@@ -1,7 +1,7 @@
 /*
  * @(#)MorphTables.h	1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -39,7 +39,7 @@ struct MorphTableHeader
     le_uint32   nChains;
     ChainHeader chains[ANY_NUMBER];
 
-    void process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount);
+    void process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount) const;
 };
 
 typedef le_int16 SubtableCoverage;
@@ -69,7 +69,7 @@ struct MorphSubtableHeader
     SubtableCoverage    coverage;
     FeatureFlags        subtableFeatures;
 
-    void process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount);
+    void process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount) const;
 };
 
 #endif

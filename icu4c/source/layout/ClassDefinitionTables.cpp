@@ -1,7 +1,7 @@
 /*
  * @(#)ClassDefinitionTables.cpp	1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -11,7 +11,7 @@
 #include "ClassDefinitionTables.h"
 #include "LESwaps.h"
 
-le_int32 ClassDefinitionTable::getGlyphClass(LEGlyphID glyphID)
+le_int32 ClassDefinitionTable::getGlyphClass(LEGlyphID glyphID) const
 {
     switch(SWAPW(classFormat)) {
     case 0:
@@ -19,14 +19,14 @@ le_int32 ClassDefinitionTable::getGlyphClass(LEGlyphID glyphID)
 
     case 1:
     {
-        ClassDefFormat1Table *f1Table = (ClassDefFormat1Table *) this;
+        const ClassDefFormat1Table *f1Table = (const ClassDefFormat1Table *) this;
 
         return f1Table->getGlyphClass(glyphID);
     }
 
     case 2:
     {
-        ClassDefFormat2Table *f2Table = (ClassDefFormat2Table *) this;
+        const ClassDefFormat2Table *f2Table = (const ClassDefFormat2Table *) this;
 
         return f2Table->getGlyphClass(glyphID);
     }
@@ -36,7 +36,7 @@ le_int32 ClassDefinitionTable::getGlyphClass(LEGlyphID glyphID)
     }
 }
 
-le_bool ClassDefinitionTable::hasGlyphClass(le_int32 glyphClass)
+le_bool ClassDefinitionTable::hasGlyphClass(le_int32 glyphClass) const
 {
     switch(SWAPW(classFormat)) {
     case 0:
@@ -44,14 +44,14 @@ le_bool ClassDefinitionTable::hasGlyphClass(le_int32 glyphClass)
 
     case 1:
     {
-        ClassDefFormat1Table *f1Table = (ClassDefFormat1Table *) this;
+        const ClassDefFormat1Table *f1Table = (const ClassDefFormat1Table *) this;
 
         return f1Table->hasGlyphClass(glyphClass);
     }
 
     case 2:
     {
-        ClassDefFormat2Table *f2Table = (ClassDefFormat2Table *) this;
+        const ClassDefFormat2Table *f2Table = (const ClassDefFormat2Table *) this;
 
         return f2Table->hasGlyphClass(glyphClass);
     }
@@ -61,7 +61,7 @@ le_bool ClassDefinitionTable::hasGlyphClass(le_int32 glyphClass)
     }
 }
 
-le_int32 ClassDefFormat1Table::getGlyphClass(LEGlyphID glyphID)
+le_int32 ClassDefFormat1Table::getGlyphClass(LEGlyphID glyphID) const
 {
     LEGlyphID firstGlyph = SWAPW(startGlyph);
     LEGlyphID lastGlyph  = firstGlyph + SWAPW(glyphCount);
@@ -73,7 +73,7 @@ le_int32 ClassDefFormat1Table::getGlyphClass(LEGlyphID glyphID)
     return 0;
 }
 
-le_bool ClassDefFormat1Table::hasGlyphClass(le_int32 glyphClass)
+le_bool ClassDefFormat1Table::hasGlyphClass(le_int32 glyphClass) const
 {
     le_uint16 count  = SWAPW(glyphCount);
     int i;
@@ -87,7 +87,7 @@ le_bool ClassDefFormat1Table::hasGlyphClass(le_int32 glyphClass)
     return false;
 }
 
-le_int32 ClassDefFormat2Table::getGlyphClass(LEGlyphID glyphID)
+le_int32 ClassDefFormat2Table::getGlyphClass(LEGlyphID glyphID) const
 {
     le_uint16 rangeCount = SWAPW(classRangeCount);
     le_int32  rangeIndex =
@@ -100,7 +100,7 @@ le_int32 ClassDefFormat2Table::getGlyphClass(LEGlyphID glyphID)
     return SWAPW(classRangeRecordArray[rangeIndex].rangeValue);
 }
 
-le_bool ClassDefFormat2Table::hasGlyphClass(le_int32 glyphClass)
+le_bool ClassDefFormat2Table::hasGlyphClass(le_int32 glyphClass) const
 {
     le_uint16 rangeCount = SWAPW(classRangeCount);
     int i;

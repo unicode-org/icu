@@ -1,7 +1,7 @@
 /*
  * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -13,7 +13,7 @@
 #include "GlyphIterator.h"
 #include "LESwaps.h"
 
-le_uint32 MultipleSubstitutionSubtable::process(GlyphIterator *glyphIterator, LEGlyphFilter *filter)
+le_uint32 MultipleSubstitutionSubtable::process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter) const
 {
     LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(glyph);
@@ -22,7 +22,7 @@ le_uint32 MultipleSubstitutionSubtable::process(GlyphIterator *glyphIterator, LE
     if (coverageIndex >= 0 && coverageIndex < seqCount)
     {
         Offset sequenceTableOffset = SWAPW(sequenceTableOffsetArray[coverageIndex]);
-        SequenceTable *sequenceTable = (SequenceTable *) ((char *) this + sequenceTableOffset);
+        const SequenceTable *sequenceTable = (const SequenceTable *) ((char *) this + sequenceTableOffset);
         le_uint16 glyphCount = SWAPW(sequenceTable->glyphCount);
 
         if (glyphCount == 0) {

@@ -2,7 +2,7 @@
 /*
  * @(#)OpenTypeLayoutEngine.cpp	1.3 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -18,14 +18,14 @@
 #include "GDEFMarkFilter.h"
 
 OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-                        GlyphSubstitutionTableHeader *gsubTable)
+                        const GlyphSubstitutionTableHeader *gsubTable)
     : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fGSUBTable(gsubTable), fSubstitutionFilter(NULL)
 {
     static le_uint32 gdefTableTag = 0x47444546; // "GDEF"
     static le_uint32 gposTableTag = 0x47504F53; // "GPOS"
 
-    fGDEFTable = (GlyphDefinitionTableHeader *) getFontTable(gdefTableTag);
-    fGPOSTable = (GlyphPositioningTableHeader *) getFontTable(gposTableTag);
+    fGDEFTable = (const GlyphDefinitionTableHeader *) getFontTable(gdefTableTag);
+    fGPOSTable = (const GlyphPositioningTableHeader *) getFontTable(gposTableTag);
 
     setScriptAndLanguageTags();
 }

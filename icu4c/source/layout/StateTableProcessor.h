@@ -1,7 +1,7 @@
 /*
  * @(#)StateTableProcessor.h	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -26,7 +26,7 @@ public:
     virtual void endStateTable() = 0;
 
 protected:
-    StateTableProcessor(MorphSubtableHeader *morphSubtableHeader);
+    StateTableProcessor(const MorphSubtableHeader *morphSubtableHeader);
     virtual ~StateTableProcessor();
 
     StateTableProcessor();
@@ -36,11 +36,11 @@ protected:
     ByteOffset stateArrayOffset;
     ByteOffset entryTableOffset;
 
-    ClassTable *classTable;
+    const ClassTable *classTable;
     le_int16 firstGlyph;
     le_int16 lastGlyph;
 
-    MorphStateTableHeader *stateTableHeader;
+    const MorphStateTableHeader *stateTableHeader;
 };
 
 #endif

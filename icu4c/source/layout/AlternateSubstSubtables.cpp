@@ -1,7 +1,7 @@
 /*
  * @(#)AlternateSubstSubtables.cpp	1.7 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -13,7 +13,7 @@
 #include "GlyphIterator.h"
 #include "LESwaps.h"
 
-le_uint32 AlternateSubstitutionSubtable::process(GlyphIterator *glyphIterator, LEGlyphFilter *filter)
+le_uint32 AlternateSubstitutionSubtable::process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter) const
 {
     // NOTE: For now, we'll just pick the first alternative...
     LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
@@ -26,8 +26,8 @@ le_uint32 AlternateSubstitutionSubtable::process(GlyphIterator *glyphIterator, L
         if (coverageIndex < altSetCount)
         {
             Offset alternateSetTableOffset = SWAPW(alternateSetTableOffsetArray[coverageIndex]);
-            AlternateSetTable *alternateSetTable =
-                (AlternateSetTable *) ((char *) this + alternateSetTableOffset);
+            const AlternateSetTable *alternateSetTable =
+                (const AlternateSetTable *) ((char *) this + alternateSetTableOffset);
             LEGlyphID alternate = SWAPW(alternateSetTable->alternateArray[0]);
 
             if (filter != NULL || filter->accept(alternate)) {

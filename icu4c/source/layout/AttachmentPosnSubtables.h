@@ -1,7 +1,7 @@
 /*
  * @(#)AttachmentPosnSubtables.h	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -21,11 +21,11 @@ struct AttachmentPositioningSubtable : GlyphPositioningSubtable
     Offset    markArrayOffset;
     Offset    baseArrayOffset;
 
-    le_int32  getBaseCoverage(LEGlyphID baseGlyphId);
-    le_uint32 process(GlyphIterator *glyphIterator);
+    le_int32  getBaseCoverage(LEGlyphID baseGlyphId) const;
+    le_uint32 process(GlyphIterator *glyphIterator) const;
 };
 
-inline le_int32 AttachmentPositioningSubtable::getBaseCoverage(LEGlyphID baseGlyphID)
+inline le_int32 AttachmentPositioningSubtable::getBaseCoverage(LEGlyphID baseGlyphID) const
 {
     return getGlyphCoverage(baseCoverageTableOffset, baseGlyphID);
 }

@@ -2,7 +2,7 @@
 /*
  * @(#)OpenTypeLayoutEngine.h	1.4 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -59,7 +59,7 @@ public:
 	 * @see ScriptAndLangaugeTags.h for script and language codes
 	 */
     OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-                            GlyphSubstitutionTableHeader *gsubTable);
+                            const GlyphSubstitutionTableHeader *gsubTable);
 
 	/**
 	 * This constructor is used when the font requires a "canned" GSUB table which can't be known
@@ -115,17 +115,17 @@ protected:
 	/**
 	 * The address of the GSUB table.
 	 */
-    GlyphSubstitutionTableHeader *fGSUBTable;
+    const GlyphSubstitutionTableHeader *fGSUBTable;
 
 	/**
 	 * The address of the GDEF table.
 	 */
-    GlyphDefinitionTableHeader   *fGDEFTable;
+    const GlyphDefinitionTableHeader   *fGDEFTable;
 
 	/**
 	 * The address of the GPOS table.
 	 */
-    GlyphPositioningTableHeader  *fGPOSTable;
+    const GlyphPositioningTableHeader  *fGPOSTable;
 
 	/**
 	 * An optional filter used to inhibit substitutions

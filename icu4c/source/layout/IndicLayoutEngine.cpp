@@ -2,7 +2,7 @@
 /*
  * @(#)IndicLayoutEngine.cpp	1.3 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -21,7 +21,7 @@
 #include "IndicReordering.h"
 
 IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-                    GlyphSubstitutionTableHeader *gsubTable)
+                    const GlyphSubstitutionTableHeader *gsubTable)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable)
 {
     // nothing else to do...

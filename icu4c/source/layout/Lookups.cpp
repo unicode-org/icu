@@ -1,7 +1,7 @@
 /*
  * @(#)Lookups.cpp	1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -11,7 +11,7 @@
 #include "CoverageTables.h"
 #include "LESwaps.h"
 
-LookupTable *LookupListTable::getLookupTable(le_uint16 lookupTableIndex)
+const LookupTable *LookupListTable::getLookupTable(le_uint16 lookupTableIndex) const
 {
     if (lookupTableIndex >= SWAPW(lookupCount)) {
         return 0;
@@ -19,10 +19,10 @@ LookupTable *LookupListTable::getLookupTable(le_uint16 lookupTableIndex)
 
     Offset lookupTableOffset = lookupTableOffsetArray[lookupTableIndex];
 
-    return (LookupTable *) ((char *) this + SWAPW(lookupTableOffset));
+    return (const LookupTable *) ((char *) this + SWAPW(lookupTableOffset));
 }
 
-LookupSubtable *LookupTable::getLookupSubtable(le_uint16 subtableIndex)
+const LookupSubtable *LookupTable::getLookupSubtable(le_uint16 subtableIndex) const
 {
     if (subtableIndex >= SWAPW(subTableCount)) {
         return 0;
@@ -30,12 +30,12 @@ LookupSubtable *LookupTable::getLookupSubtable(le_uint16 subtableIndex)
 
     Offset subtableOffset = subTableOffsetArray[subtableIndex];
 
-    return (LookupSubtable *) ((char *) this + SWAPW(subtableOffset));
+    return (const LookupSubtable *) ((char *) this + SWAPW(subtableOffset));
 }
 
-le_int32 LookupSubtable::getGlyphCoverage(Offset tableOffset, LEGlyphID glyphID)
+le_int32 LookupSubtable::getGlyphCoverage(Offset tableOffset, LEGlyphID glyphID) const
 {
-    CoverageTable *coverageTable = (CoverageTable *) ((char *) this + SWAPW(tableOffset));
+    const CoverageTable *coverageTable = (const CoverageTable *) ((char *) this + SWAPW(tableOffset));
 
     return coverageTable->getGlyphCoverage(glyphID);
 }

@@ -1,7 +1,7 @@
 /*
  * @(#)SubtableProcessor.h	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -18,7 +18,7 @@ public:
     virtual ~SubtableProcessor();
 
 protected:
-    SubtableProcessor(MorphSubtableHeader *morphSubtableHeader);
+    SubtableProcessor(const MorphSubtableHeader *morphSubtableHeader);
 
     SubtableProcessor();
 
@@ -26,7 +26,7 @@ protected:
     SubtableCoverage coverage;
     FeatureFlags subtableFeatures;
 
-    MorphSubtableHeader *subtableHeader;
+    const MorphSubtableHeader *subtableHeader;
 };
 
 #endif

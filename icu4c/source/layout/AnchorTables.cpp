@@ -1,7 +1,7 @@
 /*
  * @(#)AnchorTables.cpp	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -12,12 +12,12 @@
 #include "LESwaps.h"
 
 void AnchorTable::getAnchor(LEGlyphID glyphID, const LEFontInstance *fontInstance,
-                            LEPoint &anchor)
+                            LEPoint &anchor) const
 {
     switch(SWAPW(anchorFormat)) {
     case 1:
     {
-        Format1AnchorTable *f1 = (Format1AnchorTable *) this;
+        const Format1AnchorTable *f1 = (const Format1AnchorTable *) this;
 
         f1->getAnchor(fontInstance, anchor);
         break;
@@ -25,7 +25,7 @@ void AnchorTable::getAnchor(LEGlyphID glyphID, const LEFontInstance *fontInstanc
 
     case 2:
     {
-        Format2AnchorTable *f2 = (Format2AnchorTable *) this;
+        const Format2AnchorTable *f2 = (const Format2AnchorTable *) this;
 
         f2->getAnchor(glyphID, fontInstance, anchor);
         break;
@@ -33,7 +33,7 @@ void AnchorTable::getAnchor(LEGlyphID glyphID, const LEFontInstance *fontInstanc
 
     case 3:
     {
-        Format3AnchorTable *f3 = (Format3AnchorTable *) this;
+        const Format3AnchorTable *f3 = (const Format3AnchorTable *) this;
 
         f3->getAnchor(fontInstance, anchor);
         break;
@@ -44,7 +44,7 @@ void AnchorTable::getAnchor(LEGlyphID glyphID, const LEFontInstance *fontInstanc
     }
 }
 
-void Format1AnchorTable::getAnchor(const LEFontInstance *fontInstance, LEPoint &anchor)
+void Format1AnchorTable::getAnchor(const LEFontInstance *fontInstance, LEPoint &anchor) const
 {
     le_int16 x = SWAPW(xCoordinate);
     le_int16 y = SWAPW(yCoordinate);
@@ -55,7 +55,7 @@ void Format1AnchorTable::getAnchor(const LEFontInstance *fontInstance, LEPoint &
     fontInstance->pixelsToUnits(pixels, anchor);
 }
 
-void Format2AnchorTable::getAnchor(LEGlyphID glyphID, const LEFontInstance *fontInstance, LEPoint &anchor)
+void Format2AnchorTable::getAnchor(LEGlyphID glyphID, const LEFontInstance *fontInstance, LEPoint &anchor) const
 {
     LEPoint point;
 
@@ -70,7 +70,7 @@ void Format2AnchorTable::getAnchor(LEGlyphID glyphID, const LEFontInstance *font
     fontInstance->pixelsToUnits(point, anchor);
 }
 
-void Format3AnchorTable::getAnchor(const LEFontInstance *fontInstance, LEPoint &anchor)
+void Format3AnchorTable::getAnchor(const LEFontInstance *fontInstance, LEPoint &anchor) const
 {
     le_int16 x = SWAPW(xCoordinate);
     le_int16 y = SWAPW(yCoordinate);
@@ -81,14 +81,14 @@ void Format3AnchorTable::getAnchor(const LEFontInstance *fontInstance, LEPoint &
     fontInstance->transformFunits(x, y, pixels);
 
     if (dtxOffset != 0) {
-        DeviceTable *dtx = (DeviceTable *) ((char *) this + dtxOffset);
+        const DeviceTable *dtx = (const DeviceTable *) ((char *) this + dtxOffset);
         le_int16 adjx = dtx->getAdjustment((le_int16) fontInstance->getXPixelsPerEm());
 
         pixels.fX += adjx;
     }
 
     if (dtyOffset != 0) {
-        DeviceTable *dty = (DeviceTable *) ((char *) this + dtyOffset);
+        const DeviceTable *dty = (const DeviceTable *) ((char *) this + dtyOffset);
         le_int16 adjy = dty->getAdjustment((le_int16) fontInstance->getYPixelsPerEm());
 
         pixels.fY += adjy;

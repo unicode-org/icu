@@ -1,7 +1,7 @@
 /*
  * @(#)MarkToMarkPosnSubtables.h	1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -17,8 +17,8 @@
 
 struct MarkToMarkPositioningSubtable : AttachmentPositioningSubtable
 {
-    le_int32   process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
-    LEGlyphID  findMark2Glyph(GlyphIterator *glyphIterator);
+    le_int32   process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const;
+    LEGlyphID  findMark2Glyph(GlyphIterator *glyphIterator) const;
 };
 
 struct Mark2Record

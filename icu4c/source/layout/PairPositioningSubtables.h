@@ -1,7 +1,7 @@
 /*
  * @(#)PairPositioningSubtables.h	1.7 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -34,7 +34,7 @@ struct PairPositioningSubtable : GlyphPositioningSubtable
     ValueFormat valueFormat1;
     ValueFormat valueFormat2;
 
-    le_uint32  process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
+    le_uint32  process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const;
 };
 
 struct PairPositioningFormat1Subtable : PairPositioningSubtable
@@ -42,11 +42,11 @@ struct PairPositioningFormat1Subtable : PairPositioningSubtable
     le_uint16   pairSetCount;
     Offset      pairSetTableOffsetArray[ANY_NUMBER];
 
-    le_uint32  process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
+    le_uint32  process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const;
 
 private:
-    PairValueRecord *findPairValueRecord(LEGlyphID glyphID, PairValueRecord *records,
-        le_uint16 recordCount, le_uint16 recordSize);
+    const PairValueRecord *findPairValueRecord(LEGlyphID glyphID, const PairValueRecord *records,
+        le_uint16 recordCount, le_uint16 recordSize) const;
 };
 
 // NOTE: ValueRecord has a variable size
@@ -69,7 +69,7 @@ struct PairPositioningFormat2Subtable : PairPositioningSubtable
     le_uint16    class2Count;
     Class1Record class1RecordArray[ANY_NUMBER];
 
-    le_uint32  process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
+    le_uint32  process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const;
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*
  * @(#)LEGlyphFilter.h	1.3 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -26,7 +26,7 @@ public:
 	 *
 	 * @return true if the glyph index is in the set.
 	 */
-    virtual le_bool accept(LEGlyphID glyph) = 0;
+    virtual le_bool accept(LEGlyphID glyph) const = 0;
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*
  * @(#)SimpleArrayProcessor.h	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -19,7 +19,7 @@ class SimpleArrayProcessor : public NonContextualGlyphSubstitutionProcessor
 public:
     virtual void process(LEGlyphID *glyphs, le_int32 *charIndices, le_int32 glyphCount);
 
-    SimpleArrayProcessor(MorphSubtableHeader *morphSubtableHeader);
+    SimpleArrayProcessor(const MorphSubtableHeader *morphSubtableHeader);
 
     virtual ~SimpleArrayProcessor();
 
@@ -27,7 +27,7 @@ private:
     SimpleArrayProcessor();
 
 protected:
-    SimpleArrayLookupTable *simpleArrayLookupTable;
+    const SimpleArrayLookupTable *simpleArrayLookupTable;
 };
 
 #endif

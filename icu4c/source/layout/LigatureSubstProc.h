@@ -1,7 +1,7 @@
 /*
  * @(#)LigatureSubstProc.h	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -27,7 +27,7 @@ public:
 
     virtual void endStateTable();
 
-    LigatureSubstitutionProcessor(MorphSubtableHeader *morphSubtableHeader);
+    LigatureSubstitutionProcessor(const MorphSubtableHeader *morphSubtableHeader);
     virtual ~LigatureSubstitutionProcessor();
 
 private:
@@ -38,12 +38,12 @@ protected:
     ByteOffset componentTableOffset;
     ByteOffset ligatureTableOffset;
 
-    LigatureSubstitutionStateEntry *entryTable;
+    const LigatureSubstitutionStateEntry *entryTable;
 
     le_int32 componentStack[nComponents];
     le_int16 m;
 
-    LigatureSubstitutionHeader *ligatureSubstitutionHeader;
+    const LigatureSubstitutionHeader *ligatureSubstitutionHeader;
 };
 
 #endif

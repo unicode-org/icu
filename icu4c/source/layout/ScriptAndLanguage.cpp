@@ -1,7 +1,7 @@
 /*
  * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -11,7 +11,7 @@
 #include "ScriptAndLanguage.h"
 #include "LESwaps.h"
 
-LangSysTable *ScriptTable::findLanguage(LETag languageTag)
+const LangSysTable *ScriptTable::findLanguage(LETag languageTag) const
 {
     le_uint16 count = SWAPW(langSysCount);
     Offset langSysTableOffset = defaultLangSysTableOffset;
@@ -26,28 +26,28 @@ LangSysTable *ScriptTable::findLanguage(LETag languageTag)
     }
 
 	if (langSysTableOffset != 0) {
-		return (LangSysTable *) ((char *)this + SWAPW(langSysTableOffset));
+		return (const LangSysTable *) ((char *)this + SWAPW(langSysTableOffset));
 	}
 
 	return 0;
 }
 
-ScriptTable *ScriptListTable::findScript(LETag scriptTag)
+const ScriptTable *ScriptListTable::findScript(LETag scriptTag) const
 {
     le_uint16 count = SWAPW(scriptCount);
     Offset scriptTableOffset =
         OpenTypeUtilities::getTagOffset(scriptTag, scriptRecordArray, count);
 
     if (scriptTableOffset != 0) {
-        return (ScriptTable *) ((char *)this + scriptTableOffset);
+        return (const ScriptTable *) ((char *)this + scriptTableOffset);
     }
 
     return 0;
 }
 
-LangSysTable *ScriptListTable::findLanguage(LETag scriptTag, LETag languageTag)
+const LangSysTable *ScriptListTable::findLanguage(LETag scriptTag, LETag languageTag) const
 {
-    ScriptTable *scriptTable = findScript(scriptTag);
+    const ScriptTable *scriptTable = findScript(scriptTag);
 
     if (scriptTable == 0) {
         return 0;

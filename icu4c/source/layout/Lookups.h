@@ -1,7 +1,7 @@
 /*
  * @(#)Lookups.h	1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -27,8 +27,8 @@ struct LookupSubtable
     le_uint16 subtableFormat;
     Offset    coverageTableOffset;
 
-    le_int32  getGlyphCoverage(LEGlyphID glyphID);
-    le_int32  getGlyphCoverage(Offset tableOffset, LEGlyphID glyphID);
+    le_int32  getGlyphCoverage(LEGlyphID glyphID) const;
+    le_int32  getGlyphCoverage(Offset tableOffset, LEGlyphID glyphID) const;
 };
 
 struct LookupTable
@@ -38,7 +38,7 @@ struct LookupTable
     le_uint16       subTableCount;
     Offset          subTableOffsetArray[ANY_NUMBER];
 
-    LookupSubtable  *getLookupSubtable(le_uint16 subtableIndex);
+    const LookupSubtable  *getLookupSubtable(le_uint16 subtableIndex) const;
 };
 
 struct LookupListTable
@@ -46,10 +46,10 @@ struct LookupListTable
     le_uint16   lookupCount;
     Offset      lookupTableOffsetArray[ANY_NUMBER];
 
-    LookupTable *getLookupTable(le_uint16 lookupTableIndex);
+    const LookupTable *getLookupTable(le_uint16 lookupTableIndex) const;
 };
 
-inline le_int32 LookupSubtable::getGlyphCoverage(LEGlyphID glyphID)
+inline le_int32 LookupSubtable::getGlyphCoverage(LEGlyphID glyphID) const
 {
     return getGlyphCoverage(coverageTableOffset, glyphID);
 }

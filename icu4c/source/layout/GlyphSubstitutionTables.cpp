@@ -18,17 +18,17 @@
 
 void GlyphSubstitutionTableHeader::process(LEGlyphID *glyphs, const LETag **glyphTags, le_int32 glyphCount,
                                            le_bool rightToLeft, LETag scriptTag, LETag languageTag,
-                                           GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
-                                           LEGlyphFilter *filter)
+                                           const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
+                                           const LEGlyphFilter *filter) const
 {
     GlyphSubstitutionLookupProcessor processor(this, scriptTag, languageTag, filter);
 
     processor.process(glyphs, NULL, glyphTags, glyphCount, rightToLeft, glyphDefinitionTableHeader, NULL);
 }
 
-le_bool GlyphSubstitutionTableHeader::coversScript(LETag scriptTag)
+le_bool GlyphSubstitutionTableHeader::coversScript(LETag scriptTag) const
 {
-    ScriptListTable *scriptListTable = (ScriptListTable *) ((char *)this + SWAPW(scriptListOffset));
+    const ScriptListTable *scriptListTable = (const ScriptListTable *) ((char *)this + SWAPW(scriptListOffset));
 
     return scriptListTable->findScript(scriptTag) != NULL;
 }

@@ -1,7 +1,7 @@
 /*
  * @(#)Features.cpp	1.4 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -10,10 +10,9 @@
 #include "Features.h"
 #include "LESwaps.h"
 
-FeatureTable *FeatureListTable::getFeatureTable(le_uint16 featureIndex, LETag *featureTag)
+const FeatureTable *FeatureListTable::getFeatureTable(le_uint16 featureIndex, LETag *featureTag) const
 {
-    if (featureIndex >= SWAPW(featureCount))
-    {
+    if (featureIndex >= SWAPW(featureCount)) {
         return 0;
     }
 
@@ -21,6 +20,6 @@ FeatureTable *FeatureListTable::getFeatureTable(le_uint16 featureIndex, LETag *f
 
     *featureTag = SWAPT(featureRecordArray[featureIndex].featureTag);
 
-    return (FeatureTable *) ((char *) this + SWAPW(featureTableOffset));
+    return (const FeatureTable *) ((char *) this + SWAPW(featureTableOffset));
 }
 

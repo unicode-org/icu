@@ -1,7 +1,7 @@
 /*
  * @(#)AlternateSubstSubtables.h	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -25,7 +25,7 @@ struct AlternateSubstitutionSubtable : GlyphSubstitutionSubtable
     le_uint16 alternateSetCount;
     Offset    alternateSetTableOffsetArray[ANY_NUMBER];
 
-    le_uint32 process(GlyphIterator *glyphIterator, LEGlyphFilter *filter = NULL);
+    le_uint32 process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter = NULL) const;
 };
 
 #endif

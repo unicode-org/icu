@@ -1,7 +1,7 @@
 /*
  * @(#)TrimmedArrayProcessor.h	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -19,7 +19,7 @@ class TrimmedArrayProcessor : public NonContextualGlyphSubstitutionProcessor
 public:
     virtual void process(LEGlyphID *glyphs, le_int32 *charIndices, le_int32 glyphCount);
 
-    TrimmedArrayProcessor(MorphSubtableHeader *morphSubtableHeader);
+    TrimmedArrayProcessor(const MorphSubtableHeader *morphSubtableHeader);
 
     virtual ~TrimmedArrayProcessor();
 
@@ -29,7 +29,7 @@ private:
 protected:
     le_int16 firstGlyph;
     le_int16 lastGlyph;
-    TrimmedArrayLookupTable *trimmedArrayLookupTable;
+    const TrimmedArrayLookupTable *trimmedArrayLookupTable;
 };
 
 #endif
