@@ -18,5 +18,5 @@ package com.ibm.icu.util;
  * @author Alan Liu
  * @draft ICU 3.0
  */
-public abstract class Unit {
+public abstract class MeasureUnit {
 }
