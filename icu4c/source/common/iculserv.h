@@ -34,7 +34,6 @@ U_NAMESPACE_END
 
 #include "hash.h"
 #include "uvector.h"
-#include "digitlst.h"
 
 #include "icuserv.h"
 
