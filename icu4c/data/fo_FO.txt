@@ -1,5 +1,4 @@
-﻿
-// *******************************************************************************
+﻿// *******************************************************************************
 // *
 // *   Copyright (C) 1997-2001, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
@@ -7,12 +6,12 @@
 // *******************************************************************************
 
 fo_FO {
-      Version { "x0.0" }
+    Version { "x0.0" }
 
     /* Discarding duplicate data for tag: AmPmMarkers */
     CurrencyElements { 
             "kr",
-            "DKK ",
+            "DKK",
             ",",
     }
     DateTimePatterns { 
@@ -25,9 +24,7 @@ fo_FO {
             "MMM dd,yy",
             "dd/MM/yy",
             "{1} {0}",
-
     }
-
     NumberPatterns { 
             "#,##0.###;-#,##0.###",
             "¤#,##0.00;¤ -#,##0.00",
