@@ -306,7 +306,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
 
     // initialize (we always exit the loop with a break statement)
     c = text->current();
-    while (TRUE) {
+    for (;;) {
 
         // if we can transition to state "-1" from our current state, we're
         // on the last character of a legal word.  Push that position onto

@@ -1999,7 +1999,7 @@ GregorianCalendar::inDaylightTime(UErrorCode& status) const
     // Force an update of the state of the Calendar.
     ((GregorianCalendar*)this)->complete(status); // cast away const
 
-    return U_SUCCESS(status) ? (internalGet(DST_OFFSET) != 0) : FALSE;
+    return (UBool)(U_SUCCESS(status) ? (internalGet(DST_OFFSET) != 0) : FALSE);
 }
 
 // -------------------------------------

@@ -9,7 +9,7 @@
 * Modification History:
 *
 *   Date          Name        Description
-*   07/12/2000    Madhu	      Creation 
+*   07/12/2000    Madhu       Creation 
 *******************************************************************************
 */
 
@@ -32,12 +32,12 @@ addPUtilTest(TestNode** root)
 {
     addTest(root, &TestPUtilAPI,       "putiltst/TestPUtilAPI");
     addTest(root, &testIEEEremainder,  "putiltst/testIEEEremainder");
-   
-  
+
+
 }
 
 void TestPUtilAPI(){
-    
+
     double  n1=0.0, y1=0.0, expn1, expy1;
     int     result=0;
     double  value1 = 0.021;
@@ -47,7 +47,7 @@ void TestPUtilAPI(){
     char versionString[10];
     char *str=0;
     UBool isTrue=FALSE;
-     
+
     log_verbose("Testing the API uprv_modf()\n");
     y1 = uprv_modf(value1, &n1);
     expn1=0;
@@ -62,15 +62,15 @@ void TestPUtilAPI(){
     log_verbose("Testing the API uprv_fmod()\n");
     expn1=uprv_fmod(30.50, 15.00);
     doAssert(expn1, 0.5, "uprv_fmod(30.50, 15.00) failed.");
-   
+
     log_verbose("Testing the API uprv_ceil()\n");
     expn1=uprv_ceil(value1);
     doAssert(expn1, 1, "uprv_ceil(0.021) failed.");
-   
+
     log_verbose("Testing the API uprv_floor()\n");
     expn1=uprv_floor(value1);
     doAssert(expn1, 0, "uprv_floor(0.021) failed.");
-   
+
     log_verbose("Testing the API uprv_fabs()\n");
     expn1=uprv_fabs((2.02-1.345));
     doAssert(expn1, 0.675, "uprv_fabs(2.02-1.345) failed.");
@@ -81,27 +81,27 @@ void TestPUtilAPI(){
     log_verbose("Testing the API uprv_fmax() with x value= NaN\n");
     expn1=uprv_fmax(uprv_getNaN(), 1.2);
     doAssert(expn1, uprv_getNaN(), "uprv_fmax(uprv_getNaN(), 1.2) failed. when one parameter is NaN");
-   
+
     log_verbose("Testing the API uprv_fmin()\n");
     doAssert(uprv_fmin(2.4, 1.2), 1.2, "uprv_fmin(2.4, 1.2) failed.");
-   
+
     log_verbose("Testing the API uprv_fmin() with x value= NaN\n");
     expn1=uprv_fmin(uprv_getNaN(), 1.2);
     doAssert(expn1, uprv_getNaN(), "uprv_fmin(uprv_getNaN(), 1.2) failed. when one parameter is NaN");
-    
+
     log_verbose("Testing the API uprv_max()\n");
     doAssert(uprv_max(4, 2), 4, "uprv_max(4, 2) failed.");
-    
+
     log_verbose("Testing the API uprv_min()\n");
     doAssert(uprv_min(-4, 2), -4, "uprv_min(-4, 2) failed.");
-    
+
     log_verbose("Testing the API uprv_trunc()\n");
     doAssert(uprv_trunc(12.3456), 12, "uprv_trunc(12.3456) failed.");
     doAssert(uprv_trunc(12.234E2), 1223, "uprv_trunc(12.234E2) failed.");
     doAssert(uprv_trunc(uprv_getNaN()), uprv_getNaN(), "uprv_trunc(uprv_getNaN()) failed. with parameter=NaN");
     doAssert(uprv_trunc(uprv_getInfinity()), uprv_getInfinity(), "uprv_trunc(uprv_getInfinity()) failed. with parameter=Infinity");
-  
-  
+
+
     log_verbose("Testing the API uprv_pow10()\n");
     doAssert(uprv_pow10(4), 10000, "uprv_pow10(4) failed.");
 
@@ -294,7 +294,7 @@ void testIEEEremainder()
     double    pinf        = uprv_getInfinity();
     double    ninf        = -uprv_getInfinity();
     double    nan         = uprv_getNaN();
-    double    pzero       = 0.0;
+/*    double    pzero       = 0.0;*/
     double    nzero       = 0.0;
 
     nzero *= -1;

@@ -64,7 +64,7 @@ static int INDENT_LEVEL = 0;
 /*-------------------------------------------*/
 
 /* strncmp that also makes sure there's a \0 at s2[0] */
-int strncmp_nullcheck( const char* s1,
+static int strncmp_nullcheck( const char* s1,
                const char* s2,
                int n )
 {
@@ -72,7 +72,7 @@ int strncmp_nullcheck( const char* s1,
   else  return strncmp ( s1, s2, n );
 }
 
-void getNextLevel( const char* name,
+static void getNextLevel( const char* name,
            int* nameLen,
            const char** nextName )
 {
@@ -91,7 +91,7 @@ void getNextLevel( const char* name,
   else    *nameLen = strlen(name);  
 }
 
-TestNode *createTestNode( )
+static TestNode *createTestNode( )
 {
   TestNode *newNode;
   
@@ -208,7 +208,7 @@ TestNode *addTestNode ( TestNode *root, const char *name )
     }
 }
 
-void iterateTestsWithLevel ( const TestNode* root,
+static void iterateTestsWithLevel ( const TestNode* root,
                  int len, 
                  const TestNode** list,
                  TestMode mode)
@@ -511,7 +511,7 @@ int processArgs(const TestNode* root,
  * Display program invocation arguments
  */
 
-void help ( const char *argv0 )
+static void help ( const char *argv0 )
 {
     printf("Usage: %s [ -l ] [ -v ] [ -verbose] [-a] [ -all] [-n] \n [ -no_err_msg] [ -h ] [ /path/to/test ]\n",
             argv0);
