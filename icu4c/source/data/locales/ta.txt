@@ -255,6 +255,6 @@ ta {
     LocaleScript:array {
         "Taml"   // ISO 15924 Name 
     }
-    ExemplarCharacters{"[:Taml:]"}
+    ExemplarCharacters{"[[:Taml:]\u200c\u200d]"}
 }
 

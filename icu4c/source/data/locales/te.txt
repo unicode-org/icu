@@ -4,7 +4,7 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
-// $Revision: 1.13 $
+// $Revision: 1.14 $
 //
 // Telugu Locale. Data by Ram [ram@jtcsv.com]
 
@@ -34,7 +34,7 @@ te {
         "\u0c36\u0c41\u0c15\u0c4d\u0c30\u0c35\u0c3e\u0c30\u0c02",
         "\u0c36\u0c28\u0c3f\u0c35\u0c3e\u0c30\u0c02",
     }
-   MonthAbbreviations {
+    MonthAbbreviations {
         "\u0c1c\u0c28\u0c35\u0c30\u0c3f",
         "\u0c2b\u0c3f\u0c2c\u0c4d\u0c30\u0c35\u0c30\u0c3f",
         "\u0c2e\u0c3e\u0c30\u0c4d\u0c1a\u0c3f",
@@ -84,11 +84,9 @@ te {
     LocaleScript{ 
         "Telu",  // ISO 15924 Name 
     }
-    ExemplarCharacters{"[:Telu:]"}
+    ExemplarCharacters{"[[:Telu:]\u200c\u200d]"}
     // /**************** Info Below is needed ****************/
-    // Countries{}
     // Eras{}
-    // Languages{}
     // localPatternChars{}
     //
 }

@@ -85,7 +85,7 @@ gu {
         "\ufffd",
     }
     LocaleScript:array { "Gujr" }
-    ExemplarCharacters { "[:Gujr:]" }
+    ExemplarCharacters { "[[:Gujr:]\u200c\u200d]" }
     CollationElements {	    
         Version { "1.0" }
         Sequence { 
