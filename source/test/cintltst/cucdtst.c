@@ -925,11 +925,14 @@ enumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCategory t
         { 0x0590, U_LEFT_TO_RIGHT },
         { 0x0600, U_RIGHT_TO_LEFT },
         { 0x07C0, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x0900, U_RIGHT_TO_LEFT },
         { 0xFB1D, U_LEFT_TO_RIGHT },
         { 0xFB50, U_RIGHT_TO_LEFT },
         { 0xFE00, U_RIGHT_TO_LEFT_ARABIC },
         { 0xFE70, U_LEFT_TO_RIGHT },
         { 0xFF00, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x10800, U_LEFT_TO_RIGHT },
+        { 0x11000, U_RIGHT_TO_LEFT },
         { 0x110000, U_LEFT_TO_RIGHT }
     };
 
@@ -982,6 +985,8 @@ enumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCategory t
      * Verify default Bidi classes.
      * See table 3-7 "Bidirectional Character Types" in UAX #9.
      * http://www.unicode.org/reports/tr9/
+     *
+     * See also DerivedBidiClass.txt for Cn code points!
      */
     if(type==U_UNASSIGNED || type==U_PRIVATE_USE_CHAR) {
         /* enumerate the intersections of defaultBidi ranges with [start..limit[ */
@@ -2215,12 +2220,26 @@ TestAdditionalProperties() {
         /* enum/integer type properties */
 
         /* UCHAR_BIDI_CLASS tested for assigned characters in TestUnicodeData() */
-#if 0
-        /* ### TODO test default Bidi classes for unassigned code points */
-        { 0x, UCHAR_BIDI_CLASS,  },
-        { 0x, UCHAR_BIDI_CLASS,  },
-        { 0x, UCHAR_BIDI_CLASS,  },
-#endif
+        /* test default Bidi classes for unassigned code points */
+        { 0x0590, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
+        { 0x05a2, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
+        { 0x05ed, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
+        { 0x07f2, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
+        { 0x08ba, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
+        { 0xfb37, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
+        { 0xfb42, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
+        { 0x10806, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
+        { 0x10909, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
+        { 0x10fe4, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
+
+        { 0x0606, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x061c, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x063f, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x070e, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x0775, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
+        { 0xfbc2, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
+        { 0xfd90, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
+        { 0xfefe, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
 
         { 0x02AF, UCHAR_BLOCK, UBLOCK_IPA_EXTENSIONS },
         { 0x0C4E, UCHAR_BLOCK, UBLOCK_TELUGU },

@@ -682,7 +682,7 @@ U_CAPI UCharDirection U_EXPORT2
 u_charDirection(UChar32 c) {   
     uint32_t props;
     GET_PROPS(c, props);
-    return (UCharDirection)((props>>UPROPS_BIDI_SHIFT)&0x1f);
+    return (UCharDirection)GET_BIDI_CLASS(props);
 }
 
 U_CAPI UBool U_EXPORT2
