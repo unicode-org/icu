@@ -610,7 +610,7 @@ static void TestfgetsNewLineHandling(void) {
     UFILE *myFile = NULL;
     int32_t lineIdx;
 
-    myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "UTF-8");
+    myFile = u_fopen(STANDARD_TEST_FILE, "wb", NULL, "UTF-8");
     if (myFile == NULL) {
         log_err("Can't write test file.\n");
         return;
@@ -620,7 +620,7 @@ static void TestfgetsNewLineHandling(void) {
     }
     u_fclose(myFile);
 
-    myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, "UTF-8");
+    myFile = u_fopen(STANDARD_TEST_FILE, "rb", NULL, "UTF-8");
 
     for (lineIdx = 0; lineIdx < (int32_t)(sizeof(testUStr)/sizeof(testUStr[0])); lineIdx++) {
         UChar *returnedUCharBuffer;
