@@ -802,6 +802,17 @@ public class HebrewCalendar extends Calendar {
         return (int) (day + 347997);
     }
 
+    /**
+     * Return the current Calendar type.
+     * @return type of calendar (gregorian, etc.)
+     * @internal ICU 3.0
+     */
+    public String getType() {
+        return "hebrew";
+    }
+
+    
+
     /*
     private static CalendarFactory factory;
     public static CalendarFactory factory() {
