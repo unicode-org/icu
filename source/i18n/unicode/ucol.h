@@ -237,6 +237,32 @@ ucol_open(    const    char         *loc,
         UErrorCode      *status);
 
 /**
+ * Open a UCollator with a specific version.
+ * This is the same as ucol_open() except that ucol_getVersion() of
+ * the returned object is guaranteed to be the same as the version
+ * parameter.
+ * This is designed to be used to open the same collator for a given
+ * locale even when ICU is updated.
+ * The same locale and version guarantees the same sort keys and
+ * comparison results.
+ *
+ * @param loc The locale ID for which to open a collator.
+ * @param version The requested collator version.
+ * @param status A pointer to a UErrorCode,
+ *               must not indicate a failure before calling this function.
+ * @return A pointer to a UCollator, or NULL if an error occurred
+ *         or a collator with the requested version is not available.
+ *
+ * @see ucol_open
+ * @see ucol_getVersion
+ * @draft ICU 1.8
+ */
+U_CAPI UCollator * U_EXPORT2
+ucol_openVersion(const char *loc,
+                 UVersionInfo version,
+                 UErrorCode *status);
+
+/**
  * Open a UCollator for comparing strings.
  * The UCollator may be used in calls to \Ref{ucol_strcoll}.
  * @param rules A string describing the collation rules.
