@@ -9,7 +9,6 @@
 #include "OpenTypeTables.h"
 #include "OpenTypeUtilities.h"
 #include "IndicReordering.h"
-#include "ScriptAndLanguageTags.h"
 
 class ReorderingOutput
 {
