@@ -384,6 +384,53 @@ UnicodeStringTest::TestCaseConversion()
     expectedResult = uppercaseGreek;
     if (test4 != expectedResult)
         errln("toUpper failed: expected \"" + expectedResult + "\", got \"" + test4 + "\".");
+
+    // more string case mapping tests with the new implementation
+    {
+        static const UChar
+
+        beforeLower[]= { 0x61, 0x42, 0x49,  0x3a3, 0xdf, 0x3a3, 0x2f, 0xd93f, 0xdfff },
+        lowerRoot[]=   { 0x61, 0x62, 0x69,  0x3c3, 0xdf, 0x3c2, 0x2f, 0xd93f, 0xdfff },
+        lowerTurkish[]={ 0x61, 0x62, 0x131, 0x3c3, 0xdf, 0x3c2, 0x2f, 0xd93f, 0xdfff },
+
+        beforeUpper[]= { 0x61, 0x42, 0x69,  0x3c2, 0xdf,       0x3c3, 0x2f, 0xfb03,           0xfb03,           0xfb03,           0xd93f, 0xdfff },
+        upperRoot[]=   { 0x41, 0x42, 0x49,  0x3a3, 0x53, 0x53, 0x3a3, 0x2f, 0x46, 0x46, 0x49, 0x46, 0x46, 0x49, 0x46, 0x46, 0x49, 0xd93f, 0xdfff },
+        upperTurkish[]={ 0x41, 0x42, 0x130, 0x3a3, 0x53, 0x53, 0x3a3, 0x2f, 0x46, 0x46, 0x49, 0x46, 0x46, 0x49, 0x46, 0x46, 0x49, 0xd93f, 0xdfff };
+
+        UnicodeString s;
+
+        /* lowercase with root locale */
+        s=UnicodeString(FALSE, beforeLower, sizeof(beforeLower)/U_SIZEOF_UCHAR).toLower();
+        if( s.length()!=(sizeof(lowerRoot)/U_SIZEOF_UCHAR) ||
+            s!=UnicodeString(FALSE, lowerRoot, s.length())
+        ) {
+            errln("error in toLower(root locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, lowerRoot, sizeof(lowerRoot)/U_SIZEOF_UCHAR) + "\"");
+        }
+
+        /* lowercase with turkish locale */
+        s=UnicodeString(FALSE, beforeLower, sizeof(beforeLower)/U_SIZEOF_UCHAR).toLower(Locale("tr"));
+        if( s.length()!=(sizeof(lowerTurkish)/U_SIZEOF_UCHAR) ||
+            s!=UnicodeString(FALSE, lowerTurkish, s.length())
+        ) {
+            errln("error in toLower(turkish locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, lowerTurkish, sizeof(lowerTurkish)/U_SIZEOF_UCHAR) + "\"");
+        }
+
+        /* uppercase with root locale */
+        s=UnicodeString(FALSE, beforeUpper, sizeof(beforeUpper)/U_SIZEOF_UCHAR).toUpper();
+        if( s.length()!=(sizeof(upperRoot)/U_SIZEOF_UCHAR) ||
+            s!=UnicodeString(FALSE, upperRoot, s.length())
+        ) {
+            errln("error in toUpper(root locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, upperRoot, sizeof(upperRoot)/U_SIZEOF_UCHAR) + "\"");
+        }
+
+        /* uppercase with turkish locale */
+        s=UnicodeString(FALSE, beforeUpper, sizeof(beforeUpper)/U_SIZEOF_UCHAR).toUpper(Locale("tr"));
+        if( s.length()!=(sizeof(upperTurkish)/U_SIZEOF_UCHAR) ||
+            s!=UnicodeString(FALSE, upperTurkish, s.length())
+        ) {
+            errln("error in toUpper(turkish locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, upperTurkish, sizeof(upperTurkish)/U_SIZEOF_UCHAR) + "\"");
+        }
+    }
 }
 
 void
