@@ -128,7 +128,7 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts
   t->UCA = UCA;
   t->expansions = (ExpansionTable *)uprv_malloc(sizeof(ExpansionTable));
   uprv_memset(t->expansions, 0, sizeof(ExpansionTable));
-  t->mapping = ucmp32_open(UCOL_NOT_FOUND);
+  t->mapping = ucmpe32_open(UCOL_NOT_FOUND, UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), status);
   t->contractions = uprv_cnttab_open(t->mapping, status);
 
   /* copy UCA's maxexpansion and merge as we go along */
@@ -179,13 +179,7 @@ tempUCATable *uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
 
   /* mapping */
   if(t->mapping != NULL) {
-    uint16_t *index = (uint16_t *)uprv_malloc(sizeof(uint16_t)*t->mapping->fCount);
-    int32_t *array = (int32_t *)uprv_malloc(sizeof(int32_t)*t->mapping->fCount);
-
-    uprv_memcpy(array, t->mapping->fArray, t->mapping->fCount*sizeof(int32_t));
-    uprv_memcpy(index, t->mapping->fIndex, UCMP32_kIndexCount*sizeof(uint16_t));
-
-    r->mapping = ucmp32_openAdopt(index, array, t->mapping->fCount);
+    r->mapping = ucmpe32_clone(t->mapping, status);
   }
 
   /* expansions */
@@ -266,7 +260,7 @@ void uprv_uca_closeTempTable(tempUCATable *t) {
   if(t->contractions != NULL) {
     uprv_cnttab_close(t->contractions);
   }
-  ucmp32_close(t->mapping);
+  ucmpe32_close(t->mapping);
 
   uprv_free(t->maxExpansions->endExpansionCE);
   uprv_free(t->maxExpansions->expansionCESize);
@@ -544,34 +538,127 @@ void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t) {
     }
 }
 
-uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE, UCAElements *element, UErrorCode *status) {
-    uint32_t i = 0;
 
-    for (i=1; i<element->cSize; i++) {   /* First add contraction chars to unsafe CP hash table */
-        unsafeCPSet(t->unsafeCP, element->cPoints[i]);
+// Note regarding surrogate handling: We are interested only in the single
+// or leading surrogates in a contraction. If a surrogate is somewhere else
+// in the contraction, it is going to be handled as a pair of code units,
+// as it doesn't affect the performance AND handling surrogates specially
+// would complicate code way too much.
+uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE, 
+                                 UCAElements *element, UErrorCode *status) {
+    CntTable *contractions = t->contractions;
+    UChar32 cp;
+    uint32_t cpsize = 0;
+
+    // First we need to check if contractions starts with a surrogate
+    UTF_NEXT_CHAR(element->cPoints, cpsize, element->cSize, cp);
+
+    if(cpsize<element->cSize) { // This is a real contraction, if there are other characters after the first
+      uint32_t j = 0;
+      for (j=1; j<element->cSize; j++) {   /* First add contraction chars to unsafe CP hash table */
+          unsafeCPSet(t->unsafeCP, element->cPoints[j]);
+      }
+      // Add the last char of the contraction to the contraction-end hash table.
+      ContrEndCPSet(t->contrEndCP, element->cPoints[element->cSize -1]);
+      if(UCOL_ISJAMO(element->cPoints[0])) {
+        t->image->jamoSpecial = TRUE;
+      }
+      /* then we need to deal with it */
+      /* we could aready have something in table - or we might not */
+      /* The fact is that we want to add or modify an existing contraction */
+      /* and add it backwards then */
+      element->cPoints+=cpsize;
+      element->cSize-=cpsize;
+      if(!isContraction(CE)) { 
+        /* if it wasn't contraction, we wouldn't end up here*/
+        int32_t firstContractionOffset = 0;
+        int32_t contractionOffset = 0;
+        firstContractionOffset = uprv_cnttab_addContraction(contractions, UPRV_CNTTAB_NEWELEMENT, 0, CE, status);
+        uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
+        contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, *element->cPoints, newCE, status);
+        contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, CE, status);
+        CE =  constructContractCE(firstContractionOffset);
+      } else { /* we are adding to existing contraction */
+        /* there were already some elements in the table, so we need to add a new contraction */
+        /* Two things can happen here: either the codepoint is already in the table, or it is not */
+        int32_t position = uprv_cnttab_findCP(contractions, CE, *element->cPoints, status);
+        if(position > 0) {       /* if it is we just continue down the chain */
+          uint32_t eCE = uprv_cnttab_getCE(contractions, CE, position, status);
+          uint32_t newCE = uprv_uca_processContraction(contractions, element, eCE, status);
+          uprv_cnttab_setContraction(contractions, CE, position, *(element->cPoints), newCE, status);
+        } else {                  /* if it isn't, we will have to create a new sequence */
+          uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
+          uprv_cnttab_insertContraction(contractions, CE, *(element->cPoints), newCE, status);
+        }
+      }
+      element->cPoints-=cpsize;
+      element->cSize+=cpsize;
+      ucmpe32_set(t->mapping, cp, CE);
+    } else if(!isContraction(CE)) { /* this is just a surrogate, and there is no contraction */
+      ucmpe32_set(t->mapping, cp, element->mapCE);
+    } else { /* fill out the first stage of the contraction with the surrogate CE */
+      uprv_cnttab_changeContraction(contractions, CE, 0, element->mapCE, status);
+      uprv_cnttab_changeContraction(contractions, CE, 0xFFFF, element->mapCE, status);
     }
-    // Add the last char of the contraction to the contraction-end hash table.
-    ContrEndCPSet(t->contrEndCP, element->cPoints[element->cSize -1]);
+    return CE;
+}
 
-    if(UCOL_ISJAMO(element->cPoints[0])) {
-      t->image->jamoSpecial = TRUE;
+
+uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status) {
+    int32_t firstContractionOffset = 0;
+    int32_t contractionOffset = 0;
+    uint32_t contractionElement = UCOL_NOT_FOUND;
+
+    if(U_FAILURE(*status)) {
+        return UCOL_NOT_FOUND;
     }
 
-    /* then we need to deal with it */
-    /* we could aready have something in table - or we might not */
-    /* The fact is that we want to add or modify an existing contraction */
-    /* and add it backwards then */
-    uint32_t result = uprv_uca_processContraction(t->contractions, element, CE, status);
-    if(CE == UCOL_NOT_FOUND || !isContraction(CE)) {
-      ucmp32_set(t->mapping, element->cPoints[0], result);
+    /* end of recursion */
+    if(element->cSize == 1) {
+      if(isContraction(existingCE)) {
+        uprv_cnttab_changeContraction(contractions, existingCE, 0, element->mapCE, status);
+        uprv_cnttab_changeContraction(contractions, existingCE, 0xFFFF, element->mapCE, status);
+        return existingCE;
+      } else {
+        return element->mapCE; /*can't do just that. existingCe might be a contraction, meaning that we need to do another step */
+      }
     }
 
-    return result;
+    /* this recursion currently feeds on the only element we have... We will have to copy it in order to accomodate */
+    /* for both backward and forward cycles */
+
+    /* we encountered either an empty space or a non-contraction element */
+    /* this means we are constructing a new contraction sequence */
+    element->cPoints++;
+    element->cSize--;
+    if(!isContraction(existingCE)) { 
+      /* if it wasn't contraction, we wouldn't end up here*/
+      firstContractionOffset = uprv_cnttab_addContraction(contractions, UPRV_CNTTAB_NEWELEMENT, 0, existingCE, status);
+      uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
+      contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, *element->cPoints, newCE, status);
+      contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, existingCE, status);
+      existingCE =  constructContractCE(firstContractionOffset);
+    } else { /* we are adding to existing contraction */
+      /* there were already some elements in the table, so we need to add a new contraction */
+      /* Two things can happen here: either the codepoint is already in the table, or it is not */
+      int32_t position = uprv_cnttab_findCP(contractions, existingCE, *element->cPoints, status);
+      if(position > 0) {       /* if it is we just continue down the chain */
+        uint32_t eCE = uprv_cnttab_getCE(contractions, existingCE, position, status);
+        uint32_t newCE = uprv_uca_processContraction(contractions, element, eCE, status);
+        uprv_cnttab_setContraction(contractions, existingCE, position, *(element->cPoints), newCE, status);
+      } else {                  /* if it isn't, we will have to create a new sequence */
+        uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
+        uprv_cnttab_insertContraction(contractions, existingCE, *(element->cPoints), newCE, status);
+      }
+    }
+    element->cPoints--;
+    element->cSize++;
+    return existingCE;
 }
 
 /* This adds a read element, while testing for existence */
 uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status) {
-  CompactIntArray *mapping = t->mapping;
+  CompactEIntArray *mapping = t->mapping;
   ExpansionTable *expansions = t->expansions;
   CntTable *contractions = t->contractions; 
 
@@ -619,10 +706,14 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
     }
   }
 
-  CE = ucmp32_get(mapping, element->cPoints[0]);
 
   if(element->cSize > 1) { /* we're adding a contraction */
-    /* OR A SURROGATE - HERE IS WHERE THE DISTINCTION HAS TO BE MADE! */
+    uint32_t i = 0;
+    UChar32 cp;
+
+    UTF_NEXT_CHAR(element->cPoints, i, element->cSize, cp);
+    CE = ucmpe32_get(mapping, cp);
+
     UCAElements *composed = (UCAElements *)uprv_malloc(sizeof(UCAElements));
     uprv_memcpy(composed, element, sizeof(UCAElements));
     composed->cPoints = composed->uchars;
@@ -639,22 +730,23 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
     uprv_free(composed);
 
     CE = uprv_uca_addContraction(t, CE, element, status);
-
   } else { /* easy case, */
+    CE = ucmpe32_get(mapping, element->cPoints[0]);
+
     if( CE != UCOL_NOT_FOUND) {
         if(isContraction(CE)) { /* adding a non contraction element (thai, expansion, single) to already existing contraction */
             uprv_cnttab_setContraction(contractions, CE, 0, 0, element->mapCE, status);
             /* This loop has to change the CE at the end of contraction REDO!*/
             uprv_cnttab_changeLastCE(contractions, CE, element->mapCE, status);
         } else {
-          ucmp32_set(mapping, element->cPoints[0], element->mapCE);
+          ucmpe32_set(mapping, element->cPoints[0], element->mapCE);
 #ifdef UCOL_DEBUG
           fprintf(stderr, "Warning - trying to overwrite existing data %08X for cp %04X with %08X\n", CE, element->cPoints[0], element->CEs[0]);
           //*status = U_ILLEGAL_ARGUMENT_ERROR;
 #endif
         }
     } else {
-      ucmp32_set(mapping, element->cPoints[0], element->mapCE);
+      ucmpe32_set(mapping, element->cPoints[0], element->mapCE);
     }
   }
 
@@ -662,66 +754,8 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
   return CE;
 }
 
-uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status) {
-    int32_t firstContractionOffset = 0;
-    int32_t contractionOffset = 0;
-    uint32_t contractionElement = UCOL_NOT_FOUND;
 
-    if(U_FAILURE(*status)) {
-        return UCOL_NOT_FOUND;
-    }
-
-    /* end of recursion */
-    if(element->cSize == 1) {
-      if(isContraction(existingCE)) {
-        uprv_cnttab_changeContraction(contractions, existingCE, 0, element->mapCE, status);
-        uprv_cnttab_changeContraction(contractions, existingCE, 0xFFFF, element->mapCE, status);
-        return existingCE;
-      } else {
-        return element->mapCE; /*can't do just that. existingCe might be a contraction, meaning that we need to do another step */
-      }
-    }
-
-    /* this recursion currently feeds on the only element we have... We will have to copy it in order to accomodate */
-    /* for both backward and forward cycles */
-
-    /* we encountered either an empty space or a non-contraction element */
-    /* this means we are constructing a new contraction sequence */
-    if(existingCE == UCOL_NOT_FOUND || !isContraction(existingCE)) { 
-      /* if it wasn't contraction, we wouldn't end up here*/
-      firstContractionOffset = uprv_cnttab_addContraction(contractions, UPRV_CNTTAB_NEWELEMENT, 0, existingCE, status);
-
-      UChar toAdd = element->cPoints[1];
-      element->cPoints++;
-      element->cSize--;
-      uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
-      element->cPoints--;
-      element->cSize++;
-      contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, toAdd, newCE, status);
-      contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, existingCE, status);
-      contractionElement =  constructContractCE(firstContractionOffset);
-      return contractionElement;
-    } else { /* we are adding to existing contraction */
-      /* there were already some elements in the table, so we need to add a new contraction */
-      /* Two things can happen here: either the codepoint is already in the table, or it is not */
-      int32_t position = uprv_cnttab_findCP(contractions, existingCE, *(element->cPoints+1), status);
-      element->cPoints++;
-      element->cSize--;
-      if(position > 0) {       /* if it is we just continue down the chain */
-        uint32_t eCE = uprv_cnttab_getCE(contractions, existingCE, position, status);
-        uint32_t newCE = uprv_uca_processContraction(contractions, element, eCE, status);
-        uprv_cnttab_setContraction(contractions, existingCE, position, *(element->cPoints), newCE, status);
-      } else {                  /* if it isn't, we will have to create a new sequence */
-        uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
-        uprv_cnttab_insertContraction(contractions, existingCE, *(element->cPoints), newCE, status);
-      }
-      element->cPoints--;
-      element->cSize++;
-      return existingCE;
-    }
-}
-
-void uprv_uca_getMaxExpansionJamo(CompactIntArray       *mapping, 
+void uprv_uca_getMaxExpansionJamo(CompactEIntArray       *mapping, 
                                   MaxExpansionTable     *maxexpansion,
                                   MaxJamoExpansionTable *maxjamoexpansion,
                                   UBool                  jamospecial,
@@ -737,7 +771,7 @@ void uprv_uca_getMaxExpansionJamo(CompactIntArray       *mapping,
   uint32_t ce;
 
   while (v >= VBASE) {
-      ce = ucmp32_get(mapping, v);
+      ce = ucmpe32_get(mapping, v);
       if (ce < UCOL_SPECIAL_FLAG) {
           uprv_uca_setMaxExpansion(ce, 2, maxexpansion, status);
       }
@@ -746,7 +780,7 @@ void uprv_uca_getMaxExpansionJamo(CompactIntArray       *mapping,
 
   while (t >= TBASE)
   {
-      ce = ucmp32_get(mapping, t);
+      ce = ucmpe32_get(mapping, t);
       if (ce < UCOL_SPECIAL_FLAG) {
           uprv_uca_setMaxExpansion(ce, 3, maxexpansion, status);
       }
@@ -780,7 +814,7 @@ void uprv_uca_getMaxExpansionJamo(CompactIntArray       *mapping,
 
 
 UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
-    CompactIntArray *mapping = t->mapping;
+    CompactEIntArray *mapping = t->mapping;
     ExpansionTable *expansions = t->expansions;
     CntTable *contractions = t->contractions; 
     MaxExpansionTable *maxexpansion = t->maxExpansions;
@@ -794,9 +828,9 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     int32_t contractionsSize = 0;
     contractionsSize = uprv_cnttab_constructTable(contractions, beforeContractions, status);
 
-    ucmp32_compact(mapping, 1);
+    ucmpe32_compact(mapping);
     UMemoryStream *ms = uprv_mstrm_openNew(8192);
-    int32_t mappingSize = ucmp32_flattenMem(mapping, ms);
+    int32_t mappingSize = ucmpe32_flattenMem(mapping, ms);
     const uint8_t *flattened = uprv_mstrm_getBuffer(ms, &mappingSize);
 
     /* sets jamo expansions */
@@ -880,7 +914,7 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     uint32_t *store = (uint32_t*)(dataStart+tableOffset);
     int32_t i = 0;
     for(i = 0; i<=0xFF; i++) {
-        *(store++) = ucmp32_get(mapping,i);
+        *(store++) = ucmpe32_get(mapping,i);
         tableOffset+=sizeof(uint32_t);
     }
 

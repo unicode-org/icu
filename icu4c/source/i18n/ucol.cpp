@@ -489,7 +489,7 @@ ucol_close(UCollator *coll)
     }
   }
   if(coll->mapping != NULL) {
-      ucmp32_close(coll->mapping);
+      ucmpe32_close(coll->mapping);
   }
   if(coll->rules != NULL && coll->freeRulesOnClose) {
     uprv_free((UChar *)coll->rules);
@@ -722,7 +722,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
 
     result->image = image;
     const uint8_t *mapping = (uint8_t*)result->image+result->image->mappingPosition;
-    CompactIntArray *newUCAmapping = ucmp32_openFromData(&mapping, status);
+    CompactEIntArray *newUCAmapping = ucmpe32_openFromData(&mapping, status);
     if(U_SUCCESS(*status)) {
         result->mapping = newUCAmapping;
     } else {
@@ -1106,7 +1106,7 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
       }
       else
       {
-          order = ucmp32_get(coll->mapping, ch);                             /* we'll go for slightly slower trie */
+          order = ucmpe32_get(coll->mapping, ch);                             /* we'll go for slightly slower trie */
           if(order > UCOL_NOT_FOUND) {                                       /* if a CE is special                */
               order = getSpecialCE(coll, order, collationSource, status);    /* and try to get the special CE     */
           }
@@ -1395,7 +1395,7 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                     result = UCOL_THAI;
                 }
                 else {
-                    result = ucmp32_get(coll->mapping, ch);
+                    result = ucmpe32_get(coll->mapping, ch);
                 }
                 if (result > UCOL_NOT_FOUND) {
                     result = getSpecialPrevCE(coll, result, data, status);
@@ -1434,7 +1434,7 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
     uint32_t order;
 
     /* if we got here, the codepoint MUST be over 0xFF - so we look directly in the trie */
-    order = ucmp32_get(UCA->mapping, ch);
+    order = ucmpe32_get(UCA->mapping, ch);
 
     if(order > UCOL_NOT_FOUND) { /* UCA also gives us a special CE */
       order = getSpecialCE(UCA, order, collationSource, status);
@@ -1472,12 +1472,12 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
         // return the first CE, but first put the rest into the expansion buffer
         if (!collationSource->coll->image->jamoSpecial) { // FAST PATH
 
-          *(collationSource->CEpos++) = ucmp32_get(UCA->mapping, V);
+          *(collationSource->CEpos++) = ucmpe32_get(UCA->mapping, V);
           if (T != TBase) {
-              *(collationSource->CEpos++) = ucmp32_get(UCA->mapping, T);
+              *(collationSource->CEpos++) = ucmpe32_get(UCA->mapping, T);
           }
 
-          return ucmp32_get(UCA->mapping, L); // return first one
+          return ucmpe32_get(UCA->mapping, L); // return first one
 
         } else { // Jamo is Special
           collIterate jamos;
@@ -1585,7 +1585,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
       }
       else {
       */
-        order = ucmp32_get(UCA->mapping, ch);
+        order = ucmpe32_get(UCA->mapping, ch);
       //}
   }
 
@@ -1635,10 +1635,10 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
       */
       if (!collationSource->coll->image->jamoSpecial)
       {
-        *(collationSource->CEpos ++) = ucmp32_get(UCA->mapping, L);
-        *(collationSource->CEpos ++) = ucmp32_get(UCA->mapping, V);
+        *(collationSource->CEpos ++) = ucmpe32_get(UCA->mapping, L);
+        *(collationSource->CEpos ++) = ucmpe32_get(UCA->mapping, V);
         if (T != TBase)
-          *(collationSource->CEpos ++) = ucmp32_get(UCA->mapping, T);
+          *(collationSource->CEpos ++) = ucmpe32_get(UCA->mapping, T);
 
         collationSource->toReturn = collationSource->CEpos - 1;
         return *(collationSource->toReturn);
@@ -2139,8 +2139,19 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
       /* This one is not found, and we'll let somebody else bother about it... no more games */
       return CE;
     case SURROGATE_TAG:
-      /* pending surrogate discussion with Markus and Mark */
-      return UCOL_NOT_FOUND;
+      /* we encountered a leading surrogate. We shall get the CE by using the following code unit */
+      /* two things can happen here: next code point can be a trailing surrogate - we will use it */
+      /* to retrieve the CE, or it is not a trailing surrogate (or the string is done). In that case */
+      /* we return 0 (completely ignorable - per UCA specification */
+      {
+        UChar trail;
+        if (collIter_eos(source) || !(UTF16_IS_TRAIL((trail = getNextNormalizedChar(source))))) {
+          return 0;
+        } else {
+          CE = ucmpe32_getSurrogate(coll->mapping, CE, trail);
+        }
+      }
+      break;
     case THAI_TAG:
       /* Thai/Lao reordering */
         if  (((source->flags) & UCOL_ITER_INNORMBUF) ||     /* Already Swapped     ||                 */
@@ -4328,7 +4339,7 @@ U_CAPI UBool isTailored(const UCollator *coll, const UChar u, UErrorCode *status
         return FALSE;
       }
     } else { /* regular */
-      CE = ucmp32_get(coll->mapping, u);
+      CE = ucmpe32_get(coll->mapping, u);
     }
 
     if(isContraction(CE)) {
