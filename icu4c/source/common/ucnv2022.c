@@ -550,7 +550,6 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
         if(myLocale[0]=='j' && (myLocale[1]=='a'|| myLocale[1]=='p') && 
             (myLocale[2]=='_' || myLocale[2]=='\0')){
             int len=0;
-            char* temp;
             /* open the required converters and cache them */
             myConverterData->myConverterArray[0]=   ucnv_open("ASCII", errorCode );
             myConverterData->myConverterArray[1]=   ucnv_open("ISO8859_1", errorCode);
@@ -570,14 +569,12 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             /* set the function pointers to appropriate funtions */
             cnv->sharedData=(UConverterSharedData*)(&_ISO2022JPData);
             uprv_strcpy(myConverterData->locale,"ja");
-                        
+
             myConverterData->version =options & UCNV_OPTIONS_VERSION_MASK;
-            temp = "ISO_2022,locale=ja,version=";
-            uprv_strcpy(myConverterData->name,temp);
-            len=strlen(temp);
+            uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=");
+            len=strlen(myConverterData->name);
             myConverterData->name[len-1]=(char)(myConverterData->version+(int)'0');
             myConverterData->name[len]='\0';
-           
         }
         else if(myLocale[0]=='k' && (myLocale[1]=='o'|| myLocale[1]=='r') && 
             (myLocale[2]=='_' || myLocale[2]=='\0')){
@@ -585,7 +582,7 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             /* initialize the state variables */
             setInitialStateToUnicodeKR(cnv, myConverterData);
             setInitialStateFromUnicodeKR(cnv,myConverterData);
-       
+
             if ((options  & UCNV_OPTIONS_VERSION_MASK)==1){
                     myConverterData->version = 1;
                     myConverterData->currentConverter=myConverterData->fromUnicodeConverter=
@@ -620,8 +617,8 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             /* set the function pointers to appropriate funtions */
             cnv->sharedData=(UConverterSharedData*)&_ISO2022CNData;
             uprv_strcpy(myConverterData->locale,"cn");
-            
-            if ((options  & UCNV_OPTIONS_VERSION_MASK)==1){             
+
+            if ((options  & UCNV_OPTIONS_VERSION_MASK)==1){
                myConverterData->version = 1;
                uprv_strcpy(myConverterData->name,"ISO_2022,locale=cn,version=1");
             }else{
@@ -2028,7 +2025,7 @@ getTrail:
     /*save the state and return */
     args->source = source;
     args->target = (char*)target;
-    args->converter->fromUnicodeStatus = (int32_t)isTargetByteDBCS;
+    args->converter->fromUnicodeStatus = (uint32_t)isTargetByteDBCS;
 }
 
 /************************ To Unicode ***************************************/
@@ -2159,7 +2156,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeA
                 else{
                     tempBuf[0] = (char) (args->converter->toUnicodeStatus+0x80);
                     tempBuf[1] = (char) (mySourceChar+0x80);
-                    mySourceChar+= (UChar)(args->converter->toUnicodeStatus)<<8;
+                    mySourceChar = (UChar)(mySourceChar + (args->converter->toUnicodeStatus<<8));
                     args->converter->toUnicodeStatus =0x00;
                     pBuf = &tempBuf[0];
                     tempLimit = &tempBuf[2]+1;
