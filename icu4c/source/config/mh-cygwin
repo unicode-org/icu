@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Cygwin-specific setup
-## Copyright (c) 2001-2004, International Business Machines Corporation and
+## Copyright (c) 2001-2005, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -67,12 +67,12 @@ I18N_STUBNAME = in
 %.d: $(srcdir)/%.c
 	@echo "generating dependency information for $<"
 	@echo -n "$@ " > $@
-	@$(SHELL) -ec '$(GEN_DEPS.c) $< >> $@; [ -s $@ ] || rm -f $@'
+	@$(GEN_DEPS.c) $< >> $@ || (rm -f $@ && FALSE)
 
 %.d: $(srcdir)/%.cpp
 	@echo "generating dependency information for $<"
 	@echo -n "$@ " > $@
-	@$(SHELL) -ec '$(GEN_DEPS.cc) $< >> $@; [ -s $@ ] || rm -f $@'
+	@$(GEN_DEPS.cc) $< >> $@ || (rm -f $@ && FALSE)
 
 ## Versioned target for a shared library.
 ## Since symbolic links don't work the same way on Windows,
