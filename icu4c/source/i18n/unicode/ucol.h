@@ -270,9 +270,10 @@ ucol_openVersion(const char *loc,
  * The UCollator may be used in calls to \Ref{ucol_strcoll}.
  * @param rules A string describing the collation rules.
  * @param rulesLength The length of rules, or -1 if null-terminated.
- * @param mode The normalization mode; one of UCOL_NO_NORMALIZATION,
- * UCOL_CAN_DECOMP, UCOL_COMPAT_DECOMP, UCOL_CAN_DECOMP_COMPAT_COMP,
- * UCOL_COMPAT_DECOMP_CAN_COMP, UCOL_DEFAULT_NORMALIZATION
+ * @param normalizationMode The normalization mode: One of
+ *             UCOL_OFF     (expect the text to not need normalization),
+ *             UCOL_ON      (normalize), or
+ *             UCOL_DEFAULT (set the mode according to the rules)
  * @param strength The collation strength; one of UCOL_PRIMARY, UCOL_SECONDARY,
  * UCOL_TERTIARY, UCOL_IDENTICAL,UCOL_DEFAULT_STRENGTH
  * @param status A pointer to an UErrorCode to receive any errors
@@ -285,7 +286,7 @@ ucol_openVersion(const char *loc,
 U_CAPI UCollator*
 ucol_openRules( const UChar        *rules,
                 int32_t            rulesLength,
-                UNormalizationMode mode,
+                UColAttributeValue normalizationMode,
                 UCollationStrength strength,
                 UParseError        *parseError,
                 UErrorCode         *status);
@@ -424,33 +425,6 @@ ucol_getStrength(const UCollator *coll);
 U_CAPI void
 ucol_setStrength(    UCollator            *coll,
             UCollationStrength        strength);
-
-/**
- * Get the normalization mode used in a UCollator.
- * The normalization mode influences how strings are compared.
- * @param coll The UCollator to query.
- * @return The normalization mode; one of UCOL_NO_NORMALIZATION, 
- * UCOL_CAN_DECOMP, UCOL_COMPAT_DECOMP, UCOL_CAN_DECOMP_COMPAT_COMP,
- * UCOL_COMPAT_DECOMP_CAN_COMP, UCOL_DEFAULT_NORMALIZATION
- * @see ucol_setNormalization
- * @stable
- */
-U_CAPI UNormalizationMode
-ucol_getNormalization(const UCollator* coll);
-
-/**
- * Set the normalization mode used in a UCollator.
- * The normalization mode influences how strings are compared.
- * @param coll The UCollator to set.
- * @param mode The desired normalization mode; one of UCOL_NO_NORMALIZATION,
- * UCOL_CAN_DECOMP, UCOL_COMPAT_DECOMP, UCOL_CAN_DECOMP_COMPAT_COMP, 
- * UCOL_COMPAT_DECOMP_CAN_COMP, UCOL_DEFAULT_NORMALIZATION
- * @see ucol_getNormalization
- * @stable
- */
-U_CAPI void
-ucol_setNormalization(  UCollator        *coll,
-            UNormalizationMode    mode);
 
 /**
  * Get the display name for a UCollator.
@@ -633,6 +607,32 @@ U_CAPI int32_t ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UCha
 #include "unicode/ucoleitr.h"
 
 /********************************* Deprecated API ********************************/
+
+/**
+ * Get the normalization mode used in a UCollator.
+ * The normalization mode influences how strings are compared.
+ * @param coll The UCollator to query.
+ * @return The normalization mode, UNORM_NONE or UNORM_NFD.
+ * @see ucol_setNormalization
+ * @deprecated To be removed after 2002-sep-30; use ucol_getAttribute().
+ */
+U_CAPI UNormalizationMode
+ucol_getNormalization(const UCollator* coll);
+
+/**
+ * Set the normalization mode used in a UCollator.
+ * The normalization mode influences how strings are compared.
+ * @param coll The UCollator to set.
+ * @param mode The desired normalization mode: One of
+ *             UNORM_NONE (expect the text to not need normalization),
+ *             UNORM_NFD (normalize)
+ * @see ucol_getNormalization
+ * @deprecated To be removed after 2002-sep-30; use ucol_setAttribute().
+ */
+U_CAPI void
+ucol_setNormalization(  UCollator        *coll,
+            UNormalizationMode    mode);
+
 /**
  *@deprecated Remove after Aug 2002
  */
@@ -641,7 +641,7 @@ U_CAPI int32_t ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UCha
 #if ((U_ICU_VERSION_MAJOR_NUM != 1) || (U_ICU_VERSION_MINOR_NUM !=9))
 #   error "ICU version has changed. Please redefine the macros under U_USE_DEPRECATED_FORMAT_API pre-processor definition"
 #else 
-#   define ucol_openRules_1_9(rules,rulesLength,modes,strength,status) ucol_openRules(rules,rulesLength,modes,strength,NULL,status)
+#   define ucol_openRules_1_9(rules,rulesLength,normalizationMode,strength,status) ucol_openRules(rules,rulesLength,(UColAttributeValue)normalizationMode,strength,NULL,status)
 #endif
 
 #endif
