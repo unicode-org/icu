@@ -92,7 +92,7 @@ U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_initAlias(CompactByteArray *this_obj,
                                int32_t count);
 
 U_CAPI  void U_EXPORT2 ucmp8_close(CompactByteArray* array);
-U_CAPI  UBool U_EXPORT2 isBogus(const CompactByteArray* array);
+U_CAPI  UBool U_EXPORT2 ucmp8_isBogus(const CompactByteArray* array);
 
 #define ucmp8_get(array, index)  (array->fArray[(array->fIndex[index >> UCMP8_kBlockShift] & 0xFFFF) + (index & UCMP8_kBlockMask)])
 
