@@ -135,8 +135,9 @@ static void TestQuotes(void)
     str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
     unum_format(fmt, 123, str, lneed+1,  NULL, &status);
   }
-  if(U_FAILURE(status)) {
+  if(U_FAILURE(status) || !str) {
     log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
+    return;
   }
   log_verbose("Pattern \"%s\" \n", u_austrcpy(tempBuf, pat) );
   log_verbose("Format 123 -> %s\n", u_austrcpy(tempBuf, str) );
@@ -364,10 +365,13 @@ static void TestCurrencySign(void)
   }
   log_verbose("Pattern \" %s \" \n", u_austrcpy(tempBuf, pat));
   log_verbose("Format 1234.56 -> %s\n", u_austrcpy(tempBuf, str) );
-
-  res=(UChar*)malloc(sizeof(UChar) * (strlen("$1,234.56")+1) );
-  u_uastrcpy(res, "$1,234.56");
-  if (u_strcmp(str, res) !=0) log_err("FAIL: Expected $1,234.56\n");
+  if(U_SUCCESS(status) && str) {
+    res=(UChar*)malloc(sizeof(UChar) * (strlen("$1,234.56")+1) );
+    u_uastrcpy(res, "$1,234.56");
+    if (u_strcmp(str, res) !=0) log_err("FAIL: Expected $1,234.56\n");
+  } else {
+    log_err("Error formatting\n");
+  }
   free(str);
   free(res);
   free(pat);
@@ -382,11 +386,13 @@ static void TestCurrencySign(void)
   if(U_FAILURE(status)) {
     log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
   }
-  res=(UChar*)malloc(sizeof(UChar) * (strlen("-$1,234.56")+1) );
-  u_uastrcpy(res, "-$1,234.56");
-  if (u_strcmp(str, res) != 0) log_err("FAIL: Expected -$1,234.56\n");
-  free(str);
-  free(res);
+  if(str) {
+    res=(UChar*)malloc(sizeof(UChar) * (strlen("-$1,234.56")+1) );
+    u_uastrcpy(res, "-$1,234.56");
+    if (u_strcmp(str, res) != 0) log_err("FAIL: Expected -$1,234.56\n");
+    free(str);
+    free(res);
+  }
 
   unum_close(fmt);  
   free(pattern);
