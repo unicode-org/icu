@@ -165,10 +165,33 @@
 
 #   define NO_LIBRARY NULL
 #   define IS_LIBRARY(lib) ((lib)!=NULL)
+
+
+#ifndef UDATA_DEBUG
 #   define LOAD_LIBRARY(path, basename) dlopen(path, RTLD_LAZY|RTLD_GLOBAL)
 #   define UNLOAD_LIBRARY(lib) dlclose(lib)
-
 #   define GET_LIBRARY_ENTRY(lib, entryName) dlsym(lib, entryName)
+#else
+  void *LOAD_LIBRARY(const char *path, const char *basename)
+  {
+    void *rc;
+    rc = dlopen(path, RTLD_LAZY|RTLD_GLOBAL);
+    fprintf(stderr, "Load [%s|%s] -> %p\n", path, basename, rc);
+    return rc;
+  }
+  void  UNLOAD_LIBRARY(void *lib)
+  {
+    dlclose(lib);
+    fprintf(stderr, "Unload [%p]\n", lib);
+  }
+  void * GET_LIBRARY_ENTRY(void *lib, const char *entryName)
+  {
+    void *rc;
+    rc = dlsym(lib, entryName);
+    fprintf(stderr, "Get[%p] %s->%p\n", lib, entryName, rc);
+    return rc;
+  }
+#endif
   /* End of dlopen or compatible functions */
 
 #else /* unknown platform, no DLL implementation */
@@ -481,6 +504,12 @@ offsetTOCLookupFn(const UDataMemory *pData,
                   const char *tocEntryName,
                   const char *dllEntryName,
                   UErrorCode *pErrorCode) {
+#ifdef UDATA_DEBUG
+  fprintf(stderr, "offsetTOC[%p] looking for %s/%s\n",
+	  pData,
+	  tocEntryName,dllEntryName);
+#endif
+
     if(pData->toc!=NULL) {
         const char *base=(const char *)pData->toc;
         uint32_t *toc=(uint32_t *)pData->toc;
@@ -500,11 +529,21 @@ offsetTOCLookupFn(const UDataMemory *pData,
 
         if(uprv_strcmp(tocEntryName, base+toc[2*start])==0) {
             /* found it */
+#ifdef UDATA_DEBUG
+	  fprintf(stderr, "Found: %p\n",(base+toc[2*start+1]));
+#endif
             return (const DataHeader *)(base+toc[2*start+1]);
         } else {
+#ifdef UDATA_DEBUG
+	  fprintf(stderr, "Not found.\n");
+#endif
             return NULL;
         }
     } else {
+#ifdef UDATA_DEBUG
+      fprintf(stderr, "returning header\n");
+#endif
+
         return pData->pHeader;
     }
 }
@@ -514,6 +553,11 @@ pointerTOCLookupFn(const UDataMemory *pData,
                    const char *tocEntryName,
                    const char *dllEntryName,
                    UErrorCode *pErrorCode) {
+#ifdef UDATA_DEBUG
+  fprintf(stderr, "ptrTOC[%p] looking for %s/%s\n",
+	  pData,
+	  tocEntryName,dllEntryName);
+#endif
     if(pData->toc!=NULL) {
         const PointerTOCEntry *toc=(const PointerTOCEntry *)((const uint32_t *)pData->toc+2);
         uint32_t start, limit, number;
@@ -521,6 +565,12 @@ pointerTOCLookupFn(const UDataMemory *pData,
         /* perform a binary search for the data in the common data's table of contents */
         start=0;
         limit=*(const uint32_t *)pData->toc; /* number of names in this table of contents */
+
+#ifdef UDATA_DEBUG
+	fprintf(stderr, "  # of ents: %d\n", limit);
+	fflush(stderr);
+#endif
+
         while(start<limit-1) {
             number=(start+limit)/2;
             if(uprv_strcmp(tocEntryName, toc[number].entryName)<0) {
@@ -532,12 +582,23 @@ pointerTOCLookupFn(const UDataMemory *pData,
 
         if(uprv_strcmp(tocEntryName, toc[start].entryName)==0) {
             /* found it */
-            return normalizeDataPointer(toc[start].pHeader);
+#ifdef UDATA_DEBUG
+	  fprintf(stderr, "FOUND: %p\n", 
+		  normalizeDataPointer(toc[start].pHeader));
+#endif
+
+             return normalizeDataPointer(toc[start].pHeader);
         } else {
+#ifdef UDATA_DEBUG
+	  fprintf(stderr, "NOT found\n");
+#endif
             return NULL;
         }
     } else {
-        return pData->pHeader;
+#ifdef UDATA_DEBUG
+         fprintf(stderr, "Returning header\n");
+#endif
+	 return pData->pHeader;
     }
 }
 
@@ -556,7 +617,7 @@ dllTOCLookupFn(const UDataMemory *pData,
 
 /* common library functions ------------------------------------------------- */
 
-static UDataMemory commonICUData={ NULL };
+ static UDataMemory commonICUData={ NULL }; 
 
 static void
 setCommonICUData(UDataMemory *pData) {
@@ -921,9 +982,17 @@ doOpenChoice(const char *path, const char *type, const char *name,
     uprv_memset(&dataMemory, 0, sizeof(UDataMemory));
     pathBuffer[0]=0;
     pCommonData=openCommonData(&dataMemory, path, isICUData, pathBuffer, &errorCode);
+#ifdef UDATA_DEBUG
+    fprintf(stderr, "commonData;%p\n", pCommonData);
+    fflush(stderr);
+#endif
+
     if(U_SUCCESS(errorCode)) {
         /* look up the data piece in the common data */
         pHeader=pCommonData->lookupFn(pCommonData, tocEntryName, dllEntryName, &errorCode);
+#ifdef UDATA_DEBUG
+	fprintf(stderr, "Common found: %p\n", pHeader);
+#endif
         if(pHeader!=NULL) {
             /* data found in the common data, test it */
             if(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
@@ -949,9 +1018,15 @@ doOpenChoice(const char *path, const char *type, const char *name,
                 pEntryData->parent=pCommonData;
                 pEntryData->pHeader=pHeader;
                 pEntryData->flags=(pCommonData->flags&DATA_MEMORY_TYPE_MASK)|1UL<<DYNAMIC_DATA_MEMORY_SHIFT;
+#ifdef UDATA_DEBUG
+		fprintf(stderr, " made data @%p\n", pEntryData);
+#endif
                 return pEntryData;
             } else {
                 /* the data is not acceptable, look further */
+#ifdef UDATA_DEBUG
+	      fprintf(stderr, "Not acceptable\n");
+#endif
                 errorCode=U_INVALID_FORMAT_ERROR;
             }
         }
@@ -969,6 +1044,10 @@ doOpenChoice(const char *path, const char *type, const char *name,
     } else {
         inBasename=findBasename(path);
     }
+
+#ifdef UDATA_DEBUG
+    fprintf(stderr, "looking for ind. file\n");
+#endif
 
     /* try path+basename+"_"+entryName first */
     if(*inBasename!=0) {
@@ -1068,7 +1147,7 @@ U_CAPI UDataMemory * U_EXPORT2
 udata_open(const char *path, const char *type, const char *name,
            UErrorCode *pErrorCode) {
 #ifdef UDATA_DEBUG
-  fprintf(stderr, "udata_open(): Opening: %s . %s\n", name, type);
+  fprintf(stderr, "udata_open(): Opening: %s . %s\n", name, type);fflush(stderr);
 #endif
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -1085,6 +1164,10 @@ U_CAPI UDataMemory * U_EXPORT2
 udata_openChoice(const char *path, const char *type, const char *name,
                  UDataMemoryIsAcceptable *isAcceptable, void *context,
                  UErrorCode *pErrorCode) {
+#ifdef UDATA_DEBUG
+  fprintf(stderr, "udata_openChoice(): Opening: %s . %s\n", name, type);fflush(stderr);
+#endif
+
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return NULL;
     } else if(name==NULL || *name==0 || isAcceptable==NULL) {
@@ -1097,6 +1180,10 @@ udata_openChoice(const char *path, const char *type, const char *name,
 
 U_CAPI void U_EXPORT2
 udata_close(UDataMemory *pData) {
+#ifdef UDATA_DEBUG
+  fprintf(stderr, "udata_close()\n");fflush(stderr);
+#endif
+
     if(pData!=NULL && IS_DATA_MEMORY_LOADED(pData)) {
         unloadDataMemory(pData);
         if(pData->flags&(1UL<<DYNAMIC_DATA_MEMORY_SHIFT)) {

@@ -153,6 +153,8 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   T_FileStream_writeLine(makefile, tmp);
   sprintf(tmp, "TOCOBJ= %s_dat%s \n\n", o->shortName,OBJ_SUFFIX);
   T_FileStream_writeLine(makefile, tmp);
+  sprintf(tmp, "TOCSYM= %s_dat \n\n", o->shortName);
+  T_FileStream_writeLine(makefile, tmp);
 
   T_FileStream_writeLine(makefile, "BASE_OBJECTS= $(TOCOBJ) ");
 
@@ -165,8 +167,8 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   T_FileStream_writeLine(makefile,"build-objs: $(SOURCES) $(OBJECTS)\n\n$(OBJECTS): $(SOURCES)\n\n");
  
 #ifdef HPUX 
-  T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(TARGET): $(OBJECTS) $(HPUX_JUNK_OBJ) $(LISTFILES)\n"
-                                   "\t$(SHLIB.cc) -o $@ $(OBJECTS) $(HPUX_JUNK_OBJ)\n"
+  T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(TARGET): $(OBJECTS) $(HPUX_JUNK_OBJ) $(LISTFILES) $(BIR_DEPS)\n"
+                                   "\t$(SHLIB.cc) -o $@ $(OBJECTS) $(HPUX_JUNK_OBJ) $(BIR_LDFLAGS)\n"
                                    "\t-ls -l $@\n\n");
 
   T_FileStream_writeLine(makefile, "$(TEMP_DIR)/hpux_junk_obj.cpp:\n"
@@ -176,8 +178,8 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                    "	$(COMPILE.cc) -o $@ $<\n"
                                    "\n");
 #else
-  T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(TARGET): $(OBJECTS) $(LISTFILES)\n"
-                                   "\t$(SHLIB.c) -o $@ $(OBJECTS)\n"
+  T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(TARGET): $(OBJECTS) $(LISTFILES) $(BIR_DEPS)\n"
+                                   "\t$(SHLIB.c) -o $@ $(OBJECTS) $(BIR_LDFLAGS)\n"
                                    "\t-ls -l $@\n\n");
 #endif
 
@@ -186,6 +188,15 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   
   T_FileStream_writeLine(makefile, "install: $(TARGETDIR)/$(TARGET)\n"
                                    "\t$(INSTALL-L) $(TARGETDIR)/$(TARGET) $(INSTALLTO)/$(TARGET)\n\n");
+
+#ifdef U_SOLARIS
+  T_FileStream_writeLine(makefile, "$(NAME).map:\n\techo \"{global: $(TOCSYM); local: *; };\" > $@\n\n");
+#endif
+
+#ifdef AIX
+  T_FileStream_writeLine(makefile, "$(NAME).map:\n\techo \"$(TOCSYM)\" > $@\n\n");
+#endif
+
 
 *status = U_ZERO_ERROR;
 

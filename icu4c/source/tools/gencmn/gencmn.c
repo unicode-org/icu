@@ -105,6 +105,7 @@ main(int argc, char* argv[]) {
     options[7].value=DATA_TYPE;
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
+#ifndef U_HAVE_BIND_INTERNAL_REFERENCES
     /* if it is ICU data.. no prefix. */
     if(!uprv_strcmp(options[6].value, COMMON_DATA_NAME))
     {
@@ -115,6 +116,9 @@ main(int argc, char* argv[]) {
       uprv_strcpy(symPrefix, options[6].value);
       uprv_strcat(symPrefix, "_");
     }
+#else
+    symPrefix[0] = 0;
+#endif
 
     /* error handling, printing usage message */
     if(argc<0) {
