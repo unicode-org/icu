@@ -90,7 +90,7 @@ static void TestFile() {
     u_fprintf(myFile, "Time %%T (non-ANSI): %T\n", myDate);
     u_fprintf(myFile, "Percent %%P (non-ANSI): %P\n", myFloat);
     u_fprintf(myFile, "Currency %%M (non-ANSI): %M\n", myFloat);
-    u_fprintf(myFile, "Spell Out %%V (non-ANSI): %V\n", *n);
+    u_fprintf(myFile, "Spell Out %%V (non-ANSI): %V\n", myFloat);
 
     *n = 1;
     u_fprintf(myFile, "Pointer to integer (Count) %%n: n=%d %n n=%d\n", *n, n, *n);
@@ -626,13 +626,15 @@ static void TestStream() {
     char testStreamBuf[512];
     const char *testStr = "Beginning of test str1   <<432 1" C_NEW_LINE " UTF-8 \xCE\xBC\xF0\x90\x80\x81\xF0\x90\x80\x82";
     ostrstream outTestStream(testStreamBuf, sizeof(testStreamBuf));
-    istrstream inTestStream(" tHis\xCE\xBC mu world", 0);
-    const UChar thisMu[] = { 0x74, 0x48, 0x69, 0x73, 0x3BC ,0};
+    istrstream inTestStream(" tHis\xCE\xBC\xE2\x80\x82 mu world", 0);
+    const UChar thisMu[] = { 0x74, 0x48, 0x69, 0x73, 0x3BC, 0};
+    const UChar mu[] = { 0x6D, 0x75, 0};
     UnicodeString str1 = UNICODE_STRING_SIMPLE("str1");
     UnicodeString str2 = UNICODE_STRING_SIMPLE(" <<");
     UnicodeString str3 = UNICODE_STRING_SIMPLE("4");
     UnicodeString str4 = UNICODE_STRING_SIMPLE(" UTF-8 ");
     UnicodeString inStr = UNICODE_STRING_SIMPLE(" UTF-8 ");
+    UnicodeString inStr2;
     char defConvName[128];
     char inStrC[128];
     UErrorCode status = U_ZERO_ERROR;
@@ -658,11 +660,16 @@ static void TestStream() {
         log_err("Got: \"%s\", Expected: \"%s\"\n", testStreamBuf, testStr);
     }
     
-    inTestStream >> inStr;
+    inTestStream >> inStr >> inStr2;
     if (inStr.compare(thisMu) != 0) {
         u_austrncpy(inStrC, inStr.getBuffer(), inStr.length());
         inStrC[inStr.length()] = 0;
         log_err("Got: \"%s\", Expected: \"tHis\\u03BC\"\n", inStrC);
+    }
+    if (inStr2.compare(mu) != 0) {
+        u_austrncpy(inStrC, inStr.getBuffer(), inStr.length());
+        inStrC[inStr.length()] = 0;
+        log_err("Got: \"%s\", Expected: \"mu\"\n", inStrC);
     }
 
     /* return the default converter to the original state. */
