@@ -45,6 +45,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(17,TestDateFormatCalendar);
         TESTCASE(18,TestSpaceParsing);
         TESTCASE(19,TestExactCountFormat);
+        TESTCASE(20,TestWhiteSpaceParsing);
         default: name = ""; break;
     }
 }
@@ -1051,6 +1052,24 @@ void DateFormatTest::TestExactCountFormat() {
     };
     const int32_t DATA_len = sizeof(DATA)/sizeof(DATA[0]);
 
+    expectParse(DATA, DATA_len, Locale("en"));
+}
+
+/**
+ * Test handling of white space.
+ */
+void DateFormatTest::TestWhiteSpaceParsing() {
+    const char* DATA[] = {
+        "yyyy MM dd",
+        
+        // pattern, input, expected parse or null if expect parse failure
+        
+        // Pattern space run should parse input text space run
+        "MM   d yy",   " 04 01 03",    "2003 04 01",
+        NULL,          " 04  01   03 ", "2003 04 01",
+    };
+    const int32_t DATA_len = sizeof(DATA)/sizeof(DATA[0]);
+    
     expectParse(DATA, DATA_len, Locale("en"));
 }
 

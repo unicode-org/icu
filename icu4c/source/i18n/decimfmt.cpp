@@ -47,6 +47,7 @@
 #include "unicode/dcfmtsym.h"
 #include "unicode/resbund.h"
 #include "unicode/uchar.h"
+#include "uprops.h"
 #include "digitlst.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -1154,25 +1155,21 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
     int32_t position = parsePosition.getIndex();
     int32_t oldStart = position;
 
-    // check for positivePrefix; take longest
-    UBool gotPositive = text.compare(position,fPositivePrefix.length(),fPositivePrefix,0,
-                                      fPositivePrefix.length()) == 0;
-    UBool gotNegative = text.compare(position,fNegativePrefix.length(),fNegativePrefix,0,
-                                      fNegativePrefix.length()) == 0;
-    // If the number is positive and negative at the same time,
-    // 1. the number is positive if the positive prefix is longer
-    // 2. the number is negative if the negative prefix is longer
-    if (gotPositive && gotNegative) {
-        if (fPositivePrefix.length() > fNegativePrefix.length())
-            gotNegative = FALSE;
-        else if (fPositivePrefix.length() < fNegativePrefix.length())
-            gotPositive = FALSE;
+    // Match positive and negative prefixes; prefer longest match.
+    int32_t posMatch = compareAffix(fPositivePrefix, text, position);
+    int32_t negMatch = compareAffix(fNegativePrefix, text, position);
+    if (posMatch >= 0 && negMatch >= 0) {
+        if (posMatch > negMatch) {
+            negMatch = -1;
+        } else if (negMatch > posMatch) {
+            posMatch = -1;
+        }  
     }
-    if(gotPositive)
-        position += fPositivePrefix.length();
-    else if(gotNegative)
-        position += fNegativePrefix.length();
-    else {
+    if (posMatch >= 0) {
+        position += posMatch;
+    } else if (negMatch >= 0) {
+        position += negMatch;
+    } else {
         parsePosition.setErrorIndex(position);
         return FALSE;
     }
@@ -1361,48 +1358,30 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
         }
     }
 
-    // check for positiveSuffix
-    if (gotPositive && fPositiveSuffix.length() > 0)
-    {
-        gotPositive = text.compare(position,fPositiveSuffix.length(),fPositiveSuffix,0,
-                                   fPositiveSuffix.length()) == 0;
+    // Match positive and negative suffixes; prefer longest match.
+    if (posMatch >= 0) {
+        posMatch = compareAffix(fPositiveSuffix, text, position);
     }
-    if (gotNegative && fNegativeSuffix.length() > 0)
-    {
-        gotNegative = text.compare(position,fNegativeSuffix.length(),fNegativeSuffix,0,
-                                   fNegativeSuffix.length()) == 0;
+    if (negMatch >= 0) {
+        negMatch = compareAffix(fNegativeSuffix, text, position);
     }
-
-    // if both match, take longest
-    if (gotPositive && gotNegative)
-    {
-        if (fPositiveSuffix.length() > fNegativeSuffix.length())
-        {
-            gotNegative = FALSE;
-        }
-        else if (fPositiveSuffix.length() < fNegativeSuffix.length())
-        {
-            gotPositive = FALSE;
-        }
-        else
-        {
-            gotPositive = TRUE; // Make them equal to each other.
-            gotNegative = TRUE;
-        }
+    if (posMatch >= 0 && negMatch >= 0) {
+        if (posMatch > negMatch) {
+            negMatch = -1;
+        } else if (negMatch > posMatch) {
+            posMatch = -1;
+        }  
     }
 
-    // fail if neither or both
-    if (gotPositive == gotNegative)
-    {
+    // Fail if neither or both
+    if ((posMatch >= 0) == (negMatch >= 0)) {
         parsePosition.setErrorIndex(position);
         return FALSE;
     }
 
-    parsePosition.setIndex(position +
-                           (gotPositive ? fPositiveSuffix.length() :
-                            fNegativeSuffix.length())); // mark success!
+    parsePosition.setIndex(position + (posMatch>=0 ? posMatch : negMatch));
 
-    digits.fIsPositive = gotPositive;
+    digits.fIsPositive = (posMatch >= 0);
 
     if(parsePosition.getIndex() == oldStart)
     {
@@ -1412,6 +1391,59 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
     return TRUE;
 }
 
+/**
+ * Return the length matched by the given affix, or -1 if none.
+ * Runs of white space in the affix, match runs of white space in
+ * the input.  Pattern white space and input white space are
+ * determined differently; see code.
+ * @param affix pattern string, taken as a literal
+ * @param input input text
+ * @param pos offset into input at which to begin matching
+ * @return length of input that matches, or -1 if match failure
+ */
+int32_t DecimalFormat::compareAffix(const UnicodeString& affix,
+                                    const UnicodeString& input,
+                                    int32_t pos) {
+    int32_t start = pos;
+    for (int32_t i=0; i<affix.length(); ) {
+        UChar32 c = affix.char32At(i);
+        int32_t len = U16_LENGTH(c);
+        i += len;
+        if (uprv_isRuleWhiteSpace(c)) {
+            // Advance over run in pattern
+            while (i < affix.length()) {
+                c = affix.char32At(i);
+                if (!uprv_isRuleWhiteSpace(c)) {
+                    break;
+                }
+                i += U16_LENGTH(c);
+            }
+
+            // Advance over run in input text
+            int32_t s = pos;
+            while (pos < input.length()) {
+                c = input.char32At(pos);
+                if (!u_isUWhiteSpace(c)) {
+                    break;
+                }
+                pos += U16_LENGTH(c);
+            }
+
+            // Must see at least one white space char in input
+            if (pos == s) {
+                return -1;
+            }
+        } else {
+            if (pos < input.length() &&
+                input.char32At(pos) == c) {
+                pos += len;
+            } else {
+                return -1;
+            }
+        }
+    }
+    return pos - start;
+}
 
 //------------------------------------------------------------------------------
 // Gets the pointer to the localized decimal format symbols

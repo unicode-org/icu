@@ -86,6 +86,8 @@ public:
      * Test the functioning of the secondary grouping value.
      */
     void TestSecondaryGrouping(void);
+
+    void TestWhiteSpaceParsing(void);
         
     void expect(NumberFormat& fmt, const UnicodeString& str, int32_t n);
     void expect(NumberFormat& fmt, const char *str, int32_t n) {

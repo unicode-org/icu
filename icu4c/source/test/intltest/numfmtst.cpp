@@ -55,6 +55,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(15,TestCurrencyPatterns);
 
         CASE(16,TestDigitListAPI);
+        CASE(17,TestWhiteSpaceParsing);
 
         default: name = ""; break;
     }
@@ -669,6 +670,19 @@ void NumberFormatTest::TestSecondaryGrouping(void) {
               " x hi_IN -> \"" +
               escape(out) + "\"");
     }
+}
+
+void NumberFormatTest::TestWhiteSpaceParsing(void) {
+    UErrorCode ec = U_ZERO_ERROR;
+    DecimalFormatSymbols US(Locale::getUS(), ec);
+    DecimalFormat fmt("a  b#0c  ", US, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: Constructor");
+        return;
+    }
+    int32_t n = 1234;
+    expect(fmt, "a b1234c ", n);
+    expect(fmt, "a   b1234c   ", n);
 }
 
 // -------------------------------------
