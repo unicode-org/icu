@@ -37,6 +37,7 @@
 #include "unicode/utf.h"
 #include "unicode/uversion.h"
 #include "unicode/uconfig.h"
+#include "unicode/udraft.h"
 
 /*!
  * \file
@@ -719,12 +720,11 @@ U_CAPI const char * U_EXPORT2
 u_errorName(UErrorCode code);
 
 
-#ifdef U_HIDE_DRAFT_API
-#   define U_DRAFT static
-#else
-#   define U_DRAFT  U_CAPI
-#endif
 
+#define U_DRAFT  U_CAPI
+#define U_STABLE U_CAPI
+#define U_INTERNAL U_CAPI
+#define U_SYSTEM U_CAPI
 
 /*===========================================================================*/
 /* Include header for platform utilies */
