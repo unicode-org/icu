@@ -1514,7 +1514,12 @@ UnicodeString::extract(int32_t start,
 
   // just write the NUL if the string length is 0
   if(length == 0) {
-    return u_terminateChars(target, dstSize, 0, &status);
+      if(dstSize >= 0x80000000) {  
+          // careful: dstSize is unsigned! (0xffffffff means "unlimited")
+          // make sure that the NUL-termination works (takes int32_t)
+          dstSize=0x7fffffff;
+      }
+      return u_terminateChars(target, dstSize, 0, &status);
   }
 
   // if the codepage is the default, use our cache
