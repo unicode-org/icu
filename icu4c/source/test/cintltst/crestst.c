@@ -98,6 +98,8 @@ void addResourceBundleTest(TestNode** root)
     addTest(root, &TestFallback, "tsutil/crestst/TestFallback");
     addTest(root, &TestAliasConflict, "tsutil/crestst/TestAliasConflict");
     addTest(root, &TestFileStream, "tsutil/crestst/TestFileStream");
+    addTest(root, &TestGetSize, "tsutil/crestst/TestGetSize");
+    addTest(root, &TestGetLocaleByType, "tsutil/crestst/TestGetLocaleByType");
 }
 
 
@@ -790,4 +792,130 @@ static void TestFileStream(void){
     free(fileName);
     free(buf);
 
+}
+
+static void TestGetSize(void) {
+  const struct {
+    const char* key;
+    int32_t size;
+  } test[] = {
+    { "zerotest", 1},
+    { "one", 1},
+    { "importtest", 1},
+    { "integerarray", 1},
+    { "emptyarray", 0},
+    { "emptytable", 0},
+    { "emptystring", 1}, /* empty string is still a string */
+    { "emptyint", 1}, 
+    { "emptybin", 1},
+    { "testinclude", 1},
+    { "CollationElements", 3}, /* not 2 - there is hidden %%CollationBin */
+  };
+
+  UErrorCode status = U_ZERO_ERROR;
+
+  UResourceBundle *rb = NULL;
+  UResourceBundle *res = NULL;
+  UResourceBundle *helper = NULL;
+  const char* testdatapath = loadTestData(&status);
+  int32_t i = 0, j = 0;
+  int32_t size = 0;
+
+  if(U_FAILURE(status))
+  {
+      log_err("Could not load testdata.dat %s\n", u_errorName(status));
+      return;
+  }
+
+  rb = ures_open(testdatapath, "testtypes", &status);
+  if(U_FAILURE(status))
+  {
+      log_err("Could not testtypes resource bundle %s\n", u_errorName(status));
+      return;
+  }
+
+  for(i = 0; i < sizeof(test)/sizeof(test[0]); i++) {
+    res = ures_getByKey(rb, test[i].key, res, &status);
+    if(U_FAILURE(status))
+    {
+        log_err("Couldn't find the key %s. Error: %s\n", test[i].key, u_errorName(status));
+        ures_close(rb);
+        return;
+    }
+    size = ures_getSize(res);
+    if(size != test[i].size) {
+      log_err("Expected size %i, got size %i for key %s\n", test[i].size, size, test[i].key);
+      for(j = 0; j < size; j++) {
+        helper = ures_getByIndex(res, j, helper, &status);
+        log_err("%s\n", ures_getKey(helper));
+      }
+    }
+  }
+  ures_close(helper); 
+  ures_close(res);
+  ures_close(rb);
+}
+    
+static void TestGetLocaleByType(void) {
+  const struct {
+    char *requestedLocale;
+    char *resourceKey;
+    char *validLocale;
+    char *actualLocale;
+  } test[] = {
+    { "te_IN_BLAH", "string_only_in_te_IN", "te_IN", "te_IN" },
+    { "te_IN_BLAH", "string_only_in_te", "te_IN", "te" },
+    { "te_IN_BLAH", "string_only_in_Root", "te_IN", "root" },
+    { "te_IN_BLAH_01234567890_01234567890_01234567890_01234567890_01234567890_01234567890", "array_2d_only_in_Root", "te_IN", "root" },
+    { "te_IN_BLAH@currency=euro", "array_2d_only_in_te_IN", "te_IN", "te_IN" },
+    { "te_IN_BLAH@collation=phonebook;calendar=thai", "array_2d_only_in_te", "te_IN", "te" }
+  };
+
+  UErrorCode status = U_ZERO_ERROR;
+
+  UResourceBundle *rb = NULL;
+  UResourceBundle *res = NULL;
+  const char* testdatapath = loadTestData(&status);
+  int32_t i = 0;
+  const char *locale = NULL;
+
+  if(U_FAILURE(status))
+  {
+      log_err("Could not load testdata.dat %s\n", u_errorName(status));
+      return;
+  }
+
+  for(i = 0; i < sizeof(test)/sizeof(test[0]); i++) {
+    rb = ures_open(testdatapath, test[i].requestedLocale, &status);
+    if(U_FAILURE(status))
+    {
+        log_err("Could not open resource bundle %s (error %s)\n", test[i].requestedLocale, u_errorName(status));
+        status = U_ZERO_ERROR;
+        continue;
+    }
+
+    res = ures_getByKey(rb, test[i].resourceKey, res, &status);
+    if(U_FAILURE(status))
+    {
+        log_err("Couldn't find the key %s. Error: %s\n", test[i].resourceKey, u_errorName(status));
+        ures_close(rb);
+        status = U_ZERO_ERROR;
+        continue;
+    }
+
+    locale = ures_getLocaleByType(res, ULOC_REQUESTED_LOCALE, &status);
+    if(strcmp(locale, test[i].requestedLocale) != 0) {
+      log_err("Expected requested locale to be %s. Got %s\n", test[i].requestedLocale, locale);
+    }
+    locale = ures_getLocaleByType(res, ULOC_VALID_LOCALE, &status);
+    if(strcmp(locale, test[i].validLocale) != 0) {
+      log_err("Expected valid locale to be %s. Got %s\n", test[i].requestedLocale, locale);
+    }
+    locale = ures_getLocaleByType(res, ULOC_ACTUAL_LOCALE, &status);
+    if(strcmp(locale, test[i].actualLocale) != 0) {
+      log_err("Expected actual locale to be %s. Got %s\n", test[i].requestedLocale, locale);
+    }
+    ures_close(rb);
+  }
+  ures_close(res);
 }
