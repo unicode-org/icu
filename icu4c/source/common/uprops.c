@@ -42,50 +42,50 @@ static const struct {
      * and there must be exacly one entry per binary UProperty.
      *
      * Properties with mask 0 are handled in code.
-     * Pseudo-column -2 indicates case mapping properties.
+     * For them, column is the UPropertySource value.
      */
-    {  1, U_MASK(UPROPS_ALPHABETIC) },
-    {  1, U_MASK(UPROPS_ASCII_HEX_DIGIT) },
-    {  1, U_MASK(UPROPS_BIDI_CONTROL) },
-    { -1, U_MASK(UPROPS_MIRROR_SHIFT) },
-    {  1, U_MASK(UPROPS_DASH) },
-    {  1, U_MASK(UPROPS_DEFAULT_IGNORABLE_CODE_POINT) },
-    {  1, U_MASK(UPROPS_DEPRECATED) },
-    {  1, U_MASK(UPROPS_DIACRITIC) },
-    {  1, U_MASK(UPROPS_EXTENDER) },
-    {  0, 0 },                                  /* UCHAR_FULL_COMPOSITION_EXCLUSION */
-    {  1, U_MASK(UPROPS_GRAPHEME_BASE) },
-    {  1, U_MASK(UPROPS_GRAPHEME_EXTEND) },
-    {  1, U_MASK(UPROPS_GRAPHEME_LINK) },
-    {  1, U_MASK(UPROPS_HEX_DIGIT) },
-    {  1, U_MASK(UPROPS_HYPHEN) },
-    {  1, U_MASK(UPROPS_ID_CONTINUE) },
-    {  1, U_MASK(UPROPS_ID_START) },
-    {  1, U_MASK(UPROPS_IDEOGRAPHIC) },
-    {  1, U_MASK(UPROPS_IDS_BINARY_OPERATOR) },
-    {  1, U_MASK(UPROPS_IDS_TRINARY_OPERATOR) },
-    {  1, U_MASK(UPROPS_JOIN_CONTROL) },
-    {  1, U_MASK(UPROPS_LOGICAL_ORDER_EXCEPTION) },
-    { -2, 0 },                                  /* UCHAR_LOWERCASE */
-    {  1, U_MASK(UPROPS_MATH) },
-    {  1, U_MASK(UPROPS_NONCHARACTER_CODE_POINT) },
-    {  1, U_MASK(UPROPS_QUOTATION_MARK) },
-    {  1, U_MASK(UPROPS_RADICAL) },
-    { -2, 0 },                                  /* UCHAR_SOFT_DOTTED */
-    {  1, U_MASK(UPROPS_TERMINAL_PUNCTUATION) },
-    {  1, U_MASK(UPROPS_UNIFIED_IDEOGRAPH) },
-    { -2, 0 },                                  /* UCHAR_UPPERCASE */
-    {  1, U_MASK(UPROPS_WHITE_SPACE) },
-    {  1, U_MASK(UPROPS_XID_CONTINUE) },
-    {  1, U_MASK(UPROPS_XID_START) },
-    { -2, 0 },                                  /* UCHAR_CASE_SENSITIVE */
-    {  2, U_MASK(UPROPS_V2_S_TERM) },
-    {  2, U_MASK(UPROPS_V2_VARIATION_SELECTOR) },
-    {  0, 0 },                                  /* UCHAR_NFD_INERT */
-    {  0, 0 },                                  /* UCHAR_NFKD_INERT */
-    {  0, 0 },                                  /* UCHAR_NFC_INERT */
-    {  0, 0 },                                  /* UCHAR_NFKC_INERT */
-    {  0, 0 }                                   /* UCHAR_SEGMENT_STARTER */
+    {  1,               U_MASK(UPROPS_ALPHABETIC) },
+    {  1,               U_MASK(UPROPS_ASCII_HEX_DIGIT) },
+    {  1,               U_MASK(UPROPS_BIDI_CONTROL) },
+    { -1,               U_MASK(UPROPS_MIRROR_SHIFT) },
+    {  1,               U_MASK(UPROPS_DASH) },
+    {  1,               U_MASK(UPROPS_DEFAULT_IGNORABLE_CODE_POINT) },
+    {  1,               U_MASK(UPROPS_DEPRECATED) },
+    {  1,               U_MASK(UPROPS_DIACRITIC) },
+    {  1,               U_MASK(UPROPS_EXTENDER) },
+    { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_FULL_COMPOSITION_EXCLUSION */
+    {  1,               U_MASK(UPROPS_GRAPHEME_BASE) },
+    {  1,               U_MASK(UPROPS_GRAPHEME_EXTEND) },
+    {  1,               U_MASK(UPROPS_GRAPHEME_LINK) },
+    {  1,               U_MASK(UPROPS_HEX_DIGIT) },
+    {  1,               U_MASK(UPROPS_HYPHEN) },
+    {  1,               U_MASK(UPROPS_ID_CONTINUE) },
+    {  1,               U_MASK(UPROPS_ID_START) },
+    {  1,               U_MASK(UPROPS_IDEOGRAPHIC) },
+    {  1,               U_MASK(UPROPS_IDS_BINARY_OPERATOR) },
+    {  1,               U_MASK(UPROPS_IDS_TRINARY_OPERATOR) },
+    {  1,               U_MASK(UPROPS_JOIN_CONTROL) },
+    {  1,               U_MASK(UPROPS_LOGICAL_ORDER_EXCEPTION) },
+    { UPROPS_SRC_CASE,  0 },                                    /* UCHAR_LOWERCASE */
+    {  1,               U_MASK(UPROPS_MATH) },
+    {  1,               U_MASK(UPROPS_NONCHARACTER_CODE_POINT) },
+    {  1,               U_MASK(UPROPS_QUOTATION_MARK) },
+    {  1,               U_MASK(UPROPS_RADICAL) },
+    { UPROPS_SRC_CASE,  0 },                                    /* UCHAR_SOFT_DOTTED */
+    {  1,               U_MASK(UPROPS_TERMINAL_PUNCTUATION) },
+    {  1,               U_MASK(UPROPS_UNIFIED_IDEOGRAPH) },
+    { UPROPS_SRC_CASE,  0 },                                    /* UCHAR_UPPERCASE */
+    {  1,               U_MASK(UPROPS_WHITE_SPACE) },
+    {  1,               U_MASK(UPROPS_XID_CONTINUE) },
+    {  1,               U_MASK(UPROPS_XID_START) },
+    { UPROPS_SRC_CASE,  0 },                                    /* UCHAR_CASE_SENSITIVE */
+    {  2,               U_MASK(UPROPS_V2_S_TERM) },
+    {  2,               U_MASK(UPROPS_V2_VARIATION_SELECTOR) },
+    { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_NFD_INERT */
+    { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_NFKD_INERT */
+    { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_NFC_INERT */
+    { UPROPS_SRC_NORM,  0 },                                    /* UCHAR_NFKC_INERT */
+    { UPROPS_SRC_NORM,  0 }                                     /* UCHAR_SEGMENT_STARTER */
 };
 
 U_CAPI UBool U_EXPORT2
@@ -95,45 +95,48 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
         /* not a known binary property */
     } else {
         uint32_t mask=binProps[which].mask;
+        int32_t column=binProps[which].column;
         if(mask!=0) {
             /* systematic, directly stored properties */
-            return (u_getUnicodeProperties(c, binProps[which].column)&mask)!=0;
-        } else if(binProps[which].column==-2) {
-            /* case mapping properties */
-            UErrorCode errorCode=U_ZERO_ERROR;
-            UCaseProps *csp=ucase_getSingleton(&errorCode);
-            if(U_FAILURE(errorCode)) {
-                return FALSE;
-            }
-            switch(which) {
-            case UCHAR_LOWERCASE:
-                return (UBool)(UCASE_LOWER==ucase_getType(csp, c));
-            case UCHAR_UPPERCASE:
-                return (UBool)(UCASE_UPPER==ucase_getType(csp, c));
-            case UCHAR_SOFT_DOTTED:
-                return ucase_isSoftDotted(csp, c);
-            case UCHAR_CASE_SENSITIVE:
-                return ucase_isCaseSensitive(csp, c);
-            default:
-                break;
-            }
+            return (u_getUnicodeProperties(c, column)&mask)!=0;
         } else {
+            if(column==UPROPS_SRC_CASE) {
+                /* case mapping properties */
+                UErrorCode errorCode=U_ZERO_ERROR;
+                UCaseProps *csp=ucase_getSingleton(&errorCode);
+                if(U_FAILURE(errorCode)) {
+                    return FALSE;
+                }
+                switch(which) {
+                case UCHAR_LOWERCASE:
+                    return (UBool)(UCASE_LOWER==ucase_getType(csp, c));
+                case UCHAR_UPPERCASE:
+                    return (UBool)(UCASE_UPPER==ucase_getType(csp, c));
+                case UCHAR_SOFT_DOTTED:
+                    return ucase_isSoftDotted(csp, c);
+                case UCHAR_CASE_SENSITIVE:
+                    return ucase_isCaseSensitive(csp, c);
+                default:
+                    break;
+                }
+            } else if(column==UPROPS_SRC_NORM) {
 #if !UCONFIG_NO_NORMALIZATION
-            /* normalization properties from unorm.icu */
-            switch(which) {
-            case UCHAR_FULL_COMPOSITION_EXCLUSION:
-                return unorm_internalIsFullCompositionExclusion(c);
-            case UCHAR_NFD_INERT:
-            case UCHAR_NFKD_INERT:
-            case UCHAR_NFC_INERT:
-            case UCHAR_NFKC_INERT:
-                return unorm_isNFSkippable(c, (UNormalizationMode)(which-UCHAR_NFD_INERT)+UNORM_NFD);
-            case UCHAR_SEGMENT_STARTER:
-                return unorm_isCanonSafeStart(c);
-            default:
-                break;
-            }
+                /* normalization properties from unorm.icu */
+                switch(which) {
+                case UCHAR_FULL_COMPOSITION_EXCLUSION:
+                    return unorm_internalIsFullCompositionExclusion(c);
+                case UCHAR_NFD_INERT:
+                case UCHAR_NFKD_INERT:
+                case UCHAR_NFC_INERT:
+                case UCHAR_NFKC_INERT:
+                    return unorm_isNFSkippable(c, (UNormalizationMode)(which-UCHAR_NFD_INERT)+UNORM_NFD);
+                case UCHAR_SEGMENT_STARTER:
+                    return unorm_isCanonSafeStart(c);
+                default:
+                    break;
+                }
 #endif
+            }
         }
     }
     return FALSE;
@@ -291,6 +294,40 @@ u_getIntPropertyMaxValue(UProperty which) {
     }
 }
 
+U_CAPI UPropertySource U_EXPORT2
+uprops_getSource(UProperty which) {
+    if(which<UCHAR_BINARY_START) {
+        return UPROPS_SRC_NONE; /* undefined */
+    } else if(which<UCHAR_BINARY_LIMIT) {
+        if(binProps[which].mask!=0) {
+            return UPROPS_SRC_CHAR;
+        } else {
+            return (UPropertySource)binProps[which].column;
+        }
+    } else if(which<UCHAR_INT_START) {
+        return UPROPS_SRC_NONE; /* undefined */
+    } else if(which<UCHAR_INT_LIMIT) {
+        switch(which) {
+        case UCHAR_HANGUL_SYLLABLE_TYPE:
+            return UPROPS_SRC_HST;
+        case UCHAR_CANONICAL_COMBINING_CLASS:
+        case UCHAR_NFD_QUICK_CHECK:
+        case UCHAR_NFKD_QUICK_CHECK:
+        case UCHAR_NFC_QUICK_CHECK:
+        case UCHAR_NFKC_QUICK_CHECK:
+        case UCHAR_LEAD_CANONICAL_COMBINING_CLASS:
+        case UCHAR_TRAIL_CANONICAL_COMBINING_CLASS:
+            return UPROPS_SRC_NORM;
+        default:
+            return UPROPS_SRC_CHAR;
+        }
+    } else if(which==UCHAR_GENERAL_CATEGORY_MASK) {
+        return UPROPS_SRC_CHAR;
+    } else {
+        return UPROPS_SRC_NONE; /* undefined */
+    }
+}
+
 /*----------------------------------------------------------------
  * Inclusions list
  *----------------------------------------------------------------*/
@@ -377,7 +414,15 @@ u_getIntPropertyMaxValue(UProperty which) {
  *
  * Do not use a UnicodeSet pattern because that causes infinite recursion;
  * UnicodeSet depends on the inclusions set.
+ *
+ * ---
+ *
+ * uprv_getInclusions() is commented out starting 2004-sep-13 because
+ * uniset_props.cpp now calls the uxyz_addPropertyStarts() directly,
+ * and only for the relevant property source.
  */
+#if 0
+
 U_CAPI void U_EXPORT2
 uprv_getInclusions(USetAdder *sa, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -390,3 +435,5 @@ uprv_getInclusions(USetAdder *sa, UErrorCode *pErrorCode) {
     uchar_addPropertyStarts(sa, pErrorCode);
     ucase_addPropertyStarts(ucase_getSingleton(pErrorCode), sa, pErrorCode);
 }
+
+#endif

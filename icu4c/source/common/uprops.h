@@ -338,12 +338,51 @@ uprv_getISOCommentCharacters(USetAdder *sa);
 #endif
 
 /**
+ * Constants for which data and implementation files provide which properties.
+ * Used by UnicodeSet for service-specific property enumeration.
+ * @internal
+ */
+enum UPropertySource {
+    /** No source, not a supported property. */
+    UPROPS_SRC_NONE,
+    /** From uchar.c/uprops.icu */
+    UPROPS_SRC_CHAR,
+    /** Hangul_Syllable_Type, from uchar.c/uprops.icu */
+    UPROPS_SRC_HST,
+    /** From unames.c/unames.icu */
+    UPROPS_SRC_NAMES,
+    /** From unorm.cpp/unorm.icu */
+    UPROPS_SRC_NORM,
+    /** From ucase.c/ucase.icu */
+    UPROPS_SRC_CASE,
+    /** From ubidi.c/ubidi.icu */
+    UPROPS_SRC_BIDI,
+    /** One more than the highes UPropertySource (UPROPS_SRC_) constant. */
+    UPROPS_SRC_COUNT
+};
+typedef enum UPropertySource UPropertySource;
+
+/**
+ * @see UPropertySource
+ * @internal
+ */
+U_CAPI UPropertySource U_EXPORT2
+uprops_getSource(UProperty which);
+
+/**
  * Enumerate each core properties data trie and add the
  * start of each range of same properties to the set.
  * @internal
  */
 U_CAPI void U_EXPORT2
 uchar_addPropertyStarts(USetAdder *sa, UErrorCode *pErrorCode);
+
+/**
+ * Same as uchar_addPropertyStarts() but only for Hangul_Syllable_Type.
+ * @internal
+ */
+U_CAPI void U_EXPORT2
+uhst_addPropertyStarts(USetAdder *sa, UErrorCode *pErrorCode);
 
 /**
  * Return a set of characters for property enumeration.
