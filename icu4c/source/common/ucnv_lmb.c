@@ -27,7 +27,7 @@
 #include "ucmp16.h"
 #include "ucmp8.h"
 #include "unicode/ucnv_err.h"
-#include "ucnv_bld.h"
+#include "unicode/ucnv_bld.h"
 #include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
 
@@ -361,9 +361,10 @@ struct _UniLMBCSGrpMap
    {0x2502, 0x2502,  ULMBCS_AMBIGUOUS_SBCS},
    {0x2503, 0x2503,  ULMBCS_AMBIGUOUS_MBCS},
    {0x2504, 0x2505,  ULMBCS_GRP_TW},
-   {0x2506, 0xFFFE,  ULMBCS_AMBIGUOUS_MBCS},
-    {0xFFFF, 0xFFFF, ULMBCS_GRP_UNICODE}
- 
+   {0x2506, 0x2665,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2666, 0x2666,  ULMBCS_GRP_EXCEPT},
+   {0x2667, 0xFFFE,  ULMBCS_AMBIGUOUS_MBCS},
+   {0xFFFF, 0xFFFF,  ULMBCS_GRP_UNICODE}
 };
    
 ulmbcs_byte_t 
@@ -508,7 +509,7 @@ FindLMBCSLocale(const char *LocaleID)
     _LMBCSToUnicodeWithOffsets,\
     _LMBCSToUnicodeWithOffsets,\
     _LMBCSFromUnicode,\
-    NULL,\
+    _LMBCSFromUnicode,\
     _LMBCSGetNextUChar,\
     NULL\
 };\
@@ -775,6 +776,7 @@ _LMBCSFromUnicode(UConverter*     _this,
    int bytes_written;
    UBool groups_tried[ULMBCS_GRP_LAST];
    UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS *) _this->extraInfo;
+   int sourceIndex = 0; 
 
 
    /* Basic strategy: attempt to fill in local LMBCS 1-char buffer.(LMBCS)
@@ -926,16 +928,31 @@ _LMBCSFromUnicode(UConverter*     _this,
          }
       }
   
-      if (*target + bytes_written > targetLimit)
+      /* we have a translation. increment source and write as much as posible to target */
+      (*source)++;
+      pLMBCS = LMBCS;
+      while (*target < targetLimit && bytes_written--)
       {
-         *err = U_INDEX_OUTOFBOUNDS_ERROR;
+         *(*target)++ = *pLMBCS++;
+         if (offsets)
+         {
+            *offsets++ = sourceIndex;
+         }
       }
-      else
+      sourceIndex++;
+      if (bytes_written > 0)
       {
-         /* now that we are sure it all fits, move it in & increment source */
-         for(pLMBCS = LMBCS; bytes_written--; *(*target)++ = *pLMBCS++)
-            { };
-         (*source)++;
+         /* write any bytes that didn't fit in target to the error buffer,
+            common code will move this to target if we get called back with
+            enough target room
+         */
+         uint8_t * pErrorBuffer = _this->charErrorBuffer;
+         *err = U_INDEX_OUTOFBOUNDS_ERROR;
+         _this->charErrorBufferLength = bytes_written;
+         while (bytes_written--)
+         {
+            *pErrorBuffer++ = *pLMBCS++;
+         }
       }
    }     
 }
