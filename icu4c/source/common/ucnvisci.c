@@ -282,14 +282,14 @@ static const uint8_t validityTable[128] = {
 /*0x00 : 0x00: 0x93A  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x93B  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xe9 : 0xda: 0x93c  */ DEV_MASK + PNJ_MASK + ZERO     + ORI_MASK + BNG_MASK + ZERO     + MLM_MASK + ZERO     ,
-/*0x00 : 0x00: 0x93d  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
+/*0x00 : 0x00: 0x93d  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xda : 0xff: 0x93e  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xdb : 0xff: 0x93f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xdc : 0xff: 0x940  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xdd : 0xff: 0x941  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xde : 0xff: 0x942  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xdf : 0xbe: 0x943  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
-/*0x00 : 0x00: 0x944  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
+/*0x00 : 0x00: 0x944  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xe3 : 0x80: 0x945  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xe0 : 0x87: 0x946  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xe1 : 0xff: 0x947  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
@@ -405,14 +405,14 @@ static const uint16_t fromUnicodeTable[128]={
     0xFFFF ,/* 0x093A */ 
     0xFFFF ,/* 0x093B */ 
     0x00e9 ,/* 0x093c */ 
-    0xFFFF ,/* 0x093d */ 
+    0xEAE9 ,/* 0x093d */ 
     0x00da ,/* 0x093e */ 
     0x00db ,/* 0x093f */ 
     0x00dc ,/* 0x0940 */ 
     0x00dd ,/* 0x0941 */ 
     0x00de ,/* 0x0942 */ 
     0x00df ,/* 0x0943 */ 
-    0xFFFF ,/* 0x0944 */ 
+    0xDFE9 ,/* 0x0944 */ 
     0x00e3 ,/* 0x0945 */ 
     0x00e0 ,/* 0x0946 */ 
     0x00e1 ,/* 0x0947 */ 
@@ -442,7 +442,7 @@ static const uint16_t fromUnicodeTable[128]={
     0x00ce ,/* 0x095f */ 
     0xAAe9 ,/* 0x0960 */ 
     0xA7E9 ,/* 0x0961 */ 
-    0x1DE9 ,/* 0x0962 */ 
+    0xDBE9 ,/* 0x0962 */ 
     0xDCE9 ,/* 0x0963 */ 
     0x00ea ,/* 0x0964 */ 
     0xeaea ,/* 0x0965 */ 
@@ -733,8 +733,10 @@ static const uint16_t toUnicodeTable[256]={
 };
 
 static const uint16_t nuktaSpecialCases[][2]={
-    { 14 /*length of array*/   , 0      },
+    { 16 /*length of array*/   , 0      },
     { 0xA6 , 0x090c },
+    { 0xEA , 0x093D },
+    { 0xDF , 0x0944 },
     { 0xA1 , 0x0950 },
     { 0xb3 , 0x0958 },
     { 0xb4 , 0x0959 },
@@ -745,7 +747,7 @@ static const uint16_t nuktaSpecialCases[][2]={
     { 0xc9 , 0x095e },
     { 0xAA , 0x0960 },
     { 0xA7 , 0x0961 },
-    { 0x1D , 0x0962 },
+    { 0xDB , 0x0962 },
     { 0xDC , 0x0963 }, 
 };
 
@@ -1279,6 +1281,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                         if(validityTable[(uint8_t)targetUniChar] & data->currentMaskToUnicode){       
                             targetUniChar += data->currentDeltaToUnicode ;
                             *contextCharToUnicode= NO_CHAR_MARKER;
+                            *toUnicodeStatus = missingCharMarker;
                             break;
                         }
                         /* else fall through to default */
