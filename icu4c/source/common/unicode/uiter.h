@@ -59,7 +59,7 @@ typedef enum UCharIteratorOrigin UCharIteratorOrigin;
  *
  * @param iter the UCharIterator structure ("this pointer")
  * @param origin get the 0, start, limit, length, or current index
- * @return the requested index
+ * @return the requested index, or -1 in an error condition
  *
  * @see UCharIteratorOrigin
  * @see UCharIterator
@@ -77,11 +77,12 @@ UCharIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin);
  * iteration range, or relative to the current position itself.
  * The movement is expressed in numbers of code units forward
  * or backward by specifying a positive or negative delta.
+ * Out of bounds movement will be pinned to the start or limit.
  *
  * @param iter the UCharIterator structure ("this pointer")
  * @param delta can be positive, zero, or negative
  * @param origin move relative to the 0, start, limit, length, or current index
- * @return the new index
+ * @return the new index, or -1 on an error condition.
  *
  * @see UCharIteratorOrigin
  * @see UCharIterator
