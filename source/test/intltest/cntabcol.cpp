@@ -111,7 +111,7 @@ void ContractionTableTest::TestClone(){
   if(U_FAILURE(status)) {
     errln("Error constructing table error = %i (%s)\n", status, u_errorName(status));
   } else {
-    testClone = uprv_cnttab_clone(testTable);
+    testClone = uprv_cnttab_clone(testTable, &status);
     if(U_SUCCESS(status)) {
       for(i = 0; i<0x500; i++) {
         res = uprv_cnttab_getCE(testTable, i, 0, &status);

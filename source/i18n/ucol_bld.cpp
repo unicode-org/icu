@@ -5,7 +5,7 @@
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  ucol_tok.cpp
+*   file name:  ucol_bld.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -670,25 +670,26 @@ uint8_t ucol_uprv_getCaseBits(const UCollator *UCA, const UChar *src, uint32_t l
   }
 
   nLen = unorm_normalize(src, len, UNORM_NFKD, 0, n, 128, status);
-
-  for(i = 0; i < nLen; i++) {
-    init_collIterate(UCA, &n[i], 1, &s);
-    order = ucol_getNextCE(UCA, &s, status);
-    if(isContinuation(order)) {
-      *status = U_INTERNAL_PROGRAM_ERROR;
-      return UCOL_LOWER_CASE;
-    }
-    if((order&UCOL_CASE_BIT_MASK)== UCOL_UPPER_CASE) {
-      uCount++;
-    } else {
-      if(u_islower(n[i])) {
-        lCount++;
+  if(U_SUCCESS(*status)) {
+    for(i = 0; i < nLen; i++) {
+      init_collIterate(UCA, &n[i], 1, &s);
+      order = ucol_getNextCE(UCA, &s, status);
+      if(isContinuation(order)) {
+        *status = U_INTERNAL_PROGRAM_ERROR;
+        return UCOL_LOWER_CASE;
+      }
+      if((order&UCOL_CASE_BIT_MASK)== UCOL_UPPER_CASE) {
+        uCount++;
       } else {
-        UChar sk[1], lk[1];
-        u_toSmallKana(&n[i], 1, sk, 1, status);
-        u_toLargeKana(&n[i], 1, lk, 1, status);
-        if(sk[0] == n[i] && lk[0] != n[i]) {
+        if(u_islower(n[i])) {
           lCount++;
+        } else {
+          UChar sk[1], lk[1];
+          u_toSmallKana(&n[i], 1, sk, 1, status);
+          u_toLargeKana(&n[i], 1, lk, 1, status);
+          if(sk[0] == n[i] && lk[0] != n[i]) {
+            lCount++;
+          }
         }
       }
     }
@@ -709,7 +710,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
   UColToken *expt = NULL;
   uint32_t i = 0, j = 0;
 
-  while(tok != NULL) {
+  while(tok != NULL && U_SUCCESS(*status)) {
     /* first, check if there are any expansions */
     /* if there are expansions, we need to do a little bit more processing */
     /* since parts of expansion can be tailored, while others are not */
