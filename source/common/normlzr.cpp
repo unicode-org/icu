@@ -154,7 +154,7 @@ Normalizer::compose(const UnicodeString& source,
                     int32_t options,
                     UnicodeString& result, 
                     UErrorCode &status) {
-    if(source.isBogus()) {
+    if(source.isBogus() || U_FAILURE(status)) {
         result.setToBogus();
     } else {
         /* make sure that we do not operate on the same buffer in source and result */
@@ -176,7 +176,7 @@ Normalizer::decompose(const UnicodeString& source,
                       int32_t options,
                       UnicodeString& result, 
                       UErrorCode &status) {
-    if(source.isBogus()) {
+    if(source.isBogus() || U_FAILURE(status)) {
         result.setToBogus();
     } else {
         /* make sure that we do not operate on the same buffer in source and result */
