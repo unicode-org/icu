@@ -2694,7 +2694,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
 
 
         // LB 10    QU SP* x OP
-        if (fSP->contains(prevChar) && fOP->contains(thisChar)) {
+        if (fOP->contains(thisChar)) {
             // Scan backwards from prevChar to see if it is preceded by QU CM* SP*
             int tPos = prevPos;
             while (tPos>0 && fSP->contains(fText->char32At(tPos))) {
@@ -2819,7 +2819,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
                     pos = fCharBI->preceding(numEndIdx);
                     thisChar = fText->char32At(pos);
                     while (fCM->contains(thisChar)) {
-                        pos = fCharBI->preceding(pos);
+                        pos = fCharBI->preceding(pos);  // TODO:  just get previous codepoint.  Don't use BI.
                         thisChar = fText->char32At(pos);
                     }
                 }
