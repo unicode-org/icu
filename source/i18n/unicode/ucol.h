@@ -11,7 +11,7 @@
 #include "unicode/unorm.h"
 /**
  * \file
- * \brief Description of Collator C API
+ * \brief C API: Collator 
  *
  * <h2> Collator C API </h2>
  *

@@ -11,7 +11,7 @@
 #include <stdarg.h>
 /**
  * \file
- * \brief Description of MessageFormat C API`
+ * \brief C API: MessageFormat 
  *
  * <h2>Message Format C API </h2>
  *

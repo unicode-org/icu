@@ -18,7 +18,12 @@
 /********************************************************************
  * General Notes
  ********************************************************************
+ */
+/**
+ * \file
+ * \brief C API: Transliterator
  *
+ * <h2> Transliteration </h2>
  * The data structures and functions described in this header provide
  * transliteration services.  Transliteration services are implemented
  * as C++ classes.  The comments and documentation in this header

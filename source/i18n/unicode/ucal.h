@@ -9,7 +9,7 @@
 #include "unicode/utypes.h"
 /**
  * \file
- * \brief Description of Calendar C API
+ * \brief C API: Calendar 
  *
  * <h2>Calendar C API</h2>
  *
