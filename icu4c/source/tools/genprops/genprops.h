@@ -58,7 +58,7 @@ extern void
 initStore(void);
 
 extern void
-exitStore();
+exitStore(void);
 
 extern uint32_t
 makeProps(Props *p);
@@ -80,7 +80,7 @@ U_CFUNC void
 initAdditionalProperties(void);
 
 U_CFUNC void
-exitAdditionalProperties();
+exitAdditionalProperties(void);
 
 U_CFUNC void
 generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pErrorCode);
