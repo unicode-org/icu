@@ -330,6 +330,10 @@ SOURCE=.\unorm.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\uprops.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\uresbund.c
 # End Source File
 # Begin Source File
