@@ -46,6 +46,9 @@ GnomeFontInstance::GnomeFontInstance(TT_Engine engine, const TT_Text *fontPathNa
 
     // FIXME: what about the display resolution?
     // TT_Set_Instance_Resolutions(fInstance, 72, 72);
+    fDeviceScaleX = ((float) 96) / 72;
+    fDeviceScaleY = ((float) 96) / 72;
+
     TT_Set_Instance_CharSize(fInstance, pointSize << 6);
 
     TT_Get_Face_Properties(fFace, &faceProperties);
