@@ -37,7 +37,6 @@
 #include "unicode/normlzr.h"
 
 
-const InverseTableHeader *ucol_initInverseUCA(UErrorCode *status);
 UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status);
 
 typedef struct {

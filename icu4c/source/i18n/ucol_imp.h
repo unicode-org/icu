@@ -545,9 +545,14 @@ void ucol_putOptionsToHeader(UCollator* result, UCATableHeader * image, UErrorCo
 uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, UErrorCode *status);
 int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, uint32_t CE, incrementalContext *ctx, UErrorCode *status);
 void ucol_updateInternalState(UCollator *coll);
-uint32_t ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status);
+
+U_CAPI uint32_t U_EXPORT2 ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status);
 U_CAPI char U_EXPORT2 *ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len);
-U_CAPI UBool isTailored(const UCollator *coll, const UChar u, UErrorCode *status);
+U_CAPI UBool U_EXPORT2 isTailored(const UCollator *coll, const UChar u, UErrorCode *status);
+
+U_CAPI const U_EXPORT2 InverseTableHeader *ucol_initInverseUCA(UErrorCode *status);
+U_CAPI uint32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t strength);
+U_CAPI uint32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t strength);
 
 #endif
 
