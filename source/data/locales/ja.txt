@@ -1520,7 +1520,7 @@ ja {
         "H:mm:ss",
         "H:mm",
         "yyyy'\u5E74'M'\u6708'd'\u65E5'",
-        "yyyy/MM/dd",
+        "yyyy'\u5E74'M'\u6708'd'\u65E5'",
         "yyyy/MM/dd",
         "yy/MM/dd",
         "{1} {0}",
