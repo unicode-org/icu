@@ -706,17 +706,20 @@ int32_t Calendar::stringToDayNumber(const UnicodeString& string, UErrorCode& sta
 
     int32_t len = string.length();
     char *number = new char[1 + len];
-    if (number == 0) { status = U_MEMORY_ALLOCATION_ERROR; return 0; }
+    if (number == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+    }
     char *end;
 
     string.extract(0, len, number);
     number[len] = 0;
     int32_t value = strtol(number, &end, 10); // Radix 10
 
-    delete[] number;
-
     if (end-number != len || len == 0 || value < 1 || value > 7)
         status = U_INVALID_FORMAT_ERROR;
+
+    delete[] number;
 
     return value;
 }
