@@ -580,7 +580,7 @@ static void TestBreakIterator() {
 
     count = 0;
     while (count < 4) {
-        // 0-3 test are fixed
+        /* 0-3 test are fixed */
         const SearchData     *search   = &(BREAKITERATOREXACT[count]);     
               UCollator      *collator = getCollator(search->collator);
               UBreakIterator *breaker  = getBreakIterator(search->breaker);
@@ -1501,7 +1501,7 @@ static void TestBreakIteratorCanonical() {
 
     open();
     while (count < 4) {
-        // 0-3 test are fixed
+        /* 0-3 test are fixed */
               UChar           pattern[32];
               UChar           text[128];
         const SearchData     *search   = &(BREAKITERATORCANONICAL[count]);     
