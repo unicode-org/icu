@@ -294,6 +294,7 @@ icu4c/source/test/testdata/uni-text.bin -text
 icu4j/build.xml svneol=native#text/xml
 icu4j/license.html svneol=native#text/html
 icu4j/readme.html svneol=native#text/html
+icu4j/releasenotes.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/data/ThaiWordFreq.xls -text
 icu4j/src/com/ibm/icu/dev/data/holidays_jp.ucs -text svneol=native#application/octet-stream
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text svneol=native#application/octet-stream
