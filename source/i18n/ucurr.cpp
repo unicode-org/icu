@@ -129,20 +129,22 @@ _findMetaData(const UChar* currency) {
 
 // don't use ICUService since we don't need fallback
 
+struct CReg;
+
+static UMTX gCRegLock = 0;
+static CReg* gCRegHead = 0;
+
 struct CReg {
   CReg *next;
   UChar iso[4];
   char  id[12];
 
-  static UMTX gLock;
-  static CReg* gHead;
-
   CReg(const UChar* _iso, const char* _id)
     : next(0)
   {
     int32_t len = strlen(_id);
-    if (len > 11) {
-      len = 11;
+    if (len > (sizeof(id)-1)) {
+      len = (sizeof(id)-1);
     }
     uprv_strncpy(id, _id, len);
     id[len] = 0;
@@ -155,12 +157,12 @@ struct CReg {
     if (status && U_SUCCESS(*status) && _iso && _id) {
       CReg* n = new CReg(_iso, _id);
       if (n) {
-        Mutex mutex(&gLock);
-        if (!gHead) {
+        Mutex mutex(&gCRegLock);
+        if (!gCRegHead) {
             ucln_i18n_registerCleanup();
         }
-        n->next = gHead;
-        gHead = n;
+        n->next = gCRegHead;
+        gCRegHead = n;
         return n;
       }
       *status = U_MEMORY_ALLOCATION_ERROR;
@@ -169,14 +171,14 @@ struct CReg {
   }
 
   static UBool unreg(UCurrRegistryKey key) {
-    Mutex mutex(&gLock);
-    if (gHead == key) {
-      gHead = gHead->next;
+    Mutex mutex(&gCRegLock);
+    if (gCRegHead == key) {
+      gCRegHead = gCRegHead->next;
       delete (CReg*)key;
       return TRUE;
     }
 
-    CReg* p = gHead;
+    CReg* p = gCRegHead;
     while (p) {
       if (p->next == key) {
         p->next = ((CReg*)key)->next;
@@ -190,8 +192,8 @@ struct CReg {
   }
 
   static const UChar* get(const char* id) {
-    Mutex mutex(&gLock);
-    CReg* p = gHead;
+    Mutex mutex(&gCRegLock);
+    CReg* p = gCRegHead;
     while (p) {
       if (uprv_strcmp(id, p->id) == 0) {
         return p->iso;
@@ -202,17 +204,14 @@ struct CReg {
   }
 
   static void cleanup(void) {
-    while (gHead) {
-      CReg* n = gHead;
-      gHead = gHead->next;
+    while (gCRegHead) {
+      CReg* n = gCRegHead;
+      gCRegHead = gCRegHead->next;
       delete n;
     }
-    umtx_destroy(&gLock);
+    umtx_destroy(&gCRegLock);
   }
 };
-
-UMTX CReg::gLock = 0;
-CReg* CReg::gHead = 0;
 
 // -------------------------------------
 
