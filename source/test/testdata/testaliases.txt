@@ -45,13 +45,13 @@ testaliases
     // WARNING: this test assumes that on all platforms digits sort normally
     // if not, the test may fail
     testGetStringByKeyAliasing {
-        KeyAlias0PST:alias { "/ICUDATA/en/zoneStrings/0/0" } //"PST",
+        KeyAlias0PST:alias { "/ICUDATA/en/zoneStrings/0/0" } //"America/Los_Angeles",
         KeyAlias1PacificStandardTime:alias { "/ICUDATA/en/zoneStrings/0/1" } //"Pacific Standard Time",
         KeyAlias2PDT:alias { "/ICUDATA/en/zoneStrings/0/4" } //"PDT",
         KeyAlias3LosAngeles:alias { "/ICUDATA/en/zoneStrings/0/5" } //"Los Angeles",
     }
     testGetStringByIndexAliasing  {
-        :alias { "/ICUDATA/en/zoneStrings/0/0" } //"PST",
+        :alias { "/ICUDATA/en/zoneStrings/0/0" } //"America/Los_Angeles",
         :alias { "/ICUDATA/en/zoneStrings/0/1" } //"Pacific Standard Time",
         :alias { "/ICUDATA/en/zoneStrings/0/4" } //"PDT",
         :alias { "/ICUDATA/en/zoneStrings/0/5" } //"Los Angeles",

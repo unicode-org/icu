@@ -2144,14 +2144,14 @@ static void TestResourceLevelAliasing(void) {
     /* test getting aliased string by index */
     {
         const char* keys[] = {
-            "KeyAlias0PST",
+                "KeyAlias0PST",
                 "KeyAlias1PacificStandardTime",
                 "KeyAlias2PDT",
                 "KeyAlias3LosAngeles"
         };
         
         const char* strings[] = {
-            "PST",
+                "America/Los_Angeles",
                 "Pacific Standard Time",
                 "PDT",
                 "Los Angeles",
