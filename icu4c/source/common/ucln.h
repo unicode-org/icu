@@ -19,7 +19,7 @@
 
 #include "unicode/utypes.h"
 
-typedef enum ECleanupLibraryType {
+enum ECleanupLibraryType {
     UCLN_START = -1,
     UCLN_CUSTOM,    /* Custom is for anyone else. */
     UCLN_LAYOUT,
