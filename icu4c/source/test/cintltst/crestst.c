@@ -325,6 +325,18 @@ UBool testTag(const char* frag,
 
   strcpy(item_tag, "tag");
 
+	status = U_ZERO_ERROR;
+	theBundle = ures_open(testdatapath, "root", &status);
+	if(U_FAILURE(status))
+	{
+		ures_close(theBundle);
+		log_err("Couldn't open root bundle in %s", testdatapath);
+		return FALSE;
+	}
+	ures_close(theBundle);
+	theBundle = NULL;
+	
+
   for (i=0; i<bundles_count; ++i)
     {
       strcpy(action,"construction for");
@@ -337,6 +349,8 @@ UBool testTag(const char* frag,
       /*theBundle = ures_open("c:\\icu\\icu\\source\\test\\testdata\\testdata", param[i].name, &status);*/
 
       CONFIRM_ErrorCode(status,param[i].expected_constructor_status);
+
+
 
       if(i == 5)
 	actual_bundle = 0; /* ne -> default */
