@@ -481,12 +481,12 @@ DecimalFormat::format(int32_t number,
 
         if (number < 0) // This can only happen if number == Long.MIN_VALUE
         {
-            int32_t cutoff = T_INT32_MIN / fMultiplier;
+            int32_t cutoff = INT32_MIN / fMultiplier;
             useDouble = (number < cutoff);
         }
         else
         {
-            int32_t cutoff = T_INT32_MAX / fMultiplier;
+            int32_t cutoff = INT32_MAX / fMultiplier;
             useDouble = (number > cutoff);
         }
         // use double to format the number instead so we don't get out
