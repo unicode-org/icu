@@ -1431,13 +1431,13 @@ public:
    * @param startLength the number of characters to extract
    * @param target the target buffer for extraction, can be NULL
    *               if targetLength is 0
-   * @param targetLength the length of the target buffer
+   * @param targetCapacity the length of the target buffer
    * @param inv Signature-distinguishing paramater, use US_INV.
    * @return the output string length, not including the terminating NUL
    * @draft ICU 3.2
    */
   int32_t extract(int32_t start,
-           int32_t length,
+           int32_t startLength,
            char *target,
            int32_t targetCapacity,
            enum EInvariant inv) const;

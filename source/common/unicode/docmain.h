@@ -166,7 +166,7 @@
  *   </tr>
  *   <tr>
  *     <td>Regular Expressions</td>
- *     <td>N/A</td>
+ *     <td>uregex.h</td>
  *     <td>RegexPattern, RegexMatcher</td>
  *   </tr>
  *   <tr>

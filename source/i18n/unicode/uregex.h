@@ -13,6 +13,13 @@
 *   ICU Regular Expressions, API for C
 */
 
+/**
+ * \file
+ * \brief C API: Regular Expressions
+ *
+ * <p>This is a C wrapper around the C++ RegexPattern and RegexMatcher classes.</p>
+ */
+
 #ifndef UREGEX_H
 #define UREGEX_H
 
