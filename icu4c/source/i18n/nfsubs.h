@@ -90,7 +90,7 @@ public:
      * @param radix The radix of the divisor
      * @param exponent The exponent of the divisor
      */
-    virtual void setDivisor(int32_t radix, int32_t exponent);
+    virtual void setDivisor(int32_t radix, int32_t exponent, UErrorCode& status);
     
     /**
      * Replaces result with the string describing the substitution.
@@ -294,11 +294,18 @@ public:
         : NFSubstitution(_pos, _ruleSet, formatter, description, status), divisor(_divisor)
     {
         ldivisor = util64_fromDouble(divisor);
+        if (divisor == 1 || divisor == 0) {
+            status = U_PARSE_ERROR;
+        }
     }
     
-    void setDivisor(int32_t radix, int32_t exponent) { 
+    void setDivisor(int32_t radix, int32_t exponent, UErrorCode& status) { 
         divisor = uprv_pow(radix, exponent);
         ldivisor = util64_fromDouble(divisor);
+
+        if(divisor == 1 || divisor == 0) { // need to signal error somehow
+            status = U_PARSE_ERROR;
+        }
     }
     
     UBool operator==(const NFSubstitution& rhs) const;
@@ -339,9 +346,13 @@ public:
         const UnicodeString& description,
         UErrorCode& status);
     
-    void setDivisor(int32_t radix, int32_t exponent) { 
+    void setDivisor(int32_t radix, int32_t exponent, UErrorCode& status) { 
         divisor = uprv_pow(radix, exponent);
         ldivisor = util64_fromDouble(divisor);
+
+        if (divisor == 1 || divisor == 0) {
+            status = U_PARSE_ERROR;
+        }
     }
     
     UBool operator==(const NFSubstitution& rhs) const;

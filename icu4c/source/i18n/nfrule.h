@@ -55,7 +55,7 @@ public:
     void setType(ERuleType ruleType) { baseValue = (int32_t)ruleType; }
 
     int64_t getBaseValue() const { return baseValue; }
-    void setBaseValue(int64_t value);
+    void setBaseValue(int64_t value, UErrorCode& status);
 
     double getDivisor() const { return uprv_pow(radix, exponent); }
 

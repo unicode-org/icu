@@ -221,7 +221,7 @@ NFSubstitution::~NFSubstitution()
  * @param exponent The exponent of the divisor
  */
 void
-NFSubstitution::setDivisor(int32_t /*radix*/, int32_t /*exponent*/) {
+NFSubstitution::setDivisor(int32_t /*radix*/, int32_t /*exponent*/, UErrorCode& status) {
   // a no-op for all substitutions except multiplier and modulus substitutions
 }
 
@@ -563,6 +563,10 @@ ModulusSubstitution::ModulusSubstitution(int32_t _pos,
   // the owning rule's divisor controls the behavior of this
   // substitution: rather than keeping a backpointer to the rule,
   // we keep a copy of the divisor
+
+  if (ldivisor == 1 || ldivisor == 0) {
+      status = U_PARSE_ERROR;
+  }
 
   if (description == gGreaterGreaterGreaterThan) {
     // the >>> token doesn't alter how this substituion calculates the

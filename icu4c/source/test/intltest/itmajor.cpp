@@ -23,6 +23,7 @@
 #include "ittrans.h"
 #include "itrbbi.h"
 #include "itrbnf.h"
+#include "itrbnfp.h"
 #include "itrbnfrt.h"
 #include "normconf.h"
 #include "regextst.h"
@@ -158,8 +159,20 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
 #endif
                 break;
 
+            case 12: name = "rbnfp";
+#if !UCONFIG_NO_FORMATTING
+                if (exec) {
+                    logln("TestSuite RuleBasedNumberParse ----"); logln();
+                    IntlTestRBNFParse test;
+                    callTest(test, par);
+                }
+#endif
+                break;
+
         default: name = ""; break;
     }
+
+
 }
 
 void IntlTestNormalize::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )

@@ -552,6 +552,14 @@ SOURCE=.\itrbnf.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\itrbnfp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\itrbnfp.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\itrbnfrt.cpp
 # End Source File
 # Begin Source File
