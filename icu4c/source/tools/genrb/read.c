@@ -164,7 +164,9 @@ static enum ETokenType getStringToken(UFILE *f,
     /*	c = u_fgetc(f, status);*/
 
 	/* EOF reached */
-	if(c == (UChar)U_EOF)        return tok_EOF;
+    if(c == (UChar)U_EOF) {
+        return tok_EOF;
+    }
 	/* Unterminated quoted strings */
 	if(U_FAILURE(*status))  return tok_error;
 	if(c == QUOTE) 

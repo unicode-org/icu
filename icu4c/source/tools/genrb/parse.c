@@ -231,18 +231,27 @@ parse(FileStream *f, const char *cp,
 
   file = u_finit((FILE *)f, 0, cp);
 /*  file = u_finit(f, cp, status); */
+  if(file == NULL) {
+      setErrorText("Could not initialize input file - most probably because of wrong converter\n");
+      *status = U_INVALID_FORMAT_ERROR;
+      goto finish;
+  }
 
     bundle = bundle_open(status);
     rootTable = bundle -> fRoot;
 
-  if(U_FAILURE(*status) || file == NULL) goto finish;
+    if(U_FAILURE(*status) || file == NULL) {
+        goto finish;
+    }
   
   /* iterate through the stream */
   for(;;) {
 
     /* get next token from stream */
     type = getNextToken(file, &token, status);
-    if(U_FAILURE(*status)) goto finish;
+    if(U_FAILURE(*status)) {
+        goto finish;
+    }
 
     switch(type) {
     case tok_EOF:
@@ -278,7 +287,9 @@ parse(FileStream *f, const char *cp,
     case eSetTag:
         ustr_cpy(&tag, &token, status);
         u_UCharsToChars(tag.fChars, cTag, u_strlen(tag.fChars)+1);
-        if(U_FAILURE(*status)) goto finish;
+        if(U_FAILURE(*status)) {
+            goto finish;
+        }
 		if(uprv_strchr(cTag, ':')) {
 			/* type modificator - do the type modification*/
 		} else if(uprv_strcmp(cTag, "CollationElements") == 0) {
@@ -307,10 +318,11 @@ parse(FileStream *f, const char *cp,
         table_add(rootTable, temp, status);
 		if(colEl == TRUE) {
 			const UChar * defaultRulesArray;
+            UErrorCode intStatus = U_ZERO_ERROR;
 			uint32_t defaultRulesArrayLength = 0;
 			/* do the collation elements */
 			int32_t len = 0;
-			uint8_t *data = NULL;
+			uint8_t *binColData = NULL;
 			UCollator *coll = NULL; 
 			UChar *rules = NULL;
 			defaultRulesArray = ucol_getDefaultRulesArray(&defaultRulesArrayLength);
@@ -318,24 +330,28 @@ parse(FileStream *f, const char *cp,
 			uprv_memcpy(rules, defaultRulesArray, defaultRulesArrayLength*sizeof(defaultRulesArray[0]));
 			uprv_memcpy(rules + defaultRulesArrayLength, token.fChars, token.fLength*sizeof(token.fChars[0]));
 			
-			coll = ucol_openRules(rules, defaultRulesArrayLength + token.fLength, UCOL_DECOMP_CAN, 0, status);
+			coll = ucol_openRules(rules, defaultRulesArrayLength + token.fLength, UCOL_DECOMP_CAN, 0, &intStatus);
 			ucol_setNormalization(coll, UCOL_NO_NORMALIZATION);
 
-			if(U_SUCCESS(*status) && coll !=NULL) {
-				data = ucol_cloneRuleData(coll, &len, status);
+			if(U_SUCCESS(intStatus) && coll !=NULL) {
+				binColData = ucol_cloneRuleData(coll, &len, &intStatus);
 				if(U_SUCCESS(*status) && data != NULL) {
-					temp1 = bin_open(bundle, "%%Collation", len, data, status);
+					temp1 = bin_open(bundle, "%%Collation", len, binColData, status);
 					table_add(rootTable, temp1, status);
-					uprv_free(data);
+					uprv_free(binColData);
 				}
 				ucol_close(coll);
-			}
+            } else {
+                setErrorText("Warning: %%Collation could not be constructed from CollationElements - check context!");
+            }
 			uprv_free(rules);
 			colEl = FALSE;
 		}
         /*uhash_put(data, tag.fChars, status);*/
         put(data, &tag, status);
-        if(U_FAILURE(*status)) goto finish;
+        if(U_FAILURE(*status)) {
+            goto finish;
+        }
         temp = NULL;
         break;
 
@@ -349,7 +365,9 @@ parse(FileStream *f, const char *cp,
         temp1 = string_open(bundle, NULL, token.fChars, token.fLength, status);
         array_add(temp, temp1, status);
         temp1 = NULL;
-        if(U_FAILURE(*status)) goto finish;
+        if(U_FAILURE(*status)) {
+            goto finish;
+        }
         break;
       
       /* Record a comma-delimited list string */      
@@ -357,7 +375,9 @@ parse(FileStream *f, const char *cp,
         temp1 = string_open(bundle, NULL, token.fChars, token.fLength, status);
         array_add(temp, temp1, status);
         temp1 = NULL;
-        if(U_FAILURE(*status)) goto finish;
+        if(U_FAILURE(*status)) {
+            goto finish;
+        }
         break;
       
       /* End a string list */
@@ -366,7 +386,9 @@ parse(FileStream *f, const char *cp,
         put(data, &tag, status);
         table_add(rootTable, temp, status);
         temp = NULL;
-        if(U_FAILURE(*status)) goto finish;
+        if(U_FAILURE(*status)) {
+            goto finish;
+        }
         break;
       
     case eBeg2dList:
@@ -376,7 +398,9 @@ parse(FileStream *f, const char *cp,
         }
         temp = array_open(bundle, cTag, status);
         temp1 = array_open(bundle, NULL, status);
-        if(U_FAILURE(*status)) goto finish;
+        if(U_FAILURE(*status)) {
+            goto finish;
+        }
         break;
       
     case eEnd2dList:
@@ -386,20 +410,26 @@ parse(FileStream *f, const char *cp,
         table_add(rootTable, temp, status);
         temp1 = NULL;
         temp = NULL;
-        if(U_FAILURE(*status)) goto finish;
+        if(U_FAILURE(*status)) {
+            goto finish;
+        }
         break;
       
     case e2dStr:
         temp2 = string_open(bundle, NULL, token.fChars, token.fLength, status);
         array_add(temp1, temp2, status);
         temp2 = NULL;
-        if(U_FAILURE(*status)) goto finish;
+        if(U_FAILURE(*status)) {
+            goto finish;
+        }
         break;
       
     case eNewRow:
         array_add(temp, temp1, status);
         temp1 = array_open(bundle, NULL, status);
-        if(U_FAILURE(*status)) goto finish;
+        if(U_FAILURE(*status)) {
+            goto finish;
+        }
         break;
       
     case eBegTagged:
@@ -409,7 +439,9 @@ parse(FileStream *f, const char *cp,
         }
         temp = table_open(bundle, cTag, status);
         u_UCharsToChars(token.fChars, cSubTag, u_strlen(token.fChars)+1);
-        if(U_FAILURE(*status)) goto finish;
+        if(U_FAILURE(*status)) {
+            goto finish;
+        }
         break;
       
     case eEndTagged:
@@ -417,20 +449,26 @@ parse(FileStream *f, const char *cp,
         put(data, &tag, status);
         table_add(rootTable, temp, status);
         temp = NULL;
-        if(U_FAILURE(*status)) goto finish;
+        if(U_FAILURE(*status)) {
+            goto finish;
+        }
         break;
       
     case eTaggedStr:
         temp1 = string_open(bundle, cSubTag, token.fChars, token.fLength, status);
         table_add(temp, temp1, status);
         temp1 = NULL;
-        if(U_FAILURE(*status)) goto finish;
+        if(U_FAILURE(*status)) {
+            goto finish;
+        }
         break;
       
       /* Record the last string as the subtag */
     case eSubtag:
         u_UCharsToChars(token.fChars, cSubTag, u_strlen(token.fChars)+1);
-        if(U_FAILURE(*status)) goto finish;
+        if(U_FAILURE(*status)) {
+            goto finish;
+        }
         if(table_get(temp, cSubTag, status) != 0) {
 	        *status = U_INVALID_FORMAT_ERROR;
 	        setErrorText("Duplicate subtag found in tagged list");
@@ -477,7 +515,9 @@ parse(FileStream *f, const char *cp,
 			}
 			uprv_free(rules);
 	}
-        if(U_FAILURE(*status)) goto finish;
+    if(U_FAILURE(*status)) {
+        goto finish;
+    }
         data = uhash_open(hashUString, compareUString, status);
         uhash_setKeyDeleter(data, freeUString);
         break;
