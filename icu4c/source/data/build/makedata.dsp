@@ -102,6 +102,10 @@ SOURCE=..\..\..\data\resfiles.mk
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\test\testdata\testdata.mk
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\data\ucmfiles.mk
 # End Source File
 # End Group
