@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationRuleParser.java,v $ 
-* $Date: 2003/02/27 00:51:02 $ 
-* $Revision: 1.11 $
+* $Date: 2003/04/09 20:03:43 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -1895,7 +1895,7 @@ final class CollationRuleParser
                   	m_parsedToken_.m_charsOffset_+m_parsedToken_.m_charsLen_));
                 pattern = it.next();
                 while(pattern != null) {
-                  	if(Normalizer.quickCheck(pattern, Normalizer.FCD) != Normalizer.NO) {
+                  	if(Normalizer.quickCheck(pattern, Normalizer.FCD,0) != Normalizer.NO) {
                         tailored.add(pattern);
                     }
                     pattern = it.next();

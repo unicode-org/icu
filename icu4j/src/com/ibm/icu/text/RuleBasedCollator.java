@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/03/21 18:55:11 $
-* $Revision: 1.36 $
+* $Date: 2003/04/09 20:03:43 $
+* $Revision: 1.37 $
 *
 *******************************************************************************
 */
@@ -740,7 +740,7 @@ public final class RuleBasedCollator extends Collator
 
         int bottomCount4 = 0xFF - commonBottom4;
         // If we need to normalize, we'll do it all at once at the beginning!
-        if (m_utilCompare5_ && Normalizer.quickCheck(source, Normalizer.NFD)
+        if (m_utilCompare5_ && Normalizer.quickCheck(source, Normalizer.NFD,0)
                                                     != Normalizer.YES) {
             // if it is identical strength, we have to normalize the string to
             // NFD so that it will be appended correctly to the end of the sort
@@ -748,7 +748,7 @@ public final class RuleBasedCollator extends Collator
             source = Normalizer.decompose(source, false);
         }
         else if (getDecomposition() != NO_DECOMPOSITION
-            && Normalizer.quickCheck(source, Normalizer.FCD)
+            && Normalizer.quickCheck(source, Normalizer.FCD,0)
                                                     != Normalizer.YES) {
             // for the rest of the strength, if decomposition is on, FCD is
             // enough for us to work on.
@@ -3443,12 +3443,12 @@ public final class RuleBasedCollator extends Collator
 
     {
         if (normalize) {
-            if (Normalizer.quickCheck(source, Normalizer.NFD)
+            if (Normalizer.quickCheck(source, Normalizer.NFD,0)
                                                     != Normalizer.YES) {
                 source = Normalizer.decompose(source, false);
             }
 
-            if (Normalizer.quickCheck(target, Normalizer.NFD)
+            if (Normalizer.quickCheck(target, Normalizer.NFD,0)
                                                         != Normalizer.YES) {
                 target = Normalizer.decompose(target, false);
             }

@@ -6,19 +6,24 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2003/04/03 22:52:00 $ 
-* $Revision: 1.25 $
+* $Date: 2003/04/09 20:03:44 $ 
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
 
 package com.ibm.icu.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.Locale;
+
+import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.VersionInfo;
+import com.ibm.icu.util.RangeValueIterator.Element;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.*;
@@ -327,6 +332,21 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * @param index of the case value to be retrieved
     * @return folded case value at index
     */
+    /* 
+     * Issue for canonical caseless match (UAX #21): 
+     * Turkic casefolding (using "T" mappings in CaseFolding.txt) does not preserve 
+     * canonical equivalence, unlike default-option casefolding. 
+     * For example, I-grave and I + grave fold to strings that are not canonically 
+     * equivalent. 
+     * For more details, see the comment in unorm_compare() in unorm.cpp 
+     * and the intermediate prototype changes for Jitterbug 2021. 
+     * (For example, revision 1.104 of uchar.c and 1.4 of CaseFolding.txt.) 
+     * 
+     * This did not get fixed because it appears that it is not possible to fix 
+     * it for uppercase and lowercase characters (I-grave vs. i-grave) 
+     * together in a way that they still fold to common result strings. 
+     */ 
+
     public int getFoldCase(int index)
     {
         char single = m_case_[index];
@@ -1198,7 +1218,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * Get the the maximum values for some enum/int properties.
      * @return maximum values for the integer properties.
      */
-    public int getMaxBlockScriptValues(int column) 
+    public int getMaxValues(int column) 
     {
        // return m_maxBlockScriptValue_;
         
@@ -1900,6 +1920,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     {
         // Lt + Uppercase + Lowercase = Lt + Lu + Ll 
         // + Other_Uppercase+Other_Lowercase
+            
         boolean result = (cat == UCharacterCategory.TITLECASE_LETTER 
                || cat == UCharacterCategory.UPPERCASE_LETTER
                || cat == UCharacterCategory.LOWERCASE_LETTER);
@@ -1953,46 +1974,152 @@ public final class UCharacterProperty implements Trie.DataManipulate
     	return (property & (1 << type)) != 0;
     }
 
-    /**
-     * Returns true if the given code point is either the source of a case
-     * mapping or _in_ the target of a case mapping.  Not the same as the
-     * general category Cased_Letter.
-     *
-     * @param cp the code point to test
-     * @return true if cp is case sensitive
-     */
-    private static boolean isCaseSensitive(int cp) {
-        return CASE_SENSITIVE.contains(cp);
+    
+	private static final int TAB     = 0x0009;
+	private static final int LF      = 0x000a;
+	private static final int FF      = 0x000c;
+	private static final int CR      = 0x000d;
+	private static final int U_A     = 0x0041;
+	private static final int U_Z     = 0x005a;
+	private static final int U_a     = 0x0061;
+	private static final int U_z     = 0x007a;
+	private static final int DEL     = 0x007f;
+	private static final int NL      = 0x0085;
+	private static final int NBSP    = 0x00a0;
+	private static final int CGJ     = 0x034f;
+	private static final int FIGURESP= 0x2007;
+	private static final int HAIRSP  = 0x200a;
+	private static final int ZWNJ    = 0x200c;
+	private static final int ZWJ     = 0x200d;
+	private static final int RLM     = 0x200f;
+	private static final int NNBSP   = 0x202f;
+	private static final int WJ      = 0x2060;
+	private static final int INHSWAP = 0x206a;
+	private static final int NOMDIG  = 0x206f;
+	private static final int ZWNBSP  = 0xfeff;
+	
+    public UnicodeSet addPropertyStarts(UnicodeSet set) {
+        int c;
+       
+        /* add the start code point of each same-value range of each trie */
+        //utrie_enum(&normTrie, NULL, _enumPropertyStartsRange, set);
+        TrieIterator normIter = new TrieIterator(m_trie_);
+        RangeValueIterator.Element result = new RangeValueIterator.Element();
+      	/* add code points with hardcoded properties, plus the ones following them */
+
+    	/* add for IS_THAT_CONTROL_SPACE() */
+	    set.add(TAB); /* range TAB..CR */
+	    set.add(CR+1);
+	    set.add(0x1c);
+	    set.add(0x1f+1);
+	    set.add(NL);
+	    set.add(NL+1);
+	
+	    /* add for u_isIDIgnorable() what was not added above */
+	    set.add(DEL); /* range DEL..NBSP-1, NBSP added below */
+	    set.add(HAIRSP);
+	    set.add(RLM+1);
+	    set.add(INHSWAP);
+	    set.add(NOMDIG+1);
+	    set.add(ZWNBSP);
+	    set.add(ZWNBSP+1);
+	
+	    /* add no-break spaces for u_isWhitespace() what was not added above */
+	    set.add(NBSP);
+	    set.add(NBSP+1);
+	    set.add(FIGURESP);
+	    set.add(FIGURESP+1);
+	    set.add(NNBSP);
+	    set.add(NNBSP+1);
+	
+	    /* add for u_charDigitValue() */
+	    set.add(0x3007);
+	    set.add(0x3008);
+	    set.add(0x4e00);
+	    set.add(0x4e01);
+	    set.add(0x4e8c);
+	    set.add(0x4e8d);
+	    set.add(0x4e09);
+	    set.add(0x4e0a);
+	    set.add(0x56db);
+	    set.add(0x56dc);
+	    set.add(0x4e94);
+	    set.add(0x4e95);
+	    set.add(0x516d);
+	    set.add(0x516e);
+	    set.add(0x4e03);
+	    set.add(0x4e04);
+	    set.add(0x516b);
+	    set.add(0x516c);
+	    set.add(0x4e5d);
+	    set.add(0x4e5e);
+	
+	    /* add for u_digit() */
+	    set.add(U_a);
+	    set.add(U_z+1);
+	    set.add(U_A);
+	    set.add(U_Z+1);
+	
+	    /* add for UCHAR_DEFAULT_IGNORABLE_CODE_POINT what was not added above */
+	    set.add(WJ); /* range WJ..NOMDIG */
+	    set.add(0xfff0);
+	    set.add(0xfffb+1);
+	    set.add(0xe0000);
+	    set.add(0xe0fff+1);
+	
+	    /* add for UCHAR_GRAPHEME_BASE and others */
+	    set.add(CGJ);
+	    set.add(CGJ+1);
+	
+	    /* add for UCHAR_JOINING_TYPE */
+	    set.add(ZWNJ); /* range ZWNJ..ZWJ */
+	    set.add(ZWJ+1);
+	
+	    /* add Jamo type boundaries for UCHAR_HANGUL_SYLLABLE_TYPE */
+	    set.add(0x1100);
+	    int value= UCharacter.HangulSyllableType.LEADING_JAMO;
+	    int value2;
+	    for(c=0x115a; c<=0x115f; ++c) {
+	        value2= UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
+	        if(value!=value2) {
+	            value=value2;
+	            set.add(c);
+	        }
+	    }
+	
+	    set.add(0x1160);
+	    value=UCharacter.HangulSyllableType.VOWEL_JAMO;
+	    for(c=0x11a3; c<=0x11a7; ++c) {
+	        value2=UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
+	        if(value!=value2) {
+	            value=value2;
+	            set.add(c);
+	        }
+	    }
+	
+	    set.add(0x11a8);
+	    value=UCharacter.HangulSyllableType.TRAILING_JAMO;
+	    for(c=0x11fa; c<=0x11ff; ++c) {
+	        value2=UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
+	        if(value!=value2) {
+	            value=value2;
+	            set.add(c);
+	        }
+	    }
+	
+	
+	    /*
+	     * Omit code points for u_charCellWidth() because
+	     * - it is deprecated and not a real Unicode property
+	     * - they are probably already set from the trie enumeration
+	     */
+	
+	    /*
+	     * Omit code points with hardcoded specialcasing properties
+	     * because we do not build property UnicodeSets for them right now.
+	     */      
+        return set; // for chaining
     }
 
-    private static UnicodeSet CASE_SENSITIVE = null;
 
-    // MACHINE-GENERATED; Unicode version 3.2.0.0; DO NOT EDIT; See com.ibm.icu.dev.tools.translit.UnicodeSetCloseOver
-    private static final String CASE_SENSITIVE_RANGES =
-        "AZaz\u00B5\u00B5\u00C0\u00D6\u00D8\u00F6\u00F8\u0137\u0139\u017F\u0181"+
-        "\u018C\u018E\u0199\u019C\u01A9\u01AC\u01B9\u01BC\u01BD\u01BF\u01BF\u01C4"+
-        "\u0220\u0222\u0233\u0253\u0254\u0256\u0257\u0259\u0259\u025B\u025B\u0260"+
-        "\u0260\u0263\u0263\u0268\u0269\u026F\u026F\u0272\u0272\u0275\u0275\u0280"+
-        "\u0280\u0283\u0283\u0288\u0288\u028A\u028B\u0292\u0292\u02BC\u02BC\u02BE"+
-        "\u02BE\u0300\u0301\u0307\u0308\u030A\u030A\u030C\u030C\u0313\u0313\u0331"+
-        "\u0331\u0342\u0342\u0345\u0345\u0386\u0386\u0388\u038A\u038C\u038C\u038E"+
-        "\u03A1\u03A3\u03CE\u03D0\u03D1\u03D5\u03D6\u03D8\u03F2\u03F4\u03F5\u0400"+
-        "\u0481\u048A\u04BF\u04C1\u04CE\u04D0\u04F5\u04F8\u04F9\u0500\u050F\u0531"+
-        "\u0556\u0561\u0587\u1E00\u1E9B\u1EA0\u1EF9\u1F00\u1F15\u1F18\u1F1D\u1F20"+
-        "\u1F45\u1F48\u1F4D\u1F50\u1F57\u1F59\u1F59\u1F5B\u1F5B\u1F5D\u1F5D\u1F5F"+
-        "\u1F7D\u1F80\u1FB4\u1FB6\u1FBC\u1FBE\u1FBE\u1FC2\u1FC4\u1FC6\u1FCC\u1FD0"+
-        "\u1FD3\u1FD6\u1FDB\u1FE0\u1FEC\u1FF2\u1FF4\u1FF6\u1FFC\u2126\u2126\u212A"+
-        "\u212B\u2160\u217F\u24B6\u24E9\uFB00\uFB06\uFB13\uFB17\uFF21\uFF3A\uFF41"+
-        "\uFF5A\uD801\uDC00\uD801\uDC25\uD801\uDC28\uD801\uDC4D";
-
-    static {
-        CASE_SENSITIVE = new UnicodeSet();
-        for (int i=0; i<CASE_SENSITIVE_RANGES.length(); ) {
-            int start = UTF16.charAt(CASE_SENSITIVE_RANGES, i);
-            i += UTF16.getCharCount(start);
-            int end = UTF16.charAt(CASE_SENSITIVE_RANGES, i);
-            i += UTF16.getCharCount(end);
-            CASE_SENSITIVE.add(start, end);
-        }
-    }
 }

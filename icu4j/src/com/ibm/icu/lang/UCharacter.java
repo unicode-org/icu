@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/04/04 01:41:55 $ 
-* $Revision: 1.70 $
+* $Date: 2003/04/09 20:03:45 $ 
+* $Revision: 1.71 $
 *
 *******************************************************************************
 */
@@ -19,6 +19,7 @@ import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ValueIterator;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.impl.NormalizerImpl;
@@ -3583,7 +3584,215 @@ public final class UCharacter
         
         return result.toString();
     }
+    
+	/**
+	 * Bit mask for getting just the options from a string compare options word
+	 * that are relevant for case folding (of a single string or code point).
+	 * @internal
+	 */
+	private static final int FOLD_CASE_OPTIONS_MASK = 0xff;
+    
+    /**
+     * Option value for case folding: use default mappings defined in CaseFolding.txt.
+     * @draft ICU 2.6
+     */
+    public static final int FOLD_CASE_DEFAULT    =      0x0000;
+    /** 
+     * Option value for case folding: exclude the mappings for dotted I 
+     * and dotless i marked with 'I' in CaseFolding.txt. 
+     * @draft ICU 2.6
+     */
+    public static final int FOLD_CASE_EXCLUDE_SPECIAL_I = 0x0001;
+    
+    /**
+     * The given character is mapped to its case folding equivalent according 
+     * to UnicodeData.txt and CaseFolding.txt; if the character has no case 
+     * folding equivalent, the character itself is returned.
+     * Only "simple", single-code point case folding mappings are used.
+     * For "full", multiple-code point mappings use the API 
+     * foldCase(String str, boolean defaultmapping).
+     * @param ch             the character to be converted
+     * @param options        A bit set for special processing. Currently the recognised options are
+     *                        FOLD_CASE_EXCLUDE_SPECIAL_I and FOLD_CASE_DEFAULT 
+     * @return               the case folding equivalent of the character, if 
+     *                       any; otherwise the character itself.
+     * @see                  #foldCase(String, boolean)
+     * @draft ICU 2.6
+     */
+	/*
+	 * Issue for canonical caseless match (UAX #21):
+	 * Turkic casefolding (using "T" mappings in CaseFolding.txt) does not preserve
+	 * canonical equivalence, unlike default-option casefolding.
+	 * For example, I-grave and I + grave fold to strings that are not canonically
+	 * equivalent.
+	 * For more details, see the comment in Normalizer.compare() 
+	 * and the intermediate prototype changes for Jitterbug 2021.
+	 * (For example, revision 1.104 of uchar.c and 1.4 of CaseFolding.txt.)
+	 *
+	 * This did not get fixed because it appears that it is not possible to fix
+	 * it for uppercase and lowercase characters (I-grave vs. i-grave)
+	 * together in a way that they still fold to common result strings.
+	 */
+	 public static int foldCase(int ch, int options)
+     {
+        int props = PROPERTY_.getProperty(ch);
+        if (isNotExceptionIndicator(props)) {
+            int type = UCharacterProperty.TYPE_MASK & props;
+            if (type == UCharacterCategory.UPPERCASE_LETTER ||
+                type == UCharacterCategory.TITLECASE_LETTER) {
+                return ch + UCharacterProperty.getSignedValue(props);
+            }
+        } 
+        else {
+            int index = UCharacterProperty.getExceptionIndex(props);
+            if (PROPERTY_.hasExceptionValue(index, 
+                                      UCharacterProperty.EXC_CASE_FOLDING_)) {
+                int exception = PROPERTY_.getException(index, 
+                                      UCharacterProperty.EXC_CASE_FOLDING_);
+                if (exception != 0) {
+                    int foldedcasech = 
+                         PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_);
+                    if (foldedcasech != 0){
+                        return foldedcasech;
+                    }
+                }
+                else {
+                    // special case folding mappings, hardcoded
+                    if ((options&FOLD_CASE_OPTIONS_MASK)== Normalizer.FOLD_CASE_DEFAULT) { 
+                        // default mappings
+                        if (ch == 0x49 || ch == 0x130) { 
+                            // 0049; C; 0069; # LATIN CAPITAL LETTER I */
+                            // no simple default mapping for U+0130, 
+                            // use UnicodeData.txt
+                            return UCharacterProperty.LATIN_SMALL_LETTER_I_;
+                        } 
+                    } 
+                    else {
+                        // Turkic mappings 
+                        if (ch == 0x49) {
+                            // 0049; T; 0131; # LATIN CAPITAL LETTER I
+                            return 0x131;
+                        } 
+                        else if (ch == 0x130) {
+                            // 0130; T; 0069; 
+                            // # LATIN CAPITAL LETTER I WITH DOT ABOVE
+                            return 0x69;
+                        }
+                    }
+                    // return ch itself because it is excluded from case folding
+                    return ch;
+                }                                  
+            }
+            if (PROPERTY_.hasExceptionValue(index, 
+                                       UCharacterProperty.EXC_LOWERCASE_)) {  
+                // not else! - allow to fall through from above
+                return PROPERTY_.getException(index, 
+                                         UCharacterProperty.EXC_LOWERCASE_);
+            }
+        }
+            
+        return ch; // no mapping - return the character itself
+    }
+    
+    /**
+     * The given string is mapped to its case folding equivalent according to
+     * UnicodeData.txt and CaseFolding.txt; if any character has no case 
+     * folding equivalent, the character itself is returned.
+     * "Full", multiple-code point case folding mappings are returned here.
+     * For "simple" single-code point mappings use the API 
+     * foldCase(int ch, boolean defaultmapping).
+     * @param str            the String to be converted
+     * @param options        A bit set for special processing. Currently the recognised options are
+     *                        FOLD_CASE_EXCLUDE_SPECIAL_I and FOLD_CASE_DEFAULT 
+     * @return               the case folding equivalent of the character, if 
+     *                       any; otherwise the character itself.
+     * @see                  #foldCase(int, boolean)
+     * @draft ICU 2.6
+     */
+	public static final String foldCase(String str, int options){
+        int          size   = str.length();
+        StringBuffer result = new StringBuffer(size);
+        int          offset  = 0;
+        int          ch;
 
+        // case mapping loop
+        while (offset < size) {
+            ch = UTF16.charAt(str, offset);
+            offset += UTF16.getCharCount(ch);
+            int props = getProperty(ch);
+            if ((props & UCharacterProperty.EXCEPTION_MASK) == 0) {
+                int type = UCharacterProperty.TYPE_MASK & props;
+                if (type == UCharacterCategory.UPPERCASE_LETTER ||
+                    type == UCharacterCategory.TITLECASE_LETTER) {
+                    ch += UCharacterProperty.getSignedValue(props);
+                }
+            }  
+            else {
+                int index = UCharacterProperty.getExceptionIndex(props);
+                if (PROPERTY_.hasExceptionValue(index, 
+                                    UCharacterProperty.EXC_CASE_FOLDING_)) {
+                    int exception = PROPERTY_.getException(index, 
+                                      UCharacterProperty.EXC_CASE_FOLDING_);                             
+                    if (exception != 0) {
+                        PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_, 
+                                             exception >> SHIFT_24_, result);
+                    } 
+                    else {
+                        // special case folding mappings, hardcoded
+                        if (ch != 0x49 && ch != 0x130) {
+                            // return ch itself because there is no special 
+                            // mapping for it
+                            UTF16.append(result, ch);
+                            continue;
+                        }
+                        if ((options&FOLD_CASE_OPTIONS_MASK)== Normalizer.FOLD_CASE_DEFAULT) {
+                            // default mappings
+                            if (ch == 0x49) {
+                                // 0049; C; 0069; # LATIN CAPITAL LETTER I
+                                result.append(
+                                    UCharacterProperty.LATIN_SMALL_LETTER_I_);
+                            }
+                            else if (ch == 0x130) {
+                                // 0130; F; 0069 0307; 
+                                // # LATIN CAPITAL LETTER I WITH DOT ABOVE
+                                result.append(
+                                    UCharacterProperty.LATIN_SMALL_LETTER_I_);
+                                result.append((char)0x307);
+                            }
+                        }
+                        else {
+                            // Turkic mappings
+                            if (ch == 0x49) {
+                                // 0049; T; 0131; # LATIN CAPITAL LETTER I
+                                result.append((char)0x131);
+                            } 
+                            else if (ch == 0x130) {
+                                // 0130; T; 0069; 
+                                // # LATIN CAPITAL LETTER I WITH DOT ABOVE
+                                result.append(
+                                    UCharacterProperty.LATIN_SMALL_LETTER_I_);
+                            }
+                        }
+                    }
+                    // do not fall through to the output of c
+                    continue;
+                } 
+                else {
+                    if (PROPERTY_.hasExceptionValue(index, 
+                                         UCharacterProperty.EXC_LOWERCASE_)) {
+                        ch = PROPERTY_.getException(index, 
+                                          UCharacterProperty.EXC_LOWERCASE_);
+                    }
+                }
+                
+            }
+
+            // handle 1:1 code point mappings from UnicodeData.txt
+            UTF16.append(result, ch);
+        }
+        
+        return result.toString();
+	}
     /**
      * Return numeric value of Han code points.
      * <br> This returns the value of Han 'numeric' code points,
@@ -4083,7 +4292,7 @@ public final class UCharacter
             case UProperty.BIDI_CLASS:
                 return UCharacterDirection.CHAR_DIRECTION_COUNT - 1;
             case UProperty.BLOCK:
-                max = (PROPERTY_.getMaxBlockScriptValues(0)
+                max = (PROPERTY_.getMaxValues(0)
                       & BLOCK_MASK_) >> BLOCK_SHIFT_;
                 if (max == 0) {
                     max = UnicodeBlock.COUNT - 1;
@@ -4107,7 +4316,7 @@ public final class UCharacter
             case UProperty.NUMERIC_TYPE:
                 return NumericType.COUNT - 1;
             case UProperty.SCRIPT:
-                max = PROPERTY_.getMaxBlockScriptValues(0) & SCRIPT_MASK_;
+                max = PROPERTY_.getMaxValues(0) & SCRIPT_MASK_;
                 if (max == 0) {
                     max = UScript.CODE_LIMIT - 1;
                 }
