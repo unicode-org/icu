@@ -578,7 +578,7 @@ protected:
      */
     NumberFormat& operator=(const NumberFormat&);
 
-protected:
+private:
     static const int32_t fgMaxIntegerDigits;
     static const int32_t fgMinIntegerDigits;
 
