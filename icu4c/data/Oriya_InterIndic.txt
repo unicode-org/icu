@@ -1,17 +1,16 @@
-﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
-// Source: \icu4j\src\com\ibm\text\resources/Transliterator_Oriya_InterIndic.utf8.txt
+// Source: \u005cicu4j\u005csrc\u005ccom\u005cibm\u005ctext\u005cresources/Transliterator_Oriya_InterIndic.utf8.txt
 // Date: Thu Mar  1 20:03:55 2001
 //--------------------------------------------------------------------
 
 // Oriya_InterIndic
 
-Oriya_InterIndic {
+Oriya-InterIndic {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines
@@ -21,87 +20,87 @@ Oriya_InterIndic {
 //--------------------------------------------------------------------
 
 // Oriya-InterIndic
-
-"ଁ>\uE001;" // SIGN CANDRABINDU
-"ଂ>\uE002;" // SIGN ANUSVARA
-"ଃ>\uE003;" // SIGN VISARGA
-"ଅ>\uE005;" // LETTER A
-"ଆ>\uE006;" // LETTER AA
-"ଇ>\uE007;" // LETTER I
-"ଈ>\uE008;" // LETTER II
-"ଉ>\uE009;" // LETTER U
-"ଊ>\uE00A;" // LETTER UU
-"ଋ>\uE00B;" // LETTER VOCALIC R
-"ଌ>\uE00C;" // LETTER VOCALIC L
-"ଏ>\uE081;" // LETTER E
-"ଐ>\uE010;" // LETTER AI
-"ଓ>\uE082;" // LETTER O
-"ଔ>\uE014;" // LETTER AU
-"କ>\uE015;" // LETTER KA
-"ଖ>\uE016;" // LETTER KHA
-"ଗ>\uE017;" // LETTER GA
-"ଘ>\uE018;" // LETTER GHA
-"ଙ>\uE019;" // LETTER NGA
-"ଚ>\uE01A;" // LETTER CA
-"ଛ>\uE01B;" // LETTER CHA
-"ଜ>\uE01C;" // LETTER JA
-"ଝ>\uE01D;" // LETTER JHA
-"ଞ>\uE01E;" // LETTER NYA
-"ଟ>\uE01F;" // LETTER TTA
-"ଠ>\uE020;" // LETTER TTHA
-"ଡ>\uE021;" // LETTER DDA
-"ଢ>\uE022;" // LETTER DDHA
-"ଣ>\uE023;" // LETTER NNA
-"ତ>\uE024;" // LETTER TA
-"ଥ>\uE025;" // LETTER THA
-"ଦ>\uE026;" // LETTER DA
-"ଧ>\uE027;" // LETTER DHA
-"ନ>\uE028;" // LETTER NA
-"ପ>\uE02A;" // LETTER PA
-"ଫ>\uE02B;" // LETTER PHA
-"ବ>\uE02C;" // LETTER BA
-"ଭ>\uE02D;" // LETTER BHA
-"ମ>\uE02E;" // LETTER MA
-"ଯ>\uE02F;" // LETTER YA
-"ର>\uE030;" // LETTER RA
-"ଲ>\uE032;" // LETTER LA
-"ଳ>\uE033;" // LETTER LLA
-"ଶ>\uE036;" // LETTER SHA
-"ଷ>\uE037;" // LETTER SSA
-"ସ>\uE038;" // LETTER SA
-"ହ>\uE039;" // LETTER HA
-"଼>\uE03C;" // SIGN NUKTA
-"ଽ>\uE03D;" // SIGN AVAGRAHA
-"ା>\uE03E;" // VOWEL SIGN AA
-"ି>\uE03F;" // VOWEL SIGN I
-"ୀ>\uE040;" // VOWEL SIGN II
-"ୁ>\uE041;" // VOWEL SIGN U
-"ୂ>\uE042;" // VOWEL SIGN UU
-"ୃ>\uE043;" // VOWEL SIGN VOCALIC R
-"େ>\uE084;" // VOWEL SIGN E
-"ୈ>\uE048;" // VOWEL SIGN AI
-"ୋ>\uE085;" // VOWEL SIGN O
-"ୌ>\uE04C;" // VOWEL SIGN AU
-"୍>\uE04D;" // SIGN VIRAMA
-"ୖ>\uE056;" // AI LENGTH MARK
-"ୗ>\uE057;" // AU LENGTH MARK
-"ଡ଼>\uE083;" // LETTER RRA
-"ଢ଼>\uE05D;" // LETTER RHA
-"ୟ>\uE05F;" // LETTER YYA
-"ୠ>\uE060;" // LETTER VOCALIC RR
-"ୡ>\uE061;" // LETTER VOCALIC LL
-"୦>\uE066;" // DIGIT ZERO
-"୧>\uE067;" // DIGIT ONE
-"୨>\uE068;" // DIGIT TWO
-"୩>\uE069;" // DIGIT THREE
-"୪>\uE06A;" // DIGIT FOUR
-"୫>\uE06B;" // DIGIT FIVE
-"୬>\uE06C;" // DIGIT SIX
-"୭>\uE06D;" // DIGIT SEVEN
-"୮>\uE06E;" // DIGIT EIGHT
-"୯>\uE06F;" // DIGIT NINE
-"୰>\uE080;" // ISSHAR
-
+":: NFD (NFC) ;"
+"\u0b01>\ue001;" // SIGN CANDRABINDU
+"\u0b02>\ue002;" // SIGN ANUSVARA
+"\u0b03>\ue003;" // SIGN VISARGA
+"\u0b05>\ue005;" // LETTER A
+"\u0b06>\ue006;" // LETTER AA
+"\u0b07>\ue007;" // LETTER I
+"\u0b08>\ue008;" // LETTER II
+"\u0b09>\ue009;" // LETTER U
+"\u0b0a>\ue00a;" // LETTER UU
+"\u0b0b>\ue00b;" // LETTER VOCALIC R
+"\u0b0c>\ue00c;" // LETTER VOCALIC L
+"\u0b0f>\ue00f;" // LETTER E
+"\u0b10>\ue010;" // LETTER AI
+"\u0b13>\ue013;" // LETTER O
+"\u0b14>\ue014;" // LETTER AU
+"\u0b15>\ue015;" // LETTER KA
+"\u0b16>\ue016;" // LETTER KHA
+"\u0b17>\ue017;" // LETTER GA
+"\u0b18>\ue018;" // LETTER GHA
+"\u0b19>\ue019;" // LETTER NGA
+"\u0b1a>\ue01a;" // LETTER CA
+"\u0b1b>\ue01b;" // LETTER CHA
+"\u0b1c>\ue01c;" // LETTER JA
+"\u0b1d>\ue01d;" // LETTER JHA
+"\u0b1e>\ue01e;" // LETTER NYA
+"\u0b1f>\ue01f;" // LETTER TTA
+"\u0b20>\ue020;" // LETTER TTHA
+"\u0b21>\ue021;" // LETTER DDA
+"\u0b22>\ue022;" // LETTER DDHA
+"\u0b23>\ue023;" // LETTER NNA
+"\u0b24>\ue024;" // LETTER TA
+"\u0b25>\ue025;" // LETTER THA
+"\u0b26>\ue026;" // LETTER DA
+"\u0b27>\ue027;" // LETTER DHA
+"\u0b28>\ue028;" // LETTER NA
+"\u0b2a>\ue02a;" // LETTER PA
+"\u0b2b>\ue02b;" // LETTER PHA
+"\u0b2c>\ue02c;" // LETTER BA
+"\u0b2d>\ue02d;" // LETTER BHA
+"\u0b2e>\ue02e;" // LETTER MA
+"\u0b2f>\ue02f;" // LETTER YA
+"\u0b30>\ue030;" // LETTER RA
+"\u0b32>\ue032;" // LETTER LA
+"\u0b33>\ue033;" // LETTER LLA
+"\u0b36>\ue036;" // LETTER SHA
+"\u0b37>\ue037;" // LETTER SSA
+"\u0b38>\ue038;" // LETTER SA
+"\u0b39>\ue039;" // LETTER HA
+"\u0b3c>\ue03c;" // SIGN NUKTA
+"\u0b3d>\ue03d;" // SIGN AVAGRAHA
+"\u0b3e>\ue03e;" // VOWEL SIGN AA
+"\u0b3f>\ue03f;" // VOWEL SIGN I
+"\u0b40>\ue040;" // VOWEL SIGN II
+"\u0b41>\ue041;" // VOWEL SIGN U
+"\u0b42>\ue042;" // VOWEL SIGN UU
+"\u0b43>\ue043;" // VOWEL SIGN VOCALIC R
+"\u0b47>\ue047;" // VOWEL SIGN E
+"\u0b48>\ue048;" // VOWEL SIGN AI
+"\u0b4b>\ue04b;" // VOWEL SIGN O
+"\u0b4c>\ue04c;" // VOWEL SIGN AU
+"\u0b4d>\ue04d;" // SIGN VIRAMA
+"\u0b56>\ue056;" // AI LENGTH MARK
+"\u0b57>\ue057;" // AU LENGTH MARK
+"\u0b5c>\ue05c;" // LETTER RRA
+"\u0b5d>\ue05d;" // LETTER RHA
+"\u0b5f>\ue05f;" // LETTER YYA
+"\u0b60>\ue060;" // LETTER VOCALIC RR
+"\u0b61>\ue061;" // LETTER VOCALIC LL
+"\u0b66>\ue066;" // DIGIT ZERO
+"\u0b67>\ue067;" // DIGIT ONE
+"\u0b68>\ue068;" // DIGIT TWO
+"\u0b69>\ue069;" // DIGIT THREE
+"\u0b6a>\ue06a;" // DIGIT FOUR
+"\u0b6b>\ue06b;" // DIGIT FIVE
+"\u0b6c>\ue06c;" // DIGIT SIX
+"\u0b6d>\ue06d;" // DIGIT SEVEN
+"\u0b6e>\ue06e;" // DIGIT EIGHT
+"\u0b6f>\ue06f;" // DIGIT NINE
+"\u0b70>\ue070;" // ISSHAR
+    ":: NFC (NFD) ;"
 // eof
   }
 }
