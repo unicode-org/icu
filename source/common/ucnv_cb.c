@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2003, International Business Machines
+*   Copyright (C) 2000-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
  *  ucnv_cb.c:
@@ -19,6 +19,9 @@
  */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "unicode/ucnv_cb.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
@@ -224,3 +227,5 @@ ucnv_cbToUWriteSub (UConverterToUnicodeArgs *args,
         ucnv_cbToUWriteUChars(args, &kSubstituteChar, 1, offsetIndex, err);
     }
 }
+
+#endif

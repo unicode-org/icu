@@ -20,6 +20,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_cb.h"
 #include "ucnv_bld.h"
@@ -2026,3 +2029,5 @@ const UConverterSharedData _SCSUData={
     NULL, NULL, &_SCSUStaticData, FALSE, &_SCSUImpl,
     0
 };
+
+#endif

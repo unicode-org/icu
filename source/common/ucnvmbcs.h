@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2003, International Business Machines
+*   Copyright (C) 2000-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -18,6 +18,9 @@
 #define __UCNVMBCS_H__
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
 
@@ -388,5 +391,7 @@ _MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
                              USet *set,
                              UConverterUnicodeSet which,
                              UErrorCode *pErrorCode);
+
+#endif
 
 #endif

@@ -476,19 +476,19 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action)
     case doOptionEnd:
         {
             UnicodeString opt(fRB->fRules, fOptionStart, fScanIndex-fOptionStart);
-            if (opt == "chain") {
+            if (opt == UNICODE_STRING("chain", 5)) {
                 fRB->fChainRules = TRUE;
-            } else if (opt == "LBCMNoChain") {
+            } else if (opt == UNICODE_STRING("LBCMNoChain", 11)) {
                 fRB->fLBCMNoChain = TRUE;
-            } else if (opt == "forward") {
+            } else if (opt == UNICODE_STRING("forward", 7)) {
                 fRB->fDefaultTree   = &fRB->fForwardTree;
-            } else if (opt == "reverse") {
+            } else if (opt == UNICODE_STRING("reverse", 7)) {
                 fRB->fDefaultTree   = &fRB->fReverseTree;
-            } else if (opt == "safe_forward") {
+            } else if (opt == UNICODE_STRING("safe_forward", 12)) {
                 fRB->fDefaultTree   = &fRB->fSafeFwdTree;
-            } else if (opt == "safe_reverse") {
+            } else if (opt == UNICODE_STRING("safe_reverse", 12)) {
                 fRB->fDefaultTree   = &fRB->fSafeRevTree;
-            } else if (opt == "lookAheadHardBreak") {
+            } else if (opt == UNICODE_STRING("lookAheadHardBreak", 18)) {
                 fRB->fLookAheadHardBreak = TRUE;
             } else {
                 error(U_BRK_UNRECOGNIZED_OPTION);

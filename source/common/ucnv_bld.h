@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -18,6 +18,9 @@
 #define UCNV_BLD_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_cnv.h"
@@ -241,5 +244,7 @@ U_CAPI int32_t U_EXPORT2
 ucnv_swap(const UDataSwapper *ds,
           const void *inData, int32_t length, void *outData,
           UErrorCode *pErrorCode);
+
+#endif
 
 #endif /* _UCNV_BLD */

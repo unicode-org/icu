@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2003, International Business Machines
+*   Copyright (C) 2000-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -42,7 +42,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_LEGACY_CONVERSION
+#if !UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION
 
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_cb.h"

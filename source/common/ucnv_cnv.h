@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -19,6 +19,9 @@
 #define UCNV_CNV_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
 
@@ -273,5 +276,7 @@ ucnv_toUWriteCodePoint(UConverter *cnv,
                        int32_t **offsets,
                        int32_t sourceIndex,
                        UErrorCode *pErrorCode);
+
+#endif
 
 #endif /* UCNV_CNV */

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -21,6 +21,9 @@
 #define UCNV_IMP_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "unicode/uloc.h"
 #include "ucnv_bld.h"
 
@@ -91,5 +94,6 @@ ucnv_incrementRefCount(UConverterSharedData *sharedData);
  */
 int32_t ucnv_copyPlatformString(char *platformString, UConverterPlatform platform);
 
+#endif
 
 #endif /* _UCNV_IMP */

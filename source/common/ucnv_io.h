@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1999-2003, International Business Machines
+ *   Copyright (C) 1999-2004, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *
@@ -14,6 +14,9 @@
 #define UCNV_IO_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "udataswp.h"
 
 #define UCNV_AMBIGUOUS_ALIAS_MAP_BIT 0x8000
@@ -158,6 +161,8 @@ U_CAPI int32_t U_EXPORT2
 ucnv_swapAliases(const UDataSwapper *ds,
                  const void *inData, int32_t length, void *outData,
                  UErrorCode *pErrorCode);
+
+#endif
 
 #endif /* _UCNV_IO */
 

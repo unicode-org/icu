@@ -670,6 +670,8 @@ u_strncpy(UChar     *dst,
      const UChar     *src, 
      int32_t     n);
 
+#if !UCONFIG_NO_CONVERSION
+
 /**
  * Copy a byte string encoded in the default codepage to a ustring.
  * Adds a null terminator.
@@ -727,6 +729,8 @@ U_STABLE char* U_EXPORT2 u_austrcpy(char *dst,
 U_STABLE char* U_EXPORT2 u_austrncpy(char *dst,
             const UChar *src,
             int32_t n );
+
+#endif
 
 /**
  * Synonym for memcpy(), but with UChars only.

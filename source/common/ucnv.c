@@ -20,6 +20,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "unicode/ustring.h"
 #include "unicode/ures.h"
 #include "unicode/ucnv.h"
@@ -2444,6 +2447,8 @@ ucnv_detectUnicodeSignature( const char* source,
     *signatureLength=0;
     return NULL;
 }
+
+#endif
 
 /*
  * Hey, Emacs, please set the following:

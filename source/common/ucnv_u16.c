@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2003, International Business Machines
+*   Copyright (C) 2002-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u16.c
@@ -15,6 +15,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
@@ -1344,3 +1347,5 @@ const UConverterSharedData _UTF16Data = {
     NULL, NULL, &_UTF16StaticData, FALSE, &_UTF16Impl, 
     0
 };
+
+#endif

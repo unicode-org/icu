@@ -1,6 +1,6 @@
 /*
  *****************************************************************************
- * Copyright (C) 1996-2003, International Business Machines Corporation and  *
+ * Copyright (C) 1996-2004, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
@@ -216,7 +216,7 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
             uprv_free(current);
             return;
         }
-        pieces[0][0] = UnicodeString("");
+        pieces[0][0] = UnicodeString();
         pieces_lengths = (int32_t*)uprv_malloc(1 * sizeof(int32_t));
         /* test for NULL */
         if (pieces_lengths == 0) {

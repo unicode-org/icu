@@ -88,8 +88,10 @@ u_cleanup(void)
     unames_cleanup();
     pname_cleanup();
     uchar_cleanup();
+#if !UCONFIG_NO_CONVERSION
     ucnv_cleanup();
     ucnv_io_cleanup();
+#endif
     udata_cleanup();
     putil_cleanup();
 

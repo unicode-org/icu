@@ -279,8 +279,7 @@ RuleBasedBreakIterator::getText() const {
     // function is called while we're in that state, we have to fudge an
     // an iterator to return.
     if (nonConstThis->fText == NULL) {
-        // TODO:  do this in a way that does not do a default conversion!
-        nonConstThis->fText = new StringCharacterIterator("");
+        nonConstThis->fText = new StringCharacterIterator(UnicodeString());
     }
     return *nonConstThis->fText;
 }

@@ -170,25 +170,10 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ResourceBundle)
 
-ResourceBundle::ResourceBundle( const UnicodeString&    path,
-                                const Locale&           locale,
-                                UErrorCode&              error)
-                                :UObject(), fLocale(NULL)
-{
-    constructForLocale(path, locale, error);
-}
-
 ResourceBundle::ResourceBundle(UErrorCode &err)
                                 :UObject(), fLocale(NULL)
 {
     fResource = ures_open(0, Locale::getDefault().getName(), &err);
-}
-
-ResourceBundle::ResourceBundle( const UnicodeString&    path,
-                                UErrorCode&              error)
-                                :UObject(), fLocale(NULL)
-{
-    constructForLocale(path, Locale::getDefault(), error);
 }
 
 ResourceBundle::ResourceBundle(const ResourceBundle &other)
@@ -254,21 +239,6 @@ ResourceBundle::~ResourceBundle()
 ResourceBundle *
 ResourceBundle::clone() const {
     return new ResourceBundle(*this);
-}
-
-void 
-ResourceBundle::constructForLocale(const UnicodeString& path,
-                                   const Locale& locale,
-                                   UErrorCode& error)
-{
-    char name[300];
-
-    if(!path.isEmpty()) {
-        path.extract(name, sizeof(name), 0, error);
-        fResource = ures_open(name, locale.getName(), &error);
-    } else {
-        fResource = ures_open(0, locale.getName(), &error);
-    }
 }
 
 UnicodeString ResourceBundle::getString(UErrorCode& status) const {

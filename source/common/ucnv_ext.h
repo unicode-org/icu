@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2004, International Business Machines
+*   Copyright (C) 2003-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -20,6 +20,9 @@
 #define __UCNV_EXT_H__
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
 
@@ -454,5 +457,7 @@ ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
 
 /* get bytes or bytes index */
 #define UCNV_EXT_FROM_U_GET_DATA(value) ((value)&UCNV_EXT_FROM_U_DATA_MASK)
+
+#endif
 
 #endif
