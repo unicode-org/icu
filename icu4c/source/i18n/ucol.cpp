@@ -8290,14 +8290,55 @@ ucol_equals(const UCollator *source, const UCollator *target) {
     result = FALSE;
   } else {
     UColToken *sourceReset = NULL, *targetReset = NULL;
-    UChar sourceResetString, targetResetString;
+    UChar *sourceResetString = NULL, *targetResetString = NULL;
+    int32_t sourceStringLen = 0, targetStringLen = 0;
     for(i = 0; i < sourceListLen; i++) {
       sourceReset = sourceParser.lh[i].reset;
-      sourceResetString = sourceParser.source[sourceReset->source];
+      sourceResetString = sourceParser.source+(sourceReset->source & 0xFFFFFF);
+      sourceStringLen = sourceReset->source >> 24;
       for(j = 0; j < sourceListLen; j++) {
         targetReset = targetParser.lh[j].reset;
-        targetResetString = targetParser.source[targetReset->source];
-        if(targetResetString == sourceResetString) {
+        targetResetString = targetParser.source+(targetReset->source & 0xFFFFFF);
+        targetStringLen = targetReset->source >> 24;
+        if(sourceStringLen == targetStringLen && (u_strncmp(sourceResetString, targetResetString, sourceStringLen) == 0)) {
+          sourceReset = sourceParser.lh[i].first;
+          targetReset = targetParser.lh[j].first;
+          while(sourceReset != NULL && targetReset != NULL) {
+            sourceResetString = sourceParser.source+(sourceReset->source & 0xFFFFFF);
+            sourceStringLen = sourceReset->source >> 24;
+            targetResetString = targetParser.source+(targetReset->source & 0xFFFFFF);
+            targetStringLen = targetReset->source >> 24;
+            if(sourceStringLen != targetStringLen || (u_strncmp(sourceResetString, targetResetString, sourceStringLen) != 0)) {
+              return FALSE;
+            }
+            // probably also need to check the expansions
+            if(sourceReset->expansion) {
+              if(!targetReset->expansion) {
+                return FALSE;
+              } else {
+                // compare expansions
+                sourceResetString = sourceParser.source+(sourceReset->expansion& 0xFFFFFF);
+                sourceStringLen = sourceReset->expansion >> 24;
+                targetResetString = targetParser.source+(targetReset->expansion & 0xFFFFFF);
+                targetStringLen = targetReset->expansion >> 24;
+                if(sourceStringLen != targetStringLen || (u_strncmp(sourceResetString, targetResetString, sourceStringLen) != 0)) {
+                  return FALSE;
+                }
+              }
+            } else {
+              if(targetReset->expansion) {
+                return FALSE;
+              }
+            }
+            sourceReset = sourceReset->next;
+            targetReset = targetReset->next;
+          }
+          if(sourceReset != targetReset) { // at least one is not NULL
+            // there are more tailored elements in one list
+            return FALSE;
+          }
+
+
           break;
         }
       }
