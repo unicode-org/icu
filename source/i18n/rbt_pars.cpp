@@ -1451,7 +1451,7 @@ int32_t TransliteratorParser::parseInteger(const UnicodeString& rule, int32_t& p
     }
 
     while (p < limit) {
-        int8_t d = u_digit(rule.charAt(p++), radix);
+        int32_t d = u_digit(rule.charAt(p++), radix);
         if (d < 0) {
             --p;
             break;
