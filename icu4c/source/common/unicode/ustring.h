@@ -15,7 +15,9 @@
 
 #ifndef USTRING_H
 #define USTRING_H
+
 #include "unicode/utypes.h"
+#include "unicode/uiter.h"
 
 /** Simple declaration for u_strToTitle() to avoid including unicode/ubrk.h. @draft ICU 2.1*/
 #ifndef UBRK_TYPEDEF_UBREAK_ITERATOR
@@ -457,6 +459,29 @@ U_CAPI int32_t U_EXPORT2
 u_strCompare(const UChar *s1, int32_t length1,
              const UChar *s2, int32_t length2,
              UBool codePointOrder);
+
+/**
+ * Compare two Unicode strings (binary order)
+ * as presented by UCharIterator objects.
+ * Works otherwise just like u_strCompare().
+ *
+ * Both iterators are reset to their start positions.
+ * When the function returns, it is undefined where the iterators
+ * have stopped.
+ *
+ * @param iter1 First source string iterator.
+ * @param s2 Second source string iterator.
+ * @param codePointOrder Choose between code unit order (FALSE)
+ *                       and code point order (TRUE).
+ *
+ * @return <0 or 0 or >0 as usual for string comparisons
+ *
+ * @see u_strCompare
+ *
+ * @draft ICU 2.6
+ */
+U_CAPI int32_t U_EXPORT2
+u_strCompareIter(UCharIterator *iter1, UCharIterator *iter2, UBool codePointOrder);
 
 #ifndef U_COMPARE_CODE_POINT_ORDER
 /* see also unistr.h and unorm.h */
