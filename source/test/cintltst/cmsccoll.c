@@ -1074,7 +1074,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
  * primary vs. primary, secondary vs. secondary
  * tertiary vs. tertiary
  */
-int32_t compareCEs(uint32_t s1, uint32_t s2,
+static int32_t compareCEs(uint32_t s1, uint32_t s2,
                    uint32_t t1, uint32_t t2) {
   uint32_t s = 0, t = 0;
   if(s1 == t1 && s2 == t2) {
@@ -1087,15 +1087,15 @@ int32_t compareCEs(uint32_t s1, uint32_t s2,
   } else if(s > t) {
     return 1;
   } else {
-    s = s1 & 0x0000FF00 | (s2 & 0x0000FF00)>>8;
-    t = t1 & 0x0000FF00 | (t2 & 0x0000FF00)>>8;
+    s = (s1 & 0x0000FF00) | (s2 & 0x0000FF00)>>8;
+    t = (t1 & 0x0000FF00) | (t2 & 0x0000FF00)>>8;
     if(s < t) {
       return -1;
     } else if(s > t) {
       return 1;
     } else {
-      s = (s1 & 0x000000FF)<<8 | s2 & 0x000000FF;
-      t = (t1 & 0x000000FF)<<8 | t2 & 0x000000FF;
+      s = (s1 & 0x000000FF)<<8 | (s2 & 0x000000FF);
+      t = (t1 & 0x000000FF)<<8 | (t2 & 0x000000FF);
       if(s < t) {
         return -1;
       } else {
