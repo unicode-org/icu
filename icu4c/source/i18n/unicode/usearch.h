@@ -75,7 +75,7 @@
  *      contracting sequence except the first will fail. Vice versa if a 
  *      preceding pattern match is to be found, a invalid starting point 
  *      would be any character within a contracting sequence except the last.
- * <\ul>
+ * </ul>
  * <p>
  * A breakiterator can be used if only matches at logical breaks are desired.
  * Using a breakiterator will only give you results that exactly matches the
@@ -135,6 +135,9 @@
 * Data structure for searching
 */
 struct UStringSearch;
+/**
+* Data structure for searching
+*/
 typedef struct UStringSearch UStringSearch;
 
 typedef enum {
