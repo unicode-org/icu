@@ -36,7 +36,7 @@
 #include "unicode/curramt.h"
 #include "uhash.h"
 #include "cmemory.h"
-#include "iculserv.h"
+#include "servloc.h"
 #include "ucln_in.h"
 #include "cstring.h"
 #include "putilimp.h"

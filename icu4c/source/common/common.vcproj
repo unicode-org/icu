@@ -1582,22 +1582,37 @@
 			Name="registration"
 			Filter="">
 			<File
-				RelativePath=".\iculserv.cpp">
+				RelativePath=".\serv.cpp">
 			</File>
 			<File
-				RelativePath=".\iculserv.h">
+				RelativePath=".\serv.h">
 			</File>
 			<File
-				RelativePath=".\icunotif.cpp">
+				RelativePath=".\servlk.cpp">
 			</File>
 			<File
-				RelativePath=".\icunotif.h">
+				RelativePath=".\servlkf.cpp">
 			</File>
 			<File
-				RelativePath=".\icuserv.cpp">
+				RelativePath=".\servloc.h">
 			</File>
 			<File
-				RelativePath=".\icuserv.h">
+				RelativePath=".\servls.cpp">
+			</File>
+			<File
+				RelativePath=".\servlu.cpp">
+			</File>
+			<File
+				RelativePath=".\servnotf.cpp">
+			</File>
+			<File
+				RelativePath=".\servnotf.h">
+			</File>
+			<File
+				RelativePath=".\servrbf.cpp">
+			</File>
+			<File
+				RelativePath=".\servslkf.cpp">
 			</File>
 		</Filter>
 		<Filter

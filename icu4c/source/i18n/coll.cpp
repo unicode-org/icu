@@ -46,7 +46,7 @@
 #include "ucol_imp.h"
 #include "cmemory.h"
 #include "mutex.h"
-#include "iculserv.h"
+#include "servloc.h"
 #include "ustrenum.h"
 #include "ucln_in.h"
 

@@ -32,7 +32,7 @@ U_NAMESPACE_END
 #include "hash.h"
 #include "uvector.h"
 
-#include "icuserv.h"
+#include "serv.h"
 
 U_NAMESPACE_BEGIN
 
