@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2002/08/07 03:10:18 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/12/18 00:44:39 $ 
+ * $Revision: 1.12 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
@@ -16,11 +16,7 @@ import java.util.Locale;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
-import com.ibm.icu.util.BuddhistCalendar;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.GregorianCalendar;
-import com.ibm.icu.util.JapaneseCalendar;
-import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.*;
 
 /**
  * @test
@@ -329,5 +325,31 @@ public class IBMCalendarTest extends CalendarTest {
     public void TestMalaysianInstance() {
         Locale loc = new Locale("ms", "MY");  // Malay (Malaysia)
         Calendar cal = Calendar.getInstance(loc);
+    }
+
+    /**
+     * Miscellaneous tests to increase coverage.
+     */
+    public void TestCoverage() {
+        // BuddhistCalendar
+        BuddhistCalendar bcal = new BuddhistCalendar();
+        int i = bcal.getMinimum(Calendar.ERA);
+        bcal.add(Calendar.YEAR, 1);
+        bcal.add(Calendar.MONTH, 1);
+        Date d = bcal.getTime();
+
+        // CalendarAstronomer
+        // (This class should probably be made package-private.)
+        CalendarAstronomer astro = new CalendarAstronomer();
+        String s = astro.local(0);
+
+        // ChineseCalendar
+        ChineseCalendar ccal = new ChineseCalendar(TimeZone.getDefault(),
+                                                   Locale.getDefault());
+        ccal.add(Calendar.MONTH, 1);
+        ccal.add(Calendar.YEAR, 1);
+        ccal.roll(Calendar.MONTH, 1);
+        ccal.roll(Calendar.YEAR, 1);
+        d = ccal.getTime();
     }
 }

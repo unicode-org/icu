@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarAstronomer.java,v $ 
- * $Date: 2002/12/05 01:25:10 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/12/18 00:44:36 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -1083,17 +1083,17 @@ public class CalendarAstronomer {
         moonPosition    = null;
     }
     
-    private static void out(String s) {
-        System.out.println(s);
-    }
+    //private static void out(String s) {
+    //    System.out.println(s);
+    //}
     
-    private static String deg(double rad) {
-        return Double.toString(rad * RAD_DEG);
-    }
+    //private static String deg(double rad) {
+    //    return Double.toString(rad * RAD_DEG);
+    //}
     
-    private static String hours(long ms) {
-        return Double.toString((double)ms / HOUR_MS) + " hours";
-    }
+    //private static String hours(long ms) {
+    //    return Double.toString((double)ms / HOUR_MS) + " hours";
+    //}
 
     /**
      * @stable ICU 2.0
