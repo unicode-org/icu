@@ -20,7 +20,7 @@
 .BR "\-v\fP, \fB\-\-verbose"
 ]
 [
-.BI "\-s\fP, \fB\-\-sourcedir" " source"
+.BI "\-s\fP, \fB\-\-copyright"
 ]
 [
 .BI "\-d\fP, \fB\-\-destdir" " destination"
@@ -28,21 +28,13 @@
 .IR bundle " \.\.\."
 .SH DESCRIPTION
 .B genuca
-create the UCA data table
-.I bundle
-source files passed on the command line to their binary form.
+create the UCA data table source files passed on
+the command line into their binary form.
 The resulting files have a
-.B .res
-extension while resource bundle source files typically have a 
+.B .dat
+extension while UCA source files typically have a 
 .B .txt
 extension.
-The
-.I bundle
-file name should be a local identifier, e.g.
-.B ja_JP.txt
-for Japanese (Japan) data, or
-.B root.txt
-for the root bundle.
 .PP
 These binary files can then be read directly by ICU, or used by
 .BR pkgdata (8)
@@ -60,11 +52,8 @@ Print help about usage and exit.
 .BR \-v\fP, \fB\-\-verbose
 Display extra informative messages during execution.
 .TP
-.BI "\-s\fP, \fB\-\-sourcedir" " source"
-Set the source directory to
-.IR source .
-The default source directory is specified by the environment variable
-.BR ICU_DATA .
+.BI "\-s\fP, \fB\-\-copyright"
+Include a copyright notice into the binary data.
 .TP
 .BI "\-d\fP, \fB\-\-destdir" " destination"
 Set the destination directory to
