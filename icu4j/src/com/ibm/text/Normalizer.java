@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Normalizer.java,v $ 
- * $Date: 2000/07/26 16:20:40 $ 
- * $Revision: 1.9 $
+ * $Date: 2000/09/21 22:37:41 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -16,6 +16,7 @@ import java.lang.Character;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import com.ibm.util.CompactByteArray;
+import com.ibm.util.Utility;
 
 /**
  * <tt>Normalizer</tt> transforms Unicode text into an equivalent composed or
@@ -423,12 +424,12 @@ public final class Normalizer {
             int type = charInfo & ComposeData.TYPE_MASK;
             int index = charInfo >>> ComposeData.INDEX_SHIFT;
             
-            if (DEBUG) System.out.println("Got char " + hex(ch) + ", type=" + type + ", index=" + index);
+            if (DEBUG) System.out.println("Got char " + Utility.hex(ch) + ", type=" + type + ", index=" + index);
 
             // Examples of NON_COMPOSING_COMBINING with an index < minExplode:
             // 00A8 017F 03D2 1FBF 1FFE
             if (type == ComposeData.BASE || (type == ComposeData.NON_COMPOSING_COMBINING && index < minExplode)) {
-                if (DEBUG) System.out.println("New base " + hex(ch) + ", type=" + type + ", index=" + index);
+                if (DEBUG) System.out.println("New base " + Utility.hex(ch) + ", type=" + type + ", index=" + index);
                 classesSeenL = classesSeenH = 0;
                 baseIndex = index;
                 basePos = result.length();
@@ -444,7 +445,7 @@ public final class Normalizer {
                     (classesSeenL & (1 << cclass)) :
                     (classesSeenH & (1 << (cclass & 31))));
 
-                if (DEBUG) System.out.println("Class of " + hex(ch) + " = " + cclass +
+                if (DEBUG) System.out.println("Class of " + Utility.hex(ch) + " = " + cclass +
                     " seen:" + seen +
                     " baseIndex:" + baseIndex +
                     " action:" + composeAction(baseIndex, index));
@@ -469,7 +470,7 @@ public final class Normalizer {
                         result.setCharAt(basePos, newBase);
 
                         baseIndex = composeLookup(newBase) >>> ComposeData.INDEX_SHIFT;
-                        if (DEBUG) System.out.println("New base " + hex(newBase));
+                        if (DEBUG) System.out.println("New base " + Utility.hex(newBase));
                     } else {
                         // Normal pairwise combination.  Replace the base char
                         if (DEBUG) System.out.println("Pairwise combining");
@@ -477,7 +478,7 @@ public final class Normalizer {
                         result.setCharAt(basePos, newBase);
 
                         baseIndex = composeLookup(newBase) >>> ComposeData.INDEX_SHIFT;
-                        if (DEBUG) System.out.println("New base " + hex(newBase));
+                        if (DEBUG) System.out.println("New base " + Utility.hex(newBase));
                     }
                     //
                     // Since there are Unicode characters that cannot be combined in arbitrary
@@ -509,13 +510,13 @@ public final class Normalizer {
                 // Single exploding character
                 explode(explodeBuf, index);
                 explodePos = 0;
-                if (DEBUG) System.out.println("explosion: " + hex(ch) + " --> " + hex(explodeBuf));
+                if (DEBUG) System.out.println("explosion: " + Utility.hex(ch) + " --> " + Utility.hex(explodeBuf));
             }
             else if (type == ComposeData.HANGUL && minExplode == 0) {
                 // If we're in compatibility mode we need to decompose Hangul to Jamo,
                 // because some of the Jamo might have compatibility decompositions.
                 hangulToJamo(ch, explodeBuf, minDecomp);
-                if (DEBUG) System.out.println("decomposed hangul " + hex(ch) + " to jamo " + hex(explodeBuf));
+                if (DEBUG) System.out.println("decomposed hangul " + Utility.hex(ch) + " to jamo " + Utility.hex(explodeBuf));
                 explodePos = 0;
             }
             else if (type == ComposeData.INITIAL_JAMO) {
@@ -523,7 +524,7 @@ public final class Normalizer {
                 baseIndex = ComposeData.INITIAL_JAMO_INDEX;
                 basePos = result.length();
                 result.append(ch);
-                if (DEBUG) System.out.println("got initial jamo " + hex(ch));
+                if (DEBUG) System.out.println("got initial jamo " + Utility.hex(ch));
             }
             else if (type == ComposeData.MEDIAL_JAMO && classesSeenL == 0 && classesSeenH == 0
                         && baseIndex == ComposeData.INITIAL_JAMO_INDEX) {
@@ -534,7 +535,7 @@ public final class Normalizer {
                 char newCh = (char)(HANGUL_BASE + (l*JAMO_VCOUNT + v) * JAMO_TCOUNT);
                 result.setCharAt(basePos, newCh);
 
-                if (DEBUG) System.out.println("got medial jamo " + hex(ch) + ", replacing with Hangul " + hex(newCh));
+                if (DEBUG) System.out.println("got medial jamo " + Utility.hex(ch) + ", replacing with Hangul " + Utility.hex(newCh));
 
                 baseIndex = ComposeData.MEDIAL_JAMO_INDEX;
             }
@@ -545,13 +546,13 @@ public final class Normalizer {
                 char newCh = (char)(result.charAt(basePos) + (ch - JAMO_TBASE));
                 result.setCharAt(basePos, newCh);
 
-                if (DEBUG) System.out.println("got final jamo " + hex(ch) + ", replacing with Hangul " + hex(newCh));
+                if (DEBUG) System.out.println("got final jamo " + Utility.hex(ch) + ", replacing with Hangul " + Utility.hex(newCh));
 
                 baseIndex = 0;
                 basePos = -1;
                 classesSeenL = classesSeenH = 0;
             } else {
-                if (DEBUG) System.out.println("No base as of " + hex(ch));
+                if (DEBUG) System.out.println("No base as of " + Utility.hex(ch));
                 baseIndex = 0;
                 basePos = -1;
                 classesSeenL = classesSeenH = 0;
@@ -619,7 +620,7 @@ public final class Normalizer {
                 baseIndex = index;
                 basePos = buffer.length();
                 buffer.append(ch);
-                if (DEBUG) System.out.println("got BASE char " + hex(ch) + ", type=" + type + ", index=" + index);
+                if (DEBUG) System.out.println("got BASE char " + Utility.hex(ch) + ", type=" + type + ", index=" + index);
                 lastBase = ch;
             }
             else if (type == ComposeData.COMBINING)
@@ -630,7 +631,7 @@ public final class Normalizer {
                     (classesSeenL & (1 << cclass)) :
                     (classesSeenH & (1 << (cclass & 31))));
 
-                if (DEBUG) System.out.println("got COMBINING char " + hex(ch) + ", type=" + type + ", index=" + index
+                if (DEBUG) System.out.println("got COMBINING char " + Utility.hex(ch) + ", type=" + type + ", index=" + index
                         + ", class=" + cclass);
 
                 // We can only combine a character with the base if we haven't
@@ -649,8 +650,8 @@ public final class Normalizer {
 
                         baseIndex = composeLookup(newBase) >>> ComposeData.INDEX_SHIFT;
 
-                        if (DEBUG) System.out.println("Pairwise explosion: " + hex(lastBase) + "," + hex(ch)
-                            + " --> " + hex(newBase) + "," + hex(explodeBuf));
+                        if (DEBUG) System.out.println("Pairwise explosion: " + Utility.hex(lastBase) + "," + Utility.hex(ch)
+                            + " --> " + Utility.hex(newBase) + "," + Utility.hex(explodeBuf));
                         lastBase = newBase;
                     } else {
                         // Normal pairwise combination.  Replace the base char
@@ -659,8 +660,8 @@ public final class Normalizer {
 
                         baseIndex = composeLookup(newBase) >>> ComposeData.INDEX_SHIFT;
 
-                        if (DEBUG) System.out.println("Pairwise combination: " + hex(lastBase) + "," + hex(ch)
-                            + " --> " + hex(newBase));
+                        if (DEBUG) System.out.println("Pairwise combination: " + Utility.hex(lastBase) + "," + Utility.hex(ch)
+                            + " --> " + Utility.hex(newBase));
                         lastBase = newBase;
                     }
                     //
@@ -694,13 +695,13 @@ public final class Normalizer {
                 // Single exploding character
                 explode(explodeBuf, index);
                 explodePos = 0;
-                if (DEBUG) System.out.println("explosion: " + hex(ch) + " --> " + hex(explodeBuf));
+                if (DEBUG) System.out.println("explosion: " + Utility.hex(ch) + " --> " + Utility.hex(explodeBuf));
             }
             else if (type == ComposeData.HANGUL && minExplode == 0) {
                 // If we're in compatibility mode we need to decompose Hangul to Jamo,
                 // because some of the Jamo might have compatibility decompositions.
                 hangulToJamo(ch, explodeBuf, minDecomp);
-                if (DEBUG) System.out.println("decomposed hangul " + hex(ch) + " to jamo " + hex(explodeBuf));
+                if (DEBUG) System.out.println("decomposed hangul " + Utility.hex(ch) + " to jamo " + Utility.hex(explodeBuf));
                 explodePos = 0;
             }
             else if (type == ComposeData.INITIAL_JAMO) {
@@ -714,7 +715,7 @@ public final class Normalizer {
                 baseIndex = ComposeData.INITIAL_JAMO_INDEX;
                 basePos = buffer.length();
                 buffer.append(ch);
-                if (DEBUG) System.out.println("got initial jamo " + hex(ch));
+                if (DEBUG) System.out.println("got initial jamo " + Utility.hex(ch));
             }
             else if (type == ComposeData.MEDIAL_JAMO && classesSeenL == 0 && classesSeenH == 0
                         && baseIndex == ComposeData.INITIAL_JAMO_INDEX) {
@@ -725,7 +726,7 @@ public final class Normalizer {
                 char newCh = (char)(HANGUL_BASE + (l*JAMO_VCOUNT + v) * JAMO_TCOUNT);
                 buffer.setCharAt(basePos, newCh);
 
-                if (DEBUG) System.out.println("got medial jamo " + hex(ch) + ", replacing with Hangul " + hex(newCh));
+                if (DEBUG) System.out.println("got medial jamo " + Utility.hex(ch) + ", replacing with Hangul " + Utility.hex(newCh));
 
                 baseIndex = ComposeData.MEDIAL_JAMO_INDEX;
             }
@@ -736,7 +737,7 @@ public final class Normalizer {
                 char newCh = (char)(buffer.charAt(basePos) + (ch - JAMO_TBASE));
                 buffer.setCharAt(basePos, newCh);
 
-                if (DEBUG) System.out.println("got final jamo " + hex(ch) + ", replacing with Hangul " + hex(newCh));
+                if (DEBUG) System.out.println("got final jamo " + Utility.hex(ch) + ", replacing with Hangul " + Utility.hex(newCh));
 
                 baseIndex = 0;
                 basePos = -1;
@@ -747,7 +748,7 @@ public final class Normalizer {
                 basePos = -1;
                 classesSeenL = classesSeenH = 0;
                 buffer.append(ch);
-                if (DEBUG) System.out.println("UNKNOWN char " + hex(ch));
+                if (DEBUG) System.out.println("UNKNOWN char " + Utility.hex(ch));
             }
 
             if (explodePos == EMPTY) {
@@ -805,7 +806,7 @@ public final class Normalizer {
             int type = charInfo & ComposeData.TYPE_MASK;
             int index = charInfo >>> ComposeData.INDEX_SHIFT;
 
-            if (DEBUG) System.out.println("prevCompose got char " + hex(ch) +
+            if (DEBUG) System.out.println("prevCompose got char " + Utility.hex(ch) +
                                           ", type=" + type + ", index=" + index +
                                           ", minExplode=" + minExplode);
 
@@ -822,8 +823,8 @@ public final class Normalizer {
             // TODO: The performance of this is awful; add a way to compose
             // a StringBuffer in place.
             String composed = compose(buffer.toString(), mode.compat(), options);
-            if (DEBUG) System.out.println("prevCompose called compose(" + hex(buffer) +
-                                          ")->" + hex(composed));            
+            if (DEBUG) System.out.println("prevCompose called compose(" + Utility.hex(buffer) +
+                                          ")->" + Utility.hex(composed));            
             buffer.setLength(0);
             buffer.append(composed);
 
@@ -838,17 +839,17 @@ public final class Normalizer {
             ch = DONE;
         }
 
-        if (DEBUG) System.out.println("prevCompose returning " + hex(ch));
+        if (DEBUG) System.out.println("prevCompose returning " + Utility.hex(ch));
         return ch;
     }
 
     private static void bubbleAppend(StringBuffer target, char ch, int cclass) {
-        if (DEBUG) System.out.println(" bubbleAppend(" + hex(target) + ", " + hex(ch) + ", " + cclass + ")" );
-        if (DEBUG) System.out.println("  getComposeClass(" + hex(ch) + ")=" + getComposeClass(ch));
+        if (DEBUG) System.out.println(" bubbleAppend(" + Utility.hex(target) + ", " + Utility.hex(ch) + ", " + cclass + ")" );
+        if (DEBUG) System.out.println("  getComposeClass(" + Utility.hex(ch) + ")=" + getComposeClass(ch));
         int i;
         for (i = target.length() - 1; i > 0; --i) {
             int iClass = getComposeClass(target.charAt(i));
-            if (DEBUG) System.out.println(" bubbleAppend: target[" + i + "]=" + hex(target.charAt(i)) + " is class " + iClass);
+            if (DEBUG) System.out.println(" bubbleAppend: target[" + i + "]=" + Utility.hex(target.charAt(i)) + " is class " + iClass);
 
             if (iClass == 1 || iClass <= cclass) {      // 1 means combining class 0
                 // We've hit something we can't bubble this character past, so insert here
@@ -944,11 +945,11 @@ public final class Normalizer {
             int offset = DecompData.offsets.elementAt(ch);
             int index = offset & DecompData.DECOMP_MASK;
 
-            if (DEBUG) System.out.println("decompose got " + hex(ch));
+            if (DEBUG) System.out.println("decompose got " + Utility.hex(ch));
 
             if (index > minDecomp) {
                 if ((offset & DecompData.DECOMP_RECURSE) != 0) {
-                    if (DEBUG) System.out.println(" " + hex(ch) + " has RECURSIVE decomposition, index=" + index);
+                    if (DEBUG) System.out.println(" " + Utility.hex(ch) + " has RECURSIVE decomposition, index=" + index);
                     if (buffer == null) {
                         buffer = new StringBuffer();
                     } else {
@@ -957,7 +958,7 @@ public final class Normalizer {
                     doAppend(DecompData.contents, index, buffer);
                     bufPtr = 0;
                 } else {
-                    if (DEBUG) System.out.println(" " + hex(ch) + " has decomposition, index=" + index);
+                    if (DEBUG) System.out.println(" " + Utility.hex(ch) + " has decomposition, index=" + index);
                     doAppend(DecompData.contents, index, result);
                 }
             } else if (ch >= HANGUL_BASE && ch < HANGUL_LIMIT && hangul) {
@@ -1000,7 +1001,7 @@ public final class Normalizer {
             initBuffer();
 
             if (index > minDecomp) {
-                if (DEBUG) System.out.println(" " + hex(ch) + " has decomposition, index=" + index);
+                if (DEBUG) System.out.println(" " + Utility.hex(ch) + " has decomposition, index=" + index);
                 doAppend(DecompData.contents, index, buffer);
 
                 if ((offset & DecompData.DECOMP_RECURSE) != 0) {
@@ -1056,7 +1057,7 @@ public final class Normalizer {
                 ch = buffer.charAt(0);
             }
         }
-        if (DEBUG) System.out.println(" nextDecomp returning " + hex(ch) + ", text index=" + text.getIndex());
+        if (DEBUG) System.out.println(" nextDecomp returning " + Utility.hex(ch) + ", text index=" + text.getIndex());
         return ch;
     }
 
@@ -1085,7 +1086,7 @@ public final class Normalizer {
         int offset = DecompData.offsets.elementAt(ch);
         int index = offset & DecompData.DECOMP_MASK;
 
-        if (DEBUG) System.out.println("prevDecomp got input char " + hex(ch));
+        if (DEBUG) System.out.println("prevDecomp got input char " + Utility.hex(ch));
 
         if (index > minDecomp || DecompData.canonClass.elementAt(ch) != DecompData.BASE)
         {
@@ -1099,7 +1100,7 @@ public final class Normalizer {
                 ch = text.previous();
             }
 
-            if (DEBUG) System.out.println("prevDecomp buffer: " + hex(buffer));
+            if (DEBUG) System.out.println("prevDecomp buffer: " + Utility.hex(buffer));
 
             // Decompose the buffer
             for (int i = 0; i < buffer.length(); i++) {
@@ -1123,7 +1124,7 @@ public final class Normalizer {
                 }
             }
             
-            if (DEBUG) System.out.println("prevDecomp buffer after decomp: " + hex(buffer));
+            if (DEBUG) System.out.println("prevDecomp buffer after decomp: " + Utility.hex(buffer));
 
             if (buffer.length() > 1) {
                 // If there is more than one combining character in the buffer,
@@ -1139,7 +1140,7 @@ public final class Normalizer {
             bufferLimit = bufferPos = buffer.length() - 1;
             ch = buffer.charAt(bufferPos);
         }
-        if (DEBUG) System.out.println(" prevDecomp returning '" + ch + "' " + hex(ch) + ", text index=" + text.getIndex());
+        if (DEBUG) System.out.println(" prevDecomp returning '" + ch + "' " + Utility.hex(ch) + ", text index=" + text.getIndex());
         return ch;
     }
 
@@ -1404,14 +1405,14 @@ public final class Normalizer {
 
     private final char curForward() {
         char ch = text.current();
-        if (DEBUG) System.out.println(" curForward returning " + hex(ch) + ", text index=" + text.getIndex());
+        if (DEBUG) System.out.println(" curForward returning " + Utility.hex(ch) + ", text index=" + text.getIndex());
         return ch;
     }
 
     private final char curBackward() {
         char ch = atEnd ? text.current() : text.previous();
         atEnd = false;
-        if (DEBUG) System.out.println(" curBackward returning " + hex(ch) + ", text index=" + text.getIndex());
+        if (DEBUG) System.out.println(" curBackward returning " + Utility.hex(ch) + ", text index=" + text.getIndex());
         return ch;
     }
 
@@ -1643,14 +1644,4 @@ public final class Normalizer {
     // These must agree with the constants used in NormalizerBuilder
     static final int STR_INDEX_SHIFT = 2;
     static final int STR_LENGTH_MASK = 0x0003;
-
-    static final String hex(char ch) {
-        return UInfo.hex(ch);
-    }
-    static final String hex(String s) {
-        return UInfo.hex(s);
-    }
-    static final String hex(StringBuffer s) {
-        return UInfo.hex(s.toString());
-    }
 };

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/normalizer/Attic/CPPWriter.java,v $ 
- * $Date: 2000/09/19 17:04:47 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/09/21 22:37:55 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -16,6 +16,7 @@ import com.ibm.text.*;
 import com.ibm.util.*;
 import com.ibm.util.CompactByteArray;
 import com.ibm.util.CompactCharArray;
+import com.ibm.util.Utility;
 import java.io.*;
 
 /**
@@ -64,7 +65,7 @@ class CPPWriter extends SourceWriter {
     }
 
     public void writeHex(String name, char value) {
-        header.println("    enum { " + name + " = 0x" + UInfo.hex(value) + " };");
+        header.println("    enum { " + name + " = 0x" + Utility.hex(value) + " };");
     }
 
     public void writeHex(String name, int value) {
@@ -142,7 +143,7 @@ class CPPWriter extends SourceWriter {
             if (i > 0 && i % 8 == 0) {
                 source.print(Utility.LINE_SEPARATOR + "    ");
             }
-            source.print("0x" + UInfo.hex(array[i]) + ", ");
+            source.print("0x" + Utility.hex(array[i]) + ", ");
         }
         source.println("};");
     }
@@ -159,7 +160,7 @@ class CPPWriter extends SourceWriter {
             if (i > 0 && i % 8 == 0) {
                 source.print(Utility.LINE_SEPARATOR + "    ");
             }
-            source.print("0x" + UInfo.hex((char)array[i]) + ", ");
+            source.print("0x" + Utility.hex((char)array[i]) + ", ");
         }
         source.println("};");
     }
