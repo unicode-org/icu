@@ -785,7 +785,7 @@ CLEANUP:
 
 /* data swapping ------------------------------------------------------------ */
 
-U_CAPI int32_t U_CALLCONV
+U_CAPI int32_t U_EXPORT2
 usprep_swap(const UDataSwapper *ds,
             const void *inData, int32_t length, void *outData,
             UErrorCode *pErrorCode) {
