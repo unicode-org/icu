@@ -93,7 +93,7 @@ static const struct RBBIRuleTableEl gRuleParseStateTable[] = {
     , {doOptionEnd, 255, 17,0,  FALSE}     //  16 
     , {doNOP, 59 /* ; */, 1,0,  TRUE}     //  17      option-scan3
     , {doNOP, 129, 17,0,  TRUE}     //  18 
-    , {doNOP, 255, 95,0,  FALSE}     //  19 
+    , {doRuleError, 255, 95,0,  FALSE}     //  19 
     , {doExprStart, 255, 21, 8, FALSE}     //  20      reverse-rule
     , {doRuleChar, 254, 30,0,  TRUE}     //  21      term
     , {doNOP, 129, 21,0,  TRUE}     //  22 

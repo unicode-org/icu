@@ -91,7 +91,7 @@ option-scan2:
 option-scan3:
     ';'                  n start 
     white_space          n option-scan3 
-    default                errorDeath 
+    default                errorDeath                               doRuleError 
     
 
 reverse-rule:
