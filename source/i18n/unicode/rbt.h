@@ -206,6 +206,7 @@ class TransliterationRuleData;
  * matches. In other words, the first rule <em>masks</em> the second rule. </p>
  *
  * @author Alan Liu
+ * @draft
  */
 class U_I18N_API RuleBasedTransliterator : public Transliterator {
 
@@ -228,6 +229,7 @@ public:
      * @param direction either FORWARD or REVERSE.
      * @exception IllegalArgumentException if rules are malformed
      * or direction is invalid.
+     * @draft
      */
     RuleBasedTransliterator(const UnicodeString& ID,
                             const UnicodeString& rules,
@@ -251,6 +253,7 @@ public:
 
     /**
      * Covenience constructor with no filter.
+     * @draft
      */
     RuleBasedTransliterator(const UnicodeString& ID,
                             const UnicodeString& rules,
@@ -259,6 +262,7 @@ public:
 
     /**
      * Covenience constructor with no filter and FORWARD direction.
+     * @draft
      */
     RuleBasedTransliterator(const UnicodeString& ID,
                             const UnicodeString& rules,
@@ -266,27 +270,38 @@ public:
 
     /**
      * Covenience constructor with FORWARD direction.
+     * @draft
      */
     RuleBasedTransliterator(const UnicodeString& ID,
                             const UnicodeString& rules,
                             UnicodeFilter* adoptedFilter,
                             UErrorCode& status);
 
+    /**
+     * Covenience constructor.
+     * @draft
+     */
     RuleBasedTransliterator(const UnicodeString& ID,
                             const TransliterationRuleData* theData,
                             UnicodeFilter* adoptedFilter = 0);
 
+    /**
+     * Copy constructor.
+     * @draft
+     */
     RuleBasedTransliterator(const RuleBasedTransliterator&);
 
     virtual ~RuleBasedTransliterator();
 
     /**
      * Implement Transliterator API.
+     * @draft
      */
     Transliterator* clone(void) const;
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
+     * @draft
      */
     virtual void handleTransliterate(Replaceable& text, Position& offsets,
                                      bool_t isIncremental) const;

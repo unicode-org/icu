@@ -22,7 +22,8 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: hextouni.h,v $ $Revision: 1.4 $ $Date: 2000/03/08 19:26:17 $
+ * @version $RCSfile: hextouni.h,v $ $Revision: 1.5 $ $Date: 2000/03/22 19:19:33 $
+ * @draft
  */
 class U_I18N_API HexToUnicodeTransliterator : public Transliterator {
 
@@ -66,6 +67,7 @@ public:
      * Constructs a transliterator that recognizes the standard
      * prefixes "&#92;u", "&#92;U", "u+", and "U+", each with no
      * suffix.
+     * @draft
      */
     HexToUnicodeTransliterator(UnicodeFilter* adoptedFilter = 0);
 
@@ -87,21 +89,25 @@ public:
 
     /**
      * Destructor.
+     * @draft
      */
     virtual ~HexToUnicodeTransliterator();
 
     /**
      * Copy constructor.
+     * @draft
      */
     HexToUnicodeTransliterator(const HexToUnicodeTransliterator&);
 
     /**
      * Assignment operator.
+     * @draft
      */
     HexToUnicodeTransliterator& operator=(const HexToUnicodeTransliterator&);
 
     /**
      * Transliterator API.
+     * @draft
      */
     Transliterator* clone(void) const;
 
@@ -140,6 +146,7 @@ public:
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
+     * @draft
      */
     virtual void handleTransliterate(Replaceable& text, Position& offset,
                                      bool_t isIncremental) const;

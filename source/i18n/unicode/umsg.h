@@ -167,6 +167,7 @@
 * @return The total buffer size needed; if greater than resultLength, the 
 * output was truncated.
 * @see u_parseMessage
+* @draft  should this just be usprintf?
 */
 U_CAPI int32_t
 u_formatMessage(    const    char        *locale,
@@ -216,6 +217,7 @@ u_vformatMessage(    const    char        *locale,
 * @param ... A variable-length argument list containing the arguments
 * specified in pattern.
 * @see u_formatMessage
+* @draft
 */
 U_CAPI void 
 u_parseMessage(    const    char        *locale,

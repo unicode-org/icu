@@ -216,11 +216,13 @@ public:
 
     /**
      * destructor
+     * @stable
      */
     virtual ~Calendar();
 
     /**
      * Create and return a polymorphic copy of this calendar.
+     * @stable
      */
     virtual Calendar* clone(void) const = 0;
 
@@ -232,6 +234,7 @@ public:
      *                 with U_ZERO_ERROR if created successfully, set to a failure result
      *                 otherwise.
      * @return         A Calendar if created successfully. NULL otherwise.
+     * @stable
      */
     static Calendar* createInstance(UErrorCode& success);
 
@@ -245,6 +248,7 @@ public:
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
      * @return             A Calendar if created successfully. NULL otherwise.
+     * @stable
      */
     static Calendar* createInstance(TimeZone* zoneToAdopt, UErrorCode& success);
 
@@ -257,6 +261,7 @@ public:
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
      * @return             A Calendar if created successfully. NULL otherwise.
+     * @stable
      */
     static Calendar* createInstance(const TimeZone& zone, UErrorCode& success);
 
@@ -268,6 +273,7 @@ public:
      *                 with U_ZERO_ERROR if created successfully, set to a failure result
      *                 otherwise.
      * @return         A Calendar if created successfully. NULL otherwise.
+     * @stable
      */
     static Calendar* createInstance(const Locale& aLocale, UErrorCode& success);
 
@@ -282,6 +288,7 @@ public:
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
      * @return             A Calendar if created successfully. NULL otherwise.
+     * @stable
      */
     static Calendar* createInstance(TimeZone* zoneToAdopt, const Locale& aLocale, UErrorCode& success);
 
@@ -295,6 +302,7 @@ public:
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
      * @return             A Calendar if created successfully. NULL otherwise.
+     * @stable
      */
     static Calendar* createInstance(const TimeZone& zoneToAdopt, const Locale& aLocale, UErrorCode& success);
 
@@ -305,6 +313,7 @@ public:
      * @return       An array of Locale objects representing the set of locales for which
      *               Calendars are installed.  The system retains ownership of this list;
      *               the caller must NOT delete it.
+     * @stable
      */
     static const Locale* getAvailableLocales(int32_t& count);
 
@@ -313,6 +322,7 @@ public:
      * (derived from the system time).
      *
      * @return   The current UTC time in milliseconds.
+     * @stable
      */
     static UDate getNow(void);
 
@@ -327,6 +337,7 @@ public:
      *                leniency, this will be set to an error status.
      * @return        The current time in UTC (GMT) time, or zero if the operation
      *                failed.
+     * @stable
      */
     inline UDate getTime(UErrorCode& status) const { return getTimeInMillis(status); }
 
@@ -335,6 +346,7 @@ public:
      * be in non-local UTC (GMT) time.
      *
      * @param date  The given UDate in UTC (GMT) time.
+     * @stable
      */
     inline void setTime(UDate date, UErrorCode& status) { setTimeInMillis(date, status); }
 
@@ -347,6 +359,7 @@ public:
      * @param that  The Calendar object to be compared with.
      * @return      True if the given Calendar is the same as this Calendar; false
      *              otherwise.
+     * @stable
      */
     virtual bool_t operator==(const Calendar& that) const;
 
@@ -356,6 +369,7 @@ public:
      * @param that  The Calendar object to be compared with.
      * @return      True if the given Calendar is not the same as this Calendar; false
      *              otherwise.
+     * @stable
      */
     bool_t operator!=(const Calendar& that) const {return !operator==(that);}
 
@@ -371,6 +385,7 @@ public:
      *                leniency, this will be set to an error status.
      * @return        True if the current time of this Calendar is equal to the time of
      *                Calendar when; false otherwise.
+     * @stable
      */
     bool_t equals(const Calendar& when, UErrorCode& status) const;
 
@@ -385,6 +400,7 @@ public:
      *                leniency, this will be set to an error status.
      * @return        True if the current time of this Calendar is before the time of
      *                Calendar when; false otherwise.
+     * @stable
      */
     bool_t before(const Calendar& when, UErrorCode& status) const;
 
@@ -399,14 +415,15 @@ public:
      *                leniency, this will be set to an error status.
      * @return        True if the current time of this Calendar is after the time of
      *                Calendar when; false otherwise.
+     * @stable
      */
     bool_t after(const Calendar& when, UErrorCode& status) const;
 
     /**
      * Return true if another Calendar object is equivalent to this one.  An equivalent
      * Calendar will behave exactly as this one does, but may be set to a different time.
+     * @deprecated not in Java API!
      */
-     // {sfb} not in Java API!
     virtual bool_t equivalentTo(const Calendar& other) const;
 
     /**
@@ -424,6 +441,7 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
+     * @stable
      */
     virtual void add(EDateFields field, int32_t amount, UErrorCode& status) = 0;
 
@@ -448,8 +466,8 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
+     * @stable
      */
-    // {sfb} this doesn't seem to match the Java version
     void roll(EDateFields field, bool_t up, UErrorCode& status);
 
     /**
@@ -472,8 +490,8 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid, this will be set to
      *                an error status.
+     * @stable
      */
-    // {sfb} this doesn't match Java- but it has to be this way to assure backwards compatibility
     virtual void roll(EDateFields field, int32_t amount, UErrorCode& status) = 0;
 
     /**
@@ -482,6 +500,7 @@ public:
      * given time zone is NULL, this function has no effect.
      *
      * @param value  The given time zone.
+     * @stable
      */
     void adoptTimeZone(TimeZone* value);
 
@@ -490,6 +509,7 @@ public:
      * passed in is _not_ adopted; the client is still responsible for deleting it.
      *
      * @param value  The given time zone.
+     * @stable
      */
     void setTimeZone(const TimeZone& zone);
 
@@ -499,6 +519,7 @@ public:
      * or this Calendar is destroyed.
      *
      * @return   The time zone object associated with this calendar.
+     * @stable
      */
     const TimeZone& getTimeZone(void) const;
 
@@ -508,6 +529,7 @@ public:
      * with this Calendar is the default TimeZone as returned by TimeZone::createDefault().
      *
      * @return   The time zone object which was associated with this calendar.
+     * @stable
      */
     TimeZone* orphanTimeZone(void);
 
@@ -517,8 +539,8 @@ public:
      * @param status Fill-in parameter which receives the status of this operation.
      * @return   True if the current date for this Calendar is in Daylight Savings Time,
      *           false, otherwise.
+     * @stable
      */
-    // {sfb} API change?
     virtual bool_t inDaylightTime(UErrorCode& status) const = 0;
 
     /**
@@ -531,6 +553,7 @@ public:
      * @param lenient  True specifies date/time interpretation to be lenient.
      *
      * @see            DateFormat#setLenient
+     * @stable
      */
     void setLenient(bool_t lenient);
 
@@ -538,6 +561,7 @@ public:
      * Tells whether date/time interpretation is to be lenient.
      *
      * @return   True tells that date/time interpretation is to be lenient.
+     * @stable
      */
     bool_t isLenient(void) const;
 
@@ -545,6 +569,7 @@ public:
      * Sets what the first day of the week is; e.g., Sunday in US, Monday in France.
      *
      * @param value  The given first day of the week.
+     * @stable
      */
     void setFirstDayOfWeek(EDaysOfWeek value);
 
@@ -552,6 +577,7 @@ public:
      * Gets what the first day of the week is; e.g., Sunday in US, Monday in France.
      *
      * @return   The first day of the week.
+     * @stable
      */
     EDaysOfWeek getFirstDayOfWeek(void) const;
 
@@ -562,6 +588,7 @@ public:
      * use value 7.
      *
      * @param value  The given minimal days required in the first week of the year.
+     * @stable
      */
     void setMinimalDaysInFirstWeek(uint8_t value);
 
@@ -572,6 +599,7 @@ public:
      * be a full week, getMinimalDaysInFirstWeek returns 7.
      *
      * @return   The minimal days required in the first week of the year.
+     * @stable
      */
     uint8_t getMinimalDaysInFirstWeek(void) const;
 
@@ -581,6 +609,7 @@ public:
      *
      * @param field  The given time field.
      * @return       The minimum value for the given time field.
+     * @stable
      */
     virtual int32_t getMinimum(EDateFields field) const = 0;
 
@@ -590,6 +619,7 @@ public:
      *
      * @param field  The given time field.
      * @return       The maximum value for the given time field.
+     * @stable
      */
     virtual int32_t getMaximum(EDateFields field) const = 0;
 
@@ -599,6 +629,7 @@ public:
      *
      * @param field  The given time field.
      * @return       The highest minimum value for the given time field.
+     * @stable
      */
     virtual int32_t getGreatestMinimum(EDateFields field) const = 0;
 
@@ -608,6 +639,7 @@ public:
      *
      * @param field  The given time field.
      * @return       The lowest maximum value for the given time field.
+     * @stable
      */
     virtual int32_t getLeastMaximum(EDateFields field) const = 0;
 
@@ -622,6 +654,7 @@ public:
      *
      * @param field the field to determine the minimum of
      * @return the minimum of the given field for the current date of this Calendar
+     * @stable
      */
     int32_t getActualMinimum(EDateFields field, UErrorCode& status) const;
 
@@ -638,6 +671,7 @@ public:
      *
      * @param field the field to determine the maximum of
      * @return the maximum of the given field for the current date of this Calendar
+     * @stable
      */
     int32_t getActualMaximum(EDateFields field, UErrorCode& status) const;
 
@@ -652,6 +686,7 @@ public:
      * @param status Fill-in parameter which receives the status of the operation.
      * @return       The value for the given time field, or zero if the field is unset,
      *               and set() has been called for any other field.
+     * @stable
      */
     int32_t get(EDateFields field, UErrorCode& status) const;
 
@@ -660,6 +695,7 @@ public:
      * resolving of time in Calendar. Unset fields have a value of zero, by definition.
      *
      * @return   True if the given time field has a value set; false otherwise.
+     * @stable
      */
     bool_t isSet(EDateFields field) const;
 
@@ -668,6 +704,7 @@ public:
      *
      * @param field  The given time field.
      * @param value  The value to be set for the given time field.
+     * @stable
      */
     void set(EDateFields field, int32_t value);
 
@@ -679,6 +716,7 @@ public:
      * @param month  The value used to set the MONTH time field. Month value is 0-based.
      *               e.g., 0 for January.
      * @param date   The value used to set the DATE time field.
+     * @stable
      */
     void set(int32_t year, int32_t month, int32_t date);
 
@@ -692,6 +730,7 @@ public:
      * @param date    The value used to set the DATE time field.
      * @param hour    The value used to set the HOUR_OF_DAY time field.
      * @param minute  The value used to set the MINUTE time field.
+     * @stable
      */
     void set(int32_t year, int32_t month, int32_t date, int32_t hour, int32_t minute);
 
@@ -706,6 +745,7 @@ public:
      * @param hour    The value used to set the HOUR_OF_DAY time field.
      * @param minute  The value used to set the MINUTE time field.
      * @param second  The value used to set the SECOND time field.
+     * @stable
      */
     void set(int32_t year, int32_t month, int32_t date, int32_t hour, int32_t minute, int32_t second);
 
@@ -713,6 +753,7 @@ public:
      * Clears the values of all the time fields, making them both unset and assigning
      * them a value of zero. The field values will be determined during the next
      * resolving of time into time fields.
+     * @stable
      */
     void clear(void);
 
@@ -722,6 +763,7 @@ public:
      * time into time fields.
      *
      * @param field  The time field to be cleared.
+     * @stable
      */
     void clear(EDateFields field);
 
@@ -738,6 +780,7 @@ public:
      *
      * @return   The class ID for this object. All objects of a given class have the
      *           same class ID. Objects of other classes have different class IDs.
+     * @stable
      */
     virtual UClassID getDynamicClassID(void) const = 0;
 
@@ -749,16 +792,19 @@ protected:
       *
       * @param success  Indicates the status of Calendar object construction. Returns
       *                 U_ZERO_ERROR if constructed successfully.
+     * @stable
       */
     Calendar(UErrorCode& success);
 
     /**
      * Copy constructor
+     * @stable
      */
     Calendar(const Calendar& source);
 
     /**
      * Default assignment operator
+     * @stable
      */
     Calendar& operator=(const Calendar& right);
 
@@ -770,6 +816,7 @@ protected:
      * @param aLocale  The given locale.
      * @param success  Indicates the status of Calendar object construction. Returns
      *                 U_ZERO_ERROR if constructed successfully.
+     * @stable
      */
     Calendar(TimeZone* zone, const Locale& aLocale, UErrorCode& success);
 
@@ -780,6 +827,7 @@ protected:
      * @param aLocale  The given locale.
      * @param success  Indicates the status of Calendar object construction. Returns
      *                 U_ZERO_ERROR if constructed successfully.
+     * @stable
      */
     Calendar(const TimeZone& zone, const Locale& aLocale, UErrorCode& success);
 
@@ -789,6 +837,7 @@ protected:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
+     * @stable
      */
     virtual void computeTime(UErrorCode& status) = 0;
 
@@ -797,19 +846,21 @@ protected:
      * time field values with a new time that is set for the calendar.  This method
      * does NOT recompute the time first; to recompute the time, then the fields, use
      * the method complete().
+     * @stable
      */
     virtual void computeFields(UErrorCode& status) = 0;
 
-    // {sfb} this uses a long in Java
     /**
      * Gets this Calendar's current time as a long.
      * @return the current time as UTC milliseconds from the epoch.
+     * @stable
      */
     double getTimeInMillis(UErrorCode& status) const;
 
     /**
      * Sets this Calendar's current time from the given long value.
      * @param date the new time in UTC milliseconds from the epoch.
+     * @stable
      */
     void setTimeInMillis( double millis, UErrorCode& status );
 
@@ -820,6 +871,7 @@ protected:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
+     * @stable
      */
     void complete(UErrorCode& status);
 
@@ -829,6 +881,7 @@ protected:
      *
      * @param field  The given time field.
      * @return       The value for the given time field.
+     * @stable
      */
     int32_t internalGet(EDateFields field) const {return fFields[field];}
 
@@ -836,6 +889,7 @@ protected:
      * Sets the value for a given time field.  This is a fast internal method for
      * subclasses.  It does not affect the areFieldsInSync, isTimeSet, or areAllFieldsSet
      * flags.
+     * @stable
      */
     void internalSet(EDateFields field, int32_t value);
 
@@ -864,11 +918,13 @@ protected:
 
     /**
      * Get the current time without recomputing.
+     * @stable
      */
     UDate        internalGetTime(void) const     { return fTime; }
 
     /**
      * Set the current time without affecting flags or fields.
+     * @stable
      */
     void        internalSetTime(UDate time)     { fTime = time; }
 

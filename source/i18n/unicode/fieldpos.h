@@ -95,6 +95,7 @@ public:
 
     /**
      * Creates a FieldPosition object with a non-specified field.
+     * @stable
      */
     FieldPosition() 
         : fField(DONT_CARE), fBeginIndex(0), fEndIndex(0) {}
@@ -108,6 +109,7 @@ public:
      * @see NumberFormat#FRACTION_FIELD
      * @see DateFormat#YEAR_FIELD
      * @see DateFormat#MONTH_FIELD
+     * @stable
      */
     FieldPosition(int32_t field) 
         : fField(field), fBeginIndex(0), fEndIndex(0) {}
@@ -115,60 +117,71 @@ public:
     /**
      * Copy constructor
      * @param copy the object to be copied from.
+     * @stable
      */
     FieldPosition(const FieldPosition& copy) 
         : fField(copy.fField), fBeginIndex(copy.fBeginIndex), fEndIndex(copy.fEndIndex) {}
 
     /**
      * Destructor
+     * @stable
      */
     ~FieldPosition() {}
 
     /**
      * Assignment operator
+     * @stable
      */
     FieldPosition&      operator=(const FieldPosition& copy);
 
     /** 
      * Equality operator.
      * @return TRUE if the two field positions are equal, FALSE otherwise.
+     * @stable
      */
     bool_t              operator==(const FieldPosition& that) const;
 
     /** 
      * Equality operator.
      * @return TRUE if the two field positions are not equal, FALSE otherwise.
+     * @stable
      */
     bool_t              operator!=(const FieldPosition& that) const;
 
     /**
      * Retrieve the field identifier.
+     * @stable
      */
     int32_t getField(void) const { return fField; }
 
     /**
      * Retrieve the index of the first character in the requested field.
+     * @stable
      */
     int32_t getBeginIndex(void) const { return fBeginIndex; }
 
     /**
      * Retrieve the index of the character following the last character in the
      * requested field.
+     * @stable
      */
     int32_t getEndIndex(void) const { return fEndIndex; }
  
     /**
      * Set the field.
+     * @stable
      */
     void setField(int32_t f) { fField = f; }
 
     /**
      * Set the begin index.  For use by subclasses of Format.
+     * @stable
      */
     void setBeginIndex(int32_t bi) { fBeginIndex = bi; }
 
     /**
      * Set the end index.  For use by subclasses of Format.
+     * @stable
      */
     void setEndIndex(int32_t ei) { fEndIndex = ei; }
     
