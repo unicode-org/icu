@@ -20,7 +20,7 @@ import java.util.ListResourceBundle;
  * spaces removed.  Once we have good test cases for Thai, we will replace this
  * with good resource data (and a good dictionary file) for Thai
  */
-public class BreakIteratorRules_en_US_TEST extends ListResourceBundle {
+public class BreakIteratorRules_en_US_DEMO extends ListResourceBundle {
     public Object[][] getContents() {
         return contents;
     }

@@ -1,5 +1,5 @@
 #
-# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.2 $ $Date: 2000/03/02 00:39:50 $
+# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.3 $ $Date: 2000/03/07 23:23:38 $
 #
 
 TOPDIR=	../../../../..
@@ -10,7 +10,7 @@ include $(TOPDIR)/src/build/defs.gmk
 
 FILES_java=	$(TARGDIR)/TextBoundDemo.java	\
 		$(TARGDIR)/DBBIDemo.java	\
-		$(TARGDIR)/BreakIteratorRules_en_US_TEST.java	\
+		$(TARGDIR)/BreakIteratorRules_en_US_DEMO.java	\
 
 FILES_dict= $(TARGDIR)/english.dict \
 
