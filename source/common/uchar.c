@@ -226,7 +226,7 @@ static uint16_t stage23Bits, stage2Mask, stage3Mask;
 static bool_t
 isAcceptable(void *context,
              const char *type, const char *name,
-             UDataInfo *pInfo) {
+             const UDataInfo *pInfo) {
     if(
         pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&

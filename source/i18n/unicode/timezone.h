@@ -539,7 +539,7 @@ private:
     // See source file for documentation
     static bool_t U_CALLCONV isDataAcceptable(void *context,
                                    const char *type, const char *name,
-                                   UDataInfo *pInfo);
+                                   const UDataInfo *pInfo);
 
     // See source file for documentation
     static TimeZone* createSystemTimeZone(const UnicodeString& name);
