@@ -2374,7 +2374,7 @@ public class UnicodeSet extends UnicodeFilter {
     public void addAll(Collection source) {
         Iterator it = source.iterator();
         while (it.hasNext()) {
-            source.add(it.next().toString());
+            add(it.next().toString());
         }
     }
 
