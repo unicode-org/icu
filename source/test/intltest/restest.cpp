@@ -11,21 +11,23 @@
 *****************************************************************************************
 */
 
-#include "restest.h"
-
-#include "resbund.h"
-#include "unistr.h"
-
 #include <time.h>
 #include <string.h>
 #include <limits.h>
 
 #define RESTEST_HEAP_CHECK 0
 
+#include "utypes.h"
+
 #if defined(_WIN32) && !defined(__WINDOWS__)
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 #endif
+
+#include "cstring.h"
+#include "unistr.h"
+#include "resbund.h"
+#include "restest.h"
 
 //***************************************************************************************
 
@@ -341,7 +343,7 @@ ResourceBundleTest::testTag(const char* frag,
 
     // Now try to load the desired items
 
-    UnicodeString tag;
+    char tag[100];
     UnicodeString action;
 
     int32_t i,j,row,col, actual_bundle;
@@ -359,28 +361,28 @@ ResourceBundleTest::testTag(const char* frag,
         ResourceBundle theBundle( directory, *param[i].locale, status);
         CONFIRM_UErrorCode(status,param[i].expected_constructor_status);
 
-	if(i == 5)
-	  actual_bundle = 0; /* ne -> default */
-	else if(i == 3)
-	  actual_bundle = 1; /* te_NE -> te */
-	else if(i == 4)
-	  actual_bundle = 2; /* te_IN_NE -> te_IN */
-	else
-	  actual_bundle = i;
+        if(i == 5)
+          actual_bundle = 0; /* ne -> default */
+        else if(i == 3)
+          actual_bundle = 1; /* te_NE -> te */
+        else if(i == 4)
+          actual_bundle = 2; /* te_IN_NE -> te_IN */
+        else
+          actual_bundle = i;
 
 
         UErrorCode expected_resource_status = U_MISSING_RESOURCE_ERROR;
         for (j=e_te_IN; j>=e_Default; --j)
         {
             if (is_in[j] && param[i].inherits[j])
-	      {
-		if(j == actual_bundle) /* it's in the same bundle OR it's a nonexistent=default bundle (5) */
-		  expected_resource_status = U_ZERO_ERROR;
-		else if(j == 0)
-		  expected_resource_status = U_USING_DEFAULT_ERROR;
-		else
-		  expected_resource_status = U_USING_FALLBACK_ERROR;
-		
+              {
+                if(j == actual_bundle) /* it's in the same bundle OR it's a nonexistent=default bundle (5) */
+                  expected_resource_status = U_ZERO_ERROR;
+                else if(j == 0)
+                  expected_resource_status = U_USING_DEFAULT_ERROR;
+                else
+                  expected_resource_status = U_USING_FALLBACK_ERROR;
+                
                 break;
             }
         }
@@ -405,8 +407,8 @@ ResourceBundleTest::testTag(const char* frag,
         action += tag;
         action += ")";
 
-        tag = "string_";
-        tag += frag;
+        icu_strcpy(tag, "string_");
+        icu_strcat(tag, frag);
 
         UnicodeString string(kERROR);
         status = U_ZERO_ERROR;
@@ -427,8 +429,8 @@ ResourceBundleTest::testTag(const char* frag,
         action += tag;
         action += ")";
 
-        tag = "array_";
-        tag += frag;
+        icu_strcpy(tag, "array_");
+        icu_strcat(tag, frag);
 
         int32_t count = kERROR_COUNT;
         status = U_ZERO_ERROR;
@@ -493,8 +495,8 @@ ResourceBundleTest::testTag(const char* frag,
         action += tag;
         action += ")";
 
-        tag = "array_2d_";
-        tag += frag;
+        icu_strcpy(tag, "array_2d_");
+        icu_strcat(tag, frag);
 
         int32_t row_count = kERROR_COUNT, column_count = kERROR_COUNT;
         status = U_ZERO_ERROR;
@@ -543,7 +545,7 @@ ResourceBundleTest::testTag(const char* frag,
             string = kERROR;
             theBundle.get2dArrayItem(tag, row, col, string, status);
             expected_status = (row >= 0 && row < row_count && col >= 0 && col < column_count) ?
-	      expected_resource_status: U_MISSING_RESOURCE_ERROR;
+              expected_resource_status: U_MISSING_RESOURCE_ERROR;
             CONFIRM_UErrorCode(status,expected_status);
 
             if (U_SUCCESS(status))
@@ -563,8 +565,8 @@ ResourceBundleTest::testTag(const char* frag,
         //--------------------------------------------------------------------------
         // taggedArrayItem
 
-        tag = "tagged_array_";
-        tag += frag;
+        icu_strcpy(tag, "tagged_array_");
+        icu_strcat(tag, frag);
 
         action = param[i].name;
         action += ".getTaggedArray(";

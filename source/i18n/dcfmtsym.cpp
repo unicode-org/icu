@@ -32,8 +32,8 @@ const int32_t DecimalFormatSymbols::fgCurrencyElementsLength = 3;
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale.
  */
-const UnicodeString DecimalFormatSymbols::fgNumberElements("NumberElements");
-const UnicodeString DecimalFormatSymbols::fgCurrencyElements("CurrencyElements");
+const char *DecimalFormatSymbols::fgNumberElements="NumberElements";
+const char *DecimalFormatSymbols::fgCurrencyElements="CurrencyElements";
 
 // Because the C-compiler doesn't parse \u escape sequences, we encode the
 // \u last resort strings as UChar arrays.

@@ -783,7 +783,7 @@ public:
      * The resource tags we use to retrieve decimal format data from
      * locale resource bundles.
      */
-    static const UnicodeString fgNumberPatterns;
+    static const char *fgNumberPatterns;
 
 public:
 

@@ -92,7 +92,7 @@ const int32_t DecimalFormat::kDoubleFractionDigits = 340;
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale.
  */
-const UnicodeString DecimalFormat::fgNumberPatterns("NumberPatterns");
+const char *DecimalFormat::fgNumberPatterns="NumberPatterns";
 
 //------------------------------------------------------------------------------
 // Constructs a DecimalFormat instance in the default locale.
