@@ -1,4 +1,6 @@
-﻿DataDrivenCollationTest {
+﻿// Copyright (c) 2001-2003 International Business Machines
+// Corporation and others. All Rights Reserved.
+DataDrivenCollationTest {
     Info {
         Headers { "sequence" }
         Description { "These are the data driven tests" }

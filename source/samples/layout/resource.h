@@ -1,5 +1,7 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Developer Studio generated include file.
+// Copyright (c) 2001-2003 International Business Machines
+// Corporation and others. All Rights Reserved.
 // Used by LayoutSample.rc
 //
 #define IDM_FILE_NEWSAMPLE              40001
