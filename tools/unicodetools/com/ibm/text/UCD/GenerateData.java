@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2002/06/22 01:21:09 $
-* $Revision: 1.20 $
+* $Date: 2002/07/14 22:04:49 $
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -508,6 +508,7 @@ public class GenerateData implements UCD_Types {
             int type = i & 0xFF00;
             if (type == AGE) continue;
             if (i == (BINARY_PROPERTIES | CaseFoldTurkishI)) continue;
+            if (i == (BINARY_PROPERTIES | Non_break)) continue;
             
             UnicodeProperty up = UnifiedBinaryProperty.make(i, Default.ucd);
             if (up == null) continue;

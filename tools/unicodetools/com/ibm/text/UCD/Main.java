@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/06/22 01:21:09 $
-* $Revision: 1.17 $
+* $Date: 2002/07/14 22:04:49 $
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -69,6 +69,8 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("definitionTransliterator")) GenerateHanTransliterator.main(0);
             else if (arg.equalsIgnoreCase("romajiTransliterator")) GenerateHanTransliterator.main(1);
             else if (arg.equalsIgnoreCase("pinYinTransliterator")) GenerateHanTransliterator.main(2);
+            else if (arg.equalsIgnoreCase("hanproperties")) GenerateHanTransliterator.readUnihan();
+            
             else if (arg.equalsIgnoreCase("compareBlueberry")) VerifyUCD.compareBlueberry();
             
             else if (arg.equalsIgnoreCase("checkBIDI")) VerifyUCD.checkBIDI();
