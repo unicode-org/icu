@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2003/03/21 22:46:58 $ 
-* $Revision: 1.14 $
+* $Date: 2003/03/22 07:35:01 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -1910,15 +1910,16 @@ final class CollationParsedRuleBuilder
             m_utilElement2_.m_CEs_ = element.m_CEs_;
             m_utilElement2_.m_isThai_ = element.m_isThai_;
             m_utilElement2_.m_mapCE_ = element.m_mapCE_;
-            m_utilElement2_.m_prefixChars_ = element.m_prefixChars_;
+            //m_utilElement2_.m_prefixChars_ = element.m_prefixChars_;
             m_utilElement2_.m_sizePrim_ = element.m_sizePrim_;
             m_utilElement2_.m_sizeSec_ = element.m_sizeSec_;
             m_utilElement2_.m_sizeTer_ = element.m_sizeTer_;
             m_utilElement2_.m_variableTop_ = element.m_variableTop_;
-            m_utilElement2_.m_prefix_ = 0;
-            m_utilElement2_.m_uchars_ 
+            m_utilElement2_.m_prefix_ = element.m_prefix_;
+            m_utilElement2_.m_prefixChars_ 
                            = Normalizer.compose(element.m_prefixChars_, false);
-            m_utilElement2_.m_cPoints_ = m_utilElement2_.m_uchars_;
+            m_utilElement2_.m_uchars_ = element.m_uchars_;
+            m_utilElement2_.m_cPoints_ = element.m_cPoints_;
             m_utilElement2_.m_cPointsOffset_ = 0;
             
 		    if (t.m_prefixLookup_ != null) {
@@ -3593,8 +3594,12 @@ final class CollationParsedRuleBuilder
                 // codepoints here are in the NFD form. We need to add the
                 // first code point of the NFC form to unsafe, because 
                 // strcoll needs to backup over them.
-                String decomp = Normalizer.decompose(e.m_cPoints_, true);
-                unsafeCPSet(t.m_unsafeCP_, decomp.charAt(0));
+                // weiv: This is wrong! See the comment above.
+                //String decomp = Normalizer.decompose(e.m_cPoints_, true);
+                //unsafeCPSet(t.m_unsafeCP_, decomp.charAt(0));
+                // it should be:
+                String comp = Normalizer.compose(e.m_cPoints_, false);
+                unsafeCPSet(t.m_unsafeCP_, comp.charAt(0));
             } 
         }
     }
