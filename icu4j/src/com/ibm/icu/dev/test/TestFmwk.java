@@ -5,9 +5,11 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.test;
+
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -266,8 +268,6 @@ public class TestFmwk extends AbstractTestLog {
                 if (!validate()) {
                     params.writeTestInvalid(name);
                 } else {
-		    Runtime rt = Runtime.getRuntime();
-		    System.out.println("free: " + rt.freeMemory() + ", total: " + rt.totalMemory());
                     params.push(name, getDescription(), f == 1);
                     execute();
                     params.pop();
@@ -476,6 +476,8 @@ public class TestFmwk extends AbstractTestLog {
                     params.listlevel = 2;
                 } else if (arg.equals("-listexaustive") || arg.equals("-le")) {
                     params.listlevel = 3;
+		} else if (arg.equals("-memory") || arg.equals("-m")) {
+		    params.memusage = true;
                 } else if (arg.equals("-nothrow") || arg.equals("-n")) {
                     params.nothrow = true;
                     params.errorSummary = new StringBuffer();
@@ -508,6 +510,29 @@ public class TestFmwk extends AbstractTestLog {
                     }
                 } else if (arg.startsWith("-tfilter:")) {
                     params.tfilter = arg.substring(8);
+		} else if (arg.startsWith("-time") || arg.startsWith("-t")) {
+		    long val = 0;
+		    int inx = arg.indexOf(':');
+		    if (inx > 0) {
+			String num = arg.substring(inx+1);
+			try {
+			    val = Long.parseLong(num);
+			} 
+			catch (Exception e) {
+			    System.out.println("*** Error: could not parse time threshold '" + num + "'");
+			    System.exit(1);
+			}
+		    }
+		    params.timing = val;
+		    String fmt = "#,00s";
+		    if (val <= 10) {
+			fmt = "#,##0.000s";
+		    } else if (val <= 100) {
+			fmt = "#,##0.00s";
+		    } else if (val <= 1000) {
+			fmt = "#,##0.0s";
+		    }
+		    params.tformat = new DecimalFormat(fmt);
                 } else if (arg.startsWith("-filter:")) {
                     String temp = arg.substring(8).toLowerCase();
                     filter = filter == null ? temp : filter + "," + temp;
@@ -716,6 +741,14 @@ public class TestFmwk extends AbstractTestLog {
         return params.nodata;
     }
 
+    public boolean isTiming() {
+        return params.timing < Long.MAX_VALUE;
+    }
+
+    public boolean isMemTracking() {
+	return params.memusage;
+    }
+
     /**
      * 0 = fewest tests, 5 is normal build, 10 is most tests
      */
@@ -780,14 +813,18 @@ public class TestFmwk extends AbstractTestLog {
         System.out.println(" -l[ist] List immediate targets of this test");
         System.out.println("   -la, -listAll List immediate targets of this test, and all subtests");
         System.out.println("   -le, -listExaustive List all subtests and targets");
+// don't know how to get useful numbers for memory usage using java API calls
+//      System.out.println(" -m[emory] print memory usage and force gc for each test");
         System.out.println(" -n[othrow] Message on test failure rather than exception");
         System.out.println(" -prompt Prompt before exiting");
         System.out.println(" -q[uiet] Do not show warnings");
         System.out.println(" -r[andom][:<n>] If present, randomize targets.  If n is present,\n" +
                            "       use it as the seed.  If random is not set, targets will\n" +
                            "       be in alphabetical order to ensure cross-platform consistency.");
-        System.out.println(" -s[ilent] No output except error summary or exceptions.\n");
+        System.out.println(" -s[ilent] No output except error summary or exceptions.");
         System.out.println(" -tfilter:<str> Transliterator Test filter of ids.");
+	System.out.println(" -t[ime][:<n>] Print elapsed time for each test.  if n is present\n" +
+			   "       only print times >= n milliseconds.");
         System.out.println(" -v[erbose] Show log messages");
         System.out.println(" -w[arning] Continue in presence of warnings, and disable missing test warnings.");
         System.out.println(" -nodata | -nd Do not warn if resource data is not present.");
@@ -953,6 +990,8 @@ public class TestFmwk extends AbstractTestLog {
         public boolean   describe;
         public boolean   warnings;
         public boolean   nodata;
+        public long      timing = Long.MAX_VALUE;
+        public boolean   memusage;
         public int       inclusion;
         public String    filter;
         public long      seed;
@@ -970,6 +1009,7 @@ public class TestFmwk extends AbstractTestLog {
         private int         warnCount;
         private int         invalidCount;
         private int         testCount;
+	private NumberFormat tformat;
         public Random       random;
 
         public void init() {
@@ -994,6 +1034,8 @@ public class TestFmwk extends AbstractTestLog {
             int tc;
             boolean flushed;
             boolean included;
+	    long mem;
+	    long millis;
 
             public State(State link, String name, boolean included) {
                 this.link = link;
@@ -1013,6 +1055,9 @@ public class TestFmwk extends AbstractTestLog {
                 if (link == null || this.included) {
                     flush();
                 }
+
+		mem = getmem();
+		millis = System.currentTimeMillis();
             }
 
             void flush() {
@@ -1049,7 +1094,7 @@ public class TestFmwk extends AbstractTestLog {
 
         public void pop() {
             if (stack != null) {
-                writeTestResult(stack.ec, stack.ic, stack.tc);
+                writeTestResult();
                 stack = stack.link;
             }
         }
@@ -1171,7 +1216,28 @@ public class TestFmwk extends AbstractTestLog {
             }
         }
 
-        private void writeTestResult(int oldFail, int oldInvalid, int oldTestCount) {
+	long getmem() {
+	    long newmem = 0;
+	    if (memusage) {
+		Runtime rt = Runtime.getRuntime();
+		long lastmem = Long.MAX_VALUE;
+		do {
+		    rt.gc();
+		    rt.gc();
+		    try {
+			Thread.sleep(50);
+		    }
+		    catch (Exception e) {
+			break;
+		    }
+		    lastmem = newmem;
+		    newmem = rt.totalMemory() - rt.freeMemory();
+		} while (newmem < lastmem);
+	    }
+	    return newmem;
+	}
+
+        private void writeTestResult() {
             if (inDocMode()) {
                 if (needLineFeed) {
                     log.println();
@@ -1181,12 +1247,16 @@ public class TestFmwk extends AbstractTestLog {
                 return;
             }
 
-            int errorDelta = errorCount - oldFail;
-            int invalidDelta = invalidCount - oldInvalid;
-            int testDelta = testCount - oldTestCount;
+	    long dmem = getmem() - stack.mem;
+	    long dtime = System.currentTimeMillis() - stack.millis;
+		
+            int testDelta = testCount - stack.tc;
             if (testDelta == 0) {
                 return;
             }
+
+            int errorDelta = errorCount - stack.ec;
+            int invalidDelta = invalidCount - stack.ic;
 
             stack.flush();
 
@@ -1196,6 +1266,19 @@ public class TestFmwk extends AbstractTestLog {
             }
             needLineFeed = false;
 
+	    if (memusage || dtime >= timing) {
+		log.print(" (");
+		if (memusage) {
+		    log.print("dmem: " + dmem);
+		}
+		if (dtime >= timing) {
+		    if (memusage) {
+			log.print(", ");
+		    }
+		    log.print(tformat.format(dtime/1000f));
+		}
+		log.print(")");
+	    }
             if (errorDelta != 0) {
                 log.println(" FAILED (" + errorDelta + " failures" +
                             ((invalidDelta != 0) ?
@@ -1423,6 +1506,18 @@ public class TestFmwk extends AbstractTestLog {
     }
 
     // End JUnit-like assertions
+
+    // PrintWriter support
+
+    public PrintWriter getErrorLogPrintWriter() {
+	return new PrintWriter(new TestLogWriter(this, TestLog.ERR));
+    }
+
+    public PrintWriter getLogPrintWriter() {
+	return new PrintWriter(new TestLogWriter(this, TestLog.LOG));
+    }
+
+    // end PrintWriter support
 
     protected TestParams params = null;
 
