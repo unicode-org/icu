@@ -23,7 +23,8 @@ CLEANFILES = *~ $(DEPS)
 TARGET = intltest
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/toolutil -D'U_SRCDATADIR=$(MACRO_SEPARATOR)"$(top_srcdir)/../data/"'
+DATADIR := $(shell pwd)/../../../data
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/toolutil -D'U_SRCDATADIR=$(MACRO_SEPARATOR)"$(DATADIR)/"'
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \

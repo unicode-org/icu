@@ -1304,14 +1304,9 @@ static FileStream * getFractionalUCA(void)
     uprv_strcat(newPath, "unidata" U_FILE_SEP_STRING );
     uprv_strcat(newPath, "FractionalUCA.txt");
 
-#if defined (U_SRCDATADIR) /* points to the icu/data directory */
-    /* If defined, we'll try an alternate directory second */
-    uprv_strcpy(backupPath, U_SRCDATADIR);
-#else
     uprv_strcpy(backupPath, u_getDataDirectory());
     uprv_strcat(backupPath, ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
     uprv_strcat(backupPath, U_FILE_SEP_STRING);
-#endif
     uprv_strcat(backupPath, "unidata" U_FILE_SEP_STRING );
     uprv_strcat(backupPath, "FractionalUCA.txt");
       

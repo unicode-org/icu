@@ -476,14 +476,9 @@ void UnicodeTest::TestUnicodeData()
     strcpy(newPath, u_getDataDirectory());
     strcat(newPath, "unidata" U_FILE_SEP_STRING "UnicodeData.txt");
 
-#if defined (U_SRCDATADIR) /* points to the icu/data directory */
-    /* If defined, we'll try an alternate directory second */
-    strcpy(backupPath, U_SRCDATADIR);
-#else
     strcpy(backupPath, u_getDataDirectory());
     strcat(backupPath, ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
     strcat(backupPath, U_FILE_SEP_STRING);
-#endif
     strcat(backupPath, "unidata" U_FILE_SEP_STRING "UnicodeData.txt");
 
     errorCode=U_ZERO_ERROR;
