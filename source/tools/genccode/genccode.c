@@ -155,7 +155,7 @@ write8(FileStream *out, uint8_t byte) {
         s[i++]='0'+byte/100;
         byte%=100;
     }
-    if(byte>=10) {
+    if(i>0 || byte>=10) {
         s[i++]='0'+byte/10;
         byte%=10;
     }
