@@ -349,10 +349,10 @@ Unicode::forDigit(int32_t digit, int8_t radix) {
                    + digit);
 }
 
-int32_t
-Unicode::getVersion(uint8_t* versionArray)
+void
+Unicode::getUnicodeVersion(UVersionInfo* versionArray)
 {
-	return (u_getVersion(versionArray) );
+	u_getUnicodeVersion(versionArray);
 }
 
 

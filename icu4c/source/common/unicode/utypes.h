@@ -142,6 +142,12 @@ typedef int32_t UTextOffset;
 /*===========================================================================*/
 typedef uint16_t UChar;
 
+/*===========================================================================*/
+/* Related version information                                               */
+/*===========================================================================*/
+
+typedef struct { uint8_t versions[U_MAX_VERSION_LEN]; } UVersionInfo;
+
 /* U_SIZEOF_UCHAR==sizeof(UChar) */
 #define U_SIZEOF_UCHAR 2
 
