@@ -32,11 +32,16 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.5 $ $Date: 2000/01/19 19:02:10 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.6 $ $Date: 2000/02/05 00:23:56 $
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
 
     Transliterator** trans;
+
+    /**
+     * Array of original filters associated with transliterators.
+     */
+    UnicodeFilter** filters;
 
     int32_t count;
 
@@ -100,6 +105,14 @@ public:
 
     void adoptTransliterators(Transliterator* adoptedTransliterators[],
                               int32_t count);
+
+    /**
+     * Override Transliterator.  Modify the transliterators that make up
+     * this compound transliterator so their filters are the logical AND
+     * of this transliterator's filter and their own.  Original filters
+     * are kept in the filters array.
+     */
+    virtual void adoptFilter(UnicodeFilter* f);
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.

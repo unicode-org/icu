@@ -10,6 +10,21 @@
 #include "unicode/unifltlg.h"
 #include "unicode/unifilt.h"
 
+/**
+ * A NullFilter always returns a fixed value, either TRUE or FALSE.
+ * A filter value of 0 (that is, a UnicodeFilter* f, where f == 0)
+ * is equivalent to a NullFilter(TRUE).
+ */
+class NullFilter : public UnicodeFilter {
+    bool_t result;
+public:
+    NullFilter(bool_t r) { result = r; }
+    NullFilter(const NullFilter& f) { result = f.result; }
+    virtual ~NullFilter() {}
+    virtual bool_t contains(UChar c) const { return result; }
+    virtual UnicodeFilter* clone() const { return new NullFilter(*this); }
+};
+
 class UnicodeNotFilter : public UnicodeFilter {
     UnicodeFilter* filt;
 public:
@@ -30,8 +45,12 @@ UnicodeFilter* UnicodeNotFilter::clone() const { return new UnicodeNotFilter(*th
  * Returns a <tt>UnicodeFilter</tt> that implements the inverse of
  * the given filter.
  */
-UnicodeFilter* UnicodeFilterLogic::createNot(const UnicodeFilter& f) {
-    return new UnicodeNotFilter(f.clone());
+UnicodeFilter* UnicodeFilterLogic::createNot(const UnicodeFilter* f) {
+    if (f == 0) {
+        return new NullFilter(FALSE);
+    } else {
+        return new UnicodeNotFilter(f->clone());
+    }
 }
 
 class UnicodeAndFilter : public UnicodeFilter {
@@ -57,33 +76,20 @@ UnicodeFilter* UnicodeAndFilter::clone() const { return new UnicodeAndFilter(*th
  * circuit AND of the result of the two given filters.  That is,
  * if <tt>f.contains()</tt> is <tt>false</tt>, then <tt>g.contains()</tt>
  * is not called, and <tt>contains()</tt> returns <tt>false</tt>.
- *
- * <p>Either <tt>f</tt> or <tt>g</tt> must be non-null.
  */
-UnicodeFilter* UnicodeFilterLogic::createAnd(const UnicodeFilter& f,
-                                             const UnicodeFilter& g) {
-    return new UnicodeAndFilter(f.clone(), g.clone());
+UnicodeFilter* UnicodeFilterLogic::createAnd(const UnicodeFilter* f,
+                                             const UnicodeFilter* g) {
+    if (f == 0) {
+        if (g == 0) {
+            return NULL;
+        }
+        return g->clone();
+    }
+    if (g == 0) {
+        return f->clone();
+    }
+    return new UnicodeAndFilter(f->clone(), g->clone());
 }
-
-/**
- * Returns a <tt>UnicodeFilter</tt> that implements a short
- * circuit AND of the result of the given filters.  That is, if
- * <tt>f[i].contains()</tt> is <tt>false</tt>, then
- * <tt>f[j].contains()</tt> is not called, where <tt>j > i</tt>, and
- * <tt>contains()</tt> returns <tt>false</tt>.
- */
-//!UnicodeFilter* UnicodeFilterLogic::and(const UnicodeFilter** f) {
-//!    return new UnicodeFilter() {
-//!        public bool_t contains(UChar c) {
-//!            for (int32_t i=0; i<f.length; ++i) {
-//!                if (!f[i].contains(c)) {
-//!                    return FALSE;
-//!                }
-//!            }
-//!            return TRUE;
-//!        }
-//!    };
-//!}
 
 class UnicodeOrFilter : public UnicodeFilter {
     UnicodeFilter* filt1;
@@ -108,32 +114,17 @@ UnicodeFilter* UnicodeOrFilter::clone() const { return new UnicodeOrFilter(*this
  * circuit OR of the result of the two given filters.  That is, if
  * <tt>f.contains()</tt> is <tt>true</tt>, then <tt>g.contains()</tt> is
  * not called, and <tt>contains()</tt> returns <tt>true</tt>.
- *
- * <p>Either <tt>f</tt> or <tt>g</tt> must be non-null.
  */
-UnicodeFilter* UnicodeFilterLogic::createOr(const UnicodeFilter& f,
-                                            const UnicodeFilter& g) {
-    return new UnicodeOrFilter(f.clone(), g.clone());
+UnicodeFilter* UnicodeFilterLogic::createOr(const UnicodeFilter* f,
+                                            const UnicodeFilter* g) {
+    if (f == 0) {
+        if (g == 0) {
+            return NULL;
+        }
+        return g->clone();
+    }
+    if (g == 0) {
+        return f->clone();
+    }
+    return new UnicodeOrFilter(f->clone(), g->clone());
 }
-
-/**
- * Returns a <tt>UnicodeFilter</tt> that implements a short
- * circuit OR of the result of the given filters.  That is, if
- * <tt>f[i].contains()</tt> is <tt>false</tt>, then
- * <tt>f[j].contains()</tt> is not called, where <tt>j > i</tt>, and
- * <tt>contains()</tt> returns <tt>true</tt>.
- */
-//!UnicodeFilter* UnicodeFilterLogic::or(const UnicodeFilter** f) {
-//!    return new UnicodeFilter() {
-//!        public bool_t contains(UChar c) {
-//!            for (int32_t i=0; i<f.length; ++i) {
-//!                if (f[i].contains(c)) {
-//!                    return TRUE;
-//!                }
-//!            }
-//!            return FALSE;
-//!        }
-//!    };
-//!}
-
-// TODO: Add nand() & nor() for convenience, if needed.

@@ -474,6 +474,19 @@ const UnicodeFilter* Transliterator::getFilter(void) const {
 }
 
 /**
+ * Returns the filter used by this transliterator, or
+ * <tt>NULL</tt> if this transliterator uses no filter.  The
+ * caller must eventually delete the result.  After this call,
+ * this transliterator's filter is set to <tt>NULL</tt>.
+ */
+UnicodeFilter* Transliterator::orphanFilter(void) {
+    UnicodeFilter *result = filter;
+    // MUST go through adoptFilter in case latter is overridden
+    adoptFilter(0);
+    return result;
+}
+
+/**
  * Changes the filter used by this transliterator.  If the filter
  * is set to <tt>null</tt> then no filtering will occur.
  *
