@@ -55,7 +55,7 @@ install: all
 
 void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 {
-  char tmp[1024], tmp2[1024];
+  char tmp[1024], tmp2[1024], srcPath[1024];
   char stanza[3072];
 
   CharList *tail = NULL, *infiles = NULL;
@@ -68,69 +68,79 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   CharList *copyFilesRightTail = NULL;
   CharList *copyFilesInstallTail = NULL;
 
+  CharList *copyDirs = NULL; /* list of dirs to create for copying */
+  CharList *installDirs = NULL; /* list of dirs to create for installation */
+
 /*  CharList *copyCommands = NULL;*/
 
   const char *baseName;
 
   T_FileStream_writeLine(makefile, "\n.PHONY: $(NAME) all install clean\n\nall: $(NAME)\n\n");
 
-  /* Dont' copy files already in tmp */
-  for(infiles = o->filePaths;infiles;infiles = infiles->next)
-  {
-    baseName = findBasename(infiles->str);
+  if(o->embed) {
+    infiles = o->filePaths;
+  } else {
+    infiles = o->files; /* raw files - no paths other than tree paths */
+  }
 
+  /* Dont' copy files already in tmp */
+  for(;infiles;infiles = infiles->next)
+  { 
     uprv_strcpy(tmp, o->targetDir);
     uprv_strcat(tmp, U_FILE_SEP_STRING);
+    if(o->embed) {
+      baseName = findBasename(infiles->str);
+      uprv_strcpy(srcPath, baseName);
+    } else {
+      baseName = infiles->str;
+      uprv_strcat(tmp, o->shortName);
+      uprv_strcat(tmp, U_FILE_SEP_STRING);
+      uprv_strcpy(srcPath, "$(SRCDIR)/");
+      uprv_strcat(srcPath, infiles->str);
+    }
     uprv_strcat(tmp, baseName);
+
+    copyDirs = pkg_appendUniqueDirToList(copyDirs, NULL, tmp);
 
     o->outFiles = pkg_appendToList(o->outFiles, &tail, uprv_strdup(tmp));
 
     if(strcmp(tmp, infiles->str) == 0)
     {
-     /* fprintf(stderr, "### NOT copying: %s\n", tmp); */
+      /* fprintf(stderr, "### NOT copying: %s\n", tmp); */
       /*  no copy needed.. */
-      continue;
-    }
-
-    sprintf(stanza, "%s: %s\n\t$(INSTALL_DATA) $< $@\n", tmp, infiles->str);
-    T_FileStream_writeLine(makefile, stanza);
-
-    uprv_strcpy(tmp2, o->targetDir);
-    uprv_strcat(tmp2, U_FILE_SEP_STRING);
-    uprv_strcat(tmp2, U_FILE_SEP_STRING);
-    uprv_strcat(tmp2, baseName);
-
-    if(strcmp(tmp2, infiles->str) == 0)
-    {
-      /* fprintf(stderr, "### NOT copying: %s\n", tmp2);  */
-      /*  no copy needed.. */
-      continue;
+    } else {
+      sprintf(stanza, "%s: %s\n\t$(INSTALL_DATA) $< $@\n", tmp, srcPath);
+      T_FileStream_writeLine(makefile, stanza);
     }
 
     uprv_strcpy(tmp2, "$(INSTALLTO)" U_FILE_SEP_STRING);
+    if(!o->embed) {
+      uprv_strcat(tmp2, o->shortName);
+      uprv_strcat(tmp2, U_FILE_SEP_STRING);
+    }
     uprv_strcat(tmp2, baseName);
 
-    if(strcmp(tmp2, infiles->str) == 0)
-    {
-      /* fprintf(stderr, "### NOT copying: %s\n", tmp2);  */
+    installDirs = pkg_appendUniqueDirToList(installDirs, NULL, tmp2);
+
+    if(strcmp(tmp2, infiles->str) == 0) {
+      /* fprintf(stderr, "### NOT copying: %s\n", tmp2);   */
       /*  no copy needed.. */
-      continue;
+    } else {
+      sprintf(stanza, "%s: %s\n\t$(INSTALL_DATA) $< $@\n", tmp2, tmp);
+      T_FileStream_writeLine(makefile, stanza);
+      
+      /* left hand side: target path, target name */
+      copyFilesLeft = pkg_appendToList(copyFilesLeft, &copyFilesLeftTail, uprv_strdup(tmp));
+      
+      /* fprintf(stderr, "##### COPY %s from %s\n", tmp, infiles->str); */
+      /* rhs:  source path */
+      copyFilesRight = pkg_appendToList(copyFilesRight, &copyFilesRightTail, uprv_strdup(infiles->str));
+      
+      /* install:  installed path */
+      copyFilesInstall = pkg_appendToList(copyFilesInstall, &copyFilesInstallTail, uprv_strdup(tmp2));
     }
-
-    sprintf(stanza, "%s: %s\n\t$(INSTALL_DATA) $< $@\n", tmp2, tmp);
-    T_FileStream_writeLine(makefile, stanza);
-
-    /* left hand side: target path, target name */
-    copyFilesLeft = pkg_appendToList(copyFilesLeft, &copyFilesLeftTail, uprv_strdup(tmp));
-
-    /* fprintf(stderr, "##### COPY %s from %s\n", tmp, infiles->str); */
-    /* rhs:  source path */
-    copyFilesRight = pkg_appendToList(copyFilesRight, &copyFilesRightTail, uprv_strdup(infiles->str));
-
-    /* install:  installed path */
-    copyFilesInstall = pkg_appendToList(copyFilesInstall, &copyFilesInstallTail, uprv_strdup(tmp2));
   }
-
+  
   if(o->nooutput || o->verbose) {
     CharList *i;
     fprintf(stdout, "# Output files: ");
@@ -155,9 +165,18 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   pkg_writeCharListWrap(makefile, copyFilesInstall, " ", " \\\n", 0);
   T_FileStream_writeLine(makefile, "\n\n");
 
+  T_FileStream_writeLine(makefile, "COPYDIRS= ");
+  pkg_writeCharListWrap(makefile, copyDirs, " ", " \\\n", 0);
+  T_FileStream_writeLine(makefile, "\n\n");
+
+
+  T_FileStream_writeLine(makefile, "INSTALLDIRS= ");
+  pkg_writeCharListWrap(makefile, installDirs, " ", " \\\n", 0);
+  T_FileStream_writeLine(makefile, "\n\n");
+
   if(copyFilesRight != NULL)
   {
-    T_FileStream_writeLine(makefile, "$(NAME): $(COPIEDDEST)\n\n");
+    T_FileStream_writeLine(makefile, "$(NAME): copy-dirs $(COPIEDDEST)\n\n");
 
     T_FileStream_writeLine(makefile, "clean:\n\t-$(RMV) $(COPIEDDEST) $(MAKEFILE)");
     T_FileStream_writeLine(makefile, "\n\n");
@@ -167,6 +186,8 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   {
     T_FileStream_writeLine(makefile, "clean:\n\n");
   }
-  T_FileStream_writeLine(makefile, "install: $(INSTALLEDDEST)\n\n");
+  T_FileStream_writeLine(makefile, "install: install-dirs $(INSTALLEDDEST)\n\n");
+  T_FileStream_writeLine(makefile, "install-dirs:\n\t$(MKINSTALLDIRS) $(INSTALLDIRS)\n\n");
+  T_FileStream_writeLine(makefile, "copy-dirs:\n\t$(MKINSTALLDIRS) $(COPYDIRS)\n\n");
 }
 
