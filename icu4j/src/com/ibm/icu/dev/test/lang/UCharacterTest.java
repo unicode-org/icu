@@ -97,7 +97,7 @@ public final class UCharacterTest extends TestFmwk
          * Check the version number here.
          */
         VersionInfo version =	UCharacter.getUnicodeVersion();
-        if(version.getMajor()<4) {
+        if(version.getMajor()<4 || version.equals(VersionInfo.getInstance(4, 0, 1))) {
             return;
         }
 
@@ -112,13 +112,9 @@ public final class UCharacterTest extends TestFmwk
          * (which checks Nd).
          *
          * This was not true in Unicode 3.2 and earlier.
-         * The following characters had decimal digit values but were No not Nd.
-         * (from DerivedNumericType-3.2.0.txt)
-00B2..00B3    ; decimal # No   [2] SUPERSCRIPT TWO..SUPERSCRIPT THREE
-00B9          ; decimal # No       SUPERSCRIPT ONE
-2070          ; decimal # No       SUPERSCRIPT ZERO
-2074..2079    ; decimal # No   [6] SUPERSCRIPT FOUR..SUPERSCRIPT NINE
-2080..2089    ; decimal # No  [10] SUBSCRIPT ZERO..SUBSCRIPT NINE
+         * Unicode 4.0 fixed discrepancies.
+         * Unicode 4.0.1 re-introduced problems in this area due to an
+         * unintentionally incomplete last-minute change.
          */
         String digitsPattern = "[:Nd:]";
         String decimalValuesPattern = "[:Numeric_Type=Decimal:]";
