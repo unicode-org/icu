@@ -538,7 +538,7 @@ ibm-949_P11A-1999 { UTR22* }
 # The following aliases tries to mirror the poor state of alias recognition
 # on these platforms.
 #
-# ibm-970 is a almost a subset of ibm-1363.
+# ibm-970 is almost a subset of ibm-1363.
 # Java, Solaris and AIX use euc-kr to also mean ksc5601.
 ibm-970_P110-1995 { UTR22* }
                         ibm-970 { IBM* }
@@ -547,6 +547,10 @@ ibm-970_P110-1995 { UTR22* }
                         ibm-eucKR { JAVA }
                         csEUCKR { IANA WINDOWS }  # x-euc-kr is also a MIME name
                         ibm-970_VPUA
+
+# ibm-971 is almost the set of DBCS mappings of ibm-970
+ibm-971_P100-1995       ibm-971 { IBM* } ibm-971_VPUA
+
 # Java, Solaris and AIX use euc-kr to also mean ksc5601, and _sometimes_ for Windows too.
 # ibm-1363 is almost a superset of ibm-970.
 ibm-1363_P11B-1998 { UTR22* }
