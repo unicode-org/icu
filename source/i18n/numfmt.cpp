@@ -71,6 +71,20 @@ static const UChar gLastResortPercentPat[] = {
 static const UChar gLastResortScientificPat[] = {
     0x23, 0x45, 0x30, 0 /* "#E0" */
 };
+
+// If the maximum base 10 exponent were 4, then the largest number would
+// be 99,999 which has 5 digits.
+static const int32_t gMaxIntegerDigits = DBL_MAX_10_EXP + 1; // Should be ~40 ? --srl
+static const int32_t gMinIntegerDigits = 127;
+
+static const UChar * const gLastResortNumberPatterns[] =
+{
+    gLastResortDecimalPat,
+    gLastResortCurrencyPat,
+    gLastResortPercentPat,
+    gLastResortScientificPat
+};
+
 // *****************************************************************************
 // class NumberFormat
 // *****************************************************************************
@@ -78,20 +92,6 @@ static const UChar gLastResortScientificPat[] = {
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(NumberFormat)
-// If the maximum base 10 exponent were 4, then the largest number would
-// be 99,999 which has 5 digits.
-const int32_t NumberFormat::fgMaxIntegerDigits = DBL_MAX_10_EXP + 1; // Should be ~40 ? --srl
-const int32_t NumberFormat::fgMinIntegerDigits = 127;
-
-const int32_t NumberFormat::fgNumberPatternsCount = 3;
-
-const UChar * const NumberFormat::fgLastResortNumberPatterns[] =
-{
-    gLastResortDecimalPat,
-    gLastResortCurrencyPat,
-    gLastResortPercentPat,
-    gLastResortScientificPat
-};
 
 #if !UCONFIG_NO_SERVICE
 // -------------------------------------
@@ -125,7 +125,7 @@ SimpleNumberFormatFactory::getSupportedIDs(int32_t &count, UErrorCode& status) c
 // default constructor
 NumberFormat::NumberFormat()
 :   fGroupingUsed(TRUE),
-    fMaxIntegerDigits(fgMaxIntegerDigits),
+    fMaxIntegerDigits(gMaxIntegerDigits),
     fMinIntegerDigits(1),
     fMaxFractionDigits(3), // invariant, >= minFractionDigits
     fMinFractionDigits(0),
@@ -706,7 +706,7 @@ int32_t NumberFormat::getMaximumIntegerDigits() const
 void
 NumberFormat::setMaximumIntegerDigits(int32_t newValue)
 {
-    fMaxIntegerDigits = uprv_max(0, uprv_min(newValue, fgMaxIntegerDigits));
+    fMaxIntegerDigits = uprv_max(0, uprv_min(newValue, gMaxIntegerDigits));
     if(fMinIntegerDigits > fMaxIntegerDigits)
         fMinIntegerDigits = fMaxIntegerDigits;
 }
@@ -728,7 +728,7 @@ NumberFormat::getMinimumIntegerDigits() const
 void
 NumberFormat::setMinimumIntegerDigits(int32_t newValue)
 {
-    fMinIntegerDigits = uprv_max(0, uprv_min(newValue, fgMinIntegerDigits));
+    fMinIntegerDigits = uprv_max(0, uprv_min(newValue, gMinIntegerDigits));
     if(fMinIntegerDigits > fMaxIntegerDigits)
         fMaxIntegerDigits = fMinIntegerDigits;
 }
@@ -750,7 +750,7 @@ NumberFormat::getMaximumFractionDigits() const
 void
 NumberFormat::setMaximumFractionDigits(int32_t newValue)
 {
-    fMaxFractionDigits = uprv_max(0, uprv_min(newValue, fgMaxIntegerDigits));
+    fMaxFractionDigits = uprv_max(0, uprv_min(newValue, gMaxIntegerDigits));
     if(fMaxFractionDigits < fMinFractionDigits)
         fMinFractionDigits = fMaxFractionDigits;
 }
@@ -772,7 +772,7 @@ NumberFormat::getMinimumFractionDigits() const
 void
 NumberFormat::setMinimumFractionDigits(int32_t newValue)
 {
-    fMinFractionDigits = uprv_max(0, uprv_min(newValue, fgMinIntegerDigits));
+    fMinFractionDigits = uprv_max(0, uprv_min(newValue, gMinIntegerDigits));
     if (fMaxFractionDigits < fMinFractionDigits)
         fMaxFractionDigits = fMinFractionDigits;
 }
@@ -838,12 +838,12 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         symbolsToAdopt = new DecimalFormatSymbols(status);
 
         // Creates a DecimalFormat instance with the last resort number patterns.
-        pattern.setTo(TRUE, fgLastResortNumberPatterns[style], -1);
+        pattern.setTo(TRUE, gLastResortNumberPatterns[style], -1);
     }
     else {
         // If not all the styled patterns exists for the NumberFormat in this locale,
         // sets the status code to failure and returns nil.
-        if (ures_getSize(numberPatterns) < fgNumberPatternsCount) {
+        if (ures_getSize(numberPatterns) < (int32_t)(sizeof(gLastResortNumberPatterns)/sizeof(gLastResortNumberPatterns[0]))) {
             status = U_INVALID_FORMAT_ERROR;
             goto cleanup;
         }
