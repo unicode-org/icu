@@ -405,8 +405,8 @@ static void DataDrivenScanf(void) {
                     uBufferLenReturned = u_sscanf_u(argument, format, &dbl);
                     //uFileBufferLenReturned = u_fscanf_u(testFile, format, dbl);
                     if (dbl != expectedDbl) {
-                        log_err("error in scanf test case Got: %f Exp: %f\n",
-                                dbl, expectedDbl);
+                        log_err("error in scanf test case[%d] Got: %f Exp: %f\n",
+                                i, dbl, expectedDbl);
                     }
                     break;
                 case 0x31:  // '1' int8_t
@@ -414,8 +414,8 @@ static void DataDrivenScanf(void) {
                     uBufferLenReturned = u_sscanf_u(argument, format, &i8);
                     //uFileBufferLenReturned = u_fscanf_u(testFile, format, i8);
                     if (i8 != expected8) {
-                        log_err("error in scanf test case Got: %02X Exp: %02X\n",
-                                i8, expected8);
+                        log_err("error in scanf test case[%d] Got: %02X Exp: %02X\n",
+                                i, i8, expected8);
                     }
                     break;
                 case 0x32:  // '2' int16_t
@@ -423,8 +423,8 @@ static void DataDrivenScanf(void) {
                     uBufferLenReturned = u_sscanf_u(argument, format, &i16);
                     //uFileBufferLenReturned = u_fscanf_u(testFile, format, i16);
                     if (i16 != expected16) {
-                        log_err("error in scanf test case Got: %04X Exp: %04X\n",
-                                i16, expected16);
+                        log_err("error in scanf test case[%d] Got: %04X Exp: %04X\n",
+                                i, i16, expected16);
                     }
                     break;
                 case 0x34:  // '4' int32_t
@@ -432,8 +432,8 @@ static void DataDrivenScanf(void) {
                     uBufferLenReturned = u_sscanf_u(argument, format, &i32);
                     //uFileBufferLenReturned = u_fscanf_u(testFile, format, i32);
                     if (i32 != expected32) {
-                        log_err("error in scanf test case Got: %08X Exp: %08X\n",
-                                i32, expected32);
+                        log_err("error in scanf test case[%d] Got: %08X Exp: %08X\n",
+                                i, i32, expected32);
                     }
                     break;
                 case 0x38:  // '8' int64_t
