@@ -1906,6 +1906,7 @@ private:
   friend class UnicodeStringStreamer;
   friend class UnicodeConverterCPP;
   friend U_COMMON_API ostream &operator<<(ostream& stream, const UnicodeString& s);
+  friend class StringCharacterIterator;
 
   /*
    * The following are all the class fields that are stored
@@ -2439,7 +2440,7 @@ UnicodeString::char32At(UTextOffset offset) const
 {
   if((uint32_t)offset < (uint32_t)fLength) {
     UChar32 c;
-    UTF_GET_CHAR(fArray, offset, fLength, c);
+    UTF_GET_CHAR(fArray, 0, offset, fLength, c);
     return c;
   } else {
     return kInvalidUChar;
@@ -2449,7 +2450,7 @@ UnicodeString::char32At(UTextOffset offset) const
 inline UTextOffset
 UnicodeString::getCharStart(UTextOffset offset) {
   if((uint32_t)offset < (uint32_t)fLength) {
-    UTF_SET_CHAR_START(fArray, offset);
+    UTF_SET_CHAR_START(fArray, 0, offset);
     return offset;
   } else {
     return 0;
@@ -2459,7 +2460,7 @@ UnicodeString::getCharStart(UTextOffset offset) {
 inline UTextOffset
 UnicodeString::getCharLimit(UTextOffset offset) {
   if((uint32_t)offset < (uint32_t)fLength) {
-    UTF_SET_CHAR_LIMIT(fArray, offset, fLength);
+    UTF_SET_CHAR_LIMIT(fArray, 0, offset, fLength);
     return offset;
   } else {
     return fLength;
