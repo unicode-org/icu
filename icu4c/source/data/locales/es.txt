@@ -961,13 +961,13 @@ es {
                         "s\u00E1b",
                     }
                     narrow{
-		                "D"
-		                "L"
-		                "M"
-		                "M"
-		                "J"
-		                "V"
-		                "S"
+		                "D",
+		                "L",
+		                "M",
+		                "M",
+		                "J",
+		                "V",
+		                "S",
                     }
                     wide{
                         "domingo",

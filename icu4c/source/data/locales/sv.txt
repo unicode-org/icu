@@ -257,11 +257,6 @@ sv {
         JPY { "\u00A5","Japansk yen" }
         SEK { "kr", "Svensk krona" }
     }
-    Eras { 
-        "f.Kr.",
-        "e.Kr.",
-    }
-
     Languages {
         aa  {"afar"}
         ab  {"abkhaziska"}
@@ -874,6 +869,10 @@ sv {
                         "l\u00F6rdag",
                     }
                 }
+            }
+            eras { 
+                "f.Kr.",
+                "e.Kr.",
             }
             monthNames{
                 format{
