@@ -708,7 +708,7 @@ static char* u_bottomNBytesOfDouble(double* d, int n)
   Based on original code by Carl Brown <cbrown@xnetinc.com>
 */
 
-static LONG openTZRegKey(HKEY* hkey, const char* tziname, int Wintype);
+static LONG openTZRegKey(HKEY* hkey, const char* winid, int winType);
 
 /**
  * Layout of the binary registry data under the "TZI" key.
@@ -716,7 +716,7 @@ static LONG openTZRegKey(HKEY* hkey, const char* tziname, int Wintype);
 typedef struct {
    LONG       Bias;
    LONG       StandardBias;
-   LONG       DaylightBias;
+   LONG       DaylightBias; /* Tweaked by GetTimeZoneInformation */
    SYSTEMTIME StandardDate;
    SYSTEMTIME DaylightDate;
 } TZI;
@@ -740,9 +740,11 @@ typedef struct {
  * which is not present on Windows 9x/Me.
  *
  * Zones that are not unique under Offset+Rules should be grouped
- * together for efficiency (see code below).  In addition, rules must
- * be grouped so that all zones of a single offset are together.  Any
- * other organization is not required.
+ * together for efficiency (see code below).  In addition, rules MUST
+ * be grouped so that all zones of a single offset are together.
+ *
+ * Comments list S(tandard) or D(aylight), as declared by Windows,
+ * followed by the display name (data from Windows XP).
  *
  * NOTE: Etc/GMT+12 is CORRECT for offset GMT-12:00.  Consult
  * documentation elsewhere for an explanation.
@@ -893,7 +895,7 @@ static const char* STD_REGKEY = "Std";
 
 /**
  * HKLM subkeys used to probe for the flavor of Windows.  Note that we
- * specifically check for the "GMT" zone sub key; this is present on
+ * specifically check for the "GMT" zone subkey; this is present on
  * NT, but on XP has become "GMT Standard Time".  We need to
  * discriminate between these cases.
  */
@@ -995,6 +997,12 @@ static const char* detectWindowsTimeZone() {
         }
         RegCloseKey(hkey);
         if (result == ERROR_SUCCESS) {
+            /* Assume that offsets are grouped together, and bail out
+               when we've scanned everything with a matching
+               offset. */
+            if (firstMatch >= 0 && tziKey.Bias != tziReg.Bias) {
+                break;
+            }
             /* Windows alters the DaylightBias in some situations.
                Using the bias and the rules suffices, so overwrite
                these unreliable fields. */
@@ -1006,12 +1014,6 @@ static const char* detectWindowsTimeZone() {
                     firstMatch = j;
                 }
                 lastMatch = j;
-            }
-            /* Assume that offsets are grouped together, and bail out
-               when we've scanned everything with a matching
-               offset. */
-            if (firstMatch >= 0 && tziKey.Bias != tziReg.Bias) {
-                break;
             }
         }
     }
@@ -1063,10 +1065,10 @@ static const char* detectWindowsTimeZone() {
                                      &stdRegNameSize);
         }
         RegCloseKey(hkey);
-        if (result == ERROR_SUCCESS) {
-            if (memcmp(stdName, stdRegName, stdNameSize) == 0) {
-                break;
-            }
+        if (result == ERROR_SUCCESS &&
+            stdRegNameSize == stdNameSize &&
+            memcmp(stdName, stdRegName, stdNameSize) == 0) {
+            break;
         }
     }
 
