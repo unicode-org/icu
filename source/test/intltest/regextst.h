@@ -21,7 +21,11 @@ public:
 
     virtual void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL );
 
-    virtual void TestRegexAPI();
+    virtual void API_Match();
+    virtual void API_Pattern();
+    virtual void API_Replace();
+    virtual void Basic();
+
     virtual UBool doRegexLMTest(char *pat, char *text, UBool looking, UBool match, int line);
 
 };

@@ -1830,6 +1830,12 @@ _uBrkErrorName[U_BRK_ERROR_LIMIT - U_BRK_ERROR_START] = {
     "U_BRK_UNDEFINED_VARIABLE",
 };
 
+static const char * const
+_uRegexErrorName[U_REGEX_ERROR_LIMIT - U_REGEX_ERROR_START] = {
+    "U_REGEX_ERROR_START",
+    "U_REGEX_INTERNAL_ERROR"
+    "U_REGEX_INVALID_STATE"
+};
 
 U_CAPI const char * U_EXPORT2
 u_errorName(UErrorCode code) {
@@ -1843,6 +1849,8 @@ u_errorName(UErrorCode code) {
         return _uFmtErrorName[code - U_FMT_PARSE_ERROR_START];
     } else if (U_BRK_ERROR_START <= code  && code < U_BRK_ERROR_LIMIT){
         return _uBrkErrorName[code - U_BRK_ERROR_START];
+    } else if (U_REGEX_ERROR_START <= code && code < U_REGEX_ERROR_LIMIT) {
+        return _uBrkErrorName[code - U_REGEX_ERROR_START];
     } else {
         return "[BOGUS UErrorCode]";
     }

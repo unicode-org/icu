@@ -141,7 +141,7 @@ RegexCompile::~RegexCompile() {
 //
 //---------------------------------------------------------------------------------
 void    RegexCompile::compile(                    
-                         RegexPattern &rxp,          // User level patter object to receive
+                         RegexPattern &rxp,          // User level pattern object to receive
                                                      //    the compiled pattern.
                          const UnicodeString &pat,   // Source pat to be compiled.
                          UParseError &pp,            // Error position info

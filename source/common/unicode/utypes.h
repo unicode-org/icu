@@ -482,7 +482,7 @@ typedef enum UErrorCode {
     U_FMT_PARSE_ERROR_LIMIT,
    
     /* 
-     * the error code range 0x10200 0x10300 are reserved for Break Iterator related error
+     * the error code range 0x10200 0x102ff are reserved for Break Iterator related error
      */
     U_BRK_ERROR_START=0x10200,
     U_BRK_INTERNAL_ERROR,
@@ -496,6 +496,14 @@ typedef enum UErrorCode {
     U_BRK_NEW_LINE_IN_QUOTED_STRING,
     U_BRK_UNDEFINED_VARIABLE,
     U_BRK_ERROR_LIMIT,
+
+    /*
+     * The error codes in the range 0x10300-0x103ff are reserved for regular expression related errrs
+     */
+     U_REGEX_ERROR_START=0x10300,
+     U_REGEX_INTERNAL_ERROR,
+     U_REGEX_INVALID_STATE,
+     U_REGEX_ERROR_LIMIT,
 
     U_ERROR_LIMIT=U_BRK_ERROR_LIMIT /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
 } UErrorCode;
