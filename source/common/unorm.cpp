@@ -448,13 +448,9 @@ _getExtraData(uint32_t norm32) {
 static const UnicodeSet *
 internalGetNXHangul(UErrorCode &errorCode) {
     /* internal function, does not check for incoming U_FAILURE */
-
     UBool isCached;
 
-    /* do this because double-checked locking is broken */
-    umtx_lock(NULL);
-    isCached=nxCache[UNORM_NX_HANGUL]!=NULL;
-    umtx_unlock(NULL);
+    UMTX_CHECK(NULL, (UBool)(nxCache[UNORM_NX_HANGUL]!=NULL), isCached);
 
     if(!isCached) {
         UnicodeSet *set=new UnicodeSet(0xac00, 0xd7a3);
@@ -476,100 +472,16 @@ internalGetNXHangul(UErrorCode &errorCode) {
     return nxCache[UNORM_NX_HANGUL];
 }
 
+/* get and set an exclusion set from a UnicodeSet pattern */
 static const UnicodeSet *
-internalGetNXCJKCompat(UErrorCode &errorCode) {
+internalGetNXFromPattern(int32_t options, const char *pattern, UErrorCode &errorCode) {
     /* internal function, does not check for incoming U_FAILURE */
-
     UBool isCached;
 
-    /* do this because double-checked locking is broken */
-    umtx_lock(NULL);
-    isCached=nxCache[UNORM_NX_CJK_COMPAT]!=NULL;
-    umtx_unlock(NULL);
+    UMTX_CHECK(NULL, (UBool)(nxCache[options]!=NULL), isCached);
 
     if(!isCached) {
-        /* build a set from [CJK Ideographs]&[has canonical decomposition] */
-        UnicodeSet *set, *hasDecomp;
-
-        set=new UnicodeSet(UNICODE_STRING("[:Ideographic:]", 15), errorCode);
-        if(set==NULL) {
-            errorCode=U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
-        }
-        if(U_FAILURE(errorCode)) {
-            delete set;
-            return NULL;
-        }
-
-        /* start with an empty set for [has canonical decomposition] */
-        hasDecomp=new UnicodeSet();
-        if(hasDecomp==NULL) {
-            delete set;
-            errorCode=U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
-        }
-
-        /* iterate over all ideographs and remember which canonically decompose */
-        UnicodeSetIterator it(*set);
-        UChar32 start, end;
-        uint32_t norm32;
-
-        while(it.nextRange() && !it.isString()) {
-            start=it.getCodepoint();
-            end=it.getCodepointEnd();
-            while(start<=end) {
-                UTRIE_GET32(&normTrie, start, norm32);
-                if(norm32&_NORM_QC_NFD) {
-                    hasDecomp->add(start);
-                }
-                ++start;
-            }
-        }
-
-        /* hasDecomp now contains all ideographs that decompose canonically */
-
-        umtx_lock(NULL);
-        if(nxCache[UNORM_NX_CJK_COMPAT]==NULL) {
-            nxCache[UNORM_NX_CJK_COMPAT]=hasDecomp;
-            hasDecomp=NULL;
-        }
-        umtx_unlock(NULL);
-
-        delete hasDecomp;
-        delete set;
-    }
-
-    return nxCache[UNORM_NX_CJK_COMPAT];
-}
-
-static const UnicodeSet *
-internalGetNXUnicode(uint32_t options, UErrorCode &errorCode) {
-    /* internal function, does not check for incoming U_FAILURE */
-    options&=_NORM_OPTIONS_UNICODE_MASK;
-    if(options==0) {
-        return NULL;
-    }
-
-    UBool isCached;
-
-    /* do this because double-checked locking is broken */
-    umtx_lock(NULL);
-    isCached=nxCache[options]!=NULL;
-    umtx_unlock(NULL);
-
-    if(!isCached) {
-        /* build a set with all code points that were not designated by the specified Unicode version */
-        UnicodeSet *set;
-
-        switch(options) {
-        case UNORM_UNICODE_3_2:
-            set=new UnicodeSet(UNICODE_STRING("[:^Age=3.2:]", 12), errorCode);
-            break;
-        default:
-            errorCode=U_ILLEGAL_ARGUMENT_ERROR;
-            return NULL;
-        }
-
+        UnicodeSet *set=new UnicodeSet(UnicodeString(pattern, -1, US_INV), errorCode);
         if(set==NULL) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             return NULL;
@@ -592,6 +504,36 @@ internalGetNXUnicode(uint32_t options, UErrorCode &errorCode) {
     return nxCache[options];
 }
 
+static const UnicodeSet *
+internalGetNXCJKCompat(UErrorCode &errorCode) {
+    /* build a set from [CJK Ideographs]&[has canonical decomposition] */
+    return internalGetNXFromPattern(
+                UNORM_NX_CJK_COMPAT,
+                "[:Ideographic:]&[:NFD_QC=No:]",
+                errorCode);
+}
+
+static const UnicodeSet *
+internalGetNXUnicode(uint32_t options, UErrorCode &errorCode) {
+    /* internal function, does not check for incoming U_FAILURE */
+    const char *pattern;
+
+    options&=_NORM_OPTIONS_UNICODE_MASK;
+    switch(options) {
+    case 0:
+        return NULL;
+    case UNORM_UNICODE_3_2:
+        pattern="[:^Age=3.2:]";
+        break;
+    default:
+        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
+    /* build a set with all code points that were not designated by the specified Unicode version */
+    return internalGetNXFromPattern(options, pattern, errorCode);
+}
+
 /* Get a decomposition exclusion set. The data must be loaded. */
 static const UnicodeSet *
 internalGetNX(int32_t options, UErrorCode &errorCode) {
@@ -599,10 +541,7 @@ internalGetNX(int32_t options, UErrorCode &errorCode) {
 
     UBool isCached;
 
-    /* do this because double-checked locking is broken */
-    umtx_lock(NULL);
-    isCached=nxCache[options]!=NULL;
-    umtx_unlock(NULL);
+    UMTX_CHECK(NULL, (UBool)(nxCache[options]!=NULL), isCached);
 
     if(!isCached) {
         /* return basic sets */
