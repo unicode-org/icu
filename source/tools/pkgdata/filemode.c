@@ -56,18 +56,23 @@ install: all
 void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 {
   char tmp[1024], tmp2[1024];
+  char stanza[3072];
+
   CharList *tail = NULL, *infiles = NULL;
 
   CharList *copyFilesLeft = NULL;  /* left hand side of the copy rule*/
   CharList *copyFilesRight = NULL; /* rhs "" "" */
+  CharList *copyFilesInstall = NULL;
 
   CharList *copyFilesLeftTail = NULL;
   CharList *copyFilesRightTail = NULL;
+  CharList *copyFilesInstallTail = NULL;
 
   CharList *copyCommands = NULL;
 
   const char *baseName;
 
+  T_FileStream_writeLine(makefile, "\n.PHONY: $(NAME)\n\nall: $(NAME)\n\ninstall: $(INSTALLEDDEST)\n\n");
 
   /* Dont' copy files already in tmp */
   for(infiles = o->filePaths;infiles;infiles = infiles->next)
@@ -87,6 +92,9 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
       continue;
     }
 
+    sprintf(stanza, "%s: %s\n\t$(INSTALL_DATA) $< $@\n", tmp, infiles->str);
+    T_FileStream_writeLine(makefile, stanza);
+
     uprv_strcpy(tmp2, o->targetDir);
     uprv_strcat(tmp2, U_FILE_SEP_STRING);
     uprv_strcat(tmp2, U_FILE_SEP_STRING);
@@ -99,6 +107,19 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
       continue;
     }
 
+    uprv_strcpy(tmp2, "$(INSTALLTO)" U_FILE_SEP_STRING);
+    uprv_strcat(tmp2, baseName);
+
+    if(strcmp(tmp2, infiles->str) == 0)
+    {
+      /* fprintf(stderr, "### NOT copying: %s\n", tmp2);  */
+      /*  no copy needed.. */
+      continue;
+    }
+
+    sprintf(stanza, "%s: %s\n\t$(INSTALL_DATA) $< $@\n", tmp2, tmp);
+    T_FileStream_writeLine(makefile, stanza);
+
     /* left hand side: target path, target name */
     copyFilesLeft = pkg_appendToList(copyFilesLeft, &copyFilesLeftTail, uprv_strdup(tmp));
 
@@ -106,6 +127,8 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     /* rhs:  source path */
     copyFilesRight = pkg_appendToList(copyFilesRight, &copyFilesRightTail, uprv_strdup(infiles->str));
 
+    /* install:  installed path */
+    copyFilesInstall = pkg_appendToList(copyFilesInstall, &copyFilesInstallTail, uprv_strdup(tmp2));
   }
 
   if(o->nooutput || o->verbose) {
@@ -124,26 +147,17 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
   /* these are also the files to delete */
   T_FileStream_writeLine(makefile, "COPIEDDEST= ");
-  pkg_writeCharListWrap(makefile, copyFilesLeft, " ", " \\\n",1);
+  pkg_writeCharListWrap(makefile, copyFilesLeft, " ", " \\\n", 0);
   T_FileStream_writeLine(makefile, "\n");
 
 
-  T_FileStream_writeLine(makefile, "\n.PHONY: $(NAME)\n");
-  T_FileStream_writeLine(makefile, "all: $(NAME)\n\n");
-
-  /* commands for the make rule */
-  tail = NULL;
-  copyCommands =  pkg_appendToList(copyCommands, &tail, uprv_strdup
-				   ("@for file in $?; do \\\n"
-				    "\techo $(INSTALL_DATA) $$file $(TARGETDIR) ; \\\n"
-				    "\t$(INSTALL_DATA) $$file $(TARGETDIR) ; \\\n"
-				    "done;\n\n"));
+  T_FileStream_writeLine(makefile, "INSTALLEDDEST= ");
+  pkg_writeCharListWrap(makefile, copyFilesInstall, " ", " \\\n", 0);
+  T_FileStream_writeLine(makefile, "\n");
 
   if(copyFilesRight != NULL)
   {
-
-    pkg_mak_writeStanza(makefile, o, "$(NAME)", copyFilesRight,
-                        copyCommands);
+    T_FileStream_writeLine(makefile, "$(NAME): $(COPIEDDEST)\n\n");
 
     T_FileStream_writeLine(makefile, "clean:\n\t-$(RMV) $(COPIEDDEST) $(MAKEFILE)");
     T_FileStream_writeLine(makefile, "\n\n");
@@ -153,13 +167,5 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   {
     T_FileStream_writeLine(makefile, "clean:\n\n");
   }
-
-  sprintf(tmp, "install: \n"
-          "\t@for file in $(DATAFILEPATHS) ; do \\\n"
-	  "\t\techo $(INSTALL_DATA) $$file $$INSTALLTO; \\\n"
-	  "\t\t$(INSTALL_DATA) $$file $$INSTALLTO; \\\n"
-	  "\tdone;\n\n");
-
-
-  T_FileStream_writeLine(makefile, tmp);
 }
+
