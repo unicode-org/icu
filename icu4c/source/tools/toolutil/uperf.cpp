@@ -101,12 +101,10 @@ UPerfTest::UPerfTest(int32_t argc, const char* argv[], UErrorCode& status){
     }
     if(options[ITERATIONS].doesOccur) {
         iterations = atoi(options[ITERATIONS].value);
-        time =0;
     }
  
     if(options[TIME].doesOccur) {
         time = atoi(options[TIME].value);
-        iterations = 0;
     }
     
     if(options[LINE_MODE].doesOccur) {
