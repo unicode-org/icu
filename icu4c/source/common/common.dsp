@@ -1213,6 +1213,10 @@ SOURCE=.\utracimp.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\utypes.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\utypes.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
