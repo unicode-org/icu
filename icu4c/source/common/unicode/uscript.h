@@ -19,9 +19,7 @@
 #include "ures.h"
 #include "cstring.h"
 
-typedef enum UScriptCode UScriptCode;
-
-enum UScriptCode {
+typedef enum UScriptCode {
       U_INVALID_CODE = -1,
       U_COMMON      =  0 , /* Zyyy */
       U_INHERITED   =  1,  /* Qaai */
@@ -66,7 +64,7 @@ enum UScriptCode {
       U_UCAS        = 40,  /* Cans */
       U_YI          = 41,   /* Yiii */
       U_SCRIPT_CODE_LIMIT = 43 
-  };
+} UScriptCode;
 
 
 
