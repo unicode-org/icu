@@ -66,15 +66,15 @@ $(builddir)/build-stamp:
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f $(builddir)/build-stamp $(builddir)/configure-stamp
+	 $(RM) $(builddir)/build-stamp $(builddir)/configure-stamp
 
 	# Add here commands to clean up after the build process.
-	-$(MAKE) -C $(srcdir) distclean
-
-	rm -f $(addprefix debian/,$(DEBIAN_FILES))
+	-$(MAKE) -C $(builddir) distclean
+	-$(RM) `find $(builddir)/samples $(builddir)/test -name Makefile`
+	$(RM) $(addprefix debian/,$(DEBIAN_FILES))
 	dh_clean
 
-	test $(builddir) != $(srcdir) && rmdir $(builddir)
+	test $(builddir) != $(srcdir) && rmdir `find $(builddir) -type d -print`
 
 install: build
 	dh_testdir
@@ -150,7 +150,7 @@ binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
 	    $(srcdir)/../data/*.brk \
 	    debian/icu-i18ndata/$(datasrcdir)
 	cd debian/icu-i18ndata/$(datasrcdir) && \
-	    rm -f convrtrs.txt UnicodeData*.txt ucname.txt
+	    $(RM) convrtrs.txt UnicodeData*.txt ucname.txt
 	#
 	# do a bit of cleanup
 	#
