@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/WriteCharts.java,v $
- * $Date: 2001/11/13 02:50:11 $
- * $Revision: 1.6 $
+ * $Date: 2001/11/13 20:03:51 $
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -21,9 +21,11 @@ import java.io.*;
 
 public class WriteCharts {
     public static void main(String[] args) throws IOException {
-        if (false) testSet();
+        if (false) {
+            printSet("[[\u0000-\u007E \u30A1-\u30FC \uFF61-\uFF9F\u3001\u3002][:Katakana:][:Mark:]]");
+        }
         String testSet = "";
-        if (args.length == 0) args = all;
+        if (args.length == 0) args = getAllScripts();
         for (int i = 0; i < args.length; ++i) {
     // Enumeration enum = Transliterator.getAvailableIDs();
             if (args[i].startsWith("[")) {
@@ -35,8 +37,9 @@ public class WriteCharts {
         }
     }
     
-    public static void testSet() {
-        UnicodeSet s = new UnicodeSet("[[\u0000-\u007E \u30A1-\u30FC \uFF61-\uFF9F\u3001\u3002][:Katakana:][:Mark:]]");
+    public static void printSet(String source) {
+        UnicodeSet s = new UnicodeSet(source);
+        System.out.println("Printout for '" + source + "'");
         int count = s.getRangeCount();
         for (int i = 0; i < count; ++i) {
             int start = s.getRangeStart(i);
@@ -45,14 +48,63 @@ public class WriteCharts {
         }
     }
     
-    static final String[] all = {
-        "Cyrillic-Latin", "Greek-Latin", 
-        "el-Latin",
-        "Devanagari-Tamil", "Devanagari-Latin", 
-        "Katakana-Latin", "Hiragana-Latin", "Hangul-Latin"
+    public static String[] getAllScripts() {
+        Set set = new TreeSet();
+        int scripts[];
+        Enumeration sources = Transliterator.getAvailableSources();
+        while(sources.hasMoreElements()) {
+            String source = (String) sources.nextElement();
+            scripts = UScript.getCode(source);
+            int sourceScript = scripts[0];
+            if (sourceScript == UScript.INVALID_CODE) {
+                System.out.println("[Skipping " + source + "]");
+                continue;
+            }
+            System.out.println("Source: " + source + ";\tScripts: " + showScripts(scripts));
+            Enumeration targets = Transliterator.getAvailableTargets(source);
+            while(targets.hasMoreElements()) {
+                String target = (String) targets.nextElement();
+                scripts = UScript.getCode(target);
+                int targetScript = scripts[0];
+                if (targetScript == UScript.INVALID_CODE
+                        || targetScript < sourceScript) {
+                    // skip doing both directions
+                    System.out.println("[Skipping '" + source + "-" + target + "']");
+                    continue;
+                }
+                System.out.println("\tTarget: " + target + ";\tScripts: " + showScripts(scripts));
+                Enumeration variants = Transliterator.getAvailableVariants(source, target);
+                while(variants.hasMoreElements()) {
+                    String variant = (String) variants.nextElement();
+                    String id = source + "-" + target;
+                    if (variant.length() != 0) {
+                        id += "/" + variant;
+                        if (true) {
+                            System.out.println("SKIPPING VARIANT, SINCE IT CURRENTLY BREAKS!\t" + id);
+                            continue;
+                        }
+                    }
+                    System.out.println("\t\t\t\tAdding: '" + id + "'");
+                    set.add(id);
+                }
+            }
+        }
+        String[] results = new String[set.size()];
+        set.toArray(results);
+        return results;
     };
     
+    public static String showScripts(int[] scripts) {
+        StringBuffer results = new StringBuffer();
+        for (int i = 0; i < scripts.length; ++i) {
+            if (i != 0) results.append(", ");
+            results.append(UScript.getName(scripts[i]));
+        }
+        return results.toString();
+    }
+    
     public static void print(String testSet, String rawId) throws IOException {
+        System.out.println("Processing " + rawId);
         Transliterator t = Transliterator.getInstance(rawId);
         String id = t.getID();
         
@@ -73,11 +125,15 @@ public class WriteCharts {
                 return;
             } else {
                 testSet = "[:" + source + ":]";
+                if (source.equalsIgnoreCase("katakana")) {
+                    testSet = "[" + testSet + "\u30FC]";
+                    printSet(testSet);
+                }
             }
         }
         UnicodeSet sourceSet = new UnicodeSet(testSet);
 
-        // check that the source is a script
+        // check that the target is a script
         int[] scripts = UScript.getCode(target);
         if (scripts.length != 1) {
             target = "[:Latin:]";
@@ -88,7 +144,7 @@ public class WriteCharts {
         
         Transliterator inverse = t.getInverse();
         
-        Transliterator hex = Transliterator.getInstance("Any-Hex");
+        //Transliterator hex = Transliterator.getInstance("Any-Hex");
         
                 
         // iterate through script
@@ -133,11 +189,40 @@ public class WriteCharts {
                     
                 map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ss, Normalizer.DECOMP_COMPAT, 0))
                         + "\u0000" + ss, 
-                    "<tr><td>" + ss + "<br><tt>" + hex.transliterate(ss) + "</tt></td><td>"
-                        + ts + "<br><tt>" + hex.transliterate(ts) + "</tt></td><td>"
-                        + rt + "<br><tt>" + hex.transliterate(rt) + "</tt></td></tr>" );
+                    "<td class='s'>" + ss + "<br><tt>" + hex(ss)
+                        + "</tt></td><td class='t'>" + ts + "<br><tt>" + hex(ts)
+                        + "</tt></td><td class='r'>" + rt + "<br><tt>" + hex(rt) + "</tt></td>" );
+                
+                // Check Duals
+                /*
+                int maxDual = 200;
+              dual:
+                for (int i2 = 0; i2 < count; ++i2) {
+                    int end2 = sourceSet.getRangeEnd(i2);
+                    for (int j2 = sourceSet.getRangeStart(i2); j2 <= end; ++j2) {
+                        String ss2 = UTF16.valueOf(j2);
+                        String ts2 = t.transliterate(ss2);
+                        String rt2 = inverse.transliterate(ts2);
+                        
+                        String ss12 = ss + ss2;
+                        String ts12 = t.transliterate(ss + ss12);
+                        String rt12 = inverse.transliterate(ts12);
+                        if (ts12.equals(ts + ts2) && rt12.equals(rt + rt2)) continue;   
+                        if (--maxDual < 0) break dual;
+                        
+                        // transliteration of whole differs from that of parts
+                        group = 0x100;
+                        map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ss12, Normalizer.DECOMP_COMPAT, 0))
+                                + "\u0000" + ss12, 
+                            "<td class='s'>" + ss12 + "<br><tt>" + hex(ss12)
+                                + "</tt></td><td class='t'>" + ts12 + "<br><tt>" + hex(ts12)
+                                + "</tt></td><td class='r'>" + rt12 + "<br><tt>" + hex(rt12) + "</tt></td>" );
+                    }
+                }
+                */
             }
         }
+        
         
         leftOverSet.remove(0x0100,0x02FF); // remove extended & IPA
         
@@ -161,13 +246,14 @@ public class WriteCharts {
                 }
                     
                 map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ts, Normalizer.DECOMP_COMPAT, 0)) + ts, 
-                    "<tr><td>-</td><td>" + ts + "<br><tt>" + hex.transliterate(ts) + "</tt></td><td>"
-                    + rt + "<br><tt>" + hex.transliterate(rt) + "</tt></td></tr>");
+                    "<td class='s'>-</td><td class='t'>" + ts + "<br><tt>" + hex(ts)
+                    + "</tt></td><td class='r'>"
+                    + rt + "<br><tt>" + hex(rt) + "</tt></td>");
             }
         }
 
         // make file name and open
-        File f = new File("chart_" + id.replace('/', '_') + ".html");
+        File f = new File("transliteration/chart_" + id.replace('/', '_') + ".html");
         String filename = f.getCanonicalFile().toString();
         PrintWriter out = new PrintWriter(
             new OutputStreamWriter(
@@ -183,41 +269,81 @@ public class WriteCharts {
             out.println("<link rel='stylesheet' href='http://www.unicode.org/charts/uca/charts.css' type='text/css'>");
             
             out.println("<BODY>");
-            String tableHeader = "<p><table border='1'><tr><th>Source</th><th>Target</th><th>Return</th></tr>";
+            out.println("<h1>Transliteration Samples for '" + Transliterator.getDisplayName(id) + "'</h1>");
+            out.println("<p>This file illustrates the transliterations of " + Transliterator.getDisplayName(id) + ".");
+            out.println("The samples are mechanically generated, and only include single characters");
+            out.println("from the source set. Thus it will <i>not</i> contain examples where the transliteration");
+            out.println("depends on the context around the character. For a more detailed -- and interactive -- example, see the");
+            out.println("<a href='http://oss.software.ibm.com/cgi-bin/icu/tr'>Transliteration Demo</a></p><hr>");
+            
+            // set up the headers
+            int columnCount = 3;
+            String headerBase = "<th>Source</th><th>Target</th><th>Return</th>";
+            String headers = headerBase;
+            for (int i = columnCount - 1; i > 0; --i) headers += headerBase;
+            
+            String tableHeader = "<p><table border='1'><tr>" + headers + "</tr>";
             String tableFooter = "</table></p>";
-            out.println("<h1>Round Trip</h1>");
+            out.println("<h2>Round Trip</h2>");
             out.println(tableHeader);
             
             Iterator it = map.keySet().iterator();
             char lastGroup = 0;
             count = 0;
+            int column = 0;
             while (it.hasNext()) {
                 String key = (String) it.next();
                 char group = key.charAt(0);
                 if (group != lastGroup || count++ > 50) {
                     lastGroup = group;
                     count = 0;
+                    if (column != 0) {
+                        out.println("</tr>");
+                        column = 0;
+                    }
                     out.println(tableFooter);
                     
                     String title = "";
-                    if ((group & 0x80) != 0) out.println("<hr><h1>Completeness</h1>");
-                    else out.println("<hr><h1>Round Trip</h1>");
-                    if ((group & 16) != 0) out.println("<h2>Errors: Contains Private Use Characters</h2>");
-                    if ((group & 8) != 0) out.println("<h2>Possible Errors: Return not in Source Set</h2>");
-                    if ((group & 4) != 0) out.println("<h2>Errors: Return not equal to Source</h2>");
-                    if ((group & 2) != 0) out.println("<h2>Errors: Return not in Source Set</h2>");
-                    if ((group & 1) != 0) out.println("<h2>Errors: Target not in Target Set</h2>");
+                    if ((group & 0x100) != 0) out.println("<hr><h2>Duals</h2>");
+                    else if ((group & 0x80) != 0) out.println("<hr><h2>Completeness</h2>");
+                    else out.println("<hr><h2>Round Trip</h2>");
+                    if ((group & 16) != 0) out.println("<h3>Errors: Contains Private Use Characters</h3>");
+                    if ((group & 8) != 0) out.println("<h3>Possible Errors: Return not in Source Set</h3>");
+                    if ((group & 4) != 0) out.println("<h3>One-Way Mapping: Return not equal to Source</h3>");
+                    if ((group & 2) != 0) out.println("<h3>Errors: Return not in Source Set</h3>");
+                    if ((group & 1) != 0) out.println("<h3>Errors: Target not in Target Set</h3>");
                                         
                     out.println(tableHeader);
+                    column = 0;
                 }
                 String value = (String) map.get(key);
+                if (column++ == 0) out.print("<tr>");
                 out.println(value);
+                if (column == 3) {
+                    out.println("</tr>");
+                    column = 0;
+                }
+            }
+            if (column != 0) {
+                out.println("</tr>");
+                column = 0;
             }
             out.println(tableFooter + "</BODY></HTML>");
             
         } finally {
             out.close();
         }
+    }
+    
+    public static String hex(String s) {
+        int cp;
+        StringBuffer results = new StringBuffer();
+        for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(s, i);
+            if (i != 0) results.append(' ');
+            results.append(Integer.toHexString(cp));
+        }
+        return results.toString().toUpperCase();
     }
     
     static final UnicodeSet okAnyway = new UnicodeSet("[^[:Letter:]]");
