@@ -129,6 +129,15 @@ resolveImplicitLevels(UBiDi *pBiDi,
 static void
 adjustWSLevels(UBiDi *pBiDi);
 
+/* to avoid some conditional statements, use tiny constant arrays */
+static Flags flagLR[2]={ DIRPROP_FLAG(L), DIRPROP_FLAG(R) };
+static Flags flagE[2]={ DIRPROP_FLAG(LRE), DIRPROP_FLAG(RLE) };
+static Flags flagO[2]={ DIRPROP_FLAG(LRO), DIRPROP_FLAG(RLO) };
+
+#define DIRPROP_FLAG_LR(level) flagLR[(level)&1]
+#define DIRPROP_FLAG_E(level) flagE[(level)&1]
+#define DIRPROP_FLAG_O(level) flagO[(level)&1]
+
 /* UBiDi object management -------------------------------------------------- */
 
 U_CAPI UBiDi * U_EXPORT2

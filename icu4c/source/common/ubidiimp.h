@@ -98,15 +98,6 @@ enum {
  */
 #define MASK_EMBEDDING (DIRPROP_FLAG(NSM)|MASK_POSSIBLE_N)
 
-/* to avoid some conditional statements, use tiny constant arrays */
-static Flags flagLR[2]={ DIRPROP_FLAG(L), DIRPROP_FLAG(R) };
-static Flags flagE[2]={ DIRPROP_FLAG(LRE), DIRPROP_FLAG(RLE) };
-static Flags flagO[2]={ DIRPROP_FLAG(LRO), DIRPROP_FLAG(RLO) };
-
-#define DIRPROP_FLAG_LR(level) flagLR[(level)&1]
-#define DIRPROP_FLAG_E(level) flagE[(level)&1]
-#define DIRPROP_FLAG_O(level) flagO[(level)&1]
-
 /* the dirProp's L and R are defined to 0 and 1 values in UCharDirection */
 #define GET_LR_FROM_LEVEL(level) ((DirProp)((level)&1))
 
