@@ -70,7 +70,7 @@ StringCaseTest::TestCaseConversion()
     test3 += "STANBUL, NOT CONSTANTINOPLE!";
 
     UnicodeString   test4(test3);
-    test4.toLower();
+    test4.toLower(Locale(""));
     expectedResult = UnicodeString("i\\u0307stanbul, not constantinople!", "").unescape();
     if (test4 != expectedResult)
         errln("1. toLower failed: expected \"" + expectedResult + "\", got \"" + test4 + "\".");
@@ -86,7 +86,7 @@ StringCaseTest::TestCaseConversion()
     test3 += " palace, istanbul";
     test4 = test3;
 
-    test4.toUpper();
+    test4.toUpper(Locale(""));
     expectedResult = "TOPKAPI PALACE, ISTANBUL";
     if (test4 != expectedResult)
         errln("toUpper failed: expected \"" + expectedResult + "\", got \"" + test4 + "\".");
@@ -155,7 +155,7 @@ StringCaseTest::TestCaseConversion()
 
         /* uppercase with root locale */
         s=UnicodeString(FALSE, beforeUpper, (int32_t)(sizeof(beforeUpper)/U_SIZEOF_UCHAR));
-        s.setCharAt(0, beforeUpper[0]).toUpper();
+        s.setCharAt(0, beforeUpper[0]).toUpper(Locale(""));
         if( s.length()!=(sizeof(upperRoot)/U_SIZEOF_UCHAR) ||
             s!=UnicodeString(FALSE, upperRoot, s.length())
         ) {
@@ -235,7 +235,7 @@ StringCaseTest::TestCaseConversion()
             errln("error in sigmas.toLower()=\"" + t + "\" expected \"" + sigmasLower + "\"");
         }
 
-        (t=sigmas).toUpper();
+        (t=sigmas).toUpper(Locale(""));
         if(t!=sigmasUpper) {
             errln("error in sigmas.toUpper()=\"" + t + "\" expected \"" + sigmasUpper + "\"");
         }
