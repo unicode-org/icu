@@ -12,7 +12,7 @@ usage()
     echo "          1. 'AIX4.1.5xlC' if you are using xlC on AIX4.1.5"
     echo "          2. 'SOLARISCC' if you are using native CC compiler on Solaris"
     echo "          3. 'SOLARISGCC' if you are using GNU C++ compiler on Solaris"
-    echo "          4. 'LinuxRedHat5.2' if you are using GNU C++ compiler on Linux"
+    echo "          4. 'LinuxRedHat6.0' if you are using GNU C++ compiler on Linux"
     echo "          5. 'HP/UX10.2CC' if you are using native C++ compiler on HP-UX10.2"
     echo "          6. 'HP/UX10.2ACC' if you are using Advanced C++ compiler on HP-UX10.2"
     echo "          7. 'HP/UX11CC' if you are using native C++ compiler on HP-UX11"
@@ -68,7 +68,7 @@ case $platform in
                 CXX=/usr/local/SUNWspro/bin/CC; export CXX 
                 ./configure;;
 
-        LinuxRedHat5.2)
+        LinuxRedHat6.0)
                 echo Running configure for Linux using gcc compiler ...
                 CXX=g++; export CXX 
 		        CC=gcc; export CC
