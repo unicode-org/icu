@@ -365,8 +365,8 @@ struct _UniLMBCSGrpMap
    {0x2667, 0xFFFE,  ULMBCS_AMBIGUOUS_MBCS},
    {0xFFFF, 0xFFFF,  ULMBCS_GRP_UNICODE}
 };
-   
-ulmbcs_byte_t 
+
+static ulmbcs_byte_t 
 FindLMBCSUniRange(UChar uniChar)
 {
    struct _UniLMBCSGrpMap * pTable = UniLMBCSGrpMap;
@@ -411,52 +411,52 @@ struct _LocaleLMBCSGrpMap
    ulmbcs_byte_t OptGroup;
 }  LocaleLMBCSGrpMap[] =
 {
-   "ar", ULMBCS_GRP_AR,
-   "be", ULMBCS_GRP_RU,
-   "bg", ULMBCS_GRP_L2,
-   /* "ca", ULMBCS_GRP_L1, */
-   "cs", ULMBCS_GRP_L2,
-   /* "da", ULMBCS_GRP_L1, */
-   /* "de", ULMBCS_GRP_L1, */
-   "el", ULMBCS_GRP_GR,
-   /* "en", ULMBCS_GRP_L1, */
-   /* "es", ULMBCS_GRP_L1, */
-   /* "et", ULMBCS_GRP_L1, */
-   /* "fi", ULMBCS_GRP_L1, */
-   /* "fr", ULMBCS_GRP_L1, */
-   "he", ULMBCS_GRP_HE,
-   "hu", ULMBCS_GRP_L2,
-   /* "is", ULMBCS_GRP_L1, */
-   /* "it", ULMBCS_GRP_L1, */
-   "iw", ULMBCS_GRP_HE,
-   "ja", ULMBCS_GRP_JA,
-   "ko", ULMBCS_GRP_KO,
-   /* "lt", ULMBCS_GRP_L1, */
-   /* "lv", ULMBCS_GRP_L1, */
-   "mk", ULMBCS_GRP_RU,
-   /* "nl", ULMBCS_GRP_L1, */
-   /* "no", ULMBCS_GRP_L1, */
-   "pl", ULMBCS_GRP_L2,
-   /* "pt", ULMBCS_GRP_L1, */
-   "ro", ULMBCS_GRP_L2,
-   "ru", ULMBCS_GRP_RU,
-   "sh", ULMBCS_GRP_L2,
-   "sk", ULMBCS_GRP_L2,
-   "sl", ULMBCS_GRP_L2,
-   "sq", ULMBCS_GRP_L2,
-   "sr", ULMBCS_GRP_RU,
-   /* "sv", ULMBCS_GRP_L1, */
-   "th", ULMBCS_GRP_TH,
-   "tr", ULMBCS_GRP_TR,
-   "uk", ULMBCS_GRP_RU,
-   /* "vi", ULMBCS_GRP_L1, */
-   "zh_TW", ULMBCS_GRP_TW,
-   "zh", ULMBCS_GRP_CN,
-   NULL, ULMBCS_GRP_L1
+   {"ar", ULMBCS_GRP_AR},
+   {"be", ULMBCS_GRP_RU},
+   {"bg", ULMBCS_GRP_L2},
+   /* {"ca", ULMBCS_GRP_L1}, */
+   {"cs", ULMBCS_GRP_L2},
+   /* {"da", ULMBCS_GRP_L1}, */
+   /* {"de", ULMBCS_GRP_L1}, */
+   {"el", ULMBCS_GRP_GR},
+   /* {"en", ULMBCS_GRP_L1}, */
+   /* {"es", ULMBCS_GRP_L1}, */
+   /* {"et", ULMBCS_GRP_L1}, */
+   /* {"fi", ULMBCS_GRP_L1}, */
+   /* {"fr", ULMBCS_GRP_L1}, */
+   {"he", ULMBCS_GRP_HE},
+   {"hu", ULMBCS_GRP_L2},
+   /* {"is", ULMBCS_GRP_L1}, */
+   /* {"it", ULMBCS_GRP_L1}, */
+   {"iw", ULMBCS_GRP_HE},
+   {"ja", ULMBCS_GRP_JA},
+   {"ko", ULMBCS_GRP_KO},
+   /* {"lt", ULMBCS_GRP_L1}, */
+   /* {"lv", ULMBCS_GRP_L1}, */
+   {"mk", ULMBCS_GRP_RU},
+   /* {"nl", ULMBCS_GRP_L1}, */
+   /* {"no", ULMBCS_GRP_L1}, */
+   {"pl", ULMBCS_GRP_L2},
+   /* {"pt", ULMBCS_GRP_L1}, */
+   {"ro", ULMBCS_GRP_L2},
+   {"ru", ULMBCS_GRP_RU},
+   {"sh", ULMBCS_GRP_L2},
+   {"sk", ULMBCS_GRP_L2},
+   {"sl", ULMBCS_GRP_L2},
+   {"sq", ULMBCS_GRP_L2},
+   {"sr", ULMBCS_GRP_RU},
+   /* {"sv", ULMBCS_GRP_L1}, */
+   {"th", ULMBCS_GRP_TH},
+   {"tr", ULMBCS_GRP_TR},
+   {"uk", ULMBCS_GRP_RU},
+   /* {"vi", ULMBCS_GRP_L1}, */
+   {"zh_TW", ULMBCS_GRP_TW},
+   {"zh", ULMBCS_GRP_CN},
+   {NULL, ULMBCS_GRP_L1}
 };
 
 
-ulmbcs_byte_t 
+static ulmbcs_byte_t 
 FindLMBCSLocale(const char *LocaleID)
 {
    struct _LocaleLMBCSGrpMap *pTable = LocaleLMBCSGrpMap;
@@ -648,7 +648,7 @@ Turn this on by defining LMBCS_DEBUG, or by changing it to
    starting at pStartLMBCS (if any).
 */
 
-size_t
+static size_t
 LMBCSConversionWorker (
    UConverterDataLMBCS * extraInfo,    /* subconverters, opt & locale groups */
    ulmbcs_byte_t group,                /* The group to try */
@@ -730,7 +730,7 @@ LMBCSConversionWorker (
 /* This is a much simpler version of above, when we 
 know we are writing LMBCS using the Unicode group
 */
-size_t 
+static size_t 
 LMBCSConvertUni(ulmbcs_byte_t * pLMBCS, UChar uniChar)  
 {
      /* encode into LMBCS Unicode range */
@@ -957,7 +957,7 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
 
 
 /* A function to call when we are looking at the Unicode group byte in LMBCS */
-UChar
+static UChar
 GetUniFromLMBCSUni(char const ** ppLMBCSin)  /* Called with LMBCS-style Unicode byte stream */
 {
    uint8_t  HighCh = *(*ppLMBCSin)++;  /* Big-endian Unicode in LMBCS compatibility group*/
@@ -991,7 +991,7 @@ GetUniFromLMBCSUni(char const ** ppLMBCSin)  /* Called with LMBCS-style Unicode 
    UTF-32. The only difference is in surrogate handling
 */
 
-UChar32 
+static UChar32 
 _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                          UErrorCode*   err,
                          UBool         returnUTF32)
@@ -1200,7 +1200,7 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
                      UErrorCode*    err)
 {
    UChar uniChar;    /* one output UNICODE char */
-   const char * saveSource;
+   const char * saveSource = args->source;
    const char * pStartLMBCS = args->source;  /* beginning of whole string */
 
    if (args->targetLimit == args->target)         /* error check may belong in common code */
@@ -1217,7 +1217,7 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
       if (args->converter->invalidCharLength) /* reassemble char from previous call */
       {
          char LMBCS [ULMBCS_CHARSIZE_MAX];
-         char *pLMBCS = LMBCS, *saveSource, *saveSourceLimit; 
+         const char *pLMBCS = LMBCS, /* *saveSource,*/ *saveSourceLimit; 
          size_t size_old = args->converter->invalidCharLength;
 
          /* limit from source is either reminder of temp buffer, or user limit on source */
@@ -1228,12 +1228,12 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
       
          uprv_memcpy(LMBCS, args->converter->invalidCharBuffer, size_old);
          uprv_memcpy(LMBCS + size_old, args->source, size_new);
-         saveSource = (char*)args->source;
-         saveSourceLimit = (char*)args->sourceLimit;
+         /* saveSource = (char*)args->source; */ /* Already done */
+         saveSourceLimit = args->sourceLimit;
          args->source = pLMBCS;
          args->sourceLimit = pLMBCS+size_old+size_new;
          uniChar = (UChar) _LMBCSGetNextUCharWorker(args, err, FALSE);
-         pLMBCS = (char*)args->source;
+         pLMBCS = args->source;
          args->source =saveSource;
          args->sourceLimit = saveSourceLimit;
          args->source += (pLMBCS - LMBCS - size_old);
@@ -1286,7 +1286,7 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
 
    /* If character incomplete, store away partial char if more to come */
    if ((*err == U_TRUNCATED_CHAR_FOUND) && !args->flush )
-         {
+   {
       int8_t savebytes = (int8_t)(args->sourceLimit - saveSource);
       args->converter->invalidCharLength = (int8_t)savebytes;
       uprv_memcpy(args->converter->invalidCharBuffer, saveSource, savebytes);
