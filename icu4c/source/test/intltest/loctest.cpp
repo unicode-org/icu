@@ -1197,26 +1197,45 @@ LocaleTest::TestThaiCurrencyFormat()
  * If this is changed to use the single-character Euro symbol, this
  * test must be updated.
  *
- * DON'T ASSUME: Any specific countries support the Euro.  Instead,
- * iterate through all locales.
  */
 void 
 LocaleTest::TestEuroSupport() 
 {
-    const UnicodeString EURO_VARIANT("EURO");
     UChar euro = 0x20ac;
     const UnicodeString EURO_CURRENCY(&euro, 1, 1); // Look for this UnicodeString in formatted Euro currency
+    const char* localeArr[] = {
+                            "ca_ES",
+                            "de_AT",
+                            "de_DE",
+                            "de_LU",
+                            "el_GR",
+                            "en_BE",
+                            "en_IE",
+                            "es_ES",
+                            "eu_ES",
+                            "fi_FI",
+                            "fr_BE",
+                            "fr_FR",
+                            "fr_LU",
+                            "ga_IE",
+                            "gl_ES",
+                            "it_IT",
+                            "nl_BE",
+                            "nl_NL",
+                            "pt_PT",
+                            '\0'
+
+                        };
+    const char** locales = localeArr;
 
     UErrorCode status = U_ZERO_ERROR;
 
     UnicodeString temp;
 
     int32_t locCount = 0;
-    const Locale *locales = NumberFormat::getAvailableLocales(locCount);      
-    for (int32_t i=0; i < locCount; ++i) {
-        Locale loc = locales[i];
+    for (;*locales!='\0';locales++) {
+        Locale loc (*locales);
         UnicodeString temp;
-        if (  (temp=loc.getVariant()).indexOf(EURO_VARIANT) >= 0) {
             NumberFormat *nf = NumberFormat::createCurrencyInstance(loc, status);
             UnicodeString pos;
             nf->format(271828.182845, pos);
@@ -1235,7 +1254,6 @@ LocaleTest::TestEuroSupport()
             }
         
             delete nf;
-        }
     }
 }
 
