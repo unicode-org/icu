@@ -960,6 +960,7 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
     UChar *pivot, *pivot2;
 
     UConverter *inConverter, *outConverter;
+    char *myTarget;
     const char *sourceLimit;
     const char *targetLimit;
     int32_t targetCapacity=0;
@@ -995,11 +996,11 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
     /* set up the other variables */
     sourceLimit=source+sourceSize;
     pivot=pivot2=pivotBuffer;
+    myTarget=target;
     targetCapacity=0;
 
     if(targetSize>0) {
         /* perform real conversion */
-        char *myTarget=target;
 
         /*
          * loops until the input buffer is completely consumed
@@ -1050,14 +1051,14 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
             /* since the pivot buffer may still contain some characters, start with emptying it */
             *pErrorCode=U_ZERO_ERROR;
             while(pivot2!=pivot && U_SUCCESS(*pErrorCode)) {
-                target=targetBuffer;
+                myTarget=targetBuffer;
                 ucnv_fromUnicode(outConverter,
-                                 &target, targetLimit,
+                                 &myTarget, targetLimit,
                                  (const UChar **)&pivot2, pivot,
                                  NULL,
                                  (UBool)(source==sourceLimit),
                                  pErrorCode);
-                targetCapacity+=(target-targetBuffer);
+                targetCapacity+=(myTarget-targetBuffer);
                 if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
                     *pErrorCode=U_ZERO_ERROR;
                 }
@@ -1092,7 +1093,7 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
     ucnv_close (inConverter);
     ucnv_close (outConverter);
 
-    return targetCapacity;
+    return u_terminateChars(target, targetSize, targetCapacity, pErrorCode);
 }
 
 UConverterType ucnv_getType(const UConverter* converter)
