@@ -277,7 +277,7 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
     }*/
     logln("Testing adoptTransliterator() API of CompoundTransliterator");
     UnicodeString ID3("Latin-Katakana");
-    Transliterator **transarray2=new Transliterator*[1];
+    Transliterator **transarray2=(Transliterator **)uprv_malloc(sizeof(Transliterator*)*1);
     transarray2[0] = Transliterator::createInstance(ID3,UTRANS_FORWARD,parseError,status);
     if (transarray2[0] != 0) {
         ct1->adoptTransliterators(transarray2, 1);
