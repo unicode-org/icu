@@ -1135,10 +1135,31 @@ static void TestCoverageMBCS(){
 
 }
 
+static void TestConverterType(const char *convName, enum UConverterType convType) {
+    UConverter* myConverter;
+    UErrorCode err = U_ZERO_ERROR;
+
+    myConverter = ucnv_open(convName, &err);
+    if (U_FAILURE(err)) {
+        log_err("Failed to create an %s converter\n", convName);
+        return;
+    }
+    else
+    {
+        if (ucnv_getType(myConverter)!=convType) {
+            log_err("ucnv_getType Failed for %s. Got enum value 0x%X\n",
+                convName, convType);
+        }
+        else {
+            log_verbose("ucnv_getType %s ok\n", convName);
+        }
+    }
+    ucnv_close(myConverter);
+}
 
 static void TestConverterTypesAndStarters()
 {
-    UConverter* myConverter[3];
+    UConverter* myConverter;
     UErrorCode err = U_ZERO_ERROR;
     UBool mystarters[256];
 
@@ -1171,22 +1192,22 @@ static void TestConverterTypesAndStarters()
         TRUE, TRUE, TRUE, TRUE, TRUE, TRUE};*/
 
 
-  log_verbose("Testing KSC, ibm-930, ibm-878  for starters and their conversion types.");
+    log_verbose("Testing KSC, ibm-930, ibm-878  for starters and their conversion types.");
 
-    myConverter[0] = ucnv_open("ksc", &err);
+    myConverter = ucnv_open("ksc", &err);
     if (U_FAILURE(err)) {
       log_err("Failed to create an ibm-ksc converter\n");
       return;
     }
     else
     {
-        if (ucnv_getType(myConverter[0])!=UCNV_MBCS)
+        if (ucnv_getType(myConverter)!=UCNV_MBCS)
             log_err("ucnv_getType Failed for ibm-949\n");
         else
             log_verbose("ucnv_getType ibm-949 ok\n");
 
-        if(myConverter[0]!=NULL)
-            ucnv_getStarters(myConverter[0], mystarters, &err);
+        if(myConverter!=NULL)
+            ucnv_getStarters(myConverter, mystarters, &err);
 
         /*if (memcmp(expectedKSCstarters, mystarters, sizeof(expectedKSCstarters)))
           log_err("Failed ucnv_getStarters for ksc\n");
@@ -1194,35 +1215,23 @@ static void TestConverterTypesAndStarters()
           log_verbose("ucnv_getStarters ok\n");*/
 
     }
+    ucnv_close(myConverter);
 
-    myConverter[1] = ucnv_open("ibm-930", &err);
-    if (U_FAILURE(err)) {
-        log_err("Failed to create an ibm-930 converter\n");
-        return;
-    }
-    else
-    {
-        if (ucnv_getType(myConverter[1])!=UCNV_EBCDIC_STATEFUL)
-            log_err("ucnv_getType Failed for ibm-930\n");
-        else
-            log_verbose("ucnv_getType ibm-930 ok\n");
-    }
-
-    myConverter[2] = ucnv_open("ibm-878", &err);
-    if (U_FAILURE(err)) {
-      log_err("Failed to create an ibm-815 converter\n");
-      return;
-    }
-    else
-      {
-        if (ucnv_getType(myConverter[2])!=UCNV_SBCS) log_err("ucnv_getType Failed for ibm-815\n");
-        else log_verbose("ucnv_getType ibm-815 ok\n");
-      }
-
-
-    ucnv_close(myConverter[0]);
-    ucnv_close(myConverter[1]);
-    ucnv_close(myConverter[2]);
+    TestConverterType("ibm-930", UCNV_EBCDIC_STATEFUL);
+    TestConverterType("ibm-878", UCNV_SBCS);
+    TestConverterType("iso-8859-1", UCNV_LATIN_1);
+    TestConverterType("ibm-1208", UCNV_UTF8);
+    TestConverterType("utf-8", UCNV_UTF8);
+    TestConverterType("UTF-16BE", UCNV_UTF16_BigEndian);
+    TestConverterType("UTF-16LE", UCNV_UTF16_LittleEndian);
+    TestConverterType("UTF-32BE", UCNV_UTF32_BigEndian);
+    TestConverterType("UTF-32LE", UCNV_UTF32_LittleEndian);
+    TestConverterType("iso-2022", UCNV_ISO_2022);
+    TestConverterType("hz", UCNV_HZ);
+    TestConverterType("scsu", UCNV_SCSU);
+    TestConverterType("x-iscii-de", UCNV_ISCII);
+    TestConverterType("ascii", UCNV_US_ASCII);
+    TestConverterType("utf-7", UCNV_UTF7);
 }
 
 static void
