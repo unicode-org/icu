@@ -69,28 +69,36 @@ $CR $LF;
 
 $ALetterEx     = $ALetter     $Extend*; 
 $ABaseLetterEx = $ABaseLetter $Extend*; 
+$ACMLetterEx   = $ACMLetter   $Extend*; 
 $NumericEx     = $Numeric     $Extend*;
 $MidNumEx      = $MidNum      $Extend*;
 $MidNumLetEx   = $MidNumLet   $Extend*;
 $MidLetterEx   = $MidLetter   $Extend*;
 $KatakanaEx    = $Katakana    $Extend*;
 
-[^$Format] $Extend*; 
+# see character breaks
+
+[^$Control] $Extend*; 
 
 # rule 5
 
-$ALetterSeq = $ALetterEx ($Format* $ALetterEx)* {200};
+$ALetterEx ($Format* $ALetterEx)* {200};
 
 # rule 6 and 7
 
-$ALetterSeq   
-    (
-	    $Format* 
-	    ($MidLetterEx | $MidNumLetEx) 
-	    $Format* 
-        ($ABaseLetterEx | $Format $ALetterSeq)
-	)*
-{200}; 
+$MidALetterEx = ($ABaseLetterEx | $Format $ACMLetterEx);
+
+$ALetterSeq =
+$ALetterEx
+(
+    $Format* ($MidLetterEx | $MidNumLetEx) $Format* $MidALetterEx
+)*;
+
+$MidALetterSeq =
+$MidALetterEx
+(
+    $Format* ($MidLetterEx | $MidNumLetEx) $Format* $MidALetterEx
+)*;
 
 # rule 8
 
@@ -98,11 +106,11 @@ $NumericEx ($Format* $NumericEx)* {100};
 
 # rule 9
 
-$ALetterEx ($Format* ($ALetterEx | $NumericEx))* {200};
+$ALetterSeq ($Format* ($NumericEx | $MidALetterSeq))* {200};
 
 # rule 10
 
-$NumericEx + ($Format* $ALetterEx)+ ($Format* $NumericEx)* {200};
+$NumericEx ($Format* $MidALetterSeq)+ ($Format* $NumericEx)* {200};
 
 # rule 11 and 12 
 
@@ -129,37 +137,49 @@ $BackKatakanaEx    = $Extend* $Katakana;
 
 $LF $CR;
 
-$Extend* [^$Format];
+# see character breaks
+
+$Extend* [^$Control];
 
 # rule 5
 
 ($BackALetterEx $Format*)* $BackABaseLetterEx;
-($BackALetterEx $Format*)* $BackACMLetterEx / $Format;
+($BackALetterEx $Format*)* $BackACMLetterEx / $Control;
 
 # rule 6 and 7
 
+$BackMidALetterEx = ($BackABaseLetterEx | $BackACMLetterEx $Format);
+
+$BackALetterSeq =
 (
-       ($BackALetterEx $Format*)* 
-       ($BackABaseLetterEx | $BackACMLetterEx $Format) 
-       ($Format* ($BackMidLetterEx | $BackMidNumLetEx))
-  )+ 
-  $Format* ($BackALetterEx $Format*)* $BackABaseLetterEx;
-  
+    $BackMidALetterEx $Format* ($BackMidLetterEx | $BackMidNumLetEx) $Format*
+)*
+$BackABaseLetterEx;
+
+$BackMidALetterSeq =
 (
-       ($BackALetterEx $Format*)* 
-       ($BackABaseLetterEx | $BackACMLetterEx $Format) 
-       ($Format* ($BackMidLetterEx | $BackMidNumLetEx))
-  )+ 
-  $Format* ($BackALetterEx $Format*)* $BackACMLetterEx / $Format;
+    $BackMidALetterEx $Format* ($BackMidLetterEx | $BackMidNumLetEx) $Format*
+)*
+$BackMidALetterEx;
 
 # rule 8
 
 $BackNumericEx $Format* $BackNumericEx; 
 
-# rule 9, 10
+# rule 10
 
-(($BackALetterEx | $BackNumericEx) $Format*)+ ($BackABaseLetterEx | $BackNumericEx);
-(($BackALetterEx | $BackNumericEx) $Format*)+ $BackACMLetterEx / $Format;
+(($BackNumericEx | $BackMidALetterSeq) $Format*)* $BackALetterSeq;
+
+# to handle letter sequences ending with a combining mark
+(($BackNumericEx | $BackMidALetterSeq) $Format*)* 
+(
+    $BackMidALetterEx $Format* ($BackMidLetterEx | $BackMidNumLetEx) $Format*
+)*
+$BackACMLetterEx / $Control;
+
+# rule 10
+
+($BackNumericEx $Format*)* ($BackMidALetterSeq $Format*)* $BackNumericEx;
 
 # rule 11 and 12
 
@@ -178,7 +198,7 @@ $Extend+ [^$Extend];
 
 # rule 4
 $Format+ $BackABaseLetterEx;
-$Format+ $BackACMLetterEx / $Format;
+$Format+ $BackACMLetterEx / $Control;
 $Format+ $BackNumericEx;
 $Format+ $BackMidLetterEx;
 $Format+ $BackMidNumLetEx;
@@ -187,7 +207,7 @@ $Format+ $BackKatakanaEx;
 
 # rule 6
 ($MidLetter | $MidNumLet) $Format* $BackABaseLetterEx;
-($MidLetter | $MidNumLet) $Format* $BackACMLetterEx / $Format;
+($MidLetter | $MidNumLet) $Format* $BackACMLetterEx / $Control;
 
 # rule 11
 ($MidNum | $MidNumLet) $Format* $BackNumericEx;
