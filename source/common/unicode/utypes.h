@@ -254,7 +254,15 @@ typedef void* UClassID;
 
 /*
  * Control of symbol import/export.
- * The ICU is separated into two libraries.
+ * ICU is separated into three libraries.
+ */
+
+/**
+ * \def U_COMBINED_IMPLEMENTATION
+ * Set to export library symbols from inside the ICU library
+ * when all of ICU is in a single library.
+ * This can be set as a compiler option while building ICU, and it
+ * needs to be the first one tested to override U_COMMON_API, U_I18N_API, etc.
  */
 
 /**
@@ -276,7 +284,11 @@ typedef void* UClassID;
  */
 
 
-#ifdef U_COMMON_IMPLEMENTATION
+#if defined(U_COMBINED_IMPLEMENTATION)
+#define U_COMMON_API  U_EXPORT
+#define U_I18N_API    U_EXPORT
+#define U_LAYOUT_API  U_EXPORT
+#elif defined(U_COMMON_IMPLEMENTATION)
 #define U_COMMON_API  U_EXPORT
 #define U_I18N_API    U_IMPORT
 #define U_LAYOUT_API  U_IMPORT
@@ -284,10 +296,6 @@ typedef void* UClassID;
 #define U_COMMON_API  U_IMPORT
 #define U_I18N_API    U_EXPORT
 #define U_LAYOUT_API  U_IMPORT
-#elif defined(U_COMBINED_IMPLEMENTATION)
-#define U_COMMON_API  U_EXPORT
-#define U_I18N_API    U_EXPORT
-#define U_LAYOUT_API  U_EXPORT
 #elif defined(U_LAYOUT_IMPLEMENTATION)
 #define U_COMMON_API  U_IMPORT
 #define U_I18N_API    U_IMPORT
