@@ -3069,7 +3069,20 @@ private:
 
 };
 
+/**
+ * Create a new UnicodeString with the concatenation of two others.
+ *
+ * @param s1 The first string to be copied to the new one.
+ * @param s2 The second string to be copied to the new one, after s1.
+ * @return UnicodeString(s1).append(s2)
+ * @draft ICU 2.8
+ */
+inline UnicodeString
+operator+ (const UnicodeString &s1, const UnicodeString &s2);
+
 U_NAMESPACE_END
+
+// inline implementations -------------------------------------------------- ***
 
 //========================================
 // Array copying
@@ -4003,6 +4016,15 @@ UnicodeString::reverse(int32_t start,
                int32_t _length)
 { return doReverse(start, _length); }
 
+// functions that are not UnicodeString members ---------------------------- ***
+
+inline UnicodeString
+operator+ (const UnicodeString &s1, const UnicodeString &s2) {
+    return
+        UnicodeString(s1.length()+s2.length()+1, (UChar32)0, 0).
+            append(s1).
+                append(s2);
+}
 
 U_NAMESPACE_END
 

@@ -171,6 +171,14 @@ UnicodeStringTest::TestBasicManipulation()
 			errln("UnicodeString::setTo(const UnicodeString&, int32_t) failed");
 		}
 	}
+
+    {
+        // op+ is new in ICU 2.8
+        UnicodeString s=UnicodeString("abc", "")+UnicodeString("def", "")+UnicodeString("ghi", "");
+        if(s!=UnicodeString("abcdefghi", "")) {
+            errln("operator+(UniStr, UniStr) failed");
+        }
+    }
 }
 
 void
