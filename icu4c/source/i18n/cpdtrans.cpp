@@ -35,38 +35,40 @@ CompoundTransliterator::CompoundTransliterator(
 /**
  * Splits an ID of the form "ID;ID;..." into a compound using each
  * of the IDs. 
- * @param ID of above form
+ * @param id of above form
  * @param forward if false, does the list in reverse order, and
  * takes the inverse of each ID.
  */
-CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
+CompoundTransliterator::CompoundTransliterator(const UnicodeString& id,
                               UTransDirection direction,
                               UnicodeFilter* adoptedFilter,
                               UErrorCode& status) :
-    Transliterator(ID, 0), // set filter to 0 here!
+    Transliterator(id, 0), // set filter to 0 here!
     trans(0), filters(0) {
-    init(ID, direction, adoptedFilter, status);
+    init(id, direction, adoptedFilter, status);
 }
 
-CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
+CompoundTransliterator::CompoundTransliterator(const UnicodeString& id,
                               UErrorCode& status) :
-    Transliterator(ID, 0), // set filter to 0 here!
+    Transliterator(id, 0), // set filter to 0 here!
     trans(0), filters(0) {
-    init(ID, UTRANS_FORWARD, 0, status);
+    init(id, UTRANS_FORWARD, 0, status);
 }
 
-void CompoundTransliterator::init(const UnicodeString& ID,
+void CompoundTransliterator::init(const UnicodeString& id,
                                   UTransDirection direction,
                                   UnicodeFilter* adoptedFilter,
                                   UErrorCode& status) {
-    if (U_FAILURE(status)) return;
-    UnicodeString* list = split(ID, ID_DELIM, count);
+    if (U_FAILURE(status))
+        return;
+    UnicodeString* list = split(id, ID_DELIM, &count);
     trans = new Transliterator*[count];
     for (int32_t i = 0; i < count; ++i) {
         trans[i] = createInstance(list[direction==UTRANS_FORWARD ? i : (count-1-i)],
                                   direction);
         if (trans[i] == NULL) {
-            while (++i < count) trans[i] = 0;
+            while (++i < count)
+                trans[i] = 0;
             status = U_ILLEGAL_ARGUMENT_ERROR;
             delete[] list;
             delete adoptedFilter;
@@ -84,9 +86,9 @@ void CompoundTransliterator::init(const UnicodeString& ID,
  * join(ID_DELIM, map($_.getID(), transliterators).
  */
 UnicodeString CompoundTransliterator::joinIDs(Transliterator* const transliterators[],
-                                              int32_t count) {
+                                              int32_t transCount) {
     UnicodeString id;
-    for (int32_t i=0; i<count; ++i) {
+    for (int32_t i=0; i<transCount; ++i) {
         if (i > 0) {
             id.append(ID_DELIM);
         }
@@ -100,17 +102,18 @@ UnicodeString CompoundTransliterator::joinIDs(Transliterator* const transliterat
  */
 UnicodeString* CompoundTransliterator::split(const UnicodeString& s,
                                              UChar divider,
-                                             int32_t& count) {
+                                             int32_t* count) {
     // changed MED
     // see how many there are
-    count = 1;
-	int32_t i;
+    *count = 1;
+    int32_t i;
     for (i = 0; i < s.length(); ++i) {
-        if (s.charAt(i) == divider) ++count;
+        if (s.charAt(i) == divider)
+            ++(*count);
     }
     
     // make an array with them
-    UnicodeString* result = new UnicodeString[count];
+    UnicodeString* result = new UnicodeString[*count];
     int32_t last = 0;
     int32_t current = 0;
     
@@ -345,7 +348,7 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
         return; // Short circuit for empty compound transliterators
     }
 
-	int32_t i;
+    int32_t i;
     int32_t cursor = index.start;
     int32_t limit = index.limit;
     int32_t globalLimit = limit;
