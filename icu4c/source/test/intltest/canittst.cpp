@@ -162,10 +162,12 @@ void CanonicalIteratorTest::TestBasic() {
         int counter = 0;
         set->removeAll();
         while (TRUE) {
-            UnicodeString *result = new UnicodeString(it.next());
-            if (*result == "")
+            //UnicodeString *result = new UnicodeString(it.next());
+            UnicodeString result(it.next());
+            if (result == "") {
                 break;
-            set->put(*result, result, status); // Add result to the table
+            }
+            set->put(result, new UnicodeString(result), status); // Add result to the table
             //logln(++counter + ": " + hex.transliterate(result));
             //logln(" = " + name.transliterate(result));
         }
@@ -257,6 +259,7 @@ UnicodeString CanonicalIteratorTest::collectionToString(Hashtable *col) {
     }
 */
 
+    delete [] resArray;
 
     return result;
 }
