@@ -325,7 +325,7 @@ static inline void getValues(uint32_t result, int8_t& flag,
     flag = (int8_t) (result & 0x07);
     /* next 2 bits contain the length */
     length = (int8_t) ((result>>3) & 0x03);
-    /* next 10 bits contain the index */
+    /* next 11 bits contain the index */
     index  = (result>> 5);
 }
 
@@ -346,7 +346,7 @@ compareMapping(uint32_t codepoint, uint32_t* mapping,int32_t mapLength,
                 pTestIDNA->errln( "Did not get the assigned flag for codepoint 0x%08X. Expected: %i Got: %i\n",codepoint, UIDNA_MAP_NFKC, flag);
             }
         }else{
-            if(flag=UIDNA_NO_VALUE || flag == UIDNA_PROHIBITED){
+            if(flag==UIDNA_NO_VALUE || flag == UIDNA_PROHIBITED){
                 if(index != _IDNA_MAP_TO_NOTHING ){
                     pTestIDNA->errln( "Did not get the assigned flag for codepoint 0x%08X. Expected: %i Got: %i\n", codepoint, _IDNA_MAP_TO_NOTHING, index);
                 }
