@@ -95,7 +95,7 @@ class PropertyAliases {
     Offset nameGroupPool_offset; // offset to start of array
     int16_t nameGroupPool_count; // number of entries (not groups)
     Offset stringPool_offset; // offset to start of pool
-    int16_t stringPool_count; // number of strings
+    int16_t stringPool_count; // number of strings (not size in bytes)
 
     // -- end pnames data --
 
@@ -312,16 +312,42 @@ class NameToEnum {
 
 /*----------------------------------------------------------------------
  * 
- * In-memory layout
- * (>x) this structure refers to structure x
+ * In-memory layout.  THIS IS NOT A STANDALONE DOCUMENT.  It goes
+ * together with above C++ declarations and gives an overview.
+ *
+ * See above for definitions of Offset and EnumValue.  Also, refer to
+ * above class declarations for the "bottom line" on data layout.
+ *
+ * Sizes:
+ * '*_offset' is an Offset (see above)
+ * 'count' members are typically int32_t (see above declarations)
+ * 'enumArray' is an array of EnumValue (see above)
+ * 'offsetArray' is an array of Offset (see above)
+ * 'nameArray' is an array of Offset (see above)
+ * 'enum*' is an EnumValue (see above)
+ * '*Array [x n]' means that *Array has n elements
+ *
+ * References:
+ * Instead of pointers, this flat data structure contains offsets.
+ * All offsets are relative to the start of 'header'.  A notation
+ * is used to indicate what structure each offset points to:
+ * 'foo (>x)' the offset(s) in foo point to structure x
  * 
+ * Structures:
+ * Each structure is assigned a number, except for the header,
+ * which is called 'header'.  The numbers are not contiguous
+ * for historical reasons.  Some structures have sub-parts
+ * that are denoted with a letter, e.g., "5a".
+ * 
+ * BEGIN LAYOUT
+ * ============
  * header:
  *  enumToName_offset (>0)
  *  nameToEnum_offset (>2)
  *  enumToValue_offset (>3)
  *  (alignment padding build in to header)
  * 
- * 0: # EnumToOffset obj for props => name groups
+ * 0: # NonContiguousEnumToOffset obj for props => name groups
  *  count
  *  enumArray [x count]
  *  offsetArray [x count] (>98)
@@ -337,7 +363,7 @@ class NameToEnum {
  * 
  * => pad to next 4-byte boundary
  * 
- * 3: # EnumToOffset obj for enumerated props => ValueMaps
+ * 3: # NonContiguousEnumToOffset obj for enumerated props => ValueMaps
  *  count
  *  enumArray [x count]
  *  offsetArray [x count] (>4)
