@@ -141,7 +141,7 @@ testData(TestIDNA& test) {
 U_CDECL_BEGIN
 
 static void U_CALLCONV
-strprepProfileLineFn(void *context,
+strprepProfileLineFn(void * /*context*/,
               char *fields[][2], int32_t fieldCount,
               UErrorCode *pErrorCode) {
     uint32_t mapping[40];
