@@ -1138,6 +1138,30 @@ public:
            UTextOffset dstStart = 0) const;
 
   /**
+   * Copy the contents of the string into dest.
+   * This is a convenience function that
+   * checks if there is enough space in dest,
+   * extracts the entire string if possible,
+   * and NUL-terminates dest if possible.
+   *
+   * If the string fits into dest but cannot be NUL-terminated
+   * (length()==destCapacity) then the error code is set to U_STRING_NOT_TERMINATED_WARNING.
+   * If the string itself does not fit into dest
+   * (length()>destCapacity) then the error code is set to U_BUFFER_OVERFLOW_ERROR.
+   *
+   * If the string aliases to <code>dest</code> itself as an external buffer,
+   * then extract() will not copy the contents.
+   *
+   * @param dest Destination string buffer.
+   * @param destCapacity Number of UChars available at dest.
+   * @param errorCode ICU error code.
+   * @return length()
+   */
+  int32_t
+  extract(UChar *dest, int32_t destCapacity,
+          UErrorCode &errorCode) const;
+
+  /**
    * Copy the characters in the range 
    * [<tt>start</tt>, <tt>start + length</tt>) into the  UnicodeString
    * <tt>target</tt>.
