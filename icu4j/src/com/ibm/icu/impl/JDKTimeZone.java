@@ -92,42 +92,45 @@ public class JDKTimeZone extends TimeZone {
     public void getOffset(long date, boolean local, int[] offsets) {
         // The following code works on 1.4 or later.  Since we need to
         // be compatible with 1.3, we have to use reflection.
-        //| if (zone instanceof ZoneInfo) {
-        //|     ((ZoneInfo) zone).getOffsets(date, offsets);
-        //|     if (local) {
-        //|         date -= offsets[0] + offsets[1];
-        //|         ((ZoneInfo) zone).getOffsets(date, offsets);
-        //|     }
-        //| } else {
-        //|     super.getOffset(date, local, offsets);
-        //| }
+//  	if (zone instanceof sun.util.calendar.ZoneInfo) {
+//  	    ((sun.util.calendar.ZoneInfo) zone).getOffsets(date, offsets);
+//  	    if (local) {
+//  		date -= offsets[0] + offsets[1];
+//  		((sun.util.calendar.ZoneInfo) zone).getOffsets(date, offsets);
+//  	    }
+//  	} else {
+//  	    super.getOffset(date, local, offsets);
+//  	}
 
-        try {
-            Class zoneInfo = Class.forName("sun.util.calendar.ZoneInfo");
-            if (zoneInfo.isInstance(zone)) {
-                Method getOffsets = zoneInfo.getMethod("getOffsets",
-                       new Class[] { Long.TYPE, Class.forName("[I") });
-                Object[] args = new Object[] { new Long(date), offsets };
-                getOffsets.invoke(zone, args);
-                if (local) {
-                    date -= offsets[0] + offsets[1];
-                    args[0] = new Long(date);
-                    getOffsets.invoke(zone, args);
-                }
-                return;
-            }
-        } catch (ClassNotFoundException e1) {
-            // ok; fall through
-        } catch (SecurityException ex) {
-            // ok; fall through, we're running in a protected context
-        } catch (NoSuchMethodException e2) {
-            throw new RuntimeException(); // should not occur
-        } catch (IllegalAccessException e3) {
-            throw new RuntimeException(); // should not occur
-        } catch (InvocationTargetException e4) {
-            throw new RuntimeException(); // should not occur
-        }
-        super.getOffset(date, local, offsets);
+	// no longer require JDK 1.3 compatibility
+	if (false) {
+	    try {
+		Class zoneInfo = Class.forName("sun.util.calendar.ZoneInfo");
+		if (zoneInfo.isInstance(zone)) {
+		    Method getOffsets = zoneInfo.getMethod("getOffsets",
+							   new Class[] { Long.TYPE, Class.forName("[I") });
+		    Object[] args = new Object[] { new Long(date), offsets };
+		    getOffsets.invoke(zone, args);
+		    if (local) {
+			date -= offsets[0] + offsets[1];
+			args[0] = new Long(date);
+			getOffsets.invoke(zone, args);
+		    }
+		    return;
+		}
+	    } catch (ClassNotFoundException e1) {
+		// ok; fall through
+	    } catch (SecurityException ex) {
+		// ok; fall through, we're running in a protected context
+	    } catch (NoSuchMethodException e2) {
+		throw new RuntimeException(); // should not occur
+	    } catch (IllegalAccessException e3) {
+		throw new RuntimeException(); // should not occur
+	    } catch (InvocationTargetException e4) {
+		throw new RuntimeException(); // should not occur
+	    }
+	    super.getOffset(date, local, offsets);
+	}
     }
  
     /**
