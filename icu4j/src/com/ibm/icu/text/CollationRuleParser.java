@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationRuleParser.java,v $ 
-* $Date: 2003/05/14 19:03:30 $ 
-* $Revision: 1.13 $
+* $Date: 2003/05/27 16:49:23 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -1428,8 +1428,11 @@ final class CollationRuleParser
 		                    m_parsedToken_.m_charsLen_ ++;
 		                }
 		                wasinquote = true;
-		                m_current_ ++;
-		                ch = m_source_.charAt(m_current_); 
+                        do {
+                            m_current_ ++;
+                            ch = m_source_.charAt(m_current_); 
+                            // skip whitespace between '|' and the character
+                        } while (UCharacterProperty.isRuleWhiteSpace(ch));
 		                break;
                     case 0x0021: // '!' // ignoring java set thai reordering
                         break;
