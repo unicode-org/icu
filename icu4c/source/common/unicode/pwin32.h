@@ -48,6 +48,7 @@
 #else
 #define U_DEBUG 0
 #endif
+#endif
 
 #ifndef U_RELEASE
 #ifdef NDEBUG
