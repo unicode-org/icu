@@ -11,25 +11,6 @@
 #include "intltest.h"
 #include "mutex.h"
 
-/*
-    Test multithreading.   Of course we need a thread class first..
-    this wrapper has a ported implementation.
- */
-
-class SimpleThread
-{
-public:
-    SimpleThread();
-    virtual ~SimpleThread();
-    int32_t start(void); // start the thread
-public: // should be private, but then we couldn't be asocial.
-    virtual void run(void) = 0; // Override this to provide some real implementation
-private:
-    void *fImplementation;
-
-public:
-    static void sleep(int32_t millis); // probably shouldn't go here but oh well. 
-};
 
 
 /**
@@ -58,7 +39,7 @@ public:
     void TestThreadedIntl(void);
 #endif
   void TestCollators(void);
-
+  void TestString();
 };
 
 #endif
