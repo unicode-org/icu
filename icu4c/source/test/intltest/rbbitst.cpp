@@ -14,7 +14,6 @@
 #include "unicode/utypes.h"
 #include "unicode/brkiter.h"
 #include "unicode/rbbi.h"
-#include "unicode/unicode.h"
 #include "unicode/uchar.h"
 #include "unicode/utf16.h"
 #include <stdio.h>

@@ -6,7 +6,7 @@
 
 #include "ustrtest.h"
 #include "unicode/unistr.h"
-#include "unicode/unicode.h"
+#include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "unicode/locid.h"
 #include "unicode/ucnv.h"
