@@ -24,10 +24,10 @@ import java.util.jar.JarFile;
  * does not look in the boot or system class path.
  */
 public class ICULocaleData {
-	private static Locale[] localeList;
-	private static final String PACKAGE1 = "com.ibm.icu.impl.data";
-	private static final String[] packageNames = { PACKAGE1 };
-	private static boolean debug = ICUDebug.enabled("localedata");
+    private static Locale[] localeList;
+    private static final String PACKAGE1 = "com.ibm.icu.impl.data";
+    private static final String[] packageNames = { PACKAGE1 };
+    private static boolean debug = ICUDebug.enabled("localedata");
 
     /**
      * Returns a list of the installed locales.
@@ -54,14 +54,14 @@ public class ICULocaleData {
      * modifying this function to pay attention to the "key" parameter.  --rtg 1/26/98
      */
     public static Locale[] getAvailableLocales(String key) {
-		// ignore key, just return all locales
-		return getAvailableLocales();
+	// ignore key, just return all locales
+	return getAvailableLocales();
     }
     
-	/**
-	 * Return an array of all the locales for which we have resource information.
-	 */
-	public static Locale[] getAvailableLocales() {
+    /**
+     * Return an array of all the locales for which we have resource information.
+     */
+    public static Locale[] getAvailableLocales() {
         // creating the locale list is expensive, so be careful to do it
         // only once
         if (localeList == null) {
@@ -72,8 +72,8 @@ public class ICULocaleData {
             }
         }
 
-		return (Locale[])localeList.clone();
-	}
+	return (Locale[])localeList.clone();
+    }
 
     /**
      * Gets a LocaleElements resource bundle.
@@ -82,53 +82,71 @@ public class ICULocaleData {
         return getResourceBundle("LocaleElements", locale);
     }
 
-	/**
-	 * Still need permissions to use our own class loader, is there no way
-	 * to load class resources from new locations that aren't already on the
-	 * class path?
-	 */
-	private static ResourceBundle instantiateBundle(String name, Locale l) {
-		return ResourceBundle.getBundle(name, l);
-	}
+    /**
+     * Gets a LocaleElements resource bundle.
+     */
+    public static ResourceBundle getLocaleElements(String localeName) {
+	return getResourceBundle("LocaleElements", localeName);
+    }
 
-	/**
-	 * Get a resource bundle from the lookup chain.
-	 */
+    /**
+     * Still need permissions to use our own class loader, is there no way
+     * to load class resources from new locations that aren't already on the
+     * class path?
+     */
+    private static ResourceBundle instantiateBundle(String name, Locale l) {
+	System.out.println("instantiating " + name + " locale: " + l);
+	ResourceBundle rb = ResourceBundle.getBundle(name, l);
+	System.out.println("instantiate returning: " + rb);
+	return rb;
+    }
+
+    /**
+     * Get a resource bundle from the lookup chain.
+     */
+    public static ResourceBundle getResourceBundle(String bundleName, String localeName) {
+	Locale locale = LocaleUtility.getLocaleFromName(localeName);
+	return getResourceBundle(bundleName, locale);
+    }
+
+    /**
+     * Get a resource bundle from the lookup chain.
+     */
     public static ResourceBundle getResourceBundle(String bundleName, Locale locale) {
-		if (locale == null) {
-			locale = Locale.getDefault();
-		}
-		ResourceBundle rb = null;
-		for (int i = 0; i < packageNames.length && rb == null; ++i) {
-			try {
-				String path = packageNames[i] + "." + bundleName;
-				if (debug) System.out.println("calling getBundle: " + path + "_" + locale);
-				rb = instantiateBundle(path, locale);
-			} 
-			catch (MissingResourceException e) {
-				if (debug) System.out.println(bundleName + "_" + locale + " not found in " + packageNames[i]);
-			}
-		}
-
-		return rb;
+	if (locale == null) {
+	    locale = Locale.getDefault();
 	}
+	ResourceBundle rb = null;
+	for (int i = 0; i < packageNames.length && rb == null; ++i) {
+	    try {
+		String path = packageNames[i] + "." + bundleName;
+		if (debug) System.out.println("calling getBundle: " + path + "_" + locale);
+		rb = instantiateBundle(path, locale);
+	    } 
+	    catch (MissingResourceException e) {
+		if (debug) System.out.println(bundleName + "_" + locale + " not found in " + packageNames[i]);
+	    }
+	}
+
+	return rb;
+    }
 
     // ========== privates ==========
 
 
     private static Locale[] createLocaleList() {
-		try {
-			ResourceBundle index = getLocaleElements(LocaleUtility.getLocaleFromName("index"));
-			String[] localeNames = index.getStringArray("InstalledLocales");
-			Locale[] locales = new Locale[localeNames.length];
-			for (int i = 0; i < localeNames.length; ++i) {
-				locales[i] = LocaleUtility.getLocaleFromName(localeNames[i]);
-			}
-			return locales;
-		}
-		catch (MissingResourceException e) {
-		}
+	try {
+	    ResourceBundle index = getLocaleElements(LocaleUtility.getLocaleFromName("index"));
+	    String[] localeNames = index.getStringArray("InstalledLocales");
+	    Locale[] locales = new Locale[localeNames.length];
+	    for (int i = 0; i < localeNames.length; ++i) {
+		locales[i] = LocaleUtility.getLocaleFromName(localeNames[i]);
+	    }
+	    return locales;
+	}
+	catch (MissingResourceException e) {
+	}
 		
-		return new Locale[0];
+	return new Locale[0];
     }
 }
