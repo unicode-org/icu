@@ -738,7 +738,7 @@ void IntlTestTextBoundary::TestLineInvariants()
             }
         }
     }
-
+    delete e;
 }
 
 void IntlTestTextBoundary::TestThaiLineBreak() {
@@ -1146,7 +1146,7 @@ void IntlTestTextBoundary::generalIteratorTest(BreakIterator& bi, Vector* expect
 
     delete nextResults;
     delete previousResults;
-
+    delete []boundaries;
 }
 
 Vector* IntlTestTextBoundary::testFirstAndNext(BreakIterator& bi, UnicodeString& text) 
@@ -1326,7 +1326,7 @@ void IntlTestTextBoundary::doMultipleSelectionTest(BreakIterator& iterator,
     int32_t testOffset;
     int32_t count = 0;
 
-    logln("doMultipleSelectionTest text of length: "+testText.length());
+    logln("doMultipleSelectionTest text of length: %d", testText.length());
 
     if (*testIterator != iterator)
         errln("clone() or operator!= failed: two clones compared unequal");
