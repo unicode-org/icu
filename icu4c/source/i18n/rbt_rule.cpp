@@ -297,13 +297,13 @@ UBool TransliterationRule::masks(const TransliterationRule& r2) const {
  * <tt>null</tt> then no filtering is applied.
  */
 UBool TransliterationRule::matches(const Replaceable& text,
-                                    int32_t start, int32_t limit,
-                                    int32_t cursor,
-                                    const TransliterationRuleData& data,
-                                    const UnicodeFilter* filter) const {
+                                   const UTransPosition& pos,
+                                   const TransliterationRuleData& data,
+                                   const UnicodeFilter* filter) const {
     // Match anteContext, key, and postContext
-    cursor -= anteContextLength;
-    if (cursor < start || (cursor + pattern.length()) > limit) {
+    int32_t cursor = pos.start - anteContextLength;
+    if (cursor < pos.contextStart ||
+        (cursor + pattern.length()) > pos.contextLimit) {
         return FALSE;
     }
     for (int32_t i=0; i<pattern.length(); ++i, ++cursor) {
@@ -341,12 +341,10 @@ UBool TransliterationRule::matches(const Replaceable& text,
  * @see #FULL_MATCH
  */
 int32_t TransliterationRule::getMatchDegree(const Replaceable& text,
-                                            int32_t start, int32_t limit,
-                                            int32_t cursor,
+                                            const UTransPosition& pos,
                                             const TransliterationRuleData& data,
                                             const UnicodeFilter* filter) const {
-    int len = getRegionMatchLength(text, start, limit, cursor - anteContextLength,
-                                   pattern, data, filter);
+    int len = getRegionMatchLength(text, pos, pattern, data, filter);
     return len < anteContextLength ? MISMATCH :
         (len < pattern.length() ? PARTIAL_MATCH : FULL_MATCH);
 }
@@ -375,16 +373,16 @@ int32_t TransliterationRule::getMatchDegree(const Replaceable& text,
  * match this rule.
  */
 int32_t TransliterationRule::getRegionMatchLength(const Replaceable& text,
-                                          int32_t start,
-                                          int32_t limit, int32_t cursor,
+                                          const UTransPosition& pos,
                                           const UnicodeString& templ,
                                           const TransliterationRuleData& data,
                                           const UnicodeFilter* filter) const {
-    if (cursor < start) {
+    int32_t cursor = pos.start - anteContextLength;
+    if (cursor < pos.contextStart) {
         return -1;
     }
     int32_t i;
-    for (i=0; i<templ.length() && cursor<limit; ++i, ++cursor) {
+    for (i=0; i<templ.length() && cursor<pos.contextLimit; ++i, ++cursor) {
         if (!charMatches(templ.charAt(i), text.charAt(cursor),
                          data, filter)) {
             return -1;

@@ -88,10 +88,6 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
      * exzd|    done
      */
 
-    int32_t contextStart = index.contextStart;
-    int32_t limit = index.limit;
-    int32_t cursor = index.start;
-
     /* A rule like
      *   a>b|a
      * creates an infinite loop. To prevent that, we put an arbitrary
@@ -102,7 +98,7 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
      * uint32_t.
      */
     uint32_t loopCount = 0;
-    uint32_t loopLimit = limit - cursor;
+    uint32_t loopLimit = index.limit - index.start;
     if (loopLimit >= 0x10000000) {
         loopLimit = 0xFFFFFFFF;
     } else {
@@ -111,13 +107,11 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
 
     UBool isPartial = FALSE;
 
-    while (cursor < limit && loopCount <= loopLimit) {
+    while (index.start < index.limit && loopCount <= loopLimit) {
         TransliterationRule* r = isIncremental ?
-            data->ruleSet.findIncrementalMatch(text, contextStart, limit, cursor,
-                                               *data, isPartial,
+            data->ruleSet.findIncrementalMatch(text, index, *data, isPartial,
                                                getFilter()) :
-            data->ruleSet.findMatch(text, contextStart, limit,
-                                    cursor, *data,
+            data->ruleSet.findMatch(text, index, *data,
                                     getFilter());
 
         /* If we match a rule then apply it by replacing the key
@@ -132,17 +126,15 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
             if (isPartial) { // always FALSE unless isIncremental
                 break;
             } else {
-                ++cursor;
+                ++index.start;
             }
         } else {
             // Delegate replacement to TransliterationRule object
-            limit += r->replace(text, cursor, *data);
-            cursor += r->getCursorPos();
+            int32_t lenDelta = r->replace(text, index.start, *data);
+            index.limit += lenDelta;
+            index.contextLimit += lenDelta;
+            index.start += r->getCursorPos();
             ++loopCount;
         }
     }
-
-    index.contextLimit += limit - index.limit;
-    index.limit = limit;
-    index.start = cursor;
 }
