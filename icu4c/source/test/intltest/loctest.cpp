@@ -1242,8 +1242,11 @@ LocaleTest::Test4139940()
     // o double acute (\u0151) IS.
     UChar ocf = 0x00f4;
     UChar oda = 0x0151;
-    if (str.indexOf(oda) < 0 || str.indexOf(ocf) >= 0)
-        errln("Fail: Monday in Hungarian is wrong");
+    if (str.indexOf(oda) < 0 || str.indexOf(ocf) >= 0) {
+      errln("Fail: Monday in Hungarian is wrong - oda's index is %d and ocf's is %d",
+            str.indexOf(oda), str.indexOf(ocf));
+      logln(UnicodeString("String is: ") + str );
+    }
 }
 
 UDate

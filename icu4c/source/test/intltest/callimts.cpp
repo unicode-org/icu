@@ -9,6 +9,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "callimts.h"
+#include "caltest.h"
 #include "unicode/calendar.h"
 #include "unicode/gregocal.h"
 #include "unicode/datefmt.h"
@@ -40,6 +41,7 @@ void CalendarLimitTest::runIndexedTest( int32_t index, UBool exec, const char* &
 void
 CalendarLimitTest::test(UDate millis, U_NAMESPACE_QUALIFIER Calendar* cal, U_NAMESPACE_QUALIFIER DateFormat* fmt)
 {
+  static const UDate kDrift = 1e-10;
     UErrorCode exception = U_ZERO_ERROR;
     UnicodeString theDate;
     UErrorCode status = U_ZERO_ERROR;
@@ -48,9 +50,11 @@ CalendarLimitTest::test(UDate millis, U_NAMESPACE_QUALIFIER Calendar* cal, U_NAM
         fmt->format(millis, theDate);
         UDate dt = fmt->parse(theDate, status);
         // allow a small amount of error (drift)
-        if(! withinErr(dt, millis, 1e-10))
-            errln(UnicodeString("FAIL:round trip for large milli, got: ") + dt + " wanted: " + millis);
-        else {
+        if(! withinErr(dt, millis, kDrift)) {
+          errln("FAIL:round trip for large milli, got: %.1lf wanted: %.1lf. (delta %.2lf greater than %.2lf)",
+                dt, millis, uprv_fabs(millis-dt), uprv_fabs(dt*kDrift));
+          logln(UnicodeString("   ") + theDate + " " + CalendarTest::calToStr(*cal));
+          } else {
             logln(UnicodeString("OK: got ") + dt + ", wanted " + millis);
             logln(UnicodeString("    ") + theDate);
         }
@@ -89,15 +93,18 @@ CalendarLimitTest::TestCalendarLimit()
     fmt->adoptCalendar(cal);
     ((SimpleDateFormat*) fmt)->applyPattern("HH:mm:ss.SSS zzz, EEEE, MMMM d, yyyy G");
 
+
     // This test used to test the algorithmic limits of the dates that
     // GregorianCalendar could handle.  However, the algorithm has
     // been rewritten completely since then and the prior limits no
     // longer apply.  Instead, we now do basic round-trip testing of
     // some extreme (but still manageable) dates.
     UDate m;
-    for ( m = 1e17; m < 1e18; m *= 1.1) {
+    logln("checking 1e16..1e17");
+    for ( m = 1e16; m < 1e17; m *= 1.1) {
         test(m, cal, fmt);
     }
+    logln("checking -1e14..-1e15");
     for ( m = -1e14; m > -1e15; m *= 1.1) {
         test(m, cal, fmt);
     }

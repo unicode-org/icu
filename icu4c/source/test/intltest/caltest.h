@@ -168,11 +168,19 @@ public:
         int times, UCalendarDateFields field, UCalendarDateFields field2, 
         UErrorCode& errorCode);
 
+    void TestYWOY(void);
+
     void yearAddTest(Calendar& cal, UErrorCode& status);
  
 public: // package
     // test subroutine use by TestDOWProgression
     virtual void marchByDelta(Calendar* cal, int32_t delta);
+
+ public:
+    // for other tests' use
+    static UnicodeString fieldName(UCalendarDateFields f);
+    static UnicodeString calToStr(const Calendar & cal);
+
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
