@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateCaseFolding.java,v $
-* $Date: 2001/12/13 23:35:56 $
-* $Revision: 1.4 $
+* $Date: 2002/03/15 00:34:46 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -54,12 +54,13 @@ public class GenerateCaseFolding implements UCD_Types {
         String filename = "CaseFolding";
         if (normalized) filename += "-Normalized";
         String directory = "DerivedData/";
-        PrintWriter out = Utility.openPrintWriter(directory + filename + GenerateData.getFileSuffix(true));
-        GenerateData.generateBat(directory, filename, GenerateData.getFileSuffix(true));
+        String newFile = directory + filename + GenerateData.getFileSuffix(true);
+        PrintWriter out = Utility.openPrintWriter(newFile);
+        String mostRecent = GenerateData.generateBat(directory, filename, GenerateData.getFileSuffix(true));
         
         out.println("# CaseFolding" + GenerateData.getFileSuffix(false));
+        out.println(GenerateData.generateDateLine());
         out.println("#");
-        out.println("# Generated: " + new Date() + ", MD");
         Utility.appendFile("CaseFoldingHeader.txt", false, out);
         
         /*
@@ -95,6 +96,7 @@ public class GenerateCaseFolding implements UCD_Types {
         }
         out.close();
         log.close();
+        Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile));
     }
 
     static void drawLine(PrintWriter out, int ch, String type, String result) {
@@ -414,11 +416,14 @@ public class GenerateCaseFolding implements UCD_Types {
         return false;
     }
     
-    static void generateSpecialCasing() throws IOException {
+    static void generateSpecialCasing(boolean normalize) throws IOException {
         Main.setUCD();
         Map sorted = new TreeMap();
         
-        PrintWriter log = Utility.openPrintWriter("SpecialCasingExceptions" + GenerateData.getFileSuffix(true));
+        String suffix2 = "";
+        if (normalize) suffix2 = "-Normalized";
+        
+        PrintWriter log = Utility.openPrintWriter("SpecialCasingExceptions" + suffix2 + GenerateData.getFileSuffix(true));
         
         for (int ch = 0; ch <= 0x10FFFF; ++ch) {
             Utility.dot(ch);
@@ -436,12 +441,22 @@ public class GenerateCaseFolding implements UCD_Types {
             String fupper = Main.nfc.normalize(Main.ucd.getCase(decomp, SIMPLE, UPPER));
             String ftitle = Main.nfc.normalize(Main.ucd.getCase(decomp, SIMPLE, TITLE));
             
-            String base = Main.nfc.normalize(decomp);
-            String blower = Main.nfc.normalize(specialNormalization(lower));
-            String bupper = Main.nfc.normalize(specialNormalization(upper));
-            String btitle = Main.nfc.normalize(specialNormalization(title));
+            String base = decomp;
+            String blower = specialNormalization(lower);
+            String bupper = specialNormalization(upper);
+            String btitle = specialNormalization(title);
+
+            if (true) {
+                flower = Main.nfc.normalize(flower);
+                fupper = Main.nfc.normalize(fupper);
+                ftitle = Main.nfc.normalize(ftitle);
+                base = Main.nfc.normalize(base);
+                blower = Main.nfc.normalize(blower);
+                bupper = Main.nfc.normalize(bupper);
+                btitle = Main.nfc.normalize(btitle);
+            }
             
-            if (ch == 0x249c) {
+            if (ch == -1) {// for debugging, change to actual character
                 System.out.println("Code: " + Main.ucd.getCodeAndName(ch));
                 System.out.println("Decomp: " + Main.ucd.getCodeAndName(decomp));
                 System.out.println("Base: " + Main.ucd.getCodeAndName(base));
@@ -476,11 +491,6 @@ public class GenerateCaseFolding implements UCD_Types {
             if (flower.equals(lower) && fupper.equals(upper) && ftitle.equals(title)) continue;
             
             String name = Main.ucd.getName(ch);
-            String mapping = Utility.hex(ch)
-                + "; " + Utility.hex(flower.equals(base) ? chstr : flower)
-                + "; " + Utility.hex(ftitle.equals(base) ? chstr : ftitle)
-                + "; " + Utility.hex(fupper.equals(base) ? chstr : fupper)
-                + "; # " + Main.ucd.getName(ch);
             
             int order = name.equals("LATIN SMALL LETTER SHARP S") ? 1
                 : name.indexOf("ARMENIAN SMALL LIGATURE") >= 0 ? 3
@@ -490,19 +500,33 @@ public class GenerateCaseFolding implements UCD_Types {
                 : UTF16.countCodePoint(fupper) == 2 ? 6
                 : 7;
             
+            // HACK
+            boolean denormalize = !normalize && order != 5 && order != 6;
+            
+            String mapping = Utility.hex(ch)
+                + "; " + Utility.hex(flower.equals(base) ? chstr : denormalize ? Main.nfd.normalize(flower) : flower)
+                + "; " + Utility.hex(ftitle.equals(base) ? chstr : denormalize ? Main.nfd.normalize(ftitle) : ftitle)
+                + "; " + Utility.hex(fupper.equals(base) ? chstr : denormalize ? Main.nfd.normalize(fupper) : fupper)
+                + "; # " + Main.ucd.getName(ch);
             
             // special exclusions 
             if (isExcluded(ch)) {
                 log.println("# " + mapping);
             } else {
-                sorted.put(new Integer((order << 24) | ch), mapping);
+                int x = ch;
+                if (ch == 0x01F0) x = 0x03B1; // HACK to reorder the same
+                sorted.put(new Integer((order << 24) | x), mapping);
             }
         }
         log.close();
         
         System.out.println("Writing");
-        PrintWriter out = Utility.openPrintWriter("DerivedData/SpecialCasing" + GenerateData.getFileSuffix(true));
-        GenerateData.generateBat("DerivedData/", "SpecialCasing", GenerateData.getFileSuffix(true));
+        String newFile = "DerivedData/SpecialCasing" + suffix2 + GenerateData.getFileSuffix(true);
+        PrintWriter out = Utility.openPrintWriter(newFile);
+        String mostRecent = GenerateData.generateBat("DerivedData/", "SpecialCasing", suffix2 + GenerateData.getFileSuffix(true));
+        out.println("# SpecialCasing" + GenerateData.getFileSuffix(false));
+        out.println(GenerateData.generateDateLine());
+        out.println("#");
         Utility.appendFile("SpecialCasingHeader.txt", true, out);
 
         Iterator it = sorted.keySet().iterator();
@@ -533,5 +557,6 @@ public class GenerateCaseFolding implements UCD_Types {
         }
         Utility.appendFile("SpecialCasingFooter.txt", true, out);
         out.close();
+        Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile));
     }
 }

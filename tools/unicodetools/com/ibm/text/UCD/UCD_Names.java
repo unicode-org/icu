@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2001/12/13 23:35:57 $
-* $Revision: 1.11 $
+* $Date: 2002/03/15 00:34:46 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -571,7 +571,7 @@ final class UCD_Names implements UCD_Types {
         }
     }
 
-    public static byte ON = Utility.lookup("ON", BC);
+    public static byte ON = Utility.lookup("ON", BC, true);
 
     public static String[] JOINING_TYPE = {
         "C",

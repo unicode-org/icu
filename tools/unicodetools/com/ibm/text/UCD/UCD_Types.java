@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2001/12/13 23:35:57 $
-* $Revision: 1.8 $
+* $Date: 2002/03/15 00:34:46 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -14,9 +14,13 @@
 package com.ibm.text.UCD;
 
 public interface UCD_Types {
-    public static final String DATA_DIR = "C:\\DATA\\";
-    public static final String BIN_DIR = DATA_DIR + "BIN\\";
-    public static final String GEN_DIR = DATA_DIR + "GEN\\";
+    
+    public static final int dVersion = 7; // change to fix the generated file D version. If less than zero, no "d"
+    
+    public static final String BASE_DIR = "C:\\DATA\\";
+    public static final String UCD_DIR = BASE_DIR + "UCD\\";
+    public static final String BIN_DIR = BASE_DIR + "BIN\\";
+    public static final String GEN_DIR = BASE_DIR + "GEN\\";
 
 
     static final byte BINARY_FORMAT = 5; // bumped if binary format of UCD changes
@@ -32,7 +36,8 @@ public interface UCD_Types {
      static final byte
         NON_ENUMERATED = -1,
         ENUMERATED = 0,
-        BINARY = 1;
+        BINARY = 1,
+        FLATTENED_BINARY = 2;
     
     /*
   0	Code value in 4-digit hexadecimal format.

@@ -4,10 +4,12 @@ import com.ibm.text.utility.*;
 
 public abstract class UnicodeProperty implements UCD_Types {
   
+    // TODO: turn all of these into privates, and use setters only
+    
     protected UCD       ucd;
     protected boolean   isStandard = true;
     protected byte      type = NOT_DERIVED;
-    private byte      valueType = BINARY;
+    private byte        valueType = BINARY;
     protected boolean   hasUnassigned = false;
     protected boolean   isBinary = true;
     protected byte      defaultValueStyle = SHORT;
@@ -20,6 +22,7 @@ public abstract class UnicodeProperty implements UCD_Types {
     protected String    name;
     protected String    shortName;
     protected String    numberName;
+    protected boolean   skeletonize = true;
       
       /**
        * Return the UCD in use
@@ -76,7 +79,7 @@ public abstract class UnicodeProperty implements UCD_Types {
       public String getProperty(byte style) { 
             if (style == NORMAL) style = defaultPropertyStyle;
             switch (style) {
-                case LONG: return Utility.getUnskeleton(name.toString(), false);
+                case LONG: return skeletonize ? Utility.getUnskeleton(name.toString(), false) : name.toString();
                 case SHORT: return shortName.toString();
                 case NUMBER: return numberName.toString();
                 default: throw new IllegalArgumentException("Bad property: " + style);
@@ -108,7 +111,7 @@ public abstract class UnicodeProperty implements UCD_Types {
       public String getValue(int cp) { return getValue(cp, NORMAL); }
 
       public void setValue(byte style, String in) {
-            if (getValueType() != BINARY) throw new IllegalArgumentException("Can't set varying value: " + style);
+            if (getValueType() < BINARY) throw new IllegalArgumentException("Can't set varying value: " + style);
             if (style == NORMAL) style = defaultValueStyle;
             switch (style) {
               case LONG: valueName = Utility.getUnskeleton(in, false); break;
@@ -119,7 +122,7 @@ public abstract class UnicodeProperty implements UCD_Types {
       }
       
       public String getValue(byte style) {
-            if (getValueType() != BINARY) throw new IllegalArgumentException(
+            if (getValueType() < BINARY) throw new IllegalArgumentException(
                 "Value varies in " + getName(LONG) + "; call getValue(cp)");
             try {
                 if (style == NORMAL) style = defaultValueStyle;

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2001/12/13 23:35:57 $
-* $Revision: 1.10 $
+* $Date: 2002/03/15 00:34:46 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -81,9 +81,10 @@ public final class Utility {    // COMMON UTILITIES
         return clearBits(source, start, start);
     }
 
-    public static int find(String source, String[] target) {
+    public static int find(String source, String[] target, boolean skeletonize) {
+        if (skeletonize) source = getSkeleton(source);
         for (int i = 0; i < target.length; ++i) {
-            if (source.equalsIgnoreCase(target[i])) return i;
+            if (source.equals(getSkeleton(target[i]))) return i;
         }
         return -1;
     }
@@ -94,27 +95,29 @@ public final class Utility {    // COMMON UTILITIES
      */
     
     public static String getSkeleton(String source) {
-        StringBuffer result = new StringBuffer();
+        skeletonBuffer.setLength(0);
         boolean gotOne = false;
-        // remove spaces, '_'
+        // remove spaces, '_', '-'
         // we can do this with char, since no surrogates are involved
         for (int i = 0; i < source.length(); ++i) {
             char ch = source.charAt(i);
-            if (ch == '_' || ch == ' ') {
+            if (ch == '_' || ch == ' ' || ch == '-') {
                 gotOne = true;
             } else {
                 char ch2 = Character.toLowerCase(ch);
                 if (ch2 != ch) {
                     gotOne = true;
-                    result.append(ch2);
+                    skeletonBuffer.append(ch2);
                 } else {
-                    result.append(ch);
+                    skeletonBuffer.append(ch);
                 }
             }
         }
         if (!gotOne) return source; // avoid string creation
-        return result.toString();
+        return skeletonBuffer.toString();
     }
+    
+    private static StringBuffer skeletonBuffer = new StringBuffer();
     
     /**
      * These routines use the Java functions, because they only need to act on ASCII
@@ -122,6 +125,7 @@ public final class Utility {    // COMMON UTILITIES
      */
     
     public static String getUnskeleton(String source, boolean titlecaseStart) {
+        if (source.equals("noBreak")) return source; // HACK
         StringBuffer result = new StringBuffer();
         int lastCat = -1;
         boolean haveFirstCased = true;
@@ -145,7 +149,6 @@ public final class Utility {    // COMMON UTILITIES
         return result.toString();
     }
     
-    
     public static String findSubstring(String source, Set target, boolean invert) {
         Iterator it = target.iterator();
         while (it.hasNext()) {
@@ -155,8 +158,8 @@ public final class Utility {    // COMMON UTILITIES
         return null;
     }
 
-    public static byte lookup(String source, String[] target) {
-        int result = Utility.find(source, target);
+    public static byte lookup(String source, String[] target, boolean skeletonize) {
+        int result = Utility.find(source, target, skeletonize);
         if (result != -1) return (byte)result;
         throw new ChainException("Could not find \"{0}\" in table [{1}]", new Object [] {source, target});
     }
@@ -511,22 +514,20 @@ public final class Utility {    // COMMON UTILITIES
         "1.1.0",
     };
 
-    private static final String DATA_DIR = "C:\\DATA";
-
     public static PrintWriter openPrintWriter(String filename) throws IOException {
-        return openPrintWriter(filename, true);
+        return openPrintWriter(filename, true, true);
     }
     
-    public static PrintWriter openPrintWriter(String filename, boolean removeCR) throws IOException {
+    public static PrintWriter openPrintWriter(String filename, boolean removeCR, boolean latin1) throws IOException {
         return new PrintWriter(
                     new UTF8StreamWriter(
                         new FileOutputStream(getOutputName(filename)),
                         32*1024,
-                        removeCR));
+                        removeCR, latin1));
     }
     
     public static String getOutputName(String filename) {
-        return DATA_DIR + File.separator + "GEN" + File.separator + filename;
+        return UCD_Types.GEN_DIR + filename;
     }
     
     public static void print(PrintWriter pw, Collection c, String separator) {
@@ -570,6 +571,82 @@ public final class Utility {    // COMMON UTILITIES
         }
     }
     
+    public static void renameIdentical(String file1, String file2) throws IOException {
+        if (file1 == null) {
+            System.out.println("Null file");
+            return;
+        }
+        
+        boolean identical = false;
+        BufferedReader br1 = new BufferedReader(new FileReader(file1), 32*1024);
+        BufferedReader br2 = new BufferedReader(new FileReader(file2), 32*1024);
+        String line1 = "";
+        String line2 = "";
+        try {
+            for (int lineCount = 0; ; ++lineCount) {
+                line1 = getLineWithoutFluff(br1, lineCount == 0);
+                line2 = getLineWithoutFluff(br2, lineCount == 0);
+                if (line1 == null) {
+                    if (line2 == null) identical = true;
+                    break;
+                }
+                if (!line1.equals(line2)) {
+                    break;
+                }
+            }
+        } finally {
+            br1.close();
+            br2.close();
+        }
+        if (identical) {
+            File foo = new File(file2);
+            File newName = new File(foo.getParent(), "UNCHANGED-" + foo.getName());
+            if (newName.exists()) {
+                for (int i = 1; newName.exists(); ++i) {
+                    newName = new File(foo.getParent(), "UNCHANGED" + i + "-" + foo.getName());
+                }
+            }
+            System.out.println("IDENTICAL TO PREVIOUS, RENAMING : " + foo);
+            System.out.println("TO : " + newName);
+            boolean renameResult = foo.renameTo(newName);
+            if (!renameResult) System.out.println("Couldn't rename!");
+        } else {
+            System.out.println("Found difference in : " + file1 + ", " + file2);
+            int diff = compare(line1, line2);
+            System.out.println(" Line1: '" + line1.substring(0,diff) + "', '" + line1.substring(diff));
+            System.out.println(" Line2: '" + line2.substring(0,diff) + "', '" + line2.substring(diff));
+        }
+    }
+    
+    static String getLineWithoutFluff(BufferedReader br1, boolean first) throws IOException {
+        while (true) {
+            String line1 = br1.readLine();
+            if (line1 == null) return line1;
+            line1 = line1.trim();
+            if (line1.length() == 0) continue;
+            if (line1.equals("#")) continue;
+            if (line1.startsWith("# Generated")) continue;
+            if (line1.startsWith("# Date")) continue;
+            if (first && line1.startsWith("#")) {
+                first = false;
+                continue;
+            }
+            return line1;
+        }
+    }    
+    
+    /** Returns -1 if strings are equal; otherwise the position they are different at
+    */
+    public static int compare(String a, String b) {
+        int len = a.length();
+        if (len > b.length()) len = b.length();
+        for (int i = 0; i < len; ++i) {
+            if (a.charAt(i) != b.charAt(i)) return i;
+        }
+        if (a.length() != b.length()) return len;
+        return -1;
+    }
+    
     public static void copyTextFile(String filename, boolean utf8, String newName) throws IOException {
         PrintWriter out = Utility.openPrintWriter(newName);
         appendFile(filename, utf8, out);
@@ -590,21 +667,38 @@ public final class Utility {    // COMMON UTILITIES
         for (int i = 0; i < searchPath.length; ++i) {
             if (version.length() != 0 && version.compareTo(searchPath[i]) < compValue) continue;
 
-            String directoryName = DATA_DIR + File.separator + searchPath[i] + "-Update" + File.separator;
+            String directoryName = UCD_Types.UCD_DIR + File.separator + searchPath[i] + "-Update" + File.separator;
             if (show) System.out.println("Trying: '" + directoryName + "', '" + filename + "'");
-            File directory = new File(directoryName);
-            String[] list = directory.list();
-            for (int j = 0; j < list.length; ++j) {
-                String fn = list[j];
-                if (!fn.endsWith(".txt")) continue;
-                //System.out.print("\t'" + fn + "'");
-                if (!fn.startsWith(filename)) {
-                    //System.out.println(" -- MISS: '" + filename + "'");
-                    continue;
+            String result = searchDirectory(new File(directoryName), filename, show);
+            if (result != null) return result;
+            
+        }
+        return null;
+    }
+    
+    public static Set getDirectoryContentsLastFirst(File directory) {
+        Set result = new TreeSet(new Comparator() {
+                public int compare(Object a, Object b) {
+                    return ((Comparable) b).compareTo(a);
                 }
-                //System.out.println(" -- HIT");
+            });
+        result.addAll(java.util.Arrays.asList(directory.list()));
+        return result;
+    }
+    
+    public static String searchDirectory(File directory, String filename, boolean show) throws IOException {
+        Iterator it = getDirectoryContentsLastFirst(directory).iterator();
+        while (it.hasNext()) {
+            String fn = (String) it.next();
+            File foo = new File(directory + File.separator + fn);
+            // System.out.println("\tChecking: '" + foo.getCanonicalPath() + "'");
+            if (foo.isDirectory()) {
+                String attempt = searchDirectory(foo, filename, show);
+                if (attempt != null) return attempt;
+            }
+            if (fn.endsWith(".txt") && fn.startsWith(filename)) {
                 if (show) System.out.println("\tFound: '" + fn + "'");
-                return directoryName + fn;
+                return foo.getCanonicalPath();
             }
         }
         return null;
@@ -653,8 +747,11 @@ public final class Utility {    // COMMON UTILITIES
                     System.out.println(prefix + ucd.getCodeAndName(cp));
                 }
             } else {
-                System.out.println(prefix + ucd.getCodeAndName(start) + 
-                    ((start != end) ? (".." + ucd.getCodeAndName(end)) : ""));
+                System.out.println(prefix + ucd.getCode(start)
+                    + ((start != end) ? (".." + ucd.getCode(end)) : "")
+                    + "\t# " + ucd.getName(start)
+                    + ((start != end) ? (".." + ucd.getName(end)) : "")
+                );
             }
         }
     }
