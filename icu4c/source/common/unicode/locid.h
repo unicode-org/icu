@@ -329,6 +329,19 @@ public:
     static      void            setDefault(const    Locale&     newLocale,
                                                     UErrorCode&  success);
 
+    
+    /**
+     * Creates a locale which has had minimal canonicalization 
+     * as per uloc_getName(). 
+     * @param name The name to create from
+     * @return new locale object
+     * @draft
+     * @see uloc_getName
+     */
+     
+    static Locale createFromName(const char *name);
+
+    
     /**
      * Returns the locale's two-letter ISO-639 language code.
      * @return      An alias to the code
