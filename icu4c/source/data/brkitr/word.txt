@@ -6,7 +6,7 @@
 #
 #   ICU Word Break Rules
 #      See Unicode Standard Annex #29.
-#      These rules are based on the proposed draft dated 2003-03-31
+#      These rules are based on Version 4.0.0, dated 2003-04-17
 #
 
 
@@ -24,7 +24,7 @@ $Katakana  = [[:Script = KATAKANA:] [:name = KATAKANA-HIRAGANA PROLONGED SOUND M
 
 $ALetter   = [[:Alphabetic:] [:name= HEBREW PUNCTUATION GERESH:] 
                            - [:Ideographic:]
-                           - [:Katakana:]
+                           - $Katakana
                            - [:Script = Thai:]
                            - [:Script = Lao:]
                            - [:Script = Hiragana:]];
@@ -70,18 +70,19 @@ $Format    = [[:Cf:]];
 #
 #  "Extended"  definitions.  Grapheme Cluster + Format Chars, treated like the base char.
 #
-$ALetterEx    = $ALetter   $Extend* $Format*; 
-$NumericEx    = $Numeric   $Extend* $Format*;
-$MidNumEx     = $MidNum    $Extend* $Format*;
-$MidNumLetEx  = $MidNumLet $Extend* $Format*;
-$MidLetterEx  = $MidLetter $Extend* $Format*;
-$KatakanaEx   = $Katakana  $Extend* $Format*;
+$ALetterEx    = $ALetter   $Extend*; 
+$NumericEx    = $Numeric   $Extend*;
+$MidNumEx     = $MidNum    $Extend*;
+$MidNumLetEx  = $MidNumLet $Extend*;
+$MidLetterEx  = $MidLetter $Extend*;
+$KatakanaEx   = $Katakana  $Extend*;
+$FormatEx     = $Format    $Extend*;
 
 
 #
 #  Numbers.  Rules 8, 11, 12 form the TR.
 #
-$NumberSequence = $NumericEx (($MidNumEx | $MidNumLetEx)? $NumericEx)*;
+$NumberSequence = $NumericEx ($FormatEx* ($MidNumEx | $MidNumLetEx)? $FormatEx* $NumericEx)*;
 $NumberSequence {100};
 
 #
@@ -90,13 +91,13 @@ $NumberSequence {100};
 #     - may include both letters and numbers.
 #     - may include  MideLetter, MidNumber punctuation.
 #
-$LetterSequence = $ALetterEx (($MidLetterEx | $MidNumLetEx)? $ALetterEx)*;     # rules #6, #7
-$NumberSequence? $LetterSequence ($NumberSequence | $LetterSequence)* {200};
+$LetterSequence = $ALetterEx ($FormatEx* ($MidLetterEx | $MidNumLetEx)? $FormatEx* $ALetterEx)*;     # rules #6, #7
+($NumberSequence $FormatEx*)? $LetterSequence ($FormatEx* ($NumberSequence | $LetterSequence))* {200};
 
 #
 #  Do not break between Katakana.   Rule #13.
 #
-$KatakanaEx+ {300};
+$KatakanaEx ($FormatEx* $KatakanaEx)* {300};
 [:Hiragana:] $Extend* {300};
 
 #
@@ -127,5 +128,5 @@ $CR $LF;
 #
 $NonStarters = [$Numeric $ALetter $Katakana $MidLetter $MidNum $MidNumLet $Extend $Format];
 
-!.*;
-#! ($NonStarters* | \n \r) .;
+#!.*;
+! ($NonStarters* | \n \r) .;
