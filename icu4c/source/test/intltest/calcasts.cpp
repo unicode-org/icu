@@ -39,15 +39,17 @@ void CalendarCaseTest::doTestCases(const TestCase *cases, Calendar *cal) {
   static const double ONE_DAY    = 24*ONE_HOUR;
   static const double JULIAN_EPOCH = -210866760000000.;   // 1/1/4713 BC 12:00
   int32_t i;
-  logln("hi\n");
   UErrorCode status = U_ZERO_ERROR;
   cal->adoptTimeZone(TimeZone::getGMT()->clone());
   for(i=0;cases[i].era>=0;i++) {
-    logln(UnicodeString("Test case ") + i);
     UDate t = (JULIAN_EPOCH+(ONE_DAY*cases[i].julian));
-    
+
+    logln("Test case %d:  julianday%f -> date %f\n", i, cases[i].julian, t);
+
     // Millis -> fields
     cal->setTime(t, status);
+
+    logln(calToStr(*cal));
 
     checkField(cal, UCAL_ERA, cases[i].era, status);
     checkField(cal, UCAL_YEAR, cases[i].year,status);
@@ -88,8 +90,10 @@ UBool CalendarCaseTest::checkField(Calendar *cal, UCalendarDateFields field, int
     return FALSE;
   }
   if(res != value) {
-    errln((UnicodeString)"Checking field " + fieldName(field) + " expected " + value + " and got " + res + UnicodeString("\n"));
+    errln((UnicodeString)"FAIL: Checking field " + fieldName(field) + " expected " + value + " and got " + res + UnicodeString("\n"));
     return FALSE;
+  } else {
+    logln((UnicodeString)"Checking field " + fieldName(field) + " == " + value + UnicodeString("\n"));
   }
   return TRUE;
 }
