@@ -38,7 +38,7 @@ LINK = $(LINK.c)
 endif
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/extra/ustdio -I$(srcdir)/../toolutil
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 ENABLE_RPATH = @ENABLE_RPATH@
@@ -46,7 +46,7 @@ ifeq ($(ENABLE_RPATH),YES)
 RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
 endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = $(LIBUSTDIO) $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@ 
+LIBS = $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@ 
 
 ##OBJECTS = error.o genrb.o ustr.o parse.o read.o write.o list.o	\
 ##rblist.o  util.o

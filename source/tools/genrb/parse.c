@@ -13,7 +13,7 @@
 *   Date        Name        Description
 *   05/26/99    stephen     Creation.
 *   02/25/00    weiv        Overhaul to write udata
-*   5/10/01     Ram			removed ustdio dependency
+*   5/10/01     Ram         removed ustdio dependency
 *******************************************************************************
 */
 
@@ -492,7 +492,7 @@ parse(UCHARBUF* buf, const char *cp, const char *inputDir,
 
           /* Record a singleton string */
         case eStr:
-			/* check if we have reached here after finding %%UCARULES */
+            /* check if we have reached here after finding %%UCARULES */
             if(ucaEl==TRUE){
                 FileStream *in =NULL;
                 char fileName[256]={'\0'};
@@ -508,32 +508,32 @@ parse(UCHARBUF* buf, const char *cp, const char *inputDir,
                 /* open the file */
                 in = T_FileStream_open(fileName, "rb");
                 if(in){
-					const char* cp;
-					UChar c=0;
-					UCHARBUF* ucbuf;
-					int size = T_FileStream_size(in);
-					UChar* pTarget = (UChar*) uprv_malloc(sizeof(UChar)*size);
-					UChar* target = pTarget;
-					UChar* targetLimit = pTarget+size;
-					if(ucbuf_autodetect(in,&cp)){
-					}
-					ucbuf= ucbuf_open(in,cp,status);
-					do{
-						c = (UChar)ucbuf_getc(ucbuf,status);
-						unescape(ucbuf,status);
-						*(target++) = c;
-					}while(c!=U_EOF && (target<targetLimit));
-					                
-					/* Add it to bundle */
-					temp = string_open(bundle,cTag, pTarget, target-pTarget, status);
-					table_add(rootTable, temp, status);
-					put(data, &tag, status);
-					if(U_FAILURE(*status)) {
-						goto finish;
-					}
-					temp = NULL;
-					/* clean up */
-					uprv_free(pTarget);
+                    const char* cp;
+                    UChar c=0;
+                    UCHARBUF* ucbuf;
+                    int size = T_FileStream_size(in);
+                    UChar* pTarget = (UChar*) uprv_malloc(sizeof(UChar)*size);
+                    UChar* target = pTarget;
+                    UChar* targetLimit = pTarget+size;
+                    if(ucbuf_autodetect(in,&cp)){
+                    }
+                    ucbuf= ucbuf_open(in,cp,status);
+                    do{
+                        c = (UChar)ucbuf_getc(ucbuf,status);
+                        unescape(ucbuf,status);
+                        *(target++) = c;
+                    }while(c!=U_EOF && (target<targetLimit));
+                                    
+                    /* Add it to bundle */
+                    temp = string_open(bundle,cTag, pTarget, target-pTarget, status);
+                    table_add(rootTable, temp, status);
+                    put(data, &tag, status);
+                    if(U_FAILURE(*status)) {
+                        goto finish;
+                    }
+                    temp = NULL;
+                    /* clean up */
+                    uprv_free(pTarget);
                 }else{
                     fprintf(stderr, "Error! Couldn't open input file %s for tag %s\n", fileName, cTag );
                     goto finish;
