@@ -608,7 +608,7 @@ _LMBCSOpenWorker(UConverter*  _this,
 static void 
 _LMBCSClose(UConverter *   _this) 
 {
-    if (_this->extraInfo != NULL && !_this->isExtraLocal)
+    if (_this->extraInfo != NULL)
     {
         ulmbcs_byte_t Ix;
         UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS *) _this->extraInfo;
@@ -618,7 +618,9 @@ _LMBCSClose(UConverter *   _this)
            if (extraInfo->OptGrpConverter[Ix] != NULL)
               ucnv_unloadSharedDataIfReady(extraInfo->OptGrpConverter[Ix]);
         }
-        uprv_free (_this->extraInfo);
+        if (!_this->isExtraLocal) {
+            uprv_free (_this->extraInfo);
+        }
     }
 }
 
@@ -1071,8 +1073,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
         {
             group = CurByte;                   /* group byte is in the source */
             extraInfo = (UConverterDataLMBCS *) args->converter->extraInfo;
-            cnv = extraInfo->OptGrpConverter[group];
-            if (!cnv)
+            if (group > ULMBCS_GRP_LAST || (cnv = extraInfo->OptGrpConverter[group]) == NULL)
             {
                 /* this is not a valid group byte - no converter*/
                 *err = U_INVALID_CHAR_FOUND;
