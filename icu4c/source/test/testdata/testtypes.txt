@@ -33,7 +33,7 @@ testtypes
     
     // genrb just includes the test as a string after converting to UTF-16
         
-    testincludeUTF:include{ "th18057.txt" }
+    testincludeUTF:include{ "riwords.txt" }
     // No unescaping is done.
     testinclude:include{ "translit_rules.txt" }
 
