@@ -94,8 +94,9 @@ void AstroTest::TestSolarLongitude(void) {
     
     double longitude = astro->getSunLongitude();
     //longitude = 0;
-    CalendarAstronomer::Equatorial *result = astro->getSunPosition();
-    logln((UnicodeString)"Sun position is " + result->toString() + (UnicodeString)";  " /* + result->toHmsString()*/ + " Sun longitude is " + longitude );
+    CalendarAstronomer::Equatorial result;
+    astro->getSunPosition(result);
+    logln((UnicodeString)"Sun position is " + result.toString() + (UnicodeString)";  " /* + result.toHmsString()*/ + " Sun longitude is " + longitude );
   }
   closeAstro(status);
   ASSERT_OK(status);
@@ -118,8 +119,8 @@ void AstroTest::TestLunarPosition(void) {
     gc->set((int32_t)tests[i][0], (int32_t)tests[i][1]-1, (int32_t)tests[i][2], (int32_t)tests[i][3], (int32_t)tests[i][4]);
     astro->setDate(gc->getTime(status));
     
-    CalendarAstronomer::Equatorial *result = astro->getMoonPosition();
-    logln((UnicodeString)"Moon position is " + result->toString() + (UnicodeString)";  " /* + result->toHmsString()*/);
+    const CalendarAstronomer::Equatorial& result = astro->getMoonPosition();
+    logln((UnicodeString)"Moon position is " + result.toString() + (UnicodeString)";  " /* + result->toHmsString()*/);
   }
   
   closeAstro(status);
@@ -133,9 +134,9 @@ void AstroTest::TestCoordinates(void) {
   initAstro(status);
   ASSERT_OK(status);
     
-  CalendarAstronomer::Equatorial *result = astro->eclipticToEquatorial(139.686111 * CalendarAstronomer::PI / 180.0, 4.875278* CalendarAstronomer::PI / 180.0);
-  logln((UnicodeString)"result is " + result->toString() + (UnicodeString)";  " /* + result->toHmsString()*/ );
-  delete result;
+  CalendarAstronomer::Equatorial result;
+  astro->eclipticToEquatorial(result, 139.686111 * CalendarAstronomer::PI / 180.0, 4.875278* CalendarAstronomer::PI / 180.0);
+  logln((UnicodeString)"result is " + result.toString() + (UnicodeString)";  " /* + result.toHmsString()*/ );
   closeAstro(status);
   ASSERT_OK(status);
 }
@@ -158,9 +159,12 @@ void AstroTest::TestCoverage(void) {
 
   double eclLat = laLat * CalendarAstronomer::PI / 360;
   double eclLong = laLong * CalendarAstronomer::PI / 360;
-  CalendarAstronomer::Ecliptic *ecl = new CalendarAstronomer::Ecliptic(eclLat, eclLong);
-  CalendarAstronomer::Equatorial *eq = NULL;
-  logln("ecliptic: " + ecl->toString());
+
+  CalendarAstronomer::Ecliptic ecl(eclLat, eclLong);
+  CalendarAstronomer::Equatorial eq;
+  CalendarAstronomer::Horizon hor;
+
+  logln("ecliptic: " + ecl.toString());
   CalendarAstronomer *myastro3 = new CalendarAstronomer();
   myastro3->setJulianDay((4713 + 2000) * 365.25);
 
@@ -176,13 +180,9 @@ void AstroTest::TestCoverage(void) {
     logln((UnicodeString)"   cent: " + astro->getJulianCentury());
     logln((UnicodeString)"   gw sidereal: " + astro->getGreenwichSidereal());
     logln((UnicodeString)"   loc sidereal: " + astro->getLocalSidereal());
-    logln((UnicodeString)"   equ ecl: " + (eq=astro->eclipticToEquatorial(*ecl))->toString());
-    delete eq;
-    logln((UnicodeString)"   equ long: " + (eq=astro->eclipticToEquatorial(eclLong))->toString());
-    delete eq;
-    CalendarAstronomer::Horizon *hor = NULL;
-    logln((UnicodeString)"   horiz: " + (hor=astro->eclipticToHorizon(eclLong))->toString());
-    delete hor;
+    logln((UnicodeString)"   equ ecl: " + (astro->eclipticToEquatorial(eq,ecl)).toString());
+    logln((UnicodeString)"   equ long: " + (astro->eclipticToEquatorial(eq, eclLong)).toString());
+    logln((UnicodeString)"   horiz: " + (astro->eclipticToHorizon(hor, eclLong)).toString());
     logln((UnicodeString)"   sunrise: " + (astro->getSunRiseSet(TRUE)));
     logln((UnicodeString)"   sunset: " + (astro->getSunRiseSet(FALSE)));
     logln((UnicodeString)"   moon phase: " + astro->getMoonPhase());
@@ -198,7 +198,6 @@ void AstroTest::TestCoverage(void) {
   delete myastro3;
   delete myastro;
   delete cal;
-  delete ecl;
 
   closeAstro(status);
   ASSERT_OK(status);
