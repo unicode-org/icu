@@ -1310,8 +1310,6 @@ static void TestGetVersion(){
     int i=0, j = 0;
     int locCount = uloc_countAvailable();
     const char *locName = "root";
-    const UChar* rules =NULL;
-    int32_t len = 0;
     
     log_verbose("The ures_getVersion tests begin : \n");
 
