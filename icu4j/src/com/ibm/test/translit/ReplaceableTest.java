@@ -17,7 +17,7 @@ public class ReplaceableTest extends TestFmwk {
   
     public void Test() throws IOException, ParseException {
         check("Lower", "ABCD", "1234", "");
-        check("Upper", "abcd\u00DF", "123456", ""); // must map 00DF to SS
+        check("Upper", "abcd\u00DF", "123455", ""); // must map 00DF to SS
         check("Title", "aBCD", "1234", "");
         check("NFC", "A\u0300E\u0300", "1234", "13");
         check("NFD", "\u00C0\u00C8", "12", "1122");
@@ -32,8 +32,8 @@ public class ReplaceableTest extends TestFmwk {
         t.transliterate(tr);
         String newStyles = tr.getStyles();
         if (!newStyles.equals(shouldProduceStyles)) {
-            errln("Styles Not Retained: " + transliteratorName 
-                + "(" + original + ") => " + tr.toString() + "; should be {" + shouldProduceStyles + "}!");
+            errln("FAIL Styles: " + transliteratorName + "("
+                + original + " => " + tr.toString() + "; should be {" + shouldProduceStyles + "}!");
         } else {
             logln("OK: " + transliteratorName + "(" + original + ") => " + tr.toString());
         }
