@@ -46,7 +46,7 @@ randul()
         srand((unsigned)time(NULL));
         initialized = TRUE;
     }
-    // Assume rand has at least 12 bits of precision
+    /* Assume rand has at least 12 bits of precision */
     
     for (i=0; i<sizeof(l); ++i) ((char*)&l)[i] = (rand() & 0x0FF0) >> 4;
     return l;
@@ -68,7 +68,7 @@ static int32_t randi(int32_t n)
 {
     return (int32_t)(randd() * n);
 }
-//***************************************************************************************
+/***************************************************************************************/
 /**
  * Convert an integer, positive or negative, to a character string radix 10.
  */
@@ -471,9 +471,9 @@ bool_t testTag(const char* frag,
       array=ures_getByKey(theBundle, tag, array, &status);
 	  CONFIRM_ErrorCode(status,expected_resource_status);
 	  if (U_SUCCESS(status)) {
-			//confirm the resource type is an array
+	    /*confirm the resource type is an array*/
 		    CONFIRM_INT_EQ(ures_getType(array), RES_ARRAY);
-            //confirm the size
+		    /*confirm the size*/
 			count=ures_getSize(array);
             CONFIRM_INT_GE(count,1);
             for (j=0; j<count; ++j) {
@@ -550,7 +550,7 @@ bool_t testTag(const char* frag,
         CONFIRM_ErrorCode(status,expected_resource_status);
         if (U_SUCCESS(status))
         {
-            //confirm the resource type is an 2darray
+	  /*confirm the resource type is an 2darray*/
             CONFIRM_INT_EQ(ures_getType(array2d), RES_ARRAY);
 		    row_count=ures_getSize(array2d);
           	CONFIRM_INT_GE(row_count,1);
@@ -560,7 +560,7 @@ bool_t testTag(const char* frag,
 				tableRow=ures_getByIndex(array2d, row, tableRow, &status);
 				CONFIRM_ErrorCode(status, expected_resource_status);
                 if(U_SUCCESS(status)){
-                    //confirm the resourcetype of each table row is an array
+		  /*confirm the resourcetype of each table row is an array*/
 			        CONFIRM_INT_EQ(ures_getType(tableRow), RES_ARRAY);
 		            column_count=ures_getSize(tableRow);
                     CONFIRM_INT_GE(column_count,1);
@@ -588,7 +588,7 @@ bool_t testTag(const char* frag,
 		
 
       /*------2dArrayItem-------------------------------------------------------------- */
-      // 2dArrayItem
+	/* 2dArrayItem*/
       for (j=0; j<10; ++j)
 	   {
            row = row_count ? (randi(row_count * 3) - row_count) : (randi(200) - 100);
@@ -666,7 +666,7 @@ bool_t testTag(const char* frag,
 			tag_count=0;
 		}
     
-     //---------taggedArrayItem----------------------------------------------
+      /*---------taggedArrayItem----------------------------------------------*/
       count = 0;
         for (index=-20; index<20; ++index)
         {
