@@ -724,6 +724,44 @@ public class TimeZoneTest extends TestFmwk
             }
         }
     }
+
+    public void TestCountries() {
+        // Make sure America/Los_Angeles is in the "US" group, and
+        // Asia/Tokyo isn't.  Vice versa for the "JP" group.
+
+        String[] s = TimeZone.getAvailableIDs("US");
+        boolean la = false, tokyo = false;
+        String laZone = "America/Los_Angeles", tokyoZone = "Asia/Tokyo";
+
+        for (int i=0; i<s.length; ++i) {
+            if (s[i].equals(laZone)) {
+                la = true;
+            }
+            if (s[i].equals(tokyoZone)) {
+                tokyo = true;
+            }
+        }
+        if (!la || tokyo) {
+            errln("FAIL: " + laZone + " in US = " + la);
+            errln("FAIL: " + tokyoZone + " in US = " + tokyo);
+        }
+
+        s = TimeZone.getAvailableIDs("JP");
+        la = false; tokyo = false;
+
+        for (int i=0; i<s.length; ++i) {
+            if (s[i].equals(laZone)) {
+                la = true;
+            }
+            if (s[i].equals(tokyoZone)) {
+                tokyo = true;
+            }
+        }
+        if (la || !tokyo) {
+            errln("FAIL: " + laZone + " in JP = " + la);
+            errln("FAIL: " + tokyoZone + " in JP = " + tokyo);
+        }
+    }
 }
 
 //eof
