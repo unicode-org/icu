@@ -1108,13 +1108,13 @@ static void TestCoverageMBCS(){
     {
 
         /* MBCS with three byte codepage data test4.ucm*/
-        const UChar unicodeInput[]    = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0x000e};
-        const uint8_t expectedtest4[] = { 0x00, 0x05, 0xff, 0x01, 0x02, 0x03, 0x0b,  0x07,  0x01, 0x02, 0x03, 0x0a,  0xff,};
-        int32_t  totest4Offs[]        = { 0, 1, 2, 3, 3, 3, 3, 4, 6, 6, 6, 6, 8,};
+        static const UChar unicodeInput[]    = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0x000e};
+        static const uint8_t expectedtest4[] = { 0x00, 0x05, 0xff, 0x01, 0x02, 0x03, 0x0b,  0x07,  0x01, 0x02, 0x03, 0x0a,  0xff,};
+        static const int32_t totest4Offs[]   = { 0, 1, 2, 3, 3, 3, 3, 4, 6, 6, 6, 6, 8,};
 
-        const uint8_t test4input[]    = { 0x00, 0x05, 0x06, 0x01, 0x02, 0x03, 0x0b,  0x07,  0x01, 0x02, 0x03, 0x0a, 0x01, 0x02, 0x03, 0x0c,};
-        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0xfffd};
-        int32_t fromtest4Offs[]       = { 0, 1, 2, 3, 7, 7, 8, 8, 12,};
+        static const uint8_t test4input[]    = { 0x00, 0x05, 0x06, 0x01, 0x02, 0x03, 0x0b,  0x07,  0x01, 0x02, 0x03, 0x0a, 0x01, 0x02, 0x03, 0x0c,};
+        static const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0xfffd};
+        static const int32_t fromtest4Offs[] = { 0, 1, 2, 3, 7, 7, 8, 8, 12,};
 
         /*from Unicode*/
         if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
@@ -1135,7 +1135,7 @@ static void TestCoverageMBCS(){
 
 }
 
-static void TestConverterType(const char *convName, enum UConverterType convType) {
+static void TestConverterType(const char *convName, UConverterType convType) {
     UConverter* myConverter;
     UErrorCode err = U_ZERO_ERROR;
 
