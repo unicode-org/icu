@@ -3,12 +3,13 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NameUnicodeTransliterator.java,v $ 
- * $Date: 2002/03/27 19:13:22 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/07/26 21:12:36 $ 
+ * $Revision: 1.11 $
  */
 package com.ibm.icu.text;
 import java.util.*;
 import com.ibm.icu.lang.*;
+import com.ibm.icu.impl.UCharacterProperty;
 
 /**
  * A transliterator that performs name to character mapping.
@@ -93,7 +94,7 @@ class NameUnicodeTransliterator extends Transliterator {
                 // to a single space.  If closeDelimiter is found, exit
                 // the loop.  If any other character is found, exit the
                 // loop.  If the limit is found, exit the loop.
-                if (UCharacter.isWhitespace(c)) {
+                if (UCharacterProperty.isRuleWhiteSpace(c)) {
                     // Ignore leading whitespace
                     if (ibuf != 0 && buf[ibuf-1] != (char)0x0020) {
                         buf[ibuf++] = (char)0x0020 /* */;

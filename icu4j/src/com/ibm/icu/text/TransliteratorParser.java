@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliteratorParser.java,v $
-* $Date: 2002/06/20 01:21:18 $
-* $Revision: 1.22 $
+* $Date: 2002/07/26 21:12:36 $
+* $Revision: 1.23 $
 **********************************************************************
 */
 package com.ibm.icu.text;
@@ -16,6 +16,7 @@ import java.util.Stack;
 import java.util.Vector;
 import java.text.ParsePosition;
 import com.ibm.icu.lang.*;
+import com.ibm.icu.impl.UCharacterProperty;
 
 class TransliteratorParser {
 
@@ -445,10 +446,7 @@ class TransliteratorParser {
                 // Since all syntax characters are in the BMP, fetching
                 // 16-bit code units suffices here.
                 char c = rule.charAt(pos++);
-                if (Character.isWhitespace(c)) {
-                    // Ignore whitespace.  Note that this is not Unicode
-                    // spaces, but Java spaces -- a subset, representing
-                    // whitespace likely to be seen in code.
+                if (UCharacterProperty.isRuleWhiteSpace(c)) {
                     continue;
                 }
                 // HALF_ENDERS is all chars that end a rule half: "<>=;"
@@ -920,10 +918,7 @@ class TransliteratorParser {
             int limit = rule.length();
             while (pos < limit) {
                 char c = rule.charAt(pos++);
-                if (Character.isWhitespace(c)) {
-                    // Ignore leading whitespace.  Note that this is not
-                    // Unicode spaces, but Java spaces -- a subset,
-                    // representing whitespace likely to be seen in code.
+                if (UCharacterProperty.isRuleWhiteSpace(c)) {
                     continue;
                 }
                 // Skip lines starting with the comment character
@@ -948,7 +943,7 @@ class TransliteratorParser {
                         rule.regionMatches(pos, ID_TOKEN, 0, ID_TOKEN_LEN)) {
                         pos += ID_TOKEN_LEN;
                         c = rule.charAt(pos);
-                        while (UCharacter.isWhitespace(c) && pos < limit) {
+                        while (UCharacterProperty.isRuleWhiteSpace(c) && pos < limit) {
                             ++pos;
                             c = rule.charAt(pos);
                         }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2002/07/16 22:56:09 $
- * $Revision: 1.81 $
+ * $Date: 2002/07/26 21:12:36 $
+ * $Revision: 1.82 $
  *
  *****************************************************************************************
  */
@@ -16,6 +16,7 @@ import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.CaseInsensitiveString;
+import com.ibm.icu.impl.UCharacterProperty;
 
 import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
@@ -250,7 +251,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.81 $ $Date: 2002/07/16 22:56:09 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.82 $ $Date: 2002/07/26 21:12:36 $
  */
 public abstract class Transliterator {
     /**
@@ -1562,7 +1563,7 @@ public abstract class Transliterator {
                 // Skip over whitespace
                 int pos = 0;
                 while (pos < line.length() &&
-                       Character.isWhitespace(line.charAt(pos))) {
+                       UCharacterProperty.isRuleWhiteSpace(line.charAt(pos))) {
                     ++pos;
                 }
                 // Ignore blank lines and comments

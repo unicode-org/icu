@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $
- * $Date: 2002/06/28 19:15:52 $
- * $Revision: 1.56 $
+ * $Date: 2002/07/26 21:12:36 $
+ * $Revision: 1.57 $
  *
  *****************************************************************************************
  */
@@ -24,7 +24,7 @@ import com.ibm.icu.impl.data.ResourceReader;
  * translations. Rule sets are stored in resource bundles indexed by
  * name. Rules within a rule set are separated by semicolons (';').
  * To include a literal semicolon, prefix it with a backslash ('\').
- * Whitespace, as defined by <code>Character.isWhitespace()</code>,
+ * Whitespace, as defined by <code>UCharacterProperty.isRuleWhiteSpace()</code>,
  * is ignored. If the first non-blank character on a line is '#',
  * the entire line is ignored as a comment. </p>
  *
@@ -279,7 +279,7 @@ import com.ibm.icu.impl.data.ResourceReader;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.56 $ $Date: 2002/06/28 19:15:52 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.57 $ $Date: 2002/07/26 21:12:36 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -468,6 +468,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.57  2002/07/26 21:12:36  alan
+ * jitterbug 1997: use UCharacterProperty.isRuleWhiteSpace() in parsers
+ *
  * Revision 1.56  2002/06/28 19:15:52  alan
  * jitterbug 1434: improve method names; minor cleanup
  *
