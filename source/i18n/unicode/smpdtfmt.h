@@ -56,30 +56,34 @@ class DateFormat;
  * as the following:
  * <pre>
  * \code
- *    Symbol   Meaning                 Presentation       Example
- *    ------   -------                 ------------       -------
- *    G        era designator          (Text)             AD
- *    y        year                    (Number)           1996
- *    Y        year/week of year       (Number)           1996
- *    M        month in year           (Text & Number)    July & 07
- *    d        day in month            (Number)           10
- *    h        hour in am/pm (1~12)    (Number)           12
- *    H        hour in day (0~23)      (Number)           0
- *    m        minute in hour          (Number)           30
- *    s        second in minute        (Number)           55
- *    S        millisecond             (Number)           978
- *    E        day of week             (Text)             Tuesday
- *    e        day of week/local (1~7) (Number)           2
- *    D        day of year             (Number)           189
- *    F        day of week in month    (Number)           2 (2nd Wed in July)
- *    w        week in year            (Number)           27
- *    W        week in month           (Number)           2
- *    a        am/pm marker            (Text)             PM
- *    k        hour in day (1~24)      (Number)           24
- *    K        hour in am/pm (0~11)    (Number)           0
- *    z        time zone               (Text)             Pacific Standard Time
- *    '        escape for text
- *    ''       single quote                               '
+ * Symbol   Meaning                 Presentation        Example
+ * ------   -------                 ------------        -------
+ * G        era designator          (Text)              AD
+ * y        year                    (Number)            1996
+ * Y        year (week of year)     (Number)            1997
+ * u        extended year           (Number)            4601
+ * M        month in year           (Text & Number)     July & 07
+ * d        day in month            (Number)            10
+ * h        hour in am/pm (1~12)    (Number)            12
+ * H        hour in day (0~23)      (Number)            0
+ * m        minute in hour          (Number)            30
+ * s        second in minute        (Number)            55
+ * S        fractional second       (Number)            978
+ * E        day of week             (Text)              Tuesday
+ * e        day of week (local 1~7) (Number)            2
+ * D        day in year             (Number)            189
+ * F        day of week in month    (Number)            2 (2nd Wed in July)
+ * w        week in year            (Number)            27
+ * W        week in month           (Number)            2
+ * a        am/pm marker            (Text)              PM
+ * k        hour in day (1~24)      (Number)            24
+ * K        hour in am/pm (0~11)    (Number)            0
+ * z        time zone               (Text)              Pacific Standard Time
+ * Z        time zone (RFC 822)     (Number)            -0800
+ * g        Julian day              (Number)            2451334
+ * A        milliseconds in day     (Number)            69540000
+ * '        escape for text         (Delimiter)         'Date='
+ * ''       single quote            (Literal)           'o''clock'
  * \endcode
  * </pre>
  * The count of pattern letters determine the format.
@@ -91,6 +95,7 @@ class DateFormat;
  * this amount (e.g. if "m" produces "6", "mm" produces "06"). Year is handled
  * specially; that is, if the count of 'y' is 2, the Year will be truncated to 2 digits.
  * (e.g., if "yyyy" produces "1997", "yy" produces "97".)
+ * Unlike other fields, fractional seconds are padded on the right with zero.
  * <P>
  * (Text & Number): 3 or over, use text, otherwise use number.  (e.g., "M" produces "1",
  * "MM" produces "01", "MMM" produces "Jan", and "MMMM" produces "January".)
@@ -764,7 +769,7 @@ private:
     /**
      * Map index into pattern character string to DateFormat field number
      */
-    static const DateFormat::EField fgPatternIndexToDateFormatField[];
+    static const UDateFormatField fgPatternIndexToDateFormatField[];
 
     /**
      * The formatting pattern for this formatter.
