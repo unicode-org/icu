@@ -20,6 +20,7 @@
 #include "unicode/uchriter.h"
 #include "unicode/brkiter.h"
 #include "unicode/locid.h"
+#include "unicode/ubidi.h"
 
 #include "paragraph.h"
 #include "scrptrun.h"
@@ -28,8 +29,8 @@
 
 #define MARGIN 10
 
-Paragraph::Paragraph(void *surface, RunParams params[], int32_t count)
-    : fRunCount(count), fRunInfo(NULL), fCharCount(0), fText(NULL), fGlyphCount(0), fGlyphs(NULL),
+Paragraph::Paragraph(void *surface, RunParams params[], int32_t count, UBiDi *bidi)
+    : fBidi(bidi), fRunCount(count), fRunInfo(NULL), fCharCount(0), fText(NULL), fGlyphCount(0), fGlyphs(NULL),
       fCharIndices(NULL), fGlyphIndices(NULL), fDX(NULL), fBreakArray(NULL), fBreakCount(0),
       fLineHeight(-1), fAscent(-1)
 {
@@ -190,6 +191,8 @@ Paragraph::~Paragraph()
 
     delete[] fBreakArray;
     delete[] fRunInfo;
+
+    ubidi_close(fBidi);
 }
 
 int32_t Paragraph::getLineHeight()
@@ -410,42 +413,64 @@ void Paragraph::draw(void *surface, int32_t firstLine, int32_t lastLine)
 {
     int32_t line, x, y;
     int32_t prevRun = 0;
+    UErrorCode bidiStatus = U_ZERO_ERROR;
+    UBiDi  *lBidi = ubidi_openSized(fCharCount, 0, &bidiStatus);
 
     y = fAscent;
 
     for (line = firstLine; line <= lastLine; line += 1) {
         int32_t firstChar = fBreakArray[line];
         int32_t lastChar  = fBreakArray[line + 1] - 1;
-        int32_t firstRun  = getCharRun(firstChar, prevRun, 1);
-        int32_t lastRun   = getCharRun(lastChar, firstRun, 1);
+        int32_t dirCount, dirRun;
 
         x = MARGIN;
 
-        for (int32_t run = firstRun; run <= lastRun; run += 1) {
-            const RenderingFontInstance *fontInstance = fRunInfo[run].fontInstance;
-            int32_t nextBase;
+        ubidi_setLine(fBidi, firstChar, lastChar, lBidi, &bidiStatus);
 
-            if (run == lastRun) {
-                nextBase = lastChar + 1;
-            } else {
-                nextBase = fRunInfo[run + 1].charBase;
+        dirCount = ubidi_countRuns(lBidi, &bidiStatus);
+
+        for (dirRun = 0; dirRun < dirCount; dirRun += 1) {
+            UTextOffset runStart = 0, runLength = 0;
+            UBiDiDirection runDirection = ubidi_getVisualRun(lBidi, dirRun, &runStart, &runLength);
+
+            runStart += firstChar;
+
+            int32_t runEnd    = runStart + runLength - 1;
+            int32_t firstRun  = getCharRun(runStart, prevRun, 1);
+            int32_t lastRun   = getCharRun(runEnd,   firstRun, 1);
+
+            for (int32_t run = firstRun; run <= lastRun; run += 1) {
+                const RenderingFontInstance *fontInstance = fRunInfo[run].fontInstance;
+                int32_t nextBase;
+
+                if (run == lastRun) {
+                    nextBase = runEnd + 1;
+                } else {
+                    nextBase = fRunInfo[run + 1].charBase;
+                }
+
+                x += drawRun(surface, fontInstance, runStart, nextBase - 1, x, y);
+                runStart = nextBase;
             }
 
-            x += drawRun(surface, fontInstance, firstChar, nextBase - 1, x, y);
-            firstChar = nextBase;
+            prevRun = lastRun;
         }
 
         y += fLineHeight;
-        prevRun = lastRun;
     }
+
+    ubidi_close(lBidi);
 }
 
 Paragraph *Paragraph::paragraphFactory(const char *fileName, FontMap *fontMap, GUISupport *guiSupport, void *surface)
 {
     RunParams params[64];
     int32_t paramCount = 0;
-    int32_t charCount = 0;
+    int32_t charCount  = 0;
+    int32_t dirCount   = 0;
+    int32_t dirRun     = 0;
     RFIErrorCode fontStatus = RFI_NO_ERROR;
+    UErrorCode bidiStatus = U_ZERO_ERROR;
     const UChar *text = UnicodeReader::readFile(fileName, guiSupport, charCount);
     ScriptRun scriptRun(text, charCount);
 
@@ -453,29 +478,39 @@ Paragraph *Paragraph::paragraphFactory(const char *fileName, FontMap *fontMap, G
         return NULL;
     }
 
-    while (scriptRun.next()) {
-        int32_t     start = scriptRun.getScriptStart();
-        int32_t     end   = scriptRun.getScriptEnd();
-        UScriptCode code  = scriptRun.getScriptCode();
+    UBiDi *pBidi = ubidi_openSized(charCount, 0, &bidiStatus);
 
-        params[paramCount].text = &((UChar *) text)[start];
-        params[paramCount].count = end - start;
-        params[paramCount].scriptCode = (UScriptCode) code;
-        params[paramCount].rightToLeft = false;
+    ubidi_setPara(pBidi, text, charCount, UBIDI_DEFAULT_LTR, NULL, &bidiStatus);
 
-        params[paramCount].fontInstance = fontMap->getScriptFont(code, fontStatus);
+    dirCount = ubidi_countRuns(pBidi, &bidiStatus);
 
-        if (params[paramCount].fontInstance == NULL) {
-            return 0;
+    for (dirRun = 0; dirRun < dirCount; dirRun += 1) {
+        UTextOffset runStart = 0, runLength = 0;
+        UBiDiDirection runDirection = ubidi_getVisualRun(pBidi, dirRun, &runStart, &runLength);
+        
+        scriptRun.reset(runStart, runLength);
+
+        while (scriptRun.next()) {
+            int32_t     start = scriptRun.getScriptStart();
+            int32_t     end   = scriptRun.getScriptEnd();
+            UScriptCode code  = scriptRun.getScriptCode();
+
+            params[paramCount].text = &((UChar *) text)[start];
+            params[paramCount].count = end - start;
+            params[paramCount].scriptCode = (UScriptCode) code;
+            params[paramCount].rightToLeft = runDirection == UBIDI_RTL;
+
+            params[paramCount].fontInstance = fontMap->getScriptFont(code, fontStatus);
+
+            if (params[paramCount].fontInstance == NULL) {
+                ubidi_close(pBidi);
+                return 0;
+            }
+
+            paramCount += 1;
         }
-
-        if (code == USCRIPT_ARABIC) {
-            params[paramCount].rightToLeft = true;
-        }
-
-        paramCount += 1;
     }
 
-    return new Paragraph(surface, params, paramCount);
+    return new Paragraph(surface, params, paramCount, pBidi);
 }
 

@@ -16,6 +16,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uscript.h"
 #include "unicode/brkiter.h"
+#include "unicode/ubidi.h"
 
 #include "GUISupport.h"
 #include "RenderingFontInstance.h"
@@ -45,7 +46,7 @@ struct RunInfo
 class Paragraph
 {
 public:
-    Paragraph(void *surface,RunParams runs[], int32_t count);
+    Paragraph(void *surface,RunParams runs[], int32_t count, UBiDi *bidi);
 
     ~Paragraph();
 
@@ -68,6 +69,8 @@ protected:
 
 
 private:
+    UBiDi *fBidi;
+
     int32_t fRunCount;
     RunInfo *fRunInfo;
 
