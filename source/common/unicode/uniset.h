@@ -320,7 +320,7 @@ public:
      * Constructs a set from the given pattern.  See the class
      * description for the syntax of the pattern language.
      * @param pattern a string specifying what characters are in the set
-     * @exception <code>IllegalArgumentException</code> if the pattern
+     * @param status returns <code>IllegalArgumentException</code> if the pattern
      * contains a syntax error.
      * @stable ICU 2.0
      */
@@ -333,6 +333,8 @@ public:
      * @param pattern a string specifying what characters are in the set
      * @param options bitmask for options to apply to the pattern.
      * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
+     * @param status returns <code>IllegalArgumentException</code> if the pattern
+     * contains a syntax error.
      * @internal
      */
     UnicodeSet(const UnicodeString& pattern,
@@ -430,7 +432,7 @@ public:
      * pattern, optionally ignoring white space.  See the class
      * description for the syntax of the pattern language.
      * @param pattern a string specifying what characters are in the set
-     * @exception <code>IllegalArgumentException</code> if the pattern
+     * @param status returns <code>IllegalArgumentException</code> if the pattern
      * contains a syntax error.
      * @stable ICU 2.0
      */
@@ -444,6 +446,8 @@ public:
      * @param pattern a string specifying what characters are in the set
      * @param options bitmask for options to apply to the pattern.
      * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
+     * @param status returns <code>IllegalArgumentException</code> if the pattern
+     * contains a syntax error.
      * @internal
      */
     UnicodeSet& applyPattern(const UnicodeString& pattern,
@@ -624,7 +628,7 @@ public:
     /**
      * Returns true if this set contains one or more of the characters
      * and strings of the given set.
-     * @param c set to be checked for containment
+     * @param s The set to be checked for containment
      * @return true if the condition is met
      * @draft ICU 2.4
      */
