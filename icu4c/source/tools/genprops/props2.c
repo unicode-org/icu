@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2003, International Business Machines
+*   Copyright (C) 2002-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -265,7 +265,11 @@ propListNames[]={
     { "Unified_Ideograph",                  1, UPROPS_UNIFIED_IDEOGRAPH },
     { "Deprecated",                         1, UPROPS_DEPRECATED },
     { "Soft_Dotted",                        1, UPROPS_SOFT_DOTTED },
-    { "Logical_Order_Exception",            1, UPROPS_LOGICAL_ORDER_EXCEPTION }
+    { "Logical_Order_Exception",            1, UPROPS_LOGICAL_ORDER_EXCEPTION },
+
+    /* new properties in Unicode 4.0.1 */
+    { "STerm",                              2, UPROPS_V2_S_TERM },
+    { "Variation_Selector",                 2, UPROPS_V2_VARIATION_SELECTOR }
 };
 
 static const Binaries
@@ -399,7 +403,7 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     /* process various UCD .txt files */
 
     /* add Han numeric types & values */
-    parseMultiFieldFile(filename, basename, "DerivedNumericValues", suffix, 3, numericLineFn, pErrorCode);
+    parseMultiFieldFile(filename, basename, "DerivedNumericValues", suffix, 2, numericLineFn, pErrorCode);
 
     /* set proper bidi class for unassigned code points (Cn) */
     parseTwoFieldFile(filename, basename, "DerivedBidiClass", suffix, bidiClassLineFn, pErrorCode);
@@ -537,7 +541,7 @@ numericLineFn(void *context,
     Props newProps;
     char *s, *end;
     uint32_t start, limit, value, oldProps32;
-    int32_t type, oldType;
+    int32_t oldType;
     char c;
     UBool isFraction;
 
@@ -586,25 +590,21 @@ numericLineFn(void *context,
         }
     }
 
-    /* parse numeric type */
-    s=trimTerminateField(fields[2][0], fields[2][1]);
-    type=u_getPropertyValueEnum(UCHAR_NUMERIC_TYPE, s);
-    if(type<=0) {
-        fprintf(stderr, "genprops error: unknown numeric type in DerivedNumericValues.txt field 1 at %s\n", s);
-        exit(U_PARSE_ERROR);
-    }
+    /*
+     * Unicode 4.0.1 removes the third column that used to list the numeric type.
+     * Assume that either the data is the same as in UnicodeData.txt,
+     * or else that the numeric type is "numeric".
+     * This should work because we only expect to add numeric values for
+     * Han characters; for those, UnicodeData.txt lists only ranges without
+     * specific properties for single characters.
+     */
 
     for(; start<limit; ++start) {
         oldProps32=getProps(start);
         oldType=(int32_t)GET_NUMERIC_TYPE(oldProps32);
-        if(oldType==type) {
+        if(oldType!=0) {
             /* this code point was already listed with its numeric value in UnicodeData.txt */
             continue;
-        }
-        if(oldType!=0) {
-            /* the numeric type differs from what we got from UnicodeData.txt */
-            fprintf(stderr, "genprops error: new numeric value for an already numeric character in DerivedNumericValues.txt at %s\n", fields[0][0]);
-            exit(U_PARSE_ERROR);
         }
 
         /*
@@ -630,7 +630,7 @@ numericLineFn(void *context,
         }
 
         if(beVerbose) {
-            printf("adding U+%04x numeric type %d value %u\n", start, type, value);
+            printf("adding U+%04x numeric type %d value %u\n", start, U_NT_NUMERIC, value);
         }
 
         /* reconstruct the properties and set the new numeric type and value */
@@ -639,8 +639,8 @@ numericLineFn(void *context,
         newProps.generalCategory=(uint8_t)GET_CATEGORY(oldProps32);
         newProps.bidi=(uint8_t)GET_BIDI_CLASS(oldProps32);
         newProps.isMirrored=(uint8_t)(oldProps32&(1UL<<UPROPS_MIRROR_SHIFT) ? TRUE : FALSE);
-        newProps.numericType=(uint8_t)type;     /* newly parsed numeric type */
-        newProps.numericValue=(int32_t)value;   /* newly parsed numeric value */
+        newProps.numericType=(uint8_t)U_NT_NUMERIC; /* assumed numeric type, see Unicode 4.0.1 comment */
+        newProps.numericValue=(int32_t)value;       /* newly parsed numeric value */
         addProps(start, makeProps(&newProps));
     }
 }

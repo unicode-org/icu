@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2003, International Business Machines
+*   Copyright (C) 2002-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -164,6 +164,7 @@ enum {
 /*
  * Properties in vector word 2
  * Bits
+ * 31..24   More binary properties
  * 13..11   Joining Type
  * 10.. 5   Joining Group
  *  4.. 0   Decomposition Type
@@ -175,6 +176,12 @@ enum {
 #define UPROPS_JG_SHIFT         5
 
 #define UPROPS_DT_MASK          0x0000001f
+
+enum {
+    UPROPS_V2_S_TERM=24,                        /* new in ICU 3.0 and Unicode 4.0.1 */
+    UPROPS_V2_VARIATION_SELECTOR,
+    UPROPS_V2_TOP                               /* must be <=32 */
+};
 
 /**
  * Get a properties vector word for a code point.

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2003, International Business Machines
+*   Copyright (C) 2001-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -246,8 +246,22 @@ derivedNormalizationPropertiesLineFn(void *context,
             qcFlags&=0xf;
         } else if(0==uprv_memcmp(s, "MAYBE", 5)) {
             qcFlags&=0x30;
+        } else if(0==uprv_memcmp(s, "QC", 2) && *(s=(char *)u_skipWhitespace(s+2))==';') {
+            /*
+             * Unicode 4.0.1:
+             * changes single field "NFD_NO" -> two fields "NFD_QC; N" etc.
+             */
+            /* start of the field */
+            s=(char *)u_skipWhitespace(s+1);
+            if(*s=='N') {
+                qcFlags&=0xf;
+            } else if(*s=='M') {
+                qcFlags&=0x30;
+            } else {
+                return; /* do nothing for "Yes" because it's the default value */
+            }
         } else {
-            return;
+            return; /* do nothing for "Yes" because it's the default value */
         }
 
         /* set this flag for all code points in this range */
@@ -259,7 +273,10 @@ derivedNormalizationPropertiesLineFn(void *context,
         while(start<=end) {
             setCompositionExclusion(start++);
         }
-    } else if(0==uprv_memcmp(s, "FNC", 3) && *(s=(char *)u_skipWhitespace(s+3))==';') {
+    } else if(
+        (0==uprv_memcmp(s, "FNC", 3) || 0==uprv_memcmp(s, "FC_NFKC", 7))
+        && *(s=(char *)u_skipWhitespace(s+3))==';'
+    ) {
         /* FC_NFKC_Closure, parse field 2 to get the string */
         char *t;
 
