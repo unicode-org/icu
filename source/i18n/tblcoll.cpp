@@ -269,6 +269,16 @@ const UnicodeString& RuleBasedCollator::getRules() const
   return (*urulestring);
 }
 
+void RuleBasedCollator::getRules(UColRuleOption delta, UnicodeString &buffer)
+{
+    UChar *rules = NULL;
+    int rulesize = ucol_getRulesEx(ucollator, delta, rules, -1);
+    rules = new UChar[rulesize];
+    ucol_getRulesEx(ucollator, delta, rules, rulesize);
+    buffer.setTo(rules, rulesize);
+    delete rules;
+}
+
 Collator::EComparisonResult RuleBasedCollator::compare(
                                                const UnicodeString& source,
                                                const UnicodeString& target,
