@@ -696,7 +696,7 @@ static void TestUDataGetMemory() {
         log_err("FAIL: udata_openChoice() failed for name=%s, type=%s, \n errorcode=%s\n", name, type, myErrorName(status));
         return;
     }
-    table=(const uint32_t *)udata_getMemory(result);
+    table=(const int32_t *)udata_getMemory(result);
 
     /* The alias table may list more converters than what's actually available now. [grhoten] */
     if(ucnv_countAvailable() > table[1])      /*???*/
