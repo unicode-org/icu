@@ -24,6 +24,8 @@
 #include "itercoll.h"
 #endif
 
+#include "unicode/schriter.h"
+#include "unicode/chariter.h"
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
 static UErrorCode status = U_ZERO_ERROR;
@@ -108,6 +110,30 @@ void CollationIteratorTest::TestPrevious(char *par)
     backAndForth(*iter);
     delete iter;
     delete c3;
+
+    status=U_ZERO_ERROR;
+    source= CharsToUnicodeString("\\u0e41\\u0e02\\u0e27abc");
+    
+    Collator *c4=Collator::createInstance(Locale("th", "TH", ""), status);
+    if(U_FAILURE(status)){
+        errln("Couldn't create a collator");
+    }
+    iter = ((RuleBasedCollator*)c4)->createCollationElementIterator(source);
+    backAndForth(*iter);
+    delete iter;
+    delete c4;
+   
+    status=U_ZERO_ERROR;
+    Collator *c5=Collator::createInstance(status);
+    if(U_FAILURE(status)){
+        errln("Couldn't create a collator");
+    }
+    iter = ((RuleBasedCollator*)c5)->createCollationElementIterator(source);
+    backAndForth(*iter);
+    delete iter;
+    delete c5;
+
+
 }
 
 /**
@@ -183,13 +209,25 @@ void CollationIteratorTest::TestSetText(char *par)
 
     if (U_FAILURE(status))
     {
-        errln("call to inter2->setText(test1) failed.");
+        errln("call to iter2->setText(test1) failed.");
     }
     else
     {
         assertEqual(*iter1, *iter2);
     }
-
+    iter1->reset();
+    //now use the overloaded setText(ChracterIterator&, UErrorCode) function to set the text
+    CharacterIterator* chariter = new StringCharacterIterator(test1);
+    iter2->setText(*chariter, status);
+    if (U_FAILURE(status))
+    {
+        errln("call to iter2->setText(chariter(test1)) failed.");
+    }
+    else
+    {
+        assertEqual(*iter1, *iter2);
+    }
+   
     delete iter2;
     delete iter1;
 }
@@ -344,7 +382,7 @@ void CollationIteratorTest::backAndForth(CollationElementIterator &iter)
         {
             UnicodeString hexString("0x");
 
-            appendHex(0, 8, hexString);
+            appendHex(o, 8, hexString);
             hexString += " ";
             err(hexString);
         }
