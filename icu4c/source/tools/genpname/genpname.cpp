@@ -215,7 +215,7 @@ public:
 };
 
 // Sort function for NameToEnumEntry (sort by name index)
-int compareNameToEnumEntry(const void* e1, const void* e2) {
+U_CAPI int compareNameToEnumEntry(const void* e1, const void* e2) {
     return ((NameToEnumEntry*)e1)->nameIndex - ((NameToEnumEntry*)e2)->nameIndex;
 }
 
@@ -245,7 +245,7 @@ public:
 };
 
 // Sort function for EnumToNameGroupEntry (sort by name index)
-int compareEnumToNameGroupEntry(const void* e1, const void* e2) {
+U_CAPI int compareEnumToNameGroupEntry(const void* e1, const void* e2) {
     return ((EnumToNameGroupEntry*)e1)->enumValue - ((EnumToNameGroupEntry*)e2)->enumValue;
 }
 
@@ -276,7 +276,7 @@ public:
 };
 
 // Sort function for EnumToValueEntry (sort by enum)
-int compareEnumToValueEntry(const void* e1, const void* e2) {
+U_CAPI int compareEnumToValueEntry(const void* e1, const void* e2) {
     return ((EnumToValueEntry*)e1)->enumValue - ((EnumToValueEntry*)e2)->enumValue;
 }
 
@@ -885,7 +885,7 @@ static UDataInfo dataInfo = {
 };
 
 // Glue for C<->C++
-int compareAliasNames(const void* elem1, const void* elem2) {
+U_CAPI int compareAliasNames(const void* elem1, const void* elem2) {
     return ((const AliasName*)elem1)->compare(*(const AliasName*)elem2);
 }
 
