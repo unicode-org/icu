@@ -3,6 +3,11 @@
  * Copyright (C) 2001, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/format/Attic/DateFormatMiscTests.java,v $ 
+ * $Date: 2001/10/19 11:26:32 $ 
+ * $Revision: 1.2 $
+ *
+ *****************************************************************************************
  */
 
 /** 
@@ -29,8 +34,6 @@ public class DateFormatMiscTests extends com.ibm.test.TestFmwk {
     }
     
     /*
-     * @test @(#)$RCSfile: DateFormatMiscTests.java,v $ $Revision: 1.1 $ $Date: 2001/10/19 10:28:16 $
-     *
      * @bug 4097450
      */
     public void Test4097450() {
@@ -66,8 +69,6 @@ public class DateFormatMiscTests extends com.ibm.test.TestFmwk {
     }
     
     /*
-     * @test @(#)$RCSfile: DateFormatMiscTests.java,v $ $Revision: 1.1 $ $Date: 2001/10/19 10:28:16 $
-     *
      * @bug 4099975
      */
     public void Test4099975() {
@@ -81,8 +82,6 @@ public class DateFormatMiscTests extends com.ibm.test.TestFmwk {
     }
     
     /*
-     * @test @(#)bug4117335.java    1.1 3/5/98
-     *
      * @bug 4117335
      */
     public void Test4117335() {
