@@ -46,93 +46,93 @@
  * Floating point utility to determine if a double is Not a Number (NaN).
  * @internal
  */
-U_STABLE UBool   U_EXPORT2 uprv_isNaN(double d);
+U_INTERNAL UBool   U_EXPORT2 uprv_isNaN(double d);
 /**
  * Floating point utility to determine if a double has an infinite value.
  * @internal
  */
-U_STABLE UBool   U_EXPORT2 uprv_isInfinite(double d);
+U_INTERNAL UBool   U_EXPORT2 uprv_isInfinite(double d);
 /**
  * Floating point utility to determine if a double has a positive infinite value.
  * @internal
  */
-U_STABLE UBool   U_EXPORT2 uprv_isPositiveInfinity(double d);
+U_INTERNAL UBool   U_EXPORT2 uprv_isPositiveInfinity(double d);
 /**
  * Floating point utility to determine if a double has a negative infinite value.
  * @internal
  */
-U_STABLE UBool   U_EXPORT2 uprv_isNegativeInfinity(double d);
+U_INTERNAL UBool   U_EXPORT2 uprv_isNegativeInfinity(double d);
 /**
  * Floating point utility that returns a Not a Number (NaN) value.
  * @internal
  */
-U_STABLE double  U_EXPORT2 uprv_getNaN(void);
+U_INTERNAL double  U_EXPORT2 uprv_getNaN(void);
 /**
  * Floating point utility that returns an infinite value.
  * @internal
  */
-U_STABLE double  U_EXPORT2 uprv_getInfinity(void);
+U_INTERNAL double  U_EXPORT2 uprv_getInfinity(void);
 
 /**
  * Floating point utility to truncate a double.
  * @internal
  */
-U_STABLE double  U_EXPORT2 uprv_trunc(double d);
+U_INTERNAL double  U_EXPORT2 uprv_trunc(double d);
 /**
  * Floating point utility to calculate the floor of a double.
  * @internal
  */
-U_STABLE double  U_EXPORT2 uprv_floor(double d);
+U_INTERNAL double  U_EXPORT2 uprv_floor(double d);
 /**
  * Floating point utility to calculate the ceiling of a double.
  * @internal
  */
-U_STABLE double  U_EXPORT2 uprv_ceil(double d);
+U_INTERNAL double  U_EXPORT2 uprv_ceil(double d);
 /**
  * Floating point utility to calculate the absolute value of a double.
  * @internal
  */
-U_STABLE double  U_EXPORT2 uprv_fabs(double d);
+U_INTERNAL double  U_EXPORT2 uprv_fabs(double d);
 /**
  * Floating point utility to calculate the fractional and integer parts of a double.
  * @internal
  */
-U_STABLE double  U_EXPORT2 uprv_modf(double d, double* pinteger);
+U_INTERNAL double  U_EXPORT2 uprv_modf(double d, double* pinteger);
 /**
  * Floating point utility to calculate the remainder of a double divided by another double.
  * @internal
  */
-U_STABLE double  U_EXPORT2 uprv_fmod(double d, double y);
+U_INTERNAL double  U_EXPORT2 uprv_fmod(double d, double y);
 /**
  * Floating point utility to calculate d to the power of exponent (d^exponent).
  * @internal
  */
-U_STABLE double  U_EXPORT2 uprv_pow(double d, double exponent);
+U_INTERNAL double  U_EXPORT2 uprv_pow(double d, double exponent);
 /**
  * Floating point utility to calculate 10 to the power of exponent (10^exponent).
  * @internal
  */
-U_STABLE double  U_EXPORT2 uprv_pow10(int32_t exponent);
+U_INTERNAL double  U_EXPORT2 uprv_pow10(int32_t exponent);
 /**
  * Floating point utility to calculate the maximum value of two doubles.
  * @internal
  */
-U_STABLE double  U_EXPORT2 uprv_fmax(double d, double y);
+U_INTERNAL double  U_EXPORT2 uprv_fmax(double d, double y);
 /**
  * Floating point utility to calculate the minimum value of two doubles.
  * @internal
  */
-U_STABLE double  U_EXPORT2 uprv_fmin(double d, double y);
+U_INTERNAL double  U_EXPORT2 uprv_fmin(double d, double y);
 /**
  * Private utility to calculate the maximum value of two integers.
  * @internal
  */
-U_STABLE int32_t U_EXPORT2 uprv_max(int32_t d, int32_t y);
+U_INTERNAL int32_t U_EXPORT2 uprv_max(int32_t d, int32_t y);
 /**
  * Private utility to calculate the minimum value of two integers.
  * @internal
  */
-U_STABLE int32_t U_EXPORT2 uprv_min(int32_t d, int32_t y);
+U_INTERNAL int32_t U_EXPORT2 uprv_min(int32_t d, int32_t y);
 
 #if U_IS_BIG_ENDIAN
 #   define uprv_isNegative(number) (*((signed char *)&(number))<0)
@@ -145,7 +145,7 @@ U_STABLE int32_t U_EXPORT2 uprv_min(int32_t d, int32_t y);
  * type of arbitrary bit length.
  * @internal
  */
-U_STABLE double  U_EXPORT2 uprv_maxMantissa(void);
+U_INTERNAL double  U_EXPORT2 uprv_maxMantissa(void);
 
 /**
  * Return the floor of the log base 10 of a given double.
@@ -158,13 +158,13 @@ U_STABLE double  U_EXPORT2 uprv_maxMantissa(void);
  * @return the log of value d.
  * @internal
  */
-U_STABLE int16_t  U_EXPORT2 uprv_log10(double d);
+U_INTERNAL int16_t  U_EXPORT2 uprv_log10(double d);
 
 /**
  * Floating point utility to calculate the logarithm of a double.
  * @internal
  */
-U_STABLE double  U_EXPORT2 uprv_log(double d);
+U_INTERNAL double  U_EXPORT2 uprv_log(double d);
 
 /**
  * Does common notion of rounding e.g. uprv_floor(x + 0.5);
@@ -172,7 +172,7 @@ U_STABLE double  U_EXPORT2 uprv_log(double d);
  * @return the rounded double
  * @internal
  */
-U_STABLE double  U_EXPORT2 uprv_round(double x);
+U_INTERNAL double  U_EXPORT2 uprv_round(double x);
 
 #if 0
 /**
@@ -182,7 +182,7 @@ U_STABLE double  U_EXPORT2 uprv_round(double x);
  * @return the number of digits after the decimal point in a double number x.
  * @internal
  */
-/*U_STABLE int32_t  U_EXPORT2 uprv_digitsAfterDecimal(double x);*/
+/*U_INTERNAL int32_t  U_EXPORT2 uprv_digitsAfterDecimal(double x);*/
 #endif
 
 /**
@@ -217,7 +217,7 @@ U_STABLE double  U_EXPORT2 uprv_round(double x);
  * Date/Time application.
  * @internal
  */
-U_STABLE void     U_EXPORT2 uprv_tzset(void);
+U_INTERNAL void     U_EXPORT2 uprv_tzset(void);
 
 /**
  * Difference in seconds between coordinated universal
@@ -235,14 +235,14 @@ U_STABLE int32_t  U_EXPORT2 uprv_timezone(void);
  *              tzname(1) is an empty string.
  * @internal
  */
-U_STABLE char*    U_EXPORT2 uprv_tzname(int n);
+U_INTERNAL char*    U_EXPORT2 uprv_tzname(int n);
 
 /**
  * Get UTC (GMT) time measured in seconds since 0:00 on 1/1/70.
  * @return the UTC time measured in seconds 
  * @internal
  */
-U_STABLE int32_t  U_EXPORT2 uprv_getUTCtime(void);
+U_INTERNAL int32_t  U_EXPORT2 uprv_getUTCtime(void);
 
 /**
  * Return the ICU data directory. 
@@ -295,7 +295,7 @@ U_STABLE void U_EXPORT2 u_setDataDirectory(const char *directory);
  * @return the default codepage for this platform 
  * @internal
  */
-U_STABLE const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
+U_INTERNAL const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
 
 /**
  * Please use uloc_getDefault() instead.
@@ -306,7 +306,7 @@ U_STABLE const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
  * @return the default locale ID string
  * @internal
  */
-U_STABLE const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
+U_INTERNAL const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
 
 /**
  * Filesystem file and path separator characters.
@@ -342,7 +342,7 @@ U_STABLE const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
  * @return TRUE if the path is absolute
  * @internal (ICU 3.0)
  */
-U_STABLE UBool U_EXPORT2 uprv_pathIsAbsolute(const char *path);
+U_INTERNAL UBool U_EXPORT2 uprv_pathIsAbsolute(const char *path);
 
 /**
  * Convert char characters to UChar characters.
@@ -393,7 +393,7 @@ u_UCharsToChars(const UChar *us, char *cs, int32_t length);
  *
  * @internal (ICU 2.8)
  */
-U_STABLE UBool U_EXPORT2
+U_INTERNAL UBool U_EXPORT2
 uprv_isInvariantString(const char *s, int32_t length);
 
 /**
@@ -406,7 +406,7 @@ uprv_isInvariantString(const char *s, int32_t length);
  *
  * @internal (ICU 2.8)
  */
-U_STABLE UBool U_EXPORT2
+U_INTERNAL UBool U_EXPORT2
 uprv_isInvariantUString(const UChar *s, int32_t length);
 
 /**

@@ -1010,7 +1010,7 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status);
  * @see ucol_identifierToShortString
  * @internal ICU 3.0
  */
-U_CAPI uint32_t U_EXPORT2
+U_INTERNAL uint32_t U_EXPORT2
 ucol_collatorToIdentifier(const UCollator *coll,
                           const char *locale,
                           UErrorCode *status);
@@ -1027,7 +1027,7 @@ ucol_collatorToIdentifier(const UCollator *coll,
  * @see ucol_identifierToShortString
  * @internal ICU 3.0
  */
-U_CAPI UCollator* U_EXPORT2
+U_INTERNAL UCollator* U_EXPORT2
 ucol_openFromIdentifier(uint32_t identifier,
                         UBool forceDefaults,
                         UErrorCode *status);
@@ -1049,7 +1049,7 @@ ucol_openFromIdentifier(uint32_t identifier,
  * @see ucol_shortStringToIdentifier
  * @internal ICU 3.0
  */
-U_CAPI int32_t U_EXPORT2
+U_INTERNAL int32_t U_EXPORT2
 ucol_identifierToShortString(uint32_t identifier,
                              char *buffer,
                              int32_t capacity,
@@ -1070,7 +1070,7 @@ ucol_identifierToShortString(uint32_t identifier,
  * @see ucol_identifierToShortString
  * @internal ICU 3.0
  */
-U_CAPI uint32_t U_EXPORT2
+U_INTERNAL uint32_t U_EXPORT2
 ucol_shortStringToIdentifier(const char *definition,
                              UBool forceDefaults,
                              UErrorCode *status);
@@ -1088,7 +1088,7 @@ ucol_shortStringToIdentifier(const char *definition,
  * @see ucol_setAttribute
  * @internal ICU 3.0
  */
-U_CAPI UColAttributeValue  U_EXPORT2
+U_INTERNAL UColAttributeValue  U_EXPORT2
 ucol_getAttributeOrDefault(const UCollator *coll, UColAttribute attr, UErrorCode *status);
 
 /** Check whether two collators are equal. Collators are considered equal if they
@@ -1099,7 +1099,7 @@ ucol_getAttributeOrDefault(const UCollator *coll, UColAttribute attr, UErrorCode
  *  @return TRUE or FALSE
  *  @internal ICU 3.0
  */
-U_CAPI UBool U_EXPORT2
+U_INTERNAL UBool U_EXPORT2
 ucol_equals(const UCollator *source, const UCollator *target);
 
 /** Calculates the set of unsafe code points, given a collator.
@@ -1109,7 +1109,7 @@ ucol_equals(const UCollator *source, const UCollator *target);
  *  @return number of elements in the set
  *  @internal ICU 3.0
  */
-U_CAPI int32_t U_EXPORT2
+U_INTERNAL int32_t U_EXPORT2
 ucol_getUnsafeSet( const UCollator *coll,
                   USet *unsafe,
                   UErrorCode *status);

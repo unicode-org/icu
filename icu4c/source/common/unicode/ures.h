@@ -315,7 +315,7 @@ ures_getLocaleByType(const UResourceBundle* resourceBundle,
  * @return a newly allocated resource bundle or NULL if it doesn't exist.
  * @internal
  */
-U_STABLE void U_EXPORT2 
+U_INTERNAL void U_EXPORT2 
 ures_openFillIn(UResourceBundle *r, 
                 const char* path,
                 const char* localeID, 
@@ -687,7 +687,7 @@ U_NAMESPACE_END
  * @param status error code
  * @internal ICU 3.0
  */
-U_CAPI UEnumeration* U_EXPORT2
+U_INTERNAL UEnumeration* U_EXPORT2
 ures_openAvailableLocales(const char *path, UErrorCode *status);
 
 /**
@@ -707,7 +707,7 @@ ures_openAvailableLocales(const char *path, UErrorCode *status);
  * than resultCapacity, the returned full name will be truncated and an error code will be returned.
  * @internal ICU 3.0
  */
-U_CAPI int32_t U_EXPORT2
+U_INTERNAL int32_t U_EXPORT2
 ures_getFunctionalEquivalent(char *result, int32_t resultCapacity, 
                              const char *path, const char *resName, const char *keyword, const char *locid,
                              UBool *isAvailable, UBool omitDefault, UErrorCode *status);
@@ -720,7 +720,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
  * @param status error code
  * @internal ICU 3.0
  */
-U_CAPI UEnumeration* U_EXPORT2
+U_INTERNAL UEnumeration* U_EXPORT2
 ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status);
 
 #endif /*_URES*/
