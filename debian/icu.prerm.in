@@ -18,6 +18,7 @@ set -e
 case "$1" in
     remove|upgrade|deconfigure)
 	prefix=@prefix@
+	exec_prefix=@exec_prefix@
 
 	# Set ICU_DATA for ease of testing files. It is not necessary to
 	# export it as we are guaranteed that the binaries we invoke will

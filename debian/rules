@@ -113,7 +113,7 @@ binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
 	dh_movefiles -picu \
 	    etc \
 	    usr/sbin \
-	    $(icudatadir)/*.txt \
+	    $(icudatadir)/README \
 	    $(iculibdir)/*.cnv \
 	    $(iculibdir)/u*.dat \
 	    $(iculibdir)/tz.dat \
