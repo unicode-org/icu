@@ -37,6 +37,7 @@ void addNumForTest(TestNode** root);
 void addNumForTest(TestNode** root)
 {
     addTest(root, &TestNumberFormat, "tsformat/cnumtst/TestNumberFormat");
+    addTest(root, &TestSignificantDigits, "tsformat/cnumtst/TestSignificantDigits");
     addTest(root, &TestNumberFormatPadding, "tsformat/cnumtst/TestNumberFormatPadding");
     addTest(root, &TestInt64Format, "tsformat/cnumtst/TestInt64Format");
     addTest(root, &TestRBNFFormat, "tsformat/cnumtst/TestRBNFFormat");
@@ -728,6 +729,45 @@ free(result);
     unum_close(cur_frpattern);
     unum_close(myclone);
 
+}
+
+static void TestSignificantDigits()
+{
+    UChar temp[128];
+    int32_t resultlengthneeded;
+    int32_t resultlength;
+    UErrorCode status = U_ZERO_ERROR;
+    UChar *result;
+    UNumberFormat* fmt;
+    double d = 123456.789;
+
+    u_uastrcpy(temp, "###0.0#");
+    fmt=unum_open(UNUM_IGNORE, temp, -1, NULL, NULL,&status);
+    if (U_FAILURE(status)) {
+        log_err("got unexpected error for unum_open: '%s'\n", u_errorName(status));
+    }
+    unum_setAttribute(fmt, UNUM_SIGNIFICANT_DIGITS_USED, TRUE);
+    unum_setAttribute(fmt, UNUM_MAX_SIGNIFICANT_DIGITS, 6);
+
+    u_uastrcpy(temp, "123457");
+    resultlength=0;
+    resultlengthneeded=unum_formatDouble(fmt, d, NULL, resultlength, NULL, &status);
+    if(status==U_BUFFER_OVERFLOW_ERROR)
+    {
+        status=U_ZERO_ERROR;
+        resultlength=resultlengthneeded+1;
+        result=(UChar*)malloc(sizeof(UChar) * resultlength);
+        unum_formatDouble(fmt, d, result, resultlength, NULL, &status);
+    }
+    if(U_FAILURE(status))
+    {
+        log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status));
+    }
+    if(u_strcmp(result, temp)==0)
+        log_verbose("Pass: Number Formatting using unum_formatDouble() Successful\n");
+    else
+        log_err("FAIL: Error in number formatting using unum_formatDouble()\n");
+    free(result);
 }
 
 static void TestNumberFormatPadding()
