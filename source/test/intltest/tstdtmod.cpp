@@ -28,10 +28,10 @@ TestDataModule *TestDataModule::getTestDataModule(const char* name, TestLog& log
   }
 }
 
-TestDataModule::TestDataModule(const char* name, TestLog& log, UErrorCode& status)
-: name(name),
+TestDataModule::TestDataModule(const char* name, TestLog& log, UErrorCode& /*status*/)
+: testName(name),
 fInfo(NULL),
-log(log)
+fLog(log)
 {
 }
 
@@ -43,7 +43,7 @@ TestDataModule::~TestDataModule() {
 
 const char * TestDataModule::getName() const
 {
-  return name;
+  return testName;
 }
 
 
@@ -52,7 +52,7 @@ RBTestDataModule::~RBTestDataModule()
 {
   ures_close(fTestData);
   ures_close(fModuleBundle);
-  ures_close(info);
+  ures_close(fInfoRB);
   uprv_free(tdpath);
 }
 
@@ -60,7 +60,7 @@ RBTestDataModule::RBTestDataModule(const char* name, TestLog& log, UErrorCode& s
 : TestDataModule(name, log, status),
   fModuleBundle(NULL),
   fTestData(NULL),
-  info(NULL),
+  fInfoRB(NULL),
   tdpath(NULL)
 {
   fNumberOfTests = 0;
@@ -69,25 +69,24 @@ RBTestDataModule::RBTestDataModule(const char* name, TestLog& log, UErrorCode& s
   if(fDataTestValid) {
     fTestData = ures_getByKey(fModuleBundle, "TestData", NULL, &status);
     fNumberOfTests = ures_getSize(fTestData);
-    info = ures_getByKey(fModuleBundle, "Info", NULL, &status);
+    fInfoRB = ures_getByKey(fModuleBundle, "Info", NULL, &status);
     if(status != U_ZERO_ERROR) {
       log.errln("Unable to initalize test data - missing mandatory description resources!");
       fDataTestValid = FALSE;
     } else {
-      fInfo = new RBDataMap(info, status);
+      fInfo = new RBDataMap(fInfoRB, status);
     }
   }
 }
 
-UBool RBTestDataModule::getInfo(const DataMap *& info, UErrorCode &status) const
+UBool RBTestDataModule::getInfo(const DataMap *& info, UErrorCode &/*status*/) const
 {
-  if(fInfo) {
     info = fInfo;
-    return TRUE;
-  } else {
-    info = NULL;
-    return FALSE;
-  }
+    if(fInfo) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 TestData* RBTestDataModule::createTestData(int32_t index, UErrorCode &status) const 
@@ -98,7 +97,7 @@ TestData* RBTestDataModule::createTestData(int32_t index, UErrorCode &status) co
   if(fDataTestValid == TRUE) {
     // Both of these resources get adopted by a TestData object.
     UResourceBundle *DataFillIn = ures_getByIndex(fTestData, index, NULL, &status); 
-    UResourceBundle *headers = ures_getByKey(info, "Headers", NULL, &intStatus);
+    UResourceBundle *headers = ures_getByKey(fInfoRB, "Headers", NULL, &intStatus);
   
     if(U_SUCCESS(status)) {
       result = new RBTestData(DataFillIn, headers, status);
@@ -126,7 +125,7 @@ TestData* RBTestDataModule::createTestData(const char* name, UErrorCode &status)
   if(fDataTestValid == TRUE) {
     // Both of these resources get adopted by a TestData object.
     UResourceBundle *DataFillIn = ures_getByKey(fTestData, name, NULL, &status); 
-    UResourceBundle *headers = ures_getByKey(info, "Headers", NULL, &intStatus);
+    UResourceBundle *headers = ures_getByKey(fInfoRB, "Headers", NULL, &intStatus);
    
     if(U_SUCCESS(status)) {
       result = new RBTestData(DataFillIn, headers, status);
@@ -158,7 +157,7 @@ RBTestDataModule::getTestBundle(const char* bundleName, UErrorCode &status)
     if (testBundle == NULL) {
         testBundle = ures_openDirect(icu_data, bundleName, &status);
         if (status != U_ZERO_ERROR) {
-            log.errln(UnicodeString("Failed: could not load test data from resourcebundle: ") + UnicodeString(bundleName));
+            fLog.errln(UnicodeString("Failed: could not load test data from resourcebundle: ") + UnicodeString(bundleName));
             fDataTestValid = FALSE;
         }
     }
