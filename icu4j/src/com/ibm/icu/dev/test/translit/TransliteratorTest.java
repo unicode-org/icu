@@ -102,6 +102,28 @@ public class TransliteratorTest extends IntlTest {
     }
 
     /**
+     * Test undefined variable.
+     */
+    public void TestUndefinedVariable() {
+        String rule = "({initial}) a <> \u1161;";
+        try {
+            Transliterator t = new RuleBasedTransliterator("<ID>", rule);
+        } catch (IllegalArgumentException e) {
+            logln("OK: Got exception for " + rule + ", as expected: " +
+                  e.getMessage());
+            return;
+        }
+        errln("Fail: bogus rule " + rule + " compiled without error");
+    }
+
+    /**
+     * Test empty context.
+     */
+    public void TestEmptyContext() {
+        expect("() a () > b;", "xay a ", "xby b ");
+    }
+
+    /**
      * Test inline set syntax and set variable syntax.
      */
     public void TestInlineSet() {
