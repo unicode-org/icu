@@ -24,7 +24,11 @@ U_NAMESPACE_BEGIN
 //#define __u_IntBits 32
 
 class llong {
+#ifdef RBNF_DEBUG
+public:
+#else
 private:
+#endif
     uint32_t lo;
     int32_t hi;
 private:

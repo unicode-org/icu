@@ -339,6 +339,10 @@ NFSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, int32
     // parsing
     //-----------------------------------------------------------------------
 
+#ifdef RBNF_DEBUG
+#include <stdio.h>
+#endif
+
 /**
  * Parses a string using the rule set or DecimalFormat belonging
  * to this substitution.  If there's a match, a mathematical
