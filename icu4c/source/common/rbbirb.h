@@ -223,7 +223,7 @@ struct RBBISetTableEl {
 #include <stdio.h>
 #define RBBIDebugPrintf printf
 #else
-#define RBBIDebugPrintf
+inline void RBBIDebugPrintf(...) {}
 #endif
 
 U_NAMESPACE_END
