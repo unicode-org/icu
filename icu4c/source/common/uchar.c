@@ -896,6 +896,7 @@ u_strToUpper(const UChar *src, int32_t srcLength,
              UChar *dest, int32_t destCapacity,
              const char *locale,
              UErrorCode *pErrorCode) {
+    /* ### TODO for ICU 1.8 */
     *pErrorCode=U_UNSUPPORTED_ERROR;
     return 0;
 }
@@ -905,6 +906,7 @@ u_strToLower(const UChar *src, int32_t srcLength,
              UChar *dest, int32_t destCapacity,
              const char *locale,
              UErrorCode *pErrorCode) {
+    /* ### TODO for ICU 1.8 */
     *pErrorCode=U_UNSUPPORTED_ERROR;
     return 0;
 }
