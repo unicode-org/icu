@@ -667,8 +667,9 @@ TestInvalidRules(){
         "<d",
         " Ch[variable t"
     };
-    int i = 0;
-    for(i;i<MAX_ERROR_STATES;i++){
+    int i;
+
+    for(i = 0;i<MAX_ERROR_STATES;i++){
         UChar rules[1000]       = { '\0' };
         UChar preContextExp[1000]  = { '\0' };
         UChar postContextExp[1000] = { '\0' };
