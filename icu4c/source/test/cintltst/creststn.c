@@ -1395,9 +1395,9 @@ static void TestGetVersionColl(){
             return;
         }
         /* test NUL termination of UCARules */
-        rules = ures_getStringByKey(resB,"%%UCARULES",&len, &status);
+        rules = ures_getStringByKey(resB,"UCARules",&len, &status);
         if(!rules || U_FAILURE(status)) {
-          log_data_err("Could not load %%UCARULES for locale %s\n", locName);
+          log_data_err("Could not load UCARules for locale %s\n", locName);
           continue;
         }
         if(u_strlen(rules) != len){
@@ -2016,7 +2016,7 @@ static void TestFallback()
         UResourceBundle* myResB = ures_open(NULL,"no_NO_NY",&err);
         UResourceBundle* resLocID = ures_getByKey(myResB, "Version", NULL, &err);
         UResourceBundle* tResB;
-        static const UChar versionStr[] = { 0x0031, 0x002E, 0x0032, 0};
+        static const UChar versionStr[] = { 0x0031, 0x002E, 0x0032, 0x0035, 0x0000};
 
         if(err != U_ZERO_ERROR){
             log_data_err("Expected U_ZERO_ERROR when trying to test no_NO_NY aliased to nn_NO for Version err=%s\n",u_errorName(err));
@@ -2063,12 +2063,18 @@ static void TestResourceLevelAliasing(void) {
     }
     
     aliasB = ures_open(testdatapath, "testaliases", &status);
-    
+
+    if(U_FAILURE(status))
+    {
+        log_err("Could not load testaliases.res %s \n",myErrorName(status));
+        return;
+    }
     /* this should fail - circular alias */
     tb = ures_getByKey(aliasB, "aaa", tb, &status);
     if(status != U_TOO_MANY_ALIASES_ERROR) {
         log_err("Failed to detect circular alias\n");
-    } else {
+    }
+    else {
         status = U_ZERO_ERROR;
     }
     tb = ures_getByKey(aliasB, "aab", tb, &status);

@@ -21,7 +21,8 @@ static UBool isCurrencyPreEuro(const char* currencyKey){
         strcmp(currencyKey, "LUF") == 0 ||
         strcmp(currencyKey, "GRD") == 0 ||
         strcmp(currencyKey, "BEF") == 0 ||
-        strcmp(currencyKey, "ITL") == 0 ){
+        strcmp(currencyKey, "ITL") == 0 ||
+        strcmp(currencyKey, "EEK") == 0){
             return TRUE;
     }
     return FALSE;
@@ -1105,7 +1106,7 @@ static void TestExemplarSet(void){
             }
 
             if (existsInScript == FALSE){
-                log_err("ExemplarSet containment failed for locale : %s", locale);
+                log_err("ExemplarSet containment failed for locale : %s\n", locale);
             }
         }
         assertTrue("case-folded is a superset",
