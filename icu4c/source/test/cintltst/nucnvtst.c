@@ -2716,7 +2716,7 @@ TestHZ() {
     int32_t* myOff= offsets;
     cnv=ucnv_open("HZ", &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("Unable to open HZ converter: %s\n", u_errorName(errorCode));
+        log_data_err("Unable to open HZ converter: %s\n", u_errorName(errorCode));
         return;
     }
 
