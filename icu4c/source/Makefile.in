@@ -106,7 +106,7 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	fi
 
 clean-recursive-with-twist:
-	$(MAKE) clean-recursive LOCAL_SUBDIRS='$(CLEAN_FIRST_SUBDIRS) $(filter-out tools,$($(CLEAN_FIRST_SUBDIRS)))'
+	$(MAKE) clean-recursive LOCAL_SUBDIRS='$(CLEAN_FIRST_SUBDIRS) $(filter-out $(CLEAN_FIRST_SUBDIRS),$(LOCAL_SUBDIRS))'
 
 all-local: $(srcdir)/configure
 
