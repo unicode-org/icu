@@ -34,7 +34,7 @@ static const int32_t POW10[] = { 1, 10, 100, 1000, 10000, 100000,
 
 static const int32_t MAX_POW10 = (sizeof(POW10)/sizeof(POW10[0])) - 1;
 
-static const int32_t ISO_COUNTRY_CODE_LENGTH = 3;
+#define ISO_COUNTRY_CODE_LENGTH 3
 
 //------------------------------------------------------------
 // Resource tags
@@ -133,6 +133,7 @@ _findMetaData(const UChar* currency) {
 
 struct CReg;
 
+/* Remember to call umtx_init(&gCRegLock) before using it! */
 static UMTX gCRegLock = 0;
 static CReg* gCRegHead = 0;
 
@@ -159,6 +160,7 @@ struct CReg : public UMemory {
         if (status && U_SUCCESS(*status) && _iso && _id) {
             CReg* n = new CReg(_iso, _id);
             if (n) {
+                umtx_init(&gCRegLock);
                 Mutex mutex(&gCRegLock);
                 if (!gCRegHead) {
                     ucln_i18n_registerCleanup();
@@ -173,6 +175,7 @@ struct CReg : public UMemory {
     }
     
     static UBool unreg(UCurrRegistryKey key) {
+        umtx_init(&gCRegLock);
         Mutex mutex(&gCRegLock);
         if (gCRegHead == key) {
             gCRegHead = gCRegHead->next;
@@ -194,6 +197,7 @@ struct CReg : public UMemory {
     }
     
     static const UChar* get(const char* id) {
+        umtx_init(&gCRegLock);
         Mutex mutex(&gCRegLock);
         CReg* p = gCRegHead;
         while (p) {
@@ -204,7 +208,8 @@ struct CReg : public UMemory {
         }
         return NULL;
     }
-    
+
+    /* This doesn't need to be thread safe. It's for u_cleanup only. */
     static void cleanup(void) {
         while (gCRegHead) {
             CReg* n = gCRegHead;

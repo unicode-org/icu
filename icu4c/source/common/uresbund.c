@@ -222,6 +222,10 @@ UBool ures_cleanup(void)
     return (cache == NULL);
 }
 
+U_CFUNC void ures_init(UErrorCode *status) {
+    umtx_init(&resbMutex);
+}
+
 
 /** INTERNAL: sets the name (locale) of the resource bundle to given name */
 

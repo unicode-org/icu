@@ -37,7 +37,7 @@ U_CFUNC UBool breakiterator_cleanup(void);
 
 U_CFUNC UBool ustrprep_cleanup(void);
 
-U_CAPI UBool U_EXPORT2 ucnv_cleanup(void);
+U_CFUNC UBool U_EXPORT2 ucnv_cleanup(void);
 
 U_CFUNC UBool ucnv_io_cleanup(void);
 
@@ -50,5 +50,12 @@ U_CFUNC UBool putil_cleanup(void);
 U_CFUNC UBool uset_cleanup(void);
 
 U_CFUNC UBool service_cleanup(void);
+
+
+/* Only mutexes should be initialized in these functions. */
+
+U_CFUNC void ucnv_init(UErrorCode *status);
+
+U_CFUNC void ures_init(UErrorCode *status);
 
 #endif
