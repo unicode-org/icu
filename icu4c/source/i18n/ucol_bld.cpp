@@ -483,7 +483,7 @@ U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok, UHashtable *tailored, 
 
   while(2*CEi<noOfBytes[0] || CEi<noOfBytes[1] || CEi<noOfBytes[2]) {
     if(CEi > 0) {
-      value = 0x80; /* Continuation marker */
+      value = UCOL_CONTINUATION_MARKER; /* Continuation marker */
     } else {
       value = 0;
     }
@@ -635,6 +635,32 @@ U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UHash
   }
 }
 
+uint8_t ucol_uprv_getCaseBits(const UChar *s, uint32_t len, UErrorCode *status) {
+  UChar n[128];
+  UChar nu[128];
+
+  uint32_t nLen = 0;
+  uint32_t nuLen = 0;
+
+  nLen = unorm_normalize(s, len, UNORM_NFKD, 0, n, 128, status);
+
+  nuLen = u_strToUpper(nu, 128, n, nLen, "", status);
+  if(nuLen == nLen) {
+    if(u_strncmp(n, nu, nuLen) == 0) {
+      return UCOL_UPPER_CASE;
+    }
+  }
+
+  nuLen = u_strToLower(nu, 128, n, nLen, "", status);
+  if(nuLen == nLen) {
+    if(u_strncmp(n, nu, nuLen) == 0) {
+      return UCOL_LOWER_CASE;
+    }
+  }
+
+  return UCOL_MIXED_CASE;
+
+}
 
 U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokListHeader *lh, UHashtable *tailored, UErrorCode *status) {
   UCAElements el;
@@ -730,6 +756,17 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
       }
     }
 
+    // Case bits handling 
+    el.CEs[0] &= 0xFFFFFF3F; // Clean the case bits field
+    if(el.cSize > 1) {
+      // Do it manually
+      el.CEs[0] |= ucol_uprv_getCaseBits(el.cPoints, el.cSize, status);
+    } else {
+      // Copy it from the UCA
+      uint32_t caseCE = ucol_getFirstCE(src->UCA, el.cPoints[0], status);
+      el.CEs[0] |= (caseCE & 0xC0);
+    }
+#if 0
     /* we also need a case bit here, and we'll fish it out from the UCA for the first codepoint */
     uint32_t caseCE = ucol_getFirstCE(src->UCA, el.cPoints[0], status);
     if((caseCE & 0x40) != 0) {
@@ -747,7 +784,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
         el.CEs[i] &= 0xFFFFFFBF;
       }
     }
-
+#endif
 
     /* and then, add it */
 #if UCOL_DEBUG==2
