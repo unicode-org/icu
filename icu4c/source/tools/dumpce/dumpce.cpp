@@ -106,13 +106,21 @@ void serialize(FILE *f, const UChar *c, int l)
 * @param iter collation element iterator
 */
 void serialize(FILE *f, UCollationElements *iter) {
-    UChar *codepoint = iter->iteratordata_.string;
+    UChar   *codepoint = iter->iteratordata_.string;
+    // unlikely that sortkeys will be over this size 
+    uint8_t  sortkey[64];
+    uint8_t *psortkey = sortkey;
+    int      sortkeylength = 0;
 
     if (iter->iteratordata_.flags & UCOL_ITER_HASLEN) {
         serialize(f, codepoint, iter->iteratordata_.endp - codepoint);
+        sortkeylength = ucol_getSortKey(iter->iteratordata_.coll, codepoint, 
+                        iter->iteratordata_.endp - codepoint, sortkey, 64);
     }
     else {
         serialize(f, codepoint);
+        sortkeylength = ucol_getSortKey(iter->iteratordata_.coll, codepoint, 
+                                        -1, sortkey, 64);
     }
     if (options[5].doesOccur) {
         serialize(stdout, codepoint);
@@ -140,6 +148,21 @@ void serialize(FILE *f, UCollationElements *iter) {
             return;
         }
     }
+    fprintf(f, "] ");
+
+    if (sortkeylength > 64) {
+        fprintf(f, "Sortkey exceeds pre-allocated size");
+    }
+
+    fprintf(f, "[");
+    while (TRUE) {
+        fprintf(f, "%02x", *psortkey);
+        psortkey ++;
+        if ((*psortkey) == 0) {
+            break;
+        }
+        fprintf(f, " ");
+    }
     fprintf(f, "]\n");
 }
 
@@ -148,9 +171,12 @@ void serialize(FILE *f, UCollationElements *iter) {
 * @param f file output stream
 * @param r rule
 * @param rlen rule length
+* @param contractionsonly flag to indicate if only contractions are to be 
+*                         output or all collation elements
 * @param iter iterator to iterate over collation elements
 */
-void serialize(FILE *f, UChar *rule, int rlen, UCollationElements *iter) {
+void serialize(FILE *f, UChar *rule, int rlen, UBool contractiononly, 
+               UCollationElements *iter) {
     const UChar           *current  = NULL;
           uint32_t         strength = 0;
           uint32_t         chOffset = 0; 
@@ -175,7 +201,7 @@ void serialize(FILE *f, UChar *rule, int rlen, UCollationElements *iter) {
                                               &specs, rstart, &error)) 
                                               != NULL) {
         // contractions handled here
-        if (chLen > 1) {
+        if (!contractiononly || chLen > 1) {
             ucol_setText(iter, rule + chOffset, chLen, &error);
             if (U_FAILURE(error)) {
                 fprintf(stdout, "Error setting text in iterator\n");
@@ -189,19 +215,21 @@ void serialize(FILE *f, UChar *rule, int rlen, UCollationElements *iter) {
 
 /**
 * Output the collation element belonging to the locale into a file
+* @param fullrules flag to indicate if only tailored collation elements are to
+*        be output or all collation elements
 */
-void serialize() {
+void serialize(UBool tailoredonly) {
     UErrorCode  error              = U_ZERO_ERROR;
-    UChar32     codepoint          = 0;
     UChar       str[128];
     int         strlen = 0;
 
     fprintf(OUTPUT_, "# This file contains the serialized collation elements\n");
     fprintf(OUTPUT_, "# as of the collation version indicated below.\n");
-    fprintf(OUTPUT_, "# Data format: xxxx xxxx..; [yyyyyyyy yyyyyy..]\n");
-    fprintf(OUTPUT_, "#              where xxxx are codepoints in hexadecimals\n");
-    fprintf(OUTPUT_, "#              and yyyyyyyy are the corresponding\n");
+    fprintf(OUTPUT_, "# Data format: xxxx xxxx..; [yyyyyyyy yyyyyy..] [zz zz..\n");
+    fprintf(OUTPUT_, "#              where xxxx are codepoints in hexadecimals,\n");
+    fprintf(OUTPUT_, "#              yyyyyyyy are the corresponding\n");
     fprintf(OUTPUT_, "#              collation elements in hexadecimals\n");
+    fprintf(OUTPUT_, "#              and zz are the sortkey values in hexadecimals\n");
     
     UCollationElements *iter = ucol_openElements(COLLATOR_, str, strlen, 
                                                  &error);
@@ -210,42 +238,160 @@ void serialize() {
         return;
     }
 
-    fprintf(OUTPUT_, "\n# Range of unicode characters\n\n");
-
-    while (codepoint <= UCHAR_MAX_VALUE) { 
-        if (u_isdefined(codepoint)) {
-            strlen = 0;
-            UTF16_APPEND_CHAR_UNSAFE(str, strlen, codepoint);
-            str[strlen] = 0;
-            ucol_setText(iter, str, strlen, &error);
-            if (U_FAILURE(error)) {
-                fprintf(stdout, "Error setting text in iterator\n");
-                return;
+    if (!tailoredonly) {
+        fprintf(OUTPUT_, "\n# Range of unicode characters\n\n");
+        UChar32     codepoint          = 0;
+        while (codepoint <= UCHAR_MAX_VALUE) { 
+            if (u_isdefined(codepoint)) {
+                strlen = 0;
+                UTF16_APPEND_CHAR_UNSAFE(str, strlen, codepoint);
+                str[strlen] = 0;
+                ucol_setText(iter, str, strlen, &error);
+                if (U_FAILURE(error)) {
+                    fprintf(stdout, "Error setting text in iterator\n");
+                    return;
+                }
+                serialize(OUTPUT_, iter);
             }
-            serialize(OUTPUT_, iter);
+            codepoint ++;
         }
-        codepoint ++;
     }
-    
-    fprintf(OUTPUT_, "\n# Contractions\n\n");
-    
+
     UChar    ucarules[0x10000];
-    UChar   *rules      = ucarules;
-    int32_t  rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, ucarules, 
-                                          0x10000);
-    if (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE > 0x10000) {
-        rules = (UChar *)malloc(sizeof(UChar) * 
-                               (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE));
-        rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, rules, 
-                                     rulelength);
+    UChar   *rules;
+    int32_t  rulelength = 0;
+    rules      = ucarules;
+    
+    if (tailoredonly) {
+              int32_t  rulelength = 0;
+        const UChar   *temp = ucol_getRules(COLLATOR_, &rulelength);
+        if (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE > 0x10000) {
+            rules = (UChar *)malloc(sizeof(UChar) * 
+                                (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE));
+        }
+        memcpy(rules, temp, rulelength * sizeof(UChar));
+        rules[rulelength] = 0;
+        fprintf(OUTPUT_, "\n# Tailorings\n\n");
+        serialize(OUTPUT_, rules, rulelength, FALSE, iter);
+        if (rules != ucarules) {
+            free(rules);
+        }
     }
-    serialize(OUTPUT_, rules, rulelength, iter);
+    else {        
+        rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, ucarules, 
+                                     0x10000);
+        if (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE > 0x10000) {
+            rules = (UChar *)malloc(sizeof(UChar) * 
+                                (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE));
+            rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, rules, 
+                                         rulelength);
+        }
+        fprintf(OUTPUT_, "\n# Contractions\n\n");
+        serialize(OUTPUT_, rules, rulelength, TRUE, iter);
+        if (rules != ucarules) {
+            free(rules);
+        }
+    }
         
     ucol_closeElements(iter);
-    ucol_close(COLLATOR_);
+}
 
-    if (rules != ucarules) {
-        free(rules);
+/**
+* Output the collation element into a file
+*/
+void serialize() {
+    const char    *locale      = (char *)options[2].value;
+          int32_t  localeindex = 0;
+    char filename[128];
+    int  dirlength = 0;
+
+    if (options[4].doesOccur) {
+        const char *dir      = options[4].value;
+        strcpy(filename, dir);
+        dirlength = strlen(dir);
+        char dirending = dir[dirlength - 1];
+        if (dirending != U_FILE_SEP_CHAR) {
+            filename[dirlength] = U_FILE_SEP_CHAR;
+            filename[dirlength + 1] = 0;
+        }
+        dirlength ++;
+    }
+    if (strcmp(locale, "all") == 0) {
+        if (options[4].doesOccur) {
+            strcat(filename, "UCA.txt");
+            OUTPUT_ = fopen(filename, "w");
+            if (OUTPUT_ == NULL) {
+                fprintf(stdout, "Cannot open file:%s\n", filename);
+                return;
+            }
+        }
+        fprintf(OUTPUT_, "# UCA collation elements\n");
+        fprintf(stdout, "UCA\n");
+        UErrorCode error = U_ZERO_ERROR;
+        COLLATOR_ = ucol_open("en_US", &error);
+        if (U_FAILURE(error)) {
+            fprintf(stdout, "Collator creation failed:");
+            fprintf(stdout, u_errorName(error));
+            return;
+        }
+        UVersionInfo version;
+        ucol_getVersion(COLLATOR_, version);
+        fprintf(OUTPUT_, "# Collation version number: %d.%d.%d.%d\n", 
+                         version[0], version[1], version[2], version[3]);
+
+        serialize(FALSE);
+        if (options[4].doesOccur) {
+            filename[dirlength] = 0;
+            fclose(OUTPUT_);
+        }
+        ucol_close(COLLATOR_);
+        localeindex = ucol_countAvailable() - 1;
+        fprintf(stdout, "Number of locales: %d\n", localeindex + 1);
+        locale      = ucol_getAvailable(localeindex);
+    }
+
+    while (TRUE) {
+        UErrorCode error = U_ZERO_ERROR;
+        COLLATOR_ = ucol_open(locale, &error);
+        if (U_FAILURE(error)) {
+            fprintf(stdout, "Collator creation failed:");
+            fprintf(stdout, u_errorName(error));
+            return;
+        }
+
+        if (options[4].doesOccur) {
+            strcat(filename, locale);
+            strcat(filename, ".txt");
+            OUTPUT_ = fopen(filename, "w");
+            if (OUTPUT_ == NULL) {
+                fprintf(stdout, "Cannot open file:%s\n", filename);
+                return;
+            }
+        }
+        
+        fprintf(OUTPUT_, "# Locale: %s\n", locale);
+        fprintf(stdout, "Locale: %s\n", locale);
+        UVersionInfo version;
+        ucol_getVersion(COLLATOR_, version);
+        fprintf(OUTPUT_, "# Collation version number: %d.%d.%d.%d\n", 
+                         version[0], version[1], version[2], version[3]);
+
+        if (options[3].doesOccur) {
+            serialize(TRUE);
+        }
+
+        ucol_close(COLLATOR_);
+
+        if (options[4].doesOccur) {
+            filename[dirlength] = 0;
+            fclose(OUTPUT_);
+        }
+    
+        localeindex --;
+        if (localeindex < 0) {
+            break;
+        }
+        locale = ucol_getAvailable(localeindex);
     }
 }
 
@@ -273,68 +419,9 @@ int main(int argc, char *argv[]) {
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
-    const char    *locale      = (char *)options[2].value;
-          int32_t  localeindex = 0;
-    
-    if (strcmp(locale, "all") == 0) {
-        localeindex = ucol_countAvailable() - 1;
-        fprintf(stdout, "Number of locales: %d\n", localeindex + 1);
-        locale      = ucol_getAvailable(localeindex);
-    }
-
-    while (TRUE) {
-        UErrorCode error = U_ZERO_ERROR;
-        COLLATOR_ = ucol_open(locale, &error);
-        if (U_FAILURE(error)) {
-            fprintf(stdout, "Collator creation failed:");
-            fprintf(stdout, u_errorName(error));
-            return -1;
-        }
-
-        if (options[4].doesOccur) {
-            const char *dir      = options[4].value;
-            int  dirlength = strlen(dir);
-            char filename[128];
-            
-            strcpy(filename, dir);
-            char dirending = dir[dirlength - 1];
-            if (dirending != U_FILE_SEP_CHAR) {
-                filename[dirlength] = U_FILE_SEP_CHAR;
-                filename[dirlength + 1] = 0;
-            }
-
-            strcat(filename, locale);
-            strcat(filename, "_ce.txt");
-            OUTPUT_ = fopen(filename, "w");
-            if (OUTPUT_ == NULL) {
-                fprintf(stdout, "Cannot open file:%s\n", filename);
-                return -1;
-            }
-        }
-        else {
-            OUTPUT_ = stdout;
-        }
-
-        fprintf(OUTPUT_, "# Locale: %s\n", locale);
-        fprintf(stdout, "Locale: %s\n", locale);
-        UVersionInfo version;
-        ucol_getVersion(COLLATOR_, version);
-        fprintf(OUTPUT_, "# Collation version number: %d.%d.%d.%d\n", 
-                         version[0], version[1], version[2], version[3]);
-
-        if (options[3].doesOccur) {
-            serialize();
-        }
-
-        if (options[4].doesOccur) {
-            fclose(OUTPUT_);
-        }
-    
-        localeindex --;
-        if (localeindex < 0) {
-            break;
-        }
-        locale = ucol_getAvailable(localeindex);
+    OUTPUT_ = stdout;
+    if (options[3].doesOccur) {
+        serialize();
     }
     return 0;
 }
