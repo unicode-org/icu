@@ -252,10 +252,6 @@ class DefaultCalendarFactory : public ICUResourceBundleFactory {
     if(U_FAILURE(status)) {
       return NULL; 
     } else {
-      int i;
-      for(i=0;keyword[i];i++) {
-        keyword[i] = uprv_tolower(keyword[i]);
-      }
       UnicodeString *ret = new UnicodeString("@calendar=","");
       (*ret) += UnicodeString(keyword, "");
       return ret;
