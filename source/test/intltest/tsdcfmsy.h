@@ -24,7 +24,7 @@ private:
     void testSymbols(char *par);
 
      /** helper functions**/
-    void Verify(double value, UnicodeString& pattern, DecimalFormatSymbols sym, UnicodeString& expected);
+    void Verify(double value, const UnicodeString& pattern, DecimalFormatSymbols sym, const UnicodeString& expected);
 };
 
 #endif
