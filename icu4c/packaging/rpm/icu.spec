@@ -129,6 +129,7 @@ rm -f $RPM_BUILD_ROOT/usr/lib/icu/2.6/libicudata.a
 %doc license.html
 %config /etc/icu/convrtrs.txt
 /usr/share/icu/2.6/README
+/usr/share/icu/2.6/license.html
 /usr/lib/icu/2.6/*.cnv
 /usr/lib/icu/2.6/*.icu
 
