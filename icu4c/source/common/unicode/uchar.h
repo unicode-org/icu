@@ -625,14 +625,33 @@ enum UBlockCode {
     UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS =87,
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_HALFWIDTH_AND_FULLWIDTH_FORMS=87,
-
+    
+    UBLOCK_OLD_ITALIC = 88  ,
     /** */
-    UBLOCK_COUNT=88,
+    UBLOCK_GOTHIC = 89 ,
+    /** */
+    UBLOCK_DESERET = 90 ,
+    /** */
+    UBLOCK_BYZANTINE_MUSICAL_SYMBOLS = 91 ,
+    /** */
+    UBLOCK_MUSICAL_SYMBOLS = 92 ,
+    /** */
+    UBLOCK_MATHEMATICAL_ALPHANUMERIC_SYMBOLS = 93  ,
+    /** */
+    UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B  = 94 ,
+    /** */
+    UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT = 95 ,
+    /** */
+    UBLOCK_TAGS = 96 ,
+    /** */
+    UBLOCK_PRIVATE_USE = 97 ,
+    /** */
+    UBLOCK_COUNT=98,
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
-    U_SCRIPT_COUNT=88,
+    U_SCRIPT_COUNT=98,
 
     /** */
-    UBLOCK_NO_SCRIPT=UBLOCK_COUNT,
+    UBLOCK_INVALID_CODE=UBLOCK_COUNT,
 
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_CHAR_SCRIPT_COUNT =UBLOCK_COUNT,

@@ -795,104 +795,159 @@ u_forDigit(int32_t digit, int8_t radix) {
 
 /* static data tables ------------------------------------------------------- */
 
-struct BlockScriptMap {
-    const UChar        fFirstCode;
-    const UChar        fLastCode;
-};
-typedef struct BlockScriptMap BlockScriptMap;
+/**********************************************************
+ *
+ * WARNING: The below map is machine generated
+ * by genscrpt after parsing Blocks.txt,
+ * plese donot edit unless you know what you are doing
+ *
+ **********************************************************
+ */
 
-static const BlockScriptMap fScriptIndex[] = {
-/* Generated from the Unicode-3.0-beta blocks.txt file */
-  { 0x0000, 0x007F }, /*BASIC_LATIN */
-  { 0x0080, 0x00FF }, /*LATIN_1_SUPPLEMENT */
-  { 0x0100, 0x017F }, /*LATIN_EXTENDED_A */
-  { 0x0180, 0x024F }, /*LATIN_EXTENDED_B */
-  { 0x0250, 0x02AF }, /*IPA_EXTENSIONS */
-  { 0x02B0, 0x02FF }, /*SPACING_MODIFIER_LETTERS */
-  { 0x0300, 0x036F }, /*COMBINING_DIACRITICAL_MARKS */
-  { 0x0370, 0x03FF }, /*GREEK */
-  { 0x0400, 0x04FF }, /*CYRILLIC */
-  { 0x0530, 0x058F }, /*ARMENIAN */
-  { 0x0590, 0x05FF }, /*HEBREW */
-  { 0x0600, 0x06FF }, /*ARABIC */
-  { 0x0700, 0x074F }, /*SYRIAC */
-  { 0x0780, 0x07BF }, /*THAANA */
-  { 0x0900, 0x097F }, /*DEVANAGARI */
-  { 0x0980, 0x09FF }, /*BENGALI */
-  { 0x0A00, 0x0A7F }, /*GURMUKHI */
-  { 0x0A80, 0x0AFF }, /*GUJARATI */
-  { 0x0B00, 0x0B7F }, /*ORIYA */
-  { 0x0B80, 0x0BFF }, /*TAMIL */
-  { 0x0C00, 0x0C7F }, /*TELUGU */
-  { 0x0C80, 0x0CFF }, /*KANNADA */
-  { 0x0D00, 0x0D7F }, /*MALAYALAM */
-  { 0x0D80, 0x0DFF }, /*SINHALA */
-  { 0x0E00, 0x0E7F }, /*THAI */
-  { 0x0E80, 0x0EFF }, /*LAO */
-  { 0x0F00, 0x0FFF }, /*TIBETAN */
-  { 0x1000, 0x109F }, /*MYANMAR */
-  { 0x10A0, 0x10FF }, /*GEORGIAN */
-  { 0x1100, 0x11FF }, /*HANGUL_JAMO */
-  { 0x1200, 0x137F }, /*ETHIOPIC */
-  { 0x13A0, 0x13FF }, /*CHEROKEE */
-  { 0x1400, 0x167F }, /*UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS */
-  { 0x1680, 0x169F }, /*OGHAM */
-  { 0x16A0, 0x16FF }, /*RUNIC */
-  { 0x1780, 0x17FF }, /*KHMER */
-  { 0x1800, 0x18AF }, /*MONGOLIAN */
-  { 0x1E00, 0x1EFF }, /*LATIN_EXTENDED_ADDITIONAL */
-  { 0x1F00, 0x1FFF }, /*GREEK_EXTENDED */
-  { 0x2000, 0x206F }, /*GENERAL_PUNCTUATION */
-  { 0x2070, 0x209F }, /*SUPERSCRIPTS_AND_SUBSCRIPTS */
-  { 0x20A0, 0x20CF }, /*CURRENCY_SYMBOLS */
-  { 0x20D0, 0x20FF }, /*COMBINING_MARKS_FOR_SYMBOLS */
-  { 0x2100, 0x214F }, /*LETTERLIKE_SYMBOLS */
-  { 0x2150, 0x218F }, /*NUMBER_FORMS */
-  { 0x2190, 0x21FF }, /*ARROWS */
-  { 0x2200, 0x22FF }, /*MATHEMATICAL_OPERATORS */
-  { 0x2300, 0x23FF }, /*MISCELLANEOUS_TECHNICAL */
-  { 0x2400, 0x243F }, /*CONTROL_PICTURES */
-  { 0x2440, 0x245F }, /*OPTICAL_CHARACTER_RECOGNITION */
-  { 0x2460, 0x24FF }, /*ENCLOSED_ALPHANUMERICS */
-  { 0x2500, 0x257F }, /*BOX_DRAWING */
-  { 0x2580, 0x259F }, /*BLOCK_ELEMENTS */
-  { 0x25A0, 0x25FF }, /*GEOMETRIC_SHAPES */
-  { 0x2600, 0x26FF }, /*MISCELLANEOUS_SYMBOLS */
-  { 0x2700, 0x27BF }, /*DINGBATS */
-  { 0x2800, 0x28FF }, /*BRAILLE_PATTERNS */
-  { 0x2E80, 0x2EFF }, /*CJK_RADICALS_SUPPLEMENT */
-  { 0x2F00, 0x2FDF }, /*KANGXI_RADICALS */
-  { 0x2FF0, 0x2FFF }, /*IDEOGRAPHIC_DESCRIPTION_CHARACTERS */
-  { 0x3000, 0x303F }, /*CJK_SYMBOLS_AND_PUNCTUATION */
-  { 0x3040, 0x309F }, /*HIRAGANA */
-  { 0x30A0, 0x30FF }, /*KATAKANA */
-  { 0x3100, 0x312F }, /*BOPOMOFO */
-  { 0x3130, 0x318F }, /*HANGUL_COMPATIBILITY_JAMO */
-  { 0x3190, 0x319F }, /*KANBUN */
-  { 0x31A0, 0x31BF }, /*BOPOMOFO_EXTENDED */
-  { 0x3200, 0x32FF }, /*ENCLOSED_CJK_LETTERS_AND_MONTHS */
-  { 0x3300, 0x33FF }, /*CJK_COMPATIBILITY */
-  { 0x3400, 0x4DB5 }, /*CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A */
-  { 0x4E00, 0x9FFF }, /*CJK_UNIFIED_IDEOGRAPHS */
-  { 0xA000, 0xA48F }, /*YI_SYLLABLES */
-  { 0xA490, 0xA4CF }, /*YI_RADICALS */
-  { 0xAC00, 0xD7A3 }, /*HANGUL_SYLLABLES */
-  { 0xD800, 0xDB7F }, /*HIGH_SURROGATES */
-  { 0xDB80, 0xDBFF }, /*HIGH_PRIVATE_USE_SURROGATES */
-  { 0xDC00, 0xDFFF }, /*LOW_SURROGATES */
-  { 0xE000, 0xF8FF }, /*PRIVATE_USE */
-  { 0xF900, 0xFAFF }, /*CJK_COMPATIBILITY_IDEOGRAPHS */
-  { 0xFB00, 0xFB4F }, /*ALPHABETIC_PRESENTATION_FORMS */
-  { 0xFB50, 0xFDFF }, /*ARABIC_PRESENTATION_FORMS_A */
-  { 0xFE20, 0xFE2F }, /*COMBINING_HALF_MARKS */
-  { 0xFE30, 0xFE4F }, /*CJK_COMPATIBILITY_FORMS */
-  { 0xFE50, 0xFE6F }, /*SMALL_FORM_VARIANTS */
-  { 0xFE70, 0xFEFE }, /*ARABIC_PRESENTATION_FORMS_B */
-  { 0xFEFF, 0xFEFF }, /*U_SPECIALS */
-  { 0xFF00, 0xFFEF }, /*HALFWIDTH_AND_FULLWIDTH_FORMS */
-  { 0xFFF0, 0xFFFD }, /*SPECIALS_2 = "U_CHAR_SCRIPT_COUNT" (really specials) */
-  { 0xFFFF, 0xFFFF } /* END */
+#define UBLOCK_CODE_INDEX_SIZE 98
+
+struct UBlockCodeMap {
+   const UChar32       fFirstCode;
+   const UChar32       fLastCode;
+   const UBlockCode    code;
 };
+typedef struct UBlockCodeMap UBlockCodeMap;
+
+static const UBlockCodeMap blockCodeIndex[UBLOCK_CODE_INDEX_SIZE] = {
+       { 0x00000000, 0x0000007F, UBLOCK_BASIC_LATIN },
+       { 0x00000080, 0x000000FF, UBLOCK_LATIN_1_SUPPLEMENT },
+       { 0x00000100, 0x0000017F, UBLOCK_LATIN_EXTENDED_A },
+       { 0x00000180, 0x0000024F, UBLOCK_LATIN_EXTENDED_B },
+       { 0x00000250, 0x000002AF, UBLOCK_IPA_EXTENSIONS },
+       { 0x000002B0, 0x000002FF, UBLOCK_SPACING_MODIFIER_LETTERS },
+       { 0x00000300, 0x0000036F, UBLOCK_COMBINING_DIACRITICAL_MARKS },
+       { 0x00000370, 0x000003FF, UBLOCK_GREEK },
+       { 0x00000400, 0x000004FF, UBLOCK_CYRILLIC },
+       { 0x00000530, 0x0000058F, UBLOCK_ARMENIAN },
+       { 0x00000590, 0x000005FF, UBLOCK_HEBREW },
+       { 0x00000600, 0x000006FF, UBLOCK_ARABIC },
+       { 0x00000700, 0x0000074F, UBLOCK_SYRIAC },
+       { 0x00000780, 0x000007BF, UBLOCK_THAANA },
+       { 0x00000900, 0x0000097F, UBLOCK_DEVANAGARI },
+       { 0x00000980, 0x000009FF, UBLOCK_BENGALI },
+       { 0x00000A00, 0x00000A7F, UBLOCK_GURMUKHI },
+       { 0x00000A80, 0x00000AFF, UBLOCK_GUJARATI },
+       { 0x00000B00, 0x00000B7F, UBLOCK_ORIYA },
+       { 0x00000B80, 0x00000BFF, UBLOCK_TAMIL },
+       { 0x00000C00, 0x00000C7F, UBLOCK_TELUGU },
+       { 0x00000C80, 0x00000CFF, UBLOCK_KANNADA },
+       { 0x00000D00, 0x00000D7F, UBLOCK_MALAYALAM },
+       { 0x00000D80, 0x00000DFF, UBLOCK_SINHALA },
+       { 0x00000E00, 0x00000E7F, UBLOCK_THAI },
+       { 0x00000E80, 0x00000EFF, UBLOCK_LAO },
+       { 0x00000F00, 0x00000FFF, UBLOCK_TIBETAN },
+       { 0x00001000, 0x0000109F, UBLOCK_MYANMAR },
+       { 0x000010A0, 0x000010FF, UBLOCK_GEORGIAN },
+       { 0x00001100, 0x000011FF, UBLOCK_HANGUL_JAMO },
+       { 0x00001200, 0x0000137F, UBLOCK_ETHIOPIC },
+       { 0x000013A0, 0x000013FF, UBLOCK_CHEROKEE },
+       { 0x00001400, 0x0000167F, UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS },
+       { 0x00001680, 0x0000169F, UBLOCK_OGHAM },
+       { 0x000016A0, 0x000016FF, UBLOCK_RUNIC },
+       { 0x00001780, 0x000017FF, UBLOCK_KHMER },
+       { 0x00001800, 0x000018AF, UBLOCK_MONGOLIAN },
+       { 0x00001E00, 0x00001EFF, UBLOCK_LATIN_EXTENDED_ADDITIONAL },
+       { 0x00001F00, 0x00001FFF, UBLOCK_GREEK_EXTENDED },
+       { 0x00002000, 0x0000206F, UBLOCK_GENERAL_PUNCTUATION },
+       { 0x00002070, 0x0000209F, UBLOCK_SUPERSCRIPTS_AND_SUBSCRIPTS },
+       { 0x000020A0, 0x000020CF, UBLOCK_CURRENCY_SYMBOLS },
+       { 0x000020D0, 0x000020FF, UBLOCK_COMBINING_MARKS_FOR_SYMBOLS },
+       { 0x00002100, 0x0000214F, UBLOCK_LETTERLIKE_SYMBOLS },
+       { 0x00002150, 0x0000218F, UBLOCK_NUMBER_FORMS },
+       { 0x00002190, 0x000021FF, UBLOCK_ARROWS },
+       { 0x00002200, 0x000022FF, UBLOCK_MATHEMATICAL_OPERATORS },
+       { 0x00002300, 0x000023FF, UBLOCK_MISCELLANEOUS_TECHNICAL },
+       { 0x00002400, 0x0000243F, UBLOCK_CONTROL_PICTURES },
+       { 0x00002440, 0x0000245F, UBLOCK_OPTICAL_CHARACTER_RECOGNITION },
+       { 0x00002460, 0x000024FF, UBLOCK_ENCLOSED_ALPHANUMERICS },
+       { 0x00002500, 0x0000257F, UBLOCK_BOX_DRAWING },
+       { 0x00002580, 0x0000259F, UBLOCK_BLOCK_ELEMENTS },
+       { 0x000025A0, 0x000025FF, UBLOCK_GEOMETRIC_SHAPES },
+       { 0x00002600, 0x000026FF, UBLOCK_MISCELLANEOUS_SYMBOLS },
+       { 0x00002700, 0x000027BF, UBLOCK_DINGBATS },
+       { 0x00002800, 0x000028FF, UBLOCK_BRAILLE_PATTERNS },
+       { 0x00002E80, 0x00002EFF, UBLOCK_CJK_RADICALS_SUPPLEMENT },
+       { 0x00002F00, 0x00002FDF, UBLOCK_KANGXI_RADICALS },
+       { 0x00002FF0, 0x00002FFF, UBLOCK_IDEOGRAPHIC_DESCRIPTION_CHARACTERS },
+       { 0x00003000, 0x0000303F, UBLOCK_CJK_SYMBOLS_AND_PUNCTUATION },
+       { 0x00003040, 0x0000309F, UBLOCK_HIRAGANA },
+       { 0x000030A0, 0x000030FF, UBLOCK_KATAKANA },
+       { 0x00003100, 0x0000312F, UBLOCK_BOPOMOFO },
+       { 0x00003130, 0x0000318F, UBLOCK_HANGUL_COMPATIBILITY_JAMO },
+       { 0x00003190, 0x0000319F, UBLOCK_KANBUN },
+       { 0x000031A0, 0x000031BF, UBLOCK_BOPOMOFO_EXTENDED },
+       { 0x00003200, 0x000032FF, UBLOCK_ENCLOSED_CJK_LETTERS_AND_MONTHS },
+       { 0x00003300, 0x000033FF, UBLOCK_CJK_COMPATIBILITY },
+       { 0x00003400, 0x00004DB5, UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A },
+       { 0x00004E00, 0x00009FFF, UBLOCK_CJK_UNIFIED_IDEOGRAPHS },
+       { 0x0000A000, 0x0000A48F, UBLOCK_YI_SYLLABLES },
+       { 0x0000A490, 0x0000A4CF, UBLOCK_YI_RADICALS },
+       { 0x0000AC00, 0x0000D7A3, UBLOCK_HANGUL_SYLLABLES },
+       { 0x0000D800, 0x0000DB7F, UBLOCK_HIGH_SURROGATES },
+       { 0x0000DB80, 0x0000DBFF, UBLOCK_HIGH_PRIVATE_USE_SURROGATES },
+       { 0x0000DC00, 0x0000DFFF, UBLOCK_LOW_SURROGATES },
+       { 0x0000E000, 0x0000F8FF, UBLOCK_PRIVATE_USE },
+       { 0x0000F900, 0x0000FAFF, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS },
+       { 0x0000FB00, 0x0000FB4F, UBLOCK_ALPHABETIC_PRESENTATION_FORMS },
+       { 0x0000FB50, 0x0000FDFF, UBLOCK_ARABIC_PRESENTATION_FORMS_A },
+       { 0x0000FE20, 0x0000FE2F, UBLOCK_COMBINING_HALF_MARKS },
+       { 0x0000FE30, 0x0000FE4F, UBLOCK_CJK_COMPATIBILITY_FORMS },
+       { 0x0000FE50, 0x0000FE6F, UBLOCK_SMALL_FORM_VARIANTS },
+       { 0x0000FE70, 0x0000FEFE, UBLOCK_ARABIC_PRESENTATION_FORMS_B },
+       { 0x0000FEFF, 0x0000FEFF, UBLOCK_SPECIALS },
+       { 0x0000FF00, 0x0000FFEF, UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS },
+       { 0x0000FFF0, 0x0000FFFD, UBLOCK_SPECIALS },
+       { 0x00010300, 0x0001032F, UBLOCK_OLD_ITALIC },
+       { 0x00010330, 0x0001034F, UBLOCK_GOTHIC },
+       { 0x00010400, 0x0001044F, UBLOCK_DESERET },
+       { 0x0001D000, 0x0001D0FF, UBLOCK_BYZANTINE_MUSICAL_SYMBOLS },
+       { 0x0001D100, 0x0001D1FF, UBLOCK_MUSICAL_SYMBOLS },
+       { 0x0001D400, 0x0001D7FF, UBLOCK_MATHEMATICAL_ALPHANUMERIC_SYMBOLS },
+       { 0x00020000, 0x0002A6D6, UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B },
+       { 0x0002F800, 0x0002FA1F, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT },
+       { 0x000E0000, 0x000E007F, UBLOCK_TAGS },
+       { 0x000F0000, 0x000FFFFD, UBLOCK_PRIVATE_USE },
+};
+/* Get the script associated with the character*/
+UBlockCode
+ublock_getCode(UChar32 codepoint)
+{
+    /* binary search the map and return the code */
+    int32_t left, middle, right,rc;
+    
+    left =0;
+    right= UBLOCK_CODE_INDEX_SIZE-1;
+
+    while(left <= right){
+        middle = (left+right)/2;
+        /* check if the codepoint is the valid range */
+        if((uint32_t)(blockCodeIndex[middle].fLastCode - codepoint) <=
+           (blockCodeIndex[middle].fLastCode - blockCodeIndex[middle].fFirstCode)
+           ){
+            rc = 0;
+        }else if(codepoint> blockCodeIndex[middle].fLastCode){
+            rc =-1;
+        }else {
+            rc = 1;
+        }
+
+        if(rc<0){
+            left = middle+1;
+        }else if(rc >0){
+            right = middle -1;
+        }else{
+            return  blockCodeIndex[middle].code;
+        }
+    }
+    return UBLOCK_INVALID_CODE;
+}
+
+/******************************************************/
 
 static const UChar cellWidthRanges[] =
 {
@@ -935,37 +990,6 @@ static const UChar cellWidthValues[] =
 };
 
 #define NUM_CELL_WIDTH_VALUES (sizeof(cellWidthValues)/sizeof(cellWidthValues[0]))
-
-/* Get the script associated with the character*/
-UBlockCode
-ublock_getCode(UChar32 ch)
-{
-    int32_t i, j;
-    UBlockCode returnValue = UBLOCK_NO_SCRIPT;
-
-    /* surrogate support is still incomplete */
-    if((uint32_t)ch>0xffff) {
-        return UBLOCK_NO_SCRIPT;
-    }
-
-    /* ### a binary search would be faster; maybe this should go into a data file, too */
-    i = -1;
-    for( j = 0; i == -1 && fScriptIndex[j].fFirstCode != 0xFFFF; ++j )
-        if( fScriptIndex[j].fFirstCode <= ch && ch <= fScriptIndex[j].fLastCode ) {
-            i = j;
-            if(j == UBLOCK_COUNT) /* "U_SPECIALS 2" */
-                i = UBLOCK_SPECIALS;
-        }
-    if(i >= UBLOCK_COUNT) {
-        returnValue = UBLOCK_NO_SCRIPT;
-    }
-    else if( i != -1 ) {
-        returnValue = (UBlockCode)i;
-    } 
-
-    return returnValue;
-}
-
 /* Gets table cell width of the Unicode character.*/
 uint16_t
 u_charCellWidth(UChar32 ch)
