@@ -65,6 +65,7 @@ RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) : fParenStack(
 
     fMatchOpenParen   = -1;
     fMatchCloseParen  = -1;
+    fStringOpStart    = -1;
 
     if (U_SUCCESS(status) && U_FAILURE(rxp->fDeferredStatus)) {
         status = rxp->fDeferredStatus;
