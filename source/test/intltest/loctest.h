@@ -59,7 +59,6 @@ public:
     void TestBug4135316(void);
     void TestSimpleDisplayNames(void);
     void TestUninstalledISO3Names(void);
-    void TestChangedISO639Codes(void);
     void TestAtypicalLocales(void);
     void TestNullDefault(void);
     void TestThaiCurrencyFormat(void);
