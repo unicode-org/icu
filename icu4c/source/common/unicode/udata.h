@@ -61,6 +61,11 @@ U_CDECL_BEGIN
 #define U_TREE_ENTRY_SEP_STRING "/"
 
 /**
+ * Alias for standard ICU data 
+ */
+#define U_ICUDATA_ALIAS "ICUDATA"
+
+/**
  * UDataInfo contains the properties about the requested data.
  * This is meta data.
  *
