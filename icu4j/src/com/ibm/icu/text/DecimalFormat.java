@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2002/08/21 00:04:18 $ 
- * $Revision: 1.18 $
+ * $Date: 2002/12/03 19:45:38 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -369,10 +369,10 @@ import java.io.InvalidObjectException; //Bug 4185761 [Richard/GCL]
  *
  * @see          java.text.Format
  * @see          NumberFormat
- * @version      1.48 09/21/98
  * @author       Mark Davis
  * @author       Alan Liu
- * */
+ * @stable
+ */
 public class DecimalFormat extends NumberFormat {
 
     /**
@@ -388,6 +388,7 @@ public class DecimalFormat extends NumberFormat {
      * @see NumberFormat#getNumberInstance
      * @see NumberFormat#getCurrencyInstance
      * @see NumberFormat#getPercentInstance
+     * @stable
      */
     public DecimalFormat() {
         // [NEW]
@@ -415,6 +416,7 @@ public class DecimalFormat extends NumberFormat {
      * @see NumberFormat#getNumberInstance
      * @see NumberFormat#getCurrencyInstance
      * @see NumberFormat#getPercentInstance
+     * @stable
      */
     public DecimalFormat(String pattern) {
     // Always applyPattern after the symbols are set
@@ -443,6 +445,7 @@ public class DecimalFormat extends NumberFormat {
      * @see NumberFormat#getCurrencyInstance
      * @see NumberFormat#getPercentInstance
      * @see DecimalFormatSymbols
+     * @stable
      */
     public DecimalFormat (String pattern, DecimalFormatSymbols symbols) {
         // Always applyPattern after the symbols are set
@@ -452,7 +455,9 @@ public class DecimalFormat extends NumberFormat {
     }
 
 
-    // Overrides
+    /**
+     * @stable
+     */
     public StringBuffer format(double number, StringBuffer result,
                                FieldPosition fieldPosition)
     {
@@ -569,6 +574,9 @@ public class DecimalFormat extends NumberFormat {
         }
     }
 
+    /**
+     * @stable
+     */
     public StringBuffer format(long number, StringBuffer result,
                                FieldPosition fieldPosition)
     {
@@ -619,6 +627,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigInteger number.
+     * @stable
      */
     public StringBuffer format(BigInteger number, StringBuffer result,
                                FieldPosition fieldPosition) {
@@ -645,6 +654,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal number.
+     * @stable
      */
     public StringBuffer format(java.math.BigDecimal number, StringBuffer result,
                                FieldPosition fieldPosition) {
@@ -668,10 +678,11 @@ public class DecimalFormat extends NumberFormat {
         }        
     }
 
-    //This has been removed pending addition of com.ibm.icu.math package to ICU4J
-    /*
+
+    /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal number.
+     * @stable
      */
     public StringBuffer format(com.ibm.icu.math.BigDecimal number, StringBuffer result,
                                FieldPosition fieldPosition) {
@@ -1048,6 +1059,7 @@ public class DecimalFormat extends NumberFormat {
      * has not changed upon return, then parsing failed.
      * @return a <code>Number</code> object with the parsed value or
      * <code>null</code> if the parse failed
+     * @stable
      */
     public Number parse(String text, ParsePosition parsePosition)
     {
@@ -1372,6 +1384,7 @@ public class DecimalFormat extends NumberFormat {
      * by the programmer or user.
      * @return desired DecimalFormatSymbols
      * @see DecimalFormatSymbols
+     * @stable
      */
     public DecimalFormatSymbols getDecimalFormatSymbols() {
         try {
@@ -1388,6 +1401,7 @@ public class DecimalFormat extends NumberFormat {
      * by the programmer or user.
      * @param newSymbols desired DecimalFormatSymbols
      * @see DecimalFormatSymbols
+     * @stable
      */
     public void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {
         symbols = (DecimalFormatSymbols) newSymbols.clone();
@@ -1429,6 +1443,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Get the positive prefix.
      * <P>Examples: +123, $123, sFr123
+     * @stable
      */
     public String getPositivePrefix () {
         return positivePrefix;
@@ -1437,6 +1452,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Set the positive prefix.
      * <P>Examples: +123, $123, sFr123
+     * @stable
      */
     public void setPositivePrefix (String newValue) {
         positivePrefix = newValue;
@@ -1445,6 +1461,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Get the negative prefix.
      * <P>Examples: -123, ($123) (with negative suffix), sFr-123
+     * @stable
      */
     public String getNegativePrefix () {
         return negativePrefix;
@@ -1453,6 +1470,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Set the negative prefix.
      * <P>Examples: -123, ($123) (with negative suffix), sFr-123
+     * @stable
      */
     public void setNegativePrefix (String newValue) {
         negativePrefix = newValue;
@@ -1461,6 +1479,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Get the positive suffix.
      * <P>Example: 123%
+     * @stable
      */
     public String getPositiveSuffix () {
         return positiveSuffix;
@@ -1469,6 +1488,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Set the positive suffix.
      * <P>Example: 123%
+     * @stable
      */
     public void setPositiveSuffix (String newValue) {
         positiveSuffix = newValue;
@@ -1477,6 +1497,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Get the negative suffix.
      * <P>Examples: -123%, ($123) (with positive suffixes)
+     * @stable
      */
     public String getNegativeSuffix () {
         return negativeSuffix;
@@ -1485,6 +1506,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Set the positive suffix.
      * <P>Examples: 123%
+     * @stable
      */
     public void setNegativeSuffix (String newValue) {
         negativeSuffix = newValue;
@@ -1496,6 +1518,7 @@ public class DecimalFormat extends NumberFormat {
      * (For Arabic, use arabic percent symbol).
      * For a permill, set the suffixes to have "\u2031" and the multiplier to be 1000.
      * <P>Examples: with 100, 1.23 -> "123", and "123" -> 1.23
+     * @stable
      */
     public int getMultiplier () {
         return multiplier;
@@ -1507,6 +1530,7 @@ public class DecimalFormat extends NumberFormat {
      * (For Arabic, use arabic percent symbol).
      * For a permill, set the suffixes to have "\u2031" and the multiplier to be 1000.
      * <P>Examples: with 100, 1.23 -> "123", and "123" -> 1.23
+     * @stable
      */
     public void setMultiplier (int newValue) {
         if (newValue <= 0) {
@@ -1523,6 +1547,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #setRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
+     * @stable
      */
     public java.math.BigDecimal getRoundingIncrement() {
         return roundingIncrement;
@@ -1538,6 +1563,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #getRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
+     * @stable
      */
     public void setRoundingIncrement(java.math.BigDecimal newValue) {
         int i = newValue == null
@@ -1564,6 +1590,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #getRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
+     * @stable
      */
     public void setRoundingIncrement(double newValue) {
         if (newValue < 0.0) {
@@ -1583,6 +1610,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #getRoundingIncrement
      * @see #setRoundingMode
      * @see java.math.BigDecimal
+     * @stable
      */
     public int getRoundingMode() {
         return roundingMode;
@@ -1601,6 +1629,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #getRoundingIncrement
      * @see #getRoundingMode
      * @see java.math.BigDecimal
+     * @stable
      */
     public void setRoundingMode(int roundingMode) {
         if (roundingMode < java.math.BigDecimal.ROUND_UP
@@ -1620,6 +1649,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
+     * @stable
      */
     public int getFormatWidth() {
         return formatWidth;
@@ -1637,6 +1667,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
+     * @stable
      */
     public void setFormatWidth(int width) {
         if (width < 0) {
@@ -1654,6 +1685,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
+     * @stable
      */
     public char getPadCharacter() {
         return pad;
@@ -1669,6 +1701,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #getPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
+     * @stable
      */
     public void setPadCharacter(char padChar) {
         pad = padChar;
@@ -1691,6 +1724,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #PAD_AFTER_PREFIX
      * @see #PAD_BEFORE_SUFFIX
      * @see #PAD_AFTER_SUFFIX
+     * @stable
      */
     public int getPadPosition() {
         return padPosition;
@@ -1716,6 +1750,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #PAD_AFTER_PREFIX
      * @see #PAD_BEFORE_SUFFIX
      * @see #PAD_AFTER_SUFFIX
+     * @stable
      */
     public void setPadPosition(int padPos) {
         if (padPos < PAD_BEFORE_PREFIX || padPos > PAD_AFTER_SUFFIX) {
@@ -1733,6 +1768,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #setMinimumExponentDigits
      * @see #isExponentSignAlwaysShown
      * @see #setExponentSignAlwaysShown
+     * @stable
      */
     public boolean isScientificNotation() {
         return useExponentialNotation;
@@ -1748,6 +1784,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #setMinimumExponentDigits
      * @see #isExponentSignAlwaysShown
      * @see #setExponentSignAlwaysShown
+     * @stable
      */
     public void setScientificNotation(boolean useScientific) {
         useExponentialNotation = useScientific;
@@ -1765,6 +1802,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #setMinimumExponentDigits
      * @see #isExponentSignAlwaysShown
      * @see #setExponentSignAlwaysShown
+     * @stable
      */
     public byte getMinimumExponentDigits() {
         return minExponentDigits;
@@ -1782,6 +1820,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #getMinimumExponentDigits
      * @see #isExponentSignAlwaysShown
      * @see #setExponentSignAlwaysShown
+     * @stable
      */
     public void setMinimumExponentDigits(byte minExpDig) {
         if (minExpDig < 1) {
@@ -1801,6 +1840,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #setMinimumExponentDigits
      * @see #getMinimumExponentDigits
      * @see #setExponentSignAlwaysShown
+     * @stable
      */
     public boolean isExponentSignAlwaysShown() {
         return exponentSignAlwaysShown;
@@ -1818,6 +1858,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #setMinimumExponentDigits
      * @see #getMinimumExponentDigits
      * @see #isExponentSignAlwaysShown
+     * @stable
      */
     public void setExponentSignAlwaysShown(boolean expSignAlways) {
         exponentSignAlwaysShown = expSignAlways;
@@ -1830,6 +1871,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #setGroupingSize
      * @see NumberFormat#isGroupingUsed
      * @see DecimalFormatSymbols#getGroupingSeparator
+     * @stable
      */
     public int getGroupingSize () {
         return groupingSize;
@@ -1842,6 +1884,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #getGroupingSize
      * @see NumberFormat#setGroupingUsed
      * @see DecimalFormatSymbols#setGroupingSeparator
+     * @stable
      */
     public void setGroupingSize (int newValue) {
         groupingSize = (byte)newValue;
@@ -1864,6 +1907,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #setSecondaryGroupingSize
      * @see NumberFormat#isGroupingUsed
      * @see DecimalFormatSymbols#getGroupingSeparator
+     * @stable
      */
     public int getSecondaryGroupingSize () {
         return groupingSize2;
@@ -1877,6 +1921,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #getSecondaryGroupingSize
      * @see NumberFormat#setGroupingUsed
      * @see DecimalFormatSymbols#setGroupingSeparator
+     * @stable
      */
     public void setSecondaryGroupingSize (int newValue) {
         groupingSize2 = (byte)newValue;
@@ -1886,6 +1931,7 @@ public class DecimalFormat extends NumberFormat {
      * Allows you to get the behavior of the decimal separator with integers.
      * (The decimal separator will always appear with decimals.)
      * <P>Example: Decimal ON: 12345 -> 12345.; OFF: 12345 -> 12345
+     * @stable
      */
     public boolean isDecimalSeparatorAlwaysShown() {
         return decimalSeparatorAlwaysShown;
@@ -1895,6 +1941,7 @@ public class DecimalFormat extends NumberFormat {
      * Allows you to set the behavior of the decimal separator with integers.
      * (The decimal separator will always appear with decimals.)
      * <P>Example: Decimal ON: 12345 -> 12345.; OFF: 12345 -> 12345
+     * @stable
      */
     public void setDecimalSeparatorAlwaysShown(boolean newValue) {
         decimalSeparatorAlwaysShown = newValue;
@@ -1902,6 +1949,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Standard override; no change in semantics.
+     * @stable
      */
     public Object clone() {
         try {
@@ -1915,6 +1963,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Overrides equals
+     * @stable
      */
     public boolean equals(Object obj)
     {
@@ -1953,6 +2002,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Overrides hashCode
+     * @stable
      */
     public int hashCode() {
         return super.hashCode() * 37 + positivePrefix.hashCode();
@@ -1963,6 +2013,7 @@ public class DecimalFormat extends NumberFormat {
      * Synthesizes a pattern string that represents the current state
      * of this Format object.
      * @see #applyPattern
+     * @stable
      */
     public String toPattern() {
         return toPattern( false );
@@ -1972,6 +2023,7 @@ public class DecimalFormat extends NumberFormat {
      * Synthesizes a localized pattern string that represents the current
      * state of this Format object.
      * @see #applyPattern
+     * @stable
      */
     public String toLocalizedPattern() {
         return toPattern( true );
@@ -2266,6 +2318,7 @@ public class DecimalFormat extends NumberFormat {
      * <p>Example: "#,#00.0#;(#,#00.0#)" for negatives in parentheses.
      * <p>In negative patterns, the minimum and maximum counts are ignored;
      * these are presumed to be set in the positive pattern.
+     * @stable
      */
     public void applyPattern( String pattern ) {
         applyPattern( pattern, false );
@@ -2288,6 +2341,7 @@ public class DecimalFormat extends NumberFormat {
      * <p>Example: "#,#00.0#;(#,#00.0#)" for negatives in parantheses.
      * <p>In negative patterns, the minimum and maximum counts are ignored;
      * these are presumed to be set in the positive pattern.
+     * @stable
      */
     public void applyLocalizedPattern( String pattern ) {
         applyPattern( pattern, true );
@@ -2801,6 +2855,7 @@ public class DecimalFormat extends NumberFormat {
      * Sets the maximum number of digits allowed in the integer portion of a
      * number. This override limits the integer digit count to 309.
      * @see NumberFormat#setMaximumIntegerDigits
+     * @stable
      */
     public void setMaximumIntegerDigits(int newValue) {
         super.setMaximumIntegerDigits(Math.min(newValue, DOUBLE_INTEGER_DIGITS));
@@ -2810,6 +2865,7 @@ public class DecimalFormat extends NumberFormat {
      * Sets the minimum number of digits allowed in the integer portion of a
      * number. This override limits the integer digit count to 309.
      * @see NumberFormat#setMinimumIntegerDigits
+     * @stable
      */
     public void setMinimumIntegerDigits(int newValue) {
         super.setMinimumIntegerDigits(Math.min(newValue, DOUBLE_INTEGER_DIGITS));
@@ -2823,7 +2879,7 @@ public class DecimalFormat extends NumberFormat {
      * currency format through the application of a new pattern.
      * @param theCurrency new currency object to use.  Must not be
      * null.
-     * @since ICU 2.2
+     * @draft ICU 2.2
      */
     public void setCurrency(Currency theCurrency) {
         // If we are a currency format, then modify our affixes to
@@ -2851,7 +2907,7 @@ public class DecimalFormat extends NumberFormat {
      * custom DecimalFormatSymbols object.  A custom
      * DecimalFormatSymbols object has currency symbols that are not
      * the standard ones for its locale.
-     * @since ICU 2.2
+     * @draft ICU 2.2
      */
     public Currency getCurrency() {
         return currency;
@@ -2861,6 +2917,7 @@ public class DecimalFormat extends NumberFormat {
      * Sets the maximum number of digits allowed in the fraction portion of a
      * number. This override limits the fraction digit count to 340.
      * @see NumberFormat#setMaximumFractionDigits
+     * @stable
      */
     public void setMaximumFractionDigits(int newValue) {
         super.setMaximumFractionDigits(Math.min(newValue, DOUBLE_FRACTION_DIGITS));
@@ -2870,6 +2927,7 @@ public class DecimalFormat extends NumberFormat {
      * Sets the minimum number of digits allowed in the fraction portion of a
      * number. This override limits the fraction digit count to 340.
      * @see NumberFormat#setMinimumFractionDigits
+     * @stable
      */
     public void setMinimumFractionDigits(int newValue) {
         super.setMinimumFractionDigits(Math.min(newValue, DOUBLE_FRACTION_DIGITS));
@@ -3213,6 +3271,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #PAD_AFTER_PREFIX
      * @see #PAD_BEFORE_SUFFIX
      * @see #PAD_AFTER_SUFFIX
+     * @stable
      */
     public static final int PAD_BEFORE_PREFIX = 0;
 
@@ -3226,6 +3285,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #PAD_BEFORE_PREFIX
      * @see #PAD_BEFORE_SUFFIX
      * @see #PAD_AFTER_SUFFIX
+     * @stable
      */
     public static final int PAD_AFTER_PREFIX  = 1;
 
@@ -3239,6 +3299,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #PAD_BEFORE_PREFIX
      * @see #PAD_AFTER_PREFIX
      * @see #PAD_AFTER_SUFFIX
+     * @stable
      */
     public static final int PAD_BEFORE_SUFFIX = 2;
 
@@ -3252,6 +3313,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #PAD_BEFORE_PREFIX
      * @see #PAD_AFTER_PREFIX
      * @see #PAD_BEFORE_SUFFIX
+     * @stable
      */
     public static final int PAD_AFTER_SUFFIX  = 3;
 

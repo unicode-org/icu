@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2002/07/26 22:51:49 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/12/03 19:45:38 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -472,9 +472,10 @@ import java.util.Vector;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.9 $ $Date: 2002/07/26 22:51:49 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.10 $ $Date: 2002/12/03 19:45:38 $
  * @see NumberFormat
  * @see DecimalFormat
+ * @stable
  */
 public final class RuleBasedNumberFormat extends NumberFormat {
 
@@ -490,16 +491,19 @@ public final class RuleBasedNumberFormat extends NumberFormat {
 
     /**
      * Selector code that tells the constructor to create a spellout formatter
+     * @stable
      */
     public static final int SPELLOUT = 1;
 
     /**
      * Selector code that tells the constructor to create an ordinal formatter
+     * @stable
      */
     public static final int ORDINAL = 2;
 
     /**
      * Selector code that tells the constructor to create a duration formatter
+     * @stable
      */
     public static final int DURATION = 3;
 
@@ -559,6 +563,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * @param description A description of the formatter's desired behavior.
      * See the class documentation for a complete explanation of the description
      * syntax.
+     * @stable
      */
     public RuleBasedNumberFormat(String description) {
         locale = Locale.getDefault();
@@ -576,6 +581,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * @param locale A locale, which governs which characters are used for
      * formatting values in numerals, and which characters are equivalent in
      * lenient parsing.
+     * @stable
      */
     public RuleBasedNumberFormat(String description, Locale locale) {
         this.locale = locale;
@@ -592,6 +598,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * spells out a value in words in the desired language, ORDINAL, which attaches
      * an ordinal suffix from the desired language to the end of a number (e.g. "123rd"),
      * and DURATION, which formats a duration in seconds as hours, minutes, and seconds.
+     * @stable
      */
     public RuleBasedNumberFormat(Locale locale, int format) {
         this.locale = locale;
@@ -630,6 +637,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * out a value in words in the default locale's langyage, ORDINAL, which attaches
      * an ordinal suffix from the default locale's language to a numeral, and
      * DURATION, which formats a duration in seconds as hours, minutes, and seconds.
+     * @stable
      */
     public RuleBasedNumberFormat(int format) {
         this(Locale.getDefault(), format);
@@ -642,6 +650,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
     /**
      * Duplicates this formatter.
      * @return A RuleBasedNumberFormat that is equal to this one.
+     * @stable
      */
     public Object clone() {
         return super.clone();
@@ -651,6 +660,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * Tests two RuleBasedNumberFormats for equality.
      * @param that The formatter to compare against this one.
      * @return true if the two formatters have identical behavior.
+     * @stable
      */
     public boolean equals(Object that) {
         // if the other object isn't a RuleBasedNumberFormat, that's
@@ -687,6 +697,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * with identical behavior to this one.  This won't necessarily be identical
      * to the rule set description that was originally passed in, but will produce
      * the same result.
+     * @stable
      */
     public String toString() {
 
@@ -737,6 +748,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
     /**
      * Returns a list of the names of all of this formatter's public rule sets.
      * @return A list of the names of all of this formatter's public rule sets.
+     * @stable
      */
     public String[] getRuleSetNames() {
         // preflight the iteration, counting the number of public rule sets
@@ -766,6 +778,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * @param ruleSet The name of the rule set to format the number with.
      * This must be the name of a valid public rule set for this formatter.
      * @return A textual representation of the number.
+     * @stable
      */
     public String format(double number, String ruleSet) throws IllegalArgumentException {
         if (ruleSet.startsWith("%%")) {
@@ -784,6 +797,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * @param ruleSet The name of the rule set to format the number with.
      * This must be the name of a valid public rule set for this formatter.
      * @return A textual representation of the number.
+     * @stable
      */
     public String format(long number, String ruleSet) throws IllegalArgumentException {
         if (ruleSet.startsWith("%%")) {
@@ -799,6 +813,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * @param toAppendTo A StringBuffer that the result should be appended to.
      * @param ignore This function doesn't examine or update the field position.
      * @return toAppendTo
+     * @stable
      */
     public StringBuffer format(double number,
                                StringBuffer toAppendTo,
@@ -821,6 +836,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * @param toAppendTo A StringBuffer that the result should be appended to.
      * @param ignore This function doesn't examine or update the field position.
      * @return toAppendTo
+     * @stable
      */
     public StringBuffer format(long number,
                                StringBuffer toAppendTo,
@@ -836,6 +852,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Implement com.ibm.icu.text.NumberFormat:
      * Format a BigInteger.
+     * @stable
      */
     public StringBuffer format(BigInteger number,
                                StringBuffer toAppendTo,
@@ -847,6 +864,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Implement com.ibm.icu.text.NumberFormat:
      * Format a BigDecimal.
+     * @stable
      */
     public StringBuffer format(java.math.BigDecimal number,
                                StringBuffer toAppendTo,
@@ -858,6 +876,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Implement com.ibm.icu.text.NumberFormat:
      * Format a BigDecimal.
+     * @stable
      */
     public StringBuffer format(com.ibm.icu.math.BigDecimal number,
                                StringBuffer toAppendTo,
@@ -880,6 +899,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * instance of either Long or Double, depending on whether the result has a
      * fractional part.
      * @see #setLenientParseMode
+     * @stable
      */
     public Number parse(String text, ParsePosition parsePosition) {
 
@@ -970,6 +990,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      *
      * @param enabled If true, turns lenient-parse mode on; if false, turns it off.
      * @see java.text.RuleBasedCollator
+     * @stable
      */
     public void setLenientParseMode(boolean enabled) {
         lenientParse = enabled;
@@ -986,6 +1007,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * by default.
      * @return true if lenient-parse mode is turned on.
      * @see #setLenientParseMode
+     * @stable
      */
     public boolean lenientParseEnabled() {
         return lenientParse;
@@ -996,6 +1018,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * to the initial default rule set.
      * @param ruleSetName the name of the rule set, or null to reset the initial default.
      * @throws IllegalArgumentException if ruleSetName is not the name of a public ruleset.
+     * @stable
      */
     public void setDefaultRuleSet(String ruleSetName) {
         if (ruleSetName == null) {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2002/11/22 22:45:19 $ 
- * $Revision: 1.15 $
+ * $Date: 2002/12/03 19:45:38 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -182,8 +182,8 @@ import java.util.ResourceBundle;
  * @see          DateFormat
  * @see          DateFormatSymbols
  * @see          DecimalFormat
- * @version      1.51, 09/24/99
  * @author       Mark Davis, Chen-Lieh Huang, Alan Liu
+ * @stable
  */
 public class SimpleDateFormat extends DateFormat {
 
@@ -208,7 +208,6 @@ public class SimpleDateFormat extends DateFormat {
      * and the highest allowable <code>serialVersionOnStream</code>
      * is written.
      * @serial
-     * @since JDK1.1.4
      */
     private int serialVersionOnStream = currentSerialVersion;
 
@@ -258,6 +257,7 @@ public class SimpleDateFormat extends DateFormat {
      * generality, use the factory methods in the DateFormat class.
      *
      * @see DateFormat
+     * @stable
      */
     public SimpleDateFormat() {
         this(SHORT, SHORT, Locale.getDefault());
@@ -267,6 +267,7 @@ public class SimpleDateFormat extends DateFormat {
      * Construct a SimpleDateFormat using the given pattern in the default
      * locale.  <b>Note:</b> Not all locales support SimpleDateFormat; for full
      * generality, use the factory methods in the DateFormat class.
+     * @stable
      */
     public SimpleDateFormat(String pattern)
     {
@@ -277,6 +278,7 @@ public class SimpleDateFormat extends DateFormat {
      * Construct a SimpleDateFormat using the given pattern and locale.
      * <b>Note:</b> Not all locales support SimpleDateFormat; for full
      * generality, use the factory methods in the DateFormat class.
+     * @stable
      */
     public SimpleDateFormat(String pattern, Locale loc)
     {
@@ -288,6 +290,7 @@ public class SimpleDateFormat extends DateFormat {
     /**
      * Construct a SimpleDateFormat using the given pattern and
      * locale-specific symbol data.
+     * @stable
      */
     public SimpleDateFormat(String pattern, DateFormatSymbols formatData)
     {
@@ -365,6 +368,7 @@ public class SimpleDateFormat extends DateFormat {
      * to begin on the date the user specifies.
      * @param startDate During parsing, two digit years will be placed in the range
      * <code>startDate</code> to <code>startDate + 100 years</code>.
+     * @stable
      */
     public void set2DigitYearStart(Date startDate) {
         parseAmbiguousDatesAsAfter(startDate);
@@ -375,6 +379,7 @@ public class SimpleDateFormat extends DateFormat {
      * as being within.
      * @return the start of the 100-year period into which two digit years are
      * parsed
+     * @stable
      */
     public Date get2DigitYearStart() {
         return defaultCenturyStart;
@@ -392,6 +397,7 @@ public class SimpleDateFormat extends DateFormat {
      * if desired. On output: the offsets of the alignment field.
      * @return the formatted date-time string.
      * @see DateFormat
+     * @stable
      */
     public StringBuffer format(Calendar cal, StringBuffer toAppendTo,
                                FieldPosition pos)
@@ -475,6 +481,7 @@ public class SimpleDateFormat extends DateFormat {
      * this field; used to set pos when appropriate
      * @param pos receives the position of a field, when appropriate
      * @param formatData the symbols for this formatter
+     * @stable
      */
     protected String subFormat(char ch, int count, int beginOffset,
                                FieldPosition pos, DateFormatSymbols formatData,
@@ -619,6 +626,7 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Formats a number with the specified minimum and maximum number of digits.
+     * @stable
      */
     protected String zeroPaddingNumber(long value, int minDigits, int maxDigits)
     {
@@ -631,6 +639,7 @@ public class SimpleDateFormat extends DateFormat {
     /**
      * Overrides DateFormat
      * @see DateFormat
+     * @stable
      */
     public void parse(String text, Calendar cal, ParsePosition pos)
     {
@@ -863,6 +872,7 @@ public class SimpleDateFormat extends DateFormat {
      * number indicating matching failure, otherwise.  As a side effect,
      * sets the <code>cal</code> field <code>field</code> to the index
      * of the best match, if matching succeeded.
+     * @stable
      */
     protected int matchString(String text, int start, int field, String[] data, Calendar cal)
     {
@@ -970,6 +980,7 @@ public class SimpleDateFormat extends DateFormat {
      * number indicating matching failure, otherwise.  As a side effect,
      * set the appropriate field of <code>cal</code> with the parsed
      * value.
+     * @stable
      */
     protected int subParse(String text, int start, char ch, int count,
                            boolean obeyCount, boolean[] ambiguousYear, Calendar cal)
@@ -1297,6 +1308,7 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Return a pattern string describing this date format.
+     * @stable
      */
     public String toPattern() {
         return pattern;
@@ -1304,6 +1316,7 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Return a localized pattern string describing this date format.
+     * @stable
      */
     public String toLocalizedPattern() {
         return translatePattern(pattern,
@@ -1313,6 +1326,7 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Apply the given unlocalized pattern string to this date format.
+     * @stable
      */
     public void applyPattern (String pattern)
     {
@@ -1321,6 +1335,7 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Apply the given localized pattern string to this date format.
+     * @stable
      */
     public void applyLocalizedPattern(String pattern) {
         this.pattern = translatePattern(pattern,
@@ -1332,6 +1347,7 @@ public class SimpleDateFormat extends DateFormat {
      * Gets the date/time formatting data.
      * @return a copy of the date-time formatting data associated
      * with this date-time formatter.
+     * @stable
      */
     public DateFormatSymbols getDateFormatSymbols()
     {
@@ -1341,6 +1357,7 @@ public class SimpleDateFormat extends DateFormat {
     /**
      * Allows you to set the date/time formatting data.
      * @param newFormatData the given date-time formatting data.
+     * @stable
      */
     public void setDateFormatSymbols(DateFormatSymbols newFormatSymbols)
     {
@@ -1349,6 +1366,7 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Method for subclasses to access the DateFormatSymbols.
+     * @stable
      */
     protected DateFormatSymbols getSymbols() {
         return formatData;
@@ -1356,6 +1374,7 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Overrides Cloneable
+     * @stable
      */
     public Object clone() {
         SimpleDateFormat other = (SimpleDateFormat) super.clone();
@@ -1366,6 +1385,7 @@ public class SimpleDateFormat extends DateFormat {
     /**
      * Override hashCode.
      * Generates the hash code for the SimpleDateFormat object
+     * @stable
      */
     public int hashCode()
     {
@@ -1375,6 +1395,7 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Override equals.
+     * @stable
      */
     public boolean equals(Object obj)
     {
