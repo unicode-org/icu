@@ -58,14 +58,14 @@ void printSeq(const unsigned char* a, int len)
 {
     int i=0;
     log_verbose("{");
-    while (i<len) log_verbose("%2x ", a[i++]);
+    while (i<len) log_verbose("0x%02x ", a[i++]);
     log_verbose("}\n");
 }
 void printUSeq(const UChar* a, int len)
 {
     int i=0;
     log_verbose("{U+");
-    while (i<len) log_verbose("%4x ", a[i++]);
+    while (i<len) log_verbose("0x%04x ", a[i++]);
     log_verbose("}\n");
 }
 
@@ -73,14 +73,14 @@ void printSeqErr(const unsigned char* a, int len)
 {
     int i=0;
     fprintf(stderr, "{");
-    while (i<len)  fprintf(stderr, "%2x ", a[i++]);
+    while (i<len)  fprintf(stderr, "0x%02x ", a[i++]);
     fprintf(stderr, "}\n");
 }
 void printUSeqErr(const UChar* a, int len)
 {
     int i=0;
     fprintf(stderr, "{U+");
-    while (i<len) fprintf(stderr, "%4x ", a[i++]);
+    while (i<len) fprintf(stderr, "0x%04x ", a[i++]);
     fprintf(stderr,"}\n");
 }
 void 
@@ -452,7 +452,7 @@ UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect,
         }
         
         log_verbose(junk);
-
+        printUSeq(expect, expectlen);
         if ( checkOffsets )
           {
             log_verbose("\nOffsets:");
@@ -493,9 +493,9 @@ UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect,
         log_err("String does not match. %s\n", gNuConvTestName);
         log_verbose("String does not match. %s\n", gNuConvTestName);
         printf("\nGot:");
-        printUSeq(junkout, expectlen);
+        printUSeqErr(junkout, expectlen);
         printf("\nExpected:");
-        printUSeq(expect, expectlen); 
+        printUSeqErr(expect, expectlen); 
         return FALSE;
     }
 }
@@ -676,7 +676,7 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
                sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf8", fmUTF8Offs ))
       log_err("utf8 -> u did not match\n");
     /*ISO-2022*/
-    if(/* broken for icu 1.6, do not test uprv_strcmp("1.6", U_ICU_VERSION) != 0 && */!testConvertToU(expectedISO2022, sizeof(expectedISO2022),
+    if(!testConvertToU(expectedISO2022, sizeof(expectedISO2022),
                sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "ISO_2022", fmISO2022Offs ))
       log_err("iso-2022  -> u  did not match.\n");
     /*UTF16 LE*/
@@ -715,6 +715,85 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
     if(!testConvertToU(expectedLMBCS, sizeof(expectedLMBCS),
                LMBCSUChars, sizeof(LMBCSUChars)/sizeof(LMBCSUChars[0]), "LMBCS-1", fmLMBCSOffs ))
       log_err("LMBCS-1 -> u  did not match.\n");
+
+
+    /*some more test to increase the code coverage in MBCS.  Create an test converter from test1.ucm
+      which is test file for MBCS conversion with single-byte codepage data.*/
+    {
+        
+        /* MBCS with single byte codepage data test1.ucm*/
+        const UChar unicodeInput[]    = { 0x20ac, 0x0005, 0x0006, 0xdbc4, 0xde34, 0x0003};
+        const uint8_t expectedtest1[] = { 0x00, 0x05, 0xff, 0x07, 0xff,};
+        int32_t  totest1Offs[]        = { 0, 1, 2, 3, 5, }; 
+
+        const uint8_t test1input[]    = { 0x00, 0x05, 0x06, 0x07, 0x08, 0x09};
+        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0xfffd, 0xdbc4, 0xde34, 0xfffd, 0xfffd};
+        int32_t fromtest1Offs[]       = { 0, 1, 2, 3, 3, 4, 5};
+
+        /*from Unicode*/
+        if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
+                expectedtest1, sizeof(expectedtest1), "test1", totest1Offs ))
+            log_err("u-> test1(MBCS conversion with single-byte) did not match.\n");
+        
+        /*to Unicode*/
+        if(!testConvertToU(test1input, sizeof(test1input),
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test1", fromtest1Offs ))
+            log_err("test1(MBCS conversion with single-byte) -> u  did not match.\n");
+
+    }
+
+    /*some more test to increase the code coverage in MBCS.  Create an test converter from test3.ucm
+      which is test file for MBCS conversion with three-byte codepage data.*/
+    {
+        
+        /* MBCS with three byte codepage data test3.ucm*/
+        const UChar unicodeInput[]    = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0x000e};
+        const uint8_t expectedtest3[] = { 0x00, 0x05, 0xff, 0x01, 0x02, 0x0b,  0x07,  0x01, 0x02, 0x0a,  0xff,};
+        int32_t  totest3Offs[]        = { 0, 1, 2, 3, 3, 3, 4, 6, 6, 6, 8}; 
+
+        const uint8_t test3input[]    = { 0x00, 0x05, 0x06, 0x01, 0x02, 0x0b,  0x07,  0x01, 0x02, 0x0a, 0x01, 0x02, 0x0c,};
+        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0xfffd, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0xfffd};
+        int32_t fromtest3Offs[]       = { 0, 1, 2, 3, 6, 6, 7, 7, 10 };
+
+        /*from Unicode*/
+        if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
+                expectedtest3, sizeof(expectedtest3), "test3", totest3Offs ))
+            log_err("u-> test3(MBCS conversion with three-byte) did not match.\n");
+        
+        /*to Unicode*/
+        if(!testConvertToU(test3input, sizeof(test3input),
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test3", fromtest3Offs ))
+            log_err("test3(MBCS conversion with three-byte) -> u  did not match.\n");
+
+    }
+    
+    /*some more test to increase the code coverage in MBCS.  Create an test converter from test4.ucm
+      which is test file for MBCS conversion with four-byte codepage data.*/
+    {
+        
+        /* MBCS with three byte codepage data test4.ucm*/
+        const UChar unicodeInput[]    = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0x000e};
+        const uint8_t expectedtest4[] = { 0x00, 0x05, 0xff, 0x01, 0x02, 0x03, 0x0b,  0x07,  0x01, 0x02, 0x03, 0x0a,  0xff,};
+        int32_t  totest4Offs[]        = { 0, 1, 2, 3, 3, 3, 3, 4, 6, 6, 6, 6, 8,}; 
+
+        const uint8_t test4input[]    = { 0x00, 0x05, 0x06, 0x01, 0x02, 0x03, 0x0b,  0x07,  0x01, 0x02, 0x03, 0x0a, 0x01, 0x02, 0x03, 0x0c,};
+        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0xfffd, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0xfffd};
+        int32_t fromtest4Offs[]       = { 0, 1, 2, 3, 7, 7, 8, 8, 12,};
+
+        /*from Unicode*/
+        if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
+                expectedtest4, sizeof(expectedtest4), "test4", totest4Offs ))
+            log_err("u-> test4(MBCS conversion with four-byte) did not match.\n");
+        
+        /*to Unicode*/
+        if(!testConvertToU(test4input, sizeof(test4input),
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test4", fromtest4Offs ))
+            log_err("test4(MBCS conversion with four-byte) -> u  did not match.\n");
+
+    }
+
+
+
  
 }  
      
@@ -1160,6 +1239,7 @@ TestMBCS() {
         TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character");
     }
     ucnv_close(cnv);
+
 }
 void
 TestISO_2022() {
@@ -1240,7 +1320,6 @@ TestISO_2022_JP() {
 	char *cTarget;
 	const char *cTargetLimit;
 	char *cBuf; 
-	int8_t i=0;
 	UChar *uBuf,*test;
     int32_t uBufSize = 120;
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -1267,7 +1346,7 @@ TestISO_2022_JP() {
 	ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,TRUE,&errorCode);
 	uSource = &in[0];
 	while(*uSource){
-		if(*test=!*uSource){
+		if(*test!=*uSource){
 			log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
 		}
 		*uSource++;
