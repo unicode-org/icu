@@ -670,6 +670,14 @@ SOURCE=.\usrchimp.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\buddhcal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\buddhcal.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\calendar.cpp
 # End Source File
 # Begin Source File
