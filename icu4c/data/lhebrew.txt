@@ -5,15 +5,15 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: src\com\ibm\tools\translit\dumpICUrules.bat
 // Source: src\com\ibm\text\resources/TransliterationRule_Latin_Hebrew.java
-// Date: Fri May 19 15:50:22 2000
+// Date: Wed Jul  5 16:11:18 2000
 //--------------------------------------------------------------------
 
 // Latin-Hebrew
 
 lhebrew {
   Rule {
-    //variable names, derived from the Unicode names.
     
+    // Variable names, derived from the Unicode names.
     "$POINT_SHEVA=\u05B0;"
     "$POINT_HATAF_SEGOL=\u05B1;"
     "$POINT_HATAF_PATAH=\u05B2;"
@@ -66,41 +66,15 @@ lhebrew {
     "$PUNCTUATION_GERESH=\u05F3;"
     "$PUNCTUATION_GERSHAYIM=\u05F4;"
     
-    //wildcards
-    //The values can be anything we don't use in this file: start at E000.
-    
-    "$letter=[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ];"
-    
+    "$letter=[a-zA-Z];"
     "$softvowel=[eiyEIY];"
-    
     "$vowellike=[$ALEF$AYIN$YOD$VAV];"
-    
     "$hebrew=[\u0590-\u05FF];" // the whole block -liu
     
-    //?>{POINT_SHEVA}
-    //?>{POINT_HATAF_SEGOL}
-    //?>{POINT_HATAF_PATAH}
-    //?>{POINT_HATAF_QAMATS}
-    //?>{POINT_HIRIQ}
-    //?>{POINT_TSERE}
-    //?>{POINT_SEGOL}
-    //?>{POINT_PATAH}
-    //?>{POINT_QAMATS}
-    //?>{POINT_HOLAM}
-    //?>{POINT_QUBUTS}
-    //?>{POINT_DAGESH_OR_MAPIQ}
-    //?>{POINT_METEG}
-    //?>{PUNCTUATION_MAQAF}
-    //?>{POINT_RAFE}
-    //?>{PUNCTUATION_PASEQ}
-    //?>{POINT_SHIN_DOT}
-    //?>{POINT_SIN_DOT}
-    //?>{PUNCTUATION_SOF_PASUQ}
-    
-    // why is this a special case? -liu
+    // [Why is this a special case? -liu]
     "k''h <> $KAF $HE ;"
     
-    // mark non-final forms in final position as x~ -liu
+    // Mark non-final forms in final position as x~ -liu
     "k    <  $KAF   } $hebrew ;"
     "m    <  $MEM   } $hebrew ;"
     "n    <  $NUN   } $hebrew ;"
@@ -112,7 +86,7 @@ lhebrew {
     "p'~' <> $PE    ;"
     "ts'~'<> $TSADI ;"
     
-    // mark final forms in non-final position as x^ -liu
+    // Mark final forms in non-final position as x^ -liu
     "k'^' <> $FINAL_KAF   } $hebrew ;"
     "m'^' <> $FINAL_MEM   } $hebrew ;"
     "n'^' <> $FINAL_NUN   } $hebrew ;"
@@ -124,10 +98,11 @@ lhebrew {
     "p    <  $FINAL_PE;"
     "ts   <  $FINAL_TSADI;"
     
-    "a>$ALEF;"
+    // Main rules
+    "a<>$ALEF;"
     "A>$ALEF;"
     
-    "b>$BET;"
+    "b<>$BET;"
     "B>$BET;"
     
     "c}$softvowel>$SAMEKH;"
@@ -137,10 +112,10 @@ lhebrew {
     "c>$FINAL_KAF;"
     "C>$FINAL_KAF;"
     
-    "d>$DALET;"
+    "d<>$DALET;"
     "D>$DALET;"
     
-    "e>$AYIN;"
+    "e<>$AYIN;"
     "E>$AYIN;"
     
     "f}$letter>$PE;"
@@ -148,10 +123,10 @@ lhebrew {
     "F}$letter>$PE;"
     "F>$FINAL_PE;"
     
-    "g>$GIMEL;"
+    "g<>$GIMEL;"
     "G>$GIMEL;"
     
-    "h>$HE;"
+    "h<>$HE;"
     "H>$HE;"
     
     "i>$YOD;"
@@ -160,16 +135,16 @@ lhebrew {
     "j>$DALET$SHIN;"
     "J>$DALET$SHIN;"
     
+    "kh<>$HET;"
     "kH>$HET;"
-    "kh>$HET;"
-    "KH>$HET;"
     "Kh>$HET;"
+    "KH>$HET;"
     "k}$letter>$KAF;"
     "K}$letter>$KAF;"
     "k>$FINAL_KAF;"
     "K>$FINAL_KAF;"
     
-    "l>$LAMED;"
+    "l<>$LAMED;"
     "L>$LAMED;"
     
     "m}$letter>$MEM;"
@@ -190,23 +165,24 @@ lhebrew {
     "P}$letter>$PE;"
     "P>$FINAL_PE;"
     
-    "q>$QOF;"
+    "q<>$QOF;"
     "Q>$QOF;"
     
-    "r>$RESH;"
+    "r<>$RESH;"
     "R>$RESH;"
     
+    "sh<>$SHIN;"
     "sH>$SHIN;"
-    "sh>$SHIN;"
-    "SH>$SHIN;"
     "Sh>$SHIN;"
-    "s>$SAMEKH;"
+    "SH>$SHIN;"
+    "s''<$SAMEKH}$HE;"
+    "s<>$SAMEKH;"
     "S>$SAMEKH;"
     
-    "th>$TAV;"
+    "th<>$TAV;"
     "tH>$TAV;"
-    "TH>$TAV;"
     "Th>$TAV;"
+    "TH>$TAV;"
     "tS}$letter>$TSADI;"
     "ts}$letter>$TSADI;"
     "Ts}$letter>$TSADI;"
@@ -215,10 +191,12 @@ lhebrew {
     "ts>$FINAL_TSADI;"
     "Ts>$FINAL_TSADI;"
     "TS>$FINAL_TSADI;"
-    "t>$TET;"
+    "t''<$TET}[$HE $SAMEKH $SHIN];"
+    "t<>$TET;"
     "T>$TET;"
     
-    "u>$VAV;"
+    "v<$VAV}$vowellike;"
+    "u<>$VAV;"
     "U>$VAV;"
     
     "v>$VAV;"
@@ -230,80 +208,14 @@ lhebrew {
     "x>$KAF$SAMEKH;"
     "X>$KAF$SAMEKH;"
     
-    "y>$YOD;"
+    "y<>$YOD;"
     "Y>$YOD;"
     
-    "z>$ZAYIN;"
+    "z<>$ZAYIN;"
     "Z>$ZAYIN;"
     
-    //#?>{YIDDISH_DOUBLE_VAV}
-    //?>{YIDDISH_VAV_YOD}
-    //?>{YIDDISH_DOUBLE_YOD}
-    //?>{PUNCTUATION_GERESH}
-    //?>{PUNCTUATION_GERSHAYIM}
-    
+    // Delete stray apostrophes
     "''>;"
-    
-    //{POINT_SHEVA}>@
-    //{POINT_HATAF_SEGOL}>@
-    //{POINT_HATAF_PATAH}>@
-    //{POINT_HATAF_QAMATS}>@
-    //{POINT_HIRIQ}>@
-    //{POINT_TSERE}>@
-    //{POINT_SEGOL}>@
-    //{POINT_PATAH}>@
-    //{POINT_QAMATS}>@
-    //{POINT_HOLAM}>@
-    //{POINT_QUBUTS}>@
-    //{POINT_DAGESH_OR_MAPIQ}>@
-    //{POINT_METEG}>@
-    //{PUNCTUATION_MAQAF}>@
-    //{POINT_RAFE}>@
-    //{PUNCTUATION_PASEQ}>@
-    //{POINT_SHIN_DOT}>@
-    //{POINT_SIN_DOT}>@
-    //{PUNCTUATION_SOF_PASUQ}>@
-    
-    "a<$ALEF;"
-    "e<$AYIN;"
-    "b<$BET;"
-    "d<$DALET;"
-    //+ "k<$FINAL_KAF;"
-    //+ "m<$FINAL_MEM;"
-    //+ "n<$FINAL_NUN;"
-    //+ "p<$FINAL_PE;"
-    //+ "ts<$FINAL_TSADI;"
-    "g<$GIMEL;"
-    "kh<$HET;"
-    "h<$HE;"
-    //+ "k''<$KAF}$HE;"
-    //+ "k<$KAF;"
-    "l<$LAMED;"
-    //+ "m<$MEM;"
-    //+ "n<$NUN;"
-    //+ "p<$PE;"
-    "q<$QOF;"
-    "r<$RESH;"
-    "s''<$SAMEKH}$HE;"
-    "s<$SAMEKH;"
-    "sh<$SHIN;"
-    "th<$TAV;"
-    "t''<$TET}$HE;"
-    "t''<$TET}$SAMEKH;"
-    "t''<$TET}$SHIN;"
-    "t<$TET;"
-    //+ "ts<$TSADI;"
-    "v<$VAV}$vowellike;"
-    "u<$VAV;"
-    "y<$YOD;"
-    "z<$ZAYIN;"
-    
-    //{YIDDISH_DOUBLE_VAV}>@
-    //{YIDDISH_VAV_YOD}>@
-    //{YIDDISH_DOUBLE_YOD}>@
-    //{PUNCTUATION_GERESH}>@
-    //{PUNCTUATION_GERSHAYIM}>@
-    
     "<'';"
   }
 }

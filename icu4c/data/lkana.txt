@@ -5,21 +5,31 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: src\com\ibm\tools\translit\dumpICUrules.bat
 // Source: src\com\ibm\text\resources/TransliterationRule_Latin_Kana.java
-// Date: Fri May 19 15:50:23 2000
+// Date: Wed Jul  5 16:11:19 2000
 //--------------------------------------------------------------------
 
 // Latin-Kana
 
 lkana {
   Rule {
-    //# $Revision: 1.2 $
-    // Transliteration rules for Japanese Hiragana and Katakana to
-    // romaji
-    // lower case roman generates hiragana.
-    // upper case roman generates katakana.
-    // Uses modified Hepburn. Small changes to make unambiguous.
-    // Kunrei-shiki: Hepburn/MHepburn
     
+    // Japanese hiragana and katakana to and from latin
+    // (romaji).  Lower case latin corresponds to hiragana;
+    // upper case latin to katakana.  The handling of
+    // Hiragana and Katakana is largely the same.  The bulk
+    // of the transliterator consists of two identical sets
+    // of rules, differing only in case.
+    
+    // Because of minor differences between the two blocks
+    // (e.g., the existence of small katakana ka and ke, but
+    // no corresponding hiragana), some rules exist for only
+    // one script.
+    
+    // Uses modified Hepburn. Small changes to make
+    // unambiguous.
+    
+    //| Kunrei-shiki: Hepburn/MHepburn
+    //| ------------------------------
     //| si:     shi
     //| si ~ya: sha
     //| si ~yu: shu
@@ -36,7 +46,9 @@ lkana {
     //| di:     ji/dji
     //| du:     zu/dzu
     //| hu:     fu
-    //| // for foreign words
+    
+    //| For foreign words:
+    //| -----------------
     //| se ~i   si
     //| si ~e   she
     //|
@@ -56,18 +68,17 @@ lkana {
     //| hu ~i   fi
     //| hu ~e   he
     //| hu ~o   ho
-    //| // Most small forms are generated, but if necessary
-    //| // explicit small forms are given with ~a, ~ya, etc.
     
-    //#######################################
-    // Definitions of variables to be substituted
-    //#######################################
+    // Most small forms are generated, but if necessary
+    // explicit small forms are given with ~a, ~ya, etc.
+    
+    //------------------------------------------------------
+    // Variables
     
     "$vowel=[aeiou];"
-    "$quote='';"
+    "$QUOTE='';"
     
-    // now the kana
-    "$long=\u30FC;"
+    // Hiragana block
     
     "$a2=\u3041;"
     "$a=\u3042;"
@@ -90,10 +101,6 @@ lkana {
     "$ge=\u3052;"
     "$ko=\u3053;"
     "$go=\u3054;"
-    
-    //these are small katakana
-    "$ka2=\u30F5;"
-    "$ke2=\u30F6;"
     
     "$sa=\u3055;"
     "$za=\u3056;"
@@ -168,15 +175,15 @@ lkana {
     "$n=\u3093;"
     "$vu=\u3094;"
     
-    // alternates, just to make the rules easier
+    // Alternates, just to make the rules easier
     "$yi2=\u3043;"
     "$yi=\u3044;"
     "$ye2=\u3047;"
     "$ye=\u3048;"
     "$wu=$u;"
-    // end alternates
+    // End alternates
     
-    // Katakana
+    // Katakana block
     
     "$A2=\u30A1;"
     "$A=\u30A2;"
@@ -200,9 +207,8 @@ lkana {
     "$KO=\u30B3;"
     "$GO=\u30B4;"
     
-    //these generate small katakana
-    "$KA2=\u30F5;"
-    "$KE2=\u30F6;"
+    "$KA2=\u30F5;" // Small Katakana KA; no Hiragana equiv.
+    "$KE2=\u30F6;" // Small Katakana KE; no Hiragana equiv.
     
     "$SA=\u30B5;"
     "$ZA=\u30B6;"
@@ -263,13 +269,13 @@ lkana {
     "$YO=\u30E8;"
     "$WA2=\u30EE;"
     
-    // alternates, just to make the rules easier
+    // Alternates, just to make the rules easier
     "$YI2=\u30A3;"
     "$YI=\u30A4;"
     "$YE2=\u30A7;"
     "$YE=\u30A8;"
     "$WU=$U;"
-    // end alternates
+    // End alternates
     
     "$RA=\u30E9;"
     "$RI=\u30EA;"
@@ -290,9 +296,8 @@ lkana {
     
     "$N=\u30F3;"
     "$LONG=\u30FC;"
-    "$QUOTE='';"
     
-    // Variables used for double-letters with tsu
+    // Variables used for doubled-consonants with tsu
     
     "$K_START=[$KA$KI$KU$KE$KO$ka$ki$ku$ke$ko];"
     "$G_START=[$GA$GI$GU$GE$GO$ga$gi$gu$ge$go];"
@@ -321,8 +326,21 @@ lkana {
     
     "$V_START=[$VA$VI$VU$VE$VO$vu];"
     
-    // lowercase copies for convenience in making hiragana
+    // If $N is followed by $N_QUOTER, then it needs an
+    // apostrophe after its romaji form to disambiguate it.
+    // E.g., $N $A != $NA, so represent as "n'a", not "na".
     
+    "$N_QUOTER = [$A $I $U $E $O $NA $NI $NU $NE $NO"
+    "             $YA $YU $YO $N];"
+    
+    "$n_quoter = [$a $i $u $e $o $na $ni $nu $ne $no"
+    "             $ya $yu $yo $n];"
+    
+    // Lowercase copies for convenience in making hiragana
+    // rule set copy
+    
+    "$long = $LONG;"
+    "$quote = $QUOTE;"
     "$k_start=$K_START;"
     "$g_start=$G_START;"
     "$s_start=$S_START;"
@@ -341,80 +359,120 @@ lkana {
     "$w_start=$W_START;"
     "$v_start=$V_START;"
     
-    // remember that the order is very significant:
-    // always put longer before shorter elements
+    //------------------------------------------------------
+    // Katakana rules
     
-    //#######################################
-    // KATAKANA
-    //#######################################
+    // The rules immediately following are not shared.  That
+    // is, they exist only for katakana, not for hiragana.
     
     "VA<>$VA;"
     "VI<>$VI;"
     "VE<>$VE;"
     "VO<>$VO;"
+    "'~KA'<>$KA2;"
+    "'~KE'<>$KE2;"
     
-    //#######################################
-    // KATAKANA SHARED
-    // These are also used to produce hiragana, by lowercasing
-    //#######################################
+    // ~~~ BEGIN shared rules ~~~
     
-    "A>$A;"
+    // The shared rules are copied from katakana to hiragana
+    // and then mechanically lowercased.
     
-    "BA>$BA;"
-    "BI>$BI;"
-    "BU>$BU;"
-    "BE>$BE;"
-    "BO>$BO;"
+    "A<>$A;"
+    
+    "BA<>$BA;"
+    "BYA<$BI$YA2;"
+    "BYI<$BI$I2;"
+    "BYU<$BI$YU2;"
+    "BYE<$BI$E2;"
+    "BYO<$BI$YO2;"
+    "BI<>$BI;"
+    "BU<>$BU;"
+    "BE<>$BE;"
+    "BO<>$BO;"
     "BY>$BI|'~Y';"
     
-    "CHI>$TI;"
+    "CHA<$TI$YA2;"
+    "CHI'~I'<$TI$I2;" // Liu
+    "CHU<$TI$YU2;"
+    "CHE<$TI$E2;"
+    "CHO<$TI$YO2;"
+    "CHI<>$TI;"
     "CH>$TI|'~Y';"
     
     "C}I>|S;"
     "C}E>|S;"
     
-    "DA>$DA;"
-    "DI>$DE$I2;"
-    "DU>$DE$U2;"
-    "DE>$DE;"
-    "DO>$DO;"
-    "DZU>$DU;"
-    "DJI>$DI;"
+    "DA<>$DA;"
+    "DI<>$DE$I2;"
+    "DU<>$DE$U2;"
+    "DE<>$DE;"
+    "DO<>$DO;"
+    "DZU<>$DU;"
+    "DJA<$DI$YA2;"
+    "DJI'~I'<$DI$I2;" // Liu
+    "DJU<$DI$YU2;"
+    "DJE<$DI$E2;"
+    "DJO<$DI$YO2;"
+    "DJI<>$DI;"
     "DJ>$DI|'~Y';"
     
-    "E>$E;"
+    "E<>$E;"
     
-    "FU>$HU;"
+    "FA<$HU$A2;"
+    "FI<$HU$I2;"
+    "FE<$HU$E2;"
+    "FO<$HU$O2;"
+    "FU<>$HU;"
     
-    "GA>$GA;"
-    "GI>$GI;"
-    "GU>$GU;"
-    "GE>$GE;"
-    "GO>$GO;"
+    "GA<>$GA;"
+    "GYA<$GI$YA2;"
+    "GYI<$GI$I2;"
+    "GYU<$GI$YU2;"
+    "GYE<$GI$E2;"
+    "GYO<$GI$YO2;"
+    "GI<>$GI;"
+    "GU<>$GU;"
+    "GE<>$GE;"
+    "GO<>$GO;"
     "GY>$GI|'~Y';"
     
-    "HA>$HA;"
-    "HI>$HI;"
-    "HU>$HE$U2;"
-    "HE>$HE;"
-    "HO>$HO;"
+    "HA<>$HA;"
+    "HI<>$HI;"
+    "HU<>$HE$U2;"
+    "HE<>$HE;"
+    "HO<>$HO;"
     
-    "I>$I;"
+    "I<>$I;"
     
-    "JI>$ZI;"
+    "JA<$ZI$YA2;"
+    "JI'~I'<$ZI$I2;" // Liu
+    "JU<$ZI$YU2;"
+    "JE<$ZI$E2;"
+    "JO<$ZI$YO2;"
+    "JI<>$ZI;"
     
-    "KA>$KA;"
-    "KI>$KI;"
-    "KU>$KU;"
-    "KE>$KE;"
-    "KO>$KO;"
+    "KA<>$KA;"
+    "KYA<$KI$YA2;"
+    "KYI<$KI$I2;"
+    "KYU<$KI$YU2;"
+    "KYE<$KI$E2;"
+    "KYO<$KI$YO2;"
+    "KI<>$KI;"
+    "KU<>$KU;"
+    "KE<>$KE;"
+    "KO<>$KO;"
     "KY>$KI|'~Y';"
     
-    "MA>$MA;"
-    "MI>$MI;"
-    "MU>$MU;"
-    "ME>$ME;"
-    "MO>$MO;"
+    "MA<>$MA;"
+    "MYA<$MI$YA2;"
+    "MYI<$MI$I2;"
+    "MYU<$MI$YU2;"
+    "MYE<$MI$E2;"
+    "MYO<$MI$YO2;"
+    "MI<>$MI;"
+    "MU<>$MU;"
+    "ME<>$ME;"
+    "MO<>$MO;"
     "MY>$MI|'~Y';"
     
     "M}P>$N;"
@@ -422,474 +480,298 @@ lkana {
     "M}F>$N;"
     "M}V>$N;"
     
-    "NA>$NA;"
-    "NI>$NI;"
-    "NU>$NU;"
-    "NE>$NE;"
-    "NO>$NO;"
-    "NY>$NI|'~Y';"
-    
-    "O>$O;"
-    
-    "PA>$PA;"
-    "PI>$PI;"
-    "PU>$PU;"
-    "PE>$PE;"
-    "PO>$PO;"
-    "PY>$PI|'~Y';"
-    
-    "RA>$RA;"
-    "RI>$RI;"
-    "RU>$RU;"
-    "RE>$RE;"
-    "RO>$RO;"
-    "RY>$RI|'~Y';"
-    
-    "SA>$SA;"
-    "SI>$SE$I2;"
-    "SU>$SU;"
-    "SE>$SE;"
-    "SO>$SO;"
-    
-    "SHI>$SI;"
-    "SH>$SI|'~Y';"
-    
-    "TA>$TA;"
-    "TI>$TE$I2;"
-    "TU>$TE$U2;"
-    "TE>$TE;"
-    "TO>$TO;"
-    
-    "TSU>$TU;"
-    //+ "TS>$TU|'~';"
-    
-    "U>$U;"
-    
-    "VU>$VU;"
-    
-    "WA>$WA;"
-    "WI>$WI;"
-    "WU>$WU;"
-    "WE>$WE;"
-    "WO>$WO;"
-    
-    "YA>$YA;"
-    "YI>$YI;"
-    "YU>$YU;"
-    "YE>$YE;"
-    "YO>$YO;"
-    
-    "ZA>$ZA;"
-    "ZI>$ZE$I2;"
-    "ZU>$ZU;"
-    "ZE>$ZE;"
-    "ZO>$ZO;"
-    
-    // SMALL FORMS
-    
-    "'~A'>$A2;"
-    "'~I'>$I2;"
-    "'~U'>$U2;"
-    "'~E'>$E2;"
-    "'~O'>$O2;"
-    "'~KA'>$KA2;"
-    "'~KE'>$KE2;"
-    "'~TSU'>$TU2;"
-    "'~WA'>$WA2;"
-    "'~YA'>$YA2;"
-    "'~YI'>$YI2;"
-    "'~YU'>$YU2;"
-    "'~YE'>$YE2;"
-    "'~YO'>$YO2;"
-    
-    // DOUBLE CONSONANTS
-    
-    "B}B>$TU2;"
-    "C}K>$TU2;"
-    "C}C>$TU2;"
-    "C}Q>$TU2;"
-    "D}D>$TU2;"
-    "F}F>$TU2;"
-    "G}G>$TU2;"
-    "H}H>$TU2;"
-    "J}J>$TU2;"
-    "K}K>$TU2;"
-    "L}L>$TU2;"
-    "M}M>$TU2;"
-    "N}N>$TU2;"
-    "P}P>$TU2;"
-    "Q}Q>$TU2;"
-    "R}R>$TU2;"
-    "S}SH>$TU2;"
-    "S}S>$TU2;"
-    "T}CH>$TU2;"
-    "T}T>$TU2;"
-    "V}V>$TU2;"
-    "W}W>$TU2;"
-    "X}X>$TU2;"
-    "Y}Y>$TU2;"
-    "Z}Z>$TU2;"
-    
-    // ########################################
-    // CATCH MISSING VOWELS!
-    // THESE ARE TO INSURE COMPLETENESS, THAT
-    // ALL ROMAJI MAPS TO KANA
-    // ########################################
-    
-    //| + "SH>$SI;"
-    //| + "TS>$TU;"
-    //| + "CH>$TI;"
-    //| + "DJ>$DI;"
-    //| + "DZ>$DU;"
-    
-    // THE FOLLOWING ARE NOT REALLY NECESSARY, BUT PRODUCE
-    // SLIGHTLY MORE NATURAL RESULTS.
-    
-    //masked: + "BY>$BI;"
-    "CY>$SE$I2;"
-    "DY>$DE$I2;"
-    //masked: + "GY>$GI;"
-    "HY>$HI;"
-    //masked: + "KY>$KI;"
-    //masked: + "MY>$MI;"
-    //masked: + "PY>$PI;"
-    //masked: + "RY>$RI;"
-    "SY>$SE$I2;"
-    "TY>$TE$I2;"
-    "ZY>$ZE$I2;"
-    
-    // SIMPLE SUBSTITUTIONS USING BACKUP
-    
-    "C>|K;"
-    "F>$HU|'~';"
-    "J>$ZI|'~Y';"
-    "L>|R;"
-    "Q>|K;" // BACKUP AND REDO
-    "V>$VU|'~';"
-    "W>$U|'~';"
-    "X>|KS;"
-    
-    // WE HAD TO LIST THE LONGER ONES FIRST,
-    // SO HERE ARE THE ISOLATED CONSONANTS
-    
-    "B>$BU;"
-    "D>$DE;"
-    //masked: + "F>$HU;"
-    "G>$GU;"
-    "H>$HE;"
-    //masked: + "J>$ZI;"
-    "K>$KU;"
-    "M>$N;"
-    "N>$N;"
-    "P>$PU;"
-    "R>$RU;"
-    "S>$SU;"
-    "T>$TE;"
-    //masked: + "V>$BU;"
-    //masked: + "W>$U;"
-    //masked: + "X>$KU$SU;"
-    "Y>$I;"
-    "Z>$ZU;"
-    
-    // NOW KANA TO ROMAN
-    
-    "GYA<$GI$YA2;"
-    "GYI<$GI$I2;"
-    "GYU<$GI$YU2;"
-    "GYE<$GI$E2;"
-    "GYO<$GI$YO2;"
-    
-    "GA<$GA;"
-    "GI<$GI;"
-    "GU<$GU;"
-    "GE<$GE;"
-    "GO<$GO;"
-    
-    "KYA<$KI$YA2;"
-    "KYI<$KI$I2;"
-    "KYU<$KI$YU2;"
-    "KYE<$KI$E2;"
-    "KYO<$KI$YO2;"
-    
-    "KA<$KA;"
-    "KI<$KI;"
-    "KU<$KU;"
-    "KE<$KE;"
-    "KO<$KO;"
-    
-    "JA<$ZI$YA2;"
-    "JI'~I'<$ZI$I2;" // LIU
-    "JU<$ZI$YU2;"
-    "JE<$ZI$E2;"
-    "JO<$ZI$YO2;"
-    "JI<$ZI;"
-    
-    "ZA<$ZA;"
-    "ZI<$ZE$I2;"
-    "ZU<$ZU;"
-    "ZE<$ZE;"
-    "ZO<$ZO;"
-    
-    "SHA<$SI$YA2;"
-    "SHI'~I'<$SI$I2;" // LIU
-    "SHU<$SI$YU2;"
-    "SHE<$SI$E2;"
-    "SHO<$SI$YO2;"
-    "SHI<$SI;"
-    
-    "SA<$SA;"
-    "SI<$SE$I2;"
-    "SU<$SU;"
-    "SE<$SE;"
-    "SO<$SO;"
-    
-    "DJA<$DI$YA2;"
-    "DJI'~I'<$DI$I2;" // LIU
-    "DJU<$DI$YU2;"
-    "DJE<$DI$E2;"
-    "DJO<$DI$YO2;"
-    "DJI<$DI;"
-    
-    "DZU<$DU;"
-    
-    "DA<$DA;"
-    "DI<$DE$I2;"
-    "DU<$DE$U2;"
-    "DE<$DE;"
-    "DO<$DO;"
-    
-    "CHA<$TI$YA2;"
-    "CHI'~I'<$TI$I2;" // LIU
-    "CHU<$TI$YU2;"
-    "CHE<$TI$E2;"
-    "CHO<$TI$YO2;"
-    "CHI<$TI;"
-    
-    "TSU<$TU;"
-    
-    "TA<$TA;"
-    "TI<$TE$I2;"
-    "TU<$TE$U2;"
-    "TE<$TE;"
-    "TO<$TO;"
-    
+    "NA<>$NA;"
     "NYA<$NI$YA2;"
     "NYI<$NI$I2;"
     "NYU<$NI$YU2;"
     "NYE<$NI$E2;"
     "NYO<$NI$YO2;"
+    "NI<>$NI;"
+    "NU<>$NU;"
+    "NE<>$NE;"
+    "NO<>$NO;"
+    "NY>$NI|'~Y';"
     
-    "NA<$NA;"
-    "NI<$NI;"
-    "NU<$NU;"
-    "NE<$NE;"
-    "NO<$NO;"
+    "O<>$O;"
     
-    "BYA<$BI$YA2;"
-    "BYI<$BI$I2;"
-    "BYU<$BI$YU2;"
-    "BYE<$BI$E2;"
-    "BYO<$BI$YO2;"
-    
-    "BA<$BA;"
-    "BI<$BI;"
-    "BU<$BU;"
-    "BE<$BE;"
-    "BO<$BO;"
-    
+    "PA<>$PA;"
     "PYA<$PI$YA2;"
     "PYI<$PI$I2;"
     "PYU<$PI$YU2;"
     "PYE<$PI$E2;"
     "PYO<$PI$YO2;"
+    "PI<>$PI;"
+    "PU<>$PU;"
+    "PE<>$PE;"
+    "PO<>$PO;"
+    "PY>$PI|'~Y';"
     
-    "PA<$PA;"
-    "PI<$PI;"
-    "PU<$PU;"
-    "PE<$PE;"
-    "PO<$PO;"
-    
-    "FA<$HU$A2;"
-    "FI<$HU$I2;"
-    "FE<$HU$E2;"
-    "FO<$HU$O2;"
-    "FU<$HU;"
-    
-    "HA<$HA;"
-    "HI<$HI;"
-    "HU<$HE$U2;"
-    "HE<$HE;"
-    "HO<$HO;"
-    
-    "MYA<$MI$YA2;"
-    "MYI<$MI$I2;"
-    "MYU<$MI$YU2;"
-    "MYE<$MI$E2;"
-    "MYO<$MI$YO2;"
-    
-    "MA<$MA;"
-    "MI<$MI;"
-    "MU<$MU;"
-    "ME<$ME;"
-    "MO<$MO;"
-    
-    "YA<$YA;"
-    //+ "YE<$YI;"
-    "YU<$YU;"
-    //+ "YE<$YE;"
-    "YO<$YO;"
-    
+    "RA<>$RA;"
     "RYA<$RI$YA2;"
     "RYI<$RI$I2;"
     "RYU<$RI$YU2;"
     "RYE<$RI$E2;"
     "RYO<$RI$YO2;"
+    "RI<>$RI;"
+    "RU<>$RU;"
+    "RE<>$RE;"
+    "RO<>$RO;"
+    "RY>$RI|'~Y';"
     
-    "RA<$RA;"
-    "RI<$RI;"
-    "RU<$RU;"
-    "RE<$RE;"
-    "RO<$RO;"
+    "SA<>$SA;"
+    "SI<>$SE$I2;"
+    "SU<>$SU;"
+    "SE<>$SE;"
+    "SO<>$SO;"
     
-    "WA<$WA;"
-    "WI<$WI;"
-    "WE<$WE;"
-    "WO<$WO;"
-    //+ "WU<$WU;"
+    "SHA<$SI$YA2;"
+    "SHI'~I'<$SI$I2;" // Liu
+    "SHU<$SI$YU2;"
+    "SHE<$SI$E2;"
+    "SHO<$SI$YO2;"
+    "SHI<>$SI;"
+    "SH>$SI|'~Y';"
     
-    "'V~A'<$VU$A2;" // LIU
-    "'V~I'<$VU$I2;" // LIU
-    "'V~E'<$VU$E2;" // LIU
-    "'V~O'<$VU$O2;" // LIU
-    "VU<$VU;"
+    "TA<>$TA;"
+    "TI<>$TE$I2;"
+    "TU<>$TE$U2;"
+    "TE<>$TE;"
+    "TO<>$TO;"
     
-    // DOUBLED LETTERS
+    // Double consonants
     
-    "N''<$N}$A;"
-    "N''<$N}$I;"
-    "N''<$N}$U;"
-    "N''<$N}$E;"
-    "N''<$N}$O;"
-    "N''<$N}$NA;"
-    "N''<$N}$NI;"
-    "N''<$N}$NU;"
-    "N''<$N}$NE;"
-    "N''<$N}$NO;"
-    "N''<$N}$YA;"
-    "N''<$N}$YU;"
-    "N''<$N}$YO;"
-    "N''<$N}$N;"
-    "N<$N;"
+    "B}B<>$TU2}$B_START;"
+    "C}K>$TU2;"
+    "C}C>$TU2;"
+    "C}Q>$TU2;"
+    "D}D<>$TU2}$D_START;"
+    "F}F<>$TU2}$F_START;"
+    "G}G<>$TU2}$G_START;"
+    "H}H<>$TU2}$H_START;"
+    "J}J<>$TU2}$J_START;"
+    "K}K<>$TU2}$K_START;"
+    "L}L>$TU2;"
+    "M}M<>$TU2}$M_START;"
+    "N}N<>$TU2}$N_START;"
+    "P}P<>$TU2}$P_START;"
+    "Q}Q>$TU2;"
+    "R}R<>$TU2}$R_START;"
+    "S}SH>$TU2;"
+    "S}S<>$TU2}$S_START;"
+    "T}CH>$TU2;"
+    "T}T<>$TU2}$T_START;"
+    "V}V<>$TU2}$V_START;"
+    "W}W<>$TU2}$W_START;"
+    "X}X>$TU2;"
+    "Y}Y<>$TU2}$Y_START;"
+    "Z}Z<>$TU2}$Z_START;"
     
-    "N<$TU2}$N_START;"
-    "M<$TU2}$M_START;"
-    "W<$TU2}$W_START;"
-    "Y<$TU2}$Y_START;"
-    "G<$TU2}$G_START;"
-    "K<$TU2}$K_START;"
-    "Z<$TU2}$Z_START;"
-    "J<$TU2}$J_START;"
-    "S<$TU2}$S_START;"
-    "D<$TU2}$D_START;"
-    "T<$TU2}$T_START;"
-    "B<$TU2}$B_START;"
-    "P<$TU2}$P_START;"
-    "H<$TU2}$H_START;"
-    "F<$TU2}$F_START;"
-    "R<$TU2}$R_START;"
-    "V<$TU2}$V_START;"
+    "TSU<>$TU;"
     
-    "A<$A;" // MOVED THIS BLOCK DOWN {aliu}
-    "I<$I;"
-    "U<$U;"
-    "E<$E;"
-    "O<$O;"
+    "U<>$U;"
     
-    // SMALL FORMS
+    "'V~A'<$VU$A2;" // Liu
+    "'V~I'<$VU$I2;" // Liu
+    "'V~E'<$VU$E2;" // Liu
+    "'V~O'<$VU$O2;" // Liu
+    "VU<>$VU;"
     
-    "'~A'<$A2;"
-    "'~I'<$I2;"
-    "'~U'<$U2;"
-    "'~E'<$E2;"
-    "'~O'<$O2;"
-    "'~KA'<$KA2;"
-    "'~KE'<$KE2;"
-    "'~YA'<$YA2;"
-    "'~YU'<$YU2;"
-    "'~YO'<$YO2;"
-    "'~TSU'<$TU2;"
-    "'~WA'<$WA2;"
+    "WA<>$WA;"
+    "WI<>$WI;"
+    "WU>$WU;"
+    "WE<>$WE;"
+    "WO<>$WO;"
     
-    // LENGTH MARK. LATER, COULD USE CIRCUMFLEX
+    "YA<>$YA;"
+    "YI>$YI;"
+    "YU<>$YU;"
+    "YE>$YE;"
+    "YO<>$YO;"
     
-    "A<A{$LONG;" // LIU
-    "E<E{$LONG;" // LIU
-    "I<I{$LONG;" // LIU
-    "O<O{$LONG;" // LIU
-    "U<U{$LONG;" // LIU
+    "ZA<>$ZA;"
+    "ZI<>$ZE$I2;"
+    "ZU<>$ZU;"
+    "ZE<>$ZE;"
+    "ZO<>$ZO;"
     
-    //#######################################
-    // HIRAGANA
-    // These are derived from the above by lowercasing
-    //#######################################
+    // Prolonged vowel mark. This indicates a doubling of
+    // the preceding vowel sound in both katakana and
+    // hiragana.
     
-    "a>$a;"
+    "A<A{$LONG;" // Liu
+    "E<E{$LONG;" // Liu
+    "I<I{$LONG;" // Liu
+    "O<O{$LONG;" // Liu
+    "U<U{$LONG;" // Liu
     
-    "ba>$ba;"
-    "bi>$bi;"
-    "bu>$bu;"
-    "be>$be;"
-    "bo>$bo;"
+    // Small forms
+    
+    "'~A'<>$A2;"
+    "'~I'<>$I2;"
+    "'~U'<>$U2;"
+    "'~E'<>$E2;"
+    "'~O'<>$O2;"
+    "'~TSU'<>$TU2;"
+    "'~WA'<>$WA2;"
+    "'~YA'<>$YA2;"
+    "'~YI'>$YI2;"
+    "'~YU'<>$YU2;"
+    "'~YE'>$YE2;"
+    "'~YO'<>$YO2;"
+    
+    // One-way latin->kana rules.  These do not occur in
+    // well-formed romaji representing actual Japanese text.
+    // Their purpose is to make all romaji map to kana of
+    // some sort.
+    
+    // The following are not really necessary, but produce
+    // slightly more natural results.
+    
+    "CY>$SE$I2;"
+    "DY>$DE$I2;"
+    "HY>$HI;"
+    "SY>$SE$I2;"
+    "TY>$TE$I2;"
+    "ZY>$ZE$I2;"
+    
+    // Simple substitutions using backup
+    
+    "C>|K;"
+    "F>$HU|'~';"
+    "J>$ZI|'~Y';"
+    "L>|R;"
+    "Q>|K;"
+    "V>$VU|'~';"
+    "W>$U|'~';"
+    "X>|KS;"
+    
+    // Isolated consonants listed here so as not to mask
+    // longer rules above.
+    
+    "B>$BU;"
+    "D>$DE;"
+    "G>$GU;"
+    "H>$HE;"
+    "K>$KU;"
+    "M>$N;"
+    "N''<$N}$N_QUOTER;"
+    "N<>$N;"
+    "P>$PU;"
+    "R>$RU;"
+    "S>$SU;"
+    "T>$TE;"
+    "Y>$I;"
+    "Z>$ZU;"
+    
+    // ~~~ END shared rules ~~~
+    
+    //------------------------------------------------------
+    // Hiragana rules
+    
+    // Currently, there are no hiragana rules other than the
+    // shared rules.
+    
+    // ~~~ BEGIN shared rules ~~~
+    
+    // The shared rules are copied from katakana to hiragana
+    // and then mechanically lowercased.
+    
+    "a<>$a;"
+    
+    "ba<>$ba;"
+    "bya<$bi$ya2;"
+    "byi<$bi$i2;"
+    "byu<$bi$yu2;"
+    "bye<$bi$e2;"
+    "byo<$bi$yo2;"
+    "bi<>$bi;"
+    "bu<>$bu;"
+    "be<>$be;"
+    "bo<>$bo;"
     "by>$bi|'~y';"
     
-    "chi>$ti;"
+    "cha<$ti$ya2;"
+    "chi'~i'<$ti$i2;" // liu
+    "chu<$ti$yu2;"
+    "che<$ti$e2;"
+    "cho<$ti$yo2;"
+    "chi<>$ti;"
     "ch>$ti|'~y';"
     
     "c}i>|s;"
     "c}e>|s;"
     
-    "da>$da;"
-    "di>$de$i2;"
-    "du>$de$u2;"
-    "de>$de;"
-    "do>$do;"
-    "dzu>$du;"
-    "dji>$di;"
+    "da<>$da;"
+    "di<>$de$i2;"
+    "du<>$de$u2;"
+    "de<>$de;"
+    "do<>$do;"
+    "dzu<>$du;"
+    "dja<$di$ya2;"
+    "dji'~i'<$di$i2;" // liu
+    "dju<$di$yu2;"
+    "dje<$di$e2;"
+    "djo<$di$yo2;"
+    "dji<>$di;"
     "dj>$di|'~y';"
     
-    "e>$e;"
+    "e<>$e;"
     
-    "fu>$hu;"
+    "fa<$hu$a2;"
+    "fi<$hu$i2;"
+    "fe<$hu$e2;"
+    "fo<$hu$o2;"
+    "fu<>$hu;"
     
-    "ga>$ga;"
-    "gi>$gi;"
-    "gu>$gu;"
-    "ge>$ge;"
-    "go>$go;"
+    "ga<>$ga;"
+    "gya<$gi$ya2;"
+    "gyi<$gi$i2;"
+    "gyu<$gi$yu2;"
+    "gye<$gi$e2;"
+    "gyo<$gi$yo2;"
+    "gi<>$gi;"
+    "gu<>$gu;"
+    "ge<>$ge;"
+    "go<>$go;"
     "gy>$gi|'~y';"
     
-    "ha>$ha;"
-    "hi>$hi;"
-    "hu>$he$u2;"
-    "he>$he;"
-    "ho>$ho;"
+    "ha<>$ha;"
+    "hi<>$hi;"
+    "hu<>$he$u2;"
+    "he<>$he;"
+    "ho<>$ho;"
     
-    "i>$i;"
+    "i<>$i;"
     
-    "ji>$zi;"
+    "ja<$zi$ya2;"
+    "ji'~i'<$zi$i2;" // liu
+    "ju<$zi$yu2;"
+    "je<$zi$e2;"
+    "jo<$zi$yo2;"
+    "ji<>$zi;"
     
-    "ka>$ka;"
-    "ki>$ki;"
-    "ku>$ku;"
-    "ke>$ke;"
-    "ko>$ko;"
+    "ka<>$ka;"
+    "kya<$ki$ya2;"
+    "kyi<$ki$i2;"
+    "kyu<$ki$yu2;"
+    "kye<$ki$e2;"
+    "kyo<$ki$yo2;"
+    "ki<>$ki;"
+    "ku<>$ku;"
+    "ke<>$ke;"
+    "ko<>$ko;"
     "ky>$ki|'~y';"
     
-    "ma>$ma;"
-    "mi>$mi;"
-    "mu>$mu;"
-    "me>$me;"
-    "mo>$mo;"
+    "ma<>$ma;"
+    "mya<$mi$ya2;"
+    "myi<$mi$i2;"
+    "myu<$mi$yu2;"
+    "mye<$mi$e2;"
+    "myo<$mi$yo2;"
+    "mi<>$mi;"
+    "mu<>$mu;"
+    "me<>$me;"
+    "mo<>$mo;"
     "my>$mi|'~y';"
     
     "m}p>$n;"
@@ -897,138 +779,156 @@ lkana {
     "m}f>$n;"
     "m}v>$n;"
     
-    "na>$na;"
-    "ni>$ni;"
-    "nu>$nu;"
-    "ne>$ne;"
-    "no>$no;"
+    "na<>$na;"
+    "nya<$ni$ya2;"
+    "nyi<$ni$i2;"
+    "nyu<$ni$yu2;"
+    "nye<$ni$e2;"
+    "nyo<$ni$yo2;"
+    "ni<>$ni;"
+    "nu<>$nu;"
+    "ne<>$ne;"
+    "no<>$no;"
     "ny>$ni|'~y';"
     
-    "o>$o;"
+    "o<>$o;"
     
-    "pa>$pa;"
-    "pi>$pi;"
-    "pu>$pu;"
-    "pe>$pe;"
-    "po>$po;"
+    "pa<>$pa;"
+    "pya<$pi$ya2;"
+    "pyi<$pi$i2;"
+    "pyu<$pi$yu2;"
+    "pye<$pi$e2;"
+    "pyo<$pi$yo2;"
+    "pi<>$pi;"
+    "pu<>$pu;"
+    "pe<>$pe;"
+    "po<>$po;"
     "py>$pi|'~y';"
     
-    "ra>$ra;"
-    "ri>$ri;"
-    "ru>$ru;"
-    "re>$re;"
-    "ro>$ro;"
+    "ra<>$ra;"
+    "rya<$ri$ya2;"
+    "ryi<$ri$i2;"
+    "ryu<$ri$yu2;"
+    "rye<$ri$e2;"
+    "ryo<$ri$yo2;"
+    "ri<>$ri;"
+    "ru<>$ru;"
+    "re<>$re;"
+    "ro<>$ro;"
     "ry>$ri|'~y';"
     
-    "sa>$sa;"
-    "si>$se$i2;"
-    "su>$su;"
-    "se>$se;"
-    "so>$so;"
+    "sa<>$sa;"
+    "si<>$se$i2;"
+    "su<>$su;"
+    "se<>$se;"
+    "so<>$so;"
     
-    "shi>$si;"
+    "sha<$si$ya2;"
+    "shi'~i'<$si$i2;" // liu
+    "shu<$si$yu2;"
+    "she<$si$e2;"
+    "sho<$si$yo2;"
+    "shi<>$si;"
     "sh>$si|'~y';"
     
-    "ta>$ta;"
-    "ti>$te$i2;"
-    "tu>$te$u2;"
-    "te>$te;"
-    "to>$to;"
+    "ta<>$ta;"
+    "ti<>$te$i2;"
+    "tu<>$te$u2;"
+    "te<>$te;"
+    "to<>$to;"
     
-    "tsu>$tu;"
-    //+ "ts>$tu|'~';"
+    // double consonants
     
-    "u>$u;"
-    
-    "vu>$vu;"
-    
-    "wa>$wa;"
-    "wi>$wi;"
-    "wu>$wu;"
-    "we>$we;"
-    "wo>$wo;"
-    
-    "ya>$ya;"
-    "yi>$yi;"
-    "yu>$yu;"
-    "ye>$ye;"
-    "yo>$yo;"
-    
-    "za>$za;"
-    "zi>$ze$i2;"
-    "zu>$zu;"
-    "ze>$ze;"
-    "zo>$zo;"
-    
-    // small forms
-    
-    "'~a'>$a2;"
-    "'~i'>$i2;"
-    "'~u'>$u2;"
-    "'~e'>$e2;"
-    "'~o'>$o2;"
-    "'~ka'>$ka2;"
-    "'~ke'>$ke2;"
-    "'~tsu'>$tu2;"
-    "'~wa'>$wa2;"
-    "'~ya'>$ya2;"
-    "'~yi'>$yi2;"
-    "'~yu'>$yu2;"
-    "'~ye'>$ye2;"
-    "'~yo'>$yo2;"
-    
-    // Double Consonants
-    
-    "b}b>$tu2;"
+    "b}b<>$tu2}$b_start;"
     "c}k>$tu2;"
     "c}c>$tu2;"
     "c}q>$tu2;"
-    "d}d>$tu2;"
-    "f}f>$tu2;"
-    "g}g>$tu2;"
-    "h}h>$tu2;"
-    "j}j>$tu2;"
-    "k}k>$tu2;"
+    "d}d<>$tu2}$d_start;"
+    "f}f<>$tu2}$f_start;"
+    "g}g<>$tu2}$g_start;"
+    "h}h<>$tu2}$h_start;"
+    "j}j<>$tu2}$j_start;"
+    "k}k<>$tu2}$k_start;"
     "l}l>$tu2;"
-    "m}m>$tu2;"
-    "n}n>$tu2;"
-    "p}p>$tu2;"
+    "m}m<>$tu2}$m_start;"
+    "n}n<>$tu2}$n_start;"
+    "p}p<>$tu2}$p_start;"
     "q}q>$tu2;"
-    "r}r>$tu2;"
+    "r}r<>$tu2}$r_start;"
     "s}sh>$tu2;"
-    "s}s>$tu2;"
+    "s}s<>$tu2}$s_start;"
     "t}ch>$tu2;"
-    "t}t>$tu2;"
-    "v}v>$tu2;"
-    "w}w>$tu2;"
+    "t}t<>$tu2}$t_start;"
+    "v}v<>$tu2}$v_start;"
+    "w}w<>$tu2}$w_start;"
     "x}x>$tu2;"
-    "y}y>$tu2;"
-    "z}z>$tu2;"
+    "y}y<>$tu2}$y_start;"
+    "z}z<>$tu2}$z_start;"
     
-    // ########################################
-    // catch missing vowels!
-    // These are to insure completeness, that
-    // all romaji maps to kana
-    // ########################################
+    "tsu<>$tu;"
     
-    //| + "sh>$si;"
-    //| + "ts>$tu;"
-    //| + "ch>$ti;"
-    //| + "dj>$di;"
-    //| + "dz>$du;"
+    "u<>$u;"
+    
+    "'v~a'<$vu$a2;" // liu
+    "'v~i'<$vu$i2;" // liu
+    "'v~e'<$vu$e2;" // liu
+    "'v~o'<$vu$o2;" // liu
+    "vu<>$vu;"
+    
+    "wa<>$wa;"
+    "wi<>$wi;"
+    "wu>$wu;"
+    "we<>$we;"
+    "wo<>$wo;"
+    
+    "ya<>$ya;"
+    "yi>$yi;"
+    "yu<>$yu;"
+    "ye>$ye;"
+    "yo<>$yo;"
+    
+    "za<>$za;"
+    "zi<>$ze$i2;"
+    "zu<>$zu;"
+    "ze<>$ze;"
+    "zo<>$zo;"
+    
+    // prolonged vowel mark. this indicates a doubling of
+    // the preceding vowel sound in both katakana and
+    // hiragana.
+    
+    "a<a{$long;" // liu
+    "e<e{$long;" // liu
+    "i<i{$long;" // liu
+    "o<o{$long;" // liu
+    "u<u{$long;" // liu
+    
+    // small forms
+    
+    "'~a'<>$a2;"
+    "'~i'<>$i2;"
+    "'~u'<>$u2;"
+    "'~e'<>$e2;"
+    "'~o'<>$o2;"
+    "'~tsu'<>$tu2;"
+    "'~wa'<>$wa2;"
+    "'~ya'<>$ya2;"
+    "'~yi'>$yi2;"
+    "'~yu'<>$yu2;"
+    "'~ye'>$ye2;"
+    "'~yo'<>$yo2;"
+    
+    // one-way latin->kana rules.  these do not occur in
+    // well-formed romaji representing actual japanese text.
+    // their purpose is to make all romaji map to kana of
+    // some sort.
     
     // the following are not really necessary, but produce
     // slightly more natural results.
     
-    //masked: + "by>$bi;"
     "cy>$se$i2;"
     "dy>$de$i2;"
-    //masked: + "gy>$gi;"
     "hy>$hi;"
-    //masked: + "ky>$ki;"
-    //masked: + "my>$mi;"
-    //masked: + "py>$pi;"
-    //masked: + "ry>$ri;"
     "sy>$se$i2;"
     "ty>$te$i2;"
     "zy>$ze$i2;"
@@ -1039,277 +939,36 @@ lkana {
     "f>$hu|'~';"
     "j>$zi|'~y';"
     "l>|r;"
-    "q>|k;" // backup and redo
+    "q>|k;"
     "v>$vu|'~';"
     "w>$u|'~';"
     "x>|ks;"
     
-    // We had to list the longer ones first,
-    // so here are the isolated consonants
+    // isolated consonants listed here so as not to mask
+    // longer rules above.
     
     "b>$bu;"
     "d>$de;"
-    //masked: + "f>$hu;"
     "g>$gu;"
     "h>$he;"
-    //masked: + "j>$zi;"
     "k>$ku;"
     "m>$n;"
-    "n>$n;"
+    "n''<$n}$n_quoter;"
+    "n<>$n;"
     "p>$pu;"
     "r>$ru;"
     "s>$su;"
     "t>$te;"
-    //masked: + "v>$bu;"
-    //masked: + "w>$u;"
-    //masked: + "x>$ku$su;"
     "y>$i;"
     "z>$zu;"
     
-    // NOW KANA TO ROMAN
+    // ~~~ END shared rules ~~~
     
-    "gya<$gi$ya2;"
-    "gyi<$gi$i2;"
-    "gyu<$gi$yu2;"
-    "gye<$gi$e2;"
-    "gyo<$gi$yo2;"
+    //------------------------------------------------------
+    // Final cleanup
     
-    "ga<$ga;"
-    "gi<$gi;"
-    "gu<$gu;"
-    "ge<$ge;"
-    "go<$go;"
-    
-    "kya<$ki$ya2;"
-    "kyi<$ki$i2;"
-    "kyu<$ki$yu2;"
-    "kye<$ki$e2;"
-    "kyo<$ki$yo2;"
-    
-    "ka<$ka;"
-    "ki<$ki;"
-    "ku<$ku;"
-    "ke<$ke;"
-    "ko<$ko;"
-    
-    "ja<$zi$ya2;"
-    "ji'~i'<$zi$i2;" // LIU
-    "ju<$zi$yu2;"
-    "je<$zi$e2;"
-    "jo<$zi$yo2;"
-    "ji<$zi;"
-    
-    "za<$za;"
-    "zi<$ze$i2;"
-    "zu<$zu;"
-    "ze<$ze;"
-    "zo<$zo;"
-    
-    "sha<$si$ya2;"
-    "shi'~i'<$si$i2;" // LIU
-    "shu<$si$yu2;"
-    "she<$si$e2;"
-    "sho<$si$yo2;"
-    "shi<$si;"
-    
-    "sa<$sa;"
-    "si<$se$i2;"
-    "su<$su;"
-    "se<$se;"
-    "so<$so;"
-    
-    "dja<$di$ya2;"
-    "dji'~i'<$di$i2;" // LIU
-    "dju<$di$yu2;"
-    "dje<$di$e2;"
-    "djo<$di$yo2;"
-    "dji<$di;"
-    
-    "dzu<$du;"
-    
-    "da<$da;"
-    "di<$de$i2;"
-    "du<$de$u2;"
-    "de<$de;"
-    "do<$do;"
-    
-    "cha<$ti$ya2;"
-    "chi'~i'<$ti$i2;" // LIU
-    "chu<$ti$yu2;"
-    "che<$ti$e2;"
-    "cho<$ti$yo2;"
-    "chi<$ti;"
-    
-    "tsu<$tu;"
-    
-    "ta<$ta;"
-    "ti<$te$i2;"
-    "tu<$te$u2;"
-    "te<$te;"
-    "to<$to;"
-    
-    "nya<$ni$ya2;"
-    "nyi<$ni$i2;"
-    "nyu<$ni$yu2;"
-    "nye<$ni$e2;"
-    "nyo<$ni$yo2;"
-    
-    "na<$na;"
-    "ni<$ni;"
-    "nu<$nu;"
-    "ne<$ne;"
-    "no<$no;"
-    
-    "bya<$bi$ya2;"
-    "byi<$bi$i2;"
-    "byu<$bi$yu2;"
-    "bye<$bi$e2;"
-    "byo<$bi$yo2;"
-    
-    "ba<$ba;"
-    "bi<$bi;"
-    "bu<$bu;"
-    "be<$be;"
-    "bo<$bo;"
-    
-    "pya<$pi$ya2;"
-    "pyi<$pi$i2;"
-    "pyu<$pi$yu2;"
-    "pye<$pi$e2;"
-    "pyo<$pi$yo2;"
-    
-    "pa<$pa;"
-    "pi<$pi;"
-    "pu<$pu;"
-    "pe<$pe;"
-    "po<$po;"
-    
-    "fa<$hu$a2;"
-    "fi<$hu$i2;"
-    "fe<$hu$e2;"
-    "fo<$hu$o2;"
-    "fu<$hu;"
-    
-    "ha<$ha;"
-    "hi<$hi;"
-    "hu<$he$u2;"
-    "he<$he;"
-    "ho<$ho;"
-    
-    "mya<$mi$ya2;"
-    "myi<$mi$i2;"
-    "myu<$mi$yu2;"
-    "mye<$mi$e2;"
-    "myo<$mi$yo2;"
-    
-    "ma<$ma;"
-    "mi<$mi;"
-    "mu<$mu;"
-    "me<$me;"
-    "mo<$mo;"
-    
-    "ya<$ya;"
-    //+ "ye<$yi;"
-    "yu<$yu;"
-    //+ "ye<$ye;"
-    "yo<$yo;"
-    
-    "rya<$ri$ya2;"
-    "ryi<$ri$i2;"
-    "ryu<$ri$yu2;"
-    "rye<$ri$e2;"
-    "ryo<$ri$yo2;"
-    
-    "ra<$ra;"
-    "ri<$ri;"
-    "ru<$ru;"
-    "re<$re;"
-    "ro<$ro;"
-    
-    "wa<$wa;"
-    "wi<$wi;"
-    "we<$we;"
-    "wo<$wo;"
-    //+ "wu<$wu;"
-    
-    "va<$vu$a2;"
-    "vi<$vu$i2;"
-    "ve<$vu$e2;"
-    "vo<$vu$o2;"
-    "vu<$vu;"
-    
-    // Doubled letters
-    
-    "n''<$n}$a;"
-    "n''<$n}$i;"
-    "n''<$n}$u;"
-    "n''<$n}$e;"
-    "n''<$n}$o;"
-    "n''<$n}$na;"
-    "n''<$n}$ni;"
-    "n''<$n}$nu;"
-    "n''<$n}$ne;"
-    "n''<$n}$no;"
-    "n''<$n}$ya;"
-    "n''<$n}$yu;"
-    "n''<$n}$yo;"
-    "n''<$n}$n;"
-    "n<$n;"
-    
-    "n<$tu2}$n_start;"
-    "m<$tu2}$m_start;"
-    "w<$tu2}$w_start;"
-    "y<$tu2}$y_start;"
-    "g<$tu2}$g_start;"
-    "k<$tu2}$k_start;"
-    "z<$tu2}$z_start;"
-    "j<$tu2}$j_start;"
-    "s<$tu2}$s_start;"
-    "d<$tu2}$d_start;"
-    "t<$tu2}$t_start;"
-    "b<$tu2}$b_start;"
-    "p<$tu2}$p_start;"
-    "h<$tu2}$h_start;"
-    "f<$tu2}$f_start;"
-    "r<$tu2}$r_start;"
-    "v<$tu2}$v_start;"
-    
-    "a<$a;" // Moved this block down {aliu}
-    "i<$i;"
-    "u<$u;"
-    "e<$e;"
-    "o<$o;"
-    
-    // small forms
-    
-    "'~a'<$a2;"
-    "'~i'<$i2;"
-    "'~u'<$u2;"
-    "'~e'<$e2;"
-    "'~o'<$o2;"
-    //masked: + "'~ka'<$ka2;" ({~ka} is an alias for {~KA})
-    //masked: + "'~ke'<$ke2;" ({~ke} is an alias for {~KE})
-    "'~ya'<$ya2;"
-    "'~yu'<$yu2;"
-    "'~yo'<$yo2;"
-    "'~tsu'<$tu2;"
-    "'~wa'<$wa2;"
-    
-    // length mark. Later, could use circumflex
-    
-    "a<a{$long;" // Liu
-    "e<e{$long;" // Liu
-    "i<i{$long;" // Liu
-    "o<o{$long;" // Liu
-    "u<u{$long;" // Liu
-    
-    //#######################################
-    // Non-shared stuff goes here
-    
-    "'~'>;" // remove if not used
-    "$quote>;" // remove if not used
-    //+ "<$quote;"
+    "'~'>;" // delete stray tildes
+    "$quote>;" // delete stray quotes
     "'-'>$long;"
-    
   }
 }
