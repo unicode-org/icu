@@ -1,5 +1,5 @@
 /*
- * $RCSfile: CompactByteArray.java,v $ $Revision: 1.3 $ $Date: 2000/02/24 19:38:14 $
+ * $RCSfile: CompactByteArray.java,v $ $Revision: 1.4 $ $Date: 2000/02/24 19:42:38 $
  *
  * (C) Copyright Taligent, Inc. 1996 - All Rights Reserved
  * (C) Copyright IBM Corp. 1996-1998 - All Rights Reserved
@@ -49,7 +49,7 @@ package com.ibm.util;
  * array contains the indicies of Unicode characters to the value array.
  *
  * @see                CompactCharArray
- * @version            $Revision: 1.3 $
+ * @version            $Revision: 1.4 $
  * @author             Helena Shih
  */
 public final class CompactByteArray implements Cloneable {
@@ -264,7 +264,7 @@ public final class CompactByteArray implements Cloneable {
      * For internal use only.  Do not modify the result, the behavior of
      * modified results are undefined.
      */
-    public char getIndexArray()[]
+    public char[] getIndexArray()
     {
         return indices;
     }
@@ -273,7 +273,7 @@ public final class CompactByteArray implements Cloneable {
      * For internal use only.  Do not modify the result, the behavior of
      * modified results are undefined.
      */
-    public byte getValueArray()[]
+    public byte[] getValueArray()
     {
         return values;
     }
