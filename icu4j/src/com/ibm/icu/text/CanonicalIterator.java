@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CanonicalIterator.java,v $ 
- * $Date: 2002/07/31 03:01:19 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/09/17 19:11:52 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -36,21 +36,24 @@ import com.ibm.icu.impl.USerializedSet;
  *</pre>
  *<br>Note: the code is intended for use with small strings, and is not suitable for larger ones,
  * since it has not been optimized for that situation.
- *@author M. Davis
- *@draft 2.2
- *@internal -- not for public use: the API may change without warning.
+ * @author M. Davis
+ * @draft ICU 2.4
  */
 
-public class CanonicalIterator {
+public final class CanonicalIterator {
     /**
-     *@param source string to get results for
+     * Construct a CanonicalIterator object
+     * @param source string to get results for
+	 * @draft ICU 2.4
      */
     public CanonicalIterator(String source) {
         setSource(source);
     }
     
     /**
-     *@return gets the source: NOTE: it is the NFD form of the source originally passed in
+     * Gets the NFD form of the current source we are iterating over.
+     * @return gets the source: NOTE: it is the NFD form of the source originally passed in
+	 * @draft ICU 2.4
      */
     public String getSource() {
       return source;
@@ -58,6 +61,7 @@ public class CanonicalIterator {
     
     /**
      * Resets the iterator so that one can start again from the beginning.
+	 * @draft ICU 2.4
      */
     public void reset() {
         done = false;
@@ -67,9 +71,11 @@ public class CanonicalIterator {
     }
     
     /**
-     *@return the next string that is canonically equivalent. The value null is returned when
+     * Get the next canonically equivalent string.
+	 * <br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
+     * @return the next string that is canonically equivalent. The value null is returned when
      * the iteration is done.
-	 *<br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
+	 * @draft ICU 2.4
      */
     public String next() {
         if (done) return null;
@@ -97,8 +103,10 @@ public class CanonicalIterator {
     }
     
     /**
-     *@param set the source string to iterate against. This allows the same iterator to be used
+     * Set a new source for this iterator. Allows object reuse.
+     * @param set the source string to iterate against. This allows the same iterator to be used
      * while changing the source string, saving object creation.
+	 * @draft ICU 2.4
      */
     public void setSource(String newSource) {
         source = Normalizer.normalize(newSource, Normalizer.NFD);
@@ -141,7 +149,7 @@ public class CanonicalIterator {
     
     /**
      * Simple implementation of permutation. 
-	 *<br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
+	 * <br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
      * @param source the string to find permutations for
      * @param the set to add the results to
      * @internal
