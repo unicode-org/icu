@@ -1232,6 +1232,7 @@ static void TestConverterTypesAndStarters()
     TestConverterType("x-iscii-de", UCNV_ISCII);
     TestConverterType("ascii", UCNV_US_ASCII);
     TestConverterType("utf-7", UCNV_UTF7);
+    TestConverterType("bocu-1", UCNV_BOCU1);
 }
 
 static void
@@ -1460,6 +1461,7 @@ TestSignatureDetection(){
                 "\x0E\xFE\xFF\x41",     /* SCSU     */
                 "\x00\x00\xFE\xFF\x41", /* UTF-32BE */
                 "\xFF\xFE\x00\x00\x42", /* UTF-32LE */
+                "\xFB\xEE\x28",         /* BOCU-1   */
                 "\xFF\x41\x42"          /* NULL     */
         };
         static const int len[] = {
@@ -1481,6 +1483,7 @@ TestSignatureDetection(){
             4,
             5,
             5,
+            3,
             3
         };
 
@@ -1503,6 +1506,7 @@ TestSignatureDetection(){
                 "SCSU",
                 "UTF-32BE",
                 "UTF-32LE",
+                "BOCU-1",
                 NULL
         };
         static const int32_t expectedLength[] ={
@@ -1524,6 +1528,7 @@ TestSignatureDetection(){
             3,
             4,
             4,
+            3,
             0
         };
         int i=0;
@@ -2934,7 +2939,7 @@ TestFullRoundtrip(const char* cp){
     UChar usource[10] ={0};
     UChar nsrc[10] = {0};
     uint32_t i=1;
-    int len=0;
+    int len=0, ulen;
     nsrc[0]=0x0061;
     /* Test codepoint 0 */
     TestConv(usource,1,cp,"",NULL,0);
@@ -2943,7 +2948,8 @@ TestFullRoundtrip(const char* cp){
     TestConv(nsrc,3,cp,"",NULL,0);
 
     for(;i<=0x10FFFF;i++){
-        if(i>=0xD800 && i<=0xDFFF){
+        if(i==0xD800){
+            i=0xDFFF;
             continue;
         }
         if(i<=0xFFFF){
@@ -2954,17 +2960,25 @@ TestFullRoundtrip(const char* cp){
             usource[1]=UTF16_TRAIL(i);
             len=2;
         }
+        ulen=len;
+        if(i==0x80) {
+            usource[2]=0;
+        }
         /* Test only single code points */
-        TestConv(usource,u_strlen(usource),cp,"",NULL,0);
+        TestConv(usource,ulen,cp,"",NULL,0);
         /* Test codepoint repeated twice */
-        u_strncat(usource,usource,len);
-        TestConv(usource,u_strlen(usource),cp,"",NULL,0);
+        usource[ulen]=usource[0];
+        usource[ulen+1]=usource[1];
+        ulen+=len;
+        TestConv(usource,ulen,cp,"",NULL,0);
         /* Test codepoint repeated 3 times */
-        u_strncat(usource,usource,len);
-        TestConv(usource,u_strlen(usource),cp,"",NULL,0);
+        usource[ulen]=usource[0];
+        usource[ulen+1]=usource[1];
+        ulen+=len;
+        TestConv(usource,ulen,cp,"",NULL,0);
         /* Test codepoint in between 2 codepoints */
-        nsrc[1]=0;
-        u_strncat(nsrc,usource,len);
+        nsrc[1]=usource[0];
+        nsrc[2]=usource[1];
         nsrc[len+1]=0x5555;
         TestConv(nsrc,len+2,cp,"",NULL,0);        
         uprv_memset(usource,0,sizeof(UChar)*10);
@@ -2974,6 +2988,8 @@ TestFullRoundtrip(const char* cp){
 static void
 TestRoundTrippingAllUTF(void){
     if(!QUICK){
+        log_verbose("Running exhaustive round trip test for BOCU-1\n");
+        TestFullRoundtrip("BOCU-1");
         log_verbose("Running exhaustive round trip test for SCSU\n");
         TestFullRoundtrip("SCSU");
         log_verbose("Running exhaustive round trip test for UTF-8\n");
@@ -2990,9 +3006,6 @@ TestRoundTrippingAllUTF(void){
         TestFullRoundtrip("UTF-7");
         log_verbose("Running exhaustive round trip test for UTF-7\n");
         TestFullRoundtrip("UTF-7,version=1");
-        /*#### TODO: Enable this test when BOCU-1 is available */
-        /*log_verbose("Running exhaustive round trip test for BOCU-1");*/
-        /*TestFullRoundtrip("BOCU-1");*/
         log_verbose("Running exhaustive round trip test for GB18030\n");
         TestFullRoundtrip("GB18030");
     }
