@@ -249,7 +249,7 @@ static void TestPrefixes() {
   const char *testTitles[] = { "uloc_getLanguage()", "uloc_getCountry()", "uloc_getVariant()", "name", "uloc_getName()", "country3", "lcid" };
 
   char buf[PREFIXBUFSIZ];
-  int len;
+  int32_t len;
   UErrorCode err;
 
 
@@ -297,13 +297,13 @@ static void TestPrefixes() {
         log_verbose("#%d: %s on %s: -> [%s] (length %d)\n",
                 row, testTitles[n], loc, buf, len);
 
-        if(len != strlen(buf)+1) {
+        if(len != (int32_t)strlen(buf)+1) {
           log_err("#%d: %s on %s: -> [%s] (length returned %d, actual %d!)\n",
                 row, testTitles[n], loc, buf, len, strlen(buf)+1);
 
         }
         
-        /* see if they smashed somehting */
+        /* see if they smashed something */
         if(buf[len+1] != '%') {
           log_err("#%d: %s on %s: -> [%s] - wrote [%X] out ofbounds!\n",
                 row, testTitles[n], loc, buf, buf[len+1]);
