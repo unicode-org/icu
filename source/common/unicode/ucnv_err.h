@@ -151,14 +151,14 @@ typedef enum {
  * @stable ICU 2.0
  */
 typedef struct {
-    uint16_t size;              /**< The size of this struct    */
-    UBool flush;                /**< The internal state of converter will be reset and data flushed if set to TRUE   */
-    UConverter *converter;      /**< Pointer to the converter that is opened and to which this struct is passed as an argument */
-    const UChar *source;        /**< Pointer to the source source buffer   */
-    const UChar *sourceLimit;   /**< Pointer to the limit (end + 1) of source buffer   */
-    char *target;               /**< Pointer to the target buffer   */
-    const char *targetLimit;    /**< Pointer to the limit (end + 1) of target buffer    */
-    int32_t *offsets;           /**< Pointer to the buffer that recieves the offsets. *offset = blah ; offset++; */
+    uint16_t size;              /**< The size of this struct. @stable ICU 2.0 */
+    UBool flush;                /**< The internal state of converter will be reset and data flushed if set to TRUE. @stable ICU 2.0    */
+    UConverter *converter;      /**< Pointer to the converter that is opened and to which this struct is passed as an argument. @stable ICU 2.0  */
+    const UChar *source;        /**< Pointer to the source source buffer. @stable ICU 2.0    */
+    const UChar *sourceLimit;   /**< Pointer to the limit (end + 1) of source buffer. @stable ICU 2.0    */
+    char *target;               /**< Pointer to the target buffer. @stable ICU 2.0    */
+    const char *targetLimit;    /**< Pointer to the limit (end + 1) of target buffer. @stable ICU 2.0     */
+    int32_t *offsets;           /**< Pointer to the buffer that recieves the offsets. *offset = blah ; offset++;. @stable ICU 2.0  */
 } UConverterFromUnicodeArgs;
 
 
@@ -168,13 +168,13 @@ typedef struct {
  */
 typedef struct {
     uint16_t size;              /**< The size of this struct    */
-    UBool flush;                /**< The internal state of converter will be reset and data flushed if set to TRUE   */
-    UConverter *converter;      /**< Pointer to the converter that is opened and to which this struct is passed as an argument */
-    const char *source;         /**< Pointer to the source source buffer   */
-    const char *sourceLimit;    /**< Pointer to the limit (end + 1) of source buffer   */
-    UChar *target;              /**< Pointer to the target buffer   */
-    const UChar *targetLimit;   /**< Pointer to the limit (end + 1) of target buffer    */
-    int32_t *offsets;           /**< Pointer to the buffer that recieves the offsets. *offset = blah ; offset++; */
+    UBool flush;                /**< The internal state of converter will be reset and data flushed if set to TRUE. @stable ICU 2.0   */
+    UConverter *converter;      /**< Pointer to the converter that is opened and to which this struct is passed as an argument. @stable ICU 2.0 */
+    const char *source;         /**< Pointer to the source source buffer. @stable ICU 2.0    */
+    const char *sourceLimit;    /**< Pointer to the limit (end + 1) of source buffer. @stable ICU 2.0    */
+    UChar *target;              /**< Pointer to the target buffer. @stable ICU 2.0    */
+    const UChar *targetLimit;   /**< Pointer to the limit (end + 1) of target buffer. @stable ICU 2.0     */
+    int32_t *offsets;           /**< Pointer to the buffer that recieves the offsets. *offset = blah ; offset++;. @stable ICU 2.0  */
 } UConverterToUnicodeArgs;
 
 

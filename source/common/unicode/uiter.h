@@ -205,35 +205,41 @@ struct UCharIterator {
     /**
      * (protected) Pointer to string or wrapped object or similar.
      * Not used by caller.
+     * @draft ICU 2.1
      */
     const void *context;
 
     /**
      * (protected) Length of string or similar.
      * Not used by caller.
+     * @draft ICU 2.1
      */
     int32_t length;
 
     /**
      * (protected) Start index or similar.
      * Not used by caller.
+     * @draft ICU 2.1
      */
     int32_t start;
 
     /**
      * (protected) Current index or similar.
      * Not used by caller.
+     * @draft ICU 2.1
      */
     int32_t index;
 
     /**
      * (protected) Limit index or similar.
      * Not used by caller.
+     * @draft ICU 2.1
      */
     int32_t limit;
 
     /**
      * (protected) Not currently used by any instance.
+     * @draft ICU 2.1
      */
     int32_t reservedField;
 
@@ -242,6 +248,7 @@ struct UCharIterator {
      * start or limit index of the iteration range.
      *
      * @see UCharIteratorGetIndex
+     * @draft ICU 2.1
      */
     UCharIteratorGetIndex *getIndex;
 
@@ -252,6 +259,7 @@ struct UCharIterator {
      * or backward by specifying a positive or negative delta.
      *
      * @see UCharIteratorMove
+     * @draft ICU 2.1
      */
     UCharIteratorMove *move;
 
@@ -260,6 +268,7 @@ struct UCharIterator {
      * return another code unit.
      *
      * @see UCharIteratorHasNext
+     * @draft ICU 2.1
      */
     UCharIteratorHasNext *hasNext;
 
@@ -267,6 +276,7 @@ struct UCharIterator {
      * (public) Check if previous() can still return another code unit.
      *
      * @see UCharIteratorHasPrevious
+     * @draft ICU 2.1
      */
     UCharIteratorHasPrevious *hasPrevious;
 
@@ -275,6 +285,7 @@ struct UCharIterator {
      * or U_SENTINEL if there is none (index is at the limit).
      *
      * @see UCharIteratorCurrent
+     * @draft ICU 2.1
      */
     UCharIteratorCurrent *current;
 
@@ -284,6 +295,7 @@ struct UCharIterator {
      * or return U_SENTINEL if there is none (index is at the limit).
      *
      * @see UCharIteratorNext
+     * @draft ICU 2.1
      */
     UCharIteratorNext *next;
 
@@ -293,6 +305,7 @@ struct UCharIterator {
      * or return U_SENTINEL if there is none (index is at the start).
      *
      * @see UCharIteratorPrevious
+     * @draft ICU 2.1
      */
     UCharIteratorPrevious *previous;
 
@@ -300,6 +313,7 @@ struct UCharIterator {
      * (public) Reserved for future use. Currently NULL.
      *
      * @see UCharIteratorReserved
+     * @draft ICU 2.1
      */
     UCharIteratorReserved *reservedFn;
 };
