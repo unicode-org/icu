@@ -198,8 +198,10 @@ struct RBBISetTableEl {
 #ifdef RBBI_DEBUG
 #include <stdio.h>
 #define RBBIDebugPrintf printf
+#define RBBIDebugPuts puts
 #else
 inline void RBBIDebugPrintf(...) {}
+#define RBBIDebugPuts(arg)
 #endif
 
 U_NAMESPACE_END

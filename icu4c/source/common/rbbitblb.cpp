@@ -76,7 +76,7 @@ void  RBBITableBuilder::build() {
     //
     fTree = fTree->flattenVariables();
     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "ftree")) {
-        RBBIDebugPrintf("Parse tree after flattening variable references.\n");
+        RBBIDebugPuts("Parse tree after flattening variable references.");
         fTree->printTree(TRUE);
     }
 
@@ -98,7 +98,7 @@ void  RBBITableBuilder::build() {
     //
     fTree->flattenSets();
     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "stree")) {
-        RBBIDebugPrintf("Parse tree after flattening Unicode Set references.\n");
+        RBBIDebugPuts("Parse tree after flattening Unicode Set references.");
         fTree->printTree(TRUE);
     }
 
@@ -115,7 +115,7 @@ void  RBBITableBuilder::build() {
     calcLastPos(fTree);
     calcFollowPos(fTree);
     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "pos")) {
-        RBBIDebugPrintf("\n\n");
+        RBBIDebugPuts("\n");
         printPosSets(fTree);
     }
 

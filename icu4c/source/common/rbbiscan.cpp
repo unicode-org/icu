@@ -598,7 +598,7 @@ void RBBIRuleScanner::fixOpStack(RBBINode::OpPrecedence p) {
     for (;;) {
         n = fNodeStack[fNodeStackPtr-1];   // an operator node
         if (n->fPrecedence == 0) {
-            RBBIDebugPrintf("RBBIRuleScanner::fixOpStack, bad operator node\n");
+            RBBIDebugPuts("RBBIRuleScanner::fixOpStack, bad operator node");
             error(U_BRK_INTERNAL_ERROR);
             return;
         }
@@ -931,10 +931,12 @@ void RBBIRuleScanner::parse() {
         //    the search will stop there, if not before.
         //
         tableEl = &gRuleParseStateTable[state];
-        if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "scan")) {
-            RBBIDebugPrintf("char, line, col = (\'%c\', %d, %d)    state=%s ",
-                fC.fChar, fLineNum, fCharNum, RBBIRuleStateNames[state]);
-        }
+        #ifdef RBBI_DEBUG
+            if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "scan")) {
+                RBBIDebugPrintf("char, line, col = (\'%c\', %d, %d)    state=%s ",
+                    fC.fChar, fLineNum, fCharNum, RBBIRuleStateNames[state]);
+            }
+        #endif
 
         for (;;) {
             if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "scan")) { RBBIDebugPrintf(".");}
@@ -993,7 +995,7 @@ void RBBIRuleScanner::parse() {
             fStackPtr++;
             if (fStackPtr >= kStackSize) {
                 error(U_BRK_INTERNAL_ERROR);
-                RBBIDebugPrintf("RBBIRuleScanner::parse() - state stack overflow.\n");
+                RBBIDebugPuts("RBBIRuleScanner::parse() - state stack overflow.");
                 fStackPtr--;
             }
             fStack[fStackPtr] = tableEl->fPushState;
@@ -1012,7 +1014,7 @@ void RBBIRuleScanner::parse() {
             fStackPtr--;
             if (fStackPtr < 0) {
                 error(U_BRK_INTERNAL_ERROR);
-                RBBIDebugPrintf("RBBIRuleScanner::parse() - state stack underflow.\n");
+                RBBIDebugPuts("RBBIRuleScanner::parse() - state stack underflow.");
                 fStackPtr++;
             }
         }
@@ -1037,6 +1039,7 @@ void RBBIRuleScanner::parse() {
     // We now have a parse tree for the rule expressions
     // and a list of all UnicodeSets that are referenced.
     //
+#ifdef RBBI_DEBUG
     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "symbols")) {fSymbolTable->rbbiSymtablePrint();}
     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "ptree"))
     {
@@ -1049,7 +1052,7 @@ void RBBIRuleScanner::parse() {
         RBBIDebugPrintf("\nCompleted Safe Point Reverse Rules Parse Tree...\n");
         fRB->fSafeRevTree->printTree(TRUE);
     }
-
+#endif
 }
 
 
@@ -1059,9 +1062,11 @@ void RBBIRuleScanner::parse() {
 //
 //---------------------------------------------------------------------------------
 void RBBIRuleScanner::printNodeStack(const char *title) {
+#ifdef RBBI_DEBUG
     int i;
     RBBIDebugPrintf("%s.  Dumping node stack...\n", title);
     for (i=fNodeStackPtr; i>0; i--) {fNodeStack[i]->printTree(TRUE);}
+#endif
 }
 
 
@@ -1077,7 +1082,7 @@ RBBINode  *RBBIRuleScanner::pushNewNode(RBBINode::NodeType  t) {
     fNodeStackPtr++;
     if (fNodeStackPtr >= kStackSize) {
         error(U_BRK_INTERNAL_ERROR);
-        RBBIDebugPrintf("RBBIRuleScanner::pushNewNode - stack overflow.\n");
+        RBBIDebugPuts("RBBIRuleScanner::pushNewNode - stack overflow.");
         *fRB->fStatus = U_BRK_INTERNAL_ERROR;
         return NULL;
     }

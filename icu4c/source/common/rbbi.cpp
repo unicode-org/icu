@@ -674,7 +674,7 @@ int32_t RuleBasedBreakIterator::handleNext() {
 
 int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
     if (fTrace) {
-        RBBIDebugPrintf("Handle Next   pos   char  state category  \n");
+        RBBIDebugPuts("Handle Next   pos   char  state category");
     }
 
     // No matter what, handleNext alway correctly sets the break tag value.
@@ -753,15 +753,17 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
             category &= ~0x4000;
         }
 
-        if (fTrace) {
-            RBBIDebugPrintf("             %4d   ", fText->getIndex());
-            if (0x20<=c && c<0x7f) {
-                RBBIDebugPrintf("\"%c\"  ", c);
-            } else {
-                RBBIDebugPrintf("%5x  ", c);
+        #ifdef RBBI_DEBUG
+            if (fTrace) {
+                RBBIDebugPrintf("             %4d   ", fText->getIndex());
+                if (0x20<=c && c<0x7f) {
+                    RBBIDebugPrintf("\"%c\"  ", c);
+                } else {
+                    RBBIDebugPrintf("%5x  ", c);
+                }
+                RBBIDebugPrintf("%3d  %3d\n", state, category);
             }
-            RBBIDebugPrintf("%3d  %3d\n", state, category);
-        }
+        #endif
 
         // look up a state transition in the state table
         state = row->fNextState[category];
@@ -875,7 +877,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
     }
 
     if (fTrace) {
-        RBBIDebugPrintf("Handle Prev   pos   char  state category  \n");
+        RBBIDebugPuts("Handle Prev   pos   char  state category");
     }
 
     // loop until we reach the beginning of the text or transition to state 0
@@ -897,15 +899,17 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
             category &= ~0x4000;
         }
 
-        if (fTrace) {
-            RBBIDebugPrintf("             %4d   ", fText->getIndex());
-            if (0x20<=c && c<0x7f) {
-                RBBIDebugPrintf("\"%c\"  ", c);
-            } else {
-                RBBIDebugPrintf("%5x  ", c);
+        #ifdef RBBI_DEBUG
+            if (fTrace) {
+                RBBIDebugPrintf("             %4d   ", fText->getIndex());
+                if (0x20<=c && c<0x7f) {
+                    RBBIDebugPrintf("\"%c\"  ", c);
+                } else {
+                    RBBIDebugPrintf("%5x  ", c);
+                }
+                RBBIDebugPrintf("%3d  %3d\n", state, category);
             }
-            RBBIDebugPrintf("%3d  %3d\n", state, category);
-        }
+        #endif
 
         // look up a state transition in the backwards state table
         state = row->fNextState[category];
@@ -1020,7 +1024,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
     }
 
     if (fTrace) {
-        RBBIDebugPrintf("Handle Prev   pos   char  state category  \n");
+        RBBIDebugPuts("Handle Prev   pos   char  state category");
     }
 
     // loop until we reach the beginning of the text or transition to state 0
@@ -1047,15 +1051,17 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
             category &= ~0x4000;
         }
 
-        if (fTrace) {
-            RBBIDebugPrintf("             %4d   ", fText->getIndex());
-            if (0x20<=c && c<0x7f) {
-                RBBIDebugPrintf("\"%c\"  ", c);
-            } else {
-                RBBIDebugPrintf("%5x  ", c);
+        #ifdef RBBI_DEBUG
+            if (fTrace) {
+                RBBIDebugPrintf("             %4d   ", fText->getIndex());
+                if (0x20<=c && c<0x7f) {
+                    RBBIDebugPrintf("\"%c\"  ", c);
+                } else {
+                    RBBIDebugPrintf("%5x  ", c);
+                }
+                RBBIDebugPrintf("%3d  %3d\n", state, category);
             }
-            RBBIDebugPrintf("%3d  %3d\n", state, category);
-        }
+        #endif
 
         // look up a state transition in the backwards state table
         state = row->fNextState[category];
