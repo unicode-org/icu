@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/TestCharacter.java,v $
- * $Date: 2003/06/03 18:49:30 $
- * $Revision: 1.2 $
+ * $Date: 2004/03/11 07:22:56 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
  */
@@ -28,7 +28,8 @@ public class TestCharacter extends TestGroup {
                   "UCharacterCategoryTest", 
                   "UCharacterDirectionTest", 
                   "UPropertyAliasesTest",
-                  "UTF16Test" 
+                  "UTF16Test",
+		  "UCharacterSurrogateTest"
               },
               "Character Property and UTF16 Tests");
     }

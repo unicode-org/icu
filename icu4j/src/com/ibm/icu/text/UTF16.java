@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2003/12/13 00:30:54 $ 
-* $Revision: 1.34 $
+* $Date: 2004/03/11 07:23:29 $ 
+* $Revision: 1.35 $
 *
 *******************************************************************************
 */
@@ -131,7 +131,7 @@ public final class UTF16
      * @stable ICU 2.1
      */
     public static final int LEAD_SURROGATE_MIN_VALUE = 0xD800;
-	/**
+        /**
      * Trail surrogate minimum value
      * @stable ICU 2.1
      */
@@ -141,7 +141,7 @@ public final class UTF16
      * @stable ICU 2.1
      */
     public static final int LEAD_SURROGATE_MAX_VALUE = 0xDBFF;
-	/**
+        /**
      * Trail surrogate maximum value
      * @stable ICU 2.1
      */
@@ -204,31 +204,31 @@ public final class UTF16
         // For simplicity in usage, and because the frequency of pairs is 
         // low, look both directions.
                 
-	    if (single <= LEAD_SURROGATE_MAX_VALUE) {
-	        ++ offset16;
-	        if (source.length() != offset16) {
-    	        char trail = source.charAt(offset16);
-	            if (trail >= TRAIL_SURROGATE_MIN_VALUE &&
-	                trail <= TRAIL_SURROGATE_MAX_VALUE) {
-	                return UCharacterProperty.getRawSupplementary(single, 
-	                                                              trail);
-	            }
-	        }
-	    } 
-	    else 
-	    { 
-	        -- offset16;
-	        if (offset16 >= 0) {
-	        	// single is a trail surrogate so
-	        	char lead = source.charAt(offset16);
-	        	if (lead >= LEAD_SURROGATE_MIN_VALUE &&
-	        	    lead <= LEAD_SURROGATE_MAX_VALUE) {
-	         	   return UCharacterProperty.getRawSupplementary(lead, 
-	         	                                                 single);
-	        	}
-	        }
-	    } 
-	    return single; // return unmatched surrogate
+            if (single <= LEAD_SURROGATE_MAX_VALUE) {
+                ++ offset16;
+                if (source.length() != offset16) {
+                char trail = source.charAt(offset16);
+                    if (trail >= TRAIL_SURROGATE_MIN_VALUE &&
+                        trail <= TRAIL_SURROGATE_MAX_VALUE) {
+                        return UCharacterProperty.getRawSupplementary(single, 
+                                                                      trail);
+                    }
+                }
+            } 
+            else 
+            { 
+                -- offset16;
+                if (offset16 >= 0) {
+                        // single is a trail surrogate so
+                        char lead = source.charAt(offset16);
+                        if (lead >= LEAD_SURROGATE_MIN_VALUE &&
+                            lead <= LEAD_SURROGATE_MAX_VALUE) {
+                           return UCharacterProperty.getRawSupplementary(lead, 
+                                                                         single);
+                        }
+                }
+            } 
+            return single; // return unmatched surrogate
     }
       
     /**
@@ -265,29 +265,29 @@ public final class UTF16
         // For simplicity in usage, and because the frequency of pairs is 
         // low, look both directions.
                 
-	    if (single <= LEAD_SURROGATE_MAX_VALUE) 
-	    {
-	        ++ offset16;
-	        if (source.length() != offset16)
-	        {
-	        char trail = source.charAt(offset16);
-	        if (isTrailSurrogate(trail))
-	            return UCharacterProperty.getRawSupplementary(single, trail);
-	        }
-	    } 
-	    else 
-	    { 
-	        -- offset16;
-	        if (offset16 >= 0)
-	        {
-	        // single is a trail surrogate so
-	        char lead = source.charAt(offset16);
-	        if (isLeadSurrogate(lead)) {
-	            return UCharacterProperty.getRawSupplementary(lead, single);
-	        }
-	        }
-	    } 
-	    return single; // return unmatched surrogate
+            if (single <= LEAD_SURROGATE_MAX_VALUE) 
+            {
+                ++ offset16;
+                if (source.length() != offset16)
+                {
+                char trail = source.charAt(offset16);
+                if (isTrailSurrogate(trail))
+                    return UCharacterProperty.getRawSupplementary(single, trail);
+                }
+            } 
+            else 
+            { 
+                -- offset16;
+                if (offset16 >= 0)
+                {
+                // single is a trail surrogate so
+                char lead = source.charAt(offset16);
+                if (isLeadSurrogate(lead)) {
+                    return UCharacterProperty.getRawSupplementary(lead, single);
+                }
+                }
+            } 
+            return single; // return unmatched surrogate
     }
       
     /**
@@ -327,24 +327,24 @@ public final class UTF16
         // Convert the UTF-16 surrogate pair if necessary.
         // For simplicity in usage, and because the frequency of pairs is 
         // low, look both directions.      
-	    if (single <= LEAD_SURROGATE_MAX_VALUE) {
-	        offset16 ++;
-	        if (offset16 >= limit) {
-	            return single;
-	        }
-	        char trail = source[offset16];
-	        if (isTrailSurrogate(trail)) {
-	            return UCharacterProperty.getRawSupplementary(single, trail);
-	        }
+            if (single <= LEAD_SURROGATE_MAX_VALUE) {
+                offset16 ++;
+                if (offset16 >= limit) {
+                    return single;
+                }
+                char trail = source[offset16];
+                if (isTrailSurrogate(trail)) {
+                    return UCharacterProperty.getRawSupplementary(single, trail);
+                }
         } 
         else { // isTrailSurrogate(single), so
             if (offset16 == start) {
                 return single;
             }
             offset16 --;
-	        char lead = source[offset16];
-	        if (isLeadSurrogate(lead))
-	            return UCharacterProperty.getRawSupplementary(lead, single);
+                char lead = source[offset16];
+                if (isLeadSurrogate(lead))
+                    return UCharacterProperty.getRawSupplementary(lead, single);
         }
         return single; // return unmatched surrogate
     }
@@ -383,29 +383,29 @@ public final class UTF16
         // For simplicity in usage, and because the frequency of pairs is 
         // low, look both directions.
                 
-	    if (single <= LEAD_SURROGATE_MAX_VALUE) 
-	    {
-	        ++ offset16;
-	        if (source.length() != offset16)
-	        {
-	        char trail = source.charAt(offset16);
-	        if (isTrailSurrogate(trail))
-	            return UCharacterProperty.getRawSupplementary(single, trail);
-	        }
-	    } 
-	    else 
-	    { 
-	        -- offset16;
-	        if (offset16 >= 0)
-	        {
-	        // single is a trail surrogate so
-	        char lead = source.charAt(offset16);
-	        if (isLeadSurrogate(lead)) {
-	            return UCharacterProperty.getRawSupplementary(lead, single);
-	        }
-	        }
-	    } 
-	    return single; // return unmatched surrogate
+            if (single <= LEAD_SURROGATE_MAX_VALUE) 
+            {
+                ++ offset16;
+                if (source.length() != offset16)
+                {
+                char trail = source.charAt(offset16);
+                if (isTrailSurrogate(trail))
+                    return UCharacterProperty.getRawSupplementary(single, trail);
+                }
+            } 
+            else 
+            { 
+                -- offset16;
+                if (offset16 >= 0)
+                {
+                // single is a trail surrogate so
+                char lead = source.charAt(offset16);
+                if (isLeadSurrogate(lead)) {
+                    return UCharacterProperty.getRawSupplementary(lead, single);
+                }
+                }
+            } 
+            return single; // return unmatched surrogate
     }
       
     /**
@@ -420,7 +420,7 @@ public final class UTF16
     public static int getCharCount(int char32) 
     {
         if (char32 < SUPPLEMENTARY_MIN_VALUE) {
-        	return 1;
+                return 1;
         }
         return 2;
     }
@@ -612,7 +612,7 @@ public final class UTF16
     public static char getLeadSurrogate(int char32) 
     {
         if (char32 >= SUPPLEMENTARY_MIN_VALUE) {
-        	return (char)(LEAD_SURROGATE_OFFSET_ + 
+                return (char)(LEAD_SURROGATE_OFFSET_ + 
                       (char32 >> LEAD_SURROGATE_SHIFT_));
         }
             
@@ -632,7 +632,7 @@ public final class UTF16
     public static char getTrailSurrogate(int char32) 
     {
         if (char32 >= SUPPLEMENTARY_MIN_VALUE) {
-        	return (char)(TRAIL_SURROGATE_MIN_VALUE + 
+                return (char)(TRAIL_SURROGATE_MIN_VALUE + 
                       (char32 & TRAIL_SURROGATE_MASK_));       
         }
           
@@ -654,7 +654,7 @@ public final class UTF16
     public static String valueOf(int char32)
     {
         if (char32 < CODEPOINT_MIN_VALUE || char32 > CODEPOINT_MAX_VALUE) {
-        	throw new IllegalArgumentException("Illegal codepoint");
+                throw new IllegalArgumentException("Illegal codepoint");
         }
         return toString(char32);
     }
@@ -1001,7 +1001,7 @@ public final class UTF16
     {
         offset16 += start;
         if (offset16 > limit) {
-        	throw new StringIndexOutOfBoundsException(offset16);
+                throw new StringIndexOutOfBoundsException(offset16);
         }
          
         int result = 0;
@@ -1010,15 +1010,15 @@ public final class UTF16
         
         for (int i = start; i < offset16; ++ i) 
         {
-        	ch = source[i];
-        	if (hadLeadSurrogate && isTrailSurrogate(ch)) {
-            	hadLeadSurrogate = false; // count valid trail as zero
-        	}
-        	else
-        	{
-            	hadLeadSurrogate = isLeadSurrogate(ch);
-            	++ result;                          // count others as 1
-        	}
+                ch = source[i];
+                if (hadLeadSurrogate && isTrailSurrogate(ch)) {
+                hadLeadSurrogate = false; // count valid trail as zero
+                }
+                else
+                {
+                hadLeadSurrogate = isLeadSurrogate(ch);
+                ++ result;                          // count others as 1
+                }
         }
         
         if (offset16 == limit) {
@@ -1028,7 +1028,7 @@ public final class UTF16
         // end of source being the less significant surrogate character
         // shift result back to the start of the supplementary character
         if (hadLeadSurrogate && (isTrailSurrogate(source[offset16]))) {
-        	result --;
+                result --;
         }
           
         return result;
@@ -1056,12 +1056,12 @@ public final class UTF16
         if (char32 >= SUPPLEMENTARY_MIN_VALUE) 
         {
             target.append(getLeadSurrogate(char32));
-	        target.append(getTrailSurrogate(char32));
+                target.append(getTrailSurrogate(char32));
         } 
-	    else {
-	        target.append((char)char32);
-	    }
-	    return target;
+            else {
+                target.append((char)char32);
+            }
+            return target;
     }
       
     /**
@@ -1158,22 +1158,22 @@ public final class UTF16
             // pairs of the surrogate with offset16 at the lead char found
             if (isLeadSurrogate(single) && (target.length() > offset16 + 1) 
                 && isTrailSurrogate(target.charAt(offset16 + 1))) {
-	            count ++;
-	        }
-	        else {
-	            // pairs of the surrogate with offset16 at the trail char 
-	            // found
-	            if (isTrailSurrogate(single) && (offset16 > 0) &&
-	                isLeadSurrogate(target.charAt(offset16 -1)))
-	            {
-	                offset16 --;
-	                count ++;
-	            }
-	        }
-	    }
-	    target.replace(offset16, offset16 + count, valueOf(char32));
+                    count ++;
+                }
+                else {
+                    // pairs of the surrogate with offset16 at the trail char 
+                    // found
+                    if (isTrailSurrogate(single) && (offset16 > 0) &&
+                        isLeadSurrogate(target.charAt(offset16 -1)))
+                    {
+                        offset16 --;
+                        count ++;
+                    }
+                }
+            }
+            target.replace(offset16, offset16 + count, valueOf(char32));
     }
-    	
+        
     /**
      * Set a code point into a UTF16 position in a char array.
      * Adjusts target according if we are replacing a non-supplementary 
@@ -1202,51 +1202,51 @@ public final class UTF16
             // pairs of the surrogate with offset16 at the lead char found
             if (isLeadSurrogate(single) && (target.length > offset16 + 1) &&
                 isTrailSurrogate(target[offset16 + 1])) {
-	            count ++;
-	        }
-	        else {
-	            // pairs of the surrogate with offset16 at the trail char 
-	            // found
-	            if (isTrailSurrogate(single) && (offset16 > 0) &&
-	                isLeadSurrogate(target[offset16 -1]))
-	            {
-	                offset16 --;
-	                count ++;
-	            }
-	        }
-	    }
-    	  
-	    String str = valueOf(char32);
-	    int result = limit;
-	    int strlength = str.length();
-	    target[offset16] = str.charAt(0);
-	    if (count == strlength) {
-	        if (count == 2) {
-	            target[offset16 + 1] = str.charAt(1);
-	        }
-	    }
-	    else {
-	        // this is not exact match in space, we'll have to do some 
-	        // shifting
-	        System.arraycopy(target, offset16 + count, target, 
-	                       offset16 + strlength, limit - (offset16 + count));
-	        if (count < strlength) {
-	            // char32 is a supplementary character trying to squeeze into
-	            // a non-supplementary space
-	            target[offset16 + 1] = str.charAt(1);
-	            result ++;
-	            if (result < target.length) {
-	                target[result] = 0;
-	            }
-	        }
-	        else {
-	            // char32 is a non-supplementary character trying to fill 
-	            // into a supplementary space
-	            result --;
-	            target[result] = 0;
-	        }
-	    }
-	    return result;
+                    count ++;
+                }
+                else {
+                    // pairs of the surrogate with offset16 at the trail char 
+                    // found
+                    if (isTrailSurrogate(single) && (offset16 > 0) &&
+                        isLeadSurrogate(target[offset16 -1]))
+                    {
+                        offset16 --;
+                        count ++;
+                    }
+                }
+            }
+          
+            String str = valueOf(char32);
+            int result = limit;
+            int strlength = str.length();
+            target[offset16] = str.charAt(0);
+            if (count == strlength) {
+                if (count == 2) {
+                    target[offset16 + 1] = str.charAt(1);
+                }
+            }
+            else {
+                // this is not exact match in space, we'll have to do some 
+                // shifting
+                System.arraycopy(target, offset16 + count, target, 
+                               offset16 + strlength, limit - (offset16 + count));
+                if (count < strlength) {
+                    // char32 is a supplementary character trying to squeeze into
+                    // a non-supplementary space
+                    target[offset16 + 1] = str.charAt(1);
+                    result ++;
+                    if (result < target.length) {
+                        target[result] = 0;
+                    }
+                }
+                else {
+                    // char32 is a non-supplementary character trying to fill 
+                    // into a supplementary space
+                    result --;
+                    target[result] = 0;
+                }
+            }
+            return result;
     }
       
     /**
@@ -2299,6 +2299,48 @@ public final class UTF16
     }
     
     /**
+     * Cover JDK 1.5 API.  Create String from an array of codePoints.
+     * @param codePoints the code array
+     * @param offset     the start of the text in the code point array
+     * @param count      the number of code points
+     * @return a String representing the code points between offset and count
+     * @throws IllegalArgumentException if an invalid code point is encountered
+     * @throws  IndexOutOfBoundsException  if the offset or count are out of bounds.
+     */
+    public static String newString(int[] codePoints, int offset, int count) {
+        char[] chars = new char[codePoints.length];
+        int w = 0;
+        for (int r = offset, e = offset + count; r < e; ++r) {
+            int cp = codePoints[r];
+            if (cp < 0 || cp > 0x10ffff) {
+                throw new IllegalArgumentException();
+            }
+            while (true) {
+                try {
+                    if (cp < 0x010000) {
+                        chars[w] = (char)cp;
+                        w++;
+                    } else {
+                        chars[w] = (char)(LEAD_SURROGATE_OFFSET_ +
+                                          (cp >> LEAD_SURROGATE_SHIFT_));
+                        chars[w+1] = (char)(TRAIL_SURROGATE_MIN_VALUE + 
+                                            (cp & TRAIL_SURROGATE_MASK_));       
+                        w += 2;
+                    }
+                    break;
+                }
+                catch (IndexOutOfBoundsException ex) {
+                    int newlen = (int)(Math.ceil((double)codePoints.length * (w+2) / (r-offset+1)));
+                    char[] temp = new char[newlen];
+                    System.arraycopy(chars, 0, temp, 0, w);
+                    chars = temp;
+                }
+            }
+        }
+        return new String(chars, 0, w);
+    }
+
+    /**
     * <p>UTF16 string comparator class.
     * Allows UTF16 string comparison to be done with the various modes</p>
     * <ul>
@@ -2485,16 +2527,16 @@ public final class UTF16
             String str1 = (String)a;
             String str2 = (String)b;
             
-	        if (str1 == str2) {
-	        	return 0;
-	        }
-	        if (str1 == null) {
-	            return -1;
-	        }
-	        if (str2 == null) {
-	            return 1;
-	        }
-	        
+                if (str1 == str2) {
+                        return 0;
+                }
+                if (str1 == null) {
+                    return -1;
+                }
+                if (str2 == null) {
+                    return 1;
+                }
+                
             if (m_ignoreCase_) {
                 return compareCaseInsensitive(str1, str2);
             }
@@ -2618,18 +2660,18 @@ public final class UTF16
     /**
     * Shift value for lead surrogate to form a supplementary character.
     */
-	private static final int LEAD_SURROGATE_SHIFT_ = 10;
-	/**
+        private static final int LEAD_SURROGATE_SHIFT_ = 10;
+        /**
     * Mask to retrieve the significant value from a trail surrogate.
     */
-	private static final int TRAIL_SURROGATE_MASK_     = 0x3FF;   
+        private static final int TRAIL_SURROGATE_MASK_     = 0x3FF;   
     /**
      * Value that all lead surrogate starts with
      */
     private static final int LEAD_SURROGATE_OFFSET_ = 
-	                                    LEAD_SURROGATE_MIN_VALUE - 
-	                                   (SUPPLEMENTARY_MIN_VALUE 
-	                                    >> LEAD_SURROGATE_SHIFT_);
+                                            LEAD_SURROGATE_MIN_VALUE - 
+                                           (SUPPLEMENTARY_MIN_VALUE 
+                                            >> LEAD_SURROGATE_SHIFT_);
                                         
     // private methods ------------------------------------------------------
     
