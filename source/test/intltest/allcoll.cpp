@@ -4,26 +4,11 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-#ifndef _COLL
 #include "unicode/coll.h"
-#endif
-
-#ifndef _TBLCOLL
 #include "unicode/tblcoll.h"
-#endif
-
-#ifndef _UNISTR
 #include "unicode/unistr.h"
-#endif
-
-#ifndef _SORTKEY
 #include "unicode/sortkey.h"
-#endif
-
-#ifndef _ALLCOLL
 #include "allcoll.h"
-#endif
-
 #include "sfwdchit.h"
 
 /*
@@ -31,11 +16,7 @@
  * This helps maintain a single copy of the data.
  */
 #define INCLUDE_CALLCOLL_C
-#ifndef __OS400__
 #include "../cintltst/callcoll.c"
-#else
-#include "cintltst/callcoll.c"
-#endif
 
 CollationDummyTest::CollationDummyTest()
 : myCollation(0)
