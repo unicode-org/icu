@@ -77,161 +77,6 @@ public final class UScript {
     public static final int TAGBANWA     = 45;  /* Tagb */
     public static final int CODE_LIMIT   = 46; 
     
-    private static final class NameCodePair{
-        String name;
-        int code;
-        private NameCodePair(String str, int cd){
-            name = str;
-            code=cd;
-        }
-    }
-    
-	private static final NameCodePair[] scriptNames={
-	   new NameCodePair( "ARABIC",              ARABIC      ),
-	   new NameCodePair( "ARMENIAN",            ARMENIAN    ),
-	   new NameCodePair( "BENGALI",             BENGALI     ),
-	   new NameCodePair( "BOPOMOFO",            BOPOMOFO    ),
-	   new NameCodePair( "BUHID",               BUHID       ),
-	   new NameCodePair( "CANADIAN_ABORIGINAL", UCAS        ),
-	   new NameCodePair( "CHEROKEE",            CHEROKEE    ),
-	   new NameCodePair( "COMMON",              COMMON      ),
-       new NameCodePair( "COPTIC",              COPTIC      ),
-	   new NameCodePair( "CYRILLIC",            CYRILLIC    ),
-	   new NameCodePair( "DESERET",             DESERET     ),
-	   new NameCodePair( "DEVANAGARI",          DEVANAGARI  ),
-	   new NameCodePair( "ETHIOPIC",            ETHIOPIC    ),
-	   new NameCodePair( "GEORGIAN",            GEORGIAN    ),
-	   new NameCodePair( "GOTHIC",              GOTHIC      ),
-	   new NameCodePair( "GREEK",               GREEK       ),
-	   new NameCodePair( "GUJARATI",            GUJARATI    ),
-	   new NameCodePair( "GURMUKHI",            GURMUKHI    ),
-	   new NameCodePair( "HAN",                 HAN         ),
-	   new NameCodePair( "HANGUL",              HANGUL      ),
-	   new NameCodePair( "HANUNOO",             HANUNOO     ),
-	   new NameCodePair( "HEBREW",              HEBREW      ),
-	   new NameCodePair( "HIRAGANA",            HIRAGANA    ),
-	   new NameCodePair( "INHERITED",           INHERITED   ),
-	   new NameCodePair( "KANNADA",             KANNADA     ),
-	   new NameCodePair( "KATAKANA",            KATAKANA    ),
-	   new NameCodePair( "KHMER",               KHMER       ),
-       new NameCodePair( "LAO",                 LAO         ),
-	   new NameCodePair( "LATIN",               LATIN       ),
-	   new NameCodePair( "MALAYALAM",           MALAYALAM   ),
-	   new NameCodePair( "MONGOLIAN",           MONGOLIAN   ),
-	   new NameCodePair( "MYANMAR",             MYANMAR     ),
-	   new NameCodePair( "OGHAM",               OGHAM       ),
-	   new NameCodePair( "OLD_ITALIC",          OLD_ITALIC  ),
-	   new NameCodePair( "ORIYA",               ORIYA       ),
-	   new NameCodePair( "RUNIC",               RUNIC       ),
-	   new NameCodePair( "SINHALA",             SINHALA     ),
-	   new NameCodePair( "SYRIAC",              SYRIAC      ),
-	   new NameCodePair( "TAGALOG",             TAGALOG     ),
-	   new NameCodePair( "TAGBANWA",            TAGBANWA    ),
-	   new NameCodePair( "TAMIL",               TAMIL       ),
-	   new NameCodePair( "TELUGU",              TELUGU      ),
-	   new NameCodePair( "THAANA",              THAANA      ),
-	   new NameCodePair( "THAI",                THAI        ),
-	   new NameCodePair( "TIBETAN",             TIBETAN     ),
-	   new NameCodePair( "UCAS",                UCAS        ),
-	   new NameCodePair( "YI",                  YI          )
-    };
-	
-	/* script abbreviations with codes, sorted by abbreviations */
-	private static final NameCodePair[] scriptAbbr= {
-	    new NameCodePair( "Arab",       ARABIC      ),
-	    new NameCodePair( "Armn",       ARMENIAN    ),
-	    new NameCodePair( "Beng",       BENGALI     ),
-	    new NameCodePair( "Bopo",       BOPOMOFO    ),
-	    new NameCodePair( "Buhd",       BUHID       ),
-	    new NameCodePair( "Cans",       UCAS        ),
-	    new NameCodePair( "Cher",       CHEROKEE    ),
-	    new NameCodePair( "Cyrl",       CYRILLIC    ),
-	 /* new NameCodePair( "Cyrs",       CYRILLIC    ), */
-	    new NameCodePair( "Deva",       DEVANAGARI  ),
-	    new NameCodePair( "Dsrt",       DESERET     ),
-	    new NameCodePair( "Ethi",       ETHIOPIC    ),
-	 /* new NameCodePair( Geoa",       GEORGIAN    ), */
-	 /* new NameCodePair( Geon",       GEORGIAN    ), */
-	    new NameCodePair( "Geor",       GEORGIAN    ),
-	    new NameCodePair( "Goth",       GOTHIC      ),
-	    new NameCodePair( "Grek",       GREEK       ),
-	    new NameCodePair( "Gujr",       GUJARATI    ),
-	    new NameCodePair( "Guru",       GURMUKHI    ),
-	    new NameCodePair( "Hang",       HANGUL      ),
-	    new NameCodePair( "Hani",       HAN         ),
-	    new NameCodePair( "Hano",       HANUNOO     ),
-	    new NameCodePair( "Hebr",       HEBREW      ),
-	    new NameCodePair( "Hira",       HIRAGANA    ),
-	    new NameCodePair( "Ital",       OLD_ITALIC  ),
-	    new NameCodePair( "Kana",       KATAKANA    ),
-	    new NameCodePair( "Khmr",       KHMER       ),
-	    new NameCodePair( "Knda",       KANNADA     ),
-	    new NameCodePair( "Lao",        LAO         ),
-	 /* new NameCodePair( "Laoo",       LAO         ), */
-	 /* new NameCodePair( "Latf",       LATIN       ), */
-	 /* new NameCodePair( "Latg",       LATIN       ), */
-	    new NameCodePair( "Latn",       LATIN       ),
-	    new NameCodePair( "Mlym",       MALAYALAM   ),
-	    new NameCodePair( "Mong",       MONGOLIAN   ),
-	    new NameCodePair( "Mymr",       MYANMAR     ),
-	    new NameCodePair( "Ogam",       OGHAM       ),
-	    new NameCodePair( "Orya",       ORIYA       ),
-	    new NameCodePair( "Qaac",       COPTIC      ),
-	    new NameCodePair( "Qaai",       INHERITED   ),
-	    new NameCodePair( "Runr",       RUNIC       ),
-	    new NameCodePair( "Sinh",       SINHALA     ),
-	    new NameCodePair( "Syrc",       SYRIAC      ),
-	 /* new NameCodePair( "Syre",       SYRIAC      ), */
-	 /* new NameCodePair( "Syrj",       SYRIAC      ), */
-	 /* new NameCodePair( "Syrn",       SYRIAC      ), */
-	    new NameCodePair( "Tagb",       TAGBANWA    ),
-	    new NameCodePair( "Taml",       TAMIL       ),
-	    new NameCodePair( "Telu",       TELUGU      ),
-	    new NameCodePair( "Tglg",       TAGALOG     ),
-	    new NameCodePair( "Thaa",       THAANA      ),
-	    new NameCodePair( "Thai",       THAI        ),
-	    new NameCodePair( "Tibt",       TIBETAN     ),
-	    new NameCodePair( "Yiii",       YI          ),
-	    new NameCodePair( "Zyyy",       COMMON      )
-    };
-
-
-
-    /* binary search the string array */
-    private static int findStringIndex(NameCodePair[] sortedArr, String target){
-        int size = sortedArr.length;
-        int left, middle, right,rc;
-        left =0;
-        right= size-1;
-        
-        target = target.toUpperCase();
-        while(left <= right){
-            middle = (left+right)/2;
-            rc=comparePropertyNames(sortedArr[middle].name,target);
-            if(rc<0){
-                left = middle+1;
-            }else if(rc >0){
-                right = middle -1;
-            }else{
-                return middle;
-            }
-        }
-        return -1;
-    }
-
-    /* linearly search the array and return the index */
-    private static int findCodeIndex(NameCodePair[] unsorted, int target){
-        int size = unsorted.length;
-        int i=0;
-        while(i<size){
-            if(target == unsorted[i].code){
-                return i;
-            }
-            i++;
-        }
-        return -1;
-    }
-    
     private static final int SCRIPT_MASK   = 0x0000007f;
     private static final UCharacterProperty prop= UCharacterProperty.getInstance();
     
@@ -253,10 +98,11 @@ public final class UScript {
         int[] result = new int[scripts.length];
         int w = 0;
         for (int i = 0; i < scripts.length; ++i) {
-            int strIndex = findStringIndex(scriptAbbr, scripts[i]);
-            if (strIndex != -1) {
-                result[w++] = scriptAbbr[strIndex].code;
-            }
+            try {
+                int code = UCharacter.getPropertyValueEnum(UProperty.SCRIPT,
+                                                           scripts[i]);
+                result[w++] = code;
+            } catch (IllegalArgumentException e) {}
         }
 
         if (w < result.length) {
@@ -278,40 +124,30 @@ public final class UScript {
     public static final int[] getCode(Locale locale)
         throws MissingResourceException {
         return findCodeFromLocale(locale);
-        }
+    }
     
     /**
      * Gets a script codes associated with the given locale or ISO 15924 abbreviation or name. 
      * Returns MALAYAM given "Malayam" OR "Mlym".
      * Returns LATIN given "en" OR "en_US" 
+     *
+     * <p>Note: To search by short or long script alias only, use
+     * UCharacater.getPropertyValueEnum(UProperty.SCRIPT, alias)
+     * instead.  This does a fast lookup with no access of the locale
+     * data.
      * @param nameOrAbbrOrLocale name of the script or ISO 15924 code or locale
      * @return The script codes array. null if the the code cannot be found.
      * @draft
      */
     public static final int[] getCode(String nameOrAbbrOrLocale){
-            
-        int[] code = new int[1];
-        code[0] = INVALID_CODE;
-        int strIndex=0;
-        
-        /* try the Names array first */
-        strIndex = findStringIndex(scriptNames, nameOrAbbrOrLocale);
-        
-        if(strIndex>=0 && strIndex < scriptNames.length){ 
-            code[0] =  scriptNames[strIndex].code;
+        try {
+            return new int[] {
+                UCharacter.getPropertyValueEnum(UProperty.SCRIPT,
+                                                nameOrAbbrOrLocale)
+            };
+        } catch (IllegalArgumentException e) {
+            return findCodeFromLocale(LocaleUtility.getLocaleFromName(nameOrAbbrOrLocale));
         }
-        /* we did not find in names array so try abbr array*/
-        if(code[0] == INVALID_CODE){
-            strIndex = findStringIndex(scriptAbbr, nameOrAbbrOrLocale);
-            if(strIndex>=0 && strIndex < scriptAbbr.length){ 
-                code[0] =  scriptAbbr[strIndex].code;
-            }
-        }
-        /* we still haven't found it try locale */        
-        if(code[0]==INVALID_CODE){            
-            code = findCodeFromLocale(LocaleUtility.getLocaleFromName(nameOrAbbrOrLocale));
-        }
-        return code;
     }
 
     /** 
@@ -340,16 +176,9 @@ public final class UScript {
      * @draft
      */
     public static final String getName(int scriptCode){
-        int index = -1;
-        if(scriptCode > CODE_LIMIT){
-            throw new IllegalArgumentException(Integer.toString(scriptCode));
-        }
-        index = findCodeIndex(scriptNames,scriptCode);
-        if(index >=0){
-            return scriptNames[index].name;
-        }else{
-            throw new IllegalArgumentException(Integer.toString(scriptCode));
-        }
+        return UCharacter.getPropertyValueName(UProperty.SCRIPT,
+                                               scriptCode,
+                                               UProperty.NameChoice.LONG);
     }
     
     /**
@@ -361,54 +190,9 @@ public final class UScript {
      * @draft
      */
     public static final String getShortName(int scriptCode){
-        int index = -1;
-        if(scriptCode > CODE_LIMIT){
-            throw new IllegalArgumentException(Integer.toString(scriptCode));
-        }
-        index = findCodeIndex(scriptAbbr,scriptCode);
-        if(index >=0){
-            return scriptAbbr[index].name;
-        }else{
-            throw new IllegalArgumentException(Integer.toString(scriptCode));
-        }
-    }
-    private static int comparePropertyNames( String s1, String s2) {    
-	    int rc;
-	    char c1, c2;
-	    char[] name1 = s1.toCharArray();
-        char[] name2 = s2.toCharArray();
-        int i=0;
-        int j=0;
-        int endIndex1 = name1.length-1;
-        int endIndex2 = name2.length-1;
-	    for(;;) {
-            if((i>=name1.length)||(j>=name2.length)) {
-                return (name1.length - name2.length);
-            }
-            // Ignore delimiters '-', '_', and ASCII White_Space 
-	        while((c1=name1[i])=='-' || c1=='_' ||
-	              c1==' ' || c1=='\t' || c1=='\n' || c1==0x0B || c1=='\f' || c1=='\r'
-	        ) {
-	            ++i;
-	        }
-	        while((c2=name2[j])=='-' || c2=='_' ||
-	              c2==' ' || c2=='\t' || c2=='\n' || c2==0x0B || c2=='\f' || c2=='\r'
-	        ) {
-	            ++j;
-	        }
-	        // Case-insensitive comparison
-	        if(c1!=c2) {
-	            rc=(int)(char)UCharacter.toLowerCase(c1)-(int)(char)UCharacter.toLowerCase(c2);
-	            if(rc!=0) {
-	                return rc;
-	            }
-	        }
-	        if(i==endIndex1 && j==endIndex2){
-                return 0;
-            }
-	        ++i;
-	        ++j;
-        }
+        return UCharacter.getPropertyValueName(UProperty.SCRIPT,
+                                               scriptCode,
+                                               UProperty.NameChoice.SHORT);
     }
 }
 
