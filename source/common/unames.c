@@ -1561,7 +1561,8 @@ u_charFromName(UCharNameChoice nameChoice,
     if (lower[0] == '<') {
         if (nameChoice == U_EXTENDED_CHAR_NAME) {
             if (lower[--i] == '>') {
-                for (--i; lower[i] && lower[i] != '-'; --i);
+                for (--i; lower[i] && lower[i] != '-'; --i) {
+                }
 
                 if (lower[i] == '-') { /* We've got a category. */
                     uint32_t cIdx;
