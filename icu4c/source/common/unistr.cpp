@@ -492,10 +492,15 @@ UnicodeString::toUpper(const Locale& locale)
   }
 
   else {
+    // clone our array, if necessary
+    cloneArrayIfNeeded();
+    UChar *array = getArrayStart();
+
     while(start < limit) {
-      c = getArrayStart()[start];
-      if(Unicode::isLowerCase(c))
-    doSetCharAt(start, Unicode::toUpperCase(c));
+      c = array[start];
+      if(Unicode::isLowerCase(c)) {
+        array[start] = Unicode::toUpperCase(c);
+    }
       ++start;
     }
   }
@@ -556,10 +561,15 @@ UnicodeString::toLower(const Locale& locale)
   // Greek, we rely on the Unicode class to do all our case mapping--
   // there are no other special cases
   else {
+    // clone our array, if necessary
+    cloneArrayIfNeeded();
+    UChar *array = getArrayStart();
+
     while(start < limit) {
-      c = getArrayStart()[start];
-      if(Unicode::isUpperCase(c) || Unicode::isTitleCase(c))
-    doSetCharAt(start, Unicode::toLowerCase(c));
+      c = array[start];
+      if(Unicode::isUpperCase(c) || Unicode::isTitleCase(c)) {
+        array[start] = Unicode::toLowerCase(c);
+      }
       ++start;
     }
   }
@@ -627,9 +637,9 @@ UnicodeString::doReplace(UTextOffset start,
   // allocate a bigger array if needed
   if( newSize > getCapacity() ) {
 
-    // allocate at minimum the current capacity + needed space
+    // allocate at minimum needed space
     int32_t tempLength;
-    UChar *temp = allocate(fCapacity + srcLength, tempLength);
+    UChar *temp = allocate(newSize + 1, tempLength);
     if(! temp) {
       setToBogus();
       return *this;
@@ -927,7 +937,6 @@ UnicodeString::doCodepageCreate(const char *codepageData,
 
     // update the conversion parameters
     fLength      = myTarget - getArrayStart();
-    arraySize    = getCapacity() - fLength;
 
     // allocate more space and copy data, if needed
     if(status == U_INDEX_OUTOFBOUNDS_ERROR) {
@@ -941,8 +950,8 @@ UnicodeString::doCodepageCreate(const char *codepageData,
       }
 
       if(fRefCounted) {
-        // copy the old array into temp, including the ref count
-        us_arrayCopy(fArray, 0, temp, 0, fLength + 1);
+        // copy the old array into temp
+        us_arrayCopy(fArray, 1, temp, 1, fLength);
         delete [] fArray;
       } else {
         // if we're not currently ref counted, shift the array right by one
@@ -1077,26 +1086,48 @@ UnicodeString::pinIndices(UTextOffset& start,
 void
 UnicodeString::cloneArrayIfNeeded()
 {
-  // if we're ref counted, make a copy of the buffer if necessary
-  if(fArray != fStackBuffer && refCount() > 1) {
-    UChar *copy = new UChar [ fCapacity ];
-    if( ! copy ) {
-      setToBogus();
-      return;
+  // if we're aliased or ref counted, make a copy of the buffer if necessary
+  if(fArray != fStackBuffer && (!fRefCounted || refCount() > 1)) {
+    UChar *copy;
+    bool_t refCounted;
+    if(fLength <= US_STACKBUF_SIZE) {
+      // a small string does not need allocation
+      fCapacity = US_STACKBUF_SIZE;
+      copy = fStackBuffer;
+      refCounted = FALSE;
+    } else {
+      if(!fRefCounted) {
+        // make room for the ref count
+        ++fCapacity;
+      }
+      if(fCapacity - 1 <= fLength) {
+        // make room for a terminating NUL
+        fCapacity = fLength + 2;
+      }
+      copy = new UChar [ fCapacity ];
+      if(copy == 0) {
+        setToBogus();
+        return;
+      }
+      refCounted = TRUE;
     }
 
     // copy the current shared array into our new array
-    us_arrayCopy(fArray, 0, copy, 0, fLength + 1);
+    us_arrayCopy(getArrayStart(), 0, copy, refCounted ? 1 : 0, fLength);
 
     // remove a reference from the current shared array
     // if there are no more references to the current shared array,
     // after we remove the reference, delete the array
-    if(removeRef() == 0)
+    if(fRefCounted && removeRef() == 0) {
       delete [] fArray;
+    }
 
     // make our array point to the new copy and set the ref count to one
     fArray = copy;
-    setRefCount(1);
+    fRefCounted = refCounted;
+    if(refCounted) {
+      setRefCount(1);
+    }
   }
 }
 
