@@ -148,7 +148,7 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
             }
 #endif
             break;
-        case 11: name = "conversion";
+        case 11: name = "convert";
                 if (exec) {
                     logln("TestSuite Conversion---"); logln();
                     ConversionTest test;
