@@ -42,7 +42,7 @@ public :
 
     static NamePrepTransform* createInstance(UParseError& parseError, UErrorCode& status);
 
-    inline ~NamePrepTransform();
+    virtual ~NamePrepTransform();
 
 
     inline UBool isProhibited(UChar32 ch);
