@@ -18,6 +18,7 @@
 #include "unicode/unistr.h"
 #include "unicode/parseerr.h"
 #include "unicode/utrans.h" // UTransPosition, UTransDirection
+#include "unicode/strenum.h"
 
 U_NAMESPACE_BEGIN
 
@@ -1031,25 +1032,15 @@ public:
 public:
 
     /**
-     * Return the number of IDs currently registered with the system.
-     * To retrieve the actual IDs, call getAvailableID(i) with
-     * i from 0 to countAvailableIDs() - 1.
-     * @return the number of IDs currently registered with the system.
-     * @stable ICU 2.0
+     * Return a StringEnumeration over the IDs available at the time of the
+     * call, including user-registered IDs.
+     * @param ec input-output error code
+     * @return a newly-created StringEnumeration over the transliterators
+     * available at the time of the call. The caller should delete this object
+     * when done using it.
+     * @draft ICU 3.0
      */
-    static int32_t countAvailableIDs(void);
-
-    /**
-     * Return the index-th available ID.  index must be between 0
-     * and countAvailableIDs() - 1, inclusive.  If index is out of
-     * range, the result of getAvailableID(0) is returned.
-     * @param index the given ID index.
-     * @return      the index-th available ID.  index must be between 0
-     *              and countAvailableIDs() - 1, inclusive.  If index is out of
-     *              range, the result of getAvailableID(0) is returned.
-     * @stable ICU 2.0
-     */
-    static const UnicodeString& getAvailableID(int32_t index);
+    static StringEnumeration* getAvailableIDs(UErrorCode& ec);
 
     /**
      * Return the number of registered source specifiers.
@@ -1203,6 +1194,27 @@ public:
 private:
     static UBool initializeRegistry(void);
 
+public:
+    /**
+     * Return the number of IDs currently registered with the system.
+     * To retrieve the actual IDs, call getAvailableID(i) with
+     * i from 0 to countAvailableIDs() - 1.
+     * @return the number of IDs currently registered with the system.
+     * @obsolete ICU 3.4 use getAvailableIDs() instead
+     */
+    static int32_t countAvailableIDs(void);
+
+    /**
+     * Return the index-th available ID.  index must be between 0
+     * and countAvailableIDs() - 1, inclusive.  If index is out of
+     * range, the result of getAvailableID(0) is returned.
+     * @param index the given ID index.
+     * @return      the index-th available ID.  index must be between 0
+     *              and countAvailableIDs() - 1, inclusive.  If index is out of
+     *              range, the result of getAvailableID(0) is returned.
+     * @obsolete ICU 3.4 use getAvailableIDs() instead
+     */
+    static const UnicodeString& getAvailableID(int32_t index);
 };
 
 inline int32_t Transliterator::getMaximumContextLength(void) const {

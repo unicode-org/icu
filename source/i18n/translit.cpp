@@ -22,6 +22,7 @@
 #include "unicode/unifltlg.h"
 #include "unicode/uniset.h"
 #include "unicode/uscript.h"
+#include "unicode/strenum.h"
 #include "cpdtrans.h"
 #include "nultrans.h"
 #include "rbt_data.h"
@@ -1188,6 +1189,7 @@ void Transliterator::unregister(const UnicodeString& ID) {
 }
 
 /**
+ * == OBSOLETE - remove in ICU 3.4 ==
  * Return the number of IDs currently registered with the system.
  * To retrieve the actual IDs, call getAvailableID(i) with
  * i from 0 to countAvailableIDs() - 1.
@@ -1199,6 +1201,7 @@ int32_t Transliterator::countAvailableIDs(void) {
 }
 
 /**
+ * == OBSOLETE - remove in ICU 3.4 ==
  * Return the index-th available ID.  index must be between 0
  * and countAvailableIDs() - 1, inclusive.  If index is out of
  * range, the result of getAvailableID(0) is returned.
@@ -1213,6 +1216,21 @@ const UnicodeString& Transliterator::getAvailableID(int32_t index) {
     umtx_unlock(&registryMutex);
     U_ASSERT(result != NULL); // fail if no registry
     return *result;
+}
+
+StringEnumeration* Transliterator::getAvailableIDs(UErrorCode& ec) {
+    if (U_FAILURE(ec)) return NULL;
+    StringEnumeration* result = NULL;
+    umtx_init(&registryMutex);
+    umtx_lock(&registryMutex);
+    if (HAVE_REGISTRY) {
+        result = registry->getAvailableIDs();
+    }
+    umtx_unlock(&registryMutex);
+    if (result == NULL) {
+        ec = U_INTERNAL_TRANSLITERATOR_ERROR;
+    }
+    return result;
 }
 
 int32_t Transliterator::countAvailableSources(void) {
