@@ -73,10 +73,6 @@ public:
     void testAdopt(void);
 
 private:
-    static Formattable testArgs[];
-    static UnicodeString testCases[];
-    static UnicodeString testResultPatterns[];
-    static UnicodeString testResultStrings[];
 };
 
 

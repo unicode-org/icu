@@ -38,7 +38,7 @@
 #define MAX(x,y) ((x) > (y) ? (x) : (y))
 #endif
 
-const UnicodeString CollationMonkeyTest::source("-abcdefghijklmnopqrstuvwxyz#&^$@");
+const UnicodeString CollationMonkeyTest::source("-abcdefghijklmnopqrstuvwxyz#&^$@", "");
 
 CollationMonkeyTest::CollationMonkeyTest()
 : myCollator(0)

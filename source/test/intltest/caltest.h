@@ -125,7 +125,6 @@ public:
 public: // package
     // internal routine for checking date
     static UnicodeString value(Calendar* calendar);
-    static UnicodeString EXPECTED_0610;
  
 public:
     /**

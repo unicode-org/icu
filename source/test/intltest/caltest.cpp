@@ -1012,6 +1012,7 @@ CalendarTest::TestSecondsZero121()
 void
 CalendarTest::TestAddSetGet0610()
 {
+    UnicodeString EXPECTED_0610("1993/0/5", "");
     UErrorCode status = U_ZERO_ERROR;
     {
         Calendar *calendar = new GregorianCalendar(status);
@@ -1066,7 +1067,6 @@ CalendarTest::value(Calendar* calendar)
         (U_FAILURE(status) ? " FAIL: Calendar::get failed" : "");
 }
  
-UnicodeString CalendarTest::EXPECTED_0610 = "1993/0/5";
  
 // -------------------------------------
  

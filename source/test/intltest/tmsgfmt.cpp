@@ -24,47 +24,6 @@
 #include "unicode/choicfmt.h"
 #include "unicode/gregocal.h"
 
-Formattable TestMessageFormat::testArgs[] = {
-    Formattable(double(1)), Formattable(double(3456)),
-        Formattable("Disk"), Formattable(UDate((int32_t)1000000000L), Formattable::kIsDate)
-};
-
-UnicodeString TestMessageFormat::testCases[] = {
-   "Quotes '', '{', 'a' {0} '{0}'",
-   "Quotes '', '{', 'a' {0,number} '{0}'",
-   "'{'1,number,'#',##} {1,number,'#',##}",
-   "There are {1} files on {2} at {3}.",
-   "On {2}, there are {1} files, with {0,number,currency}.",
-   "'{1,number,percent}', {1,number,percent},",
-   "'{1,date,full}', {1,date,full},",
-   "'{3,date,full}', {3,date,full},",
-   "'{1,number,#,##}' {1,number,#,##}",
-};
-
-UnicodeString TestMessageFormat::testResultPatterns[] = {
-    "Quotes '', '{', a {0} '{'0}",
-    "Quotes '', '{', a {0,number} '{'0}",
-    "'{'1,number,#,##} {1,number,'#'#,##}",
-    "There are {1} files on {2} at {3}.",
-    "On {2}, there are {1} files, with {0,number,currency}.",
-    "'{'1,number,percent}, {1,number,percent},",
-    "'{'1,date,full}, {1,date,full},",
-    "'{'3,date,full}, {3,date,full},",
-    "'{'1,number,#,##} {1,number,#,##}"
-};
-
-UnicodeString TestMessageFormat::testResultStrings[] = {
-    "Quotes ', {, a 1 {0}",
-    "Quotes ', {, a 1 {0}",
-    "{1,number,#,##} #34,56",
-    "There are 3,456 files on Disk at 1/12/70 5:46 AM.",
-    "On Disk, there are 3,456 files, with $1.00.",
-    "{1,number,percent}, 345,600%,",
-    "{1,date,full}, Wednesday, December 31, 1969,",
-    "{3,date,full}, Monday, January 12, 1970,",
-    "{1,number,#,##} 34,56"
-};
-
 
 
 void TestMessageFormat::testBug3()
@@ -250,6 +209,46 @@ operator<<( IntlTest&           stream,
 
 void TestMessageFormat::PatternTest() 
 {
+    Formattable testArgs[] = {
+        Formattable(double(1)), Formattable(double(3456)),
+            Formattable("Disk"), Formattable(UDate((int32_t)1000000000L), Formattable::kIsDate)
+    };
+    UnicodeString testCases[] = {
+       "Quotes '', '{', 'a' {0} '{0}'",
+       "Quotes '', '{', 'a' {0,number} '{0}'",
+       "'{'1,number,'#',##} {1,number,'#',##}",
+       "There are {1} files on {2} at {3}.",
+       "On {2}, there are {1} files, with {0,number,currency}.",
+       "'{1,number,percent}', {1,number,percent},",
+       "'{1,date,full}', {1,date,full},",
+       "'{3,date,full}', {3,date,full},",
+       "'{1,number,#,##}' {1,number,#,##}",
+    };
+
+    UnicodeString testResultPatterns[] = {
+        "Quotes '', '{', a {0} '{'0}",
+        "Quotes '', '{', a {0,number} '{'0}",
+        "'{'1,number,#,##} {1,number,'#'#,##}",
+        "There are {1} files on {2} at {3}.",
+        "On {2}, there are {1} files, with {0,number,currency}.",
+        "'{'1,number,percent}, {1,number,percent},",
+        "'{'1,date,full}, {1,date,full},",
+        "'{'3,date,full}, {3,date,full},",
+        "'{'1,number,#,##} {1,number,#,##}"
+    };
+
+    UnicodeString testResultStrings[] = {
+        "Quotes ', {, a 1 {0}",
+        "Quotes ', {, a 1 {0}",
+        "{1,number,#,##} #34,56",
+        "There are 3,456 files on Disk at 1/12/70 5:46 AM.",
+        "On Disk, there are 3,456 files, with $1.00.",
+        "{1,number,percent}, 345,600%,",
+        "{1,date,full}, Wednesday, December 31, 1969,",
+        "{3,date,full}, Monday, January 12, 1970,",
+        "{1,number,#,##} 34,56"
+    };
+
 
     for (int32_t i = 0; i < 9; ++i) {
         //it_out << "\nPat in:  " << testCases[i] << endl;
