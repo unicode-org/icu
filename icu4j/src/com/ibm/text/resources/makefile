@@ -1,5 +1,5 @@
 #
-# @(#)$RCSfile: makefile,v $ $Revision: 1.2 $ $Date: 2000/02/18 00:29:08 $
+# @(#)$RCSfile: makefile,v $ $Revision: 1.3 $ $Date: 2000/02/23 21:59:17 $
 #
 
 TOPDIR=		../../../../..
@@ -27,7 +27,7 @@ FILES_java=	$(TARGDIR)/NumberFormatRules.java	    \
 			$(TARGDIR)/BreakIteratorRules_th.java   \
 										\
 			$(TARGDIR)/TransliterationRule_Fullwidth_Halfwidth.java	\
-#			$(TARGDIR)/TransliterationRule_Han_Pinyin.java			\
+			$(TARGDIR)/TransliterationRule_Han_Pinyin.java			\
 			$(TARGDIR)/TransliterationRule_Kanji_English.java		\
 			$(TARGDIR)/TransliterationRule_Kanji_OnRomaji.java		\
 			$(TARGDIR)/TransliterationRule_KeyboardEscape_Latin1.java	\

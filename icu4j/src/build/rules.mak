@@ -30,7 +30,7 @@ classes: delete.classlist $(FILES_class) $(FILES_dics)
     cp $(SRC_FILES_dict) $(TARGDIR)
 !endif
 !ifdef SUBDIRS
-	@for %%d in ( $(SUBDIRS) ) do cd %d && nmake -nologo /f makefile.nmk classes && cd ..
+	@for %%d in ( $(SUBDIRS) ) do cd %d && $(MAKE) classes && cd ..
 !endif
 
 dict: $(SRC_FILES_dict)

@@ -7,4 +7,4 @@ PKGPATH=	$(PACKAGE:.=\)
 TARGDIR=	$(CLASSDIR)/$(PKGPATH)
 
 JAVACFLAGS=	-target 1.1
-
+MAKE=		nmake -nologo 
