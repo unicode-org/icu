@@ -20,7 +20,7 @@
 #include "cstring.h"
 
 typedef enum UScriptCode {
-      U_INVALID_CODE = -1,
+      U_INVALID_SCRIPT_CODE = -1,
       U_COMMON      =  0 , /* Zyyy */
       U_INHERITED   =  1,  /* Qaai */
       U_ARABIC      =  2,  /* Arab */

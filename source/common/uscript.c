@@ -312,7 +312,7 @@ findCodeIndex(const UScriptCode unsorted[], const UScriptCode target, int size){
 
 U_CAPI UScriptCode 
 uchar_getScriptCode(const char* nameOrAbbrOrLocale, UErrorCode* err){
-    UScriptCode code = U_INVALID_CODE;
+    UScriptCode code = U_INVALID_SCRIPT_CODE;
     int index=0;
 
     /* check arguments */
@@ -326,21 +326,21 @@ uchar_getScriptCode(const char* nameOrAbbrOrLocale, UErrorCode* err){
         code = (UScriptCode) scriptNameCodes[index];
     }
     /* we did not find in names array so try abbr array*/
-    if(code ==U_INVALID_CODE){
+    if(code ==U_INVALID_SCRIPT_CODE){
         index = findStringIndex(scriptAbbr, nameOrAbbrOrLocale, U_SCRIPT_ABBR_ARRAY_SIZE);
         if(index>=0 && index < U_SCRIPT_NAMES_ARRAY_SIZE){ 
             code = (UScriptCode) scriptAbbrCodes[index];
         }
     }
     /* we still haven't found it try locale */
-    if(code==U_INVALID_CODE){
+    if(code==U_INVALID_SCRIPT_CODE){
         UResourceBundle* resB = ures_open(u_getDataDirectory(),nameOrAbbrOrLocale,err);
-        if(*err==U_ZERO_ERROR){
+        if(U_SUCCESS(*err)&& *err != U_USING_DEFAULT_ERROR){
             int32_t len=0;
             UResourceBundle* resD = ures_getByKey(resB,"LocaleScript",NULL,err);
             int index =0;
             const UChar* name = ures_getStringByIndex(resD,0,&len,err);
-            if(U_SUCCESS(*err)){
+            if(U_SUCCESS(*err) ){
                 char cName[50] = {'\0'};
                 u_UCharsToChars(name,cName,len);
                 index = findStringIndex(scriptNames, cName, U_SCRIPT_NAMES_ARRAY_SIZE);
@@ -387,6 +387,6 @@ uchar_scriptCodeName(UScriptCode code){
     if(code>=0 && code<U_SCRIPT_CODE_LIMIT) {
         return scriptCodeName[code+1];
     } else{
-        return scriptCodeName[U_INVALID_CODE+1];
+        return scriptCodeName[U_INVALID_SCRIPT_CODE+1];
     }
 }
