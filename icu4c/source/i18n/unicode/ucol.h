@@ -20,7 +20,7 @@
  * <h2> Collator C API </h2>
  *
  * The C API for Collator performs locale-sensitive
- * string comparison. You use this class to build
+ * string comparison. You use this service to build
  * searching and sorting routines for natural language text.
  * <em>Important: </em>The ICU collation service has been reimplemented 
  * in order to achieve better performance and UCA compliance. 
@@ -42,7 +42,7 @@
  * <p>
  * @see         UCollationResult
  * @see         UNormalizationMode
- * @see            UCollationStrength
+ * @see         UCollationStrength
  * @see         UCollationElements
  */
 
@@ -133,31 +133,31 @@ typedef enum {
 
 } UColAttributeValue;
 
-    /**
-     * Base letter represents a primary difference.  Set comparison
-     * level to UCOL_PRIMARY to ignore secondary and tertiary differences.
-     * Use this to set the strength of a Collator object.
-     * Example of primary difference, "abc" &lt; "abd"
-     * 
-     * Diacritical differences on the same base letter represent a secondary
-     * difference.  Set comparison level to UCOL_SECONDARY to ignore tertiary
-     * differences. Use this to set the strength of a Collator object.
-     * Example of secondary difference, "ä" >> "a".
-     *
-     * Uppercase and lowercase versions of the same character represents a
-     * tertiary difference.  Set comparison level to UCOL_TERTIARY to include
-     * all comparison differences. Use this to set the strength of a Collator
-     * object.
-     * Example of tertiary difference, "abc" &lt;&lt;&lt; "ABC".
-     *
-     * Two characters are considered "identical" when they have the same
-     * unicode spellings.  UCOL_IDENTICAL.
-     * For example, "ä" == "ä".
-     *
-     * UCollationStrength is also used to determine the strength of sort keys 
-     * generated from UCollator objects
-     * These values can be now found in the UColAttributeValue enum.
-     **/
+/**
+ * Base letter represents a primary difference.  Set comparison
+ * level to UCOL_PRIMARY to ignore secondary and tertiary differences.
+ * Use this to set the strength of a Collator object.
+ * Example of primary difference, "abc" &lt; "abd"
+ * 
+ * Diacritical differences on the same base letter represent a secondary
+ * difference.  Set comparison level to UCOL_SECONDARY to ignore tertiary
+ * differences. Use this to set the strength of a Collator object.
+ * Example of secondary difference, "ä" >> "a".
+ *
+ * Uppercase and lowercase versions of the same character represents a
+ * tertiary difference.  Set comparison level to UCOL_TERTIARY to include
+ * all comparison differences. Use this to set the strength of a Collator
+ * object.
+ * Example of tertiary difference, "abc" &lt;&lt;&lt; "ABC".
+ *
+ * Two characters are considered "identical" when they have the same
+ * unicode spellings.  UCOL_IDENTICAL.
+ * For example, "ä" == "ä".
+ *
+ * UCollationStrength is also used to determine the strength of sort keys 
+ * generated from UCollator objects
+ * These values can be now found in the UColAttributeValue enum.
+ **/
 typedef UColAttributeValue UCollationStrength;
 
 /** Attributes that collation service understands. All the attributes can take UCOL_DEFAULT
@@ -224,9 +224,11 @@ typedef enum {
 
 /** Options for retrieving the rule string */
 typedef enum {
-  UCOL_TAILORING_ONLY, /** Retrieve tailoring only */
-  UCOL_FULL_RULES /** Retrieve UCA rules and tailoring */
-}  UColRuleOption ;
+  /** Retrieve tailoring only */
+  UCOL_TAILORING_ONLY, 
+  /** Retrieve UCA rules and tailoring */
+  UCOL_FULL_RULES 
+} UColRuleOption ;
 
 /**
  * Open a UCollator for comparing strings.
@@ -234,8 +236,10 @@ typedef enum {
  * service. After finished, collator must be disposed of by calling
  * \Ref{ucol_close}.
  * @param loc The locale containing the required collation rules. 
- *            if NULL is passed for the locale, UCA rules will be 
- *            used.
+ *            Special values for locales can be passed in - 
+ *            if NULL is passed for the locale, the default locale
+ *            collation rules will be used. If empty string ("") or
+ *            "root" are passed, UCA rules will be used.
  * @param status A pointer to an UErrorCode to receive any errors
  * @return A pointer to a UCollator, or 0 if an error occurred.
  * @see ucol_openRules
@@ -574,7 +578,7 @@ ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
  * @see UColAttribute
  * @see UColAttributeValue
  * @see ucol_getAttribute
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI void U_EXPORT2 
 ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status);
@@ -588,7 +592,7 @@ ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value,
  * @see UColAttribute
  * @see UColAttributeValue
  * @see ucol_setAttribute
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI UColAttributeValue  U_EXPORT2 
 ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status);
@@ -664,7 +668,7 @@ ucol_restoreVariableTop(UCollator *coll, const uint32_t varTop, UErrorCode *stat
  * @see ucol_open
  * @see ucol_openRules
  * @see ucol_close
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI UCollator* U_EXPORT2 
 ucol_safeClone(const UCollator *coll,
@@ -684,7 +688,7 @@ ucol_safeClone(const UCollator *coll,
  * @param buffer buffer to store the result in. If NULL, you'll get no rules.
  * @param bufferLen lenght of buffer to store rules in. If less then needed you'll get only the part that fits in.
  * @return current rules
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2 
 ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen);
@@ -759,6 +763,7 @@ ucol_setNormalization(  UCollator        *coll,
  * @return real locale name from which the collation data comes. 
  *         If the collator was instantiated from rules, returns
  *         NULL.
+ * @draft ICU 2.1
  */
 U_CAPI const char * U_EXPORT2
 ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);
