@@ -969,6 +969,8 @@ protected:
      * Method for subclasses to use to obtain a character in the given
      * string, with filtering.  If the character at the given offset
      * is excluded by this transliterator's filter, then U+FFFE is returned.
+     * @deprecated the new architecture provides filtering at the top
+     * level.  This method will be removed Dec 31 2001.
      */
     UChar filteredCharAt(const Replaceable& text, int32_t i) const;
 
