@@ -1532,12 +1532,14 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
     UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
+    StateEnum* currentState =  &myData->toUnicodeCurrentState;
     int plane = 0; /*dummy variable*/
+
     /*Arguments Check*/
     if (U_FAILURE(*err)) 
         return;
     
-    if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
+    if ((args->converter == NULL) || (myTarget < args->target) || (mySource < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -1547,14 +1549,6 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
         if(myTarget < args->targetLimit){
             
             mySourceChar= (unsigned char) *mySource++;
-            
-            if(args->converter->mode==UCNV_SI){
-                    
-               /* if there are no escape sequences in the first buffer then they
-                * are assumed to be ASCII according to RFC-1554
-                */    
-                myData->toUnicodeCurrentState = ASCII;
-            }
             
             /*consume the escape sequence*/
             if(myData->key!=0 || mySourceChar== ESC_2022){
@@ -1573,7 +1567,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
             }
             else if(mySourceChar<=SPACE){
                 if(args->converter->toUnicodeStatus == 0x00){
-                    myData->toUnicodeCurrentState = ASCII;
+                    *currentState = ASCII;
                     
                 }
                 else
@@ -1581,25 +1575,23 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                      
             }
 
-            switch(myConverterType[myData->toUnicodeCurrentState]){
+            switch(myConverterType[*currentState]){
                 
                  case ASCII1:
                     if(args->converter->toUnicodeStatus == 0x00 && mySourceChar < 0x7F){
                         targetUniChar = (UChar) mySourceChar;
+                        break;
                     }
-                    else{
-                        goto SAVE_STATE;
-                    }
-                    break;
+                    goto SAVE_STATE;
+
                 case SBCS:
                     if(args->converter->toUnicodeStatus == 0x00){
                         targetUniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(myData->currentConverter->sharedData, mySourceChar);
+                        break;
                     }
-                    else{
-                        goto SAVE_STATE;
-                    }
-                    break;
-                
+
+                    goto SAVE_STATE;
+
                 case DBCS:
                     if(args->converter->toUnicodeStatus == 0x00){
                         args->converter->toUnicodeStatus = (UChar) mySourceChar;
@@ -1620,12 +1612,11 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                 case LATIN1:
                     if(args->converter->fromUnicodeStatus == 0x00 && mySourceChar < 0x100){
                         targetUniChar = (UChar) mySourceChar;
+                        break;
                     }
-                    else{
-                        goto SAVE_STATE;
-                    }
-                    break;
-                
+
+                    goto SAVE_STATE;
+
                 case INVALID_STATE:
                     *err = U_ILLEGAL_ESCAPE_SEQUENCE;
                     goto END_LOOP;
@@ -1636,7 +1627,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
             if(targetUniChar < 0xfffe){
                 if(args->offsets){
                     args->offsets[myTarget - args->target]= mySource - args->source - 2 
-                                                            +(myConverterType[myData->toUnicodeCurrentState] < SBCS);
+                                                            +(myConverterType[*currentState] < SBCS);
                     
                 }
                 *(myTarget++)=(UChar)targetUniChar;
@@ -1653,7 +1644,7 @@ SAVE_STATE:
                     UConverterCallbackReason reason;
                     int32_t currentOffset ;
                     int32_t saveIndex = myTarget - args->target;
-                    if(myConverterType[myData->toUnicodeCurrentState] > SBCS){
+                    if(myConverterType[*currentState] > SBCS){
 
                         currentOffset= mySource - args->source - 2;
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[0];
