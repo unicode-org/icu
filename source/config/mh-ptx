@@ -1,0 +1,87 @@
+## -*-makefile-*-
+## PTX-specific setup
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
+##
+## $Id: mh-ptx,v 1.14 2000/10/16 18:05:34 yves Exp $
+
+## Flags for position independent code
+SHAREDLIBCFLAGS = -KPIC
+SHAREDLIBCXXFLAGS = -KPIC
+SHAREDLIBCPPFLAGS = -DPIC
+
+## Commands to generate dependency files
+GEN_DEPS.c=	$(CC) -Kthread -DPTX -c $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -M -DPTX $(DEFS) $(CPPFLAGS)
+
+## Commands to compile
+COMPILE.c=	$(CC) -Kthread -DPTX $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) -Kthread -DPTX $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+
+## Commands to link
+#LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.c=		$(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -lm -lgen
+LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -lm -lgen
+
+## Commands to make a shared library
+SHLIB.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -DPTX -G
+SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -DPTX -G
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-R	
+LD_RPATH_PRE=
+
+## Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
+
+## Versioned target for a shared library.
+FINAL_SO_TARGET = $(SO_TARGET)
+MIDDLE_SO_TARGET = 
+
+###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
+## Prefix for the ICU library names
+ICUPREFIX = icu
+LIBICU = lib$(ICUPREFIX)
+## Shared object suffix
+SO=		so
+## Non-shared intermediate object suffix
+STATIC_O = ao
+
+## Force removal [for make clean]
+RMV = rm -rf
+## Platform commands to remove or move executable and library targets
+INSTALL-S = $(INSTALL_PROGRAM)
+INSTALL-L = $(INSTALL_DATA)
+
+## Link commands to link to ICU libs
+LIBICUUC= 	-L$(top_builddir)/common -l$(ICUPREFIX)uc
+LIBICUI18N= 	-L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
+LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
+LIBICUTOOLUTIL=-L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
+LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
+
+## Compilation rules
+%.$(STATIC_O): $(srcdir)/%.c
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+%.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+%.$(STATIC_O): $(srcdir)/%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
+%.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
+
+## Dependency rules
+%.d : $(srcdir)/%.c
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.c) $< \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+%.d : $(srcdir)/%.cpp
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.cc) -o $@ $< \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+## End Ptx-specific setup

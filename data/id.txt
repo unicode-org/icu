@@ -1,0 +1,88 @@
+﻿
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+id {
+
+   Version { "x0.0" }
+
+    DayAbbreviations { 
+            "Min",
+            "Sen",
+            "Sel",
+            "Rab",
+            "Kam",
+            "Jum",
+            "Sab",
+    }
+    DayNames { 
+            "Minggu",
+            "Senin",
+            "Selasa",
+            "Rabu",
+            "Kamis",
+            "Jumat",
+            "Sabtu",
+    }
+    MonthAbbreviations { 
+            "Jan",
+            "Peb",
+            "Mar",
+            "Apr",
+            "Mei",
+            "Jun",
+            "Jul",
+            "Agu",
+            "Sep",
+            "Okt",
+            "Nov",
+            "Des",
+            "",
+    }
+    MonthNames { 
+            "Januari",
+            "Pebruari",
+            "Maret",
+            "April",
+            "Mei",
+            "Juni",
+            "Juli",
+            "Agustus",
+            "September",
+            "Oktober",
+            "November",
+            "Desember",
+            "",
+    }
+    NumberElements { 
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "‰",
+            "∞",
+            "�",
+    }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "¤#,##0.00;-¤#,##0.00",
+            "#,##0%",
+    }
+    LocaleID{ "21"}
+            // /**************** Info Below is needed ****************/
+            // CollationElements{}
+            // Countries{}
+            // Eras{}
+            // Languages{}
+            // ShortLanguage { }
+            // localPatternChars{}
+            //
+}

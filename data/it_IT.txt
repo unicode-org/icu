@@ -1,0 +1,22 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+it_IT {
+    CurrencyElements { 
+            "L.",
+            "ITL",
+            ",",
+    }
+    LocaleString { "it_IT" }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "\u00A4 #,##0;-\u00A4 #,##0",
+            "#,##0%",
+    }
+    ShortCountry { "ITA" }
+    LocaleID { "0410" }
+}
