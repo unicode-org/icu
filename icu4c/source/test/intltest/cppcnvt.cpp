@@ -12,7 +12,6 @@
 #include "unicode/unistr.h"
 #include "unicode/convert.h"
 #include "unicode/ucnv_err.h"
-#include <iostream.h>
 #include "cppcnvt.h"
 #include "cstring.h"
 

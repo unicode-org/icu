@@ -201,7 +201,6 @@ ostream& operator<<(ostream& stream,  const Formattable&   obj);
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <iostream.h>
 
 IntlTest&
 operator<<( IntlTest&           stream,
