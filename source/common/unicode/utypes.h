@@ -471,6 +471,7 @@ typedef enum UErrorCode UErrorCode;
 /* operational success or failure. */
 
 #ifdef XP_CPLUSPLUS
+U_NAMESPACE_BEGIN
     /**
      * Does the error code indicate success?
      * @stable
@@ -481,6 +482,7 @@ typedef enum UErrorCode UErrorCode;
      * @stable
      */
     inline UBool U_FAILURE(UErrorCode code) { return (UBool)(code>U_ZERO_ERROR); }
+U_NAMESPACE_END
 #else
     /**
      * Does the error code indicate success?

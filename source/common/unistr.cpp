@@ -79,6 +79,7 @@ print(const UChar *s,
 // Local function definitions for now
 
 // need to copy areas that may overlap
+static
 inline void
 us_arrayCopy(const UChar *src, int32_t srcStart,
          UChar *dst, int32_t dstStart, int32_t count)

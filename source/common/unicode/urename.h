@@ -109,13 +109,8 @@
 #define _UTF32LEData _UTF32LEData_2_0
 #define _UTF7Data _UTF7Data_2_0
 #define _UTF8Data _UTF8Data_2_0
-#define __Q27icu_2_023RuleBasedTransliteratorRCQ27icu_2_013UnicodeStringT116_UTransDirectionPQ27icu_2_013UnicodeFilterR10UErrorCode __Q27icu_2_023RuleBasedTransliteratorRCQ27icu_2_013UnicodeStringT116_UTransDirectionPQ27icu_2_013UnicodeFilterR10UErrorCode_2_0
-#define __Q27icu_2_023RuleBasedTransliteratorRCQ27icu_2_013UnicodeStringT116_UTransDirectionPQ27icu_2_013UnicodeFilterR12_UParseErrorR10UErrorCode __Q27icu_2_023RuleBasedTransliteratorRCQ27icu_2_013UnicodeStringT116_UTransDirectionPQ27icu_2_013UnicodeFilterR12_UParseErrorR10UErrorCode_2_0
-#define __Q27icu_2_023RuleBasedTransliteratorRCQ27icu_2_013UnicodeStringT116_UTransDirectionR10UErrorCode __Q27icu_2_023RuleBasedTransliteratorRCQ27icu_2_013UnicodeStringT116_UTransDirectionR10UErrorCode_2_0
 #define _fini _fini_2_0
 #define _init _init_2_0
-#define createFromRules__Q27icu_2_014TransliteratorRCQ27icu_2_013UnicodeStringT116_UTransDirectionR12_UParseErrorR10UErrorCode createFromRules__Q27icu_2_014TransliteratorRCQ27icu_2_013UnicodeStringT116_UTransDirectionR12_UParseErrorR10UErrorCode_2_0
-#define deleteToken deleteToken_2_0
 #define findNameDummy findNameDummy_2_0
 #define init_collIterate init_collIterate_2_0
 #define isCaseIgnorable isCaseIgnorable_2_0
@@ -123,7 +118,6 @@
 #define locale_cleanup locale_cleanup_2_0
 #define locale_get_default locale_get_default_2_0
 #define locale_set_default locale_set_default_2_0
-#define put__Q27icu_2_022TransliteratorRegistryRCQ27icu_2_013UnicodeStringT116_UTransDirectionSc put__Q27icu_2_022TransliteratorRegistryRCQ27icu_2_013UnicodeStringT116_UTransDirectionSc_2_0
 #define putil_cleanup putil_cleanup_2_0
 #define res_countArrayItems res_countArrayItems_2_0
 #define res_getArrayItem res_getArrayItem_2_0
@@ -494,6 +488,7 @@
 #define ucol_strcoll ucol_strcoll_2_0
 #define ucol_tok_assembleTokenList ucol_tok_assembleTokenList_2_0
 #define ucol_tok_closeTokenList ucol_tok_closeTokenList_2_0
+#define ucol_tok_initTokenList ucol_tok_initTokenList_2_0
 #define ucol_tok_parseNextToken ucol_tok_parseNextToken_2_0
 #define ucol_updateInternalState ucol_updateInternalState_2_0
 #define udat_applyPattern udat_applyPattern_2_0
@@ -530,7 +525,6 @@
 #define uhash_compareChars uhash_compareChars_2_0
 #define uhash_compareIChars uhash_compareIChars_2_0
 #define uhash_compareLong uhash_compareLong_2_0
-#define uhash_compareTokens uhash_compareTokens_2_0
 #define uhash_compareUChars uhash_compareUChars_2_0
 #define uhash_compareUnicodeString uhash_compareUnicodeString_2_0
 #define uhash_count uhash_count_2_0
@@ -545,7 +539,6 @@
 #define uhash_hashChars uhash_hashChars_2_0
 #define uhash_hashIChars uhash_hashIChars_2_0
 #define uhash_hashLong uhash_hashLong_2_0
-#define uhash_hashTokens uhash_hashTokens_2_0
 #define uhash_hashUChars uhash_hashUChars_2_0
 #define uhash_hashUCharsN uhash_hashUCharsN_2_0
 #define uhash_hashUnicodeString uhash_hashUnicodeString_2_0
@@ -831,6 +824,7 @@
 #define DigitList DigitList_2_0
 #define Entry Entry_2_0
 #define FeatureListTable FeatureListTable_2_0
+#define FieldPosition FieldPosition_2_0
 #define Format Format_2_0
 #define Format1AnchorTable Format1AnchorTable_2_0
 #define Format2AnchorTable Format2AnchorTable_2_0
@@ -849,6 +843,7 @@
 #define GlyphSubstitutionLookupProcessor GlyphSubstitutionLookupProcessor_2_0
 #define GlyphSubstitutionTableHeader GlyphSubstitutionTableHeader_2_0
 #define GregorianCalendar GregorianCalendar_2_0
+#define Hashtable Hashtable_2_0
 #define HebrewShaping HebrewShaping_2_0
 #define HexToUnicodeTransliterator HexToUnicodeTransliterator_2_0
 #define IndicClassTable IndicClassTable_2_0
@@ -878,7 +873,9 @@
 #define MorphTableHeader MorphTableHeader_2_0
 #define MultipleSubstitutionSubtable MultipleSubstitutionSubtable_2_0
 #define MultiplierSubstitution MultiplierSubstitution_2_0
+#define Mutex Mutex_2_0
 #define NFRule NFRule_2_0
+#define NFRuleList NFRuleList_2_0
 #define NFRuleSet NFRuleSet_2_0
 #define NFSubstitution NFSubstitution_2_0
 #define NameUnicodeTransliterator NameUnicodeTransliterator_2_0
@@ -896,6 +893,7 @@
 #define PairPositioningFormat2Subtable PairPositioningFormat2Subtable_2_0
 #define PairPositioningSubtable PairPositioningSubtable_2_0
 #define ParseData ParseData_2_0
+#define ParsePosition ParsePosition_2_0
 #define Quantifier Quantifier_2_0
 #define RemoveTransliterator RemoveTransliterator_2_0
 #define ReorderingOutput ReorderingOutput_2_0
@@ -949,9 +947,11 @@
 #define TransliteratorRegistry TransliteratorRegistry_2_0
 #define TrimmedArrayProcessor TrimmedArrayProcessor_2_0
 #define UCharCharacterIterator UCharCharacterIterator_2_0
-#define UColTokListHeader UColTokListHeader_2_0
+#define UCharReference UCharReference_2_0
 #define UStack UStack_2_0
 #define UVector UVector_2_0
+#define U_FAILURE U_FAILURE_2_0
+#define U_SUCCESS U_SUCCESS_2_0
 #define Unicode Unicode_2_0
 #define UnicodeAndFilter UnicodeAndFilter_2_0
 #define UnicodeArabicOpenTypeLayoutEngine UnicodeArabicOpenTypeLayoutEngine_2_0
@@ -977,14 +977,21 @@
 #define atoll atoll_2_0
 #define indicClassTables indicClassTables_2_0
 #define llong llong_2_0
+#define llong_abs llong_abs_2_0
+#define llong_asDouble llong_asDouble_2_0
+#define llong_asInt llong_asInt_2_0
+#define llong_pow llong_pow_2_0
 #define lltoa lltoa_2_0
 #define locale_set_default_internal locale_set_default_internal_2_0
+#define max max_2_0
+#define operator& operator&_2_0
+#define posAfter posAfter_2_0
+#define posBefore posBefore_2_0
 #define u_atoll u_atoll_2_0
 #define u_lltoa u_lltoa_2_0
-#define u_strncmpNoCase u_strncmpNoCase_2_0
-#define ucol_tok_initTokenList ucol_tok_initTokenList_2_0
-#define ucol_uprv_tok_readAndSetOption ucol_uprv_tok_readAndSetOption_2_0
-#define ucol_uprv_tok_setOptionInImage ucol_uprv_tok_setOptionInImage_2_0
+#define ule ule_2_0
+#define unorm_getFCD16 unorm_getFCD16_2_0
+#define unorm_getFCD16FromSurrogatePair unorm_getFCD16FromSurrogatePair_2_0
 #define uprv_cnttab_addContraction uprv_cnttab_addContraction_2_0
 #define uprv_cnttab_changeContraction uprv_cnttab_changeContraction_2_0
 #define uprv_cnttab_changeLastCE uprv_cnttab_changeLastCE_2_0
@@ -1005,6 +1012,8 @@
 #define uprv_uca_getMaxExpansionJamo uprv_uca_getMaxExpansionJamo_2_0
 #define uprv_uca_setMaxExpansion uprv_uca_setMaxExpansion_2_0
 #define uprv_uca_setMaxJamoExpansion uprv_uca_setMaxJamoExpansion_2_0
+#define ures_getUnicodeStringByIndex ures_getUnicodeStringByIndex_2_0
+#define ures_getUnicodeStringByKey ures_getUnicodeStringByKey_2_0
 #define util_equalRules util_equalRules_2_0
 #endif
 #endif
