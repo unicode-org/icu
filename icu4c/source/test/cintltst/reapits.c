@@ -690,7 +690,7 @@ void TestRegexCAPI(void) {
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_STRING("abcAB \\ $ abc", buf, TRUE); 
 
-
+        uregex_close(re);
     }
 
 
@@ -738,6 +738,7 @@ void TestRegexCAPI(void) {
                       numFields;          /* Each field gets a NUL terminator */ 
 
         TEST_ASSERT(spaceNeeded == requiredCapacity);
+        uregex_close(re);
 
     
         /*  Split with too few output strings available */
@@ -783,7 +784,7 @@ void TestRegexCAPI(void) {
             TEST_ASSERT(fields[3] == NULL);
             TEST_ASSERT(spaceNeeded == requiredCapacity);
         }
-    uregex_close(re);
+        uregex_close(re);
     }
 
 
