@@ -12,8 +12,6 @@
 
 #include "llong.h"
 
-#include <math.h>
-
 U_NAMESPACE_BEGIN
 
 class FieldPosition;
@@ -26,7 +24,7 @@ class RuleBasedNumberFormat;
 class UnicodeString;
 
 class NFRule {
- public:
+public:
 
     enum ERuleType {
         kNoBase = 0,
@@ -56,7 +54,7 @@ class NFRule {
     llong getBaseValue() const { return baseValue; }
     void setBaseValue(llong value);
 
-    double getDivisor() const { return pow(radix, exponent); }
+    double getDivisor() const { return uprv_pow(radix, exponent); }
 
     void doFormat(llong number, UnicodeString& toAppendTo, int32_t pos) const;
     void doFormat(double  number, UnicodeString& toAppendTo, int32_t pos) const;
@@ -71,7 +69,7 @@ class NFRule {
 
     void appendRuleText(UnicodeString& result) const;
 
- private:
+private:
     void parseRuleDescriptor(UnicodeString& descriptor, UErrorCode& status);
     void extractSubstitutions(const NFRuleSet* ruleSet, const NFRule* predecessor, const RuleBasedNumberFormat* rbnf, UErrorCode& status);
     NFSubstitution* extractSubstitution(const NFRuleSet* ruleSet, const NFRule* predecessor, const RuleBasedNumberFormat* rbnf, UErrorCode& status);
@@ -80,13 +78,13 @@ class NFRule {
     int32_t indexOfAny(const UChar* const strings[]) const;
     double matchToDelimiter(const UnicodeString& text, int32_t startPos, double baseValue,
                             const UnicodeString& delimiter, ParsePosition& pp, const NFSubstitution* sub, 
-							double upperBound) const;
+                            double upperBound) const;
     void stripPrefix(UnicodeString& text, const UnicodeString& prefix, ParsePosition& pp) const;
 
-	int32_t prefixLength(const UnicodeString& str, const UnicodeString& prefix) const;
-	UBool allIgnorable(const UnicodeString& str) const;
-	int32_t findText(const UnicodeString& str, const UnicodeString& key, 
-			int32_t startingAt, int32_t* resultCount) const;
+    int32_t prefixLength(const UnicodeString& str, const UnicodeString& prefix) const;
+    UBool allIgnorable(const UnicodeString& str) const;
+    int32_t findText(const UnicodeString& str, const UnicodeString& key, 
+                     int32_t startingAt, int32_t* resultCount) const;
 
 private:
     llong baseValue;

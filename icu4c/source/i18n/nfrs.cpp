@@ -13,8 +13,6 @@
 * 10/11/2001  Doug      Ported from ICU4J
 */
 
-#include <math.h>
-
 #include "nfrs.h"
 #include "nfrule.h"
 #include "nfrlist.h"
@@ -447,7 +445,7 @@ NFRuleSet::findFractionRuleSetRule(double number) const
     }
     // for each rule, do the following...
     llong tempDifference;
-    llong difference = llong::kMaxValue;
+    llong difference(uprv_maxMantissa());
     int32_t winner = 0;
     for (uint32_t i = 0; i < rules.size(); ++i) {
         // "numerator" is the numerator of the fraction if the 

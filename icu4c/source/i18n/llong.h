@@ -16,10 +16,9 @@
 #ifndef LLONG_H
 #define LLONG_H
 
-// debug
-#include <stdio.h>
-
 #include "unicode/utypes.h"
+
+U_NAMESPACE_BEGIN
 
 // machine dependent value, need to move
 //#define __u_IntBits 32
@@ -29,20 +28,17 @@ private:
     uint32_t lo;
     int32_t hi;
 private:
-    enum { 
-        MASK32 = 0xffffffffu
-    };
-
-    static const double kD32;  // 2^^32 as a double
-    static const double kDMin; // -(2^^54), minimum double with full integer precision
-    static const double kDMax; // 2^^54, maximum double with full integer precision
 
     // private constructor
     // should be private, but we can't construct the way we want using SOLARISCC
     // so make public in order that file statics can access this constructor
- public:
+public:
+    static const double kD32;  // 2^^32 as a double
+    static const double kDMin; // -(2^^54), minimum double with full integer precision
+    static const double kDMax; // 2^^54, maximum double with full integer precision
+
     llong(int32_t h, uint32_t l) : lo(l), hi(h) {}
- private:
+private:
     // convenience, size reduction in inline code
     llong& nnot() { hi = ~hi; lo = ~lo; return *this; }
     llong& negate() { hi = ~hi; lo = ~lo; if (!++lo) ++hi; return *this; }
@@ -64,23 +60,7 @@ public:
 //#if __u_IntBits == 64
 //    llong(unsigned int i) : lo(i & MASK32), hi(i >> 32) {}
 //#endif
-    llong(double d) { // avoid dependency on bit representation of double
-        if (uprv_isNaN(d)) {
-            *this = llong::kZero;
-        } else if (d < kDMin) {
-            *this = llong::kMinDouble;
-        } else if (d > kDMax) {
-            *this = llong::kMaxDouble;
-        } else {
-            int neg = d < 0; 
-            if (neg) d = -d; 
-            d = uprv_floor(d);
-            hi = (int32_t)uprv_floor(d / kD32);
-            d -= kD32 * hi;
-            lo = (uint32_t)d;
-            if (neg) negate();
-        }
-    }
+    llong(double d);
 
     llong(const llong& rhs) : lo(rhs.lo), hi(rhs.hi) {}
 
@@ -217,16 +197,12 @@ public:
     friend uint32_t u_lltoa(const llong& lhs, UChar* buffer, uint32_t buflen, uint32_t radix = 10, UBool raw = FALSE);
 
     // useful public constants - perhaps should not have class statics
-    static const llong& kMaxValue;
-    static const llong& kMinValue;
-    static const llong& kMinusOne;
-    static const llong& kZero;
-    static const llong& kOne;
-    static const llong& kTwo;
+//    static const llong getZero();
+//    static const llong getOne();
 
 private:
-    static const llong& kMaxDouble;
-    static const llong& kMinDouble;
+    static const llong getMaxDouble();
+    static const llong getMinDouble();
 
     // right shift without sign extension
     llong& ushr(int32_t shift) {
@@ -292,9 +268,9 @@ inline double   llong_asDouble(const llong& lhs) { return llong::kD32 * lhs.hi +
 
 inline llong llong_pow(const llong& lhs, uint32_t n) { 
     if (lhs.isZero()) {
-        return llong::kZero;
+        return llong(0, 0); /* zero */
     } else if (n == 0) {
-        return llong::kOne;
+        return llong(0, 1); /* one */
     } else {
         llong r(lhs);
         while (--n > 0) {
@@ -320,6 +296,8 @@ inline UBool operator< (const llong& lhs, const uint32_t rhs) { return lhs.hi ==
 inline UBool operator>=(const llong& lhs, const uint32_t rhs) { return lhs.hi == 0 ? lhs.lo >= rhs : lhs.hi >= 0; }
 inline UBool operator<=(const llong& lhs, const uint32_t rhs) { return lhs.hi == 0 ? lhs.lo <= rhs : lhs.hi <= 0; }
 #endif
+
+U_NAMESPACE_END
 
 // LLONG_H
 #endif

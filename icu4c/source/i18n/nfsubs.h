@@ -21,34 +21,15 @@
 #include "nfrs.h"
 #include "nfrule.h"
 #include "llong.h"
+#include "float.h"
 
 U_NAMESPACE_BEGIN
 
-static double MAX_DOUBLE = 1.7976931348623157e+308;
-static double java_fmod(double n, double d) 
-{
-    // c doesn't define '%' for floating point, but java does.
-    // from the java language spec 15.17:
-    // "In the remaining cases, where neither an infinity, nor a zero, 
-    // nor NaN is involved, the floating-point remainder r from the 
-    // division of a dividend n by a divisor d is defined by the 
-    // mathematical relation r = n - (d . q) where q is an integer 
-    // that is negative only if n/d is negative and positive only if 
-    // n/d is positive, and whose magnitude is as large as possible 
-    // without exceeding the magnitude of the true mathematical 
-    // quotient of n and d."
-    //
-    // I'm not sure if fmod (from what header?) has the same implemenation
-    
-    double q = n/d;
-    q = q < 0 ? -floor(-q) : floor(q);
-    return n - d * q;
-}
 
-static double round(double n)
-{
-    return floor(n + .5);
-}
+//static double round(double n)
+//{
+//    return floor(n + .5);
+//}
 
 class NFSubstitution {
     int32_t pos;
@@ -242,7 +223,7 @@ public:
     double calcUpperBound(double oldUpperBound) const { return oldUpperBound; }
     UChar tokenChar() const { return (UChar)0x003d; } // '='
 private:
-    static char fgClassID;
+    static const char fgClassID;
     
 public:
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
@@ -266,7 +247,7 @@ public:
     }
     
     void setDivisor(int32_t radix, int32_t exponent) { 
-        divisor = pow(radix, exponent);
+        divisor = uprv_pow(radix, exponent);
         ldivisor = divisor;
     }
     
@@ -277,7 +258,7 @@ public:
     }
     
     double transformNumber(double number) const {
-        return floor(number / divisor);
+        return uprv_floor(number / divisor);
     }
     
     double composeRuleValue(double newRuleValue, double oldRuleValue) const {
@@ -309,7 +290,7 @@ public:
         UErrorCode& status);
     
     void setDivisor(int32_t radix, int32_t exponent) { 
-        divisor = pow(radix, exponent);
+        divisor = uprv_pow(radix, exponent);
         ldivisor = divisor;
     }
     
@@ -319,7 +300,7 @@ public:
     void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
     
     llong transformNumber(llong number) const { return number % ldivisor; }
-    double transformNumber(double number) const { return java_fmod(number, divisor); }
+    double transformNumber(double number) const { return uprv_fmod(number, divisor); }
     
     UBool doParse(const UnicodeString& text, 
         ParsePosition& parsePosition,
@@ -329,7 +310,7 @@ public:
         Formattable& result) const;
     
     double composeRuleValue(double newRuleValue, double oldRuleValue) const {
-        return oldRuleValue - java_fmod(oldRuleValue, divisor) + newRuleValue;
+        return oldRuleValue - uprv_fmod(oldRuleValue, divisor) + newRuleValue;
     }
     
     double calcUpperBound(double oldUpperBound) const { return divisor; }
@@ -355,9 +336,9 @@ public:
         : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
     
     llong transformNumber(llong number) const { return number; }
-    double transformNumber(double number) const { return floor(number); }
+    double transformNumber(double number) const { return uprv_floor(number); }
     double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue + oldRuleValue; }
-    double calcUpperBound(double oldUpperBound) const { return MAX_DOUBLE; }
+    double calcUpperBound(double oldUpperBound) const { return DBL_MAX; }
     UChar tokenChar() const { return (UChar)0x003c; } // '<'
 private:
     static const char fgClassID;
@@ -381,8 +362,8 @@ public:
     UBool operator==(const NFSubstitution& rhs) const;
     
     void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
-    llong transformNumber(llong number) const { return llong::kZero; }
-    double transformNumber(double number) const { return number - floor(number); }
+    llong transformNumber(llong number) const { return llong(0,0); }
+    double transformNumber(double number) const { return number - uprv_floor(number); }
     
     UBool doParse(const UnicodeString& text,
         ParsePosition& parsePosition,
@@ -412,9 +393,9 @@ public:
         : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
     
     llong transformNumber(llong number) const { return llong_abs(number); }
-    double transformNumber(double number) const { return fabs(number); }
+    double transformNumber(double number) const { return uprv_fabs(number); }
     double composeRuleValue(double newRuleValue, double oldRuleValue) const { return -newRuleValue; }
-    double calcUpperBound(double oldUpperBound) const { return MAX_DOUBLE; }
+    double calcUpperBound(double oldUpperBound) const { return DBL_MAX; }
     UChar tokenChar() const { return (UChar)0x003e; } // '>'
 private:
     static const char fgClassID;
@@ -442,7 +423,7 @@ public:
     UBool operator==(const NFSubstitution& rhs) const;
     
     llong transformNumber(llong number) const { return number * ldenominator; }
-    double transformNumber(double number) const { return round(number * denominator); }
+    double transformNumber(double number) const { return uprv_round(number * denominator); }
     
     UBool doParse(const UnicodeString& text, 
         ParsePosition& parsePosition,
@@ -479,15 +460,15 @@ public:
     void toString(UnicodeString& result) const {}
     void doSubstitution(double number, UnicodeString& toInsertInto, int32_t _pos) const {}
     void doSubstitution(llong number, UnicodeString& toInsertInto, int32_t _pos) const {}
-    llong transformNumber(llong number) const { return llong::kZero; }
+    llong transformNumber(llong number) const { return llong(0,0); }
     double transformNumber(double number) const { return 0; }
     UBool doParse(const UnicodeString& text, 
-        ParsePosition& parsePosition, 
-        double baseValue,
-        double upperBound, 
-        UBool lenientParse,
-        Formattable& result) const
-    { result.setDouble(baseValue); return TRUE; }
+                ParsePosition& parsePosition, 
+                double baseValue,
+                double upperBound, 
+                UBool lenientParse,
+                Formattable& result) const
+            { result.setDouble(baseValue); return TRUE; }
     double composeRuleValue(double newRuleValue, double oldRuleValue) const { return 0; } // never called
     double calcUpperBound(double oldUpperBound) const { return 0; } // never called
     UBool isNullSubstitution() const { return TRUE; }
