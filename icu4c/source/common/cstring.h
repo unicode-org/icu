@@ -48,6 +48,7 @@
 #define uprv_toupper(c) toupper(c)
 #define uprv_tolower(c) tolower(c)
 #define uprv_strtoul(str, end, base) strtoul(str, end, base)
+#define uprv_strtol(str, end, base) strtol(str, end, base)
 #ifdef WIN32
 #   define uprv_stricmp(str1, str2) _stricmp(str1, str2)
 #elif defined(POSIX)
