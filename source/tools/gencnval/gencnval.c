@@ -249,9 +249,6 @@ parseLine(const char *line) {
     /* add the converter as its own alias to the alias table */
     addAlias(converter, cnv);
 
-    /* count it for the converter */
-    ++converters[cnv].aliasCount;
-
     /* get all the real aliases */
     for(;;) {
         /* skip white space */
@@ -266,7 +263,7 @@ parseLine(const char *line) {
 
         /* get an alias name */
         start=pos;
-        while(line[pos]!=0 && line[pos]!='#' && !isspace((unsigned char)line[pos])) {
+        while(line[pos]!=0 && line[pos]!='{' && line[pos]!='#' && !isspace((unsigned char)line[pos])) {
             ++pos;
         }
         limit=pos;
@@ -280,8 +277,22 @@ parseLine(const char *line) {
         /* add the alias/converter pair to the alias table */
         addAlias(alias, cnv);
 
-        /* count it for the converter */
-        ++converters[cnv].aliasCount;
+        /* skip whitespace */
+        while(line[pos]!=0 && isspace((unsigned char)line[pos])) {
+            ++pos;
+        }
+        if (line[pos] == '{') {   /* skip over tags */
+            start = ++pos;
+            while (line[pos] && line[pos] != '}' && line[pos] != '#') {
+                ++pos;
+            }
+            if (line[pos] == '}') {
+                ++pos;
+            } else {
+                fprintf(stderr, "unterminated tag list: %s\n", line);
+                exit(U_PARSE_ERROR);
+            }
+        }
     }
 }
 
@@ -296,6 +307,8 @@ addAlias(const char *alias, uint16_t converter) {
     aliases[aliasCount].converter=converter;
 
     ++aliasCount;
+
+    ++converters[converter].aliasCount;
 }
 
 static uint16_t
