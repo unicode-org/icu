@@ -543,16 +543,21 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
     // to the unsafe table, so that backward contraction skips it, as it has to pick the whole 
     // prefix, which won't happen if start is safe.
     uint32_t j = 0;
-    if(element->cSize > 1) {
+    //if(element->cSize > 1) {
       if(!(UTF_IS_TRAIL(element->cPoints[0]))) {
         unsafeCPSet(t->unsafeCP, element->cPoints[0]);
       }
-    }
+    //}
 
     // The second loop I'm unhappy with as it increases the number of unsafe characters. 
     // Now, all the characters in a prefix are unsafe and that will pick the whole contraction,
     // and the prefixes for forward processing.
-    for (j=0; j<element->prefixSize; j++) {   /* First add contraction chars to unsafe CP hash table */
+      
+      if(!(UTF_IS_TRAIL(element->prefix[0]))) {
+        unsafeCPSet(t->unsafeCP, element->prefix[0]);
+      }
+      // This should affect only prefixes larger than 3
+      for (j=1; j<element->prefixSize-1; j++) {   /* First add contraction chars to unsafe CP hash table */
       // Unless it is a trail surrogate, which is handled algoritmically and 
       // shouldn't take up space in the table.
       if(!(UTF_IS_TRAIL(element->prefix[j]))) {
@@ -859,7 +864,7 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
     CE = ucmpe32_get(mapping, element->cPoints[0]);
 
     if( CE != UCOL_NOT_FOUND) {
-        if(isContraction(CE)) { /* adding a non contraction element (thai, expansion, single) to already existing contraction */
+      if(isCntTableElement(CE) /*isContraction(CE)*/) { /* adding a non contraction element (thai, expansion, single) to already existing contraction */
             uprv_cnttab_setContraction(contractions, CE, 0, 0, element->mapCE, status);
             /* This loop has to change the CE at the end of contraction REDO!*/
             uprv_cnttab_changeLastCE(contractions, CE, element->mapCE, status);
