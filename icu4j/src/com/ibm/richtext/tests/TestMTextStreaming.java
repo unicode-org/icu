@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestMTextStreaming.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:46:57 $
+ * @(#)$RCSfile: TestMTextStreaming.java,v $ $Revision: 1.2 $ $Date: 2000/04/21 22:11:24 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -14,6 +14,8 @@
  */
 package com.ibm.richtext.tests;
 
+import com.ibm.test.TestFmwk;
+
 import java.io.*;
 import java.awt.Color;
 
@@ -25,15 +27,14 @@ import com.ibm.richtext.styledtext.StyleModifier;
 import com.ibm.textlayout.attributes.AttributeMap;
 import com.ibm.textlayout.attributes.TextAttribute;
 
-public class TestMTextStreaming {
+public class TestMTextStreaming extends TestFmwk {
 
     static final String COPYRIGHT =
                 "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
-    public static void main(String[] args) {
+                
+    public static void main(String[] args) throws Exception {
 
-        TestMTextStreaming t = new TestMTextStreaming();
-        t.test();
-        System.out.println("PASSED");
+        new TestMTextStreaming().run(args);
     }
 
     public TestMTextStreaming() {
@@ -117,7 +118,7 @@ public class TestMTextStreaming {
         }
     }
 
-    public static void streamAndCompare(MText text) {
+    public void streamAndCompare(MText text) {
 
         Throwable error = null;
 
@@ -132,7 +133,7 @@ public class TestMTextStreaming {
             MText streamedText = (MText) objIn.readObject();
             if (!isEqual(text, streamedText)) {
                 isEqual(text, streamedText);
-                throw new Error("Streamed text is not equal");
+                errln("Streamed text is not equal");
             }
         }
 /*        catch(OptionalDataException e) {
@@ -150,7 +151,7 @@ public class TestMTextStreaming {
 
         if (error != null) {
             error.printStackTrace();
-            throw new Error("Serialization failed.");
+            errln("Serialization failed.");
         }
     }
 

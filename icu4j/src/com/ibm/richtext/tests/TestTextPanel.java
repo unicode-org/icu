@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:46:57 $
+ * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.2 $ $Date: 2000/04/21 22:11:24 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -13,6 +13,8 @@
  * will not be liable for any third party claims against you.
  */
 package com.ibm.richtext.tests;
+
+import com.ibm.test.TestFmwk;
 
 import java.util.Random;
 import java.awt.Color;
@@ -41,7 +43,12 @@ import com.ibm.textlayout.attributes.AttributeSet;
 import com.ibm.textlayout.attributes.TextAttribute;
 import com.ibm.textlayout.attributes.AttributeMap;
 
-public final class TestTextPanel {
+public final class TestTextPanel extends TestFmwk {
+
+    public static void main(String[] args) throws Exception {
+
+        new TestTextPanel().run(args);
+    }
 
     private final class TestListener implements TextPanelListener {
         
@@ -96,7 +103,7 @@ public final class TestTextPanel {
                 }
             }
             if (e) {
-                throw new Error("Some events pending");
+                errln("Some events pending");
             }
         }
         
@@ -104,7 +111,7 @@ public final class TestTextPanel {
             
             int index = event.getID() - TextPanelEvent.TEXT_PANEL_FIRST;
             if (status[index] == NO_WAY) {
-                throw new Error("Unexpected event: " + event);
+                errln("Unexpected event: " + event);
             }
             else if (status[index] == DEFINITELY) {
                 status[index] = NO_WAY;
@@ -193,16 +200,16 @@ public final class TestTextPanel {
         }
     }
 
-    public static void main(String[] args) {
-
-        new TestTextPanel().test();
-        System.out.println("TextPanelTest PASSED");
-    }
-
     public TestTextPanel() {
 
         fClipboard = new Clipboard("TestTextPanel");
         incRandSeed();
+    }
+    
+    // For inner class accessibility
+    protected void errln(String message) {
+    
+        super.errln(message);
     }
     
     public TestTextPanel(MTextPanel panel) {
@@ -275,11 +282,11 @@ public final class TestTextPanel {
         setTextPanel(new TextPanel(text, fClipboard));
 
         for (int i=0; i < TEST_ITERS; i++) {
-            testSetSelection();
+            _testSetSelection();
             testModifications(MOD_TEXT, true);
             testEditMenuOperations(fClipboard);
             testModFlag(fTextPanel.getCommandLogSize());
-            testCommandLogControl();
+            _testCommandLogControl();
         }
     }
 
@@ -340,10 +347,10 @@ public final class TestTextPanel {
         }
         
         if (fTextPanel.getSelectionStart() != start) {
-            throw new Error("getSelectionStart is incorrect after set");
+            errln("getSelectionStart is incorrect after set");
         }
         if (fTextPanel.getSelectionEnd() != limit) {
-            throw new Error("getSelectionEnd is incorrect after set");
+            errln("getSelectionEnd is incorrect after set");
         }
         fListener.assertNotExpectingEvents();
         fListener.allowAll();
@@ -371,11 +378,11 @@ public final class TestTextPanel {
         testSelection(SET_END, start, selEnd);
     }
 
-    public void testSetSelection() {
+    public void _testSetSelection() {
 
         int textLength = fTextPanel.getTextLength();
         if (textLength != fTextPanel.getText().length()) {
-            throw new Error("Text panel length is not correct");
+            errln("Text panel length is not correct");
         }
 
         setAndTestSelection(0, textLength / 2);
@@ -414,7 +421,7 @@ public final class TestTextPanel {
         fListener.assertNotExpectingEvents();
         
         if (fTextPanel.getSelectionStart() != oldText.length() + insLength) {
-            throw new Error("Append didn't result in correct selection");
+            errln("Append didn't result in correct selection");
         }
 
         fListener.expectEvent(TextPanelEvent.TEXT_CHANGED);
@@ -424,27 +431,27 @@ public final class TestTextPanel {
         fListener.allowAll();
         
         if (fTextPanel.getSelectionStart() != insLength) {
-            throw new Error("Insert didn't result in correct selection");
+            errln("Insert didn't result in correct selection");
         }
 
         fTextPanel.replaceRange(insertionText, insLength, insLength+oldText.length());
         if (fTextPanel.getSelectionStart() != insLength*2) {
-            throw new Error("Replace didn't result in correct selection");
+            errln("Replace didn't result in correct selection");
         }
         if (fTextPanel.getSelectionEnd() != insLength*2) {
-            throw new Error("Replace didn't result in correct selection");
+            errln("Replace didn't result in correct selection");
         }
         if (fTextPanel.getTextLength() != insLength*3) {
-            throw new Error("textLength is incorrect");
+            errln("textLength is incorrect");
         }
 
         if (restoreOldText) {
             fTextPanel.setText(oldText);
             if (fTextPanel.getSelectionStart() != oldText.length()) {
-                throw new Error("setText didn't result in correct selection");
+                errln("setText didn't result in correct selection");
             }
             if (fTextPanel.getTextLength() != oldText.length()) {
-                throw new Error("length incorrect after setText");
+                errln("length incorrect after setText");
             }
         }
         
@@ -452,7 +459,7 @@ public final class TestTextPanel {
     }
 
     private static int iterationCount = 0;
-    public void testCommandLogControl() {
+    public void _testCommandLogControl() {
 
         fListener.refuseAll();
         iterationCount++;
@@ -465,7 +472,7 @@ public final class TestTextPanel {
             fTextPanel.setCommandLogSize(BIG_COMMAND_LOG_SIZE);
             
             if (fTextPanel.canRedo()) {
-                throw new Error("canRedo after setCommandLogSize");
+                errln("canRedo after setCommandLogSize");
             }
             fListener.assertNotExpectingEvents();
         }
@@ -502,17 +509,17 @@ public final class TestTextPanel {
             fListener.assertNotExpectingEvents();
         }
         if (!fTextPanel.canUndo()) {
-            throw new Error("Command log is too small");
+            errln("Command log is too small");
         }
         
         fListener.allowAll();
         fTextPanel.undo();
         if (fTextPanel.canUndo()) {
-            throw new Error("Command log is too large");
+            errln("Command log is too large");
         }
 
         if (fTextPanel.getTextLength() != origLength * insText.length()) {
-            throw new Error("Text length was not restored");
+            errln("Text length was not restored");
         }
 
         for (int i=0; i < BIG_COMMAND_LOG_SIZE; i++) {
@@ -520,11 +527,11 @@ public final class TestTextPanel {
         }
 
         if (fTextPanel.getTextLength() != origLength+BIG_COMMAND_LOG_SIZE) {
-            throw new Error("Text length was not restored after redo");
+            errln("Text length was not restored after redo");
         }
 
         if (fTextPanel.canRedo()) {
-            throw new Error("Should not be able to redo");
+            errln("Should not be able to redo");
         }
 
         fTextPanel.undo();
@@ -532,27 +539,27 @@ public final class TestTextPanel {
         fTextPanel.setCommandLogSize(SMALL_COMMAND_LOG_SIZE);
 
         if (fTextPanel.canRedo()) {
-            throw new Error("canRedo after setCommandLogSize(small)");
+            errln("canRedo after setCommandLogSize(small)");
         }
 
         for (int i=0; i < SMALL_COMMAND_LOG_SIZE; i++) {
             if (!fTextPanel.canUndo()) {
-                throw new Error("should be able to undo");
+                errln("should be able to undo");
             }
             fTextPanel.undo();
         }
         if (fTextPanel.canUndo()) {
-            throw new Error("should not be able to undo after setCommandLogSize(small)");
+            errln("should not be able to undo after setCommandLogSize(small)");
         }
         if (!fTextPanel.canRedo()) {
-            throw new Error("why can't this redo???");
+            errln("why can't this redo???");
         }
         fTextPanel.redo();
 
         fTextPanel.clearCommandLog();
 
         if (fTextPanel.canUndo() || fTextPanel.canRedo()) {
-            throw new Error("Command log wasn't cleared");
+            errln("Command log wasn't cleared");
         }
     }
 
@@ -570,29 +577,29 @@ public final class TestTextPanel {
                 }
             });
             if (!fTextPanel.clipboardNotEmpty()) {
-                throw new Error("MTextPanel doesn't recognize string content.");
+                errln("MTextPanel doesn't recognize string content.");
             }
 
             fTextPanel.setCaretPosition(fTextPanel.getSelectionStart());
             int oldLength = fTextPanel.getTextLength();
             fTextPanel.paste();
             if (fTextPanel.getTextLength() != oldLength + STRING_CONTENT.length()) {
-                throw new Error("Text length is wrong after paste.");
+                errln("Text length is wrong after paste.");
             }
 
             if (!fTextPanel.canUndo()) {
-                throw new Error("canUndo should be true");
+                errln("canUndo should be true");
             }
             fTextPanel.undo();
             if (fTextPanel.getTextLength() != oldLength) {
-                throw new Error("Length is wrong after undo");
+                errln("Length is wrong after undo");
             }
             if (!fTextPanel.canRedo()) {
-                throw new Error("canRedo should be true");
+                errln("canRedo should be true");
             }
             fTextPanel.redo();
             if (fTextPanel.getTextLength() != oldLength + STRING_CONTENT.length()) {
-                throw new Error("Text length is wrong after redo.");
+                errln("Text length is wrong after redo.");
             }
         }
 
@@ -600,14 +607,14 @@ public final class TestTextPanel {
         fTextPanel.selectAll();
         fTextPanel.clear();
         if (fTextPanel.getTextLength() != 0) {
-            throw new Error("Length is nonzero after clear");
+            errln("Length is nonzero after clear");
         }
         if (!fTextPanel.canUndo()) {
-            throw new Error("canUndo should be true");
+            errln("canUndo should be true");
         }
         fTextPanel.undo();
         if (fTextPanel.getTextLength() != origLength) {
-            throw new Error("Old text not restored");
+            errln("Old text not restored");
         }
 
         if (origLength > 0) {
@@ -615,22 +622,22 @@ public final class TestTextPanel {
             fTextPanel.select(0, 1);
             fTextPanel.cut();
             if (fTextPanel.getTextLength() != origLength-1) {
-                throw new Error("Length wrong after cut");
+                errln("Length wrong after cut");
             }
             fTextPanel.paste();
             if (fTextPanel.getTextLength() != origLength) {
-                throw new Error("Length wrong after paste");
+                errln("Length wrong after paste");
             }
             fTextPanel.select(0, origLength);
             fTextPanel.copy();
             fTextPanel.setCaretPosition(0);
             fTextPanel.paste();
             if (fTextPanel.getTextLength() != 2*origLength) {
-                throw new Error("Length wrong after paste");
+                errln("Length wrong after paste");
             }
             fTextPanel.undo();
             if (fTextPanel.getTextLength() != origLength) {
-                throw new Error("Length wrong after undo");
+                errln("Length wrong after undo");
             }
         }
     }
@@ -641,7 +648,7 @@ public final class TestTextPanel {
         fTextPanel.setModified(modified);
         for (int i=0; i < depth; i++) {
             if (!fTextPanel.canUndo()) {
-                throw new Error("Panel cannot undo at valid depth.  Depth=" + i);
+                errln("Panel cannot undo at valid depth.  Depth=" + i);
             }
             fTextPanel.undo();
             fTextPanel.setModified(modified);
@@ -649,13 +656,13 @@ public final class TestTextPanel {
 
         // check that all mod flags are false:
         if (fTextPanel.isModified() != modified) {
-            throw new Error("isModified is not correct");
+            errln("isModified is not correct");
         }
 
         for (int i=0; i < depth; i++) {
             fTextPanel.redo();
             if (fTextPanel.isModified() != modified) {
-                throw new Error("isModified is not correct");
+                errln("isModified is not correct");
             }
         }
     }
@@ -681,7 +688,7 @@ public final class TestTextPanel {
         }
 
         if (fTextPanel.getTextLength() != oldLength) {
-            throw new Error("Undo did not restore old text.");
+            errln("Undo did not restore old text.");
         }
     }
 
@@ -743,7 +750,7 @@ public final class TestTextPanel {
                 break;
             
             default:
-                throw new Error("Invalid operation!");
+                errln("Invalid operation!");
         }
         fListener.assertNotExpectingEvents();
         fListener.allowAll();

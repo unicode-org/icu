@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestMText.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:46:57 $
+ * @(#)$RCSfile: TestMText.java,v $ $Revision: 1.2 $ $Date: 2000/04/21 22:11:24 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -14,6 +14,8 @@
  */
 package com.ibm.richtext.tests;
 
+import com.ibm.test.TestFmwk;
+
 import com.ibm.textlayout.attributes.AttributeMap;
 import com.ibm.textlayout.attributes.TextAttribute;
 
@@ -27,14 +29,23 @@ import java.util.Random;
 
 import java.io.*;
 
-public class TestMText {
+public class TestMText extends TestFmwk {
 
     static final String COPYRIGHT =
                 "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
+    public static void main(String[] args) throws Exception {
+
+        new TestMText().run(args);
+    }
+    
     private static final int TEST_ITERATIONS = 5000;
     private static final int STYLE_TEST_ITERATIONS = 5000;
     private static final long RAND_SEED = 598436;
 
+    private static final int NOT_IN_MONKEY_TEST = -5000;
+    private int testIteration = NOT_IN_MONKEY_TEST;
+    private int theCase = NOT_IN_MONKEY_TEST;
+    
     private static StyleModifier createMinusModifier(final Object attr) {
         return new StyleModifier() {
             public AttributeMap modifyStyle(AttributeMap style) {
@@ -43,28 +54,13 @@ public class TestMText {
         };
     }
 
-    private static final String NO_STREAMING_ARG = "-nostreaming";
-
-    public static void main(String[] args) {
-
-        TestMText t = new TestMText();
-        boolean streaming = true;
-
-        if (args.length > 0) {
-            if (args.length == 1 && args[0].equals(NO_STREAMING_ARG)) {
-                streaming = false;
-            }
-            else {
-                throw new Error("USAGE: java TestMText [" + NO_STREAMING_ARG + "]");
-            }
-        }
-
-        t.simpleTest();
-        t.styleTest();
-        t.monkeyTest(streaming);
-        System.out.println("MText test PASSED");
+    public void test() {
+    
+        simpleTest();
+        styleTest();
+        monkeyTest(true);
     }
-
+    
     public void simpleTest() {
 
         AttributeMap boldStyle = new AttributeMap(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
@@ -81,13 +77,13 @@ public class TestMText {
             buf.append(allItalic);
 
             if (ts == buf.getTimeStamp()) {
-                throw new Error("Time stamp not incremented");
+                errln("Time stamp not incremented");
             }
 
             // should be bbbbbiii now
 
             if (buf.length() != allBold.length() + allItalic.length()) {
-                throw new Error("Length is wrong.");
+                errln("Length is wrong.");
             }
 
             for (int i=0; i < buf.length(); i++) {
@@ -105,29 +101,29 @@ public class TestMText {
                 }
 
                 if (buf.at(i) != rightChar) {
-                    throw new Error("Character is wrong.");
+                    errln("Character is wrong.");
                 }
                 if (!buf.characterStyleAt(i).equals(rightStyle)) {
-                    throw new Error("Style is wrong.");
+                    errln("Style is wrong.");
                 }
             }
 
             int pos = 0;
 
             if (!buf.characterStyleAt(pos).equals(boldStyle)) {
-                throw new Error("First style is wrong.");
+                errln("First style is wrong.");
             }
             if (buf.characterStyleLimit(pos) != allBold.length()) {
-                throw new Error("Run length is wrong.");
+                errln("Run length is wrong.");
             }
 
             pos = allBold.length();
 
             if (!buf.characterStyleAt(pos).equals(italicStyle)) {
-                throw new Error("Second style is wrong.");
+                errln("Second style is wrong.");
             }
             if (buf.characterStyleLimit(pos) != buf.length()) {
-                throw new Error("Run length is wrong.");
+                errln("Run length is wrong.");
             }
 
             {
@@ -137,10 +133,10 @@ public class TestMText {
                 // bbbbbiiibbbbb
 
                 if (buf.damagedRangeStart() != oldLength) {
-                    throw new Error("Damaged range start is incorrect");
+                    errln("Damaged range start is incorrect");
                 }
                 if (buf.damagedRangeLimit() != buf.length()) {
-                    throw new Error("Damaged range limit is incorrect");
+                    errln("Damaged range limit is incorrect");
                 }
             }
 
@@ -150,34 +146,34 @@ public class TestMText {
             // bbbbbbbbbb
 
             if (buf.length() != 2 * allBold.length()) {
-                throw new Error("Text should be twice the length of bold text.");
+                errln("Text should be twice the length of bold text.");
             }
 
             pos = buf.length() / 2;
             if (buf.characterStyleStart(pos) != 0 ||
                             buf.characterStyleLimit(pos) != buf.length()) {
-                throw new Error("Run range is wrong.");
+                errln("Run range is wrong.");
             }
             if (!buf.characterStyleAt(pos).equals(boldStyle)) {
-                throw new Error("Run style is wrong.");
+                errln("Run style is wrong.");
             }
 
             ts = buf.getTimeStamp();
             CharacterIterator cIter = buf.createCharacterIterator();
             for (char ch = cIter.first(); ch != cIter.DONE; ch = cIter.next()) {
                 if (ch != allBold.at(0)) {
-                    throw new Error("Character is wrong.");
+                    errln("Character is wrong.");
                 }
             }
 
             if (ts != buf.getTimeStamp()) {
-                throw new Error("Time stamp should not have changed");
+                errln("Time stamp should not have changed");
             }
 
             buf.replace(0, 1, plain, 0, plain.length());
 
             if (ts == buf.getTimeStamp()) {
-                throw new Error("Time stamp not incremented");
+                errln("Time stamp not incremented");
             }
 
             // ppppppbbbbbbbbb
@@ -185,17 +181,17 @@ public class TestMText {
             // ppppppiii
 
             if (buf.length() != allItalic.length()+plain.length()) {
-                throw new Error("Length is wrong.");
+                errln("Length is wrong.");
             }
 
             pos = 0;
             if (buf.characterStyleLimit(pos) != plain.length()) {
-                throw new Error("Run limit is wrong.");
+                errln("Run limit is wrong.");
             }
 
             pos = plain.length();
             if (buf.characterStyleLimit(pos) != buf.length()) {
-                throw new Error("Run limit is wrong.");
+                errln("Run limit is wrong.");
             }
 
             buf.replace(plain.length(), plain.length(), allBold, 0, allBold.length());
@@ -203,22 +199,22 @@ public class TestMText {
 
             AttributeMap st = buf.characterStyleAt(1);
             if (!st.equals(AttributeMap.EMPTY_ATTRIBUTE_MAP)) {
-                throw new Error("Style is wrong.");
+                errln("Style is wrong.");
             }
             if (buf.characterStyleStart(1) != 0 || buf.characterStyleLimit(1) != plain.length()) {
-                throw new Error("Style start is wrong.");
+                errln("Style start is wrong.");
             }
 
             st = buf.characterStyleAt(buf.length() - 1);
             if (!st.equals(italicStyle)) {
-                throw new Error("Style is wrong.");
+                errln("Style is wrong.");
             }
             if (buf.characterStyleStart(buf.length() - 1) != plain.length()+allBold.length()) {
-                throw new Error("Style start is wrong.");
+                errln("Style start is wrong.");
             }
 
             if (buf.characterStyleLimit(buf.length() - 1) != buf.length()) {
-                throw new Error("Style limit is wrong.");
+                errln("Style limit is wrong.");
             }
         }
     }
@@ -305,24 +301,24 @@ public class TestMText {
                 AttributeMap currentStyle = text.characterStyleAt(runStart);
                 int runLimit = text.characterStyleLimit(runStart);
                 if (runStart >= runLimit) {
-                    throw new Error("Run length is not positive");
+                    errln("Run length is not positive");
                 }
                 if (currentStyle.equals(oldStyle)) {
-                    throw new Error("Styles didn't merge");
+                    errln("Styles didn't merge");
                 }
 
                 for (int pos=runStart; pos < runLimit; pos++) {
                     AttributeMap charStyleAtPos = text.characterStyleAt(pos);
                     if (currentStyle != charStyleAtPos) {
-                        throw new Error("Iterator style is not equal to text style at " + pos + ".");
+                        errln("Iterator style is not equal to text style at " + pos + ".");
                     }
                     AttributeMap expected = styles[pos];
                     if (!currentStyle.equals(expected)) {
-                        throw new Error("Iterator style doesn't match expected style at " + pos + ".");
+                        errln("Iterator style doesn't match expected style at " + pos + ".");
                     }
                     if (!(text.characterStyleStart(pos) == runStart) ||
                             !(text.characterStyleLimit(pos) == runLimit)) {
-                        throw new Error("style run start / limit is not consistent");
+                        errln("style run start / limit is not consistent");
                     }
                 }
                 runStart = runLimit;
@@ -330,7 +326,7 @@ public class TestMText {
             if (textLength > 0) {
                 if (text.characterStyleAt(textLength) !=
                             text.characterStyleAt(textLength-1)) {
-                    throw new Error("Character styles at end aren't the same");
+                    errln("Character styles at end aren't the same");
                 }
             }
 
@@ -350,16 +346,24 @@ public class TestMText {
                 System.out.println("damageStart: " + damageStart + ";  damageLimit: " + damageLimit);
                 System.out.println("text.rangeStart: " + text.damagedRangeStart() +
                                    "text.rangeLimit: " + text.damagedRangeLimit());
-                throw new Error("Damage range start or limit is not expected value");
+                errln("Damage range start or limit is not expected value");
             }
 
             if ((damageLimit == Integer.MIN_VALUE) != (oldTs == text.getTimeStamp())) {
 
-                throw new Error("timeStamp is incorrect");
+                errln("timeStamp is incorrect");
             }
         }
     }
 
+    protected void err(String message) {
+    
+        if (testIteration != NOT_IN_MONKEY_TEST) {
+            message = "testIteration="+testIteration+"; testCase="+theCase+message;
+        }
+        super.err(message);
+    }
+    
     /**
     * Perform a random series of operations on an MText and
     * check the result of each operation against a set of invariants.
@@ -404,8 +408,8 @@ public class TestMText {
 
         MText buf = new StyledText();
         String plainText = new String();
-        int testIteration=0;
-        int theCase=0;
+        //int testIteration=0; - now instance variables so errln can report it
+        //int theCase=0;
 
         final int NUM_CASES = 14;
         boolean[] casesExecuted = new boolean[NUM_CASES];
@@ -414,7 +418,6 @@ public class TestMText {
 
         final String ALWAYS_DIFFERENT = "\uFEFF";
 
-        try {
             for (testIteration=0; testIteration < TEST_ITERATIONS; testIteration++) {
 
                 theCase = randInt(rand, NUM_CASES);
@@ -428,7 +431,7 @@ public class TestMText {
                 int timeStamp = buf.getTimeStamp();
                 String oldPlainText = plainText;
                 if (oldPlainText == null) {
-                    throw new Error("oldPlainText is null!");
+                    errln("oldPlainText is null!");
                 }
 
                 switch (theCase) {
@@ -600,13 +603,13 @@ public class TestMText {
                             }
                             if (error != null) {
                                 error.printStackTrace();
-                                throw new Error("Streaming problem: " + error);
+                                errln("Streaming problem: " + error);
                             }
                         }
                         break;
 
                     default:
-                        throw new Error("Invalid case.");
+                        errln("Invalid case.");
                 }
 
                 // Check time stamp if oldPlainText != null.
@@ -617,18 +620,18 @@ public class TestMText {
                                     oldPlainText.equals(plainText)) {
                         System.out.println("plainText hashCode: " + plainText.hashCode());
                         System.out.println("oldPlainText hashCode: " + oldPlainText.hashCode());
-                        throw new Error("Time stamp is incorrect");
+                        errln("Time stamp is incorrect");
                     }
                 }
 
                 // now check invariants:
                 if (plainText.length() != buf.length()) {
-                    throw new Error("Lengths don't match");
+                    errln("Lengths don't match");
                 }
 
                 for (int j=0; j < buf.length(); j++) {
                     if (buf.at(j) != plainText.charAt(j)) {
-                        throw new Error("Characters don't match.");
+                        errln("Characters don't match.");
                     }
                 }
 
@@ -636,15 +639,15 @@ public class TestMText {
                 for (start = 0; start < buf.length();) {
 
                     if (start != buf.characterStyleStart(start)) {
-                        throw new Error("style start is wrong");
+                        errln("style start is wrong");
                     }
                     int limit = buf.characterStyleLimit(start);
                     if (start >= limit) {
-                        throw new Error("start >= limit");
+                        errln("start >= limit");
                     }
                     char current = plainText.charAt(start);
 
-                    AttributeMap comp;
+                    AttributeMap comp = null;
                     if (current == 'p') {
                         comp = emptyAttrs;
                     }
@@ -655,32 +658,32 @@ public class TestMText {
                         comp = italicAttrs;
                     }
                     else {
-                        throw new Error("An invalid character snuck in!");
+                        errln("An invalid character snuck in!");
                     }
 
                     AttributeMap startStyle = buf.characterStyleAt(start);
-                    if (!startStyle.equals(comp)) {
-                        throw new Error("Style is not expected style.");
+                    if (!comp.equals(startStyle)) {
+                        errln("Style is not expected style.");
                     }
 
                     for (int j = start; j < limit; j++) {
                         if (plainText.charAt(j) != current) {
-                            throw new Error("Character doesn't match style.");
+                            errln("Character doesn't match style.");
                         }
                         if (buf.characterStyleAt(j) != startStyle) {
-                            throw new Error("Incorrect style in run");
+                            errln("Incorrect style in run");
                         }
                     }
 
                     if (limit < buf.length()) {
                         if (plainText.charAt(limit) == current) {
-                            throw new Error("Style run ends too soon.");
+                            errln("Style run ends too soon.");
                         }
                     }
                     start = limit;
                 }
                 if (start != buf.length()) {
-                    throw new Error("Last limit is not buffer length.");
+                    errln("Last limit is not buffer length.");
                 }
 
                 // won't try to compute and check damaged range;  however,
@@ -689,29 +692,26 @@ public class TestMText {
                 int damageLimit = buf.damagedRangeLimit();
                 if (damageStart == Integer.MAX_VALUE) {
                     if (damageLimit != Integer.MIN_VALUE) {
-                        throw new Error("Invalid empty interval");
+                        errln("Invalid empty interval");
                     }
                 }
                 else {
                     if (damageStart > damageLimit) {
-                        throw new Error("Damage range inverted");
+                        errln("Damage range inverted");
                     }
                     if (damageStart < 0 || damageLimit > buf.length()) {
-                        throw new Error("Damage range endpoint out of bounds");
+                        errln("Damage range endpoint out of bounds");
                     }
                 }
             }
-        }
-        catch(Error e) {
-            System.out.println("Iteration=" + testIteration + ";  case=" + theCase);
-            throw e;
-        }
 
+        testIteration = NOT_IN_MONKEY_TEST;
+        
         boolean allCasesExecuted = true;
         for (int index=0; index < NUM_CASES; index++) {
             allCasesExecuted &= casesExecuted[index];
             if (casesExecuted[index] == false) {
-                System.out.println("Case " + index + " not executed.");
+                logln("Case " + index + " not executed.");
             }
         }
         //if (allCasesExecuted) {
