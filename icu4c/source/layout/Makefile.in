@@ -109,6 +109,7 @@ MultipleSubstSubtables.o \
 OpenTypeUtilities.o \
 PairPositioningSubtables.o \
 ScriptAndLanguage.o \
+ScriptAndLanguageTags.o \
 SinglePositioningSubtables.o \
 SingleSubstitutionSubtables.o \
 SubstitutionLookups.o \
