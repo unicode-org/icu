@@ -16,7 +16,8 @@
 #if !UCONFIG_NO_IDNA
 
 #include "nfsprep.h"
-#include "cstring.h"
+#include "ustr_imp.h"
+#include "cintltst.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 #define NFS4_MAX_BUFFER_SIZE 1000
@@ -262,7 +263,7 @@ nfs4_mixed_prepare( const char* src, int32_t srcLength,
         return 0;
     }
     if(srcLength == -1){
-        srcLength = uprv_strlen(src);
+        srcLength = strlen(src);
     }
     getPrefixSuffix(src, srcLength, &prefix, &prefixLen, &suffix, &suffixLen, status); 
 
