@@ -1213,7 +1213,7 @@ Unicode::digit(UChar32 ch, int8_t radix) {
     } else {
         return -1; // invalid radix
     }
-    return (value<radix) ? value : -1;
+    return (uint8_t)((value<radix) ? value : (uint8_t)(-1));
 }
 
 inline UChar32
