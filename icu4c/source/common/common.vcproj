@@ -1522,7 +1522,7 @@
 				RelativePath=".\uset.cpp">
 			</File>
 			<File
-l				RelativePath=".\uset_imp.h">
+				RelativePath=".\uset_imp.h">
 			</File>
 			<File
 				RelativePath=".\uset_props.cpp">
