@@ -470,7 +470,7 @@ u_strCompare(const UChar *s1, int32_t length1,
  * have stopped.
  *
  * @param iter1 First source string iterator.
- * @param s2 Second source string iterator.
+ * @param iter2 Second source string iterator.
  * @param codePointOrder Choose between code unit order (FALSE)
  *                       and code point order (TRUE).
  *
@@ -525,6 +525,9 @@ u_strCompareIter(UCharIterator *iter1, UCharIterator *iter2, UBool codePointOrde
  *     (see u_strCompare for details).
  *
  *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ *
+ * @param pErrorCode Must be a valid pointer to an error code value,
+ *                  which must not indicate a failure before the function call.
  *
  * @return <0 or 0 or >0 as usual for string comparisons
  *
