@@ -249,12 +249,10 @@ ResourceBundle::constructForLocale(const UnicodeString& path,
                                    const Locale& locale,
                                    UErrorCode& error)
 {
-    char name[128];
-    int32_t patlen = path.length();
+    char name[300];
 
-    if(patlen > 0) {
-        path.extract(0, patlen, name);
-        name[patlen] = '\0';
+    if(!path.empty()) {
+        path.extract(name, sizeof(name), 0, error);
         resource = ures_open(name, locale.getName(), &error);
     } else {
         resource = ures_open(0, locale.getName(), &error);
