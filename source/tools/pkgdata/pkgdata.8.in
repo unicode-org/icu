@@ -29,9 +29,6 @@
 .BI "\-p\fP, \fB\-\-name" " name"
 .BI "\-O\fP, \fB\-\-bldopt" " options"
 [
-.BI "\-p\fP, \fB\-\-name" " name"
-]
-[
 .BI "\-e\fP, \fB\-\-entrypoint" " name"
 ]
 [
@@ -151,7 +148,7 @@ not limited to, setting variables used by
 .BR make (1)
 during the build of the packaged file.
 .TP
-.BI "\-n\fP, \fB\-\-name" " name"
+.BI "\-p\fP, \fB\-\-name" " name"
 Set the packaged file name to
 .IR name .
 This name is also used as the default entry point name.
