@@ -276,7 +276,11 @@ static const IndicClassTable *indicClassTables[] = {
     NULL,            /* 'thai' (THAI) */
     NULL,            /* 'tibt' (TIBETAN) */
     NULL,            /* 'cans' (CANADIAN-ABORIGINAL) */
-    NULL             /* 'yiii' (YI) */
+    NULL,            /* 'yiii' (YI) */
+    NULL,            /* 'tglg' (TAGALOG) */
+    NULL,            /* 'hano' (HANUNOO) */
+    NULL,            /* 'buhd' (BUHID) */
+    NULL             /* 'tagb' (TAGBANWA) */
 };
 
 IndicClassTable::CharClass IndicClassTable::getCharClass(LEUnicode ch) const

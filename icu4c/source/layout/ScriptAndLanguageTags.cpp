@@ -1,7 +1,7 @@
 /*
  * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998 - 2002. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
@@ -37,7 +37,7 @@ const LETag OpenTypeLayoutEngine::scriptTags[] = {
     hebrScriptTag, /* 'hebr' (HEBREW) */
     hiraScriptTag, /* 'hira' (HIRAGANA) */
     kndaScriptTag, /* 'knda' (KANNADA) */
-    kataScriptTag, /* 'kata' (KATAKANA) */
+    kanaScriptTag, /* 'kana' (KATAKANA) */
     khmrScriptTag, /* 'khmr' (KHMER) */
     laooScriptTag, /* 'laoo' (LAO) */
     latnScriptTag, /* 'latn' (LATIN) */
@@ -45,7 +45,7 @@ const LETag OpenTypeLayoutEngine::scriptTags[] = {
     mongScriptTag, /* 'mong' (MONGOLIAN) */
     mymrScriptTag, /* 'mymr' (MYANMAR) */
     ogamScriptTag, /* 'ogam' (OGHAM) */
-    italScriptTag, /* 'ital' (OLD-ITALIC) */
+    italScriptTag, /* 'ital' (OLD_ITALIC) */
     oryaScriptTag, /* 'orya' (ORIYA) */
     runrScriptTag, /* 'runr' (RUNIC) */
     sinhScriptTag, /* 'sinh' (SINHALA) */
@@ -55,8 +55,12 @@ const LETag OpenTypeLayoutEngine::scriptTags[] = {
     thaaScriptTag, /* 'thaa' (THAANA) */
     thaiScriptTag, /* 'thai' (THAI) */
     tibtScriptTag, /* 'tibt' (TIBETAN) */
-    cansScriptTag, /* 'cans' (CANADIAN-ABORIGINAL) */
-    yiiiScriptTag  /* 'yiii' (YI) */
+    cansScriptTag, /* 'cans' (CANADIAN_ABORIGINAL) */
+    yiiiScriptTag, /* 'yiii' (YI) */
+    tglgScriptTag, /* 'tglg' (TAGALOG) */
+    hanoScriptTag, /* 'hano' (HANUNOO) */
+    buhdScriptTag, /* 'buhd' (BUHID) */
+    tagbScriptTag  /* 'tagb' (TAGBANWA) */
 };
 
 U_NAMESPACE_END
