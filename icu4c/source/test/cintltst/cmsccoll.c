@@ -3860,6 +3860,7 @@ static void Alexis2(void) {
   }
 
   ucol_close(coll);
+  ucnv_close(conv);
 }
 
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
