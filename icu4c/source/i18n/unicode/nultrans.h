@@ -18,12 +18,12 @@
  */
 class U_I18N_API NullTransliterator : public Transliterator {
 
+public:
+
     /**
      * ID for this transliterator.
      */
-    static const char* _ID;
-
-public:
+    static const UnicodeString ID; // public for Transliterator
 
     /**
      * Constructs a transliterator.
@@ -47,7 +47,7 @@ public:
                                      UBool isIncremental) const;
 };
 
-inline NullTransliterator::NullTransliterator() : Transliterator(_ID, 0) {}
+inline NullTransliterator::NullTransliterator() : Transliterator(ID, 0) {}
 
 inline NullTransliterator::~NullTransliterator() {}
 
