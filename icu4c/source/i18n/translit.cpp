@@ -1017,8 +1017,7 @@ void Transliterator::parseCompoundID(const UnicodeString& id,
  * @param regenID regenerated ID, reversed if appropriate, which
  * should be applied to the final created transliterator.  This method
  * will append to this parameter for FORWARD direction and insert
- * addition text at offset 0 for REVERSE direction.  If create is
- * FALSE then this parameter is not used.
+ * addition text at offset 0 for REVERSE direction.
  * @param pos INPUT-OUTPUT parameter.  On input, the position of the
  * first character to parse.  On output, the position after the last
  * character parsed.  This will be a semicolon or ID.length().  In the
@@ -1027,7 +1026,7 @@ void Transliterator::parseCompoundID(const UnicodeString& id,
  * filter, if one is parsed.  When a non-null compound filter is
  * returned then a null Transliterator pointer is returned.
  * @param create if TRUE, create and return the result.  If FALSE,
- * only scan the ID, and return NULL.
+ * only scan the ID, and return NULL (but still form the regenID).
  * @return a newly created transliterator, or NULL.  NULL is returned
  * in all cases if create is FALSE.  If create is TRUE, then NULL is
  * returned on error, or if the ID is effectively empty.
