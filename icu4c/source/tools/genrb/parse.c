@@ -1225,13 +1225,8 @@ parseInclude(char *tag, uint32_t startline, UErrorCode *status)
     char             *filename;
     uint32_t          line;
     UChar *pTarget     = NULL;
-    UChar *target      = NULL;
-    UChar *targetLimit = NULL;
 
     UCHARBUF *ucbuf;
-    UChar32   c     = 0;
-    uint32_t  size = 0;
-    UBool quoted = FALSE;
     char     *fullname = NULL;
     int32_t  count     = 0;
     const char* cp = NULL;

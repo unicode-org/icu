@@ -3670,7 +3670,6 @@ inline uint8_t *packFrench(uint8_t *primaries, uint8_t *primEnd, uint8_t *second
   uint8_t secondary;
   int32_t count2 = 0;
   uint32_t i = 0, size = 0;
-  uint8_t *primStart = primaries;
   // we use i here since the key size already accounts for terminators, so we'll discard the increment
   addWithIncrement(primaries, primEnd, i, UCOL_LEVELTERMINATOR); 
   /* If there are any unresolved continuation secondaries, reverse them here so that we can reverse the whole secondary thing */
