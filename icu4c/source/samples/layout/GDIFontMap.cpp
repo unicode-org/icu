@@ -35,5 +35,5 @@ const LEFontInstance *GDIFontMap::openFont(const char *fontName, le_int16 pointS
 		result = NULL;
 	}
 
-    return NULL;
+    return result;
 }
