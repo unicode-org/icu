@@ -712,7 +712,7 @@ changeState_2022(UConverter* _this,
     UCNV_TableStates_2022 value;
     UConverterDataISO2022* myData2022 = ((UConverterDataISO2022*)_this->extraInfo);
     uint32_t key = myData2022->key;
-    int32_t offset;
+    int32_t offset = 0;
     char c;
 
     value = VALID_NON_TERMINAL_2022;
@@ -1297,7 +1297,7 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
     int32_t len, outLen;
     int8_t choices[10];
     int32_t choiceCount;
-    uint32_t targetValue;
+    uint32_t targetValue = 0;
     UBool useFallback;
 
     int32_t i;
@@ -2382,7 +2382,7 @@ UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
     int32_t len;
     int8_t choices[3];
     int32_t choiceCount;
-    uint32_t targetValue;
+    uint32_t targetValue = 0;
     UBool useFallback;
 
     /* set up the state */

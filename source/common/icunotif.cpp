@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2003, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,7 +10,7 @@
 #if !UCONFIG_NO_SERVICE
 
 #include "icunotif.h"
-#if DEBUG
+#ifdef NOTIFIER_DEBUG
 #include <stdio.h>
 #endif
 
@@ -58,7 +58,7 @@ ICUNotifier::addListener(const EventListener* l, UErrorCode& status)
 
       listeners->addElement((void*)l, status); // cast away const
     } else {
-#if DEBUG
+#ifdef NOTIFIER_DEBUG
       fprintf(stderr, "Listener invalid for this notifier.");
       exit(1);
 #endif

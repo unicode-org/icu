@@ -8,6 +8,9 @@
 **********************************************************************
 */
 
+#ifndef FUNCREPL_H
+#define FUNCREPL_H
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_TRANSLITERATION
@@ -118,5 +121,6 @@ class U_I18N_API FunctionReplacer : public UnicodeFunctor, public UnicodeReplace
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+#endif
 
 //eof

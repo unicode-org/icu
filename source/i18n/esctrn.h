@@ -134,7 +134,7 @@ class U_I18N_API EscapeTransliterator : public Transliterator {
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
-    void handleTransliterate(Replaceable& text, UTransPosition& offset,
+    virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                              UBool isIncremental) const;
 
  private:
