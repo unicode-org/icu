@@ -50,7 +50,10 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
-#include <wchar.h>
+
+#if U_HAVE_WCHAR_H
+# include <wchar.h>
+#endif
 
 
 #ifndef _FILESTRM
