@@ -72,7 +72,7 @@ LATIN_1			iso-8859-1 { MIME } ibm-819 cp819 latin1 8859-1	csisolatin1 iso-ir-100
 ISO_2022		iso-2022 { MIME	} 2022 cp2022
 ISO_2022,locale=ja      iso-2022,locale=jp iso-2022-jp,locale=ja_jp iso-2022-jp { MIME }
 ISO_2022,locale=ko      iso-2022,locale=kr iso-2022,locale=ko_kr iso-2022-kr { MIME }
-ISO_2022,locale=zh      iso-2022,locale=zh iso-2022,locale=zh_zh iso-2022-cn { MIME }
+ISO_2022,locale=zh      iso-2022,locale=cn iso-2022,locale=zh_zh iso-2022-cn { MIME }
 LMBCS-1			lmbcs
 LMBCS-2
 LMBCS-3	        
