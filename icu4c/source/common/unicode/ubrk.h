@@ -14,6 +14,10 @@
  */
 #ifndef UBRK_TYPEDEF_UBREAK_ITERATOR
 #   define UBRK_TYPEDEF_UBREAK_ITERATOR
+    /**
+     *  Opaque type representing an ICU Break iterator object.
+     *  @stable ICU 2.0
+     */
     typedef void UBreakIterator;
 #endif
 
