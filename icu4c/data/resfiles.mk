@@ -72,7 +72,9 @@ lv.txt lv_LV.txt\
 mk.txt mk_MK.txt\
 mr.txt mr_IN.txt\
 mt.txt mt_MT.txt\
+nb.txt nb_NO.txt\
 nl.txt nl_BE.txt nl_BE_EURO.txt nl_NL.txt nl_NL_EURO.txt\
+nn.txt nn_NO.txt\
 no.txt no_NO.txt no_NO_NY.txt\
 pl.txt pl_PL.txt\
 pt.txt pt_BR.txt pt_PT.txt pt_PT_EURO.txt\
@@ -86,13 +88,12 @@ sr.txt sr_YU.txt\
 sv.txt sv_FI.txt sv_SE.txt\
 sw.txt sw_KE.txt sw_TZ.txt\
 ta.txt ta_IN.txt\
-te.txt\
+te.txt te_IN.txt\
 th.txt th_TH.txt\
 tr.txt tr_TR.txt\
 uk.txt uk_UA.txt\
 vi.txt vi_VN.txt\
-zh.txt zh_CN.txt zh_HK.txt zh_SG.txt zh_TW.txt\
-nn.txt nn_NO.txt nb.txt nb_NO.txt
+zh.txt zh_CN.txt zh_HK.txt zh_SG.txt zh_TW.txt
 
 TRANSLIT_SOURCE=fullhalf.txt translit_index.txt kana.txt kbdescl1.txt\
 larabic.txt lcyril.txt ldevan.txt\
