@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationKey.java,v $ 
-* $Date: 2002/09/11 00:12:39 $ 
-* $Revision: 1.10 $
+* $Date: 2002/12/03 20:45:19 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -84,8 +84,7 @@ package com.ibm.icu.text;
  * @see Collator
  * @see RuleBasedCollator
  * @author Syn Wee Quek
- * @since release 2.2, April 18 2002
- * @draft 2.2 
+ * @draft ICU 2.2 
  */
 public final class CollationKey implements Comparable 
 {
@@ -100,7 +99,7 @@ public final class CollationKey implements Comparable
      * @param key array of bytes that represent the collation order of argument
      *            source
      * @see Collator
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public CollationKey(String source, byte key[])
     {
@@ -114,7 +113,7 @@ public final class CollationKey implements Comparable
     /**
      * Return the source string that this CollationKey represents.
      * @return source string that this CollationKey represents
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public String getSourceString() 
     {
@@ -150,7 +149,7 @@ public final class CollationKey implements Comparable
      * </p>  
      * @return CollationKey value in a sequence of big-endian byte bytes 
      *         terminated by a null.
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public byte[] toByteArray() 
     {
@@ -185,7 +184,8 @@ public final class CollationKey implements Comparable
      *         than target.
      * @exception NullPointerException is thrown if argument is null.
      * @see Collator#compare(String, String)
-     * @draft 2.2 */
+     * @draft ICU 2.2 
+     */
     public int compareTo(CollationKey target)
     {
     	int i = 0;
@@ -238,10 +238,11 @@ public final class CollationKey implements Comparable
      *            a CollationKey.  NullPointerException is thrown when the argument 
      *            is null.
      * @see #compareTo(CollationKey)
-     * @draft 2.2 */
+     * @draft ICU 2.2 
+     */
     public int compareTo(Object obj) 
     {
-	return compareTo((CollationKey)obj);
+	   return compareTo((CollationKey)obj);
     }
 
     /**
@@ -258,7 +259,7 @@ public final class CollationKey implements Comparable
      * @exception ClassCastException is thrown when the argument is not 
      *            a CollationKey.  NullPointerException is thrown when the argument 
      *            is null.
-     * @draft 2.2 
+     * @draft ICU 2.2 
      */
     public boolean equals(Object target) 
     {
@@ -282,7 +283,7 @@ public final class CollationKey implements Comparable
      * @param target the CollationKey to compare to.
      * @return true if two objects are equal, false otherwise.
      * @exception NullPointerException is thrown when the argument is null.
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public boolean equals(CollationKey target) 
     {
@@ -314,7 +315,7 @@ public final class CollationKey implements Comparable
      * hash table.
      * </p>
      * @return the hash value.
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public int hashCode() 
     {

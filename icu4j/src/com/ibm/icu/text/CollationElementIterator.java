@@ -90,8 +90,7 @@ import com.ibm.icu.impl.ICUDebug;
  * @see RuleBasedCollator
  * @see StringSearch
  * @author Syn Wee Quek
- * @since release 2.2, April 18 2002
- * @draft 2.2 
+ * @draft ICU 2.2 
  */
 public final class CollationElementIterator 
 {
@@ -104,7 +103,7 @@ public final class CollationElementIterator
      * collation elements to return.</p>
      *
      * <p>See class documentation for an example of use.</p>
-     * @draft 2.2
+     * @draft ICU 2.2
      * @see #next
      * @see #previous */
     public final static int NULLORDER = 0xffffffff;
@@ -115,7 +114,7 @@ public final class CollationElementIterator
      * ignored.</p>
      *
      * <p>See class documentation for an example of use.</p>
-     * @draft 2.2
+     * @draft ICU 2.2
      * @see #next
      * @see #previous */
     public static final int IGNORABLE = 0;
@@ -149,7 +148,8 @@ public final class CollationElementIterator
      * @return The character offset in the source string corresponding to the 
      *         collation element that will be returned by the next call to 
      *         next().
-     * @draft 2.2 */
+     * @draft ICU 2.2 
+     */
     public int getOffset()
     {
         if (m_bufferOffset_ != -1) {
@@ -170,7 +170,7 @@ public final class CollationElementIterator
      * @param ce a collation element returned by previous() or next().
      * @return the maximum length of any expansion sequence ending
      *         with the specified collation element.
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public int getMaxExpansion(int ce)
     {
@@ -212,7 +212,7 @@ public final class CollationElementIterator
      * attributes changed, calling reset() will reinitialize the
      * iterator to use the new attributes.</p>
      *
-     * @draft 2.2 
+     * @draft ICU 2.2 
      */
     public void reset()
     {
@@ -240,7 +240,7 @@ public final class CollationElementIterator
      *
      * @return the next collation element or NULLORDER if the end of the 
      *         iteration has been reached.
-     * @draft 2.2 
+     * @draft ICU 2.2 
      */
     public int next()
     {
@@ -316,7 +316,8 @@ public final class CollationElementIterator
      *
      * @return the previous collation element, or NULLORDER when the start of 
      *             the iteration has been reached.
-     * @draft 2.2 */
+     * @draft ICU 2.2 
+     */
     public int previous()
     {
         if (m_source_.getIndex() <= 0 && m_isForwards_) {
@@ -393,7 +394,7 @@ public final class CollationElementIterator
      * i.e. the first 16 bits.  This value is unsigned.
      * @param ce the collation element
      * @return the element's 16 bits primary order.
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public final static int primaryOrder(int ce)
     {
@@ -405,7 +406,7 @@ public final class CollationElementIterator
      * i.e. the 16th to 23th bits, inclusive.  This value is unsigned.
      * @param ce the collation element
      * @return the element's 8 bits secondary order
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public final static int secondaryOrder(int ce)
     {
@@ -418,7 +419,7 @@ public final class CollationElementIterator
      * 8 bits.  This value is unsigned.
      * @param ce the collation element
      * @return the element's 8 bits tertiary order
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public final static int tertiaryOrder(int ce)
     {
@@ -445,7 +446,8 @@ public final class CollationElementIterator
      * @param offset the character offset into the original source string to 
      *        set. Note that this is not an offset into the corresponding 
      *        sequence of collation elements.
-     * @draft 2.2 */
+     * @draft ICU 2.2 
+     */
     public void setOffset(int offset)
     {  
         m_source_.setIndex(offset);
@@ -486,7 +488,8 @@ public final class CollationElementIterator
      * to the beginning of the text.</p>
      *
      * @param source the new source string for iteration.
-     * @draft 2.2 */
+     * @draft ICU 2.2 
+     */
     public void setText(String source)
     {
         m_srcUtilIter_.setText(source);   
@@ -499,7 +502,7 @@ public final class CollationElementIterator
      * offset to the beginning of the text.
      * </p>
      * @param source the new source string iterator for iteration.
-     * @draft 2.2
+     * @draft ICU 2.2
      */
     public void setText(CharacterIterator source)
     {   
@@ -516,6 +519,7 @@ public final class CollationElementIterator
      * the same source text and have the same current position in iteration.
      * @param that object to test if it is equals to this 
      *             CollationElementIterator
+     * @draft ICU 2.2
      */
     public boolean equals(Object that) 
     {
@@ -533,7 +537,7 @@ public final class CollationElementIterator
         return false;
     }
     
-    // protected constructors -----------------------------------------------
+    // package private constructors ------------------------------------------
         
     /**
      * <p>CollationElementIterator constructor. This takes a source
@@ -544,7 +548,8 @@ public final class CollationElementIterator
      *
      * @param source the source string.
      * @param collator the RuleBasedCollator
-     * @draft 2.2 */
+     * @draft ICU 2.2 
+     */
     CollationElementIterator(String source, RuleBasedCollator collator) 
     {
         m_srcUtilIter_ = new StringCharacterIterator(source);
@@ -566,7 +571,8 @@ public final class CollationElementIterator
      *
      * @param source the source string iterator.
      * @param collator the RuleBasedCollator
-     * @draft 2.2 */
+     * @draft ICU 2.2 
+     */
     CollationElementIterator(CharacterIterator source, 
                              RuleBasedCollator collator) 
     {
@@ -632,7 +638,6 @@ public final class CollationElementIterator
      * getOffset() is guaranteed to return the same value as was passed to a 
      * preceding call to setOffset().</p>
      * @param offset new character offset into the original text to set. 
-     * @draft 2.2
      */
     void setExactOffset(int offset)
     {  
@@ -673,7 +678,6 @@ public final class CollationElementIterator
      * </p>
      * @param source the new source string iterator for iteration.
      * @param offset to the source
-     * @draft 2.2
      */
     void setText(CharacterIterator source, int offset)
     {

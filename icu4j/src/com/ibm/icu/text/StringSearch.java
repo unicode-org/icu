@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2002/12/03 02:14:21 $ 
- * $Revision: 1.15 $
+ * $Date: 2002/12/03 20:45:20 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -145,7 +145,7 @@ import com.ibm.icu.impl.NormalizerImpl;
  * @see SearchIterator
  * @see RuleBasedCollator
  * @author Laura Werner, synwee
- * @stable ICU 1.0
+ * @stable ICU 2.0
  */
 // internal notes: all methods do not guarantee the correct status of the 
 // characteriterator. the caller has to maintain the original index position
@@ -171,7 +171,7 @@ public final class StringSearch extends SearchIterator
      * @see BreakIterator
      * @see RuleBasedCollator
      * @see SearchIterator
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public StringSearch(String pattern, CharacterIterator target,
                         RuleBasedCollator collator, BreakIterator breakiter) 
@@ -201,7 +201,7 @@ public final class StringSearch extends SearchIterator
      *            or of length 0
      * @see RuleBasedCollator
      * @see SearchIterator
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public StringSearch(String pattern, CharacterIterator target,
                         RuleBasedCollator collator) 
@@ -224,7 +224,7 @@ public final class StringSearch extends SearchIterator
      * @see BreakIterator
      * @see RuleBasedCollator
      * @see SearchIterator
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public StringSearch(String pattern, CharacterIterator target, Locale locale)
     {
@@ -246,7 +246,7 @@ public final class StringSearch extends SearchIterator
      * @see BreakIterator
      * @see RuleBasedCollator
      * @see SearchIterator
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public StringSearch(String pattern, String target) 
     {
@@ -265,7 +265,7 @@ public final class StringSearch extends SearchIterator
      * @see RuleBasedCollator
      * @see #setStrength
      * @see #getCollator
-     * @deprecated ICU 2.2. Use this.getCollator().getStrength() instead.
+     * @deprecated ICU 2.2. [Use this.getCollator().getStrength() instead.]
      */
     public int getStrength() {
         return m_collator_.getStrength();
@@ -285,7 +285,7 @@ public final class StringSearch extends SearchIterator
 	 * @return RuleBasedCollator used by this StringSearch
      * @see RuleBasedCollator
      * @see #setCollator
-     * @stable ICU 1.0
+     * @stable ICU 2.0
 	 */
     public RuleBasedCollator getCollator() 
     {
@@ -295,7 +295,7 @@ public final class StringSearch extends SearchIterator
     /**
      * Returns the pattern for which StringSearch is searching for.
      * @return the pattern searched for
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public String getPattern() 
     {
@@ -340,10 +340,10 @@ public final class StringSearch extends SearchIterator
      * Sets the strength property of the RuleBasedCollator used for searching.
      * See the Collator documentation for a description of the strengths.
      * </p>
-     * @deprecated ICU 2.2. Use this.getCollator().setStrength(int) instead. 
+     * @deprecated ICU 2.2. [Use this.getCollator().setStrength(int) instead.
      *             After which StringSearch.reset() 
      *             or StringSearch.setCollator(this.getCollator()) should be
-     *             called to update StringSearch.
+     *             called to update StringSearch.]
      * @see Collator
      * @see Collator#PRIMARY
      * @see Collator#SECONDARY
@@ -376,6 +376,7 @@ public final class StringSearch extends SearchIterator
      * @param collator to use for this StringSearch
      * @exception IllegalArgumentException thrown when collator is null
      * @see #getCollator
+     * @stable ICU 2.0
      */
     public void setCollator(RuleBasedCollator collator) 
     {
@@ -402,7 +403,7 @@ public final class StringSearch extends SearchIterator
      * @see #getPattern
      * @exception IllegalArgumentException thrown if pattern is null or of
      * 			  length 0
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public void setPattern(String pattern) 
     {
