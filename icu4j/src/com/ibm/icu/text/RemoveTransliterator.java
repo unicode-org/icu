@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RemoveTransliterator.java,v $ 
- * $Date: 2001/09/20 21:20:39 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/09/28 20:27:02 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -35,40 +35,12 @@ public class RemoveTransliterator extends Transliterator {
      * Implements {@link Transliterator#handleTransliterate}.
      */
     protected void handleTransliterate(Replaceable text,
-                                       Position offsets, boolean incremental) {
-        // Find runs of unfiltered characters and replace them with the
-        // empty string.  This loop has been optimized to what is probably
-        // an unnecessary degree.
-        String empty = "";
-        int start = offsets.start;
-        for (;;) {
-            // Find first unfiltered character, if any
-            while (start < offsets.limit &&
-                   filteredCharAt(text, start) == '\uFFFE') {
-                ++start;
-            }
-            if (start >= offsets.limit) {
-                break;
-            }
-            
-            // assert(start < offsets.limit &&
-            //        filteredCharAt(text, start) != 0xFFFE);
-            
-            // Find last unfiltered character
-            int limit = start+1; // sic: +1
-            while (limit < offsets.limit &&
-                   filteredCharAt(text, limit) != '\uFFFE') {
-                ++limit;
-            }
-            
-            // assert(start < limit);
-            
-            // Remove characters
-            text.replace(start, limit, empty);
-            limit -= start; // limit <= deleted length
-            offsets.contextLimit -= limit;
-            offsets.limit -= limit;
-        }
-        offsets.start = start;
+                                       Position index, boolean incremental) {
+        // Our caller (filteredTransliterate) has already narrowed us
+        // to an unfiltered run.  Delete it.
+        text.replace(index.start, index.limit, "");
+        int len = index.limit - index.start;
+        index.contextLimit -= len;
+        index.limit -= len;
     }
 }

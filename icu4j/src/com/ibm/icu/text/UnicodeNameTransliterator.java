@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeNameTransliterator.java,v $ 
- * $Date: 2001/07/02 20:55:29 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/09/28 20:24:09 $ 
+ * $Revision: 1.2 $
  */
 package com.ibm.text;
 import java.util.*;
@@ -57,7 +57,6 @@ public class UnicodeNameTransliterator extends Transliterator {
         int cursor = offsets.start;
         int limit = offsets.limit;
         
-        UnicodeFilter filt = getFilter();
         StringBuffer str = new StringBuffer();
         str.append(openDelimiter);
         int len;
@@ -65,8 +64,7 @@ public class UnicodeNameTransliterator extends Transliterator {
         
         while (cursor < limit) {
             char c = text.charAt(cursor);
-            if ((filt == null || filt.contains(c)) &&
-                (name=UCharacter.getName(c)) != null) {
+            if ((name=UCharacter.getName(c)) != null) {
                 
                 str.setLength(1);
                 str.append(name).append(closeDelimiter);
