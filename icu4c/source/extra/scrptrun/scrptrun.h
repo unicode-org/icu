@@ -1,108 +1,133 @@
 /*
- * %W% %E%
+ *******************************************************************************
  *
- * (C) Copyright IBM Corp. 2001 - All Rights Reserved
+ *   Copyright (C) 1999-2001, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
  *
+ *******************************************************************************
+ *   file name:  scrptrun.h
+ *
+ *   created on: 10/17/2001
+ *   created by: Eric R. Mader
  */
 
 #ifndef __SCRPTRUN_H
 #define __SCRPTRUN_H
 
-#include "layout/LETypes.h"
+#include "unicode/utypes.h"
+#include "unicode/uscript.h"
 
 struct ScriptRecord
 {
-	LEUnicode32 startChar;
-	LEUnicode32 endChar;
-	le_int32 scriptCode;
+    UChar32 startChar;
+    UChar32 endChar;
+    UScriptCode scriptCode;
+};
+
+struct ParenStackEntry
+{
+    int32_t pairIndex;
+    UScriptCode scriptCode;
 };
 
 class ScriptRun
 {
 public:
-	ScriptRun();
+    ScriptRun();
 
-	ScriptRun(const LEUnicode chars[], le_int32 length);
+    ScriptRun(const UChar chars[], int32_t length);
 
-	ScriptRun(const LEUnicode chars[], le_int32 start, le_int32 length);
+    ScriptRun(const UChar chars[], int32_t start, int32_t length);
 
-	void reset();
+    void reset();
 
-	void reset(le_int32 start, le_int32 count);
+    void reset(int32_t start, int32_t count);
 
-	void reset(const LEUnicode chars[], le_int32 start, le_int32 length);
+    void reset(const UChar chars[], int32_t start, int32_t length);
 
-	le_int32 getScriptStart();
+    int32_t getScriptStart();
 
-	le_int32 getScriptEnd();
+    int32_t getScriptEnd();
 
-	le_int32 getScriptCode();
+    UScriptCode getScriptCode();
 
-	le_bool next();
+    UBool next();
 
 private:
 
-	static le_bool sameScript(le_int32 scriptOne, le_int32 scriptTwo);
+    static UBool sameScript(int32_t scriptOne, int32_t scriptTwo);
 
-	le_int32 charStart;
-	le_int32 charLimit;
-	const LEUnicode *charArray;
+    int32_t charStart;
+    int32_t charLimit;
+    const UChar *charArray;
 
-	le_int32 scriptStart;
-	le_int32 scriptEnd;
-	le_int32 scriptCode;
+    int32_t scriptStart;
+    int32_t scriptEnd;
+    UScriptCode scriptCode;
+
+    ParenStackEntry parenStack[128];
+    int32_t parenSP;
+
+    static int8_t highBit(int32_t value);
+    static int32_t getPairIndex(UChar32 ch);
+
+    static UChar32 pairedChars[];
+    static const int32_t pairedCharCount;
+    static const int32_t pairedCharPower;
+    static const int32_t pairedCharExtra;
 };
 
 inline ScriptRun::ScriptRun()
 {
-	reset(NULL, 0, 0);
+    reset(NULL, 0, 0);
 }
 
-inline ScriptRun::ScriptRun(const LEUnicode chars[], le_int32 length)
+inline ScriptRun::ScriptRun(const UChar chars[], int32_t length)
 {
-	reset(chars, 0, length);
+    reset(chars, 0, length);
 }
 
-inline ScriptRun::ScriptRun(const LEUnicode chars[], le_int32 start, le_int32 length)
+inline ScriptRun::ScriptRun(const UChar chars[], int32_t start, int32_t length)
 {
-	reset(chars, start, length);
+    reset(chars, start, length);
 }
 
-inline le_int32 ScriptRun::getScriptStart()
+inline int32_t ScriptRun::getScriptStart()
 {
-	return scriptStart;
+    return scriptStart;
 }
 
-inline le_int32 ScriptRun::getScriptEnd()
+inline int32_t ScriptRun::getScriptEnd()
 {
-	return scriptEnd;
+    return scriptEnd;
 }
 
-inline le_int32 ScriptRun::getScriptCode()
+inline UScriptCode ScriptRun::getScriptCode()
 {
-	return scriptCode;
+    return scriptCode;
 }
 
 inline void ScriptRun::reset()
 {
-	scriptStart = charStart;
-	scriptEnd   = charStart;
-	scriptCode  = -1;
+    scriptStart = charStart;
+    scriptEnd   = charStart;
+    scriptCode  = USCRIPT_INVALID_CODE;
+    parenSP     = -1;
 }
 
-inline void ScriptRun::reset(le_int32 start, le_int32 length)
+inline void ScriptRun::reset(int32_t start, int32_t length)
 {
-	charStart = start;
-	charLimit = start + length;
+    charStart = start;
+    charLimit = start + length;
 
-	reset();
+    reset();
 }
 
-inline void ScriptRun::reset(const LEUnicode chars[], le_int32 start, le_int32 length)
+inline void ScriptRun::reset(const UChar chars[], int32_t start, int32_t length)
 {
-	charArray = chars;
+    charArray = chars;
 
-	reset(start, length);
+    reset(start, length);
 }
 
 
