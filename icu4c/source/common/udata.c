@@ -57,6 +57,11 @@ static UBool s390dll = TRUE;
 /* DLL/shared library base functions ---------------------------------------- */
 
 #ifdef WIN32
+#   define WIN32_LEAN_AND_MEAN
+#   define NOUSER
+#   define NOSERVICE
+#   define NOIME
+#   define NOMCX
 #   include <windows.h>
 
     typedef HINSTANCE Library;
