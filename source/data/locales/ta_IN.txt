@@ -28,6 +28,10 @@ ta_IN {
                 "d-M-yy",
                 "{1} {0}"
             }
+            weekend:intvector { // Sunday
+             1, 0,   // onset dow, millis in day  (Sunday 12:00am)
+             2, 0    // cease dow, millis in day  (Monday 12:00am)
+            }
         }
     }
 }
