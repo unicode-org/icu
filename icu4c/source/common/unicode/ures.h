@@ -42,80 +42,6 @@
  * More on resource bundle concepts and syntax can be found in the 
  * <a href="http://oss.software.ibm.com/icu/userguide/Fallbackmechanism.html">users guide</a>.
  * <P>
- *
- * <H2>Usage model:</H2>
- * Resource bundles contain resources. In code, both types of entities are treated the
- * same and are represented with a same data structure <pre>UResourceBundle</pre>. 
- * Resource bundle has a tree structure, where leaf nodes can be strings, binaries 
- * and integers while non-leaf nodes (including the root node) can be tables and arrays.
- * One or more resource bundles are used to represent data needed by the application
- * for running in the particular locale. Complete set of resource bundles for an application
- * would contain all the data needed to run in intended locales. <P>
- * If the data for the requested locale is missing, an effort will be made to obtain most
- * usable data. This process is called fallback. Also, fallback happens when a resource 
- * is not present in the given bundle. Then, the other bundles in the fallback chain are
- * also searched for the requested resource.<P>
- * Retrieving data from resources is possible in several ways, depending on the type of
- * the resources:<P>
- * 1) Access by a key: this approach works only for table resources<P>
- * 2) Access by an index: tables and arrays can be addressed by an index<P>
- * 3) Iteration: works for tables and arrays<P>
- * To use data in resource bundles, following steps are needed:<P>
- * 1) opening a bundle for a particular locale:
- * <pre>
- * \code
- *      UErrorCode status = U_ZERO_ERROR;
- *      UResourceBundle* resB = ures_open("myPackage", "de_AT_EURO", &status);
- * \endcode
- * </pre>
- * Status allows, besides testing for plain error, to see whether fallback occured. There
- * are two extra non error values for status after this operation: U_USING_FALLBACK_ERROR,
- * which implies that the bundle for the requested locale was not found, but that one of
- * the bundles in the fallback chain was used (de_AT and de in this case) and
- * U_USING_DEFAULT_ERROR which implies that not one bundle in the fallback chain was found
- * and that default locale was used. In any case, 'root' locale is always at the end of the
- * chain.
- *
- * This is an example for using a possible custom resource:
- * <pre>
- * \code
- *     const char *currentLocale;
- *     UErrorCode status = U_ZERO_ERROR;
- *     UResourceBundle* myResources=ures_open("MyResources", currentLocale, &status);
- * 
- *     const UChar *button1Title = 0, *button2Title = 0;
- *     int32_t button1TitleLen = 0, button2TitleLen = 0;
- *     button1Title= ures_getStringByKey(myResources, "OkKey", &button1TitleLen, &status);
- *     button2Title= ures_getStringByKey(myResources, "CancelKey", &button2TitleLen, &status);
- * \endcode
- * </pre>
- * <h3>Fill-in parameter</h3>
- * A lot of resource bundle APIs allow usage of a fill-in parameter. This 
- * construct helps in reducing allocation of new structures if once can reuse
- * the current resource bundle. Here is an example:
- * <pre>
- * \code
- * UErrorCode status = U_ZERO_ERROR;
- * UResourceBundle *root = ures_open(NULL, "root", &status);
- * if(U_SUCCESS(status)) {
- *   UResourceBundle *zones = ures_getByKey(root, "zoneStrings", NULL, &status);
- *   if(U_SUCCESS(status)) {
- *       UResourceBundle *currentZone = NULL;
- *       while(ures_hasNext(zones)) {
- *         currentZone = ures_getNextResource(zones, currentZone, &status);
- *         ... do interesting stuff  here ...
- *       }
- *       ures_close(currentZone);
- *   }
- *   ures_close(zones);
- * }
- * ures_close(root);
- * \endcode
- * </pre>
- * In the above example, resource bundle zones is reused. Just one allocation is done.
- * If a NULL pointer is passed as a fill-in parameter, a new resource bundle will be
- * allocated. If a resource bundle is passed, it is going to be reused.
- *    
  */
 
 /**
@@ -171,11 +97,12 @@ typedef enum {
  * The UErrorCode err parameter is used to return status information to the user. To
  * check whether the construction succeeded or not, you should check the value of
  * U_SUCCESS(err). If you wish more detailed information, you can check for
- * informational error results which still indicate success. U_USING_FALLBACK_ERROR
+ * informational status results which still indicate success. U_USING_FALLBACK_WARNING
  * indicates that a fall back locale was used. For example, 'de_CH' was requested,
- * but nothing was found there, so 'de' was used. U_USING_DEFAULT_ERROR indicates that
+ * but nothing was found there, so 'de' was used. U_USING_DEFAULT_WARNING indicates that
  * the default locale data or root locale data was used; neither the requested locale 
- * nor any of its fall back locales could be found.
+ * nor any of its fall back locales could be found. Please see the users guide for more 
+ * information on this topic.
  * @return      a newly allocated resource bundle.
  * @see ures_close
  * @stable ICU 2.0
@@ -245,6 +172,7 @@ ures_openW(const wchar_t* path,
  *                root locale will be used.
  * @param status : fills in the outgoing error code.
  * @return      a newly allocated resource bundle.
+ * @see ures_open
  * @stable ICU 2.0
  */
 U_CAPI UResourceBundle* U_EXPORT2 
@@ -261,7 +189,7 @@ ures_openU(const UChar* path,
  *@param err: fills in the outgoing error code
  *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
  *                could be a non-failing error 
- *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_FALLBACK_WARNING </TT>
  *@return: for    <STRONG>Arrays</STRONG>: returns the number of resources in the array
  *                <STRONG>Tables</STRONG>: returns the number of resources in the table
  *                <STRONG>single string</STRONG>: returns 1
@@ -352,7 +280,7 @@ ures_openFillIn(UResourceBundle *r,
  *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
  *                Always check the value of status. Don't count on returning NULL.
  *                could be a non-failing error 
- *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
  * @return a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
  * @see ures_getBinary
  * @see ures_getIntVector
@@ -374,7 +302,7 @@ ures_getString(const UResourceBundle* resourceBundle,
  *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
  *                Always check the value of status. Don't count on returning NULL.
  *                could be a non-failing error 
- *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
  * @return a pointer to a chuck of unsigned bytes which live in a memory mapped/DLL file.
  * @see ures_getString
  * @see ures_getIntVector
@@ -396,7 +324,7 @@ ures_getBinary(const UResourceBundle* resourceBundle,
  *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
  *                Always check the value of status. Don't count on returning NULL.
  *                could be a non-failing error 
- *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
  * @return a pointer to a chunk of unsigned bytes which live in a memory mapped/DLL file.
  * @see ures_getBinary
  * @see ures_getString
@@ -417,7 +345,7 @@ ures_getIntVector(const UResourceBundle* resourceBundle,
  * @param status: fills in the outgoing error code
  *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
  *                could be a non-failing error 
- *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
  * @return an integer value
  * @see ures_getInt
  * @see ures_getIntVector
@@ -437,7 +365,7 @@ ures_getUInt(const UResourceBundle* resourceBundle,
  * @param status: fills in the outgoing error code
  *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
  *                could be a non-failing error 
- *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
  * @return an integer value
  * @see ures_getUInt
  * @see ures_getIntVector
@@ -625,7 +553,7 @@ U_NAMESPACE_BEGIN
  * @param status: fills in the outgoing error code
  *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
  *                could be a non-failing error 
- *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
  * @return        an UnicodeString object. If there is an error, string is bogus
  * @stable ICU 2.0
  */
