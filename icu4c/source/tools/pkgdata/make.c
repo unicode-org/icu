@@ -339,3 +339,29 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
 
 #endif  /* #ifdef WIN32 */
 
+void
+pkg_mak_writeAssemblyHeader(FileStream *f, const UPKGOptions *o)
+{
+    T_FileStream_writeLine(f, "\n");
+    T_FileStream_writeLine(f, "ifneq ($(GENCCODE_ASSEMBLY),)\n");
+    T_FileStream_writeLine(f, "\n");
+    T_FileStream_writeLine(f, "BASE_OBJECTS=$(NAME)_dat.o\n");
+    T_FileStream_writeLine(f, "\n");
+    T_FileStream_writeLine(f, "$(TEMP_DIR)/$(NAME).dat: $(CMNLIST)\n");
+    T_FileStream_writeLine(f, "\t$(INVOKE) $(GENCMN) -c -e $(ENTRYPOINT) -n $(NAME) -t dat -d $(TEMP_DIR) 0 $(CMNLIST)\n");
+    T_FileStream_writeLine(f, "\n");
+    T_FileStream_writeLine(f, "$(TEMP_DIR)/$(NAME)_dat.o : $(TEMP_DIR)/$(NAME).dat\n");
+    T_FileStream_writeLine(f, "\t$(INVOKE) $(GENCCODE) $(GENCCODE_ASSEMBLY) -n $(NAME) -e $(ENTRYPOINT) -d $(TEMP_DIR) $<\n");
+    T_FileStream_writeLine(f, "\t$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $(TEMP_DIR)/$(NAME)_dat"ASM_SUFFIX"\n");
+    T_FileStream_writeLine(f, "\t$(RMV) $(TEMP_DIR)/$(NAME)_dat"ASM_SUFFIX"\n");
+    T_FileStream_writeLine(f, "\n");
+    T_FileStream_writeLine(f, "else\n");
+    T_FileStream_writeLine(f, "\n");
+}
+
+void
+pkg_mak_writeAssemblyFooter(FileStream *f, const UPKGOptions *o)
+{
+    T_FileStream_writeLine(f, "\nendif\n");
+}
+

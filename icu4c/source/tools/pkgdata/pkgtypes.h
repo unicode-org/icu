@@ -141,6 +141,8 @@ typedef struct UPKGOptions_
 # define UDATA_LIB_SUFFIX ".a"
 #endif 
 
+#define ASM_SUFFIX ".s"
+
 
 /* defines for common file names */
 #define UDATA_CMN_PREFIX ""

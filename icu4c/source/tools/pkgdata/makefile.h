@@ -63,4 +63,9 @@ extern void pkg_mode_common(UPKGOptions* o, FileStream *stream, UErrorCode *stat
 extern void pkg_mode_files(UPKGOptions* o, FileStream *stream, UErrorCode *status);
 
 
+extern void
+pkg_mak_writeAssemblyHeader(FileStream *f, const UPKGOptions *o);
+extern void
+pkg_mak_writeAssemblyFooter(FileStream *f, const UPKGOptions *o);
+
 #endif
