@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestAttributeMap.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:46:57 $
+ * @(#)$RCSfile: TestAttributeMap.java,v $ $Revision: 1.2 $ $Date: 2000/04/21 22:11:24 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -14,7 +14,7 @@
  */
 package com.ibm.richtext.tests;
 
-//import java.util.Hashtable;
+import com.ibm.test.TestFmwk;
 
 import com.ibm.textlayout.attributes.AttributeSet;
 import com.ibm.textlayout.attributes.TextAttribute;
@@ -22,10 +22,31 @@ import com.ibm.textlayout.attributes.Map;
 import com.ibm.textlayout.attributes.AttributeMap;
 import java.util.Enumeration;
 
-public class TestAttributeMap {
+// Java2 imports
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Map.Entry;
+
+
+public class TestAttributeMap extends TestFmwk  {
 
     static final String COPYRIGHT =
                 "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
+
+
+    // There are JDK 1.1 versions of AttributeMap and AttributeSet.
+    // Some of the tests in this class require Java 2 API's.  I have
+    // tried to isolate these tests by conditionalizing them on
+    // this static variable.  If you are back-porting to 1.1, remove
+    // the Java 2 tests ONLY.
+    private static final boolean gJDK11 = false;
+
+    public static void main(String[] args) throws Exception {
+
+        new TestAttributeMap().run(args);
+    }
+
     private AttributeSet maps;  // A Set of AttributeMaps
     private AttributeSet sets;  // A Set of Sets
 
@@ -45,27 +66,18 @@ public class TestAttributeMap {
     };
 
     /**
-     * If the test fails an exception will propogate out of main.
-     */
-    public static void main(String[] args) {
-
-        new TestAttributeMap().test();
-        System.out.println("PASSED");
-    }
-
-    /**
      * Returns lhs.equals(rhs) - but also checks for symmetry, and
      * consistency with hashCode().
      */
-    private static boolean equalMaps(AttributeMap lhs, Object rhs) {
+    private boolean equalMaps(AttributeMap lhs, Object rhs) {
 
         boolean equal = lhs.equals(rhs);
         if (equal != (rhs.equals(lhs))) {
-            throw new Error("AttributeMap.equals is not symetric");
+            errln("AttributeMap.equals is not symetric");
         }
         if (equal) {
             if (lhs.hashCode() != rhs.hashCode()) {
-                throw new Error("AttributeMaps are equal but hashCodes differ");
+                errln("AttributeMaps are equal but hashCodes differ");
             }
         }
         return equal;
@@ -114,26 +126,25 @@ public class TestAttributeMap {
     public void test() {
 
         easyTests();
-        //onlyAttributeKeyTests();
 
         Enumeration mapIter = maps.elements();
         while (mapIter.hasMoreElements()) {
 
             AttributeMap testMap = (AttributeMap) mapIter.nextElement();
 
-            testModifiers(testMap);
-            testViews(testMap);
+            _testModifiers(testMap);
+            _testViews(testMap);
 
             Enumeration unionIter = maps.elements();
             while (unionIter.hasMoreElements()) {
-                testUnionWith(testMap, (AttributeMap) unionIter.nextElement());
+                _testUnionWith(testMap, (AttributeMap) unionIter.nextElement());
             }
 
             Enumeration setIter = sets.elements();
             while (setIter.hasMoreElements()) {
                 AttributeSet testSet = (AttributeSet) setIter.nextElement();
-                testIntersectWith(testMap, testSet);
-                testRemoveAttributes(testMap, testSet);
+                _testIntersectWith(testMap, testSet);
+                _testRemoveAttributes(testMap, testSet);
             }
         }
     }
@@ -142,13 +153,17 @@ public class TestAttributeMap {
      * Invoke modifiers on map.  All should throw
      * UnsupportedOperationException, and leave map unmodified.
      */
-    public static void testModifiers(AttributeMap map) {
-/*
+    void _testModifiers(AttributeMap map) {
+
+        if (gJDK11) {
+            return;
+        }
+        
         AttributeMap originalMap = new AttributeMap(map);
 
         try {
             map.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
-            throw new Error("Put should throw UnsupportedOperationException.");
+            errln("Put should throw UnsupportedOperationException.");
         }
         catch(UnsupportedOperationException e) {
         }
@@ -160,36 +175,35 @@ public class TestAttributeMap {
                 key = iter.next();
             }
             map.remove(key);
-            throw new Error("Set should throw UnsupportedOperationException.");
+            errln("Set should throw UnsupportedOperationException.");
         }
         catch(UnsupportedOperationException e) {
         }
 
         try {
             map.putAll(map);
-            throw new Error("putAll should throw UnsupportedOperationException.");
+            errln("putAll should throw UnsupportedOperationException.");
         }
         catch(UnsupportedOperationException e) {
         }
 
         try {
             map.clear();
-            throw new Error("clear should throw UnsupportedOperationException.");
+            errln("clear should throw UnsupportedOperationException.");
         }
         catch(UnsupportedOperationException e) {
         }
 
         if (!originalMap.equals(map)) {
-            throw new Error("Modifiers changed map.");
+            errln("Modifiers changed map.");
         }
-*/
     }
 
     /**
      * Ensure that map.addAttributes(addMap) is equivalent to calling
      * map.add on all of addMap's entries.
      */
-    public static void testUnionWith(AttributeMap map, AttributeMap addMap) {
+    void _testUnionWith(AttributeMap map, AttributeMap addMap) {
 
         AttributeMap lhs = map.addAttributes(addMap);
 
@@ -203,7 +217,7 @@ public class TestAttributeMap {
         }
 
         if (!equalMaps(lhs, rhs)) {
-            throw new Error("Maps are not equal.");
+            errln("Maps are not equal.");
         }
     }
 
@@ -211,7 +225,7 @@ public class TestAttributeMap {
      * Ensure that map.removeAttributes(remove) is equivalent to calling
      * map.removeAttribute on remove's elements.
      */
-    public static void testRemoveAttributes(AttributeMap map, AttributeSet remove) {
+    void _testRemoveAttributes(AttributeMap map, AttributeSet remove) {
 
         AttributeMap lhs = map.removeAttributes(remove);
 
@@ -224,7 +238,7 @@ public class TestAttributeMap {
         }
 
         if (!equalMaps(lhs, rhs)) {
-            throw new Error("Maps are not equal.");
+            errln("Maps are not equal.");
         }
     }
 
@@ -232,7 +246,7 @@ public class TestAttributeMap {
      * Ensure that map.intersectWith(intersect) is equivalent to
      * map.removeAttributes(map.keySet() - intersect);
      */
-    public static void testIntersectWith(AttributeMap map, AttributeSet intersect) {
+    void _testIntersectWith(AttributeMap map, AttributeSet intersect) {
 
         AttributeMap lhs = map.intersectWith(intersect);
 
@@ -248,7 +262,7 @@ public class TestAttributeMap {
             System.out.println("map: " + map);
             System.out.println("lhs: " + lhs);
             System.out.println("rhs: " + rhs);
-            throw new Error("Maps are not equal.");
+            errln("Maps are not equal.");
         }
     }
 
@@ -261,29 +275,34 @@ public class TestAttributeMap {
      *    map.get() is consistent with entry's key, value;
      *    sum of hashcodes of entries equals map.hashCode().
      */
-    public static void testViews(AttributeMap map) {
+    void _testViews(AttributeMap map) {
 
         AttributeSet keySet = map.getKeySet();
-        //Collection values = map.values();
-        //Set entrySet = map.entrySet();
-
-        if (keySet.size() != map.size() /*|| entrySet.size() != map.size()*/) {
-            throw new Error("Set sizes are inconsistent with map size.");
-        }
-
-        int hashCode = 0;
 
         Enumeration keyIter = keySet.elements();
         while (keyIter.hasMoreElements()) {
             if (!map.containsKey(keyIter.nextElement())) {
-                throw new Error("keySet contains key not in map");
+                errln("keySet contains key not in map");
             }
         }
-/*
+
+        if (gJDK11) {
+            return;
+        }
+        
+        Collection values = map.values();
+        Set entrySet = map.entrySet();
+
+        if (keySet.size() != map.size() || entrySet.size() != map.size()) {
+            errln("Set sizes are inconsistent with map size.");
+        }
+
+        int hashCode = 0;
+
         Iterator valueIter = values.iterator();
         while (valueIter.hasNext()) {
             if (!map.containsValue(valueIter.next())) {
-                throw new Error("value set contains value not in map");
+                errln("value set contains value not in map");
             }
         }
 
@@ -294,77 +313,76 @@ public class TestAttributeMap {
 
             Object key = entry.getKey();
             if (!keySet.contains(key)) {
-                throw new Error("Entry key is not in key set.");
+                errln("Entry key is not in key set.");
             }
 
             Object value = map.get(entry.getKey());
             if (!values.contains(value)) {
-                throw new Error("Entry value is not in value set.");
+                errln("Entry value is not in value set.");
             }
 
             if (map.get(key) != value) {
-                throw new Error("map.get did not return entry value.");
+                errln("map.get did not return entry value.");
             }
 
             hashCode += entry.hashCode();
         }
 
         if (hashCode != map.hashCode()) {
-            throw new Error("map hashcode is not sum of entry hashcodes.");
+            errln("map hashcode is not sum of entry hashcodes.");
         }
-*/
     }
 
     /**
      * Look for correct behavior in obvious cases.
      */
-    private void easyTests() {
+    void easyTests() {
 
         AttributeMap map = new AttributeMap();
         if (!map.equals(AttributeMap.EMPTY_ATTRIBUTE_MAP)) {
-            throw new Error("Default-constructed map is not equal to empty map.");
+            errln("Default-constructed map is not equal to empty map.");
         }
 
         map = map.addAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
         Object otherMap = new AttributeMap(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
         if (!map.equals(otherMap)) {
-            throw new Error("Maps are inconsistent after map.add");
+            errln("Maps are inconsistent after map.add");
         }
 
         otherMap = map.addAttributes(map);
         if (!equalMaps(map,otherMap)) {
-            throw new Error("Maps are inconsistent after addAttributes");
+            errln("Maps are inconsistent after addAttributes");
         }
 
         map = map.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 
         if (map.size() != 2) {
-            throw new Error("Map size is wrong.  map="+map);
+            errln("Map size is wrong.  map="+map);
         }
 
         if (equalMaps(map,otherMap)) {
-            throw new Error("Maps should not be equal");
+            errln("Maps should not be equal");
         }
 
         Object posture = new Float(0);
         map = map.addAttribute(TextAttribute.POSTURE, posture);
 
         if (map.size() != 2) {
-            throw new Error("Map size is wrong");
+            errln("Map size is wrong");
         }
 
         if (!map.get(TextAttribute.POSTURE).equals(posture)) {
-            throw new Error("Map element is wrong");
+            errln("Map element is wrong");
         }
 
         map = map.removeAttribute(TextAttribute.UNDERLINE);
 
         if (map.size() != 1) {
-            throw new Error("Map size is wrong");
+            errln("Map size is wrong");
         }
 
         if (map.get(TextAttribute.UNDERLINE) != null) {
-            throw new Error("Map should not have element");
+            errln("Map should not have element");
         }
 
         // map has POSTURE_REGULAR.  If we addAttributes a map with
@@ -372,11 +390,11 @@ public class TestAttributeMap {
 
         map = map.addAttributes(new AttributeMap(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE));
         if (map.get(TextAttribute.POSTURE) != TextAttribute.POSTURE_OBLIQUE) {
-            throw new Error("Map element is wrong");
+            errln("Map element is wrong");
         }
 
-        testModifiers(map);
-        testViews(map);
+        _testModifiers(map);
+        _testViews(map);
 
         Enumeration mapIter = maps.elements();
         while (mapIter.hasMoreElements()) {
@@ -384,29 +402,8 @@ public class TestAttributeMap {
             Object newValue = new Object();
             AttributeMap newMap = testMap.addAttribute(attributes[0], newValue);
             if (newMap.get(attributes[0]) != newValue) {
-                throw new Error("Did not get expected value back.  map=" + map);
+                errln("Did not get expected value back.  map=" + map);
             }
         }
     }
-
-/*    private void onlyAttributeKeyTests() {
-
-        Hashtable ht = new Hashtable();
-        ht.put("Not an attribute!", "Shouldn't work!");
-
-        try {
-            new AttributeMap(ht);
-            throw new Error("No exception from non-Attribute key in constructor");
-        }
-        catch(ClassCastException e) {
-        }
-
-        try {
-            AttributeMap.EMPTY_ATTRIBUTE_MAP.addAttributes(ht);
-            throw new Error("No exception from non-Attribute key in addAttributes");
-        }
-        catch(ClassCastException e) {
-        }
-    }
-*/
 }

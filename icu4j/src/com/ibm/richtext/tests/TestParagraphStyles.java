@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestParagraphStyles.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:46:57 $
+ * @(#)$RCSfile: TestParagraphStyles.java,v $ $Revision: 1.2 $ $Date: 2000/04/21 22:11:24 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -14,6 +14,8 @@
  */
 package com.ibm.richtext.tests;
 
+import com.ibm.test.TestFmwk;
+
 import com.ibm.richtext.styledtext.StyledText;
 import com.ibm.richtext.styledtext.MConstText;
 import com.ibm.richtext.styledtext.MText;
@@ -21,10 +23,16 @@ import com.ibm.textlayout.attributes.AttributeMap;
 import com.ibm.richtext.styledtext.StyleModifier;
 import java.util.Random;
 
-public final class TestParagraphStyles {
+public final class TestParagraphStyles extends TestFmwk {
 
     static final String COPYRIGHT =
                 "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
+                
+    public static void main(String[] args) throws Exception {
+
+        new TestParagraphStyles().run(args);
+    }
+
     private static final int RAND_SEED = 1234;
     private static final int NUM_TESTS = 2500;
 
@@ -51,12 +59,6 @@ public final class TestParagraphStyles {
     private static final StyleModifier E_MOD =
                             StyleModifier.createReplaceModifier(E_STYLE);
 
-    public static void main(String[] args) {
-
-        new TestParagraphStyles().test();
-        System.out.println("Paragraph Styles test PASSED");
-    }
-
     public void test() {
 
         easyTests();
@@ -78,12 +80,12 @@ public final class TestParagraphStyles {
         verifyParagraphCount(temp);
         for (int i=0; i < text.length(); i++) {
             if (!temp.paragraphStyleAt(i).equals(text.paragraphStyleAt(i))) {
-                throw new Error("Paragraph styles are wrong");
+                errln("Paragraph styles are wrong");
             }
         }
         for (int i=0; i < src.length(); i++) {
             if (!temp.paragraphStyleAt(i+text.length()).equals(src.paragraphStyleAt(i))) {
-                throw new Error("Paragraph styles are wrong");
+                errln("Paragraph styles are wrong");
             }
         }
 
@@ -91,13 +93,13 @@ public final class TestParagraphStyles {
         temp.replace(0, 1, src, 0, src.length());
         verifyParagraphCount(temp);
         if (temp.paragraphLimit(0) != 4) {
-            throw new Error("Paragraph limit is wrong");
+            errln("Paragraph limit is wrong");
         }
         if (!temp.paragraphStyleAt(0).equals(B_STYLE)) {
-            throw new Error("First style is wrong");
+            errln("First style is wrong");
         }
         if (!temp.paragraphStyleAt(4).equals(A_STYLE)) {
-            throw new Error("Style after insert is wrong");
+            errln("Style after insert is wrong");
         }
 
         // test append
@@ -107,20 +109,20 @@ public final class TestParagraphStyles {
         initC.append(newSrc);
         // now initC should be one paragraph with style B
         if (initC.paragraphLimit(0) != initC.length()) {
-            throw new Error("Should only be one paragraph");
+            errln("Should only be one paragraph");
         }
         if (initC.paragraphStyleAt(0) != initC.paragraphStyleAt(initC.length())) {
-            throw new Error("Two different paragraph styles");
+            errln("Two different paragraph styles");
         }
         if (!initC.paragraphStyleAt(initC.length()/2).equals(B_STYLE)) {
-            throw new Error("Incorrect paragraph style");
+            errln("Incorrect paragraph style");
         }
         
         text = new StyledText("aaa\n", PLAIN);
         text.modifyParagraphStyles(0, text.length(), A_MOD);
         text.modifyParagraphStyles(text.length(), text.length(), B_MOD);
         if (text.paragraphStyleAt(text.length()) != B_STYLE) {
-            throw new Error("0-length paragraph at end has incorrect style");
+            errln("0-length paragraph at end has incorrect style");
         }
     }
 
@@ -158,10 +160,10 @@ public final class TestParagraphStyles {
         trailingP2.modifyParagraphStyles(trailingP2.length(), trailingP2.length(), B_MOD);
 
         if (!trailingP2.paragraphStyleAt(trailingP2.length()-1).equals(D_STYLE)) {
-            throw new Error("Style incorrect in trailingP2");
+            errln("Style incorrect in trailingP2");
         }
         if (!trailingP2.paragraphStyleAt(trailingP2.length()).equals(B_STYLE)) {
-            throw new Error("Ending style incorrect in trailingP2");
+            errln("Ending style incorrect in trailingP2");
         }
 
         MConstText[] tests = { noParagraph, twoParagraphs,
@@ -198,8 +200,8 @@ public final class TestParagraphStyles {
         }
     }
 
-    private static void insertAndCheck(MConstText src, int srcStart, int srcLimit,
-                                       MText target, int start, int limit) {
+    private void insertAndCheck(MConstText src, int srcStart, int srcLimit,
+                                MText target, int start, int limit) {
 
         // p-style after insertion
         AttributeMap after;
@@ -236,7 +238,7 @@ public final class TestParagraphStyles {
         if (target.damagedRangeLimit() != damageLimit) {
             System.out.println("limit: " + damageLimit + ";  target.limit: " +
                                 target.damagedRangeLimit());
-            throw new Error("Damaged range limit is incorrect");
+            errln("Damaged range limit is incorrect");
         }
 
         final int damageStart = (damageLimit==Integer.MIN_VALUE)? Integer.MAX_VALUE :
@@ -244,20 +246,20 @@ public final class TestParagraphStyles {
         if (target.damagedRangeStart() > damageStart) {
             System.out.println("start: " + damageStart + ";  target.start: " +
                                 target.damagedRangeStart());
-            throw new Error("Damaged range start is incorrect");
+            errln("Damaged range start is incorrect");
         }
 
         verifyParagraphCount(target);
 
         // check endpoints
         if (!before.equals(target.paragraphStyleAt(Math.max(start-1, 0)))) {
-            throw new Error("Incorrect paragraph style before modified range");
+            errln("Incorrect paragraph style before modified range");
         }
 
         int lengthDelta = (srcLimit-srcStart) - (limit-start);
         int indexAfterInsert = Math.min(target.length(), limit + lengthDelta);
         if (!after.equals(target.paragraphStyleAt(indexAfterInsert))) {
-            throw new Error("Incorrect paragraph style after modified range");
+            errln("Incorrect paragraph style after modified range");
         }
 
         if (srcHasPBreak) {
@@ -269,11 +271,11 @@ public final class TestParagraphStyles {
             while (startP < limitOfTest) {
                 int limitP = target.paragraphLimit(startP);
                 if (src.paragraphLimit(startP-offset) + offset != limitP) {
-                    throw new Error("paragraph limits are not consistent");
+                    errln("paragraph limits are not consistent");
                 }
                 if (!src.paragraphStyleAt(startP-offset)
                                     .equals(target.paragraphStyleAt(startP))) {
-                    throw new Error("paragraph styles are not consistent");
+                    errln("paragraph styles are not consistent");
                 }
                 startP = limitP;
             }
@@ -281,13 +283,13 @@ public final class TestParagraphStyles {
         else {
             for (int i=start; i < start+(srcLimit-srcStart); i++) {
                 if (!after.equals(target.paragraphStyleAt(i))) {
-                    throw new Error("paragraph style changed unexpectedly");
+                    errln("paragraph style changed unexpectedly");
                 }
             }
         }
     }
 
-    private static void verifyParagraphCount(MConstText text) {
+    private void verifyParagraphCount(MConstText text) {
 
         int pCount = 0;
         int textLength = text.length();
@@ -313,11 +315,11 @@ public final class TestParagraphStyles {
 
         if (sepCount + 1 != pCount) {
             System.out.println("sepCount=" + sepCount + ";  pCount=" + pCount);
-            throw new Error("Paragraph count is not consistent with characters");
+            errln("Paragraph count is not consistent with characters");
         }
     }
 
-    private static void checkEndpoint(MConstText text) {
+    private void checkEndpoint(MConstText text) {
 
         boolean emptyFinalParagraph;
         int length = text.length();
@@ -331,7 +333,7 @@ public final class TestParagraphStyles {
         }
 
         if ((text.paragraphStart(length) == length) != emptyFinalParagraph) {
-            throw new Error("Final paragraph length is incorrect");
+            errln("Final paragraph length is incorrect");
         }
     }
 }
