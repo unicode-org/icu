@@ -462,8 +462,8 @@ int32_t* RuleHalf::createSegments() const {
 
 TransliterationRuleData*
 TransliterationRuleParser::parse(const UnicodeString& rules,
-                                 RuleBasedTransliterator::Direction direction,
-                                 ParseError* parseError) {
+                                 UTransDirection direction,
+                                 UParseError* parseError) {
     TransliterationRuleParser parser(rules, direction, parseError);
     parser.parseRules();
     if (U_FAILURE(parser.status)) {
@@ -480,8 +480,8 @@ TransliterationRuleParser::parse(const UnicodeString& rules,
  */
 TransliterationRuleParser::TransliterationRuleParser(
                                      const UnicodeString& theRules,
-                                     RuleBasedTransliterator::Direction theDirection,
-                                     ParseError* theParseError) :
+                                     UTransDirection theDirection,
+                                     UParseError* theParseError) :
     rules(theRules), direction(theDirection), data(0), parseError(theParseError) {
     parseData = new ParseData(0, &setVariablesVector);
 }
@@ -650,13 +650,13 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
     // If the direction we want doesn't match the rule
     // direction, do nothing.
     if (op != FWDREV_RULE_OP &&
-        ((direction == Transliterator::FORWARD) != (op == FORWARD_RULE_OP))) {
+        ((direction == UTRANS_FORWARD) != (op == FORWARD_RULE_OP))) {
         return pos;
     }
 
     // Transform the rule into a forward rule by swapping the
     // sides if necessary.
-    if (direction == Transliterator::REVERSE) {
+    if (direction == UTRANS_REVERSE) {
         left = &_right;
         right = &_left;
     }
@@ -735,10 +735,13 @@ int32_t TransliterationRuleParser::syntaxError(int32_t parseErrorCode,
         if (end < 0) {
             end = rule.length();
         }
-        if (end > (start + 80)) { // In case end wasn't found
-            end = start + 80;
-        }
-        rule.extractBetween(start, end, parseError->context); // Current rule
+        int32_t len = uprv_max(end - start, U_PARSE_CONTEXT_LEN-1);
+        // Extract everything into the preContext and leave the postContext
+        // blank, since we don't have precise error position.
+        // TODO: Fix this.
+        rule.extract(start, len, parseError->preContext); // Current rule
+        parseError->preContext[len] = 0;
+        parseError->postContext[0] = 0;
     }
     status = U_ILLEGAL_ARGUMENT_ERROR;
     return start;

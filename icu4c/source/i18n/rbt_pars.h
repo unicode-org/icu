@@ -26,7 +26,7 @@ class TransliterationRuleParser {
      */
     const UnicodeString& rules;
 
-    RuleBasedTransliterator::Direction direction;
+    UTransDirection direction;
 
     TransliterationRuleData* data;
 
@@ -40,7 +40,7 @@ class TransliterationRuleParser {
      * Pointer to user structure in which to return parse error information.
      * May be NULL.
      */
-    ParseError* parseError;
+    UParseError* parseError;
 
     /**
      * Temporary symbol table used during parsing.
@@ -84,8 +84,8 @@ public:
 
     static TransliterationRuleData*
         parse(const UnicodeString& rules,
-              RuleBasedTransliterator::Direction direction,
-              ParseError* parseError = 0);
+              UTransDirection direction,
+              UParseError* parseError = 0);
     
 private:
 
@@ -95,8 +95,8 @@ private:
      * rules
      */
     TransliterationRuleParser(const UnicodeString& rules,
-                              RuleBasedTransliterator::Direction direction,
-                              ParseError* parseError = 0);
+                              UTransDirection direction,
+                              UParseError* parseError = 0);
 
     /**
      * Destructor.

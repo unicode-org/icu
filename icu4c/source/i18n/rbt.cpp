@@ -14,9 +14,9 @@
 #include "unicode/rep.h"
 
 void RuleBasedTransliterator::_construct(const UnicodeString& rules,
-                                         Direction direction,
+                                         UTransDirection direction,
                                          UErrorCode& status,
-                                         ParseError* parseError) {
+                                         UParseError* parseError) {
     data = 0;
     isDataOwned = TRUE;
     if (U_SUCCESS(status)) {
@@ -71,7 +71,7 @@ RuleBasedTransliterator::clone(void) const {
  * Implements {@link Transliterator#handleTransliterate}.
  */
 void
-RuleBasedTransliterator::handleTransliterate(Replaceable& text, Position& index,
+RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& index,
                                              UBool isIncremental) const {
     /* We keep start and limit fixed the entire time,
      * relative to the text -- limit may move numerically if text is

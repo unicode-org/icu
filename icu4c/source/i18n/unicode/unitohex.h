@@ -190,7 +190,7 @@ public:
      * Implements {@link Transliterator#handleTransliterate}.
      * @draft
      */
-    virtual void handleTransliterate(Replaceable& text, Position& offsets,
+    virtual void handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                      UBool isIncremental) const;
 };
 

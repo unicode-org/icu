@@ -55,7 +55,7 @@ public:
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
-    virtual void handleTransliterate(Replaceable& text, Position& offset,
+    virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;
 };
 
