@@ -542,21 +542,11 @@ fastUnicode:
     }
 endloop:
 
+    /* set the converter state back into UConverter */
     if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
-        /* copy the input sequence into the error buffer */
-        int8_t i;
-
-        for(i=0; i<cnv->toULength; ++i) {
-            cnv->invalidCharBuffer[i]=(char)cnv->toUBytes[i];
-        }
-        cnv->invalidCharLength=i;
-
         /* reset to deal with the next character */
         state=readCommand;
-    }
-
-    /* set the converter state back into UConverter */
-    if(state==readCommand) {
+    } else if(state==readCommand) {
         /* not in a multi-byte sequence, reset toULength */
         cnv->toULength=0;
     }
@@ -845,21 +835,11 @@ fastUnicode:
     }
 endloop:
 
+    /* set the converter state back into UConverter */
     if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
-        /* copy the input sequence into the error buffer */
-        int8_t i;
-
-        for(i=0; i<cnv->toULength; ++i) {
-            cnv->invalidCharBuffer[i]=(char)cnv->toUBytes[i];
-        }
-        cnv->invalidCharLength=i;
-
         /* reset to deal with the next character */
         state=readCommand;
-    }
-
-    /* set the converter state back into UConverter */
-    if(state==readCommand) {
+    } else if(state==readCommand) {
         /* not in a multi-byte sequence, reset toULength */
         cnv->toULength=0;
     }
@@ -2032,7 +2012,13 @@ static const UConverterStaticData _SCSUStaticData={
     0, /* CCSID for SCSU */
     UCNV_IBM, UCNV_SCSU,
     1, 3, /* one UChar generates at least 1 byte and at most 3 bytes */
-    { 0x0e, 0xff, 0xfd, 0 }, 3, /* ### the subchar really must be written by an SCSU function! */
+    /*
+     * ### TODO the subchar really must be written by an SCSU function
+     * however, currently SCSU's fromUnicode() never causes errors, therefore
+     * no callbacks will be called and no subchars written
+     * See Jitterbug 2837 - RFE: forbid converting surrogate code points in all charsets
+     */
+    { 0x0e, 0xff, 0xfd, 0 }, 3,
     FALSE, FALSE,
     0,
     0,
@@ -2044,5 +2030,3 @@ const UConverterSharedData _SCSUData={
     NULL, NULL, &_SCSUStaticData, FALSE, &_SCSUImpl,
     0
 };
-
-/* ### clarify: if an error occurs, does a converter reset itself? or is it in a defined or undefined state? */
