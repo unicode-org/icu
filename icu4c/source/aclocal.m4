@@ -67,16 +67,13 @@ esac
 	)
 ])
 
-dnl ICU_CONDITIONAL - Taken from Automake 1.4
+dnl ICU_CONDITIONAL - similar example taken from Automake 1.4
 AC_DEFUN(ICU_CONDITIONAL,
 [AC_SUBST($1_TRUE)
-AC_SUBST($1_FALSE)
 if $2; then
   $1_TRUE=
-  $1_FALSE='#'
 else
   $1_TRUE='#'
-  $1_FALSE=
 fi])
 
 dnl AC_SEARCH_LIBS_FIRST(FUNCTION, SEARCH-LIBS [, ACTION-IF-FOUND

@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os400,v 1.25 2004/03/26 01:22:25 grhoten-oss Exp $
+## $Id: mh-os400,v 1.26 2004/04/01 00:21:57 grhoten-oss Exp $
 
 GEN_DEPS.c=	$(CC1) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX1) -E -M $(DEFS) $(CPPFLAGS)
@@ -56,7 +56,7 @@ LIBICULE = $(LIBDIR)/$(LIBICU)le$(ICULIBSUFFIX).$(SO)
 LIBICULX = $(LIBDIR)/$(LIBICU)lx$(ICULIBSUFFIX).$(SO)
 LIBCTESTFW = $(top_builddir)/tools/ctestfw/$(LIBICU)ctestfw$(ICULIBSUFFIX).$(SO)
 LIBICUTOOLUTIL = $(LIBDIR)/$(LIBICU)tu$(ICULIBSUFFIX).$(SO)
-LIBUSTDIO= $(LIBDIR)/$(LIBICU)io$(ICULIBSUFFIX).$(SO)
+LIBICUIO= $(LIBDIR)/$(LIBICU)io$(ICULIBSUFFIX).$(SO)
 
 ## Special OS400 rules
 

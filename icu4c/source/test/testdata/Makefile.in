@@ -20,11 +20,8 @@ subdir = test/testdata
 
 ## Optional directory setup
 @EXTRAS_TRUE@EXTRA = extra
-@EXTRAS_FALSE@EXTRA = 
 @TESTS_TRUE@TEST = test
-@TESTS_FALSE@TEST = 
 @SAMPLES_TRUE@SAMPLE = samples
-@SAMPLES_FALSE@SAMPLE = 
 
 
 ## Files to remove for 'make clean'

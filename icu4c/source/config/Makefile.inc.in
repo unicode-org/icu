@@ -1,8 +1,8 @@
 ## -*-makefile-*-
 #******************************************************************************
-#   Copyright (C) 1999-2003, International Business Machines
+#   Copyright (C) 1999-2004, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.38 $
+# $Revision: 1.39 $
 #******************************************************************************
 # This Makefile.inc is designed to be included into projects which make use
 # of the ICU.
@@ -87,14 +87,14 @@ endif
 # 3. optionally, add one or more of:
 #    - $(ICULIBS_I18N)    - i18n library, formatting, etc.
 #    - $(ICULIBS_LAYOUT)  - ICU layout library. 
-#    - $(ICULIBS_USTDIO)  - ICU stdio equivalent library
+#    - $(ICULIBS_ICUIO)   - ICU stdio equivalent library
 
 ICULIBS_COMMON = -l$(ICUPREFIX)uc$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
 ICULIBS_DATA   = -l$(ICUPREFIX)data$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
 ICULIBS_I18N   = -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
-ICULIBS_TOOLUTIL = -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
+ICULIBS_TOOLUTIL = -l$(ICUPREFIX)tu$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
 ICULIBS_CTESTFW = -l$(ICUPREFIX)ctestfw$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
-ICULIBS_USTDIO = -licuio$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
+ICULIBS_ICUIO = -l$(ICUPREFIX)io$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
 ICULIBS_OBSOLETE = -l$(ICUPREFIX)obsolete$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
 ICULIBS_LAYOUT = -l$(ICUPREFIX)le$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
 ICULIBS_LAYOUTEX = -l$(ICUPREFIX)lx$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
