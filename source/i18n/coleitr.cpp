@@ -156,6 +156,8 @@ void CollationElementIterator::setText(const UnicodeString& source,
   }
   init_collIterate(m_data_->iteratordata_.coll, string, length, 
                    &m_data_->iteratordata_);
+
+  m_data_->reset_   = TRUE;
 }
 
 // Sets the source to the new character iterator.
@@ -188,6 +190,7 @@ void CollationElementIterator::setText(CharacterIterator& source,
   m_data_->isWritable = TRUE;
   init_collIterate(m_data_->iteratordata_.coll, buffer, length, 
                    &m_data_->iteratordata_);
+  m_data_->reset_   = TRUE;
 }
 
 int32_t CollationElementIterator::strengthOrder(int32_t order) const
@@ -204,21 +207,6 @@ int32_t CollationElementIterator::strengthOrder(int32_t order) const
 }
 
 /* CollationElementIterator private constructors/destructors --------------- */
-
-/* 
-This private method will never be called, but it makes the linker happy
-CollationElementIterator::CollationElementIterator() : m_data_(0)
-{
-}
-*/
-
-CollationElementIterator::CollationElementIterator(
-                                              const RuleBasedCollator* order)
-                                              : isDataOwned_(TRUE)
-{
-  UErrorCode status = U_ZERO_ERROR;
-  m_data_ = ucol_openElements(order->ucollator, NULL, 0, &status);
-}
 
 /** 
 * This is the "real" constructor for this class; it constructs an iterator

@@ -207,25 +207,12 @@ private:
     * @param size output parameter of the number of collation key values
     * @return a pointer to an array of 16-bit collation key values.
     */
-            uint16_t*               copyValues(int32_t &size) const;
-
             void adopt(uint8_t *values, int32_t count);
-
-    /**
-     * The secret adopting constructor!
-     */
-    CollationKey(int32_t count, uint8_t *values);
 
     /*
      * Creates a collation key with a string.
      */
-                                    CollationKey(const UnicodeString& value);
-
-            int32_t                 storeBytes(int32_t cursor, uint32_t byteValue);
-            int32_t                    storeUnicodeString(int32_t cursor, const UnicodeString &value);
-            void                    reverseBytes(int32_t from, int32_t to);
             CollationKey&           ensureCapacity(int32_t newSize);
-            CollationKey&           copyUnicodeString(const UnicodeString &value);
             CollationKey&           setToBogus(void);
             CollationKey&           reset(void);
 
@@ -259,14 +246,4 @@ CollationKey::getByteArray(int32_t &count) const
     count = fCount;
     return fBytes;
 }
-
-inline UTextOffset
-CollationKey::storeBytes(UTextOffset cursor, uint32_t byteValue)
-{
-    fBytes[cursor++] = (uint8_t) (byteValue >> 8);
-    fBytes[cursor++] = (uint8_t) byteValue;
-
-    return cursor;
-}
-
 #endif
