@@ -978,6 +978,12 @@ uprv_uca_getImplicitPrimary(UChar32 cp);
 U_CAPI UChar32 U_EXPORT2
 uprv_uca_getRawFromImplicit(uint32_t implicit);
 
+U_CAPI UChar32 U_EXPORT2
+uprv_uca_getRawFromCodePoint(UChar32 i);
+
+U_CAPI UChar32 U_EXPORT2
+uprv_uca_getCodePointFromRaw(UChar32 i);
+
 /** Check whether two collators are equal. Collators are considered equal if they
  *  will sort strings the same. This means that both the current attributes and the
  *  rules must be equivalent. Currently used for RuleBasedCollator::operator==.
