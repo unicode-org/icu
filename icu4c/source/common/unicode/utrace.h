@@ -92,7 +92,7 @@ utrace_setLevel(int32_t traceLevel);
 
 /**
  * Getter for the trace level.
- * @param traceLevel A UTraceLevel value.
+ * @return The UTraceLevel value being used by ICU.
  * @draft ICU 2.8
  */
 U_DRAFT int32_t U_EXPORT2
