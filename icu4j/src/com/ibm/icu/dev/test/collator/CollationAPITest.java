@@ -23,6 +23,7 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
+import com.ibm.icu.util.VersionInfo;
 
 public class CollationAPITest extends TestFmwk {
     public static void main(String[] args) throws Exception {
@@ -513,6 +514,14 @@ public class CollationAPITest extends TestFmwk {
             return;
         }
     
+        logln("Test getVersion");
+        VersionInfo expectedVersion = VersionInfo.getInstance(0x21, 0x40, 0x01, 0x04);
+        doAssert(col.getVersion().equals(expectedVersion), "Expected version "+expectedVersion.toString()+" got "+col.getVersion().toString());
+        
+        logln("Test getUCAVersion");
+        VersionInfo expectedUCAVersion = VersionInfo.getInstance(0x4, 0, 0, 0);
+        doAssert(col.getUCAVersion().equals(expectedUCAVersion), "Expected UCA version "+expectedUCAVersion.toString()+" got "+col.getUCAVersion().toString());
+        
         doAssert((col.compare("ab", "abc") < 0), "ab < abc comparison failed");
         doAssert((col.compare("ab", "AB") < 0), "ab < AB comparison failed");
         doAssert((col.compare("blackbird", "black-bird") > 0), "black-bird > blackbird comparison failed");
@@ -835,6 +844,14 @@ public class CollationAPITest extends TestFmwk {
             public int getVariableTop()
             {
                 return 0;
+            }
+            public VersionInfo getVersion()
+			{
+            	return VersionInfo.getInstance(0);
+            }
+            public VersionInfo getUCAVersion()
+			{
+            	return VersionInfo.getInstance(0);
             }
         }
  

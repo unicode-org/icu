@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2004/01/08 22:27:03 $
-* $Revision: 1.54 $
+* $Date: 2004/01/14 21:49:20 $
+* $Revision: 1.55 $
 *
 *******************************************************************************
 */
@@ -4393,5 +4393,43 @@ public final class RuleBasedCollator extends Collator
           }
         }
         return 0;
+    }
+    /** Get the version of this collator object.
+     *  @return the version object associated with this collator
+     * @draft ICU 2.8
+     */
+    public VersionInfo getVersion() {
+    	/* RunTime version  */
+    	int rtVersion = VersionInfo.UCOL_RUNTIME_VERSION.getMajor();
+    	/* Builder version*/
+    	int bdVersion = m_version_.getMajor();
+
+    	/* Charset Version. Need to get the version from cnv files
+    	 * makeconv should populate cnv files with version and
+    	 * an api has to be provided in ucnv.h to obtain this version
+    	 */
+    	int csVersion = 0;
+
+    	/* combine the version info */
+    	int cmbVersion = ((rtVersion<<11) | (bdVersion<<6) | (csVersion)) & 0xFFFF;
+    	
+    	/* Tailoring rules */
+    	return VersionInfo.getInstance(cmbVersion>>8, 
+    			cmbVersion & 0xFF, 
+				m_version_.getMinor(), 
+				UCA_.m_UCA_version_.getMajor());
+
+//    	versionInfo[0] = (uint8_t)(cmbVersion>>8);
+//    	versionInfo[1] = (uint8_t)cmbVersion;
+//    	versionInfo[2] = coll->image->version[1];
+//    	versionInfo[3] = coll->UCA->image->UCAVersion[0];
+    }
+    
+    /** Get the UCA version of this collator object.
+     *  @return the version object associated with this collator
+     * @draft ICU 2.8
+     */
+    public VersionInfo getUCAVersion() {
+    	return UCA_.m_UCA_version_;
     }
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2004/01/08 22:26:56 $
-* $Revision: 1.40 $
+* $Date: 2004/01/14 21:49:20 $
+* $Revision: 1.41 $
 *
 *******************************************************************************
 */
@@ -738,17 +738,13 @@ public abstract class Collator implements Comparator, Cloneable
 	 *  @return the version object associated with this collator
 	 * @draft ICU 2.8
 	 */
-	public VersionInfo getVersion() {
-		return VersionInfo.getInstance(0);
-	}
+	public abstract VersionInfo getVersion();
 	
 	/** Get the UCA version of this collator object.
 	 *  @return the version object associated with this collator
 	 * @draft ICU 2.8
 	 */
-	public VersionInfo getUCAVersion() {
-		return VersionInfo.getInstance(0);
-	}
+	public abstract VersionInfo getUCAVersion();
 	
 	// protected constructor -------------------------------------------------
 

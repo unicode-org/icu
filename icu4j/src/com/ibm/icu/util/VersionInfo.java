@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/VersionInfo.java,v $ 
- * $Date: 2003/11/18 17:53:53 $ 
- * $Revision: 1.17 $
+ * $Date: 2004/01/14 21:49:20 $ 
+ * $Revision: 1.18 $
  *
  * jitterbug 1741
  *****************************************************************************************
@@ -108,6 +108,25 @@ public final class VersionInfo
      */
     public static final VersionInfo ICU_VERSION;
     
+    /**
+     * ICU4J collator runtime version
+     * @draft ICU 2.8
+     */
+    public static final VersionInfo UCOL_RUNTIME_VERSION;
+
+    /**
+     * ICU4J collator builder version
+     * @draft ICU 2.8
+     */
+    public static final VersionInfo UCOL_BUILDER_VERSION;
+    
+    /**
+     * ICU4J collator tailorings version
+     * @draft ICU 2.8
+     */
+    public static final VersionInfo UCOL_TAILORINGS_VERSION; 
+	
+	
     // public methods ------------------------------------------------------
         
     /**
@@ -361,6 +380,9 @@ public final class VersionInfo
         UNICODE_3_2   = getInstance(3, 2, 0, 0);
         UNICODE_4_0   = getInstance(4, 0, 0, 0);
         ICU_VERSION = getInstance(2, 8, 0, 0);
+        UCOL_RUNTIME_VERSION = getInstance(4);
+        UCOL_BUILDER_VERSION = getInstance(5);
+		UCOL_TAILORINGS_VERSION = getInstance(1);
     }
     
     // private constructor -----------------------------------------------
