@@ -109,7 +109,13 @@ getChoice(Library lib, const char *entry,
 #define LIB_SUFFIX ".dll"
 
 /* skip the bogus double */
-#define GET_ENTRY(lib, entryName) (MappedData *)(((double*)GetProcAddress(lib, entryName))+1)
+#define GET_ENTRY(lib, entryName) getWIN32Entry(lib, entryName) /*(MappedData *)(((double*)GetProcAddress(lib, entryName))+1)*/
+
+static MappedData *getWIN32Entry(Library lib, const char *entryName) {
+    MappedData *m;
+    m = (MappedData *)GetProcAddress(lib, entryName);
+    return (MappedData *)(m==NULL?NULL:((double*)m)+1);
+}
 
 #define NO_LIBRARY NULL
 #define IS_LIBRARY(lib) ((lib)!=NULL)
@@ -257,7 +263,14 @@ getChoice(Library lib, const char *entry,
           UDataMemoryIsAcceptable *isAcceptable, void *context,
           UErrorCode *pErrorCode);
 
-#define GET_ENTRY(lib, entryName) (MappedData *)(((double*)dlsym(lib, entryName))+1)
+#define GET_ENTRY(lib, entryName) getPOSIXEntry(lib, entryName) /*(MappedData *)(((double*)dlsym(lib, entryName))+1)*/
+
+static MappedData *getPOSIXEntry(Library lib, const char *entryName) {
+    MappedData *m;
+    m = dlsym(lib, entryName);
+    return (MappedData *)(m==NULL?NULL:((double *)m)+1);
+}
+
 
 #define NO_LIBRARY NULL
 #define IS_LIBRARY(lib) ((lib)!=NULL)
