@@ -417,7 +417,7 @@ UBool TransliteratorIDParser::parseCompoundID(const UnicodeString& id, int32_t d
     return TRUE;
 
  FAIL:
-    UObjectDeleter save = list.setDeleter(_deleteSingleID);
+    UObjectDeleter *save = list.setDeleter(_deleteSingleID);
     list.removeAllElements();
     list.setDeleter(save);
     delete globalFilter;
@@ -503,7 +503,7 @@ int32_t TransliteratorIDParser::instantiateList(UVector& list,
 
  RETURN:
 
-    UObjectDeleter save = list.setDeleter(_deleteSingleID);
+    UObjectDeleter *save = list.setDeleter(_deleteSingleID);
     list.removeAllElements();
     list.setDeleter(_deleteTransliterator);
 

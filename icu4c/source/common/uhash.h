@@ -107,7 +107,7 @@ typedef struct UHashElement UHashElement;
  * @param key A key stored in a hashtable
  * @return A NON-NEGATIVE hash code for parm.
  */
-typedef int32_t (U_EXPORT2 * U_CALLCONV UHashFunction)(const UHashTok key);
+typedef int32_t U_CALLCONV UHashFunction(const UHashTok key);
 
 /**
  * A key comparison function.
@@ -115,8 +115,8 @@ typedef int32_t (U_EXPORT2 * U_CALLCONV UHashFunction)(const UHashTok key);
  * @param key2 A key stored in a hashtable
  * @return TRUE if the two keys are equal.
  */
-typedef UBool (U_EXPORT2 * U_CALLCONV UKeyComparator)(const UHashTok key1,
-                                            const UHashTok key2);
+typedef UBool U_CALLCONV UKeyComparator(const UHashTok key1,
+                                        const UHashTok key2);
 
 /**
  * A function called by <TT>uhash_remove</TT>,
@@ -124,7 +124,7 @@ typedef UBool (U_EXPORT2 * U_CALLCONV UKeyComparator)(const UHashTok key1,
  * an existing key or value.
  * @param obj A key or value stored in a hashtable
  */
-typedef void (U_EXPORT2 * U_CALLCONV UObjectDeleter)(void* obj);
+typedef void U_CALLCONV UObjectDeleter(void* obj);
 
 /**
  * This specifies whether or not, and how, the hastable resizes itself.
@@ -165,13 +165,13 @@ struct UHashtable {
     
     /* Function pointers */
 
-    UHashFunction keyHasher;      /* Computes hash from key.
+    UHashFunction *keyHasher;      /* Computes hash from key.
                                    * Never null. */
-    UKeyComparator keyComparator; /* Compares keys for equality.
+    UKeyComparator *keyComparator; /* Compares keys for equality.
                                    * Never null. */
-    UObjectDeleter keyDeleter;    /* Deletes keys when required.
+    UObjectDeleter *keyDeleter;    /* Deletes keys when required.
                                    * If NULL won't do anything */
-    UObjectDeleter valueDeleter;  /* Deletes values when required.
+    UObjectDeleter *valueDeleter;  /* Deletes values when required.
                                    * If NULL won't do anything */
 };
 typedef struct UHashtable UHashtable;
@@ -193,8 +193,8 @@ U_CDECL_END
  * @see uhash_openSize
  */
 U_CAPI UHashtable* U_EXPORT2 
-uhash_open(UHashFunction keyHash,
-           UKeyComparator keyComp,
+uhash_open(UHashFunction *keyHash,
+           UKeyComparator *keyComp,
            UErrorCode *status);
 
 /**
@@ -209,8 +209,8 @@ uhash_open(UHashFunction keyHash,
  * @see uhash_open
  */
 U_CAPI UHashtable* U_EXPORT2 
-uhash_openSize(UHashFunction keyHash,
-               UKeyComparator keyComp,
+uhash_openSize(UHashFunction *keyHash,
+               UKeyComparator *keyComp,
                int32_t size,
                UErrorCode *status);
 
@@ -229,8 +229,8 @@ uhash_close(UHashtable *hash);
  * @param fn the function to be used hash keys; must not be NULL
  * @return the previous key hasher; non-NULL
  */
-U_CAPI UHashFunction U_EXPORT2 
-uhash_setKeyHasher(UHashtable *hash, UHashFunction fn);
+U_CAPI UHashFunction *U_EXPORT2 
+uhash_setKeyHasher(UHashtable *hash, UHashFunction *fn);
 
 /**
  * Set the function used to compare keys.  The default comparison is a
@@ -239,8 +239,8 @@ uhash_setKeyHasher(UHashtable *hash, UHashFunction fn);
  * @param fn the function to be used compare keys; must not be NULL
  * @return the previous key comparator; non-NULL
  */
-U_CAPI UKeyComparator U_EXPORT2 
-uhash_setKeyComparator(UHashtable *hash, UKeyComparator fn);
+U_CAPI UKeyComparator *U_EXPORT2 
+uhash_setKeyComparator(UHashtable *hash, UKeyComparator *fn);
 
 /**
  * Set the function used to delete keys.  If this function pointer is
@@ -252,8 +252,8 @@ uhash_setKeyComparator(UHashtable *hash, UKeyComparator fn);
  * @param fn the function to be used delete keys, or NULL
  * @return the previous key deleter; may be NULL
  */
-U_CAPI UObjectDeleter U_EXPORT2 
-uhash_setKeyDeleter(UHashtable *hash, UObjectDeleter fn);
+U_CAPI UObjectDeleter *U_EXPORT2 
+uhash_setKeyDeleter(UHashtable *hash, UObjectDeleter *fn);
 
 /**
  * Set the function used to delete values.  If this function pointer
@@ -265,8 +265,8 @@ uhash_setKeyDeleter(UHashtable *hash, UObjectDeleter fn);
  * @param fn the function to be used delete values, or NULL
  * @return the previous value deleter; may be NULL
  */
-U_CAPI UObjectDeleter U_EXPORT2 
-uhash_setValueDeleter(UHashtable *hash, UObjectDeleter fn);
+U_CAPI UObjectDeleter *U_EXPORT2 
+uhash_setValueDeleter(UHashtable *hash, UObjectDeleter *fn);
 
 /**
  * Specify whether or not, and how, the hastable resizes itself.
