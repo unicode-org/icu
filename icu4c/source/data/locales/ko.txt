@@ -2309,10 +2309,10 @@ ko {
     }
 
     DateTimePatterns {
-        "a hh'\uC2DC'mm'\uBD84'ss'\uCD08' z",
-        "a hh'\uC2DC'mm'\uBD84'ss'\uCD08'",
-        "a h:mm:ss",
-        "a h:mm",
+        "a hh'\uC2DC' mm'\uBD84' ss'\uCD08' z",
+        "a hh'\uC2DC' mm'\uBD84' ss'\uCD08'",
+        "a hh'\uC2DC' mm'\uBD84'",
+        "a hh'\uC2DC' mm'\uBD84'",
         "yyyy'\uB144' M'\uC6D4' d'\uC77C' EEEE",
         "yyyy'\uB144' M'\uC6D4' d'\uC77C' EE",
         "yyyy-MM-dd",
