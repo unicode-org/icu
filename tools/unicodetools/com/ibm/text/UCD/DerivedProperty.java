@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2001/09/01 00:06:48 $
-* $Revision: 1.1 $
+* $Date: 2001/09/01 01:11:13 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -423,7 +423,9 @@ of characters, the first of which has a non-zero combining class.
             {
                 name = "GraphemeExtend";
                 header = header = "# Derived Property: " + name
-                    + "\r\n#  Generated from: Me + Mn + Mc + Other_GraphemeExtend - GraphemeLink";
+                    + "\r\n#  Generated from: Me + Mn + Mc + Other_GraphemeExtend - GraphemeLink"
+                    + "\r\n#  Used in the definition of GraphemeCluster: "
+                    + "\r\n#    GraphemeCluster ::= GraphameBase? ( GraphemeExtend | GraphemeLink Join_Control? GraphemeBase? )*";
             }
             boolean hasProperty(int cp) {
                 if (ucdData.getBinaryProperty(cp, GraphemeExtend)) return false;
@@ -438,7 +440,9 @@ of characters, the first of which has a non-zero combining class.
             {
                 name = "GraphemeBase";
                 header = header = "# Derived Property: " + name
-                    + "\r\n#  Generated from: [0..10FFFF] - Cc - Cf - Cs - Co - Cn - Zl - Zp - GraphemeLink - GraphemeExtend";
+                    + "\r\n#  Generated from: [0..10FFFF] - Cc - Cf - Cs - Co - Cn - Zl - Zp - GraphemeLink - GraphemeExtend"
+                    + "\r\n#  Used in the definition of GraphemeCluster: "
+                    + "\r\n#    GraphemeCluster ::= GraphameBase? ( GraphemeExtend | GraphemeLink Join_Control? GraphemeBase? )*";
             }
             boolean hasProperty(int cp) {
                 byte cat = ucdData.getCategory(cp);

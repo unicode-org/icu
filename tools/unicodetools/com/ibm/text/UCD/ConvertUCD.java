@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ConvertUCD.java,v $
-* $Date: 2001/08/31 00:30:17 $
-* $Revision: 1.2 $
+* $Date: 2001/09/01 01:11:13 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -243,6 +243,7 @@ public final class ConvertUCD implements UCD_Types {
     */
 
     static void toJava() throws Exception {
+        System.out.println("Building " + version);
         // Blocks is special
         // Unihan is special
         // collect all the other .txt files in the directory

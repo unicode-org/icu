@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2001/09/01 00:06:15 $
-* $Revision: 1.3 $
+* $Date: 2001/09/01 01:11:13 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -199,7 +199,7 @@ public class GenerateData implements UCD_Types {
     }
 
     public static void generateDerived (int bitMask, int headerChoice, String fileName) throws IOException {
-        PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + fileName + ".txt"));
+        PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + fileName + "dX.txt"));
         doHeader(fileName, output, headerChoice);
         for (int i = 0; i < DerivedProperty.LIMIT; ++i) {
             if ((bitMask & (1<<i)) == 0) continue;
