@@ -48,6 +48,7 @@ typedef struct UAmbiguousConverter {
 static const UAmbiguousConverter ambiguousConverters[]={
     { "ibm-942_P120-1999", 0xa5 },
     { "ibm-943_P130-1999", 0xa5 },
+    { "ibm-897_P100-1995", 0xa5 },
     { "ibm-33722_P120-1999", 0xa5 },
     { "ibm-949_P110-1999", 0x20a9 },
     { "ibm-1363_P110-1997", 0x20a9 },

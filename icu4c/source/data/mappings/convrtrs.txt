@@ -241,16 +241,21 @@ US-ASCII { MIME* IANA JAVA WINDOWS }
 # Language-specific variants of ISO-2022 continue to be available as listed below.
 # ISO_2022                         ISO-2022 { MIME* } 2022 cp2022
 
-ISO_2022,locale=ja,version=0     ISO-2022-JP { IANA* MIME* JAVA* } csISO2022JP { JAVA } 
-ISO_2022,locale=ja,version=1     ISO-2022-JP-1 JIS JIS_Encoding { IANA* }
-ISO_2022,locale=ja,version=2     ISO-2022-JP-2 { IANA* MIME* } csISO2022JP2
-ISO_2022,locale=ja,version=3     JIS7 csJISEncoding
-ISO_2022,locale=ja,version=4     JIS8
-ISO_2022,locale=ko,version=0     ISO-2022-KR { IANA* MIME* } csISO2022KR # This uses ibm-949
-ISO_2022,locale=ko,version=1     ibm-25546
-ISO_2022,locale=zh,version=0     ISO-2022-CN { IANA* MIME* } # csISO2022CN
-ISO_2022,locale=zh,version=1     ISO-2022-CN-EXT { IANA* MIME* }
-HZ                               HZ-GB-2312 { IANA* MIME* }
+ISO_2022,locale=ja,version=0    ISO-2022-JP { IANA* MIME* JAVA* } csISO2022JP { JAVA } 
+ISO_2022,locale=ja,version=1    ISO-2022-JP-1 JIS JIS_Encoding { IANA* }
+ISO_2022,locale=ja,version=2    ISO-2022-JP-2 { IANA* MIME* } csISO2022JP2
+ISO_2022,locale=ja,version=3    JIS7 csJISEncoding
+ISO_2022,locale=ja,version=4    JIS8
+ISO_2022,locale=ko,version=0    ISO-2022-KR { IANA* MIME* } csISO2022KR # This uses ibm-949
+ISO_2022,locale=ko,version=1    ibm-25546
+ISO_2022,locale=zh,version=0    ISO-2022-CN { IANA* MIME* } # csISO2022CN
+ISO_2022,locale=zh,version=1    ISO-2022-CN-EXT { IANA* MIME* }
+HZ                              HZ-GB-2312 { IANA* MIME* }
+
+# Part of iso-2022
+ibm-897_P100-1995 { UTR22* }    ibm-897 { IBM* } JIS_X0201 { IANA* } X0201 { IANA } csHalfWidthKatakana { IANA }
+
+
 ISCII,version=0         x-iscii-de { WINDOWS } windows-57002 { WINDOWS* } iscii-dev
 ISCII,version=1         x-iscii-be { WINDOWS } windows-57003 { WINDOWS* } iscii-bng windows-57006 { WINDOWS } x-iscii-as { WINDOWS } # be is different from as on Windows.
 ISCII,version=2         x-iscii-pa { WINDOWS } windows-57011 { WINDOWS* } iscii-gur
