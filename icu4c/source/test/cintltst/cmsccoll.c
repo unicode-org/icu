@@ -2925,8 +2925,133 @@ static void TestSurrogates() {
   genericRulesStarter(rule, test, 14);
 }
 
+static void TestNewJapanese() {
+  UErrorCode status = U_ZERO_ERROR;
+  /*UParseError parseError;*/
+  UCollator *coll = NULL;  
+  UChar string[256] = {0};
+  uint32_t uStringLen = 0;
+
+
+        /*UCollator *coll = ucol_open("ja_JP_JIS", &status);  */
+  /*"&\u304b\u3099<<<\u304c|\u309d=\u304b|\u309d\u3099=\u304c|\u309d\u3099"*/
+
+  static const char *rules = "&z <<< z|a";
+    /* this should yield in zz<<< za */
+    static const char *testaz[] = { "zz", "za" };
+
+  static const char *test[] = {
+      "\\u30b7\\u30e3\\u30fc\\u30ec",
+      "\\u30b7\\u30e3\\u30a4",
+      "\\u30b7\\u30e4\\u30a3",
+      "\\u30b7\\u30e3\\u30ec",
+      "\\u3061\\u3087\\u3053",
+      "\\u3061\\u3088\\u3053",
+      "\\u30c1\\u30e7\\u30b3\\u30ec\\u30fc\\u30c8",
+      "\\u3066\\u30fc\\u305f",
+      "\\u30c6\\u30fc\\u30bf",
+      "\\u30c6\\u30a7\\u30bf",
+      "\\u3066\\u3048\\u305f",
+      "\\u3067\\u30fc\\u305f",
+      "\\u30c7\\u30fc\\u30bf",
+      "\\u30c7\\u30a7\\u30bf",
+      "\\u3067\\u3048\\u305f",
+      "\\u3066\\u30fc\\u305f\\u30fc",
+      "\\u30c6\\u30fc\\u30bf\\u30a1",
+      "\\u30c6\\u30a7\\u30bf\\u30fc",
+      "\\u3066\\u3047\\u305f\\u3041",
+      "\\u3066\\u3048\\u305f\\u30fc",
+      "\\u3067\\u30fc\\u305f\\u30fc",
+      "\\u30c7\\u30fc\\u30bf\\u30a1",
+      "\\u3067\\u30a7\\u305f\\u30a1",
+      "\\u30c7\\u3047\\u30bf\\u3041",
+      "\\u30c7\\u30a8\\u30bf\\u30a2",
+      "\\u3072\\u3086",
+      "\\u3073\\u3085\\u3042",
+      "\\u3074\\u3085\\u3042",
+      "\\u3073\\u3085\\u3042\\u30fc",
+      "\\u30d3\\u30e5\\u30a2\\u30fc",
+      "\\u3074\\u3085\\u3042\\u30fc",
+      "\\u30d4\\u30e5\\u30a2\\u30fc",
+      "\\u30d2\\u30e5\\u30a6",
+      "\\u30d2\\u30e6\\u30a6",
+      "\\u30d4\\u30e5\\u30a6\\u30a2",
+      "\\u3074\\u3085\\u30fc\\u3042\\u30fc",
+      "\\u30d3\\u30e5\\u30fc\\u30a2\\u30fc",
+      "\\u30d3\\u30e5\\u30a6\\u30a2\\u30fc",
+      "\\u3072\\u3085\\u3093",
+      "\\u3074\\u3085\\u3093",
+      "\\u3075\\u30fc\\u308a",
+      "\\u30d5\\u30fc\\u30ea",
+      "\\u3075\\u3045\\u308a",
+      "\\u3075\\u30a5\\u308a",
+      "\\u3075\\u30a5\\u30ea",
+      "\\u30d5\\u30a6\\u30ea",
+      "\\u3076\\u30fc\\u308a",
+      "\\u30d6\\u30fc\\u30ea",
+      "\\u3076\\u3045\\u308a",
+      "\\u30d6\\u30a5\\u308a",
+      "\\u3077\\u3046\\u308a",
+      "\\u30d7\\u30a6\\u30ea",
+      "\\u3075\\u30fc\\u308a\\u30fc",
+      "\\u30d5\\u30a5\\u30ea\\u30fc",
+      "\\u3075\\u30a5\\u308a\\u30a3",
+      "\\u30d5\\u3045\\u308a\\u3043",
+      "\\u30d5\\u30a6\\u30ea\\u30fc",
+      "\\u3075\\u3046\\u308a\\u3043",
+      "\\u30d6\\u30a6\\u30ea\\u30a4",
+      "\\u3077\\u30fc\\u308a\\u30fc",
+      "\\u3077\\u30a5\\u308a\\u30a4",
+      "\\u3077\\u3046\\u308a\\u30fc",
+      "\\u30d7\\u30a6\\u30ea\\u30a4",
+      "\\u30d5\\u30fd",
+      "\\u3075\\u309e",
+      "\\u3076\\u309d",
+      "\\u3076\\u3075",
+      "\\u3076\\u30d5",
+      "\\u30d6\\u3075",
+      "\\u30d6\\u30d5",
+      "\\u3076\\u309e",
+      "\\u3076\\u3077",
+      "\\u30d6\\u3077",
+      "\\u3077\\u309d",
+      "\\u30d7\\u30fd",
+      "\\u3077\\u3075",
+  };
+
+  uint32_t i = 0;
+  UCollationElements *it = NULL;
+  uint32_t CE;
+
+  genericRulesStarter(rules, testaz, 2);
+
+  genericLocaleStarter("ja_JP_JIS", test, sizeof(test)/sizeof(test[0]));
+
+
+
+  uStringLen = u_unescape(rules, string, 256);
+  coll = ucol_open("ja_JP_JIS", &status);
+  it = ucol_openElements(coll, string, 0, &status);
+
+  for(i = 0; i < sizeof(test)/sizeof(test[0]); i++) {
+    log_verbose("%s\n", test[i]);
+    uStringLen = u_unescape(test[i], string, 256);
+    ucol_setText(it, string, uStringLen, &status);
+
+    while((CE=ucol_next(it, &status)) != UCOL_NULLORDER) {
+      log_verbose("%08X\n", CE);
+    }
+    log_verbose("\n");
+
+  }
+
+  ucol_closeElements(it);
+  ucol_close(coll);
+}
+
 void addMiscCollTest(TestNode** root)
 {
+    /*addTest(root, &TestNewJapanese, "tscoll/cmsccoll/TestNewJapanese");   */
     /*addTest(root, &TestLimitations, "tscoll/cmsccoll/TestLimitations");*/
     addTest(root, &TestNonChars, "tscoll/cmsccoll/TestNonChars");
     addTest(root, &TestExtremeCompression, "tscoll/cmsccoll/TestExtremeCompression");
