@@ -12,7 +12,6 @@
 #include "unicode/unifilt.h"
 #include "unicode/uchar.h"
 
-
 // As of Unicode 3.0.0, the longest name is 83 characters long.
 #define LONGEST_NAME 83
 
@@ -111,7 +110,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
             break;
 
         case 1: // after open delimiter
-            // Look for [-a-zA-Z0-9].  If \w+ is found, convert it
+            // Look for [-a-zA-Z0-9+].  If \w+ is found, convert it
             // to a single space.  If closeDelimiter is found, exit
             // the loop.  If any other character is found, exit the
             // loop.  If the limit is found, exit the loop.
@@ -135,7 +134,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
                 buf[ibuf] = 0; // Add terminating zero
                 UErrorCode status = U_ZERO_ERROR;
 
-                UChar32 ch = 0xFFFF;
+                UChar32 ch = UCHAR_MAX_VALUE + 1;
 
 		// Try in this order: U+XXXX (and bail out if we cannot
 		// decode it), or Unicode name then Unicode 1.0 name.
@@ -147,10 +146,10 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
 		    for (; jbuf < ibuf; ++jbuf) {
 			if (buf[jbuf] >= 0x0030 && buf[jbuf] <= 0x0039) {
 			    ch = (ch << 4) + buf[jbuf] - 0x0030;
-			} else if (buf[jbuf] >= 0x0041 && buf[jbuf] <= 0x0045) {
+			} else if (buf[jbuf] >= 0x0041 && buf[jbuf] <= 0x0046) {
 			    ch = (ch << 4) + buf[jbuf] - 0x0041 + 10;
 			} else {
-			    ch = 0xFFFF;
+			    ch = UCHAR_MAX_VALUE + 1;
 			    break;
 			}
 		    }
@@ -161,8 +160,9 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
 			status = U_ZERO_ERROR;
 			ch = u_charFromName(U_UNICODE_10_CHAR_NAME, cbuf, &status);
 		    }
+		    if (ch == (UChar32) 0xFFFF) ch = UCHAR_MAX_VALUE + 1;
 		}
-                if (ch != (UChar32) 0xFFFF && U_SUCCESS(status)) {
+                if (ch != (UChar32) (UCHAR_MAX_VALUE + 1) && U_SUCCESS(status)) {
                     // Lookup succeeded
                     str.truncate(0);
                     str.append(ch);
@@ -186,10 +186,11 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
             //    c -= 0x0020; // [a-z] => [A-Z]
             //}
 
-            // Check if c =~ [-A-Z0-9]
+            // Check if c =~ [-A-Z0-9+]
             if (c == (UChar)0x002D ||
                 (c >= (UChar)0x0041 && c <= (UChar)0x005A) ||
-                (c >= (UChar)0x0030 && c <= (UChar)0x0039)) {
+                (c >= (UChar)0x0030 && c <= (UChar)0x0039) ||
+                c == (UChar)0x002B) {
                 buf[ibuf++] = (char) c;
                 // If we go a bit past the longest possible name then abort
                 if (ibuf == (LONGEST_NAME + 4)) {
