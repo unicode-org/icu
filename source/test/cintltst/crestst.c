@@ -563,6 +563,13 @@ static void TestFileStream(void){
 	if(T_FileStream_size(stream)<=0){
 		log_data_err("T_FileStream_size failed to d %s \n",fileName);
 	}
+	if(T_FileStream_error(stream)){
+		log_data_err("T_FileStream_error shouldn't have an error %s\n",fileName);
+    }
+    T_FileStream_putc(stream, 0x20);
+	if(!T_FileStream_error(stream)){
+		log_data_err("T_FileStream_error didn't get an error %s\n",fileName);
+    }
 
 	T_FileStream_close(stream);
 	/* test writing function */
@@ -596,10 +603,6 @@ static void TestFileStream(void){
 	if(uprv_strncmp(testline, buf,retLen)!=0){
 		log_data_err("T_FileStream_write failed %s\n",fileName);
 	}
-
-        /* weiv: I think we should first set error and then close the stream */
-
-	T_FileStream_setError(stream);
 
 	T_FileStream_close(stream);
 
