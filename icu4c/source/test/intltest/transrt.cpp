@@ -39,11 +39,18 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
         CASE(2,TestGreek);
         CASE(3,Testel);
         CASE(4,TestCyrillic);
+        CASE(5,TestDevanagariLatin);
+        CASE(6,TestDevanagariBengali);
+        CASE(7,TestDevanagariGurmukhi);
+        CASE(8,TestDevanagariGujarati);
+        CASE(9,TestDevanagariOriya);
+        CASE(10,TestDevanagariTamil);
+        CASE(11,TestDevanagariTelugu);
+        CASE(12,TestDevanagariKannada);
+        CASE(13,TestDevanagariMalayalam);
 #ifdef ENABLE_FAILING_TESTS
-        CASE(5,TestDevanagari);
-        CASE(6,TestDevanagariTamil);
-        CASE(7,TestJamo);
-        CASE(8,TestJamoHangul);
+        CASE(14,TestJamo);
+        CASE(15,TestJamoHangul);
 #endif
         default: name = ""; break;
     }
@@ -605,17 +612,116 @@ void TransliteratorRoundTripTest::TestCyrillic() {
     test.test("", UnicodeString("[\\u0400-\\u045F]", ""), NULL, this, new Legal());
 }
 
-void TransliteratorRoundTripTest::TestDevanagari() {
+
+//----------------------------------
+// Inter-Indic Tests
+//----------------------------------
+void TransliteratorRoundTripTest::TestDevanagariLatin() {
     RTTest test("Latin-DEVANAGARI", 
                 TestUtility::LATIN_SCRIPT, TestUtility::DEVANAGARI_SCRIPT);
     test.test("", "[:Devanagari:]", NULL, this, new Legal());
 }
 
-void TransliteratorRoundTripTest::TestDevanagariTamil() {
-    RTTest test("Tamil-DEVANAGARI", 
-                TestUtility::TAMIL_SCRIPT, TestUtility::DEVANAGARI_SCRIPT);
-    test.test("[:tamil:]", "[:Devanagari:]", NULL, this, new Legal());
+void TransliteratorRoundTripTest::TestDevanagariBengali()  {
+    RTTest test("BENGALI-DEVANAGARI", 
+        TestUtility::BENGALI_SCRIPT, TestUtility::DEVANAGARI_SCRIPT);
+         test.test("[:BENGALI:]", "[:Devanagari:]", 
+                "[\\u0950\\u0935\\u0912\\u0933\\u090e\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]\\u09F0\\u09F1]", /*roundtrip exclusions*/
+                this, new Legal());
+    RTTest test1("DEVANAGARI-BENGALI", 
+            TestUtility::DEVANAGARI_SCRIPT, TestUtility::BENGALI_SCRIPT );
+          test1.test( "[:Devanagari:]", "[:BENGALI:]",
+                  "[\\u0950\\u0935\\u0912\\u0933\\u090e\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]\\u09F0\\u09F1]", /*roundtrip exclusions*/
+                  this, new Legal());
 }
+void TransliteratorRoundTripTest::TestDevanagariGurmukhi()  {
+    RTTest test("GURMUKHI-DEVANAGARI", 
+      TestUtility::GURMUKHI_SCRIPT, TestUtility::DEVANAGARI_SCRIPT);
+      test.test("[:GURMUKHI:]", "[:Devanagari:]", 
+            "[\\u0950\\u090D\\u090e\\u0912\\u0911\\u090b\\u090c\\u0934\\u0960\\u0961\\u0937\\u0a72\\u0a73\\u0a74\\u093d]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("DEVANAGARI-GURMUKHI", 
+        TestUtility::DEVANAGARI_SCRIPT, TestUtility::GURMUKHI_SCRIPT );
+      test1.test( "[:Devanagari:]", "[:GURMUKHI:]",
+              "[\\u0950\\u090D\\u090e\\u0912\\u0911\\u090b\\u090c\\u0934\\u0960\\u0961\\u0937\\u0a72\\u0a73\\u0a74\\u093d]", /*roundtrip exclusions*/
+              this, new Legal());
+} 
+void TransliteratorRoundTripTest::TestDevanagariGujarati()  {
+    RTTest test("GUJARATI-DEVANAGARI", 
+      TestUtility::GUJARATI_SCRIPT, TestUtility::DEVANAGARI_SCRIPT);
+      test.test("[:GUJARATI:]", "[:Devanagari:]", 
+            "[\\u0961\\u090c\\u090e\\u0912]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("DEVANAGARI-GUJARATI", 
+        TestUtility::DEVANAGARI_SCRIPT, TestUtility::GUJARATI_SCRIPT );
+      test1.test( "[:Devanagari:]", "[:GUJARATI:]",NULL,
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestDevanagariOriya()  {
+    RTTest test("ORIYA-DEVANAGARI", 
+      TestUtility::ORIYA_SCRIPT, TestUtility::DEVANAGARI_SCRIPT);
+      test.test("[:ORIYA:]", "[:Devanagari:]", 
+            "[\\u0950\\u090D\\u090e\\u0912\\u0911\\u0931\\u0935]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("DEVANAGARI-ORIYA", 
+        TestUtility::DEVANAGARI_SCRIPT, TestUtility::ORIYA_SCRIPT );
+      test1.test( "[:Devanagari:]", "[:ORIYA:]",
+              "[\\u0950\\u090D\\u090e\\u0912\\u0911\\u0931\\u0935]", /*roundtrip exclusions*/ 
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestDevanagariTamil()  {
+    RTTest test("Tamil-DEVANAGARI", 
+      TestUtility::TAMIL_SCRIPT, TestUtility::DEVANAGARI_SCRIPT);
+      test.test("[:tamil:]", "[:Devanagari:]", 
+              "[\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]"
+              "\\u090B\\u090C\\u0916\\u0917\\u0918\\u091B\\u091D\\u0920\\u0921"
+              "\\u0922\\u0925\\u0926\\u0927\\u092B\\u092C\\u092D\\u0936\\u0960\\u0961]", /*roundtrip exclusions*/
+              this, new Legal());
+    RTTest test1("DEVANAGARI-Tamil", 
+        TestUtility::DEVANAGARI_SCRIPT, TestUtility::TAMIL_SCRIPT );
+      test1.test( "[:Devanagari:]", "[:tamil:]",
+              "[\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestDevanagariTelugu()  {
+    RTTest test("Telugu-DEVANAGARI", 
+      TestUtility::TELUGU_SCRIPT, TestUtility::DEVANAGARI_SCRIPT);
+      test.test("[:telugu:]", "[:Devanagari:]", 
+            "[\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("DEVANAGARI-TELUGU", 
+        TestUtility::DEVANAGARI_SCRIPT, TestUtility::TELUGU_SCRIPT );
+      test1.test( "[:Devanagari:]", "[:TELUGU:]",
+              "[\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestDevanagariKannada()  {
+    RTTest test("KANNADA-DEVANAGARI", 
+      TestUtility::KANNADA_SCRIPT, TestUtility::DEVANAGARI_SCRIPT);
+      test.test("[:KANNADA:]", "[:Devanagari:]", 
+            "[\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("DEVANAGARI-KANNADA", 
+        TestUtility::DEVANAGARI_SCRIPT, TestUtility::KANNADA_SCRIPT );
+      test1.test( "[:Devanagari:]", "[:KANNADA:]",
+              "[\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
+              this, new Legal());
+}
+void TransliteratorRoundTripTest::TestDevanagariMalayalam()  {
+    RTTest test("MALAYALAM-DEVANAGARI", 
+      TestUtility::MALAYALAM_SCRIPT, TestUtility::DEVANAGARI_SCRIPT);
+      test.test("[:MALAYALAM:]", "[:Devanagari:]", 
+            "[\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
+            this, new Legal());
+    RTTest test1("DEVANAGARI-MALAYALAM", 
+        TestUtility::DEVANAGARI_SCRIPT, TestUtility::MALAYALAM_SCRIPT );
+      test1.test( "[:Devanagari:]", "[:MALAYALAM:]",
+              "[\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
+              this, new Legal());
+} 
+//---------------
+// End Indic
+//---------------
 
 void RTTest::test2() {
 
