@@ -155,7 +155,7 @@ u_fclose(UFILE *file);
  * @draft
  */
 U_CAPI void U_EXPORT2
-u_flush(UFILE *file);
+u_fflush(UFILE *file);
 
 /**
  * Get the FILE* associated with a UFILE.
