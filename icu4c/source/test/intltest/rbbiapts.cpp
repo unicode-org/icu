@@ -737,9 +737,13 @@ void RBBIAPITest::TestBug2190() {
 void RBBIAPITest::TestRegistration() {
   UErrorCode status = U_ZERO_ERROR;
   BreakIterator* thai_word = BreakIterator::createWordInstance("th_TH", status);
-  BreakIterator* root_word = BreakIterator::createWordInstance("", status);
-  URegistryKey key = BreakIterator::registerInstance(thai_word, "xx", UBRK_WORD, status);
 
+  // ok to not delete these if we exit because of error?
+  BreakIterator* thai_char = BreakIterator::createCharacterInstance("th_TH", status);
+  BreakIterator* root_word = BreakIterator::createWordInstance("", status);
+  BreakIterator* root_char = BreakIterator::createCharacterInstance("", status);
+
+  URegistryKey key = BreakIterator::registerInstance(thai_word, "xx", UBRK_WORD, status);
   {
     if (*thai_word == *root_word) {
       errln("thai not different from root");
@@ -748,12 +752,31 @@ void RBBIAPITest::TestRegistration() {
 
   {
     BreakIterator* result = BreakIterator::createWordInstance("xx_XX", status);
-    if (*result != *thai_word) {
-      errln("result not equal");
-    }
+    UBool fail = *result != *thai_word;
     delete result;
+    if (fail) {
+      errln("bad result for xx_XX/word");
+    }
   }
   
+  {
+    BreakIterator* result = BreakIterator::createCharacterInstance("th_TH", status);
+    UBool fail = *result != *thai_char;
+    delete result;
+    if (fail) {
+      errln("bad result for th_TH/char");
+    }
+  }
+  
+  {
+    BreakIterator* result = BreakIterator::createCharacterInstance("xx_XX", status);
+    UBool fail = *result != *root_char;
+    delete result;
+    if (fail) {
+      errln("bad result for xx_XX/char");
+    }
+  }
+    
   {
     StringEnumeration* avail = BreakIterator::getAvailableLocales();
     UBool found = FALSE;
@@ -780,17 +803,18 @@ void RBBIAPITest::TestRegistration() {
   {
     BreakIterator* result = BreakIterator::createWordInstance("xx", status);
     BreakIterator* root = BreakIterator::createWordInstance("", status);
-      if (*root != *result) {
-	errln("did not get root break");
-      }
+    UBool fail = *root != *result;
     delete root;
     delete result;
+    if (fail) {
+      errln("did not get root break");
+    }
   }
 
   {
     StringEnumeration* avail = BreakIterator::getAvailableLocales();
     UBool found = FALSE;
-	const UnicodeString* p;
+    const UnicodeString* p;
     while (p = avail->snext(status)) {
       if (p->compare("xx") == 0) {
 	found = TRUE;
@@ -802,6 +826,11 @@ void RBBIAPITest::TestRegistration() {
       errln("found test locale");
     }
   }
+
+  // that_word was adopted by factory
+  delete thai_char;
+  delete root_word;
+  delete root_char;
 }
 
 //---------------------------------------------
