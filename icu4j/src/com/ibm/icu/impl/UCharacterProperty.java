@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/07/08 23:52:14 $ 
-* $Revision: 1.10 $
+* $Date: 2002/07/18 23:27:03 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -534,11 +534,11 @@ public final class UCharacterProperty implements Trie.DataManipulate
                 }
         		
         		int additionalproperty = getAdditional(codepoint, 1);
-        		if (compareAdditionalType(additionalproperty, 
+                if (compareAdditionalType(additionalproperty, 
        		                   OTHER_DEFAULT_IGNORABLE_CODE_POINT_PROPERTY_)) {
                     return true;
                 }
-                if (compareAdditionalType(additionalproperty, 
+                if (!compareAdditionalType(additionalproperty, 
 		                                              WHITE_SPACE_PROPERTY_)) {
                     int generaltype = getPropType(getProperty(codepoint));
                     if (generaltype == UCharacterCategory.FORMAT 
