@@ -25,12 +25,12 @@ typedef struct  {
   uint32_t previousCE;
   uint32_t previousContCE;
 /*  uint32_t strongest[2];*/
-  int32_t pos[3];
-  uint32_t gapsLo[9];
-  uint32_t gapsHi[9];
-  uint32_t numStr[3];
-  UColToken* fStrToken[3];
-  UColToken* lStrToken[3];
+  int32_t pos[UCOL_STRENGTH_LIMIT];
+  uint32_t gapsLo[3*UCOL_CE_STRENGTH_LIMIT];
+  uint32_t gapsHi[3*UCOL_CE_STRENGTH_LIMIT];
+  uint32_t numStr[UCOL_CE_STRENGTH_LIMIT];
+  UColToken* fStrToken[UCOL_CE_STRENGTH_LIMIT];
+  UColToken* lStrToken[UCOL_CE_STRENGTH_LIMIT];
 
 /*
   UColAttributeValue strongestP;
