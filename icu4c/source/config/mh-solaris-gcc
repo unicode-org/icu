@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-solaris-gcc,v 1.33 2004/03/10 21:47:02 grhoten-oss Exp $
+## $Id: mh-solaris-gcc,v 1.34 2004/03/26 18:07:36 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -fPIC
@@ -19,7 +19,7 @@ LD_RPATH=	-R
 LD_RPATH_PRE=	
 
 ## Compiler switch to embed a library name
-LD_SONAME = -h $(MIDDLE_SO_TARGET)
+LD_SONAME = -h $(notdir $(MIDDLE_SO_TARGET))
 
 ## The type of assembly needed when pkgdata is used for generating shared libraries.
 GENCCODE_ASSEMBLY=-a sun

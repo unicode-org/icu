@@ -3,7 +3,7 @@
 ## Copyright (c) 2001-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin,v 1.17 2004/03/26 17:57:08 grhoten-oss Exp $
+## $Id: mh-cygwin,v 1.18 2004/03/26 18:07:35 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -27,7 +27,7 @@ LD_RPATH=
 LD_RPATH_PRE=	-Wl,-rpath,
 
 ## Compiler switch to embed a library name
-LD_SONAME = -Wl,-soname -Wl,$(MIDDLE_SO_TARGET)
+LD_SONAME =
 
 ## Shared object suffix
 SO = dll

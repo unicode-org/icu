@@ -3,7 +3,7 @@
 ## Copyright (c) 2003-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-mpras,v 1.2 2003/08/08 23:53:43 grhoten-oss Exp $
+## $Id: mh-mpras,v 1.3 2004/03/26 18:07:36 grhoten-oss Exp $
 ## Original contributer: Jason Gordon from NCR
 
 ## Flags for position independent code
@@ -28,7 +28,7 @@ LD_RPATH=     -YP,
 LD_RPATH_PRE=	
 
 ## Compiler switch to embed a library name
-LD_SONAME = -h $(MIDDLE_SO_TARGET)
+LD_SONAME = -h $(notdir $(MIDDLE_SO_TARGET))
 
 ## Shared object suffix
 SO=		so

@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-acc,v 1.36 2003/12/11 18:40:38 grhoten-oss Exp $
+## $Id: mh-hpux-acc,v 1.37 2004/03/26 18:07:36 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -59,7 +59,7 @@ LD_RPATH_PRE=
 LDLIBRARYPATH_ENVVAR = SHLIB_PATH
 
 ## Compiler switch to embed a library name
-LD_SONAME = -Wl,+h,$(MIDDLE_SO_TARGET)
+LD_SONAME = -Wl,+h,$(notdir $(MIDDLE_SO_TARGET))
 
 ## Shared object suffix
 SO=		sl
