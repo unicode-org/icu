@@ -18,6 +18,7 @@
 #include "ucmp8.h"
 #include "ucmp16.h"
 #include "unicode/ucnv_err.h"
+#include "unicode/ucnv_cb.h"
 #include "ucnv_cnv.h"
 #include "cmemory.h"
 #include "unicode/ucnv.h"
