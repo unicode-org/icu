@@ -4,8 +4,8 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/currency.cpp,v $ 
-* $Date: 2002/05/14 23:24:24 $ 
-* $Revision: 1.3 $
+* $Date: 2002/05/15 18:51:39 $ 
+* $Revision: 1.4 $
 **********************************************************************
 */
 #include "unicode/currency.h"
@@ -15,94 +15,123 @@
 
 U_NAMESPACE_BEGIN
 
-/**
- * TEMPORARY data structure.
- */
-struct UCurrencyData {
-    char   code[4];
-    int32_t fractionDigits;
-    double  rounding;
-};
+//------------------------------------------------------------
+// Constants
+
+// Default currency meta data of last resort.  We try to use the
+// defaults encoded in the meta data resource bundle.  If there is a
+// configuration/build error and these are not available, we use these
+// hard-coded defaults (which should be identical).
+static const int32_t LAST_RESORT_DATA[] = { 2, 0 };
+
+// POW10[i] = 10^i, i=0..MAX_POW10
+static const int32_t POW10[] = { 1, 10, 100, 1000, 10000, 100000,
+                                 1000000, 10000000, 100000000, 1000000000 };
+
+static const int32_t MAX_POW10 = (sizeof(POW10)/sizeof(POW10[0])) - 1;
+
+//------------------------------------------------------------
+// Resource tags
+
+// Tag for meta-data, in root.
+#define CURRENCY_META "CurrencyMeta"
+
+// Tag for default meta-data, in CURRENCY_META
+#define DEFAULT_META "DEFAULT"
+
+// Tag for legacy currency elements data
+#define CURRENCY_ELEMENTS "CurrencyElements"
+
+// Tag for localized display names (symbols) of currencies
+#define CURRENCIES "Currencies"
+
+//------------------------------------------------------------
+// Code
 
 /**
- * TEMPORARY Static data block giving currency fraction digits and
- * rounding increments.  The first entry with a NULL code gives
- * the default values for currencies not listed here.  The last
- * entry with a NULL code marks the end.
+ * Internal function to look up currency data.  Result is an array of
+ * two integers.  The first is the fraction digits.  The second is the
+ * rounding increment, or 0 if none.  The rounding increment is in
+ * units of 10^(-fraction_digits).
  */
-static const UCurrencyData DATA[] = {
-    // TODO Temporary implementation; Redo this
-    // Code, Fraction digits, Rounding increment
-    { ""   , 2, 0.0 }, // Default
-    { "BYB", 0, 0.0 },
-    { "CHF", 2, 0.25 },
-    { "ESP", 0, 0.0 },
-    { "IQD", 3, 0.0 },
-    { "ITL", 0, 0.0 },
-    { "JOD", 3, 0.0 },
-    { "JPY", 0, 0.0 },
-    { "KWD", 3, 0.0 },
-    { "LUF", 0, 0.0 },
-    { "LYD", 3, 0.0 },
-    { "PTE", 0, 0.0 },
-    { "PYG", 0, 0.0 },
-    { "TND", 3, 0.0 },
-    { "TRL", 0, 0.0 },
-};
-
-#define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
-
-/**
- * TEMPORARY Internal function to look up currency data.
- */
-static int32_t
+static const int32_t*
 _findData(const char* currency) {
-    // TODO Temporary implementation; Redo this
 
-    // Start from element 1
-    for (int32_t i=1; i < (int32_t)ARRAY_SIZE(DATA); ++i) {
-        int32_t c = uprv_stricmp(DATA[i].code, currency);
-        if (c == 0) {
-            return i;
-        } else if (c > 0) {
-            break;
+    // Get CurrencyMeta resource out of root locale file.  [This may
+    // move out of the root locale file later; if it does, update this
+    // code.]
+    UErrorCode ec = U_ZERO_ERROR;
+    ResourceBundle currencyMeta =
+        ResourceBundle((char*)0, Locale(""), ec).get(CURRENCY_META, ec);
+    
+    if (U_FAILURE(ec)) {
+        // Config/build error; return hard-coded defaults
+        return LAST_RESORT_DATA;
+    }
+
+    // Look up our currency, or if that's not available, then DEFAULT
+    ResourceBundle rb = currencyMeta.get(currency, ec);
+    if (U_FAILURE(ec)) {
+        rb = currencyMeta.get(DEFAULT_META, ec);
+        if (U_FAILURE(ec)) {
+            // Config/build error; return hard-coded defaults
+            return LAST_RESORT_DATA;
         }
     }
-    return 0; // Return default entry
+
+    int32_t len;
+    const int32_t *data = rb.getIntVector(len, ec);
+    if (U_FAILURE(ec) || len < 2) {
+        // Config/build error; return hard-coded defaults
+        return LAST_RESORT_DATA;
+    }
+
+    return data;
 }
 
-/**
- * Returns a currency object for the default currency in the given
- * locale.
- */
-void
-UCurrency::forLocale(const Locale& locale,
-                     char* result,
-                     UErrorCode& ec) {
+U_CAPI void U_EXPORT2
+ucurr_forLocale(const char* locale,
+                char*       result,
+                UErrorCode* ec) {
+
+    // TODO: ? Establish separate resource for locale->currency mapping
+    //       ? <IF> we end up deleting the CurrencyElements resource.
+    //       ? In the meantime the CurrencyElements tag has exactly the
+    //       ? data we want.
+
     // Look up the CurrencyElements resource for this locale.
     // It contains: [0] = currency symbol, e.g. "$";
-    // [1] = intl. currency symbol, e.g. "USD";
-    // [2] = monetary decimal separator, e.g. ".".
-    if (U_SUCCESS(ec)) {
-        ResourceBundle rb((char*)0, locale, ec);
-        UnicodeString s = rb.get("CurrencyElements", ec).getStringEx(1, ec);
-        s.extract(0, 3, result, "");
-    } else {
-        result[0] = 0;
+    //              [1] = intl. currency symbol, e.g. "USD";
+    //              [2] = monetary decimal separator, e.g. ".".
+
+    if (ec != NULL && U_SUCCESS(*ec)) {
+        ResourceBundle rb((char*)0, Locale(locale), *ec);
+        UnicodeString s = rb.get(CURRENCY_ELEMENTS, *ec).getStringEx(1, *ec);
+        if (U_SUCCESS(*ec)) {
+            s.extract(0, 3, result, "");
+            return;
+        }
     }
+
+    result[0] = 0;
 }
 
 /**
- * Returns the display string for this currency object in the
- * given locale.  For example, the display string for the USD
- * currency object in the en_US locale is "$".
+ * Rather than convert a UnicodeString to a UChar array and then back
+ * to a UnicodeString, possibly with allocation of UChar space on the
+ * heap, we use this function in DecimalFormat.
+ *
+ * This is internal to ICU, but exported by this file.  Note that it
+ * is C++ API even though it's named like a C function.
+ *
+ * @internal
  */
 UnicodeString
-UCurrency::getSymbol(const char* currency,
-                     const Locale& locale) {
+ucurr_getSymbolAsUnicodeString(const char* currency,
+                               const Locale& locale) {
+
     // Look up the Currencies resource for the given locale.  The
-    // Currencies locale looks like this in the original C
-    // resource file:
+    // Currencies locale data looks like this:
     //|en {
     //|  Currencies { 
     //|    USD { "$" }
@@ -110,49 +139,67 @@ UCurrency::getSymbol(const char* currency,
     //|    //...
     //|  }
     //|}
+
     UErrorCode ec = U_ZERO_ERROR;
-
     ResourceBundle rb((char*)0, locale, ec);
-    UnicodeString s = rb.get("Currencies", ec).getStringEx(currency, ec);
-    if (U_SUCCESS(ec) && s.length() > 0) {
-        return s;
+    UnicodeString s = rb.get(CURRENCIES, ec).getStringEx(currency, ec);
+    UBool found = U_SUCCESS(ec);
+
+    if (!found) {
+        // Since the Currencies resource is not fully populated yet,
+        // check to see if we can find the currency in the
+        // CurrencyElements resource.
+        ec = U_ZERO_ERROR;
+        ResourceBundle ce = rb.get(CURRENCY_ELEMENTS, ec);
+        UnicodeString curr(currency, "");
+        if (ce.getStringEx(1, ec) == curr) {
+            s = ce.getStringEx((int32_t)0, ec);
+            found = U_SUCCESS(ec);
+        }
+
+        if (!found) {
+            // If we fail to find a match, use the full ISO code
+            s = curr;
+        }
     }
 
-    // Since the Currencies resource is not fully populated yet,
-    // check to see if we can find what we want in the CurrencyElements
-    // resource.
-    ec = U_ZERO_ERROR;
-    ResourceBundle ce = rb.get("CurrencyElements", ec);
-    s = UnicodeString(currency, "");
-    if (ce.getStringEx(1, ec) == s) {
-        return ce.getStringEx((int32_t)0, ec);
-    }
-
-    // If we fail to find a match, use the full ISO code
     return s;
 }
 
-/**
- * Returns the number of the number of fraction digits that should
- * be displayed for this currency.
- * @return a non-negative number of fraction digits to be
- * displayed
- */
-int32_t
-UCurrency::getDefaultFractionDigits(const char* currency) {
-    // TODO Temporary implementation; Redo this
-    return DATA[_findData(currency)].fractionDigits;
+U_CAPI int32_t U_EXPORT2
+ucurr_getSymbol(const char* currency,
+                UChar*      result,
+                int32_t     resultCapacity,
+                const char* locale,
+                UErrorCode* ec) {
+
+    if (ec == NULL || U_FAILURE(*ec)) {
+        return 0;
+    }
+
+    UnicodeString s = ucurr_getSymbolAsUnicodeString(currency, Locale(locale));
+
+    return s.extract(result, resultCapacity, *ec);
 }
 
-/**
- * Returns the rounding increment for this currency, or 0.0 if no
- * rounding is done by this currency.
- * @return the non-negative rounding increment, or 0.0 if none
- */
-double
-UCurrency::getRoundingIncrement(const char* currency) {
-    // TODO Temporary implementation; Redo this
-    return DATA[_findData(currency)].rounding;
+U_CAPI int32_t U_EXPORT2
+ucurr_getDefaultFractionDigits(const char* currency) {
+    return (_findData(currency))[0];
+}
+
+U_CAPI double U_EXPORT2
+ucurr_getRoundingIncrement(const char* currency) {
+    const int32_t *data = _findData(currency);
+
+    // If there is no rounding, or if the meta data is invalid,
+    // return 0.0 to indicate no rounding.
+    if (data[1] == 0 || data[0] < 0 || data[0] > MAX_POW10) {
+        return 0.0;
+    }
+
+    // Return data[1] / 10^(data[0]).  The only actual rounding data,
+    // as of this writing, is CHF { 2, 25 }.
+    return double(data[1]) / POW10[data[0]];
 }
 
 U_NAMESPACE_END
