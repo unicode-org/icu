@@ -951,7 +951,7 @@ T_UConverter_getNextUChar_ISO_2022(UConverterToUnicodeArgs* args,
         return 0xffff;
     }
 
-    do{
+    while(1){
 
         mySourceLimit = getEndOfBuffer_2022(&(args->source), args->sourceLimit, TRUE);
         /*Find the end of the buffer e.g : Next Escape Seq | end of Buffer*/
@@ -973,7 +973,11 @@ T_UConverter_getNextUChar_ISO_2022(UConverterToUnicodeArgs* args,
                ISO_2022,
                &plane,
                err);
-    }while(args->source < args->sourceLimit);
+        if(args->source >= args->sourceLimit){
+            *err = U_INDEX_OUTOFBOUNDS_ERROR;
+            break;
+        }
+    }
 
     if( (args->source == args->sourceLimit) && args->flush){
         _ISO2022Reset(args->converter,UCNV_RESET_TO_UNICODE);
