@@ -727,6 +727,7 @@ private:
    * @return TRUE if writing to the file was successful, FALSE otherwise.
    */
   UBool              writeToFile(const char* fileName) const; // True on success
+  /*  UBool              prepareForBundle() const;*/
 
   /**
    * Add this table collation to the cache.  This involves adding the
@@ -771,6 +772,9 @@ private:
                       UErrorCode& status);
   void                constructFromCache( const UnicodeString& key,
                       UErrorCode& status);
+  void                constructFromBundle(const char* fileName,
+					  UErrorCode& status);
+
 
   //--------------------------------------------------------------------------
   // Internal Static Utility Methods

@@ -65,6 +65,7 @@
 #include "mergecol.h"
 #include "unicode/resbund.h"
 #include "filestrm.h"
+#include "umemstrm.h"
 
 #ifdef _DEBUG
 #include "unistrm.h"
@@ -80,8 +81,10 @@
 class RuleBasedCollatorStreamer
 {
 public:
-    static void streamIn(RuleBasedCollator* collator, FileStream* is);
-    static void streamOut(const RuleBasedCollator* collator, FileStream* os);
+   static void streamIn(RuleBasedCollator* collator, FileStream* is);
+   static void streamOut(const RuleBasedCollator* collator, FileStream* os);
+   static void streamIn(RuleBasedCollator* collator, UMemoryStream* is);
+   static void streamOut(const RuleBasedCollator* collator, UMemoryStream* os);
 };
 
 //===========================================================================================
@@ -755,6 +758,68 @@ RuleBasedCollator::constructFromFile(const char* fileName,
     T_FileStream_close(ifs);
 }
 
+void
+RuleBasedCollator::constructFromBundle(const char* fileName,
+                                  UErrorCode& status)
+{
+    // This method tries to read in a flattened RuleBasedCollator that
+    // has been previously streamed out using the streamOut() method.
+    // The 'fileName' parameter should contain a full pathname valid on
+    // the local environment.
+
+    if (U_FAILURE(status))
+    {
+        return;
+    }
+
+    if (dataIsOwned)
+    {
+        delete data;
+        data = 0;
+    }
+
+    mPattern = 0;
+    isOverIgnore = FALSE;
+    setStrength(Collator::TERTIARY); // This is the default strength
+
+    FileStream* ifs = T_FileStream_open(fileName, "rb");
+    //UMemoryStream* ifs = uprv_mstrm_openBuffer(NULL, 0);
+    if (ifs == 0) {
+        status = U_FILE_ACCESS_ERROR;
+        return;
+    }
+
+    // The streamIn function does the actual work here...
+    RuleBasedCollatorStreamer::streamIn(this, ifs);
+
+    if (!T_FileStream_error(ifs))
+    {
+        status = U_ZERO_ERROR;
+    }
+    else if (data && data->isBogus())
+    {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        delete data;
+        data = 0;
+    }
+    else
+    {
+        status = U_MISSING_RESOURCE_ERROR;
+        delete data;
+        data = 0;
+    }
+
+#ifdef COLLDEBUG
+    fprintf(stderr, "binary read %s size %d, %s\n", fileName, T_FileStream_size(ifs), u_errorName(status));
+#endif
+
+    // We constructed the data when streaming it in, so we own it
+    dataIsOwned = TRUE;
+
+    T_FileStream_close(ifs);
+    //uprv_mstrm_close(ifs);
+}
+
 RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
                                 UErrorCode& status)
     : Collator(),
@@ -862,7 +927,7 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
           next = eDone;
           break;
             }
-        }
+       }
 
       // First try to load the collation from the in-memory static cache.
       // Note that all of the caching logic is handled here, and in the
@@ -2516,6 +2581,88 @@ VectorOfInt *RuleBasedCollator::getExpandValueList(int32_t order) const
 
 
 
+void RuleBasedCollatorStreamer::streamIn(RuleBasedCollator* collator, UMemoryStream* is)
+{
+    if (!uprv_mstrm_error(is))
+    {
+        // Check that this is the correct file type
+        int16_t id;
+
+        uprv_mstrm_read(is, &id, sizeof(id));
+        if (id != collator->FILEID)
+        {
+            // This isn't the right type of file.  Mark the ios
+            // as failing and return.
+            uprv_mstrm_setError(is); // force the stream to set its error flag
+            return;
+        }
+
+        // Stream in large objects
+        char isNull;
+
+        uprv_mstrm_read(is, &isNull, sizeof(isNull));
+        if (isNull)
+        {
+            delete collator->data;
+            collator->data = NULL;
+        }
+        else
+        {
+            if (collator->data == NULL)
+            {
+                collator->data = new TableCollationData;
+            }
+            
+            collator->data->streamIn(is);
+            if (collator->data->isBogus()) {
+                uprv_mstrm_setError(is); // force the stream to set its error flag
+                return;
+            }
+        }
+
+        // Verify that the end marker is present
+        uprv_mstrm_read(is, &id, sizeof(id));
+        if (id != collator->FILEID)
+        {
+            // This isn't the right type of file.  Mark the ios
+            // as failing and return.
+            uprv_mstrm_setError(is); // force the stream to set its error flag
+            return;
+        }
+
+        // Reset other data members
+        collator->isOverIgnore = FALSE;
+        collator->lastChar = 0;
+        delete collator->mPattern;
+        collator->mPattern = 0;
+        collator->key.remove();
+        collator->dataIsOwned = TRUE;
+    }
+}
+
+void RuleBasedCollatorStreamer::streamOut(const RuleBasedCollator* collator, UMemoryStream* os)
+{
+    if (!uprv_mstrm_error(os))
+    {
+        // We use a 16-bit ID code to identify this file.
+        int16_t id = collator->FILEID;
+        uprv_mstrm_write(os, (uint8_t *)&id, sizeof(id));
+
+        // Stream out the data
+        char isNull;
+        isNull = (collator->data == 0);
+        uprv_mstrm_write(os, (uint8_t*)&isNull, sizeof(isNull));
+
+        if (!isNull)
+        {
+            collator->data->streamOut(os);
+        }
+
+        // Write out the ID to indicate the end
+        uprv_mstrm_write(os, (uint8_t *)&id, sizeof(id));
+    }
+}
+
 void RuleBasedCollatorStreamer::streamIn(RuleBasedCollator* collator, FileStream* is)
 {
     if (!T_FileStream_error(is))
@@ -2616,6 +2763,27 @@ UBool RuleBasedCollator::writeToFile(const char* fileName) const
     T_FileStream_close(ofs);
     return err;
 }
+/*
+UBool RuleBasedCollator::prepareForBundle() const
+{
+    UMemoryStream* ofs = uprv_mstrm_openNew(0);
+    if (ofs != 0)
+    {
+        RuleBasedCollatorStreamer::streamOut(this, ofs);
+    }
+
+#ifdef COLLDEBUG
+    fprintf(stderr, "binary write %s size %d %s\n", fileName, T_FileStream_size(ofs),
+        (!T_FileStream_error(ofs) ? ", OK" : ", FAIL"));
+#endif
+
+    UBool err = uprv_mstrm_error(ofs) == 0;
+
+    uprv_mstrm_close(ofs);
+
+    return err;
+}
+*/
 
 void RuleBasedCollator::addToCache(const UnicodeString& key)
 {
@@ -2704,13 +2872,34 @@ RuleBasedCollator::chopLocale(UnicodeString& localeName)
 uint8_t *
 RuleBasedCollator::cloneRuleData(int32_t &length, UErrorCode &status)
 {
+  UMemoryStream *memdata = 0;
+  uint8_t *data = 0;
+
   if(U_FAILURE(status)) {
     return NULL;
   }
-  
-  status = U_UNSUPPORTED_ERROR;
 
-  return NULL;
+      memdata = uprv_mstrm_openNew(0);
+
+      if (memdata != 0) {
+        RuleBasedCollatorStreamer::streamOut(this, memdata);
+      }
+
+      UBool err = uprv_mstrm_error(memdata) == 0;
+
+
+    data = (uint8_t *)uprv_malloc(memdata->fPos);
+    if(data == 0) {
+      status = U_MEMORY_ALLOCATION_ERROR;
+      uprv_mstrm_close(memdata);
+      length = 0;
+      return 0;
+    } else {
+      uprv_memcpy(data, memdata->fStart, memdata->fPos);
+      length = memdata->fPos;
+      uprv_mstrm_close(memdata);
+      return data;
+    }
 }
 
 
