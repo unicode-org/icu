@@ -14,8 +14,8 @@
 */
 
 #include <stdio.h>
-#include <memory.h>
 #include "unicode/utypes.h"
+#include "cmemory.h"
 #include "cintltst.h"
 #include "umemstrm.h"
 
@@ -71,7 +71,7 @@ static void TestMemoryStreamAPI(){
     log_verbose("Testing the function uprv_mstrm_getBuffer())\n");
     x=0;
     gotBuffer=uprv_mstrm_getBuffer(memStream, &x);
-    if(memcmp(buffer, gotBuffer, sizeof(buffer)/sizeof(buffer[0])) != 0){
+    if(uprv_memcmp(buffer, gotBuffer, sizeof(buffer)/sizeof(buffer[0])) != 0){
         log_err("uprv_mstrm_getBuffer() failed\n");
         printf("\nGot:");
         printUSeqErr(gotBuffer, sizeof(buffer)/sizeof(buffer[0]));
@@ -81,7 +81,7 @@ static void TestMemoryStreamAPI(){
 
     log_verbose("Testing the function uprv_mstrm_read()\n");
     uprv_mstrm_read(memStream, (uint8_t*)gotBuffer, 1);
-    if(memcmp(buffer, gotBuffer, 1) != 0){
+    if(uprv_memcmp(buffer, gotBuffer, 1) != 0){
         log_err("uprv_mstrm_read() failed\n");
         printf("\nGot:");
         printUSeqErr(gotBuffer, 1);
@@ -90,7 +90,7 @@ static void TestMemoryStreamAPI(){
 
     } 
     uprv_mstrm_read(memStream, (uint8_t*)gotBuffer, 5);
-    if(memcmp(buffer+1, gotBuffer, 5) != 0){
+    if(uprv_memcmp(buffer+1, gotBuffer, 5) != 0){
         log_err("uprv_mstrm_read() failed\n");
         printf("\nGot:");
         printUSeqErr(gotBuffer, 5);
@@ -99,7 +99,7 @@ static void TestMemoryStreamAPI(){
 
     } 
     uprv_mstrm_read(memStream, (uint8_t*)gotBuffer, 8);
-    if(memcmp(buffer+6, gotBuffer, 8) != 0){
+    if(uprv_memcmp(buffer+6, gotBuffer, 8) != 0){
         log_err("uprv_mstrm_read() failed\n");
         printf("\nGot:");
         printUSeqErr(gotBuffer, 8);
@@ -111,7 +111,7 @@ static void TestMemoryStreamAPI(){
     /*try to read outside the limit*/
     /*It just reads untill the limit and sets the error and eof flags*/
     x=uprv_mstrm_read(memStream, (uint8_t*)gotBuffer, 5);
-    if(memcmp(buffer+14, gotBuffer, 2) != 0){
+    if(uprv_memcmp(buffer+14, gotBuffer, 2) != 0){
         log_err("uprv_mstrm_read() failed\n");
         printf("\nGot:");
         printUSeqErr(gotBuffer, 2);
@@ -132,7 +132,7 @@ static void TestMemoryStreamAPI(){
     log_verbose("Testing the function uprv_mstrm_getBuffer())\n");
     x=0;
     gotBuffer=uprv_mstrm_getBuffer(memStream, &x);
-    if(memcmp(buffer, gotBuffer, sizeof(buffer)/sizeof(buffer[0])) != 0){
+    if(uprv_memcmp(buffer, gotBuffer, sizeof(buffer)/sizeof(buffer[0])) != 0){
         log_err("uprv_mstrm_getBuffer() failed\n");
         printf("\nGot:");
         printUSeqErr(gotBuffer, sizeof(buffer)/sizeof(buffer[0]));

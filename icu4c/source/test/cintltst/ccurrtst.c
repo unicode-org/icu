@@ -13,7 +13,6 @@
 *********************************************************************************
 */
 
-#include <memory.h>
 #include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
@@ -22,6 +21,7 @@
 #include "ccurrtst.h"
 #include "ccolltst.h"
 #include "unicode/ustring.h"
+#include "cmemory.h"
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0]) 
 
@@ -147,7 +147,7 @@ void currTest()
             sortKey2=(uint8_t*)malloc(sizeof(uint8_t) * (sortklen+1));
             ucol_getSortKey(c, target, u_strlen(target), sortKey2, sortklen+1);
 
-            res = memcmp(sortKey1, sortKey2, sortklen);
+            res = uprv_memcmp(sortKey1, sortKey2, sortklen);
             if (res < 0) keyResult = (UCollationResult)-1;
             else if (res > 0) keyResult = (UCollationResult)1;
             else keyResult = (UCollationResult)0;
