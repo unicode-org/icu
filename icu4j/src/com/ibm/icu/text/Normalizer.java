@@ -3,12 +3,6 @@
  * Copyright (C) 2000-2003, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2003/12/13 00:30:50 $ 
- * $Revision: 1.39 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.text;
 import com.ibm.icu.impl.NormalizerImpl;

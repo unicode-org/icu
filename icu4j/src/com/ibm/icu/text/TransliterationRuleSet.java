@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRuleSet.java,v $
- * $Date: 2003/06/03 18:49:35 $
- * $Revision: 1.27 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 
@@ -28,7 +22,6 @@ import com.ibm.icu.impl.UtilityExtensions;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.27 $ $Date: 2003/06/03 18:49:35 $
  */
 class TransliterationRuleSet {
     /**
@@ -262,83 +255,3 @@ class TransliterationRuleSet {
         return set;
     }
 }
-
-/* $Log: TransliterationRuleSet.java,v $
- * Revision 1.27  2003/06/03 18:49:35  alan
- * jitterbug 2959: update copyright dates to include 2003
- *
-/* Revision 1.26  2003/01/28 18:55:42  rviswanadha
-/* jitterbug 2309: Modularize ICU4J big bang commit
-/*
-/* Revision 1.25  2002/06/28 19:15:53  alan
-/* jitterbug 1434: improve method names; minor cleanup
-/*
-/* Revision 1.24  2002/06/26 18:12:40  alan
-/* jitterbug 1434: initial public implementation of getSourceSet and getTargetSet
-/*
-/* Revision 1.23  2002/02/25 22:43:58  ram
-/* Move Utility class to icu.impl
-/*
-/* Revision 1.22  2002/02/16 03:06:17  Mohan
-/* ICU4J reorganization
-/*
-/* Revision 1.21  2002/02/09 01:01:47  alan
-/* jitterbug 1544: add char32At() to Replaceable
-/*
-/* Revision 1.20  2001/11/29 22:31:18  alan
-/* jitterbug 1560: add source-set methods and TransliteratorUtility class
-/*
-/* Revision 1.19  2001/11/29 16:11:46  alan
-/* jitterbug 1560: add debugging code; fix handling of runs; detect incomplete non-incremental processing
-/*
-/* Revision 1.18  2001/11/27 21:57:05  alan
-/* jitterbug 1389: incorporate Mark's review comments - comments only
-/*
-/* Revision 1.17  2001/11/06 05:06:26  alan
-/* jitterbug 60: make toRules() read from original vector
-/*
-/* Revision 1.16  2001/11/05 18:55:54  alan
-/* jitterbug 60: elide duplicate rules in toRules()
-/*
-/* Revision 1.15  2001/10/26 22:48:41  alan
-/* jitterbug 68: add DEBUG support to dump rule-based match progression
-/*
- * Revision 1.14  2001/10/25 22:33:19  alan
- * jitterbug 73: use int for index values to avoid signedness problems
- *
- * Revision 1.13  2001/09/26 18:17:42  alan
- * jitterbug 67: delete obsolete code
- *
- * Revision 1.12  2001/09/26 18:00:06  alan
- * jitterbug 67: sync parser with icu4c, allow unlimited, nested segments
- *
- * Revision 1.11  2001/09/19 17:43:38  alan
- * jitterbug 60: initial implementation of toRules()
- *
- * Revision 1.10  2000/06/29 21:59:23  alan4j
- * Fix handling of Transliterator.Position fields
- *
- * Revision 1.9  2000/03/10 04:07:24  johnf
- * Copyright update
- *
- * Revision 1.8  2000/02/03 18:11:19  Alan
- * Use array rather than hashtable for char-to-set map
- *
- * Revision 1.7  2000/01/27 18:59:19  Alan
- * Use Position rather than int[] and move all subclass overrides to one method (handleTransliterate)
- *
- * Revision 1.6  2000/01/18 20:36:17  Alan
- * Make UnicodeSet inherit from UnicodeFilter
- *
- * Revision 1.5  2000/01/04 21:43:57  Alan
- * Add rule indexing, and move masking check to TransliterationRuleSet.
- *
- * Revision 1.4  1999/12/22 01:40:54  Alan
- * Consolidate rule pattern anteContext, key, and postContext into one string.
- *
- * Revision 1.3  1999/12/22 01:05:54  Alan
- * Improve masking checking; turn it off by default, for better performance
- *
- * Revision 1.2  1999/12/22 00:01:36  Alan
- * Detect a>x masking a>y
- */

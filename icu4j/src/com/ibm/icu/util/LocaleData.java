@@ -3,12 +3,6 @@
  * Copyright (C) 2003, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/LocaleData.java,v $
- * $Date: 2004/01/09 03:09:05 $
- * $Revision: 1.5 $
- *
- *******************************************************************************
 */
 package com.ibm.icu.util;
 

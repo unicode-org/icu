@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFRule.java,v $ 
- * $Date: 2004/03/16 15:44:58 $ 
- * $Revision: 1.9 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 
@@ -20,7 +14,6 @@ import java.text.*;
  * A class represnting a single rule in a RuleBasedNumberFormat.  A rule
  * inserts its text into the result string and then passes control to its
  * substitutions, which do the same thing.
- * $RCSfile: NFRule.java,v $ $Revision: 1.9 $ $Date: 2004/03/16 15:44:58 $
  */
 final class NFRule {
     //-----------------------------------------------------------------------

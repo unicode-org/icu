@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2004/03/11 07:04:09 $ 
- * $Revision: 1.30 $
- *
- *****************************************************************************************
  */
 
 package com.ibm.icu.text;

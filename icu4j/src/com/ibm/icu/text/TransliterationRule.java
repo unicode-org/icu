@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2004/02/25 01:25:20 $
- * $Revision: 1.51 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 
@@ -46,7 +40,6 @@ import com.ibm.icu.impl.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.51 $ $Date: 2004/02/25 01:25:20 $
  */
 class TransliterationRule {
 
@@ -580,156 +573,3 @@ class TransliterationRule {
         output.addReplacementSetTo(toUnionTo);
     }
 }
-
-/**
- * $Log: TransliterationRule.java,v $
- * Revision 1.51  2004/02/25 01:25:20  alan
- * jitterbug 3517: make toString output shorter
- *
- * Revision 1.50  2003/06/03 18:49:35  alan
- * jitterbug 2959: update copyright dates to include 2003
- *
- * Revision 1.49  2003/05/14 19:03:30  rviswanadha
- * jitterbug 2836: fix compiler warnings
- *
- * Revision 1.48  2003/01/28 18:55:42  rviswanadha
- * jitterbug 2309: Modularize ICU4J big bang commit
- *
- * Revision 1.47  2002/06/28 19:15:53  alan
- * jitterbug 1434: improve method names; minor cleanup
- *
- * Revision 1.46  2002/06/26 18:12:39  alan
- * jitterbug 1434: initial public implementation of getSourceSet and getTargetSet
- *
- * Revision 1.45  2002/02/25 22:43:57  ram
- * Move Utility class to icu.impl
- *
- * Revision 1.44  2002/02/16 03:06:16  Mohan
- * ICU4J reorganization
- *
- * Revision 1.43  2002/02/09 01:01:47  alan
- * jitterbug 1544: add char32At() to Replaceable
- *
- * Revision 1.42  2002/02/07 00:53:54  alan
- * jitterbug 1234: make output side of RBTs object-oriented; rewrite ID parsers and modularize them; implement &Any-Lower() support
- *
- * Revision 1.41  2001/12/11 22:11:04  alan
- * jitterbug 1591: edit comments
- *
- * Revision 1.40  2001/12/11 17:43:57  alan
- * jitterbug 1591: clean up TransliterationRule
- *
- * Revision 1.39  2001/12/03 21:33:58  alan
- * jitterbug 1373: more fixes to support supplementals
- *
- * Revision 1.38  2001/11/30 22:27:29  alan
- * jitterbug 1560: fix double increment bug in getSourceSet
- *
- * Revision 1.37  2001/11/29 22:31:18  alan
- * jitterbug 1560: add source-set methods and TransliteratorUtility class
- *
- * Revision 1.36  2001/11/21 22:21:45  alan
- * jitterbug 1533: incorporate Mark's review comments; move escape handling methods to Utility
- *
- * Revision 1.35  2001/11/02 17:46:05  alan
- * jitterbug 1426: eliminate NOP call to copy()
- *
- * Revision 1.34  2001/10/30 18:04:08  alan
- * jitterbug 1406: make quantified segments behave like perl counterparts
- *
- * Revision 1.33  2001/10/25 23:22:15  alan
- * jitterbug 73: changes to support zero-length matchers at end of key
- *
- * Revision 1.32  2001/10/25 22:42:24  alan
- * jitterbug 73: use int for index values to avoid signedness problems
- *
- * Revision 1.31  2001/10/18 23:02:32  alan
- * jitterbug 60: fix handling of anchors in toRule
- *
- * Revision 1.30  2001/10/04 22:33:53  alan
- * jitterbug 69: minor fix to incremental RBT code
- *
- * Revision 1.29  2001/10/03 00:14:23  alan
- * jitterbug 73: finish quantifier and supplemental char support
- *
- * Revision 1.28  2001/09/26 18:00:06  alan
- * jitterbug 67: sync parser with icu4c, allow unlimited, nested segments
- *
- * Revision 1.27  2001/09/19 17:43:38  alan
- * jitterbug 60: initial implementation of toRules()
- *
- * Revision 1.26  2001/06/29 22:35:41  alan4j
- * Implement Any-Upper Any-Lower and Any-Title transliterators
- *
- * Revision 1.25  2000/11/29 19:12:32  alan4j
- * Update docs
- *
- * Revision 1.24  2000/08/30 20:40:30  alan4j
- * Implement anchors.
- *
- * Revision 1.23  2000/06/29 21:59:23  alan4j
- * Fix handling of Transliterator.Position fields
- *
- * Revision 1.22  2000/05/18 21:37:19  alan
- * Update docs
- *
- * Revision 1.21  2000/04/28 01:22:01  alan
- * Update syntax displayed by toString
- *
- * Revision 1.20  2000/04/25 17:17:37  alan
- * Add Replaceable.copy to retain out-of-band info during reordering.
- *
- * Revision 1.19  2000/04/25 01:42:58  alan
- * Allow arbitrary length variable values. Clean up Data API. Update javadocs.
- *
- * Revision 1.18  2000/04/22 01:25:10  alan
- * Add support for cursor positioner '@'; update javadoc
- *
- * Revision 1.17  2000/04/21 21:16:40  alan
- * Modify rule syntax
- *
- * Revision 1.16  2000/04/19 16:34:18  alan
- * Add segment support.
- *
- * Revision 1.15  2000/04/12 20:17:45  alan
- * Delegate replace operation to rule object
- *
- * Revision 1.14  2000/03/10 04:07:24  johnf
- * Copyright update
- *
- * Revision 1.13  2000/02/10 07:36:25  johnf
- * fixed imports for com.ibm.icu.impl.Utility
- *
- * Revision 1.12  2000/02/03 18:11:19  Alan
- * Use array rather than hashtable for char-to-set map
- *
- * Revision 1.11  2000/01/27 18:59:19  Alan
- * Use Position rather than int[] and move all subclass overrides to one method (handleTransliterate)
- *
- * Revision 1.10  2000/01/18 20:36:17  Alan
- * Make UnicodeSet inherit from UnicodeFilter
- *
- * Revision 1.9  2000/01/18 02:38:55  Alan
- * Fix filtering bug.
- *
- * Revision 1.8  2000/01/13 23:53:23  Alan
- * Fix bugs found during ICU port
- *
- * Revision 1.7  2000/01/11 04:12:06  Alan
- * Cleanup, embellish comments
- *
- * Revision 1.6  2000/01/11 02:25:03  Alan
- * Rewrite UnicodeSet and RBT parsers for better performance and new syntax
- *
- * Revision 1.5  2000/01/04 21:43:57  Alan
- * Add rule indexing, and move masking check to TransliterationRuleSet.
- *
- * Revision 1.4  1999/12/22 01:40:54  Alan
- * Consolidate rule pattern anteContext, key, and postContext into one string.
- *
- * Revision 1.3  1999/12/22 01:05:54  Alan
- * Improve masking checking; turn it off by default, for better performance
- *
- * Revision 1.2  1999/12/21 23:58:44  Alan
- * Detect a>x masking a>y
- */

@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2000, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFRuleSet.java,v $ 
- * $Date: 2004/03/23 21:33:58 $ 
- * $Revision: 1.9 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 
@@ -24,7 +18,6 @@ import java.util.Vector;
  * appropriate rule for formatting a particular number and dispatch
  * control to it, and to arbitrate between different rules when parsing
  * a number.
- * $RCSfile: NFRuleSet.java,v $ $Revision: 1.9 $ $Date: 2004/03/23 21:33:58 $
  */
 // temporary testing only
 public final class NFRuleSet {

@@ -3,12 +3,6 @@
  * Copyright (C) 2001, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Quantifier.java,v $ 
- * $Date: 2002/06/28 19:15:52 $ 
- * $Revision: 1.8 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 import com.ibm.icu.impl.Utility;

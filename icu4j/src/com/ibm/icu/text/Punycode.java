@@ -3,12 +3,6 @@
  * Copyright (C) 2003-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Punycode.java,v $ 
- * $Date: 2004/01/09 03:08:46 $ 
- * $Revision: 1.2 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 

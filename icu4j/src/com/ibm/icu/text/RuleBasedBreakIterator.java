@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $
- * $Date: 2004/01/26 23:04:48 $
- * $Revision: 1.27 $
- *
- *****************************************************************************************
  */
 
 
@@ -230,7 +224,6 @@ import java.io.*;
  *
  * @author Richard Gillam
  * @stable ICU 2.0
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.27 $ $Date: 2004/01/26 23:04:48 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 

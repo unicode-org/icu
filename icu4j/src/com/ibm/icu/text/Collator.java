@@ -3,12 +3,6 @@
 * Copyright (C) 1996-2003, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2004/04/01 03:11:44 $
-* $Revision: 1.43 $
-*
-*******************************************************************************
 */
 package com.ibm.icu.text;
 

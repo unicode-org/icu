@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2004/02/20 23:32:06 $
- * $Revision: 1.106 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 

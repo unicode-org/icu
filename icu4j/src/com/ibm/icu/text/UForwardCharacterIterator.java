@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2000, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /usr/cvs/icu4j/icu4j/src/com/ibm/icu/impl/UForwardCharacterIterator.java,v $ 
- * $Date: 2002/06/20 01:18:09 $ 
- * $Revision: 1.1 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 

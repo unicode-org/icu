@@ -3,13 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/VersionInfo.java,v $ 
- * $Date: 2004/01/22 06:39:31 $ 
- * $Revision: 1.19 $
- *
- * jitterbug 1741
- *****************************************************************************************
  */
 
 package com.ibm.icu.util;

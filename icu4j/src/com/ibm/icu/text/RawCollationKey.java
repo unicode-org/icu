@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RawCollationKey.java,v $ 
- * $Date: 2003/09/23 04:16:47 $ 
- * $Revision: 1.2 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.text;
 

@@ -3,12 +3,6 @@
  * Copyright (C) 2001-2002, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/CaseInsensitiveString.java,v $
- * $Date: 2002/12/05 01:25:12 $
- * $Revision: 1.5 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.util;
 

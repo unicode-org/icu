@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Replaceable.java,v $ 
- * $Date: 2003/12/20 03:07:10 $ 
- * $Revision: 1.13 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 
