@@ -43,9 +43,9 @@ public class TestUScript extends TestFmwk{
         int numErrors =0;
 
         for( ; i<testNames.length; i++){
-            int code = UScript.getCode(testNames[i]);
-            if( code != expected[i]){
-                logln("Error getting script code Got: " +code + " Expected: " +expected[i] +" for name "+testNames[i]);
+            int[] code = UScript.getCode(testNames[i]);
+            if( code[0] != expected[i]){
+                logln("Error getting script code Got: " +code[0] + " Expected: " +expected[i] +" for name "+testNames[i]);
                 numErrors++;
             }
         }
@@ -53,7 +53,24 @@ public class TestUScript extends TestFmwk{
             errln("Number of Errors in UScript.getCode() : " + numErrors);
         }            
     }
-    
+    public void TestMultipleCode(){
+        final String[] testNames = { "ja" ,"ko_KR","zh","zh_TW"};
+        final int[][] expected = {
+                                {UScript.KATAKANA,UScript.HIRAGANA,UScript.HAN},
+                                {UScript.HANGUL, UScript.HAN},
+                                {UScript.HAN},
+                                {UScript.HAN,UScript.BOPOMOFO}
+                              };
+        for(int i=0; i<testNames.length;i++){
+            int[] code = UScript.getCode(testNames[i]);
+            int[] expt = (int[]) expected[i];
+            for(int j =0; j< code.length;j++){
+                if(code[j]!=expt[j]){
+                    logln("Error getting script code Got: " +code[j] + " Expected: " +expt[j] +" for name "+testNames[i]);
+                }
+            }
+        }
+    }
     public void TestGetCode(){
 
         final String[] testNames={
@@ -101,9 +118,9 @@ public class TestUScript extends TestFmwk{
         int numErrors =0;
 
         for( ; i<testNames.length; i++){
-            int code = UScript.getCode(testNames[i]);
-            if( code != expected[i]){
-                logln("Error getting script code Got: " +code + " Expected: " +expected[i] +" for name "+testNames[i]);
+            int[] code = UScript.getCode(testNames[i]);
+            if( code[0] != expected[i]){
+                logln("Error getting script code Got: " +code[0] + " Expected: " +expected[i] +" for name "+testNames[i]);
                 numErrors++;
             }
         }

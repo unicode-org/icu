@@ -20,7 +20,12 @@ import com.ibm.text.UCharacter;
  * Scripts.txt.
  */
 public final class UScript {
-    
+    /**
+     * Puts a copyright in the .class file
+     */
+    private static final String copyrightNotice
+        = "Copyright \u00a92001 IBM Corp.  All rights reserved.";
+        
     public static final int INVALID_CODE = -1;
     public static final int COMMON       =  0;  /* Zyyy */
     public static final int INHERITED    =  1;  /* Qaai */
@@ -250,7 +255,7 @@ public final class UScript {
         INHERITED  ,
         RUNIC      ,
         SINHALA    ,
-        SYRIAC     ,
+      /*  SYRIAC     , */
       /*  SYRIAC     , */
       /*  SYRIAC     , */
         SYRIAC     ,
@@ -763,21 +768,30 @@ public final class UScript {
 
     private static final String localeScript = "com.ibm.text.resources.LocaleScript";
     
-    private static int findCodeFromLocale(Locale locale)
+    private static int[] findCodeFromLocale(Locale locale)
             throws MissingResourceException{
         //TODO: Currently we use a hacked fallback mechanism.
         //Should be changed once ICU4J bundles locale data
         //with the distribution
-        int code = INVALID_CODE;
+        int[] code = new int[1];
+        code[0] = INVALID_CODE;
+        
         ResourceBundle resB = ResourceBundle.getBundle(localeScript);
         String temp = locale.toString();
-        do{
+        while(true){
             try{
                 String[] scriptArray = resB.getStringArray(temp);
-                int strIndex = findStringIndex(scriptNames,scriptArray[0]);
-                if(strIndex>=0 && strIndex < scriptAbbr.length){ 
-                    code =  scriptNameCodes[strIndex];
+                code = new int[scriptArray.length];
+                for(int i= 0; i< scriptArray.length ;i++){
+                    int strIndex = findStringIndex(scriptAbbr,scriptArray[i]);
+                    
+                    if(strIndex>=0 && strIndex < scriptAbbr.length){ 
+                        code[i] =  scriptAbbrCodes[strIndex];
+                    }else{
+                        code[i] = INVALID_CODE;
+                    }
                 }
+                break;
             }catch(MissingResourceException e){
                 
                 /* handle fallback */
@@ -789,7 +803,7 @@ public final class UScript {
                 }
                 continue;
             }
-        }while(code==INVALID_CODE);
+        }
         
         return code;
      }
@@ -834,7 +848,7 @@ public final class UScript {
     * @exception IllegalArgumentException, MissingResourceException
     * @draft
     */
-    public static final int getCode(Locale locale)
+    public static final int[] getCode(Locale locale)
         throws IllegalArgumentException, MissingResourceException{
             return findCodeFromLocale(locale);
     }
@@ -848,27 +862,28 @@ public final class UScript {
     * @exception IllegalArgumentException, MissingResourceException
     * @draft
     */
-    public static final int getCode(String nameOrAbbrOrLocale)
+    public static final int[] getCode(String nameOrAbbrOrLocale)
         throws IllegalArgumentException, MissingResourceException{
             
-        int code = INVALID_CODE;
+        int[] code = new int[1];
+        code[0] = INVALID_CODE;
         int strIndex=0;
         
         /* try the Names array first */
         strIndex = findStringIndex(scriptNames, nameOrAbbrOrLocale);
         
         if(strIndex>=0 && strIndex < scriptNames.length){ 
-            code =  scriptNameCodes[strIndex];
+            code[0] =  scriptNameCodes[strIndex];
         }
         /* we did not find in names array so try abbr array*/
-        if(code == INVALID_CODE){
+        if(code[0] == INVALID_CODE){
             strIndex = findStringIndex(scriptAbbr, nameOrAbbrOrLocale);
             if(strIndex>=0 && strIndex < scriptAbbr.length){ 
-                code =  scriptAbbrCodes[strIndex];
+                code[0] =  scriptAbbrCodes[strIndex];
             }
         }
         /* we still haven't found it try locale */        
-        if(code==INVALID_CODE){            
+        if(code[0]==INVALID_CODE){            
             code = findCodeFromLocale(new Locale(nameOrAbbrOrLocale,""));
         }
         return code;

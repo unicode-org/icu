@@ -4,7 +4,6 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
-
 package com.ibm.text.resources;
 
 import java.util.ListResourceBundle; 
@@ -16,399 +15,252 @@ public class LocaleScript extends ListResourceBundle {
       }
 
       private static final Object[][] localeScript = new Object[][] {
-           {"root", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
-                                 }
-           },
            {"af", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
-                                 }
-           },
-           {"am", new String[] {
-                                      "Ethiopic",
-                                      "Ethi",
+                                      "LATN",
                                  }
            },
            {"ar", new String[] {
-                                      "Arabic",
-                                      "Arab",
+                                      "ARAB",
                                  }
            },
            {"be", new String[] {
-                                      "Cyrillic",
-                                      "Cyrl",
-                                      "Cyrs",
+                                      "CYRL",
                                  }
            },
            {"bg", new String[] {
-                                      "Cyrillic",
-                                      "Cyrl",
-                                      "Cyrs",
-                                 }
-           },
-           {"bn", new String[] {
-                                      "Bengali",
-                                      "Beng",
+                                      "CYRL",
                                  }
            },
            {"ca", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"cs", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"da", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"de", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"el", new String[] {
-                                      "Greek",
-                                      "Grek",
+                                      "GREK",
                                  }
            },
            {"en", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"eo", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"es", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"et", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"eu", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"fa", new String[] {
-                                      "Arabic",
-                                      "Arab",
+                                      "ARAB",
                                  }
            },
            {"fi", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"fo", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"fr", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"ga", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"gl", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"gv", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"he", new String[] {
-                                      "Hebrew",
-                                      "Hebr",
+                                      "HEBR",
                                  }
            },
            {"hi", new String[] {
-                                      "Devanagari",
-                                      "Deva",
+                                      "DEVA",
                                  }
            },
            {"hr", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"hu", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
-                                 }
-           },
-           {"hy", new String[] {
-                                      "Armn",
+                                      "LATN",
                                  }
            },
            {"id", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"is", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"it", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"iw", new String[] {
-                                      "Hebrew",
-                                      "Hebr",
+                                      "HEBR",
+                                 }
+           },
+           {"ja", new String[] {
+                                      "KANA",
+                                      "HIRA",
+                                      "HANI"
                                  }
            },
            {"kl", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
+                                 }
+           },
+           {"ko", new String[] {
+                                      "HANG",
+                                      "HANI",
                                  }
            },
            {"kok", new String[] {
-                                      "Devanagari",
-                                      "Deva",
+                                      "DEVA",
                                  }
            },
            {"kw", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"lt", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"lv", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"mk", new String[] {
-                                      "Cyrillic",
-                                      "Cyrs",
+                                      "CYRL",
                                  }
            },
            {"mr", new String[] {
-                                      "Devanagari",
-                                      "Deva",
-                                 }
-           },
-           {"ms", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "DEVA",
                                  }
            },
            {"mt", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"nb", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"nl", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"nn", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"pl", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"pt", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"ro", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"ru", new String[] {
-                                      "Cyrillic",
-                                      "Cyrs",
+                                      "CYRL",
                                  }
            },
            {"sh", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"sk", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"sl", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"sq", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"sr", new String[] {
-                                      "Cyrillic",
-                                      "Cyrs",
+                                      "CYRL",
                                  }
            },
            {"sv", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"sw", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"ta", new String[] {
-                                      "Tamil",
-                                      "Taml",
+                                      "TAML",
                                  }
            },
            {"te", new String[] {
-                                      "Telugu",
-                                      "Telu",
+                                      "TELU",
                                  }
            },
            {"th", new String[] {
-                                      "Thai",
-                                      "Thai",
+                                      "THAI",
                                  }
            },
            {"tr", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
                                  }
            },
            {"uk", new String[] {
-                                      "Cyrillic",
-                                      "Cyrs",
+                                      "CYRL",
                                  }
            },
            {"vi", new String[] {
-                                      "Latin",
-                                      "Latn",
-                                      "Latf",
-                                      "Latg",
+                                      "LATN",
+                                 }
+           },
+           {"zh", new String[] {
+                                      "HANI",
+                                 }
+           },
+           {"zh_TW", new String[] {
+                                      "HANI",
+                                      "BOPO",
                                  }
            },
       };
