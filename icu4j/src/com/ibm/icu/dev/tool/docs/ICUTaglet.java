@@ -8,6 +8,14 @@ package com.ibm.icu.dev.tool.docs;
 
 import com.sun.javadoc.*;
 import com.sun.tools.doclets.*;
+import com.sun.tools.doclets.internal.toolkit.taglets.*;
+import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
+
+// stupid jdk 1.5 contains both com.sun.tools.doclets.Taglet and
+// com.sun.tools.doclets.internal.toolkit.taglets.Taglet.
+// their registration code casts to the second, not the first, and the
+// second doesn't implement the first, so if you just implement the
+// first, you die.
 
 import java.text.BreakIterator;
 import java.util.Locale;
@@ -32,9 +40,9 @@ public abstract class ICUTaglet implements Taglet {
         ICUInternalTaglet.register(taglets);
         ICUDraftTaglet.register(taglets);
         ICUStableTaglet.register(taglets);
-        ICUDeprecatedTaglet.register(taglets);
+//         ICUDeprecatedTaglet.register(taglets);
         ICUObsoleteTaglet.register(taglets);
-    ICUIgnoreTaglet.register(taglets);
+        ICUIgnoreTaglet.register(taglets);
     }
 
     protected ICUTaglet(String name, int mask) {
@@ -47,27 +55,27 @@ public abstract class ICUTaglet implements Taglet {
     }
 
     public boolean inConstructor() {
-        return (mask & MASK_FIELD) != 0;
+        return (mask & MASK_CONSTRUCTOR) != 0;
     }
 
     public boolean inMethod() {
-        return (mask & MASK_FIELD) != 0;
+        return (mask & MASK_METHOD) != 0;
     }
 
     public boolean inOverview() {
-        return (mask & MASK_FIELD) != 0;
+        return (mask & MASK_OVERVIEW) != 0;
     }
 
     public boolean inPackage() {
-        return (mask & MASK_FIELD) != 0;
+        return (mask & MASK_PACKAGE) != 0;
     }
 
     public boolean inType() {
-        return (mask & MASK_FIELD) != 0;
+        return (mask & MASK_TYPE) != 0;
     }
 
     public boolean isInlineTag() {
-        return (mask & MASK_FIELD) != 0;
+        return (mask & MASK_INLINE) != 0;
     }
 
     public String getName() {
@@ -91,6 +99,22 @@ public abstract class ICUTaglet implements Taglet {
             }
         }
         return null;
+    }
+
+    public TagletOutput getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException {
+	TagletOutput out = writer.getTagletOutputInstance();
+	out.setOutput(toString(tag));
+	return out;
+    }
+
+    public TagletOutput getTagletOutput(Doc holder, TagletWriter writer) throws IllegalArgumentException {
+ 	TagletOutput out = writer.getTagletOutputInstance();
+	Tag[] tags = holder.tags(getName());
+	if (tags.length == 0) {
+	    return null;
+	}
+ 	out.setOutput(toString(tags[0]));
+ 	return out;
     }
 
     protected static final String STATUS = "<dt><b>Status:</b></dt>";
@@ -152,10 +176,16 @@ public abstract class ICUTaglet implements Taglet {
         }
     }
 
+    /*
+     * sigh, in JDK 1.5 we can't override the standard deprecated taglet
+     * so easily.  I'm not impressed with the javadoc code.
+     *
+
     public static class ICUDeprecatedTaglet extends ICUTaglet {
         private static final String NAME = "deprecated";
 
         public static void register(Map taglets) {
+	    taglets.remove(NAME); // override standard deprecated taglet
             taglets.put(NAME, new ICUDeprecatedTaglet());
         }
 
@@ -171,12 +201,13 @@ public abstract class ICUTaglet implements Taglet {
             int next = bi.next();
             if (first == -1 || next == -1) {
                 System.err.println("Warning: bad deprecated tag '" + text + "'");
-                return STATUS + "<dd><em>Deprecated</em>. " + text + "</dd>";
+                return "<dd><em>Note</em>. " + text + "</dd>";
             } else {
-                return STATUS + "<dd><em>Deprecated in " + text.substring(first, next) + "</em>. " + text.substring(next) + "</dd>";
+                return "<dd><em>Note, " + text.substring(first, next) + "</em>. " + text.substring(next) + "</dd>";
             }
         }
     }
+    */
 
     public static class ICUObsoleteTaglet extends ICUTaglet {
         private static final String NAME = "obsolete";
@@ -201,23 +232,23 @@ public abstract class ICUTaglet implements Taglet {
     }
 
     public static class ICUIgnoreTaglet extends ICUTaglet {
-    private static ICUTaglet singleton;
+        private static ICUTaglet singleton;
 
-    public static void register(Map taglets) {
-        if (singleton == null) {
-        singleton = new ICUIgnoreTaglet();
+        public static void register(Map taglets) {
+            if (singleton == null) {
+                singleton = new ICUIgnoreTaglet();
+            }
+            taglets.put("bug", singleton);
+            taglets.put("test", singleton);
+            taglets.put("summary", singleton);
         }
-        taglets.put("bug", singleton);
-        taglets.put("test", singleton);
-        taglets.put("summary", singleton);
-    }
 
-    private ICUIgnoreTaglet() {
-         super(".ignore", MASK_DEFAULT);
-    }
+        private ICUIgnoreTaglet() {
+            super(".ignore", MASK_DEFAULT);
+        }
 
-    public String toString(Tag tag) {
-        return null;
-    }
+        public String toString(Tag tag) {
+            return null;
+        }
     }
 }
