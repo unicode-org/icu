@@ -92,16 +92,14 @@ UConverter* UnicodeString::fgDefaultConverter  = 0;
 // Constructors
 //========================================
 UnicodeString::UnicodeString()
-  : fArray(fStackBuffer),
-    fLength(0),
-    fCapacity(US_STACKBUF_SIZE),
+  : fCapacity(US_STACKBUF_SIZE),
+    fArray(fStackBuffer),
     fFlags(kShortString)
 {}
 
 UnicodeString::UnicodeString(int32_t capacity, UChar32 c, int32_t count)
-  : fArray(0),
-    fLength(0),
-    fCapacity(US_STACKBUF_SIZE),
+  : fCapacity(US_STACKBUF_SIZE),
+    fArray(0),
     fFlags(0)
 {
   if(count <= 0) {
@@ -164,18 +162,18 @@ UnicodeString::UnicodeString(int32_t capacity, UChar32 c, int32_t count)
 }
 
 UnicodeString::UnicodeString(UChar ch)
-  : fArray(fStackBuffer),
-    fLength(1),
+  : Replaceable(1),
     fCapacity(US_STACKBUF_SIZE),
+    fArray(fStackBuffer),
     fFlags(kShortString)
 {
   fStackBuffer[0] = ch;
 }
 
 UnicodeString::UnicodeString(UChar32 ch)
-  : fArray(fStackBuffer),
-    fLength(1),
+  : Replaceable(1),
     fCapacity(US_STACKBUF_SIZE),
+    fArray(fStackBuffer),
     fFlags(kShortString)
 {
   UTextOffset i = 0;
@@ -184,9 +182,8 @@ UnicodeString::UnicodeString(UChar32 ch)
 }
 
 UnicodeString::UnicodeString(const UChar *text)
-  : fArray(fStackBuffer),
-    fLength(0),
-    fCapacity(US_STACKBUF_SIZE),
+  : fCapacity(US_STACKBUF_SIZE),
+    fArray(fStackBuffer),
     fFlags(kShortString)
 {
   doReplace(0, 0, text, 0, u_strlen(text));
@@ -194,9 +191,8 @@ UnicodeString::UnicodeString(const UChar *text)
 
 UnicodeString::UnicodeString(const UChar *text,
                              int32_t textLength)
-  : fArray(fStackBuffer),
-    fLength(0),
-    fCapacity(US_STACKBUF_SIZE),
+  : fCapacity(US_STACKBUF_SIZE),
+    fArray(fStackBuffer),
     fFlags(kShortString)
 {
   doReplace(0, 0, text, 0, textLength);
@@ -205,9 +201,9 @@ UnicodeString::UnicodeString(const UChar *text,
 UnicodeString::UnicodeString(UBool isTerminated,
                              const UChar *text,
                              int32_t textLength)
-  : fArray((UChar *)text),
-    fLength(textLength),
+  : Replaceable(textLength),
     fCapacity(isTerminated ? textLength + 1 : textLength),
+    fArray((UChar *)text),
     fFlags(kReadonlyAlias)
 {
   if(text == 0 || textLength < -1 || textLength == -1 && !isTerminated) {
@@ -222,9 +218,9 @@ UnicodeString::UnicodeString(UBool isTerminated,
 UnicodeString::UnicodeString(UChar *buff,
                              int32_t bufLength,
                              int32_t buffCapacity)
-  : fArray(buff),
-    fLength(bufLength),
+  : Replaceable(bufLength),
     fCapacity(buffCapacity),
+    fArray(buff),
     fFlags(kWriteableAlias)
 {
   if(buff == 0 || bufLength < 0 || bufLength > buffCapacity) {
@@ -234,9 +230,8 @@ UnicodeString::UnicodeString(UChar *buff,
 
 UnicodeString::UnicodeString(const char *codepageData,
                              const char *codepage)
-  : fArray(fStackBuffer),
-    fLength(0),
-    fCapacity(US_STACKBUF_SIZE),
+  : fCapacity(US_STACKBUF_SIZE),
+    fArray(fStackBuffer),
     fFlags(kShortString)
 {
   if(codepageData != 0) {
@@ -248,9 +243,8 @@ UnicodeString::UnicodeString(const char *codepageData,
 UnicodeString::UnicodeString(const char *codepageData,
                              int32_t dataLength,
                              const char *codepage)
-  : fArray(fStackBuffer),
-    fLength(0),
-    fCapacity(US_STACKBUF_SIZE),
+  : fCapacity(US_STACKBUF_SIZE),
+    fArray(fStackBuffer),
     fFlags(kShortString)
 {
   if(codepageData != 0) {
@@ -260,9 +254,8 @@ UnicodeString::UnicodeString(const char *codepageData,
 
 UnicodeString::UnicodeString(const UnicodeString& that)
   : Replaceable(),
-    fArray(fStackBuffer),
-    fLength(0),
     fCapacity(US_STACKBUF_SIZE),
+    fArray(fStackBuffer),
     fFlags(kShortString)
 {
   *this = that;
@@ -640,6 +633,16 @@ UnicodeString::doCaseCompare(UTextOffset start,
   } else {
     return 0;
   }
+}
+
+UChar
+UnicodeString::getCharAt(UTextOffset offset) const {
+  return charAt(offset);
+}
+
+UChar32
+UnicodeString::getChar32At(UTextOffset offset) const {
+  return char32At(offset);
 }
 
 void
