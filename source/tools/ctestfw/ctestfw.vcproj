@@ -40,7 +40,6 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="odbc32.lib odbccp32.lib"
 				OutputFile="..\..\..\bin\ctestfw.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -106,7 +105,6 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="odbc32.lib odbccp32.lib"
 				OutputFile="..\..\..\bin\ctestfwd.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
