@@ -607,7 +607,7 @@ uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE,
 uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status) {
     int32_t firstContractionOffset = 0;
     int32_t contractionOffset = 0;
-    uint32_t contractionElement = UCOL_NOT_FOUND;
+//    uint32_t contractionElement = UCOL_NOT_FOUND;
 
     if(U_FAILURE(*status)) {
         return UCOL_NOT_FOUND;
