@@ -271,6 +271,10 @@ SOURCE=.\tmsgfmt.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\transtst.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\trcoll.cpp
 # End Source File
 # Begin Source File
