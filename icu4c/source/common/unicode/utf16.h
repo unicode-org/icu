@@ -90,7 +90,7 @@
                 (c)=UTF_ERROR_VALUE; \
             } \
         } else { \
-            if((i)>(start) && UTF_IS_FIRST_SURROGATE(__c2=(s)[(i)-1])) { \
+            if((i)-1>=(start) && UTF_IS_FIRST_SURROGATE(__c2=(s)[(i)-1])) { \
                 (c)=UTF16_GET_PAIR_VALUE(__c2, (c)); \
                 /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() */ \
             } else if(strict) {\
