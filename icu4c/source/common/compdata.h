@@ -7,7 +7,7 @@
 * >       DO NOT EDIT BY HAND       <
 * >      RUN TOOL TO REGENERATE     <
 * Tool: com.ibm.text.Normalizer
-* Creation date: Tue Jul 25 11:14:48 PDT 2000
+* Creation date: Tue Sep 19 10:02:59 PDT 2000
 */
 #include "unicode/utypes.h"
 #include "ucmp8.h"
@@ -39,11 +39,15 @@ struct ComposeData {
 
     static const uint16_t lookup_values[];
 
+    static CompactShortArray _lookup;
+
     static const CompactShortArray* lookup;
 
     static const uint16_t actions_index[];
 
     static const uint16_t actions_values[];
+
+    static CompactShortArray _actions;
 
     static const CompactShortArray* actions;
 

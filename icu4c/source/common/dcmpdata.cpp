@@ -7,7 +7,7 @@
 * >       DO NOT EDIT BY HAND       <
 * >      RUN TOOL TO REGENERATE     <
 * Tool: com.ibm.text.Normalizer
-* Creation date: Fri Aug 11 10:18:35 PDT 2000
+* Creation date: Tue Sep 19 10:02:50 PDT 2000
 */
 #include "dcmpdata.h" 
 
@@ -996,8 +996,11 @@ const uint16_t DecompData::offsets_values[] = {
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, };
 
+CompactShortArray DecompData::_offsets;
+
 const CompactShortArray* DecompData::offsets = 
-    ucmp16_openAdoptWithBlockShift((uint16_t*)offsets_index,
+    ucmp16_initAliasWithBlockShift(&DecompData::_offsets,
+                                   (uint16_t*)offsets_index,
                                    (int16_t*)offsets_values,
                                    5792, 0x0000, 5);
 
@@ -2135,7 +2138,10 @@ const uint8_t DecompData::canonClass_values[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, };
 
+CompactByteArray DecompData::_canonClass;
+
 const CompactByteArray* DecompData::canonClass = 
-    ucmp8_openAdopt((uint16_t*)canonClass_index,
+    ucmp8_initAlias(&DecompData::_canonClass,
+                    (uint16_t*)canonClass_index,
                     (int8_t*)canonClass_values,
                     3072);
