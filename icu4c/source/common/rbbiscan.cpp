@@ -319,11 +319,10 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action)
         // The ';' that terminates an expression really just functions as a '|' with
         //   a low operator prededence.
         //
-        // Each of the four sets of rules are collected separately.  
-        //  (Forward, Reverse, ForwardSafe, ReverseSafe)
+        // Each of the four sets of rules are collected separately.
+        //  (forward, reverse, safe_forward, safe_reverse)
         //  OR this rule into the appropriate group of them.
         //
-        // RBBINode **destRules = (fReverseRule? &fRB->fReverseTree : &fRB->fForwardTree); TODO: delete
         RBBINode **destRules = (fReverseRule? &fRB->fReverseTree : fRB->fDefaultTree);
 
         if (*destRules != NULL) {
@@ -879,7 +878,7 @@ void RBBIRuleScanner::nextChar(RBBIRuleChar &c) {
 //---------------------------------------------------------------------------------
 //
 //  Parse RBBI rules.   The state machine for rules parsing is here.
-//                      The state tables are hand-written in the file TODO.txt,
+//                      The state tables are hand-written in the file rbbirpt.txt,
 //                      and converted to the form used here by a perl
 //                      script rbbicst.pl
 //
