@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RbnfTest.java,v $ 
- * $Date: 2002/02/22 03:43:32 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/07/30 21:37:07 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -413,6 +413,70 @@ public class RbnfTest extends TestFmwk {
         */
     }
 
+    public void TestFractionalRuleSet() {
+	String fracRules = 
+	    "%main:\n" +
+	    // this rule formats the number if it's 1 or more.  It formats
+	    // the integral part using a DecimalFormat ("#,##0" puts
+	    // thousands separators in the right places) and the fractional
+	    // part using %%frac.  If there is no fractional part, it
+	    // just shows the integral part.
+	    "    x.0: <#,##0<[ >%%frac>];\n" +
+	    // this rule formats the number if it's between 0 and 1.  It
+	    // shows only the fractional part (0.5 shows up as "1/2," not
+	    // "0 1/2")
+	    "    0.x: >%%frac>;\n" +
+	    // the fraction rule set.  This works the same way as the one in the
+	    // preceding example: We multiply the fractional part of the number
+	    // being formatted by each rule's base value and use the rule that
+	    // produces the result closest to 0 (or the first rule that produces 0).
+	    // Since we only provide rules for the numbers from 2 to 10, we know
+	    // we'll get a fraction with a denominator between 2 and 10.
+	    // "<0<" causes the numerator of the fraction to be formatted
+	    // using numerals
+	    "%%frac:\n" +
+	    "    2: 1/2;\n" +
+	    "    3: <0</3;\n" +
+	    "    4: <0</4;\n" +
+	    "    5: <0</5;\n" +
+	    "    6: <0</6;\n" +
+	    "    7: <0</7;\n" +
+	    "    8: <0</8;\n" +
+	    "    9: <0</9;\n" +
+	    "   10: <0</10;\n";
+
+
+	RuleBasedNumberFormat formatter =
+	    new RuleBasedNumberFormat(fracRules, Locale.ENGLISH);
+
+        String[][] testData = {
+            { "0", "0" },
+            { ".1", "1/10" },
+            { ".11", "1/9" },
+            { ".125", "1/8" },
+            { ".1428", "1/7" },
+            { ".1667", "1/6" },
+            { ".2", "1/5" },
+            { ".25", "1/4" },
+            { ".333", "1/3" },
+            { ".5", "1/2" },
+            { "1.1", "1 1/10" },
+            { "2.11", "2 1/9" },
+            { "3.125", "3 1/8" },
+            { "4.1428", "4 1/7" },
+            { "5.1667", "5 1/6" },
+            { "6.2", "6 1/5" },
+            { "7.25", "7 1/4" },
+            { "8.333", "8 1/3" },
+            { "9.5", "9 1/2" },
+            { ".2222", "2/9" },
+            { ".4444", "4/9" },
+            { ".5555", "5/9" },
+            { "1.2856", "1 2/7" }
+        };
+       doTest(formatter, testData, false); // exact values aren't parsable from fractions
+    }
+
     public void TestSwedishSpellout()
     {
         Locale locale = new Locale("sv", "", "");
@@ -479,7 +543,9 @@ public class RbnfTest extends TestFmwk {
             for (int i = 0; i < testData.length; i++) {
                 String number = testData[i][0];
                 String expectedWords = testData[i][1];
-                String actualWords = formatter.format(decFmt.parse(number));
+		logln("test[" + i + "] number: " + number + " target: " + expectedWords);
+		Number num = decFmt.parse(number);
+                String actualWords = formatter.format(num);
 
                 if (!actualWords.equals(expectedWords)) {
                     errln("Spot check failed: for " + number + ", expected "
@@ -499,8 +565,8 @@ public class RbnfTest extends TestFmwk {
             }
         }
         catch (Throwable e) {
-            errln("Test failed with exception: " + e.toString());
             e.printStackTrace();
+            errln("Test failed with exception: " + e.toString());
         }
     }
 
