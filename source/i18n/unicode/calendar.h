@@ -1501,7 +1501,7 @@ protected:
 
     /**
      * Given a precedence table, return the newest field combination in
-     * the table, or -1 (kResolveSTOP) if none is found.
+     * the table, or UCAL_FIELD_COUNT if none is found.
      *
      * <p>The precedence table is a 3-dimensional array of integers.  It
      * may be thought of as an array of groups.  Each group is an array of
@@ -1523,7 +1523,7 @@ protected:
      * <p>If all lines of a group contain at least one unset field, then no
      * line will match, and the group as a whole will fail to match.  In
      * that case, the next group will be processed.  If all groups fail to
-     * match, then -1 is returned.
+     * match, then UCAL_FIELD_COUNT is returned.
      * @internal
      */
     UCalendarDateFields resolveFields(const UFieldResolutionTable *precedenceTable);
