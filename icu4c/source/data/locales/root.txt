@@ -1068,8 +1068,11 @@ root {
         ARMN { "Armenian" }
         BENG { "Bengali" }
         BOPO { "Bopomofo" }
+        BRAI { "Braille" }
+        BUHD { "Buhid" }
         CANS { "Unified Canadian Aboriginal Symbols" }
         CHER { "Cherokee" }
+        CPRT { "Cypriot" }
         CYRL { "Cyrillic" }
         DEVA { "Devanagari" }
         DSRT { "Deseret" }
@@ -1080,6 +1083,7 @@ root {
         GUJR { "Gujarati" }
         GURU { "Gurmukhi" }
         HANG { "Hangul" }
+        HANO { "Hanunoo" }
         HANI { "Han" }
         HEBR { "Hebrew" }
         HIRA { "Hiragana" }
@@ -1087,23 +1091,31 @@ root {
         KANA { "Katakana" }
         KHMR { "Khmer" }
         KNDA { "Kannada" }
-        LAO  { "Lao" }
+        LAOO { "Lao" }
         LATN { "Latin" }
+        LIMB { "Limbu" }
+        LINB { "Linear B" }
         MLYM { "Malayalam" }
         MONG { "Mongolian" }
         MYMR { "Myanmar" }
         OGAM { "Ogham" }
         ORYA { "Oriya" }
+        OSMA { "Osmanya" }
         QAAC { "Coptic" }
         QAAI { "Inherited" }
         RUNR { "Runic" }
+        SHAW { "Shavian" }
         SINH { "Sinhala" }
         SYRC { "Syriac" }
+        TAGB { "Tagbanwa" }
+        TALE { "Tai Le" }
         TAML { "Tamil" }
         TELU { "Telugu" }
+        TGLG { "Tagalog" }
         THAA { "Thana" }
         THAI { "Thai" }
         TIBT { "Tibetan" }
+        UGAR { "Ugaritic" }
         YIII { "Yi" }
         ZYYY { "Common" }
    }
