@@ -1516,7 +1516,7 @@ const char* uprv_getDefaultCodepage()
     static char codesetName[100];
     char *name = NULL;
     char *euro = NULL;
-    char *localeName = NULL;
+    const char *localeName = NULL;
     const char *defaultTable = NULL;
  
     uprv_memset(codesetName, 0, 100);
