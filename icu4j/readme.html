@@ -11,8 +11,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/readme.html,v $
-* $Date: 2002/08/15 19:30:28 $
-* $Revision: 1.35 $
+* $Date: 2002/08/16 15:51:35 $
+* $Revision: 1.36 $
 *
 *******************************************************************************
 -->
@@ -20,17 +20,17 @@
 
 <body bgcolor="#FFFFFF" link="#0000FF" vlink="#800080" lang="EN-US">
 
-<h2>ReadMe: International Components for Unicode for Java</h2>
-
-<p>Version: 2.2 August 15th 2002 </p>
-
-<hr size="2" width="100%" align="center">
-
-<p>COPYRIGHT: <br>
-Copyright (c) 2002 International Business Machines Corporation and others. All Rights
-Reserved. </p>
+    <h2>International Components for Unicode for Java</h2>
+    <h3>Read Me for ICU4J 2.2</h3>
 
 <hr size="2" width="100%" align="center">
+    <p><b>Release Date</b><br>
+    August 15th, 2002</p>
+
+<p>For the most recent
+      release, see the <a href="http://oss.software.ibm.com/icu4j/download/index.html">
+      ICU4J download site</a>.
+    </P>
 
 <h3><u>Contents</u></h3>
 
@@ -231,7 +231,7 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
   </tr>
 </table>
 
-<p><b>The source directories mirror the package structure of the code.</b><br><font color="red">Core</font> packages become part of the ICU4J jar file.<br><font color="red">API</font> packages contain classes with supported API.</p>
+<p><b>The source directories mirror the package structure of the code.</b><br><font color="red">Core</font> packages become part of the ICU4J jar file.<br><font color="red">API</font> packages contain classes with supported API. <br><font color="red">RichText</font> classes are Core and API, but can be removed from icu4j.jar, and can be built into their own jar.</p>
 
 <table BORDER="1" CELLPADDING="3" WIDTH="623">
   <tr>
@@ -286,7 +286,8 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
     </td>
   </tr>
   <tr>
-    <td>$Root/src/com/ibm/richtext</td> <td>Styled text editing
+    <td>$Root/src/com/ibm/richtext<br><font color="red">RichText</font></td> 
+    <td>Styled text editing
     package. This includes demos, tests, and GUIs for editing and
     displaying styled text.  The richtext package provides a
     scrollable display, typing, arrow-key support, tabs, alignment and
@@ -315,10 +316,16 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
 
 <p>ICU4J data is stored in the following locations:
 
-<ul>
-  <li>The package <code>com.ibm.icu.impl.data</code> holds data used by the ICU4J core packages (<code>com.ibm.icu.lang</code>, <code>com.ibm.icu.text</code>, <code>com.ibm.icu.util</code>, <code>com.ibm.icu.math</code> and <code>com.ibm.icu.text</code>). In particular, all resource information is stored here.</li>
-  <li>The package <code>com.ibm.icu.dev.data</code> holds data that is not part of ICU4J core, but rather part of a test, sample, or demo.</li>
-</ul>
+<table BORDER="1" CELLPADDING="3" WIDTH="623">
+  <tr>
+    <td><code>com.ibm.icu.impl.data</code></td>
+    <td>Holds data used by the ICU4J core packages (<code>com.ibm.icu.lang</code>, <code>com.ibm.icu.text</code>, <code>com.ibm.icu.util</code>, <code>com.ibm.icu.math</code> and <code>com.ibm.icu.text</code>). In particular, all resource information is stored here.</td>
+  </tr>
+  <tr>
+    <td><code>com.ibm.icu.dev.data</code></td>
+    <td>Holds data that is not part of ICU4J core, but rather part of a test, sample, or demo.</td>
+  </tr>
+</table>
 
 <h3><u><a name="API"></a>Where to get Documentation</u></h3>
 
@@ -718,11 +725,10 @@ While we are not able to respond individually to each comment, we do review all 
 
 <hr size="2" width="100%" align="center">
 
-<p>Copyright © 2002 International Business Machines Corporation and others. All Rights
-Reserved. <br>
+<p><i><font size="-1">Copyright © 2002 International Business Machines Corporation and others. All Rights
+Reserved.<br>
 5600 Cottle Road, San José, CA 95193
-</p>
+</font></i></p>
 
-<hr size="2" width="100%" align="center">
 </body>
 </html>
