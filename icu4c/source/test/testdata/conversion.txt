@@ -43,6 +43,23 @@ conversion {
     toUnicode {
       Headers { "charset", "bytes", "unicode", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidChars" }
       Cases {
+        // test that ISO-2022-JP encodes ASCII as itself
+        {
+          "ISO-2022-JP",
+          :bin{ 3f4041424344454647 },
+          "?@ABCDEFG",
+          :intvector{ 0,1,2,3,4,5,6,7,8 },
+          :int{1}, :int{1}, "", "?", :bin{""}
+        }
+        // test that ISO-2022-CN encodes ASCII as itself
+        {
+          "ISO-2022-CN",
+          :bin{ 3f4041424344454647 },
+          "?@ABCDEFG",
+          :intvector{ 0,1,2,3,4,5,6,7,8 },
+          :int{1}, :int{1}, "", "?", :bin{""}
+        }
+
         // ISO-2022-KR
 
         // truncated, partial escape sequence
@@ -420,6 +437,23 @@ conversion {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // test that ISO-2022-JP encodes ASCII as itself
+        {
+          "ISO-2022-JP",
+          "?@ABCDEFG",
+          :bin{       3f4041424344454647 },
+          :intvector{ 0,1,2,3,4,5,6,7,8 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        // test that ISO-2022-CN encodes ASCII as itself
+        {
+          "ISO-2022-CN",
+          "?@ABCDEFG",
+          :bin{       3f4041424344454647 },
+          :intvector{ 0,1,2,3,4,5,6,7,8 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
         // moved from cintltst /tsconv/nccbtst/TestSkipCallBack
         {
           "iso-2022-jp",
