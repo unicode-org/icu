@@ -22,6 +22,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uset.h"
+#include "udataswp.h"
 
 /* indexes[] entries */
 enum {
@@ -353,10 +354,6 @@ uchar_addPropertyStarts(USet *set, UErrorCode *pErrorCode);
  */
 U_CAPI void U_EXPORT2
 uprv_getInclusions(USet* set, UErrorCode *pErrorCode);
-
-/* forward declaration */
-struct UDataSwapper;
-typedef struct UDataSwapper UDataSwapper;
 
 /**
  * Swap the ICU Unicode properties file. See uchar.c.

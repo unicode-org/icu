@@ -14,6 +14,7 @@
 #define UCNV_IO_H
 
 #include "unicode/utypes.h"
+#include "udataswp.h"
 
 #define UCNV_AMBIGUOUS_ALIAS_MAP_BIT 0x8000
 #define UCNV_CONVERTER_INDEX_MASK 0xFFF
@@ -148,10 +149,6 @@ ucnv_io_getDefaultConverterName(void);
  */
 U_CFUNC void
 ucnv_io_setDefaultConverterName(const char *name);
-
-/* forward declaration */
-struct UDataSwapper;
-typedef struct UDataSwapper UDataSwapper;
 
 /**
  * Swap an ICU converter alias table. See ucnv_io.c.
