@@ -25,6 +25,16 @@ set -e
 case "$1" in
     configure)
 	ldconfig
+
+	# Adjust the current ICU link in /usr/lib/icu
+
+	icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
+	cd /usr/lib/icu
+	rm -f current
+	if test x"$icucurrent" != x
+	then
+	    ln -s "$icucurrent" current
+	fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
