@@ -20,7 +20,7 @@
 #include "unicode/udata.h"
 #include "unicode/uloc.h"
 #include "unicode/locid.h"
-
+#include "putilimp.h" /* for uprv_getUTCtime */
 #if !defined(WIN32) && !defined(XP_MAC) && !defined(U_RHAPSODY)
 #define POSIX 1
 #endif
@@ -628,11 +628,11 @@ public:
     virtual void run()
     {
         SimpleThread::sleep(500);          // wait, make sure they aquire the lock
-        fElapsed = Calendar::getNow();
+        fElapsed = uprv_getUTCtime();
         {
             Mutex m;                        // wait here
 
-            fElapsed = Calendar::getNow() - fElapsed;
+            fElapsed = uprv_getUTCtime() - fElapsed;
 
             if(fOtherThread.fDone == FALSE) 
                 fErr = TRUE;                // they didnt get to it yet

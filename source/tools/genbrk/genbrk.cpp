@@ -33,6 +33,7 @@
 #include "unicode/rbbi.h"
 #include "unicode/uclean.h"
 #include "unicode/udata.h"
+#include "unicode/putil.h"
 
 #include "uoptions.h"
 #include "unewdata.h"
