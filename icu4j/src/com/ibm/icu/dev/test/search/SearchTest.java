@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/search/SearchTest.java,v $ 
- * $Date: 2001/11/21 23:26:02 $ 
- * $Revision: 1.10 $
+ * $Date: 2001/12/03 21:48:03 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -462,15 +462,24 @@ public class SearchTest extends com.ibm.test.TestFmwk {
                    "<TH>Restrictions</TH></TR>\n<TR><TH>Silver</TH><TH>2\n" +
                    "Years</TH><TH>Yes</TH></TR>\n<TR><TH>Gold</TH>";
         String pattern = "HE";
+        int    offset[] = {8, 44};
 
-		/* System.out.println("Searching for all occurrences of pattern " +
-						   pattern + " following contents:\n" + contents); */
+		logln("Searching for all occurrences of pattern " +
+			   pattern + " following contents:\n" + contents);
 
 	    StringSearch searcher = new StringSearch(pattern, contents);
-	    int	    	 offset;
-
-	    while ((offset = searcher.next()) != SearchIterator.DONE) {
-		    System.out.println( "Found match at offset " + offset );
+        int textoffset = searcher.next();
+        int count = 0;
+        
+	    while (textoffset != SearchIterator.DONE && count < offset.length) {
+	        if (textoffset != offset[count]) {
+		        errln( "Found match not found at offset " + offset[count]);
+		    }
+		    count ++;
+		    textoffset = searcher.next();
+		}
+		if (textoffset != SearchIterator.DONE || count != offset.length) {
+		    errln("End of pattern " + pattern + " search encountering problems");
 		}
     }
     
