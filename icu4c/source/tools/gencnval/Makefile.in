@@ -7,7 +7,7 @@
 SHELL = @SHELL@
 VERSION = @VERSION@
 
-SECTION=1
+SECTION = 8
 MAN_FILES = $(TARGET).$(SECTION)
 
 ICUDATADIR=$(top_builddir)/data/
