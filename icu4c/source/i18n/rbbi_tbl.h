@@ -130,12 +130,12 @@ private:
      * Compute a hash code for these tables
      * @return A hash code
      */
-    virtual int32_t hashCode() const;
+    virtual int32_t hashCode(void) const;
 
     /**
      * Returns the description used to create these tables
      */
-    const UnicodeString& getRules() const;
+    const UnicodeString& getRules(void) const;
 
     //=======================================================================
     // reference counting
@@ -144,12 +144,12 @@ private:
     /**
      * increments the reference count.
      */
-    void addReference();
+    void addReference(void);
 
     /**
      * decrements the reference count and deletes the object if it reaches zero
      */
-    void removeReference();
+    void removeReference(void);
 
 protected:
     //=======================================================================
@@ -193,17 +193,17 @@ RuleBasedBreakIteratorTables::operator!=(const RuleBasedBreakIteratorTables& tha
 }
 
 inline const UnicodeString&
-RuleBasedBreakIteratorTables::getRules() const {
+RuleBasedBreakIteratorTables::getRules(void) const {
     return description;
 }
 
 inline void
-RuleBasedBreakIteratorTables::addReference() {
+RuleBasedBreakIteratorTables::addReference(void) {
     ++refCount;
 }
 
 inline void
-RuleBasedBreakIteratorTables::removeReference() {
+RuleBasedBreakIteratorTables::removeReference(void) {
     if (--refCount <= 0)
         delete this;
 }

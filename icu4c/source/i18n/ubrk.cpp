@@ -26,19 +26,19 @@ ubrk_open(UBreakIteratorType type,
   switch(type) {
 
   case UBRK_CHARACTER:
-    result = BreakIterator::createCharacterInstance(Locale().init(locale));
+    result = BreakIterator::createCharacterInstance(Locale().init(locale), *status);
     break;
 
   case UBRK_WORD:
-    result = BreakIterator::createWordInstance(Locale().init(locale));
+    result = BreakIterator::createWordInstance(Locale().init(locale), *status);
     break;
 
   case UBRK_LINE:
-    result = BreakIterator::createLineInstance(Locale().init(locale));
+    result = BreakIterator::createLineInstance(Locale().init(locale), *status);
     break;
 
   case UBRK_SENTENCE:
-    result = BreakIterator::createSentenceInstance(Locale().init(locale));
+    result = BreakIterator::createSentenceInstance(Locale().init(locale), *status);
     break;
   }
 

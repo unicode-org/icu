@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-1999, International Business Machines Corporation and    *
+* Copyright (C) 1997-2000, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -10,6 +10,7 @@
 *
 *   Date        Name        Description
 *   02/18/97    aliu        Converted from OpenClass.  Added DONE.
+*   01/13/2000  helena      Added UErrorCode parameter to createXXXInstance methods.
 *****************************************************************************************
 */
 
@@ -37,7 +38,7 @@ const UTextOffset BreakIterator::DONE = (int32_t)-1;
 
 // Creates a simple text boundary for word breaks.
 BreakIterator*
-BreakIterator::createWordInstance(const Locale& key)
+BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
 {
     // WARNING: This routine is currently written specifically to handle only the
     // default rules files and the alternate rules files for Thai.  This function
@@ -46,14 +47,14 @@ BreakIterator::createWordInstance(const Locale& key)
     const char* filename = "word";
 
     UnicodeString temp;
+    if (U_FAILURE(status)) return NULL;
     if (key.getLanguage(temp) == UnicodeString("th", (char*)0)) {
         filename = "word_th";
     }
 
-    UErrorCode err = U_ZERO_ERROR;
-    UDataMemory* file = udata_open(NULL, "brk", filename, &err);
+    UDataMemory* file = udata_open(NULL, "brk", filename, &status);
 
-    if (!U_FAILURE(err)) {
+    if (!U_FAILURE(status)) {
         const void* image = udata_getMemory(file);
 
         if (image != NULL) {
@@ -64,7 +65,7 @@ BreakIterator::createWordInstance(const Locale& key)
                 strcpy(fullPath, dataDir);
                 strcpy(fullPath, filename);
                 
-                result = new DictionaryBasedBreakIterator(image, fullPath);
+                result = new DictionaryBasedBreakIterator(image, fullPath, status);
                 delete [] fullPath;
             }
             else {
@@ -80,7 +81,7 @@ BreakIterator::createWordInstance(const Locale& key)
 
 // Creates a simple text boundary for line breaks.
 BreakIterator*
-BreakIterator::createLineInstance(const Locale& key)
+BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
 {
     // WARNING: This routine is currently written specifically to handle only the
     // default rules files and the alternate rules files for Thai.  This function
@@ -89,14 +90,14 @@ BreakIterator::createLineInstance(const Locale& key)
     const char* filename = "line";
 
     UnicodeString temp;
+    if (U_FAILURE(status)) return NULL;
     if (key.getLanguage(temp) == UnicodeString("th", (char*)0)) {
         filename = "line_th";
     }
 
-    UErrorCode err = U_ZERO_ERROR;
-    UDataMemory* file = udata_open(NULL, "brk", filename, &err);
+    UDataMemory* file = udata_open(NULL, "brk", filename, &status);
 
-    if (!U_FAILURE(err)) {
+    if (!U_FAILURE(status)) {
         const void* image = udata_getMemory(file);
 
         if (image != NULL) {
@@ -107,7 +108,7 @@ BreakIterator::createLineInstance(const Locale& key)
                 strcpy(fullPath, dataDir);
                 strcat(fullPath, filename);
                 
-                result = new DictionaryBasedBreakIterator(image, fullPath);
+                result = new DictionaryBasedBreakIterator(image, fullPath, status);
                 delete [] fullPath;
             }
             else {
@@ -123,7 +124,7 @@ BreakIterator::createLineInstance(const Locale& key)
 
 // Creates a simple text boundary for character breaks.
 BreakIterator*
-BreakIterator::createCharacterInstance(const Locale& key)
+BreakIterator::createCharacterInstance(const Locale& key, UErrorCode& status)
 {
     // WARNING: This routine is currently written specifically to handle only the
     // default rules files and the alternate rules files for Thai.  This function
@@ -131,10 +132,10 @@ BreakIterator::createCharacterInstance(const Locale& key)
     BreakIterator* result = NULL;
     const char* filename = "char";
 
-    UErrorCode err = U_ZERO_ERROR;
-    UDataMemory* file = udata_open(NULL, "brk", filename, &err);
+    if (U_FAILURE(status)) return NULL;
+    UDataMemory* file = udata_open(NULL, "brk", filename, &status);
 
-    if (!U_FAILURE(err)) {
+    if (!U_FAILURE(status)) {
         const void* image = udata_getMemory(file);
 
         if (image != NULL) {
@@ -149,7 +150,7 @@ BreakIterator::createCharacterInstance(const Locale& key)
 
 // Creates a simple text boundary for sentence breaks.
 BreakIterator*
-BreakIterator::createSentenceInstance(const Locale& key)
+BreakIterator::createSentenceInstance(const Locale& key, UErrorCode& status)
 {
     // WARNING: This routine is currently written specifically to handle only the
     // default rules files and the alternate rules files for Thai.  This function
@@ -157,10 +158,10 @@ BreakIterator::createSentenceInstance(const Locale& key)
     BreakIterator* result = NULL;
     const char* filename = "sent";
 
-    UErrorCode err = U_ZERO_ERROR;
-    UDataMemory* file = udata_open(NULL, "brk", filename, &err);
+    if (U_FAILURE(status)) return NULL;
+    UDataMemory* file = udata_open(NULL, "brk", filename, &status);
 
-    if (!U_FAILURE(err)) {
+    if (!U_FAILURE(status)) {
         const void* image = udata_getMemory(file);
 
         if (image != NULL) {

@@ -267,12 +267,12 @@ RuleBasedBreakIterator(const void* image);
      * Compute a hash code for this BreakIterator
      * @return A hash code
      */
-    virtual int32_t hashCode() const;
+    virtual int32_t hashCode(void) const;
 
     /**
      * Returns the description used to create this iterator
      */
-    virtual const UnicodeString& getRules() const;
+    virtual const UnicodeString& getRules(void) const;
 
     //=======================================================================
     // BreakIterator overrides
@@ -285,7 +285,7 @@ RuleBasedBreakIterator(const void* image);
      * you need to change it, clone it first.
      * @return An iterator over the text being analyzed.
      */
-    virtual const CharacterIterator& getText() const;
+    virtual const CharacterIterator& getText(void) const;
 
     /**
      * Returns a newly-created CharacterIterator that the caller is to take
@@ -294,7 +294,7 @@ RuleBasedBreakIterator(const void* image);
      * IT AS PURE VIRTUAL, FORCING RBBI TO IMPLEMENT IT.  IT SHOULD BE REMOVED
      * FROM *BOTH* CLASSES.
      */
-    virtual CharacterIterator* createText() const;
+    virtual CharacterIterator* createText(void) const;
 
     /**
      * Set the iterator to analyze a new piece of text.  This function resets
@@ -399,7 +399,7 @@ RuleBasedBreakIterator(const void* image);
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
      */
-    inline virtual UClassID getDynamicClassID() const;
+    inline virtual UClassID getDynamicClassID(void) const;
 
     /**
      * Returns the class ID for this class.  This is useful only for
@@ -411,7 +411,7 @@ RuleBasedBreakIterator(const void* image);
      *
      * @return          The class ID for all objects of this class.
      */
-    inline static UClassID getStaticClassID();
+    inline static UClassID getStaticClassID(void);
 
 protected:
     //=======================================================================
@@ -440,7 +440,7 @@ protected:
      * in text or iteration position.  This function is a no-op in RuleBasedBreakIterator,
      * but subclasses can and do override it.
      */
-    virtual void reset();
+    virtual void reset(void);
 
 private:
 
@@ -457,11 +457,11 @@ inline bool_t RuleBasedBreakIterator::operator!=(const BreakIterator& that) cons
     return !operator==(that);
 }
 
-inline UClassID RuleBasedBreakIterator::getDynamicClassID() const {
+inline UClassID RuleBasedBreakIterator::getDynamicClassID(void) const {
     return RuleBasedBreakIterator::getStaticClassID();
 }
 
-inline UClassID RuleBasedBreakIterator::getStaticClassID() {
+inline UClassID RuleBasedBreakIterator::getStaticClassID(void) {
     return (UClassID)(&fgClassID);
 }
 

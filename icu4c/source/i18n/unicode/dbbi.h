@@ -1,9 +1,10 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999 IBM Corp. All rights reserved.
+*   Copyright (C) 1999-2000 IBM Corp. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *   12/1/99    rgillam     Complete port from Java.
+*   01/13/2000 helena      Added UErrorCode to ctors.
 **********************************************************************
 */
 
@@ -36,6 +37,9 @@
  * dictionary file is in a serialized binary format.  We have a very primitive (and
  * slow) BuildDictionaryFile utility for creating dictionary files, but aren't
  * currently making it public.  Contact us for help.
+ * <p>
+ * <b> NOTE </b>  The DictionaryBasedIterator class is still under development.  The
+ * APIs are not in stable condition yet.  
  */
 class U_I18N_API DictionaryBasedBreakIterator : public RuleBasedBreakIterator {
 
@@ -71,11 +75,21 @@ private:
     static char fgClassID;
 
 public:
-    //=======================================================================
-    // constructors
-    //=======================================================================
+    /**=======================================================================
+     * Create a dictionary based break boundary detection iterator.  
+     * @param tablesImage The location for the dictionary to be loaded into memory
+     * @param dictionaryFilename The name of the dictionary file 
+     * @param status the error code status
+     * @return A dictionary based break detection iterator.  The UErrorCode& status 
+     * parameter is used to return status information to the user.
+     * To check whether the construction succeeded or not, you should check
+     * the value of U_SUCCESS(err).  If you wish more detailed information, you
+     * can check for informational error results which still indicate success.  For example,
+     * U_FILE_ACCESS_ERROR will be returned if the file does not exist.
+     * The caller owns the returned object and is responsible for deleting it.
+     ======================================================================= */
 
-DictionaryBasedBreakIterator(const void* tablesImage, char* dictionaryFilename);
+    DictionaryBasedBreakIterator(const void* tablesImage, char* dictionaryFilename, UErrorCode& status);
 
     //=======================================================================
     // boilerplate
@@ -96,7 +110,7 @@ DictionaryBasedBreakIterator(const void* tablesImage, char* dictionaryFilename);
      * Returns a newly-constructed RuleBasedBreakIterator with the same
      * behavior, and iterating over the same text, as this one.
      */
-    virtual BreakIterator* clone() const;
+    virtual BreakIterator* clone(void) const;
 
     //=======================================================================
     // BreakIterator overrides
@@ -105,7 +119,7 @@ DictionaryBasedBreakIterator(const void* tablesImage, char* dictionaryFilename);
      * Advances the iterator backwards, to the last boundary preceding this one.
      * @return The position of the last boundary position preceding this one.
      */
-    virtual int32_t previous();
+    virtual int32_t previous(void);
 
     /**
      * Sets the iterator to refer to the first boundary position following
@@ -133,7 +147,7 @@ DictionaryBasedBreakIterator(const void* tablesImage, char* dictionaryFilename);
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
      */
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID(void) const;
 
     /**
      * Returns the class ID for this class.  This is useful only for
@@ -145,7 +159,7 @@ DictionaryBasedBreakIterator(const void* tablesImage, char* dictionaryFilename);
      *
      * @return          The class ID for all objects of this class.
      */
-    static UClassID getStaticClassID();
+    static UClassID getStaticClassID(void);
 
 protected:
     //=======================================================================
@@ -158,13 +172,13 @@ protected:
      * of the text or the state machine transitions to state 0.  We update our return
      * value every time the state machine passes through a possible end state.
      */
-    virtual int32_t handleNext();
+    virtual int32_t handleNext(void);
 
     /**
      * dumps the cache of break positions (usually in response to a change in
      * position of some sort)
      */
-    virtual void reset();
+    virtual void reset(void);
 
 private:
     /**
@@ -181,20 +195,20 @@ private:
      * Used by the tables object to increment the count of dictionary characters
      * during iteration
      */
-    void bumpDictionaryCharCount();
+    void bumpDictionaryCharCount(void);
 
     friend class DictionaryBasedBreakIteratorTables;
 };
 
-inline UClassID DictionaryBasedBreakIterator::getDynamicClassID() const {
+inline UClassID DictionaryBasedBreakIterator::getDynamicClassID(void) const {
     return RuleBasedBreakIterator::getStaticClassID();
 }
 
-inline UClassID DictionaryBasedBreakIterator::getStaticClassID() {
+inline UClassID DictionaryBasedBreakIterator::getStaticClassID(void) {
     return (UClassID)(&fgClassID);
 }
 
-inline void DictionaryBasedBreakIterator::bumpDictionaryCharCount() {
+inline void DictionaryBasedBreakIterator::bumpDictionaryCharCount(void) {
     ++dictionaryCharCount;
 }
 
