@@ -7,7 +7,7 @@
 /* Test Internationalized Calendars for C++ */
 
 #include "unicode/utypes.h"
-#include "strings.h"
+#include "string.h"
 #include "unicode/locid.h"
 
 #if !UCONFIG_NO_FORMATTING
