@@ -1190,7 +1190,7 @@ static void TestAmbiguous()
     UChar *asciiResult = 0, *sjisResult = 0;
     int32_t asciiLength = 0, sjisLength = 0;
     
-    sjis_cnv = ucnv_open("SJIS", &status);
+    sjis_cnv = ucnv_open("ibm-943", &status);
     if (U_FAILURE(status))
     {
         log_err("Failed to create a SJIS converter\n");
