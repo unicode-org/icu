@@ -319,12 +319,6 @@
 				RelativePath=".\tsmthred.h">
 			</File>
 			<File
-				RelativePath=".\tsmutex.cpp">
-			</File>
-			<File
-				RelativePath=".\tsmutex.h">
-			</File>
-			<File
 				RelativePath=".\tsputil.cpp">
 			</File>
 			<File
