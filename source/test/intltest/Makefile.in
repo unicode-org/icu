@@ -25,7 +25,7 @@ LIBS = $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = allcoll.o apicoll.o callimts.o calregts.o caltest.o		\
 caltztst.o canittst.o citrtest.o cntabcol.o cppcnvt.o cputilst.o currcoll.o dacoll.o	\
-dcfmapts.o decoll.o dtfmapts.o dtfmrgts.o dtfmtrtts.o dtfmttst.o	\
+dadrcoll.o dcfmapts.o decoll.o dtfmapts.o dtfmrgts.o dtfmtrtts.o dtfmttst.o	\
 encoll.o escoll.o ficoll.o frcoll.o g7coll.o intltest.o itconv.o	\
 itercoll.o itformat.o itmajor.o ittxtbd.o itutil.o jacoll.o lcukocol.o	\
 loctest.o miscdtfm.o mnkytst.o msfmrgts.o nmfmapts.o nmfmtrt.o		\
