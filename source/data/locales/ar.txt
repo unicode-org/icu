@@ -137,7 +137,6 @@ ar {
         }
     }
     LocaleScript{
-            "Arabic",
             "Arab"
     }
 }

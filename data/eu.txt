@@ -69,11 +69,8 @@ eu {
             "\ufffd",
     }
     LocaleID{ "2D"}
-    LocaleScript{ 
-                "Latin", // Script Name  
+    LocaleScript{  
                 "Latn",  // ISO 15924 Name 
-                "Latf",  // ISO 15924 Name 
-                "Latg",  // ISO 15924 Name 
     }
             // /**************** Info Below is needed ****************/
             // CollationElements{}
