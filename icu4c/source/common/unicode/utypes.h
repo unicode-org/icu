@@ -80,9 +80,11 @@
  * <p>The list of "invariant characters" is:<br>
  * \code
  *    A-Z  a-z  0-9  SPACE  "  %  &amp;  '  (  )  *  +  ,  -  .  /  :  ;  <  =  >  ?  _
- *\endcode
- *<br>
- * (52 letters + 10 numbers + 20 punc/sym = 82 total)</p>
+ * \endcode
+ * <br>
+ * (52 letters + 10 numbers + 20 punc/sym/space = 82 total)</p>
+ *
+ * <p>This matches the IBM Syntactic Character Set (CS 640).</p>
  *
  * <p>In other words, all the graphic characters in 7-bit ASCII should
  * be safely accessible except the following:</p>
