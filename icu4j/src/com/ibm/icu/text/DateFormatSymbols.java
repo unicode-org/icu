@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateFormatSymbols.java,v $ 
- * $Date: 2000/03/10 04:07:19 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/04/27 22:41:39 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -19,6 +19,7 @@ import java.lang.ref.SoftReference;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.Enumeration;
+import java.text.resources.DateFormatZoneData;
 import com.ibm.util.Utility;
 
 /**

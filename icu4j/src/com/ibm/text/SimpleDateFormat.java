@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/SimpleDateFormat.java,v $ 
- * $Date: 2000/03/21 02:19:56 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/04/27 22:41:39 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -217,7 +217,7 @@ public class SimpleDateFormat extends DateFormat {
      * The symbols used by this formatter for week names, month names,
      * etc.  May not be null.
      * @serial
-     * @see java.text.DateFormatSymbols
+     * @see DateFormatSymbols
      */
     private DateFormatSymbols formatData;
 
@@ -251,7 +251,7 @@ public class SimpleDateFormat extends DateFormat {
      * locale.  <b>Note:</b> Not all locales support SimpleDateFormat; for full
      * generality, use the factory methods in the DateFormat class.
      *
-     * @see java.text.DateFormat
+     * @see DateFormat
      */
     public SimpleDateFormat() {
         this(SHORT, SHORT, Locale.getDefault());
@@ -386,7 +386,7 @@ public class SimpleDateFormat extends DateFormat {
      * @param pos the formatting position. On input: an alignment field,
      * if desired. On output: the offsets of the alignment field.
      * @return the formatted date-time string.
-     * @see java.text.DateFormat
+     * @see DateFormat
      */
     public StringBuffer format(Date date, StringBuffer toAppendTo,
                                FieldPosition pos)
@@ -605,7 +605,7 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Overrides DateFormat
-     * @see java.text.DateFormat
+     * @see DateFormat
      */
     public Date parse(String text, ParsePosition pos)
     {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2000/04/05 17:04:30 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/04/27 22:41:39 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -341,7 +341,6 @@ import java.util.Hashtable;
  *
  * @see          java.text.Format
  * @see          java.text.NumberFormat
- * @see          java.text.ChoiceFormat
  * @version      1.48 09/21/98
  * @author       Mark Davis
  * @author       Alan Liu

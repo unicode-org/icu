@@ -289,7 +289,7 @@ import com.ibm.text.DateFormat;
  * @see          Date
  * @see          GregorianCalendar
  * @see          TimeZone
- * @see          java.text.DateFormat
+ * @see          DateFormat
  * @version      1.48, 11/05/99
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu
  * @since JDK1.1
@@ -1307,7 +1307,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * With strict interpretation, such dates will cause an exception to be
      * thrown.
      *
-     * @see java.text.DateFormat#setLenient
+     * @see DateFormat#setLenient
      */
     public void setLenient(boolean lenient)
     {

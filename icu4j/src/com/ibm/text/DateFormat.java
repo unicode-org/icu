@@ -348,7 +348,7 @@ public abstract class DateFormat extends Format {
      * the parse succeeds.  Clients may insist on strict adherence to the
      * format by calling setLenient(false).
      *
-     * @see java.text.DateFormat#setLenient(boolean)
+     * @see #setLenient(boolean)
      *
      * @param text  The date/time string to be parsed
      *
