@@ -24,6 +24,17 @@
 #include "itconv.h"
 #include "ittrans.h"
 #include "itrbbi.h"
+#include "normconf.h"
+#include "tstnorm.h"
+
+#define CASE_SUITE(id, suite) case id:                  \
+                          name = #suite;                \
+                          if(exec) {                    \
+                              logln(#suite "---");      \
+                              suite test;               \
+                              callTest(test, par);      \
+                          }                             \
+                          break
 
 void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
@@ -36,48 +47,57 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
                 }
                 break;
 
-        case 1: name = "collate"; 
+        case 1: name = "convert"; 
                 if (exec) {
-                    logln("TestSuite Collator----"); logln();
-                    IntlTestCollator test;
-                    callTest( test, par );
-                }
-                break;
-
-        case 2: name = "textbounds"; 
-                if (exec) {
-                    logln("TestSuite TextBoundary----"); logln();
-                    IntlTestTextBoundary test;
-                    callTest( test, par );
-                }
-                break;
-
-        case 3: name = "format"; 
-                if (exec) {
-                    logln("TestSuite Format----"); logln();
-                    IntlTestFormat test;
-                    callTest( test, par );
-                }
-                break;
-
-        case 4: name = "convert"; 
-                if (exec) {
-                    logln("TestSuite Convert----"); logln();
+                    logln("TestSuite Convert---"); logln();
                     IntlTestConvert test;
                     callTest( test, par );
                 }
                 break;
 
-        case 5: name = "translit"; 
+        case 2: name = "normalize"; 
                 if (exec) {
-                    logln("TestSuite Transliterator----"); logln();
+                    logln("TestSuite Normalize---"); logln();
+                    IntlTestNormalize test;
+                    callTest( test, par );
+                }
+                break;
+
+        case 3: name = "collate"; 
+                if (exec) {
+                    logln("TestSuite Collator---"); logln();
+                    IntlTestCollator test;
+                    callTest( test, par );
+                }
+                break;
+
+        case 4: name = "textbounds"; 
+                if (exec) {
+                    logln("TestSuite TextBoundary---"); logln();
+                    IntlTestTextBoundary test;
+                    callTest( test, par );
+                }
+                break;
+
+        case 5: name = "format"; 
+                if (exec) {
+                    logln("TestSuite Format---"); logln();
+                    IntlTestFormat test;
+                    callTest( test, par );
+                }
+                break;
+
+        case 6: name = "translit"; 
+                if (exec) {
+                    logln("TestSuite Transliterator---"); logln();
                     IntlTestTransliterator test;
                     callTest( test, par );
                 }
                 break;
-        case 6: name = "rbbi"; 
+
+        case 7: name = "rbbi"; 
                 if (exec) {
-                    logln("TestSuite RuleBasedBreakIterator----"); logln();
+                    logln("TestSuite RuleBasedBreakIterator---"); logln();
                     IntlTestRBBI test;
                     callTest( test, par );
                 }
@@ -87,3 +107,14 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
     }
 }
 
+void IntlTestNormalize::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+{
+    if(exec) logln("TestSuite Normalize:");
+    switch (index) {
+        CASE_SUITE(0, NormalizerConformanceTest);
+        CASE_SUITE(1, BasicNormalizerTest);
+        default:
+            name="";
+            break;
+    }
+}
