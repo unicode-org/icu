@@ -348,6 +348,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
     char *endCodePoint = NULL;
     char *spacePointer = NULL;
     char *result = fgets(buffer, 2048, data);
+    int32_t buflen = uprv_strlen(buffer);
     if(U_FAILURE(*status)) {
         return 0;
     }
@@ -361,7 +362,11 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
             return NULL;
         }
     }
-    if(buffer[0] == '#' || buffer[0] == '\n') {
+    while(buflen>0 && (buffer[buflen-1] == '\r' || buffer[buflen-1] == '\n')) {
+      buffer[--buflen] = 0;
+    }
+
+    if(buffer[0] == 0 || buffer[0] == '#') {
         return NULL; // just a comment, skip whole line
     }
 
@@ -520,7 +525,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
 
     commentStart = strchr(startCodePoint, '#');
     if(commentStart == NULL) {
-        commentStart = strlen(startCodePoint) + startCodePoint - 1;
+        commentStart = strlen(startCodePoint) + startCodePoint;
     }
 
     i = 0;
