@@ -90,6 +90,7 @@ ru.txt ru_RU.txt ru_UA.txt\
 sh.txt sh_YU.txt\
 sk.txt sk_SK.txt\
 sl.txt sl_SI.txt\
+so.txt so_DJ.txt so_ET.txt so_KE.txt so_SO.txt\
 sq.txt sq_AL.txt\
 sr.txt sr_YU.txt\
 sv.txt sv_FI.txt sv_SE.txt\
@@ -97,7 +98,7 @@ sw.txt sw_KE.txt sw_TZ.txt\
 ta.txt ta_IN.txt\
 te.txt te_IN.txt\
 th.txt th_TH.txt\
-ti.txt ti_ET.txt\
+ti.txt ti_ET.txt ti_ER.txt\
 tr.txt tr_TR.txt\
 uk.txt uk_UA.txt\
 vi.txt vi_VN.txt\

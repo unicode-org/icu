@@ -5,8 +5,7 @@
 // *
 // *******************************************************************************
 // * Amharic language locale for Ethiopia.
-// * Contributed by Daniel Yacob <yacob@geez.org>
-// *
+// * Contributed by Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
 
 am_ET {
     Version{ "x0.1" }
@@ -26,9 +25,9 @@ am_ET {
             "hh:mm:ss a",
             "h:mm:ss a",
             "h:mm a",
-            "EEEE dd MMMM yyyy",
+            "EEEE\u1363 dd MMMM \u1240\u1295 yyyy G",
             "dd MMMM yyyy",
-            "MMM dd,yy",
+            "dd-MMM-yy",
             "dd/MM/yy",
             "{1} {0}",
     }

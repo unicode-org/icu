@@ -4,33 +4,23 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // *******************************************************************************
-// * Tigrigna language locale for Ethiopia.
-// * Contributed by Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
+// * Somali language locale for Djibouti.
+// * Contributed by :
+// *             Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
+// *             Mohamed Diriye Abdullahi <diriyeam@magellan.umontreal.ca>
+// *             Department of Linguistics and Translation, Universite de Montreal, Montreal
 
-ti_ET {
+so_DJ {
     Version{ "x0.1" }
-    AmPmMarkers {
-            "\u1295\u1309\u1206 \u1230\u12D3\u1270",
-            "\u12F5\u1215\u122D \u1230\u12D3\u1275",
-    }
-    // CountryISBNNumber { "231" }
-    // CountryNumber { "231" }
+
+    // CountryISBNNumber { "262" }
+    // CountryNumber { "262" }
     CurrencyElements {
             "$",
-            "ETB",
+            "DJF",
             ".",
     }
-    DateTimePatterns { 
-            "hh:mm:ss a",
-            "hh:mm:ss a",
-            "h:mm:ss a",
-            "h:mm a",
-            "EEEE\u1363 dd MMMM \u1218\u12D3\u120D\u1272 yyyy G",
-            "dd MMMM yyyy",
-            "dd-MMM-yy",
-            "dd/MM/yy",
-            "{1} {0}",
-    }
+
     // Measurement { "Metric" }
     NumberElements {
             ".",
@@ -55,4 +45,4 @@ ti_ET {
     //    Width { "210" }
     //    Units { "mm" }
     // }
-}
+ }
