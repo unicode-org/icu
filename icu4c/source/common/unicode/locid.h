@@ -666,7 +666,10 @@ public:
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
 protected: /* only protected for testing purposes. DO NOT USE. */
-    /** set it from a single string. */
+    /**
+     * Set this from a single POSIX style locale string.
+     * @internal
+     */
     void setFromPOSIXID(const char *posixID);
 
 private:
