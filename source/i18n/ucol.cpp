@@ -1335,7 +1335,7 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
         data->toReturn --;
         result = *(data->toReturn);
         if (data->CEs == data->toReturn) {
-            data->CEpos = data->toReturn = data->CEs;
+            data->CEpos = data->toReturn;
         }
     }
     else {

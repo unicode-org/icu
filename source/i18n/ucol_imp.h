@@ -371,6 +371,7 @@ ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status);
 /* StringSearch internal use */
 #define inNormBuf(coleiter) ((coleiter)->iteratordata_.flags & UCOL_ITER_INNORMBUF)
 #define isFCDPointerNull(coleiter) ((coleiter)->iteratordata_.fcdPosition == NULL)
+#define hasExpansion(coleiter) ((coleiter)->iteratordata_.CEpos != (coleiter)->iteratordata_.CEs)
 #define getExpansionPrefix(coleiter) ((coleiter)->iteratordata_.toReturn - (coleiter)->iteratordata_.CEs)
 #define setExpansionPrefix(coleiter, offset) ((coleiter)->iteratordata_.CEs + offset)
 #define getExpansionSuffix(coleiter) ((coleiter)->iteratordata_.CEpos - (coleiter)->iteratordata_.toReturn)
