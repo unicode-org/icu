@@ -206,7 +206,7 @@ unorm_cleanup() {
     dataErrorCode=U_ZERO_ERROR;
     haveNormData=0;
 
-    for(i=0; i<LENGTHOF(nxCache); ++i) {
+    for(i=0; i<(int32_t)LENGTHOF(nxCache); ++i) {
         delete nxCache[i];
     }
     uprv_memset(nxCache, 0, sizeof(nxCache));
