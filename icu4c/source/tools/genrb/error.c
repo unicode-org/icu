@@ -31,7 +31,7 @@ void error(uint32_t linenumber, const char *msg, ...)
     va_end(va);
 }
 
-static gShowWarning = TRUE;
+static UBool gShowWarning = TRUE;
 
 void setShowWarning(UBool val)
 {
