@@ -190,27 +190,10 @@ void CompoundTransliterator::adoptTransliterators(Transliterator* adoptedTransli
 }
 
 /**
- * Transliterates a segment of a string.  <code>Transliterator</code> API.
- * @param text the string to be transliterated
- * @param start the beginning index, inclusive; <code>0 <= start
- * <= limit</code>.
- * @param limit the ending index, exclusive; <code>start <= limit
- * <= text.length()</code>.
- * @return the new limit index
- */
-int32_t CompoundTransliterator::transliterate(Replaceable& text,
-                                              int32_t start, int32_t limit) const {
-    for (int32_t i=0; i<count; ++i) {
-        limit = trans[i]->transliterate(text, start, limit);
-    }
-    return limit;
-}
-
-/**
  * Implements {@link Transliterator#handleTransliterate}.
  */
-void CompoundTransliterator::handleTransliterate(Replaceable& text,
-                                                 int32_t index[3]) const {
+void CompoundTransliterator::handleTransliterate(Replaceable& text, Position& index,
+                                                 bool_t incremental) const {
     /* Call each transliterator with the same start value and
      * initial cursor index, but with the limit index as modified
      * by preceding transliterators.  The cursor index must be
@@ -291,29 +274,29 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text,
         }
     }
 
-    int32_t cursor = index[CURSOR];
-    int32_t limit = index[LIMIT];
+    int32_t cursor = index.cursor;
+    int32_t limit = index.limit;
     int32_t globalLimit = limit;
     /* globalLimit is the overall limit.  We keep track of this
-     * since we overwrite index[LIMIT] with the previous
-     * index[CURSOR].  After each transliteration, we update
+     * since we overwrite index.limit with the previous
+     * index.cursor.  After each transliteration, we update
      * globalLimit for insertions or deletions that have happened.
      */
     
     for (i=0; i<count; ++i) {
-        index[CURSOR] = cursor; // Reset cursor
-        index[LIMIT] = limit;
+        index.cursor = cursor; // Reset cursor
+        index.limit = limit;
         
-        trans[i]->handleTransliterate(text, index);
+        trans[i]->handleTransliterate(text, index, incremental);
         
         // Adjust overall limit for insertions/deletions
-        globalLimit += index[LIMIT] - limit;
-        limit = index[CURSOR]; // Move limit to end of committed text
+        globalLimit += index.limit - limit;
+        limit = index.cursor; // Move limit to end of committed text
     }
     // Cursor is good where it is -- where the last
     // transliterator left it.  Limit needs to be put back
     // where it was, modulo adjustments for deletions/insertions.
-    index[LIMIT] = globalLimit;
+    index.limit = globalLimit;
     
     // Fixup the transliterator filters, if we had to modify them.
     if (f != 0) {

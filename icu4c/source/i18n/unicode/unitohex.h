@@ -113,8 +113,8 @@ public:
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
-    virtual void handleTransliterate(Replaceable& text,
-                                     int32_t offsets[3]) const;
+    virtual void handleTransliterate(Replaceable& text, Position& offsets,
+                                     bool_t isIncremental) const;
 
 private:
 

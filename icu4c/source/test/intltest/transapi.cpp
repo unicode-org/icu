@@ -283,7 +283,8 @@ void TransliteratorAPITest::TestTransliterate1(){
 			 errln("FAIL: construction: " + Data[i+0]);
 			 continue;
 			}
-            t->transliterate(Data[i+1], gotResult);
+            gotResult = Data[i+1];
+            t->transliterate(gotResult);
 			message=t->getID() + "->transliterate(UnicodeString, UnicodeString) for\n\t Source:" + Data[i+1];
             doTest(message, gotResult, Data[i+2]);
 
@@ -323,7 +324,8 @@ void TransliteratorAPITest::TestTransliterate2(){
 			 }
 		     start=getInt(Data2[i+2]);
 			 limit=getInt(Data2[i+3]);
-             t->transliterate(Data2[i+1], start, limit, gotResBuf);
+             Data2[i+1].extractBetween(start, limit, gotResBuf);
+             t->transliterate(gotResBuf);
 			 //  errln("FAIL: calling transliterate on " + t->getID());
              doTest(t->getID() + ".transliterate(UnicodeString, int32_t, int32_t, UnicodeString):(" + start + "," + limit + ")  for \n\t source: " + Data2[i+1], gotResBuf, Data2[i+4]);
           
@@ -335,8 +337,9 @@ void TransliteratorAPITest::TestTransliterate2(){
          
          logln("\n   Try calling transliterate with illegal start and limit values");
          t=Transliterator::createInstance("Unicode-Hex");
-         t->transliterate("try start greater than limit", 10, 5, gotResBuf);
-         if(gotResBuf == "")
+         gotResBuf = temp = "try start greater than limit";
+         t->transliterate(gotResBuf, 10, 5);
+         if(gotResBuf == temp)
               logln("OK: start greater than limit value handled correctly");
 		  else
 		 	   errln("FAIL: start greater than limit value returned" + gotResBuf);
@@ -374,7 +377,7 @@ void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
          Transliterator* t=Transliterator::createInstance("Unicode-Hex");
 		 if(t == 0)
 			 errln("FAIL : construction");
-         int32_t index[]={19,20,20};
+         Transliterator::Position index={19,20,20};
          UnicodeString rs= "Transliterate this-''";
          UnicodeString insertion="abc";
          UnicodeString expected="Transliterate this-'\\u0061\\u0062\\u0063'";
@@ -386,7 +389,7 @@ void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
 		 doTest(message, rs, expected);
           
          logln("try calling transliterate with invalid index values");
-         int32_t index1[][3]={
+         Transliterator::Position index1[]={
              //START, LIMIT, CURSOR
              {10, 10, 12},   //invalid since CURSOR>LIMIT valid:-START <= CURSOR <= LIMIT
              {17, 16, 17},   //invalid since START>LIMIT valid:-0<=START<=LIMIT
@@ -421,7 +424,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
         };
 		Transliterator* t=Transliterator::createInstance("Unicode-Hex");
         //keyboardAux(t, Data);
-		int32_t index[] = {0, 0, 0};
+		Transliterator::Position index = {0, 0, 0};
 	    UErrorCode status=U_ZERO_ERROR;
         UnicodeString s;
         logln("Testing transliterate(Replaceable, int32_t, UnicodeString, UErrorCode)");
@@ -445,8 +448,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
         
 		s="";
 		status=U_ZERO_ERROR;
-	    for(i=0;i<3;i++)
-			index[i]=0;
+        index.start = index.limit = index.cursor = 0;
 		logln("Testing transliterate(Replaceable, int32_t, UChar, UErrorCode)");
 		for(i=10; i<sizeof(Data)/sizeof(Data[0]); i=i+2){
 			UnicodeString log;
@@ -519,16 +521,16 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
 	};
 	
 	UErrorCode status=U_ZERO_ERROR;
-	int32_t index[]={0, 0, 0};
+	Transliterator::Position index={0, 0, 0};
 	logln("Testing transliterate(Replaceable, int32_t, UErrorCode)");
 	Transliterator *t=Transliterator::createInstance("Unicode-Hex");
 	if(t == 0)
 			errln("FAIL : construction");
 	for(int32_t i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+4){
 		UnicodeString log;
-		index[0]=getInt(Data[i+0]);
-        index[1]=getInt(Data[i+1]);
-        index[2]=getInt(Data[i+2]);
+		index.start=getInt(Data[i+0]);
+        index.limit=getInt(Data[i+1]);
+        index.cursor=getInt(Data[i+2]);
         t->transliterate(s, index, status);
         if(U_FAILURE(status)){
            errln("FAIL: " + t->getID()+ ".transliterate(Replaceable, int32_t[], UErrorCode)-->" + (UnicodeString)u_errorName(status));
@@ -592,10 +594,12 @@ void TransliteratorAPITest::TestGetAdoptFilter(){
           
     UnicodeString got, temp, message;
     UnicodeString data="ABCabcbbCBa";
-	t->transliterate(data, temp);
+    temp = data;
+	t->transliterate(temp);
 	t->adoptFilter(new TestFilter1);
 
-	t->transliterate(data, got);
+    got = data;
+	t->transliterate(got);
     UnicodeString exp="A\\u0042Ca\\u0062c\\u0062\\u0062C\\u0042a";
 	message="transliteration after adoptFilter(a,A,c,C) ";
     doTest(message, got, exp);
@@ -607,7 +611,8 @@ void TransliteratorAPITest::TestGetAdoptFilter(){
     else
        errln("FAIL: adoptFilter or getFilter round trip failed");  
 
-    t->transliterate(data, got);
+    got = data;
+    t->transliterate(got);
     exp="\\u0041\\u0042\\u0043\\u0061\\u0062\\u0063\\u0062\\u0062\\u0043\\u0042\\u0061";
     message="transliteration after adopting null filter";
     doTest(message, got, exp);
@@ -617,25 +622,29 @@ void TransliteratorAPITest::TestGetAdoptFilter(){
     t->adoptFilter(new TestFilter2);
     data="heelloe";
 	exp="\\u0068eell\\u006Fe";
-	t->transliterate(data, got);
+    got = data;
+	t->transliterate(got);
 	message="transliteration using (e,l) filter";
     doTest("transliteration using (e,l) filter", got, exp);
 	
 	data="are well";
 	exp="\\u0061\\u0072e\\u0020\\u0077ell";
-    t->transliterate(data, got);
+    got = data;
+    t->transliterate(got);
 	doTest(message, got, exp);
     
     t->adoptFilter(new TestFilter3);
 	data="ho, wow!";
 	exp="\\u0068o\\u002C\\u0020wow\\u0021";
-    t->transliterate(data, got);
+    got = data;
+    t->transliterate(got);
 	message="transliteration using (o,w) filter";
     doTest("transliteration using (o,w) filter", got, exp);
 
     data="owl";
 	exp="ow\\u006C";
-    t->transliterate(data, got);
+    got = data;
+    t->transliterate(got);
 	doTest("transliteration using (o,w) filter", got, exp);
 
 	delete t;
@@ -645,15 +654,15 @@ void TransliteratorAPITest::TestGetAdoptFilter(){
 
 
 void TransliteratorAPITest::keyboardAux(Transliterator *t, UnicodeString DATA[], UnicodeString& s, int32_t begin, int32_t end) {
-        int32_t index[]= {0, 0, 0};
+        Transliterator::Position index = {0, 0, 0};
 		UErrorCode status=U_ZERO_ERROR;
         for (int32_t i=begin; i<end; i=i+5) {
             UnicodeString log;
             if (DATA[i+0] != "") {
                  log = s + " + " + DATA[0] + " -> ";
-                 index[0]=getInt(DATA[i+2]);
-                 index[1]=getInt(DATA[i+3]);
-                 index[2]=getInt(DATA[i+4]);
+                 index.start=getInt(DATA[i+2]);
+                 index.limit=getInt(DATA[i+3]);
+                 index.cursor=getInt(DATA[i+4]);
                  t->transliterate(s, index, DATA[i+0], status);
                  if(U_FAILURE(status)){
 					 errln("FAIL: " + t->getID()+ ".transliterate(Replaceable, int32_t[], UnicodeString, UErrorCode)-->" + (UnicodeString)u_errorName(status));
@@ -669,14 +678,12 @@ void TransliteratorAPITest::keyboardAux(Transliterator *t, UnicodeString DATA[],
         }
 }
 
-void TransliteratorAPITest::displayOutput(const UnicodeString& got, const UnicodeString& expected, UnicodeString& log, int32_t index[]){
+void TransliteratorAPITest::displayOutput(const UnicodeString& got, const UnicodeString& expected, UnicodeString& log, Transliterator::Position& index){
 		 // Show the start index '{' and the cursor '|'
 			UnicodeString a, b, c;
-			got.extractBetween(0, index[Transliterator::START], a);
-			got.extractBetween(index[Transliterator::START],
-                           index[Transliterator::CURSOR], b);
-			got.extractBetween(index[Transliterator::CURSOR],
-                           got.length(), c);
+			got.extractBetween(0, index.start, a);
+			got.extractBetween(index.start, index.cursor, b);
+			got.extractBetween(index.cursor, got.length(), c);
 			log.append(a).
 				append('{').
 				append(b).

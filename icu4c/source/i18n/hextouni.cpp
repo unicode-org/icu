@@ -50,15 +50,15 @@ Transliterator* HexToUnicodeTransliterator::clone(void) const {
 /**
  * Implements {@link Transliterator#handleKeyboardTransliterate}.
  */
-void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text,
-                                                     int32_t offsets[3]) const {
+void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text, Position& offsets,
+                                                     bool_t isIncremental) const {
     /**
      * Performs transliteration changing Unicode hexadecimal
      * escapes to characters.  For example, "U+0040" -> '@'.  A fixed
      * set of prefixes is recognized: "&#92;u", "&#92;U", "u+", "U+". 
      */
-    int32_t cursor = offsets[CURSOR];
-    int32_t limit = offsets[LIMIT];
+    int32_t cursor = offsets.cursor;
+    int32_t limit = offsets.limit;
 
     int32_t maxCursor = limit - 6;
 
@@ -116,6 +116,6 @@ void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text,
         }
     }
 
-    offsets[LIMIT] = limit;
-    offsets[CURSOR] = cursor;
+    offsets.limit = limit;
+    offsets.cursor = cursor;
 }

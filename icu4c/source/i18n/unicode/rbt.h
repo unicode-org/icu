@@ -277,20 +277,6 @@ public:
      * <= limit</code>.
      * @param limit the ending index, exclusive; <code>start <= limit
      * <= text.length()</code>.
-     * @param result buffer to receive the transliterated text; previous
-     * contents are discarded
-     */
-    virtual void transliterate(const UnicodeString& text,
-                               int32_t start, int32_t limit,
-                               UnicodeString& result) const;
-
-    /**
-     * Transliterates a segment of a string.  <code>Transliterator</code> API.
-     * @param text the string to be transliterated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
      * @return The new limit index
      */
     virtual int32_t transliterate(Replaceable& text,
@@ -299,8 +285,8 @@ public:
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
-    virtual void handleTransliterate(Replaceable& text,
-                                     int32_t index[3]) const;
+    virtual void handleTransliterate(Replaceable& text, Position& offsets,
+                                     bool_t isIncremental) const;
 
 private:
 

@@ -234,28 +234,23 @@ public:
         REVERSE
     };
 
-    enum {
+    class Position {
+    public:
         /**
-         * In the <code>transliterate()</code>
-         * <code>index[]</code> array, the beginning index, inclusive
-         * @see #transliterate
+         * In <code>transliterate()</code>, the beginning index, inclusive
          */
-        START = 0,
+        int32_t start;
 
         /**
-         * In the <code>transliterate()</code>
-         * <code>index[]</code> array, the ending index, exclusive
-         * @see #transliterate
+         * In <code>transliterate()</code>, the ending index, exclusive
          */
-        LIMIT = 1,
+        int32_t limit;
 
         /**
-         * In the <code>transliterate()</code>
-         * <code>index[]</code> array, the next character to be considered
-         * for transliteration
-         * @see #transliterate
+         * In <code>transliterate()</code>, the next character to be
+         * considered for transliteration
          */
-        CURSOR = 2
+        int32_t cursor;
     };
 
 private:
@@ -425,29 +420,7 @@ public:
     virtual Transliterator* clone() const { return 0; }
 
     /**
-     * Transliterates the segment of a string that begins at the
-     * character at offset <code>start</code> and extends to the
-     * character at offset <code>limit - 1</code>, with optional
-     * filtering.  A default implementaion is provided here;
-     * subclasses should provide a more efficient implementation if
-     * possible.
-     * @param text the string to be transliterated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param result buffer to receive the transliterated text; previous
-     * contents are discarded
-     */
-    virtual void transliterate(const UnicodeString& text,
-                               int32_t start, int32_t limit,
-                               UnicodeString& result) const;
-
-    /**
      * Transliterates a segment of a string, with optional filtering.
-     * The default implementation simply calls <code>handleTransliterate</code>.
-     * Subclasses that can supply a more efficient implementation should
-     * override this method.
      *
      * @param text the string to be transliterated
      * @param start the beginning index, inclusive; <code>0 <= start
@@ -467,15 +440,6 @@ public:
                                   int32_t start, int32_t limit) const;
 
     /**
-     * Transliterates an entire string. Convenience method.
-     * @param text the string to be transliterated
-     * @param result buffer to receive the transliterated text; previous
-     * contents are discarded
-     */
-    virtual void transliterate(const UnicodeString& text,
-                               UnicodeString& result) const;
-
-    /**
      * Transliterates an entire string in place. Convenience method.
      * @param text the string to be transliterated
      */
@@ -486,25 +450,25 @@ public:
      * transliterated unambiguosly after new text has been inserted,
      * typically as a result of a keyboard event.  The new text in
      * <code>insertion</code> will be inserted into <code>text</code>
-     * at <code>index[LIMIT]</code>, advancing
-     * <code>index[LIMIT]</code> by <code>insertion.length()</code>.
+     * at <code>index.limit</code>, advancing
+     * <code>index.limit</code> by <code>insertion.length()</code>.
      * Then the transliterator will try to transliterate characters of
-     * <code>text</code> between <code>index[CURSOR]</code> and
-     * <code>index[LIMIT]</code>.  Characters before
-     * <code>index[CURSOR]</code> will not be changed.
+     * <code>text</code> between <code>index.cursor</code> and
+     * <code>index.limit</code>.  Characters before
+     * <code>index.cursor</code> will not be changed.
      *
-     * <p>Upon return, values in <code>index[]</code> will be updated.
-     * <code>index[START]</code> will be advanced to the first
+     * <p>Upon return, values in <code>index</code> will be updated.
+     * <code>index.start</code> will be advanced to the first
      * character that future calls to this method will read.
-     * <code>index[CURSOR]</code> and <code>index[LIMIT]</code> will
+     * <code>index.cursor</code> and <code>index.limit</code> will
      * be adjusted to delimit the range of text that future calls to
      * this method may change.
      *
      * <p>Typical usage of this method begins with an initial call
-     * with <code>index[START]</code> and <code>index[LIMIT]</code>
+     * with <code>index.start</code> and <code>index.limit</code>
      * set to indicate the portion of <code>text</code> to be
-     * transliterated, and <code>index[CURSOR] == index[START]</code>.
-     * Thereafter, <code>index[]</code> can be used without
+     * transliterated, and <code>index.cursor == index.start</code>.
+     * Thereafter, <code>index</code> can be used without
      * modification in future calls, provided that all changes to
      * <code>text</code> are made via this method.
      *
@@ -520,33 +484,29 @@ public:
      * @param text the buffer holding transliterated and untransliterated text
      * @param index an array of three integers.
      *
-     * <ul><li><code>index[START]</code>: the beginning index,
-     * inclusive; <code>0 <= index[START] <= index[LIMIT]</code>.
+     * <ul><li><code>index.start</code>: the beginning index,
+     * inclusive; <code>0 <= index.start <= index.limit</code>.
      *
-     * <li><code>index[LIMIT]</code>: the ending index, exclusive;
-     * <code>index[START] <= index[LIMIT] <= text.length()</code>.
+     * <li><code>index.limit</code>: the ending index, exclusive;
+     * <code>index.start <= index.limit <= text.length()</code>.
      * <code>insertion</code> is inserted at
-     * <code>index[LIMIT]</code>.
+     * <code>index.limit</code>.
      *
-     * <li><code>index[CURSOR]</code>: the next character to be
-     * considered for transliteration; <code>index[START] <=
-     * index[CURSOR] <= index[LIMIT]</code>.  Characters before
-     * <code>index[CURSOR]</code> will not be changed by future calls
+     * <li><code>index.cursor</code>: the next character to be
+     * considered for transliteration; <code>index.start <=
+     * index.cursor <= index.limit</code>.  Characters before
+     * <code>index.cursor</code> will not be changed by future calls
      * to this method.</ul>
      *
      * @param insertion text to be inserted and possibly
      * transliterated into the translation buffer at
-     * <code>index[LIMIT]</code>.  If <code>null</code> then no text
+     * <code>index.limit</code>.  If <code>null</code> then no text
      * is inserted.
-     * @see #START
-     * @see #LIMIT
-     * @see #CURSOR
      * @see #handleTransliterate
-     * @exception IllegalArgumentException if <code>index[]</code>
+     * @exception IllegalArgumentException if <code>index</code>
      * is invalid
      */
-    virtual void transliterate(Replaceable& text,
-                               int32_t index[3],
+    virtual void transliterate(Replaceable& text, Position& index,
                                const UnicodeString& insertion,
                                UErrorCode& status) const;
 
@@ -562,10 +522,10 @@ public:
      * #transliterate(Replaceable, int[], String)}.
      * @param insertion text to be inserted and possibly
      * transliterated into the translation buffer at
-     * <code>index[LIMIT]</code>.
+     * <code>index.limit</code>.
      * @see #transliterate(Replaceable, int[], String)
      */
-    virtual void transliterate(Replaceable& text, int32_t index[3],
+    virtual void transliterate(Replaceable& text, Position& index,
                                UChar insertion,
                                UErrorCode& status) const;
     
@@ -580,7 +540,7 @@ public:
      * #transliterate(Replaceable, int[], String)}.
      * @see #transliterate(Replaceable, int[], String)
      */
-    virtual void transliterate(Replaceable& text, int32_t index[3],
+    virtual void transliterate(Replaceable& text, Position& index,
                                UErrorCode& status) const;
 
     /**
@@ -594,7 +554,7 @@ public:
      * #transliterate}
      */
     virtual void finishTransliteration(Replaceable& text,
-                                       int32_t index[3]) const;
+                                       Position& index) const;
 
 private:
 
@@ -606,7 +566,7 @@ private:
      * work.
      */
     void _transliterate(Replaceable& text,
-                        int32_t index[3],
+                        Position& index,
                         const UnicodeString* insertion,
                         UErrorCode &status) const;
 
@@ -615,18 +575,18 @@ protected:
     /**
      * Abstract method that concrete subclasses define to implement
      * keyboard transliteration.  This method should transliterate all
-     * characters between <code>index[CURSOR]</code> and
-     * <code>index[LIMIT]</code> that can be unambiguously
+     * characters between <code>index.cursor</code> and
+     * <code>index.limit</code> that can be unambiguously
      * transliterated, regardless of future insertions of text at
-     * <code>index[LIMIT]</code>.  <code>index[CURSOR]</code> should
+     * <code>index.limit</code>.  <code>index.cursor</code> should
      * be advanced past committed characters (those that will not
      * change in future calls to this method).
-     * <code>index[LIMIT]</code> should be updated to reflect text
+     * <code>index.limit</code> should be updated to reflect text
      * replacements that shorten or lengthen the text between
-     * <code>index[CURSOR]</code> and <code>index[LIMIT]</code>.  Upon
-     * return, neither <code>index[CURSOR]</code> nor
-     * <code>index[LIMIT]</code> should be less than the initial value
-     * of <code>index[CURSOR]</code>.  <code>index[START]</code>
+     * <code>index.cursor</code> and <code>index.limit</code>.  Upon
+     * return, neither <code>index.cursor</code> nor
+     * <code>index.limit</code> should be less than the initial value
+     * of <code>index.cursor</code>.  <code>index.start</code>
      * should <em>not</em> be changed.
      *
      * @param text the buffer holding transliterated and
@@ -636,7 +596,8 @@ protected:
      * @see #transliterate
      */
     virtual void handleTransliterate(Replaceable& text,
-                                     int32_t index[3]) const = 0;
+                                     Position& index,
+                                     bool_t incremental) const = 0;
 
     // C++ requires this friend declaration so CompoundTransliterator
     // can access handleTransliterate.  Alternatively, we could
