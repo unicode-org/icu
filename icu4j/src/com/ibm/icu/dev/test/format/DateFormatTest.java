@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2003/10/13 17:14:46 $ 
- * $Revision: 1.20 $
+ * $Date: 2003/10/16 00:52:18 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -140,10 +140,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     
         /*
          * SimpleDateFormat(pattern, locale) Construct a SimpleDateDateFormat using
-         * the givening pattern, the locale and using the TimeZone.getDefault();
+         * the given pattern, the locale and using the TimeZone.getDefault();
          * So it need to add the timezone offset on hour field. 
          * ps. the Method Calendar.getTime() used by SimpleDateFormat.parse() always 
-         * return Date vaule with TimeZone.getDefault() [Richard/GCL]
+         * return Date value with TimeZone.getDefault() [Richard/GCL]
          */
         
         TimeZone defaultTZ = TimeZone.getDefault();
@@ -151,7 +151,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         int defaultOffset = defaultTZ.getRawOffset();
         int PSTOffset = PST.getRawOffset();
         int hour = 2 + (defaultOffset - PSTOffset) / (60*60*1000);
-        hour = (hour < 0) ? hour + 24 : hour;
+        // hour is the expected hour of day, in units of seconds
+        hour = ((hour < 0) ? hour + 24 : hour) * 60*60;
         try {
             Date d = fmt.parse(s);
             Calendar cal = Calendar.getInstance();
@@ -160,9 +161,13 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             hour += defaultTZ.inDaylightTime(d) ? 1 : 0;
             
             logln(s + " P> " + ((DateFormat) fullFmt).format(d));
-            int hr = cal.get(Calendar.HOUR_OF_DAY);
+            // hr is the actual hour of day, in units of seconds
+            // adjust for DST
+            int hr = cal.get(Calendar.HOUR_OF_DAY) * 60*60 -
+                cal.get(Calendar.DST_OFFSET) / 1000;
             if (hr != hour)
-                errln("FAIL: Should parse to hour " + hour);
+                errln("FAIL: Hour (-DST) = " + hr / (60*60.0)+
+                      "; expected " + hour / (60*60.0));
         } catch (ParseException e) {
             errln("Parse Error:" + e.getMessage());
         }

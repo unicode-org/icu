@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/AstroTest.java,v $ 
- * $Date: 2003/10/02 20:50:57 $ 
- * $Revision: 1.14 $
+ * $Date: 2003/10/16 00:49:58 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -168,7 +168,16 @@ public class AstroTest extends TestFmwk {
 
         logln("Sunrise/Sunset times for Toronto, Canada");
         CalendarAstronomer astro = new CalendarAstronomer(-(79+25/60), 43+40/60);
-        TimeZone tz = TimeZone.getTimeZone("America/Montreal");
+
+        // As of ICU4J 2.8 the ICU4J time zones implement pass-through
+        // to the underlying JDK.  Because of variation in the
+        // underlying JDKs, we have to use a fixed-offset
+        // SimpleTimeZone to get consistent behavior between JDKs.
+        // The offset we want is [-18000000, 3600000] (raw, dst).
+        // [aliu 10/15/03]
+
+        // TimeZone tz = TimeZone.getTimeZone("America/Montreal");
+        TimeZone tz = new SimpleTimeZone(-18000000 + 3600000, "Montreal(FIXED)");
 
         GregorianCalendar cal = new GregorianCalendar(tz, Locale.US);
         GregorianCalendar cal2 = new GregorianCalendar(tz, Locale.US);
@@ -181,7 +190,7 @@ public class AstroTest extends TestFmwk {
         DateFormat df = DateFormat.getTimeInstance(cal, DateFormat.MEDIUM, Locale.US);
         DateFormat df2 = DateFormat.getDateTimeInstance(cal, DateFormat.MEDIUM, DateFormat.MEDIUM, Locale.US);
         DateFormat day = DateFormat.getDateInstance(cal, DateFormat.MEDIUM, Locale.US);
-				
+
         for (int i=0; i < 30; i++) {
             astro.setDate(cal.getTime());
 			
