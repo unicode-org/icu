@@ -626,7 +626,6 @@ uprv_free(result);
 	/*testing spellout format to make sure we can use it successfully.*/
 	log_verbose("\nTesting spellout format\n");
 	{
-	int i;
 	int32_t values[] = { 0, -5, 105, 1005, 105050 };
 	for (i = 0; i < LENGTH(values); ++i) {
 		UChar buffer[128];
@@ -638,16 +637,16 @@ uprv_free(result);
 			log_err("Error in formatting using unum_format(spellout_fmt, ...): %s\n", myErrorName(status));
 		} else {
 			int32_t pp = 0;
-			int32_t result;
+			int32_t parseResult;
 			char logbuf[256];
 			ustrToAstr(buffer, len, logbuf, LENGTH(logbuf));
 			log_verbose("formatted %d as '%s', length: %d\n", value, logbuf, len);
 
-			result = unum_parse(spellout_def, buffer, len, &pp, &status);
+			parseResult = unum_parse(spellout_def, buffer, len, &pp, &status);
 			if (U_FAILURE(status)) {
 				log_err("Error in parsing using unum_format(spellout_fmt, ...): %s\n", myErrorName(status));
-			} else if (result != value) {
-				log_err("unum_format result %d != value %d\n", result, value);
+			} else if (parseResult != value) {
+				log_err("unum_format result %d != value %d\n", parseResult, value);
 			}
 		}
 	}
