@@ -81,7 +81,7 @@ util_lcm(int64_t x, int64_t y)
 
     while (t != 0) {
         while ((t & 1) == 0) {
-            t >>= 1;
+            t = t >> 1;
         }
         if (t > 0) {
             x1 = t;
