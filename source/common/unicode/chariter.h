@@ -605,27 +605,70 @@ public:
   virtual void            getText(UnicodeString&  result) = 0;
 
 protected:
+  /**
+   * Empty constructor.
+   * @stable ICU 2.0
+   */
   CharacterIterator();
+
+  /**
+   * Constructor, just setting the length field in this base class.
+   * @stable ICU 2.0
+   */
   CharacterIterator(int32_t length);
+
+  /**
+   * Constructor, just setting the length and position fields in this base class.
+   * @stable ICU 2.0
+   */
   CharacterIterator(int32_t length, int32_t position);
+
+  /**
+   * Constructor, just setting the length, start, end, and position fields in this base class.
+   * @stable ICU 2.0
+   */
   CharacterIterator(int32_t length, int32_t textBegin, int32_t textEnd, int32_t position);
   
-  /*copy constructor
+  /**
+   * Copy constructor.
+   *
    * @param that The CharacterIterator to be copied
-   * @return the newly created CharacterIterator. */
+   * @stable ICU 2.0
+   */
   CharacterIterator(const CharacterIterator &that);
 
   /**
-    * Assignment operator.  Sets this CharacterIterator to have the same behavior,
-    * as the one passed in.
-    * @param that The CharacterIterator passed in.
-    * @return the newly set CharacterIterator.
-    */
+   * Assignment operator.  Sets this CharacterIterator to have the same behavior,
+   * as the one passed in.
+   * @param that The CharacterIterator passed in.
+   * @return the newly set CharacterIterator.
+   * @stable ICU 2.0
+   */
   CharacterIterator &operator=(const CharacterIterator &that);
 
-  int32_t      textLength; // need this for correct getText() and hashCode()
+  /**
+   * Base class text length field.
+   * Necessary this for correct getText() and hashCode().
+   * @stable ICU 2.0
+   */
+  int32_t textLength;
+
+  /**
+   * Base class field for the current position.
+   * @stable ICU 2.0
+   */
   int32_t  pos;
+
+  /**
+   * Base class field for the start of the iteration range.
+   * @stable ICU 2.0
+   */
   int32_t  begin;
+
+  /**
+   * Base class field for the end of the iteration range.
+   * @stable ICU 2.0
+   */
   int32_t  end;
 };
 

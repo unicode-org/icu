@@ -560,7 +560,7 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/* @deprecated ICU 2.4. Use U16_GET instead, see utf_old.h. */
+/** @deprecated ICU 2.4. Use U16_GET instead, see utf_old.h. */
 #define UTF16_GET_CHAR_SAFE(s, start, i, length, c, strict) { \
     (c)=(s)[i]; \
     if(UTF_IS_SURROGATE(c)) { \

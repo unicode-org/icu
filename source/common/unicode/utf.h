@@ -107,8 +107,8 @@
 /* include the utfXX.h after the following definitions */
 
 /*!
- * \def U_SIZEOF_WCHAR_T
- * U_SIZEOF_WCHAR_T==sizeof(wchar_t).
+ * \def U_HAVE_WCHAR_H
+ * Indicates whether <wchar.h> is available (1) or not (0). Set to 1 by default.
  *
  * @stable ICU 2.0
  */
@@ -116,7 +116,12 @@
 #   define U_HAVE_WCHAR_H 1
 #endif
 
-/* U_SIZEOF_WCHAR_T==sizeof(wchar_t) (0 means it is not defined or autoconf could not set it) */
+/*!
+ * \def U_SIZEOF_WCHAR_T
+ * U_SIZEOF_WCHAR_T==sizeof(wchar_t) (0 means it is not defined or autoconf could not set it)
+ *
+ * @stable ICU 2.0
+ */
 #if U_SIZEOF_WCHAR_T==0
 #   undef U_SIZEOF_WCHAR_T
 #   define U_SIZEOF_WCHAR_T 4

@@ -434,7 +434,7 @@ typedef enum UCharCategory
  * corresponding UCharCategory constant is n.
  *
  * There are also some U_GC_Y_MASK constants for groups of general categories
- * like L& for all letter categories.
+ * like L for all letter categories.
  *
  * @see u_charType
  * @see U_GET_GC_MASK
@@ -443,63 +443,100 @@ typedef enum UCharCategory
  */
 #define U_GC_CN_MASK    U_MASK(U_GENERAL_OTHER_TYPES)
 
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_LU_MASK    U_MASK(U_UPPERCASE_LETTER)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_LL_MASK    U_MASK(U_LOWERCASE_LETTER)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_LT_MASK    U_MASK(U_TITLECASE_LETTER)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_LM_MASK    U_MASK(U_MODIFIER_LETTER)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_LO_MASK    U_MASK(U_OTHER_LETTER)
 
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_MN_MASK    U_MASK(U_NON_SPACING_MARK)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_ME_MASK    U_MASK(U_ENCLOSING_MARK)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_MC_MASK    U_MASK(U_COMBINING_SPACING_MARK)
 
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_ND_MASK    U_MASK(U_DECIMAL_DIGIT_NUMBER)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_NL_MASK    U_MASK(U_LETTER_NUMBER)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_NO_MASK    U_MASK(U_OTHER_NUMBER)
 
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_ZS_MASK    U_MASK(U_SPACE_SEPARATOR)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_ZL_MASK    U_MASK(U_LINE_SEPARATOR)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_ZP_MASK    U_MASK(U_PARAGRAPH_SEPARATOR)
 
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_CC_MASK    U_MASK(U_CONTROL_CHAR)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_CF_MASK    U_MASK(U_FORMAT_CHAR)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_CO_MASK    U_MASK(U_PRIVATE_USE_CHAR)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_CS_MASK    U_MASK(U_SURROGATE)
 
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_PD_MASK    U_MASK(U_DASH_PUNCTUATION)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_PS_MASK    U_MASK(U_START_PUNCTUATION)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_PE_MASK    U_MASK(U_END_PUNCTUATION)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_PC_MASK    U_MASK(U_CONNECTOR_PUNCTUATION)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_PO_MASK    U_MASK(U_OTHER_PUNCTUATION)
 
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_SM_MASK    U_MASK(U_MATH_SYMBOL)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_SC_MASK    U_MASK(U_CURRENCY_SYMBOL)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_SK_MASK    U_MASK(U_MODIFIER_SYMBOL)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_SO_MASK    U_MASK(U_OTHER_SYMBOL)
 
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_PI_MASK    U_MASK(U_INITIAL_PUNCTUATION)
+/** Mask constant for a UCharCategory. @draft ICU 2.1 */
 #define U_GC_PF_MASK    U_MASK(U_FINAL_PUNCTUATION)
 
 
+/** Mask constant for multiple UCharCategory bits (L Letters). @draft ICU 2.1 */
 #define U_GC_L_MASK \
             (U_GC_LU_MASK|U_GC_LL_MASK|U_GC_LT_MASK|U_GC_LM_MASK|U_GC_LO_MASK)
 
+/** Mask constant for multiple UCharCategory bits (LC Cased Letters). @draft ICU 2.1 */
 #define U_GC_LC_MASK \
             (U_GC_LU_MASK|U_GC_LL_MASK|U_GC_LT_MASK)
 
+/** Mask constant for multiple UCharCategory bits (M Marks). @draft ICU 2.1 */
 #define U_GC_M_MASK (U_GC_MN_MASK|U_GC_ME_MASK|U_GC_MC_MASK)
 
+/** Mask constant for multiple UCharCategory bits (N Numbers). @draft ICU 2.1 */
 #define U_GC_N_MASK (U_GC_ND_MASK|U_GC_NL_MASK|U_GC_NO_MASK)
 
+/** Mask constant for multiple UCharCategory bits (Z Separators). @draft ICU 2.1 */
 #define U_GC_Z_MASK (U_GC_ZS_MASK|U_GC_ZL_MASK|U_GC_ZP_MASK)
 
+/** Mask constant for multiple UCharCategory bits (C Others). @draft ICU 2.1 */
 #define U_GC_C_MASK \
             (U_GC_CN_MASK|U_GC_CC_MASK|U_GC_CF_MASK|U_GC_CO_MASK|U_GC_CS_MASK)
 
+/** Mask constant for multiple UCharCategory bits (P Punctuation). @draft ICU 2.1 */
 #define U_GC_P_MASK \
             (U_GC_PD_MASK|U_GC_PS_MASK|U_GC_PE_MASK|U_GC_PC_MASK|U_GC_PO_MASK| \
              U_GC_PI_MASK|U_GC_PF_MASK)
 
+/** Mask constant for multiple UCharCategory bits (S Symbols). @draft ICU 2.1 */
 #define U_GC_S_MASK (U_GC_SM_MASK|U_GC_SC_MASK|U_GC_SK_MASK|U_GC_SO_MASK)
 
 /**
@@ -1091,7 +1128,7 @@ typedef enum UBlockCode UBlockCode;
  * Values returned by the u_getCellWidth() function.
  * @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release.
  */
-typedef enum UCellWidth
+enum UCellWidth
 {
     /** @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release. */
     U_ZERO_WIDTH              = 0,
@@ -1103,7 +1140,9 @@ typedef enum UCellWidth
     U_NEUTRAL_WIDTH           = 3,
     /** @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release. */
     U_CELL_WIDTH_COUNT
-} UCellWidth;
+};
+
+typedef enum UCellWidth UCellWidth; /**< C typedef for struct UCellWidth. @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release. */
 
 /**
  * East Asian Width constants.
@@ -2005,6 +2044,7 @@ u_getISOComment(UChar32 c,
  * @see UCharNameChoice
  * @see u_charName
  * @see u_enumCharNames
+ * @stable ICU 1.7
  */
 U_CAPI UChar32 U_EXPORT2
 u_charFromName(UCharNameChoice nameChoice,
@@ -2026,6 +2066,7 @@ u_charFromName(UCharNameChoice nameChoice,
  *
  * @see UCharNameChoice
  * @see u_enumCharNames
+ * @stable ICU 1.7
  */
 typedef UBool UEnumCharNamesFn(void *context,
                                UChar32 code,
@@ -2052,6 +2093,7 @@ typedef UBool UEnumCharNamesFn(void *context,
  * @see UEnumCharNamesFn
  * @see u_charName
  * @see u_charFromName
+ * @stable ICU 1.7
  */
 U_CAPI void U_EXPORT2
 u_enumCharNames(UChar32 start, UChar32 limit,

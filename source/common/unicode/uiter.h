@@ -38,7 +38,7 @@
 U_CDECL_BEGIN
 
 struct UCharIterator;
-typedef struct UCharIterator UCharIterator;
+typedef struct UCharIterator UCharIterator; /**< C typedef for struct UCharIterator. @draft ICU 2.1 */
 
 /**
  * Origin constants for UCharIterator.getIndex() and UCharIterator.move().
