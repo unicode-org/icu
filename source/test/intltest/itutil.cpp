@@ -84,7 +84,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, char* &name, 
                 callTest( test, par );
             }
             break;
-	   case 6:
+       case 6:
             name = "NewResourceBundleTest"; 
             if (exec) {
                 logln("NewResourceBundleTest---"); logln("");
