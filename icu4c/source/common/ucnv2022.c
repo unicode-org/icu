@@ -997,9 +997,9 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverterFromUnicodeArgs * args,
               args->source += mySourceIndex;
               FromU_CALLBACK_MACRO(args->converter->fromUContext,
                                  args,
-                                 args->source,
+                                 args->converter->invalidUCharBuffer,
                                  1,
-                                 (UChar32) *(args->source),
+                                 (UChar32) mySourceChar,
                                  UCNV_UNASSIGNED,
                                  err);
               args->source = saveSource;
@@ -1123,9 +1123,9 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterFromUnico
               args->offsets = args->offsets?args->offsets+myTargetIndex:0;
               FromU_CALLBACK_OFFSETS_LOGIC_MACRO(args->converter->fromUContext,
                                      args,
-                                     args->source,
+                                     args->converter->invalidUCharBuffer,
                                      1,
-                                     (UChar32) (*args->source),
+                                     (UChar32)mySourceChar,
                                      UCNV_UNASSIGNED,
                                      err);
               args->source = saveSource;
