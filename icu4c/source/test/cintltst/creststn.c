@@ -408,6 +408,17 @@ static void TestNewTypes() {
             }
         }
     }
+    /* test for jitterbug#1435 */
+    {
+        const UChar* str = ures_getStringByKey(theBundle,"test_underscores",&len,&status);
+        const char* expect ="test message ....";
+        UChar uExpect[200];
+        u_charsToUChars(expect,uExpect,uprv_strlen(expect)+1);
+        CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+        if(u_strcmp(uExpect,str)){
+            log_err("Did not get the expected string for test_underscores.");
+        }
+    }
     ures_close(res);
     ures_close(theBundle);
 

@@ -32,7 +32,18 @@ testtypes
     testescape{ "tab:\t cr:\r ff:\f newline:\n backslash:\\ quote=\' doubleQuote=\" singlequoutes=''" }
     string{ }
     stringTable{{}}
-    
+    //nested table
+    menu {
+        file {
+		 open { "Open" }
+	         save { "Save" }
+	         exit { "Exit" }
+	     }
+      }
+    test_underscores{
+        "test message ...."
+    }
+            
 }
 
 //eof
