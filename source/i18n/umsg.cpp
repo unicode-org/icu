@@ -763,10 +763,15 @@ umsg_vformat(   UMessageFormat *fmt,
                 UErrorCode     *status)
 {
 
-    if(U_FAILURE(*status))
+    if(status==0 || U_FAILURE(*status))
     {
         return -1;
     }
+    if(resultLength<0 || (resultLength>0 && result==0)) {
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
+
     int32_t count =0;
     const Formattable::Type* argTypes = ((MessageFormat*)fmt)->getFormatTypeList(count);
     Formattable args[MessageFormat::kMaxFormat];
@@ -820,16 +825,7 @@ umsg_vformat(   UMessageFormat *fmt,
         return -1;
     }
 
-    if(result ==NULL || resultLength < resultStr.length()){
-        *status = U_BUFFER_OVERFLOW_ERROR;
-    }else{
-        /* copy the resultStr to target buffer */
-        //u_strcpy(result, resultStr.getUChars());
-        int len = resultStr.length();
-        resultStr.extract(0,len,result);
-        result[len]=0;/* null terminate the string */
-    }
-    return resultStr.length();
+    return resultStr.extract(result, resultStr.length(), *status);
 }
 
 U_CAPI void
@@ -898,7 +894,6 @@ umsg_vparse(UMessageFormat *fmt,
         case Formattable::kString:
             aString = va_arg(ap, UChar*);
             args[i].getString(temp);
-            //u_strcpy(aString, temp.getUChars());
             len = temp.length();
             temp.extract(0,len,aString);
             aString[len]=0;
