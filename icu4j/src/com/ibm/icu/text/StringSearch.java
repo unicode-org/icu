@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2002/07/12 21:59:22 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/07/24 19:13:30 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -1077,8 +1077,12 @@ public final class StringSearch extends SearchIterator
 	                    return false;
 	                }
 	            }
-	            if (m_utilColEIter_.next() 
-	            		!= CollationElementIterator.NULLORDER 
+                int nextce = m_utilColEIter_.next();
+                while (m_utilColEIter_.getOffset() == end 
+                       && getCE(nextce) == CollationElementIterator.IGNORABLE) {
+                    nextce = m_utilColEIter_.next();       
+                }
+	            if (nextce != CollationElementIterator.NULLORDER 
 	            	&& m_utilColEIter_.getOffset() == end) {
 	                // extra collation elements at the end of the match
 	                return false;
