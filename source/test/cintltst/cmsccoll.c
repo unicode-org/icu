@@ -14,6 +14,7 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
 #include "unicode/ucoleitr.h"
@@ -248,8 +249,6 @@ static void IncompleteCntTest( )
 
   coll = ucol_openRules(temp, u_strlen(temp), UCOL_NO_NORMALIZATION, 
                                                 UCOL_DEFAULT_STRENGTH, &status);
-  /* problem in strcollinc for unfinshed contractions */
-  ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
 
   if(U_SUCCESS(status)) {
     size = sizeof(cnt1)/sizeof(cnt1[0]);
@@ -277,8 +276,6 @@ static void IncompleteCntTest( )
   u_uastrcpy(temp, " & Z < DAVIS < MARK <DAV");
   coll = ucol_openRules(temp, u_strlen(temp), UCOL_NO_NORMALIZATION, 
                                                 UCOL_DEFAULT_STRENGTH, &status);
-  /* problem in strcollinc for unfinshed contractions */
-  ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
 
   if(U_SUCCESS(status)) {
     size = sizeof(cnt2)/sizeof(cnt2[0]);
@@ -438,11 +435,70 @@ static void FunkyATest( )
     ucol_close(myCollation);
 }
 
+UColAttributeValue alternateHandling[] = {
+  UCOL_NON_IGNORABLE,
+    UCOL_SHIFTED
+};
+
+UColAttributeValue caseLevel[] = {
+  UCOL_OFF,
+    UCOL_ON
+};
+
+UColAttributeValue strengths[] = {
+  UCOL_PRIMARY,
+    UCOL_SECONDARY,
+    UCOL_TERTIARY,
+    UCOL_QUATERNARY,
+    UCOL_IDENTICAL
+};
+
+
+
+static void PrintMarkDavis( )
+{
+  UErrorCode status = U_ZERO_ERROR;
+  UChar m[256];
+  uint8_t sortkey[256];
+  UCollator *coll = ucol_open(NULL, &status);
+  uint32_t i,j,k,l, sortkeysize;
+  uint32_t sizem = 0;
+
+  u_uastrcpy(m, "Mark Davis");
+  sizem = u_strlen(m);
+
+
+  m[1] = 0xe4;
+
+  for(i = 0; i<sizem; i++) {
+    fprintf(stderr, "\\u%04X ", m[i]);
+  }
+  fprintf(stderr, "\n");
+
+  for(i = 0; i<sizeof(alternateHandling)/sizeof(alternateHandling[0]); i++) {
+    ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, alternateHandling[i], &status);
+    for(j = 0; j<sizeof(caseLevel)/sizeof(caseLevel[0]); j++) {
+      ucol_setAttribute(coll, UCOL_CASE_LEVEL, caseLevel[j], &status);
+      for(k = 0; k<sizeof(strengths)/sizeof(strengths[0]); k++) {
+        ucol_setAttribute(coll, UCOL_STRENGTH, strengths[k], &status);
+        sortkeysize = ucol_getSortKey(coll, m, sizem, sortkey, 256);
+        fprintf(stderr, "aH: %i, case: %i, st: %i\nSortkey: ", alternateHandling[i], caseLevel[j], strengths[k]);
+        for(l = 0; l<sortkeysize; l++) {
+          fprintf(stderr, "%02X", sortkey[l]);
+        }
+        fprintf(stderr, "\n");
+      }
+    }
+  }
+}
+
+
 void addMiscCollTest(TestNode** root)
 { 
     addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
     addTest(root, &IncompleteCntTest, "tscoll/cmsccoll/IncompleteCntTest");
     addTest(root, &BlackBirdTest, "tscoll/cmsccoll/BlackBirdTest");
     addTest(root, &FunkyATest, "tscoll/cmsccoll/FunkyATest");
+    /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/
 }
 
