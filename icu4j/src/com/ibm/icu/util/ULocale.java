@@ -8,14 +8,12 @@
 package com.ibm.icu.util;
 
 import java.io.Serializable;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
-import java.util.Set;
 import java.util.TreeMap;
 
 import com.ibm.icu.impl.ICUResourceBundle;

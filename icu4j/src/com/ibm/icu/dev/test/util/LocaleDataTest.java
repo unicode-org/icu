@@ -6,8 +6,6 @@
 */
 package com.ibm.icu.dev.test.util;
 
-import java.util.Locale;
-
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.lang.UScript;
