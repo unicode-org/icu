@@ -3,7 +3,7 @@ package com.ibm.text;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.text.ParsePosition;
-import com.ibm.Utility;
+import com.ibm.util.Utility;
 
 /**
  * A transliterator that reads a set of rules in order to determine how to perform
@@ -197,9 +197,12 @@ import com.ibm.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.14 $ $Date: 2000/02/03 18:18:42 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.15 $ $Date: 2000/02/10 07:36:25 $
  *
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.15  2000/02/10 07:36:25  johnf
+ * fixed imports for com.ibm.util.Utility
+ *
  * Revision 1.14  2000/02/03 18:18:42  Alan
  * Use array rather than hashtable for char-to-set map
  *
