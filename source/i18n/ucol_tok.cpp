@@ -112,7 +112,7 @@ typedef struct {
 /* they can be used to assure that the CEs will be always positioned in  */
 /* the same place relative to a point with known properties (e.g. first  */
 /* primary ignorable). */
-static indirectBoundaries ucolIndirectBoundaries[11];
+static indirectBoundaries ucolIndirectBoundaries[15];
 /*
 static indirectBoundaries ucolIndirectBoundaries[11] = {
   { UCOL_RESET_TOP_VALUE,               0, 
@@ -255,7 +255,15 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   setIndirectBoundaries(9, consts->UCA_FIRST_NON_VARIABLE, 0);
   // UCOL_LAST_NON_VARIABLE
   setIndirectBoundaries(10, consts->UCA_LAST_NON_VARIABLE, consts->UCA_FIRST_IMPLICIT);
-
+  // UCOL_FIRST_IMPLICIT
+  setIndirectBoundaries(11, consts->UCA_FIRST_IMPLICIT, 0);
+  // UCOL_LAST_IMPLICIT
+  setIndirectBoundaries(12, consts->UCA_LAST_IMPLICIT, consts->UCA_FIRST_TRAILING);
+  // UCOL_FIRST_TRAILING
+  setIndirectBoundaries(13, consts->UCA_FIRST_TRAILING, 0);
+  // UCOL_LAST_TRAILING
+  setIndirectBoundaries(14, consts->UCA_LAST_TRAILING, 0);
+  ucolIndirectBoundaries[14].limitCE = (consts->UCA_PRIMARY_SPECIAL_MIN<<24);
 }
 
 static inline 
@@ -337,7 +345,10 @@ U_STRING_DECL(suboption_11, "primary",        7);
 U_STRING_DECL(suboption_12, "secondary",      9);
 U_STRING_DECL(suboption_13, "tertiary",       8);
 U_STRING_DECL(suboption_14, "variable",       8);
-U_STRING_DECL(suboption_15, "non-ignorable", 13);
+U_STRING_DECL(suboption_15, "regular",        7);
+U_STRING_DECL(suboption_16, "implicit",       8);
+U_STRING_DECL(suboption_17, "trailing",       8);
+
 
 U_STRING_DECL(option_00,    "undefined",      9);
 U_STRING_DECL(option_01,    "rearrange",      9);  
@@ -400,12 +411,14 @@ static const ucolTokSuboption strengthSub[5] = {
   {suboption_10, 1, UCOL_IDENTICAL},
 };
 
-static const ucolTokSuboption firstLastSub[5] = {
+static const ucolTokSuboption firstLastSub[7] = {
   {suboption_11, 7, UCOL_PRIMARY},
   {suboption_12, 9, UCOL_PRIMARY},
   {suboption_13, 8, UCOL_PRIMARY},
   {suboption_14, 8, UCOL_PRIMARY},
-  {suboption_15, 13, UCOL_PRIMARY},
+  {suboption_15, 7, UCOL_PRIMARY},
+  {suboption_16, 8, UCOL_PRIMARY},
+  {suboption_17, 8, UCOL_PRIMARY},
 };
 
 static const ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
@@ -420,8 +433,8 @@ static const ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
  {option_01,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"rearrange"      */
  {option_12,  6, beforeSub, 3, UCOL_ATTRIBUTE_COUNT}, /*"before"    */
  {option_05,  3, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"top"            */
- {option_15,  5, firstLastSub, 5, UCOL_ATTRIBUTE_COUNT}, /*"first" */
- {option_16,  4, firstLastSub, 5, UCOL_ATTRIBUTE_COUNT}, /*"last" */
+ {option_15,  5, firstLastSub, 7, UCOL_ATTRIBUTE_COUNT}, /*"first" */
+ {option_16,  4, firstLastSub, 7, UCOL_ATTRIBUTE_COUNT}, /*"last" */
  {option_00,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"undefined"      */
  {option_09, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"scriptOrder"    */
  {option_10, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"charsetname"    */
@@ -468,7 +481,9 @@ void ucol_uprv_tok_initData() {
     U_STRING_INIT(suboption_12, "secondary",      9);
     U_STRING_INIT(suboption_13, "tertiary",       8);
     U_STRING_INIT(suboption_14, "variable",       8);
-    U_STRING_INIT(suboption_15, "non-ignorable", 13);
+    U_STRING_INIT(suboption_15, "regular",        7);
+    U_STRING_INIT(suboption_16, "implicit",       8);
+    U_STRING_INIT(suboption_17, "trailing",       8);
 
 
     U_STRING_INIT(option_00, "undefined",      9);
@@ -792,6 +807,11 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                     *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE >> 16);
                     *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE & 0xFFFF);
                     newCharsLen = 5;
+                  } 
+                  if(before) { // This is a combination of before and indirection like '&[before 2][first regular]<b'
+                    *src->extraCurrent++ = 0x002d;
+                    *src->extraCurrent++ = before;
+                    newCharsLen+=2;
                   }
 
                   src->current++;
@@ -1391,29 +1411,51 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           }
         }
 
-        if((specs & UCOL_TOK_BEFORE) != 0 && top == FALSE) { /* we're doing before & there is no indirection */
-          uint8_t strength = (specs & UCOL_TOK_BEFORE) - 1;
-          if(sourceToken != NULL && sourceToken->strength != UCOL_TOK_RESET) { 
-            /* this is a before that is already ordered in the UCA - so we need to get the previous with good strength */
-            while(sourceToken->strength > strength && sourceToken->previous != NULL) {
-              sourceToken = sourceToken->previous;
-            }
-            /* here, either we hit the strength or NULL */
-            if(sourceToken->strength == strength) {
-              if(sourceToken->previous != NULL) {
+        if((specs & UCOL_TOK_BEFORE) != 0) { /* we're doing before */
+          if(top == FALSE) { /* there is no indirection */
+            uint8_t strength = (specs & UCOL_TOK_BEFORE) - 1;
+            if(sourceToken != NULL && sourceToken->strength != UCOL_TOK_RESET) { 
+              /* this is a before that is already ordered in the UCA - so we need to get the previous with good strength */
+              while(sourceToken->strength > strength && sourceToken->previous != NULL) {
                 sourceToken = sourceToken->previous;
-              } else { /* start of list */
+              }
+              /* here, either we hit the strength or NULL */
+              if(sourceToken->strength == strength) {
+                if(sourceToken->previous != NULL) {
+                  sourceToken = sourceToken->previous;
+                } else { /* start of list */
+                  sourceToken = sourceToken->listHeader->reset;
+                }              
+              } else { /* we hit NULL */
+                /* we should be doing the else part */
                 sourceToken = sourceToken->listHeader->reset;
-              }              
-            } else { /* we hit NULL */
-              /* we should be doing the else part */
-              sourceToken = sourceToken->listHeader->reset;
+                sourceToken = getVirginBefore(src, sourceToken, strength, parseError, status);
+              }
+            } else {
               sourceToken = getVirginBefore(src, sourceToken, strength, parseError, status);
-              //sourceToken = NULL;
             }
-          } else {
-            sourceToken = getVirginBefore(src, sourceToken, strength, parseError, status);
-            //sourceToken = NULL;
+          } else { /* this is both before and indirection */
+            top = FALSE;
+            ListList[src->resultLen].previousCE = 0;
+            ListList[src->resultLen].previousContCE = 0;
+            ListList[src->resultLen].indirect = TRUE;
+            /* we need to do slightly more work. we need to get the baseCE using the */
+            /* inverse UCA & getPrevious. The next bound is not set, and will be decided */
+            /* in ucol_bld */
+            uint8_t strength = (specs & UCOL_TOK_BEFORE) - 1;
+            uint32_t baseCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE;
+            uint32_t baseContCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE;//&0xFFFFFF3F;
+            uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
+
+            /*int32_t invPos = ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);*/
+            ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);
+
+            ListList[src->resultLen].baseCE = CE;
+            ListList[src->resultLen].baseContCE = SecondCE;
+            ListList[src->resultLen].nextCE = 0;
+            ListList[src->resultLen].nextContCE = 0;
+
+            sourceToken = ucol_tok_initAReset(src, 0, &expandNext, parseError, status);
           }
         }
 
@@ -1455,33 +1497,15 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
             ListList[src->resultLen].indirect = FALSE;
             sourceToken = ucol_tok_initAReset(src, expand, &expandNext, parseError, status);
           } else { /* top == TRUE */
+            /* just use the supplied values */
             top = FALSE;
             ListList[src->resultLen].previousCE = 0;
             ListList[src->resultLen].previousContCE = 0;
             ListList[src->resultLen].indirect = TRUE;
-            if((specs & UCOL_TOK_BEFORE) == 0) { /* indirect without before */
-              /* just use the supplied values */
-              ListList[src->resultLen].baseCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE;
-              ListList[src->resultLen].baseContCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE;
-              ListList[src->resultLen].nextCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].limitCE;
-              ListList[src->resultLen].nextContCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].limitContCE;
-            } else { /* there was a before */
-              /* we need to do slightly more work. we need to get the baseCE using the */
-              /* inverse UCA & getPrevious. The next bound is not set, and will be decided */
-              /* in ucol_bld */
-              uint8_t strength = (specs & UCOL_TOK_BEFORE) - 1;
-              uint32_t baseCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE;
-              uint32_t baseContCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE;//&0xFFFFFF3F;
-              uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
-
-              /*int32_t invPos = ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);*/
-              ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);
-
-              ListList[src->resultLen].baseCE = CE;
-              ListList[src->resultLen].baseContCE = SecondCE;
-              ListList[src->resultLen].nextCE = 0;
-              ListList[src->resultLen].nextContCE = 0;
-            }
+            ListList[src->resultLen].baseCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE;
+            ListList[src->resultLen].baseContCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE;
+            ListList[src->resultLen].nextCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].limitCE;
+            ListList[src->resultLen].nextContCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].limitContCE;
 
             sourceToken = ucol_tok_initAReset(src, 0, &expandNext, parseError, status);
 
