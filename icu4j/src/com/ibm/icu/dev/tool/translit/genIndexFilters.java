@@ -57,8 +57,7 @@ public class genIndexFilters {
 
     static void showSourceSet(String ID, Normalizer.Mode m, boolean lowerFirst) throws IOException {
         Transliterator t = Transliterator.getInstance(ID);
-        // TransliteratorUtility gives us access to package private API
-        UnicodeSet sourceSet = TransliteratorUtility.getSourceSet(t);
+        UnicodeSet sourceSet = t.getSourceSet();
         if (m != Normalizer.NONE || lowerFirst) {
             UnicodeSetClosure.close(sourceSet, m, lowerFirst);
         }
