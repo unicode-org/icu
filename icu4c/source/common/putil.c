@@ -2212,7 +2212,7 @@ uprv_ebcdicFromAscii(const UDataSwapper *ds,
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(ds==NULL || inData==NULL || length<0 || (length&1)!=0 || outData==NULL) {
+    if(ds==NULL || inData==NULL || length<0 || (length>0 && outData==NULL)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -2249,7 +2249,7 @@ uprv_copyAscii(const UDataSwapper *ds,
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(ds==NULL || inData==NULL || length<0 || outData==NULL) {
+    if(ds==NULL || inData==NULL || length<0 || (length>0 && outData==NULL)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -2289,7 +2289,7 @@ uprv_asciiFromEbcdic(const UDataSwapper *ds,
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(ds==NULL || inData==NULL || length<0 ||  outData==NULL) {
+    if(ds==NULL || inData==NULL || length<0 ||  (length>0 && outData==NULL)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -2326,7 +2326,7 @@ uprv_copyEbcdic(const UDataSwapper *ds,
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(ds==NULL || inData==NULL || length<0 || (length&1)!=0 || outData==NULL) {
+    if(ds==NULL || inData==NULL || length<0 || (length>0 && outData==NULL)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
