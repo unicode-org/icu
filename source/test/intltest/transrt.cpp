@@ -69,6 +69,32 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
 }
 
 //--------------------------------------------------------------------
+// TransliteratorPointer
+//--------------------------------------------------------------------
+
+/**
+ * A transliterator pointer wrapper that deletes the contained
+ * pointer automatically when the wrapper goes out of scope.
+ * Sometimes called a "janitor" or "smart pointer".
+ */
+class TransliteratorPointer {
+    Transliterator* t;
+    // disallowed:
+    TransliteratorPointer(const TransliteratorPointer& rhs);
+    TransliteratorPointer& operator=(const TransliteratorPointer& rhs);
+public:
+    TransliteratorPointer(Transliterator* adopted) {
+        t = adopted;
+    }
+    ~TransliteratorPointer() {
+        delete t;
+    }
+    inline Transliterator* operator->() { return t; }
+    inline operator const Transliterator*() const { return t; }
+    inline operator Transliterator*() { return t; }
+};
+
+//--------------------------------------------------------------------
 // Legal
 //--------------------------------------------------------------------
 
@@ -520,9 +546,9 @@ void RTTest::test2(UBool quickRt, int32_t density) {
     UnicodeString cs, targ, reverse;
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseError ;
-    Transliterator* sourceToTarget = 
+    TransliteratorPointer sourceToTarget(
         Transliterator::createInstance(transliteratorID, UTRANS_FORWARD, parseError,
-                                       status);
+                                       status));
     if (sourceToTarget == NULL) {
         parent->errln("FAIL: createInstance(" + transliteratorID +
                    ") returned NULL. Error: " + u_errorName(status)
@@ -531,13 +557,12 @@ void RTTest::test2(UBool quickRt, int32_t density) {
         
                 return;
     }
-    Transliterator* targetToSource = sourceToTarget->createInverse(status);
+    TransliteratorPointer targetToSource(sourceToTarget->createInverse(status));
     if (targetToSource == NULL) {
         parent->errln("FAIL: " + transliteratorID +
                    ".createInverse() returned NULL. Error:" + u_errorName(status)          
                    + "\n\tpreContext : " + prettify(parseError.preContext) 
                    + "\n\tpostContext : " + prettify(parseError.postContext));
-        delete sourceToTarget;
         return;
     }
 
@@ -562,20 +587,20 @@ void RTTest::test2(UBool quickRt, int32_t density) {
       UParseError parseError;
       rules = sourceToTarget->toRules(rules, TRUE);
       // parent->logln((UnicodeString)"toRules => " + rules);
-      Transliterator *sourceToTarget2 = Transliterator::createFromRules(
+      TransliteratorPointer sourceToTarget2(Transliterator::createFromRules(
                                                        "s2t2", rules, 
                                                        UTRANS_FORWARD,
-                                                       parseError, status);
+                                                       parseError, status));
       if (U_FAILURE(status)) {
           parent->errln("FAIL: createFromRules %s\n", u_errorName(status));
           return;
       }
 
       rules = targetToSource->toRules(rules, FALSE);
-      Transliterator *targetToSource2 = Transliterator::createFromRules(
+      TransliteratorPointer targetToSource2(Transliterator::createFromRules(
                                                        "t2s2", rules, 
                                                        UTRANS_FORWARD,
-                                                       parseError, status);
+                                                       parseError, status));
       if (U_FAILURE(status)) {
           parent->errln("FAIL: createFromRules %s\n", u_errorName(status));
           return;
@@ -610,8 +635,6 @@ void RTTest::test2(UBool quickRt, int32_t density) {
               logToRulesFails("Target-Source, toRules", cs, targ, targ2);
           }
       }
-      delete sourceToTarget2;
-      delete targetToSource2;
     }      
 
     parent->logln("Checking that all source characters convert to target - Singles");
@@ -836,8 +859,6 @@ void RTTest::test2(UBool quickRt, int32_t density) {
         }
     }
     parent->logln("");
-    delete sourceToTarget;
-    delete targetToSource;
 }
 
 void RTTest::logWrongScript(const UnicodeString& label,
@@ -1103,9 +1124,9 @@ static const char latinForIndic[] = "[['.0-9A-Za-z~\\u00C0-\\u00C5\\u00C7-\\u00C
 void TransliteratorRoundTripTest::TestDevanagariLatin() {
     {
         UErrorCode status = U_ZERO_ERROR;
-        Transliterator* t1 = Transliterator::createInstance("[\\u0000-\\u00FE \\u0982\\u0983 [:Bengali:][:nonspacing mark:]];NFD;Bengali-InterIndic;InterIndic-Gujarati;NFC;( [ \\u0000-\\u00FE [:Gujarati:][[:nonspacing mark:]])",UTRANS_FORWARD, status);
+        TransliteratorPointer t1(Transliterator::createInstance("[\\u0000-\\u00FE \\u0982\\u0983 [:Bengali:][:nonspacing mark:]];NFD;Bengali-InterIndic;InterIndic-Gujarati;NFC;( [ \\u0000-\\u00FE [:Gujarati:][[:nonspacing mark:]])",UTRANS_FORWARD, status));
         if(t1){
-            t1->createInverse(status);
+            TransliteratorPointer t2(t1->createInverse(status));
             if(U_FAILURE(status)){
                 errln("FAIL: could not create the Inverse:-( \n");
             }
