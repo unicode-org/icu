@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeToHexTransliterator.java,v $ 
- * $Date: 2000/03/10 04:07:25 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/03/22 01:59:55 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -19,47 +19,226 @@ import java.util.*;
  * prefix specified in the constructor and optionally converts the hex
  * digits to uppercase.
  *
- * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
+ * <p>The format of the output is set by a pattern.  This pattern
+ * follows the same syntax as <code>HexToUnicodeTransliterator</code>,
+ * except it does not allow multiple specifications.  The pattern sets
+ * the prefix string, suffix string, and minimum and maximum digit
+ * count.  There are no setters or getters for these attributes; they
+ * are set only through the pattern.
+ *
+ * <p>The setUppercase() and isUppercase() methods control whether 'a'
+ * through 'f' or 'A' through 'F' are output as hex digits.  This is
+ * not controlled through the pattern; only through the methods.  The
+ * default is uppercase.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.5 $ $Date: 2000/03/10 04:07:25 $
+ * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.6 $ $Date: 2000/03/22 01:59:55 $
  */
 public class UnicodeToHexTransliterator extends Transliterator {
-
-    /**
-     * Package accessible ID for this transliterator.
-     */
-    static String _ID = "Unicode-Hex";
-
-    private String prefix;
-
-    private boolean uppercase;
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
 
     /**
+     * Package accessible ID for this transliterator.
+     */
+    static final String _ID = "Unicode-Hex";
+
+    private static final char[] HEX_DIGITS = {
+        '0', '1', '2', '3', '4', '5', '6', '7',
+        '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
+        '0', '1', '2', '3', '4', '5', '6', '7',
+        '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+    };
+
+    // Character constants for special pattern chars
+    private static final char ZERO      = '0';
+    private static final char POUND     = '#';
+    private static final char BACKSLASH = '\\';
+
+    /**
+     * The pattern set by applyPattern() and returned by toPattern().
+     */
+    private String pattern;
+
+    /**
+     * The string preceding the hex digits, parsed from the pattern.
+     */
+    private String prefix;
+
+    /**
+     * The string following the hex digits, parsed from the pattern.
+     */
+    private String suffix;
+
+    /**
+     * The minimum number of hex digits to output, between 1 and 4,
+     * inclusive.  Parsed from the pattern.
+     */
+    private int minDigits;
+
+    /**
+     * If true, output uppercase hex digits; otherwise output
+     * lowercase.  Set by setUppercase() and returned by isUppercase().
+     */
+    private boolean uppercase;
+
+    /**
      * Constructs a transliterator.
-     * @param prefix the string that will precede the four hex
-     * digits for UNICODE_HEX transliterators.  Ignored
-     * if direction is HEX_UNICODE.
+     * @param pattern The pattern for this transliterator.  See
+     * applyPattern() for pattern syntax.
      * @param uppercase if true, the four hex digits will be
      * converted to uppercase; otherwise they will be lowercase.
      * Ignored if direction is HEX_UNICODE.
+     * @param filter the filter for this transliterator, or
+     * null if none.
      */
-    public UnicodeToHexTransliterator(String prefix, boolean uppercase,
+    public UnicodeToHexTransliterator(String pattern, boolean uppercase,
                                       UnicodeFilter filter) {
         super(_ID, filter);
-        this.prefix = prefix;
         this.uppercase = uppercase;
+        applyPattern(pattern);
+    }
+
+    /**
+     * Constructs an uppercase transliterator with no filter.
+     * @param pattern The pattern for this transliterator.  See
+     * applyPattern() for pattern syntax.
+     */
+    public UnicodeToHexTransliterator(String pattern) {
+        this(pattern, true, null);
     }
 
     /**
      * Constructs a transliterator with the default prefix "&#092;u"
-     * that outputs uppercase hex digits.
+     * that outputs four uppercase hex digits.
      */
     public UnicodeToHexTransliterator() {
-        this("\\u", true, null);
+        super(_ID, null);
+        pattern = "\\\\u0000";
+        prefix = "\\u";
+        suffix = "";
+        minDigits = 4;
+        uppercase = true;
+    }
+
+    /**
+     * Set the pattern recognized by this transliterator.  The pattern
+     * must contain zero or more prefix characters, one or more digit
+     * characters, and zero or more suffix characters.  The digit
+     * characters indicates optional digits ('#') followed by required
+     * digits ('0').  The total number of digits cannot exceed 4, and
+     * must be at least 1 required digit.  Use a backslash ('\\') to
+     * escape any of the special characters.  An empty pattern is not
+     * allowed.
+     *
+     * <p>Example: "U+0000" specifies a prefix of "U+", exactly four
+     * digits, and no suffix.  "<###0>" has a prefix of "<", between
+     * one and four digits, and a suffix of ">".
+     *
+     * <p><pre>
+     * pattern := prefix-char* digit-spec suffix-char*
+     * digit-spec := '#'* '0'+
+     * prefix-char := [^special-char] | '\\' special-char
+     * suffix-char := [^special-char] | '\\' special-char
+     * special-char := ';' | '0' | '#' | '\\'
+     * </pre>
+     *
+     * <p>Limitations: There is no way to set the uppercase attribute
+     * in the pattern.  (applyPattern() does not alter the uppercase
+     * attribute.)
+     */
+    public void applyPattern(String thePattern) {
+        StringBuffer prefixBuf = null;
+        StringBuffer suffixBuf = null;
+        int minDigits = 0;
+        int maxDigits = 0;
+
+        /* The mode specifies where we are in each spec.
+         * mode 0 = in prefix
+         * mode 1 = in optional digits (#)
+         * mode 2 = in required digits (0)
+         * mode 3 = in suffix
+         */
+        int mode = 0;
+
+        for (int i=0; i<thePattern.length(); ++i) {
+            char c = thePattern.charAt(i);
+            boolean isLiteral = false;
+            if (c == BACKSLASH) {
+                if ((i+1)<thePattern.length()) {
+                    isLiteral = true;
+                    c = thePattern.charAt(++i);
+                } else {
+                    // Trailing '\\'
+                    throw new IllegalArgumentException("Trailing '\\'");
+                }
+            }
+
+            if (!isLiteral) {
+                switch (c) {
+                case POUND:
+                    // Seeing a '#' moves us from mode 0 (prefix) to mode 1
+                    // (optional digits).
+                    if (mode == 0) {
+                        ++mode;
+                    } else if (mode != 1) {
+                        // Unquoted '#'
+                        throw new IllegalArgumentException("Unquoted '#'");
+                    }
+                    ++maxDigits;
+                    break;
+                case ZERO:
+                    // Seeing a '0' moves us to mode 2 (required digits)
+                    if (mode < 2) {
+                        mode = 2;
+                    } else if (mode != 2) {
+                        // Unquoted '0'
+                        throw new IllegalArgumentException("Unquoted '0'");
+                    }
+                    ++minDigits;
+                    ++maxDigits;
+                    break;
+                default:
+                    isLiteral = true;
+                    break;
+                }
+            }
+
+            if (isLiteral) {
+                if (mode == 0) {
+                    if (prefixBuf == null) {
+                        prefixBuf = new StringBuffer();
+                    }
+                    prefixBuf.append(c);
+                } else {
+                    // Any literal outside the prefix moves us into mode 3
+                    // (suffix)
+                    mode = 3;
+                    if (suffixBuf == null) {
+                        suffixBuf = new StringBuffer();
+                    }
+                    suffixBuf.append(c);
+                }
+            }
+        }
+
+        if (minDigits < 1 || maxDigits > 4) {
+            // Invalid min/max digit count
+            throw new IllegalArgumentException("Invalid min/max digit count");
+        }
+
+        pattern = thePattern;
+        prefix = (prefixBuf == null) ? "" : prefixBuf.toString();
+        suffix = (suffixBuf == null) ? "" : suffixBuf.toString();
+        this.minDigits = minDigits;
+    }
+
+    /**
+     * Return this transliterator's pattern.
+     */
+    public String toPattern() {
+        return pattern;
     }
 
     /**
@@ -116,16 +295,28 @@ public class UnicodeToHexTransliterator extends Transliterator {
         int limit = offsets.limit;
 
         UnicodeFilter filter = getFilter();
+        StringBuffer hex = new StringBuffer(prefix);
+        int prefixLen = prefix.length();
 
-    loop:
         while (cursor < limit) {
             char c = text.charAt(cursor);
             if (filter != null && !filter.contains(c)) {
                 ++cursor;
                 continue;
             }
-            String hex = hex(c);
-            text.replace(cursor, cursor+1, hex);
+
+            hex.setLength(prefixLen);
+            boolean showRest = false;
+            for (int i=3; i>=0; --i) {
+                int d = (c >> (i*4)) & 0xF;
+                if (showRest || (d != 0) || minDigits > i) {
+                    hex.append(HEX_DIGITS[uppercase ? (d|16) : d]);
+                    showRest = true;
+                }
+            }
+            hex.append(suffix);
+
+            text.replace(cursor, cursor+1, hex.toString());
             int len = hex.length();
             cursor += len; // Advance cursor by 1 and adjust for new text
             --len;
@@ -134,25 +325,5 @@ public class UnicodeToHexTransliterator extends Transliterator {
 
         offsets.limit = limit;
         offsets.cursor = cursor;
-    }
-
-    /**
-     * Form escape sequence.
-     */
-    private final String hex(char c) {
-        StringBuffer buf = new StringBuffer();
-        buf.append(prefix);
-        if (c < 0x1000) {
-            buf.append('0');
-            if (c < 0x100) {
-                buf.append('0');
-                if (c < 0x10) {
-                    buf.append('0');
-                }
-            }
-        } 
-        String h = Integer.toHexString(c);
-        buf.append(uppercase ? h.toUpperCase() : h);
-        return buf.toString();
     }
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2000/03/10 03:47:47 $ 
- * $Revision: 1.13 $
+ * $Date: 2000/03/22 02:00:08 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -390,6 +390,26 @@ public class TransliteratorTest extends TestFmwk {
             Transliterator t = new RuleBasedTransliterator("<ID>", DATA[i]);
             expect(t, DATA[i+1], DATA[i+2]);
         }
+    }
+
+    /**
+     * Prefix, suffix support in hex transliterators
+     */
+    public void TestJ243() {
+        // Test default Hex-Unicode, which should handle
+        // \\u, \\U, u+, and U+
+        HexToUnicodeTransliterator hex = new HexToUnicodeTransliterator();
+        expect(hex, "\\u0041+\\U0042,u+0043uu+0044z", "A+B,CuDz");
+
+        // Try a custom Hex-Unicode
+        // \\uXXXX and &#xXXXX;
+        HexToUnicodeTransliterator hex2 = new HexToUnicodeTransliterator("\\\\u###0;&\\#x###0\\;"); 
+        expect(hex2, "\\u61\\u062\\u0063\\u00645\\u66x&#x30;&#x031;&#x0032;&#x00033;",
+               "abcd5fx012&#x00033;");
+
+        // Try custom Unicode-Hex (default is tested elsewhere)
+        UnicodeToHexTransliterator hex3 = new UnicodeToHexTransliterator("&\\#x###0;");
+        expect(hex3, "012", "&#x30;&#x31;&#x32;");
     }
 
     //======================================================================
