@@ -1,4 +1,4 @@
-package demo.translit;
+package com.ibm.demo.translit;
 import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -15,7 +15,7 @@ import com.ibm.text.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.2 $ $Date: 2000/01/11 04:15:27 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.3 $ $Date: 2000/02/24 20:11:10 $
  */
 public class Demo extends Frame {
 
@@ -201,7 +201,7 @@ public class Demo extends Frame {
             ++compoundCount;
             Transliterator t[] = new Transliterator[compoundCount];
             System.arraycopy(compoundTranslit, 0, t, 0, compoundCount);
-            translit = new CompoundTransliterator("Compound", t);
+            translit = new CompoundTransliterator(t);
             text.setTransliterator(translit);
         }
     }
