@@ -589,7 +589,7 @@ ga{
         TJS { "TJS", "Somoni na Táidsíceastáine"    } // 01/01/2001-
         TMM { "TMM", "Manat na An Tuircméanastáine"   } // 11/01/1993-
         TND { "TND", "Dínear na Túinéise"       } // 11/01/1958-
-        TOP { "T$",  "Pa\u00b4anga Tonga"   } // 02/14/1966-
+        TOP { "T$",  "Pa\u02bbanga Tonga"   } // 02/14/1966-
         TOS { "TOS", "Punt Steirling Tonga" } // 1921-02/14/1966
         TPE { "TPE", "Escudo Tíomóir"         } // 01/02/1959-12/07/1975
         TPP { "TPP", "Pataca Tíomóir"         } // 1895-12/31/1958
@@ -644,7 +644,7 @@ ga{
         XNF { "XNF", "CFA Franc na nAntillí Francach" } // 01/01/1960-1975
         XOF { "XOF", "CFA Franc BCEAO"      } // 12/04/1958-
         XPF { "CFPF","CFP Franc"            } // 12/26/1945-
-        XPS { "XPS", "Punt Steirling"       } // 07/27/1694-
+        //XPS { "XPS", "Punt Steirling"       } // 07/27/1694-
         XSS { "XSS", "Scilling Steirling"    } // 07/27/1694-
         XTR { "XTR", "Rúbal Inaistrithe COMECON" } // 1960-1992
         YDD { "YDD", "Dínear Éimin"         } // 4/1/1965-05/22/1990

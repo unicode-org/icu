@@ -34,6 +34,7 @@ de {
         ADP { "ADP", "Andorranische Pesete"      } // 1936-
         AED { "AED", "UAE Dirham" }
         AFA { "AFA", "Afghani" }
+        AFN { "Af",  "Afghani" }
         AIF { "AIF", "Afar und Issa Franc" } // 07/05/1967-06/27/1977
         ALK { "ALK", "Albanischer Lek (1946-1961)" } // 1946-1961
         ALL { "ALL", "Lek" }
@@ -59,15 +60,18 @@ de {
         BAN { "BAN", "Bosnien und Herzegowina Neuer Dinar" } // 08/15/1994-01/01/1995
         BBD { "BBD", "Barbados-Dollar" }
         BDT { "BDT", "Taka" }
-        BEF { "BEF", "Belgischer Franken" }
+        BEC { "BEC", "Belgischer Franc (konvertibel)" }
+        BEF { "BEF",  "Belgischer Franc" } // 1831-2002
         BGL { "BGL", "Lew" }
-        BGN { "BGN", "Bulgarian Lev" }
+        BGN { "BGN", "Lew" } // 01/01/1999-
+        BGO { "BGO", "Lew (1879-1952)" } // 07/08/1879-05/1952
         BHD { "BHD", "Bahrain-Dinar" }
         BIF { "BIF", "Burundi-Franc" }
         BMD { "BMD", "Bermuda-Dollar" }
         BMP { "BMP", "Bermuda-Pfund"        } // 1914-02/06/1970
         BND { "BND", "Brunei-Dollar" }
         BOB { "BOB", "Boliviano" }
+        BOL { "BOL", "Boliviano (1863-1962)" } // 06/23/1863-12/31/1962
         BOP { "BOP", "Bolivianischer Peso"        } // 01/01/1963-1986
         BOV { "BOV", "Mvdol" } // financial instrument
         BRB { "BRB", "Brasilianischer Cruzeiro Novo (1967-1986)" } // 02/13/1967-02/28/1986
@@ -105,6 +109,7 @@ de {
         COF { "COF", "Kongo CFA Franc"      } // 04/01/1973-1992
         COP { "COP", "Kolumbianischer Peso" }
         CRC { "CRC", "Costa Rica Colon" }
+        CSC { "CSC", "Tschechoslowakische Krone"  } // 05/1945-06/01/1953
         CUP { "CUP", "Kubanischer Peso" }
         CVE { "CVE", "Kap Verde Escudo" }
         CYP { "CYP", "Zypern Pfund" }
@@ -168,6 +173,8 @@ de {
         IDN { "IDN", "Indonesische Neue Rupiah" } // 11/02/1949-12/13/1965
         IDR { "IDR", "Rupiah" }
         IEP { "IEP", "Irisches Pfund" }
+        ILL { "ILL", "Schekel"       } // 02/22/1980-09/04/1985
+        ILP { "ILP", "Israelisches Pfund"        } // 08/16/1948-02/22/1980
         ILS { "ILS", "Schekel" }
         INR { "=0#Rs.|1#Re.|1<Rs.", "Indische Rupie" }
         IQD { "IQD", "Irak Dinar" }
@@ -254,6 +261,7 @@ de {
         PDR { "PDR", "Dnjestr-Republik Rubel" } // 01/24/1994-12/01/1994
         PEI { "PEI", "Peruanischer Inti"        } // 02/01/1985-07/01/1991
         PEN { "PEN", "Neuer Sol" }
+        PES { "PES", "Sol"         } // 02/14/1863-02/01/1985
         PGK { "PGK", "Kina" }
         PHP { "PHP", "Philippinischer Peso" }
         PKR { "PKR", "Pakistanische Rupie" }
@@ -265,6 +273,7 @@ de {
         PYG { "PYG", "Guarani" }
         QAR { "QAR", "Katar Riyal" }
         ROL { "ROL", "Leu" }
+        RON { "RON", "Neuer Leu"     } // 08/15/1947-01/28/1952
         RUB { "RUB", "Russischer Rubel (neu)" }
         RUR { "RUR", "Russischer Rubel (alt)" }
         RWF { "RWF", "Ruanda Franc" }
@@ -276,11 +285,13 @@ de {
         SEK { "SEK", "Schwedische Krone" }
         SGD { "SGD", "Singapur Dollar" }
         SHP { "SHP", "St. Helena Pfund" }
+        SIB { "SIB", "Tolar Bons"  } // 10/08/1991-10/07/1992
         SIT { "SIT", "Tolar" }
         SKK { "SKK", "Slowakische Krone" }
         SLL { "SLL", "Leone" }
         SML { "SML", "San Marino Lire"      } // 12/23/1865-
         SOS { "SOS", "Somalia Schilling" }
+        SQS { "SQS", "Somaliland Schilling"  } // 05/24/1991-
         SRG { "SRG", "Suriname Gulden" }
         SSP { "SSP", "Schottisches Pfund"       } // 1707-
         STD { "STD", "Dobra" }
@@ -297,12 +308,14 @@ de {
         TJS { "TJS", "Tadschikistan Somoni"    } // 01/01/2001-
         TMM { "TMM", "Turkmenistan-Manat" }
         TND { "TND", "Tunesischer Dinar" }
-        TOP { "TOP", "Pa'anga" }
+        TOP { "TOP", "Pa\u02bbanga" }
         TOS { "TOS", "Tonga Pfund Sterling" } // 1921-02/14/1966
         TPE { "TPE", "Timor Escudo" }
+        TPP { "TPP", "Timor Pataca"         } // 1895-12/31/1958
         TRL { "TRL", "T\u00FCrkische Lira" }
         TTD { "TTD", "Trinidad und Tobago Dollar" }
         TTO { "TTO", "Trinidad und Tobago Dollar (alt)" } // 01/01/1899-08/01/1951
+        TVD { "TVD", "Tuvalu Dollar"        } // 1979-
         TWD { "TWD", "Neuer Taiwan Dollar" }
         TZS { "TZS", "Tansania Schilling" }
         UAH { "UAH", "Hryvnia" }
@@ -328,6 +341,7 @@ de {
         WSP { "WSP", "West-Samoa Pfund"  } // 12/17/1920-07/10/1962
         WST { "WST", "Tala" }
         XAF { "XAF", "CFA Franc (\u00C4quatorial)" }
+        XAU { "XAU", "Gold" }
         XBA { "XBA", "Europ\u00E4ische Rechnungseinheit" }
         XBC { "XBC", "Europ\u00E4ische Rechnungseinheit (XBC)" } // 04/1972-12/31/1978
         XBD { "XBD", "Europ\u00E4ische Rechnungseinheit (XBD)" } // 1961-12/31/1978
@@ -339,7 +353,7 @@ de {
         XNF { "XNF", "Franz\u00F6sischer Antillen CFA Franc" } // 01/01/1960-1975
         XOF { "XOF", "CFA Franc (West)" }
         XPF { "XPF", "CFP Franc" }
-        XPS { "XPS", "Pfund Sterling"       } // 07/27/1694-
+        //XPS { "XPS", "Pfund Sterling"       } // 07/27/1694-
         XTR { "XTR", "COMECON Transferabler Rubel" } // 1960-1992
         YDD { "YDD", "Jemen Dinar"         } // 4/1/1965-05/22/1990
         YEI { "YEI", "Jemen Imadi Riyal"   } // 1904-02/1964
@@ -355,6 +369,8 @@ de {
         ZAR { "ZAR", "Rand" }
         ZMK { "ZMK", "Kwacha" }
         ZMP { "ZMP", "Sambisches Pfund"        } // 08/07/1964-01/16/1968
+        ZRN { "ZRN", "Neuer Zaire"    } // 11/01/1993-07/1998
+        ZRZ { "ZRZ", "Zaire"        } // 10/27/1971-11/01/1993
         ZWD { "ZWD", "Simbabwe Dollar" }
     }
     Countries {
@@ -413,7 +429,7 @@ de {
         CV { "Kap Verde" }
         CX { "Weihnachtsinsel" }
         CY { "Zypern" }
-        CZ { "Tschechien" }
+        CZ { "Tschechische Republik" }
 
         DE { "Deutschland" }
         DJ { "Dschibuti" }
@@ -501,14 +517,14 @@ de {
 
         MA { "Marokko" }
         //MC { "Monaco" }
-        MD { "Moldawien" }
+        MD { "Republik Moldau" } 
         MG { "Madagaskar" }
         MH { "Marshallinseln" }
         MK { "Mazedonien" }
         //ML { "Mali" }
         //MM { "Myanmar" }
         MN { "Mongolei" }
-        MO { "Macau S.A.R.,China" }
+        MO { "Macau S.A.R., China" }
         MP { "N\u00f6rdliche Marianen" }
         //MQ { "Martinique" }
         MR { "Mauretanien" }
@@ -546,7 +562,7 @@ de {
         PM { "St. Pierre und Miquelon" }
         //PN { "Pitcairn" }
         //PR { "Puerto Rico" }
-        PS { "Pal\u00E4stina" }
+        PS { "Pal\u00E4stinensische Gebiete" }
         //PT { "Portugal" }
         //PW { "Palau" }
         //PY { "Paraguay" }
@@ -555,7 +571,7 @@ de {
 
         //RE { "R\u00E9union" }
         RO { "Rum\u00E4nien" }
-        RU { "Russland" }
+        RU { "Russische F\u00f6deration" }
         RW { "Ruanda" }
 
         SA { "Saudi-Arabien" }
@@ -642,39 +658,48 @@ de {
         ab  { "Abchasisch" }
         ae  { "Avestisch" }
         af  { "Afrikaans" }
+        ak  { "Akan" }
         am  { "Amharisch" }
         an  { "Aragonesisch" }
         ar  { "Arabisch" }
         as  { "Assamesisch" }
         av  { "Awarisch" }
-        ay  { "Aymara" }
+        ay  { "Aymar\u00e1-Sprache" }
         az  { "Aserbaidschanisch" }
         ba  { "Baschkirisch" }
         be  { "Wei\u00dfrussisch" }
         bg  { "Bulgarisch" }
         bh  { "Biharisch" }
         bi  { "Bislama" }
+        bm  { "Bambara-Sprache" }
         bn  { "Bengalisch" }
         bo  { "Tibetisch" }
         br  { "Bretonisch" }
         bs  { "Bosnisch"}
         ca  { "Katalanisch" }
         ce  { "Tschetschenisch" }
+        ch  { "Chamorro-Sprache" }
+        chr { "Cherokee" }
         co  { "Korsisch" }
+        cr  { "Cree" }
         cs  { "Tschechisch" }
         cu  { "Kirchenslawisch" }
         cv  { "Tschuwaschisch" }
-        cy  { "Walisisch" }
+        cy  { "Kymrisch" }
         da  { "D\u00e4nisch" }
         de  { "Deutsch" }
+        dv  { "Maledivisch" }
         dz  { "Bhutanisch" }
+        ee  { "Ewe-Sprache" }
         el  { "Griechisch" }
         en  { "Englisch" }
+        enm { "Mittelenglisch" }
         eo  { "Esperanto" }
         es  { "Spanisch" }
         et  { "Estnisch" }
         eu  { "Baskisch" }
         fa  { "Persisch" }
+        ff  { "Ful" }
         fi  { "Finnisch" }
         fj  { "Fidschianisch" }
         fo  { "F\u00e4r\u00f6isch" }
@@ -682,6 +707,7 @@ de {
         fy  { "Friesisch" }
         ga  { "Irisch" }
         gd  { "Schottisch-G\u00e4lisch" }
+        gez { "Alt\u00e4thiopisch" }
         gl  { "Galizisch" }
         gn  { "Guarani" }
         gu  { "Gujarati" }
@@ -690,13 +716,16 @@ de {
         haw { "Hawaiianisch" }
         he  { "Hebr\u00e4isch" }
         hi  { "Hindi" }
+        ho  { "Hiri-Motu" }
         hr  { "Kroatisch" }
         ht  { "Kreolisch" }
         hu  { "Ungarisch" }
         hy  { "Armenisch" }
+        hz  { "Herero-Sprache" }
         ia  { "Interlingua" }
         id  { "Indonesisch" }
         ie  { "Interlingue" }
+        ig  { "Igbo-Sprache" }
         ik  { "Inupiak" }
         //in  { "Indonesisch" }  // Use "id" instead
         is  { "Isl\u00e4ndisch" }
@@ -708,22 +737,29 @@ de {
         //jw  { "Javanisch" } // Use jv instead
         jv  { "Javanisch" } // more google.de hits than Javanesisch
         ka  { "Georgisch" }
+        kg  { "Kongo" }
+        ki  { "Kikuyu-Sprache" }
         kj  { "Kwanyama" }
         kk  { "Kasachisch" }
         kl  { "Gr\u00f6nl\u00e4ndisch" }
         km  { "Kambodschanisch" }
         kn  { "Kannada" }
         ko  { "Koreanisch" }
+        kok { "Konkani" }
+        kr  { "Kanuri-Sprache" }
         ks  { "Kaschmirisch" }
         ku  { "Kurdisch" }
+        kv  { "Komi-Sprache" }
         kw  { "Kornisch" }
         ky  { "Kirgisisch" }
         la  { "Latein" } // Lateinisch doesn't seem correct
         lb  { "Luxemburgisch" }
+        lg  { "Ganda-Sprache" }
         li  { "Limburgisch" }
         ln  { "Lingala" }
         lo  { "Laotisch" }
         lt  { "Litauisch" }
+        lu  { "Luba" }
         lv  { "Lettisch" }
         mg  { "Madagassisch" }
         mh  { "Marschallesisch" }
@@ -735,29 +771,34 @@ de {
         mr  { "Marathi" }
         ms  { "Malaiisch" } // less often: Malaysisch, Malayisch
         mt  { "Maltesisch" }
-        my  { "Burmesisch" }
+        my  { "Birmanisch" }
         na  { "Nauruisch" }
         nb  { "Norwegisch Bokm\u00e5l" }
         nd  { "Ndebele-Sprache (Nord)" }
         ne  { "Nepalesisch" }
+        ng  { "Ndonga" }
         nl  { "Niederl\u00e4ndisch" } // "Holl\u00e4ndisch" is not correct
         nn  { "Norwegisch Nynorsk" }
         no  { "Norwegisch" }
         nr  { "Ndebele-Sprache (S\u00FCd)" }
+        nv  { "Navajo-Sprache"}
+        ny  { "Chewa-Sprache" }
         oc  { "Okzitanisch" }
+        oj  { "Ojibwa-Sprache" }
         om  { "Oromo" } // also mentioned: Afan, Oromiffa
         or  { "Orija" }
         os  { "Ossetisch" }
         pa  { "Pandschabisch" }
+        pi  { "Pali" }
         pl  { "Polnisch" }
         ps  { "Afghanisch (Paschtu)" }
         pt  { "Portugiesisch" }
         qu  { "Quechua" }
         rm  { "R\u00e4toromanisch" }
-        rn  { "Kirundi" }
+        rn  { "Rundi-Sprache" }
         ro  { "Rum\u00e4nisch" }
         ru  { "Russisch" }
-        rw  { "Ruandisch" } // Kinyarwanda?
+        rw  { "Rwanda-Sprache" } // Kinyarwanda?
         sa  { "Sanskrit" }
         sc  { "Sardisch" }
         sd  { "Sindhi" } // less often Zinti
@@ -765,6 +806,7 @@ de {
         sg  { "Sango" }
         sh  { "Serbo-Kroatisch" }
         si  { "Singhalesisch" }
+        sid { "Sidamo" }
         sk  { "Slowakisch" }
         sl  { "Slowenisch" }
         sm  { "Samoanisch" }
@@ -773,7 +815,7 @@ de {
         sq  { "Albanisch" }
         sr  { "Serbisch" }
         ss  { "Swazi" }
-        st  { "Sotho" }
+        st  { "S\u00fcd-Sotho-Sprache" }
         su  { "Sudanesisch" }
         sv  { "Schwedisch" }
         sw  { "Suaheli" }
@@ -783,19 +825,21 @@ de {
         tg  { "Tadschikisch" }
         th  { "Thai" }
         ti  { "Tigrinja" }
+        tig { "Tigre" }
         tk  { "Turkmenisch" } // "T\u00fcrkmenisch" is a typo
         tl  { "Tagalog" }
-        tn  { "Setswana" } // language of Botswana, also Tswana, very rarely Tsuana; Sezuan is in China
+        tn  { "Tswana-Sprache" } // language of Botswana, also Tswana, very rarely Tsuana; Sezuan is in China
         to  { "Tongaisch" }
         tr  { "T\u00fcrkisch" }
         ts  { "Tsonga" }
         tt  { "Tatarisch" }
         tw  { "Twi" } // spoken in Ghana
         ty  { "Tahitisch" }
-        ug  { "Uigur" }
+        ug  { "Uigurisch" }
         uk  { "Ukrainisch" }
         ur  { "Urdu" }
         uz  { "Usbekisch" }
+        ve  { "Venda-Sprache" }
         vi  { "Vietnamesisch" }
         vo  { "Volap\u00fck" }
         wa  { "Wallonisch" }

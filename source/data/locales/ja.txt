@@ -8,269 +8,269 @@
 ja {
     Version { "2.0" }
     Countries { 
-        AD { "\u30A2\u30F3\u30C9\u30E9" }
-        AE { "\u30A2\u30E9\u30D6\u9996\u9577\u56FD\u9023\u90A6" }
-        AF { "\u30A2\u30D5\u30AC\u30CB\u30B9\u30BF\u30F3" }
-        AG { "\u30A2\u30F3\u30C6\u30A3\u30B0\u30A2\u30FB\u30D0\u30FC\u30D6\u30FC\u30C0" }
-        AI { "\u30A2\u30F3\u30AE\u30E9" }
-        AL { "\u30A2\u30EB\u30D0\u30CB\u30A2" }
-        AM { "\u30A2\u30EB\u30E1\u30CB\u30A2" }
-        AN { "\u30AA\u30E9\u30F3\u30C0\u9818\u30A2\u30F3\u30C6\u30A3\u30EB\u8AF8\u5CF6" }
-        AO { "\u30A2\u30F3\u30B4\u30E9" }
+        AD { "\u30a2\u30f3\u30c9\u30e9" }
+        AE { "\u30a2\u30e9\u30d6\u9996\u9577\u56fd\u9023\u90a6" }
+        AF { "\u30a2\u30d5\u30ac\u30cb\u30b9\u30bf\u30f3" }
+        AG { "\u30a2\u30f3\u30c6\u30a3\u30b0\u30a2\u30fb\u30d0\u30fc\u30d6\u30fc\u30c0" }
+        AI { "\u30a2\u30f3\u30ae\u30e9" }
+        AL { "\u30a2\u30eb\u30d0\u30cb\u30a2" }
+        AM { "\u30a2\u30eb\u30e1\u30cb\u30a2" }
+        AN { "\u30aa\u30e9\u30f3\u30c0\u9818\u30a2\u30f3\u30c6\u30a3\u30eb\u8af8\u5cf6" }
+        AO { "\u30a2\u30f3\u30b4\u30e9" }
         AQ { "\u5357\u6975\u5927\u9678" }
-        AR { "\u30A2\u30EB\u30BC\u30F3\u30C1\u30F3" }
-        AS { "\u7C73\u9818\u30B5\u30E2\u30A2" }
-        AT { "\u30AA\u30FC\u30B9\u30C8\u30EA\u30A2" }
-        AU { "\u30AA\u30FC\u30B9\u30C8\u30E9\u30EA\u30A2" }
-        AW { "\u30A2\u30EB\u30D0\u5CF6" }
-        AZ { "\u30A2\u30BC\u30EB\u30D0\u30A4\u30B8\u30E3\u30F3" }
-        BA { "\u30DC\u30B9\u30CB\u30A2\u30FB\u30D8\u30EB\u30C4\u30A7\u30B4\u30D3\u30CA" }
-        BB { "\u30D0\u30EB\u30D0\u30C9\u30B9" }
-        BD { "\u30D0\u30F3\u30B0\u30E9\u30C7\u30B7\u30E5" }
-        BE { "\u30D9\u30EB\u30AE\u30FC" }
-        BF { "\u30D6\u30EB\u30AD\u30CA\u30D5\u30A1\u30BD" }
-        BG { "\u30D6\u30EB\u30AC\u30EA\u30A2" }
-        BH { "\u30D0\u30FC\u30EC\u30FC\u30F3" }
-        BI { "\u30D6\u30EB\u30F3\u30B8" }
-        BJ { "\u30D9\u30CB\u30F3" }
-        //BM { "\u30D0\u30FC\u30DF\u30E5\u30FC\u30C0\u8AF8\u5CF6" } // Baamyuuda Shodou
-        BM { "\u30D0\u30FC\u30DF\u30E5\u30FC\u30C0" } // Baamyuuda
-        BN { "\u30D6\u30EB\u30CD\u30A4" }
-        BO { "\u30DC\u30EA\u30D3\u30A2" }
-        BR { "\u30D6\u30E9\u30B8\u30EB" }
-        BS { "\u30D0\u30CF\u30DE" }
-        BT { "\u30D6\u30FC\u30BF\u30F3" }
-        BV { "\u30D6\u30FC\u30D9\u5CF6" }
-        BW { "\u30DC\u30C4\u30EF\u30CA" }
-        BY { "\u30D9\u30E9\u30EB\u30FC\u30B7" }
-        BZ { "\u30D9\u30EA\u30FC\u30BA" }
-        CA { "\u30AB\u30CA\u30C0" }
-        CC { "\u30B3\u30B3\u30B9 (\u30AD\u30FC\u30EA\u30F3\u30B0) \u8AF8\u5CF6" }
-        CD { "\u30B3\u30F3\u30B4\u6C11\u4E3B\u5171\u548C\u56FD" }
-        CF { "\u4E2D\u592E\u30A2\u30D5\u30EA\u30AB\u5171\u548C\u56FD" }
-        CG { "\u30B3\u30F3\u30B4" }
-        CH { "\u30B9\u30A4\u30B9" }
-        CI { "\u30B3\u30FC\u30C8\u30B8\u30DC\u30A2\u30FC\u30EB" }
-        CK { "\u30AF\u30C3\u30AF\u8AF8\u5CF6" }
-        CL { "\u30C1\u30EA" }
-        CM { "\u30AB\u30E1\u30EB\u30FC\u30F3" }
-        //CN { "\u4E2D\u83EF\u4EBA\u6C11\u5171\u548C\u56FD" } // China (PRC)
-        CN { "\u4E2D\u56FD" } // China
-        CO { "\u30B3\u30ED\u30F3\u30D3\u30A2" }
-        CR { "\u30B3\u30B9\u30BF\u30EA\u30AB" }
-        CU { "\u30AD\u30E5\u30FC\u30D0" }
-        CV { "\u30AB\u30FC\u30DC\u30D9\u30EB\u30C7" }
-        CX { "\u30AF\u30EA\u30B9\u30DE\u30B9\u5CF6" }
-        CY { "\u30AD\u30D7\u30ED\u30B9" }
-        CZ { "\u30C1\u30A7\u30B3" }
-        DE { "\u30C9\u30A4\u30C4" }
-        DJ { "\u30B8\u30D6\u30C1" }
-        DK { "\u30C7\u30F3\u30DE\u30FC\u30AF" }
-        DM { "\u30C9\u30DF\u30CB\u30AB\u56FD" }
-        DO { "\u30C9\u30DF\u30CB\u30AB\u5171\u548C\u56FD" }
-        DZ { "\u30A2\u30EB\u30B8\u30A7\u30EA\u30A2" }
-        EC { "\u30A8\u30AF\u30A2\u30C9\u30EB" }
-        EE { "\u30A8\u30B9\u30C8\u30CB\u30A2" }
-        EG { "\u30A8\u30B8\u30D7\u30C8" }
-        EH { "\u897F\u30B5\u30CF\u30E9" }
-        ER { "\u30A8\u30EA\u30C8\u30EA\u30A2" }
-        ES { "\u30B9\u30DA\u30A4\u30F3" }
-        ET { "\u30A8\u30C1\u30AA\u30D4\u30A2" }
-        FI { "\u30D5\u30A3\u30F3\u30E9\u30F3\u30C9" }
-        FJ { "\u30D5\u30A3\u30B8\u30FC" }
-        FK { "\u30D5\u30A9\u30FC\u30AF\u30E9\u30F3\u30C9\u8AF8\u5CF6" }
-        FM { "\u30DF\u30AF\u30ED\u30CD\u30B7\u30A2" }
-        FO { "\u30D5\u30A7\u30ED\u30FC\u8AF8\u5CF6" }
-        FR { "\u30D5\u30E9\u30F3\u30B9" }
-        GA { "\u30AC\u30DC\u30F3" }
-        GB { "\u30A4\u30AE\u30EA\u30B9" }
-        GD { "\u30B0\u30EC\u30CA\u30C0" }
-        GE { "\u30B0\u30EB\u30B8\u30A2" }
-        GF { "\u4ECF\u9818\u30AE\u30A2\u30CA" }
-        GH { "\u30AC\u30FC\u30CA" }
-        GI { "\u30B8\u30D6\u30E9\u30EB\u30BF\u30EB" }
-        GL { "\u30B0\u30EA\u30FC\u30F3\u30E9\u30F3\u30C9" }
-        GM { "\u30AC\u30F3\u30D3\u30A2" }
-        GN { "\u30AE\u30CB\u30A2" }
-        GP { "\u30B0\u30A2\u30C9\u30EB\u30FC\u30D7" }
-        GQ { "\u8D64\u9053\u30AE\u30CB\u30A2" }
-        GR { "\u30AE\u30EA\u30B7\u30A2" }
-        GS { "\u5357\u30B8\u30E7\u30FC\u30B8\u30A2\u5CF6\u30FB\u5357\u30B5\u30F3\u30C9\u30A4\u30C3\u30C1\u8AF8\u5CF6" }
-        GT { "\u30B0\u30A2\u30C6\u30DE\u30E9" }
-        GU { "\u30B0\u30A2\u30E0\u5CF6" }
-        GW { "\u30AE\u30CB\u30A2\u30D3\u30B5\u30A6" }
-        GY { "\u30AC\u30A4\u30A2\u30CA" }
-        //HK { "\u9999\u6E2F\u7279\u5225\u884C\u653F\u533A" } // Hong Kong SAR
-        HK { "\u4E2D\u83EF\u4EBA\u6C11\u5171\u548C\u56FD\u9999\u6E2F\u7279\u5225\u884C\u653F\u533A" } // PRC Hong Kong SAR
-        HM { "\u30CF\u30FC\u30C9\u30FB\u30A2\u30F3\u30C9\u30FB\u30DE\u30AF\u30C9\u30CA\u30EB\u30C9\u30FB\u30A2\u30A4\u30E9\u30F3\u30BA" }
-        HN { "\u30DB\u30F3\u30B8\u30E5\u30E9\u30B9" }
-        HR { "\u30AF\u30ED\u30A2\u30C1\u30A2" }
-        HT { "\u30CF\u30A4\u30C1" }
-        HU { "\u30CF\u30F3\u30AC\u30EA\u30FC" }
-        ID { "\u30A4\u30F3\u30C9\u30CD\u30B7\u30A2" }
-        IE { "\u30A2\u30A4\u30EB\u30E9\u30F3\u30C9" }
-        IL { "\u30A4\u30B9\u30E9\u30A8\u30EB" }
-        IN { "\u30A4\u30F3\u30C9" }
-        IO { "\u82F1\u9818\u30A4\u30F3\u30C9\u6D0B\u690D\u6C11\u5730" }
-        IQ { "\u30A4\u30E9\u30AF" }
-        IR { "\u30A4\u30E9\u30F3" }
-        IS { "\u30A2\u30A4\u30B9\u30E9\u30F3\u30C9" }
-        IT { "\u30A4\u30BF\u30EA\u30A2" }
-        JM { "\u30B8\u30E3\u30DE\u30A4\u30AB" }
-        JO { "\u30E8\u30EB\u30C0\u30F3" }
-        JP { "\u65E5\u672C" }
-        KE { "\u30B1\u30CB\u30A2" }
-        KG { "\u30AD\u30EB\u30AE\u30B9\u30BF\u30F3" }
-        KH { "\u30AB\u30F3\u30DC\u30B8\u30A2" }
-        KI { "\u30AD\u30EA\u30D0\u30B9" }
-        KM { "\u30B3\u30E2\u30ED" }
-        KN { "\u30BB\u30F3\u30C8\u30AF\u30EA\u30B9\u30C8\u30D5\u30A1\u30FC\u30FB\u30CD\u30A4\u30D3\u30B9" }
-        KP { "\u671D\u9BAE\u6C11\u4E3B\u4E3B\u7FA9\u4EBA\u6C11\u5171\u548C\u56FD" }
-        KR { "\u5927\u97D3\u6C11\u56FD" }
-        KW { "\u30AF\u30A6\u30A7\u30FC\u30C8" }
-        KY { "\u30B1\u30A4\u30DE\u30F3\u8AF8\u5CF6" }
-        KZ { "\u30AB\u30B6\u30D5\u30B9\u30BF\u30F3" }
-        LA { "\u30E9\u30AA\u30B9" }
-        //LA { "\u30E9\u30AA\u30B9\u4EBA\u6C11\u6C11\u4E3B\u5171\u548C\u56FD" } // From translation center
-        LB { "\u30EC\u30D0\u30CE\u30F3" }
-        LC { "\u30BB\u30F3\u30C8\u30EB\u30B7\u30A2" }
-        LI { "\u30EA\u30D2\u30C6\u30F3\u30B7\u30E5\u30BF\u30A4\u30F3" }
-        LK { "\u30B9\u30EA\u30E9\u30F3\u30AB" }
-        LR { "\u30EA\u30D9\u30EA\u30A2" }
-        LS { "\u30EC\u30BD\u30C8" }
-        LT { "\u30EA\u30C8\u30A2\u30CB\u30A2" }
-        //LU { "\u30EB\u30AF\u30BB\u30F3\u30D6\u30EB\u30AF" } // Old value. Spelling error?
-        LU { "\u30EB\u30AF\u30BB\u30F3\u30D6\u30EB\u30B0" }
-        LV { "\u30E9\u30C8\u30D3\u30A2" }
-        LY { "\u30EA\u30D3\u30A2" }
-        MA { "\u30E2\u30ED\u30C3\u30B3" }
-        MC { "\u30E2\u30CA\u30B3" }
-        MD { "\u30E2\u30EB\u30C9\u30D0" }
-        MG { "\u30DE\u30C0\u30AC\u30B9\u30AB\u30EB" }
-        MH { "\u30DE\u30FC\u30B7\u30E3\u30EB\u8AF8\u5CF6\u5171\u548C\u56FD" }
-        MK { "\u30DE\u30B1\u30C9\u30CB\u30A2" }
-        ML { "\u30DE\u30EA" }
-        MM { "\u30DF\u30E3\u30F3\u30DE\u30FC" }
-        MN { "\u30E2\u30F3\u30B4\u30EB" }
-        //MO { "\u30DE\u30AB\u30AA\u7279\u5225\u884C\u653F\u533A" } // Makao SAR
-        MO { "\u4E2D\u83EF\u4EBA\u6C11\u5171\u548C\u56FD\u30DE\u30AB\u30AA\u7279\u5225\u884C\u653F\u533A" } // PRC Makao SAR
-        MP { "\u5317\u30DE\u30EA\u30A2\u30CA\u8AF8\u5CF6" }
-        MQ { "\u30DE\u30EB\u30C6\u30A3\u30CB\u30FC\u30AF\u5CF6" }
-        //MQ { "\u30DE\u30EB\u30C1\u30CB\u30FC\u30AF\u5CF6" } // From translation center
-        MR { "\u30E2\u30FC\u30EA\u30BF\u30CB\u30A2" }
-        MS { "\u30E2\u30F3\u30C8\u30BB\u30E9\u30C8\u5CF6" }
-        MT { "\u30DE\u30EB\u30BF" }
-        MU { "\u30E2\u30FC\u30EA\u30B7\u30E3\u30B9" }
-        MV { "\u30E2\u30EB\u30B8\u30D6" }
-        MW { "\u30DE\u30E9\u30A6\u30A3" }
-        MX { "\u30E1\u30AD\u30B7\u30B3" }
-        MY { "\u30DE\u30EC\u30FC\u30B7\u30A2" }
-        MZ { "\u30E2\u30B6\u30F3\u30D3\u30FC\u30AF" }
-        NA { "\u30CA\u30DF\u30D3\u30A2" }
-        NC { "\u30CB\u30E5\u30FC\u30AB\u30EC\u30C9\u30CB\u30A2" }
-        NE { "\u30CB\u30B8\u30A7\u30FC\u30EB" }
-        NF { "\u30CE\u30FC\u30D5\u30A9\u30FC\u30AF\u5CF6" }
-        NG { "\u30CA\u30A4\u30B8\u30A7\u30EA\u30A2" }
-        NI { "\u30CB\u30AB\u30E9\u30B0\u30A2" }
-        NL { "\u30AA\u30E9\u30F3\u30C0" }
-        NO { "\u30CE\u30EB\u30A6\u30A7\u30FC" }
-        NP { "\u30CD\u30D1\u30FC\u30EB" }
-        NR { "\u30CA\u30A6\u30EB" }
-        NU { "\u30CB\u30A6\u30A8\u5CF6" }
-        NZ { "\u30CB\u30E5\u30FC\u30B8\u30FC\u30E9\u30F3\u30C9" }
-        OM { "\u30AA\u30DE\u30FC\u30F3" }
-        PA { "\u30D1\u30CA\u30DE" }
-        PE { "\u30DA\u30EB\u30FC" }
-        PF { "\u4ECF\u9818\u30DD\u30EA\u30CD\u30B7\u30A2" }
-        PG { "\u30D1\u30D7\u30A2\u30CB\u30E5\u30FC\u30AE\u30CB\u30A2" }
-        PH { "\u30D5\u30A3\u30EA\u30D4\u30F3" }
-        PK { "\u30D1\u30AD\u30B9\u30BF\u30F3" }
-        PL { "\u30DD\u30FC\u30E9\u30F3\u30C9" }
-        PM { "\u30B5\u30F3\u30D4\u30A8\u30FC\u30EB\u30FB\u30A8\u30FB\u30DF\u30AF\u30ED\u30F3\u5CF6" }
-        PN { "\u30D4\u30C8\u30B1\u30A2\u30F3\u5CF6" }
-        PR { "\u30D7\u30A8\u30EB\u30C8\u30EA\u30B3" }
-        PS { "\u30D1\u30EC\u30B9\u30C1\u30CA" }
-        PT { "\u30DD\u30EB\u30C8\u30AC\u30EB" }
-        PW { "\u30D1\u30E9\u30AA" }
-        PY { "\u30D1\u30E9\u30B0\u30A2\u30A4" }
-        QA { "\u30AB\u30BF\u30FC\u30EB" }
-        RE { "\u30EC\u30E6\u30CB\u30AA\u30F3\u5CF6" }
-        RO { "\u30EB\u30FC\u30DE\u30CB\u30A2" }
-        RU { "\u30ED\u30B7\u30A2" }
-        RW { "\u30EB\u30EF\u30F3\u30C0" }
-        SA { "\u30B5\u30A6\u30B8\u30A2\u30E9\u30D3\u30A2" }
-        SB { "\u30BD\u30ED\u30E2\u30F3\u8AF8\u5CF6" }
-        SC { "\u30BB\u30A4\u30B7\u30A7\u30EB" }
-        SD { "\u30B9\u30FC\u30C0\u30F3" }
-        SE { "\u30B9\u30A6\u30A7\u30FC\u30C7\u30F3" }
-        SG { "\u30B7\u30F3\u30AC\u30DD\u30FC\u30EB" }
-        SH { "\u30BB\u30F3\u30C8\u30D8\u30EC\u30CA\u5CF6" }
-        SI { "\u30B9\u30ED\u30D9\u30CB\u30A2" }
-        SJ { "\u30B9\u30D0\u30FC\u30EB\u30D0\u30EB\u8AF8\u5CF6\u30FB\u30E4\u30F3\u30DE\u30A4\u30A8\u30F3\u5CF6" }
-        SK { "\u30B9\u30ED\u30D0\u30AD\u30A2" }
-        SL { "\u30B7\u30A8\u30E9\u30EC\u30AA\u30CD" }
-        SM { "\u30B5\u30F3\u30DE\u30EA\u30CE" }
-        SN { "\u30BB\u30CD\u30AC\u30EB" }
-        SO { "\u30BD\u30DE\u30EA\u30A2" }
-        SP { "\u30BB\u30EB\u30D3\u30A2" }
-        SR { "\u30B9\u30EA\u30CA\u30E0" }
-        ST { "\u30B5\u30F3\u30C8\u30E1\u30FB\u30D7\u30EA\u30F3\u30B7\u30DA" }
-        SV { "\u30A8\u30EB\u30B5\u30EB\u30D0\u30C9\u30EB" }
-        SY { "\u30B7\u30EA\u30A2" }
-        SZ { "\u30B9\u30EF\u30B8\u30E9\u30F3\u30C9" }
-        TC { "\u30BF\u30FC\u30AF\u30B9\u8AF8\u5CF6\u30FB\u30AB\u30A4\u30B3\u30B9\u8AF8\u5CF6" }
-        TD { "\u30C1\u30E3\u30C9" }
-        TF { "\u4ECF\u5357\u65B9\u9818" }
-        //TF { "\u4ECF\u9818\u6975\u5357\u8AF8\u5CF6" } // From translation center
-        TG { "\u30C8\u30FC\u30B4" }
-        TH { "\u30BF\u30A4" }
-        TJ { "\u30BF\u30B8\u30AD\u30B9\u30BF\u30F3" }
-        TK { "\u30C8\u30B1\u30E9\u30A6\u8AF8\u5CF6" }
-        TL { "\u6771\u30C6\u30A3\u30E2\u30FC\u30EB" }
-        //TL { "\u6771\u30C1\u30E2\u30FC\u30EB" } // From translation center
-        TM { "\u30C8\u30EB\u30AF\u30E1\u30CB\u30B9\u30BF\u30F3" }
-        TN { "\u30C1\u30E5\u30CB\u30B8\u30A2" }
-        TO { "\u30C8\u30F3\u30AC" }
-        TR { "\u30C8\u30EB\u30B3" }
-        TT { "\u30C8\u30EA\u30CB\u30C0\u30FC\u30C9\u30FB\u30C8\u30D0\u30B4" }
-        TV { "\u30C4\u30D0\u30EB" }
-        TW { "\u53F0\u6E7E" }
-        TZ { "\u30BF\u30F3\u30B6\u30CB\u30A2" }
-        UA { "\u30A6\u30AF\u30E9\u30A4\u30CA" }
-        UG { "\u30A6\u30AC\u30F3\u30C0" }
-        UM { "\u7C73\u9818\u592A\u5E73\u6D0B\u8AF8\u5CF6" }
-        US { "\u30A2\u30E1\u30EA\u30AB\u5408\u8846\u56FD" }
-        UY { "\u30A6\u30EB\u30B0\u30A2\u30A4" }
-        UZ { "\u30A6\u30BA\u30D9\u30AD\u30B9\u30BF\u30F3" }
-        //VA { "\u30D0\u30C1\u30AB\u30F3" } // Old value
-        VA { "\u30ED\u30FC\u30DE\u6559\u7687\u5E81 (\u30D0\u30C1\u30AB\u30F3\u5E02\u56FD)" }
-        VC { "\u30BB\u30F3\u30C8\u30D3\u30F3\u30BB\u30F3\u30C8\u30FB\u30B0\u30EC\u30CA\u30C7\u30A3\u30FC\u30F3\u8AF8\u5CF6" }
-        VE { "\u30D9\u30CD\u30BA\u30A8\u30E9" }
-        VG { "\u82F1\u9818\u30D0\u30FC\u30B8\u30F3\u8AF8\u5CF6" }
-        VI { "\u7C73\u9818\u30D0\u30FC\u30B8\u30F3\u8AF8\u5CF6" }
-        VN { "\u30D9\u30C8\u30CA\u30E0" }
-        VU { "\u30D0\u30CC\u30A2\u30C4" }
-        WF { "\u30A6\u30A9\u30EA\u30B9\u30FB\u30D5\u30C8\u30FC\u30CA" }
-        WS { "\u897F\u30B5\u30E2\u30A2" }
-        YE { "\u30A4\u30A8\u30E1\u30F3" }
-        YT { "\u30DE\u30E8\u30C3\u30C8\u5CF6" }
-        //YU { "\u30E6\u30FC\u30B4\u30B9\u30E9\u30D3\u30A2\u9023\u90A6" } // Yuugosurabia Rempou (Union)
-        YU { "\u30E6\u30FC\u30B4\u30B9\u30E9\u30D3\u30A2" } // Yuugosurabia
-        ZA { "\u5357\u30A2\u30D5\u30EA\u30AB" }
-        ZM { "\u30B6\u30F3\u30D3\u30A2" }
-        ZW { "\u30B8\u30F3\u30D0\u30D6\u30A8" }
+        AR { "\u30a2\u30eb\u30bc\u30f3\u30c1\u30f3" }
+        AS { "\u7c73\u9818\u30b5\u30e2\u30a2" }
+        AT { "\u30aa\u30fc\u30b9\u30c8\u30ea\u30a2" }
+        AU { "\u30aa\u30fc\u30b9\u30c8\u30e9\u30ea\u30a2" }
+        AW { "\u30a2\u30eb\u30d0\u5cf6" }
+        AZ { "\u30a2\u30bc\u30eb\u30d0\u30a4\u30b8\u30e3\u30f3" }
+        BA { "\u30dc\u30b9\u30cb\u30a2\u30fb\u30d8\u30eb\u30c4\u30a7\u30b4\u30d3\u30ca" }
+        BB { "\u30d0\u30eb\u30d0\u30c9\u30b9" }
+        BD { "\u30d0\u30f3\u30b0\u30e9\u30c7\u30b7\u30e5" }
+        BE { "\u30d9\u30eb\u30ae\u30fc" }
+        BF { "\u30d6\u30eb\u30ad\u30ca\u30d5\u30a1\u30bd" }
+        BG { "\u30d6\u30eb\u30ac\u30ea\u30a2" }
+        BH { "\u30d0\u30fc\u30ec\u30fc\u30f3" }
+        BI { "\u30d6\u30eb\u30f3\u30b8" }
+        BJ { "\u30d9\u30cb\u30f3" }
+        //BM { "\u30d0\u30fc\u30df\u30e5\u30fc\u30c0\u8af8\u5cf6" } // Baamyuuda Shodou
+        BM { "\u30d0\u30fc\u30df\u30e5\u30fc\u30c0" } // Baamyuuda
+        BN { "\u30d6\u30eb\u30cd\u30a4" }
+        BO { "\u30dc\u30ea\u30d3\u30a2" }
+        BR { "\u30d6\u30e9\u30b8\u30eb" }
+        BS { "\u30d0\u30cf\u30de" }
+        BT { "\u30d6\u30fc\u30bf\u30f3" }
+        BV { "\u30d6\u30fc\u30d9\u5cf6" }
+        BW { "\u30dc\u30c4\u30ef\u30ca" }
+        BY { "\u30d9\u30e9\u30eb\u30fc\u30b7" }
+        BZ { "\u30d9\u30ea\u30fc\u30ba" }
+        CA { "\u30ab\u30ca\u30c0" }
+        CC { "\u30b3\u30b3\u30b9 (\u30ad\u30fc\u30ea\u30f3\u30b0) \u8af8\u5cf6" }
+        CD { "\u30b3\u30f3\u30b4\u6c11\u4e3b\u5171\u548c\u56fd" }
+        CF { "\u4e2d\u592e\u30a2\u30d5\u30ea\u30ab\u5171\u548c\u56fd" }
+        CG { "\u30b3\u30f3\u30b4" }
+        CH { "\u30b9\u30a4\u30b9" }
+        CI { "\u30b3\u30fc\u30c8\u30b8\u30dc\u30a2\u30fc\u30eb" }
+        CK { "\u30af\u30c3\u30af\u8af8\u5cf6" }
+        CL { "\u30c1\u30ea" }
+        CM { "\u30ab\u30e1\u30eb\u30fc\u30f3" }
+        //CN { "\u4e2d\u83ef\u4eba\u6c11\u5171\u548c\u56fd" } // China (PRC)
+        CN { "\u4e2d\u56fd" } // China
+        CO { "\u30b3\u30ed\u30f3\u30d3\u30a2" }
+        CR { "\u30b3\u30b9\u30bf\u30ea\u30ab" }
+        CU { "\u30ad\u30e5\u30fc\u30d0" }
+        CV { "\u30ab\u30fc\u30dc\u30d9\u30eb\u30c7" }
+        CX { "\u30af\u30ea\u30b9\u30de\u30b9\u5cf6" }
+        CY { "\u30ad\u30d7\u30ed\u30b9" }
+        CZ { "\u30c1\u30a7\u30b3" }
+        DE { "\u30c9\u30a4\u30c4" }
+        DJ { "\u30b8\u30d6\u30c1" }
+        DK { "\u30c7\u30f3\u30de\u30fc\u30af" }
+        DM { "\u30c9\u30df\u30cb\u30ab\u56fd" }
+        DO { "\u30c9\u30df\u30cb\u30ab\u5171\u548c\u56fd" }
+        DZ { "\u30a2\u30eb\u30b8\u30a7\u30ea\u30a2" }
+        EC { "\u30a8\u30af\u30a2\u30c9\u30eb" }
+        EE { "\u30a8\u30b9\u30c8\u30cb\u30a2" }
+        EG { "\u30a8\u30b8\u30d7\u30c8" }
+        EH { "\u897f\u30b5\u30cf\u30e9" }
+        ER { "\u30a8\u30ea\u30c8\u30ea\u30a2" }
+        ES { "\u30b9\u30da\u30a4\u30f3" }
+        ET { "\u30a8\u30c1\u30aa\u30d4\u30a2" }
+        FI { "\u30d5\u30a3\u30f3\u30e9\u30f3\u30c9" }
+        FJ { "\u30d5\u30a3\u30b8\u30fc" }
+        FK { "\u30d5\u30a9\u30fc\u30af\u30e9\u30f3\u30c9\u8af8\u5cf6" }
+        FM { "\u30df\u30af\u30ed\u30cd\u30b7\u30a2" }
+        FO { "\u30d5\u30a7\u30ed\u30fc\u8af8\u5cf6" }
+        FR { "\u30d5\u30e9\u30f3\u30b9" }
+        GA { "\u30ac\u30dc\u30f3" }
+        GB { "\u30a4\u30ae\u30ea\u30b9" }
+        GD { "\u30b0\u30ec\u30ca\u30c0" }
+        GE { "\u30b0\u30eb\u30b8\u30a2" }
+        GF { "\u4ecf\u9818\u30ae\u30a2\u30ca" }
+        GH { "\u30ac\u30fc\u30ca" }
+        GI { "\u30b8\u30d6\u30e9\u30eb\u30bf\u30eb" }
+        GL { "\u30b0\u30ea\u30fc\u30f3\u30e9\u30f3\u30c9" }
+        GM { "\u30ac\u30f3\u30d3\u30a2" }
+        GN { "\u30ae\u30cb\u30a2" }
+        GP { "\u30b0\u30a2\u30c9\u30eb\u30fc\u30d7" }
+        GQ { "\u8d64\u9053\u30ae\u30cb\u30a2" }
+        GR { "\u30ae\u30ea\u30b7\u30a2" }
+        GS { "\u5357\u30b8\u30e7\u30fc\u30b8\u30a2\u5cf6\u30fb\u5357\u30b5\u30f3\u30c9\u30a4\u30c3\u30c1\u8af8\u5cf6" }
+        GT { "\u30b0\u30a2\u30c6\u30de\u30e9" }
+        GU { "\u30b0\u30a2\u30e0\u5cf6" }
+        GW { "\u30ae\u30cb\u30a2\u30d3\u30b5\u30a6" }
+        GY { "\u30ac\u30a4\u30a2\u30ca" }
+        //HK { "\u9999\u6e2f\u7279\u5225\u884c\u653f\u533a" } // Hong Kong SAR
+        HK { "\u4e2d\u83ef\u4eba\u6c11\u5171\u548c\u56fd\u9999\u6e2f\u7279\u5225\u884c\u653f\u533a" } // PRC Hong Kong SAR
+        HM { "\u30cf\u30fc\u30c9\u30fb\u30a2\u30f3\u30c9\u30fb\u30de\u30af\u30c9\u30ca\u30eb\u30c9\u30fb\u30a2\u30a4\u30e9\u30f3\u30ba" }
+        HN { "\u30db\u30f3\u30b8\u30e5\u30e9\u30b9" }
+        HR { "\u30af\u30ed\u30a2\u30c1\u30a2" }
+        HT { "\u30cf\u30a4\u30c1" }
+        HU { "\u30cf\u30f3\u30ac\u30ea\u30fc" }
+        ID { "\u30a4\u30f3\u30c9\u30cd\u30b7\u30a2" }
+        IE { "\u30a2\u30a4\u30eb\u30e9\u30f3\u30c9" }
+        IL { "\u30a4\u30b9\u30e9\u30a8\u30eb" }
+        IN { "\u30a4\u30f3\u30c9" }
+        IO { "\u82f1\u9818\u30a4\u30f3\u30c9\u6d0b\u690d\u6c11\u5730" }
+        IQ { "\u30a4\u30e9\u30af" }
+        IR { "\u30a4\u30e9\u30f3" }
+        IS { "\u30a2\u30a4\u30b9\u30e9\u30f3\u30c9" }
+        IT { "\u30a4\u30bf\u30ea\u30a2" }
+        JM { "\u30b8\u30e3\u30de\u30a4\u30ab" }
+        JO { "\u30e8\u30eb\u30c0\u30f3" }
+        JP { "\u65e5\u672c" }
+        KE { "\u30b1\u30cb\u30a2" }
+        KG { "\u30ad\u30eb\u30ae\u30b9\u30bf\u30f3" }
+        KH { "\u30ab\u30f3\u30dc\u30b8\u30a2" }
+        KI { "\u30ad\u30ea\u30d0\u30b9" }
+        KM { "\u30b3\u30e2\u30ed" }
+        KN { "\u30bb\u30f3\u30c8\u30af\u30ea\u30b9\u30c8\u30d5\u30a1\u30fc\u30fb\u30cd\u30a4\u30d3\u30b9" }
+        KP { "\u671d\u9bae\u6c11\u4e3b\u4e3b\u7fa9\u4eba\u6c11\u5171\u548c\u56fd" }
+        KR { "\u5927\u97d3\u6c11\u56fd" }
+        KW { "\u30af\u30a6\u30a7\u30fc\u30c8" }
+        KY { "\u30b1\u30a4\u30de\u30f3\u8af8\u5cf6" }
+        KZ { "\u30ab\u30b6\u30d5\u30b9\u30bf\u30f3" }
+        LA { "\u30e9\u30aa\u30b9" }
+        //LA { "\u30e9\u30aa\u30b9\u4eba\u6c11\u6c11\u4e3b\u5171\u548c\u56fd" } // From translation center
+        LB { "\u30ec\u30d0\u30ce\u30f3" }
+        LC { "\u30bb\u30f3\u30c8\u30eb\u30b7\u30a2" }
+        LI { "\u30ea\u30d2\u30c6\u30f3\u30b7\u30e5\u30bf\u30a4\u30f3" }
+        LK { "\u30b9\u30ea\u30e9\u30f3\u30ab" }
+        LR { "\u30ea\u30d9\u30ea\u30a2" }
+        LS { "\u30ec\u30bd\u30c8" }
+        LT { "\u30ea\u30c8\u30a2\u30cb\u30a2" }
+        //LU { "\u30eb\u30af\u30bb\u30f3\u30d6\u30eb\u30af" } // Old value. Spelling error?
+        LU { "\u30eb\u30af\u30bb\u30f3\u30d6\u30eb\u30b0" }
+        LV { "\u30e9\u30c8\u30d3\u30a2" }
+        LY { "\u30ea\u30d3\u30a2" }
+        MA { "\u30e2\u30ed\u30c3\u30b3" }
+        MC { "\u30e2\u30ca\u30b3" }
+        MD { "\u30e2\u30eb\u30c9\u30d0" }
+        MG { "\u30de\u30c0\u30ac\u30b9\u30ab\u30eb" }
+        MH { "\u30de\u30fc\u30b7\u30e3\u30eb\u8af8\u5cf6\u5171\u548c\u56fd" }
+        MK { "\u30de\u30b1\u30c9\u30cb\u30a2" }
+        ML { "\u30de\u30ea" }
+        MM { "\u30df\u30e3\u30f3\u30de\u30fc" }
+        MN { "\u30e2\u30f3\u30b4\u30eb" }
+        //MO { "\u30de\u30ab\u30aa\u7279\u5225\u884c\u653f\u533a" } // Makao SAR
+        MO { "\u4e2d\u83ef\u4eba\u6c11\u5171\u548c\u56fd\u30de\u30ab\u30aa\u7279\u5225\u884c\u653f\u533a" } // PRC Makao SAR
+        MP { "\u5317\u30de\u30ea\u30a2\u30ca\u8af8\u5cf6" }
+        MQ { "\u30de\u30eb\u30c6\u30a3\u30cb\u30fc\u30af\u5cf6" }
+        //MQ { "\u30de\u30eb\u30c1\u30cb\u30fc\u30af\u5cf6" } // From translation center
+        MR { "\u30e2\u30fc\u30ea\u30bf\u30cb\u30a2" }
+        MS { "\u30e2\u30f3\u30c8\u30bb\u30e9\u30c8\u5cf6" }
+        MT { "\u30de\u30eb\u30bf" }
+        MU { "\u30e2\u30fc\u30ea\u30b7\u30e3\u30b9" }
+        MV { "\u30e2\u30eb\u30b8\u30d6" }
+        MW { "\u30de\u30e9\u30a6\u30a3" }
+        MX { "\u30e1\u30ad\u30b7\u30b3" }
+        MY { "\u30de\u30ec\u30fc\u30b7\u30a2" }
+        MZ { "\u30e2\u30b6\u30f3\u30d3\u30fc\u30af" }
+        NA { "\u30ca\u30df\u30d3\u30a2" }
+        NC { "\u30cb\u30e5\u30fc\u30ab\u30ec\u30c9\u30cb\u30a2" }
+        NE { "\u30cb\u30b8\u30a7\u30fc\u30eb" }
+        NF { "\u30ce\u30fc\u30d5\u30a9\u30fc\u30af\u5cf6" }
+        NG { "\u30ca\u30a4\u30b8\u30a7\u30ea\u30a2" }
+        NI { "\u30cb\u30ab\u30e9\u30b0\u30a2" }
+        NL { "\u30aa\u30e9\u30f3\u30c0" }
+        NO { "\u30ce\u30eb\u30a6\u30a7\u30fc" }
+        NP { "\u30cd\u30d1\u30fc\u30eb" }
+        NR { "\u30ca\u30a6\u30eb" }
+        NU { "\u30cb\u30a6\u30a8\u5cf6" }
+        NZ { "\u30cb\u30e5\u30fc\u30b8\u30fc\u30e9\u30f3\u30c9" }
+        OM { "\u30aa\u30de\u30fc\u30f3" }
+        PA { "\u30d1\u30ca\u30de" }
+        PE { "\u30da\u30eb\u30fc" }
+        PF { "\u4ecf\u9818\u30dd\u30ea\u30cd\u30b7\u30a2" }
+        PG { "\u30d1\u30d7\u30a2\u30cb\u30e5\u30fc\u30ae\u30cb\u30a2" }
+        PH { "\u30d5\u30a3\u30ea\u30d4\u30f3" }
+        PK { "\u30d1\u30ad\u30b9\u30bf\u30f3" }
+        PL { "\u30dd\u30fc\u30e9\u30f3\u30c9" }
+        PM { "\u30b5\u30f3\u30d4\u30a8\u30fc\u30eb\u30fb\u30a8\u30fb\u30df\u30af\u30ed\u30f3\u5cf6" }
+        PN { "\u30d4\u30c8\u30b1\u30a2\u30f3\u5cf6" }
+        PR { "\u30d7\u30a8\u30eb\u30c8\u30ea\u30b3" }
+        PS { "\u30d1\u30ec\u30b9\u30c1\u30ca" }
+        PT { "\u30dd\u30eb\u30c8\u30ac\u30eb" }
+        PW { "\u30d1\u30e9\u30aa" }
+        PY { "\u30d1\u30e9\u30b0\u30a2\u30a4" }
+        QA { "\u30ab\u30bf\u30fc\u30eb" }
+        RE { "\u30ec\u30e6\u30cb\u30aa\u30f3\u5cf6" }
+        RO { "\u30eb\u30fc\u30de\u30cb\u30a2" }
+        RU { "\u30ed\u30b7\u30a2" }
+        RW { "\u30eb\u30ef\u30f3\u30c0" }
+        SA { "\u30b5\u30a6\u30b8\u30a2\u30e9\u30d3\u30a2" }
+        SB { "\u30bd\u30ed\u30e2\u30f3\u8af8\u5cf6" }
+        SC { "\u30bb\u30a4\u30b7\u30a7\u30eb" }
+        SD { "\u30b9\u30fc\u30c0\u30f3" }
+        SE { "\u30b9\u30a6\u30a7\u30fc\u30c7\u30f3" }
+        SG { "\u30b7\u30f3\u30ac\u30dd\u30fc\u30eb" }
+        SH { "\u30bb\u30f3\u30c8\u30d8\u30ec\u30ca\u5cf6" }
+        SI { "\u30b9\u30ed\u30d9\u30cb\u30a2" }
+        SJ { "\u30b9\u30d0\u30fc\u30eb\u30d0\u30eb\u8af8\u5cf6\u30fb\u30e4\u30f3\u30de\u30a4\u30a8\u30f3\u5cf6" }
+        SK { "\u30b9\u30ed\u30d0\u30ad\u30a2" }
+        SL { "\u30b7\u30a8\u30e9\u30ec\u30aa\u30cd" }
+        SM { "\u30b5\u30f3\u30de\u30ea\u30ce" }
+        SN { "\u30bb\u30cd\u30ac\u30eb" }
+        SO { "\u30bd\u30de\u30ea\u30a2" }
+        SP { "\u30bb\u30eb\u30d3\u30a2" }
+        SR { "\u30b9\u30ea\u30ca\u30e0" }
+        ST { "\u30b5\u30f3\u30c8\u30e1\u30fb\u30d7\u30ea\u30f3\u30b7\u30da" }
+        SV { "\u30a8\u30eb\u30b5\u30eb\u30d0\u30c9\u30eb" }
+        SY { "\u30b7\u30ea\u30a2" }
+        SZ { "\u30b9\u30ef\u30b8\u30e9\u30f3\u30c9" }
+        TC { "\u30bf\u30fc\u30af\u30b9\u8af8\u5cf6\u30fb\u30ab\u30a4\u30b3\u30b9\u8af8\u5cf6" }
+        TD { "\u30c1\u30e3\u30c9" }
+        TF { "\u4ecf\u5357\u65b9\u9818" }
+        //TF { "\u4ecf\u9818\u6975\u5357\u8af8\u5cf6" } // From translation center
+        TG { "\u30c8\u30fc\u30b4" }
+        TH { "\u30bf\u30a4" }
+        TJ { "\u30bf\u30b8\u30ad\u30b9\u30bf\u30f3" }
+        TK { "\u30c8\u30b1\u30e9\u30a6\u8af8\u5cf6" }
+        TL { "\u6771\u30c6\u30a3\u30e2\u30fc\u30eb" }
+        //TL { "\u6771\u30c1\u30e2\u30fc\u30eb" } // From translation center
+        TM { "\u30c8\u30eb\u30af\u30e1\u30cb\u30b9\u30bf\u30f3" }
+        TN { "\u30c1\u30e5\u30cb\u30b8\u30a2" }
+        TO { "\u30c8\u30f3\u30ac" }
+        TR { "\u30c8\u30eb\u30b3" }
+        TT { "\u30c8\u30ea\u30cb\u30c0\u30fc\u30c9\u30fb\u30c8\u30d0\u30b4" }
+        TV { "\u30c4\u30d0\u30eb" }
+        TW { "\u53f0\u6e7e" }
+        TZ { "\u30bf\u30f3\u30b6\u30cb\u30a2" }
+        UA { "\u30a6\u30af\u30e9\u30a4\u30ca" }
+        UG { "\u30a6\u30ac\u30f3\u30c0" }
+        UM { "\u7c73\u9818\u592a\u5e73\u6d0b\u8af8\u5cf6" }
+        US { "\u30a2\u30e1\u30ea\u30ab\u5408\u8846\u56fd" }
+        UY { "\u30a6\u30eb\u30b0\u30a2\u30a4" }
+        UZ { "\u30a6\u30ba\u30d9\u30ad\u30b9\u30bf\u30f3" }
+        //VA { "\u30d0\u30c1\u30ab\u30f3" } // Old value
+        VA { "\u30ed\u30fc\u30de\u6559\u7687\u5e81 (\u30d0\u30c1\u30ab\u30f3\u5e02\u56fd)" }
+        VC { "\u30bb\u30f3\u30c8\u30d3\u30f3\u30bb\u30f3\u30c8\u30fb\u30b0\u30ec\u30ca\u30c7\u30a3\u30fc\u30f3\u8af8\u5cf6" }
+        VE { "\u30d9\u30cd\u30ba\u30a8\u30e9" }
+        VG { "\u82f1\u9818\u30d0\u30fc\u30b8\u30f3\u8af8\u5cf6" }
+        VI { "\u7c73\u9818\u30d0\u30fc\u30b8\u30f3\u8af8\u5cf6" }
+        VN { "\u30d9\u30c8\u30ca\u30e0" }
+        VU { "\u30d0\u30cc\u30a2\u30c4" }
+        WF { "\u30a6\u30a9\u30ea\u30b9\u30fb\u30d5\u30c8\u30fc\u30ca" }
+        WS { "\u897f\u30b5\u30e2\u30a2" }
+        YE { "\u30a4\u30a8\u30e1\u30f3" }
+        YT { "\u30de\u30e8\u30c3\u30c8\u5cf6" }
+        //YU { "\u30e6\u30fc\u30b4\u30b9\u30e9\u30d3\u30a2\u9023\u90a6" } // Yuugosurabia Rempou (Union)
+        YU { "\u30e6\u30fc\u30b4\u30b9\u30e9\u30d3\u30a2" } // Yuugosurabia
+        ZA { "\u5357\u30a2\u30d5\u30ea\u30ab" }
+        ZM { "\u30b6\u30f3\u30d3\u30a2" }
+        ZW { "\u30b8\u30f3\u30d0\u30d6\u30a8" }
     }
     Languages { 
         aa  { "\u30a2\u30d5\u30a1\u30fc\u30eb\u8a9e" }
         ab  { "\u30a2\u30d6\u30cf\u30ba\u8a9e" }
-        ae  { "\u30A2\u30F4\u30A7\u30B9\u30BF\u8A9E" }
+        ae  { "\u30a2\u30f4\u30a7\u30b9\u30bf\u8a9e" }
         af  { "\u30a2\u30d5\u30ea\u30ab\u30fc\u30f3\u30b9\u8a9e" }
-        ak  { "\u30A2\u30AB\u30F3\u8A9E" }
+        ak  { "\u30a2\u30ab\u30f3\u8a9e" }
         am  { "\u30a2\u30e0\u30cf\u30e9\u8a9e" }
-        an  { "\u30A2\u30E9\u30B4\u30F3\u8A9E" }
+        an  { "\u30a2\u30e9\u30b4\u30f3\u8a9e" }
         ar  { "\u30a2\u30e9\u30d3\u30a2\u8a9e" }
         as  { "\u30a2\u30c3\u30b5\u30e0\u8a9e" }
-        av  { "\u30A2\u30F4\u30A1\u30EB\u8A9E" }
+        av  { "\u30a2\u30f4\u30a1\u30eb\u8a9e" }
         ay  { "\u30a2\u30a4\u30de\u30e9\u8a9e" }
         az  { "\u30a2\u30bc\u30eb\u30d0\u30a4\u30b8\u30e3\u30f3\u8a9e" }
 
@@ -280,29 +280,32 @@ ja {
         bg  { "\u30d6\u30eb\u30ac\u30ea\u30a2\u8a9e" }
         bh  { "\u30d3\u30cf\u2015\u30eb\u8a9e" }
         bi  { "\u30d3\u30b9\u30e9\u30de\u8a9e" }
-        bm  { "\u30D0\u30F3\u30D0\u30E9\u8A9E" }
+        bm  { "\u30d0\u30f3\u30d0\u30e9\u8a9e" }
         bn  { "\u30d9\u30f3\u30ac\u30eb\u8a9e" }
         bo  { "\u30c1\u30d9\u30c3\u30c8\u8a9e" }
         br  { "\u30d6\u30eb\u30c8\u30f3\u8a9e" }
-        bs  { "\u30DC\u30B9\u30CB\u30A2\u8A9E"}
+        bs  { "\u30dc\u30b9\u30cb\u30a2\u8a9e"}
+        byn { "\u30d3\u30ea\u30f3\u8a9e" }
 
         ca  { "\u30ab\u30bf\u30ed\u30cb\u30a2\u8a9e" }
-        ce  { "\u30C1\u30A7\u30C1\u30A7\u30F3\u8A9E" }
-        ch  { "\u30C1\u30E3\u30E2\u30ED\u8A9E" }
+        ce  { "\u30c1\u30a7\u30c1\u30a7\u30f3\u8a9e" }
+        ch  { "\u30c1\u30e3\u30e2\u30ed\u8a9e" }
+        chr { "\u30c1\u30a7\u30ed\u30ad\u30fc\u8a9e" }
         co  { "\u30b3\u30eb\u30b7\u30ab\u8a9e" }
+        cr  { "\u30af\u30ea\u30fc\u8a9e" }
         cs  { "\u30c1\u30a7\u30b3\u8a9e" }
-        cu  { "\u6559\u4F1A\u30B9\u30E9\u30D6\u8A9E" }
-        cv  { "\u30C1\u30E5\u30F4\u30A1\u30B7\u30E5\u8A9E" }
+        cu  { "\u6559\u4f1a\u30b9\u30e9\u30d6\u8a9e" }
+        cv  { "\u30c1\u30e5\u30f4\u30a1\u30b7\u30e5\u8a9e" }
         cy  { "\u30a6\u30a7\u30fc\u30eb\u30ba\u8a9e" }
 
         da  { "\u30c7\u30f3\u30de\u30fc\u30af\u8a9e" }
         de  { "\u30c9\u30a4\u30c4\u8a9e" }
-        dv  { "\u30C7\u30A3\u30F4\u30A7\u30D2\u8A9E" }
+        dv  { "\u30c7\u30a3\u30f4\u30a7\u30d2\u8a9e" }
         dz  { "\u30d6\u30fc\u30bf\u30f3\u8a9e" }
 
-        ee  { "\u30A8\u30A6\u30A7\u8A9E" }
+        ee  { "\u30a8\u30a6\u30a7\u8a9e" }
         //el { "\u30ae\u30ea\u30b7\u30a2\u8a9e" } // Old value
-        el  { "\u30AE\u30EA\u30B7\u30E3\u8A9E" }
+        el  { "\u30ae\u30ea\u30b7\u30e3\u8a9e" }
         en  { "\u82f1\u8a9e" }
         eo  { "\u30a8\u30b9\u30da\u30e9\u30f3\u30c8\u8a9e" }
         es  { "\u30b9\u30da\u30a4\u30f3\u8a9e" }
@@ -310,7 +313,7 @@ ja {
         eu  { "\u30d0\u30b9\u30af\u8a9e" }
 
         fa  { "\u30da\u30eb\u30b7\u30a2\u8a9e" }
-        ff  { "\u30D5\u30E9\u30CB\u8A9E" }
+        ff  { "\u30d5\u30e9\u30cb\u8a9e" }
         fi  { "\u30d5\u30a3\u30f3\u30e9\u30f3\u30c9\u8a9e" }
         fj  { "\u30d5\u30a3\u30b8\u30fc\u8a9e" }
         fo  { "\u30d5\u30a7\u30ed\u30fc\u8a9e" }
@@ -319,7 +322,7 @@ ja {
 
         ga  { "\u30a2\u30a4\u30eb\u30e9\u30f3\u30c9\u8a9e" }
         gd  { "\u30b9\u30b3\u30c3\u30c8\u30e9\u30f3\u30c9\u30fb\u30b2\u30fc\u30eb\u8a9e" }
-        gez { "\u30B2\u30A8\u30BA\u8A9E" }
+        gez { "\u30b2\u30a8\u30ba\u8a9e" }
         gl  { "\u30ac\u30ea\u30b7\u30a2\u8a9e" }
         gn  { "\u30b0\u30ef\u30e9\u30cb\u8a9e" }
         gu  { "\u30b0\u30b8\u30e3\u30e9\u30fc\u30c8\u8a9e" }
@@ -329,20 +332,20 @@ ja {
         haw { "\u30cf\u30ef\u30a4\u8a9e" }
         he  { "\u30d8\u30d6\u30e9\u30a4\u8a9e" }
         hi  { "\u30d2\u30f3\u30c7\u30a3\u30fc\u8a9e" }
-        ho  { "\u30D2\u30EA\u30E2\u30C8\u30A5\u8A9E" }
+        ho  { "\u30d2\u30ea\u30e2\u30c8\u30a5\u8a9e" }
         hr  { "\u30af\u30ed\u30a2\u30c1\u30a2\u8a9e" }
-        ht  { "\u30CF\u30A4\u30C1\u8A9E" }
+        ht  { "\u30cf\u30a4\u30c1\u8a9e" }
         hu  { "\u30cf\u30f3\u30ac\u30ea\u30fc\u8a9e" }
         hy  { "\u30a2\u30eb\u30e1\u30cb\u30a2\u8a9e" }
-        hz  { "\u30D8\u30EC\u30ED\u8A9E" }
+        hz  { "\u30d8\u30ec\u30ed\u8a9e" }
 
         ia  { "\u56fd\u969b\u8a9e" }
         id  { "\u30a4\u30f3\u30c9\u30cd\u30b7\u30a2\u8a9e" }
         ie  { "\u56fd\u969b\u8a9e" }
-        ig  { "\u30A4\u30DC\u8A9E" }
-        ii  { "\u56DB\u5DDD\u30A4\u8A9E" }
+        ig  { "\u30a4\u30dc\u8a9e" }
+        ii  { "\u56db\u5ddd\u30a4\u8a9e" }
         ik  { "\u30a4\u30cc\u30d4\u30a2\u30c3\u30af\u8a9e" }
-        io  { "\u30A4\u30C9\u8A9E" }
+        io  { "\u30a4\u30c9\u8a9e" }
         is  { "\u30a2\u30a4\u30b9\u30e9\u30f3\u30c9\u8a9e" }
         it  { "\u30a4\u30bf\u30ea\u30a2\u8a9e" }
         iu  { "\u30a4\u30cc\u30af\u30a6\u30c6\u30a3\u30c8\u30c3\u30c8\u8a9e" }
@@ -351,34 +354,35 @@ ja {
         jv  { "\u30b8\u30e3\u30ef\u8a9e" }
 
         ka  { "\u30b0\u30eb\u30b8\u30a2\u8a9e" }
-        kg  { "\u30B3\u30F3\u30B4\u8A9E" }
-        ki  { "\u30AD\u30AF\u30E6\u8A9E" }
-        kj  { "\u30AF\u30A2\u30CB\u30E3\u30DE\u8A9E" }
+        kg  { "\u30b3\u30f3\u30b4\u8a9e" }
+        ki  { "\u30ad\u30af\u30e6\u8a9e" }
+        kj  { "\u30af\u30a2\u30cb\u30e3\u30de\u8a9e" }
         kk  { "\u30ab\u30b6\u30d5\u8a9e" }
         kl  { "\u30b0\u30ea\u30fc\u30f3\u30e9\u30f3\u30c9\u8a9e" }
         km  { "\u30ab\u30f3\u30dc\u30b8\u30a2\u8a9e" }
         kn  { "\u30ab\u30f3\u30ca\u30c0\u8a9e" }
         ko  { "\u97d3\u56fd\u8a9e" }
-        kr  { "\u30AB\u30CC\u30EA\u8A9E" }
+        kok { "\u30b3\u30f3\u30ab\u30cb\u8a9e" }
+        kr  { "\u30ab\u30cc\u30ea\u8a9e" }
         ks  { "\u30ab\u30b7\u30df\u30fc\u30eb\u8a9e" }
         ku  { "\u30af\u30eb\u30c9\u8a9e" }
-        kv  { "\u30B3\u30DF\u8A9E" }
+        kv  { "\u30b3\u30df\u8a9e" }
         kw  { "\u30b3\u30fc\u30f3\u30a6\u30a9\u30fc\u30eb\u8a9e" }
         ky  { "\u30ad\u30eb\u30ae\u30b9\u8a9e" }
 
         la  { "\u30e9\u30c6\u30f3\u8a9e" }
-        lb  { "\u30EB\u30AF\u30BB\u30F3\u30D6\u30EB\u30AF\u8A9E" }
-        lg  { "\u30AC\u30F3\u30C0\u8A9E" }
-        li  { "\u30EA\u30F3\u30D6\u30EB\u30D5\u8A9E" }
+        lb  { "\u30eb\u30af\u30bb\u30f3\u30d6\u30eb\u30af\u8a9e" }
+        lg  { "\u30ac\u30f3\u30c0\u8a9e" }
+        li  { "\u30ea\u30f3\u30d6\u30eb\u30d5\u8a9e" }
         ln  { "\u30ea\u30f3\u30ac\u30e9\u8a9e" }
         lo  { "\u30e9\u30aa\u8a9e" }
         lt  { "\u30ea\u30c8\u30a2\u30cb\u30a2\u8a9e" }
-        lu  { "\u30EB\u30D0\u30FB\u30AB\u30BF\u30F3\u30AC\u8A9E" }
+        lu  { "\u30eb\u30d0\u30fb\u30ab\u30bf\u30f3\u30ac\u8a9e" }
         //lv { "\u30e9\u30c8\u30d3\u30a2\u8a9e (\u30ec\u30c3\u30c8\u8a9e)" } // Old value
-        lv  { "\u30E9\u30C8\u30D3\u30A2\u8A9E" }
+        lv  { "\u30e9\u30c8\u30d3\u30a2\u8a9e" }
 
         mg  { "\u30de\u30e9\u30ac\u30b7\u30fc\u8a9e" }
-        mh  { "\u30DE\u30FC\u30B7\u30E3\u30EB\u8A9E"}
+        mh  { "\u30de\u30fc\u30b7\u30e3\u30eb\u8a9e"}
         mi  { "\u30de\u30aa\u30ea\u8a9e" }
         mk  { "\u30de\u30b1\u30c9\u30cb\u30a2\u8a9e" }
         ml  { "\u30de\u30e9\u30e4\u2015\u30e9\u30e0\u8a9e" }
@@ -391,24 +395,24 @@ ja {
 
         na  { "\u30ca\u30a6\u30eb\u8a9e" }
         nb  { "\u30ce\u30eb\u30a6\u30a7\u30fc\u8a9e (\u30dc\u30af\u30e2\u30fc\u30eb)" }
-        nd  { "\u5317\u30F3\u30C7\u30D9\u30EC\u8A9E" }
+        nd  { "\u5317\u30f3\u30c7\u30d9\u30ec\u8a9e" }
         ne  { "\u30cd\u30d1\u30fc\u30eb\u8a9e" }
-        ng  { "\u30F3\u30C9\u30F3\u30AC\u8A9E" }
+        ng  { "\u30f3\u30c9\u30f3\u30ac\u8a9e" }
         nl  { "\u30aa\u30e9\u30f3\u30c0\u8a9e" }
         nn  { "\u30ce\u30eb\u30a6\u30a7\u30fc\u8a9e (\u30cb\u30e5\u30fc\u30ce\u30eb\u30b9\u30af)" }
         no  { "\u30ce\u30eb\u30a6\u30a7\u30fc\u8a9e" }
 
-        nr  { "\u5357\u30F3\u30C7\u30D9\u30EC\u8A9E" }
-        nv  { "\u30CA\u30D0\u30DB\u8A9E"}
-        ny  { "\u30CB\u30E3\u30F3\u30B8\u30E3\u8A9E\u3001\u30C1\u30C1\u30A7\u30EF\u8A9E\u3001\u30C1\u30A7\u30EF\u8A9E" }
-        oc  { "\u30d7\u30ed\u30d0\u30f3\u30b9\u8a9e" }
-        oj  { "\u30AA\u30D6\u30B8\u30EF\u8A9E" }
+        nr  { "\u5357\u30f3\u30c7\u30d9\u30ec\u8a9e" }
+        nv  { "\u30ca\u30d0\u30db\u8a9e"}
+        ny  { "\u30cb\u30e3\u30f3\u30b8\u30e3\u8a9e\u3001\u30c1\u30c1\u30a7\u30ef\u8a9e\u3001\u30c1\u30a7\u30ef\u8a9e" }
+        oc  { "\u30d7\u30ed\u30f4\u30a1\u30f3\u30b9\u8a9e" }
+        oj  { "\u30aa\u30d6\u30b8\u30ef\u8a9e" }
         om  { "\u30ac\u30e9\u8a9e" }
         or  { "\u30aa\u30ea\u30e4\u30fc\u8a9e" }
-        os  { "\u30AA\u30BB\u30C8\u8A9E" }
+        os  { "\u30aa\u30bb\u30c8\u8a9e" }
 
         pa  { "\u30d1\u30f3\u30b8\u30e3\u30d6\u8a9e" }
-        pi  { "\u30D1\u30FC\u30EA\u8A9E" }
+        pi  { "\u30d1\u30fc\u30ea\u8a9e" }
         pl  { "\u30dd\u30fc\u30e9\u30f3\u30c9\u8a9e" }
         ps  { "\u30d1\u30b7\u30e5\u30c8\u30fc\u8a9e" }
         pt  { "\u30dd\u30eb\u30c8\u30ac\u30eb\u8a9e" }
@@ -422,13 +426,13 @@ ja {
         rw  { "\u30eb\u30ef\u30f3\u30c0\u8a9e" }
 
         sa  { "\u30b5\u30f3\u30b9\u30af\u30ea\u30c3\u30c8\u8a9e" }
-        sc  { "\u30B5\u30EB\u30C7\u30FC\u30CB\u30E3\u8A9E" }
+        sc  { "\u30b5\u30eb\u30c7\u30fc\u30cb\u30e3\u8a9e" }
         sd  { "\u30b7\u30f3\u30c9\u8a9e" }
-        se  { "\u5317\u30B5\u30FC\u30DF\u8A9E" }
+        se  { "\u5317\u30b5\u30fc\u30df\u8a9e" }
         sg  { "\u30b5\u30f3\u30b4\u8a9e" }
         sh  { "\u30bb\u30eb\u30dc\uff1d\u30af\u30ed\u30a2\u30c1\u30a2\u8a9e" }
         si  { "\u30b7\u30f3\u30cf\u30e9\u8a9e" }
-        sid { "\u30B7\u30C0\u30E2\u8A9E" }
+        sid { "\u30b7\u30c0\u30e2\u8a9e" }
         sk  { "\u30b9\u30ed\u30d0\u30ad\u30a2\u8a9e" }
         sl  { "\u30b9\u30ed\u30d9\u30cb\u30a2\u8a9e" }
         sm  { "\u30b5\u30e2\u30a2\u8a9e" }
@@ -437,17 +441,17 @@ ja {
         sq  { "\u30a2\u30eb\u30d0\u30cb\u30a2\u8a9e" }
         sr  { "\u30bb\u30eb\u30d3\u30a2\u8a9e" }
         ss  { "\u30b7\u30b9\u30ef\u30c6\u30a3\u8a9e" }
-        st  { "\u30bb\u30bd\u30c8\u8a9e" }
+        st  { "\u5357\u30bb\u30bd\u30c8\u8a9e" }
         su  { "\u30b9\u30f3\u30c0\u8a9e" }
         sv  { "\u30b9\u30a6\u30a7\u30fc\u30c7\u30f3\u8a9e" }
         sw  { "\u30b9\u30ef\u30d2\u30ea\u8a9e" }
-        syr { "\u30B7\u30EA\u30A2\u8A9E" }
+        syr { "\u30b7\u30ea\u30a2\u8a9e" }
         ta  { "\u30bf\u30df\u30fc\u30eb\u8a9e" }
         te  { "\u30c6\u30eb\u30b0\u8a9e" }
         tg  { "\u30bf\u30b8\u30af\u8a9e" }
         th  { "\u30bf\u30a4\u8a9e" }
         ti  { "\u30c6\u30a3\u30b0\u30ea\u30cb\u30a2\u8a9e" }
-        tig { "\u30C6\u30A3\u30B0\u30EC\u8A9E" }
+        tig { "\u30c6\u30a3\u30b0\u30ec\u8a9e" }
         tk  { "\u30c8\u30eb\u30af\u30e1\u30f3\u8a9e" }
         tl  { "\u30bf\u30ac\u30ed\u30b0\u8a9e" }
         tn  { "\u30c4\u30ef\u30ca\u8a9e" }
@@ -456,17 +460,18 @@ ja {
         ts  { "\u30c4\u30a9\u30f3\u30ac\u8a9e" }
         tt  { "\u30bf\u30bf\u30fc\u30eb\u8a9e" }
         tw  { "\u30c8\u30a5\u30a4\u8a9e" }
+        ty  { "\u30bf\u30d2\u30c1\u8a9e" }
 
         ug  { "\u30a6\u30a4\u30b0\u30eb\u8a9e" }
         uk  { "\u30a6\u30af\u30e9\u30a4\u30ca\u8a9e" }
         ur  { "\u30a6\u30eb\u30c9\u30a5\u30fc\u8a9e" }
         uz  { "\u30a6\u30ba\u30d9\u30af\u8a9e" }
 
-        ve  { "\u30D9\u30F3\u30C0\u8A9E" }
+        ve  { "\u30d9\u30f3\u30c0\u8a9e" }
         vi  { "\u30d9\u30c8\u30ca\u30e0\u8a9e" }
         vo  { "\u30dc\u30e9\u30d4\u30e5\u30af\u8a9e" }
 
-        wa  { "\u30EF\u30ED\u30F3\u8A9E" }
+        wa  { "\u30ef\u30ed\u30f3\u8a9e" }
         wo  { "\u30a6\u30a9\u30ed\u30d5\u8a9e" }
 
         xh  { "\u30b3\u30b5\u8a9e" }
@@ -476,8 +481,8 @@ ja {
 
         za  { "\u30c1\u30ef\u30f3\u8a9e" }
         zh  { "\u4e2d\u56fd\u8a9e" }
-        //zh_cn { "\u4E2D\u56FD\u8A9E (\u7C21\u4F53\u5B57)" }
-        //zh_tw { "\u4E2D\u56FD\u8A9E (\u7E41\u4F53\u5B57)" }
+        //zh_cn { "\u4e2d\u56fd\u8a9e (\u7c21\u4f53\u5b57)" }
+        //zh_tw { "\u4e2d\u56fd\u8a9e (\u7e41\u4f53\u5b57)" }
         zu  { "\u30ba\u30fc\u30eb\u30fc\u8a9e" }
     }
 
@@ -491,227 +496,452 @@ ja {
 //        "-",
 //        "E",
 //        "\u2030",
-//        "\u221E",
-//        "\uFFFD",
+//        "\u221e",
+//        "\ufffd",
 //    }
     localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
     zoneStrings { 
+         {
+            "PST",
+            "\u592a\u5e73\u6d0b\u6a19\u6e96\u6642",
+            "PST",
+            "\u592a\u5e73\u6d0b\u590f\u6642\u9593",
+            "PDT",
+            "\u30ed\u30b5\u30f3\u30bc\u30eb\u30b9",
+        }
+        {
+            "America/Los_Angeles",
+            "\u592a\u5e73\u6d0b\u6a19\u6e96\u6642",
+            "PST",
+            "\u592a\u5e73\u6d0b\u590f\u6642\u9593",
+            "PDT",
+            "\u30ed\u30b5\u30f3\u30bc\u30eb\u30b9",
+        }
+        {
+            "MST",
+            "\u5c71\u5730\u6a19\u6e96\u6642",
+            "MST",
+            "\u5c71\u5730\u590f\u6642\u9593",
+            "MDT",
+            "\u30c7\u30f3\u30d0\u30fc",
+        }
+        {
+            "America/Denver",
+            "\u5c71\u5730\u6a19\u6e96\u6642",
+            "MST",
+            "\u5c71\u5730\u590f\u6642\u9593",
+            "MDT",
+            "\u30c7\u30f3\u30d0\u30fc",
+        }
+        {
+            "PNT",
+            "\u5c71\u5730\u6a19\u6e96\u6642",
+            "MST",
+            "\u5c71\u5730\u6a19\u6e96\u6642",
+            "MST",
+            "\u30d5\u30a7\u30cb\u30c3\u30af\u30b9",
+        }
+        {
+            "America/Phoenix",
+            "\u5c71\u5730\u6a19\u6e96\u6642",
+            "MST",
+            "\u5c71\u5730\u6a19\u6e96\u6642",
+            "MST",
+            "\u30d5\u30a7\u30cb\u30c3\u30af\u30b9",
+        }
+        {
+            "CST",
+            "\u4e2d\u90e8\u6a19\u6e96\u6642",
+            "CST",
+            "\u4e2d\u90e8\u590f\u6642\u9593",
+            "CDT",
+            "\u30b7\u30ab\u30b4",
+        }
+        {
+            "America/Chicago",
+            "\u4e2d\u90e8\u6a19\u6e96\u6642",
+            "CST",
+            "\u4e2d\u90e8\u590f\u6642\u9593",
+            "CDT",
+            "\u30b7\u30ab\u30b4",
+        }
+        {
+            "EST",
+            "\u6771\u90e8\u6a19\u6e96\u6642",
+            "EST",
+            "\u6771\u90e8\u590f\u6642\u9593",
+            "EDT",
+            "\u30cb\u30e5\u30fc\u30e8\u30fc\u30af",
+        }
+        {
+            "America/New_York",
+            "\u6771\u90e8\u6a19\u6e96\u6642",
+            "EST",
+            "\u6771\u90e8\u590f\u6642\u9593",
+            "EDT",
+            "\u30cb\u30e5\u30fc\u30e8\u30fc\u30af",
+        }
+        {
+            "IET",
+            "\u6771\u90e8\u6a19\u6e96\u6642",
+            "EST",
+            "\u6771\u90e8\u6a19\u6e96\u6642",
+            "EST",
+            "\u30a4\u30f3\u30c7\u30a3\u30a2\u30ca\u30dd\u30ea\u30b9",
+        }
+        {
+            "America/Indianapolis",
+            "\u6771\u90e8\u6a19\u6e96\u6642",
+            "EST",
+            "\u6771\u90e8\u6a19\u6e96\u6642",
+            "EST",
+            "\u30a4\u30f3\u30c7\u30a3\u30a2\u30ca\u30dd\u30ea\u30b9",
+        }
+        {
+            "HST",
+            "\u30cf\u30ef\u30a4\u6a19\u6e96\u6642",
+            "HST",
+            "\u30cf\u30ef\u30a4\u6a19\u6e96\u6642",
+            "HST",
+            "\u30db\u30ce\u30eb\u30eb",
+        }
+        {
+            "Pacific/Honolulu",
+            "\u30cf\u30ef\u30a4\u6a19\u6e96\u6642",
+            "HST",
+            "\u30cf\u30ef\u30a4\u6a19\u6e96\u6642",
+            "HST",
+            "\u30db\u30ce\u30eb\u30eb",
+        }
+        {
+            "AST",
+            "\u30a2\u30e9\u30b9\u30ab\u6a19\u6e96\u6642",
+            "AST",
+            "\u30a2\u30e9\u30b9\u30ab\u590f\u6642\u9593",
+            "ADT",
+            "\u30a2\u30f3\u30ab\u30ec\u30c3\u30b8"
+        }
+        {
+            "America/Anchorage",
+            "\u30a2\u30e9\u30b9\u30ab\u6a19\u6e96\u6642",
+            "AST",
+            "\u30a2\u30e9\u30b9\u30ab\u590f\u6642\u9593",
+            "ADT",
+            "\u30a2\u30f3\u30ab\u30ec\u30c3\u30b8",
+        }
+        {
+            "America/Halifax",
+            "\u5927\u897f\u6d0b\u6a19\u6e96\u6642",
+            "AST",
+            "\u5927\u897f\u6d0b\u590f\u6642\u9593",
+            "ADT",
+            "\u30cf\u30ea\u30d5\u30a1\u30af\u30b9"
+        }
+        {
+            "CNT",
+            "\u30cb\u30e5\u30fc\u30d5\u30a1\u30f3\u30c9\u30e9\u30f3\u30c9\u5cf6\u6a19\u6e96\u6642",
+            "CNT",
+            "\u30cb\u30e5\u30fc\u30d5\u30a1\u30f3\u30c9\u30e9\u30f3\u30c9\u5cf6\u590f\u6642\u9593",
+            "CDT",
+            "\u30bb\u30f3\u30c8\u30b8\u30e7\u30f3\u30ba",
+        }
+        {
+            "America/St_Johns",
+            "\u30cb\u30e5\u30fc\u30d5\u30a1\u30f3\u30c9\u30e9\u30f3\u30c9\u5cf6\u6a19\u6e96\u6642",
+            "CNT",
+            "\u30cb\u30e5\u30fc\u30d5\u30a1\u30f3\u30c9\u30e9\u30f3\u30c9\u5cf6\u590f\u6642\u9593",
+            "CDT",
+            "\u30bb\u30f3\u30c8\u30b8\u30e7\u30f3\u30ba",
+        }
+        {
+            "ECT",
+            "\u4e2d\u6b27\u6a19\u6e96\u6642",
+            "CET",
+            "\u4e2d\u6b27\u590f\u6642\u9593",
+            "CEST",
+            "\u30d1\u30ea",
+        }
+        {
+            "Europe/Paris",
+            "\u4e2d\u6b27\u6a19\u6e96\u6642",
+            "CET",
+            "\u4e2d\u6b27\u590f\u6642\u9593",
+            "CEST",
+            "\u30d1\u30ea",
+        }
+        {
+            "GMT",
+            "\u30b0\u30ea\u30cb\u30c3\u30b8\u6a19\u6e96\u6642",
+            "GMT",
+            "\u30b0\u30ea\u30cb\u30c3\u30b8\u6a19\u6e96\u6642",
+            "GMT",
+            "\u30ed\u30f3\u30c9\u30f3",
+        }
+        {
+            "Africa/Casablanca",
+            "\u30b0\u30ea\u30cb\u30c3\u30b8\u6a19\u6e96\u6642",
+            "GMT",
+            "\u30b0\u30ea\u30cb\u30c3\u30b8\u6a19\u6e96\u6642",
+            "GMT",
+            "\u30ab\u30b5\u30d6\u30e9\u30f3\u30ab",
+        }
+        {
+            "Asia/Jerusalem",
+            "\u30a4\u30b9\u30e9\u30a8\u30eb\u6a19\u6e96\u6642",
+            "IST",
+            "\u30a4\u30b9\u30e9\u30a8\u30eb\u590f\u6642\u9593",
+            "IDT",
+            "\u30a8\u30eb\u30b5\u30ec\u30e0",
+        }
+        {
+            "JST",
+            "\u65e5\u672c\u6a19\u6e96\u6642",
+            "JST",
+            "\u65e5\u672c\u6a19\u6e96\u6642",
+            "JST",
+            "\u6771\u4eac",
+        }
         {
             "Asia/Tokyo",
-            "\u65E5\u672C\u6A19\u6E96\u6642",
+            "\u65e5\u672c\u6a19\u6e96\u6642",
             "JST",
-            "\u65E5\u672C\u6A19\u6E96\u6642",
+            "\u65e5\u672c\u6a19\u6e96\u6642",
             "JST",
+            "\u6771\u4eac",
+        }
+        {
+            "Europe/Bucharest",
+            "\u6771\u6b27\u6a19\u6e96\u6642",
+            "EET",
+            "\u6771\u6b27\u590f\u6642\u9593",
+            "EEST",
+            "\u30d6\u30ab\u30ec\u30b9\u30c8",
+        }
+        {
+            "CTT",
+            "\u4e2d\u56fd\u6a19\u6e96\u6642",
+            "CTT",
+            "\u4e2d\u56fd\u6a19\u6e96\u6642",
+            "CDT",
+            "\u4e0a\u6d77",
+        }
+        {
+            "Asia/Shanghai",
+            "\u4e2d\u56fd\u6a19\u6e96\u6642",
+            "CTT",
+            "\u4e2d\u56fd\u6a19\u6e96\u6642",
+            "CDT",
+            "\u4e0a\u6d77",
         }
     }
     LocaleScript{ "Kana","Hira", "Hani" }
 
     ExemplarCharacters{ 
-        "[\u4E00-\u4E01\u4E03\u4E07-\u4E0B\u4E0D-\u4E0E\u4E14\u4E16\u4E18-\u4E19\u4E21"
-        "\u4E26\u4E2D\u4E38-\u4E39\u4E3B\u4E45\u4E4F\u4E57\u4E59\u4E5D\u4E71\u4E73\u4E7E"
-        "\u4E86\u4E88-\u4E89\u4E8B-\u4E8C\u4E92\u4E94-\u4E95\u4E9C\u4EA1\u4EA4\u4EAB-"
-        "\u4EAD\u4EBA\u4EC1\u4ECA-\u4ECB\u4ECF\u4ED5-\u4ED6\u4ED8-\u4ED9\u4EE3-\u4EE5"
-        "\u4EEE\u4EF0\u4EF2\u4EF6\u4EFB\u4F01\u4F0F-\u4F11\u4F1A\u4F1D\u4F2F\u4F34\u4F38"
-        "\u4F3A\u4F3C\u4F46\u4F4D-\u4F50\u4F53\u4F55\u4F59\u4F5C\u4F73\u4F75\u4F7F\u4F8B"
-        "\u4F8D\u4F9B\u4F9D\u4FA1\u4FAE-\u4FAF\u4FB5\u4FBF\u4FC2-\u4FC3\u4FCA\u4FD7\u4FDD"
-        "\u4FE1\u4FEE\u4FF3\u4FF5\u4FF8\u5009\u500B\u500D\u5012\u5019\u501F\u5023-\u5024"
-        "\u502B\u5039\u5049\u504F\u505C\u5065\u5074-\u5076\u507D\u508D\u5091\u5098-\u5099"
-        "\u50AC\u50B5\u50B7\u50BE\u50CD\u50CF\u50D5\u50DA\u50E7\u5100\u5104\u5112\u511F"
-        "\u512A\u5143-\u5146\u5148-\u5149\u514B\u514D\u5150\u515A\u5165\u5168\u516B-"
-        "\u516D\u5171\u5175\u5177-\u5178\u517C\u5185-\u5186\u518A\u518D\u5192\u5197"
-        "\u5199\u51A0\u51AC\u51B7\u51C6\u51CD\u51DD\u51E1\u51E6\u51F6\u51F8-\u51FA"
-        "\u5200\u5203\u5206-\u5208\u520A\u5211\u5217\u521D\u5224-\u5225\u5229\u5230"
-        "\u5236-\u5238\u523A-\u523B\u5247\u524A\u524D\u5256\u525B\u5263-\u5264\u526F-"
-        "\u5270\u5272\u5275\u5287\u529B\u529F-\u52A0\u52A3\u52A9-\u52AA\u52B1\u52B4"
-        "\u52B9\u52BE\u52C5\u52C7\u52C9\u52D5\u52D8-\u52D9\u52DD\u52DF\u52E2\u52E4"
-        "\u52E7\u52F2\u52FA\u5301\u5305\u5316-\u5317\u5320\u5339-\u533B\u533F\u5341"
-        "\u5343\u5347-\u5348\u534A\u5351-\u5354\u5357-\u5358\u535A\u5360\u5370-\u5371"
-        "\u5373-\u5375\u5378\u5384\u5398\u539A\u539F\u53B3\u53BB\u53C2\u53C8\u53CA-\u53CE"
-        "\u53D4\u53D6-\u53D7\u53D9\u53E3-\u53E5\u53EB-\u53EC\u53EF-\u53F0\u53F2-\u53F3"
-        "\u53F7-\u53F8\u5404\u5408-\u5409\u540C-\u5411\u541B\u541F\u5426\u542B\u5438-"
-        "\u5439\u5448-\u544A\u5468\u5473\u547C-\u547D\u548C\u54B2\u54C0-\u54C1\u54E1"
-        "\u54F2\u5506-\u5507\u5510\u552F\u5531\u5546\u554F\u5553\u5584\u559A\u559C-\u559D"
-        "\u55AA-\u55AB\u55B6\u55E3\u5606\u5631\u5668\u5674\u5687\u56DA-\u56DB\u56DE\u56E0"
-        "\u56E3\u56F0\u56F2-\u56F3\u56FA\u56FD\u570F\u5712\u571F\u5727-\u5728\u5730\u5742"
-        "\u5747\u574A\u5751\u576A\u5782\u578B\u57A3\u57CB\u57CE\u57DF\u57F7\u57F9-\u57FA"
-        "\u5800\u5802\u5805\u5815\u5824\u582A\u5831\u5834\u5840-\u5841\u584A\u5851\u5854"
-        "\u5857\u585A\u5869\u587E\u5883\u5893\u5897\u589C\u58A8\u58B3\u58BE\u58C1\u58C7"
-        "\u58CA\u58CC\u58EB\u58EE\u58F0-\u58F2\u5909\u590F\u5915-\u5916\u591A\u591C\u5922"
-        "\u5927\u5929-\u592B\u592E\u5931\u5947\u5949\u594F\u5951\u5954\u5965\u5968\u596A"
-        "\u596E\u5973-\u5974\u597D\u5982-\u5984\u598A\u5999\u59A5\u59A8\u59B9\u59BB\u59C9"
-        "\u59CB\u59D3-\u59D4\u59EB\u59FB\u59FF\u5A01\u5A18\u5A20\u5A2F\u5A46\u5A5A\u5A66"
-        "\u5A7F\u5A92\u5AC1\u5ACC\u5AE1\u5B22\u5B50\u5B54\u5B57-\u5B58\u5B5D\u5B63-\u5B64"
-        "\u5B66\u5B6B\u5B85\u5B87-\u5B89\u5B8C\u5B97-\u5B9A\u5B9C-\u5B9D\u5B9F\u5BA2-"
-        "\u5BA4\u5BAE\u5BB0\u5BB3-\u5BB6\u5BB9\u5BBF\u5BC2\u5BC4\u5BC6\u5BCC\u5BD2\u5BDB"
-        "\u5BDD\u5BDF\u5BE1\u5BE7\u5BE9\u5BEE\u5BF8\u5BFA\u5BFE-\u5BFF\u5C01-\u5C02\u5C04"
-        "\u5C06\u5C09-\u5C0B\u5C0E-\u5C0F\u5C11\u5C1A\u5C31\u5C3A\u5C3C-\u5C40\u5C45"
-        "\u5C48\u5C4A-\u5C4B\u5C55\u5C5E\u5C64-\u5C65\u5C6F\u5C71\u5C90\u5CA9\u5CAC\u5CB3"
-        "\u5CB8\u5CE0-\u5CE1\u5CF0\u5CF6\u5D07\u5D0E\u5D29\u5DDD-\u5DDE\u5DE1\u5DE3\u5DE5"
-        "-\u5DE8\u5DEE\u5DF1\u5DFB\u5E02-\u5E03\u5E06\u5E0C\u5E1D\u5E25\u5E2B\u5E2D\u5E2F"
-        "-\u5E30\u5E33\u5E38\u5E3D\u5E45\u5E55\u5E63\u5E72-\u5E74\u5E78-\u5E79\u5E7B-"
-        "\u5E7E\u5E81\u5E83\u5E8A\u5E8F\u5E95\u5E97\u5E9C\u5EA6-\u5EA7\u5EAB\u5EAD\u5EB6-"
-        "\u5EB8\u5EC3\u5EC9-\u5ECA\u5EF6-\u5EF7\u5EFA\u5F01\u5F0A\u5F0F-\u5F10\u5F13-"
-        "\u5F15\u5F1F\u5F26-\u5F27\u5F31\u5F35\u5F37\u5F3E\u5F53\u5F62\u5F69\u5F6B\u5F70-"
-        "\u5F71\u5F79\u5F7C\u5F80-\u5F81\u5F84-\u5F85\u5F8B-\u5F8C\u5F90\u5F92-\u5F93"
-        "\u5F97\u5FA1\u5FA9-\u5FAA\u5FAE\u5FB3-\u5FB4\u5FB9\u5FC3\u5FC5\u5FCC-\u5FCD"
-        "\u5FD7-\u5FD9\u5FDC\u5FE0\u5FEB\u5FF5\u6012\u6016\u601D\u6020\u6025\u6027\u602A"
-        "\u604B\u6050\u6052\u6065\u6068-\u6069\u606D\u606F\u6075\u6094\u609F-\u60A0\u60A3"
-        "\u60A6\u60A9-\u60AA\u60B2\u60BC\u60C5\u60D1\u60DC\u60E8\u60F0\u60F3\u6101\u6109"
-        "\u610F\u611A-\u611B\u611F\u6148\u614B-\u614C\u614E\u6155\u6162-\u6163\u6168"
-        "\u616E\u6170\u6176\u6182\u618E\u61A4\u61A9\u61B2\u61B6\u61BE\u61C7\u61D0\u61F2"
-        "\u61F8\u6210-\u6212\u6226\u622F\u6238\u623B\u623F-\u6240\u6247\u6249\u624B\u624D"
-        "\u6253\u6255\u6271\u6276\u6279\u627F-\u6280\u6284\u628A\u6291\u6295\u6297-\u6298"
-        "\u629C\u629E\u62AB\u62B1\u62B5\u62B9\u62BC-\u62BD\u62C5\u62CD\u62D0\u62D2-\u62D3"
-        "\u62D8-\u62D9\u62DB\u62DD\u62E0-\u62E1\u62EC\u62F7\u62FE\u6301\u6307\u6311\u6319"
-        "\u631F\u632F\u633F\u6355\u635C\u6368\u636E\u6383\u6388\u638C\u6392\u6398\u639B"
-        "\u63A1-\u63A2\u63A5\u63A7-\u63A8\u63AA\u63B2\u63CF-\u63D0\u63DA-\u63DB\u63E1"
-        "\u63EE\u63F4\u63FA\u640D\u642C-\u642D\u643A\u643E\u6442\u6458\u6469\u6483\u64A4"
-        "\u64AE\u64B2\u64C1\u64CD\u64E6\u64EC\u652F\u6539\u653B\u653E-\u653F\u6545\u654F"
-        "\u6551\u6557\u6559\u6562-\u6563\u656C\u6570\u6574-\u6575\u6577\u6587\u6589\u658E"
-        "\u6597\u6599\u659C\u65A4-\u65A5\u65AD\u65B0\u65B9\u65BD\u65C5\u65CB\u65CF\u65D7"
-        "\u65E2\u65E5\u65E7-\u65E9\u65EC\u6606-\u6607\u660E\u6613-\u6614\u661F-\u6620"
-        "\u6625\u6628\u662D\u662F\u663C\u6642\u6669\u666E-\u666F\u6674\u6676\u6681\u6687"
-        "\u6691\u6696-\u6697\u66A6\u66AB\u66AE\u66B4\u66C7\u66DC\u66F2\u66F4\u66F8-\u66F9"
-        "\u66FF-\u6700\u6708-\u6709\u670D\u6715\u6717\u671B\u671D\u671F\u6728\u672A-\u672D"
-        "\u6731\u6734\u673A\u673D\u6749\u6750-\u6751\u675F\u6761\u6765\u676F\u6771\u677E-"
-        "\u677F\u6790\u6797\u679A\u679C-\u679D\u67A0\u67A2\u67AF\u67B6\u67C4\u67D0\u67D3-"
-        "\u67D4\u67F1\u67F3\u67FB\u6804\u6813\u6821\u682A\u6838-\u6839\u683C-\u683D\u6843"
-        "\u6848\u6851\u685C\u685F\u6885\u68B0\u68C4\u68CB\u68D2\u68DA\u68DF\u68EE\u68FA"
-        "\u690D\u691C\u696D\u6975\u697C-\u697D\u6982\u69CB\u69D8\u69FD\u6A19\u6A21\u6A29"
-        "-\u6A2A\u6A39\u6A4B\u6A5F\u6B04\u6B20-\u6B21\u6B27\u6B32\u6B3A\u6B3E\u6B4C\u6B53"
-        "\u6B62-\u6B63\u6B66\u6B69\u6B6F\u6B73-\u6B74\u6B7B\u6B89-\u6B8B\u6B96\u6BB4-"
-        "\u6BB5\u6BBA-\u6BBB\u6BBF\u6BCD-\u6BCE\u6BD2\u6BD4\u6BDB\u6C0F\u6C11\u6C17\u6C34"
-        "\u6C37-\u6C38\u6C41-\u6C42\u6C57\u6C5A\u6C5F-\u6C60\u6C7A\u6C7D\u6C88\u6C96"
-        "\u6CA1-\u6CA2\u6CB3\u6CB8-\u6CB9\u6CBB-\u6CBC\u6CBF\u6CC1\u6CC9-\u6CCA\u6CCC"
-        "\u6CD5\u6CE1-\u6CE3\u6CE5\u6CE8\u6CF0\u6CF3\u6D0B\u6D17\u6D1E\u6D25\u6D2A\u6D3B"
-        "\u6D3E\u6D41\u6D44-\u6D45\u6D5C\u6D66\u6D6A\u6D6E\u6D74\u6D77-\u6D78\u6D88\u6D99"
-        "\u6DAF\u6DB2\u6DBC\u6DD1\u6DE1\u6DF1\u6DF7\u6DFB\u6E05\u6E07-\u6E09\u6E0B\u6E13"
-        "\u6E1B\u6E21\u6E26\u6E29\u6E2C\u6E2F\u6E56\u6E6F\u6E7E-\u6E80\u6E90\u6E96\u6E9D"
-        "\u6EB6\u6EC5\u6ECB\u6ED1\u6EDD-\u6EDE\u6EF4\u6F01-\u6F02\u6F06\u6F0F\u6F14\u6F20"
-        "\u6F22\u6F2B-\u6F2C\u6F38\u6F54\u6F5C\u6F5F\u6F64\u6F6E\u6F84\u6FC0-\u6FC1\u6FC3"
-        "\u6FEB\u6FEF\u702C\u706B\u706F-\u7070\u707D\u7089-\u708A\u708E\u70AD\u70B9-"
-        "\u70BA\u70C8\u7121\u7126\u7136\u713C\u7159\u7167\u7169\u716E\u719F\u71B1\u71C3"
-        "\u71E5\u7206\u7235-\u7236\u7247-\u7248\u725B\u7267\u7269\u7272\u7279\u72A0\u72AC"
-        "\u72AF\u72B6\u72C2\u72E9\u72EC-\u72ED\u731B\u731F\u732B\u732E\u7336\u733F\u7344"
-        "\u7363\u7372\u7384\u7387\u7389\u738B\u73CD\u73E0\u73ED\u73FE\u7403\u7406\u7434"
-        "\u74B0\u74BD\u74F6\u7518\u751A\u751F\u7523\u7528\u7530-\u7533\u7537\u753A-\u753B"
-        "\u754C\u7551\u7554\u7559\u755C-\u755D\u7565\u756A\u7570\u7573\u758E\u7591\u75AB"
-        "\u75B2\u75BE\u75C5\u75C7\u75D8\u75DB\u75E2\u75F4\u7642\u7652\u7656\u767A-\u767B"
-        "\u767D-\u767E\u7684\u7686-\u7687\u76AE\u76BF\u76C6\u76CA\u76D7\u76DB\u76DF\u76E3"
-        "-\u76E4\u76EE\u76F2\u76F4\u76F8\u76FE\u7701\u770B-\u770C\u771F-\u7720\u773A"
-        "\u773C\u7740\u7761\u7763\u77AC\u77DB\u77E2\u77E5\u77ED\u77EF\u77F3\u7802\u7814"
-        "-\u7815\u7832\u7834\u785D\u786B-\u786C\u7881\u7891\u78BA\u78C1\u78E8\u7901\u790E"
-        "\u793A\u793C\u793E\u7948-\u7949\u7956\u795D-\u795E\u7965\u7968\u796D\u7981\u7985"
-        "\u798D\u798F\u79C0-\u79C1\u79CB\u79D1-\u79D2\u79D8\u79DF\u79E9\u79F0\u79FB\u7A0B"
-        "\u7A0E\u7A1A\u7A2E\u7A32\u7A3C\u7A3F-\u7A40\u7A42\u7A4D\u7A4F\u7A6B\u7A74\u7A76"
-        "\u7A7A\u7A81\u7A83\u7A92-\u7A93\u7AAE-\u7AAF\u7ACB\u7ADC\u7AE0\u7AE5\u7AEF\u7AF6"
-        "\u7AF9\u7B11\u7B1B\u7B26\u7B2C\u7B46\u7B49\u7B4B\u7B52\u7B54\u7B56\u7B87\u7B97"
-        "\u7BA1\u7BB1\u7BC0\u7BC4\u7BC9\u7BE4\u7C21\u7C3F\u7C4D\u7C73\u7C89\u7C8B\u7C92"
-        "\u7C97-\u7C98\u7C9B\u7CA7\u7CBE\u7CD6\u7CE7\u7CF8\u7CFB\u7CFE\u7D00\u7D04-\u7D05"
-        "\u7D0B\u7D0D\u7D14\u7D19-\u7D1B\u7D20-\u7D22\u7D2B\u7D2F-\u7D30\u7D33\u7D39-"
-        "\u7D3A\u7D42\u7D44\u7D4C\u7D50\u7D5E\u7D61\u7D66\u7D71\u7D75-\u7D76\u7D79\u7D99-"
-        "\u7D9A\u7DAD\u7DB1-\u7DB2\u7DBF\u7DCA\u7DCF\u7DD1-\u7DD2\u7DDA\u7DE0\u7DE8-"
-        "\u7DE9\u7DEF\u7DF4\u7E01\u7E04\u7E1B\u7E26\u7E2B\u7E2E\u7E3E\u7E41\u7E4A\u7E54"
-        "-\u7E55\u7E6D\u7E70\u7F36\u7F6A\u7F6E\u7F70\u7F72\u7F77\u7F85\u7F8A\u7F8E\u7FA4"
-        "\u7FA9\u7FBD\u7FC1\u7FCC\u7FD2\u7FFB-\u7FFC\u8001\u8003\u8005\u8010\u8015\u8017"
-        "\u8033\u8056\u805E\u8074\u8077\u8089\u808C\u8096\u809D\u80A2\u80A5\u80A9-\u80AA"
-        "\u80AF\u80B2\u80BA\u80C3\u80C6\u80CC\u80CE\u80DE\u80F4\u80F8\u80FD\u8102\u8105"
-        "\u8108\u811A\u8131\u8133\u8139\u8150\u8155\u8170\u8178-\u8179\u819A\u819C\u81A8"
-        "\u81D3\u81E3\u81E8\u81EA\u81ED\u81F3-\u81F4\u8208\u820C\u820E\u8217\u821E-\u821F"
-        "\u822A\u822C\u8236\u8239\u8247\u8266\u826F\u8272\u828B\u829D\u82B1\u82B3\u82B8"
-        "\u82BD\u82D7\u82E5-\u82E6\u82F1\u8302\u830E\u8336\u8349\u8352\u8358\u8377\u83CA"
-        "\u83CC\u83D3\u83DC\u83EF\u843D\u8449\u8457\u846C\u84B8\u84C4\u8535\u8584\u85A6"
-        "\u85AA-\u85AC\u85E9\u85FB\u8650\u865A\u865C\u865E\u866B\u868A\u8695\u86C7\u86CD"
-        "\u86EE\u878D\u8840\u8846\u884C\u8853\u8857\u885B\u885D\u8861\u8863\u8868\u8870"
-        "\u8877\u888B\u88AB\u88C1-\u88C2\u88C5\u88CF\u88D5\u88DC\u88F8\u88FD\u8907\u8910"
-        "\u8912\u895F\u8972\u897F\u8981\u8986-\u8987\u898B\u898F\u8996\u899A\u89A7\u89AA"
-        "\u89B3\u89D2\u89E3\u89E6\u8A00\u8A02\u8A08\u8A0E\u8A13\u8A17-\u8A18\u8A1F\u8A2A"
-        "\u8A2D\u8A31\u8A33-\u8A34\u8A3A\u8A3C\u8A50\u8A54-\u8A55\u8A5E\u8A60\u8A66"
-        "\u8A69\u8A70-\u8A73\u8A87\u8A89\u8A8C-\u8A8D\u8A93\u8A95\u8A98\u8A9E\u8AA0\u8AA4"
-        "\u8AAC-\u8AAD\u8AB2\u8ABF\u8AC7\u8ACB\u8AD6\u8AED-\u8AEE\u8AF8\u8AFE\u8B00-"
-        "\u8B01\u8B04\u8B19\u8B1B\u8B1D\u8B21\u8B39\u8B58\u8B5C\u8B66\u8B70\u8B72\u8B77"
-        "\u8C37\u8C46\u8C4A\u8C5A\u8C61\u8C6A\u8C9D-\u8C9E\u8CA0-\u8CA2\u8CA7-\u8CA9"
-        "\u8CAB-\u8CAC\u8CAF\u8CB4\u8CB7-\u8CB8\u8CBB\u8CBF-\u8CC0\u8CC3-\u8CC4\u8CC7"
-        "\u8CCA\u8CD3\u8CDB-\u8CDC\u8CDE\u8CE0\u8CE2\u8CE6\u8CEA\u8CFC\u8D08\u8D64"
-        "\u8D66\u8D70\u8D74\u8D77\u8D85\u8D8A\u8DA3\u8DB3\u8DDD\u8DE1\u8DEF\u8DF3\u8DF5"
-        "\u8E0A\u8E0F\u8E8D\u8EAB\u8ECA\u8ECC-\u8ECD\u8ED2\u8EDF\u8EE2\u8EF8\u8EFD\u8F03"
-        "\u8F09\u8F1D\u8F29-\u8F2A\u8F38\u8F44\u8F9B\u8F9E\u8FB1-\u8FB2\u8FBA\u8FBC\u8FC5"
-        "\u8FCE\u8FD1\u8FD4\u8FEB\u8FED\u8FF0\u8FF7\u8FFD\u9000-\u9001\u9003\u9006\u900F-"
-        "\u9010\u9013-\u9014\u901A\u901D\u901F-\u9020\u9023\u902E\u9031-\u9032\u9038"
-        "\u9042\u9045\u9047\u904A-\u904B\u904D-\u904E\u9053-\u9055\u9060\u9063\u9069"
-        "\u906D-\u906E\u9075\u9077-\u9078\u907A\u907F\u9084\u90A6\u90AA\u90B8\u90CA\u90CE"
-        "\u90E1\u90E8\u90ED\u90F5\u90F7\u90FD\u914C-\u914D\u9152\u9154\u9162\u916A\u916C"
-        "\u9175\u9177-\u9178\u919C\u91B8\u91C8\u91CC-\u91CF\u91D1\u91DD\u91E3\u920D\u9234"
-        "\u9244\u925B\u9262\u9271\u9280\u9283\u9285\u9291\u9298\u92AD\u92ED\u92F3\u92FC"
-        "\u9318\u9320\u932C\u932F\u9332\u935B\u9396\u93AE\u93E1\u9418\u9451\u9577\u9580"
-        "\u9589\u958B\u9591\u9593\u95A2-\u95A3\u95A5\u95B2\u95D8\u9632\u963B\u9644\u964D"
-        "\u9650\u965B\u9662-\u9665\u966A\u9670\u9673\u9675-\u9676\u9678\u967A\u967D\u9685"
-        "-\u9686\u968A\u968E-\u968F\u9694\u969B-\u969C\u96A0\u96A3\u96B7\u96BB\u96C4-"
-        "\u96C7\u96CC\u96D1\u96E2-\u96E3\u96E8\u96EA\u96F0\u96F2\u96F6-\u96F7\u96FB\u9700"
-        "\u9707\u970A\u971C\u9727\u9732\u9752\u9759\u975E\u9762\u9769\u9774\u97F3\u97FB"
-        "\u97FF\u9802\u9805-\u9806\u9810-\u9812\u9818\u982D\u983B-\u983C\u984C-\u984D"
-        "\u9854-\u9855\u9858\u985E\u9867\u98A8\u98DB\u98DF\u98E2\u98EF\u98F2\u98FC-"
-        "\u98FE\u990A\u9913\u9928\u9996\u9999\u99AC\u99C4-\u99C6\u99D0\u9A0E\u9A12-"
-        "\u9A13\u9A30\u9A5A\u9AA8\u9AC4\u9AD8\u9AEA\u9B3C\u9B42\u9B45\u9B54\u9B5A\u9BAE"
-         "\u9BE8\u9CE5\u9CF4\u9D8F\u9E97\u9EA6\u9EBB\u9EC4\u9ED2\u9ED9\u9F13\u9F3B\u9F62]"
+        "[\u4e00-\u4e01\u4e03\u4e07-\u4e0b\u4e0d-\u4e0e\u4e14\u4e16\u4e18-\u4e19\u4e21"
+        "\u4e26\u4e2d\u4e38-\u4e39\u4e3b\u4e45\u4e4f\u4e57\u4e59\u4e5d\u4e71\u4e73\u4e7e"
+        "\u4e86\u4e88-\u4e89\u4e8b-\u4e8c\u4e92\u4e94-\u4e95\u4e9c\u4ea1\u4ea4\u4eab-"
+        "\u4ead\u4eba\u4ec1\u4eca-\u4ecb\u4ecf\u4ed5-\u4ed6\u4ed8-\u4ed9\u4ee3-\u4ee5"
+        "\u4eee\u4ef0\u4ef2\u4ef6\u4efb\u4f01\u4f0f-\u4f11\u4f1a\u4f1d\u4f2f\u4f34\u4f38"
+        "\u4f3a\u4f3c\u4f46\u4f4d-\u4f50\u4f53\u4f55\u4f59\u4f5c\u4f73\u4f75\u4f7f\u4f8b"
+        "\u4f8d\u4f9b\u4f9d\u4fa1\u4fae-\u4faf\u4fb5\u4fbf\u4fc2-\u4fc3\u4fca\u4fd7\u4fdd"
+        "\u4fe1\u4fee\u4ff3\u4ff5\u4ff8\u5009\u500b\u500d\u5012\u5019\u501f\u5023-\u5024"
+        "\u502b\u5039\u5049\u504f\u505c\u5065\u5074-\u5076\u507d\u508d\u5091\u5098-\u5099"
+        "\u50ac\u50b5\u50b7\u50be\u50cd\u50cf\u50d5\u50da\u50e7\u5100\u5104\u5112\u511f"
+        "\u512a\u5143-\u5146\u5148-\u5149\u514b\u514d\u5150\u515a\u5165\u5168\u516b-"
+        "\u516d\u5171\u5175\u5177-\u5178\u517c\u5185-\u5186\u518a\u518d\u5192\u5197"
+        "\u5199\u51a0\u51ac\u51b7\u51c6\u51cd\u51dd\u51e1\u51e6\u51f6\u51f8-\u51fa"
+        "\u5200\u5203\u5206-\u5208\u520a\u5211\u5217\u521d\u5224-\u5225\u5229\u5230"
+        "\u5236-\u5238\u523a-\u523b\u5247\u524a\u524d\u5256\u525b\u5263-\u5264\u526f-"
+        "\u5270\u5272\u5275\u5287\u529b\u529f-\u52a0\u52a3\u52a9-\u52aa\u52b1\u52b4"
+        "\u52b9\u52be\u52c5\u52c7\u52c9\u52d5\u52d8-\u52d9\u52dd\u52df\u52e2\u52e4"
+        "\u52e7\u52f2\u52fa\u5301\u5305\u5316-\u5317\u5320\u5339-\u533b\u533f\u5341"
+        "\u5343\u5347-\u5348\u534a\u5351-\u5354\u5357-\u5358\u535a\u5360\u5370-\u5371"
+        "\u5373-\u5375\u5378\u5384\u5398\u539a\u539f\u53b3\u53bb\u53c2\u53c8\u53ca-\u53ce"
+        "\u53d4\u53d6-\u53d7\u53d9\u53e3-\u53e5\u53eb-\u53ec\u53ef-\u53f0\u53f2-\u53f3"
+        "\u53f7-\u53f8\u5404\u5408-\u5409\u540c-\u5411\u541b\u541f\u5426\u542b\u5438-"
+        "\u5439\u5448-\u544a\u5468\u5473\u547c-\u547d\u548c\u54b2\u54c0-\u54c1\u54e1"
+        "\u54f2\u5506-\u5507\u5510\u552f\u5531\u5546\u554f\u5553\u5584\u559a\u559c-\u559d"
+        "\u55aa-\u55ab\u55b6\u55e3\u5606\u5631\u5668\u5674\u5687\u56da-\u56db\u56de\u56e0"
+        "\u56e3\u56f0\u56f2-\u56f3\u56fa\u56fd\u570f\u5712\u571f\u5727-\u5728\u5730\u5742"
+        "\u5747\u574a\u5751\u576a\u5782\u578b\u57a3\u57cb\u57ce\u57df\u57f7\u57f9-\u57fa"
+        "\u5800\u5802\u5805\u5815\u5824\u582a\u5831\u5834\u5840-\u5841\u584a\u5851\u5854"
+        "\u5857\u585a\u5869\u587e\u5883\u5893\u5897\u589c\u58a8\u58b3\u58be\u58c1\u58c7"
+        "\u58ca\u58cc\u58eb\u58ee\u58f0-\u58f2\u5909\u590f\u5915-\u5916\u591a\u591c\u5922"
+        "\u5927\u5929-\u592b\u592e\u5931\u5947\u5949\u594f\u5951\u5954\u5965\u5968\u596a"
+        "\u596e\u5973-\u5974\u597d\u5982-\u5984\u598a\u5999\u59a5\u59a8\u59b9\u59bb\u59c9"
+        "\u59cb\u59d3-\u59d4\u59eb\u59fb\u59ff\u5a01\u5a18\u5a20\u5a2f\u5a46\u5a5a\u5a66"
+        "\u5a7f\u5a92\u5ac1\u5acc\u5ae1\u5b22\u5b50\u5b54\u5b57-\u5b58\u5b5d\u5b63-\u5b64"
+        "\u5b66\u5b6b\u5b85\u5b87-\u5b89\u5b8c\u5b97-\u5b9a\u5b9c-\u5b9d\u5b9f\u5ba2-"
+        "\u5ba4\u5bae\u5bb0\u5bb3-\u5bb6\u5bb9\u5bbf\u5bc2\u5bc4\u5bc6\u5bcc\u5bd2\u5bdb"
+        "\u5bdd\u5bdf\u5be1\u5be7\u5be9\u5bee\u5bf8\u5bfa\u5bfe-\u5bff\u5c01-\u5c02\u5c04"
+        "\u5c06\u5c09-\u5c0b\u5c0e-\u5c0f\u5c11\u5c1a\u5c31\u5c3a\u5c3c-\u5c40\u5c45"
+        "\u5c48\u5c4a-\u5c4b\u5c55\u5c5e\u5c64-\u5c65\u5c6f\u5c71\u5c90\u5ca9\u5cac\u5cb3"
+        "\u5cb8\u5ce0-\u5ce1\u5cf0\u5cf6\u5d07\u5d0e\u5d29\u5ddd-\u5dde\u5de1\u5de3\u5de5"
+        "-\u5de8\u5dee\u5df1\u5dfb\u5e02-\u5e03\u5e06\u5e0c\u5e1d\u5e25\u5e2b\u5e2d\u5e2f"
+        "-\u5e30\u5e33\u5e38\u5e3d\u5e45\u5e55\u5e63\u5e72-\u5e74\u5e78-\u5e79\u5e7b-"
+        "\u5e7e\u5e81\u5e83\u5e8a\u5e8f\u5e95\u5e97\u5e9c\u5ea6-\u5ea7\u5eab\u5ead\u5eb6-"
+        "\u5eb8\u5ec3\u5ec9-\u5eca\u5ef6-\u5ef7\u5efa\u5f01\u5f0a\u5f0f-\u5f10\u5f13-"
+        "\u5f15\u5f1f\u5f26-\u5f27\u5f31\u5f35\u5f37\u5f3e\u5f53\u5f62\u5f69\u5f6b\u5f70-"
+        "\u5f71\u5f79\u5f7c\u5f80-\u5f81\u5f84-\u5f85\u5f8b-\u5f8c\u5f90\u5f92-\u5f93"
+        "\u5f97\u5fa1\u5fa9-\u5faa\u5fae\u5fb3-\u5fb4\u5fb9\u5fc3\u5fc5\u5fcc-\u5fcd"
+        "\u5fd7-\u5fd9\u5fdc\u5fe0\u5feb\u5ff5\u6012\u6016\u601d\u6020\u6025\u6027\u602a"
+        "\u604b\u6050\u6052\u6065\u6068-\u6069\u606d\u606f\u6075\u6094\u609f-\u60a0\u60a3"
+        "\u60a6\u60a9-\u60aa\u60b2\u60bc\u60c5\u60d1\u60dc\u60e8\u60f0\u60f3\u6101\u6109"
+        "\u610f\u611a-\u611b\u611f\u6148\u614b-\u614c\u614e\u6155\u6162-\u6163\u6168"
+        "\u616e\u6170\u6176\u6182\u618e\u61a4\u61a9\u61b2\u61b6\u61be\u61c7\u61d0\u61f2"
+        "\u61f8\u6210-\u6212\u6226\u622f\u6238\u623b\u623f-\u6240\u6247\u6249\u624b\u624d"
+        "\u6253\u6255\u6271\u6276\u6279\u627f-\u6280\u6284\u628a\u6291\u6295\u6297-\u6298"
+        "\u629c\u629e\u62ab\u62b1\u62b5\u62b9\u62bc-\u62bd\u62c5\u62cd\u62d0\u62d2-\u62d3"
+        "\u62d8-\u62d9\u62db\u62dd\u62e0-\u62e1\u62ec\u62f7\u62fe\u6301\u6307\u6311\u6319"
+        "\u631f\u632f\u633f\u6355\u635c\u6368\u636e\u6383\u6388\u638c\u6392\u6398\u639b"
+        "\u63a1-\u63a2\u63a5\u63a7-\u63a8\u63aa\u63b2\u63cf-\u63d0\u63da-\u63db\u63e1"
+        "\u63ee\u63f4\u63fa\u640d\u642c-\u642d\u643a\u643e\u6442\u6458\u6469\u6483\u64a4"
+        "\u64ae\u64b2\u64c1\u64cd\u64e6\u64ec\u652f\u6539\u653b\u653e-\u653f\u6545\u654f"
+        "\u6551\u6557\u6559\u6562-\u6563\u656c\u6570\u6574-\u6575\u6577\u6587\u6589\u658e"
+        "\u6597\u6599\u659c\u65a4-\u65a5\u65ad\u65b0\u65b9\u65bd\u65c5\u65cb\u65cf\u65d7"
+        "\u65e2\u65e5\u65e7-\u65e9\u65ec\u6606-\u6607\u660e\u6613-\u6614\u661f-\u6620"
+        "\u6625\u6628\u662d\u662f\u663c\u6642\u6669\u666e-\u666f\u6674\u6676\u6681\u6687"
+        "\u6691\u6696-\u6697\u66a6\u66ab\u66ae\u66b4\u66c7\u66dc\u66f2\u66f4\u66f8-\u66f9"
+        "\u66ff-\u6700\u6708-\u6709\u670d\u6715\u6717\u671b\u671d\u671f\u6728\u672a-\u672d"
+        "\u6731\u6734\u673a\u673d\u6749\u6750-\u6751\u675f\u6761\u6765\u676f\u6771\u677e-"
+        "\u677f\u6790\u6797\u679a\u679c-\u679d\u67a0\u67a2\u67af\u67b6\u67c4\u67d0\u67d3-"
+        "\u67d4\u67f1\u67f3\u67fb\u6804\u6813\u6821\u682a\u6838-\u6839\u683c-\u683d\u6843"
+        "\u6848\u6851\u685c\u685f\u6885\u68b0\u68c4\u68cb\u68d2\u68da\u68df\u68ee\u68fa"
+        "\u690d\u691c\u696d\u6975\u697c-\u697d\u6982\u69cb\u69d8\u69fd\u6a19\u6a21\u6a29"
+        "-\u6a2a\u6a39\u6a4b\u6a5f\u6b04\u6b20-\u6b21\u6b27\u6b32\u6b3a\u6b3e\u6b4c\u6b53"
+        "\u6b62-\u6b63\u6b66\u6b69\u6b6f\u6b73-\u6b74\u6b7b\u6b89-\u6b8b\u6b96\u6bb4-"
+        "\u6bb5\u6bba-\u6bbb\u6bbf\u6bcd-\u6bce\u6bd2\u6bd4\u6bdb\u6c0f\u6c11\u6c17\u6c34"
+        "\u6c37-\u6c38\u6c41-\u6c42\u6c57\u6c5a\u6c5f-\u6c60\u6c7a\u6c7d\u6c88\u6c96"
+        "\u6ca1-\u6ca2\u6cb3\u6cb8-\u6cb9\u6cbb-\u6cbc\u6cbf\u6cc1\u6cc9-\u6cca\u6ccc"
+        "\u6cd5\u6ce1-\u6ce3\u6ce5\u6ce8\u6cf0\u6cf3\u6d0b\u6d17\u6d1e\u6d25\u6d2a\u6d3b"
+        "\u6d3e\u6d41\u6d44-\u6d45\u6d5c\u6d66\u6d6a\u6d6e\u6d74\u6d77-\u6d78\u6d88\u6d99"
+        "\u6daf\u6db2\u6dbc\u6dd1\u6de1\u6df1\u6df7\u6dfb\u6e05\u6e07-\u6e09\u6e0b\u6e13"
+        "\u6e1b\u6e21\u6e26\u6e29\u6e2c\u6e2f\u6e56\u6e6f\u6e7e-\u6e80\u6e90\u6e96\u6e9d"
+        "\u6eb6\u6ec5\u6ecb\u6ed1\u6edd-\u6ede\u6ef4\u6f01-\u6f02\u6f06\u6f0f\u6f14\u6f20"
+        "\u6f22\u6f2b-\u6f2c\u6f38\u6f54\u6f5c\u6f5f\u6f64\u6f6e\u6f84\u6fc0-\u6fc1\u6fc3"
+        "\u6feb\u6fef\u702c\u706b\u706f-\u7070\u707d\u7089-\u708a\u708e\u70ad\u70b9-"
+        "\u70ba\u70c8\u7121\u7126\u7136\u713c\u7159\u7167\u7169\u716e\u719f\u71b1\u71c3"
+        "\u71e5\u7206\u7235-\u7236\u7247-\u7248\u725b\u7267\u7269\u7272\u7279\u72a0\u72ac"
+        "\u72af\u72b6\u72c2\u72e9\u72ec-\u72ed\u731b\u731f\u732b\u732e\u7336\u733f\u7344"
+        "\u7363\u7372\u7384\u7387\u7389\u738b\u73cd\u73e0\u73ed\u73fe\u7403\u7406\u7434"
+        "\u74b0\u74bd\u74f6\u7518\u751a\u751f\u7523\u7528\u7530-\u7533\u7537\u753a-\u753b"
+        "\u754c\u7551\u7554\u7559\u755c-\u755d\u7565\u756a\u7570\u7573\u758e\u7591\u75ab"
+        "\u75b2\u75be\u75c5\u75c7\u75d8\u75db\u75e2\u75f4\u7642\u7652\u7656\u767a-\u767b"
+        "\u767d-\u767e\u7684\u7686-\u7687\u76ae\u76bf\u76c6\u76ca\u76d7\u76db\u76df\u76e3"
+        "-\u76e4\u76ee\u76f2\u76f4\u76f8\u76fe\u7701\u770b-\u770c\u771f-\u7720\u773a"
+        "\u773c\u7740\u7761\u7763\u77ac\u77db\u77e2\u77e5\u77ed\u77ef\u77f3\u7802\u7814"
+        "-\u7815\u7832\u7834\u785d\u786b-\u786c\u7881\u7891\u78ba\u78c1\u78e8\u7901\u790e"
+        "\u793a\u793c\u793e\u7948-\u7949\u7956\u795d-\u795e\u7965\u7968\u796d\u7981\u7985"
+        "\u798d\u798f\u79c0-\u79c1\u79cb\u79d1-\u79d2\u79d8\u79df\u79e9\u79f0\u79fb\u7a0b"
+        "\u7a0e\u7a1a\u7a2e\u7a32\u7a3c\u7a3f-\u7a40\u7a42\u7a4d\u7a4f\u7a6b\u7a74\u7a76"
+        "\u7a7a\u7a81\u7a83\u7a92-\u7a93\u7aae-\u7aaf\u7acb\u7adc\u7ae0\u7ae5\u7aef\u7af6"
+        "\u7af9\u7b11\u7b1b\u7b26\u7b2c\u7b46\u7b49\u7b4b\u7b52\u7b54\u7b56\u7b87\u7b97"
+        "\u7ba1\u7bb1\u7bc0\u7bc4\u7bc9\u7be4\u7c21\u7c3f\u7c4d\u7c73\u7c89\u7c8b\u7c92"
+        "\u7c97-\u7c98\u7c9b\u7ca7\u7cbe\u7cd6\u7ce7\u7cf8\u7cfb\u7cfe\u7d00\u7d04-\u7d05"
+        "\u7d0b\u7d0d\u7d14\u7d19-\u7d1b\u7d20-\u7d22\u7d2b\u7d2f-\u7d30\u7d33\u7d39-"
+        "\u7d3a\u7d42\u7d44\u7d4c\u7d50\u7d5e\u7d61\u7d66\u7d71\u7d75-\u7d76\u7d79\u7d99-"
+        "\u7d9a\u7dad\u7db1-\u7db2\u7dbf\u7dca\u7dcf\u7dd1-\u7dd2\u7dda\u7de0\u7de8-"
+        "\u7de9\u7def\u7df4\u7e01\u7e04\u7e1b\u7e26\u7e2b\u7e2e\u7e3e\u7e41\u7e4a\u7e54"
+        "-\u7e55\u7e6d\u7e70\u7f36\u7f6a\u7f6e\u7f70\u7f72\u7f77\u7f85\u7f8a\u7f8e\u7fa4"
+        "\u7fa9\u7fbd\u7fc1\u7fcc\u7fd2\u7ffb-\u7ffc\u8001\u8003\u8005\u8010\u8015\u8017"
+        "\u8033\u8056\u805e\u8074\u8077\u8089\u808c\u8096\u809d\u80a2\u80a5\u80a9-\u80aa"
+        "\u80af\u80b2\u80ba\u80c3\u80c6\u80cc\u80ce\u80de\u80f4\u80f8\u80fd\u8102\u8105"
+        "\u8108\u811a\u8131\u8133\u8139\u8150\u8155\u8170\u8178-\u8179\u819a\u819c\u81a8"
+        "\u81d3\u81e3\u81e8\u81ea\u81ed\u81f3-\u81f4\u8208\u820c\u820e\u8217\u821e-\u821f"
+        "\u822a\u822c\u8236\u8239\u8247\u8266\u826f\u8272\u828b\u829d\u82b1\u82b3\u82b8"
+        "\u82bd\u82d7\u82e5-\u82e6\u82f1\u8302\u830e\u8336\u8349\u8352\u8358\u8377\u83ca"
+        "\u83cc\u83d3\u83dc\u83ef\u843d\u8449\u8457\u846c\u84b8\u84c4\u8535\u8584\u85a6"
+        "\u85aa-\u85ac\u85e9\u85fb\u8650\u865a\u865c\u865e\u866b\u868a\u8695\u86c7\u86cd"
+        "\u86ee\u878d\u8840\u8846\u884c\u8853\u8857\u885b\u885d\u8861\u8863\u8868\u8870"
+        "\u8877\u888b\u88ab\u88c1-\u88c2\u88c5\u88cf\u88d5\u88dc\u88f8\u88fd\u8907\u8910"
+        "\u8912\u895f\u8972\u897f\u8981\u8986-\u8987\u898b\u898f\u8996\u899a\u89a7\u89aa"
+        "\u89b3\u89d2\u89e3\u89e6\u8a00\u8a02\u8a08\u8a0e\u8a13\u8a17-\u8a18\u8a1f\u8a2a"
+        "\u8a2d\u8a31\u8a33-\u8a34\u8a3a\u8a3c\u8a50\u8a54-\u8a55\u8a5e\u8a60\u8a66"
+        "\u8a69\u8a70-\u8a73\u8a87\u8a89\u8a8c-\u8a8d\u8a93\u8a95\u8a98\u8a9e\u8aa0\u8aa4"
+        "\u8aac-\u8aad\u8ab2\u8abf\u8ac7\u8acb\u8ad6\u8aed-\u8aee\u8af8\u8afe\u8b00-"
+        "\u8b01\u8b04\u8b19\u8b1b\u8b1d\u8b21\u8b39\u8b58\u8b5c\u8b66\u8b70\u8b72\u8b77"
+        "\u8c37\u8c46\u8c4a\u8c5a\u8c61\u8c6a\u8c9d-\u8c9e\u8ca0-\u8ca2\u8ca7-\u8ca9"
+        "\u8cab-\u8cac\u8caf\u8cb4\u8cb7-\u8cb8\u8cbb\u8cbf-\u8cc0\u8cc3-\u8cc4\u8cc7"
+        "\u8cca\u8cd3\u8cdb-\u8cdc\u8cde\u8ce0\u8ce2\u8ce6\u8cea\u8cfc\u8d08\u8d64"
+        "\u8d66\u8d70\u8d74\u8d77\u8d85\u8d8a\u8da3\u8db3\u8ddd\u8de1\u8def\u8df3\u8df5"
+        "\u8e0a\u8e0f\u8e8d\u8eab\u8eca\u8ecc-\u8ecd\u8ed2\u8edf\u8ee2\u8ef8\u8efd\u8f03"
+        "\u8f09\u8f1d\u8f29-\u8f2a\u8f38\u8f44\u8f9b\u8f9e\u8fb1-\u8fb2\u8fba\u8fbc\u8fc5"
+        "\u8fce\u8fd1\u8fd4\u8feb\u8fed\u8ff0\u8ff7\u8ffd\u9000-\u9001\u9003\u9006\u900f-"
+        "\u9010\u9013-\u9014\u901a\u901d\u901f-\u9020\u9023\u902e\u9031-\u9032\u9038"
+        "\u9042\u9045\u9047\u904a-\u904b\u904d-\u904e\u9053-\u9055\u9060\u9063\u9069"
+        "\u906d-\u906e\u9075\u9077-\u9078\u907a\u907f\u9084\u90a6\u90aa\u90b8\u90ca\u90ce"
+        "\u90e1\u90e8\u90ed\u90f5\u90f7\u90fd\u914c-\u914d\u9152\u9154\u9162\u916a\u916c"
+        "\u9175\u9177-\u9178\u919c\u91b8\u91c8\u91cc-\u91cf\u91d1\u91dd\u91e3\u920d\u9234"
+        "\u9244\u925b\u9262\u9271\u9280\u9283\u9285\u9291\u9298\u92ad\u92ed\u92f3\u92fc"
+        "\u9318\u9320\u932c\u932f\u9332\u935b\u9396\u93ae\u93e1\u9418\u9451\u9577\u9580"
+        "\u9589\u958b\u9591\u9593\u95a2-\u95a3\u95a5\u95b2\u95d8\u9632\u963b\u9644\u964d"
+        "\u9650\u965b\u9662-\u9665\u966a\u9670\u9673\u9675-\u9676\u9678\u967a\u967d\u9685"
+        "-\u9686\u968a\u968e-\u968f\u9694\u969b-\u969c\u96a0\u96a3\u96b7\u96bb\u96c4-"
+        "\u96c7\u96cc\u96d1\u96e2-\u96e3\u96e8\u96ea\u96f0\u96f2\u96f6-\u96f7\u96fb\u9700"
+        "\u9707\u970a\u971c\u9727\u9732\u9752\u9759\u975e\u9762\u9769\u9774\u97f3\u97fb"
+        "\u97ff\u9802\u9805-\u9806\u9810-\u9812\u9818\u982d\u983b-\u983c\u984c-\u984d"
+        "\u9854-\u9855\u9858\u985e\u9867\u98a8\u98db\u98df\u98e2\u98ef\u98f2\u98fc-"
+        "\u98fe\u990a\u9913\u9928\u9996\u9999\u99ac\u99c4-\u99c6\u99d0\u9a0e\u9a12-"
+        "\u9a13\u9a30\u9a5a\u9aa8\u9ac4\u9ad8\u9aea\u9b3c\u9b42\u9b45\u9b54\u9b5a\u9bae"
+         "\u9be8\u9ce5\u9cf4\u9d8f\u9e97\u9ea6\u9ebb\u9ec4\u9ed2\u9ed9\u9f13\u9f3b\u9f62]"
     }
 
     Scripts {
-        Arab { "\u30A2\u30E9\u30D3\u30A2\u6587\u5B57" }
-        Armn { "\u30A2\u30EB\u30E1\u30CB\u30A2\u6587\u5B57" }
-        Beng { "\u30D9\u30F3\u30AC\u30EB\u6587\u5B57" }
-        Bopo { "\u6CE8\u97F3\u5B57\u6BCD" }
-        Brai { "\u30D6\u30E9\u30A4\u30E6\u70B9\u5B57" }
-        Buhd { "\u30D6\u30D2\u30C3\u30C9\u6587\u5B57" }
-        Cans { "\u7D71\u5408\u30AB\u30CA\u30C0\u5148\u4F4F\u6C11\u8A18\u53F7" }
-        Cher { "\u30C1\u30A7\u30ED\u30AD\u30FC\u6587\u5B57" }
-        Cprt { "\u30AD\u30D7\u30ED\u30B9\u6587\u5B57" }
-        Cyrl { "\u30AD\u30EA\u30EB\u6587\u5B57" }
-        Deva { "\u30C7\u30FC\u30D0\u30CA\u30FC\u30AC\u30EA\u30FC\u6587\u5B57" }
-        Dsrt { "\u30C7\u30BB\u30EC\u30C3\u30C8\u6587\u5B57" }
-        Ethi { "\u30A8\u30C1\u30AA\u30D4\u30A2\u6587\u5B57" }
-        Geor { "\u30B0\u30EB\u30B8\u30A2\u6587\u5B57" }
-        Goth { "\u30B4\u30FC\u30C8\u6587\u5B57" }
-        Grek { "\u30AE\u30EA\u30B7\u30E3\u6587\u5B57" }
-        Gujr { "\u30B0\u30B8\u30E3\u30E9\u30FC\u30C8\u6587\u5B57" }
-        Guru { "\u30B0\u30EB\u30E0\u30AD\u30FC\u6587\u5B57" }
-        Hang { "\u30CF\u30F3\u30B0\u30EB\u6587\u5B57" }
-        Hano { "\u30CF\u30CC\u30CE\u30AA\u6587\u5B57" }
-        Hani { "\u6F22\u5B57" }
-        Hans { "\u7C21\u4F53\u5B57" }
-        Hant { "\u7E41\u4F53\u5B57" }
-        Hebr { "\u30D8\u30D6\u30E9\u30A4\u6587\u5B57" }
-        Hira { "\u3072\u3089\u304C\u306A" }
-        Ital { "\u53E4\u4EE3\u30A4\u30BF\u30EA\u30A2\u6587\u5B57" }
-        Kana { "\u30AB\u30BF\u30AB\u30CA" }
-        Khmr { "\u30AB\u30F3\u30DC\u30B8\u30A2\u6587\u5B57" }
-        Knda { "\u30AB\u30F3\u30CA\u30C0\u6587\u5B57" }
-        Laoo { "\u30E9\u30AA\u6587\u5B57" }
-        Latn { "\u30E9\u30C6\u30F3\u6587\u5B57" }
-        Limb { "\u30EA\u30F3\u30D6\u6587\u5B57" }
-        Linb { "\u7DDA\u6587\u5B57B" }
-        Mlym { "\u30DE\u30E9\u30E4\u30FC\u30E9\u30E0\u6587\u5B57" }
-        Mong { "\u30E2\u30F3\u30B4\u30EB\u6587\u5B57" }
-        Mymr { "\u30DF\u30E3\u30F3\u30DE\u30FC\u6587\u5B57" }
-        Ogam { "\u30AA\u30AC\u30E0" }
-        Orya { "\u30AA\u30EA\u30E4\u30FC\u6587\u5B57" }
-        Osma { "\u30AA\u30B9\u30DE\u30CB\u30A2\u6587\u5B57" }
-        Qaac { "\u30B3\u30D7\u30C8\u6587\u5B57" } // Coptic is not a formal part of ISO-15924 yet
+        Arab { "\u30a2\u30e9\u30d3\u30a2\u6587\u5b57" }
+        Armn { "\u30a2\u30eb\u30e1\u30cb\u30a2\u6587\u5b57" }
+        Beng { "\u30d9\u30f3\u30ac\u30eb\u6587\u5b57" }
+        Bopo { "\u6ce8\u97f3\u5b57\u6bcd" }
+        Brai { "\u30d6\u30e9\u30a4\u30e6\u70b9\u5b57" }
+        Buhd { "\u30d6\u30d2\u30c3\u30c9\u6587\u5b57" }
+        Cans { "\u7d71\u5408\u30ab\u30ca\u30c0\u5148\u4f4f\u6c11\u8a18\u53f7" }
+        Cher { "\u30c1\u30a7\u30ed\u30ad\u30fc\u6587\u5b57" }
+        Cprt { "\u30ad\u30d7\u30ed\u30b9\u6587\u5b57" }
+        Cyrl { "\u30ad\u30ea\u30eb\u6587\u5b57" }
+        Deva { "\u30c7\u30fc\u30d0\u30ca\u30fc\u30ac\u30ea\u30fc\u6587\u5b57" }
+        Dsrt { "\u30c7\u30bb\u30ec\u30c3\u30c8\u6587\u5b57" }
+        Ethi { "\u30a8\u30c1\u30aa\u30d4\u30a2\u6587\u5b57" }
+        Geor { "\u30b0\u30eb\u30b8\u30a2\u6587\u5b57" }
+        Goth { "\u30b4\u30fc\u30c8\u6587\u5b57" }
+        Grek { "\u30ae\u30ea\u30b7\u30e3\u6587\u5b57" }
+        Gujr { "\u30b0\u30b8\u30e3\u30e9\u30fc\u30c8\u6587\u5b57" }
+        Guru { "\u30b0\u30eb\u30e0\u30ad\u30fc\u6587\u5b57" }
+        Hang { "\u30cf\u30f3\u30b0\u30eb\u6587\u5b57" }
+        Hano { "\u30cf\u30cc\u30ce\u30aa\u6587\u5b57" }
+        Hani { "\u6f22\u5b57" }
+        Hans { "\u7c21\u4f53\u5b57" }
+        Hant { "\u7e41\u4f53\u5b57" }
+        Hebr { "\u30d8\u30d6\u30e9\u30a4\u6587\u5b57" }
+        Hira { "\u3072\u3089\u304c\u306a" }
+        Ital { "\u53e4\u4ee3\u30a4\u30bf\u30ea\u30a2\u6587\u5b57" }
+        Kana { "\u30ab\u30bf\u30ab\u30ca" }
+        Khmr { "\u30ab\u30f3\u30dc\u30b8\u30a2\u6587\u5b57" }
+        Knda { "\u30ab\u30f3\u30ca\u30c0\u6587\u5b57" }
+        Laoo { "\u30e9\u30aa\u6587\u5b57" }
+        Latn { "\u30e9\u30c6\u30f3\u6587\u5b57" }
+        Limb { "\u30ea\u30f3\u30d6\u6587\u5b57" }
+        Linb { "\u7dda\u6587\u5b57B" }
+        Mlym { "\u30de\u30e9\u30e4\u30fc\u30e9\u30e0\u6587\u5b57" }
+        Mong { "\u30e2\u30f3\u30b4\u30eb\u6587\u5b57" }
+        Mymr { "\u30df\u30e3\u30f3\u30de\u30fc\u6587\u5b57" }
+        Ogam { "\u30aa\u30ac\u30e0" }
+        Orya { "\u30aa\u30ea\u30e4\u30fc\u6587\u5b57" }
+        Osma { "\u30aa\u30b9\u30de\u30cb\u30a2\u6587\u5b57" }
+        Qaac { "\u30b3\u30d7\u30c8\u6587\u5b57" } // Coptic is not a formal part of ISO-15924 yet
         //Qaai { "Inherited" } // PUA
-        Runr { "\u30EB\u30FC\u30F3\u6587\u5B57" }
-        Shaw { "\u30B7\u30E7\u30FC\u6587\u5B57" }
-        Sinh { "\u30B7\u30F3\u30CF\u30E9\u6587\u5B57" }
-        Syrc { "\u30B7\u30EA\u30A2\u6587\u5B57" }
-        Tagb { "\u30BF\u30B0\u30D0\u30F3\u30EF\u6587\u5B57" }
-        Tale { "\u30BF\u30A4\u30EC\u6587\u5B57" }
-        Taml { "\u30BF\u30DF\u30FC\u30EB\u6587\u5B57" }
-        Telu { "\u30C6\u30EB\u30B0\u6587\u5B57" }
-        Tglg { "\u30BF\u30AC\u30ED\u30B0\u6587\u5B57" }
-        Thaa { "\u30BF\u30FC\u30CA\u6587\u5B57" }
-        Thai { "\u30BF\u30A4\u6587\u5B57" }
-        Tibt { "\u30C1\u30D9\u30C3\u30C8\u6587\u5B57" }
-        Ugar { "\u30A6\u30AC\u30EA\u30C8\u6587\u5B57" }
-        Yiii { "\u30A4\u6587\u5B57" }
+        Runr { "\u30eb\u30fc\u30f3\u6587\u5b57" }
+        Shaw { "\u30b7\u30e7\u30fc\u6587\u5b57" }
+        Sinh { "\u30b7\u30f3\u30cf\u30e9\u6587\u5b57" }
+        Syrc { "\u30b7\u30ea\u30a2\u6587\u5b57" }
+        Tagb { "\u30bf\u30b0\u30d0\u30f3\u30ef\u6587\u5b57" }
+        Tale { "\u30bf\u30a4\u30ec\u6587\u5b57" }
+        Taml { "\u30bf\u30df\u30fc\u30eb\u6587\u5b57" }
+        Telu { "\u30c6\u30eb\u30b0\u6587\u5b57" }
+        Tglg { "\u30bf\u30ac\u30ed\u30b0\u6587\u5b57" }
+        Thaa { "\u30bf\u30fc\u30ca\u6587\u5b57" }
+        Thai { "\u30bf\u30a4\u6587\u5b57" }
+        Tibt { "\u30c1\u30d9\u30c3\u30c8\u6587\u5b57" }
+        Ugar { "\u30a6\u30ac\u30ea\u30c8\u6587\u5b57" }
+        Yiii { "\u30a4\u6587\u5b57" }
         //Zyyy { "Common" } // This may need to become "undetermined script"
     }
 
@@ -761,123 +991,407 @@ ja {
 
     // Currency display names
     Currencies {
-        AED { "AED", "UAE \u30C7\u30A3\u30EB\u30CF\u30E0" } // UAE Dirham
-        ALL { "ALL", "\u30EC\u30AF" } // Leck
-        AMD { "AMD", "\u30A2\u30EB\u30E1\u30CB\u30A2 \u30C9\u30E9\u30E0" } // Armenian Dram
-        ARS { "ARS", "\u30A2\u30EB\u30BC\u30F3\u30C1\u30F3 \u30DA\u30BD" } // Argentine Peso
-        AUD { "AUD", "\u30AA\u30FC\u30B9\u30C8\u30E9\u30EA\u30A2 \u30C9\u30EB" } // Australian Dollar
-        AZM { "AZM", "\u30A2\u30BC\u30EB\u30D0\u30A4\u30B8\u30E3\u30F3 \u30DE\u30CA\u30C8" } // Azerbaijanian Manat
-        BGL { "BGL", "\u30EC\u30D5" } // Lev
-        BHD { "BHD", "\u30D0\u30FC\u30EC\u30FC\u30F3 \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Bahraini Dinar
-        BND { "BND", "\u30D6\u30EB\u30CD\u30A4 \u30C9\u30EB" } // Brunei Dollar
-        BOB { "BOB", "\u30DC\u30EA\u30D3\u30A2\u30CE" } // Boliviano
-        BRL { "BRL", "\u30D6\u30E9\u30B8\u30EB \u30EC\u30A2\u30FC\u30EB" } // Brazilian Real
-        BYB { "BYB", "\u30D9\u30E9\u30EB\u30FC\u30B7 \u30EB\u30FC\u30D6\u30EB" }
-        BZD { "BZD", "\u30D9\u30EA\u30FC\u30BA \u30C9\u30EB" } // Belize Dollar
-        CAD { "CAD", "\u30AB\u30CA\u30C0 \u30C9\u30EB" } // Canadian Dollar
-        CHF { "CHF", "\u30B9\u30A4\u30B9 \u30D5\u30E9\u30F3" } // Swiss Franc
-        CLP { "CLP", "\u30C1\u30EA \u30DA\u30BD" } // Chilean Peso
-        CNY { "CNY", "\u5143\u4EBA\u6C11\u5E63" } // Yuan Renminbi
-        COP { "COP", "\u30B3\u30ED\u30F3\u30D3\u30A2 \u30DA\u30BD" } // Colombian Peso
-        CRC { "CRC", "\u30B3\u30B9\u30BF\u30EA\u30AB \u30B3\u30ED\u30FC\u30F3" } // Costa Rican Colon
-        CZK { "CZK", "\u30C1\u30A7\u30B3 \u30B3\u30EB\u30CA" } // Czech Koruna
-        DEM { "DEM", "\u30C9\u30A4\u30C4 \u30DE\u30EB\u30AF" }
-        DKK { "DKK", "\u30C7\u30F3\u30DE\u30FC\u30AF \u30AF\u30ED\u30FC\u30CD" } // Danish Krone
-        DOP { "DOP", "\u30C9\u30DF\u30CB\u30AB \u30DA\u30BD" } // Dominican Peso
-        DZD { "DZD", "\u30A2\u30EB\u30B8\u30A7\u30EA\u30A2 \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Algerian Dinar
-        EEK { "EEK", "\u30AF\u30EB\u30FC\u30F3" } // Kroon
-        EGP { "EGP", "\u30A8\u30B8\u30D7\u30C8 \u30DD\u30F3\u30C9" } // Egyptian Pound
-        EUR { "\u20AC", "\u30E6\u30FC\u30ED" } // Euro
-        FRF { "FRF", "\u30D5\u30E9\u30F3\u30B9 \u30D5\u30E9\u30F3"         } // 01/01/1960-2002
-        GBP { "\u00A3", "\u82F1\u8CA8\u30DD\u30F3\u30C9" }
-        GEL { "GEL", "\u30E9\u30EA" } // Lari
-        GTQ { "GTQ", "\u30B1\u30C3\u30C4\u30A1\u30EB" } // Quetzal
-        HKD { "HKD", "\u9999\u6E2F\u30C9\u30EB" } // Hong Kong Dollar
-        HNL { "HNL", "\u30EC\u30F3\u30D4\u30E9" } // Lempira
-        HRK { "HRK", "\u30AF\u30ED\u30A2\u30C1\u30A2 \u30AF\u30FC\u30CA" } // Croatian kuna
-        HUF { "HUF", "\u30D5\u30A9\u30FC\u30EA\u30F3\u30C8" } // Forint
-        IDR { "IDR", "\u30EB\u30D4\u30A2" } // Rupiah
-        ILS { "ILS", "\u30A4\u30B9\u30E9\u30A8\u30EB\u65B0\u30B7\u30A7\u30B1\u30EB" } // New Israeli Sheqel
-        INR { "=0#Rs.|1#Re.|1<Rs.", "\u30A4\u30F3\u30C9 \u30EB\u30D4\u30FC" } // Indian Rupee
-        IQD { "IQD", "\u30A4\u30E9\u30AF \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Iraqi Dinar
-        IRR { "IRR", "\u30A4\u30E9\u30F3 \u30EA\u30A2\u30EB" } // Iranian Rial
-        ISK { "ISK", "\u30A2\u30A4\u30B9\u30E9\u30F3\u30C9 \u30AF\u30ED\u30FC\u30CA" } // Iceland Krona
-        ITL { "\u20A4", "\u30A4\u30BF\u30EA\u30A2 \u30EA\u30E9" }
-        JMD { "JMD", "\u30B8\u30E3\u30DE\u30A4\u30AB \u30C9\u30EB" } // Jamaican Dollar
-        JOD { "JOD", "\u30E8\u30EB\u30C0\u30F3 \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Jordanian Dinar
-        JPY { "\uFFE5", "\u5186" } // Yen: JAPAN (JP)
-        KES { "KES", "\u30B1\u30CB\u30A2 \u30B7\u30EA\u30F3\u30B0" } // Kenyan Shilling
-        KGS { "KGS", "\u30BD\u30E0" } // Som
-        KRW { "\uFFE6", "\u30A6\u30A9\u30F3" } // Won
-        KWD { "KWD", "\u30AF\u30A6\u30A7\u30FC\u30C8 \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Kuwaiti Dinar
-        KZT { "KZT", "\u30C6\u30F3\u30B2" } // Tenge
-        LBP { "LBP", "\u30EC\u30D0\u30CE\u30F3 \u30DD\u30F3\u30C9" } // Lebanese Pound
-        LTL { "LTL", "\u30EA\u30C8\u30A2\u30CB\u30A2 \u30EA\u30BF\u30B9" } // Lithuanian Litas
-        LVL { "LVL", "\u30E9\u30C8\u30D3\u30A2 \u30E9\u30C3\u30C8" } // Latvian Lats
-        LYD { "LYD", "\u30EA\u30D3\u30A2 \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Lybian Dinar
-        MAD { "MAD", "\u30E2\u30ED\u30C3\u30B3 \u30C7\u30A3\u30EB\u30CF\u30E0" } // Moroccan Dirham
-        MKD { "MKD", "\u30C7\u30CA\u30EB" } // Denar
-        MNT { "MNT", "\u30C8\u30A5\u30B0\u30EA\u30AF" } // Tugrik
-        MOP { "MOP", "\u30D1\u30BF\u30AB" } // Pataca
-        MVR { "MVR", "\u30EB\u30D5\u30A3\u30E4" } // Rufiyaa
-        MXN { "MXN", "\u30E1\u30AD\u30B7\u30B3 \u30DA\u30BD" } // Mexican Peso
-        MYR { "MYR", "\u30DE\u30EC\u30FC\u30B7\u30A2 \u30EA\u30F3\u30AE\u30C3\u30C8" } // Malaysian Ringgit
-        NIO { "NIO", "\u30B3\u30EB\u30C9\u30D0 \u30AA\u30ED" } // Cordoba Oro
-        NOK { "NOK", "\u30CE\u30EB\u30A6\u30A7\u30FC \u30AF\u30ED\u30FC\u30CD" } // Norwegian Krone
-        NZD { "NZD", "\u30CB\u30E5\u30FC\u30B8\u30FC\u30E9\u30F3\u30C9 \u30C9\u30EB" } // New Zealand Dollar
-        OMR { "OMR", "\u30AA\u30DE\u30FC\u30F3 \u30EA\u30A2\u30EB" } // Rial Omani
-        PAB { "PAB", "\u30D0\u30EB\u30DC\u30A2" } // Balboa
-        PEN { "PEN", "\u30CC\u30A8\u30DC \u30BD\u30EB" } // Nuevo Sol
-        PHP { "PHP", "\u30D5\u30A3\u30EA\u30D4\u30F3 \u30DA\u30BD" } // Philippine Peso
-        PKR { "PKR", "\u30D1\u30AD\u30B9\u30BF\u30F3 \u30EB\u30D4\u30FC" } // Pakistan Rupee
-        PLN { "PLN", "\u30BA\u30ED\u30C1" } // Zloty
-        PYG { "PYG", "\u30B0\u30A2\u30E9\u30CB\u30FC" } // Guarani
-        QAR { "QAR", "\u30AB\u30BF\u30FC\u30EB \u30EA\u30A2\u30EB" } // Qatari Rial
-        ROL { "ROL", "\u30EC\u30A4" } // Leu
-        RUR { "RUR", "\u30ED\u30B7\u30A2 \u30EB\u30FC\u30D6\u30EB" } // Russian Ruble
-        SAR { "SAR", "\u30B5\u30A6\u30B8 \u30EA\u30E4\u30FC\u30EB" } // Saudi Riyal
-        SEK { "SEK", "\u30B9\u30A6\u30A7\u30FC\u30C7\u30F3 \u30AF\u30ED\u30FC\u30CA" } // Swedish Krona
-        SGD { "SGD", "\u30B7\u30F3\u30AC\u30DD\u30FC\u30EB \u30C9\u30EB" } // Singapore Dollar
-        SIT { "SIT", "\u30C8\u30E9\u30EB" } // Tolar
-        SKK { "SKK", "\u30B9\u30ED\u30D0\u30AD\u30A2 \u30B3\u30EB\u30CA" } // Slovak Koruna
-        SYP { "SYP", "\u30B7\u30EA\u30A2 \u30DD\u30F3\u30C9" } // Syrian Pound
-        THB { "THB", "\u30D0\u30FC\u30C4" } // Baht
-        TND { "TND", "\u30C1\u30E5\u30CB\u30B8\u30A2 \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Tunisian Dinar
-        TRL { "TRL", "\u30C8\u30EB\u30B3 \u30EA\u30E9" } // Turkish Lira
-        TTD { "TTD", "\u30C8\u30EA\u30CB\u30C0\u30FC\u30C9\u30C8\u30D0\u30B4 \u30C9\u30EB" } // Trinidad and Tobago Dollar
-        TWD { "TWD", "\u65B0\u53F0\u6E7E\u5143" } // New Taiwan Dollar
-        UAH { "UAH", "\u30D5\u30EA\u30D6\u30CA" } // Hryvnia
-        USD { "$", "\u7C73\u30C9\u30EB" } // US Dollar
-        UYU { "UYU", "\u30A6\u30EB\u30B0\u30A2\u30A4 \u30DA\u30BD" } // Peso Uruguayo
-        UZS { "UZS", "\u30A6\u30BA\u30D9\u30AD\u30B9\u30BF\u30F3 \u30B9\u30E0" } // Uzbekistan Sum
-        VEB { "VEB", "\u30DC\u30EA\u30D0\u30EB" } // Bolivar
-        VND { "\u0111", "\u30C9\u30F3" } // Dong
-        YER { "YER", "\u30A4\u30A8\u30E1\u30F3 \u30EA\u30A2\u30EB" } // Yemeni Rial
-        YUN { "YUN", "\u30E6\u30FC\u30B4\u30B9\u30E9\u30D3\u30A2\u65B0\u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" }
-        ZAR { "ZAR", "\u30E9\u30F3\u30C9" } // Rand
-        ZWD { "ZWD", "\u30B8\u30F3\u30D0\u30D6\u30A8 \u30C9\u30EB" } // Zimbabwe Dollar
+        ADD { "ADD", "\u30a2\u30f3\u30c9\u30e9 \u30c7\u30a3\u30ca\u30fc\u30eb" } // 1873-06/30/2002
+        ADP { "ADP", "\u30a2\u30f3\u30c9\u30e9 \u30da\u30bb\u30bf" } // 1936-
+        AED { "AED", "UAE \u30c7\u30a3\u30eb\u30cf\u30e0" } // UAE Dirham
+        AFA { "AFA", "\u30a2\u30d5\u30ac\u30cb\u30fc (1927-2002)"  } // 1927-
+        AFN { "Af",  "\u30a2\u30d5\u30ac\u30cb\u30fc" }
+        AIF { "AIF", "\u30a2\u30d5\u30a1\u30fc\u30eb\u304a\u3088\u3073\u30a4\u30b5\u30b9 \u30d5\u30e9\u30f3" } // 07/05/1967-06/27/1977
+        ALK { "ALK", "\u30a2\u30eb\u30d0\u30cb\u30a2 \u30ec\u30af (1946-1961)" } // 1946-1961
+        ALL { "ALL", "\u30a2\u30eb\u30d0\u30cb\u30a2 \u30ec\u30af" } // 1961-
+        ALV { "ALV", "\u30a2\u30eb\u30d0\u30cb\u30a2 \u30ec\u30af (Valute)"  } // 1992-1993
+        ALX { "ALX", "\u30a2\u30eb\u30d0\u30cb\u30a2 \u30ec\u30af (f)" } // 1953-1965
+        AMD { "AMD", "\u30a2\u30eb\u30e1\u30cb\u30a2 \u30c9\u30e9\u30e0" } // Armenian Dram
+        ANG { "ANG", "\u30aa\u30e9\u30f3\u30c0\u9818\u30a2\u30f3\u30c6\u30a3\u30eb \u30ae\u30eb\u30c0\u30fc" } // 05/10/1940-
+        AOA { "AOA", "\u30af\u30ef\u30f3\u30b6 (AOA)" } // 09/1926-12/31/1958
+        AOK { "AOK", "\u30af\u30ef\u30f3\u30b6 (1977-1990)" } // 01/08/1977-09/25/1990
+        AON { "AON", "\u30a2\u30f3\u30b4\u30e9 \u65b0\u30af\u30ef\u30f3\u30b6 (1990-2000)" } // 09/25/1990-07/01/1995
+        AOR { "AOR", "\u30a2\u30f3\u30b4\u30e9 \u65e7\u30af\u30ef\u30f3\u30b6 (1995-1999)" } // 07/01/1995-12/13/1999
+        AOS { "AOS", "\u30a2\u30f3\u30b4\u30e9 \u30a8\u30b9\u30af\u30fc\u30c9" } // 12/31/1958-11/11/1976
+        ARA { "ARA", "\u30a2\u30eb\u30bc\u30f3\u30c1\u30f3 \u30a2\u30a5\u30b9\u30c8\u30e9\u30fc\u30eb" } // 06/14/1985-01/01/1992
+        ARM { "ARM", "\u30a2\u30eb\u30bc\u30f3\u30c1\u30f3 \u30da\u30bd (MN)" } // 1899-01/01/1970
+        ARP { "ARP", "\u30a2\u30eb\u30bc\u30f3\u30c1\u30f3 \u30da\u30bd (1983-1985)" } // 06/01/1983-06/14/1985
+        ARS { "ARS", "\u30a2\u30eb\u30bc\u30f3\u30c1\u30f3 \u30da\u30bd" } // Argentine Peso
+        AUD { "AUD", "\u30aa\u30fc\u30b9\u30c8\u30e9\u30ea\u30a2 \u30c9\u30eb" } // Australian Dollar
+        AUP { "AUP", "\u30aa\u30fc\u30b9\u30c8\u30e9\u30ea\u30a2 \u30dd\u30f3\u30c9" } // 1902-02/14/1966
+        AWG { "AWG", "\u30a2\u30eb\u30d0 \u30ae\u30eb\u30c0\u30fc" } // 01/01/1986-
+        AZM { "AZM", "\u30a2\u30bc\u30eb\u30d0\u30a4\u30b8\u30e3\u30f3 \u30de\u30ca\u30c8" } // Azerbaijanian Manat
+        BAD { "BAD", "\u30dc\u30b9\u30cb\u30a2 \u30c7\u30a3\u30ca\u30fc\u30eb" } // 07/01/1992-08/15/1994
+        BAM { "BAM", "\u30dc\u30b9\u30cb\u30a2 \u30de\u30eb\u30af (BAM)" } // 01/01/1995-
+        BAN { "BAN", "\u30dc\u30b9\u30cb\u30a2 \u65b0\u30c7\u30a3\u30ca\u30fc\u30eb" } // 08/15/1994-01/01/1995
+        BBD { "BBD", "\u30d0\u30eb\u30d0\u30c9\u30b9 \u30c9\u30eb" } // 11/29/1966-
+        BDT { "BDT", "\u30d0\u30f3\u30b0\u30e9\u30c7\u30b7\u30e5 \u30bf\u30ab" } // 01/01/1972-
+        BEC { "BEC", "\u30d9\u30eb\u30ae\u30fc \u30d5\u30e9\u30f3 (BEC)" }
+        BEF { "BEF", "\u30d9\u30eb\u30ae\u30fc \u30d5\u30e9\u30f3" } // 1831-2002
+        BEL { "BEL", "\u30d9\u30eb\u30ae\u30fc \u30d5\u30e9\u30f3 (BEL)" }
+        BGL { "BGL", "\u30d6\u30eb\u30ac\u30ea\u30a2 \u30ec\u30d5 (BGL)" } // 01/01/1962-01/01/1999
+        BGM { "BGM", "\u30d6\u30eb\u30ac\u30ea\u30a2 \u30ec\u30d5 (BGM)" } // 05/1952-01/01/1962
+        BGN { "BGN", "\u30d6\u30eb\u30ac\u30ea\u30a2 \u65b0\u30ec\u30d5" } // 01/01/1999-
+        BGO { "BGO", "\u30d6\u30eb\u30ac\u30ea\u30a2 \u30ec\u30d5 (1879-1952)" } // 07/08/1879-05/1952
+        BGX { "BGX", "\u30d6\u30eb\u30ac\u30ea\u30a2 \u30ec\u30d5 (FEC)" } // 1965-1986
+        BHD { "BHD", "\u30d0\u30fc\u30ec\u30fc\u30f3 \u30c7\u30a3\u30ca\u30fc\u30eb" } // 10/1965-
+        BIF { "BIF", "\u30d6\u30eb\u30f3\u30b8 \u30d5\u30e9\u30f3" } // 05/19/1964-
+        BMD { "BMD", "\u30d0\u30df\u30e5\u30fc\u30c0 \u30c9\u30eb" } // 02/06/1970-
+        BMP { "BMP", "\u30d0\u30df\u30e5\u30fc\u30c0 \u30dd\u30f3\u30c9" } // 1914-02/06/1970
+        BND { "BND", "\u30d6\u30eb\u30cd\u30a4 \u30c9\u30eb" } // Brunei Dollar
+        BOB { "BOB", "\u30dc\u30ea\u30d3\u30a2\u30ce" } // Boliviano
+        BOL { "BOL", "\u30dc\u30ea\u30d3\u30a2 \u30dc\u30ea\u30d3\u30a2\u30ce (1863-1962)" } // 06/23/1863-12/31/1962
+        BOP { "BOP", "\u30dc\u30ea\u30d3\u30a2 \u30da\u30bd" } // 01/01/1963-1986
+        BOV { "BOV", "\u30dc\u30ea\u30d3\u30a2 Mvdol" }
+        BRB { "BRB", "\u30d6\u30e9\u30b8\u30eb \u65b0\u30af\u30eb\u30bc\u30a4\u30ed (BRB\u30011967-1986)" } // 02/13/1967-02/28/1986
+        BRC { "BRC", "\u30d6\u30e9\u30b8\u30eb \u30af\u30eb\u30bc\u30a4\u30ed (BRC)" } // 02/28/1986-01/15/1989
+        BRE { "BRE", "\u30d6\u30e9\u30b8\u30eb \u30af\u30eb\u30bc\u30a4\u30ed (BRE\u30011990-1993)" } // 03/16/1990-08/01/1993
+        BRL { "BRL",  "\u30d6\u30e9\u30b8\u30eb \u30ec\u30a2\u30eb" } // 07/01/1994-
+        BRN { "BRN", "\u30d6\u30e9\u30b8\u30eb \u65b0\u30af\u30eb\u30bc\u30a4\u30ed (BRN)"  } // 01/15/1989-03/16/1990
+        BRR { "BRR", "\u30d6\u30e9\u30b8\u30eb \u30af\u30eb\u30bc\u30a4\u30ed \u30ec\u30a2\u30eb" } // 08/01/1993-07/01/1994
+        BRZ { "BRZ", "\u30d6\u30e9\u30b8\u30eb \u30af\u30eb\u30bc\u30a4\u30ed (BRZ\u30011942-1967)" } // 1942-1967
+        BSD { "BSD", "\u30d0\u30cf\u30de \u30c9\u30eb" } // 5/25/1966-
+        BSP { "BSP", "\u30d0\u30cf\u30de \u30dd\u30f3\u30c9" } // 1869-5/25/1966
+        BTN { "BTN", "\u30d6\u30fc\u30bf\u30f3 \u30cb\u30e5\u30eb\u30bf\u30e0" } // 1974-
+        BTR { "BTR", "\u30d6\u30fc\u30bf\u30f3 \u30eb\u30d4\u30fc" } // 1928-1974
+        BUK { "BUK", "\u30d3\u30eb\u30de \u30c1\u30e3\u30c3\u30c8" } // 01/04/1948-06/18/1989
+        BUR { "BUR", "\u30d3\u30eb\u30de \u30eb\u30d4\u30fc" } // 04/01/1937-07/01/1952
+        BWP { "BWP", "\u30dc\u30c4\u30ef\u30ca \u30d7\u30e9" } // 1976-
+        BYB { "BYB", "\u30d9\u30e9\u30eb\u30fc\u30b7 \u30eb\u30fc\u30d6\u30eb (BYB\u30011994-1999)" } // 08/1994-01/01/2000
+        BYL { "BYL", "\u30d9\u30e9\u30eb\u30fc\u30b7 \u30eb\u30fc\u30d6\u30eb (BYL\u30011992-1994)" } // 09/25/1992-08/1994
+        BYR { "BYR", "\u30d9\u30e9\u30eb\u30fc\u30b7 \u30eb\u30fc\u30d6\u30eb" } // 01/01/2000-
+        BZD { "BZD", "\u30d9\u30ea\u30fc\u30ba \u30c9\u30eb" } // Belize Dollar
+        BZH { "BZH", "\u82f1\u9818\u30db\u30f3\u30b8\u30e5\u30e9\u30b9 \u30c9\u30eb" } // 1855-1972
+        CAD { "CAD", "\u30ab\u30ca\u30c0 \u30c9\u30eb" } // Canadian Dollar
+        CDF { "CDF", "\u30b3\u30f3\u30b4 \u30d5\u30e9\u30f3" } // 07/1998-
+        CDG { "CDG", "\u30b3\u30f3\u30b4\u5171\u548c\u56fd \u30d5\u30e9\u30f3" } // 06/30/1960-07/22/1967
+        CDL { "CDL", "\u30b3\u30f3\u30b4 \u30b6\u30a4\u30fc\u30eb" } // 07/23/1967-10/27/1971
+        CFF { "CFF", "\u4e2d\u592e\u30a2\u30d5\u30ea\u30ab\u5171\u548c\u56fd CFA \u30d5\u30e9\u30f3" } // 04/01/1973-1992
+        CHF { "CHF", "\u30b9\u30a4\u30b9 \u30d5\u30e9\u30f3" } // Swiss Franc
+        CKD { "CKD", "\u30af\u30c3\u30af\u8af8\u5cf6 \u30c9\u30eb" } // 1987-
+        CLC { "CLC", "\u30c1\u30ea \u30da\u30bd (CLC)" } // 1817-12/31/1959
+        CLE { "CLE", "\u30c1\u30ea \u30a8\u30b9\u30af\u30fc\u30c9" } // 1/1/1960-1975
+        CLF { "CLF", "\u30c1\u30ea \u30a6\u30cb\u30c0 \u30c7 \u30d5\u30a9\u30e1\u30f3\u30c8" } // 1975-
+        CLP { "CLP", "\u30c1\u30ea \u30da\u30bd" } // Chilean Peso
+        CMF { "CMF", "\u30ab\u30e1\u30eb\u30fc\u30f3 CFA \u30d5\u30e9\u30f3"   } // 01/01/1960-1992
+        CNP { "CNP", "\u4e2d\u56fd\u4eba\u6c11\u5143" } // 1948-04/30/1953
+        CNX { "CNX", "\u4e2d\u56fd \u7c73\u30c9\u30eb (FEC)" } // 1979-1998
+        CNY { "CNY", "\u4e2d\u56fd\u4eba\u6c11\u5143" } // 03/01/1953-
+        COB { "COB", "\u30b3\u30ed\u30f3\u30d3\u30a2 \u30da\u30bd (COB)" }
+        COF { "COF", "\u30b3\u30f3\u30b4 CFA \u30d5\u30e9\u30f3" } // 04/01/1973-1992
+        COP { "COP", "\u30b3\u30ed\u30f3\u30d3\u30a2 \u30da\u30bd" } // Colombian Peso
+        CRC { "CRC", "\u30b3\u30b9\u30bf\u30ea\u30ab \u30b3\u30ed\u30f3"    } // 10/26/1896-
+        CSC { "CSC", "\u30c1\u30a7\u30b3\u30b9\u30ed\u30d0\u30ad\u30a2 \u30b3\u30eb\u30ca (CSC)"  } // 05/1945-06/01/1953
+        CSK { "CSK", "\u30c1\u30a7\u30b3\u30b9\u30ed\u30d0\u30ad\u30a2 \u30b3\u30eb\u30ca (CSK)" } // 06/01/1953-12/31/1992
+        CUP { "CUP", "\u30ad\u30e5\u30fc\u30d0 \u30da\u30bd" } // 1881-
+        CUX { "CUX", "\u30ad\u30e5\u30fc\u30d0 (FEC)" } // 1985-
+        CVE { "CVE", "\u30ab\u30fc\u30dc\u30d9\u30eb\u30c7 \u30a8\u30b9\u30af\u30fc\u30c9" } // 05/22/1911-
+        CWG { "CWG", "\u30ad\u30e5\u30e9\u30bd\u30fc\u5cf6 \u30ae\u30eb\u30c0\u30fc" } // 1848-1960
+        CYP { "CYP", "\u30ad\u30d7\u30ed\u30b9 \u30dd\u30f3\u30c9" } // 9/5/1917-
+        CZK { "CZK", "\u30c1\u30a7\u30b3 \u30b3\u30eb\u30ca" } // Czech Koruna
+        DDM { "DDM", "\u6771\u30c9\u30a4\u30c4 \u30de\u30eb\u30af"  } // 07/20/1948-10/02/1990
+        DEM { "DEM", "\u30c9\u30a4\u30c4 \u30de\u30eb\u30af" } // 6/20/1948-2002
+        DES { "DES", "\u30c9\u30a4\u30c4 \u30de\u30eb\u30af (Sperrmark)" } // 03/31/1951-12/29/1958
+        DJF { "DJF", "\u30b8\u30d6\u30c1 \u30d5\u30e9\u30f3" } // 06/27/1977-
+        DKK { "DKK", "\u30c7\u30f3\u30de\u30fc\u30af \u30af\u30ed\u30fc\u30cd" } // Danish Krone
+        DOP { "DOP", "\u30c9\u30df\u30cb\u30ab \u30da\u30bd" } // Dominican Peso
+        DZD { "DZD", "\u30a2\u30eb\u30b8\u30a7\u30ea\u30a2 \u30c7\u30a3\u30ca\u30fc\u30eb" } // 04/01/1964-
+        DZF { "DZF", "\u30a2\u30eb\u30b8\u30a7\u30ea\u30a2 \u65b0\u30d5\u30e9\u30f3" } // 01/01/1960-04/01/1964
+        DZG { "DZG", "\u30a2\u30eb\u30b8\u30a7\u30ea\u30a2 \u30d5\u30e9\u30f3 (DZG)" } // 08/04/1851-12/31/1959
+        ECS { "ECS", "\u30a8\u30af\u30a2\u30c9\u30eb \u30b9\u30af\u30ec" } // 4/1/1884-2000
+        ECV { "ECV", "\u30a8\u30af\u30a2\u30c9\u30eb UVC" } // 1980-
+        EEK { "EEK", "\u30a8\u30b9\u30c8\u30cb\u30a2 \u30af\u30eb\u30fc\u30f3" } // 06/21/1992-
+        EGP { "EGP", "\u30a8\u30b8\u30d7\u30c8 \u30dd\u30f3\u30c9" } // Egyptian Pound
+        ERN { "ERN", "\u30a8\u30ea\u30c8\u30ea\u30a2 \u30ca\u30af\u30d5\u30a1" } // 1997-
+        ESP { "ESP", "\u30b9\u30da\u30a4\u30f3 \u30da\u30bb\u30bf" } // 01/01/1859-02/28/2002
+        ETB { "ETB",  "\u30a8\u30c1\u30aa\u30d4\u30a2 \u30d6\u30eb" } // 09/15/1976-
+        ETD { "ETD", "\u30a8\u30c1\u30aa\u30d4\u30a2 \u30c9\u30eb" } // 07/23/1945-09/15/1976
+        EUR { "\u20ac", "\u30e6\u30fc\u30ed" } // Euro
+        FIM { "FIM", "\u30d5\u30a3\u30f3\u30e9\u30f3\u30c9 \u30de\u30eb\u30ab" } // 1/1/1963-2002
+        FIN { "FIN", "\u30d5\u30a3\u30f3\u30e9\u30f3\u30c9 \u30de\u30eb\u30ab (1860-1962)" } // 4/4/1860-12/31/1962
+        FJD { "FJD", "\u30d5\u30a3\u30b8\u30fc\u8af8\u5cf6 \u30c9\u30eb" } // 01/13/1969-
+        FJP { "FJP", "\u30d5\u30a3\u30b8\u30fc\u8af8\u5cf6 \u30dd\u30f3\u30c9" } // 1917-01/13/1969
+        FKP { "FKP", "\u30d5\u30a9\u30fc\u30af\u30e9\u30f3\u30c9\uff08\u30de\u30eb\u30d3\u30ca\u30b9\uff09\u8af8\u5cf6 \u30dd\u30f3\u30c9" } // 1901-
+        FOK { "FOK", "\u30d5\u30a7\u30ed\u30fc\u8af8\u5cf6 \u30af\u30ed\u30fc\u30ca" } // 1940-
+        FRF { "FRF", "\u30d5\u30e9\u30f3\u30b9 \u30d5\u30e9\u30f3" } // 01/01/1960-2002
+        FRG { "FRG", "\u30d5\u30e9\u30f3\u30b9 \u30d5\u30e9\u30f3 (Franc Germinal/Franc Poincare)" } // 04/07/1803-12/31/1959
+        GAF { "GAF", "\u30ac\u30dc\u30f3 CFA \u30d5\u30e9\u30f3"      } // 04/01/1973-1992
+        GBP { "\u00a3",  "\u82f1\u56fd\u30dd\u30f3\u30c9" } // 07/27/1694-
+        GEK { "GEK", "\u30b0\u30eb\u30b8\u30a2 \u30af\u30fc\u30dd\u30f3 \u30e9\u30ea" } // 04/05/1993-09/23/1995
+        GEL { "GEL", "\u30b0\u30eb\u30b8\u30a2 \u30e9\u30ea" } // 09/23/1995-
+        GHC { "GHC", "\u30ac\u30fc\u30ca \u30bb\u30c7\u30a3" } // 03/09/1979-
+        GHO { "GHO", "\u30ac\u30fc\u30ca \u65e7\u30bb\u30c7\u30a3" } // 07/19/1965-02/17/1967
+        GHP { "GHP", "\u30ac\u30fc\u30ca \u30dd\u30f3\u30c9" } // 07/14/1958-
+        GHR { "GHR", "\u30ac\u30fc\u30ca \u65b0\u30bb\u30c7\u30a3" } // 02/17/1967-03/09/1979
+        GIP { "GIP", "\u30b8\u30d6\u30e9\u30eb\u30bf\u30eb \u30dd\u30f3\u30c9" } // 1713-
+        GLK { "GLK", "\u30b0\u30ea\u30fc\u30f3\u30e9\u30f3\u30c9 \u30af\u30ed\u30fc\u30cd" } // 1874-07/01/1967
+        GMD { "GMD", "\u30ac\u30f3\u30d3\u30a2 \u30c0\u30e9\u30b7" } // 07/01/1971-
+        GMP { "GMP", "\u30ac\u30f3\u30d3\u30a2 \u30dd\u30f3\u30c9" } // 05/13/1964-07/01/1971
+        GNF { "GNF", "\u30ae\u30cb\u30a2 \u30d5\u30e9\u30f3" } // 01/06/1986-
+        GNI { "GNI", "\u30ae\u30cb\u30a2 \u30d5\u30e9\u30f3 (1960-1972)" } // 03/01/1960-10/02/1972
+        GNS { "GNS", "\u30ae\u30cb\u30a2 \u30b7\u30ea\u30fc" } // 10/02/1972-01/06/1986
+        GPF { "GPF", "\u30b0\u30a2\u30c9\u30eb\u30fc\u30d7 \u30d5\u30e9\u30f3" } // 07/11/1851-12/31/1959
+        GQE { "GQE", "\u8d64\u9053\u30ae\u30cb\u30a2 \u30ae\u30cb\u30fc" } // 07/07/1975-01/01/1985
+        GQF { "GQF", "\u8d64\u9053\u30ae\u30cb\u30a2 \u30d5\u30e9\u30f3" } // 01/01/1985-1992
+        GQP { "GQP", "\u8d64\u9053\u30ae\u30cb\u30a2 \u30da\u30bb\u30bf" } // 10/12/1968-07/07/1975
+        GRD { "GRD", "\u30ae\u30ea\u30b7\u30e3 \u30c9\u30e9\u30af\u30de" } // 05/01/1954-2002
+        GRN { "GRN", "\u30ae\u30ea\u30b7\u30e3 \u65b0\u30c9\u30e9\u30af\u30de" } // 11/11/1944-05/01/1954
+        GTQ { "GTQ", "\u30b0\u30a2\u30c6\u30de\u30e9 \u30b1\u30c4\u30a1\u30eb" } // 05/27/1925-
+        GUF { "GUF", "\u4ecf\u9818\u30ae\u30a2\u30ca \u30d5\u30e9\u30f3" } // 07/11/1851-12/31/1959
+        GWE { "GWE", "\u30dd\u30eb\u30c8\u30ac\u30eb\u9818\u30ae\u30cb\u30a2 \u30a8\u30b9\u30af\u30fc\u30c9" } // 1879-09/10/1974
+        GWM { "GWM", "\u30dd\u30eb\u30c8\u30ac\u30eb\u9818\u30ae\u30cb\u30a2 \u30df\u30eb\u30ec\u30a4\u30b9" } // 1879-09/10/1974
+        GWP { "GWP", "\u30ae\u30cb\u30a2\u30d3\u30b5\u30a6 \u30da\u30bd" } // 9/10/1974-12/31/1996
+        GYD { "GYD", "\u30ac\u30a4\u30a2\u30ca \u30c9\u30eb" } // 05/26/1966-
+        HKD { "HKD", "\u9999\u6e2f\u30c9\u30eb" } // Hong Kong Dollar
+        HNL { "HNL", "\u30db\u30f3\u30b8\u30e5\u30e9\u30b9 \u30ec\u30f3\u30d4\u30e9" } // 04/03/1926-
+        HRD { "HRD", "\u30af\u30ed\u30a2\u30c1\u30a2 \u30c7\u30a3\u30ca\u30fc\u30eb" }
+        HRK { "HRK", "\u30af\u30ed\u30a2\u30c1\u30a2 \u30af\u30fc\u30ca" } // Croatian kuna
+        HTG { "HTG", "\u30cf\u30a4\u30c1 \u30b0\u30fc\u30eb\u30c9" } // 08/26/1872-
+        HUF { "HUF", "\u30cf\u30f3\u30ac\u30ea\u30fc \u30d5\u30a9\u30ea\u30f3\u30c8"     } // 07/23/1946-
+        IBP { "IBP", "\u5317\u30a2\u30a4\u30eb\u30e9\u30f3\u30c9 \u30dd\u30f3\u30c9" } // 07/27/1694-
+        IDG { "IDG", "\u30a4\u30f3\u30c9\u30cd\u30b7\u30a2 \u30cb\u30ab\u30ae\u30eb\u30c0\u30fc" } // 09/1945-05/13/1950
+        IDJ { "IDJ", "\u30a4\u30f3\u30c9\u30cd\u30b7\u30a2 \u30b8\u30e3\u30ef \u30eb\u30d4\u30a2" } // 10/17/1945-03/13/1950
+        IDN { "IDN", "\u30a4\u30f3\u30c9\u30cd\u30b7\u30a2 \u65b0\u30eb\u30d4\u30a2" } // 11/02/1949-12/13/1965
+        IDR { "IDR", "\u30a4\u30f3\u30c9\u30cd\u30b7\u30a2 \u30eb\u30d4\u30a2" } // 12/13/1965-
+        IEP { "IEP", "\u30a2\u30a4\u30ea\u30c3\u30b7\u30e5 \u30dd\u30f3\u30c9" } // 1922-2001
+        ILL { "ILL", "\u30a4\u30b9\u30e9\u30a8\u30eb \u30b7\u30a7\u30b1\u30eb" } // 02/22/1980-09/04/1985
+        ILP { "ILP", "\u30a4\u30b9\u30e9\u30a8\u30eb \u30dd\u30f3\u30c9" } // 08/16/1948-02/22/1980
+        ILS { "ILS", "\u30a4\u30b9\u30e9\u30a8\u30eb\u65b0\u30b7\u30a7\u30b1\u30eb" } // New Israeli Sheqel
+        IMP { "IMP", "\u30de\u30f3\u5cf6 \u30dd\u30f3\u30c9" } // 1865-
+        INR { "=0#Rs.|1#Re.|1<Rs.", "\u30a4\u30f3\u30c9 \u30eb\u30d4\u30fc" } // Indian Rupee
+        IQD { "IQD", "\u30a4\u30e9\u30af \u30c7\u30a3\u30ca\u30fc\u30eb" } // 04/19/1931-
+        IRR { "IRR", "\u30a4\u30e9\u30f3 \u30ea\u30a2\u30eb" } // Iranian Rial
+        ISK { "ISK", "\u30a2\u30a4\u30b9\u30e9\u30f3\u30c9 \u30af\u30ed\u30fc\u30ca" } // Iceland Krona
+        ITL { "\u20a4", "\u30a4\u30bf\u30ea\u30a2 \u30ea\u30e9" }
+        JEP { "JEP", "\u30b8\u30e3\u30fc\u30b8\u30fc\u5cf6 \u30dd\u30f3\u30c9" } // 1840-
+        JMD { "JMD", "\u30b8\u30e3\u30de\u30a4\u30ab \u30c9\u30eb" } // Jamaican Dollar
+        JMP { "JMP", "\u30b8\u30e3\u30de\u30a4\u30ab \u30dd\u30f3\u30c9" } // 1900-09/08/1969
+        JOD { "JOD", "\u30e8\u30eb\u30c0\u30f3 \u30c7\u30a3\u30ca\u30fc\u30eb" } // 07/01/1950-
+        JPY { "\uffe5", "\u5186" } // Yen: JAPAN (JP)
+        KES { "KES", "\u30b1\u30cb\u30a2 \u30b7\u30ea\u30f3\u30b0" } // Kenyan Shilling
+        KGS { "KGS", "\u30ad\u30eb\u30ae\u30b9\u30bf\u30f3 \u30bd\u30e0" } // 05/10/1993-
+        KHO { "KHO", "\u30ab\u30f3\u30dc\u30b8\u30a2 \u65e7\u30ea\u30a8\u30eb" } // 01/01/1955-1975
+        KHR { "KHR", "\u30ab\u30f3\u30dc\u30b8\u30a2 \u30ea\u30a8\u30eb" } // 03/20/1980-
+        KID { "KID", "\u30ad\u30ea\u30d0\u30b9 \u30c9\u30eb" } // 07/12/1979-
+        KMF { "KMF", "\u30b3\u30e2\u30ed \u30d5\u30e9\u30f3" } // 07/06/1975-
+        KPP { "KPP", "\u5317\u671d\u9bae \u4eba\u6c11\u30a6\u30a9\u30f3" } // 1947-02/1959
+        KPW { "KPW", "\u5317\u671d\u9bae \u30a6\u30a9\u30f3" } // 02/1959-
+        KRH { "KRH", "\u97d3\u56fd \u30db\u30a2\u30f3" } // 02/15/1953-06/10/1962
+        KRO { "KRO", "\u97d3\u56fd \u65e7\u30a6\u30a9\u30f3" } // 1947-02/15/1953
+        KRW { "\uffe6",  "\u97d3\u56fd \u30a6\u30a9\u30f3" } // 06/10/1962-
+        KWD { "KWD", "\u30af\u30a6\u30a7\u30fc\u30c8 \u30c7\u30a3\u30ca\u30fc\u30eb" } // Kuwaiti Dinar
+        KYD { "KYD", "\u30b1\u30a4\u30de\u30f3\u8af8\u5cf6 \u30c9\u30eb" } // 1971-
+        KZR { "KZR", "\u30ab\u30b6\u30d5\u30b9\u30bf\u30f3 \u30eb\u30fc\u30d6\u30eb" } // 08/1993-11/05/1993
+        KZT { "KZT", "\u30ab\u30b6\u30d5\u30b9\u30bf\u30f3 \u30c6\u30f3\u30b2" } // Tenge
+        LAK { "LAK", "\u30e9\u30aa\u30b9 \u30ad\u30fc\u30d7" } // 05/05/1955-
+        LBP { "LBP", "\u30ec\u30d0\u30ce\u30f3 \u30dd\u30f3\u30c9" } // Lebanese Pound
+        LIF { "LIF", "\u30ea\u30d2\u30c6\u30f3\u30b7\u30e5\u30bf\u30a4\u30f3 \u30d5\u30e9\u30f3"  } // 03/17/1799-
+        LKR { "LKR", "\u30b9\u30ea\u30e9\u30f3\u30ab \u30eb\u30d4\u30fc" } // 05/22/1978-
+        LNR { "LNR", "\u30bb\u30a4\u30ed\u30f3 \u30eb\u30d4\u30fc" } // 12/16/1949-05/22/1978
+        LRD { "LRD", "\u30ea\u30d9\u30ea\u30a2 \u30c9\u30eb" } // 01/01/1944-
+        LSL { "LSL", "\u30ec\u30bd\u30c8 \u30ed\u30c6\u30a3" } // 01/22/1980-
+        LTL { "LTL", "\u30ea\u30c8\u30a2\u30cb\u30a2 \u30ea\u30bf\u30b9" } // Lithuanian Litas
+        LTT { "LTT", "\u30ea\u30c8\u30a2\u30cb\u30a2 \u30bf\u30ed\u30ca" } // 10/1/1992-06/25/1993
+        LUF { "LUF", "\u30eb\u30af\u30bb\u30f3\u30d6\u30eb\u30b0 \u30d5\u30e9\u30f3" } // 12/20/1848-
+        LVL { "LVL", "\u30e9\u30c8\u30d3\u30a2 \u30e9\u30c3\u30c4" } // Latvian Lats
+        LVR { "LVR", "\u30e9\u30c8\u30d3\u30a2 \u30eb\u30fc\u30d6\u30eb" } // 05/07/1992-10/17/1993
+        LYB { "LYB", "\u30ea\u30d3\u30a2 \u30ea\u30e9 (British Military Authority)" } // 1941-12/24/1951
+        LYD { "LYD", "\u30ea\u30d3\u30a2 \u30c7\u30a3\u30ca\u30fc\u30eb" } // Lybian Dinar
+        LYP { "LYP", "\u30ea\u30d4\u30a2 \u30dd\u30f3\u30c9" } // 12/24/1951-09/01/1971
+        MAD { "MAD", "\u30e2\u30ed\u30c3\u30b3 \u30c7\u30a3\u30eb\u30cf\u30e0" } // Moroccan Dirham
+        MAF { "MAF", "\u30e2\u30ed\u30c3\u30b3 \u30d5\u30e9\u30f3" } // 1881-10/17/1959
+        MCF { "MCF", "\u30e2\u30ca\u30b3 \u30d5\u30e9\u30f3" } // 01/01/1960-
+        MCG { "MCG", "\u30e2\u30ca\u30b3 \u30d5\u30e9\u30f3 (MCG)" } // 03/07/1837-12/31/1959
+        MDC { "MDC", "\u30e2\u30eb\u30c9\u30d0 \u30ec\u30a4 \u30af\u30fc\u30dd\u30f3" } // 06/1992-11/29/1993
+        MDL { "MDL", "\u30e2\u30eb\u30c9\u30d0 \u30ec\u30a4" } // 11/29/1993-
+        MDR { "MDR", "\u30e2\u30eb\u30c9\u30d0 \u30ec\u30a4 \u30af\u30fc\u30dd\u30f3" } // 05/23/1991-06/1992
+        MGA { "MGA", "\u30de\u30c0\u30ac\u30b9\u30ab\u30eb \u30a2\u30ea\u30a2\u30ea" } // 11/01/1983-
+        MGF { "MGF", "\u30de\u30c0\u30ac\u30b9\u30ab\u30eb \u30d5\u30e9\u30f3" } // 07/01/1963-
+        MHD { "MHD", "\u30de\u30fc\u30b7\u30e3\u30eb\u8af8\u5cf6 \u30c9\u30eb" } // 1979-
+        MKD { "MKD", "\u30de\u30b1\u30c9\u30cb\u30a2 \u30c7\u30ca\u30eb" } // Denar
+        MKN { "MKN", "\u30de\u30b1\u30c9\u30cb\u30a2 \u30c7\u30ca\u30eb (1992-1993)" } // 04/26/1992-05/20/1993
+        MLF { "MLF", "\u30de\u30ea \u30d5\u30e9\u30f3" } // 07/02/1962-1984
+        MMK { "MMK", "\u30df\u30e3\u30f3\u30de\u30fc \u30c1\u30e3\u30c3\u30c8" } // 06/18/1989-
+        MMX { "MMX", "\u30df\u30e3\u30f3\u30de\u30fc \u30c9\u30eb (FEC)" }
+        MNT { "MNT", "\u30e2\u30f3\u30b4\u30eb \u30c8\u30b0\u30ed\u30b0" } // Tugrik
+        MOP { "MOP", "\u30de\u30ab\u30aa \u30d1\u30bf\u30ab" } // Pataca
+        MQF { "MQF", "\u30de\u30eb\u30c6\u30a3\u30cb\u30fc\u30af\u5cf6 \u30d5\u30e9\u30f3" } // 07/11/1851-1959
+        MRO { "MRO", "\u30e2\u30fc\u30ea\u30bf\u30cb\u30a2 \u30a6\u30ae\u30a2" } // 06/29/1973-
+        MTL { "MTL", "\u30de\u30eb\u30bf \u30ea\u30e9" }
+        MTP { "MTP", "\u30de\u30eb\u30bf \u30dd\u30f3\u30c9" } // 08/13/1914-
+        MUR { "MUR", "\u30e2\u30fc\u30ea\u30b7\u30e3\u30b9 \u30eb\u30d4\u30fc" } // 1848-03/12/1968
+        MVP { "MVP", "\u30e2\u30eb\u30c7\u30a3\u30d6\u8af8\u5cf6 \u30eb\u30d4\u30fc" } // 1960-07/01/1981
+        MVR { "MVR", "\u30e2\u30eb\u30c7\u30a3\u30d6\u8af8\u5cf6 \u30eb\u30d5\u30a3\u30a2" } // Rufiyaa
+        MWK { "MK",  "\u30de\u30e9\u30a6\u30a3 \u30af\u30ef\u30c1\u30e3" } // 02/15/1971-
+        MWP { "MWP", "\u30de\u30e9\u30a6\u30a3 \u30dd\u30f3\u30c9" } // 07/06/1964-02/15/1971
+        MXN { "MXN", "\u30e1\u30ad\u30b7\u30b3 \u30da\u30bd" } // Mexican Peso
+        MXP { "MXP", "\u30e1\u30ad\u30b7\u30b3 \u30da\u30bd (MXP\u30011861-1992)" } // 1822-12/31/1992
+        MXV { "MXV", "\u30e1\u30ad\u30b7\u30b3 UDI" } // 1975-
+        MYR { "MYR", "\u30de\u30ec\u30fc\u30b7\u30a2 \u30ea\u30f3\u30ae\u30c3\u30c8" } // Malaysian Ringgit
+        MZE { "MZE", "\u30e2\u30b6\u30f3\u30d4\u30fc\u30af \u30a8\u30b9\u30af\u30fc\u30c9" } // 09/01/1922-06/16/1980
+        MZM { "MZM", "\u30e2\u30b6\u30f3\u30d4\u30fc\u30af \u30e1\u30c6\u30a3\u30ab\u30eb" } // 06/16/1980-
+        NAD { "NAD", "\u30ca\u30df\u30d3\u30a2 \u30c9\u30eb" } // 1993-
+        NCF { "NCF", "\u30cb\u30e5\u30fc\u30ab\u30ec\u30c9\u30cb\u30a2 CFP \u30d5\u30e9\u30f3" } // 12/26/1945-1992
+        NGN { "NGN", "\u30ca\u30a4\u30b8\u30a7\u30ea\u30a2 \u30ca\u30a4\u30e9" } // 01/01/1973-
+        NGP { "NGP", "\u30ca\u30a4\u30b8\u30a7\u30ea\u30a2 \u30dd\u30f3\u30c9" } // 07/01/1959-01/01/1973
+        NHF { "NHF", "\u30cb\u30e5\u30fc\u30d8\u30d6\u30ea\u30c7\u30a3\u30fc\u30ba\u8af8\u5cf6 CFP \u30d5\u30e9\u30f3" } // 08/31/1941-12/31/1959
+        NIC { "NIC", "\u30cb\u30ab\u30e9\u30b0\u30a2 \u30b3\u30eb\u30c9\u30d0" } // 02/15/1988-04/30/1991
+        NIG { "NIG", "\u30cb\u30ab\u30e9\u30b0\u30a2 \u30b3\u30eb\u30c9\u30d0 (NIG)" } // 04/03/1926-02/15/1988
+        NIO { "NIO", "\u30cb\u30ab\u30e9\u30b0\u30a2 \u30b3\u30eb\u30c9\u30d0 \u30aa\u30ed" } // 04/30/1991-
+        NLG { "NLG", "\u30aa\u30e9\u30f3\u30c0 \u30ae\u30eb\u30c0\u30fc" } // 1795-
+        NOK { "NOK", "\u30ce\u30eb\u30a6\u30a7\u30fc \u30af\u30ed\u30fc\u30cd" } // Norwegian Krone
+        NPR { "NPR", "\u30cd\u30d1\u30fc\u30eb \u30eb\u30d4\u30fc" } // 1945-
+        NZD { "NZD", "\u30cb\u30e5\u30fc\u30b8\u30fc\u30e9\u30f3\u30c9 \u30c9\u30eb" } // New Zealand Dollar
+        NZP { "NZP", "\u30cb\u30e5\u30fc\u30b8\u30fc\u30e9\u30f3\u30c9 \u30dd\u30f3\u30c9" } // 1907-07/10/1967
+        OMR { "OMR", "\u30aa\u30de\u30fc\u30f3 \u30ea\u30a2\u30eb" } // Rial Omani
+        OMS { "OMS", "\u30aa\u30de\u30fc\u30f3 \u30ea\u30a2\u30eb (OMS)" } // 07/25/1970-11/11/1972
+        PAB { "PAB", "\u30d1\u30ca\u30de \u30d0\u30eb\u30dc\u30a2" } // Balboa
+        PDK { "PDK", "\u6cbf\u30c9\u30cb\u30a8\u30b9\u30c8\u30eb \u30eb\u30fc\u30d6\u30eb (PDK)" } // 12/01/1994-12/31/2000
+        PDN { "PDN", "\u6cbf\u30c9\u30cb\u30a8\u30b9\u30c8\u30eb \u65b0\u30eb\u30fc\u30d6\u30eb (PDN)" } // 01/01/2001-
+        PDR { "PDR", "\u6cbf\u30c9\u30cb\u30a8\u30b9\u30c8\u30eb \u30eb\u30fc\u30d6\u30eb (PDR)" } // 01/24/1994-12/01/1994
+        PEI { "PEI", "\u30da\u30eb\u30fc \u30a4\u30f3\u30c6\u30a3" } // 02/01/1985-07/01/1991
+        PEN { "PEN", "\u30da\u30eb\u30fc \u65b0\u30bd\u30eb" } // Nuevo Sol
+        PES { "PES", "\u30da\u30eb\u30fc \u30bd\u30eb" } // 02/14/1863-02/01/1985
+        PGK { "PGK", "\u30d1\u30d7\u30a2\u30cb\u30e5\u30fc\u30ae\u30cb\u30a2 \u30ad\u30ca" } // 09/16/1975-
+        PHP { "PHP", "\u30d5\u30a3\u30ea\u30d4\u30f3 \u30da\u30bd" } // Philippine Peso
+        PKR { "PKR", "\u30d1\u30ad\u30b9\u30bf\u30f3 \u30eb\u30d4\u30fc" } // Pakistan Rupee
+        PLN { "PLN", "\u30dd\u30fc\u30e9\u30f3\u30c9 \u30ba\u30a6\u30a9\u30c6\u30a3" } // Zloty
+        PLX { "PLX", "\u30dd\u30fc\u30e9\u30f3\u30c9 \u7c73\u30c9\u30eb (FEC)" } // 1960-
+        PLZ { "PLZ", "\u30dd\u30fc\u30e9\u30f3\u30c9 \u30ba\u30a6\u30a9\u30c6\u30a3 (1950-1995)" } // 10/28/1950-12/31/1994
+        PSP { "PSP", "\u30d1\u30ec\u30b9\u30c1\u30ca \u30dd\u30f3\u30c9" } // 11/01/1927-07/01/1950
+        PTC { "PTC", "\u30dd\u30eb\u30c8\u30ac\u30eb \u30b3\u30f3\u30c8" } // 06/09/1931-2002
+        PTE { "PTE", "\u30dd\u30eb\u30c8\u30ac\u30eb \u30a8\u30b9\u30af\u30fc\u30c9" } // 05/22/1911-2002
+        PYG { "PYG", "\u30d1\u30e9\u30b0\u30a2\u30a4 \u30b0\u30a2\u30e9\u30cb" } // Guarani
+        QAR { "QAR", "\u30ab\u30bf\u30fc\u30eb \u30ea\u30a2\u30eb" } // Qatari Rial
+        REF { "REF", "\u30ec\u30e6\u30cb\u30aa\u30f3\u5cf6 \u30d5\u30e9\u30f3" } // 07/11/1851-12/31/1959
+        ROL { "ROL", "\u30eb\u30fc\u30de\u30cb\u30a2 \u30ec\u30a4" } // Leu
+        RON { "RON", "\u30eb\u30fc\u30de\u30cb\u30a2 \u65b0\u30ec\u30a4" } // 08/15/1947-01/28/1952
+        RUR { "RUR", "\u30ed\u30b7\u30a2 \u30eb\u30fc\u30d6\u30eb (1991-1998)" } // 12/25/1991-12/31/1998
+        RWF { "RWF", "\u30eb\u30ef\u30f3\u30c0 \u30d5\u30e9\u30f3" } // 05/19/1964-
+        SAR { "SAR", "\u30b5\u30a6\u30b8 \u30ea\u30e4\u30eb" } // 10/22/1952-
+        SAS { "SAS", "\u30b5\u30a6\u30b8 \u30ea\u30e4\u30eb (SAS)" } // 01/01/1936-10/22/1952
+        SBD { "SBD", "\u30bd\u30ed\u30e2\u30f3\u8af8\u5cf6 \u30c9\u30eb" } // 10/24/1977-
+        SCR { "SCR", "\u30bb\u30a4\u30b7\u30a7\u30eb \u30eb\u30d4\u30fc" } // 1900-
+        SDD { "SDD", "\u30b9\u30fc\u30c0\u30f3 \u30c7\u30a3\u30ca\u30fc\u30eb" } // 1992-
+        SDP { "SDP", "\u30b9\u30fc\u30c0\u30f3 \u30dd\u30f3\u30c9" } // 04/08/1957-06/1998
+        SEK { "SEK", "\u30b9\u30a6\u30a7\u30fc\u30c7\u30f3 \u30af\u30ed\u30fc\u30ca" } // Swedish Krona
+        SGD { "SGD", "\u30b7\u30f3\u30ac\u30dd\u30fc\u30eb \u30c9\u30eb" } // Singapore Dollar
+        SHP { "SHP", "\u30bb\u30f3\u30c8\u30d8\u30ec\u30ca\u5cf6 \u30dd\u30f3\u30c9" } // 1917-
+        SIB { "SIB", "\u30b9\u30ed\u30d9\u30cb\u30a2 \u30c8\u30e9\u30fc\u30eb (SIB)" } // 10/08/1991-10/07/1992
+        SIT { "SIT", "\u30b9\u30ed\u30d9\u30cb\u30a2 \u30c8\u30e9\u30fc\u30eb" } // Tolar
+        SKK { "SKK", "\u30b9\u30ed\u30d0\u30ad\u30a2 \u30b3\u30eb\u30ca" } // Slovak Koruna
+        SLL { "SLL", "\u30b7\u30a8\u30e9\u30ec\u30aa\u30cd \u30ec\u30aa\u30f3" } // 08/04/1964-
+        SML { "SML", "\u30b5\u30f3\u30de\u30ea\u30ce \u30ea\u30e9" } // 12/23/1865-
+        SOS { "SOS", "\u30bd\u30de\u30ea\u30a2 \u30b7\u30ea\u30f3\u30b0" } // 07/01/1960-05/24/1991
+        SQS { "SQS", "\u30bd\u30de\u30ea\u30e9\u30f3\u30c9 \u30b7\u30ea\u30f3\u30b0" } // 05/24/1991-
+        SRG { "SRG", "\u30b9\u30ea\u30ca\u30e0 \u30ae\u30eb\u30c0\u30fc" } // 12/25/1975-
+        SSP { "SSP", "\u30b9\u30b3\u30c3\u30c8\u30e9\u30f3\u30c9 \u30dd\u30f3\u30c9" } // 1707-
+        STD { "STD", "\u30b5\u30f3\u30c8\u30e1\u30fb\u30d7\u30ea\u30f3\u30b7\u30da \u30c9\u30d6\u30e9" }
+        STE { "STE", "\u30b5\u30f3\u30c8\u30e1\u30fb\u30d7\u30ea\u30f3\u30b7\u30da \u30a8\u30b9\u30af\u30fc\u30c9" } // 05/22/1911-07/05/1975
+        SUN { "SUN", "\u30bd\u9023 \u65b0\u30eb\u30fc\u30d6\u30eb" } // 12/16/1947-12/31/1960
+        SUR { "SUR", "\u30bd\u9023 \u30eb\u30fc\u30d6\u30eb" } // 01/01/1961-12/25/1991
+        SVC { "SVC", "\u30a8\u30eb\u30b5\u30eb\u30d0\u30c9\u30eb \u30b3\u30ed\u30f3" } // 11/11/1919-
+        SYP { "SYP", "\u30b7\u30ea\u30a2 \u30dd\u30f3\u30c9" } // Syrian Pound
+        SZL { "SZL", "\u30b9\u30ef\u30b8\u30e9\u30f3\u30c9 \u30ea\u30e9\u30f3\u30b2\u30cb"  } // 09/06/1974-
+        TCC { "TCC", "\u30bf\u30fc\u30af\u30b9\u30fb\u30ab\u30a4\u30b3\u30b9\u8af8\u5cf6 \u30af\u30ed\u30fc\u30f3" } // 1971-
+        TDF { "TDF", "\u30c1\u30e3\u30c9 CFA \u30d5\u30e9\u30f3" } // 04/01/1973-1992
+        THB { "THB", "\u30bf\u30a4 \u30d0\u30fc\u30c4" } // Baht
+        TJR { "TJR", "\u30bf\u30b8\u30ad\u30b9\u30bf\u30f3 \u30eb\u30fc\u30d6\u30eb" } // 05/1995-12/31/2000
+        TJS { "TJS", "\u30bf\u30b8\u30ad\u30b9\u30bf\u30f3 \u30bd\u30e2\u30cb" } // 01/01/2001-
+        TMM { "TMM", "\u30c8\u30eb\u30af\u30e1\u30cb\u30b9\u30bf\u30f3 \u30de\u30ca\u30c8" } // 11/01/1993-
+        TND { "TND", "\u30c1\u30e5\u30cb\u30b8\u30a2 \u30c7\u30a3\u30ca\u30fc\u30eb" } // 11/01/1958-
+        TOP { "TOP",  "\u30c8\u30f3\u30ac \u30d1\u30fb\u30a2\u30f3\u30ac"   } // 02/14/1966-
+        TOS { "TOS", "\u30c8\u30f3\u30ac \u30dd\u30f3\u30c9" } // 1921-02/14/1966
+        TPE { "TPE", "\u30c6\u30a3\u30e2\u30fc\u30eb \u30a8\u30b9\u30af\u30fc\u30c9" } // 01/02/1959-12/07/1975
+        TPP { "TPP", "\u30c6\u30a3\u30e2\u30fc\u30eb \u30d1\u30bf\u30ab" } // 1895-12/31/1958
+        TRL { "TRL", "\u30c8\u30eb\u30b3 \u30ea\u30e9" } // Turkish Lira
+        TTD { "TTD", "\u30c8\u30ea\u30cb\u30c0\u30fc\u30c9\u30c8\u30d0\u30b4 \u30c9\u30eb" } // Trinidad and Tobago Dollar
+        TTO { "TTO", "\u30c8\u30ea\u30cb\u30c0\u30fc\u30c9\u30c8\u30d0\u30b4 \u65e7\u30c9\u30eb" } // 01/01/1899-08/01/1951
+        TVD { "TVD", "\u30c4\u30d0\u30eb \u30c9\u30eb" } // 1979-
+        TWD { "TWD", "\u65b0\u53f0\u6e7e\u30c9\u30eb" } // 6/15/1949-
+        TZS { "TZS", "\u30bf\u30f3\u30b6\u30cb\u30a2 \u30b7\u30ea\u30f3\u30b0" } // 06/14/1966-
+        UAH { "UAH", "\u30a6\u30af\u30e9\u30a4\u30ca \u30b0\u30ea\u30d6\u30ca" } // Hryvnia
+        UAK { "UAK", "\u30a6\u30af\u30e9\u30a4\u30ca \u30ab\u30eb\u30dc\u30d0\u30cd\u30c4" } // 11/13/1992-10/17/1993
+        UGS { "UGS", "\u30a6\u30ac\u30f3\u30c0 \u30b7\u30ea\u30f3\u30b0 (1966-1987)" } // 08/15/1966-05/15/1987
+        UGX { "UGX", "\u30a6\u30ac\u30f3\u30c0 \u30b7\u30ea\u30f3\u30b0"      } // 05/15/1987-
+        USD { "$",   "\u7c73\u30c9\u30eb" } // US Dollar
+        USN { "USN", "\u7c73\u30c9\u30eb (\u7fcc\u65e5)" }
+        USS { "USS", "\u7c73\u30c9\u30eb (\u5f53\u65e5)" }
+        UYF { "UYF", "\u30a6\u30eb\u30b0\u30a2\u30a4 \u30da\u30bd (UYF)" } // 06/23/1862-07/01/1975
+        UYP { "UYP", "\u30a6\u30eb\u30b0\u30a2\u30a4 \u30da\u30bd (1975-1993)" } // 07/01/1975-03/01/1993
+        UYU { "UYU", "\u30a6\u30eb\u30b0\u30a2\u30a4 \u30da\u30bd" } // Peso Uruguayo
+        UZC { "UZC", "\u30a6\u30ba\u30d9\u30ad\u30b9\u30bf\u30f3 \u30b9\u30e0 (UZC)" } // 1993-07/1994
+        UZS { "UZS", "\u30a6\u30ba\u30d9\u30ad\u30b9\u30bf\u30f3 \u30b9\u30e0" } // Uzbekistan Sum
+        VAL { "VAL", "\u30d0\u30c1\u30ab\u30f3 \u30ea\u30e9" } // 1929-2002
+        VDD { "VDD", "\u5317\u30d9\u30c8\u30ca\u30e0 \u30c9\u30f3 (VDD)" } // 1953-02/28/1958
+        VDN { "VDN", "\u5317\u30d9\u30c8\u30ca\u30e0 \u65b0\u30c9\u30f3" } // 02/28/1958-05/03/1978
+        VDP { "VDP", "\u5317\u30d9\u30c8\u30ca\u30e0 \u30c9\u30f3 (VDP)" } // 11/3/1946-1953
+        VEB { "VEB", "\u30d9\u30cd\u30ba\u30a8\u30e9 \u30dc\u30ea\u30d0\u30eb" } // Bolivar
+        VGD { "VGD", "\u82f1\u9818\u30d0\u30fc\u30b8\u30f3\u8af8\u5cf6 \u30c9\u30eb" } // 1973-
+        VND { "\u0111",  "\u30d9\u30c8\u30ca\u30e0 \u30c9\u30f3"  } // 09/14/1985-
+        VNN { "VNN", "\u30d9\u30c8\u30ca\u30e0 \u65b0\u30c9\u30f3" } // 05/03/1978-09/14/1985
+        VNR { "VNR", "\u30d9\u30c8\u30ca\u30e0\u5171\u548c\u56fd \u30c9\u30f3" } // 12/29/1954-9/22/1975
+        VNS { "VNS", "\u30d9\u30c8\u30ca\u30e0\u81ea\u6cbb\u533a \u30c9\u30f3" } // 09/22/1975-05/03/1978
+        VUV { "VUV", "\u30d0\u30cc\u30a2\u30c4 \u30d0\u30c4" } // 01/01/1981-
+        WSP { "WSP", "\u897f\u30b5\u30e2\u30a2 \u30dd\u30f3\u30c9" } // 12/17/1920-07/10/1962
+        WST { "WST", "\u897f\u30b5\u30e2\u30a2 \u30bf\u30e9" } // 07/10/1967-
+        XAD { "XAD", "\u30a2\u30b8\u30a2 \u30c7\u30a3\u30ca\u30fc\u30eb\u52d8\u5b9a\u5358\u4f4d" }
+        XAF { "XAF", "CFA \u30d5\u30e9\u30f3 BEAC" } // 1974-
+        XAM { "XAM", "\u30a2\u30b8\u30a2\u901a\u8ca8\u5358\u4f4d (AMU)" } // 12/1974-
+        XAU { "XAU", "\u91d1" }
+        XBA { "XBA", "\u30e8\u30fc\u30ed\u30c3\u30d1\u6df7\u5408\u5358\u4f4d (EURCO)" }
+        XBB { "XBB", "\u30e8\u30fc\u30ed\u30c3\u30d1\u901a\u8ca8\u5358\u4f4d (EMU-6)" } // 12/1970-04/1972
+        XBC { "XBC", "\u30e8\u30fc\u30ed\u30c3\u30d1\u52d8\u5b9a\u5358\u4f4d (EUA-9)" } // 04/1972-12/31/1978
+        XBD { "XBD", "\u30e8\u30fc\u30ed\u30c3\u30d1\u52d8\u5b9a\u5358\u4f4d (EUA-17)" } // 1961-12/31/1978
+        XCD { "EC$", "\u6771\u30ab\u30ea\u30d6 \u30c9\u30eb" } // 10/06/1965-
+        XCF { "XCF", "CFA \u65b0\u30d5\u30e9\u30f3" } // 01/01/1960-
+        XDR { "XDR", "\u7279\u5225\u5f15\u304d\u51fa\u3057\u6a29 (Special Drawing Rights)" } // 1970-
+        XEF { "XEF", "CFA \u30d5\u30e9\u30f3 (BCEAEC)" } // 12/04/1958-04/01/1973
+        XEU { "XEU", "\u30e8\u30fc\u30ed\u30c3\u30d1\u901a\u8ca8\u5358\u4f4d" } // 1975-1998
+        XFO { "XFO", "\u30d5\u30e9\u30f3\u30b9 \u30d5\u30e9\u30f3 (XFO)" }
+        XFU { "XFU", "\u30d5\u30e9\u30f3\u30b9 UIC \u30d5\u30e9\u30f3" }
+        XID { "XID", "\u30a4\u30b9\u30e9\u30e0 \u30c7\u30a3\u30ca\u30fc\u30eb" }
+        XMF { "XMF", "\u30d5\u30e9\u30f3\u30b9 \u65b0\u30d5\u30e9\u30f3 (XMF)" } // 1960-
+        XNF { "XNF", "\u4ecf\u9818\u30a2\u30f3\u30c6\u30a3\u30eb\u8af8\u5cf6 CFA \u30d5\u30e9\u30f3" } // 01/01/1960-1975
+        XOF { "XOF", "CFA \u30d5\u30e9\u30f3 BCEAO" } // 12/04/1958-
+        XPF { "XPF", "CFP \u30d5\u30e9\u30f3" } // 12/26/1945-
+        //XPS { "XPS", "\u9280\u30dd\u30f3\u30c9" } // 07/27/1694-
+        XSS { "XSS", "\u30b7\u30ea\u30f3\u30b0 \u30dd\u30f3\u30c9"    } // 07/27/1694-
+        XTR { "XTR", "\u30b3\u30e1\u30b3\u30f3\u632f\u66ff\u30eb\u30fc\u30d6\u30eb" } // 1960-1992
+        YDD { "YDD", "\u30a4\u30a8\u30e1\u30f3 \u30c7\u30a3\u30ca\u30fc\u30eb"         } // 4/1/1965-05/22/1990
+        YEI { "YEI", "\u30a4\u30a8\u30e1\u30f3 \u30ea\u30a2\u30eb (YEI)"   } // 1904-02/1964
+        YER { "YER", "\u30a4\u30a8\u30e1\u30f3 \u30ea\u30a2\u30eb" } // Yemeni Rial
+        YUD { "YUD", "\u30e6\u30fc\u30b4\u30b9\u30e9\u30d3\u30a2 \u30c7\u30a3\u30ca\u30fc\u30eb (YUD)"  } // 01/01/1966-1990
+        YUF { "YUF", "\u30e6\u30fc\u30b4\u30b9\u30e9\u30d3\u30a2 \u30c7\u30a3\u30ca\u30fc\u30eb (YUF)" } // 12/04/1943-12/31/1965
+        YUG { "YUG", "\u30e6\u30fc\u30b4\u30b9\u30e9\u30d3\u30a2 \u30c7\u30a3\u30ca\u30fc\u30eb (YUG)" } // 01/1994-02/1994
+        YUM { "YUM", "\u30e6\u30fc\u30b4\u30b9\u30e9\u30d3\u30a2 \u30b9\u30fc\u30d1\u30fc \u30c7\u30a3\u30ca\u30fc\u30eb" } // 02/1994-
+        YUN { "YUN", "\u30e6\u30fc\u30b4\u30b9\u30e9\u30d3\u30a2 \u65b0\u30c7\u30a3\u30ca\u30fc\u30eb (YUN)" } // 1990-07/1992
+        YUO { "YUO", "\u30e6\u30fc\u30b4\u30b9\u30e9\u30d3\u30a2 \u30c7\u30a3\u30ca\u30fc\u30eb (YUO)" } // 10/1993-12/1993
+        YUR { "YUR", "\u30e6\u30fc\u30b4\u30b9\u30e9\u30d3\u30a2 \u30c7\u30a3\u30ca\u30fc\u30eb (YUR)" } // 07/1992-10/1993
+        ZAL { "ZAL", "\u5357\u30a2\u30d5\u30ea\u30ab \u30e9\u30f3\u30c9 (ZAL)" }
+        ZAP { "ZAP", "\u5357\u30a2\u30d5\u30ea\u30ab \u30dd\u30f3\u30c9" } // 1920-02/14/1961
+        ZAR { "ZAR", "\u5357\u30a2\u30d5\u30ea\u30ab \u30e9\u30f3\u30c9" } // Rand
+        ZMP { "ZMP", "\u30b6\u30f3\u30d3\u30a2 \u30dd\u30f3\u30c9" } // 08/07/1964-01/16/1968
+        ZRN { "ZRN", "\u30b6\u30a4\u30fc\u30eb \u65b0\u30b6\u30a4\u30fc\u30eb" } // 11/01/1993-07/1998
+        ZRZ { "ZRZ", "\u30b6\u30a4\u30fc\u30eb \u30b6\u30a4\u30fc\u30eb" } // 10/27/1971-11/01/1993
+        ZWD { "ZWD", "\u30b8\u30f3\u30d0\u30d6\u30a8 \u30c9\u30eb" } // Zimbabwe Dollar
     }
     Keys{
-        calendar  { "\u66A6" }
-        collation { "\u7167\u5408\u9806\u756A" }
-        currency  { "\u901A\u8CA8" }
+        calendar  { "\u66a6" }
+        collation { "\u7167\u5408\u9806\u756a" }
+        currency  { "\u901a\u8ca8" }
     }
     Types{
         collation{
-            direct      { "\u76F4\u63A5\u8457\u9304" }
-            phonebook   { "\u96FB\u8A71\u5E33\u65B9\u5F0F" }
-            pinyin      { "\u62FC\u97F3\u9806" }
-            stroke      { "\u753B\u6570\u9806" }
-            traditional { "\u65E7\u5F0F" }
+            direct      { "\u76f4\u63a5\u8457\u9304" }
+            phonebook   { "\u96fb\u8a71\u5e33\u65b9\u5f0f" }
+            pinyin      { "\u62fc\u97f3\u9806" }
+            stroke      { "\u753b\u6570\u9806" }
+            traditional { "\u65e7\u5f0f" }
         }
         calendar{
-            buddhist      { "\u4ECF\u66A6" }
-            chinese       { "\u4E2D\u56FD\u66A6" }
-            gregorian     { "\u30B0\u30EC\u30B4\u30EA\u30AA\u66A6" }
-            hebrew        { "\u30D8\u30D6\u30E9\u30A4\u66A6" }
-            islamic       { "\u30A4\u30B9\u30E9\u30E0\u66A6" }
-            islamic-civil { "\u592A\u967D\u30A4\u30B9\u30E9\u30E0\u66A6" }
-            japanese	  { "\u548C\u66A6" }
+            buddhist      { "\u4ecf\u66a6" }
+            chinese       { "\u4e2d\u56fd\u66a6" }
+            gregorian     { "\u30b0\u30ec\u30b4\u30ea\u30aa\u66a6" }
+            hebrew        { "\u30d8\u30d6\u30e9\u30a4\u66a6" }
+            islamic       { "\u30a4\u30b9\u30e9\u30e0\u66a6" }
+            islamic-civil { "\u592a\u967d\u30a4\u30b9\u30e9\u30e0\u66a6" }
+            japanese      { "\u548c\u66a6" }
         }
     }
     Variants{
@@ -888,45 +1402,54 @@ ja {
     calendar{
         gregorian{
             AmPmMarkers{
-                "\u5348\u524D",
-                "\u5348\u5F8C",
+                "\u5348\u524d",
+                "\u5348\u5f8c",
             }
             DateTimePatterns{
-                "H'\u6642'mm'\u5206'ss'\u79D2'z",
+                "H'\u6642'mm'\u5206'ss'\u79d2'z",
                 "H:mm:ss:z",
                 "H:mm:ss",
                 "H:mm",
-                "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE",
-                "yyyy'\u5E74'M'\u6708'd'\u65E5'",
+                "yyyy'\u5e74'M'\u6708'd'\u65e5'EEEE",
+                "yyyy'\u5e74'M'\u6708'd'\u65e5'",
                 "yyyy/MM/dd",
                 "yy/MM/dd",
                 "{1} {0}",
             }
             dayNames{
                 format{
-                    abbreviated{
-                        "\u65E5",
+                    narrow{
+                        "\u65e5",
                         "\u6708",
-                        "\u706B",
-                        "\u6C34",
+                        "\u706b",
+                        "\u6c34",
                         "\u6728",
-                        "\u91D1",
-                        "\u571F",
+                        "\u91d1",
+                        "\u571f",
+                    }
+                   abbreviated{
+                        "\u65e5",
+                        "\u6708",
+                        "\u706b",
+                        "\u6c34",
+                        "\u6728",
+                        "\u91d1",
+                        "\u571f",
                     }
                     wide{
-                        "\u65E5\u66DC\u65E5",
-                        "\u6708\u66DC\u65E5",
-                        "\u706B\u66DC\u65E5",
-                        "\u6C34\u66DC\u65E5",
-                        "\u6728\u66DC\u65E5",
-                        "\u91D1\u66DC\u65E5",
-                        "\u571F\u66DC\u65E5",
+                        "\u65e5\u66dc\u65e5",
+                        "\u6708\u66dc\u65e5",
+                        "\u706b\u66dc\u65e5",
+                        "\u6c34\u66dc\u65e5",
+                        "\u6728\u66dc\u65e5",
+                        "\u91d1\u66dc\u65e5",
+                        "\u571f\u66dc\u65e5",
                     }
                 }
             }
             eras{
-                "\u7D00\u5143\u524D",
-                "\u897F\u66A6",
+                "\u7d00\u5143\u524d",
+                "\u897f\u66a6",
             }
             monthNames{
                 format{
@@ -944,7 +1467,36 @@ ja {
                         "11\u6708",
                         "12\u6708",
                     }
-                }
+                    // Below are same as root
+//                    abbreviated{
+//                        "1",
+//                        "2",
+//                        "3",
+//                        "4",
+//                        "5",
+//                        "6",
+//                        "7",
+//                        "8",
+//                        "9",
+//                        "10",
+//                        "11",
+//                        "12",
+//                    }
+//                    narrow{
+//                        "1",
+//                        "2",
+//                        "3",
+//                        "4",
+//                        "5",
+//                        "6",
+//                        "7",
+//                        "8",
+//                        "9",
+//                        "10",
+//                        "11",
+//                        "12",
+//                    }
+              }
             }
         }
         japanese{
@@ -952,249 +1504,249 @@ ja {
                 // (ICU 2.6) International Calendar Data.  Note, THE FORMAT OF THIS DATA WILL CHANGE IN FUTURE RELEASES.
 
                 "\u5927\u5316",             //  645 Taika
-                "\u767D\u96C9",             //  650 Hakuchi
-                "\u767D\u9CEF",             //  672 Hakuho
-                "\u6731\u9CE5",             //  686 Shucho
-                "\u5927\u5B9D",             //  701 Taiho
-                "\u6176\u96F2",             //  704 Keiun
-                "\u548C\u9285",             //  708 Wado
-                "\u970A\u4E80",             //  715 Reiki
-                "\u990A\u8001",             //  717 Yoro
-                "\u795E\u4E80",             //  724 Jinki
-                "\u5929\u5E73",             //  729 Tempyo
-                "\u5929\u5E73\u611F\u5B9D", //  749 Tempyo-kampo
-                "\u5929\u5E73\u52DD\u5B9D", //  749 Tempyo-shoho
-                "\u5929\u5E73\u5B9D\u5B57", //  757 Tempyo-hoji
-                "\u5929\u5E73\u795E\u8B77", //  765 Tempho-jingo
-                "\u795E\u8B77\u666F\u96F2", //  767 Jingo-keiun
-                "\u5B9D\u4E80",             //  770 Hoki
-                "\u5929\u5FDC",             //  781 Ten-o
-                "\u5EF6\u66A6",             //  782 Enryaku
-                "\u5927\u540C",             //  806 Daido
-                "\u5F18\u4EC1",             //  810 Konin
+                "\u767d\u96c9",             //  650 Hakuchi
+                "\u767d\u9cef",             //  672 Hakuho
+                "\u6731\u9ce5",             //  686 Shucho
+                "\u5927\u5b9d",             //  701 Taiho
+                "\u6176\u96f2",             //  704 Keiun
+                "\u548c\u9285",             //  708 Wado
+                "\u970a\u4e80",             //  715 Reiki
+                "\u990a\u8001",             //  717 Yoro
+                "\u795e\u4e80",             //  724 Jinki
+                "\u5929\u5e73",             //  729 Tempyo
+                "\u5929\u5e73\u611f\u5b9d", //  749 Tempyo-kampo
+                "\u5929\u5e73\u52dd\u5b9d", //  749 Tempyo-shoho
+                "\u5929\u5e73\u5b9d\u5b57", //  757 Tempyo-hoji
+                "\u5929\u5e73\u795e\u8b77", //  765 Tempho-jingo
+                "\u795e\u8b77\u666f\u96f2", //  767 Jingo-keiun
+                "\u5b9d\u4e80",             //  770 Hoki
+                "\u5929\u5fdc",             //  781 Ten-o
+                "\u5ef6\u66a6",             //  782 Enryaku
+                "\u5927\u540c",             //  806 Daido
+                "\u5f18\u4ec1",             //  810 Konin
                 "\u5929\u9577",             //  824 Tencho
-                "\u627F\u548C",             //  834 Showa
+                "\u627f\u548c",             //  834 Showa
                 "\u5609\u7965",             //  848 Kajo
-                "\u4EC1\u5BFF",             //  851 Ninju
+                "\u4ec1\u5bff",             //  851 Ninju
                 "\u6589\u8861",             //  854 Saiko
-                "\u5929\u5B89",             //  857 Tennan
-                "\u8C9E\u89B3",             //  859 Jogan
+                "\u5929\u5b89",             //  857 Tennan
+                "\u8c9e\u89b3",             //  859 Jogan
                 "\u5143\u6176",             //  877 Genkei
-                "\u4EC1\u548C",             //  885 Ninna
-                "\u5BDB\u5E73",             //  889 Kampyo
-                "\u660C\u6CF0",             //  898 Shotai
-                "\u5EF6\u559C",             //  901 Engi
-                "\u5EF6\u9577",             //  923 Encho
-                "\u627F\u5E73",             //  931 Shohei
+                "\u4ec1\u548c",             //  885 Ninna
+                "\u5bdb\u5e73",             //  889 Kampyo
+                "\u660c\u6cf0",             //  898 Shotai
+                "\u5ef6\u559c",             //  901 Engi
+                "\u5ef6\u9577",             //  923 Encho
+                "\u627f\u5e73",             //  931 Shohei
                 "\u5929\u6176",             //  938 Tengyo
-                "\u5929\u66A6",             //  947 Tenryaku
-                "\u5929\u5FB3",             //  957 Tentoku
-                "\u5FDC\u548C",             //  961 Owa
-                "\u5EB7\u4FDD",             //  964 Koho
-                "\u5B89\u548C",             //  968 Anna
+                "\u5929\u66a6",             //  947 Tenryaku
+                "\u5929\u5fb3",             //  957 Tentoku
+                "\u5fdc\u548c",             //  961 Owa
+                "\u5eb7\u4fdd",             //  964 Koho
+                "\u5b89\u548c",             //  968 Anna
                 "\u5929\u7984",             //  970 Tenroku
-                "\u5929\u5EF6",             //  973 Ten-en
-                "\u8C9E\u5143",             //  976 Jogen
+                "\u5929\u5ef6",             //  973 Ten-en
+                "\u8c9e\u5143",             //  976 Jogen
                 "\u5929\u5143",             //  978 Tengen
-                "\u6C38\u89B3",             //  983 Eikan
-                "\u5BDB\u548C",             //  985 Kanna
-                "\u6C38\u5EF6",             //  987 Ei-en
-                "\u6C38\u795A",             //  989 Eiso
-                "\u6B63\u66A6",             //  990 Shoryaku
-                "\u9577\u5FB3",             //  995 Chotoku
-                "\u9577\u4FDD",             //  999 Choho
-                "\u5BDB\u5F18",             // 1004 Kanko
-                "\u9577\u548C",             // 1012 Chowa
-                "\u5BDB\u4EC1",             // 1017 Kannin
-                "\u6CBB\u5B89",             // 1021 Jian
-                "\u4E07\u5BFF",             // 1024 Manju
+                "\u6c38\u89b3",             //  983 Eikan
+                "\u5bdb\u548c",             //  985 Kanna
+                "\u6c38\u5ef6",             //  987 Ei-en
+                "\u6c38\u795a",             //  989 Eiso
+                "\u6b63\u66a6",             //  990 Shoryaku
+                "\u9577\u5fb3",             //  995 Chotoku
+                "\u9577\u4fdd",             //  999 Choho
+                "\u5bdb\u5f18",             // 1004 Kanko
+                "\u9577\u548c",             // 1012 Chowa
+                "\u5bdb\u4ec1",             // 1017 Kannin
+                "\u6cbb\u5b89",             // 1021 Jian
+                "\u4e07\u5bff",             // 1024 Manju
                 "\u9577\u5143",             // 1028 Chogen
-                "\u9577\u66A6",             // 1037 Choryaku
-                "\u9577\u4E45",             // 1040 Chokyu
-                "\u5BDB\u5FB3",             // 1044 Kantoku
-                "\u6C38\u627F",             // 1046 Eisho
-                "\u5929\u559C",             // 1053 Tengi
-                "\u5EB7\u5E73",             // 1058 Kohei
-                "\u6CBB\u66A6",             // 1065 Jiryaku
-                "\u5EF6\u4E45",             // 1069 Enkyu
-                "\u627F\u4FDD",             // 1074 Shoho
-                "\u627F\u66A6",             // 1077 Shoryaku
-                "\u6C38\u4FDD",             // 1081 Eiho
-                "\u5FDC\u5FB3",             // 1084 Otoku
-                "\u5BDB\u6CBB",             // 1087 Kanji
-                "\u5609\u4FDD",             // 1094 Kaho
-                "\u6C38\u9577",             // 1096 Eicho
-                "\u627F\u5FB3",             // 1097 Shotoku
-                "\u5EB7\u548C",             // 1099 Kowa
-                "\u9577\u6CBB",             // 1104 Choji
-                "\u5609\u627F",             // 1106 Kasho
-                "\u5929\u4EC1",             // 1108 Tennin
-                "\u5929\u6C38",             // 1110 Ten-ei
-                "\u6C38\u4E45",             // 1113 Eikyu
-                "\u5143\u6C38",             // 1118 Gen-ei
-                "\u4FDD\u5B89",             // 1120 Hoan
-                "\u5929\u6CBB",             // 1124 Tenji
-                "\u5927\u6CBB",             // 1126 Daiji
-                "\u5929\u627F",             // 1131 Tensho
-                "\u9577\u627F",             // 1132 Chosho
-                "\u4FDD\u5EF6",             // 1135 Hoen
-                "\u6C38\u6CBB",             // 1141 Eiji
-                "\u5EB7\u6CBB",             // 1142 Koji
-                "\u5929\u990A",             // 1144 Tenyo
-                "\u4E45\u5B89",             // 1145 Kyuan
-                "\u4EC1\u5E73",             // 1151 Ninpei
-                "\u4E45\u5BFF",             // 1154 Kyuju
-                "\u4FDD\u5143",             // 1156 Hogen
-                "\u5E73\u6CBB",             // 1159 Heiji
-                "\u6C38\u66A6",             // 1160 Eiryaku
-                "\u5FDC\u4FDD",             // 1161 Oho
-                "\u9577\u5BDB",             // 1163 Chokan
-                "\u6C38\u4E07",             // 1165 Eiman
-                "\u4EC1\u5B89",             // 1166 Nin-an
-                "\u5609\u5FDC",             // 1169 Kao
-                "\u627F\u5B89",             // 1171 Shoan
-                "\u5B89\u5143",             // 1175 Angen
-                "\u6CBB\u627F",             // 1177 Jisho
-                "\u990A\u548C",             // 1181 Yowa
-                "\u5BFF\u6C38",             // 1182 Juei
-                "\u5143\u66A6",             // 1184 Genryuku
-                "\u6587\u6CBB",             // 1185 Bunji
-                "\u5EFA\u4E45",             // 1190 Kenkyu
-                "\u6B63\u6CBB",             // 1199 Shoji
-                "\u5EFA\u4EC1",             // 1201 Kennin
-                "\u5143\u4E45",             // 1204 Genkyu
-                "\u5EFA\u6C38",             // 1206 Ken-ei
-                "\u627F\u5143",             // 1207 Shogen
-                "\u5EFA\u66A6",             // 1211 Kenryaku
-                "\u5EFA\u4FDD",             // 1213 Kenpo
-                "\u627F\u4E45",             // 1219 Shokyu
-                "\u8C9E\u5FDC",             // 1222 Joo
-                "\u5143\u4EC1",             // 1224 Gennin
+                "\u9577\u66a6",             // 1037 Choryaku
+                "\u9577\u4e45",             // 1040 Chokyu
+                "\u5bdb\u5fb3",             // 1044 Kantoku
+                "\u6c38\u627f",             // 1046 Eisho
+                "\u5929\u559c",             // 1053 Tengi
+                "\u5eb7\u5e73",             // 1058 Kohei
+                "\u6cbb\u66a6",             // 1065 Jiryaku
+                "\u5ef6\u4e45",             // 1069 Enkyu
+                "\u627f\u4fdd",             // 1074 Shoho
+                "\u627f\u66a6",             // 1077 Shoryaku
+                "\u6c38\u4fdd",             // 1081 Eiho
+                "\u5fdc\u5fb3",             // 1084 Otoku
+                "\u5bdb\u6cbb",             // 1087 Kanji
+                "\u5609\u4fdd",             // 1094 Kaho
+                "\u6c38\u9577",             // 1096 Eicho
+                "\u627f\u5fb3",             // 1097 Shotoku
+                "\u5eb7\u548c",             // 1099 Kowa
+                "\u9577\u6cbb",             // 1104 Choji
+                "\u5609\u627f",             // 1106 Kasho
+                "\u5929\u4ec1",             // 1108 Tennin
+                "\u5929\u6c38",             // 1110 Ten-ei
+                "\u6c38\u4e45",             // 1113 Eikyu
+                "\u5143\u6c38",             // 1118 Gen-ei
+                "\u4fdd\u5b89",             // 1120 Hoan
+                "\u5929\u6cbb",             // 1124 Tenji
+                "\u5927\u6cbb",             // 1126 Daiji
+                "\u5929\u627f",             // 1131 Tensho
+                "\u9577\u627f",             // 1132 Chosho
+                "\u4fdd\u5ef6",             // 1135 Hoen
+                "\u6c38\u6cbb",             // 1141 Eiji
+                "\u5eb7\u6cbb",             // 1142 Koji
+                "\u5929\u990a",             // 1144 Tenyo
+                "\u4e45\u5b89",             // 1145 Kyuan
+                "\u4ec1\u5e73",             // 1151 Ninpei
+                "\u4e45\u5bff",             // 1154 Kyuju
+                "\u4fdd\u5143",             // 1156 Hogen
+                "\u5e73\u6cbb",             // 1159 Heiji
+                "\u6c38\u66a6",             // 1160 Eiryaku
+                "\u5fdc\u4fdd",             // 1161 Oho
+                "\u9577\u5bdb",             // 1163 Chokan
+                "\u6c38\u4e07",             // 1165 Eiman
+                "\u4ec1\u5b89",             // 1166 Nin-an
+                "\u5609\u5fdc",             // 1169 Kao
+                "\u627f\u5b89",             // 1171 Shoan
+                "\u5b89\u5143",             // 1175 Angen
+                "\u6cbb\u627f",             // 1177 Jisho
+                "\u990a\u548c",             // 1181 Yowa
+                "\u5bff\u6c38",             // 1182 Juei
+                "\u5143\u66a6",             // 1184 Genryuku
+                "\u6587\u6cbb",             // 1185 Bunji
+                "\u5efa\u4e45",             // 1190 Kenkyu
+                "\u6b63\u6cbb",             // 1199 Shoji
+                "\u5efa\u4ec1",             // 1201 Kennin
+                "\u5143\u4e45",             // 1204 Genkyu
+                "\u5efa\u6c38",             // 1206 Ken-ei
+                "\u627f\u5143",             // 1207 Shogen
+                "\u5efa\u66a6",             // 1211 Kenryaku
+                "\u5efa\u4fdd",             // 1213 Kenpo
+                "\u627f\u4e45",             // 1219 Shokyu
+                "\u8c9e\u5fdc",             // 1222 Joo
+                "\u5143\u4ec1",             // 1224 Gennin
                 "\u5609\u7984",             // 1225 Karoku
-                "\u5B89\u8C9E",             // 1227 Antei
-                "\u5BDB\u559C",             // 1229 Kanki
-                "\u8C9E\u6C38",             // 1232 Joei
-                "\u5929\u798F",             // 1233 Tempuku
-                "\u6587\u66A6",             // 1234 Bunryaku
-                "\u5609\u798E",             // 1235 Katei
-                "\u66A6\u4EC1",             // 1238 Ryakunin
-                "\u5EF6\u5FDC",             // 1239 En-o
-                "\u4EC1\u6CBB",             // 1240 Ninji
-                "\u5BDB\u5143",             // 1243 Kangen
-                "\u5B9D\u6CBB",             // 1247 Hoji
-                "\u5EFA\u9577",             // 1249 Kencho
-                "\u5EB7\u5143",             // 1256 Kogen
-                "\u6B63\u5609",             // 1257 Shoka
-                "\u6B63\u5143",             // 1259 Shogen
-                "\u6587\u5FDC",             // 1260 Bun-o
-                "\u5F18\u9577",             // 1261 Kocho
-                "\u6587\u6C38",             // 1264 Bun-ei
-                "\u5EFA\u6CBB",             // 1275 Kenji
-                "\u5F18\u5B89",             // 1278 Koan
-                "\u6B63\u5FDC",             // 1288 Shoo
-                "\u6C38\u4EC1",             // 1293 Einin
-                "\u6B63\u5B89",             // 1299 Shoan
-                "\u4E7E\u5143",             // 1302 Kengen
+                "\u5b89\u8c9e",             // 1227 Antei
+                "\u5bdb\u559c",             // 1229 Kanki
+                "\u8c9e\u6c38",             // 1232 Joei
+                "\u5929\u798f",             // 1233 Tempuku
+                "\u6587\u66a6",             // 1234 Bunryaku
+                "\u5609\u798e",             // 1235 Katei
+                "\u66a6\u4ec1",             // 1238 Ryakunin
+                "\u5ef6\u5fdc",             // 1239 En-o
+                "\u4ec1\u6cbb",             // 1240 Ninji
+                "\u5bdb\u5143",             // 1243 Kangen
+                "\u5b9d\u6cbb",             // 1247 Hoji
+                "\u5efa\u9577",             // 1249 Kencho
+                "\u5eb7\u5143",             // 1256 Kogen
+                "\u6b63\u5609",             // 1257 Shoka
+                "\u6b63\u5143",             // 1259 Shogen
+                "\u6587\u5fdc",             // 1260 Bun-o
+                "\u5f18\u9577",             // 1261 Kocho
+                "\u6587\u6c38",             // 1264 Bun-ei
+                "\u5efa\u6cbb",             // 1275 Kenji
+                "\u5f18\u5b89",             // 1278 Koan
+                "\u6b63\u5fdc",             // 1288 Shoo
+                "\u6c38\u4ec1",             // 1293 Einin
+                "\u6b63\u5b89",             // 1299 Shoan
+                "\u4e7e\u5143",             // 1302 Kengen
                 "\u5609\u5143",             // 1303 Kagen
-                "\u5FB3\u6CBB",             // 1306 Tokuji
-                "\u5EF6\u6176",             // 1308 Enkei
-                "\u5FDC\u9577",             // 1311 Ocho
-                "\u6B63\u548C",             // 1312 Showa
-                "\u6587\u4FDD",             // 1317 Bunpo
-                "\u5143\u5FDC",             // 1319 Geno
-                "\u5143\u4EA8",             // 1321 Genkyo
-                "\u6B63\u4E2D",             // 1324 Shochu
-                "\u5609\u66A6",             // 1326 Kareki
-                "\u5143\u5FB3",             // 1329 Gentoku
-                "\u5143\u5F18",             // 1331 Genko
-                "\u5EFA\u6B66",             // 1334 Kemmu
-                "\u5EF6\u5143",             // 1336 Engen
-                "\u8208\u56FD",             // 1340 Kokoku
-                "\u6B63\u5E73",             // 1346 Shohei
-                "\u5EFA\u5FB3",             // 1370 Kentoku
-                "\u6587\u4E2D",             // 1372 Bunchu
+                "\u5fb3\u6cbb",             // 1306 Tokuji
+                "\u5ef6\u6176",             // 1308 Enkei
+                "\u5fdc\u9577",             // 1311 Ocho
+                "\u6b63\u548c",             // 1312 Showa
+                "\u6587\u4fdd",             // 1317 Bunpo
+                "\u5143\u5fdc",             // 1319 Geno
+                "\u5143\u4ea8",             // 1321 Genkyo
+                "\u6b63\u4e2d",             // 1324 Shochu
+                "\u5609\u66a6",             // 1326 Kareki
+                "\u5143\u5fb3",             // 1329 Gentoku
+                "\u5143\u5f18",             // 1331 Genko
+                "\u5efa\u6b66",             // 1334 Kemmu
+                "\u5ef6\u5143",             // 1336 Engen
+                "\u8208\u56fd",             // 1340 Kokoku
+                "\u6b63\u5e73",             // 1346 Shohei
+                "\u5efa\u5fb3",             // 1370 Kentoku
+                "\u6587\u4e2d",             // 1372 Bunchu
                 "\u5929\u6388",             // 1375 Tenju
-                "\u5F18\u548C",             // 1381 Kowa
-                "\u5143\u4E2D",             // 1384 Genchu
-                "\u81F3\u5FB3",             // 1384 Meitoku
-                "\u5EB7\u66A6",             // 1379 Koryaku
+                "\u5f18\u548c",             // 1381 Kowa
+                "\u5143\u4e2d",             // 1384 Genchu
+                "\u81f3\u5fb3",             // 1384 Meitoku
+                "\u5eb7\u66a6",             // 1379 Koryaku
                 "\u5609\u6176",             // 1387 Kakei
-                "\u5EB7\u5FDC",             // 1389 Koo
-                "\u660E\u5FB3",             // 1390 Meitoku
-                "\u5FDC\u6C38",             // 1394 Oei
-                "\u6B63\u9577",             // 1428 Shocho
-                "\u6C38\u4EAB",             // 1429 Eikyo
+                "\u5eb7\u5fdc",             // 1389 Koo
+                "\u660e\u5fb3",             // 1390 Meitoku
+                "\u5fdc\u6c38",             // 1394 Oei
+                "\u6b63\u9577",             // 1428 Shocho
+                "\u6c38\u4eab",             // 1429 Eikyo
                 "\u5609\u5409",             // 1441 Kakitsu
-                "\u6587\u5B89",             // 1444 Bun-an
-                "\u5B9D\u5FB3",             // 1449 Hotoku
-                "\u4EAB\u5FB3",             // 1452 Kyotoku
-                "\u5EB7\u6B63",             // 1455 Kosho
+                "\u6587\u5b89",             // 1444 Bun-an
+                "\u5b9d\u5fb3",             // 1449 Hotoku
+                "\u4eab\u5fb3",             // 1452 Kyotoku
+                "\u5eb7\u6b63",             // 1455 Kosho
                 "\u9577\u7984",             // 1457 Choroku
-                "\u5BDB\u6B63",             // 1460 Kansho
-                "\u6587\u6B63",             // 1466 Bunsho
-                "\u5FDC\u4EC1",             // 1467 Onin
-                "\u6587\u660E",             // 1469 Bunmei
-                "\u9577\u4EAB",             // 1487 Chokyo
-                "\u5EF6\u5FB3",             // 1489 Entoku
-                "\u660E\u5FDC",             // 1492 Meio
-                "\u6587\u4E80",             // 1501 Bunki
-                "\u6C38\u6B63",             // 1504 Eisho
-                "\u5927\u6C38",             // 1521 Taiei
-                "\u4EAB\u7984",             // 1528 Kyoroku
+                "\u5bdb\u6b63",             // 1460 Kansho
+                "\u6587\u6b63",             // 1466 Bunsho
+                "\u5fdc\u4ec1",             // 1467 Onin
+                "\u6587\u660e",             // 1469 Bunmei
+                "\u9577\u4eab",             // 1487 Chokyo
+                "\u5ef6\u5fb3",             // 1489 Entoku
+                "\u660e\u5fdc",             // 1492 Meio
+                "\u6587\u4e80",             // 1501 Bunki
+                "\u6c38\u6b63",             // 1504 Eisho
+                "\u5927\u6c38",             // 1521 Taiei
+                "\u4eab\u7984",             // 1528 Kyoroku
                 "\u5929\u6587",             // 1532 Tenmon
-                "\u5F18\u6CBB",             // 1555 Koji
-                "\u6C38\u7984",             // 1558 Eiroku
-                "\u5143\u4E80",             // 1570 Genki
-                "\u5929\u6B63",             // 1573 Tensho
+                "\u5f18\u6cbb",             // 1555 Koji
+                "\u6c38\u7984",             // 1558 Eiroku
+                "\u5143\u4e80",             // 1570 Genki
+                "\u5929\u6b63",             // 1573 Tensho
                 "\u6587\u7984",             // 1592 Bunroku
                 "\u6176\u9577",             // 1596 Keicho
-                "\u5143\u548C",             // 1615 Genwa
-                "\u5BDB\u6C38",             // 1624 Kan-ei
-                "\u6B63\u4FDD",             // 1644 Shoho
-                "\u6176\u5B89",             // 1648 Keian
-                "\u627F\u5FDC",             // 1652 Shoo
-                "\u660E\u66A6",             // 1655 Meiryaku
-                "\u4E07\u6CBB",             // 1658 Manji
-                "\u5BDB\u6587",             // 1661 Kanbun
-                "\u5EF6\u5B9D",             // 1673 Enpo
-                "\u5929\u548C",             // 1681 Tenwa
-                "\u8C9E\u4EAB",             // 1684 Jokyo
+                "\u5143\u548c",             // 1615 Genwa
+                "\u5bdb\u6c38",             // 1624 Kan-ei
+                "\u6b63\u4fdd",             // 1644 Shoho
+                "\u6176\u5b89",             // 1648 Keian
+                "\u627f\u5fdc",             // 1652 Shoo
+                "\u660e\u66a6",             // 1655 Meiryaku
+                "\u4e07\u6cbb",             // 1658 Manji
+                "\u5bdb\u6587",             // 1661 Kanbun
+                "\u5ef6\u5b9d",             // 1673 Enpo
+                "\u5929\u548c",             // 1681 Tenwa
+                "\u8c9e\u4eab",             // 1684 Jokyo
                 "\u5143\u7984",             // 1688 Genroku
-                "\u5B9D\u6C38",             // 1704 Hoei
-                "\u6B63\u5FB3",             // 1711 Shotoku
-                "\u4EAB\u4FDD",             // 1716 Kyoho
+                "\u5b9d\u6c38",             // 1704 Hoei
+                "\u6b63\u5fb3",             // 1711 Shotoku
+                "\u4eab\u4fdd",             // 1716 Kyoho
                 "\u5143\u6587",             // 1736 Genbun
-                "\u5BDB\u4FDD",             // 1741 Kanpo
-                "\u5EF6\u4EAB",             // 1744 Enkyo
-                "\u5BDB\u5EF6",             // 1748 Kan-en
-                "\u5B9D\u66A6",             // 1751 Horyaku
-                "\u660E\u548C",             // 1764 Meiwa
-                "\u5B89\u6C38",             // 1772 An-ei
-                "\u5929\u660E",             // 1781 Tenmei
-                "\u5BDB\u653F",             // 1789 Kansei
-                "\u4EAB\u548C",             // 1801 Kyowa
+                "\u5bdb\u4fdd",             // 1741 Kanpo
+                "\u5ef6\u4eab",             // 1744 Enkyo
+                "\u5bdb\u5ef6",             // 1748 Kan-en
+                "\u5b9d\u66a6",             // 1751 Horyaku
+                "\u660e\u548c",             // 1764 Meiwa
+                "\u5b89\u6c38",             // 1772 An-ei
+                "\u5929\u660e",             // 1781 Tenmei
+                "\u5bdb\u653f",             // 1789 Kansei
+                "\u4eab\u548c",             // 1801 Kyowa
                 "\u6587\u5316",             // 1804 Bunka
-                "\u6587\u653F",             // 1818 Bunsei
-                "\u5929\u4FDD",             // 1830 Tenpo
-                "\u5F18\u5316",             // 1844 Koka
-                "\u5609\u6C38",             // 1848 Kaei
-                "\u5B89\u653F",             // 1854 Ansei
-                "\u4E07\u5EF6",             // 1860 Man-en
-                "\u6587\u4E45",             // 1861 Bunkyu
-                "\u5143\u6CBB",             // 1864 Genji
-                "\u6176\u5FDC",             // 1865 Keio
-                "\u660E\u6CBB",             // 1868 Meiji
-                "\u5927\u6B63",             // 1912 Taisho
-                "\u662D\u548C",             // 1926 Showa
-                "\u5E73\u6210"             // 1989 Heisei
+                "\u6587\u653f",             // 1818 Bunsei
+                "\u5929\u4fdd",             // 1830 Tenpo
+                "\u5f18\u5316",             // 1844 Koka
+                "\u5609\u6c38",             // 1848 Kaei
+                "\u5b89\u653f",             // 1854 Ansei
+                "\u4e07\u5ef6",             // 1860 Man-en
+                "\u6587\u4e45",             // 1861 Bunkyu
+                "\u5143\u6cbb",             // 1864 Genji
+                "\u6176\u5fdc",             // 1865 Keio
+                "\u660e\u6cbb",             // 1868 Meiji
+                "\u5927\u6b63",             // 1912 Taisho
+                "\u662d\u548c",             // 1926 Showa
+                "\u5e73\u6210"             // 1989 Heisei
             }
             DateTimePatterns {
-                "H'\u6642'mm'\u5206'ss'\u79D2'z",
+                "H'\u6642'mm'\u5206'ss'\u79d2'z",
                 "H:mm:ss:z",
                 "H:mm:ss",
                 "H:mm",
-                "Gy'\u5E74'M'\u6708'd'\u65E5'EEEE",
-                "Gy'\u5E74'M'\u6708'd'\u65E5'",
+                "Gy'\u5e74'M'\u6708'd'\u65e5'EEEE",
+                "Gy'\u5e74'M'\u6708'd'\u65e5'",
                 "G yy/MM/dd",
                 "G yy/MM/dd",
                 "{1} {0}",

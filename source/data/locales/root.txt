@@ -618,16 +618,16 @@ root {
                     wide{
                         "Muharram",
                         "Safar",
-                        "Rabi' I",
-                        "Rabi' II",
+                        "Rabi\u02bb I",
+                        "Rabi\u02bb II",
                         "Jumada I",
                         "Jumada II",
                         "Rajab",
-                        "Sha'ban",
+                        "Sha\u02bbban",
                         "Ramadan",
                         "Shawwal",
-                        "Dhu'l-Qi'dah",
-                        "Dhu'l-Hijjah"
+                        "Dhu\u02bbl-Qi\u02bbdah",
+                        "Dhu\u02bbl-Hijjah"
                     }
                 }
             }
