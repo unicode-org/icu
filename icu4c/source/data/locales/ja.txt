@@ -2867,7 +2867,7 @@ ja {
         "H:mm:ss:z",
         "H:mm:ss",
         "H:mm",
-        "Gy'\u5E74'M'\u6708'd'\u65E5'",
+        "Gy'\u5E74'M'\u6708'd'\u65E5'EEEE",
         "Gy'\u5E74'M'\u6708'd'\u65E5'",
         "G yy/MM/dd",
         "G yy/MM/dd",

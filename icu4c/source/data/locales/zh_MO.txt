@@ -15,7 +15,7 @@ zh_MO {
         "ahh:mm:ss",
         "ah:mm",
         "yyyy'\u5E74'MM'\u6708'dd'\u65E5' EEEE",
-        "yyyy'\u5E74'MM'\u6708'dd'\u65E5' EEEE",
+        "yyyy'\u5E74'MM'\u6708'dd'\u65E5'",
         "yyyy'\u5E74'M'\u6708'd'\u65E5'",
         "yy'\u5E74'M'\u6708'd'\u65E5'",
         "{1} {0}",
