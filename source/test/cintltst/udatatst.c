@@ -260,7 +260,7 @@ static void TestUDataOpen(){
      */
     {
 #if 0
-        /* TODO:  fix doOpenChoice().  Bug 3121.
+        /* TODO:  fix doOpenChoice().  Bug 3121. */
         char longTestPath[1024];    /* Implementation goes to heap at length of 128.  */
         char longName[1024];
 
