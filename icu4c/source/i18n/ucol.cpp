@@ -337,8 +337,10 @@ ucol_close(UCollator *coll)
   if(coll->rules != NULL) {
     uprv_free(coll->rules);
   }
-  if(coll->rb != NULL) {
+  if(coll->rb != NULL) { /* pointing to read-only memory */
     ures_close(coll->rb);
+  } else if(coll->hasRealData == TRUE) {
+    uprv_free((UCATableHeader *)coll->image);
   }
   uprv_free(coll);
 }
@@ -775,11 +777,12 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
       } else { /* need to pick it from the UCA */
         /* first, get the UChars from the rules */
         /* then pick CEs out until there is no more and stuff them into expansion */
-        UChar source[256];
+        UChar source[256],buff[256];
         collIterate s;
         uint32_t order = 0;
         uint32_t len = tok->expansion >> 24;
-        uprv_memcpy(source, (tok->expansion & 0x00FFFFFF) + src->source, len*sizeof(UChar));
+        uprv_memcpy(buff, (tok->expansion & 0x00FFFFFF) + src->source, len*sizeof(UChar));
+        unorm_normalize(buff, len, UNORM_NFD, 0, source, 256, status);
         init_collIterate(source, len, &s, FALSE);
 
         for(;;) {
@@ -809,7 +812,10 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
       key.source = newCharsLen << 24 | charsOffset;
       key.expansion = newExtensionsLen << 24 | extensionOffset;
 */
-    uprv_memcpy(el.uchars, (tok->source & 0x00FFFFFF) + src->source, (tok->source >> 24)*sizeof(UChar));
+    UChar buff[128];
+    uprv_memcpy(buff, (tok->source & 0x00FFFFFF) + src->source, (tok->source >> 24)*sizeof(UChar));
+    unorm_normalize(buff, tok->source >> 24, UNORM_NFD, 0, el.uchars, 128, status);
+    /*uprv_memcpy(el.uchars, (tok->source & 0x00FFFFFF) + src->source, (tok->source >> 24)*sizeof(UChar));*/
     /* I think I don't want to have expansion chars in chars for UCAelement... HMMM! */
     /*uprv_memcpy(el.uchars+(tok->source >> 24), (tok->expansion & 0x00FFFFFF) + src->source, (tok->expansion >> 24)*sizeof(UChar));*/
     el.cSize = (tok->source >> 24); /* + (tok->expansion >> 24);*/
@@ -950,18 +956,44 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, uint32_t *resL
     ucol_createElements(src, t, &src->lh[i], tailored, status);
   }
 
-  UCATableHeader *myData = uprv_uca_assembleTable(t, status);  
-
-  /* produce canonical & compatibility closure */
-
+  UCATableHeader *myData = NULL;
   {
     UChar decomp[256];
     uint32_t noOfDec = 0, i = 0, j = 0, CE = UCOL_NOT_FOUND;
     uint32_t u = 0;
-    UCAElements el;
     collIterate colIt;
-    UCollator *temp = ucol_initCollator(myData, NULL, status);
+    UCAElements el;
+    el.isThai = FALSE;
+  /* add latin-1 stuff */
+    for(u = 0; u<0x100; u++) {
+      if((CE = ucmp32_get(t->mapping, u)) == UCOL_NOT_FOUND /*) {*/
+        /* this test is for contractions that are missing the starting element. Looks like latin-1 should be done before assembling */
+        /* the table, even if it results in more false closure elements */
+        || ((isContraction(CE)) &&
+        (uprv_cnttab_getCE(t->contractions, CE, 0, TRUE, status) == UCOL_NOT_FOUND))
+        ) {
+        decomp[0] = u;
+        el.uchars[0] = u;
+        el.cPoints = el.uchars;
+        el.codepoint = u;
+        el.cSize = 1;
+        el.noOfCEs = 0;
+        init_collIterate(decomp, 1, &colIt, TRUE);
+        while(CE != UCOL_NO_MORE_CES) {
+          CE = ucol_getNextCE(UCA, &colIt, status);
+          /*UCOL_GETNEXTCE(CE, temp, colIt, status);*/
+          if(CE != UCOL_NO_MORE_CES) {
+            el.CEs[el.noOfCEs++] = CE;
+          }
+        }
+        uprv_uca_addAnElement(t, &el, status);
+      }
+    }
 
+   myData = uprv_uca_assembleTable(t, status);  
+   UCollator *temp = ucol_initCollator(myData, NULL, status);
+
+  /* produce canonical & compatibility closure */
     for(u = 0; u < 0x10000; u++) {
       if((noOfDec = uprv_ucol_decompose (u, decomp)) > 1) {
         for(i = 0; i<noOfDec; i++) {
@@ -983,33 +1015,6 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, uint32_t *resL
             break;
           }        
         }
-      }
-    }
-  /* add latin-1 stuff */
-    for(u = 0; u<0x100; u++) {
-      if((CE = ucmp32_get(t->mapping, u)) == UCOL_NOT_FOUND) {
-        /* this test is for contractions that are missing the starting element. Looks like latin-1 should be done before assembling */
-        /* the table, even if it results in more false closure elements */
-/*
-        || ((isContraction(CE)) &&
-        ((*(temp->contractionCEs + ((UChar *)temp->image+getContractOffset(CE) - temp->contractionIndex))) == UCOL_NOT_FOUND))
-        ) {
-*/
-        decomp[0] = u;
-        el.uchars[0] = u;
-        el.cPoints = el.uchars;
-        el.codepoint = u;
-        el.cSize = 1;
-        el.noOfCEs = 0;
-        init_collIterate(decomp, 1, &colIt, TRUE);
-        while(CE != UCOL_NO_MORE_CES) {
-          CE = ucol_getNextCE(temp, &colIt, status);
-          /*UCOL_GETNEXTCE(CE, temp, colIt, status);*/
-          if(CE != UCOL_NO_MORE_CES) {
-            el.CEs[el.noOfCEs++] = CE;
-          }
-        }
-        uprv_uca_addAnElement(t, &el, status);
       }
     }
   }

@@ -162,7 +162,7 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
             /* This loop has to change the CE at the end of contraction REDO!*/
             uprv_cnttab_changeLastCE(contractions, CE, element->mapCE, TRUE, status);
         } else {
-          fprintf(stderr, "Warning - trying to overwrite already existing data for codepoint %04X\n", element->cPoints[0]);
+          //fprintf(stderr, "Warning - trying to overwrite already existing data for codepoint %04X\n", element->cPoints[0]);
           //*status = U_ILLEGAL_ARGUMENT_ERROR;
         }
     } else {
@@ -270,10 +270,6 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
     UCATableHeader *myData = (UCATableHeader *)dataStart;
     myData->contractionSize = contractionsSize;
 
-    /* Stuff everything with @ */
-    memset(dataStart, '@', toAllocate);
-
-    memset(dataStart+tableOffset, 0, sizeof(UCATableHeader));
     tableOffset += paddedsize(sizeof(UCATableHeader));
 
     /* copy expansions */
