@@ -258,7 +258,7 @@ public class CollationEnglishTest extends TestFmwk{
         int i;
         myCollation.setStrength(Collator.PRIMARY);
         for (i = 38; i < 43 ; i++) {
-            doTest(testSourceCases[39], testTargetCases[39], results[39]);
+            doTest(testSourceCases[i], testTargetCases[i], results[i]);
         }  
     }
     
