@@ -1808,10 +1808,16 @@ uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate 
       /* we return 0 (completely ignorable - per UCA specification */
       {
         UChar trail;
+        collIterateState state;
+        backupState(source, &state);
         if (collIter_eos(source) || !(UTF16_IS_TRAIL((trail = getNextNormalizedChar(source))))) {
           return 0;
         } else {
           CE = ucmpe32_getSurrogate(coll->mapping, CE, trail);
+          if(CE == UCOL_NOT_FOUND) { // there are tailored surrogates in this block, but not this one.
+            // We need to backup
+            loadState(source, &state, TRUE);
+          }
         }
       }
       break;
@@ -1875,7 +1881,7 @@ uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate 
               // in the prefix table are in the reverse order
               schar = UTF16_TRAIL(normOutput);
             } else {
-              schar = normOutput;
+              schar = (UChar)normOutput;
             }
           }
         } else { // previous normalized codepoint was a supplementary
@@ -2490,7 +2496,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
               // prefix table are in the reverse order
               schar = UTF16_TRAIL(normOutput);
             } else {
-              schar = normOutput;
+              schar = (UChar)normOutput;
             }
           }
         } else { // previous normalized codepoint was a supplementary
@@ -4843,6 +4849,12 @@ ucol_strcoll( const UCollator    *coll,
         /* There is an identical portion at the beginning of the two strings.        */
         /*   If the identical portion ends within a contraction or a comibining      */
         /*   character sequence, back up to the start of that sequence.              */
+/*
+      if (equalLength < sourceLength) {
+        while (UTF_IS_TRAIL(source + equalLength)) {
+          --equalLength;
+        }
+*/
         pSrc  = source + equalLength;        /* point to the first differing chars   */
         pTarg = target + equalLength;
         if (pSrc  != source+sourceLength && ucol_unsafeCP(*pSrc, coll) ||
