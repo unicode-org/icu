@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/format/Attic/DateFormatTest.java,v $ 
- * $Date: 2001/10/23 13:10:53 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/10/31 05:01:39 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -191,7 +191,7 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
             /* # is a marker for "ao\xfbt" == "aou^t" */
             "", "", "13", "", "mercredi", "", "", "", "14", "34", "", "", "PDT",
             /* Following two added by weiv for two new fields */
-            "AD", "97", "8", "33", "3", "13", "225", "Wed", "2", "PM", "2", "14", "34", "12", "513", "PDT",
+            "AD", "1997", "8", "33", "3", "13", "225", "Wed", "2", "PM", "2", "14", "34", "12", "513", "PDT",
             /* Following two added by weiv for two new fields */
             "AD",  "1997",  "August",  "0033", "0003", "0013", "0225", "Wednesday", "0002",
              "PM", "0002",  "0014", "0034", "0012",   "0513", "Pacific Daylight Time",
