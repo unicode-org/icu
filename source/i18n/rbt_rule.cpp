@@ -186,41 +186,6 @@ bool_t TransliterationRule::masks(const TransliterationRule& r2) const {
 }
 
 /**
- * Return true if this rule matches the given text.  The text being matched
- * occupies a virtual buffer consisting of the contents of
- * <code>result</code> concatenated to a substring of <code>text</code>.
- * The substring is specified by <code>start</code> and <code>limit</code>.
- * The value of <code>cursor</code> is an index into this virtual buffer,
- * from 0 to the length of the buffer.  In terms of the parameters,
- * <code>cursor</code> must be between 0 and <code>result.length() + limit -
- * start</code>.
- * @param text the untranslated text
- * @param start the beginning index, inclusive; <code>0 <= start
- * <= limit</code>.
- * @param limit the ending index, exclusive; <code>start <= limit
- * <= text.length()</code>.
- * @param result translated text so far
- * @param cursor position at which to translate next, an offset into result.
- * If greater than or equal to result.length(), represents offset start +
- * cursor - result.length() into text.
- * @param filter the filter.  Any character for which
- * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
- * altered by this transliterator.  If <tt>filter</tt> is
- * <tt>null</tt> then no filtering is applied.
- */
-bool_t TransliterationRule::matches(const UnicodeString& text,
-                                    int32_t start, int32_t limit,
-                                    const UnicodeString& result,
-                                    int32_t cursor,
-                                    const TransliterationRuleData& data,
-                                    const UnicodeFilter* filter) const {
-    // Match anteContext, key, and postContext
-    return regionMatches(text, start, limit, result,
-                         cursor - anteContextLength,
-                         pattern, data, filter);
-}
-
-/**
  * Return true if this rule matches the given text.
  * @param text the text, both translated and untranslated
  * @param start the beginning index, inclusive; <code>0 <= start
@@ -241,9 +206,17 @@ bool_t TransliterationRule::matches(const Replaceable& text,
                                     const TransliterationRuleData& data,
                                     const UnicodeFilter* filter) const {
     // Match anteContext, key, and postContext
-    return regionMatches(text, start, limit,
-                         cursor - anteContextLength,
-                         pattern, data, filter);
+    cursor -= anteContextLength;
+    if (cursor < start || (cursor + pattern.length()) > limit) {
+        return FALSE;
+    }
+    for (int32_t i=0; i<pattern.length(); ++i, ++cursor) {
+        if (!charMatches(pattern.charAt(i), text.charAt(cursor),
+                         data, filter)) {
+            return FALSE;
+        }
+    }
+    return TRUE;
 }
 
 /**
@@ -280,92 +253,6 @@ int32_t TransliterationRule::getMatchDegree(const Replaceable& text,
                                    pattern, data, filter);
     return len < anteContextLength ? MISMATCH :
         (len < pattern.length() ? PARTIAL_MATCH : FULL_MATCH);
-}
-
-/**
- * Return true if a template matches the text.  The entire length of the
- * template is compared to the text at the cursor.  As in
- * <code>matches()</code>, the text being matched occupies a virtual buffer
- * consisting of the contents of <code>result</code> concatenated to a
- * substring of <code>text</code>.  See <code>matches()</code> for details.
- * @param text the untranslated text
- * @param start the beginning index, inclusive; <code>0 <= start
- * <= limit</code>.
- * @param limit the ending index, exclusive; <code>start <= limit
- * <= text.length()</code>.
- * @param result translated text so far
- * @param cursor position at which to translate next, an offset into result.
- * If greater than or equal to result.length(), represents offset start +
- * cursor - result.length() into text.
- * @param templ the text to match against.  All characters must match.
- * @param data a dictionary of variables mapping <code>Character</code>
- * to <code>UnicodeSet</code>
- * @param filter the filter.  Any character for which
- * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
- * altered by this transliterator.  If <tt>filter</tt> is
- * <tt>null</tt> then no filtering is applied.
- * @return true if there is a match
- */
-bool_t TransliterationRule::regionMatches(const UnicodeString& text,
-                                          int32_t start, int32_t limit,
-                                          const UnicodeString& result,
-                                          int32_t cursor,
-                                          const UnicodeString& templ,
-                                          const TransliterationRuleData& data,
-                                          const UnicodeFilter* filter) const {
-    int32_t rlen = result.length();
-    if (cursor < 0
-        || (cursor + templ.length()) > (rlen + limit - start)) {
-        return FALSE;
-    }
-    for (int32_t i=0; i<templ.length(); ++i, ++cursor) {
-        if (!charMatches(templ.charAt(i),
-                         cursor < rlen ? result.charAt(cursor)
-                                       : text.charAt(cursor - rlen + start),
-                         data, filter)) {
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
-
-/**
- * Return true if a template matches the text.  The entire length of the
- * template is compared to the text at the cursor.
- * @param text the text, both translated and untranslated
- * @param start the beginning index, inclusive; <code>0 <= start
- * <= limit</code>.
- * @param limit the ending index, exclusive; <code>start <= limit
- * <= text.length()</code>.
- * @param cursor position at which to translate next, representing offset
- * into text.  This value must be between <code>start</code> and
- * <code>limit</code>.
- * @param templ the text to match against.  All characters must match.
- * @param data a dictionary of variables mapping <code>Character</code>
- * to <code>UnicodeSet</code>
- * @param filter the filter.  Any character for which
- * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
- * altered by this transliterator.  If <tt>filter</tt> is
- * <tt>null</tt> then no filtering is applied.
- * @return true if there is a match
- */
-bool_t TransliterationRule::regionMatches(const Replaceable& text,
-                                          int32_t start, int32_t limit,
-                                          int32_t cursor,
-                                          const UnicodeString& templ,
-                                          const TransliterationRuleData& data,
-                                          const UnicodeFilter* filter) const {
-    if (cursor < start
-        || (cursor + templ.length()) > limit) {
-        return FALSE;
-    }
-    for (int32_t i=0; i<templ.length(); ++i, ++cursor) {
-        if (!charMatches(templ.charAt(i), text.charAt(cursor),
-                         data, filter)) {
-            return FALSE;
-        }
-    }
-    return TRUE;
 }
 
 /**
