@@ -136,7 +136,7 @@ U_CDECL_END
  * lexically follows name2.
  */
 U_CAPI int U_EXPORT2
-ucnv_aliasNameCmp(const char *name1, const char *name2);
+ucnv_compareNames(const char *name1, const char *name2);
 
 
 /**
