@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
+// Tool: dumpicurules.bat
 // Source: ../../text/resources/Transliterator_Any_Publishing.txt
-// Date: Wed Nov  7 09:34:03 2001
+// Date: Fri Nov 30 13:01:41 2001
 //--------------------------------------------------------------------
 
 // Any_Publishing
@@ -18,8 +18,8 @@ translit_Any_Publishing {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/data/Attic/translit_Any_Publishing.txt,v $
-// $Date: 2001/11/07 18:50:25 $
-// $Revision: 1.2 $
+// $Date: 2001/11/30 21:24:15 $
+// $Revision: 1.3 $
 //--------------------------------------------------------------------
 
 // Test case
