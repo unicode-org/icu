@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacterNameIterator.java,v $
-* $Date: 2002/04/05 01:38:15 $
-* $Revision: 1.3 $
+* $Date: 2002/09/19 21:18:14 $
+* $Revision: 1.4 $
 *
 ******************************************************************************
 */
@@ -14,6 +14,8 @@
 package com.ibm.icu.lang;
 
 import com.ibm.icu.util.ValueIterator;
+import com.ibm.icu.impl.UCharacterName;
+import com.ibm.icu.impl.UCharacterNameChoice;
 
 /**
  * <p>Class enabling iteration of the codepoints and their names.</p>
@@ -43,7 +45,7 @@ class UCharacterNameIterator implements ValueIterator
     		return false;
     	}
     	
-    	if (m_choice_ != UCharacterNameChoice.U_UNICODE_10_CHAR_NAME) {
+    	if (m_choice_ != UCharacterNameChoice.UNICODE_10_CHAR_NAME) {
     		int length = m_name_.getAlgorithmLength();
     		if (m_algorithmIndex_ < length) {
     			while (m_algorithmIndex_ < length) {
@@ -97,7 +99,7 @@ class UCharacterNameIterator implements ValueIterator
     		m_current_ ++;
     		return true;
     	}
-    	else if (m_choice_ == UCharacterNameChoice.U_EXTENDED_CHAR_NAME) {
+    	else if (m_choice_ == UCharacterNameChoice.EXTENDED_CHAR_NAME) {
     		if (!iterateExtended(element, m_limit_)) {
     			m_current_ ++;
     			return true;
@@ -238,7 +240,7 @@ class UCharacterNameIterator implements ValueIterator
         		                          index + GROUP_OFFSETS_[offset], 
         	 	                          GROUP_LENGTHS_[offset], m_choice_);
         		if ((name == null || name.length() == 0) && 
-          	 		m_choice_ == UCharacterNameChoice.U_EXTENDED_CHAR_NAME) {
+          	 		m_choice_ == UCharacterNameChoice.EXTENDED_CHAR_NAME) {
            			name = m_name_.getExtendedName(m_current_);
         		}
         		if (name != null && name.length() > 0) {
@@ -297,7 +299,7 @@ class UCharacterNameIterator implements ValueIterator
        			if (gMIN > limit) {
                		gMIN = limit;
             	}
-       			if (m_choice_ == UCharacterNameChoice.U_EXTENDED_CHAR_NAME) {
+       			if (m_choice_ == UCharacterNameChoice.EXTENDED_CHAR_NAME) {
 					if (!iterateExtended(result, gMIN)) {
 		 				return false;
 					}
