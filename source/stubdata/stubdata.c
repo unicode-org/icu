@@ -38,7 +38,7 @@ typedef struct {
                                    /*        pointerTOC to OffsetTOC.     */
 } ICU_Data_Header;
 
-U_EXPORT const ICU_Data_Header U_EXPORT2 U_ICUDATA_ENTRY_POINT = {
+U_EXPORT const ICU_Data_Header U_ICUDATA_ENTRY_POINT = {
     32,          /* headerSize */
     0xda,        /* magic1,  (see struct MappedData in udata.c)  */
     0x27,        /* magic2     */
