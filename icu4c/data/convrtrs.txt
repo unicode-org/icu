@@ -5,11 +5,10 @@
 
 # Algorithmic: DO NOT CHANGE LEFT COLUMN OF ALGORITHMIC CONVERTERS
 UTF8                  utf8 utf-8 ibm-1208 utf_8 ibm1208 cp1208
-# If ICU is run on the intel platforms, NT, Linux etc., be sure to update the UTF16 entry with the following two lines:
-# UTF16_BigEndian       utf-16le utf-16 ibm-1200 ibm1200 cp1200 iso-10646-ucs-2 ucs-2
-# UTF16_LittleEndian    utf-16be
-UTF16_BigEndian       utf-16be utf-16 ibm-1200 ibm1200 cp1200 iso-10646-ucs-2 ucs-2
+UTF16_BigEndian       utf-16be
 UTF16_LittleEndian    utf-16le
+UTF16_PlatformEndian  utf16 utf-16 ibm-1200 ibm1200 cp1200 iso-10646-ucs-2 ucs-2
+UTF16_OppositeEndian
 LATIN_1               iso-8859-1 iso_8859-1 ibm-819 ibm819 cp819 latin1 latin-1 ascii ascii-7 us-ascii 8859-1 csisolatin1 iso-ir-100 iso_8859-1:1978
 ISO_2022	iso-2022	2022  cp2022 iso2022 iso_2022
 
