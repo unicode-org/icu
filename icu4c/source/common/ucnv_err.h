@@ -39,7 +39,7 @@
 #ifndef UCNV_ERR_H
 #define UCNV_ERR_H
 
-
+#include "ucnv.h"
 #include "utypes.h"
 
 
