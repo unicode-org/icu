@@ -573,6 +573,12 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\gregoimp.cpp">
+			</File>
+			<File
+				RelativePath=".\gregoimp.h">
+			</File>
+			<File
 				RelativePath=".\japancal.cpp">
 			</File>
 			<File
