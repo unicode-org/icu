@@ -1061,13 +1061,15 @@ void RBBIRuleScanner::parse() {
 //  printNodeStack     for debugging...
 //
 //---------------------------------------------------------------------------------
-void RBBIRuleScanner::printNodeStack(const char *title) {
 #ifdef RBBI_DEBUG
+void RBBIRuleScanner::printNodeStack(const char *) {}
+#else
+void RBBIRuleScanner::printNodeStack(const char *title) {
     int i;
     RBBIDebugPrintf("%s.  Dumping node stack...\n", title);
     for (i=fNodeStackPtr; i>0; i--) {fNodeStack[i]->printTree(TRUE);}
-#endif
 }
+#endif
 
 
 

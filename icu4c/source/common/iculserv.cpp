@@ -661,7 +661,7 @@ ICUResourceBundleFactory::handleCreate(const Locale& loc, int32_t /* kind */, co
         char pkg[20];
         int32_t length;
         length=_bundleName.extract(0, INT32_MAX, pkg, (int32_t)sizeof(pkg), US_INV);
-        if(length>=sizeof(pkg)) {
+        if(length>=(int32_t)sizeof(pkg)) {
             return NULL;
         }
         return new ResourceBundle(pkg, loc, status);
