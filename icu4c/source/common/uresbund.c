@@ -20,8 +20,9 @@
 */
 
 #include "unicode/ustring.h"
-
+#include "unicode/ucnv.h"
 #include "uresimp.h"
+#include "ustr_imp.h"
 #include "cwchar.h"
 #include "ucln_cmn.h"
 #include "cmemory.h"
@@ -1531,25 +1532,35 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath,
                   const char* localeID, 
                   UErrorCode* status)
 {
-    UResourceBundle *r;
-    int32_t pathSize = u_strlen(myPath) + 1;
-    char *path = (char *)uprv_malloc(pathSize);
-    /* test for NULL */
-    if(path == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
+    char path[2048];
+    UConverter *cnv;
+    int32_t length;
+
+    if(status==NULL || U_FAILURE(*status)) {
+        return NULL;
+    }
+    if(myPath==NULL) {
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
 
-    u_UCharsToChars(myPath, path, pathSize);
-
-    r = ures_open(path, localeID, status);
-    uprv_free(path);
-
-    if (U_FAILURE(*status)) {
+    cnv=u_getDefaultConverter(status);
+    if(U_FAILURE(*status)) {
         return NULL;
     }
 
-    return r;
+    length=ucnv_fromUChars(cnv, path, sizeof(path), myPath, -1, status);
+    u_releaseDefaultConverter(cnv);
+    if(U_FAILURE(*status)) {
+        return NULL;
+    }
+    if(length>=sizeof(path)) {
+        /* not NUL-terminated - path too long */
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
+    return ures_open(path, localeID, status);
 }
 
 /**
