@@ -229,8 +229,10 @@ parse(UCHARBUF* buf, const char *cp, const char *inputDir,
     struct SResource *temp = NULL;
     struct SResource *temp1 = NULL;
     struct SResource *temp2 = NULL;
+    int32_t dirlen = 0;
     UBool colEl = FALSE, colOverride = FALSE, ucaEl = FALSE;
     UChar trueValue[] = {0x0054, 0x0052, 0x0055, 0x0045, 0x0000}; /* Just to store "TRUE" and "FALSE" */
+                    
 /*  UChar falseValue[] = {0x0046, 0x0041, 0x004C, 0x0053, 0x0045, 0x0000}; */ /* Unicode for "FALSE" */
 
     /* Hashtable for keeping track of seen tag names */
@@ -256,9 +258,13 @@ parse(UCHARBUF* buf, const char *cp, const char *inputDir,
         return NULL;
     }
 */
-
+    if(inputDir != NULL) {
+        dirlen = uprv_strlen(inputDir);
+    }
+    
     node = eInitial;
     data = 0;
+
 
     lineCount = 1;
 
@@ -500,7 +506,9 @@ parse(UCHARBUF* buf, const char *cp, const char *inputDir,
                 ucaEl=FALSE; /* reset ucaEL */
                 /* make the fileName including the directory */
                 uprv_strcat(fileName,inputDir);
-                uprv_strcat(fileName,U_FILE_SEP_STRING);
+                if(inputDir[dirlen-1] != U_FILE_SEP_CHAR) {
+                    uprv_strcat(fileName,U_FILE_SEP_STRING);
+                }
                 uprv_strcat(fileName,U_ICU_UNIDATA);
                 uprv_strcat(fileName,U_FILE_SEP_STRING);
                 u_UCharsToChars(token.fChars,cs,token.fLength);
