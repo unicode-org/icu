@@ -41,6 +41,7 @@ void CollationIteratorTest::TestUnicodeChar()
     
     for (codepoint = 1; codepoint < 0xFFFE;)
     {
+      codepoint = 0xD828;
       source.remove();
 
       while (codepoint % 0xFF != 0) 

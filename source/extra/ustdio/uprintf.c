@@ -263,7 +263,7 @@ u_fprintf_u(    UFILE        *f,
   return count;
 }
 
-int32_t 
+U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vfprintf(    UFILE        *f,
         const char    *patternSpecification,
         va_list        ap)
@@ -1094,7 +1094,7 @@ u_printf_spellout_handler(UFILE             *stream,
 
 #define UP_PERCENT 0x0025
 
-int32_t 
+U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vfprintf_u(    UFILE        *f,
         const UChar    *patternSpecification,
         va_list        ap)

@@ -310,7 +310,7 @@ u_sscanf_u(UChar         *buffer,
   return converted;
 }
 
-int32_t 
+U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vsscanf(UChar         *buffer,
         const char     *locale,
         const char    *patternSpecification,
@@ -1188,7 +1188,7 @@ u_sscanf_scanset_handler(u_localized_string    *input,
 
 #define UP_PERCENT 0x0025
 
-int32_t 
+U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vsscanf_u(UChar         *buffer,
         const char     *locale,
         const UChar    *patternSpecification,
