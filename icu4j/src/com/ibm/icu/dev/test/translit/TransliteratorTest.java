@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/11/14 19:16:18 $
- * $Revision: 1.68 $
+ * $Date: 2001/11/15 22:20:29 $
+ * $Revision: 1.69 $
  *
  *****************************************************************************************
  */
@@ -755,18 +755,18 @@ public class TransliteratorTest extends TestFmwk {
      */
     public void TestFilterIDs() {
         String[] DATA = {
-            "Any[aeiou]-Hex",
-            "Hex[aeiou]-Any",
-            "quizzical",
-            "q\\u0075\\u0069zz\\u0069c\\u0061l",
+            "Any[aeiou]-Hex", // ID
+            "[aeiou]Hex-Any", // expected inverse ID
+            "quizzical",      // src
+            "q\\u0075\\u0069zz\\u0069c\\u0061l", // expected ID.translit(src)
 
             "Any[aeiou]-Hex;Hex[^5]-Any",
-            "Any[^5]-Hex;Hex[aeiou]-Any",
+            "[^5]Any-Hex;[aeiou]Hex-Any",
             "quizzical",
             "q\\u0075izzical",
 
             "Null[abc]",
-            "Null[abc]",
+            "[abc]Null",
             "xyz",
             "xyz",
         };
@@ -2005,6 +2005,35 @@ public class TransliteratorTest extends TestFmwk {
             return;
         }
         errln("FAIL: No syntax error");
+    }
+
+    /**
+     * Test ID form variants
+     */
+    public void TestIDForms() {
+        String DATA[] = {
+            "NFC", "NFD",
+            "NFD", "NFC",
+            "Any-NFKD", "Any-NFKC",
+            "Null", "Null",
+            "Latin-Greek/UNGEGN", "Greek-Latin/UNGEGN",
+            "Greek/UNGEGN-Latin", "Latin-Greek/UNGEGN",
+            "Bengali-Devanagari/", "Devanagari-Bengali",
+        };
+
+        for (int i=0; i<DATA.length; i+=2) {
+            Transliterator t =
+                Transliterator.getInstance(DATA[i]);
+            Transliterator u = t.getInverse();
+            if (t.getID().equals(DATA[i]) &&
+                u.getID().equals(DATA[i+1])) {
+                logln("Ok: " + DATA[i] + ".getInverse() => " + DATA[i+1]);
+            } else {
+                errln("FAIL: getInstance(" + DATA[i] + ") => " +
+                      t.getID() + " x getInverse() => " + u.getID() +
+                      ", expected " + DATA[i+1]);
+            }
+        }
     }
 
     //======================================================================
