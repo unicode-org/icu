@@ -277,6 +277,22 @@ ucol_openRules(    const    UChar                  *rules,
 {
   uint32_t listLen = 0;
   UColTokenParser src;
+  UColAttributeValue norm;
+
+  switch(mode) {
+  case UNORM_NONE:
+    norm = UCOL_OFF;
+    break;
+  case UNORM_NFD:
+    norm = UCOL_ON;
+    break;
+  case UCOL_DEFAULT_NORMALIZATION: 
+    norm = UCOL_DEFAULT;
+    break;
+  default:
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
 
   ucol_initUCA(status);
 
@@ -299,21 +315,6 @@ ucol_openRules(    const    UChar                  *rules,
   src.opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
 
   uprv_memcpy(src.opts, UCA->options, sizeof(UColOptionSet));
-  src.opts->strength = strength;
-
-  switch(mode) {
-  case UNORM_NONE:
-    src.opts->normalizationMode = UCOL_OFF;
-    break;
-  case UNORM_NFD:
-  case UCOL_DEFAULT_NORMALIZATION: /* this constant has been wrongly defined to compatibility decomposition */
-    /* for a while now. Submit a jitterbug for changing that */
-    src.opts->normalizationMode = UCOL_ON;
-    break;
-  default:
-    *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return 0;
-  }
 
   listLen = ucol_tok_assembleTokenList(&src, status);
   if(U_FAILURE(*status)) {
@@ -355,6 +356,8 @@ ucol_openRules(    const    UChar                  *rules,
     u_strcpy((UChar *)result->rules, rules);
     result->freeRulesOnClose = TRUE;
     result->rb = 0;
+    ucol_setAttribute(result, UCOL_STRENGTH, strength, status);
+    ucol_setAttribute(result, UCOL_NORMALIZATION_MODE, norm, status);
   } else {
     uprv_free(src.opts);
     if(table != NULL) {
@@ -2356,7 +2359,6 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     UBool wasShifted = FALSE;
     UBool notIsContinuation = FALSE;
     uint8_t leadPrimary = 0;
-    uint32_t primCompCount = 1;
 
 
     for(;;) {
@@ -2408,21 +2410,27 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 #ifdef UCOL_PRIM_COMPRESSION
             if(primary1 != UCOL_IGNORABLE) {
               if(notIsContinuation) {
-                if(primary1 != leadPrimary) {
-                  if(primCompCount > 1) {
+                if(primary2 != UCOL_IGNORABLE) { /* This is a two byter, should be compressed */
+                  if(primary1 != leadPrimary) {
+                    if(leadPrimary != 0) {
+                      currentSize++;
+                    }
                     currentSize++;
-                    primCompCount = 1;
-                  }
-                  leadPrimary = primary1;
+                    leadPrimary = primary1; 
+                  } 
                   currentSize++;
-                } else {
-                  primCompCount++;
+                } else { /* This is a one byter, no compression */
+                  if(leadPrimary != 0) { /* But if there was some, finish the sequence */
+                    currentSize++;
+                    leadPrimary = 0;
+                  }
+                  currentSize++;
                 }
-              } else {
+              } else { /* we are in continuation, so we're gonna add primary to the key don't care about compression */
                 currentSize++;
-              }
-              if(primary2 != UCOL_IGNORABLE) {
-                currentSize++;
+                if(primary2 != UCOL_IGNORABLE) {
+                  currentSize++;
+                }
               }
             }
 #else
@@ -2486,13 +2494,6 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 
           }
     }
-
-#ifdef UCOL_PRIM_COMPRESSION
-    if(primCompCount > 1) {
-      currentSize++;
-    }
-#endif
-
 
     if(c2 > 0) {
       currentSize += (c2/UCOL_BOT_COUNT2)+1;
@@ -2740,7 +2741,6 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     uint32_t count2 = 0, count3 = 0, count4 = 0;
     uint8_t leadPrimary = 0;
-    uint32_t primCompCount = 1;
 
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
@@ -2814,20 +2814,26 @@ ucol_calcSortKey(const    UCollator    *coll,
 #ifdef UCOL_PRIM_COMPRESSION
             if(primary1 != UCOL_IGNORABLE) {
               if(notIsContinuation) {
-                if(primary1 != leadPrimary) {
-                  if(primCompCount > 1) {
-                    *primaries++ = (primary1 > leadPrimary) ? 0xFF : 0x03;
-                    primCompCount = 1;
+                if(primary2 != UCOL_IGNORABLE) { /* This is a two byter, should be compressed */
+                  if(primary1 != leadPrimary) {
+                    if(leadPrimary != 0) {
+                      *primaries++ = (primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN;
+                    }
+                    *primaries++ = leadPrimary = primary1; 
                   }
-                  *primaries++ = leadPrimary = primary1; 
-                } else {
-                  primCompCount++;
+                  *primaries++ = primary2; /* second part */
+                } else { /* This is a one byter, no compression */
+                  if(leadPrimary != 0) { /* But if there was some, finish the sequence */
+                    *primaries++ = (primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN;
+                    leadPrimary = 0; /* and reset it */
+                  }
+                  *primaries++ = primary1; /* add the primary */
                 }
-              } else {
-                *primaries++ = primary1; /* we are in continuation, so we're gonna add first primary to the key don't care */
-              }
-              if(primary2 != UCOL_IGNORABLE) {
-                *primaries++ = primary2; /* second part */
+              } else { /* we are in continuation, so we're gonna add primary to the key don't care about compression */
+                *primaries++ = primary1; 
+                if(primary2 != UCOL_IGNORABLE) {
+                  *primaries++ = primary2; /* second part */
+                }
               }
             }
 #else
@@ -2961,12 +2967,6 @@ ucol_calcSortKey(const    UCollator    *coll,
 
 
     if(U_SUCCESS(*status)) {
-#ifdef UCOL_PRIM_COMPRESSION
-      if(primCompCount > 1) {
-        *primaries++ = 0x03;
-      }
-#endif
-
       sortKeySize += (primaries - primStart);
       /* we have done all the CE's, now let's put them together to form a key */
       if(compareSec == 0) {
@@ -3237,7 +3237,6 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
     uint32_t count2 = 0, count3 = 0;
     uint8_t leadPrimary = 0;
-    uint32_t primCompCount = 1;
 
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
@@ -3273,20 +3272,26 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 #ifdef UCOL_PRIM_COMPRESSION
             if(primary1 != UCOL_IGNORABLE) {
               if(notIsContinuation) {
-                if(primary1 != leadPrimary) {
-                  if(primCompCount > 1) {
-                    *primaries++ = (primary1 > leadPrimary) ? 0xFF : 0x03;
-                    primCompCount = 1;
+                if(primary2 != UCOL_IGNORABLE) { /* This is a two byter, should be compressed */
+                  if(primary1 != leadPrimary) {
+                    if(leadPrimary != 0) {
+                      *primaries++ = (primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN;
+                    }
+                    *primaries++ = leadPrimary = primary1; 
+                  } 
+                  *primaries++ = primary2; /* second part */
+                } else { /* This is a one byter, no compression */
+                  if(leadPrimary != 0) { /* But if there was some, finish the sequence */
+                    *primaries++ = (primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN;
+                    leadPrimary = 0;
                   }
-                  *primaries++ = leadPrimary = primary1; 
-                } else {
-                  primCompCount++;
+                  *primaries++ = primary1; /* add the primary */
                 }
-              } else {
-                *primaries++ = primary1; /* we are in continuation, so we're gonna add first primary to the key don't care */
-              }
-              if(primary2 != UCOL_IGNORABLE) {
-                *primaries++ = primary2; /* second part */
+              } else { /* we are in continuation, so we're gonna add primary to the key don't care about compression */
+                *primaries++ = primary1; 
+                if(primary2 != UCOL_IGNORABLE) {
+                  *primaries++ = primary2; /* second part */
+                }
               }
             }
 #else
@@ -3379,11 +3384,6 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     }
 
     if(U_SUCCESS(*status)) {
-#ifdef UCOL_PRIM_COMPRESSION
-      if(primCompCount > 1) {
-        *primaries++ = 0x03;
-      }
-#endif
       sortKeySize += (primaries - primStart);
       /* we have done all the CE's, now let's put them together to form a key */
       if (count2 > 0) {
