@@ -192,6 +192,7 @@ DigitList::getDouble() /*const*/
         value = 0.0;
     }
     else {
+        char* end = NULL;
         if (!gDecimal) {
             char rep[MAX_DIGITS];
             // For machines that decide to change the decimal on you,
@@ -206,7 +207,7 @@ DigitList::getDouble() /*const*/
         formatBase10(fDecimalAt,
                      fDigits + fCount + 1,  // skip the 'e'
                      MAX_DEC_DIGITS - fCount - 3);  // skip the 'e' and '.'
-        value = atof(fDecimalDigits);
+        value = uprv_strtod(fDecimalDigits, &end);
     }
 
     return fIsPositive ? value : -value;
