@@ -361,7 +361,7 @@ static void TestNormalization()
     UChar source[10];
     UCollationElements *iter;
 
-    coll = ucol_openRules(rule, rulelen, UNORM_NFD, UCOL_TERTIARY, NULL, &status);
+    coll = ucol_openRules(rule, rulelen, UCOL_ON, UCOL_TERTIARY, NULL, &status);
     ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     if (U_FAILURE(status)){
         log_err("ERROR: in creation of collator using ucol_openRules()\n %s\n",
@@ -441,7 +441,7 @@ static void TestPrevious()
 
     /* Test with a contracting character sequence */
     u_uastrcpy(rule, "&a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH");
-    c1 = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, NULL, &status);
+    c1 = ucol_openRules(rule, u_strlen(rule), UCOL_OFF, UCOL_DEFAULT_STRENGTH, NULL, &status);
 
     log_verbose("Contraction rule testing back and forth with no normalization\n");
     
@@ -465,7 +465,7 @@ static void TestPrevious()
     
     /* Test with an expanding character sequence */
     u_uastrcpy(rule, "&a < b < c/abd < d");
-    c2 = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, NULL, &status);
+    c2 = ucol_openRules(rule, u_strlen(rule), UCOL_OFF, UCOL_DEFAULT_STRENGTH, NULL, &status);
     log_verbose("Expansion rule testing back and forth with no normalization\n");
     if (c2 == NULL || U_FAILURE(status))
     {
@@ -485,7 +485,7 @@ static void TestPrevious()
     ucol_close(c2);
     /* Now try both */
     u_uastrcpy(rule, "&a < b < c/aba < d < z < ch");
-    c3 = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,  UCOL_DEFAULT_STRENGTH,NULL, &status);
+    c3 = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT,  UCOL_DEFAULT_STRENGTH,NULL, &status);
     log_verbose("Expansion/contraction rule testing back and forth with no normalization\n");
 
     if (c3 == NULL || U_FAILURE(status))
@@ -834,7 +834,7 @@ static void TestMaxExpansion()
 
     UChar rule[256];
     u_uastrcpy(rule, "&a < ab < c/aba < d < z < ch");
-    coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,
+    coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT,
         UCOL_DEFAULT_STRENGTH,NULL, &status);
     iter = ucol_openElements(coll, &ch, 1, &status);
 
@@ -930,7 +930,7 @@ static void TestMaxExpansion()
     rule[8] = 0x71;
     rule[9] = 0;
     
-    coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,
+    coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT,
         UCOL_DEFAULT_STRENGTH,NULL, &status);
     iter = ucol_openElements(coll, &ch, 1, &status);
 
@@ -1438,8 +1438,7 @@ static void TestDiscontiguos() {
           UCollationElements *iter;      
           UCollationElements *resultiter;      
     
-    coll       = ucol_openRules(rule, rulelen, UCOL_NO_NORMALIZATION,  
-                          UCOL_DEFAULT_STRENGTH,NULL, &status);
+    coll       = ucol_openRules(rule, rulelen, UCOL_OFF, UCOL_DEFAULT_STRENGTH,NULL, &status);
     iter       = ucol_openElements(coll, rule, 1, &status);
     resultiter = ucol_openElements(coll, rule, 1, &status);
 
@@ -1512,8 +1511,7 @@ static void TestCEBufferOverflow()
     UCollationElements *iter;
     
     u_uastrcpy(rule, "&z < AB");
-    coll = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION,  
-                                           UCOL_DEFAULT_STRENGTH, NULL,&status);
+    coll = ucol_openRules(rule, u_strlen(rule), UCOL_OFF, UCOL_DEFAULT_STRENGTH, NULL,&status);
     if (U_FAILURE(status)) {
         log_err("Rule based collator not created for testing ce buffer overflow\n");
     }

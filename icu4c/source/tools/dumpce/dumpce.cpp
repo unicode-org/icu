@@ -66,7 +66,7 @@ static UColAttributeValue ATTRIBUTE_[UCOL_ATTRIBUTE_COUNT] = {
     UCOL_DEFAULT
 };
 
-static UNormalizationMode NORMALIZATION_ = UCOL_DEFAULT_NORMALIZATION;
+static UColAttributeValue NORMALIZATION_ = UCOL_DEFAULT;
 
 typedef struct {
     int   value;
@@ -101,13 +101,11 @@ static const EnumNameValuePair ATTRIBUTE_VALUE_[] = {
 };
 
 static const EnumNameValuePair NORMALIZATION_VALUE_[] = {
-    {UCOL_NO_NORMALIZATION, "UCOL_NO_NORMALIZATION|UNORM_NONE"},
-    {UCOL_DECOMP_CAN, "UCOL_DECOMP_CAN|UNORM_NFD"},
-    {UCOL_DECOMP_COMPAT, 
-        "UCOL_DECOMP_COMPAT|UNORM_NFKD|UCOL_DEFAULT_NORMALIZATION"},
-    {UCOL_DECOMP_CAN_COMP_COMPAT, 
-        "UCOL_DECOMP_CAN_COMP_COMPAT|UNORM_DEFAULT|UNORM_NFC"},
-    {UCOL_DECOMP_COMPAT_COMP_CAN, "UCOL_DECOMP_COMPAT_COMP_CAN|UNORM_NFKC"},
+    {UNORM_NONE, "UNORM_NONE"},
+    {UNORM_NFD, "UNORM_NFD"},
+    {UNORM_NFKD, "UNORM_NFKD"},
+    {UNORM_NFC, "UNORM_NFC|UNORM_DEFAULT"},
+    {UNORM_NFKC, "UNORM_NFKC"},
     NULL
 };
 
@@ -451,7 +449,7 @@ void setAttributes(UCollator *collator, UErrorCode *error)
 */
 void setNormalization(UCollator *collator) 
 {
-    if (NORMALIZATION_ != UCOL_DEFAULT_NORMALIZATION) {
+    if (NORMALIZATION_ != UCOL_DEFAULT) {
         ucol_setNormalization(collator, NORMALIZATION_);
     }
 }
@@ -732,7 +730,7 @@ void parseNormalization() {
         fprintf(stdout, "Normalization mode not found: %s\n", str);
         return;
     }
-    NORMALIZATION_ = (UNormalizationMode)norm;
+    NORMALIZATION_ = (UColAttributeValue)norm;
 }
 
 /** 

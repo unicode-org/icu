@@ -559,7 +559,7 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
             UChar     *rules = NULL;
             UParseError parseError;
             coll = ucol_openRules(tokenValue->fChars, tokenValue->fLength, 
-                UNORM_NONE, UCOL_DEFAULT_STRENGTH,&parseError, &intStatus);
+                UCOL_OFF, UCOL_DEFAULT_STRENGTH,&parseError, &intStatus);
 
             if (U_SUCCESS(intStatus) && coll != NULL)
             {
