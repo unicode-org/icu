@@ -3,7 +3,7 @@
 ## Copyright (c) 2001-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin-msvc,v 1.18 2004/03/29 22:31:23 grhoten-oss Exp $
+## $Id: mh-cygwin-msvc,v 1.19 2004/03/29 22:48:08 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -58,6 +58,10 @@ SO = dll
 STATIC_O = o
 # OUTOPT is for creating a specific output name
 OUTOPT = /out:
+
+# Static library prefix and file extension
+LIBSICU = $(STATIC_PREFIX)$(ICUPREFIX)
+A = lib
 
 ## An import library is needed for z/OS and MSVC
 IMPORT_LIB_EXT = .lib
