@@ -88,11 +88,6 @@ static UBool gMakeBinaryCollation = TRUE;
 
 static struct SResource *parseResource(char *tag, const struct UString *comment, UErrorCode *status);
 
-static UChar toHexDigit(uint8_t ch) {
-    static const char gHexChars[] = "0123456789ABCDEF";
-    return gHexChars[ch];
-}
-
 /* The nature of the lookahead buffer:
    There are MAX_LOOKAHEAD + 1 slots, used as a circular buffer.  This provides
    MAX_LOOKAHEAD lookahead tokens and a slot for the current token and value.
