@@ -1408,7 +1408,7 @@ u_internalFoldCase(UChar32 c, UChar dest[32], uint32_t options) {
         uint32_t *pe=GET_EXCEPTIONS(props);
         uint32_t firstExceptionValue=*pe;
         if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_CASE_FOLDING)) {
-            int i=EXC_CASE_FOLDING;
+            i=EXC_CASE_FOLDING;
             ++pe;
             ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
             props=*pe;
@@ -1433,7 +1433,7 @@ u_internalFoldCase(UChar32 c, UChar dest[32], uint32_t options) {
                 /* return c itself because it is excluded from case folding */
             }
         } else if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_LOWERCASE)) {
-            int i=EXC_LOWERCASE;
+            i=EXC_LOWERCASE;
             ++pe;
             ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
             c=(UChar32)*pe;
