@@ -8,7 +8,7 @@
 es_PY {
     Version{ "1.0" }
     CurrencyElements { 
-            "G",
+            "Gs",
             "PYG",
             ",",
     }

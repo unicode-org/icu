@@ -7,7 +7,7 @@
 
 ro_RO {
     CurrencyElements { 
-            "LEI",
+            "lei",
             "ROL",
             ",",
     }

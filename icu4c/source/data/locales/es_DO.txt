@@ -18,8 +18,8 @@ es_DO {
             "hh:mm a",
             "EEEE d' de 'MMMM' de 'yyyy",
             "d' de 'MMMM' de 'yyyy",
-            "MM/dd/yyyy",
-            "MM/dd/yy",
+            "dd/MM/yyyy",
+            "dd/MM/yy",
             "{1} {0}",
     }
     LocaleID { "1c0a" }

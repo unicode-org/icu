@@ -27,13 +27,13 @@ id {
     }
     MonthAbbreviations {
             "Jan",
-            "Peb",
+            "Feb",
             "Mar",
             "Apr",
             "Mei",
             "Jun",
             "Jul",
-            "Agu",
+            "August",
             "Sep",
             "Okt",
             "Nov",
@@ -42,7 +42,7 @@ id {
     }
     MonthNames {
             "Januari",
-            "Pebruari",
+            "Februari",
             "Maret",
             "April",
             "Mei",

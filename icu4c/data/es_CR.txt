@@ -7,9 +7,9 @@
 
 es_CR {
     CurrencyElements { 
-            "C",
+            "\u20A1",
             "CRC",
-            ".",
+            ",",
     }
     DateTimePatterns { 
             "hh:mm:ss a z",
@@ -25,8 +25,8 @@ es_CR {
     LocaleID { "140a" }
     LocaleString { "es_CR" }
     NumberElements { 
-            ".",
             ",",
+            ".",
             ";",
             "%",
             "0",

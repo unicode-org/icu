@@ -7,7 +7,7 @@
 
 es_SV {
     CurrencyElements { 
-            "C",
+            "\u20A1",
             "SVC",
             ".",
     }
