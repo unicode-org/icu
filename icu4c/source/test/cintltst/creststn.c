@@ -631,7 +631,7 @@ static void TestBinaryCollationData(){
     if(U_SUCCESS(status)){
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
         CONFIRM_INT_EQ(ures_getType(coll), RES_TABLE);
-        binColl=ures_getByKey(teRes, "%%CollationBin", binColl, &status);  
+        binColl=ures_getByKey(coll, "%%CollationBin", binColl, &status);  
         if(U_SUCCESS(status)){
             CONFIRM_ErrorCode(status, U_ZERO_ERROR);
             CONFIRM_INT_EQ(ures_getType(binColl), RES_BINARY);
@@ -711,7 +711,8 @@ static void TestAPI() {
         log_err("ERROR: ures_getNextResource() failed \n");
     }
     key=ures_getKey(teFillin);
-    if(strcmp(key, "%%CollationBin") != 0){
+    /*if(strcmp(key, "%%CollationBin") != 0){*/
+    if(strcmp(key, "CollationElements") != 0){
         log_err("ERROR: ures_getNextResource() failed\n");
     }
 
@@ -910,7 +911,7 @@ static void TestErrorConditions(){
     /*Test ures_getBinary(0 status != U_ILLEGAL_ARGUMENT_ERROR*/
     status=U_ZERO_ERROR;
     coll = ures_getByKey(teRes, "CollationElements", coll, &status);
-    binColl=ures_getByKey(teRes, "%%CollationBin", binColl, &status);
+    binColl=ures_getByKey(coll, "%%CollationBin", binColl, &status);
 
     status=U_ILLEGAL_ARGUMENT_ERROR;
     binResult=(uint8_t*)ures_getBinary(binColl,  &len, &status);
