@@ -499,13 +499,9 @@ u_printf_uinteger_handler(const u_printf_stream_handler *handler,
     int64_t         num        = args[0].int64Value;
     UNumberFormat   *format;
     UChar           result[UPRINTF_BUFFER_SIZE];
-    UChar           prefixBuffer[UPRINTF_BUFFER_SIZE];
-    int32_t         prefixBufferLen = sizeof(prefixBuffer);
     int32_t         minDigits     = -1;
     int32_t         resultLen;
     UErrorCode      status        = U_ZERO_ERROR;
-
-    prefixBuffer[0] = 0;
 
     /* TODO: Fix this once uint64_t can be formatted. */
     if (info->fIsShort)
