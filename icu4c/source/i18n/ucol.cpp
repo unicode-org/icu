@@ -16,92 +16,12 @@
 #include "cpputils.h"
 #include "cstring.h"
 
-
-static uint8_t utf16fixup[32] = {
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0x20, 0xf8, 0xf8, 0xf8, 0xf8
-};
-
-
 #include <stdio.h>
 
 #include "ucmp32.h"
 #include "tcoldata.h"
 #include "tables.h"
 
-#define UCOL_DEBUG
-
-#define UCOL_MAX_BUFFER 256
-
-#define UCOL_NORMALIZATION_GROWTH 2
-
-#define UCOL_WRITABLE_BUFFER_SIZE 256
-
-struct collIterate {
-  UChar *string; // Original string
-  UChar *len;   // Original string length
-  UChar *pos; // This is position in the string
-  uint32_t *toReturn; // This is the CE from CEs buffer that should be returned
-  uint32_t *CEpos; // This is the position to which we have stored processed CEs
-  uint32_t CEs[UCOL_MAX_BUFFER]; // This is where we store CEs
-  UBool isThai; // Have we already encountered a Thai prevowel
-  UBool isWritable; // is the source buffer writable?
-  UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; // A writable buffer.
-  UChar *writableBuffer;
-};
-
-
-#define UCOL_UNMAPPEDCHARVALUE 0x7fff0000     // from coleiterator
-
-#define UCOL_LEVELTERMINATOR 1
-#define UCOL_CHARINDEX 0x70000000             // need look up in .commit()
-#define UCOL_EXPANDCHARINDEX 0x7E000000       // Expand index follows
-#define UCOL_CONTRACTCHARINDEX 0x7F000000     // contract indexes follows
-#define UCOL_UNMAPPED 0xFFFFFFFF              // unmapped character values
-#define UCOL_PRIMARYORDERINCREMENT 0x00010000 // primary strength increment
-#define UCOL_SECONDARYORDERINCREMENT 0x00000100 // secondary strength increment
-#define UCOL_TERTIARYORDERINCREMENT 0x00000001 // tertiary strength increment
-#define UCOL_MAXIGNORABLE 0x00010000          // maximum ignorable char order value
-#define UCOL_PRIMARYORDERMASK 0xffff0000      // mask off anything but primary order
-#define UCOL_SECONDARYORDERMASK 0x0000ff00    // mask off anything but secondary order
-#define UCOL_TERTIARYORDERMASK 0x000000ff     // mask off anything but tertiary order
-#define UCOL_SECONDARYRESETMASK 0x0000ffff    // mask off secondary and tertiary order
-#define UCOL_IGNORABLEMASK 0x0000ffff         // mask off ignorable char order
-#define UCOL_PRIMARYDIFFERENCEONLY 0xffff0000 // use only the primary difference
-#define UCOL_SECONDARYDIFFERENCEONLY 0xffffff00  // use only the primary and secondary difference
-#define UCOL_PRIMARYORDERSHIFT 16             // primary order shift
-#define UCOL_SECONDARYORDERSHIFT 8            // secondary order shift
-#define UCOL_SORTKEYOFFSET 2                  // minimum sort key offset
-#define UCOL_CONTRACTCHAROVERFLOW 0x7FFFFFFF  // Indicates the char is a contract char
-
-
-#define UCOL_COLELEMENTSTART 0x02020202       // starting value for collation elements
-#define UCOL_PRIMARYLOWZEROMASK 0x00FF0000    // testing mask for primary low element
-#define UCOL_RESETSECONDARYTERTIARY 0x00000202// reseting value for secondaries and tertiaries
-#define UCOL_RESETTERTIARY 0x00000002         // reseting value for tertiaries
-
-#define UCOL_IGNORABLE 0x02020202
-#define UCOL_PRIMIGNORABLE 0x0202
-#define UCOL_SECIGNORABLE 0x02
-#define UCOL_TERIGNORABLE 0x02
-
-
-#define UCOL_PRIMARYORDER(order) (((order) & UCOL_PRIMARYORDERMASK)>> UCOL_PRIMARYORDERSHIFT)
-#define UCOL_SECONDARYORDER(order) (((order) & UCOL_SECONDARYORDERMASK)>> UCOL_SECONDARYORDERSHIFT)
-#define UCOL_TERTIARYORDER(order) ((order) & UCOL_TERTIARYORDERMASK)
-
-/**
- * Determine if a character is a Thai vowel (which sorts after
- * its base consonant).
- */
-#define UCOL_ISTHAIPREVOWEL(ch) ((uint32_t)(ch) - 0xe40) <= (0xe44 - 0xe40)
-
-/**
- * Determine if a character is a Thai base consonant
- */
-#define UCOL_ISTHAIBASECONSONANT(ch) ((uint32_t)(ch) - 0xe01) <= (0xe2e - 0xe01)
 
 U_CAPI UCollator*
 ucol_open(    const    char         *loc,
@@ -306,6 +226,10 @@ ucol_countAvailable()
   return uloc_countAvailable();
 }
 
+inline void *ucol_getABuffer(const UCollator *coll, uint32_t size) {
+    return ((RuleBasedCollator *)coll)->getSomeMemory(size);
+}
+
 U_CAPI const UChar*
 ucol_getRules(    const    UCollator        *coll, 
         int32_t            *length)
@@ -315,49 +239,6 @@ ucol_getRules(    const    UCollator        *coll,
   return rules.getUChars();
 }
 
-/*
-void init_collIterate(const UChar *string, int32_t len, collIterate *s, UBool isWritable) {
-    s->string = s->pos = (UChar *)string;
-    s->len = (UChar *)string+len;
-    s->CEpos = s->toReturn = s->CEs;
-	s->isThai = TRUE;
-	s->isWritable = isWritable;
-	s->writableBuffer = s->stackWritableBuffer;
-}
-*/
-#define init_collIterate(sourceString, sourceLen, s, isSourceWritable) { \
-    (s)->string = (s)->pos = (UChar *)(sourceString); \
-    (s)->len = (UChar *)(sourceString)+(sourceLen); \
-    (s)->CEpos = (s)->toReturn = (s)->CEs; \
-	(s)->isThai = TRUE; \
-	(s)->isWritable = (isSourceWritable); \
-	(s)->writableBuffer = (s)->stackWritableBuffer; \
-}
-
-/*
-int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *status) {
-
-  if (U_FAILURE(*status) || (source->pos>=source->len && source->CEpos <= source->toReturn)) {
-    return CollationElementIterator::NULLORDER;
-  }
-  
-  if (source->CEpos > source->toReturn) {
-      return(*(source->toReturn++));
-  }
- 
-  source->CEpos = source->toReturn = source->CEs;
- 
-  *(source->CEpos)  = ucmp32_get(((RuleBasedCollator *)coll)->data->mapping, *(source->pos));
-
-  // this should benefit from reordering of the clauses, so that the cleanest case is returned the first.
-
-  if(*(source->CEpos) < UCOL_EXPANDCHARINDEX && !(isThaiPreVowel(*(source->pos)))) {     
-    source->pos++;
-    return (*(source->CEpos));
-  }
-  return getComplicatedCE(coll, source, status);
-}
-*/
 UCollationResult ucol_compareUsingSortKeys(const    UCollator    *coll,
         const    UChar        *source,
         int32_t            sourceLength,
@@ -399,25 +280,6 @@ UCollationResult ucol_compareUsingSortKeys(const    UCollator    *coll,
         return UCOL_EQUAL;
     }
 }
-
-#define UCOL_GETNEXTCE(order, coll, collationSource, status) { \
-  if (U_FAILURE((status)) || ((collationSource).pos>=(collationSource).len \
-      && (collationSource).CEpos <= (collationSource).toReturn)) { \
-    (order) = UCOL_NULLORDER; \
-  } else if ((collationSource).CEpos > (collationSource).toReturn) { \
-    (order) = *((collationSource).toReturn++); \
-  } else {\
-    (collationSource).CEpos = (collationSource).toReturn = (collationSource).CEs; \
-    *((collationSource).CEpos)  = ucmp32_get(((RuleBasedCollator *)(coll))->data->mapping, *((collationSource).pos)); \
-    if(*((collationSource).CEpos) < UCOL_EXPANDCHARINDEX && !(UCOL_ISTHAIPREVOWEL(*((collationSource).pos)))) { \
-      (collationSource).pos++; \
-      (order)=(*((collationSource).CEpos)); \
-    } else { \
-	  (order) = getComplicatedCE((coll), &(collationSource), &(status)); \
-    } \
-  } \
-}
-
 
 
 int32_t getComplicatedCE(const UCollator *coll, collIterate *source, UErrorCode *status) {
@@ -485,6 +347,7 @@ int32_t getComplicatedCE(const UCollator *coll, collIterate *source, UErrorCode 
 				source->isThai = FALSE;
 				if((source->len - source->pos) > UCOL_WRITABLE_BUFFER_SIZE) {
 					// allocate a new buffer
+                    source->writableBuffer = (UChar *)ucol_getABuffer(coll, (source->len - source->pos)*sizeof(UChar));
 				} 
 				UChar *sourceCopy = source->pos;
 				UChar *targetCopy = source->writableBuffer;
@@ -525,23 +388,9 @@ ucol_strcollEx(    const    UCollator    *coll,
         return (UCollationResult) ((RuleBasedCollator*)coll)->compareEx(source,sourceLength,target,targetLength);
 }
 
-struct incrementalContext {
-    UCharForwardIterator *source; 
-    void *sourceContext;
-    UChar currentChar;
-    UChar lastChar;
-    UChar string[UCOL_MAX_BUFFER]; // Original string
-    UChar *len;   // Original string length
-    UChar *pos; // This is position in the string
-    uint32_t *toReturn; // This is the CE from CEs buffer that should be returned
-    uint32_t *CEpos; // This is the position to which we have stored processed CEs
-    uint32_t CEs[UCOL_MAX_BUFFER]; // This is where we store CEs
-    UBool panic; // can't handle it any more - we have to call the cavalry
-};
-
-
 void init_incrementalContext(UCharForwardIterator *source, void *sourceContext, incrementalContext *s) {
-    s->len = s->pos = s->string ;
+    s->len = s->stringP = s->stackString ;
+    s->capacity = s->stackString+UCOL_MAX_BUFFER;
     s->CEpos = s->toReturn = s->CEs;
     s->source = source;
     s->sourceContext = sourceContext;
@@ -566,7 +415,8 @@ int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UE
 
   if(ctx->lastChar == 0xFFFF) {
       ctx->currentChar = ctx->source(ctx->sourceContext);
-      *(ctx->len++) = ctx->currentChar;
+      incctx_appendChar(ctx, ctx->currentChar);
+      //*(ctx->len++) = ctx->currentChar;
       if(ctx->currentChar == 0xFFFF) {
           return UCOL_NULLORDER;
       }
@@ -608,7 +458,8 @@ int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UE
                 int32_t listSize = list->size();
 				UBool foundSmaller = TRUE;
                 UBool endOfString = FALSE;
-                *(ctx->len++) = ctx->lastChar;
+                //*(ctx->len++) = ctx->lastChar;
+                incctx_appendChar(ctx, ctx->lastChar);
 				while(!endOfString && foundSmaller) {
                     endOfString = ((ctx->lastChar = ctx->source(ctx->sourceContext)) == 0xFFFF);
 					key[posKey++] = ctx->lastChar;
@@ -619,7 +470,8 @@ int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UE
 						pair = list->at(i);
 						if ((pair != NULL) && (pair->fwd == TRUE /*fwd*/) && (pair->equalTo(key, posKey))) {
 							order = pair->value;
-                            *(ctx->len++) = ctx->lastChar;
+                            //*(ctx->len++) = ctx->lastChar;
+                            incctx_appendChar(ctx, ctx->lastChar);
 							foundSmaller = TRUE;
 						}
 						i++;
@@ -651,15 +503,48 @@ int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UE
     return order;
 }
 
-UCollationResult alternateIncrementalProcessing(const UCollator *coll, incrementalContext *srcCtx, incrementalContext *trgCtx) {
-    if(srcCtx->pos == srcCtx->len || *(srcCtx->len-1) != 0xFFFF) {
-        while((*(srcCtx->len++) = srcCtx->source(srcCtx->sourceContext)) != 0xFFFF);
+void incctx_cleanUpContext(incrementalContext *ctx) {
+    if(ctx->stringP != ctx->stackString) {
+        uprv_free(ctx->stringP);
     }
-    if(trgCtx->pos == trgCtx->len || *(trgCtx->len-1) != 0xFFFF) {
-        while((*(trgCtx->len++) = trgCtx->source(trgCtx->sourceContext)) != 0xFFFF);
-    }
+}
 
-    return ucol_strcoll(coll, srcCtx->pos, srcCtx->len-srcCtx->pos-1, trgCtx->pos, trgCtx->len-trgCtx->pos-1);
+UChar incctx_appendChar(incrementalContext *ctx, UChar c) {
+    if(ctx->len == ctx->capacity) { /* bother, said Pooh, we need to reallocate */
+        UChar *newStuff;
+        if(ctx->stringP == ctx->stackString) { /* we haven't allocated before, need to allocate */
+            newStuff = (UChar *)uprv_malloc(2*(ctx->capacity - ctx->stringP)*sizeof(UChar));
+            if(newStuff == NULL) {
+                /*freak out*/
+            }
+            uprv_memcpy(newStuff, ctx->stringP, (ctx->capacity - ctx->stringP)*sizeof(UChar));
+        } else { /* we have already allocated, need to reallocate */
+            newStuff = (UChar *)uprv_realloc(ctx->stringP, 2*(ctx->capacity - ctx->stringP)*sizeof(UChar));
+            if(newStuff == NULL) {
+                /*freak out*/
+            }
+        }
+        ctx->len=newStuff+(ctx->len - ctx->stringP);
+        ctx->capacity = newStuff+2*(ctx->capacity - ctx->stringP);
+        ctx->stringP = newStuff;
+    }
+    *(ctx->len++) = c;
+    return c;
+}
+
+
+
+UCollationResult alternateIncrementalProcessing(const UCollator *coll, incrementalContext *srcCtx, incrementalContext *trgCtx) {
+    if(srcCtx->stringP == srcCtx->len || *(srcCtx->len-1) != 0xFFFF) {
+        while(incctx_appendChar(srcCtx, srcCtx->source(srcCtx->sourceContext)) != 0xFFFF);
+    }
+    if(trgCtx->stringP == trgCtx->len || *(trgCtx->len-1) != 0xFFFF) {
+        while(incctx_appendChar(trgCtx, trgCtx->source(trgCtx->sourceContext)) != 0xFFFF);
+    }
+    UCollationResult result = ucol_strcoll(coll, srcCtx->stringP, srcCtx->len-srcCtx->stringP-1, trgCtx->stringP, trgCtx->len-trgCtx->stringP-1);
+    incctx_cleanUpContext(srcCtx);
+    incctx_cleanUpContext(trgCtx);
+    return result;
 }
 
 /* This is the incremental function */
@@ -778,6 +663,8 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                     // Neither of the orders is ignorable, and we already know that the primary
                     // orders are different because of the (pSOrder != pTOrder) test above.
                     // Record the difference and stop the comparison.
+                    incctx_cleanUpContext(&sColl);
+                    incctx_cleanUpContext(&tColl);
                     if (pSOrder < pTOrder)
                     {
                         return UCOL_LESS;  // (strength is PRIMARY)
@@ -838,6 +725,8 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                 {
                     // We found an additional non-ignorable base character in the source string.
                     // This is a primary difference, so the source is greater
+                    incctx_cleanUpContext(&sColl);
+                    incctx_cleanUpContext(&tColl);
                     return UCOL_GREATER; // (strength is PRIMARY)
                 }
 
@@ -864,6 +753,8 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                 {
                     // We found an additional non-ignorable base character in the target string.
                     // This is a primary difference, so the source is less
+                    incctx_cleanUpContext(&sColl);
+                    incctx_cleanUpContext(&tColl);
                     return UCOL_LESS; // (strength is PRIMARY)
                 }
 
@@ -978,6 +869,8 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                     // Neither of the orders is ignorable, and we already know that the primary
                     // orders are different because of the (pSOrder != pTOrder) test above.
                     // Record the difference and stop the comparison.
+                    incctx_cleanUpContext(&sColl);
+                    incctx_cleanUpContext(&tColl);
                     if (pSOrder < pTOrder)
                     {
                         return UCOL_LESS;  // (strength is PRIMARY)
@@ -1039,6 +932,8 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                 {
                     // We found an additional non-ignorable base character in the source string.
                     // This is a primary difference, so the source is greater
+                    incctx_cleanUpContext(&sColl);
+                    incctx_cleanUpContext(&tColl);
                     return UCOL_GREATER; // (strength is PRIMARY)
                 }
 
@@ -1068,6 +963,8 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                 {
                     // We found an additional non-ignorable base character in the target string.
                     // This is a primary difference, so the source is less
+                    incctx_cleanUpContext(&sColl);
+                    incctx_cleanUpContext(&tColl);
                     return UCOL_LESS; // (strength is PRIMARY)
                 }
 
@@ -1115,10 +1012,10 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
 
         int8_t comparison;
         
-        Normalizer::normalize(UnicodeString(sColl.string, sColl.len-sColl.string-1), ((RuleBasedCollator *)coll)->getDecomposition(), 
+        Normalizer::normalize(UnicodeString(sColl.stringP, sColl.len-sColl.stringP-1), ((RuleBasedCollator *)coll)->getDecomposition(), 
                       0, sourceDecomp,  status);
 
-        Normalizer::normalize(UnicodeString(tColl.string, tColl.len-tColl.string-1), ((RuleBasedCollator *)coll)->getDecomposition(), 
+        Normalizer::normalize(UnicodeString(tColl.stringP, tColl.len-tColl.stringP-1), ((RuleBasedCollator *)coll)->getDecomposition(), 
                       0, targetDecomp,  status);
         
         comparison = sourceDecomp.compare(targetDecomp);
@@ -1137,6 +1034,8 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
         }
     }
 
+    incctx_cleanUpContext(&sColl);
+    incctx_cleanUpContext(&tColl);
     return result;
 }
 
@@ -1778,8 +1677,8 @@ ucol_calcSortKey(const    UCollator    *coll,
     uint8_t *primaries = *result, *secondaries = second, *tertiaries = tert;
 
     if(primaries == NULL && allocatePrimary == TRUE) {
-        primaries = *result = (uint8_t *)uprv_malloc(UCOL_MAX_BUFFER);
-        resultLength = UCOL_MAX_BUFFER;
+        primaries = *result = (uint8_t *)uprv_malloc(2*UCOL_MAX_BUFFER);
+        resultLength = 2*UCOL_MAX_BUFFER;
     }
 
     int32_t primSize = resultLength, secSize = UCOL_MAX_BUFFER, terSize = UCOL_MAX_BUFFER;
@@ -1890,12 +1789,12 @@ ucol_calcSortKey(const    UCollator    *coll,
                     goto cleanup;
                 } else {
                     uint8_t *newStart;
-                    newStart = (uint8_t *)uprv_realloc(primStart, 2*resultLength);
+                    newStart = (uint8_t *)uprv_realloc(primStart, 2*sortKeySize);
                     if(primStart == NULL) {
                         /*freak out*/
                     }
                     primaries=newStart+(primaries-primStart);
-                    resultLength *= 2;
+                    resultLength = 2*sortKeySize;
                     primStart = *result = newStart;
                 }
             }

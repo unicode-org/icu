@@ -33,9 +33,6 @@ class Normalizer;
 class VectorOfPToContractElement;
 class RuleBasedCollator;
 
-// This is just temporary, for prototyping.
-struct collIterate;
-typedef void *  UCollator;
 
 /**
  * The CollationElementIterator class is used as an iterator to walk through

@@ -67,13 +67,6 @@ class NormalizerIterator; // see tblcoll.cpp
 class Collator;
 class TableCollationData;
 
-// This is just temporary, for prototyping.
-struct collIterate;
-struct incrementalContext;
-typedef void *  UCollator;
-
-
-
 /**
  * The RuleBasedCollator class provides the simple implementation of Collator,
  * using data-driven tables.  The user can create a customized table-based
@@ -715,35 +708,24 @@ private:
   friend int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *status);
   friend int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *source, UErrorCode *status); 
   friend int32_t getComplicatedCE(const UCollator *coll, collIterate *source, UErrorCode *status);
-/*
-  friend int32_t ucol_getSortKey(const    UCollator    *coll, const    UChar        *source,
-        int32_t        sourceLength, uint8_t        *result, int32_t        resultLength);
-*/
-
   friend int32_t ucol_calcSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
         uint8_t        **result,
         int32_t        resultLength,
         UBool allocatePrimary);
-
   friend UCollationResult ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *source,
         int32_t            sourceLength,
         const    UChar        *target,
         int32_t            targetLength);
-/*
-  friend UCollationResult ucol_strcollEx(    const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t            sourceLength,
-        const    UChar        *target,
-        int32_t            targetLength);
-*/
   friend int32_t ucol_getSortKeySize(const UCollator *coll, 
         collIterate *s, 
         int32_t currentSize, 
         UColAttributeValue strength, 
         int32_t len);
+  friend void *ucol_getABuffer(const UCollator *coll, uint32_t size);
+
 
 
 
@@ -1025,7 +1007,15 @@ private:
   UBool              dataIsOwned;
   TableCollationData* data;
   Normalizer::EMode fDefaultDecomp;
+  void **fSomeMemory;
+  int32_t *fSizes;
+  int32_t fAvailableMemory;
+  int32_t fUsedMemory;
+
+  void *getSomeMemory(int32_t size);
+
 };
+
 
 inline UBool
 RuleBasedCollator::operator!=(const Collator& other) const

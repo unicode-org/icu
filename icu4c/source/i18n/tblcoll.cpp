@@ -55,9 +55,9 @@
 #include "ucmp32.h"
 #include "tcoldata.h"
 
-#include "unicode/tblcoll.h"
-
 #include "ucolimp.h"
+
+#include "unicode/tblcoll.h"
 
 #include "unicode/coleitr.h"
 #include "unicode/locid.h"
@@ -69,6 +69,7 @@
 #include "filestrm.h"
 #include "umemstrm.h"
 #include "umutex.h"
+#include "cmemory.h"
 
 #ifdef _DEBUG
 #include "unistrm.h"
@@ -532,7 +533,8 @@ RuleBasedCollator::RuleBasedCollator()
       cursor1(0),
       cursor2(0),
       dataIsOwned(FALSE),
-      data(0)
+      data(0),
+      fSomeMemory(NULL)
 {
 }
 
@@ -545,7 +547,8 @@ RuleBasedCollator::RuleBasedCollator(const  RuleBasedCollator&  that)
       cursor1(0),
       cursor2(0),
       dataIsOwned(FALSE),
-      data(that.data) // Alias the data pointer
+      data(that.data) ,// Alias the data pointer
+      fSomeMemory(NULL)
 {
 }
 
@@ -615,7 +618,9 @@ RuleBasedCollator::RuleBasedCollator(const  UnicodeString&  rules,
       cursor1(0),
       cursor2(0),
       dataIsOwned(FALSE),
-      data(0)
+      data(0),
+      fSomeMemory(NULL)
+
 {
     if (U_FAILURE(status))
     {
@@ -636,7 +641,9 @@ RuleBasedCollator::RuleBasedCollator(const  UnicodeString&  rules,
     cursor1(0),
     cursor2(0),
     dataIsOwned(FALSE),
-    data(0)
+    data(0),
+      fSomeMemory(NULL)
+
 {
     if (U_FAILURE(status))
     {
@@ -656,7 +663,9 @@ RuleBasedCollator::RuleBasedCollator(const  UnicodeString&  rules,
     cursor1(0),
     cursor2(0),
     dataIsOwned(FALSE),
-    data(0)
+    data(0),
+      fSomeMemory(NULL)
+
 {
   if (U_FAILURE(status))
     {
@@ -678,7 +687,9 @@ RuleBasedCollator::RuleBasedCollator(const  UnicodeString&  rules,
       cursor1(0),
       cursor2(0),
       dataIsOwned(FALSE),
-      data(0)
+      data(0),
+      fSomeMemory(NULL)
+
 {
     if (U_FAILURE(status))
     {
@@ -890,7 +901,9 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
       cursor1(0),
       cursor2(0),
       dataIsOwned(FALSE),
-      data(0)
+      data(0),
+      fSomeMemory(NULL)
+
 {
 
 
@@ -1072,6 +1085,18 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
 
 RuleBasedCollator::~RuleBasedCollator()
 {
+
+    if(fSomeMemory != NULL) {
+        int32_t i = 0;
+        for(i = 0; i<fAvailableMemory; i++) {
+            if(*(fSomeMemory+i)!= NULL) {
+                uprv_free(*(fSomeMemory+i));
+            }
+        }
+        uprv_free(fSomeMemory);
+        delete[] fSizes;
+    }
+
     if (dataIsOwned)
     {
         delete data;
@@ -3084,6 +3109,41 @@ int32_t RuleBasedCollator::getSortKey(const   UChar *source,
 						  int32_t resultLength) const {
 	int32_t resLen = ucol_getSortKey((UCollator *)this, source, sourceLength, result, resultLength);
 	return resLen;
+}
+
+inline void * RuleBasedCollator::getSomeMemory(int32_t size) {
+    int32_t sizeOfStuff = 5;
+    if(fSomeMemory == NULL) {
+        fSomeMemory = (void **)uprv_malloc(sizeOfStuff*sizeof(void*));
+        fSizes = new int32_t[sizeOfStuff];
+        fUsedMemory = 0;
+        fAvailableMemory = sizeOfStuff;
+        uprv_memset(fSomeMemory, 0, sizeOfStuff*sizeof(void*));
+    } else if(fUsedMemory == sizeOfStuff) {
+        fUsedMemory = 0;
+    }
+
+    void *result = NULL;
+    if(*(fSomeMemory+fUsedMemory) == NULL) {
+        result = uprv_malloc(size);
+        fSizes[fUsedMemory] = size;
+    } else {
+        if(fSizes[fUsedMemory] < size) {
+            result = uprv_realloc(*(fSomeMemory+fUsedMemory), size);
+            fSizes[fUsedMemory] = size;
+        } else {
+            result = *(fSomeMemory+fUsedMemory);
+        }
+    }
+
+    if(result == NULL) {
+        /*freak out*/
+    }
+
+    *(fSomeMemory+fUsedMemory) = result;
+    fUsedMemory++;
+
+    return result;
 }
 
 //eof
