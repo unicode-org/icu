@@ -35,7 +35,9 @@ StringMatcher::StringMatcher(const UnicodeString& theString,
 }
 
 StringMatcher::StringMatcher(const StringMatcher& o) :
+    UnicodeFunctor(o),
     UnicodeMatcher(o),
+    UnicodeReplacer(o),
     pattern(o.pattern),
     data(o.data),
     segmentNumber(o.segmentNumber),
@@ -254,7 +256,7 @@ UnicodeString& StringMatcher::toReplacerPattern(UnicodeString& rule,
  * into the given set.
  * @param toUnionTo the set into which to union the output characters
  */
-void StringMatcher::addReplacementSetTo(UnicodeSet& toUnionTo) const {
+void StringMatcher::addReplacementSetTo(UnicodeSet& /*toUnionTo*/) const {
     // The output of this replacer varies; it is the source text between
     // matchStart and matchLimit.  Since this varies depending on the
     // input text, we can't compute it here.  We can either do nothing
