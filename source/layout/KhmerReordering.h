@@ -96,8 +96,7 @@ struct KhmerClassTable    // This list must include all types of components that
         CF_POS_BELOW     = 0x00040000,
         CF_POS_ABOVE     = 0x00020000,
         CF_POS_AFTER     = 0x00010000,
-        CF_POS_MASK      = 0x000f0000,
-        
+        CF_POS_MASK      = 0x000f0000
     };
 
     typedef le_uint32 CharClass;

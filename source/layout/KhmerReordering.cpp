@@ -48,8 +48,7 @@ enum
     
     // split vowel
     _va = _da | KhmerClassTable::CF_SPLIT_VOWEL,
-    _vr = _dr | KhmerClassTable::CF_SPLIT_VOWEL,
-
+    _vr = _dr | KhmerClassTable::CF_SPLIT_VOWEL
 };
 
 
@@ -381,7 +380,7 @@ le_int32 KhmerReordering::findSyllable(const KhmerClassTable *classTable, const 
 
 // This is the real reordering function as applied to the Khmer language
 
-le_int32 KhmerReordering::reorder(const LEUnicode *chars, le_int32 charCount, le_int32 scriptCode,
+le_int32 KhmerReordering::reorder(const LEUnicode *chars, le_int32 charCount, le_int32 /*scriptCode*/,
                                   LEUnicode *outChars, LEGlyphStorage &glyphStorage)
 {
     const KhmerClassTable *classTable = KhmerClassTable::getKhmerClassTable();
