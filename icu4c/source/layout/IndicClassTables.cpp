@@ -208,7 +208,7 @@ static const SplitMatra mlymSplitTable[] = {{0x0D46, 0x0D3E}, {0x0D47, 0x0D3E}, 
 #define TAML_SCRIPT_FLAGS (IndicClassTable::SF_MPRE_FIXUP | IndicClassTable::SF_NO_POST_BASE_LIMIT)
 #define TELU_SCRIPT_FLAGS (IndicClassTable::SF_MATRAS_AFTER_BASE | 3)
 #define KNDA_SCRIPT_FLAGS (IndicClassTable::SF_MATRAS_AFTER_BASE | 3)
-#define MLYM_SCRIPT_FLAGS (IndicClassTable::SF_NO_POST_BASE_LIMIT)
+#define MLYM_SCRIPT_FLAGS (IndicClassTable::SF_MPRE_FIXUP | IndicClassTable::SF_NO_POST_BASE_LIMIT)
 
 //
 // Indic Class Tables
