@@ -68,6 +68,10 @@ om{
         "KD",  // KD = Kiristoos Dura = Before Christ
         "KB",  // KB = Kiristoos Booda = After Christ
     }
+    DateTimeElements:intvector { 
+        7,
+        1,
+    }
     Languages { 
         om { "Oromoo" }
     }
