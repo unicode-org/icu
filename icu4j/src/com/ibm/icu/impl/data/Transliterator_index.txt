@@ -42,48 +42,41 @@
 Fullwidth-Halfwidth:file:Transliterator_Fullwidth_Halfwidth.utf8.txt:UTF8:FORWARD
 Halfwidth-Fullwidth:file:Transliterator_Fullwidth_Halfwidth.utf8.txt:UTF8:REVERSE
 
-Latin-Arabic:file:Transliterator_Latin_Arabic.utf8.txt:UTF8:FORWARD
-Arabic-Latin:file:Transliterator_Latin_Arabic.utf8.txt:UTF8:REVERSE
+Latin-Cyrillic:file:Transliterator_Cyrillic_Latin.txt:UTF8:REVERSE
+Cyrillic-Latin:file:Transliterator_Cyrillic_Latin.txt:UTF8:FORWARD
 
-Latin-Cyrillic:file:Transliterator_Latin_Cyrillic.utf8.txt:UTF8:FORWARD
-Cyrillic-Latin:file:Transliterator_Latin_Cyrillic.utf8.txt:UTF8:REVERSE
-
-Latin-Devanagari:file:Transliterator_Latin_Devanagari.utf8.txt:UTF8:FORWARD
-Devanagari-Latin:file:Transliterator_Latin_Devanagari.utf8.txt:UTF8:REVERSE
-
-Latin-Greek:file:Transliterator_Latin_Greek.utf8.txt:UTF8:FORWARD
-Greek-Latin:file:Transliterator_Latin_Greek.utf8.txt:UTF8:REVERSE
-
-Latin-Hebrew:file:Transliterator_Latin_Hebrew.utf8.txt:UTF8:FORWARD
-Hebrew-Latin:file:Transliterator_Latin_Hebrew.utf8.txt:UTF8:REVERSE
+Latin-Greek:file:Transliterator_Greek_Latin.txt:UTF8:REVERSE
+Greek-Latin:file:Transliterator_Greek_Latin.txt:UTF8:FORWARD
 
 LowerLatin-Jamo:internal:Transliterator_Latin_Jamo.utf8.txt:UTF8:FORWARD
 Latin-Jamo:alias:Any-Lower;LowerLatin-Jamo
 Jamo-Latin:file:Transliterator_Latin_Jamo.utf8.txt:UTF8:REVERSE
 
-Latin-Kana:file:Transliterator_Latin_Kana.utf8.txt:UTF8:FORWARD
-Kana-Latin:file:Transliterator_Latin_Kana.utf8.txt:UTF8:REVERSE
+Latin-Katakana:file:Transliterator_Latin_Katakana.txt:UTF8:FORWARD
+Katakana-Latin:file:Transliterator_Latin_Katakana.txt:UTF8:REVERSE
+
+Latin-Hiragana:file:Transliterator_Hiragana_Latin.txt:UTF8:REVERSE
+Hiragana-Latin:file:Transliterator_Hiragana_Latin.txt:UTF8:FORWARD
 
 Hiragana-Katakana:file:Transliterator_Hiragana_Katakana.utf8.txt:UTF8:FORWARD
 Katakana-Hiragana:file:Transliterator_Hiragana_Katakana.utf8.txt:UTF8:REVERSE
 
-StraightQuotes-CurlyQuotes:file:Transliterator_StraightQuotes_CurlyQuotes.utf8.txt:UTF8:FORWARD
-CurlyQuotes-StraightQuotes:file:Transliterator_StraightQuotes_CurlyQuotes.utf8.txt:UTF8:REVERSE
+Any-Accents:file:Transliterator_Any_Accents.txt:UTF8:FORWARD
+Accents-Any:file:Transliterator_Any_Accents.txt:UTF8:REVERSE
+
+Any-Publishing:file:Transliterator_Any_Publishing.txt:UTF8:FORWARD
+Publishing-Any:file:Transliterator_Any_Publishing.txt:UTF8:REVERSE
 
 # One way rules (forward only)
 
 Han-Pinyin:file:Transliterator_Han_Pinyin.utf8.txt:UTF8:FORWARD
 Kanji-English:file:Transliterator_Kanji_English.utf8.txt:UTF8:FORWARD
 Kanji-OnRomaji:file:Transliterator_Kanji_OnRomaji.utf8.txt:UTF8:FORWARD
-KeyboardEscape-Latin1:file:Transliterator_KeyboardEscape_Latin1.utf8.txt:UTF8:FORWARD
-UnicodeName-UnicodeChar:file:Transliterator_UnicodeName_UnicodeChar.utf8.txt:UTF8:FORWARD
 
 # Compound rules
 
-Latin-Hangul:alias:Latin-Jamo;[\u1100-\u11FF]NFC
-### TODO
-### Change this to be a compound filter
-Hangul-Latin:alias:[\uAC00-\uD7AF]NFD;Jamo-Latin
+Latin-Hangul:alias:[:Latin:];Latin-Jamo;[\u1100-\u11FF]NFC
+Hangul-Latin:alias:[\uAC00-\uD7AF];NFD;Jamo-Latin
 
 # Inter-Indic composed rules
 Latin-InterIndic:internal:Transliterator_Latin_InterIndic.txt:UTF8:FORWARD
@@ -108,8 +101,7 @@ InterIndic-Telugu:internal:Transliterator_InterIndic_Telugu.txt:UTF8:FORWARD
 InterIndic-Kannada:internal:Transliterator_InterIndic_Kannada.txt:UTF8:FORWARD
 InterIndic-Malayalam:internal:Transliterator_InterIndic_Malayalam.txt:UTF8:FORWARD
 
-
-#Latin-Xtransliterators
+#Latin-Indic transliterators
 Latin-Devanagari:alias:NFD;Latin-InterIndic;InterIndic-Devanagari;NFC
 Latin-Bengali:alias:NFD;Latin-InterIndic;InterIndic-Bengali;NFC
 Latin-Gurmukhi:alias:NFD;Latin-InterIndic;InterIndic-Gurmukhi;NFC
@@ -120,7 +112,7 @@ Latin-Telugu:alias:NFD;Latin-InterIndic;InterIndic-Telugu;NFC
 Latin-Kannada:alias:NFD;Latin-InterIndic;InterIndic-Kannada;NFC
 Latin-Malayalam:alias:NFD;Latin-InterIndic;InterIndic-Malayalam;NFC
 
-#X-Latintransliterators
+#Indic-Latin transliterators
 Devanagari-Latin:alias:NFD;Devanagari-InterIndic;InterIndic-Latin;NFC
 Bengali-Latin:alias:NFD;Bengali-InterIndic;InterIndic-Latin;NFC
 Gurmukhi-Latin:alias:NFD;Bengali-InterIndic;InterIndic-Latin;NFC
