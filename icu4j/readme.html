@@ -304,6 +304,23 @@ Completed in 19 seconds</pre>
     the main class files.</td>
   </tr>
   <tr>
+    <td>zip</td>
+    <td>Create a zip archive of the source, docs, and jar file for
+    distribution, excluding unwanted things like CVS directories and
+    emacs backup files.  The zip file
+    <strong>icu4jYYYYMMDD.zip</strong> will be created in the
+    directory <em>above</em> the root ICU4J directory, where YYYYMMDD
+    is today's date.  Any existing file of that name will be
+    overwritten.</td>
+  </tr>
+  <tr>
+    <td>zipsrc</td>
+    <td>Like the <strong>zip</strong> target, without the docs and
+    the jar file.  The zip file <strong>icu4jsrcYYYYMMDD.zip</strong>
+    will be created in the directory <em>above</em> the root ICU4J
+    directory.</td>
+  </tr>
+  <tr>
     <td>clean</td>
     <td>Remove all built targets, leaving the source.</td>
   </tr>
