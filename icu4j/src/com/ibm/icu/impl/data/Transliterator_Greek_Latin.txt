@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Greek_Latin.txt,v $
-# $Date: 2001/09/25 22:58:55 $
-# $Revision: 1.3 $
+# $Date: 2001/10/20 01:33:44 $
+# $Revision: 1.4 $
 #--------------------------------------------------------------------
 
 # Rules are predicated on running NFD first, and NFC afterwards
@@ -67,8 +67,6 @@ $iotasub > i ;
 
 # BREATHING
 
-$smooth > ; #delete smooth breathing
-
 # Convert rough breathing to h, and move before letters.
 
 # Make A ` x = > H a x
@@ -120,27 +118,12 @@ $smooth > ; #delete smooth breathing
 
 # Now do smooth
 
-ηυ $1 $smooth < [^[:L:][:M:]] { e $macron u ( $ddot? ) }; 
-η $smooth < [^[:L:][:M:]] { e $macron }; 
-ω $smooth < [^[:L:][:M:]] { o $macron };
+#delete smooth breathing for Latin
+$smooth > ; 
 
-αυ $1 $smooth < [^[:L:][:M:]] { au ( $ddot? ) }; 
-αι $1 $smooth < [^[:L:][:M:]] { ai ( $ddot? ) }; 
-α $smooth < [^[:L:][:M:]] { a }; 
-ευ $1 $smooth < [^[:L:][:M:]] { eu  ( $ddot? ) }; 
-ει $1 $smooth < [^[:L:][:M:]] { ei  ( $ddot? ) }; 
-ε $smooth < [^[:L:][:M:]] { e }; 
-ι $smooth < [^[:L:][:M:]] { i }; 
-ου $1 $smooth < [^[:L:][:M:]] { ou  ( $ddot? ) }; 
-οι $1 $smooth < [^[:L:][:M:]] { oi  ( $ddot? ) }; 
-ο $smooth < [^[:L:][:M:]] { o }; 
-υ $smooth < [^[:L:][:M:]] { u }; 
-υι $1 $smooth < [^[:L:][:M:]] { ui  ( $ddot? ) }; 
-
-
-# seems to cause infinite loop
-# | $1 $smooth < [:^L:] { ([aeiouyAEIOUY] $macron? [aeiouyAEIOUY] $macron?) } [^[$smooth]] ;
-# | $1 $smooth < [:^L:] { ([aeiouyAEIOUY] $macron?) } [[^aeiouyAEIOUY] [$smooth]] ;
+# insert in Greek
+ | $1 $smooth < [:^L:] { ([aeiouyAEIOUY] $macron? [aeiouyAEIOUY] $macron?) } [^[$smooth]] ;
+ | $1 $smooth < [:^L:] { ([aeiouyAEIOUY] $macron?) } [^aeiouyAEIOUY$smooth$macron] ;
 
 # TODO: preserve smooth/rough breathing if not 
 # on initial vowel sequence
@@ -239,7 +222,9 @@ $vowel { Υ <> U ;
 Χ } $beforeLower <> Ch ; 
 Χ <> CH ; 
 
-# completeness for ASCII
+# Completeness for ASCII
+
+$ignore = [[:Mark:]''] * ;
 
 | k  < c ;
 | ph < f ;
@@ -247,5 +232,35 @@ $vowel { Υ <> U ;
 | k < q ;
 | u < v ;
 | u < w ;
+| K < C ;
+| PH < F } $ignore [:UppercaseLetter:] ;
+| PH < [:UppercaseLetter:] $ignore { F ;
+| PH < F ;
+| I < J ;
+| K < Q ;
+| U < V ;
+| U < W ;
+
+$rough } $ignore [:UppercaseLetter:] > H ;
+$ignore [:UppercaseLetter:] { $rough > H ;
+$rough < H ;
+$rough <> h ;
+
+# Completeness for Greek
+
+ϐ > | β ;
+ϑ > | θ ;
+ϒ > | Υ ;
+ϕ > | φ ;
+ϖ > | π ;
+
+ϰ > | κ ;
+ϱ > | ρ ;
+ϲ > | σ ;
+ϳ > j ;
+ϴ > | Θ ;
+ϵ > | ε ;
+
+ ͺ > i;
 
 ::NFC (NFD) ; 

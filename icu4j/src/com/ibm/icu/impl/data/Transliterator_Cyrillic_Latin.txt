@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Cyrillic_Latin.txt,v $
-# $Date: 2001/09/25 22:58:55 $
-# $Revision: 1.2 $
+# $Date: 2001/10/20 01:33:44 $
+# $Revision: 1.3 $
 #--------------------------------------------------------------------
 # TODO: add remaining characters
 # Should add variants for Russian-English, Russian-German
@@ -38,8 +38,8 @@ $comma = \u0326 ;
 # ҹ <> XXX ; # CYRILLIC SMALL LETTER CHE WITH VERTICAL STROKE
 # Ҹ <> XXX ; # CYRILLIC CAPITAL LETTER CHE WITH VERTICAL STROKE
 
-э <> e $grave; # CYRILLIC SMALL LETTER E
-Э <> E $grave; # CYRILLIC CAPITAL LETTER E
+э <> e $acute; # CYRILLIC SMALL LETTER E
+Э <> E $acute; # CYRILLIC CAPITAL LETTER E
 є <> e $hat; # CYRILLIC SMALL LETTER UKRAINIAN IE
 Є <> E $hat; # CYRILLIC CAPITAL LETTER UKRAINIAN IE
 
@@ -56,8 +56,8 @@ $comma = \u0326 ;
 ю <> u $hat ; # CYRILLIC SMALL LETTER YU
 Ю <>  U $hat ; # CYRILLIC CAPITAL LETTER YU
 
-і <> i $grave; # CYRILLIC SMALL LETTER BYELORUSSIAN-UKRAINIAN I
-І <> I $grave; # CYRILLIC CAPITAL LETTER BYELORUSSIAN-UKRAINIAN I
+і <> i $acute; # CYRILLIC SMALL LETTER BYELORUSSIAN-UKRAINIAN I
+І <> I $acute; # CYRILLIC CAPITAL LETTER BYELORUSSIAN-UKRAINIAN I
 ј <> j $caron; # CYRILLIC SMALL LETTER JE
 Ј <> J $caron; # CYRILLIC CAPITAL LETTER JE
 
@@ -69,7 +69,8 @@ $comma = \u0326 ;
 ћ <> c $acute ; # CYRILLIC SMALL LETTER TSHE
 Ћ <> C $acute ; # CYRILLIC CAPITAL LETTER TSHE
 
-
+џ <> d $hat ; # CYRILLIC SMALL LETTER DZHE
+Џ <> D $hat ; # CYRILLIC CAPITAL LETTER DZHE
 
 # Normal order
 
@@ -84,8 +85,8 @@ $comma = \u0326 ;
 в <> v ; # CYRILLIC SMALL LETTER VE
 В <> V ; # CYRILLIC CAPITAL LETTER VE
 
-ґ <> g $acute ; # CYRILLIC SMALL LETTER GHE WITH UPTURN
-Ґ <> G $acute ; # CYRILLIC CAPITAL LETTER GHE WITH UPTURN
+ґ <> g $grave ; # CYRILLIC SMALL LETTER GHE WITH UPTURN
+Ґ <> G $grave ; # CYRILLIC CAPITAL LETTER GHE WITH UPTURN
 ғ <> g $dot ; # CYRILLIC SMALL LETTER GHE WITH STROKE
 Ғ <> G $dot; # CYRILLIC CAPITAL LETTER GHE WITH STROKE
 ҕ <> g $breve; # CYRILLIC SMALL LETTER GHE WITH MIDDLE HOOK
@@ -199,8 +200,7 @@ $comma = \u0326 ;
 # Ҽ <> XXX ; # CYRILLIC CAPITAL LETTER ABKHASIAN CHE
 # ҿ <> XXX ; # CYRILLIC SMALL LETTER ABKHASIAN CHE WITH DESCENDER
 # Ҿ <> XXX ; # CYRILLIC CAPITAL LETTER ABKHASIAN CHE WITH DESCENDER
-# џ <> XXX ; # CYRILLIC SMALL LETTER DZHE
-# Џ <> XXX ; # CYRILLIC CAPITAL LETTER DZHE
+
 
 ъ <>  [:Ll:] { $modprime2 ; # CYRILLIC SMALL LETTER HARD SIGN
 Ъ <> $modprime2 ; # CYRILLIC CAPITAL LETTER HARD SIGN
@@ -284,5 +284,16 @@ $comma = \u0326 ;
 ### Ӭ <> XXX ; # CYRILLIC CAPITAL LETTER E
 ### ѷ <> XXX ; # CYRILLIC SMALL LETTER IZHITSA
 ### Ѷ <> XXX ; # CYRILLIC CAPITAL LETTER IZHITSA
+
+# Completeness
+$ignore = [[:Mark:]''] * ;
+| k < q ;
+| K < Q ;
+| u < w ;
+| U < W ;
+| KS < X } $ignore [:UppercaseLetter:] ;
+| KS < [:UppercaseLetter:] $ignore { X ;
+| Ks < X ;
+| ks < x ;
 
 :: NFC (NFD) ;

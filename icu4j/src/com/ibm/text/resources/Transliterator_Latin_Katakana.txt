@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/Transliterator_Latin_Katakana.txt,v $
-# $Date: 2001/10/10 20:29:09 $
-# $Revision: 1.4 $
+# $Date: 2001/10/20 01:33:44 $
+# $Revision: 1.5 $
 #--------------------------------------------------------------------
 
 ::NFD (NFC) ;
@@ -89,6 +89,8 @@ $y_start = [ヤユヨやゆよ] ;
 $r_start = [ラリルレロらりるれろ] ;
 
 $w_start = [ワヰヱヲわゐゑを] ;
+
+$v_start = [ワヰヱヲ]゙ ;
 
 # if ン is followed by $n_quoter, then it needs an
 # apostrophe after its romaji form to disambiguate it.
@@ -190,11 +192,11 @@ i <> イ ;
 
 # j  } $vowel > ジ | '~y' ;
 
-ja < ジャ ;
+ja <> ジャ ;
 ji'~i' < ジィ ; # liu
-ju < ジュ ;
-je < ジェ ;
-jo < ジョ ;
+ju <> ジュ ;
+je <> ジェ ;
+jo <> ジョ ;
 ji <> ジ ;
 
 k | '~' < キ} $small_y ;
@@ -324,16 +326,17 @@ t } ch > ッ ;
 
 #voiced
 
+j } j <> ッ } $j_start ;
 b } b <> ッ } [$h_start$f_start] $voice;
 d } d <> ッ } $t_start $voice;
 g } g <> ッ } $k_start $voice;
 p } p <> ッ } [$h_start$f_start] $semivoice;
 # v } v <> ッ } [ワヰウヱヲう]  $voice ;
 z } z <> ッ } $s_start $voice;
+v } v <> ッ } $v_start;
 
 # normal
 
-j } j <> ッ } $j_start ;
 k } k <> ッ } $k_start ;
 m } m <> ッ } $m_start ;
 n } n <> ッ } $n_start ;
@@ -343,10 +346,10 @@ r } r <> ッ } $r_start ;
 t } t <> ッ } $t_start ;
 s } s <> ッ } $s_start ;
 
-# completeness
-w  < ッ } $w_start;
-y  < ッ } $y_start;
+w } w  <> ッ } $w_start;
+y } y <> ッ } $y_start;
 
+# completeness 
 x } x > ッ ;
 c } k > ッ ;
 c } c > ッ ;
@@ -382,6 +385,10 @@ $macron <> ー ;
 '~ye' > ェ ;
 '~yo' <> ョ ;
 
+# h- rule: lengthens vowel if not followed by a vowel
+
+[aeiou] } h > ー ;
+
 # one-way latin- > kana rules. these do not occur in
 # well-formed romaji representing actual japanese text.
 # their purpose is to make all romaji map to kana of
@@ -397,6 +404,8 @@ sy > セィ ;
 ty > ティ ;
 zy > ゼィ ;
 
+h > ヘ ;
+
 # isolated consonants listed here so as not to mask
 # longer rules above.
 
@@ -408,7 +417,6 @@ dj > ヂ;
 b > ブ ;
 d > デ ;
 g > グ ;
-h > ヘ ;
 k > ク ;
 m > ム ;
 n'' < ン } $n_quoter ;
@@ -438,7 +446,7 @@ x > | ks ;
 # Final cleanup
 
 '~' > ; # delete stray tildes between letters
-# '' > ; # delete stray quotes between letters
+[:Katakana:] { '' } [:Latin:] > ; # delete stray quotes between letters
 
 :: NFC (NFD) ;
 
