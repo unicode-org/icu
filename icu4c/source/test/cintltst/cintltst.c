@@ -234,8 +234,6 @@ void ctest_setICU_DATA() {
         char *pBackSlash;
         int i;
 
-//        p = new char [strlen("\\data") + strlen(__FILE__) + 1];  //  <<< LEAK
-//        strcpy(p, "ICU_DATA=");
         strcpy(p, __FILE__);
         /* We want to back over three '\' chars.                            */
         /*   Only Windows should end up here, so looking for '\' is safe.   */
