@@ -226,6 +226,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
         CASE(23, TestParallelAPIValues)
         CASE(24, TestKeywordVariants)
         CASE(25, TestKeywordVariantParsing)
+        CASE(26, TestGetBaseName)
 
         // keep the last index in sync with the condition in default:
 
@@ -1657,3 +1658,25 @@ LocaleTest::TestKeywordVariantParsing(void) {
     }
 }
 
+void
+LocaleTest::TestGetBaseName(void) {
+    struct {
+        const char *localeID;
+        const char *baseName;
+    } testCases[] = {
+        { "de_DE@  C o ll A t i o n   = Phonebook   ", "de_DE" },
+        { "de@currency = euro; CoLLaTion   = PHONEBOOk", "de" },
+        { "ja@calendar = buddhist", "ja" }
+    };
+
+    int32_t i = 0, baseNameLen = 0;
+
+    for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
+        Locale loc(testCases[i].localeID);
+        if(strcmp(testCases[i].baseName, loc.getBaseName())) {
+            errln("For locale \"%s\" expected baseName \"%s\", but got \"%s\"",
+                testCases[i].localeID, testCases[i].baseName, loc.getBaseName());
+            return;
+        }
+    }
+}
