@@ -1014,7 +1014,7 @@ static void TestInt64Format() {
 static void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
     char temp[512];
     UChar buffer[512];
-    int BUFSIZE = sizeof(buffer)/sizeof(buffer[0]);
+    int32_t BUFSIZE = sizeof(buffer)/sizeof(buffer[0]);
     double vals[] = {
         -.2, 0, .2, 5.5, 15.2, 250, 123456789
     };
@@ -1129,7 +1129,7 @@ static void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
 
     {
         UErrorCode status = U_ZERO_ERROR;
-        int len = unum_toPattern(fmt, FALSE, buffer, BUFSIZE, &status);
+        unum_toPattern(fmt, FALSE, buffer, BUFSIZE, &status);
         if (U_SUCCESS(status)) {
             u_austrcpy(temp, buffer);
             log_verbose("pattern: '%s'\n", temp);
@@ -1157,11 +1157,11 @@ static void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
 static void TestRBNFFormat() {
     UErrorCode status;
     UParseError perr;
-    UChar temp[768];
+    UChar pat[1024];
+    UChar tempUChars[512];
     UNumberFormat *formats[5];
     int COUNT = sizeof(formats)/sizeof(formats[0]);
     int i;
-    const char* pat;
 
     for (i = 0; i < COUNT; ++i) {
         formats[i] = 0;
@@ -1169,8 +1169,8 @@ static void TestRBNFFormat() {
 
     /* instantiation */
     status = U_ZERO_ERROR;
-    u_uastrcpy(temp, "#,##0.0#;(#,##0.0#)");
-    formats[0] = unum_open(UNUM_PATTERN_DECIMAL, temp, -1, "en_US", &perr, &status);
+    u_uastrcpy(pat, "#,##0.0#;(#,##0.0#)");
+    formats[0] = unum_open(UNUM_PATTERN_DECIMAL, pat, -1, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
         log_err("unable to open decimal pattern");
     }
@@ -1194,7 +1194,7 @@ static void TestRBNFFormat() {
     }
 
     status = U_ZERO_ERROR;
-    pat =
+    u_uastrcpy(pat,
         "%standard:\n"
         "-x: minus >>;\n"
         "x.x: << point >>;\n"
@@ -1209,7 +1209,8 @@ static void TestRBNFFormat() {
         "70: seventy[->>];\n"
         "80: eighty[->>];\n"
         "90: ninety[->>];\n"
-        "100: =#,##0=;\n"
+        "100: =#,##0=;\n");
+    u_uastrcpy(tempUChars,
         "%simple:\n"
         "=%standard=;\n"
         "20: twenty[ and change];\n"
@@ -1227,9 +1228,10 @@ static void TestRBNFFormat() {
         "=%standard=;\n"
         "20: some reasonable number;\n"
         "100: some substantial number;\n"
-        "100,000,000: some huge number;\n";
-    u_uastrcpy(temp, pat);
-    formats[4] = unum_open(UNUM_PATTERN_RULEBASED, temp, -1, "en_US", &perr, &status);
+        "100,000,000: some huge number;\n");
+    /* This is to get around some compiler warnings about char * string length. */
+    u_strcat(pat, tempUChars);
+    formats[4] = unum_open(UNUM_PATTERN_RULEBASED, pat, -1, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
         log_err("unable to open rulebased pattern");
     }
