@@ -20,11 +20,7 @@ sid {
     Currencies {
         ETB { "$", "ETB" }
     }
-    DateTimeElements:intvector { 
-        7,
-        1,
-    }
-    Languages { 
+    Languages {
         sid { "Sidaamu Afo" }
     }
     ExemplarCharacters{ "[a-z]" }
@@ -37,6 +33,10 @@ sid {
             AmPmMarkers{
                 "soodo",
                 "hawwaro",
+            }
+            DateTimeElements:intvector { 
+                7,
+                1,
             }
             DateTimePatterns{
                 "h:mm:ss a",

@@ -18,8 +18,4 @@ ka_GE{
         "dd.MM.yy",
         "{1} {0}",
     }
-//    DateTimeElements:intvector {
-//        1,
-//        2 // Probably 1
-//    }
 }

@@ -146,10 +146,6 @@ gez {
         ETB { "ETB", "ETB" }
         ERN { "ERN", "ERN" }
     }
-    DateTimeElements:intvector { 
-        7,
-        1,
-    }
     Languages {
         Fallback { "am" }
         am { "\u12A0\u121D\u1210\u1228\u129B" }
@@ -162,6 +158,10 @@ gez {
             AmPmMarkers{
                 "\u133D\u1263\u1215",
                 "\u121D\u1234\u1275"
+            }
+            DateTimeElements:intvector { 
+                7,
+                1,
             }
             dayNames{
                 format{
