@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2001, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1996-2003, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -38,7 +38,7 @@
  *  UErrorCode status = U_ZERO_ERROR;
  *  UChar *myString;
  *  int32_t myStrlen = 0;
- *  UDateFormat* dfmt = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "PST", &status);
+ *  UDateFormat* dfmt = udat_open(UDAT_DEFAULT, UDAT_DEFAULT, NULL, NULL, -1, NULL, -1, &status);
  *  myStrlen = udat_format(dfmt, myDate, NULL, myStrlen, NULL, &status);
  *  if (status==U_BUFFER_OVERFLOW_ERROR){
  *      status=U_ZERO_ERROR;
@@ -57,7 +57,7 @@
  *  UChar* myString;
  *  char buffer[1024];
  *  UDate myDateArr[] = { 0.0, 100000000.0, 2000000000.0 }; // test values
- *  UDateFormat* df = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "GMT", &status);
+ *  UDateFormat* df = udat_open(UDAT_DEFAULT, UDAT_DEFAULT, NULL, NULL, -1, NULL, 0, &status);
  *  for (i = 0; i < 3; i++) {
  *      myStrlen = udat_format(df, myDateArr[i], NULL, myStrlen, NULL, &status);
  *      if(status == U_BUFFER_OVERFLOW_ERROR){
@@ -81,7 +81,7 @@
  *  char buffer[1024];
  *
  *  pos.field = 1;  // Same as the DateFormat::EField enum
- *  UDateFormat* dfmt = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "PST", &status);
+ *  UDateFormat* dfmt = udat_open(UDAT_DEFAULT, UDAT_DEFAULT, NULL, -1, NULL, 0, &status);
  *  myStrlen = udat_format(dfmt, myDate, NULL, myStrlen, &pos, &status);
  *  if (status==U_BUFFER_OVERFLOW_ERROR){
  *      status=U_ZERO_ERROR;
@@ -97,7 +97,7 @@
  * udat_open()
  * <pre>
  * \code
- *        UDateFormat* df = udat_open(UDAT_SHORT, UDAT_SHORT, "fr_FR", "GMT", &status);
+ *        UDateFormat* df = udat_open(UDAT_SHORT, UDAT_SHORT, "fr_FR", NULL, -1, NULL, 0, &status);
  * \endcode
  * </pre>
  * You can use a DateFormat API udat_parse() to parse.
@@ -132,10 +132,13 @@
 
 /** A date formatter.
  *  For usage in C programs.
+ *  @stable ICU 2.6
  */
 typedef void* UDateFormat;
 
-/** The possible date/time format styles */
+/** The possible date/time format styles 
+ *  @stable ICU 2.6
+ */
 typedef enum UDateFormatStyle {
     /** Full style */
     UDAT_FULL,
@@ -208,7 +211,6 @@ udat_clone(const UDateFormat *fmt,
 /**
 * Format a date using an UDateFormat.
 * The date will be formatted using the conventions specified in \Ref{udat_open}
-* or \Ref{udat_openPattern}
 * @param format The formatter to use
 * @param dateToFormat The date to format
 * @param result A pointer to a buffer to receive the formatted number.
@@ -235,7 +237,6 @@ udat_format(    const    UDateFormat*    format,
 /**
 * Parse a string into an date/time using a UDateFormat.
 * The date will be parsed using the conventions specified in \Ref{udat_open}
-* or \Ref{udat_openPattern}
 * @param format The formatter to use.
 * @param text The text to parse.
 * @param textLength The length of text, or -1 if null-terminated.
@@ -256,7 +257,6 @@ udat_parse(    const    UDateFormat*    format,
 /**
 * Parse a string into an date/time using a UDateFormat.
 * The date will be parsed using the conventions specified in \Ref{udat_open}
-* or \Ref{udat_openPattern}
 * @param format The formatter to use.
 * @param calendar The calendar in which to store the parsed data.
 * @param text The text to parse.
@@ -437,7 +437,10 @@ udat_applyPattern(            UDateFormat     *format,
                     const   UChar           *pattern,
                             int32_t         patternLength);
 
-/** The possible types of date format symbols */
+/** 
+ * The possible types of date format symbols 
+ * @stable ICU 2.6
+ */
 typedef enum UDateFormatSymbolType {
     /** The era names, for example AD */
     UDAT_ERAS,
@@ -458,6 +461,7 @@ typedef enum UDateFormatSymbolType {
 struct UDateFormatSymbols;
 /** Date format symbols.
  *  For usage in C programs.
+ *  @stable ICU 2.6
  */
 typedef struct UDateFormatSymbols UDateFormatSymbols;
 
