@@ -1224,21 +1224,19 @@ const char* IntlTest::loadTestData(UErrorCode& err){
         strcpy(p, __FILE__);
         /* We want to back over three '\' chars.                            */
         /*   Only Windows should end up here, so looking for '\' is safe.   */
-        if (strrchr(p, U_FILE_SEP_CHAR) != NULL) {
-            for (i=1; i<=3; i++) {
-                pBackSlash = strrchr(p, U_FILE_SEP_CHAR);
-                if (pBackSlash != NULL) {
-                    *pBackSlash = 0;        /* Truncate the string at the '\'   */
-                }
-            }
-
+        for (i=1; i<=3; i++) {
+            pBackSlash = strrchr(p, U_FILE_SEP_CHAR);
             if (pBackSlash != NULL) {
-                /* We found and truncated three names from the path.
-                *  Now append "source\data" and set the environment
-                */
-                strcpy(pBackSlash, U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata");
-                directory = p;
+                *pBackSlash = 0;        /* Truncate the string at the '\'   */
             }
+        }
+
+        if (pBackSlash != NULL) {
+            /* We found and truncated three names from the path.
+            *  Now append "source\data" and set the environment
+            */
+            strcpy(pBackSlash, U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata");
+            directory = p;
         }
         else {
             /* __FILE__ on MSVC7 does not contain the directory */
