@@ -1,0 +1,81 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+gv {
+    Version { "1.0" }
+    DayAbbreviations {
+        "Jed",
+        "Jel",
+        "Jem",
+        "Jerc",
+        "Jerd",
+        "Jeh",
+        "Jes",
+    }
+    DayNames {
+        "Jedoonee",
+        "Jelhein",
+        "Jemayrt",
+        "Jercean",
+        "Jerdein",
+        "Jeheiney",
+        "Jesarn",
+    }
+    MonthAbbreviations {
+        "J-guer",
+        "T-arree",
+        "Mayrnt",
+        "Avrril",
+        "Boaldyn",
+        "M-souree",
+        "J-souree",
+        "Luanistyn",
+        "M-fouyir",
+        "J-fouyir",
+        "M.Houney",
+        "M.Nollick",
+    }
+    MonthNames {
+        "Jerrey-geuree",
+        "Toshiaght-arree",
+        "Mayrnt",
+        "Averil",
+        "Boaldyn",
+        "Mean-souree",
+        "Jerrey-souree",
+        "Luanistyn",
+        "Mean-fouyir",
+        "Jerrey-fouyir",
+        "Mee Houney",
+        "Mee ny Nollick",
+    }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221e",
+//        "\ufffd",
+//    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+
+    // /**************** Info Below is needed ****************/
+    // CollationElements{}
+    // Countries{}
+    // Eras{}
+    // Languages{}
+    // ShortLanguage { }
+    // localPatternChars{}
+    //
+}

@@ -1,0 +1,2 @@
+fortune_resources_root.res
+fortune_resources_es.res

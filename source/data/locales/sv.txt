@@ -1,0 +1,798 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+sv {
+    Version{ "1.0" }
+    CollationElements {
+        Version { "1.0" }
+        Sequence { "& Z < \u00E6 <<< \u00C6 < a\u030A <<< A\u030A <<< aa <<<aA <<< A"
+        "a <<< AA< a\u0308 <<< A\u0308 < o\u0308 <<< O\u0308 << u\u030B <<< U\u030B<o\u030B <<< O"
+        "\u030B << \u00F8 <<< \u00D8 & V <<< w <<< W & Y<<< u\u0308 <<< U\u0308" }
+    }
+    Countries { 
+        // AD {"Andorra"}
+        AE {"F\u00F6renade Arabemiraten"}
+        AF {"Afganistan"}
+        AG {"Antigua och Barbuda"}
+        // AI {"Anguilla"}
+        AL {"Albanien"}
+        AM {"Armenien"}
+        AN {"Nederl\u00E4ndska Antillerna"}
+        // AO {"Angola"}
+        AQ {"Antarktis"}
+        // AR {"Argentina"}
+        AS {"Amerikanska Samoa"}
+        AT {"\u00D6sterrike"}
+        AU {"Australien"}
+        AZ {"Azerbajdzjan"}
+        BA {"Bosnien Herzegovina"}
+        // BB {"Barbados"}
+        // BD {"Bangladesh"}
+        BE {"Belgien"}
+        // BF {"Burkina Faso"}
+        BG {"Bulgarien"}
+        // BH {"Bahrain"}
+        // BI {"Burundi"}
+        // BJ {"Benin"}
+        // BM {"Bermuda"}
+        // BN {"Brunei"}
+        // BO {"Bolivia"}
+        BR {"Brasilien"}
+        // BS {"Bahamas"}
+        // BT {"Bhutan"}
+        // BW {"Botswana"}
+        BY {"Vitryssland"}
+        // BZ {"Belize"}
+        CA {"Kanada"}
+        CD {"Kongo"}
+        CF {"Centralafrikanska republiken"}
+        CG {"Kongo"}
+        CH {"Schweiz"}
+        CI {"Elfenbenskusten"}
+        CK {"Cook\u00F6arna"}
+        // CL {"Chile"}
+        CM {"Kamerun"}
+        CN {"Kina"}
+        // CO {"Colombia"}
+        // CR {"Costa Rica"}
+        CU {"Kuba"}
+        CV {"Cap Verde"}
+        CX {"Jul\u00F6n"}
+        CY {"Cypern"}
+        CZ {"Tjeckien"}
+        DE {"Tyskland"}
+        // DJ {"Djibouti"}
+        DK {"Danmark"}
+        // DM {"Dominica"}
+        DO {"Dominikanska republiken"}
+        DZ {"Algeriet"}
+        // EC {"Ecuador"}
+        EE {"Estland"}
+        EG {"Egypten"}
+        EH {"V\u00E4stra Sahara"}
+        // ER {"Eritrea"}
+        ES {"Spanien"}
+        ET {"Etiopien"}
+        // FI {"Finland"}
+        // FJ {"Fiji"}
+        FK {"Falklands\u00F6arna"}
+        FM {"Mikronesien"}
+        FO {"F\u00E4r\u00F6arna"}
+        FR {"Frankrike"}
+        // GA {"Gabon"}
+        GB {"Storbritannien"}
+        // GD {"Grenada"}
+        GE {"Georgien"}
+        GF {"Franska Guyana"}
+        // GH {"Ghana"}
+        // GI {"Gibraltar"}
+        GL {"Gr\u00F6nland"}
+        // GM {"Gambia"}
+        // GN {"Guinea"}
+        GP {"Guadelope"}
+        GQ {"Ekvatorialguinea"}
+        GR {"Grekland"}
+        // GT {"Guatemala"}
+        // GU {"Guam"}
+        // GW {"Guinea-Bissau"}
+        // GY {"Guyana"}
+        HK {"Hong Kong"}
+        // HN {"Honduras"}
+        HR {"Kroatien"}
+        // HT {"Haiti"}
+        HU {"Ungern"}
+        ID {"Indonesien"}
+        IE {"Irland"}
+        // IL {"Israel"}
+        IN {"Indien"}
+        IQ {"Irak"}
+        // IR {"Iran"}
+        IS {"Island"}
+        IT {"Italien"}
+        // JM {"Jamaica"}
+        JO {"Jordanien"}
+        // JP {"Japan"}
+        // KE {"Kenya"}
+        KG {"Kirgisistan"}
+        KH {"Kambodja"}
+        // KI {"Kiribati"}
+        KM {"Komorerna"}
+        KN {"S:t Christopher och Nevis"}
+        KP {"Nordkorea"}
+        KR {"Sydkorea"}
+        // KW {"Kuwait"}
+        KY {"Cayman\u00F6arna"}
+        KZ {"Kazachstan"}
+        // LA {"Laos"}
+        LB {"Libanon"}
+        LC {"S:t Lucia"}
+        // LI {"Liechtenstein"}
+        // LK {"Sri Lanka"}
+        // LR {"Liberia"}
+        // LS {"Lesotho"}
+        LT {"Litauen"}
+        LU {"Luxemburg"}
+        LV {"Lettland"}
+        LY {"Libyen"}
+        MA {"Marocko"}
+        // MC {"Monaco"}
+        MD {"Moldavien"}
+        MG {"Madagaskar"}
+        MH {"Marshall\u00F6arna"}
+        MK {"Makedonien"}
+        // ML {"Mali"}
+        // MM {"Myanmar"}
+        MN {"Mongoliet"}
+        // MO {"Macau"}
+        MP {"Nordmarianerna"}
+        // MQ {"Martinique"}
+        MR {"Mauretanien"}
+        // MS {"Montserrat"}
+        // MT {"Malta"}
+        // MU {"Mauritius"}
+        MV {"Maldiverna"}
+        // MW {"Malawi"}
+        MX {"Mexiko"}
+        // MY {"Malaysia"}
+        // MZ {"Mozambique"}
+        // NA {"Namibia"}
+        NC {"Nya Caledonien"}
+        // NE {"Niger"}
+        NF {"Norfolk\u00F6n"}
+        // NG {"Nigeria"}
+        // NI {"Nicaragua"}
+        NL {"Nederl\u00E4nderna"}
+        NO {"Norge"}
+        // NP {"Nepal"}
+        // NR {"Nauru"}
+        // NU {"Niue"}
+        NZ {"Nya Zeeland"}
+        // OM {"Oman"}
+        // PA {"Panama"}
+        // PE {"Peru"}
+        PF {"Franska Polynesien"}
+        PG {"Papua Nya Guinea"}
+        PH {"Filippinerna"}
+        // PK {"Pakistan"}
+        PL {"Polen"}
+        PM {"S:t Pierre och Miquelon"}
+        // PN {"Pitcairn"}
+        // PR {"Puerto Rico"}
+        // PS {"Palestina"}
+        // PT {"Portugal"}
+        // PY {"Paraguay"}
+        // QA {"Qatar"}
+        // RE {"R\u00E9union"}
+        RO {"Rum\u00E4nien"}
+        RU {"Ryssland"}
+        // RW {"Rwanda"}
+        SA {"Saudi-Arabien"}
+        SB {"Salomon\u00F6arna"}
+        SC {"Seychellerna"}
+        // SD {"Sudan"}
+        SE {"Sverige"}
+        // SG {"Singapore"}
+        SH {"S:t Helena"}
+        SI {"Slovenien"}
+        SJ {"Svalbard och Jan Mayen"}
+        SK {"Slovakien"}
+        // SL {"Sierra Leone"}
+        // SM {"San Marino"}
+        // SN {"Senegal"}
+        // SO {"Somalia"}
+        SR {"Surinam"}
+        ST {"S\u00E3o Tom\u00E9 och Pr\u00EDncipe"}
+        // SV {"El Salvador"}
+        SY {"Syrien"}
+        // SZ {"Swaziland"}
+        TC {"Turks- och Caicos\u00F6arna"}
+        TD {"Tchad"}
+        // TG {"Togo"}
+        // TH {"Thailand"}
+        TJ {"Tadzjikistan"}
+        // TK {"Tokelau"}
+        TL {"\u00D6sttimor"}
+        // TM {"Turkmenistan"}
+        TN {"Tunisien"}
+        // TO {"Tonga"}
+        TR {"Turkiet"}
+        TT {"Trinidad och Tobago"}
+        // TV {"Tuvalu"}
+        // TW {"Taiwan"}
+        // TZ {"Tanzania"}
+        UA {"Ukraina"}
+        // UG {"Uganda"}
+        US {"USA"}
+        // UY {"Uruguay"}
+        // UZ {"Uzbekistan"}
+        VA {"Vatikanstaten"}
+        VC {"S:t Vincent och Grenadinerna"}
+        // VE {"Venezuela"}
+        WF {"Wallis och Futuna"}
+        VG {"Brittiska Jungfru\u00F6arna"}
+        VI {"Amerikanska Jungfru\u00F6arna"}
+        // VN {"Vietnam"}
+        // WS {"Samoa"}
+        // VU {"Vanuatu"}
+        YE {"Jemen"}
+        // YT {"Mayotte"}
+        YU {"Jugoslavien"}
+        ZA {"Sydafrika"}
+        // ZM {"Zambia"}
+        // ZW {"Zimbabwe"}
+        // \u00C5L        {"\u00C5land"}
+    }
+    DateTimeElements:intvector { 
+        2,
+        4,
+    }
+    DateTimePatterns { 
+        "'kl 'H:mm z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "'den 'd MMMM yyyy",
+        "'den 'd MMMM yyyy",
+        "yyyy-MMM-dd",
+        "yyyy-MM-dd",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "s\u00F6",
+        "m\u00E5",
+        "ti",
+        "on",
+        "to",
+        "fr",
+        "l\u00F6",
+    }
+    DayNames { 
+        "s\u00F6ndag",
+        "m\u00E5ndag",
+        "tisdag",
+        "onsdag",
+        "torsdag",
+        "fredag",
+        "l\u00F6rdag",
+    }
+
+    Languages {
+        aa   {"afar"}
+        ab   {"abkhaziska"}
+        ace  {"achinese"}
+        ach  {"acholi"}
+        ada  {"adangme"}
+        ae   {"avestiska"}
+        af   {"afrikaans"}
+        ak   {"akan"}
+        akk  {"akkadiska"}
+        ale  {"aleutiska"}
+        am   {"amhariska"}
+        ar   {"arabiska"}
+        arc  {"arameiska"}
+        arn  {"araukanska"}
+        arp  {"arapaho"}
+        arw  {"arawakiska"}
+        as   {"assami"}
+        ast  {"asturiska"}
+        av   {"avariska"}
+        awa  {"awadhi"}
+        ay   {"aymara"}
+        az   {"azerbadzjanska"}
+        ba   {"basjkiriska"}
+        bad  {"banda"}
+        bal  {"baluchi"}
+        bam  {"bambara"}
+        ban  {"balinesiska"}
+        bas  {"basa"}
+        be   {"vitryska"}
+        bej  {"beyja"}
+        bem  {"bemba"}
+        bg   {"bulgariska"}
+        bh   {"bihari"}
+        bho  {"bhojpuri"}
+        bi   {"bislama"}
+        bik  {"bikol"}
+        bin  {"bini"}
+        bla  {"siksika"}
+        bn   {"bengali"}
+        bo   {"tibetanska"}
+        br   {"bretonska"}
+        bra  {"braj"}
+        bs   {"bosniska"}
+        btk  {"batak"}
+        bua  {"buriat"}
+        bug  {"buginesiska"}
+        ca   {"katalanska"}
+        cad  {"caddo"}
+        car  {"karibiska"}
+        ce   {"tjetjenska"}
+        ceb  {"cebuano"}
+        ch   {"chamorro"}
+        chb  {"chibcha"}
+        chg  {"chagatai"}
+        chk  {"chuukesiska"}
+        chm  {"mari"}
+        chn  {"chinook"}
+        cho  {"choctaw"}
+        chr  {"cherokesiska"}
+        chy  {"cheyenne"}
+        co   {"korsiska"}
+        cop  {"koptiska"}
+        cr   {"cree"}
+        cs   {"tjeckiska"}
+        cv   {"tjuvasjiska"}
+        cy   {"walesiska"}
+        da   {"danska"}
+        dak  {"dakota"}
+        day  {"dayak"}
+        de   {"tyska"}
+        del  {"delaware"}
+        dgr  {"dogrib"}
+        din  {"dinka"}
+        doi  {"dogri"}
+        dua  {"duala"}
+        dv   {"maldiviska"}
+        dyu  {"dyula"}
+        dz   {"dzongkha"}
+        ee   {"ewe"}
+        efi  {"efik"}
+        eka  {"ekajuk"}
+        el   {"grekiska"}
+        elx  {"elamitiska"}
+        en   {"engelska"}
+        eo   {"esperanto"}
+        es   {"spanska"}
+        et   {"estniska"}
+        eu   {"baskiska"}
+        ewo  {"ewondo"}
+        fa   {"farsi"}
+        fan  {"fang"}
+        fat  {"fanti"}
+        ff   {"fulani"}
+        fi   {"finska"}
+        fj   {"fidjianska"}
+        fo   {"f\u00E4r\u00F6iska"}
+        fon  {"fon"}
+        fr   {"franska"}
+        fur  {"friuilian"}
+        fy   {"frisiska"}
+        ga   {"irl\u00E4ndsk gaeliska"}
+        gaa  {"g\u00E0"}
+        gay  {"gayo"}
+        gba  {"gbaya"}
+        gd   {"skotsk gaeliska"}
+        gil  {"gilbertesiska; kiribati"}
+        gl   {"galiciska"}
+        gn   {"guaran\u00ED"}
+        gon  {"gondi"}
+        gor  {"gorontalo"}
+        got  {"gotiska"}
+        grb  {"grebo"}
+        gu   {"gujarati"}
+        gv   {"manx gaeliska"}
+        gwi  {"gwich'in"}
+        ha   {"haussa"}
+        hai  {"haida"}
+        haw  {"hawaiiska"}
+        he   {"hebreiska"}
+        hi   {"hindi"}
+        hil  {"hiligaynon"}
+        him  {"himachali"}
+        hmn  {"hmong"}
+        ho   {"hiri motu"}
+        hr   {"kroatiska"}
+        hu   {"ungerska"}
+        hup  {"hupa"}
+        hy   {"armeniska"}
+        hz   {"herero"}
+        iba  {"iban"}
+        id   {"indonesiska"}
+        ig   {"ibo"}
+        ii   {"yi"}
+        ijo  {"ijo"}
+        ik   {"inupiaq"}
+        ilo  {"iloko"}
+        is   {"isl\u00E4ndska"}
+        it   {"italienska"}
+        iu   {"inuktitut"}
+        ja   {"japanska"}
+        jv   {"javanska"}
+        ka   {"georgiska"}
+        kaa  {"karakalpakiska"}
+        kab  {"kabyliska"}
+        kac  {"kachin"}
+        kam  {"kamba"}
+        kar  {"karen"}
+        kaw  {"kawi"}
+        kg   {"kikongo"}
+        kha  {"khasi"}
+        kho  {"sakiska"}
+        ki   {"kikuyu"}
+        kj   {"kuanyama"}
+        kk   {"kazakiska"}
+        kl   {"gr\u00F6nl\u00E4ndska; kalaallisut"}
+        km   {"kambodjanska; khmer"}
+        kmb  {"kinbundu"}
+        kn   {"kanaresiska; kannada"}
+        ko   {"koreanska"}
+        kok  {"konkani"}
+        kos  {"kosreanska"}
+        kpe  {"kpelle"}
+        kr   {"kanuri"}
+        kro  {"kru"}
+        kru  {"kurukh"}
+        ks   {"kashmiri"}
+        ku   {"kurdiska"}
+        kum  {"kumyk"}
+        kut  {"kutenai"}
+        kv   {"kome"}
+        kw   {"korniska"}
+        ky   {"kirgisiska"}
+        la   {"latin"}
+        lah  {"lahnda"}
+        lam  {"lamba"}
+        lb   {"luxemburgiska"}
+        lez  {"lezghien"}
+        lg   {"luganda"}
+        li   {"limburgiska"}
+        ln   {"lingala"}
+        lo   {"laotiska"}
+        lol  {"lolo; mongo"}
+        loz  {"lozi"}
+        lt   {"litauiska"}
+        lu   {"luba-katanga"}
+        lua  {"luba-lulua"}
+        lui  {"luise\u00F1o"}
+        lun  {"lunda"}
+        luo  {"luo"}
+        lus  {"lushai"}
+        lv   {"lettiska"}
+        mad  {"madurese"}
+        mag  {"magahi"}
+        mai  {"maithili"}
+        mak  {"makasar"}
+        man  {"mande"}
+        mas  {"massajiska"}
+        mdr  {"mandar"}
+        men  {"mende"}
+        mg   {"malagassiska"}
+        mh   {"marshalliska"}
+        mi   {"maori"}
+        mic  {"mic-mac"}
+        min  {"minangkabau"}
+        mk   {"makedonska"}
+        ml   {"malayalam"}
+        mn   {"mongoliska"}
+        mnc  {"manchu"}
+        mni  {"manipuri"}
+        mo   {"moldaviska"}
+        moh  {"mohawk"}
+        mos  {"mossi"}
+        mr   {"marathi"}
+        ms   {"malajiska"}
+        mt   {"maltesiska"}
+        mus  {"muskogee"}
+        mwr  {"marwari"}
+        my   {"burmanska"}
+        na   {"nauru"}
+        nah  {"nahuatl; aztekiska"}
+        nap  {"napolitanska"}
+        nb   {"norskt bokm\u00E5l"}
+        nd   {"nord\u00ADndebele"}
+        ne   {"nepali"}
+        new  {"newari"}
+        ng   {"ndonga"}
+        nia  {"nias"}
+        niu  {"niuean"}
+        nl   {"nederl\u00E4ndska; holl\u00E4ndska"}
+        nn   {"ny\u00ADnorsk"}
+        no   {"norska"}
+        nr   {"syd\u00ADndebele"}
+        nso  {"nord\u00ADsotho"}
+        nv   {"navaho"}
+        ny   {"nyanja"}
+        nym  {"nyamwezi"}
+        nyn  {"nyankole"}
+        nyo  {"nyoro"}
+        nzi  {"nzima"}
+        oc   {"provensalska"}
+        oj   {"odjibwa; chippewa"}
+        om   {"oromo; galla"}
+        or   {"oriya"}
+        os   {"ossetiska"}
+        osa  {"osage"}
+        pa   {"panjabi"}
+        pag  {"pangasinan"}
+        pam  {"pampanga"}
+        pap  {"papiamento"}
+        pau  {"palauan"}
+        phn  {"kananeiska; feniciska"}
+        pi   {"pali"}
+        pl   {"polska"}
+        pon  {"ponape"}
+        ps   {"pashto; afghanska"}
+        pt   {"portugisiska"}
+        qu   {"quechua"}
+        raj  {"rajasthani"}
+        rap  {"rapanui"}
+        rar  {"rarotongan"}
+        rm   {"r\u00E4to\u00ADromanska"}
+        rn   {"rundi"}
+        ro   {"rum\u00E4nska"}
+        rom  {"romani"}
+        ru   {"ryska"}
+        rw   {"rwanda; kinjarwanda"}
+        sa   {"sanskrit"}
+        sad  {"sandawe"}
+        sah  {"jakutiska"}
+        sam  {"samaritanska"}
+        sas  {"sasak"}
+        sat  {"santali"}
+        sc   {"sardiska"}
+        sco  {"skotska"}
+        sd   {"sindhi"}
+        se   {"nord\u00ADsamiska"}
+        sel  {"selkup"}
+        sg   {"sango"}
+        shn  {"shan"}
+        si   {"singalesiska"}
+        sid  {"sidamo"}
+        sk   {"slovakiska"}
+        sl   {"slovenska"}
+        sm   {"samoanska"}
+        // sma  {"syd\u00ADsamiska"}
+        // smj  {"lule\u00ADsamiska"}
+        // smn  {"enare\u00ADsamiska"}
+        // sms  {"skolt\u00ADsamiska"}
+        sn   {"shona; manshona"}
+        snk  {"soninke"}
+        so   {"somali"}
+        sog  {"sogdiska"}
+        son  {"songhai"}
+        sq   {"albanska"}
+        sr   {"serbiska"}
+        srr  {"serer"}
+        ss   {"swati"}
+        st   {"syd\u00ADsotho"}
+        su   {"sundanesiska"}
+        suk  {"sukuma"}
+        sus  {"susu"}
+        sux  {"sumeriska"}
+        sv   {"svenska"}
+        sw   {"swahili"}
+        syr  {"syriska"}
+        ta   {"tamil"}
+        te   {"telugu"}
+        tem  {"temne"}
+        ter  {"tereno"}
+        tet  {"tetum"}
+        tg   {"tadzjikiska"}
+        th   {"thail\u00E4nska"}
+        ti   {"tigrinja"}
+        tig  {"tigr\u00E9"}
+        tiv  {"tivi"}
+        tk   {"turkmeniska"}
+        tkl  {"tokelau"}
+        tl   {"tagalog"}
+        tli  {"tlingit"}
+        tmh  {"tamashek"}
+        tn   {"tswana"}
+        to   {"tonga"}
+        tog  {"tonga-Nyasa"}
+        tpi  {"tok pisin"}
+        tr   {"turkiska"}
+        ts   {"tsonga"}
+        tsi  {"tsimshian"}
+        tt   {"tatariska"}
+        tum  {"tumbuka"}
+        tvl  {"tuvaluan"}
+        tw   {"twi"}
+        ty   {"tahitiska"}
+        tyv  {"tuviniska"}
+        ug   {"uiguriska"}
+        uga  {"ugaritiska"}
+        uk   {"ukrainska"}
+        umb  {"umbundu"}
+        ur   {"urdu"}
+        uz   {"uzbekiska"}
+        vai  {"vai"}
+        ve   {"venda"}
+        vi   {"vietnamesiska"}
+        vot  {"votiska"}
+        wa   {"walloon"}
+        wal  {"walamo"}
+        war  {"waray"}
+        was  {"washo"}
+        wo   {"wolof"}
+        xh   {"xhosa"}
+        yao  {"yao"}
+        yap  {"yap"}
+        yi   {"jiddisch"}
+        yo   {"yoruba"}
+        za   {"zhuang"}
+        zap  {"zapotek"}
+        zen  {"zenaga"}
+        zh   {"kinesiska"}
+        znd  {"zand\u00E9"}
+        zu   {"zulu"}
+        zun  {"zu\u00F1i"}
+    }
+
+    LocaleID:int { 0x1d }
+    MonthAbbreviations { 
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "maj",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "dec",
+    }
+    MonthNames { 
+        "januari",
+        "februari",
+        "mars",
+        "april",
+        "maj",
+        "juni",
+        "juli",
+        "augusti",
+        "september",
+        "oktober",
+        "november",
+        "december",
+    }
+    NumberElements { 
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+    }
+    Eras { 
+        "f.Kr.",
+        "e.Kr.",
+    }
+    zoneStrings { 
+        {
+            "Europe/Stockholm",
+            "Central European Time",
+            "MET",
+            "Central European Time (DST)",
+            "MET",
+            "Stockholm",
+        }
+    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u00e4 \u00f6 \u00e5 \u00e1 \u00e9 \u00eb \u00fc]" }
+    
+    //------------------------------------------------------------
+    // Rule Based Number Format Support
+    //------------------------------------------------------------
+
+    // Spellout rules for Swedish.
+    // Thanks to Kent Karlsson for cleaning up these rules.
+    // (rapport inskickad till ICU 2001-11-03; ny version inskickad till Doug Felt 2001-11-07)
+
+    SpelloutRules {
+      "%year:\n"
+          "=%neutrum=;\n"
+          "1000>: <%neutrum<hundra[\u00ad>>];\n"
+          "10,000: =%neutrum=;\n"
+          // the same as default except we change the one's digit, wish there were a better way
+      "%neutrum:\n"
+            "-x: minus >>;\n"
+            "x.x: << komma >>;\n"
+            "noll; ett; tv\u00e5; tre; fyra; fem; sex; sju; \u00e5tta; nio;\n"
+            "tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;\n"
+            "20: tjugo[>>];\n"
+            "30: trettio[>>];\n"
+            "40: fyrtio[>>];\n"
+            "50: femtio[>>];\n"
+            "60: sextio[>>];\n"
+            "70: sjuttio[>>];\n"
+            "80: \u00e5ttio[>>];\n"
+            "90: nittio[>>];\n"
+            "100: <<hundra[\u00ad>>];\n"
+            "1000: ettusen[ >>];\n"
+            "2000: <%default<\u00adtusen[ >>];\n"
+            "1,000,000: en miljon[ >>];\n"
+            "2,000,000: <%default< miljoner[ >>];\n"
+            "1,000,000,000: en miljard[ >>];\n"
+            "2,000,000,000: <%default< miljarder[ >>];\n"
+            "1,000,000,000,000: en biljon[ >>];\n"
+            "2,000,000,000,000: <%default< biljoner[ >>];\n"
+            "1,000,000,000,000,000: en triljon[ >>];\n"
+            "2,000,000,000,000,000: <%default< triljoner[ >>];\n"
+            "1,000,000,000,000,000,000: =#,##0=;\n"
+      "%default:\n"
+            " -x: minus >>;\n"
+            "x.x: << komma >>;\n"
+            "noll; en; tv\u00e5; tre; fyra; fem; sex; sju; \u00e5tta; nio;\n"
+            "tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;\n"
+            "20: tjugo[>>];\n"
+            "30: trettio[>>];\n"
+            "40: fyrtio[>>];\n"
+            "50: femtio[>>];\n"
+            "60: sextio[>>];\n"
+            "70: sjuttio[>>];\n"
+            "80: \u00e5ttio[>>];\n"
+            "90: nittio[>>];\n"
+            "100: etthundra[\u00ad>>];\n"
+            "200: <<hundra[\u00ad>>];\n"
+            "1000: ettusen[ >>];\n"
+            "2000: <<\u00adtusen[ >>];\n"
+            "1,000,000: en miljon[ >>];\n"
+            "2,000,000: << miljoner[ >>];\n"
+            "1,000,000,000: en miljard[ >>];\n"
+            "2,000,000,000: << miljarder[ >>];\n"
+            "1,000,000,000,000: en biljon[ >>];\n"
+            "2,000,000,000,000: << biljoner[ >>];\n"
+            "1,000,000,000,000,000: en triljon[ >>];\n"
+            "2,000,000,000,000,000: << triljoner[ >>];\n"
+            "1,000,000,000,000,000,000: =#,##0=;\n" 
+/* 
+ * Current (java) implementation can't handle these magnitudes
+            "1,000,000,000,000,000,000: en triljard[ >>];\n"
+            "2,000,000,000,000,000,000: << triljarder[ >>];\n"
+ * Current (c++) implmenatation can't handle these magnitudes
+            "1,000,000,000,000,000,000,000: en kvartiljon[ >>];\n"
+            "2,000,000,000,000,000,000,000: << kvartiljoner[ >>];\n"
+            "1,000,000,000,000,000,000,000,000: en kvartiljard[ >>];\n"
+            "2,000,000,000,000,000,000,000,000: << kvartiljarder[ >>];\n"
+            "1,000,000,000,000,000,000,000,000,000: en kvintiljon[ >>];\n"
+            "2,000,000,000,000,000,000,000,000,000: << kvintiljoner[ >>];\n"
+            "1,000,000,000,000,000,000,000,000,000,000: en kvintiljard[ >>];\n"
+            "2,000,000,000,000,000,000,000,000,000,000: << kvintiljarder[ >>];\n"
+            "1,000,000,000,000,000,000,000,000,000,000,000: en sextiljon[ >>];\n"
+            "2,000,000,000,000,000,000,000,000,000,000,000: << sextiljoner[ >>];\n"
+            "1,000,000,000,000,000,000,000,000,000,000,000,000: en sextiljard[ >>];\n"
+            "2,000,000,000,000,000,000,000,000,000,000,000,000: << sextiljarder[ >>];\n"
+            "1,000,000,000,000,000,000,000,000,000,000,000,000,000: =#,##0="
+*/
+    }
+
+    // Currency display names
+    Currencies {
+        SEK { "kr", "SEK" }
+    }
+}

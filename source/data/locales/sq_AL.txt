@@ -1,0 +1,28 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+sq_AL {
+    Version{ "1.1" }
+//    LocaleString { "sq_AL" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    zoneStrings { 
+        {
+            "Europe/Tirane",
+            "CET", // TODO: Replace with long Albanian name
+            "CET",
+            "CEST", // TODO: Replace with long Albanian name
+            "CEST",
+        }
+    }
+//    ShortCountry { "ALB" }
+    LocaleID:int { 0x041c }
+}
