@@ -718,6 +718,10 @@ private:
                uint16_t offset, 
                UnicodeString& dest, 
                UTextOffset pos);
+  static uint16_t doReplace(const UChar source[], 
+               uint16_t offset, 
+               UnicodeString& dest, 
+               UTextOffset pos);
   
   static void hangulToJamo(UChar ch, 
                UnicodeString& result, 
