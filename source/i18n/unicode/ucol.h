@@ -97,6 +97,11 @@
  * @see            UCollationStrength
  * @see         UCollationElements
  */
+struct collIterate;
+typedef struct collIterate collIterate;
+
+struct incrementalContext;
+typedef struct incrementalContext incrementalContext;
 
  /** A collator.
  *  For usage in C programs.
@@ -198,6 +203,11 @@ typedef enum {
      UCOL_ATTRIBUTE_COUNT
 } UColAttribute;
 
+typedef enum {
+	UCOL_TAILORING_ONLY,
+	UCOL_FULL_RULES
+}  UColRuleOption ;
+
 /**
  * Open a UCollator for comparing strings.
  * The UCollator may be used in calls to \Ref{ucol_strcoll}.
@@ -266,9 +276,9 @@ ucol_strcoll(    const    UCollator    *coll,
         int32_t            targetLength);
 
 /**
- * see the reference for ucol_strcoll. This is a temporary placeholder 
- * for the new implementation
- * @draft DO NOT USE!!! temporary prototyping support. Will be removed by 1.7 release.
+ * DO NOT USE THIS API!!! It is the old implementation of ucol_strcoll
+ * and is used only for testing purposes.
+ * @internal DO NOT USE!!! Will be removed by 1.8 release.
  */
 U_CAPI UCollationResult
 ucol_strcollEx(    const    UCollator    *coll,
@@ -480,9 +490,9 @@ ucol_getSortKey(const    UCollator    *coll,
         int32_t            resultLength);
 
 /**
- * see the reference for ucol_getSortKey. This is a temporary placeholder 
- * for the new implementation
- * @draft DO NOT USE! temporary prototyping support. Will be removed by 1.7 release.
+ * DO NOT USE THIS API!!! It is the old implementation of ucol_getSortKey
+ * and is used only for testing purposes.
+ * @internal DO NOT USE!!! Will be removed by 1.8 release.
  */
 U_CAPI int32_t
 ucol_getSortKeyEx(const    UCollator    *coll,
@@ -510,6 +520,7 @@ ucol_keyHashCode(    const    uint8_t*    key,
  */
 struct UCollationElements;
 typedef struct UCollationElements UCollationElements;
+
 /**
  * The UCollationElements  is used as an iterator to walk through
  * each character of an international string. Use the iterator to return the
@@ -698,18 +709,6 @@ ucol_setOffset(    UCollationElements    *elems,
 U_CAPI void U_EXPORT2
 ucol_getVersion(const UCollator* coll, UVersionInfo info);
 
-/**
- * Makes a copy of the Collator's rule data. The format is
- * that of .col files.
- * 
- * @param length returns the length of the data, in bytes.
- * @param status the error status
- * @return memory, owned by the caller, of size 'length' bytes.
- * @draft INTERNAL USE ONLY
- */
-U_CAPI uint8_t *
-ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
-
 
 /* Following are the new APIs for 1.7. They are all draft and most are not even implemented */
 
@@ -762,13 +761,6 @@ typedef UChar UCharForwardIterator(void *context);
 U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll, 
 								 UCharForwardIterator *source, void *sourceContext,
 								 UCharForwardIterator *target, void *targetContext);
-
-enum UColRuleOption {
-	UCOL_TAILORING_ONLY,
-	UCOL_FULL_RULES
-};
-
-typedef enum UColRuleOption UColRuleOption;
 
 /**
  * Returns current rules. Delta defines whether full rules are returned or just the tailoring. 

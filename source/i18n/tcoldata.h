@@ -29,7 +29,7 @@
 #ifndef TCOLDATA_H
 #define TCOLDATA_H
 
-#include "unicode/ucol.h"
+#include "ucolimp.h"
 
 #include "ucmp32.h"
 #include "unicode/utypes.h"
@@ -47,8 +47,6 @@ class RuleBasedCollator;
 class CollationElementIterator;
 
 // This is just temporary, for prototyping.
-struct collIterate;
-struct incrementalContext;
 typedef void *  UCollator;
 
 //=============================================================================
