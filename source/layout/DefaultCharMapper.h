@@ -25,7 +25,7 @@ U_NAMESPACE_BEGIN
  *
  * @see LECharMapper
  */
-class DefaultCharMapper : public LECharMapper
+class DefaultCharMapper : public UMemory, public LECharMapper
 {
 private:
     le_bool fFilterControls;
