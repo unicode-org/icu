@@ -8,12 +8,12 @@ This sample demonstrates
 Files:
     break.cpp      Main source file in C++
     ubreak.c       Main source file in C
-    break.dsw      Windows MSVC workspace.  Double-click this to get started.
-    break.dsp      Windows MSVC project file
+    break.sln      Windows MSVC workspace.  Double-click this to get started.
+    break.vcproj   Windows MSVC project file
 
 To Build break on Windows
     1.  Install and build ICU
-    2.  In MSVC, open the workspace file icu\samples\break\break.dsw
+    2.  In MSVC, open the workspace file icu\samples\break\break.sln
     3.  Choose a Debug or Release build.
     4.  Build.
 	

@@ -9,8 +9,8 @@ This sample demonstrates
          
 Files:
     uresb.c        Main source file in C
-    uresb.dsw      Windows MSVC workspace.  Double-click this to get started.
-    uresb.dsp      Windows MSVC project file
+    uresb.sln      Windows MSVC workspace.  Double-click this to get started.
+    uresb.vcproj   Windows MSVC project file
     resources.dsp  Windows project file for resources
     resources.mak  Windows makefile for resources
 
@@ -20,7 +20,7 @@ Files:
 
 To Build uresb on Windows
     1.  Install and build ICU
-    2.  In MSVC, open the workspace file icu\samples\uresb\uresb.dsw
+    2.  In MSVC, open the workspace file icu\samples\uresb\uresb.sln
     3.  Choose a Debug or Release build.
     4.  Build.
 	

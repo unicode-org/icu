@@ -8,12 +8,13 @@ This sample demonstrates
 Files:
     case.cpp      Main source file in C++
     ucase.c       Main source file in C
-    case.dsp      Windows MSVC project file
+    case.sln      Windows MSVC workspace.  Double-click this to get started.
+    case.vcproj   Windows MSVC project file
 
 To Build case on Windows
     1.  Install and build ICU
-    2.  In MSVC, open the project file icu\samples\case\case.dsp 
-        (or, use the workspace All, in icu\samples\all\all.dsw )
+    2.  In MSVC, open the solution file icu\samples\case\case.sln
+        (or, use the workspace All, in icu\samples\all\all.sln )
     3.  Choose a Debug or Release build.
     4.  Build.
 	

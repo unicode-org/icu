@@ -7,12 +7,12 @@ This sample demonstrates
          
 Files:
     props.cpp      Main source file in C++
-    props.dsw      Windows MSVC workspace.  Double-click this to get started.
-    props.dsp      Windows MSVC project file
+    props.sln      Windows MSVC workspace.  Double-click this to get started.
+    props.vcproj   Windows MSVC project file
 
 To Build props on Windows
     1.  Install and build ICU
-    2.  In MSVC, open the workspace file icu\samples\props\props.dsw
+    2.  In MSVC, open the workspace file icu\samples\props\props.sln
     3.  Choose a Debug or Release build.
     4.  Build.
 	
