@@ -250,7 +250,7 @@ utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, U
                     *pi=i;
                     UTF8_MASK_LEAD_BYTE(b, count);
                     c|=(UChar32)b<<shift;
-                    if(count>=4 || c>0x10ffff || c<utf8_minLegal[count] || UTF_IS_SURROGATE(c) || (strict && UTF_IS_UNICODE_NONCHAR(c))) {
+                    if(count>=4 || c>0x10ffff || c<utf8_minLegal[count] || UTF_IS_SURROGATE(c) || (strict>0 && UTF_IS_UNICODE_NONCHAR(c))) {
                         /* illegal sequence or (strict and non-character) */
                         if(count>=4) {
                             count=3;
