@@ -239,11 +239,18 @@ typedef int8_t UBool;
 
 
 /*==========================================================================*/
-/* U_INLINE and U_ALIGN_CODE   Set default vaues if these are not already   */
+/* U_INLINE and U_ALIGN_CODE   Set default values if these are not already  */
 /*                             defined.  Definitions normally are in        */
 /*                             platform.h or the corresponding file for     */
 /*                             the OS in use.                               */
 /*==========================================================================*/
+
+/**
+ * \def U_ALIGN_CODE
+ * This is used to align code fragments to a specific byte boundary.
+ * This is useful for getting consistent performance test results.
+ * @internal
+ */
 #ifndef U_ALIGN_CODE
 #   define U_ALIGN_CODE(n)
 #endif
