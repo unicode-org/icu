@@ -726,12 +726,21 @@ u_charScript(UChar32    ch);
  *             It must be <code>0&lt;=code&lt;0x10ffff</code>.
  * @param nameChoice Selector for which name to get.
  * @param buffer Destination address for copying the name.
+ *               The name will always be zero-terminated.
+ *               If there is no name, then the buffer will be set to the empty string.
  * @param bufferLength <code>==sizeof(buffer)</code>
  * @param pErrorCode Pointer to a UErrorCode variable;
  *        check for <code>U_SUCCESS()</code> after <code>u_charName()</code>
  *        returns.
+ * @return The length of the name, or 0 if there is no name for this character.
+ *         If the bufferLength is less than or equal to the length, then the buffer
+ *         contains the truncated name and the returned length indicates the full
+ *         length of the name.
+ *         The length does not include the zero-termination.
  *
  * @see UCharNameChoice
+ * @see u_charFromName
+ * @see u_enumCharNames
  * @draft
  */
 U_CAPI UTextOffset U_EXPORT2
@@ -741,7 +750,19 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
 
 /**
  * Find a Unicode character by its name and return its code point value.
- * ### TBD
+ * The name is matched exactly and completely.
+ * A Unicode 1.0 name is matched only if it differs from the modern name.
+ * Unicode names are all uppercase.
+ *
+ * @param nameChoice Selector for which name to match.
+ * @param name The name to match.
+ * @param pErrorCode Pointer to a UErrorCode variable
+ * @return The Unicode code point value of the character with the given name,
+ *         or 0xffff if there is no such character.
+ *
+ * @see UCharNameChoice
+ * @see u_charName
+ * @see u_enumCharNames
  */
 U_CAPI UChar32 U_EXPORT2
 u_charFromName(UCharNameChoice nameChoice,
@@ -755,7 +776,16 @@ U_CDECL_BEGIN
  * for each Unicode character with the code point value and
  * the character name.
  * If such a function returns FALSE, then the enumeration is stopped.
- * ### TBD
+ *
+ * @param context The context pointer that was passed to u_enumCharNames().
+ * @param code The Unicode code point for the character with this name.
+ * @param nameChoice Selector for which kind of names is enumerated.
+ * @param name The character's name, zero-terminated.
+ * @param length The length of the name.
+ * @return TRUE if the enumeration should continue, FALSE to stop it.
+ *
+ * @see UCharNameChoice
+ * @see u_enumCharNames
  */
 typedef UBool UEnumCharNamesFn(void *context,
                                UChar32 code,
@@ -769,7 +799,21 @@ U_CDECL_END
  * Enumerate all assigned Unicode characters between the start and limit
  * code points (start inclusive, limit exclusive) and call a function
  * for each, passing the code point value and the character name.
- * ### TBD
+ * For Unicode 1.0 names, only those are enumerated that differ from the
+ * modern names.
+ *
+ * @param start The first code point in the enumeration range.
+ * @param limit One more than the last code point in the enumeration range
+ *              (the first one after the range).
+ * @param fn The function that is to be called for each character name.
+ * @param context An arbitrary pointer that is passed to the function.
+ * @param nameChoice Selector for which kind of names to enumerate.
+ * @param pErrorCode Pointer to a UErrorCode variable
+ *
+ * @see UCharNameChoice
+ * @see UEnumCharNamesFn
+ * @see u_charName
+ * @see u_charFromName
  */
 U_CAPI void U_EXPORT2
 u_enumCharNames(UChar32 start, UChar32 limit,
