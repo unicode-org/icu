@@ -596,11 +596,12 @@ umsg_vparse(UMessageFormat *fmt,
             UErrorCode     *status);
 
 
-/** Get the locale for this message format object. You can choose between valid and actual locale.
- *  @param cal The calendar object
- *  @param type type of the locale we're looking for (valid or actual) 
- *  @param status error code for the operation
- *  @return the locale name
+/** Get the locale for this message format object.
+ * You can choose between valid and actual locale.
+ * @param fmt The formatter to get the locale from
+ * @param type type of the locale we're looking for (valid or actual) 
+ * @param status error code for the operation
+ * @return the locale name
  */
 U_CAPI const char* U_EXPORT2
 umsg_getLocaleByType(const UMessageFormat *fmt,
