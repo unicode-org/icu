@@ -32,6 +32,12 @@
     */
     static void TestUnicodeChar(void);
 
+    /**
+    * Test for CollationElementIterator previous and next for the whole set of
+    * unicode characters with normalization on.
+    */
+    static void TestNormalizedUnicodeChar(void);
+
        /**
      * Test for CollationElementIterator.previous()
      *
@@ -57,6 +63,10 @@
     * a previous for the same string at the same position
     */
     static void TestBug672(void);
+    /**
+    * Test iterators with an relatively small buffer
+    */
+    static void TestSmallBuffer(void);
     
     /*------------------------------------------------------------------------
      Internal utilities
