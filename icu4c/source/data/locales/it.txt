@@ -56,6 +56,7 @@ it {
         CN { "Cina" }
         //CO { "Colombia" }
         //CR { "Costa Rica" }
+        //CU { "Cuba" }
         CV { "Capo Verde" }
         CX { "Isola di Natale" }
         CY { "Cipro" }
@@ -108,6 +109,8 @@ it {
         IL { "Israele" }
         //IN { "India" }
         IO { "Territori Britannici dell'Oceano Indiano" }
+        //IQ { "Iraq" }
+        //IR { "Iran" }
         IS { "Islanda" }
         IT { "Italia" }
         JM { "Giamaica" }
@@ -119,7 +122,8 @@ it {
         //KI { "Kiribati" }
         KM { "Comore" }
         KN { "Saint Kitts e Nevis" }
-        KR { "Corea, Repubblica" }
+        KP { "Corea del Nord" }    // alternate name { "Corea, Repubblica Popolare Democratica" }
+        KR { "Corea del Sud" }    // alternate name { "Corea, Repubblica" }
         //KW { "Kuwait" }
         KY { "Isole Cayman" }
         KZ { "Kazakistan" }
@@ -133,6 +137,7 @@ it {
         LT { "Lituania" }
         LU { "Lussemburgo" }
         LV { "Lettonia" }
+        LY { "Libia" }
         MA { "Marocco" }
         //MC { "Monaco" }
         MD { "Moldavia" }
@@ -189,6 +194,7 @@ it {
         SA { "Arabia Saudita" }
         SB { "Isole Solomon" }
         //SC { "Seychelles" }
+        //SD { "Sudan" }
         SE { "Svezia" }
         //SG { "Singapore" }
         //SH { "Saint Helena" }
@@ -202,6 +208,7 @@ it {
         //SR { "Suriname" }
         ST { "Sao Tome e Principe" }
         //SV { "El Salvador" }
+        SY { "Siria" }    // alternate name { "Repubblica Araba di Siria" }
         //SZ { "Swaziland" }
         TC { "Isole Turks e Caicos" }
         TD { "Ciad" }
@@ -217,7 +224,7 @@ it {
         TR { "Turchia" }
         TT { "Trinidad e Tobago" }
         //TV { "Tuvalu" }
-        //TW { "Taiwan" }
+        TW { "Taiwan (provincia della Cina)" }    // alternate name { "Taiwan" }
         //TZ { "Tanzania" }
         UA { "Ucraina" }
         //UG { "Uganda" }
