@@ -76,7 +76,6 @@ void ConvertTest::TestConvert()
     const char*      CodePagesToTest[NUM_CODEPAGE]       =
     {
        "IBM-949"
-
     };
 
     const uint16_t CodePageNumberToTest[NUM_CODEPAGE]             =
@@ -84,11 +83,9 @@ void ConvertTest::TestConvert()
         949
     };
 
-
 /*    const int32_t        CodePagesAsciiControls[NUM_CODEPAGE]    =
     { 
         0xFFFFFFFF
-
     };
 
     const int32_t        CodePagesOtherControls[NUM_CODEPAGE]    =
@@ -96,35 +93,29 @@ void ConvertTest::TestConvert()
          0x00000005
     };*/
 
-
     const int8_t     CodePagesMinChars[NUM_CODEPAGE] =
     {
         1
-
     };
 
     const int8_t     CodePagesMaxChars[NUM_CODEPAGE] =
     {
         2
-
     };
 
-    const int16_t        CodePagesSubstitutionChars[NUM_CODEPAGE]    =
+    const int16_t    CodePagesSubstitutionChars[NUM_CODEPAGE] =
     {
-        (int16_t)0xAFFE
-
+        0xAFFEu
     };
 
-    const char* CodePagesTestFiles[NUM_CODEPAGE]    =
+    const char*      CodePagesTestFiles[NUM_CODEPAGE]    =
     {
         "uni-text.txt" 
     };
 
-
-    const UConverterPlatform        CodePagesPlatform[NUM_CODEPAGE]    =
+    const UConverterPlatform CodePagesPlatform[NUM_CODEPAGE] =
     {
         UCNV_IBM
-    
     };
 
 /*    const UConverterToUCallback CodePagesMissingCharAction[NUM_CODEPAGE] =
