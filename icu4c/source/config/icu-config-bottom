@@ -1,5 +1,5 @@
 ## -*-sh-*-
-## BEGIN of icu-config-bottom. $Revision: 1.5 $
+## BEGIN of icu-config-bottom. $Revision: 1.6 $
 ## Copyright (c) 2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
@@ -21,10 +21,16 @@ allflags()
     echo "  --bindir               Print binary directory path (bin)"
     echo "  --cc                   Print C compiler used [CC]"
     echo "  --cflags               Print C compiler flags [CFLAGS]"
+    echo "  --cflags-dynamic       Print additional C flags for"
+    echo "                             building shared libraries."
     echo "  --cppflags             Print C Preprocessor flags [CPPFLAGS]"
-    echo "  --cppflags-searchpath Print only -I include directives  (-Iinclude)"
+    echo "  --cppflags-dynamic     Print additional C Preprocessor flags for"
+    echo "                             building shared libraries."
+    echo "  --cppflags-searchpath  Print only -I include directives  (-Iinclude)"
     echo "  --cxx                  Print C++ compiler used [CXX]"
     echo "  --cxxflags             Print C++ compiler flags [CXXFLAGS]"
+    echo "  --cxxflags-dynamic     Print additional C++ flags for"
+    echo "                             building shared libraries."
     echo "  --detect-prefix        Attempt to detect prefix based on PATH"
     echo "  --exec-prefix          Print prefix for executables (/bin)"
     echo "  --exists               Return with 0 status if ICU exists else fail"
@@ -184,6 +190,18 @@ do
 
 	--cppflags-searchpath)
 	    echo -I${prefix}/include
+	    ;;
+
+	--cppflags-dynamic)
+	    echo $SHAREDLIBCPPFLAGS
+	    ;;
+
+	--cxxflags-dynamic)
+	    echo $SHAREDLIBCXXFLAGS
+	    ;;
+
+	--cflags-dynamic)
+	    echo $SHAREDLIBCFLAGS
 	    ;;
 
 	--ldflags-system)
