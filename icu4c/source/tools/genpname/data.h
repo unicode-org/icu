@@ -1,4 +1,7 @@
 /**
+ * Copyright (C) 2002-2003, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ *
  * MACHINE GENERATED FILE.  !!! Do not edit manually !!!
  *
  * Generated from
@@ -8,7 +11,7 @@
  *   PropertyAliases.txt
  *   PropertyValueAliases.txt
  *
- * Date: Mon Mar 17 09:44:03 2003
+ * Date: Tue Jun  3 17:01:25 2003
  * Unicode version: 4.0.0
  * Script: preparse.pl
  */
