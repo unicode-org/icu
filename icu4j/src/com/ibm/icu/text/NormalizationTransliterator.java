@@ -13,7 +13,7 @@ import java.util.*;
 
 /*
  * @author Alan Liu
- * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.3 $ $Date: 2001/09/28 05:45:46 $
+ * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.4 $ $Date: 2001/10/04 20:10:30 $
  */
 public class NormalizationTransliterator extends Transliterator {
 
@@ -106,7 +106,7 @@ public class NormalizationTransliterator extends Transliterator {
             // in incremental mode then we collect up trailing jamo
             // and save them for next time.
             boolean doStandardBackup = true;
-            if (mode.compose() && isIncremental) {
+            if (mode.compose()) {
                 // As a minor optimization, if there are three or more
                 // trailing jamo, we let the first three through --
                 // these should be handled correctly.
