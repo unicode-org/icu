@@ -469,12 +469,9 @@ ucnv_io_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode) {
 U_CFUNC void
 ucnv_io_fillAvailableConverters(const char **aliases, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode)) {
-        const uint16_t *p=converterTable;
-        uint16_t count=*p++;
-        while(count>0) {
-            *aliases++=(const char *)aliasTable+*p;
-            p+=2;
-            --count;
+        uint16_t count = 0;
+        while (count < availableConverterCount) {
+            *aliases++=availableConverters[count++];
         }
     }
 }
