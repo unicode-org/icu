@@ -207,7 +207,23 @@ public class SearchTest extends TestFmwk {
     SearchData SUPPLEMENTARY[] = {
         /* 012345678901234567890123456789012345678901234567890012345678901234567890123456789012345678901234567890012345678901234567890123456789 */
         new SearchData("abc \uD800\uDC00 \uD800\uDC01 \uD801\uDC00 \uD800\uDC00abc abc\uD800\uDC00 \uD800\uD800\uDC00 \uD800\uDC00\uDC00",
-            "\uD800\uDC00", null, Collator.TERTIARY, null, new int[] {4, 13, 22, 26, 29, -1}, new int[] {2, 2, 2, 2, 2}),
+            "\uD800\uDC00", null, Collator.TERTIARY, null, 
+            new int[] {4, 13, 22, 26, 29, -1}, new int[] {2, 2, 2, 2, 2}),
+        new SearchData("and\uD834\uDDB9this sentence", "\uD834\uDDB9", null, 
+                       Collator.TERTIARY, null, new int[] {3, -1}, 
+                       new int[] {2}),
+        new SearchData("and \uD834\uDDB9 this sentence", " \uD834\uDDB9 ", 
+                       null, Collator.TERTIARY, null, new int[] {3, -1}, 
+                       new int[] {4}),
+        new SearchData("and-\uD834\uDDB9-this sentence", "-\uD834\uDDB9-", 
+                       null, Collator.TERTIARY, null, new int[] {3, -1}, 
+                       new int[] {4}),
+        new SearchData("and,\uD834\uDDB9,this sentence", ",\uD834\uDDB9,", 
+                       null, Collator.TERTIARY, null, new int[] {3, -1}, 
+                       new int[] {4}),
+        new SearchData("and?\uD834\uDDB9?this sentence", "?\uD834\uDDB9?", 
+                       null, Collator.TERTIARY, null, new int[] {3, -1}, 
+                       new int[] {4}),
         new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
     };
 
@@ -371,6 +387,21 @@ public class SearchTest extends TestFmwk {
         new SearchData("abc \uD800\uDC00 \uD800\uDC01 \uD801\uDC00 \uD800\uDC00abc abc\uD800\uDC00 \uD800\uD800\uDC00 \uD800\uDC00\uDC00",
                        "\uD800\uDC00", null, Collator.TERTIARY, null, new int[] {4, 13, 22, 26, 29, -1},
                        new int[] {2, 2, 2, 2, 2}),
+        new SearchData("and\uD834\uDDB9this sentence", "\uD834\uDDB9", null, 
+                       Collator.TERTIARY, null, new int[] {3, -1}, 
+                       new int[] {2}),
+        new SearchData("and \uD834\uDDB9 this sentence", " \uD834\uDDB9 ", 
+                       null, Collator.TERTIARY, null, new int[] {3, -1}, 
+                       new int[] {4}),
+        new SearchData("and-\uD834\uDDB9-this sentence", "-\uD834\uDDB9-", 
+                       null, Collator.TERTIARY, null, new int[] {3, -1}, 
+                       new int[] {4}),
+        new SearchData("and,\uD834\uDDB9,this sentence", ",\uD834\uDDB9,", 
+                       null, Collator.TERTIARY, null, new int[] {3, -1}, 
+                       new int[] {4}),
+        new SearchData("and?\uD834\uDDB9?this sentence", "?\uD834\uDDB9?", 
+                       null, Collator.TERTIARY, null, new int[] {3, -1}, 
+                       new int[] {4}),
         new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
     };
 
