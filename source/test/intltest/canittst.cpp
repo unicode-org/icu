@@ -12,7 +12,7 @@
 #include "intltest.h"
 #include "cstring.h"
 #include "canittst.h"
-#include "caniter.h"
+#include "unicode/caniter.h"
 #include "unicode/uchar.h"
 
 #define ARRAY_LENGTH(array) ((int32_t)(sizeof (array) / sizeof (*array)))
@@ -98,7 +98,7 @@ void CanonicalIteratorTest::TestExhaustive() {
         
         while (TRUE) {
             UnicodeString item = it.next();
-            if (item == "") break;
+            if (item.isBogus()) break;
             if (item == s) gotSource = TRUE;
             if (item == decomp) gotDecomp = TRUE;
             if (item == comp) gotComp = TRUE;
@@ -164,7 +164,7 @@ void CanonicalIteratorTest::TestBasic() {
         while (TRUE) {
             //UnicodeString *result = new UnicodeString(it.next());
             UnicodeString result(it.next());
-            if (result == "") {
+            if (result.isBogus()) {
                 break;
             }
             set->put(result, new UnicodeString(result), status); // Add result to the table
