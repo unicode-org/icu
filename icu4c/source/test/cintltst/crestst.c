@@ -35,6 +35,7 @@ void TestFallback(void);
 
 /*****************************************************************************/
 
+#ifdef ICU_URES_USE_DEPRECATES
 /**
  * Convert an integer, positive or negative, to a character string radix 10.
  */
@@ -67,6 +68,7 @@ itoa1(int32_t i, char* buf)
 
   return result;
 }
+#endif
 
 const UChar kERROR[] = { 0x0045 /*E*/, 0x0052 /*'R'*/, 0x0052 /*'R'*/,
              0x004F /*'O'*/, 0x0052/*'R'*/, 0x0000 /*'\0'*/};
@@ -300,13 +302,13 @@ UBool testTag(const char* frag,
     int32_t i,j;
     int32_t actual_bundle;
     int32_t resultLen;
-    int32_t count = 0;
-    int32_t row_count=0;
-    int32_t column_count=0;
-    int32_t index = 0;
     char testdatapath[256];
 
 #ifdef ICU_URES_USE_DEPRECATES
+    int32_t row_count=0;
+    int32_t column_count=0;
+    int32_t count = 0;
+    int32_t index = 0;
     UErrorCode expected_status;
     int32_t k,row,col;
     char buf[5];
