@@ -142,8 +142,7 @@ binary-arch: build install
 	#
 	$(RM) debian/tmp/usr/lib/libicuctestfw.*
 	dh_movefiles -plibicu$(major) \
-	    usr/lib/*.so.* \
-	    usr/lib/libicudt*
+	    usr/lib/*.so.*
 	mkdir debian/libicu$(major)/usr/lib/icu
 	#
 	# build icu package by moving files from icu-dev
