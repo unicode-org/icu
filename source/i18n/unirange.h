@@ -71,7 +71,7 @@ public:
 private:
 
     // For UVector of UnicodeRange* objects
-    static void deleter(void*);
+    static void U_CALLCONV deleter(void*);
 
 };
 

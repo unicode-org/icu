@@ -103,6 +103,6 @@ UnicodeRange::largestUnusedSubrange(const UnicodeString& str) const {
 }
 
 // For UVector of UnicodeRange* objects
-void UnicodeRange::deleter(void* e) {
+void U_CALLCONV UnicodeRange::deleter(void* e) {
     delete (UnicodeRange*) e;
 }
