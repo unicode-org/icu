@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $ 
- * $Date: 2001/02/06 22:37:30 $ 
- * $Revision: 1.11 $
+ * $Date: 2001/10/30 02:42:49 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.11 $ $Date: 2001/02/06 22:37:30 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.12 $ $Date: 2001/10/30 02:42:49 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -1681,7 +1681,7 @@ visitedChars = 0;
 
             // call parseRule() for every rule in the rule list (except those which
             // start with !, which are actually backwards-iteration rules)
-            int n = tempRuleList.size();
+            // variable not used int n = tempRuleList.size();
             for (int i = 0; i < tempRuleList.size(); i++) {
                 String rule = (String)tempRuleList.elementAt(i);
                 if (rule.charAt(0) != '!') {
@@ -2582,7 +2582,7 @@ if (rowNumMap[i] == 0) System.out.print("\t" + i);
 System.out.println();
 */
 
-            boolean madeChange;
+            // variable not used boolean madeChange;
             int newRowNum;
 
             // algorithm for minimizing the number of states in the table adapted from

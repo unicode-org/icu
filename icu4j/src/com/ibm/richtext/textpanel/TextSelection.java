@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TextSelection.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:51:23 $
+ * @(#)$RCSfile: TextSelection.java,v $ $Revision: 1.2 $ $Date: 2001/10/30 02:42:48 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -689,7 +689,7 @@ class TextSelection extends Behavior implements Runnable {
     */
     public void scrollToShowSelectionEnd() {
         TextOffset  liveEnd;
-        Point[]     points;
+        // variable not used Point[]     points;
         Rectangle   caret;
 
         if (fAnchor.equals(fStart))
@@ -705,7 +705,7 @@ class TextSelection extends Behavior implements Runnable {
     }
 
     private void select(TextRange range) {
-        int textLength = fTextComponent.getText().length();
+        // variable not used int textLength = fTextComponent.getText().length();
 
         TextOffset start = new TextOffset(range.start);
 

@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/normalizer/Attic/QuickCheckBuilder.java,v $ 
-* $Date: 2001/08/23 02:22:38 $ 
-* $Revision: 1.5 $
+* $Date: 2001/10/30 02:42:49 $ 
+* $Revision: 1.6 $
 *
 ******************************************************************************
 */
@@ -42,6 +42,7 @@ import com.ibm.text.UTF16;
 *      NFKC NFC NFKD NFD MAYBES       NFKC NFC NFKD NFD YES<br>
 * ie if quick[0xABCD] = 10000001, this means that 0xABCD is in NFD form and 
 * maybe in NFKC form.
+* @deprecated ICU4J 2.0, since ICU has written its own tool.
 */
 public class QuickCheckBuilder
 {
@@ -49,6 +50,7 @@ public class QuickCheckBuilder
   
   /**
   * constructor with default input, output file path
+  * @deprecated ICU4J 2.0, since ICU has written its own tool.
   */
   public QuickCheckBuilder()
   {
@@ -58,6 +60,7 @@ public class QuickCheckBuilder
   * Building method.
   * Each unicode character will be used to generate data, output to the default
   * file path  
+  * @deprecated ICU4J 2.0, since ICU has written its own tool.
   */
   public void build()
   {
@@ -69,6 +72,7 @@ public class QuickCheckBuilder
   * Each unicode character will be used to generate data.
   * @param input file path
   * @param output file path
+  * @deprecated ICU4J 2.0, since ICU has written its own tool.
   */
   public void build(String input, String output)
   {   

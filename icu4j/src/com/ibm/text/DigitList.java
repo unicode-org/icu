@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/DigitList.java,v $ 
- * $Date: 2001/10/19 12:33:50 $ 
- * $Revision: 1.7 $
+ * $Date: 2001/10/30 02:42:49 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -395,7 +395,7 @@ final class DigitList implements Cloneable {
      * incremented
      */
     private boolean shouldRoundUp(int maximumDigits) {
-        boolean increment = false;
+        // variable not used boolean increment = false;
         // Implement IEEE half-even rounding
         /*Bug 4243108
           format(0.0) gives "0.1" if preceded by parse("99.99") [Richard/GCL]

@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: AsyncFormatter.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:50:03 $
+ * @(#)$RCSfile: AsyncFormatter.java,v $ $Revision: 1.2 $ $Date: 2001/10/30 02:42:50 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -1019,7 +1019,7 @@ final class AsyncFormatter extends MFormatter implements Runnable
 
         final int newCurTextLen = fText.length();
 
-        int oldPixHeight = fPixHeight;
+        // variable not used int oldPixHeight = fPixHeight;
         int oldFullPixHeight = fFullPixHeight;
         fPixHeight -= fLineTable[fLTPosEnd].getHeight();
 

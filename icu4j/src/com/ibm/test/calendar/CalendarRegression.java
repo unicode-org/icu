@@ -201,7 +201,10 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
         gc.set(Calendar.MILLISECOND, 0);
 
         Date cd = gc.getTime();
-        Date exp = new Date(97, 3, 1, 0, 0, 0);
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.clear();
+        cal.set(1997, 3, 1, 0, 0, 0);
+        Date exp = cal.getTime();
         if (!cd.equals(exp))
             errln("Fail: Calendar.set broken. Got " + cd + " Want " + exp);
     }
@@ -228,7 +231,10 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
     }
 
     public void Test4070502() {
-        Date d = getAssociatedDate(new Date(98, 0, 30));
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(1998, 0, 30);
+        Date d = getAssociatedDate(tempcal.getTime());
         Calendar cal = new GregorianCalendar();
         cal.setTime(d);
         if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||
@@ -285,10 +291,14 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
 
     public void Test4071385() {
         Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date(98, Calendar.JUNE, 24));
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(1998, Calendar.JUNE, 24);
+        cal.setTime(tempcal.getTime());
         cal.set(Calendar.MONTH, Calendar.NOVEMBER); // change a field
         logln(cal.getTime().toString());
-        if (!cal.getTime().equals(new Date(98, Calendar.NOVEMBER, 24)))
+        tempcal.set(1998, Calendar.NOVEMBER, 24);
+        if (!cal.getTime().equals(tempcal.getTime()))
             errln("Fail");
     }
 
@@ -565,17 +575,28 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
             }
         }
 
+        Date d[] = new Date[8];
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(1997, Calendar.DECEMBER, 28);
+        d[0] = tempcal.getTime();
+        tempcal.set(1998, Calendar.JANUARY, 10);
+        d[1] = tempcal.getTime();
+        tempcal.set(1998, Calendar.DECEMBER, 31);
+        d[2] = tempcal.getTime();
+        tempcal.set(1999, Calendar.JANUARY, 1);
+        d[3] = tempcal.getTime();
         // Test field disambiguation with a few special hard-coded cases.
         // This shouldn't fail if the above cases aren't failing.
         Object[] DISAM = {
             new Integer(1998), new Integer(1), new Integer(Calendar.SUNDAY),
-                new Date(97, Calendar.DECEMBER, 28),
+                d[0],
             new Integer(1998), new Integer(2), new Integer(Calendar.SATURDAY),
-                new Date(98, Calendar.JANUARY, 10),
+                d[1],
             new Integer(1998), new Integer(53), new Integer(Calendar.THURSDAY),
-                new Date(98, Calendar.DECEMBER, 31),
+                d[2],
             new Integer(1998), new Integer(53), new Integer(Calendar.FRIDAY),
-                new Date(99, Calendar.JANUARY, 1),
+                d[3],
         };
         testCal.setMinimalDaysInFirstWeek(3);
         testCal.setFirstDayOfWeek(Calendar.SUNDAY);
@@ -601,11 +622,28 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
         // Now try adding and rolling
         Object ADD = new Object();
         Object ROLL = new Object();
+        tempcal.set(1998, Calendar.DECEMBER, 25);
+        d[0] = tempcal.getTime();
+        tempcal.set(1999, Calendar.JANUARY, 1);
+        d[1] = tempcal.getTime();
+        tempcal.set(1997, Calendar.DECEMBER, 28);
+        d[2] = tempcal.getTime();
+        tempcal.set(1998, Calendar.JANUARY, 4);
+        d[3] = tempcal.getTime();
+        tempcal.set(1998, Calendar.DECEMBER, 27);
+        d[4] = tempcal.getTime();
+        tempcal.set(1997, Calendar.DECEMBER, 28);
+        d[5] = tempcal.getTime();
+        tempcal.set(1999, Calendar.JANUARY, 2);
+        d[6] = tempcal.getTime();
+        tempcal.set(1998, Calendar.JANUARY, 3);
+        d[7] = tempcal.getTime();
+        
         Object[] ADDROLL = {
-            ADD, new Integer(1), new Date(98, Calendar.DECEMBER, 25), new Date(99, Calendar.JANUARY, 1),
-            ADD, new Integer(1), new Date(97, Calendar.DECEMBER, 28), new Date(98, Calendar.JANUARY, 4),
-            ROLL, new Integer(1), new Date(98, Calendar.DECEMBER, 27), new Date(97, Calendar.DECEMBER, 28),
-            ROLL, new Integer(1), new Date(99, Calendar.JANUARY, 2), new Date(98, Calendar.JANUARY, 3),
+            ADD, new Integer(1), d[0], d[1],
+            ADD, new Integer(1), d[2], d[3],
+            ROLL, new Integer(1), d[4], d[5],
+            ROLL, new Integer(1), d[6], d[7],
         };
         testCal.setMinimalDaysInFirstWeek(3);
         testCal.setFirstDayOfWeek(Calendar.SUNDAY);
@@ -665,12 +703,21 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
     }
 
     public void Test4108764() {
-        Date d00 = new Date(97, Calendar.MARCH, 15, 12, 00, 00);
-        Date d01 = new Date(97, Calendar.MARCH, 15, 12, 00, 56);
-        Date d10 = new Date(97, Calendar.MARCH, 15, 12, 34, 00);
-        Date d11 = new Date(97, Calendar.MARCH, 15, 12, 34, 56);
-        Date dM  = new Date(97, Calendar.JANUARY, 15, 12, 34, 56);
-        Date epoch = new Date(70, Calendar.JANUARY, 1);
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(1997, Calendar.MARCH, 15, 12, 00, 00);
+        Date d00 = tempcal.getTime();
+        tempcal.set(1997, Calendar.MARCH, 15, 12, 00, 56);
+        Date d01 = tempcal.getTime();
+        tempcal.set(1997, Calendar.MARCH, 15, 12, 34, 00);
+        Date d10 = tempcal.getTime();
+        tempcal.set(1997, Calendar.MARCH, 15, 12, 34, 56);
+        Date d11 = tempcal.getTime();
+        tempcal.set(1997, Calendar.JANUARY, 15, 12, 34, 56);
+        Date dM  = tempcal.getTime();
+        tempcal.clear();
+        tempcal.set(1970, Calendar.JANUARY, 1);
+        Date epoch = tempcal.getTime();
 
         Calendar cal = Calendar.getInstance(); 
         cal.setTime(d11);
@@ -716,8 +763,13 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
         int ONE_HOUR = 60*60*1000;
         Calendar cal = Calendar.getInstance();
         cal.setTimeZone(TimeZone.getTimeZone("PST"));
-        long onset = new Date(98, Calendar.APRIL, 5, 1, 0).getTime() + ONE_HOUR;
-        long cease = new Date(98, Calendar.OCTOBER, 25, 0, 0).getTime() + 2*ONE_HOUR;
+        
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(1998, Calendar.APRIL, 5, 1, 0);
+        long onset = tempcal.getTime().getTime() + ONE_HOUR;
+        tempcal.set(1998, Calendar.OCTOBER, 25, 0, 0);
+        long cease = tempcal.getTime().getTime() + 2*ONE_HOUR;
 
         boolean fail = false;
         
@@ -969,7 +1021,10 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
     public void Test4147269() {
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setLenient(false);
-        Date date = new Date(1996-1900, Calendar.JANUARY, 3); // Arbitrary date
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(1996, Calendar.JANUARY, 3); // Arbitrary date
+        Date date = tempcal.getTime(); 
         for (int field = 0; field < calendar.getFieldCount(); field++) {
             calendar.setTime(date);
             // Note: In the bug report, getActualMaximum() was called instead
@@ -1385,65 +1440,83 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
         Calendar cal = Calendar.getInstance(Locale.US);
 
         // General field setting test
-        int Y = 1995 - 1900;
+        int Y = 1995;
+        
+        Date d[] = new Date[13];
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(Y, Calendar.JANUARY, 1);
+        d[0] = tempcal.getTime();
+        tempcal.set(Y, Calendar.MARCH, 1);
+        d[1] = tempcal.getTime();
+        tempcal.set(Y, Calendar.JANUARY, 4);
+        d[2] = tempcal.getTime();
+        tempcal.set(Y, Calendar.JANUARY, 18);
+        d[3] = tempcal.getTime();
+        tempcal.set(Y, Calendar.JANUARY, 18);
+        d[4] = tempcal.getTime();
+        tempcal.set(Y-1, Calendar.DECEMBER, 22);
+        d[5] = tempcal.getTime();
+        tempcal.set(Y, Calendar.JANUARY, 26);
+        d[6] = tempcal.getTime();
+        tempcal.set(Y, Calendar.JANUARY, 26);
+        d[7] = tempcal.getTime();
+        tempcal.set(Y, Calendar.MARCH, 1);
+        d[8] = tempcal.getTime();
+        tempcal.set(Y, Calendar.OCTOBER, 6);
+        d[9] = tempcal.getTime();
+        tempcal.set(Y, Calendar.OCTOBER, 13);
+        d[10] = tempcal.getTime();
+        tempcal.set(Y, Calendar.AUGUST, 10);
+        d[11] = tempcal.getTime();
+        tempcal.set(Y, Calendar.DECEMBER, 7);
+        d[12] = tempcal.getTime();
 
         Object[] FIELD_DATA = {
             // Add new test cases as needed.
 
             // 0
-            new int[] {}, new Date(Y, Calendar.JANUARY, 1),
+            new int[] {}, d[0],
             // 1
-            new int[] { Calendar.MONTH, Calendar.MARCH },
-            new Date(Y, Calendar.MARCH, 1),
+            new int[] { Calendar.MONTH, Calendar.MARCH }, d[1],
             // 2
-            new int[] { Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY },
-            new Date(Y, Calendar.JANUARY, 4),
+            new int[] { Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY }, d[2],
             // 3
             new int[] { Calendar.DAY_OF_WEEK, Calendar.THURSDAY,
-                        Calendar.DAY_OF_MONTH, 18, },
-            new Date(Y, Calendar.JANUARY, 18),
+                        Calendar.DAY_OF_MONTH, 18, }, d[3],
             // 4
             new int[] { Calendar.DAY_OF_MONTH, 18,
-                        Calendar.DAY_OF_WEEK, Calendar.THURSDAY, },
-            new Date(Y, Calendar.JANUARY, 18),
+                        Calendar.DAY_OF_WEEK, Calendar.THURSDAY, }, d[4],
             // 5  (WOM -1 is in previous month)
             new int[] { Calendar.DAY_OF_MONTH, 18,
                         Calendar.WEEK_OF_MONTH, -1,
-                        Calendar.DAY_OF_WEEK, Calendar.THURSDAY, },
-            new Date(Y-1, Calendar.DECEMBER, 22),
+                        Calendar.DAY_OF_WEEK, Calendar.THURSDAY, }, d[5],
             // 6
             new int[] { Calendar.DAY_OF_MONTH, 18,
                         Calendar.WEEK_OF_MONTH, 4,
-                        Calendar.DAY_OF_WEEK, Calendar.THURSDAY, },
-            new Date(Y, Calendar.JANUARY, 26),
+                        Calendar.DAY_OF_WEEK, Calendar.THURSDAY, }, d[6],
             // 7  (DIM -1 is in same month)
             new int[] { Calendar.DAY_OF_MONTH, 18,
                         Calendar.DAY_OF_WEEK_IN_MONTH, -1,
-                        Calendar.DAY_OF_WEEK, Calendar.THURSDAY, },
-            new Date(Y, Calendar.JANUARY, 26),
+                        Calendar.DAY_OF_WEEK, Calendar.THURSDAY, }, d[7],
             // 8
             new int[] { Calendar.WEEK_OF_YEAR, 9,
-                        Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY, },
-            new Date(Y, Calendar.MARCH, 1),
+                        Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY, }, d[8],
             // 9
             new int[] { Calendar.MONTH, Calendar.OCTOBER,
                         Calendar.DAY_OF_WEEK_IN_MONTH, 1,
-                        Calendar.DAY_OF_WEEK, Calendar.FRIDAY, },
-            new Date(Y, Calendar.OCTOBER, 6),
+                        Calendar.DAY_OF_WEEK, Calendar.FRIDAY, }, d[9],
             // 10
             new int[] { Calendar.MONTH, Calendar.OCTOBER,
                         Calendar.WEEK_OF_MONTH, 2,
-                        Calendar.DAY_OF_WEEK, Calendar.FRIDAY, },
-            new Date(Y, Calendar.OCTOBER, 13),
+                        Calendar.DAY_OF_WEEK, Calendar.FRIDAY, }, d[10],
             // 11
             new int[] { Calendar.MONTH, Calendar.OCTOBER,
                         Calendar.DAY_OF_MONTH, 15,
-                        Calendar.DAY_OF_YEAR, 222, },
-            new Date(Y, Calendar.AUGUST, 10),
+                        Calendar.DAY_OF_YEAR, 222, }, d[11],
             // 12
             new int[] { Calendar.DAY_OF_WEEK, Calendar.THURSDAY,
-                        Calendar.MONTH, Calendar.DECEMBER, },
-            new Date(Y, Calendar.DECEMBER, 7),
+                        Calendar.MONTH, Calendar.DECEMBER, }, d[12],
         };
 
         for (int i=0; i<FIELD_DATA.length; i+=2) {
@@ -1451,7 +1524,7 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
             Date exp = (Date) FIELD_DATA[i+1];
             
             cal.clear();
-            cal.set(Calendar.YEAR, Y + 1900);
+            cal.set(Calendar.YEAR, Y);
             for (int j=0; j<fields.length; j+=2) {
                 cal.set(fields[j], fields[j+1]);
             }
@@ -1464,14 +1537,23 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
             }
         }
 
+        tempcal.set(1997, Calendar.JANUARY, 5);
+        d[0] = tempcal.getTime();
+        tempcal.set(1997, Calendar.JANUARY, 26);
+        d[1] = tempcal.getTime();
+        tempcal.set(1997, Calendar.FEBRUARY, 23);
+        d[2] = tempcal.getTime();
+        tempcal.set(1997, Calendar.JANUARY, 26);
+        d[3] = tempcal.getTime();
+        tempcal.set(1997, Calendar.JANUARY, 5);
+        d[4] = tempcal.getTime();
+        tempcal.set(1996, Calendar.DECEMBER, 8);
+        d[5] = tempcal.getTime();
         // Test specific failure reported in bug
-        Object[] DATA = {
-            new Integer(1), new Date(1997-1900, Calendar.JANUARY, 5),
-            new Integer(4), new Date(1997-1900, Calendar.JANUARY, 26),
-            new Integer(8), new Date(1997-1900, Calendar.FEBRUARY, 23),
-            new Integer(-1), new Date(1997-1900, Calendar.JANUARY, 26),
-            new Integer(-4), new Date(1997-1900, Calendar.JANUARY, 5),
-            new Integer(-8), new Date(1996-1900, Calendar.DECEMBER, 8),
+        Object[] DATA = { 
+            new Integer(1), d[0], new Integer(4), d[1],
+            new Integer(8), d[2], new Integer(-1), d[3],
+            new Integer(-4), d[4], new Integer(-8), d[5],
         };
         for (int i=0; i<DATA.length; i+=2) {
             cal.clear();
@@ -1677,7 +1759,9 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
         try {
             Locale loc = Locale.US;
             TimeZone.setDefault(TimeZone.getTimeZone("America/Los_Angeles"));
-            Date date = new Date(2001, Calendar.APRIL, 5, 17, 43, 53);
+            java.util.Calendar tempcal = java.util.Calendar.getInstance();
+            tempcal.set(2001 + 1900, Calendar.APRIL, 5, 17, 43, 53);
+            Date date = tempcal.getTime();
             Calendar cal = Calendar.getInstance(loc);
             Object[] DATA = {
                 DateFormat.getDateInstance(DateFormat.SHORT, loc),

@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/calendar/Attic/IBMCalendarTest.java,v $ 
- * $Date: 2000/11/18 00:17:58 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/10/30 02:42:49 $ 
+ * $Revision: 1.5 $
  *******************************************************************************
  */
 package com.ibm.test.calendar;
@@ -142,7 +142,10 @@ public class IBMCalendarTest extends CalendarTest {
             int month = data[i++];
             int dayOfMonth = data[i++];
 
-            Date D = new Date(gregorianYear - 1900, month, dayOfMonth);
+            java.util.Calendar tempcal = java.util.Calendar.getInstance();
+            tempcal.clear();
+            tempcal.set(gregorianYear, month, dayOfMonth);
+            Date D = tempcal.getTime();
 
             cal.clear();
             cal.set(Calendar.ERA, era);
@@ -208,7 +211,8 @@ public class IBMCalendarTest extends CalendarTest {
     public void TestGregorianLimits() {
         // Final parameter is either number of days, if > 0, or test
         // duration in seconds, if < 0.
-        doLimitsTest(new GregorianCalendar(), null,
-                     new Date(2004-1900, Calendar.JANUARY, 1), -10);
+        Calendar cal = Calendar.getInstance();
+        cal.set(2004, Calendar.JANUARY, 1);
+        doLimitsTest(new GregorianCalendar(), null, cal.getTime(), -10);
     }
 }

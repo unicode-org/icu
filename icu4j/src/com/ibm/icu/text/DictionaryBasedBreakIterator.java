@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DictionaryBasedBreakIterator.java,v $ 
- * $Date: 2001/02/06 22:37:30 $ 
- * $Revision: 1.7 $
+ * $Date: 2001/10/30 02:42:49 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -415,7 +415,7 @@ switch (categoryFlags.length % 4) {
                 // us from messing with anything in possibleBreakPositions that didn't work as
                 // a starting point the last time we tried it (this is to prevent a bunch of
                 // repetitive checks from slowing down some extreme cases)
-                Integer newStartingSpot = null;
+                // variable not used Integer newStartingSpot = null;
                 while (!possibleBreakPositions.isEmpty() && wrongBreakPositions.contains(
                             possibleBreakPositions.peek())) {
                     possibleBreakPositions.pop();

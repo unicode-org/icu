@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/format/Attic/IntlTestDateFormatAPI.java,v $ 
- * $Date: 2001/10/23 13:12:14 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/10/30 02:42:49 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  **/
@@ -49,7 +49,12 @@ public class IntlTestDateFormatAPI extends com.ibm.test.TestFmwk
         // Create two objects at different system times
         DateFormat a = DateFormat.getInstance();
         Date start = Calendar.getInstance().getTime();
-        while (start.equals(Calendar.getInstance().getTime())) ; // Wait for time to change
+        while (true) {
+            // changed to remove compiler warnings.
+            if (!start.equals(Calendar.getInstance().getTime())) {
+                break; // Wait for time to change
+            }
+        }
         DateFormat b = DateFormat.getInstance();
 
         if (!(a.equals(b)))

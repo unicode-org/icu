@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/holiday/HolidayBorderPanel.java,v $ 
- * $Date: 2001/09/08 01:39:20 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/10/30 02:42:50 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -165,7 +165,7 @@ public class HolidayBorderPanel extends Panel {
     /**
      * Returns the insets of this panel..
      */
-    public Insets insets() {
+    public Insets getInsets() {
         int adjustment = 0;
 
         // adjust for text string
@@ -199,7 +199,7 @@ public class HolidayBorderPanel extends Panel {
 
         // set the style and re-layout the panel
         this.style = style;
-        layout();
+        doLayout();
         repaint();
 
         return this;
@@ -222,7 +222,7 @@ public class HolidayBorderPanel extends Panel {
 
         if (thickness > 0) {
             this.thickness = thickness;
-            layout();
+            doLayout();
             repaint();
             }
 
@@ -246,7 +246,7 @@ public class HolidayBorderPanel extends Panel {
 
         if (gap > -1) {
             this.gap = gap;
-            layout();
+            doLayout();
             repaint();
             }
 
@@ -294,7 +294,7 @@ public class HolidayBorderPanel extends Panel {
         if (font != null) {
             this.font = font;
             if (style == IN || style == OUT) {
-                layout();
+                doLayout();
                 repaint();
                 }
             }
@@ -319,7 +319,7 @@ public class HolidayBorderPanel extends Panel {
 
         this.text = text;
         if (style == IN || style == OUT) {
-            layout();
+            doLayout();
             repaint();
             }
 
@@ -343,7 +343,7 @@ public class HolidayBorderPanel extends Panel {
 
         this.alignment = alignment;
         if (style == IN || style == OUT) {
-            layout();
+            doLayout();
             repaint();
             }
 
@@ -366,7 +366,7 @@ public class HolidayBorderPanel extends Panel {
     public void paint(Graphics g) {
 
         // get current dimensions
-        Dimension size = size();
+        Dimension size = getSize();
         int width = size.width;
         int height = size.height;
 

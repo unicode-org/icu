@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TextComponent.java,v $ $Revision: 1.3 $ $Date: 2001/03/07 02:39:01 $
+ * @(#)$RCSfile: TextComponent.java,v $ $Revision: 1.4 $ $Date: 2001/10/30 02:42:48 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -389,7 +389,7 @@ class TextComponent extends FakeComponent
             Rectangle documentBounds = fDocumentView.getDocumentBounds();
             Rectangle viewBounds = getBounds();
             
-            int oldDx = dx;
+            // variable not used int oldDx = dx;
             dx = pinScrollOffset(dx, 
                                  documentBounds.x,
                                  documentBounds.width,
@@ -696,7 +696,7 @@ class TextComponent extends FakeComponent
             if (fWrapToWindowWidth || !wrap) {
 
                 Rectangle hostBounds = fHost.getBounds();
-                final int insetDim = 2 * fInsetAmount;
+                // variable not used final int insetDim = 2 * fInsetAmount;
 
                 int formatWidth = hostBounds.width - 2*fInsetAmount;
                 if (formatWidth <= CARET_SLOP) {
