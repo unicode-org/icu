@@ -111,7 +111,8 @@ getChoice(Library lib, const char *entry,
 
 #define LIB_SUFFIX ".dll"
 
-#define GET_ENTRY(lib, entryName) (MappedData *)GetProcAddress(lib, entryName)
+/* skip the bogus double */
+#define GET_ENTRY(lib, entryName) (MappedData *)(((double*)GetProcAddress(lib, entryName))+1)
 
 #define NO_LIBRARY NULL
 #define IS_LIBRARY(lib) ((lib)!=NULL)
@@ -259,7 +260,7 @@ getChoice(Library lib, const char *entry,
           UDataMemoryIsAcceptable *isAcceptable, void *context,
           UErrorCode *pErrorCode);
 
-#define GET_ENTRY(lib, entryName) (MappedData *)dlsym(lib, entryName)
+#define GET_ENTRY(lib, entryName) (MappedData *)(((double*)dlsym(lib, entryName))+1)
 
 #define NO_LIBRARY NULL
 #define IS_LIBRARY(lib) ((lib)!=NULL)

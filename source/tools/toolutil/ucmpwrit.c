@@ -1,11 +1,31 @@
 #include "ucmpwrit.h"
 #include <stdio.h>
 
-U_CAPI  void U_EXPORT2 udata_write_ucmp8 (UNewDataMemory *pData, const CompactByteArray* array)
+U_CAPI  uint32_t U_EXPORT2 udata_write_ucmp8 (UNewDataMemory *pData, const CompactByteArray* array)
 {
+    uint32_t size = sizeof(*array);
+
     udata_writeBlock(pData, array, sizeof(*array));
     udata_writeBlock(pData, array->fArray, sizeof(array->fArray[0])*array->fCount);
+    size += sizeof(array->fArray[0])*array->fCount;
+
+    if((sizeof(*array)+(sizeof(array->fArray[0])*array->fCount))&1)
+    {
+        udata_writePadding(pData, 1); /* Pad total so far to even size */
+        size += 1;
+    }
+
     udata_writeBlock(pData, array->fIndex, sizeof(array->fIndex[0])*UCMP8_kIndexCount);
+    size +=  sizeof(array->fIndex[0])*UCMP8_kIndexCount;
+
+    
+    while(size%4) /* end padding */
+    {
+        udata_writePadding(pData, 1); /* Pad total so far to even size */
+        size += 1;
+    }
+
+    return size;
 }
 
 /* internal constants*/
@@ -29,11 +49,30 @@ const int32_t UCMP16_kIndexCount = UCMP16_kIndexCount_int;
 const uint32_t UCMP16_kBlockMask = UCMP16_kBlockMask_int;
 
 
-U_CAPI  void U_EXPORT2 udata_write_ucmp16 (UNewDataMemory *pData, const CompactShortArray* array)
+U_CAPI  uint32_t U_EXPORT2 udata_write_ucmp16 (UNewDataMemory *pData, const CompactShortArray* array)
 {
+    uint32_t size = sizeof(*array);
+
     udata_writeBlock(pData, array, sizeof(*array));
+
+    if(sizeof(*array)&1)
+    {
+        udata_writePadding(pData, 1); /* Pad to even size */
+        size++;
+    }
+    
     udata_writeBlock(pData, array->fArray, sizeof(array->fArray[0])*array->fCount);
+    size +=  sizeof(array->fArray[0])*array->fCount;
     udata_writeBlock(pData, array->fIndex, sizeof(array->fIndex[0])*UCMP16_kIndexCount);
+    size += sizeof(array->fIndex[0])*UCMP16_kIndexCount;
+    
+    while(size%4) /* end padding */
+    {
+        udata_writePadding(pData, 1); /* Pad total so far to even size */
+        size += 1;
+    }
+
+    return size;
 }
 
 

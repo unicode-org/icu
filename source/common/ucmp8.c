@@ -416,17 +416,19 @@ U_CAPI  CompactByteArray * U_EXPORT2 ucmp8_cloneFromData(const uint8_t **source,
     array->fArray = (const int8_t*)*source;
     *source +=  (sizeof(int8_t)*array->fCount);
 
+    if(((*source)-((const uint8_t*)oldArray)) & 1 )
+    {
+        (*source)++;
+    }
+
     array->fIndex = (const uint16_t*)*source;
     *source += (sizeof(uint16_t)*UCMP8_kIndexCount);
-    
+
+
+    /* eat up padding */
+    while((*source-((uint8_t*)oldArray))%4)
+        (*source)++;
+
+
     return array;
 }
-
-
-
-
-
-
-
-
-
