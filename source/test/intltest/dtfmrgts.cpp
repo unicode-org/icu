@@ -489,9 +489,9 @@ void DateFormatRegressionTest::Test4071441(void)
     failure(status, "calB->setTime");
     if (*calA == *calB)
         errln("Fail: Can't complete test; Calendar instances equal");
-/*    if (*fmtA != *fmtB)
+    if (*fmtA != *fmtB)
         errln("Fail: DateFormat unequal when Calendars equivalent");
-*/
+
     logln("DateFormat.equals ok");
 
     delete fmtA;
