@@ -440,10 +440,10 @@ void doTest(UCollator* myCollation, const UChar source[], const UChar target[], 
     gSortklen1 = uprv_strlen((const char *)sortKey1)+1;
     gSortklen2 = uprv_strlen((const char *)sortKey2)+1;
     if(sortklen1 != gSortklen1){
-        log_err("SortKey length does not match Expected: %i Got: %i",sortklen1, gSortklen1);
+        log_err("SortKey length does not match Expected: %i Got: %i\n",sortklen1, gSortklen1);
     }
     if(sortklen2!= gSortklen2){
-        log_err("SortKey length does not match Expected: %i Got: %i", sortklen2, gSortklen2);
+        log_err("SortKey length does not match Expected: %i Got: %i\n", sortklen2, gSortklen2);
     }
 
     if(temp < 0) {
