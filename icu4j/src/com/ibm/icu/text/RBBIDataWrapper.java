@@ -44,8 +44,18 @@ public class RBBIDataWrapper {
     public String         fRuleSource;
     public int            fStatusTable[];
     
-    // Data Header.  A struct-like class with the fields from the RBBI data file header.
-    //
+    // Index offsets to the fields in a state table row.
+    //    Corresponds to struct RBBIStateTableRow in the C version.
+    //   
+    final static int      ACCEPTING  = 0;
+    final static int      LOOKAHEAD  = 1;
+    final static int      TAGIDX     = 2;
+    final static int      RESERVED   = 3;
+    final static int      NEXTSTATES = 4;
+    
+    /**
+     * Data Header.  A struct-like class with the fields from the RBBI data file header.
+     */
     static class RBBIDataHeader {
         int         fMagic;         //  == 0xbla0 
         int         fVersion;       //  == 1 
@@ -77,6 +87,15 @@ public class RBBIDataWrapper {
             fMagic = 0;
         };
     };
+    
+    /**
+     * RBBI State Table Indexing Function.  Given a state number, return the
+     * array index of the start of the state table row for that state.
+     * 
+     */
+    int getRowIndex(int state){
+        return state * (fHeader.fCatCount + 4);
+    }
     
     static class TrieFoldingFunc implements  Trie.DataManipulate {
         public int getFoldingOffset(int data) {

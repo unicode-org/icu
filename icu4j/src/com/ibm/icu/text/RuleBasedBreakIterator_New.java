@@ -10,10 +10,7 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
 /**
- * @author andy
- *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * Rule Based Break Iterator implementation.
  */
 public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
     
@@ -250,7 +247,85 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      * @stable ICU 2.0
      */
 	public int following(int offset) {
-		return  0;             // TODO:
+        // if the offset passed in is already past the end of the text,
+        // just return DONE; if it's before the beginning, return the
+        // text's starting offset
+        fLastRuleStatusIndex  = 0;
+        fLastStatusIndexValid = true;
+        if (fText == null || offset >= fText.getEndIndex()) {
+            last();
+            return next();
+        }
+        else if (offset < fText.getBeginIndex()) {
+            return first();
+        }
+
+        // otherwise, set our internal iteration position (temporarily)
+        // to the position passed in.  If this is the _beginning_ position,
+        // then we can just use next() to get our return value
+
+        int result = 0;
+
+        if (fData.fSRTable != null) {
+            // Safe Point Reverse rules exist.
+            //   This allows us to use the optimum algorithm.
+            fText.setIndex(offset);
+            // move forward one codepoint to prepare for moving back to a
+            // safe point.
+            // this handles offset being between a supplementary character
+            CINext32(fText);
+            // handlePrevious will move most of the time to < 1 boundary away
+            handlePrevious(fData.fSRTable);
+            result = next();
+            while (result <= offset) {
+                result = next();
+            }
+            return result;
+        }
+        if (fData.fSFTable != null) {
+            // No Safe point reverse table, but there is a safe pt forward table.
+            // 
+            fText.setIndex(offset);
+            CIPrevious32(fText);
+            // handle next will give result >= offset
+            handleNext(fData.fSFTable);
+            // previous will give result 0 or 1 boundary away from offset,
+            // most of the time
+            // we have to
+            int oldresult = previous();
+            while (oldresult > offset) {
+                result = previous();
+                if (result <= offset) {
+                    return oldresult;
+                }
+                oldresult = result;
+            }
+            result = next();
+            if (result <= offset) {
+                return next();
+            }
+            return result;
+        }
+        // otherwise, we have to sync up first.  Use handlePrevious() to back
+        // us up to a known break position before the specified position (if
+        // we can determine that the specified position is a break position,
+        // we don't back up at all).  This may or may not be the last break
+        // position at or before our starting position.  Advance forward
+        // from here until we've passed the starting position.  The position
+        // we stop on will be the first break position after the specified one.
+        // old rule syntax
+
+        fText.setIndex(offset);
+        if (offset == fText.getBeginIndex()) {
+            return handleNext();
+        }
+        result = previous();
+
+        while (result != BreakIterator.DONE && result <= offset) {
+            result = next();
+        }
+
+        return result;
 	}
     /**
      * Sets the iterator to refer to the last boundary position before the
@@ -260,7 +335,66 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      * @stable ICU 2.0
      */
     public int preceding(int offset) {
-    	return  0;             // TODO:
+        // if the offset passed in is already past the end of the text,
+        // just return DONE; if it's before the beginning, return the
+
+        // text's starting offset
+        if (fText == null || offset > fText.getEndIndex()) {
+            // return BreakIterator::DONE;
+            return last();
+        }
+        else if (offset < fText.getBeginIndex()) {
+            return first();
+        }
+
+        // if we start by updating the current iteration position to the
+        // position specified by the caller, we can just use previous()
+        // to carry out this operation
+
+        int  result;
+        if (fData.fSFTable != null) {
+            /// todo synwee
+            // new rule syntax
+            fText.setIndex(offset);
+            // move backwards one codepoint to prepare for moving forwards to a
+            // safe point.
+            // this handles offset being between a supplementary character
+            CIPrevious32(fText);
+            handleNext(fData.fSFTable);
+            result = previous();
+            while (result >= offset) {
+                result = previous();
+            }
+            return result;
+        }
+        if (fData.fSRTable != null) {
+            // backup plan if forward safe table is not available
+            fText.setIndex(offset);
+            CINext32(fText);
+            // handle previous will give result <= offset
+            handlePrevious(fData.fSRTable);
+
+            // next will give result 0 or 1 boundary away from offset,
+            // most of the time
+            // we have to
+            int oldresult = next();
+            while (oldresult < offset) {
+                result = next();
+                if (result >= offset) {
+                    return oldresult;
+                }
+                oldresult = result;
+            }
+            result = previous();
+            if (result >= offset) {
+                return previous();
+            }
+            return result;
+        }
+
+        // old rule syntax
+        fText.setIndex(offset);
+        return previous();
     }
 
 /**
@@ -272,7 +406,32 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
  * @stable ICU 2.0
  */
 public boolean isBoundary(int offset) {
-	return true;    // TODO:
+    // the beginning index of the iterator is always a boundary position by definition
+    if (fText == null || offset == fText.getBeginIndex()) {
+        first();       // For side effects on current position, tag values.
+        return true;
+    }
+
+    if (offset == fText.getEndIndex()) {
+        last();       // For side effects on current position, tag values.
+        return true;
+    }
+
+    // out-of-range indexes are never boundary positions
+    if (offset < fText.getBeginIndex()) {
+        first();       // For side effects on current position, tag values.
+        return false;
+    }
+
+    if (offset > fText.getEndIndex()) {
+        last();        // For side effects on current position, tag values.
+        return false;
+    }
+
+    // otherwise, we can use following() on the position before the specified
+    // one and return true if the position we get back is the one the user
+    // specified
+    return following(offset - 1) == offset;
 }
 
 /**
@@ -281,7 +440,7 @@ public boolean isBoundary(int offset) {
  * @stable ICU 2.0
  */
 public int current() {
-		return 0;             // TODO:
+    return (fText != null) ? fText.getIndex() : BreakIterator.DONE;
 	}
 
 
@@ -307,8 +466,46 @@ public int current() {
  *
  * @draft ICU 3.0
  */
+
+private void makeRuleStatusValid() {
+    if (fLastStatusIndexValid == false) {
+        //  No cached status is available.
+        if (fText == null || current() == fText.getBeginIndex()) {
+            //  At start of text, or there is no text.  Status is always zero.
+            fLastRuleStatusIndex = 0;
+            fLastStatusIndexValid = true;
+        } else {
+            //  Not at start of text.  Find status the tedious way.
+            int pa = current();
+            previous();
+            int pb = next();
+            if (pa != pb) {
+                // TODO:  comment this out.
+                System.out.println("RuleBasedBreakIterator::makeRuleStatusValid internal error");
+            }
+        }
+    }
+    //U_ASSERT(fLastStatusIndexValid == TRUE);
+    //U_ASSERT(fLastRuleStatusIndex >= 0  &&  fLastRuleStatusIndex < fData->fStatusMaxIdx);
+
+}
+
+
+
 public int  getRuleStatus() {
-	return  0;             // TODO:
+    makeRuleStatusValid();
+    //   Status records have this form:
+    //           Count N         <--  fLastRuleStatusIndex points here.
+    //           Status val 0
+    //           Status val 1
+    //              ...
+    //           Status val N-1  <--  the value we need to return
+    //   The status values are sorted in ascending order.
+    //   This function returns the last (largest) of the array of status values.
+    int  idx = fLastRuleStatusIndex + fData.fStatusTable[fLastRuleStatusIndex];
+    int  tagVal = fData.fStatusTable[idx];
+
+    return tagVal;
 }
 
 
@@ -334,10 +531,15 @@ public int  getRuleStatus() {
  * @draft ICU 3.0
  */
 public int getRuleStatusVec(int[] fillInArray) {
-    if (fillInArray != null && fillInArray.length >= 1) {    // TODO:
-        fillInArray[0] = 0;
+    makeRuleStatusValid();
+    int numStatusVals = fData.fStatusTable[fLastRuleStatusIndex];
+    if (fillInArray != null) {  
+        int numToCopy = Math.min(numStatusVals, fillInArray.length);
+        for (int i=0; i<numToCopy; i++) {
+            fillInArray[i] = fData.fStatusTable[fLastRuleStatusIndex + i + 1];
+        }
     }
-    return 1;
+    return numStatusVals;
  }
 
 
@@ -397,23 +599,326 @@ public int getRuleStatusVec(int[] fillInArray) {
         }
         return retVal;
     }
+    
+    private static int CICurrent32(CharacterIterator ci) {
+        char cLead = ci.current();
+        int  retVal = (int)cLead;
+        if (UTF16.isLeadSurrogate(cLead)) {
+            char cTrail = ci.next();
+            ci.previous();
+            if (UTF16.isTrailSurrogate(cTrail)) {
+                retVal = ((int)cLead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10 +
+                         ((int)cTrail - UTF16.TRAIL_SURROGATE_MIN_VALUE);
+            }
+         }
+        return retVal;
+    }
+    
+    private static boolean CIHasNext(CharacterIterator ci) {
+        if (ci == null) {
+            return false;
+        }
+        int end = ci.getEndIndex();
+        if (end == 0 || ci.getIndex() < end) {
+            return false;
+        }
+        return true;
+    }
+    
+    private static boolean CIHasPrevious(CharacterIterator ci) {
+        if (ci == null) {
+            return false;
+        }
+        return (ci.getIndex() != ci.getBeginIndex());
+    }
+    
     /**
      * Internal implementation of next() for RBBI.
      * @internal
      */
     private int handleNext() {
-        // TODO:
-        return 0;
+        return handleNext(fData.fFTable);
     }
 
     
+    private int handleNext(short stateTable[]) {
+        if (fTrace) {
+            System.out.println("Handle Next   pos   char  state category");
+        }
+
+        // No matter what, handleNext alway correctly sets the break tag value.
+        fLastStatusIndexValid = true;
+
+        // if we're already at the end of the text, return DONE.
+        if (CIHasNext(fText) == false) {
+            fLastRuleStatusIndex = 0;
+            return BreakIterator.DONE;
+        }
+
+        int initialPosition = fText.getIndex();
+        int result          = initialPosition;
+        int lookaheadResult = 0;
+
+        // Initialize the state machine.  Begin in state 1
+        int               state           = START_STATE;
+        short             category;
+        int               c               = CICurrent32(fText);
+        int               row             = fData.getRowIndex(state); 
+        int               lookaheadStatus = 0;
+        int               lookaheadTagIdx = 0;
+
+        fLastRuleStatusIndex = 0;
+
+        // Character Category fetch for starting character.
+        //    See comments on character category code within loop, below.
+        category = (short)fData.fTrie.getCodePointValue(c);
+        if ((category & 0x4000) != 0)  {
+              // fDictionaryCharCount++;
+              category &= ~0x4000;
+            }
+
+        // loop until we reach the end of the text or transition to state 0
+        while (state != STOP_STATE) {
+            if (c == CharacterIterator.DONE && CIHasNext(fText)== false) {
+                // Reached end of input string.
+                //    Note: CharacterIterator::DONE is 0xffff, which is also a legal
+                //          character value.  Check for DONE first, because it's quicker,
+                //          but also need to check fText->hasNext() to be certain.
+
+                if (lookaheadResult > result) {
+                    // We ran off the end of the string with a pending look-ahead match.
+                    // Treat this as if the look-ahead condition had been met, and return
+                    //  the match at the / position from the look-ahead rule.
+                    result               = lookaheadResult;
+                    fLastRuleStatusIndex = lookaheadTagIdx;
+                    lookaheadStatus      = 0;
+                } else if (result == initialPosition) {
+                    // Ran off end, no match found.
+                    // move forward one
+                    fText.setIndex(initialPosition);
+                    CINext32(fText);
+                    // fText.getIndex();   // Why was this here?
+                }
+                break;
+            }
+            // look up the current character's character category, which tells us
+            // which column in the state table to look at.
+            //
+            category = (short)fData.fTrie.getCodePointValue(c);
+
+            //  Clear the dictionary flag bit in the character's category.
+            //  Note:  not using the old style dictionary stuff in this Java engine.
+            //         But the bit can be set by the C++ rule compiler, and
+            //         we need to clear it out here to be safe.
+            category &= ~0x4000;
+ 
+            if (fTrace) {
+                System.out.print("            " +  fText.getIndex() + "   ");
+                if (0x20<=c && c<0x7f) {
+                    System.out.print((char)c + "  ");
+                } else {
+                    System.out.print(Integer.toHexString(c) + "   ");
+                }
+                System.out.print(state + "   " + category);
+            }
+
+            // look up a state transition in the state table
+            //     state = row->fNextState[category];
+            state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
+            row   = fData.getRowIndex(state);
+
+            // Get the next character.  Doing it here positions the iterator
+            //    to the correct position for recording matches in the code that
+            //    follows.
+            c = CINext32(fText);
+
+            if (stateTable[row + RBBIDataWrapper.ACCEPTING] == -1) {
+                // Match found, common case, could have lookahead so we move on to check it
+                result = fText.getIndex();
+                //  Remember the break status (tag) values.
+                fLastRuleStatusIndex = stateTable[row + RBBIDataWrapper.TAGIDX];
+            }
+
+            if (stateTable[row + RBBIDataWrapper.LOOKAHEAD] != 0) {
+                if (lookaheadStatus != 0
+                    && stateTable[row + RBBIDataWrapper.ACCEPTING] == lookaheadStatus) {
+                    // Lookahead match is completed.  Set the result accordingly, but only
+                    // if no other rule has matched further in the mean time.
+                    result               = lookaheadResult;
+                    fLastRuleStatusIndex = lookaheadTagIdx;
+                    lookaheadStatus      = 0;
+                    /// i think we have to back up to read the lookahead character again
+                    /// fText->setIndex(lookaheadResult);
+                    /// TODO: this is a simple hack since reverse rules only have simple
+                    /// lookahead rules that we can definitely break out from.
+                    /// we need to make the lookahead rules not chain eventually.
+                    /// return result;
+                    /// this is going to be the longest match again
+                    continue;
+                }
+
+                int  r = fText.getIndex();
+                lookaheadResult = r;
+                lookaheadStatus = stateTable[row + RBBIDataWrapper.LOOKAHEAD];
+                lookaheadTagIdx = stateTable[row + RBBIDataWrapper.TAGIDX];
+                continue;
+            }
+
+
+            if (stateTable[row + RBBIDataWrapper.ACCEPTING] != 0) {
+                lookaheadStatus = 0;           // clear out any pending look-ahead matches.
+            }
+        }        // End of state machine main loop
+
+        // The state machine is done.  Check whether it found a match...
+
+        // If the iterator failed to advance in the match engine, force it ahead by one.
+        //   (This really indicates a defect in the break rules.  They should always match
+        //    at least one character.)
+        if (result == initialPosition) {
+            result = fText.setIndex(initialPosition);
+            CINext32(fText);
+            result = fText.getIndex();
+        }
+
+        // Leave the iterator at our result position.
+        fText.setIndex(result);
+        if (fTrace) {
+            System.out.println("result = " + result);
+        }
+        return result;
+    }
+
+    /*
+     * handlePrevious
+     */
     private int  handlePrevious() {
-        // TODO:
-        return 0;
+        if (fText == null || fData == null) {
+            return 0;
+        }
+        if (fData.fRTable == null) {
+            fText.first();
+            return fText.getIndex();
+        }
+
+        short          stateTable[]    = fData.fRTable;
+        int            state           = START_STATE;
+        int            category;
+        int            lastCategory    = 0;
+        int            result          = fText.getIndex();
+        int            lookaheadStatus = 0;
+        int            lookaheadResult = 0;
+        int            lookaheadTagIdx = 0;
+        int            c               = CICurrent32(fText);
+        int            row;
+
+        row = fData.getRowIndex(state);
+        category = (short)fData.fTrie.getCodePointValue(c);
+        category &= ~0x4000;    // Clear the dictionary bit, just in case.
+
+        if (fTrace) {
+            System.out.println("Handle Prev   pos   char  state category ");
+        }
+
+        // loop until we reach the beginning of the text or transition to state 0
+        for (;;) {
+            if (c == CharacterIterator.DONE && CIHasPrevious(fText)==false) {
+                break;
+            }
+
+            // save the last character's category and look up the current
+            // character's category
+            lastCategory = category;
+            category = (short)fData.fTrie.getCodePointValue(c);
+
+            // Check the dictionary bit in the character's category.
+             //    Don't exist in this Java engine implementation.  Clear the bit.
+            //
+            category &= ~0x4000;
+
+            if (fTrace) {
+                System.out.print("             " + fText.getIndex()+ "   ");
+                if (0x20<=c && c<0x7f) {
+                    System.out.print("  " +  c + "  ");
+                } else {
+                    System.out.print(" " + Integer.toHexString(c) + " ");
+                }
+                System.out.println(" " + state + "  " + category + " ");
+            }
+
+            // look up a state transition in the backwards state table
+            state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
+            row = fData.getRowIndex(state);
+
+            continueOn: {
+                if (stateTable[row + RBBIDataWrapper.ACCEPTING] == 0 &&
+                        stateTable[row + RBBIDataWrapper.LOOKAHEAD] == 0) {
+                    break continueOn;
+                }
+                
+                if (stateTable[row + RBBIDataWrapper.ACCEPTING] == -1) {
+                    // Match found, common case, no lookahead involved.
+                    result = fText.getIndex();
+                    lookaheadStatus = 0;     // clear out any pending look-ahead matches.
+                    break continueOn;
+                }
+                
+                if (stateTable[row + RBBIDataWrapper.ACCEPTING] == 0 &&
+                    stateTable[row + RBBIDataWrapper.LOOKAHEAD] != 0) {
+                    // Lookahead match point.  Remember it, but only if no other rule
+                    //                         has unconditionally matched to this point.
+                    // TODO:  handle case where there's a pending match from a different rule
+                    //        where lookaheadStatus != 0  && lookaheadStatus != row->fLookAhead.
+                    int  r = fText.getIndex();
+                    if (r > result) {
+                        lookaheadResult = r;
+                        lookaheadStatus = stateTable[row + RBBIDataWrapper.LOOKAHEAD];
+                        lookaheadTagIdx = stateTable[row + RBBIDataWrapper.TAGIDX];
+                    }
+                    break continueOn;
+                }
+                
+                if (stateTable[row + RBBIDataWrapper.ACCEPTING] != 0 &&
+                        stateTable[row + RBBIDataWrapper.LOOKAHEAD] != 0) {
+                    // Lookahead match is completed.  Set the result accordingly, but only
+                    //   if no other rule has matched further in the mean time.
+                    //  TODO:  CHECK THIS LOGIC.  It looks backwards.
+                    //         These are _reverse_ rules.  
+                    if (lookaheadResult > result) {
+                        if (stateTable[row + RBBIDataWrapper.ACCEPTING] != lookaheadStatus) {  
+                            // TODO:  handle this case of overlapping lookahead matches.
+                            //        With correctly written rules, we won't get here.
+                            System.out.println("Trouble in handlePrevious()");  // comment out 
+                        }
+                        result               = lookaheadResult;
+                        fLastRuleStatusIndex = lookaheadTagIdx;
+                        lookaheadStatus      = 0;
+                    }
+                    break continueOn;
+                }   
+            }   // end of continueOn block.
+
+            if (state == STOP_STATE) {
+                break;
+            }
+
+            // then advance one character backwards
+            c = CIPrevious32(fText);
+        }
+
+        // Note:  the result position isn't what is returned to the user by previous(),
+        //        but where the implementation of previous() turns around and
+        //        starts iterating forward again.
+        if (c == CharacterIterator.DONE && CIHasPrevious(fText)==false) {
+            result = fText.getBeginIndex();
+        }
+        fText.setIndex(result);
+
+        return result;
     }
     
     
-    private int handlePrevious(short statetable[]) {
+    private int handlePrevious(short stateTable[]) {
         // TODO:
         return 0;
     }
