@@ -316,6 +316,7 @@ void GlyphIterator::resetCursiveLastExitPoint()
     }
 
     cursiveLastPosition       = -1;
+    cursiveFirstPosition      = -1;
     cursiveBaselineAdjustment =  0;
 }
 #endif
