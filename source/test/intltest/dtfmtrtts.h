@@ -46,22 +46,15 @@ public:
 /**
  * Return a random uint32_t
  **/
-static uint32_t randLong()
-{
-    // Assume 8-bit (or larger) rand values.  Also assume
-    // that the system rand() function is very poor, which it always is.
-    uint32_t d;
-    uint32_t i;
-    char* poke = (char*)&d;
-    for (i=0; i < sizeof(uint32_t); ++i)
-    {
-        poke[i] = (char)(rand() & 0xFF);
-    }
-    return d;
+static uint32_t randLong() {
+    // The portable IntlTest::random() function has sufficient
+    // resolution for a 16-bit value, but not for 32 bits.
+    return ((uint32_t) (IntlTest::random() * (1<<16))) |
+          (((uint32_t) (IntlTest::random() * (1<<16))) << 16);
 }
 
 /**
- * Return a random double 0 <= x < 1.0
+ * Return a random double 0 <= x <= 1.0
  **/
 static double randFraction()
 {
@@ -69,7 +62,7 @@ static double randFraction()
 }
 
 /**
- * Return a random value from -range..+range.
+ * Return a random value from -range..+range (closed).
  **/
 static double randDouble(double range)
 {
