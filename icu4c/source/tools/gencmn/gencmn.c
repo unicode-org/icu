@@ -125,7 +125,7 @@ main(int argc, const char *argv[]) {
             "\t\t-d or --destdir     destination directory, followed by the path\n"
             "\t\t-n or --name        name of the destination file, defaults to " COMMON_DATA_NAME "\n"
             "\t\t-t or --type        type of the destination file, defaults to " DATA_TYPE "\n"
-            "\t\t-s or --source      write a .c source file with the table of contents\n",
+            "\t\t-S or --source      write a .c source file with the table of contents\n",
             argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
@@ -173,6 +173,11 @@ main(int argc, const char *argv[]) {
         T_FileStream_close(in);
     }
 
+    if(fileCount==0) {
+        printf("gencmn: no files listed in %s\n", argc==2 ? "<stdin>" : argv[2]);
+        return 0;
+    }
+
     /* sort the files by basename */
     qsort(files, fileCount, sizeof(File), compareFiles);
 
@@ -193,7 +198,9 @@ main(int argc, const char *argv[]) {
                          options[3].doesOccur ? U_COPYRIGHT_STRING : options[5].value,
                          &errorCode);
         if(U_FAILURE(errorCode)) {
-            fprintf(stderr, "gencmn: unable to open output file - error %s\n", u_errorName(errorCode));
+            fprintf(stderr, "gencmn: udata_create(-d %s -n %s -t %s) failed - %s\n",
+                options[4].value, options[6].value, options[7].value,
+                u_errorName(errorCode));
             exit(errorCode);
         }
 
@@ -238,7 +245,7 @@ main(int argc, const char *argv[]) {
         /* finish */
         udata_finish(out, &errorCode);
         if(U_FAILURE(errorCode)) {
-            fprintf(stderr, "gencmn: error finishing output file - %s\n", u_errorName(errorCode));
+            fprintf(stderr, "gencmn: udata_finish() failed - %s\n", u_errorName(errorCode));
             exit(errorCode);
         }
     } else {
@@ -266,7 +273,7 @@ main(int argc, const char *argv[]) {
         /* open the output file */
         out=T_FileStream_open(filename, "w");
         if(out==NULL) {
-            fprintf(stderr, "gencmn: unable to open output file %s\n", filename);
+            fprintf(stderr, "gencmn: unable to open .c output file %s\n", filename);
             exit(U_FILE_ACCESS_ERROR);
         }
 
@@ -283,13 +290,11 @@ main(int argc, const char *argv[]) {
             options[6].value, options[7].value);
         T_FileStream_writeLine(out, buffer);
 
-        if(fileCount>0) {
-            sprintf(buffer, "extern const char\n    %s[]", files[0].pathname);
+        sprintf(buffer, "extern const char\n    %s[]", files[0].pathname);
+        T_FileStream_writeLine(out, buffer);
+        for(i=1; i<fileCount; ++i) {
+            sprintf(buffer, ",\n    %s[]", files[i].pathname);
             T_FileStream_writeLine(out, buffer);
-            for(i=1; i<fileCount; ++i) {
-                sprintf(buffer, ",\n    %s[]", files[i].pathname);
-                T_FileStream_writeLine(out, buffer);
-            }
         }
         T_FileStream_writeLine(out, ";\n\n");
 
@@ -324,12 +329,14 @@ main(int argc, const char *argv[]) {
         );
         T_FileStream_writeLine(out, buffer);
 
-        for(i=0; i<fileCount; ++i) {
-            sprintf(buffer, "        { \"%s\", %s },\n", files[i].basename, files[i].pathname);
+        sprintf(buffer, "        { \"%s\", %s }", files[0].basename, files[0].pathname);
+        T_FileStream_writeLine(out, buffer);
+        for(i=1; i<fileCount; ++i) {
+            sprintf(buffer, ",\n        { \"%s\", %s }", files[i].basename, files[i].pathname);
             T_FileStream_writeLine(out, buffer);
         }
       
-        T_FileStream_writeLine(out, "    }\n};\n");
+        T_FileStream_writeLine(out, "\n    }\n};\n");
         T_FileStream_close(out);
     }
 
@@ -342,7 +349,7 @@ addFile(const char *filename, bool_t sourceTOC) {
     uint32_t length;
 
     if(fileCount==MAX_FILE_COUNT) {
-        fprintf(stderr, "gencmn: too many files\n");
+        fprintf(stderr, "gencmn: too many files, maximum is %d\n", MAX_FILE_COUNT);
         exit(U_BUFFER_OVERFLOW_ERROR);
     }
 
