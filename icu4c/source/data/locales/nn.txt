@@ -27,7 +27,7 @@ nn{
         "HH.mm",
         "EEEE d. MMMM yyyy",
         "d. MMMM yyyy",
-        "d. MMM yyyy",
+        "d. MMM. yyyy",
         "dd.MM.yy",
         "{1} {0}",
     }
@@ -37,18 +37,18 @@ nn{
         no { "Norsk" }
     }
     MonthAbbreviations {
-        "jan.",
-        "feb.",
-        "mar.",
-        "apr.",
-        "mai.",
-        "jun.",
-        "jul.",
-        "aug.",
-        "sep.",
-        "okt.",
-        "nov.",
-        "des.",
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "mai",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "des",
     }
     MonthNames {
         "januar",
@@ -94,13 +94,13 @@ nn{
         }
     }
     DayAbbreviations {
-        "su.",
-        "m\u00E5.",
-        "ty.",
-        "on.",
-        "to.",
-        "fr.",
-        "la.",
+        "su",
+        "m\u00E5",
+        "ty",
+        "on",
+        "to",
+        "fr",
+        "la",
     }
     DayNames {
         "sundag",
@@ -111,7 +111,7 @@ nn{
         "fredag",
         "laurdag",
     }
-    ExemplarCharacters { "[a-z \u00e6 \u00e5 \u00f8 \u00e9 \u00f3 \u00f4 \u00e0 \u00fc \u01ce]" }
+    ExemplarCharacters { "[a-z\u00e6\u00e5\u00f8\u00e9\u00f3\u00f4\u00e0\u00fc\u01ce]" }
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 
 //    }
