@@ -2969,7 +2969,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     UBool  doCase = (coll->caseLevel == UCOL_ON);
     UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
     UBool  qShifted = shifted  && (compareQuad == 0);
-    UBool  doHiragana = coll->hiraganaQ && (compareQuad == 0);
+    UBool  doHiragana = (coll->hiraganaQ == UCOL_ON) && (compareQuad == 0);
     UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
     uint8_t fSecsBuff[UCOL_FSEC_BUF_SIZE];
     uint8_t *fSecs = fSecsBuff;
@@ -3316,7 +3316,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
     UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
     UBool  qShifted = shifted && (compareQuad == 0);
-    UBool  doHiragana = coll->hiraganaQ && (compareQuad == 0);
+    UBool  doHiragana = (coll->hiraganaQ == UCOL_ON) && (compareQuad == 0);
     const uint8_t *scriptOrder = coll->scriptOrder;
 
     uint32_t variableTopValue = coll->variableTopValue;
@@ -4898,7 +4898,7 @@ ucol_strcoll( const UCollator    *coll,
     UBool isFrenchSec = (coll->frenchCollation == UCOL_ON) && checkSecTer;
     UBool shifted = (coll->alternateHandling == UCOL_SHIFTED);
     UBool qShifted = shifted && checkQuad;
-    UBool doHiragana = coll->hiraganaQ && checkQuad;
+    UBool doHiragana = (coll->hiraganaQ == UCOL_ON) && checkQuad;
 
     uint8_t caseSwitch = coll->caseSwitch;
     uint8_t tertiaryMask = coll->tertiaryMask;
