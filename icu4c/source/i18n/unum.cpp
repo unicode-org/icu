@@ -451,7 +451,9 @@ unum_getAttribute(const UNumberFormat*          fmt,
   } else {
     U_ASSERT(((const NumberFormat*)fmt)->getDynamicClassID() == RuleBasedNumberFormat::getStaticClassID());
     if (attr == UNUM_LENIENT_PARSE) {
+#if !UCONFIG_NO_COLLATION
       return ((const RuleBasedNumberFormat*)fmt)->isLenient();
+#endif
     }
   }
 
@@ -548,7 +550,9 @@ unum_setAttribute(    UNumberFormat*          fmt,
   } else {
     U_ASSERT(((NumberFormat*)fmt)->getDynamicClassID() == RuleBasedNumberFormat::getStaticClassID());
     if (attr == UNUM_LENIENT_PARSE) {
+#if !UCONFIG_NO_COLLATION
       ((RuleBasedNumberFormat*)fmt)->setLenient((UBool)newValue);
+#endif
     }
   }
 }

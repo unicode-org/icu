@@ -20,6 +20,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 
+#if !UCONFIG_NO_COLLATION
 
 enum OptionsList {
     UCOL_SIT_LANGUAGE = 0,
@@ -1021,3 +1022,4 @@ ucol_getUnsafeSet( const UCollator *coll,
 
     return uset_size(unsafe);
 }
+#endif
