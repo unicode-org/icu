@@ -332,7 +332,7 @@ public:
    * for forward iteration with nextPostInc().
    * @draft
    */
-  virtual inline UChar  firstPostInc(void);
+  virtual UChar         firstPostInc(void);
 
   /**
    * Sets the iterator to refer to the first code point in its
@@ -351,7 +351,7 @@ public:
    * for forward iteration with next32PostInc().
    * @draft
    */
-  virtual inline UChar32 first32PostInc(void);
+  virtual UChar32       first32PostInc(void);
 
   /**
    * Sets the iterator to refer to the first code unit or code point in its
