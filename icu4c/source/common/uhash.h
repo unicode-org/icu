@@ -14,21 +14,30 @@
 #include "unicode/utypes.h"
 
 /**
- * UHashtable stores key-value pairs and does efficient lookup based
- * on keys.  It also provides a protocol for enumerating through the
- * key-value pairs (in no particular order).  Both keys and values are
- * stored as void* pointers.  Hashing of keys and comparison of keys
- * are accomplished by user-supplied functions.  Several prebuilt
+ * UHashtable stores key-value pairs and does moderately fast lookup
+ * based on keys.  It provides a good tradeoff between access time and
+ * storage space.  As elements are added to it, it grows to accomodate
+ * them.  In its current implementation, the table never shrinks, even
+ * if all elements are removed from it.  Keys and values are stored as
+ * void* pointers.  Hashing of keys and comparison of keys are
+ * accomplished by user-supplied functions.  Several prebuilt
  * functions exist for common key types.
  *
- * UHashtable may optionally own either its keys or its values.  To
- * accomplish this the key and/or value deleter function pointers must
- * be set to non-NULL values.  If keys and/or values are owned, then
- * keys and/or values passed to uhash_put() are owned by the hashtable
- * and will be deleted by it at some point, either as keys and/or
- * values are replaced, or when uhash_close() is finally called.  Keys
- * passed to methods other than uhash_put() are never owned by the
- * hashtable.
+ * User-supplied functions also control ownership of keys and values.
+ * If a void* key is actually a pointer to a deletable object, then
+ * UHashtable can be made to delete that object by setting the key
+ * deleter function pointer to a non-NULL value.  If this is done,
+ * then keys passed to uhash_put() are owned by the hashtable and will
+ * be deleted by it at some point, either as keys are replaced, or
+ * when uhash_close() is finally called.  The same is true of values
+ * and the value deleter function pointer.  Keys passed to methods
+ * other than uhash_put() are never owned by the hashtable.
+ *
+ * NULL values are not allowed, since uhash_get() returns NULL to
+ * indicate a key that is not in the table.  If a key and a NULL value
+ * is passed to uhash_put(), this has the effect of doing a
+ * uhash_remove() on that key.  This keeps uhash_get(), uhash_count(),
+ * and uhash_nextElement() consistent with one another.
  *
  * To see what's in a hashtable, use uhash_nextElement() to iterate
  * through its contents.  Each call to this function returns a
@@ -38,6 +47,14 @@
  * However, if uhash_put() is called during iteration then the
  * iteration will be out of sync.  Under no circumstances should the
  * hash element be modified directly.
+ *
+ * By default, the hashtable grows when necessary, but never shrinks,
+ * even if all items are removed.  For most applications this is
+ * optimal.  However, in a highly dynamic use where memory is at a
+ * premium, the table can be set to both grow and shrink by calling
+ * uhash_setResizePolicy() with the policy U_GROW_AND_SHRINK.  In a
+ * situation where memory the client wants a table that does not grow
+ * at all, the constant U_FIXED can be used.
  */
 
 /********************************************************************
@@ -84,8 +101,18 @@ struct UHashElement {
 typedef struct UHashElement UHashElement;
 
 /**
- * The UHashtable struct.  Clients should treat this as an opaque data type
- * and manipulate it only through the uhash_... API.
+ * This specifies whether or not, and how, the hastable resizes itself.
+ * See uhash_setResizePolicy().
+ */
+enum UHashResizePolicy {
+    U_GROW,            /* Grow on demand, do not shrink */
+    U_GROW_AND_SHRINK, /* Grow and shrink on demand */
+    U_FIXED            /* Never change size */
+};
+
+/**
+ * The UHashtable struct.  Clients should treat this as an opaque data
+ * type and manipulate it only through the uhash_... API.
  */
 struct UHashtable {
 
@@ -168,6 +195,8 @@ uhash_openSize(UHashFunction keyHash,
 U_CAPI void
 uhash_close(UHashtable *hash);
 
+
+
 /**
  * Set the function used to hash keys.
  * @param fn the function to be used hash keys; must not be NULL
@@ -210,6 +239,13 @@ U_CAPI UObjectDeleter
 uhash_setValueDeleter(UHashtable *hash, UObjectDeleter fn);
 
 /**
+ * Specify whether or not, and how, the hastable resizes itself.
+ * See enum UHashResizePolicy.
+ */
+U_CAPI void
+uhash_setResizePolicy(UHashtable *hash, enum UHashResizePolicy policy);
+
+/**
  * Get the number of key-value pairs stored in a UHashtable.
  * @param hash The UHashtable to query.
  * @return The number of key-value pairs stored in hash.
@@ -221,9 +257,10 @@ uhash_count(const UHashtable *hash);
  * Put an item in a UHashtable.  If the keyDeleter is non-NULL, then
  * the hashtable owns 'key' after this call.  If the valueDeleter is
  * non-NULL, then the hashtable owns 'value' after this call.
+ * Storing a NULL value is the same as calling uhash_remove().
  * @param hash The target UHashtable.
  * @param key The key to store.
- * @param value The value to store.
+ * @param value The value to store, may be NULL (see above).
  * @param status A pointer to an UErrorCode to receive any errors.
  * @return The previous value, or NULL if none.
  * @see uhash_get
@@ -248,12 +285,18 @@ uhash_get(const UHashtable *hash,
  * Remove an item from a UHashtable.
  * @param hash The target UHashtable.
  * @param key The hash code of the value to be removed.
- * @param status A pointer to an UErrorCode to receive any errors.
  * @return The item removed, or 0 if not found.
  */
 U_CAPI void*
 uhash_remove(UHashtable *hash,
              const void *key);
+
+/**
+ * Remove all items from a UHashtable.
+ * @param hash The target UHashtable.
+ */
+U_CAPI void
+uhash_removeAll(UHashtable *hash);
 
 /**
  * Iterate through the elements of a UHashtable.  The caller must not
@@ -268,7 +311,7 @@ uhash_remove(UHashtable *hash,
  * @return a hash element, or NULL if no further key-value pairs
  * exist in the table.
  */
-U_CAPI UHashElement*
+U_CAPI const UHashElement*
 uhash_nextElement(const UHashtable *hash,
                   int32_t *pos);
 
@@ -279,14 +322,15 @@ uhash_nextElement(const UHashtable *hash,
  * @param e The element, returned by uhash_nextElement(), to remove.
  * Must not be NULL.  Must not be an empty or deleted element (as long
  * as this was returned by uhash_nextElement() it will not be empty or
- * deleted).
+ * deleted).  Note: Although this parameter is const, it will be
+ * modified.
  * @return the value that was removed.
  */
 U_CAPI void*
-uhash_removeElement(UHashtable *hash, UHashElement* e);
+uhash_removeElement(UHashtable *hash, const UHashElement* e);
 
 /********************************************************************
- * Key Hash Functions
+ * UChar* and char* Support Functions
  ********************************************************************/
 
 /**
@@ -320,19 +364,6 @@ U_CAPI int32_t
 uhash_hashIChars(const void *key);
 
 /**
- * Generate a hash code for a 32-bit integer.  The hashcode is
- * identical to the void* value itself.
- * @param key The 32-bit integer (cast to void*) to hash.
- * @return A hash code for the key.
- */
-U_CAPI int32_t
-uhash_hashLong(const void *key);
-
-/********************************************************************
- * Key Comparators
- ********************************************************************/
-
-/**
  * Comparator for null-terminated UChar* strings.  Use together with
  * uhash_hashUChars.
  */
@@ -352,17 +383,6 @@ uhash_compareChars(const void *key1, const void *key2);
  */
 U_CAPI bool_t
 uhash_compareIChars(const void *key1, const void *key2);
-
-/********************************************************************
- * Object Deleters
- ********************************************************************/
-
-/**
- * Deleter for any key or value allocated using uprv_malloc.  Calls
- * uprv_free.
- */
-U_CAPI void
-uhash_freeBlock(void *obj);
 
 /********************************************************************
  * UnicodeString Support Functions
@@ -386,85 +406,31 @@ uhash_compareUnicodeString(const void *key1, const void *key2);
 U_CAPI void
 uhash_deleteUnicodeString(void *obj);
 
-
-
-
-
-
-
-
-
-/*********************************************************************
- * BEGIN BACKWARD COMPATIBILITY
- * BEGIN BACKWARD COMPATIBILITY
- *
- * These functions will go away soon.  Do not under any circumstances
- * use them.  This means you.
+/********************************************************************
+ * int32_t Support Functions
  ********************************************************************/
 
 /**
- * Put an item in a UHashtable.
- * @param hash The target UHashtable.
- * @param value The value to store.
- * @param status A pointer to an UErrorCode to receive any errors.
- * @return The hash code associated with value.
- * @see uhash_get
+ * Hash function for 32-bit integer keys.
  */
 U_CAPI int32_t
-uhash_OLD_put(UHashtable *hash,
-              void *value,
-              UErrorCode *status);
-
-U_CAPI void*
-uhash_OLD_get(const UHashtable *hash, 
-              int32_t key);
+uhash_hashLong(const void *key);
 
 /**
- * Put an item in a UHashtable.
- * @param hash The target UHashtable.
- * @param value The value to store.
- * @param status A pointer to an UErrorCode to receive any errors.
- * @return The hash code associated with value.
- * @see uhash_get
+ * Comparator function for 32-bit integer keys.
  */
-U_CAPI int32_t
-uhash_OLD_putKey(UHashtable *hash,
-                 int32_t valueKey,
-                 void *value,
-                 UErrorCode *status);
-
-/**
- * Remove an item from a UHashtable.
- * @param hash The target UHashtable.
- * @param key The hash code of the value to be removed.
- * @param status A pointer to an UErrorCode to receive any errors.
- * @return The item removed, or 0 if not found.
- */
-U_CAPI void*
-uhash_OLD_remove(UHashtable *hash,
-                 int32_t key,
-                 UErrorCode *status);
-
-/**
- * Iterate through the elements of a UHashtable.
- * @param hash The target UHashtable.
- * @param pos A pointer to an integer.  This should be set to -1 to retrieve
- * the first value, and should subsequently not be changed by the caller.
- * @return The next item in the hash table, or 0 if no items remain.
- */
-U_CAPI void*
-uhash_OLD_nextElement(const UHashtable *hash,
-                      int32_t *pos);
-
-U_CAPI int32_t
-uhash_OLD_hashUString(const void *key);
-
 U_CAPI bool_t
-uhash_OLD_pointerComparator(const void* key1, const void* key2);
+uhash_compareLong(const void *key1, const void *key2);
 
-/*********************************************************************
- * END BACKWARD COMPATIBILITY
- * END BACKWARD COMPATIBILITY
+/********************************************************************
+ * Other Support Functions
  ********************************************************************/
+
+/**
+ * Deleter for any key or value allocated using uprv_malloc.  Calls
+ * uprv_free.
+ */
+U_CAPI void
+uhash_freeBlock(void *obj);
 
 #endif

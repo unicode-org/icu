@@ -108,7 +108,14 @@ TaggedList::get(const UnicodeString& tag) const {
 bool_t TaggedList::nextElement(const UnicodeString*& key,
                                const UnicodeString*& value,
                                int32_t& pos) const {
-    return hash->nextElement(key, (void*&)value, pos);
+    const UHashElement *e = hash->nextElement(pos);
+    if (e != NULL) {
+        key   = (const UnicodeString*) e->key;
+        value = (const UnicodeString*) e->value;
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 UClassID 

@@ -137,7 +137,7 @@ int32_t  ucnv_flushCache ()
   UConverterSharedData *mySharedData = NULL;
   int32_t pos = -1;
   int32_t tableDeletedNum = 0;
-  UHashElement *e;
+  const UHashElement *e;
 
   /*if shared data hasn't even been lazy evaluated yet
    * return 0
