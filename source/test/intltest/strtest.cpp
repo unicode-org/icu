@@ -137,6 +137,19 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
             }
         }
         break;
+    case 7:
+        name="Test_UTF8_COUNT_TRAIL_BYTES";
+        if(exec) {
+            if(UTF8_COUNT_TRAIL_BYTES(0x7F) != 0
+                || UTF8_COUNT_TRAIL_BYTES(0xC0) != 1
+                || UTF8_COUNT_TRAIL_BYTES(0xE0) != 2
+                || UTF8_COUNT_TRAIL_BYTES(0xF0) != 3)
+            {
+                errln("Test_UTF8_COUNT_TRAIL_BYTES: UTF8_COUNT_TRAIL_BYTES does not work right! "
+                      "See utf8.h.");
+            }
+        }
+        break;
     default:
         name="";
         break;
