@@ -284,7 +284,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
                 uhash_put(cache, (void *)r, r, status);
             } else {
               /* somebody have already inserted it while we were working, discard newly opened data */
-              /* this part is probably obsolete since we check cache in locked state */
+              /* Also, we could get here IF we opened an alias */
                 uprv_free(r->fName);
                 if(r->fPath != NULL) {
                     uprv_free(r->fPath);
@@ -404,7 +404,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, const Resour
         resB = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
         ures_setIsStackObject(resB, FALSE);
     } else {
-        if(ures_isStackObject(resB, status) != FALSE) {
+        if(ures_isStackObject(resB) != FALSE) {
             ures_setIsStackObject(resB, TRUE);
         }
     }
@@ -433,7 +433,7 @@ UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original, U
             isStackObject = FALSE;
             r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
         } else {
-            isStackObject = ures_isStackObject(r, status);
+            isStackObject = ures_isStackObject(r);
             if(U_FAILURE(*status)) {
                 return r;
             }
@@ -719,9 +719,9 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
                 /* TODO: do the fallback */
             }
             return res_getString(&(resB->fResData), r, len);
-        case RES_INT_VECTOR:
-        default:
-            return NULL;
+        /*case RES_INT_VECTOR:*/
+        /*default:*/
+          /*return;*/
         }
     } else {
         *status = U_MISSING_RESOURCE_ERROR;
@@ -735,12 +735,10 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
     const char *key = inKey;
 
     if (status==NULL || U_FAILURE(*status)) {
-        /*return NULL;*/
         return fillIn;
     }
     if(resB == NULL) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
-        /*return NULL;*/
         return fillIn;
     }
 
@@ -762,7 +760,11 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
         } else {
             return init_resb_result(&(resB->fResData), res, key, resB->fData, fillIn, status);
         }
-    } else if(RES_GET_TYPE(resB->fRes) == RES_ARRAY && resB->fHasFallback == TRUE) {
+    } 
+#if 0
+    /* this is a kind of TODO item. If we have an array with an index table, we could do this. */
+    /* not currently */
+    else if(RES_GET_TYPE(resB->fRes) == RES_ARRAY && resB->fHasFallback == TRUE) {
         /* here should go a first attempt to locate the key using index table */
         const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
         if(U_SUCCESS(*status)) {
@@ -770,10 +772,11 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
         } else {
             *status = U_MISSING_RESOURCE_ERROR;
         }
-    } else {
+    }
+#endif    
+    else {
         *status = U_RESOURCE_TYPE_MISMATCH;
     }
-    /*return NULL;*/
     return fillIn;
 }
 
@@ -808,7 +811,11 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
         } else {
             return res_getString(&(resB->fResData), res, len);
         }
-    } else if(RES_GET_TYPE(resB->fRes) == RES_ARRAY && resB->fHasFallback == TRUE) {
+    } 
+#if 0 
+    /* this is a kind of TODO item. If we have an array with an index table, we could do this. */
+    /* not currently */   
+    else if(RES_GET_TYPE(resB->fRes) == RES_ARRAY && resB->fHasFallback == TRUE) {
         /* here should go a first attempt to locate the key using index table */
         const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
         if(U_SUCCESS(*status)) {
@@ -816,7 +823,9 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
         } else {
             *status = U_MISSING_RESOURCE_ERROR;
         }
-    } else {
+    } 
+#endif    
+    else {
         *status = U_RESOURCE_TYPE_MISMATCH;
     }
     return NULL;
@@ -893,16 +902,19 @@ void entryClose(UResourceDataEntry *resB) {
 
 
 U_CFUNC const char* ures_getName(const UResourceBundle* resB) {
-    return resB->fData->fName;
+  if(resB == NULL) {
+    return NULL;
+  }
+
+  return resB->fData->fName;
 }
+
 U_CFUNC const char* ures_getPath(const UResourceBundle* resB) {
-    return resB->fData->fPath;
-}
-U_CFUNC const char* ures_getTag(const UResourceBundle* resB) {
-    return resB->fKey;
-}
-U_CFUNC const ResourceData * ures_getResData(const UResourceBundle* resB) {
-    return &(resB->fData->fData);
+  if(resB == NULL) {
+    return NULL;
+  }
+
+  return resB->fData->fPath;
 }
 
 /* OLD API implementation */
@@ -963,6 +975,8 @@ U_CAPI UResourceBundle* ures_open(const char* path,
     while(hasData->fBogus != U_ZERO_ERROR) {
         hasData = hasData->fParent;
         if(hasData == NULL) {
+          /* This can happen only if fallback chain gets broken by an act of God */
+          /* TODO: this unlikely to happen, consider removing it */
             entryClose(r->fData);
             uprv_free(r);
             *status = U_MISSING_RESOURCE_ERROR;
@@ -1022,7 +1036,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath,
     return r;
 }
 
-U_CAPI void ures_setIsStackObject( UResourceBundle* resB, UBool state) {
+U_CFUNC void ures_setIsStackObject( UResourceBundle* resB, UBool state) {
     if(state) {
         resB->fMagic1 = 0;
         resB->fMagic2 = 0;
@@ -1032,19 +1046,8 @@ U_CAPI void ures_setIsStackObject( UResourceBundle* resB, UBool state) {
     }
 }
 
-U_CAPI UBool ures_isStackObject( UResourceBundle* resB, UErrorCode *status) {
-    if(status == NULL || U_FAILURE(*status)) {
-        return FALSE;
-    }
-    if(resB == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return TRUE;
-    }
-    if(resB->fMagic1 == MAGIC1 && resB->fMagic2 == MAGIC2) {
-        return FALSE;
-    } else {
-        return TRUE;
-    }
+U_CFUNC UBool ures_isStackObject(UResourceBundle* resB) {
+  return((resB->fMagic1 == MAGIC1 && resB->fMagic2 == MAGIC2)?FALSE:TRUE);
 }
 
 /**
@@ -1093,7 +1096,7 @@ U_CAPI void ures_close(UResourceBundle*    resB)
             uprv_free(resB->fVersion);
         }
 
-        if(ures_isStackObject(resB, &status) == FALSE) {
+        if(ures_isStackObject(resB) == FALSE) {
             uprv_free(resB);
         }
     }

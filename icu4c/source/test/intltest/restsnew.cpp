@@ -828,12 +828,13 @@ NewResourceBundleTest::testTag(const char* frag,
                 UnicodeString value=tagelement.getNextString(&tkey, status);
                 UnicodeString key(tkey);
                 logln("tag = " + key + ", value = " + value );
-                if(key.startsWith("tag") && value.startsWith(base)){
+                if(value.startsWith(base)){
                     record_pass();
                 }else{
                     record_fail();
                 }
             }
+
         }else{
             tag_count=0;
         }

@@ -101,10 +101,6 @@ res_getResource(const ResourceData *pResData, const char *key);
 U_CFUNC int32_t
 res_countArrayItems(const ResourceData *pResData, const Resource res);
 
-U_CFUNC void
-res_getNextStringTableItem(const ResourceData *pResData, Resource table, 
-                           const UChar **value, const char **key, int32_t *len, 
-                           int16_t *indexS);
 U_CFUNC int32_t res_getTableSize(const ResourceData *pResData, Resource table);
 
 U_CFUNC Resource res_getArrayItem(const ResourceData *pResData, const Resource array, const int32_t indexS);
