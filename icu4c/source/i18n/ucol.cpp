@@ -7584,7 +7584,7 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
     // N.B.: Resource name is "collations" but keyword is "collation"
     return ures_getFunctionalEquivalent(result, resultCapacity, U_ICUDATA_COLL,
                                         "collations", keyword, locale,
-                                        isAvailable, status);
+                                        isAvailable, TRUE, status);
 }
 
 U_CAPI void U_EXPORT2
