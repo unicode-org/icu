@@ -424,7 +424,7 @@ pt {
         USD { "$", "D\u00F3lar Americano" }
         UYP { "UYP", "Novo Peso Uruguaio" }
         VEB { "VEB", "Bolivar Venezuelano" }
-        VND { "\u20AB", "Dong Vietnamita" }
+        VND { "\u0111", "Dong Vietnamita" }
         VUV { "VUV", "Vatu do Vanuatu" }
         WST { "WST", "Tala de Samoa" }
         XAF { "XAF", "Franco do Gab\u00E3o C.f.A" }
