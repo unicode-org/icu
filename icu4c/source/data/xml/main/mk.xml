@@ -1,112 +1,126 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:26 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="002F">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="mk" >македонски</language>
-		</languages >
-		<countries  >
-			<country id="MK">Македонија</country>
-		</countries  >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Africa/Casablanca" default="true">
-			<long>
-				<generic>GMT</generic>
-				<standard>GMT</standard>
-			</long>
-			<short>
-				<generic>Africa/Casablanca</generic>
-				<standard>GMT</standard>
-				<daylight>GMT</daylight>
-			</short>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">јануари</month>
-				<month id="2">февруари</month>
-				<month id="3">март</month>
-				<month id="4">април</month>
-				<month id="5">мај</month>
-				<month id="6">јуни</month>
-				<month id="7">јули</month>
-				<month id="8">август</month>
-				<month id="9">септември</month>
-				<month id="10">октомври</month>
-				<month id="11">ноември</month>
-				<month id="12">декември</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">јан.</month>
-				<month id="2">фев.</month>
-				<month id="3">мар.</month>
-				<month id="4">апр.</month>
-				<month id="5">мај.</month>
-				<month id="6">јун.</month>
-				<month id="7">јул.</month>
-				<month id="8">авг.</month>
-				<month id="9">септ.</month>
-				<month id="10">окт.</month>
-				<month id="11">ноем.</month>
-				<month id="12">декем.</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">недела </day>
-				<day id="2">понеделник </day>
-				<day id="3">вторник </day>
-				<day id="4">среда </day>
-				<day id="5">четврток </day>
-				<day id="6">петок </day>
-				<day id="7">сабота </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">нед. </day>
-				<day id="2">пон. </day>
-				<day id="3">вт. </day>
-				<day id="4">сре. </day>
-				<day id="5">чет. </day>
-				<day id="6">пет. </day>
-				<day id="7">саб. </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">пр.н.е.</era>
-				<era id="1">ае.</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<chars>GuMtkHmsSEDFwWahKzUe</chars>
-				<time>
-					<full>HH:mm:ss z</full>
-					<long>HH:mm:ss z</long>
-					<medium>HH:mm:ss</medium>
-					<short>HH:mm</short>
-				</time>
-				<date>
-					<full>EEEE, d, MMMM yyyy</full>
-					<long>d, MMMM yyyy</long>
-					<medium>d.M.yyyy</medium>
-					<short>d.M.yy</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="mk"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="mk">македонски</language>
+		</languages>
+		<territories>
+			<territory type="MK">Македонија</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[а-и к-ш ѐ ѓ ѕ ј љ њ ќ ѝ џ]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<localizedPatternChars>GuMtkHmsSEDFwWahKzUe</localizedPatternChars>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">јануари</month>
+					<month type="2">февруари</month>
+					<month type="3">март</month>
+					<month type="4">април</month>
+					<month type="5">мај</month>
+					<month type="6">јуни</month>
+					<month type="7">јули</month>
+					<month type="8">август</month>
+					<month type="9">септември</month>
+					<month type="10">октомври</month>
+					<month type="11">ноември</month>
+					<month type="12">декември</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">јан.</month>
+					<month type="2">фев.</month>
+					<month type="3">мар.</month>
+					<month type="4">апр.</month>
+					<month type="5">мај.</month>
+					<month type="6">јун.</month>
+					<month type="7">јул.</month>
+					<month type="8">авг.</month>
+					<month type="9">септ.</month>
+					<month type="10">окт.</month>
+					<month type="11">ноем.</month>
+					<month type="12">декем.</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">недела</day>
+					<day type="mon">понеделник</day>
+					<day type="tue">вторник</day>
+					<day type="wed">среда</day>
+					<day type="thu">четврток</day>
+					<day type="fri">петок</day>
+					<day type="sat">сабота</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">нед.</day>
+					<day type="mon">пон.</day>
+					<day type="tue">вт.</day>
+					<day type="wed">сре.</day>
+					<day type="thu">чет.</day>
+					<day type="fri">пет.</day>
+					<day type="sat">саб.</day>
+				</dayAbbr>
+				<eras>
+					<era type="1">пр.н.е.</era>
+					<era type="2">ае.</era>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>EEEE, d, MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>d, MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>d.M.yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>d.M.yy</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>HH:mm:ss</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>HH:mm</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+		</timeZoneNames>
+	</dates>
+		<collations>
+			<collation  >
+				<suppress_contractions>[Ѐ-џ]</suppress_contractions>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.1" />
+			</collation  >
+		</collations>
 </localeData>

@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:31 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<country id="YU" />
-		<correspondsTo vendor="081A">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-	<currencies>
-		<currency id="YUN" default="true">
-			<symbol>Din</symbol>
-			<name>YUN</name>
-			<decimal>,</decimal>
-		</currency>
-	</currencies>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="sh"></language>
+		<territory type="YUG">YU</territory>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+				</calendar>
+			</calendars>
+		</dates>
+		<numbers>
+			<currencies>
+				<default type="YUN"/>
+				<currency type="YUN">
+					<symbol>Din</symbol>
+					<displayName>YUN</displayName>
+					<decimal>,</decimal>
+				</currency>
+			</currencies>
+		</numbers>
 </localeData>

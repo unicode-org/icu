@@ -1,53 +1,64 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:31 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<country id="RU" />
-		<correspondsTo vendor="0419">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-	<numberFormat class="decimal" default="true"> 
-		<patterns> 
-			<decimal>#,##0.###;-#,##0.###</decimal>
-			<percent>#,##0%</percent>
-			<scientific>#E0</scientific>
-		</patterns>
-		<symbols>
-			<decimal>,</decimal>
-			<group> </group>
-			<list>;</list>
-			<percentSign>%</percentSign>
-			<nativeZeroDigit>0</nativeZeroDigit>
-			<patternDigit>#</patternDigit>
-			<plusSign>+</plusSign>
-			<minusSign>-</minusSign>
-			<exponential>E</exponential>
-			<perMille>‰</perMille>
-			<infinity>∞</infinity>
-			<nan>�</nan>
-		</symbols>
-	</numberFormat> 
-	<currencies>
-		<currency id="RUR" default="true">
-			<symbol>р.</symbol>
-			<name>RUR</name>
-			<decimal>,</decimal>
-			<pattern>#,##0.00¤;-#,##0.00¤</pattern>
-		</currency>
-	</currencies>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="ru"></language>
+		<territory type="RUS">RU</territory>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+				</calendar>
+			</calendars>
+		</dates>
+		<numbers>
+			<symbols>
+				<decimal>,</decimal>
+				<group> </group>
+				<list>;</list>
+				<percentSign>%</percentSign>
+				<nativeZeroDigit>0</nativeZeroDigit>
+				<patternDigit>#</patternDigit>
+				<plusSign>+</plusSign>
+				<minusSign>-</minusSign>
+				<exponential>E</exponential>
+				<perMille>‰</perMille>
+				<infinity>∞</infinity>
+				<nan>�</nan>
+			</symbols>
+			<numberFormats>
+				<default type="decimal"/>
+				<numberFormat type="decimal">
+					<pattern>#,##0.###</pattern>
+					<pattern>-#,##0.###</pattern>
+				</numberFormat>
+				<numberFormat type="currency">
+					<pattern>#,##0.00¤</pattern>
+					<pattern>-#,##0.00¤</pattern>
+				</numberFormat>
+				<numberFormat type="percent">
+					<pattern>#,##0%</pattern>
+				</numberFormat>
+				<numberFormat type="scientific">
+					<pattern>#E0</pattern>
+				</numberFormat>
+			</numberFormats>
+			<currencies>
+				<default type="RUR"/>
+				<currency type="RUR">
+					<symbol>р.</symbol>
+					<displayName>RUR</displayName>
+					<decimal>,</decimal>
+				</currency>
+			</currencies>
+		</numbers>
 </localeData>

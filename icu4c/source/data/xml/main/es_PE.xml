@@ -1,54 +1,99 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:15 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<country id="PE" />
-		<correspondsTo vendor="280A">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<time>
-					<full>hh:mm:ss a z</full>
-					<long>hh:mm:ss a z</long>
-					<medium>hh:mm:ss a</medium>
-					<short>hh:mm a</short>
-				</time>
-				<date>
-					<full>EEEE d' de 'MMMM' de 'yyyy</full>
-					<long>d' de 'MMMM' de 'yyyy</long>
-					<medium>dd/MM/yyyy</medium>
-					<short>dd/MM/yy</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<numberFormat class="decimal" default="true"> 
-		<patterns> 
-			<decimal>#,##0.###;-#,##0.###</decimal>
-			<percent>#,##0%</percent>
-			<scientific>#E0</scientific>
-		</patterns>
-	</numberFormat> 
-	<currencies>
-		<currency id="PEN" default="true">
-			<symbol>S/</symbol>
-			<name>PEN</name>
-			<decimal>.</decimal>
-			<pattern>¤#,##0.00;¤-#,##0.00</pattern>
-		</currency>
-	</currencies>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="es"></language>
+		<territory type="PER">PE</territory>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+					<dateFormats>
+						<default type="medium"/>
+						<dateFormat type="full">
+							<pattern>EEEE d' de 'MMMM' de 'yyyy</pattern>
+						</dateFormat>
+						<dateFormat type="long">
+							<pattern>d' de 'MMMM' de 'yyyy</pattern>
+						</dateFormat>
+						<dateFormat type="medium">
+							<pattern>dd/MM/yyyy</pattern>
+						</dateFormat>
+						<dateFormat type="short">
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormats>
+					<timeFormats>
+						<default type="medium"/>
+						<timeFormat type="full">
+							<pattern>hh:mm:ss a z</pattern>
+						</timeFormat>
+						<timeFormat type="long">
+							<pattern>hh:mm:ss a z</pattern>
+						</timeFormat>
+						<timeFormat type="medium">
+							<pattern>hh:mm:ss a</pattern>
+						</timeFormat>
+						<timeFormat type="short">
+							<pattern>hh:mm a</pattern>
+						</timeFormat>
+					</timeFormats>
+					<dateTimeFormat>
+						<pattern>{1} {0}</pattern>
+					</dateTimeFormat>
+				</calendar>
+			</calendars>
+		</dates>
+		<numbers>
+			<numberFormats>
+				<default type="decimal"/>
+				<numberFormat type="decimal">
+					<pattern>#,##0.###</pattern>
+					<pattern>-#,##0.###</pattern>
+				</numberFormat>
+				<numberFormat type="currency">
+					<pattern>¤#,##0.00</pattern>
+					<pattern>¤-#,##0.00</pattern>
+				</numberFormat>
+				<numberFormat type="percent">
+					<pattern>#,##0%</pattern>
+				</numberFormat>
+				<numberFormat type="scientific">
+					<pattern>#E0</pattern>
+				</numberFormat>
+			</numberFormats>
+			<currencies>
+				<default type="PEN"/>
+				<currency type="PEN">
+					<symbol>S/</symbol>
+					<displayName>PEN</displayName>
+					<decimal>.</decimal>
+				</currency>
+			</currencies>
+		</numbers>
+		<collations>
+			<collation key="TRADITIONAL" >
+				<rules>
+					<reset>N</reset>
+					<p>ñ</p>
+					<t>Ñ</t>
+					<reset>C</reset>
+					<p>ch</p>
+					<tc>ChCH</tc>
+					<reset>l</reset>
+					<p>ll</p>
+					<t>Ll</t>
+				</rules>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			</collation  >
+		</collations>
 </localeData>

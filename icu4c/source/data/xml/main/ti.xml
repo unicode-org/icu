@@ -1,84 +1,89 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:34 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0000">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="ti" >ትግርኛ</language>
-		</languages >
-		<countries  >
-			<country id="ER">ኤርትራ</country>
-			<country id="ET">ኢትዮጵያ</country>
-		</countries  >
-
-	</displayNames >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">ጃንዩወሪ</month>
-				<month id="2">ፌብሩወሪ</month>
-				<month id="3">ማርች</month>
-				<month id="4">ኤፕረል</month>
-				<month id="5">ሜይ</month>
-				<month id="6">ጁን</month>
-				<month id="7">ጁላይ</month>
-				<month id="8">ኦገስት</month>
-				<month id="9">ሴፕቴምበር</month>
-				<month id="10">ኦክተውበር</month>
-				<month id="11">ኖቬምበር</month>
-				<month id="12">ዲሴምበር</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">ጃንዩ</month>
-				<month id="2">ፌብሩ</month>
-				<month id="3">ማርች</month>
-				<month id="4">ኤፕረ</month>
-				<month id="5">ሜይ</month>
-				<month id="6">ጁን</month>
-				<month id="7">ጁላይ</month>
-				<month id="8">ኦገስ</month>
-				<month id="9">ሴፕቴ</month>
-				<month id="10">ኦክተ</month>
-				<month id="11">ኖቬም</month>
-				<month id="12">ዲሴም</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">ሰንበት </day>
-				<day id="2">ሰኑይ </day>
-				<day id="3">ሠሉስ </day>
-				<day id="4">ረቡዕ </day>
-				<day id="5">ኃሙስ </day>
-				<day id="6">ዓርቢ </day>
-				<day id="7">ቀዳም </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">ሰንበት </day>
-				<day id="2">ሰኑይ </day>
-				<day id="3">ሠሉስ </day>
-				<day id="4">ረቡዕ </day>
-				<day id="5">ኃሙስ </day>
-				<day id="6">ዓርቢ </day>
-				<day id="7">ቀዳም </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">ዓ/ዓ</era>
-				<era id="1">ዓ/ም</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="ti"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="ti">ትግርኛ</language>
+		</languages>
+		<territories>
+			<territory type="ER">ኤርትራ</territory>
+			<territory type="ET">ኢትዮጵያ</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[:Ethi:]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">ጃንዩወሪ</month>
+					<month type="2">ፌብሩወሪ</month>
+					<month type="3">ማርች</month>
+					<month type="4">ኤፕረል</month>
+					<month type="5">ሜይ</month>
+					<month type="6">ጁን</month>
+					<month type="7">ጁላይ</month>
+					<month type="8">ኦገስት</month>
+					<month type="9">ሴፕቴምበር</month>
+					<month type="10">ኦክተውበር</month>
+					<month type="11">ኖቬምበር</month>
+					<month type="12">ዲሴምበር</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">ጃንዩ</month>
+					<month type="2">ፌብሩ</month>
+					<month type="3">ማርች</month>
+					<month type="4">ኤፕረ</month>
+					<month type="5">ሜይ</month>
+					<month type="6">ጁን</month>
+					<month type="7">ጁላይ</month>
+					<month type="8">ኦገስ</month>
+					<month type="9">ሴፕቴ</month>
+					<month type="10">ኦክተ</month>
+					<month type="11">ኖቬም</month>
+					<month type="12">ዲሴም</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">ሰንበት</day>
+					<day type="mon">ሰኑይ</day>
+					<day type="tue">ሠሉስ</day>
+					<day type="wed">ረቡዕ</day>
+					<day type="thu">ኃሙስ</day>
+					<day type="fri">ዓርቢ</day>
+					<day type="sat">ቀዳም</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">ሰንበት</day>
+					<day type="mon">ሰኑይ</day>
+					<day type="tue">ሠሉስ</day>
+					<day type="wed">ረቡዕ</day>
+					<day type="thu">ኃሙስ</day>
+					<day type="fri">ዓርቢ</day>
+					<day type="sat">ቀዳም</day>
+				</dayAbbr>
+				<week>
+					<minDays count="7"/>
+					<firstDay day="mon"/>
+				</week>
+				<eras>
+					<era type="1">ዓ/ዓ</era>
+					<era type="2">ዓ/ም</era>
+				</eras>
+			</calendar>
+		</calendars>
+	</dates>
 </localeData>

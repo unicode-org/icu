@@ -1,78 +1,83 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:23 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0037">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">იანვარი</month>
-				<month id="2">თებერვალი</month>
-				<month id="3">მარტი</month>
-				<month id="4">აპრილი</month>
-				<month id="5">მაისი</month>
-				<month id="6">ივნისი</month>
-				<month id="7">ივლისი</month>
-				<month id="8">აგვისტო</month>
-				<month id="9">სექტემბერი</month>
-				<month id="10">ოქტომბერი</month>
-				<month id="11">ნოემბერი</month>
-				<month id="12">დეკემბერი</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">იან</month>
-				<month id="2">თებ</month>
-				<month id="3">მარ</month>
-				<month id="4">აპრ</month>
-				<month id="5">მაის</month>
-				<month id="6">ივნ</month>
-				<month id="7">ივლ</month>
-				<month id="8">აგვ</month>
-				<month id="9">სექ</month>
-				<month id="10">ოქტ</month>
-				<month id="11">ნოემ</month>
-				<month id="12">დეკ</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">კვირა </day>
-				<day id="2">ორშაბათი </day>
-				<day id="3">სამშაბათი </day>
-				<day id="4">ოთხშაბათი </day>
-				<day id="5">ხუთშაბათი </day>
-				<day id="6">პარასკევი </day>
-				<day id="7">შაბათი </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">კვირა </day>
-				<day id="2">ორშაბათი </day>
-				<day id="3">სამშაბათი </day>
-				<day id="4">ოთხშაბათი </day>
-				<day id="5">ხუთშაბათი </day>
-				<day id="6">პარასკევი </day>
-				<day id="7">შაბათი </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<normalization>OFF</normalization>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="ka"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="ka">ქართული</language>
+		</languages>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[:Geor:]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">იანვარი</month>
+					<month type="2">თებერვალი</month>
+					<month type="3">მარტი</month>
+					<month type="4">აპრილი</month>
+					<month type="5">მაისი</month>
+					<month type="6">ივნისი</month>
+					<month type="7">ივლისი</month>
+					<month type="8">აგვისტო</month>
+					<month type="9">სექტემბერი</month>
+					<month type="10">ოქტომბერი</month>
+					<month type="11">ნოემბერი</month>
+					<month type="12">დეკემბერი</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">იან</month>
+					<month type="2">თებ</month>
+					<month type="3">მარ</month>
+					<month type="4">აპრ</month>
+					<month type="5">მაის</month>
+					<month type="6">ივნ</month>
+					<month type="7">ივლ</month>
+					<month type="8">აგვ</month>
+					<month type="9">სექ</month>
+					<month type="10">ოქტ</month>
+					<month type="11">ნოემ</month>
+					<month type="12">დეკ</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">კვირა</day>
+					<day type="mon">ორშაბათი</day>
+					<day type="tue">სამშაბათი</day>
+					<day type="wed">ოთხშაბათი</day>
+					<day type="thu">ხუთშაბათი</day>
+					<day type="fri">პარასკევი</day>
+					<day type="sat">შაბათი</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">კვირა</day>
+					<day type="mon">ორშაბათი</day>
+					<day type="tue">სამშაბათი</day>
+					<day type="wed">ოთხშაბათი</day>
+					<day type="thu">ხუთშაბათი</day>
+					<day type="fri">პარასკევი</day>
+					<day type="sat">შაბათი</day>
+				</dayAbbr>
+			</calendar>
+		</calendars>
+	</dates>
+		<collations>
+			<collation  >
+				<settings normalization="on"/>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			</collation  >
+		</collations>
 </localeData>

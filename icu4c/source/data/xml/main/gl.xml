@@ -1,73 +1,74 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:18 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0056">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">Xaneiro</month>
-				<month id="2">Febreiro</month>
-				<month id="3">Marzo</month>
-				<month id="4">Abril</month>
-				<month id="5">Maio</month>
-				<month id="6">Xuño</month>
-				<month id="7">Xullo</month>
-				<month id="8">Agosto</month>
-				<month id="9">Setembro</month>
-				<month id="10">Outubro</month>
-				<month id="11">Novembro</month>
-				<month id="12">Decembro</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">Xan</month>
-				<month id="2">Feb</month>
-				<month id="3">Mar</month>
-				<month id="4">Abr</month>
-				<month id="5">Mai</month>
-				<month id="6">Xuñ</month>
-				<month id="7">Xul</month>
-				<month id="8">Ago</month>
-				<month id="9">Set</month>
-				<month id="10">Out</month>
-				<month id="11">Nov</month>
-				<month id="12">Dec</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Domingo </day>
-				<day id="2">Luns </day>
-				<day id="3">Martes </day>
-				<day id="4">Mércores </day>
-				<day id="5">Xoves </day>
-				<day id="6">Venres </day>
-				<day id="7">Sábado </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Dom </day>
-				<day id="2">Lun </day>
-				<day id="3">Mar </day>
-				<day id="4">Mér </day>
-				<day id="5">Xov </day>
-				<day id="6">Ven </day>
-				<day id="7">Sáb </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="gl"></language>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[a-z á é í ó ú ü ñ]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Xaneiro</month>
+					<month type="2">Febreiro</month>
+					<month type="3">Marzo</month>
+					<month type="4">Abril</month>
+					<month type="5">Maio</month>
+					<month type="6">Xuño</month>
+					<month type="7">Xullo</month>
+					<month type="8">Agosto</month>
+					<month type="9">Setembro</month>
+					<month type="10">Outubro</month>
+					<month type="11">Novembro</month>
+					<month type="12">Decembro</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Xan</month>
+					<month type="2">Feb</month>
+					<month type="3">Mar</month>
+					<month type="4">Abr</month>
+					<month type="5">Mai</month>
+					<month type="6">Xuñ</month>
+					<month type="7">Xul</month>
+					<month type="8">Ago</month>
+					<month type="9">Set</month>
+					<month type="10">Out</month>
+					<month type="11">Nov</month>
+					<month type="12">Dec</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">Domingo</day>
+					<day type="mon">Luns</day>
+					<day type="tue">Martes</day>
+					<day type="wed">Mércores</day>
+					<day type="thu">Xoves</day>
+					<day type="fri">Venres</day>
+					<day type="sat">Sábado</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Dom</day>
+					<day type="mon">Lun</day>
+					<day type="tue">Mar</day>
+					<day type="wed">Mér</day>
+					<day type="thu">Xov</day>
+					<day type="fri">Ven</day>
+					<day type="sat">Sáb</day>
+				</dayAbbr>
+			</calendar>
+		</calendars>
+	</dates>
 </localeData>

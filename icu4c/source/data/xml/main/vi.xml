@@ -1,111 +1,144 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:36 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="002A">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">Tháng một</month>
-				<month id="2">Tháng hai</month>
-				<month id="3">Tháng ba</month>
-				<month id="4">Tháng tư</month>
-				<month id="5">Tháng năm</month>
-				<month id="6">Tháng sáu</month>
-				<month id="7">Tháng bảy</month>
-				<month id="8">Tháng tám</month>
-				<month id="9">Tháng chín</month>
-				<month id="10">Tháng mười</month>
-				<month id="11">Tháng mười một</month>
-				<month id="12">Tháng mười hai</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">Thg 1</month>
-				<month id="2">Thg 2</month>
-				<month id="3">Thg 3</month>
-				<month id="4">Thg 4</month>
-				<month id="5">Thg 5</month>
-				<month id="6">Thg 6</month>
-				<month id="7">Thg 7</month>
-				<month id="8">Thg 8</month>
-				<month id="9">Thg 9</month>
-				<month id="10">Thg 10</month>
-				<month id="11">Thg 11</month>
-				<month id="12">Thg 12</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Thứ hai </day>
-				<day id="2">Thứ ba </day>
-				<day id="3">Thứ tư </day>
-				<day id="4">Thứ năm </day>
-				<day id="5">Thứ sáu </day>
-				<day id="6">Thứ bảy </day>
-				<day id="7">Chủ nhật </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Th 2 </day>
-				<day id="2">Th 3 </day>
-				<day id="3">Th 4 </day>
-				<day id="4">Th 5 </day>
-				<day id="5">Th 6 </day>
-				<day id="6">Th 7 </day>
-				<day id="7">CN </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<time>
-					<full>HH:mm:ss z</full>
-					<long>HH:mm:ss z</long>
-					<medium>HH:mm:ss</medium>
-					<short>HH:mm</short>
-				</time>
-				<date>
-					<full>EEEE dd MMMM yyyy</full>
-					<long>EEE dd MMM yyyy</long>
-					<medium>dd MMM yyyy</medium>
-					<short>dd/MM/yy</short>
-				</date>
- 				<dateTime>{0} {1} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<numberFormat class="decimal" default="true"> 
-		<patterns> 
-			<decimal>#,##0.###;-#,##0.###</decimal>
-			<percent>#,##0%</percent>
-			<scientific>#E0</scientific>
-		</patterns>
-	</numberFormat> 
-	<collation version="2.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<normalization>OFF</normalization>
-		<after>̀</after>
-		<gt2>̉</gt2>
-		<gt2>̃</gt2>
-		<gt2>́</gt2>
-		<gt2>̣</gt2>
-		<gt2>̆</gt2>
-		<gt2>̂</gt2>
-		<gt2>̛</gt2>
-		<after>D</after>
-		<gt1>đ</gt1>
-		<gt3>Đ</gt3>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="vi"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="vi">Tiếng Việt</language>
+		</languages>
+		<territories>
+			<territory type="VN">Việt Nam</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[a-z Ạ-ỹ đ ơ à-ã è-ê ì í ò-õ ù ú ý ă ĩ ũ ư]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Tháng một</month>
+					<month type="2">Tháng hai</month>
+					<month type="3">Tháng ba</month>
+					<month type="4">Tháng tư</month>
+					<month type="5">Tháng năm</month>
+					<month type="6">Tháng sáu</month>
+					<month type="7">Tháng bảy</month>
+					<month type="8">Tháng tám</month>
+					<month type="9">Tháng chín</month>
+					<month type="10">Tháng mười</month>
+					<month type="11">Tháng mười một</month>
+					<month type="12">Tháng mười hai</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Thg 1</month>
+					<month type="2">Thg 2</month>
+					<month type="3">Thg 3</month>
+					<month type="4">Thg 4</month>
+					<month type="5">Thg 5</month>
+					<month type="6">Thg 6</month>
+					<month type="7">Thg 7</month>
+					<month type="8">Thg 8</month>
+					<month type="9">Thg 9</month>
+					<month type="10">Thg 10</month>
+					<month type="11">Thg 11</month>
+					<month type="12">Thg 12</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">Thứ hai</day>
+					<day type="mon">Thứ ba</day>
+					<day type="tue">Thứ tư</day>
+					<day type="wed">Thứ năm</day>
+					<day type="thu">Thứ sáu</day>
+					<day type="fri">Thứ bảy</day>
+					<day type="sat">Chủ nhật</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Th 2</day>
+					<day type="mon">Th 3</day>
+					<day type="tue">Th 4</day>
+					<day type="wed">Th 5</day>
+					<day type="thu">Th 6</day>
+					<day type="fri">Th 7</day>
+					<day type="sat">CN</day>
+				</dayAbbr>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>EEEE dd MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>EEE dd MMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>dd MMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>dd/MM/yy</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>HH:mm:ss</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>HH:mm</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{0} {1}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<numberFormats>
+			<default type="decimal"/>
+			<numberFormat type="decimal">
+				<pattern>#,##0.###</pattern>
+				<pattern>-#,##0.###</pattern>
+			</numberFormat>
+			<numberFormat type="currency">
+				<pattern>#,##0.00 ¤</pattern>
+				<pattern>-#,##0.00 ¤</pattern>
+			</numberFormat>
+			<numberFormat type="percent">
+				<pattern>#,##0%</pattern>
+			</numberFormat>
+			<numberFormat type="scientific">
+				<pattern>#E0</pattern>
+			</numberFormat>
+		</numberFormats>
+	</numbers>
+		<collations>
+			<collation  >
+				<settings normalization="on"/>
+				<rules>
+					<reset>̀</reset>
+					<sc>̛̣̉̃́̆̂</sc>
+					<reset>D</reset>
+					<p>đ</p>
+				</rules>
+				<special owner="http://oss.software.ibm.com/icu/" version="2.0" />
+			</collation  >
+		</collations>
 </localeData>

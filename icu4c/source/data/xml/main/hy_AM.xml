@@ -1,34 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:20 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<country id="AM" />
-		<correspondsTo vendor="042B">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<eras>
-				<era id="0">Ք․Ա․</era>
-				<era id="1">Ք․Ե․</era>
-			</eras>
-		</calendar>
-	</calendars>
-	<numberFormat class="decimal" default="true"> 
-		<patterns> 
-			<decimal>#0.###;-#0.###</decimal>
-			<percent>#0%</percent>
-			<scientific>#E0</scientific>
-		</patterns>
-	</numberFormat> 
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="hy"></language>
+		<territory type="ARM">AM</territory>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+					<eras>
+						<era type="1">Ք․Ա․</era>
+						<era type="2">Ք․Ե․</era>
+					</eras>
+				</calendar>
+			</calendars>
+		</dates>
 </localeData>

@@ -1,150 +1,170 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:07 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0006">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="da" >dansk</language>
-		</languages >
-		<countries  >
-			<country id="DK">Danmark</country>
-		</countries  >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Europe/Copenhagen" default="true">
-			<long>
-				<generic>Central European Time</generic>
-				<standard>Central European Time (DST)</standard>
-				<daylight>Copenhagen</daylight>
-			</long>
-			<short>
-				<generic>Europe/Copenhagen</generic>
-				<standard>MET</standard>
-				<daylight>MET</daylight>
-			</short>
-			<city>Copenhagen</city>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">januar</month>
-				<month id="2">februar</month>
-				<month id="3">marts</month>
-				<month id="4">april</month>
-				<month id="5">maj</month>
-				<month id="6">juni</month>
-				<month id="7">juli</month>
-				<month id="8">august</month>
-				<month id="9">september</month>
-				<month id="10">oktober</month>
-				<month id="11">november</month>
-				<month id="12">december</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">jan</month>
-				<month id="2">feb</month>
-				<month id="3">mar</month>
-				<month id="4">apr</month>
-				<month id="5">maj</month>
-				<month id="6">jun</month>
-				<month id="7">jul</month>
-				<month id="8">aug</month>
-				<month id="9">sep</month>
-				<month id="10">okt</month>
-				<month id="11">nov</month>
-				<month id="12">dec</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">søndag </day>
-				<day id="2">mandag </day>
-				<day id="3">tirsdag </day>
-				<day id="4">onsdag </day>
-				<day id="5">torsdag </day>
-				<day id="6">fredag </day>
-				<day id="7">lørdag </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">sø </day>
-				<day id="2">ma </day>
-				<day id="3">ti </day>
-				<day id="4">on </day>
-				<day id="5">to </day>
-				<day id="6">fr </day>
-				<day id="7">lø </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">f.Kr.</era>
-				<era id="1">e.Kr.</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<chars>GuMtkHmsSEDFwWahKzUe</chars>
-				<time>
-					<full>HH:mm:ss z</full>
-					<long>HH:mm:ss z</long>
-					<medium>HH:mm:ss</medium>
-					<short>HH:mm</short>
-				</time>
-				<date>
-					<full>d. MMMM yyyy</full>
-					<long>d. MMMM yyyy</long>
-					<medium>dd-MM-yyyy</medium>
-					<short>dd-MM-yy</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<collation version="2.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<after>A</after>
-		<gt1>ǽ</gt1>
-		<gt3>Ǽ</gt3>
-		<after>Z</after>
-		<gt1>æ</gt1>
-		<gt3>Æ</gt3>
-		<gt2>ä</gt2>
-		<gt3>Ä</gt3>
-		<gt1>ø</gt1>
-		<gt3>Ø</gt3>
-		<gt2>ö</gt2>
-		<gt3>Ö</gt3>
-		<gt2>ő</gt2>
-		<gt3>Ő</gt3>
-		<gt1>å</gt1>
-		<gt3>Å</gt3>
-		<gt3>aa</gt3>
-		<gt3>aA</gt3>
-		<gt3>Aa</gt3>
-		<gt3>AA</gt3>
-		<after>V</after>
-		<gt3>w</gt3>
-		<gt3>W</gt3>
-		<after>Y</after>
-		<gt2>ü</gt2>
-		<gt3>Ü</gt3>
-		<after>D</after>
-		<gt1>ð</gt1>
-		<gt3>Ð</gt3>
-		<after>T</after>
-		<gt1>þ</gt1>
-		<gt3>Þ</gt3>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="da"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="da">dansk</language>
+		</languages>
+		<territories>
+			<territory type="DK">Danmark</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[a-z æ å ø á é í ó ú ý]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<localizedPatternChars>GuMtkHmsSEDFwWahKzUe</localizedPatternChars>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">januar</month>
+					<month type="2">februar</month>
+					<month type="3">marts</month>
+					<month type="4">april</month>
+					<month type="5">maj</month>
+					<month type="6">juni</month>
+					<month type="7">juli</month>
+					<month type="8">august</month>
+					<month type="9">september</month>
+					<month type="10">oktober</month>
+					<month type="11">november</month>
+					<month type="12">december</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">jan</month>
+					<month type="2">feb</month>
+					<month type="3">mar</month>
+					<month type="4">apr</month>
+					<month type="5">maj</month>
+					<month type="6">jun</month>
+					<month type="7">jul</month>
+					<month type="8">aug</month>
+					<month type="9">sep</month>
+					<month type="10">okt</month>
+					<month type="11">nov</month>
+					<month type="12">dec</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">søndag</day>
+					<day type="mon">mandag</day>
+					<day type="tue">tirsdag</day>
+					<day type="wed">onsdag</day>
+					<day type="thu">torsdag</day>
+					<day type="fri">fredag</day>
+					<day type="sat">lørdag</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">sø</day>
+					<day type="mon">ma</day>
+					<day type="tue">ti</day>
+					<day type="wed">on</day>
+					<day type="thu">to</day>
+					<day type="fri">fr</day>
+					<day type="sat">lø</day>
+				</dayAbbr>
+				<week>
+					<minDays count="2"/>
+					<firstDay day="thu"/>
+				</week>
+				<eras>
+					<era type="1">f.Kr.</era>
+					<era type="2">e.Kr.</era>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>d. MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>d. MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>dd-MM-yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>dd-MM-yy</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>HH:mm:ss</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>HH:mm</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<zone type="Copenhagen">
+				<long>
+					<generic>Central European Time</generic>
+					<standard>Central European Time</standard>
+					<daylight>Central European Time (DST)</daylight>
+				</long>
+				<short>
+					<generic>Europe/Copenhagen</generic>
+					<standard>MET</standard>
+					<daylight>MET</daylight>
+				</short>
+				<exemplarCity>Copenhagen</exemplarCity>
+			</zone>
+		</timeZoneNames>
+	</dates>
+		<collations>
+			<collation  >
+				<rules>
+					<reset>A</reset>
+					<p>ǽ</p>
+					<t>Ǽ</t>
+					<reset>Z</reset>
+					<p>æ</p>
+					<t>Æ</t>
+					<s>ä</s>
+					<t>Ä</t>
+					<p>ø</p>
+					<t>Ø</t>
+					<s>ö</s>
+					<t>Ö</t>
+					<s>ő</s>
+					<t>Ő</t>
+					<p>å</p>
+					<tc>ÅaaaAAaAA</tc>
+					<reset>V</reset>
+					<tc>wW</tc>
+					<reset>Y</reset>
+					<s>ü</s>
+					<t>Ü</t>
+					<reset>D</reset>
+					<p>ð</p>
+					<t>Ð</t>
+					<reset>T</reset>
+					<p>þ</p>
+				</rules>
+				<special owner="http://oss.software.ibm.com/icu/" version="2.0" />
+			</collation  >
+		</collations>
 </localeData>

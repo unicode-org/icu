@@ -1,73 +1,76 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:07 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0045">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">জানুয়ারী</month>
-				<month id="2">ফেব্রুয়ারী</month>
-				<month id="3">মার্চ</month>
-				<month id="4">এপ্রিল</month>
-				<month id="5">মে</month>
-				<month id="6">জুন</month>
-				<month id="7">জুলাই</month>
-				<month id="8">আগস্ট</month>
-				<month id="9">সেপ্টেম্বর</month>
-				<month id="10">অক্টোবর</month>
-				<month id="11">নভেম্বর</month>
-				<month id="12">ডিসেম্বর</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">জানুয়ারী</month>
-				<month id="2">ফেব্রুয়ারী</month>
-				<month id="3">মার্চ</month>
-				<month id="4">এপ্রিল</month>
-				<month id="5">মে</month>
-				<month id="6">জুন</month>
-				<month id="7">জুলাই</month>
-				<month id="8">আগস্ট</month>
-				<month id="9">সেপ্টেম্বর</month>
-				<month id="10">অক্টোবর</month>
-				<month id="11">নভেম্বর</month>
-				<month id="12">ডিসেম্বর</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">রবিবার </day>
-				<day id="2">সোমবার </day>
-				<day id="3">মঙগলবার </day>
-				<day id="4">বুধবার </day>
-				<day id="5">বৃহস্পতিবার </day>
-				<day id="6">শুক্রবার </day>
-				<day id="7">শনিবার </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">রবি </day>
-				<day id="2">সোম </day>
-				<day id="3">মঙগল </day>
-				<day id="4">বুধ </day>
-				<day id="5">বৃহস্পতি </day>
-				<day id="6">শুক্র </day>
-				<day id="7">শনি </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>পূর্বাহ্ণ</am><pm>অপরাহ্ণ</pm>
-		</calendar>
-	</calendars>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="bn"></language>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[:Beng:]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">জানুয়ারী</month>
+					<month type="2">ফেব্রুয়ারী</month>
+					<month type="3">মার্চ</month>
+					<month type="4">এপ্রিল</month>
+					<month type="5">মে</month>
+					<month type="6">জুন</month>
+					<month type="7">জুলাই</month>
+					<month type="8">আগস্ট</month>
+					<month type="9">সেপ্টেম্বর</month>
+					<month type="10">অক্টোবর</month>
+					<month type="11">নভেম্বর</month>
+					<month type="12">ডিসেম্বর</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">জানুয়ারী</month>
+					<month type="2">ফেব্রুয়ারী</month>
+					<month type="3">মার্চ</month>
+					<month type="4">এপ্রিল</month>
+					<month type="5">মে</month>
+					<month type="6">জুন</month>
+					<month type="7">জুলাই</month>
+					<month type="8">আগস্ট</month>
+					<month type="9">সেপ্টেম্বর</month>
+					<month type="10">অক্টোবর</month>
+					<month type="11">নভেম্বর</month>
+					<month type="12">ডিসেম্বর</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">রবিবার</day>
+					<day type="mon">সোমবার</day>
+					<day type="tue">মঙগলবার</day>
+					<day type="wed">বুধবার</day>
+					<day type="thu">বৃহস্পতিবার</day>
+					<day type="fri">শুক্রবার</day>
+					<day type="sat">শনিবার</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">রবি</day>
+					<day type="mon">সোম</day>
+					<day type="tue">মঙগল</day>
+					<day type="wed">বুধ</day>
+					<day type="thu">বৃহস্পতি</day>
+					<day type="fri">শুক্র</day>
+					<day type="sat">শনি</day>
+				</dayAbbr>
+				<am>পূর্বাহ্ণ</am>
+				<pm>অপরাহ্ণ</pm>
+			</calendar>
+		</calendars>
+	</dates>
 </localeData>

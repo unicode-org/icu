@@ -1,137 +1,152 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:26 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0027">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="lt" >Lietuviř</language>
-		</languages >
-		<countries  >
-			<country id="LT">Lietuva</country>
-		</countries  >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Africa/Casablanca" default="true">
-			<long>
-				<generic>GMT</generic>
-				<standard>GMT</standard>
-			</long>
-			<short>
-				<generic>Africa/Casablanca</generic>
-				<standard>GMT</standard>
-				<daylight>GMT</daylight>
-			</short>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">Sausio</month>
-				<month id="2">Vasario</month>
-				<month id="3">Kovo</month>
-				<month id="4">Balandžio</month>
-				<month id="5">Gegužės</month>
-				<month id="6">Birželio</month>
-				<month id="7">Liepos</month>
-				<month id="8">Rugpjūčio</month>
-				<month id="9">Rugsėjo</month>
-				<month id="10">Spalio</month>
-				<month id="11">Lapkričio</month>
-				<month id="12">Gruodžio</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">Sau</month>
-				<month id="2">Vas</month>
-				<month id="3">Kov</month>
-				<month id="4">Bal</month>
-				<month id="5">Geg</month>
-				<month id="6">Bir</month>
-				<month id="7">Lie</month>
-				<month id="8">Rgp</month>
-				<month id="9">Rgs</month>
-				<month id="10">Spa</month>
-				<month id="11">Lap</month>
-				<month id="12">Grd</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Sekmadienis </day>
-				<day id="2">Pirmadienis </day>
-				<day id="3">Antradienis </day>
-				<day id="4">Trečiadienis </day>
-				<day id="5">Ketvirtadienis </day>
-				<day id="6">Penktadienis </day>
-				<day id="7">Šeštadienis </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Sk </day>
-				<day id="2">Pr </day>
-				<day id="3">An </day>
-				<day id="4">Tr </day>
-				<day id="5">Kt </day>
-				<day id="6">Pn </day>
-				<day id="7">Št </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">pr.Kr.</era>
-				<era id="1">po.Kr.</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<chars>GanjkHmsSEDFwWxhKzAe</chars>
-				<time>
-					<full>HH.mm.ss z</full>
-					<long>HH.mm.ss z</long>
-					<medium>HH.mm.ss</medium>
-					<short>HH.mm</short>
-				</time>
-				<date>
-					<full>EEEE, yyyy, MMMM d</full>
-					<long>EEEE, yyyy, MMMM d</long>
-					<medium>yyyy.M.d</medium>
-					<short>yy.M.d</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<after>C</after>
-		<gt1>č</gt1>
-		<gt3>Č</gt3>
-		<after>I</after>
-		<gt2>y</gt2>
-		<eq>ı</eq>
-		<gt3>Y</gt3>
-		<eq>İ</eq>
-		<after>S</after>
-		<gt1>š</gt1>
-		<gt3>Š</gt3>
-		<after>X</after>
-		<gt1>ý</gt1>
-		<gt3>Ý</gt3>
-		<gt1>ŷ</gt1>
-		<gt3>Ŷ</gt3>
-		<gt1>ÿ</gt1>
-		<gt3>Ÿ</gt3>
-		<after>Z</after>
-		<gt1>ž</gt1>
-		<gt3>Ž</gt3>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="lt"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="lt">Lietuviř</language>
+		</languages>
+		<territories>
+			<territory type="LT">Lietuva</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[a-z ą ę į ų ė ū č š ž]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Sausio</month>
+					<month type="2">Vasario</month>
+					<month type="3">Kovo</month>
+					<month type="4">Balandžio</month>
+					<month type="5">Gegužės</month>
+					<month type="6">Birželio</month>
+					<month type="7">Liepos</month>
+					<month type="8">Rugpjūčio</month>
+					<month type="9">Rugsėjo</month>
+					<month type="10">Spalio</month>
+					<month type="11">Lapkričio</month>
+					<month type="12">Gruodžio</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Sau</month>
+					<month type="2">Vas</month>
+					<month type="3">Kov</month>
+					<month type="4">Bal</month>
+					<month type="5">Geg</month>
+					<month type="6">Bir</month>
+					<month type="7">Lie</month>
+					<month type="8">Rgp</month>
+					<month type="9">Rgs</month>
+					<month type="10">Spa</month>
+					<month type="11">Lap</month>
+					<month type="12">Grd</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">Sekmadienis</day>
+					<day type="mon">Pirmadienis</day>
+					<day type="tue">Antradienis</day>
+					<day type="wed">Trečiadienis</day>
+					<day type="thu">Ketvirtadienis</day>
+					<day type="fri">Penktadienis</day>
+					<day type="sat">Šeštadienis</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Sk</day>
+					<day type="mon">Pr</day>
+					<day type="tue">An</day>
+					<day type="wed">Tr</day>
+					<day type="thu">Kt</day>
+					<day type="fri">Pn</day>
+					<day type="sat">Št</day>
+				</dayAbbr>
+				<week>
+					<minDays count="2"/>
+					<firstDay day="mon"/>
+				</week>
+				<eras>
+					<era type="1">pr.Kr.</era>
+					<era type="2">po.Kr.</era>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>EEEE, yyyy, MMMM d</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>EEEE, yyyy, MMMM d</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>yyyy.M.d</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>yy.M.d</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>HH.mm.ss z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>HH.mm.ss z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>HH.mm.ss</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>HH.mm</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+		</timeZoneNames>
+	</dates>
+		<collations>
+			<collation  >
+				<settings backwards="2"/>
+				<rules>
+					<reset>C</reset>
+					<p>č</p>
+					<t>Č</t>
+					<reset>I</reset>
+					<s>y</s>
+					<i>ı</i>
+					<t>Y</t>
+					<i>İ</i>
+					<reset>S</reset>
+					<p>š</p>
+					<t>Š</t>
+					<reset>X</reset>
+					<p>ý</p>
+					<t>Ý</t>
+					<p>ŷ</p>
+					<t>Ŷ</t>
+					<p>ÿ</p>
+					<t>Ÿ</t>
+					<reset>Z</reset>
+					<p>ž</p>
+				</rules>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			</collation  >
+		</collations>
 </localeData>

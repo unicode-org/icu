@@ -1,116 +1,128 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:32 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="001C">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="sq" >shqipe</language>
-		</languages >
-		<countries  >
-			<country id="AL">Shqipëria</country>
-		</countries  >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Africa/Casablanca" default="true">
-			<long>
-				<generic>GMT</generic>
-				<standard>GMT</standard>
-			</long>
-			<short>
-				<generic>Africa/Casablanca</generic>
-				<standard>GMT</standard>
-				<daylight>GMT</daylight>
-			</short>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">janar</month>
-				<month id="2">shkurt</month>
-				<month id="3">mars</month>
-				<month id="4">prill</month>
-				<month id="5">maj</month>
-				<month id="6">qershor</month>
-				<month id="7">korrik</month>
-				<month id="8">gusht</month>
-				<month id="9">shtator</month>
-				<month id="10">tetor</month>
-				<month id="11">nëntor</month>
-				<month id="12">dhjetor</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">Jan</month>
-				<month id="2">Shk</month>
-				<month id="3">Mar</month>
-				<month id="4">Pri</month>
-				<month id="5">Maj</month>
-				<month id="6">Qer</month>
-				<month id="7">Kor</month>
-				<month id="8">Gsh</month>
-				<month id="9">Sht</month>
-				<month id="10">Tet</month>
-				<month id="11">Nën</month>
-				<month id="12">Dhj</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">e diel </day>
-				<day id="2">e hënë </day>
-				<day id="3">e martë </day>
-				<day id="4">e mërkurë </day>
-				<day id="5">e enjte </day>
-				<day id="6">e premte </day>
-				<day id="7">e shtunë </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Die </day>
-				<day id="2">Hën </day>
-				<day id="3">Mar </day>
-				<day id="4">Mër </day>
-				<day id="5">Enj </day>
-				<day id="6">Pre </day>
-				<day id="7">Sht </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">p.e.r.</era>
-				<era id="1">n.e.r.</era>
-			</eras>
-			<am>PD</am><pm>MD</pm>
-			<patterns> 
-				<chars>GanjkHmsSEDFwWxhKzAe</chars>
-				<time>
-					<full>h.mm.ss.a z</full>
-					<long>h.mm.ss.a z</long>
-					<medium>h:mm:ss.a</medium>
-					<short>h.mm.a</short>
-				</time>
-				<date>
-					<full>EEEE, dd MMMM yyyy</full>
-					<long>dd MMMM yyyy</long>
-					<medium>yyyy-MM-dd</medium>
-					<short>yy-MM-dd</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="sq"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="sq">shqipe</language>
+		</languages>
+		<territories>
+			<territory type="AL">Shqipëria</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[a-z ë ç]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">janar</month>
+					<month type="2">shkurt</month>
+					<month type="3">mars</month>
+					<month type="4">prill</month>
+					<month type="5">maj</month>
+					<month type="6">qershor</month>
+					<month type="7">korrik</month>
+					<month type="8">gusht</month>
+					<month type="9">shtator</month>
+					<month type="10">tetor</month>
+					<month type="11">nëntor</month>
+					<month type="12">dhjetor</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Jan</month>
+					<month type="2">Shk</month>
+					<month type="3">Mar</month>
+					<month type="4">Pri</month>
+					<month type="5">Maj</month>
+					<month type="6">Qer</month>
+					<month type="7">Kor</month>
+					<month type="8">Gsh</month>
+					<month type="9">Sht</month>
+					<month type="10">Tet</month>
+					<month type="11">Nën</month>
+					<month type="12">Dhj</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">e diel</day>
+					<day type="mon">e hënë</day>
+					<day type="tue">e martë</day>
+					<day type="wed">e mërkurë</day>
+					<day type="thu">e enjte</day>
+					<day type="fri">e premte</day>
+					<day type="sat">e shtunë</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Die</day>
+					<day type="mon">Hën</day>
+					<day type="tue">Mar</day>
+					<day type="wed">Mër</day>
+					<day type="thu">Enj</day>
+					<day type="fri">Pre</day>
+					<day type="sat">Sht</day>
+				</dayAbbr>
+				<eras>
+					<era type="1">p.e.r.</era>
+					<era type="2">n.e.r.</era>
+				</eras>
+				<am>PD</am>
+				<pm>MD</pm>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>EEEE, dd MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>dd MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>yyyy-MM-dd</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>yy-MM-dd</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>h.mm.ss.a z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>h.mm.ss.a z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>h:mm:ss.a</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>h.mm.a</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+		</timeZoneNames>
+	</dates>
+		<collations>
+			<collation  >
+				<settings backwards="2"/>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			</collation  >
+		</collations>
 </localeData>

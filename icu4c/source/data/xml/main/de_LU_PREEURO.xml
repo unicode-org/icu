@@ -1,34 +1,69 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:09 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<country id="LU" />
-		<variant id="PREEURO" />
-		<correspondsTo vendor="1007">Windows</correspondsTo>
-	</identity  >
-	<numberFormat class="decimal" default="true"> 
-		<patterns> 
-			<decimal>#,##0.###;-#,##0.###</decimal>
-			<percent>#,##0%</percent>
-			<scientific>#E0</scientific>
-		</patterns>
-	</numberFormat> 
-	<currencies>
-		<currency id="LUF" default="true">
-			<symbol>F</symbol>
-			<name>LUF</name>
-			<decimal>,</decimal>
-		</currency>
-	</currencies>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="de"></language>
+		<territory type="LUX">LU</territory>
+		<variant type="PREEURO">{2}</variant>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+				</calendar>
+			</calendars>
+		</dates>
+		<numbers>
+			<numberFormats>
+				<default type="decimal"/>
+				<numberFormat type="decimal">
+					<pattern>#,##0.###</pattern>
+					<pattern>-#,##0.###</pattern>
+				</numberFormat>
+				<numberFormat type="currency">
+					<pattern>#,##0 ¤</pattern>
+					<pattern>-#,##0 ¤</pattern>
+				</numberFormat>
+				<numberFormat type="percent">
+					<pattern>#,##0%</pattern>
+				</numberFormat>
+				<numberFormat type="scientific">
+					<pattern>#E0</pattern>
+				</numberFormat>
+			</numberFormats>
+			<currencies>
+				<default type="LUF"/>
+				<currency type="LUF">
+					<symbol>F</symbol>
+					<displayName>LUF</displayName>
+					<decimal>,</decimal>
+				</currency>
+			</currencies>
+		</numbers>
+		<collations>
+			<collation key="PHONEBOOK" >
+				<rules>
+					<reset>ae</reset>
+					<t>ä</t>
+					<reset>AE</reset>
+					<t>Ä</t>
+					<reset>oe</reset>
+					<t>ö</t>
+					<reset>OE</reset>
+					<t>Ö</t>
+					<reset>ue</reset>
+					<t>ü</t>
+					<reset>UE</reset>
+				</rules>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			</collation  >
+		</collations>
 </localeData>

@@ -1,114 +1,144 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:21 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0010">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="it" >italiano</language>
-		</languages >
-		<countries  >
-			<country id="CH">Svizzera</country>
-			<country id="IT">Italia</country>
-		</countries  >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Europe/Rome" default="true">
-			<long>
-				<generic>CET</generic>
-				<standard>CET</standard>
-				<daylight>Rome</daylight>
-			</long>
-			<short>
-				<generic>Europe/Rome</generic>
-				<standard>CET</standard>
-				<daylight>CET</daylight>
-			</short>
-			<city>Rome</city>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">gennaio</month>
-				<month id="2">febbraio</month>
-				<month id="3">marzo</month>
-				<month id="4">aprile</month>
-				<month id="5">maggio</month>
-				<month id="6">giugno</month>
-				<month id="7">luglio</month>
-				<month id="8">agosto</month>
-				<month id="9">settembre</month>
-				<month id="10">ottobre</month>
-				<month id="11">novembre</month>
-				<month id="12">dicembre</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">gen</month>
-				<month id="2">feb</month>
-				<month id="3">mar</month>
-				<month id="4">apr</month>
-				<month id="5">mag</month>
-				<month id="6">giu</month>
-				<month id="7">lug</month>
-				<month id="8">ago</month>
-				<month id="9">set</month>
-				<month id="10">ott</month>
-				<month id="11">nov</month>
-				<month id="12">dic</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">domenica </day>
-				<day id="2">lunedì </day>
-				<day id="3">martedì </day>
-				<day id="4">mercoledì </day>
-				<day id="5">giovedì </day>
-				<day id="6">venerdì </day>
-				<day id="7">sabato </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">dom </day>
-				<day id="2">lun </day>
-				<day id="3">mar </day>
-				<day id="4">mer </day>
-				<day id="5">gio </day>
-				<day id="6">ven </day>
-				<day id="7">sab </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">aC</era>
-				<era id="1">dC</era>
-			</eras>
-			<am>m.</am><pm>p.</pm>
-			<patterns> 
-				<time>
-					<full>HH:mm:ss z</full>
-					<long>HH:mm:ss z</long>
-					<medium>HH:mm:ss</medium>
-					<short>HH:mm</short>
-				</time>
-				<date>
-					<full>EEEE d MMMM yyyy</full>
-					<long>dd MMMM yyyy</long>
-					<medium>dd/MMM/yy</medium>
-					<short>dd/MM/yy</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="it"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="it">italiano</language>
+		</languages>
+		<territories>
+			<territory type="CH">Svizzera</territory>
+			<territory type="IT">Italia</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[a-z é ó à è ì ò í ú ù ï]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">gennaio</month>
+					<month type="2">febbraio</month>
+					<month type="3">marzo</month>
+					<month type="4">aprile</month>
+					<month type="5">maggio</month>
+					<month type="6">giugno</month>
+					<month type="7">luglio</month>
+					<month type="8">agosto</month>
+					<month type="9">settembre</month>
+					<month type="10">ottobre</month>
+					<month type="11">novembre</month>
+					<month type="12">dicembre</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">gen</month>
+					<month type="2">feb</month>
+					<month type="3">mar</month>
+					<month type="4">apr</month>
+					<month type="5">mag</month>
+					<month type="6">giu</month>
+					<month type="7">lug</month>
+					<month type="8">ago</month>
+					<month type="9">set</month>
+					<month type="10">ott</month>
+					<month type="11">nov</month>
+					<month type="12">dic</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">domenica</day>
+					<day type="mon">lunedì</day>
+					<day type="tue">martedì</day>
+					<day type="wed">mercoledì</day>
+					<day type="thu">giovedì</day>
+					<day type="fri">venerdì</day>
+					<day type="sat">sabato</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">dom</day>
+					<day type="mon">lun</day>
+					<day type="tue">mar</day>
+					<day type="wed">mer</day>
+					<day type="thu">gio</day>
+					<day type="fri">ven</day>
+					<day type="sat">sab</day>
+				</dayAbbr>
+				<week>
+					<minDays count="2"/>
+					<firstDay day="thu"/>
+				</week>
+				<eras>
+					<era type="1">aC</era>
+					<era type="2">dC</era>
+				</eras>
+				<am>m.</am>
+				<pm>p.</pm>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>EEEE d MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>dd MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>dd/MMM/yy</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>dd/MM/yy</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>HH:mm:ss</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>HH:mm</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<zone type="Rome">
+				<long>
+					<generic>CET</generic>
+					<standard>CET</standard>
+					<daylight>CET</daylight>
+				</long>
+				<short>
+					<generic>Europe/Rome</generic>
+					<standard>CET</standard>
+					<daylight>CET</daylight>
+				</short>
+				<exemplarCity>Rome</exemplarCity>
+			</zone>
+		</timeZoneNames>
+	</dates>
+	<special owner="http://oss.software.ibm.com/icu/"  >
+		<ruleBasedNumberFormats>
+			<ruleBasedNumberFormat type="spellout">%main:<cp hex="000A" />    -x: meno &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; virgola &gt;&gt;;<cp hex="000A" />    zero; uno; due; tre; quattro; cinque; sei; sette; otto;<cp hex="000A" />        nove;<cp hex="000A" />    dieci; undici; dodici; tredici; quattordici; quindici; sedici;<cp hex="000A" />        diciasette; diciotto; diciannove;<cp hex="000A" />    20: venti; vent&gt;%%with-i&gt;;<cp hex="000A" />    30: trenta; trent&gt;%%with-i&gt;;<cp hex="000A" />    40: quaranta; quarant&gt;%%with-a&gt;;<cp hex="000A" />    50: cinquanta; cinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: sessanta; sessant&gt;%%with-a&gt;;<cp hex="000A" />    70: settanta; settant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: novanta; novant&gt;%%with-a&gt;;<cp hex="000A" />    100: cento; cent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;&lt;cento; &lt;&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: mille; mill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;&lt;mila; &lt;&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000&gt;&gt;: &lt;&lt;mila[ &gt;&gt;];<cp hex="000A" />    1,000,000: =#,##0= (incomplete data);<cp hex="000A" />%%with-a:<cp hex="000A" />    azero; uno; adue; atre; aquattro; acinque; asei; asette; otto;<cp hex="000A" />        anove;<cp hex="000A" />    adieci; undici; adodici; atredici; aquattordici; aquindici; asedici;<cp hex="000A" />        adiciasette; adiciotto; adiciannove;<cp hex="000A" />    20: aventi; avent&gt;%%with-i&gt;;<cp hex="000A" />    30: atrenta; atrent&gt;%%with-i&gt;;<cp hex="000A" />    40: aquaranta; aquarant&gt;%%with-a&gt;;<cp hex="000A" />    50: acinquanta; acinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: asessanta; asessant&gt;%%with-a&gt;;<cp hex="000A" />    70: asettanta; asettant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: anovanta; anovant&gt;%%with-a&gt;;<cp hex="000A" />    100: acento; acent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;%%with-a&lt;cento; &lt;%%with-a&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: amille; amill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;%%with-a&lt;mila; &lt;%%with-a&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000: =%main=;<cp hex="000A" />%%with-i:<cp hex="000A" />    izero; uno; idue; itre; iquattro; icinque; isei; isette; otto;<cp hex="000A" />        inove;<cp hex="000A" />    idieci; undici; idodici; itredici; iquattordici; iquindici; isedici;<cp hex="000A" />        idiciasette; idiciotto; idiciannove;<cp hex="000A" />    20: iventi; ivent&gt;%%with-i&gt;;<cp hex="000A" />    30: itrenta; itrent&gt;%%with-i&gt;;<cp hex="000A" />    40: iquaranta; iquarant&gt;%%with-a&gt;;<cp hex="000A" />    50: icinquanta; icinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: isessanta; isessant&gt;%%with-a&gt;;<cp hex="000A" />    70: isettanta; isettant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: inovanta; inovant&gt;%%with-a&gt;;<cp hex="000A" />    100: icento; icent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;%%with-i&lt;cento; &lt;%%with-i&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: imille; imill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;%%with-i&lt;mila; &lt;%%with-i&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000: =%main=;<cp hex="000A" />%%with-o:<cp hex="000A" />    ozero; uno; odue; otre; oquattro; ocinque; osei; osette; otto;<cp hex="000A" />        onove;<cp hex="000A" />    odieci; undici; ododici; otredici; oquattordici; oquindici; osedici;<cp hex="000A" />        odiciasette; odiciotto; odiciannove;<cp hex="000A" />    20: oventi; ovent&gt;%%with-i&gt;;<cp hex="000A" />    30: otrenta; otrent&gt;%%with-i&gt;;<cp hex="000A" />    40: oquaranta; oquarant&gt;%%with-a&gt;;<cp hex="000A" />    50: ocinquanta; ocinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: osessanta; osessant&gt;%%with-a&gt;;<cp hex="000A" />    70: osettanta; osettant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: onovanta; onovant&gt;%%with-a&gt;;<cp hex="000A" />    100: ocento; ocent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;%%with-o&lt;cento; &lt;%%with-o&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: omille; omill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;%%with-o&lt;mila; &lt;%%with-o&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000: =%main=;<cp hex="000A" /></ruleBasedNumberFormat>
+		</ruleBasedNumberFormats>
+	</special>
 </localeData>

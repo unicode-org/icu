@@ -1,127 +1,130 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:07 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0003">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="ca" >català</language>
-		</languages >
-		<countries  >
-			<country id="ES">Espanya</country>
-		</countries  >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Africa/Casablanca" default="true">
-			<long>
-				<generic>GMT</generic>
-				<standard>GMT</standard>
-			</long>
-			<short>
-				<generic>Africa/Casablanca</generic>
-				<standard>GMT</standard>
-				<daylight>GMT</daylight>
-			</short>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">gener</month>
-				<month id="2">febrer</month>
-				<month id="3">març</month>
-				<month id="4">abril</month>
-				<month id="5">maig</month>
-				<month id="6">juny</month>
-				<month id="7">juliol</month>
-				<month id="8">agost</month>
-				<month id="9">setembre</month>
-				<month id="10">octubre</month>
-				<month id="11">novembre</month>
-				<month id="12">desembre</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">gen.</month>
-				<month id="2">feb.</month>
-				<month id="3">març</month>
-				<month id="4">abr.</month>
-				<month id="5">maig</month>
-				<month id="6">juny</month>
-				<month id="7">jul.</month>
-				<month id="8">ag.</month>
-				<month id="9">set.</month>
-				<month id="10">oct.</month>
-				<month id="11">nov.</month>
-				<month id="12">des.</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">diumenge </day>
-				<day id="2">dilluns </day>
-				<day id="3">dimarts </day>
-				<day id="4">dimecres </day>
-				<day id="5">dijous </day>
-				<day id="6">divendres </day>
-				<day id="7">dissabte </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">dg. </day>
-				<day id="2">dl. </day>
-				<day id="3">dt. </day>
-				<day id="4">dc. </day>
-				<day id="5">dj. </day>
-				<day id="6">dv. </day>
-				<day id="7">ds. </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<chars>GuMtkHmsSEDFwWahKzUe</chars>
-				<time>
-					<full>HH:mm:ss z</full>
-					<long>HH:mm:ss z</long>
-					<medium>HH:mm:ss</medium>
-					<short>HH:mm</short>
-				</time>
-				<date>
-					<full>EEEE dd MMMM yyyy</full>
-					<long>d MMMM yyyy</long>
-					<medium>dd/MM/yyyy</medium>
-					<short>dd/MM/yy</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<after>C</after>
-		<gt1>ch</gt1>
-		<gt3>Ch</gt3>
-		<gt3>CH</gt3>
-		<after>L</after>
-		<gt1>ll</gt1>
-		<gt3>l·l</gt3>
-		<gt3>Ll</gt3>
-		<gt3>L·l</gt3>
-		<gt3>LL</gt3>
-		<gt3>L·L</gt3>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="ca"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="ca">català</language>
+		</languages>
+		<territories>
+			<territory type="ES">Espanya</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[a-z é í ó ú à è ò ï ü ŀ ç ñ]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<localizedPatternChars>GuMtkHmsSEDFwWahKzUe</localizedPatternChars>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">gener</month>
+					<month type="2">febrer</month>
+					<month type="3">març</month>
+					<month type="4">abril</month>
+					<month type="5">maig</month>
+					<month type="6">juny</month>
+					<month type="7">juliol</month>
+					<month type="8">agost</month>
+					<month type="9">setembre</month>
+					<month type="10">octubre</month>
+					<month type="11">novembre</month>
+					<month type="12">desembre</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">gen.</month>
+					<month type="2">feb.</month>
+					<month type="3">març</month>
+					<month type="4">abr.</month>
+					<month type="5">maig</month>
+					<month type="6">juny</month>
+					<month type="7">jul.</month>
+					<month type="8">ag.</month>
+					<month type="9">set.</month>
+					<month type="10">oct.</month>
+					<month type="11">nov.</month>
+					<month type="12">des.</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">diumenge</day>
+					<day type="mon">dilluns</day>
+					<day type="tue">dimarts</day>
+					<day type="wed">dimecres</day>
+					<day type="thu">dijous</day>
+					<day type="fri">divendres</day>
+					<day type="sat">dissabte</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">dg.</day>
+					<day type="mon">dl.</day>
+					<day type="tue">dt.</day>
+					<day type="wed">dc.</day>
+					<day type="thu">dj.</day>
+					<day type="fri">dv.</day>
+					<day type="sat">ds.</day>
+				</dayAbbr>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>EEEE dd MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>d MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>dd/MM/yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>dd/MM/yy</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>HH:mm:ss</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>HH:mm</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+		</timeZoneNames>
+	</dates>
+		<collations>
+			<collation  >
+				<settings backwards="2"/>
+				<rules>
+					<reset>C</reset>
+					<p>ch</p>
+					<tc>ChCH</tc>
+					<reset>L</reset>
+					<p>ll</p>
+					<tc>l·lLlL·lLL</tc>
+				</rules>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			</collation  >
+		</collations>
 </localeData>
