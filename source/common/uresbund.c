@@ -165,6 +165,7 @@ static void initCache(UErrorCode *status) {
 }
 
 /* Works just like ucnv_flushCache() */
+/* TODO: figure out why fCountExisting may not go to zero. Do not make this function public yet. */
 static int32_t ures_flushCache()
 {
     UResourceDataEntry *resB = NULL;
@@ -189,7 +190,8 @@ static int32_t ures_flushCache()
          * Don't worry about the parents of this node.
          * Those will eventually get deleted too, if not already.
          */
-        if (resB->fCountExisting == 0)
+/* TODO: figure out why fCountExisting may not go to zero. Do not make this function public yet. */
+/*        if (resB->fCountExisting == 0)*/
         {
             rbDeletedNum++;
             uhash_removeElement(cache, e);
