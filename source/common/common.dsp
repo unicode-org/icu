@@ -264,6 +264,10 @@ SOURCE=.\uhash_us.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\uiter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\uloc.c
 # End Source File
 # Begin Source File
@@ -940,6 +944,33 @@ SOURCE=.\udatamem.h
 # Begin Source File
 
 SOURCE=.\uhash.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\uiter.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\uiter.h
+
+"..\..\include\unicode\uiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\uiter.h
+
+"..\..\include\unicode\uiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
