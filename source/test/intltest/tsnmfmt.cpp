@@ -22,6 +22,7 @@ static const char * formattableTypeName(Formattable::Type t)
   case Formattable::kLong: return "kLong";
   case Formattable::kString: return "kString";
   case Formattable::kArray: return "kArray";
+  case Formattable::kInt64: return "kInt64";
   default: return "??unknown??";
   }
 }
@@ -292,6 +293,8 @@ IntlTestNumberFormat::tryIt(double aNumber)
         // Convert from long to double
         if (number[i].getType() == Formattable::kLong)
             number[i].setDouble(number[i].getLong());
+		else if (number[i].getType() == Formattable::kInt64)
+			number[i].setDouble(number[i].getInt64());
         else if (number[i].getType() != Formattable::kDouble)
         {
             errMsg = ("**** FAIL: Parse of " + prettify(string[i-1])

@@ -105,6 +105,40 @@ const int32_t DecimalFormat::kDoubleIntegerDigits  = 309;
 const int32_t DecimalFormat::kDoubleFractionDigits = 340;
 
 const int32_t DecimalFormat::kMaxScientificIntegerDigits = 8;
+#if 0
+class Test {
+private:
+	int32_t f;
+public:
+// 	void a(int arg);
+	void a(int32_t arg);
+ 	void a(int64_t arg);
+	void a(double arg);
+};
+
+//void Test::a(int arg) { f = (int32_t)arg; }
+void Test::a(int32_t arg) { f = arg; }
+void Test::a(int64_t arg) { f = (int32_t)arg; }
+void Test::a(double arg)  { f = (int32_t)arg; }
+
+static void test(uint64_t num) {
+	Test t;
+	int32_t zero32 = 0;
+	int64_t zero64 = 0;
+	double  zeroDbl = 0;
+
+	t.a((int32_t)0);
+	t.a((int64_t)0);
+	t.a((double)0);
+	t.a(0);
+	t.a(0.0);
+	t.a(0.0f);
+//	t.a(zero32);
+//	t.a(zero64);
+//	t.a(zeroDbl);
+//	t.a(num);
+}
+#endif
 
 /**
  * These are the tags we expect to see in normal resource bundle files associated
@@ -594,6 +628,16 @@ DecimalFormat::format(int32_t number,
                       UnicodeString& appendTo,
                       FieldPosition& fieldPosition) const
 {
+	return format((int64_t)number, appendTo, fieldPosition);
+}
+
+//------------------------------------------------------------------------------
+ 
+UnicodeString&
+DecimalFormat::format(int64_t number,
+                      UnicodeString& appendTo,
+                      FieldPosition& fieldPosition) const
+{
     DigitList digits;
 
     // Clears field positions.
@@ -610,8 +654,8 @@ DecimalFormat::format(int32_t number,
     // check for this before multiplying, and if it happens we use doubles
     // instead, trading off accuracy for range.
     if (fRoundingIncrement != NULL
-        || (fMultiplier != 0 && (number > (INT32_MAX / fMultiplier)
-                              || number < (INT32_MIN / fMultiplier))))
+        || (fMultiplier != 0 && (number > (INT64_MAX / fMultiplier)
+                              || number < (INT64_MIN / fMultiplier))))
     {
         digits.set(((double)number) * fMultiplier,
 			precision(FALSE),
@@ -1180,6 +1224,17 @@ DecimalFormat::parse(const UnicodeString& text,
         int32_t n = digits.getLong();
         if (n % mult == 0) {
             result.setLong(n / mult);
+            return;
+        }
+        else {  // else handle the remainder
+            result.setDouble(((double)n) / mult);
+            return;
+        }
+    }
+    else if (digits.fitsIntoInt64(isParseIntegerOnly())) {
+        int64_t n = digits.getInt64();
+        if (n % mult == 0) {
+            result.setInt64(n / mult);
             return;
         }
         else {  // else handle the remainder

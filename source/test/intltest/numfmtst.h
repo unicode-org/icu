@@ -79,6 +79,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void TestScientificGrouping(void);
 
+    void TestInt64(void);
+
     void TestSurrogateSupport(void);
 
     /**

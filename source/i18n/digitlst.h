@@ -28,16 +28,19 @@
 #include "unicode/uobject.h"
 #include <float.h>
 
-// Decimal digits in a 32-bit int
+// Decimal digits in a 64-bit int
 //#define LONG_DIGITS 19 
+#define INT64_DIGITS 19
 
 typedef enum EDigitListValues {
-    MAX_DIGITS = DBL_DIG,
+    MAX_DBL_DIGITS = DBL_DIG,
+	MAX_I64_DIGITS = INT64_DIGITS,
+	MAX_DIGITS = MAX_I64_DIGITS,
     MAX_EXPONENT = DBL_DIG,
     DIGIT_PADDING = 3,
 
      // "+." + fDigits + "e" + fDecimalAt
-    MAX_DEC_DIGITS = DBL_DIG + DIGIT_PADDING + MAX_EXPONENT
+    MAX_DEC_DIGITS = MAX_DIGITS + DIGIT_PADDING + MAX_EXPONENT
 } EDigitListValues;
 
 U_NAMESPACE_BEGIN
@@ -61,7 +64,7 @@ U_NAMESPACE_BEGIN
  * derived by placing all the digits of the list to the right of the
  * decimal point, by 10^exponent.
  */
-class U_COMMON_API DigitList : public UMemory { // Declare external to make compiler happy
+class U_I18N_API DigitList : public UMemory { // Declare external to make compiler happy
 public:
     DigitList();
     ~DigitList();
@@ -126,6 +129,14 @@ public:
     int32_t getLong(void);
 
     /**
+     * Utility routine to get the value of the digit list
+     * Make sure that fitsIntoInt64() is called before calling this function.
+     * Returns 0 if zero length.
+     * @return the value of the digit list, return 0 if it is zero length
+     */
+    int64_t getInt64(void);
+
+    /**
      * Return true if the number represented by this object can fit into
      * a long.
      * @param ignoreNegativeZero True if negative zero is ignored.
@@ -133,6 +144,15 @@ public:
      * a long, return false otherwise.
      */
     UBool fitsIntoLong(UBool ignoreNegativeZero);
+
+    /**
+     * Return true if the number represented by this object can fit into
+     * an int64_t.
+     * @param ignoreNegativeZero True if negative zero is ignored.
+     * @return true if the number represented by this object can fit into
+     * a long, return false otherwise.
+     */
+    UBool fitsIntoInt64(UBool ignoreNegativeZero);
 
     /**
      * Utility routine to set the value of the digit list from a double
@@ -152,6 +172,15 @@ public:
      * @param maximunDigits The maximum number of digits to be shown
      */
     void set(int32_t source, int32_t maximumDigits = 0);
+
+    /**
+     * Utility routine to set the value of the digit list from an int64.
+     * If a non-zero maximumDigits is specified, no more than that number of
+     * significant digits will be produced.
+     * @param source The value to be set
+     * @param maximunDigits The maximum number of digits to be shown
+     */
+    void set(int64_t source, int32_t maximumDigits = 0);
 
     /**
      * Return true if this is a representation of zero.

@@ -248,6 +248,19 @@ public:
                             UnicodeString& appendTo) const;
 
     /**
+     * Format an int64 number. These methods call the NumberFormat
+     * pure virtual format() methods with the default FieldPosition.
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @return          Reference to 'appendTo' parameter.
+     * @draft ICU 2.8
+     */
+    UnicodeString& format(  int64_t number,
+                            UnicodeString& appendTo) const;
+
+    /**
      * Format a double number. Concrete subclasses must implement
      * these pure virtual methods.
      *
@@ -278,6 +291,22 @@ public:
                                   UnicodeString& appendTo,
                                   FieldPosition& pos) const = 0;
 
+    /**
+     * Format an int64 number. (Not abstract to retain compatibility
+	 * with earlier releases, however subclasses should override this
+	 * method as it just delegates to format(int32_t number...);
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @return          Reference to 'appendTo' parameter.
+     * @draft ICU 2.8
+    */
+    virtual UnicodeString& format(int64_t number,
+                                  UnicodeString& appendTo,
+                                  FieldPosition& pos) const;
     /**
      * Redeclared Format method.
      * @param obj       The object to be formatted.
