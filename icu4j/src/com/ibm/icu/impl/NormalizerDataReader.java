@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerDataReader.java,v $
- * $Date: 2002/10/09 23:53:24 $
- * $Revision: 1.8 $
+ * $Date: 2002/11/15 21:04:19 $
+ * $Revision: 1.9 $
  *******************************************************************************
  */
  
@@ -229,13 +229,38 @@ import com.ibm.icu.impl.ICUDebug;
 	 *
 	 * The auxiliary 16-bit trie contains data for additional properties.
 	 * Bits
-	 * 15..12   reserved (for skippable flags, see NormalizerTransliterator)
+     * 15..13   reserved
+     *     12   not NFC_Skippable (f) (formatVersion>=2.2)
 	 *     11   flag: not a safe starter for canonical closure
 	 *     10   composition exclusion
 	 *  9.. 0   index into extraData[] to FC_NFKC_Closure string
 	 *          (not for lead surrogate),
 	 *          or lead surrogate offset (for lead surrogate, if 9..0 not zero)
-	 *
+	 * 
+     * Conditions for "NF* Skippable" from Mark Davis' com.ibm.text.UCD.NFSkippable:
+     * (used in NormalizerTransliterator)
+     *
+     * A skippable character is
+     * a) unassigned, or ALL of the following:
+     * b) of combining class 0.
+     * c) not decomposed by this normalization form.
+     * AND if NFC or NFKC,
+     * d) can never compose with a previous character.
+     * e) can never compose with a following character.
+     * f) can never change if another character is added.
+     *    Example: a-breve might satisfy all but f, but if you
+     *    add an ogonek it changes to a-ogonek + breve
+     *
+     * a)..e) must be tested from norm32.
+     * Since f) is more complicated, the (not-)NFC_Skippable flag (f) is built
+     * into the auxiliary trie.
+     * The same bit is used for NFC and NFKC; (c) differs for them.
+     * As usual, we build the "not skippable" flags so that unassigned
+     * code points get a 0 bit.
+     * This bit is only valid after (a)..(e) test FALSE; test NFD_NO before (f) as well.
+     * Test Hangul LV syllables entirely in code.
+     *   
+     * 
 	 * - FC_NFKC_Closure strings in extraData[]
 	 *
 	 * Strings are either stored as a single code unit or as the length
@@ -399,7 +424,7 @@ final class NormalizerDataReader implements ICUBinary.Authenticate {
     */
     private static final byte DATA_FORMAT_ID[] = {(byte)0x4E, (byte)0x6F, 
                                                     (byte)0x72, (byte)0x6D};
-    private static final byte DATA_FORMAT_VERSION[] = {(byte)0x2, (byte)0x1, 
+    private static final byte DATA_FORMAT_VERSION[] = {(byte)0x2, (byte)0x2, 
                                                         (byte)0x5, (byte)0x2};
 	
 }

@@ -5,17 +5,23 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2002/09/19 18:12:30 $
- * $Revision: 1.11 $
+ * $Date: 2002/11/15 21:04:18 $
+ * $Revision: 1.12 $
  *******************************************************************************
  */
  
 package com.ibm.icu.impl;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;	
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.lang.UCharacter;
+
 /**
  * @version 	1.0
  * @author  Ram Viswanadha
@@ -53,7 +59,7 @@ public final class NormalizerImpl {
     public static final int QC_NFD=4;             /* no */
     public static final int QC_NFKD=8;            /* no */
 	
-    private static final int QC_ANY_NO=0xf;
+    public static final int QC_ANY_NO=0xf;
 
     /* quick check flags 4..5 mean "maybe" for their forms; 
      * test flags>=QC_MAYBE 
@@ -65,10 +71,10 @@ public final class NormalizerImpl {
 
     private static final int COMBINES_FWD=0x40;
     private static final int COMBINES_BACK=0x80;
-    private static final int COMBINES_ANY=0xc0;
+    public  static final int COMBINES_ANY=0xc0;
     // UnicodeData.txt combining class in bits 15.
     private static final int CC_SHIFT=8;           		  
-    public static final int CC_MASK=0xff00;
+    public  static final int CC_MASK=0xff00;
     // 16 bits for the index to UChars and other extra data
     private static final int EXTRA_SHIFT=16;
     // start of surrogate specials after shift                
@@ -123,14 +129,16 @@ public final class NormalizerImpl {
 	
 	/* AUX constants */
 	/* value constants for auxTrie */	
-	private static final int AUX_UNSAFE_SHIFT	= 11;
-	private static final int AUX_COMP_EX_SHIFT	= 10;
+	private static final int AUX_UNSAFE_SHIFT	       = 11;
+	private static final int AUX_COMP_EX_SHIFT	       = 10;
+    private static final int AUX_NFC_SKIPPABLE_F_SHIFT = 12;
 	
-	private static final int AUX_MAX_FNC        =   ((int)1<<AUX_COMP_EX_SHIFT);
-	private static final int AUX_UNSAFE_MASK    =   (int)((1<<AUX_UNSAFE_SHIFT) & UNSIGNED_INT_MASK);
-	private static final int AUX_FNC_MASK       =   (int)((AUX_MAX_FNC-1) & UNSIGNED_INT_MASK);
-	private static final int AUX_COMP_EX_MASK   =   (int)((1<<AUX_COMP_EX_SHIFT) & UNSIGNED_INT_MASK);
-	
+	private static final int AUX_MAX_FNC          =   ((int)1<<AUX_COMP_EX_SHIFT);
+	private static final int AUX_UNSAFE_MASK      =   (int)((1<<AUX_UNSAFE_SHIFT) & UNSIGNED_INT_MASK);
+	private static final int AUX_FNC_MASK         =   (int)((AUX_MAX_FNC-1) & UNSIGNED_INT_MASK);
+	private static final int AUX_COMP_EX_MASK     =   (int)((1<<AUX_COMP_EX_SHIFT) & UNSIGNED_INT_MASK);
+	private static final long AUX_NFC_SKIP_F_MASK =   ((UNSIGNED_INT_MASK&1)<<AUX_NFC_SKIPPABLE_F_SHIFT);
+    
 	/* canonStartSets[0..31] contains indexes for what is in the array */
     /* number of uint16_t in canonical starter sets */
     static final int SET_INDEX_CANON_SETS_LENGTH		= 0;
@@ -163,7 +171,7 @@ public final class NormalizerImpl {
 	 private static final int COMPARE_EQUIV = 0x80000;
 	
 	/*******************************/
-	
+
 	/* Wrappers for Trie implementations */ 
 	static final class NormTrieImpl implements Trie.DataManipulate{
 		static IntTrie normTrie= null;
@@ -174,6 +182,7 @@ public final class NormalizerImpl {
         *         the folding offset
 	    * @return data offset or 0 if there is no data for the lead surrogate
 	    */
+        /* normTrie: 32-bit trie result may contain a special extraData index with the folding offset */
 	    public int getFoldingOffset(int value){
             return  BMP_INDEX_LENGTH+
                     ((value>>(EXTRA_SHIFT-SURROGATE_BLOCK_BITS))&
@@ -190,7 +199,7 @@ public final class NormalizerImpl {
         *         the folding offset
 	    * @return data offset or 0 if there is no data for the lead surrogate
 	    */
-
+        /* fcdTrie: the folding offset is the lead FCD value itself */
 	    public int getFoldingOffset(int value){
 			return value;
 	    }
@@ -205,8 +214,9 @@ public final class NormalizerImpl {
         *        the folding offset
 	    * @return data offset or 0 if there is no data for the lead surrogate
 	    */
+        /* auxTrie: the folding offset is in bits 9..0 of the 16-bit trie result */
 	    public int getFoldingOffset(int value){
-	        return (value&AUX_FNC_MASK)<<5;
+	        return (int)(value &AUX_FNC_MASK)<<SURROGATE_BLOCK_BITS;
 	    }
 	}
 		 
@@ -223,6 +233,7 @@ public final class NormalizerImpl {
 	
 	static boolean isDataLoaded;
 	static boolean isFormatVersion_2_1;
+    static boolean isFormatVersion_2_2;
 	/**
      * Default buffer size of datafile
      */
@@ -315,12 +326,16 @@ public final class NormalizerImpl {
                                     ||
                                    (formatVersion[0]==2 && formatVersion[1]>=1)
                                  );
+            isFormatVersion_2_2 =( formatVersion[0]>2 
+                                    ||
+                                   (formatVersion[0]==2 && formatVersion[1]>=2)
+                                 );
             
             b.close();
             i.close();
         }
     }
-    
+        
 	/* ---------------------------------------------------------------------- */
 	
 	/* Korean Hangul and Jamo constants */
@@ -426,7 +441,10 @@ public final class NormalizerImpl {
          * */
 	    return fcdTrieImpl.fcdTrie.getTrailValue(fcd16, c2);
 	}
-	
+    public static int getFCD16(int c) {
+        return  fcdTrieImpl.fcdTrie.getValue(c);
+    }
+    	
 	private static int getExtraDataIndex(long norm32) {
 	    return (int)(norm32>>EXTRA_SHIFT);
 	}
@@ -2502,7 +2520,7 @@ public final class NormalizerImpl {
 	            /* found? */
 	            if(c==table[start]) {
 	                i=table[start+1];
-	                if((i&CANON_SET_BMP_MASK)==CANON_SET_BMP_IS_INDEX) {
+	                if((i & CANON_SET_BMP_MASK)==CANON_SET_BMP_IS_INDEX) {
 	                    /* result 01xxxxxx xxxxxx contains index x to a 
                          * USerializedSet */
 	                    i&=(CANON_SET_MAX_CANON_SETS-1);
@@ -2548,7 +2566,7 @@ public final class NormalizerImpl {
 	                     * single-code point set {x} in
                          * triplet { 100xxxxx 000hhhhh  llllllll llllllll  xxxxxxxx xxxxxxxx }
 	                     */
-	                    i|=((int)h&0x1f00)<<8; /* add high bits from high(c) */
+	                    i|=((int)h & 0x1f00)<<8; /* add high bits from high(c) */
 	                    fillSet.setSerializedToOne((int)i);
 	                    return true;
 	                }
@@ -2592,6 +2610,84 @@ public final class NormalizerImpl {
         } else {
             return 0;
         }
+    }
+
+
+    /* Is c an NF<mode>-skippable code point? See unormimp.h. */
+    public static boolean isNFSkippable(int c, Normalizer.Mode mode, long mask) {
+        long /*unsigned int*/ norm32;
+        mask = mask & UNSIGNED_INT_MASK;
+        char aux, fcd;
+   
+        /* check conditions (a)..(e), see unormimp.h */
+        norm32 = getNorm32(c);
+
+        if((norm32&mask)!=0) {
+            return false; /* fails (a)..(e), not skippable */
+        }
+    
+        if(mode == Normalizer.NFD || mode == Normalizer.NFKD || mode == Normalizer.NONE){
+            return true; /* NF*D, passed (a)..(c), is skippable */
+        }
+        /* check conditions (a)..(e), see unormimp.h */
+
+        /* NF*C/FCC, passed (a)..(e) */
+        if((norm32& QC_NFD)==0) {
+            return true; /* no canonical decomposition, is skippable */
+        }
+    
+        /* check Hangul syllables algorithmically */
+        if(isNorm32HangulOrJamo(norm32)) {
+            /* Jamo passed (a)..(e) above, must be Hangul */
+            return !isHangulWithoutJamoT((char)c); /* LVT are skippable, LV are not */
+        }
+    
+        /* if(mode<=UNORM_NFKC) { -- enable when implementing FCC */
+        /* NF*C, test (f) flag */
+        if(!isFormatVersion_2_2) {
+            return false; /* no (f) data, say not skippable to be safe */
+        }
+    
+
+        aux = auxTrieImpl.auxTrie.getCodePointValue(c);
+        return (aux&AUX_NFC_SKIP_F_MASK)==0; /* TRUE=skippable if the (f) flag is not set */
+    
+        /* } else { FCC, test fcd<=1 instead of the above } */
+    }
+    /*
+    private static final boolean
+    _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
+        // add the start code point to the USet 
+        uset_add((USet *)context, start);
+        return TRUE;
+    }
+    */
+
+    public static UnicodeSet addPropertyStarts(UnicodeSet set) {
+        int c;
+       
+        /* add the start code point of each same-value range of each trie */
+        //utrie_enum(&normTrie, NULL, _enumPropertyStartsRange, set);
+        TrieIterator normIter = new TrieIterator(normTrieImpl.normTrie);
+        RangeValueIterator.Element result = new RangeValueIterator.Element();
+        
+        while(normIter.next(result)){
+            set.add(result.start);
+        }
+        
+        TrieIterator fcdIter  = new TrieIterator(fcdTrieImpl.fcdTrie);
+        //utrie_enum(&fcdTrie, NULL, _enumPropertyStartsRange, set);
+        while(normIter.next(result)){
+            set.add(result.start);
+        }
+    
+        /* add Hangul LV syllables and LV+1 because of skippables */
+        for(c=HANGUL_BASE; c<HANGUL_BASE+HANGUL_COUNT; c+=JAMO_T_COUNT) {
+            set.add(c);
+            set.add(c+1);
+        }
+        set.add(HANGUL_BASE+HANGUL_COUNT); /* add Hangul+1 to continue with other properties */
+        return set; // for chaining
     }
 
 	/**
