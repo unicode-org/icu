@@ -42,35 +42,7 @@ typedef int tst_strcoll(void *collator, const int object,
                         const UChar *source, const int sLen,
                         const UChar *target, const int tLen);
 
-const static UChar gRules[MAX_TOKEN_LEN] =
-/*" & 0 < 1,\u2461<a,A"*/
-{ 0x0026, 0x0030, 0x003C, 0x0031, 0x002C, 0x2460, 0x003C, 0x0061, 0x002C, 0x0041, 0x0000 };
 
-const static UChar testCase[][MAX_TOKEN_LEN] =
-{
-    /*0*/ {0x0031 /*'1'*/, 0x0061/*'a'*/, 0x0000},
-    /*1*/ {0x0031 /*'1'*/, 0x0041/*'A'*/, 0x0000},
-    /*2*/ {0x2460 /*circ'1'*/, 0x0061/*'a'*/, 0x0000},
-    /*3*/ {0x2460 /*circ'1'*/, 0x0041/*'A'*/, 0x0000}
-};
-
-const static UCollationResult caseTestResults[][9] =
-{
-        { UCOL_LESS, UCOL_LESS, UCOL_LESS, 0, UCOL_LESS, UCOL_LESS, 0, 0, UCOL_LESS },
-        { UCOL_GREATER, UCOL_LESS, UCOL_LESS, 0, UCOL_LESS, UCOL_LESS, 0, 0, UCOL_GREATER },
-        { UCOL_LESS, UCOL_LESS, UCOL_LESS, 0, UCOL_GREATER, UCOL_LESS, 0, 0, UCOL_LESS },
-        { UCOL_GREATER, UCOL_LESS, UCOL_GREATER, 0, UCOL_LESS, UCOL_LESS, 0, 0, UCOL_GREATER }
-
-};
-
-const static UColAttributeValue caseTestAttributes[][2] =
-{
-        { UCOL_LOWER_FIRST, UCOL_OFF},
-        { UCOL_UPPER_FIRST, UCOL_OFF},
-        { UCOL_LOWER_FIRST, UCOL_ON},
-        { UCOL_UPPER_FIRST, UCOL_ON}
-
-};
 
 static void TestCase( )
 {
@@ -1008,7 +980,7 @@ static uint32_t testSwitch(tst_strcoll* func, void *collator, int opts, uint32_t
 }
 
 
-static void testAgainstUCA(UCollator *coll, UCollator *UCA, LCID lcid, UErrorCode *status) {
+static void testAgainstUCA(UCollator *coll, UCollator *UCA, LCID lcid, const char *refName, UErrorCode *status) {
   const UChar *rules = NULL, *current = NULL;
   int32_t ruleLen = 0;
   uint32_t strength = 0;
@@ -1063,7 +1035,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, LCID lcid, UErrorCod
 
       if(strength != UCOL_TOK_RESET) {
         if((*first<0x3400 || *first>=0xa000) && (*second<0x3400 || *second>=0xa000)) {
-          UCAdiff += testSwitch(&ucaTest, (void *)UCA, 0, strength, first, second, "UCA");
+          UCAdiff += testSwitch(&ucaTest, (void *)UCA, 0, strength, first, second, refName);
           /*Windiff += testSwitch(&winTest, (void *)lcid, 0, strength, first, second, "Win32");*/
         }
       }
@@ -1077,7 +1049,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, LCID lcid, UErrorCod
       log_verbose("\n");
     }
     if(UCAdiff == 0) {
-      log_verbose("No immediate difference with UCA!\n");
+      log_verbose("No immediate difference with %s!\n", refName);
     }
     if(Windiff == 0) {
       log_verbose("No immediate difference with Win32!\n");
@@ -1286,7 +1258,7 @@ static void TestCollations( ) {
         cName[nameSize] = 0;
         log_verbose("\nTesting locale %s (%s), LCID %04X\n", locName, cName, lcid);
         coll = ucol_open(locName, &status);
-        testAgainstUCA(coll, UCA, lcid, &status);
+        testAgainstUCA(coll, UCA, lcid, "UCA", &status);
         ucol_close(coll);
     }
   }
@@ -1669,8 +1641,6 @@ static void TestUCAZero() {
   u_unescape(blah, b, 256);
   ucol_getSortKey(coll, b, 1, res, 256);
 
-
-
   ucol_close(coll);
 }
 
@@ -1763,6 +1733,216 @@ static void TestJ815() {
 }
 
 
+/*
+"& a < b < c < d& r < c",									"& a < b < d& r < c",
+"& a < b < c < d& c < m",									"& a < b < c < m < d",
+"& a < b < c < d& a < m",									"& a < m < b < c < d",
+"& a <<< b << c < d& a < m",								"& a <<< b << c < m < d",
+"& a < b < c < d& [before 1] c < m",						"& a < b < m < c < d",
+"& a << b <<< c << d <<< e& [before 3] e <<< x",			"& a << b <<< c << d <<< x <<< e",
+"& a << b <<< c << d <<< e& [before 2] e <<< x",			"& a << b <<< c <<< x << d <<< e",
+"& a << b <<< c << d <<< e& [before 1] e <<< x",			"& a <<< x << b <<< c << d <<< e",
+"& a << b <<< c << d <<< e <<< f < g& [before 1] e < x",	"& a << b <<< c << d <<< e <<< f < x < g",
+*/
+static void TestRedundantRules() {
+  int32_t i;
+
+  const static char *rules[] = {
+    "& a < b < c < d& r < c",
+    "& a < b < c < d& r < c",
+    "& a < b < c < d& c < m",
+    "& a < b < c < d& a < m",
+    "& a <<< b << c < d& a < m",
+    "& a < b < c < d& [before 1] c < m",
+    "& a << b <<< c << d <<< e& [before 3] e <<< x",
+    "& a << b <<< c << d <<< e& [before 2] e <<< x",
+    "& a << b <<< c << d <<< e& [before 1] e <<< x",
+    "& a << b <<< c << d <<< e <<< f < g& [before 1] e < x"
+  };
+
+  const static char *expectedRules[] = {
+    "& a < b < d& r < c",
+    "& a < b < d& r < c",
+    "& a < b < c < m < d",
+    "& a < m < b < c < d",
+    "& a <<< b << c < m < d",
+    "& a < b < m < c < d",
+    "& a << b <<< c << d <<< x <<< e",
+    "& a << b <<< c <<< x << d <<< e",
+    "& a <<< x << b <<< c << d <<< e",
+    "& a << b <<< c << d <<< e <<< f < x < g"
+  };
+
+  const static char *testdata[][8] = {
+    {"a", "b", "d"},
+    {"r", "c"},
+    {"a", "b", "c", "m", "d"},
+    {"a", "m", "b", "c", "d"},
+    {"a", "b", "c", "m", "d"},
+    {"a", "b", "m", "c", "d"},
+    {"a", "b", "c", "d", "x", "e"},
+    {"a", "b", "c", "x", "d", "e"},
+    {"a", "x", "b", "c", "d", "e"},
+    {"a", "b", "c", "d", "e", "f", "x", "g"}
+  };
+
+  const static uint32_t testdatalen[] = {
+    3,
+      2,
+      5,
+      5,
+      5,
+      5,
+      6,
+      6,
+      6,
+      8
+  };
+
+
+
+  UCollator *credundant = NULL;
+  UCollator *cresulting = NULL;
+  UErrorCode status = U_ZERO_ERROR;
+  UChar rlz[2048] = { 0 };
+  uint32_t rlen = 0;
+
+  for(i = 0; i<sizeof(rules)/sizeof(rules[0]); i++) {
+    log_verbose("testing rule %s, expected to be %s\n", rules[i], expectedRules[i]);
+    rlen = u_unescape(rules[i], rlz, 2048);
+    credundant = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
+    rlen = u_unescape(expectedRules[i], rlz, 2048);
+    cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
+
+    testAgainstUCA(cresulting, credundant, 0, "expected", &status);
+
+    ucol_close(credundant);
+    ucol_close(cresulting);
+
+    log_verbose("testing using data\n");
+
+    genericRulesStarter(rules[i], testdata[i], testdatalen[i]);
+  }
+
+}
+
+static void TestCase( )
+{
+    const static UChar gRules[MAX_TOKEN_LEN] =
+    /*" & 0 < 1,\u2461<a,A"*/
+    { 0x0026, 0x0030, 0x003C, 0x0031, 0x002C, 0x2460, 0x003C, 0x0061, 0x002C, 0x0041, 0x0000 };
+
+    const static UChar testCase[][MAX_TOKEN_LEN] =
+    {
+        /*0*/ {0x0031 /*'1'*/, 0x0061/*'a'*/, 0x0000},
+        /*1*/ {0x0031 /*'1'*/, 0x0041/*'A'*/, 0x0000},
+        /*2*/ {0x2460 /*circ'1'*/, 0x0061/*'a'*/, 0x0000},
+        /*3*/ {0x2460 /*circ'1'*/, 0x0041/*'A'*/, 0x0000}
+    };
+
+    const static UCollationResult caseTestResults[][9] =
+    {
+            { UCOL_LESS, UCOL_LESS, UCOL_LESS, 0, UCOL_LESS, UCOL_LESS, 0, 0, UCOL_LESS },
+            { UCOL_GREATER, UCOL_LESS, UCOL_LESS, 0, UCOL_LESS, UCOL_LESS, 0, 0, UCOL_GREATER },
+            { UCOL_LESS, UCOL_LESS, UCOL_LESS, 0, UCOL_GREATER, UCOL_LESS, 0, 0, UCOL_LESS },
+            { UCOL_GREATER, UCOL_LESS, UCOL_GREATER, 0, UCOL_LESS, UCOL_LESS, 0, 0, UCOL_GREATER }
+
+    };
+
+    const static UColAttributeValue caseTestAttributes[][2] =
+    {
+            { UCOL_LOWER_FIRST, UCOL_OFF},
+            { UCOL_UPPER_FIRST, UCOL_OFF},
+            { UCOL_LOWER_FIRST, UCOL_ON},
+            { UCOL_UPPER_FIRST, UCOL_ON}
+
+    };
+    int32_t i,j,k;
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator  *myCollation;
+    myCollation = ucol_open("en_US", &status);
+    if(U_FAILURE(status)){
+        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        return;
+    }
+    log_verbose("Testing different case settings\n");
+    ucol_setStrength(myCollation, UCOL_TERTIARY);
+
+    for(k = 0; k<4; k++) {
+      ucol_setAttribute(myCollation, UCOL_CASE_FIRST, caseTestAttributes[k][0], &status);
+      ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, caseTestAttributes[k][1], &status);
+      log_verbose("Case first = %d, Case level = %d\n", caseTestAttributes[k][0], caseTestAttributes[k][1]);
+      for (i = 0; i < 3 ; i++) {
+        for(j = i+1; j<4; j++) {
+          doTest(myCollation, testCase[i], testCase[j], caseTestResults[k][3*i+j-1]);
+        }
+      }
+    }
+    ucol_close(myCollation);
+
+    myCollation = ucol_openRules(gRules, u_strlen(gRules), UNORM_NONE, UCOL_TERTIARY, &status);
+    if(U_FAILURE(status)){
+        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        return;
+    }
+    log_verbose("Testing different case settings with custom rules\n");
+    ucol_setStrength(myCollation, UCOL_TERTIARY);
+
+    for(k = 0; k<4; k++) {
+      ucol_setAttribute(myCollation, UCOL_CASE_FIRST, caseTestAttributes[k][0], &status);
+      ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, caseTestAttributes[k][1], &status);
+      for (i = 0; i < 3 ; i++) {
+        for(j = i+1; j<4; j++) {
+          doTest(myCollation, testCase[i], testCase[j], caseTestResults[k][3*i+j-1]);
+        }
+      }
+    }
+    ucol_close(myCollation);    
+    {
+      const static char *lowerFirst[] = {
+        "h",
+        "H",
+        "ch",
+        "Ch",
+        "CH",
+        "cha",
+        "chA",
+        "Cha",
+        "ChA",
+        "CHa",
+        "CHA",
+        "i",
+        "I"
+      };
+
+      const static char *upperFirst[] = {
+        "H",
+        "h",
+        "CH",
+        "Ch",
+        "ch",
+        "CHA",
+        "CHa",
+        "ChA",
+        "Cha",
+        "chA",
+        "cha",
+        "I",
+        "i"
+      };
+      log_verbose("mixed case test\n");
+      log_verbose("lower first, case level off\n");
+      genericRulesStarter("[casefirst lower]&H<ch<<<Ch<<<CH", lowerFirst, sizeof(lowerFirst)/sizeof(lowerFirst[0]));
+      log_verbose("upper first, case level off\n");
+      genericRulesStarter("[casefirst upper]&H<ch<<<Ch<<<CH", upperFirst, sizeof(upperFirst)/sizeof(upperFirst[0]));
+      log_verbose("lower first, case level on\n");
+      genericRulesStarter("[casefirst lower][caselevel on]&H<ch<<<Ch<<<CH", lowerFirst, sizeof(lowerFirst)/sizeof(lowerFirst[0]));
+      log_verbose("upper first, case level on\n");
+      genericRulesStarter("[casefirst upper][caselevel on]&H<ch<<<Ch<<<CH", upperFirst, sizeof(upperFirst)/sizeof(upperFirst[0]));
+    }
+
+}
+
 static void TestIncrementalNormalize() {
 
     UChar baseA     =0x41;
@@ -1826,6 +2006,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestJ815, "tscoll/cmsccoll/TestJ815");
     addTest(root, &TestJ831, "tscoll/cmsccoll/TestJ831");
     addTest(root, &TestBefore, "tscoll/cmsccoll/TestBefore");
+    /*addTest(root, &TestRedundantRules, "tscoll/cmsccoll/TestRedundantRules");*/
     /*addTest(root, &TestUCAZero, "tscoll/cmsccoll/TestUCAZero");*/
     /*addTest(root, &TestUnmappedSpaces, "tscoll/cmsccoll/TestUnmappedSpaces");*/
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/
