@@ -850,7 +850,7 @@ TestLMBCS() {
    /* LMBCS to Unicode */
 
     const char *s=(const char *)pszLMBCS, *s0, *limit=(const char *)pszLMBCS+sizeof(pszLMBCS);
-    const uint32_t *r=pszUnicode;
+    const uint32_t *r= (const uint32_t *) pszUnicode;
     const uint32_t *o = offsets;
 
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -887,7 +887,7 @@ TestLMBCS() {
       UConverter *cnv16he = ucnv_open("LMBCS-16,locale=he", &errorCode);
       UConverter *cnv01us = ucnv_open("LMBCS-1,locale=USen", &errorCode);
       UChar uniString [] = {0x0192}; /* Latin Small letter f with hook */
-      UChar * pUni = uniString;
+      const UChar * pUni = uniString;
       char lmbcsString [4];
       char * pLMBCS = lmbcsString;
       UErrorCode errorCode=U_ZERO_ERROR;
