@@ -515,6 +515,27 @@ ibm-949_P11A-1999 { UTR22* }
                         cp949c { JAVA* }
                         ibm-949_VSUB_VPUA
 
+# Korean EUC.
+#
+# <quote from="Jungshik Shin">
+# EUC-KR = KS X 1003/ISO 646-KR or ISO 646-IRV/US-ASCII in GL and KS X 1001:1998 (formerly KS C 5601-1987) in GR.
+#
+# Although widely spread on MS Windows, using 
+# KS C 5601 or related names to denote EUC-KR or
+# windows-949 is very much misleading. KS C 5601-1987
+# is NOT suitable as a designation for MIME charset
+# and MBCS. It's just the name of a 94 x 94 Korean 
+# coded character set standard which can be invoked
+# on either GL (with MSB reset) or GR (with MSB set).
+# Note that JOHAB (windows-1361) specified in 
+# KS X 1001:1998 annex 3 (KS C 5601-1992 annex 3) 
+# is a _seprate_ MBCS with a _completely different_
+# mapping.
+# </quote>
+#
+# The following aliases tries to mirror the poor state of alias recognition
+# on these platforms.
+#
 # ibm-970 is a almost a subset of ibm-1363.
 # Java, Solaris and AIX use euc-kr to also mean ksc5601.
 ibm-970_P110-1995 { UTR22* }
@@ -522,16 +543,15 @@ ibm-970_P110-1995 { UTR22* }
                         EUC-KR { IANA* MIME* WINDOWS JAVA* }
                         windows-51949 { WINDOWS* }
                         ibm-eucKR { JAVA }
-                        csEUCKR { IANA WINDOWS }  # Korean EUC. x-euc-kr is a MIME name
+                        csEUCKR { IANA WINDOWS }  # x-euc-kr is also a MIME name
                         ibm-970_VPUA
 # Java, Solaris and AIX use euc-kr to also mean ksc5601, and _sometimes_ for Windows too.
 # ibm-1363 is almost a superset of ibm-970.
-# Johab seems to be ksc5601-1992 and windows-1361, which is not this.
 ibm-1363_P11B-1998 { UTR22* }
                         ibm-1363 # Leave untagged because this isn't the default
                         KS_C_5601-1987 { IANA* WINDOWS JAVA }
                         KS_C_5601-1989 { IANA WINDOWS }
-                        KSC_5601 { MIME* IANA WINDOWS }
+                        KSC_5601 { MIME* IANA WINDOWS } # Needed by iso-2022
                         csKSC56011987 { IANA WINDOWS }
                         korean { IANA WINDOWS }
                         iso-ir-149 { IANA WINDOWS }
@@ -540,8 +560,8 @@ ibm-1363_P11B-1998 { UTR22* }
                         cp1363
                         ksc
                         ibm-1363_VSUB_VPUA
-                        # ks_x_1001:1992    # This seems to mean johab
-                        # ksc5601-1992      # This seems to mean johab
+                        # ks_x_1001:1992
+                        # ksc5601-1992
 ibm-1363_P110-1997 { UTR22* } # Korean KSC MBCS with \ <-> Won mapping
                         ibm-1363 { IBM* }
                         ibm-1363_VASCII_VSUB_VPUA
@@ -778,4 +798,3 @@ ebcdic-xml-us
 
 #ibm-1159_P100-1999 { UTR22* }   ibm-1159 { IBM* }   # SBCS T-Ch Host. Euro update of ibm-28709. This is used in combination with another CCSID mapping.
 #ibm-9027_P100-1999 { UTR22* }   ibm-9027 { IBM* }   # DBCS T-Ch Host. Euro update of ibm-835. DBCS portion of ibm-1371.
-
