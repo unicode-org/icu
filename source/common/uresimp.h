@@ -59,16 +59,15 @@ struct UResourceDataEntry {
 
 struct UResourceBundle {
     const char *fKey; /*tag*/
+    UResourceDataEntry *fData; /*for low-level access*/
+    char *fVersion;
     char *fResPath; /* full path to the resource: "zh_TW/CollationElements/Sequence" */
     char fResBuf[RES_BUFSIZE];
     int32_t fResPathLen;
-    char *fVersion;
     UBool fHasFallback;
     UBool fIsTopLevel;
-    uint32_t fMagic1;
-    uint32_t fMagic2;
-    /*UBool fIsStackObject;*/
-    UResourceDataEntry *fData; /*for low-level access*/
+    uint32_t fMagic1;   /* For determining if it's a stack object */
+    uint32_t fMagic2;   /* For determining if it's a stack object */
     int32_t fIndex;
     int32_t fSize;
     ResourceData fResData;
@@ -88,7 +87,7 @@ U_CFUNC UBool ures_isStackObject( UResourceBundle* resB);
 /* Some getters used by the copy constructor */
 U_CFUNC const char* ures_getName(const UResourceBundle* resB);
 U_CFUNC const char* ures_getPath(const UResourceBundle* resB);
-U_CFUNC void ures_appendResPath(UResourceBundle *resB, const char* toAdd);
+U_CFUNC void ures_appendResPath(UResourceBundle *resB, const char* toAdd, int32_t lenToAdd);
 /*U_CFUNC void ures_setResPath(UResourceBundle *resB, const char* toAdd);*/
 U_CFUNC void ures_freeResPath(UResourceBundle *resB);
 

@@ -855,17 +855,18 @@ _startsWith(const char *s, const char *possiblePrefix) {
  * mechanism is desired, one could move variant display strings into their
  * own table "Variants" like the Languages and Countries tables.
  */
-static UResourceBundle *
-_res_getTableItemWithFallback(const char *path, const char *locale,
+static const UChar *
+_res_getTableStringWithFallback(const char *path, const char *locale,
                               const char *tableKey, const char *itemKey,
-                              UResourceBundle **pMainRB,
-                              UErrorCode *pErrorCode) {
+                              int32_t *pLength,
+                              UErrorCode *pErrorCode)
+{
     char localeBuffer[200];
-    UResourceBundle *rb, *table, *item;
+    UResourceBundle *rb, table;
+    const UChar *item;
     const char *defaultLocale;
     UBool lookedAtDefault;
 
-    *pMainRB=NULL;
     lookedAtDefault=FALSE;
     defaultLocale=uloc_getDefault();
 
@@ -904,6 +905,7 @@ _res_getTableItemWithFallback(const char *path, const char *locale,
         locale=ures_getLocale(rb, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             /* error getting the locale ID for an open RB - should never happen */
+            *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
             ures_close(rb);
             return NULL;
         }
@@ -916,7 +918,8 @@ _res_getTableItemWithFallback(const char *path, const char *locale,
          * this falls back through the locale's chain to root, but not through the default locale
          */
         *pErrorCode=U_ZERO_ERROR;
-        table=ures_getByKey(rb, tableKey, NULL, pErrorCode);
+        ures_initStackObject(&table);
+        ures_getByKey(rb, tableKey, &table, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             /* no such table anywhere in this fallback chain */
             ures_close(rb);
@@ -952,29 +955,33 @@ _res_getTableItemWithFallback(const char *path, const char *locale,
 #endif
 
         /* get the real locale ID for this table in case of aliases & fallbacks */
-        locale=ures_getLocale(table, pErrorCode);
+        locale=ures_getLocale(&table, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             /* error getting the locale ID for an open RB - should never happen */
-            ures_close(table);
+            *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
+            ures_close(&table);
             ures_close(rb);
             return NULL;
         }
 
         if(itemKey!=NULL) {
             /* try to open the requested item in the table */
-            item=ures_getByKey(table, itemKey, NULL, pErrorCode);
-            ures_close(table); /* we will not need the table any more */
+            item=ures_getStringByKey(&table, itemKey, pLength, pErrorCode);
             if(U_SUCCESS(*pErrorCode)) {
                 /* we got the requested item! */
-                *pMainRB=rb;
+                ures_close(&table);
+                ures_close(rb);
                 return item;
             }
         } else {
             /* return the "table" resource itself, not an item from it */
-            *pMainRB=rb;
-            return table;
+            item=ures_getString(&table, pLength, pErrorCode);
+            ures_close(&table); /* we will not need the table any more */
+            ures_close(rb);
+            return item;
         }
 
+        ures_close(&table);
         ures_close(rb);
         if(lookedAtDefault && (*locale==0 || 0==uprv_strcmp(locale, "root"))) {
             /* end of fallback, default and root do not have the requested item either */
@@ -1005,27 +1012,21 @@ _getStringOrCopyKey(const char *path, const char *locale,
                     const char *substitute,
                     UChar *dest, int32_t destCapacity,
                     UErrorCode *pErrorCode) {
-    UResourceBundle *rb, *item;
     const UChar *s;
     int32_t length;
 
     length=-1;
-    item=_res_getTableItemWithFallback(path, locale,
+    s=_res_getTableStringWithFallback(path, locale,
                                        tableKey, itemKey,
-                                       &rb,
+                                       &length,
                                        pErrorCode);
-    if(U_SUCCESS(*pErrorCode)) {
-        s=ures_getString(item, &length, pErrorCode);
-        if(U_SUCCESS(*pErrorCode)) {
-            int32_t copyLength=uprv_min(length, destCapacity);
-            if(copyLength>0) {
-                u_memcpy(dest, s, copyLength);
-            }
-        } else {
-            length=-1;
+    if(U_SUCCESS(*pErrorCode) && s) {
+        int32_t copyLength=uprv_min(length, destCapacity);
+        if(copyLength>0) {
+            u_memcpy(dest, s, copyLength);
         }
-        ures_close(item);
-        ures_close(rb);
+    } else {
+        length=-1;
     }
 
     /* no string from a resource bundle: convert the substitute */
