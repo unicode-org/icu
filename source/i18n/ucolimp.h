@@ -172,26 +172,7 @@ static uint8_t utf16fixup[32] = {
 
 /* a macro that gets a simple CE */
 /* for more complicated CEs it resorts to getComplicatedCE (what else) */
-#define UCOL_GETNEXTCE(order, coll, collationSource, status) { \
-  if (U_FAILURE((status)) || ((collationSource).pos>=(collationSource).len \
-      && (collationSource).CEpos <= (collationSource).toReturn)) { \
-    (order) = UCOL_NULLORDER; \
-  } else if ((collationSource).CEpos > (collationSource).toReturn) { \
-    (order) = *((collationSource).toReturn++); \
-  } else {\
-    (collationSource).CEpos = (collationSource).toReturn = (collationSource).CEs; \
-    *((collationSource).CEpos)  = ucmp32_get(((RuleBasedCollator *)(coll))->data->mapping, *((collationSource).pos)); \
-    if(*((collationSource).CEpos) < UCOL_EXPANDCHARINDEX && !(UCOL_ISTHAIPREVOWEL(*((collationSource).pos)))) { \
-      (collationSource).pos++; \
-      (order)=(*((collationSource).CEpos)); \
-    } else { \
-	  (order) = getComplicatedCE((coll), &(collationSource), &(status)); \
-    } \
-  } \
-}
-
-
-#define UCOL_GETNEXTCENEW(order, coll, collationSource, status) {                     \
+#define UCOL_GETNEXTCE(order, coll, collationSource, status) {                     \
     if (U_FAILURE(*(status)) || ((collationSource).pos>=(collationSource).len          \
       && (collationSource).CEpos <= (collationSource).toReturn)) {                    \
       (order) = UCOL_NULLORDER;                                                       \
@@ -213,8 +194,9 @@ static uint8_t utf16fixup[32] = {
     (collationSource).pos++;                                                          \
 }
 
+uint32_t getSpecialCE(const UCollator *coll, collIterate *source, UErrorCode *status);
+uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
 uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
-int32_t getComplicatedCE(const UCollator *coll, collIterate *source, UErrorCode *status);
 void incctx_cleanUpContext(incrementalContext *ctx);
 UChar incctx_appendChar(incrementalContext *ctx, UChar c);
 
@@ -233,7 +215,9 @@ ucol_calcSortKey(const    UCollator    *coll,
         int32_t        sourceLength,
         uint8_t        **result,
         int32_t        resultLength,
-        UBool allocatePrimary);
+        UBool allocatePrimary,
+        UErrorCode *status);
+
 
 /**
  * Makes a copy of the Collator's rule data. The format is
@@ -310,7 +294,7 @@ typedef struct {
       UColAttributeValue strength;          /* attribute for strength */
 } UCATableHeader;
 
-struct UCollatorNew {
+struct UCollator {
     UBool freeOnClose;
     UResourceBundle *rb;
     const UCATableHeader *image;
@@ -336,8 +320,12 @@ struct UCollatorNew {
     UBool strengthisDefault;          /* attribute for strength */
 };
 
-uint32_t getSpecialCENew(const UCollatorNew *coll, collIterate *source, UErrorCode *status);
-uint32_t ucol_getNextCENew(const UCollatorNew *coll, collIterate *collationSource, UErrorCode *status);
+
+void init_incrementalContext(UCharForwardIterator *source, void *sourceContext, incrementalContext *s);
+int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UErrorCode *status);
+void incctx_cleanUpContext(incrementalContext *ctx);
+UChar incctx_appendChar(incrementalContext *ctx, UChar c);
+UCollationResult alternateIncrementalProcessing(const UCollator *coll, incrementalContext *srcCtx, incrementalContext *trgCtx);
 
 #endif
 
