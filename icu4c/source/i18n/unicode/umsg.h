@@ -332,6 +332,7 @@ u_formatMessageWithError(   const char    *locale,
  * in pattern.
  * @return The total buffer size needed; if greater than resultLength, the
  * output was truncated.
+ * @draft ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 u_vformatMessageWithError(  const char   *locale,
@@ -400,7 +401,10 @@ u_vparseMessageWithError(const char  *locale,
                          UErrorCode* status);
 
 /*----------------------- New experimental API --------------------------- */
-
+/** 
+ * The message format object
+ * @draft ICU 2.0
+ */
 typedef void* UMessageFormat;
 
 
