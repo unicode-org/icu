@@ -1068,6 +1068,43 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
   }
 }
 
+/* 
+ * Takes two CEs (lead and continuation) and 
+ * compares them as CEs should be compared:
+ * primary vs. primary, secondary vs. secondary
+ * tertiary vs. tertiary
+ */
+int32_t compareCEs(uint32_t s1, uint32_t s2,
+                   uint32_t t1, uint32_t t2) {
+  uint32_t s = 0, t = 0;
+  if(s1 == t1 && s2 == t2) {
+    return 0;
+  }
+  s = (s1 & 0xFFFF0000)|((s2 & 0xFFFF0000)>>16); 
+  t = (t1 & 0xFFFF0000)|((t2 & 0xFFFF0000)>>16); 
+  if(s < t) {
+    return -1;
+  } else if(s > t) {
+    return 1;
+  } else {
+    s = s1 & 0x0000FF00 | (s2 & 0x0000FF00)>>8;
+    t = t1 & 0x0000FF00 | (t2 & 0x0000FF00)>>8;
+    if(s < t) {
+      return -1;
+    } else if(s > t) {
+      return 1;
+    } else {
+      s = (s1 & 0x000000FF)<<8 | s2 & 0x000000FF;
+      t = (t1 & 0x000000FF)<<8 | t2 & 0x000000FF;
+      if(s < t) {
+        return -1;
+      } else {
+        return 1;
+      }
+    }
+  }
+}
+
 static void testCEs(UCollator *coll, UErrorCode *status) {
 
   const UChar *rules = NULL, *current = NULL;
@@ -1099,7 +1136,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
   UCAConstants *consts = (UCAConstants *)((uint8_t *)UCA->image + UCA->image->UCAConsts);
   uint32_t UCOL_RESET_TOP_VALUE = consts->UCA_LAST_NON_VARIABLE[0], UCOL_RESET_TOP_CONT = consts->UCA_LAST_NON_VARIABLE[1], 
            UCOL_NEXT_TOP_VALUE = consts->UCA_FIRST_IMPLICIT[0], UCOL_NEXT_TOP_CONT = consts->UCA_FIRST_IMPLICIT[1];
-
+  
   baseCE=baseContCE=nextCE=nextContCE=currCE=currContCE=lastCE=lastContCE = UCOL_NOT_FOUND;
 
   src.opts = &opts;
@@ -1142,6 +1179,8 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
       if(!isContinuation(currContCE)) {
         currContCE = 0;
       }
+
+      /* we need to repack CEs here */
 
       if(strength == UCOL_TOK_RESET) {
         if(top_ == TRUE) {
@@ -1187,12 +1226,13 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
               log_err("current CE  (initial strength UCOL_EQUAL)\n");
             }
           } else {
-            if(currCE > nextCE || (currCE == nextCE && currContCE >= nextContCE)) {
+            if(compareCEs(currCE, currContCE, nextCE, nextContCE) > 0) {
+            /*if(currCE > nextCE || (currCE == nextCE && currContCE >= nextContCE)) {*/
               log_err("current CE is not less than base CE\n");
             }
-            if(currCE < lastCE || (currCE == lastCE && currContCE <= lastContCE)) {
-              log_err("sequence of generated CEs is broken:  curr=%08X, last=%08X, currCont=%08X, lastCont=%08X\n",
-                            currCE, lastCE, currContCE, lastContCE);
+            if(compareCEs(currCE, currContCE, lastCE, lastContCE) < 0) {
+            /*if(currCE < lastCE || (currCE == lastCE && currContCE <= lastContCE)) {*/
+              log_err("sequence of generated CEs is broken\n");
             }
           }
         }
@@ -1224,6 +1264,8 @@ static const char* localesToTest[] = {
 #endif
 
 static const char* rulesToTest[] = {
+  /* Funky fa rule */
+  "&\\u0622 < \\u0627 << \\u0671 < \\u0621",
   /*"& Z < p, P",*/
     /* Cui Mins rules */
     "&[top]<o,O<p,P<q,Q<'?'/u<r,R<u,U", /*"<o,O<p,P<q,Q<r,R<u,U & Qu<'?'",*/
@@ -1300,7 +1342,6 @@ static void RamsRulesTest(void) {
   UErrorCode status = U_ZERO_ERROR;
   int32_t i = 0;
   UCollator *coll = NULL;
-/*  UCollator *UCA = ucol_open("", &status); */
   UChar rule[2048];
   uint32_t ruleLen;
   int32_t noOfLoc = uloc_countAvailable();
@@ -1314,13 +1355,6 @@ static void RamsRulesTest(void) {
     if(hasCollationElements(locName)) {
       if (uprv_strcmp("ja", locName)==0) {
         log_verbose("Don't know how to test Japanese because of prefixes\n");
-        continue;
-      }
-      /*
-       * TODO: fix testCEs for testing the Farsi rules
-       */
-      if (uprv_strcmp("fa", locName)==0 && U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM == 2) {
-        log_verbose("Donot test fa locale due to a bug in testCEs\n");
         continue;
       }
       log_verbose("Testing locale %s\n", locName);
@@ -1339,8 +1373,7 @@ static void RamsRulesTest(void) {
 
   for(i = 0; i<sizeof(rulesToTest)/sizeof(rulesToTest[0]); i++) {
     log_verbose("Testing rule: %s\n", rulesToTest[i]);
-    u_uastrcpy(rule, rulesToTest[i]);
-    ruleLen = u_strlen(rule);
+    ruleLen = u_unescape(rulesToTest[i], rule, 2048);
     coll = ucol_openRules(rule, ruleLen, UCOL_OFF, UCOL_TERTIARY, NULL,&status);
     if(U_SUCCESS(status)) {
       testCollator(coll, &status);
@@ -3579,7 +3612,6 @@ static void TestRuleOptions(void) {
     genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
   }
 }
-
 
 void addMiscCollTest(TestNode** root)
 {
