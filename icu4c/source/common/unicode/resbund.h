@@ -198,7 +198,7 @@ public:
      * returns a string from a string resource type
      *
      * @param status  fills in the outgoing error code
-     *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+     *                could be <TT>U_MISSING_RESOURCE_ERROR</TT> if the key is not found
      *                could be a warning 
      *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
      * @return a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
@@ -213,7 +213,7 @@ public:
      *
      * @param len     fills in the length of resulting byte chunk
      * @param status  fills in the outgoing error code
-     *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+     *                could be <TT>U_MISSING_RESOURCE_ERROR</TT> if the key is not found
      *                could be a warning 
      *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
      * @return a pointer to a chunk of unsigned bytes which live in a memory mapped/DLL file.
@@ -228,7 +228,7 @@ public:
      *
      * @param len     fills in the length of resulting integer vector
      * @param status  fills in the outgoing error code
-     *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+     *                could be <TT>U_MISSING_RESOURCE_ERROR</TT> if the key is not found
      *                could be a warning 
      *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
      * @return a pointer to a vector of integers that lives in a memory mapped/DLL file.
@@ -242,7 +242,7 @@ public:
      * This integer is originally 28 bits.
      *
      * @param status  fills in the outgoing error code
-     *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+     *                could be <TT>U_MISSING_RESOURCE_ERROR</TT> if the key is not found
      *                could be a warning 
      *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
      * @return an unsigned integer value
@@ -256,7 +256,7 @@ public:
      * This integer is originally 28 bit and the sign gets propagated.
      *
      * @param status  fills in the outgoing error code
-     *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+     *                could be <TT>U_MISSING_RESOURCE_ERROR</TT> if the key is not found
      *                could be a warning 
      *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
      * @return a signed integer value
