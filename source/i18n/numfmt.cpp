@@ -75,6 +75,7 @@ NumberFormat::~NumberFormat()
 // copy constructor
 
 NumberFormat::NumberFormat(const NumberFormat &source)
+:   Format(source)
 {
     *this = source;
 }
