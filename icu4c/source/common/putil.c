@@ -1697,7 +1697,7 @@ The leftmost codepage (.xxx) wins.
     int32_t lang = MAC_LC_INIT_NUMBER;
     /* = GetScriptManagerVariable(smScriptLang);*/
     int32_t date_region = MAC_LC_INIT_NUMBER;
-    char* posixID = 0;
+    const char* posixID = 0;
     int32_t count = sizeof(mac_lc_recs) / sizeof(mac_lc_rec);
     int32_t i;
     Intl1Hndl ih;
