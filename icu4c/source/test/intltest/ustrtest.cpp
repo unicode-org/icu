@@ -395,7 +395,10 @@ UnicodeStringTest::TestCaseConversion()
 
         beforeUpper[]= { 0x61, 0x42, 0x69,  0x3c2, 0xdf,       0x3c3, 0x2f, 0xfb03,           0xfb03,           0xfb03,           0xd93f, 0xdfff },
         upperRoot[]=   { 0x41, 0x42, 0x49,  0x3a3, 0x53, 0x53, 0x3a3, 0x2f, 0x46, 0x46, 0x49, 0x46, 0x46, 0x49, 0x46, 0x46, 0x49, 0xd93f, 0xdfff },
-        upperTurkish[]={ 0x41, 0x42, 0x130, 0x3a3, 0x53, 0x53, 0x3a3, 0x2f, 0x46, 0x46, 0x49, 0x46, 0x46, 0x49, 0x46, 0x46, 0x49, 0xd93f, 0xdfff };
+        upperTurkish[]={ 0x41, 0x42, 0x130, 0x3a3, 0x53, 0x53, 0x3a3, 0x2f, 0x46, 0x46, 0x49, 0x46, 0x46, 0x49, 0x46, 0x46, 0x49, 0xd93f, 0xdfff },
+
+        beforeMiniUpper[]=  { 0xdf, 0x61 },
+        miniUpper[]=        { 0x53, 0x53, 0x41 };
 
         UnicodeString s;
 
@@ -408,7 +411,7 @@ UnicodeStringTest::TestCaseConversion()
         }
 
         /* lowercase with turkish locale */
-        s=UnicodeString(FALSE, beforeLower, sizeof(beforeLower)/U_SIZEOF_UCHAR).toLower(Locale("tr"));
+        s=UnicodeString(FALSE, beforeLower, sizeof(beforeLower)/U_SIZEOF_UCHAR).setCharAt(0, beforeLower[0]).toLower(Locale("tr"));
         if( s.length()!=(sizeof(lowerTurkish)/U_SIZEOF_UCHAR) ||
             s!=UnicodeString(FALSE, lowerTurkish, s.length())
         ) {
@@ -416,7 +419,7 @@ UnicodeStringTest::TestCaseConversion()
         }
 
         /* uppercase with root locale */
-        s=UnicodeString(FALSE, beforeUpper, sizeof(beforeUpper)/U_SIZEOF_UCHAR).toUpper();
+        s=UnicodeString(FALSE, beforeUpper, sizeof(beforeUpper)/U_SIZEOF_UCHAR).setCharAt(0, beforeUpper[0]).toUpper();
         if( s.length()!=(sizeof(upperRoot)/U_SIZEOF_UCHAR) ||
             s!=UnicodeString(FALSE, upperRoot, s.length())
         ) {
@@ -429,6 +432,14 @@ UnicodeStringTest::TestCaseConversion()
             s!=UnicodeString(FALSE, upperTurkish, s.length())
         ) {
             errln("error in toUpper(turkish locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, upperTurkish, sizeof(upperTurkish)/U_SIZEOF_UCHAR) + "\"");
+        }
+
+        /* uppercase a short string with root locale */
+        s=UnicodeString(FALSE, beforeMiniUpper, sizeof(beforeMiniUpper)/U_SIZEOF_UCHAR).setCharAt(0, beforeMiniUpper[0]).toUpper();
+        if( s.length()!=(sizeof(miniUpper)/U_SIZEOF_UCHAR) ||
+            s!=UnicodeString(FALSE, miniUpper, s.length())
+        ) {
+            errln("error in toUpper(root locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, miniUpper, sizeof(miniUpper)/U_SIZEOF_UCHAR) + "\"");
         }
     }
 }
