@@ -124,16 +124,6 @@ Formattable::Formattable(int64_t value)
 }
 
 // -------------------------------------
-// Creates a formattable object with a char* string.
-
-Formattable::Formattable(const char* stringToCopy)
-    :   UObject(), fType(kString)
-{
-    fBogus.setToBogus();
-    fValue.fString = new UnicodeString(stringToCopy);
-}
-
-// -------------------------------------
 // Creates a formattable object with a UnicodeString instance.
 
 Formattable::Formattable(const UnicodeString& stringToCopy)
