@@ -145,7 +145,7 @@ void TestDateFormat()
     else
         log_err("FAIL: Date Format for french locale failed using udat_format()\n");
     /*foramt using it */
-    u_uastrcpy(temp, "10-lug-96 16.05.28");
+    u_uastrcpy(temp, "10/lug/96 16:05:28");
     
     if(u_strcmp(myDateFormat(it,d), temp)==0)
         log_verbose("PASS: Date Format for italian locale successful uisng udat_format()\n");
