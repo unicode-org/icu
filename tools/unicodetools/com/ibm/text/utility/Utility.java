@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2004/04/10 16:49:19 $
-* $Revision: 1.42 $
+* $Date: 2004/06/26 00:26:16 $
+* $Revision: 1.43 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ import java.util.*;
 import java.text.*;
 import java.io.*;
 
+import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.Replaceable;
@@ -462,18 +463,22 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
      * Splits a string containing divider into pieces, storing in output
      * and returns the number of pieces.
      */
-	public static int split(String s, char divider, String[] output) {
+	public static int split(String s, char divider, String[] output, boolean trim) {
 	    try {
             int last = 0;
             int current = 0;
             int i;
             for (i = 0; i < s.length(); ++i) {
                 if (s.charAt(i) == divider) {
-                    output[current++] = s.substring(last,i);
+                    String temp = s.substring(last,i);
+                    if (trim) temp = temp.trim();
+                    output[current++] = temp;
                     last = i+1;
                 }
             }
-            output[current++] = s.substring(last,i);
+            String temp = s.substring(last,i);
+            if (trim) temp = temp.trim();
+            output[current++] = temp;
             int result = current;
             while (current < output.length) {
                 output[current++] = "";
@@ -484,9 +489,16 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         }
 	}
 
-	public static String[] split(String s, char divider) {
+    public static String[] split(String s, char divider) {
+        return split(s,divider,false);
+    }
+    public static int split(String s, char divider, String[] output) {
+        return split(s,divider,output,false);
+    }
+    
+	public static String[] split(String s, char divider, boolean trim) {
 	    String[] result = new String[100]; // HACK
-	    int count = split(s, divider, result);
+	    int count = split(s, divider, result, trim);
 	    return extract(result, 0, count);
 	}
 
@@ -1207,6 +1219,47 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     
     private static boolean isSeparateLineIDN(int start, int end, UCD ucd) {
         return (isSeparateLineIDN(start, ucd) || isSeparateLineIDN(end, ucd));
+    }
+
+    public static Transliterator createFromFile(String fileName, int direction, Transliterator pretrans) throws IOException {
+        StringBuffer buffer = new StringBuffer();
+        FileLineIterator fli = new FileLineIterator();
+        fli.open(fileName, Utility.UTF8);
+        fli.commentChar = FileLineIterator.NOTCHAR; // disable comments
+        while (true) {
+            String line = fli.read();
+            if (line == null) break;
+            if (line.startsWith("\uFEFF")) line = line.substring(1);
+            if (pretrans != null) line = pretrans.transliterate(line);
+            buffer.append(line);
+            buffer.append("\r\n"); // separate with whitespace
+        }
+        fli.close();
+        
+        /*
+        
+        // read and concatenate all the lines
+        FileInputStream fis = new FileInputStream(fileName);
+        InputStreamReader isr = new InputStreamReader(fis, "UTF8");
+        BufferedReader br = new BufferedReader(isr, 32*1024);
+        while (true) {
+            String line = br.readLine();
+            if (line == null) break;
+            if (line.length() > 0 && line.charAt(0) == '\uFEFF') line = line.substring(1); // strip BOM
+            if (pretrans != null) line = pretrans.transliterate(line);
+            buffer.append(line);
+            buffer.append("\r\n"); // separate with whitespace
+        }
+        br.close();
+        //System.out.println(buffer.toString());
+        */
+        
+        // Transform file name into id
+        String id = fileName;
+        int pos = id.lastIndexOf('.');
+        if (pos >= 0) id = id.substring(0, pos);
+        //System.out.println(buffer);
+        return Transliterator.createFromRules(id, buffer.toString(), direction);
     }
 
 }

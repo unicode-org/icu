@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -968,35 +969,68 @@ public class MakeUnicodeFiles {
         }
     }
     
-    public static void showMatches() throws IOException {
+    public static void showAllDiff() throws IOException {
         PrintWriter out = BagFormatter.openUTF8Writer(UCD_Types.GEN_DIR, "propertyDifference.txt");
         try {
-            showDifferences(out, "4.0.1", "LB", "GC");
-            showDifferences(out, "4.0.1", "East Asian Width", "LB");
-            showDifferences(out, "4.0.1", "East Asian Width", "GC");
+            UnicodeProperty.Factory fac = ToolUnicodePropertySource.make("4.0.1");
+            List props = fac.getAvailableNames(
+                  (1<<UnicodeProperty.BINARY) 
+                | (1<<UnicodeProperty.ENUMERATED) 
+                //| (1<<UnicodeProperty.CATALOG)
+                );
+            Set skipList = new HashSet();
+            skipList.add("Age");
+            skipList.add("Joining_Group");
+            skipList.add("Canonical_Combining_Class");
+            
+            for (Iterator it = props.iterator(); it.hasNext();) {
+                String prop1 = (String) it.next();
+                for (Iterator it2 = props.iterator(); it2.hasNext();) {
+                    String prop2 = (String) it2.next();
+                    if (prop1.equals(prop2)) continue;
+                    if (skipList.contains(prop2)) continue;
+                    System.out.println(prop1 + " vs. " + prop2);
+                    showDifferences(out, fac.getProperty(prop1), fac.getProperty(prop2), false);
+                    out.flush();
+                }             
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             out.close();
         }
     }
 
     static NumberFormat nf = NumberFormat.getIntegerInstance(Locale.ENGLISH);
-    
+
+
     static void showDifferences(PrintWriter out, String version, String prop1, String prop2) throws IOException {
         UnicodeProperty p1 = ToolUnicodePropertySource.make(version).getProperty(prop1);
         UnicodeProperty p2 = ToolUnicodePropertySource.make(version).getProperty(prop2);
+        showDifferences(out, p1, p2, true);
+    }
+        
+    static void showDifferences(PrintWriter out, UnicodeProperty p1, UnicodeProperty p2, boolean doOverlaps) throws IOException {
         BagFormatter bf = new BagFormatter();
-        out.println("Comparing " + p1.getName() + " and " + p2.getName());
+        //out.println("Comparing " + p1.getName() + " and " + p2.getName());
         System.out.println("Comparing " + p1.getName() + " and " + p2.getName());
+        String pn1 = '$' + p1.getName();
+        String pn2 = '$' + p2.getName();
         UnicodeSet intersection = new UnicodeSet();
         UnicodeSet disjoint = new UnicodeSet();
+        String skip1 = p1.getValue(0xEFFFD);
+        String skip2 = p2.getValue(0xEFFFD);
             main:
             for (Iterator it1 = p1.getAvailableValues().iterator(); it1.hasNext();) {
                 String v1 = (String)it1.next();
+                if (v1.equals(skip1)) continue;
                 UnicodeSet s1 = p1.getSet(v1);
-                v1 += " (" + p1.getFirstValueAlias(v1) + ")";
+                if (s1.size() == 0) continue;
+                String pv1 = pn1 + (v1.equals("True") ? "" : ":" + v1);
+                //v1 += " (" + p1.getFirstValueAlias(v1) + ")";
                 System.out.println(v1);
-                out.println();
-                out.println(v1 + " [" + nf.format(s1.size()) + "]");
+                //out.println();
+                //out.println(v1 + " [" + nf.format(s1.size()) + "]");
 
                 // create some containers so that the output is organized reasonably
                 String contains = "";
@@ -1005,22 +1039,25 @@ public class MakeUnicodeFiles {
                 Set overlapsSet = new TreeSet();
                 for (Iterator it2 = p2.getAvailableValues().iterator(); it2.hasNext();) {
                     String v2 = (String)it2.next();
+                    if (v2.equals(skip2)) continue;
                     UnicodeSet s2 = p2.getSet(v2);
+                    if (s2.size() == 0) continue;
                     // v2 += "(" + p2.getFirstValueAlias(v2) + ")";
-                    v2 = p2.getFirstValueAlias(v2);
+                    //v2 = p2.getFirstValueAlias(v2);
+                    String pv2 = pn2 + (v2.equals("True") ? "" : ":" + v2);
                     if (s1.containsNone(s2)) continue;
                     if (s1.equals(s2)) {
-                        out.println("\t= " + v2);
+                        out.println(pv1 + "\t= " + pv2);
                         continue main; // since they are partitions, we can stop here
                     } else if (s2.containsAll(s1)) {
-                        out.println("\t\u2282 " + v2 + " [" + nf.format(s2.size()) + "]");
+                        // out.println(pv1 + "\t\u2282 " + pv2);
                         continue main; // partition, stop
                     } else if (s1.containsAll(s2)) {
-                        if (contains.length() != 0) contains += " \u222a ";
-                        contains += v2 + " [" + nf.format(s2.size()) + "]";
+                        if (contains.length() != 0) contains += " ";
+                        contains += pv2;
                         containsSet.addAll(s2);
                         if (containsSet.size() == s1.size()) break;
-                    } else { // doesn't contain, isn't contained
+                    } else if (doOverlaps) { // doesn't contain, isn't contained
                         if (overlaps.length() != 0) overlaps += "\r\n\t";
                         intersection.clear().addAll(s2).retainAll(s1);
                         disjoint.clear().addAll(s1).removeAll(s2);
@@ -1030,7 +1067,8 @@ public class MakeUnicodeFiles {
                     } 
                 }
                 if (contains.length() != 0) {
-                    out.println((containsSet.size() == s1.size() ? "\t= " : "\t\u2283 ") + contains);
+                    out.println(pv1 + (containsSet.size() == s1.size() ? "\t= " 
+                        : "\t\u2283 ") + "[" + contains + "]");
                 } 
                 if (overlaps.length() != 0) out.println("\t" + overlaps);
                 if (false && overlapsSet.size() != 0) {
@@ -1152,7 +1190,7 @@ public class MakeUnicodeFiles {
     
     static final UnicodeSet INVARIANT_RELATIONS = new UnicodeSet("[\\= \\! \\? \\< \\> \u2264 \u2265 \u2282 \u2286 \u2283 \u2287]");
     
-    static void testInvariants() throws IOException {
+    public static void testInvariants() throws IOException {
         PrintWriter out = BagFormatter.openUTF8Writer(UCD_Types.GEN_DIR, "UnicodeInvariantResults.txt");
         out.write('\uFEFF'); // BOM
         BufferedReader in = BagFormatter.openUTF8Reader("", "UnicodeInvariants.txt");
