@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2002/07/26 00:24:33 $
-* $Revision: 1.52 $
+* $Date: 2002/07/30 02:41:11 $
+* $Revision: 1.53 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -21,8 +21,9 @@
     <path id="clover.classpath">
 	<!-- ***** you will need to change the paths below to point
 	           to clover.jar and velocity.jar on your filesystem ***** -->
-	<pathelement path="/work/devicu4j/coverage/clover-0.6b/lib/clover.jar"/>
-	<pathelement path="/work/devicu4j/coverage/clover-0.6b/lib/velocity.jar"/>
+    <pathelement path="${java.class.path}/"/>
+	<pathelement location="clover.jar"/>
+	<pathelement location="velocity.jar"/>
     </path>
 
     <!-- target to switch Clover on -->
@@ -157,7 +158,7 @@
     <target name ="coreData" depends="init">
         <copy todir="${build.dir}/com/ibm/icu/impl/data">
         <fileset dir="${src.dir}/com/ibm/icu/impl/data"
-                 includes="Transliterator_*.txt,*.dat"/>
+                 includes="Transliterator_*.txt,*.icu"/>
         </copy>
     </target>
 

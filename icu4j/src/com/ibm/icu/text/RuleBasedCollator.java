@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/07/26 18:25:06 $ 
-* $Revision: 1.11 $
+* $Date: 2002/07/30 02:38:11 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -1303,7 +1303,7 @@ public final class RuleBasedCollator extends Collator
         	UCA_ = new RuleBasedCollator();
             UCA_CONSTANTS_ = new UCAConstants();
         	InputStream i = UCA_.getClass().getResourceAsStream(
-                                        "/com/ibm/icu/impl/data/ucadata.dat");
+                                        "/com/ibm/icu/impl/data/ucadata.icu");
         	
        		BufferedInputStream b = new BufferedInputStream(i, 90000);
         	CollatorReader reader = new CollatorReader(b);

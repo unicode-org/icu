@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2002/07/11 21:25:24 $ 
-* $Revision: 1.16 $
+* $Date: 2002/07/30 02:38:11 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -874,7 +874,7 @@ final class UCharacterName
     // private data members ----------------------------------------------
     
     /**
-    * Data used in unames.dat
+    * Data used in unames.icu
     */
     private char m_tokentable_[];
     private byte m_tokenstring_[];
@@ -892,7 +892,7 @@ final class UCharacterName
     * Default name of the name datafile
     */
     private static final String NAME_FILE_NAME_ = 
-                                           "/com/ibm/icu/impl/data/unames.dat";
+                                           "/com/ibm/icu/impl/data/unames.icu";
     /**
     * Shift count to retrieve group information
     */

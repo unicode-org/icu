@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/07/26 23:29:37 $ 
-* $Revision: 1.44 $
+* $Date: 2002/07/30 02:38:11 $ 
+* $Revision: 1.45 $
 *
 *******************************************************************************
 */
@@ -43,7 +43,7 @@ import com.ibm.icu.impl.NormalizerImpl;
 * E.g. In Windows <br>
 * <code>set CLASSPATH=%CLASSPATH%;$JAR_FILE_PATH/ucharacter.jar</code>.<br>
 * Otherwise, another method would be to copy the files uprops.dat and 
-* unames.dat from the icu4j source subdirectory 
+* unames.icu from the icu4j source subdirectory 
 * <i>$ICU4J_SRC/src/com.ibm.icu.impl.data</i> to your class directory 
 * <i>$ICU4J_CLASS/com.ibm.icu.impl.data</i>.
 * </p>

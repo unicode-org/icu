@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorReader.java,v $ 
-* $Date: 2002/07/12 21:59:22 $ 
-* $Revision: 1.4 $
+* $Date: 2002/07/30 02:38:12 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -19,13 +19,13 @@ import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.IntTrie;
 
 /**
-* <p>Internal reader class for ICU data file uca.dat containing 
+* <p>Internal reader class for ICU data file uca.icu containing 
 * Unicode Collation Algorithm data.</p> 
-* <p>This class simply reads uca.dat, authenticates that it is a valid
+* <p>This class simply reads uca.icu, authenticates that it is a valid
 * ICU data file and split its contents up into blocks of data for use in
 * <a href=Collator.html>com.ibm.icu.text.Collator</a>.
 * </p> 
-* <p>uca.dat which is in big-endian format is jared together with this 
+* <p>uca.icu which is in big-endian format is jared together with this 
 * package.</p>
 * @author Syn Wee Quek
 * @since release 2.2, April 18 2002
@@ -51,7 +51,7 @@ final class CollatorReader
     
     /**
     * <p>Protected constructor.</p>
-    * @param inputStream ICU uprop.dat file input stream
+    * @param inputStream ICU uprops.icu file input stream
     * @param readICUHeader flag to indicate if the ICU header has to be read
     * @exception IOException throw if data file fails authentication 
     * @draft 2.1
@@ -373,7 +373,7 @@ final class CollatorReader
     // private variables -------------------------------------------------
   
     /**
-    * Data input stream for uca.dat 
+    * Data input stream for uca.icu 
     */
     private DataInputStream m_dataInputStream_;
    
