@@ -3184,6 +3184,7 @@ _getPrevNorm32(UCharIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar
     } else {
         /* unpaired second surrogate, undo the c2=src.previous() movement */
         src.move(&src, 1, UITER_CURRENT);
+        c2=0;
         return 0;
     }
 }
@@ -3419,6 +3420,7 @@ _getNextNorm32(UCharIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar
             }
         } else {
             /* unmatched surrogate */
+            c2=0;
             return 0;
         }
     }
