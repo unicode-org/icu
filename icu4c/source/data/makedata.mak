@@ -90,6 +90,7 @@ PATH = $(PATH);$(ICUP)\bin
 !INCLUDE "$(ICUDATA)\ucmfiles.mk"
 !IF EXISTS("$(ICUDATA)\ucmebcdic.mk")
 !INCLUDE "$(ICUDATA)\ucmebcdic.mk"
+UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_EBCDIC) 
 !IF EXISTS("$(ICUDATA)\ucmlocal.mk")
 !INCLUDE "$(ICUDATA)\ucmlocal.mk"
 UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_EBCDIC) $(UCM_SOURCE_LOCAL)
