@@ -991,8 +991,8 @@ doOpenChoice(const char *path, const char *type, const char *name,
     const char         *pathBuffer;
 
     TinyString          tocEntryName;
-    char                oldStylePath[1024];
-    char                oldStylePathBasename[100];
+    TinyString          oldStylePath;
+    TinyString          oldStylePathBasename;
     const char         *dataPath;
 
     const char         *tocEntrySuffix;
@@ -1004,12 +1004,16 @@ doOpenChoice(const char *path, const char *type, const char *name,
     const char         *inBasename;
     UErrorCode          errorCode=U_ZERO_ERROR;
     UBool               isICUData= (UBool)(path==NULL);
+
+    TinyString_init(&tocEntryName);
+    TinyString_init(&oldStylePath);
+    TinyString_init(&oldStylePathBasename);
+
     /* Make up a full mame by appending the type to the supplied
      *  name, assuming that a type was supplied.
      */
 
     /* prepend the package */
-    TinyString_init(&tocEntryName);
     TinyString_append(&tocEntryName, packageNameFromPath(path));
 
     tocEntrySuffixIndex = tocEntryName.length;
@@ -1053,16 +1057,19 @@ doOpenChoice(const char *path, const char *type, const char *name,
         */
 
         char *rightSlash;
-        uprv_strcpy(oldStylePath, path);
-        oldStylePath[uprv_strlen(path)-1]=0; /* chop off trailing slash */
+        TinyString_append(&oldStylePath, path);
+        /* chop off trailing slash */
+        oldStylePath.length--;
+        oldStylePath.s[oldStylePath.length] = 0;
         
-        rightSlash = (char*)uprv_strrchr(oldStylePath, U_FILE_SEP_CHAR);
+        rightSlash = (char*)uprv_strrchr(oldStylePath.s, U_FILE_SEP_CHAR);
         if(rightSlash != NULL) {
             rightSlash++;
-            inBasename = uprv_strcpy(oldStylePathBasename, rightSlash);
-            uprv_strcat(oldStylePath, U_FILE_SEP_STRING);
-            uprv_strcat(oldStylePath, inBasename);  /* one more time, for the base name */
-            path = oldStylePath;
+            TinyString_append(&oldStylePathBasename, rightSlash);
+            inBasename = oldStylePathBasename.s;
+            TinyString_append(&oldStylePath, U_FILE_SEP_STRING);
+            TinyString_append(&oldStylePath, inBasename);  /* one more time, for the base name */
+            path = oldStylePath.s;
         } else {
             *pErrorCode = U_FILE_ACCESS_ERROR;  /* hopelessly bad case */
             retVal = NULL;
