@@ -1391,6 +1391,21 @@ public:
   inline int32_t  length(void) const;
 
   /**
+   * Count Unicode code points in the length UChar code units of the string.
+   * A code point may occupy either one or two UChar code units.
+   * Counting code points involves reading all code units.
+   *
+   * This functions is basically the inverse of moveIndex32().
+   *
+   * @param start the index of the first code unit to check
+   * @param length the number of UChar code units to check
+   * @return the number of code points in the specified code units
+   * @draft ICU 2.0
+   */
+  int32_t
+  countChar32(UTextOffset start=0, int32_t length=0x7fffffff) const;
+
+  /**
    * Determine if this string is empty.
    * @return TRUE if this string contains 0 characters, FALSE otherwise.
    * @draft ICU 2.0
