@@ -53,6 +53,10 @@
 /* This is the longest expansion sequence we can handle without bombing out */
 #define UCOL_EXPAND_CE_BUFFER_SIZE 64
 
+
+#define UCOL_RUNTIME_VERSION 1
+#define UCOL_BUILDER_VERSION 1
+
 struct collIterate {
   UChar *string; /* Original string */
   UChar *len;   /* Original string length */

@@ -296,7 +296,7 @@ ucol_open(    const    char         *loc,
   /* first take on tailoring version: */
   /* get CollationElements -> Version */
   UResourceBundle *binary = ures_getByKey(b, "%%CollationNew", NULL, status);
-  UResourceBundle* resB;
+
   const UChar* trDataVersion;
 
   if(*status == U_MISSING_RESOURCE_ERROR) { /* if we don't find tailoring, we'll fallback to UCA */
@@ -316,17 +316,6 @@ ucol_open(    const    char         *loc,
       result->hasRealData = FALSE;
     }
     result->rb = b;
-
-    resB = ures_getByKey(result->rb,"CollationElements",NULL,status);
-    trDataVersion=ures_get(resB,"Version",status); 
-    if(trDataVersion){
-      char tVer[10]={'\0'};
-      UVersionInfo trVInfo;
-      u_UCharsToChars(trDataVersion, tVer, 10);
-      u_versionFromString(trVInfo,tVer );
-      result->trVersion=(uint8_t)trVInfo[0]; 
-    }
-    ures_close(resB);
   } else { /* There is another error, and we're just gonna clean up */
     ures_close(b);
     return NULL;
@@ -1227,6 +1216,9 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
 
     result->zero = 0;
     result->rules = NULL;
+    /* get the version info form UCATableHeader and populate the Collator struct*/
+    result->dataInfo.dataVersion[0] = result->image->version[0]; /* UCA Builder version*/
+    result->dataInfo.dataVersion[1] = result->image->version[1]; /* UCA Tailoring rules version*/
 
     return result;
 }
@@ -3153,10 +3145,6 @@ ucol_countAvailable()
   return uloc_countAvailable();
 }
 
-/* temp Defines */
-#define UCOL_RUNTIME_VERSION 1
-#define UCOL_BUILDER_VERSION 1
-
 U_CAPI void 
 ucol_getVersion(const UCollator* coll, 
                 UVersionInfo versionInfo) 
@@ -3164,12 +3152,9 @@ ucol_getVersion(const UCollator* coll,
     UErrorCode status =U_ZERO_ERROR;
     /* RunTime version  */
     uint8_t rtVersion = UCOL_RUNTIME_VERSION;
-    /* Builder version
-     * Vladimir said this would be a #define but
-     * I am of the opinion that the builder populates
-     * the built CEs with version
-     */
-    uint8_t bdVersion = UCOL_BUILDER_VERSION;
+    /* Builder version*/
+    uint8_t bdVersion = coll->dataInfo.dataVersion[0];
+
     /* Charset Version. Need to get the version from cnv files
      * makeconv should populate cnv files with version and 
      * an api has to be provided in ucnv.h to obtain this version
@@ -3180,16 +3165,14 @@ ucol_getVersion(const UCollator* coll,
     uint16_t cmbVersion = (rtVersion<<11) | (bdVersion<<6) | (csVersion);
     
     /* UCA table version info */
-    uint8_t* ucaDataVersion = (uint8_t*) coll->dataInfo.dataVersion;
-    uint8_t ucaVersion =ucaDataVersion[0];
+    uint8_t ucaVersion = UCA->dataInfo.dataVersion[0];
 
-    /* Tailoring rules
-     * Is this the resource bundle version????
-     */
+    /* Tailoring rules */
     versionInfo[0] = cmbVersion>>8;
     versionInfo[1] = (uint8_t)cmbVersion;
-    versionInfo[2] = (uint8_t)(coll->trVersion | ucaVersion | rtVersion);
-    versionInfo[3] = (uint8_t)ucaVersion;
+    versionInfo[2] = coll->dataInfo.dataVersion[1];
+    versionInfo[3] = UCA->dataInfo.dataVersion[1];
+
 
 }
 /****************************************************************************/
