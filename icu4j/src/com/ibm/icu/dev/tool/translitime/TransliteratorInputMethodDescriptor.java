@@ -1,10 +1,11 @@
 /*
- * ===========================================================================
- * IBM ICU Transliterator IME - TransliteratorInputMethodDescriptor.java version 1.0
- * (C) Copyright IBM Corp. 2004. All Rights Reserved
- * ===========================================================================
+ *******************************************************************************
+ * Copyright (C) 2004, International Business Machines Corporation and         *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
  */
-package com.ibm.icu.dev.tool.ime;
+
+package com.ibm.icu.dev.tool.translitime;
 
 import java.awt.Image;
 import java.awt.im.spi.InputMethod;
@@ -67,7 +68,7 @@ public class TransliteratorInputMethodDescriptor implements InputMethodDescripto
         String name = null;
 
         try {
-            rb = ResourceBundle.getBundle("com.ibm.icu.dev.tool.ime.Transliterator", displayLanguage);
+            rb = ResourceBundle.getBundle("com.ibm.icu.dev.tool.translitime.Transliterator", displayLanguage);
             name = rb.getString("name");
         }
         catch (MissingResourceException m) {
