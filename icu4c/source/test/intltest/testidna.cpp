@@ -25,6 +25,7 @@
 #include "cmemory.h"
 #include "testidna.h"
 #include "idnaref.h"
+#include "nptrans.h"
 
 static UChar unicodeIn[][41] ={
     { 
@@ -1394,6 +1395,8 @@ void TestIDNA::TestRefIDNA(){
                             "idnaref_IDNToUnicode",idnaref_IDNToUnicode
                             );
     testChaining("idnaref_toASCII",idnaref_toASCII, "idnaref_toUnicode", idnaref_toUnicode);
+    delete TestIDNA::prep;
+    TestIDNA::prep = NULL;
 }
 
 void TestIDNA::TestDataFile(){

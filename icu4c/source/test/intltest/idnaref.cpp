@@ -20,7 +20,7 @@
 #include "cmemory.h"
 #include "sprpimpl.h"
 #include "nptrans.h"
-//#include "punyref.h"
+#include "testidna.h"
 #include "punycode.h"
 #include "unicode/ustring.h"
 
@@ -40,18 +40,18 @@ static const UChar ACE_PREFIX[] ={ 0x0058,0x004E,0x002d,0x002d } ;
 #define FULL_STOP        0x002E
 
 
-static NamePrepTransform* prep = NULL;
+NamePrepTransform* TestIDNA::prep = NULL;
 
 static NamePrepTransform* getInstance(UErrorCode& status){
-    if(prep == NULL){
+    if(TestIDNA::prep == NULL){
         UParseError parseError;
-        prep = NamePrepTransform::createInstance(parseError, status);
-        if(prep ==NULL){
+        TestIDNA::prep = NamePrepTransform::createInstance(parseError, status);
+        if(TestIDNA::prep ==NULL){
            status = U_MEMORY_ALLOCATION_ERROR;
            return NULL;
         }
     }
-    return prep;
+    return TestIDNA::prep;
 
 }
 
