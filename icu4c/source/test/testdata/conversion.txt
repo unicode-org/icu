@@ -177,6 +177,22 @@ conversion {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // windows-936 vs. ibm-1386
+        {
+          "ibm-1386",
+          "\x1a\u20ac\u5555\x80\x81\U00055555",
+          :bin{ 7fa2e3dffb7f7fa1a1 },
+          :intvector{ 0, 1, 1, 2, 2, 3, 4, 5, 5 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        {
+          "windows-936",
+          "\x1a\u20ac\u5555\x80\x81\U00055555",
+          :bin{ 1a80dffb3f3f3f },
+          :intvector{ 0, 1, 2, 2, 3, 4, 5 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
         // verify that if a conversion table does not have any mapping for U+0000,
         // then there will not even be a phantom fallback to 00
         {
