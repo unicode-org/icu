@@ -23,6 +23,10 @@ class U_COMMON_API UnicodeConverterCPP
   /*Debug method*/
   void printRef(void) const;
 
+  /* list of converter and alias names */
+  static const char **availableConverterNames;
+  static int32_t availableConverterNamesCount;
+
  public:
 
 //Constructors and a destructor
