@@ -776,7 +776,7 @@ void IntlTestTextBoundary::TestThaiLineBreak() {
         Locale("th"), status); 
     if (U_FAILURE(status))
     {
-        errln("Failed to create the BreakIterator for default locale in TestThaiLineBreak.\n");
+        errln("Failed to create the BreakIterator for Thai locale in TestThaiLineBreak.\n");
         return;
     }
 
@@ -842,7 +842,7 @@ thaiLineSelection->addElement(CharsToUnicodeString("(\\u0e1b\\u0e23\\u0e30\\u0e4
     BreakIterator* e = BreakIterator::createLineInstance(Locale("th"), status); 
     if (U_FAILURE(status))
     {
-        errln("Failed to create the BreakIterator for default locale in TestMixedThaiLineBreak.\n");
+        errln("Failed to create the BreakIterator for Thai locale in TestMixedThaiLineBreak.\n");
         return;
     }
 
@@ -873,12 +873,77 @@ void IntlTestTextBoundary::TestMaiyamok()
 
     if (U_FAILURE(status))
     {
-        errln("Failed to create the BreakIterator for default locale in TestMaiyamok.\n");
+        errln("Failed to create the BreakIterator for Thai locale in TestMaiyamok.\n");
         return;
     }
     generalIteratorTest(*e, thaiLineSelection);
     delete e;
     delete thaiLineSelection;
+}
+
+void IntlTestTextBoundary::TestThaiWordBreak() {
+    Vector* thaiWordSelection = new Vector();
+    UErrorCode status = U_ZERO_ERROR;
+
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E1A\\u0E17")); //2
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E17\\u0E35\\u0E48")); //5
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E51")); //6
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E1E\\u0E32\\u0E22\\u0E38")); //10
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E44\\u0E0B\\u0E42\\u0E04\\u0E25\\u0E19")); //16
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u000D\\u000A")); //18
+
+    // This is the correct result
+    //thaiWordSelection->addElement(CharsToUnicodeString("\\u0E42\\u0E14\\u0E42\\u0E23\\u0E18\\u0E35")); //24
+    //thaiWordSelection->addElement(CharsToUnicodeString("\\u0E2D\\u0E32\\u0E28\\u0E31\\u0E22")); //29
+
+    // and this is what the dictionary does...
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E42\\u0E14")); // 20
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E42\\u0E23\\u0E18\\u0E35\\u0E2D\\u0E32\\u0E28\\u0E31\\u0E22")); //29
+
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E2D\\u0E22\\u0E39\\u0E48")); //33
+
+    // This is the correct result
+    //thaiWordSelection->addElement(CharsToUnicodeString("\\u0E17\\u0E48\\u0E32\\u0E21")); //37
+    //thaiWordSelection->addElement(CharsToUnicodeString("\\u0E01\\u0E25\\u0E32\\u0E07")); //41
+
+    // and this is what the dictionary does
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E17\\u0E48\\u0E32\\u0E21\\u0E01\\u0E25\\u0E32\\u0E07")); //41
+
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E17\\u0E38\\u0E48\\u0E07")); //45
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E43\\u0E2B\\u0E0D\\u0E48")); //49
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E43\\u0E19")); //51
+
+    // This is the correct result
+    //thaiWordSelection->addElement(CharsToUnicodeString("\\u0E41\\u0E04\\u0E19\\u0E0B\\u0E31\\u0E2A")); //57
+    //thaiWordSelection->addElement(CharsToUnicodeString("\\u0E01\\u0E31\\u0E1A")); //60
+
+    // and this is what the dictionary does
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E41\\u0E04\\u0E19")); // 54
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E0B\\u0E31\\u0E2A\\u0E01\\u0E31\\u0E1A")); //60
+
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E25\\u0E38\\u0E07")); //63
+
+    // This is the correct result
+    //thaiWordSelection->addElement(CharsToUnicodeString("\\u0E40\\u0E2E\\u0E19\\u0E23\\u0E35")); //68
+    //thaiWordSelection->addElement(CharsToUnicodeString("\\u0E0A\\u0E32\\u0E27")); //71
+    //thaiWordSelection->addElement(CharsToUnicodeString("\\u0E44\\u0E23\\u0E48")); //74
+    //thaiWordSelection->addElement(CharsToUnicodeString("\\u0E41\\u0E25\\u0E30")); //77
+
+    // and this is what the dictionary does
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E40\\u0E2E")); // 65
+    thaiWordSelection->addElement(CharsToUnicodeString("\\u0E19\\u0E23\\u0E35\\u0E0A\\u0E32\\u0E27\\u0E44\\u0E23\\u0E48\\u0E41\\u0E25\\u0E30")); //77
+
+    BreakIterator* e = BreakIterator::createWordInstance(
+        Locale("th"), status); 
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for Thai locale in TestThaiWordBreak.\n");
+        return;
+    }
+
+    generalIteratorTest(*e, thaiWordSelection);
+    delete e;
+    delete thaiWordSelection;
 }
 
 /**
@@ -896,7 +961,7 @@ void IntlTestTextBoundary::TestJapaneseLineBreak()
     UTextOffset i;
     if (U_FAILURE(status))
     {
-        errln("Failed to create the BreakIterator for default locale in TestJapaneseLineBreak.\n");
+        errln("Failed to create the BreakIterator for Japanese locale in TestJapaneseLineBreak.\n");
         return;
     }
 
@@ -1103,6 +1168,7 @@ void IntlTestTextBoundary::runIndexedTest( int32_t index, UBool exec, const char
     case 15: name = "TestThaiLineBreak"; if(exec) TestThaiLineBreak(); break;
     case 16: name = "TestMixedThaiLineBreak"; if(exec) TestMixedThaiLineBreak(); break;
     case 17: name = "TestMaiyamok"; if(exec) TestMaiyamok(); break;
+    case 18: name = "TestThaiWordBreak"; if(exec) TestThaiWordBreak(); break;
 
 
     default: name = ""; break; //needed to end loop
