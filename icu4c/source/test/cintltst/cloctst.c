@@ -1439,6 +1439,14 @@ static void TestKeywordVariants(void)
                     }
                     j++;
                 }
+                j = 0;
+                uenum_reset(keywords, &status);
+                while((keyword = uenum_next(keywords, &keywordLen, &status))) {
+                    if(strcmp(keyword, testCases[i].expectedKeywords[j]) != 0) {
+                        log_err("Expected to get keyword value %s, got %s\n", testCases[i].expectedKeywords[j], keyword);
+                    }
+                    j++;
+                }
             }
             uenum_close(keywords);
         }
