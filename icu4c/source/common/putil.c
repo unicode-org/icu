@@ -31,7 +31,7 @@
 *   06/28/99    stephen     Removed mutex locking in u_isBigEndian().
 *   08/04/99    jeffrey R.  Added OS/2 changes
 *   11/15/99    helena      Integrated S/390 IEEE support.
-*   04/26/01    Barry N.    OS/400 support for uprv_getDefaultLocaleID
+*   04/26/01    Barry N.    OS/400 support for uprv_getDefaultLocaleIDM
 *   08/15/01    Steven H.   OS/400 support for uprv_getDefaultCodepage
 ******************************************************************************
 */
@@ -770,6 +770,13 @@ uprv_timezone()
     return tdiff;
 #endif
 }
+
+/* Note that U_TZNAME does *not* have to be tzname, but if it does,
+   some platforms need to have it declared here. */ 
+
+#ifndef tzname /* For SGI.  */
+extern char *tzname[]; /* RS6000 and others reject char **tzname.  */ 
+#endif
 
 U_CAPI char* U_EXPORT2
 uprv_tzname(int n)
