@@ -221,7 +221,7 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
     /*setTransliterator and adoptTransliterator */
 	
 	ct1->setTransliterators(transarray, count);
-	if(ct1->getCount() != count || ct1->getID() != "Latin-kana"){
+	if(ct1->getCount() != count || ct1->getID() != ID2){
 		errln((UnicodeString)"Error: setTransliterators) failed.\n\t Count:- expected->" + count + (UnicodeString)".  got->" + ct1->getCount() +
 			                                       (UnicodeString)"\n\tID   :- expected->" + ID2 + (UnicodeString)".  got->" + ct1->getID());
 	}
@@ -241,11 +241,12 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
 		logln("OK: setTransliterator() passed");
 	}*/
 	logln("Testing adoptTransliterator() API of CompoundTransliterator");
-    Transliterator *transarray2[]={Transliterator::createInstance("Latin-Kana")};
+    UnicodeString ID3("Latin-Kana");
+    Transliterator *transarray2[]={Transliterator::createInstance(ID3)};
 	ct1->adoptTransliterators(transarray2, 1);
-	if(ct1->getCount() != 1 || ct1->getID() != "Latin-kana"){
+	if(ct1->getCount() != 1 || ct1->getID() != ID3){
 		errln((UnicodeString)"Error: adoptTransliterators) failed.\n\t Count:- expected->1" + (UnicodeString)".  got->" + ct1->getCount() +
-			                                       (UnicodeString)"\n\tID   :- expected->Latin-Kana" + (UnicodeString)".  got->" + ct1->getID());
+			                                       (UnicodeString)"\n\tID   :- expected->" + ID3 + (UnicodeString)".  got->" + ct1->getID());
 	}
 	else{
 		logln("OK: adoptTranslterator() passed");
