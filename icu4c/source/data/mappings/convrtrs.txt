@@ -100,7 +100,7 @@ ibm-920                 iso-8859-9 { MIME } ECMA-128 latin5 cp920 8859-9 csisola
 ibm-923                 iso-8859-15 { MIME } latin9 cp923 8859-15 latin0 csisolatin0 csisolatin9       # Latin 9
 ibm-1252                windows-1252  { MIME } cp1252 ibm-1004 cp1004        # Windows Latin 1 We don't have an ibm-5348, so this is a best possible match
 ibm-943                 Shift_JIS { MIME } csWindows31J sjis cp943 cp932 ms_kanji csshiftjis windows-31j  x-sjis  # japanese. Unicode name is \u30b7\u30d5\u30c8\u7b26\u53f7\u5316\u8868\u73fe Iana says that Windows-31J is an extension to csshiftjis ibm-932 removed
-ibm-949                 KS_C_5601-1987 { IANA } iso-ir-149 KS_C_5601-1989 csKSC56011987 ksc-5601 { MIME } johab ks_x_1001:1992 korean       # KSC-5601-1992, korean
+ibm-949                 KS_C_5601-1987 { IANA } iso-ir-149 KS_C_5601-1989 csKSC56011987 ksc-5601 { MIME } johab ks_x_1001:1992       # KSC-5601-1992, korean
 ibm-1370                big5 { MIME } csBig5 x-big5 cp950 # Taiwan Big-5 (w/ euro update)
 ibm-950                 # Taiwan Big-5 (w/o euro update)
 ibm-1386                GB_2312-80 { IANA } iso-ir-58 csISO58GB231280 gbk chinese gb { MIME } gb2312 gb2312-1980 cp936 zh_cn # Chinese GBK removed
