@@ -525,6 +525,7 @@ void    RegexCompile::compile(
     // Optimization passes
     //  
     matchStartType();  
+    OptDotStar();
     stripNOPs();
     OptEndingLoop();
 
@@ -3195,18 +3196,30 @@ void RegexCompile::OptEndingLoop() {
 
 //----------------------------------------------------------------------------------------
 //
-//   OptDotStar       Optimize patterns that end with a '.*' to
-//                    just advance the input to the end without further todo.
+//   OptDotStar       Optimize patterns that end with a '.*' or '.+' to
+//                    just advance the input to the end.
+//
+//         Transform this compiled sequence
+//            [DOT_ANY | DOT_ANY_ALL]
+//            JMP_SAV  to previous instruction
+//            [NOP | END_CAPTURE | DOLLAR | BACKSLASH_Z]*
+//            END
+//
+//         To
+//            NOP
+//            [DOT_ANY_PL | DOT_ANY_ALL_PL]
+//            [NOP | END_CAPTURE | DOLLAR | BACKSLASH_Z]*
+//            END
 //
 //----------------------------------------------------------------------------------------
 void RegexCompile::OptDotStar() {
     // Scan backwards in the pattern, looking for a JMP_SAV near the end.
-    int32_t  jmp_loc;
+    int32_t  jmpLoc;
     int32_t  op;
     int32_t  opType;
-    for (jmp_loc=fRXPat->fCompiledPat->size(); jmp_loc--;) {
-        U_ASSERT(jmp_loc>0);
-        op     = fRXPat->fCompiledPat->elementAti(jmp_loc);
+    for (jmpLoc=fRXPat->fCompiledPat->size(); jmpLoc--;) {
+        U_ASSERT(jmpLoc>0);
+        op     = fRXPat->fCompiledPat->elementAti(jmpLoc);
         opType = URX_TYPE(op);
         switch(opType) { 
 
@@ -3214,6 +3227,9 @@ void RegexCompile::OptDotStar() {
         case URX_END:
         case URX_NOP:
         case URX_END_CAPTURE:
+        case URX_DOLLAR_M:
+        case URX_DOLLAR:
+        case URX_BACKSLASH_Z:
             // These ops may follow the JMP_SAV without preventing us from
             //   doing this optimization.
             continue;
@@ -3230,46 +3246,30 @@ void RegexCompile::OptDotStar() {
     }
 
     // We found in URX_JMP_SAV near the end that is a candidate for optimizing.
-    // Scan the body of the loop for anything that prevents the optimization,
-    //   which is anything that does a state save, or anything that 
-    //   alters the current stack frame (like a capture start/end)
+    // Is the target address the previous instruction?
+    // Is the previous instruction a flavor of URX_DOTANY
     int32_t  loopTopLoc = URX_VAL(op);
-    U_ASSERT(loopTopLoc > 1 && loopTopLoc < jmp_loc);
-    int32_t  loc;
-    for (loc=loopTopLoc; loc<jmp_loc; loc++) {
-        op     = fRXPat->fCompiledPat->elementAti(loc);
-        opType = URX_TYPE(op);
-        switch(opType) { 
-
-        case URX_STATE_SAVE:
-        case URX_JMP_SAV:
-        case URX_JMP_SAV_X:
-        case URX_CTR_INIT:
-        case URX_CTR_INIT_NG:
-        case URX_CTR_LOOP:
-        case URX_CTR_LOOP_NG:
-        case URX_LD_SP:
-        case URX_END_CAPTURE:
-        case URX_START_CAPTURE:
-            // These ops do a state save.
-            // Can not do the optimization.
-            return;
-
-        default:
-            // Other ops within the loop are OK.
-            ;//    keep looking.
-        }
+    if (loopTopLoc != jmpLoc-1) {
+        return;
+    }
+    int32_t newOp;
+    int32_t oldOp     = fRXPat->fCompiledPat->elementAti(loopTopLoc);
+    int32_t oldOpType = opType = URX_TYPE(oldOp);
+    if (oldOpType == URX_DOTANY) {
+        newOp = URX_BUILD(URX_DOTANY_PL, 0);
+    }
+    else if (oldOpType == URX_DOTANY_ALL) {
+        newOp = URX_BUILD(URX_DOTANY_ALL_PL, 0);
+    } else {
+        return;    // Sequence we were looking for isn't there.
     }
 
-    // Everything checks out.  We can do the optimization.
-    insertOp(jmp_loc);   // Make space for the extra operand word 0f URX_JMP_SAV_X
-    op = URX_BUILD(URX_JMP_SAV_X, loopTopLoc);
-    fRXPat->fCompiledPat->setElementAt(op, jmp_loc);
-
-    int32_t dataLoc = fRXPat->fDataSize;
-    fRXPat->fDataSize += 1; 
-    fRXPat->fCompiledPat->setElementAt(dataLoc, jmp_loc+1);
+    // Substitute the new instructions into the pattern.
+    // The NOP will be removed in a later optimization step.
+    fRXPat->fCompiledPat->setElementAt(URX_BUILD(URX_NOP, 0), loopTopLoc);
+    fRXPat->fCompiledPat->setElementAt(newOp, jmpLoc);
 }
+
 
 //----------------------------------------------------------------------------------------
 //
