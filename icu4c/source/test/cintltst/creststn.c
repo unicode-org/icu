@@ -243,7 +243,7 @@ static void TestNewTypes() {
     int32_t i = 0;
     int32_t intResult = 0;
     const UChar *zeroString;
-
+    UChar expected[] = { 'a','b','c','\0','d','e','f' };
     strcpy(action, "Construction of testtypes bundle");
 
     strcpy(testdatapath, directory);
@@ -267,6 +267,11 @@ static void TestNewTypes() {
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
         CONFIRM_INT_EQ(len, 7);
         CONFIRM_INT_NE(len, 3);
+    }
+    for(i=0;i<len;i++){
+        if(zeroString[i]!= expected[i]){
+            log_verbose("Output didnot match Expected: \\u%4X Got: \\u%4X", expected[i], zeroString[i]);
+        }
     }
 
     strcpy(action, "getting and testing of binary type");
