@@ -26,6 +26,7 @@ static const UChar NEWLINE  = 10;
 
 // Empty string
 static const UChar EMPTY[] = {0}; //""
+static const UChar COLON_COLON[] = {0x3A, 0x3A, 0}; //"::"
 
 U_NAMESPACE_BEGIN
 
@@ -362,7 +363,7 @@ UnicodeString& CompoundTransliterator::toRules(UnicodeString& rulesSource,
         // If we are a compound RBT and if we have a global
         // filter, then emit it at the top.
         UnicodeString pat;
-        rulesSource.append("::").append(getFilter()->toPattern(pat, escapeUnprintable)).append(ID_DELIM);
+        rulesSource.append(COLON_COLON).append(getFilter()->toPattern(pat, escapeUnprintable)).append(ID_DELIM);
     }
     for (int32_t i=0; i<count; ++i) {
         UnicodeString rule;
