@@ -132,8 +132,8 @@ private:
     void assertEqual(CollationElementIterator &i1, CollationElementIterator &i2);
 
     RuleBasedCollator *en_us;
-    static const UnicodeString test1;
-    static const UnicodeString test2;
+    const UnicodeString test1;
+    const UnicodeString test2;
 
 };
 

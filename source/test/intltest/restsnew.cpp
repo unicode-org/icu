@@ -25,7 +25,6 @@
 
 //***************************************************************************************
 
-static const UnicodeString kERROR = UNICODE_STRING("ERROR", 5);
 static const UChar kErrorUChars[] = { 0x45, 0x52, 0x52, 0x4f, 0x52, 0 };
 static const int32_t kErrorLength = 5;
 static const int32_t kERROR_COUNT = -1234567;
@@ -597,8 +596,10 @@ NewResourceBundleTest::testTag(const char* frag,
 
         CONFIRM_UErrorCode(status, expected_resource_status);
 
-        UnicodeString expected_string;
-        expected_string = U_SUCCESS(status) ? base : kERROR;
+        UnicodeString expected_string(kErrorUChars);
+        if (U_SUCCESS(status)) {
+            expected_string = base;
+        }
 
         CONFIRM_EQ(string, expected_string);
 
@@ -652,7 +653,7 @@ NewResourceBundleTest::testTag(const char* frag,
         {
             index = count ? (randi(count * 3) - count) : (randi(200) - 100);
             status = U_ZERO_ERROR;
-            string = kERROR;
+            string = kErrorUChars;
             ResourceBundle array = theBundle.get(tag, status);
             if(!U_FAILURE(status)){
                 UnicodeString t = array.getStringEx(index, status);
@@ -669,7 +670,7 @@ NewResourceBundleTest::testTag(const char* frag,
                 expected_string = base;
                 expected_string += itoa(index,buf);
             } else {
-                expected_string = kERROR;
+                expected_string = kErrorUChars;
             }
                CONFIRM_EQ(string,expected_string);
 
@@ -739,7 +740,7 @@ NewResourceBundleTest::testTag(const char* frag,
            row = row_count ? (randi(row_count * 3) - row_count) : (randi(200) - 100);
            col = column_count ? (randi(column_count * 3) - column_count) : (randi(200) - 100);
            status = U_ZERO_ERROR;
-           string = kERROR;
+           string = kErrorUChars;
            ResourceBundle array2d=theBundle.get(tag, status);
            if(U_SUCCESS(status)){
                 ResourceBundle tablerow=array2d.get(row, status);
@@ -760,7 +761,7 @@ NewResourceBundleTest::testTag(const char* frag,
                expected_string += itoa(row,buf);
                expected_string += itoa(col,buf);
            } else {
-               expected_string = kERROR;
+               expected_string = kErrorUChars;
            }
                CONFIRM_EQ(string,expected_string);
 
@@ -822,7 +823,7 @@ NewResourceBundleTest::testTag(const char* frag,
         {
             char buf[32];
             status = U_ZERO_ERROR;
-            string = kERROR;
+            string = kErrorUChars;
             char item_tag[8];
             uprv_strcpy(item_tag, "tag");
             uprv_strcat(item_tag, itoa(index,buf));
