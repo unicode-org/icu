@@ -2629,8 +2629,8 @@ int32_t Calendar::handleGetMonthLength(int32_t extendedYear, int32_t month) cons
 }
 
 int32_t Calendar::handleGetYearLength(int32_t eyear) const  {
-    return handleComputeMonthStart(eyear+1, 0, false) -
-            handleComputeMonthStart(eyear, 0, false);
+    return handleComputeMonthStart(eyear+1, 0, FALSE) -
+            handleComputeMonthStart(eyear, 0, FALSE);
 }
 
 int32_t
