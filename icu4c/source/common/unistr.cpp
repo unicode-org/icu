@@ -88,8 +88,6 @@ us_arrayCopy(const UChar *src, int32_t srcStart,
   }
 }
 
-UConverter* UnicodeString::fgDefaultConverter  = 0;
-
 //========================================
 // Constructors
 //========================================
@@ -1270,7 +1268,7 @@ UnicodeString::extract(UTextOffset start,
   // if the codepage is the default, use our cache
   // if it is an empty string, then use the "invariant character" conversion
   if (codepage == 0) {
-    converter = getDefaultConverter(status);
+    converter = u_getDefaultConverter(&status);
   } else if (*codepage == 0) {
     // use the "invariant characters" conversion
     if (length > fLength - start) {
@@ -1329,7 +1327,7 @@ UnicodeString::extract(UTextOffset start,
 
   // close the converter
   if (codepage == 0) {
-    releaseDefaultConverter(converter);
+    u_releaseDefaultConverter(converter);
   } else {
     ucnv_close(converter);
   }
@@ -1353,7 +1351,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
   // if the codepage is the default, use our cache
   // if it is an empty string, then use the "invariant character" conversion
   UConverter *converter = (codepage == 0 ?
-                             getDefaultConverter(status) :
+                             u_getDefaultConverter(&status) :
                              *codepage == 0 ?
                                0 :
                                ucnv_open(codepage, &status));
@@ -1419,7 +1417,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
 
   // close the converter
   if(codepage == 0) {
-    releaseDefaultConverter(converter);
+    u_releaseDefaultConverter(converter);
   } else {
     ucnv_close(converter);
   }
@@ -1523,56 +1521,5 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
     }
   }
   return TRUE;
-}
-
-
-//========================================
-// Default converter caching
-//========================================
-
-UConverter*
-UnicodeString::getDefaultConverter(UErrorCode &status)
-{
-  UConverter *converter = 0;
-
-  if(fgDefaultConverter != 0) {
-    Mutex lock;
-
-    // need to check to make sure it wasn't taken out from under us
-    if(fgDefaultConverter != 0) {
-      converter = fgDefaultConverter;
-      fgDefaultConverter = 0;
-    }
-  }
-
-  // if the cache was empty, create a converter
-  if(converter == 0) {
-    converter = ucnv_open(0, &status);
-    if(U_FAILURE(status)) {
-      return 0;
-    }
-  }
-
-  return converter;
-}
-
-void
-UnicodeString::releaseDefaultConverter(UConverter *converter)
-{
-  if(fgDefaultConverter == 0) {
-    if (converter != 0) {
-      ucnv_reset(converter);
-    }
-
-    Mutex lock;
-
-    if(fgDefaultConverter == 0) {
-      fgDefaultConverter = converter;
-      converter = 0;
-    }
-  }
-
-  // it's safe to close a 0 converter
-  ucnv_close(converter);
 }
 

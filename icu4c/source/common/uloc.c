@@ -37,6 +37,7 @@
 #include "cstring.h"
 #include "unicode/ustring.h"
 #include "cmemory.h"
+#include "ucln_cmn.h"
 
 /****************************************************************************
   Global variable and type definitions
@@ -1219,9 +1220,32 @@ uloc_getAvailable(int32_t offset)
 
 int32_t uloc_countAvailable()
 {
-  if (_installedLocales == NULL) _lazyEvaluate_installedLocales();
+    if (_installedLocales == NULL)
+        _lazyEvaluate_installedLocales();
 
     return _installedLocalesCount;
+}
+
+UBool ucln_uloc(void) {
+    char ** temp;
+    int32_t localeCount;
+    int32_t i;
+
+    umtx_lock(NULL);
+
+    temp = _installedLocales;
+    _installedLocales = NULL;
+
+    localeCount = _installedLocalesCount;
+    _installedLocalesCount = 0;
+
+    umtx_unlock(NULL);
+
+    for (i = 0; i < localeCount; i++) {
+        uprv_free(temp[i]);
+    }
+    uprv_free(temp);
+    return TRUE;
 }
 
 static void _lazyEvaluate_installedLocales()
@@ -1233,15 +1257,16 @@ static void _lazyEvaluate_installedLocales()
     char ** temp;
     int32_t i = 0;
     int32_t len = 0;
+    int32_t localeCount;
     
     ures_setIsStackObject(&installed, TRUE);
     index = ures_open(NULL, kIndexLocaleName, &status);
     ures_getByKey(index, kIndexTag, &installed, &status);
     
     if(U_SUCCESS(status)) {
-        _installedLocalesCount = ures_getSize(&installed);
-        temp = (char **) uprv_malloc(sizeof(char*) * (_installedLocalesCount+1));
-        
+        localeCount = ures_getSize(&installed);
+        temp = (char **) uprv_malloc(sizeof(char*) * (localeCount+1));
+
         ures_resetIterator(&installed);
         while(ures_hasNext(&installed)) {
             lname = ures_getNextString(&installed, &len, NULL, &status);
@@ -1251,19 +1276,20 @@ static void _lazyEvaluate_installedLocales()
             temp[i][len] = 0; /* Terminate the string */
             i++;
         }
+
+        umtx_lock(NULL);
+        if (_installedLocales == NULL)
         {
-            umtx_lock(NULL);
-            if (_installedLocales == NULL)
-            {
-                _installedLocales = temp;
-                temp = NULL;
-            } else {
-                for (i = 0; i < _installedLocalesCount; i++) uprv_free(temp[i]);
-                uprv_free(temp);
+            _installedLocales = temp;
+            _installedLocalesCount = localeCount;
+        } else {
+            for (i = 0; i < localeCount; i++) {
+                uprv_free(temp[i]);
             }
-            umtx_unlock(NULL);
-            
+            uprv_free(temp);
         }
+        umtx_unlock(NULL);
+
         ures_close(&installed);
     }
     ures_close(index);

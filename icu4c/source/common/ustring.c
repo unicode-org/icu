@@ -24,16 +24,11 @@
 #include "cmemory.h"
 #include "umutex.h"
 #include "ustr_imp.h"
+#include "ucln_cmn.h"
 
 /* forward declaractions of definitions for the shared default converter */
 
-static UConverter *fgDefaultConverter = NULL;
-
-static UConverter*
-getDefaultConverter(void);
-
-static void
-releaseDefaultConverter(UConverter *converter);
+static UConverter *gDefaultConverter = NULL;
 
 /* ANSI string.h - style functions ------------------------------------------ */
 
@@ -878,9 +873,9 @@ UChar* u_uastrncpy(UChar *ucs1,
            int32_t n)
 {
   UChar *target = ucs1;
-  UConverter *cnv = getDefaultConverter();
-  if(cnv != NULL) {
-    UErrorCode err = U_ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
+  UConverter *cnv = u_getDefaultConverter(&err);
+  if(U_SUCCESS(err) && cnv != NULL) {
     ucnv_reset(cnv);
     ucnv_toUnicode(cnv,
                    &target,
@@ -891,7 +886,7 @@ UChar* u_uastrncpy(UChar *ucs1,
                    TRUE,
                    &err);
     ucnv_reset(cnv); /* be good citizens */
-    releaseDefaultConverter(cnv);
+    u_releaseDefaultConverter(cnv);
     if(U_FAILURE(err) && (err != U_BUFFER_OVERFLOW_ERROR) ) {
       *ucs1 = 0; /* failure */
     }
@@ -907,16 +902,16 @@ UChar* u_uastrncpy(UChar *ucs1,
 UChar* u_uastrcpy(UChar *ucs1,
           const char *s2 )
 {
-  UConverter *cnv = getDefaultConverter();
-  if(cnv != NULL) {
-    UErrorCode err = U_ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
+  UConverter *cnv = u_getDefaultConverter(&err);
+  if(U_SUCCESS(err) && cnv != NULL) {
     ucnv_toUChars(cnv,
                     ucs1,
                     MAX_STRLEN,
                     s2,
                     uprv_strlen(s2),
                     &err);
-    releaseDefaultConverter(cnv);
+    u_releaseDefaultConverter(cnv);
     if(U_FAILURE(err)) {
       *ucs1 = 0;
     }
@@ -948,9 +943,9 @@ char* u_austrncpy(char *s1,
         int32_t n)
 {
   char *target = s1;
-  UConverter *cnv = getDefaultConverter();
-  if(cnv != NULL) {
-    UErrorCode err = U_ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
+  UConverter *cnv = u_getDefaultConverter(&err);
+  if(U_SUCCESS(err) && cnv != NULL) {
     ucnv_reset(cnv);
     ucnv_fromUnicode(cnv,
                   &target,
@@ -961,7 +956,7 @@ char* u_austrncpy(char *s1,
                   TRUE,
                   &err);
     ucnv_reset(cnv); /* be good citizens */
-    releaseDefaultConverter(cnv);
+    u_releaseDefaultConverter(cnv);
     if(U_FAILURE(err) && (err != U_BUFFER_OVERFLOW_ERROR) ) {
       *s1 = 0; /* failure */
     }
@@ -977,16 +972,16 @@ char* u_austrncpy(char *s1,
 char* u_austrcpy(char *s1,
          const UChar *ucs2 )
 {
-  UConverter *cnv = getDefaultConverter();
-  if(cnv != NULL) {
-    UErrorCode err = U_ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
+  UConverter *cnv = u_getDefaultConverter(&err);
+  if(U_SUCCESS(err) && cnv != NULL) {
     int32_t len = ucnv_fromUChars(cnv,
                   s1,
                   MAX_STRLEN,
                   ucs2,
                   -1,
                   &err);
-    releaseDefaultConverter(cnv);
+    u_releaseDefaultConverter(cnv);
     s1[len] = 0;
   } else {
     *s1 = 0;
@@ -996,44 +991,62 @@ char* u_austrcpy(char *s1,
 
 /* mutexed access to a shared default converter ----------------------------- */
 
-/* this is the same implementation as in unistr.cpp */
+UBool ucln_ustring(void) {
+    UConverter *converter = 0;
 
-static UConverter*
-getDefaultConverter()
-{
-  UConverter *converter = NULL;
-
-  if(fgDefaultConverter != NULL) {
-    umtx_lock(NULL);
-
-    /* need to check to make sure it wasn't taken out from under us */
-    if(fgDefaultConverter != NULL) {
-      converter = fgDefaultConverter;
-      fgDefaultConverter = NULL;
+    if (gDefaultConverter) {
+        umtx_lock(NULL);
+        
+        if (gDefaultConverter) {
+            converter = gDefaultConverter;
+            gDefaultConverter = NULL;
+        }
+        umtx_unlock(NULL);
     }
-    umtx_unlock(NULL);
-  }
-
-  /* if the cache was empty, create a converter */
-  if(converter == NULL) {
-    UErrorCode status = U_ZERO_ERROR;
-    converter = ucnv_open(NULL, &status);
-    if(U_FAILURE(status)) {
-      return NULL;
-    }
-  }
-
-  return converter;
+    
+    // it's safe to close a 0 converter
+    ucnv_close(converter);
+    return TRUE;
 }
 
-static void
-releaseDefaultConverter(UConverter *converter)
+UConverter*
+u_getDefaultConverter(UErrorCode *status)
 {
-  if(fgDefaultConverter == NULL) {
+    UConverter *converter = NULL;
+    
+    if (gDefaultConverter != NULL) {
+        umtx_lock(NULL);
+        
+        /* need to check to make sure it wasn't taken out from under us */
+        if (gDefaultConverter != NULL) {
+            converter = gDefaultConverter;
+            gDefaultConverter = NULL;
+        }
+        umtx_unlock(NULL);
+    }
+
+    /* if the cache was empty, create a converter */
+    if(converter == NULL) {
+        converter = ucnv_open(NULL, status);
+        if(U_FAILURE(*status)) {
+            return NULL;
+        }
+    }
+
+    return converter;
+}
+
+void
+u_releaseDefaultConverter(UConverter *converter)
+{
+  if(gDefaultConverter == NULL) {
+    if (converter != NULL) {
+      ucnv_reset(converter);
+    }
     umtx_lock(NULL);
 
-    if(fgDefaultConverter == NULL) {
-      fgDefaultConverter = converter;
+    if(gDefaultConverter == NULL) {
+      gDefaultConverter = converter;
       converter = NULL;
     }
     umtx_unlock(NULL);

@@ -16,6 +16,7 @@
 #define __USTR_IMP_H__
 
 #include "unicode/utypes.h"
+#include "unicode/ucnv.h"
 
 /**
  * Are the Unicode properties loaded?
@@ -108,5 +109,22 @@ u_internalStrcasecmp(const UChar *s1, int32_t length1,
  */
 U_CFUNC uint8_t
 u_internalGetCombiningClass(UChar32 c);
+
+/**
+ * Get the default converter. This is a commonly used converter
+ * that is used for the ustring and UnicodeString API.
+ * Remember to use the u_releaseDefaultConverter when you are done.
+ * @internal
+ */
+U_CFUNC UConverter*
+u_getDefaultConverter(UErrorCode *status);
+
+
+/**
+ * Release the default converter to the converter cache.
+ * @internal
+ */
+U_CFUNC void
+u_releaseDefaultConverter(UConverter *converter);
 
 #endif
