@@ -17,6 +17,7 @@
 
 #include "utypes.h"
 #include "itutil.h"
+#include "strtest.h"
 #include "loctest.h"
 #include "citrtest.h"
 #include "ustrtest.h"
@@ -36,24 +37,15 @@ void IntlTestUtilities::runIndexedTest( int32_t index, bool_t exec, char* &name,
     if (exec) logln("TestSuite Utilities: ");
     switch (index) {
         case 0:
-            name = "LocaleTest"; 
+            name = "StringTest"; 
             if (exec) {
-                logln("LocaleTest---"); logln("");
-                LocaleTest test;
+                logln("StringTest---"); logln("");
+                StringTest test;
                 callTest( test, par );
             }
             break;
 
         case 1:
-            name = "CharIterTest"; 
-            if (exec) {
-                logln("CharIterTest---"); logln("");
-                CharIterTest test;
-                callTest( test, par );
-            }
-            break;
-
-        case 2:
             name = "UnicodeStringTest"; 
             if (exec) {
                 logln("UnicodeStringTest---"); logln("");
@@ -62,7 +54,25 @@ void IntlTestUtilities::runIndexedTest( int32_t index, bool_t exec, char* &name,
             }
             break;
 
+        case 2:
+            name = "LocaleTest"; 
+            if (exec) {
+                logln("LocaleTest---"); logln("");
+                LocaleTest test;
+                callTest( test, par );
+            }
+            break;
+
         case 3:
+            name = "CharIterTest"; 
+            if (exec) {
+                logln("CharIterTest---"); logln("");
+                CharIterTest test;
+                callTest( test, par );
+            }
+            break;
+
+        case 4:
             name = "UnicodeTest"; 
             if (exec) {
                 logln("UnicodeTest---"); logln("");
@@ -71,7 +81,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, bool_t exec, char* &name,
             }
             break;
 
-        case 4:
+        case 5:
             name = "ResourceBundleTest"; 
             if (exec) {
                 logln("ResourceBundleTest---"); logln("");
@@ -80,7 +90,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, bool_t exec, char* &name,
             }
             break;
 
-        case 5:
+        case 6:
             name = "MutexTest"; 
             if (exec) {
                 logln("MutexTest---"); logln("");
@@ -89,7 +99,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, bool_t exec, char* &name,
             }
             break;
 
-        case 6:
+        case 7:
             name = "MultithreadTest"; 
             if (exec) {
                 logln("MultithreadTest---"); logln("");
@@ -98,7 +108,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, bool_t exec, char* &name,
             }
             break;
 
-        case 7:
+        case 8:
             name = "PUtilTest"; 
             if (exec) {
                 logln("PUtilTest---"); logln("");
