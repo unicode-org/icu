@@ -673,10 +673,23 @@ public:
      * Returns the filter used by this transliterator, or <tt>NULL</tt> if this
      * transliterator uses no filter.  The caller must eventually delete the
      * result.  After this call, this transliterator's filter is set to
-     * <tt>NULL</tt>.  Calls adoptFilter().
+     * <tt>NULL</tt>.
      */
     UnicodeFilter* orphanFilter(void);
 
+#ifdef U_USE_DEPRECATED_TRANSLITERATOR_API
+    /**
+     * Changes the filter used by this transliterator.  If the filter
+     * is set to <tt>null</tt> then no filtering will occur.
+     *
+     * <p>Callers must take care if a transliterator is in use by
+     * multiple threads.  The filter should not be changed by one
+     * thread while another thread may be transliterating.
+     *
+     * @deprecated This method will be made NON-VIRTUAL in Aug 2002.
+     */
+    virtual void adoptFilter(UnicodeFilter* adoptedFilter);
+#else
     /**
      * Changes the filter used by this transliterator.  If the filter
      * is set to <tt>null</tt> then no filtering will occur.
@@ -686,7 +699,8 @@ public:
      * thread while another thread may be transliterating.
      * @draft
      */
-    virtual void adoptFilter(UnicodeFilter* adoptedFilter);
+    void adoptFilter(UnicodeFilter* adoptedFilter);
+#endif
 
     /**
      * Returns this transliterator's inverse.  See the class
@@ -943,22 +957,6 @@ private:
 protected:
 
     /**
-     * Method for subclasses to use to obtain a character in the given
-     * string, with filtering.  If the character at the given offset
-     * is excluded by this transliterator's filter, then U+FFFE is returned.
-     *
-     * <p><b>Note:</b> Most subclasses that implement
-     * handleTransliterator() will <em>not</em> want to use this
-     * method, since characters they see are already filtered.  Only
-     * subclasses with special requirements, such as those overriding
-     * filteredTransliterate(), should need this method.
-     *
-     * @deprecated the new architecture provides filtering at the top
-     * level.  This method will be removed Dec 31 2001.
-     */
-    UChar filteredCharAt(const Replaceable& text, int32_t i) const;
-
-    /**
      * Set the ID of this transliterators.  Subclasses shouldn't do
      * this, unless the underlying script behavior has changed.
      */
@@ -968,6 +966,7 @@ private:
     static void initializeRegistry(void);
 
 #ifdef U_USE_DEPRECATED_TRANSLITERATOR_API
+
 public:
     /**
      * Returns a <code>Transliterator</code> object given its ID.
@@ -1007,6 +1006,23 @@ public:
      * @deprecated Remove after Aug 2002 use factory mehod that takes UErrorCode
      */
     inline Transliterator* createInverse() const;
+
+protected:
+    /**
+     * Method for subclasses to use to obtain a character in the given
+     * string, with filtering.  If the character at the given offset
+     * is excluded by this transliterator's filter, then U+FFFE is returned.
+     *
+     * <p><b>Note:</b> Most subclasses that implement
+     * handleTransliterator() will <em>not</em> want to use this
+     * method, since characters they see are already filtered.  Only
+     * subclasses with special requirements, such as those overriding
+     * filteredTransliterate(), should need this method.
+     *
+     * @deprecated the new architecture provides filtering at the top
+     * level.  This method will be removed Aug 2002.
+     */
+    UChar filteredCharAt(const Replaceable& text, int32_t i) const;
 
 #endif
 };
