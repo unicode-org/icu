@@ -14,6 +14,7 @@
 #include "unicode/smpdtfmt.h"
 #include "unicode/datefmt.h"
 #include "unicode/simpletz.h"
+#include "unicode/strenum.h"
 #include "cmemory.h"
 
 // *****************************************************************************
@@ -68,7 +69,8 @@ void DateFormatTest::TestWallyWedel()
      * A String array for the time zone ids.
      */
     int32_t ids_length;
-    const UnicodeString **ids = TimeZone::createAvailableIDs(ids_length);
+    StringEnumeration* ids = TimeZone::createEnumeration();
+    ids_length = ids->count(status);
     /*
      * How many ids do we have?
      */
@@ -84,7 +86,8 @@ void DateFormatTest::TestWallyWedel()
     Calendar *cal = Calendar::createInstance(status);
     for (int32_t i = 0; i < ids_length; i++) {
         // logln(i + " " + ids[i]);
-        TimeZone *ttz = TimeZone::createTimeZone(*ids[i]);
+        const UnicodeString* id = ids->snext(status);
+        TimeZone *ttz = TimeZone::createTimeZone(*id);
         // offset = ttz.getRawOffset();
         cal->setTimeZone(*ttz);
         cal->setTime(today, status);
@@ -123,13 +126,13 @@ void DateFormatTest::TestWallyWedel()
         UBool ok = fmtDstOffset == 0 || *fmtDstOffset == dstOffset;
         if (ok)
         {
-            logln(UnicodeString() + i + " " + *ids[i] + " " + dstOffset +
+            logln(UnicodeString() + i + " " + *id + " " + dstOffset +
                   " " + fmtOffset +
                   (fmtDstOffset != 0 ? " ok" : " ?"));
         }
         else
         {
-            errln(UnicodeString() + i + " " + *ids[i] + " " + dstOffset +
+            errln(UnicodeString() + i + " " + *id + " " + dstOffset +
                   " " + fmtOffset + " *** FAIL ***");
         }
         delete ttz;
@@ -137,7 +140,7 @@ void DateFormatTest::TestWallyWedel()
     }
     delete cal;
     //  delete ids;   // TODO:  BAD API
-    uprv_free(ids);
+    delete ids;
     delete sdf;
     delete tz;
 }

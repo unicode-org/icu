@@ -13,6 +13,7 @@
 #include "unicode/calendar.h"
 #include "unicode/gregocal.h"
 #include "unicode/resbund.h"
+#include "unicode/strenum.h"
 #include "tztest.h"
 #include "cmemory.h"
 
@@ -286,14 +287,16 @@ TimeZoneTest::TestVariousAPI518()
 void
 TimeZoneTest::TestGetAvailableIDs913()
 {
+    UErrorCode ec = U_ZERO_ERROR;
     UnicodeString str;
-    UnicodeString *buf = new UnicodeString("TimeZone.getAvailableIDs() = { ");
+    UnicodeString *buf = new UnicodeString("TimeZone::createEnumeration() = { ");
     int32_t s_length;
-    const UnicodeString** s = TimeZone::createAvailableIDs(s_length);
+    StringEnumeration* s = TimeZone::createEnumeration();
+    s_length = s->count(ec);
     int32_t i;
     for (i = 0; i < s_length;++i) {
         if (i > 0) *buf += ", ";
-        *buf += *s[i];
+        *buf += *s->snext(ec);
     }
     *buf += " };";
     logln(*buf);
@@ -302,31 +305,35 @@ TimeZoneTest::TestGetAvailableIDs913()
      * zone, the last zone, and one in-between.  This tests the binary
      * search through the system zone data.
      */
-    for (i=0; i<3; ++i) {
-        int32_t which = (i==0)?0:((i==1)?(s_length/2):(s_length-1));
-        TimeZone *z = TimeZone::createTimeZone(*s[which]);
+    s->reset(ec);
+    int32_t middle = s_length/2;
+    for (i=0; i<s_length; ++i) {
+        const UnicodeString* id = s->snext(ec);
+        if (i==0 || i==middle || i==(s_length-1)) {
+        TimeZone *z = TimeZone::createTimeZone(*id);
         if (z == 0) {
             errln(UnicodeString("FAIL: createTimeZone(") +
-                  *s[which] + ") -> 0");
-        } else if (z->getID(str) != *s[which]) {
+                  *id + ") -> 0");
+        } else if (z->getID(str) != *id) {
             errln(UnicodeString("FAIL: createTimeZone(") +
-                  *s[which] + ") -> zone " + str);
+                  *id + ") -> zone " + str);
         } else {
             logln(UnicodeString("OK: createTimeZone(") +
-                  *s[which] + ") succeeded");
+                  *id + ") succeeded");
         }
         delete z;
+        }
     }
-    //   delete [] s;    ****BAD API  ***
-    uprv_free(s);
+    delete s;
 
     buf->truncate(0);
-    *buf += "TimeZone.getAvailableIDs(GMT+02:00) = { ";
+    *buf += "TimeZone::createEnumeration(GMT+02:00) = { ";
 
-    s = TimeZone::createAvailableIDs(+ 2 * 60 * 60 * 1000, s_length);
+    s = TimeZone::createEnumeration(+ 2 * 60 * 60 * 1000);
+    s_length = s->count(ec);
     for (i = 0; i < s_length;++i) {
         if (i > 0) *buf += ", ";
-        *buf += *s[i];
+        *buf += *s->snext(ec);
     }
     *buf += " };";
     logln(*buf);
@@ -349,8 +356,7 @@ TimeZoneTest::TestGetAvailableIDs913()
     delete tz;
 
     delete buf;
-    //  delete [] s;    //  BAD API  !!!!
-    uprv_free(s);
+    delete s;
 }
 
 
@@ -988,22 +994,25 @@ TimeZoneTest::TestAlternateRules()
 void TimeZoneTest::TestCountries() {
     // Make sure America/Los_Angeles is in the "US" group, and
     // Asia/Tokyo isn't.  Vice versa for the "JP" group.
+    UErrorCode ec = U_ZERO_ERROR;
     int32_t n;
-    const UnicodeString** s = TimeZone::createAvailableIDs("US", n);
+    StringEnumeration* s = TimeZone::createEnumeration("US");
+    n = s->count(ec);
     UBool la = FALSE, tokyo = FALSE;
     UnicodeString laZone("America/Los_Angeles", "");
     UnicodeString tokyoZone("Asia/Tokyo", "");
     int32_t i;
 
     if (s == NULL || n <= 0) {
-        errln("FAIL: TimeZone::createAvailableIDs() returned nothing");
+        errln("FAIL: TimeZone::createEnumeration() returned nothing");
         return;
     }
     for (i=0; i<n; ++i) {
-        if (*s[i] == (laZone)) {
+        const UnicodeString* id = s->snext(ec);
+        if (*id == (laZone)) {
             la = TRUE;
         }
-        if (*s[i] == (tokyoZone)) {
+        if (*id == (tokyoZone)) {
             tokyo = TRUE;
         }
     }
@@ -1011,17 +1020,18 @@ void TimeZoneTest::TestCountries() {
         errln("FAIL: " + laZone + " in US = " + la);
         errln("FAIL: " + tokyoZone + " in US = " + tokyo);
     }
-    //  delete[] s;  // TODO:  BAD API
-    uprv_free(s);
+    delete s;
     
-    s = TimeZone::createAvailableIDs("JP", n);
+    s = TimeZone::createEnumeration("JP");
+    n = s->count(ec);
     la = FALSE; tokyo = FALSE;
     
     for (i=0; i<n; ++i) {
-        if (*s[i] == (laZone)) {
+        const UnicodeString* id = s->snext(ec);
+        if (*id == (laZone)) {
             la = TRUE;
         }
-        if (*s[i] == (tokyoZone)) {
+        if (*id == (tokyoZone)) {
             tokyo = TRUE;
         }
     }
@@ -1029,8 +1039,7 @@ void TimeZoneTest::TestCountries() {
         errln("FAIL: " + laZone + " in JP = " + la);
         errln("FAIL: " + tokyoZone + " in JP = " + tokyo);
     }
-    //  delete[] s;  // TODO:  bad API
-    uprv_free(s);
+    delete s;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

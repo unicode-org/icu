@@ -14,9 +14,16 @@
 #include "unicode/calendar.h"
 #include "unicode/timezone.h"
 #include "unicode/ustring.h"
+#include "unicode/strenum.h"
 #include "cmemory.h"
+#include "ustrenum.h"
 
 U_NAMESPACE_USE
+
+U_CAPI UEnumeration* U_EXPORT2
+ucal_openTimeZoneEnumeration(int32_t rawOffset, UErrorCode* ec) {
+    return uenum_openStringEnumeration(TimeZone::createEnumeration(rawOffset), ec);
+}
 
 U_CAPI const UChar* U_EXPORT2
 ucal_getAvailableTZIDs(        int32_t         rawOffset,
@@ -26,22 +33,26 @@ ucal_getAvailableTZIDs(        int32_t         rawOffset,
 
   if(U_FAILURE(*status)) return 0;
   
-  int32_t count = 0;
   const UChar *retVal = 0;
   
-  const UnicodeString** tzs = TimeZone::createAvailableIDs(rawOffset, 
-                                 count);
-
+  StringEnumeration* tzs = TimeZone::createEnumeration(rawOffset);
   if(tzs == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
-  if(index < count)
-    retVal = tzs[index]->getBuffer();
-  else
+  UErrorCode ec = U_ZERO_ERROR;
+  if (index >= 0 && index < tzs->count(ec)) {
+      for (;;) {
+          retVal = tzs->unext(ec);
+          if (U_FAILURE(ec) || retVal==NULL) {
+              break;
+          }
+          if (index-- == 0) break;
+      }
+  } else {
     *status = U_INDEX_OUTOFBOUNDS_ERROR;
-  
+  }
   uprv_free(tzs);
   return retVal;
 }
@@ -49,18 +60,14 @@ ucal_getAvailableTZIDs(        int32_t         rawOffset,
 U_CAPI int32_t U_EXPORT2
 ucal_countAvailableTZIDs(int32_t rawOffset)
 {  
-
-  int32_t count = 0;
-  
-  const UnicodeString** tzs = TimeZone::createAvailableIDs(rawOffset, 
-                                  count);
-
+  const StringEnumeration* tzs = TimeZone::createEnumeration(rawOffset);
   if(tzs == 0) {
     // TBD: U_MEMORY_ALLOCATION_ERROR
     return 0;
   }
-
-  uprv_free(tzs);
+  UErrorCode ec = U_ZERO_ERROR;
+  int32_t count = tzs->count(ec);
+  delete tzs;
   return count;
 }
 
