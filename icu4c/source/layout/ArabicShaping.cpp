@@ -64,6 +64,7 @@ ArabicShaping::ShapeType ArabicShaping::getShapeType(LEUnicode c)
     return ST_NOSHAPE_NONE;
 }
 
+#if 0
 const LETag GlyphShaper::isolFeatureTag  = 0x69736F6C; // 'isol'
 const LETag GlyphShaper::initFeatureTag  = 0x696E6974; // 'init'
 const LETag GlyphShaper::mediFeatureTag  = 0x6D656469; // 'medi'
@@ -73,16 +74,57 @@ const LETag GlyphShaper::msetFeatureTag  = 0x6D736574; // 'mset'
 const LETag GlyphShaper::markFeatureTag  = 0x6D61726B; // 'mark'
 
 const LETag GlyphShaper::emptyTag        = 0x00000000; // ''
+#else
+
+const LETag isolFeatureTag  = 0x69736F6C; // 'isol'
+const LETag initFeatureTag  = 0x696E6974; // 'init'
+const LETag mediFeatureTag  = 0x6D656469; // 'medi'
+const LETag finaFeatureTag  = 0x66696E61; // 'fina'
+const LETag ligaFeatureTag  = 0x6C696761; // 'liga'
+const LETag msetFeatureTag  = 0x6D736574; // 'mset'
+const LETag markFeatureTag  = 0x6D61726B; // 'mark'
+
+const LETag emptyTag        = 0x00000000; // ''
+#endif
+
+const LETag ccmpFeatureTag = 0x63636D70; // 'ccmp'
+const LETag rligFeatureTag = 0x726C6967; // 'rlig'
+const LETag caltFeatureTag = 0x63616C74; // 'calt'
+const LETag dligFeatureTag = 0x646C6967; // 'dlig'
+const LETag cswhFeatureTag = 0x63737768; // 'cswh'
+const LETag cursFeatureTag = 0x63757273; // 'curs'
+const LETag kernFeatureTag = 0x6B65726E; // 'kern'
+const LETag mkmkFeatureTag = 0x6D6B6D6B; // 'mkmk'
+
+
+const LETag featureOrder[] = 
+{
+    ccmpFeatureTag, isolFeatureTag, finaFeatureTag, mediFeatureTag, initFeatureTag, rligFeatureTag,
+    caltFeatureTag, ligaFeatureTag, dligFeatureTag, cswhFeatureTag, msetFeatureTag, cursFeatureTag,
+    kernFeatureTag, markFeatureTag, mkmkFeatureTag, emptyTag
+};
 
 const LETag GlyphShaper::tagArray[] =
 {
-    isolFeatureTag, ligaFeatureTag, msetFeatureTag, markFeatureTag, emptyTag,
-    finaFeatureTag, ligaFeatureTag, msetFeatureTag, markFeatureTag, emptyTag,
-    initFeatureTag, ligaFeatureTag, msetFeatureTag, markFeatureTag, emptyTag,
-    mediFeatureTag, ligaFeatureTag, msetFeatureTag, markFeatureTag, emptyTag
+    isolFeatureTag, ligaFeatureTag, msetFeatureTag, markFeatureTag, ccmpFeatureTag, rligFeatureTag,
+        caltFeatureTag, dligFeatureTag, cswhFeatureTag, cursFeatureTag, kernFeatureTag, mkmkFeatureTag, emptyTag,
+
+    finaFeatureTag, ligaFeatureTag, msetFeatureTag, markFeatureTag, ccmpFeatureTag, rligFeatureTag,
+        caltFeatureTag, dligFeatureTag, cswhFeatureTag, cursFeatureTag, kernFeatureTag, mkmkFeatureTag, emptyTag,
+
+    initFeatureTag, ligaFeatureTag, msetFeatureTag, markFeatureTag, ccmpFeatureTag, rligFeatureTag,
+        caltFeatureTag, dligFeatureTag, cswhFeatureTag, cursFeatureTag, kernFeatureTag, mkmkFeatureTag, emptyTag,
+
+    mediFeatureTag, ligaFeatureTag, msetFeatureTag, markFeatureTag, ccmpFeatureTag, rligFeatureTag,
+        caltFeatureTag, dligFeatureTag, cswhFeatureTag, cursFeatureTag, kernFeatureTag, mkmkFeatureTag, emptyTag
 };
 
 #define TAGS_PER_GLYPH (sizeof GlyphShaper::tagArray / sizeof(LETag) / 4)
+
+const LETag *ArabicShaping::getFeatureOrder()
+{
+    return featureOrder;
+}
 
 void ArabicShaping::shape(const LEUnicode *chars, le_int32 offset, le_int32 charCount, le_int32 charMax,
                           le_bool rightToLeft, Shaper &shaper)
