@@ -251,7 +251,51 @@ public final class VersionInfo
     {
         return getInstance(major, 0, 0, 0);
     }
- 
+
+    private static VersionInfo javaVersion;
+
+    /**
+     * @internal
+     */
+    public static VersionInfo javaVersion() {
+	if (javaVersion == null) {
+	    String s = System.getProperty("java.version");
+	    // clean string
+	    // preserve only digits, separated by single '.' 
+	    // ignore over 4 digit sequences
+	    // does not test < 255, very odd...
+
+	    char[] chars = s.toCharArray();
+	    int r = 0, w = 0, count = 0;
+	    boolean numeric = false; // ignore leading non-numerics
+	    while (r < chars.length) {
+		char c = chars[r++];
+		if (c < '0' || c > '9') {
+		    if (numeric) {
+			if (count == 3) {
+			    // only four digit strings allowed
+			    break;
+			}
+			numeric = false;
+			chars[w++] = '.';
+			++count;
+		    }
+		} else {
+		    numeric = true;
+		    chars[w++] = c;
+		}
+	    }
+	    while (w > 0 && chars[w-1] == '.') {
+		--w;
+	    }
+    
+	    String vs = new String(chars, 0, w);
+
+	    javaVersion = VersionInfo.getInstance(vs);
+	}
+	return javaVersion;
+    }
+
     /** 
      * Returns the String representative of VersionInfo in the format of 
      * "major.minor.milli.micro"   
