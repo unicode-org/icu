@@ -302,7 +302,6 @@ static UResourceBundle* openOlsonResource(const UnicodeString& id,
     if (ures_getSize(&res) <= 1 && getOlsonMeta(top)) {
       int32_t deref = ures_getInt(&res, &ec) + 0;
       U_DEBUG_TZ_MSG(("getInt: %s - type is %d\n", u_errorName(ec), ures_getType(&res)));
-      ures_close(&res);
       UResourceBundle *ares = ures_getByKey(top, kZONES, NULL, &ec); // dereference Zones section
       ures_getByIndex(ares, deref, &res, &ec);
       ures_close(ares);
