@@ -4,7 +4,7 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-package com.ibm.icu.dev.test.format;
+package com.ibm.icu.dev.test.util;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,15 +14,14 @@ import java.util.Map;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 public class DisplayNameTest extends TestFmwk {
-    static final boolean SHOW_ALL = true;
+    static final boolean SHOW_ALL = false;
     
     public static void main(String[] args) throws Exception {
         new DisplayNameTest().run(args);
@@ -32,9 +31,15 @@ public class DisplayNameTest extends TestFmwk {
         public String get(ULocale locale, String code, Object context);
     }
 
-    Map test = new HashMap();
-    static final String[] zoneFormats = {"zzz", "zzzz", "Z"};
-    static final String[] currencyFormats = {"\u00a4", "\u00a4\u00a4"};
+    Map[] codeToName = new Map[10];
+    {
+        for (int k = 0; k < codeToName.length; ++k) codeToName[k] = new HashMap();
+    }
+    
+    static final Object[] zoneFormats = {new Integer(0), new Integer(1), new Integer(2),
+        new Integer(3), new Integer(4), new Integer(5), new Integer(6), new Integer(7)};
+    static final Object[] currencyFormats = {new Integer(Currency.SYMBOL_NAME), new Integer(Currency.LONG_NAME)};
+    static final Object[] NO_CONTEXT = {null};
     
     static final Date JAN1 = new Date(2004-1900,0,1);
     static final Date JULY1 = new Date(2004-1900,6,1);
@@ -68,46 +73,59 @@ public class DisplayNameTest extends TestFmwk {
         check("Script", locale, scripts, null, new DisplayNameGetter() {
             public String get(ULocale locale, String code, Object context) {
                 // TODO This is kinda a hack; ought to be direct way.
-                return ULocale.getDisplayCountry("en-"+code, locale);
+                return ULocale.getDisplayScript("en_"+code, locale);
             }
         });
         check("Country", locale, countries, null, new DisplayNameGetter() {
             public String get(ULocale locale, String code, Object context) {
                 // TODO This is kinda a hack; ought to be direct way.
-                return ULocale.getDisplayScript("en-"+code, locale);
+                return ULocale.getDisplayCountry("en_"+code, locale);
             }
         });
-        for (int j = 0; j < currencyFormats.length; ++j)
-          check("Currencies", locale, currencies, currencyFormats[j], new DisplayNameGetter() {
-            // TODO: fix once SimpleDateFormat takes a ULocale
+        check("Currencies", locale, currencies, currencyFormats, new DisplayNameGetter() {
             public String get(ULocale locale, String code, Object context) {
-                DecimalFormat sdf = new DecimalFormat(context.toString(),
-                    new DecimalFormatSymbols(locale.toLocale()));
-                return sdf.format(0);
+                Currency s = Currency.getInstance(code);
+                return s.getName(locale.toLocale(), ((Integer)context).intValue(), new boolean[1]);
             }
         });
         // comment this out, because the zone string information is lost
         // we'd have to access the resources directly to test them
-        if (false) for (int j = 0; j < zoneFormats.length; ++j) {
-            check("Zones", locale, zones, zoneFormats[j], new DisplayNameGetter() {
-                // TODO: fix once SimpleDateFormat takes a ULocale
-                public String get(ULocale locale, String code, Object context) {
-                    SimpleDateFormat sdf = new SimpleDateFormat(context.toString(), locale.toLocale());
-                    sdf.setTimeZone(TimeZone.getTimeZone(code));
-                    return sdf.format(JULY1);
-                }
-            });
-            check("Zones", locale, zones, zoneFormats[j], new DisplayNameGetter() {
-                // TODO: fix once SimpleDateFormat takes a ULocale
-                public String get(ULocale locale, String code, Object context) {
-                    SimpleDateFormat sdf = new SimpleDateFormat(context.toString(), locale.toLocale());
-                    sdf.setTimeZone(TimeZone.getTimeZone(code));
-                    return sdf.format(JAN1);
-                }
-            });
-        }
+
+        check("Zones", locale, zones, zoneFormats, new DisplayNameGetter() {
+            // TODO replace once we have real API
+            public String get(ULocale locale, String code, Object context) {
+                return getZoneString(locale, code, ((Integer)context).intValue());
+            }
+        });
+
     }
     
+    Map zoneData = new HashMap();
+    
+    private String getZoneString(ULocale locale, String olsonID, int item) {
+        Map data = (Map)zoneData.get(locale);
+        if (data == null) {
+            data = new HashMap();
+            ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(locale);
+            ICUResourceBundle table = bundle.getWithFallback("zoneStrings");
+            for (int i = 0; ; ++i) {
+                ICUResourceBundle stringSet = table.get(i);
+                if (stringSet == null) break;
+                String key = stringSet.getString(0);
+                ArrayList list = new ArrayList();
+                for (int j = 1; ; ++j) {
+                    String entry = stringSet.getString(j);
+                    if (entry == null) break;
+                    list.add(entry);
+                }
+                data.put(key, list.toArray(new String[list.size()]));
+            }
+            zoneData.put(locale, data);
+        }
+        String[] strings = (String[]) data.get(olsonID);
+        if (strings == null || item >= strings.length) return olsonID;
+        return strings[item];
+    }
     /**
      * Hack to get code list
      * @return
@@ -141,36 +159,43 @@ public class DisplayNameTest extends TestFmwk {
     }
 
     private void check(String type, ULocale locale, 
-      String[] codes, Object context, DisplayNameGetter getter) {
-        test.clear();
+      String[] codes, Object[] contextList, DisplayNameGetter getter) {
+        if (contextList == null) contextList = NO_CONTEXT;
+        for (int k = 0; k < contextList.length; ++k) codeToName[k].clear();
         for (int j = 0; j < codes.length; ++j) {
             String code = codes[j];
-            String name = getter.get(locale, code, context);
-            if (name == null || name.length() == 0) {
-                errln(
-                    locale // .getDisplayName(ULocale.ENGLISH) causes exception
-                    + ": Null or Zero-Length Display Name " + type
-                    + "\t" + code
-                    + ((context != null) ? "\t(" + context + ")" : "")
-                );
-                continue;            
-            }
-            Object otherCode = test.get(name);
-            if (otherCode != null) {
-                errln(
-                    locale // .getDisplayName(ULocale.ENGLISH) causes exception
-                    + ": Display Names collide for " + type
-                    + "\t" + code
-                    + "\t" + otherCode
-                    + "\t" + name
-                    + ((context != null) ? "\t(" + context + ")" : "")
-                );
-            } else {
-                test.put(name, code);
-                if (SHOW_ALL) logln(
-                    locale + "\t" + type + "\t" + code + "\t" + name 
-                    + ((context != null) ? "\t(" + context + ")" : "")
-                );
+            for (int k = 0; k < contextList.length; ++k) {
+                Object context = contextList[k];
+                String name = getter.get(locale, code, context);
+                if (name == null || name.length() == 0) {
+                    errln(
+                        locale + "[" + locale.getDisplayName(ULocale.ENGLISH) + "]"
+                        + ": Null or Zero-Length Display Name " + type
+                        + ((context != null) ? "\t(" + context + "]" : "")
+                        + "\t" + code + "[" + getter.get(ULocale.ENGLISH, code, context) + "]"
+                    );
+                    continue;            
+                }
+                String otherCode = (String) codeToName[k].get(name);
+                if (otherCode != null) {
+                    errln(
+                        locale + "[" + locale.getDisplayName(ULocale.ENGLISH) + "]"
+                        + ": Display Names collide for " + type
+                        + ((context != null) ? "\t(" + context + "]" : "")
+                        + "\t" + code + "[" + getter.get(ULocale.ENGLISH, code, context) + "]"
+                        + " & " + otherCode + "[" + getter.get(ULocale.ENGLISH, otherCode, context) + "]"
+                        + "\t=> " + name
+                    );
+                } else {
+                    codeToName[k].put(name, code);
+                    if (SHOW_ALL) logln(
+                        locale + "[" + locale.getDisplayName(ULocale.ENGLISH) + "]"
+                        + "\t" + type 
+                        + ((context != null) ? "\t(" + context + "]" : "")
+                        + "\t" + code + "[" + getter.get(ULocale.ENGLISH, code, context) + "]"
+                        + "\t=> " + name 
+                    );
+                }
             }
         }
     }
