@@ -26,8 +26,18 @@
                           }                             \
                           break
 
-// #define ENABLE_FAILING_TESTS
-
+#define EXHAUSTIVE(id,test) case id:                            \
+                              if(quick==FALSE){                 \
+                                  name = #test;                 \
+                                  if (exec){                    \
+                                      logln(#test "---");       \
+                                      logln((UnicodeString)""); \
+                                      test();                   \
+                                  }                             \
+                              }else{                            \
+                                name="";                        \
+                              }                                 \
+                              break
 void
 TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
                                    const char* &name, char* /*par*/) {
@@ -40,46 +50,50 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
         CASE(3,Testel);
         CASE(4,TestCyrillic);
         CASE(5,TestDevanagariLatin);
-        CASE(6,TestDevanagariBengali);
-        CASE(7,TestDevanagariGurmukhi);
-        CASE(8,TestDevanagariGujarati);
-        CASE(9,TestDevanagariOriya);
-        CASE(10,TestDevanagariTamil);
-        CASE(11,TestDevanagariTelugu);
-        CASE(12,TestDevanagariKannada);
-        CASE(13,TestDevanagariMalayalam);
-        CASE(14,TestBengaliGurmukhi);
-        CASE(15,TestBengaliGujarati);
-        CASE(16,TestBengaliOriya);
-        CASE(17,TestBengaliTamil);
-        CASE(18,TestBengaliTelugu);
-        CASE(19,TestBengaliKannada);
-        CASE(20,TestBengaliMalayalam );
-        CASE(21,TestGurmukhiGujarati);
-        CASE(22,TestGurmukhiOriya);
-        CASE(23,TestGurmukhiTamil);
-        CASE(24,TestGurmukhiTelugu);
-        CASE(25,TestGurmukhiKannada);
-        CASE(26,TestGurmukhiMalayalam);
-        CASE(27,TestGujaratiOriya);
-        CASE(28,TestGujaratiTamil);
-        CASE(29,TestGujaratiTelugu);
-        CASE(30,TestGujaratiKannada);
-        CASE(31,TestGujaratiMalayalam);
-        CASE(32,TestOriyaTamil);
-        CASE(33,TestOriyaTelugu);
-        CASE(34,TestOriyaKannada);
-        CASE(35,TestOriyaMalayalam);
-        CASE(36,TestTamilTelugu);
-        CASE(37,TestTamilKannada);
-        CASE(38,TestTamilMalayalam);
-        CASE(39,TestTeluguKannada);
-        CASE(40,TestTeluguMalayalam);
-        CASE(41,TestKannadaMalayalam);
+
 #ifdef ENABLE_FAILING_TESTS
-        CASE(42,TestJamo);
-        CASE(43,TestJamoHangul);
+        CASE(6,TestJamo);
+        CASE(7,TestJamoHangul);
+#else 
+        case 6: /* falls through */
+        case 7: /* falls through */
 #endif
+        EXHAUSTIVE(8,TestDevanagariBengali);
+        EXHAUSTIVE(9,TestDevanagariGurmukhi);
+        EXHAUSTIVE(10,TestDevanagariGujarati);
+        EXHAUSTIVE(11,TestDevanagariOriya);
+        EXHAUSTIVE(12,TestDevanagariTamil);
+        EXHAUSTIVE(13,TestDevanagariTelugu);
+        EXHAUSTIVE(14,TestDevanagariKannada);
+        EXHAUSTIVE(15,TestDevanagariMalayalam);
+        EXHAUSTIVE(16,TestBengaliGurmukhi);
+        EXHAUSTIVE(17,TestBengaliGujarati);
+        EXHAUSTIVE(18,TestBengaliOriya);
+        EXHAUSTIVE(19,TestBengaliTamil);
+        EXHAUSTIVE(20,TestBengaliTelugu);
+        EXHAUSTIVE(21,TestBengaliKannada);
+        EXHAUSTIVE(22,TestBengaliMalayalam );
+        EXHAUSTIVE(23,TestGurmukhiGujarati);
+        EXHAUSTIVE(24,TestGurmukhiOriya);
+        EXHAUSTIVE(25,TestGurmukhiTamil);
+        EXHAUSTIVE(26,TestGurmukhiTelugu);
+        EXHAUSTIVE(27,TestGurmukhiKannada);
+        EXHAUSTIVE(28,TestGurmukhiMalayalam);
+        EXHAUSTIVE(29,TestGujaratiOriya);
+        EXHAUSTIVE(30,TestGujaratiTamil);
+        EXHAUSTIVE(31,TestGujaratiTelugu);
+        EXHAUSTIVE(32,TestGujaratiKannada);
+        EXHAUSTIVE(33,TestGujaratiMalayalam);
+        EXHAUSTIVE(34,TestOriyaTamil);
+        EXHAUSTIVE(35,TestOriyaTelugu);
+        EXHAUSTIVE(36,TestOriyaKannada);
+        EXHAUSTIVE(37,TestOriyaMalayalam);
+        EXHAUSTIVE(38,TestTamilTelugu);
+        EXHAUSTIVE(39,TestTamilKannada);
+        EXHAUSTIVE(40,TestTamilMalayalam);
+        EXHAUSTIVE(41,TestTeluguKannada);
+        EXHAUSTIVE(42,TestTeluguMalayalam);
+        EXHAUSTIVE(43,TestKannadaMalayalam);
         default: name = ""; break;
     }
 }
