@@ -384,10 +384,6 @@ public:
      * <= limit</code>.
      * @param limit the ending index, exclusive; <code>start <= limit
      * <= text.length()</code>.
-     * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
      * @return The new limit index.  The text previously occupying <code>[start,
      * limit)</code> has been transliterated, possibly to a string of a different
      * length, at <code>[start, </code><em>new-limit</em><code>)</code>, where
