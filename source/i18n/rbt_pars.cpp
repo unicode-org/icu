@@ -258,11 +258,11 @@ void Segments::addParenthesisAt(int32_t offset, UBool isOpen, UErrorCode &status
     isOpenParen.addElement(isOpen ? 1 : 0, status);
 }
 
-int32_t Segments::getLastParenOffset(UBool& isOpenParen) const {
+int32_t Segments::getLastParenOffset(UBool& isOpenParenReturn) const {
     if (size() == 0) {
         return -1;
     }
-    isOpenParen = isOpen(size()-1);
+    isOpenParenReturn = isOpen(size()-1);
     return offset(size()-1);
 }
 
@@ -829,11 +829,11 @@ TransliteratorParser::~TransliteratorParser() {
 
 void
 TransliteratorParser::parse(const UnicodeString& rules,
-                            UTransDirection direction,
+                            UTransDirection transDirection,
                             UParseError& pe,
                             UErrorCode& ec) {
     if (U_SUCCESS(ec)) {
-        parseRules(rules, direction);
+        parseRules(rules, transDirection);
         pe = parseError;
         ec = status;
     }

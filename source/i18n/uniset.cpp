@@ -179,11 +179,11 @@ UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
         if (category < 0 || category >= U_CHAR_CATEGORY_COUNT) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
         } else {
-            UnicodeString pat(FALSE, CATEGORY_NAMES + category*2, 2);
-            pat.insert(0, OPEN);
-            pat.append(CLOSE);
+            UnicodeString pattern(FALSE, CATEGORY_NAMES + category*2, 2);
+            pattern.insert(0, OPEN);
+            pattern.append(CLOSE);
             list = new UChar32[capacity];
-            applyPattern(pat, status);
+            applyPattern(pattern, status);
         }
     }
 }
