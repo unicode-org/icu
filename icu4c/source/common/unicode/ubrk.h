@@ -241,6 +241,26 @@ typedef enum UWordBreak {
     UBRK_WORD_IDEO_LIMIT     = 500
 } UWordBreak;
 
+/**
+ *  Enum constants for the line break tags returned by getRuleStatus().
+ *  A range of values is defined for each category of
+ *  word, to allow for further subdivisions of a category in future releases.
+ *  Applications should check for tag values falling within the range, rather
+ *  than for single individual values.
+ *  @draft ICU 2.8
+*/
+typedef enum ULineBreakTag {
+    /** Tag value for soft line breaks, positions at which a line break
+      *  is acceptable but not required                */
+    UBRK_LINE_SOFT            = 0,
+    /** Upper bound for soft line breaks.              */
+    UBRK_LINE_SOFT_LIMIT      = 100,
+    /** Tag value for a hard, or mandatory line break  */
+    UBRK_LINE_HARD            = 100,
+    /** Upper bound for hard line breaks.              */
+    UBRK_LINE_HARD_LIMIT      = 200
+} ULineBreakTag;
+
 
 /**
  * Open a new UBreakIterator for locating text boundaries for a specified locale.

@@ -553,10 +553,10 @@ void RBBIAPITest::TestQuoteGrouping() {
 }
 
 //
-//  TestWordStatus
+//  TestRuleStatus
 //      Test word break rule status constants.
 //
-void RBBIAPITest::TestWordStatus() {
+void RBBIAPITest::TestRuleStatus() {
 
      
      UnicodeString testString1 =   //                  Ideographic    Katakana       Hiragana
@@ -599,6 +599,51 @@ void RBBIAPITest::TestWordStatus() {
          }
      }
      delete bi;
+
+     // Now test line break status.  This test mostly is to confirm that the status constants
+     //                              are correctly declared in the header.
+     testString1 =   "test line. \n";
+     // break type    s    s     h
+
+     bi = (RuleBasedBreakIterator *)
+         BreakIterator::createLineInstance(Locale::getEnglish(), status);
+     if(U_FAILURE(status)) {
+         errln("failed to create word break iterator.");
+     } else {
+         int32_t i = 0;
+         int32_t pos, tag;
+         UBool   success;
+
+         bi->setText(testString1);
+         pos = bi->current();
+         tag = bi->getRuleStatus();
+         for (i=0; i<3; i++) {
+             switch (i) {
+             case 0:
+                 success = pos==0  && tag==UBRK_LINE_SOFT; break;
+             case 1:
+                 success = pos==5  && tag==UBRK_LINE_SOFT; break;
+             case 2:
+                 success = pos==12 && tag==UBRK_LINE_HARD; break;
+             default:
+                 success = FALSE; break;
+             }
+             if (success == FALSE) {
+                 errln("Fail: incorrect word break status or position.  i=%d, pos=%d, tag=%d",
+                     i, pos, tag);
+                 break;
+             }
+             pos = bi->next();
+             tag = bi->getRuleStatus();
+         }
+         if (UBRK_LINE_SOFT >= UBRK_LINE_SOFT_LIMIT ||
+             UBRK_LINE_HARD >= UBRK_LINE_HARD_LIMIT ||
+             UBRK_LINE_HARD > UBRK_LINE_SOFT && UBRK_LINE_HARD < UBRK_LINE_SOFT_LIMIT ) {
+             errln("UBRK_LINE_* constants from header are inconsistent.");
+         }
+     }
+     delete bi;
+
 }
 
 
@@ -805,7 +850,7 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case  6: name = "extra"; break;   /* Extra */
         case  7: name = "TestBuilder"; if (exec) TestBuilder(); break;
         case  8: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
-        case  9: name = "TestWordStatus"; if (exec) TestWordStatus(); break;
+        case  9: name = "TestRuleStatus"; if (exec) TestRuleStatus(); break;
         case 10: name = "TestBug2190"; if (exec) TestBug2190(); break;
         case 11: name = "TestRegistration"; if (exec) TestRegistration(); break;
         case 12: name = "TestBoilerPlate"; if (exec) TestBoilerPlate(); break;
