@@ -60,7 +60,7 @@ $HEADERDEF =~ s/\./_/;
 print HEADER <<"EndOfHeaderComment";
 /*
 *******************************************************************************
-*   Copyright (C) 2001, International Business Machines
+*   Copyright (C) 2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -71,7 +71,7 @@ print HEADER <<"EndOfHeaderComment";
 *
 *   Created by: Perl script written by Vladimir Weinstein
 *
-*  Contains data for renaming ICU exports in the $ARGV[0] library
+*  Contains data for renaming ICU exports.
 *  Gets included by umachine.h
 *
 *  THIS FILE IS MACHINE-GENERATED, DON'T PLAY WITH IT IF YOU DON'T KNOW WHAT
