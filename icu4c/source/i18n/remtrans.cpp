@@ -21,23 +21,23 @@ U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RemoveTransliterator)
 
 /**
+ * Factory method
+ */
+static Transliterator* RemoveTransliterator_create(const UnicodeString& /*ID*/,
+                                                   Transliterator::Token /*context*/) {
+    /* We don't need the ID or context. We just remove data */
+    return new RemoveTransliterator();
+}
+
+/**
  * System registration hook.
  */
 void RemoveTransliterator::registerIDs() {
 
-    Transliterator::_registerFactory(::ID, _create, integerToken(0));
+    Transliterator::_registerFactory(::ID, RemoveTransliterator_create, integerToken(0));
 
     Transliterator::_registerSpecialInverse(UNICODE_STRING_SIMPLE("Remove"),
                                             UNICODE_STRING_SIMPLE("Null"), FALSE);
-}
-
-/**
- * Factory method
- */
-Transliterator* RemoveTransliterator::_create(const UnicodeString& /*ID*/,
-                                              Token /*context*/) {
-    /* We don't need the ID or context. We just remove data */
-    return new RemoveTransliterator();
 }
 
 RemoveTransliterator::RemoveTransliterator() : Transliterator(::ID, 0) {}

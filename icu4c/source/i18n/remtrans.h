@@ -73,12 +73,6 @@ public:
      */
     static UClassID U_EXPORT2 getStaticClassID();
 
- private:
-
-    /**
-     * Factory method
-     */
-    static Transliterator* _create(const UnicodeString& ID, Token context);
 };
 
 U_NAMESPACE_END
