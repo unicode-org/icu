@@ -24,12 +24,12 @@
 
 
 #include "unicode/putil.h"
-#include "unicode/ucnv.h"
 #include "unicode/ustring.h"
 #include "cstring.h"
 #include "cwchar.h"
 #include "cmemory.h"
 #include "ustr_imp.h"
+#include "ustr_cnv.h"
 
 
 static U_INLINE UBool 
