@@ -3,12 +3,12 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TitlecaseTransliterator.java,v $ 
- * $Date: 2002/02/28 23:55:46 $ 
- * $Revision: 1.13 $
+ * $Date: 2002/03/15 22:48:07 $ 
+ * $Revision: 1.14 $
  */
 package com.ibm.icu.text;
 import java.util.*;
-import com.ibm.icu.impl.UnicodeProperty;
+import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.UCharacterIterator;
 
 /**
@@ -105,13 +105,13 @@ class TitlecaseTransliterator extends Transliterator {
         while (textPos < limit) {
         	original.setIndex(textPos);
             cp = original.currentCodepoint();
-            oldLen = UnicodeProperty.getCharCount(cp);
+            oldLen = UTF16.getCharCount(cp);
             
             if (!SKIP.contains(cp)) {
                 if (doTitle) {
-                    newLen = UnicodeProperty.toUpperOrTitleCase(loc, cp, original, false, buffer);
+                    newLen = m_charppty_.toUpperOrTitleCase(loc, cp, original, false, buffer);
                 } else {
-                    newLen = UnicodeProperty.toLowerCase(loc, cp, original, buffer);
+                    newLen = m_charppty_.toLowerCase(loc, cp, original, buffer);
                 }
                 doTitle = !CASED.contains(cp);
                 if (newLen >= 0) {
@@ -129,5 +129,10 @@ class TitlecaseTransliterator extends Transliterator {
         offsets.start = offsets.limit;
     }
     
-    private char buffer[] = new char[UnicodeProperty.MAX_CASE_MAP_SIZE];
+    private char buffer[] = new char[UCharacterProperty.MAX_CASE_MAP_SIZE];
+    /**
+     * Character property database
+     */
+    private static final UCharacterProperty m_charppty_ = 
+                                            UCharacterProperty.getInstance();
 }

@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacterTypeIterator.java,v $
-* $Date: 2002/02/28 23:47:22 $
-* $Revision: 1.4 $
+* $Date: 2002/03/15 22:48:07 $
+* $Revision: 1.5 $
 *
 ******************************************************************************
 */
@@ -14,7 +14,6 @@
 package com.ibm.icu.lang;
 
 import com.ibm.icu.impl.TrieIterator;
-import com.ibm.icu.impl.UnicodeProperty;
 import com.ibm.icu.impl.UCharacterProperty;
 
 /**
@@ -42,13 +41,12 @@ class UCharacterTypeIterator extends TrieIterator
     
     /**
     * TrieEnumeration constructor
-    * @param trie to be used
-    * @exception IllegalArgumentException throw when argument is null.
+    * @param property the unicode character properties to be used
     * @draft 2.1
     */
-    protected UCharacterTypeIterator()
+    protected UCharacterTypeIterator(UCharacterProperty property)
     {
-        super(UnicodeProperty.PROPERTY.m_trie_);
+       super(property.m_trie_);
     }
     
     // protected methods ----------------------------------------------
@@ -64,7 +62,19 @@ class UCharacterTypeIterator extends TrieIterator
     */
     protected int extract(int value)
     {
-        return UCharacterProperty.getPropType(
-                                 UnicodeProperty.PROPERTY.m_property_[value]);
+    	// this is needed because TrieIterator() gets called first and it
+    	// in turn calls extract to instantiate this default value
+    	// so sometimes m_property_ does not get assigned properly
+    	if (m_property_ == null) {
+    		m_property_ = UCharacterProperty.getInstance().m_property_;
+    	}
+    	return UCharacterProperty.getPropType(m_property_[value]);
     }
+    
+    // private data members ---------------------------------------------
+    
+    /**
+     * Character property
+     */
+    private int m_property_[];
 }

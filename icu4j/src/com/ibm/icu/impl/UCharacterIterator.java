@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/UCharacterIterator.java,v $ 
- * $Date: 2002/03/13 22:49:17 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/03/15 22:48:07 $ 
+ * $Revision: 1.3 $
  *
  *******************************************************************************
  */
@@ -14,6 +14,7 @@ package com.ibm.icu.impl;
 
 import com.ibm.icu.text.Replaceable;
 import com.ibm.icu.text.ReplaceableString;
+import com.ibm.icu.text.UTF16;
 import java.text.CharacterIterator;
 
 /**
@@ -192,11 +193,11 @@ public final class UCharacterIterator implements CharacterIterator
 		if (m_index_ < m_length_ - 1) {
 			int ch = m_replaceable_.charAt(m_index_);
 			m_index_ ++;
-			if (ch >= UnicodeProperty.LEAD_SURROGATE_MIN_VALUE &&
-			    ch <= UnicodeProperty.LEAD_SURROGATE_MAX_VALUE) {
+			if (ch >= UTF16.LEAD_SURROGATE_MIN_VALUE &&
+			    ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
 			    ch = m_replaceable_.charAt(m_index_);
-			    if (ch >= UnicodeProperty.TRAIL_SURROGATE_MIN_VALUE &&
-			    	ch <= UnicodeProperty.TRAIL_SURROGATE_MAX_VALUE) {
+			    if (ch >= UTF16.TRAIL_SURROGATE_MIN_VALUE &&
+			    	ch <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
 			    	m_index_ ++;
 				}
 			}
@@ -239,11 +240,11 @@ public final class UCharacterIterator implements CharacterIterator
         if (m_index_ > 0) {
             m_index_ --;
             int ch = m_replaceable_.charAt(m_index_);
-			if (ch >= UnicodeProperty.TRAIL_SURROGATE_MIN_VALUE &&
-			    ch <= UnicodeProperty.TRAIL_SURROGATE_MAX_VALUE) {
+			if (ch >= UTF16.TRAIL_SURROGATE_MIN_VALUE &&
+			    ch <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
 			    ch = m_replaceable_.charAt(m_index_);
-			    if (ch >= UnicodeProperty.LEAD_SURROGATE_MIN_VALUE &&
-			    	ch <= UnicodeProperty.LEAD_SURROGATE_MAX_VALUE) {
+			    if (ch >= UTF16.LEAD_SURROGATE_MIN_VALUE &&
+			    	ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
 			    	m_index_ --;
 				}
 			}
