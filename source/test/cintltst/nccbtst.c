@@ -387,6 +387,21 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
         };
 
+
+        UChar SCSU_inputText[]={ 0x0041, 0xd801/*illegal*/, 0x0042, };
+
+        const uint8_t to_SCSU[]={    
+            0x41,   
+            0x42
+
+           
+        };
+        int32_t from_SCSUOffs [] ={ 
+            0,
+            2,
+
+        };
+
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
                 toIBM943, sizeof(toIBM943), "ibm-943",
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, offset, NULL, 0 ))
@@ -450,6 +465,12 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
                 to_hz1, sizeof(to_hz1), "hz",
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_hzOffs1, NULL, 0,UCNV_SKIP_STOP_ON_ILLEGAL,U_ILLEGAL_CHAR_FOUND ))
             log_err("u-> hz with skip & UCNV_SKIP_STOP_ON_ILLEGAL did not match.\n"); 
+        
+        /*SCSU*/
+        if(!testConvertFromUnicode(SCSU_inputText, sizeof(SCSU_inputText)/sizeof(SCSU_inputText[0]),
+                to_SCSU, sizeof(to_SCSU), "SCSU",
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_SCSUOffs, NULL, 0 ))
+            log_err("u-> SCSU with skip did not match.\n");
 
 
       
@@ -667,6 +688,17 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
             log_err("utf8->u with skip did not match.\n");;
     }
 
+    log_verbose("Testing toUnicode for SCSU with UCNV_TO_U_CALLBACK_SKIP \n");
+    {
+        const uint8_t sampleText1[] = {  0xba, 0x8c,0xF8, 0x61,0x0c, 0x0c,};
+        UChar    expected1[] = {  0x00ba,  0x008c,  0x00f8,  0x0061,0xfffe,0xfffe};
+        int32_t offsets1[] = {   0x0000, 0x0001,0x0002,0x0003,4,5};
+
+        if(!testConvertToUnicode(sampleText1, sizeof(sampleText1),
+                 expected1, sizeof(expected1)/sizeof(expected1[0]),"SCSU",
+                (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, offsets1, NULL, 0 ))
+            log_err("scsu->u with stop did not match.\n");;
+    }
 }
 
 static void TestStop(int32_t inputsize, int32_t outputsize)
@@ -832,7 +864,24 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, offsets, NULL, 0 ))
             log_err("u-> utf8 with stop did not match.\n");
     }
+    log_verbose("Testing fromUnicode for SCSU with UCNV_FROM_U_CALLBACK_STOP \n");
+    {
+        UChar SCSU_inputText[]={ 0x0041, 0xd801/*illegal*/, 0x0042, };
 
+        const uint8_t to_SCSU[]={    
+            0x41,   
+           
+        };
+        int32_t from_SCSUOffs [] ={ 
+            0,
+
+        };
+        if(!testConvertFromUnicode(SCSU_inputText, sizeof(SCSU_inputText)/sizeof(SCSU_inputText[0]),
+                to_SCSU, sizeof(to_SCSU), "SCSU",
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, from_SCSUOffs, NULL, 0 ))
+            log_err("u-> SCSU with skip did not match.\n");
+    
+    }
     /*to Unicode*/
     if(!testConvertToUnicode(expstopIBM_949, sizeof(expstopIBM_949),
              IBM_949stoptoUnicode, sizeof(IBM_949stoptoUnicode)/sizeof(IBM_949stoptoUnicode[0]),"ibm-949",
@@ -890,7 +939,7 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
                 (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, from_euc_twOffs, NULL, 0 ))
             log_err("euc-tw->u with stop did not match.\n");
     }
-    log_verbose("Testing fromUnicode for UTF-8 with UCNV_TO_U_CALLBACK_STOP \n");
+    log_verbose("Testing toUnicode for UTF-8 with UCNV_TO_U_CALLBACK_STOP \n");
     {
         const uint8_t sampleText1[] = { 0x31, 0xe4, 0xba, 0x8c, 
             0xe0, 0x80,  0x61,};
@@ -901,6 +950,17 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
                  expected1, sizeof(expected1)/sizeof(expected1[0]),"utf8",
                 (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, offsets1, NULL, 0 ))
             log_err("utf8->u with stop did not match.\n");;
+    }
+    log_verbose("Testing toUnicode for SCSU with UCNV_TO_U_CALLBACK_STOP \n");
+    {
+        const uint8_t sampleText1[] = {  0xba, 0x8c,0xF8, 0x61,0x0c, 0x0c,0x04};
+        UChar    expected1[] = {  0x00ba,  0x008c,  0x00f8,  0x0061};
+        int32_t offsets1[] = {   0x0000, 0x0001,0x0002,0x0003};
+
+        if(!testConvertToUnicode(sampleText1, sizeof(sampleText1),
+                 expected1, sizeof(expected1)/sizeof(expected1[0]),"SCSU",
+                (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, offsets1, NULL, 0 ))
+            log_err("scsu->u with stop did not match.\n");;
     }
 
 }
@@ -988,7 +1048,30 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
             log_err("u-> euc-tw with substitute did not match.\n");  
 
     }
+    log_verbose("Testing fromUnicode for SCSU with UCNV_FROM_U_CALLBACK_SUBSTITUTE \n");
+    {
+        UChar SCSU_inputText[]={ 0x0041, 0xd801/*illegal*/, 0x0042, };
 
+        const uint8_t to_SCSU[]={    
+            0x41,
+            0x0e, 0xff,0xfd,
+            0x42
+
+           
+        };
+        int32_t from_SCSUOffs [] ={ 
+            0,
+            1,1,1,
+            2,
+
+        };
+        if(!testConvertFromUnicode(SCSU_inputText, sizeof(SCSU_inputText)/sizeof(SCSU_inputText[0]),
+                to_SCSU, sizeof(to_SCSU), "SCSU",
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, from_SCSUOffs, NULL, 0 ))
+            log_err("u-> SCSU with skip did not match.\n");
+
+    
+    }
     
     /*to unicode*/
     if(!testConvertToUnicode(expsubIBM_949, sizeof(expsubIBM_949),
@@ -1003,7 +1086,7 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
              IBM_930subtoUnicode, sizeof(IBM_930subtoUnicode)/sizeof(IBM_930subtoUnicode[0]),"ibm-930",
             (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM930Offs, NULL, 0 ))
         log_err("ibm-930->u with substitute did not match.\n");
-
+ 
     log_verbose("Testing toUnicode with UCNV_TO_U_CALLBACK_SUBSTITUTE \n");
     {
 
@@ -1063,6 +1146,17 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
                  expected1, sizeof(expected1)/sizeof(expected1[0]),"utf8",
                 (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0 ))
             log_err("utf8->u with substitute did not match.\n");;
+    }
+    log_verbose("Testing toUnicode for SCSU with UCNV_TO_U_CALLBACK_SUBSTITUTE \n");
+    {
+        const uint8_t sampleText1[] = {  0xba, 0x8c,0xF8, 0x61,0x0c, 0x0c,};
+        UChar    expected1[] = {  0x00ba,  0x008c,  0x00f8,  0x0061,0xfffd,0xfffd};
+        int32_t offsets1[] = {   0x0000, 0x0001,0x0002,0x0003,4,5};
+
+        if(!testConvertToUnicode(sampleText1, sizeof(sampleText1),
+                 expected1, sizeof(expected1)/sizeof(expected1[0]),"SCSU",
+                (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0 ))
+            log_err("scsu->u with stop did not match.\n");;
     }
 
     log_verbose("Testing ibm-930 subchar/subchar1\n");
