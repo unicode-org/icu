@@ -54,7 +54,7 @@ LIBS = $(LIBICUUC) $(DEFAULT_LIBS)
 OBJECTS = ucln_in.o \
 fmtable.o format.o msgfmt.o umsg.o numfmt.o unum.o decimfmt.o dcfmtsym.o \
 choicfmt.o datefmt.o smpdtfmt.o dtfmtsym.o udat.o \
-ucal.o calendar.o gregocal.o timezone.o simpletz.o \
+ucal.o calendar.o gregocal.o timezone.o simpletz.o olsontz.o \
 buddhcal.o japancal.o \
 sortkey.o bocsu.o coleitr.o coll.o ucoleitr.o \
 ucol.o ucol_bld.o ucol_cnt.o ucol_elm.o ucol_tok.o ucol_wgt.o tblcoll.o \
