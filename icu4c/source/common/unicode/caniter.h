@@ -122,14 +122,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual inline UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID();
 
 private:
     // ===================== PRIVATES ==============================
@@ -190,5 +190,14 @@ private:
      */
     static const char fgClassID;
 };
+
+inline UClassID
+CanonicalIterator::getStaticClassID()
+{ return (UClassID)&fgClassID; }
+
+inline UClassID
+CanonicalIterator::getDynamicClassID() const 
+{ return CanonicalIterator::getStaticClassID(); }
+
 U_NAMESPACE_END
 #endif
