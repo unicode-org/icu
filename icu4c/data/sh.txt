@@ -7,7 +7,7 @@
 
 sh {
     CollationElements { 
-	    Version { "1.0" }
+	    Version { "2.0" }
 		Override { "FALSE" }
 		Sequence { 	"& C < \u010D, \u010C < \u0107, \u0106"
 				"& D < \u0111, \u0110 < d\u017E, D\u017E, D\u017D"
