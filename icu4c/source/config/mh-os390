@@ -63,6 +63,7 @@ LIBICU-UC= 	$(top_builddir)/common/libicu-uc.x
 LIBICU-I18N= 	$(top_builddir)/i18n/libicu-i18n.x
 LIBCTESTFW= 	$(top_builddir)/tools/ctestfw/libctestfw.x
 LIBICU-TOOLUTIL=$(top_builddir)/tools/toolutil/libicu-toolutil.x
+LIBUSTDIO=      $(top_builddir)/extra/ustdio/libustdio.x
 
 ## Special 390 rules
 
