@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2004/02/25 00:01:34 $
- * $Revision: 1.62 $
+ * $Date: 2004/03/22 23:57:52 $
+ * $Revision: 1.63 $
  *
  *****************************************************************************************
  */
@@ -1259,14 +1259,14 @@ public class TestFmwk extends AbstractTestLog {
      */
     protected void assertTrue(String message, boolean condition) {
         if (!condition) {
-            errln("FAIL: assertTrue() failed: " + message);
+            errln("assertTrue() failed: " + message);
         } else if (VERBOSE_ASSERTIONS) {
             logln("Ok: " + message);
         }
     }
     protected void assertFalse(String message, boolean condition) {
         if (condition) {
-            errln("FAIL: assertFalse() failed: " + message);
+            errln("assertFalse() failed: " + message);
         } else if (VERBOSE_ASSERTIONS) {
             logln("Ok: " + message);
         }
@@ -1274,9 +1274,18 @@ public class TestFmwk extends AbstractTestLog {
     protected void assertEquals(String message,
                                 Object expected, Object actual) {
         if (!expected.equals(actual)) {
-            errln("FAIL: " + message + "; got " + actual +
+            if (actual instanceof String) {
+                // display quotes around string objects, for clarity
+                actual = "\"" + actual + '"';
+                expected = "\"" + expected + '"';
+            }
+            errln(message + "; got " + actual +
                   "; expected " + expected);
         } else if (VERBOSE_ASSERTIONS) {
+            if (actual instanceof String) {
+                // display quotes around string objects, for clarity
+                actual = "\"" + actual + '"';
+            }
             logln("Ok: " + message + "; got " + actual);
         }
     }
