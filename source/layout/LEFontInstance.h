@@ -313,7 +313,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual float inline yUnitsToPoints(float yUnits) const;
+    virtual inline float yUnitsToPoints(float yUnits) const;
 
     /**
      * This method converts font design units to points.
