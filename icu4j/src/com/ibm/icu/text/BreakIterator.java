@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $
- * $Date: 2004/01/15 22:19:50 $
- * $Revision: 1.28 $
+ * $Date: 2004/01/23 23:15:18 $
+ * $Revision: 1.29 $
  *
  *****************************************************************************************
  */
@@ -422,6 +422,9 @@ public abstract class BreakIterator implements Cloneable
     /** @draft ICU 2.4 */
     public static final int KIND_TITLE = 4;
 
+    /** @since ICU 2.8 */
+    private static final int KIND_COUNT = 5;
+
     /** @internal */
     private static final SoftReference[] iterCache = new SoftReference[5];
 
@@ -564,6 +567,16 @@ public abstract class BreakIterator implements Cloneable
      * @draft ICU 2.4
      */
     public static Object registerInstance(BreakIterator iter, Locale locale, int kind) {
+        // If the registered object matches the one in the cache, then
+        // flush the cached object.
+        if (iterCache[kind] != null) {
+            BreakIteratorCache cache = (BreakIteratorCache) iterCache[kind].get();
+            if (cache != null) {
+                if (cache.getLocale().equals(locale)) {
+                    iterCache[kind] = null;
+                }
+            }
+        }
         return getShim().registerInstance(iter, locale, kind);
     }
 
@@ -588,6 +601,13 @@ public abstract class BreakIterator implements Cloneable
         // module.
         ///CLOVER:OFF
         if (shim != null) {
+            // Unfortunately, we don't know what is being unregistered
+            // -- what `kind' and what locale -- so we flush all
+            // caches.  This is safe but inefficient if people are
+            // actively registering and unregistering.
+            for (int kind=0; kind<KIND_COUNT; ++kind) {
+                iterCache[kind] = null;
+            }
             return shim.unregister(key);
         }
         return false;
