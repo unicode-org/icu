@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003, International Business Machines Corporation and         *
+ * Copyright (C) 2003-2004, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -105,17 +105,19 @@ public class LocaleDataTest extends TestFmwk{
                     boolean existsInScript = false;
                     UnicodeSetIterator iter = new UnicodeSetIterator(exemplarSet);
                     // iterate over the 
-                    while (iter.nextRange()) {
+                    while (!existsInScript && iter.nextRange()) {
                         if (iter.codepoint != UnicodeSetIterator.IS_STRING) {
                             for(int j=0; j<sets.length; j++){
                                 if(sets[j].contains(iter.codepoint, iter.codepointEnd)){
                                     existsInScript = true;
+                                    break;
                                 }
                             }
                         } else {
                             for(int j=0; j<sets.length; j++){
                                 if(sets[j].contains(iter.string)){
                                     existsInScript = true;
+                                    break;
                                 }
                             }
                         }
