@@ -5,13 +5,13 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteHTMLCollation.java,v $ 
-* $Date: 2002/06/15 02:47:12 $ 
-* $Revision: 1.8 $
+* $Date: 2005/03/04 02:50:25 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
 
-WARNING: OLD FILE. DON"T COMPILE.
+//WARNING: OLD FILE. DON"T COMPILE.
 
 package com.ibm.text.UCA;
 
@@ -24,7 +24,7 @@ import com.ibm.text.utility.*;
 
 public class WriteHTMLCollation implements UCD_Types {
 
-    public static final String copyright = 
+/*    public static final String copyright = 
       "Copyright (C) 2000, IBM Corp. and others. All Rights Reserved.";
       
     static final boolean EXCLUDE_UNSUPPORTED = true;    
@@ -64,7 +64,7 @@ public class WriteHTMLCollation implements UCD_Types {
         //UInfo.init();
         ucd = UCD.make("");
         
-        /*
+        
         Normalizer foo = new Normalizer(Normalizer.NFKD);
         char x = '\u1EE2';
         System.out.println(UCA.hex(x) + " " + ucd.getName(x));
@@ -74,7 +74,7 @@ public class WriteHTMLCollation implements UCD_Types {
             System.out.println(ucd.getCanonicalClass(c));
         }
         System.out.println(UCA.hex(nx, " ") + " " + ucd.getName(nx));
-        */
+        
         
         // DO FOLLOWING
         //writeConformance("CollationTest_NON_IGNORABLE.txt", UCA.NON_IGNORABLE);
@@ -119,7 +119,7 @@ public class WriteHTMLCollation implements UCD_Types {
             String e = nfkc.normalize(d);
             if (!e.equals(c)) {
                 System.out.println(Utility.hex(a) + "; " + Utility.hex(d, " ") + " # " + ucd.getName(a));
-                /*
+                
                 System.out.println(Utility.hex(a) 
                 + ", " + Utility.hex(b, " ")
                 + ", " + Utility.hex(c, " ")
@@ -131,7 +131,7 @@ public class WriteHTMLCollation implements UCD_Types {
                 + ", " + ucd.getName(c)
                 + ", " + ucd.getName(d)
                 + ", " + ucd.getName(e));
-                */
+                
             }
             String f = Case.fold(e);
             String g = nfkc.normalize(f);
@@ -181,7 +181,7 @@ public class WriteHTMLCollation implements UCD_Types {
         }
         return result.toString();
     }
-    /*
+    
     static void writeConformance(String filename, byte option)  throws IOException {
         PrintWriter log = Utility.openPrintWriter(filename);
 
@@ -252,7 +252,7 @@ public class WriteHTMLCollation implements UCD_Types {
         sortedD.clear();
         System.out.println("Done");
     }
-    */
+    
     
     static void addStringX(int x, byte option) {
         addStringX(String.valueOf((char)x), option);
@@ -274,9 +274,9 @@ public class WriteHTMLCollation implements UCD_Types {
         sortedD.put(colDbase, s);
     }
     
-    /** 
+    *//** 
      * Check that the primaries are the same as the compatibility decomposition.
-     */
+     *//*
     static void checkBadDecomps(int strength, boolean decomposition) {
         int oldStrength = collator.getStrength();
         collator.setStrength(strength);
@@ -319,7 +319,7 @@ public class WriteHTMLCollation implements UCD_Types {
         return buf.toString();
     }
     
-        /*
+        
         log = new PrintWriter(new FileOutputStream("Frequencies.html"));
         log.println("<html><body>");
         MessageFormat mf = new MessageFormat("<tr><td><tt>{0}</tt></td><td><tt>{1}</tt></td><td align='right'><tt>{2}</tt></td><td align='right'><tt>{3}</tt></td></tr>");
@@ -344,16 +344,16 @@ public class WriteHTMLCollation implements UCD_Types {
         log.println("</table>");
         log.println("</body></html>");
         log.close();
-        */
+        
         
     static int[] compactSecondary;
     
-    /*static void checkEquivalents() {
+    static void checkEquivalents() {
         Normalizer nfkd = new Normalizer(Normalizer.NFKC);
         Normalizer nfd = new Normalizer(Normalizer.NFKD);
         for (char c = 0; c < 0xFFFF; ++c) {
             
-    }*/
+    }
     
     static void testCompatibilityCharacters() throws IOException {
         log = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
@@ -774,9 +774,9 @@ public class WriteHTMLCollation implements UCD_Types {
         for (int secondary = 0; secondary < compactSecondary.length; ++secondary) {
             if (secondarySet.get(secondary)) {
                 compactSecondary[secondary] = subtotal++;
-                /*System.out.println("compact[" + Utility.hex(secondary)
+                System.out.println("compact[" + Utility.hex(secondary)
                     + "]=" + Utility.hex(compactSecondary[secondary])
-                    + ", " + Utility.hex(fixSecondary(secondary)));*/
+                    + ", " + Utility.hex(fixSecondary(secondary)));
             }
         }
         System.out.println();
@@ -980,14 +980,14 @@ public class WriteHTMLCollation implements UCD_Types {
         }
         summary.println("Last:  " + Utility.hex(lastNp) + " " + ucd.getName(lastChr.charAt(0)));
         
-        /*
+        
         String sample = "\u3400\u3401\u4DB4\u4DB5\u4E00\u4E01\u9FA4\u9FA5\uAC00\uAC01\uD7A2\uD7A3";
         for (int i = 0; i < sample.length(); ++i) {
             char ch = sample.charAt(i);
             log.println(Utility.hex(ch) + " => " + Utility.hex(fixHan(ch))
                     + "          " + ucd.getName(ch));
         }
-        */
+        
         summary.println();
         summary.println("# First Implicit: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0)));
         summary.println("# Last Implicit: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0x10FFFF)));
@@ -1160,7 +1160,7 @@ public class WriteHTMLCollation implements UCD_Types {
         return s;
     }
         
-    /*
+    
 30F5;KATAKANA LETTER SMALL KA;Lo;0;L;;;;;N;;;;;
 30AB;KATAKANA LETTER KA;Lo;0;L;;;;;N;;;;;
 30F6;KATAKANA LETTER SMALL KE;Lo;0;L;;;;;N;;;;;
@@ -1209,7 +1209,7 @@ public class WriteHTMLCollation implements UCD_Types {
 308E;HIRAGANA LETTER SMALL WA;Lo;0;L;;;;;N;;;;;
 308F;HIRAGANA LETTER WA;Lo;0;L;;;;;N;;;;;
 
-*/
+
         
     
     static final int secondaryDoubleStart = 0xD0;
@@ -1248,13 +1248,13 @@ public class WriteHTMLCollation implements UCD_Types {
         return (top << 8) | bottom;
     }
     
-/*
+
 # 0153: (EE3D) 20E3 [0000.0153.0002] COMBINING ENCLOSING KEYCAP
 # 0154: (EE41) 0153 [0997.0154.0004][08B1.0020.0004] LATIN SMALL LIGATURE OE
 # 0155: (EE45) 017F [09F3.0155.0004] LATIN SMALL LETTER LONG S
 # 0157: (EE49) 16C6 [1656.0157.0004] RUNIC LETTER SHORT-TWIG-AR A
 # 0158: (EE4D) 2776 [0858.0158.0006] DINGBAT NEGATIVE CIRCLED DIGIT ONE
-*/
+
     
     static int fixTertiary(int x) {
         if (x == 0) return x;
@@ -1304,12 +1304,12 @@ public class WriteHTMLCollation implements UCD_Types {
         return (x & 1) == 0;
     }
     
-   /* static String ceToString(int primary, int secondary, int tertiary) {
+    static String ceToString(int primary, int secondary, int tertiary) {
         return "[" + hexBytes(primary) + ", "
             + hexBytes(secondary) + ", "
             + hexBytes(tertiary) + "]";
     }
-    */
+    
     
     static String hexBytes(long x) {
         StringBuffer temp = new StringBuffer();
@@ -1397,13 +1397,13 @@ public class WriteHTMLCollation implements UCD_Types {
                 setSingle(k, ces);
             }
         }
-        /*setSingle('\u0300', ces);
+        setSingle('\u0300', ces);
         setSingle('\u0301', ces);
         setSingle('\u0302', ces);
         setSingle('\u0303', ces);
         setSingle('\u0308', ces);
         setSingle('\u030C', ces);
-        */
+        
         
         bumps.set(0x089A); // lowest non-variable
         bumps.set(0x4E00); // lowest Kangxi
@@ -1498,13 +1498,13 @@ public class WriteHTMLCollation implements UCD_Types {
                 }
                 log.println(UCA.toString(sortKey) + "<br>");
                 
-                /*if (source.equals(lastSource)) {
+                if (source.equals(lastSource)) {
                     it.remove();
                     --duplicateCount;
                 }
                 //lastSortKey = sortKey;
                 lastSource = lastSource;
-                */
+                
             }
             System.out.println("Total: " + sortedD.size());
         }
@@ -1571,9 +1571,9 @@ public class WriteHTMLCollation implements UCD_Types {
                     case 1: color = 0x6666FF; break;
                     case 0: color = 0x3333FF; break;
                 }
-                /*if (mark == MARK2) {
+                if (mark == MARK2) {
                     color = color & 0xFF00FF;
-                }*/
+                }
                 if (color != 0xFFFFFF) out.print(" bgcolor='#" + Integer.toString(color,16) + "'");
                 //if (firstRow) out.print(" width='6%'");
                 out.print(">");
@@ -1600,7 +1600,7 @@ public class WriteHTMLCollation implements UCD_Types {
         System.out.println("Done");
     }
     
-/*            
+            
 3400;<CJK Ideograph Extension A, First>;Lo;0;L;;;;;N;;;;;
 4DB5;<CJK Ideograph Extension A, Last>;Lo;0;L;;;;;N;;;;;
 4E00;<CJK Ideograph, First>;Lo;0;L;;;;;N;;;;;
@@ -1611,7 +1611,7 @@ A000;YI SYLLABLE IT;Lo;0;L;;;;;N;;;;;
 A001;YI SYLLABLE IX;Lo;0;L;;;;;N;;;;;
 A4C4;YI RADICAL ZZIET;So;0;ON;;;;;N;;;;;
 A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
-*/
+
 
     static final char[][] extraRanges = {{0x3400, 0x4DB5}, {0x4E00, 0x9FA5}, {0xAC00, 0xD7A3}, {0xA000, 0xA48C}};
             
@@ -1644,10 +1644,10 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
         String colNbase = collator.getSortKey(ch, option, false);
         String colCbase = collator.getSortKey(nfc.normalize(ch), option, false);
         if (!colNbase.equals(colCbase)) {
-            /*System.out.println(Utility.hex(ch));
+            System.out.println(Utility.hex(ch));
             System.out.println(printableKey(colNbase));
             System.out.println(printableKey(colNbase));
-            System.out.println(printableKey(colNbase));*/
+            System.out.println(printableKey(colNbase));
             MismatchedN.put(ch,colNbase);
             MismatchedC.put(ch,colCbase);
             MismatchedD.put(ch,colDbase);
@@ -1659,7 +1659,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
         backD.put(ch, colD);
         sortedN.put(colN, ch);
         backN.put(ch, colN);
-        /*
+        
         if (strength > 4) {
             duplicateCount++;
             duplicates.put(ch+MARK1, col);
@@ -1668,7 +1668,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
             sorted.put(col2 + MARK2, ch);
         }
         unique += 2;
-        */
+        
     }
     
    static void removeAdjacentDuplicates() {
@@ -1910,18 +1910,18 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
         return sortKey;
     }
     
-    /*
+    
       LINKS</td></tr><tr><td><blockquote>
      CONTENTS     
-    */
+    
     
    
     static void writeTail(PrintWriter out, int counter, String title, String other, boolean show) throws IOException {
         copyFile(out, "HTML-Part2.txt");
-        /*
+        
         out.println("</tr></table></center></div>");
         out.println("</body></html>");
-        */
+        
         out.close();
     }
     
@@ -1940,7 +1940,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
                 "UTF8"),
             4*1024));
         copyFile(out, "HTML-Part1.txt");
-        /*
+        
         out.println("<html><head>");
         out.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
         out.println("<title>" + HTMLString(title) + "</title>");
@@ -1974,7 +1974,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
     <td>
       <p align="right"><a href="CollationKey24.html"><font size="3">Show Key</font></a>
   </tr>
-*/
+
 
         
         // index
@@ -2091,10 +2091,10 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
               || ch >= '\uD800' && ch <= '\uDFFF'
               || ch >= '\uFFFE') {
                 result.append('\uFFFD');
-                /*result.append("#x");
+                result.append("#x");
                 result.append(cpName(ch));
                 result.append(";");
-                */
+                
             } else if (quoteApos && ch == '\'') {
                 result.append("&apos;");
             } else if (ch == '\"') {
@@ -2133,5 +2133,5 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
         return 0x100000;
     }
     
-
+*/
 }

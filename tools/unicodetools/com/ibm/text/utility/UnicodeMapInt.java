@@ -2,15 +2,15 @@ package com.ibm.text.utility;
 import com.ibm.icu.text.UnicodeSet;
 
 final class UnicodeMapInt {
-    private int [] index = new int[1];
+/*    private int [] index = new int[1];
     private int [] data = new int[1];
     private int len = 1;
     
-    /* index array is a set of inflection points; it and the data are always of the form
+     index array is a set of inflection points; it and the data are always of the form
        index: {MIN_VALUE,        x,                  y,                  ...,    q,                    MAX_VALUE}
        data:  {value for ..x-1,  value for x..y-1,   value for y..z-1,   ...,    value for q..}
         AND no adjacent values are identical!
-    */
+    
     
     
     public int put (int cp, int value) {
@@ -63,9 +63,9 @@ final class UnicodeMapInt {
         return data[findIndex(cp) - 1];
     }
     
-    /**
+    *//**
      * Returns the set of all characters that have the given value
-     */
+     *//*
     public UnicodeSet getMatch(int value) {
         UnicodeSet result = new UnicodeSet();
         for (int i = 0; i < len; ++i) {
@@ -74,7 +74,7 @@ final class UnicodeMapInt {
         return result;
     }
     
-    /** Finds the least index with a value greater than cp */
+    *//** Finds the least index with a value greater than cp *//*
     private int findIndex( int cp) {
         if (cp > 0x10FFFF) throw new ArrayIndexOutOfBoundsException("Code point too large: " + cp); // out of bounds!
         int i = -1;
@@ -84,7 +84,7 @@ final class UnicodeMapInt {
          
     }
     
-    /*
+    
     public UnicodeSetIterator iterator() {
     }
     */
