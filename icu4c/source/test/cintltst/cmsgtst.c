@@ -471,6 +471,57 @@ void TestMessageFormatWithValist( void )
     free(str);
 }
 
+void CallParseMessage(const char* locale, UChar* pattern, int32_t patternLength, 
+                       UChar* source, int32_t sourceLength, UErrorCode *status, ...)
+{
+    int32_t len = 0;
+    va_list ap;
+    va_start(ap, status);
+    u_vparseMessage(locale, pattern, patternLength, source, sourceLength, ap, status);
+    va_end(ap);
+}
+/*test u_vparseMessage() with various test patterns */
+void TestParseMessageWithValist()
+{
+    UChar pattern[100];
+    UChar source[100];
+    UErrorCode status = U_ZERO_ERROR;
+    double value;
+    UChar str[10];
+    UChar res[10];
+        
+    log_verbose("\nTesting a sample for parse Message test#9\n");
+    
+    u_uastrcpy(source, "You deposited an amount of $500.00");
+    u_uastrcpy(pattern, "You {0} an amount of {1,number,currency}");
+    u_uastrcpy(res,"deposited");
+        
+    CallParseMessage( "en_US", pattern, u_strlen(pattern), source, u_strlen(source), &status, str, &value);
+    if(U_FAILURE(status)){
+        log_err("ERROR: failure in parse Message on test#9: %s\n", myErrorName(status));
+    }
+    if(value==500.00  && u_strcmp(str,res)==0)
+        log_verbose("PASS: parseMessage successful on test#9\n");
+    else
+        log_err("FAIL: Error in parseMessage on test#9 \n");
+
+    
+    
+    log_verbose("\nTesting a sample for parse Message test#10\n");
+    
+    u_uastrcpy(source, "There are 123 files on MyDisk created");
+    u_uastrcpy(pattern, "There are {0,number,integer} files on {1} created");
+    u_uastrcpy(res,"MyDisk");
+        
+    CallParseMessage( "en_US", pattern, u_strlen(pattern), source, u_strlen(source), &status, &value, str);
+    if(U_FAILURE(status)){
+        log_err("ERROR: failure in parse Message on test#10: %s\n", myErrorName(status));
+    }
+    if(value==123.00 && u_strcmp(str,res)==0)
+        log_verbose("PASS: parseMessage successful on test#10\n");
+    else
+        log_err("FAIL: Error in parseMessage on test#10 \n");    
+}
 void addMsgForTest(TestNode** root)
 {
     addTest(root, &MessageFormatTest, "tsformat/cmsgtst/MessageFormatTest");
@@ -479,5 +530,6 @@ void addMsgForTest(TestNode** root)
     addTest(root, &TestMsgFormatChoice, "tsformat/cmsgtst/TestMsgFormatChoice");
     addTest(root, &TestParseMessage, "tsformat/cmsgtst/TestParseMessage");
     addTest(root, &TestMessageFormatWithValist, "tsformat/cmsgtst/TestMessageFormatWithValist");
+    addTest(root, &TestParseMessageWithValist, "tsformat/cmsgtst/TestParseMessageWithValist");
 
 }
