@@ -1118,7 +1118,7 @@ UnicodeStringTest::TestStackAllocation()
     }
 
     // test the (new) capacity constructor
-    UnicodeString capTest(5, 0x2a, 5);
+    UnicodeString capTest(5, (UChar32)0x2a, 5);
     if( capTest.length() != 5 * Unicode::charLength(0x2a) ||
         capTest.char32At(0) != 0x2a ||
         capTest.char32At(4) != 0x2a
@@ -1126,7 +1126,7 @@ UnicodeStringTest::TestStackAllocation()
         errln("The UnicodeString capacity constructor does not work with an ASCII filler");
     }
 
-    capTest = UnicodeString(5, 0x10ff2a, 5);
+    capTest = UnicodeString(5, (UChar32)0x10ff2a, 5);
     if( capTest.length() != 5 * Unicode::charLength(0x10ff2a) ||
         capTest.char32At(0) != 0x10ff2a ||
         capTest.char32At(4) != 0x10ff2a
