@@ -676,6 +676,24 @@ void loadTableFromFile(FileStream* convFile, UConverterSharedData* sharedData, U
         }
     }
 
+    if(cnvData->isValid!=NULL)
+    {
+        const uint8_t *p = staticData->subChar;
+        codepageValue = 0;
+        switch(staticData->subCharLen) {
+        case 4:     codepageValue = (codepageValue << 8) | *p++;
+        case 3:     codepageValue = (codepageValue << 8) | *p++;
+        case 2:     codepageValue = (codepageValue << 8) | *p++;
+        case 1:     codepageValue = (codepageValue << 8) | *p;
+        default:    break; /* must never occur */
+        }
+        if(!cnvData->isValid(cnvData, staticData->subChar, staticData->subCharLen, codepageValue)) {
+            fprintf(stderr, "       the substitution character byte sequence is illegal in this codepage structure!\n");
+            *err = U_INVALID_TABLE_FORMAT;
+            isOK = FALSE;
+        }
+    }
+
     staticData->hasFromUnicodeFallback = staticData->hasToUnicodeFallback = FALSE;
 
     while (T_FileStream_readLine(convFile, storageLine, sizeof(storageLine)))
