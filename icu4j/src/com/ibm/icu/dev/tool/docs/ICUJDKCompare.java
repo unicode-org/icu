@@ -1,3 +1,5 @@
+package com.ibm.icu.dev.tool.docs;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
