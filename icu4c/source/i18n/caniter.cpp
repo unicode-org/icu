@@ -5,13 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.cpp,v $ 
- * $Date: 2002/02/27 21:47:04 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/03/11 17:48:06 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
 
 #include "hash.h"
+#include "uset.h"
+#include "unormimp.h"
 #include "unicode/caniter.h"
 
 /**
@@ -48,16 +50,6 @@ Results for: {LATIN CAPITAL LETTER A WITH RING ABOVE}{LATIN SMALL LETTER D}{COMB
  *@draft
  */
 
-//#include <stdio.h>
-
-
-//CanonicalIterator::SAFE_START = NULL;
-//CanonicalIterator::AT_START = NULL;
-
-static UnicodeSet *SAFE_START = NULL; // = new UnicodeSet();
-//private static CharMap AT_START = new CharMap();
-static Hashtable *AT_START = NULL;
-
 #if 0
 static UBool PROGRESS = FALSE;
 
@@ -91,7 +83,6 @@ CanonicalIterator::CanonicalIterator(UnicodeString source, UErrorCode status) :
     pieces_lengths(NULL),
     current(NULL)
 {
-  initStaticData(status);
     setSource(source, status);
 }
 
@@ -189,9 +180,11 @@ void CanonicalIterator::setSource(UnicodeString newSource, UErrorCode status) {
     // on the NFD form - see above).
     for (; i < source.length(); i += UTF16_CHAR_LENGTH(cp)) {
         cp = source.char32At(i);
-        if (SAFE_START->contains(cp)) {
+        if (unorm_isCanonSafeStart(cp)) {
             source.extract(start, i, list[list_length++]); // add up to i
             start = i;
+        } else {
+          cp++; /* ### TODO remove, this is just a breakpoint place */
         }
     }
     source.extract(start, i, list[list_length++]); // add last one
@@ -269,99 +262,6 @@ Hashtable *CanonicalIterator::permute(UnicodeString &source, UErrorCode status) 
     return result;
 }
 
-static UBool U_CALLCONV
-_enumCategoryRangeSAFE_STARTsetup(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {
-  int32_t cc = 0;
-  // TODO: use a switch that will automatically add all the unassigned, lead surrogates, tail surrogates and privates
-  //fprintf(stdout, "SAFE_START:%08X - %08X, %i\n", start, limit, type);
-  if(type > 0) {
-    for(; start < limit; start++) {
-      cc = u_getCombiningClass(start);
-      if(cc == 0) {
-        int32_t lowerLimit = start;
-        while(cc == 0 && start <= limit) {
-          cc = u_getCombiningClass(++start);
-        }
-        SAFE_START->add(lowerLimit, start-1);
-      }
-    }
-  } else {
-    SAFE_START->add(start, limit-1);
-  }
-  return TRUE;
-}
-
-static UBool U_CALLCONV
-_enumCategoryRangeAT_STARTsetup(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {
-  UErrorCode status = *(UErrorCode *)context;
-  int32_t cc = 0;
-  //fprintf(stdout, "AT_START:%08X - %08X, %i\n", start, limit, type);
-  UChar32 cp = 0;
-  if(type > 0) {
-    for(cp = start; cp < limit; cp++) {
-        UnicodeString istr(cp);
-        UnicodeString decomp;
-        Normalizer::normalize(istr, UNORM_NFD, 0, decomp, status);
-        if (decomp==istr) continue;
-    
-        // add each character in the decomposition to canBeIn      
-        UChar32 component = 0;
-        int32_t i = 0;
-        for (i = 0; i < decomp.length(); i += UTF16_CHAR_LENGTH(component)) {
-            component = decomp.char32At(i);
-            if (i == 0) {
-              UnicodeSet *isIn = (UnicodeSet *)AT_START->get(component);
-              if(isIn == NULL) {
-                isIn = new UnicodeSet();
-              }
-              isIn->add(cp);
-              AT_START->put(component, isIn, status);
-            } else if (u_getCombiningClass(component) == 0) {
-                SAFE_START->remove(component);
-            }
-        }
-    }
-  }
-  return TRUE;
-}
-
-void CanonicalIterator::initStaticData(UErrorCode status) {
-  if(SAFE_START == NULL && AT_START == NULL) {
-    SAFE_START = new UnicodeSet();
-    // TODO: have value deleter for UnicodeSets
-    AT_START = new Hashtable(FALSE, status);
-
-    UChar32 cp = 0;
-    //if (PROGRESS) printf("Getting Safe Start");
-
-    // TODO: use u_enumCharType() instead
-    // the fastest with current, public apis is to 
-    // enumerate with u_enumCharType() for all categories !=0 and then 
-    // getCombiningClass(start..limit-1) that cuts it down by a factor of about 11...
-    u_enumCharTypes(_enumCategoryRangeSAFE_STARTsetup, 0);
-  
-    //if (PROGRESS) printf("Getting Containment\n");
-    u_enumCharTypes(_enumCategoryRangeAT_STARTsetup, &status);
-  }
-}
-
-/**
- *@return the set of "safe starts", characters that are class zero AND are never non-initial in a decomposition.
- */
-UnicodeSet *CanonicalIterator::getSafeStart(UErrorCode status) {
-  initStaticData(status);
-    return  SAFE_START;
-}
-
-/**
- *@return the set of characters whose decompositions start with the given character
- */
-UnicodeSet *CanonicalIterator::getStarts(UChar32 cp, UErrorCode status) {
-  initStaticData(status);
-  UnicodeSet *result = (UnicodeSet *)AT_START->get(cp);
-  return result;
-}
-
 // privates
     
 // we have a segment, in NFD. Find all the strings that are canonically equivalent to it.
@@ -437,32 +337,27 @@ Hashtable *CanonicalIterator::getEquivalents2(UnicodeString segment, UErrorCode 
 
     //StringBuffer workingBuffer = new StringBuffer();
     UnicodeString workingBuffer;
-
+    USerializedSet starts;
     
     // cycle through all the characters
-    UChar32 cp;
+    UChar32 cp, limit = 0;
     int32_t i = 0, j = 0;
     for (i = 0; i < segment.length(); i += UTF16_CHAR_LENGTH(cp)) {
         // see if any character is at the start of some decomposition
         cp = segment.char32At(i);
-        UnicodeSet *starts = (UnicodeSet *)AT_START->get(cp);
-        if (starts == NULL) continue;
-        //UnicodeSetIterator usi = new UnicodeSetIterator(starts);
-        int32_t setSize = starts->size();
+        if (!unorm_getCanonStartSet(cp, &starts)) {
+          continue;
+        }
         // if so, see which decompositions match 
-        //while (TRUE) {
-        for(j = 0; j < setSize; j++) {
-            //UChar32 cp2 = usi.next();
-            UChar32 cp2 = starts->charAt(j);
-            //if (cp2 < 0) break; // done
-            const Hashtable *remainder = extract(cp2, segment, i, workingBuffer, status);
+        for(cp = limit; cp < limit || uset_getSerializedRange(&starts, j++, &cp, &limit); ++cp) {
+            const Hashtable *remainder = extract(cp, segment, i, workingBuffer, status);
             if (remainder == NULL) continue;
             
             // there were some matches, so add all the possibilities to the set.
             //UnicodeString prefix = segment.substring(0, i) + UTF16.valueOf(cp2);
             UnicodeString *prefix = new UnicodeString;
             segment.extract(0, i, *prefix);
-            *prefix += cp2;
+            *prefix += cp;
 
             const UHashElement *ne = NULL;
             int32_t el = -1;
