@@ -1051,7 +1051,7 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
     // set the subchar
     int32_t length;
 
-    if((length=strlen(cc.subchar))!=0) {
+    if((length=(int32_t)strlen(cc.subchar))!=0) {
         ucnv_setSubstChars(cnv, cc.subchar, (int8_t)length, &errorCode);
         if(U_FAILURE(errorCode)) {
             errln("fromUnicode[%d](%s cb=\"%s\" fb=%d flush=%d) ucnv_setSubChars() failed - %s",
