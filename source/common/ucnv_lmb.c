@@ -28,6 +28,7 @@
 #if !UCONFIG_NO_LEGACY_CONVERSION
 
 #include "cmemory.h"
+#include "cstring.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
 #include "unicode/ucnv.h"
