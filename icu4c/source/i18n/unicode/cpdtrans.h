@@ -34,7 +34,7 @@ class U_I18N_API UVector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.17 $ $Date: 2001/08/31 03:22:53 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.18 $ $Date: 2001/09/22 03:36:34 $
  * @draft
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
@@ -215,5 +215,63 @@ private:
     void freeTransliterators(void);
 
     void computeMaximumContextLength(void);
+
+    
+#ifdef U_USE_DEPRECATED_TRANSLITERATOR_API
+
+public:
+
+    /**
+     * Constructs a new compound transliterator.
+     * @param filter the filter.  Any character for which
+     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * altered by this transliterator.  If <tt>filter</tt> is
+     * <tt>null</tt> then no filtering is applied.
+     * @deprecated Remove after Aug 2002. Use the constructor that takes
+     * UParseError as one of the paramerters.
+     */
+    CompoundTransliterator(const UnicodeString& id,
+                           UTransDirection dir,
+                           UnicodeFilter* adoptedFilter,
+                           UErrorCode& status);
+
+    /**
+     * Constructs a new compound transliterator in the FORWARD
+     * direction with a NULL filter.
+     * @deprecated Remove after Aug 2002. Use the constructor that takes
+     * UParseError as one of the parmeters.
+     */
+    CompoundTransliterator(const UnicodeString& id,
+                           UErrorCode& status);
+
+#endif
 };
+
+/**
+ * Definitions for deprecated API
+ * @deprecated Remove after Aug 2002
+ */
+
+#ifdef U_USE_DEPRECATED_TRANSLITERATOR_API
+
+inline CompoundTransliterator::CompoundTransliterator( const UnicodeString& id,
+                                                       UTransDirection dir,
+                                                       UnicodeFilter* adoptedFilter,
+                                                       UErrorCode& status):
+                                            Transliterator(id, adoptedFilter),
+                                            trans(0), compoundRBTIndex(-1) {
+    UParseError parseError;
+    init(id, dir, -1, 0, TRUE,parseError,status);
+}
+
+inline CompoundTransliterator::CompoundTransliterator(const UnicodeString& id,
+                                                      UErrorCode& status) :
+                                            Transliterator(id, 0), // set filter to 0 here!
+                                            trans(0), compoundRBTIndex(-1) {
+    UParseError parseError;
+    init(id, UTRANS_FORWARD, -1, 0, TRUE,parseError,status);       
+}
+
+#endif
+
 #endif
