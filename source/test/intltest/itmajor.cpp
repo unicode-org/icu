@@ -23,6 +23,7 @@
 #include "ittxtbd.h"
 #include "itformat.h"
 #include "itconv.h"
+#include "transtst.h"
 
 
 void MajorTestLevel::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
@@ -64,6 +65,14 @@ void MajorTestLevel::runIndexedTest( int32_t index, bool_t exec, char* &name, ch
                 if (exec) {
                     logln("TestSuite Convert----"); logln();
                     IntlTestConvert test;
+                    callTest( test, par );
+                }
+                break;
+
+        case 5: name = "translit"; 
+                if (exec) {
+                    logln("TestSuite Transliterator----"); logln();
+                    TransliteratorTest test;
                     callTest( test, par );
                 }
                 break;
