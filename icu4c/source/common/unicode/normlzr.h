@@ -693,6 +693,7 @@ public:
   // Deprecated APIs
   //-------------------------------------------------------------------------
 
+#ifdef ICU_NORMALIZER_USE_DEPRECATES
   /** The options for a Normalizer object */
   enum {
     /**
@@ -716,7 +717,6 @@ public:
     IGNORE_HANGUL     = 0x001
   };
 
-#ifdef ICU_NORMALIZER_USE_DEPRECATES
   /**
    * This tells us what the bits in the "mode" mean.
    * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.

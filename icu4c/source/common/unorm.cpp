@@ -47,6 +47,12 @@ enum {
     _STACK_BUFFER_CAPACITY=100
 };
 
+#ifndef ICU_UNORM_USE_DEPRECATES
+enum {
+    UNORM_IGNORE_HANGUL=16
+};
+#endif /* ICU_UNORM_USE_DEPRECATES */
+
 /* Korean Hangul and Jamo constants */
 enum {
     JAMO_L_BASE=0x1100,     /* "lead" jamo */
