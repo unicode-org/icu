@@ -301,6 +301,8 @@ public:
      * @param theFloat - the floating point value
      *
      * @return the fixed point value
+     *
+     * @draft ICU 2.2
      */
     static le_int32 floatToFixed(float theFloat)
     {
