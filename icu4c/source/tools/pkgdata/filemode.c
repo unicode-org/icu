@@ -72,7 +72,7 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
   const char *baseName;
 
-  T_FileStream_writeLine(makefile, "\n.PHONY: $(NAME)\n\nall: $(NAME)\n\ninstall: $(INSTALLEDDEST)\n\n");
+  T_FileStream_writeLine(makefile, "\n.PHONY: $(NAME) all install clean\n\nall: $(NAME)\n\n");
 
   /* Dont' copy files already in tmp */
   for(infiles = o->filePaths;infiles;infiles = infiles->next)
@@ -148,12 +148,12 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   /* these are also the files to delete */
   T_FileStream_writeLine(makefile, "COPIEDDEST= ");
   pkg_writeCharListWrap(makefile, copyFilesLeft, " ", " \\\n", 0);
-  T_FileStream_writeLine(makefile, "\n");
+  T_FileStream_writeLine(makefile, "\n\n");
 
 
   T_FileStream_writeLine(makefile, "INSTALLEDDEST= ");
   pkg_writeCharListWrap(makefile, copyFilesInstall, " ", " \\\n", 0);
-  T_FileStream_writeLine(makefile, "\n");
+  T_FileStream_writeLine(makefile, "\n\n");
 
   if(copyFilesRight != NULL)
   {
@@ -167,5 +167,6 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   {
     T_FileStream_writeLine(makefile, "clean:\n\n");
   }
+  T_FileStream_writeLine(makefile, "install: $(INSTALLEDDEST)\n\n");
 }
 
