@@ -1,23 +1,11 @@
 /******************************************************************************
 *
-*   Copyright (C) 1999-2000, International Business Machines
+*   Copyright (C) 1999-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************/
 //
-// uconv demonstration example of ICU and codepage conversion
-// Purpose is to be a similar tool as the UNIX iconv program.
-//
-// Usage: uconv [flag] [file]
-// -f [codeset]  Convert file from this codeset
-// -t [codeset]  Convert file to this code set
-// -l            Display all available converters
-// -x [transliterator]  Run everything through a transliterator
-// -L            Display all available transliterators
-// If no file is given, uconv tries to read from stdin
-// 
-// To compile: c++ -o uconv -I${ICUHOME}/include -Wall -g uconv.cpp -L${ICUHOME}/lib -licuuc -licui18n
-//
+// uconv: an iconv(1)-like converter using ICU.
 // Original contributor was Jonas Utterström <jonas.utterstrom@vittran.norrnod.se> in 1999
 // Converted to the C conversion API and many improvements by Yves Arrouye <yves@realnames.com>. 
 //
@@ -194,7 +182,7 @@ static int printConverters(const char *pname, const char *lookfor, int canon)
             if (U_FAILURE(err)) {
                 printf("%s", name);
                     
-                UnicodeString str(name);
+                UnicodeString str(name, strlen(name) + 1);
                 putchar('\t');
                 u_wmsg("cantGetAliases", str.getBuffer(), u_wmsg_errorName(err));
                 return -1;
@@ -205,7 +193,7 @@ static int printConverters(const char *pname, const char *lookfor, int canon)
                     const char *alias = ucnv_getAlias(name, a, &err);
                         
                     if (U_FAILURE(err)) {
-                        UnicodeString str(name);
+                        UnicodeString str(name, strlen(name) + 1);
                         putchar('\t');
                         u_wmsg("cantGetAliases", str.getBuffer(), u_wmsg_errorName(err));
                         return -1;
@@ -303,15 +291,20 @@ static int printTransliterators(const char *pname, int canon) {
     return 0;
 }
 
+// Compute the offset of data in its source
+static int32_t dataOffset(const int32_t *fromoffsets, int32_t whereto, const int32_t *tooffsets) {
+    return fromoffsets[tooffsets[whereto]];
+}
 
 // Convert a file from one encoding to another
 static UBool convertFile(const char *pname,
-                         const char* fromcpage, 
+                         const char* fromcpage,
                          UConverterToUCallback toucallback,
                          const void *touctxt,
                          const char* tocpage,
                          UConverterFromUCallback fromucallback,
                          const void *fromuctxt,
+                         int fallback,
                          const char *translit,
                          const char* infilestr, 
                          FILE* outfile,
@@ -337,6 +330,7 @@ static UBool convertFile(const char *pname,
     const UChar* cuniiter;
     UChar* uniiter;
     UChar* unibuff = 0;
+    int32_t *fromoffsets = 0, *tooffsets = 0;
 
     size_t rd, totbuffsize;
 
@@ -380,6 +374,7 @@ static UBool convertFile(const char *pname,
         UnicodeString str(translit);
         t = Transliterator::createInstance(str, UTRANS_FORWARD, err);
         if (U_FAILURE(err)) {
+            str.append((UChar32) 0);
             initMsg(pname);
             u_wmsg("cantOpenTranslit", str.getBuffer(), u_wmsg_errorName(err));
             if (t) {
@@ -397,7 +392,7 @@ static UBool convertFile(const char *pname,
     convfrom = ucnv_open(fromcpage, &err);
     if (U_FAILURE(err))
     {
-      UnicodeString str(fromcpage,"");
+      UnicodeString str(fromcpage, strlen(fromcpage) + 1);
       initMsg(pname);
       u_wmsg("cantOpenFromCodeset",str.getBuffer(),
              u_wmsg_errorName(err));
@@ -414,7 +409,7 @@ static UBool convertFile(const char *pname,
     convto = ucnv_open(tocpage, &err);
     if (U_FAILURE(err))
     {
-        UnicodeString str(tocpage,"");
+        UnicodeString str(tocpage, strlen(tocpage) + 1);
         initMsg(pname);
         u_wmsg("cantOpenToCodeset",str.getBuffer(),
                u_wmsg_errorName(err));
@@ -427,6 +422,7 @@ static UBool convertFile(const char *pname,
         u_wmsg("cantSetCallback", u_wmsg_errorName(err));
         goto error_exit;
     }
+    ucnv_setFallback(convto, fallback);
 
     // To ensure that the buffer always is of enough size, we
     // must take the worst case scenario, that is the character in the codepage
@@ -435,6 +431,9 @@ static UBool convertFile(const char *pname,
     totbuffsize = buffsize * ucnv_getMaxCharSize(convto);
     buff = new char[totbuffsize];
     unibuff = new UChar[buffsize];
+    
+    fromoffsets = new int32_t[buffsize];
+    tooffsets = new int32_t[totbuffsize];
 
     // OK, we can convert now.
 
@@ -443,7 +442,8 @@ static UBool convertFile(const char *pname,
         rd = fread(buff, 1, readsize, infile);
         if (ferror(infile) != 0)
         {
-            UnicodeString str(strerror(errno), "");
+            UnicodeString str(strerror(errno));
+            str.append((UChar32) 0);
             initMsg(pname);
             u_wmsg("cantRead",str.getBuffer());
             goto error_exit;
@@ -461,14 +461,17 @@ static UBool convertFile(const char *pname,
         uniiter = unibuff;
         cbuffiter = buff;
         flush = rd!=readsize;
-        ucnv_toUnicode(convfrom, &uniiter, uniiter + buffsize, &cbuffiter, cbuffiter + rd, 0, flush, &err);
+        ucnv_toUnicode(convfrom, &uniiter, uniiter + buffsize, &cbuffiter, cbuffiter + rd, fromoffsets, flush, &err);
           
-        foffset += uniiter - unibuff;
+        foffset += cbuffiter - buff - 1;
 
         if (U_FAILURE(err))
         {
+            char pos[32];
+            sprintf(pos, "%u", foffset);
+            UnicodeString str(pos, strlen(pos) + 1);
             initMsg(pname);
-            u_wmsg("problemCvtToU", u_wmsg_errorName(err));
+            u_wmsg("problemCvtToU", str.getBuffer(), u_wmsg_errorName(err));
             goto error_exit;
         }
             
@@ -476,8 +479,11 @@ static UBool convertFile(const char *pname,
         // of chars read.
         if (flush && cbuffiter!=(buff+rd))
         {
+            char pos[32];
+            sprintf(pos, "%u", foffset);
+            UnicodeString str(pos, strlen(pos) + 1);
             initMsg(pname);
-            u_wmsg("premEndInput");
+            u_wmsg("premEndInput", str.getBuffer());
             goto error_exit;
         }
             
@@ -499,12 +505,18 @@ static UBool convertFile(const char *pname,
             
           }
 
-        ucnv_fromUnicode(convto, &buffiter, buffiter + totbuffsize, &cuniiter, cuniiter + (size_t) (uniiter - unibuff), 0, flush, &err);
+        ucnv_fromUnicode(convto, &buffiter, buffiter + totbuffsize, &cuniiter, cuniiter + (size_t) (uniiter - unibuff), tooffsets, flush, &err);
             
         if (U_FAILURE(err))
         {
+            char pos[32];
+
+            uint32_t erroffset = dataOffset(fromoffsets, buffiter - buff, tooffsets);
+         
+            sprintf(pos, "%u", foffset - (uniiter - unibuff) + erroffset);
+            UnicodeString str(pos, strlen(pos) + 1);
             initMsg(pname);
-            u_wmsg("problemCvtFromU", u_wmsg_errorName(err));
+            u_wmsg("problemCvtFromU", str.getBuffer(), u_wmsg_errorName(err));
             goto error_exit;
         }
                         
@@ -512,8 +524,11 @@ static UBool convertFile(const char *pname,
         // of consumed characters.
         if (flush && cuniiter!=(unibuff+(size_t)(uniiter-unibuff)))
         {
+            char pos[32];
+            sprintf(pos, "%u", foffset);
+            UnicodeString str(pos, strlen(pos) + 1);
             initMsg(pname);
-            u_wmsg("premEnd");
+            u_wmsg("premEnd", str.getBuffer());
             goto error_exit;
         }
             
@@ -530,17 +545,23 @@ static UBool convertFile(const char *pname,
     } while (!flush); // Stop when we have flushed the converters (this means that it's the end of output)
 
     goto normal_exit;
+
   error_exit:
     ret = FALSE;
+
   normal_exit:
+    // Close the created converters
+
     if (convfrom) ucnv_close(convfrom);
     if (convto) ucnv_close(convto);
 
     if ( t ) delete t;
 
-    // Close the created converters
     if (buff) delete [] buff;
     if (unibuff) delete [] unibuff;
+
+    if (fromoffsets) delete [] fromoffsets;
+    if (tooffsets) delete [] tooffsets;
 
     if (infile != stdin) {
         fclose(infile);
@@ -557,21 +578,21 @@ static void usage(const char *pname, int ecode)
    
   initMsg(pname);
   msg = ures_getStringByKey(gBundle, ecode ? "lcUsageWord" : "ucUsageWord", &msgLen, &err);
-  UnicodeString upname(pname);
-  UnicodeString mname(msg, msgLen);
+  UnicodeString upname(pname, strlen(pname) + 1);
+  UnicodeString mname(msg, msgLen + 1);
 
   u_wmsg("usage", mname.getBuffer(), upname.getBuffer());
   if (!ecode) {
-    putchar('\n');
+    fputc('\n', stderr);
     u_wmsg("help");
 
     /* Now dump callbacks and finish. */
 
     int i, count = sizeof(transcode_callbacks) / sizeof(*transcode_callbacks);
     for (i = 0; i < count; ++i) {
-        printf(" %s", transcode_callbacks[i].name);
+        fprintf(stderr, " %s", transcode_callbacks[i].name);
     }
-    putchar('\n');
+    fputc('\n', stderr);
   }
 
   exit(ecode);
@@ -587,6 +608,7 @@ int main(int argc, char** argv)
     const char* tocpage = 0;
     const char *translit = 0;
     const char* outfilestr = 0;
+    int fallback = 0;
 
     UConverterFromUCallback fromucallback = UCNV_FROM_U_CALLBACK_STOP;
     const void *fromuctxt = 0;
@@ -602,7 +624,7 @@ int main(int argc, char** argv)
     const char *printName = 0;
     int printTranslits = 0;
 
-    int silent = 0, verbose = 0;
+    int verbose = 0;
 
     // Prettify pname.
     for (pname = *argv + strlen(*argv) - 1; pname != *argv && *pname != U_FILE_SEP_CHAR; --pname);
@@ -636,6 +658,10 @@ int main(int argc, char** argv)
                 translit = *iter;
             else
                 usage(pname, 1);
+        } else if (!strcmp("--fallback", *iter)) {
+            fallback = 1;
+        } else if (!strcmp("--no-fallback", *iter)) {
+            fallback = 0;
         }
         else if (strcmp("-l", *iter) == 0 || !strcmp("--list", *iter))
         {
@@ -743,7 +769,7 @@ int main(int argc, char** argv)
             }
         }
         else if (!strcmp("-s", *iter) || !strcmp("--silent", *iter)) {
-            silent = 1;
+            verbose = 0;
         } else if (!strcmp("-v", *iter) || !strcmp("--verbose", *iter)) {
             verbose = 1;
         } else if (!strcmp("-V", *iter) || !strcmp("--version", *iter)) {
@@ -827,6 +853,10 @@ int main(int argc, char** argv)
         else if (strcmp("-x", *iter) == 0)
         {
             iter++;
+        } else if (!strcmp("--fallback", *iter)) {
+            ;
+        } else if (!strcmp("--no-fallback", *iter)) {
+            ;
         }
         else if (strcmp("-l", *iter) == 0 || !strcmp("--list", *iter))
         {
@@ -875,14 +905,14 @@ int main(int argc, char** argv)
             ++iter;
         } else {
             seenf = 1;
-            if (!convertFile(pname, fromcpage, toucallback, touctxt, tocpage, fromucallback, fromuctxt, translit, *iter, outfile, verbose)) {
+            if (!convertFile(pname, fromcpage, toucallback, touctxt, tocpage, fromucallback, fromuctxt, fallback, translit, *iter, outfile, verbose)) {
                 goto error_exit;
             }
         }
     }
 
     if (!seenf) {
-        if (!convertFile(pname, fromcpage, toucallback, touctxt, tocpage, fromucallback, fromuctxt, translit, 0, outfile, verbose)) {
+        if (!convertFile(pname, fromcpage, toucallback, touctxt, tocpage, fromucallback, fromuctxt, fallback, translit, 0, outfile, verbose)) {
             goto error_exit;
         }
     }
