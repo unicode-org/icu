@@ -539,6 +539,18 @@ SOURCE=.\timezone.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\titletrn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\tolowtrn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\toupptrn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\translit.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -709,6 +721,10 @@ SOURCE=.\utrans.cpp
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\xformtrn.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
