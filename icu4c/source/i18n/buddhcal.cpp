@@ -272,7 +272,7 @@ BuddhistCalendar::initializeSystemDefaultCentury()
   if (fgSystemDefaultCenturyStart == fgSystemDefaultCentury)
   {
     UErrorCode status = U_ZERO_ERROR;
-    BuddhistCalendar calendar(Locale("th_TH_TRADITIONAL"),status);
+    BuddhistCalendar calendar(Locale("@calendar=buddhist"),status);
     if (U_SUCCESS(status))
     {
       calendar.setTime(Calendar::getNow(), status);
