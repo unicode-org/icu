@@ -2,7 +2,7 @@
 // Konkani locale
 
 kok_IN {
-    Version { "1.0" }
+    Version { "1.1.1" }
     LocaleID { "0457" }
     ShortCountry { IND }
 
