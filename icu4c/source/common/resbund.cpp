@@ -170,19 +170,20 @@ U_NAMESPACE_BEGIN
 ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 const Locale&           locale,
                                 UErrorCode&              error)
+                                :locName(NULL)
 {
     constructForLocale(path, locale, error);
 }
 
-ResourceBundle::ResourceBundle(UErrorCode &err) {
+ResourceBundle::ResourceBundle(UErrorCode &err)
+                                :locName(NULL)
+{
     resource = ures_open(0, Locale::getDefault().getName(), &err);
-    if(U_SUCCESS(err)) {
-        fRealLocale = Locale(ures_getRealLocale(resource, &err));
-    }
 }
 
 ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 UErrorCode&              error)
+                                :locName(NULL)
 {
     constructForLocale(path, Locale::getDefault(), error);
 }
@@ -190,12 +191,13 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
 ResourceBundle::ResourceBundle(const wchar_t* path,
                                const Locale& locale, 
                                UErrorCode& err)
+                               :locName(NULL)
 {
     constructForLocale(path, locale, err);
 }
 
 ResourceBundle::ResourceBundle(const ResourceBundle &other)
-: fRealLocale(other.fRealLocale)
+                              :locName(NULL)
 {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -205,30 +207,23 @@ ResourceBundle::ResourceBundle(const ResourceBundle &other)
         /* Copying a bad resource bundle */
         resource = NULL;
     }
-//        if(other.resource->fIsTopLevel == TRUE) {
-//            constructForLocale(ures_getPath(other.resource), Locale(ures_getName(other.resource)), status);
-//        } else {
-//            resource = copyResb(0, other.resource, &status);
-//        }
 }
 
-ResourceBundle::ResourceBundle(UResourceBundle *res, UErrorCode& err) {
+ResourceBundle::ResourceBundle(UResourceBundle *res, UErrorCode& err)
+                               :locName(NULL)
+{
     if (res) {
         resource = ures_copyResb(0, res, &err);
-        if(U_SUCCESS(err)) {
-            fRealLocale = Locale(ures_getRealLocale(resource, &err));
-        }
     } else {
         /* Copying a bad resource bundle */
         resource = NULL;
     }
 }
 
-ResourceBundle::ResourceBundle( const char* path, const Locale& locale, UErrorCode& err) {
+ResourceBundle::ResourceBundle( const char* path, const Locale& locale, UErrorCode& err) 
+                                :locName(NULL)
+{
     resource = ures_open(path, locale.getName(), &err);
-    if(U_SUCCESS(err)) {
-        fRealLocale = Locale(ures_getRealLocale(resource, &err));
-    }
 }
 
 
@@ -248,12 +243,6 @@ ResourceBundle& ResourceBundle::operator=(const ResourceBundle& other)
         /* Copying a bad resource bundle */
         resource = NULL;
     }
-    fRealLocale = other.fRealLocale;
-//    if(other.resource->fIsTopLevel == TRUE) {
-//        constructForLocale(ures_getPath(other.resource), Locale(ures_getName(other.resource)), status);
-//    } else {
-//        resource = copyResb(resource, other.resource, &status);
-//    }
     return *this;
 }
 
@@ -261,6 +250,9 @@ ResourceBundle::~ResourceBundle()
 {
     if(resource != 0) {
         ures_close(resource);
+    }
+    if(locName != NULL) {
+      delete(locName);
     }
 }
 
@@ -277,9 +269,6 @@ ResourceBundle::constructForLocale(const UnicodeString& path,
     } else {
         resource = ures_open(0, locale.getName(), &error);
     }
-    if(U_SUCCESS(error)) {
-        fRealLocale = Locale(ures_getRealLocale(resource, &error));
-    }
 }
 
 void 
@@ -291,10 +280,6 @@ ResourceBundle::constructForLocale(const wchar_t* path,
         resource = ures_openW(path, locale.getName(), &error);
     } else {
         resource = ures_open(0, locale.getName(), &error);
-    }
-
-    if(U_SUCCESS(error)) {
-        fRealLocale = Locale(ures_getRealLocale(resource, &error));
     }
 }
 
@@ -416,7 +401,13 @@ void ResourceBundle::getVersion(UVersionInfo versionInfo) const {
 
 const Locale &ResourceBundle::getLocale(void) const
 {
-    return fRealLocale;
+  if(locName == NULL) {
+    UErrorCode status = U_ZERO_ERROR;
+    const char *localeName = ures_getLocale(resource, &status);
+    ResourceBundle *me = (ResourceBundle *)this; // semantically const
+    me->locName = new Locale(localeName);
+  }
+  return *locName;
 }
 
 //eof
