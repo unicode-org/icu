@@ -105,8 +105,8 @@ charFromDirPropTest(void) {
 
     for(i=0; i<U_CHAR_DIRECTION_COUNT; ++i) {
         if(u_charDirection(charFromDirProp[i])!=(UCharDirection)i) {
-            log_err("u_charDirection(charFromDirProp[%d]=U+%04x)!=%d\n",
-                    i, charFromDirProp[i], i);
+            log_err("u_charDirection(charFromDirProp[%d]=U+%04x)==%d!=%d\n",
+                    i, charFromDirProp[i], u_charDirection(charFromDirProp[i]), i);
         }
     }
 }
@@ -1385,7 +1385,7 @@ initCharFromDirProps() {
     }
 
     u_getUnicodeVersion(ucdVersion);
-    if(memcmp(ucdVersion, ucd401, sizeof(UVersionInfo))>0) {
+    if(memcmp(ucdVersion, ucd401, sizeof(UVersionInfo))>=0) {
         /* Unicode 4.0.1 changes bidi classes for +-/ */
         charFromDirProp[U_EUROPEAN_NUMBER_SEPARATOR]=0x2b; /* change ES character from / to + */
     }
