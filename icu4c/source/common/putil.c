@@ -1791,9 +1791,9 @@ u_errorName(UErrorCode code) {
         return _uErrorName[code];
     } else if(code>=U_ERROR_WARNING_START && code<U_ERROR_WARNING_LIMIT) {
         return _uErrorInfoName[code-U_ERROR_WARNING_START];
-    } else if(U_PARSE_ERROR_LIMIT - code <= U_PARSE_ERROR_LIMIT- U_PARSE_ERROR_START){
+    } else if((uint32_t)(U_PARSE_ERROR_LIMIT - code) <= (U_PARSE_ERROR_LIMIT- U_PARSE_ERROR_START)){
         return _uTransErrorName[code - U_PARSE_ERROR_START];
-    } else if(U_FMT_PARSE_ERROR_LIMIT - code <= U_FMT_PARSE_ERROR_LIMIT- U_FMT_PARSE_ERROR_START){
+    } else if((uint32_t)(U_FMT_PARSE_ERROR_LIMIT - code) <= (U_FMT_PARSE_ERROR_LIMIT- U_FMT_PARSE_ERROR_START)){
         return _uFmtErrorName[code - U_FMT_PARSE_ERROR_START];
     } else {
         return "[BOGUS UErrorCode]";
