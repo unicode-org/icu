@@ -77,7 +77,7 @@ syr{
   "\u221e",
   "\ufffd",
  }
- LocaleScript{ "Cyrl" }
+ LocaleScript{ "Syrc" }
  CollationElements {	    
     Version { "1.0" }
     Sequence { 
