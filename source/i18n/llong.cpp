@@ -216,6 +216,7 @@ static const uint8_t digitInfo[] = {
     0xa1u, 0xa2u, 0xa3u,     0,     0,     0,     0,     0,
 };
 
+#ifdef RBNF_DEBUG
 llong llong::atoll(const char* str, uint32_t radix)
 {
     if (radix > 36) {
@@ -241,6 +242,7 @@ llong llong::atoll(const char* str, uint32_t radix)
     }
     return result;
 }
+#endif
 
 llong llong::utoll(const UChar* str, uint32_t radix)
 {
@@ -269,6 +271,7 @@ llong llong::utoll(const UChar* str, uint32_t radix)
     return result;
 }
 
+#ifdef RBNF_DEBUG
 uint32_t llong::lltoa(char* buf, uint32_t len, uint32_t radix, UBool raw) const
 {    
     if (radix > 36) {
@@ -314,6 +317,7 @@ uint32_t llong::lltoa(char* buf, uint32_t len, uint32_t radix, UBool raw) const
 
     return len;
 }
+#endif
 
 uint32_t llong::lltou(UChar* buf, uint32_t len, uint32_t radix, UBool raw) const
 {    
