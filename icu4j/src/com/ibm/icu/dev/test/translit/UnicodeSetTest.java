@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2002/06/06 22:39:31 $ 
- * $Revision: 1.30 $
+ * $Date: 2002/08/28 20:22:00 $ 
+ * $Revision: 1.31 $
  *
  *****************************************************************************************
  */
@@ -726,6 +726,15 @@ public class UnicodeSetTest extends TestFmwk {
             "[:math=false:]",
             "q",
             "(*+)",
+
+            // JB#1767 \N{}, \p{ASCII}
+            "[:Ascii:]",
+            "abc\u0000\u007F",
+            "\u0080\u4E00",
+
+            "[\\N{ latin small letter  a  }[:name= latin small letter z:]]",
+            "az",
+            "qrs",
         };
 
         for (int i=0; i<DATA.length; i+=3) {
@@ -766,6 +775,11 @@ public class UnicodeSetTest extends TestFmwk {
         }
     }
 
+    public void TestContainsString() {
+        UnicodeSet x = new UnicodeSet("[a{bc}]");
+        if (x.contains("abc")) errln("FAIL");
+    }
+    
     public void TestExhaustive() {
         // exhaustive tests. Simulate UnicodeSets with integers.
         // That gives us very solid tests (except for large memory tests).
