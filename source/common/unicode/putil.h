@@ -104,15 +104,15 @@ U_CAPI double  U_EXPORT2 uprv_modf(double d, double* pinteger);
  */
 U_CAPI double  U_EXPORT2 uprv_fmod(double d, double y);
 /**
- * Floating point utility to calculate d to the power of exp (d^exp).
+ * Floating point utility to calculate d to the power of exponent (d^exponent).
  * @internal
  */
-U_CAPI double  U_EXPORT2 uprv_pow(double d, double exp);
+U_CAPI double  U_EXPORT2 uprv_pow(double d, double exponent);
 /**
- * Floating point utility to calculate 10 to the power of exp (10^exp).
+ * Floating point utility to calculate 10 to the power of exponent (10^exponent).
  * @internal
  */
-U_CAPI double  U_EXPORT2 uprv_pow10(int32_t exp);
+U_CAPI double  U_EXPORT2 uprv_pow10(int32_t exponent);
 /**
  * Floating point utility to calculate the maximum value of two doubles.
  * @internal
