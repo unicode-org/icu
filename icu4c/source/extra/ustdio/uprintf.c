@@ -575,7 +575,7 @@ u_printf_char_handler(UFILE                 *stream,
   unsigned char arg = (unsigned char)(args[0].intValue);
 
   /* convert from default codepage to Unicode */
-  s = ufmt_defaultCPToUnicode(&arg, 1);
+  s = ufmt_defaultCPToUnicode((const char *)&arg, 1);
   if(s == 0) {
     return 0;
   }
