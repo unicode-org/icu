@@ -588,6 +588,7 @@ void StringSearchTest::TestInitialization()
     UnicodeString  text;
     UnicodeString  temp("a");
     StringSearch  *result;
+    int count;
 
     /* simple test on the pattern ce construction */
     pattern.append(temp);
@@ -627,7 +628,7 @@ void StringSearchTest::TestInitialization()
     delete result;
     
     /* testing if an extremely large pattern will fail the initialization */
-    for (int count = 0; count < 512; count ++) {
+    for (count = 0; count < 512; count ++) {
         pattern.append(temp);
     }
     result = new StringSearch(pattern, text, m_en_us_, NULL, status);
@@ -966,6 +967,7 @@ void StringSearchTest::TestPattern()
 {
           
     UChar temp[512];
+    int templength;
     u_unescape(PATTERN[0].text, temp, 512);
     UnicodeString text;
     text.setTo(temp, u_strlen(temp));
@@ -1043,7 +1045,7 @@ void StringSearchTest::TestPattern()
         return;
     }
     /* enormous pattern size to see if this crashes */
-    for (int templength = 0; templength != 512; templength ++) {
+    for (templength = 0; templength != 512; templength ++) {
         temp[templength] = 0x61;
     }
     temp[511] = 0;
@@ -2183,7 +2185,7 @@ void StringSearchTest::TestSubclass()
     if (search.next(status) != USEARCH_DONE) {
         errln("Error should have reached the end of the iteration");
     }
-    for (int i = sizeof(expected) / sizeof(int) - 1; i >= 0; i --) {
+    for (i = sizeof(expected) / sizeof(int) - 1; i >= 0; i --) {
         if (search.previous(status) != expected[i]) {
             errln("Error getting previous match");
         }
