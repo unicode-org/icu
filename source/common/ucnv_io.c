@@ -1158,7 +1158,7 @@ ucnv_swapAliases(const UDataSwapper *ds,
     }
 
     /* an alias table must contain at least the table of contents array */
-    if(length>=0 && length<4*(1+minTocLength)) {
+    if(length>=0 && (length-headerSize)<4*(1+minTocLength)) {
         udata_printError(ds, "ucnv_swapAliases(): too few bytes (%d after header) for an alias table\n",
                          length-headerSize);
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
@@ -1193,6 +1193,13 @@ ucnv_swapAliases(const UDataSwapper *ds,
         const uint16_t *p, *p2;
         uint16_t *q, *q2;
         uint16_t oldIndex;
+
+        if((length-headerSize)<(2*(int32_t)topOffset)) {
+            udata_printError(ds, "ucnv_swapAliases(): too few bytes (%d after header) for an alias table\n",
+                             length-headerSize);
+            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            return 0;
+        }
 
         outTable=(uint16_t *)((char *)outData+headerSize);
 
