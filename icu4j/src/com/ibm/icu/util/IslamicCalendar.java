@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/IslamicCalendar.java,v $ 
- * $Date: 2002/12/04 16:38:52 $ 
- * $Revision: 1.14 $
+ * $Date: 2002/12/05 01:25:34 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -72,7 +72,7 @@ import com.ibm.icu.util.CalendarAstronomer;
  *
  * @author Laura Werner
  * @author Alan Liu
- * @stable
+ * @stable ICU 2.0
  */
 public class IslamicCalendar extends Calendar {
 
@@ -84,73 +84,73 @@ public class IslamicCalendar extends Calendar {
     
     /**
      * Constant for Muharram, the 1st month of the Islamic year. 
-     * @stable 
+     * @stable ICU 2.0 
      */
     public static final int MUHARRAM = 0;
 
     /**
      * Constant for Safar, the 2nd month of the Islamic year. 
-     * @stable 
+     * @stable ICU 2.0 
      */
     public static final int SAFAR = 1;
 
     /**
      * Constant for Rabi' al-awwal (or Rabi' I), the 3rd month of the Islamic year. 
-     * @stable 
+     * @stable ICU 2.0 
      */
     public static final int RABI_1 = 2;
 
     /**
      * Constant for Rabi' al-thani or (Rabi' II), the 4th month of the Islamic year. 
-     * @stable 
+     * @stable ICU 2.0 
      */
     public static final int RABI_2 = 3;
 
     /**
      * Constant for Jumada al-awwal or (Jumada I), the 5th month of the Islamic year. 
-     * @stable 
+     * @stable ICU 2.0 
      */
     public static final int JUMADA_1 = 4;
 
     /**
      * Constant for Jumada al-thani or (Jumada II), the 6th month of the Islamic year. 
-     * @stable 
+     * @stable ICU 2.0 
      */
     public static final int JUMADA_2 = 5;
 
     /**
      * Constant for Rajab, the 7th month of the Islamic year. 
-     * @stable 
+     * @stable ICU 2.0 
      */
     public static final int RAJAB = 6;
 
     /**
      * Constant for Sha'ban, the 8th month of the Islamic year. 
-     * @stable 
+     * @stable ICU 2.0 
      */
     public static final int SHABAN = 7;
 
     /**
      * Constant for Ramadan, the 9th month of the Islamic year. 
-     * @stable 
+     * @stable ICU 2.0 
      */
     public static final int RAMADAN = 8;
 
     /**
      * Constant for Shawwal, the 10th month of the Islamic year. 
-     * @stable 
+     * @stable ICU 2.0 
      */
     public static final int SHAWWAL = 9;
 
     /**
      * Constant for Dhu al-Qi'dah, the 11th month of the Islamic year. 
-     * @stable 
+     * @stable ICU 2.0 
      */
     public static final int DHU_AL_QIDAH = 10;
 
     /**
      * Constant for Dhu al-Hijjah, the 12th month of the Islamic year. 
-     * @stable 
+     * @stable ICU 2.0 
      */
     public static final int DHU_AL_HIJJAH = 11;
 
@@ -164,7 +164,7 @@ public class IslamicCalendar extends Calendar {
     /**
      * Constructs a default <code>IslamicCalendar</code> using the current time
      * in the default time zone with the default locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public IslamicCalendar()
     {
@@ -175,7 +175,7 @@ public class IslamicCalendar extends Calendar {
      * Constructs an <code>IslamicCalendar</code> based on the current time
      * in the given time zone with the default locale.
      * @param zone the given time zone.
-     * @stable
+     * @stable ICU 2.0
      */
     public IslamicCalendar(TimeZone zone)
     {
@@ -187,7 +187,7 @@ public class IslamicCalendar extends Calendar {
      * in the default time zone with the given locale.
      *
      * @param aLocale the given locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public IslamicCalendar(Locale aLocale)
     {
@@ -200,7 +200,7 @@ public class IslamicCalendar extends Calendar {
      *
      * @param zone the given time zone.
      * @param aLocale the given locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public IslamicCalendar(TimeZone zone, Locale aLocale)
     {
@@ -213,7 +213,7 @@ public class IslamicCalendar extends Calendar {
      * in the default time zone with the default locale.
      *
      * @param date      The date to which the new calendar is set.
-     * @stable
+     * @stable ICU 2.0
      */
     public IslamicCalendar(Date date) {
         super(TimeZone.getDefault(), Locale.getDefault());
@@ -228,7 +228,7 @@ public class IslamicCalendar extends Calendar {
      * @param month the value used to set the {@link #MONTH MONTH} time field in the calendar.
      *              Note that the month value is 0-based. e.g., 0 for Muharram.
      * @param date the value used to set the {@link #DATE DATE} time field in the calendar.
-     * @stable
+     * @stable ICU 2.0
      */
     public IslamicCalendar(int year, int month, int date)
     {
@@ -252,7 +252,7 @@ public class IslamicCalendar extends Calendar {
      *              in the calendar.
      * @param second the value used to set the {@link #SECOND SECOND} time field
      *              in the calendar.
-     * @stable
+     * @stable ICU 2.0
      */
     public IslamicCalendar(int year, int month, int date, int hour,
                              int minute, int second)
@@ -272,7 +272,7 @@ public class IslamicCalendar extends Calendar {
      *
      * @param beCivil   <code>true</code> to use the civil calendar,
      *                  <code>false</code> to use the astronomical calendar.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setCivil(boolean beCivil)
     {
@@ -290,7 +290,7 @@ public class IslamicCalendar extends Calendar {
      * Returns <code>true</code> if this object is using the fixed-cycle civil
      * calendar, or <code>false</code> if using the religious, astronomical
      * calendar.
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean isCivil() {
         return civil;
@@ -328,7 +328,7 @@ public class IslamicCalendar extends Calendar {
     };
 
     /**
-     * @stable
+     * @stable ICU 2.0
      */
     protected int handleGetLimit(int field, int limitType) {
         return LIMITS[field][limitType];
@@ -489,7 +489,7 @@ public class IslamicCalendar extends Calendar {
      *
      * @param year  The hijri year
      * @param year  The hijri month, 0-based
-     * @stable
+     * @stable ICU 2.0
      */
     protected int handleGetMonthLength(int extendedYear, int month) {
 
@@ -509,7 +509,7 @@ public class IslamicCalendar extends Calendar {
 
     /**
      * Return the number of days in the given Islamic year
-     * @stable
+     * @stable ICU 2.0
      */
     protected int handleGetYearLength(int extendedYear) {
         if (civil) {
@@ -526,7 +526,7 @@ public class IslamicCalendar extends Calendar {
 
     // Return JD of start of given month/year
     /**
-     * @stable
+     * @stable ICU 2.0
      */
     protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
         return (int) monthStart(eyear, month) + 1948439;
@@ -537,7 +537,7 @@ public class IslamicCalendar extends Calendar {
     //-------------------------------------------------------------------------
 
     /**
-     * @stable
+     * @stable ICU 2.0
      */
     protected int handleGetExtendedYear() {
         int year;
@@ -563,7 +563,7 @@ public class IslamicCalendar extends Calendar {
      * The DAY_OF_WEEK and DOW_LOCAL fields are already set when this
      * method is called. The getGregorianXxx() methods return Gregorian
      * calendar equivalents for the given Julian day.
-     * @stable
+     * @stable ICU 2.0
      */
     protected void handleComputeFields(int julianDay) {
         int year, month, dayOfMonth, dayOfYear;

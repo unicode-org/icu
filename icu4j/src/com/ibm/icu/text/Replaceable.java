@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Replaceable.java,v $ 
- * $Date: 2002/12/04 00:04:15 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/12/05 01:22:00 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -56,13 +56,13 @@ package com.ibm.icu.text;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @stable
+ * @stable ICU 2.0
  */
 public interface Replaceable {
     /**
      * Returns the number of 16-bit code units in the text.
      * @return number of 16-bit code units in text
-     * @stable
+     * @stable ICU 2.0
      */ 
     int length();
 
@@ -71,7 +71,7 @@ public interface Replaceable {
      * @param offset an integer between 0 and <code>length()</code>-1
      * inclusive
      * @return 16-bit code unit of text at given offset
-     * @stable
+     * @stable ICU 2.0
      */
     char charAt(int offset);
 
@@ -87,7 +87,7 @@ public interface Replaceable {
      * @param offset an integer between 0 and <code>length()</code>-1
      * inclusive
      * @return 32-bit code point of text at given offset
-     * @stable
+     * @stable ICU 2.0
      */
     int char32At(int offset);
 
@@ -107,7 +107,7 @@ public interface Replaceable {
      * <code>start <= limit <= length()</code>.
      * @param dst the destination array.
      * @param dstStart the start offset in the destination array.
-     * @stable
+     * @stable ICU 2.0
      */
     void getChars(int srcStart, int srcLimit, char dst[], int dstStart);
 
@@ -127,7 +127,7 @@ public interface Replaceable {
      * <= length()</code>.
      * @param text the text to replace characters <code>start</code>
      * to <code>limit - 1</code>
-     * @stable
+     * @stable ICU 2.0
      */
     void replace(int start, int limit, String text);
 
@@ -150,7 +150,7 @@ public interface Replaceable {
      * @param charsStart the beginning index into <code>chars</code>,
      * inclusive; <code>0 <= start <= limit</code>.
      * @param charsLen the number of characters of <code>chars</code>.
-     * @stable
+     * @stable ICU 2.0
      */
     void replace(int start, int limit, char[] chars,
                  int charsStart, int charsLen);
@@ -176,7 +176,7 @@ public interface Replaceable {
      * <code>start..limit-1</code> will be copied to <code>dest</code>.
      * Implementations of this method may assume that <code>dest <= start ||
      * dest >= limit</code>.
-     * @stable
+     * @stable ICU 2.0
      */
     void copy(int start, int limit, int dest);
     

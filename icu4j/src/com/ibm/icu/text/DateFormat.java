@@ -104,7 +104,7 @@ import java.util.ResourceBundle;
  * @see          com.ibm.icu.util.GregorianCalendar
  * @see          com.ibm.icu.util.TimeZone
  * @author       Mark Davis, Chen-Lieh Huang, Alan Liu
- * @stable
+ * @stable ICU 2.0
  */
 public abstract class DateFormat extends Format {
 
@@ -114,7 +114,7 @@ public abstract class DateFormat extends Format {
      * initialize this to a calendar appropriate for the locale associated with
      * this <code>DateFormat</code>.
      * @serial
-     * @stable
+     * @stable ICU 2.0
      */
     protected Calendar calendar;
 
@@ -123,35 +123,35 @@ public abstract class DateFormat extends Format {
      * in dates and times.  Subclasses should initialize this to a number format
      * appropriate for the locale associated with this <code>DateFormat</code>.
      * @serial
-     * @stable
+     * @stable ICU 2.0
      */
     protected NumberFormat numberFormat;
 
     /**
      * Useful constant for ERA field alignment.
      * Used in FieldPosition of date/time formatting.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int ERA_FIELD = 0;
 
     /**
      * Useful constant for YEAR field alignment.
      * Used in FieldPosition of date/time formatting.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int YEAR_FIELD = 1;
 
     /**
      * Useful constant for MONTH field alignment.
      * Used in FieldPosition of date/time formatting.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int MONTH_FIELD = 2;
 
     /**
      * Useful constant for DATE field alignment.
      * Used in FieldPosition of date/time formatting.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int DATE_FIELD = 3;
 
@@ -160,7 +160,7 @@ public abstract class DateFormat extends Format {
      * Used in FieldPosition of date/time formatting.
      * HOUR_OF_DAY1_FIELD is used for the one-based 24-hour clock.
      * For example, 23:59 + 01:00 results in 24:59.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int HOUR_OF_DAY1_FIELD = 4;
 
@@ -169,70 +169,70 @@ public abstract class DateFormat extends Format {
      * Used in FieldPosition of date/time formatting.
      * HOUR_OF_DAY0_FIELD is used for the zero-based 24-hour clock.
      * For example, 23:59 + 01:00 results in 00:59.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int HOUR_OF_DAY0_FIELD = 5;
 
     /**
      * Useful constant for MINUTE field alignment.
      * Used in FieldPosition of date/time formatting.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int MINUTE_FIELD = 6;
 
     /**
      * Useful constant for SECOND field alignment.
      * Used in FieldPosition of date/time formatting.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int SECOND_FIELD = 7;
 
     /**
      * Useful constant for MILLISECOND field alignment.
      * Used in FieldPosition of date/time formatting.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int MILLISECOND_FIELD = 8;
 
     /**
      * Useful constant for DAY_OF_WEEK field alignment.
      * Used in FieldPosition of date/time formatting.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int DAY_OF_WEEK_FIELD = 9;
 
     /**
      * Useful constant for DAY_OF_YEAR field alignment.
      * Used in FieldPosition of date/time formatting.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int DAY_OF_YEAR_FIELD = 10;
 
     /**
      * Useful constant for DAY_OF_WEEK_IN_MONTH field alignment.
      * Used in FieldPosition of date/time formatting.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int DAY_OF_WEEK_IN_MONTH_FIELD = 11;
 
     /**
      * Useful constant for WEEK_OF_YEAR field alignment.
      * Used in FieldPosition of date/time formatting.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int WEEK_OF_YEAR_FIELD = 12;
 
     /**
      * Useful constant for WEEK_OF_MONTH field alignment.
      * Used in FieldPosition of date/time formatting.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int WEEK_OF_MONTH_FIELD = 13;
 
     /**
      * Useful constant for AM_PM field alignment.
      * Used in FieldPosition of date/time formatting.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int AM_PM_FIELD = 14;
 
@@ -241,7 +241,7 @@ public abstract class DateFormat extends Format {
      * Used in FieldPosition of date/time formatting.
      * HOUR1_FIELD is used for the one-based 12-hour clock.
      * For example, 11:30 PM + 1 hour results in 12:30 AM.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int HOUR1_FIELD = 15;
 
@@ -250,14 +250,14 @@ public abstract class DateFormat extends Format {
      * Used in FieldPosition of date/time formatting.
      * HOUR0_FIELD is used for the zero-based 12-hour clock.
      * For example, 11:30 PM + 1 hour results in 00:30 AM.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int HOUR0_FIELD = 16;
 
     /**
      * Useful constant for TIMEZONE field alignment.
      * Used in FieldPosition of date/time formatting.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static int TIMEZONE_FIELD = 17;
 
@@ -288,7 +288,7 @@ public abstract class DateFormat extends Format {
      * 5 and 8, respectively, for the first occurence of the timezone
      * pattern character 'z'.
      * @see java.text.Format
-     * @stable
+     * @stable ICU 2.0
      */
     public final StringBuffer format(Object obj, StringBuffer toAppendTo,
                                      FieldPosition fieldPosition)
@@ -326,7 +326,7 @@ public abstract class DateFormat extends Format {
      * 5 and 8, respectively, for the first occurence of the timezone
      * pattern character 'z'.
      * @return the formatted date/time string.
-     * @stable
+     * @stable ICU 2.0
      */
     public abstract StringBuffer format(Calendar cal, StringBuffer toAppendTo,
                                         FieldPosition fieldPosition);
@@ -352,7 +352,7 @@ public abstract class DateFormat extends Format {
      * 5 and 8, respectively, for the first occurence of the timezone
      * pattern character 'z'.
      * @return the formatted date/time string.
-     * @stable
+     * @stable ICU 2.0
      */
     public final StringBuffer format(Date date, StringBuffer toAppendTo,
                                      FieldPosition fieldPosition) {
@@ -365,7 +365,7 @@ public abstract class DateFormat extends Format {
      * Formats a Date into a date/time string.
      * @param date the time value to be formatted into a time string.
      * @return the formatted time string.
-     * @stable
+     * @stable ICU 2.0
      */
     public final String format(Date date)
     {
@@ -382,7 +382,7 @@ public abstract class DateFormat extends Format {
      * @exception  ParseException  If the given string cannot be parsed as a date.
      *
      * @see #parse(String, ParsePosition)
-     * @stable
+     * @stable ICU 2.0
      */
     public Date parse(String text) throws ParseException
     {
@@ -418,7 +418,7 @@ public abstract class DateFormat extends Format {
      * @param pos   On input, the position at which to start parsing; on
      *              output, the position at which parsing terminated, or the
      *              start position if the parse failed.
-     * @stable
+     * @stable ICU 2.0
      */
     public abstract void parse(String text, Calendar cal, ParsePosition pos);
 
@@ -441,7 +441,7 @@ public abstract class DateFormat extends Format {
      *              start position if the parse failed.
      *
      * @return      A Date, or null if the input could not be parsed
-     * @stable
+     * @stable ICU 2.0
      */
     public final Date parse(String text, ParsePosition pos) {
         int start = pos.getIndex();
@@ -466,7 +466,7 @@ public abstract class DateFormat extends Format {
      * calls parse(String, ParsePosition).
      *
      * @see #parse(String, ParsePosition)
-     * @stable
+     * @stable ICU 2.0
      */
     public Object parseObject (String source, ParsePosition pos)
     {
@@ -475,31 +475,31 @@ public abstract class DateFormat extends Format {
 
     /**
      * Constant for full style pattern.
-     * @stable
+     * @stable ICU 2.0
      */
     public static final int FULL = 0;
 
     /**
      * Constant for long style pattern.
-     * @stable
+     * @stable ICU 2.0
      */
     public static final int LONG = 1;
 
     /**
      * Constant for medium style pattern.
-     * @stable
+     * @stable ICU 2.0
      */
     public static final int MEDIUM = 2;
 
     /**
      * Constant for short style pattern.
-     * @stable
+     * @stable ICU 2.0
      */
     public static final int SHORT = 3;
 
     /**
      * Constant for default style pattern.  Its value is MEDIUM.
-     * @stable
+     * @stable ICU 2.0
      */
     public static final int DEFAULT = MEDIUM;
 
@@ -507,7 +507,7 @@ public abstract class DateFormat extends Format {
      * Gets the time formatter with the default formatting style
      * for the default locale.
      * @return a time formatter.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static DateFormat getTimeInstance()
     {
@@ -520,7 +520,7 @@ public abstract class DateFormat extends Format {
      * @param style the given formatting style. For example,
      * SHORT for "h:mm a" in the US locale.
      * @return a time formatter.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static DateFormat getTimeInstance(int style)
     {
@@ -534,7 +534,7 @@ public abstract class DateFormat extends Format {
      * SHORT for "h:mm a" in the US locale.
      * @param aLocale the given locale.
      * @return a time formatter.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static DateFormat getTimeInstance(int style,
                                                  Locale aLocale)
@@ -546,7 +546,7 @@ public abstract class DateFormat extends Format {
      * Gets the date formatter with the default formatting style
      * for the default locale.
      * @return a date formatter.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static DateFormat getDateInstance()
     {
@@ -559,7 +559,7 @@ public abstract class DateFormat extends Format {
      * @param style the given formatting style. For example,
      * SHORT for "M/d/yy" in the US locale.
      * @return a date formatter.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static DateFormat getDateInstance(int style)
     {
@@ -573,7 +573,7 @@ public abstract class DateFormat extends Format {
      * SHORT for "M/d/yy" in the US locale.
      * @param aLocale the given locale.
      * @return a date formatter.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static DateFormat getDateInstance(int style,
                                                  Locale aLocale)
@@ -585,7 +585,7 @@ public abstract class DateFormat extends Format {
      * Gets the date/time formatter with the default formatting style
      * for the default locale.
      * @return a date/time formatter.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static DateFormat getDateTimeInstance()
     {
@@ -600,7 +600,7 @@ public abstract class DateFormat extends Format {
      * @param timeStyle the given time formatting style. For example,
      * SHORT for "h:mm a" in the US locale.
      * @return a date/time formatter.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static DateFormat getDateTimeInstance(int dateStyle,
                                                        int timeStyle)
@@ -615,7 +615,7 @@ public abstract class DateFormat extends Format {
      * @param timeStyle the given time formatting style.
      * @param aLocale the given locale.
      * @return a date/time formatter.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static DateFormat
         getDateTimeInstance(int dateStyle, int timeStyle, Locale aLocale)
@@ -626,7 +626,7 @@ public abstract class DateFormat extends Format {
     /**
      * Get a default date/time formatter that uses the SHORT style for both the
      * date and the time.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static DateFormat getInstance() {
         return getDateTimeInstance(SHORT, SHORT);
@@ -635,7 +635,7 @@ public abstract class DateFormat extends Format {
     /**
      * Gets the set of locales for which DateFormats are installed.
      * @return the set of locales for which DateFormats are installed.
-     * @stable
+     * @stable ICU 2.0
      */
     public static Locale[] getAvailableLocales()
     {
@@ -646,7 +646,7 @@ public abstract class DateFormat extends Format {
      * Set the calendar to be used by this date format.  Initially, the default
      * calendar for the specified or default locale is used.
      * @param newCalendar the new Calendar to be used by the date format
-     * @stable
+     * @stable ICU 2.0
      */
     public void setCalendar(Calendar newCalendar)
     {
@@ -656,7 +656,7 @@ public abstract class DateFormat extends Format {
     /**
      * Gets the calendar associated with this date/time formatter.
      * @return the calendar associated with this date/time formatter.
-     * @stable
+     * @stable ICU 2.0
      */
     public Calendar getCalendar()
     {
@@ -666,7 +666,7 @@ public abstract class DateFormat extends Format {
     /**
      * Allows you to set the number formatter.
      * @param newNumberFormat the given new NumberFormat.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setNumberFormat(NumberFormat newNumberFormat)
     {
@@ -681,7 +681,7 @@ public abstract class DateFormat extends Format {
      * Gets the number formatter which this date/time formatter uses to
      * format and parse a time.
      * @return the number formatter which this date/time formatter uses.
-     * @stable
+     * @stable ICU 2.0
      */
     public NumberFormat getNumberFormat()
     {
@@ -691,7 +691,7 @@ public abstract class DateFormat extends Format {
     /**
      * Sets the time zone for the calendar of this DateFormat object.
      * @param zone the given new time zone.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setTimeZone(TimeZone zone)
     {
@@ -701,7 +701,7 @@ public abstract class DateFormat extends Format {
     /**
      * Gets the time zone.
      * @return the time zone associated with the calendar of DateFormat.
-     * @stable
+     * @stable ICU 2.0
      */
     public TimeZone getTimeZone()
     {
@@ -715,7 +715,7 @@ public abstract class DateFormat extends Format {
      * inputs must match this object's format.
      * @param lenient when true, parsing is lenient
      * @see com.ibm.icu.util.Calendar#setLenient
-     * @stable
+     * @stable ICU 2.0
      */
     public void setLenient(boolean lenient)
     {
@@ -724,7 +724,7 @@ public abstract class DateFormat extends Format {
 
     /**
      * Tell whether date/time parsing is to be lenient.
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean isLenient()
     {
@@ -733,7 +733,7 @@ public abstract class DateFormat extends Format {
 
     /**
      * Overrides hashCode
-     * @stable
+     * @stable ICU 2.0
      */
     public int hashCode() {
         return numberFormat.hashCode();
@@ -742,7 +742,7 @@ public abstract class DateFormat extends Format {
 
     /**
      * Overrides equals
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -754,7 +754,7 @@ public abstract class DateFormat extends Format {
 
     /**
      * Overrides Cloneable
-     * @stable
+     * @stable ICU 2.0
      */
     public Object clone()
     {
@@ -789,7 +789,7 @@ public abstract class DateFormat extends Format {
 
     /**
      * Create a new date format.
-     * @stable
+     * @stable ICU 2.0
      */
     protected DateFormat() {}
 
@@ -811,7 +811,7 @@ public abstract class DateFormat extends Format {
      *              etc.
      *
      * @param locale The locale for which the date format is desired.
-     * @stable
+     * @stable ICU 2.0
      */
     static final public DateFormat getDateInstance(Calendar cal, int dateStyle, Locale locale)
     {
@@ -834,7 +834,7 @@ public abstract class DateFormat extends Format {
      * @param locale The locale for which the time format is desired.
      *
      * @see DateFormat#getTimeInstance
-     * @stable
+     * @stable ICU 2.0
      */
     static final public DateFormat getTimeInstance(Calendar cal, int timeStyle, Locale locale)
     {
@@ -861,7 +861,7 @@ public abstract class DateFormat extends Format {
      * @param locale The locale for which the date/time format is desired.
      *
      * @see DateFormat#getDateTimeInstance
-     * @stable
+     * @stable ICU 2.0
      */
     static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle,
                                                  int timeStyle, Locale locale)
@@ -871,7 +871,7 @@ public abstract class DateFormat extends Format {
 
     /**
      * Convenience overload
-     * @stable
+     * @stable ICU 2.0
      */
     static final public DateFormat getInstance(Calendar cal, Locale locale) {
         return getDateTimeInstance(cal, SHORT, SHORT, locale);
@@ -879,7 +879,7 @@ public abstract class DateFormat extends Format {
 
     /**
      * Convenience overload
-     * @stable
+     * @stable ICU 2.0
      */
     static final public DateFormat getInstance(Calendar cal) {
         return getInstance(cal, Locale.getDefault());
@@ -887,7 +887,7 @@ public abstract class DateFormat extends Format {
 
     /**
      * Convenience overload
-     * @stable
+     * @stable ICU 2.0
      */
     static final public DateFormat getDateInstance(Calendar cal, int dateStyle) {
         return getDateInstance(cal, dateStyle, Locale.getDefault());
@@ -895,7 +895,7 @@ public abstract class DateFormat extends Format {
 
     /**
      * Convenience overload
-     * @stable
+     * @stable ICU 2.0
      */
     static final public DateFormat getTimeInstance(Calendar cal, int timeStyle) {
         return getTimeInstance(cal, timeStyle, Locale.getDefault());
@@ -903,7 +903,7 @@ public abstract class DateFormat extends Format {
 
     /**
      * Convenience overload
-     * @stable
+     * @stable ICU 2.0
      */
     static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle, int timeStyle) {
         return getDateTimeInstance(cal, dateStyle, timeStyle, Locale.getDefault());

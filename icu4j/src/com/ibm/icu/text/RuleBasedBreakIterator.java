@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $
- * $Date: 2002/12/04 01:45:51 $
- * $Revision: 1.22 $
+ * $Date: 2002/12/05 01:22:11 $
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -229,20 +229,20 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * @stable
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.22 $ $Date: 2002/12/04 01:45:51 $
+ * @stable ICU 2.0
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.23 $ $Date: 2002/12/05 01:22:11 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
     /**
      * A token used as a character-category value to identify ignore characters
-     * @stable
+     * @stable ICU 2.0
      */
     protected static final byte IGNORE = -1;
 
     /**
      * Special variable used to define ignore characters
-     * @stable
+     * @stable ICU 2.0
      */
     private static final String IGNORE_VAR = "_ignore_";
 
@@ -312,7 +312,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * on BreakIterator to create one indirectly from a description
      * in the framework's resource files.  You'd use this when you want
      * special behavior not provided by the built-in iterators.
-     * @stable
+     * @stable ICU 2.0
      */
     public RuleBasedBreakIterator(String description) {
 //System.out.println(">>>RBBI constructor");
@@ -326,7 +326,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
     /**
      * Creates a Builder.
-     * @stable
+     * @stable ICU 2.0
      */
     protected Builder makeBuilder() {
         return new Builder();
@@ -339,7 +339,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * Clones this iterator.
      * @return A newly-constructed RuleBasedBreakIterator with the same
      * behavior as this one.
-     * @stable
+     * @stable ICU 2.0
      */
     public Object clone()
     {
@@ -353,7 +353,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     /**
      * Returns true if both BreakIterators are of the same class, have the same
      * rules, and iterate over the same text.
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean equals(Object that) {
         try {
@@ -375,7 +375,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
     /**
      * Returns the description used to create this iterator
-     * @stable
+     * @stable ICU 2.0
      */
     public String toString() {
         return description;
@@ -384,7 +384,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     /**
      * Compute a hashcode for this BreakIterator
      * @return A hash code
-     * @stable
+     * @stable ICU 2.0
      */
     public int hashCode()
     {
@@ -634,7 +634,7 @@ throws IOException {
      * Sets the current iteration position to the beginning of the text.
      * (i.e., the CharacterIterator's starting offset).
      * @return The offset of the beginning of the text.
-     * @stable
+     * @stable ICU 2.0
      */
     public int first() {
         CharacterIterator t = getText();
@@ -647,7 +647,7 @@ throws IOException {
      * Sets the current iteration position to the end of the text.
      * (i.e., the CharacterIterator's ending offset).
      * @return The text's past-the-end offset.
-     * @stable
+     * @stable ICU 2.0
      */
     public int last() {
         CharacterIterator t = getText();
@@ -666,7 +666,7 @@ throws IOException {
      * (negative is backwards, and positive is forwards).
      * @return The character offset of the boundary position n boundaries away from
      * the current one.
-     * @stable
+     * @stable ICU 2.0
      */
     public int next(int n) {
         int result = current();
@@ -684,7 +684,7 @@ throws IOException {
     /**
      * Advances the iterator to the next boundary position.
      * @return The position of the first boundary after this one.
-     * @stable
+     * @stable ICU 2.0
      */
     public int next() {
         return handleNext();
@@ -693,7 +693,7 @@ throws IOException {
     /**
      * Advances the iterator backwards, to the last boundary preceding this one.
      * @return The position of the last boundary position preceding this one.
-     * @stable
+     * @stable ICU 2.0
      */
     public int previous() {
         // if we're already sitting at the beginning of the text, return DONE
@@ -728,7 +728,7 @@ throws IOException {
 
     /**
      * Throw IllegalArgumentException unless begin <= offset < end.
-     * @stable
+     * @stable ICU 2.0
      */
     protected static final void checkOffset(int offset, CharacterIterator text) {
         if (offset < text.getBeginIndex() || offset > text.getEndIndex()) {
@@ -741,7 +741,7 @@ throws IOException {
      * the specified position.
      * @param offset The position from which to begin searching for a break position.
      * @return The position of the first break after the current position.
-     * @stable
+     * @stable ICU 2.0
      */
     public int following(int offset) {
         // if the offset passed in is already past the end of the text,
@@ -779,7 +779,7 @@ throws IOException {
      * specified position.
      * @param offset The position to begin searching for a break from.
      * @return The position of the last boundary before the starting position.
-     * @stable
+     * @stable ICU 2.0
      */
     public int preceding(int offset) {
         // if we start by updating the current iteration position to the
@@ -797,7 +797,7 @@ throws IOException {
      * or after "offset".
      * @param offset the offset to check.
      * @return True if "offset" is a boundary position.
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean isBoundary(int offset) {
         CharacterIterator text = getText();
@@ -817,7 +817,7 @@ throws IOException {
     /**
      * Returns the current iteration position.
      * @return The current iteration position.
-     * @stable
+     * @stable ICU 2.0
      */
     public int current() {
         return getText().getIndex();
@@ -829,7 +829,7 @@ throws IOException {
      * Changing the state of this iterator can have undefined consequences.  If
      * you need to change it, clone it first.
      * @return An iterator over the text being analyzed.
-     * @stable
+     * @stable ICU 2.0
      */
     public CharacterIterator getText() {
         // The iterator is initialized pointing to no text at all, so if this
@@ -845,7 +845,7 @@ throws IOException {
      * Set the iterator to analyze a new piece of text.  This function resets
      * the current iteration position to the beginning of the text.
      * @param newText An iterator over the text to analyze.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setText(CharacterIterator newText) {
         // Test text to see if we need to wrap it in a SafeCharIterator:
@@ -872,7 +872,7 @@ throws IOException {
      * and advances through the text character by character until we reach the end
      * of the text or the state machine transitions to state 0.  We update our return
      * value every time the state machine passes through a possible end state.
-     * @stable
+     * @stable ICU 2.0
      */
     protected int handleNext() {
         // if we're already at the end of the text, return DONE.
@@ -980,7 +980,7 @@ throws IOException {
      * The various calling methods then iterate forward from this safe position to
      * the appropriate position to return.  (For more information, see the description
      * of buildBackwardsStateTable() in RuleBasedBreakIterator.Builder.)
-     * @stable
+     * @stable ICU 2.0
      */
     protected int handlePrevious() {
         CharacterIterator text = getText();

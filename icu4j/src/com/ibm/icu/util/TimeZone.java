@@ -71,13 +71,13 @@ import java.util.Vector;
  * @see          GregorianCalendar
  * @see          SimpleTimeZone
  * @author       Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu
- * @stable
+ * @stable ICU 2.0
  */
 abstract public class TimeZone implements Serializable, Cloneable {
     /**
      * Sole constructor.  (For invocation by subclass constructors, typically
      * implicit.)
-     * @stable
+     * @stable ICU 2.0
      */
     public TimeZone() {
     }
@@ -86,7 +86,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * A style specifier for <code>getDisplayName()</code> indicating
      * a short name, such as "PST."
      * @see #LONG
-     * @stable
+     * @stable ICU 2.0
      */
     public static final int SHORT = 0;
 
@@ -94,7 +94,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * A style specifier for <code>getDisplayName()</code> indicating
      * a long name, such as "Pacific Standard Time."
      * @see #SHORT
-     * @stable
+     * @stable ICU 2.0
      */
     public static final int LONG  = 1;
 
@@ -122,7 +122,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @param dayOfWeek the day-of-week of the given date.
      * @param milliseconds the millis in day in <em>standard</em> local time.
      * @return the offset to add *to* GMT to get local time.
-     * @stable
+     * @stable ICU 2.0
      */
     abstract public int getOffset(int era, int year, int month, int day,
                                   int dayOfWeek, int milliseconds);
@@ -170,7 +170,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * Sets the base time zone offset to GMT.
      * This is the offset to add *to* UTC to get local time.
      * @param offsetMillis the given base time zone offset to GMT.
-     * @stable
+     * @stable ICU 2.0
      */
     abstract public void setRawOffset(int offsetMillis);
 
@@ -178,14 +178,14 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * Gets unmodified offset, NOT modified in case of daylight savings.
      * This is the offset to add *to* UTC to get local time.
      * @return the unmodified offset to add *to* UTC to get local time.
-     * @stable
+     * @stable ICU 2.0
      */
     abstract public int getRawOffset();
 
     /**
      * Gets the ID of this time zone.
      * @return the ID of this time zone.
-     * @stable
+     * @stable ICU 2.0
      */
     public String getID()
     {
@@ -196,7 +196,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * Sets the time zone ID. This does not change any other data in
      * the time zone object.
      * @param ID the new time zone ID.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setID(String ID)
     {
@@ -214,7 +214,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * then this method returns a string in the format
      * <code>GMT[+-]hh:mm</code>.
      * @return the human-readable name of this time zone in the default locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public final String getDisplayName() {
         return getDisplayName(false, LONG, Locale.getDefault());
@@ -230,7 +230,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @param locale the locale in which to supply the display name.
      * @return the human-readable name of this time zone in the given locale
      * or in the default locale if the given locale is not recognized.
-     * @stable
+     * @stable ICU 2.0
      */
     public final String getDisplayName(Locale locale) {
         return getDisplayName(false, LONG, locale);
@@ -245,7 +245,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @param daylight if true, return the daylight savings name.
      * @param style either <code>LONG</code> or <code>SHORT</code>
      * @return the human-readable name of this time zone in the default locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public final String getDisplayName(boolean daylight, int style) {
         return getDisplayName(daylight, style, Locale.getDefault());
@@ -263,7 +263,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @return the human-readable name of this time zone in the given locale
      * or in the default locale if the given locale is not recognized.
      * @exception IllegalArgumentException style is invalid.
-     * @stable
+     * @stable ICU 2.0
      */
     public String getDisplayName(boolean daylight, int style, Locale locale) {
         /* NOTES:
@@ -316,7 +316,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * Queries if this time zone uses daylight savings time.
      * @return true if this time zone uses daylight savings time,
      * false, otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     abstract public boolean useDaylightTime();
 
@@ -326,7 +326,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @param date the given Date.
      * @return true if the given date is in daylight savings time,
      * false, otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     abstract public boolean inDaylightTime(Date date);
 
@@ -340,7 +340,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      *
      * @return the specified <code>TimeZone</code>, or the GMT zone if the given ID
      * cannot be understood.
-     * @stable
+     * @stable ICU 2.0
      */
     public static synchronized TimeZone getTimeZone(String ID) {
         /* We first try to lookup the zone ID in our hashtable.  If this fails,
@@ -366,7 +366,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @param rawOffset the offset in milliseconds from GMT
      * @return an array of IDs for system TimeZones with the given
      * raw offset.  If there are none, return a zero-length array.
-     * @stable
+     * @stable ICU 2.0
      */
     public static String[] getAvailableIDs(int rawOffset) {
         return TimeZoneData.getAvailableIDs(rawOffset);
@@ -381,7 +381,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * to return zones not associated with any country
      * @return an array of IDs for system TimeZones in the given
      * country.  If there are none, return a zero-length array.
-     * @stable
+     * @stable ICU 2.0
      */
     public static String[] getAvailableIDs(String country) {
         return TimeZoneData.getAvailableIDs(country);
@@ -393,7 +393,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * <code>get()</code> to construct the corresponding TimeZone
      * object.
      * @return an array of all system TimeZone IDs
-     * @stable
+     * @stable ICU 2.0
      */
     public static String[] getAvailableIDs() {
         return TimeZoneData.getAvailableIDs();
@@ -411,7 +411,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @return the number of zones in the equivalency group containing
      * 'id', or zero if 'id' is not a valid system ID
      * @see #getEquivalentID
-     * @stable
+     * @stable ICU 2.0
      */
     public static int countEquivalentIDs(String id) {
         return TimeZoneData.countEquivalentIDs(id);
@@ -434,7 +434,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * containing 'id', or an empty string if 'id' is not a valid
      * system ID or 'index' is out of range
      * @see #countEquivalentIDs
-     * @stable
+     * @stable ICU 2.0
      */
     public static String getEquivalentID(String id, int index) {
         return TimeZoneData.getEquivalentID(id, index);
@@ -451,7 +451,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * The source of the default <code>TimeZone</code> 
      * may vary with implementation.
      * @return a default <code>TimeZone</code>.
-     * @stable
+     * @stable ICU 2.0
      */
     public static synchronized TimeZone getDefault() {
         if (defaultZone == null) {
@@ -517,7 +517,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * is null, reset the default to the value it had originally when the
      * VM first started.
      * @param zone the new default time zone
-     * @stable
+     * @stable ICU 2.0
      */
     public static synchronized void setDefault(TimeZone zone)
     {
@@ -538,7 +538,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @param other the <code>TimeZone</code> object to be compared with
      * @return true if the other zone is not null and is the same as this one,
      * with the possible exception of the ID
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean hasSameRules(TimeZone other) {
         return other != null && getRawOffset() == other.getRawOffset() &&
@@ -547,7 +547,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
 
     /**
      * Overrides Cloneable
-     * @stable
+     * @stable ICU 2.0
      */
     public Object clone()
     {

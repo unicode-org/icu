@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateFormatSymbols.java,v $
- * $Date: 2002/12/03 19:45:38 $
- * $Revision: 1.13 $
+ * $Date: 2002/12/05 01:21:36 $
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -72,7 +72,7 @@ import java.util.Vector;
  * @see          SimpleDateFormat
  * @see          com.ibm.icu.util.SimpleTimeZone
  * @author       Chen-Lieh Huang
- * @stable
+ * @stable ICU 2.0
  */
 public class DateFormatSymbols implements Serializable, Cloneable {
 
@@ -83,7 +83,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @throws  java.util.MissingResourceException
      *          if the resources for the default locale cannot be
      *          found or cannot be loaded.
-     * @stable
+     * @stable ICU 2.0
      */
     public DateFormatSymbols()
     {
@@ -97,7 +97,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @throws  java.util.MissingResourceException
      *          if the resources for the specified locale cannot be
      *          found or cannot be loaded.
-     * @stable
+     * @stable ICU 2.0
      */
     public DateFormatSymbols(Locale locale)
     {
@@ -205,7 +205,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Gets era strings. For example: "AD" and "BC".
      * @return the era strings.
-     * @stable
+     * @stable ICU 2.0
      */
     public String[] getEras() {
         return duplicate(eras);
@@ -214,7 +214,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Sets era strings. For example: "AD" and "BC".
      * @param newEras the new era strings.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setEras(String[] newEras) {
         eras = duplicate(newEras);
@@ -223,7 +223,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Gets month strings. For example: "January", "February", etc.
      * @return the month strings.
-     * @stable
+     * @stable ICU 2.0
      */
     public String[] getMonths() {
         return duplicate(months);
@@ -232,7 +232,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Sets month strings. For example: "January", "February", etc.
      * @param newMonths the new month strings.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setMonths(String[] newMonths) {
         months = duplicate(newMonths);
@@ -241,7 +241,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Gets short month strings. For example: "Jan", "Feb", etc.
      * @return the short month strings.
-     * @stable
+     * @stable ICU 2.0
      */
     public String[] getShortMonths() {
         return duplicate(shortMonths);
@@ -250,7 +250,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Sets short month strings. For example: "Jan", "Feb", etc.
      * @param newShortMonths the new short month strings.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setShortMonths(String[] newShortMonths) {
         shortMonths = duplicate(newShortMonths);
@@ -260,7 +260,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Gets weekday strings. For example: "Sunday", "Monday", etc.
      * @return the weekday strings. Use <code>Calendar.SUNDAY</code>,
      * <code>Calendar.MONDAY</code>, etc. to index the result array.
-     * @stable
+     * @stable ICU 2.0
      */
     public String[] getWeekdays() {
         return duplicate(weekdays);
@@ -271,7 +271,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param newWeekdays the new weekday strings. The array should
      * be indexed by <code>Calendar.SUNDAY</code>,
      * <code>Calendar.MONDAY</code>, etc.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setWeekdays(String[] newWeekdays) {
         weekdays = duplicate(newWeekdays);
@@ -281,7 +281,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Gets short weekday strings. For example: "Sun", "Mon", etc.
      * @return the short weekday strings. Use <code>Calendar.SUNDAY</code>,
      * <code>Calendar.MONDAY</code>, etc. to index the result array.
-     * @stable
+     * @stable ICU 2.0
      */
     public String[] getShortWeekdays() {
         return duplicate(shortWeekdays);
@@ -292,7 +292,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param newShortWeekdays the new short weekday strings. The array should
      * be indexed by <code>Calendar.SUNDAY</code>,
      * <code>Calendar.MONDAY</code>, etc.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setShortWeekdays(String[] newShortWeekdays) {
         shortWeekdays = duplicate(newShortWeekdays);
@@ -301,7 +301,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Gets ampm strings. For example: "AM" and "PM".
      * @return the weekday strings.
-     * @stable
+     * @stable ICU 2.0
      */
     public String[] getAmPmStrings() {
         return duplicate(ampms);
@@ -310,7 +310,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Sets ampm strings. For example: "AM" and "PM".
      * @param newAmpms the new ampm strings.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setAmPmStrings(String[] newAmpms) {
         ampms = duplicate(newAmpms);
@@ -319,7 +319,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Gets timezone strings.
      * @return the timezone strings.
-     * @stable
+     * @stable ICU 2.0
      */
     public String[][] getZoneStrings() {
         return duplicate(zoneStrings);
@@ -328,7 +328,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Sets timezone strings.
      * @param newZoneStrings the new timezone strings.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setZoneStrings(String[][] newZoneStrings) {
         zoneStrings = duplicate(newZoneStrings);
@@ -337,7 +337,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Gets localized date-time pattern characters. For example: 'u', 't', etc.
      * @return the localized date-time pattern characters.
-     * @stable
+     * @stable ICU 2.0
      */
     public String getLocalPatternChars() {
         return new String(localPatternChars);
@@ -347,7 +347,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Sets localized date-time pattern characters. For example: 'u', 't', etc.
      * @param newLocalPatternChars the new localized date-time
      * pattern characters.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setLocalPatternChars(String newLocalPatternChars) {
         localPatternChars = newLocalPatternChars;
@@ -355,7 +355,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Overrides Cloneable
-     * @stable
+     * @stable ICU 2.0
      */
     public Object clone()
     {
@@ -371,7 +371,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Override hashCode.
      * Generates a hash code for the DateFormatSymbols object.
-     * @stable
+     * @stable ICU 2.0
      */
     public int hashCode() {
         int hashcode = 0;
@@ -382,7 +382,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Override equals
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean equals(Object obj)
     {
@@ -600,7 +600,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param locale    The locale whose symbols are desired.
      *
      * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
-     * @stable
+     * @stable ICU 2.0
      */
     public DateFormatSymbols(Calendar cal, Locale locale) {
         this(cal==null?null:cal.getClass(), locale);
@@ -635,7 +635,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * bundle.  Symbols that are not overridden are inherited from the
      * default DateFormatSymbols for the locale.
      * @see DateFormatSymbols#DateFormatSymbols
-     * @stable
+     * @stable ICU 2.0
      */
     public DateFormatSymbols(ResourceBundle bundle, Locale locale) {
         // Get the default symbols for the locale, since most
@@ -654,7 +654,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * <code>super.constructCalendarSpecific(bundle)</code> as needed to
      * handle the "DayNames", "DayAbbreviations", "MonthNames",
      * "MonthAbbreviations", and "Eras" resource data.
-     * @stable
+     * @stable ICU 2.0
      */
     protected void constructCalendarSpecific(ResourceBundle bundle) {
 
@@ -698,7 +698,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * (just before the class name) and "Symbols" appended to the end.
      * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
      * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
-     * @stable
+     * @stable ICU 2.0
      */
     static public ResourceBundle getDateFormatBundle(Class calendarClass, Locale locale)
         throws MissingResourceException {
