@@ -172,6 +172,8 @@ public class CollationThaiTest extends TestFmwk {
             return;        
         }
     
+        stripBOM(in);
+        
         //
         // Loop through each word in the dictionary and compare it to the previous
         // word.  They should be in sorted order.
@@ -244,7 +246,30 @@ public class CollationThaiTest extends TestFmwk {
         logln("Words checked: " + wordCount);
     }
     
-    private byte savedByte = 0;
+    private static final byte BOM[] = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
+    
+    private byte savedBytes[]= new byte[BOM.length];
+    private int  savedByteCount = 0;
+    private int  savedByte = 0;
+    
+    void stripBOM(DataInputStream in) {
+        try {
+            savedByteCount = in.read(savedBytes, 0, BOM.length);
+            
+            for (int i = 0; i < BOM.length; i += 1) {
+                if (savedBytes[i] != BOM[i]) {
+                    return;
+                }
+            }
+            
+            savedByteCount = 0;
+            savedByte = 0;
+        } catch (EOFException ee) {
+            // nothing
+        } catch (IOException e) {
+            // nothing
+        }
+    }
     
     String readLine(DataInputStream in) {
         byte[] bytes = new byte[128];
@@ -252,9 +277,8 @@ public class CollationThaiTest extends TestFmwk {
         byte c = 0;
         
         while (i < 128) {
-            if (savedByte != 0) {
-                c = savedByte;
-                savedByte = 0;
+            if (savedByte < savedByteCount) {
+                c = savedBytes[savedByte++];
             } else {
                 try {
                     c = in.readByte();
@@ -271,7 +295,9 @@ public class CollationThaiTest extends TestFmwk {
                     c = in.readByte();
                     
                     if (c != 0xA) {
-                        savedByte = c;
+                        savedBytes[0] = c;
+                        savedByte = 0;
+                        savedByteCount = 1;
                     }
                 } catch (EOFException ee) {
                     break;
