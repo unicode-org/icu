@@ -162,9 +162,9 @@ main(int argc,
     /*make_col(arg, &status);*/
     if(U_FAILURE(status)) {
         printf("genrb: %s processing file \"%s\"\n", u_errorName(status), arg);
-        if(getErrorText() != 0)
-	    printf("       (%s)\n", getErrorText());
     }
+    if(getErrorText() != 0)
+	printf("Issued Errors and Warnings:\n       (%s)\n", getErrorText());
   }
 
   return status;
@@ -201,7 +201,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
           uprv_strcpy(openFileName, inputDir);
           uprv_strcat(openFileName, filename);
       }
-      in = T_FileStream_open(openFileName, "r");
+      in = T_FileStream_open(openFileName, "rb");
       uprv_free(openFileName);
   }
 
@@ -209,7 +209,26 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     *status = U_FILE_ACCESS_ERROR;
     setErrorText("File not found");
     return;
+  } else { /* auto detect popular encodings */
+      UBool autodetect = FALSE;
+      char start[3];
+      T_FileStream_read(in, start, 3);
+      if(start[0] == '\xFE' && start[1] == '\xFF') {
+          cp = "utf-16be";
+          autodetect = TRUE;
+      } else if(start[0] == '\xFF' && start[1] == '\xFE') {
+          cp = "utf-16le";
+          autodetect = TRUE;
+      } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
+          cp = "utf-8";
+          autodetect = TRUE;
+      }
+      T_FileStream_rewind(in);
+      if(autodetect == TRUE) {
+          printf("Autodetected encoding %s\n", cp);
+      }
   }
+
 
   /* Parse the data into an SRBRoot */
   data = parse(in, cp, status);
