@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1997-2004, International Business Machines Corporation and   *
+* Copyright (C) 1997-2005, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
@@ -267,7 +267,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
     /* here we try to deduce the right locale name */
     if(localeID == NULL) { /* if localeID is NULL, we're trying to open default locale */
         uprv_strcpy(name, uloc_getDefault());
-    } else if(uprv_strlen(localeID) == 0) { /* if localeID is "" then we try to open root locale */
+    } else if(*localeID == 0) { /* if localeID is "" then we try to open root locale */
         uprv_strcpy(name, kRootLocaleName);
     } else { /* otherwise, we'll open what we're given */
         uprv_strcpy(name, localeID);
@@ -338,18 +338,20 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
             /* handle the alias by trying to get out the %%Alias tag.*/
             /* We'll try to get alias string from the bundle */
             Resource aliasres = res_getResource(&(r->fData), "%%ALIAS");
-            const UChar *alias = res_getString(&(r->fData), aliasres, &aliasLen);
-            if(alias != NULL && aliasLen > 0) { /* if there is actual alias - unload and load new data */
-                u_UCharsToChars(alias, aliasName, aliasLen+1);
-                isAlias = TRUE;
-                res_unload(&(r->fData));
-                result = res_load(&(r->fData), r->fPath, aliasName, status);
-                if (result == FALSE || U_FAILURE(*status)) { 
-                    /* we couldn't load aliased data - so we have no data */
-                    *status = U_USING_FALLBACK_WARNING;
-                    r->fBogus = U_USING_FALLBACK_WARNING;
+            if (aliasres != RES_BOGUS) {
+                const UChar *alias = res_getString(&(r->fData), aliasres, &aliasLen);
+                if(alias != NULL && aliasLen > 0) { /* if there is actual alias - unload and load new data */
+                    u_UCharsToChars(alias, aliasName, aliasLen+1);
+                    isAlias = TRUE;
+                    res_unload(&(r->fData));
+                    result = res_load(&(r->fData), r->fPath, aliasName, status);
+                    if (result == FALSE || U_FAILURE(*status)) { 
+                        /* we couldn't load aliased data - so we have no data */
+                        *status = U_USING_FALLBACK_WARNING;
+                        r->fBogus = U_USING_FALLBACK_WARNING;
+                    }
+                    setEntryName(r, aliasName, status);
                 }
-                setEntryName(r, aliasName, status);
             }
         }
 
@@ -806,16 +808,21 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     resB->fParentRes = parent;
     resB->fTopLevelData = parent->fTopLevelData;
     if(parent->fResPath && parent != resB) {
-      ures_appendResPath(resB, parent->fResPath, parent->fResPathLen);
+        ures_appendResPath(resB, parent->fResPath, parent->fResPathLen);
     }
     if(key != NULL) {
-      ures_appendResPath(resB, key, (int32_t)uprv_strlen(key));
-      ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1);
+        ures_appendResPath(resB, key, (int32_t)uprv_strlen(key));
+        ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1);
     } else {
-      char buf[256];
-      int32_t len = T_CString_integerToString(buf, index, 10);
-      ures_appendResPath(resB, buf, len);
-      ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1);
+        char buf[256];
+        int32_t len = T_CString_integerToString(buf, index, 10);
+        ures_appendResPath(resB, buf, len);
+        ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1);
+    }
+    /* Make sure that Purify doesn't complain about uninitialized memory copies. */
+    {
+        int32_t unusedLen = ((resB->fResBuf == resB->fResPath) ? resB->fResPathLen : 0);
+        uprv_memset(resB->fResBuf + unusedLen, 0, sizeof(resB->fResBuf) - unusedLen);
     }
 
     resB->fVersion = NULL;
@@ -1301,7 +1308,7 @@ ures_findSubResource(const UResourceBundle *resB, char* path, UResourceBundle *f
         *status = U_MISSING_RESOURCE_ERROR;
         break;
     }
-  } while(uprv_strlen(path)); /* there is more stuff in the path */
+  } while(*path); /* there is more stuff in the path */
 
   return result;
 }
