@@ -33,8 +33,6 @@ U_CFUNC UBool locale_cleanup(void);
 
 U_CFUNC UBool uloc_cleanup(void);
 
-U_CFUNC UBool ustring_cleanup(void);
-
 U_CFUNC UBool breakiterator_cleanup(void);
 
 U_CFUNC UBool ustrprep_cleanup(void);

@@ -22,7 +22,7 @@
 #include "unicode/ustring.h"
 #include "cstring.h"
 #include "cmemory.h"
-#include "ustr_imp.h"
+
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -175,9 +175,6 @@ static void TestFlushCache(void) {
     UErrorCode          err                 =   U_ZERO_ERROR;
     UConverter*            someConverters[5];
     int flushCount = 0;
-
-    /* Close the default converter just in case one of the tested converters is also the default converter. */
-    ucnv_close(u_getDefaultConverter(&err));
 
     /* flush the converter cache to get a consistent state before the flushing is tested */
     ucnv_flushCache();
