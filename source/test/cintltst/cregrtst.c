@@ -1009,10 +1009,11 @@ AllocateTextBoundary();
             }
         }
     }
-    ubrk_close(e);
+
     /* it does break after hyphens (unless they're followed by a digit, a non-spacing mark,
        a currency symbol, a non-breaking space, or a line or paragraph separator) */
     u_strcpy(dashes, CharsToUChars("-\\u00ad\\u2010\\u2012\\u2013\\u2014"));
+
     for (i = 0; i < u_strlen(s); i++) {
         work[0] = s[i];
         for (j = 0; j < u_strlen(dashes); j++) {
@@ -1033,9 +1034,9 @@ AllocateTextBoundary();
                     c == 0xfeff)
                     continue;
                 work[2] = c;
-                e = ubrk_open(UBRK_LINE, "en_US", work, u_strlen(work), &status);
+		ubrk_setText(e, work, u_strlen(work), &status);
                 if(U_FAILURE(status)){
-                log_err("FAIL: Error in opening the word break Iterator in testLineInvaiants:\n %s \n", myErrorName(status));
+                log_err("FAIL: Error in setting text on the word break Iterator in testLineInvaiants:\n %s \n", myErrorName(status));
                 return;
                 }
                 saw2 = FALSE;
