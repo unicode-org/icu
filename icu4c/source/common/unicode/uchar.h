@@ -251,6 +251,10 @@ typedef enum UProperty {
     /** Binary property XID_Start. ID_Start modified to allow
         closure under normalization forms NFKC and NFKD. @stable ICU 2.1 */
     UCHAR_XID_START,
+    /** Binary property Case_Sensitive. Either the source of a case
+        mapping or _in_ the target of a case mapping. Not the same as
+        the general category Cased_Letter. @draft ICU 2.6 */
+    UCHAR_CASE_SENSITIVE,
     /** One more than the last constant for binary Unicode properties. @stable ICU 2.1 */
     UCHAR_BINARY_LIMIT,
 
@@ -2607,18 +2611,6 @@ u_totitle(UChar32 c);
  */
 U_CAPI UChar32 U_EXPORT2
 u_foldCase(UChar32 c, uint32_t options);
-
-/**
- * Returns true if the given code point is "case unique".  A case
- * unique code point has the property that the case fold closure
- * of that code point contains only itself.
- *
- * @param cp the code point to test
- * @return true if cp's case fold closure contains only itself.
- * @draft ICU 2.6
- */
-U_CAPI UBool U_EXPORT2
-uchar_isCaseUnique(UChar32 ch);
 
 /**
  * Returns the decimal digit value of the code point in the
