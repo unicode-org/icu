@@ -31,7 +31,8 @@ StringSearch::StringSearch(const UnicodeString &pattern,
 
     m_strsrch_ = usearch_open(m_pattern_.getBuffer(), m_pattern_.length(), 
                               m_text_.getBuffer(), m_text_.length(), 
-                              locale.getName(), NULL, &status);
+                              locale.getName(), (UBreakIterator *)breakiter, 
+                              &status);
     uprv_free(m_search_);
     m_search_ = NULL;
 
@@ -65,9 +66,11 @@ StringSearch::StringSearch(const UnicodeString     &pattern,
         return;
     }
     m_strsrch_ = usearch_openFromCollator(m_pattern_.getBuffer(), 
-                                          m_pattern_.length(), m_text_.getBuffer(), 
+                                          m_pattern_.length(), 
+                                          m_text_.getBuffer(), 
                                           m_text_.length(), coll->ucollator, 
-                                          NULL, &status);
+                                          (UBreakIterator *)breakiter, 
+                                          &status);
     uprv_free(m_search_);
     m_search_ = NULL;
 
@@ -97,7 +100,8 @@ StringSearch::StringSearch(const UnicodeString     &pattern,
     }
     m_strsrch_ = usearch_open(m_pattern_.getBuffer(), m_pattern_.length(), 
                               m_text_.getBuffer(), m_text_.length(), 
-                              locale.getName(), NULL, &status);
+                              locale.getName(), (UBreakIterator *)breakiter, 
+                              &status);
     uprv_free(m_search_);
     m_search_ = NULL;
 
@@ -131,9 +135,11 @@ StringSearch::StringSearch(const UnicodeString     &pattern,
         return;
     }
     m_strsrch_ = usearch_openFromCollator(m_pattern_.getBuffer(), 
-                                          m_pattern_.length(), m_text_.getBuffer(), 
+                                          m_pattern_.length(), 
+                                          m_text_.getBuffer(), 
                                           m_text_.length(), coll->ucollator, 
-                                          NULL, &status);
+                                          (UBreakIterator *)breakiter, 
+                                          &status);
     uprv_free(m_search_);
     m_search_ = NULL;
 
@@ -161,9 +167,11 @@ StringSearch::StringSearch(const StringSearch &that) :
     else {
         m_strsrch_ = usearch_openFromCollator(m_pattern_.getBuffer(), 
                                               m_pattern_.length(), 
-                                              m_text_.getBuffer(), m_text_.length(), 
+                                              m_text_.getBuffer(), 
+                                              m_text_.length(), 
                                               that.m_strsrch_->collator, 
-                                              NULL, &status);
+                                     (UBreakIterator *)that.m_breakiterator_, 
+                                              &status);
     }
     uprv_free(m_search_);
     m_search_ = NULL;

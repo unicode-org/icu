@@ -547,8 +547,8 @@ static void TestBreakIterator() {
     if (usearch_getBreakIterator(NULL) != NULL) {
         log_err("Expected NULL breakiterator from NULL string search\n");
     }
-    u_unescape(BREAKITERATOR[0].text, text, 128);
-    u_unescape(BREAKITERATOR[0].pattern, pattern, 32);
+    u_unescape(BREAKITERATOREXACT[0].text, text, 128);
+    u_unescape(BREAKITERATOREXACT[0].pattern, pattern, 32);
     strsrch = usearch_openFromCollator(pattern, -1, text, -1, EN_US_, NULL, 
                                        &status);
     if (U_FAILURE(status)) {
@@ -580,7 +580,8 @@ static void TestBreakIterator() {
 
     count = 0;
     while (count < 4) {
-        const SearchData     *search   = &(BREAKITERATOR[count]);     
+        // 0-3 test are fixed
+        const SearchData     *search   = &(BREAKITERATOREXACT[count]);     
               UCollator      *collator = getCollator(search->collator);
               UBreakIterator *breaker  = getBreakIterator(search->breaker);
     
@@ -602,7 +603,7 @@ static void TestBreakIterator() {
             usearch_close(strsrch);
             goto ENDTESTBREAKITERATOR;
         }
-        search   = &(BREAKITERATOR[count + 1]);
+        search   = &(BREAKITERATOREXACT[count + 1]);
         breaker  = getBreakIterator(search->breaker);
         usearch_setBreakIterator(strsrch, breaker, &status);
         if (U_FAILURE(status) || 
@@ -620,8 +621,8 @@ static void TestBreakIterator() {
         count += 2;
     }
     count = 0;
-    while (BREAKITERATOR[count].text != NULL) {
-         if (!assertEqual(BREAKITERATOR[count])) {
+    while (BREAKITERATOREXACT[count].text != NULL) {
+         if (!assertEqual(BREAKITERATOREXACT[count])) {
              log_err("Error at test number %d\n", count);
              goto ENDTESTBREAKITERATOR;
          }
@@ -1500,6 +1501,7 @@ static void TestBreakIteratorCanonical() {
 
     open();
     while (count < 4) {
+        // 0-3 test are fixed
               UChar           pattern[32];
               UChar           text[128];
         const SearchData     *search   = &(BREAKITERATORCANONICAL[count]);     
@@ -1527,7 +1529,7 @@ static void TestBreakIteratorCanonical() {
             usearch_close(strsrch);
             goto ENDTESTBREAKITERATOR;
         }
-        search   = &(BREAKITERATOR[count + 1]);
+        search   = &(BREAKITERATOREXACT[count + 1]);
         breaker  = getBreakIterator(search->breaker);
         usearch_setBreakIterator(strsrch, breaker, &status);
         if (U_FAILURE(status) || 
