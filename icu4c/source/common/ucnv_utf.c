@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2000, International Business Machines
+*   Copyright (C) 2000-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_utf.cpp

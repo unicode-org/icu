@@ -1,10 +1,10 @@
 /*
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *
 *  FILE NAME : putil.c (previously putil.cpp and ptypes.cpp)
 *
@@ -31,7 +31,7 @@
 *   06/28/99    stephen     Removed mutex locking in u_isBigEndian().
 *   08/04/99    jeffrey R.  Added OS/2 changes
 *   11/15/99    helena      Integrated S/390 IEEE support.
-*******************************************************************************
+******************************************************************************
 */
 
 #ifdef _AIX

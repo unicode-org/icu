@@ -1,13 +1,13 @@
-/*******************************************************************************
+/*****************************************************************************
  *
- *   Copyright (C) 1998-1999, International Business Machines
+ *   Copyright (C) 1998-2001, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *
  *   Change history:
  *
  *   06/29/2000  helena      Major rewrite of the callback APIs.
- *******************************************************************************/
+ *****************************************************************************/
 
 #ifndef CONVERT_H
 #define CONVERT_H

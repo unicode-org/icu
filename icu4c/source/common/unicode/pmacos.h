@@ -1,10 +1,10 @@
 /*
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *
 *  FILE NAME : pmacos.h
 *
@@ -14,7 +14,7 @@
 *   03/30/99    stephen     Added Linux support.
 *   04/13/99    stephen     Reworked for autoconf.
 *   08/26/00    srl         Moved to pmacos.h
-*******************************************************************************
+******************************************************************************
 */
 
 /* Define the platform we're on. */
@@ -49,7 +49,7 @@
  */
 
 #ifndef U_IOSTREAM_SOURCE
-#define U_IOSTREAM_SOURCE 198506	/* Wish we could use 199711 but that breaks while compiling chariter.cpp */
+#define U_IOSTREAM_SOURCE 198506    /* Wish we could use 199711 but that breaks while compiling chariter.cpp */
 #endif
 
 /* Determines whether specific types are available */
@@ -112,10 +112,10 @@ typedef unsigned short uint16_t;
 /* Character data types                                                      */
 /*===========================================================================*/
 
-#define U_HAVE_WCHAR_H		0
-#define U_SIZEOF_WCHAR_T	2
+#define U_HAVE_WCHAR_H      0
+#define U_SIZEOF_WCHAR_T    2
 
-#define U_HAVE_WCSCPY		0
+#define U_HAVE_WCSCPY       0
 
 /*===========================================================================*/
 /* Symbol import-export control                                              */
@@ -131,5 +131,5 @@ typedef unsigned short uint16_t;
 /* Programs used by ICU code                                                 */
 /*===========================================================================*/
 
-#define U_MAKE	"Make"
+#define U_MAKE  "Make"
 

@@ -1,10 +1,10 @@
 /*
-*****************************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1996-1999, International Business Machines
+*   Copyright (C) 1996-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*****************************************************************************************
+******************************************************************************
 *
 * File locid.h
 *
@@ -20,9 +20,9 @@
 *   04/24/97    aliu        Numerous changes per code review.
 *   08/18/98    stephen     Added tokenizeString(),changed getDisplayName()
 *   09/08/98    stephen     Moved definition of kEmptyString for Mac Port
-*   11/09/99	weiv        Added const char * getName() const;
+*   11/09/99    weiv        Added const char * getName() const;
 *   04/12/00    srl         removing unicodestring api's and cached hash code
-*****************************************************************************************
+******************************************************************************
 */
 
 #ifndef LOCID_H

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 1999-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -88,10 +88,10 @@ typedef void (*UConverterWriteSub) (UConverterFromUnicodeArgs *pArgs, int32_t of
  * If this function is not set, then ucnv_safeClone assumes that the converter has no private data that changes
  * after the converter is done opening.
  */
-typedef UConverter * (*UConverterSafeClone) (	const UConverter *cnv, 
-												void 			*stackBuffer,
-												int32_t 		*pBufferSize, 
-												UErrorCode 		*status);
+typedef UConverter * (*UConverterSafeClone) (const UConverter   *cnv, 
+                                             void               *stackBuffer,
+                                             int32_t            *pBufferSize, 
+                                             UErrorCode         *status);
 
 UBool CONVERSION_U_SUCCESS (UErrorCode err);
 
@@ -144,7 +144,7 @@ struct UConverterImpl {
     UConverterGetStarters getStarters;
     UConverterGetName getName;
     UConverterWriteSub writeSub;
-	UConverterSafeClone safeClone;
+    UConverterSafeClone safeClone;
 };
 
 extern const UConverterSharedData

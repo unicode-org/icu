@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -12,7 +12,7 @@
 *   04/02/97  aliu        Creation.
 *   04/07/99  srl         rewrite - C interface, multiple mutices
 *   05/13/99  stephen     Changed to umutex (from cmutex)
-********************************************************************************
+******************************************************************************
 */
 
 #ifndef UMUTEX_H

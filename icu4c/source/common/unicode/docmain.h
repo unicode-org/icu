@@ -1,12 +1,12 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-1999, International Business Machines Corporation and
+ * Copyright (c) 1997-2001, International Business Machines Corporation and
  * others. All Rights Reserved.
  *
  *  FILE NAME: DOCMAIN.h
  *
  *   Date          Name        Description
- *   12/11/2000    Ram	      Creation.
+ *   12/11/2000    Ram        Creation.
  */
 /* This file contains documentation for Doxygen and doesnot have
  * any significance with respect to C or C++ API

@@ -1,10 +1,10 @@
 /*
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 2000, International Business Machines
+*   Copyright (C) 2000-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *   file name:  ucnvmbcs.c
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)

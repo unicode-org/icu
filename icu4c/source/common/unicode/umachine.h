@@ -1,10 +1,10 @@
 /*
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1999-2000, International Business Machines
+*   Copyright (C) 1999-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *   file name:  umachine.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
@@ -35,10 +35,10 @@
  *   the UTF-handling macros made this unmaintainable.
  * 
  */
-/*===========================================================================*/
-/* Include platform-dependent definitions                                    */
-/* which are contained in the platform-specific file platform.h              */
-/*===========================================================================*/
+/*==========================================================================*/
+/* Include platform-dependent definitions                                   */
+/* which are contained in the platform-specific file platform.h             */
+/*==========================================================================*/
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #   include "unicode/pwin32.h"

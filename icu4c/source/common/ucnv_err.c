@@ -1,10 +1,10 @@
 /*
- *******************************************************************************
+ *****************************************************************************
  *
- *   Copyright (C) 1998-1999, International Business Machines
+ *   Copyright (C) 1998-2001, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
- *******************************************************************************
+ *****************************************************************************
  *
  *  ucnv_err.c
  *  Implements error behaviour functions called by T_UConverter_{from,to}Unicode
@@ -224,8 +224,8 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
   { 
       while (i < length)
       {
-        valueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;	/* adding % */
-        valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT;	/* adding U */
+        valueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;  /* adding % */
+        valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT; /* adding U */
         itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
         valueStringLength += 4;
       }
@@ -238,31 +238,31 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
           while (i < length)
           {
             valueString[valueStringLength++] = (UChar) UNICODE_RS_CODEPOINT;    /* adding \ */
-            valueString[valueStringLength++] = (UChar) UNICODE_U_LOW_CODEPOINT;	/* adding u */
+            valueString[valueStringLength++] = (UChar) UNICODE_U_LOW_CODEPOINT; /* adding u */
             itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
             valueStringLength += 4;
           }
           break;
 
         case UCNV_PRV_ESCAPE_C:
-            valueString[valueStringLength++] = (UChar) UNICODE_RS_CODEPOINT;	/* adding \ */
+            valueString[valueStringLength++] = (UChar) UNICODE_RS_CODEPOINT;    /* adding \ */
 
             if(length==2){
                 UChar32 temp = UTF16_GET_PAIR_VALUE(codeUnits[0],codeUnits[1]);
-                valueString[valueStringLength++] = (UChar) UNICODE_U_LOW_CODEPOINT;	/* adding u */
+                valueString[valueStringLength++] = (UChar) UNICODE_U_LOW_CODEPOINT; /* adding u */
                 valueStringLength += itou (valueString + valueStringLength, temp, 16, 8);
                 
             }
             else{
-                valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT;	/* adding U */
+                valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT; /* adding U */
                 valueStringLength += itou (valueString + valueStringLength, codeUnits[0], 16, 4);
             }
           break;
 
         case UCNV_PRV_ESCAPE_XML_DEC:
     
-            valueString[valueStringLength++] = (UChar) UNICODE_AMP_CODEPOINT;	/* adding & */
-            valueString[valueStringLength++] = (UChar) UNICODE_HASH_CODEPOINT;	/* adding # */
+            valueString[valueStringLength++] = (UChar) UNICODE_AMP_CODEPOINT;   /* adding & */
+            valueString[valueStringLength++] = (UChar) UNICODE_HASH_CODEPOINT;  /* adding # */
             if(length==2){
                 UChar32 temp = UTF16_GET_PAIR_VALUE(codeUnits[0],codeUnits[1]);
                 valueStringLength += itou (valueString + valueStringLength, temp, 10, 0);
@@ -275,8 +275,8 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
 
         case UCNV_PRV_ESCAPE_XML_HEX:
 
-            valueString[valueStringLength++] = (UChar) UNICODE_AMP_CODEPOINT;	/* adding & */
-            valueString[valueStringLength++] = (UChar) UNICODE_HASH_CODEPOINT;	/* adding # */
+            valueString[valueStringLength++] = (UChar) UNICODE_AMP_CODEPOINT;   /* adding & */
+            valueString[valueStringLength++] = (UChar) UNICODE_HASH_CODEPOINT;  /* adding # */
             valueString[valueStringLength++] = (UChar) UNICODE_X_LOW_CODEPOINT; /* adding x */
             if(length==2){
                 UChar32 temp = UTF16_GET_PAIR_VALUE(codeUnits[0],codeUnits[1]);
@@ -290,8 +290,8 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
        default:
           while (i < length)
           {
-            valueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;	/* adding % */
-            valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT;	            /* adding U */
+            valueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;  /* adding % */
+            valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT;             /* adding U */
             itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
             valueStringLength += 4;
           }
@@ -405,34 +405,32 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (
                  UConverterCallbackReason reason,
                  UErrorCode * err)
 {
-  UChar uniValueString[VALUE_STRING_LENGTH];
-  int32_t valueStringLength = 0;
-  int32_t i = 0;
-  
-  if (reason > UCNV_IRREGULAR)
-  {
-    return;
-  }
+    UChar uniValueString[VALUE_STRING_LENGTH];
+    int32_t valueStringLength = 0;
+    int32_t i = 0;
 
-  /* ### TODO:
-   * This should use the new ucnv_cbWrite...() functions instead of doing
-   * "tricks" as before we had a good callback API!
-   * (Actually, this function is not all that bad.)
-   */
-
-  while (i < length)
+    if (reason > UCNV_IRREGULAR)
     {
-      uniValueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;	/* adding % */
-      uniValueString[valueStringLength++] = (UChar) UNICODE_X_CODEPOINT;	/* adding X */
-      itou (uniValueString + valueStringLength, (uint8_t) codeUnits[i++], 16, 2);
-      valueStringLength += 2;
+        return;
+    }
+
+    /* ### TODO:
+     * This should use the new ucnv_cbWrite...() functions instead of doing
+     * "tricks" as before we had a good callback API!
+     * (Actually, this function is not all that bad.)
+     */
+
+    while (i < length)
+    {
+        uniValueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT; /* adding % */
+        uniValueString[valueStringLength++] = (UChar) UNICODE_X_CODEPOINT;    /* adding X */
+        itou (uniValueString + valueStringLength, (uint8_t) codeUnits[i++], 16, 2);
+        valueStringLength += 2;
     }
 
 
-  /* reset the error */
-  *err = U_ZERO_ERROR;
-  
-  ucnv_cbToUWriteUChars(toArgs, uniValueString, valueStringLength, 0, err);
+    /* reset the error */
+    *err = U_ZERO_ERROR;
 
-  return;
+    ucnv_cbToUWriteUChars(toArgs, uniValueString, valueStringLength, 0, err);
 }

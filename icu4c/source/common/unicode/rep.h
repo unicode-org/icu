@@ -1,14 +1,14 @@
 /*
-**********************************************************************
-* Copyright (C) 1999, International Business Machines Corporation and
+**************************************************************************
+* Copyright (C) 1999-2001, International Business Machines Corporation and
 * others. All Rights Reserved.
-**********************************************************************
+**************************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.  Ported from java.  Modified to
 *                           match current UnicodeString API.  Forced
 *                           to use name "handleReplaceBetween" because
 *                           of existing methods in UnicodeString.
-**********************************************************************
+**************************************************************************
 */
 
 #ifndef REP_H

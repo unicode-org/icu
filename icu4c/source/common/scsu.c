@@ -1,19 +1,19 @@
 /*
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 1999-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *
 * File scsu.c
 *
 * Modification History:
 *
 *   Date        Name        Description
-*   05/17/99    stephen	    Creation (ported from java UnicodeCompressor.java)
+*   05/17/99    stephen     Creation (ported from java UnicodeCompressor.java)
 *   09/21/99    stephen     Updated to handle data splits on decompression.
-*******************************************************************************
+******************************************************************************
 */
 
 #include "unicode/scsu.h"
@@ -106,13 +106,13 @@
 /* Local function prototypes */
 static int32_t scsu_makeIndex(int32_t c);
 static UBool scsu_inDynamicWindow(const UnicodeCompressor *comp,
-				   int32_t c, 
-				   int32_t whichWindow);
+                                  int32_t c, 
+                                  int32_t whichWindow);
 static UBool scsu_inStaticWindow(int32_t c, 
-				  int32_t whichWindow);
+                                 int32_t whichWindow);
 static UBool scsu_isCompressible(int32_t c);
 static int32_t scsu_findDynamicWindow(const UnicodeCompressor *comp,
-				      int32_t c);
+                                      int32_t c);
 static int32_t scsu_findStaticWindow(int32_t c);
 static int32_t scsu_getLRDefinedWindow(const UnicodeCompressor *comp);
 
@@ -237,11 +237,11 @@ scsu_init(UnicodeCompressor *comp)
 
 void
 scsu_compress(UnicodeCompressor *comp,
-	      uint8_t           **target,
-	      const uint8_t     *targetLimit,
-	      const UChar       **source,
-	      const UChar       *sourceLimit,
-	      UErrorCode        *status)
+              uint8_t           **target,
+              const uint8_t     *targetLimit,
+              const UChar       **source,
+              const UChar       *sourceLimit,
+              UErrorCode        *status)
 {
   /* the current position in the source unichar buffer*/
   const UChar *unicharBuffer = *source;
@@ -280,25 +280,25 @@ scsu_compress(UnicodeCompressor *comp,
  mainLoop:
   while( unicharBuffer < sourceLimit && byteBuffer < targetLimit) {
     switch( comp->fMode ) {
-	    
+
       /* main single byte mode compression loop*/
     case SINGLEBYTEMODE:
       while( unicharBuffer < sourceLimit && byteBuffer < targetLimit ) {
 
 	/* get current char*/
 	curUC = *unicharBuffer++;
-		
+
 	/* get next char*/
 	if( unicharBuffer < sourceLimit ) 
 	  nextUC = *unicharBuffer;
 	else
 	  nextUC = INVALIDCHAR;
-		
+
 	/* chars less than 0x0080 (excluding tags) go straight in
 	   stream */
 	if( curUC < 0x0080 ) {
 	  loByte = curUC;
-		    
+
 	  /* we need to check and make sure we don't
 	     accidentally write a single byte mode tag to
 	     the stream unless it's quoted */
@@ -310,15 +310,15 @@ scsu_compress(UnicodeCompressor *comp,
 	      --unicharBuffer; 
 	      goto finish;
 	    }
-			
+
 	    /* since we know the byte is less than 0x80, SQUOTE0
 	       will use static window 0, or Latin-1*/
 	    *byteBuffer++ = (uint8_t) SQUOTE0;
 	  }
-		    
+
 	  *byteBuffer++ = (uint8_t) loByte;
 	}
-		
+
 	/* if the char belongs to current window, convert it
 	   to a byte by adding the generic compression offset
 	   and subtracting the window's offset*/
@@ -328,7 +328,7 @@ scsu_compress(UnicodeCompressor *comp,
 	    (curUC - comp->fOffsets[ comp->fCurrentWindow ] 
 	     + COMPRESSIONOFFSET);
 	}
-	    
+
 	/* if char is not in compressible range, either switch
 	   to or quote from unicode*/
 	else if( ! scsu_isCompressible(curUC) ) {
@@ -341,7 +341,7 @@ scsu_compress(UnicodeCompressor *comp,
 	      --unicharBuffer; 
 	      goto finish;
 	    }
-		    
+
 	    *byteBuffer++ = (uint8_t) SQUOTEU;
 	    *byteBuffer++ = (uint8_t) (curUC >> 8);
 	    *byteBuffer++ = (uint8_t) curUC;
@@ -354,19 +354,19 @@ scsu_compress(UnicodeCompressor *comp,
 	      --unicharBuffer; 
 	      goto finish;
 	    }
-		    
+
 	    *byteBuffer++  = (uint8_t) SCHANGEU;
-			
+
 	    hiByte = curUC >> 8;
 	    loByte = curUC;
-			
+
 	    /* add quote Unicode tag */
 	    if( sUnicodeTagTable[hiByte] )
 	      *byteBuffer++ = (uint8_t) UQUOTEU;  
-			
+
 	    *byteBuffer++ = (uint8_t) hiByte;
 	    *byteBuffer++ = (uint8_t) loByte;
-			
+
 	    comp->fMode = UNICODEMODE;
 
 	    /* use a goto here for speed, to avoid having
@@ -375,7 +375,7 @@ scsu_compress(UnicodeCompressor *comp,
 	    goto mainLoop;
 	  }
 	}
-	    
+
 	/* if the char is in a currently defined dynamic
 	   window, figure out which one, and either switch to
 	   it or quote from it*/
@@ -386,7 +386,7 @@ scsu_compress(UnicodeCompressor *comp,
 	    forwardUC = *(unicharBuffer + 1);
 	  else
 	    forwardUC = INVALIDCHAR;
-		    
+
 	  /* all three chars in same window, switch to that
 	     window- inDynamicWindow will return FALSE for
 	     INVALIDCHAR*/
@@ -399,7 +399,7 @@ scsu_compress(UnicodeCompressor *comp,
 	      --unicharBuffer; 
 	      goto finish;
 	    }
-			
+
 	    *byteBuffer++ = (uint8_t) (SCHANGE0 + whichWindow);
 	    *byteBuffer++ = (uint8_t) 
 	      (curUC - comp->fOffsets[whichWindow] 
@@ -407,7 +407,7 @@ scsu_compress(UnicodeCompressor *comp,
 	    comp->fTimeStamps [ whichWindow ] = ++(comp->fTimeStamp);
 	    comp->fCurrentWindow  = whichWindow;
 	  }
-		    
+
 	  /* either only next char or neither in same
 	     window, so quote*/
 	  else {
@@ -418,14 +418,14 @@ scsu_compress(UnicodeCompressor *comp,
 	      --unicharBuffer; 
 	      goto finish;
 	    }
-		    
+
 	    *byteBuffer++ = (uint8_t) (SQUOTE0 + whichWindow);
 	    *byteBuffer++ = (uint8_t) 
 	      (curUC - comp->fOffsets[whichWindow] 
 	       + COMPRESSIONOFFSET);
 	  }
 	}
-		
+
 	/* if a static window is defined, and the following
 	   character is not in that static window, quote from
 	   the static window Note: to quote from a static
@@ -440,11 +440,11 @@ scsu_compress(UnicodeCompressor *comp,
 	    --unicharBuffer; 
 	    goto finish;
 	  }
-		
+
 	  *byteBuffer++ = (uint8_t) (SQUOTE0 + whichWindow);
 	  *byteBuffer++ = (uint8_t) (curUC - sOffsets[whichWindow]);
 	}
-	    
+
 	/* if a window is not defined, decide if we want to
 	   define a new one or switch to unicode mode*/
 	else {
@@ -452,13 +452,13 @@ scsu_compress(UnicodeCompressor *comp,
 	     compressible)*/
 	  curIndex = scsu_makeIndex(curUC);
 	  comp->fIndexCount[curIndex]++;
-		    
+
 	  /* look ahead*/
 	  if( (unicharBuffer + 1) < sourceLimit )
 	    forwardUC = *(unicharBuffer + 1);
 	  else
 	    forwardUC = INVALIDCHAR;
-		    
+
 	  /* if we have encountered this index at least once
 	     before, define a new window*/
 	  if( comp->fIndexCount[curIndex] > 1 ) {
@@ -472,18 +472,18 @@ scsu_compress(UnicodeCompressor *comp,
 
 	    /* get least recently defined window*/
 	    whichWindow = scsu_getLRDefinedWindow(comp);
-			
+
 	    *byteBuffer++ = (uint8_t) (SDEFINE0 + whichWindow);
 	    *byteBuffer++ = (uint8_t) curIndex;
 	    *byteBuffer++ = (uint8_t) 
 	      (curUC - sOffsetTable[curIndex] 
 	       + COMPRESSIONOFFSET);
-			
+
 	    comp->fOffsets[whichWindow] = sOffsetTable[curIndex];
 	    comp->fCurrentWindow = whichWindow;
 	    comp->fTimeStamps [whichWindow] = ++(comp->fTimeStamp);
 	  }
-		
+
 	  /* three chars in a row with same index, define a
 	     new window- makeIndex will return RESERVEDINDEX
 	     for INVALIDCHAR*/
@@ -498,18 +498,18 @@ scsu_compress(UnicodeCompressor *comp,
 	    }
 
 	    whichWindow = scsu_getLRDefinedWindow(comp);
-		    
+
 	    *byteBuffer++ = (uint8_t) (SDEFINE0 + whichWindow);
 	    *byteBuffer++ = (uint8_t) curIndex;
 	    *byteBuffer++ = (uint8_t) 
 	      (curUC - sOffsetTable[curIndex] 
 	       + COMPRESSIONOFFSET);
-			
+
 	    comp->fOffsets[whichWindow] = sOffsetTable[curIndex];
 	    comp->fCurrentWindow = whichWindow;
 	    comp->fTimeStamps [whichWindow] = ++(comp->fTimeStamp);
 	  }
-		
+
 	  /* only two chars in a row with same index, so
 	     switch to unicode mode makeIndex will return
 	     RESERVEDINDEX for INVALIDCHAR*/
@@ -522,19 +522,19 @@ scsu_compress(UnicodeCompressor *comp,
 	      --unicharBuffer; 
 	      goto finish;
 	    }
-			
+
 	    *byteBuffer++ = (uint8_t) SCHANGEU;
-			
+
 	    hiByte = curUC >> 8;
 	    loByte = curUC;
-			
+
 	    /* add quote Unicode tag */
 	    if( sUnicodeTagTable[hiByte] )
 	      *byteBuffer++ = (uint8_t) UQUOTEU;
-			
+
 	    *byteBuffer++ = (uint8_t) hiByte;
 	    *byteBuffer++ = (uint8_t) loByte;
-			
+
 	    comp->fMode = UNICODEMODE;
 
 	    /* use a goto here for speed, to avoid having
@@ -542,7 +542,7 @@ scsu_compress(UnicodeCompressor *comp,
 	       of the case */
 	    goto mainLoop;
 	  }
-		    
+
 	  /* three chars have different indices, so switch
 	     to unicode mode*/
 	  else {
@@ -553,19 +553,19 @@ scsu_compress(UnicodeCompressor *comp,
 	      --unicharBuffer; 
 	      goto finish;
 	    }
-		    
+
 	    *byteBuffer++ = (uint8_t) SCHANGEU;
-			
+
 	    hiByte = curUC >> 8;
 	    loByte = curUC;
-			
+
 	    /* add quote Unicode tag*/
 	    if( sUnicodeTagTable[ hiByte ] )
 	      *byteBuffer++ = (uint8_t) UQUOTEU;
-			
+
 	    *byteBuffer++ = (uint8_t) hiByte;
 	    *byteBuffer++ = (uint8_t) loByte;
-			
+
 	    comp->fMode = UNICODEMODE;
 
 	    /* use a goto here for speed, to avoid having
@@ -576,20 +576,20 @@ scsu_compress(UnicodeCompressor *comp,
 	}
       }
       break;
-	    
+
       /* main unicode mode compression loop*/
     case UNICODEMODE:
       while(unicharBuffer < sourceLimit && byteBuffer < targetLimit) {
 
 	/* get current char*/
 	curUC = *unicharBuffer++;  
-		
+
 	/* get next char*/
 	if( unicharBuffer < sourceLimit )
 	  nextUC = *unicharBuffer;
 	else
 	  nextUC = INVALIDCHAR;
-		
+
 	/* if we have two uncompressible unichars in a row,
 	   put the current char's bytes in the stream*/
 	if( ! scsu_isCompressible(curUC) 
@@ -602,23 +602,23 @@ scsu_compress(UnicodeCompressor *comp,
 	    --unicharBuffer; 
 	    goto finish;
 	  }
-		    
+
 	  hiByte = curUC >> 8;
 	  loByte = curUC;
-		    
+
 	  /* add quote Unicode tag*/
 	  if( sUnicodeTagTable[ hiByte ] )
 	    *byteBuffer++   = (uint8_t) UQUOTEU;  
-		    
+
 	  *byteBuffer++ = (uint8_t) hiByte;
 	  *byteBuffer++ = (uint8_t) loByte;
 	}
-		
+
 	/* bytes less than 0x80 can go straight in the stream,
 	   but in single-byte mode*/
 	else if( curUC < 0x0080 ) {
 	  loByte = curUC;
-		    
+
 	  /* if two chars in a row below 0x80 and the
 	     current char is not a single-byte mode tag,
 	     switch to single-byte mode*/
@@ -631,11 +631,11 @@ scsu_compress(UnicodeCompressor *comp,
 	      --unicharBuffer; 
 	      goto finish;
 	    }
-			
+
 	    /* use window 0, but any would work*/
 	    *byteBuffer++ = (uint8_t) UCHANGE0;
 	    *byteBuffer++ = (uint8_t) loByte;
-			
+
 	    comp->fCurrentWindow = 0;
 	    comp->fTimeStamps [0] = ++(comp->fTimeStamp);
 	    comp->fMode = SINGLEBYTEMODE;
@@ -645,7 +645,7 @@ scsu_compress(UnicodeCompressor *comp,
 	       of the case */
 	    goto mainLoop;
 	  }
-		    
+
 	  /* otherwise, just write the bytes to the stream
 	     (this will cover the case of only 1 char less
 	     than 0x80 and single-byte mode tags)*/
@@ -657,7 +657,7 @@ scsu_compress(UnicodeCompressor *comp,
 	      --unicharBuffer; 
 	      goto finish;
 	    }
-			
+
 	    /* since the character is less than 0x80, the
 	       high byte is always 0x00 - no need for
 	       (curUC >> 8)*/
@@ -665,7 +665,7 @@ scsu_compress(UnicodeCompressor *comp,
 	    *byteBuffer++ = (uint8_t) loByte;
 	  }
 	}
-		
+
 	/* figure out if the current unichar is in a defined
 	   window*/
 	else if( (whichWindow = scsu_findDynamicWindow(comp, curUC)) 
@@ -682,12 +682,12 @@ scsu_compress(UnicodeCompressor *comp,
 	      --unicharBuffer; 
 	      goto finish;
 	    }
-			
+
 	    *byteBuffer++ = (uint8_t) (UCHANGE0 + whichWindow);
 	    *byteBuffer++ = (uint8_t) 
 	      (curUC - comp->fOffsets[whichWindow] 
 	       + COMPRESSIONOFFSET);
-			
+
 	    comp->fTimeStamps[whichWindow] = ++(comp->fTimeStamp);
 	    comp->fCurrentWindow = whichWindow;
 	    comp->fMode = SINGLEBYTEMODE;
@@ -708,32 +708,32 @@ scsu_compress(UnicodeCompressor *comp,
 	      --unicharBuffer; 
 	      goto finish;
 	    }
-			
+
 	    hiByte = curUC >> 8;
 	    loByte = curUC;
-			
+
 	    /* add quote Unicode tag*/
 	    if( sUnicodeTagTable[ hiByte ] )
 	      *byteBuffer++ = (uint8_t) UQUOTEU;
-			
+
 	    *byteBuffer++ = (uint8_t) hiByte;
 	    *byteBuffer++ = (uint8_t) loByte;
 	  }
 	}
-		
+
 	/* char is not in a defined window*/
 	else {
 	  /* determine index for current char (char is
 	     compressible)*/
 	  curIndex = scsu_makeIndex(curUC);
 	  comp->fIndexCount[curIndex]++;
-		    
+
 	  /* look ahead*/
 	  if( (unicharBuffer + 1) < sourceLimit )
 	    forwardUC = *unicharBuffer;
 	  else
 	    forwardUC = INVALIDCHAR;
-		    
+
 	  /* if we have encountered this index at least once
 	     before, define a new window for it that hasn't
 	     previously been redefined*/
@@ -745,16 +745,16 @@ scsu_compress(UnicodeCompressor *comp,
 	      --unicharBuffer; 
 	      goto finish;
 	    }
-			
+
 	    /* get least recently defined window*/
 	    whichWindow = scsu_getLRDefinedWindow(comp);
-			
+
 	    *byteBuffer++ = (uint8_t) (UDEFINE0 + whichWindow);
 	    *byteBuffer++ = (uint8_t) curIndex;
 	    *byteBuffer++ = (uint8_t) 
 	      (curUC - sOffsetTable[curIndex] 
 	       + COMPRESSIONOFFSET);
-			
+
 	    comp->fOffsets[whichWindow] = sOffsetTable[curIndex];
 	    comp->fCurrentWindow = whichWindow;
 	    comp->fTimeStamps[whichWindow] = ++(comp->fTimeStamp);
@@ -765,7 +765,7 @@ scsu_compress(UnicodeCompressor *comp,
 	       of the case */
 	    goto mainLoop;
 	  }
-		
+
 	  /* if three chars in a row with the same index,
 	     define a new window makeIndex will return
 	     RESERVEDINDEX for INVALIDCHAR*/
@@ -778,15 +778,15 @@ scsu_compress(UnicodeCompressor *comp,
 	      --unicharBuffer; 
 	      goto finish;
 	    }
-			
+
 	    whichWindow = scsu_getLRDefinedWindow(comp);
-			
+
 	    *byteBuffer++ = (uint8_t) (UDEFINE0 + whichWindow);
 	    *byteBuffer++ = (uint8_t) curIndex;
 	    *byteBuffer++ = (uint8_t) 
 	      (curUC - sOffsetTable[curIndex] 
 	       + COMPRESSIONOFFSET);
-			
+
 	    comp->fOffsets[whichWindow] = sOffsetTable[curIndex];
 	    comp->fCurrentWindow = whichWindow;
 	    comp->fTimeStamps[whichWindow] = ++(comp->fTimeStamp);
@@ -797,7 +797,7 @@ scsu_compress(UnicodeCompressor *comp,
 	       of the case */
 	    goto mainLoop;
 	  }
-		    
+
 	  /* otherwise just quote the unicode, and save our
 	     windows for longer runs*/
 	  else {
@@ -808,14 +808,14 @@ scsu_compress(UnicodeCompressor *comp,
 	      --unicharBuffer; 
 	      goto finish;
 	    }
-			
+
 	    hiByte = curUC >> 8;
 	    loByte = curUC;
-			
+
 	    /* add quote Unicode tag*/
 	    if( sUnicodeTagTable[ hiByte ] )
 	      *byteBuffer++ = (uint8_t) UQUOTEU;
-			
+
 	    *byteBuffer++ = (uint8_t) hiByte;
 	    *byteBuffer++ = (uint8_t) loByte;
 	  }
@@ -836,11 +836,11 @@ scsu_compress(UnicodeCompressor *comp,
 
 void 
 scsu_decompress(UnicodeCompressor *comp,
-		UChar             **target,
-		const UChar       *targetLimit,
-		const uint8_t     **source,
-		const uint8_t     *sourceLimit,
-		UErrorCode        *status)
+                UChar             **target,
+                const UChar       *targetLimit,
+                const uint8_t     **source,
+                const uint8_t     *sourceLimit,
+                UErrorCode        *status)
 {
   /* the current position in the source byte buffer*/
   const uint8_t *byteBuffer = *source;
@@ -882,7 +882,7 @@ scsu_decompress(UnicodeCompressor *comp,
 
       /* verify there are newBytes bytes in byteBuffer */
       if(sourceLimit - byteBuffer < newBytes)
-	newBytes = sourceLimit - byteBuffer;
+        newBytes = sourceLimit - byteBuffer;
 
       uprv_memcpy(comp->fBuffer + comp->fBufferLength, byteBuffer, newBytes);
     }
@@ -892,7 +892,7 @@ scsu_decompress(UnicodeCompressor *comp,
 
     /* call self recursively to decompress the buffer */
     scsu_decompress(comp, &unicharBuffer, targetLimit,
-		    &newSource, newSourceLimit, status);
+                    &newSource, newSourceLimit, status);
 
     /* update the positions into the arrays */
     /* unicharBuffer was updated by the call to decompress above */
@@ -908,10 +908,10 @@ scsu_decompress(UnicodeCompressor *comp,
       /* single-byte mode decompression loop*/
     case SINGLEBYTEMODE:
       while(byteBuffer < sourceLimit && unicharBuffer < targetLimit) {
-		
+
 	/* get the next byte */
 	aByte = *byteBuffer++;
-		
+
 	switch(aByte) {
 	  /* All bytes from 0x80 through 0xFF are remapped to
 	     chars or surrogate pairs according to the currently
@@ -942,7 +942,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	case 0xF3: case 0xF4: case 0xF5: case 0xF6: case 0xF7:
 	case 0xF8: case 0xF9: case 0xFA: case 0xFB: case 0xFC:
 	case 0xFD: case 0xFE: case 0xFF: 
-		    
+
 	  /* For offsets <= 0xFFFF, convert to a single char by
 	     adding the window's offset and subtracting the
 	     generic compression offset*/
@@ -968,7 +968,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	      byteBuffer += comp->fBufferLength;
 	      goto finish;
 	    }
-		    
+
 	    normalizedBase = comp->fOffsets[comp->fCurrentWindow] 
 	      - 0x10000;
 	    *unicharBuffer++ = 
@@ -978,7 +978,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	       + (aByte & 0x7F));
 	  }
 	  break;
-		    
+
 	  /* bytes from 0x20 through 0x7F are treated as ASCII
 	     and are remapped to chars by padding the high byte
 	     (this is the same as quoting from static window 0)
@@ -1007,7 +1007,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	case 0x7F: 
 	  *unicharBuffer++ = (UChar) aByte;
 	  break;
-		    
+
 	  /* quote unicode*/
 	case SQUOTEU:
 	  /* verify we have two bytes following tag and if not,
@@ -1020,12 +1020,12 @@ scsu_decompress(UnicodeCompressor *comp,
 	    byteBuffer += comp->fBufferLength;
 	    goto finish;
 	  }
-		    
+
 	  aByte = *byteBuffer++;
 	  *unicharBuffer++ = 
 	    (UChar) (aByte << 8 | *byteBuffer++);
 	  break;
-		    
+
 	  /* switch to Unicode mode*/
 	case SCHANGEU:
 	  comp->fMode = UNICODEMODE;
@@ -1033,7 +1033,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	     fMode in the while loop at the top of the case */
 	  goto mainLoop;
 	  break;
-		    
+
 	  /* handle all quote tags*/
 	case SQUOTE0:   case SQUOTE1:   case SQUOTE2:  case SQUOTE3:
 	case SQUOTE4:   case SQUOTE5:   case SQUOTE6:  case SQUOTE7:
@@ -1047,7 +1047,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	    byteBuffer += comp->fBufferLength;
 	    goto finish;
 	  }
-		    
+
 	  /* if the byte is in the range 0x00 - 0x7F, use static
 	     window n- otherwise, use dynamic window n */
 	  dByte = *byteBuffer++;
@@ -1057,13 +1057,13 @@ scsu_decompress(UnicodeCompressor *comp,
 		      : (comp->fOffsets[aByte - SQUOTE0] 
 			 - COMPRESSIONOFFSET))); 
 	  break;
-		    
+
 	  /* handle all change tags*/
 	case SCHANGE0: case SCHANGE1: case SCHANGE2: case SCHANGE3: 
 	case SCHANGE4: case SCHANGE5: case SCHANGE6: case SCHANGE7:
 	  comp->fCurrentWindow = (aByte - SCHANGE0);
 	  break;
-		    
+
 	  /* handle all define tags*/
 	case SDEFINE0: case SDEFINE1: case SDEFINE2: case SDEFINE3:
 	case SDEFINE4: case SDEFINE5: case SDEFINE6: case SDEFINE7:
@@ -1077,12 +1077,12 @@ scsu_decompress(UnicodeCompressor *comp,
 	    byteBuffer += comp->fBufferLength;
 	    goto finish;
 	  }
-		    
+
 	  comp->fCurrentWindow = (aByte - SDEFINE0);
 	  comp->fOffsets[comp->fCurrentWindow] = 
 	    sOffsetTable[*byteBuffer++];
 	  break;
-		    
+
 	  /* handle define extended tag*/
 	case SDEFINEX:
 	  /* verify we have two bytes following tag and if not,
@@ -1095,29 +1095,29 @@ scsu_decompress(UnicodeCompressor *comp,
 	    byteBuffer += comp->fBufferLength;
 	    goto finish;
 	  }
-		    
+
 	  aByte = *byteBuffer++;
 	  comp->fCurrentWindow  = (aByte & 0xE0) >> 5;
 	  comp->fOffsets[comp->fCurrentWindow] = 0x10000 
 	    + (0x80 
 	       * (((aByte & 0x1F) << 8) | *byteBuffer++));
 	  break;
-		    
+
 	  /* reserved, shouldn't happen*/
 	case SRESERVED:
 	  break;
-		    
+
 	} /* end switch*/
       } /* end while*/
       break;
-	    
+
       /* unicode mode decompression loop*/
     case UNICODEMODE:
       while( byteBuffer < sourceLimit && unicharBuffer < targetLimit ) {
 
 	/* get the next byte */
 	aByte = *byteBuffer++;
-	    
+
 	switch( aByte ) {
 	  /* handle all define tags*/
 	case UDEFINE0: case UDEFINE1: case UDEFINE2: case UDEFINE3:
@@ -1132,7 +1132,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	    byteBuffer += comp->fBufferLength;
 	    goto finish;
 	  }
-  
+
 	  comp->fCurrentWindow = (aByte - UDEFINE0);
 	  comp->fOffsets[comp->fCurrentWindow] = 
 	    sOffsetTable[*byteBuffer++];
@@ -1141,7 +1141,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	     fMode in the while loop at the top of the case */
 	  goto mainLoop;
 	  break;
-		    
+
 	  /* handle define extended tag*/
 	case UDEFINEX:
 	  /* verify we have two bytes following tag if not,
@@ -1154,7 +1154,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	    byteBuffer += comp->fBufferLength;
 	    goto finish;
 	  }
-  
+
 	  aByte  = *byteBuffer++;
 	  comp->fCurrentWindow = (aByte & 0xE0) >> 5;
 	  comp->fOffsets[comp->fCurrentWindow] = 0x10000 
@@ -1165,7 +1165,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	     fMode in the while loop at the top of the case */
 	  goto mainLoop;
 	  break;
-		
+
 	  /* handle all change tags*/
 	case UCHANGE0: case UCHANGE1: case UCHANGE2: case UCHANGE3:
 	case UCHANGE4: case UCHANGE5: case UCHANGE6: case UCHANGE7:
@@ -1175,7 +1175,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	     fMode in the while loop at the top of the case */
 	  goto mainLoop;
 	  break;
-		    
+
 	  /* quote unicode*/
 	case UQUOTEU:
 	  /* verify we have two bytes following tag if not,
@@ -1188,7 +1188,7 @@ scsu_decompress(UnicodeCompressor *comp,
 	    byteBuffer += comp->fBufferLength;
 	    goto finish;
 	  }
-		    
+
 	  aByte = *byteBuffer++;
 	  *unicharBuffer++ = (UChar) 
 	    (aByte << 8 | *byteBuffer++);
@@ -1208,7 +1208,7 @@ scsu_decompress(UnicodeCompressor *comp,
 
 	  *unicharBuffer++ = (UChar) (aByte << 8 | *byteBuffer++);
 	  break;
-		
+
 	} /* end switch*/
       } /* end while*/
       break;
@@ -1247,7 +1247,7 @@ scsu_reset(UnicodeCompressor *comp)
   for(i = 0; i < USCSU_NUM_WINDOWS; i++) {
     comp->fTimeStamps[i]          = 0;
   }
-    
+
   /* reset count of seen indices*/
   for( i = 0; i <= USCSU_MAX_INDEX; i++ ) {
     comp->fIndexCount[i] = 0;
@@ -1306,11 +1306,11 @@ scsu_makeIndex(int32_t c)
  */
 static UBool 
 scsu_inDynamicWindow(const UnicodeCompressor *comp,
-		     int32_t c, 
-		     int32_t whichWindow)
+                     int32_t c, 
+                     int32_t whichWindow)
 {
   return (UBool)(c >= comp->fOffsets[whichWindow] 
-	  && c < (comp->fOffsets[whichWindow] + 0x80));
+      && c < (comp->fOffsets[whichWindow] + 0x80));
 }
 
 /**
@@ -1322,7 +1322,7 @@ scsu_inDynamicWindow(const UnicodeCompressor *comp,
  */
 static UBool 
 scsu_inStaticWindow(int32_t c, 
-		    int32_t whichWindow)
+                    int32_t whichWindow)
 {
   return (UBool)(c >= sOffsets[whichWindow] && c < (sOffsets[whichWindow] + 0x80));
 }
@@ -1346,7 +1346,7 @@ scsu_isCompressible(int32_t c)
  */
 static int32_t 
 scsu_findDynamicWindow(const UnicodeCompressor *comp,
-		       int32_t c)
+                       int32_t c)
 {
   int32_t i;
     
@@ -1369,13 +1369,13 @@ static int32_t
 scsu_findStaticWindow(int32_t c)
 {
   int32_t i;
-    
+
   for(i = 0; i < USCSU_NUM_STATIC_WINDOWS; i++) {
     if(scsu_inStaticWindow(c, i)) {
       return i;
     }
   }
-    
+
   return INVALIDWINDOW;
 }
 
@@ -1386,7 +1386,7 @@ scsu_getLRDefinedWindow(const UnicodeCompressor *comp)
   int32_t leastRU         = INT32_MAX;
   int32_t whichWindow     = INVALIDWINDOW;
   int32_t i;
-  
+
   /* find least recently used window*/
   for(i = 0; i < USCSU_NUM_WINDOWS; i++ ) {
     if(comp->fTimeStamps[i] < leastRU) {
@@ -1394,6 +1394,6 @@ scsu_getLRDefinedWindow(const UnicodeCompressor *comp)
       whichWindow = i;
     }
   }
-    
+
   return whichWindow;
 }

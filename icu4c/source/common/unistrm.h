@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *  FILE NAME : unistrm.h
@@ -12,7 +12,7 @@
 *   03/26/97    aliu        Added indexOf(UChar,).
 *   04/24/97    aliu        Numerous changes per code review.
 *   05/06/97    helena      Added isBogus().
-*****************************************************************************************
+******************************************************************************
 */         
 #ifndef UNISTRM_H
 #define UNISTRM_H

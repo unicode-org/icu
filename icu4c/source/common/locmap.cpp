@@ -1,10 +1,10 @@
 /*
  **********************************************************************
- *   Copyright (C) 1996-1999, International Business Machines
+ *   Copyright (C) 1996-2001, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.19 $
+// $Revision: 1.20 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -19,7 +19,7 @@
 // Kathleen Wilson, 4/30/96
 //
 //  Date        Name        Description
-//  3/11/97     aliu        Fixed off-by-one bug in assignment operator.  Added
+//  3/11/97     aliu        Fixed off-by-one bug in assignment operator. Added
 //                          setId() method and safety check against 
 //                          MAX_ID_LENGTH.
 // 04/23/99     stephen     Added C wrapper for convertToPosix.

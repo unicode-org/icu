@@ -1,10 +1,10 @@
 /*
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *
 * File UMEMSTRM.C
 *
@@ -14,7 +14,7 @@
 *
 *   Date        Name        Description
 *   5/17/00      weiv          Created
-*******************************************************************************
+******************************************************************************
 */
 
 #include "umemstrm.h"
@@ -146,30 +146,30 @@ U_CAPI const uint8_t * U_EXPORT2 uprv_mstrm_getCurrentBuffer(UMemoryStream *MS, 
 
 U_CAPI int32_t U_EXPORT2 uprv_mstrm_skip(UMemoryStream *MS, int32_t len){
     if(MS->fError == FALSE) {
-		MS->fReadPos+=len;
+        MS->fReadPos+=len;
     } else {
-		return 0;
+        return 0;
     }
-	if(MS->fReadPos>MS->fPos) {
-		MS->fError = TRUE;
-		return 0;
-	} else {
-		return len;
-	}
+    if(MS->fReadPos>MS->fPos) {
+        MS->fError = TRUE;
+        return 0;
+    } else {
+        return len;
+    }
 }
 
 U_CAPI int32_t U_EXPORT2 uprv_mstrm_jump(UMemoryStream *MS, const uint8_t *where){
     if(MS->fError == FALSE) {
-		MS->fReadPos=(where-MS->fStart);
+        MS->fReadPos=(where-MS->fStart);
     } else {
-		return 0;
+        return 0;
     }
-	if(MS->fReadPos>MS->fPos) {
-		MS->fError = TRUE;
-		return 0;
-	} else {
-		return where-MS->fStart;
-	}
+    if(MS->fReadPos>MS->fPos) {
+        MS->fError = TRUE;
+        return 0;
+    } else {
+        return where-MS->fStart;
+    }
 }
 
 U_CAPI void U_EXPORT2

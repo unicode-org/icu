@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1996-1999, International Business Machines
+*   Copyright (C) 1996-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -153,7 +153,7 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
       /* Big-endian ASCII */
 #     define U_ICUDATA_TYPE_LETTER "b"
 #   else
-	  /* Little-endian ASCII */
+      /* Little-endian ASCII */
 #     define U_ICUDATA_TYPE_LETTER "l"
 #   endif
 #endif
@@ -430,9 +430,9 @@ U_CAPI const char * U_EXPORT2
 u_errorName(UErrorCode code);
 
 #define U_COPYRIGHT_STRING \
-  " Copyright (C) 2000, International Business Machines Corporation and others.  All Rights Reserved. "
+  " Copyright (C) 2001, International Business Machines Corporation and others. All Rights Reserved. "
 
-#define U_COPYRIGHT_STRING_LENGTH  160
+#define U_COPYRIGHT_STRING_LENGTH  128
 
 /**
  * Mutex data type.

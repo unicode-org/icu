@@ -1,10 +1,10 @@
 /*
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *
 * File scsu.h
 *
@@ -13,7 +13,7 @@
 *   Date        Name        Description
 *   05/17/99    stephen	    Creation (ported from java UnicodeCompressor.java)
 *   09/21/99    stephen     Updated to handle data splits on decompression.
-*******************************************************************************
+******************************************************************************
 */
 
 #ifndef SCSU_H

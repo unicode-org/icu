@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1997-1999, International Business Machines
+ *   Copyright (C) 1997-2001, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 *
@@ -25,7 +25,7 @@
 *   07/21/99    stephen     Added U_CFUNC setDefault
 *   11/09/99    weiv        Added const char * getName() const;
 *   04/12/00    srl         removing unicodestring api's and cached hash code
-*******************************************************************************
+******************************************************************************
 */
 
 

@@ -1,10 +1,10 @@
 /*
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 2000, International Business Machines
+*   Copyright (C) 2000-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *   file name:  ucnvscsu.c
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
@@ -15,8 +15,8 @@
 *
 *   This is an implementation of the Standard Compression Scheme for Unicode
 *   as defined in http://www.unicode.org/unicode/reports/tr6/ .
-*   Reserved commands and window settings are treated as illegal sequences and will
-*   result in callback calls.
+*   Reserved commands and window settings are treated as illegal sequences and
+*   will result in callback calls.
 */
 
 #include "unicode/utypes.h"
@@ -26,7 +26,7 @@
 #include "ucnv_cnv.h"
 #include "cmemory.h"
 
-/* Prototypes --------------------------------------------------------------- */
+/* Prototypes ------------------------------------------------------------- */
 
 /* Keep these here to make finicky compilers happy */
 
@@ -56,10 +56,10 @@ _SCSUWriteSub(UConverterFromUnicodeArgs *pArgs,
                int32_t offsetIndex,
                UErrorCode *pErrorCode);
 U_CFUNC UConverter * 
-_SCSUSafeClone(const UConverter 	*cnv, 
-			  void *stackBuffer, 
-			  int32_t *pBufferSize, 
-			  UErrorCode *status);
+_SCSUSafeClone(const UConverter     *cnv, 
+              void *stackBuffer, 
+              int32_t *pBufferSize, 
+              UErrorCode *status);
 
 
 /* SCSU definitions --------------------------------------------------------- */
@@ -1370,37 +1370,36 @@ _SCSUWriteSub(UConverterFromUnicodeArgs *pArgs,
 /* structure for SafeClone calculations */
 struct cloneStruct
 {
-	UConverter cnv;
-	SCSUData mydata;
+    UConverter cnv;
+    SCSUData mydata;
 };
 
 U_CFUNC UConverter * 
-_SCSUSafeClone(
-			const UConverter *cnv, 
-			void *stackBuffer, 
-			int32_t *pBufferSize, 
-			UErrorCode *status)
+_SCSUSafeClone(const UConverter *cnv, 
+               void *stackBuffer, 
+               int32_t *pBufferSize, 
+               UErrorCode *status)
 {
-	struct cloneStruct * localClone;
-	int32_t bufferSizeNeeded = sizeof(struct cloneStruct);
+    struct cloneStruct * localClone;
+    int32_t bufferSizeNeeded = sizeof(struct cloneStruct);
 
     if (U_FAILURE(*status)){
         return 0;
     }
-	
-	if (*pBufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
-		*pBufferSize = 	bufferSizeNeeded;
-		return 0;
+
+    if (*pBufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+        *pBufferSize = bufferSizeNeeded;
+        return 0;
     }
 
     localClone = (struct cloneStruct *)stackBuffer;
     memcpy(&localClone->cnv, cnv, sizeof(UConverter));
-	localClone->cnv.isCopyLocal = TRUE;
-	
-	memcpy(&localClone->mydata, cnv->extraInfo, sizeof(SCSUData));
-	localClone->cnv.extraInfo = &localClone->mydata;
+    localClone->cnv.isCopyLocal = TRUE;
 
-	return &localClone->cnv;
+    memcpy(&localClone->mydata, cnv->extraInfo, sizeof(SCSUData));
+    localClone->cnv.extraInfo = &localClone->mydata;
+
+    return &localClone->cnv;
 }
 
 
@@ -1426,7 +1425,7 @@ static const UConverterImpl _SCSUImpl={
     NULL,
     _SCSUGetName,
     _SCSUWriteSub,
-	_SCSUSafeClone
+    _SCSUSafeClone
 };
 
 static const UConverterStaticData _SCSUStaticData={

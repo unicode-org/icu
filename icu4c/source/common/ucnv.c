@@ -1,10 +1,10 @@
 /*
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *
 *  ucnv.c:
 *  Implements APIs for the ICU's codeset conversion library;
@@ -155,42 +155,42 @@ UConverter *ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pB
         return 0;
     }
     
-	if (cnv->sharedData->impl->safeClone != NULL) {
-			/* call the custom safeClone function for sizing */
-		bufferSizeNeeded = 0;
-		cnv->sharedData->impl->safeClone(cnv, stackBuffer, &bufferSizeNeeded, status);
-	}
-	else
-	{
-		bufferSizeNeeded = sizeof(UConverter);
-	}
+    if (cnv->sharedData->impl->safeClone != NULL) {
+        /* call the custom safeClone function for sizing */
+        bufferSizeNeeded = 0;
+        cnv->sharedData->impl->safeClone(cnv, stackBuffer, &bufferSizeNeeded, status);
+    }
+    else
+    {
+        bufferSizeNeeded = sizeof(UConverter);
+    }
 
-	if (*pBufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
-		*pBufferSize = 	bufferSizeNeeded;
-		return 0;
+    if (*pBufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+        *pBufferSize = bufferSizeNeeded;
+        return 0;
     }
 
     if (*pBufferSize < bufferSizeNeeded || stackBuffer == NULL)
     {
-		/* allocate one here...*/
-		localConverter = createConverter (ucnv_getName (cnv, status), status);
-		if (U_SUCCESS(*status))
-		{
-			*status = U_SAFECLONE_ALLOCATED_ERROR;
-		}
+        /* allocate one here...*/
+        localConverter = createConverter (ucnv_getName (cnv, status), status);
+        if (U_SUCCESS(*status))
+        {
+            *status = U_SAFECLONE_ALLOCATED_ERROR;
+        }
     } else {
-		if (cnv->sharedData->impl->safeClone != NULL) {
-			/* call the custom safeClone function */
-			localConverter = cnv->sharedData->impl->safeClone(cnv, stackBuffer, pBufferSize, status);
-		}
-		else
-		{
-    		localConverter = (UConverter *)stackBuffer;
-    		memcpy(localConverter, cnv, sizeof(UConverter));
-			localConverter->isCopyLocal = TRUE;
-		}
-	}
-	return localConverter;    
+        if (cnv->sharedData->impl->safeClone != NULL) {
+            /* call the custom safeClone function */
+            localConverter = cnv->sharedData->impl->safeClone(cnv, stackBuffer, pBufferSize, status);
+        }
+        else
+        {
+            localConverter = (UConverter *)stackBuffer;
+            memcpy(localConverter, cnv, sizeof(UConverter));
+            localConverter->isCopyLocal = TRUE;
+        }
+    }
+    return localConverter;
 }
 
 
@@ -346,14 +346,14 @@ void   ucnv_getSubstChars (const UConverter * converter,
   if (U_FAILURE (*err))
     return;
 
-  if (*len < converter->subCharLen)	/*not enough space in subChars */
+  if (*len < converter->subCharLen) /*not enough space in subChars */
     {
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
       return;
     }
 
-  uprv_memcpy (mySubChar, converter->subChar, converter->subCharLen);	/*fills in the subchars */
-  *len = converter->subCharLen;	/*store # of bytes copied to buffer */
+  uprv_memcpy (mySubChar, converter->subChar, converter->subCharLen);   /*fills in the subchars */
+  *len = converter->subCharLen; /*store # of bytes copied to buffer */
 
   return;
 }
@@ -374,8 +374,8 @@ void   ucnv_setSubstChars (UConverter * converter,
       return;
     }
 
-  uprv_memcpy (converter->subChar, mySubChar, len);	/*copies the subchars */
-  converter->subCharLen = len;	/*sets the new len */
+  uprv_memcpy (converter->subChar, mySubChar, len); /*copies the subchars */
+  converter->subCharLen = len;  /*sets the new len */
 
   /*
    * There is currently (2001Feb) no separate API to set/get subChar1.
