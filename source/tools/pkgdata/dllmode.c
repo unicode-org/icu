@@ -28,69 +28,6 @@
 #include "pkgtypes.h"
 #include "makefile.h"
 
-static void
-writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
-{
-  const char *p, *baseName;
-  char *tmpPtr;
-  char tmp[1024];
-  char stanza[1024];
-  char cfile[1024];
-  CharList *oTail = NULL;
-  CharList *infiles;
-  CharList *parents = NULL, *commands = NULL;
-
-  infiles = o->filePaths;
-
-  for(;infiles;infiles = infiles->next) {
-    baseName = findBasename(infiles->str);
-    p = uprv_strrchr(baseName, '.');
-    if( (p == NULL) || (*p == '\0' ) ) {
-      continue;
-    }
-
-    uprv_strncpy(tmp, baseName, p-baseName);
-    p++;
-
-    uprv_strcpy(tmp+(p-1-baseName), "_"); /* to append */
-    uprv_strcat(tmp, p);
-    uprv_strcat(tmp, OBJ_SUFFIX);
-
-    /* iSeries cannot have '-' in the .o objects. */
-    for( tmpPtr = tmp; *tmpPtr; tmpPtr++ ) {
-      if ( *tmpPtr == '-' ) {
-        *tmpPtr = '_';
-      }
-    }
-
-    *objects = pkg_appendToList(*objects, &oTail, uprv_strdup(tmp));
-
-    /* write source list */
-    strcpy(cfile,tmp);
-    strcpy(cfile+strlen(cfile)-strlen(OBJ_SUFFIX), ".c" );
-
-
-    /* Make up parents.. */
-    parents = pkg_appendToList(parents, NULL, uprv_strdup(infiles->str));
-
-    /* make up commands.. */
-    sprintf(stanza, "$(INVOKE) $(GENCCODE) -n $(ENTRYPOINT) -d $(TEMP_DIR) $<");
-
-    commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
-
-    sprintf(stanza, "$(COMPILE.c) -o $@ $(TEMP_DIR)/%s", cfile);
-    commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
-
-    sprintf(stanza, "$(TEMP_DIR)/%s", tmp);
-    pkg_mak_writeStanza(makefile, o, stanza, parents, commands);
-
-    pkg_deleteList(parents);
-    pkg_deleteList(commands);
-    parents = NULL;
-    commands = NULL;
-  }
-
-}
 
 void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 {
@@ -173,7 +110,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   T_FileStream_writeLine(makefile, tmp);
 
   /* Write compile rules */
-  writeObjRules(o, makefile, &objects);
+  pkg_mak_writeObjRules(o, makefile, &objects, OBJ_SUFFIX);
 
   sprintf(tmp, "# List file for gencmn:\n"
           "CMNLIST=%s%s$(NAME)_dll.lst\n\n",
