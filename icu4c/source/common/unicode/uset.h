@@ -283,6 +283,7 @@ uset_isEmpty(const USet* set);
 /**
  * Returns TRUE if the given USet contains the given character.
  * @param set the set
+ * @param c The codepoint to check for within the set
  * @return true if set contains c
  * @draft ICU 2.4
  */
@@ -292,6 +293,7 @@ uset_contains(const USet* set, UChar32 c);
 /**
  * Returns TRUE if the given USet contains all characters c
  * where start <= c && c <= end.
+ * @param set the set
  * @param start the first character of the range to test, inclusive
  * @param end the last character of the range to test, inclusive
  * @return TRUE if set contains the range
@@ -427,6 +429,8 @@ uset_getSerializedSet(USerializedSet* fillSet, const uint16_t* src, int32_t srcL
 /**
  * Set the USerializedSet to contain the given character (and nothing
  * else).
+ * @param fillSet pointer to result
+ * @param c The codepoint to set
  * @draft ICU 2.4
  */
 U_CAPI void U_EXPORT2
@@ -436,6 +440,7 @@ uset_setSerializedToOne(USerializedSet* fillSet, UChar32 c);
  * Returns TRUE if the given USerializedSet contains the given
  * character.
  * @param set the serialized set
+ * @param c The codepoint to check for within the set
  * @return true if set contains c
  * @draft ICU 2.4
  */

@@ -140,8 +140,6 @@ public:
      *                          See setStartRule() for a complete explanation.
      * @param savingsStartTime  The daylight savings starting time, expressed as the
      *                          number of milliseconds after midnight.
-     * @param savingsStartTimeMode Whether the start time is local wall time, local
-     *                          standard time, or UTC time. Default is local wall time.
      * @param savingsEndMonth   The daylight savings ending month. Month is
      *                          0-based. eg, 0 for January.
      * @param savingsEndDayOfWeekInMonth     The daylight savings ending day-of-week-in-month.
@@ -150,10 +148,6 @@ public:
      *                          See setStartRule() for a complete explanation.
      * @param savingsEndTime    The daylight savings ending time, expressed as the
      *                          number of milliseconds after midnight.
-     * @param savingsEndTimeMode Whether the end time is local wall time, local
-     *                          standard time, or UTC time. Default is local wall time.
-     * @param savingsDST        The number of milliseconds added to standard time
-     *                          to get DST time. Default is one hour.
      * @param status            An UErrorCode to receive the status.
      * @stable ICU 2.0
      */
@@ -206,6 +200,7 @@ public:
         int8_t savingsEndMonth, int8_t savingsEndDayOfWeekInMonth,
         int8_t savingsEndDayOfWeek, int32_t savingsEndTime,
         int32_t savingsDST, UErrorCode& status);
+
     /**
      * Construct a SimpleTimeZone with the given raw GMT offset, time zone ID,
      * and times to start and end daylight savings time. To create a TimeZone that
@@ -230,6 +225,8 @@ public:
      *                          See setStartRule() for a complete explanation.
      * @param savingsStartTime  The daylight savings starting time, expressed as the
      *                          number of milliseconds after midnight.
+     * @param savingsStartTimeMode Whether the start time is local wall time, local
+     *                          standard time, or UTC time. Default is local wall time.
      * @param savingsEndMonth   The daylight savings ending month. Month is
      *                          0-based. eg, 0 for January.
      * @param savingsEndDayOfWeekInMonth     The daylight savings ending day-of-week-in-month.
@@ -389,8 +386,6 @@ public:
      * @param time          The time of that day (number of millis after midnight)
      *                      when DST takes effect in local wall time, which is
      *                      standard time in this case.
-     * @param mode whether the time is local wall time, local standard time,
-     * or UTC time. Default is local wall time.
      * @param after         If true, this rule selects the first dayOfWeek on
      *                      or after dayOfMonth.  If false, this rule selects
      *                      the last dayOfWeek on or before dayOfMonth.

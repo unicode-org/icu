@@ -62,10 +62,10 @@ public:
     /**
      * Creates a Formattable object with a UDate instance.
      * @param d the UDate instance.
-     * @param ISDATE the flag to indicate this is a date.
+     * @param flag the flag to indicate this is a date. Always set it to kIsDate
      * @stable ICU 2.0  
      */
-    Formattable(UDate d, ISDATE);
+    Formattable(UDate d, ISDATE flag);
     /**
      * Creates a Formattable object with a double number.
      * @param d the double number.
