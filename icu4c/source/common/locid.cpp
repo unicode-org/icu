@@ -48,8 +48,8 @@
 /**
  * static variables
  */
-Locale*  availableLocaleList = NULL;
-int32_t  availableLocaleListCount;
+static Locale*  availableLocaleList = NULL;
+static int32_t  availableLocaleListCount;
 
 #ifdef ICU_LOCID_USE_DEPRECATES
 Locale Locale::fgDefaultLocale;
@@ -133,9 +133,9 @@ const Locale::LocaleProxy Locale::CANADA   = {eCANADA};
 const Locale::LocaleProxy Locale::CANADA_FRENCH={eCANADA_FRENCH};
 
 #define LOCALE_CACHE_SIZE (eMAX_LOCALES * sizeof(Locale))
-uint8_t gByteLocaleCache[LOCALE_CACHE_SIZE];
+static uint8_t gByteLocaleCache[LOCALE_CACHE_SIZE];
 
-Locale *gLocaleCache = NULL;
+static Locale *gLocaleCache = NULL;
 
 Locale::LocaleProxy::operator const Locale&(void) const
 {
@@ -919,20 +919,8 @@ Locale::initLocaleCache(void)
 
         for (int idx = 0; idx < eMAX_LOCALES; idx++)
         {
-            if (localeCache[idx].fullName == newLocales[idx].fullNameBuffer)
-            {
-                localeCache[idx].fullName = localeCache[idx].fullNameBuffer;
-            }
-            else
-            {
-                // Since we did a memcpy we need to make sure that the local
-                // Locales do not destroy the memory of the permanent locales.
-                //
-                // This can be a memory leak, but this code shouldn't normally
-                // get executed.
-                localeCache[idx].fullName = new char[uprv_strlen(localeCache[idx].fullNameBuffer) + 1];
-                uprv_strcpy(localeCache[idx].fullName, localeCache[idx].fullNameBuffer);
-            }
+            /* Buffers should be small enough that no leaks occur */
+            localeCache[idx].fullName = localeCache[idx].fullNameBuffer;
         }
         gLocaleCache = localeCache;
     }
