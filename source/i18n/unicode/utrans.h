@@ -163,7 +163,7 @@ typedef struct UTransPosition {
  * @param rulesLength the length of the rules, or -1 if the rules
  * are zero-terminated.
  * @param dir the desired direction
- * @param parseErr a pointer to a UParseError struct to receive the
+ * @param parseError a pointer to a UParseError struct to receive the
  * details of any parsing errors. This parameter may be NULL if no
  * parsing error details are desired.
  * @param status a pointer to the UErrorCode
