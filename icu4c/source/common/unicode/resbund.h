@@ -63,7 +63,7 @@ U_NAMESPACE_BEGIN
  * Resource bundles in ICU4C are currently defined using text files which conform to the following
  * <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/bnf_rb.txt">BNF definition</a>.
  * More on resource bundle concepts and syntax can be found in the 
- * <a href="http://oss.software.ibm.com/icu/userguide/Fallbackmechanism.html">users guide</a>.
+ * <a href="http://oss.software.ibm.com/icu/userguide/ResourceManagement.html">Users Guide</a>.
  * <P>
  *
  * The ResourceBundle class is not suitable for subclassing.
