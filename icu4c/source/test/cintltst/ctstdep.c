@@ -213,7 +213,7 @@ TestDeprecatedNumFmtAPI(void)
       int32_t lneed, i;
       UFieldPosition pos;
       UErrorCode status = U_ZERO_ERROR;
-      const char* locale[]={"fr_CA", "de_DE", "fr_FR"};
+      const char* locale[]={"fr_CA", "de_DE_PREEURO", "fr_FR_PREEURO"};
       const char* result[]={"1,50 $", "1,50 DM", "1,50 F"};
       log_verbose("\nTesting the number format with different currency patterns\n");
       for(i=0; i < 3; i++)
