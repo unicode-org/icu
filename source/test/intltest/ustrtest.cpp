@@ -549,17 +549,6 @@ UnicodeStringTest::TestMiscellaneous()
     for (i = 0; i < test2.length(); i++)
         if (test2[i] != test4[i])
             errln(UnicodeString("getUChars() failed: strings differ at position ") + i);
-
-    test4 = test1.orphanStorage();
-
-    if (test1.length() != 0)
-        errln("orphanStorage() failed: orphaned string's contents is " + test1);
-
-    for (i = 0; i < test2.length(); i++)
-        if (test2[i] != test4[i])
-            errln(UnicodeString("orphanStorage() failed: strings differ at position ") + i);
-
-    delete (UChar*)test4;
 }
 
 void
@@ -606,13 +595,9 @@ UnicodeStringTest::TestStackAllocation()
         errln("insert() on stack-allocated UnicodeString didn't work right");
     if (guardWord2 != 0x4DED)
         errln("insert() on stack-allocated UnicodeString overwrote guard word!");
-#if 0
-    // the current implementation will always reallocate the memory
-    // after it was aliased in case it was read-only;
-    // therefore, this test must fail and we don't perform it
+
     if (workingBuffer[24] != 0x67)
         errln("insert() on stack-allocated UnicodeString didn't affect backing store");
-#endif
 
     *test += " to the aid of their country.";
     if (*test != "Now is the time for all good men to come to the aid of their country.")
@@ -624,9 +609,32 @@ UnicodeStringTest::TestStackAllocation()
     if (*test != "ha!")
         errln("Assignment to stack-allocated UnicodeString didn't work");
     if (workingBuffer[0] != 0x4e)
-        errln("Change to UnicodeString after overflow are stil affecting original buffer");
+        errln("Change to UnicodeString after overflow are still affecting original buffer");
     if (guardWord2 != 0x4DED)
         errln("Change to UnicodeString after overflow overwrote guard word!");
+
+    // test read-only aliasing with setTo()
+    workingBuffer[0] = 0x20ac;
+    workingBuffer[1] = 0x125;
+    workingBuffer[2] = 0;
+    test->setTo(TRUE, workingBuffer, 2);
+    if(test->length() != 2 || test->charAt(0) != 0x20ac || test->charAt(1) != 0x125) {
+        errln("UnicodeString.setTo(readonly alias) does not alias correctly");
+    }
+    workingBuffer[1] = 0x109;
+    if(test->charAt(1) != 0x109) {
+        errln("UnicodeString.setTo(readonly alias) made a copy: did not see change in buffer");
+    }
+
+    test->setTo(TRUE, workingBuffer, -1);
+    if(test->length() != 2 || test->charAt(0) != 0x20ac || test->charAt(1) != 0x109) {
+        errln("UnicodeString.setTo(readonly alias, length -1) does not alias correctly");
+    }
+
+    test->setTo(FALSE, workingBuffer, -1);
+    if(!test->isBogus()) {
+        errln("UnicodeString.setTo(unterminated readonly alias, length -1) does not result in isBogus()");
+    }
 
     delete test;
 }

@@ -13,26 +13,32 @@
  * Simple utility to set output buffer parameters
  ******************************************************/
 void T_fillOutputParams(const UnicodeString* temp,
-            UChar* result, 
-            const int32_t resultLength,
-            int32_t* resultLengthOut, 
-            UErrorCode* status) 
+                        UChar* result, 
+                        const int32_t resultLength,
+                        int32_t* resultLengthOut, 
+                        UErrorCode* status) 
 {
-  
-  const int32_t actual = temp->length();
-  const bool_t overflowed = actual >= resultLength;
-  const int32_t returnedSize = uprv_min(actual, resultLength-1);
-  if ((temp->length() < resultLength) && (result != temp->getUChars()) && (returnedSize > 0)) {
-    u_strcpy(result, temp->getUChars());
-  }
-  
+  int32_t actual = temp->length();
+
   if (resultLength > 0) {
-    result[returnedSize] = 0;
-  }
-  if (resultLengthOut) {
-    *resultLengthOut = actual;
-    if (U_SUCCESS(*status) && overflowed) {
-      *status = U_BUFFER_OVERFLOW_ERROR;
+    // copy the contents; extract() will check if it needs to copy anything at all
+    temp->extract(0, resultLength - 1, result, 0);
+
+    // zero-terminate the result buffer
+    if (actual < resultLength) {
+      result[actual] = 0;
+    } else {
+      result[resultLength - 1] = 0;
     }
+  }
+
+  // set the output length to the actual string length
+  if (resultLengthOut != 0) {
+    *resultLengthOut = actual;
+  }
+
+  // set the error code according to the necessary buffer length
+  if (actual >= resultLength && U_SUCCESS(*status)) {
+    *status = U_BUFFER_OVERFLOW_ERROR;
   }
 }
