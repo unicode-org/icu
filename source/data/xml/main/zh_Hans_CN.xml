@@ -9,8 +9,9 @@
 	<identity>
 		<version number="1.1"/>
 		<generation date="2004-06-04" />
-		<language type="es" /> 
-		<territory type="UY" /> 
+		<language type="zh" /> 
+		<script type="Hans" /> 
+		<territory type="CN" /> 
 	</identity>
 	<dates>
 		<calendars>
@@ -19,22 +20,22 @@
 					<default type="medium"/>
 					<dateFormatLength type="full">
 						<dateFormat >
-							<pattern>EEEE d' de 'MMMM' de 'yyyy</pattern>
+							<pattern>yyyy'年'M'月'd'日'EEEE</pattern>
 						</dateFormat>
 					</dateFormatLength >
 					<dateFormatLength type="long">
 						<dateFormat >
-							<pattern>d' de 'MMMM' de 'yyyy</pattern>
+							<pattern>yyyy'年'M'月'd'日'</pattern>
 						</dateFormat>
 					</dateFormatLength >
 					<dateFormatLength type="medium">
 						<dateFormat >
-							<pattern>dd/MM/yyyy</pattern>
+							<pattern>yyyy-M-d</pattern>
 						</dateFormat>
 					</dateFormatLength >
 					<dateFormatLength type="short">
 						<dateFormat >
-							<pattern>dd/MM/yy</pattern>
+							<pattern>yy-M-d</pattern>
 						</dateFormat>
 					</dateFormatLength >
 				</dateFormats>
@@ -42,22 +43,22 @@
 					<default type="medium"/>
 					<timeFormatLength type="full">
 						<timeFormat >
-							<pattern>hh:mm:ss a z</pattern>
+							<pattern>ahh'时'mm'分'ss'秒' z</pattern>
 						</timeFormat>
 					</timeFormatLength >
 					<timeFormatLength type="long">
 						<timeFormat >
-							<pattern>hh:mm:ss a z</pattern>
+							<pattern>ahh'时'mm'分'ss'秒'</pattern>
 						</timeFormat>
 					</timeFormatLength >
 					<timeFormatLength type="medium">
 						<timeFormat >
-							<pattern>hh:mm:ss a</pattern>
+							<pattern>ahh:mm:ss</pattern>
 						</timeFormat>
 					</timeFormatLength >
 					<timeFormatLength type="short">
 						<timeFormat >
-							<pattern>hh:mm a</pattern>
+							<pattern>ah:mm</pattern>
 						</timeFormat>
 					</timeFormatLength >
 				</timeFormats>
@@ -72,20 +73,6 @@
 		</calendars>
 	</dates>
 	<numbers>
-		<symbols>
-			<decimal>,</decimal>
-			<group>.</group>
-			<list>;</list>
-			<percentSign>%</percentSign>
-			<nativeZeroDigit>0</nativeZeroDigit>
-			<patternDigit>#</patternDigit>
-			<plusSign>+</plusSign>
-			<minusSign>-</minusSign>
-			<exponential>E</exponential>
-			<perMille>‰</perMille>
-			<infinity>∞</infinity>
-			<nan>�</nan>
-		</symbols>
 		<decimalFormats>
 			<decimalFormatLength >
 				<decimalFormat >
@@ -110,7 +97,7 @@
 		<currencyFormats>
 			<currencyFormatLength >
 				<currencyFormat >
-					<pattern>¤ #,##0.00;(¤#,##0.00)</pattern>
+					<pattern>¤#,##0.00;-¤#,##0.00</pattern>
 				</currencyFormat>
 			</currencyFormatLength >
 		</currencyFormats>

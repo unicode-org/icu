@@ -7,8 +7,8 @@
 >
 <ldml>
 	<identity>
-		<version number="3.0"/>
-		<generation date="2004-06-01" />
+		<version number="1.1"/>
+		<generation date="2004-06-04" />
 		<language type="pl" /> 
 	</identity>
 	<localeDisplayNames>
@@ -330,18 +330,18 @@
 							<month type="12">g</month>
 						</monthWidth>
 						<monthWidth type="wide">
-							<month type="1">styczeń</month>
-							<month type="2">luty</month>
-							<month type="3">marzec</month>
-							<month type="4">kwiecień</month>
-							<month type="5">maj</month>
-							<month type="6">czerwiec</month>
-							<month type="7">lipiec</month>
-							<month type="8">sierpień</month>
-							<month type="9">wrzesień</month>
-							<month type="10">październik</month>
-							<month type="11">listopad</month>
-							<month type="12">grudzień</month>
+							<month type="1">stycznia</month>
+							<month type="2">lutego</month>
+							<month type="3">marca</month>
+							<month type="4">kwietnia</month>
+							<month type="5">maja</month>
+							<month type="6">czerwca</month>
+							<month type="7">lipca</month>
+							<month type="8">sierpnia</month>
+							<month type="9">września</month>
+							<month type="10">października</month>
+							<month type="11">listopada</month>
+							<month type="12">grudnia</month>
 						</monthWidth>
 					</monthContext>
 					<monthContext type="stand-alone">

@@ -7,8 +7,8 @@
 >
 <ldml>
 	<identity>
-		<version number="3.0"/>
-		<generation date="2004-06-01" />
+		<version number="1.1"/>
+		<generation date="2004-06-04" />
 		<language type="en" /> 
 	</identity>
 	<localeDisplayNames>
@@ -578,7 +578,7 @@
 			<territory type="BY">Belarus</territory>
 			<territory type="BZ">Belize</territory>
 			<territory type="CA">Canada</territory>
-			<territory type="CC">Cocos Islands</territory>
+			<territory type="CC">Cocos (Keeling) Islands</territory>
 			<territory type="CD">Democratic Republic of the Congo</territory>
 			<territory type="CF">Central African Republic</territory>
 			<territory type="CG">Congo</territory>
@@ -627,7 +627,7 @@
 			<territory type="GP">Guadeloupe</territory>
 			<territory type="GQ">Equatorial Guinea</territory>
 			<territory type="GR">Greece</territory>
-			<territory type="GS">South Georgia and South Sandwich Islands</territory>
+			<territory type="GS">South Georgia and the South Sandwich Islands</territory>
 			<territory type="GT">Guatemala</territory>
 			<territory type="GU">Guam</territory>
 			<territory type="GW">Guinea-Bissau</territory>
@@ -2728,10 +2728,6 @@
 			<currency type="XPF">
 				<displayName>CFP Franc</displayName>
 				<symbol>CFPF</symbol>
-			</currency>
-			<currency type="XSS">
-				<displayName>Shilling Sterling</displayName>
-				<symbol>XSS</symbol>
 			</currency>
 			<currency type="XTR">
 				<displayName>COMECON Transferable Ruble</displayName>

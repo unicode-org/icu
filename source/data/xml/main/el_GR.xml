@@ -7,8 +7,8 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-06-01" />
+		<version number="1.1"/>
+		<generation date="2004-06-04" />
 		<language type="el" /> 
 		<territory type="GR" /> 
 	</identity>
@@ -45,8 +45,8 @@
 			<currency type="GRD">
 				<displayName>Δρχ</displayName>
 				<symbol>Δρχ</symbol>
-				<pattern>#,##0 ¤;-#,##0 ¤</pattern>
-				<decimal>#,##0 ¤;-#,##0 ¤</decimal>
+				<pattern>#,##0.00 ¤;-#,##0.00 ¤</pattern>
+				<decimal>#,##0.00 ¤;-#,##0.00 ¤</decimal>
 				<group>.</group>
 			</currency>
 		</currencies>
