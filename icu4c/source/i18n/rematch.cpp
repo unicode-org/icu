@@ -2222,13 +2222,13 @@ breakFromLoop:
         fMatchStart   = startIdx;
         fMatchEnd     = fp->fInputIdx;
         if (fTraceDebug) {
-            REGEX_RUN_DEBUG_PRINTF("Match.  start=%d   end=%d\n\n", fMatchStart, fMatchEnd);
+            REGEX_RUN_DEBUG_PRINTF(("Match.  start=%d   end=%d\n\n", fMatchStart, fMatchEnd));
         }
     }
     else
     {
         if (fTraceDebug) {
-            REGEX_RUN_DEBUG_PRINTF("No match\n\n");
+            REGEX_RUN_DEBUG_PRINTF(("No match\n\n"));
         }
     }
 

@@ -419,7 +419,7 @@ void   RegexPattern::dumpOp(int32_t index) const {
         pinnedType = 0;
     }
     
-    REGEX_DUMP_DEBUG_PRINTF("%4d   %08x    %-15s  ", index, op, opNames[pinnedType]);
+    REGEX_DUMP_DEBUG_PRINTF(("%4d   %08x    %-15s  ", index, op, opNames[pinnedType]));
     switch (type) {
     case URX_NOP:
     case URX_DOTANY:
@@ -470,12 +470,12 @@ void   RegexPattern::dumpOp(int32_t index) const {
     case URX_LOOP_C:
     case URX_LOOP_DOT_I:
         // types with an integer operand field.
-        REGEX_DUMP_DEBUG_PRINTF("%d", val);
+        REGEX_DUMP_DEBUG_PRINTF(("%d", val));
         break;
         
     case URX_ONECHAR:
     case URX_ONECHAR_I:
-        REGEX_DUMP_DEBUG_PRINTF("%c", val<256?val:'?');
+        REGEX_DUMP_DEBUG_PRINTF(("%c", val<256?val:'?'));
         break;
         
     case URX_STRING:
@@ -488,7 +488,7 @@ void   RegexPattern::dumpOp(int32_t index) const {
             for (i=val; i<val+length; i++) {
                 UChar c = fLiteralText[i];
                 if (c < 32 || c >= 256) {c = '.';}
-                REGEX_DUMP_DEBUG_PRINTF("%c", c);
+                REGEX_DUMP_DEBUG_PRINTF(("%c", c));
             }
         }
         break;
@@ -500,7 +500,7 @@ void   RegexPattern::dumpOp(int32_t index) const {
             UnicodeSet *set = (UnicodeSet *)fSets->elementAt(val);
             set->toPattern(s, TRUE);
             for (int32_t i=0; i<s.length(); i++) {
-                REGEX_DUMP_DEBUG_PRINTF("%c", s.charAt(i));
+                REGEX_DUMP_DEBUG_PRINTF(("%c", s.charAt(i)));
             }
         }
         break;
@@ -510,85 +510,82 @@ void   RegexPattern::dumpOp(int32_t index) const {
         {
             UnicodeString s;
             if (val & URX_NEG_SET) {
-                REGEX_DUMP_DEBUG_PRINTF("NOT ");
+                REGEX_DUMP_DEBUG_PRINTF(("NOT "));
                 val &= ~URX_NEG_SET;
             }
             UnicodeSet *set = fStaticSets[val];
             set->toPattern(s, TRUE);
             for (int32_t i=0; i<s.length(); i++) {
-                REGEX_DUMP_DEBUG_PRINTF("%c", s.charAt(i));
+                REGEX_DUMP_DEBUG_PRINTF(("%c", s.charAt(i)));
             }
         }
         break;
 
         
     default:
-        REGEX_DUMP_DEBUG_PRINTF("??????");
+        REGEX_DUMP_DEBUG_PRINTF(("??????"));
         break;
     }
-    REGEX_DUMP_DEBUG_PRINTF("\n");
+    REGEX_DUMP_DEBUG_PRINTF(("\n"));
 }
-#else
-/* Define it this way to reduce compiler warnings */
-void   RegexPattern::dumpOp(int32_t ) const {}
 #endif
 
 
-
-void   RegexPattern::dump() const {
 #if defined(REGEX_DEBUG)
+U_CAPI void  U_EXPORT2 
+RegexPatternDump(const RegexPattern *This) {
     int      index;
     int      i;
 
-    REGEX_DUMP_DEBUG_PRINTF("Original Pattern:  ");
-    for (i=0; i<fPattern.length(); i++) {
-        REGEX_DUMP_DEBUG_PRINTF("%c", fPattern.charAt(i));
+    REGEX_DUMP_DEBUG_PRINTF(("Original Pattern:  "));
+    for (i=0; i<This->fPattern.length(); i++) {
+        REGEX_DUMP_DEBUG_PRINTF(("%c", This->fPattern.charAt(i)));
     }
-    REGEX_DUMP_DEBUG_PRINTF("\n");
-    REGEX_DUMP_DEBUG_PRINTF("   Min Match Length:  %d\n", fMinMatchLen);
-    REGEX_DUMP_DEBUG_PRINTF("   Match Start Type:  %s\n", START_OF_MATCH_STR(fStartType));   
-    if (fStartType == START_STRING) {
-        REGEX_DUMP_DEBUG_PRINTF("    Initial match sting: \"");
-        for (i=fInitialStringIdx; i<fInitialStringIdx+fInitialStringLen; i++) {
-            REGEX_DUMP_DEBUG_PRINTF("%c", fLiteralText[i]);   // TODO:  non-printables, surrogates.
+    REGEX_DUMP_DEBUG_PRINTF(("\n"));
+    REGEX_DUMP_DEBUG_PRINTF(("   Min Match Length:  %d\n", This->fMinMatchLen));
+    REGEX_DUMP_DEBUG_PRINTF(("   Match Start Type:  %s\n", START_OF_MATCH_STR(This->fStartType)));   
+    if (This->fStartType == START_STRING) {
+        REGEX_DUMP_DEBUG_PRINTF(("    Initial match sting: \""));
+        for (i=This->fInitialStringIdx; i<This->fInitialStringIdx+This->fInitialStringLen; i++) {
+            REGEX_DUMP_DEBUG_PRINTF(("%c", This->fLiteralText[i]));   // TODO:  non-printables, surrogates.
         }
 
-    } else if (fStartType == START_SET) {
-        int32_t numSetChars = fInitialChars->size();
+    } else if (This->fStartType == START_SET) {
+        int32_t numSetChars = This->fInitialChars->size();
         if (numSetChars > 20) {
             numSetChars = 20;
         }
-        REGEX_DUMP_DEBUG_PRINTF("     Match First Chars : ");
+        REGEX_DUMP_DEBUG_PRINTF(("     Match First Chars : "));
         for (i=0; i<numSetChars; i++) {
-            UChar32 c = fInitialChars->charAt(i);
+            UChar32 c = This->fInitialChars->charAt(i);
             if (0x20<c && c <0x7e) { 
-                REGEX_DUMP_DEBUG_PRINTF("%c ", c);
+                REGEX_DUMP_DEBUG_PRINTF(("%c ", c));
             } else {
-                REGEX_DUMP_DEBUG_PRINTF("%#x ", c);
+                REGEX_DUMP_DEBUG_PRINTF(("%#x ", c));
             }
         }
-        if (numSetChars < fInitialChars->size()) {
-            REGEX_DUMP_DEBUG_PRINTF(" ...");
+        if (numSetChars < This->fInitialChars->size()) {
+            REGEX_DUMP_DEBUG_PRINTF((" ..."));
         }
-        REGEX_DUMP_DEBUG_PRINTF("\n");
+        REGEX_DUMP_DEBUG_PRINTF(("\n"));
 
-    } else if (fStartType == START_CHAR) {
-        REGEX_DUMP_DEBUG_PRINTF("    First char of Match : ");
-        if (0x20 < fInitialChar && fInitialChar<0x7e) {
-                REGEX_DUMP_DEBUG_PRINTF("%c\n", fInitialChar);
+    } else if (This->fStartType == START_CHAR) {
+        REGEX_DUMP_DEBUG_PRINTF(("    First char of Match : "));
+        if (0x20 < This->fInitialChar && This->fInitialChar<0x7e) {
+                REGEX_DUMP_DEBUG_PRINTF(("%c\n", This->fInitialChar));
             } else {
-                REGEX_DUMP_DEBUG_PRINTF("%#x\n", fInitialChar);
+                REGEX_DUMP_DEBUG_PRINTF(("%#x\n", This->fInitialChar));
             }
     }
 
-    REGEX_DUMP_DEBUG_PRINTF("\nIndex   Binary     Type             Operand\n"
-           "-------------------------------------------\n");
-    for (index = 0; index<fCompiledPat->size(); index++) {
-        dumpOp(index);
+    REGEX_DUMP_DEBUG_PRINTF(("\nIndex   Binary     Type             Operand\n" \
+           "-------------------------------------------\n"));
+    for (index = 0; index<This->fCompiledPat->size(); index++) {
+        This->dumpOp(index);
     }
-    REGEX_DUMP_DEBUG_PRINTF("\n\n");
-#endif
+    REGEX_DUMP_DEBUG_PRINTF(("\n\n"));
 };
+#endif
 
 
 

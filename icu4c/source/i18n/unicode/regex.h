@@ -16,6 +16,7 @@
 #ifndef REGEX_H
 #define REGEX_H
 
+// #define REGEX_DEBUG
 
 /**
  * \file
@@ -50,6 +51,7 @@ U_NAMESPACE_BEGIN
 // Forward Declarations...
 
 class RegexMatcher;
+class RegexPattern;
 class UVector;
 class UVector32;
 class UnicodeSet;
@@ -92,6 +94,20 @@ enum {
       */
     UREGEX_UWORD            = 256
 };
+
+
+
+
+/**
+ *   RBBIPatternDump   Debug function, displays the compiled form of a pattern.
+ *   @internal
+ */
+#ifdef REGEX_DEBUG
+U_CAPI void U_EXPORT2
+    RegexPatternDump(const RegexPattern *pat);
+#else
+    #define RegexPatternDump(pat)
+#endif
 
 
 
@@ -337,13 +353,6 @@ public:
         UErrorCode       &status) const;
 
 
-
-    /**
-     *   dump   Debug function, displays the compiled form of a pattern.
-     *   @internal
-     */
-    void dump() const;
-
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
@@ -414,16 +423,12 @@ private:
     //
     void        init();            // Common initialization, for use by constructors.
     void        zap();             // Common cleanup
+#ifdef REGEX_DEBUG
     void        dumpOp(int32_t index) const;
-
+    friend     void RegexPatternDump(const RegexPattern *);
+#endif
 
 };
-
-
-
-
-
-
 
 
 
