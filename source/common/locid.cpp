@@ -699,12 +699,12 @@ Locale::getAvailableLocales(int32_t& count)
   return localeList;
 }
 
-static const char* const* Locale::getISOCountries()
+const char* const* Locale::getISOCountries()
 {
   return uloc_getISOCountries();
 }
 
-static const char* const* Locale::getISOLanguages()
+const char* const* Locale::getISOLanguages()
 {
   return uloc_getISOLanguages();
 }
