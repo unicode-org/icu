@@ -7,14 +7,9 @@
 package com.ibm.icu.util;
 
 import com.ibm.icu.impl.ICULocaleData;
-import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.ICUService.Key;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICULocaleService;
-import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
-import com.ibm.icu.impl.ICULocaleService.LocaleKey;
 import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
-import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
