@@ -1231,7 +1231,6 @@ LocaleTest::TestEuroSupport()
 
     UnicodeString temp;
 
-    int32_t locCount = 0;
     for (;*locales!=NULL;locales++) {
         Locale loc (*locales);
         UnicodeString temp;
