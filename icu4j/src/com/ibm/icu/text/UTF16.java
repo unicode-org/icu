@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2002/06/20 01:21:18 $ 
-* $Revision: 1.21 $
+* $Date: 2002/07/16 00:21:13 $ 
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -2215,34 +2215,7 @@ public final class UTF16
 	        return 0;
         }
         
-        public int caseCompare(Object a, Object b, int options){
-            if (a == b) {
-                return 0;
-            }
-            if (a == null) {
-                return -1;
-            }
-            if (b == null) {
-                return 1;
-            }
-            String sa = (String) a;
-	        String sb = (String) b;
-            int la = sa.length();
-            int lb = sb.length();
-            if( sa != sb ){
-                int result = NormalizerImpl.cmpEquivFold(sa,sb,
-                                         options|Normalizer.COMPARE_IGNORE_CASE);
-                if(result!=0) {
-                  return (int)((byte)(result >> 24 | 1));
-                }
 
-            }else{
-                if(la != lb){
-                    return (int)((byte)((la-lb) >> 24 | 1));
-                }
-            }
-            return 0;
-        } 
     }
     
     // private data members -------------------------------------------------
