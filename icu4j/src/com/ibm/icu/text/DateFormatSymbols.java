@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateFormatSymbols.java,v $ 
- * $Date: 2000/10/17 20:54:59 $ 
- * $Revision: 1.6 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateFormatSymbols.java,v $
+ * $Date: 2000/11/21 06:54:53 $
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -452,7 +452,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     {
         /* We have to handle two different formats of DateFormatZoneData.
          * The first is used in JDK 1.2.2:
-         * 
+         *
          * | public Object[][] getContents() {
          * |   return new Object[][] {
          * |     {"zoneStrings",
@@ -467,7 +467,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
          * | }
          *
          * The second is used in JDK 1.3:
-         * 
+         *
          * | public Object[][] getContents() {
          * |   return new Object[][] {
          * |     {"America/Los_Angeles", new String[] {"America/Los_Angeles", "Pacific Standard Time", "PST",
@@ -620,7 +620,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * For example, the bundle corresponding to "com.ibm.util.HebrewCalendar"
      * is "com.ibm.util.resources.HebrewCalendarSymbols".
      * <p>
-     * Within the ResourceBundle, this method searches for five keys: 
+     * Within the ResourceBundle, this method searches for five keys:
      * <ul>
      * <li><b>DayNames</b> -
      *      An array of strings corresponding to each possible
@@ -666,13 +666,18 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
      */
     public DateFormatSymbols(Calendar cal, Locale locale) {
+        this(cal==null?null:cal.getClass(), locale);
+    }
+
+    public DateFormatSymbols(Class calendarClass, Locale locale) {
         this(locale); // old-style construction
-        if (cal != null) {
+        if (calendarClass != null) {
             ResourceBundle bundle = null;
             try {
-                bundle = getDateFormatBundle(cal, locale);
+                bundle = getDateFormatBundle(calendarClass, locale);
             } catch (MissingResourceException e) {
-                if (!(cal instanceof GregorianCalendar)) {
+                //if (!(cal instanceof GregorianCalendar)) {
+                if (!(GregorianCalendar.class.isAssignableFrom(calendarClass))) {
                     // Ok for symbols to be missing for a Gregorian calendar, but
                     // not for any other type.
                     throw e;
@@ -696,7 +701,17 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         constructCalendarSpecific(bundle);
     }
 
-    private void constructCalendarSpecific(ResourceBundle bundle) {
+    /**
+     * Given a resource bundle specific to the given Calendar class,
+     * initialize this object.  Member variables will have already been
+     * initialized using the default mechanism, so only those that differ
+     * from or supplement the standard resource data need be handled here.
+     * If subclasses override this method, they should call
+     * <code>super.constructCalendarSpecific(bundle)</code> as needed to
+     * handle the "DayNames", "DayAbbreviations", "MonthNames",
+     * "MonthAbbreviations", and "Eras" resource data.
+     */
+    protected void constructCalendarSpecific(ResourceBundle bundle) {
 
         // Fetch the day names from the resource bundle.  If they're not found,
         // it's ok; we'll just use the default ones.
@@ -752,31 +767,38 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * For example, the bundle corresponding to "com.ibm.util.HebrewCalendar"
      * is "com.ibm.util.resources.HebrewCalendarSymbols".
      */
-    static public ResourceBundle getDateFormatBundle(Calendar cal, Locale locale)
+    static public ResourceBundle getDateFormatBundle(Class calendarClass, Locale locale)
                                   throws MissingResourceException {
 
         // Find the calendar's class name, which we're going to use to construct the
         // resource bundle name.
-        String fullName = cal.getClass().getName();
+        String fullName = calendarClass.getName();
         int lastDot = fullName.lastIndexOf('.');
         String className = fullName.substring(lastDot+1);
 
         // The name of the ResourceBundle itself is the calendar's fully-qualified
-        // name, with ".resources" inserted in the package and "Symbols" appended
+        // name, with ".resources" inserted in the package and "Symbols" appended.
+        // E.g., "my.pkg.MyCalendar" -> "my.pkg.resources.MyCalendarSymbols"
         String bundleName = fullName.substring(0, lastDot+1) + "resources."
                                 + className + "Symbols";
-        
+
         ResourceBundle result = null;
         try {
             result = ResourceBundle.getBundle(bundleName, locale);
         }
         catch (MissingResourceException e) {
-            if (!(cal instanceof GregorianCalendar)) {
+            //if (!(cal instanceof GregorianCalendar)) {
+            if (!(GregorianCalendar.class.isAssignableFrom(calendarClass))) {
                 // Ok for symbols to be missing for a Gregorian calendar, but
                 // not for any other type.
                 throw e;
             }
         }
         return result;
+    }
+
+    static public ResourceBundle getDateFormatBundle(Calendar cal, Locale locale)
+                                  throws MissingResourceException {
+        return getDateFormatBundle(cal==null?null:cal.getClass(), locale);
     }
 }

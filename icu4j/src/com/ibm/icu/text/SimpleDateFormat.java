@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2000/05/26 21:38:55 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/11/21 06:54:53 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -60,6 +60,7 @@ import java.lang.StringIndexOutOfBoundsException;
  * ------   -------                 ------------        -------
  * G        era designator          (Text)              AD
  * y        year                    (Number)            1996
+ * u        extended year           (Number)            4601
  * M        month in year           (Text & Number)     July & 07
  * d        day in month            (Number)            10
  * h        hour in am/pm (1~12)    (Number)            12
@@ -461,7 +462,17 @@ public class SimpleDateFormat extends DateFormat {
         DateFormat.TIMEZONE_FIELD,
     };
 
-    // Private member function that does the real date/time formatting.
+    /**
+     * Format a single field, given its pattern character.  Subclasses may
+     * override this method in order to modify or add formatting
+     * capabilities.
+     * @param ch the pattern character
+     * @param count the number of times ch is repeated in the pattern
+     * @param beginOffset the offset of the output string at the start of
+     * this field; used to set pos when appropriate
+     * @param pos receives the position of a field, when appropriate
+     * @param formatData the symbols for this formatter
+     */
     protected String subFormat(char ch, int count, int beginOffset,
                              FieldPosition pos, DateFormatSymbols formatData)
          throws IllegalArgumentException
@@ -469,6 +480,12 @@ public class SimpleDateFormat extends DateFormat {
         int     patternCharIndex = -1;
         int     maxIntCount = Integer.MAX_VALUE;
         String  current = "";
+
+        // TEMPORARY HACK TODO fix this
+        if (ch == 'u') { // 'u' - EXTENDED_YEAR
+            return zeroPaddingNumber(calendar.get(Calendar.EXTENDED_YEAR),
+                                     1, maxIntCount);
+        }
 
         if ((patternCharIndex=formatData.patternChars.indexOf(ch)) == -1)
             throw new IllegalArgumentException("Illegal pattern character " +
@@ -830,15 +847,22 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     /**
-     * Private code-size reduction function used by subParse.
+     * Attempt to match the text at a given position against an array of
+     * strings.  Since multiple strings in the array may match (for
+     * example, if the array contains "a", "ab", and "abc", all will match
+     * the input string "abcd") the longest match is returned.  As a side
+     * effect, the given field of <code>calendar</code> is set to the index
+     * of the best match, if there is one.
      * @param text the time text being parsed.
      * @param start where to start parsing.
      * @param field the date field being parsed.
      * @param data the string array to parsed.
-     * @return the new start position if matching succeeded; a negative number
-     * indicating matching failure, otherwise.
+     * @return the new start position if matching succeeded; a negative
+     * number indicating matching failure, otherwise.  As a side effect,
+     * sets the <code>calendar</code> field <code>field</code> to the index
+     * of the best match, if matching succeeded.
      */
-    private int matchString(String text, int start, int field, String[] data)
+    protected int matchString(String text, int start, int field, String[] data)
     {
         int i = 0;
         int count = data.length;
@@ -929,8 +953,10 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     /**
-     * Private member function that converts the parsed date strings into
-     * timeFields. Returns -start (for ParsePosition) if failed.
+     * Protected method that converts one field of the input string into a
+     * numeric field value in <code>calendar</code>.  Returns -start (for
+     * ParsePosition) if failed.  Subclasses may override this method to
+     * modify or add parsing capabilities.
      * @param text the time text to be parsed.
      * @param start where to start parsing.
      * @param ch the pattern character for the date field text to be parsed.
@@ -939,17 +965,44 @@ public class SimpleDateFormat extends DateFormat {
      * and we should use the count to know when to stop parsing.
      * @param ambiguousYear return parameter; upon return, if ambiguousYear[0]
      * is true, then a two-digit year was parsed and may need to be readjusted.
-     * @return the new start position if matching succeeded; a negative number
-     * indicating matching failure, otherwise.
+     * @return the new start position if matching succeeded; a negative
+     * number indicating matching failure, otherwise.  As a side effect,
+     * set the appropriate field of <code>calendar</code> with the parsed
+     * value.
      */
-    private int subParse(String text, int start, char ch, int count,
-                         boolean obeyCount, boolean[] ambiguousYear)
+    protected int subParse(String text, int start, char ch, int count,
+                           boolean obeyCount, boolean[] ambiguousYear)
     {
         Number number = null;
         int value = 0;
         int i;
         ParsePosition pos = new ParsePosition(0);
         int patternCharIndex = -1;
+
+        // TEMPORARY HACK TODO fix this
+        if (ch == 'u') { // 'u' - EXTENDED_YEAR
+            pos.setIndex(start);
+            for (;;) {
+                if (pos.getIndex() >= text.length()) return -start;
+                char c = text.charAt(pos.getIndex());
+                if (c != ' ' && c != '\t') break;
+                pos.setIndex(pos.getIndex()+1);
+            }
+            if (obeyCount) {
+                if ((start+count) > text.length()) {
+                    return -start;
+                }
+                number = numberFormat.parse(text.substring(0, start+count), pos);
+            } else {
+                number = numberFormat.parse(text, pos);
+            }
+            if (number == null) {
+                return -start;
+            }
+            value = number.intValue();
+            calendar.set(Calendar.EXTENDED_YEAR, value);
+            return pos.getIndex();
+        }
 
         if ((patternCharIndex=formatData.patternChars.indexOf(ch)) == -1)
             return -start;
@@ -1287,6 +1340,13 @@ public class SimpleDateFormat extends DateFormat {
     public void setDateFormatSymbols(DateFormatSymbols newFormatSymbols)
     {
         this.formatData = (DateFormatSymbols)newFormatSymbols.clone();
+    }
+
+    /**
+     * Method for subclasses to access the DateFormatSymbols.
+     */
+    protected DateFormatSymbols getSymbols() {
+        return formatData;
     }
 
     /**

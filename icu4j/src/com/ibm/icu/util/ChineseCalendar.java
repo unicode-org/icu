@@ -3,10 +3,11 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ChineseCalendar.java,v $
- * $Date: 2000/11/18 01:07:18 $
- * $Revision: 1.3 $
+ * $Date: 2000/11/21 06:55:09 $
+ * $Revision: 1.4 $
  */
 package com.ibm.util;
+import com.ibm.text.*;
 import java.util.Date;
 import java.util.Locale;
 
@@ -246,6 +247,17 @@ public class ChineseCalendar extends Calendar {
             EPOCH_JULIAN_DAY + 1; // Julian day -> local days
         int nextStart = newMoonNear(thisStart + SYNODIC_GAP, true);
         return nextStart - thisStart;
+    }
+
+
+    /**
+     * Framework method to create a calendar-specific DateFormat object
+     * using the the given pattern.  This method is responsible for
+     * creating the calendar- specific DateFormat and DateFormatSymbols
+     * objects as needed.
+     */
+    protected DateFormat handleGetDateFormat(String pattern, Locale locale) {
+        return new ChineseDateFormat(pattern, locale);
     }
 
     //------------------------------------------------------------------
