@@ -8,6 +8,8 @@
 #include "unicode/unistr.h"
 #include "unicode/unicode.h"
 #include "unicode/locid.h"
+#include "unicode/ucnv.h"
+#include "cmemory.h"
 
 #if 0
 #include "unicode/ustream.h"
@@ -382,6 +384,68 @@ UnicodeStringTest::TestExtract()
         }
         if(dest[length-1]!=s[length-1] || dest[length]!=0 || dest[length+1]!=0xa5) {
             errln("UnicodeString.extract(dest large enough) did not extract the string correctly");
+        }
+    }
+
+    {
+        // test new UConverter extract() and constructor
+        UnicodeString s=UNICODE_STRING("\\U0002f999\\U0001d15f\\u00c4\\u1ed0", 32).unescape();
+        char buffer[32];
+        static const char expect[]={
+            (char)0xf0, (char)0xaf, (char)0xa6, (char)0x99,
+            (char)0xf0, (char)0x9d, (char)0x85, (char)0x9f,
+            (char)0xc3, (char)0x84,
+            (char)0xe1, (char)0xbb, (char)0x90
+        };
+        UErrorCode errorCode=U_ZERO_ERROR;
+        UConverter *cnv=ucnv_open("UTF-8", &errorCode);
+        int32_t length;
+
+        if(U_SUCCESS(errorCode)) {
+            // test preflighting
+            if( (length=s.extract(NULL, 0, cnv, errorCode))!=13 ||
+                errorCode!=U_BUFFER_OVERFLOW_ERROR
+            ) {
+                errln("UnicodeString::extract(NULL, UConverter) preflighting failed (length=%ld, %s)",
+                      length, u_errorName(errorCode));
+            }
+            errorCode=U_ZERO_ERROR;
+            if( (length=s.extract(buffer, 2, cnv, errorCode))!=13 ||
+                errorCode!=U_BUFFER_OVERFLOW_ERROR
+            ) {
+                errln("UnicodeString::extract(too small, UConverter) preflighting failed (length=%ld, %s)",
+                      length, u_errorName(errorCode));
+            }
+
+            // try error cases
+            errorCode=U_ZERO_ERROR;
+            if( s.extract(NULL, 2, cnv, errorCode)==13 || U_SUCCESS(errorCode)) {
+                errln("UnicodeString::extract(UConverter) succeeded with an illegal destination");
+            }
+            errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+            if( s.extract(NULL, 0, cnv, errorCode)==13 || U_SUCCESS(errorCode)) {
+                errln("UnicodeString::extract(UConverter) succeeded with a previous error code");
+            }
+            errorCode=U_ZERO_ERROR;
+
+            // extract for real
+            if( (length=s.extract(buffer, sizeof(buffer), cnv, errorCode))!=13 ||
+                uprv_memcmp(buffer, expect, 13)!=0 ||
+                buffer[13]!=0 ||
+                U_FAILURE(errorCode)
+            ) {
+                errln("UnicodeString::extract(UConverter) conversion failed (length=%ld, %s)",
+                      length, u_errorName(errorCode));
+            }
+
+            // try the constructor
+            UnicodeString t(expect, sizeof(expect), cnv, errorCode);
+            if(U_FAILURE(errorCode) || s!=t) {
+                errln("UnicodeString(UConverter) conversion failed (%s)",
+                      u_errorName(errorCode));
+            }
+
+            ucnv_close(cnv);
         }
     }
 }
