@@ -18,110 +18,15 @@
 ******************************************************************************
 */
 
-#include "uhash.h"
+#include "locmap.h"
 #include "unicode/ustdio.h"
 #include "ufile.h"
 #include "unicode/uloc.h"
 #include "loccache.h"
 #include "unicode/ures.h"
 #include "unicode/ucnv.h"
+#include "cstring.h"
 
-#include <string.h>
-#include <stdlib.h>
-
-
-/* the data in the following two functions should REALLY be somewhere else */
-/* convert from a country code (only the first 2 chars are significant)  */
-/* to an IBM codepage */
-
-/* TODO: We should consider using uprv_defaultCodePageForLocale() instead of this table
- (less to maintain when the ISO-639 standard changes */
-
-/* thanks to http://czyborra.com/charsets/iso8859.htm for most of this info */
-static const char *ufile_locale2codepage[] = {
-  "af", "latin-1",  /* Afrikaans */
-  "ar", "ibm-1256", /* arabic */
-
-  "be", "ibm-915"  , /*  Byelorussian */
-  "bg", "ibm-915"  , /* Bulgarian */
-    
-  "ca", "latin-1"  , /* catalan */
-  "cs", "ibm-912"  , /* Czech */
-  
-  "da", "latin-1"  ,  /* danish */
-  "de", "latin-1"  ,  /* german */
-  
-  "el", "ibm-813"  , /* Greek */
-  "en", "latin-1"  ,  /* English */
-  "eo", "ibm-913"  , /* Esperanto */
-  "es", "latin-1"  ,  /* Spanish */
-  "eu", "latin-1"  , /* basque */
-  "et", "ibm-914"  , /* Estonian  */
-  
-  "fi", "latin-1"  ,  /* Finnish */
-  "fo", "latin-1"  ,  /* faroese */
-  "fr", "latin-1"  ,  /* French */
-  
-  "ga", "latin-1"  ,  /* Irish (Gaelic) */
-  "gd", "latin-1"  ,  /* Scottish */
-  
-  "hr", "ibm-912"  , /* Croatian */
-  "hu", "ibm-912"  , /* Hungarian */
-  
-  "in", "latin-1"  , /* Indonesian */
-  "is", "latin-1"  ,  /* Icelandic */
-  "it", "latin-1"  ,  /* Italian  */
-  "iw", "ibm-916", /* hebrew */
-  
-  "ja", "ibm-943", /* Japanese */
-  "ji", "ibm-916", /* Yiddish */
-  
-  "kl", "ibm-914", /* Greenlandic */
-  "ko", "ibm-949", /* korean  */
-  
-  "lt", "ibm-914", /* Lithuanian */
-  "lv", "ibm-914", /* latvian (lettish) */
-  
-  "mk", "ibm-915"  , /* Macedonian */
-  "mt", "ibm-1208"  , /* Maltese [UTF8] */
-  
-  "nl", "latin-1"  ,  /* dutch */
-  "no", "latin-1"  ,  /* Norwegian */
-  
-  "pl", "ibm-912"  , /* Polish */
-  "pt", "latin-1"  ,  /* Portugese */
-  
-  "rm", "latin-1"  ,  /* Rhaeto-romanic (?) */
-  "ro", "ibm-912"  , /* Romanian */
-  "ru", "ibm-878"  , /* Russian */
-  
-  "sk", "ibm-912"  , /* Slovak */
-
-  "sl", "ibm-912"  , /* Slovenian */
-  "sq", "latin-1"  ,  /* albanian */
-  "sr", "ibm-915"  , /* Serbian */
-  "sv", "latin-1"  ,  /* Swedish */
-  "sw", "latin-1"  ,  /* Swahili */
-  
-  "th", "ibm-1208" , /* Thai - UTF8 */
-  
-  "tr", "ibm-920",  /* Turkish */
-  
-  "uk", "ibm-915"  , /* pre 1990 Ukranian (?) */
-  
-  "zh", "Big-5",  /* Chinese */
-  0,    0 
-};
-
-static const char* 
-ufile_lookup_codepage(const char *locale)
-{ 
-  int32_t i;
-  for(i = 0; ufile_locale2codepage[i]; i+= 2)
-    if( ! strncmp(ufile_locale2codepage[i], locale, 2))
-      return ufile_locale2codepage[i + 1];
-  return 0;
-}
 
 static UBool hasICUData(const char *cp) {
     UErrorCode status = U_ZERO_ERROR;
@@ -185,7 +90,7 @@ u_fopen(const char    *filename,
 
   /* if the codepage is 0, use the default for the locale */
   if(codepage == 0) {
-    codepage = ufile_lookup_codepage(locale);
+    codepage = uprv_defaultCodePageForLocale(locale);
   
     /* if the codepage is still 0, the default codepage will be used */
   }
@@ -228,7 +133,7 @@ u_finit(FILE        *f,
   result->fConverter = NULL;
   result->fBundle = NULL;
 
-  if(hasICUData(codepage) == TRUE) {
+  if(hasICUData(codepage)) {
       /* if locale is 0, use the default */
       if(locale == 0)
         locale = uloc_getDefault();
@@ -246,7 +151,7 @@ u_finit(FILE        *f,
 
   /* if the codepage is 0, use the default for the locale */
   if(codepage == 0) {
-    codepage = ufile_lookup_codepage(locale); 
+    codepage = uprv_defaultCodePageForLocale(locale); 
 
 
 
@@ -332,7 +237,7 @@ u_fsetcodepage(    const char    *codepage,
 
   /* if the codepage is 0, use the default for the locale */
   if(codepage == 0) {
-    codepage = ufile_lookup_codepage(file->fBundle->fLocale);
+    codepage = uprv_defaultCodePageForLocale(file->fBundle->fLocale);
   
     /* if the codepage is still 0, fall back on the default codepage */
   }
