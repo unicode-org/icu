@@ -6,7 +6,7 @@ rem %1 path where the icu folder resides
 
 if "%1"=="" goto :error
 
-if "%ICU_DATA%"=="" set ICU_DATA=%1\icu\data\
+if "%ICU_DATA%"=="" set ICU_DATA=%1\data\
 
 rem toolversion: Debug or Release
 set toolversion=Release

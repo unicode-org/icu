@@ -21,19 +21,19 @@ CFG=Debug
 !IF "$(ICUP)"==""
 !ERROR Can't find path!
 !ELSE
-ICUDATA=$(ICUP)\icu\data
+ICUDATA=$(ICUP)\data
 ICU_DATA=$(ICUDATA)\
-DATA_PATH=$(ICUP)\icu\data^\
+DATA_PATH=$(ICUP)\data^\
 #TRANS=translit^\
 TEST=..\source\test\testdata^\
-TESTDATA=$(ICUP)\icu\source\test\testdata^\
-ICUTOOLS=$(ICUP)\icu\source\tools
+TESTDATA=$(ICUP)\source\test\testdata^\
+ICUTOOLS=$(ICUP)\source\tools
 !ENDIF
 
 LINK32 = link.exe
 LINK32_FLAGS = /out:"$(ICUDATA)/icudata.dll" /DLL /NOENTRY /base:"0x4ad00000" /comment:" Copyright (C) 1999-2000 International Business Machines Corporation and others.  All Rights Reserved. "
-#CPP_FLAGS = /I$(ICUP)\icu\include /GD /c
-CPP_FLAGS = /I$(ICUP)\icu\include /GD /c /Fo$@
+#CPP_FLAGS = /I$(ICUP)\include /GD /c
+CPP_FLAGS = /I$(ICUP)\include /GD /c /Fo$@
 
 #Here we test if configuration is given
 !IF "$(CFG)" != "Release" && "$(CFG)" != "release" && "$(CFG)" != "Debug" && "$(CFG)" != "debug"
@@ -58,7 +58,7 @@ NULL=
 NULL=nul
 !ENDIF
 
-PATH = $(PATH);$(ICUP)\icu\bin\$(CFG)
+PATH = $(PATH);$(ICUP)\bin\$(CFG)
 
 # Suffixes for data files
 .SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
