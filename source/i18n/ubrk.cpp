@@ -69,7 +69,7 @@ ubrk_openRules(const UChar *rules,
            UErrorCode *status)
 {
   if(U_FAILURE(*status)) return 0;
-
+  *status = U_UNSUPPORTED_ERROR;
   return 0;
 }
 
