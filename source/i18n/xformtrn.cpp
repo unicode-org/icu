@@ -7,6 +7,8 @@
 *   05/24/01    aliu        Creation.
 **********************************************************************
 */
+// THIS CLASS IS CURRENTLY UNUSED
+#if 0
 
 #include "xformtrn.h"
 #include "unicode/unifilt.h"
@@ -63,3 +65,6 @@ void TransformTransliterator::handleTransliterate(Replaceable& text, UTransPosit
 }
 
 U_NAMESPACE_END
+
+#endif
+// THIS CLASS IS CURRENTLY UNUSED

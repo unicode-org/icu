@@ -7,6 +7,9 @@
 *   05/24/01    aliu        Creation.
 **********************************************************************
 */
+// THIS CLASS IS CURRENTLY UNUSED
+#if 0
+
 #ifndef XFORMTRN_H
 #define XFORMTRN_H
 
@@ -57,3 +60,6 @@ class U_I18N_API TransformTransliterator : public Transliterator {
 U_NAMESPACE_END
 
 #endif
+
+#endif
+// THIS CLASS IS CURRENTLY UNUSED
