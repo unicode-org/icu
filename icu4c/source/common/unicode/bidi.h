@@ -40,27 +40,27 @@ U_NAMESPACE_BEGIN
  * Unicode BiDi algorithm, see ubidi.h.
  *
  * @see UBiDi
- * @deprecated To be removed after 2002-sep-30; use the C API with UBiDi and ubidi_... functions.
+ * @obsolete ICU 2.4. Use the C API with UBiDi and ubidi_... functions instead since this API will be removed in that release.
  */
 class U_COMMON_API BiDi : public UObject {
 public:
     /** @memo Default constructor, calls ubidi_open(). 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     BiDi();
 
     /** @memo Constructor, calls ubidi_open(). 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     BiDi(UErrorCode &rErrorCode);
 
     /** @memo Preallocating constructor, calls ubidi_openSized(). 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     BiDi(int32_t maxLength, int32_t maxRunCount, UErrorCode &rErrorCode);
 
     /** @memo Destructor, calls ubidi_close(). 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     ~BiDi();
 
@@ -73,7 +73,7 @@ public:
      *
      * @see setPara
      * @see writeReordered
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     void
     setInverse(UBool isInverse);
@@ -82,13 +82,13 @@ public:
      * Is this BiDi object set to perform the inverse BiDi algorithm?
      *
      * @see setInverse
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     UBool
     isInverse();
 
     /** @memo Set this object for one paragraph's text. 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     BiDi &
     setPara(const UChar *text, int32_t length,
@@ -97,7 +97,7 @@ public:
 
 
     /** @memo Set this object for one line of the paragraph object's text. 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     BiDi &
     setLine(const BiDi &rParaBiDi,
@@ -105,50 +105,50 @@ public:
             UErrorCode &rErrorCode);
 
     /** @memo Get the directionality of the text. 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     UBiDiDirection
     getDirection() const;
 
     /** @memo Get the pointer to the text.
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     const UChar *
     getText() const;
 
     /** @memo Get the length of the text. 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     int32_t
     getLength() const;
 
     /** @memo Get the paragraph level of the text. 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     UBiDiLevel
     getParaLevel() const;
 
     /** @memo Get the level for one character. 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     UBiDiLevel
     getLevelAt(int32_t charIndex) const;
 
     /** @memo Get an array of levels for each character. 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     const UBiDiLevel *
     getLevels(UErrorCode &rErrorCode);
 
     /** @memo Get a logical run. 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     void
     getLogicalRun(int32_t logicalStart,
                   int32_t &rLogicalLimit, UBiDiLevel &rLevel) const;
 
     /** @memo Get the number of runs. 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     int32_t
     countRuns(UErrorCode &rErrorCode);
@@ -156,19 +156,19 @@ public:
     /**
      * @memo Get one run's logical start, length, and directionality,
      *       which can be 0 for LTR or 1 for RTL.     
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     UBiDiDirection
     getVisualRun(int32_t runIndex, int32_t &rLogicalStart, int32_t &rLength);
 
     /** @memo Get the visual position from a logical text position. 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     int32_t
     getVisualIndex(int32_t logicalIndex, UErrorCode &rErrorCode);
 
     /** @memo Get the logical text position from a visual position. 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     int32_t
     getLogicalIndex(int32_t visualIndex, UErrorCode &rErrorCode);
@@ -176,7 +176,7 @@ public:
     /**
      *  @memo Get a logical-to-visual index map (array) for the characters in the UBiDi
      *       (paragraph or line) object.
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     void
     getLogicalMap(int32_t *indexMap, UErrorCode &rErrorCode);
@@ -184,25 +184,25 @@ public:
     /**
      * @memo Get a visual-to-logical index map (array) for the characters in the UBiDi
      *       (paragraph or line) object.
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     void
     getVisualMap(int32_t *indexMap, UErrorCode &rErrorCode);
 
     /** @memo Same as ubidi_reorderLogical(). 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     static void
     reorderLogical(const UBiDiLevel *levels, int32_t length, int32_t *indexMap);
 
     /** @memo Same as ubidi_reorderVisual(). 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     static void
     reorderVisual(const UBiDiLevel *levels, int32_t length, int32_t *indexMap);
 
     /** @memo Same as ubidi_invertMap(). 
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     static void
     invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
@@ -214,7 +214,7 @@ public:
      * write a reordered string to the destination buffer.
      *
      * @see ubidi_writeReordered
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     int32_t
     writeReordered(UChar *dest, int32_t destSize,
@@ -225,7 +225,7 @@ public:
      * Reverse a Right-To-Left run of Unicode text.
      *
      * @see ubidi_writeReverse
-     * @deprecated
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     static int32_t
     writeReverse(const UChar *src, int32_t srcLength,
@@ -236,14 +236,14 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @draft ICU 2.2
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @draft ICU 2.2
+     * @obsolete ICU 2.4. Use the parallel ubidi_ C API instead since this API will be removed in that release.
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
@@ -411,7 +411,7 @@ BiDi::writeReverse(const UChar *src, int32_t srcLength,
 U_NAMESPACE_END
 #else
 
-#error "The unicode/bidi.h header is deprecated. Please use the BiDi C API in unicode/ubidi.h instead."
+#error "The unicode/bidi.h header is obsolete. Please use the BiDi C API in unicode/ubidi.h instead."
 
 #endif /* ICU_UBIDI_USE_DEPRECATES */
 
