@@ -344,7 +344,11 @@ public:
     * Parse the given string using this object's choices. The method
     * does string comparisons to try to find an optimal match.
     * If no object can be parsed, index is unchanged, and NULL is
-    * returned.
+    * returned.  The result is returned as the most parsimonious
+    * type of <code>Formattable</code> that will accomodate all of the
+    * necessary precision.  For example, if the result is exactly 12,
+    * it will be returned as a long.  However, if it is 1.5, it will
+    * be returned as a double.
     *
     * @param text           The text to be parsed.
     * @param result         Formattable to be set to the parse result.
@@ -352,6 +356,7 @@ public:
     * @param parsePosition  The position to start parsing at on input.
     *                       On output, moved to after the last successfully
     *                       parse character. On parse failure, does not change.
+    * @see Formattable
     * @stable
     */
     virtual void parse(const UnicodeString& text,
