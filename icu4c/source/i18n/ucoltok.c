@@ -111,6 +111,10 @@ void ucol_tok_initTokenList(UColTokenParser *src, UErrorCode *status) {
   uhash_setValueDeleter(uchars2tokens, deleteElement);
 }
 
+void ucol_tok_closeTokenList() {
+    uhash_close(uchars2tokens);
+}
+
 UColToken *ucol_tok_open() {
   return NULL;
 }
@@ -127,7 +131,7 @@ Processing Description
   handled. 
 */
 
-uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
+uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
   UColToken *lastToken = NULL;
   uint32_t newCharsLen = 0, newExtensionsLen = 0;
   uint32_t charsOffset = 0, extensionOffset = 0;
@@ -508,3 +512,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
   return listPosition;
 }
 
+uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
+    ucol_uprv_tok_assembleTokenList(src, status);
+    ucol_tok_closeTokenList();
+}
