@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedBreakIterator.java,v $ 
- * $Date: 2000/05/09 22:50:42 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/05/18 19:03:36 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -240,7 +240,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.6 $ $Date: 2000/05/09 22:50:42 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.7 $ $Date: 2000/05/18 19:03:36 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -1595,14 +1595,14 @@ visitedChars = 0;
             // for each category...
             for (int i = 0; i < categories.size(); i++) {
                 UnicodeSet chars = (UnicodeSet)(categories.elementAt(i));
-                String pairs = chars.getPairs();
+                int n = chars.getRangeCount();
 
                 // go through the character ranges in the category one by one...
-                for (int j = 0; j < pairs.length(); j += 2) {
+                for (int j = 0; j < n; ++j) {
                     // and set the corresponding elements in the CompactArray accordingly
                     if (i != 0) {
-                        charCategoryTable.setElementAt(pairs.charAt(j), pairs.charAt(j + 1),
-                                (byte)i);
+                        charCategoryTable.setElementAt((char)chars.getRangeStart(j),
+                            (char)chars.getRangeEnd(j), (byte)i);
                     }
 
                     // (category 0 is special-- it's the hiding place for the ignore
@@ -1610,8 +1610,8 @@ visitedChars = 0;
                     // -1 [this is because category 0 contains all characters not
                     // specifically mentioned anywhere in the rules] )
                     else {
-                        charCategoryTable.setElementAt(pairs.charAt(j), pairs.charAt(j + 1),
-                                IGNORE);
+                        charCategoryTable.setElementAt((char)chars.getRangeStart(j),
+                            (char)chars.getRangeEnd(j), IGNORE);
                     }
                 }
             }
