@@ -352,5 +352,19 @@ U_CFUNC void
 _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                           UErrorCode *pErrorCode);
 
+/*
+ * Internal function returning a UnicodeSet for toUnicode() conversion.
+ * Currently only used for ISO-2022-CN, and only handles roundtrip mappings.
+ * In the future, if we add support for reverse-fallback sets, this function
+ * needs to be updated, and called for each initial state.
+ * Does not currently handle extensions.
+ * Does not empty the set first.
+ */
+U_CFUNC void
+_MBCSGetUnicodeSetForBytes(const UConverter *cnv,
+                           USet *set,
+                           UConverterUnicodeSet which,
+                           uint8_t state, int32_t lowByte, int32_t highByte,
+                           UErrorCode *pErrorCode);
 
 #endif

@@ -488,9 +488,11 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
             (myLocale[2]=='_' || myLocale[2]=='\0')){
 
             /* open the required converters and cache them */
-            myConverterData->myConverterArray[GB2312_1]     = ucnv_open("ibm-5478",errorCode);
-            myConverterData->myConverterArray[ISO_IR_165]   = ucnv_open("iso-ir-165",errorCode);
-            myConverterData->myConverterArray[CNS_11643]    = ucnv_open("cns-11643-1992",errorCode);
+            myConverterData->myConverterArray[GB2312_1]         = ucnv_open("ibm-5478",errorCode);
+            if(version==1) {
+                myConverterData->myConverterArray[ISO_IR_165]   = ucnv_open("iso-ir-165",errorCode);
+            }
+            myConverterData->myConverterArray[CNS_11643]        = ucnv_open("cns-11643-1992",errorCode);
 
 
             /*initialize the state variables*/
@@ -2793,12 +2795,14 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
     if (U_FAILURE(*pErrorCode)) {
         return;
     }
+#ifdef U_ENABLE_GENERIC_ISO_2022
     if (cnv->sharedData == &_ISO2022Data) {
         /* We use UTF-8 in this case */
         uset_addRange(set, 0, 0xd7FF);
         uset_addRange(set, 0xE000, 0x10FFFF);
         return;
     }
+#endif
 
     cnvData = (UConverterDataISO2022*)cnv->extraInfo;
     if (cnv->sharedData == &_ISO2022KRData && cnvData->currentConverter != NULL) {
@@ -2811,28 +2815,29 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
     case 'j':
         if(jpCharsetMasks[cnvData->version]&CSM(ISO8859_1)) {
             /* include Latin-1 for some variants of JP */
-            cnvSet = uset_open(0, 0xff);
+            uset_addRange(set, 0, 0xff);
         } else {
             /* include ASCII for JP */
-            cnvSet = uset_open(0, 0x7f);
+            uset_addRange(set, 0, 0x7f);
         }
         /* include half-width Katakana for JP */
-        uset_addRange(cnvSet, 0xff61, 0xff9f);
+        uset_addRange(set, 0xff61, 0xff9f);
         break;
     case 'c':
     case 'z':
         /* include ASCII for CN */
-        cnvSet = uset_open(0, 0x7f);
+        uset_addRange(set, 0, 0x7f);
         break;
     case 'k':
         /* there is only one converter for KR, and it is not in the myConverterArray[] */
         ucnv_getUnicodeSet(cnvData->currentConverter, set, which, pErrorCode);
         return;
     default:
-        cnvSet = uset_open(1, 0);
         break;
     }
 
+    /* open a helper set because ucnv_getUnicodeSet() first empties its result set */
+    cnvSet = uset_open(1, 0);
     if (!cnvSet) {
         *pErrorCode =U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -2847,8 +2852,19 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
      */
     for (i=0; i<UCNV_2022_MAX_CONVERTERS; i++) {
         if(cnvData->myConverterArray[i]!=NULL) {
-            ucnv_getUnicodeSet(cnvData->myConverterArray[i], cnvSet, which, pErrorCode);
-            uset_addAll(set, cnvSet /* pErrorCode */);
+            if( (cnvData->locale[0]=='c' || cnvData->locale[0]=='z') &&
+                cnvData->version==0 && i==CNS_11643
+            ) {
+                /* special handling for non-EXT ISO-2022-CN: add only code points for CNS planes 1 and 2 */
+                _MBCSGetUnicodeSetForBytes(
+                        cnvData->myConverterArray[i],
+                        set, UCNV_ROUNDTRIP_SET,
+                        0, 0x81, 0x82,
+                        pErrorCode);
+            } else {
+                ucnv_getUnicodeSet(cnvData->myConverterArray[i], cnvSet, which, pErrorCode);
+                uset_addAll(set, cnvSet /* pErrorCode */);
+            }
         }
     }
     uset_close(cnvSet);

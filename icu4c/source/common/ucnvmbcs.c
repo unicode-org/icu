@@ -426,6 +426,98 @@ _MBCSSizeofFromUBytes(UConverterMBCSTable *mbcsTable) {
     }
 }
 
+/* similar to _MBCSGetNextUChar() but recursive */
+static void
+_getUnicodeSetForBytes(const UConverter *cnv,
+                       const int32_t (*stateTable)[256], const uint16_t *unicodeCodeUnits,
+                       USet *set,
+                       UConverterUnicodeSet which,
+                       uint8_t state, uint32_t offset, int32_t lowByte, int32_t highByte,
+                      
+                       UErrorCode *pErrorCode) {
+    int32_t b, entry;
+
+    for(b=lowByte; b<=highByte; ++b) {
+        entry=stateTable[state][b];
+        if(MBCS_ENTRY_IS_TRANSITION(entry)) {
+            _getUnicodeSetForBytes(
+                cnv, stateTable, unicodeCodeUnits,
+                set, which,
+                (uint8_t)MBCS_ENTRY_TRANSITION_STATE(entry),
+                offset+MBCS_ENTRY_TRANSITION_OFFSET(entry),
+                0, 0xff,
+                pErrorCode);
+        } else {
+            UChar32 c;
+            int32_t rowOffset=offset;
+            uint8_t action;
+
+            c=U_SENTINEL;
+
+            /*
+             * An if-else-if chain provides more reliable performance for
+             * the most common cases compared to a switch.
+             */
+            action=(uint8_t)(MBCS_ENTRY_FINAL_ACTION(entry));
+            if(action==MBCS_STATE_VALID_DIRECT_16) {
+                /* output BMP code point */
+                c=(UChar)MBCS_ENTRY_FINAL_VALUE_16(entry);
+            } else if(action==MBCS_STATE_VALID_16) {
+                offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
+                c=unicodeCodeUnits[offset];
+                if(c<0xfffe) {
+                    /* output BMP code point */
+                } else {
+                    c=U_SENTINEL;
+                }
+            } else if(action==MBCS_STATE_VALID_16_PAIR) {
+                offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
+                c=unicodeCodeUnits[offset++];
+                if(c<0xd800) {
+                    /* output BMP code point below 0xd800 */
+                } else if(c<=0xdbff) {
+                    /* output roundtrip or fallback supplementary code point */
+                    c=((c&0x3ff)<<10)+unicodeCodeUnits[offset]+(0x10000-0xdc00);
+                } else if(c==0xe000) {
+                    /* output roundtrip BMP code point above 0xd800 or fallback BMP code point */
+                    c=unicodeCodeUnits[offset];
+                } else {
+                    c=U_SENTINEL;
+                }
+            } else if(action==MBCS_STATE_VALID_DIRECT_20) {
+                /* output supplementary code point */
+                c=(UChar32)(MBCS_ENTRY_FINAL_VALUE(entry)+0x10000);
+            }
+
+            if(c>=0) {
+                uset_add(set, c);
+            }
+            offset=rowOffset;
+        }
+    }
+}
+
+/*
+ * Internal function returning a UnicodeSet for toUnicode() conversion.
+ * Currently only used for ISO-2022-CN, and only handles roundtrip mappings.
+ * In the future, if we add support for reverse-fallback sets, this function
+ * needs to be updated, and called for each initial state.
+ * Does not currently handle extensions.
+ * Does not empty the set first.
+ */
+U_CFUNC void
+_MBCSGetUnicodeSetForBytes(const UConverter *cnv,
+                           USet *set,
+                           UConverterUnicodeSet which,
+                           uint8_t state, int32_t lowByte, int32_t highByte,
+                           UErrorCode *pErrorCode) {
+    _getUnicodeSetForBytes(
+        cnv, cnv->sharedData->mbcs.stateTable, cnv->sharedData->mbcs.unicodeCodeUnits,
+        set, which,
+        state, 0, lowByte, highByte,
+        pErrorCode);
+}
+
 static void
 _MBCSGetUnicodeSet(const UConverter *cnv,
                    USet *set,
