@@ -76,6 +76,7 @@ struct UColToken {
   UColTokListHeader *listHeader;
   UColToken* previous;
   UColToken* next;
+  UChar *rulesToParse;
 };
 
 typedef struct {
