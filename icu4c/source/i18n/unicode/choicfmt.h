@@ -361,6 +361,7 @@ public:
      * Gets the pattern.
      * 
      * @param pattern    Output param which will recieve the pattern
+     *                   Previous contents are deleted.
      * @return    A reference to 'pattern'
      * @stable
      */
@@ -454,84 +455,85 @@ public:
      */
     virtual const UnicodeString* getFormats(int32_t& count) const;
 
-   /**
-    * Format a double or long number using this object's choices.
-    *
-    * @param number     The value to be formatted.
-    * @param toAppendTo The string to append the formatted string to.
-    *                   This is an output parameter.
-    * @param pos        On input: an alignment field, if desired.
-    *                   On output: the offsets of the alignment field.
-    * @return           A reference to 'toAppendTo'.
-    * @stable
-    */
+    /**
+     * Format a double or long number using this object's choices.
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @return          Reference to 'appendTo' parameter.
+     * @stable
+     */
     virtual UnicodeString& format(double number,
-                                  UnicodeString& toAppendTo,
+                                  UnicodeString& appendTo,
                                   FieldPosition& pos) const;
-   /**
-    * Format a int_32t number using this object's choices.
-    *
-    * @param number     The value to be formatted.
-    * @param toAppendTo The string to append the formatted string to.
-    *                   This is an output parameter.
-    * @param pos        On input: an alignment field, if desired.
-    *                   On output: the offsets of the alignment field.
-    * @return           A reference to 'toAppendTo'.
-    * @stable
-    */
+    /**
+     * Format a int_32t number using this object's choices.
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @return          Reference to 'appendTo' parameter.
+     * @stable
+     */
     virtual UnicodeString& format(int32_t number,
-                                  UnicodeString& toAppendTo,
+                                  UnicodeString& appendTo,
                                   FieldPosition& pos) const;
-   /**
-    * Format an array of objects using this object's choices.
-    *
-    * @param objs       The array of objects to be formatted.
-    * @param cnt        The size of objs.
-    * @param toAppendTo The string to append the formatted string to.
-    *                   This is an output parameter.
-    * @param pos        On input: an alignment field, if desired.
-    *                   On output: the offsets of the alignment field.
-    * @param success    Output param set to success/failure code on
-    *                   exit. 
-    * @return           A reference to 'toAppendTo'.
-    * @stable
-    */
+    /**
+     * Format an array of objects using this object's choices.
+     *
+     * @param objs      The array of objects to be formatted.
+     * @param cnt       The size of objs.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @param success   Output param set to success/failure code on
+     *                  exit. 
+     * @return          Reference to 'appendTo' parameter.
+     * @stable
+     */
     virtual UnicodeString& format(const Formattable* objs,
                                   int32_t cnt,
-                                  UnicodeString& toAppendTo,
+                                  UnicodeString& appendTo,
                                   FieldPosition& pos,
                                   UErrorCode& success) const;
-   /**
-    * Format an object using this object's choices.
-    *
-    *
-    * @param obj        The object to be formatted.
-    * @param toAppendTo The string to append the formatted string to.
-    *                   This is an output parameter.
-    * @param pos        On input: an alignment field, if desired.
-    *                   On output: the offsets of the alignment field.
-    * @param status     Output param set to success/failure code on
-    *                   exit. 
-    * @return           A reference to 'toAppendTo'.
-    * @stable
-    */
+    /**
+     * Format an object using this object's choices.
+     *
+     *
+     * @param obj       The object to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @param status    Output param set to success/failure code on
+     *                  exit. 
+     * @return          Reference to 'appendTo' parameter.
+     * @stable
+     */
     virtual UnicodeString& format(const Formattable& obj,
-                                  UnicodeString& toAppendTo,
+                                  UnicodeString& appendTo,
                                   FieldPosition& pos, 
                                   UErrorCode& status) const;
 
     /**
      * Redeclared NumberFormat method.
      *
-     * @param obj        The object to be formatted.
-     * @param result     Output param which will receive the formatted object.
-     * @param status     Output param set to success/failure code on
-     *                   exit. 
-     * @return           A reference to 'result'.
+     * @param obj       The object to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param status    Output param set to success/failure code on
+     *                  exit. 
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     UnicodeString& format(const Formattable& obj,
-                          UnicodeString& result,
+                          UnicodeString& appendTo,
                           UErrorCode& status) const;
 
     /**
@@ -540,12 +542,13 @@ public:
      * pure virtual format() methods with the default FieldPosition.
      *
      * @param number    The value to be formatted.
-     * @param output    Output param with the formatted string.
-     * @return          A reference to 'output' param.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     UnicodeString& format(  double number,
-                            UnicodeString& output) const;
+                            UnicodeString& appendTo) const;
 
     /**
      * Redeclared NumberFormat method.
@@ -553,12 +556,13 @@ public:
      * pure virtual format() methods with the default FieldPosition.
      *
      * @param number    The value to be formatted.
-     * @param output    Output param with the formatted string.
-     * @return          A reference to 'output' param.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     UnicodeString& format(  int32_t number,
-                            UnicodeString& output) const;
+                            UnicodeString& appendTo) const;
 
    /**
     * Return a long if possible (e.g. within range LONG_MAX,
@@ -766,23 +770,23 @@ inline double ChoiceFormat::previousDouble( double d )
 
 inline UnicodeString&
 ChoiceFormat::format(const Formattable& obj,
-                     UnicodeString& result,
+                     UnicodeString& appendTo,
                      UErrorCode& status) const {
     // Don't use Format:: - use immediate base class only,
     // in case immediate base modifies behavior later.
-    return NumberFormat::format(obj, result, status);
+    return NumberFormat::format(obj, appendTo, status);
 }
 
 inline UnicodeString&
 ChoiceFormat::format(double number,
-                     UnicodeString& output) const {
-    return NumberFormat::format(number, output);
+                     UnicodeString& appendTo) const {
+    return NumberFormat::format(number, appendTo);
 }
 
 inline UnicodeString&
 ChoiceFormat::format(int32_t number,
-                     UnicodeString& output) const {
-    return NumberFormat::format(number, output);
+                     UnicodeString& appendTo) const {
+    return NumberFormat::format(number, appendTo);
 }
 U_NAMESPACE_END
 
