@@ -11,7 +11,7 @@
 ALL : "$(TESTDATAOUT)\testdata.dat" 
 	@echo Test data is built.
 
-"$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\ja_data.res" "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\ja_data.res" "$(TESTDATAOUT)\DataDrivenCollationTest.res" $(TESTDATAOUT)test.dat
+"$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\ja_data.res" "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\testaliases.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\ja_data.res" "$(TESTDATAOUT)\DataDrivenCollationTest.res" $(TESTDATAOUT)test.dat
 	@echo Building test data
 	copy "$(TESTDATABLD)\te.res" "$(TESTDATAOUT)\testudata_nam.typ"
 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m common -c -p testdata -O "$(PKGOPT)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
@@ -21,6 +21,7 @@ te.res
 te_IN.res
 testtypes.res
 testempty.res
+testaliases.res
 ja_data.res
 DataDrivenCollationTest.res
 test.dat
