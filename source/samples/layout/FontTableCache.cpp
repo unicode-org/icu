@@ -44,6 +44,9 @@ FontTableCache::~FontTableCache()
     }
 
     fTableCacheCurr = 0;
+
+    LE_DELETE_ARRAY(fTableCache);
+    fTableCache = NULL;
 }
 
 const void *FontTableCache::find(LETag tableTag) const

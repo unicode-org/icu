@@ -19,6 +19,7 @@
 #include "GDIGUISupport.h"
 #include "GDIFontMap.h"
 #include "UnicodeReader.h"
+#include "ScriptCompositeFontInstance.h"
 
 #include "resource.h"
 
@@ -109,6 +110,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
         }
     }
 
+    UnregisterClass(szAppName, hInstance);
     return msg.wParam;
 }
 
@@ -120,6 +122,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     static GDIFontMap *fontMap = NULL;
     static GDISurface *surface = NULL;
     static GDIGUISupport *guiSupport = new GDIGUISupport();
+    static ScriptCompositeFontInstance *font = NULL;
 
     switch (message) {
     case WM_CREATE:
@@ -130,6 +133,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         surface = new GDISurface(hdc);
 
         fontMap = new GDIFontMap(surface, "FontMap.GDI", 24, guiSupport, fontStatus);
+        font    = new ScriptCompositeFontInstance(fontMap);
 
         if (LE_FAILURE(fontStatus)) {
             ReleaseDC(hwnd, hdc);
@@ -141,7 +145,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         context->width  = 600;
         context->height = 400;
 
-        context->paragraph = Paragraph::paragraphFactory("Sample.txt", fontMap, guiSupport);
+        context->paragraph = Paragraph::paragraphFactory("Sample.txt", font, guiSupport);
         SetWindowLong(hwnd, 0, (LONG) context);
 
         windowCount += 1;
@@ -288,7 +292,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
                 hdc = GetDC(hwnd);
                 surface->setHDC(hdc);
 
-                Paragraph *newParagraph = Paragraph::paragraphFactory(szFileName, fontMap, guiSupport);
+                Paragraph *newParagraph = Paragraph::paragraphFactory(szFileName, font, guiSupport);
 
                 if (newParagraph != NULL) {
                     context = (Context *) GetWindowLong(hwnd, 0);
@@ -337,7 +341,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         delete context;
 
         if (--windowCount <= 0) {
-            delete fontMap;
+            delete font;
             delete surface;
 
             PostQuitMessage(0);
