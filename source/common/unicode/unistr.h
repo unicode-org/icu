@@ -2785,11 +2785,12 @@ public:
    * \Uhhhhhhhh   8 hex digits
    * \xhh         1-2 hex digits
    * \ooo         1-3 octal digits; o in [0-7]
+   * \cX          control-X; X is masked with 0x1F
    *
    * as well as the standard ANSI C escapes:
    *
    * \a => U+0007, \b => U+0008, \t => U+0009, \n => U+000A,
-   * \v => U+000B, \f => U+000C, \r => U+000D,
+   * \v => U+000B, \f => U+000C, \r => U+000D, \e => U+001B,
    * \" => U+0022, \' => U+0027, \? => U+003F, \\ => U+005C
    *
    * Anything else following a backslash is generically escaped.  For
