@@ -688,11 +688,14 @@ sub merge_PropertyValueAliases {
     }
 
     # Merge the combining class values in manually
+    # Add the same values to the synthetic lccc and tccc properties
     die "Error: No ccc data"
         unless exists $va->{'ccc'};
     for my $ccc (keys %{$va->{'ccc'}}) {
         die "Error: Can't overwrite ccc $ccc"
             if (exists $h->{'ccc'}->{$ccc});
+        $h->{'lccc'}->{$ccc} =
+        $h->{'tccc'}->{$ccc} =
         $h->{'ccc'}->{$ccc} = $va->{'ccc'}->{$ccc};
     }
     delete $va->{'ccc'};
