@@ -1927,7 +1927,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
 
     UnicodeString pat, buf;
     UBool usePat = FALSE;
-    UnicodeSet* scratch = 0;
+    UnicodeSet scratch;
     RuleCharacterIterator::Pos backup;
 
     // mode: 0=before [, 1=between [...], 2=after ]
@@ -2038,14 +2038,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
             }
 
             if (nested == 0) {
-                if (scratch == 0) { // lazy allocation
-                    scratch = new UnicodeSet();
-                    if (scratch == 0) {
-                        ec = U_MEMORY_ALLOCATION_ERROR;
-                        return;
-                    }
-                }
-                nested = scratch;
+                nested = &scratch;
             }
             switch (setMode) {
             case 1:
@@ -2265,9 +2258,6 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
             break;
         }
     }
-
-    delete scratch;
-    scratch = NULL;
 
     if (mode != 2) {
         // syntaxError(chars, "Missing ']'");
