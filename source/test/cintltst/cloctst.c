@@ -72,7 +72,7 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* display name (English) */
     {   "English (United States)", "French (France)", "Catalan (Spain)", 
         "Greek (Greece)", "Norwegian (Norway, NY)", "Chinese (Simplified Han, China)", 
-        "German (Germany, Collation=Phonebook Order)", "Spanish (Collation=Traditional)", "Japanese (Japan, Calendar=JAPANESE)" },
+        "German (Germany, Collation=Phonebook Order)", "Spanish (Collation=Traditional)", "Japanese (Japan, Calendar=Japaneese Calendar)" },
 
     /* display language (French) */
     {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien",    "chinois", "allemand", "espagnol", "japonais"     },
