@@ -205,7 +205,7 @@ static uint8_t utf16fixup[32] = {
 }
 
 uint32_t getSpecialCE(const UCollator *coll, collIterate *source, UErrorCode *status);
-uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
+U_CFUNC uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
 uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
 void incctx_cleanUpContext(incrementalContext *ctx);
 UChar incctx_appendChar(incrementalContext *ctx, UChar c);
@@ -333,6 +333,14 @@ typedef struct {
       UColAttributeValue strength;          /* attribute for strength */
 } UCATableHeader;
 
+typedef struct {
+  uint32_t byteSize;
+  uint32_t tableSize;
+  uint32_t contsSize;
+  uint32_t table;
+  uint32_t conts;
+} InverseTableHeader;
+
 struct UCollator {
     UBool freeOnClose;
     UResourceBundle *rb;
@@ -370,6 +378,7 @@ void incctx_cleanUpContext(incrementalContext *ctx);
 UChar incctx_appendChar(incrementalContext *ctx, UChar c);
 UCollationResult alternateIncrementalProcessing(const UCollator *coll, incrementalContext *srcCtx, incrementalContext *trgCtx);
 void ucol_initUCA(UErrorCode *status);
+void ucol_initInverseUCA(UErrorCode *status);
 UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status);
 uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, UErrorCode *status);
 int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, incrementalContext *ctx, UErrorCode *status);
