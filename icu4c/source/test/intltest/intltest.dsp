@@ -781,6 +781,10 @@ SOURCE=.\tstnorm.cpp
 
 SOURCE=.\tstnorm.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\tstnrapi.cpp
+# End Source File
 # End Group
 # Begin Group "properties & sets"
 
