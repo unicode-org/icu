@@ -623,7 +623,7 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
     const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
     UBool isCESU8 = (UBool)(args->converter->sharedData == &_CESU8Data);
     uint32_t ch, ch2;
-    int32_t offsetNum = 0, nextSourceIndex;
+    int32_t offsetNum, nextSourceIndex;
     int16_t indexToWrite;
     char temp[4];
 
@@ -631,7 +631,11 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
     {
         ch = cnv->fromUSurrogateLead;
         cnv->fromUSurrogateLead = 0;
+        offsetNum = -1;
+        nextSourceIndex = 0;
         goto lowsurrogate;
+    } else {
+        offsetNum = 0;
     }
 
     while (mySource < sourceLimit && myTarget < targetLimit)
