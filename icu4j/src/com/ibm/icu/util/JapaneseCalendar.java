@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/JapaneseCalendar.java,v $ 
- * $Date: 2002/02/16 03:06:29 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/10/02 20:20:24 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -534,5 +534,21 @@ public class JapaneseCalendar extends GregorianCalendar {
         default:
             return super.handleGetLimit(field, limitType);
         }
+    }
+
+    private static CalendarFactory factory;
+    public static CalendarFactory factory() {
+        if (factory == null) {
+            factory = new CalendarFactory() {
+                public Calendar create(TimeZone tz, Locale loc) {
+                    return new JapaneseCalendar(tz, loc);
+                }
+
+                public String factoryName() {
+                    return "Japanese";
+                }
+            };
+        }
+        return factory;
     }
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/BuddhistCalendar.java,v $ 
- * $Date: 2002/02/16 03:06:24 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/10/02 20:20:25 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -186,5 +186,21 @@ public class BuddhistCalendar extends GregorianCalendar {
             return BE;
         }
         return super.handleGetLimit(field, limitType);
+    }
+
+    private static CalendarFactory factory;
+    public static CalendarFactory factory() {
+        if (factory == null) {
+            factory = new CalendarFactory() {
+                public Calendar create(TimeZone tz, Locale loc) {
+                    return new BuddhistCalendar(tz, loc);
+                }
+
+                public String factoryName() {
+                    return "Buddhist";
+                }
+            };
+        }
+        return factory;
     }
 }

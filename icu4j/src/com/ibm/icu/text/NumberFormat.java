@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2002/09/14 21:36:28 $ 
- * $Revision: 1.14 $
+ * $Date: 2002/10/02 20:20:21 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -21,6 +21,7 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Locale;
@@ -162,7 +163,7 @@ import com.ibm.icu.impl.LocaleUtility;
  *
  * see          DecimalFormat
  * see          java.text.ChoiceFormat
- * @version      $Revision: 1.14 $
+ * @version      $Revision: 1.15 $
  * @author       Mark Davis
  * @author       Helena Shih
  * @author       Alan Liu
@@ -483,18 +484,19 @@ public abstract class NumberFormat extends Format{
         public static final int FORMAT_INTEGER = INTEGERSTYLE;
 
         /**
-         * Return true if this factory will 'hide' other locales that
+         * Return true if this factory will 'cover' other locales that
          * are more specific than the ones in this factory.  E.g., if
-         * this 'hides' other locales, then by supporting the 'en'
+         * this 'covers' other locales, then by supporting the 'en'
          * locale, this also supports 'en_US', 'en_US_ETC' and so on,
          * even though only the 'en' locale is listed.
          */
-        public abstract boolean hasGenericLocales();
+        public abstract boolean covers();
 
         /**
-         * Return an array of the locales directly supported by this factory.
+         * Return an unmodifiable collection of the locale names directly 
+         * supported by this factory.
          */
-         public abstract Locale[] getSupportedLocales();
+         public abstract Set getSupportedLocaleNames();
 
         /**
          * Return a number format of the appropriate type.  If the locale
@@ -505,20 +507,20 @@ public abstract class NumberFormat extends Format{
     }
 
     public static abstract class SimpleNumberFormatFactory extends NumberFormatFactory {
-        final Locale locale;
-        final boolean isGeneric;
+        final Set localeNames;
+        final boolean covers;
 
-        public SimpleNumberFormatFactory(Locale locale, boolean isGeneric) {
-            this.locale = locale;
-            this.isGeneric = isGeneric;
+        public SimpleNumberFormatFactory(Locale locale, boolean covers) {
+            localeNames = Collections.singleton(LocaleUtility.canonicalLocaleString(locale));
+            this.covers = covers;
         }
 
-        public final boolean hasGenericLocales() {
-            return isGeneric;
+        public final boolean covers() {
+            return covers;
         }
 
-        public final Locale[] getSupportedLocales() {
-            return new Locale[] { locale };
+        public final Set getSupportedLocaleNames() {
+            return localeNames;
         }
     }
 
@@ -526,25 +528,17 @@ public abstract class NumberFormat extends Format{
         private NumberFormatFactory delegate;
 
         NFFactory(NumberFormatFactory delegate) {
-            super(true, delegate.hasGenericLocales());
+            super(delegate.covers() ? VISIBLE_COVERS : VISIBLE);
 
             this.delegate = delegate;
         }
 
-        protected Object handleCreate(Key key) {
-            NFKey nfkey = (NFKey)key;
-            Locale loc = nfkey.canonicalLocale();
-            int choice = nfkey.choice();
-            return delegate.createFormat(loc, choice);
+        protected Object handleCreate(Locale loc, int kind) {
+            return delegate.createFormat(loc, kind);
         }
 
-        protected Set handleGetSupportedIDs() {
-            Locale[] locales = delegate.getSupportedLocales();
-            Set result = new HashSet();
-            for (int i = 0; i < locales.length; ++i) {
-                result.add(locales.toString());
-            }
-            return result;
+        protected Set getSupportedIDs() {
+            return delegate.getSupportedLocaleNames();
         }
     }
 
@@ -553,30 +547,10 @@ public abstract class NumberFormat extends Format{
      * @return available locales
      */
     public static Locale[] getAvailableLocales() {
-        // return ICULocaleData.getAvailableLocales("NumberPatterns");
-        return getService().getAvailableLocales();
-    }
-
-    private static final class NFKey extends LocaleKey {
-        private int choice;
-
-        private static String[] CHOICE_NAMES = {
-            "number", "currency", "percent", "scientific", "integer"
-        };
-
-        private NFKey(String id, String canonicalID, String canonicalFallback, int choice) {
-            super(id, canonicalID, canonicalFallback, CHOICE_NAMES[choice]);
-            this.choice = choice;
-        }
-
-        int choice() {
-            return choice;
-        }
-
-        static NFKey createKey(ICULocaleService service, Locale locale, int choice) {
-            String id = LocaleUtility.canonicalLocaleString(locale.toString());
-            String fallback = service.validateFallbackLocale();
-            return new NFKey(id, id, fallback, choice);
+        if (service == null) {
+            return ICULocaleData.getAvailableLocales();
+        } else {
+            return service.getAvailableLocales();
         }
     }
 
@@ -597,45 +571,35 @@ public abstract class NumberFormat extends Format{
      * registerInstance).
      */
     public static boolean unregister(Object registryKey) {
-        return getService().unregisterFactory((Factory)registryKey);
+        if (service == null) {
+            return false;
+        } else {
+            return service.unregisterFactory((Factory)registryKey);
+        }
     }
 
     private static ICULocaleService service = null;
     private static ICULocaleService getService() {
         if (service == null) {
-            
-            final String[][] pattern = {
-                new String[] { "NumberPatterns" },
-                new String[] { "NumberElements" },
-                new String[] { "CurrencyElements" },
-            };
-
             class RBNumberFormatFactory extends ICUResourceBundleFactory {
-                RBNumberFormatFactory() {
-                    super ("LocaleElements", pattern, true, true);
-                }
-
-                protected Object handleCreate(Key key) {
-                    NFKey nfkey = (NFKey)key;
-                    Locale locale = nfkey.currentLocale();
-                    // System.out.println("testing locale: " + locale);
-                    if (acceptsLocale(locale)) {
-                        // System.out.println("creating with locale: " + nfkey.canonicalLocale());
-                        return createInstance(nfkey.canonicalLocale(), nfkey.choice());
-                    }
-                    // System.out.println("did not support locale");
-                    return null;
+                protected Object handleCreate(Locale loc, int kind) {
+                    return createInstance(loc, kind);
                 }
             }
                 
             ICULocaleService newService = new ICULocaleService("NumberFormat");
-
             newService.registerFactory(new RBNumberFormatFactory());
-
-            service = newService; // atomic
+            
+            synchronized (NumberFormat.class) {
+                if (service == null) {
+                    service = newService;
+                }
+            }
         }
         return service;
     }
+
+    // ===== End of factory stuff =====
 
     /**
      * Overrides hashCode
@@ -800,8 +764,7 @@ public abstract class NumberFormat extends Format{
     // Hook for service
     private static NumberFormat getInstance(Locale desiredLocale, int choice) {
         ICULocaleService service = getService();
-        NFKey key = NFKey.createKey(service, desiredLocale, choice);
-        NumberFormat result = (NumberFormat)service.getKey(key);
+        NumberFormat result = (NumberFormat)service.get(desiredLocale, choice);
 
         //System.out.println("desired locale: " + desiredLocale + " service result:" + result);
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICULocaleService.java,v $
- * $Date: 2002/09/14 21:36:30 $
- * $Revision: 1.7 $
+ * $Date: 2002/10/02 20:20:21 $
+ * $Revision: 1.8 $
  *
  *******************************************************************************
  */
@@ -14,6 +14,7 @@ package com.ibm.icu.impl;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -29,7 +30,7 @@ public class ICULocaleService extends ICUService {
     private String fallbackLocaleName;
 
     /**
-     * Construct an ICULocaleService.  This uses the current default locale as a fallback.
+     * Construct an ICULocaleService.
      */
     public ICULocaleService() {
     }
@@ -42,21 +43,44 @@ public class ICULocaleService extends ICUService {
     }
 
     /**
-     * Convenience override for callers using locales.
+     * Convenience override for callers using locales.  This calls
+     * get(Locale, int, Locale[]) with KIND_ANY for kind and null for
+     * actualReturn.
      */
     public Object get(Locale locale) {
-        return get(locale, null);
+        return get(locale, LocaleKey.KIND_ANY, null);
     }
 
     /**
-     * Convenience override for callers using locales.
+     * Convenience override for callers using locales.  This calls
+     * get(Locale, int, Locale[]) with a null actualReturn.
+     */
+    public Object get(Locale locale, int kind) {
+        return get(locale, kind, null);
+    }
+
+    /**
+     * Convenience override for callers using locales. This calls
+     * get(Locale, String, Locale[]) with a null kind.
      */
     public Object get(Locale locale, Locale[] actualReturn) {
+        return get(locale, LocaleKey.KIND_ANY, actualReturn);
+    }
+                   
+    /**
+     * Convenience override for callers using locales.  This uses
+     * createKey(Locale.toString(), kind) to create a key, calls getKey, and then
+     * if actualReturn is not null, returns the actualResult from
+     * getKey into a Locale.  
+     */
+    public Object get(Locale locale, int kind, Locale[] actualReturn) {
+        Key key = createKey(locale.toString(), kind);
         if (actualReturn == null) {
-            return get(locale.toString());
+            return getKey(key);
         }
+
         String[] temp = new String[1];
-        Object result = get(locale.toString(), temp);
+        Object result = getKey(key, temp);
         if (result != null) {
             actualReturn[0] = LocaleUtility.getLocaleFromName(temp[0]);
         }
@@ -64,22 +88,35 @@ public class ICULocaleService extends ICUService {
     }
 
     /**
-     * Convenience override for callers using locales.
+     * Convenience override for callers using locales.  This calls
+     * registerObject(Object, Locale, int kind, int coverage)
+     * passing KIND_ANY for the kind, and VISIBLE for the coverage.
      */
     public Factory registerObject(Object obj, Locale locale) {
-        return registerObject(obj, locale, true);
+        return registerObject(obj, locale, LocaleKey.KIND_ANY, LocaleKeyFactory.VISIBLE);
     }
 
     /**
-     * Convenience override for callers using locales.
+     * Convenience function for callers using locales.  This calls
+     * registerObject(Object, Locale, int kind, int coverage)
+     * passing VISIBLE for the coverage.
      */
-    public Factory registerObject(Object obj, Locale locale, boolean visible) {
-        return registerObject(obj, locale.toString(), visible);
+    public Factory registerObject(Object obj, Locale locale, int kind) {
+        return registerObject(obj, locale, kind, LocaleKeyFactory.VISIBLE);
     }
 
     /**
-     * Convenience method for callers using locales.  This is the 
-     * current typical API for this operation, though perhaps it should change.
+     * Convenience function for callers using locales.  This  instantiates
+     * a SimpleLocaleKeyFactory, and registers the factory.
+     */
+    public Factory registerObject(Object obj, Locale locale, int kind, int coverage) {
+        Factory factory = new SimpleLocaleKeyFactory(obj, locale, kind, coverage);
+	return registerFactory(factory);
+    }
+
+    /**
+     * Convenience method for callers using locales.  This returns the standard
+     * Locale list, built from the Set of visible ids.
      */
     public Locale[] getAvailableLocales() {
         Set visIDs = getVisibleIDs();
@@ -106,24 +143,26 @@ public class ICULocaleService extends ICUService {
      * is in upper case, with no trailing underscores.</p> 
      */
     public static class LocaleKey extends ICUService.Key {
-        private String prefix;
+        private int kind;
 	private String primaryID;
 	private String fallbackID;
 	private String currentID;
+
+        public static final int KIND_ANY = -1;
 
 	/**
 	 * Create a LocaleKey with canonical primary and fallback IDs.
 	 */
 	public static LocaleKey createWithCanonicalFallback(String primaryID, String canonicalFallbackID) {
-            return createWithCanonicalFallback(primaryID, canonicalFallbackID, null);
+            return createWithCanonicalFallback(primaryID, canonicalFallbackID, KIND_ANY);
 	}
 	    
 	/**
 	 * Create a LocaleKey with canonical primary and fallback IDs.
 	 */
-	public static LocaleKey createWithCanonicalFallback(String primaryID, String canonicalFallbackID, String prefix) {
+	public static LocaleKey createWithCanonicalFallback(String primaryID, String canonicalFallbackID, int kind) {
             String canonicalPrimaryID = LocaleUtility.canonicalLocaleString(primaryID);
-	    return new LocaleKey(primaryID, canonicalPrimaryID, canonicalFallbackID, prefix);
+	    return new LocaleKey(primaryID, canonicalPrimaryID, canonicalFallbackID, kind);
 	}
 	    
 	/**
@@ -132,10 +171,10 @@ public class ICULocaleService extends ICUService {
 	 * fallbackID is the current default locale's string in
 	 * canonical form.
 	 */
-        protected LocaleKey(String primaryID, String canonicalPrimaryID, String canonicalFallbackID, String prefix) {
+        protected LocaleKey(String primaryID, String canonicalPrimaryID, String canonicalFallbackID, int kind) {
 	    super(primaryID);
 
-            this.prefix = prefix;
+            this.kind = kind;
 	    
 	    if (canonicalPrimaryID == null) {
 		this.primaryID = "";
@@ -156,10 +195,17 @@ public class ICULocaleService extends ICUService {
         }
 
         /**
-         * Return the prefix, or null if none was defined. 
+         * Return the prefix associated with the kind, or null if the kind is KIND_ANY.
          */
         public String prefix() {
-            return prefix;
+            return kind == KIND_ANY ? null : Integer.toString(kind());
+        }
+
+        /**
+         * Return the kind code associated with this key.
+         */
+        public int kind() {
+            return kind;
         }
 
 	/**
@@ -181,8 +227,11 @@ public class ICULocaleService extends ICUService {
          */
         public String currentDescriptor() {
             String result = currentID();
-            if (result != null && prefix != null) {
-                result = prefix + "/" + result;
+            if (result != null) {
+                result = "/" + result;
+                if (kind != KIND_ANY) {
+                    result = prefix() + result;
+                }
             }
             return result;
         }
@@ -227,419 +276,299 @@ public class ICULocaleService extends ICUService {
     }
 
     /**
-     * This is a factory that handles multiple keys, and records
-     * information about the keys it handles or doesn't handle.  This
-     * allows it to quickly filter subsequent queries on keys it has
-     * seen before.  Subclasses implement handleCreate instead of
-     * create.  Before updateVisibleIDs is called, it keeps track of
-     * keys that it doesn't handle.  If its ids are visible, once
-     * updateVisibleIDs is called, it builds a set of all the keys it
-     * does handle and keeps track of the keys it does handle.  
+     * A subclass of Factory that uses LocaleKeys, and is able to
+     * 'cover' more specific locales with more general locales that it
+     * supports.  
+     *
+     * <p>Covers may be any of the values VISIBLE,
+     * INVISIBLE, VISIBLE_COVERS, INVISIBLE_COVERS, or
+     * VISIBLE_COVERS_REMOVE.
+     *
+     * <p>'Visible' indicates that the specific locale(s) supported by
+     * the factory are registered in getSupportedIDs, 'Invisible'
+     * indicates that they are not.  'Covers' indicates that the
+     * factory preempts previously-registered factories from handling
+     * more specific locales (for one or more kinds); if visible, these
+     * locales remain in visible ids, otherwise they are removed.
+     * 'Visible covers remove' leaves the 'original' locale visible,
+     * but makes the covered sublocales invisible, like
+     * invisible_covers.  
+     *
+     * <p>Localization of visible ids (covered or primary) is handled
+     * by the covering factory, regardless of kind.
+     *
+     * <p><b>Example 1:</b> Factory A supports en_US with coverage
+     * VISIBLE_COVERS.  Previously-registered factory B supports
+     * en_US_CALIFORNIA.  getVisibleIDs will return both en_US and
+     * en_US_CALIFORNIA, Factory A will handle both of them and
+     * localize the ids for both of these.
+     *
+     * <p><b>Example 2:</b> Factory A supports word/en_US with
+     * coverage VISIBLE_COVERS_REMOVE.  Previously-registered factory
+     * B supports /en_US_CALIFORNIA (all kinds).  getVisibleIDs will
+     * return only en_US and not en_US_CALIFORNIA, Factory A will
+     * handle word/en_US and word/en_US_CALIFORNIA, and also localize
+     * the id en_US.  Factory B will handle other kinds of requests
+     * under en_US_CALIFORNIA.  
      */
-    public static abstract class MultipleKeyFactory implements ICUService.Factory {
-	protected final boolean visible;
-	private SoftReference cacheref;
-
-        private static final class CacheInfo {
-            final Set cache;
-            final boolean included;
-
-            CacheInfo() {
-                this.cache = new HashSet();
-                this.included = false;
-            }
-
-            CacheInfo(Set cache) {
-                this.cache = cache;
-                this.included = true;
-            }
-
-            /**
-             * Return true if we're known to support id, or not known to not support id.
-             */
-            boolean tryCreate(String id) {
-                boolean result = cache.contains(id) == included;
-                return result;
-            }
-
-            /**
-             * Update information about whether we support this id.  Since if we are storing
-             * information on included ids, we already know all of them, we only need to
-             * update if we're storing information on ids we don't support and we don't
-             * support the id (the result is null).
-             */
-            void addCreate(String id, Object result) {
-                if (!included && result == null) {
-                    cache.add(id);
-                }
-            }
-        }
-
-	/**
-	 * Convenience overload of MultipleKeyFactory(boolean) that defaults
-	 * visible to true.
-	 */
-	public MultipleKeyFactory() {
-	    this(true);
-	}
-
-	/**
-	 * Constructs a MultipleKeyFactory whose ids are visible iff visible is true.
-	 */
-	public MultipleKeyFactory(boolean visible) {
-	    this.visible = visible;
-	}
-
-	/**
-	 * Get the cache of IDs.  These are either the ids that we know we
-	 * don't understand, if included is false, or the entire set of ids
-	 * we do know we understand, if included is true.  If the cache has
-         * been flushed, included is false.
-	 */
-	private CacheInfo getCache() {
-	    CacheInfo result = null;
-	    if (cacheref != null) {
-		result = (CacheInfo)cacheref.get();
-	    }
-	    if (result == null) {
-		result = new CacheInfo();
-                cacheref = new SoftReference(result);
-	    }
-	    return result;
-	}
-
-	/**
-	 * Get the cache of IDs we understand.
-	 */
-	protected Set getSupportedIDs() {
-	    CacheInfo ci = getCache();
-            Set result = ci.cache;
-	    if (!ci.included) {
-                result = handleGetSupportedIDs();
-		cacheref = new SoftReference(new CacheInfo(result));
-            }
-            
-	    return result;
-	}
-
-	public Object create(Key key) {
-	    Object result = null;
-	    String id = key.currentID();
-	    CacheInfo ci = getCache();
-            if (ci.tryCreate(id)) {
-		result = handleCreate(key);
-                ci.addCreate(id, result);
-	    }
-	    return result;
-	}
-
-	public void updateVisibleIDs(Map result) {
-	    if (visible) {
-                Iterator iter = getSupportedIDs().iterator();
-                while (iter.hasNext()) {
-                    result.put(iter.next(), this);
-                }
-	    }
-	}
-
-	public String getDisplayName(String id, Locale locale) {
-	    if (visible) {
-		Set cache = getSupportedIDs();
-		if (cache.contains(id)) {
-		    return handleGetDisplayName(id, locale);
-		}
-	    }
-	    return null;
-	}
-
-	/**
-	 * Subclasses implement this instead of create.
-	 */
-	protected abstract Object handleCreate(Key key);
-
-	/**
-	 * Subclasses implement this instead of getSupportedIDs.  Any
-	 * id known to and handled by this class should be included in
-         * the returned Set.
-	 */
-	protected abstract Set handleGetSupportedIDs();
-
-	/**
-	 * Subclasses implement this instead of getDisplayName.
-	 * Return the display name for the (visible) id in the
-	 * provided locale.  The default implementation just returns
-	 * the id.  
-	 */
-	protected String handleGetDisplayName(String id, Locale locale) {
-	    return id;
-	}
-    }
-
-    /**
-     * A subclass of MultipleKeyFactory that uses LocaleKeys.  It is
-     * able to optionally 'hide' more specific locales with more general
-     * locales that it supports.
-     */
-    public static abstract class LocaleKeyFactory extends MultipleKeyFactory {
-        protected final boolean hides;
+    public static abstract class LocaleKeyFactory implements Factory {
+        protected final String name;
+        protected final int coverage;
 
         /**
-         * Create a LocaleKeyFactory.
+         * Coverage value indicating that the factory makes
+         * its locales visible, and does not cover more specific 
+         * locales.
          */
-        public LocaleKeyFactory(boolean visible, boolean hides) {
-            super(visible);
+        public static final int VISIBLE = 0;
 
-            this.hides = hides;
+        /**
+         * Coverage value indicating that the factory does not make
+         * its locales visible, and does not cover more specific
+         * locales.
+         */
+        public static final int INVISIBLE = 1;
+
+        /**
+         * Coverage value indicating that the factory makes
+         * its locales visible, covers more specific 
+         * locales, and provides localization for the covered
+         * locales.
+         */
+        public static final int VISIBLE_COVERS = 2;
+
+        /**
+         * Coverage value indicating that the factory does not
+         * make its locales visible, covers more specific
+         * locales, and also does not allow the locales it
+         * covers to be visible.
+         */
+        public static final int INVISIBLE_COVERS = 3;
+
+        /**
+         * Coverage value indicating that the factory makes
+         * its locales visible, covers more specific 
+         * locales, but does not allow the locales it covers
+         * to be visible.
+         */
+        public static final int VISIBLE_COVERS_REMOVE = 6;
+
+        
+        /**
+         * Constructor used by subclasses.
+         */
+        protected LocaleKeyFactory(int coverage) {
+            this.coverage = coverage;
+            this.name = null;
         }
 
         /**
-         * Override of superclass method.  If this is visible, it will update
-         * result with the ids it supports.  If this hides ids, more specific
-         * ids already in result will be remapped to this.
+         * Constructor used by subclasses.
          */
-	public void updateVisibleIDs(Map result) {
-	    if (visible) {
-		Set cache = getSupportedIDs();
-                Map toRemap = new HashMap();
-		Iterator iter = cache.iterator();
-		while (iter.hasNext()) {
-                    String id = (String)iter.next();
-                    if (hides) {
-                        int idlen = id.length();
-                        Iterator miter = result.keySet().iterator();
-                        while (miter.hasNext()) {
-                            String mid = (String)miter.next();
-                            if (mid.startsWith(id) &&
-                                (mid.length() == idlen ||
-                                 mid.charAt(idlen) == '_')) {
-
-                                toRemap.put(mid, this);
-                                miter.remove();
-                            }
-                        }                            
-                    }
-                    toRemap.put(id, this);
-		}
-                result.putAll(toRemap);
-	    }
-	}
-
-	/**
-	 * Return a localized name for the locale represented by id.
-	 */
-	protected String handleGetDisplayName(String id, Locale locale) {
-	    // use java's display name formatting for now
-	    return LocaleUtility.getLocaleFromName(id).getDisplayName(locale);
-	}
-    }
-
-    /**
-     * A factory that creates a service based on the ICU locale data.
-     * Subclasses specify a prefix (default is LocaleElements), a
-     * semicolon-separated list of required resources, and a visible flag.
-     * This factory will search the ICU locale data for a bundle with
-     * the exact prefix.  Then it will test whether the required resources
-     * are all in this exact bundle.  If so, it instantiates the full
-     * resource bundle, and hands it to createServiceFromResource, which
-     * subclasses must implement.  Otherwise it returns null.
-     */
-    public static class ICUResourceBundleFactory extends MultipleKeyFactory {
-	protected final String name;
-	protected final String[][] requiredContents;
-
-        public ICUResourceBundleFactory(boolean visible) {
-            this((String)null, visible);
+        protected LocaleKeyFactory(int coverage, String name) {
+            this.coverage = coverage;
+            this.name = name;
         }
 
-	/**
-	 * A service factory based on ICU resource data in the LocaleElements resources.
-	 */
-	public ICUResourceBundleFactory(String requiredContents, boolean visible) {
-	    this(ICULocaleData.LOCALE_ELEMENTS, requiredContents, visible);
-	}
+        /**
+         * Implement superclass abstract method.  This checks the currentID of
+         * the key against the supported IDs, and passes the canonicalLocale and
+         * kind off to handleCreate (which subclasses must implement).
+         */
+        public Object create(Key key) {
+            // System.out.println("factory: " + this + "create: " + key.currentID());
 
-	/**
-	 * A service factory based on ICU resource data in resources
-	 * with the given name.  If requiredContents is not null, all
-	 * listed resources must come directly from the same bundle.  
-	 */
-	public ICUResourceBundleFactory(String name, String requiredContents, boolean visible) {
-            this(name, buildRcAndOr(requiredContents), true, visible);
-        }
+            if (getSupportedIDs().contains(key.currentID())) {
+                LocaleKey lkey = (LocaleKey)key;
+                Locale loc = lkey.canonicalLocale();
+                int kind = lkey.kind();
 
-        private static class Node {
-            public boolean test(ResourceBundle rb) {
-                return rb != null;
+                return handleCreate(loc, kind);
+            } else {
+                // System.out.println("IDs did not support: " + key.currentID());
+                // System.out.println(getSupportedIDs());
             }
-        }
-
-        private static class ResourceNode {
-            String name;
-        }
-
-        private static class BoolNode extends Node {
-            BoolNode car;
-            BoolNode cdr;
-        }
-
-        private static String[][] buildRcAndOr(String requiredContents) {
-            String[][] rcAndOr = null;
-            if (requiredContents != null) {
-                rcAndOr = new String[][] { parseDelimitedString(requiredContents) };
-            }
-            return rcAndOr;
-        }
-
-        public ICUResourceBundleFactory(String[] rcOr, boolean visible) {
-            this(ICULocaleData.LOCALE_ELEMENTS, rcOr, visible);
-        }
-
-        public ICUResourceBundleFactory(String name, String[] rcOr, boolean visible) {
-            this(name, buildRcAndOr(rcOr), true, visible);
-        }
-
-        private static String[][] buildRcAndOr(String[] rcOr) {
-            String[][] rcOrAnd = null;
-            if (rcOr != null) {
-                rcOrAnd = new String[rcOr.length][];
-                for (int i = 0; i < rcOr.length; ++i) {
-                    rcOrAnd[i] = parseDelimitedString(rcOr[i]);
-                }
-            }
-            return rcOrAnd;
-        }
-
-        public ICUResourceBundleFactory(String[][] rcOrAnd, boolean adopt, boolean visible) {
-            this(ICULocaleData.LOCALE_ELEMENTS, rcOrAnd, adopt, visible);
-        }
-
-        private static String[] parseDelimitedString(String str) {
-            if (str != null) {
-		ArrayList list = new ArrayList();
-		for (int i = 0, len = str.length();;) {
-		    while (i < len && str.charAt(i) == ';') {
-			++i;
-		    }
-		    if (i == len) {
-		      break;
-		    }
-		    int j = str.indexOf(';', i);
-		    if (j == -1) {
-		      j = len;
-		    }
-		    list.add(str.substring(i, j));
-		    i = j;
-		}
-		return (String[])list.toArray(new String[list.size()]);
-	    }
             return null;
         }
 
-        public ICUResourceBundleFactory(String name, String[][] rcOrAnd, boolean adopt, boolean visible) {
-	    super(visible);
-
-	    this.name = name;
+        /**
+         * Override of superclass method.  This adjusts the result based
+         * on the coverage rule for this factory.
+         */
+	public void updateVisibleIDs(Map result) {
+            Set cache = getSupportedIDs();
             
-            if (!adopt && rcOrAnd != null) {
-                rcOrAnd = (String[][])rcOrAnd.clone();
-                for (int i = 0; i < rcOrAnd.length; ++i) {
-                    rcOrAnd[i] = (String[])(rcOrAnd[i].clone());
+            boolean visible = (coverage & 0x1) == 0;
+            boolean covers = (coverage & 0x2) != 0;
+            boolean removes = !visible || (coverage & 0x4) != 0;
+
+            // System.out.println("vis: " + visible + " covers: " + covers + " removes: " + removes);
+            Map toRemap = new HashMap();
+            Iterator iter = cache.iterator();
+            while (iter.hasNext()) {
+                String id = (String)iter.next();
+                if (covers) {
+                    int idlen = id.length();
+                    Iterator miter = result.keySet().iterator();
+                    while (miter.hasNext()) {
+                        String mid = (String)miter.next();
+                        if (mid.startsWith(id) &&
+                            (mid.length() == idlen ||
+                             mid.charAt(idlen) == '_')) {
+
+                            if (removes) {
+                                miter.remove();
+                            } else {
+                                toRemap.put(mid, this);
+                            }
+                        }
+                    }
                 }
-            }
-            this.requiredContents = rcOrAnd;
-	}
+                if (!visible) {
+                    result.remove(id);
+                } else {
+                    toRemap.put(id, this);
+                }
 
-	/**
-	 * Overrides parent handleCreate call.  Parent will filter out keys that it
-	 * knows are not accepted by this factory before calling this method.
-	 */
-	protected Object handleCreate(Key key) {
-	    Locale loc = LocaleUtility.getLocaleFromName(key.currentID());
-	    if (acceptsLocale(loc)) {
-		ResourceBundle bundle = ICULocaleData.getResourceBundle(name, loc); // full resource bundle tree lookup
-		return createFromBundle(bundle, key);
-	    }
-	    return null;
-	}
-
-	/**
-	 * Queries all the available locales in ICU and adds the names
-	 * of those which it accepts to result.  This is quite
-	 * time-consuming so we don't want to do it more than once if
-	 * we have to.  This is only called if we are visible.  
-	 */
-	protected Set handleGetSupportedIDs() {
-            Set result = new TreeSet(String.CASE_INSENSITIVE_ORDER);
-	    Locale[] locales = ICULocaleData.getAvailableLocales(name);
-	    for (int i = 0; i < locales.length; ++i) {
-		Locale locale = locales[i];
-		if (acceptsLocale(locale)) {
-                    String str = LocaleUtility.canonicalLocaleString(locale.toString());
-		    result.add(str);
-		}
-	    }
-            return result;
+            }                    
+            result.putAll(toRemap);
 	}
 
 	/**
 	 * Return a localized name for the locale represented by id.
 	 */
-	protected String handleGetDisplayName(String id, Locale locale) {
-	    return LocaleUtility.getLocaleFromName(id).getDisplayName(locale);
+	public String getDisplayName(String id, Locale locale) {
+            if (locale == null) {
+                return id;
+            }
+            Locale loc = LocaleUtility.getLocaleFromName(id);
+	    return loc.getDisplayName(locale);
 	}
 
+        /**
+         * Utility method used by create(Key).  Subclasses can implement
+         * this instead of create.
+         */
+        protected Object handleCreate(Locale loc, int kind) {
+            return null;
+        }
+
+        /**
+         * Return the set of ids that this factory supports (visible or 
+         * otherwise).  This can be called often and might need to be
+         * cached if it is expensive to create.
+         */
+        protected abstract Set getSupportedIDs();
+
+        /**
+         * For debugging.
+         */
+        public String toString() {
+            StringBuffer buf = new StringBuffer(super.toString());
+            if (name != null) {
+                buf.append(", name: ");
+                buf.append(name);
+            }
+            buf.append(", coverage: ");
+            String[] coverage_names = {
+                "visible", "invisible", "visible_covers", "invisible_covers", "????", "visible_covers_remove"
+            };
+            buf.append(coverage_names[coverage]);
+            return buf.toString();
+        }
+    }
+
+    /**
+     * A LocaleKeyFactory that just returns a single object for a kind/locale.
+     */
+    public static class SimpleLocaleKeyFactory extends LocaleKeyFactory {
+        private final Object obj;
+        private final String id;
+        private final int kind;
+
+        public SimpleLocaleKeyFactory(Object obj, Locale locale, int kind, int coverage) {
+            this(obj, locale, kind, coverage, null);
+        }
+
+        public SimpleLocaleKeyFactory(Object obj, Locale locale, int kind, int coverage, String name) {
+            super(coverage, name);
+            
+            this.obj = obj;
+            this.id = LocaleUtility.canonicalLocaleString(locale.toString());
+            this.kind = kind;
+        }
+
+        public Object create(Key key) {
+            LocaleKey lkey = (LocaleKey)key;
+            if (kind == LocaleKey.KIND_ANY || kind == lkey.kind()) {
+                String keyID = lkey.currentID();
+                if (id.equals(keyID) ||
+                    ((coverage & 0x2) != 0 && LocaleUtility.isFallbackOf(id, keyID))) {
+                    return obj;
+                }
+            }
+            return null;
+        }
+
+        protected Set getSupportedIDs() {
+            return Collections.singleton(id);
+        }
+
+        public String toString() {
+            StringBuffer buf = new StringBuffer(super.toString());
+            buf.append(", id: ");
+            buf.append(id);
+            buf.append(", kind: ");
+            buf.append(kind);
+            return buf.toString();
+        }
+    }
+
+    /**
+     * A LocaleKeyFactory that creates a service based on the ICU locale data.
+     * This is a base class for most ICU factories.  Subclasses instantiate it
+     * with a constructor that takes a bundle name, which determines the supported
+     * IDs.  Subclasses then override handleCreate to create the actual service
+     * object.  The default implementation returns a resource bundle.
+     */
+    public static class ICUResourceBundleFactory extends LocaleKeyFactory {
+	protected final String bundleName;
+
+        /**
+         * Convenience constructor that uses the main ICU bundle name.
+         */
+        public ICUResourceBundleFactory() {
+            this(ICULocaleData.LOCALE_ELEMENTS);
+        }
+
 	/**
-	 * We only accept the locale if there is a bundle for this exact locale and if
-	 * all the required resources are directly in this bundle (none is from an
-	 * inherited bundle);
+	 * A service factory based on ICU resource data in resources
+	 * with the given name.
 	 */
-	protected boolean acceptsLocale(Locale loc) {
-            boolean debug = false;
-            if (debug) System.out.println("al name: " + name + " loc: '" + loc + "'");
-            try {
-                ResourceBundle bundle = ICULocaleData.loadResourceBundle(name, loc);
-                if (bundle == null) {
-                    if (debug) System.out.println("no bundle");
-                    return false;
-                }
-                if (requiredContents == null) {
-                    if (debug) System.out.println("always accepts");
-                    return true;
-                }
+	public ICUResourceBundleFactory(String bundleName) {
+            super(VISIBLE);
 
-            loop: 
-                for (int i = 0; i < requiredContents.length; ++i) {
-                    String[] andRC = requiredContents[i];
+            this.bundleName = bundleName;
+        }
 
-                    for (int j = 0; j < andRC.length; ++j) {
-                        try {
-                            if (debug) System.out.println("al["+i+"]["+j+"] " + andRC[j]);
-                            bundle.getObject(andRC[j]);
-                        }
-                        catch (MissingResourceException ex) {
-                            if (debug) System.out.println("nope");
-                            continue loop;
-                        }
-                    }
-                    if (debug) System.out.println("ok");
-                    return true;
-                }
-	    }
-	    catch (Exception e) {
-                Thread.dumpStack();
-                if (debug) System.out.println("whoops: " + e);
-                System.exit(0);
-	    }
-	    return false;
+	/**
+         * Return the supported IDs.  This is the set of all locale names in ICULocaleData.
+	 */
+	protected Set getSupportedIDs() {
+            return ICULocaleData.getAvailableLocaleNameSet(bundleName);
 	}
 
-	/**
-	 * Subclassers implement this to create their service object based on the bundle and key.
-	 * The default implementation just returns the bundle.
-	 */
-         protected Object createFromBundle(ResourceBundle bundle, Key key) {
-	     return bundle;
-         }
+        /**
+         * Create the service.  The default implementation returns the resource bundle
+         * for the locale, ignoring kind.
+         */
+        protected Object handleCreate(Locale loc, int kind) {
+            return ICULocaleData.getResourceBundle(bundleName, loc);
+        }
+
+        public String toString() {
+            return super.toString() + ", bundle: " + bundleName;
+        }
     }
 
     /**
@@ -660,7 +589,11 @@ public class ICULocaleService extends ICUService {
         return fallbackLocaleName;
     }
 
-    protected Key createKey(String id) {
+    public Key createKey(String id) {
 	return LocaleKey.createWithCanonicalFallback(id, validateFallbackLocale());
+    }
+
+    public Key createKey(String id, int kind) {
+	return LocaleKey.createWithCanonicalFallback(id, validateFallbackLocale(), kind);
     }
 }

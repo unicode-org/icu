@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/IslamicCalendar.java,v $ 
- * $Date: 2002/08/07 03:10:18 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/10/02 20:20:24 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -560,4 +560,20 @@ public class IslamicCalendar extends Calendar {
         internalSet(DAY_OF_MONTH, dayOfMonth);
         internalSet(DAY_OF_YEAR, dayOfYear);       
     }    
+
+    private static CalendarFactory factory;
+    public static CalendarFactory factory() {
+        if (factory == null) {
+            factory = new CalendarFactory() {
+                public Calendar create(TimeZone tz, Locale loc) {
+                    return new IslamicCalendar(tz, loc);
+                }
+
+                public String factoryName() {
+                    return "Islamic";
+                }
+            };
+        }
+        return factory;
+    }
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/LocaleUtility.java,v $
- * $Date: 2002/09/14 21:36:29 $
- * $Revision: 1.5 $
+ * $Date: 2002/10/02 20:20:21 $
+ * $Revision: 1.6 $
  *  *****************************************************************************************
  */
  
@@ -69,6 +69,14 @@ public class LocaleUtility {
         return isFallbackOf(parent.toString(), child.toString());
     }
 
+
+    /**
+     * Convenience method that calls canonicalLocaleString(String) with
+     * locale.toString();
+     */
+    public static String canonicalLocaleString(Locale locale) {
+        return canonicalLocaleString(locale.toString());
+    }
 
     /**
      * You'd think that Locale canonicalizes, since it munges the
