@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $ 
-* $Date: 2002/05/16 20:04:49 $ 
-* $Revision: 1.5 $
+* $Date: 2002/05/20 23:43:01 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -167,25 +167,6 @@ public abstract class Collator
      * @draft 2.2
      */
     public final static int CANONICAL_DECOMPOSITION = 1;
-
-    /**
-     * <p>Decomposition mode value. With FULL_DECOMPOSITION set, both Unicode 
-     * canonical variants and Unicode compatibility variants will be 
-     * decomposed for collation.  This causes not only accented characters to 
-     * be collated, but also characters that have special formats to be 
-     * collated with their norminal form. For example, the half-width and
-     * full-width ASCII and Katakana characters are then collated together.
-     * FULL_DECOMPOSITION is the most complete and therefore the slowest
-     * decomposition mode.</p>
-     * <p>
-     * FULL_DECOMPOSITION corresponds to Normalization Form KD as described in 
-     * <a href="http://www.unicode.org/unicode/reports/tr15/">Unicode 
-     * Technical Report #15</a>.</p>
-     * @see #getDecomposition
-     * @see #setDecomposition
-     * @draft 2.2
-     */
-    public final static int FULL_DECOMPOSITION = 2;
     
     // public methods --------------------------------------------------------
     
@@ -232,11 +213,10 @@ public abstract class Collator
      */
     public void setDecomposition(int decomposition) {
         if ((decomposition != NO_DECOMPOSITION) &&
-            (decomposition != CANONICAL_DECOMPOSITION) &&
-            (decomposition != FULL_DECOMPOSITION)) {
+            (decomposition != CANONICAL_DECOMPOSITION)) {
             throw new IllegalArgumentException("Wrong decomposition mode.");
         }
-        m_decomposition_ = CANONICAL_DECOMPOSITION;
+        m_decomposition_ = decomposition;
     }
     
     // public getters --------------------------------------------------------
