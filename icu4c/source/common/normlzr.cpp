@@ -177,21 +177,9 @@ Normalizer::quickCheck(const UnicodeString& source,
   if (U_FAILURE(status))
     return UNORM_MAYBE;
 
-  uint32_t length = source.length();
-  UChar s[StackBufferLen];
-	UChar *ps = s;
-	
-  if (length >= StackBufferLen)
-		ps = new UChar[length + 1];
-	
-	source.extract(0, length, ps);
-  ps[length] = 0;
-  UNormalizationCheckResult result;
-  result = unorm_quickCheck(ps, length, getUNormalizationMode(mode, status),
-                            &status);
-  if (ps != s)
-    delete[] ps;
-  return result;
+  const UChar *ps = source.getUChars();
+  return unorm_quickCheck(ps, source.length(), 
+                          getUNormalizationMode(mode, status), &status);
 }
 
 //-------------------------------------------------------------------------
