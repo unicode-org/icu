@@ -181,8 +181,9 @@ protected:
     // commented out because UObject is abstract (see getDynamicClassID)
     // inline UObject(const UObject &other) {}
 
-#if U_ICU_VERSION_MAJOR_NUM>3 || (U_ICU_VERSION_MAJOR_NUM==3 && U_ICU_VERSION_MINOR_NUM>0)
-    // TODO post ICU 2.4  (This comment inserted in 2.2)
+#if 0
+    // TODO Sometime in the future. Implement operator==().
+    // (This comment inserted in 2.2)
     // some or all of the following "boilerplate" functions may be made public
     // in a future ICU4C release when all subclasses implement them
 
