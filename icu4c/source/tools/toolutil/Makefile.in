@@ -57,7 +57,7 @@ endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBICUUC) @LIBS@ 
 
-OBJECTS = toolutil.o unewdata.o ucmpwrit.o uoptions.o uparse.o
+OBJECTS = toolutil.o unewdata.o ucmpwrit.o uoptions.o uparse.o ucbuf.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 

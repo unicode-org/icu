@@ -19,12 +19,12 @@
 #include "unicode/ucnv.h"
 #include "filestrm.h"
 #include "cmemory.h"
-#include "unicode/utrans.h"
 #include "unicode/ustring.h"
 #include "ucbuf.h"
+
 #define MAX_BUF 1000
 
-UBool 
+U_CAPI UBool U_EXPORT2
 ucbuf_autodetect(FileStream* in,const char** cp){
   UBool autodetect = FALSE;
   char start[3];
@@ -46,7 +46,7 @@ ucbuf_autodetect(FileStream* in,const char** cp){
   return autodetect;
 }
 
-UCHARBUF* 
+static UCHARBUF* 
 ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
     UChar* pTarget=NULL;
     UChar* target=NULL;
@@ -100,7 +100,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
     return buf;
 }
 
-UChar32 
+U_CAPI UChar32 U_EXPORT2
 ucbuf_getc(UCHARBUF* buf,UErrorCode* err){
     UChar32 c =0;
     if(buf->currentPos<buf->bufLimit){
@@ -130,7 +130,7 @@ _charAt(int32_t offset, void *context) {
     return ((UCHARBUF*) context)->currentPos[offset];
 }
 
-UChar32
+U_CAPI UChar32 U_EXPORT2
 ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
     int32_t length;
     int32_t offset;
@@ -177,7 +177,7 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
 }
 
 
-UCHARBUF* 
+U_CAPI UCHARBUF* U_EXPORT2
 ucbuf_open(FileStream* in, const char* cp,UErrorCode* err){
 
     UCHARBUF* buf =(UCHARBUF*) uprv_malloc(sizeof(UCHARBUF));
@@ -186,8 +186,7 @@ ucbuf_open(FileStream* in, const char* cp,UErrorCode* err){
     }
     if(buf){
         buf->in=in;
-        buf->fileLen = T_FileStream_size(in);
-        buf->remaining=buf->fileLen;
+        buf->remaining=T_FileStream_size(in);
         buf->buffer=NULL;
         buf->currentPos=NULL;
         buf->bufLimit=NULL;
@@ -208,12 +207,12 @@ ucbuf_open(FileStream* in, const char* cp,UErrorCode* err){
     }
 }
 
-void 
+static void 
 ucbuf_closebuf(UCHARBUF* buf){
     uprv_free(buf->buffer);
 }
 
-void 
+U_CAPI void U_EXPORT2
 ucbuf_ungetc(UChar32 c,UCHARBUF* buf){
     if(buf->currentPos!=buf->buffer){
         buf->currentPos--;
@@ -221,7 +220,7 @@ ucbuf_ungetc(UChar32 c,UCHARBUF* buf){
 
 }
 
-void 
+U_CAPI void U_EXPORT2
 ucbuf_close(UCHARBUF* buf){
     if(buf->conv){
         ucnv_close(buf->conv);
