@@ -177,9 +177,12 @@ typedef unsigned short uint16_t;
 #define U_HAVE_NL_LANGINFO_CODESET  @U_HAVE_NL_LANGINFO_CODESET@
 #define U_NL_LANGINFO_CODESET       @U_NL_LANGINFO_CODESET@
 
-#define U_TZSET     @U_TZSET@
-#define U_TIMEZONE  @U_TIMEZONE@
-#define U_TZNAME    @U_TZNAME@
+#define U_TZSET         @U_TZSET@
+#define U_HAVE_TIMEZONE @U_HAVE_TIMEZONE@
+#if U_HAVE_TIMEZONE
+#   define U_TIMEZONE   @U_TIMEZONE@
+#endif
+#define U_TZNAME        @U_TZNAME@
 
 /*===========================================================================*/
 /* Symbol import-export control                                              */
