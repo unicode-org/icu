@@ -44,21 +44,21 @@ u_finit(FileStream *f, const char *cp,
   result->fUCPos 	= result->fUCBuffer;
   result->fUCLimit 	= result->fUCBuffer;
   
-  if(cp == 0) {                     //weiv: we're using the default converter
+  if(cp == 0) {                     /* weiv: we're using the default converter*/
       result->fConverter = ucnv_open(0, status);
       if(U_FAILURE(*status) || result->fConverter == 0) {
         T_FileStream_close(result->fFile);
         icu_free(result);
         return 0;
       }
-  } else if (icu_strlen(cp)>icu_strlen("")) {    //weiv: we're specifying the converter
+  } else if (icu_strlen(cp)>icu_strlen("")) {    /*weiv: we're specifying the converter*/
       result->fConverter = ucnv_open(cp, status);
       if(U_FAILURE(*status) || result->fConverter == 0) {
         T_FileStream_close(result->fFile);
         icu_free(result);
         return 0;
       }
-  } else {                          //weiv: we'll go for invariant converter
+  } else {                          /*weiv: we'll go for invariant converter */
       result->fConverter = NULL;
   }
 
@@ -104,7 +104,7 @@ ufile_fill_uchar_buffer(UFILE *f,
   availLength = UFILE_UCHARBUFFER_SIZE - dataSize;
   
   /* Determine the # of codepage bytes needed to fill our UChar buffer */
-  maxCPBytes = availLength * (f->fConverter!=NULL?ucnv_getMaxCharSize(f->fConverter):1); //weiv: Probably shoud #define it somewhere
+  maxCPBytes = availLength * (f->fConverter!=NULL?ucnv_getMaxCharSize(f->fConverter):1); /*weiv: Probably shoud #define it somewhere */
   
   /* Read in the data to convert */
   bytesRead = T_FileStream_read(f->fFile,f->fCharBuffer, 
@@ -117,7 +117,7 @@ ufile_fill_uchar_buffer(UFILE *f,
   myTarget 	= f->fUCBuffer + dataSize;
   bufferSize	= UFILE_UCHARBUFFER_SIZE;
 
-  if(f->fConverter != NULL) {   //weiv: we have a good converter, so we'll just use it
+  if(f->fConverter != NULL) {   /*weiv: we have a good converter, so we'll just use it */
       /* Perform the conversion */
       ucnv_toUnicode(f->fConverter,
 		     &myTarget, 
@@ -127,7 +127,7 @@ ufile_fill_uchar_buffer(UFILE *f,
 		     NULL,
 		     TRUE,
 		     status);
-  } else {                      //weiv: we couldn't obtain a converter, so we'll go with invariant conversion
+  } else {                      /*weiv: we couldn't obtain a converter, so we'll go with invariant conversion */
       u_charsToUChars(mySource, myTarget, bytesRead);
       myTarget += bytesRead;
   }
