@@ -30,7 +30,7 @@
 
 U_CAPI const char *uprv_convertToPosix(uint32_t hostid, UErrorCode* status);
 
-U_CAPI uint32_t uprv_convertToLCID(const char* posixID, UErrorCode* status);
+U_CAPI uint32_t uprv_convertToLCID(const char *langID, const char* posixID, UErrorCode* status);
 
 #endif /* LOCMAP_H */
 
