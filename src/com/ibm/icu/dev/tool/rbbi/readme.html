@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>README For RBBI Tools</title>
+<!-- Copyright (C) 2003-2004, International Business Machines Corporation and
+     others. All Rights Reserved.
+-->
+</head>
+<body>
+<h3>What Are These Tools?</h3>
+This directory contains two tools, WriteTablesToFiles, which converts
+the Java&nbsp; BreakIterators into .brk files for ICU4C, and
+BuildDictionaryFile, which builds the binary the Thai word break
+dictionary from a Unicode text file containing a list of Thai words.
+The rest of this document describes how to use these tools.<br>
+<h3>How To Build The ICU4C BreakIterator Files</h3>
+The RuleBasedBreakIterator code was originally developed for ICU4J, and
+then ported to ICU4C. For various reasons, the code which compiled the
+state tables from the rule text was hard to port. Instead the
+WriteTablesToFiles tool was wirtten to read in the Java data and write
+the .brk files which ICU4C reads. Later the RBBI code was re-written
+for ICU4C, including the ability to compile the state tables from rules
+stored in text files. This means that the WriteTablesToFiles tool is
+now obsolete.<br>
+<br>
+<h3>How To Build The Thai Word Break Dictionary</h3>
+The Thai word berak code was developed originally for ICU4J, and then
+ported to ICU4C - the dictionary builder tool was never ported, so you
+have to use the Java tool to build the dictionary file for ICU4C. On
+the other hand, all of the rest of the ICU locale data was developed
+originally for
+ICU4C, and a tool was written to covert the ICU4C locale data to Java
+resource bundles for use by ICU4J. Consequently, the process of
+building the Thai
+word break dictionary for ICU4C and
+ICU4J is a bit convoluted. Here are the steps:<br>
+<div style="margin-left: 40px;">
+<ol>
+  <li>Download and build both ICU4C and ICU4J on a <span
+ style="font-weight: bold;">Big Endian</span> machine.<br>
+  </li>
+  <li>Run the following command line to build the Thai dictionary file:<br>
+java -classpath $icu4j_root/classes
+com.ibm.icu.dev.tool.rbbi.BuildDictionaryFile
+$icu4j_root/src/com/ibm/icu/dev/data/thai6.ucs Unicode
+$icu_root/soruce/data/brkitr/thai_dict.brk</li>
+  <li>Rebuild the ICU4C resources.</li>
+  <li>Rebuild the ICU4J ICULocaleData.jar file. (See <a
+ href="../../../../../../../readme.html">the ICU4J readme file</a> for
+instructions)</li>
+  <li>Move ICULocaleData.jar from $icu_root/source/data/locales/java to
+$icu4j_root/src/com/ibm/icu/impl/data</li>
+  <li>Build ICU4J's _resources target to unjar the new files.<br>
+  </li>
+</ol>
+</div>
+In the above, $icu_root is the root of your ICU4C source tree, for
+example
+"~/dev/icu" and $icu4j_root is the root of your ICU4J source tree, for
+example "~/dev/icu4j".<br>
+<br>
+</body>
+</html>

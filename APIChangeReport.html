@@ -1,0 +1,466 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>ICU4J API Comparison: ICU4J 3.0 with ICU4J 3.2</title>
+</head>
+<body>
+<h1>ICU4J API Comparison: ICU4J 3.0 with ICU4J 3.2</h1>
+
+<hr/>
+<h2>Removed from ICU4J 3.0</h2>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li>(draft)      public class <i>CharArrayWrapper</i></li>
+ULocale
+<ul>
+    <li>(draft)      public <i>ULocale</i>(java.util.Locale)</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Obsoleted in ICU4J 3.2</h2>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+Currency
+<ul>
+    <li>(obsolete)   public final ULocale <i>getLocale</i>(ULocale.Type)</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Changed in ICU4J 3.2 (old, new)</h2>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+Collator
+<ul>
+    <li>(draft)      public static final java.lang.Object <i>registerInstance</i>(com.ibm.icu.text.Collator, java.util.Locale)</br>
+(draft)      public static final java.lang.Object <i>registerInstance</i>(com.ibm.icu.text.Collator, com.ibm.icu.util.ULocale)</li>
+</ul>
+RawCollationKey
+<ul>
+    <li>(draft)      public int <i>compareTo</i>(com.ibm.icu.text.RawCollationKey)</br>
+(draft)      public int <i>compareTo</i>(java.lang.Object)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li>(draft)      public class <i>ByteArrayWrapper</i> extends java.lang.Object</br>
+(draft)      public class <i>ByteArrayWrapper</i> extends java.lang.Object implements java.lang.Comparable</li>
+ByteArrayWrapper
+<ul>
+    <li>(draft)      public final void <i>append</i>(byte[], int, int)</br>
+(draft)      public final com.ibm.icu.util.ByteArrayWrapper <i>append</i>(byte[], int, int)</li>
+    <li>(draft)      public void <i>ensureCapacity</i>(int)</br>
+(draft)      public com.ibm.icu.util.ByteArrayWrapper <i>ensureCapacity</i>(int)</li>
+    <li>(draft)      public final void <i>set</i>(byte[], int, int)</br>
+(draft)      public final com.ibm.icu.util.ByteArrayWrapper <i>set</i>(byte[], int, int)</li>
+</ul>
+ChineseCalendar
+<ul>
+    <li>(draft)      protected com.ibm.icu.text.DateFormat <i>handleGetDateFormat</i>(java.lang.String, java.util.Locale)</br>
+(draft)      protected com.ibm.icu.text.DateFormat <i>handleGetDateFormat</i>(java.lang.String, com.ibm.icu.util.ULocale)</li>
+</ul>
+Currency
+<ul>
+    <li>(draft)      public static java.lang.Object <i>registerInstance</i>(com.ibm.icu.util.Currency, java.util.Locale)</br>
+(draft)      public static java.lang.Object <i>registerInstance</i>(com.ibm.icu.util.Currency, com.ibm.icu.util.ULocale)</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Promoted to stable in ICU4J 3.2</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+<li>(stable)     public static interface <i>UCharacter.HangulSyllableType</i></li>
+UCharacter
+<ul>
+    <li>(stable)     public static final int FOLD_CASE_DEFAULT</li>
+    <li>(stable)     public static final int FOLD_CASE_EXCLUDE_SPECIAL_I</li>
+    <li>(stable)     public static int <i>foldCase</i>(int, int)</li>
+    <li>(stable)     public static final java.lang.String <i>foldCase</i>(java.lang.String, int)</li>
+</ul>
+UCharacter.JoiningGroup
+<ul>
+    <li>(stable)     public static final int FE</li>
+    <li>(stable)     public static final int KHAPH</li>
+    <li>(stable)     public static final int ZHAIN</li>
+</ul>
+UCharacter.LineBreak
+<ul>
+    <li>(stable)     public static final int NEXT_LINE</li>
+    <li>(stable)     public static final int WORD_JOINER</li>
+</ul>
+UCharacter.UnicodeBlock
+<ul>
+    <li>(stable)     public static final UCharacter.UnicodeBlock AEGEAN_NUMBERS</li>
+    <li>(stable)     public static final int AEGEAN_NUMBERS_ID</li>
+    <li>(stable)     public static final UCharacter.UnicodeBlock CYPRIOT_SYLLABARY</li>
+    <li>(stable)     public static final int CYPRIOT_SYLLABARY_ID</li>
+    <li>(stable)     public static final UCharacter.UnicodeBlock KHMER_SYMBOLS</li>
+    <li>(stable)     public static final int KHMER_SYMBOLS_ID</li>
+    <li>(stable)     public static final UCharacter.UnicodeBlock LIMBU</li>
+    <li>(stable)     public static final int LIMBU_ID</li>
+    <li>(stable)     public static final UCharacter.UnicodeBlock LINEAR_B_IDEOGRAMS</li>
+    <li>(stable)     public static final int LINEAR_B_IDEOGRAMS_ID</li>
+    <li>(stable)     public static final UCharacter.UnicodeBlock LINEAR_B_SYLLABARY</li>
+    <li>(stable)     public static final int LINEAR_B_SYLLABARY_ID</li>
+    <li>(stable)     public static final UCharacter.UnicodeBlock MISCELLANEOUS_SYMBOLS_AND_ARROWS</li>
+    <li>(stable)     public static final int MISCELLANEOUS_SYMBOLS_AND_ARROWS_ID</li>
+    <li>(stable)     public static final UCharacter.UnicodeBlock NO_BLOCK</li>
+    <li>(stable)     public static final UCharacter.UnicodeBlock OSMANYA</li>
+    <li>(stable)     public static final int OSMANYA_ID</li>
+    <li>(stable)     public static final UCharacter.UnicodeBlock PHONETIC_EXTENSIONS</li>
+    <li>(stable)     public static final int PHONETIC_EXTENSIONS_ID</li>
+    <li>(stable)     public static final UCharacter.UnicodeBlock SHAVIAN</li>
+    <li>(stable)     public static final int SHAVIAN_ID</li>
+    <li>(stable)     public static final UCharacter.UnicodeBlock TAI_LE</li>
+    <li>(stable)     public static final int TAI_LE_ID</li>
+    <li>(stable)     public static final UCharacter.UnicodeBlock TAI_XUAN_JING_SYMBOLS</li>
+    <li>(stable)     public static final int TAI_XUAN_JING_SYMBOLS_ID</li>
+    <li>(stable)     public static final UCharacter.UnicodeBlock UGARITIC</li>
+    <li>(stable)     public static final int UGARITIC_ID</li>
+    <li>(stable)     public static final UCharacter.UnicodeBlock VARIATION_SELECTORS_SUPPLEMENT</li>
+    <li>(stable)     public static final int VARIATION_SELECTORS_SUPPLEMENT_ID</li>
+    <li>(stable)     public static final UCharacter.UnicodeBlock YIJING_HEXAGRAM_SYMBOLS</li>
+    <li>(stable)     public static final int YIJING_HEXAGRAM_SYMBOLS_ID</li>
+</ul>
+UProperty
+<ul>
+    <li>(stable)     public static final int CASE_SENSITIVE</li>
+    <li>(stable)     public static final int HANGUL_SYLLABLE_TYPE</li>
+</ul>
+UScript
+<ul>
+    <li>(stable)     public static final int BRAILLE</li>
+    <li>(stable)     public static final int CANADIAN_ABORIGINAL</li>
+    <li>(stable)     public static final int CYPRIOT</li>
+    <li>(stable)     public static final int LIMBU</li>
+    <li>(stable)     public static final int LINEAR_B</li>
+    <li>(stable)     public static final int OSMANYA</li>
+    <li>(stable)     public static final int SHAVIAN</li>
+    <li>(stable)     public static final int TAI_LE</li>
+    <li>(stable)     public static final int UGARITIC</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li>(stable)     public static final class <i>CollationKey.BoundMode</i></li>
+<li>(stable)     public static abstract class <i>Collator.CollatorFactory</i></li>
+<li>(stable)     public static abstract class <i>NumberFormat.NumberFormatFactory</i></li>
+<li>(stable)     public static abstract class <i>NumberFormat.SimpleNumberFormatFactory</i></li>
+BreakIterator
+<ul>
+    <li>(stable)     public static synchronized java.util.Locale[] <i>getAvailableLocales</i>()</li>
+</ul>
+CollationKey
+<ul>
+    <li>(stable)     public CollationKey <i>getBound</i>(int, int)</li>
+    <li>(stable)     public CollationKey <i>merge</i>(CollationKey)</li>
+</ul>
+Collator
+<ul>
+    <li>(stable)     public java.lang.Object <i>clone</i>()</li>
+    <li>(stable)     public static java.lang.String <i>getDisplayName</i>(java.util.Locale)</li>
+    <li>(stable)     public static java.lang.String <i>getDisplayName</i>(java.util.Locale, java.util.Locale)</li>
+    <li>(stable)     public abstract int <i>getVariableTop</i>()</li>
+    <li>(stable)     public static final java.lang.Object <i>registerFactory</i>(Collator.CollatorFactory)</li>
+    <li>(stable)     public abstract int <i>setVariableTop</i>(java.lang.String)</li>
+    <li>(stable)     public abstract void <i>setVariableTop</i>(int)</li>
+    <li>(stable)     public static final boolean <i>unregister</i>(java.lang.Object)</li>
+</ul>
+Normalizer
+<ul>
+    <li>(stable)     public static final int COMPARE_NORM_OPTIONS_SHIFT</li>
+    <li>(stable)     public static final int UNICODE_3_2</li>
+    <li>(stable)     public <i>Normalizer</i>(UCharacterIterator, Normalizer.Mode, int)</li>
+    <li>(stable)     public <i>Normalizer</i>(java.lang.String, Normalizer.Mode, int)</li>
+    <li>(stable)     public <i>Normalizer</i>(java.text.CharacterIterator, Normalizer.Mode, int)</li>
+    <li>(stable)     public static int <i>compose</i>(char[], char[], boolean, int)</li>
+    <li>(stable)     public static int <i>compose</i>(char[], int, int, char[], int, int, boolean, int)</li>
+    <li>(stable)     public static java.lang.String <i>compose</i>(java.lang.String, boolean, int)</li>
+    <li>(stable)     public static int <i>decompose</i>(char[], char[], boolean, int)</li>
+    <li>(stable)     public static int <i>decompose</i>(char[], int, int, char[], int, int, boolean, int)</li>
+    <li>(stable)     public static java.lang.String <i>decompose</i>(java.lang.String, boolean, int)</li>
+    <li>(stable)     public int <i>getOption</i>(int)</li>
+    <li>(stable)     public static boolean <i>isNormalized</i>(char[], int, int, Normalizer.Mode, int)</li>
+    <li>(stable)     public static boolean <i>isNormalized</i>(int, Normalizer.Mode, int)</li>
+    <li>(stable)     public static boolean <i>isNormalized</i>(java.lang.String, Normalizer.Mode, int)</li>
+    <li>(stable)     public static int <i>normalize</i>(char[], char[], Normalizer.Mode, int)</li>
+    <li>(stable)     public static int <i>normalize</i>(char[], int, int, char[], int, int, Normalizer.Mode, int)</li>
+    <li>(stable)     public static java.lang.String <i>normalize</i>(int, Normalizer.Mode)</li>
+    <li>(stable)     public static java.lang.String <i>normalize</i>(int, Normalizer.Mode, int)</li>
+    <li>(stable)     public static java.lang.String <i>normalize</i>(java.lang.String, Normalizer.Mode, int)</li>
+    <li>(stable)     public static Normalizer.QuickCheckResult <i>quickCheck</i>(char[], Normalizer.Mode, int)</li>
+    <li>(stable)     public static Normalizer.QuickCheckResult <i>quickCheck</i>(char[], int, int, Normalizer.Mode, int)</li>
+    <li>(stable)     public static Normalizer.QuickCheckResult <i>quickCheck</i>(java.lang.String, Normalizer.Mode, int)</li>
+    <li>(stable)     public void <i>setOption</i>(int, boolean)</li>
+</ul>
+Normalizer.Mode
+<ul>
+    <li>(stable)     protected int <i>normalize</i>(char[], int, int, char[], int, int, UnicodeSet)</li>
+    <li>(stable)     protected int <i>normalize</i>(char[], int, int, char[], int, int, int)</li>
+    <li>(stable)     protected java.lang.String <i>normalize</i>(java.lang.String, int)</li>
+    <li>(stable)     protected Normalizer.QuickCheckResult <i>quickCheck</i>(char[], int, int, boolean, UnicodeSet)</li>
+</ul>
+NumberFormat
+<ul>
+    <li>(stable)     protected <i>NumberFormat</i>()</li>
+    <li>(stable)     public Currency <i>getCurrency</i>()</li>
+    <li>(stable)     public static java.lang.Object <i>registerFactory</i>(NumberFormat.NumberFormatFactory)</li>
+    <li>(stable)     public void <i>setCurrency</i>(Currency)</li>
+    <li>(stable)     public static boolean <i>unregister</i>(java.lang.Object)</li>
+</ul>
+RuleBasedCollator
+<ul>
+    <li>(stable)     public java.lang.String <i>getRules</i>(boolean)</li>
+    <li>(stable)     public int <i>getVariableTop</i>()</li>
+    <li>(stable)     public int <i>setVariableTop</i>(java.lang.String)</li>
+    <li>(stable)     public void <i>setVariableTop</i>(int)</li>
+</ul>
+Transliterator.Position
+<ul>
+    <li>(stable)     public <i>Transliterator.Position</i>(Transliterator.Position)</li>
+    <li>(stable)     public boolean <i>equals</i>(java.lang.Object)</li>
+    <li>(stable)     public void <i>set</i>(Transliterator.Position)</li>
+    <li>(stable)     public java.lang.String <i>toString</i>()</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+Currency
+<ul>
+    <li>(stable)     public static final int LONG_NAME</li>
+    <li>(stable)     public static final int SYMBOL_NAME</li>
+    <li>(stable)     public static boolean <i>unregister</i>(java.lang.Object)</li>
+</ul>
+VersionInfo
+<ul>
+    <li>(stable)     public static final VersionInfo UNICODE_4_0</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Added in ICU4J 3.2</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+UCharacter
+<ul>
+    <li>(draft)      public static final int <i>codePointAt</i>(char[], int, int)</li>
+    <li>(draft)      public static final int <i>codePointBefore</i>(char[], int, int)</li>
+    <li>(draft)      public static java.lang.String <i>toLowerCase</i>(ULocale, java.lang.String)</li>
+    <li>(draft)      public static java.lang.String <i>toTitleCase</i>(ULocale, java.lang.String, BreakIterator)</li>
+    <li>(draft)      public static java.lang.String <i>toUpperCase</i>(ULocale, java.lang.String)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+BreakIterator
+<ul>
+    <li>(draft)      public static synchronized ULocale[] <i>getAvailableULocales</i>()</li>
+    <li>(draft)      public static BreakIterator <i>getCharacterInstance</i>(ULocale)</li>
+    <li>(draft)      public static BreakIterator <i>getLineInstance</i>(ULocale)</li>
+    <li>(draft)      public static BreakIterator <i>getSentenceInstance</i>(ULocale)</li>
+    <li>(draft)      public static BreakIterator <i>getTitleInstance</i>(ULocale)</li>
+    <li>(draft)      public static BreakIterator <i>getWordInstance</i>(ULocale)</li>
+    <li>(draft)      public static java.lang.Object <i>registerInstance</i>(BreakIterator, ULocale, int)</li>
+</ul>
+ChineseDateFormat
+<ul>
+    <li>(draft)      public <i>ChineseDateFormat</i>(java.lang.String, ULocale)</li>
+</ul>
+ChineseDateFormatSymbols
+<ul>
+    <li>(draft)      public <i>ChineseDateFormatSymbols</i>(Calendar, ULocale)</li>
+    <li>(draft)      public <i>ChineseDateFormatSymbols</i>(ULocale)</li>
+</ul>
+Collator
+<ul>
+    <li>(draft)      public static java.lang.String <i>getDisplayName</i>(ULocale)</li>
+    <li>(draft)      public static java.lang.String <i>getDisplayName</i>(ULocale, ULocale)</li>
+</ul>
+Collator.CollatorFactory
+<ul>
+    <li>(draft)      public Collator <i>createCollator</i>(ULocale)</li>
+    <li>(draft)      public java.lang.String <i>getDisplayName</i>(ULocale, ULocale)</li>
+</ul>
+DateFormat
+<ul>
+    <li>(draft)      public static ULocale[] <i>getAvailableULocales</i>()</li>
+    <li>(draft)      public static final DateFormat <i>getDateInstance</i>(Calendar, int, ULocale)</li>
+    <li>(draft)      public static final DateFormat <i>getDateInstance</i>(int, ULocale)</li>
+    <li>(draft)      public static final DateFormat <i>getDateTimeInstance</i>(Calendar, int, int, ULocale)</li>
+    <li>(draft)      public static final DateFormat <i>getDateTimeInstance</i>(int, int, ULocale)</li>
+    <li>(draft)      public static final DateFormat <i>getInstance</i>(Calendar, ULocale)</li>
+    <li>(draft)      public static final DateFormat <i>getTimeInstance</i>(Calendar, int, ULocale)</li>
+    <li>(draft)      public static final DateFormat <i>getTimeInstance</i>(int, ULocale)</li>
+</ul>
+DateFormatSymbols
+<ul>
+    <li>(draft)      public <i>DateFormatSymbols</i>(Calendar, ULocale)</li>
+    <li>(draft)      public <i>DateFormatSymbols</i>(ULocale)</li>
+    <li>(draft)      public <i>DateFormatSymbols</i>(java.lang.Class, ULocale)</li>
+    <li>(draft)      public <i>DateFormatSymbols</i>(java.util.ResourceBundle, ULocale)</li>
+    <li>(draft)      public static java.util.ResourceBundle <i>getDateFormatBundle</i>(Calendar, ULocale)</li>
+    <li>(draft)      public static java.util.ResourceBundle <i>getDateFormatBundle</i>(java.lang.Class, ULocale)</li>
+</ul>
+DecimalFormatSymbols
+<ul>
+    <li>(draft)      public <i>DecimalFormatSymbols</i>(ULocale)</li>
+    <li>(draft)      public ULocale <i>getULocale</i>()</li>
+</ul>
+MessageFormat
+<ul>
+    <li>(draft)      public <i>MessageFormat</i>(java.lang.String, ULocale)</li>
+    <li>(draft)      public ULocale <i>getULocale</i>()</li>
+    <li>(draft)      public void <i>setLocale</i>(ULocale)</li>
+</ul>
+Normalizer
+<ul>
+    <li>(obsolete)   public int <i>setIndex</i>(int)</li>
+</ul>
+NumberFormat
+<ul>
+    <li>(draft)      public static ULocale[] <i>getAvailableULocales</i>()</li>
+    <li>(draft)      public static NumberFormat <i>getCurrencyInstance</i>(ULocale)</li>
+    <li>(draft)      public static NumberFormat <i>getInstance</i>(ULocale)</li>
+    <li>(draft)      public static NumberFormat <i>getIntegerInstance</i>(ULocale)</li>
+    <li>(draft)      public static NumberFormat <i>getNumberInstance</i>(ULocale)</li>
+    <li>(draft)      protected static java.lang.String <i>getPattern</i>(ULocale, int)</li>
+    <li>(draft)      public static NumberFormat <i>getPercentInstance</i>(ULocale)</li>
+    <li>(draft)      public static NumberFormat <i>getScientificInstance</i>(ULocale)</li>
+</ul>
+NumberFormat.NumberFormatFactory
+<ul>
+    <li>(draft)      public NumberFormat <i>createFormat</i>(ULocale, int)</li>
+</ul>
+NumberFormat.SimpleNumberFormatFactory
+<ul>
+    <li>(draft)      public <i>NumberFormat.SimpleNumberFormatFactory</i>(ULocale)</li>
+    <li>(draft)      public <i>NumberFormat.SimpleNumberFormatFactory</i>(ULocale, boolean)</li>
+</ul>
+RuleBasedNumberFormat
+<ul>
+    <li>(draft)      public <i>RuleBasedNumberFormat</i>(ULocale, int)</li>
+    <li>(draft)      public <i>RuleBasedNumberFormat</i>(java.lang.String, ULocale)</li>
+    <li>(draft)      public <i>RuleBasedNumberFormat</i>(java.lang.String, java.lang.String[][])</li>
+    <li>(draft)      public <i>RuleBasedNumberFormat</i>(java.lang.String, java.lang.String[][], ULocale)</li>
+    <li>(draft)      public java.lang.String <i>getRuleSetDisplayName</i>(java.lang.String)</li>
+    <li>(draft)      public java.lang.String <i>getRuleSetDisplayName</i>(java.lang.String, ULocale)</li>
+    <li>(draft)      public ULocale[] <i>getRuleSetDisplayNameLocales</i>()</li>
+    <li>(draft)      public java.lang.String[] <i>getRuleSetDisplayNames</i>()</li>
+    <li>(draft)      public java.lang.String[] <i>getRuleSetDisplayNames</i>(ULocale)</li>
+</ul>
+SimpleDateFormat
+<ul>
+    <li>(draft)      public <i>SimpleDateFormat</i>(java.lang.String, ULocale)</li>
+</ul>
+StringSearch
+<ul>
+    <li>(draft)      public <i>StringSearch</i>(java.lang.String, java.text.CharacterIterator, ULocale)</li>
+</ul>
+Transliterator
+<ul>
+    <li>(draft)      public static java.lang.String <i>getDisplayName</i>(java.lang.String, ULocale)</li>
+</ul>
+UnicodeSet
+<ul>
+    <li>(draft)      public <i>UnicodeSet</i>(java.lang.String, java.text.ParsePosition, SymbolTable, int)</li>
+    <li>(draft)      public UnicodeSet <i>applyPropertyAlias</i>(java.lang.String, java.lang.String, SymbolTable)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li>(draft)      public final class <i>UniversalTimeScale</i></li>
+BuddhistCalendar
+<ul>
+    <li>(draft)      public <i>BuddhistCalendar</i>(TimeZone, ULocale)</li>
+    <li>(draft)      public <i>BuddhistCalendar</i>(ULocale)</li>
+</ul>
+ByteArrayWrapper
+<ul>
+    <li>(draft)      public <i>ByteArrayWrapper</i>(byte[], int)</li>
+    <li>(draft)      public <i>ByteArrayWrapper</i>(java.nio.ByteBuffer)</li>
+    <li>(draft)      public int <i>compareTo</i>(java.lang.Object)</li>
+    <li>(draft)      public boolean <i>equals</i>(java.lang.Object)</li>
+    <li>(draft)      public int <i>hashCode</i>()</li>
+    <li>(draft)      public java.lang.String <i>toString</i>()</li>
+</ul>
+Calendar
+<ul>
+    <li>(draft)      protected <i>Calendar</i>(TimeZone, ULocale)</li>
+    <li>(draft)      public static ULocale[] <i>getAvailableULocales</i>()</li>
+    <li>(draft)      public DateFormat <i>getDateTimeFormat</i>(int, int, ULocale)</li>
+    <li>(draft)      public java.lang.String <i>getDisplayName</i>(ULocale)</li>
+    <li>(draft)      public static synchronized Calendar <i>getInstance</i>(TimeZone, ULocale)</li>
+    <li>(draft)      public static synchronized Calendar <i>getInstance</i>(ULocale)</li>
+    <li>(draft)      protected DateFormat <i>handleGetDateFormat</i>(java.lang.String, ULocale)</li>
+</ul>
+ChineseCalendar
+<ul>
+    <li>(draft)      public <i>ChineseCalendar</i>(TimeZone, ULocale)</li>
+</ul>
+Currency
+<ul>
+    <li>(stable)     public static ULocale[] <i>getAvailableULocales</i>()</li>
+    <li>(draft)      public static Currency <i>getInstance</i>(ULocale)</li>
+    <li>(draft)      public java.lang.String <i>getName</i>(ULocale, int, boolean[])</li>
+</ul>
+GregorianCalendar
+<ul>
+    <li>(draft)      public <i>GregorianCalendar</i>(TimeZone, ULocale)</li>
+    <li>(draft)      public <i>GregorianCalendar</i>(ULocale)</li>
+</ul>
+HebrewCalendar
+<ul>
+    <li>(draft)      public <i>HebrewCalendar</i>(TimeZone, ULocale)</li>
+    <li>(draft)      public <i>HebrewCalendar</i>(ULocale)</li>
+</ul>
+Holiday
+<ul>
+    <li>(draft)      public java.lang.String <i>getDisplayName</i>(ULocale)</li>
+    <li>(draft)      public static Holiday[] <i>getHolidays</i>(ULocale)</li>
+</ul>
+IslamicCalendar
+<ul>
+    <li>(draft)      public <i>IslamicCalendar</i>(TimeZone, ULocale)</li>
+    <li>(draft)      public <i>IslamicCalendar</i>(ULocale)</li>
+</ul>
+JapaneseCalendar
+<ul>
+    <li>(draft)      public <i>JapaneseCalendar</i>(TimeZone, ULocale)</li>
+    <li>(draft)      public <i>JapaneseCalendar</i>(ULocale)</li>
+</ul>
+TimeZone
+<ul>
+    <li>(draft)      public java.lang.String <i>getDisplayName</i>(boolean, int, ULocale)</li>
+    <li>(draft)      public final java.lang.String <i>getDisplayName</i>(ULocale)</li>
+</ul>
+ULocale
+<ul>
+    <li>(draft)      public static ULocale <i>forLocale</i>(java.util.Locale)</li>
+    <li>(draft)      public ULocale <i>getFallback</i>()</li>
+    <li>(draft)      public static java.lang.String <i>getFallback</i>(java.lang.String)</li>
+    <li>(draft)      public ULocale <i>setKeywordValue</i>(java.lang.String, java.lang.String)</li>
+    <li>(draft)      public static java.lang.String <i>setKeywordValue</i>(java.lang.String, java.lang.String, java.lang.String)</li>
+</ul>
+</ul>
+
+<hr/>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Sun Nov 07 21:50:10 PST 2004<br/>Copyright (C) 2004, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+</body>
+</html>
