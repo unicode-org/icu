@@ -32,7 +32,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define WINBUILDMODE (*(o->options)=='R'?"Release":"Debug")
+/*#define WINBUILDMODE (*(o->options)=='R'?"Release":"Debug")*/
+#define CONTAINS_REAL_PATH(o) (*(o->options)==PKGDATA_DERIVED_PATH)
 
 void writeCmnRules(UPKGOptions *o,  FileStream *makefile)
 {
@@ -79,8 +80,14 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
     sprintf(tmp2, "ICUROOT=%s\n\n", o->icuroot);
     T_FileStream_writeLine(makefile, tmp2);
 
-    sprintf(tmp2,
-        "GENCMN = $(ICUROOT)%sbin\\gencmn.exe\n", separator);
+    if (CONTAINS_REAL_PATH(o)) {
+        sprintf(tmp2,
+            "GENCMN = $(ICUROOT)%sgencmn.exe\n", separator);
+    }
+    else {
+        sprintf(tmp2,
+            "GENCMN = $(ICUROOT)%sbin\\gencmn.exe\n", separator);
+    }
     T_FileStream_writeLine(makefile, tmp2);
 
     if(isDll) {
@@ -110,8 +117,14 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
             );
         T_FileStream_writeLine(makefile, tmp2);
 
-        sprintf(tmp2,
-            "GENCCODE = $(ICUROOT)%sbin\\genccode.exe\n",  separator);
+        if (CONTAINS_REAL_PATH(o)) {
+            sprintf(tmp2,
+                "GENCCODE = $(ICUROOT)%sgenccode.exe\n", separator);
+        }
+        else {
+            sprintf(tmp2,
+                "GENCCODE = $(ICUROOT)%sbin\\genccode.exe\n", separator);
+        }
         T_FileStream_writeLine(makefile, tmp2);
 
         T_FileStream_writeLine(makefile, "\n"
@@ -159,8 +172,15 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
             );
         T_FileStream_writeLine(makefile, tmp2);
 
-        sprintf(tmp2,
-            "GENCCODE = $(ICUROOT)%sbin\\genccode.exe\n",  separator);
+
+        if (CONTAINS_REAL_PATH(o)) {
+            sprintf(tmp2,
+                "GENCCODE = $(ICUROOT)%sgenccode.exe\n", separator);
+        }
+        else {
+            sprintf(tmp2,
+                "GENCCODE = $(ICUROOT)%sbin\\genccode.exe\n", separator);
+        }
         T_FileStream_writeLine(makefile, tmp2);
 
         T_FileStream_writeLine(makefile, "\n"

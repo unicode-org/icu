@@ -37,7 +37,7 @@ CFG=Debug
 !ENDIF
 !MESSAGE ICU path is $(ICUP)
 RESNAME=uconvmsg
-RESDIR=.  #$(ICUP)\..\icuapps\uconv\$(RESNAME)
+RESDIR=.
 RESFILES=resfiles.mk
 ICUDATA=$(ICUP)\data
 
@@ -49,20 +49,6 @@ PKGMODE=static
 ICD=$(ICUDATA)^\
 DATA_PATH=$(ICUP)\data^\
 ICUTOOLS=$(ICUP)\bin
-
-# We have to prepare params for pkgdata - to help it find the tools
-!IF "$(CFG)" == "Debug" || "$(CFG)" == "debug"
-PKGOPT=D:$(ICUP)
-!ELSE
-PKGOPT=R:$(ICUP)
-!ENDIF
-
-# This appears in original Microsofts makefiles
-!IF "$(OS)" == "Windows_NT"
-NULL=
-!ELSE
-NULL=nul
-!ENDIF
 
 PATH = $(PATH);$(ICUP)\bin
 
@@ -86,41 +72,30 @@ OUTPUT = "$(DLL_OUTPUT)\$(RESNAME).dll"
 OUTPUT = "$(DLL_OUTPUT)\$(RESNAME).lib"
 !ENDIF
 
-ALL : GODATA  $(OUTPUT) GOBACK #$(RESNAME).dat
+ALL : $(OUTPUT)
 	@echo All targets are up to date (mode $(PKGMODE))
 
 
 # invoke pkgdata - static
-"$(DLL_OUTPUT)\$(RESNAME).lib" :  $(RB_FILES) $(RESFILES)
+"$(DLL_OUTPUT)\$(RESNAME).lib" : $(RB_FILES) $(RESFILES)
 	@echo Building $(RESNAME).lib
-	@"$(ICUTOOLS)\pkgdata" -f -v -m static -c -p $(RESNAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s "$(RESDIR)" <<pkgdatain.txt
+	@"$(ICUTOOLS)\pkgdata" -f -v -m static -c -p $(RESNAME) -d "$(DLL_OUTPUT)" -s "$(RESDIR)" <<pkgdatain.txt
 $(RB_FILES:.res =.res
 )
 <<KEEP
 
-# utility to send us to the right dir
-GODATA :
-#	cd "$(RESDIR)"
-
-# utility to get us back to the right dir
-GOBACK :
-#	cd "$(RESDIR)\.."
-
 # This is to remove all the data files
 CLEAN :
-	@cd "$(RESDIR)"
-	-@erase "*.res"
-	-@erase "uconvmsg*.*"
-	-@erase "*.obj"
-	-@erase "base*.*"
-	@cd "$(ICUTOOLS)"
     -@erase "$(RB_FILES)"
-    -@"$(ICUTOOLS)\pkgdata" -f --clean -v -m static -c -p $(RESNAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s "$(RESDIR)" pkgdatain.txt
+	-@erase "$(RESDIR)\uconvmsg*.*"
+	-@erase "$(CFG)\*uconvmsg*.*"
+    -@"$(ICUTOOLS)\pkgdata" -f --clean -v -m static -c -p $(RESNAME) -d "$(DLL_OUTPUT)" -s "$(RESDIR)" pkgdatain.txt
 
 # Inference rule for creating resource bundles
 .txt.res:
 	@echo Making Resource Bundle files
-        "$(ICUTOOLS)\genrb" -t -p $(RESNAME) -s $(@D) -d $(@D) $(?F)
+	"$(ICUTOOLS)\genrb" -t -p $(RESNAME) -s $(@D) -d $(@D) $(?F)
 
 
 $(RESSRC) : {"$(ICUTOOLS)"}genrb.exe
+

@@ -155,21 +155,28 @@ main(int argc, char* argv[]) {
         }
 
         if(!options[1].doesOccur) {
-          /* Try to fill in from icu-config or equivalent */
-          fillInMakefileFromICUConfig(&options[1]);
+            /* Try to fill in from icu-config or equivalent */
+            fillInMakefileFromICUConfig(&options[1]);
         }
+#ifdef WIN32
+        else {
+            fprintf(stderr, "Warning: You are using the deprecated -O option\n"
+                            "\tYou can fix this warning by installing pkgdata, gencmn and genccode\n"
+                            "\tinto the same directory and not specifying the -O option to pkgdata.\n");
+        }
+#endif
         
         if(!options[1].doesOccur) {
-          fprintf(stderr, " required parameter is missing: -O is required \n");
-          fprintf(stderr, "Run '%s --help' for help.\n", progname);
-          return 1;
+            fprintf(stderr, " required parameter is missing: -O is required \n");
+            fprintf(stderr, "Run '%s --help' for help.\n", progname);
+            return 1;
         }
-
+        
         if(!options[0].doesOccur) /* -O we already have - don't report it. */
         {
-          fprintf(stderr, " required parameter -p is missing \n");
-          fprintf(stderr, "Run '%s --help' for help.\n", progname);
-          return 1;
+            fprintf(stderr, " required parameter -p is missing \n");
+            fprintf(stderr, "Run '%s --help' for help.\n", progname);
+            return 1;
         }
 
         if(argc == 1) {
@@ -254,33 +261,36 @@ main(int argc, char* argv[]) {
         o.cShortName = csname;
     }
 
+    o.verbose   = options[5].doesOccur;
 #ifdef WIN32 /* format is R:pathtoICU or D:pathtoICU */
     {
         char *pathstuff = (char *)options[1].value;
         if(options[1].value[uprv_strlen(options[1].value)-1] == '\\') {
             pathstuff[uprv_strlen(options[1].value)-1] = '\0';
         }
-        if(*pathstuff == 'R' || *pathstuff == 'D') {
+        if(*pathstuff == PKGDATA_DERIVED_PATH || *pathstuff == 'R' || *pathstuff == 'D') {
             o.options = pathstuff;
             pathstuff++;
             if(*pathstuff == ':') {
                 *pathstuff = '\0';
                 pathstuff++;
             }
-/*            else {
-                fprintf(stderr, "Error: invalid windows build mode, should be R (release) or D (debug).\n", o.mode, progname);
+            else {
+                fprintf(stderr, "Error: invalid windows build mode, should be R (release) or D (debug).\n");
                 return 1;
             }
         } else {
-            fprintf(stderr, "Error: invalid windows build mode, should be R (release) or D (debug).\n", o.mode, progname);
-            return 1;*/
+            fprintf(stderr, "Error: invalid windows build mode, should be R (release) or D (debug).\n");
+            return 1;
         }
         o.icuroot = pathstuff;
+        if (o.verbose) {
+            fprintf(stdout, "# ICUROOT is %s\n", o.icuroot);
+        }
     }
 #else /* on UNIX, we'll just include the file... */
     o.options   = options[1].value;
 #endif
-    o.verbose   = options[5].doesOccur;
     if(options[6].doesOccur) {
         o.comment = U_COPYRIGHT_STRING;
     } else if (options[7].doesOccur) {
@@ -591,58 +601,77 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
 void fillInMakefileFromICUConfig(UOption *option)
 {
 #if U_HAVE_POPEN
-  FILE *p;
-  size_t n;
-  static char buf[512] = "";
-  static const char cmd[] = "icu-config --incfile";
-
-  if(options[5].doesOccur)
-  {
-    /* informational */
-    fprintf(stderr, "%s: No -O option found, trying '%s'.\n", progname, cmd);
-  }
-
-  p = popen(cmd, "r");
-
-  if(p == NULL)
-  {
-    fprintf(stderr, "%s: icu-config: No icu-config found. (fix PATH or use -O option)\n", progname);
-    return;
-  }
-  
-  n = fread(buf, 1, 511, p);
-
-  pclose(p);
-
-  if(n<=0)
-  {
-    fprintf(stderr,"%s: icu-config: Could not read from icu-config. (fix PATH or use -O option)\n", progname);
-    return;
-  }
-
-  if(buf[strlen(buf)-1]=='\n')
-  {
-    buf[strlen(buf)-1]=0;
-  }
-  
-  if(buf[0] == 0)
-  {
-    fprintf(stderr, "%s: icu-config: invalid response from icu-config (fix PATH or use -O option)\n", progname);
-    return;
-  }
-
-  if(options[5].doesOccur)
-  {
-    /* informational */
-    fprintf(stderr, "%s: icu-config: using '-O %s'\n", progname, buf);
-  }
-  option->value = buf;
-  option->doesOccur = TRUE;
+    FILE *p;
+    size_t n;
+    static char buf[512] = "";
+    static const char cmd[] = "icu-config --incfile";
+    
+    if(options[5].doesOccur)
+    {
+        /* informational */
+        fprintf(stderr, "%s: No -O option found, trying '%s'.\n", progname, cmd);
+    }
+    
+    p = popen(cmd, "r");
+    
+    if(p == NULL)
+    {
+        fprintf(stderr, "%s: icu-config: No icu-config found. (fix PATH or use -O option)\n", progname);
+        return;
+    }
+    
+    n = fread(buf, 1, 511, p);
+    
+    pclose(p);
+    
+    if(n<=0)
+    {
+        fprintf(stderr,"%s: icu-config: Could not read from icu-config. (fix PATH or use -O option)\n", progname);
+        return;
+    }
+    
+    if(buf[strlen(buf)-1]=='\n')
+    {
+        buf[strlen(buf)-1]=0;
+    }
+    
+    if(buf[0] == 0)
+    {
+        fprintf(stderr, "%s: icu-config: invalid response from icu-config (fix PATH or use -O option)\n", progname);
+        return;
+    }
+    
+    if(options[5].doesOccur)
+    {
+        /* informational */
+        fprintf(stderr, "%s: icu-config: using '-O %s'\n", progname, buf);
+    }
+    option->value = buf;
+    option->doesOccur = TRUE;
 #else  /* ! U_HAVE_POPEN */
 
-  /* no popen available */
-  /* Put other OS specific ways to search for the Makefile.inc type 
-     information or else fail.. */
+#ifdef WIN32
+    char tmp[1024];
+    char *fullEXEpath = _fullpath(tmp, progname, sizeof(tmp));
+    char *pathstuff = (char *)options[1].value;
+
+    if (fullEXEpath) {
+        pathstuff = strrchr(fullEXEpath, U_FILE_SEP_CHAR);
+        if (pathstuff) {
+            pathstuff[1] = 0;
+            uprv_memmove(fullEXEpath + 2, fullEXEpath, uprv_strlen(fullEXEpath)+1);
+            fullEXEpath[0] = PKGDATA_DERIVED_PATH;
+            fullEXEpath[1] = ':';
+            option->value = uprv_strdup(fullEXEpath);
+            option->doesOccur = TRUE;
+        }
+    }
+    /* else can't determine the path */
+#endif
+
+    /* no popen available */
+    /* Put other OS specific ways to search for the Makefile.inc type 
+       information or else fail.. */
 
 #endif
 }
