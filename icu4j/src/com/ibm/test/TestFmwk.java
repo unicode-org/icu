@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/Attic/TestFmwk.java,v $ 
- * $Date: 2001/12/03 18:21:57 $ 
- * $Revision: 1.25 $
+ * $Date: 2001/12/03 21:48:07 $ 
+ * $Revision: 1.26 $
  *
  *****************************************************************************************
  */
@@ -122,8 +122,8 @@ public class TestFmwk implements TestLog {
                 params.prompt = true;
             } else if (args[i].equals("-nothrow")) {
                 params.nothrow = true;
-            } else if (args[i].equals("-e")) {
-                params.quick = false;
+            } else if (args[i].startsWith("-e")) {
+                params.inclusion = (args[i].length() == 2) ? 5 : Integer.parseInt(args[i].substring(2));
             } else if (args[i].toLowerCase().startsWith("-filter:")) {
                 params.filter = args[i].substring(8);
             } else {
@@ -170,8 +170,15 @@ public class TestFmwk implements TestLog {
         return params.verbose;
     }
 
+    /**
+     * 0 = fewest tests, 5 is normal build, 10 is most tests
+     */
+    public int getInclusion() {
+        return params.inclusion;
+    }
+
     public boolean isQuick() {
-        return params.quick;
+        return params.inclusion == 0;
     }
 
     public String getFilter() {
@@ -381,7 +388,7 @@ public class TestFmwk implements TestLog {
     	public boolean   prompt = false;
     	public boolean   nothrow = false;
     	public boolean   verbose = false;
-    	public boolean   quick = true;
+    	public int      inclusion = 0;
     	public String    filter = null;
 
     	public PrintWriter log = new ASCIIWriter(System.out, true);
