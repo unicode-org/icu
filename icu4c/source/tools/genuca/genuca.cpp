@@ -598,7 +598,7 @@ write_uca_table(const char *filename,
     /* populate the version info struct with version info*/
     myD->version[0] = UCOL_BUILDER_VERSION;
     /*TODO:The fractional rules version should be taken from FractionalUCA.txt*/
-    myD->version[1] = UCA_TAILORING_RULES_VERSION;
+    myD->version[1] = UCOL_FRACTIONAL_UCA_VERSION;
     myD->jamoSpecial = FALSE;
 
     tempUCATable *t = uprv_uca_initTempTable(myD, opts, NULL, status);
