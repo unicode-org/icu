@@ -39,7 +39,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable
  */
-#define U_UNICODE_VERSION "3.1.1"
+#define U_UNICODE_VERSION "3.2"
 
 /**
  * \file
@@ -97,7 +97,7 @@ U_CDECL_BEGIN
  */
 enum UProperty {
     /** Binary property Alphabetic. Same as u_isUAlphabetic, different from u_isalpha.
-        Lu+Ll+Lt+Lm+Lo+Other_Alphabetic @draft ICU 2.1 */
+        Lu+Ll+Lt+Lm+Lo+Nl+Other_Alphabetic @draft ICU 2.1 */
     UCHAR_ALPHABETIC,
     /** First constant for binary Unicode properties. @draft ICU 2.1 */
     UCHAR_BINARY_START=UCHAR_ALPHABETIC,
@@ -116,7 +116,7 @@ enum UProperty {
     UCHAR_DASH,
     /** Binary property Default_Ignorable_Code_Point (new in Unicode 3.2).
         Ignorable in most processing.
-        Cf+Cc+Cs+Other_Default_Ignorable_Code_Point-White_Space @draft ICU 2.1 */
+        <2060..206F, FFF0..FFFB, E0000..E0FFF>+Other_Default_Ignorable_Code_Point+(Cf+Cc+Cs-White_Space) @draft ICU 2.1 */
     UCHAR_DEFAULT_IGNORABLE_CODE_POINT,
     /** Binary property Deprecated (new in Unicode 3.2).
         The usage of deprecated characters is strongly discouraged. @draft ICU 2.1 */
@@ -134,11 +134,11 @@ enum UProperty {
     UCHAR_FULL_COMPOSITION_EXCLUSION,
     /** Binary property Grapheme_Base (new in Unicode 3.2).
         For programmatic determination of grapheme cluster boundaries.
-        [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-Grapheme_Extend @draft ICU 2.1 */
+        [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-Grapheme_Extend-CGJ @draft ICU 2.1 */
     UCHAR_GRAPHEME_BASE,
     /** Binary property Grapheme_Extend (new in Unicode 3.2).
         For programmatic determination of grapheme cluster boundaries.
-        Me+Mn+Mc+Other_Grapheme_Extend-Grapheme_Link @draft ICU 2.1 */
+        Me+Mn+Mc+Other_Grapheme_Extend-Grapheme_Link-CGJ @draft ICU 2.1 */
     UCHAR_GRAPHEME_EXTEND,
     /** Binary property Grapheme_Link (new in Unicode 3.2).
         For programmatic determination of grapheme cluster boundaries. @draft ICU 2.1 */
@@ -461,7 +461,10 @@ enum UBlockCode {
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_COMBINING_DIACRITICAL_MARKS=7,
     
-    /** @draft ICU 2.0 */
+    /**
+     * Unicode 3.2 renames this block to "Greek and Coptic".
+     * @draft ICU 2.0
+     */
     UBLOCK_GREEK =8,
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_GREEK=8,
@@ -636,7 +639,10 @@ enum UBlockCode {
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_CURRENCY_SYMBOLS=42,
     
-    /** @draft ICU 2.0 */
+    /**
+     * Unicode 3.2 renames this block to "Combining Diacritical Marks for Symbols".
+     * @draft ICU 2.0
+     */
     UBLOCK_COMBINING_MARKS_FOR_SYMBOLS =43,
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_COMBINING_MARKS_FOR_SYMBOLS=43,
@@ -811,7 +817,10 @@ enum UBlockCode {
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_LOW_SURROGATES=77,
 
-    /** @draft ICU 2.0 */
+    /**
+     * Unicode 3.2 renames this block to "Private Use Area".
+     * @draft ICU 2.0
+     */
     UBLOCK_PRIVATE_USE = 78,
     /** @deprecated  Use UBLOCK_PRIVATE_USE. Remove after Aug, 2002 */
     UBLOCK_PRIVATE_USE_AREA =UBLOCK_PRIVATE_USE,
@@ -880,9 +889,41 @@ enum UBlockCode {
     /** @draft ICU 2.0 */
     UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT = 95 ,
     /** @draft ICU 2.0 */
-    UBLOCK_TAGS = 96 ,
+    UBLOCK_TAGS = 96,
+
+    /* New blocks in Unicode 3.2 */
+
+    /** @draft ICU 2.2 */
+    UBLOCKS_CYRILLIC_SUPPLEMENTARY = 97,
+    /** @draft ICU 2.2 */
+    UBLOCKS_TAGALOG = 98,
+    /** @draft ICU 2.2 */
+    UBLOCKS_HANUNOO = 99,
+    /** @draft ICU 2.2 */
+    UBLOCKS_BUHID = 100,
+    /** @draft ICU 2.2 */
+    UBLOCKS_TAGBANWA = 101,
+    /** @draft ICU 2.2 */
+    UBLOCKS_MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A = 102,
+    /** @draft ICU 2.2 */
+    UBLOCKS_SUPPLEMENTAL_ARROWS_A = 103,
+    /** @draft ICU 2.2 */
+    UBLOCKS_SUPPLEMENTAL_ARROWS_B = 104,
+    /** @draft ICU 2.2 */
+    UBLOCKS_MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B = 105,
+    /** @draft ICU 2.2 */
+    UBLOCKS_SUPPLEMENTAL_MATHEMATICAL_OPERATORS = 106,
+    /** @draft ICU 2.2 */
+    UBLOCKS_KATAKANA_PHONETIC_EXTENSIONS = 107,
+    /** @draft ICU 2.2 */
+    UBLOCKS_VARIATION_SELECTORS = 108,
+    /** @draft ICU 2.2 */
+    UBLOCKS_SUPPLEMENTARY_PRIVATE_USE_AREA_A = 109,
+    /** @draft ICU 2.2 */
+    UBLOCKS_SUPPLEMENTARY_PRIVATE_USE_AREA_B = 110,
+
     /** @draft ICU 2.0 */
-    UBLOCK_COUNT=97,
+    UBLOCK_COUNT,
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_SCRIPT_COUNT=UBLOCK_COUNT,
 
@@ -1402,7 +1443,7 @@ u_charDigitValue(UChar32 c);
 /**
  * Returns the Unicode allocation block that contains the character.
  *
- * @see #UCharBlock
+ * @see #UBlockCode
  * @draft ICU 2.0
  */
 U_CAPI UBlockCode U_EXPORT2
