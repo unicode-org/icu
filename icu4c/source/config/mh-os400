@@ -28,6 +28,10 @@ ARFLAGS = -cuv
 LD_RPATH=	-I
 LD_RPATH_PRE=	-I
 
+## Make target to rebind the common library
+## to the actual data versus the stub data
+POST_DATA_BUILD = os400-data-rebind
+
 ## Versioned target for a shared library.
 FINAL_SO_TARGET = $(SO_TARGET)
 MIDDLE_SO_TARGET = 

@@ -82,7 +82,7 @@ OS390INSTALL=install390
 OS390LIST=$(BUILDDIR)/icudata390.lst
 endif
 
-all-local: icupkg.inc build-local packagedata testdata packagetest $(OS390PKG)
+all-local: icupkg.inc build-local packagedata testdata $(POST_DATA_BUILD) packagetest $(OS390PKG)
 
 dist-local:
 
@@ -425,5 +425,9 @@ testdata: packagedata $(ALL_TEST_FILES) $(UNPACKAGEDTESTDATA)
 
 packagetest: testdata icupkg.inc $(TESTBUILDDIR)/testdata.lst 
 	$(PKGDATA_INVOKE) $(PKGDATA) -T $(TESTBUILDDIR) -d $(TESTOUTDIR) -s $(TESTBUILDDIR) -p $(TESTDATA) -m common $(TESTBUILDDIR)/testdata.lst
+
+os400-data-rebind:
+	$(RMV) $(LIBICUUC)
+	(cd ../common && $(MAKE) RECURSIVE=YES) || exit;
 
 
