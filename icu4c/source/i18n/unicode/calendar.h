@@ -18,6 +18,7 @@
 *   11/15/99    weiv        added YEAR_WOY and DOW_LOCAL
 *                           to EDateFields
 *    8/19/2002  srl         Removed Javaisms
+*   11/07/2003  srl         Update, clean up documentation.
 ********************************************************************************
 */
 
@@ -188,17 +189,10 @@ public:
         MILLISECOND,          // Example: 0..999
         ZONE_OFFSET,          // Example: -12*U_MILLIS_PER_HOUR..12*U_MILLIS_PER_HOUR
         DST_OFFSET,           // Example: 0 or U_MILLIS_PER_HOUR
-// here will go names for 'Y' and 'e'
-        YEAR_WOY,  // 'Y' Example: 1..big number
-        DOW_LOCAL, // 'e' Example: 1..7
-        
-        EXTENDED_YEAR,        //  Year of this calendar system, encompassing all supra-year fields. For example, in Gregorian/Julian calendars, positive Extended Year values indicate years AD,  1 BC = -1 extended, 2 BC = -2 extended, and so on.
-        JULIAN_DAY,           //  Modified Julian day number, encompassing all date-related fields.  Demarcates at local midnight.
-        MILLISECONDS_IN_DAY,  //  Ranges from 0 to 23:59:59.999 (regardless of DST).  This field behaves <em>exactly</em> like a composite of all time-related fields, not including the zone fields.  As such, it also reflects discontinuities of those fields on DST transition days.  On a day of DST onset, it will jump forward.  On a day of DST cessation, it will jump backward.  This reflects the fact that is must be combined with the DST_OFFSET field to obtain a unique local time value.
- 
-        FIELD_COUNT,
+        YEAR_WOY,             // 'Y' Example: 1..big number - Year of Week of Year 
+        DOW_LOCAL,            // 'e' Example: 1..7 - Day of Week / Localized
 
-        DAY_OF_MONTH = DATE   // Synonyms
+        FIELD_COUNT = UCAL_FIELD_COUNT
     };
 
     /**
@@ -1325,7 +1319,17 @@ protected:
      */
     virtual void prepareGetActual(UCalendarDateFields field, UBool isMinimum, UErrorCode &status);
     
-    enum ELimitType { U_CAL_LIMIT_MINIMUM = 0, U_CAL_LIMIT_GREATEST_MINIMUM, U_CAL_LIMIT_LEAST_MAXIMUM, U_CAL_LIMIT_MAXIMUM, U_CAL_LIMIT_COUNT };
+    /**
+     * Limit enums. Not in sync with UCalendarLimitTypes
+     * @internal  
+     */
+    enum ELimitType { 
+      U_CAL_LIMIT_MINIMUM = 0, 
+      U_CAL_LIMIT_GREATEST_MINIMUM, 
+      U_CAL_LIMIT_LEAST_MAXIMUM, 
+      U_CAL_LIMIT_MAXIMUM, 
+      U_CAL_LIMIT_COUNT
+    };
     
     /**
      * Subclass API for defining limits of different types.
@@ -1409,6 +1413,8 @@ protected:
      * Subclasses may override this.  This method calls
      * handleGetMonthLength() to obtain the calendar-specific month
      * length.
+     * @param bestField which field to use to calculate the date 
+     * @return julian day specified by calendar fields.
      * @internal
      */
     virtual int32_t handleComputeJulianDay(UCalendarDateFields bestField);
@@ -1423,6 +1429,12 @@ protected:
      */
     virtual int32_t handleGetExtendedYearFromWeekFields(int32_t yearWoy, int32_t woy);
 
+    /**
+     * Compute the Julian day from fields.  Will determine whether to use
+     * the JULIAN_DAY field directly, or other fields.
+     * @return the julian day
+     * @internal
+     */
     int32_t computeJulianDay();
     
     /**
@@ -1445,25 +1457,41 @@ protected:
 
 
     /**
-     * Return the best stamp in a range.
+     * Determine the best stamp in a range.
      * @param start first enum to look at
      * @param end last enum to look at
      * @param best stamp prior to function call
+     * @return the stamp value of the best stamp
+     * @internal
      */
     int32_t newestStamp(UCalendarDateFields start, UCalendarDateFields end, int32_t bestSoFar) const;
 
     /**
-     * Value to OR against resolve table field values for remapping.
+     * Value to be bitwised "ORed" against resolve table field values for remapping.
      * @see #resolveFields
      * @internal
      */
     static const int32_t kResolveRemap;
 
     /**
-     * Type for resolution tables
+     * Precedence table for Dates
+     * @see #resolveFields
+     * @internal
      */
     static const UFieldResolutionTable kDatePrecedence[];
+
+    /**
+     * Precedence table for Year
+     * @see #resolveFields
+     * @internal
+     */
     static const UFieldResolutionTable kYearPrecedence[];
+
+    /**
+     * Precedence table for Day of Week
+     * @see #resolveFields
+     * @internal
+     */
     static const UFieldResolutionTable kDOWPrecedence[];
 
     /**
@@ -1506,6 +1534,14 @@ protected:
 
     
 private:    
+    /**
+     * Helper function for calculating limits by trial and error
+     * @param field The field being investigated
+     * @param startValue starting (least max) value of field
+     * @param endValue ending (greatest max) value of field
+     * @param status return type
+     * @internal
+     */
     int32_t getActualHelper(UCalendarDateFields field, int32_t startValue, int32_t endValue, UErrorCode &status) const;
 
 
@@ -1611,6 +1647,7 @@ protected:
      * Return the extended year on the Gregorian calendar as computed by
      * <code>computeGregorianFields()</code>.
      * @see #computeGregorianFields
+     * @internal
      */
     int32_t getGregorianYear() const {
         return fGregorianYear;
@@ -1620,6 +1657,7 @@ protected:
      * Return the month (0-based) on the Gregorian calendar as computed by
      * <code>computeGregorianFields()</code>.
      * @see #computeGregorianFields
+     * @internal
      */
     int32_t getGregorianMonth() const {
         return fGregorianMonth;
@@ -1629,6 +1667,7 @@ protected:
      * Return the day of year (1-based) on the Gregorian calendar as
      * computed by <code>computeGregorianFields()</code>.
      * @see #computeGregorianFields
+     * @internal
      */
     int32_t getGregorianDayOfYear() const {
         return fGregorianDayOfYear;
@@ -1638,6 +1677,7 @@ protected:
      * Return the day of month (1-based) on the Gregorian calendar as
      * computed by <code>computeGregorianFields()</code>.
      * @see #computeGregorianFields
+     * @internal
      */
     int32_t getGregorianDayOfMonth() const {
       return fGregorianDayOfMonth;
@@ -1647,13 +1687,14 @@ protected:
      * Called by computeJulianDay.  Returns the default month (0-based) for the year,
      * taking year and era into account.  Defaults to 0 for Gregorian, which doesn't care.
      * @internal
+     * @internal
      */
     virtual int32_t getDefaultMonthInYear() ;
 
 
     /**
      * Called by computeJulianDay.  Returns the default day (1-based) for the month,
-     * taking currently-set year and era into account.  Defaults to 1 for Gregorian, which doesn't care. 
+     * taking currently-set year and era into account.  Defaults to 1 for Gregorian.
      * @internal
      */
     virtual int32_t getDefaultDayInMonth(int32_t /*month*/);
@@ -1764,17 +1805,21 @@ protected:
      *              the first week because
      *              {@link #getMinimalDaysInFirstWeek getMinimalDaysInFirstWeek}
      *              is more than one.
+     * @internal
      */
     inline int32_t weekNumber(int32_t dayOfPeriod, int32_t dayOfWeek);
 
     /**
      * returns the local DOW, valid range 0..6
+     * @internal
      */
     int32_t getLocalDOW();
 
 private:
 
-    // The next available value for stampp[]
+    /**
+     * The next available value for fStamp[]
+     */
     int32_t fNextStamp;// = MINIMUM_USER_STAMP;
 
     /**
@@ -1945,6 +1990,7 @@ private:
      *
      * @param julian  The given Julian date number.
      * @return   Day number from 1..7 (SUN..SAT).
+     * @internal
      */
     static uint8_t julianDayToDayOfWeek(double julian);
 

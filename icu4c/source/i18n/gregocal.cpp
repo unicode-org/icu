@@ -622,35 +622,6 @@ GregorianCalendar::yearLength() const
 // -------------------------------------
 
 /**
- * Overrides Calendar
- * corrects for Gregorian shift
- * @see Calendar#complete
- */
-void
-GregorianCalendar::computeFields(UErrorCode& ec) {
-    Calendar::computeFields(ec);
-
-    if (U_FAILURE(ec)) {
-        return;
-    }
-    
-#if 0
-    /* compensate for gregorian  cutover */
-    if((internalGet(UCAL_EXTENDED_YEAR) == fGregorianCutoverYear) &&
-       fFields[UCAL_JULIAN_DAY] >= fCutoverJulianDay) {
-#if defined (U_DEBUG_CAL)
-      fprintf(stderr, "%s:%d: cf - gregorian cutover issue!\n", 
-              __FILE__, __LINE__);
-#endif
-      fFields[UCAL_DAY_OF_YEAR] -= kGregorianShift;
-      fFields[UCAL_WEEK_OF_YEAR] -= kGregorianWeekShift;
-    }
-#endif
-}
-
-// -------------------------------------
-
-/**
  * After adjustments such as add(MONTH), add(YEAR), we don't want the
  * month to jump around.  E.g., we don't want Jan 31 + 1 month to go to Mar
  * 3, we want it to go to Feb 28.  Adjustments which might run into this
@@ -1069,24 +1040,24 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
 
 
 /**
-    * Return the minimum value that this field could have, given the current date.
-    * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
-    * @param field    the time field.
-    * @return         the minimum value that this field could have, given the current date.
-    * @deprecated ICU 2.6. Use getActualMinimum(UCalendarDateFields field) instead.
-    */
+ * Return the minimum value that this field could have, given the current date.
+ * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
+ * @param field    the time field.
+ * @return         the minimum value that this field could have, given the current date.
+ * @deprecated ICU 2.6. Use getActualMinimum(UCalendarDateFields field) instead.
+ */
 int32_t GregorianCalendar::getActualMinimum(EDateFields field) const
 {
     return getMinimum((UCalendarDateFields)field);
 }
 
 /**
-    * Return the minimum value that this field could have, given the current date.
-    * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
-    * @param field    the time field.
-    * @return         the minimum value that this field could have, given the current date.
-    * @draft ICU 2.6.
-    */
+ * Return the minimum value that this field could have, given the current date.
+ * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
+ * @param field    the time field.
+ * @return         the minimum value that this field could have, given the current date.
+ * @draft ICU 2.6.
+ */
 int32_t GregorianCalendar::getActualMinimum(UCalendarDateFields field) const
 {
     return getMinimum(field);
