@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2004/02/18 03:09:00 $
-* $Revision: 1.15 $
+* $Date: 2004/12/11 06:03:08 $
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -137,8 +137,71 @@ public class TestData implements UCD_Types {
 			log.close();
 		}
 	}
+	
+	static PrintWriter log;
+	
+    public static void checkShaping() throws IOException {
+    	log = BagFormatter.openUTF8Writer(UCD_Types.GEN_DIR, "checklog.txt");
+    	checkProperty("Joining_Type", "Non_Joining", "Joining_Type", "Transparent");
+    	checkProperty("Joining_Group", "No_Joining_Group", "Joining_Type", "Transparent");  	
+       	checkProperty("Line_Break", "Unknown", "Line_Break", "Combining_Mark");
+       	checkProperty("East_Asian_Width", null, "Line_Break", "Combining_Mark");
+       	checkProperty("Bidi_Class", null, "Line_Break", "Combining_Mark");
+       	checkProperty("Script", null, "Script", new String[]{"Common", "Inherited"});
+       	checkProperty("General_Category", null, "General_Category", new String[]{"Spacing_Mark", 
+       			"Enclosing_Mark", "Nonspacing_Mark"});
+    	log.close();
+    }
 
-    public static class RegexMatcher implements UnicodeProperty.Matcher {
+    /**
+	 * @param propertyName
+     * @param exclusion
+     * @param ignorePropertyName TODO
+     * @param ignoreValue
+	 */
+	private static void checkProperty(String propertyName, String exclusion, String ignorePropertyName, Object ignoreValueList) {
+		log.println();
+		log.println(propertyName + " Check");
+		log.println();
+		Set ignoreValueSet = new HashSet();
+		if (ignoreValueList instanceof String) ignoreValueSet.add(ignoreValueList);
+		else ignoreValueSet.addAll(Arrays.asList((Object[])ignoreValueList));
+		
+		ToolUnicodePropertySource ups = ToolUnicodePropertySource.make("4.0.1");
+    	UnicodeProperty up = ups.getProperty(propertyName);
+    	UnicodeProperty ignProp = ups.getProperty(ignorePropertyName);
+    	UnicodeProperty name = ups.getProperty("Name");
+    	UnicodeSet significant = (exclusion != null ? up.getSet(exclusion) : new UnicodeSet()).complement();
+    	UnicodeSetIterator it = new UnicodeSetIterator(significant);
+    	Normalizer n = new Normalizer(Normalizer.NFD, "4.0.1");
+    	int counter = 0;
+    	while (it.next()) {
+    		String baseValue = up.getValue(it.codepoint);
+    		String nfd = n.normalize(it.codepoint);
+    		if (n.isNormalized(it.codepoint)) continue;
+    		//if (nfd.equals(it.getString())) continue;
+    		int cp;
+    		for (int i = 0; i < nfd.length(); i += UTF16.getCharCount(cp)) {
+    			cp = UTF16.charAt(nfd, i);
+        		boolean shown = false;
+    			String newValue = up.getValue(cp);    		
+    			String possIgnValue = ignProp.getValue(cp);
+				if (ignoreValueSet.contains(possIgnValue)) {
+					//log.println("--- " + newValue + "\t" + Utility.hex(cp) + " " + name.getValue(cp));
+					continue;
+				}
+				//log.println("*** " + newValue + "\t" + Utility.hex(cp) + " " + name.getValue(cp));
+				
+				if (!baseValue.equals(newValue)) {
+    				if (!shown) log.println((++counter) + "\tCONFLICT\t" + baseValue + "\t" + Utility.hex(it.codepoint) + " " + name.getValue(it.codepoint));
+					log.println("\tNFD(" + Utility.hex(it.codepoint) + ") contains:\t" + newValue + "\t" + Utility.hex(cp) + " " + name.getValue(cp));
+					shown = true;
+				}
+    		}    		
+    	}
+	}
+
+	public static class RegexMatcher implements UnicodeProperty.Matcher {
         private Matcher matcher;
         
         public UnicodeProperty.Matcher set(String pattern) {

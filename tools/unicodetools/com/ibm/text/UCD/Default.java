@@ -15,6 +15,7 @@ public final class Default implements UCD_Types {
     private static Normalizer nfkc;
     private static Normalizer nfkd;
     private static Normalizer[] nf = new Normalizer[4];
+    private static String year;
     
     public static void setUCD(String version) {
         ucdVersion = version;
@@ -37,12 +38,19 @@ public final class Default implements UCD_Types {
     }
     
     static DateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd', 'HH:mm:ss' GMT'");
+    static DateFormat yearFormat = new SimpleDateFormat("yyyy");
+    
     static {
         myDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        year = yearFormat.format(new Date());
     }
     
     public static String getDate() {
         return myDateFormat.format(new Date());
+    }
+
+    public static String getYear() {
+        return year;
     }
 
     public static String ucdVersion() {
@@ -74,5 +82,12 @@ public final class Default implements UCD_Types {
         if (ucd == null) setUCD();
         return nf[index];
     }
+
+	/**
+	 * @param lineValue
+	 */
+	public static void setYear(String lineValue) {
+		year = lineValue;
+	}
 
 }

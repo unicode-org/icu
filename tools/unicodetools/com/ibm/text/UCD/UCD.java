@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2004/11/13 23:10:32 $
-* $Revision: 1.36 $
+* $Date: 2004/12/11 06:03:08 $
+* $Revision: 1.37 $
 *
 *******************************************************************************
 */
@@ -1094,6 +1094,7 @@ public final class UCD implements UCD_Types {
             if (ch <= 0x4DB5) return 0x3400;
             if (ch <= 0x4E00) return ch;         // CJK Ideograph
             if (ch <= 0x9FA5) return 0x4E00;
+            if (ch <= 0x9FBB && rCompositeVersion >= 0x40100) return 0x4E00;
             if (ch <= 0xAC00) return ch;         // Hangul Syllable
             if (ch <= 0xD7A3) return 0xAC00;
             if (ch <= 0xD800) return ch;         // Non Private Use High Surrogate

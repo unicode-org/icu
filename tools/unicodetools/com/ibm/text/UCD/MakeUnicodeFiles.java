@@ -34,12 +34,13 @@ import com.ibm.icu.text.SymbolTable;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeMatcher;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.text.UCD.MakeUnicodeFiles.Format.PrintStyle;
 import com.ibm.text.utility.UnicodeDataFile;
 import com.ibm.text.utility.Utility;
 import com.ibm.icu.text.Collator;
 
 public class MakeUnicodeFiles {
-    public static int dVersion = 6; // change to fix the generated file D version. If less than zero, no "d"
+    public static int dVersion = -1; // change to fix the generated file D version. If less than zero, no "d"
     
     /*static String[] hackNameList = {
        "noBreak", "Arabic_Presentation_Forms-A", "Arabic_Presentation_Forms-B", 
@@ -62,8 +63,7 @@ public class MakeUnicodeFiles {
     static boolean DEBUG = false;
     
     public static void main(String[] args) throws IOException {
-        //generateFile();
-        testInvariants();
+        generateFile();
     }
 
     static class Format {
@@ -321,6 +321,8 @@ public class MakeUnicodeFiles {
                             }
                         } else if (line.startsWith("DeltaVersion:")) {
                             dVersion = Integer.parseInt(lineValue);
+                        } else if (line.startsWith("CopyrightYear:")) {
+                            Default.setYear(lineValue);
                         } else if (line.startsWith("File:")) {
                             int p2 = lineValue.lastIndexOf('/');
                             file = lineValue.substring(p2+1);
@@ -758,7 +760,7 @@ public class MakeUnicodeFiles {
              else bf.setPropName(name);
             
              if (ps.interleaveValues) {
-                writeInterleavedValues(pw, bf, prop);
+                writeInterleavedValues(pw, bf, prop, ps);
              } else if (prop.isType(UnicodeProperty.STRING_OR_MISC_MASK)) {
                 writeStringValues(pw, bf, prop);
              //} else if (prop.isType(UnicodeProperty.BINARY_MASK)) {
@@ -904,10 +906,10 @@ public class MakeUnicodeFiles {
     private static void writeInterleavedValues(
         PrintWriter pw,
         BagFormatter bf,
-        UnicodeProperty prop) {
+        UnicodeProperty prop, PrintStyle ps) {
         if (DEBUG) System.out.println("Writing Interleaved Values: " + prop.getName());
         pw.println();   
-         bf.setValueSource(new UnicodeProperty.FilteredProperty(prop, new RestoreSpacesFilter()))
+         bf.setValueSource(new UnicodeProperty.FilteredProperty(prop, new RestoreSpacesFilter(ps)))
          .setNameSource(null)
          .setLabelSource(null)
          .setRangeBreakSource(null)
@@ -945,10 +947,20 @@ public class MakeUnicodeFiles {
     }
     
     static class RestoreSpacesFilter extends UnicodeProperty.StringFilter {
-        public String remap(String original) {
+    	String skipValue;
+        /**
+		 * @param ps
+		 */
+		public RestoreSpacesFilter(PrintStyle ps) {
+			skipValue = ps.skipValue;
+			if (skipValue == null) skipValue = ps.skipUnassigned;
+		}
+
+		public String remap(String original) {
             // ok, because doesn't change length
             String mod = (String) Format.theFormat.hackMap.get(original);
             if (mod != null) original = mod;
+            if (original.equals(skipValue)) return null;
             return original.replace('_',' ');
         }
     }
@@ -1147,185 +1159,7 @@ public class MakeUnicodeFiles {
         }       
     }
     
-    /**
-     * Chain together several SymbolTables. 
-     * @author Davis
-     */
-    static class ChainedSymbolTable implements SymbolTable {
-        // TODO: add accessors?
-        private List symbolTables;
-        /**
-         * Each SymbolTable is each accessed in order by the other methods,
-         * so the first in the list is accessed first, etc.
-         * @param symbolTables
-         */
-        ChainedSymbolTable(SymbolTable[] symbolTables) {
-            this.symbolTables = Arrays.asList(symbolTables);
-        }
-        public char[] lookup(String s) {
-            for (Iterator it = symbolTables.iterator(); it.hasNext();) {
-                SymbolTable st = (SymbolTable) it.next();
-                char[] result = st.lookup(s);
-                if (result != null) return result;
-            }
-            return null;
-        }
-
-        public UnicodeMatcher lookupMatcher(int ch) {
-            for (Iterator it = symbolTables.iterator(); it.hasNext();) {
-                SymbolTable st = (SymbolTable) it.next();
-                UnicodeMatcher result = st.lookupMatcher(ch);
-                if (result != null) return result;
-            }
-            return null;
-        }
-        
-        // Warning: this depends on pos being left alone unless a string is returned!!
-        public String parseReference(String text, ParsePosition pos, int limit) {
-            for (Iterator it = symbolTables.iterator(); it.hasNext();) {
-                SymbolTable st = (SymbolTable) it.next();
-                String result = st.parseReference(text, pos, limit);
-                if (result != null) return result;
-            }
-            return null;
-        }
-    }
-    
-    static final UnicodeSet INVARIANT_RELATIONS = new UnicodeSet("[\\~ \\= \\! \\? \\< \\> \u2264 \u2265 \u2282 \u2286 \u2283 \u2287]");
-    
-    public static void testInvariants() throws IOException {
-        String[][] variables = new String[100][2];
-        int variableCount = 0;
-        PrintWriter out = BagFormatter.openUTF8Writer(UCD_Types.GEN_DIR, "UnicodeInvariantResults.txt");
-        out.write('\uFEFF'); // BOM
-        BufferedReader in = BagFormatter.openUTF8Reader("", "UnicodeInvariants.txt");
-        BagFormatter bf = new BagFormatter();
-        ChainedSymbolTable st = new ChainedSymbolTable(new SymbolTable[] {
-            ToolUnicodePropertySource.make("4.0.0").getSymbolTable("\u00D7"),
-            ToolUnicodePropertySource.make(Default.ucdVersion()).getSymbolTable("")});
-        ParsePosition pp = new ParsePosition(0);
-        int parseErrorCount = 0;
-        int testFailureCount = 0;
-        while (true) {
-            String line = in.readLine();
-            if (line == null) break;
-            if (line.startsWith("\uFEFF")) line = line.substring(1);
-            out.println(line);
-            line = line.trim();
-            int pos = line.indexOf('#');
-            if (pos >= 0) line = line.substring(0,pos).trim();
-            if (line.length() == 0) continue;
-
-            // fix all the variables
-            String oldLine = line;
-            line = Utility.replace(line, variables, variableCount);
-
-            // detect variables
-            if (line.startsWith("Let")) {
-                int x = line.indexOf('=');
-                variables[variableCount][0] = line.substring(3,x).trim();
-                variables[variableCount][1] = line.substring(x+1).trim();
-                variableCount++;
-                System.out.println("Added variable: <" + variables[variableCount-1][0] + "><"
-                         + variables[variableCount-1][1] + ">");
-                continue;
-            }
-
-            char relation = 0;
-            String rightSide = null;
-            String leftSide = null;
-            UnicodeSet leftSet = null;
-            UnicodeSet rightSet = null;
-            try {
-                pp.setIndex(0);
-                leftSet = new UnicodeSet(line, pp, st);
-                leftSide = line.substring(0,pp.getIndex());
-                eatWhitespace(line, pp);
-                relation = line.charAt(pp.getIndex());
-                if (!INVARIANT_RELATIONS.contains(relation)) {
-                    throw new ParseException("Invalid relation, must be one of " + INVARIANT_RELATIONS.toPattern(false),
-                        pp.getIndex());
-                }
-                pp.setIndex(pp.getIndex()+1); // skip char
-                eatWhitespace(line, pp);
-                int start = pp.getIndex();
-                rightSet = new UnicodeSet(line, pp, st);
-                rightSide = line.substring(start,pp.getIndex());
-                eatWhitespace(line, pp);
-                if (line.length() != pp.getIndex()) {
-                    throw new ParseException("Extra characters at end", pp.getIndex());
-                }
-            } catch (ParseException e) {
-                out.println("PARSE ERROR:\t" + line.substring(0,e.getErrorOffset())
-                    + "<@>" + line.substring(e.getErrorOffset()));
-                out.println();
-                out.println("**** START Error Info ****");
-                out.println(e.getMessage());
-                out.println("**** END Error Info ****");
-                out.println();
-                parseErrorCount++;
-                continue;
-            } catch (IllegalArgumentException e) {
-                out.println("PARSE ERROR:\t" + line);
-                out.println();
-                out.println("**** START Error Info ****");
-                out.println(e.getMessage());
-                out.println("**** END Error Info ****");
-                out.println();
-                parseErrorCount++;
-                continue;
-            }
-            
-            boolean ok = true;
-            switch(relation) {
-                case '=': ok = leftSet.equals(rightSet); break;
-                case '<': case '\u2282': ok = rightSet.containsAll(leftSet) && !leftSet.equals(rightSet); break;
-                case '>': case '\u2283': ok = leftSet.containsAll(rightSet) && !leftSet.equals(rightSet); break;
-                case '\u2264': case '\u2286': ok = rightSet.containsAll(leftSet); break;
-                case '\u2265': case '\u2287': ok = leftSet.containsAll(rightSet); break;
-                case '!': ok = leftSet.containsNone(rightSet); break;
-                case '?': ok = !leftSet.equals(rightSet) 
-                        && !leftSet.containsAll(rightSet) 
-                        && !rightSet.containsAll(leftSet)
-                        && !leftSet.containsNone(rightSet); 
-                    break;
-                default: throw new IllegalArgumentException("Internal Error");
-            }
-            if (ok) continue;
-            out.println();
-            out.println(String.valueOf(ok).toUpperCase(Locale.ENGLISH));
-            out.println("**** START Error Info ****");
-            bf.showSetDifferences(out, rightSide, rightSet, leftSide, leftSet);
-            out.println("**** END Error Info ****");
-            out.println();
-            testFailureCount++;      
-        }
-        out.println();
-        out.println("**** SUMMARY ****");
-        out.println();
-        out.println("ParseErrorCount=" + parseErrorCount);
-        out.println("TestFailureCount=" + testFailureCount);
-        out.close();
-        System.out.println("ParseErrorCount=" + parseErrorCount);
-        System.out.println("TestFailureCount=" + testFailureCount);
-    }
-    
-    /**
-     * @param line
-     * @param pp
-     */
-    private static void eatWhitespace(String line, ParsePosition pp) {
-        int cp = 0;
-        int i;
-        for (i = pp.getIndex(); i < line.length(); i += UTF16.getCharCount(cp)) {
-            cp = UTF16.charAt(line, i);
-            if (!com.ibm.icu.lang.UCharacter.isUWhiteSpace(cp)) {
-                break;
-            }
-        }
-        pp.setIndex(i);
-    }
-
+ 
     /*
     static class PropertySymbolTable implements SymbolTable {
         static boolean DEBUG = false;
