@@ -2933,9 +2933,10 @@ TestISCII(){
         0xD9, 0xE8, 0xCF,
     };
     testConvertToU(byteArr,(sizeof(byteArr)),in,(sizeof(in)/U_SIZEOF_UCHAR),"x-iscii-de",NULL,TRUE);
-    TestConv(in,(sizeof(in)/2),"ISCII,version=0","hindi", (char *)byteArr,sizeof(byteArr));
+    TestConv(in,(sizeof(in)/2),"ISCII,version=0","hindi", (char *)byteArr,sizeof(byteArr));    
 
 }
+
 static void
 TestISO_2022_JP() {
     /* test input */
@@ -3481,6 +3482,12 @@ TestISO_2022_JP_1() {
     }
     /*ucnv_close(cnv);
     cnv=ucnv_open("ISO_2022,locale=jp,version=1", &errorCode);*/
+    /*Test for the condition where there is an invalid character*/
+    ucnv_reset(cnv);
+    {
+        static const uint8_t source2[]={0x0e,0x24,0x053};
+        TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character [ISO-2022-JP-1]");
+    }
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     ucnv_close(cnv);
@@ -3567,6 +3574,12 @@ TestISO_2022_JP_2() {
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+    /*Test for the condition where there is an invalid character*/
+    ucnv_reset(cnv);
+    {
+        static const uint8_t source2[]={0x0e,0x24,0x053};
+        TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character [ISO-2022-JP-2]");
+    }
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
@@ -3638,7 +3651,13 @@ TestISO_2022_KR() {
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
-        TestJitterbug930("csISO2022KR");
+    TestJitterbug930("csISO2022KR");
+    /*Test for the condition where there is an invalid character*/
+    ucnv_reset(cnv);
+    {
+        static const uint8_t source2[]={0x1b,0x24,0x053};
+        TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ILLEGAL_ESCAPE_SEQUENCE, "an invalid character [ISO-2022-KR]");
+    }
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
@@ -3712,6 +3731,12 @@ TestISO_2022_KR_1() {
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     ucnv_reset(cnv);
     TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+        /*Test for the condition where there is an invalid character*/
+    ucnv_reset(cnv);
+    {
+        static const uint8_t source2[]={0x1b,0x24,0x053};
+        TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ILLEGAL_ESCAPE_SEQUENCE, "an invalid character [ISO-2022-KR]");
+    }
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
@@ -4065,6 +4090,12 @@ TestISO_2022_CN_EXT() {
     }
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+    /*Test for the condition where there is an invalid character*/
+    ucnv_reset(cnv);
+    {
+        static const uint8_t source2[]={0x0e,0x24,0x053};
+        TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character [ISO-2022-CN-EXT]");
+    }
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
@@ -4160,6 +4191,13 @@ TestISO_2022_CN() {
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     TestJitterbug930("csISO2022CN");
+    /*Test for the condition where there is an invalid character*/
+    ucnv_reset(cnv);
+    {
+        static const uint8_t source2[]={0x0e,0x24,0x053};
+        TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character [ISO-2022-CN]");
+    }
+
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
