@@ -377,7 +377,10 @@ void NumberFormatRegressionTest::Test4086575(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf1 = NumberFormat::createInstance(Locale::getFrance(), status);
-    if(status == U_USING_FALLBACK_WARNING) {
+
+    // TODO: There is not a good way to find out that the creation of this number format has
+    // failed. Major rewiring of format construction proposed.
+    if(U_FAILURE(status)) {
       errln("Something is wrong with French number format - it should not fallback. Exitting");
       delete nf1;
       return;
