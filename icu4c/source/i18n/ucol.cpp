@@ -17,6 +17,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "ustrenum.h"
 #include "uassert.h"
 
 #if !UCONFIG_NO_COLLATION
@@ -7535,17 +7536,58 @@ ucol_countAvailable()
 
 U_CAPI UEnumeration* U_EXPORT2
 ucol_openAvailableLocales(UErrorCode *status) {
-    return ures_openAvailableLocales(U_ICUDATA_COLL, status);
+    // This is a wrapper over Collator::getAvailableLocales()
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
+    StringEnumeration *s = Collator::getAvailableLocales();
+    if (s == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    return uenum_openStringEnumeration(s, status);
+}
+
+// would be nice if KW == RESOURCE_NAME - alan
+
+static const char* KW = "collation";
+
+static const char* RESOURCE_NAME = "collations";
+
+static const char* KEYWORDS[] = { KW };
+
+#define KEYWORD_COUNT (sizeof(KEYWORDS)/sizeof(KEYWORDS[0]))
+
+U_CAPI UEnumeration* U_EXPORT2
+ucol_getKeywords(UErrorCode *status) {
+    UEnumeration *result = NULL;
+    if (U_SUCCESS(*status)) {
+        return uenum_openCharStringsEnumeration(KEYWORDS, KEYWORD_COUNT, status);
+    }
+    return result;
 }
 
 U_CAPI UEnumeration* U_EXPORT2
 ucol_getKeywordValues(const char *keyword, UErrorCode *status) {
+    // hard-coded to accept exactly one collation keyword
+    // modify if additional collation keyword is added later
     if (U_SUCCESS(*status) &&
-        keyword==NULL || uprv_strcmp(keyword, "collation")!=0) {
+        keyword==NULL || uprv_strcmp(keyword, KW)!=0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
-    return ures_getKeywordValues(U_ICUDATA_COLL, keyword, status);
+    return ures_getKeywordValues(U_ICUDATA_COLL, RESOURCE_NAME, status);
+}
+
+U_CAPI int32_t U_EXPORT2
+ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
+                             const char* locale, UBool* isAvailable,
+                             UErrorCode* status) {
+    // odd that resource name is "collations" but keyword is
+    // "collation"
+    return ures_getFunctionalEquivalent(result, resultCapacity, U_ICUDATA_COLL,
+                                        "collations", KW, locale,
+                                        isAvailable, status);
 }
 
 U_CAPI void U_EXPORT2
