@@ -14,7 +14,7 @@
 #include "uassert.h"
 
 /* set_num key prefix string. msg_num key is simply a number. */
-static const char* SET_KEY_PREFIX = "%cat%";
+static const char SET_KEY_PREFIX[] = "%cat%";
 
 /* length of SET_KEY_PREFIX */
 #define SET_KEY_PREFIX_LEN 5
