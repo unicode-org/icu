@@ -29,11 +29,13 @@ void IntlTestDateFormatAPI::runIndexedTest( int32_t index, UBool exec, const cha
                 if (exec) {
                     logln("DateFormat API test---"); logln("");
                     UErrorCode status = U_ZERO_ERROR;
+                    Locale saveLocale;
                     Locale::setDefault(Locale::getEnglish(), status);
                     if(U_FAILURE(status)) {
                         errln("ERROR: Could not set default locale, test may not give correct results");
                     }
                     testAPI(/*par*/);
+                    Locale::setDefault(saveLocale, status);
                 }
                 break;
 
