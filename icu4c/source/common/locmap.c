@@ -530,10 +530,10 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(ka),    /*  ka  Georgian                  0x37 */
     ILCID_POSIX_MAP(kk),    /*  kk  Kazakh                    0x3f */
     ILCID_POSIX_MAP(kn),    /*  kn  Kannada                   0x4b */
-    ILCID_POSIX_MAP(ky),    /*  ky  Kyrgyz                    0x40 */
     ILCID_POSIX_MAP(ko),    /*  ko  Korean                    0x12 */
     ILCID_POSIX_MAP(kok),   /*  kok Konkani                   0x57 */
     ILCID_POSIX_MAP(ks),    /*  ks  Kashmiri                  0x60 */
+    ILCID_POSIX_MAP(ky),    /*  ky  Kyrgyz                    0x40 */
     ILCID_POSIX_MAP(lt),    /*  lt  Lithuanian                0x27 */
     ILCID_POSIX_MAP(lv),    /*  lv  Latvian, Lettish          0x26 */
     ILCID_POSIX_MAP(mk),    /*  mk  Macedonian                0x2f */
@@ -685,8 +685,9 @@ uprv_convertToLCID(const char* posixID, UErrorCode* status)
 {
 
     uint32_t   low    = 0;
-    uint32_t   high   = gLocaleCount - 1;
+    uint32_t   high   = gLocaleCount;
     uint32_t   mid    = high;
+    uint32_t   oldmid =0;
     int32_t    compVal;
     char       langID[ULOC_FULLNAME_CAPACITY];
 
@@ -706,19 +707,25 @@ uprv_convertToLCID(const char* posixID, UErrorCode* status)
     }
 
     /*Binary search for the map entry for normal cases */
-    /* When mid == 0, it's not found */
-    while (low <= high && mid != 0) {
 
-        mid = (low + high + 1) / 2;    /* +1 is to round properly */
+    while (high > low)  /*binary search*/{
+
+        mid = (high+low) >> 1; /*Finds median*/
+
+        if (mid == oldmid) 
+            break;
 
         compVal = uprv_strcmp(langID, gPosixIDmap[mid].regionMaps->posixID);
-
-        if (compVal < 0)
-            high = mid - 1;
-        else if (compVal > 0)
-            low = mid + 1;
-        else  /* found match! */
+        if (compVal < 0){
+            high = mid;
+        }
+        else if (compVal > 0){
+            low = mid;
+        }
+        else /*we found it*/{
             return hostID(&gPosixIDmap[mid], posixID, status);
+        }
+        oldmid = mid;
     }
 
     /*

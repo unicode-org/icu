@@ -13,6 +13,12 @@ nn{
         " < o\u0308<<< O\u0308< o\u030B<<< O\u030B < a\u030A<<< A\u030A<<< aa <<< aA <<< Aa <<< AA  & "
         "V<<< w<<< W" }
     }
+    Variants{
+         Fallback{"en"}
+    }
+    Keys{
+         Fallback{ "en" }
+    }
     Countries {
         NO { "Noreg" }
     }

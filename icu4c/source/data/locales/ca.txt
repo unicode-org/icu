@@ -6,14 +6,21 @@
 // ***************************************************************************
 
 ca {
-    Version { "2.0" }
+    Version { "4.0" }
     CollationElements { 
         Version { "1.0" }
         Sequence { "[backwards 2]"
         "&C < ch <<< Ch <<< CH"
         "&L < ll <<< l\u00b7l <<< Ll <<< L\u00b7l <<< LL <<< L\u00b7L" }
     }
+    Variants{
+        Fallback{"en"}
+    }
+    Keys{
+       Fallback{"en"}
+    }
     Countries { 
+        Fallback{"en"}
         ES { "Espanya" }
     }
     DateTimePatterns { 
@@ -46,6 +53,7 @@ ca {
         "dissabte",
     }
     Languages { 
+        Fallback{"en"}
         ca { "catal\u00E0" }
     }
     MonthAbbreviations { 

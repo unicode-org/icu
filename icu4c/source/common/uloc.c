@@ -52,6 +52,8 @@ U_CFUNC const char *locale_get_default(void);
 static const char _kLocaleID[]       = "LocaleID";
 static const char _kLanguages[]      = "Languages";
 static const char _kCountries[]      = "Countries";
+static const char _kVariants[]       = "Variants";
+static const char _kKeys[]           = "Keys";
 static const char _kIndexLocaleName[] = "res_index";
 static const char _kIndexTag[]       = "InstalledLocales";
 
@@ -830,7 +832,11 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
     UResourceBundle *rb, table;
     const UChar *item;
     UErrorCode errorCode;
-
+    char explicitFallbackName[80] = {0};
+    int32_t efnLen =0;
+    const char* rootName = "root";
+    const UChar* ef = NULL;
+    UBool overrideExplicitFallback = FALSE;
     for(;;) {
         /*
          * open the bundle for the current locale
@@ -868,27 +874,46 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
             *pErrorCode=errorCode;
         }
 
+        /* check if the fallback token is set */
+        ef = ures_getStringByKey(&table, "Fallback", &efnLen, &errorCode);
+        if(U_SUCCESS(errorCode)){
+            /* set the fallback chain */
+            u_UCharsToChars(ef, explicitFallbackName, efnLen);
+            /* null terminate the buffer */
+            explicitFallbackName[efnLen]=0;
+        }else if(errorCode==U_USING_DEFAULT_WARNING ||
+              (errorCode==U_USING_FALLBACK_WARNING && *pErrorCode!=U_USING_DEFAULT_WARNING)
+        ) {
+            /* set the "strongest" error code (success->fallback->default->failure) */
+            *pErrorCode=errorCode;
+        }
+
         /* try to open the requested item in the table */
         errorCode=U_ZERO_ERROR;
         item=ures_getStringByKey(&table, itemKey, pLength, &errorCode);
         if(U_SUCCESS(errorCode)) {
-            /* we got the requested item! */
-            ures_close(&table);
-            ures_close(rb);
+            /* if the item for the key is empty ... override the explicit fall back set */
+            if(item[0]==0 && efnLen > 0){
+                overrideExplicitFallback = TRUE;
+            }else{
+                /* we got the requested item! */
+                ures_close(&table);
+                ures_close(rb);
 
-            if(errorCode==U_USING_DEFAULT_WARNING ||
-               (errorCode==U_USING_FALLBACK_WARNING && *pErrorCode!=U_USING_DEFAULT_WARNING)
-            ) {
-                /* set the "strongest" error code (success->fallback->default->failure) */
-                *pErrorCode=errorCode;
+                if(errorCode==U_USING_DEFAULT_WARNING ||
+                   (errorCode==U_USING_FALLBACK_WARNING && *pErrorCode!=U_USING_DEFAULT_WARNING)
+                ) {
+                    /* set the "strongest" error code (success->fallback->default->failure) */
+                    *pErrorCode=errorCode;
+                }
+
+                /*
+                 * It is safe to close the bundle and still return the
+                 * string pointer because resource bundles are
+                 * cached until u_cleanup().
+                 */
+                return item;
             }
-
-            /*
-             * It is safe to close the bundle and still return the
-             * string pointer because resource bundles are
-             * cached until u_cleanup().
-             */
-            return item;
         }
 
         /*
@@ -909,7 +934,7 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
             return NULL;
         }
 
-        if(*locale==0 || 0==uprv_strcmp(locale, "root")) {
+        if(*locale==0 || 0==uprv_strcmp(locale, "root") || 0==uprv_strcmp(locale,explicitFallbackName)) {
             /* end of fallback; even root does not have the requested item either */
             ures_close(&table);
             ures_close(rb);
@@ -919,18 +944,23 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
 
         /* could not find the table, or its item, try to fall back to a different RB and table */
         errorCode=U_ZERO_ERROR;
-        uloc_getParent(locale, localeBuffer, sizeof(localeBuffer), &errorCode);
+        if(efnLen > 0 && overrideExplicitFallback == FALSE){
+            /* continue the fallback lookup with the explicit fallback that is requested */
+            locale = explicitFallbackName;
+        }else{
+            uloc_getParent(locale, localeBuffer, sizeof(localeBuffer), &errorCode);
+            if(U_FAILURE(errorCode) || errorCode==U_STRING_NOT_TERMINATED_WARNING) {
+                /* error getting the parent locale ID - should never happen */
+                *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
+                return NULL;
+            }
+
+            /* continue the fallback lookup with the parent locale ID */
+            locale=localeBuffer;
+        }
         /* done with the locale string - ready to close table and rb */
         ures_close(&table);
         ures_close(rb);
-        if(U_FAILURE(errorCode) || errorCode==U_STRING_NOT_TERMINATED_WARNING) {
-            /* error getting the parent locale ID - should never happen */
-            *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
-            return NULL;
-        }
-
-        /* continue the fallback lookup with the parent locale ID */
-        locale=localeBuffer;
     }
 }
 
@@ -1071,11 +1101,9 @@ uloc_getDisplayVariant(const char *locale,
     /*
      * display names for variants are top-level items of
      * locale resource bundles
-     * the rb keys are "%%" followed by the variant tags
      */
     *pErrorCode=U_ZERO_ERROR;   /* necessary because we will check for a warning code */
-    localeBuffer[0]=localeBuffer[1]='%';
-    length=uloc_getVariant(locale, localeBuffer+2, sizeof(localeBuffer)-2, pErrorCode);
+    length=uloc_getVariant(locale, localeBuffer, sizeof(localeBuffer), pErrorCode);
     if(U_FAILURE(*pErrorCode) || *pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
@@ -1086,8 +1114,8 @@ uloc_getDisplayVariant(const char *locale,
 
     /* pass itemKey=NULL to look for a top-level item */
     return _getStringOrCopyKey(NULL, displayLocale,
-                               localeBuffer, NULL,
-                               localeBuffer+2,      /* substitute=variant without %% */
+                               _kVariants, localeBuffer, 
+                               localeBuffer,      
                                dest, destCapacity,
                                pErrorCode);
 }

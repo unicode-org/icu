@@ -15,6 +15,7 @@ sk {
         " & Z < z\u030C <<< Z\u030C < z\u0307 <<< Z\u0307" }
     }
     Countries { 
+        Fallback{ "en"}
         //AD { "Andorra" }
         AE { "Spojen\u00E9 arabsk\u00E9 emir\u00E1ty" }
         AF { "Afganistan" }
@@ -290,6 +291,7 @@ sk {
         "n.l.",
     }
     Languages { 
+        Fallback{ "en"}
         ar { "arabsk\u00FD" }
         bg { "bulharsk\u00FD" }
         cs { "\u010Desk\u00FD" }
