@@ -820,8 +820,8 @@ enumNames(UCharNames *names,
                                    fn, context, nameChoice)) {
                     return FALSE;
                 }
+                ++group; /* continue with the next group */
             }
-            ++group; /* continue with the next group */
         } else if(startGroupMSB>group->groupMSB) {
             /* make sure that we start enumerating with the first group after start */
             ++group;
