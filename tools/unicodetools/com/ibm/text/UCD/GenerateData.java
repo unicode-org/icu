@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2004/12/15 02:39:25 $
-* $Revision: 1.36 $
+* $Date: 2005/03/10 02:37:19 $
+* $Revision: 1.37 $
 *
 *******************************************************************************
 */
@@ -339,19 +339,21 @@ public class GenerateData implements UCD_Types {
             } else if (propAbb.equals("isc")) {
                 type = MISC_PROP;
             }
-            addLine(sorted, UCD_Names.PROP_TYPE_NAMES[type][1], propAbb, prop);
+            addLine(sorted, UCD_Names.PROP_TYPE_NAMES[type][1], propAbb, prop, null);
             checkDuplicate(duplicates, accumulation, propAbb, prop);
             if (!prop.equals(propAbb)) checkDuplicate(duplicates, accumulation, prop, prop);
         }
-        addLine(sorted, UCD_Names.PROP_TYPE_NAMES[MISC_PROP][1], "URS", "Unicode_Radical_Stroke");
+        addLine(sorted, UCD_Names.PROP_TYPE_NAMES[MISC_PROP][1], "URS", "Unicode_Radical_Stroke", null);
         // TODO: merge above
  
         for (int k = 0; k < UCD_Names.SUPER_CATEGORIES.length; ++k) {
             valueAbb = Utility.getUnskeleton(UCD_Names.SUPER_CATEGORIES[k][0], false);
             value = Utility.getUnskeleton(UCD_Names.SUPER_CATEGORIES[k][1], true);
-            addLine(sorted, "gc", valueAbb, value, "# " + UCD_Names.SUPER_CATEGORIES[k][2]);
+            String extra = Utility.getUnskeleton(UCD_Names.SUPER_CATEGORIES[k][1], true);
+            addLine(sorted, "gc", valueAbb, value, extra, "# " + UCD_Names.SUPER_CATEGORIES[k][2]);
             checkDuplicate(duplicates, accumulation, value, "General_Category=" + value);
             if (!value.equals(valueAbb)) checkDuplicate(duplicates, accumulation, valueAbb, "General_Category=" + value);
+            if (extra != null) checkDuplicate(duplicates, accumulation, extra, "General_Category=" + value);
         }
         
         /*
@@ -360,14 +362,14 @@ public class GenerateData implements UCD_Types {
         addLine(sorted, "xx; F         ; False");
         checkDuplicate(duplicates, accumulation, "F", "xx=False");
         */
-        addLine(sorted, "qc", UCD_Names.YN_TABLE[1], UCD_Names.YN_TABLE_LONG[1]);
+        addLine(sorted, "qc", UCD_Names.YN_TABLE[1], UCD_Names.YN_TABLE_LONG[1], null);
         checkDuplicate(duplicates, accumulation, UCD_Names.YN_TABLE[1], "qc=" + UCD_Names.YN_TABLE_LONG[1]);
-        addLine(sorted, "qc", UCD_Names.YN_TABLE[0], UCD_Names.YN_TABLE_LONG[0]);
+        addLine(sorted, "qc", UCD_Names.YN_TABLE[0], UCD_Names.YN_TABLE_LONG[0], null);
         checkDuplicate(duplicates, accumulation, UCD_Names.YN_TABLE[0], "qc=" + UCD_Names.YN_TABLE_LONG[0]);
-        addLine(sorted, "qc", "M", "Maybe");
+        addLine(sorted, "qc", "M", "Maybe", null);
         checkDuplicate(duplicates, accumulation, "M", "qc=Maybe");
         
-        addLine(sorted, "blk", "n/a", Utility.getUnskeleton("no block", true));
+        addLine(sorted, "blk", "n/a", Utility.getUnskeleton("no block", true), null);
         
         for (int i = 0; i < LIMIT_ENUM; ++i) {
             int type = i & 0xFF00;
@@ -400,7 +402,7 @@ public class GenerateData implements UCD_Types {
                     : type != DERIVED && type != BINARY_PROPERTIES 
                     ? UCD_Names.PROP_TYPE_NAMES[ENUMERATED_PROP][1] 
                     : UCD_Names.PROP_TYPE_NAMES[up.getValueType()][1], 
-                    propAbb, prop);
+                    propAbb, prop, null);
                 checkDuplicate(duplicates, accumulation, propAbb, prop);
                 if (!prop.equals(propAbb)) checkDuplicate(duplicates, accumulation, prop, prop);
             }
@@ -471,9 +473,9 @@ public class GenerateData implements UCD_Types {
             if (type == COMBINING_CLASS) {
                 String num = up.getValue(NUMBER);
                 num = "; " + Utility.repeat(" ", 3-num.length()) + num;
-                addLine(sorted, propAbb + num, valueAbb, value);
+                addLine(sorted, propAbb + num, valueAbb, value, null);
             } else if (!valueAbb.equals(UCD_Names.YN_TABLE[1])) {
-                addLine(sorted, propAbb, valueAbb, value);
+                addLine(sorted, propAbb, valueAbb, value, null);
             }
             checkDuplicate(duplicates, accumulation, value, prop + "=" + value);
             if (!value.equalsIgnoreCase(valueAbb) && !valueAbb.equals("n/a")) {
@@ -483,7 +485,7 @@ public class GenerateData implements UCD_Types {
         
         Iterator blockIterator = Default.ucd().getBlockNames().iterator();
         while (blockIterator.hasNext()) {
-            addLine(sorted, "blk", "n/a", (String)blockIterator.next());
+            addLine(sorted, "blk", "n/a", (String)blockIterator.next(), null);
         }
         /*
         UCD.BlockData blockData = new UCD.BlockData();
@@ -550,19 +552,23 @@ public class GenerateData implements UCD_Types {
         Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName[0]);
     }
     
-    static void addLine(Set sorted, String f1, String f2, String f3) {
-        addLine(sorted, f1, f2, f3, null);
+    static void addLine(Set sorted, String f1, String f2, String f3, String f4) {
+        addLine(sorted, f1, f2, f3, f4, null);
     }
     
-    static void addLine(Set sorted, String f1, String f2, String f3, String f4) {
+    static void addLine(Set sorted, String f1, String f2, String f3, String f4, String comment) {
         //System.out.println("Adding: " + line);
         f1 += Utility.repeat(" ", 3 - f1.length());
         f1 += "; " + f2;
         f1 += Utility.repeat(" ", 15 - f1.length());
         f1 += "; " + f3;
         if (f4 != null) {
-            f1 += Utility.repeat(" ", 50 - f1.length());
+            f1 += Utility.repeat(" ", 30 - f1.length());
             f1 += f4;
+        }
+        if (comment != null) {
+            f1 += Utility.repeat(" ", 50 - f1.length());
+            f1 += comment;
         }
         sorted.add(f1);
     }

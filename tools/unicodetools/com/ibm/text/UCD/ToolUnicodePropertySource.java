@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.util.UnicodeMap;
@@ -355,7 +356,9 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
         }
         protected List _getNameAliases(List result) {
             addUnique(ucdProperty.getName(UCDProperty.SHORT), result);
-            addUnique(getName(), result);
+            String name = getName();
+            addUnique(name, result);
+            if (name.equals("White_Space")) addUnique("space", result);
             return result;
         }
         protected List _getValueAliases(String valueAlias, List result) {
@@ -437,7 +440,8 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
                         case UCD_Types.LINE_BREAK>>8:  temp = (ucd.getLineBreakID_fromIndex((byte)i, style)); break;
                         case UCD_Types.JOINING_TYPE>>8: temp = (ucd.getJoiningTypeID_fromIndex((byte)i, style)); break;
                         case UCD_Types.JOINING_GROUP>>8: temp = (ucd.getJoiningGroupID_fromIndex((byte)i, style)); break;
-                        case UCD_Types.SCRIPT>>8: temp = (ucd.getScriptID_fromIndex((byte)i, style)); titlecase = true;
+                        case UCD_Types.SCRIPT>>8:
+                        	temp = (ucd.getScriptID_fromIndex((byte)i, style)); titlecase = true;
                             if (UnicodeProperty.UNUSED.equals(temp)) continue;
                             if (temp != null) temp = UCharacter.toTitleCase(Locale.ENGLISH,temp,null);
                             break;
@@ -465,7 +469,10 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
         public List _getNameAliases(List result) {
             if (result == null) result = new ArrayList();
             addUnique(Utility.getUnskeleton(up.getName(UCD_Types.SHORT), false), result);
-            addUnique(Utility.getUnskeleton(up.getName(UCD_Types.LONG), true), result);
+            String longName = up.getName(UCD_Types.LONG);
+            addUnique(Utility.getUnskeleton(longName, true), result);
+            // hack
+            if (longName.equals("White_Space")) addUnique("space", result);
             return result;
         }
         
@@ -476,7 +483,7 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             else if (type == NUMERIC) return result;
             else if (type == BINARY) {
                 UnicodeProperty.addUnique(valueAlias, result);
-                return lookup(valueAlias, UCD_Names.YN_TABLE_LONG, UCD_Names.YN_TABLE, result);
+                return lookup(valueAlias, UCD_Names.YN_TABLE_LONG, UCD_Names.YN_TABLE, null, result);
             } else if (type == ENUMERATED || type == CATALOG) {
                 byte style = UCD_Types.LONG;
                 int prop = propMask>>8;
@@ -485,33 +492,33 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
                     try {
                         switch (prop) {
                         case UCD_Types.CATEGORY>>8:
-                            return lookup(valueAlias, UCD_Names.LONG_GENERAL_CATEGORY, UCD_Names.GENERAL_CATEGORY, result);
+                            return lookup(valueAlias, UCD_Names.LONG_GENERAL_CATEGORY, UCD_Names.GENERAL_CATEGORY, UCD_Names.EXTRA_GENERAL_CATEGORY, result);
                         case UCD_Types.COMBINING_CLASS>>8:
                             addUnique(String.valueOf(0xFF&Utility.lookup(valueAlias, UCD_Names.LONG_COMBINING_CLASS, true)), result);
-                            return lookup(valueAlias, UCD_Names.LONG_COMBINING_CLASS, UCD_Names.COMBINING_CLASS, result);
+                            return lookup(valueAlias, UCD_Names.LONG_COMBINING_CLASS, UCD_Names.COMBINING_CLASS, null, result);
                         case UCD_Types.BIDI_CLASS>>8:
-                            return lookup(valueAlias, UCD_Names.LONG_BIDI_CLASS, UCD_Names.BIDI_CLASS, result);
+                            return lookup(valueAlias, UCD_Names.LONG_BIDI_CLASS, UCD_Names.BIDI_CLASS, null, result);
                         case UCD_Types.DECOMPOSITION_TYPE>>8:
-                            return lookup(valueAlias, UCD_Names.LONG_DECOMPOSITION_TYPE, UCD_Names.DECOMPOSITION_TYPE, result);
+                            return lookup(valueAlias, UCD_Names.LONG_DECOMPOSITION_TYPE, UCD_Names.DECOMPOSITION_TYPE, null, result);
                         case UCD_Types.NUMERIC_TYPE>>8:
-                            return lookup(valueAlias, UCD_Names.LONG_NUMERIC_TYPE, UCD_Names.NUMERIC_TYPE, result);
+                            return lookup(valueAlias, UCD_Names.LONG_NUMERIC_TYPE, UCD_Names.NUMERIC_TYPE, null, result);
                         case UCD_Types.EAST_ASIAN_WIDTH>>8:
-                            return lookup(valueAlias, UCD_Names.LONG_EAST_ASIAN_WIDTH, UCD_Names.EAST_ASIAN_WIDTH, result);
+                            return lookup(valueAlias, UCD_Names.LONG_EAST_ASIAN_WIDTH, UCD_Names.EAST_ASIAN_WIDTH, null, result);
                         case UCD_Types.LINE_BREAK>>8:
-                            lookup(valueAlias, UCD_Names.LONG_LINE_BREAK, UCD_Names.LINE_BREAK, result);
+                            lookup(valueAlias, UCD_Names.LONG_LINE_BREAK, UCD_Names.LINE_BREAK, null, result);
                             if (valueAlias.equals("Inseparable")) addUnique("Inseperable", result);
                             // Inseparable; Inseperable
                             return result;
                         case UCD_Types.JOINING_TYPE>>8:
-                            return lookup(valueAlias, UCD_Names.LONG_JOINING_TYPE, UCD_Names.JOINING_TYPE, result);
+                            return lookup(valueAlias, UCD_Names.LONG_JOINING_TYPE, UCD_Names.JOINING_TYPE, null, result);
                         case UCD_Types.JOINING_GROUP>>8:
-                            return lookup(valueAlias, UCD_Names.JOINING_GROUP, null, result);
+                            return lookup(valueAlias, UCD_Names.JOINING_GROUP, null, null, result);
                         case UCD_Types.SCRIPT>>8: 
-                            return lookup(valueAlias, UCD_Names.LONG_SCRIPT, UCD_Names.SCRIPT, result);
+                            return lookup(valueAlias, UCD_Names.LONG_SCRIPT, UCD_Names.SCRIPT, UCD_Names.EXTRA_SCRIPT, result);
                         case UCD_Types.AGE>>8:
-                            return lookup(valueAlias, UCD_Names.AGE, null, result);
+                            return lookup(valueAlias, UCD_Names.AGE, null, null, result);
                         case UCD_Types.HANGUL_SYLLABLE_TYPE>>8: 
-                            return lookup(valueAlias, UCD_Names.LONG_HANGUL_SYLLABLE_TYPE, UCD_Names.HANGUL_SYLLABLE_TYPE, result);
+                            return lookup(valueAlias, UCD_Names.LONG_HANGUL_SYLLABLE_TYPE, UCD_Names.HANGUL_SYLLABLE_TYPE, null, result);
                         default: throw new IllegalArgumentException("Internal Error: " + prop);
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {
@@ -620,14 +627,19 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
         return result;
     }
 
-    static List lookup(String valueAlias, String[] main, String[] aux, List result) {
+    static List lookup(String valueAlias, String[] main, String[] aux, Map aux2, List result) {
         //System.out.println(valueAlias + "=>");
         //System.out.println("=>" + aux[pos]);
         if (aux != null) {
             int pos = 0xFF & Utility.lookup(valueAlias, main, true);
             UnicodeProperty.addUnique(aux[pos], result);
         }
-        return (List) UnicodeProperty.addUnique(valueAlias, result);
+        UnicodeProperty.addUnique(valueAlias, result);
+        if (aux2 != null) {
+        	String xtra = (String) aux2.get(valueAlias);
+        	if (xtra != null) UnicodeProperty.addUnique(xtra, result);
+        }
+        return result;
     }
 
     /*

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2004/12/11 06:03:08 $
-* $Revision: 1.37 $
+* $Date: 2005/03/10 02:37:20 $
+* $Revision: 1.38 $
 *
 *******************************************************************************
 */
@@ -891,7 +891,9 @@ public final class UCD implements UCD_Types {
     
     public static String getCategoryID_fromIndex(byte prop, byte style) {
         return prop < 0 || prop >= UCD_Names.GENERAL_CATEGORY.length ? null
-            : (style != LONG) ? UCD_Names.GENERAL_CATEGORY[prop] : UCD_Names.LONG_GENERAL_CATEGORY[prop];
+        	: (style == EXTRA_ALIAS && prop == DECIMAL_DIGIT_NUMBER) ? "digit"
+            : (style != LONG) ? UCD_Names.GENERAL_CATEGORY[prop]
+			: UCD_Names.LONG_GENERAL_CATEGORY[prop];
     }
     
     
@@ -1056,7 +1058,9 @@ public final class UCD implements UCD_Types {
 
     public static String getScriptID_fromIndex(byte prop, byte length) {
         return prop < 0 || prop >= UCD_Names.SCRIPT.length ? null
-        : (length == SHORT) ? UCD_Names.SCRIPT[prop] : UCD_Names.LONG_SCRIPT[prop];
+        : (length == EXTRA_ALIAS && prop == COPTIC) ? "Qaac"
+        : (length == SHORT) ? UCD_Names.SCRIPT[prop]
+        : UCD_Names.LONG_SCRIPT[prop];
     }
 
     public String getAgeID(int codePoint) {

@@ -5,15 +5,17 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2004/12/11 06:03:08 $
-* $Revision: 1.30 $
+* $Date: 2005/03/10 02:37:20 $
+* $Revision: 1.31 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCD;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.text.utility.*;
@@ -346,6 +348,11 @@ final class UCD_Names implements UCD_Types {
     
   };
 
+	public static final Map EXTRA_SCRIPT = new HashMap();
+	static {
+		EXTRA_SCRIPT.put("Coptic", "Qaac");
+	}
+
 	public static final String[] SCRIPT = {
     "Zyyy", // 	COMMON -- NOT A LETTER: NO EXACT CORRESPONDENCE IN 15924
     "Latn", // 	LATIN
@@ -479,7 +486,7 @@ final class UCD_Names implements UCD_Types {
         "Pi", // = Punctuation, Initial quote 29 (may behave like Ps or Pe depending on usage)
         "Pf" // = Punctuation, Final quote 30 (may behave like Ps or Pe dependingon usage)
     };
-
+    
     static final String[] LONG_GENERAL_CATEGORY = {
         "Unassigned", // = Other, Not Assigned 0
 
@@ -524,15 +531,21 @@ final class UCD_Names implements UCD_Types {
     };
 
     static final String[][] SUPER_CATEGORIES = {
-        {"L", "Letter", "Ll | Lm | Lo | Lt | Lu"},
-        {"M", "Mark", "Mc | Me | Mn"},
-        {"N", "Number", "Nd | Nl | No"},
-        {"Z", "Separator", "Zl | Zp | Zs"},
-        {"C", "Other", "Cc | Cf | Cn | Co | Cs"},
-        {"S", "Symbol", "Sc | Sk | Sm | So"},
-        {"P", "Punctuation", "Pc | Pd | Pe | Pf | Pi | Po | Ps"},
-        {"LC", "Cased Letter", "Ll | Lt | Lu"},
+        {"L", "Letter", null, "Ll | Lm | Lo | Lt | Lu"},
+        {"M", "Mark", null, "Mc | Me | Mn"},
+        {"N", "Number", null, "Nd | Nl | No"},
+        {"Z", "Separator", null, "Zl | Zp | Zs"},
+        {"C", "Other", "cntrl", "Cc | Cf | Cn | Co | Cs"},
+        {"S", "Symbol", null, "Sc | Sk | Sm | So"},
+        {"P", "Punctuation", "punct", "Pc | Pd | Pe | Pf | Pi | Po | Ps"},
+        {"LC", "Cased Letter", null, "Ll | Lt | Lu"},
     };
+
+	public static final Map EXTRA_GENERAL_CATEGORY = new HashMap();
+	static {
+		EXTRA_GENERAL_CATEGORY.put("Decimal_Number", "digit");
+		EXTRA_GENERAL_CATEGORY.put("Control", "cntrl");
+	}
 
 
 

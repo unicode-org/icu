@@ -1,5 +1,5 @@
-Generate: .*
-DeltaVersion: 9
+Generate: Derived.*
+DeltaVersion: 12
 CopyrightYear: 2005
 
 File: auxiliary/GraphemeBreakProperty
@@ -95,13 +95,13 @@ Property:	ID_Start
 # Derived Property: ID_Start
 #  Characters that can start an identifier.
 #  Generated from Lu+Ll+Lt+Lm+Lo+Nl+Other_ID_Start
-
+#  NOTE: See UAX #31 for more information
 
 Property:	ID_Continue
 # Derived Property: ID_Continue
 #  Characters that can continue an identifier.
 #  Generated from: ID_Start + Mn+Mc+Nd+Pc + Other_ID_Continue
-#  NOTE: Cf characters should be filtered out.
+#  NOTE: See UAX #31 for more information
 
 
 Property:	XID_Start
@@ -110,7 +110,7 @@ Property:	XID_Start
 #  Modified as described in UAX #15
 #  NOTE: Does NOT remove the non-NFKx characters.
 #        Merely ensures that if isIdentifer(string) then isIdentifier(NFKx(string))
-
+#  NOTE: See UAX #31 for more information
 
 Property:	XID_Continue
 # Derived Property: XID_Continue
@@ -119,7 +119,7 @@ Property:	XID_Continue
 #  NOTE: Cf characters should be filtered out.
 #  NOTE: Does NOT remove the non-NFKx characters.
 #        Merely ensures that if isIdentifer(string) then isIdentifier(NFKx(string))
-
+#  NOTE: See UAX #31 for more information
 
 Property:	Default_Ignorable_Code_Point
 # Derived Property: Default_Ignorable_Code_Point

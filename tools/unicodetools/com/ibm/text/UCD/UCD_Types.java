@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2004/12/11 06:03:08 $
-* $Revision: 1.30 $
+* $Date: 2005/03/10 02:37:20 $
+* $Revision: 1.31 $
 *
 *******************************************************************************
 */
@@ -72,7 +72,7 @@ public interface UCD_Types {
     
     
     // for IDs
-    static final byte NUMBER = -2, SHORT = -1, NORMAL = 0, LONG = 1, BOTH = 2;
+    static final byte NUMBER = -2, SHORT = -1, NORMAL = 0, LONG = 1, BOTH = 2, EXTRA_ALIAS = 3;
 
     // Binary ENUM Grouping
     public static final int
