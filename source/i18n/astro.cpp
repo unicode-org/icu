@@ -1533,6 +1533,7 @@ U_NAMESPACE_END
 
 U_CFUNC UBool calendar_astro_cleanup(void) {
   umtx_destroy(&ccLock);
+  return TRUE;
 }
 
 #endif //  !UCONFIG_NO_FORMATTING
