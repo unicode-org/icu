@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.cpp,v $ 
- * $Date: 2002/03/21 22:10:46 $ 
- * $Revision: 1.15 $
+ * $Date: 2002/03/27 06:27:19 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -84,9 +84,13 @@ static const UnicodeString &Tr(const UnicodeString &source) {
 CanonicalIterator::CanonicalIterator(UnicodeString source, UErrorCode &status) :
     pieces(NULL),
     pieces_lengths(NULL),
-    current(NULL)
+    current(NULL),
+    current_length(0),
+    pieces_length(0)
 {
-    setSource(source, status);
+    if(U_SUCCESS(status)) {
+      setSource(source, status);
+    }
 }
 
 CanonicalIterator::~CanonicalIterator() {
@@ -166,6 +170,9 @@ UnicodeString CanonicalIterator::next() {
  * while changing the source string, saving object creation.
  */
 void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &status) {
+    if(U_FAILURE(status)) {
+      return;
+    }
     Normalizer::normalize(newSource, UNORM_NFD, 0, source, status);
     done = FALSE;
     
@@ -236,13 +243,15 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
  * @return the results in a set.
  */
 void CanonicalIterator::permute(UnicodeString &source, UBool skipZeros, Hashtable *result, UErrorCode &status) {
+    if(U_FAILURE(status)) {
+      return;
+    }
     //if (PROGRESS) printf("Permute: %s\n", UToS(Tr(source)));
     int32_t i = 0;
 
     // optimization:
     // if zero or one character, just return a set with it
     // we check for length < 2 to keep from counting code points all the time
-    //if (source.length() <= 2 && UTF16_CHAR_LENGTH(source.char32At(0)) <= 1) {
     if (source.length() <= 2 && source.countChar32() <= 1) {
       UnicodeString *toPut = new UnicodeString(source);
       result->put(source, toPut, status); 
