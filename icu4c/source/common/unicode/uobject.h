@@ -160,7 +160,7 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual ~UObject();
+    virtual inline ~UObject() {}
 
     /**
      * ICU4C "poor man's RTTI", returns a UClassID for the actual ICU class.
