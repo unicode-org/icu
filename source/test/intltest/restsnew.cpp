@@ -392,7 +392,7 @@ NewResourceBundleTest::TestIteration()
 						 }
 					}
 					else{
-						CONFIRM_EQ(bundle.getType(), RES_STRING);
+						CONFIRM_EQ(bundle.getType(), (int32_t)RES_STRING);
 					}
 				}
 				CONFIRM_EQ(got, expected);
@@ -408,7 +408,7 @@ NewResourceBundleTest::TestIteration()
 			action = "After reaching the end of the Iterator:-  ";
 			action +=data[i];
 		    action +=".getNext()";
-			CONFIRM_NE(err, U_ZERO_ERROR);
+			CONFIRM_NE(err, (int32_t)U_ZERO_ERROR);
 			CONFIRM_EQ(u_errorName(err), u_errorName(U_INDEX_OUTOFBOUNDS_ERROR));
 			//reset the iterator
 			err = U_ZERO_ERROR;
@@ -769,7 +769,7 @@ NewResourceBundleTest::testTag(const char* frag,
 			    ResourceBundle tagelement=tags.get(item_tag, status);
 			    if(!U_FAILURE(status)){
 				    UResType elementType=tagelement.getType();
-				    CONFIRM_EQ(elementType, RES_STRING);
+				    CONFIRM_EQ(elementType, (int32_t)RES_STRING);
 				    const char* key=tagelement.getKey();
 				    CONFIRM_EQ((UnicodeString)key, (UnicodeString)item_tag);
 				    UnicodeString t=tagelement.getString(status);
