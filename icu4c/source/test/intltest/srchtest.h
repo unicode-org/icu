@@ -86,6 +86,7 @@ private:
     void TestSupplementaryCanonical();
     void TestContractionCanonical();
     void TestSearchIterator();
+	void TestUClassID();
 };
 
 #endif /* #if !UCONFIG_NO_COLLATION */

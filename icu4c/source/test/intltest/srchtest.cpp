@@ -135,6 +135,7 @@ void StringSearchTest::runIndexedTest(int32_t index, UBool exec,
         CASE(31, TestSupplementaryCanonical)
         CASE(32, TestContractionCanonical)
         CASE(33, TestSearchIterator)
+		CASE(34, TestUClassID)
         default: name = ""; break;
     }
 }
@@ -2163,6 +2164,24 @@ void StringSearchTest::TestSearchIterator()
         errln("Error: search object has to be equals to its assignment copy");
         return;
     }
+}
+
+void StringSearchTest::TestUClassID()
+{
+	char id = *((char *)StringSearch::getStaticClassID());
+	if (id != 0) {
+		errln("Static class id for StringSearch should be 0");
+	}
+	UErrorCode     status    = U_ZERO_ERROR;
+    UnicodeString  text("text");
+    UnicodeString  pattern("pattern");
+    StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
+                                              status);
+    id = *((char *)strsrch->getDynamicClassID());
+	if (id != 0) {
+		errln("Dynamic class id for StringSearch should be 0");
+	}
+	delete strsrch;
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
