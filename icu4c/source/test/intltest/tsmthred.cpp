@@ -213,11 +213,13 @@ void SimpleThread::sleep(int32_t millis)
    usleep(m); 
 #elif defined(OS390)
    millis *= 1000;
-   while(millis > 1000000) {
+   while(millis >= 1000000) {
        usleep(999999);
        millis -= 1000000;
    }
-   usleep(millis);
+   if(millis > 0) {
+       usleep(millis);
+   }
 #else
    usleep(millis * 1000);
 #endif
