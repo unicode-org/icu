@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.56 2003/06/04 18:12:51 grhoten-oss Exp $
+## $Id: mh-os390,v 1.57 2003/09/26 00:05:51 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -126,8 +126,10 @@ BATCH_LIBICUDT=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}DA)'"
 endif
 
 BATCH_COMMON_TARGET="//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}UC)'"
-BATCH_I18N_TARGET=	"//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}IN)'"
+BATCH_I18N_TARGET="//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}IN)'"
 BATCH_USTDIO_TARGET="//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}IO)'"
+BATCH_LAYOUT_TARGET="//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}LE)'"
+BATCH_LAYOUTEX_TARGET="//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}LX)'"
 
 BATCH_LIBICUUC=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}UC)'"
 BATCH_LIBICUI18N=	"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}IN)'"
