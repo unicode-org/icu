@@ -15,29 +15,28 @@
 // class DateFormatTest
 // *****************************************************************************
 
-#define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
-
 void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     // if (exec) logln((UnicodeString)"TestSuite DateFormatTest");
     switch (index) {
-        CASE(0,TestEquals)
-        CASE(1,TestTwoDigitYearDSTParse)
-        CASE(2,TestFieldPosition)
-        CASE(3,TestPartialParse994)
-        CASE(4,TestRunTogetherPattern985)
-        CASE(5,TestRunTogetherPattern917)
-        CASE(6,TestCzechMonths459)
-        CASE(7,TestLetterDPattern212)
-        CASE(8,TestDayOfYearPattern195)
-        CASE(9,TestQuotePattern161)
-        CASE(10,TestBadInput135)
-        CASE(11,TestBadInput135a)
-        CASE(12,TestTwoDigitYear)
-        CASE(13,TestDateFormatZone061)
-        CASE(14,TestDateFormatZone146)
-        CASE(15,TestLocaleDateFormat)
-        CASE(16,TestWallyWedel)
+        TESTCASE(0,TestEquals);
+        TESTCASE(1,TestTwoDigitYearDSTParse);
+        TESTCASE(2,TestFieldPosition);
+        TESTCASE(3,TestPartialParse994);
+        TESTCASE(4,TestRunTogetherPattern985);
+        TESTCASE(5,TestRunTogetherPattern917);
+        TESTCASE(6,TestCzechMonths459);
+        TESTCASE(7,TestLetterDPattern212);
+        TESTCASE(8,TestDayOfYearPattern195);
+        TESTCASE(9,TestQuotePattern161);
+        TESTCASE(10,TestBadInput135);
+        TESTCASE(11,TestBadInput135a);
+        TESTCASE(12,TestTwoDigitYear);
+        TESTCASE(13,TestDateFormatZone061);
+        TESTCASE(14,TestDateFormatZone146);
+        TESTCASE(15,TestLocaleDateFormat);
+        TESTCASE(16,TestWallyWedel);
+        TESTCASE(17,TestDateFormatCalendar);
         default: name = ""; break;
     }
 }
@@ -909,6 +908,90 @@ DateFormatTest::TestLocaleDateFormat() // Bug 495
         errln((UnicodeString)"FAIL: Expected " + expectedUS);
     delete dfUS;
     delete dfFrench;
+}
+
+/**
+ * Test DateFormat(Calendar) API
+ */
+void DateFormatTest::TestDateFormatCalendar() {
+    DateFormat *date=0, *time=0, *full=0;
+    Calendar *cal=0;
+    UnicodeString str;
+    ParsePosition pos;
+    UDate when;
+    UErrorCode ec = U_ZERO_ERROR;
+
+    /* Create a formatter for date fields. */
+    date = DateFormat::createDateInstance(DateFormat::kShort, Locale::US);
+    if (date == NULL) {
+        errln("FAIL: createDateInstance failed");
+        goto FAIL;
+    }
+
+    /* Create a formatter for time fields. */
+    time = DateFormat::createTimeInstance(DateFormat::kShort, Locale::US);
+    if (time == NULL) {
+        errln("FAIL: createTimeInstance failed");
+        goto FAIL;
+    }
+
+    /* Create a full format for output */
+    full = DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull,
+                                              Locale::US);
+    if (full == NULL) {
+        errln("FAIL: createInstance failed");
+        goto FAIL;
+    }
+
+    /* Create a calendar */
+    cal = Calendar::createInstance(Locale::US, ec);
+    if (cal == NULL || U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: Calendar::createInstance failed with " + 
+              u_errorName(ec));
+        goto FAIL;
+    }
+
+    /* Parse the date */
+    cal->clear();
+    str = UnicodeString("4/5/2001", "");
+    pos.setIndex(0);
+    date->parse(str, *cal, pos);
+    if (pos.getIndex() != str.length()) {
+        errln((UnicodeString)"FAIL: DateFormat::parse(4/5/2001) failed at " +
+              pos.getIndex());
+        goto FAIL;
+    }
+
+    /* Parse the time */
+    str = UnicodeString("5:45 PM", "");
+    pos.setIndex(0);
+    time->parse(str, *cal, pos);
+    if (pos.getIndex() != str.length()) {
+        errln((UnicodeString)"FAIL: DateFormat::parse(17:45) failed at " +
+              pos.getIndex());
+        goto FAIL;
+    }
+    
+    /* Check result */
+    when = cal->getTime(ec);
+    if (U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: cal->getTime() failed with " + u_errorName(ec));
+        goto FAIL;
+    }
+    str.truncate(0);
+    full->format(when, str);
+    // Thursday, April 5, 2001 5:45:00 PM PDT 986517900000
+    if (when == 986517900000) {
+        logln("Ok: Parsed result: " + str);
+    } else {
+        errln("FAIL: Parsed result: " + str + ", exp 4/5/2001 5:45 PM");
+    }
+
+ FAIL:    
+    delete date;
+    delete time;
+    delete full;
+    delete cal;
 }
 
 //eof
