@@ -111,6 +111,18 @@ public:
         fSMabove = fSMbelow = 0;
     }
 
+    void writeChar(LEUnicode ch, le_uint32 charIndex, const LETag *charTags)
+    {
+        LEErrorCode success = LE_NO_ERROR;
+
+        fOutChars[fOutIndex] = ch;
+
+        fGlyphStorage.setCharIndex(fOutIndex, charIndex, success);
+        fGlyphStorage.setAuxData(fOutIndex, (void *) charTags, success);
+
+        fOutIndex += 1;
+    }
+
     le_bool noteMatra(const IndicClassTable *classTable, LEUnicode matra, le_uint32 matraIndex, const LETag *matraTags)
     {
         IndicClassTable::CharClass matraClass = classTable->getCharClass(matra);
@@ -257,18 +269,6 @@ public:
         }
     }
     
-    void writeChar(LEUnicode ch, le_uint32 charIndex, const LETag *charTags)
-    {
-        LEErrorCode success = LE_NO_ERROR;
-
-        fOutChars[fOutIndex] = ch;
-
-        fGlyphStorage.setCharIndex(fOutIndex, charIndex, success);
-        fGlyphStorage.setAuxData(fOutIndex, (void *) charTags, success);
-
-        fOutIndex += 1;
-    }
-
     le_int32 getOutputIndex()
     {
         return fOutIndex;
