@@ -60,7 +60,7 @@ Transcode the data to
 .SH CAVEATS AND BUGS
 The
 .BI "\-L\fP, \fB\-\-list-transliterators"
-is not implemented at this point and
+option is not implemented at this point and
 .B uconv
 will exit with an usage merror and an exit code
 of 1 if it is used.
