@@ -80,14 +80,16 @@ class U_COMMON_API LocaleKey : public Key {
      * Create a LocaleKey with canonical primary and fallback IDs.
      */
     static LocaleKey* createWithCanonicalFallback(const UnicodeString* primaryID, 
-                                                  const UnicodeString* canonicalFallbackID);
+                                                  const UnicodeString* canonicalFallbackID,
+												  UErrorCode& status);
 	    
     /**
      * Create a LocaleKey with canonical primary and fallback IDs.
      */
     static LocaleKey* createWithCanonicalFallback(const UnicodeString* primaryID, 
                                                   const UnicodeString* canonicalFallbackID, 
-                                                  int32_t kind);
+                                                  int32_t kind,
+												  UErrorCode& status);
 	    
   protected:
     /**
@@ -474,20 +476,20 @@ class U_COMMON_API ICULocaleService : public ICUService
    * registerObject(Object, Locale, int32_t kind, int coverage)
    * passing KIND_ANY for the kind, and VISIBLE for the coverage.
    */
-  const Factory* registerObject(UObject* objToAdopt, const Locale& locale);
+  const Factory* registerObject(UObject* objToAdopt, const Locale& locale, UErrorCode& status);
 
   /**
    * Convenience function for callers using locales.  This calls
    * registerObject(Object, Locale, int kind, int coverage)
    * passing VISIBLE for the coverage.
    */
-  const Factory* registerObject(UObject* objToAdopt, const Locale& locale, int32_t kind);
+  const Factory* registerObject(UObject* objToAdopt, const Locale& locale, int32_t kind, UErrorCode& status);
 
   /**
    * Convenience function for callers using locales.  This  instantiates
    * a SimpleLocaleKeyFactory, and registers the factory.
    */
-  virtual const Factory* registerObject(UObject* objToAdopt, const Locale& locale, int32_t kind, int32_t coverage);
+  virtual const Factory* registerObject(UObject* objToAdopt, const Locale& locale, int32_t kind, int32_t coverage, UErrorCode& status);
 
   /**
    * Convenience method for callers using locales.  This returns the standard
@@ -506,12 +508,12 @@ class U_COMMON_API ICULocaleService : public ICUService
   /**
    * Override superclass createKey method.
    */
-  virtual Key* createKey(const UnicodeString* id) const;
+  virtual Key* createKey(const UnicodeString* id, UErrorCode& status) const;
 
   /**
    * Additional createKey that takes a kind.
    */
-  virtual Key* createKey(const UnicodeString* id, int32_t kind) const;
+  virtual Key* createKey(const UnicodeString* id, int32_t kind, UErrorCode& status) const;
 
   friend class ServiceEnumeration;
 };
