@@ -148,8 +148,9 @@ void TestDecomp()
         }
         if(U_FAILURE(status)){
             log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
+        } else {
+          assertEqual(result, canonTests[x][1], x);
         }
-        assertEqual(result, canonTests[x][1], x);
         free(result);
         free(source);
     }
@@ -176,8 +177,9 @@ void TestCompatDecomp()
         }
         if(U_FAILURE(status)){
             log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
+        } else {
+          assertEqual(result, compatTests[x][1], x);
         }
-        assertEqual(result, compatTests[x][1], x);
         free(result);
         free(source);
     }
@@ -204,8 +206,9 @@ void TestCanonDecompCompose()
         }
         if(U_FAILURE(status)){
             log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source),myErrorName(status) );
+        } else {
+          assertEqual(result, canonTests[x][2], x);
         }
-        assertEqual(result, canonTests[x][2], x);
         free(result);
         free(source);
     }
@@ -232,8 +235,9 @@ void TestCompatDecompCompose()
         }
         if(U_FAILURE(status)){
             log_err("ERROR in unorm_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
+        } else {
+          assertEqual(result, compatTests[x][2], x);
         }
-        assertEqual(result, compatTests[x][2], x);
         free(result);
         free(source);
     }
