@@ -1263,7 +1263,7 @@ u_charMirror(UChar32 c);
  * of The Unicode Standard, Version 2.0).  The results for various characters
  * are as follows:
  * <P>
- *      ZERO_WIDTH: Characters which are considered to take up no display-cell space:
+ *      U_ZERO_WIDTH: Characters which are considered to take up no display-cell space:
  *          control characters
  *          format characters
  *          line and paragraph separators
@@ -1272,7 +1272,7 @@ u_charMirror(UChar32 c);
  *          combining Hangul jongseong
  *          unassigned Unicode values
  * <P>
- *      HALF_WIDTH: Characters which take up half a cell in standard Asian text:
+ *      U_HALF_WIDTH: Characters which take up half a cell in standard Asian text:
  *          all characters in the General Scripts Area except combining Hangul choseong
  *              and the characters called out specifically above as ZERO_WIDTH
  *          alphabetic and Arabic presentation forms
@@ -1281,7 +1281,7 @@ u_charMirror(UChar32 c);
  *          halfwidth Hangul Jamo
  *          halfwidth forms, arrows, and shapes
  * <P>
- *      FULL_WIDTH:  Characters which take up a full cell in standard Asian text:
+ *      U_FULL_WIDTH:  Characters which take up a full cell in standard Asian text:
  *          combining Hangul choseong
  *          all characters in the CJK Phonetics and Symbols Area
  *          all characters in the CJK Ideographs Area
@@ -1292,7 +1292,7 @@ u_charMirror(UChar32 c);
  *          fullwidth ASCII
  *          fullwidth punctuation and currency signs
  * <P>
- *      NEUTRAL:  Characters whose cell width is context-dependent:
+ *      U_NEUTRAL_WIDTH:  Characters whose cell width is context-dependent:
  *          all characters in the Symbols Area, except those specifically called out above
  *          all characters in the Surrogates Area
  *          all charcaters in the Private Use Area
