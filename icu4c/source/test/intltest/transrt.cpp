@@ -548,17 +548,17 @@ UBool RTTest::checkIrrelevants(Transliterator *t,
                                const UnicodeString& irrelevants) {
     for (int i = 0; i < irrelevants.length(); ++i) {
         UChar c = irrelevants.charAt(i);
-        UnicodeString cs(c);
-        UnicodeString targ = cs;
+        UnicodeString srcStr(c);
+        UnicodeString targ = srcStr;
         t->transliterate(targ);
-        if (cs == targ) return TRUE;
+        if (srcStr == targ) return TRUE;
     }
     return FALSE;
 }
 
 void RTTest::test2(UBool quickRt, int32_t density) {
 
-    UnicodeString cs, targ, reverse;
+    UnicodeString srcStr, targ, reverse;
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseError ;
     TransliteratorPointer sourceToTarget(
@@ -626,13 +626,13 @@ void RTTest::test2(UBool quickRt, int32_t density) {
           if (!usi.next() || usi.isString()) break;
           UChar32 c = usi.getCodepoint();
                     
-          UnicodeString cs((UChar32)c);
-          UnicodeString targ = cs;
+          UnicodeString srcStr((UChar32)c);
+          UnicodeString targ = srcStr;
           sourceToTarget->transliterate(targ);
-          UnicodeString targ2 = cs;
+          UnicodeString targ2 = srcStr;
           sourceToTarget2->transliterate(targ2);
           if (targ != targ2) {
-              logToRulesFails("Source-Target, toRules", cs, targ, targ2);
+              logToRulesFails("Source-Target, toRules", srcStr, targ, targ2);
           }
       }
       
@@ -641,13 +641,13 @@ void RTTest::test2(UBool quickRt, int32_t density) {
           if (!usi.next() || usi.isString()) break;
           UChar32 c = usi.getCodepoint();
               
-          UnicodeString cs((UChar32)c);
-          UnicodeString targ = cs;
+          UnicodeString srcStr((UChar32)c);
+          UnicodeString targ = srcStr;
           targetToSource->transliterate(targ);
-          UnicodeString targ2 = cs;
+          UnicodeString targ2 = srcStr;
           targetToSource2->transliterate(targ2);
           if (targ != targ2) {
-              logToRulesFails("Target-Source, toRules", cs, targ, targ2);
+              logToRulesFails("Target-Source, toRules", srcStr, targ, targ2);
           }
       }
     }      
@@ -660,8 +660,8 @@ void RTTest::test2(UBool quickRt, int32_t density) {
         if (!usi.next() || usi.isString()) break;
         UChar32 c = usi.getCodepoint();
                 
-        UnicodeString cs((UChar32)c);
-        UnicodeString targ = cs;
+        UnicodeString srcStr((UChar32)c);
+        UnicodeString targ = srcStr;
         sourceToTarget->transliterate(targ);
         if (toTarget.containsAll(targ) == FALSE
             || badCharacters.containsSome(targ) == TRUE) {
@@ -673,14 +673,14 @@ void RTTest::test2(UBool quickRt, int32_t density) {
             }
             if (toTarget.containsAll(targD) == FALSE || 
                 badCharacters.containsSome(targD) == TRUE) {
-                logWrongScript("Source-Target", cs, targ);
+                logWrongScript("Source-Target", srcStr, targ);
                 failSourceTarg.add(c);
                 continue;
             }
         }
 
         UnicodeString cs2;
-        Normalizer::decompose(cs, FALSE, 0, cs2, status);
+        Normalizer::decompose(srcStr, FALSE, 0, cs2, status);
         if (U_FAILURE(status)) {
             parent->errln("FAIL: Internal error during decomposition %s\n", u_errorName(status));
             return;
@@ -688,7 +688,7 @@ void RTTest::test2(UBool quickRt, int32_t density) {
         UnicodeString targ2 = cs2;
         sourceToTarget->transliterate(targ2);
         if (targ != targ2) {
-            logNotCanonical("Source-Target", cs, targ,cs2, targ2);
+            logNotCanonical("Source-Target", srcStr, targ,cs2, targ2);
         }
     }
 
@@ -707,10 +707,10 @@ void RTTest::test2(UBool quickRt, int32_t density) {
             if (!usi2.next() || usi2.isString()) break;
             UChar32 d = usi2.getCodepoint();
                     
-            UnicodeString cs;
-            cs += (UChar32)c;
-            cs += (UChar32)d;
-            UnicodeString targ = cs;
+            UnicodeString srcStr;
+            srcStr += (UChar32)c;
+            srcStr += (UChar32)d;
+            UnicodeString targ = srcStr;
             sourceToTarget->transliterate(targ);
             if (toTarget.containsAll(targ) == FALSE || 
                 badCharacters.containsSome(targ) == TRUE)
@@ -723,12 +723,12 @@ void RTTest::test2(UBool quickRt, int32_t density) {
                 }
                 if (toTarget.containsAll(targD) == FALSE ||
                     badCharacters.containsSome(targD) == TRUE) {
-                    logWrongScript("Source-Target", cs, targ);
+                    logWrongScript("Source-Target", srcStr, targ);
                     continue;
                 }
             }
             UnicodeString cs2;
-            Normalizer::decompose(cs, FALSE, 0, cs2, status);
+            Normalizer::decompose(srcStr, FALSE, 0, cs2, status);
             if (U_FAILURE(status)) {
                 parent->errln("FAIL: Internal error during decomposition %s\n", u_errorName(status));
                 return;
@@ -736,7 +736,7 @@ void RTTest::test2(UBool quickRt, int32_t density) {
             UnicodeString targ2 = cs2;
             sourceToTarget->transliterate(targ2);
             if (targ != targ2) {
-                logNotCanonical("Source-Target", cs, targ, cs2,targ2);
+                logNotCanonical("Source-Target", srcStr, targ, cs2,targ2);
             }
         }
     }
@@ -751,14 +751,14 @@ void RTTest::test2(UBool quickRt, int32_t density) {
         if (!usi.next()) break;
         
         if(usi.isString()){
-            cs = usi.getString();
+            srcStr = usi.getString();
         }else{
-            cs = (UnicodeString)usi.getCodepoint();
+            srcStr = (UnicodeString)usi.getCodepoint();
         }
 
-        UChar32 c = cs.char32At(0);
+        UChar32 c = srcStr.char32At(0);
         
-        targ = cs;
+        targ = srcStr;
         targetToSource->transliterate(targ);
         reverse = targ;
         sourceToTarget->transliterate(reverse);
@@ -773,15 +773,15 @@ void RTTest::test2(UBool quickRt, int32_t density) {
             }
             if (toSource.containsAll(targD) == FALSE || 
                 badCharacters.containsSome(targD) == TRUE) {
-                logWrongScript("Target-Source", cs, targ);
+                logWrongScript("Target-Source", srcStr, targ);
                 failTargSource.add(c);
                 continue;
             }
         }
-        if (isSame(cs, reverse) == FALSE && 
+        if (isSame(srcStr, reverse) == FALSE && 
             roundtripExclusionsSet.contains(c) == FALSE
-            && roundtripExclusionsSet.contains(cs)==FALSE) {
-            logRoundTripFailure(cs,targetToSource->getID(), targ,sourceToTarget->getID(), reverse);
+            && roundtripExclusionsSet.contains(srcStr)==FALSE) {
+            logRoundTripFailure(srcStr,targetToSource->getID(), targ,sourceToTarget->getID(), reverse);
             failRound.add(c);
             continue;
         } 
@@ -825,11 +825,11 @@ void RTTest::test2(UBool quickRt, int32_t density) {
             if (!usi2.next() || usi2.isString())
                 break;
             UChar32 d = usi2.getCodepoint();
-            cs.truncate(0);  // empty the variable without construction/destruction
-            cs += c;
-            cs += d;
+            srcStr.truncate(0);  // empty the variable without construction/destruction
+            srcStr += c;
+            srcStr += d;
 
-            targ = cs;
+            targ = srcStr;
             targetToSource->transliterate(targ);
             reverse = targ;
             sourceToTarget->transliterate(reverse);
@@ -847,16 +847,16 @@ void RTTest::test2(UBool quickRt, int32_t density) {
                 if (toSource.containsAll(targD) == FALSE 
                     || badCharacters.containsSome(targD) == TRUE)
                 {
-                    logWrongScript("Target-Source", cs, targ);
+                    logWrongScript("Target-Source", srcStr, targ);
                     continue;
                 }
             }
-            if (isSame(cs, reverse) == FALSE && 
+            if (isSame(srcStr, reverse) == FALSE && 
                 roundtripExclusionsSet.contains(c) == FALSE&&
                 roundtripExclusionsSet.contains(d) == FALSE &&
-                roundtripExclusionsSet.contains(cs)== FALSE)
+                roundtripExclusionsSet.contains(srcStr)== FALSE)
             {
-                logRoundTripFailure(cs,targetToSource->getID(), targ, sourceToTarget->getID(),reverse);
+                logRoundTripFailure(srcStr,targetToSource->getID(), targ, sourceToTarget->getID(),reverse);
                 continue;
             } 
         
