@@ -26,6 +26,8 @@
                           }                             \
                           break
 
+// #define ENABLE_FAILING_TESTS
+
 void
 TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
                                    const char* &name, char* /*par*/) {
@@ -34,12 +36,15 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
         CASE(1,TestKatakana);
         //CASE(2,TestArabic);
         //CASE(3,TestHebrew);
-        //CASE(2,TestGreek);
-        //CASE(3,TestCyrillic);
-        /*
+        CASE(2,TestGreek);
+        CASE(3,Testel);
+        CASE(4,TestCyrillic);
+#ifdef ENABLE_FAILING_TESTS
+        CASE(5,TestDevanagari);
+        CASE(6,TestDevanagariTamil);
         CASE(7,TestJamo);
         CASE(8,TestJamoHangul);
-        */
+#endif
         default: name = ""; break;
     }
 }
@@ -101,8 +106,9 @@ public:
 };
 
 class LegalGreek : public Legal {
+    UBool full;
 public:
-    LegalGreek() {}
+    LegalGreek(UBool _full) { full = _full; }
     virtual ~LegalGreek() {}
 
     virtual UBool is(const UnicodeString& sourceString) const;
@@ -113,13 +119,28 @@ public:
 };
 
 UBool LegalGreek::is(const UnicodeString& sourceString) const { 
+    UnicodeString decomp;
+    UErrorCode ec = U_ZERO_ERROR;
+    Normalizer::decompose(sourceString, FALSE, 0, decomp, ec);
+                
+    // modern is simpler: don't care about anything but a grave
+    if (!full) {
+        if (sourceString == CharsToUnicodeString("\\u039C\\u03C0"))
+            return FALSE;
+        for (int32_t i = 0; i < decomp.length(); ++i) {
+            UChar c = decomp.charAt(i);
+            // exclude all the accents
+            if (c == 0x0313 || c == 0x0314 || c == 0x0300 || c == 0x0302
+                || c == 0x0342 || c == 0x0345
+                ) return FALSE;
+        }
+        return TRUE;
+    }
+
     // Legal greek has breathing marks IFF there is a vowel or RHO at the start
     // IF it has them, it has exactly one.
     // IF it starts with a RHO, then the breathing mark must come before the second letter.
     // Since there are no surrogates in greek, don't worry about them
-    UnicodeString decomp;
-    UErrorCode ec = U_ZERO_ERROR;
-    Normalizer::decompose(sourceString, FALSE, 0, decomp, ec);
     UBool firstIsVowel = FALSE;
     UBool firstIsRho = FALSE;
     UBool noLetterYet = TRUE;
@@ -201,8 +222,10 @@ class RTTest {
     int32_t pairLimit;
     UnicodeSet sourceRange;
     UnicodeSet targetRange;
+    UnicodeSet roundtripExclusions;
     IntlTest* log;
     Legal* legalSource; // NOT owned
+    UnicodeSet badCharacters;
 
 public:
 
@@ -219,10 +242,20 @@ public:
     void setPairLimit(int32_t limit);
 
     void test(const UnicodeString& sourceRange,
-              const UnicodeString& targetRange, IntlTest* log,
+              const UnicodeString& targetRange,
+              const char* roundtripExclusions,
+              IntlTest* log,
               Legal* adoptedLegal);
 
 private:
+
+    // Added to do better equality check.
+        
+    static UBool isSame(const UnicodeString& a, const UnicodeString& b);
+        
+    UBool includesSome(const UnicodeSet& set, const UnicodeString& a);
+        
+    static UBool isCamel(const UnicodeString& a);
 
     void test2();
 
@@ -232,6 +265,10 @@ private:
     void logRoundTripFailure(const UnicodeString& from,
                              const UnicodeString& to,
                              const UnicodeString& back);
+    void logNotCanonical(const UnicodeString& label,
+                         const UnicodeString& from,
+                         const UnicodeString& to,
+                         const UnicodeString& toCan);
 
 protected:
 
@@ -295,8 +332,53 @@ void RTTest::setPairLimit(int32_t limit) {
     pairLimit = limit;
 }
 
+UBool RTTest::isSame(const UnicodeString& a, const UnicodeString& b) {
+    if (a == b) return TRUE;
+    if (a.caseCompare(b, U_FOLD_CASE_DEFAULT)==0 && isCamel(a)) return TRUE;
+    UnicodeString aa, bb;
+    UErrorCode ec = U_ZERO_ERROR;
+    Normalizer::decompose(a, FALSE, 0, aa, ec);
+    Normalizer::decompose(b, FALSE, 0, bb, ec);
+    if (aa == bb) return TRUE;
+    if (aa.caseCompare(bb, U_FOLD_CASE_DEFAULT)==0 && isCamel(aa)) return TRUE;
+    return FALSE;
+}
+
+UBool RTTest::includesSome(const UnicodeSet& set, const UnicodeString& a) {
+    UChar32 cp;
+    for (int32_t i = 0; i < a.length(); i += UTF_CHAR_LENGTH(cp)) {
+        cp = a.char32At(i);
+        if (set.contains(cp)) return TRUE;
+    }
+    return FALSE;
+}
+
+UBool RTTest::isCamel(const UnicodeString& a) {
+    // see if string is of the form aB; e.g. lower, then upper or title
+    UChar32 cp;
+    UBool haveLower = FALSE;
+    for (int32_t i = 0; i < a.length(); i += UTF_CHAR_LENGTH(cp)) {
+        cp = a.char32At(i);
+        int8_t t = u_charType(cp);
+        switch (t) {
+        case U_UPPERCASE_LETTER:
+            if (haveLower) return TRUE;
+            break;
+        case U_TITLECASE_LETTER:
+            if (haveLower) return TRUE;
+            // drop through, since second letter is lower.
+        case U_LOWERCASE_LETTER:
+            haveLower = TRUE;
+            break;
+        }
+    }
+    return FALSE;
+}
+
 void RTTest::test(const UnicodeString& sourceRangeVal,
-                  const UnicodeString& targetRangeVal, IntlTest* logVal,
+                  const UnicodeString& targetRangeVal,
+                  const char* roundtripExclusions,
+                  IntlTest* logVal,
                   Legal* adoptedLegal) {
 
     UErrorCode status = U_ZERO_ERROR;
@@ -328,6 +410,15 @@ void RTTest::test(const UnicodeString& sourceRangeVal,
             return;
         }
     }
+    this->roundtripExclusions.clear();
+    if (roundtripExclusions != NULL) {
+        UErrorCode ec = U_ZERO_ERROR;
+        this->roundtripExclusions.applyPattern(roundtripExclusions, ec);
+    }
+    if (badCharacters.isEmpty()) {
+        UErrorCode ec = U_ZERO_ERROR;
+        badCharacters.applyPattern("[:Other:]", ec);
+    }
 
     test2();
 
@@ -345,6 +436,20 @@ void RTTest::logWrongScript(const UnicodeString& label,
                label + ": " +
                from + "(" + TestUtility::hex(from) + ") => " +
                to + "(" + TestUtility::hex(to) + ")");
+    ++errorCount;
+}
+
+void RTTest::logNotCanonical(const UnicodeString& label,
+                             const UnicodeString& from,
+                             const UnicodeString& to,
+                             const UnicodeString& toCan) {
+    log->errln((UnicodeString)"Fail (can.equiv)" +
+               label + ": " +
+               from + "(" + TestUtility::hex(from) + ") => " +
+               to + "(" + TestUtility::hex(to) + ")" +
+               toCan + " (" +
+               TestUtility::hex(to) + ")"
+               );
     ++errorCount;
 }
 
@@ -443,13 +548,13 @@ UBool RTTest::isReceivingTarget(const UnicodeString& s) {
 void TransliteratorRoundTripTest::TestHiragana() {
     RTTest test("Latin-Hiragana",
                 TestUtility::LATIN_SCRIPT, TestUtility::HIRAGANA_SCRIPT);
-    test.test("[a-z]", UnicodeString("[\\u3040-\\u3094]", ""), this, new Legal());
+    test.test("[a-z]", UnicodeString("[\\u3040-\\u3094]", ""), NULL, this, new Legal());
 }
 
 void TransliteratorRoundTripTest::TestKatakana() {
     RTTest test("Latin-Katakana", 
                 TestUtility::LATIN_SCRIPT, TestUtility::KATAKANA_SCRIPT);
-    test.test("[a-z]", UnicodeString("[\\u30A1-\\u30FA\\u30FC]", ""), this, new Legal());
+    test.test("[a-z]", UnicodeString("[\\u30A1-\\u30FA\\u30FC]", ""), NULL, this, new Legal());
 }
 
 void TransliteratorRoundTripTest::TestArabic() {
@@ -468,26 +573,48 @@ void TransliteratorRoundTripTest::TestJamo() {
     RTTest t("Latin-Jamo", 
              TestUtility::LATIN_SCRIPT, TestUtility::JAMO_SCRIPT);
     t.setErrorLimit(200); // Don't run full test -- too long
-    t.test("", "", this, new Legal());
+    t.test("", "", NULL, this, new Legal());
 }
 
 void TransliteratorRoundTripTest::TestJamoHangul() {
     RTTest t("Latin-Hangul", 
              TestUtility::LATIN_SCRIPT, TestUtility::HANGUL_SCRIPT);
     t.setErrorLimit(50); // Don't run full test -- too long
-    t.test("", "", this, new Legal());
+    t.test("", "", NULL, this, new Legal());
 }
 
 void TransliteratorRoundTripTest::TestGreek() {
     RTTest test("Latin-Greek", 
                 TestUtility::LATIN_SCRIPT, TestUtility::GREEK_SCRIPT);
-    test.test("", UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", ""), this, new LegalGreek());
+    test.test("", UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", ""),
+              "[\\u037A\\u03D0-\\u03F5]", /* exclusions */
+              this, new LegalGreek(TRUE));
 }
+
+void TransliteratorRoundTripTest::Testel() {
+    RTTest test("Latin-el", 
+                TestUtility::LATIN_SCRIPT, TestUtility::GREEK_SCRIPT);
+    test.test("", "[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", 
+              "[\\u037A\\u03D0-\\u03F5]", /* exclusions */
+              this, new LegalGreek(FALSE));
+    }
 
 void TransliteratorRoundTripTest::TestCyrillic() {
     RTTest test("Latin-Cyrillic", 
                 TestUtility::LATIN_SCRIPT, TestUtility::CYRILLIC_SCRIPT);
-    test.test("", UnicodeString("[\\u0400-\\u045F]", ""), this, new Legal());
+    test.test("", UnicodeString("[\\u0400-\\u045F]", ""), NULL, this, new Legal());
+}
+
+void TransliteratorRoundTripTest::TestDevanagari() {
+    RTTest test("Latin-DEVANAGARI", 
+                TestUtility::LATIN_SCRIPT, TestUtility::DEVANAGARI_SCRIPT);
+    test.test("", "[:Devanagari:]", NULL, this, new Legal());
+}
+
+void TransliteratorRoundTripTest::TestDevanagariTamil() {
+    RTTest test("Tamil-DEVANAGARI", 
+                TestUtility::TAMIL_SCRIPT, TestUtility::DEVANAGARI_SCRIPT);
+    test.test("[:tamil:]", "[:Devanagari:]", NULL, this, new Legal());
 }
 
 void RTTest::test2() {
@@ -528,11 +655,22 @@ void RTTest::test2() {
         cs.append(c);
         targ = cs;
         sourceToTarget->transliterate(targ);
-        if (!isReceivingTarget(targ)) {
+        if (!isReceivingTarget(targ) || includesSome(badCharacters, targ)) {
             logWrongScript("Source-Target", cs, targ);
             failSourceTarg.set(c);
             if (errorCount >= errorLimit)
                 return;
+        } else {
+            UnicodeString cs2;
+            UErrorCode ec = U_ZERO_ERROR;
+            Normalizer::decompose(cs, FALSE, 0, cs2, ec);
+            UnicodeString targ2 = cs2;
+            sourceToTarget->transliterate(targ2);
+            if (targ != targ2) {
+                logNotCanonical("Source-Target", cs, targ, targ2);
+                if (errorCount >= errorLimit)
+                    return;
+            }
         }
     }
 
@@ -552,10 +690,21 @@ void RTTest::test2() {
             cs.append(c).append(d);
             targ = cs;
             sourceToTarget->transliterate(targ);
-            if (!isReceivingTarget(targ)) {
+            if (!isReceivingTarget(targ) || includesSome(badCharacters, targ)) {
                 logWrongScript("Source-Target", cs, targ);
                 if (errorCount >= errorLimit)
                     return;
+            } else {
+                UnicodeString cs2;
+                UErrorCode ec = U_ZERO_ERROR;
+                Normalizer::decompose(cs, FALSE, 0, cs2, ec);
+                UnicodeString targ2 = cs2;
+                sourceToTarget->transliterate(targ2);
+                if (targ != targ2) {
+                    logNotCanonical("Source-Target", cs, targ, targ2);
+                    if (errorCount >= errorLimit)
+                        return;
+                }
             }
         }
     }
@@ -574,16 +723,27 @@ void RTTest::test2() {
         targetToSource->transliterate(targ);
         reverse = targ;
         sourceToTarget->transliterate(reverse);
-        if (!isReceivingSource(targ)) {
+        if (!isReceivingSource(targ) || includesSome(badCharacters, targ)) {
             logWrongScript("Target-Source", cs, targ);
             failTargSource.set(c);
             if (errorCount >= errorLimit)
                 return;
-        } else if (cs != reverse) {
+        } else if (!isSame(cs, reverse) && !roundtripExclusions.contains(c)) {
             logRoundTripFailure(cs, targ, reverse);
             failRound.set(c);
             if (errorCount >= errorLimit)
                 return;
+        } else {
+            UnicodeString targ2;
+            UErrorCode ec = U_ZERO_ERROR;
+            Normalizer::decompose(targ, FALSE, 0, targ2, ec);
+            UnicodeString reverse2 = targ2;
+            sourceToTarget->transliterate(reverse2);
+            if (reverse != reverse2) {
+                logNotCanonical("Target-Source", cs, targ, targ2);
+                if (errorCount >= errorLimit)
+                    return;
+            }
         }
     }
 
@@ -609,14 +769,27 @@ void RTTest::test2() {
             targetToSource->transliterate(targ);
             reverse = targ;
             sourceToTarget->transliterate(reverse);
-            if (!isReceivingSource(targ) && !failTargSource.get(c) && !failTargSource.get(d)) {
+            if (!isReceivingSource(targ) && !failTargSource.get(c) && !failTargSource.get(d)
+                || includesSome(badCharacters, targ)) {
                 logWrongScript("Target-Source", cs, targ);
                 if (errorCount >= errorLimit)
                     return;
-            } else if (cs.caseCompare(reverse, U_FOLD_CASE_DEFAULT) != 0 && !failRound.get(c) && !failRound.get(d)) {
+            } else if (!isSame(cs, reverse) && !failRound.get(c) && !failRound.get(d)
+                       && !roundtripExclusions.contains(c) && !roundtripExclusions.contains(d)) {
                 logRoundTripFailure(cs, targ, reverse);
                 if (errorCount >= errorLimit)
                     return;
+            } else {
+                UnicodeString targ2;
+                UErrorCode ec = U_ZERO_ERROR;
+                Normalizer::decompose(targ, FALSE, 0, targ2, ec);
+                UnicodeString reverse2 = targ2;
+                sourceToTarget->transliterate(reverse2);
+                if (reverse != reverse2) {
+                    logNotCanonical("Target-Source", cs, targ, targ2);
+                    if (errorCount >= errorLimit)
+                        return;
+                }
             }
         }
     }
