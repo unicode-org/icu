@@ -1356,6 +1356,92 @@ compareIterators(UCharIterator *iter1, const char *n1,
     }
 }
 
+/*
+ * Test the iterator's getState() and setState() functions.
+ * iter1 and iter2 must be set up for the same iterator type and the same string
+ * but may be physically different structs (different addresses).
+ *
+ * Assume that the text is not empty and that
+ * iteration start==0 and iteration limit==length.
+ * It must be 2<=middle<=length-2.
+ */
+static void
+testIteratorState(UCharIterator *iter1, UCharIterator *iter2, const char *n, int32_t middle) {
+    UChar32 u[4];
+
+    UErrorCode errorCode;
+    UChar32 c;
+    uint32_t state;
+    int32_t i, j;
+
+    /* get four UChars from the middle of the string */
+    iter1->move(iter1, middle-2, UITER_ZERO);
+    for(i=0; i<4; ++i) {
+        c=iter1->next(iter1);
+        if(c<0) {
+            /* the test violates the assumptions, see comment above */
+            log_err("test error: %s[%d]=%d\n", n, middle-2+i, c);
+            return;
+        }
+        u[i]=c;
+    }
+
+    /* move to the middle and get the state */
+    iter1->move(iter1, -2, UITER_CURRENT);
+    state=uiter_getState(iter1);
+
+    /* set the state into the second iterator and compare the results */
+    errorCode=U_ZERO_ERROR;
+    uiter_setState(iter2, state, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("%s->setState(0x%x) failed: %s\n", n, state, u_errorName(errorCode));
+        return;
+    }
+
+    c=iter2->current(iter2);
+    if(c!=u[2]) {
+        log_err("%s->current(at %d)=U+%04x!=U+%04x\n", n, middle, c, u[2]);
+    }
+
+    c=iter2->previous(iter2);
+    if(c!=u[1]) {
+        log_err("%s->previous(at %d)=U+%04x!=U+%04x\n", n, middle-1, c, u[1]);
+    }
+
+    iter2->move(iter2, 2, UITER_CURRENT);
+    c=iter2->next(iter2);
+    if(c!=u[3]) {
+        log_err("%s->next(at %d)=U+%04x!=U+%04x\n", n, middle+1, c, u[3]);
+    }
+
+    iter2->move(iter2, -3, UITER_CURRENT);
+    c=iter2->previous(iter2);
+    if(c!=u[0]) {
+        log_err("%s->previous(at %d)=U+%04x!=U+%04x\n", n, middle-2, c, u[0]);
+    }
+
+    /* move the second iterator back to the middle */
+    iter2->move(iter2, 1, UITER_CURRENT);
+    iter2->next(iter2);
+
+    /* check that both are in the middle */
+    i=iter1->getIndex(iter1, UITER_CURRENT);
+    j=iter2->getIndex(iter2, UITER_CURRENT);
+    if(i!=middle) {
+        log_err("%s->getIndex(current)=%d!=%d as expected\n", n, i, middle);
+    }
+    if(i!=j) {
+        log_err("%s->getIndex(current)=%d!=%d after setState()\n", n, j, i);
+    }
+
+    /* compare lengths */
+    i=iter1->getIndex(iter1, UITER_LENGTH);
+    j=iter2->getIndex(iter2, UITER_LENGTH);
+    if(i!=j) {
+        log_err("%s->getIndex(length)=%d!=%d before/after setState()\n", n, i, j);
+    }
+}
+
 static void
 TestUCharIterator() {
     static const UChar text[]={
@@ -1377,7 +1463,14 @@ TestUCharIterator() {
         log_err("NOOP UCharIterator behaves unexpectedly\n");
     }
 
-    /* compare the same string between UTF-16 and UTF-8 UCharIterators */
+    /* test get/set state */
+    length=LENGTHOF(text)-1;
+    uiter_setString(&iter1, text, -1);
+    uiter_setString(&iter2, text, length);
+    testIteratorState(&iter1, &iter2, "UTF16IteratorState", length/2);
+    testIteratorState(&iter1, &iter2, "UTF16IteratorStatePlus1", length/2+1);
+
+    /* compare the same string between UTF-16 and UTF-8 UCharIterators ------ */
     errorCode=U_ZERO_ERROR;
     u_strToUTF8(bytes, sizeof(bytes), &length, text, -1, &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -1393,7 +1486,13 @@ TestUCharIterator() {
     uiter_setUTF8(&iter2, bytes, -1);
     compareIterators(&iter1, "UTF16Iterator", &iter2, "UTF8Iterator_1");
 
-    /* compare the same string between UTF-16 and UTF-16BE UCharIterators */
+    /* test get/set state */
+    length=LENGTHOF(text)-1;
+    uiter_setUTF8(&iter1, bytes, -1);
+    testIteratorState(&iter1, &iter2, "UTF8IteratorState", length/2);
+    testIteratorState(&iter1, &iter2, "UTF8IteratorStatePlus1", length/2+1);
+
+    /* compare the same string between UTF-16 and UTF-16BE UCharIterators --- */
     errorCode=U_ZERO_ERROR;
     cnv=ucnv_open("UTF-16BE", &errorCode);
     length=ucnv_fromUChars(cnv, bytes, sizeof(bytes), text, -1, &errorCode);
@@ -1406,6 +1505,7 @@ TestUCharIterator() {
     /* terminate with a _pair_ of 0 bytes - a UChar NUL in UTF-16BE (length is known to be ok) */
     bytes[length]=bytes[length+1]=0;
 
+    uiter_setString(&iter1, text, -1);
     uiter_setUTF16BE(&iter2, bytes, length);
     compareIterators(&iter1, "UTF16Iterator", &iter2, "UTF16BEIterator");
 
@@ -1417,4 +1517,6 @@ TestUCharIterator() {
     memmove(bytes+1, bytes, length+2);
     uiter_setUTF16BE(&iter2, bytes+1, -1);
     compareIterators(&iter1, "UTF16Iterator", &iter2, "UTF16BEIteratorMoved1");
+
+    /* ### TODO test other iterators: CharacterIterator, Replaceable */
 }
