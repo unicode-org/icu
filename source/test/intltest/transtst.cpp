@@ -745,8 +745,7 @@ void TransliteratorTest::TestJ277(void) {
  */
 void TransliteratorTest::TestJ243(void) {
     UErrorCode status = U_ZERO_ERROR;
-    
-#if !defined(HPUX)
+
     // Test default Hex-Any, which should handle
     // \u, \U, u+, and U+
     HexToUnicodeTransliterator hex;
@@ -761,7 +760,6 @@ void TransliteratorTest::TestJ243(void) {
     status = U_ZERO_ERROR;
     UnicodeToHexTransliterator hex3(UnicodeString("&\\#x###0;", ""), status);
     expect(hex3, "012", "&#x30;&#x31;&#x32;");
-#endif
 }
 
 /**
@@ -3044,7 +3042,7 @@ void TransliteratorTest::TestSpecialCases(void) {
         "" // END MARKER
     };
 
-    static const UnicodeString testCases[] = {
+    const UnicodeString testCases[] = {
         // NORMALIZATION
         // should add more test cases
         "NFD" , CharsToUnicodeString("a\\u0300 \\u00E0 \\u1100\\u1161 \\uFF76\\uFF9E\\u03D3"), "",
@@ -3215,9 +3213,9 @@ static void _trans(const UnicodeString& id, const UnicodeString& src,
     delete t;
 }
 
-static const UnicodeString& _findMatch(const UnicodeString& source,
+static UnicodeString _findMatch(const UnicodeString& source,
                                        const UnicodeString* pairs) {
-    static const UnicodeString empty;
+    UnicodeString empty;
     for (int32_t i=0; pairs[i].length() > 0; i+=2) {
         if (0==source.caseCompare(pairs[i], U_FOLD_CASE_DEFAULT)) {
             return pairs[i+1];
@@ -3239,7 +3237,7 @@ void TransliteratorTest::TestIncrementalProgress(void) {
         errln("FAIL: Internal error");
         return;
     }
-    static const UnicodeString tests[] = {
+    const UnicodeString tests[] = {
         "Any", latinTest,
         "Latin", latinTest,
         "Halfwidth", latinTest,
@@ -3393,7 +3391,7 @@ void TransliteratorTest::TestInvalidBackRef(void) {
 // BEGIN TestUserFunction support factory
 
 Transliterator* _TUFF[4];
-UnicodeString _TUFID[4];
+UnicodeString* _TUFID[4];
 
 static Transliterator* _TUFFactory(const UnicodeString& ID,
                                    Transliterator::Token context) {
@@ -3402,14 +3400,15 @@ static Transliterator* _TUFFactory(const UnicodeString& ID,
 
 static void _TUFReg(const UnicodeString& ID, Transliterator* t, int32_t n) {
     _TUFF[n] = t;
-    _TUFID[n] = ID;
+    _TUFID[n] = new UnicodeString(ID);
     Transliterator::registerFactory(ID, _TUFFactory, Transliterator::integerToken(n));
 }
 
 static void _TUFUnreg(int32_t n) {
     if (_TUFF[n] != NULL) {
-        Transliterator::unregister(_TUFID[n]);
+        Transliterator::unregister(*_TUFID[n]);
         delete _TUFF[n];
+        delete _TUFID[n];
     }
 }
 
