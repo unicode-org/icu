@@ -188,11 +188,22 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 /**
  * \def U_MAX_PTR
  * Maximum value of a (void*) - use to indicate the limit of an 'infinite' buffer.
- * @param ptr The beginning of a buffer to find the maximum offset from
+ * In fact, buffer sizes must not exceed 2GB so that the difference between
+ * the buffer limit and the buffer start can be expressed in an int32_t.
+ *
+ * The definition of U_MAX_PTR must fulfill the following conditions:
+ * - return the largest possible pointer greater than base
+ * - return a valid pointer according to the machine architecture (AS/400, 64-bit, etc.)
+ * - avoid wrapping around at high addresses
+ * - make sure that the returned pointer is not farther from base than 0x7fffffff
+ *
+ * For some architectures (like AS/400), a custom macro must be defined in platform.h.in or similar.
+ *
+ * @param base The beginning of a buffer to find the maximum offset from
  * @internal
  */
 #ifndef U_MAX_PTR
-#define U_MAX_PTR(ptr) ((void*)-1)
+#   define U_MAX_PTR(base) ((void *)(((char *)(base)+0x7fffffff)>(char *)(base) ? ((char *)(base)+0x7fffffff) : (char *)-1))
 #endif
 
 /*===========================================================================*/
