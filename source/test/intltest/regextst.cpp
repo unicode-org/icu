@@ -368,7 +368,7 @@ void RegexTest::Basic() {
 //
 #if 0
     {
-    REGEX_TESTLM("A{3}BC", "AAABC", TRUE, TRUE);
+    REGEX_FIND("(?>(abc{2,4}?))(c*)", "<0>ab<1>cc</1><2>ccc</2></0>ddd");
     // REGEX_FIND("(X([abc=X]+)+X)|(y[abc=]+)", "=XX====================");
     }
     exit(1);
@@ -1223,6 +1223,19 @@ void RegexTest::Extended() {
     REGEX_FIND("(?:Hello(!{1,3}) there){1}", "<0>Hello<1>!!!</1> there</0>");
     REGEX_FIND("(?:Hello(!{1,3}) there){1}", "Hello!!!! there");
 
+    // Nongreedy {min,max}? intervals
+    REGEX_FIND("(ABC){2,3}?AB", "no matchAB");
+    REGEX_FIND("(ABC){2,3}?AB", "ABCAB");
+    REGEX_FIND("(ABC){2,3}?AB", "<0>ABC<1>ABC</1>AB</0>");
+    REGEX_FIND("(ABC){2,3}?AB", "<0>ABC<1>ABC</1>AB</0>CAB");
+    REGEX_FIND("(ABC){2,3}?AB", "<0>ABC<1>ABC</1>AB</0>CABCAB");
+    REGEX_FIND("(ABC){2,3}?AX", "<0>ABCABC<1>ABC</1>AX</0>");
+    REGEX_FIND("(ABC){2,3}?AX", "ABC<0>ABCABC<1>ABC</1>AX</0>");
+
+    // Atomic Grouping
+    REGEX_FIND("(?>.*)abc", "abcabcabc");      // no match.  .* consumed entire string.
+    //REGEX_FIND("(?>(abc{2,4}?))(c*)", "<0>ab<1>cc</1><2>ccc</2></0>ddd");
+
 }
 
 
@@ -1259,9 +1272,6 @@ void RegexTest::Errors() {
     REGEX_ERR("abc(?<!xyz).*", 1, 7, U_REGEX_UNIMPLEMENTED);   // negated look-behind
     REGEX_ERR("abc(?<@xyz).*", 1, 7, U_REGEX_RULE_SYNTAX);       // illegal construct
 
-    // Atomic Grouping
-    REGEX_ERR("abc(?>xyz)", 1, 6, U_REGEX_UNIMPLEMENTED);
-
     // Possessive Quantifiers
     REGEX_ERR("abc++d", 1, 5, U_REGEX_UNIMPLEMENTED);
     REGEX_ERR("abc*+d", 1, 5, U_REGEX_UNIMPLEMENTED);
@@ -1284,6 +1294,15 @@ void RegexTest::Errors() {
     REGEX_ERR("+", 1, 1, U_REGEX_RULE_SYNTAX);
     REGEX_ERR("abc\ndef(*2)", 2, 5, U_REGEX_RULE_SYNTAX);
     REGEX_ERR("abc**", 1, 5, U_REGEX_RULE_SYNTAX);
+
+    // Mal-formed {min,max} quantifiers
+    REGEX_ERR("abc{a,2}",1,5, U_REGEX_BAD_INTERVAL);
+    REGEX_ERR("abc{4,2}",1,8, U_REGEX_MAX_LT_MIN);
+    REGEX_ERR("abc{1,b}",1,7, U_REGEX_BAD_INTERVAL);
+    REGEX_ERR("abc{1,,2}",1,7, U_REGEX_BAD_INTERVAL);
+    REGEX_ERR("abc{1,2a}",1,8, U_REGEX_BAD_INTERVAL);
+    REGEX_ERR("abc{222222222222222222222}",1,14, U_REGEX_NUMBER_TOO_BIG);
+
 }
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
