@@ -47,11 +47,12 @@ Locale Locale::fgDefaultLocale;
 
 Locale*            Locale::localeList = NULL;
 int32_t            Locale::localeListCount;
+#ifdef ICU_LOCID_USE_DEPRECATES
 UnicodeString*    Locale::isoLanguages = NULL;
 int32_t            Locale::isoLanguagesCount;
 UnicodeString*    Locale::isoCountries = NULL;;
 int32_t            Locale::isoCountriesCount;
-
+#endif
 
 
 
@@ -92,7 +93,7 @@ const Locale  Locale::CANADA_FRENCH("fr", "CA");
  * into a single encoded String, and lazy evaluate the table from it.)
  */
 UHashtable* Locale::ctry2LangMapping = 0;
-const UnicodeString Locale::compressedCtry2LangMapping = UnicodeString(
+const UnicodeString Locale::compressedCtry2LangMapping(
     "ADfresAEarenAFpsAGenAIrnALsqAMhyruANnlenAOptAResASensmATdeAUenAWnlenAZazhyru"
     "BAsrshhrslmksqBBenBDbnhibhenBEfrnldeBFfrBGbgtrBHarenBIrnfrswBJfrBMenBNmsenzh"
     "BOesayquBRptBSenBTdzenneBVnoBWentnBYberuBZenesCAenfrCCenCFfrsgCGfrCHfrdeitrm"
@@ -118,8 +119,10 @@ const UnicodeString Locale::compressedCtry2LangMapping = UnicodeString(
 #define BUFFER_SIZE 50
 
 /*Character separating the posix id fields*/
-const UChar sep = 0x005F; // '_'
-const char sepchar = '_'; // In the platform codepage.
+// '_'
+#define SEP_UCHAR 0x005F
+// In the platform codepage.
+#define SEP_CHAR '_'
 
 Locale::~Locale()
 {   
@@ -174,14 +177,14 @@ Locale::Locale( const   char * newLanguage,
         if ( newVariant != NULL )
         {
             // remove leading _'s
-            while(newVariant[0] == sepchar)
+            while(newVariant[0] == SEP_CHAR)
             {
                 newVariant++;
             }
             
             // remove trailing _'s
             vsize = (int32_t)uprv_strlen(newVariant);
-            while( (vsize>1) && (newVariant[vsize-1] == sepchar) )
+            while( (vsize>1) && (newVariant[vsize-1] == SEP_CHAR) )
             {
                 vsize--;
             }
@@ -228,19 +231,18 @@ Locale::Locale( const   char * newLanguage,
 
         if ( ( vsize != 0 ) || (csize != 0) )  // at least:  __v
         {                                      //            ^
-            *p++ = sepchar;
+            *p++ = SEP_CHAR;
         }
 
         if ( csize != 0 )
         { 
-            
             uprv_strcpy(p, newCountry);
             p += csize;
         }
 
         if ( vsize != 0)
         {
-            *p++ = sepchar; // at least: __v
+            *p++ = SEP_CHAR; // at least: __v
 
             uprv_strncpy(p, newVariant, vsize);  // Must use strncpy because 
             p += vsize;                          // of trimming (above).
@@ -373,7 +375,8 @@ Locale& Locale::operator=(const Locale& other)
     {
     /*In case the assigner has some of its data on the heap
         * we need to do the same*/
-        if (fullName != fullNameBuffer) delete []fullName;
+        if (fullName != fullNameBuffer)
+            delete []fullName;
         fullName = new char[(uprv_strlen(other.fullName)+1)];
     }
     uprv_strcpy(fullName, other.fullName);
@@ -428,10 +431,10 @@ Locale
 Locale::createFromName (const char *name)
 {
     UErrorCode status = U_ZERO_ERROR;
-    char stack[128];
+    char stack[ULOC_FULLNAME_CAPACITY];
     char *heap = NULL;
     char *buf = stack;
-    int32_t buflen = 128;
+    int32_t buflen = ULOC_FULLNAME_CAPACITY;
     int32_t namelen = (int32_t)uprv_strlen(name);
 
     /* for some reason */
@@ -469,6 +472,25 @@ Locale::getVariant() const
     return variant;
 }
 
+const char * 
+Locale::getName() const
+{
+    return fullName;
+}
+
+const char *
+Locale::getISO3Language() const
+{
+    return uloc_getISO3Language(fullName);
+}
+
+
+const char *
+Locale::getISO3Country() const
+{
+    return uloc_getISO3Country(fullName);
+}
+
 #ifdef ICU_LOCID_USE_DEPRECATES
 UnicodeString& 
 Locale::getLanguage(UnicodeString& lang) const
@@ -497,28 +519,7 @@ Locale::getName(UnicodeString& name) const
     name = UnicodeString(fullName,"");
   return name;
 }
-#endif
 
-const char * 
-Locale::getName() const
-{
-    return fullName;
-}
-
-const char *
-Locale::getISO3Language() const
-{
-    return uloc_getISO3Language(fullName);
-}
-
-
-const char *
-Locale::getISO3Country() const
-{
-    return uloc_getISO3Country(fullName);
-}
-
-#ifdef ICU_LOCID_USE_DEPRECATES
 UnicodeString& 
 Locale::getISO3Language(UnicodeString& lang, UErrorCode& status) const
 {
@@ -943,7 +944,7 @@ Locale::Locale( const   UnicodeString&  newLanguage,
     char myLocaleID[ULOC_FULLNAME_CAPACITY];
   
     if(newCountry.length()>0) {
-        togo += sep;
+        togo += SEP_UCHAR;
         togo += newCountry;
     }
 
@@ -965,7 +966,7 @@ Locale::Locale( const   UnicodeString&  newLanguage,
   if (newCountry.length() > 0 ||
       newVariantCopy.length() > 0 )
     {
-      togo += sep;
+      togo += SEP_UCHAR;
       togo += newCountry;
     }
   
@@ -974,11 +975,11 @@ Locale::Locale( const   UnicodeString&  newLanguage,
       {
     int i = 0;
     //We need to trim variant codes : (_*)$var(_*) --> $var 
-    while ((i<vsize) && newVariantCopy[i] == sep) newVariantCopy.remove(i++, 1);
+    while ((i<vsize) && newVariantCopy[i] == SEP_UCHAR) newVariantCopy.remove(i++, 1);
     i = newVariantCopy.length() - 1;
-    while (i && (newVariantCopy[i] == sep)) newVariantCopy.remove(i--, 1);
+    while (i && (newVariantCopy[i] == SEP_UCHAR)) newVariantCopy.remove(i--, 1);
     
-    togo += sep ;
+    togo += SEP_UCHAR ;
     togo += newVariantCopy ;
       }
   
@@ -1005,7 +1006,5 @@ Locale::Locale( const   UnicodeString&  newLanguage,
 #endif
 
 //eof
-
-
 
 
