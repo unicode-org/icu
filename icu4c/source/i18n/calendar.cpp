@@ -144,9 +144,9 @@ static void getCalendarKeyword(const UnicodeString &id, char *targetBuffer, int3
 
     int32_t keywordIdx = id.indexOf((UChar)0x003D); /* '=' */
     if (id[0] == 0x40/*'@'*/
-        && id.compareBetween(1, calKeyLen+1, calendarKeyword, 0, calKeyLen) == 0)
+        && id.compareBetween(1, keywordIdx+1, calendarKeyword, 0, calKeyLen) == 0)
     {
-        keyLen = id.extract(calKeyLen+1, id.length(), targetBuffer, targetBufferSize, US_INV);
+        keyLen = id.extract(keywordIdx+1, id.length(), targetBuffer, targetBufferSize, US_INV);
     }
     targetBuffer[keyLen] = 0;
 }
@@ -449,7 +449,7 @@ static const int32_t kCalendarLimits[UCAL_FIELD_COUNT][4] = {
 };
 
 // Resource bundle tags read by this class
-const char Calendar::kDateTimeElements[] = "DateTimeElements";
+static const char gDateTimeElements[] = "DateTimeElements";
 
 // Data flow in Calendar
 // ---------------------
@@ -2985,7 +2985,7 @@ Calendar::setWeekCountData(const Locale& desiredLocale, const char *type, UError
     CalendarData calData(desiredLocale, type, status);
     // If the resource data doesn't seem to be present at all, then use last-resort
     // hard-coded data.
-    UResourceBundle *dateTimeElements = calData.getByKey(kDateTimeElements, status);
+    UResourceBundle *dateTimeElements = calData.getByKey(gDateTimeElements, status);
 
     if (U_FAILURE(status))
     {

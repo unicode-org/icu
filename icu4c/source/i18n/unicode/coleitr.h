@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1997-2004, International Business Machines
+ *   Copyright (C) 1997-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  ******************************************************************************
  */
@@ -127,7 +127,9 @@ public:
     * NULLORDER indicates that an error has occured while processing
     * @stable ICU 2.0
     */
-    static int32_t const NULLORDER;
+    enum {
+        NULLORDER = (int32_t)0xffffffff
+    };
 
     // CollationElementIterator public constructor/destructor -------------------
 
