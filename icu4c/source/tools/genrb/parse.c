@@ -212,7 +212,7 @@ int32_t lineCount = 0;
 char lastTag[200] = "";
 
 struct SRBRoot*
-parse(UCHARBUF* buf, const char *cp, const char *inputDir,
+parse(UCHARBUF* buf, const char *inputDir,
       UErrorCode *status)
 {
     enum ETokenType type;
@@ -436,7 +436,6 @@ parse(UCHARBUF* buf, const char *cp, const char *inputDir,
                           importFile = T_FileStream_open(fileName, "rb");
                         } else {
                           char *openFileName = NULL;
-                          int32_t dirlen = uprv_strlen(inputDir);
                           int32_t filelen = uprv_strlen(fileName);
                           if(inputDir[dirlen-1] != U_FILE_SEP_CHAR) {
                             openFileName = (char *) uprv_malloc(dirlen+filelen+2);

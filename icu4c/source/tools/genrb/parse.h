@@ -24,6 +24,6 @@
 #include "ucbuf.h"
 
 /* Parse a ResourceBundle text file */
-struct SRBRoot* parse(UCHARBUF* buf, const char *cp, const char* inputDir, UErrorCode *status);
+struct SRBRoot* parse(UCHARBUF* buf, const char* inputDir, UErrorCode *status);
 
 #endif
