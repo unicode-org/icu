@@ -41,6 +41,7 @@
 #include "uprops.h"
 #include "ucol_swp.h"
 #include "ucnv_bld.h"
+#include "unormimp.h"
 
 /* swapping implementations in i18n */
 
@@ -285,6 +286,9 @@ static const struct {
     { { 0x43, 0x6d, 0x6e, 0x44 }, udata_swapPackage },  /* dataFormat="CmnD" */
     /* insert data formats here, descending by expected frequency of occurrence */
     { { 0x55, 0x50, 0x72, 0x6f }, uprops_swap },        /* dataFormat="UPro" */
+#if !UCONFIG_NO_NORMALIZATION
+    { { 0x4e, 0x6f, 0x72, 0x6d }, unorm_swap },         /* dataFormat="Norm" */
+#endif
 #if !UCONFIG_NO_COLLATION
     { { 0x55, 0x43, 0x6f, 0x6c }, ucol_swap },          /* dataFormat="UCol" */
     { { 0x49, 0x6e, 0x76, 0x43 }, ucol_swapInverseUCA },/* dataFormat="InvC" */

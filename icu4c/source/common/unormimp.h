@@ -373,6 +373,15 @@ U_CAPI void U_EXPORT2
 unorm_addPropertyStarts(USet *set, UErrorCode *pErrorCode);
 
 /**
+ * Swap unorm.icu. See udataswp.h.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+unorm_swap(const UDataSwapper *ds,
+           const void *inData, int32_t length, void *outData,
+           UErrorCode *pErrorCode);
+
+/**
  * Description of the format of unorm.dat version 2.2.
  *
  * Main change from version 1 to version 2:
@@ -391,7 +400,7 @@ unorm_addPropertyStarts(USet *set, UErrorCode *pErrorCode);
  * unorm.dat customarily begins with a UDataInfo structure, see udata.h and .c.
  * After that there are the following structures:
  *
- * uint16_t indexes[_NORM_INDEX_TOP];           -- _NORM_INDEX_TOP=32, see enum in this file
+ * int32_t indexes[_NORM_INDEX_TOP];            -- _NORM_INDEX_TOP=32, see enum in this file
  *
  * UTrie normTrie;                              -- size in bytes=indexes[_NORM_INDEX_TRIE_SIZE]
  * 
