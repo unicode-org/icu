@@ -50,6 +50,7 @@ es {
         MA { "Marruecos" }
         MX { "M\u00E9xico" }
         NI { "Nicaragua" }
+        NL { "Pa\u00EDses Bajos" }
         NO { "Noruega" }
         NZ { "Nueva Zelanda" }
         PA { "Panam\u00E1" }
@@ -114,7 +115,7 @@ es {
         bg { "b\u00FAlgaro" }
         cs { "checo" }
         da { "dan\u00E1s" }
-        de { "alam\u00E1n" }
+        de { "alem\u00E1n" }
         el { "griego" }
         en { "ingl\u00E9s" }
         es { "espa\u00F1ol" }
