@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2003/03/19 17:30:56 $
-* $Revision: 1.23 $
+* $Date: 2003/03/20 21:47:28 $
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
@@ -389,7 +389,7 @@ public final class UCD implements UCD_Types {
             System.out.println("BIDI_R_SET: " + BIDI_R_SET);
             System.out.println("BIDI_AL_SET: " + BIDI_AL_SET);
 
-            UnicodeSet BIDI_R_Delta = new UnicodeSet(0xFB1D, 0xFB4F).add(0x10800, 0x10FFF).add(0x07BF,0x8FF);
+            UnicodeSet BIDI_R_Delta = new UnicodeSet(0xFB1D, 0xFB4F).add(0x10800, 0x10FFF).add(0x07C0,0x8FF);
             BIDI_R_Delta.removeAll(BIDI_R_SET);
             System.out.println("R: Adding " + BIDI_R_Delta);
             BIDI_R_SET.addAll(BIDI_R_Delta);
@@ -400,13 +400,21 @@ public final class UCD implements UCD_Types {
             BIDI_AL_SET.addAll(BIDI_AL_Delta);
             
             UnicodeSet noncharacters = UnifiedBinaryProperty.make(BINARY_PROPERTIES + Noncharacter_Code_Point).getSet();
+            noncharacters.remove(Utility.BOM);
             
-            System.out.println("Removing Noncharacters!  " + noncharacters);
+            System.out.println("Removing Noncharacters/BOM  " + noncharacters);
             BIDI_R_SET.removeAll(noncharacters);
             BIDI_AL_SET.removeAll(noncharacters);
             
+            
+            
             System.out.println("BIDI_R_SET: " + BIDI_R_SET);
             System.out.println("BIDI_AL_SET: " + BIDI_AL_SET);
+            
+            if (BIDI_R_SET.containsSome(BIDI_AL_SET)) {
+                throw new ChainException("BIDI values for Cf characters overlap!!", null);
+            }
+            
         }
 
         if (BIDI_R_SET.contains(codePoint)) {
