@@ -1,18 +1,23 @@
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.ICUNotifier;
+import com.ibm.icu.impl.ICURWLock;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICUService.Key;
 import com.ibm.icu.impl.ICUService.ServiceListener;
+import com.ibm.icu.impl.ICUService.SimpleFactory;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICULocaleService.LocaleKey;
 import com.ibm.icu.impl.ICULocaleService.MultipleKeyFactory;
 import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
+
 import java.util.Arrays;
 import java.util.EventListener;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -601,5 +606,203 @@ public class ICUServiceTest extends TestFmwk
 
 	target = service.get("za_PPP");
 	confirmEqual("test with en locale", "root", target);
+    }
+
+    // misc coverage tests
+    public void TestCoverage() {
+	// Key
+	Key key = new Key("foobar");
+	logln("ID: " + key.id());
+	logln("canonicalID: " + key.canonicalID());
+	logln("currentID: " + key.currentID());
+	logln("has fallback: " + key.fallback());
+
+	// SimpleFactory
+	Object obj = new Object();
+	SimpleFactory sf = new SimpleFactory(obj, "object");
+	try {
+	    sf = new SimpleFactory(null, null);
+	    errln("didn't throw exception");
+	}
+	catch (IllegalArgumentException e) {
+	    logln("OK: " + e.getMessage());
+	}
+	catch (Exception e) {
+	    errln("threw wrong exception");
+	}
+	logln(sf.getDisplayName("object", null));
+
+	// ICUService
+	ICUService service = new ICUService();
+	service.registerFactory(sf);
+
+	try {
+	    service.get(null, null);
+	    errln("didn't throw exception");
+	}
+	catch (NullPointerException e) {
+	    logln("OK: " + e.getMessage());
+	}
+	catch (Exception e) {
+	    errln("threw wrong exception");
+	}
+
+	try {
+	    service.registerFactory(null);
+	    errln("didn't throw exception");
+	}
+	catch (NullPointerException e) {
+	    logln("OK: " + e.getMessage());
+	}
+	catch (Exception e) {
+	    errln("threw wrong exception");
+	}
+
+	try {
+	    service.unregisterFactory(null);
+	    errln("didn't throw exception");
+	}
+	catch (NullPointerException e) {
+	    logln("OK: " + e.getMessage());
+	}
+	catch (Exception e) {
+	    errln("threw wrong exception");
+	}
+
+	logln("object is: " + service.get("object"));
+
+	logln("stats: " + service.stats());
+
+	// ICURWLock
+
+	ICURWLock rwlock = new ICURWLock();
+	rwlock.acquireRead();
+	rwlock.releaseRead();
+
+	rwlock.acquireWrite();
+	rwlock.releaseWrite();
+	logln("stats: " + rwlock.getStats());
+	logln("stats: " + rwlock.clearStats());
+	rwlock.acquireRead();
+	rwlock.releaseRead();
+	rwlock.acquireWrite();
+	rwlock.releaseWrite();
+	logln("stats: " + rwlock.getStats());
+
+	try {
+	    rwlock.releaseRead();
+	    errln("no error thrown");
+	}
+	catch (InternalError e) {
+	    logln("OK: " + e.getMessage());
+	}
+
+	try {
+	    rwlock.releaseWrite();
+	    errln("no error thrown");
+	}
+	catch (InternalError e) {
+	    logln("OK: " + e.getMessage());
+	}
+
+	// LocaleKey
+	LocaleKey lkey = LocaleKey.create("en_US", "ja_JP");
+	lkey = LocaleKey.create(null, null);
+	lkey = LocaleKey.createWithCanonical("en_US", "ja_JP");
+
+	// MultipleKeyFactory 
+	MultipleKeyFactory mkf = new MKFSubclass(false);
+	logln("obj: " + mkf.create(lkey));
+	logln(mkf.getDisplayName("foo", null));
+	logln(mkf.getDisplayName("bar", null));
+	mkf.updateVisibleIDs(new HashMap());
+
+	MultipleKeyFactory invisibleMKF = new MKFSubclass(false);
+	logln("obj: " + invisibleMKF.create(lkey));
+	logln(invisibleMKF.getDisplayName("foo", null));
+	logln(invisibleMKF.getDisplayName("bar", null));
+	invisibleMKF.updateVisibleIDs(new HashMap());
+
+	// ResourceBundleFactory
+	ICUResourceBundleFactory rbf = new ICUResourceBundleFactory(null, true);
+	logln("RB: " + rbf.create(lkey));
+	LocaleKey nokey = LocaleKey.create(null, null);
+	logln("RB: " + rbf.create(nokey));
+
+	rbf = new ICUResourceBundleFactory("foobar", true);
+	logln("RB: " + rbf.create(lkey));
+
+	// ICUNotifier
+	ICUNotifier nf = new ICUNSubclass();
+	try {
+	    nf.addListener(null);
+	    errln("added null listener");
+	}
+	catch (NullPointerException e) {
+	    logln(e.getMessage());
+	}
+	catch (Exception e) {
+	    errln("got wrong exception");
+	}
+
+	try {
+	    nf.addListener(new WrongListener());
+	    errln("added wrong listener");
+	}
+	catch (InternalError e) {
+	    logln(e.getMessage());
+	}
+	catch (Exception e) {
+	    errln("got wrong exception");
+	}
+
+	try {
+	    nf.removeListener(null);
+	    errln("removed null listener");
+	}
+	catch (NullPointerException e) {
+	    logln(e.getMessage());
+	}
+	catch (Exception e) {
+	    errln("got wrong exception");
+	}
+
+	nf.removeListener(new MyListener());
+	nf.notifyChanged();
+	nf.addListener(new MyListener());
+	nf.removeListener(new MyListener());
+    }
+
+    static class MyListener implements EventListener {
+	public void heyMan() {
+	}
+    }
+
+    static class WrongListener implements EventListener {
+	public void sayWhat() {
+	}
+    }
+
+    static class ICUNSubclass extends ICUNotifier {
+	public boolean acceptsListener(EventListener l) {
+	    return l instanceof MyListener;
+	}
+
+	public void notifyListener(EventListener l) {
+	    ((MyListener)l).heyMan();
+	}
+    }
+
+    static class MKFSubclass extends MultipleKeyFactory {
+	MKFSubclass(boolean visible) {
+	    super(visible);
+	}
+
+	public Object handleCreate(Key key) {
+	    return null;
+	}
+
+	public void handleUpdateVisibleIDs(Set result) {
+	}
     }
 }

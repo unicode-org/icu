@@ -66,12 +66,16 @@ public class ICURWLock {
 	private Stats() {
 	}
 
-	private Stats(Stats rhs) {
-	    this(rhs._rc, rhs._mrc, rhs._wrc, rhs._wc, rhs._wwc);
+	private Stats(int rc, int mrc, int wrc, int wc, int wwc) {
+	    this._rc = rc;
+	    this._mrc = mrc;
+	    this._wrc = wrc;
+	    this._wc = wc;
+	    this._wwc = wwc;
 	}
 
-	private Stats(int rc, int mrc, int wrc, int wc, int wwc) {
-	    _rc = rc; _mrc = mrc; _wrc = wrc; _wc = wc; _wwc = wwc;
+	private Stats(Stats rhs) {
+	    this(rhs._rc, rhs._mrc, rhs._wrc, rhs._wc, rhs._wwc);
 	}
 
 	/**
@@ -108,7 +112,7 @@ public class ICURWLock {
      * Return a snapshot of the current stats.  This does not reset the stats.
      */
     public synchronized Stats getStats() {
-	return new Stats(stats);
+	return stats == null ? null : new Stats(stats);
     }
 
     // utilities
