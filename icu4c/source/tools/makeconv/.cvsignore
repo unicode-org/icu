@@ -6,3 +6,4 @@ Makefile
 *.pdb
 makeconv
 makeconv.[0-9]
+*.plg

@@ -5,3 +5,4 @@ Makefile
 *.d
 *.pdb
 gencmn
+*.plg

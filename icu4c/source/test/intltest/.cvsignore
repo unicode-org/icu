@@ -3,3 +3,4 @@ intltest
 Debug
 Release
 Makefile
+*.plg
