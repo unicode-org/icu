@@ -36,6 +36,10 @@ U_CDECL_BEGIN
 #include "gennorm.h"
 U_CDECL_END
 
+#ifdef WIN32
+#   pragma warning(disable: 4100)
+#endif
+
 UBool beVerbose=FALSE, haveCopyright=TRUE;
 
 /* prototypes --------------------------------------------------------------- */
