@@ -1,76 +1,23 @@
+# *******************************************************************************
+# *
+# *   Copyright (C) 1997-2000, International Business Machines
+# *   Corporation and others.  All Rights Reserved.
+# *
+# *******************************************************************************
 #
-#       Name:		  JIS X	0212 (1990) to Unicode
-#       Unicode version:  1.1
-#       Table version:	  0.9
-#       Table format:	  Format A
-#       Date:		  8 March 1994
-#       Authors:	  Glenn	Adams <glenn@metis.com>
-#		      John H. Jenkins <John_Jenkins@taligent.com>
+#       Name:		  JIS X	0212 (1990)	to Unicode
+#       Unicode version:	  1.1
+#       Table version:		  0.9
 #
-#       Copyright (c) 1991-1994 Unicode, Inc.  All Rights reserved.
-#
-#       This file is provided as-is by Unicode, Inc. (The Unicode Consortium).
-#       No claims are made as to fitness for any particular purpose.  No
-#       warranties of any kind are expressed or implied.  The recipient
-#       agrees to determine applicability of information provided.  If this
-#       file has been provided on magnetic media by Unicode, Inc., the sole
-#       remedy for any claim will be exchange of defective media within 90
-#       days of receipt.
-#
-#       Recipient is granted the right to make copies in any form for
-#       internal distribution and to freely use the information supplied
-#       in the creation of products supporting Unicode.	 Unicode, Inc.
-#       specifically excludes the right to re-distribute this file directly
-#       to third parties or other organizations whether for profit or not.
-#
-#       General notes:
-#
-#       This table contains the data the Unicode Consortium has on how
-#       JIS X 0212 (1983) characters map into Unicode.
-#
-#       Format:	 Three tab-separated columns
-#		 Column	#1 is the JIS X 0212 code (in hex as 0xXXXX)
-#		 Column	#2 is the Unicode (in hex as 0xXXXX)
-#		 Column	#3 the Unicode name (follows a comment sign, '#')
-#					The official names for Unicode characters U+4E00
-#					to U+9FA5, inclusive, is "CJK UNIFIED IDEOGRAPH-XXXX",
-#					where XXXX is the code point.  Including all these
-#					names in this file increases its size substantially
-#					and needlessly.	 The token "<CJK>" is used for the
-#					name of	these characters.  If necessary, it can be
-#					expanded algorithmically by a parser or	editor.
-#
-#       The entries are in JIS X 0212 order
-#
-#       The following algorithms can be used to change the hex form
-#		of JIS 0212 to other standard forms:
-#
-#		To change hex to EUC form, add 0x8080
-#		To change hex to kuten form, first subtract 0x2020.  Then
-#			the high and low bytes correspond to the ku and	ten of
-#			the kuten form.	 For example, 0x2121 -> 0x0101 -> 0101;
-#			0x6D63 -> 0x4D43 -> 7767
-#
-#   The kanji mappings are a normative part of ISO/IEC 10646.  The
-#       non-kanji mappings are provisional, pending definition of
-#       official mappings by Japanese standards bodies
-#
-#       Any comments or problems, contact <John_Jenkins@taligent.com>
-#
-#       Notes:
-#
-#       1. JIS X 0212 apparently unified the following two symbols
-#	   into	a single character at 0x2922:
-#       
-#	   LATIN CAPITAL LETTER	D WITH STROKE
-#	   LATIN CAPITAL LETTER	ETH
-#
-#	   However, JIS	X 0212 maintains the distinction between
-#	   the lowercase forms of these	two elements at 0x2942 and 0x2943.
-#	   Given the structre of these JIS encodings, it is clear that
-#	   0x2922 and 0x2942 are intended to be	a capital/small pair.
-#	   Consequently, in the	Unicode mapping, 0x2922 is treated as
-#	   LATIN CAPITAL LETTER	D WITH STROKE.
+#       Authors:		 Raghuram Viswanadha
+#       Date:		 8/20/2000
+#       General Notes:
+#			 This file is created from JISX 208
+#			 mapping table from Unicode Consortium
+#			 (www.unicode.org).
+#			 Original authors:
+#			 Glenn     Adams <glenn@metis.com>
+#			 John H. Jenkins <John_Jenkins@taligent.com>
 #
 #
 <code_set_name>		      "JISX-212"
@@ -83,12 +30,12 @@
 CHARMAP
 #
 #
-#ISO 10646      JISX212
-#_________      _________	  
+#ISO 10646	    JISX212
+#_________	    _________	  
 <U02D8>	        \x22\x2F		# BREVE
-<U02C7>	        \x22\x30		# CARON	(Mandarin Chinese third tone)
+<U02C7>	        \x22\x30		# CARON	(Mandarin Chinese third	tone)
 <U00B8>	        \x22\x31		# CEDILLA
-<U02D9>	        \x22\x32		# DOT ABOVE (Mandarin Chinese light tone)
+<U02D9>	        \x22\x32		# DOT ABOVE	(Mandarin Chinese light tone)
 <U02DD>	        \x22\x33		# DOUBLE ACUTE ACCENT
 <U00AF>	        \x22\x34		# MACRON
 <U02DB>	        \x22\x35		# OGONEK
@@ -99,23 +46,23 @@ CHARMAP
 <U00A1>	        \x22\x42		# INVERTED EXCLAMATION MARK
 <U00A6>	        \x22\x43		# BROKEN BAR
 <U00BF>	        \x22\x44		# INVERTED QUESTION MARK
-<U00BA>	        \x22\x6B		# MASCULINE ORDINAL INDICATOR
+<U00BA>	        \x22\x6B		# MASCULINE	ORDINAL INDICATOR
 <U00AA>	        \x22\x6C		# FEMININE ORDINAL INDICATOR
-<U00A9>	        \x22\x6D		# COPYRIGHT SIGN
+<U00A9>	        \x22\x6D		# COPYRIGHT	SIGN
 <U00AE>	        \x22\x6E		# REGISTERED SIGN
 <U2122>	        \x22\x6F		# TRADE	MARK SIGN
 <U00A4>	        \x22\x70		# CURRENCY SIGN
 <U2116>	        \x22\x71		# NUMERO SIGN
 <U0386>	        \x26\x61		# GREEK	CAPITAL LETTER ALPHA WITH TONOS
 <U0388>	        \x26\x62		# GREEK	CAPITAL LETTER EPSILON WITH TONOS
-<U0389>	        \x26\x63		# GREEK	CAPITAL LETTER ETA WITH TONOS
+<U0389>	        \x26\x63		# GREEK	CAPITAL LETTER ETA WITH	TONOS
 <U038A>	        \x26\x64		# GREEK	CAPITAL LETTER IOTA WITH TONOS
 <U03AA>	        \x26\x65		# GREEK	CAPITAL LETTER IOTA WITH DIALYTIKA
 <U038C>	        \x26\x67		# GREEK	CAPITAL LETTER OMICRON WITH TONOS
 <U038E>	        \x26\x69		# GREEK	CAPITAL LETTER UPSILON WITH TONOS
 <U03AB>	        \x26\x6A		# GREEK	CAPITAL LETTER UPSILON WITH DIALYTIKA
 <U038F>	        \x26\x6C		# GREEK	CAPITAL LETTER OMEGA WITH TONOS
-<U03AC>	        \x26\x71		# GREEK	SMALL LETTER ALPHA WITH TONOS
+<U03AC>	        \x26\x71		# GREEK	SMALL LETTER ALPHA WITH	TONOS
 <U03AD>	        \x26\x72		# GREEK	SMALL LETTER EPSILON WITH TONOS
 <U03AE>	        \x26\x73		# GREEK	SMALL LETTER ETA WITH TONOS
 <U03AF>	        \x26\x74		# GREEK	SMALL LETTER IOTA WITH TONOS
@@ -125,11 +72,11 @@ CHARMAP
 <U03C2>	        \x26\x78		# GREEK	SMALL LETTER FINAL SIGMA
 <U03CD>	        \x26\x79		# GREEK	SMALL LETTER UPSILON WITH TONOS
 <U03CB>	        \x26\x7A		# GREEK	SMALL LETTER UPSILON WITH DIALYTIKA
-<U03B0>	        \x26\x7B		# GREEK	SMALL LETTER UPSILON WITH DIALYTIKA AND TONOS
-<U03CE>	        \x26\x7C		# GREEK	SMALL LETTER OMEGA WITH TONOS
+<U03B0>	        \x26\x7B		# GREEK	SMALL LETTER UPSILON WITH DIALYTIKA	AND TONOS
+<U03CE>	        \x26\x7C		# GREEK	SMALL LETTER OMEGA WITH	TONOS
 <U0402>	        \x27\x42		# CYRILLIC CAPITAL LETTER DJE
 <U0403>	        \x27\x43		# CYRILLIC CAPITAL LETTER GJE
-<U0404>	        \x27\x44		# CYRILLIC CAPITAL LETTER UKRAINIAN IE
+<U0404>	        \x27\x44		# CYRILLIC CAPITAL LETTER UKRAINIAN	IE
 <U0405>	        \x27\x45		# CYRILLIC CAPITAL LETTER DZE
 <U0406>	        \x27\x46		# CYRILLIC CAPITAL LETTER BYELORUSSIAN-UKRAINIAN I
 <U0407>	        \x27\x47		# CYRILLIC CAPITAL LETTER YI
@@ -173,7 +120,7 @@ CHARMAP
 <U0138>	        \x29\x47		# LATIN	SMALL LETTER KRA
 <U0142>	        \x29\x48		# LATIN	SMALL LETTER L WITH STROKE
 <U0140>	        \x29\x49		# LATIN	SMALL LETTER L WITH MIDDLE DOT
-<U0149>	        \x29\x4A		# LATIN	SMALL LETTER N PRECEDED BY APOSTROPHE
+<U0149>	        \x29\x4A		# LATIN	SMALL LETTER N PRECEDED	BY APOSTROPHE
 <U014B>	        \x29\x4B		# LATIN	SMALL LETTER ENG
 <U00F8>	        \x29\x4C		# LATIN	SMALL LETTER O WITH STROKE
 <U0153>	        \x29\x4D		# LATIN	SMALL LIGATURE OE
@@ -255,10 +202,10 @@ CHARMAP
 <U0172>	        \x2A\x6A		# LATIN	CAPITAL LETTER U WITH OGONEK
 <U016E>	        \x2A\x6B		# LATIN	CAPITAL LETTER U WITH RING ABOVE
 <U0168>	        \x2A\x6C		# LATIN	CAPITAL LETTER U WITH TILDE
-<U01D7>	        \x2A\x6D		# LATIN	CAPITAL LETTER U WITH DIAERESIS AND ACUTE
-<U01DB>	        \x2A\x6E		# LATIN	CAPITAL LETTER U WITH DIAERESIS AND GRAVE
-<U01D9>	        \x2A\x6F		# LATIN	CAPITAL LETTER U WITH DIAERESIS AND CARON
-<U01D5>	        \x2A\x70		# LATIN	CAPITAL LETTER U WITH DIAERESIS AND MACRON
+<U01D7>	        \x2A\x6D		# LATIN	CAPITAL LETTER U WITH DIAERESIS AND	ACUTE
+<U01DB>	        \x2A\x6E		# LATIN	CAPITAL LETTER U WITH DIAERESIS AND	GRAVE
+<U01D9>	        \x2A\x6F		# LATIN	CAPITAL LETTER U WITH DIAERESIS AND	CARON
+<U01D5>	        \x2A\x70		# LATIN	CAPITAL LETTER U WITH DIAERESIS AND	MACRON
 <U0174>	        \x2A\x71		# LATIN	CAPITAL LETTER W WITH CIRCUMFLEX
 <U00DD>	        \x2A\x72		# LATIN	CAPITAL LETTER Y WITH ACUTE
 <U0178>	        \x2A\x73		# LATIN	CAPITAL LETTER Y WITH DIAERESIS
@@ -280,20 +227,20 @@ CHARMAP
 <U0109>	        \x2B\x2C		# LATIN	SMALL LETTER C WITH CIRCUMFLEX
 <U010D>	        \x2B\x2D		# LATIN	SMALL LETTER C WITH CARON
 <U00E7>	        \x2B\x2E		# LATIN	SMALL LETTER C WITH CEDILLA
-<U010B>	        \x2B\x2F		# LATIN	SMALL LETTER C WITH DOT ABOVE
+<U010B>	        \x2B\x2F		# LATIN	SMALL LETTER C WITH DOT	ABOVE
 <U010F>	        \x2B\x30		# LATIN	SMALL LETTER D WITH CARON
 <U00E9>	        \x2B\x31		# LATIN	SMALL LETTER E WITH ACUTE
 <U00E8>	        \x2B\x32		# LATIN	SMALL LETTER E WITH GRAVE
 <U00EB>	        \x2B\x33		# LATIN	SMALL LETTER E WITH DIAERESIS
 <U00EA>	        \x2B\x34		# LATIN	SMALL LETTER E WITH CIRCUMFLEX
 <U011B>	        \x2B\x35		# LATIN	SMALL LETTER E WITH CARON
-<U0117>	        \x2B\x36		# LATIN	SMALL LETTER E WITH DOT ABOVE
+<U0117>	        \x2B\x36		# LATIN	SMALL LETTER E WITH DOT	ABOVE
 <U0113>	        \x2B\x37		# LATIN	SMALL LETTER E WITH MACRON
 <U0119>	        \x2B\x38		# LATIN	SMALL LETTER E WITH OGONEK
 <U01F5>	        \x2B\x39		# LATIN	SMALL LETTER G WITH ACUTE
 <U011D>	        \x2B\x3A		# LATIN	SMALL LETTER G WITH CIRCUMFLEX
 <U011F>	        \x2B\x3B		# LATIN	SMALL LETTER G WITH BREVE
-<U0121>	        \x2B\x3D		# LATIN	SMALL LETTER G WITH DOT ABOVE
+<U0121>	        \x2B\x3D		# LATIN	SMALL LETTER G WITH DOT	ABOVE
 <U0125>	        \x2B\x3E		# LATIN	SMALL LETTER H WITH CIRCUMFLEX
 <U00ED>	        \x2B\x3F		# LATIN	SMALL LETTER I WITH ACUTE
 <U00EC>	        \x2B\x40		# LATIN	SMALL LETTER I WITH GRAVE
@@ -350,7 +297,7 @@ CHARMAP
 <U0177>	        \x2B\x74		# LATIN	SMALL LETTER Y WITH CIRCUMFLEX
 <U017A>	        \x2B\x75		# LATIN	SMALL LETTER Z WITH ACUTE
 <U017E>	        \x2B\x76		# LATIN	SMALL LETTER Z WITH CARON
-<U017C>	        \x2B\x77		# LATIN	SMALL LETTER Z WITH DOT ABOVE
+<U017C>	        \x2B\x77		# LATIN	SMALL LETTER Z WITH DOT	ABOVE
 <U4E02>	        \x30\x21		# <CJK>
 <U4E04>	        \x30\x22		# <CJK>
 <U4E05>	        \x30\x23		# <CJK>
