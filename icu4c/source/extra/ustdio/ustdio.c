@@ -41,6 +41,213 @@ static const uint32_t DELIMITERS_LEN = 1;
                         (s) == DELIM_LF    )
 
 
+U_CAPI UTransliterator* U_EXPORT2
+u_fsettransliterator(UFILE *file, UFileDirection direction,
+		     UTransliterator *adopt, UErrorCode *status)
+{
+  UTransliterator *old = NULL;
+
+  if(file==NULL || U_FAILURE(*status))
+  {
+    return adopt;
+  }
+
+  if(!file) 
+  {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return adopt;
+  }
+
+  if(direction & U_READ)
+  {
+    /** TODO: implement */
+    *status = U_UNSUPPORTED_ERROR;
+    return adopt;
+  }
+
+  if(adopt == NULL) /* they are clearing it */
+  {
+    if(file->fTranslit != NULL)
+    {
+      /* TODO: Check side */
+      old = file->fTranslit->translit;
+      free(file->fTranslit->buffer);
+      file->fTranslit->buffer=NULL;
+      free(file->fTranslit);
+      file->fTranslit=NULL;
+    }
+  }
+  else
+  {
+    if(file->fTranslit == NULL)
+      {
+	file->fTranslit = (UFILETranslitBuffer*) malloc(sizeof(UFILETranslitBuffer));
+	if(!file->fTranslit)
+	{
+	  *status = U_MEMORY_ALLOCATION_ERROR;
+	  return adopt;
+	}
+	file->fTranslit->capacity = 0;
+	file->fTranslit->length = 0;
+	file->fTranslit->pos = 0;
+	file->fTranslit->buffer = NULL;
+      }
+    else
+      {
+	old = file->fTranslit->translit;
+	ufile_flush_translit(file);
+      }
+
+    file->fTranslit->translit = adopt;
+  }
+
+  return old;
+}
+
+
+const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count, UBool flush)
+{
+  int32_t newlen;
+  int32_t junkCount = 0;
+  int32_t textLength;
+  int32_t textLimit;
+  UTransPosition pos;
+  UErrorCode status = U_ZERO_ERROR;
+ 
+  if(count == NULL)
+  {
+    count = &junkCount;
+  }
+
+  if ((!f)||(!f->fTranslit)||(!f->fTranslit->translit))
+  {
+    // short circuit
+    return src;
+  }
+
+  /* First: slide over everything */
+  if(f->fTranslit->length > f->fTranslit->pos)
+  {
+    memmove(f->fTranslit->buffer, f->fTranslit->buffer + f->fTranslit->pos,
+	    (f->fTranslit->length - f->fTranslit->pos)*sizeof(UChar));
+  }
+  f->fTranslit->length -= f->fTranslit->pos; /* always */
+  f->fTranslit->pos = 0;
+
+  // Calculate new buffer size needed
+  newlen = (*count + f->fTranslit->length) * 4;
+  
+  if(newlen > f->fTranslit->capacity)
+  {
+    if(f->fTranslit->buffer == NULL)
+    {
+      f->fTranslit->buffer = (UChar*)malloc(newlen * sizeof(UChar));
+    }
+    else
+    {
+      f->fTranslit->buffer = (UChar*)realloc(f->fTranslit->buffer, newlen * sizeof(UChar));
+    }
+    f->fTranslit->capacity = newlen;
+  }
+
+  // Now, copy any data over
+  u_strncpy(f->fTranslit->buffer + f->fTranslit->length, 
+	    src,
+	    *count);
+  f->fTranslit->length += *count;
+  
+  // Now, translit in place as much as we can 
+  if(flush == FALSE)
+  {
+    textLength = f->fTranslit->length;
+    pos.contextStart = 0;
+    pos.contextLimit = textLength;
+    pos.start        = 0;
+    pos.limit        = textLength;
+
+    utrans_transIncrementalUChars(f->fTranslit->translit,
+				  f->fTranslit->buffer, /* because we shifted */
+				  &textLength,
+				  f->fTranslit->capacity,
+				  &pos,
+				  &status);
+
+    if(U_FAILURE(status))
+    {
+      fprintf(stderr, " Gack. Translit blew up with a %s\n", u_errorName(status));
+      return src; 
+    }
+    
+    /* now: start/limit point to the transliterated text */
+    /* Transliterated is [buffer..pos.start) */
+    *count            = pos.start;
+    f->fTranslit->pos = pos.start;
+    f->fTranslit->length = pos.limit;
+
+    return f->fTranslit->buffer;
+  }
+  else
+  {
+    textLength = f->fTranslit->length;
+    textLimit = f->fTranslit->length;
+
+    utrans_transUChars(f->fTranslit->translit,
+		       f->fTranslit->buffer,
+		       &textLength,
+		       f->fTranslit->capacity,
+		       0,
+		       &textLimit,
+		       &status);
+
+    if(U_FAILURE(status))
+    {
+      fprintf(stderr, " Gack. Translit(flush) blew up with a %s\n", u_errorName(status));
+      return src; 
+    }
+
+    /* out: converted len */
+    *count = textLimit;
+
+    /* Set pointers to 0 */
+    f->fTranslit->pos = 0;
+    f->fTranslit->length = 0;
+
+    return f->fTranslit->buffer;
+  }
+}
+
+
+void 
+ufile_flush_translit(UFILE *f)
+{
+  if((!f)||(!f->fTranslit))
+    return;
+
+  u_file_write_flush(NULL, 0, f, TRUE);
+}
+
+
+void 
+ufile_close_translit(UFILE *f)
+{
+  if((!f)||(!f->fTranslit))
+    return;
+
+  ufile_flush_translit(f);
+
+  if(f->fTranslit->translit)
+    utrans_close(f->fTranslit->translit);
+  
+  if(f->fTranslit->buffer)
+  {
+    free(f->fTranslit->buffer);
+  }
+
+  free(f->fTranslit);
+  f->fTranslit = NULL;
+}
+
+
 /* Input/output */
 
 U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
@@ -59,10 +266,12 @@ u_fputc(UChar        uc,
   return u_file_write(&uc, 1, f) == 1 ? uc : EOF;
 }
 
-U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
-u_file_write(    const UChar     *chars, 
+
+U_CAPI int32_t U_EXPORT2
+u_file_write_flush(    const UChar     *chars, 
         int32_t        count, 
-        UFILE         *f)
+        UFILE         *f,
+        UBool         flush)
 {
   /* Set up conversion parameters */
   UErrorCode         status        = U_ZERO_ERROR;
@@ -72,6 +281,14 @@ u_file_write(    const UChar     *chars,
   char            *myTarget     = f->fCharBuffer;
   int32_t        bufferSize    = UFILE_CHARBUFFER_SIZE;
   int32_t        written        = 0;
+
+  if((f->fTranslit) && (f->fTranslit->translit))
+  {
+    /* Do the transliteration */
+    mySource = u_file_translit(f, chars, &count, flush);
+    sourceAlias = mySource;
+    mySourceEnd = mySource + count;
+  }
  
   /* Perform the conversion in a loop */
   do {
@@ -84,7 +301,7 @@ u_file_write(    const UChar     *chars,
                  &mySource,
                  mySourceEnd,
                  NULL,
-                 FALSE,     /* TODO: This must be true when we are closing the file */
+		 flush,
                  &status);
       } else { /*weiv: do the invariant conversion */
           u_UCharsToChars(mySource, myTarget, count);
@@ -105,6 +322,15 @@ u_file_write(    const UChar     *chars,
   /* return # of chars written */
   return written;
 }
+
+U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
+u_file_write(    const UChar     *chars, 
+        int32_t        count, 
+        UFILE         *f)
+{
+  return u_file_write_flush(chars,count,f,FALSE);
+}
+
 
 /* private function used for buffering input */
 void

@@ -127,6 +127,7 @@ u_finit(FILE        *f,
 #else
     result->fFile = f;
 #endif
+    result->fTranslit = NULL;
     result->fOwnFile = FALSE;
     result->fOwnBundle     = FALSE;
     result->fUCPos     = result->fUCBuffer;
@@ -177,10 +178,20 @@ u_finit(FILE        *f,
     return result;
 }
 
+
+U_CAPI void U_EXPORT2
+u_fflush(UFILE *file)
+{
+  ufile_flush_translit(file);
+  fflush(file->fFile);
+  /* TODO: flush input */
+}
+
 U_CAPI void U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fclose(UFILE *file)
 {
-    fflush(file->fFile);
+    u_fflush(file);
+    ufile_close_translit(file);
 
     if(file->fOwnFile)
         fclose(file->fFile);

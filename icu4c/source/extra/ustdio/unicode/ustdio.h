@@ -27,6 +27,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
+#include "unicode/utrans.h"
 
 /*
  The following is a small list as to what is currently wrong/suggestions for
@@ -69,7 +70,11 @@
 /** Forward declaration of a Unicode-aware file */
 typedef struct UFILE UFILE;
 
-
+/** Enum for which direction of stream a transliterator applies to. */
+typedef enum { 
+   U_READ = 1, U_WRITE = 2, 
+   U_READWRITE =3  /* == (U_READ | U_WRITE) */ 
+} UFileDirection;
 
 /**
  * Open a UFILE.
@@ -120,6 +125,17 @@ u_finit(FILE        *f,
  */
 U_CAPI void U_EXPORT2
 u_fclose(UFILE *file);
+
+/**
+ * Flush output of a UFILE. Implies a flush of
+ * converter/transliterator state. (That is, a logical break is
+ * made in the output stream - for example if a different type of
+ * output is desired.)  The underlying OS level file is also flushed.
+ * @param file The UFILE to flush.
+ * @draft
+ */
+U_CAPI void U_EXPORT2
+u_flush(UFILE *file);
 
 /**
  * Get the FILE* associated with a UFILE.
@@ -708,6 +724,29 @@ u_vsscanf_u(UChar       *buffer,
         va_list         ap);
 
 
+/**
+ * Set a transliterator on the UFILE. The transliterator will be owned by the
+ * UFILE. 
+ * @param file The UFILE to set transliteration on
+ * @param adopt The UTransliterator to set. Can be NULL, which will
+ * mean that no transliteration is used.
+ * @param direction either U_READ, U_WRITE, or U_READWRITE - sets
+ *  which direction the transliterator is to be applied to. If
+ * U_READWRITE, the "Read" transliteration will be in the inverse
+ * direction.
+ * @param status ICU error code.
+ * @return The previously set transliterator, owned by the
+ * caller. If U_READWRITE is specified, only the WRITE transliterator
+ * is returned. In most cases, the caller should call utrans_close()
+ * on the result of this function.
+ * @draft
+ */
+
+U_CAPI UTransliterator* U_EXPORT2
+u_fsettransliterator(UFILE *file, UFileDirection direction,
+		     UTransliterator *adopt, UErrorCode *status); 
+
 #endif
+
 
 

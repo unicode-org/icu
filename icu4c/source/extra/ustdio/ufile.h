@@ -21,6 +21,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
+#include "unicode/utrans.h"
 #include "locbund.h"
 
 /* The buffer size for fromUnicode calls */
@@ -30,6 +31,16 @@
 #define UFILE_UCHARBUFFER_SIZE 1024
 
 /* A UFILE */
+
+typedef struct {
+  UTransliterator *fTranslit;
+  UChar  *buffer;             /* Beginning of buffer */
+  int32_t capacity;           /* Capacity of buffer */
+  int32_t pos;                /* Beginning of untranslitted data */
+  int32_t length;             /* Length *from beginning of buffer* of untranslitted data */
+  UTransliterator *translit;
+} UFILETranslitBuffer;
+
 struct UFILE {
   FILE            *fFile;        /* the actual fs interface */
   UBool        fOwnFile;    /* TRUE if fFile should be closed */
@@ -47,7 +58,18 @@ struct UFILE {
 
   UChar            *fUCLimit;     /* data limit in fUCBuffer */
   UChar         *fUCPos;     /* current pos in fUCBuffer */
+
+  UFILETranslitBuffer *fTranslit;
 };
+
+/**
+ * Like u_file_write but takes a flush parameter
+ */
+U_CAPI int32_t U_EXPORT2
+u_file_write_flush(    const UChar     *chars, 
+        int32_t        count, 
+        UFILE         *f,
+	 UBool         flush);
 
 /**
  * Fill a UFILE's buffer with converted codepage data.
@@ -55,5 +77,20 @@ struct UFILE {
  */
 void
 ufile_fill_uchar_buffer(UFILE *f);
+
+/**
+ * Close out the transliterator and flush any data therein.
+ * @param f flu
+ */
+void 
+ufile_close_translit(UFILE *f);
+
+/**
+ * Flush the buffer in the transliterator 
+ * @param f UFile to flush
+ */
+void 
+ufile_flush_translit(UFILE *f);
+
 
 #endif
