@@ -82,6 +82,7 @@ typedef struct {
   uint8_t               *unsafeCP;
   uint8_t               *contrEndCP;
   const UCollator       *UCA;
+  UHashtable      *prefixLookup;
 } tempUCATable; 
 
 U_CAPI tempUCATable * U_EXPORT2 uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollator *UCA, UColCETags initTag, UErrorCode *status);
@@ -91,9 +92,6 @@ U_CAPI uint32_t U_EXPORT2 uprv_uca_addAnElement(tempUCATable *t, UCAElements *el
 U_CAPI UCATableHeader * U_EXPORT2 uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status);
 U_CAPI uint32_t U_EXPORT2 uprv_uca_setRange(tempUCATable *t, UChar32 rangeStart, UChar32 rangeEnd, int32_t value, UErrorCode *status);
 
-uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status);
-int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value, UErrorCode *status);
-void uprv_uca_reverseElement(UCAElements *el);
 
 #define paddedsize(something) ((something)+((((something)%4)!=0)?(4-(something)%4):0))
 #define headersize (paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)))
