@@ -35,6 +35,11 @@
 #include "unicode/tblcoll.h"
 #include "unicode/ucoleitr.h"
 
+/** 
+ * The UCollationElements struct.
+ * For usage in C programs.
+ * @stable ICU 2.0
+ */
 typedef struct UCollationElements UCollationElements;
 
 U_NAMESPACE_BEGIN

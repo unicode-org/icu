@@ -432,7 +432,7 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
         UnicodeString item = *((UnicodeString *)(ne->value.pointer));
 
         permutations->removeAll();
-        permute(item, SKIP_ZEROES, permutations, status);
+        permute(item, CANITER_SKIP_ZEROES, permutations, status);
         const UHashElement *ne2 = NULL;
         int32_t el2 = -1;
         //Iterator it2 = permutations.iterator();

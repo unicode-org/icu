@@ -39,41 +39,70 @@
 
 #include "unicode/umachine.h"
 
-/** The standard copyright notice that gets compiled into each library. */
+/** The standard copyright notice that gets compiled into each library. 
+ *  This value will change in the subsequent releases of ICU
+ *  @draft ICU 2.4
+ */
 #define U_COPYRIGHT_STRING \
   " Copyright (C) 2002, International Business Machines Corporation and others. All Rights Reserved. "
 
 #define U_COPYRIGHT_STRING_LENGTH  128
 
-/** The current ICU major version as an integer. */
+/** The current ICU major version as an integer. 
+ *  This value will change in the subsequent releases of ICU
+ *  @draft ICU 2.4
+ */
 #define U_ICU_VERSION_MAJOR_NUM 2
 
-/** The current ICU minor version as an integer. */
+/** The current ICU minor version as an integer. 
+ *  This value will change in the subsequent releases of ICU
+ *  @draft ICU 2.4
+ */
 #define U_ICU_VERSION_MINOR_NUM 4
 
-/** The current ICU patchlevel version as an integer. */
+/** The current ICU patchlevel version as an integer.  
+ *  This value will change in the subsequent releases of ICU
+ *  @draft ICU 2.4
+ */
 #define U_ICU_VERSION_PATCHLEVEL_NUM 0
 
-/** Glued version suffix for renamers */
+/** Glued version suffix for renamers 
+ *  This value will change in the subsequent releases of ICU
+ *  @draft ICU 2.4
+ */
 #define U_ICU_VERSION_SUFFIX _2_4
 
 /** The current ICU library version as a dotted-decimal string. The patchlevel
-    only appears in this string if it non-zero. */
+ *  only appears in this string if it non-zero. 
+ *  This value will change in the subsequent releases of ICU
+ *  @draft ICU 2.4
+ */
 #define U_ICU_VERSION "2.4"
 
-/** The current ICU library major/minor version as a string without dots, for library name suffixes. */
+/** The current ICU library major/minor version as a string without dots, for library name suffixes. 
+ *  This value will change in the subsequent releases of ICU
+ *  @draft ICU 2.4
+ */
 #define U_ICU_VERSION_SHORT "24"
 
-/** An ICU version consists of up to 4 numbers from 0..255. */
+/** An ICU version consists of up to 4 numbers from 0..255.
+ *  @draft ICU 2.4
+ */
 #define U_MAX_VERSION_LENGTH 4
 
-/** In a string, ICU version fields are delimited by dots. */
+/** In a string, ICU version fields are delimited by dots.
+ *  @draft ICU 2.4
+ */
 #define U_VERSION_DELIMITER '.'
 
-/** The maximum length of an ICU version string. */
+/** The maximum length of an ICU version string.
+ *  @draft ICU 2.4
+ */
 #define U_MAX_VERSION_STRING_LENGTH 20
 
-/** The binary form of a version on ICU APIs is an array of 4 uint8_t. */
+/** The binary form of a version on ICU APIs is an array of 4 uint8_t.
+ *  @draft ICU 2.4
+ */
 typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 
 #if U_HAVE_NAMESPACE && defined(XP_CPLUSPLUS)
@@ -97,6 +126,7 @@ U_NAMESPACE_USE
  * @param versionString A string with dotted-decimal version information,
  *                      with up to four non-negative number fields with
  *                      values of up to 255 each.
+ *  @draft ICU 2.4
  */
 U_CAPI void U_EXPORT2
 u_versionFromString(UVersionInfo versionArray, const char *versionString);
@@ -111,6 +141,7 @@ u_versionFromString(UVersionInfo versionArray, const char *versionString);
  *                      a string corresponding to the numeric version
  *                      information in versionArray.
  *                      The buffer size must be at least U_MAX_VERSION_STRING_LENGTH.
+ *  @draft ICU 2.4
  */
 U_CAPI void U_EXPORT2
 u_versionToString(UVersionInfo versionArray, char *versionString);
@@ -127,35 +158,48 @@ U_CAPI void U_EXPORT2
 u_getVersion(UVersionInfo versionArray);
 
 
-/*===========================================================================*/
-/* ICU collation framework version information                               */
-/* Version info that can be obtained from a collator is affected by these    */
-/* numbers in a secret and magic way. Please use collator version as whole   */
-/*===========================================================================*/
+/*===========================================================================
+ * ICU collation framework version information                               
+ * Version info that can be obtained from a collator is affected by these    
+ * numbers in a secret and magic way. Please use collator version as whole
+ *===========================================================================
+ */
 
-/** Collation runtime version (sort key generator, strcoll). */
-/** If the version is different, sortkeys for the same string could be different */
-/** version 2 was in ICU 1.8.1. changed is: compression intervals, French secondary */
-/** compression, generating quad level always when strength is quad or more */
-/** version 4 - ICU 2.2 - tracking UCA changes, ignore completely ignorables */
-/** in contractions, ignore primary ignorables after shifted */
+/** Collation runtime version (sort key generator, strcoll). 
+ * If the version is different, sortkeys for the same string could be different 
+ * version 2 was in ICU 1.8.1. changed is: compression intervals, French secondary 
+ * compression, generating quad level always when strength is quad or more 
+ * version 4 - ICU 2.2 - tracking UCA changes, ignore completely ignorables 
+ * in contractions, ignore primary ignorables after shifted 
+ * This value may change in the subsequent releases of ICU
+ * @draft ICU 2.4
+ */
 #define UCOL_RUNTIME_VERSION 4
 
-/** Builder code version. When this is different, same tailoring might result */
-/** in assigning different collation elements to code points                  */
-/** version 2 was in ICU 1.8.1. added support for prefixes, tweaked canonical */
-/** closure. However, the tailorings should probably get same CEs assigned    */
-/** version 5 - ICU 2.2 - fixed some bugs, renamed some indirect values.      */
-/** Backward compatible with the old rules. */
+/** Builder code version. When this is different, same tailoring might result
+ * in assigning different collation elements to code points                  
+ * version 2 was in ICU 1.8.1. added support for prefixes, tweaked canonical 
+ * closure. However, the tailorings should probably get same CEs assigned    
+ * version 5 - ICU 2.2 - fixed some bugs, renamed some indirect values.      
+ * Backward compatible with the old rules. 
+ * This value may change in the subsequent releases of ICU
+ * @draft ICU 2.4
+ */
 #define UCOL_BUILDER_VERSION 5
 
-/* This is the version of FractionalUCA.txt tailoring rules*/
-/* Version 1 was in ICU 1.8.1. Version two contains canonical closure for */
-/* supplementary code points */
-/* Version 4 in ICU 2.2, following UCA=3.1.1d6, UCD=3.2.0 */
+/* This is the version of FractionalUCA.txt tailoring rules
+ * Version 1 was in ICU 1.8.1. Version two contains canonical closure for
+ * supplementary code points 
+ * Version 4 in ICU 2.2, following UCA=3.1.1d6, UCD=3.2.0 
+ * This value may change in the subsequent releases of ICU
+ * @draft ICU 2.4
+ */
 #define UCOL_FRACTIONAL_UCA_VERSION 4
 
-/** This is the version of the tailorings */
+/** This is the version of the tailorings 
+ *  This value may change in the subsequent releases of ICU
+ *  @draft ICU 2.4
+ */
 #define UCOL_TAILORINGS_VERSION 1
 
 #endif
