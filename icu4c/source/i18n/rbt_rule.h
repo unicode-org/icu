@@ -1,5 +1,5 @@
 /*
-* Copyright © {1999-2001}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1999-2001}, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
@@ -29,7 +29,7 @@ class UnicodeFilter;
  * may contain variables.  Variables represent a set of Unicode
  * characters, such as the letters <i>a</i> through <i>z</i>.
  * Variables are detected by looking up each character in a supplied
- * variable list to see if it has been so defined. 
+ * variable list to see if it has been so defined.
  *
  * @author Alan Liu
  */
@@ -61,7 +61,7 @@ public:
          * long enough.
          */
         PARTIAL_MATCH,
-        
+
         /**
          * Constant returned by <code>getMatchDegree()</code>
          * indicating a complete match between the text and this rule.
@@ -340,7 +340,7 @@ public:
                                          const UTransPosition& pos,
                                          const TransliterationRuleData& data,
                                          const UnicodeFilter* filter) const;
-    
+
     /**
      * Return true if the given key matches the given text.  This method
      * accounts for the fact that the key character may represent a character

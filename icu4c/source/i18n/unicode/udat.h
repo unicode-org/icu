@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright © {1996-2001}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1996-2001, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -12,7 +12,7 @@
 #include "unicode/unum.h"
 /**
  * \file
- * \brief C API: DateFormat 
+ * \brief C API: DateFormat
  *
  * <h2> Date Format C API</h2>
  *
@@ -28,7 +28,7 @@
  * be completely independent of the locale conventions for months, days of the
  * week, or even the calendar format: lunar vs. solar.
  * <P>
- * To format a date for the current Locale with default time and date style, 
+ * To format a date for the current Locale with default time and date style,
  * use one of the static factory methods:
  * <pre>
  * \code
@@ -76,12 +76,12 @@
  * <pre>
  * \code
  *        UErrorCode status = U_ZERO_ERROR;
- *        int32_t parsepos=0;     
+ *        int32_t parsepos=0;
  *        UDate myDate = udat_parse(df, myString, u_strlen(myString), &parsepos, &status);
  * \endcode
  * </pre>
- *  You can pass in different options for the arguments for date and time style 
- *  to control the length of the result; from SHORT to MEDIUM to LONG to FULL. 
+ *  You can pass in different options for the arguments for date and time style
+ *  to control the length of the result; from SHORT to MEDIUM to LONG to FULL.
  *  The exact result depends on the locale, but generally:
  *  see UDateFormatStyle for more details
  * <ul type=round>
@@ -91,7 +91,7 @@
  *   <li>   UDAT_FULL is pretty completely specified, such as
  *          Tuesday, April 12, 1952 AD or 3:30:42pm PST.
  * </ul>
- * You can also set the time zone on the format if you wish. 
+ * You can also set the time zone on the format if you wish.
  * <P>
  * You can also use forms of the parse and format methods with Parse Position and
  * UFieldPosition to allow you to
@@ -128,9 +128,9 @@ typedef enum UDateFormatStyle UDateFormatStyle;
      * Open a new UDateFormat for formatting and parsing dates and times.
      * A UDateFormat may be used to format dates in calls to \Ref{udat_format},
      * and to parse dates in calls to \Ref{udat_parse}.
-     * @param timeStyle The style used to format times; one of UDAT_FULL_STYLE, UDAT_LONG_STYLE, 
+     * @param timeStyle The style used to format times; one of UDAT_FULL_STYLE, UDAT_LONG_STYLE,
      * UDAT_MEDIUM_STYLE, UDAT_SHORT_STYLE, or UDAT_DEFAULT_STYLE
-     * @param dateStyle The style used to format dates; one of UDAT_FULL_STYLE, UDAT_LONG_STYLE, 
+     * @param dateStyle The style used to format dates; one of UDAT_FULL_STYLE, UDAT_LONG_STYLE,
      * UDAT_MEDIUM_STYLE, UDAT_SHORT_STYLE, or UDAT_DEFAULT_STYLE
      * @param locale The locale specifying the formatting conventions
      * @param tzID A timezone ID specifying the timezone to use.  If 0, use
@@ -143,7 +143,7 @@ typedef enum UDateFormatStyle UDateFormatStyle;
      * @draft
      */
 U_CAPI UDateFormat*
-udat_open(UDateFormatStyle  timeStyle, 
+udat_open(UDateFormatStyle  timeStyle,
           UDateFormatStyle  dateStyle,
           const char        *locale,
 	  const UChar       *tzID,
@@ -164,7 +164,7 @@ udat_open(UDateFormatStyle  timeStyle,
 * @draft
 */
 U_CAPI UDateFormat*
-udat_openPattern(    const   UChar           *pattern, 
+udat_openPattern(    const   UChar           *pattern,
             int32_t         patternLength,
             const   char         *locale,
             UErrorCode      *status);
@@ -240,8 +240,8 @@ udat_parse(    const    UDateFormat*    format,
 
 /**
 * Determine if an UDateFormat will perform lenient parsing.
-* With lenient parsing, the parser may use heuristics to interpret inputs that do not 
-* precisely match the pattern. With strict parsing, inputs must match the pattern. 
+* With lenient parsing, the parser may use heuristics to interpret inputs that do not
+* precisely match the pattern. With strict parsing, inputs must match the pattern.
 * @param fmt The formatter to query
 * @return TRUE if fmt is set to perform lenient parsing, FALSE otherwise.
 * @see udat_setLenient
@@ -252,8 +252,8 @@ udat_isLenient(const UDateFormat* fmt);
 
 /**
 * Specify whether an UDateFormat will perform lenient parsing.
-* With lenient parsing, the parser may use heuristics to interpret inputs that do not 
-* precisely match the pattern. With strict parsing, inputs must match the pattern. 
+* With lenient parsing, the parser may use heuristics to interpret inputs that do not
+* precisely match the pattern. With strict parsing, inputs must match the pattern.
 * @param fmt The formatter to set
 * @param isLenient TRUE if fmt should perform lenient parsing, FALSE otherwise.
 * @see dat_isLenient
@@ -419,7 +419,7 @@ enum UDateFormatSymbolType {
 };
 typedef enum UDateFormatSymbolType UDateFormatSymbolType;
 
-/** Date format symbols. 
+/** Date format symbols.
  *  For usage in C programs.
  */
 struct UDateFormatSymbols;
@@ -430,7 +430,7 @@ typedef struct UDateFormatSymbols UDateFormatSymbols;
 * The symbols are what a UDateFormat uses to represent locale-specific data,
 * for example month or day names.
 * @param fmt The formatter to query.
-* @param type The type of symbols to get.  One of UDAT_ERAS, UDAT_MONTHS, UDAT_SHORT_MONTHS, 
+* @param type The type of symbols to get.  One of UDAT_ERAS, UDAT_MONTHS, UDAT_SHORT_MONTHS,
 * UDAT_WEEKDAYS, UDAT_SHORT_WEEKDAYS, UDAT_AM_PMS, or UDAT_LOCALIZED_CHARS
 * @param index The desired symbol of type type.
 * @param result A pointer to a buffer to receive the pattern.
@@ -454,7 +454,7 @@ udat_getSymbols(const   UDateFormat             *fmt,
 * This function is most useful as for detemining the loop termination condition
 * for calls to \Ref{udat_getSymbols}.
 * @param fmt The formatter to query.
-* @param type The type of symbols to count.  One of UDAT_ERAS, UDAT_MONTHS, UDAT_SHORT_MONTHS, 
+* @param type The type of symbols to count.  One of UDAT_ERAS, UDAT_MONTHS, UDAT_SHORT_MONTHS,
 * UDAT_WEEKDAYS, UDAT_SHORT_WEEKDAYS, UDAT_AM_PMS, or UDAT_LOCALIZED_CHARS
 * @return The number of symbols of type type.
 * @see udat_getSymbols
@@ -470,7 +470,7 @@ udat_countSymbols(    const    UDateFormat                *fmt,
 * The symbols are what a UDateFormat uses to represent locale-specific data,
 * for example month or day names.
 * @param fmt The formatter to set
-* @param type The type of symbols to set.  One of UDAT_ERAS, UDAT_MONTHS, UDAT_SHORT_MONTHS, 
+* @param type The type of symbols to set.  One of UDAT_ERAS, UDAT_MONTHS, UDAT_SHORT_MONTHS,
 * UDAT_WEEKDAYS, UDAT_SHORT_WEEKDAYS, UDAT_AM_PMS, or UDAT_LOCALIZED_CHARS
 * @param index The index of the symbol to set of type type.
 * @param value The new value

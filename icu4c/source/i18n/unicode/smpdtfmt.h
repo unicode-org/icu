@@ -1,5 +1,5 @@
 /*
-* Copyright © {1997-2001}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-2001}, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
 *
 * File SMPDTFMT.H
@@ -117,7 +117,7 @@ class DateFormat;
  *     SimpleTimeZone* pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, "PST");
  *     pdt->setStartRule( Calendar::APRIL, 1, Calendar::SUNDAY, 2*60*60*1000);
  *     pdt->setEndRule( Calendar::OCTOBER, -1, Calendar::SUNDAY, 2*60*60*1000);
- *     
+ *
  *     // Format the current time.
  *     SimpleDateFormat* formatter
  *         = new SimpleDateFormat ("yyyy.MM.dd G 'at' hh:mm:ss a zzz", success );
@@ -127,7 +127,7 @@ class DateFormat;
  *     UnicodeString dateString;
  *     formatter->format( currentTime_1, dateString, fp );
  *     cout << "result: " << dateString << endl;
- *     
+ *
  *     // Parse the previous string back into a Date.
  *     ParsePosition pp(0);
  *     UDate currentTime_2 = formatter->parse(dateString, pp );

@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-* Copyright © {1997-1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-1999}, International Business Machines Corporation and others. All Rights Reserved.
 ********************************************************************************
 *
 * File FORMAT.H
@@ -16,10 +16,10 @@
 // *****************************************************************************
 // This file was generated from the java source file Format.java
 // *****************************************************************************
- 
+
 #ifndef FORMAT_H
 #define FORMAT_H
- 
+
 
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
@@ -27,7 +27,7 @@
 #include "unicode/fieldpos.h"
 #include "unicode/parsepos.h"
 
-/** 
+/**
  * Base class for all formats.  This is an abstract base class which
  * specifies the protocol for classes which convert other objects or
  * values, such as numeric values and dates, and their string

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright © {1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1999, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
@@ -15,7 +15,7 @@
 class UnicodeFilter;
 
 /**
- * A transliterator that converts from Unicode characters to 
+ * A transliterator that converts from Unicode characters to
  * hexadecimal Unicode escape sequences.  It outputs a
  * prefix specified in the constructor and optionally converts the hex
  * digits to uppercase.

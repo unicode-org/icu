@@ -1,12 +1,12 @@
 /*
-* Copyright © {1996-1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1996-1999}, International Business Machines Corporation and others. All Rights Reserved.
 *****************************************************************************************
 */
 //===============================================================================
 //
 // File sortkey.h
 //
-// 
+//
 //
 // Created by: Helena Shih
 //
@@ -16,7 +16,7 @@
 //
 //  6/20/97     helena      Java class name change.
 //  8/18/97     helena      Added internal API documentation.
-//  6/26/98     erm         Changed to use byte arrays and memcmp. 
+//  6/26/98     erm         Changed to use byte arrays and memcmp.
 //===============================================================================
 
 #ifndef SORTKEY_H
@@ -56,7 +56,7 @@ class RuleBasedCollator;
  *     myCollator->getCollationKey("Tom", keys[0], success );
  *     myCollator->getCollationKey("Dick", keys[1], success );
  *     myCollator->getCollationKey("Harry", keys[2], success );
- *  
+ *
  *     // Inside body of sort routine, compare keys this way:
  *     CollationKey tmp;
  *     if(keys[0].compareTo( keys[1] ) > 0 ) {
@@ -71,8 +71,8 @@ class RuleBasedCollator;
  * <p>
  * <strong>Note:</strong> <code>Collator</code>s with different Locale,
  * CollationStrength and DecompositionMode settings will return different
- * CollationKeys for the same set of strings. Locales have specific 
- * collation rules, and the way in which secondary and tertiary differences 
+ * CollationKeys for the same set of strings. Locales have specific
+ * collation rules, and the way in which secondary and tertiary differences
  * are taken into account, for example, will result in different CollationKeys
  * for same strings.
  * <p>
@@ -86,7 +86,7 @@ class RuleBasedCollator;
 class U_I18N_API CollationKey {
 public:
     /**
-     * This creates an empty collation key based on the null string.  An empty 
+     * This creates an empty collation key based on the null string.  An empty
      * collation key contains no sorting information.  When comparing two empty
      * collation keys, the result is Collator::EQUAL.  Comparing empty collation key
      * with non-empty collation key is always Collator::LESS.
@@ -96,7 +96,7 @@ public:
 
 
      /**
-     * Creates a collation key based on the collation key values.  
+     * Creates a collation key based on the collation key values.
      * @param values the collation key values
      * @param count number of collation key values, including trailing nulls.
      * @see #createBits
@@ -110,7 +110,7 @@ public:
 	 * @deprecated
      */
      CollationKey(const CollationKey& other);
-    /** 
+    /**
      * Sort key destructor.
 	 * @deprecated
      */
@@ -147,7 +147,7 @@ public:
      */
      UBool                  isBogus(void) const;
 
-    /** 
+    /**
      * Returns a pointer to the collation key values. The storage is owned
      * by the collation key and the pointer will become invalid if the key
      * is deleted.
@@ -157,7 +157,7 @@ public:
      */
 	 const    uint8_t*                getByteArray(int32_t& count) const;
 
-    /** 
+    /**
      * Extracts the collation key values into a new array. The caller owns
      * this storage and should free it.
      * @param count the output parameter of number of collation key values,
@@ -171,7 +171,7 @@ public:
      * two collation keys.
      * @param sourceKey source collation key
      * @param targetKey target collation key
-     * @return Returns Collator::LESS if sourceKey &lt; targetKey, 
+     * @return Returns Collator::LESS if sourceKey &lt; targetKey,
      * Collator::GREATER if sourceKey > targetKey and Collator::EQUAL
      * otherwise.
 	 * @deprecated

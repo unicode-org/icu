@@ -1,5 +1,5 @@
 /*
-* Copyright © {1997-2001}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-2001}, International Business Machines Corporation and others. All Rights Reserved.
 ********************************************************************************
 *
 * File TIMEZONE.H
@@ -36,7 +36,7 @@ struct TZHeader;
 struct OffsetIndex;
 struct CountryIndex;
 struct TZEquivalencyGroup;
-  
+
 /**
  * <code>TimeZone</code> represents a time zone offset, and also figures out daylight
  * savings.
@@ -76,7 +76,7 @@ struct TZEquivalencyGroup;
  * daylight savings time.
  *
 
-  
+
  * TimeZone is an abstract class representing a time zone.  A TimeZone is needed for
  * Calendar to produce local time for a particular time zone.  A TimeZone comprises
  * three basic pieces of information:<ul>
@@ -106,7 +106,7 @@ struct TZEquivalencyGroup;
  * obtain a list of all the time zone IDs recognized by createTimeZone().
  * <P>
  * You can also use TimeZone::createDefault() to create a TimeZone.  This function uses
- * platform-specific APIs to produce a TimeZone for the time zone corresponding to 
+ * platform-specific APIs to produce a TimeZone for the time zone corresponding to
  * the client's computer's physical location.  For example, if you're in Japan (assuming
  * your machine is set up correctly), TimeZone::createDefault() will return a TimeZone
  * for Japanese Standard Time ("Asia/Tokyo").
@@ -330,7 +330,7 @@ public:
      * @stable
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
-                           uint8_t dayOfWeek, int32_t milliseconds, 
+                           uint8_t dayOfWeek, int32_t milliseconds,
                            int32_t monthLength, UErrorCode& status) const = 0;
 
     /**
@@ -379,9 +379,9 @@ public:
      * Enum for use with getDisplayName
      */
 
-    enum EDisplayType { 
+    enum EDisplayType {
         SHORT = 1,
-        LONG 
+        LONG
     };
 
     /**
@@ -592,7 +592,7 @@ private:
      * INDEX_BY_ID, INDEX_BY_OFFSET, and ZONE_IDS.  Also used to
      * control read/write access to fgDefaultZone.
      */
-    static UMTX                LOCK;    
+    static UMTX                LOCK;
 
     /**
      * Responsible for setting up fgDefaultZone.  Uses routines in TPlatformUtilities
