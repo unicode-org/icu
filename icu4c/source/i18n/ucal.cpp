@@ -94,15 +94,7 @@ ucal_open(    const    UChar*          zoneID,
     return 0;
   }
   
-  Calendar *cal = 0;
-  cal = Calendar::createInstance(zone, Locale().init(locale), *status);
-  if(cal == 0) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    delete zone;
-    return 0;
-  }
-
-  return (UCalendar*)cal;
+  return (UCalendar*)Calendar::createInstance(zone, Locale().init(locale), *status);
 }
 
 CAPI void

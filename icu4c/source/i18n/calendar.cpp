@@ -196,18 +196,6 @@ Calendar::createInstance(UErrorCode& success)
 // -------------------------------------
 
 Calendar*
-Calendar::createInstance(TimeZone* zone, UErrorCode& success)
-{
-    if (FAILURE(success)) return 0;
-    // since the Locale isn't specified, use the default locale
-    Calendar* c = new GregorianCalendar(zone, Locale::getDefault(), success);
-    if (FAILURE(success)) { delete c; c = 0; }
-    return c;
-}
-
-// -------------------------------------
-
-Calendar*
 Calendar::createInstance(const TimeZone& zone, UErrorCode& success)
 {
     if (FAILURE(success)) return 0;
@@ -234,9 +222,18 @@ Calendar::createInstance(const Locale& aLocale, UErrorCode& success)
 Calendar*
 Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
 {
-    if (FAILURE(success)) return 0;
+    if (FAILURE(success)) {
+        delete zone;
+        return 0;
+    }
     Calendar* c = new GregorianCalendar(zone, aLocale, success);
-    if (FAILURE(success)) { delete c; c = 0; }
+    if (c == 0) {
+        success = U_MEMORY_ALLOCATION_ERROR;
+        delete zone;
+    } else if (FAILURE(success)) {
+        delete c;
+        c = 0;
+    }
     return c;
 }
 
