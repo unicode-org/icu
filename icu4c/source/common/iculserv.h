@@ -373,8 +373,10 @@ class U_COMMON_API ICUResourceBundleFactory : public LocaleKeyFactory
     ICUResourceBundleFactory();
 
     /**
-     * A service factory based on ICU resource data in resources
-     * with the given name.
+     * A service factory based on ICU resource data in resources with
+     * the given name.  This should be a 'path' that can be passed to
+     * ures_openAvailableLocales, such as U_ICUDATA or U_ICUDATA_COLL.
+     * The empty string is equivalent to U_ICUDATA.
      */
     ICUResourceBundleFactory(const UnicodeString& bundleName);
 
