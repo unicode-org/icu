@@ -6,7 +6,7 @@
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,v $ 
 * $Date: 2003/05/19 
-* $Revision: 1.4 $
+* $Revision: 1.5 $
 *
 ******************************************************************************
 */
@@ -28,14 +28,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.util.*;
 
-public class XLIFF2ICUConverter {
+public final class XLIFF2ICUConverter {
     
-    protected String    sourceDir = null;
-    protected String    fileName = null;
-    protected String    destDir = null;
-    protected boolean   targetOnly =false;
-    protected String    xmlfileName = null;
-    protected Document  doc;
+
 
     
     /**
@@ -53,7 +48,7 @@ public class XLIFF2ICUConverter {
         UOption.HELP_QUESTION_MARK(),
         UOption.SOURCEDIR(),
         UOption.DESTDIR(),
-        UOption.create("target-only", 't', 0),
+        UOption.create("target-only", 't', UOption.OPTIONAL_ARG),
     };
 
     private static final String RESTYPE         = "restype";
@@ -103,15 +98,35 @@ public class XLIFF2ICUConverter {
     private static final String SPACE           = " ";
     private static final String INDENT          = "    ";
     private static final String EMPTY           = "";
+    private static final String SOURCE_LANGUAGE = "source-language";
+    private static final String ID              = "id";
     
     public static void main(String[] args) {
         XLIFF2ICUConverter cnv = new XLIFF2ICUConverter();
         cnv.processArgs(args);
     }
+    private String    sourceDir = null;
+    private String    fileName = null;
+    private String    destDir = null;
+    private boolean   targetOnly =false;
+    private String    targetName = null; 
     
     private void processArgs(String[] args) {
-        int remainingArgc = UOption.parseArgs(args, options);
+        int remainingArgc = 0;
+        try{
+            remainingArgc = UOption.parseArgs(args, options);
+        }catch (Exception e){
+            System.out.println("ERROR: "+ e.toString());
+            usage();
+        }
         if(args.length==0 || options[HELP1].doesOccur || options[HELP2].doesOccur) {
+            usage();
+        }
+        if(remainingArgc==0){
+            System.out.println("ERROR: Either the file name to be processed is not "+
+                               "specified or the it is specified after the -t \n"+
+                               "option which has an optional argument. Try rearranging "+
+                               "the options.");
             usage();
         }
         if(options[SOURCEDIR].doesOccur) {
@@ -122,6 +137,7 @@ public class XLIFF2ICUConverter {
         }
         if(options[TARGETONLY].doesOccur){
             targetOnly = true;
+            targetName = options[TARGETONLY].value;
         }
         if(destDir==null){
             destDir = ".";
@@ -129,7 +145,7 @@ public class XLIFF2ICUConverter {
         for (int i = 0; i < remainingArgc; i++) {
             int lastIndex = args[i].lastIndexOf(File.separator, args[i].length()) + 1; /* add 1 to skip past the separator */
             fileName = args[i].substring(lastIndex, args[i].length());
-            xmlfileName = getFullPath(false,args[i]);
+            String xmlfileName = getFullPath(false,args[i]);
             System.out.println("Processing file: "+xmlfileName);
             createRB(xmlfileName);
         }
@@ -144,7 +160,7 @@ public class XLIFF2ICUConverter {
             "-d or --destdir      destination directory, followed by the path, default is current directory.\n" +
             "-h or -? or --help   this usage text.\n"+
             "-t or --target-only  only generate the target language txt file.\n" +
-            "example: XLIFF2ICUConverter -s xxx -d yyy myResources.xml");
+            "example: XLIFF2ICUConverter -t <optional argument> -s xxx -d yyy myResources.xlf");
     }
     
     private String getFullPath(boolean fileType, String fName){
@@ -255,12 +271,13 @@ public class XLIFF2ICUConverter {
     }
 
     
-    private void createRB(String docsrc) {
+    private void createRB(String xmlfileName) {
        
-        String urls = filenameToURL(docsrc);
+        String urls = filenameToURL(xmlfileName);
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
         dfactory.setNamespaceAware(true);
         dfactory.setValidating(true);
+        Document doc = null;
         
         ErrorHandler nullHandler = new ErrorHandler() {
             public void warning(SAXParseException e) throws SAXException {
@@ -305,7 +322,7 @@ public class XLIFF2ICUConverter {
 
             NodeList list = doc.getElementsByTagName(GROUPS);
             parseTable(list.item(0), set);
-            writeResource(set, targetOnly);
+            writeResource(set, xmlfileName);
          }
         catch (Throwable se) {
             System.out.println("ERROR :" + se.toString());
@@ -313,21 +330,26 @@ public class XLIFF2ICUConverter {
         }        
     }
     
-    private void writeResource(Resource[] set, boolean tragetOnly){
+    private void writeResource(Resource[] set, String xmlfileName){
         if(targetOnly==false){
-            writeResource(set[0], xmlfileName);
+            writeResource(set[0], xmlfileName, null);
         }
         if(targetOnly==true && set[1].name == null){
             throw new RuntimeException("The "+ xmlfileName +" does not contain translation\n");
         }
         if(set[1].name != null){
-            writeResource(set[1], xmlfileName);
+            writeResource(set[1], xmlfileName, targetName);
         }
-       
     }
-    private void writeResource(Resource set, String sourceFileName){
+    
+    private void writeResource(Resource set, String sourceFileName, String targetFileName){
         try {
-            String outputFileName = destDir+File.separator+set.name+".txt";
+            String outputFileName = null;
+            if(targetFileName != null){
+                outputFileName = destDir+File.separator+targetFileName+".txt";
+            }else{
+                outputFileName = destDir+File.separator+set.name+".txt";
+            }
             FileOutputStream file = new FileOutputStream(outputFileName);
             BufferedOutputStream writer = new BufferedOutputStream(file);
             writeBOM(writer);
@@ -351,9 +373,22 @@ public class XLIFF2ICUConverter {
             NodeList list = doc.getElementsByTagName(FILE);
             Node node = list.item(0);
             NamedNodeMap attr = node.getAttributes();
-            Node orig = attr.getNamedItem("original");
+            Node orig = attr.getNamedItem(SOURCE_LANGUAGE);
             String name = orig.getNodeValue();
-            return name.substring(0,name.indexOf("."));
+            
+            NodeList groupList = doc.getElementsByTagName(GROUPS);
+            Node group = groupList.item(0);
+            NamedNodeMap groupAtt = group.getAttributes();
+            Node id = groupAtt.getNamedItem(ID);
+            String idVal = id.getNodeValue();
+            
+            if(!name.equals(idVal)){
+                System.out.println("WARNING: The id value != language name. " +
+                                   "Please compare the output with the orignal " +
+                                   "ICU ResourceBundle before proceeding.");
+            }
+            
+            return name;
         }
         return null;
     }
@@ -377,7 +412,7 @@ public class XLIFF2ICUConverter {
             if(i==0){
                 oldLangName = langName;
             }
-            if(!langName.equals(oldLangName)){
+            if(oldLangName!=null && langName!=null && !langName.equals(oldLangName)){
                 throw new RuntimeException("The <trans-unit> elements must be bilingual, multilingual tranlations not supported. xml:lang = " + oldLangName + 
                                            " and xml:lang = " + langName);
             }
@@ -537,7 +572,7 @@ public class XLIFF2ICUConverter {
         public void write(OutputStream writer, int numIndent, boolean bare){
             writeComments(writer, numIndent);
             writeIndent(writer, numIndent);
-            write(writer, name+OPENBRACE+LINESEP);
+            write(writer, name+COLON+TABLE+OPENBRACE+LINESEP);
             numIndent++;
             Resource current = first;
             while(current != null){
