@@ -246,6 +246,8 @@ static void TestNewTypes() {
     int32_t len = 0;
     int32_t i = 0;
     int32_t intResult = 0;
+    uint32_t uintResult = 0;
+    const UChar *empty = NULL;
     const UChar *zeroString;
     UChar expected[] = { 'a','b','c','\0','d','e','f' };
     strcpy(action, "Construction of testtypes bundle");
@@ -253,6 +255,11 @@ static void TestNewTypes() {
     strcpy(testdatapath, directory);
     strcat(testdatapath, "testdata");
     theBundle = ures_open(testdatapath, "testtypes", &status);
+
+    empty = ures_getStringByKey(theBundle, "emptystring", &len, &status);
+    if(*empty != 0 || len != 0) {
+      log_err("Empty string returned invalid value\n");
+    }
 
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
 
@@ -309,8 +316,35 @@ static void TestNewTypes() {
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
     CONFIRM_INT_EQ(ures_getType(res), RES_INT);
     intResult=ures_getInt(res, &status);
+    uintResult = ures_getUInt(res, &status);
     if(U_SUCCESS(status)){
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+        CONFIRM_INT_EQ(uintResult, (uint32_t)intResult);
+        CONFIRM_INT_EQ(intResult, 1);
+    }
+
+    strcpy(action, "getting minusone");
+    res = ures_getByKey(theBundle, "minusone", res, &status);
+    CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_INT_EQ(ures_getType(res), RES_INT);
+    intResult=ures_getInt(res, &status);
+    uintResult = ures_getUInt(res, &status);
+    if(U_SUCCESS(status)){
+        CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+        CONFIRM_INT_EQ(uintResult, 0x0FFFFFFF); /* a 28 bit integer */
+        CONFIRM_INT_EQ(intResult, -1);
+        CONFIRM_INT_NE(uintResult, (uint32_t)intResult);
+    }
+
+    strcpy(action, "getting plusone");
+    res = ures_getByKey(theBundle, "plusone", res, &status);
+    CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_INT_EQ(ures_getType(res), RES_INT);
+    intResult=ures_getInt(res, &status);
+    uintResult = ures_getUInt(res, &status);
+    if(U_SUCCESS(status)){
+        CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+        CONFIRM_INT_EQ(uintResult, (uint32_t)intResult);
         CONFIRM_INT_EQ(intResult, 1);
     }
 
@@ -795,6 +829,9 @@ static void TestErrorConditions(){
     /*Test ures_getByIndex with errorCode != U_ZERO_ERROR*/
     status=U_ZERO_ERROR;
     teFillin=ures_getByKey(teRes, "array_only_in_te", teFillin, &status);
+    if(ures_countArrayItems(teRes, "array_only_in_te", &status) != 4) {
+      log_err("ERROR: Wrong number of items in an array!\n");
+    }
     status=U_ILLEGAL_ARGUMENT_ERROR;
     teFillin2=ures_getByIndex(teFillin, 0, teFillin2, &status);
     if(teFillin2 != NULL){
@@ -820,6 +857,13 @@ static void TestErrorConditions(){
     value=(UChar*)ures_getStringByIndex(NULL, 0, &len, &status);
     if(value != NULL || status != U_ILLEGAL_ARGUMENT_ERROR){
         log_err("ERROR: ures_getStringByIndex() with UResourceBundle=NULL is supposed to fail\n Expected: U_ILLEGAL_ARGUMENT_ERROR, Got: %s\n",
+                                    myErrorName(status));
+    } 
+    /*Test ures_getStringByIndex with UResourceBundle = NULL */
+    status=U_ZERO_ERROR;
+    value=(UChar*)ures_getStringByIndex(teFillin, 9999, &len, &status);
+    if(value != NULL || status != U_MISSING_RESOURCE_ERROR){
+        log_err("ERROR: ures_getStringByIndex() with index that is too big is supposed to fail\n Expected: U_MISSING_RESOURCE_ERROR, Got: %s\n",
                                     myErrorName(status));
     } 
     /*Test ures_getInt() where UResourceBundle = NULL */
