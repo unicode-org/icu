@@ -29,6 +29,7 @@
 ********************************************************************************
 */
 
+#include "cpputils.h"
 #include "choicfmt.h"
 #include "numfmt.h"
 #include "locid.h"

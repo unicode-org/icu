@@ -30,6 +30,7 @@
 *******************************************************************************
 */
 
+#include "cpputils.h"
 #include "resbund.h"
 #include "gregocal.h"
 
