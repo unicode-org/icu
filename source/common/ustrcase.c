@@ -86,7 +86,7 @@ u_internalStrToTitle(UChar *dest, int32_t destCapacity,
 
         /* titlecase the character at the found index */
         UTF_NEXT_CHAR(src, index, srcLength, c);
-        iter.move(&iter, index, UITER_START);
+        iter.move(&iter, index, UITER_ZERO);
         if(destIndex<destCapacity) {
             length=u_internalToTitle(c, &iter,
                                      dest+destIndex, destCapacity-destIndex,
