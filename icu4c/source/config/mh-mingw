@@ -121,9 +121,8 @@ LDLIBRARYPATH_ENVVAR = PATH
 # The type of assembly to write for generating an object file
 GENCCODE_ASSEMBLY=-a gcc-cygwin
 
-# These are needed to allow the pkgdata nmake files to work
-PKGDATA_OPTS = -v
-PKGDATA_INVOKE_OPTS = MAKEFLAGS=
+# These are needed to allow the pkgdata GNU make files to work
+CPPFLAGS +=-DU_MAKE=\"$(MAKE)\"
 
 ## End Cygwin/MinGW specific setup
 

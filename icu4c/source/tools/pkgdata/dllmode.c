@@ -21,7 +21,7 @@
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 
-#ifndef WIN32
+#ifndef U_MAKE_IS_NMAKE
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -285,5 +285,5 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     
 }
 
-#endif  /* #ifndef WIN32 */
+#endif  /* #ifndef U_MAKE_IS_NMAKE */
 

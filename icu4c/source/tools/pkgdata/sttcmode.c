@@ -105,7 +105,7 @@ void pkg_sttc_writeReadme(struct UPKGOptions_ *o, const char *libName, UErrorCod
 }
 
 
-#ifndef WIN32
+#ifndef U_MAKE_IS_NMAKE
 
 
 #include "makefile.h"
