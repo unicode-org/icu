@@ -111,6 +111,18 @@ UnicodeString::UnicodeString(UChar ch)
   fStackBuffer[0] = ch;
 }
 
+UnicodeString::UnicodeString(UChar32 ch, ESignature)
+  : fArray(fStackBuffer),
+    fLength(1),
+    fCapacity(US_STACKBUF_SIZE),
+    fHashCode(kInvalidHashCode),
+    fFlags(kShortString)
+{
+  UTextOffset i = 0;
+  UTF_APPEND_CHAR(fStackBuffer, i, US_STACKBUF_SIZE, ch);
+  fLength = i;
+}
+
 UnicodeString::UnicodeString(const UChar *text)
   : fArray(fStackBuffer),
     fLength(0),
@@ -607,11 +619,11 @@ UnicodeString::findAndReplace(UTextOffset start,
   oldText.pinIndices(oldStart, oldLength);
   newText.pinIndices(newStart, newLength);
 
-  if(oldLength == 0 || newLength == 0) {
+  if(oldLength == 0) {
     return *this;
   }
 
-  while(length >= oldLength) {
+  while(length > 0 && length >= oldLength) {
     UTextOffset pos = indexOf(oldText, oldStart, oldLength, start, length);
     if(pos < 0) {
       // no more oldText's here: done
@@ -987,6 +999,90 @@ UnicodeString::doReverse(UTextOffset start,
   return *this;
 }
 
+bool_t 
+UnicodeString::padLeading(int32_t targetLength,
+                          UChar padChar)
+{
+  if(isBogus() || fLength >= targetLength || !cloneArrayIfNeeded(targetLength)) {
+    return FALSE;
+  } else {
+    // move contents up by padding width
+    int32_t start = targetLength - fLength;
+    us_arrayCopy(fArray, 0, fArray, start, fLength);
+
+    // fill in padding character
+    while(--start >= 0) {
+      fArray[start] = padChar;
+    }
+    fLength = targetLength;
+    return TRUE;
+  }
+}
+
+bool_t 
+UnicodeString::padTrailing(int32_t targetLength,
+                           UChar padChar)
+{
+  if(isBogus() || fLength >= targetLength || !cloneArrayIfNeeded(targetLength)) {
+    return FALSE;
+  } else {
+    // fill in padding character
+    int32_t length = targetLength;
+    while(--length >= fLength) {
+      fArray[length] = padChar;
+    }
+    fLength = targetLength;
+    return TRUE;
+  }
+}
+
+UnicodeString& 
+UnicodeString::trim()
+{
+  if(isBogus()) {
+    return *this;
+  }
+
+  UChar32 c;
+  UTextOffset i = fLength, length;
+
+  // first cut off trailing white space
+  for(;;) {
+    length = i;
+    if(i <= 0) {
+      break;
+    }
+    UTF_PREV_CHAR(fArray, i, c);
+    if(!(c == 0x20 || Unicode::isWhitespace(c))) {
+      break;
+    }
+  }
+  if(length < fLength) {
+    fLength = length;
+  }
+
+  // find leading white space
+  UTextOffset start;
+  i = 0;
+  for(;;) {
+    start = i;
+    if(i >= length) {
+      break;
+    }
+    UTF_NEXT_CHAR(fArray, i, length, c);
+    if(!(c == 0x20 || Unicode::isWhitespace(c))) {
+      break;
+    }
+  }
+
+  // move string forward over leading white space
+  if(start > 0) {
+    doReplace(0, start, 0, 0, 0);
+  }
+
+  return *this;
+}
+
 //========================================
 // Hashing
 //========================================
@@ -1206,18 +1302,6 @@ UnicodeString::getUChars() const {
 //========================================
 // Miscellaneous
 //========================================
-void
-UnicodeString::pinIndices(UTextOffset& start,
-              int32_t& length) const
-{
-  // pin indices
-  if(length < 0 || start < 0) {
-    start = length = 0;
-  } else if(length > (fLength - start)) {
-    length = (fLength - start);
-  }
-}
-
 bool_t
 UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
                                   int32_t growCapacity,
@@ -1340,6 +1424,8 @@ void
 UnicodeString::releaseDefaultConverter(UConverter *converter)
 {
   if(fgDefaultConverter == 0) {
+    ucnv_reset(converter);
+
     Mutex lock;
 
     if(fgDefaultConverter == 0) {
