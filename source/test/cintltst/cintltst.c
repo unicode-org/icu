@@ -101,13 +101,6 @@ int main(int argc, const char* const argv[])
 
     fprintf(stdout, "Default locale for this run is %s\n", uloc_getDefault());
 
-    /* ### TODO: remove when the new normalization implementation is finished */
-    if(argc>1 && argv[1][0]=='N') {
-        unorm_setNewImplementation((UBool)(argv[1][1]=='+'));
-        ++argv;
-        --argc;
-    }
-
     root = NULL;
     addAllTests(&root);
     nerrors = processArgs(root, argc, argv);
