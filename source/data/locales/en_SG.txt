@@ -1,11 +1,11 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 1997-2002, International Business Machines
+// *   Copyright (C) 1997-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 //
-// $Revision: 1.5 $ 
+// $Revision: 1.6 $ 
 // $Tag: 
 // Singapore English locale: Data By Syn Wee Quek
 
