@@ -69,8 +69,9 @@
  * uint16_t mappingTable[];                     -- Contains the sequecence of code units that the code point maps to 
  *                                                 size in bytes = indexes[_SPREP_INDEX_MAPPING_DATA_SIZE]
  *
- * The indexes array also contains the following values:
- *
+ * The indexes array contains the following values:
+ *  indexes[_SPREP_INDEX_TRIE_SIZE]                  -- The size of the StringPrep trie in bytes
+ *  indexes[_SPREP_INDEX_MAPPING_DATA_SIZE]          -- The size of the mappingTable in bytes 
  *  indexes[_SPREP_NORM_CORRECTNS_LAST_UNI_VERSION]  -- The index of Unicode version of last entry in NormalizationCorrections.txt 
  *  indexes[_SPREP_ONE_UCHAR_MAPPING_INDEX_START]    -- The starting index of 1 UChar  mapping index in the mapping table 
  *  indexes[_SPREP_TWO_UCHARS_MAPPING_INDEX_START]   -- The starting index of 2 UChars mapping index in the mapping table
@@ -86,20 +87,20 @@
  *
  * - structure of data words from the trie
  * 
- *  i)  A value greater than _SPREP_TYPE_THRESHOLD (0xFFF0) represents the type associated with the code point
- *      if(trieWord > _SPREP_TYPE_THRESHOLD){
+ *  i)  A value greater than or equal to _SPREP_TYPE_THRESHOLD (0xFFF0) 
+ *      represents the type associated with the code point
+ *      if(trieWord >= _SPREP_TYPE_THRESHOLD){
  *          type = trieWord - 0xFFF0;
  *      }
  *      The type can be :
- *          USPREP_UNASSIGNED           
- *          USPREP_PROHIBITED           
- *          USPREP_LABEL_SEPARATOR      
- *          USPREP_DELETE  
- * 
+ *             USPREP_UNASSIGNED                     
+ *             USPREP_PROHIBITED       
+ *             USPREP_DELETE     
+ *     
  *  ii) A value less than _SPREP_TYPE_THRESHOLD means the type is USPREP_MAP and
  *      contains distribution described below
  *      
- *      0       -  ON : The code point is prohibited (USPREP_PROHIBITED)
+ *      0       -  ON : The code point is prohibited (USPREP_PROHIBITED). This is to allow for codepoint that are both prohibited and mapped.
  *      1       -  ON : The value in the next 14 bits is an index into the mapping table
  *                 OFF: The value in the next 14 bits is an delta value from the code point
  *      2..15   -  Contains data as described by bit 1. If all bits are set 
