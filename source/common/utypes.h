@@ -119,8 +119,12 @@ typedef uint16_t UChar;
 
 #ifdef XP_CPLUSPLUS
 #   define U_CFUNC extern "C"
+#   define U_CDECL_BEGIN extern "C" {
+#   define U_CDECL_END   }
 #else
 #   define U_CFUNC
+#   define U_CDECL_BEGIN
+#   define U_CDECL_END
 #endif
 #define U_CAPI U_CFUNC U_EXPORT
 
