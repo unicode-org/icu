@@ -1,4 +1,13 @@
-﻿# Preliminary transliteration table for Hebrew
+﻿#--------------------------------------------------------------------
+# Copyright (c) 1999-2001, International Business Machines
+# Corporation and others. All Rights Reserved.
+#--------------------------------------------------------------------
+# $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Hebrew_Latin.txt,v $
+# $Date: 2002/07/14 21:59:17 $
+# $Revision: 1.2 $
+#--------------------------------------------------------------------
+
+# Transliteration table for Hebrew
 # Based on the UNGEGN table at:
 #   http://www.eki.ee/wgrs/rom1_he.pdf
 #
@@ -22,9 +31,13 @@
 :: (lower);
 $letterAfter = [:M:]* [:L:] ;
 
+# move longer items here to avoid masking
+
 ח <> ẖ ;
 צ <> ẕ } $letterAfter;
 ץ <> ẕ ;
+ש <> ş ;
+ת <> ţ ;
 
 א <> ʼ ;
 ב <> b ;
@@ -48,25 +61,24 @@ $letterAfter = [:M:]* [:L:] ;
 ף <> p ;
 ק <> q ;
 ר <> r ;
-ש <> ş ;
-ת <> ţ ;
 
 ּ <> ̇ ; # dagesh just goes to overdot for now
 ׁ <> ̌ ; # shin dot -> sh
 ׂ <> ̂ ; # sin dot -> s
 
 # points
-ַ <> a ;
-ֲ <> à ;
-ָ <> á ;
-ֶ <> e ;
-ֱ <> è ;
-ֵ <> é ;
-ְ <> ê ;
+ֲ <> à ;
+ָ <> á ;
+ֱ <> è ;
+ֵ <> é ;
+ְ <> ê ;
 ִ <> i ;
-ֳ <> o ;
-ֹ <> ò ;
+ֹ <> ò ;
 ֻ <> u ;
+
+ַ <> a ;
+ֶ <> e ;
+ֳ <> o ;
 
 # fallbacks
 ק < c ;

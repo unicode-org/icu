@@ -1,8 +1,33 @@
+﻿#--------------------------------------------------------------------
+# Copyright (c) 1999-2001, International Business Machines
+# Corporation and others. All Rights Reserved.
+#--------------------------------------------------------------------
+# $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Han_Latin.txt,v $
+# $Date: 2002/07/14 21:59:15 $
+# $Revision: 1.2 $
+#--------------------------------------------------------------------
+
 # Convert CJK characters
 # Note: adds space between them and letters.
 { ([:Han:]) } [:L:] > | $1 ' ';
 [\.\,\?\!．，？！[:Pe:][:Pf:]] { } [:L:] > ' ';
 [:L:] { } [[:Han:][:Ps:][:Pi:]]> ' ';
+𢘸 > jiàng;
+𢥞 > chong;
+𨺹 > jiao;
+𦉆 > chá;
+𣎴 > dŭn;
+𡽱 > jiè;
+𢦏 > zai;
+𠀍 > shì;
+𠀉 > qiu;
+𠀅 > hài;
+𥜌 > ăo;
+𡜱 > jì;
+𠼻 > ji;
+𠁥 > gă;
+𠀁 > qi;
+𠀀 > ha;
 床 <> chuáng;
 庄 <> zhuang;
 双 <> shuang;
@@ -1238,8 +1263,6 @@
 㑋 > jiòng;
 㐼 > chèng;
 㐺 > zhòng;
-𢘸 > jiàng;
-𢥞 > chong;
 念 <> niàn;
 了 <> liăo;
 短 <> duăn;
@@ -8017,7 +8040,6 @@
 㐩 > xíng;
 㐜 > chóu;
 㐁 > tiăn;
-𨺹 > jiao;
 是 <> shì;
 石 <> shí;
 述 <> shù;
@@ -18042,13 +18064,6 @@
 㐤 > qiú;
 㐡 > nuò;
 㐆 > yĭn;
-𦉆 > chá;
-𣎴 > dŭn;
-𡽱 > jiè;
-𢦏 > zai;
-𠀍 > shì;
-𠀉 > qiu;
-𠀅 > hài;
 的 <> dē;
 迷 <> mí;
 一 <> yi;
@@ -25214,12 +25229,6 @@
 㐖 > yè;
 㐌 > sì;
 㐅 > wŭ;
-𥜌 > ăo;
-𡜱 > jì;
-𠼻 > ji;
-𠁥 > gă;
-𠀁 > qi;
-𠀀 > ha;
 訛 <> é;
 阿 <> a;
 啊 <> ā;
@@ -25387,4 +25396,31 @@
 㔩 > è;
 㓵 > è;
 。 <> '.';
-:: fullwidth-halfwidth;
+
+# fallbacks
+
+| yi < i;
+| wu < u;
+| bi < b;
+| ci < c;
+| di < d;
+| fu < f;
+| gu < g;
+| he < h;
+| ji < j;
+| ku < k;
+| li < l;
+| mi < m;
+| pi < p;
+| qi < q;
+| l < r;
+| si < s;
+| ti < t;
+| f < v;
+| wa < w;
+| xi < x;
+| yi < y;
+| zi < z;
+
+:: fullwidth-halfwidth ();
+:: (lower) ;
