@@ -63,16 +63,6 @@ enum {
 };
 
 inline UBool
-isJamo1(UChar c) {
-    return (uint16_t)(c-JAMO_L_BASE)<JAMO_L_COUNT;
-}
-
-inline UBool
-isJamo3(UChar c) {
-    return (uint16_t)(c-JAMO_T_BASE)<JAMO_T_COUNT;
-}
-
-inline UBool
 isHangulWithoutJamo3(UChar c) {
     c-=HANGUL_BASE;
     return c<HANGUL_COUNT && c%JAMO_T_COUNT==0;
@@ -109,8 +99,8 @@ static const uint16_t *indexes=NULL,
 static UVersionInfo dataVersion={ 3, 1, 0, 0 };
 
 static UBool U_CALLCONV
-isAcceptable(void *context,
-             const char *type, const char *name,
+isAcceptable(void * /* context */,
+             const char * /* type */, const char * /* name */,
              const UDataInfo *pInfo) {
     if(
         pInfo->size>=20 &&
@@ -551,9 +541,7 @@ _insertOrdered(const UChar *start, UChar *current, UChar *p,
 /* quick check functions ---------------------------------------------------- */
 
 static UBool
-unorm_checkFCD(const UChar *src,
-               int32_t srcLength, 
-               UErrorCode *pErrorCode) {
+unorm_checkFCD(const UChar *src, int32_t srcLength) {
     const UChar *limit;
     UChar c, c2;
     uint16_t fcd16;
@@ -681,7 +669,7 @@ _unorm_quickCheck(const UChar *src,
         qcMask=_NORM_QC_NFKD;
         break;
     case UNORM_FCD:
-        return unorm_checkFCD(src, srcLength, pErrorCode) ? UNORM_YES : UNORM_NO;
+        return unorm_checkFCD(src, srcLength) ? UNORM_YES : UNORM_NO;
     default:
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return UNORM_MAYBE;
@@ -1058,8 +1046,7 @@ _findSafeFCD(const UChar *src, const UChar *limit, uint16_t fcd16) {
 static uint8_t
 _decomposeFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
               UChar *dest, int32_t &destIndex, int32_t &destCapacity,
-              UBool canGrow, GrowBuffer *growBuffer, void *context,
-              UErrorCode *pErrorCode) {
+              UBool canGrow, GrowBuffer *growBuffer, void *context) {
     UChar *reorderStart;
     const UChar *p;
     uint32_t norm32;
@@ -1331,8 +1318,7 @@ unorm_makeFCD(UChar *dest, int32_t destCapacity,
              */
             prevCC=_decomposeFCD(decompStart, src, limit,
                                  dest, destIndex, destCapacity,
-                                 canGrow, growBuffer, context,
-                                 pErrorCode);
+                                 canGrow, growBuffer, context);
             decompStart=src;
         }
     }
@@ -2002,7 +1988,7 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
 U_CFUNC int32_t
 unorm_compose(UChar *dest, int32_t destCapacity,
               const UChar *src, int32_t srcLength,
-              UBool compat, UBool ignoreHangul,
+              UBool compat, UBool /* ### TODO: need to do this? -- ignoreHangul -- ### */,
               GrowBuffer *growBuffer, void *context,
               UErrorCode *pErrorCode) {
     UChar stackBuffer[_STACK_BUFFER_CAPACITY];
