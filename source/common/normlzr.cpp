@@ -616,7 +616,7 @@ void Normalizer::explode(UnicodeString& target, uint16_t index) {
 
 UChar Normalizer::pairExplode(UnicodeString& target, uint16_t action) {
     uint16_t index = ComposeData::actionIndex[action - ComposeData::MAX_COMPOSED];
-    explode(target, index + 1);
+    explode(target, (uint16_t)(index + 1));
     return ComposeData::replace[index];   // New base char
 }
 
