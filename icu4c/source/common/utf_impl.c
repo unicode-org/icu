@@ -83,7 +83,7 @@ utf8_errorValue[6]={
 };
 
 U_CAPI UChar32 U_EXPORT2
-utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict) {
+utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict, UBool *pIsError) {
     int32_t i=*pi;
     uint8_t count=UTF8_COUNT_TRAIL_BYTES(c);
     if((i)+count<=(length)) {
@@ -118,6 +118,9 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
             illegal|=(trail&0xc0)^0x80;
             break;
         case 0:
+            if(pIsError!=NULL) {
+                *pIsError=TRUE;
+            }
             return UTF8_ERROR_VALUE_1;
         /* no default branch to optimize switch()  - all values are covered */
         }
@@ -143,9 +146,20 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
                 --count;
             }
             c=utf8_errorValue[errorCount-count];
+            if(pIsError!=NULL) {
+                *pIsError=TRUE;
+            }
         } else if((strict) && UTF_IS_UNICODE_NONCHAR(c)) {
             /* strict: forbid non-characters like U+fffe */
             c=utf8_errorValue[count];
+            if(pIsError!=NULL) {
+                *pIsError=TRUE;
+            }
+        } else {
+            /* good result */
+            if(pIsError!=NULL) {
+                *pIsError=FALSE;
+            }
         }
     } else /* too few bytes left */ {
         /* error handling */
@@ -155,6 +169,9 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
             ++(i);
         }
         c=utf8_errorValue[i-i0];
+        if(pIsError!=NULL) {
+            *pIsError=TRUE;
+        }
     }
     *pi=i;
     return c;
