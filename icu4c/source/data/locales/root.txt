@@ -352,7 +352,6 @@ root {
         RWF:intvector { 0, 0 } // Rwanda Franc: RWANDA (RW)
         TND:intvector { 3, 0 } // Tunisian Dinar: TUNISIA (TN)
         TRL:intvector { 0, 0 } // Turkish Lira: TURKEY (TR)
-        TTD:intvector { 0, 0 } // Trinidad and Tobago Dollar: TRINIDAD AND TOBAGO (TT)
         VUV:intvector { 0, 0 } // Vatu: VANUATU (VU)
         XAF:intvector { 0, 0 } // CFA Franc BEAC: CAMEROON (CM), CENTRAL AFRICAN REPUBLIC (CF), CHAD (TD), CONGO (CG), EQUATORIAL GUINEA (GQ), GABON (GA)
         XOF:intvector { 0, 0 } // CFA Franc BCEAO: BENIN (BJ), BURKINA FASO (BF), COTE D'IVOIRE (CI), GUINEA-BISSAU (GW), MALI (ML), NIGER (NE), SENEGAL (SN), TOGO (TG)
@@ -423,7 +422,7 @@ root {
         DM { "XCD" } // DOMINICA: East Caribbean Dollar
         DO { "DOP" } // DOMINICAN REPUBLIC: Dominican Peso
         DZ { "DZD" } // ALGERIA: Algerian Dinar
-        EC { "ECS" } // ECUADOR: Sucre
+        EC { "USD" } // ECUADOR: US Dollar
         EE { "EEK" } // ESTONIA: Kroon
         EG { "EGP" } // EGYPT: Egyptian Pound
         EH { "MAD" } // WESTERN SAHARA: Moroccan Dirham
