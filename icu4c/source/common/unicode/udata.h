@@ -305,7 +305,7 @@ udata_setCommonData(const void *data, UErrorCode *err);
  *             to (open) this data.
  * @param data pointer to the data
  * @param err outgoing error status <code>U_USING_DEFAULT_ERROR, U_UNSUPPORTED_ERROR</code>
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI void U_EXPORT2
 udata_setAppData(const char *path, const void *data, UErrorCode *err);
