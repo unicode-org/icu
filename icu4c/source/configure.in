@@ -189,6 +189,7 @@ if test x$U_IOSTREAM_SOURCE = x
 then
     AC_LANG_SAVE
     AC_LANG_CPLUSPLUS
+    U_IOSTREAM_SOURCE=0
     AC_CHECK_HEADER(iostream)
     if test $ac_cv_header_iostream = yes
     then
@@ -203,8 +204,6 @@ then
             if test $ac_cv_iostream_ok = yes
             then
                 U_IOSTREAM_SOURCE=198506
-            else
-                U_IOSTREAM_SOURCE=0
             fi
         fi
     fi
