@@ -12,6 +12,10 @@ ms_BN{
             "$",
             "BND",
         }
+        USD{
+            "US$",
+            "USD",
+        }
     }
     NumberElements{
         ",",

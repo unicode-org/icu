@@ -8,12 +8,4 @@
 // ***************************************************************************
 fr_FR{
     Version{"1.2"}
-    calendar{
-        gregorian{
-            DateTimeElements:intvector{
-                2,
-                1,
-            }
-        }
-    }
 }

@@ -228,7 +228,6 @@ tr{
         TR{"Türkiye"}
         TT{"Trinidad ve Tobago"}
         TV{"Tuvalu"}
-        TW{"Tayvan, Çin Bölgesi"}
         TZ{"Tanzanya"}
         UA{"Ukrayna"}
         UG{"Uganda"}

@@ -12,6 +12,10 @@ en_HK{
             "$",
             "Hong Kong Dollar",
         }
+        USD{
+            "US$",
+            "USD",
+        }
     }
     NumberPatterns{
         "#,##0.###;-#,##0.###",

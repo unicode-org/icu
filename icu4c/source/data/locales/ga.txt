@@ -101,7 +101,6 @@ ga{
         GU{"Guam"}
         GW{"An Ghuine-Bhissau"}
         GY{"An Ghuáin"}
-        HK{"Hong Cong"}
         HM{"Oileán Heard agus Oileáin McDonald"}
         HN{"Hondúras"}
         HR{"An Chróit"}
@@ -150,7 +149,6 @@ ga{
         ML{"Mailí"}
         MM{"Maenmar"}
         MN{"An Mhongóil"}
-        MO{"Macao"}
         MP{"Oileáin Mariana Thuaidh"}
         MQ{"Martinique"}
         MR{"An Mharatáin"}
@@ -1980,7 +1978,7 @@ ga{
             "Béal Feirste",
         }
         {
-            "GMT",
+            "Etc/GMT",
             "Meán-Am Greenwich",
             "MAG",
             "Meán-Am Greenwich",

@@ -12,6 +12,10 @@ en_SG{
             "$",
             "Singapore Dollar",
         }
+        USD{
+            "US$",
+            "USD",
+        }
     }
     Version{"1.2"}
     calendar{
@@ -31,7 +35,7 @@ en_SG{
     }
     zoneStrings{
         {
-            "SST",
+            "Pacific/Guadalcanal",
             "Singapore Standard Time",
             "SST",
             "Singapore Standard Time",

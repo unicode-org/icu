@@ -228,7 +228,6 @@ lv{
         TR{"Turcija"}
         TT{"Trinidāda un Tobāgo"}
         TV{"Tuvalu"}
-        TW{"Taivāna, Ķīnas province"}
         TZ{"Tanzānija"}
         UA{"Ukraina"}
         UG{"Uganda"}

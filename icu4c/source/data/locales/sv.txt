@@ -2363,28 +2363,12 @@ sv{
     }
     zoneStrings{
         {
-            "PST",
-            "Pacific, normaltid",
-            "PST",
-            "Pacific, sommartid",
-            "PDT",
-            "Los Angeles",
-        }
-        {
             "America/Los_Angeles",
             "Pacific, normaltid",
             "PST",
             "Pacific, sommartid",
             "PDT",
             "Los Angeles",
-        }
-        {
-            "MST",
-            "Mountain, normaltid",
-            "MST",
-            "Mountain, sommartid",
-            "MDT",
-            "Denver",
         }
         {
             "America/Denver",
@@ -2395,28 +2379,12 @@ sv{
             "Denver",
         }
         {
-            "PNT",
-            "Mountain, normaltid",
-            "MST",
-            "Mountain, sommartid",
-            "MST",
-            "Phoenix",
-        }
-        {
             "America/Phoenix",
             "Mountain, normaltid",
             "MST",
             "Mountain, sommartid",
             "MST",
             "Phoenix",
-        }
-        {
-            "CST",
-            "Central, normaltid",
-            "CST",
-            "Central, sommartid",
-            "CDT",
-            "Chicago",
         }
         {
             "America/Chicago",
@@ -2427,28 +2395,12 @@ sv{
             "Chicago",
         }
         {
-            "EST",
-            "Eastern, normaltid",
-            "EST",
-            "Eastern, sommartid",
-            "EDT",
-            "New York",
-        }
-        {
             "America/New_York",
             "Eastern, normaltid",
             "EST",
             "Eastern, sommartid",
             "EDT",
             "New York",
-        }
-        {
-            "IET",
-            "Eastern, normaltid",
-            "EST",
-            "Eastern, normaltid",
-            "EST",
-            "Indianapolis",
         }
         {
             "America/Indianapolis",
@@ -2459,28 +2411,12 @@ sv{
             "Indianapolis",
         }
         {
-            "HST",
-            "Hawaii, normaltid",
-            "HST",
-            "Hawaii, normaltid",
-            "HST",
-            "Honolulu",
-        }
-        {
             "Pacific/Honolulu",
             "Hawaii, normaltid",
             "HST",
             "Hawaii, normaltid",
             "HST",
             "Honolulu",
-        }
-        {
-            "AST",
-            "Alaska, normaltid",
-            "AST",
-            "Alaska, sommartid",
-            "ADT",
-            "Anchorage",
         }
         {
             "America/Anchorage",
@@ -2499,28 +2435,12 @@ sv{
             "Halifax",
         }
         {
-            "CNT",
-            "Newfoundland, normaltid",
-            "CNT",
-            "Newfoundland, sommartid",
-            "CDT",
-            "St. Johns",
-        }
-        {
             "America/St_Johns",
             "Newfoundland, normaltid",
             "CNT",
             "Newfoundland, sommartid",
             "CDT",
             "St. Johns",
-        }
-        {
-            "ECT",
-            "Centraleuropa, normaltid",
-            "CET",
-            "Centraleuropa, sommartid",
-            "CEST",
-            "Paris",
         }
         {
             "Europe/Paris",
@@ -2531,7 +2451,7 @@ sv{
             "Paris",
         }
         {
-            "GMT",
+            "Etc/GMT",
             "Greenwichtid",
             "GMT",
             "Greenwichtid",
@@ -2555,14 +2475,6 @@ sv{
             "Jerusalem",
         }
         {
-            "JST",
-            "Japan, normaltid",
-            "JST",
-            "Japan, normaltid",
-            "JST",
-            "Tokyo",
-        }
-        {
             "Asia/Tokyo",
             "Japan, normaltid",
             "JST",
@@ -2577,14 +2489,6 @@ sv{
             "Östeuropa, sommartid",
             "EEST",
             "Bukarest",
-        }
-        {
-            "CTT",
-            "Kina, normaltid",
-            "CTT",
-            "Kina, normaltid",
-            "CDT",
-            "Shanghai",
         }
         {
             "Asia/Shanghai",
