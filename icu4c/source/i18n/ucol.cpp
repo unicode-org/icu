@@ -1257,18 +1257,19 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
           }
       }
 
+      uint32_t cp = 0;
+
       if(UTF_IS_FIRST_SURROGATE(ch)) {
         if( (((collationSource->flags & UCOL_ITER_HASLEN) == 0 ) || (collationSource->pos<collationSource->endp)) &&
           UTF_IS_SECOND_SURROGATE((nextChar=*collationSource->pos))) {
-          uint32_t cp = (((ch)<<10UL)+(nextChar)-((0xd800<<10UL)+0xdc00));
+          cp = (((ch)<<10UL)+(nextChar)-((0xd800<<10UL)+0xdc00));
           collationSource->pos++;
           if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
               return 0;  /* illegal code value, use completely ignoreable! */
           }
           /* This is a code point minus 0x10000, that's what algorithm requires */
-          order = 0xE0010303 | (cp & 0xFFE00) << 8;
-
-          *(collationSource->CEpos++) = 0x80200080 | (cp & 0x001FF) << 22;
+          //order = 0xE0010303 | (cp & 0xFFE00) << 8;
+          //*(collationSource->CEpos++) = 0x80200080 | (cp & 0x001FF) << 22;
         } else {
           return 0; /* completely ignorable */
         }
@@ -1277,10 +1278,50 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
         if(UTF_IS_SECOND_SURROGATE((ch)) || (ch & 0xFFFE) == 0xFFFE) {
           return 0; /* completely ignorable */
         }
+        cp = ch;
         /* Make up an artifical CE from code point as per UCA */
-        order = 0xD0800303 | (ch & 0xF000) << 12 | (ch & 0x0FE0) << 11;
-        *(collationSource->CEpos++) = 0x04000080 | (ch & 0x001F) << 27;
+        //order = 0xD0800303 | (ch & 0xF000) << 12 | (ch & 0x0FE0) << 11;
+        //*(collationSource->CEpos++) = 0x04000080 | (ch & 0x001F) << 27;
       }
+
+      int32_t HAN_START = 0x3400;
+      int32_t HAN_LIMIT = 0xA000;
+      int32_t SUPPLEMENTARY_COUNT = 0x100000;
+      int32_t BYTES_TO_AVOID = 3;
+      int32_t OTHER_COUNT = 256 - BYTES_TO_AVOID;
+      int32_t LAST_COUNT = OTHER_COUNT / 2;
+      int32_t LAST_COUNT2 = (SUPPLEMENTARY_COUNT - 1) / (OTHER_COUNT * OTHER_COUNT) + 1; // last byte
+      int32_t HAN_SHIFT = LAST_COUNT * OTHER_COUNT - HAN_START;
+      int32_t BOUNDARY = 2 * OTHER_COUNT * LAST_COUNT + HAN_START;
+      int32_t LAST2_MULTIPLIER = OTHER_COUNT / LAST_COUNT2;
+  
+      // we must skip all 00, 01, 02 bytes, so most bytes have 253 values
+      // we must leave a gap of 01 between all values of the last byte, so the last byte has 126 values (3 byte case)
+      // we shift so that HAN all has the same first primary, for compression.
+      // for the 4 byte case, we make the gap as large as we can fit.
+      // Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
+      // Four byte forms (most supplementaries) are EF xx xx xx (with a gap of LAST2_MULTIPLIER == 14)
+      
+      int32_t last0 = cp - BOUNDARY;
+      uint32_t r = 0;
+
+      if (last0 < 0) {
+          cp += HAN_SHIFT; // shift so HAN shares single block
+          int32_t last1 = cp / LAST_COUNT;
+          last0 = cp % LAST_COUNT;
+          int32_t last2 = last1 / OTHER_COUNT;
+          last1 %= OTHER_COUNT;
+          r = 0xEC030300 + (last2 << 24) + (last1 << 16) + (last0 << 9);
+      } else {
+          int32_t last1 = last0 / LAST_COUNT2;
+          last0 %= LAST_COUNT2;
+          int32_t last2 = last1 / OTHER_COUNT;
+          last1 %= OTHER_COUNT;
+          r = 0xEF030303 + (last2 << 16) + (last1 << 8) + (last0 * LAST2_MULTIPLIER);
+      }
+      order = (r & 0xFFFF0000) | 0x00000303;
+      *(collationSource->CEpos++) = ((r & 0x0000FFFF)<<16) | 0x00000080;
+
     }
     return order; /* return the CE */
 }
@@ -2742,12 +2783,12 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     UBool notIsContinuation = FALSE;
 
     uint32_t count2 = 0, count3 = 0;
+    uint8_t leadPrimary = 0;
 
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
 
             order = ucol_IGetNextCE(coll, &s, status);
-            // UCOL_GETNEXTCE(order, coll, s, status);
 
             if(isCEIgnorable(order)) {
               continue;
@@ -2772,20 +2813,28 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
             primary2 = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
             primary1 = (uint8_t)(order >>= 8);
 
-            /* In the code below, every increase in any of buffers is followed by the increase to  */
-            /* sortKeySize - this might look tedious, but it is needed so that we can find out if  */
-            /* we're using too much space and need to reallocate the primary buffer or easily bail */
-            /* out to ucol_getSortKeySizeNew.                                                      */
-
             /* Note: This code assumes that the table is well built i.e. not having 0 bytes where they are not supposed to be. */
             /* Usually, we'll have non-zero primary1 & primary2, except in cases of LatinOne and friends, when primary2 will   */
             /* be zero with non zero primary1. primary3 is different than 0 only for long primaries - see above.               */
+#ifdef UCOL_PRIM_COMPRESSION
+            if(primary1 != UCOL_IGNORABLE) {
+              if(notIsContinuation) {
+                *primaries++ = primary1; /* scriptOrder[primary1]; */ /* This is the script ordering thingie */
+              } else {
+                *primaries++ = primary1; /* scriptOrder[primary1]; */ /* This is the script ordering thingie */
+              }
+              if(primary2 != UCOL_IGNORABLE) {
+                *primaries++ = primary2; /* second part */
+              }
+            }
+#else
             if(primary1 != UCOL_IGNORABLE) {
               *primaries++ = primary1; /* scriptOrder[primary1]; */ /* This is the script ordering thingie */
               if(primary2 != UCOL_IGNORABLE) {
                 *primaries++ = primary2; /* second part */
               }
             }
+#endif
 
             if(secondary > 0) { /* I think that != 0 test should be != IGNORABLE */
               /* This is compression code. */
