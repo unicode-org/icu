@@ -24,7 +24,7 @@
 				InlineFunctionExpansion="2"
 				ImproveFloatingPointConsistency="TRUE"
 				OptimizeForProcessor="2"
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_USRDLL;U_COMMON_IMPLEMENTATION"
+				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;U_COMMON_IMPLEMENTATION"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -88,7 +88,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				OptimizeForProcessor="2"
-				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_USRDLL;U_COMMON_IMPLEMENTATION;RBBI_DEBUG"
+				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;U_COMMON_IMPLEMENTATION;RBBI_DEBUG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				DisableLanguageExtensions="TRUE"
@@ -167,6 +167,12 @@
 "
 						Outputs="..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ubidi_props.c">
+			</File>
+			<File
+				RelativePath=".\ubidi_props.h">
 			</File>
 			<File
 				RelativePath=".\ubidiimp.h">
