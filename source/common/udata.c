@@ -639,7 +639,7 @@ findBasename(const char *path) {
  *----------------------------------------------------------------------*/
 
 typedef struct DataCacheElement {
-    char          *path;
+    char          *name;
     UDataMemory    item;
 } DataCacheElement;
 
@@ -654,7 +654,7 @@ static UHashtable *gHashTable = NULL;
 static void  U_CALLCONV DataCacheElement_deleter(void *pDCEl) {
     DataCacheElement *p = (DataCacheElement *)pDCEl;
     udata_close(&p->item);             /* unmaps storage */
-    uprv_free(p->path);                /* delete the hash key string. */
+    uprv_free(p->name);                /* delete the hash key string. */
     uprv_free(pDCEl);                  /* delete 'this'          */
 }
 
@@ -689,10 +689,12 @@ static UDataMemory *udata_findCachedData(const char *path)
     UHashtable        *htable;
     UDataMemory       *retVal = NULL;
     DataCacheElement  *el;
+    const char        *baseName;
 
+    baseName = findBasename(path);   // Cache remembers only the base name, not the full path.
     htable = udata_getHashTable();
     umtx_lock(NULL);
-    el = (DataCacheElement *)uhash_get(htable, path);
+    el = (DataCacheElement *)uhash_get(htable, baseName);
     umtx_unlock(NULL);
     if (el != NULL) {
         retVal = &el->item;
@@ -703,7 +705,8 @@ static UDataMemory *udata_findCachedData(const char *path)
 
 static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UErrorCode *pErr) {
     DataCacheElement *newElement;
-    int               pathLen;
+    const char       *baseName;
+    int               nameLen;
     UHashtable       *htable;
     UDataMemory      *oldValue = NULL;
 
@@ -721,13 +724,15 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
     }
     UDataMemory_init(&newElement->item);         /*Need separte init + copy to get flags right. */
     UDatamemory_assign(&newElement->item, item);  /*  They're not all copied.                    */
-    pathLen = uprv_strlen(path);
-    newElement->path = uprv_malloc(pathLen+1);
-    if (newElement->path == NULL) {
+
+    baseName = findBasename(path);
+    nameLen = uprv_strlen(baseName);
+    newElement->name = uprv_malloc(nameLen+1);
+    if (newElement->name == NULL) {
         *pErr = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    uprv_strcpy(newElement->path, path);
+    uprv_strcpy(newElement->name, baseName);
 
     /* Stick the new DataCacheElement into the hash table.
     */
@@ -739,14 +744,14 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
     else {
         uhash_put(
             htable,
-            newElement->path,               /* Key   */
+            newElement->name,               /* Key   */
             newElement,                     /* Value */
             pErr);
     }
     umtx_unlock(NULL);
 
     if (*pErr == U_USING_DEFAULT_WARNING || U_FAILURE(*pErr)) {
-        uprv_free(newElement->path);
+        uprv_free(newElement->name);
         uprv_free(newElement);
         return oldValue;
     }
