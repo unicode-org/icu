@@ -121,11 +121,12 @@ $SY $CM+;
 
 #  
 #  Rule LB 3
+$LB3Breaks = [$BK $CR $LF $NL];
 $LB3NonBreaks = [^$BK $CR $LF $NL];               
 $LB5NonBreaks = [[$LB3NonBreaks] - [$ZW]];
 
-$LB3NonBreaks?     ($BK | $CR | $LF | $NL){100};   
-$LB5NonBreaks $CM* ($BK | $CR | $LF | $NL){100};
+$LB3NonBreaks?     $LB3Breaks {100};   
+$LB5NonBreaks $CM* $LB3Breaks {100};
 $CR $LF {100};
 
 # LB 4         x SP
@@ -134,7 +135,7 @@ $LB3NonBreaks      [$SP $ZW];
 $LB5NonBreaks $CM* [$SP $ZW];
 
 # LB 5         Break after zero width space
-
+$LB5Breaks = [$LB3Breaks $ZW];
 
 # LB 7     Combining marks.  TODO:  get it right!
 #                                   $SP $CM needs to behave like $ID.
@@ -248,8 +249,8 @@ $CM+ $SY;
 
 # LB 3
 
-($BK | $CR | $LF | $NL) $LB3NonBreaks;   
-($BK | $CR | $LF | $NL) $CM* $LB5NonBreaks;
+$LB3Breaks $LB3NonBreaks;   
+$LB3Breaks $CM* $LB5NonBreaks;
 $LF $CR;
 
 # LB 4         x SP
@@ -303,14 +304,14 @@ $BackLB14CanBreakAfter = ($CM* [$LB14NonBreaks - $CM]) | ($CM+ $SP);
 
 # LB 15
 $CM* ($BA | $HY | $NS) $BackLB14CanBreakAfter;   
-($CM* ($BA | $HY | $NS))+ $CM+ / [$BK $CR $LF $NL $ZW];   
+($CM* ($BA | $HY | $NS))+ $CM+ / $LB5Breaks;   
 [$CR $LF $BK $NL $ZW] $CM* $BB;
 $CM* [^$CB $CR $LF $BK $NL $ZW] $CM* $BB;    
 
 # LB 16
 $CM* $IN $CM* $ALPlus;
 # by rule 7c, any otherwise unattached CM behaves as AL
-$CM* $IN $CM+ / [$BK $CR $LF $NL $ZW]; 
+$CM* $IN $CM+ / $LB5Breaks; 
 
 $CM* $IN $CM* ($ID | $CM $SP); 
 $CM* $IN $CM* $IN;
@@ -319,17 +320,17 @@ $CM* $IN $CM* $NU;
 # $LB 17
 $CM* $PO $CM* ($ID | $CM $SP);
 $CM* $NU ($CM* $ALPlus)+; # includes $LB19
-$CM* $NU $CM+ / [$BK $CR $LF $NL $ZW];        # Rule 7c
+$CM* $NU $CM+ / $LB5Breaks;        # Rule 7c
 
 $CM* $ALPlus $CM* $NU;
 
 # LB 18
-($CM* $PO)? ($CM* $CL)? ($CM* $NU | $CM* $IS)* $CM* $NU ($CM* $OP | $CM* $HY)? ($CM* $PR)?;
+($CM* $PO)? ($CM* $CL)? ($CM* ($NU | $IS))* $CM* $NU ($CM* ($OP | $HY))? ($CM* $PR)?;
 
 # LB 19
 $CM* $ALPlus $CM* $ALPlus;
 # The $CM* is from rule 7C, and unattached CM is treated as AL
-$CM* $ALPlus $CM+ / [$BK $CR $LF $NL $ZW];  
+$CM* $ALPlus $CM+ / $LB5Breaks;  
 
 ## problem state table can't handle lookahead when it is at the
 ## start of the string, currently handled in the rbbi code
@@ -339,4 +340,40 @@ $CM* $ALPlus $CM+ / [$BK $CR $LF $NL $ZW];
 
 !!safe_reverse;
 
-$CM* [^$CM];
+# LB 7
+$CM* [^$CM $BK $CR $LF $NL $ZW $SP];
+$CM+ $SP / .;
+
+# LB 9
+$SP+ $CM* $OP;
+
+# LB 10
+$SP+ $CM* $QU;
+
+# LB 11
+$SP+ $CM* $CL;
+
+# LB 18
+$IS+ $CM* $NU;
+$CL $CM* ($NU | $IS);
+
+## -------------------------------------------------
+
+!!safe_forward;
+
+# LB 7
+[^$BK $CR $LF $NL $ZW $SP] $CM*;
+$SP $CM+ / .;
+
+# LB 9
+$OP $CM* $SP*;
+
+# LB 10
+$QU $CM* $SP*;
+
+# LB 11
+$CL $CM* $SP*;
+
+# LB 18
+$HY $CM* $NU; 
+$IS $CM* $CL;
