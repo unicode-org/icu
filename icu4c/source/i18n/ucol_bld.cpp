@@ -21,6 +21,7 @@
 
 static const InverseTableHeader* invUCA = NULL;
 
+U_CDECL_BEGIN
 static UBool U_CALLCONV
 isAcceptableInvUCA(void * /*context*/, 
              const char * /*type*/, const char * /*name*/,
@@ -43,6 +44,7 @@ isAcceptableInvUCA(void * /*context*/,
         return FALSE;
     }
 }
+U_CDECL_END
 
 int32_t ucol_inv_findCE(uint32_t CE, uint32_t SecondCE) {
   uint32_t bottom = 0, top = invUCA->tableSize;
