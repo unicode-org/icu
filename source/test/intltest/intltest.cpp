@@ -841,14 +841,18 @@ void IntlTest::LL_message( UnicodeString message, UBool newline )
 
     // stream out the indentation string first if necessary
     length = indent.extract(1, indent.length(), buffer, sizeof(buffer));
-    fwrite(buffer, sizeof(*buffer), length, testoutfp);
+    if (length > 0) {
+        fwrite(buffer, sizeof(*buffer), length, testoutfp);
+    }
 
     // replace each LineFeed by the indentation string
     message.findAndReplace(UnicodeString((UChar)'\n'), indent);
 
     // stream out the message
     length = message.extract(0, message.length(), buffer, sizeof(buffer));
-    fwrite(buffer, sizeof(*buffer), length, testoutfp);
+    if (length > 0) {
+        fwrite(buffer, sizeof(*buffer), length, testoutfp);
+    }
 
     if (newline) {
         char newLine = '\n';
