@@ -81,6 +81,11 @@ public:
                                  int32_t limit,
                                  UBool incremental);
 
+    /**
+     * UnicodeFunctor API.  Nothing to do.
+     */
+    virtual void setData(const TransliterationRuleData*) {}
+
 protected:
 
     UnicodeFilter();

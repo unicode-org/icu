@@ -126,6 +126,11 @@ class StringReplacer : public UnicodeFunctor, public UnicodeReplacer {
      */
     virtual UnicodeString& toReplacerPattern(UnicodeString& result,
                                              UBool escapeUnprintable) const;
+
+    /**
+     * UnicodeFunctor API
+     */
+    virtual void setData(const TransliterationRuleData*);
 };
 
 U_NAMESPACE_END

@@ -257,6 +257,22 @@ UnicodeString& StringReplacer::toReplacerPattern(UnicodeString& rule,
     return rule;
 }
 
+/**
+ * UnicodeFunctor API
+ */
+void StringReplacer::setData(const TransliterationRuleData* d) {
+    data = d;
+    int32_t i = 0;
+    while (i<output.length()) {
+        UChar32 c = output.char32At(i);
+        UnicodeFunctor* f = data->lookup(c);
+        if (f != NULL) {
+            f->setData(data);
+        }
+        i += UTF_CHAR_LENGTH(c);
+    }
+}
+
 U_NAMESPACE_END
 
 //eof

@@ -35,7 +35,7 @@ class Hashtable;
  * data structure handles this.  See the parsing code for more
  * details.
  */
-class TransliterationRuleData {
+class U_I18N_API TransliterationRuleData {
 
 public:
 
@@ -89,14 +89,22 @@ public:
     ~TransliterationRuleData();
 
     /**
+     * Given a stand-in character, return the UnicodeFunctor that it
+     * represents, or NULL if it doesn't represent anything.
+     */
+    UnicodeFunctor* lookup(UChar32 standIn) const;
+
+    /**
      * Given a stand-in character, return the UnicodeMatcher that it
-     * represents, or NULL.
+     * represents, or NULL if it doesn't represent anything or if it
+     * represents something that is not a matcher.
      */
     UnicodeMatcher* lookupMatcher(UChar32 standIn) const;
 
     /**
      * Given a stand-in character, return the UnicodeReplacer that it
-     * represents, or NULL.
+     * represents, or NULL if it doesn't represent anything or if it
+     * represents something that is not a replacer.
      */
     UnicodeReplacer* lookupReplacer(UChar32 standIn) const;
 };

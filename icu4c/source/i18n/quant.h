@@ -56,6 +56,11 @@ class Quantifier : public UnicodeFunctor, public UnicodeMatcher {
      */
     virtual UBool matchesIndexValue(uint8_t v) const;
 
+    /**
+     * UnicodeFunctor API
+     */
+    virtual void setData(const TransliterationRuleData*);
+
  private:
 
     static void appendNumber(UnicodeString& result, int32_t n);
