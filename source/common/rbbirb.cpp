@@ -30,11 +30,6 @@
 #include "rbbitblb.h"
 #include "rbbidata.h"
 
-#ifdef RBBI_DEBUG
-#include <stdio.h>
-#include <stdarg.h>
-#endif
-
 
 U_NAMESPACE_BEGIN
 
@@ -247,25 +242,5 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
     }
     return This;
 }
-
-
-
-//----------------------------------------------------------------------------
-//
-//   RBBIDebugPrintf    Printf equivalent, for debugging output.
-//                      Conditional compilation of the implementation lets us
-//                      get rid of the stdio dependency in environments where it
-//                      is unavailable.
-//
-//----------------------------------------------------------------------------
-void RBBIDebugPrintf(const char *fmt, ...) {
-#ifdef RBBI_DEBUG
-    va_list ap;
-    va_start(ap, fmt);
-    vprintf(fmt, ap);
-    va_end(ap);
-#endif
-}
-
 
 U_NAMESPACE_END
