@@ -1,5 +1,5 @@
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-1999, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
@@ -8,7 +8,7 @@
 * File CUCDTST.C
 *
 * Modification History:
-*        Name                     Description            
+*        Name                     Description
 *     Madhu Katragadda            Ported for C API, added tests for string functions
 *********************************************************************************
 */
@@ -72,7 +72,7 @@ const char dirStrings[][5] = {
     "R",
     "EN",
     "ES",
-    "ET",   
+    "ET",
     "AN",
     "CS",
     "B",
@@ -133,24 +133,22 @@ static void TestUpperLower()
         if(u_tolower(upper[i]) != lower[i]){
             log_err("FAILED u_tolower() for %lx Expected %lx Got %lx\n", upper[i], lower[i], u_tolower(upper[i]));
         }
-       
     }
     log_verbose("testing upper lower\n");
     for (i = 0; i < 21; i++) {
-        
+
         log_verbose("testing to upper to lower\n");
         if (u_isalpha(upperTest[i]) && !u_islower(upperTest[i]))
         {
             log_err("Failed isLowerCase test at  %c\n", upperTest[i]);
-        }  
+        }
         else if (u_isalpha(lowerTest[i]) && !u_isupper(lowerTest[i]))
          {
             log_err("Failed isUpperCase test at %c\n", lowerTest[i]);
-        }  
+        }
         else if (upperTest[i] != u_tolower(lowerTest[i]))
         {
             log_err("Failed case conversion from %c  To %c :\n", lowerTest[i], upperTest[i]);
-            
         }
         else if (lowerTest[i] != u_toupper(upperTest[i]))
          {
@@ -161,7 +159,7 @@ static void TestUpperLower()
             log_err("Failed case conversion with itself: %c\n", upperTest[i]);
         }
         else if (lowerTest[i] != u_toupper(lowerTest[i]))
-        {   
+        {
             log_err("Failed case conversion with itself: %c\n", lowerTest[i]);
         }
     }
@@ -169,26 +167,24 @@ static void TestUpperLower()
 
 }
 
- 
+
 /* test isLetter(u_isapha()) and isDigit(u_isdigit()) */
 static void TestLetterNumber()
 {
     UChar i = 0x0000;
 
     for (i = 0x0041; i < 0x005B; i++) {
-        log_verbose("Testing for isalpha\n");    
+        log_verbose("Testing for isalpha\n");
         if (!u_isalpha(i))
         {
             log_err("Failed isLetter test at  %.4X\n", i);
-            
         }
     }
     for (i = 0x0660; i < 0x066A; i++) {
-        log_verbose("Testing for isalpha\n"); 
+        log_verbose("Testing for isalpha\n");
         if (u_isalpha(i))
         {
             log_err("Failed isLetter test with numbers at %.4X\n", i);
-            
         }
     }
     for (i = 0x0660; i < 0x066A; i++) {
@@ -199,15 +195,14 @@ static void TestLetterNumber()
         }
     }
     for (i = 0x0041; i < 0x005B; i++) {
-        log_verbose("Testing for isalnum\n");    
+        log_verbose("Testing for isalnum\n");
         if (!u_isalnum(i))
         {
             log_err("Failed isAlNum test at  %.4X\n", i);
-            
         }
     }
     for (i = 0x0660; i < 0x066A; i++) {
-        log_verbose("Testing for isalnum\n");    
+        log_verbose("Testing for isalnum\n");
         if (!u_isalnum(i))
         {
             log_err("Failed isAlNum test at  %.4X\n", i);
@@ -231,11 +226,11 @@ static void TestMisc()
     const UChar sampleNonDigits[] = {0x0010, 0x0041, 0x0122, 0x68FE};
     const UChar sampleWhiteSpaces[] = {0x2008, 0x2009, 0x200a, 0x001c, 0x000c};
     const UChar sampleNonWhiteSpaces[] = {0x61, 0x62, 0x3c, 0x28, 0x3f};
-                        
+
 
     const int32_t sampleDigitValues[] = {0, 2, 3, 5};
     const int32_t sample2DigitValues[]= {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; /*special characters not in the properties table*/
-                                         
+
 
     enum ECellWidths         /* pasted in here from unicode.h */
     {
@@ -294,7 +289,7 @@ static void TestMisc()
         }
     }
     for (i = 0; i < 4; i++) {
-       log_verbose("Testing for isdigit \n"); 
+       log_verbose("Testing for isdigit \n");
         if ((u_isdigit(sampleDigits[i]) && 
             (u_charDigitValue(sampleDigits[i])!= sampleDigitValues[i])) ||
             (u_isdigit(sampleNonDigits[i]))) {
@@ -302,7 +297,7 @@ static void TestMisc()
         }
     }
     for (i = 0; i < 10; i++) {
-       log_verbose("Testing for u_charDigitValue for special values not existing in prop table %lx \n",  sample2Digits[i]); 
+       log_verbose("Testing for u_charDigitValue for special values not existing in prop table %lx \n",  sample2Digits[i]);
         if (u_charDigitValue(sample2Digits[i])!= sample2DigitValues[i]) 
         {
             log_err("Digit char test error : %lx\n", sample2Digits[i]);
@@ -598,7 +593,7 @@ static int32_t MakeProp(char* str)
 {
     int32_t result = 0;
     char* matchPosition =0;
-    
+
     matchPosition = strstr(tagStrings, str);
     if (matchPosition == 0) 
     {
@@ -623,12 +618,12 @@ static int32_t MakeDir(char* str)
 
 
 static const char* raw[3][4] = {
-   
+
     /* First String */
     {   "English_",  "French_",   "Croatian_", "English_"},
     /* Second String */
     {   "United States",    "France",   "Croatia",  "Unites States"},
-   
+
    /* Concatenated string */
     {   "English_United States", "French_France", "Croatian_Croatia", "English_United States"}
 };
@@ -669,6 +664,7 @@ static void TestStringFunctions()
 {
     int32_t i,j,k;
     UChar temp[512];
+    UChar nullTemp[512];
     char test[512];
     char tempOut[512];
 
@@ -678,20 +674,77 @@ static void TestStringFunctions()
     if( u_strlen(dataTable[0][0])!= u_strlen(dataTable[0][3]) || u_strlen(dataTable[0][0]) == u_strlen(dataTable[0][2]))
         log_err("There is an error in u_strlen()");
 
+    log_verbose("Testing u_memcpy() and u_memcmp()\n");
+
+    for(i=0;i<3;++i)
+    {
+        for(j=0;j<4;++j)
+        {
+            log_verbose("Testing  %s\n", u_austrcpy(tempOut, dataTable[i][j]));
+            temp[0] = 0;
+            temp[7] = 0xA4; /* Mark the end */
+            u_memcpy(temp,dataTable[i][j], 7);
+
+            if(temp[7] != 0xA4)
+                log_err("an error occured in u_memcpy()\n");
+            if(u_memcmp(temp, dataTable[i][j], 7)!=0)
+                log_err("an error occured in u_memcpy() or u_memcmp()\n");
+        }
+    }
+    if(u_memcmp(dataTable[0][0], dataTable[1][1], 7)==0)
+        log_err("an error occured in u_memcmp()\n");
+
+    log_verbose("Testing u_memset()\n");
+    nullTemp[0] = 0;
+    nullTemp[7] = 0;
+    u_memset(nullTemp, 0xa4, 7);
+    for (i = 0; i < 7; i++) {
+        if(nullTemp[i] != 0xa4) {
+            log_err("an error occured in u_memset()\n");
+        }
+    }
+    if(nullTemp[7] != 0) {
+        log_err("u_memset() went too far\n");
+    }
+
+    u_memset(nullTemp, 0, 7);
+    nullTemp[7] = 0xa4;
+    temp[7] = 0;
+    u_memcpy(temp,nullTemp, 7);
+    if(u_memcmp(temp, nullTemp, 7)!=0 || temp[7]!=0)
+        log_err("an error occured in u_memcpy() or u_memcmp()\n");
+
+
+    log_verbose("Testing u_memmove()\n");
+    for (i = 0; i < 7; i++) {
+        temp[i] = (UChar)i;
+    }
+    u_memmove(temp + 1, temp, 7);
+    if(temp[0] != 0) {
+        log_err("an error occured in u_memmove()\n");
+    }
+    for (i = 1; i <= 7; i++) {
+        if(temp[i] != (i - 1)) {
+            log_err("an error occured in u_memmove()\n");
+        }
+    }
+
     log_verbose("Testing u_strcpy() and u_strcmp()\n");
 
     for(i=0;i<3;++i)
     {
         for(j=0;j<4;++j)
         {
-            log_verbose("Testing  %s  \n", u_austrcpy(tempOut, dataTable[i][j]));
-            u_uastrcpy(temp, "");
+            log_verbose("Testing  %s\n", u_austrcpy(tempOut, dataTable[i][j]));
+            temp[0] = 0;
             u_strcpy(temp,dataTable[i][j]);
-        
+
             if(u_strcmp(temp,dataTable[i][j])!=0)
                 log_err("something threw an error in u_strcpy() or u_strcmp()\n");
         }
     }
+    if(u_strcmp(dataTable[0][0], dataTable[1][1])==0)
+        log_err("an error occured in u_memcmp()\n");
 
     log_verbose("testing u_strcat()\n");
     i=0;
@@ -711,6 +764,8 @@ static void TestStringFunctions()
         if(u_strncmp(dataTable[i][j],dataTable[i+2][j],k)!=0)
             log_err("Something threw an error in u_strncmp\n");
     }
+    if(u_strncmp(dataTable[0][0], dataTable[1][1], 7)==0)
+        log_err("an error occured in u_memcmp()\n");
 
 
     log_verbose("Testing u_strncat\n");
@@ -731,27 +786,62 @@ static void TestStringFunctions()
         k=u_strlen(dataTable[i][j]);
         u_uastrcpy(temp,"");
         u_strncpy(temp,dataTable[i+2][j],k);
-        
+
         if(u_strcmp(temp,dataTable[i][j])!=0)
             log_err("something threw an error in u_strncpy()\n");
     }
 
-    log_verbose("Testing u_strchr()\n");
+    log_verbose("Testing u_strchr() and u_memchr()\n");
 
     for(i=2,j=0;j<4;j++)
     {
+        UChar saveVal = dataTable[i][j][0];
         UChar *findPtr = u_strchr(dataTable[i][j], 0x005F);
+        int32_t dataSize = (int32_t)(u_strlen(dataTable[i][j]) + 1);
 
         log_verbose("%s ", u_austrcpy(tempOut, findPtr));
 
         if (findPtr == NULL || *findPtr != 0x005F) {
-            log_err("strchr can't find '_' in the string\n");
+            log_err("u_strchr can't find '_' in the string\n");
+        }
+
+        findPtr = u_strchr32(dataTable[i][j], 0x005F);
+        if (findPtr == NULL || *findPtr != 0x005F) {
+            log_err("u_strchr32 can't find '_' in the string\n");
         }
 
         findPtr = u_strchr(dataTable[i][j], 0);
-        if (findPtr != (&(dataTable[i][j][u_strlen(dataTable[i][j])]))) {
-            log_err("strchr can't find NULL in the string\n");
+        if (findPtr != (&(dataTable[i][j][dataSize - 1]))) {
+            log_err("u_strchr can't find NULL in the string\n");
         }
+
+        findPtr = u_strchr32(dataTable[i][j], 0);
+        if (findPtr != (&(dataTable[i][j][dataSize - 1]))) {
+            log_err("u_strchr32 can't find NULL in the string\n");
+        }
+
+        findPtr = u_memchr(dataTable[i][j], 0, dataSize);
+        if (findPtr != (&(dataTable[i][j][dataSize - 1]))) {
+            log_err("u_memchr can't find NULL in the string\n");
+        }
+
+        findPtr = u_memchr32(dataTable[i][j], 0, dataSize);
+        if (findPtr != (&(dataTable[i][j][dataSize - 1]))) {
+            log_err("u_memchr32 can't find NULL in the string\n");
+        }
+
+        dataTable[i][j][0] = 0;
+        /* Make sure we skip over the NULL termination */
+        findPtr = u_memchr(dataTable[i][j], 0x005F, dataSize);
+        if (findPtr == NULL || *findPtr != 0x005F) {
+            log_err("u_memchr can't find '_' in the string\n");
+        }
+
+        findPtr = u_memchr32(dataTable[i][j], 0x005F, dataSize);
+        if (findPtr == NULL || *findPtr != 0x005F) {
+            log_err("u_memchr32 can't find '_' in the string\n");
+        }
+        dataTable[i][j][0] = saveVal;   /* Put it back for the other tests */
     }
 
 
@@ -1043,10 +1133,10 @@ static void TestStringCopy()
         log_err("u_uastrncpy wrote past it's bounds. Expected undisturbed byte at 3\n");
     }
 
-    charOut[0] = (char)0xFB; /* load garbage into it */
-    charOut[1] = (char)0xFB;
-    charOut[2] = (char)0xFB;
-    charOut[3] = (char)0xFB;
+    charOut[0] = (char)0x7B; /* load garbage into it */
+    charOut[1] = (char)0x7B;
+    charOut[2] = (char)0x7B;
+    charOut[3] = (char)0x7B;
 
     temp[0] = 'a'; /* load codepage specific string into it */
     temp[1] = 'b';
@@ -1060,7 +1150,7 @@ static void TestStringCopy()
     if(strncmp(chars, charOut, 3) != 0){
         log_err("There is an error in u_austrncpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
     }
-    if(charOut[3] != (char)0xFB) {
+    if(charOut[3] != (char)0x7B) {
         log_err("u_austrncpy wrote past it's bounds. Expected undisturbed byte at 3\n");
     }
 
