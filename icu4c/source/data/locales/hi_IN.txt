@@ -1,3 +1,4 @@
+// *   Copyright (C) 1997-2001, International Business Machines
 // srl@monkey.sbay.org, with help from Shehnaz Nagpurwala and Anwar Nagpurwala
 // Hindi locale. Need to work on unicodizing more of the text..
 
