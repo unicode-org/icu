@@ -495,6 +495,11 @@ enum {
 
 #define UCOL_TERT_CASE_MASK   0xFF
 
+#define UCOL_ENDOFLATINONERANGE 0xFF
+#define UCOL_LATINONETABLELEN   (UCOL_ENDOFLATINONERANGE+50)
+#define UCOL_BAIL_OUT_CE      0xFF000000
+
+
 typedef enum {
     NOT_FOUND_TAG = 0,
     EXPANSION_TAG = 1,       /* This code point results in an expansion */
@@ -694,6 +699,7 @@ SortKeyGenerator(const    UCollator    *coll,
 struct UCollator {
     UColOptionSet  *options;
     SortKeyGenerator *sortKeyGen;
+    uint32_t *latinOneCEs;
     char* requestedLocale;
     UResourceBundle *rb;
     UResourceBundle *binary;
@@ -720,6 +726,7 @@ struct UCollator {
 
     const UChar *rules;
     int32_t rulesLength;
+    int32_t latinOneTableLen;
 
     UErrorCode errorCode;             /* internal error code */
 
@@ -746,6 +753,10 @@ struct UCollator {
     UBool freeOnClose;
     UBool freeOptionsOnClose;
     UBool freeRulesOnClose;
+
+    UBool latinOneUse;
+    UBool latinOneRegenTable;
+    UBool latinOneFailed;
 
     int32_t tertiaryAddition; /* when switching case, we need to add or subtract different values */
     uint8_t caseSwitch;
@@ -779,7 +790,7 @@ void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode
 #endif
 
 U_CFUNC
-void ucol_updateInternalState(UCollator *coll);
+void ucol_updateInternalState(UCollator *coll, UErrorCode *status);
 
 U_CAPI uint32_t U_EXPORT2 ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status);
 U_CAPI char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len);
