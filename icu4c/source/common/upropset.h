@@ -63,7 +63,7 @@ class Hashtable;
  * @author Alan Liu
  * @internal
  */
-class UnicodePropertySet /* not : public UObject because all methods are static */ {
+class U_COMMON_API UnicodePropertySet /* not : public UObject because all methods are static */ {
 
  public:
 
