@@ -111,8 +111,8 @@ void IntlTestNormalize::runIndexedTest( int32_t index, UBool exec, const char* &
 {
     if(exec) logln("TestSuite Normalize:");
     switch (index) {
-        CASE_SUITE(0, NormalizerConformanceTest);
-        CASE_SUITE(1, BasicNormalizerTest);
+        CASE_SUITE(0, BasicNormalizerTest);
+        CASE_SUITE(1, NormalizerConformanceTest); // this takes a long time
         default:
             name="";
             break;
