@@ -44,14 +44,6 @@
 #define U_IOSTREAM_SOURCE @U_IOSTREAM_SOURCE@
 #endif
 
-#ifndef U_DEBUG
-#define U_DEBUG @ENABLE_DEBUG@
-#endif
-
-#ifndef U_RELEASE
-#define U_RELEASE @ENABLE_RELEASE@
-#endif
-
 /* Determines whether specific types are available */
 #ifndef U_HAVE_INT8_T
 #define U_HAVE_INT8_T @HAVE_INT8_T@
@@ -85,48 +77,6 @@
 #define U_HAVE_UINT64_T @HAVE_UINT64_T@
 #endif
 
-
-/* Define whether namespace is supported */
-#ifndef U_HAVE_NAMESPACE
-#define U_HAVE_NAMESPACE @U_HAVE_NAMESPACE@
-#endif
-
-/* Determines the endianness of the platform
-   It's done this way in case multiple architectures are being built at once.
-   For example, Darwin supports fat binaries, which can be both PPC and x86 based. */
-#if defined(BYTE_ORDER) && defined(BIG_ENDIAN)
-#define U_IS_BIG_ENDIAN (BYTE_ORDER == BIG_ENDIAN)
-#else
-#define U_IS_BIG_ENDIAN @U_IS_BIG_ENDIAN@
-#endif
-
-/* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
-#define ICU_USE_THREADS @ICU_USE_THREADS@
-
-/* Determine whether to disable renaming or not. This overrides the
-   setting in umachine.h which is for all platforms. */
-#ifndef U_DISABLE_RENAMING
-#define U_DISABLE_RENAMING @U_DISABLE_RENAMING@
-#endif
-
-/* Determine whether to override new and delete. */
-#ifndef U_OVERRIDE_CXX_ALLOCATION
-#define U_OVERRIDE_CXX_ALLOCATION @U_OVERRIDE_CXX_ALLOCATION@
-#endif
-/* Determine whether to override placement new and delete for STL. */
-#ifndef U_HAVE_PLACEMENT_NEW
-#define U_HAVE_PLACEMENT_NEW @U_HAVE_PLACEMENT_NEW@
-#endif
-
-/* Determine whether to enable tracing. */
-#ifndef U_ENABLE_TRACING
-#define U_ENABLE_TRACING @U_ENABLE_TRACING@
-#endif
-
-/* Define the library suffix in a C syntax. */
-#define U_HAVE_LIB_SUFFIX @U_HAVE_LIB_SUFFIX@
-#define U_LIB_SUFFIX_C_NAME @ICULIBSUFFIXCNAME@
-#define U_LIB_SUFFIX_C_NAME_STRING "@ICULIBSUFFIXCNAME@"
 
 /*===========================================================================*/
 /* Platform/Language determination                                           */
@@ -217,6 +167,60 @@ typedef unsigned short uint16_t;
 #endif
 
 #endif
+
+/*===========================================================================*/
+/* Compiler and environment features                                         */
+/*===========================================================================*/
+
+/* Define whether namespace is supported */
+#ifndef U_HAVE_NAMESPACE
+#define U_HAVE_NAMESPACE @U_HAVE_NAMESPACE@
+#endif
+
+/* Determines the endianness of the platform
+   It's done this way in case multiple architectures are being built at once.
+   For example, Darwin supports fat binaries, which can be both PPC and x86 based. */
+#if defined(BYTE_ORDER) && defined(BIG_ENDIAN)
+#define U_IS_BIG_ENDIAN (BYTE_ORDER == BIG_ENDIAN)
+#else
+#define U_IS_BIG_ENDIAN @U_IS_BIG_ENDIAN@
+#endif
+
+/* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
+#define ICU_USE_THREADS @ICU_USE_THREADS@
+
+#ifndef U_DEBUG
+#define U_DEBUG @ENABLE_DEBUG@
+#endif
+
+#ifndef U_RELEASE
+#define U_RELEASE @ENABLE_RELEASE@
+#endif
+
+/* Determine whether to disable renaming or not. This overrides the
+   setting in umachine.h which is for all platforms. */
+#ifndef U_DISABLE_RENAMING
+#define U_DISABLE_RENAMING @U_DISABLE_RENAMING@
+#endif
+
+/* Determine whether to override new and delete. */
+#ifndef U_OVERRIDE_CXX_ALLOCATION
+#define U_OVERRIDE_CXX_ALLOCATION @U_OVERRIDE_CXX_ALLOCATION@
+#endif
+/* Determine whether to override placement new and delete for STL. */
+#ifndef U_HAVE_PLACEMENT_NEW
+#define U_HAVE_PLACEMENT_NEW @U_HAVE_PLACEMENT_NEW@
+#endif
+
+/* Determine whether to enable tracing. */
+#ifndef U_ENABLE_TRACING
+#define U_ENABLE_TRACING @U_ENABLE_TRACING@
+#endif
+
+/* Define the library suffix in a C syntax. */
+#define U_HAVE_LIB_SUFFIX @U_HAVE_LIB_SUFFIX@
+#define U_LIB_SUFFIX_C_NAME @ICULIBSUFFIXCNAME@
+#define U_LIB_SUFFIX_C_NAME_STRING "@ICULIBSUFFIXCNAME@"
 
 /*===========================================================================*/
 /* Character data types                                                      */
