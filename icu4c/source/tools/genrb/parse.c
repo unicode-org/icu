@@ -123,6 +123,40 @@ static struct STransition gTransitionTable [] = {
 /* Row length is 4 */
 #define GETTRANSITION(row,col) (gTransitionTable[col + (row<<2)])
 
+/*********************************************************************
+ * Hashtable glue
+ ********************************************************************/
+
+static bool_t get(UHashtable *hash, const struct UString* tag) {
+    return uhash_get(hash, tag) != NULL;
+}
+
+static void put(UHashtable *hash, const struct UString *tag,
+                UErrorCode* status) {
+    struct UString* key = uprv_malloc(sizeof(struct UString));
+    ustr_init(key);
+    ustr_cpy(key, tag, status);
+    uhash_put(hash, key, (void*)1, status);
+}
+
+static void freeUString(void* ustr) {
+    ustr_deinit(ustr);
+    uprv_free(ustr);
+}
+
+static int32_t hashUString(const void* ustr) {
+    return uhash_hashUChars(((struct UString*)ustr)->fChars);
+}
+
+static bool_t compareUString(const void* ustr1, const void* ustr2) {
+    return uhash_compareUChars(((struct UString*)ustr1)->fChars,
+                               ((struct UString*)ustr2)->fChars);
+}
+
+/*********************************************************************
+ * parse
+ ********************************************************************/
+
 struct SRBItemList*
 parse(FileStream *f, const char *cp,
       UErrorCode *status)
@@ -205,7 +239,7 @@ parse(FileStream *f, const char *cp,
     case eSetTag:
       ustr_cpy(&tag, &token, status);
       if(U_FAILURE(*status)) goto finish;
-      if(uhash_get(data, uhash_hashUString(tag.fChars)) != 0) {
+      if(get(data, &tag)) {
 	 char *s;
 	*status = U_INVALID_FORMAT_ERROR;
        s = uprv_malloc(1024);
@@ -226,7 +260,7 @@ parse(FileStream *f, const char *cp,
       strlist_add(current, token.fChars, status);
       item = make_rbitem(tag.fChars, current, status);
       rblist_add(list, item, status);
-      uhash_put(data, tag.fChars, status);
+      put(data, &tag, status);
       if(U_FAILURE(*status)) goto finish;
       current = 0;
       item = 0;
@@ -251,7 +285,7 @@ parse(FileStream *f, const char *cp,
       
       /* End a string list */
     case eEndList:
-      uhash_put(data, tag.fChars, status);
+      put(data, &tag, status);
       item = make_rbitem(tag.fChars, current, status);
       rblist_add(list, item, status);
       if(U_FAILURE(*status)) goto finish;
@@ -269,7 +303,7 @@ parse(FileStream *f, const char *cp,
       break;
       
     case eEnd2dList:
-      uhash_put(data, tag.fChars, status);
+      put(data, &tag, status);
       item = make_rbitem(tag.fChars, current, status);
       rblist_add(list, item, status);
       if(U_FAILURE(*status)) goto finish;
@@ -298,7 +332,7 @@ parse(FileStream *f, const char *cp,
       break;
       
     case eEndTagged:
-      uhash_put(data, tag.fChars, status);
+      put(data, &tag, status);
       item = make_rbitem(tag.fChars, current, status);
       rblist_add(list, item, status);
       if(U_FAILURE(*status)) goto finish;
@@ -330,7 +364,8 @@ parse(FileStream *f, const char *cp,
       ustr_cpy(&localeName, &token, status);
       rblist_setlocale(list, localeName.fChars, status);
       if(U_FAILURE(*status)) goto finish;
-      data = uhash_open((UHashFunction)uhash_hashUString, status);
+      data = uhash_open(hashUString, compareUString, status);
+      uhash_setKeyDeleter(data, freeUString);
       break;
       
     case eClose:
