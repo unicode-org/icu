@@ -1,0 +1,13 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+zh_Hant {
+    Version{ "1.0" }
+    collations { 
+        default { "traditional" }
+    }
+}
