@@ -136,7 +136,6 @@ void UnicodeTest::TestAdditionalProperties() {
     char newPath[256];
     char backupPath[256];
     char *fields[2][2];
-    int32_t length;
     UErrorCode errorCode=U_ZERO_ERROR;
 
     /* Look inside ICU_DATA first */
