@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2001/06/21 23:20:53 $ 
-* $Revision: 1.7 $
+* $Date: 2001/06/25 21:15:39 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -17,79 +17,71 @@ package com.ibm.text;
 import java.util.Locale;
 
 /**
-* A static class designed to be a generic code point information source that 
-* handles surrogate pairs.<br>
-* Data for code point information originates from Unicode 3.0 data files, 
-* UnicodeData.txt and Mirror.txt, downloadable from the Unicode Consortium site 
-* ftp://ftp.unicode.org/Public/<br>
-* ICU's gennames and genprops programs are used to compact the information from 
-* the above mentioned files before being used by this package. The binary 
-* result files are named unames.dat and uprops.dat. <br>
-* Both are jared with the package for release, hence to use this class please
-* add the jar file name <code>ucharacter.jar</code> to your class path.<br>
-* E.g. In Windows <code>set CLASSPATH=%CLASSPATH%;$JAR_FILE_PATH/ucharacter.jar
-* </code><br>
-* For more information about the data file format, please refer to 
-* <a href=http://oss.software.ibm.com/icu4j/icu4jhtml/com/ibm/text/ReadMe.html>
-* Read Me</a>.<br>
-* Each code point used here in in terms of a 32 bit int. This is so as to 
-* handle supplementary code points which has 21 bit in size.<br>
-* APIs provide up-to-date Unicode implementation of java.lang.Character, <br>
-* hence
-* <ul>
-*   <li> Deprecated APIs are not defined here
-*   <li> UCharacter is not designed to be a char wrapper and does not have APIs 
-*        to which involves management of that single char. e.g. char 
-*        charValue(), int compareTo(java.lang.Character, java.lang.Character) 
-*        etc.
-*	  <li> To handle surrogates, int parameters APIs are provided
-*   <li> Java specific character information is not defined e.g. boolean 
-*        isJavaIdentifierPart(char ch)
-*   <li> Has extra methods to fully utilize up-to-date Unicode data information
-*   <li> Provides methods to gets code points from a UTF-16 char or surrogate 
-*        pairs
-* </ul>
 * <p>
-* Difference between UCharacter and java.lang.Character
+* The UCharacter class provides extensions to the 
+* <a href=http://java.sun.com/j2se/1.3/docs/api/java/lang/Character.html>
+* java.lang.Character</a> class. These extensions provide support for 
+* Unicode 3.1 properties and together with the <a href=UTF16.html>UTF16</a> 
+* class, provide support for supplementary characters (those with code 
+* points above U+FFFF).
+* </p>
+* <p>
+* Code points are represented in these API using ints. While it would be 
+* more convenient in Java to have a separate primitive datatype for them, 
+* ints suffice in the meantime.
+* </p>
+* <p>
+* To use this class please add the jar file name ucharacter.jar to your 
+* class path, since it contains data files which supply the information used 
+* by this file.<br>
+* E.g. In Windows <br>
+* <code>set CLASSPATH=%CLASSPATH%;$JAR_FILE_PATH/ucharacter.jar</code>.
+* </p>
+* <p>
+* For more information about the data file format, please refer to 
+* <a href=http://oss.software.ibm.com/icu4j/doc/com/ibm/text/ReadMe.html>
+* Read Me</a>.
+* </p>
+* <p>
+* Aside from the additions for UTF-16 support, and the updated Unicode 3.1
+* properties, the main differences between UCharacter and Character are:
 * <ul>
-*   <li> UCharacter supports Unicode 3.0 Data while java.lang.Character 
-*        supports only Unicode 2.0. <br>
-*        Note : UCharacter will support Unicode 3.1 when it officially releases
-*   <li> UCharacter provides the support for supplementary code points.<br>
-*        Hence the code point type used is an int (support for 21 bits) where
-*        else java.lang.Character uses a char (16 bit)
-*   <li> The below control code points had their type is overwritten by ICU to 
-*        the type shown
-*        <ul>
-*          <li> TAB 0x9 : U_SPACE_SEPARATOR
-*          <li> VT 0xb : U_SPACE_SEPARATOR
-*          <li> LF 0xa : U_PARAGRAPH_SEPARATOR
-*          <li> FF 0xc : U_LINE_SEPARATOR
-*          <li> CR 0xd : U_PARAGRAPH_SEPARATOR
-*          <li> FS 0x1c : U_PARAGRAPH_SEPARATOR
-*          <li> GS 0x1d : U_PARAGRAPH_SEPARATOR
-*          <li> RS 0x1e : U_PARAGRAPH_SEPARATOR
-*          <li> US 0x1f : U_SPACE_SEPARATOR
-*          <li> NL 0x85 : U_PARAGRAPH_SEPARATOR
-*        </ul>
-*        Because of these type overwrites, some methods might be affected.
-*   <li> java.lang.Character maps characters 'A' - 'Z' and 'a' - 'z' to the 
-*        numeric values '10' - '35'. UCharacter does not treat the above 
-*        code points as having numeric values
-*   <li> Further detail differences can be determined from the program 
-*        <a href = ../test/text/UCharacterCompare.html>
+* <li> UCharacter is not designed to be a char wrapper and does not have 
+*      APIs to which involves management of that single char.<br>
+*      These include: 
+*      <ul>
+*        <li> char charValue(), 
+*        <li> int compareTo(java.lang.Character, java.lang.Character), etc.
+*      </ul>
+* <li> UCharacter does not include Character APIs that are deprecated, not 
+*      does it include the Java-specific character information, such as 
+*      boolean isJavaIdentifierPart(char ch).
+* <li> Character maps characters 'A' - 'Z' and 'a' - 'z' to the numeric 
+*      values '10' - '35'. UCharacter does not treat the above code points 
+*      as having numeric values
+* <li> For consistency with ICU4C's data, control code points below have their 
+*      Unicode general category reset to the types below.
+*      <ul>
+*      <li> TAB 0x9 : U_SPACE_SEPARATOR 
+*      <li> VT 0xb : U_SPACE_SEPARATOR 
+*      <li> LF 0xa : U_PARAGRAPH_SEPARATOR 
+*      <li> FF 0xc : U_LINE_SEPARATOR 
+*      <li> CR 0xd : U_PARAGRAPH_SEPARATOR 
+*      <li> FS 0x1c : U_PARAGRAPH_SEPARATOR 
+*      <li> GS 0x1d : U_PARAGRAPH_SEPARATOR 
+*      <li> RS 0x1e : U_PARAGRAPH_SEPARATOR 
+*      <li> US 0x1f : U_SPACE_SEPARATOR 
+*      <li> NL 0x85 : U_PARAGRAPH_SEPARATOR
+*      </ul>
+* <p>
+* Further detail differences can be determined from the program 
+*        <a href = http://oss.software.ibm.com/developerworks/opensource/cvs/icu4j/~checkout~/icu4j/src/com/ibm/icu/test/text/UCharacterCompare.java>
 *        com.ibm.icu.test.text.UCharacterCompare</a>
-* </ul>
-* </p> 
-* Examples on using this class is located at the test program 
-* <a href = ../test/text/UCharacterCompare.html>
-*        com.ibm.icu.test.text.UCharacterTest</a>
+* </p>
 * @author Syn Wee Quek
 * @since oct 06 2000
 * @see com.ibm.text.UCharacterCategory
 * @see com.ibm.text.UCharacterDirection
-* @see com.ibm.icu.test.text.UCharacterCompare
-* @see com.ibm.icu.test.text.UCharacterTest
 */
 
 public final class UCharacter
@@ -1356,7 +1348,7 @@ public final class UCharacter
   * equivalent, the character itself is returned.
   * Only "simple", single-code point case folding mappings are used.
   * For "full", multiple-code point mappings use the API 
-  * foldCase(String str, boolean default).
+  * foldCase(String str, boolean defaultmapping).
   * @param ch             the character to be converted
   * @param defaultmapping Indicates if all mappings defined in CaseFolding.txt 
   *                       is to be used, otherwise the mappings for dotted I 
@@ -1364,7 +1356,7 @@ public final class UCharacter
   *                       be skipped.
   * @return               the case folding equivalent of the character, if any;
   *                       otherwise the character itself.
-  * @see                  foldCase(String, boolean)
+  * @see                  #foldCase(String, boolean)
   */
   public static int foldCase(int ch, boolean defaultmapping)
   {
@@ -1417,7 +1409,7 @@ public final class UCharacter
   * equivalent, the character itself is returned.
   * "Full", multiple-code point case folding mappings are returned here.
   * For "simple" single-code point mappings use the API 
-  * foldCase(int ch, boolean default).
+  * foldCase(int ch, boolean defaultmapping).
   * @param str            the String to be converted
   * @param defaultmapping Indicates if all mappings defined in CaseFolding.txt 
   *                       is to be used, otherwise the mappings for dotted I 
@@ -1425,7 +1417,7 @@ public final class UCharacter
   *                       be skipped.
   * @return               the case folding equivalent of the character, if any;
   *                       otherwise the character itself.
-  * @see                  foldCase(int, boolean)
+  * @see                  #foldCase(int, boolean)
   */
   public static String foldCase(String str, boolean defaultmapping)
   {
