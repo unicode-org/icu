@@ -78,5 +78,13 @@
      */
     void TestGetLocale(void);
 
+    /**
+     * Test buffer overrun while having smaller buffer for sortkey (j1865)
+     */
+    void TestSortKeyBufferOverrun(void);
+    /**
+     * Test getting and setting of attributes
+     */
+    void TestGetSetAttr(void);
 
 #endif
