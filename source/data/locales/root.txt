@@ -10,7 +10,7 @@
 
 
 root {
-    Version { "3.1.1" }
+    Version { "3.2" }
 
     // each variant name that occurs in locales should be listed with %% and a display string
     "%%PREEURO" { "Pre-Euro" }   // PREEURO variant display name
@@ -30,12 +30,11 @@ root {
     // this is a special tag that makes genrb include UCARules.txt for collation
     "%%UCARULES" { "UCARules.txt"} // UCARules
 
-    // no collation elements any more
-    // CollationElements { 
-    //      Version { "1.0" }
-    //      Override { "FALSE" }
-    //      Sequence { "" }
-    // }
+    // Here are empty collation rules just for the consistency. UCA is used instead... 01/16/2001 by weiv
+    CollationElements { 
+	  Version { "x0.0" }
+	  Sequence { "" }
+	}
     // Formats for the display name of a locale, for a list of
     // items, and for composing two items in a list into one item.
     // The list patterns are used in the variant name and in the
