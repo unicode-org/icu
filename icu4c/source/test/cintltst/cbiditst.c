@@ -720,6 +720,15 @@ doArabicShapingTest() {
         log_err("failure in u_shapeArabic(U_SHAPE_DIGIT_TYPE_RESERVED), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
     }
 
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         (UChar *)(source+2), LENGTHOF(dest), /* overlap source and destination */
+                         U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_AN,
+                         &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("failure in u_shapeArabic(U_SHAPE_DIGIT_TYPE_RESERVED), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
+    }
+
     /* test that letter shaping sets "unsupported" */
     errorCode=U_ZERO_ERROR;
     length=u_shapeArabic(source, LENGTHOF(source),
