@@ -14,28 +14,12 @@
 */
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 #include "cintltst.h"
 #include "ccolltst.h"
 #include "unicode/ucol.h"
 #include "unicode/ustring.h"
 
-void addCollAPITest(TestNode**);
-void addCurrencyTest(TestNode**);
-void addNormTest(TestNode**);
-void addDanishCollTest(TestNode**);
-void addGermanCollTest(TestNode**);
-void addSpanishCollTest(TestNode**);
-void addFrenchCollTest(TestNode**);
-void addKannaCollTest(TestNode**);
-void addTurkishCollTest(TestNode**);
-void addEnglishCollTest(TestNode**);
-void addAllCollTest(TestNode**);
-
-void addRuleBasedCollTest(TestNode**);
-void addCollIterTest(TestNode**);
-void addMiscCollTest(TestNode** root);
-
+UChar U_CALLCONV testInc(void *context);
 
 void addCollTest(TestNode** root)
 {
@@ -49,6 +33,7 @@ void addCollTest(TestNode** root)
     addKannaCollTest(root);
     addTurkishCollTest(root);
     addEnglishCollTest(root);
+    addFinnishCollTest(root);
     
     /* WEIVTODO: return tests here */
     addRuleBasedCollTest(root);
@@ -140,7 +125,6 @@ UChar* appendCompareResult(UCollationResult result, UChar* target)
     else
     {
         u_uastrcpy(target, "huh???");
-            
     }
 
     return target;

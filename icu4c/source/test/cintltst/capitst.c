@@ -13,7 +13,6 @@
 *********************************************************************************
 *//* C API TEST For COLLATOR */
 #include <stdio.h>
-#include <string.h>
 #include "unicode/utypes.h"
 #include "ucol_imp.h"
 #include "unicode/uloc.h"
@@ -22,6 +21,7 @@
 #include "unicode/ustring.h"
 #include "unicode/ures.h"
 #include "cmemory.h"
+#include "ccolltst.h"
 
 
 
