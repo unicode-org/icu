@@ -69,7 +69,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "I18N_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\..\include" /I "..\..\source\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "I18N_EXPORTS" /D "U_I18N_IMPLEMENTATION" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\..\include" /I "..\..\source\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "I18N_EXPORTS" /D "U_I18N_IMPLEMENTATION" /FR /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -124,6 +124,10 @@ SOURCE=.\colrules.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\cpdtrans.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\datefmt.cpp
 # End Source File
 # Begin Source File
@@ -153,6 +157,10 @@ SOURCE=.\gregocal.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\hextouni.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\lnbkdat.cpp
 # End Source File
 # Begin Source File
@@ -170,6 +178,26 @@ SOURCE=.\numfmt.cpp
 # Begin Source File
 
 SOURCE=.\ptnentry.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_data.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_pars.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_rule.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_set.cpp
 # End Source File
 # Begin Source File
 
@@ -209,6 +237,10 @@ SOURCE=.\timezone.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\translit.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\txtbdat.cpp
 # End Source File
 # Begin Source File
@@ -241,7 +273,19 @@ SOURCE=.\unicdcm.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\unifltlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unirange.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\uniset.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unitohex.cpp
 # End Source File
 # Begin Source File
 
@@ -401,6 +445,33 @@ InputPath=.\coll.h
 # Begin Source File
 
 SOURCE=.\colrules.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cpdtrans.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\cpdtrans.h
+
+"..\..\include\cpdtrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               cpdtrans.h                ..\..\include
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\cpdtrans.h
+
+"..\..\include\cpdtrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               cpdtrans.h                ..\..\include
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -620,6 +691,33 @@ InputPath=.\gregocal.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\hextouni.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\hextouni.h
+
+"..\..\include\hextouni.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               hextouni.h                ..\..\include
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\hextouni.h
+
+"..\..\include\hextouni.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               hextouni.h                ..\..\include
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\mergecol.h
 # End Source File
 # Begin Source File
@@ -706,6 +804,57 @@ InputPath=.\parsepos.h
 # Begin Source File
 
 SOURCE=.\ptnentry.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbi.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbi_bld.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\rbt.h
+
+"..\..\include\rbt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               rbt.h                ..\..\include
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\rbt.h
+
+"..\..\include\rbt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               rbt.h                ..\..\include
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_data.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_pars.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_rule.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_set.h
 # End Source File
 # Begin Source File
 
@@ -852,6 +1001,33 @@ InputPath=.\timezone.h
 
 "..\..\include\timezone.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy               timezone.h                ..\..\include
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\translit.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\translit.h
+
+"..\..\include\translit.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               translit.h                ..\..\include
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\translit.h
+
+"..\..\include\translit.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               translit.h                ..\..\include
 
 # End Custom Build
 
@@ -1007,6 +1183,64 @@ SOURCE=.\unicdcm.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\unifilt.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unifilt.h
+
+"..\..\include\unifilt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               unifilt.h                ..\..\include
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unifilt.h
+
+"..\..\include\unifilt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               unifilt.h                ..\..\include
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unifltlg.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unifltlg.h
+
+"..\..\include\unifltlg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               unifltlg.h                ..\..\include
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unifltlg.h
+
+"..\..\include\unifltlg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               unifltlg.h                ..\..\include
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unirange.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\uniset.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -1026,6 +1260,33 @@ InputPath=.\uniset.h
 
 "..\..\include\uniset.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy               uniset.h                ..\..\include
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unitohex.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unitohex.h
+
+"..\..\include\unitohex.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               unitohex.h                ..\..\include
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unitohex.h
+
+"..\..\include\unitohex.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               unitohex.h                ..\..\include
 
 # End Custom Build
 
