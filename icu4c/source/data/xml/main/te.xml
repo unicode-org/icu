@@ -7,108 +7,15 @@
 >
 <ldml>
 	<identity>
-		<version number="1.1"/>
-		<generation date="2004-06-04" />
+		<version number="2.0"/>
+		<generation date="2004-08-11" />
 		<language type="te" /> 
 	</identity>
-	<localeDisplayNames>
-		<languages>
-			<language type="te">తెలుగు</language>
-		</languages>
-		<territories>
-			<territory type="IN">భారత దేళ౦</territory>
-		</territories>
-	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[[:Telu:]‌‍]</exemplarCharacters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 			<icu:scripts>
 				<icu:script type="1">Telu</icu:script>
 			</icu:scripts>
 		</special>
 	</characters>
-	<dates>
-		<calendars>
-			<calendar type="gregorian">
-				<months>
-					<monthContext type="format">
-						<monthWidth type="abbreviated">
-							<month type="1">జనవరి</month>
-							<month type="2">ఫిబ్రవరి</month>
-							<month type="3">మార్చి</month>
-							<month type="4">ఏప్రిల్</month>
-							<month type="5">మే</month>
-							<month type="6">జూన్</month>
-							<month type="7">జూలై</month>
-							<month type="8">ఆగస్టు</month>
-							<month type="9">సెప్టెంబర్</month>
-							<month type="10">అక్టోబర్</month>
-							<month type="11">నవంబర్</month>
-							<month type="12">డిసెంబర్</month>
-						</monthWidth>
-						<monthWidth type="wide">
-							<month type="1">జనవరి</month>
-							<month type="2">ఫిబ్రవరి</month>
-							<month type="3">మార్చి</month>
-							<month type="4">ఏప్రిల్</month>
-							<month type="5">మే</month>
-							<month type="6">జూన్</month>
-							<month type="7">జూలై</month>
-							<month type="8">ఆగస్టు</month>
-							<month type="9">సెప్టెంబర్</month>
-							<month type="10">అక్టోబర్</month>
-							<month type="11">నవంబర్</month>
-							<month type="12">డిసెంబర్</month>
-						</monthWidth>
-					</monthContext>
-				</months>
-				<days>
-					<dayContext type="format">
-						<dayWidth type="abbreviated">
-							<day type="sun">ఆది</day>
-							<day type="mon">సోమ</day>
-							<day type="tue">మంగళ</day>
-							<day type="wed">బుధ</day>
-							<day type="thu">గురు</day>
-							<day type="fri">శుక్ర</day>
-							<day type="sat">శని</day>
-						</dayWidth>
-						<dayWidth type="wide">
-							<day type="sun">ఆదివారం</day>
-							<day type="mon">సోమవారం</day>
-							<day type="tue">మంగళవారం</day>
-							<day type="wed">బుధవారం</day>
-							<day type="thu">గురువారం</day>
-							<day type="fri">శుక్రవారం</day>
-							<day type="sat">శనివారం</day>
-						</dayWidth>
-					</dayContext>
-				</days>
-				<am>పూర్వాహ్న</am>
-				<pm>అపరాహ్న</pm>
-			</calendar>
-		</calendars>
-	</dates>
-	<numbers>
-		<symbols>
-			<decimal>.</decimal>
-			<group>,</group>
-			<list>;</list>
-			<percentSign>%</percentSign>
-			<nativeZeroDigit>౦</nativeZeroDigit>
-			<patternDigit>#</patternDigit>
-			<plusSign>+</plusSign>
-			<minusSign>-</minusSign>
-			<exponential>E</exponential>
-			<perMille>‰</perMille>
-			<infinity>∞</infinity>
-			<nan>�</nan>
-		</symbols>
-		<currencies>
-			<currency type="INR">
-				<displayName>INR</displayName>
-				<symbol>రూ.</symbol>
-			</currency>
-		</currencies>
-	</numbers>
 </ldml>

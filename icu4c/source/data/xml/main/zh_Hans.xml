@@ -7,9 +7,11 @@
 >
 <ldml>
 	<identity>
-		<version number="1.1"/>
-		<generation date="2004-06-04" />
+		<version number="1.0"/>
+		<generation date="2004-08-11" />
 		<language type="zh" /> 
 		<script type="Hans" /> 
 	</identity>
+	<characters>
+	</characters>
 </ldml>
