@@ -247,7 +247,7 @@ DigitList::append(char digit)
         fDigits[fCount++] = digit;
 }
 
-#endif // _DIGITLST
 U_NAMESPACE_END
+#endif // _DIGITLST
 
 //eof
