@@ -163,10 +163,10 @@ static void TestSurrogateBehaviour(){
         UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
 
         const uint8_t expected[] = {0x1b, 0x24, 0x42,0x30,0x6c,0x43,0x7a,0x1b,0x28,0x42,
-                                    0x31,0x1b,0x28,0x42,0x1A,0x1b,0x28,0x42, 0x32};
+                                    0x31,0x1A, 0x32};
 
 
-        int32_t offsets[] = {0,0,0,0,0,1,1,2,2,2,2,3,3,3,3,5,5,5,5 };
+        int32_t offsets[] = {0,0,0,0,0,1,1,2,2,2,2,3,5 };
 
         /*iso-2022-jp*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -185,7 +185,7 @@ static void TestSurrogateBehaviour(){
                                     0x36, 0x21,
                                     0x1B, 0x24, 0x29, 0x47, 0x1B, 0x4E, 0x24, 0x22, 
                                     0x0f, 0x1A, 
-                                    0x1B, 0x24, 0x29, 0x47, 0x1B, 0x4E, 0x24, 0x23
+                                    0x0f, 0x32
                                     };
         
 
@@ -194,9 +194,9 @@ static void TestSurrogateBehaviour(){
                                     1,    1,
                                     2,    2,    2,    2,    2,    2,    2,    2,
                                     3,    3,
-                                    5,    5,    5,    5,    5,    5,    5,    5 };
+                                    5,    5,  };
 
-        /*iso-2022-jp*/
+        /*iso-2022-CN*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "iso-2022-cn", 0 , TRUE, U_ZERO_ERROR))
             log_err("u-> not match.\n");
@@ -206,13 +206,26 @@ static void TestSurrogateBehaviour(){
     }
         log_verbose("Testing for ISO-2022-kr\n");
     {
-        UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
+        UChar    sampleText[] =   { 0x4e00,0xd801, 0xdc01, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
 
-        const uint8_t expected[] = {0x1B, 0x24, 0x29, 0x43, 0x0E, 0x6C, 0x69, 0x6F, 0x4B, 0x0F, 0x31,0x0f, 0x1A, 0x0F, 0x32 };        
+        const uint8_t expected[] = {0x1B, 0x24, 0x29, 0x43, 
+                                    0x0E, 0x6C, 0x69, 
+                                    0x0f, 0x1A, 
+                                    0x0e, 0x6F, 0x4B, 
+                                    0x0F, 0x31, 
+                                    0x1A, 
+                                    0x32 };        
 
-        int32_t offsets[] = {-1,-1,-1,-1,0,0,0,1,1,2,2,3,3,5,5 };
+        int32_t offsets[] = {-1, -1, -1, -1,
+                              0, 0, 0, 
+                              1, 1,  
+                              3, 3, 3, 
+                              4, 4, 
+                              5, 
+                              7,
+                            };
 
-        /*iso-2022-jp*/
+        /*iso-2022-kr*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "iso-2022-kr", 0 , TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-1362 [UCNV_DBCS] not match.\n");
@@ -222,14 +235,24 @@ static void TestSurrogateBehaviour(){
     }
         log_verbose("Testing for HZ\n");
     {
-        UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
+        UChar    sampleText[] =   { 0x4e00, 0xd801, 0xdc01, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
 
-        const uint8_t expected[] = {0x7E ,0x7B, 0x52, 0x3B, 0x36, 0x21, 0x7E, 0x7D, 0x31,0x7E, 0x7D, 0x1A,0x7E, 0x7D,0x32 };
+        const uint8_t expected[] = {0x7E, 0x7B, 0x52, 0x3B,
+                                    0x7E, 0x7D, 0x1A, 
+                                    0x7E, 0x7B, 0x36, 0x21, 
+                                    0x7E, 0x7D, 0x31, 
+                                    0x1A,
+                                    0x32 };
 
 
-        int32_t offsets[] = {0,0,0,0,1,1,2,2,2,3,3,3,5,5,5};
+        int32_t offsets[] = {0,0,0,0,
+                             1,1,1,
+                             3,3,3,3,
+                             4,4,4,
+                             5,
+                             7,};
 
-        /*iso-2022-jp*/
+        /*hz*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "HZ", 0 , TRUE, U_ZERO_ERROR))
             log_err("u->  not match.\n");
@@ -390,32 +413,32 @@ static void TestErrorBehaviour(){
     log_verbose("Testing for iso-2022-jp\n");
     {
         UChar    sampleText[]    = { 0x0031, 0xd801};
-        const uint8_t expected[] = { 0x1b,0x28,0x42, 0x31};
-        int32_t offsets[]        = { 0x00, 0x00, 0x00, 0x00};
+        const uint8_t expected[] = {  0x31};
+        int32_t offsets[]        = { 0x00};
 
         UChar       sampleText2[] = { 0x0031, 0xd801, 0x0032};
-        const uint8_t expected2[] = { 0x1b,0x28,0x42, 0x31, 0x1b,0x28,0x42,0x1A,0x1b,0x28,0x42,0x32};
-        int32_t offsets2[]        = { 0x00, 0x00, 0x00, 0x00, 0x01,0x01,0x01,0x01,0x02,0x02,0x02,0x02};
+        const uint8_t expected2[] = {  0x31,0x1A,0x32};
+        int32_t offsets2[]        = { 0x00,0x01,0x02};
 
-        UChar       sampleText3MBCS[] = { 0x0051, 0x0050, 0xdc01};
-        const uint8_t expected3MBCS[] = {0x1b,0x28,0x42, 0x51, 0x50,0x1b,0x28,0x42,0x1A};
-        int32_t offsets3MBCS[]        = { 0x00, 0x00, 0x00, 0x00, 0x01,0x02,0x02,0x02,0x02 };
+        UChar       sampleText3MBCS[] = { 0x3000, 0x0050, 0xdc01,0x3001};
+        const uint8_t expected3MBCS[] = { 0x1B, 0x24, 0x42, 0x21, 0x21, 0x1B, 0x28, 0x42, 0x50, 0x1A, 0x1B, 0x24, 0x42, 0x21, 0x22,};
+        int32_t offsets3MBCS[]        = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03,};
 
         UChar       sampleText4MBCS[] = { 0x0061, 0x4e00, 0xdc01};
-        const uint8_t expected4MBCS[] = {0x1b,0x28,0x42, 0x61,0x1b,0x24,0x42, 0x30, 0x6c,0x1b,0x28,0x42,0x1a};
-        int32_t offsets4MBCS[]        = { 0x00, 0x00, 0x00, 0x00, 0x01, 0x01 ,0x01,0x01,0x01,0x02,0x02,0x02,0x02 };
+        const uint8_t expected4MBCS[] = { 0x61, 0x1b, 0x24, 0x42, 0x30, 0x6c,0x1b,0x28,0x42,0x1a};
+        int32_t offsets4MBCS[]        = { 0x00, 0x01, 0x01 ,0x01, 0x01, 0x01,0x02,0x02,0x02,0x02 };
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "iso-2022-jp", 0, TRUE, U_TRUNCATED_CHAR_FOUND))
+                expected, sizeof(expected), "iso-2022-jp", offsets, TRUE, U_TRUNCATED_CHAR_FOUND))
             log_err("u-> iso-2022-jp [UCNV_MBCS] \n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "iso-2022-jp", 0, FALSE, U_ZERO_ERROR))
+                expected, sizeof(expected), "iso-2022-jp", offsets, FALSE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_MBCS] \n");
 
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
-                expected2, sizeof(expected2), "iso-2022-jp", 0, TRUE, U_ZERO_ERROR))
+                expected2, sizeof(expected2), "iso-2022-jp", offsets2, TRUE, U_ZERO_ERROR))
             log_err("u->iso-2022-jp[UCNV_DBCS] did not match\n");
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
-                expected2, sizeof(expected2), "iso-2022-jp", 0, FALSE, U_ZERO_ERROR))
+                expected2, sizeof(expected2), "iso-2022-jp", offsets2, FALSE, U_ZERO_ERROR))
             log_err("u-> iso-2022-jp [UCNV_DBCS] did not match\n");
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
                 expected2, sizeof(expected2), "iso-2022-jp", offsets2, FALSE, U_ZERO_ERROR))
@@ -443,28 +466,28 @@ static void TestErrorBehaviour(){
         int32_t offsets[]        = { 0x00, 0x00};
 
         UChar       sampleText2[] = { 0x0031, 0xd801, 0x0032};
-        const uint8_t expected2[] = { 0x0f, 0x31, 0x0f,0x1A,0x0f,0x32};
-        int32_t offsets2[]        = { 0x00, 0x00, 0x01,0x01,0x02,0x02};
+        const uint8_t expected2[] = { 0x0f, 0x31, 0x1A,0x0f,0x32};
+        int32_t offsets2[]        = { 0x00, 0x00, 0x01,0x02,0x02};
 
         UChar       sampleText3MBCS[] = { 0x0051, 0x0050, 0xdc01};
-        const uint8_t expected3MBCS[] = {0x0f, 0x51, 0x50,0x0f,0x1A};
-        int32_t offsets3MBCS[]        = { 0x00, 0x00, 0x01, 0x02, 0x02 };
+        const uint8_t expected3MBCS[] = {0x0f, 0x51, 0x50, 0x1A};
+        int32_t offsets3MBCS[]        = { 0x00, 0x00, 0x01, 0x02 };
 
         UChar       sampleText4MBCS[] = { 0x0061, 0x4e00, 0xdc01};
         const uint8_t expected4MBCS[] = { 0x0f, 0x61, 0x1b, 0x24, 0x29, 0x41, 0x0e, 0x52, 0x3b, 0x0f, 0x1a };
         int32_t offsets4MBCS[]        = { 0x00, 0x00, 0x01, 0x01 ,0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02 };
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "iso-2022-cn", 0, TRUE, U_TRUNCATED_CHAR_FOUND))
+                expected, sizeof(expected), "iso-2022-cn", offsets, TRUE, U_TRUNCATED_CHAR_FOUND))
             log_err("u-> iso-2022-cn [UCNV_MBCS] \n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "iso-2022-cn", 0, FALSE, U_ZERO_ERROR))
+                expected, sizeof(expected), "iso-2022-cn", offsets, FALSE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_MBCS] \n");
 
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
-                expected2, sizeof(expected2), "iso-2022-cn", 0, TRUE, U_ZERO_ERROR))
+                expected2, sizeof(expected2), "iso-2022-cn", offsets2, TRUE, U_ZERO_ERROR))
             log_err("u->iso-2022-cn[UCNV_DBCS] did not match\n");
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
-                expected2, sizeof(expected2), "iso-2022-cn", 0, FALSE, U_ZERO_ERROR))
+                expected2, sizeof(expected2), "iso-2022-cn", offsets2, FALSE, U_ZERO_ERROR))
             log_err("u-> iso-2022-cn [UCNV_DBCS] did not match\n");
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
                 expected2, sizeof(expected2), "iso-2022-cn", offsets2, FALSE, U_ZERO_ERROR))
@@ -488,32 +511,36 @@ static void TestErrorBehaviour(){
     log_verbose("Testing for iso-2022-kr\n");
     {
         UChar    sampleText[]    = { 0x0031, 0xd801};
-        const uint8_t expected[] = { 0x1b, 0x24, 0x29, 0x43, 0x0f, 0x31};
-        int32_t offsets[]        = { -1,   -1,   -1,   -1,   0x00, 0x00};
+        const uint8_t expected[] = { 0x1b, 0x24, 0x29, 0x43, 0x31};
+        int32_t offsets[]        = { -1,   -1,   -1,   -1,   0x00};
 
         UChar       sampleText2[] = { 0x0031, 0xd801, 0x0032};
-        const uint8_t expected2[] = { 0x1b, 0x24, 0x29, 0x43, 0x0f, 0x31, 0x0f, 0x1A, 0x0f,0x32};
-        int32_t offsets2[]        = { -1,   -1,   -1,   -1,   0x00, 0x00, 0x01, 0x01, 0x02,0x02};
+        const uint8_t expected2[] = { 0x1b, 0x24, 0x29, 0x43, 0x31, 0x1A, 0x32};
+        int32_t offsets2[]        = { -1,   -1,   -1,   -1,   0x00, 0x01, 0x02};
 
         UChar       sampleText3MBCS[] = { 0x0051, 0x0050, 0xdc01};
-        const uint8_t expected3MBCS[] = { 0x1b, 0x24, 0x29, 0x43, 0x0f, 0x51, 0x50, 0x0f, 0x1A };
-        int32_t offsets3MBCS[]        = { -1,   -1,   -1,   -1,   0x00, 0x00, 0x01, 0x02, 0x02 };
+        const uint8_t expected3MBCS[] = { 0x1b, 0x24, 0x29, 0x43,  0x51, 0x50, 0x1A };
+        int32_t offsets3MBCS[]        = { -1,   -1,   -1,   -1,    0x00, 0x01, 0x02, 0x02 };
 
-        UChar       sampleText4MBCS[] = { 0x0061, 0x4e00, 0xdc01};
-        const uint8_t expected4MBCS[] = { 0x1b, 0x24, 0x29, 0x43, 0x0f, 0x61, 0x0e, 0x6c, 0x69, 0x0f, 0x1a };
-        int32_t offsets4MBCS[]        = { -1,   -1,   -1,   -1,   0x00, 0x00, 0x01 ,0x01, 0x01, 0x02, 0x02 };
+        UChar       sampleText4MBCS[] = { 0x0061, 0x4e00, 0xdc01,0x4e00};
+        const uint8_t expected4MBCS[] = { 0x1b, 0x24, 0x29, 0x43,
+                                          0x61, 
+                                          0x0e, 0x6c, 0x69, 
+                                          0x0f, 0x1a,
+                                          0x0e, 0x6c, 0x69,};
+        int32_t offsets4MBCS[]        = { -1,   -1,   -1,   -1, 0x00, 0x01 ,0x01, 0x01, 0x02, 0x02, 0x03, 0x03, 0x03 };
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "iso-2022-kr", 0, TRUE, U_TRUNCATED_CHAR_FOUND))
+                expected, sizeof(expected), "iso-2022-kr", offsets, TRUE, U_TRUNCATED_CHAR_FOUND))
             log_err("u-> iso-2022-kr [UCNV_MBCS] \n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "iso-2022-kr", 0, FALSE, U_ZERO_ERROR))
+                expected, sizeof(expected), "iso-2022-kr", offsets, FALSE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_MBCS] \n");
 
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
-                expected2, sizeof(expected2), "iso-2022-kr", 0, TRUE, U_ZERO_ERROR))
+                expected2, sizeof(expected2), "iso-2022-kr", offsets2, TRUE, U_ZERO_ERROR))
             log_err("u->iso-2022-kr[UCNV_DBCS] did not match\n");
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
-                expected2, sizeof(expected2), "iso-2022-kr", 0, FALSE, U_ZERO_ERROR))
+                expected2, sizeof(expected2), "iso-2022-kr", offsets2, FALSE, U_ZERO_ERROR))
             log_err("u-> iso-2022-kr [UCNV_DBCS] did not match\n");
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
                 expected2, sizeof(expected2), "iso-2022-kr", offsets2, FALSE, U_ZERO_ERROR))
@@ -542,28 +569,28 @@ static void TestErrorBehaviour(){
         int32_t offsets[]        = { 0x00, 0x00, 0x00};
 
         UChar       sampleText2[] = { 0x0031, 0xd801, 0x0032};
-        const uint8_t expected2[] = { 0x7e, 0x7d, 0x31, 0x7e, 0x7d, 0x1A, 0x7e, 0x7d, 0x32 };
-        int32_t offsets2[]        = { 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02 };
+        const uint8_t expected2[] = { 0x7e, 0x7d, 0x31,  0x1A,  0x32 };
+        int32_t offsets2[]        = { 0x00, 0x00, 0x00, 0x01,  0x02 };
 
         UChar       sampleText3MBCS[] = { 0x0051, 0x0050, 0xdc01};
-        const uint8_t expected3MBCS[] = { 0x7e, 0x7d, 0x51, 0x50, 0x7e, 0x7d, 0x1A };
-        int32_t offsets3MBCS[]        = { 0x00, 0x00, 0x00, 0x01, 0x02, 0x02, 0x02 };
+        const uint8_t expected3MBCS[] = { 0x7e, 0x7d, 0x51, 0x50,  0x1A };
+        int32_t offsets3MBCS[]        = { 0x00, 0x00, 0x00, 0x01, 0x02};
 
         UChar       sampleText4MBCS[] = { 0x0061, 0x4e00, 0xdc01};
         const uint8_t expected4MBCS[] = { 0x7e, 0x7d, 0x61, 0x7e, 0x7b, 0x52, 0x3b, 0x7e, 0x7d, 0x1a };
         int32_t offsets4MBCS[]        = { 0x00, 0x00, 0x00, 0x01, 0x01, 0x01 ,0x01, 0x02, 0x02, 0x02 };
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "HZ", 0, TRUE, U_TRUNCATED_CHAR_FOUND))
+                expected, sizeof(expected), "HZ", offsets, TRUE, U_TRUNCATED_CHAR_FOUND))
             log_err("u-> HZ [UCNV_MBCS] \n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "HZ", 0, FALSE, U_ZERO_ERROR))
+                expected, sizeof(expected), "HZ", offsets, FALSE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_MBCS] \n");
 
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
-                expected2, sizeof(expected2), "HZ", 0, TRUE, U_ZERO_ERROR))
+                expected2, sizeof(expected2), "HZ", offsets2, TRUE, U_ZERO_ERROR))
             log_err("u->HZ[UCNV_DBCS] did not match\n");
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
-                expected2, sizeof(expected2), "HZ", 0, FALSE, U_ZERO_ERROR))
+                expected2, sizeof(expected2), "HZ", offsets2, FALSE, U_ZERO_ERROR))
             log_err("u-> HZ [UCNV_DBCS] did not match\n");
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
                 expected2, sizeof(expected2), "HZ", offsets2, FALSE, U_ZERO_ERROR))
