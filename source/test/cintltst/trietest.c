@@ -18,6 +18,7 @@
 #include "unicode/utypes.h"
 #include "utrie.h"
 #include "cstring.h"
+#include "cmemory.h"
 
 #if 1
 #include "cintltst.h"
@@ -48,8 +49,11 @@ typedef struct CheckRange {
     UChar32 limit;
     uint32_t value;
 } CheckRange;
+struct{
+    double bogus; /* needed for aligining the storage */
+    uint8_t storage[10000000];
+} storageHolder;
 
-static uint8_t storage[100000];
 
 static uint32_t U_CALLCONV
 _testFoldedValue32(UNewTrie *trie, UChar32 start, int32_t offset) {
@@ -252,7 +256,7 @@ testTrieIteration(const char *testName,
 }
 
 static void
-testTrieRanges(const char *testName,
+testTrieRangesWithMalloc(const char *testName,
                const SetRange setRanges[], int32_t countSetRanges,
                const CheckRange checkRanges[], int32_t countCheckRanges,
                UBool dataIs32, UBool latin1Linear) {
@@ -265,6 +269,8 @@ testTrieRanges(const char *testName,
     int32_t i, length;
     UErrorCode errorCode;
     UBool overwrite, ok;
+    uint8_t* storage =NULL;
+    storage = (uint8_t*) uprv_malloc(sizeof(uint8_t)*100000);
 
     log_verbose("\ntesting Trie '%s'\n", testName);
     newTrie=utrie_open(NULL, NULL, 2000, checkRanges[0].value, latin1Linear);
@@ -309,7 +315,7 @@ testTrieRanges(const char *testName,
     }
 
     errorCode=U_ZERO_ERROR;
-    length=utrie_serialize(newTrie, storage, sizeof(storage),
+    length=utrie_serialize(newTrie, storage, 1000000,
                            dataIs32 ? _testFoldedValue32 : _testFoldedValue16,
                            (UBool)!dataIs32,
                            &errorCode);
@@ -432,6 +438,190 @@ testTrieRanges(const char *testName,
     }
 
     testTrieIteration(testName, &trie, checkRanges, countCheckRanges);
+    uprv_free(storage);
+}
+
+static void
+testTrieRanges(const char *testName,
+               const SetRange setRanges[], int32_t countSetRanges,
+               const CheckRange checkRanges[], int32_t countCheckRanges,
+               UBool dataIs32, UBool latin1Linear) {
+    UTrieGetFoldingOffset *getFoldingOffset;
+    const CheckRange *enumRanges;
+    UNewTrie *newTrie;
+    UTrie trie={ 0 };
+    uint32_t value, value2;
+    UChar32 start, limit;
+    int32_t i, length;
+    UErrorCode errorCode;
+    UBool overwrite, ok;
+
+    log_verbose("\ntesting Trie '%s'\n", testName);
+    newTrie=utrie_open(NULL, NULL, 2000, checkRanges[0].value, latin1Linear);
+
+    /* set values from setRanges[] */
+    ok=TRUE;
+    for(i=0; i<countSetRanges; ++i) {
+        start=setRanges[i].start;
+        limit=setRanges[i].limit;
+        value=setRanges[i].value;
+        overwrite=setRanges[i].overwrite;
+        if((limit-start)==1 && overwrite) {
+            ok&=utrie_set32(newTrie, start, value);
+        } else {
+            ok&=utrie_setRange32(newTrie, start, limit, value, overwrite);
+        }
+    }
+    if(!ok) {
+        log_err("error: setting values into a trie failed (%s)\n", testName);
+        return;
+    }
+
+    /* verify that all these values are in the new Trie */
+    start=0;
+    for(i=0; i<countCheckRanges; ++i) {
+        limit=checkRanges[i].limit;
+        value=checkRanges[i].value;
+
+        while(start<limit) {
+            if(value!=utrie_get32(newTrie, start, NULL)) {
+                log_err("error: newTrie(%s)[U+%04lx]==0x%lx instead of 0x%lx\n",
+                        testName, start, utrie_get32(newTrie, start, NULL), value);
+            }
+            ++start;
+        }
+    }
+
+    if(dataIs32) {
+        getFoldingOffset=_testFoldingOffset32;
+    } else {
+        getFoldingOffset=_testFoldingOffset16;
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=utrie_serialize(newTrie, storageHolder.storage, sizeof(storageHolder.storage),
+                           dataIs32 ? _testFoldedValue32 : _testFoldedValue16,
+                           (UBool)!dataIs32,
+                           &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("error: utrie_serialize(%s) failed: %s\n", testName, u_errorName(errorCode));
+        utrie_close(newTrie);
+        return;
+    }
+
+    /* test linear Latin-1 range from utrie_getData() */
+    if(latin1Linear) {
+        uint32_t *data;
+        int32_t dataLength;
+
+        data=utrie_getData(newTrie, &dataLength);
+        start=0;
+        for(i=0; i<countCheckRanges && start<=0xff; ++i) {
+            limit=checkRanges[i].limit;
+            value=checkRanges[i].value;
+
+            while(start<limit && start<=0xff) {
+                if(value!=data[UTRIE_DATA_BLOCK_LENGTH+start]) {
+                    log_err("error: newTrie(%s).latin1Data[U+%04lx]==0x%lx instead of 0x%lx\n",
+                            testName, start, data[UTRIE_DATA_BLOCK_LENGTH+start], value);
+                }
+                ++start;
+            }
+        }
+    }
+
+    utrie_close(newTrie);
+
+    errorCode=U_ZERO_ERROR;
+    if(!utrie_unserialize(&trie, storageHolder.storage, length, &errorCode)) {
+        log_err("error: utrie_unserialize() failed, %s\n", u_errorName(errorCode));
+        return;
+    }
+    trie.getFoldingOffset=getFoldingOffset;
+
+    if(dataIs32!=(trie.data32!=NULL)) {
+        log_err("error: trie serialization (%s) did not preserve 32-bitness\n", testName);
+    }
+    if(latin1Linear!=trie.isLatin1Linear) {
+        log_err("error: trie serialization (%s) did not preserve Latin-1-linearity\n", testName);
+    }
+
+    /* verify that all these values are in the unserialized Trie */
+    start=0;
+    for(i=0; i<countCheckRanges; ++i) {
+        limit=checkRanges[i].limit;
+        value=checkRanges[i].value;
+
+        if(start==0xd800) {
+            /* skip surrogates */
+            start=limit;
+            continue;
+        }
+
+        while(start<limit) {
+            if(start<=0xffff) {
+                if(dataIs32) {
+                    value2=UTRIE_GET32_FROM_BMP(&trie, start);
+                } else {
+                    value2=UTRIE_GET16_FROM_BMP(&trie, start);
+                }
+                if(value!=value2) {
+                    log_err("error: unserialized trie(%s).fromBMP(U+%04lx)==0x%lx instead of 0x%lx\n",
+                            testName, start, value2, value);
+                }
+                if(!UTF_IS_LEAD(start)) {
+                    if(dataIs32) {
+                        value2=UTRIE_GET32_FROM_LEAD(&trie, start);
+                    } else {
+                        value2=UTRIE_GET16_FROM_LEAD(&trie, start);
+                    }
+                    if(value!=value2) {
+                        log_err("error: unserialized trie(%s).fromLead(U+%04lx)==0x%lx instead of 0x%lx\n",
+                                testName, start, value2, value);
+                    }
+                }
+            }
+            if(dataIs32) {
+                UTRIE_GET32(&trie, start, value2);
+            } else {
+                UTRIE_GET16(&trie, start, value2);
+            }
+            if(value!=value2) {
+                log_err("error: unserialized trie(%s).get(U+%04lx)==0x%lx instead of 0x%lx\n",
+                        testName, start, value2, value);
+            }
+            ++start;
+        }
+    }
+
+    /* enumerate and verify all ranges */
+    enumRanges=checkRanges+1;
+    utrie_enum(&trie, _testEnumValue, _testEnumRange, &enumRanges);
+
+    /* test linear Latin-1 range */
+    if(trie.isLatin1Linear) {
+        if(trie.data32!=NULL) {
+            const uint32_t *latin1=UTRIE_GET32_LATIN1(&trie);
+
+            for(start=0; start<0x100; ++start) {
+                if(latin1[start]!=UTRIE_GET32_FROM_LEAD(&trie, start)) {
+                    log_err("error: (%s) trie.latin1[U+%04lx]=0x%lx!=0x%lx=trie.get32(U+%04lx)\n",
+                            testName, start, latin1[start], UTRIE_GET32_FROM_LEAD(&trie, start), start);
+                }
+            }
+        } else {
+            const uint16_t *latin1=UTRIE_GET16_LATIN1(&trie);
+
+            for(start=0; start<0x100; ++start) {
+                if(latin1[start]!=UTRIE_GET16_FROM_LEAD(&trie, start)) {
+                    log_err("error: (%s) trie.latin1[U+%04lx]=0x%lx!=0x%lx=trie.get16(U+%04lx)\n",
+                            testName, start, latin1[start], UTRIE_GET16_FROM_LEAD(&trie, start), start);
+                }
+            }
+        }
+    }
+
+    testTrieIteration(testName, &trie, checkRanges, countCheckRanges);
 }
 
 static void
@@ -445,10 +635,18 @@ testTrieRanges2(const char *testName,
                    setRanges, countSetRanges,
                    checkRanges, countCheckRanges,
                    dataIs32, FALSE);
+    testTrieRangesWithMalloc(testName,
+                   setRanges, countSetRanges,
+                   checkRanges, countCheckRanges,
+                   dataIs32, FALSE);
 
     uprv_strcpy(name, testName);
     uprv_strcat(name, "-latin1Linear");
     testTrieRanges(name,
+                   setRanges, countSetRanges,
+                   checkRanges, countCheckRanges,
+                   dataIs32, TRUE);
+    testTrieRangesWithMalloc(name,
                    setRanges, countSetRanges,
                    checkRanges, countCheckRanges,
                    dataIs32, TRUE);
