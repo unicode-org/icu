@@ -181,10 +181,10 @@ distclean-local: clean-local
 	$(RMV) Makefile $(SRCDATAFILES) $(DATAFILES) $(TESTDATAD) $(BASETESTDATA) icupkg.inc
 	# Clean up any old variations.. 
 	-@if [ -f @DATABUILDDIR@/icudata_dll.mak ]; then \
-		(cd pkgdata; pkgdata -m dll -p icudata -O @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/icudata.lst -d @DATABUILDDIR@ --clean ) \
+		(cd pkgdata; ./pkgdata -m dll -p icudata -O @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/icudata.lst -d @DATABUILDDIR@ --clean ) \
 	fi
 	-@if [ -f @DATABUILDDIR@/icudata_common.mak ]; then \
-		(cd pkgdata; pkgdata -m common -p icudata -O @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/icudata.lst -d @DATABUILDDIR@ --clean ) \
+		(cd pkgdata; ./pkgdata -m common -p icudata -O @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/icudata.lst -d @DATABUILDDIR@ --clean ) \
 	fi
 	-@$(RMV) @DATABUILDDIR@/icudata.lst  @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/*.o @DATABUILDDIR@/*.c @DATABUILDDIR@/*.mak @DATABUILDDIR@/*.lst
 
@@ -192,24 +192,24 @@ distclean-local: clean-local
 	@echo Generating $@ list of data files
 	@-$(RMV) @DATABUILDDIR@/icudata.lst
 	@for file in $(DATAFILES); do \
-	  echo `pwd`/$$file >@DATABUILDDIR@/icudata.lst; \
+	  echo `pwd`/$$file >>@DATABUILDDIR@/icudata.lst; \
 	done;
 
 @DATABUILDDIR@/icupkg.inc: icupkg.inc
 	cp icupkg.inc @DATABUILDDIR@/icupkg.inc
 
 build-local build-pkgdata: @DATABUILDDIR@/icudata.lst @DATABUILDDIR@/icupkg.inc $(DATAFILES)
-	(cd pkgdata; pkgdata -v -m $(MODE) -p icudata -O @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/icudata.lst -d @DATABUILDDIR@  )
+	(cd pkgdata; ./pkgdata -v -m $(MODE) -p icudata -O @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/icudata.lst -d @DATABUILDDIR@  )
 
 install-pkgdata: @DATABUILDDIR@/icudata.lst @DATABUILDDIR@/icupkg.inc
-	(cd pkgdata; pkgdata -v -m $(MODE) -p icudata -O @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/icudata.lst -d @DATABUILDDIR@ -I $(DESTDIR)$(pkgdatadir)/$(VERSION) )
+	(cd pkgdata; ./pkgdata -v -m $(MODE) -p icudata -O @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/icudata.lst -d @DATABUILDDIR@ -I $(DESTDIR)$(pkgdatadir)/$(VERSION) )
 
 icupkg.inc: $(srcdir)/icupkg.inc.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 clean-pkgdata:  @DATABUILDDIR@/icudata.lst @DATABUILDDIR@/icupkg.inc
-	-(cd pkgdata; pkgdata -m $(MODE) -p icudata -O @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/icudata.lst -d @DATABUILDDIR@ --clean ) 
+	-(cd pkgdata; ./pkgdata -m $(MODE) -p icudata -O @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/icudata.lst -d @DATABUILDDIR@ --clean ) 
 	-$(RMV) @DATABUILDDIR@/icudata.lst @DATABUILDDIR@/icupkg.inc
 
 check-local:
