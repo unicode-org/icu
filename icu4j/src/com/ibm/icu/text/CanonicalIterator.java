@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CanonicalIterator.java,v $ 
- * $Date: 2002/03/13 19:52:35 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/03/14 15:33:25 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -104,11 +104,22 @@ public class CanonicalIterator {
         source = Normalizer.normalize(newSource, Normalizer.DECOMP, 0);
         done = false;
         
+        // catch degenerate case
+    	if (newSource.length() == 0) {
+    		pieces = new String[1][];
+    		current = new int[1];
+    		pieces[0] = new String[]{""};
+    		return;
+    	}
+        
         // find the segments
         List list = new ArrayList();
         int cp;
         int start = 0;
-        int i = 1;
+        
+	    // i should be the end of the first code point
+	    
+	    int i = UTF16.findOffsetFromCodePoint(source, 1);
         for (; i < source.length(); i += UTF16.getCharCount(i)) {
             cp = UTF16.charAt(source, i);
             if (SAFE_START.contains(cp)) {
