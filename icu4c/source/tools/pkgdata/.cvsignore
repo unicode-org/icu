@@ -5,6 +5,7 @@ Makefile
 *.d
 *.pdb
 pkgdata
+pkgdata.[0-9]
 icupkg.inc
 *.ncb
 *.opt
