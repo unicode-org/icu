@@ -14,7 +14,7 @@ package com.ibm.icu.dev.tool.localeconverter;
 
 import java.io.*;
 import java.util.*;
-import com.ibm.icu.impl.ICUListResourceBundle;
+
 /**
  * @author ram
  *
@@ -59,7 +59,6 @@ public class ConvertICUListResourceBundle {
             String packagename = null;
             String bundleName = null;
             for (int i = 0; i < args.length; i++) {
-                final String thisArg = args[i];
                 if(args[i].equalsIgnoreCase("-package")){
                    i++;
                    packagename = args[i];
@@ -74,8 +73,7 @@ public class ConvertICUListResourceBundle {
             final String localeElements = packagename
                     + (String)((bundleName != null) ? "."+ bundleName : ".LocaleElements" )
                     + (String)((localeName != null) ? "_"+ localeName : "");
-            final String DateFormatZoneData = packagename+".DateFormatZoneData" +
-                    (String)((localeName != null) ? "_"+localeName : "");
+
             addLocaleData(localeElements, data);
             //addLocaleData(DateFormatZoneData, data);
             

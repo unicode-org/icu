@@ -5,15 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/PosixToNeutralConverter.java,v $ 
- * $Date: 2002/02/16 03:05:31 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/09/10 23:36:09 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.tool.localeconverter;
-import com.ibm.icu.lang.*;
-import com.ibm.icu.text.*;
-import java.io.*;
+
 import java.util.*;
 
 public class PosixToNeutralConverter extends LocaleConverter {
@@ -28,7 +26,6 @@ public class PosixToNeutralConverter extends LocaleConverter {
     public static final byte LC_NAME            = 0x14;
     public static final byte LC_IDENTIFICATION  = 0x15;
     public static final byte LC_TELEPHONE       = 0x16;
-    public static final HexToUnicodeTransliterator myTranslit = new HexToUnicodeTransliterator();
     
     private static final byte[] masks = { 
         LC_CTYPE, LC_TIME, LC_NUMERIC, LC_MONETARY, LC_MESSAGES,
@@ -103,7 +100,7 @@ public class PosixToNeutralConverter extends LocaleConverter {
         this.flags = flags;
         this.locale = locale;
         this.sfileName=fileName;
-        myTranslit.applyPattern("<U###0>");
+        
         String language = locale.getLanguage();
         String country = locale.getCountry();
         String variant = "";
@@ -175,436 +172,165 @@ public class PosixToNeutralConverter extends LocaleConverter {
         return newStr2DArr;           
     }
     public void writePosixCompData(final Hashtable result, final Hashtable source){        
-           
+        convertMESSAGES(result,source);
+        convertIDENTIFICATION(result,source);
+        convertNAMEFORMAT(result,source);
+        convertADDRESSFORMAT(result,source);
+        convertTELEPHONEFORMAT(result,source);
+    }
 
-            class DumpPosixData{
-                    FileOutputStream outFile;
-                    ICULocaleWriter myLocaleWriter;
-                    public DumpPosixData(String fileName){
-                        try{
-                            outFile = new FileOutputStream(fileName.concat("_PCD.txt"));
-                            myLocaleWriter=new ICULocaleWriter(new PrintStream((OutputStream)outFile));
-                        }
-                        catch(java.io.IOException e){
-                            System.out.println("File not found\n\n\n");
-                            return;
-                        } 
-                        
-                    }
 
-                    private void writePosixCompData(final Hashtable resultHash, final Hashtable source, String fileName){
-                        convertMESSAGES(resultHash,source);
-                        convertIDENTIFICATION(resultHash,source);
-                        convertNAMEFORMAT(resultHash,source);
-                        convertADDRESSFORMAT(resultHash,source);
-                        convertTELEPHONEFORMAT(resultHash,source);
-                        String euroVar = locale.getVariant();
-                        if(euroVar.equals("")){
-                            euroVar = "PCD";
-                        }else{
-                            euroVar=euroVar.concat("_PCD");
-                        }
-                        
-                        Locale myLocale = new Locale(locale.getLanguage(),locale.getCountry(),euroVar);
-                        myLocaleWriter.write(myLocale, resultHash);  
-                        
-                    }
+    private void convertMESSAGES(final Hashtable result, final Hashtable source){
+        final String[][]DEFAULT_MESSAGES = (String[][]) getDefault("Messages");
+        final String[][] myMessages = clone2DArr(DEFAULT_MESSAGES);
 
-                    private void convertMESSAGES(final Hashtable result, final Hashtable source){
-                        final String[][]DEFAULT_MESSAGES = (String[][]) getDefault("Messages");
-                        final String[][] myMessages = clone2DArr(DEFAULT_MESSAGES);
-
-                        String value =(String) source.get("yesexpr");
-                        ReplaceableString temp =new ReplaceableString();
-                        if(value!=null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myMessages[0][1] = temp.toString();
-                        }
-                        value = (String) source.get("noexpr");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value); 
-                            myTranslit.transliterate(temp);
-                            myMessages[1][1] = temp.toString();
-                        }
-                       resultPut(result,"Messages",myMessages);
-                    }
-                    private void convertIDENTIFICATION(final Hashtable result, final Hashtable source){
-                        final String[][]DEFAULT_MESSAGES = (String[][]) getDefault("Identification");
-                        final String[][] myIdentification = clone2DArr(DEFAULT_MESSAGES);
-                                              
-                        String value =(String) source.get("title");
-                        ReplaceableString temp =new ReplaceableString();
-                        if(value!=null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myIdentification[0][1] = temp.toString();
-                        }                        
-                        value = (String) source.get("source");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myIdentification[1][1] = temp.toString();
-                        }
-                        value = (String) source.get("address");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myIdentification[2][1] = value;
-                        }
-                        value = (String) source.get("contact");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myIdentification[3][1] = temp.toString();
-                        }
-                        value = (String) source.get("email");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myIdentification[4][1] = temp.toString();
-                        }
-                        value = (String) source.get("tel");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myIdentification[5][1] = temp.toString();
-                        }
-                        
-                        value = (String) source.get("fax");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myIdentification[6][1] = temp.toString();
-                        }
-                        value = (String) source.get("language");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myIdentification[7][1] = temp.toString();
-                        }
-                        value = (String) source.get("territory");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myIdentification[8][1] = temp.toString();
-                        }
-                        value = (String) source.get("audience");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myIdentification[9][1] = temp.toString();
-                        }
-                        
-                        value = (String) source.get("application");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myIdentification[10][1] = temp.toString();
-                        }
-                        else
-                        value = (String) source.get("abbreviation");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myIdentification[11][1] = temp.toString();
-                        }
-                        value = (String) source.get("revision");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myIdentification[12][1] = temp.toString();
-                        }
-                        value = (String) source.get("date");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myIdentification[13][1] = temp.toString();
-                        }
-                        resultPut(result,"Identification",myIdentification);
-                    }
-                    private void convertNAMEFORMAT(final Hashtable result, final Hashtable source){
-                        final String[][]DEFAULT_MESSAGES = (String[][]) getDefault("NameFormat");
-                        final String[][] myNameFormat = clone2DArr(DEFAULT_MESSAGES);
-                        String value =(String) source.get("name_mr");
-                        ReplaceableString temp =new ReplaceableString();
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myNameFormat[2][1] = temp.toString();
-                        }
-                        value = (String) source.get("name_miss");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myNameFormat[3][1] = temp.toString();
-                        }
-                        value = (String) source.get("name_ms");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myNameFormat[6][1] = temp.toString();
-                        }
-                        value = (String) source.get("name_mrs");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myNameFormat[4][1] = temp.toString();
-                        }
-                        value = (String) source.get("name_gender");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myNameFormat[1][1] = temp.toString();
-                        }
-                        value = (String) source.get("name_fmt");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            char[] myChars= new char[100];// = temp.toString().getChars();
-                            temp.getChars(0,temp.length(),myChars,0);
-                            StringBuffer myString=new StringBuffer();
-                            int i =0;
-                            do{
-                                if(myChars[i]!='%'){
-                                    myString.append(myChars[i]);
-                                    i++;
-                                }
-                                else{
-                                    i++;
-                                    switch (myChars[i]){
-                                        case 'f' :
-                                            myString.append ("{0}");
-                                            break;
-                                        case 'F' :
-                                            myString.append("{1}");
-                                            break;
-                                        case 'g' :
-                                            myString.append("{2}");
-                                            break;
-                                        case 'G' :
-                                            myString.append("{3}");
-                                            break;
-                                        case 'l' :
-                                            myString.append( "{4}");
-                                            break;
-                                        case 'o' :
-                                            myString.append("{5}");
-                                            break;
-                                        case 'm' :
-                                            myString.append("{6}");
-                                            break;
-                                        case 'M' :
-                                            myString.append("{7}");
-                                            break;
-                                        case 'p' :
-                                            myString.append("{8}");
-                                            break;
-                                        case 's':
-                                            myString.append ("{9}");
-                                            break;
-                                        case 'S':
-                                            myString.append ("{10}");
-                                            break;
-                                        case 'd':
-                                            myString.append ("{11}");
-                                            break;
-                                        case 't':
-                                            myString.append ("{12}");
-                                            break;
-                                        default:
-                                            myString.append(myChars[i]);
-                                            break;
-                                    }
-                                    i++;
-                                   //}
-                                                                          
-                                }       
-                            }while(i<temp.length());     
-                            myNameFormat[0][1] = myString.toString();
-                        }
-                         resultPut(result,"NameFormat",myNameFormat);
-                    }
-                    private void convertADDRESSFORMAT(final Hashtable result, final Hashtable source){
-                        final String[][]DEFAULT_MESSAGES = (String[][]) getDefault("AddressFormat");
-                        final String[][] myAddressFormat =( clone2DArr(DEFAULT_MESSAGES));
-                        String value =(String) source.get("postal_fmt");
-                        ReplaceableString temp =new ReplaceableString();
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            char[] myChars= new char[100];// = temp.toString().getChars();
-                            temp.getChars(0,temp.length(),myChars,0);
-                            StringBuffer myString=new StringBuffer();
-                            int i =0;
-                            do{
-                                if(myChars[i]!='%'){
-                                    myString.append(myChars[i]);
-                                    i++;
-                                }
-                                else{
-                                    i++;
-                                    switch (myChars[i]){
-                                        case 'a' :
-                                            myString.append ("{0}");
-                                            break;
-                                        case 'f' :
-                                            myString.append("{1}");
-                                            break;
-                                        case 'd' :
-                                            myString.append("{2}");
-                                            break;
-                                        case 'b' :
-                                            myString.append("{3}");
-                                            break;
-                                        case 's' :
-                                            myString.append( "{4}");
-                                            break;
-                                        case 'h' :
-                                            myString.append("{5}");
-                                            break;
-                                        case 'N' :
-                                            myString.append("{6}");
-                                            break;
-                                        case 't' :
-                                            myString.append("{13}");
-                                            break;
-                                        case 'r' :
-                                            myString.append("{7}");
-                                            break;
-                                        case 'e':
-                                            myString.append ("{8}");
-                                            break;
-                                        case 'C':
-                                            myString.append ("{9}");
-                                            break;
-                                        case 'Z':
-                                            myString.append ("{10}");
-                                            break;
-                                        case 'T':
-                                            myString.append ("{11}");
-                                            break;
-                                        case 'z':
-                                            myString.append ("{12}");
-                                            break;
-                                        case 'c':
-                                            myString.append ("{14}");
-                                            break;
-                                        default:
-                                            myString.append(myChars[i]);
-                                            break;
-                                    }
-                                    i++;
-                                }
+        String value =(String) source.get("yesexpr");
         
-                            }while(i<temp.length());   
-                            myAddressFormat[0][1] = myString.toString();
-                        }
-                         resultPut(result,"AddressFormat",myAddressFormat);
-                    }
-                    private void convertTELEPHONEFORMAT(final Hashtable result, final Hashtable source){
-                        final String[][]DEFAULT_MESSAGES = (String[][]) getDefault("TelephoneFormat");
-                        final String[][] myTelephoneFormat = clone2DArr(DEFAULT_MESSAGES);
-                        String value =(String) source.get("tel_int_fmt");
-                        ReplaceableString temp =new ReplaceableString();
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            char[] myChars= new char[100];// = temp.toString().getChars();
-                            temp.getChars(0,temp.length(),myChars,0);
-                            StringBuffer myString=new StringBuffer();
-                            int i =0;
-                            do{
-                                if(myChars[i]!='%'){
-                                    myString.append(myChars[i]);
-                                    i++;
-                                }
-                                else{
-                                    i++;
-                                    switch (myChars[i]){
-                                        case 'a' :
-                                            myString.append ("{0}");
-                                            break;
-                                        case 'A' :
-                                            myString.append("{1}");
-                                            break;
-                                        case 'l' :
-                                            myString.append("{2}");
-                                            break;
-                                        case 'c' :
-                                            myString.append("{3}");
-                                            break;
-                                        case 'C' :
-                                            myString.append( "{4}");
-                                            break;
-                                        default:
-                                            myString.append(myChars[i]);
-                                            break;
-                                    }
-                                    i++;
-                                }                                        
-                            }while(i<temp.length());
-                            myTelephoneFormat[0][1] = myString.toString();
-                        }
-                        value = (String) source.get("dom_fmt");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            char[] myChars= new char[100];// = temp.toString().getChars();
-                            temp.getChars(0,temp.length(),myChars,0);
-                            StringBuffer myString=new StringBuffer();
-                            int i =0;
-                                do{
-                                if(myChars[i]!='%'){
-                                    myString.append(myChars[i]);
-                                    i++;
-                                }
-                                else{
-                                    i++;
-                                    switch (myChars[i]){
-                                        case 'a' :
-                                            myString.append ("{0}");
-                                            break;
-                                        case 'A' :
-                                            myString.append("{1}");
-                                            break;
-                                        case 'l' :
-                                            myString.append("{2}");
-                                            break;
-                                        case 'c' :
-                                            myString.append("{3}");
-                                            break;
-                                        case 'C' :
-                                            myString.append( "{4}");
-                                            break;
-                                        default:
-                                            myString.append(myChars[i]);
-                                            break;
-                                    }
-                                    i++;
-                                }                                        
-                            }while(i<temp.length());
-                            myTelephoneFormat[1][1] = myString.toString();
-                        }
-                        value = (String) source.get("int_select");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myTelephoneFormat[2][1] = temp.toString();
-                        }
-                        value = (String) source.get("int_prefix");
-                        if(value != null){
-                            temp.replace(0,temp.length(),value);
-                            myTranslit.transliterate(temp);
-                            myTelephoneFormat[3][1] = temp.toString();
-                        }
-                         resultPut(result,"TelephoneFormat",myTelephoneFormat);
-                    }
-            }
-            
-            DumpPosixData p = new DumpPosixData(sfileName);
-            Hashtable myresult = new Hashtable(20);
-            p.writePosixCompData(myresult,source,sfileName);
+        if(value!=null){
+             myMessages[0][1]  = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("noexpr");
+        if(value != null){
+            myMessages[1][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("yesstr");
+        if(value != null){
+            myMessages[2][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("nostr");
+        if(value != null){
+            myMessages[3][1] = PosixCollationBuilder.unescape(value);
+        }
+        resultPut(result,"Messages",myMessages);
+    }
+    private void convertIDENTIFICATION(final Hashtable result, final Hashtable source){
+        final String[][]DEFAULT_MESSAGES = (String[][]) getDefault("Identification");
+        final String[][] myIdentification = clone2DArr(DEFAULT_MESSAGES);
+                              
+        String value =(String) source.get("title");
+        if(value!=null){
+            myIdentification[0][1] = PosixCollationBuilder.unescape(value);
+        }                        
+        value = (String) source.get("source");
+        if(value != null){
+            myIdentification[1][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("address");
+        if(value != null){
+            myIdentification[2][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("contact");
+        if(value != null){
+            myIdentification[3][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("email");
+        if(value != null){
+            myIdentification[4][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("tel");
+        if(value != null){
+
+            myIdentification[5][1] = PosixCollationBuilder.unescape(value);
+        }
+        
+        value = (String) source.get("fax");
+        if(value != null){
+            myIdentification[6][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("language");
+        if(value != null){
+            myIdentification[7][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("territory");
+        if(value != null){
+            myIdentification[8][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("audience");
+        if(value != null){
+            myIdentification[9][1] = PosixCollationBuilder.unescape(value);
+        }
+        
+        value = (String) source.get("application");
+        if(value != null){
+            myIdentification[10][1] = PosixCollationBuilder.unescape(value);
+        }
+        else
+        value = (String) source.get("abbreviation");
+        if(value != null){
+            myIdentification[11][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("revision");
+        if(value != null){
+            myIdentification[12][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("date");
+        if(value != null){
+            myIdentification[13][1] = PosixCollationBuilder.unescape(value);
+        }
+        resultPut(result,"Identification",myIdentification);
+    }
+    private void convertNAMEFORMAT(final Hashtable result, final Hashtable source){
+        final String[][]DEFAULT_MESSAGES = (String[][]) getDefault("NameFormat");
+        final String[][] myNameFormat = clone2DArr(DEFAULT_MESSAGES);
+        String value =(String) source.get("name_mr");
+        if(value != null){
+            myNameFormat[2][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("name_miss");
+        if(value != null){
+            myNameFormat[3][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("name_ms");
+        if(value != null){
+            myNameFormat[6][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("name_mrs");
+        if(value != null){
+            myNameFormat[4][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("name_gender");
+        if(value != null){
+            myNameFormat[1][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("name_fmt");
+        if(value != null){
+            value = PosixCollationBuilder.unescape(value);
+            myNameFormat[0][1] = value;
+        }
+         resultPut(result,"NameFormat",myNameFormat);
+    }
+    private void convertADDRESSFORMAT(final Hashtable result, final Hashtable source){
+        final String[][]DEFAULT_MESSAGES = (String[][]) getDefault("AddressFormat");
+        final String[][] myAddressFormat =( clone2DArr(DEFAULT_MESSAGES));
+        String value =(String) source.get("postal_fmt");
+        if(value != null){
+            value = PosixCollationBuilder.unescape(value);
+            myAddressFormat[0][1] = value;
+        }
+         resultPut(result,"AddressFormat",myAddressFormat);
+    }
+    private void convertTELEPHONEFORMAT(final Hashtable result, final Hashtable source){
+        final String[][]DEFAULT_MESSAGES = (String[][]) getDefault("TelephoneFormat");
+        final String[][] myTelephoneFormat = clone2DArr(DEFAULT_MESSAGES);
+        String value =(String) source.get("tel_int_fmt");
+        if(value != null){
+            value = PosixCollationBuilder.unescape(value);
+            myTelephoneFormat[0][1] = value;
+        }
+        value = (String) source.get("dom_fmt");
+        if(value != null){
+            value = PosixCollationBuilder.unescape(value);
+            myTelephoneFormat[1][1] = value;
+        }
+        value = (String) source.get("int_select");
+        if(value != null){
+            myTelephoneFormat[2][1] = PosixCollationBuilder.unescape(value);
+        }
+        value = (String) source.get("int_prefix");
+        if(value != null){
+            myTelephoneFormat[3][1] = PosixCollationBuilder.unescape(value);
+        }
+         resultPut(result,"TelephoneFormat",myTelephoneFormat);
     }
     private void convertMONETARY(final Hashtable result, final Hashtable source) {
         final String[] DEFAULT_CURRENCY_ELEMENTS = (String[])getDefault("CurrencyElements");
@@ -613,18 +339,15 @@ public class PosixToNeutralConverter extends LocaleConverter {
         //Replaceable temp = new Replaceable(value);
        
         if (value != null) {
-            myTranslit.transliterate(new ReplaceableString(value));
-            elements[0] = value;
+            elements[0] = PosixCollationBuilder.unescape(value);
         }
         value = (String)source.get("int_curr_symbol");
         if (value != null) {
-             myTranslit.transliterate(new ReplaceableString(value));
-            elements[1] = value;
+            elements[1] = PosixCollationBuilder.unescape(value);
         }
         value = (String)source.get("mon_decimal_point");
         if (value != null) {
-            myTranslit.transliterate(new ReplaceableString(value));
-            elements[2] = value;
+            elements[2] = PosixCollationBuilder.unescape(value);
         }
         resultPut(result, "CurrencyElements", elements);
     }
@@ -724,6 +447,7 @@ public class PosixToNeutralConverter extends LocaleConverter {
         final String zeroDigit = elements[4];
         final String negativeSign = elements[6];
         final String percentSign = elements[3];
+
         String groupingString;
         Object groupingObj = source.get("grouping");
         boolean isStrArray = groupingObj instanceof String[];
@@ -732,6 +456,7 @@ public class PosixToNeutralConverter extends LocaleConverter {
         } else {
             groupingString = (String)groupingObj;
         }
+        
         if (groupingString == null) {
             patterns[0] = replace(patterns[0], elements[0], "<DECIMAL>");
             patterns[0] = replace(patterns[0], elements[1], "<THOUSAND>");
@@ -741,20 +466,63 @@ public class PosixToNeutralConverter extends LocaleConverter {
             patterns[2] = replace(patterns[2], elements[1], "<THOUSAND>");
             patterns[2] = replace(patterns[2], "<THOUSAND>", thousandsSep);
         } else {
-            final int grouping = Integer.parseInt(groupingString);
+            
+            /* grouping:
+             * Defines the size of each group of digits in formatted monetary 
+             * quantities. The operand for the grouping keyword consists of a 
+             * sequence of semicolon-separated integers. Each integer specifies the 
+             * number of digits in a group. The initial integer defines the size of 
+             * the group immediately to the left of the decimal delimiter. 
+             * The following integers define succeeding groups to the left of the 
+             * previous group. If the last integer is not -1, the size of the 
+             * previous group (if any) is used repeatedly for the remainder of the 
+             * digits. If the last integer is -1, no further grouping is performed.
+             * Grouping Value    Formatted Value
+             *   3;-1               123456'789
+             *   3                  123'456'789
+             *   3;2;-1             1234'56'789
+             *   3;2                12'34'56'789
+             *   -1                 123456789
+             */
             //for a grouping of 5
             //#<thousandsSep>####0<decimalPoint>#####
             final StringBuffer pattern = new StringBuffer();
-            pattern.append(patternDigit);
-            pattern.append(thousandsSep);
-            for (int i = Math.max(1, grouping - 1); i > 0; i--) {
+            int semiColonIndex = groupingString.indexOf(';') ;
+            int grouping = 0;
+            if(semiColonIndex < 0 ){
+                grouping = Integer.parseInt(groupingString);    
                 pattern.append(patternDigit);
+                pattern.append(thousandsSep);
+                for (int i = Math.max(1, grouping - 1); i > 0; i--) {
+                    pattern.append(patternDigit);
+                }
+                pattern.append(zeroDigit);
+                pattern.append(decimalPoint);
+                for (int i = Math.max(1, grouping - 1); i >= 0; i--) {
+                    pattern.append(patternDigit);
+                }
+            }else{
+            /*    int prevIndex = 0;
+                int[] groupings = new int[4];
+                int j =0;
+                
+                for(int i=0; i<groupingString.length(); i++){
+                    if(groupingString.charAt(i)==';'){
+                        groupings[j++] = Integer.parseInt(groupingString.substring(prevIndex,i));
+                        prevIndex = i;
+                    }
+                }
+                for(int i = j-1 ;i<-1; i--){
+                    if(groupings[i] == -1){
+                        pattern.append(p);
+                    }else{
+                        
+                    }    
+                }
+              */
+              System.err.println("WARNING: unimplemented pattern parser. Pattern: " + groupingString);
             }
-            pattern.append(zeroDigit);
-            pattern.append(decimalPoint);
-            for (int i = Math.max(1, grouping - 1); i >= 0; i--) {
-                pattern.append(patternDigit);
-            }
+            
             final String patternString = pattern.toString();
             patterns[0] = patternString + ";" + negativeSign + patternString;
             
@@ -768,7 +536,7 @@ public class PosixToNeutralConverter extends LocaleConverter {
             pattern.append(percentSign);            
             patterns[2] = pattern.toString();
 
-            final String[] currencyElements = ((String[])getDefault("CurrencyElements"));
+           // final String[] currencyElements = ((String[])getDefault("CurrencyElements"));
             String currency_symbol = (String)source.get("currency_symbol");
             currency_symbol = (currency_symbol != null) ? currency_symbol : (String)source.get("int_curr_symbol");
             currency_symbol = (currency_symbol != null) ? currency_symbol : "";
@@ -780,6 +548,28 @@ public class PosixToNeutralConverter extends LocaleConverter {
             mon_thousands_sep = (mon_thousands_sep != null) ? mon_thousands_sep : "";
 
             String mon_grouping_string;
+            /*
+             * mon_grouping:
+             * 
+             * Specifies a string that defines the size of each group of digits 
+             * in formatted monetary quantities. The operand for the 
+             * mon_grouping keyword consists of a sequence of 
+             * semicolon-separated integers. Each integer specifies the number 
+             * of digits in a group. The initial integer defines the size of the
+             * group immediately to the left of the decimal delimiter. 
+             * The following integers define succeeding groups to the left of 
+             * the previous group. If the last integer is not -1, the size of 
+             * the previous group (if any) is repeatedly used for the remainder 
+             * of the digits. If the last integer is -1, no further grouping is 
+             * performed.
+             * 
+             * Value    Formatted Value
+             *  3;-1    123456'789
+             *  3       123'456'789
+             *  3;2;-1  1234'56'789
+             *  3;2     12'34'56'789
+             *   -1     123456789 
+             */ 
             final Object monGroupingObj = source.get("mon_grouping");
             if (monGroupingObj instanceof String[]) {
                 mon_grouping_string = ((String[])monGroupingObj)[0];
@@ -1005,18 +795,15 @@ public class PosixToNeutralConverter extends LocaleConverter {
     private String convertFormats(String pattern, String X_pattern, 
             String x_pattern, String c_pattern) {
         
-        HexToUnicodeTransliterator huTranslit =myTranslit;
-        huTranslit.applyPattern("<U0000>");
-        ReplaceableString tempStr = new ReplaceableString();
-        tempStr.replace(0,tempStr.length(),pattern);      
-        huTranslit.transliterate(tempStr);
-        String tpattern = tempStr.toString();
+        String tpattern = PosixCollationBuilder.unescape(pattern);
         StringBuffer result = new StringBuffer();
+        boolean singleDigit = false;
         for (int i = 0; i < tpattern.length(); i++) {
             char c = tpattern.charAt(i);
             if (c != '%') {
                 result.append(c);
             } else {
+                singleDigit = false;
                 i++;
                 c = tpattern.charAt(i);
                 switch (c) {
@@ -1039,31 +826,56 @@ public class PosixToNeutralConverter extends LocaleConverter {
                     result.append("YYYY");
                     break;
                 case 'd':
-                    result.append("dd");
+                    if(singleDigit == true){
+                        result.append("d");
+                    }else{
+                        result.append("dd");
+                    }
                     break;
                 case 'D':
                     result.append("mm/dd/yy");
                     break;
                 case 'e':
-                    result.append("dd");
+                    if(singleDigit == true){
+                        result.append("d");
+                    }else{
+                        result.append("dd");
+                    }
                     break;
                 case 'h':
                     result.append("MMM");
                     break;
                 case 'H':
-                    result.append("HH");
+                    if(singleDigit == true){
+                        result.append("H");
+                    }else{
+                        result.append("HH");
+                    }
                     break;
                 case 'I':
-                    result.append("hh");
+                    if(singleDigit == true){
+                        result.append("h");
+                    }else{
+                        result.append("hh");
+                    }
                     break;
                 case 'j':
                     result.append("DDD");
                     break;
                 case 'm':
+                    if(singleDigit == true){
+                        result.append("M");
+                    }else{
+                        result.append("MM");
+                    }
                     result.append("MM");
                     break;
                 case 'M':
-                    result.append("mm");
+                    if(singleDigit == true){
+                        result.append("m");
+                    }else{
+                        result.append("mm");
+                    };
                     break;
                 case 'n':
                     result.append('\n');
@@ -1110,6 +922,14 @@ public class PosixToNeutralConverter extends LocaleConverter {
                 case '%':
                     result.append("%");
                     break;
+                case '.':
+                    char c1 = tpattern.charAt(i+1);
+                    if(c1=='1'){
+                        singleDigit = true;
+                        i++;
+                        break; 
+                    }
+                         
                 default:
                     result.append('%');
                     result.append(c);
@@ -1121,14 +941,9 @@ public class PosixToNeutralConverter extends LocaleConverter {
     }
     
     private void convertCOLLATE(Hashtable result, Hashtable source) {
-        String[] sortOrder = (String[])source.get("sort_order");
-        HexToUnicodeTransliterator huTranslit =myTranslit;
-        huTranslit.applyPattern("<U0000>");
-        ReplaceableString tempStr = new ReplaceableString();
-        //tempStr.replace(0,tempStr.length(),sortOrder);      
+        String[] sortOrder = (String[])source.get("sort_order");    
         final Object[][] DEFAULT_COLLATION=(Object[][]) getDefault("CollationElements");
         final Object[][] elements=(Object[][])clone2DArr(DEFAULT_COLLATION);        
-        huTranslit.transliterate(tempStr);
         if (sortOrder != null) {
             if (!"forward".equals(sortOrder[0])) {
                 System.err.println("ERROR: Unsupported primary sort order: "+sortOrder[0]);
@@ -1202,7 +1017,7 @@ public class PosixToNeutralConverter extends LocaleConverter {
                 }
                 prevRule = rule;
             }
-            if ("backward".equals(sortOrder[1])) {
+            if (sortOrder.length>0 && "backward".equals(sortOrder[0])) {
                 elements[1][1] = "true";
             } else {
                 elements[1][1] = "false";

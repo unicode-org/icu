@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/EOLTransition.java,v $ 
- * $Date: 2002/02/16 03:05:27 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/09/10 23:36:09 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -14,7 +14,7 @@
 package com.ibm.icu.dev.tool.localeconverter;
 
 import java.io.*;
-import java.util.*;
+
 
 /**
  * This transition parses an end-of-line sequence.  The comment character
@@ -53,7 +53,7 @@ public class EOLTransition extends ComplexTransition {
         //}}
 }
     public boolean accepts(int c) {
-        return EOL_CHARS.indexOf((char)c) >= 0;
+        return (EOL_CHARS.indexOf((char)c) >= 0 || COMMENT_CHAR==c);
     }
     protected Lex.Transition[][] getStates() {
         synchronized (getClass()) {
@@ -65,7 +65,6 @@ public class EOLTransition extends ComplexTransition {
                     { //state 0: 
                         new Lex.StringTransition(EOL_CHARS, Lex.IGNORE_CONSUME, -1),
                         new Lex.EOFTransition(SUCCESS),
-                        new Lex.ParseExceptionTransition("bad characters in EOL")
                     },
                     { //state 1:
                         new Lex.CharTransition(COMMENT_CHAR, Lex.IGNORE_CONSUME, -2),
@@ -88,21 +87,34 @@ public class EOLTransition extends ComplexTransition {
 
     public static void main(String args[]) {
         try {
+            
+            final int TOKEN = 1;
+            final int EOF = 2;
+            final int EOL = 3;
+            final int RANGE = 4;
             Lex.Transition[][] states = {{ 
-                new EOLTransition(SUCCESS).debug(true),
-                new Lex.EOFTransition(),
-                new Lex.ParseExceptionTransition("bad test input")
+                    new Lex.EOFTransition(EOF),
+                    new EOLTransition(EOL),
+                    new SymbolTransition(TOKEN),
+                    new SpaceTransition(0),
+                    new RangeTransition(RANGE),
+                    new EOLTransition(EOL),
+                    new Lex.DefaultTransition(Lex.ACCUMULATE_CONSUME, 0)
             }};
-            String text = "\n\r\n# Hello World\n\r\n\n\n\r\r\n#hello  kdsj\n";
+            String text = "\n<NULL> 0x1243 #hello  kdsj\n";
             StringReader sr = new StringReader(text);
             PushbackReader pr = new PushbackReader(sr);
             Lex parser = new Lex(states, pr);
             parser.debug(true);
-            //parser.debug(true);
+            parser.debug(true);
             int s = parser.nextToken();
-            while (s == SUCCESS) {
-                //System.out.println(parser.getData());
+            while (s == EOL) {
+                System.out.println(parser.getData());
                 s = parser.nextToken();
+                while(s==TOKEN){
+                    System.out.println(parser.getData());
+                    s = parser.nextToken();   
+                }
             }
         } catch (Exception e) {
             System.out.println(e);

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/PosixCharMap.java,v $ 
- * $Date: 2003/08/14 22:13:23 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/09/10 23:36:09 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -284,9 +284,21 @@ public class PosixCharMap {
                         String tData = new String(encData,0,num,encoding);
                         String stringVal;
                         int[] val = getInt(begin);
-                        int beginRange = val[1];
-                        val =getInt(end);                     
-                        int endRange = val[1];
+                        int beginRange = 0;
+                        int endRange = 0;
+                        if(val == null){
+                            val = getInt((String)table.get(begin));
+                            if(val!=null){
+                                beginRange = val[1];
+                            }
+                        }
+                        val = getInt(end);                     
+                        if(val == null){
+                            val = getInt((String)table.get(end));
+                            if(val!=null){
+                                endRange = val[1];
+                            }
+                        }
                         stringVal = key.substring(0,val[0]);
                         int digit = (int)(char)tData.charAt(0);
                         while(beginRange <= endRange){
@@ -307,6 +319,9 @@ public class PosixCharMap {
         }
     }
     public int[] getInt(String data){
+        if(data == null){
+            return null;
+        }
         int i=0;
         int[] retVal = new int[2];
         int len =data.length();
@@ -316,10 +331,13 @@ public class PosixCharMap {
             }
             i++;
         }
-        String sub =data.substring(i,len-1);
-        retVal[0] =i;
-        retVal[1]=Integer.parseInt(sub,10);
-        return retVal;
+        if(i < len){
+            String sub =data.substring(i,len-1);
+            retVal[0] =i;
+            retVal[1]=Integer.parseInt(sub,10);
+            return retVal;
+        }
+        return null;
     }
     public int hexToByte(String data, byte[] retval){
         String tData = data;

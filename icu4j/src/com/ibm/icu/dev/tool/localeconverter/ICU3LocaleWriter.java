@@ -210,7 +210,7 @@ public class ICU3LocaleWriter extends LocaleWriter {
     protected void close() {
         outdent();
         println("}");
-        super.closeFileHandle();
+       // super.closeFileHandle();
     }
 
     protected String getStringJoiningCharacter() {
