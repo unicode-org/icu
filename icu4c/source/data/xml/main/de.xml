@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.1/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="3.0"/>
+		<version number="1.1"/>
 		<generation date="2004-05-27" />
 		<language type="de" /> 
 	</identity>
@@ -526,11 +521,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z ä ö ü ß]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GjMtkHmsSEDFwWahKzJeugAZ</localizedPatternChars>
@@ -2076,41 +2066,4 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
-%alt-ones:
--x: minus &gt;&gt;;
-x.x: &lt;&lt; komma &gt;&gt;;
-null; eins; =%%main=;
-%%main:
-null; ein; zwei; drei; vier; fünf; sechs; sieben; acht; neun;
-zehn; elf; zwölf; &gt;&gt;zehn;
-20: [&gt;&gt;und]zwanzig;
-30: [&gt;&gt;und]dreißig;
-40: [&gt;&gt;und]vierzig;
-50: [&gt;&gt;und]fünfzig;
-60: [&gt;&gt;und]sechzig;
-70: [&gt;&gt;und]siebzig;
-80: [&gt;&gt;und]achtzig;
-90: [&gt;&gt;und]neunzig;
-100: hundert[&gt;%alt-ones&gt;];
-200: &lt;&lt;hundert[&gt;%alt-ones&gt;];
-1000: tausend[&gt;%alt-ones&gt;];
-2000: &lt;&lt;tausend[&gt;%alt-ones&gt;];
-1,000,000: eine Million[ &gt;%alt-ones&gt;];
-2,000,000: &lt;&lt; Millionen[ &gt;%alt-ones&gt;];
-1,000,000,000: eine Milliarde[ &gt;%alt-ones&gt;];
-2,000,000,000: &lt;&lt; Milliarden[ &gt;%alt-ones&gt;];
-1,000,000,000,000: eine Billion[ &gt;%alt-ones&gt;];
-2,000,000,000,000: &lt;&lt; Billionen[ &gt;%alt-ones&gt;];
-1,000,000,000,000,000: =#,##0=;%%lenient-parse:
-&amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; '-'
-&amp; ae , ä &amp; ae , Ä
-&amp; oe , ö &amp; oe , Ö
-&amp; ue , ü &amp; ue , Ü
-
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>
