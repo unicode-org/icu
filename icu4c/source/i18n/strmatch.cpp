@@ -125,6 +125,7 @@ UMatchDegree StringMatcher::matches(const Replaceable& text,
  */
 UnicodeString& StringMatcher::toPattern(UnicodeString& result,
                                         UBool escapeUnprintable) const {
+	result.truncate(0);
     UnicodeString str, quoteBuf;
     if (isSegment) {
         result.append((UChar)40); /*(*/

@@ -77,6 +77,7 @@ UMatchDegree Quantifier::matches(const Replaceable& text,
  */
 UnicodeString& Quantifier::toPattern(UnicodeString& result,
                                      UBool escapeUnprintable) const {
+    result.truncate(0);
     matcher->toPattern(result, escapeUnprintable);
     if (minCount == 0) {
         if (maxCount == 1) {

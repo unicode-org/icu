@@ -562,7 +562,7 @@ void RTTest::test(const UnicodeString& sourceRangeVal,
         char str[100];
         int32_t length = transliteratorID.extract(str, 100, NULL, status);
         str[length] = 0;
-        parent->errln("%s errors: %d %s", str, errorCount, (errorCount > errorLimit ? " (at least!)" : " ")); // + ", see " + logFileName);
+        parent->errln("FAIL: %s errors: %d %s", str, errorCount, (errorCount > errorLimit ? " (at least!)" : " ")); // + ", see " + logFileName);
     } else {
         char str[100];
         int32_t length = transliteratorID.extract(str, 100, NULL, status);
@@ -592,7 +592,7 @@ void RTTest::test2(UBool quickRt) {
         Transliterator::createInstance(transliteratorID, UTRANS_FORWARD, parseError,
                                        status);
     if (sourceToTarget == NULL) {
-        parent->errln("Fail: createInstance(" + transliteratorID +
+        parent->errln("FAIL: createInstance(" + transliteratorID +
                    ") returned NULL. Error: " + u_errorName(status)
                    + "\n\tpreContext : " + prettify(parseError.preContext) 
                    + "\n\tpostContext : " + prettify(parseError.postContext));
@@ -601,7 +601,7 @@ void RTTest::test2(UBool quickRt) {
     }
     Transliterator* targetToSource = sourceToTarget->createInverse(status);
     if (targetToSource == NULL) {
-        parent->errln("Fail: " + transliteratorID +
+        parent->errln("FAIL: " + transliteratorID +
                    ".createInverse() returned NULL. Error:" + u_errorName(status)          
                    + "\n\tpreContext : " + prettify(parseError.preContext) 
                    + "\n\tpostContext : " + prettify(parseError.postContext));
@@ -612,7 +612,7 @@ void RTTest::test2(UBool quickRt) {
     UnicodeSetIterator usi;
     UnicodeSetIterator usi2;
 
-    parent->logln("Checking that at least one irrevant characters is not NFC'ed");
+    parent->logln("Checking that at least one irrelevant character is not NFC'ed");
     // string is from NFC_NO in the UCD
     UnicodeString irrelevants = CharsToUnicodeString("\\u2000\\u2001\\u2126\\u212A\\u212B\\u2329"); 
 
@@ -628,13 +628,14 @@ void RTTest::test2(UBool quickRt) {
       UnicodeString rules = "";
        
       UParseError parseError;
-      rules = sourceToTarget->toRules(rules, FALSE);
+      rules = sourceToTarget->toRules(rules, TRUE);
+      // parent->logln((UnicodeString)"toRules => " + rules);
       Transliterator *sourceToTarget2 = Transliterator::createFromRules(
                                                        "s2t2", rules, 
                                                        UTRANS_FORWARD,
                                                        parseError, status);
       if (U_FAILURE(status)) {
-          parent->errln("Failed opening from rules %s\n", u_errorName(status));
+          parent->errln("FAIL: createFromRules %s\n", u_errorName(status));
           return;
       }
 
@@ -644,7 +645,7 @@ void RTTest::test2(UBool quickRt) {
                                                        UTRANS_FORWARD,
                                                        parseError, status);
       if (U_FAILURE(status)) {
-          parent->errln("Failed opening from rules %s\n", u_errorName(status));
+          parent->errln("FAIL: createFromRules %s\n", u_errorName(status));
           return;
       }
 
@@ -697,7 +698,7 @@ void RTTest::test2(UBool quickRt) {
             UnicodeString targD;
             Normalizer::decompose(targ, FALSE, 0, targD, status);
             if (U_FAILURE(status)) {
-                parent->errln("Failed decomposation %s\n", u_errorName(status));
+                parent->errln("FAIL: Internal error during decomposition %s\n", u_errorName(status));
                 return;
             }
             if (UnicodeSetIterator::containsAll(toTarget, targD) == FALSE || 
@@ -712,7 +713,7 @@ void RTTest::test2(UBool quickRt) {
         UnicodeString cs2;
         Normalizer::decompose(cs, FALSE, 0, cs2, status);
         if (U_FAILURE(status)) {
-            parent->errln("Failed decomposation %s\n", u_errorName(status));
+            parent->errln("FAIL: Internal error during decomposition %s\n", u_errorName(status));
             return;
         }
         UnicodeString targ2 = cs2;
@@ -749,7 +750,7 @@ void RTTest::test2(UBool quickRt) {
                 UnicodeString targD;
                 Normalizer::decompose(targ, FALSE, 0, targD, status);
                 if (U_FAILURE(status)) {
-                    parent->errln("Failed decomposation %s\n", u_errorName(status));
+                    parent->errln("FAIL: Internal error during decomposition %s\n", u_errorName(status));
                     return;
                 }
                 if (UnicodeSetIterator::containsAll(toTarget,targD) == FALSE ||
@@ -762,7 +763,7 @@ void RTTest::test2(UBool quickRt) {
             UnicodeString cs2;
             Normalizer::decompose(cs, FALSE, 0, cs2, status);
             if (U_FAILURE(status)) {
-                parent->errln("Failed decomposition %s\n", u_errorName(status));
+                parent->errln("FAIL: Internal error during decomposition %s\n", u_errorName(status));
                 return;
             }
             UnicodeString targ2 = cs2;
@@ -796,7 +797,7 @@ void RTTest::test2(UBool quickRt) {
             UnicodeString targD;
             Normalizer::decompose(targ, FALSE, 0, targD, status);
             if (U_FAILURE(status)) {
-                parent->errln("Failed decomposation %s\n", u_errorName(status));
+                parent->errln("FAIL: Internal error during decomposition%s\n", u_errorName(status));
                 return;
             }
             if (UnicodeSetIterator::containsAll(toSource, targD) == FALSE || 
@@ -817,7 +818,7 @@ void RTTest::test2(UBool quickRt) {
         UnicodeString targ2;
         Normalizer::decompose(targ, FALSE, 0, targ2, status);
         if (U_FAILURE(status)) {
-            parent->errln("Failed decomposation %s\n", u_errorName(status));
+            parent->errln("FAIL: Internal error during decomposition%s\n", u_errorName(status));
             return;
         }
         UnicodeString reverse2 = targ2;
@@ -868,7 +869,7 @@ void RTTest::test2(UBool quickRt) {
                 UnicodeString targD;
                 Normalizer::decompose(targ, FALSE, 0, targD, status);
                 if (U_FAILURE(status)) {
-                    parent->errln("Failed decomposation %s\n", 
+                    parent->errln("FAIL: Internal error during decomposition%s\n", 
                                u_errorName(status));
                     return;
                 }
@@ -889,7 +890,7 @@ void RTTest::test2(UBool quickRt) {
             UnicodeString targ2;
             Normalizer::decompose(targ, FALSE, 0, targ2, status);
             if (U_FAILURE(status)) {
-                parent->errln("Failed decomposation %s\n", u_errorName(status));
+                parent->errln("FAIL: Internal error during decomposition%s\n", u_errorName(status));
                 return;
             }
             UnicodeString reverse2 = targ2;
@@ -907,7 +908,7 @@ void RTTest::test2(UBool quickRt) {
 void RTTest::logWrongScript(const UnicodeString& label,
                             const UnicodeString& from,
                             const UnicodeString& to) {
-    parent->errln((UnicodeString)"Fail " +
+    parent->errln((UnicodeString)"FAIL " +
                label + ": " +
                from + "(" + TestUtility::hex(from) + ") => " +
                to + "(" + TestUtility::hex(to) + ")");
@@ -919,7 +920,7 @@ void RTTest::logNotCanonical(const UnicodeString& label,
                              const UnicodeString& to,
                              const UnicodeString& fromCan,
                              const UnicodeString& toCan) {
-    parent->errln((UnicodeString)"Fail (can.equiv)" +
+    parent->errln((UnicodeString)"FAIL (can.equiv)" +
                label + ": " +
                from + "(" + TestUtility::hex(from) + ") => " +
                to + "(" + TestUtility::hex(to) + ")" +
@@ -931,7 +932,7 @@ void RTTest::logNotCanonical(const UnicodeString& label,
 }
 
 void RTTest::logFails(const UnicodeString& label) {
-    parent->errln((UnicodeString)"<br>Fail " + label);
+    parent->errln((UnicodeString)"<br>FAIL " + label);
     ++errorCount;
 }
 
@@ -940,7 +941,7 @@ void RTTest::logToRulesFails(const UnicodeString& label,
                              const UnicodeString& to, 
                              const UnicodeString& otherTo)
 {
-    parent->errln((UnicodeString)"Fail" +
+    parent->errln((UnicodeString)"FAIL: " +
                label + ": " +
                from + "(" + TestUtility::hex(from) + ") => " +
                to + "(" + TestUtility::hex(to) + ")" +
@@ -959,7 +960,7 @@ void RTTest::logRoundTripFailure(const UnicodeString& from,
                                  const UnicodeString& back) {
     if (legalSource->is(from) == FALSE) return; // skip illegals
 
-    parent->errln((UnicodeString)"Fail Roundtrip: " +
+    parent->errln((UnicodeString)"FAIL Roundtrip: " +
                from + "(" + TestUtility::hex(from) + ") => " +
                to + "(" + TestUtility::hex(to) + ")  "+toID+" => " +
                back + "(" + TestUtility::hex(back) + ") "+backID+" => ");
@@ -1140,7 +1141,7 @@ void TransliteratorRoundTripTest::TestDevanagariLatin() {
         if(t1){
             t1->createInverse(status);
             if(U_FAILURE(status)){
-                errln("could not create the Inverse:-( \n");
+                errln("FAIL: could not create the Inverse:-( \n");
             }
         }
     }
