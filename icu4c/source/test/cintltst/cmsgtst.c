@@ -586,20 +586,21 @@ static void TestJ904(void) {
         log_err("FAIL: got \"%s\", expected \"%s\"\n", cresult, EXP);
     }
 }
-void TestMessageFormat(void)
+
+static void OpenMessageFormatTest(void)
 {
     UMessageFormat *f1, *f2, *f3;
     UChar pattern[256];
     UChar result[256];
     char cresult[256];
     UParseError parseError;
-    char* locale = "hi_IN";
+    const char* locale = "hi_IN";
     char* retLoc;
-    char* PAT = "Number {1,number,#0.000}, String {0}, Date {2,date,12:mm:ss.SSS}";
+    const char* PAT = "Number {1,number,#0.000}, String {0}, Date {2,date,12:mm:ss.SSS}";
     int32_t length=0;
     UErrorCode status = U_ZERO_ERROR;
 
-    u_austrcpy(PAT,pattern);
+    u_uastrcpy(pattern, PAT);
 
     /* Test umsg_open                   */
     f1 = umsg_open(pattern,length,NULL,NULL,&status);
@@ -662,6 +663,7 @@ void addMsgForTest(TestNode** root);
 
 void addMsgForTest(TestNode** root)
 {
+    addTest(root, &OpenMessageFormatTest, "tsformat/cmsgtst/OpenMessageFormatTest");
     addTest(root, &MessageFormatTest, "tsformat/cmsgtst/MessageFormatTest");
     addTest(root, &TestSampleMessageFormat, "tsformat/cmsgtst/TestSampleMessageFormat");
     addTest(root, &TestSampleFormatAndParse, "tsformat/cmsgtst/TestSampleFormatAndParse");
