@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (c) 1996-2001, International Business Machines
+* Copyright (c) 1996-2002, International Business Machines
 * Corporation and others. All Rights Reserved.
 ******************************************************************************
 * File unorm.cpp
@@ -381,6 +381,20 @@ _decompose(uint32_t norm32, int32_t &length,
 
     length&=_NORM_DECOMP_LENGTH_MASK;
     return p;
+}
+
+/* get the canonical decomposition for one code point */
+static inline const UChar *
+_decompose(UChar32 c, int32_t &length) {
+    uint32_t norm32;
+
+    UTRIE_GET32(&normTrie, c, norm32);
+    if(norm32&_NORM_QC_NFD) {
+        uint8_t cc, trailCC;
+        return _decompose(norm32, length, cc, trailCC);
+    } else {
+        return 0;
+    }
 }
 
 /*
@@ -3157,4 +3171,590 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
     }
 
     return u_terminateUChars(dest, destCapacity, destLength, pErrorCode);
+}
+
+/* compare canonically equivalent ------------------------------------------- */
+
+/*
+ * Compare two strings for canonical equivalence.
+ * Further options include case-insensitive comparison and
+ * code point order (as opposed to code unit order).
+ *
+ * In this function, canonical equivalence is optional as well.
+ * If canonical equivalence is tested, then both strings must fulfill
+ * the FCD check.
+ *
+ * Semantically, this is equivalent to
+ *   strcmp[CodePointOrder](foldCase(NFD(s1)), foldCase(NFD(s2)))
+ * where code point order, NFD and foldCase are all optional.
+ *
+ * String comparisons almost always yield results before processing both strings
+ * completely.
+ * They are generally more efficient working incrementally instead of
+ * performing the sub-processing (strlen, normalization, case-folding)
+ * on the entire strings first.
+ *
+ * It is also unnecessary to not normalize identical characters.
+ *
+ * This function works in principle as follows:
+ *
+ * loop {
+ *   get one code unit c1 from s1 (-1 if end of source)
+ *   get one code unit c2 from s2 (-1 if end of source)
+ *
+ *   if(either string finished) {
+ *     return result;
+ *   }
+ *   if(c1==c2) {
+ *     continue;
+ *   }
+ *
+ *   // c1!=c2
+ *   try to decompose/case-fold c1/c2, and continue if one does;
+ *
+ *   // still c1!=c2 and neither decomposes/case-folds, return result
+ *   return c1-c2;
+ * }
+ *
+ * When a character decomposes, then the pointer for that source changes to
+ * the decomposition, pushing the previous pointer onto a stack.
+ * When the end of the decomposition is reached, then the code unit reader
+ * pops the previous source from the stack.
+ * (Same for case-folding.)
+ *
+ * This complicated further by operating on variable-width UTF-16.
+ * The top part of the loop works on code units, while lookups for decomposition
+ * and case-folding need code points.
+ * Code points are assembled after the equality/end-of-source part.
+ * The source pointer is only advanced beyond all code units when the code point
+ * actually decomposes/case-folds.
+ *
+ * If we were on a trail surrogate unit when assembling a code point,
+ * and the code point decomposes/case-folds, then the decomposition/folding
+ * result must be compared with the part of the other string that corresponds to
+ * this string's lead surrogate.
+ * Since we only assemble a code point when hitting a trail unit when the
+ * preceding lead units were identical, we back up the other string by one unit
+ * in such a case.
+ *
+ * The optional code point order comparison at the end works with
+ * the same fix-up as the other code point order comparison functions.
+ * See ustring.c and the comment near the end of this function.
+ *
+ * Assumption: A decomposition or case-folding result string never contains
+ * a single surrogate. This is a safe assumption in the Unicode Standard.
+ * Therefore, we do not need to check for surrogate pairs across
+ * decomposition/case-folding boundaries.
+ *
+ * This function could be moved to a different source file, at increased cost
+ * for calling the decomposition access function.
+ */
+
+// stack element for previous-level source/decomposition pointers
+struct CmpEquivLevel {
+    const UChar *start, *s, *limit;
+};
+typedef struct CmpEquivLevel CmpEquivLevel;
+
+// internal function
+U_CAPI int32_t U_EXPORT2
+unorm_cmpEquivFold(const UChar *s1, int32_t length1,
+                   const UChar *s2, int32_t length2,
+                   uint32_t options,
+                   UErrorCode *pErrorCode) {
+    // current-level start/limit - s1/s2 as current
+    const UChar *start1, *start2, *limit1, *limit2;
+
+    // decomposition variables
+    const UChar *p;
+    int32_t length;
+
+    // stacks of previous-level start/current/limit
+    CmpEquivLevel stack1[2], stack2[2];
+
+    // case folding buffers, only use current-level start/limit
+    UChar fold1[32], fold2[32];
+
+    // track which is the current level per string
+    int32_t level1, level2;
+
+    // current code units, and code points for lookups
+    int32_t c1, c2, cp1, cp2;
+
+    // no argument error checking because this itself is not an API
+
+    // assume that at least one of the options _COMPARE_EQUIV and U_COMPARE_IGNORE_CASE is set
+    // otherwise this function must behave exactly as u_strCompare()
+    // not checking for that here makes testing this function easier
+
+    // normalization/properties data loaded?
+    if( ((options&_COMPARE_EQUIV)!=0 && !_haveData(*pErrorCode)) ||
+        ((options&U_COMPARE_IGNORE_CASE)!=0 && !uprv_haveProperties())
+    ) {
+        return 0;
+    }
+
+    // initialize
+    start1=s1;
+    if(length1==-1) {
+        limit1=NULL;
+    } else {
+        limit1=s1+length1;
+    }
+
+    start2=s2;
+    if(length2==-1) {
+        limit2=NULL;
+    } else {
+        limit2=s2+length2;
+    }
+
+    level1=level2=0;
+    c1=c2=-1;
+
+    // comparison loop
+    for(;;) {
+        // here a code unit value of -1 means "get another code unit"
+        // below it will mean "this source is finished"
+
+        if(c1<0) {
+            // get next code unit from string 1, post-increment
+            for(;;) {
+                if(s1==limit1 || ((c1=*s1)==0 && (limit1==NULL || (options&_STRNCMP_STYLE)))) {
+                    if(level1==0) {
+                        c1=-1;
+                        break;
+                    }
+                } else {
+                    ++s1;
+                    break;
+                }
+
+                // reached end of level buffer, pop one level
+                do {
+                    --level1;
+                    start1=stack1[level1].start;
+                } while(start1==NULL);
+                s1=stack1[level1].s;
+                limit1=stack1[level1].limit;
+            }
+        }
+
+        if(c2<0) {
+            // get next code unit from string 2, post-increment
+            for(;;) {
+                if(s2==limit2 || ((c2=*s2)==0 && (limit2==NULL || (options&_STRNCMP_STYLE)))) {
+                    if(level2==0) {
+                        c2=-1;
+                        break;
+                    }
+                } else {
+                    ++s2;
+                    break;
+                }
+
+                // reached end of level buffer, pop one level
+                do {
+                    --level2;
+                    start2=stack2[level2].start;
+                } while(start2==NULL);
+                s2=stack2[level2].s;
+                limit2=stack2[level2].limit;
+            }
+        }
+
+        // compare c1 and c2
+        // either variable c1, c2 is -1 only if the corresponding string is finished
+        if(c1==c2) {
+            if(c1<0) {
+                return 0;   // c1==c2==-1 indicating end of strings
+            }
+            c1=c2=-1;       // make us fetch new code units
+            continue;
+        } else if(c1<0) {
+            return -1;      // string 1 ends before string 2
+        } else if(c2<0) {
+            return 1;       // string 2 ends before string 1
+        }
+        // c1!=c2 && c1>=0 && c2>=0
+
+        // get complete code points for c1, c2 for lookups if either is a surrogate
+        if(!UTF_IS_SURROGATE(c1)) {
+            cp1=c1;
+        } else {
+            UChar c;
+
+            if(UTF_IS_SURROGATE_FIRST(c1)) {
+                if(s1!=limit1 && UTF_IS_TRAIL(c=*s1)) {
+                    // advance ++s1; only below if cp1 decomposes/case-folds
+                    cp1=UTF16_GET_PAIR_VALUE(c1, c);
+                }
+            } else /* isTrail(c1) */ {
+                if(start1<=(s1-2) && UTF_IS_LEAD(c=*(s1-2))) {
+                    cp1=UTF16_GET_PAIR_VALUE(c, c1);
+                }
+            }
+        }
+
+        if(!UTF_IS_SURROGATE(c2)) {
+            cp2=c2;
+        } else {
+            UChar c;
+
+            if(UTF_IS_SURROGATE_FIRST(c2)) {
+                if(s2!=limit2 && UTF_IS_TRAIL(c=*s2)) {
+                    // advance ++s2; only below if cp2 decomposes/case-folds
+                    cp2=UTF16_GET_PAIR_VALUE(c2, c);
+                }
+            } else /* isTrail(c2) */ {
+                if(start2<=(s2-2) && UTF_IS_LEAD(c=*(s2-2))) {
+                    cp2=UTF16_GET_PAIR_VALUE(c, c2);
+                }
+            }
+        }
+
+        // go down one level for each string
+        // continue with the main loop as soon as there is a real change
+
+        if( level1==0 && (options&_COMPARE_EQUIV) &&
+            0!=(p=_decompose((UChar32)cp1, length))
+        ) {
+            // cp1 decomposes into p[length]
+            if(UTF_IS_SURROGATE(c1)) {
+                if(UTF_IS_SURROGATE_FIRST(c1)) {
+                    // advance beyond source surrogate pair if it decomposes
+                    ++s1;
+                } else /* isTrail(c1) */ {
+                    // we got a supplementary code point when hitting its trail surrogate,
+                    // therefore the lead surrogate must have been the same as in the other string;
+                    // compare this decomposition with the lead surrogate in the other string
+                    --s2;
+                    c2=*(s2-1);
+                }
+            }
+
+            // push current level pointers
+            stack1[0].start=start1;
+            stack1[0].s=s1;
+            stack1[0].limit=limit1;
+            ++level1;
+
+            // set next level pointers to decomposition
+            start1=s1=p;
+            limit1=p+length;
+
+            // get ready to read from decomposition, continue with loop
+            c1=-1;
+            continue;
+        }
+
+        if( level2==0 && (options&_COMPARE_EQUIV) &&
+            0!=(p=_decompose((UChar32)cp2, length))
+        ) {
+            // cp2 decomposes into p[length]
+            if(UTF_IS_SURROGATE(c2)) {
+                if(UTF_IS_SURROGATE_FIRST(c2)) {
+                    // advance beyond source surrogate pair if it decomposes
+                    ++s2;
+                } else /* isTrail(c2) */ {
+                    // we got a supplementary code point when hitting its trail surrogate,
+                    // therefore the lead surrogate must have been the same as in the other string;
+                    // compare this decomposition with the lead surrogate in the other string
+                    --s1;
+                    c1=*(s1-1);
+                }
+            }
+
+            // push current level pointers
+            stack2[0].start=start2;
+            stack2[0].s=s2;
+            stack2[0].limit=limit2;
+            ++level2;
+
+            // set next level pointers to decomposition
+            start2=s2=p;
+            limit2=p+length;
+
+            // get ready to read from decomposition, continue with loop
+            c2=-1;
+            continue;
+        }
+
+        if( level1<2 && (options&U_COMPARE_IGNORE_CASE) &&
+            (length=u_internalFoldCase((UChar32)cp1, fold1, 32, options))>=0
+        ) {
+            // cp1 case-folds to fold1[length]
+            if(UTF_IS_SURROGATE(c1)) {
+                if(UTF_IS_SURROGATE_FIRST(c1)) {
+                    // advance beyond source surrogate pair if it case-folds
+                    ++s1;
+                } else /* isTrail(c1) */ {
+                    // we got a supplementary code point when hitting its trail surrogate,
+                    // therefore the lead surrogate must have been the same as in the other string;
+                    // compare this decomposition with the lead surrogate in the other string
+                    --s2;
+                    c2=*(s2-1);
+                }
+            }
+
+            // push current level pointers
+            stack1[level1].start=start1;
+            stack1[level1].s=s1;
+            stack1[level1].limit=limit1;
+            ++level1;
+
+            // set empty intermediate level if skipped
+            if(level1<2) {
+                stack1[level1++].start=NULL;
+            }
+
+            start1=s1=fold1;
+            limit1=fold1+length;
+
+            // get ready to read from decomposition, continue with loop
+            c1=-1;
+            continue;
+        }
+
+        if( level2<2 && (options&U_COMPARE_IGNORE_CASE) &&
+            (length=u_internalFoldCase((UChar32)cp2, fold2, 32, options))>=0
+        ) {
+            // cp2 case-folds to fold2[length]
+            if(UTF_IS_SURROGATE(c2)) {
+                if(UTF_IS_SURROGATE_FIRST(c2)) {
+                    // advance beyond source surrogate pair if it case-folds
+                    ++s2;
+                } else /* isTrail(c2) */ {
+                    // we got a supplementary code point when hitting its trail surrogate,
+                    // therefore the lead surrogate must have been the same as in the other string;
+                    // compare this decomposition with the lead surrogate in the other string
+                    --s1;
+                    c1=*(s1-1);
+                }
+            }
+
+            // push current level pointers
+            stack2[level2].start=start2;
+            stack2[level2].s=s2;
+            stack2[level2].limit=limit2;
+            ++level2;
+
+            // set empty intermediate level if skipped
+            if(level2<2) {
+                stack2[level2++].start=NULL;
+            }
+
+            start2=s2=fold2;
+            limit2=fold2+length;
+
+            // get ready to read from decomposition, continue with loop
+            c2=-1;
+            continue;
+        }
+
+        // no decomposition/case folding, max level for both sides:
+        // return difference result
+
+        // code point order comparison must not just return cp1-cp2
+        // because when single surrogates are present then the surrogate pairs
+        // that formed cp1 and cp2 may be from different string indexes
+
+        // example: { d800 d800 dc01 } vs. { d800 dc00 }, compare at second code units
+        // c1=d800 cp1=10001 c2=dc00 cp2=10000
+        // cp1-cp2>0 but c1-c2<0 and in fact in UTF-32 it is { d800 10001 } < { 10000 }
+
+        // therefore, use same fix-up as in ustring.c/u_strCompareCodePointOrder()
+
+        if(c1>=0xd800 && c2>=0xd800 && (options&U_COMPARE_CODE_POINT_ORDER)) {
+            /* subtract 0x2800 from BMP code points to make them smaller than supplementary ones */
+            if(
+                (c1<=0xdbff && (s1+1)!=limit1 && UTF_IS_TRAIL(*(s1+1))) ||
+                (UTF_IS_TRAIL(c1) && start1!=s1 && UTF_IS_LEAD(*(s1-1)))
+            ) {
+                /* part of a surrogate pair, leave >=d800 */
+            } else {
+                /* BMP code point - may be surrogate code point - make <d800 */
+                c1-=0x2800;
+            }
+
+            if(
+                (c2<=0xdbff && (s2+1)!=limit2 && UTF_IS_TRAIL(*(s2+1))) ||
+                (UTF_IS_TRAIL(c2) && start2!=s2 && UTF_IS_LEAD(*(s2-1)))
+            ) {
+                /* part of a surrogate pair, leave >=d800 */
+            } else {
+                /* BMP code point - may be surrogate code point - make <d800 */
+                c2-=0x2800;
+            }
+        }
+
+        return c1-c2;
+    }
+}
+
+U_CAPI int32_t U_EXPORT2
+unorm_compare(const UChar *s1, int32_t length1,
+              const UChar *s2, int32_t length2,
+              uint32_t options,
+              UErrorCode *pErrorCode) {
+    UChar fcd1[300], fcd2[300];
+    int32_t result;
+    UBool didAlloc1, didAlloc2;
+
+    /* argument checking */
+    if(pErrorCode==0 || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(s1==0 || length1<-1 || s2==0 || length2<-1) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    didAlloc1=didAlloc2=FALSE;
+    options|=_COMPARE_EQUIV;
+
+    if(!(options&UNORM_INPUT_IS_FCD)) {
+        UChar *dest;
+        int32_t fcdLength1, fcdLength2;
+        UBool isFCD1, isFCD2;
+
+        // check if s1 and/or s2 fulfill the FCD conditions
+        isFCD1=unorm_checkFCD(s1, length1);
+        isFCD2=unorm_checkFCD(s2, length2);
+
+        if(!isFCD1 && !isFCD2) {
+            // if both strings need normalization then make them NFD right away and
+            // turn off normalization in the comparison function
+            uint8_t trailCC;
+
+            // fully decompose (NFD) s1 and s2
+
+            fcdLength1=_decompose(fcd1, sizeof(fcd1)/U_SIZEOF_UCHAR,
+                                  s1, length1,
+                                  FALSE, FALSE,
+                                  trailCC);
+            if(fcdLength1>sizeof(fcd1)/U_SIZEOF_UCHAR) {
+                dest=(UChar *)uprv_malloc(fcdLength1*U_SIZEOF_UCHAR);
+                if(dest==0) {
+                    *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                    return 0;
+                }
+                didAlloc1=TRUE;
+
+                fcdLength1=_decompose(dest, fcdLength1,
+                                      s1, length1,
+                                      FALSE, FALSE,
+                                      trailCC);
+
+                s1=dest;
+                length1=fcdLength1;
+            }
+
+            fcdLength2=_decompose(fcd2, sizeof(fcd2)/U_SIZEOF_UCHAR,
+                                  s2, length2,
+                                  FALSE, FALSE,
+                                  trailCC);
+            if(fcdLength2>sizeof(fcd2)/U_SIZEOF_UCHAR) {
+                dest=(UChar *)uprv_malloc(fcdLength2*U_SIZEOF_UCHAR);
+                if(dest==0) {
+                    if(didAlloc1) {
+                        uprv_free((UChar *)s1);
+                    }
+                    *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                    return 0;
+                }
+                didAlloc2=TRUE;
+
+                fcdLength2=_decompose(dest, fcdLength2,
+                                      s2, length2,
+                                      FALSE, FALSE,
+                                      trailCC);
+
+                s2=dest;
+                length2=fcdLength2;
+            }
+
+            // compare NFD strings
+            options&=~_COMPARE_EQUIV;
+        } else {
+            // if at least one string is already in FCD then only makeFCD the other
+            // and compare for equivalence
+            if(!isFCD1) {
+                fcdLength1=unorm_makeFCD(fcd1, sizeof(fcd1)/U_SIZEOF_UCHAR,
+                                         s1, length1,
+                                         pErrorCode);
+                if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                    dest=(UChar *)uprv_malloc(fcdLength1*U_SIZEOF_UCHAR);
+                    if(dest==0) {
+                        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                        return 0;
+                    }
+                    didAlloc1=TRUE;
+
+                    *pErrorCode=U_ZERO_ERROR;
+                    fcdLength1=unorm_makeFCD(dest, fcdLength1,
+                                             s1, length1,
+                                             pErrorCode);
+                    if(U_FAILURE(*pErrorCode)) {
+                        uprv_free(dest);
+                        return 0;
+                    }
+
+                    s1=dest;
+                    length1=fcdLength1;
+                }
+            }
+
+            if(!isFCD2) {
+                fcdLength2=unorm_makeFCD(fcd2, sizeof(fcd2)/U_SIZEOF_UCHAR,
+                                         s2, length2,
+                                         pErrorCode);
+                if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                    dest=(UChar *)uprv_malloc(fcdLength2*U_SIZEOF_UCHAR);
+                    if(dest==0) {
+                        if(didAlloc1) {
+                            uprv_free((UChar *)s1);
+                        }
+                        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                        return 0;
+                    }
+                    didAlloc2=TRUE;
+
+                    *pErrorCode=U_ZERO_ERROR;
+                    fcdLength2=unorm_makeFCD(dest, fcdLength2,
+                                             s2, length2,
+                                             pErrorCode);
+                    if(U_FAILURE(*pErrorCode)) {
+                        if(didAlloc1) {
+                            uprv_free((UChar *)s1);
+                        }
+                        uprv_free(dest);
+                        return 0;
+                    }
+
+                    s2=dest;
+                    length2=fcdLength2;
+                }
+            }
+        }
+    }
+
+    if(U_FAILURE(*pErrorCode)) {
+        result=0;
+    } else if(!(options&(_COMPARE_EQUIV|U_COMPARE_IGNORE_CASE))) {
+        // compare NFD strings case-sensitive: just use normal comparison
+        result=u_strCompare(s1, length1, s2, length2,
+                    FALSE, (UBool)(0!=(options&U_COMPARE_CODE_POINT_ORDER)));
+    } else {
+        result=unorm_cmpEquivFold(s1, length1, s2, length2, options, pErrorCode);
+    }
+
+    if(didAlloc1) {
+        uprv_free((UChar *)s1);
+    }
+    if(didAlloc2) {
+        uprv_free((UChar *)s2);
+    }
+
+    return result;
 }
