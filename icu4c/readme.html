@@ -69,7 +69,7 @@
       <li><a href="#ErrcodeChanges">Important Change Of Error Codes From
       Streaming Conversion Functions</a> (change for ICU 1.6)</li>
 
-      <li><a href="#collation">The collation implementation is being reworked</a></li>
+      <li><a href="#collation">The collation framework has been reimplemented to be conformant to the UCA</a></li>
 
       <li>We have improved or added support for country variants of ISO-2022, HZ, UTF-32, UTF-7, and GB 18030</li>
 
@@ -594,12 +594,12 @@
     </p>
 
     <h3><a name="collation">Collation Improvements</a></h3>
-    <p>We are reimplementing the collation implementation to make it faster
-    (much of this is done with ICU 1.7), to comply with the Unicode Collation Algorithm
-    (ICU 1.8), and also to make the locale-specific collation data smaller
-    (by separating it from the shared UCA data, also for ICU 1.8).<br>
-    <em>This means that sort keys and even some collation results are changing from ICU 1.6
-    and will change again for ICU 1.8.</em><br>
+    <p>The collation framework has been reimplemented to make it faster,
+    Unicode Collation Algorithm compliant,
+    and to make the locale-specific collation data smaller
+    (by separating it from the shared UCA data).<br>
+    <em>Sort keys and even some collation results have changed from ICU 1.6
+    and ICU 1.7.</em><br>
     For details, see our <a href="http://oss.software.ibm.com/icu/develop/collation/">collation design document</a>.</p>
 
     <h3><a name="API_documentation">API documentation</a></h3>
