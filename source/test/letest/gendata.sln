@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gendata", "gendata.vcproj", "{DA322426-C37C-4909-A99D-16B05E7FA498}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{DA322426-C37C-4909-A99D-16B05E7FA498}.Debug.ActiveCfg = Debug|Win32
+		{DA322426-C37C-4909-A99D-16B05E7FA498}.Debug.Build.0 = Debug|Win32
+		{DA322426-C37C-4909-A99D-16B05E7FA498}.Release.ActiveCfg = Release|Win32
+		{DA322426-C37C-4909-A99D-16B05E7FA498}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

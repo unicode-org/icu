@@ -1,0 +1,69 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *   Generated from Universal Locales for Linux Project
+// ***************************************************************************
+
+ms{
+    Version{ "1.0" }
+    Countries {
+        Fallback{ "en" }
+    }
+    Currencies {
+        MYR { "R", "MYR" }
+    }
+    DayAbbreviations { 
+        "Aha",
+        "Isn",
+        "Sel",
+        "Rab",
+        "Kha",
+        "Jum",
+        "Sab",
+    }
+    DayNames { 
+        "Ahad",
+        "Isnin",
+        "Selasa",
+        "Rabu",
+        "Khamis",
+        "Jumaat",
+        "Sabtu",
+    }
+    ExemplarCharacters{ "[a-z]" }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+    Languages {
+        ms { "bahasa Melayu" }
+    }
+    MonthAbbreviations { 
+        "Jan",
+        "Feb",
+        "Mac",
+        "Apr",
+        "Mei",
+        "Jun",
+        "Jul",
+        "Ogos",
+        "Sept",
+        "Okt",
+        "Nov",
+        "Dis",
+    }
+    MonthNames { 
+        "Januari",
+        "Februari",
+        "Mac",
+        "April",
+        "Mei",
+        "Jun",
+        "Julai",
+        "Ogos",
+        "September",
+        "Oktober",
+        "November",
+        "Disember",
+    }
+}

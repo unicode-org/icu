@@ -1,0 +1,12 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ar_SD {
+    Version{"2.0"}
+//    LocaleString { "ar_SD" }
+//    ShortCountry { "SDN" }
+}
