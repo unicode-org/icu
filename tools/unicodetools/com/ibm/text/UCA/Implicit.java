@@ -1,5 +1,6 @@
 package com.ibm.text.UCA;
 
+import com.ibm.text.UCD.UCD_Types;
 import com.ibm.text.utility.Utility;
 
 /**
@@ -16,7 +17,7 @@ import com.ibm.text.utility.Utility;
 # Last CJK_A: E0DE3100
 
  */
-public class Implicit {
+public class Implicit implements UCD_Types {
     
     /**
      * constants
@@ -27,7 +28,7 @@ public class Implicit {
     static final long bottomByte = 0xFFL;
     static final long fourBytes = 0xFFFFFFFFL;
     
-    static final int MAX_INPUT = 0x21FFFF;
+    static final int MAX_INPUT = 0x220000; // 2 * Unicode range + 1
     
     /**
      * Testing function
@@ -37,6 +38,10 @@ public class Implicit {
         System.out.println("Start");
         try {
             Implicit foo = new Implicit(0xE0, 0xE4);
+            
+            //int x = foo.getRawImplicit(0xF810);
+            foo.getFromRawImplicit(0xE20303E7);
+
             int gap4 = foo.getGap4();
             int gap3 = foo.getGap3();
             int minTrail = foo.getMinTrail();
@@ -44,13 +49,30 @@ public class Implicit {
             long last = 0;
             long current;
             for (int i = 0; i <= MAX_INPUT; ++i) {
-                current = foo.getImplicit(i) & fourBytes;
+                current = foo.getRawImplicit(i) & fourBytes;
+                
+                // check that it round-trips AND that all intervening ones are illegal
+                int roundtrip = foo.getFromRawImplicit((int)current);
+                if (roundtrip != i) {
+                    foo.throwError("No roundtrip", i); 
+                }
+                if (last != 0) {
+                    for (long j = last + 1; j < current; ++j) {
+                        roundtrip = foo.getFromRawImplicit((int)j);
+                        // raise an error if it *doesn't* find an error
+                        if (roundtrip != -1) {
+                            foo.throwError("Fails to recognize illegal", j);
+                        }
+                    }
+                }
+                // now do other consistency checks
                 long lastBottom = last & bottomByte;
                 long currentBottom = current & bottomByte;
                 long lastTop = last & topByte;
                 long currentTop = current & topByte;
                 
                 // do some consistency checks
+                /*
                 long gap = current - last;               
                 if (currentBottom != 0) { // if we are a 4-byte
                     // gap has to be at least gap4
@@ -65,6 +87,7 @@ public class Implicit {
                     if (current3Bottom < minTrail + gap3) foo.throwError("Failed gap3 before", i);
                     if (current3Bottom > maxTrail - gap3) foo.throwError("Failed gap3 after", i);
                 }
+                */
                 // print out some values for spot-checking
                 if (lastTop != currentTop || i == 0x10000 || i == 0x110000) {
                     foo.show(i-3);
@@ -94,13 +117,17 @@ public class Implicit {
         }
     }
     
-    private void throwError(String title, int i) {
-        throw new IllegalArgumentException(title + "\t" + Utility.hex(i) + "\t" + Utility.hex(getImplicit(i) & fourBytes));
+    private void throwError(String title, int cp) {
+        throw new IllegalArgumentException(title + "\t" + Utility.hex(cp) + "\t" + Utility.hex(getRawImplicit(cp) & fourBytes));
+    }
+
+    private void throwError(String title, long ce) {
+        throw new IllegalArgumentException(title + "\t" + Utility.hex(ce & fourBytes));
     }
 
     private void show(int i) {
         if (i >= 0 && i <= MAX_INPUT) {
-            System.out.println(Utility.hex(i) + "\t" + Utility.hex(getImplicit(i) & fourBytes));
+            System.out.println(Utility.hex(i) + "\t" + Utility.hex(getRawImplicit(i) & fourBytes));
         } 
     }
     
@@ -117,6 +144,8 @@ public class Implicit {
     int max4Primary;
     int minTrail;
     int maxTrail;
+    int max3Trail;
+    int max4Trail;
     int min4Boundary;
     
     public int getGap4() {
@@ -140,7 +169,7 @@ public class Implicit {
      */
     public Implicit(int minPrimary, int maxPrimary) {
         // 13 is the largest 4-byte gap we can use without getting 2 four-byte forms.
-        this(minPrimary, maxPrimary, 0x04, 0xFE, 1, 15);
+        this(minPrimary, maxPrimary, 0x03, 0xFE, 1, 1);
     }
     
     /**
@@ -152,54 +181,54 @@ public class Implicit {
      * @param gap3 the gap we leave for tailoring for 3-byte forms
      * @param gap4 the gap we leave for tailoring for 4-byte forms
      */
-    public Implicit(int minPrimary, int maxPrimary, int minTrail, int maxTrail, int gap3, int gap4) {
+    public Implicit(int minPrimary, int maxPrimary, int minTrail, int maxTrail, int gap3, int primaries3count) {
         // some simple parameter checks
         if (minPrimary < 0 || minPrimary >= maxPrimary || maxPrimary > 0xFF) throw new IllegalArgumentException("bad lead bytes");
         if (minTrail < 0 || minTrail >= maxTrail || maxTrail > 0xFF) throw new IllegalArgumentException("bad trail bytes");
-        if (gap3 < 1 || gap4 < 1) throw new IllegalArgumentException("must have larger gaps");
+        if (primaries3count < 1) throw new IllegalArgumentException("bad gap");
         
         this.minTrail = minTrail;
         this.maxTrail = maxTrail;
         
-        final3Multiplier = gap3 + 1;
-        final4Multiplier = gap4 + 1;
         min3Primary = minPrimary;
         max4Primary = maxPrimary;
         // compute constants for use later.
         // number of values we can use in trailing bytes
-        // leave room for empty values below, between, AND above, so
-        // gap = 2:
-        // range 3..7 => (3,4) 5 (6,7): so 1 value
-        // range 3..8 => (3,4) 5 (6,7,8): so 1 value
-        // range 3..9 => (3,4) 5 (6,7,8,9): so 1 value
-        // range 3..10 => (3,4) 5 (6,7) 8 (9, 10): so 2 values
-        final3Count = 1 + (maxTrail - minTrail - 1) / final3Multiplier;
-        final4Count = 1 + (maxTrail - minTrail - 1) / final4Multiplier;
+        // leave room for empty values between AND above, e.g. if gap = 2
+        // range 3..7 => +3 -4 -5 -6 -7: so 1 value
+        // range 3..8 => +3 -4 -5 +6 -7 -8: so 2 values
+        // range 3..9 => +3 -4 -5 +6 -7 -8 -9: so 2 values
+        final3Multiplier = gap3 + 1;
+        final3Count = (maxTrail - minTrail + 1) / final3Multiplier;
+        max3Trail = minTrail + (final3Count - 1) * final3Multiplier;
+        
         // medials can use full range
         medialCount = (maxTrail - minTrail + 1);
         // find out how many values fit in each form
-        int fourByteCount = medialCount * medialCount * final4Count;
         int threeByteCount = medialCount * final3Count;
         // now determine where the 3/4 boundary is.
         // we use 3 bytes below the boundary, and 4 above
         int primariesAvailable = maxPrimary - minPrimary + 1;
-        int min4BytesNeeded = divideAndRoundUp(MAX_INPUT, fourByteCount);
-        int min3BytesNeeded = primariesAvailable - min4BytesNeeded;
-        if (min3BytesNeeded < 1) throw new IllegalArgumentException("Too few 3-byte implicits available.");
-        int min3ByteCoverage = min3BytesNeeded * threeByteCount;
-        min4Primary = minPrimary + min3BytesNeeded;
+        int primaries4count = primariesAvailable - primaries3count;
+        //int min3BytesNeeded = primariesAvailable - min4BytesNeeded;
+        
+        
+        int min3ByteCoverage = primaries3count * threeByteCount;
+        min4Primary = minPrimary + primaries3count;
         min4Boundary = min3ByteCoverage;
         // Now expand out the multiplier for the 4 bytes, and redo.
+ 
         int totalNeeded = MAX_INPUT - min4Boundary;
-        int neededPerPrimaryByte = divideAndRoundUp(totalNeeded, min4BytesNeeded);
+        int neededPerPrimaryByte = divideAndRoundUp(totalNeeded, primaries4count);
         if (DEBUG) System.out.println("neededPerPrimaryByte: " + neededPerPrimaryByte);
         int neededPerFinalByte = divideAndRoundUp(neededPerPrimaryByte, medialCount * medialCount);
         if (DEBUG) System.out.println("neededPerFinalByte: " + neededPerFinalByte);
-        int expandedGap = (maxTrail - minTrail - 1) / (neededPerFinalByte + 1) - 1;
-        if (DEBUG) System.out.println("expandedGap: " + expandedGap);
-        if (expandedGap < gap4) throw new IllegalArgumentException("must have larger gaps");
-        final4Multiplier = expandedGap + 1;
+        int gap4 = (maxTrail - minTrail - 1) / neededPerFinalByte;
+        if (DEBUG) System.out.println("expandedGap: " + gap4);
+        if (gap4 < 1) throw new IllegalArgumentException("must have larger gap4s");
+        final4Multiplier = gap4 + 1;
         final4Count = neededPerFinalByte;
+        max4Trail = minTrail + (final4Count - 1) * final4Multiplier;
         if (DEBUG) {
             System.out.println("final4Count: " + final4Count);
             for (int counter = 0; counter <= final4Count; ++counter) {
@@ -212,13 +241,58 @@ public class Implicit {
     static public int divideAndRoundUp(int a, int b) {
         return 1 + (a-1)/b;
     }
+    /**
+     * Converts implicit CE into raw integer ("code point")
+     * @param implicit
+     * @return -1 if illegal format
+     */
+    public int getFromRawImplicit(int implicit) {
+        int result;
+        int b3 = implicit & 0xFF;
+        implicit >>= 8;
+        int b2 = implicit & 0xFF;
+        implicit >>= 8;
+        int b1 = implicit & 0xFF;
+        implicit >>= 8;
+        int b0 = implicit & 0xFF;
+
+        // simple parameter checks
+        if (b0 < min3Primary || b0 > max4Primary
+          || b1 < minTrail || b1 > maxTrail) return -1;
+        // normal offsets
+        b1 -= minTrail;
+
+        // take care of the final values, and compose
+        if (b0 < min4Primary) {
+            if (b2 < minTrail || b2 > max3Trail || b3 != 0) return -1;
+            b2 -= minTrail;
+            int remainder = b2 % final3Multiplier;
+            if (remainder != 0) return -1;
+            b0 -= min3Primary;
+            b2 /= final3Multiplier;
+            result = ((b0 * medialCount) + b1) * final3Count + b2;
+        } else {
+             if (b2 < minTrail || b2 > maxTrail
+            || b3 < minTrail || b3 > max4Trail) return -1;
+            b2 -= minTrail;
+            b3 -= minTrail;
+            int remainder = b3 % final4Multiplier;
+            if (remainder != 0) return -1;
+            b3 /= final4Multiplier;
+            b0 -= min4Primary;
+            result = (((b0 * medialCount) + b1) * medialCount + b2) * final4Count + b3 + min4Boundary;
+        }
+        // final check
+        if (result < 0 || result > MAX_INPUT) return -1;
+        return result;
+    }
     
     /**
      * Generate the implicit CE, left shifted to put the first byte at the top of an int.
      * @param cp code point
      * @return
      */
-    public int getImplicit(int cp) {
+    public int getRawImplicit(int cp) {
         if (cp < 0 || cp > MAX_INPUT) {
             throw new IllegalArgumentException("Code point out of range " + Utility.hex(cp));
         }
@@ -230,7 +304,7 @@ public class Implicit {
             int last2 = last1 / medialCount;
             last1 %= medialCount;
             
-            last0 = minTrail + (last0 + 1)*final3Multiplier - 1; // spread out, leaving gap at start
+            last0 = minTrail + last0*final3Multiplier; // spread out, leaving gap at start
             last1 = minTrail + last1; // offset
             last2 = min3Primary + last2; // offset
             
@@ -249,7 +323,7 @@ public class Implicit {
             int last3 = last2 / medialCount;
             last2 %= medialCount;
             
-            last0 = minTrail + (last0 + 1)*final4Multiplier - 1; // spread out, leaving gap at start           
+            last0 = minTrail + last0*final4Multiplier; // spread out, leaving gap at start           
             last1 = minTrail + last1; // offset
             last2 = minTrail + last2; // offset
             last3 = min4Primary + last3; // offset
@@ -261,6 +335,71 @@ public class Implicit {
             return (last3 << 24) + (last2 << 16) + (last1 << 8) + last0;
         }
     }
+    
+    public int getSwappedImplicit(int cp) {
+        if (DEBUG) System.out.println("Incoming: " + Utility.hex(cp));
+            
+        cp = Implicit.swapCJK(cp);
+        // we now have a range of numbers from 0 to 21FFFF.
+            
+        if (DEBUG) System.out.println("CJK swapped: " + Utility.hex(cp));
+            
+        return getRawImplicit(cp);
+    }
+
+    
+    /**
+        * Function used to: 
+        * a) collapse the 2 different Han ranges from UCA into one (in the right order), and
+        * b) bump any non-CJK characters by 10FFFF.
+        * The relevant blocks are:
+        * A:    4E00..9FFF; CJK Unified Ideographs
+        *       F900..FAFF; CJK Compatibility Ideographs
+        * B:    3400..4DBF; CJK Unified Ideographs Extension A
+        *       20000..XX;  CJK Unified Ideographs Extension B (and others later on)
+        * As long as
+        *   no new B characters are allocated between 4E00 and FAFF, and
+        *   no new A characters are outside of this range,
+        * (very high probability) this simple code will work.
+        * The reordered blocks are:
+        * Block1 is CJK
+        * Block2 is CJK_COMPAT_USED
+        * Block3 is CJK_A
+        * (all contiguous)
+        * Any other CJK gets its normal code point
+        * Any non-CJK gets +10FFFF
+        * When we reorder Block1, we make sure that it is at the very start,
+        * so that it will use a 3-byte form.
+        * Warning: the we only pick up the compatibility characters that are
+        * NOT decomposed, so that block is smaller!
+        */
+    
+    static int NON_CJK_OFFSET = 0x110000;
+        
+    static int swapCJK(int i) {
+        
+        if (i >= CJK_BASE) {
+            if (i < CJK_LIMIT)              return i - CJK_BASE;
+            
+            if (i < CJK_COMPAT_USED_BASE)   return i + NON_CJK_OFFSET;
+            
+            if (i < CJK_COMPAT_USED_LIMIT)  return i - CJK_COMPAT_USED_BASE
+                                                    + (CJK_LIMIT - CJK_BASE);
+            if (i < CJK_B_BASE)             return i + NON_CJK_OFFSET;
+            
+            if (i < CJK_B_LIMIT)            return i; // non-BMP-CJK
+            
+            return i + NON_CJK_OFFSET;  // non-CJK
+        }
+        if (i < CJK_A_BASE)                 return i + NON_CJK_OFFSET;
+        
+        if (i < CJK_A_LIMIT)                return i - CJK_A_BASE
+                                                    + (CJK_LIMIT - CJK_BASE) 
+                                                    + (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE);
+        return i + NON_CJK_OFFSET; // non-CJK
+    }
+    
+
     /**
      * @return
      */

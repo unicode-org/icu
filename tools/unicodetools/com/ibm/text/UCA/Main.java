@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/Main.java,v $ 
-* $Date: 2004/01/13 18:32:12 $ 
-* $Revision: 1.17 $
+* $Date: 2004/01/15 01:08:30 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -33,6 +33,7 @@ public class Main {
 		// A few changes would need to be made to the code to do older versions.
         try {
             System.out.println("Building UCA");
+            Default.setUCD(UCDVersion);
             WriteCollationData.collator = new UCA(null, UCDVersion);
             System.out.println("Built version " + WriteCollationData.collator.getDataVersion()
             	+ "/ucd: " + WriteCollationData.collator.getUCDVersion());
