@@ -48,8 +48,8 @@ CollationKey::CollationKey()
 
 // Adopt bytes allocated with malloc
 CollationKey::CollationKey(int32_t count, uint8_t *values)
-    : fBogus(FALSE), fBytes(values), fCount(count), fCapacity(count), 
-      fHashCode(kInvalidHashCode)
+    : fBogus(FALSE), fCount(count), fCapacity(count), 
+      fHashCode(kInvalidHashCode), fBytes(values)
 {
 }
 
