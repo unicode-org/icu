@@ -694,7 +694,7 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 			    &src,
 			    srcLimit,
 			    checkOffsets ? offs : NULL,
-			    (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
+			    (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of the source data */
 			    &status);
         
          /*check for an INVALID character for testing the call back function STOP*/
@@ -718,10 +718,32 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
     	ucnv_close(conv);
 		return FALSE;
 		}
-		
-	}
-
-	  } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (srcLimit < realSourceEnd) ); /* while we just need another buffer */
+    }
+    else if (status == U_INDEX_OUTOFBOUNDS_ERROR)
+    {  /* Jim Snyder-Grant: testing for UCharErrorBuffer. Only has contents if output 
+       from last source char crosses TargetLimit. As of 2000-07-11, this happens only 
+       for escape procesing. */
+        UChar errChars [UCNV_MAX_SUBCHAR_LEN];
+        int8_t len = sizeof(errChars);
+        UErrorCode localStatus = U_ZERO_ERROR;
+        ucnv_getInvalidUChars (conv, errChars, &len, &localStatus);
+        if (U_FAILURE(localStatus))
+        {
+            log_err("Error from ucnv_getInvalidChars");
+        }
+        else
+        {
+           int targIndex = targ - junkout;
+           if ((len != 0) && memcmp(errChars, expect+targIndex, len*sizeof(UChar)))
+           {
+              log_err("charErrorBuffer bytes do not match expected in %s", gNuConvTestName);
+              
+              printUSeqErr(errChars, len); 
+              printUSeqErr(expect+targIndex, len);
+           }
+        }
+     }
+  } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (srcLimit < realSourceEnd) ); /* while we just need another buffer */
 
     
 	if(U_FAILURE(status))
