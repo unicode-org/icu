@@ -50,12 +50,13 @@ public class RandomCollator extends TestFmwk {
     */
        
     public void TestRandom() throws IOException {
-        int year 
-        = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
-        if (year < 2004) {
-            System.out.println("\nTestRandom skipped for 2003");
-            return;
-        }
+//        int year 
+//        = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
+//        if (year < 2004) {
+//            System.out.println("\nTestRandom skipped for 2003");
+//            return;
+//        }
+    	if(skipIfICU(2,8)) return;
         String fileName;
         PrintWriter pw = BagFormatter.openUTF8Writer("", "RandomCollationTestLog.txt");
         TestCollator tc = new TestCollator(chars);
