@@ -26,15 +26,16 @@ const char UppercaseTransliterator::_ID[] = "Any-Upper";
 UppercaseTransliterator::UppercaseTransliterator(const Locale& theLoc) :
     Transliterator(_ID, 0),
     loc(theLoc), 
-    buffer(0) {
-    buffer = new UChar[u_getMaxCaseExpansion()];
+    buffer(0)
+{
+    buffer = (UChar *)uprv_malloc(u_getMaxCaseExpansion()*sizeof(buffer[0]));
 }
 
 /**
  * Destructor.
  */
 UppercaseTransliterator::~UppercaseTransliterator() {
-    delete [] buffer;
+    uprv_free(buffer);
 }
 
 /**
@@ -43,8 +44,9 @@ UppercaseTransliterator::~UppercaseTransliterator() {
 UppercaseTransliterator::UppercaseTransliterator(const UppercaseTransliterator& o) :
     Transliterator(o),
     loc(o.loc),
-    buffer(0){
-    buffer = new UChar[u_getMaxCaseExpansion()];
+    buffer(0)
+{
+    buffer = (UChar *)uprv_malloc(u_getMaxCaseExpansion()*sizeof(buffer[0]));
     uprv_arrayCopy(o.buffer, 0, this->buffer, 0, u_getMaxCaseExpansion());
 }
 
