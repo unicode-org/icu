@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $
- * $Date: 2001/11/17 20:58:34 $
- * $Revision: 1.59 $
+ * $Date: 2001/11/19 19:27:51 $
+ * $Revision: 1.60 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.59 $ $Date: 2001/11/17 20:58:34 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.60 $ $Date: 2001/11/19 19:27:51 $
  */
 public abstract class Transliterator {
     /**
@@ -427,9 +427,16 @@ public abstract class Transliterator {
      * @return The new limit index.  The text previously occupying <code>[start,
      * limit)</code> has been transliterated, possibly to a string of a different
      * length, at <code>[start, </code><em>new-limit</em><code>)</code>, where
-     * <em>new-limit</em> is the return value.
+     * <em>new-limit</em> is the return value. If the input offsets are out of bounds,
+     * the returned value is -1 and the input string remains unchanged.
      */
     public final int transliterate(Replaceable text, int start, int limit) {
+        if (start < 0 ||
+            limit < start ||
+            text.length() < limit) {
+            return -1;
+        }
+
         Position pos = new Position(start, limit, start);
         filteredTransliterate(text, pos, false);
         return pos.limit;
@@ -589,6 +596,19 @@ public abstract class Transliterator {
      */
     public final void finishTransliteration(Replaceable text,
                                             Position index) {
+        if (index.contextStart < 0 ||
+            index.start < index.contextStart ||
+            index.limit < index.start ||
+            index.contextLimit < index.limit ||
+            text.length() < index.contextLimit) {
+            throw new IllegalArgumentException("Invalid index {" +
+                                               index.contextStart + ", " +
+                                               index.start + ", " +
+                                               index.limit + ", " +
+                                               index.contextLimit + "}, len=" +
+                                               text.length());
+        }
+
         filteredTransliterate(text, index, false);
     }
 

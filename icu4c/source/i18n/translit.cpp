@@ -150,10 +150,15 @@ Transliterator& Transliterator::operator=(const Transliterator& other) {
  * <= limit</code>.
  * @param limit the ending index, exclusive; <code>start <= limit
  * <= text.length()</code>.
- * @return the new limit index
+ * @return the new limit index, or -1
  */
 int32_t Transliterator::transliterate(Replaceable& text,
                                       int32_t start, int32_t limit) const {
+    if (start < 0 ||
+        limit < start ||
+        text.length() < limit) {
+        return -1;
+    }
 
     UTransPosition offsets;
     offsets.contextStart= start;
@@ -295,6 +300,14 @@ void Transliterator::transliterate(Replaceable& text,
  */
 void Transliterator::finishTransliteration(Replaceable& text,
                                            UTransPosition& index) const {
+    if (index.contextStart < 0 ||
+        index.start < index.contextStart ||
+        index.limit < index.start ||
+        index.contextLimit < index.limit ||
+        text.length() < index.contextLimit) {
+        return;
+    }
+
     filteredTransliterate(text, index, FALSE);
 }
 
