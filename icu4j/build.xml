@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2001/11/28 23:00:06 $ 
-* $Revision: 1.42 $
+* $Date: 2001/11/30 22:53:34 $ 
+* $Revision: 1.43 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -53,7 +53,7 @@
         <mkdir dir="${build.dir}"/>
         <copy file="${src.dir}/com/ibm/text/resources/thai_dict"
             todir="${build.dir}/com/ibm/text/resources/"/>
-        <javac includes="com/ibm/util/**/*.java,com/ibm/text/**/*.java,com/ibm/math/**/*.java,com/ibm/richtext/**/*.java"
+        <javac includes="com/ibm/textlayout/**/*.java,com/ibm/util/**/*.java,com/ibm/text/**/*.java,com/ibm/math/**/*.java,com/ibm/richtext/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
     	    destdir="${build.dir}" 
@@ -137,7 +137,7 @@
     <target name="jar" depends="core">
         <jar jarfile="${jar.file}"
             compress="false"
-            includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*,com/ibm/richtext/**/*"
+            includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*,com/ibm/richtext/**/*,com/ibm/textlayout/**/*"
             basedir="${build.dir}"/>
     </target>
 
