@@ -1561,11 +1561,11 @@ static void TestResetBehaviour(void){
     {
         UChar sampleText[] = {0x0031, 0xd801, 0xdc01, 0x0032};
         const uint8_t expected[] = {0x31, 0x1a, 0x32};
-        int offsets[] =  { 0,1,3};
+        int32_t offsets[] =  { 0,1,3};
 
         UChar sampleText1[] = {0x0031, 0x0033, 0x0034, 0x0032};
         const uint8_t expected1[] = {0x31, 0x33,0x34, 0x32};
-        int offsets1[] =  { 0,1,2,3};
+        int32_t offsets1[] =  { 0,1,2,3};
 
         /*SBCS*/
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -1597,7 +1597,7 @@ static void TestResetBehaviour(void){
         
         UChar sampleText1[] = {0x00a1, 0x00a4, 0x00a7, 0x00a8};
         const uint8_t expected1[] = {0xa2, 0xae,0xA2,0xB4,0xA1,0xD7,0xA1,0xA7};
-        int offsets1[] =  { 0,2,4,6};
+        int32_t offsets1[] =  { 0,2,4,6};
 
         /*DBCS*/
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -1639,7 +1639,7 @@ static void TestResetBehaviour(void){
         UChar sampleText1[] = {0x4e00, 0x04e01, 0x0031,0x001A, 0x0032};
         const uint8_t expected1[] = {0x1b, 0x24, 0x42,0x30,0x6c,0x43,0x7a,0x1b,0x28,0x42,
                                     0x31,0x1A, 0x32};
-        int offsets1[] =  { 3,5,10,11,12};
+        int32_t offsets1[] =  { 3,5,10,11,12};
 
         /*iso-2022-jp*/
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -1683,7 +1683,7 @@ static void TestResetBehaviour(void){
                                     0x0f, 0x1A, 
                                     0x32
                                     };
-        int offsets1[] =  { 5,7,15,18,19};
+        int32_t offsets1[] =  { 5,7,15,18,19};
 
         /*iso-2022-CN*/
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
