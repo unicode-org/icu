@@ -681,7 +681,7 @@ static void TestMisc()
 #define ISCN 0x800
 
 /* C/POSIX-style functions, in the same order as the bit flags */
-typedef UBool IsPOSIXClass(UChar32 c);
+typedef UBool U_EXPORT2 IsPOSIXClass(UChar32 c);
 
 static const struct {
     IsPOSIXClass *fn;
