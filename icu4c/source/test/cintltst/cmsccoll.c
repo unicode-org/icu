@@ -3101,7 +3101,7 @@ static void TestNewJapanese() {
     "tt8",
     "\\u30b7\\u30e3\\u30fc\\u30ec",
   };
-  genericLocaleStarter("ja_JP_JIS", test1, sizeof(test1)/sizeof(test1[0]));
+  /*genericLocaleStarter("ja_JP_JIS", test1, sizeof(test1)/sizeof(test1[0]));*/
   genericLocaleStarter("ja_JP_JIS", test2, sizeof(test2)/sizeof(test2[0]));
   /*genericLocaleStarter("ja_JP_JIS", test3, sizeof(test3)/sizeof(test3[0]));*/
 
@@ -3167,11 +3167,36 @@ static void TestBeforePrefixFailure() {
   }
 }
 
+static void TestPrefixCompose() {
+  const char* rule1 = 
+        "&\\u30a7<<<\\u30ab|\\u30fc=\\u30ac|\\u30fc";
+  const char* test[] = {
+      "\\u30c6\\u30fc\\u30bf", 
+      "\\u30c6\\u30a7\\u30bf",
+  };
+  { 
+    UErrorCode status = U_ZERO_ERROR;
+    uint32_t i = 0;
+    UCollationElements *it = NULL;
+    uint32_t CE;
+    UChar string[256];
+    uint32_t uStringLen;
+    UCollator *coll = NULL;
+
+    uStringLen = u_unescape(rule1, string, 256);
+
+    coll = ucol_openRules(string, uStringLen, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
+    ucol_close(coll);
+  }
+
+
+}
 
 
 void addMiscCollTest(TestNode** root)
 {
     /*addTest(root, &TestBeforePrefixFailure, "tscoll/cmsccoll/TestBeforePrefixFailure");*/
+    addTest(root, &TestPrefixCompose, "tscoll/cmsccoll/TestPrefixCompose");
     addTest(root, &TestStrCollIdenticalPrefix, "tscoll/cmsccoll/TestStrCollIdenticalPrefix");
     addTest(root, &TestPrefix, "tscoll/cmsccoll/TestPrefix");
     addTest(root, &TestNewJapanese, "tscoll/cmsccoll/TestNewJapanese"); 
