@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/Attic/readme.txt,v $
-* $Date: 2003/03/18 00:03:31 $
-* $Revision: 1.7 $
+* $Date: 2003/03/18 00:42:43 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -41,13 +41,16 @@ exist:
 
 
 2. Download all of the UnicodeData files for each version into UCD_DIR.
-The folder names must be of the form: "3.2.0-Update", so rename the folders on the Unicode site to this format.
+The folder names must be of the form: "3.2.0-Update", so rename the folders on the
+Unicode site to this format.
 
 
 2a. If you are downloading any "incomplete" release (one that does not contain
 a complete set of data files for that release, you need to also download the previous
-complete release). All of the N.M-Update directorys are complete, *except* for 4.0-Update,
-which does not contain a copy of Unihan.txt.
+complete release). Most of the N.M-Update directorys are complete, *except*:
+
+    4.0-Update, which does not contain a copy of Unihan.txt
+    3.1-Update, which does not contain a copy of BidiMirroring.txt
 
 
 2b. If you are building any of the UCA tools, you need to get a copy of the UCA data file
@@ -74,6 +77,14 @@ C://DATA/
         UCD/
             3.0.0-Update/
                 Unihan-3.2.0.txt
+                ...
+            3.0.1-Update/
+                ...
+            3.1.0-Update/
+                ...
+            3.1.1-Update/
+                ...
+            3.2.0-Update/
                 ...
             4.0.0-Update/
                 ArabicShaping-4.0.0d14b.txt
