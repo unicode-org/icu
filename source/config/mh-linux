@@ -8,8 +8,13 @@ GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
 
 ## Flags for position independent code
-PICFLAGS = -fPIC
-PICCPPFLAGS = -DPIC
+SHAREDLIBCFLAGS = -fPIC
+SHAREDLIBCXXFLAGS = -fPIC
+SHAREDLIBCPPFLAGS = -DPIC
+
+## Additional flags when building libraries
+LIBCPPFLAGS = -D_REENTRANT
+THREADSCPPFLAGS = -D_REENTRANT
 
 ## Commands to compile
 COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
