@@ -20,9 +20,9 @@
 
 void TestConverterFallBack(void);
 void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize );
-static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *expect, int expectLen, 
+static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
 			    const char *codepage, UBool fallback, int32_t *expectOffsets);
-static UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expect, int expectlen, 
+static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
 		       const char *codepage, UBool fallback, int32_t *expectOffsets);
 
 
