@@ -69,7 +69,7 @@ StringSearchTest::~StringSearchTest()
 // public methods ----------------------------------------------------------
 
 void StringSearchTest::runIndexedTest(int32_t index, UBool exec, 
-                                      const char* &name, char* par) 
+                                      const char* &name, char* ) 
 {
     if (m_en_us_ == NULL && m_fr_fr_ == NULL && m_de_ == NULL &&
         m_es_ == NULL && m_en_wordbreaker_ == NULL &&
@@ -1989,7 +1989,7 @@ TempSearch::~TempSearch()
 {
 }
 
-void TempSearch::setOffset(UTextOffset position, UErrorCode &status)
+void TempSearch::setOffset(UTextOffset /*position*/, UErrorCode &/*status*/)
 {
 }
 
@@ -2003,12 +2003,12 @@ SearchIterator * TempSearch::safeClone() const
     return NULL;
 }
 
-UTextOffset TempSearch::handleNext(UTextOffset position, UErrorCode &status)
+UTextOffset TempSearch::handleNext(UTextOffset /*position*/, UErrorCode &/*status*/)
 {
     return USEARCH_DONE;
 }
 
-UTextOffset TempSearch::handlePrev(UTextOffset position, UErrorCode &status)
+UTextOffset TempSearch::handlePrev(UTextOffset /*position*/, UErrorCode &/*status*/)
 {
     return USEARCH_DONE;
 }
