@@ -56,7 +56,6 @@ _SBCSUnload(UConverterSharedData *sharedData) {
     ucmp8_close (&sharedData->table->sbcs.fromUnicode);
     if (sharedData->staticData->hasFromUnicodeFallback == TRUE)
         ucmp8_close (&sharedData->table->sbcs.fromUnicodeFallback);
-    uprv_free (sharedData->table);
 }
 
 U_CFUNC void T_UConverter_toUnicode_SBCS (UConverterToUnicodeArgs * args,
@@ -405,7 +404,6 @@ _DBCSUnload(UConverterSharedData *sharedData) {
         ucmp16_close (&sharedData->table->dbcs.fromUnicodeFallback);
     if (sharedData->staticData->hasToUnicodeFallback == TRUE)
         ucmp16_close (&sharedData->table->dbcs.toUnicodeFallback);
-    uprv_free (sharedData->table);
 }
 
 U_CFUNC void   T_UConverter_toUnicode_DBCS (UConverterToUnicodeArgs * args,

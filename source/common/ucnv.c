@@ -34,6 +34,25 @@
 #include "unicode/uloc.h"
 #include "ucnv_bld.h"
 
+#if 0
+/* debugging for converters */
+# include <stdio.h>
+void UCNV_DEBUG_LOG(char *what, char *who, void *p, int l)
+{
+   static FILE *f = NULL;
+   if(f==NULL)
+   {
+       f = fopen("c:\\UCNV_DEBUG_LOG.txt", "w");
+   }
+   fprintf(f, "%-20s %-10s %p@%d\n",
+        who,what,p,l);
+   fflush(f);
+}
+# define UCNV_DEBUG_LOG(x,y,z) UCNV_DEBUG_LOG(x,y,z,__LINE__)
+#else
+# define UCNV_DEBUG_LOG(x,y,z)
+#endif
+
 #define CHUNK_SIZE 5*1024
 
 /* Internal function : begin */
@@ -189,6 +208,8 @@ int32_t  ucnv_flushCache ()
       if (mySharedData->referenceCounter == 0)
         {
           tableDeletedNum++;
+
+          UCNV_DEBUG_LOG("del",mySharedData->staticData->name,mySharedData);
 
           uhash_removeElement(SHARED_DATA_HASHTABLE, e);
           deleteSharedConverterData (mySharedData);
