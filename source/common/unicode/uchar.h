@@ -802,9 +802,11 @@ enum UBlockCode {
     UBLOCK_COUNT,
 
     /** @draft ICU 2.0 */
-    UBLOCK_INVALID_CODE=-1,
+    UBLOCK_INVALID_CODE=-1
 
 #ifdef ICU_UCHAR_USE_DEPRECATES
+    ,
+
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_BASIC_LATIN = 1,
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
