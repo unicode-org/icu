@@ -28,22 +28,38 @@
 struct UDataSwapper;
 typedef struct UDataSwapper UDataSwapper;
 
-/*
- * ### TODO Issues
- *
- * - should each swap function check all input parameters?
- * - see if inData==outData can be allowed without major problems
- * - cnvalias.dat needs to sort outData char * strings with
- *   the output charset family version of ucnv_io.c/ucnv_compareNames()
- * - resource bundle swapping (in common) needs to call collation swapping
- *   (in i18n) for collation binaries
- */
-
 /**
  * Function type for data transformation.
  * Transforms data, or just returns the length of the data if
  * the input length is -1.
  * Swap functions assume that their data pointers are aligned properly.
+ *
+ * Quick implementation outline:
+ * (best to copy and adapt and existing swapper implementation)
+ * check that the data looks like the expected format
+ * if(length<0) {
+ *   preflight:
+ *   never dereference outData
+ *   read inData and determine the data size
+ *   assume that inData is long enough for this
+ * } else {
+ *   outData can be NULL if length==0
+ *   inData==outData (in-place swapping) possible but not required!
+ *   verify that length>=(actual size)
+ *   if there is a chance that not every byte up to size is reached
+ *     due to padding etc.:
+ *   if(inData!=outData) {
+ *     memcpy(outData, inData, actual size);
+ *   }
+ *   swap contents
+ * }
+ * return actual size
+ *
+ * Further implementation notes:
+ * - read integers from inData before swapping them
+ *   because in-place swapping can make them unreadable
+ * - compareInvChars compares a local Unicode string with already-swapped
+ *   output charset strings
  *
  * @param ds Pointer to UDataSwapper containing global data about the
  *           transformation and function pointers for handling primitive
