@@ -105,6 +105,8 @@ private:
                                                      //   taking case mode into account.
     UBool       possibleNullMatch(int32_t start,     // Test a range of compiled pattern for
                                   int32_t end);      //   for possibly matching an empty string.
+    int32_t     minMatchLength(int32_t start,
+                               int32_t end);
 
 
     UErrorCode                    *fStatus;
