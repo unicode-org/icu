@@ -822,11 +822,7 @@ public:
     /**
      * @draft ICU 2.6
      */
-    SimpleNumberFormatFactory(const Locale& locale, UBool visible = TRUE)
-      : _visible(visible)
-      , _id(locale.getName())
-    {
-    }
+    SimpleNumberFormatFactory(const Locale& locale, UBool visible = TRUE);
 
     /**
      * @draft ICU 3.0
