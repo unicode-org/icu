@@ -87,24 +87,25 @@ uenum_unextDefault(UEnumeration* en,
             int32_t* resultLength,
             UErrorCode* status)
 {
+    UChar *ustr = NULL;
+    int32_t len = 0;
     if (en->next != NULL) {
-        UChar *tempUCharVal;
-        const char *tempCharVal = en->next(en, resultLength, status);
-		if (tempCharVal == NULL) {
-		    return NULL;
-		}
-        tempUCharVal = (UChar*)
-            _getBuffer(en, (*resultLength+1) * sizeof(UChar));
-        if (!tempUCharVal) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+        const char *cstr = en->next(en, &len, status);
+        if (cstr != NULL) {
+            ustr = (UChar*) _getBuffer(en, (len+1) * sizeof(UChar));
+            if (ustr == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+            } else {
+                u_charsToUChars(cstr, ustr, len+1);
+            }
         }
-        u_charsToUChars(tempCharVal, tempUCharVal, *resultLength + 1);
-        return tempUCharVal;
     } else {
         *status = U_UNSUPPORTED_ERROR;
-        return NULL;
     }
+    if (resultLength) {
+        *resultLength = len;
+    }
+    return ustr;
 }
 
 /* Don't call this directly. Only uenum_next should be calling this. */
