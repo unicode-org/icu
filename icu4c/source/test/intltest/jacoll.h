@@ -40,10 +40,30 @@ public:
     // performs test with strength TERIARY
     void TestTertiary(/* char* par */);
 
+    /* Testing base letters */
+    void TestBase();
+
+    /* Testing plain, Daku-ten, Handaku-ten letters */
+    void TestPlainDakutenHandakuten();
+
+    /* Test Small, Large letters */
+    void TestSmallLarge();
+
+    /* Test Katakana, Hiragana letters */
+    void TestKatakanaHiragana();
+
+    /* Test Choo-on kigoo */
+    void TestChooonKigoo();
+
 private:
     static const UChar testSourceCases[][MAX_TOKEN_LEN];
     static const UChar testTargetCases[][MAX_TOKEN_LEN];
     static const Collator::EComparisonResult results[];
+    static const UChar testBaseCases[][MAX_TOKEN_LEN];
+    static const UChar testPlainDakutenHandakutenCases[][MAX_TOKEN_LEN];
+    static const UChar testSmallLargeCases[][MAX_TOKEN_LEN];
+    static const UChar testKatakanaHiraganaCases[][MAX_TOKEN_LEN];
+    static const UChar testChooonKigooCases[][MAX_TOKEN_LEN];
 
     Collator *myCollation;
 };
