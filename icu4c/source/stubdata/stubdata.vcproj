@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\bin\icudt30l.dll"
+				OutputFile="..\..\bin\icudt30.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				ProgramDatabaseFile=".\Release/icudt26l.pdb"
@@ -105,7 +105,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\bin\icudt30l.dll"
+				OutputFile="..\..\bin\icudt30.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				ProgramDatabaseFile=".\Debug/icudt26l.pdb"

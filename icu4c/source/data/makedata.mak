@@ -282,7 +282,7 @@ BRK_FILES = sent.brk char.brk line.brk word.brk title.brk line_th.brk word_th.br
 "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUP)\bin\pkgdata.exe" $(CNV_FILES) $(BRK_FILES) "$(ICUBLD)\uprops.icu" "$(ICUBLD)\unames.icu" "$(ICUBLD)\pnames.icu" "$(ICUBLD)\unorm.icu" "$(ICUBLD)\cnvalias.icu" "$(ICUBLD)\ucadata.icu" "$(ICUBLD)\invuca.icu" "$(ICUBLD)\uidna.spp" $(INDEX_COL_FILES) $(COL_COL_FILES) $(ALL_RES) "$(ICUBLD)\icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
 	echo Building icu data
 	cd "$(ICUBLD)"
-	@"$(ICUP)\bin\pkgdata" -Z -f -e $(U_ICUDATA_NAME) -v $(ICU_PACKAGE_MODE) -c -p $(ICUPKG) -T "$(ICUTMP)" -d "$(ICUBLD)" -s . <<pkgdatain.txt
+	@"$(ICUP)\bin\pkgdata" -Z -f -e $(U_ICUDATA_NAME) -v $(ICU_PACKAGE_MODE) -c -p $(ICUPKG) -T "$(ICUTMP)" -L $(U_ICUDATA_NAME) -d "$(ICUBLD)" -s . <<pkgdatain.txt
 unorm.icu
 uprops.icu
 pnames.icu
@@ -301,8 +301,8 @@ res_index.crs
 $(BRK_FILES:.brk =.brk
 )
 <<KEEP
-	copy "$(ICUPKG).dll" "$(DLL_OUTPUT)"
-	-@erase "$(ICUPKG).dll"
+	copy "$(U_ICUDATA_NAME).dll" "$(DLL_OUTPUT)"
+	-@erase "$(U_ICUDATA_NAME).dll"
 	copy "$(ICUPKG).dat" "$(ICUOUT)\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat"
 	-@erase "$(ICUPKG).dat"
 
@@ -490,5 +490,5 @@ res_index {
 
 $(UCM_SOURCE) : {"$(ICUTOOLS)\makeconv\$(CFG)"}makeconv.exe
 
-$(TRANSLIT_SOURCE) $(MISC_SOURCE) $(GENRB_SOURCE) "$(ICUBLD)\root.res" : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe "$(ICUBLD)\$(ICUDT)ucadata.icu" "$(ICUBLD)\$(ICUDT)uprops.icu" "$(ICUBLD)\$(ICUDT)unorm.icu"
+$(TRANSLIT_SOURCE) $(MISC_SOURCE) $(GENRB_SOURCE) "$(ICUBLD)\root.res" : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe "$(ICUBLD)\ucadata.icu" "$(ICUBLD)\uprops.icu" "$(ICUBLD)\unorm.icu"
 
