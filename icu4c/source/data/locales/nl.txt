@@ -56,6 +56,7 @@ nl {
         //CN { "China" }
         //CO { "Colombia" }
         //CR { "Costa Rica" }
+        //CU { "Cuba" }
         CV { "Kaapverdi\u00EB" }
         CX { "Christmaseiland" }
         //CY { "Cyprus" }
@@ -108,6 +109,8 @@ nl {
         IL { "Isra\u00EBl" }
         //IN { "India" }
         IO { "Brits Territorium in de Indische Oceaan" }
+        IQ { "Irak" }
+        //IR { "Iran, Islamitische Republiek" }
         IS { "IJsland" }
         IT { "Itali\u00EB" }
         //JM { "Jamaica" }
@@ -119,7 +122,8 @@ nl {
         //KI { "Kiribati" }
         KM { "Comoren" }
         KN { "Saint Kitts en Nevis" }
-        KR { "Korea, Republiek" }
+        KP { "Korea, Noord" }    // alternate name { "Korea, Democratische Volksrepubliek" }
+        KR { "Korea, Zuid" }    // alternate name { "Korea, Republiek" }
         KW { "Koeweit" }
         KY { "Caymaneilanden" }
         KZ { "Kazakstan" }
@@ -133,6 +137,7 @@ nl {
         LT { "Litouwen" }
         LU { "Luxemburg" }
         LV { "Letland" }
+        LY { "Libi\u00EB" }
         MA { "Marokko" }
         //MC { "Monaco" }
         MD { "Moldova, Republiek" }
@@ -202,6 +207,7 @@ nl {
         //SR { "Suriname" }
         ST { "Sao Tom\u00E9 en Principe" }
         //SV { "El Salvador" }
+        SY { "Syri\u00EB" }
         //SZ { "Swaziland" }
         TC { "Turks- en Caicoseilanden" }
         TD { "Tsjaad" }

@@ -67,6 +67,7 @@ hr {
         CN { "Kina" }
         CO { "Kolumbija" }
         CR { "Kostarika" }
+        CU { "Kuba" }
         CV { "Zeleni Rt" }
         CX { "Bo\u017Ei\u0107ni Otoci" }
         CY { "Cipar" }
@@ -119,6 +120,8 @@ hr {
         IL { "Izrael" }
         IN { "Indija" }
         IO { "Britanski Teritorij Indijskog Oceana" }
+        IQ { "Irak" }
+        IR { "Iran, Islamska Republika" }
         IS { "Island" }
         IT { "Italija" }
         JM { "Jamajka" }
@@ -130,7 +133,8 @@ hr {
         //KI { "Kiribati" }
         KM { "Komori" }
         KN { "Sveti Kristofor i Nevis" }
-        KR { "Koreja, Republika" }
+        KP { "Koreja, Sjeverna" } // alternate name { "Koreja, Demokratska Narodna Republika" }
+        KR { "Koreja, Ju\u017Ena" } // alternate name { "Koreja, Republika" }
         KW { "Kuvajt" }
         KY { "Kajmanski Otoci" }
         KZ { "Kazakstan" }
@@ -144,6 +148,7 @@ hr {
         LT { "Litva" }
         LU { "Luksemburg" }
         LV { "Latvija" }
+        LY { "Libijska Arapska D\u017Eamahirija" }
         MA { "Maroko" }
         MC { "Monako" }
         MD { "Moldavija, Republika" }
@@ -200,6 +205,7 @@ hr {
         SA { "Saudijska Arabija" }
         SB { "Salamunovi Otoci" }
         SC { "Sej\u0161eli" }
+        //SD { "Sudan" }
         SE { "\u0160vedska" }
         SG { "Singapur" }
         SH { "Sveta Helena" }
@@ -213,6 +219,7 @@ hr {
         SR { "Surinam" }
         ST { "Sveti Toma i Prinsipe" }
         //SV { "El Salvador" }
+        SY { "Sirija" } // alternate name { "Sirijska Arapska Republika" }
         SZ { "Svazi" }
         TC { "Turkski i Kaikos Otoci" }
         TD { "\u010Cad" }
@@ -228,7 +235,7 @@ hr {
         TR { "Turska" }
         TT { "Trinidad i Tobago" }
         //TV { "Tuvalu" }
-        TW { "Tajvan" }
+        TW { "Tajvan, Kineska Pokrajina" }
         TZ { "Tanzanija" }
         UA { "Ukrajina" }
         //UG { "Uganda" }
