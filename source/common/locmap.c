@@ -251,7 +251,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x044d, as, as_IN)    /*Todo: Data does not exist*/
 static const ILcidPosixElement az[] = {
     {0x2c,   "az"},
     {0x082c, "az_AZ"},  /* Cyrillic based */
-    {0x042c, "az_AZ_LATN"} /* Latin based */
+    {0x042c, "az_Latn_AZ"} /* Latin based */
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0423, be, be_BY)
@@ -480,7 +480,7 @@ static const ILcidPosixElement ur[] = {
 static const ILcidPosixElement uz[] = {
     {0x43,   "uz"},
     {0x0843, "uz_UZ"},  /* Cyrillic based */
-    {0x0443, "uz_UZ_LATN"} /* Latin based */
+    {0x0443, "uz_Latn_UZ"} /* Latin based */
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x042a, vi, vi_VN)
