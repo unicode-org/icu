@@ -21,10 +21,8 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				InlineFunctionExpansion="2"
 				ImproveFloatingPointConsistency="TRUE"
-				OptimizeForProcessor="2"
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;U_COMMON_IMPLEMENTATION"
+				PreprocessorDefinitions="WIN32;NDEBUG;U_COMMON_IMPLEMENTATION"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -35,8 +33,7 @@
 				ProgramDataBaseFileName=".\Release/"
 				BrowseInformation="1"
 				WarningLevel="3"
-				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="3"/>
+				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -87,10 +84,10 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
-				OptimizeForProcessor="2"
-				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;U_COMMON_IMPLEMENTATION;RBBI_DEBUG"
+				PreprocessorDefinitions="WIN32;_DEBUG;U_COMMON_IMPLEMENTATION;RBBI_DEBUG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				BufferSecurityCheck="TRUE"
 				DisableLanguageExtensions="TRUE"
 				PrecompiledHeaderFile=".\Debug/common.pch"
 				AssemblerListingLocation=".\Debug/"
