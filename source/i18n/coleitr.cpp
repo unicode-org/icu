@@ -220,12 +220,14 @@ CollationElementIterator::CollationElementIterator(
     return;
  
   int32_t length = sourceText.length();
-  UChar *string = (UChar *)uprv_malloc(sizeof(UChar) * length);
+  UChar *string = (UChar *)uprv_malloc(sizeof(UChar) * (length + 1));
   /* 
   Using this constructor will prevent buffer from being removed when
   string gets removed
   */
   sourceText.extract(0, length, string);
+  // null terminate it
+  string[length] = 0;
 
   m_data_ = ucol_openElements(order->ucollator, string, length, &status);
   m_data_->isWritable = TRUE;
