@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/TrieBuilder.java,v $ 
-* $Date: 2001/03/08 03:04:02 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/28 00:01:51 $ 
+* $Revision: 1.2 $
 *
 ******************************************************************************
 */
@@ -41,7 +41,7 @@ package com.ibm.util;
 *   int thirdindex = index2[secondindex] + ch & LAST_SET_OF_BITS_MASK;<br>    
 *   f(ch) = value[thirdindex];<br>
 * </p>
-* @version            $Revision: 1.1 $
+* @version            $Revision: 1.2 $
 * @author             Syn Wee Quek
 */
 final class TrieBuilder
@@ -66,6 +66,64 @@ final class TrieBuilder
   */
   static int build(byte array[], int start, int length, int blocksize, 
                    int indexarray[], byte valuearray[])
+  {
+    int valuesize = 0;
+    int valueindex;
+    int blockcount = 0;  
+    int index = 0;
+    int min;
+    
+    while (start < length) {
+      // for a block of blocksize in the array
+      // we try to find a similar block in valuearray
+      for (valueindex = 0; valueindex < valuesize; valueindex ++) {
+        // testing each block of blocksize at index valueindex in valuearray
+        // if it is == to array blocks
+        min = Math.min(blocksize, valuesize - valueindex);
+        for (blockcount = 0; blockcount < min;blockcount ++) {
+          if (array[start + blockcount] != 
+                                        valuearray[valueindex + blockcount]) {
+            break;
+          }
+        }
+        
+        if (blockcount == blocksize || valueindex + blockcount == valuesize) {
+          break;
+        }
+      }
+
+      // if no similar block is found in value array
+      // we populate the result arrays with data
+      for (min = Math.min(blocksize, length - start); blockcount < min; 
+                                                              blockcount ++) {
+        valuearray[valuesize ++] = array[start + blockcount];
+      }
+        
+      indexarray[index ++] = valueindex;
+      start += blocksize;
+    }
+    
+    return valuesize;
+  }
+  
+  /**
+  * Takes argument array and forms a compact array into the result arrays.
+  * The result will be 
+  * <code>
+  *   array[index] == valuearray[indexarray[index]]
+  * </code>.
+  * Note : This method is generic, it only takes values from the array. 
+  * @param array value array to be manipulated
+  * @param start index of the array to process
+  * @param length of array to process.
+  * @param blocksize size of each blocks existing in valuearray
+  * @param indexarray result index array with length = array.length, with 
+  *        values which indexes to valuearray.
+  * @param valuearray result value array compact value array
+  * @return size of valuearray
+  */
+  static int build(char array[], int start, int length, int blocksize, 
+                   int indexarray[], char valuearray[])
   {
     int valuesize = 0;
     int valueindex;

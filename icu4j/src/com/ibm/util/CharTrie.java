@@ -1,12 +1,12 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2000, International Business Machines Corporation and   *
+* Copyright (C) 1996-2001, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/ByteTrie.java,v $ 
+* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/CharTrie.java,v $ 
 * $Date: 2001/03/28 00:01:52 $ 
-* $Revision: 1.2 $
+* $Revision: 1.1 $
 *
 ******************************************************************************
 */
@@ -43,10 +43,10 @@ import com.ibm.text.UCharacter;
 *   int thirdindex = index2[secondindex] + ch & LAST_FOUR_BITS_MASK;<br>    
 *   f(ch) = value[thirdindex];<br>
 * </p>
-* @version            $Revision: 1.2 $
+* @version            $Revision: 1.1 $
 * @author             Syn Wee Quek
 */
-public final class ByteTrie
+public final class CharTrie
 {
   // constructors -----------------------------------------------------
   
@@ -54,7 +54,7 @@ public final class ByteTrie
   * constructor 
   * @param array of data to be populated into trie
   */
-  public ByteTrie(byte array[])
+  public CharTrie(char array[])
   {
     build(array);
   }
@@ -66,7 +66,7 @@ public final class ByteTrie
   * @param stage2 array of the second set of indexes
   * @param stage3 array of data
   */
-  public ByteTrie(int stage1[], int stage2[], byte stage3[])
+  public CharTrie(int stage1[], int stage2[], char stage3[])
   {
     m_stage1_ = stage1;
     m_stage2_ = stage2;
@@ -80,7 +80,7 @@ public final class ByteTrie
   * @param index to be manipulated into corresponding trie index
   * @return trie value at index
   */
-  public byte getValue(int index)
+  public char getValue(int index)
   {
     // index of the first access to the database 
     int index1 = index >> STAGE_1_SHIFT_;
@@ -108,7 +108,7 @@ public final class ByteTrie
   /**
   * Stage 3 value array
   */
-  private byte m_stage3_[];
+  private char m_stage3_[];
   
   /**
   * Stage 1 shift
@@ -157,16 +157,16 @@ public final class ByteTrie
   * Each unicode character will be used to generate data.
   * @param output file path
   */
-  private void build(byte array[])
+  private void build(char array[])
   {
     int ch = 0;
     
     int stage2[] = new int[COUNT_CODEPOINT_FIRST_17_BIT_];
-    byte stage3[] = new byte[UCharacter.MAX_VALUE >> 1];
+    char stage3[] = new char[UCharacter.MAX_VALUE >> 1];
     int size = TrieBuilder.build(array, 0, array.length, COUNT_4_BIT_, stage2, 
                                  stage3);
     
-    m_stage3_ = new byte[size];
+    m_stage3_ = new char[size];
     System.arraycopy(stage3, 0, m_stage3_, 0, size);
     
     m_stage1_ = new int[COUNT_CODEPOINT_FIRST_11_BIT_];
@@ -213,10 +213,10 @@ public final class ByteTrie
     }
     result.append("\n}\n\n");
     size = m_stage3_.length;
-    result.append("byte m_stage3_[] = {\n");
+    result.append("char m_stage3_[] = {\n");
     count = 0;
     for (int i = 0; i < size; i ++) {
-      result.append("0x" + Integer.toHexString((char)m_stage3_[i]));
+      result.append("0x" + Integer.toHexString(m_stage3_[i]));
       if (i != size - 1) {
         result.append(", ");
       }
