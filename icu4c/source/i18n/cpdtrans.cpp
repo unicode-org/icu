@@ -41,14 +41,37 @@ CompoundTransliterator::CompoundTransliterator(
  */
 CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
                               Transliterator::Direction direction,
-                              UnicodeFilter* adoptedFilter) :
+                              UnicodeFilter* adoptedFilter,
+                              UErrorCode& status) :
     Transliterator(ID, 0), // set filter to 0 here!
-    filters(0) {
+    filters(0), trans(0) {
+    init(ID, direction, adoptedFilter, status);
+}
+
+CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
+                              UErrorCode& status) :
+    Transliterator(ID, 0), // set filter to 0 here!
+    filters(0), trans(0) {
+    init(ID, FORWARD, 0, status);
+}
+
+void CompoundTransliterator::init(const UnicodeString& ID,
+                                  Transliterator::Direction direction,
+                                  UnicodeFilter* adoptedFilter,
+                                  UErrorCode& status) {
+    if (U_FAILURE(status)) return;
     UnicodeString* list = split(ID, ID_DELIM, count);
     trans = new Transliterator*[count];
     for (int32_t i = 0; i < count; ++i) {
         trans[i] = createInstance(list[direction==FORWARD ? i : (count-1-i)],
                                   direction);
+        if (trans[i] == NULL) {
+            while (++i < count) trans[i] = 0;
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            delete[] list;
+            delete adoptedFilter;
+            return;
+        }
     }
     delete[] list;
     computeMaximumContextLength();
@@ -118,7 +141,9 @@ CompoundTransliterator::~CompoundTransliterator() {
 
 void CompoundTransliterator::freeTransliterators(void) {
     for (int32_t i=0; i<count; ++i) {
-        delete trans[i];
+        if (trans != 0) {
+            delete trans[i];
+        }
         if (filters != 0) {
             delete filters[i];
         }
