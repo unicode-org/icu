@@ -523,7 +523,7 @@ protected:
   CharacterIterator() {}
   CharacterIterator(int32_t length);
   CharacterIterator(int32_t length, UTextOffset position);
-  CharacterIterator(int32_t length, UTextOffset begin, UTextOffset end, UTextOffset position);
+  CharacterIterator(int32_t length, UTextOffset textBegin, UTextOffset textEnd, UTextOffset position);
   CharacterIterator(const CharacterIterator &that);
 
   CharacterIterator &operator=(const CharacterIterator &that);
