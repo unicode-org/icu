@@ -216,7 +216,7 @@ void HangToJamoTransliteratorTest::TestTransliterate(){
 
 
     };
-    int i;
+    uint32_t i;
     HangulJamoTransliterator *trans1=new HangulJamoTransliterator();
     if(trans1 == 0){
         errln("HangulJamoTransliterator construction failed");

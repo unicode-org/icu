@@ -315,7 +315,7 @@ void UniToHexTransliteratorTest::TestTransliterate(){
         UnicodeString("*##00*", ""),     UnicodeString("hellothere", ""), "1", "8", "4", UnicodeString("hell*6F**74**68**65*re", ""), UnicodeString("hell*6F**74**68**65*re", ""),
 
     };
-    int i;
+    uint32_t i;
     for(i=0;i<sizeof(Data)/sizeof(Data[0]);i=i+7){
         UnicodeToHexTransliterator *trans1=new UnicodeToHexTransliterator(Data[i+0], TRUE, NULL, status);
         if(U_FAILURE(status)){
