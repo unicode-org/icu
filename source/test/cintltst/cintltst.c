@@ -428,7 +428,7 @@ const char* loadTestData(UErrorCode* err){
         /* Fall back did not succeed either so return */
         if(U_FAILURE(*err)){
             *err = U_FILE_ACCESS_ERROR;
-            log_err("Could not load testtypes.res in testdata bundle with path %s - %as\n", tdpath, u_errorName(*err));
+            log_err("Could not load testtypes.res in testdata bundle with path %s - %s\n", tdpath, u_errorName(*err));
             return "";
         }
         ures_close(test);
