@@ -1,0 +1,15 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ga_IE_PREEURO {
+    Version { "1.0" }
+    CurrencyElements {
+        "\u00a3",
+        "IEP",
+        ".",
+    }
+}

@@ -1,0 +1,27 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+//  Date        Name        Description
+//  10/23/2000  grhoten     Initial version
+
+
+sw_KE {
+    Version { "1.1" }
+    CurrencyElements { 
+        "KSh",
+        "KES",
+        ".",
+    }
+//    LocaleString { "sw_KE" }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "KEN" }
+    LocaleID:int { 0x0441 }
+}

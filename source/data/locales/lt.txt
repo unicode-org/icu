@@ -1,0 +1,113 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+lt {
+    Version{ "1.1" }
+    CollationElements { 
+        Version { "1.0" }
+        Sequence { "[backwards 2]& C < c\u030C , C\u030C & I ; y = \u0131 , Y = \u0130 "
+        "& S < s\u030C , S\u030C & X < y\u0301, Y\u0301 < y\u0302 , Y\u0302 < y\u0308, Y"
+        "\u0308 & Z < z\u030C , Z\u030C" }
+    }
+    Countries { 
+        LT { "Lietuva" }
+    }
+    DateTimePatterns { 
+        "HH.mm.ss z",
+        "HH.mm.ss z",
+        "HH.mm.ss",
+        "HH.mm",
+        "EEEE, yyyy, MMMM d",
+        "EEEE, yyyy, MMMM d",
+        "yyyy.M.d",
+        "yy.M.d",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "Sk",
+        "Pr",
+        "An",
+        "Tr",
+        "Kt",
+        "Pn",
+        "\u0160t",
+    }
+    DayNames { 
+        "Sekmadienis",
+        "Pirmadienis",
+        "Antradienis",
+        "Tre\u010Diadienis",
+        "Ketvirtadienis",
+        "Penktadienis",
+        "\u0160e\u0161tadienis",
+    }
+    Eras { 
+        "pr.Kr.",
+        "po.Kr.",
+    }
+    Languages { 
+        lt { "Lietuvi\u0159" }
+    }
+    LocaleID:int { 0x27 }
+//    LocaleString { "lt" }
+    MonthAbbreviations { 
+        "Sau",
+        "Vas",
+        "Kov",
+        "Bal",
+        "Geg",
+        "Bir",
+        "Lie",
+        "Rgp",
+        "Rgs",
+        "Spa",
+        "Lap",
+        "Grd",
+    }
+    MonthNames { 
+        "Sausio",
+        "Vasario",
+        "Kovo",
+        "Baland\u017Eio",
+        "Gegu\u017E\u0117s",
+        "Bir\u017Eelio",
+        "Liepos",
+        "Rugpj\u016B\u010Dio",
+        "Rugs\u0117jo",
+        "Spalio",
+        "Lapkri\u010Dio",
+        "Gruod\u017Eio",
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "lit" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u0105 \u0119 \u012f \u0173 \u0117 \u016b \u010d \u0161 \u017e]" }
+}

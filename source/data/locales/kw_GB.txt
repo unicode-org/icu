@@ -1,0 +1,37 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+kw_GB {
+    Version { "1.2" }
+    ///* Discarding duplicate data for tag: AmPmMarkers */
+    CurrencyElements {
+        "\u00a3",
+        "GBP",
+        ".",
+    }
+    DateTimeElements:intvector {
+        2,
+        1,
+    }
+    DateTimePatterns {
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE dd MMMM yyyy",
+        "dd MMMM yyyy",
+        "MMM dd,yy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00a4#,##0.00;-\u00a4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+}

@@ -1,0 +1,28 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+//  Date        Name        Description
+//  10/23/2000  grhoten     Initial version
+
+
+sw_TZ {
+    Version { "1.0" }
+    CurrencyElements { 
+        "TSh",
+        "TZS",
+        "",
+    }
+//    LocaleString { "sw_TZ" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "TZA" }
+// Microsoft's JDK documentation says that this number is for Kenya only.
+//    LocaleID { "0441" }
+}

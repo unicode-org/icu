@@ -1,0 +1,129 @@
+## -*-makefile-*-
+## 390-specific setup 
+## Copyright (c) 1999-2001, International Business Machines Corporation and
+## others. All Rights Reserved.
+##
+## $Id: mh-os390,v 1.34 2002/02/12 20:04:52 yves-oss Exp $
+
+###################################################################
+#                    IMPORTANT NOTE                               #
+###################################################################
+# Before you try to run the Makefile, make sure you have the      #
+# environment variables set.                                      #
+#                                                                 #
+# If you are going to do the OS390BATCH build, make sure you have #
+# the OS390BATCH environment variable set.                        #
+#                                                                 #
+#   export OS390BATCH=1                                           #
+#                                                                 #
+# To build a version of ICU which uses IEEE Floating point        #
+#                                                                 #
+#   export IEEE390=1                                              #
+#                                                                 #
+###################################################################
+
+ifeq (${IEEE390}, 1)
+ICU_IEEE          = -Wc,"float(ieee)" -DIEEE_754=1
+else
+ICU_IEEE          = -DIEEE_754=0
+endif
+
+# TODO: Consider using  -Wc,roc,rent for making the data readonly
+CFLAGS390=      -Wc,"langlvl(extended),spill(2000)" $(ICU_BUILD_OPTIONS)  $(ICU_IEEE) -Wc,dll,expo
+## OS390BATCH
+ifeq (${OS390BATCH},1)
+DEFS390=        -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_SHR_TZNAME -D_SHR_TIMEZONE -DOS390BATCH
+else
+DEFS390=        -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_SHR_TZNAME -D_SHR_TIMEZONE
+endif
+ARFLAGS=        -cr
+OS390DATA=      1
+
+
+## Commands to generate dependency files
+GEN_DEPS.c=	makedep                        
+GEN_DEPS.cc=	makedep
+
+## Commands to compile
+COMPILE.c=	_CXX_CXXSUFFIX="cpp" _CXX_STEPS="-1" $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(CFLAGS390) $(DEFS390) -c
+COMPILE.cc=	_CXX_CXXSUFFIX="cpp" _CXX_STEPS="-1" $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(CFLAGS390) $(DEFS390) -c
+
+# Commands to link
+LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) 
+LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) 
+
+## Commands for shared library (dll)
+SHLIB.c=	$(LINK.c) -Wl,dll
+SHLIB.cc=	$(LINK.cc) -Wl,dll
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-I
+
+## Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LIBPATH
+
+## Versioned target for a shared library.
+FINAL_SO_TARGET = $(basename $(SO_TARGET)).$(SO_TARGET_VERSION).$(SO)
+MIDDLE_SO_TARGET = $(basename $(SO_TARGET).$(SO))
+
+## Shared object suffix (switch to dll for shared library build)
+SO = dll
+## Non-shared intermediate object suffix
+STATIC_O = o
+
+## Suffix of the subset data library for batch mode
+BATCH_STUB_SUFFIX=_390
+
+ifeq ($(OS390BATCH),1)
+BATCH_STUB_TARGET=	"//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}D1)'"
+BATCH_LIBICUUC=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}UC)'"
+BATCH_LIBICUDT=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}D1)'"
+endif
+
+## Link commands to link to ICU libs
+LIBICUDT=	$(top_builddir)/stubdata/lib$(ICUDATA_NAME)$(ICULIBSUFFIX)$(BATCH_STUB_SUFFIX).x
+LIBICUUC=	$(top_builddir)/common/li$(ICUPREFIX)uc$(ICULIBSUFFIX).$(SO_TARGET_VERSION).x
+LIBICUI18N=	$(top_builddir)/i18n/lib$(ICUPREFIX)i18n$(ICULIBSUFFIX).$(SO_TARGET_VERSION).x
+LIBICULE=	$(top_builddir)/layout/lib$(ICUPREFIX)le$(ICULIBSUFFIX).$(SO_TARGET_VERSION).x
+LIBCTESTFW=	$(top_builddir)/tools/ctestfw/lib$(ICUPREFIX)ctestfw$(ICULIBSUFFIX).$(SO_TARGET_VERSION).x
+LIBICUTOOLUTIL=	$(top_builddir)/tools/toolutil/lib$(ICUPREFIX)toolutil$(ICULIBSUFFIX).$(SO_TARGET_VERSION).x
+LIBUSTDIO=	$(top_builddir)/extra/ustdio/libustdio$(ICULIBSUFFIX).$(SO_TARGET_VERSION).x
+
+## Special 390 rules
+
+## Build archive from object
+%.a : $(OBJECTS)
+	$(AR) $(ARFLAGS) $@ $(OBJECTS)
+
+## Compilation rules
+%.$(STATIC_O): $(srcdir)/%.c
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+%.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+%.$(STATIC_O): $(srcdir)/%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
+%.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
+
+## Dependency rules
+%.d : %.u
+	@$(SHELL) -ec 'cat $<  \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@ ; rm -f $<'
+
+%.u : $(srcdir)/%.c
+	@echo "generating dependency information for $<"
+	@$(SHELL) -ec 'touch            $*.u  > /dev/null 2>&1'
+	@$(SHELL) -ec '$(GEN_DEPS.c) -f $*.u $< > /dev/null 2>&1'
+
+%.u : $(srcdir)/%.cpp
+	@echo "generating dependency information for $<"
+	@$(SHELL) -ec 'touch              $*.u  > /dev/null 2>&1'
+	@$(SHELL) -ec '$(GEN_DEPS.cc)  -f $*.u $< > /dev/null 2>&1'
+
+## Versioned libraries rules
+%.$(SO): %.$(SO_TARGET_VERSION).$(SO)
+	$(RM) $@ && ln -s $*.$(SO_TARGET_VERSION).$(SO) $@
+
+## End 390-specific setup

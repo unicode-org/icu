@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+en_AS {
+    Version { "x0.1" }
+    CurrencyElements { 
+        "$",
+        "USD",
+        ".",
+    }
+//    LocaleString { "en_AS" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "ASM" }
+    LocaleID:int { 0x0409 }
+}
