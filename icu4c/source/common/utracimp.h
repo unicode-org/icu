@@ -67,19 +67,24 @@ U_CFUNC U_IMPORT int32_t
 #endif
 utrace_level;
 
-/**
- * Boolean expression to see if ICU tracing is turned on.
- * @draft ICU 2.8
- */
-#define UTRACE_IS_ON (utrace_level>=UTRACE_ERROR)
 
 /**
  * Boolean expression to see if ICU tracing is turned on
  * to at least the specified level.
- * @draft ICU 2.8
+ * @internal
  */
 #define UTRACE_LEVEL(level) (utrace_level>=(level))
 
+/**
+  *  Flag bit in utraceFnNumber, the local variable added to each function 
+  *  with tracing code to contains the function number.
+  *
+  *  Set the flag if the function's entry is traced, which will cause the
+  *  function's exit to also be traced.  utraceFnNumber is uncoditionally 
+  *  set at entry, whether or not the entry is traced, so that it will
+  *  always be available for error trace output.
+  */            
+#define UTRACE_TRACED_ENTRY 0x80000000
 
 /**
  * Trace statement for the entry point of a function.
@@ -93,12 +98,36 @@ utrace_level;
  * consistent with ICU's error handling model.
  *
  * @param fnNumber The UTraceFunctionNumber for the current function.
- * @draft ICU 2.8
+ * @internal
  */
 #define UTRACE_ENTRY(fnNumber) \
     int32_t utraceFnNumber=(fnNumber); \
-    if(UTRACE_IS_ON) { \
+    if(utrace_level>=UTRACE_INFO) { \
         utrace_entry(fnNumber); \
+        utraceFnNumber |= UTRACE_TRACED_ENTRY; \
+    }
+
+
+/**
+ * Trace statement for the entry point of open and close functions.
+ * Produces trace output at a less verbose setting than plain UTRACE_ENTRY
+ * Stores the function number in a local variable.
+ * In C code, must be placed immediately after the last variable declaration.
+ * Must be matched with UTRACE_EXIT() at all function exit points.
+ *
+ * Tracing should start with UTRACE_ENTRY after checking for
+ * U_FAILURE at function entry, so that if a function returns immediately
+ * because of a pre-existing error condition, it does not show up in the trace,
+ * consistent with ICU's error handling model.
+ *
+ * @param fnNumber The UTraceFunctionNumber for the current function.
+ * @internal
+ */
+#define UTRACE_ENTRY_OC(fnNumber) \
+    int32_t utraceFnNumber=(fnNumber); \
+    if(utrace_level>=UTRACE_OPEN_CLOSE) { \
+        utrace_entry(fnNumber); \
+        utraceFnNumber |= UTRACE_TRACED_ENTRY; \
     }
 
 
@@ -112,11 +141,11 @@ utrace_level;
  *                  positive values an error (see u_errorName()),
  *                  negative values an informational status.
  *
- * @draft ICU 2.8
+ * @internal
  */
 #define UTRACE_EXIT() \
-    {if(UTRACE_IS_ON) { \
-        utrace_exit(utraceFnNumber, UTRACE_EXITV_NONE); \
+    {if(utraceFnNumber & UTRACE_TRACED_ENTRY) { \
+        utrace_exit(utraceFnNumber & ~UTRACE_TRACED_ENTRY, UTRACE_EXITV_NONE); \
     }}
 
 /**
@@ -125,20 +154,20 @@ utrace_level;
  *
  * @param val       The function's return value, int32_t or comatible type.
  *
- * @draft ICU 2.8
+ * @internal 
  */
-#define UTRACE_EXIT_D(val) \
-    {if(UTRACE_IS_ON) { \
+#define UTRACE_EXIT_VALUE(val) \
+    {if(utrace_level>=UTRACE_INFO) { \
         utrace_exit(utraceFnNumber, UTRACE_EXITV_I32, val); \
     }}
 
-#define UTRACE_EXIT_S(status) \
-    {if(UTRACE_IS_ON) { \
+#define UTRACE_EXIT_STATUS(status) \
+    {if(utrace_level>=UTRACE_INFO) { \
         utrace_exit(utraceFnNumber, UTRACE_EXITV_STATUS, status); \
     }}
 
-#define UTRACE_EXIT_DS(val, status) \
-    {if(UTRACE_IS_ON) { \
+#define UTRACE_EXIT_VALUE_STATUS(val, status) \
+    {if(utrace_level>=UTRACE_INFO) { \
         utrace_exit(utraceFnNumber, (UTRACE_EXITV_I32 | UTRACE_EXITV_STATUS), val, status); \
     }}
 

@@ -345,7 +345,7 @@ U_CAPI UCollator*
 ucol_open(const char *loc,
 		  UErrorCode *status)
 {
-  UTRACE_ENTRY(UTRACE_UCOL_OPEN);
+  UTRACE_ENTRY_OC(UTRACE_UCOL_OPEN);
   UTRACE_DATA1(UTRACE_INFO, "locale = \"%s\"", loc);
   UCollator *result = NULL;
 
@@ -355,7 +355,7 @@ ucol_open(const char *loc,
     result = ucol_open_internal(loc, status);
   }
   UTRACE_DATA1(UTRACE_INFO, "Returning %p", result);
-  UTRACE_EXIT_S(*status);
+  UTRACE_EXIT_STATUS(*status);
   return result;
 }
 
@@ -474,7 +474,7 @@ ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *val
 U_CAPI void U_EXPORT2
 ucol_close(UCollator *coll)
 {
-  UTRACE_ENTRY(UTRACE_UCOL_CLOSE);
+  UTRACE_ENTRY_OC(UTRACE_UCOL_CLOSE);
   UTRACE_DATA1(UTRACE_INFO, "coll = %p", coll);
   if(coll != NULL) {
       // these are always owned by each UCollator struct, 
@@ -4305,7 +4305,7 @@ ucol_getSortKey(const    UCollator    *coll,
       //((UCollator *)coll)->errorCode = status; /*semantically const */
   }
   UTRACE_DATA2(UTRACE_VERBOSE, "Sort Key = %vb", result, keySize);
-  UTRACE_EXIT_S(status);
+  UTRACE_EXIT_STATUS(status);
   return keySize;
 }
 
@@ -5763,7 +5763,7 @@ ucol_nextSortKeyPart(const UCollator *coll,
 
     if(count==0) {
         /* nothing to do */
-        UTRACE_EXIT_D(0);
+        UTRACE_EXIT_VALUE(0);
         return 0;
     }
 
@@ -5840,7 +5840,7 @@ ucol_nextSortKeyPart(const UCollator *coll,
       s.iterator = unorm_setIter(normIter, iter, UNORM_FCD, status);
       s.flags &= ~UCOL_ITER_NORM;
       if(U_FAILURE(*status)) {
-        UTRACE_EXIT_S(*status);
+        UTRACE_EXIT_STATUS(*status);
         return 0;
       }
     } else if(level == UCOL_PSK_IDENTICAL) {
@@ -5850,7 +5850,7 @@ ucol_nextSortKeyPart(const UCollator *coll,
       s.iterator = unorm_setIter(normIter, iter, UNORM_NFD, status);
       s.flags &= ~UCOL_ITER_NORM;
       if(U_FAILURE(*status)) {
-        UTRACE_EXIT_S(*status);
+        UTRACE_EXIT_STATUS(*status);
         return 0;
       }
       doingIdenticalFromStart = TRUE;
@@ -5875,7 +5875,7 @@ ucol_nextSortKeyPart(const UCollator *coll,
         /* reset to previous state */
       s.iterator->setState(s.iterator, iterState, status);
       if(U_FAILURE(*status)) {
-          UTRACE_EXIT_S(*status);
+          UTRACE_EXIT_STATUS(*status);
           return 0;
       }
     }
@@ -5920,7 +5920,7 @@ ucol_nextSortKeyPart(const UCollator *coll,
         if(CE==UCOL_NO_MORE_CES) {
           /* should not happen */
           *status=U_INTERNAL_PROGRAM_ERROR;
-          UTRACE_EXIT_S(*status);
+          UTRACE_EXIT_STATUS(*status);
           return 0;
         }
       }
@@ -6401,7 +6401,7 @@ ucol_nextSortKeyPart(const UCollator *coll,
         // At this point we have a NFD iterator that is positioned
         // in the right place
         if(U_FAILURE(*status)) {
-          UTRACE_EXIT_S(*status);
+          UTRACE_EXIT_STATUS(*status);
           return 0;
         }
         first = uiter_previous32(s.iterator);
@@ -6471,7 +6471,7 @@ ucol_nextSortKeyPart(const UCollator *coll,
       break;
     default:
       *status = U_INTERNAL_PROGRAM_ERROR;
-      UTRACE_EXIT_S(*status);
+      UTRACE_EXIT_STATUS(*status);
       return 0;
     }
 
@@ -6547,7 +6547,7 @@ saveState:
     // Return number of meaningful sortkey bytes.
     UTRACE_DATA4(UTRACE_VERBOSE, "dest = %vb, state=%d %d",
                   dest,i, state[0], state[1]);
-    UTRACE_EXIT_D(i);
+    UTRACE_EXIT_VALUE(i);
     return i;
 }
 
@@ -8499,12 +8499,12 @@ ucol_strcollIter( const UCollator    *coll,
   UTRACE_DATA3(UTRACE_VERBOSE, "coll=%p, sIter=%p, tIter=%p", coll, sIter, tIter);
 
   if (sIter == tIter) {
-    UTRACE_EXIT_DS(UCOL_EQUAL, *status)
+    UTRACE_EXIT_VALUE_STATUS(UCOL_EQUAL, *status)
     return UCOL_EQUAL;
   }
   if(sIter == NULL || tIter == NULL || coll == NULL) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
-    UTRACE_EXIT_DS(UCOL_EQUAL, *status)
+    UTRACE_EXIT_VALUE_STATUS(UCOL_EQUAL, *status)
     return UCOL_EQUAL;
   }
 
@@ -8584,7 +8584,7 @@ end_compare:
     unorm_closeIter(tNormIter);
   }
 
-  UTRACE_EXIT_DS(result, *status)
+  UTRACE_EXIT_VALUE_STATUS(result, *status)
   return result;
 }
 
@@ -8620,7 +8620,7 @@ ucol_strcoll( const UCollator    *coll,
     if(source == NULL || target == NULL) {
       // do not crash, but return. Should have 
       // status argument to return error.
-      UTRACE_EXIT_D(UTRACE_UCOL_STRCOLL);
+      UTRACE_EXIT_VALUE(UTRACE_UCOL_STRCOLL);
       return UCOL_EQUAL;
     }
       collIterate sColl, tColl;
@@ -8637,7 +8637,7 @@ ucol_strcoll( const UCollator    *coll,
         //    Check for them being the same string, and scan through
         //    any leading equal portion.
         if (source==target) {
-            UTRACE_EXIT_D(UCOL_EQUAL);
+            UTRACE_EXIT_VALUE(UCOL_EQUAL);
             return UCOL_EQUAL;
         }
 
@@ -8652,7 +8652,7 @@ ucol_strcoll( const UCollator    *coll,
             pTarg++;
         }
         if (*pSrc == 0 && *pTarg == 0) {
-            UTRACE_EXIT_D(UCOL_EQUAL);
+            UTRACE_EXIT_VALUE(UCOL_EQUAL);
             return UCOL_EQUAL;
         }
         equalLength = pSrc - source;
@@ -8663,7 +8663,7 @@ ucol_strcoll( const UCollator    *coll,
         /* check if source and target are same strings */
 
         if (source==target  && sourceLength==targetLength) {
-            UTRACE_EXIT_D(UCOL_EQUAL);
+            UTRACE_EXIT_VALUE(UCOL_EQUAL);
             return UCOL_EQUAL;
         }
         const UChar    *pSrcEnd = source + sourceLength;
@@ -8692,7 +8692,7 @@ ucol_strcoll( const UCollator    *coll,
             // If we made it all the way through both strings, we are done.  They are ==
             if ((pSrc ==pSrcEnd  || (pSrcEnd <pSrc  && *pSrc==0))  &&   /* At end of src string, however it was specified. */
                 (pTarg==pTargEnd || (pTargEnd<pTarg && *pTarg==0)))  {  /* and also at end of dest string                  */
-                UTRACE_EXIT_D(UCOL_EQUAL);
+                UTRACE_EXIT_VALUE(UCOL_EQUAL);
                 return UCOL_EQUAL;
             }
     }
@@ -8735,7 +8735,7 @@ ucol_strcoll( const UCollator    *coll,
     } else {
       returnVal = ucol_strcollUseLatin1(coll, source, sourceLength, target, targetLength, &status);    
     }
-    UTRACE_EXIT_D(returnVal);
+    UTRACE_EXIT_VALUE(returnVal);
     return returnVal;
 }
 
@@ -8810,7 +8810,7 @@ ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *statu
     *status = U_ILLEGAL_ARGUMENT_ERROR;
   }
   UTRACE_DATA1(UTRACE_INFO, "result = %s", result);
-  UTRACE_EXIT_S(*status);
+  UTRACE_EXIT_STATUS(*status);
   return result;
 }
 
