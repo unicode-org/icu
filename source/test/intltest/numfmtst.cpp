@@ -61,6 +61,9 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(20,TestSymbolsWithBadLocale);
         CASE(21,TestAdoptDecimalFormatSymbols);
 
+		CASE(22,TestScientific2);
+		CASE(23,TestScientificGrouping);
+
         default: name = ""; break;
     }
 }
@@ -146,7 +149,7 @@ NumberFormatTest::TestDigitList(void)
   list1.append('1');
   list1.fDecimalAt = 1;
   DigitList list2;
-  list2.set(1);
+  list2.set((int32_t)1);
   if (list1 != list2) {
     errln("digitlist append, operator!= or set failed ");
   }
@@ -332,6 +335,37 @@ NumberFormatTest::TestExponential(void)
         ival += val_length;
         ilval += lval_length;
     }
+}
+
+void
+NumberFormatTest::TestScientific2() {
+	// jb 2552
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormat* fmt = (DecimalFormat*)NumberFormat::createCurrencyInstance("en_US", status);
+	if (U_SUCCESS(status)) {
+		double num = 12.34;
+		expect(*fmt, num, "$12.34");
+		fmt->setScientificNotation(TRUE);
+		expect(*fmt, num, "$1.23E1");
+		fmt->setScientificNotation(FALSE);
+		expect(*fmt, num, "$12.34");
+	}
+	delete fmt;
+}
+
+void 
+NumberFormatTest::TestScientificGrouping() {
+	// jb 2552
+    UErrorCode status = U_ZERO_ERROR;
+	DecimalFormat fmt("###.##E0",status);
+	if (U_SUCCESS(status)) {
+		expect(fmt, .01234, "12.3E-3");
+		expect(fmt, .1234, "123E-3");
+		expect(fmt, 1.234, "1.23E0");
+		expect(fmt, 12.34, "12.3E0");
+		expect(fmt, 123.4, "123E0");
+		expect(fmt, 1234., "1.23E3");
+	}
 }
 
 // -------------------------------------

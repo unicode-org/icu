@@ -752,7 +752,11 @@ public:
     virtual UBool isScientificNotation(void);
 
     /**
-     * Set whether or not scientific notation is used.
+     * Set whether or not scientific notation is used. When scientific notation
+     * is used, the effective maximum number of integer digits is <= 8.  If the
+     * maximum number of integer digits is set to more than 8, the effective
+     * maximum will be 1.  This allows this call to generate a 'default' scientific
+     * number format without additional changes.
      * @param useScientific TRUE if this object formats and parses scientific
      * notation
      * @see #isScientificNotation
@@ -1106,6 +1110,8 @@ public:
 private:
     DecimalFormat(); // default constructor not implemented
 
+	int32_t precision(UBool isIntegral) const;
+
     /**
      * Do real work of constructing a new DecimalFormat.
      */
@@ -1294,6 +1300,17 @@ protected:
    * @draft ICU 2.4
    */  
     static const int32_t  kDoubleFractionDigits;
+
+    /**
+     * When someone turns on scientific mode, we assume that more than this
+     * number of digits is due to flipping from some other mode that didn't
+     * restrict the maximum, and so we force 1 integer digit.  We don't bother
+     * to track and see if someone is using exponential notation with more than
+     * this number, it wouldn't make sense anyway, and this is just to make sure
+     * that someone turning on scientific mode with default settings doesn't
+     * end up with lots of zeroes.
+     */
+	static const int32_t  kMaxScientificIntegerDigits;
 };
 
 inline UnicodeString&
