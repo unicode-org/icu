@@ -1,7 +1,7 @@
 # Copyright © 1999-2000, International Business Machines Corporation and others. All Rights Reserved
 
 #
-# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.3 $ $Date: 2000/03/07 22:09:02 $
+# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.4 $ $Date: 2000/03/09 18:38:20 $
 # 
 
 TOPDIR=..
@@ -21,8 +21,8 @@ javadoc: FORCE
 	mkdir $(DOCDIR)
 	javadoc -d $(DOCDIR)  \
 		-nodeprecatedlist \
-		-windowTitle "International Classes for Java" \
-		-docTitle "International Classes for Java" \
+		-windowTitle "ICU4J" \
+		-docTitle "ICU4J" \
 		-encoding "iso-8859-1" \
 		-docencoding "iso-8859-1" \
 		-bottom "<font size=-1>Copyright &copy; 1998-2000 IBM Corporation.</font>" \
