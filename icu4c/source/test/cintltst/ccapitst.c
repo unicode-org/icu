@@ -13,9 +13,6 @@
 *********************************************************************************
 */
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 #include "ccapitst.h"
 #include "unicode/uloc.h"
 #include "unicode/ucnv.h"
@@ -36,6 +33,8 @@ static UConverterToUCallback otherCharAction(UConverterToUCallback MIA);
 
 static void TestCCSID(void);
 static void TestJ932(void);
+
+void addTestConvert(TestNode** root);
 
 void addTestConvert(TestNode** root)
 {

@@ -104,6 +104,8 @@ static void printUSeqErr(const UChar* a, int len)
     fprintf(stderr,"}\n");
 }
 
+void addExtraTests(TestNode** root);
+
 void addExtraTests(TestNode** root)
 {
      addTest(root, &TestSurrogateBehaviour,         "tsconv/ncnvtst/TestSurrogateBehaviour");

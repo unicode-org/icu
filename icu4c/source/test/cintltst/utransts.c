@@ -14,7 +14,6 @@
 #include "filestrm.h"
 #include "cintltst.h"
 #include "unicode/ustring.h"
-#include <stdio.h>
 
 #define TEST(x) addTest(root, &x, "utrans/" # x)
 
@@ -27,6 +26,9 @@ static void TestRegisterUnregister(void);
 
 static void _expectRules(const char*, const char*, const char*);
 static void _expect(const UTransliterator* trans, const char* cfrom, const char* cto);
+
+void addUTransTest(TestNode** root);
+
 
 void
 addUTransTest(TestNode** root) {

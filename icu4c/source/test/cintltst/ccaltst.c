@@ -14,7 +14,6 @@
 
 /* C API AND FUNCTIONALITY TEST FOR CALENDAR (ucol.h)*/
 
-#include <stdlib.h>
 #include "unicode/uloc.h"
 #include "unicode/utypes.h"
 #include "unicode/ucal.h"
@@ -23,7 +22,9 @@
 #include "cintltst.h"
 #include "ccaltst.h"
 #include "cformtst.h"
+#include "cmemory.h"
 
+void addCalTest(TestNode** root);
 
 void addCalTest(TestNode** root)
 {
@@ -84,7 +85,7 @@ static void TestCalendar()
 
     /*Testing the  ucal_open() function*/
     log_verbose("\nTesting the ucal_open()\n");
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
+    tzID=(UChar*)uprv_malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "PST");
     caldef=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     if(U_FAILURE(status)){
@@ -151,7 +152,7 @@ static void TestCalendar()
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
-        result=(UChar*)malloc(sizeof(UChar) * resultlength);
+        result=(UChar*)uprv_malloc(sizeof(UChar) * resultlength);
         ucal_getTimeZoneDisplayName(caldef, UCAL_DST, "en_US", result, resultlength, &status);
     }
     if(U_FAILURE(status))    {
@@ -165,7 +166,7 @@ static void TestCalendar()
 
 #define expectPDT "Pacific Daylight Time"
 
-    tzdname=(UChar*)malloc(sizeof(UChar) * (sizeof(expectPDT)+1));
+    tzdname=(UChar*)uprv_malloc(sizeof(UChar) * (sizeof(expectPDT)+1));
     u_uastrcpy(tzdname, expectPDT);
     if(u_strcmp(tzdname, result)==0){
         log_verbose("PASS: got the correct time zone display name %s\n", u_austrcpy(tempMsgBuf, result) );
@@ -257,9 +258,9 @@ static void TestCalendar()
     ucal_close(calit);
     /*closing the UDateFormat used */
     udat_close(datdef);
-    free(tzID);
-    free(result);
-    free(tzdname);
+    uprv_free(tzID);
+    uprv_free(result);
+    uprv_free(tzdname);
     
 }
 
@@ -279,7 +280,7 @@ static void TestGetSetDateAPI()
     UChar temp[30];
 
     log_verbose("\nOpening the calendars()\n");
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
+    tzID=(UChar*)uprv_malloc(sizeof(UChar) * 4);
     u_strcpy(tzID, fgGMTID);
     /*open the calendars used */
     caldef=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
@@ -448,7 +449,7 @@ static void TestGetSetDateAPI()
     ucal_close(caldef);
     ucal_close(caldef2);
     udat_close(datdef);
-    free(tzID);
+    uprv_free(tzID);
 
 }
 
@@ -464,7 +465,7 @@ static void TestFieldGetSet()
     UDate d1;
     UErrorCode status=U_ZERO_ERROR;
     log_verbose("\nFetching pointer to UCalendar using the ucal_open()\n");
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
+    tzID=(UChar*)uprv_malloc(sizeof(UChar) * 4);
     u_strcpy(tzID, fgGMTID);
     /*open the calendar used */
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
@@ -590,7 +591,7 @@ static void TestFieldGetSet()
 
     ucal_close(cal);
     udat_close(datdef);
-    free(tzID);
+    uprv_free(tzID);
     
 }
  
@@ -613,7 +614,7 @@ static void TestAddRollExtensive()
    
     log_verbose("Testing add and roll extensively\n");
     
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
+    tzID=(UChar*)uprv_malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "PST");
     /*open the calendar used */
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);;
@@ -759,7 +760,7 @@ static void TestAddRollExtensive()
     }
 
     ucal_close(cal);
-    free(tzID);
+    uprv_free(tzID);
 }
 
 /*------------------------------------------------------ */
@@ -772,7 +773,7 @@ static void TestGetLimits()
     UErrorCode status = U_ZERO_ERROR;
     
     
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
+    tzID=(UChar*)uprv_malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "PST");
     /*open the calendar used */
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);;
@@ -851,7 +852,7 @@ static void TestGetLimits()
 
 
     ucal_close(cal);
-    free(tzID);
+    uprv_free(tzID);
 }
 
 
@@ -872,7 +873,7 @@ static void TestDOWProgression()
     UErrorCode status = U_ZERO_ERROR;
     UChar* tzID = 0;
     char tempMsgBuf[256];
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
+    tzID=(UChar*)uprv_malloc(sizeof(UChar) * 4);
     u_strcpy(tzID, fgGMTID);
     /*open the calendar used */
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);;
@@ -919,7 +920,7 @@ static void TestDOWProgression()
     
     ucal_close(cal);
     udat_close(datfor);
-    free(tzID);
+    uprv_free(tzID);
     
 }
  
@@ -949,7 +950,7 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     UChar* tzID = 0;
     char tempMsgBuf[256];
 
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
+    tzID=(UChar*)uprv_malloc(sizeof(UChar) * 4);
     u_strcpy(tzID, fgGMTID);
     gmtcal=ucal_open(tzID, 3, "en_US", UCAL_TRADITIONAL, &status);;
     if (U_FAILURE(status)) {
@@ -1017,7 +1018,7 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     ucal_close(gmtcal);
     ucal_close(cal);
     udat_close(datfor);
-    free(tzID);
+    uprv_free(tzID);
 }
  
 /* ------------------------------------- */
