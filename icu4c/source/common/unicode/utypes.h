@@ -275,6 +275,7 @@ typedef void* UClassID;
  * and to import them from outside.
  */
 
+
 #ifdef U_COMMON_IMPLEMENTATION
 #define U_COMMON_API  U_EXPORT
 #define U_I18N_API    U_IMPORT
@@ -283,6 +284,10 @@ typedef void* UClassID;
 #define U_COMMON_API  U_IMPORT
 #define U_I18N_API    U_EXPORT
 #define U_LAYOUT_API  U_IMPORT
+#elif defined(U_COMBINED_IMPLEMENTATION)
+#define U_COMMON_API  U_EXPORT
+#define U_I18N_API    U_EXPORT
+#define U_LAYOUT_API  U_EXPORT
 #elif defined(U_LAYOUT_IMPLEMENTATION)
 #define U_COMMON_API  U_IMPORT
 #define U_I18N_API    U_IMPORT
@@ -323,7 +328,8 @@ typedef void* UClassID;
 enum UErrorCode {
     U_ERROR_INFO_START        = -128,   /**< Start of information results (semantically successful) */
     U_USING_FALLBACK_ERROR    = -128,   /**< A resource bundle lookup returned a fallback result (not an error) */
-    U_USING_DEFAULT_ERROR     = -127,   /**< A reousrce bundle lookup returned a result from the root locale (not an error) */
+    U_USING_DEFAULT_ERROR     = -127,   /**< A resource bundle lookup returned a result from the root locale (not an error) */
+    U_SAFECLONE_ALLOCATED_ERROR = -126, /**< A SafeClone operation required allocating memory (informational only) */
     U_ERROR_INFO_LIMIT,                 /**< This must always be the last warning value to indicate the limit for UErrorCode warnings (last warning code +1) */
 
     U_ZERO_ERROR              =  0,     /**< No error, no warning. */
