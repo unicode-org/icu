@@ -36,7 +36,8 @@ endif
 
 classes: $(CLASS_DEST_DIR) delete.classlist $(FILES_class) $(FILES_dics) .compile.classlist
 ifdef FILES_dict
-	@cp $(SRC_FILES_dict) $(CLASS_DEST_DIR)/$(notdir $(SRC_FILES_dict))
+#	@cp $(SRC_FILES_dict) $(CLASS_DEST_DIR)/$(notdir $(SRC_FILES_dict))
+	cp $(SRC_FILES_dict) $(CLASSDIR)/com/ibm/text/resources/$(notdir $(SRC_FILES_dict))
 endif
 ifdef SUBDIRS
 	@for D in $(SUBDIRS) ; do cd $$D ; $(MAKE) classes ; cd .. ; done
