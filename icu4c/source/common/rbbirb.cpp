@@ -150,7 +150,7 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
     int32_t rulesSize         = align8((strippedRules.length()+1) * sizeof(UChar));
 
     int32_t         totalSize = headerSize + forwardTableSize + reverseTableSize
-                                + trieSize + rulesSize;
+                                + safeFwdTableSize + safeRevTableSize + trieSize + rulesSize;
     RBBIDataHeader  *data     = (RBBIDataHeader *)uprv_malloc(totalSize);
     if (data == NULL) {
         *fStatus = U_MEMORY_ALLOCATION_ERROR;
