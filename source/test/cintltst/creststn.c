@@ -156,12 +156,14 @@ static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
 static void printUChars(UChar*);
 
 static void TestGetVersion(void);
+static void TestEmptyBundle(void);
 /***************************************************************************************/
 
 /* Array of our test objects */
 
 void addNEWResourceBundleTest(TestNode** root)
 {
+    addTest(root, &TestEmptyBundle,     "tsutil/creststn/TestEmptyBundle");
     addTest(root, &TestConstruction1,   "tsutil/creststn/TestConstruction1");
     addTest(root, &TestConstruction2,   "tsutil/creststn/TestConstruction2");
     addTest(root, &TestResourceBundles, "tsutil/creststn/TestResourceBundle");
@@ -322,6 +324,26 @@ static void TestNewTypes() {
     ures_close(res);
     ures_close(theBundle);
 
+}
+
+static void TestEmptyBundle(){
+    UErrorCode status = U_ZERO_ERROR;
+    char testdatapath[256];
+    const char *directory= u_getDataDirectory();
+    UResourceBundle *resb=0, *dResB=0;
+    strcpy(testdatapath, directory);
+    strcat(testdatapath, "testdata");
+    resb = ures_open(testdatapath, "testempty", &status);
+
+    if(U_SUCCESS(status)){
+        dResB =  ures_getByKey(resb,"test",dResB,&status);
+        if(status!= U_MISSING_RESOURCE_ERROR){
+            log_err("Did not get the expected error from an empty resource bundle. Expected : %s Got: %s\n", 
+                u_errorName(U_MISSING_RESOURCE_ERROR),u_errorName(status)); 
+        }
+    }
+    ures_close(dResB);
+    ures_close(resb);
 }
 
 static void TestBinaryCollationData(){
