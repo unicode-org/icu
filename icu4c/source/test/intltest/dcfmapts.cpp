@@ -26,11 +26,13 @@ void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, UBool exec, const 
                 if (exec) {
                     logln((UnicodeString)"DecimalFormat API test---"); logln((UnicodeString)"");
                     UErrorCode status = U_ZERO_ERROR;
+                    Locale saveLocale;
                     Locale::setDefault(Locale::getEnglish(), status);
                     if(U_FAILURE(status)) {
                         errln((UnicodeString)"ERROR: Could not set default locale, test may not give correct results");
                     }
                     testAPI(/*par*/);
+                    Locale::setDefault(saveLocale, status);
                 }
                 break;
         case 1: name = "Rounding test";

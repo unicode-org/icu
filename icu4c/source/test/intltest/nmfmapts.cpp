@@ -28,22 +28,26 @@ void IntlTestNumberFormatAPI::runIndexedTest( int32_t index, UBool exec, const c
                 if (exec) {
                     logln("NumberFormat API test---"); logln("");
                     UErrorCode status = U_ZERO_ERROR;
+                    Locale saveLocale;
                     Locale::setDefault(Locale::getEnglish(), status);
                     if(U_FAILURE(status)) {
                         errln("ERROR: Could not set default locale, test may not give correct results");
                     }
                     testAPI(/* par */);
+                    Locale::setDefault(saveLocale, status);
                 }
                 break;
         case 1: name = "NumberFormatRegistration"; 
                 if (exec) {
                     logln("NumberFormat Registration test---"); logln("");
                     UErrorCode status = U_ZERO_ERROR;
+                    Locale saveLocale;
                     Locale::setDefault(Locale::getEnglish(), status);
                     if(U_FAILURE(status)) {
                         errln("ERROR: Could not set default locale, test may not give correct results");
                     }
                     testRegistration();
+                    Locale::setDefault(saveLocale, status);
                 }
                 break;
         default: name = ""; break;
