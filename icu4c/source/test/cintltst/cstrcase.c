@@ -319,6 +319,8 @@ TestCaseTitle() {
             u_errorName(errorCode),
             buffer[0]);
     }
+
+    ubrk_close(titleIterChars);
 }
 
 /* test case folding and case-insensitive string compare -------------------- */
