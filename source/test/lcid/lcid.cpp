@@ -8,6 +8,7 @@
 //  Date:       08/09/2000
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "unicode/utypes.h"
 #include "locmap.h"
 #include "cstring.h"
@@ -35,20 +36,32 @@ int main() {
                     lcidString.extract(0, lcidString.length(), lcidStringC, "");
                     lcidStringC[lcidString.length()] = '\0';
                     uint32_t expectedLCID = uprv_strtoul(lcidStringC, NULL, 16);
-                    lcid = IGlobalLocales::convertToLCID(localeName);
-                    uprv_strcpy(lcidStringC, IGlobalLocales::convertToPosix(expectedLCID));
-                    if(strcmp(localeName, lcidStringC) == 0) {
-                        printf("0x%x is from %s and it resolves correctly to %s(0x%x)\n", expectedLCID, localeName, lcidStringC, lcid);
-                        //printf("%s: %x->%x\n", localeName, expectedLCID, lcid);
-                    } else {
-                        printf("ERROR: 0x%x is from %s and it resolves wrongfully to %s, it shoud have (0x%x)\n", expectedLCID, localeName, lcidStringC, lcid);
-                        //printf("Name mismatch: %s vs. %s: %x->%x\n", localeName, lcidStringC, expectedLCID, lcid);
-                        errors++;
+
+                    status = U_ZERO_ERROR;
+                    lcid = IGlobalLocales::convertToLCID(localeName, &status);
+                    if (U_FAILURE(status)) {
+                        printf("WARNING: %s does not have an LCID mapping (%s)\n", localeName, u_errorName(status));
+                        status = U_ZERO_ERROR;
                     }
-                    if(lcid != expectedLCID) {
-                        printf("ERROR: Locale %s wrongfully has 0x%x instead of 0x%x for LCID\n", localeName, expectedLCID, lcid);
-                        //printf("LCID mismatch: %s: %x->%x\n", localeName, expectedLCID, lcid);
-                        errors++;
+                    else {
+                        status = U_ZERO_ERROR;
+                        uprv_strcpy(lcidStringC, IGlobalLocales::convertToPosix(expectedLCID, &status));
+                        if (U_FAILURE(status)) {
+                            printf("ERROR: %x does not have an POSIX mapping due to error %s\n", expectedLCID, u_errorName(status));
+                        }
+                        if(strcmp(localeName, lcidStringC) == 0) {
+                            //printf("0x%x is from %s and it resolves correctly to %s(0x%x)\n", expectedLCID, localeName, lcidStringC, lcid);
+                            //printf("%s: %x->%x\n", localeName, expectedLCID, lcid);
+                        } else {
+                            printf("ERROR: 0x%x is from %s and it resolves wrongfully to %s, it should have (0x%x)\n", expectedLCID, localeName, lcidStringC, lcid);
+                            //printf("Name mismatch: %s vs. %s: %x->%x\n", localeName, lcidStringC, expectedLCID, lcid);
+                            errors++;
+                        }
+                        if(lcid != expectedLCID) {
+                            printf("ERROR: Locale %s wrongfully has 0x%x instead of 0x%x for LCID\n", localeName, expectedLCID, lcid);
+                            //printf("LCID mismatch: %s: %x->%x\n", localeName, expectedLCID, lcid);
+                            errors++;
+                        }
                     }
                 } else if(U_SUCCESS(status)) {
                     printf("ERROR: Locale %s not installed, and it should be!\n", localeName);
@@ -65,6 +78,9 @@ int main() {
     } else {
         printf("There were no errors\n");
     }
+
+    char temp;
+    scanf("%c", &temp);
 
     return 0;
 }
