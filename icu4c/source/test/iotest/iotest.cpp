@@ -823,6 +823,27 @@ static void TestFprintfFormat() {
     TestFPrintFormat("%3f", 1.234,       "%3f", 1.234);
     TestFPrintFormat("%3f", -1.234,      "%3f", -1.234);
 
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", NULL);
+    /* Reinitialize the buffer to verify null termination works. */
+    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));
+    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));
+    
+    uNumPrinted = u_fprintf(myFile, "%d % d %d", -1234, 1234, 1234);
+    u_fclose(myFile);
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", "en_US_POSIX", NULL);
+    u_fgets(myFile, sizeof(uBuffer)/sizeof(*uBuffer), uBuffer);
+    u_fclose(myFile);
+    u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(*uBuffer));
+    cNumPrinted = sprintf(buffer, "%d % d %d", -1234, 1234, 1234);
+    if (strcmp(buffer, compBuffer) != 0) {
+        log_err("%%d %% d %%d Got: \"%s\", Expected: \"%s\"\n", compBuffer, buffer);
+    }
+    if (cNumPrinted != uNumPrinted) {
+        log_err("%%d %% d %%d number printed Got: %d, Expected: %d\n", uNumPrinted, cNumPrinted);
+    }
+    if (buffer[uNumPrinted+1] != 0x2a) {
+        log_err("%%d %% d %%d too much stored\n");
+    }
 }
 
 #undef TestFPrintFormat
