@@ -20,10 +20,6 @@ U_NAMESPACE_BEGIN
 
 class ParsePosition;
 class SymbolTable;
-class TransliterationRuleParser;
-class TransliterationRule;
-class Transliterator;
-class TransliteratorParser;
 class UVector;
 class CaseEquivClass;
 
@@ -320,7 +316,7 @@ public:
      * Constructs a set from the given pattern.  See the class
      * description for the syntax of the pattern language.
      * @param pattern a string specifying what characters are in the set
-     * @param status returns <code>IllegalArgumentException</code> if the pattern
+     * @param status returns <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
      * contains a syntax error.
      * @stable ICU 2.0
      */
@@ -333,7 +329,7 @@ public:
      * @param pattern a string specifying what characters are in the set
      * @param options bitmask for options to apply to the pattern.
      * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
-     * @param status returns <code>IllegalArgumentException</code> if the pattern
+     * @param status returns <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
      * contains a syntax error.
      * @internal
      */
@@ -434,7 +430,7 @@ public:
      * pattern, optionally ignoring white space.  See the class
      * description for the syntax of the pattern language.
      * @param pattern a string specifying what characters are in the set
-     * @param status returns <code>IllegalArgumentException</code> if the pattern
+     * @param status returns <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
      * contains a syntax error.
      * @stable ICU 2.0
      */
@@ -448,7 +444,7 @@ public:
      * @param pattern a string specifying what characters are in the set
      * @param options bitmask for options to apply to the pattern.
      * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
-     * @param status returns <code>IllegalArgumentException</code> if the pattern
+     * @param status returns <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
      * contains a syntax error.
      * @internal
      */
@@ -1125,10 +1121,8 @@ private:
     // RuleBasedTransliterator support
     //----------------------------------------------------------------
 
-    friend class Transliterator;
     friend class TransliteratorParser;
     friend class TransliteratorIDParser;
-    friend class TransliterationRule;
 
     friend class RBBIRuleScanner;
     friend class RegexCompile;
@@ -1148,7 +1142,7 @@ private:
      * @param varCharToSet a mapping from characters (Character objects from
      * varNameToChar) to UnicodeSet objects.  May be null.  Is only used if
      * varNameToChar is also non-null.
-     * @exception <code>IllegalArgumentException</code> if the pattern
+     * @exception <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
      * contains a syntax error.
      */
     UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
@@ -1198,7 +1192,7 @@ private:
      * the pattern string.
      * @return a StringBuffer containing a pairs list for the parsed
      * substring of <code>pattern</code>
-     * @exception IllegalArgumentException if the parse fails.
+     * @exception U_ILLEGAL_ARGUMENT_ERROR if the parse fails.
      */
     void applyPattern(const UnicodeString& pattern,
                       ParsePosition& pos,
