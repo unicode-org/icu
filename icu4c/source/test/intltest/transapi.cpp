@@ -21,19 +21,16 @@
 
 int32_t getInt(UnicodeString str)
 {
+    char buffer[20];
 	int len=str.length();
-	char *alias;
-	char *buffer=new char[len+1];
-	alias=buffer;
-	for(int i=0; i< len; i++){
-		*alias=(char)str.charAt(i);
-		alias++;
-	}
-
-	*alias='\0';
-//	printf("this is buffer %s and value is %d", buffer, atoi(buffer));
+    if(len>=20) {
+        len=19;
+    }
+    str.extract(0, len, buffer, "");
+    buffer[len]=0;
 	return atoi(buffer);
 }
+
 //---------------------------------------------
 // runIndexedTest
 //---------------------------------------------
