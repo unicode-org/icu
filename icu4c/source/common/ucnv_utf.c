@@ -802,6 +802,7 @@ UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
 {
   UChar32 myUChar;
+  uint16_t first;
   /*Checks boundaries and set appropriate error codes*/
   if (args->source+2 > args->sourceLimit) 
     {
@@ -822,10 +823,11 @@ UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args,
   
   /*Gets the corresponding codepoint*/
 
-  myUChar = ((uint16_t)(*(args->source)) << 8) |((uint8_t)*((args->source)+1));
+  first = ((uint16_t)(*(args->source)) << 8) |((uint8_t)*((args->source)+1));
+  myUChar = first;
   args->source += 2;
 
-  if(UTF_IS_FIRST_SURROGATE(myUChar)) {
+  if(UTF_IS_FIRST_SURROGATE(first)) {
     uint16_t second;
 
     if (args->source+2 > args->sourceLimit) {
@@ -839,11 +841,11 @@ UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args,
     /* ignore unmatched surrogates and just deliver the first one in such a case */
     if(UTF_IS_SECOND_SURROGATE(second)) {
       /* matched pair, get pair value */
-      myUChar = UTF16_GET_PAIR_VALUE(myUChar, second);
+      myUChar = UTF16_GET_PAIR_VALUE(first, second);
       args->source += 2;
     }
   }
-
+  
   return myUChar;
 } 
 
@@ -991,6 +993,7 @@ UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
 {
   UChar32 myUChar;
+  uint16_t first;
   /*Checks boundaries and set appropriate error codes*/
   if (args->source+2 > args->sourceLimit) 
     {
@@ -1010,11 +1013,12 @@ UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args,
   
 
   /*Gets the corresponding codepoint*/
-  myUChar =  ((uint16_t)*((args->source)+1) << 8) |((uint8_t)(*(args->source)));
+  first =  ((uint16_t)*((args->source)+1) << 8) | ((uint8_t)(*(args->source)));
+  myUChar=first;
   /*updates the source*/
   args->source += 2;  
 
-  if(UTF_IS_FIRST_SURROGATE(myUChar)) {
+  if(UTF_IS_FIRST_SURROGATE(first)) {
     uint16_t second;
 
     if (args->source+2 > args->sourceLimit) {
@@ -1028,11 +1032,11 @@ UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args,
     /* ignore unmatched surrogates and just deliver the first one in such a case */
     if(UTF_IS_SECOND_SURROGATE(second)) {
       /* matched pair, get pair value */
-      myUChar = UTF16_GET_PAIR_VALUE(myUChar, second);
+      myUChar = UTF16_GET_PAIR_VALUE(first, second);
       args->source += 2;
     }
   }
-
+  
   return myUChar;
 } 
 
