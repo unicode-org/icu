@@ -2164,7 +2164,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             // assert(c <= 0xFFFF);
             lastOp = (UChar) c;
         } else if (lastOp == HYPHEN) {
-            if (lastChar >= c) {
+            if (lastChar >= c || lastChar == NONE) {
                 // Don't allow redundant (a-a) or empty (b-a) ranges;
                 // these are most likely typos.
                 //throw new IllegalArgumentException("Invalid range " + lastChar +
