@@ -829,6 +829,23 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     uint32_t value;
     int32_t length;
 
+    /*
+     * This is another piece of ugly code:
+     * A goto into the loop if the converter state contains a first surrogate
+     * from the previous function call.
+     * It saves me to check in each loop iteration a check of if(c==0)
+     * and duplicating the trail-surrogate-handling code in the else
+     * branch of that check.
+     * I could not find any other way to get around this other than
+     * using a function call for the conversion and callback, which would
+     * be even more inefficient.
+     *
+     * Markus Scherer 2000-jul-19
+     */
+    if(c!=0) {
+        goto getTrail;
+    }
+
     while(source<sourceLimit) {
         /*
          * This following test is to see if available input would overflow the output.
@@ -844,26 +861,15 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
              * a single UChar for a BMP code point or
              * a matched surrogate pair for a "surrogate code point".
              */
-            if(c==0) {
-                /* there was no lead code unit (1st surrogate) before */
-                c=*source++;
-                ++nextSourceIndex;
-                if(!UTF_IS_SURROGATE(c)) {
-                    /* convert this BMP code point */
-                    /* exit this condition tree */
-                } else if(UTF_IS_SURROGATE_FIRST(c)) {
+            c=*source++;
+            ++nextSourceIndex;
+            if(UTF_IS_SURROGATE(c)) {
+                if(UTF_IS_SURROGATE_FIRST(c)) {
                     if(source<sourceLimit) {
-                        /*
-                         * I have duplicated here the code from below
-                         * that gets the trail unit and checks for a match.
-                         * I do not think that with pre-existing state
-                         * in the converter I could get around duplicating this
-                         * at all.
-                         * (I would have to jump here from outside the loop if(c!=0).)
-                         *
-                         * Markus Scherer 2000-jul-17
-                         */
-                        UChar trail=*source;
+                        UChar trail;
+getTrail:
+                        /* test the following code unit */
+                        trail=*source;
                         if(UTF_IS_SECOND_SURROGATE(trail)) {
                             ++source;
                             ++nextSourceIndex;
@@ -883,22 +889,6 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                     }
                 } else {
                     /* this is an unmatched trail code unit (2nd surrogate) */
-                    /* callback(illegal) */
-                    reason=UCNV_ILLEGAL;
-                    *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-                    goto callback;
-                }
-            } else {
-                /* c contains a lead code unit (1st surrogate) */
-                UChar trail=*source;
-                if(UTF_IS_SECOND_SURROGATE(trail)) {
-                    ++source;
-                    ++nextSourceIndex;
-                    c=UTF16_GET_PAIR_VALUE(c, trail);
-                    /* convert this surrogate code point */
-                    /* exit this condition tree */
-                } else {
-                    /* this is an unmatched lead code unit (1st surrogate) */
                     /* callback(illegal) */
                     reason=UCNV_ILLEGAL;
                     *pErrorCode=U_ILLEGAL_CHAR_FOUND;
