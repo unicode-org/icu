@@ -821,8 +821,8 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     }
     /* Make sure that Purify doesn't complain about uninitialized memory copies. */
     {
-        int32_t unusedLen = ((resB->fResBuf == resB->fResPath) ? resB->fResPathLen : 0);
-        uprv_memset(resB->fResBuf + unusedLen, 0, sizeof(resB->fResBuf) - unusedLen);
+        int32_t usedLen = ((resB->fResBuf == resB->fResPath) ? resB->fResPathLen : 0);
+        uprv_memset(resB->fResBuf + usedLen, 0, sizeof(resB->fResBuf) - usedLen);
     }
 
     resB->fVersion = NULL;
