@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/02/10 21:16:44 $
- * $Revision: 1.41 $
+ * $Date: 2003/02/24 20:05:14 $
+ * $Revision: 1.42 $
  *
  *****************************************************************************************
  */
@@ -901,10 +901,10 @@ public class TestFmwk extends AbstractTestLog {
             if (verbose || level > (quiet ? WARN : LOG)) {
                 if (!suppressIndent) {
                     indent(indentLevel + 1);
+                    final String[] MSGNAMES = { "", "Warning: ", "Error: " };
+                    log.print(MSGNAMES[level]);
                 }
 
-                final String[] MSGNAMES = { "Log: ", "Warning: ", "Error: " };
-                log.print(MSGNAMES[level]);
                 log.print(message);
                 if (newln) {
                     log.println();
