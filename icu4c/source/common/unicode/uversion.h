@@ -19,6 +19,9 @@
 /* Main ICU version information                                              */
 /*===========================================================================*/
 
+#ifndef UVERSION_H
+#define UVERSION_H
+
 /** The current ICU major version as an integer. */
 #define U_ICU_VERSION_MAJOR_NUM 1
 
@@ -27,6 +30,13 @@
 
 /** The current ICU patchlevel version as an integer. */
 #define U_ICU_VERSION_PATCHLEVEL_NUM 1
+
+/** append macro */
+#define URAPPEND(name, suffix) name ## suffix
+
+
+/** Glued version suffix for renamers */
+#define U_ICU_VERSION_SUFFIX _1_8
 
 /** The current ICU library version as a dotted-decimal string. The patchlevel
     only appears in this string if it non-zero. */
@@ -111,3 +121,4 @@ u_getVersion(UVersionInfo versionArray);
 /** This is the version of the tailorings */
 #define UCOL_TAILORINGS_VERSION 1
 
+#endif
