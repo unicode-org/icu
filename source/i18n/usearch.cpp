@@ -260,7 +260,7 @@ inline uint16_t initializePatternCETable(UStringSearch *strsrch,
             }
             cetable = temp;
         }
-        result += ucol_getMaxExpansion(coleiter, ce) - 1;
+        result += (uint16_t)(ucol_getMaxExpansion(coleiter, ce) - 1);
     }
 
     cetable[offset]   = 0;
@@ -338,7 +338,7 @@ inline void setShiftTable(int16_t   shift[], int16_t backshift[],
     for (count = cesize; count > 0; count --) {
         // the original value count does not seem to work
         backshift[hash(cetable[count])] = count > expansionsize ? 
-                                          count - expansionsize : 1;
+                                          (int16_t)(count - expansionsize) : 1;
     }
     backshift[hash(cetable[0])] = 1;
     backshift[hash(0)] = 1;
@@ -380,7 +380,8 @@ inline void initialize(UStringSearch *strsrch, UErrorCode *status)
         UPattern *pattern = &strsrch->pattern;
         int32_t   cesize  = pattern->CELength;
 
-        int16_t minlength = cesize > expandlength ? cesize - expandlength : 1;
+        int16_t minlength = cesize > expandlength 
+			                ? (int16_t)cesize - expandlength : 1;
         pattern->defaultShiftSize    = minlength;
         setShiftTable(pattern->shift, pattern->backShift, pattern->CE,
                       cesize, expandlength, minlength, minlength);
@@ -736,9 +737,9 @@ UBool hasAccentsBeforeMatch(const UStringSearch *strsrch, int32_t start,
         uint32_t            ignorable = TRUE;
         uint32_t            firstce   = strsrch->pattern.CE[0];
 
-        ucol_setOffset(coleiter, start, &status);
+		ucol_setOffset(coleiter, start, &status);
         uint32_t ce  = getCE(strsrch, ucol_next(coleiter, &status));
-        if (U_FAILURE(status)) {
+		if (U_FAILURE(status)) {
             return TRUE;
         }
         while (ce != firstce) {
@@ -750,20 +751,26 @@ UBool hasAccentsBeforeMatch(const UStringSearch *strsrch, int32_t start,
                 return TRUE;
             }
         }
-        if (!ignorable && inNormBuf(coleiter)) {
+		if (!ignorable && inNormBuf(coleiter)) {
             // within normalization buffer, discontiguous handled here
-            return TRUE;
+		    return TRUE;
         }
 
-        // within text
+		// within text
         int32_t temp = start;
-        UBool accent = (getFCD(strsrch->search->text, &temp, 
-                               strsrch->search->textLength) >> 
-                                                    SECOND_LAST_BYTE_SHIFT_); 
+		// original code
+		// accent = (getFCD(strsrch->search->text, &temp, 
+        //                  strsrch->search->textLength) 
+		//   	     >> SECOND_LAST_BYTE_SHIFT_); 
+		// however this code does not work well with VC7 .net in release mode.
+		// maybe the inlines for getFCD combined with shifting has bugs in 
+		// VC7. anyways this is a work around.
+		UBool accent = getFCD(strsrch->search->text, &temp, 
+                              strsrch->search->textLength) > 0xFF;
         if (!accent) {
-            return checkExtraMatchAccents(strsrch, start, end, &status);
+			return checkExtraMatchAccents(strsrch, start, end, &status);
         }
-        if (!ignorable) {
+		if (!ignorable) {
             return TRUE;
         }
         if (start > 0) {
@@ -1054,8 +1061,8 @@ inline UBool checkNextExactMatch(UStringSearch *strsrch,
     UCollationElements *coleiter = strsrch->textIter;
     int32_t         start    = getColElemIterOffset(coleiter, FALSE);        
         
-    if (!checkNextExactContractionMatch(strsrch, &start, textoffset, status)) {
-        return FALSE;
+	if (!checkNextExactContractionMatch(strsrch, &start, textoffset, status)) {
+	    return FALSE;
     }
 
     // this totally matches, however we need to check if it is repeating
@@ -1064,15 +1071,16 @@ inline UBool checkNextExactMatch(UStringSearch *strsrch,
         hasAccentsBeforeMatch(strsrch, start, *textoffset) || 
         !checkIdentical(strsrch, start, *textoffset) ||
         hasAccentsAfterMatch(strsrch, start, *textoffset)) {
-        (*textoffset) ++;
+		
+		(*textoffset) ++;
         *textoffset = getNextUStringSearchBaseOffset(strsrch, *textoffset);  
-        return FALSE;
+		return FALSE;
     }
         
     // totally match, we will get rid of the ending ignorables.
     strsrch->search->matchedIndex  = start;
     strsrch->search->matchedLength = *textoffset - start;
-    return TRUE;
+	return TRUE;
 }
 
 /**
@@ -3094,7 +3102,7 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
         return FALSE;
     }
 
-    UCollationElements *coleiter        = strsrch->textIter;
+	UCollationElements *coleiter        = strsrch->textIter;
     int32_t             textlength      = strsrch->search->textLength;
     uint32_t           *patternce       = strsrch->pattern.CE;
     int32_t             patterncelength = strsrch->pattern.CELength;
@@ -3175,17 +3183,17 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
             continue;
         }
         
-        if (checkNextExactMatch(strsrch, &textoffset, status)) {
+		if (checkNextExactMatch(strsrch, &textoffset, status)) {
             // status checked in ucol_setOffset
             ucol_setOffset(coleiter, textoffset, status);
-            return TRUE;
+			return TRUE;
         }
-        if (textoffset <= textlength) {
+		if (textoffset <= textlength) {
             ucol_setOffset(coleiter, textoffset, status);
         }
     }
     setMatchNotFound(strsrch, status);
-    return FALSE;
+	return FALSE;
 }
 
 UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status)
