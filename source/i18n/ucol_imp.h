@@ -126,83 +126,36 @@ struct incrementalContext {
     const UCollator *coll;
 };
 
-/* from coleiterator */
-#define UCOL_UNMAPPEDCHARVALUE 0x7fff0000     
 
 #define UCOL_LEVELTERMINATOR 1
-/* need look up in .commit() */
-#define UCOL_CHARINDEX 0x70000000             
-/* Expand index follows */
-#define UCOL_EXPANDCHARINDEX 0x7E000000       
-/* contract indexes follows */
-#define UCOL_CONTRACTCHARINDEX 0x7F000000     
-/* unmapped character values */
-#define UCOL_UNMAPPED 0xFFFFFFFF              
-/* primary strength increment */
-#define UCOL_PRIMARYORDERINCREMENT 0x00010000 
-/* secondary strength increment */
-#define UCOL_SECONDARYORDERINCREMENT 0x00000100 
-/* tertiary strength increment */
-#define UCOL_TERTIARYORDERINCREMENT 0x00000001 
-/* maximum ignorable char order value */
-#define UCOL_MAXIGNORABLE 0x00010000          
-/* mask off secondary and tertiary order */
-#define UCOL_SECONDARYRESETMASK 0x0000ffff    
-/* mask off ignorable char order */
-#define UCOL_IGNORABLEMASK 0x0000ffff         
-/* use only the primary difference */
-#define UCOL_PRIMARYDIFFERENCEONLY 0xffff0000 
-/* use only the primary and secondary difference */
-#define UCOL_SECONDARYDIFFERENCEONLY 0xffffff00  
 
 /* mask off anything but primary order */
 #define UCOL_PRIMARYORDERMASK 0xffff0000      
-/* mask off anything but long primary order */
-#define UCOL_LONGPRIMARYORDERMASK 0xffffff00      
 /* mask off anything but secondary order */
 #define UCOL_SECONDARYORDERMASK 0x0000ff00    
 /* mask off anything but tertiary order */
 #define UCOL_TERTIARYORDERMASK 0x000000ff     
 /* primary order shift */
 #define UCOL_PRIMARYORDERSHIFT 16             
-/* long primary order shift */
-#define UCOL_LONGPRIMARYORDERSHIFT 8             
 /* secondary order shift */
 #define UCOL_SECONDARYORDERSHIFT 8            
-/* minimum sort key offset */
-#define UCOL_SORTKEYOFFSET 2                  
-/* Indicates the char is a contract char */
-#define UCOL_CONTRACTCHAROVERFLOW 0x7FFFFFFF  
 
-
-/* starting value for collation elements */
-#define UCOL_COLELEMENTSTART 0x02020202       
-/* testing mask for primary low element */
-#define UCOL_PRIMARYLOWZEROMASK 0x00FF0000    
-/* reseting value for secondaries and tertiaries */
-#define UCOL_RESETSECONDARYTERTIARY 0x00000202
-/* reseting value for tertiaries */
-#define UCOL_RESETTERTIARY 0x00000002         
 
 #define UCOL_IGNORABLE 0
-#define UCOL_PRIMIGNORABLE 0
-#define UCOL_SECIGNORABLE 0
-#define UCOL_TERIGNORABLE 0
-
 #define UCOL_IMPLICIT_SURROGATE_LAST_CE_MASK     0x80200080
 #define UCOL_IMPLICIT_MISCELLANEOUS_LAST_CE_MASK 0x04000083
 
 /* get weights from a CE */
-#define UCOL_PRIMARYORDER(order) (isLongPrimary((order))?(((order) & UCOL_LONGPRIMARYORDERMASK)>> UCOL_LONGPRIMARYORDERSHIFT):(((order) & UCOL_PRIMARYORDERMASK)>> UCOL_PRIMARYORDERSHIFT))
-#define UCOL_SECONDARYORDER(order) (isLongPrimary((order))?UCOL_UNMARKED:((order) & UCOL_SECONDARYORDERMASK)>> UCOL_SECONDARYORDERSHIFT)
-/*#define UCOL_TERTIARYORDER(order) ((order) & UCOL_TERTIARYORDERMASK)*/
-#define UCOL_TERTIARYORDER(order) ((order) & 0x3f)
+#define UCOL_PRIMARYORDER(order) (((order) & UCOL_PRIMARYORDERMASK)>> UCOL_PRIMARYORDERSHIFT)
+#define UCOL_SECONDARYORDER(order) (((order) & UCOL_SECONDARYORDERMASK)>> UCOL_SECONDARYORDERSHIFT)
+#define UCOL_TERTIARYORDER(order) ((order) & UCOL_TERTIARYORDERMASK)
 
 /**
  * Determine if a character is a Thai vowel (which sorts after
  * its base consonant).
  */
-#define UCOL_ISTHAIPREVOWEL(ch) ((uint32_t)(ch) - 0xe40) <= (0xe44 - 0xe40)
+#define UCOL_ISTHAIPREVOWEL(ch) ((((uint32_t)(ch) - 0xe40) <= (0xe44 - 0xe40)) || \
+                                 (((uint32_t)(ch) - 0xec0) <= (0xec4 - 0xec0)))
 
 /**
  * Determine if a character is a Thai base consonant
@@ -210,8 +163,8 @@ struct incrementalContext {
 #define UCOL_ISTHAIBASECONSONANT(ch) ((uint32_t)(ch) - 0xe01) <= (0xe2e - 0xe01)
 
 #define UCOL_ISJAMO(ch) ((((uint32_t)(ch) - 0x1100) <= (0x1112 - 0x1100)) || \
-                        (((uint32_t)(ch) - 0x1161) <= (0x1175 - 0x1161)) || \
-                        (((uint32_t)(ch) - 0x11A8) <= (0x11C2 - 0x11A8)))
+                         (((uint32_t)(ch) - 0x1161) <= (0x1175 - 0x1161)) || \
+                         (((uint32_t)(ch) - 0x11A8) <= (0x11C2 - 0x11A8)))
 
 
 
