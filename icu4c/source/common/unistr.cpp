@@ -1269,72 +1269,68 @@ UnicodeString::extract(UTextOffset start,
   // pin the indices to legal values
   pinIndices(start, length);
 
-  // set up the conversion parameters
-  const UChar *mySource      = getArrayStart() + start;
-  const UChar *mySourceLimit = mySource + length;
-  char *myTarget             = target;
-  const char *myTargetLimit  = target + dstSize;
-  UErrorCode status          = U_ZERO_ERROR;
-
   // create the converter
   UConverter *converter;
+  UErrorCode status = U_ZERO_ERROR;
 
   // if the codepage is the default, use our cache
+  // if it is an empty string, then use the "invariant character" conversion
   if (codepage == 0) {
     converter = getDefaultConverter(status);
   } else if (*codepage == 0) {
-    converter = 0;
+    // use the "invariant characters" conversion
+    if (length > fLength - start) {
+      length = fLength - start;
+    }
+    if (target != NULL) {
+      if (length > dstSize) {
+        length = dstSize;
+      }
+      u_UCharsToChars(getArrayStart() + start, target, length);
+    }
+    return length;
   } else {
     converter = ucnv_open(codepage, &status);
   }
 
   // if we failed, set the appropriate flags and return
-  // if it is an empty string, then use the "invariant character" conversion
   if (U_FAILURE(status)) {
-    // close the converter
-    if (codepage == 0) {
-      releaseDefaultConverter(converter);
-    } else {
-      ucnv_close(converter);
-    }
     return 0;
   }
 
   // perform the conversion
-  if (converter == 0) {
-    // use the "invariant characters" conversion
-    if (length > fLength - start) {
-      length = fLength - start;
-    }
-    u_UCharsToChars(mySource, myTarget, length);
-    return length;
-  }
+  const UChar *mySource = getArrayStart() + start;
+  const UChar *mySourceLimit = mySource + length;
+  const char *myTargetLimit;
+  int32_t size;
 
-  if (myTarget != NULL) {
-
-    /* Pin the limit to U_MAX_PTR.  NULL check is for AS/400. */
-    if((myTargetLimit < myTarget) || (myTargetLimit == NULL)) {
-      myTargetLimit = (char*)U_MAX_PTR(myTarget);
+  if (target != NULL) {
+    // Pin the limit to U_MAX_PTR if the "magic" dstSize is used.
+    if(dstSize == 0xffffffff) {
+      myTargetLimit = (char*)U_MAX_PTR(target);
+    } else {
+      myTargetLimit = target + dstSize;
     }
 
+    char *myTarget = target;
     ucnv_fromUnicode(converter, &myTarget, myTargetLimit,
              &mySource, mySourceLimit, 0, TRUE, &status);
+    size = (int32_t)(myTarget - target);
   } else {
     /* Find out the size of the target needed for the current codepage */
-    char targetCh = 0;
-    int32_t size = 0;
+    char targetBuffer[1024];
+    size = 0;
 
-    myTargetLimit = &targetCh + sizeof(char);
+    myTargetLimit = targetBuffer + sizeof(targetBuffer);
     status = U_BUFFER_OVERFLOW_ERROR;
     while (mySource < mySourceLimit && status == U_BUFFER_OVERFLOW_ERROR) {
-        myTarget = &targetCh;
+        target = targetBuffer;
         status = U_ZERO_ERROR;
-        ucnv_fromUnicode(converter, &myTarget, myTargetLimit,
+        ucnv_fromUnicode(converter, &target, myTargetLimit,
                  &mySource, mySourceLimit, 0, TRUE, &status);
-        size += sizeof(char);
+        size += (int32_t)(target - targetBuffer);
     }
     /* Use the close at the end of the function */
-    myTarget = target + size;
   }
 
   // close the converter
@@ -1344,7 +1340,7 @@ UnicodeString::extract(UTextOffset start,
     ucnv_close(converter);
   }
 
-  return (myTarget - target);
+  return size;
 }
 
 void
@@ -1370,12 +1366,6 @@ UnicodeString::doCodepageCreate(const char *codepageData,
 
   // if we failed, set the appropriate flags and return
   if(U_FAILURE(status)) {
-    // close the converter
-    if(codepage == 0) {
-      releaseDefaultConverter(converter);
-    } else {
-      ucnv_close(converter);
-    }
     setToBogus();
     return;
   }
