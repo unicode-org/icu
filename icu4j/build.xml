@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/04/24 17:14:39 $ 
-* $Revision: 1.14 $
+* $Date: 2000/04/25 17:18:28 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -85,8 +85,8 @@
               sourcepath="${src.dir}"
     		  destdir="${doc.dir}"
     		  nodeprecatedlist="true"
-			  windowtitle="ICU4J"
-			  doctitle="ICU4J"
+			  windowtitle="icu4j"
+			  doctitle="icu4j"
 			  encoding="iso-8859-1"
 			  docencoding="iso-8859-1"
 			  bottom="&lt;font size=-1>Copyright (c) 1998-2000 IBM Corporation and others.&lt;/font>"
