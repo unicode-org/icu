@@ -1031,19 +1031,13 @@ void TransliteratorRoundTripTest::TestGreek() {
     }
     RTTest test("Latin-Greek");
     LegalGreek *legal = new LegalGreek(TRUE);
-#if (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM==6)
+
     test.test(UnicodeString("[a-zA-Z]", ""), 
               UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
                             ""),
               "[\\u00B5\\u037A\\u03D0-\\u03F5]", /* exclusions */
               this, quick, legal, 50);
-#else
-    test.test(UnicodeString("[a-zA-Z]", ""), 
-              UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", 
-                            ""),
-              "[\\u00B5\\u037A\\u03D0-\\u03F5]", /* exclusions */
-              this, quick, legal, 50);
-#endif
+
 
     delete legal;
 }
@@ -1060,19 +1054,12 @@ void TransliteratorRoundTripTest::TestGreekUNGEGN() {
     }
     RTTest test("Latin-Greek/UNGEGN");
     LegalGreek *legal = new LegalGreek(FALSE);
-#if (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM==6)
+
     test.test(UnicodeString("[a-zA-Z]", ""), 
               UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
                             ""), 
               "[\\u00B5\\u037A\\u03D0-\\uFFFF {\\u039C\\u03C0}]", /* roundtrip exclusions */
               this, quick, legal);
-#else
-    test.test(UnicodeString("[a-zA-Z]", ""), 
-              UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", 
-                            ""), 
-              "[\\u00B5\\u037A\\u03D0-\\uFFFF {\\u039C\\u03C0}]", /* roundtrip exclusions */
-              this, quick, legal);
-#endif
 
     delete legal;
 }
@@ -1088,19 +1075,13 @@ void TransliteratorRoundTripTest::Testel() {
     }
     RTTest test("Latin-el");
     LegalGreek *legal = new LegalGreek(FALSE);
-#if (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM==6)
+
     test.test(UnicodeString("[a-zA-Z]", ""), 
               UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
                             ""), 
               "[\\u00B5\\u037A\\u03D0-\\uFFFF {\\u039C\\u03C0}]", /* exclusions */
               this, quick, legal);
-#else
-    test.test(UnicodeString("[a-zA-Z]", ""), 
-              UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", 
-                            ""), 
-              "[\\u00B5\\u037A\\u03D0-\\uFFFF {\\u039C\\u03C0}]", /* exclusions */
-              this, quick, legal);
-#endif
+
 
     delete legal;
 }
@@ -1109,15 +1090,9 @@ void TransliteratorRoundTripTest::TestCyrillic() {
     RTTest test("Latin-Cyrillic");
     Legal *legal = new Legal();
 
-#if (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM==6)
-    test.test(UnicodeString("[a-zA-Z\\u0110\\u0111]", ""), 
+    test.test(UnicodeString("[a-zA-Z\\u0110\\u0111\\u02BA\\u02B9]", ""), 
               UnicodeString("[[\\u0400-\\u045F] & [:Age=3.2:]]", ""), NULL, this, quick, 
               legal);
-#else
-    test.test(UnicodeString("[a-zA-Z\\u0110\\u0111]", ""), 
-              UnicodeString("[\\u0400-\\u045F]", ""), NULL, this, quick, 
-              legal);
-#endif
 
     delete legal;
 }
