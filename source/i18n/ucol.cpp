@@ -377,7 +377,8 @@ ucol_open(    const    char         *loc,
       const uint8_t *inData = ures_getBinary(binary, &len, status);
       UCATableHeader *colData = (UCATableHeader *)inData;
       if(uprv_memcmp(colData->UCAVersion, UCA->image->UCAVersion, sizeof(UVersionInfo)) != 0 ||
-        uprv_memcmp(colData->UCDVersion, UCA->image->UCDVersion, sizeof(UVersionInfo)) != 0) {
+        uprv_memcmp(colData->UCDVersion, UCA->image->UCDVersion, sizeof(UVersionInfo)) != 0 ||
+        colData->version[0] != UCOL_BUILDER_VERSION) {
         *status = U_DIFFERENT_UCA_VERSION;
         result = tryOpeningFromRules(collElem, status);
       } else {
@@ -398,6 +399,7 @@ ucol_open(    const    char         *loc,
           }
           result->hasRealData = FALSE;
         }
+        result->freeImageOnClose = FALSE;
       }
     }
     result->rb = b;
@@ -479,7 +481,8 @@ ucol_close(UCollator *coll)
     }
     if(coll->rb != NULL) { /* pointing to read-only memory */
       ures_close(coll->rb);
-    } else if(coll->hasRealData == TRUE) {
+    } 
+    if(coll->freeImageOnClose == TRUE) {
       uprv_free((UCATableHeader *)coll->image);
     }
     if(coll->elements != NULL) {
@@ -573,6 +576,7 @@ ucol_openRules( const UChar        *rules,
       uprv_memcpy(table->UCAVersion, UCA->image->UCAVersion, sizeof(UVersionInfo));
       result = ucol_initCollator(table,0,status);
       result->hasRealData = TRUE;
+      result->freeImageOnClose = TRUE;
     }
   } else { /* no rules, but no error either */
     // must be only options
@@ -589,6 +593,7 @@ ucol_openRules( const UChar        *rules,
     ucol_setOptionsFromHeader(result, opts, status);
     result->freeOptionsOnClose = TRUE;
     result->hasRealData = FALSE;
+    result->freeImageOnClose = FALSE;
   }
 
   if(U_SUCCESS(*status)) {
@@ -1071,6 +1076,7 @@ ucol_initUCA(UErrorCode *status) {
 				newUCA->validLocale = NULL;
 				newUCA->requestedLocale = NULL;
 				newUCA->hasRealData = FALSE; // real data lives in .dat file...
+                newUCA->freeImageOnClose = FALSE;
                 umtx_lock(NULL);
                 if(UCA == NULL) {
                     UCA = newUCA;

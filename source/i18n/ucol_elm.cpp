@@ -1526,6 +1526,7 @@ uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status)
       tempColl->validLocale = NULL;
       tempColl->requestedLocale = NULL;
       tempColl->hasRealData = TRUE;
+      tempColl->freeImageOnClose = TRUE;
     } else if(tempData != 0) {
       uprv_free(tempData);
     }
