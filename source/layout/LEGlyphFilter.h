@@ -1,7 +1,7 @@
 /*
  * @(#)LEGlyphFilter.h	1.3 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001, 2002 - All Rights Reserved
  *
  */
 
@@ -15,6 +15,8 @@ U_NAMESPACE_BEGIN
 /**
  * This is a helper class that is used to
  * recognize a set of glyph indices.
+ *
+ * @internal
  */
 class LEGlyphFilter /* not : public UObject because this is an interface/mixin class */ {
 public:
@@ -26,6 +28,8 @@ public:
      * @param glyph - the glyph index to be tested
      *
      * @return true if the glyph index is in the set.
+     *
+     * @internal
      */
     virtual le_bool accept(LEGlyphID glyph) const = 0;
 };

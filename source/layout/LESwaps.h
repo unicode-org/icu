@@ -2,7 +2,7 @@
 /*
  * @(#)LESwaps.h	1.3 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001, 2002 - All Rights Reserved
  *
  */
 
@@ -16,6 +16,8 @@ U_NAMESPACE_BEGIN
 /**
  * These are convenience macros which invoke the swap functions
  * from a concise call.
+ *
+ * @draft ICU 2.2
  */
 #define SWAPW(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapWord(value))
 #define SWAPL(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapLong(value))
@@ -28,6 +30,8 @@ U_NAMESPACE_BEGIN
  *
  * All methods are static and inline in an attempt to induce the compiler
  * to do most of the calculations at compile time.
+ *
+ * @draft ICU 2.2
  */
 class LESwaps /* not : public UObject because all methods are static */ {
 public:
@@ -40,6 +44,8 @@ public:
      * be in the byte with the highest address.
      *
      * @return true if the platform is big endian
+     *
+     * @draft ICU 2.2
      */
     static le_bool isBigEndian()
     {
@@ -49,12 +55,14 @@ public:
     };
 
     /**
-     * This method the byte swap required on little endian platforms
-     * to correctly access a word.
+     * This method does the byte swap required on little endian platforms
+     * to correctly access a (16-bit) word.
      *
      * @param value - the word to be byte swapped
      *
      * @return the byte swapped word
+     *
+     * @draft ICU 2.2
      */
     static le_uint16 swapWord(le_uint16 value)
     {
@@ -63,11 +71,13 @@ public:
 
     /**
      * This method does the byte swapping required on little endian platforms
-     * to correctly access a long.
+     * to correctly access a (32-bit) long.
      *
      * @param value - the long to be byte swapped
      *
      * @return the byte swapped long
+     *
+     * @draft ICU 2.2
      */
     static le_uint32 swapLong(le_uint32 value)
     {

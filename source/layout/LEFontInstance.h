@@ -2,7 +2,7 @@
 /*
  * @(#)LEFontInstance.h	1.3 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001, 2002 - All Rights Reserved
  *
  */
 
@@ -19,6 +19,8 @@ U_NAMESPACE_BEGIN
  * to glyph mapping process. Examples of this are filtering out control charcters
  * and character mirroring - replacing a character which has both a left and a right
  * hand form with the opposite form.
+ *
+ * @draft ICU 2.2
  */
 class LECharMapper /* not : public UObject because this is an interface/mixin class */ {
 public:
@@ -28,6 +30,8 @@ public:
      * @param ch - the input charcter
      *
      * @return the adjusted character
+     *
+     * @draft ICU 2.2
      */
     virtual LEUnicode32 mapChar(LEUnicode32 ch) const = 0;
 };
@@ -41,6 +45,8 @@ public:
  *
  * Each instance of an LEFontInstance represents a renerable instance of a font. (i.e. a
  * single font at a particular point size, with a particular transform)
+ *
+ * @draft ICU 2.2
  */
 class LEFontInstance /* not : public UObject because this is an interface/mixin class */ {
 public:
@@ -48,6 +54,8 @@ public:
     /**
      * This virtual destructor is here so that the subclass
      * destructors can be invoked through the base class.
+     *
+     * @draft ICU 2.2
      */
     virtual ~LEFontInstance() { };
 
@@ -61,6 +69,8 @@ public:
      * @param tableTag - the four byte table tag
      *
      * @return the address of the table in memory
+     *
+     * @draft ICU 2.2
      */
     virtual const void *getFontTable(LETag tableTag) const = 0;
 
@@ -73,6 +83,8 @@ public:
      * @param ch - the character to be tested
      *
      * @return true if the font can render ch.
+     *
+     * @draft ICU 2.2
      */
     virtual le_bool canDisplay(LEUnicode32 ch) const = 0;
 
@@ -81,6 +93,8 @@ public:
      * the font's EM square.
      *
      * @return the number of design units pre EM.
+     *
+     * @draft ICU 2.2
      */
     virtual le_int32 getUnitsPerEM() const = 0;
 
@@ -96,6 +110,8 @@ public:
      * @param glyphs - the output glyph array
      *
      * @see LECharMapper
+     *
+     * @draft ICU 2.2
      */
     virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, const LECharMapper *mapper, LEGlyphID glyphs[]) const = 0;
 
@@ -109,6 +125,8 @@ public:
      * @return the glyph index
      *
      * @see LECharMapper
+     *
+     * @draft ICU 2.2
      */
     virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const = 0;
 
@@ -122,6 +140,8 @@ public:
      * @param name - the destination character array (can be null)
      *
      * @return the number of characters in the name
+     *
+     * @draft ICU 2.2
      */
     virtual le_int32 getName(le_uint16 platformID, le_uint16 scriptID, le_uint16 languageID, le_uint16 nameID, LEUnicode *name) const = 0;
 
@@ -134,6 +154,8 @@ public:
      *
      * @param glyph - the glyph index
      * @param advance - the X and Y pixel values will be stored here
+     *
+     * @draft ICU 2.2
      */
     virtual void getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const = 0;
 
@@ -146,6 +168,8 @@ public:
      * @param point - the point's X and Y pixel values will be stored here
      *
      * @return true if the point coordinates could be stored.
+     *
+     * @draft ICU 2.2
      */
     virtual le_bool getGlyphPoint(LEGlyphID glyph, le_int32 pointNumber, LEPoint &point) const = 0;
 
@@ -154,6 +178,8 @@ public:
      * in pixels.
      *
      * @return the pixel width of the EM square
+     *
+     * @draft ICU 2.2
      */
     virtual float getXPixelsPerEm() const = 0;
 
@@ -162,6 +188,8 @@ public:
      * in pixels.
      *
      * @return the pixel height of the EM square
+     *
+     * @draft ICU 2.2
      */
     virtual float getYPixelsPerEm() const = 0;
 
@@ -172,6 +200,8 @@ public:
      * @param xUnits - design units in the X direction
      *
      * @return points in the X direction
+     *
+     * @draft ICU 2.2
      */
     virtual float xUnitsToPoints(float xUnits) const = 0;
 
@@ -182,6 +212,8 @@ public:
      * @param yUnits - design units in the Y direction
      *
      * @return points in the Y direction
+     *
+     * @draft ICU 2.2
      */
     virtual float yUnitsToPoints(float yUunits) const = 0;
 
@@ -190,6 +222,8 @@ public:
      *
      * @param units - X and Y design units
      * @param points - set to X and Y points
+     *
+     * @draft ICU 2.2
      */
     virtual void unitsToPoints(LEPoint &units, LEPoint &points) const = 0;
 
@@ -200,6 +234,8 @@ public:
      * @param xPixels - pixels in the X direction
      *
      * @return font design units in the X direction
+     *
+     * @draft ICU 2.2
      */
     virtual float xPixelsToUnits(float xPixels) const = 0;
 
@@ -210,6 +246,8 @@ public:
      * @param yPixels - pixels in the Y direction
      *
      * @return font design units in the Y direction
+     *
+     * @draft ICU 2.2
      */
     virtual float yPixelsToUnits(float yPixels) const = 0;
 
@@ -218,6 +256,8 @@ public:
      *
      * @param pixels - X and Y pixel
      * @param units - set to X and Y font design units
+     *
+     * @draft ICU 2.2
      */
     virtual void pixelsToUnits(LEPoint &pixels, LEPoint &units) const = 0;
 
@@ -228,6 +268,8 @@ public:
      * @param xFunits - the X coordinate in font design units
      * @param yFunits - the Y coordinate in font design units
      * @param pixels - the tranformed co-ordinate in pixels
+     *
+     * @draft ICU 2.2
      */
     virtual void transformFunits(float xFunits, float yFunits, LEPoint &pixels) const = 0;
 
@@ -238,6 +280,8 @@ public:
      * @param fixed - the fixed point value
      *
      * @return the floating point value
+     *
+     * @draft ICU 2.2
      */
     static float fixedToFloat(le_int32 fixed)
     {

@@ -1,7 +1,7 @@
 /*
  * @(#)loengine.h	1.0 00/12/11
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001, 2002 - All Rights Reserved
  *
  */
 
@@ -45,6 +45,8 @@ U_NAMESPACE_BEGIN
  *
  * @see LayoutEngine.h
  * @see LEFontInstance.h
+ *
+ * @draft ICU 2.2
  */
 class U_LAYOUT_API ICULayoutEngine : public UObject {
 private:
@@ -82,6 +84,8 @@ public:
      * don't know why this is...
      *
      * @see createInstance
+     *
+     * @draft ICU 2.2
      */
     virtual ~ICULayoutEngine();
 
@@ -102,6 +106,8 @@ public:
      *
      * Note; the glyph, character index and position array can be accessed
      * using the getter method below.
+     *
+     * @draft ICU 2.2
      */
     int32_t layoutChars(const UChar chars[],
                         int32_t startOffset,
@@ -128,6 +134,8 @@ public:
      *
      * Note; the glyph, character index and position array can be accessed
      * using the getter method below.
+     *
+     * @draft ICU 2.2
      */
     int32_t layoutString(const UnicodeString &str,
                          int32_t startOffset,
@@ -142,6 +150,8 @@ public:
      * of characters used to create the LayoutEngine.
      *
      * @return the number of glyphs in the glyph array
+     *
+     * @draft ICU 2.2
      */
     int32_t countGlyphs() const;
 
@@ -152,6 +162,8 @@ public:
      *
      * @param glyphs - the destiniation glyph array
      * @param success - output parameter set to an error code if the operation fails
+     *
+     * @draft ICU 2.2
      */
     void getGlyphs(uint16_t glyphs[], UErrorCode &success);
 
@@ -162,6 +174,8 @@ public:
      *
      * @param charIndices - the destiniation character index array
      * @param success - output parameter set to an error code if the operation fails
+     *
+     * @draft ICU 2.2
      */
     void getCharIndices(int32_t charIndices[], UErrorCode &success);
 
@@ -173,6 +187,8 @@ public:
      * @param charIndices - the destiniation character index array
      * @param indexBase - an offset which will be added to each index
      * @param success - output parameter set to an error code if the operation fails
+     *
+     * @draft ICU 2.2
      */
     void getCharIndices(int32_t charIndices[], int32_t indexBase, UErrorCode &success);
 
@@ -184,6 +200,8 @@ public:
      *
      * @param glyphs - the destiniation position array
      * @param success - output parameter set to an error code if the operation fails
+     *
+     * @draft ICU 2.2
      */
     void getGlyphPositions(float positions[], UErrorCode &success);
 
@@ -199,6 +217,7 @@ public:
      * @param y - the glyph's Y position
      * @param success - output parameter set to an error code if the operation fails
      *
+     * @draft ICU 2.2
      */
     void getGlyphPosition(int32_t glyphIndex, float &x, float &y, UErrorCode &success);
 
@@ -216,6 +235,8 @@ public:
      * NOTE: currently, locale is ignored...
      *
      * @see LEFontInstance
+     *
+     * @draft ICU 2.2
      */
     static ICULayoutEngine *createInstance(const LEFontInstance *fontInstance,
                                            UScriptCode script, Locale &locale,
