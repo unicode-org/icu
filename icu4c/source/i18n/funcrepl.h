@@ -24,9 +24,13 @@ class Transliterator;
  * The input text to the transliterator is the output of another
  * UnicodeReplacer object.  That is, this replacer wraps another
  * replacer with a transliterator.
+ *
+ * Added U_I18N_API to make the definition of a global operator delete work.
+ * See Jitterbug 2581. markus 2002dec17
+ *
  * @author Alan Liu
  */
-class FunctionReplacer : public UnicodeFunctor, public UnicodeReplacer {
+class U_I18N_API FunctionReplacer : public UnicodeFunctor, public UnicodeReplacer {
 
  private:
 
