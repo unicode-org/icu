@@ -1342,11 +1342,11 @@ public class TestFmwk extends AbstractTestLog {
     }
 
     protected boolean assertEquals(String message, boolean expected, boolean actual) {
-	return handleAssert(expected == actual, message, "" + expected, "" + actual);
+	return handleAssert(expected == actual, message, String.valueOf(expected), String.valueOf(actual));
     }
 
     protected boolean assertEquals(String message, long expected, long actual) {
-	return handleAssert(expected == actual, message, "" + expected, "" + actual);
+	return handleAssert(expected == actual, message, String.valueOf(expected), String.valueOf(actual));
     }
 
     // do NaN and range calculations to precision of float, don't rely on promotion to double
@@ -1355,8 +1355,8 @@ public class TestFmwk extends AbstractTestLog {
 	    ? expected == actual
 	    : !(Math.abs(expected - actual) > error); // handles NaN
 	return handleAssert(result, message,
-			    "" + expected + (error == 0 ? "" : " (within " + error + ")"), 
-			    "" + actual);
+			    String.valueOf(expected) + (error == 0 ? "" : " (within " + error + ")"), 
+			    String.valueOf(actual));
     }
 
     protected boolean assertEquals(String message, double expected, double actual, double error) {
@@ -1364,8 +1364,8 @@ public class TestFmwk extends AbstractTestLog {
 	    ? expected == actual
 	    : !(Math.abs(expected - actual) > error); // handles NaN
 	return handleAssert(result, message,
-			    "" + expected + (error == 0 ? "" : " (within " + error + ")"), 
-			    "" + actual);
+			    String.valueOf(expected) + (error == 0 ? "" : " (within " + error + ")"), 
+			    String.valueOf(actual));
     }
 
     protected boolean assertEquals(String message, Object expected, Object actual) {
