@@ -1,6 +1,3 @@
-#ifndef __UENUM_H
-#define __UENUM_H
-
 /*
 *******************************************************************************
 *
@@ -17,13 +14,18 @@
 *   created by: Vladimir Weinstein
 */
 
+#ifndef __UENUM_H
+#define __UENUM_H
+
 #include "unicode/utypes.h"
 
-/** An enumeration object.
- *  For usage in C programs.
+/**
+ * An enumeration object.
+ * For usage in C programs.
+ * @draft ICU 2.2
  */
 struct UEnumeration;
-/** structure representing an enumeration object instance */
+/** structure representing an enumeration object instance @draft ICU 2.2 */
 typedef struct UEnumeration UEnumeration;
 
 /**
@@ -31,6 +33,7 @@ typedef struct UEnumeration UEnumeration;
  * does nothing.  After this call, any char* or UChar* pointer
  * returned by uenum_unext() or uenum_next() is invalid.
  * @param en UEnumeration structure pointer
+ * @draft ICU 2.2
  */
 U_CAPI void U_EXPORT2
 uenum_close(UEnumeration* en);
@@ -47,6 +50,7 @@ uenum_close(UEnumeration* en);
  * @param status error code, can be U_ENUM_OUT_OF_SYNC_ERROR if the
  *               iterator is out of sync.
  * @return number of elements in the iterator
+ * @draft ICU 2.2
  */
 U_CAPI int32_t U_EXPORT2
 uenum_count(UEnumeration* en, UErrorCode* status);
@@ -70,6 +74,7 @@ uenum_count(UEnumeration* en, UErrorCode* status);
  *         until the next call to any uenum_... method, including
  *         uenum_next() or uenum_unext().  When all strings have been
  *         traversed, returns NULL.
+ * @draft ICU 2.2
  */
 U_CAPI const UChar* U_EXPORT2
 uenum_unext(UEnumeration* en,
@@ -102,6 +107,7 @@ uenum_unext(UEnumeration* en,
  *         until the next call to any uenum_... method, including
  *         uenum_next() or uenum_unext().  When all strings have been
  *         traversed, returns NULL.
+ * @draft ICU 2.2
  */
 U_CAPI const char* U_EXPORT2
 uenum_next(UEnumeration* en,
@@ -115,6 +121,7 @@ uenum_next(UEnumeration* en,
  * @param en the iterator object
  * @param status the error code, set to U_ENUM_OUT_OF_SYNC_ERROR if
  *               the iterator is out of sync with its service.  
+ * @draft ICU 2.2
  */
 U_CAPI void U_EXPORT2
 uenum_reset(UEnumeration* en, UErrorCode* status);
