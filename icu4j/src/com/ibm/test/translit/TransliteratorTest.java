@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/12/01 00:05:55 $
- * $Revision: 1.89 $
+ * $Date: 2001/12/03 18:26:52 $
+ * $Revision: 1.90 $
  *
  *****************************************************************************************
  */
@@ -166,7 +166,7 @@ public class TransliteratorTest extends TestFmwk {
                                                        "$lu > '*';" +
                                                        "a>ERROR");
         expect(t, "abcdefgABCDEFGU", "&bcd&fg!^**!^*&");
-    }                                                    
+    }
 
     /**
      * Test inline set syntax and set variable syntax.
@@ -1549,21 +1549,21 @@ public class TransliteratorTest extends TestFmwk {
                 Transliterator.createFromRules("a", "a > A;", Transliterator.FORWARD);
             Transliterator A =
                 Transliterator.createFromRules("A", "A > b;", Transliterator.FORWARD);
-            
+
             Transliterator array[] = new Transliterator[] {
                 a,
                 Transliterator.getInstance("NFD"),
                 A };
-            
+
             t = new CompoundTransliterator(array, new UnicodeSet("[:Ll:]"));
-            
+
             expect(t, "aAaA", "bAbA");
         }
-        
+
         expect("$smooth = x; $macron = q; [:^L:] { ([aeiouyAEIOUY] $macron?) } [^aeiouyAEIOUY$smooth$macron] > | $1 $smooth ;",
                "a",
                "ax");
-        
+
         String gr =
             "$ddot = \u0308 ;" +
             "$lcgvowel = [\u03b1\u03b5\u03b7\u03b9\u03bf\u03c5\u03c9] ;" +
@@ -1571,7 +1571,7 @@ public class TransliteratorTest extends TestFmwk {
             "($lcgvowel+ $ddot?) $rough > h | $1 ;" +
             "\u03b1 <> a ;" +
             "$rough <> h ;";
-            
+
         expect(gr, "\u03B1\u0314", "ha");
     }
 
@@ -1748,13 +1748,13 @@ public class TransliteratorTest extends TestFmwk {
 
     }
     public void  TestTeluguLatinRT(){
-        String[]  source = {   
+        String[]  source = {
             "raghur\u0101m vi\u015Bvan\u0101dha",                           /* Raghuram Viswanadha    */
-            "\u0101nand vaddir\u0101ju",                                    /* Anand Vaddiraju 	      */ 	   
-            "r\u0101j\u012Bv ka\u015Barab\u0101da",                         /* Rajeev Kasarabada      */ 
+            "\u0101nand vaddir\u0101ju",                                    /* Anand Vaddiraju 	      */
+            "r\u0101j\u012Bv ka\u015Barab\u0101da",                         /* Rajeev Kasarabada      */
             "san\u0304j\u012Bv ka\u015Barab\u0101da",                       /* sanjeev kasarabada     */
-            "san\u0304j\u012Bb sen'gupta",                                  /* sanjib sengupata 	  */ 	   
-            "amar\u0113ndra hanum\u0101nula",                               /* Amarendra hanumanula   */ 
+            "san\u0304j\u012Bb sen'gupta",                                  /* sanjib sengupata 	  */
+            "amar\u0113ndra hanum\u0101nula",                               /* Amarendra hanumanula   */
             "ravi kum\u0101r vi\u015Bvan\u0101dha",                         /* Ravi Kumar Viswanadha  */
             "\u0101ditya kandr\u0113gula",                                  /* Aditya Kandregula      */
             "\u015Br\u012Bdhar ka\u1E47\u1E6Dama\u015Be\u1E6D\u1E6Di",      /* Shridhar Kantamsetty   */
@@ -1963,7 +1963,7 @@ public class TransliteratorTest extends TestFmwk {
             return;
         }
         errln("FAIL: No syntax error");
-    }        
+    }
 
     /**
      * Test the use variable range pragma, making sure that use of
@@ -2055,20 +2055,20 @@ public class TransliteratorTest extends TestFmwk {
         rules2 = TestUtility.replace(rules2, "\n", "");
         rules2 = TestUtility.replace(rules2, "\r", "");
         testRulesForward = TestUtility.replace(testRulesForward, " ", "");
-        
+
         if (!rules2.equals(testRulesForward)) {
             errln(label);
             logln("GENERATED RULES: " + rules2);
             logln("SHOULD BE:       " + testRulesForward);
         }
     }
-            
+
     /**
      * Mark's toRules test.
      */
     public void TestToRulesMark() {
-            
-        String testRules = 
+
+        String testRules =
             "::[[:Latin:][:Mark:]];"
             + "::NFKD (NFC);"
             + "::Lower (Lower);"
@@ -2078,7 +2078,7 @@ public class TransliteratorTest extends TestFmwk {
             + "::Lower ();"
             + "::([[:Greek:][:Mark:]]);"
             ;
-        String testRulesForward = 
+        String testRulesForward =
             "::[[:Latin:][:Mark:]];"
             + "::NFKD(NFC);"
             + "::Lower(Lower);"
@@ -2087,7 +2087,7 @@ public class TransliteratorTest extends TestFmwk {
             + "::Upper (Lower);"
             + "::Lower ();"
             ;
-        String testRulesBackward = 
+        String testRulesBackward =
             "::[[:Greek:][:Mark:]];"
             + "::Lower (Upper);"
             + "::NFD(NFKC);"
@@ -2097,13 +2097,13 @@ public class TransliteratorTest extends TestFmwk {
             ;
         String source = "\u00E1"; // a-acute
         String target = "\u03AC"; // alpha-acute
-        
+
         Transliterator t2 = Transliterator.createFromRules("source-target", testRules, Transliterator.FORWARD);
         Transliterator t3 = Transliterator.createFromRules("target-source", testRules, Transliterator.REVERSE);
-        
+
         expect(t2, source, target);
         expect(t3, target, source);
-        
+
         checkRules("Failed toRules FORWARD", t2, testRulesForward);
         checkRules("Failed toRules BACKWARD", t3, testRulesBackward);
     }
@@ -2170,7 +2170,7 @@ public class TransliteratorTest extends TestFmwk {
     // These tests are not mirrored (yet) in icu4c at
     // source/test/intltest/transtst.cpp
     //======================================================================
-    
+
     /**
      * Test anchor masking
      */
@@ -2182,69 +2182,93 @@ public class TransliteratorTest extends TestFmwk {
             errln("FAIL: " + rule + " => " + e);
         }
     }
-    
+
     static final String[][] registerRules = {
         {"Any-Dev1", "x > X; y > Y;"},
         {"Any-Dev2", "XY > Z"},
-        {"Greek-Latin/FAKE", 
+        {"Greek-Latin/FAKE",
             "[^[:L:][:M:]] { \u03bc\u03c0 > b ; "+
             "\u03bc\u03c0 } [^[:L:][:M:]] > b ; "+
             "[^[:L:][:M:]] { [\u039c\u03bc][\u03a0\u03c0] > B ; "+
             "[\u039c\u03bc][\u03a0\u03c0] } [^[:L:][:M:]] > B ;"
             },
     };
-    
+
     static final String DESERET_DEE = UTF16.valueOf(0x10414);
     static final String DESERET_dee = UTF16.valueOf(0x1043C);
-    
+
     static final String[][] testCases = {
-        // NORMALIZATION, not in C
-        {"NFC", "a\u0300", "\u00E0"},
-        {"NFD", "\u00E0", "a\u0300"},
-        
+
+        // NORMALIZATION, needs porting to C
+        // should add more test cases
+        {"NFD" , "a\u0300 \u00E0 \u1100\u1161 \uFF76\uFF9E\u03D3"},
+        {"NFC" , "a\u0300 \u00E0 \u1100\u1161 \uFF76\uFF9E\u03D3"},
+        {"NFKD", "a\u0300 \u00E0 \u1100\u1161 \uFF76\uFF9E\u03D3"},
+        {"NFKC", "a\u0300 \u00E0 \u1100\u1161 \uFF76\uFF9E\u03D3"},
+
         // mp -> b BUG
         {"Greek-Latin/UNGEGN", "(\u03BC\u03C0)", "(b)"},
         {"Greek-Latin/FAKE", "(\u03BC\u03C0)", "(b)"},
-        
+
         // check for devanagari bug
         {"nfd;Dev1;Dev2;nfc", "xy", "Z"},
 
         // ff, i, dotless-i, I, dotted-I, LJLjlj deseret deeDEE
-        {"Title", "ab'cD ffi\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE, 
-                  "Ab'cd Ffi\u0131ii \u01C8\u01C9\u01C9 " + DESERET_DEE + DESERET_dee}, 
+        {"Title", "ab'cD ffi\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE,
+                  "Ab'cd Ffi\u0131ii \u01C8\u01C9\u01C9 " + DESERET_DEE + DESERET_dee},
         //TODO: enable this test once Titlecase works right
-        //{"Title", "\uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE, 
-        //          "Ffi\u0131ii \u01C8\u01C9\u01C9 " + DESERET_DEE + DESERET_dee}, 
-        {"Upper", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE, 
-                  "AB'CD FFIII\u0130 \u01C7\u01C7\u01C7 " + DESERET_DEE + DESERET_DEE},
-        {"Lower", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE, 
-                  "ab'cd \uFB00i\u0131ii \u01C9\u01C9\u01C9 " + DESERET_dee + DESERET_dee},
+        //{"Title", "\uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE,
+        //          "Ffi\u0131ii \u01C8\u01C9\u01C9 " + DESERET_DEE + DESERET_dee},
         
+        {"Upper", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE,
+                  "AB'CD FFIII\u0130 \u01C7\u01C7\u01C7 " + DESERET_DEE + DESERET_DEE},
+        {"Lower", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE,
+                  "ab'cd \uFB00i\u0131ii \u01C9\u01C9\u01C9 " + DESERET_dee + DESERET_dee},
+                  
+        {"Upper", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE},
+        {"Lower", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE},
+
          // FORMS OF S
         {"Greek-Latin/UNGEGN", "\u03C3 \u03C3\u03C2 \u03C2\u03C3", "s ss s\u0331s\u0331"},
         {"Latin-Greek/UNGEGN", "s ss s\u0331s\u0331", "\u03C3 \u03C3\u03C2 \u03C2\u03C3"},
         {"Greek-Latin", "\u03C3 \u03C3\u03C2 \u03C2\u03C3", "s ss s\u0331s\u0331"},
         {"Latin-Greek", "s ss s\u0331s\u0331", "\u03C3 \u03C3\u03C2 \u03C2\u03C3"},
     };
-    
+
     public void TestSpecialCases() {
+        
         for (int i = 0; i < registerRules.length; ++i) {
-            Transliterator t = Transliterator.createFromRules(registerRules[i][0], 
+            Transliterator t = Transliterator.createFromRules(registerRules[i][0],
                 registerRules[i][1], Transliterator.FORWARD);
             DummyFactory.add(registerRules[i][0], t);
         }
         for (int i = 0; i < testCases.length; ++i) {
-            Transliterator t = Transliterator.getInstance(testCases[i][0]);
-            expect(t, testCases[i][1], testCases[i][2]);
+            String name = testCases[i][0];
+            Transliterator t = Transliterator.getInstance(name);
+            String id = t.getID();
+            String source = testCases[i][1];
+            String target = null;
+
+            // Automatic generation of targets, to make it simpler to add test cases (and more fail-safe)
+            
+            if (testCases[i].length > 2)    target = testCases[i][2];
+            else if (id.equalsIgnoreCase("NFD"))    target = com.ibm.text.Normalizer.normalize(source, com.ibm.text.Normalizer.DECOMP,0);
+            else if (id.equalsIgnoreCase("NFC"))    target = com.ibm.text.Normalizer.normalize(source, com.ibm.text.Normalizer.COMPOSE,0);
+            else if (id.equalsIgnoreCase("NFKD"))   target = com.ibm.text.Normalizer.normalize(source, com.ibm.text.Normalizer.DECOMP_COMPAT,0);
+            else if (id.equalsIgnoreCase("NFKC"))   target = com.ibm.text.Normalizer.normalize(source, com.ibm.text.Normalizer.COMPOSE_COMPAT,0);
+            else if (id.equalsIgnoreCase("Lower"))  target = UCharacter.toLowerCase(Locale.US, source);
+            else if (id.equalsIgnoreCase("Upper"))  target = UCharacter.toUpperCase(Locale.US, source);
+
+            expect(t, source, target);
         }
     }
-            
+
     // seems like there should be an easier way to just register an instance of a transliterator
-    
+
     static class DummyFactory implements Transliterator.Factory {
         static DummyFactory singleton = new DummyFactory();
         static HashMap m = new HashMap();
-        
+
         // Since Transliterators are immutable, we don't have to clone on set & get
         static void add(String ID, Transliterator t) {
             m.put(ID, t);
@@ -2264,25 +2288,38 @@ public class TransliteratorTest extends TestFmwk {
         if (!UTF16.valueOf(DEE).equals(DESERET_DEE)) {
             errln("Fails titlecase of surrogates" + Integer.toString(dee,16) + ", " + Integer.toString(DEE,16));
         }
-            
+
         if (!UCharacter.toUpperCase(DESERET_dee + DESERET_DEE).equals(DESERET_DEE + DESERET_DEE)) {
             errln("Fails uppercase of surrogates");
         }
-            
+
         if (!UCharacter.toLowerCase(DESERET_dee + DESERET_DEE).equals(DESERET_dee + DESERET_dee)) {
             errln("Fails lowercase of surrogates");
         }
     }
-    
+
     // Check to see that incremental gets at least part way through a reasonable string.
-    
+
     public void TestIncrementalProgress() {
-        String test = "The Quick Brown Fox Jumped Over The Lazy Dog.";
-        
+        String latinTest = "The Quick Brown Fox.";
+        String devaTest = Transliterator.getInstance("Latin-Devanagari").transliterate(latinTest);
+        String kataTest = Transliterator.getInstance("Latin-Katakana").transliterate(latinTest);
+        String[][] tests = {
+            {"Any", latinTest},
+            {"Latin", latinTest},
+            {"Halfwidth", latinTest},
+            {"Devanagari", devaTest},
+            {"Katakana", kataTest},
+        };
+
         Enumeration sources = Transliterator.getAvailableSources();
         while(sources.hasMoreElements()) {
             String source = (String) sources.nextElement();
-            if (!source.equals("Latin")) continue;
+            String test = findMatch(source, tests);
+            if (test == null) {
+                logln("Skipping " + source + "-X");
+                continue;
+            }
             Enumeration targets = Transliterator.getAvailableTargets(source);
             while(targets.hasMoreElements()) {
                 String target = (String) targets.nextElement();
@@ -2290,23 +2327,38 @@ public class TransliteratorTest extends TestFmwk {
                 while(variants.hasMoreElements()) {
                     String variant = (String) variants.nextElement();
                     String id = source + "-" + target + "/" + variant;
-        
+
+                    String filter = getFilter();
+                    if (filter != null && id.indexOf(filter) < 0) continue;
+
                     Transliterator t = Transliterator.getInstance(id);
-                    String result = CheckIncrementalAux(t, test);
+                    CheckIncrementalAux(t, test);
+
+                    String rev = t.transliterate(test);
                     Transliterator inv = t.getInverse();
-                    CheckIncrementalAux(inv, result);
+                    CheckIncrementalAux(inv, rev);
                 }
             }
         }
     }
-    
-    public String CheckIncrementalAux(Transliterator t, String input) {
-        
+
+    public String findMatch (String source, String[][] pairs) {
+        for (int i = 0; i < pairs.length; ++i) {
+            if (source.equalsIgnoreCase(pairs[i][0])) return pairs[i][1];
+        }
+        return null;
+    }
+
+    public void CheckIncrementalAux(Transliterator t, String input) {
+
         Replaceable test = new ReplaceableString(input);
         Transliterator.Position pos = new Transliterator.Position(0, test.length(), 0, test.length());
         t.transliterate(test, pos);
         boolean gotError = false;
-        if (pos.start == 0) {
+
+        // we have a few special cases. Any-Remove (pos.start = 0, but also = limit) and U+XXXXX?X?
+
+        if (pos.start == 0 && pos.limit != 0 && !t.getID().equals("Hex-Any/Unicode")) {
             errln("No Progress, " + t.getID() + ": " + Utility.formatInput(test, pos));
             gotError = true;
         } else {
@@ -2317,7 +2369,6 @@ public class TransliteratorTest extends TestFmwk {
             errln("Incomplete, " + t.getID() + ":  " + Utility.formatInput(test, pos));
             gotError = true;
         }
-        return test.toString();
     }
 
     //======================================================================
@@ -2363,19 +2414,19 @@ public class TransliteratorTest extends TestFmwk {
         }
 
         ReplaceableString rsource = new ReplaceableString(source);
-        
+
         t.finishTransliteration(rsource, index);
         // Do it all at once -- below we do it incrementally
-            
+
         if (index.start != index.limit) {
-            expectAux(t.getID() + ":UNFINISHED", source, 
+            expectAux(t.getID() + ":UNFINISHED", source,
                 "start: " + index.start + ", limit: " + index.limit, false, expectedResult);
             return;
         }
         String result = rsource.toString();
         if (!expectAux(t.getID() + ":Replaceable", source, result, expectedResult)) return;
-        
-        
+
+
         if (pos == null) {
             index = new Transliterator.Position();
         } else {
