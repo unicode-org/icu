@@ -1,12 +1,12 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2000, International Business Machines Corporation and    *
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UGenPropReader.java,v $ 
-* $Date: 2001/03/21 23:34:44 $ 
-* $Revision: 1.4 $
+* $Date: 2001/03/23 19:51:38 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
