@@ -1035,6 +1035,8 @@ u_internalToLower(UChar32 c, UCharIterator *iter,
         const UChar *u;
         const uint32_t *pe=GET_EXCEPTIONS(props);
         uint32_t firstExceptionValue=*pe, specialCasing;
+        int32_t minLength;
+
         if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_SPECIAL_CASING)) {
             i=EXC_SPECIAL_CASING;
             ++pe;
@@ -1116,12 +1118,13 @@ u_internalToLower(UChar32 c, UCharIterator *iter,
             } else {
                 /* get the special case mapping string from the data file */
                 u=ucharsTable+(specialCasing&0xffff);
-                length=(int32_t)(*u++)&0x1f;
+                length=(int32_t)((*u++)&0x1f);
             }
 
             /* copy the result string */
+            minLength = (length < destCapacity) ? length : destCapacity;
             i=0;
-            while(i<length && i<destCapacity) {
+            while(i<minLength) {
                 dest[i++]=*u++;
             }
             return length;
@@ -1502,12 +1505,15 @@ u_internalFoldCase(UChar32 c,
             if(props!=0) {
                 /* return the full mapping */
                 const UChar *uchars=ucharsTable+(props&0xffff)+2;
+                int32_t minLength;
+
                 length=props>>24;
+                minLength = (length < destCapacity) ? length : destCapacity;
 
                 /* copy the result string */
                 i=0;
-                while(i<length && i<destCapacity) {
-                    dest[i++]=*uchars++;
+                while(i<minLength) {
+                    dest[i++]=*(uchars++);
                 }
                 return length;
             } else {
@@ -1515,7 +1521,7 @@ u_internalFoldCase(UChar32 c,
                 if(options==U_FOLD_CASE_DEFAULT && (uint32_t)(c-0x130)<=1) {
                     /* map dotted I and dotless i to U+0069 small i */
                     result =0x69;
-                    goto single;
+                    /* goto single; */
                 }
                 /* return c itself because it is excluded from case folding */
             }
@@ -1527,7 +1533,7 @@ u_internalFoldCase(UChar32 c,
         }
     }
 
-single:
+/* single: */
     length=UTF_CHAR_LENGTH(result);
     if(length<=destCapacity) {
         /* write result to dest */
