@@ -18,7 +18,7 @@
 #ifndef RESLIST_H
 #define RESLIST_H
 
-#define KEY_SPACE_SIZE 65532
+#define KEY_SPACE_SIZE 65536
 #define RESLIST_MAX_INT_VECTOR 2048
 
 #include "unicode/utypes.h"
@@ -35,10 +35,11 @@ U_CDECL_BEGIN
 /* Resource bundle root table */
 struct SRBRoot {
   char *fLocale;
-  uint32_t fKeyPoint;
+  int32_t fKeyPoint;
   char *fKeys;
   int32_t fCount;
-  struct SResource *fRoot; 
+  struct SResource *fRoot;
+  int32_t fMaxTableLength;
 };
 
 struct SRBRoot *bundle_open(const struct UString* comment, UErrorCode *status);
@@ -59,7 +60,7 @@ void bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* 
 
 void bundle_close(struct SRBRoot *bundle, UErrorCode *status);
 void bundle_setlocale(struct SRBRoot *bundle, UChar *locale, UErrorCode *status);
-uint16_t bundle_addtag(struct SRBRoot *bundle, const char *tag, UErrorCode *status);
+int32_t bundle_addtag(struct SRBRoot *bundle, const char *tag, UErrorCode *status);
 
 /* Various resource types */
 
@@ -125,7 +126,7 @@ void bin_close(struct SResource *binres, UErrorCode *status);
 
 struct SResource {
     UResType fType;
-    uint16_t fKey;
+    int32_t  fKey;
     uint32_t fSize; /* Size in bytes outside the header part */
     int      line;  /* used internally to report duplicate keys in tables */
     struct SResource *fNext; /*This is for internal chaining while building*/
