@@ -171,14 +171,6 @@ SOURCE=.\cbiapts.h
 
 SOURCE=.\cbkittst.c
 # End Source File
-# Begin Source File
-
-SOURCE=.\cregrtst.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\cregrtst.h
-# End Source File
 # End Group
 # Begin Group "collation"
 
