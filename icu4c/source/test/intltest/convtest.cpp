@@ -248,7 +248,7 @@ ConversionTest::TestFromUnicode() {
 
 // output helpers ---------------------------------------------------------- ***
 
-static U_INLINE char
+static inline char
 hexDigit(uint8_t digit) {
     return digit<=9 ? (char)('0'+digit) : (char)('a'-10+digit);
 }
