@@ -69,8 +69,8 @@ const static UCollationResult results[] = {
     UCOL_GREATER,
     /* test priamry > 8 */
     UCOL_LESS,
-    UCOL_EQUAL,
-    UCOL_EQUAL
+    UCOL_LESS, /*Turkish translator made a primary differnce between dotted and dotless I */
+    UCOL_GREATER
 };
 
 
