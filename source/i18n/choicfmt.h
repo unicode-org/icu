@@ -409,8 +409,8 @@ inline UnicodeString&
 ChoiceFormat::format(const Formattable& obj,
                      UnicodeString& result,
                      UErrorCode& status) const {
-    // Don't use Format:: - use NumberFormat:: in case base class
-    // modified behavior in future.
+    // Don't use Format:: - use immediate base class only,
+    // in case immediate base modifies behavior later.
     return NumberFormat::format(obj, result, status);
 }
 
