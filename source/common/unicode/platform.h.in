@@ -22,7 +22,9 @@
 #endif
 
 /* Define whether inttypes.h is available */
+#ifndef HAVE_INTTYPES_H
 #define HAVE_INTTYPES_H @HAVE_INTTYPES_H@
+#endif
 
 /*
  * Define what support for C++ streams is available.
@@ -41,13 +43,33 @@
 #define U_IOSTREAM_SOURCE @U_IOSTREAM_SOURCE@
 
 /* Determines whether specific types are available */
+#ifndef HAVE_INT8_T
 #define HAVE_INT8_T @HAVE_INT8_T@
+#endif
+
+#ifndef HAVE_UINT8_T
 #define HAVE_UINT8_T @HAVE_UINT8_T@
+#endif
+
+#ifndef HAVE_INT16_T
 #define HAVE_INT16_T @HAVE_INT16_T@
+#endif
+
+#ifndef HAVE_UINT16_T
 #define HAVE_UINT16_T @HAVE_UINT16_T@
+#endif
+
+#ifndef HAVE_INT32_T
 #define HAVE_INT32_T @HAVE_INT32_T@
+#endif
+
+#ifndef HAVE_UINT32_T
 #define HAVE_UINT32_T @HAVE_UINT32_T@
+#endif
+
+#ifndef HAVE_BOOL_T
 #define HAVE_BOOL_T @HAVE_BOOL_T@
+#endif
 
 /* Determines the endianness of the platform */
 #define U_IS_BIG_ENDIAN @U_IS_BIG_ENDIAN@
