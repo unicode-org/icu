@@ -5,7 +5,6 @@
 // *
 // ***************************************************************************
 //  Date        Name        Description
-//  11/17/99    aliu        Added support for transliterators.
 //  01/15/2002  grhoten     Synchronized the language and contry codes with ISO standards
 
 // ***  Note: do NOT translate or modify (customize) this root locale.
@@ -1712,28 +1711,6 @@ root {
         Yiii { "Yiii" }
         Zyyy { "Zyyy" }
     }
-
-    //------------------------------------------------------------
-    // BEGIN Transliterator support
-    //------------------------------------------------------------
-
-    // See also icu/source/data/translit/index.txt
-
-    TransliteratorNamePattern {
-        // Format for the display name of a Transliterator.
-        // This is the language-neutral form of this resource.
-        "{0,choice,0#|1#{1}|2#{1}-{2}}" // Display name
-    }
-
-    // Transliterator display names
-    // This is the English form of this resource.
-    "%Translit%Hex"         { "%Translit%Hex" }
-    "%Translit%UnicodeName" { "%Translit%UnicodeName" }
-    "%Translit%UnicodeChar" { "%Translit%UnicodeChar" }
-
-    //------------------------------------------------------------
-    // END Transliterator support
-    //------------------------------------------------------------
 
     Keys{
         collation { "COLLATION" }
