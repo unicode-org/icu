@@ -36,7 +36,7 @@ struct UCHARBUF {
 };
 
 typedef struct UCHARBUF UCHARBUF;
-#define U_EOF 0xFFFF
+#define U_EOF 0xFFFFFFFE
 #define U_ERR 0xFFFFFFFF
   
 U_CAPI UChar32 U_EXPORT2
@@ -49,7 +49,7 @@ U_CAPI void U_EXPORT2
 ucbuf_rewind(UCHARBUF* buf);
 
 U_CAPI UCHARBUF* U_EXPORT2
-ucbuf_open(FileStream* in,const char* cp,UErrorCode* err);
+ucbuf_open(FileStream* in,UErrorCode* err);
 
 U_CAPI void U_EXPORT2
 ucbuf_close(UCHARBUF* buf);
