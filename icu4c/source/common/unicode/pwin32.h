@@ -27,6 +27,13 @@
 #define __STDC_CONSTANT_MACROS
 #endif
 
+/* _MSC_VER is used to detect the Microsoft compiler. */
+#if defined(_MSC_VER)
+#define U_INT64_IS_LONG_LONG 0
+#else
+#define U_INT64_IS_LONG_LONG 1
+#endif
+
 /* Define whether inttypes.h is available */
 #ifndef U_HAVE_INTTYPES_H
 #define U_HAVE_INTTYPES_H 0
@@ -84,8 +91,11 @@
 #endif
 
 /* Define 64 bit limits */
+#if !U_INT64_IS_LONG_LONG
 #define INT64_C(x) ((int64_t)x)
 #define UINT64_C(x) ((uint64_t)x)
+/* else use the umachine.h definition */
+#endif
 
 /*===========================================================================*/
 /* Generic data types                                                        */
@@ -122,20 +132,18 @@ typedef unsigned int uint32_t;
 #endif
 
 #if ! U_HAVE_INT64_T
-/* _MSC_VER is used to detect the Microsoft compiler. */
-#ifdef _MSC_VER
-    typedef signed __int64 int64_t;
-#else
+#if U_INT64_IS_LONG_LONG
     typedef signed long long int64_t;
+#else
+    typedef signed __int64 int64_t;
 #endif
 #endif
 
 #if ! U_HAVE_UINT64_T
-/* _MSC_VER is used to detect the Microsoft compiler. */
-#ifdef _MSC_VER
-    typedef unsigned __int64 uint64_t;
-#else
+#if U_INT64_IS_LONG_LONG
     typedef unsigned long long uint64_t;
+#else
+    typedef unsigned __int64 uint64_t;
 #endif
 #endif
 #endif
@@ -173,6 +181,7 @@ typedef unsigned int uint32_t;
 #define U_RELEASE 0
 #endif
 #endif
+
 /* Determine whether to disable renaming or not. This overrides the
    setting in umachine.h which is for all platforms. */
 #ifndef U_DISABLE_RENAMING
@@ -211,12 +220,15 @@ typedef unsigned int uint32_t;
 /* Information about POSIX support                                           */
 /*===========================================================================*/
 
+#if 1
 #define U_TZSET         _tzset
-#define U_HAVE_TIMEZONE 1
-#if U_HAVE_TIMEZONE
-#   define U_TIMEZONE   _timezone
 #endif
+#if 1
+#define U_TIMEZONE      _timezone
+#endif
+#if 1
 #define U_TZNAME        _tzname
+#endif
 
 #define U_HAVE_MMAP 0
 #define U_HAVE_POPEN 0
