@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/10/05 18:16:59 $
- * $Revision: 1.50 $
+ * $Date: 2001/10/05 22:25:07 $
+ * $Revision: 1.51 $
  *
  *****************************************************************************************
  */
@@ -16,6 +16,51 @@ import com.ibm.test.*;
 import com.ibm.util.Utility;
 import java.text.*;
 import java.util.*;
+
+/***********************************************************************
+
+                     HOW TO USE THIS TEST FILE
+                               -or-
+                  How I developed on two platforms
+                without losing (too much of) my mind
+
+
+1. Add new tests by copying/pasting/changing existing tests.  On Java,
+   any public void method named Test...() taking no parameters becomes
+   a test.  On C++, you need to modify the header and add a line to
+   the runIndexedTest() dispatch method.
+
+2. Make liberal use of the expect() method; it is your friend.
+
+3. The tests in this file exactly match those in a sister file on the
+   other side.  The two files are:
+
+   icu4j:  src/com/ibm/test/translit/TransliteratorTest.java
+   icu4c:  source/test/intltest/transtst.cpp
+
+                  ==> THIS IS THE IMPORTANT PART <==
+
+   When you add a test here, add it there.  Give it the same name and
+   put it in the same relative place.  This makes maintenance a lot
+   simpler for any poor soul who ends up trying to synchronize the
+   tests between icu4j and icu4c.
+
+4. If you MUST enter a test that is NOT paralleled in the sister file,
+   then add it in the special non-mirrored section.  These are
+   labeled
+
+     "icu4j ONLY"
+
+   or
+
+     "icu4c ONLY"
+
+   Make sure you document the reason the test is here and not there.
+
+
+Thank you.
+The Management
+***********************************************************************/
 
 /**
  * @test
@@ -38,7 +83,7 @@ public class TransliteratorTest extends TestFmwk {
                 // We should get a new instance if we try again
                 Transliterator t2 = Transliterator.getInstance(ID);
                 if (t != t2) {
-                    logln(ID + ":" + t);
+                    logln("OK: " + Transliterator.getDisplayName(ID) + " (" + ID + "): " + t);
                 } else {
                     errln("FAIL: " + ID + " returned identical instances");
                     t = null;
@@ -493,7 +538,33 @@ public class TransliteratorTest extends TestFmwk {
         expect(hex3, "012", "&#x30;&#x31;&#x32;");
     }
 
-    public void TestJ329_TODO() {
+    public void TestJ329() {
+
+        Object[] DATA = {
+            new Boolean(false), "a > b; c > d",
+            new Boolean(true),  "a > b; no operator; c > d",
+        };
+
+        for (int i=0; i<DATA.length; i+=2) {
+            String err = null;
+            try {
+                Transliterator t = new
+                    RuleBasedTransliterator("<ID>",
+                                            (String) DATA[i+1],
+                                            Transliterator.FORWARD,
+                                            null);
+            } catch (IllegalArgumentException e) {
+                err = e.getMessage();
+            }
+            boolean gotError = (err != null);
+            String desc = (String) DATA[i+1] +
+                (gotError ? (" -> error: " + err) : " -> no error");
+            if ((err != null) == ((Boolean)DATA[i]).booleanValue()) {
+                logln("Ok:   " + desc);
+            } else {
+                errln("FAIL: " + desc);
+            }
+        }
     }
 
     /**
@@ -653,7 +724,8 @@ public class TransliteratorTest extends TestFmwk {
 
     }
 
-    public void TestCopyJ476_TODO() {
+    public void TestCopyJ476() {
+        // This is a C++-only copy constructor test
     }
 
     /**
@@ -788,7 +860,12 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
 
-    public void TestCreateInstance_TODO() {
+    public void TestCreateInstance() {
+        Transliterator myTrans = Transliterator.getInstance("Latin-Hangul", Transliterator.REVERSE);
+        String newID = myTrans.getID();
+        if (!newID.equals("Hangul-Latin")) {
+            errln("FAIL: Test for Jitterbug 912 Transliterator::createInstance(id,UTRANS_REVERSE) failed");
+        }
     }
 
     /**
@@ -964,7 +1041,31 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
 
-    public void TestCompoundFilter_TODO() {
+    /**
+     * Compound filter semantics were orginially not implemented
+     * correctly.  Originally, each component filter f(i) is replaced by
+     * f'(i) = f(i) && g, where g is the filter for the compound
+     * transliterator.
+     * 
+     * From Mark:
+     *
+     * Suppose and I have a transliterator X. Internally X is
+     * "Greek-Latin; Latin-Cyrillic; Any-Lower". I use a filter [^A].
+     * 
+     * The compound should convert all greek characters (through latin) to
+     * cyrillic, then lowercase the result. The filter should say "don't
+     * touch 'A' in the original". But because an intermediate result
+     * happens to go through "A", the Greek Alpha gets hung up.
+     */
+    public void TestCompoundFilter() {
+        Transliterator t = Transliterator.getInstance
+            ("Greek-Latin; Latin-Cyrillic; Lower", Transliterator.FORWARD);
+        t.setFilter(new UnicodeSet("[^A]"));
+
+        // Only the 'A' at index 1 should remain unchanged
+        expect(t,
+               CharsToUnicodeString("CA\\u039A\\u0391"),
+               CharsToUnicodeString("\\u043AA\\u043A\\u0430"));
     }
 
     /**
@@ -1305,11 +1406,12 @@ public class TransliteratorTest extends TestFmwk {
                                "TEST", "::NFD; aa > Q; a > q;",
                                Transliterator.FORWARD);
         expect(t, "aa", "Q");
-    }
 
-    //======================================================================
-    // icu4j only
-    //======================================================================
+
+        t = Transliterator.getInstance("Latin-Devanagari;Devanagari-Latin");
+        String s = "rmk\u1E63\u0113t";
+        expect(t, s, s);
+    }
 
     /**
      * Inverse of "Null" should be "Null". (J21)
@@ -1375,13 +1477,16 @@ public class TransliteratorTest extends TestFmwk {
         expect(" { a } > b;", "xay a ", "xby b ");
     }
 
-    public void TestDisplayName() {
-        String ID;
-        for (Enumeration e = Transliterator.getAvailableIDs(); e.hasMoreElements(); ) {
-            ID = (String) e.nextElement();
-            logln(ID + " -> " + Transliterator.getDisplayName(ID));
-        }
-    }
+    //======================================================================
+    // icu4j ONLY
+    // These tests are not mirrored (yet) in icu4c at
+    // source/test/intltest/transtst.cpp
+    //======================================================================
+
+    //======================================================================
+    // Ram's tests
+    //======================================================================
+
     /* this test performs  test of rules in ISO 15915 */
     public void  TestDevanagariLatinRT(){
         int MAX_LEN= 52;
