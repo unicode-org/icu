@@ -4,8 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/Attic/usetiter.h,v $ 
-* $Date: 2002/04/29 16:46:48 $ 
-* $Revision: 1.2 $
+* $Revision: 1.3 $
 **********************************************************************
 */
 #ifndef USETITER_H
