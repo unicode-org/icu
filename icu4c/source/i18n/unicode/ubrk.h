@@ -214,7 +214,7 @@ ubrk_open(UBreakIteratorType type,
  * @param status A UErrorCode to receive any errors.
  * @return A UBreakIterator for the specified rules.
  * @see ubrk_open
- * @draft
+ * @stable
  */
 U_CAPI UBreakIterator*
 ubrk_openRules(const UChar *rules,
@@ -237,7 +237,7 @@ ubrk_openRules(const UChar *rules,
  * @param status to indicate whether the operation went on smoothly or there were errors
     An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were necessary.
  * @return pointer to the new clone
- * @draft API 1.8 freeze
+ * @draft ICU 1.8
  */
 
 
