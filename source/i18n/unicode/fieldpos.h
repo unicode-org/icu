@@ -136,7 +136,7 @@ public:
      * Destructor
      * @stable ICU 2.0
      */
-    ~FieldPosition() {}
+    ~FieldPosition();
 
     /**
      * Assignment operator
@@ -210,14 +210,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID();
+    static UClassID getStaticClassID();
 
 private:
     /**
@@ -237,19 +237,7 @@ private:
      * If the field does not occur in the text, 0 is returned.
      */
     int32_t fEndIndex;
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
 };
-
-inline UClassID FieldPosition::getStaticClassID()
-{ return (UClassID)&fgClassID; }
-    
-inline UClassID FieldPosition::getDynamicClassID() const
-{ return FieldPosition::getStaticClassID(); }
 
 inline FieldPosition&
 FieldPosition::operator=(const FieldPosition& copy)

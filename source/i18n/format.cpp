@@ -46,7 +46,8 @@ uprv_icuin_lib_dummy(int32_t i) {
 
 U_NAMESPACE_BEGIN
 
-const char FieldPosition::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(FieldPosition)
+FieldPosition::~FieldPosition() {}
 
 // -------------------------------------
 // default constructor
