@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
-* $Date: 2001/08/31 00:30:17 $
-* $Revision: 1.2 $
+* $Date: 2001/09/06 01:29:48 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -254,7 +254,7 @@ public final class Normalizer implements UCD_Types {
 
             int ch;
             for (int j = 0; j < buffer.length(); j += UTF16.getCharCount(ch)) {
-                ch = UTF16Plus.charAt(buffer, j);
+                ch = UTF16.charAt(buffer, j);
                 int chClass = data.getCanonicalClass(ch);
                 int k = target.length(); // insertion point
                 if (chClass != 0) {
@@ -263,7 +263,7 @@ public final class Normalizer implements UCD_Types {
 
                     int ch2;
                     for (; k > 0; k -= UTF16.getCharCount(ch2)) {
-                        ch2 = UTF16Plus.charAt(target, k-1);
+                        ch2 = UTF16.charAt(target, k-1);
                         if (data.getCanonicalClass(ch2) <= chClass) break;
                     }
                 }
@@ -281,7 +281,7 @@ public final class Normalizer implements UCD_Types {
     */
     private void internalCompose(StringBuffer target) {
         int starterPos = 0;
-        int starterCh = UTF16Plus.charAt(target,0);
+        int starterCh = UTF16.charAt(target,0);
         int compPos = UTF16.getCharCount(starterCh); // length of last composition
         int lastClass = data.getCanonicalClass(starterCh);
         if (lastClass != 0) lastClass = 256; // fix for strings staring with a combining mark
@@ -291,7 +291,7 @@ public final class Normalizer implements UCD_Types {
 
         int ch;
         for (int decompPos = compPos; decompPos < target.length(); decompPos += UTF16.getCharCount(ch)) {
-            ch = UTF16Plus.charAt(target, decompPos);
+            ch = UTF16.charAt(target, decompPos);
             if (SHOW_PROGRESS) System.out.println(Utility.hex(target)
                 + ", decompPos: " + decompPos
                 + ", compPos: " + compPos

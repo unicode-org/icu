@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedPropertyLister.java,v $
-* $Date: 2001/09/01 00:06:15 $
-* $Revision: 1.3 $
+* $Date: 2001/09/06 01:29:48 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -94,6 +94,7 @@ final class DerivedPropertyLister extends PropertyLister {
         String prop = dprop.getProperty(cp, propMask);
         if (prop.length() == 0) return EXCLUDE;
         if (prop.equals(last)) return INCLUDE;
+        last = prop;
         return BREAK;
     }
 
