@@ -14,92 +14,34 @@ package com.ibm.icu.dev.tool.layout;
 public class FeatureList
 {
     
-    static class FeatureRecord extends TaggedRecord
-    {
-        private int[] lookupIndices;
-        private int lookupCount;
-        
-        public FeatureRecord(String theFeatureTag)
-        {
-            super(theFeatureTag);
-            
-            lookupIndices = new int[10];
-            lookupCount = 0;
-        }
-        
-        public void addLookup(int theLookupIndex)
-        {
-            if (lookupCount > lookupIndices.length) {
-                int[] newLookupIndices = new int[lookupIndices.length + 5];
-                
-                System.arraycopy(lookupIndices, 0, newLookupIndices, 0, lookupIndices.length);
-                lookupIndices = newLookupIndices;
-            }
-            
-            lookupIndices[lookupCount] = theLookupIndex;
-            lookupCount += 1;
-        }
-        
-        public void writeFeatureRecord(OpenTypeTableWriter writer)
-        {
-            writer.writeData(0);      // featureParams (must be NULL)
-            
-            writer.writeData(lookupCount);
-            
-            for (int i = 0; i < lookupCount; i += 1) {
-                writer.writeData(lookupIndices[i]);
-            }
-        }
-    }
-    
-    private FeatureRecord[] featureRecords;
+    private Feature[] features;
     private int featureCount;
     
     public FeatureList()
     {
-        featureRecords = new FeatureRecord[10];
+        features = new Feature[10];
         featureCount = 0;
     }
         
-    private FeatureRecord findFeatureRecord(String featureTag)
+    public void addFeature(Feature feature)
     {
-        for (int i = 0; i < featureCount; i += 1) {
-            FeatureRecord featureRecord = featureRecords[i];
+        if (featureCount >= features.length) {
+            Feature[] newFeatures = new Feature[features.length + 5];
             
-            if (featureRecord.getTag().equals(featureTag)) {
-                 return featureRecord;
-            }
+            System.arraycopy(features, 0, newFeatures, 0, features.length);
+            features = newFeatures;
         }
         
-        if (featureCount >= featureRecords.length) {
-            FeatureRecord[] newFeatureRecords = new FeatureRecord[featureCount + 5];
-            
-            System.arraycopy(featureRecords, 0, newFeatureRecords, 0, featureRecords.length);
-            featureRecords = newFeatureRecords;
-        }
-        
-        FeatureRecord newFeatureRecord = new FeatureRecord(featureTag);
-        featureRecords[featureCount] = newFeatureRecord;
-        
-        featureCount += 1;
-        return newFeatureRecord;
-    }
-    
-    public void addLookup(String featureTag, int lookupIndex)
-    {
-        FeatureRecord featureRecord = findFeatureRecord(featureTag);
-            
-        featureRecord.addLookup(lookupIndex);
+        features[featureCount++] = feature;
     }
     
     public void finalizeFeatureList()
     {
-        TaggedRecord.sort(featureRecords, featureCount);
-    }
-    
-    public int getFeatureIndex(String featureTag)
-    {
-        return TaggedRecord.search(featureRecords, featureCount, featureTag);
+        TaggedRecord.sort(features, featureCount);
+        
+        for (int i = 0; i < featureCount; i += 1) {
+            features[i].setFeatureIndex(i);
+        }
     }
     
     public void writeFeaturetList(OpenTypeTableWriter writer)
@@ -113,7 +55,7 @@ public class FeatureList
         int featureRecordOffset = writer.getOutputIndex();
         
         for (int i = 0; i < featureCount; i += 1) {
-            String tag = featureRecords[i].getTag();
+            String tag = features[i].getTag();
             
             System.out.print(" '" + tag + "'");
             writer.writeTag(tag);
@@ -127,7 +69,7 @@ public class FeatureList
             writer.fixOffset(featureRecordOffset + 2, featureListBase);
             featureRecordOffset += 3;
             
-            featureRecords[i].writeFeatureRecord(writer);
+            features[i].writeFeature(writer);
         }
         
         System.out.println();

@@ -240,7 +240,7 @@ JTextArea text;
         
         enableEvents(WindowEvent.WINDOW_CLOSING);
         enableEvents(KeyEvent.KEY_PRESSED);
-        enableEvents(KeyEvent.KEY_RELEASED);    
+        enableEvents(KeyEvent.KEY_RELEASED);
 
     text.addKeyListener(new KeyAdapter() {
         public void keyPressed(KeyEvent e) {
@@ -288,7 +288,7 @@ JTextArea text;
             "\u0935\u093f\u0937\u093e\u0926 " +
             "\u092f\u094b\u0917 " +
             "\u0927\u0943\u0924\u0930\u093e\u0937\u094d\u091f\u094d\u0930 " +
-            "\u0909\u0935\u093E\u091A\u0943 " +
+            "\u0909\u0935\u093E\u091A\u0964 " +
             "\u0927\u0930\u094d\u092e\u0915\u094d\u0937\u0947\u0924\u094d\u0930\u0947 " +
             "\u0915\u0941\u0930\u0941\u0915\u094d\u0937\u0947\u0924\u094d\u0930\u0947 " +
             "\u0938\u092e\u0935\u0947\u0924\u093e " +
@@ -296,7 +296,7 @@ JTextArea text;
             "\u092e\u093e\u092e\u0915\u093e\u0903 " +
             "\u092a\u093e\u0923\u094d\u0921\u0935\u093e\u0936\u094d\u091a\u0948\u0935 " +
             "\u0915\u093f\u092e\u0915\u0941\u0930\u094d\u0935\u0924 " +
-            "\u0938\u0902\u091c\u0935";
+            "\u0938\u0902\u091c\u092F";
     }
 
 
