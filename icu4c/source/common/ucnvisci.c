@@ -872,8 +872,12 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                     deltaChanged =TRUE;
                     converterData->isFirstBuffer=FALSE;
                 }
-
+                /* Normalize all Indic codepoints to Devanagari and map them to ISCII */
                 /* now subtract the new delta from sourceChar*/
+                /* Danda and Double Danda are valid in Northern scripts.. since Unicode 
+                 * does not include these codepoints in all Northern scrips we need to 
+                 * filter them out
+                 */
                 if(sourceChar!= DANDA && sourceChar != DOUBLE_DANDA){
                     sourceChar -= converterData->currentDeltaFromUnicode ;
                 }
