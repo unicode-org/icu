@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/09/29 15:25:08 $
- * $Revision: 1.100 $
+ * $Date: 2003/09/29 23:20:06 $
+ * $Revision: 1.101 $
  *
  *****************************************************************************************
  */
@@ -2223,25 +2223,33 @@ public class UnicodeSet extends UnicodeFilter {
                     pat.append('}');
                     continue;
                 case SymbolTable.SYMBOL_REF:
-                    if (op != 0) {
-                        syntaxError(chars, "Unquoted '$'");
-                    }
-                    if (lastItem == 1) {
-                        add(lastChar, lastChar);
-                        _appendToPat(pat, lastChar, false);
-                    }
-                    usePat = true;
-                    pat.append((char) c);
-                    add(UnicodeMatcher.ETHER);
+                    //         symbols  nosymbols
+                    // [a-$]   error    error (ambiguous)
+                    // [a$]    anchor   anchor
+                    // [a-$x]  var "x"* literal '$'
+                    // [a-$.]  error    literal '$'
+                    // *We won't get here in the case of var "x"
+                    backup = chars.getPos(backup);
                     c = chars.next(opts);
                     literal = chars.isEscaped();
-                    if (c != ']' || literal) {
-                        syntaxError(chars, "'$' not followed by var or ']'");
+                    boolean anchor = (c == ']' && !literal);
+                    if (symbols == null && !anchor) {
+                        c = SymbolTable.SYMBOL_REF;
+                        chars.setPos(backup);
+                        break; // literal '$'
                     }
-                    pat.append(']');
-                    usePat = true;
-                    mode = 2;
-                    continue;
+                    if (anchor && op == 0) {
+                        if (lastItem == 1) {
+                            add(lastChar, lastChar);
+                            _appendToPat(pat, lastChar, false);
+                        }
+                        add(UnicodeMatcher.ETHER);
+                        usePat = true;
+                        pat.append(SymbolTable.SYMBOL_REF).append(']');
+                        mode = 2;
+                        continue;
+                    }
+                    syntaxError(chars, "Unquoted '$'");
                 default:
                     break;
                 }
