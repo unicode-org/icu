@@ -11,8 +11,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/readme.html,v $
-* $Date: 2002/12/05 20:29:27 $
-* $Revision: 1.39 $
+* $Date: 2003/02/25 23:08:07 $
+* $Revision: 1.40 $
 *
 *******************************************************************************
 -->
@@ -702,6 +702,20 @@ not be extracted again.  Building the 'resource' target will force the
 resources to once again be extracted.  Extraction will 
 overwrite any corresponding .class files already in that directory.
 </p>
+<h4>Building ICU4J Resources from ICU4C</h4>
+  <ol>
+    <li> Download and build ICU on a <b>Big Endian</b> machine </li>
+    <li> Download and build ICU4J on the same machine</li>
+    <li> Change directory to &lt;icu_root_dir&gt;\source\tools\genrb  </li>
+    <li> Launch genrbjar.pl from that directory itself with the command
+        <br>
+         genrbjar.pl &lt;icu_root_dir&gt; &lt;icu4j_root_dir&gt; &lt;ld_path_variable_name&gt; [&lt;locale&gt;+]
+        <br>
+        To create all the locale data files omit the locale argument
+    </li>
+  </ol>
+  Execution of genrbjar.pl script will create the required source (*.java) files, 
+  class file and ICULocaleData.jar in &lt;icu_root_dir&gt;\source\data\locales\java directory.
 
 <h3><a name="WhereToFindMore"></a><u>Where to Find More Information</u></h3>
 
