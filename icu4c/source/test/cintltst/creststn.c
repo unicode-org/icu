@@ -676,6 +676,18 @@ static void TestAPI() {
     ures_close(teFillin);
     ures_close(teFillin2);
     ures_close(teRes);
+
+    /* Test that ures_getLocale() returns the "real" locale ID */
+    status=U_ZERO_ERROR;
+    teRes=ures_open(NULL, "dE_At_NOWHERE_TO_BE_FOUND", &status);
+    if(U_FAILURE(status)) {
+        log_err("unable to open a locale resource bundle from \"dE_At_NOWHERE_TO_BE_FOUND\"(%s)\n", u_errorName(status));
+    } else {
+        if(0!=strcmp("de_AT", ures_getLocale(teRes, &status))) {
+            log_err("ures_getLocale(\"dE_At_NOWHERE_TO_BE_FOUND\")=%s but must be de_AT\n", ures_getLocale(teRes, &status));
+        }
+        ures_close(teRes);
+    }
 }
 
 static void TestErrorConditions(){
