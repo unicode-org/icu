@@ -170,13 +170,13 @@
  *
  * Useful constants for language.
  */
-#define ULOC_ENGLISH "en"
-#define ULOC_FRENCH "fr"
-#define ULOC_GERMAN "de"
-#define ULOC_ITALIAN "it"
-#define ULOC_JAPANESE "ja"
-#define ULOC_KOREAN "ko"
-#define ULOC_CHINESE "zh"
+#define ULOC_CHINESE            "zh"
+#define ULOC_ENGLISH            "en"
+#define ULOC_FRENCH             "fr"
+#define ULOC_GERMAN             "de"
+#define ULOC_ITALIAN            "it"
+#define ULOC_JAPANESE           "ja"
+#define ULOC_KOREAN             "ko"
 #define ULOC_SIMPLIFIED_CHINESE "zh_CN"
 #define ULOC_TRADITIONAL_CHINESE "zh_TW"
 
@@ -184,27 +184,28 @@
  *
  * Useful constants for country.
  */
-#define ULOC_FRANCE "fr_FR"
-#define ULOC_GERMANY "de_DE"
-#define ULOC_ITALY "it_IT"
-#define ULOC_JAPAN "ja_JP"
-#define ULOC_KOREA "ko_KR"
-#define ULOC_CHINA "zh_CN"
-#define ULOC_PRC "zh_CN"
-#define ULOC_TAIWAN "zh_TW"
-#define ULOC_UK "en_GB"
-#define ULOC_US "en_US"
-#define ULOC_CANADA "en_CA"
-#define ULOC_CANADA_FRENCH "fr_CA"
+#define ULOC_CANADA         "en_CA"
+#define ULOC_CANADA_FRENCH  "fr_CA"
+#define ULOC_CHINA          "zh_CN"
+#define ULOC_PRC            "zh_CN"
+#define ULOC_FRANCE         "fr_FR"
+#define ULOC_GERMANY        "de_DE"
+#define ULOC_ITALY          "it_IT"
+#define ULOC_JAPAN          "ja_JP"
+#define ULOC_KOREA          "ko_KR"
+#define ULOC_TAIWAN         "zh_TW"
+#define ULOC_UK             "en_GB"
+#define ULOC_US             "en_US"
 
 
 
 
 /**
- * Gets the system's default locale.  This pointer may become invalid if the uloc_setDefault()
- * is called.
+ * Gets ICU's default locale.  This pointer and/or the contents of the pointer may
+ * become invalid if the uloc_setDefault() is called, so copy the contents of the
+ * pointer before calling uloc_setDefault().
  *
- * @return the system default locale
+ * @return the ICU default locale
  * @system
  * @stable
  */
@@ -213,10 +214,10 @@ U_CAPI const char* U_EXPORT2
 uloc_getDefault(void);
 
 /**
- * Sets the system's default locale.  Call this once during setup or program initialization.  
- * This is a system API.
+ * Sets ICU's default locale.  Call this once during setup or program initialization.  
  *
- * @param localeID the new system default locale
+ * @param localeID the new ICU default locale. A value of NULL will try to get
+ *                 the system's default locale.
  * @param status the error information if the setting of default locale fails
  * @system
  * @stable
@@ -464,7 +465,7 @@ uloc_getISOCountries(void);
  * Deprecated 1999dec14 - Gets the directory containing the locale data files.
  *
  * @return the locale data file directory
- * @deprecated 1999dec14
+ * @deprecated 1999dec14 - Remove after 2000dec14
  */
 #define uloc_getDataDirectory u_getDataDirectory
 
@@ -472,7 +473,7 @@ uloc_getISOCountries(void);
  * Deprecated 1999dec14 - Sets the directory containing the locale data files.
  *
  * @return the new directory to fetch locale data from
- * @deprecated 1999dec14
+ * @deprecated 1999dec14 - Remove after 2000dec14
  */
 #define uloc_setDataDirectory u_setDataDirectory
 
