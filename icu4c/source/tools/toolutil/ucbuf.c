@@ -41,19 +41,19 @@ struct UCHARBUF {
 static UBool ucbuf_autodetect_nrw(FileStream* in, const char** cp,int* numRead){
     /* initial 0xa5 bytes: make sure that if we read <4 bytes we don't misdetect something */
     char start[4]={ '\xa5', '\xa5', '\xa5', '\xa5' };
-    int cap =T_FileStream_size(in);
     UBool autodetect;
     int signatureLength;
 
     *numRead=0;
     *cp="";
 
-    if(cap<=0) {
+    autodetect = TRUE;
+    *numRead=T_FileStream_read(in, start, 4); /* *numRead might be <4 */
+
+    if(*numRead<2){
         return FALSE;
     }
 
-    autodetect = TRUE;
-    *numRead=T_FileStream_read(in, start, 4); /* *numRead might be <4 */
     if(start[0] == '\xFE' && start[1] == '\xFF') {
         *cp = "UTF-16BE";
         signatureLength=2;
