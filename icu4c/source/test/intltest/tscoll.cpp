@@ -38,7 +38,7 @@
 #include "normconf.h"
 #include "thcoll.h"
 #include "srchtest.h"
-
+#include "cntabcol.h"
 #include "lcukocol.h"
 
 void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
@@ -255,7 +255,7 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         }
         break;
 
-    case 16: //all
+    case 16: 
         name = "LotusCollationTest";
 
         name = "LotusCollationKoreanTest"; 
@@ -272,6 +272,17 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
             logln("StringSearchTest---"); 
             
             StringSearchTest test;
+            callTest( test, par );
+        }
+        break;
+
+    case 18: 
+        name = "ContractionTableTest";
+
+        name = "ContractionTableTest"; 
+        if (exec) {
+            logln("ContractionTableTest---"); logln("");
+            ContractionTableTest test;
             callTest( test, par );
         }
         break;
