@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/UInfo.java,v $ 
- * $Date: 2002/03/01 18:48:01 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/03/30 03:07:01 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -438,17 +438,9 @@ public final class UInfo {
     }
 
     public UInfo() {
-        // FIX
-        // This is bad...this path must be correct relative to the
-        // user's current directory.  I have changed it so that it's
-        // relative to the root icu4j directory, so it works as long
-        // as code is run from that directory, e.g., "java -classpath
-        // classes...".  A better way to do this might be to get it
-        // from a system property that is defined on the command line,
-        // e.g., "java -Dicu4j=D:/icu4j..." - liu
-        this(
-        	System.getProperty("UnicodeData")==null ?  "src/com/ibm/icu/dev/data/unicode/UnicodeData-3.0.0.txt" : System.getProperty("UnicodeData") +  "/UnicodeData-3.0.0.txt",
-            System.getProperty("UnicodeData")==null ? "src/com/ibm/icu/dev/data/unicode/CompositionExclusions-1.txt" : System.getProperty("UnicodeData") +  "/CompositionExclusions-1.txt" 
+         this(
+        	System.getProperty("ICUDataPath")==null ?  "src/com/ibm/icu/dev/data/unicode/UnicodeData-3.0.0.txt" : System.getProperty("ICUDataPath") +  "unicode/UnicodeData-3.0.0.txt",
+            System.getProperty("ICUDataPath")==null ? "src/com/ibm/icu/dev/data/unicode/CompositionExclusions-1.txt" : System.getProperty("ICUDataPath") +  "unicode/CompositionExclusions-1.txt" 
             );
     }
 
