@@ -3,7 +3,7 @@
 ## Copyright (c) 2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin,v 1.5 2002/01/04 23:48:42 yves-oss Exp $
+## $Id: mh-cygwin,v 1.6 2002/03/19 18:13:48 yves-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -81,9 +81,6 @@ BIR_DEPS=
 
 # Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = PATH
-
-# Invoke, set library path for all ICU libraries.
-INVOKE = $(LDLIBRARYPATH_ENVVAR)=$$$(LDLIBRARYPATH_ENVVAR):$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/extra/ustdio:$(top_builddir)/tools/ctestfw:$(top_builddir)/data:$(top_builddir)/stubdata/
 
 ## End Cygwin-specific setup
 
