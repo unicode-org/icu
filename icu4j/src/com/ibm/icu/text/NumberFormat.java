@@ -229,10 +229,10 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.0
      */
     public final String format(long number) {
-	StringBuffer buf = new StringBuffer(19);
-	FieldPosition pos = new FieldPosition(0);
+        StringBuffer buf = new StringBuffer(19);
+        FieldPosition pos = new FieldPosition(0);
         format(number, buf, pos);
-	return buf.toString();
+        return buf.toString();
     }
 
     /**
@@ -603,11 +603,11 @@ public abstract class NumberFormat extends UFormat {
          * @return true if the factory is visible.
          * @draft ICU 2.6
          */
-	///CLOVER:OFF
+        ///CLOVER:OFF
         public boolean visible() {
             return true;
         }
-	///CLOVER:ON
+        ///CLOVER:ON
 
         /**
          * Returns an immutable collection of the locale names directly 
@@ -694,10 +694,10 @@ public abstract class NumberFormat extends UFormat {
                 shim = (NumberFormatShim)cls.newInstance();
             }
             catch (Exception e) {
-		///CLOVER:OFF
+                ///CLOVER:OFF
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
-		///CLOVER:ON
+                ///CLOVER:ON
             }
         }
         return shim;
@@ -775,12 +775,12 @@ public abstract class NumberFormat extends UFormat {
         if (getClass() != obj.getClass())
             return false;
         NumberFormat other = (NumberFormat) obj;
-        return (maximumIntegerDigits == other.maximumIntegerDigits
+        return maximumIntegerDigits == other.maximumIntegerDigits
             && minimumIntegerDigits == other.minimumIntegerDigits
             && maximumFractionDigits == other.maximumFractionDigits
             && minimumFractionDigits == other.minimumFractionDigits
             && groupingUsed == other.groupingUsed
-            && parseIntegerOnly == other.parseIntegerOnly);
+            && parseIntegerOnly == other.parseIntegerOnly;
     }
 
     /**
@@ -995,7 +995,7 @@ public abstract class NumberFormat extends UFormat {
 //              // TODO: shims must call setLocale() on object they create
 //              return getShim().createInstance(desiredLocale, choice);
 //          }
-         return getShim().createInstance(desiredLocale, choice);
+        return getShim().createInstance(desiredLocale, choice);
     }
 
     // [NEW]
@@ -1072,11 +1072,11 @@ public abstract class NumberFormat extends UFormat {
         //    return "#,##,##0.###";
         //}
 
-		// {dlf}
-		ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,forLocale);
-		String[] numberPatterns = rb.getStringArray("NumberPatterns");
+                // {dlf}
+                ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,forLocale);
+                String[] numberPatterns = rb.getStringArray("NumberPatterns");
 
-		/* {dlf}
+                /* {dlf}
         // Try the cache first
         String[] numberPatterns = (String[]) cachedLocaleData.get(forLocale);
         if (numberPatterns == null) {
@@ -1086,7 +1086,7 @@ public abstract class NumberFormat extends UFormat {
             // Update the cache
             cachedLocaleData.put(forLocale, numberPatterns); 
         }
-		*/
+                */
 
         /*Bug 4408066
          Add codes for the new method getIntegerInstance() [Richard/GCL]
