@@ -406,7 +406,9 @@ UnicodeString& U_EXPORT2 Collator::getDisplayName(const Locale& objectLocale,
 {
 #if !UCONFIG_NO_SERVICE
     if (hasService()) {
-        return gService->getDisplayName(objectLocale.getName(), name, displayLocale);
+        UnicodeString locNameStr;
+        LocaleUtility::initNameFromLocale(objectLocale, locNameStr);
+        return gService->getDisplayName(locNameStr, name, displayLocale);
     }
 #endif
     return objectLocale.getDisplayName(displayLocale, name);
