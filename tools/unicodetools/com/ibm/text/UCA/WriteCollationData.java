@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/05/29 02:00:59 $ 
-* $Revision: 1.11 $
+* $Date: 2002/05/29 23:18:15 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -52,80 +52,7 @@ public class WriteCollationData implements UCD_Types {
     
     static UCD ucd;
     
-    public static void main(String args[]) throws Exception {
-        
-        System.out.println("Building UCA");
-        collator = new UCA(null, "");
-        
-        System.out.println("Building UCD data");
-        ucd = UCD.make("");
-        
-        if (args.length == 0) args = new String[] {"?"}; // force the help comment
-        boolean shortPrint = false;
-        
-        for (int i = 0; i < args.length; ++i) {
-            String arg = args[i];
-            if      (arg.equalsIgnoreCase("WriteRulesWithNames")) writeRules(WITH_NAMES);
-            else if (arg.equalsIgnoreCase("GenOverlap")) GenOverlap.test(collator);
-            else if (arg.equalsIgnoreCase("validateUCA")) GenOverlap.validateUCA(collator);
-            else if (arg.equalsIgnoreCase("writeNonspacingDifference")) writeNonspacingDifference();
-            
-            else if (arg.equalsIgnoreCase("collationChart")) WriteCharts.collationChart(collator);
-            else if (arg.equalsIgnoreCase("normalizationChart")) WriteCharts.normalizationChart();
-            else if (arg.equalsIgnoreCase("caseChart")) WriteCharts.caseChart();
-            else if (arg.equalsIgnoreCase("indexChart")) WriteCharts.indexChart();
-            else if (arg.equalsIgnoreCase("special")) WriteCharts.special();
-            
-            
-            else if (arg.equalsIgnoreCase("CheckHash")) GenOverlap.checkHash(collator);
-            else if (arg.equalsIgnoreCase("generateRevision")) GenOverlap.generateRevision(collator);
-            else if (arg.equalsIgnoreCase("listCyrillic")) GenOverlap.listCyrillic(collator);
-            
-            else if (arg.equalsIgnoreCase("WriteRules")) writeRules(WITHOUT_NAMES);
-            else if (arg.equalsIgnoreCase("WriteRulesXML")) writeRules(IN_XML);
-            else if (arg.equalsIgnoreCase("checkDisjointIgnorables")) checkDisjointIgnorables();
-            else if (arg.equalsIgnoreCase("writeContractions")) writeContractions();
-            else if (arg.equalsIgnoreCase("FractionalUCA")) writeFractionalUCA("FractionalUCA");
-            else if (arg.equalsIgnoreCase("writeConformance")) writeConformance("CollationTest_NON_IGNORABLE", UCA.NON_IGNORABLE, shortPrint);
-            else if (arg.equalsIgnoreCase("writeConformanceSHIFTED")) writeConformance("CollationTest_SHIFTED", UCA.SHIFTED, shortPrint);
-            else if (arg.equalsIgnoreCase("testCompatibilityCharacters")) testCompatibilityCharacters();
-            else if (arg.equalsIgnoreCase("writeCollationValidityLog")) writeCollationValidityLog();
-            else if (arg.equalsIgnoreCase("writeCaseExceptions")) writeCaseExceptions();
-            else if (arg.equalsIgnoreCase("writeJavascriptInfo")) writeJavascriptInfo();
-            else if (arg.equalsIgnoreCase("writeCaseFolding")) writeCaseFolding();
-            else if (arg.equalsIgnoreCase("javatest")) javatest();
-            else if (arg.equalsIgnoreCase("short")) shortPrint = true;
-            else {
-                System.out.println();
-                System.out.println("UNKNOWN OPTION (" + arg + "): must be one of the following (case-insensitive)");
-                System.out.println("\tWriteRulesXML, WriteRulesWithNames, WriteRules,");
-                System.out.println("\tcheckDisjointIgnorables, writeContractions,");
-                System.out.println("\tFractionalUCA, writeConformance, writeConformanceSHIFTED, testCompatibilityCharacters,");
-                System.out.println("\twriteCollationValidityLog, writeCaseExceptions, writeJavascriptInfo, writeCaseFolding");
-                System.out.println("\tjavatest, hex (used for conformance)");
-            }
-        }        
-        System.out.println("Done");
-        
-        /*
-        String s = collator.getSortKey("\u1025\u102E", UCA.NON_IGNORABLE, true);
-        System.out.println(Utility.hex("\u0595\u0325") + ", " + collator.toString(s));
-        String t = collator.getSortKey("\u0596\u0325", UCA.NON_IGNORABLE, true);
-        System.out.println(Utility.hex("\u0596\u0325") + ", " + collator.toString(t));
-        
-        
-        Normalizer foo = new Normalizer(Normalizer.NFKD);
-        char x = '\u1EE2';
-        System.out.println(Utility.hex(x) + " " + ucd.getName(x));
-        String nx = foo.normalize(x);
-        for (int i = 0; i < nx.length(); ++i) {
-            char c = nx.charAt(i);
-            System.out.println(ucd.getCanonicalClass(c));
-        }
-        System.out.println(Utility.hex(nx, " ") + " " + ucd.getName(nx));
-        */
-        
-    }
+
     
     static public void javatest() throws Exception {
         checkJavaRules("& J , K / B & K , M", new String[] {"JA", "MA", "KA", "KC", "JC", "MC"});
@@ -1837,10 +1764,12 @@ public class WriteCollationData implements UCD_Types {
         int oldFirstPrimary = UCA.getPrimary(UCA.TERMINATOR);
         boolean wasVariable = false;
         
-        log.println("# Fractional UCA Table, Generated from UCA");
+        log.println("# Fractional UCA Table, generated from standard UCA");
         log.println("# M. Davis, " + new Date());
-        log.println("# Generated processed version, as described in design document.");
-        log.println("# Notes");
+        log.println("# VERSION: UCA=" + collator.getDataVersion() + ", UCD=" + collator.getUCDVersion());
+        log.println();
+        log.println("# Generated processed version, as described in ICU design document.");
+        log.println("# NOTES");
         log.println("#  - Bugs in UCA data are NOT FIXED, except for the following problems:");
         log.println("#    - canonical equivalents are decomposed directly (some beta UCA are wrong).");
         log.println("#    - overlapping variable ranges are fixed.");
@@ -1850,7 +1779,9 @@ public class WriteCollationData implements UCD_Types {
         log.println("#    - S: contains at least one lowercase or SMALL kana");
         log.println("#    - L: otherwise");
         log.println("#    - Different primaries are separated by a blank line.");
-        log.println();
+        log.println("# WARNING");
+        log.println("#  - Differs from previous version in that MAX value was introduced at 1F.");
+        log.println("#    All tertiary values are shifted down by 1, filling the gap at 7!");
         
         String lastChr = "";
         int lastNp = 0;
@@ -1935,9 +1866,13 @@ public class WriteCollationData implements UCD_Types {
                 // int oldPrimaryValue = UCA.getPrimary(ces[q]);
                 int np = fixPrimary(pri);
                 
-                hexBytes(np, newPrimary);
-                hexBytes(fixSecondary(sec), newSecondary);
-                hexBytes(fixTertiary(ter), newTertiary);
+                try {
+                	hexBytes(np, newPrimary);
+                	hexBytes(fixSecondary(sec), newSecondary);
+                	hexBytes(fixTertiary(ter), newTertiary);
+                } catch (Exception e) {
+                	throw new ChainException("Character is {0}", new String[] {Utility.hex(chr)}, e);
+                }
                 if (isFirst) {
                     if (!sameTopByte(np, lastNp)) {
                         summary.println("Last:  " + Utility.hex(lastNp & 0xFFFFFFFFL) + " " + ucd.getName(UTF16.charAt(lastChr,0)));
@@ -2310,10 +2245,14 @@ public class WriteCollationData implements UCD_Types {
     
     static int fixTertiary(int x) {
         if (x == 0) return x;
-        if (x == 1) throw new IllegalArgumentException("Tertiary illegal: " + x);
+        if (x == 1 || x == 7) throw new IllegalArgumentException("Tertiary illegal: " + x);
         // 2 => COMMON, 1 is unused
-        int result = 2 * (x - 2) + COMMON;
-        if (result >= 0x3E) throw new IllegalArgumentException("Tertiary too large: " + Utility.hex(x) + " => " + Utility.hex(result));
+        int y = x < 7 ? x : x - 1; // we now use 1F = MAX. Causes a problem so we shift everything to fill a gap at 7 (unused).
+        
+        int result = 2 * (y - 2) + COMMON;
+        
+        if (result >= 0x3E) throw new IllegalArgumentException("Tertiary too large: "
+        	+ Utility.hex(x) + " => " + Utility.hex(result));
  
         // get case bits. 00 is low, 01 is mixed (never happens), 10 is high
         if (isUpperTertiary[x]) result |= 0x80; 
@@ -2356,7 +2295,7 @@ public class WriteCollationData implements UCD_Types {
         
         lastVal = -1;
         for (int i = 0; i <= 0x1E; ++i) {
-            if (i == 1) continue; // never occurs
+            if (i == 1 || i == 7) continue; // never occurs
             int val = fixTertiary(i);
             val &= 0x7F; // mask off case bits
             if (val <= lastVal) throw new IllegalArgumentException(
