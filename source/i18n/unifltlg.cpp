@@ -46,11 +46,12 @@ class _UF: public UnicodeFilter {
  * A filter value of 0 (that is, a UnicodeFilter* f, where f == 0)
  * is equivalent to a NullFilter(TRUE).
  */
-uint32_t gNullFilterClassID;
+static const char gNullFilterClassID;
 class NullFilter : public _UF {
     UBool result;
 public:
-    virtual UClassID getDynamicClassID() const { return (UClassID)&gNullFilterClassID; }
+    virtual UClassID getDynamicClassID() const { return getStaticClassID(); }
+    static inline UClassID getStaticClassID() { return (UClassID)&gNullFilterClassID; }
     NullFilter(UBool r) { result = r; }
     NullFilter(const NullFilter& f) : _UF(f) { result = f.result; }
     virtual ~NullFilter() {}
@@ -58,11 +59,12 @@ public:
     virtual UnicodeFunctor* clone() const { return new NullFilter(*this); }
 };
 
-uint32_t gUnicodeNotFilterClassID;
+static const char gUnicodeNotFilterClassID;
 class UnicodeNotFilter : public _UF {
     UnicodeFilter* filt;
 public:
-    virtual UClassID getDynamicClassID() const { return (UClassID)&gUnicodeNotFilterClassID; }
+    virtual UClassID getDynamicClassID() const { return getStaticClassID(); }
+    static inline UClassID getStaticClassID() { return (UClassID)&gUnicodeNotFilterClassID; }
     UnicodeNotFilter(UnicodeFilter* adopted);
     UnicodeNotFilter(const UnicodeNotFilter&);
     virtual ~UnicodeNotFilter();
@@ -89,12 +91,13 @@ UnicodeFilter* UnicodeFilterLogic::createNot(const UnicodeFilter* f) {
     }
 }
 
-uint32_t gUnicodeAndFilterClassID;
+static const char gUnicodeAndFilterClassID;
 class UnicodeAndFilter : public _UF {
     UnicodeFilter* filt1;
     UnicodeFilter* filt2;
 public:
-    UClassID getDynamicClassID() const { return (UClassID)&gUnicodeAndFilterClassID; }
+    virtual UClassID getDynamicClassID() const { return getStaticClassID(); }
+    static inline UClassID getStaticClassID() { return (UClassID)&gUnicodeAndFilterClassID; }
     UnicodeAndFilter(UnicodeFilter* adopted1, UnicodeFilter* adopted2);
     UnicodeAndFilter(const UnicodeAndFilter&);
     virtual ~UnicodeAndFilter();
@@ -151,13 +154,14 @@ UnicodeFilter* UnicodeFilterLogic::createAdoptingAnd(UnicodeFilter* f,
     return new UnicodeAndFilter(f, g);
 }
 
-uint32_t gUnicodeOrFilterClassID;
+static const char gUnicodeOrFilterClassID;
 
 class UnicodeOrFilter : public _UF {
     UnicodeFilter* filt1;
     UnicodeFilter* filt2;
 public:
-    virtual UClassID getDynamicClassID() const { return (UClassID)&gUnicodeOrFilterClassID; }
+    virtual UClassID getDynamicClassID() const { return getStaticClassID(); }
+    static inline UClassID getStaticClassID() { return (UClassID)&gUnicodeOrFilterClassID; }
     UnicodeOrFilter(UnicodeFilter* adopted1, UnicodeFilter* adopted2);
     UnicodeOrFilter(const UnicodeOrFilter&);
     virtual ~UnicodeOrFilter();
