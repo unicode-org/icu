@@ -64,7 +64,7 @@ RBTestDataModule::RBTestDataModule(const char* name, TestLog& log, UErrorCode& s
 {
   fNumberOfTests = 0;
   fDataTestValid = TRUE;
-  fModuleBundle = getTestBundle(name);
+  fModuleBundle = getTestBundle(name, status);
   if(fDataTestValid) {
     fTestData = ures_getByKey(fModuleBundle, "TestData", NULL, &status);
     fNumberOfTests = ures_getSize(fTestData);
@@ -130,9 +130,9 @@ TestData* RBTestDataModule::createTestData(const char* name, UErrorCode &status)
 
 //Get test data from ResourceBundles
 UResourceBundle* 
-RBTestDataModule::getTestBundle(const char* bundleName) 
+RBTestDataModule::getTestBundle(const char* bundleName, UErrorCode &status) 
 {
-    UErrorCode status = U_ZERO_ERROR;
+  if(U_SUCCESS(status)) {
     UResourceBundle *testBundle = NULL;
     const char* icu_data = (char*)loadTestData(status);
     if (testBundle == NULL) {
@@ -143,6 +143,9 @@ RBTestDataModule::getTestBundle(const char* bundleName)
         }
     }
     return testBundle;
+  } else {
+    return NULL;
+  }
 }
 
 const char* 
