@@ -201,7 +201,7 @@ readNext(UNormIterator *uni, UCharIterator *iter) {
     if(delta>0) {
         /* move array contents to make room */
         moveContentsTowardStart(api, uni->chars, uni->states, delta);
-        limit=api->limit;
+        api->index=limit=api->limit;
     }
 
     /* normalize starting from the limit position */
@@ -270,7 +270,7 @@ readPrevious(UNormIterator *uni, UCharIterator *iter) {
     if(delta>0) {
         /* move array contents to make room */
         moveContentsTowardEnd(api, uni->chars, uni->states, delta);
-        start=api->start;
+        api->index=start=api->start;
     }
 
     /* normalize ending at the start position */
