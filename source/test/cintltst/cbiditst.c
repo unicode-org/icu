@@ -1,5 +1,5 @@
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-1999, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
@@ -52,6 +52,15 @@ testWriteReverse(void);
 static void
 doArabicShapingTest(void);
 
+static void
+doLamAlefSpecialVLTRArabicShapingTest(void);
+
+static void
+doTashkeelSpecialVLTRArabicShapingTest(void);
+
+static void
+doLOGICALArabicDeShapingTest(void);
+
 /* helpers ------------------------------------------------------------------ */
 
 static const char *levelString="...............................................................";
@@ -67,8 +76,11 @@ printUnicode(const UChar *s, int32_t length, const UBiDiLevel *levels);
 extern void
 addComplexTest(TestNode** root) {
     addTest(root, doBiDiTest, "complex/bidi");
-    addTest(root, doInverseBiDiTest, "complex/invbidi");
+    addTest(root, doInverseBiDiTest, "complex/bidi/inverse");
     addTest(root, doArabicShapingTest, "complex/arabic-shaping");
+    addTest(root, doLamAlefSpecialVLTRArabicShapingTest, "complex/arabic-shaping/lamalef");
+    addTest(root, doTashkeelSpecialVLTRArabicShapingTest, "complex/arabic-shaping/tashkeel");
+    addTest(root, doLOGICALArabicDeShapingTest, "complex/arabic-shaping/unshaping");
 }
 
 static void
@@ -258,7 +270,7 @@ testReordering(UBiDi *pBiDi, int testNumber) {
     ubidi_invertMap(visualMap1, logicalMap2, length);
 
     /* get them from the levels array, too */
-    memcpy(levels, ubidi_getLevels(pBiDi, &errorCode), length);
+    uprv_memcpy(levels, ubidi_getLevels(pBiDi, &errorCode), length);
 
     if(U_FAILURE(errorCode)) {
         log_err("ubidi_getLevels(tests[%d]): error %s\n", testNumber, myErrorName(errorCode));
@@ -521,7 +533,7 @@ testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength, UBiDiLevel di
     if(U_FAILURE(*pErrorCode)) {
         log_err("inverse BiDi: *** error %s\n"
                 "                 turn on verbose mode to see details\n", u_errorName(*pErrorCode));
-    } else if(srcLength==visualLength && memcmp(src, visualDest, srcLength*U_SIZEOF_UCHAR)==0) {
+    } else if(srcLength==visualLength && uprv_memcmp(src, visualDest, srcLength*U_SIZEOF_UCHAR)==0) {
         ++countRoundtrips;
         log_verbose(" + roundtripped\n");
     } else {
@@ -732,6 +744,15 @@ doArabicShapingTest() {
     errorCode=U_ZERO_ERROR;
     length=u_shapeArabic(source, LENGTHOF(source),
                          dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_RESERVED|U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_AN,
+                         &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("failure in u_shapeArabic(U_SHAPE_LETTERS_RESERVED), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
                          U_SHAPE_DIGITS_RESERVED|U_SHAPE_DIGIT_TYPE_AN,
                          &errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
@@ -755,16 +776,309 @@ doArabicShapingTest() {
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("failure in u_shapeArabic(U_SHAPE_DIGIT_TYPE_RESERVED), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
     }
+}
 
-    /* test that letter shaping sets "unsupported" */
+static void
+doLamAlefSpecialVLTRArabicShapingTest() {
+    static const UChar
+    source[]={
+/*a*/   0x20 ,0x646,0x622,0x644,0x627,0x20,
+/*b*/   0x646,0x623,0x64E,0x644,0x627,0x20,
+/*c*/   0x646,0x627,0x670,0x644,0x627,0x20,
+/*d*/   0x646,0x622,0x653,0x644,0x627,0x20,
+/*e*/   0x646,0x625,0x655,0x644,0x627,0x20,
+/*f*/   0x646,0x622,0x654,0x644,0x627,0x20,
+/*g*/   0xFEFC,0x639
+    }, shape_near[]={
+        0x20,0xfee5,0x20,0xfef5,0xfe8d,0x20,0xfee5,0x20,0xfe76,0xfef7,0xfe8d,0x20,
+        0xfee5,0x20,0x670,0xfefb,0xfe8d,0x20,0xfee5,0x20,0x653,0xfef5,0xfe8d,0x20,
+        0xfee5,0x20,0x655,0xfef9,0xfe8d,0x20,0xfee5,0x20,0x654,0xfef5,0xfe8d,0x20,
+        0xfefc,0xfecb
+    }, shape_at_end[]={
+        0x20,0xfee5,0xfef5,0xfe8d,0x20,0xfee5,0xfe76,0xfef7,0xfe8d,0x20,0xfee5,0x670,
+        0xfefb,0xfe8d,0x20,0xfee5,0x653,0xfef5,0xfe8d,0x20,0xfee5,0x655,0xfef9,0xfe8d,
+        0x20,0xfee5,0x654,0xfef5,0xfe8d,0x20,0xfefc,0xfecb,0x20,0x20,0x20,0x20,0x20,0x20
+    }, shape_at_begin[]={
+        0x20,0x20,0x20,0x20,0x20,0x20,0x20,0xfee5,0xfef5,0xfe8d,0x20,0xfee5,0xfe76,
+        0xfef7,0xfe8d,0x20,0xfee5,0x670,0xfefb,0xfe8d,0x20,0xfee5,0x653,0xfef5,0xfe8d,
+        0x20,0xfee5,0x655,0xfef9,0xfe8d,0x20,0xfee5,0x654,0xfef5,0xfe8d,0x20,0xfefc,0xfecb
+    }, shape_grow_shrink[]={
+        0x20,0xfee5,0xfef5,0xfe8d,0x20,0xfee5,0xfe76,0xfef7,0xfe8d,0x20,0xfee5,
+        0x670,0xfefb,0xfe8d,0x20,0xfee5,0x653,0xfef5,0xfe8d,0x20,0xfee5,0x655,0xfef9,
+        0xfe8d,0x20,0xfee5,0x654,0xfef5,0xfe8d,0x20,0xfefc,0xfecb
+    }, shape_excepttashkeel_near[]={
+        0x20,0xfee5,0x20,0xfef5,0xfe8d,0x20,0xfee5,0x20,0xfe76,0xfef7,0xfe8d,0x20,
+        0xfee5,0x20,0x670,0xfefb,0xfe8d,0x20,0xfee5,0x20,0x653,0xfef5,0xfe8d,0x20,
+        0xfee5,0x20,0x655,0xfef9,0xfe8d,0x20,0xfee5,0x20,0x654,0xfef5,0xfe8d,0x20,
+        0xfefc,0xfecb
+    }, shape_excepttashkeel_at_end[]={
+        0x20,0xfee5,0xfef5,0xfe8d,0x20,0xfee5,0xfe76,0xfef7,0xfe8d,0x20,0xfee5,
+        0x670,0xfefb,0xfe8d,0x20,0xfee5,0x653,0xfef5,0xfe8d,0x20,0xfee5,0x655,0xfef9,
+        0xfe8d,0x20,0xfee5,0x654,0xfef5,0xfe8d,0x20,0xfefc,0xfecb,0x20,0x20,0x20,
+        0x20,0x20,0x20
+    }, shape_excepttashkeel_at_begin[]={
+        0x20,0x20,0x20,0x20,0x20,0x20,0x20,0xfee5,0xfef5,0xfe8d,0x20,0xfee5,0xfe76,
+        0xfef7,0xfe8d,0x20,0xfee5,0x670,0xfefb,0xfe8d,0x20,0xfee5,0x653,0xfef5,0xfe8d,
+        0x20,0xfee5,0x655,0xfef9,0xfe8d,0x20,0xfee5,0x654,0xfef5,0xfe8d,0x20,0xfefc,0xfecb
+    }, shape_excepttashkeel_grow_shrink[]={
+        0x20,0xfee5,0xfef5,0xfe8d,0x20,0xfee5,0xfe76,0xfef7,0xfe8d,0x20,0xfee5,0x670,
+        0xfefb,0xfe8d,0x20,0xfee5,0x653,0xfef5,0xfe8d,0x20,0xfee5,0x655,0xfef9,0xfe8d,
+        0x20,0xfee5,0x654,0xfef5,0xfe8d,0x20,0xfefc,0xfecb
+    };
+
+    UChar dest[38];
+    UErrorCode errorCode;
+    int32_t length;
+    int i = 0;
+
     errorCode=U_ZERO_ERROR;
+
     length=u_shapeArabic(source, LENGTHOF(source),
                          dest, LENGTHOF(dest),
-                         U_SHAPE_LETTERS_SHAPE,
+                         U_SHAPE_LETTERS_SHAPE|U_SHAPE_LENGTH_FIXED_SPACES_NEAR|
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
                          &errorCode);
-    if(errorCode!=U_UNSUPPORTED_ERROR) {
-        log_err("u_shapeArabic(shape letters) does not return U_UNSUPPORTED_ERROR but %s\n", u_errorName(errorCode));
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_near) || uprv_memcmp(dest, shape_near, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(LAMALEF shape_near)\n");
     }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_SHAPE|U_SHAPE_LENGTH_FIXED_SPACES_AT_END|
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_at_end) || uprv_memcmp(dest, shape_at_end, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(LAMALEF shape_at_end)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_SHAPE|U_SHAPE_LENGTH_FIXED_SPACES_AT_BEGINNING|
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_at_begin) || uprv_memcmp(dest, shape_at_begin, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(LAMALEF shape_at_begin)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_SHAPE|U_SHAPE_LENGTH_GROW_SHRINK|
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || uprv_memcmp(dest, shape_grow_shrink, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(LAMALEF shape_grow_shrink)\n");
+    }
+
+#if 0
+    /*
+     * ### TODO
+     *
+     * The option U_SHAPE_LETTERS_EXCEPT_TASHKEEL was removed from ushape.h for
+     * ICU 1.8 because its semantics were not clear.
+     * See ushape.c.
+     */
+    /* ==================== SHAPE_EXCEPT_TASHKEEL ==================== */
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_EXCEPT_TASHKEEL|U_SHAPE_LENGTH_FIXED_SPACES_NEAR|
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_excepttashkeel_near) || uprv_memcmp(dest, shape_excepttashkeel_near, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(LAMALEF shape_excepttashkeel_near)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_EXCEPT_TASHKEEL|U_SHAPE_LENGTH_FIXED_SPACES_AT_END|
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_excepttashkeel_at_end) || uprv_memcmp(dest,shape_excepttashkeel_at_end , length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(LAMALEF shape_excepttashkeel_at_end)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_EXCEPT_TASHKEEL|U_SHAPE_LENGTH_FIXED_SPACES_AT_BEGINNING|
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_excepttashkeel_at_begin) || uprv_memcmp(dest, shape_excepttashkeel_at_begin, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(LAMALEF shape_excepttashkeel_at_begin)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_EXCEPT_TASHKEEL|U_SHAPE_LENGTH_GROW_SHRINK|
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || uprv_memcmp(dest, shape_excepttashkeel_grow_shrink, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(LAMALEF shape_excepttashkeel_grow_shrink)\n");
+    }
+#endif
+}
+
+static void
+doTashkeelSpecialVLTRArabicShapingTest() {
+    static const UChar
+    source[]={
+        0x64A,0x628,0x631,0x639,0x20,
+        0x64A,0x628,0x651,0x631,0x64E,0x639,0x20,
+        0x64C,0x64A,0x628,0x631,0x64F,0x639,0x20,
+        0x628,0x670,0x631,0x670,0x639,0x20,
+        0x628,0x653,0x631,0x653,0x639,0x20,
+        0x628,0x654,0x631,0x654,0x639,0x20,
+        0x628,0x655,0x631,0x655,0x639,0x20,
+    }, shape_near[]={
+        0xfef2,0xfe91,0xfeae,0xfecb,0x20,0xfef2,0xfe91,0xfe7c,0xfeae,0xfe77,0xfecb,
+        0x20,0xfe72,0xfef2,0xfe91,0xfeae,0xfe79,0xfecb,0x20,0xfe8f,0x670,0xfeae,0x670,
+        0xfecb,0x20,0xfe8f,0x653,0xfeae,0x653,0xfecb,0x20,0xfe8f,0x654,0xfeae,0x654,
+        0xfecb,0x20,0xfe8f,0x655,0xfeae,0x655,0xfecb,0x20
+    }, shape_excepttashkeel_near[]={
+        0xfef2,0xfe91,0xfeae,0xfecb,0x20,0xfef2,0xfe91,0xfe7c,0xfeae,0xfe76,0xfecb,0x20,
+        0xfe72,0xfef2,0xfe91,0xfeae,0xfe78,0xfecb,0x20,0xfe8f,0x670,0xfeae,0x670,0xfecb,
+        0x20,0xfe8f,0x653,0xfeae,0x653,0xfecb,0x20,0xfe8f,0x654,0xfeae,0x654,0xfecb,0x20,
+        0xfe8f,0x655,0xfeae,0x655,0xfecb,0x20
+    };
+
+    UChar dest[43];
+    UErrorCode errorCode;
+    int32_t length;
+    int i = 0;
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_SHAPE|U_SHAPE_LENGTH_FIXED_SPACES_NEAR|
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_near) || uprv_memcmp(dest, shape_near, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(TASHKEEL shape_near)\n");
+    }
+
+#if 0
+    /*
+     * ### TODO
+     *
+     * The option U_SHAPE_LETTERS_EXCEPT_TASHKEEL was removed from ushape.h for
+     * ICU 1.8 because its semantics were not clear.
+     * See ushape.c.
+     */
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_EXCEPT_TASHKEEL|U_SHAPE_LENGTH_FIXED_SPACES_NEAR|
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(shape_excepttashkeel_near) || uprv_memcmp(dest, shape_excepttashkeel_near, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(TASHKEEL shape_excepttashkeel_near)\n");
+    }
+#endif
+}
+
+static void
+doLOGICALArabicDeShapingTest() {
+    static const UChar
+    source[]={
+        0x0020,0x0020,0x0020,0xFE8D,0xFEF5,0x0020,0xFEE5,0x0020,0xFE8D,0xFEF7,0x0020,
+        0xFED7,0xFEFC,0x0020,0xFEE1,0x0020,0xFE8D,0xFEDF,0xFECC,0xFEAE,0xFE91,0xFEF4,
+        0xFE94,0x0020,0xFE8D,0xFEDF,0xFEA4,0xFEAE,0xFE93,0x0020,0x0020,0x0020,0x0020
+    }, unshape_near[]={
+        0x20,0x20,0x20,0x627,0x644,0x622,0x646,0x20,0x627,0x644,0x623,0x642,0x644,0x627,
+        0x645,0x20,0x627,0x644,0x639,0x631,0x628,0x64a,0x629,0x20,0x627,0x644,0x62d,0x631,
+        0x629,0x20,0x20,0x20,0x20
+    }, unshape_at_end[]={
+        0x20,0x20,0x20,0x627,0x644,0x622,0x20,0x646,0x20,0x627,0x644,0x623,0x20,0x642,
+        0x644,0x627,0x20,0x645,0x20,0x627,0x644,0x639,0x631,0x628,0x64a,0x629,0x20,0x627,
+        0x644,0x62d,0x631,0x629,0x20
+    }, unshape_at_begin[]={
+        0x627,0x644,0x622,0x20,0x646,0x20,0x627,0x644,0x623,0x20,0x642,0x644,0x627,0x20,
+        0x645,0x20,0x627,0x644,0x639,0x631,0x628,0x64a,0x629,0x20,0x627,0x644,0x62d,0x631,
+        0x629,0x20,0x20,0x20,0x20
+    }, unshape_grow_shrink[]={
+        0x20,0x20,0x20,0x627,0x644,0x622,0x20,0x646,0x20,0x627,0x644,0x623,0x20,0x642,
+        0x644,0x627,0x20,0x645,0x20,0x627,0x644,0x639,0x631,0x628,0x64a,0x629,0x20,0x627,
+        0x644,0x62d,0x631,0x629,0x20,0x20,0x20,0x20
+    };
+
+    UChar dest[36];
+    UErrorCode errorCode;
+    int32_t length;
+    int i = 0;
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_UNSHAPE|U_SHAPE_LENGTH_FIXED_SPACES_NEAR|
+                         U_SHAPE_TEXT_DIRECTION_LOGICAL,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(unshape_near) || uprv_memcmp(dest, unshape_near, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(unshape_near)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_UNSHAPE|U_SHAPE_LENGTH_FIXED_SPACES_AT_END|
+                         U_SHAPE_TEXT_DIRECTION_LOGICAL,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(unshape_at_end) || uprv_memcmp(dest, unshape_at_end, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(unshape_at_end)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_UNSHAPE|U_SHAPE_LENGTH_FIXED_SPACES_AT_BEGINNING|
+                         U_SHAPE_TEXT_DIRECTION_LOGICAL,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(unshape_at_begin) || uprv_memcmp(dest, unshape_at_begin, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(unshape_at_begin)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_UNSHAPE|U_SHAPE_LENGTH_GROW_SHRINK|
+                         U_SHAPE_TEXT_DIRECTION_LOGICAL,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || uprv_memcmp(dest, unshape_grow_shrink, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(unshape_grow_shrink)\n");
+    }
+
 }
 
 /* helpers ------------------------------------------------------------------ */
