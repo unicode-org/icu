@@ -90,11 +90,10 @@ protected:
      * @param offset - the index of the first character to process
      * @param count - the number of characters to process
      * @param max - the number of characters in the input context
-     * @param rightToLeft - TRUE if the text is in a right to left directional run
+     * @param rightToLeft - <code>TRUE</code> if the text is in a right to left directional run
+     * @param glyphStorage - the glyph storage object. The glyph and char index arrays will be set.
      *
      * Output parameters:
-     * @param glyphs - the glyph index array
-     * @param charIndices - the character index array
      * @param success - set to an error code if the operation fails
      *
      * @return the number of glyphs in the glyph index array
@@ -109,19 +108,15 @@ protected:
      * 'kern', 'trak', 'bsln', 'opbd' and 'just' tables.
      *
      * Input parameters:
-     * @param glyphs - the input glyph array
-     * @param glyphCount - the number of glyphs in the glyph array
-     * @param x - the starting X position
-     * @param y - the starting Y position
+     * @param glyphStorage - the object holding the glyph storage. The positions will be updated as needed.
      *
      * Output parameters:
-     * @param positions - the output X and Y positions (two entries per glyph)
      * @param success - set to an error code if the operation fails
      *
      * @internal
      */
-    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[],
-        le_int32 glyphCount, float positions[], LEErrorCode &success);
+    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse,
+                                      LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
 private:
 
