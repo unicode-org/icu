@@ -2817,12 +2817,13 @@ typedef struct {
     char *locale;
 } _acceptLangItem;
 
-static int uloc_acceptLanguageCompare(const void *a, const void *b)
+static int32_t U_CALLCONV
+uloc_acceptLanguageCompare(const void *context, const void *a, const void *b)
 {
     const _acceptLangItem *aa = (const _acceptLangItem*)a;
     const _acceptLangItem *bb = (const _acceptLangItem*)b;
 
-    int rc = 0;
+    int32_t rc = 0;
     if(bb->q < aa->q) {
         rc = -1;  /* A > B */
     } else if(bb->q > aa->q) {
@@ -2943,7 +2944,16 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
           }
         }
     }
-    qsort(j, n, sizeof(j[0]), uloc_acceptLanguageCompare);
+    uprv_sortArray(j, n, sizeof(j[0]), uloc_acceptLanguageCompare, NULL, TRUE, status);
+    if(U_FAILURE(*status)) {
+      if(j != smallBuffer) {
+#if defined(ULOC_DEBUG)
+        fprintf(stderr,"freeing j %p\n", j);
+#endif
+        uprv_free(j);
+      }
+      return -1;
+    }
     strs = uprv_malloc((size_t)(sizeof(strs[0])*n));
     for(i=0;i<n;i++) {
 #if defined(ULOC_DEBUG)
