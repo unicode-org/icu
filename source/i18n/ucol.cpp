@@ -3,6 +3,9 @@
 *   Copyright (C) 1996-1999, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
+* Modification history
+* Date        Name      Comments
+* 02/16/2001  synwee    Added internal method getPrevSpecialCE 
 */
 
 #include "ucolimp.h"
@@ -1089,6 +1092,140 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
     return order; /* return the CE */
 }
 
+/* 
+* This function tries to get a CE from UCA, which should be always around 
+* UChar is passed in in order to speed things up here is also the generation 
+* of implicit CEs                              
+*/
+uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource, 
+                         uint32_t length, UErrorCode *status) 
+{
+  uint32_t order;
+  if (ch < 0xFF) 
+    order = UCA->latinOneMapping[ch];
+  else
+    order = ucmp32_get(UCA->mapping, ch);
+  
+  if (order >= UCOL_NOT_FOUND)
+    order = getSpecialPrevCE(UCA, order, collationSource, length, status); 
+  
+  if (order == UCOL_NOT_FOUND) 
+  { 
+    /* 
+    This is where we have to resort to algorithmical generation.
+    We have to check if ch is possibly a first surrogate - then we need to 
+    take the next code unit and make a bigger CE 
+    */
+    UChar nextChar;
+    const int 
+      SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7,
+      LCount = 19, VCount = 21, TCount = 28,
+      NCount = VCount * TCount,   // 588
+      SCount = LCount * NCount,   // 11172
+      LLimit = LBase + LCount,    // 1113
+      VLimit = VBase + VCount,    // 1176
+      TLimit = TBase + TCount,    // 11C3
+      SLimit = SBase + SCount;    // D7A4
+
+    /* 
+    once we have failed to find a match for codepoint cp, and are in the 
+    implicit code.
+    */
+ 
+    unsigned int L = ch - SBase;
+    if (L < SCount) 
+    { /* since it is unsigned, catchs zero case too */
+
+      /* 
+      divide into pieces.
+      we do it in this order since some compilers can do % and / in one 
+      operation
+      */
+      int T = L % TCount; 
+      L /= TCount;
+      int V = L % VCount;
+      L /= VCount;
+
+      /* offset them */
+      L += LBase;
+      V += VBase;
+      T += TBase;
+
+      /* 
+      return the first CE, but first put the rest into the expansion buffer
+      */
+      if (!collationSource->JamoSpecial) 
+      { 
+        *(collationSource->CEpos ++) = ucmp32_get(UCA->mapping, V);
+        if (T != TBase)
+          *(collationSource->CEpos++) = ucmp32_get(UCA->mapping, T);
+        /* return first one */
+        return ucmp32_get(UCA->mapping, L); 
+      } else { 
+        /* 
+        Jamo is Special
+        do recursive processing of L, V, and T with fetchCE (but T only if not 
+        equal to TBase!!)
+        Since fetchCE returns a CE, and (potentially) stuffs items into the ce 
+        buffer,
+        this is how it is done.
+        */
+        /*
+          int firstCE = fetchCE(L, ...);
+          // set pointer, leave gap!
+          int* lastExpansion = expansionBufferEnd++; 
+          *lastExpansion = fetchCE(V,...);
+          if (T != TBase) {
+            lastExpansion = expansionBufferEnd++; // set pointer, leave gap!
+            *lastExpansion = fetchCE(T,...);
+          }
+        */
+        }
+    }
+
+    if (UTF_IS_SECOND_SURROGATE(ch)) 
+    {
+      if ((collationSource->len - collationSource->pos != length) &&
+                  (UTF_IS_FIRST_SURROGATE(nextChar = *collationSource->pos))) 
+      {
+        uint32_t cp = ((ch << 10UL) + nextChar - ((0xd800 << 10UL) + 0xdc00));
+        if (collationSource->pos != collationSource->writableBuffer)
+          collationSource->pos --;
+        else
+        {
+          collationSource->pos = collationSource->string + 
+           (length - (collationSource->len - collationSource->writableBuffer));
+          collationSource->len = collationSource->string + length;
+          collationSource->isThai = TRUE;
+        }
+        if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00))
+          return 0;  /* illegal code value, use completely ignoreable! */
+        
+        /* 
+        This is a code point minus 0x10000, that's what algorithm requires 
+        */
+        order = 0xE0010303 | (cp & 0xFFE00) << 8;
+        *(collationSource->CEpos ++) = 0x80200080 | (cp & 0x001FF) << 22;
+        collationSource->toReturn ++;
+      } 
+      else
+        return 0; /* completely ignorable */
+    } 
+    else 
+    {
+      /* otherwise */
+      if (UTF_IS_FIRST_SURROGATE(ch) || (ch & 0xFFFE) == 0xFFFE)
+        return 0; /* completely ignorable */
+      
+      /* Make up an artifical CE from code point as per UCA */
+      order = 0xD08003C3 | (ch & 0xF000) << 12 | (ch & 0x0FE0) << 11;
+      *(collationSource->CEpos ++) = 0x04000080 | (ch & 0x001F) << 27;
+      collationSource->toReturn ++;
+    }
+  }
+  return order; /* return the CE */
+}
+
 /* This function handles the special CEs like contractions, expansions, surrogates, Thai */
 /* It is called by both getNextCE and getNextUCA                                         */
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status) {
@@ -1188,6 +1325,175 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         }
       }
       return CE;
+    case CHARSET_TAG:
+      /* probably after 1.8 */
+      return UCOL_NOT_FOUND;
+    default:
+      *status = U_INTERNAL_PROGRAM_ERROR;
+      CE=0;
+      break;
+    }
+    if (CE <= UCOL_NOT_FOUND) break;
+  }
+  return CE;
+}
+
+/** 
+* This function handles the special CEs like contractions, expansions, 
+* surrogates, Thai.
+* It is called by both getPrevCE and getPrevUCA                        
+* synwee 
+*/
+uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE, 
+                          collIterate *source, uint32_t length, 
+                          UErrorCode *status) 
+{
+        uint32_t count        = 0;
+  const uint32_t *CEOffset    = NULL;
+  const UChar    *UCharOffset = NULL;
+        UChar    schar, 
+                 tchar;
+  const UChar    *strend      = NULL;
+  const UChar    *constart    = NULL;
+        uint32_t size;
+  while (TRUE)
+  {
+    switch (getCETag(CE)) 
+    {
+    case NOT_FOUND_TAG:
+      return CE;
+    case SURROGATE_TAG:
+      /* pending surrogate discussion with Markus and Mark */
+      return UCOL_NOT_FOUND;
+    case THAI_TAG:
+      if (source->isThai == TRUE) 
+      { /* if we encountered Thai prevowel & the string is not yet touched */
+        source->isThai = FALSE;
+        /*
+        sigh... to cater for getNextCE, we'll have to modify and store the 
+        whole string instead of a substring as in getSpecialCE
+        */
+        UCharOffset = source->pos;
+        strend =  source->len;
+        size = strend - source->string;
+        if (size > UCOL_WRITABLE_BUFFER_SIZE) 
+        {
+          /*
+          someone else has already allocated something
+          */
+          if (source->writableBuffer != source->stackWritableBuffer)
+            uprv_free(source->writableBuffer);
+          source->writableBuffer = 
+            (UChar *)uprv_malloc(size * sizeof(UChar));
+          source->isThai = FALSE;
+        } 
+        UChar *sourceCopy = source->string;
+        UChar *targetCopy = source->writableBuffer;
+        while (sourceCopy < strend)
+        {
+	        if (UCOL_ISTHAIPREVOWEL(*sourceCopy) &&      
+            /* This is the combination that needs to be swapped */
+		        UCOL_ISTHAIBASECONSONANT(*(sourceCopy + 1))) 
+          {
+		        *(targetCopy) = *(sourceCopy + count + 1);
+		        *(targetCopy+1) = *(sourceCopy + count);
+		        targetCopy+=2;
+		        sourceCopy+=2;
+	        } 
+          else
+		        *(targetCopy++) = *(sourceCopy++);
+        }
+        source->pos   = source->writableBuffer + 
+                                               (UCharOffset - source->string);
+        source->len   = targetCopy;
+        source->CEpos = source->toReturn = source->CEs;
+        CE = UCOL_IGNORABLE;
+      } 
+      else 
+      { 
+        /* 
+        we have already played with the string, so treat Thai as a length one 
+        expansion 
+        */
+        /* find the offset to expansion table */
+        CEOffset = (uint32_t *)coll->image + getExpansionOffset(CE); 
+        CE = *CEOffset ++;
+      }
+      break;
+    case CONTRACTION_TAG:
+      /* This should handle contractions */
+      while (TRUE)
+      {
+        /* 
+        First we position ourselves at the begining of contraction sequence 
+        */
+        constart = UCharOffset = (UChar *)coll->image + getContractOffset(CE);
+        strend = source->len;
+
+        if (strend - source->pos == length) 
+        { /* this is the start of string */
+          CE = *(coll->contractionCEs + 
+                 (UCharOffset - coll->contractionIndex)); 
+          break;
+        }
+
+        /*
+        Progressing to backwards block
+        */
+        UCharOffset += *UCharOffset; 
+
+        schar = *source->pos;
+        while (schar > (tchar = *UCharOffset)) 
+          UCharOffset ++;
+        
+        if (schar != tchar) 
+        { 
+          /* 
+          we didn't find the correct codepoint. We can use either the first or 
+          the last CE 
+          */
+          if (tchar != 0xFFFF)
+            UCharOffset = constart; 
+        } 
+        else
+        {
+          /* Move up one character */
+          if (source->pos != source->writableBuffer)
+            source->pos --;
+          else
+          {
+            source->pos = source->string + 
+                          (length - (source->len - source->writableBuffer));
+            source->len = source->string + length;
+            source->isThai = TRUE;
+          }
+        }
+        CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
+        if (!isContraction(CE))
+          break;  
+      }
+      break;
+    case EXPANSION_TAG:
+      /* 
+      This should handle expansion.
+      NOTE: we can encounter both continuations and expansions in an expansion! 
+      I have to decide where continuations are going to be dealt with 
+      */
+      /* find the offset to expansion table */
+      CEOffset = (uint32_t *)coll->image + getExpansionOffset(CE); 
+      size     = getExpansionCount(CE);
+      if (size != 0) 
+        /* 
+        if there are less than 16 elements in expansion, we don't terminate 
+        */
+        for (count = 0; count < size; count++) 
+          *(source->CEpos ++) = *CEOffset++;
+      else  
+        /* else, we do */
+        while (*CEOffset != 0) 
+          *(source->CEpos ++) = *CEOffset ++;
+      source->toReturn = source->CEpos - 1;
+      return *(source->toReturn --);
     case CHARSET_TAG:
       /* probably after 1.8 */
       return UCOL_NOT_FOUND;
