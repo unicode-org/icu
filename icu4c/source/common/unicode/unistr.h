@@ -1573,6 +1573,10 @@ public:
 
   /**
    * Determine if this string is still valid.
+   * A bogus string has a non-value that is different from an empty string.
+   * It behaves much like a null reference in Java, a NULL pointer in C,
+   * or a NULL value in SQL.
+   *
    * @return TRUE if the string is valid, FALSE otherwise
    * @see setToBogus()
    * @draft ICU 2.0 (was private before)
@@ -1758,19 +1762,33 @@ public:
    * Make this UnicodeString object invalid.
    * The string will test TRUE with isBogus().
    *
-   * This is used to indicate that an operation failed, and that
+   * This can be used to indicate that a UnicodeString operation failed, and that
    * the result string is "bogus" - which can be tested with isBogus().
    * This utility function is used throughout the UnicodeString
    * implementation, and may be used in other functions,
    * especially but not exclusively when such functions do not
    * take a UErrorCode for simplicity.
    *
-   * A "bogus" string is essentially empty, and getBuffer() const
-   * will return 0.
+   * More generally, a bogus string has a non-value that is different from an empty string.
+   * It behaves much like a null reference in Java, a NULL pointer in C,
+   * or a NULL value in SQL.
+   * A "bogus" string does not contain a string value, and getBuffer()
+   * and similar will return NULL.
    *
-   * The string object can be "revived" by assigning (operator=)
-   * another string, or by using one of the other setToXYZ functions,
-   * or simply by modifying it (which will work like with an empty string).
+   * The string object can be "revived" by assigning (operator=() or fastCopyFrom())
+   * another string, or by using one of the other setToXYZ functions.
+   *
+   * The simplest ways to turn a bogus string into an empty one
+   * is to assign an empty string, or to setTo an empty one.
+   * For example:
+   * \code
+   * if(s.isBogus()) {
+   *   s=UnicodeString();    // assign an empty string, or
+   *   s.setTo((UChar32)-1); // set to a pseudo code point that is out of range, or
+   *   static const UChar nul=0;
+   *   s.setTo(&nul, 0);     // set to an empty C Unicode string
+   * }
+   * \endcode
    *
    * @see isBogus()
    * @draft ICU 2.0 (was private in earlier releases)
@@ -2431,6 +2449,7 @@ public:
    *
    * An attempted nested call will return 0, and will not further modify the
    * state of the UnicodeString object.
+   * It also returns 0 if the string is bogus.
    *
    * The actual capacity of the string buffer may be larger than minCapacity.
    * getCapacity() returns the actual capacity.
@@ -2976,6 +2995,9 @@ private:
   // release the array if owned
   void releaseArray(void);
 
+  // turn a bogus string into an empty one
+  void unBogus();
+
   // implements assigment operator, copy constructor, and fastCopyFrom()
   UnicodeString &copyFrom(const UnicodeString &src, UBool fastCopy=FALSE);
 
@@ -3051,7 +3073,7 @@ private:
     kEmptyHashCode=1, // hash code for empty string
 
     // bit flag values for fFlags
-    kIsBogus=1,         // this string is bogus, i.e., not valid
+    kIsBogus=1,         // this string is bogus, i.e., not valid or NULL
     kUsingStackBuffer=2,// fArray==fStackBuffer
     kRefCounted=4,      // there is a refCount field before the characters in fArray
     kBufferIsReadonly=8,// do not write to this buffer
@@ -3800,29 +3822,47 @@ inline UnicodeString&
 UnicodeString::setTo(const UnicodeString& srcText, 
              int32_t srcStart, 
              int32_t srcLength)
-{ return doReplace(0, fLength, srcText, srcStart, srcLength); }
+{
+  unBogus();
+  return doReplace(0, fLength, srcText, srcStart, srcLength);
+}
 
 inline UnicodeString& 
 UnicodeString::setTo(const UnicodeString& srcText, 
              int32_t srcStart)
-{ return doReplace(0, fLength, srcText, srcStart, srcText.fLength - srcStart); }
+{
+  unBogus();
+  return doReplace(0, fLength, srcText, srcStart, srcText.fLength - srcStart);
+}
 
 inline UnicodeString& 
 UnicodeString::setTo(const UnicodeString& srcText)
-{ return doReplace(0, fLength, srcText, 0, srcText.fLength); }
+{
+  unBogus();
+  return doReplace(0, fLength, srcText, 0, srcText.fLength);
+}
 
 inline UnicodeString& 
 UnicodeString::setTo(const UChar *srcChars,
              int32_t srcLength)
-{ return doReplace(0, fLength, srcChars, 0, srcLength); }
+{
+  unBogus();
+  return doReplace(0, fLength, srcChars, 0, srcLength);
+}
 
 inline UnicodeString& 
 UnicodeString::setTo(UChar srcChar)
-{ return doReplace(0, fLength, &srcChar, 0, 1); }
+{
+  unBogus();
+  return doReplace(0, fLength, &srcChar, 0, 1);
+}
 
 inline UnicodeString& 
 UnicodeString::setTo(UChar32 srcChar)
-{ return replace(0, fLength, srcChar); }
+{
+  unBogus();
+  return replace(0, fLength, srcChar);
+}
 
 inline UnicodeString& 
 UnicodeString::operator+= (UChar ch)
@@ -3928,15 +3968,7 @@ UnicodeString::removeBetween(int32_t start,
 inline UBool 
 UnicodeString::truncate(int32_t targetLength)
 {
-  if(fFlags & kIsBogus) {
-    // truncation of a bogus string should make an empty non-bogus string
-    // any modification of a bogus string should make it valid
-    fArray = fStackBuffer;
-    fLength = 0;
-    fCapacity = US_STACKBUF_SIZE;
-    fFlags = kShortString;
-    return FALSE;
-  } else if((uint32_t)targetLength < (uint32_t)fLength) {
+  if((uint32_t)targetLength < (uint32_t)fLength) {
     fLength = targetLength;
     return TRUE;
   } else {

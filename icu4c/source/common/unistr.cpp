@@ -248,15 +248,23 @@ UnicodeString::UnicodeString(UBool isTerminated,
 }
 
 UnicodeString::UnicodeString(UChar *buff,
-                             int32_t bufLength,
+                             int32_t buffLength,
                              int32_t buffCapacity)
-  : fLength(bufLength),
+  : fLength(buffLength),
     fCapacity(buffCapacity),
     fArray(buff),
     fFlags(kWritableAlias)
 {
-  if(buff == 0 || bufLength < 0 || bufLength > buffCapacity) {
+  if(buff == 0 || buffLength < -1 || buffLength > buffCapacity) {
     setToBogus();
+  }
+  if(buffLength == -1) {
+    // fLength = u_strlen(buff); but do not look beyond buffCapacity
+    const UChar *p = buff, *limit = buff + buffCapacity;
+    while(p != limit && *p != 0) {
+      ++p;
+    }
+    fLength = (int32_t)(p - buff);
   }
 }
 
@@ -929,6 +937,10 @@ UnicodeString::doLastIndexOf(UChar32 c,
   }
 }
 
+//========================================
+// Write implementation
+//========================================
+
 UnicodeString& 
 UnicodeString::findAndReplace(int32_t start,
                   int32_t length,
@@ -968,10 +980,6 @@ UnicodeString::findAndReplace(int32_t start,
 }
 
 
-//========================================
-// Write implementation
-//========================================
-
 void
 UnicodeString::setToBogus()
 {
@@ -980,6 +988,17 @@ UnicodeString::setToBogus()
   fArray = 0;
   fCapacity = fLength = 0;
   fFlags = kIsBogus;
+}
+
+// turn a bogus string into an empty one
+void
+UnicodeString::unBogus() {
+  if(fFlags & kIsBogus) {
+    fArray = fStackBuffer;
+    fLength = 0;
+    fCapacity = US_STACKBUF_SIZE;
+    fFlags = kShortString;
+  }
 }
 
 // setTo() analogous to the readonly-aliasing constructor with the same signature
@@ -1234,12 +1253,8 @@ UnicodeString::doReplace(int32_t start,
              int32_t srcStart,
              int32_t srcLength)
 {
-  // if we're bogus, set us to empty first
   if(isBogus()) {
-    fArray = fStackBuffer;
-    fLength = 0;
-    fCapacity = US_STACKBUF_SIZE;
-    fFlags = kShortString;
+    return *this;
   }
 
   if(srcChars == 0) {
@@ -1792,16 +1807,9 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
 
   // while a getBuffer(minCapacity) is "open",
   // prevent any modifications of the string by returning FALSE here
-  if(fFlags & kOpenGetBuffer) {
+  // if the string is bogus, then only an assignment or similar can revive it
+  if((fFlags&(kOpenGetBuffer|kIsBogus))!=0) {
     return FALSE;
-  }
-
-  // if we're bogus, set us to empty first
-  if(fFlags & kIsBogus) {
-    fArray = fStackBuffer;
-    fLength = 0;
-    fCapacity = US_STACKBUF_SIZE;
-    fFlags = kShortString;
   }
 
   /*
