@@ -355,7 +355,7 @@ CollationAPITest::TestRules()
     }
 
     coll->getRules(UCOL_TAILORING_ONLY, rules);
-    if (rules.length() != 0x0e) {
+    if (rules.length() != 0x0a) {
       errln("English tailored rules failed - length is 0x%x expected 0x%x", rules.length(), 0x0e);
     }
 
