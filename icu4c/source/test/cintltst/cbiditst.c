@@ -732,24 +732,6 @@ doArabicShapingTest() {
     errorCode=U_ZERO_ERROR;
     length=u_shapeArabic(source, LENGTHOF(source),
                          dest, LENGTHOF(dest),
-                         U_SHAPE_LENGTH_RESERVED|U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_AN,
-                         &errorCode);
-    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("failure in u_shapeArabic(U_SHAPE_LENGTH_RESERVED), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
-    }
-
-    errorCode=U_ZERO_ERROR;
-    length=u_shapeArabic(source, LENGTHOF(source),
-                         dest, LENGTHOF(dest),
-                         U_SHAPE_LETTERS_RESERVED|U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_AN,
-                         &errorCode);
-    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("failure in u_shapeArabic(U_SHAPE_LETTERS_RESERVED), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
-    }
-
-    errorCode=U_ZERO_ERROR;
-    length=u_shapeArabic(source, LENGTHOF(source),
-                         dest, LENGTHOF(dest),
                          U_SHAPE_DIGITS_RESERVED|U_SHAPE_DIGIT_TYPE_AN,
                          &errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {

@@ -105,8 +105,6 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
     if( source==NULL || sourceLength<-1 ||
         (dest==NULL && destSize!=0) || destSize<0 ||
         options>=U_SHAPE_DIGIT_TYPE_RESERVED ||
-        (options&U_SHAPE_LENGTH_MASK)==U_SHAPE_LENGTH_RESERVED ||
-        (options&U_SHAPE_LETTERS_MASK)==U_SHAPE_LETTERS_RESERVED ||
         (options&U_SHAPE_DIGITS_MASK)>=U_SHAPE_DIGITS_RESERVED
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
