@@ -421,6 +421,10 @@ void IntlTest::setICU_DATA() {
             u_setDataDirectory(p);     /*  p is "ICU_DATA=wherever\icu\source\data"    */
             return;
         }
+        else {
+            /* __FILE__ on MSVC7 does not contain the directory */
+            directory = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "out" U_FILE_SEP_STRING;
+        }
     }
 #endif
 
