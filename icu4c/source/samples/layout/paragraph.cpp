@@ -430,11 +430,9 @@ void Paragraph::draw(void *surface, int32_t firstLine, int32_t lastLine)
         dirCount = ubidi_countRuns(lBidi, &bidiStatus);
 
         for (dirRun = 0; dirRun < dirCount; dirRun += 1) {
-            UTextOffset runStart = 0, runLength = 0;
-            UBiDiDirection runDirection = ubidi_getVisualRun(lBidi, dirRun, &runStart, &runLength);
-
-            runStart += firstChar;
-
+            UTextOffset relStart = 0, runLength = 0;
+            UBiDiDirection runDirection = ubidi_getVisualRun(lBidi, dirRun, &relStart, &runLength);
+            int32_t runStart  = relStart + firstChar;
             int32_t runEnd    = runStart + runLength - 1;
             int32_t firstRun  = getCharRun(runStart, prevRun, 1);
             int32_t lastRun   = getCharRun(runEnd,   firstRun, 1);
