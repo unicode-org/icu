@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix-va,v 1.10 2001/04/23 23:12:28 rviswanadha Exp $
+## $Id: mh-aix-va,v 1.11 2001/09/28 00:31:53 aheninger-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
@@ -54,7 +54,7 @@ INSTALL-L = $(INSTALL_DATA)
 ## Link commands to link to ICU libs
 LIBICUUC= 	-L$(top_builddir)/common -l$(ICUPREFIX)uc
 LIBICUI18N= 	-L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
-LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
+LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw
 LIBICUTOOLUTIL=-L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
 LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 

@@ -36,9 +36,11 @@ endif
 
 DEFS = @DEFS@
 
+DATADIR := $(shell pwd)/../../../data
+
 # we define ICU_UNICODE_VERSION so we can test it
 CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil \
- -DICU_UNICODE_VERSION=\"$(UNICODE_VERSION)\" -DICU_VERSION=\"@VERSION@\" -DICUDATA_NAME=\"$(ICUDATA_NAME)\" -DU_SRCDATADIR=\"$(top_srcdir)/../data/\"
+ -DICU_UNICODE_VERSION=\"$(UNICODE_VERSION)\" -DICU_VERSION=\"@VERSION@\" -DICUDATA_NAME=\"$(ICUDATA_NAME)\" -DU_SRCDATADIR=\"$(DATADIR)/\"
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 ENABLE_RPATH = @ENABLE_RPATH@
