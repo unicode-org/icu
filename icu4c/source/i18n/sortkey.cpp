@@ -39,14 +39,14 @@ const int32_t CollationKey::kInvalidHashCode = 0;
 const int32_t CollationKey::kEmptyHashCode = 1;
 
 CollationKey::CollationKey()
-    : fCount(0), fCapacity(0), fBogus(FALSE),
+    : fBogus(FALSE), fCount(0), fCapacity(0),
       fHashCode(kEmptyHashCode), fBytes(NULL)
 {
 }
 
 // Create a collation key from a bit array.
 CollationKey::CollationKey(const uint8_t* newValues, int32_t count)
-    : fCount(count), fCapacity(count), fBogus(FALSE),
+    : fBogus(FALSE), fCount(count), fCapacity(count),
       fHashCode(kInvalidHashCode)
 {
     fBytes = new uint8_t[count];

@@ -14,8 +14,8 @@
 UBool UVector::outOfMemory = FALSE;
 
 UVector::UVector(int32_t initialCapacity) :
-    capacity(0),
     count(0),
+    capacity(0),
     elements(0),
     deleter(0),
     comparer(0) {
@@ -24,8 +24,8 @@ UVector::UVector(int32_t initialCapacity) :
 }
 
 UVector::UVector(Deleter d, Comparer c, int32_t initialCapacity) :
-    capacity(0),
     count(0),
+    capacity(0),
     elements(0),
     deleter(d),
     comparer(c) {

@@ -42,10 +42,10 @@ NumberFormat* MessageFormat::fgNumberFormat = 0;
 
 MessageFormat::MessageFormat(const UnicodeString& pattern,
                              UErrorCode& success)
-: fOffsets(NULL),
-  fArgumentNumbers(NULL),
-  fLocale(Locale::getDefault()),  // Uses the default locale
-  fCount(0)
+: fLocale(Locale::getDefault()),  // Uses the default locale
+  fOffsets(NULL),
+  fCount(0),
+  fArgumentNumbers(NULL)
 {
     fCount = kMaxFormat;
     fOffsets = new int32_t[fCount];
@@ -61,10 +61,10 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
 MessageFormat::MessageFormat(const UnicodeString& pattern,
                              const Locale& newLocale,
                              UErrorCode& success)
-: fOffsets(NULL),
-  fArgumentNumbers(NULL),
-  fLocale(newLocale),  // Uses the default locale
-  fCount(0)
+: fLocale(newLocale),  // Uses the default locale
+  fOffsets(NULL),
+  fCount(0),
+  fArgumentNumbers(NULL)
 {
     fCount = kMaxFormat;
     fOffsets = new int32_t[fCount];
