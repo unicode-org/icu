@@ -1210,8 +1210,9 @@ static int32_t
 usetContainsOne(const USet* set) {
     if (uset_size(set) == 1) {
         UChar32 start, end;
-        uset_getRange(set, 0, &start, &end);
-        return start;
+        UErrorCode ec = U_ZERO_ERROR;
+        int32_t len = uset_getItem(set, 0, &start, &end, NULL, 0, &ec);
+        if (len == 0) return start;
     }
     return -1;
 }
