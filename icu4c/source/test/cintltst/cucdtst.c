@@ -89,6 +89,11 @@ const char dirStrings[][5] = {
     "BN"
 };
 
+static void
+TestCaseFolding();
+
+static void
+TestCaseCompare();
 
 void addUnicodeTest(TestNode** root)
 {
@@ -105,6 +110,8 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestMirroring, "tsutil/cucdtst/TestMirroring");
     addTest(root, &TestUnescape, "tsutil/cucdtst/TestUnescape");
     addTest(root, &TestCaseMapping, "tsutil/cucdtst/TestCaseMapping");
+    addTest(root, &TestCaseFolding, "tsutil/cucdtst/TestCaseFolding");
+    addTest(root, &TestCaseCompare, "tsutil/cucdtst/TestCaseCompare");
 }
 
 /*==================================================== */
@@ -1448,5 +1455,121 @@ TestCaseMapping() {
             length,
             u_errorName(errorCode),
             buffer[0]);
+    }
+}
+
+/* test case folding and case-insensitive string compare -------------------- */
+
+static void
+TestCaseFolding() {
+    static const UChar32
+    simple[]={
+        /* input, default, exclude special i */
+        0x61,   0x61,  0x61,
+        0x49,   0x69,  0x69,
+        0x131,  0x69,  0x131,
+        0xdf,   0xdf,  0xdf,
+        0xfb03, 0xfb03, 0xfb03,
+        0x5ffff,0x5ffff,0x5ffff
+    };
+    static const UChar
+
+    mixed[]=                { 0x61, 0x42, 0x131, 0x3a3, 0xdf,       0xfb03,           0xd93f, 0xdfff },
+    foldedDefault[]=        { 0x61, 0x62, 0x69,  0x3c2, 0x73, 0x73, 0x66, 0x66, 0x69, 0xd93f, 0xdfff },
+    foldedExcludeSpecialI[]={ 0x61, 0x62, 0x131, 0x3c2, 0x73, 0x73, 0x66, 0x66, 0x69, 0xd93f, 0xdfff };
+
+    const UChar32 *p;
+    int32_t i;
+
+    UChar buffer[32];
+    int32_t length;
+    UErrorCode errorCode;
+
+    /* ### TODO after ICU 1.8: if u_getUnicodeVersion()>=3.1.0.0 then test exclude-special-i cases as well */
+
+    /* test simple case folding */
+    p=simple;
+    for(i=0; i<sizeof(simple)/12; p+=3, ++i) {
+        if(u_foldCase(p[0], U_FOLD_CASE_DEFAULT)!=p[1]) {
+            log_err("error: u_foldCase(0x%04lx, default)=0x%04lx instead of 0x%04lx\n",
+                    p[0], u_foldCase(p[0], U_FOLD_CASE_DEFAULT), p[1]);
+            return;
+        }
+    }
+
+    /* test full string case folding with default option and separate buffers */
+    buffer[0]=0xabcd;
+    errorCode=U_ZERO_ERROR;
+    length=u_strFoldCase(buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                        mixed, sizeof(mixed)/U_SIZEOF_UCHAR,
+                        U_FOLD_CASE_DEFAULT,
+                        &errorCode);
+    if( U_FAILURE(errorCode) ||
+        length!=(sizeof(foldedDefault)/U_SIZEOF_UCHAR) ||
+        uprv_memcmp(foldedDefault, buffer, length*U_SIZEOF_UCHAR)!=0 ||
+        buffer[length]!=0
+    ) {
+        log_err("error in u_strFoldCase(default)=%ld error=%s string matches: %s\n",
+            length,
+            u_errorName(errorCode),
+            uprv_memcmp(foldedDefault, buffer, length*U_SIZEOF_UCHAR)==0 && buffer[length]==0 ? "yes" : "no");
+    }
+
+    /* ### TODO for ICU 1.8: add the following tests similar to TestCaseMapping  */
+
+    /* test full string case folding with default option and in the same buffer */
+
+    /* test preflighting */
+
+    /* test error handling */
+}
+
+static void
+TestCaseCompare() {
+    static const UChar
+
+    mixed[]=               { 0x61, 0x42, 0x131, 0x3a3, 0xdf,       0xfb03,           0xd93f, 0xdfff, 0 },
+    otherDefault[]=        { 0x41, 0x62, 0x69,  0x3c3, 0x73, 0x53, 0x46, 0x66, 0x49, 0xd93f, 0xdfff, 0 },
+    otherExcludeSpecialI[]={ 0x41, 0x62, 0x131, 0x3c3, 0x53, 0x73, 0x66, 0x46, 0x69, 0xd93f, 0xdfff, 0 },
+    different[]=           { 0x41, 0x62, 0x69,  0x3c3, 0x73, 0x53, 0x46, 0x66, 0x49, 0xd93f, 0xdffd, 0 };
+
+    int32_t result;
+
+    /* ### TODO after ICU 1.8: if u_getUnicodeVersion()>=3.1.0.0 then test exclude-special-i cases as well */
+
+    /* test u_strcasecmp() */
+    result=u_strcasecmp(mixed, otherDefault, U_FOLD_CASE_DEFAULT);
+    if(result!=0) {
+        log_err("error: u_strcasecmp(mixed, other, default)=%ld instead of 0\n", result);
+    }
+
+    /* test u_strcasecmp() */
+    result=u_strcasecmp(mixed, different, U_FOLD_CASE_DEFAULT);
+    if(result<=0) {
+        log_err("error: u_strcasecmp(mixed, different, default)=%ld instead of positive\n", result);
+    }
+
+    /* test u_strncasecmp() - stop before the sharp s (U+00df) */
+    result=u_strncasecmp(mixed, different, 4, U_FOLD_CASE_DEFAULT);
+    if(result!=0) {
+        log_err("error: u_strncasecmp(mixed, different, 4, default)=%ld instead of 0\n", result);
+    }
+
+    /* test u_strncasecmp() - stop in the middle of the sharp s (U+00df) */
+    result=u_strncasecmp(mixed, different, 5, U_FOLD_CASE_DEFAULT);
+    if(result<=0) {
+        log_err("error: u_strncasecmp(mixed, different, 5, default)=%ld instead of positive\n", result);
+    }
+
+    /* test u_memcasecmp() - stop before the sharp s (U+00df) */
+    result=u_memcasecmp(mixed, different, 4, U_FOLD_CASE_DEFAULT);
+    if(result!=0) {
+        log_err("error: u_memcasecmp(mixed, different, 4, default)=%ld instead of 0\n", result);
+    }
+
+    /* test u_memcasecmp() - stop in the middle of the sharp s (U+00df) */
+    result=u_memcasecmp(mixed, different, 5, U_FOLD_CASE_DEFAULT);
+    if(result<=0) {
+        log_err("error: u_memcasecmp(mixed, different, 5, default)=%ld instead of positive\n", result);
     }
 }
