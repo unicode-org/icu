@@ -148,6 +148,8 @@ public:
      * whose internal tables live in a memory-mapped file.  "image" is an 
      * ICU UDataMemory handle for the pre-compiled break iterator tables.
      * @param image handle to the memory image for the break iterator data.
+     *        Ownership of the UDataMemory handle passes to the Break Iterator,
+     *        which will be responsible for closing it when it is no longer needed.
      * @param status Information on any errors encountered.
      * @see udata_open
      * @see #getBinaryRules
