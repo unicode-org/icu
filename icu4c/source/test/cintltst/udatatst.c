@@ -29,15 +29,18 @@
 #include <stdio.h>
 
 void TestUDataOpen();
-void TestUDataOpenChoice();
+void TestUDataOpenChoiceDemo1();
+void TestUDataOpenChoiceDemo2(); 
 void TestUDataGetInfo();
 void TestUDataGetMemory();
+
 
 void
 addUDataTest(TestNode** root)
 {
   addTest(root, &TestUDataOpen,       "udatatst/TestUDataOpen"      );
-  addTest(root, &TestUDataOpenChoice, "udatatst/TestUDataOpenChoice");
+  addTest(root, &TestUDataOpenChoiceDemo1, "udatatst/TestUDataOpenChoiceDemo1");
+  addTest(root, &TestUDataOpenChoiceDemo2, "udatatst/TestUDataOpenChoiceDemo2"); 
   addTest(root, &TestUDataGetInfo,    "udatatst/TestUDataGetInfo"   );
   addTest(root, &TestUDataGetMemory,  "udatatst/TestUDataGetMemory" );
 
@@ -57,8 +60,9 @@ void TestUDataOpen(){
    const char* name = "test";
    const char* type="dat";
    
-   char* temp=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata")) );
-   const char* path=strcat(strcpy(temp, u_getDataDirectory()), "icudata");
+   char* path=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata") +1 ) );
+   strcat(strcpy(path, u_getDataDirectory()), "icudata");
+
     
    log_verbose("Testing udata_open()\n");
    result=udata_open(NULL, type, name, &status);
@@ -97,9 +101,11 @@ void TestUDataOpen(){
 	} else {
 		log_verbose("calling udat_open with non-existing file returned null as expected\n");
 	}
+
+	free(path);
 }
 static bool_t
-isAcceptable(void *context,
+isAcceptable1(void *context,
              const char *type, const char *name,
              UDataInfo *pInfo) {
 	
@@ -112,10 +118,10 @@ isAcceptable(void *context,
         pInfo->dataFormat[2]==0x41 &&
         pInfo->dataFormat[3]==0x6c &&
         pInfo->formatVersion[0]==2 ){
-		log_verbose("The data from \"%s.%s\" IS acceptable using the verifing function isAcceptable()\n", name, type);
+		log_verbose("The data from \"%s.%s\" IS acceptable using the verifing function isAcceptable1()\n", name, type);
 		return TRUE;
 	} else {
-		log_verbose("The data from \"%s.%s\" IS NOT acceptable using the verifing function isAcceptable():-\n"
+		log_verbose("The data from \"%s.%s\" IS NOT acceptable using the verifing function isAcceptable1():-\n"
 			"size              = %d\n"
 			"isBigEndian       = %d\n"
 			"charsetFamily     = %d\n"
@@ -178,7 +184,7 @@ isAcceptable3(void *context,
 			
 }
 
-void TestUDataOpenChoice() {
+void TestUDataOpenChoiceDemo1() {
    
     UDataMemory *result;
     UErrorCode status=U_ZERO_ERROR;	
@@ -190,7 +196,7 @@ void TestUDataOpenChoice() {
 	};
     char* type="dat";
    
-    result=udata_openChoice(NULL, type, name[0], isAcceptable, NULL, &status);
+    result=udata_openChoice(NULL, type, name[0], isAcceptable1, NULL, &status);
     if(U_FAILURE(status)){
         log_err("FAIL: udata_openChoice() failed name=%s, type=%s, \n errorcode=%s\n", name[0], type, myErrorName(status));
 	} else {
@@ -198,7 +204,7 @@ void TestUDataOpenChoice() {
 		udata_close(result);
 	}
      
-	result=udata_openChoice(NULL, type, name[1], isAcceptable, NULL, &status);
+	result=udata_openChoice(NULL, type, name[1], isAcceptable1, NULL, &status);
 	if(U_FAILURE(status)){
 		status=U_ZERO_ERROR;
 		result=udata_openChoice(NULL, type, name[1], isAcceptable2, NULL, &status);
@@ -211,7 +217,7 @@ void TestUDataOpenChoice() {
 		udata_close(result);
 	}
 
-    result=udata_openChoice(NULL, type, name[2], isAcceptable, NULL, &status);
+    result=udata_openChoice(NULL, type, name[2], isAcceptable1, NULL, &status);
 	if(U_FAILURE(status)){
 		status=U_ZERO_ERROR;
 		result=udata_openChoice(NULL, type, name[2], isAcceptable3, NULL, &status);
@@ -225,6 +231,81 @@ void TestUDataOpenChoice() {
 	}
 
 }
+static bool_t
+isAcceptable(void *context, 
+			 const char *type, const char *name,
+			 UDataInfo *pInfo){
+	if(	pInfo->size>=20 &&
+        pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
+        pInfo->charsetFamily==U_CHARSET_FAMILY &&
+        pInfo->dataFormat[0]==0x54 &&   /* dataFormat="test" */
+        pInfo->dataFormat[1]==0x65 &&
+        pInfo->dataFormat[2]==0x73 &&
+        pInfo->dataFormat[3]==0x74 &&
+        pInfo->formatVersion[0]==1 &&
+		pInfo->dataVersion[0]==1   &&
+		*((int*)context) == 2 ) {
+   		log_verbose("The data from\"%s.%s\" IS acceptable using the verifing function isAcceptable()\n", name, type);
+
+		return TRUE;
+	} else {
+		log_verbose("The data from \"%s.%s\" IS NOT acceptable using the verifing function isAcceptable()\n", name, type);
+		return FALSE;
+	}
+}
+
+void TestUDataOpenChoiceDemo2() {
+	UDataMemory *result;
+    UErrorCode status=U_ZERO_ERROR;	
+	int i;
+	int p=2;
+ 
+    const char* name="test";
+    char* type="dat";
+
+	const char* base[]={
+		"base_dat",
+		"base_test_dat",
+		 NULL,
+	};
+	
+	char* path=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base[0]") + 1) );
+    strcpy(path, u_getDataDirectory());
+	strcat(path, "base[0]");	
+	
+	result=udata_openChoice(path, type, name, isAcceptable, &p, &status);
+	if(U_FAILURE(status)){
+		log_err("failed to load data");
+	}
+	if(U_SUCCESS(status) ) {
+		udata_close(result);
+	}
+	strcpy(path, "");
+	
+	p=0;
+	for(i=0;i<sizeof(base)/sizeof(base[0]); i++){
+		path=realloc(path, sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base[i]") +1 ) );
+		strcat(strcpy(path, u_getDataDirectory()), "base[i]");
+		result=udata_openChoice(path, type, name, isAcceptable, &p, &status);
+		if(U_FAILURE(status) && p<2 && status==U_INVALID_FORMAT_ERROR){
+			log_verbose("Loads the data but rejects it as expected %s", myErrorName(status) );
+			status=U_ZERO_ERROR;
+			p++;
+		}
+		if(U_SUCCESS(status) && p == 2) {
+			log_verbose("Loads the data and accepts it for p==2 as expected");
+			udata_close(result);
+		}
+		strcpy(path, "");
+		    
+	}
+
+   free(path);  
+
+}
+    
+
+
 void TestUDataGetInfo() {
 
 	UDataMemory *result;
@@ -247,8 +328,8 @@ void TestUDataGetInfo() {
 	const char* name2="test";
     const char* type="dat";
     
-	char* temp=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata")) );
-    const char* path=strcat(strcpy(temp, u_getDataDirectory()), "icudata");
+	char* path=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata") +1 ) );
+	strcat(strcpy(path, u_getDataDirectory()), "icudata");
 
 
     log_verbose("Testing udata_getInfo() for cnvalias.dat\n");
@@ -297,6 +378,7 @@ void TestUDataGetInfo() {
 				log_err("FAIL: udata_getInfo() filled in the wrong values\n");
 			}
 	udata_close(result);
+	free(path);
 	
 }
 
@@ -313,7 +395,7 @@ void TestUDataGetMemory() {
 	const char* name2="test";
 
     log_verbose("Testing udata_getMemory for \"cnvalias.dat()\"\n");
-    result=udata_openChoice(NULL, type, name, isAcceptable, NULL, &status);
+    result=udata_openChoice(NULL, type, name, isAcceptable1, NULL, &status);
     if(U_FAILURE(status)){
 		 log_err("FAIL: udata_openChoice() failed for name=%s, type=%s, \n errorcode=%s\n", name, type, myErrorName(status));
          return;
