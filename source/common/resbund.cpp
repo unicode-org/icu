@@ -599,7 +599,7 @@ ResourceBundle::getDataForTag(const char *tag,
     
     if(fData[i] != 0) {
       const ResourceBundleData* s = 
-	(const ResourceBundleData*)uhash_get(fData[i], 
+	(const ResourceBundleData*)uhash_OLD_get(fData[i], 
 					     UnicodeString(tag, "").hashCode() & 0x7FFFFFFF);
       if(s != 0) {
 	err = fDataStatus[i];  /* restore the error from the original lookup. */
@@ -849,10 +849,10 @@ getTaggedArrayUCharsImplementation( const ResourceBundle*   bundle,
   
   numItems = 0;
   int32_t pos = -1;
-  while(value = uhash_nextElement(forEnumerationValues, &pos)) {
+  while(value = uhash_OLD_nextElement(forEnumerationValues, &pos)) {
     if(numItems < maxItems) {
       itemTags[numItems] = 
-	((const UnicodeString*)uhash_get(((TaggedList*)data)->fHashtableKeys,
+	((const UnicodeString*)uhash_OLD_get(((TaggedList*)data)->fHashtableKeys,
 					 numItems+1))->getUChars();
       items[numItems] = ((const UnicodeString*)value)->getUChars();
     }
@@ -879,7 +879,7 @@ ResourceBundle::getTaggedArray( const char             *resourceTag,
   
   // go through the resource once and count how many items there are
   
-  numItems = uhash_size(((TaggedList*)data)->fHashtableValues);
+  numItems = uhash_count(((TaggedList*)data)->fHashtableValues);
   
   // now create the string arrays and go through the hash table again, this
   // time copying the keys and values into the string arrays
@@ -891,9 +891,9 @@ ResourceBundle::getTaggedArray( const char             *resourceTag,
     
   numItems = 0;
   int32_t pos = -1;
-  while(value = uhash_nextElement(forEnumerationValues, &pos)) {
+  while(value = uhash_OLD_nextElement(forEnumerationValues, &pos)) {
     itemTags[numItems] = 
-      *((const UnicodeString*)uhash_get(((TaggedList*)data)->fHashtableKeys, 
+      *((const UnicodeString*)uhash_OLD_get(((TaggedList*)data)->fHashtableKeys, 
 					numItems+1));
     items[numItems] = *((const UnicodeString*)value);
     numItems++;
@@ -961,7 +961,7 @@ ResourceBundle::listInstalledLocales(const UnicodeString& path,
   if(h != 0) {
     UnicodeString ukIndexTag = UnicodeString(kIndexTag,"");
     ResourceBundleData *data = 
-      (ResourceBundleData*) uhash_get(h, ukIndexTag.hashCode() & 0x7FFFFFFF);
+      (ResourceBundleData*) uhash_OLD_get(h, ukIndexTag.hashCode() & 0x7FFFFFFF);
     if(data != 0 
        && data->getDynamicClassID() == StringList::getStaticClassID()) {
       numInstalledLocales = ((StringList*)data)->fCount;
@@ -1025,7 +1025,7 @@ T_ResourceBundle_countArrayItemsImplementation(const ResourceBundle* resourceBun
     numItems = ((StringList*)data)->fCount;
   }
   else if(rbkeyClassID == TaggedList::getStaticClassID()) {
-    numItems =  uhash_size(((TaggedList*)data)->fHashtableValues);
+    numItems =  uhash_count(((TaggedList*)data)->fHashtableValues);
   }
   else if(rbkeyClassID == String2dList::getStaticClassID()) {
     numItems = ((String2dList*)data)->fRowCount; 
@@ -1061,7 +1061,7 @@ ResourceBundle::getFromCache(const PathInfo& path,
     Mutex lock;
     
     return (const UHashtable*)
-      uhash_get(fgCache->hashTable, keyname.hashCode() & 0x7FFFFFFF);
+      uhash_OLD_get(fgCache->hashTable, keyname.hashCode() & 0x7FFFFFFF);
 }
 
 /**
@@ -1127,8 +1127,8 @@ ResourceBundle::addToCache(const UnicodeString& localeName,
   UnicodeString keyName(c->makeHashkey(localeName));
   UErrorCode err = U_ZERO_ERROR;
   Mutex lock;
-  if(uhash_get(fgCache->hashTable, keyName.hashCode() & 0x7FFFFFFF) == 0) {
-    uhash_putKey(fgCache->hashTable, keyName.hashCode() & 0x7FFFFFFF, 
+  if(uhash_OLD_get(fgCache->hashTable, keyName.hashCode() & 0x7FFFFFFF) == 0) {
+    uhash_OLD_putKey(fgCache->hashTable, keyName.hashCode() & 0x7FFFFFFF, 
 		 hashtable, &err);
   }
 }

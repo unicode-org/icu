@@ -753,7 +753,7 @@ Locale::getLanguagesForCountry(const UnicodeString& country, int32_t& count)
   // lookups.
   if(ctry2LangMapping == 0) {
     UErrorCode err = U_ZERO_ERROR;
-    UHashtable *temp = uhash_open((UHashFunction)uhash_hashUString, &err);
+    UHashtable *temp = uhash_open(uhash_hashUChars, uhash_compareUChars, &err);
     if (U_FAILURE(err)) 
       {
 	count = 0;
@@ -776,7 +776,7 @@ Locale::getLanguagesForCountry(const UnicodeString& country, int32_t& count)
       int32_t valLen = sizeof(values) / sizeof(values[0]);
       for (int32_t k = 0; k < valLen; ++k)
     compressedValues.extractBetween(k * 2, (k * 2) + 2, values[k]);
-      uhash_putKey(temp, uhash_hashUString((void*)key.getUChars()),values,&err);
+      uhash_put(temp, (void*)key.getUChars(), values, &err);
       i = j;
     }
     
@@ -787,7 +787,8 @@ Locale::getLanguagesForCountry(const UnicodeString& country, int32_t& count)
       ctry2LangMapping = temp;
   }
   
-  const UnicodeString *result = (const UnicodeString*)uhash_get(ctry2LangMapping,uhash_hashUString(country.getUChars()));
+  const UnicodeString *result = (const UnicodeString*)
+      uhash_get(ctry2LangMapping, country.getUChars());
   if(result == 0)
     count = 0;
   else

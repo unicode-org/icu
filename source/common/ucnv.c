@@ -137,6 +137,7 @@ int32_t  ucnv_flushCache ()
   UConverterSharedData *mySharedData = NULL;
   int32_t pos = -1;
   int32_t tableDeletedNum = 0;
+  UHashElement *e;
 
   /*if shared data hasn't even been lazy evaluated yet
    * return 0
@@ -148,18 +149,18 @@ int32_t  ucnv_flushCache ()
    *table
    */
   umtx_lock (NULL);
-  while (mySharedData = (UConverterSharedData *) uhash_nextElement (SHARED_DATA_HASHTABLE, &pos))
+  while ((e = uhash_nextElement (SHARED_DATA_HASHTABLE, &pos)) != NULL)
     {
+      mySharedData = (UConverterSharedData *) e->value;
       /*deletes only if reference counter == 0 */
       if (mySharedData->referenceCounter == 0)
-	{
-	  UErrorCode err = U_ZERO_ERROR;
-	  tableDeletedNum++;
+        {
+          UErrorCode err = U_ZERO_ERROR;
+          tableDeletedNum++;
 
-	  uhash_remove (SHARED_DATA_HASHTABLE, uhash_hashIString (mySharedData->name), &err);
-	  deleteSharedConverterData (mySharedData);
-
-	}
+          uhash_removeElement(SHARED_DATA_HASHTABLE, e);
+          deleteSharedConverterData (mySharedData);
+        }
     }
   umtx_unlock (NULL);
 
