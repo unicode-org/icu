@@ -37,9 +37,9 @@ uprv_defaultCodePageForLocale(const char *locale);
 #ifdef WIN32
 #define LANGUAGE_LCID(hostID) (uint16_t)(0x03FF & hostID)
 
-U_CFUNC const char *T_convertToPosix(uint32_t hostid, UErrorCode* status);
+U_CAPI const char *uprv_convertToPosix(uint32_t hostid, UErrorCode* status);
 
-U_CFUNC uint32_t T_convertToLCID(const char* posixID, UErrorCode* status);
+U_CAPI uint32_t uprv_convertToLCID(const char* posixID, UErrorCode* status);
 #endif /* WIN32 */
 
 #endif /* LOCMAP_H */
