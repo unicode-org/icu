@@ -129,7 +129,7 @@ writeCCode(const char *filename, const char *destdir) {
 
     sprintf(buffer,
         "#include \"unicode/utypes.h\"\n"
-        "U_CAPI const struct {\n"
+        "U_EXPORT const struct {\n"
         "    double bogus;\n"
         "    uint8_t bytes[%ld]; \n"
         "} U_EXPORT2 %s={ 0, {\n",
