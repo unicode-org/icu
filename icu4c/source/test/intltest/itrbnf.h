@@ -20,6 +20,11 @@ class IntlTestRBNF : public IntlTest {
   // IntlTest override
   virtual void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par);
 
+  /** 
+   * Perform an API test
+   */
+  virtual void TestAPI();
+
   /**
    * Perform a simple spot check on the English spellout rules
    */
