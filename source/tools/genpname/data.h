@@ -1163,7 +1163,6 @@ int32_t NAME_GROUP[] = {
 
 #define MAX_NAMES_PER_GROUP 3
 
-#if !UCONFIG_NO_NORMALIZATION
 const int32_t VALUES_NFC_QC_COUNT = 3;
 
 const Alias VALUES_NFC_QC[] = {
@@ -1193,7 +1192,6 @@ const Alias VALUES_NFKD_QC[] = {
     Alias((int32_t) UNORM_NO, 2),
     Alias((int32_t) UNORM_YES, 4),
 };
-#endif
 
 const int32_t VALUES_bc_COUNT = 19;
 
@@ -1727,11 +1725,7 @@ const Alias VALUES_tccc[] = {
     Alias((int32_t) 9, 487),
 };
 
-#if !UCONFIG_NO_NORMALIZATION
 const int32_t PROPERTY_COUNT = 75;
-#else
-const int32_t PROPERTY_COUNT = 71;
-#endif
 
 const Property PROPERTY[] = {
     Property((int32_t) UCHAR_ALPHABETIC, 6, VALUES_binprop_COUNT, VALUES_binprop),
@@ -1787,12 +1781,10 @@ const Property PROPERTY[] = {
     Property((int32_t) UCHAR_JOINING_TYPE, 108, VALUES_jt_COUNT, VALUES_jt),
     Property((int32_t) UCHAR_LEAD_CANONICAL_COMBINING_CLASS, 110, VALUES_lccc_COUNT, VALUES_lccc),
     Property((int32_t) UCHAR_LINE_BREAK, 112, VALUES_lb_COUNT, VALUES_lb),
-#if !UCONFIG_NO_NORMALIZATION
     Property((int32_t) UCHAR_NFC_QUICK_CHECK, 114, VALUES_NFC_QC_COUNT, VALUES_NFC_QC),
     Property((int32_t) UCHAR_NFD_QUICK_CHECK, 116, VALUES_NFD_QC_COUNT, VALUES_NFD_QC),
     Property((int32_t) UCHAR_NFKC_QUICK_CHECK, 118, VALUES_NFKC_QC_COUNT, VALUES_NFKC_QC),
     Property((int32_t) UCHAR_NFKD_QUICK_CHECK, 120, VALUES_NFKD_QC_COUNT, VALUES_NFKD_QC),
-#endif
     Property((int32_t) UCHAR_NUMERIC_TYPE, 122, VALUES_nt_COUNT, VALUES_nt),
     Property((int32_t) UCHAR_SCRIPT, 124, VALUES_sc_COUNT, VALUES_sc),
     Property((int32_t) UCHAR_TRAIL_CANONICAL_COMBINING_CLASS, 126, VALUES_tccc_COUNT, VALUES_tccc),
