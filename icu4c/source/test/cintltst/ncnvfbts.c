@@ -124,7 +124,7 @@ static void setNuConvTestName(const char *codepage, const char *direction)
 
 
 static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
-                const char *codepage, UBool fallback, int32_t *expectOffsets)
+                const char *codepage, UBool fallback, const int32_t *expectOffsets)
 {
 
 
@@ -287,7 +287,7 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
 }
 
 static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
-               const char *codepage, UBool fallback, int32_t *expectOffsets)
+               const char *codepage, UBool fallback, const int32_t *expectOffsets)
 {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
@@ -450,43 +450,44 @@ static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const U
 static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize ) 
 {
 
-    UChar    SBCSText[] = 
+    static const UChar    SBCSText[] = 
      { 0x0021, 0xFF01, 0x0022, 0xFF02, 0x0023, 0xFF03, 0x003A, 0xFF1A, 0x003B, 0xFF1B, 0x003C, 0xFF1C };
      /* 21, ?, 22, ?, 23, ?, 3a, ?, 3b, ?, 3c, ? SBCS*/
-    const uint8_t expectedNative[] = 
+    static const uint8_t expectedNative[] = 
      {  0x21, 0x21, 0x22, 0x22, 0x23, 0x23, 0x3a, 0x3a, 0x3b, 0x3b, 0x3c, 0x3c};
-    UChar retrievedSBCSText[]=
+    static const UChar retrievedSBCSText[]=
        { 0x0021, 0x0021, 0x0022, 0x0022, 0x0023, 0x0023, 0x003A, 0x003A, 0x003B, 0x003B, 0x003C, 0x003C };
-    int32_t  toNativeOffs    [] = 
+    static const int32_t  toNativeOffs    [] = 
      {  0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b};
-    int32_t fromNativeoffs []  = 
+    static const int32_t fromNativeoffs []  = 
     {  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
    
     
-    UChar    DBCSText[] = 
+    /* 1363 isn't DBCS, but it has the DBCS section */
+    static const UChar    DBCSText[] = 
      { 0x00a1, 0x00ad, 0x2010, 0x00b7, 0x30fb};
-    const uint8_t expectedIBM1362[] = 
+    static const uint8_t expectedIBM1363_DBCS[] = 
      {  0xa2, 0xae, 0xa1 ,0xa9, 0xa1, 0xa9,0xa1 ,0xa4, 0xa1, 0xa4};
-    UChar retrievedDBCSText[]=
+    static const UChar retrievedDBCSText[]=
         { 0x00a1, 0x2010, 0x2010, 0x30fb, 0x30fb };
-    int32_t  toIBM1362Offs    [] = 
+    static const int32_t  toIBM1363Offs_DBCS[] = 
         {  0x00, 0x00, 0x01,0x01, 0x02, 0x02,  0x03, 0x03, 0x04, 0x04};
-    int32_t fromIBM1362offs []  = 
+    static const int32_t fromIBM1363offs_DBCS[]  = 
     {  0, 2, 4, 6, 8};
 
 
-    UChar    MBCSText[] = 
+    static const UChar    MBCSText[] = 
      { 0x0001, 0x263a, 0x2013, 0x2014, 0x263b, 0x0002};
-    const uint8_t expectedIBM1370[] = 
+    static const  uint8_t expectedIBM1370[] = 
      {  0x01, 0x01, 0xa1, 0x56, 0xa1, 0x56, 0x02, 0x02};
-    UChar retrievedMBCSText[]=
+    static const UChar retrievedMBCSText[]=
        { 0x0001, 0x0001, 0x2014, 0x2014, 0x0002, 0x0002};
-    int32_t  toIBM1370Offs    [] = 
+    static const int32_t  toIBM1370Offs    [] = 
      {  0x00, 0x01, 0x02, 0x02, 0x03, 0x03, 0x04, 0x05};
-    int32_t fromIBM1370offs []  = 
+    static const int32_t fromIBM1370offs []  = 
     {  0, 1, 2, 4, 6, 7};
 
-    UChar    MBCSText1363[] = 
+    static const UChar    MBCSText1363[] = 
      { 0x0005, 
        0xffe8, 
        0x0007, 
@@ -496,7 +497,7 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
        0x3016, 
        0x30fb, 
        0x9a36};
-    const uint8_t expectedIBM1363[] = 
+    static const uint8_t expectedIBM1363[] = 
      {  0x05, 
         0x05, 
         0x07, 
@@ -506,16 +507,16 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
         0xa1, 0xe0, 
         0xa1, 0xa4, 
         0xf5, 0xe2};
-    UChar retrievedMBCSText1363[]=
+    static const UChar retrievedMBCSText1363[]=
        { 0x0005, 0x0005, 0x0007, 0x0007, 0x001a,  0x30fb, 0x25a1, 0x30fb, 0x9a36};
-    int32_t  toIBM1363Offs    [] = 
+    static const int32_t  toIBM1363Offs    [] = 
      {  0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x05, 0x06, 0x06, 0x07, 0x07, 0x08, 0x08};
-    int32_t fromIBM1363offs []  = 
+    static const int32_t fromIBM1363offs []  = 
     {  0, 1, 2, 3, 4, 5, 7, 9, 11};
 
 
     
-    const char* nativeCodePage[]={
+    static const char* nativeCodePage[]={
         /*NLCS Mapping*/
         "ibm-367",
         "ibm-1051",
@@ -549,12 +550,12 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
     
     /*DBCS*/
     if(!testConvertFromUnicode(DBCSText, sizeof(DBCSText)/sizeof(DBCSText[0]),
-        expectedIBM1362, sizeof(expectedIBM1362), "ibm-1362", TRUE, toIBM1362Offs ))
-       log_err("u-> ibm-1362(DBCS) with FallBack did not match.\n");
+        expectedIBM1363_DBCS, sizeof(expectedIBM1363_DBCS), "ibm-1363", TRUE, toIBM1363Offs_DBCS ))
+       log_err("u-> ibm-1363(DBCS portion) with FallBack did not match.\n");
 
-    if(!testConvertToUnicode(expectedIBM1362, sizeof(expectedIBM1362), 
-        retrievedDBCSText, sizeof(retrievedDBCSText)/sizeof(retrievedDBCSText[0]),"ibm-1362", TRUE, fromIBM1362offs ))
-        log_err("ibm-1362->u(DBCS) with Fallback did not match.\n");
+    if(!testConvertToUnicode(expectedIBM1363_DBCS, sizeof(expectedIBM1363_DBCS), 
+        retrievedDBCSText, sizeof(retrievedDBCSText)/sizeof(retrievedDBCSText[0]),"ibm-1363", TRUE, fromIBM1363offs_DBCS ))
+        log_err("ibm-1363->u(DBCS portion) with Fallback did not match.\n");
 
   
     /*MBCS*/
