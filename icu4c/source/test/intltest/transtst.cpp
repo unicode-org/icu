@@ -2011,7 +2011,7 @@ void TransliteratorTest::TestEmptyContext() {
 * Test compound filter ID syntax
 */
 void TransliteratorTest::TestCompoundFilterID(void) {
-    char* DATA[] = {
+    static const char* DATA[] = {
         // Col. 1 = ID or rule set (latter must start with #)
 
         // = columns > 1 are null if expect col. 1 to be illegal =
