@@ -204,11 +204,11 @@ char *aescstrdup(const UChar* unichars){
     UConverterFromUCallback cb;
     void *p;
     UErrorCode errorCode = U_ZERO_ERROR;
-    UConverter* conv = ucnv_open(ucnv_getDefaultName(),&errorCode);
+    UConverter* conv = ucnv_open("US-ASCII",&errorCode);
     length = u_strlen( unichars);
-    newString = (char*)ctst_malloc ( sizeof(char) * 4 * (length +1));
+    newString = (char*)ctst_malloc ( sizeof(char) * 8 * (length +1));
     target = newString;
-    targetLimit = newString+sizeof(char) * 4 * (length +1);
+    targetLimit = newString+sizeof(char) * 8 * (length +1);
     ucnv_setFromUCallBack(conv, UCNV_FROM_U_CALLBACK_ESCAPE, &UCNV_ESCAPE_JAVA, &cb, &p, &errorCode);
     ucnv_fromUnicode(conv,&target,targetLimit, &unichars, (UChar*)(unichars+length),NULL,TRUE,&errorCode);
     *target = '\0';
