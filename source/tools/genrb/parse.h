@@ -20,7 +20,6 @@
 
 #include "unicode/utypes.h"
 #include "filestrm.h"
-#include "rblist.h"
 #include "ucbuf.h"
 
 U_CDECL_BEGIN
