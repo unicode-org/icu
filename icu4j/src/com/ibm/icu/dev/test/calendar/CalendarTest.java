@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CalendarTest.java,v $ 
- * $Date: 2000/11/28 00:51:41 $ 
- * $Revision: 1.9 $
+ * $Date: 2000/11/28 22:14:51 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -162,20 +162,31 @@ public class CalendarTest extends TestFmwk {
             int[] test = tests[i];
 
             cal.clear();
-            cal.set(test[0], test[1], test[2]);
+            if (cal instanceof ChineseCalendar) {
+                cal.set(Calendar.EXTENDED_YEAR, test[0]);
+                cal.set(Calendar.MONTH, test[1]);
+                cal.set(Calendar.DAY_OF_MONTH, test[2]);
+            } else {
+                cal.set(test[0], test[1], test[2]);
+            }
             if (roll) {
                 cal.roll(test[3], test[4]);
             } else {
                 cal.add(test[3], test[4]);
             }
-            
-            if (cal.get(YEAR) != test[5] || cal.get(MONTH) != test[6]
+            int y = cal.get(cal instanceof ChineseCalendar ?
+                            Calendar.EXTENDED_YEAR : YEAR);
+            if (y != test[5] || cal.get(MONTH) != test[6]
                     || cal.get(DATE) != test[7])
             {
-                errln("Error " + name + " "+ ymdToString(test[0], test[1], test[2])
+                errln("Fail: " + name + " "+ ymdToString(test[0], test[1], test[2])
                     + " " + FIELD_NAME[test[3]] + " by " + test[4]
                     + ": expected " + ymdToString(test[5], test[6], test[7])
                     + ", got " + ymdToString(cal));
+            } else if (isVerbose()) {
+                logln("OK: " + name + " "+ ymdToString(test[0], test[1], test[2])
+                    + " " + FIELD_NAME[test[3]] + " by " + test[4]
+                    + ": got " + ymdToString(cal));
             }
         }
     }
