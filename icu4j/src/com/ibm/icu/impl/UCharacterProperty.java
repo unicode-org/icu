@@ -6,15 +6,14 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2003/04/09 20:03:44 $ 
-* $Revision: 1.26 $
+* $Date: 2003/04/09 21:37:26 $ 
+* $Revision: 1.27 $
 *
 *******************************************************************************
 */
 
 package com.ibm.icu.impl;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -22,7 +21,6 @@ import java.util.Locale;
 
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.VersionInfo;
-import com.ibm.icu.util.RangeValueIterator.Element;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
@@ -2120,6 +2118,98 @@ public final class UCharacterProperty implements Trie.DataManipulate
 	     */      
         return set; // for chaining
     }
+/*----------------------------------------------------------------
+ * Inclusions list
+ *----------------------------------------------------------------*/
 
+    /*
+     * Return a set of characters for property enumeration.
+     * The set implicitly contains 0x110000 as well, which is one more than the highest
+     * Unicode code point.
+     *
+     * This set is used as an ordered list - its code points are ordered, and
+     * consecutive code points (in Unicode code point order) in the set define a range.
+     * For each two consecutive characters (start, limit) in the set,
+     * all of the UCD/normalization and related properties for
+     * all code points start..limit-1 are all the same,
+     * except for character names and ISO comments.
+     *
+     * All Unicode code points U+0000..U+10ffff are covered by these ranges.
+     * The ranges define a partition of the Unicode code space.
+     * ICU uses the inclusions set to enumerate properties for generating
+     * UnicodeSets containing all code points that have a certain property value.
+     *
+     * The Inclusion List is generated from the UCD. It is generated
+     * by enumerating the data tries, and code points for hardcoded properties
+     * are added as well.
+     *
+     * --------------------------------------------------------------------------
+     *
+     * The following are ideas for getting properties-unique code point ranges,
+     * with possible optimizations beyond the current implementation.
+     * These optimizations would require more code and be more fragile.
+     * The current implementation generates one single list (set) for all properties.
+     *
+     * To enumerate properties efficiently, one needs to know ranges of
+     * repetitive values, so that the value of only each start code point
+     * can be applied to the whole range.
+     * This information is in principle available in the uprops.icu/unorm.icu data.
+     *
+     * There are two obstacles:
+     *
+     * 1. Some properties are computed from multiple data structures,
+     *    making it necessary to get repetitive ranges by intersecting
+     *    ranges from multiple tries.
+     *
+     * 2. It is not economical to write code for getting repetitive ranges
+     *    that are precise for each of some 50 properties.
+     *
+     * Compromise ideas:
+     *
+     * - Get ranges per trie, not per individual property.
+     *   Each range contains the same values for a whole group of properties.
+     *   This would generate currently five range sets, two for uprops.icu tries
+     *   and three for unorm.icu tries.
+     *
+     * - Combine sets of ranges for multiple tries to get sufficient sets
+     *   for properties, e.g., the uprops.icu main and auxiliary tries
+     *   for all non-normalization properties.
+     *
+     * Ideas for representing ranges and combining them:
+     *
+     * - A UnicodeSet could hold just the start code points of ranges.
+     *   Multiple sets are easily combined by or-ing them together.
+     *
+     * - Alternatively, a UnicodeSet could hold each even-numbered range.
+     *   All ranges could be enumerated by using each start code point
+     *   (for the even-numbered ranges) as well as each limit (end+1) code point
+     *   (for the odd-numbered ranges).
+     *   It should be possible to combine two such sets by xor-ing them,
+     *   but no more than two.
+     *
+     * The second way to represent ranges may(?!) yield smaller UnicodeSet arrays,
+     * but the first one is certainly simpler and applicable for combining more than
+     * two range sets.
+     *
+     * It is possible to combine all range sets for all uprops/unorm tries into one
+     * set that can be used for all properties.
+     * As an optimization, there could be less-combined range sets for certain
+     * groups of properties.
+     * The relationship of which less-combined range set to use for which property
+     * depends on the implementation of the properties and must be hardcoded
+     * - somewhat error-prone and higher maintenance but can be tested easily
+     * by building property sets "the simple way" in test code.
+     *
+     * ---
+     *
+     * Do not use a UnicodeSet pattern because that causes infinite recursion;
+     * UnicodeSet depends on the inclusions set.
+     */
+    public UnicodeSet getInclusions() {
+        UnicodeSet set = new UnicodeSet();
+        addPropertyStarts(set);
+        NormalizerImpl.addPropertyStarts(set);
+        return set;
+    }
 
 }
