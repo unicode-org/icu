@@ -253,12 +253,12 @@ protected:
 //  * @param myParent The name of the myClass's parent.
 //  * @internal
 //  */
-// #define UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(myClass, myParent) \
-//     UClassID myClass::getStaticClassID() { \
-//       static const UClassID CLASS = (UClassID)myParent::getStaticClassID(); \
-//       return (UClassID)&CLASS; \
-//     }
-// 
+/* #define UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(myClass, myParent) \
+    UClassID myClass::getStaticClassID() { \
+        static const UClassID CLASS = (UClassID)myParent::getStaticClassID(); \
+        return (UClassID)&CLASS; \
+    }
+*/ 
 // /**
 //  * This macro adds ICU RTTI to an ICU concrete class implementation.
 //  * This macro should be invoked in *.cpp files.  The corresponding
@@ -268,12 +268,12 @@ protected:
 //  * @param myParent The name of the myClass's parent.
 //  * @internal
 //  */
-// #define UOBJECT_DEFINE_RTTI_IMPLEMENTATION(myClass, myParent) \
-//     UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(myClass, myParent) \
-//     UClassID myClass::getDynamicClassID() const { \
-//       return myClass::getStaticClassID(); \
-//     }
-
+/*#define UOBJECT_DEFINE_RTTI_IMPLEMENTATION(myClass, myParent) \
+    UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(myClass, myParent) \
+    UClassID myClass::getDynamicClassID() const { \
+        return myClass::getStaticClassID(); \
+    }
+*/
 
 
 U_NAMESPACE_END

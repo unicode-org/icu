@@ -252,14 +252,14 @@ ucharstrenum_close(UEnumeration* en) {
 
 static int32_t U_CALLCONV
 ucharstrenum_count(UEnumeration* en,
-                   UErrorCode* ec) {
+                   UErrorCode* /*ec*/) {
     return ((UCharStringEnumeration*)en)->count;
 }
 
 static const char* U_CALLCONV
 ucharstrenum_next(UEnumeration* en,
                   int32_t* resultLength,
-                  UErrorCode* ec) {
+                  UErrorCode* /*ec*/) {
     UCharStringEnumeration *e = (UCharStringEnumeration*) en;
     if (e->index >= e->count) {
         return NULL;
@@ -273,7 +273,7 @@ ucharstrenum_next(UEnumeration* en,
 
 static void U_CALLCONV
 ucharstrenum_reset(UEnumeration* en,
-                   UErrorCode* ec) {
+                   UErrorCode* /*ec*/) {
     ((UCharStringEnumeration*)en)->index = 0;
 }
 
