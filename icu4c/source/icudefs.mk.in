@@ -3,8 +3,12 @@
 #
 # Yves Arrouye.
 #
-# Copyright (C) 2000, International Business Machines Corporation and others.
+# Copyright (C) 2000-2001, International Business Machines Corporation and others.
 # All Rights Reserved.
+
+#
+# Some of these variables are overridden in the config/mh-* files.
+#
 
 # Shell to use
 
@@ -68,4 +72,43 @@ CXX = @CXX@
 
 ECHO_N = @ECHO_N@
 ECHO_C = @ECHO_C@
+
+# Commands to compile
+COMPILE.c=    $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=   $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+
+# Commands to link
+LINK.c=       $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.cc=      $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+
+# Commands to make a shared library
+SHLIB.c=      $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared
+SHLIB.cc=     $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
+
+# Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
+
+# Versioned target for a shared library.
+FINAL_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION)
+MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
+
+##  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
+# Prefix for the ICU library names
+ICUPREFIX = icu
+LIBICU = lib$(ICUPREFIX)
+
+# Force removal [for make clean]
+RMV = rm -rf
+# Platform commands to remove or move executable and library targets
+INSTALL-S = $(INSTALL_PROGRAM)
+INSTALL-L = $(INSTALL_DATA)
+
+# Link commands to link to ICU libs
+LIBICUDT=       -L$(top_builddir)/data -L$(top_builddir)/stubdata -l$(ICUPREFIX)data
+LIBICUUC=       -L$(top_builddir)/common -l$(ICUPREFIX)uc$(ICULIBSUFFIX) $(LIBICUDT)
+LIBICUI18N=     -L$(top_builddir)/i18n -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)
+LIBICULE=       -L$(top_builddir)/layout -l$(ICUPREFIX)layout$(ICULIBSSUFFIX)
+LIBCTESTFW=     -L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw$(ICULIBSUFFIX)
+LIBICUTOOLUTIL= -L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)
+LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio$(ICULIBSUFFIX)
 
