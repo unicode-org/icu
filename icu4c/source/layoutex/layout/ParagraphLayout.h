@@ -18,6 +18,8 @@
 
 #include "layout/RunArrays.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * ParagraphLayout.
  *
@@ -655,6 +657,7 @@ inline ParagraphLayout::VisualRun::~VisualRun()
     LE_DELETE_ARRAY(fGlyphs);
 }
 
+U_NAMESPACE_END
 #endif
 
 

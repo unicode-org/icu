@@ -15,6 +15,8 @@
 #include "unicode/utypes.h"
 #include "unicode/locid.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * The initial size of an array if it is unspecified.
  *
@@ -634,4 +636,5 @@ inline ValueRuns::~ValueRuns()
     }
 }
 
+U_NAMESPACE_END
 #endif
