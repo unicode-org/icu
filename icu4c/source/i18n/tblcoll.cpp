@@ -1,12 +1,57 @@
 /*
 ******************************************************************************
-* Copyright © {1996-1999}, International Business Machines Corporation and   *
+* Copyright © {1996-2001}, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *     
 ******************************************************************************
 */
 
 /**
-* Created by : Syn Wee Quek
+* File tblcoll.cpp
+*
+* Created by: Helena Shih 
+*
+* Modification History:
+*
+*  Date        Name        Description
+*  2/5/97      aliu        Added streamIn and streamOut methods.  Added
+*                          constructor which reads RuleBasedCollator object from
+*                          a binary file.  Added writeToFile method which streams
+*                          RuleBasedCollator out to a binary file.  The streamIn
+*                          and streamOut methods use istream and ostream objects
+*                          in binary mode.
+*  2/11/97     aliu        Moved declarations out of for loop initializer.
+*                          Added Mac compatibility #ifdef for ios::nocreate.
+*  2/12/97     aliu        Modified to use TableCollationData sub-object to
+*                          hold invariant data.
+*  2/13/97     aliu        Moved several methods into this class from Collation.
+*                          Added a private RuleBasedCollator(Locale&) constructor,
+*                          to be used by Collator::getInstance().  General
+*                          clean up.  Made use of UErrorCode variables consistent.
+*  2/20/97     helena      Added clone, operator==, operator!=, operator=, and copy
+*                          constructor and getDynamicClassID.
+*  3/5/97      aliu        Changed compaction cycle to improve performance.  We
+*                          use the maximum allowable value which is kBlockCount.
+*                          Modified getRules() to load rules dynamically.  Changed
+*                          constructFromFile() call to accomodate this (added
+*                          parameter to specify whether binary loading is to
+*                          take place).
+* 05/06/97     helena      Added memory allocation error check.
+*  6/20/97     helena      Java class name change.
+*  6/23/97     helena      Adding comments to make code more readable.
+* 09/03/97     helena      Added createCollationKeyValues().
+* 06/26/98     erm         Changes for CollationKeys using byte arrays.
+* 08/10/98     erm         Synched with 1.2 version of RuleBasedCollator.java
+* 04/23/99     stephen     Removed EDecompositionMode, merged with
+*                          Normalizer::EMode
+* 06/14/99     stephen     Removed kResourceBundleSuffix
+* 06/22/99     stephen     Fixed logic in constructFromFile() since .ctx
+*                          files are no longer used.
+* 11/02/99     helena      Collator performance enhancements.  Special case
+*                          for NO_OP situations. 
+* 11/17/99     srl         More performance enhancements. Inlined some internal functions.
+* 12/15/99     aliu        Update to support Thai collation.  Move NormalizerIterator
+*                          to implementation file.
+* 01/29/01     synwee      Modified into a C++ wrapper calling C APIs (ucol.h)
 */
 
 #include "ucolimp.h"
@@ -68,7 +113,8 @@ const uint32_t StackBufferLen = 1024;
 * Copy constructor
 */
 RuleBasedCollator::RuleBasedCollator(const RuleBasedCollator& that) : 
-              Collator(that), dataIsOwned(FALSE), ucollator(that.ucollator)
+              Collator(that), dataIsOwned(FALSE), ucollator(that.ucollator),
+              urulestring(that.urulestring)
 {
 }
 
@@ -92,8 +138,14 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 
   ucollator = ucol_openRules(pucharrules, length, UCOL_DEFAULT_NORMALIZATION, 
                              UCOL_DEFAULT_STRENGTH, &status);
+  
   if (U_SUCCESS(status))
+  {
+    const UChar *r = ucol_getRules(ucollator, &length);
+    urulestring = new UnicodeString(r, length);
+    
     dataIsOwned = TRUE;
+  }
   
 	if (pucharrules != ucharrules)
 		delete[] pucharrules;
@@ -122,7 +174,11 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
                              strength, &status);
 
   if (U_SUCCESS(status))
+  {
+    const UChar *r = ucol_getRules(ucollator, &length);
+    urulestring = new UnicodeString(r, length);
     dataIsOwned = TRUE;
+  }
   
 	if (pucharrules != ucharrules)
 		delete[] pucharrules;
@@ -152,7 +208,11 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
                              UCOL_DEFAULT_STRENGTH, &status);
 
   if (U_SUCCESS(status))
+  {
+    const UChar *r = ucol_getRules(ucollator, &length);
+    urulestring = new UnicodeString(r, length);
     dataIsOwned = TRUE;
+  }
   
 	if (pucharrules != ucharrules)
 		delete[] pucharrules;
@@ -179,10 +239,13 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 
   UCollationStrength strength = getUCollationStrength(collationStrength);
   UNormalizationMode mode = getUNormalizationMode(decompositionMode);
-  ucollator = ucol_openRules(pucharrules, length, mode, strength, 
-                             &status);
+  ucollator = ucol_openRules(pucharrules, length, mode, strength, &status);
   if (U_SUCCESS(status))
+  {
+    const UChar *r = ucol_getRules(ucollator, &length);
+    urulestring = new UnicodeString(r, length);
     dataIsOwned = TRUE;
+  }
 
 	if (pucharrules != ucharrules)
 		delete[] pucharrules;
@@ -197,8 +260,9 @@ RuleBasedCollator::~RuleBasedCollator()
   if (dataIsOwned)
   {
     ucol_close(ucollator);
-    ucollator = NULL;
+    delete urulestring;
   }
+  ucollator = NULL;
 }
 
 // RuleBaseCollator public methods ---------------------------------------
@@ -232,10 +296,12 @@ RuleBasedCollator& RuleBasedCollator::operator=(
     {
       ucol_close(ucollator);
       ucollator = NULL;
+      delete urulestring;
     }
     
     dataIsOwned = FALSE;
     ucollator = that.ucollator;
+    urulestring = that.urulestring;
   }
   return *this;
 }
@@ -254,14 +320,13 @@ CollationElementIterator* RuleBasedCollator::createCollationElementIterator
                                            (const UnicodeString& source) const
 {
   UErrorCode status = U_ZERO_ERROR;
-  CollationElementIterator *newCursor = 0;
-
-  newCursor = new CollationElementIterator(source, this, status);
+  CollationElementIterator *result = new CollationElementIterator(source, this, 
+                                                                  status);
   
   if (U_FAILURE(status))
     return NULL;
     
-  return newCursor;
+  return result;
 }
 
 /** 
@@ -273,14 +338,13 @@ CollationElementIterator* RuleBasedCollator::createCollationElementIterator
                                        (const CharacterIterator& source) const
 {
   UErrorCode status = U_ZERO_ERROR;
-  CollationElementIterator *newCursor = 0;
-
-  newCursor = new CollationElementIterator(source, this, status);
+  CollationElementIterator *result = new CollationElementIterator(source, this, 
+                                                                  status);
   
   if (U_FAILURE(status))
     return NULL;
     
-  return newCursor;
+  return result;
 }
 
 /** 
@@ -292,10 +356,7 @@ CollationElementIterator* RuleBasedCollator::createCollationElementIterator
 */
 const UnicodeString& RuleBasedCollator::getRules() const
 {
-  int32_t length;
-  const UChar *rules = ucol_getRules(ucollator, &length);
-  UnicodeString *result = new UnicodeString(rules, length);
-  return (*result);
+  return (*urulestring);
 }
 
 Collator::EComparisonResult RuleBasedCollator::compare(
@@ -478,7 +539,10 @@ Collator* RuleBasedCollator::safeClone(void)
   UCollator *ucol = ucol_safeClone(ucollator, NULL, 0, &intStatus);
   if (U_FAILURE(intStatus))
     return NULL;
-  RuleBasedCollator *result = new RuleBasedCollator(ucol);
+  int32_t length = 0;
+  UnicodeString *r = new UnicodeString(ucol_getRules(ucollator, &length), 
+                                       length);
+  RuleBasedCollator *result = new RuleBasedCollator(ucol, r);
   result->dataIsOwned = TRUE;
   return result;
 }
@@ -572,9 +636,11 @@ RuleBasedCollator::RuleBasedCollator() : dataIsOwned(FALSE)
 {
 }
 
-RuleBasedCollator::RuleBasedCollator(UCollator *collator) : dataIsOwned(FALSE)
+RuleBasedCollator::RuleBasedCollator(UCollator *collator, 
+                                     UnicodeString *rule) : dataIsOwned(FALSE)
 {
   ucollator = collator;
+  urulestring = rule;
 }
 
 RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
@@ -607,38 +673,37 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
 
   setUCollator(desiredLocale, status);
 
-  if (!U_SUCCESS(status)) 
+  if (U_FAILURE(status)) 
   {
-    UErrorCode intStatus = U_ZERO_ERROR;
+    status = U_ZERO_ERROR;
    
-    setUCollator(ResourceBundle::kDefaultFilename, intStatus);
-    if (U_FAILURE(intStatus)) 
+    setUCollator(ResourceBundle::kDefaultFilename, status);
+    if (U_FAILURE(status)) 
     {
-      intStatus = U_ZERO_ERROR;
-      /*
+      status = U_ZERO_ERROR;
+
       unsigned long size = 0;
       const UChar * defaultrules = ucol_getDefaultRulesArray(&size);
-      */
-      /*
-      synwee : have to use ucol for this
-      constructFromRules(defaultrules, intStatus);
-      */
-      /*
-      UCollator *collator = ucol_openRules(defaultrules, size, 
-        UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &intStatus);
-      */
-      if (intStatus == U_ZERO_ERROR)
-        status = U_USING_DEFAULT_ERROR;
-      else
-        status = intStatus;     // bubble back
 
+      ucollator = ucol_openRules(defaultrules, size, 
+                                 UCOL_DEFAULT_NORMALIZATION, 
+                                 UCOL_DEFAULT_STRENGTH, &status);
+      
+      if (status == U_ZERO_ERROR)
+        status = U_USING_DEFAULT_ERROR;
+      
       if (status == U_MEMORY_ALLOCATION_ERROR)
         return;
     }
   }
 
   if (U_SUCCESS(status))
+  {
+    int32_t length;
+    const UChar *r = ucol_getRules(ucollator, &length);
+    urulestring = new UnicodeString(r, length);
     dataIsOwned = TRUE;
+  }
   
   return;
 }

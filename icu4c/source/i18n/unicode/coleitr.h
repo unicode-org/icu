@@ -5,8 +5,21 @@
 *****************************************************************************************
 */
 
-/*
-* Created by: Syn Wee Quek
+/**
+* File coleitr.h
+*
+* 
+*
+* Created by: Helena Shih
+*
+* Modification History:
+*
+*  Date         Name          Description
+*
+*  8/18/97     helena      Added internal API documentation.
+* 08/03/98        erm            Synched with 1.2 version CollationElementIterator.java
+* 12/10/99      aliu          Ported Thai collation support from Java.
+* 01/25/01     swquek      Modified into a C++ wrapper calling C APIs (ucoliter.h)
 */
 
 #ifndef COLEITR_H
