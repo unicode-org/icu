@@ -549,7 +549,6 @@ u_sprintf_octal_handler(u_localized_string *output,
                const u_sprintf_spec_info     *info,
                const ufmt_args            *args)
 {
-  int32_t         written     = 0;
   long            num         = (long) (args[0].intValue);
   UChar            result         [USPRINTF_BUFFER_SIZE];
   int32_t         len        = USPRINTF_BUFFER_SIZE;
