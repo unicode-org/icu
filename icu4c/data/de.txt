@@ -131,11 +131,11 @@ de {
     localPatternChars { "GuMtkHmsSEDFwWahKzJd" }
     zoneStrings { 
         {
-                "Europe/Berlin",
-                "CET",
-                "CET",
-                "CET",
-                "CET",
+        "Europe/Berlin", 
+        "Mitteleurop\u00E4ische Zeit", 
+        "MEZ", 
+        "Mitteleurop\u00E4ische Sommerzeit", 
+        "MESZ"
         }
     }
 }
