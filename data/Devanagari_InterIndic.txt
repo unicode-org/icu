@@ -1,17 +1,11 @@
-﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
-// THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
-// Source: \icu4j\src\com\ibm\text\resources/Transliterator_Devanagari_InterIndic.utf8.txt
-// Date: Thu Mar  1 20:03:54 2001
-//--------------------------------------------------------------------
 
 // Devanagari_InterIndic
 
-Devanagari_InterIndic {
+Devanagari-InterIndic {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines
@@ -21,112 +15,124 @@ Devanagari_InterIndic {
 //--------------------------------------------------------------------
 
 // Devanagari-InterIndic
+ ":: NFD (NFC) ;"
+ //Rules for Decomposed characters
+ "\u0928\u093c  > \ue029;"  //\u0929
+ "\u0930\u093c  > \ue031;"  //\u0932
+ "\u0933\u093c  > \ue034;"  //\u0934
+ "\u0915\u093c  > \ue058;"  //\u0958 LETTER QA   (For Urdu)
+ "\u0916\u093c  > \ue059;"  //\u0959 LETTER KHHA (For Urdu)
+ "\u0917\u093c  > \ue05a;"  //\u095a LETTER GHHA (For Urdu)
+ "\u091c\u093c  > \ue05b;"  //\u095b LETTER ZA   (For Urdu)
+ "\u0921\u093c  > \ue05c;"  //\u095c LETTER DDDHA (pronounced RRA)
+ "\u0922\u093c  > \ue05d;"  //\u095d LETTER RHA   (pronounced RRHA)
+ "\u092b\u093c  > \ue05e;"  //\u095e LETTER FA
+ "\u092f\u093c  > \ue05f;"  //\u095f LETTER YYA
 
-"ँ>\uE001;" // SIGN CANDRABINDU
-"ं>\uE002;" // SIGN ANUSVARA
-"ः>\uE003;" // SIGN VISARGA
-"अ>\uE005;" // LETTER A
-"आ>\uE006;" // LETTER AA
-"इ>\uE007;" // LETTER I
-"ई>\uE008;" // LETTER II
-"उ>\uE009;" // LETTER U
-"ऊ>\uE00A;" // LETTER UU
-"ऋ>\uE00B;" // LETTER VOCALIC R
-"ऌ>\uE00C;" // LETTER VOCALIC L
-// ऍ>; // UNMAPPED Devanagari-InterIndic: LETTER CANDRA E
-// ऎ>; // UNMAPPED Devanagari-InterIndic: LETTER SHORT E
-"ए>\uE081;" // LETTER E
-"ऐ>\uE010;" // LETTER AI
-// ऑ>; // UNMAPPED Devanagari-InterIndic: LETTER CANDRA O
-// ऒ>; // UNMAPPED Devanagari-InterIndic: LETTER SHORT O
-"ओ>\uE082;" // LETTER O
-"औ>\uE014;" // LETTER AU
-"क>\uE015;" // LETTER KA
-"ख>\uE016;" // LETTER KHA
-"ग>\uE017;" // LETTER GA
-"घ>\uE018;" // LETTER GHA
-"ङ>\uE019;" // LETTER NGA
-"च>\uE01A;" // LETTER CA
-"छ>\uE01B;" // LETTER CHA
-"ज>\uE01C;" // LETTER JA
-"झ>\uE01D;" // LETTER JHA
-"ञ>\uE01E;" // LETTER NYA
-"ट>\uE01F;" // LETTER TTA
-"ठ>\uE020;" // LETTER TTHA
-"ड>\uE021;" // LETTER DDA
-"ढ>\uE022;" // LETTER DDHA
-"ण>\uE023;" // LETTER NNA
-"त>\uE024;" // LETTER TA
-"थ>\uE025;" // LETTER THA
-"द>\uE026;" // LETTER DA
-"ध>\uE027;" // LETTER DHA
-"न>\uE028;" // LETTER NA
-"ऩ>\uE029;" // LETTER NNNA
-"प>\uE02A;" // LETTER PA
-"फ>\uE02B;" // LETTER PHA
-"ब>\uE02C;" // LETTER BA
-"भ>\uE02D;" // LETTER BHA
-"म>\uE02E;" // LETTER MA
-"य>\uE02F;" // LETTER YA
-"र>\uE030;" // LETTER RA
-"ऱ>\uE083;" // LETTER RRA
-"ल>\uE032;" // LETTER LA
-"ळ>\uE033;" // LETTER LLA
-"ऴ>\uE034;" // LETTER LLLA
-"व>\uE035;" // LETTER VA
-"श>\uE036;" // LETTER SHA
-"ष>\uE037;" // LETTER SSA
-"स>\uE038;" // LETTER SA
-"ह>\uE039;" // LETTER HA
-"़>\uE03C;" // SIGN NUKTA
-"ऽ>\uE03D;" // SIGN AVAGRAHA
-"ा>\uE03E;" // VOWEL SIGN AA
-"ि>\uE03F;" // VOWEL SIGN I
-"ी>\uE040;" // VOWEL SIGN II
-"ु>\uE041;" // VOWEL SIGN U
-"ू>\uE042;" // VOWEL SIGN UU
-"ृ>\uE043;" // VOWEL SIGN VOCALIC R
-"ॄ>\uE044;" // VOWEL SIGN VOCALIC RR
-"ॅ>\uE045;" // VOWEL SIGN CANDRA E
-// ॆ>; // UNMAPPED Devanagari-InterIndic: VOWEL SIGN SHORT E
-"े>\uE084;" // VOWEL SIGN E
-"ै>\uE048;" // VOWEL SIGN AI
-"ॉ>\uE049;" // VOWEL SIGN CANDRA O
-// ॊ>; // UNMAPPED Devanagari-InterIndic: VOWEL SIGN SHORT O
-"ो>\uE085;" // VOWEL SIGN O
-"ौ>\uE04C;" // VOWEL SIGN AU
-"्>\uE04D;" // SIGN VIRAMA
-"ॐ>\uE050;" // OM
-// ॑>; // UNMAPPED Devanagari-InterIndic: STRESS SIGN UDATTA
-// ॒>; // UNMAPPED Devanagari-InterIndic: STRESS SIGN ANUDATTA
-// ॓>; // UNMAPPED Devanagari-InterIndic: GRAVE ACCENT
-// ॔>; // UNMAPPED Devanagari-InterIndic: ACUTE ACCENT
-// क़>; // UNMAPPED Devanagari-InterIndic: LETTER QA
-"ख़>\uE059;" // LETTER KHHA
-"ग़>\uE05A;" // LETTER GHHA
-"ज़>\uE05B;" // LETTER ZA
-// ड़>; // UNMAPPED Devanagari-InterIndic: LETTER DDDHA
-"ढ़>\uE05D;" // LETTER RHA
-"फ़>\uE05E;" // LETTER FA
-"य़>\uE05F;" // LETTER YYA
-"ॠ>\uE060;" // LETTER VOCALIC RR
-"ॡ>\uE061;" // LETTER VOCALIC LL
-"ॢ>\uE062;" // VOWEL SIGN VOCALIC L
-"ॣ>\uE063;" // VOWEL SIGN VOCALIC LL
-// ।>; // UNMAPPED Devanagari-InterIndic: DANDA
-// ॥>; // UNMAPPED Devanagari-InterIndic: DOUBLE DANDA
-"०>\uE066;" // DIGIT ZERO
-"१>\uE067;" // DIGIT ONE
-"२>\uE068;" // DIGIT TWO
-"३>\uE069;" // DIGIT THREE
-"४>\uE06A;" // DIGIT FOUR
-"५>\uE06B;" // DIGIT FIVE
-"६>\uE06C;" // DIGIT SIX
-"७>\uE06D;" // DIGIT SEVEN
-"८>\uE06E;" // DIGIT EIGHT
-"९>\uE06F;" // DIGIT NINE
-// ॰>; // UNMAPPED Devanagari-InterIndic: ABBREVIATION SIGN
-
-// eof
+ "\u0901>\ue001;"  // SIGN CANDRABINDU
+ "\u0902>\ue002;"  // SIGN ANUSVARA
+ "\u0903>\ue003;"  // SIGN VISARGA
+ "\u0905>\ue005;"  // LETTER A
+ "\u0906>\ue006;"  // LETTER AA
+ "\u0907>\ue007;"  // LETTER I
+ "\u0908>\ue008;"  // LETTER II
+ "\u0909>\ue009;"  // LETTER U
+ "\u090a>\ue00a;"  // LETTER UU
+ "\u090b>\ue00b;"  // LETTER VOCALIC R
+ "\u090c>\ue00c;"  // LETTER VOCALIC L
+ "\u090d>\ue00d;"  // LETTER CANDRA E (For representing English sounds)
+//"\u090e>\ue00e;" // UNMAPPED LETTER SHORT E(For Southern Scripts)
+ "\u090f>\ue00f;"  // LETTER E
+ "\u0910>\ue010;"  // LETTER AI
+ "\u0911>\ue011;"  // LETTER CANDRA O (For representing English sounds)
+//"\u0912>\ue012;" // UNMAPPED LETTER SHORT O (For Southern Scripts)
+ "\u0913>\ue013;"  // LETTER O
+ "\u0914>\ue014;"  // LETTER AU
+ "\u0915>\ue015;"  // LETTER KA
+ "\u0916>\ue016;"  // LETTER KHA
+ "\u0917>\ue017;"  // LETTER GA
+ "\u0918>\ue018;"  // LETTER GHA
+ "\u0919>\ue019;"  // LETTER NGA
+ "\u091a>\ue01a;"  // LETTER CA
+ "\u091b>\ue01b;"  // LETTER CHA
+ "\u091c>\ue01c;"  // LETTER JA
+ "\u091d>\ue01d;"  // LETTER JHA
+ "\u091e>\ue01e;"  // LETTER NYA
+ "\u091f>\ue01f;"  // LETTER TTA
+ "\u0920>\ue020;"  // LETTER TTHA
+ "\u0921>\ue021;"  // LETTER DDA
+ "\u0922>\ue022;"  // LETTER DDHA
+ "\u0923>\ue023;"  // LETTER NNA
+ "\u0924>\ue024;"  // LETTER TA
+ "\u0925>\ue025;"  // LETTER THA
+ "\u0926>\ue026;"  // LETTER DA
+ "\u0927>\ue027;"  // LETTER DHA
+ "\u0928>\ue028;"  // LETTER NA
+ "\u0929>\ue029;"  // LETTER NNNA
+ "\u092a>\ue02a;"  // LETTER PA
+ "\u092b>\ue02b;"  // LETTER PHA
+ "\u092c>\ue02c;"  // LETTER BA
+ "\u092d>\ue02d;"  // LETTER BHA
+ "\u092e>\ue02e;"  // LETTER MA
+ "\u092f>\ue02f;"  // LETTER YA
+ "\u0930>\ue030;"  // LETTER RA
+ //"\u0931>\ue031;"  // UNMAPPED LETTER RRA (Eyelash RA for Southern scripts)
+ "\u0932>\ue032;"  // LETTER LA
+ "\u0933>\ue033;"  // LETTER LLA
+ //"\u0934>\ue034;"  // UNMAPPED LETTER LLLA (LLLA for Southern scripts)
+ "\u0935>\ue035;"  // LETTER VA
+ "\u0936>\ue036;"  // LETTER SHA
+ "\u0937>\ue037;"  // LETTER SSA
+ "\u0938>\ue038;"  // LETTER SA
+ "\u0939>\ue039;"  // LETTER HA
+ "\u093c>\ue03c;"  // SIGN NUKTA
+ "\u093d>\ue03d;"  // SIGN AVAGRAHA
+ "\u093e>\ue03e;"  // VOWEL SIGN AA
+ "\u093f>\ue03f;"  // VOWEL SIGN I
+ "\u0940>\ue040;"  // VOWEL SIGN II
+ "\u0941>\ue041;"  // VOWEL SIGN U
+ "\u0942>\ue042;"  // VOWEL SIGN UU
+ "\u0943>\ue043;"  // VOWEL SIGN VOCALIC R
+ "\u0944>\ue044;"  // VOWEL SIGN VOCALIC RR
+ "\u0945>\ue045;"  // VOWEL SIGN CANDRA E
+//"\u0946>\ue046;" // UNMAPPED VOWEL SIGN SHORT E
+ "\u0947>\ue047;"  // VOWEL SIGN E
+ "\u0948>\ue048;"  // VOWEL SIGN AI
+ "\u0949>\ue049;"  // VOWEL SIGN CANDRA O
+//"\u094a>\ue04a;" // UNMAPPED VOWEL SIGN SHORT O
+ "\u094b>\ue04b;"  // VOWEL SIGN O
+ "\u094c>\ue04c;"  // VOWEL SIGN AU
+ "\u094d>\ue04d;"  // SIGN VIRAMA
+ "\u0950>\ue050;"  // OM
+// "\u0951>;" // UNMAPPED STRESS SIGN UDATTA
+// "\u0952>;" // UNMAPPED STRESS SIGN ANUDATTA
+// "\u0953>;" // UNMAPPED GRAVE ACCENT
+// "\u0954>;" // UNMAPPED ACUTE ACCENT
+ "\u0958>\ue058;"  // LETTER QA   (For Urdu)
+ "\u0959>\ue059;"  // LETTER KHHA (For Urdu)
+ "\u095a>\ue05a;"  // LETTER GHHA (For Urdu)
+ "\u095b>\ue05b;"  // LETTER ZA   (For Urdu)
+ "\u095c>\ue05c;"  // LETTER DDDHA (pronounced RRA)
+ "\u095d>\ue05d;"  // LETTER RHA   (pronounced RRHA)
+ "\u095e>\ue05e;"  // LETTER FA
+ "\u095f>\ue05f;"  // LETTER YYA
+ "\u0960>\ue060;"  // LETTER VOCALIC RR
+ "\u0961>\ue061;"  // LETTER VOCALIC LL
+ "\u0962>\ue062;"  // VOWEL SIGN VOCALIC L
+ "\u0963>\ue063;"  // VOWEL SIGN VOCALIC LL
+// "\u0964>;" // UNMAPPED Devanagari-InterIndic: DANDA
+// "\u0965>;" // UNMAPPED Devanagari-InterIndic: DOUBLE DANDA
+ "\u0966>\ue066;"  // DIGIT ZERO
+ "\u0967>\ue067;"  // DIGIT ONE
+ "\u0968>\ue068;"  // DIGIT TWO
+ "\u0969>\ue069;"  // DIGIT THREE
+ "\u096a>\ue06a;"  // DIGIT FOUR
+ "\u096b>\ue06b;"  // DIGIT FIVE
+ "\u096c>\ue06c;"  // DIGIT SIX
+ "\u096d>\ue06d;"  // DIGIT SEVEN
+ "\u096e>\ue06e;"  // DIGIT EIGHT
+ "\u096f>\ue06f;"  // DIGIT NINE
+// "\u0970>;" // UNMAPPED Devanagari-InterIndic: ABBREVIATION SIGN
+    ":: NFC (NFD) ;"
   }
 }
