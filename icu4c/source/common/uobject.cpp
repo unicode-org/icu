@@ -14,16 +14,13 @@
 *   created by: Markus W. Scherer
 */
 
-#include "unicode/utypes.h"
 #include "unicode/uobject.h"
 
-#ifdef U_CPP_MEMORY_TEST
-#   include "cmemory.h"
-#endif
+#ifdef U_OVERRIDE_CXX_ALLOCATION
+
+#include "cmemory.h"
 
 U_NAMESPACE_BEGIN
-
-#ifdef U_CPP_MEMORY_TEST
 
 /*
  * Test implementation of UObject::new/delete
@@ -66,7 +63,7 @@ void UObject::operator delete(void *p) {
     }
 }
 
-#if 0
+#if U_CXX_MEMORY_TEST
 void *UObject::operator new[](size_t size) {
     return uprv_malloc(size);
 }
@@ -90,6 +87,7 @@ void UObject::operator delete[](void *p, size_t /* size */) {
 }
 #endif
 
+U_NAMESPACE_END
+
 #endif
 
-U_NAMESPACE_END

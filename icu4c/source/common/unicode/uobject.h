@@ -28,6 +28,7 @@ U_NAMESPACE_BEGIN
 
 /* TODO undefine this symbol except for tests! See uobject.cpp */
 // #define U_CPP_MEMORY_TEST
+#define U_OVERRIDE_CXX_ALLOCATION 1
 
 /**
  * UObject is the common ICU base class.
@@ -59,18 +60,27 @@ public:
      */
     virtual inline ~UObject() {}
 
-    // possible overrides for ICU4C C++ memory management,
-    // not provided by ICU itself;
-    // simple, non-class types are allocated using the macros in common/cmemory.h
-    // (uprv_malloc(), uprv_free(), uprv_realloc());
-    // they or something else could be used here to implement C++ new/delete
-    // for ICU4C C++ classes
 
-#define U_CPP_MEMORY_TEST
-#ifdef U_CPP_MEMORY_TEST
+#ifdef U_OVERRIDE_CXX_ALLOCATION
+    /**
+     * Overrides for ICU4C C++ memory management.
+     * simple, non-class types are allocated using the macros in common/cmemory.h
+     * (uprv_malloc(), uprv_free(), uprv_realloc());
+     * they or something else could be used here to implement C++ new/delete
+     * for ICU4C C++ classes
+     * @draft ICU 2.2
+     */
     void *operator new(size_t size);
+    /**
+     * Overrides for ICU4C C++ memory management.
+     * simple, non-class types are allocated using the macros in common/cmemory.h
+     * (uprv_malloc(), uprv_free(), uprv_realloc());
+     * they or something else could be used here to implement C++ new/delete
+     * for ICU4C C++ classes
+     * @draft ICU 2.2
+     */
     void operator delete(void *p);
-#if 0
+#if U_CXX_MEMORY_TEST
     /* Sun Forte really dislikes these functions. */
     void *operator new[](size_t size);
     void operator delete[](void *p);
