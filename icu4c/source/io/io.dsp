@@ -233,43 +233,43 @@ SOURCE=.\uscanf_p.h
 
 SOURCE=.\unicode\ustdio.h
 
-!IF  "$(CFG)" == "ustdio - Win32 Release"
+!IF  "$(CFG)" == "io - Win32 Release"
 
 # Begin Custom Build
 InputPath=.\unicode\ustdio.h
 
 "..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
+!ELSEIF  "$(CFG)" == "io - Win32 Debug"
 
 # Begin Custom Build
 InputPath=.\unicode\ustdio.h
 
 "..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
+!ELSEIF  "$(CFG)" == "io - Win64 Release"
 
 # Begin Custom Build
 InputPath=.\unicode\ustdio.h
 
 "..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
+!ELSEIF  "$(CFG)" == "io - Win64 Debug"
 
 # Begin Custom Build
 InputPath=.\unicode\ustdio.h
 
 "..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -280,43 +280,43 @@ InputPath=.\unicode\ustdio.h
 
 SOURCE=.\unicode\ustream.h
 
-!IF  "$(CFG)" == "ustdio - Win32 Release"
+!IF  "$(CFG)" == "io - Win32 Release"
 
 # Begin Custom Build
 InputPath=.\unicode\ustream.h
 
 "..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
+!ELSEIF  "$(CFG)" == "io - Win32 Debug"
 
 # Begin Custom Build
 InputPath=.\unicode\ustream.h
 
 "..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
+!ELSEIF  "$(CFG)" == "io - Win64 Release"
 
 # Begin Custom Build
 InputPath=.\unicode\ustream.h
 
 "..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
+!ELSEIF  "$(CFG)" == "io - Win64 Debug"
 
 # Begin Custom Build
 InputPath=.\unicode\ustream.h
 
 "..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
