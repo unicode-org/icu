@@ -19,6 +19,7 @@
 #include "cstring.h"
 #include "cmemory.h"
 #include "unewdata.h"
+#include "ucnv_cnv.h"
 #include "ucnvmbcs.h"
 #include "makeconv.h"
 #include "genmbcs.h"
@@ -31,26 +32,19 @@ enum {
 };
 
 enum {
-    MBCS_STAGE_2_BLOCK_SIZE=0x80, /* 128=64*2, 2 16-bit words per stage 3 block; 64=1<<6 for 6 bits in stage 2 */
-    MBCS_STAGE_2_BLOCK_SIZE_SHIFT=7, /* log2(MBCS_STAGE_2_BLOCK_SIZE) */
+    MBCS_STAGE_2_BLOCK_SIZE=0x40, /* 64; 64=1<<6 for 6 bits in stage 2 */
+    MBCS_STAGE_2_BLOCK_SIZE_SHIFT=6, /* log2(MBCS_STAGE_2_BLOCK_SIZE) */
     MBCS_STAGE_1_SIZE=0x440, /* 0x110000>>10, or 17*64 for one entry per 1k code points */
-    MBCS_STAGE_2_MAX_BLOCKS=MBCS_STAGE_1_SIZE+1, /* one block per stage 1 entry plus one all-unassigned block */
+    MBCS_STAGE_2_SIZE=0xfbc0, /* 0x10000-MBCS_STAGE_1_SIZE */
+    MBCS_MAX_STAGE_2_TOP=MBCS_STAGE_2_SIZE,
+    MBCS_STAGE_2_MAX_BLOCKS=MBCS_STAGE_2_SIZE>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT,
 
-    MBCS_STAGE_2_ALL_UNASSIGNED_INDEX=MBCS_STAGE_1_SIZE/MBCS_STAGE_2_MULTIPLIER, /* stage 1 entry for the all-unassigned stage 2 block */
-    MBCS_STAGE_2_FIRST_ASSIGNED=MBCS_STAGE_1_SIZE+MBCS_STAGE_2_BLOCK_SIZE, /* start of the first stage 2 block after the all-unassigned one */
+    MBCS_STAGE_2_ALL_UNASSIGNED_INDEX=0, /* stage 1 entry for the all-unassigned stage 2 block */
+    MBCS_STAGE_2_FIRST_ASSIGNED=MBCS_STAGE_2_BLOCK_SIZE, /* start of the first stage 2 block after the all-unassigned one */
 
     MBCS_MAX_STATE_COUNT=128,
     MBCS_MAX_FALLBACK_COUNT=1000
 };
-
-/*
- * the maximum stage2Top is
- * the stage 2 assigned-blocks base=MBCS_STAGE_2_FIRST_ASSIGNED=(stage 1 size plus one all-unassigned block)
- * plus the maximum number of assigned stage 2 blocks (=stage 1 size) times the block length (*MBCS_STAGE_2_BLOCK_SIZE, or <<MBCS_STAGE_2_BLOCK_SIZE_SHIFT)
- * or
- * the size of stage 1 plus the maximum number of all stage 2 blocks (=stage 1 size+1) times the block length
- */
-#define MBCS_MAX_STAGE_2_TOP (MBCS_STAGE_1_SIZE+((uint32_t)MBCS_STAGE_2_MAX_BLOCKS<<MBCS_STAGE_2_BLOCK_SIZE_SHIFT))
 
 typedef struct MBCSData {
     NewConverter newConverter;
@@ -65,7 +59,9 @@ typedef struct MBCSData {
     int32_t countToUCodeUnits;
 
     /* fromUnicode */
-    uint16_t table[MBCS_MAX_STAGE_2_TOP];
+    uint16_t stage1[MBCS_STAGE_1_SIZE];
+    uint16_t stage2Single[MBCS_STAGE_2_SIZE]; /* stage 2 for single-byte codepages */
+    uint32_t stage2[MBCS_STAGE_2_SIZE]; /* stage 2 for MBCS */
     uint8_t *fromUBytes;
     uint32_t stage2Top, stage3Top, maxCharLength;
 } MBCSData;
@@ -87,6 +83,12 @@ static UBool
 MBCSIsValid(NewConverter *cnvData,
             const uint8_t *bytes, int32_t length,
             uint32_t b);
+
+static UBool
+MBCSSingleAddFromUnicode(NewConverter *cnvData,
+                         const uint8_t *bytes, int32_t length,
+                         UChar32 c, uint32_t b,
+                         int8_t isFallback);
 
 static UBool
 MBCSAddFromUnicode(NewConverter *cnvData,
@@ -112,11 +114,15 @@ MBCSInit(MBCSData *mbcsData, uint8_t maxCharLength) {
     mbcsData->newConverter.startMappings=MBCSProcessStates;
     mbcsData->newConverter.isValid=MBCSIsValid;
     mbcsData->newConverter.addToUnicode=MBCSAddToUnicode;
-    mbcsData->newConverter.addFromUnicode=MBCSAddFromUnicode;
+    if(maxCharLength==1) {
+        mbcsData->newConverter.addFromUnicode=MBCSSingleAddFromUnicode;
+    } else {
+        mbcsData->newConverter.addFromUnicode=MBCSAddFromUnicode;
+    }
     mbcsData->newConverter.finishMappings=MBCSPostprocess;
     mbcsData->newConverter.write=MBCSWrite;
 
-    mbcsData->header.version[0]=3;
+    mbcsData->header.version[0]=4;
     mbcsData->stateFlags[0]=MBCS_STATE_FLAG_DIRECT;
     mbcsData->stage2Top=MBCS_STAGE_2_FIRST_ASSIGNED; /* after stage 1 and one all-unassigned stage 2 block */
     mbcsData->stage3Top=16*maxCharLength; /* after one all-unassigned stage 3 block */
@@ -125,7 +131,7 @@ MBCSInit(MBCSData *mbcsData, uint8_t maxCharLength) {
 
     /* point all entries in stage 1 to the "all-unassigned" first block in stage 2 */
     for(i=0; i<MBCS_STAGE_1_SIZE; ++i) {
-        mbcsData->table[i]=MBCS_STAGE_2_ALL_UNASSIGNED_INDEX;
+        mbcsData->stage1[i]=MBCS_STAGE_2_ALL_UNASSIGNED_INDEX;
     }
 }
 
@@ -179,11 +185,11 @@ static const char *
 parseState(const char *s, int32_t state[256], uint32_t *pFlags) {
     const char *t;
     uint32_t start, end, i;
-    int32_t value;
+    int32_t entry;
 
     /* initialize the state: all illegal with U+ffff */
     for(i=0; i<256; ++i) {
-        state[i]=0x807fff80|(MBCS_STATE_ILLEGAL<<27);
+        state[i]=MBCS_ENTRY_FINAL(0, MBCS_STATE_ILLEGAL, 0xffff);
     }
 
     /* skip leading white space */
@@ -228,12 +234,12 @@ parseState(const char *s, int32_t state[256], uint32_t *pFlags) {
             end=start;
         }
 
-        /* determine the state values for this range */
+        /* determine the state entrys for this range */
         if(*s!=':' && *s!='.') {
             /* the default is: final state with valid entries */
-            value=0x80000000|(MBCS_STATE_VALID_16<<27UL);
+            entry=MBCS_ENTRY_FINAL(0, MBCS_STATE_VALID_16, 0);
         } else {
-            value=0;
+            entry=MBCS_ENTRY_TRANSITION(0, 0);
             if(*s==':') {
                 /* get the next state, default to 0 */
                 s=skipWhitespace(s+1);
@@ -243,37 +249,37 @@ parseState(const char *s, int32_t state[256], uint32_t *pFlags) {
                         return s;
                     }
                     s=skipWhitespace(t);
-                    value|=i;
+                    entry=MBCS_ENTRY_SET_STATE(entry, i);
                 }
             }
 
             /* get the state action, default to valid */
             if(*s=='.') {
                 /* this is a final state */
-                value|=0x80000000;
+                entry=MBCS_ENTRY_SET_FINAL(entry);
 
                 s=skipWhitespace(s+1);
                 if(*s=='u') {
                     /* unassigned set U+fffe */
-                    value|=0x7fff00|(MBCS_STATE_UNASSIGNED<<27UL);
+                    entry=MBCS_ENTRY_FINAL_SET_ACTION_VALUE(entry, MBCS_STATE_UNASSIGNED, 0xfffe);
                     s=skipWhitespace(s+1);
                 } else if(*s=='p') {
                     if(*pFlags!=MBCS_STATE_FLAG_DIRECT) {
-                        value|=MBCS_STATE_VALID_16_PAIR<<27UL;
+                        entry=MBCS_ENTRY_FINAL_SET_ACTION(entry, MBCS_STATE_VALID_16_PAIR);
                     } else {
-                        value|=MBCS_STATE_VALID_16<<27UL;
+                        entry=MBCS_ENTRY_FINAL_SET_ACTION(entry, MBCS_STATE_VALID_16);
                     }
                     s=skipWhitespace(s+1);
                 } else if(*s=='s') {
-                    value|=MBCS_STATE_CHANGE_ONLY<<27UL;
+                    entry=MBCS_ENTRY_FINAL_SET_ACTION(entry, MBCS_STATE_CHANGE_ONLY);
                     s=skipWhitespace(s+1);
                 } else if(*s=='i') {
                     /* illegal set U+ffff */
-                    value|=0x7fff80|(MBCS_STATE_ILLEGAL<<27UL);
+                    entry=MBCS_ENTRY_FINAL_SET_ACTION_VALUE(entry, MBCS_STATE_ILLEGAL, 0xffff);
                     s=skipWhitespace(s+1);
                 } else {
                     /* default to valid */
-                    value|=MBCS_STATE_VALID_16<<27UL;
+                    entry=MBCS_ENTRY_FINAL_SET_ACTION(entry, MBCS_STATE_VALID_16);
                 }
             } else {
                 /* this is an intermediate state, nothing to do */
@@ -281,26 +287,26 @@ parseState(const char *s, int32_t state[256], uint32_t *pFlags) {
         }
 
         /* adjust "final valid" states according to the state flags */
-        if(((uint32_t)value>>27U)==(16|MBCS_STATE_VALID_16)) {
+        if(MBCS_ENTRY_FINAL_ACTION(entry)==MBCS_STATE_VALID_16) {
             switch(*pFlags) {
             case 0:
                 /* no adjustment */
                 break;
             case MBCS_STATE_FLAG_DIRECT:
                 /* set the valid-direct code point to "unassigned"==0xfffe */
-                value=value&0x87ffffff|(MBCS_STATE_VALID_DIRECT_16<<27UL)|(0xfffe<<7L);
+                entry=MBCS_ENTRY_FINAL_SET_ACTION_VALUE(entry, MBCS_STATE_VALID_DIRECT_16, 0xfffe);
                 break;
             case MBCS_STATE_FLAG_SURROGATES:
-                value=value&0x87ffffff|(MBCS_STATE_VALID_16_PAIR<<27UL);
+                entry=MBCS_ENTRY_FINAL_SET_ACTION_VALUE(entry, MBCS_STATE_VALID_16_PAIR, 0);
                 break;
             default:
                 break;
             }
         }
 
-        /* set this value for the range */
+        /* set this entry for the range */
         for(i=start; i<=end; ++i) {
-            state[i]=value;
+            state[i]=entry;
         }
 
         if(*s==',') {
@@ -357,14 +363,14 @@ sumUpStates(MBCSData *mbcsData) {
                 /* at first, add up only the final delta offsets to keep them <512 */
                 for(cell=0; cell<256; ++cell) {
                     entry=mbcsData->stateTable[state][cell];
-                    if(entry<0) {
-                        switch((uint32_t)entry>>27U) {
-                        case 16|MBCS_STATE_VALID_16:
-                            mbcsData->stateTable[state][cell]=entry&0xf800007f|(sum<<7L);
+                    if(MBCS_ENTRY_IS_FINAL(entry)) {
+                        switch(MBCS_ENTRY_FINAL_ACTION(entry)) {
+                        case MBCS_STATE_VALID_16:
+                            mbcsData->stateTable[state][cell]=MBCS_ENTRY_FINAL_SET_VALUE(entry, sum);
                             sum+=1;
                             break;
-                        case 16|MBCS_STATE_VALID_16_PAIR:
-                            mbcsData->stateTable[state][cell]=entry&0xf800007f|(sum<<7L);
+                        case MBCS_STATE_VALID_16_PAIR:
+                            mbcsData->stateTable[state][cell]=MBCS_ENTRY_FINAL_SET_VALUE(entry, sum);
                             sum+=2;
                             break;
                         default:
@@ -377,10 +383,10 @@ sumUpStates(MBCSData *mbcsData) {
                 /* now, add up the delta offsets for the transitional entries */
                 for(cell=0; cell<256; ++cell) {
                     entry=mbcsData->stateTable[state][cell];
-                    if(entry>=0) {
-                        if(mbcsData->stateFlags[entry&0x7f]&MBCS_STATE_FLAG_READY) {
-                            mbcsData->stateTable[state][cell]=entry&0xf800007f|(sum<<7L);
-                            sum+=mbcsData->stateOffsetSum[entry&0x7f];
+                    if(MBCS_ENTRY_IS_TRANSITION(entry)) {
+                        if(mbcsData->stateFlags[MBCS_ENTRY_TRANSITION_STATE(entry)]&MBCS_STATE_FLAG_READY) {
+                            mbcsData->stateTable[state][cell]=MBCS_ENTRY_TRANSITION_SET_OFFSET(entry, sum);
+                            sum+=mbcsData->stateOffsetSum[MBCS_ENTRY_TRANSITION_STATE(entry)];
                         } else {
                             /* that next state does not have a sum yet, we cannot finish the one for this state */
                             sum=-1;
@@ -410,12 +416,12 @@ sumUpStates(MBCSData *mbcsData) {
     sum=mbcsData->stateOffsetSum[0];
     for(state=1; state<(int)mbcsData->header.countStates; ++state) {
         if((mbcsData->stateFlags[state]&0xf)==MBCS_STATE_FLAG_DIRECT) {
-            int32_t sum2=sum<<7;
+            int32_t sum2=sum;
             sum+=mbcsData->stateOffsetSum[state];
             for(cell=0; cell<256; ++cell) {
                 entry=mbcsData->stateTable[state][cell];
-                if(entry>=0) {
-                    mbcsData->stateTable[state][cell]=entry+sum2;
+                if(MBCS_ENTRY_IS_TRANSITION(entry)) {
+                    mbcsData->stateTable[state][cell]=MBCS_ENTRY_TRANSITION_ADD_OFFSET(entry, sum2);
                 }
             }
         }
@@ -443,18 +449,18 @@ MBCSProcessStates(NewConverter *cnvData) {
     for(state=mbcsData->header.countStates-1; state>=0; --state) {
         for(cell=0; cell<256; ++cell) {
             entry=mbcsData->stateTable[state][cell];
-            if((uint32_t)(entry&0x7f)>=mbcsData->header.countStates) {
+            if((uint8_t)MBCS_ENTRY_STATE(entry)>=mbcsData->header.countStates) {
                 fprintf(stderr, "error: state table entry [%x][%x] has a next state of %x that is too high\n",
-                    state, cell, entry&0x7f);
+                    state, cell, MBCS_ENTRY_STATE(entry));
                 return FALSE;
             }
-            if(entry<0 && (mbcsData->stateFlags[entry&0x7f]&0xf)!=MBCS_STATE_FLAG_DIRECT) {
+            if(MBCS_ENTRY_IS_FINAL(entry) && (mbcsData->stateFlags[MBCS_ENTRY_STATE(entry)]&0xf)!=MBCS_STATE_FLAG_DIRECT) {
                 fprintf(stderr, "error: state table entry [%x][%x] is final but has a non-initial next state of %x\n",
-                    state, cell, entry&0x7f);
+                    state, cell, MBCS_ENTRY_STATE(entry));
                 return FALSE;
-            } else if(entry>=0 && (mbcsData->stateFlags[entry&0x7f]&0xf)==MBCS_STATE_FLAG_DIRECT) {
+            } else if(MBCS_ENTRY_IS_TRANSITION(entry) && (mbcsData->stateFlags[MBCS_ENTRY_STATE(entry)]&0xf)==MBCS_STATE_FLAG_DIRECT) {
                 fprintf(stderr, "error: state table entry [%x][%x] is not final but has an initial next state of %x\n",
-                    state, cell, entry&0x7f);
+                    state, cell, MBCS_ENTRY_STATE(entry));
                 return FALSE;
             }
         }
@@ -471,10 +477,10 @@ MBCSProcessStates(NewConverter *cnvData) {
             return FALSE;
         }
         /* are the SI/SO all in the right places? */
-        if( mbcsData->stateTable[0][0xe]==(int32_t)(0x80000001|(MBCS_STATE_CHANGE_ONLY<<27L)) &&
-            mbcsData->stateTable[0][0xf]==(int32_t)(0x80000000|(MBCS_STATE_CHANGE_ONLY<<27L)) &&
-            mbcsData->stateTable[1][0xe]==(int32_t)(0x80000001|(MBCS_STATE_CHANGE_ONLY<<27L)) &&
-            mbcsData->stateTable[1][0xf]==(int32_t)(0x80000000|(MBCS_STATE_CHANGE_ONLY<<27L))
+        if( mbcsData->stateTable[0][0xe]==MBCS_ENTRY_FINAL(1, MBCS_STATE_CHANGE_ONLY, 0) &&
+            mbcsData->stateTable[0][0xf]==MBCS_ENTRY_FINAL(0, MBCS_STATE_CHANGE_ONLY, 0) &&
+            mbcsData->stateTable[1][0xe]==MBCS_ENTRY_FINAL(1, MBCS_STATE_CHANGE_ONLY, 0) &&
+            mbcsData->stateTable[1][0xf]==MBCS_ENTRY_FINAL(0, MBCS_STATE_CHANGE_ONLY, 0)
         ) {
             mbcsData->header.flags=MBCS_OUTPUT_2_SISO;
         } else {
@@ -489,7 +495,7 @@ MBCSProcessStates(NewConverter *cnvData) {
     /* check that no unexpected state is a "direct" one */
     while(state<(int)mbcsData->header.countStates) {
         if((mbcsData->stateFlags[state]&0xf)==MBCS_STATE_FLAG_DIRECT) {
-            fprintf(stderr, "error: state %d is 'direct' (initial) - not supported except for SI/SO codepages\n", state);
+            fprintf(stderr, "error: state %d is 'initial' - not supported except for SI/SO codepages\n", state);
             return FALSE;
         }
         ++state;
@@ -513,13 +519,20 @@ MBCSProcessStates(NewConverter *cnvData) {
     }
 
     /* allocate the codepage mappings and preset the first 16 characters to 0 */
-    mbcsData->fromUBytes=(uint8_t *)uprv_malloc(0x100000*mbcsData->maxCharLength); /* 1M mappings is the maximum possible */
+    if(mbcsData->maxCharLength==1) {
+        /* allocate 64k 16-bit results for single-byte codepages */
+        sum=0x20000;
+    } else {
+        /* allocate 1M * maxCharLength bytes for at most 1M mappings */
+        sum=0x100000*mbcsData->maxCharLength;
+    }
+    mbcsData->fromUBytes=(uint8_t *)uprv_malloc(sum);
     if(mbcsData->fromUBytes==NULL) {
-        fprintf(stderr, "error: out of memory allocating %ldMB for target mappings\n", mbcsData->maxCharLength);
+        fprintf(stderr, "error: out of memory allocating %ldMB for target mappings\n", sum);
         return FALSE;
     }
     /* initialize the all-unassigned first stage 3 block */
-    uprv_memset(mbcsData->fromUBytes, 0, 16*mbcsData->maxCharLength);
+    uprv_memset(mbcsData->fromUBytes, 0, 64);
 
     return TRUE;
 }
@@ -624,38 +637,38 @@ MBCSAddToUnicode(NewConverter *cnvData,
      */
     for(i=0;;) {
         entry=mbcsData->stateTable[state][bytes[i++]];
-        if(entry>=0) {
+        if(MBCS_ENTRY_IS_TRANSITION(entry)) {
             if(i==length) {
                 fprintf(stderr, "error: byte sequence too short, ends in non-final state %hu: 0x%02lx (U+%lx)\n", state, b, c);
                 return FALSE;
             }
-            state=(uint8_t)(entry&0x7f);
-            offset+=entry>>7;
+            state=(uint8_t)MBCS_ENTRY_TRANSITION_STATE(entry);
+            offset+=MBCS_ENTRY_TRANSITION_OFFSET(entry);
         } else {
             if(i<length) {
                 fprintf(stderr, "error: byte sequence too long by %d bytes, final state %hu: 0x%02lx (U+%lx)\n", (length-i), state, b, c);
                 return FALSE;
             }
-            switch((uint32_t)entry>>27U) {
-            case 16|MBCS_STATE_ILLEGAL:
+            switch(MBCS_ENTRY_FINAL_ACTION(entry)) {
+            case MBCS_STATE_ILLEGAL:
                 fprintf(stderr, "error: byte sequence ends in illegal state at U+%04lx<->0x%02lx\n", c, b);
                 return FALSE;
-            case 16|MBCS_STATE_CHANGE_ONLY:
+            case MBCS_STATE_CHANGE_ONLY:
                 fprintf(stderr, "error: byte sequence ends in state-change-only at U+%04lx<->0x%02lx\n", c, b);
                 return FALSE;
-            case 16|MBCS_STATE_UNASSIGNED:
+            case MBCS_STATE_UNASSIGNED:
                 fprintf(stderr, "error: byte sequence ends in unassigned state at U+%04lx<->0x%02lx\n", c, b);
                 return FALSE;
-            case 16|MBCS_STATE_FALLBACK_DIRECT_16:
-            case 16|MBCS_STATE_VALID_DIRECT_16:
-            case 16|MBCS_STATE_FALLBACK_DIRECT_20:
-            case 16|MBCS_STATE_VALID_DIRECT_20:
-                if((entry&0xffffff80)!=(0x807fff00|(MBCS_STATE_VALID_DIRECT_16<<27))) {
+            case MBCS_STATE_FALLBACK_DIRECT_16:
+            case MBCS_STATE_VALID_DIRECT_16:
+            case MBCS_STATE_FALLBACK_DIRECT_20:
+            case MBCS_STATE_VALID_DIRECT_20:
+                if(MBCS_ENTRY_SET_STATE(entry, 0)!=MBCS_ENTRY_FINAL(0, MBCS_STATE_VALID_DIRECT_16, 0xfffe)) {
                     /* the "direct" action's value is not "valid-direct-16-unassigned" any more */
-                    if((entry&(1L<<27))==0) {
-                        old=entry>>7;
+                    if(MBCS_ENTRY_FINAL_ACTION(entry)==MBCS_STATE_VALID_DIRECT_16 || MBCS_ENTRY_FINAL_ACTION(entry)==MBCS_STATE_FALLBACK_DIRECT_16) {
+                        old=MBCS_ENTRY_FINAL_VALUE(entry);
                     } else {
-                        old=0x10000+(entry>>7);
+                        old=0x10000+MBCS_ENTRY_FINAL_VALUE(entry);
                     }
                     if(isFallback>=0) {
                         fprintf(stderr, "error: duplicate codepage byte sequence at U+%04lx<->0x%02lx see U+%04lx\n", c, b, old);
@@ -669,22 +682,20 @@ MBCSAddToUnicode(NewConverter *cnvData,
                      */
                 }
                 /* reassign the correct action code */
-                entry=
-                    entry&0x8000007f|
-                    (MBCS_STATE_FALLBACK_DIRECT_16+(isFallback>0 ? 0 : 2)+(c>=0x10000 ? 1 : 0))
-                        <<27;
+                entry=MBCS_ENTRY_FINAL_SET_ACTION(entry, (MBCS_STATE_VALID_DIRECT_16+(isFallback>0 ? 2 : 0)+(c>=0x10000 ? 1 : 0)));
+
                 /* put the code point into bits 22..7 for BMP, c-0x10000 into 26..7 for others */
                 if(c<=0xffff) {
-                    entry|=c<<7;
+                    entry=MBCS_ENTRY_FINAL_SET_VALUE(entry, c);
                 } else {
-                    entry|=(c-0x10000)<<7;
+                    entry=MBCS_ENTRY_FINAL_SET_VALUE(entry, c-0x10000);
                 }
                 mbcsData->stateTable[state][bytes[i-1]]=entry;
                 break;
-            case 16|MBCS_STATE_VALID_16:
+            case MBCS_STATE_VALID_16:
                 /* bits 26..16 are not used, 0 */
                 /* bits 15..7 contain the final offset delta to one 16-bit code unit */
-                offset+=(uint16_t)entry>>7;
+                offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
                 /* check that this byte sequence is still unassigned */
                 if((old=mbcsData->unicodeCodeUnits[offset])!=0xfffe || (old=removeFallback(mbcsData, offset))!=-1) {
                     if(isFallback>=0) {
@@ -694,44 +705,61 @@ MBCSAddToUnicode(NewConverter *cnvData,
                         fprintf(stderr, "duplicate codepage byte sequence at U+%04lx<->0x%02lx see U+%04lx\n", c, b, old);
                     }
                 }
+                if(c>=0x10000) {
+                    fprintf(stderr, "error: code point does not fit into valid-16-bit state at U+%04lx<->0x%02lx\n", c, b);
+                    return FALSE;
+                }
                 if(isFallback>0) {
                     /* assign only if there is no precise mapping */
                     if(mbcsData->unicodeCodeUnits[offset]==0xfffe) {
                         return setFallback(mbcsData, offset, c);
                     }
                 } else {
-                    if(c>=0x10000) {
-                        fprintf(stderr, "error: code point does not fit into valid-16-bit state at U+%04lx<->0x%02lx\n", c, b);
-                        return FALSE;
-                    }
                     mbcsData->unicodeCodeUnits[offset]=(uint16_t)c;
                 }
                 break;
-            case 16|MBCS_STATE_VALID_16_PAIR:
+            case MBCS_STATE_VALID_16_PAIR:
                 /* bits 26..16 are not used, 0 */
                 /* bits 15..7 contain the final offset delta to two 16-bit code units */
-                if(UTF_IS_FIRST_SURROGATE(c)) {
-                    fprintf(stderr, "error: cannot assign single first surrogate to surrogate-pair state at U+%04lx<->0x%02lx\n", c, b);
-                    return FALSE;
-                }
-                offset+=(uint16_t)entry>>7;
+                offset+=MBCS_ENTRY_FINAL_VALUE_16(entry);
                 /* check that this byte sequence is still unassigned */
-                if((old=mbcsData->unicodeCodeUnits[offset])!=0xfffe || (old=removeFallback(mbcsData, offset))!=-1) {
+                old=mbcsData->unicodeCodeUnits[offset];
+                if(old<0xfffe) {
+                    int32_t real;
+                    if(old<0xd800) {
+                        real=old;
+                    } else if(old<=0xdfff) {
+                        real=0x10000+((old&0x3ff)<<10)+((mbcsData->unicodeCodeUnits[offset+1])&0x3ff);
+                    } else /* old<=0xe001 */ {
+                        real=mbcsData->unicodeCodeUnits[offset+1];
+                    }
                     if(isFallback>=0) {
-                        fprintf(stderr, "error: duplicate codepage byte sequence at U+%04lx<->0x%02lx see U+%04lx\n", c, b, old);
+                        fprintf(stderr, "error: duplicate codepage byte sequence at U+%04lx<->0x%02lx see U+%04lx\n", c, b, real);
                         return FALSE;
                     } else if(VERBOSE) {
-                        fprintf(stderr, "duplicate codepage byte sequence at U+%04lx<->0x%02lx see U+%04lx\n", c, b, old);
+                        fprintf(stderr, "duplicate codepage byte sequence at U+%04lx<->0x%02lx see U+%04lx\n", c, b, real);
                     }
                 }
                 if(isFallback>0) {
                     /* assign only if there is no precise mapping */
-                    if(mbcsData->unicodeCodeUnits[offset]==0xfffe) {
-                        return setFallback(mbcsData, offset, c);
+                    if(old<=0xdbff || old==0xe000) {
+                        /* do nothing */
+                    } else if(c<=0xffff) {
+                        /* set a BMP fallback code point as a pair with 0xe001 */
+                        mbcsData->unicodeCodeUnits[offset++]=0xe001;
+                        mbcsData->unicodeCodeUnits[offset]=(uint16_t)c;
+                    } else {
+                        /* set a fallback surrogate pair with two second surrogates */
+                        mbcsData->unicodeCodeUnits[offset++]=(uint16_t)(0xdbc0+(c>>10));
+                        mbcsData->unicodeCodeUnits[offset]=(uint16_t)(0xdc00+(c&0x3ff));
                     }
                 } else {
-                    if(c<=0xffff) {
-                        /* set BMP code point */
+                    if(c<0xd800) {
+                        /* set a BMP code point */
+                        mbcsData->unicodeCodeUnits[offset]=(uint16_t)c;
+                    } else if(c<=0xffff) {
+                        /* set a BMP code point above 0xd800 as a pair with 0xe000 */
+                        mbcsData->unicodeCodeUnits[offset++]=0xe000;
                         mbcsData->unicodeCodeUnits[offset]=(uint16_t)c;
                     } else {
                         /* set a surrogate pair */
@@ -778,34 +806,34 @@ MBCSIsValid(NewConverter *cnvData,
      */
     for(i=0;;) {
         entry=mbcsData->stateTable[state][bytes[i++]];
-        if(entry>=0) {
+        if(MBCS_ENTRY_IS_TRANSITION(entry)) {
             if(i==length) {
                 fprintf(stderr, "error: byte sequence too short, ends in non-final state %hu: 0x%02lx\n", state, b);
                 return FALSE;
             }
-            state=(uint8_t)(entry&0x7f);
-            offset+=entry>>7;
+            state=(uint8_t)MBCS_ENTRY_TRANSITION_STATE(entry);
+            offset+=MBCS_ENTRY_TRANSITION_OFFSET(entry);
         } else {
             if(i<length) {
                 fprintf(stderr, "error: byte sequence too long by %d bytes, final state %hu: 0x%02lx\n", (length-i), state, b);
                 return FALSE;
             }
-            switch((uint32_t)entry>>27U) {
-            case 16|MBCS_STATE_ILLEGAL:
+            switch(MBCS_ENTRY_FINAL_ACTION(entry)) {
+            case MBCS_STATE_ILLEGAL:
                 fprintf(stderr, "error: byte sequence ends in illegal state: 0x%02lx\n", b);
                 return FALSE;
-            case 16|MBCS_STATE_CHANGE_ONLY:
+            case MBCS_STATE_CHANGE_ONLY:
                 fprintf(stderr, "error: byte sequence ends in state-change-only: 0x%02lx\n", b);
                 return FALSE;
-            case 16|MBCS_STATE_UNASSIGNED:
+            case MBCS_STATE_UNASSIGNED:
                 fprintf(stderr, "error: byte sequence ends in unassigned state: 0x%02lx\n", b);
                 return FALSE;
-            case 16|MBCS_STATE_FALLBACK_DIRECT_16:
-            case 16|MBCS_STATE_VALID_DIRECT_16:
-            case 16|MBCS_STATE_FALLBACK_DIRECT_20:
-            case 16|MBCS_STATE_VALID_DIRECT_20:
-            case 16|MBCS_STATE_VALID_16:
-            case 16|MBCS_STATE_VALID_16_PAIR:
+            case MBCS_STATE_FALLBACK_DIRECT_16:
+            case MBCS_STATE_VALID_DIRECT_16:
+            case MBCS_STATE_FALLBACK_DIRECT_20:
+            case MBCS_STATE_VALID_DIRECT_20:
+            case MBCS_STATE_VALID_16:
+            case MBCS_STATE_VALID_16_PAIR:
                 return TRUE;
             default:
                 /* reserved, must never occur */
@@ -814,6 +842,79 @@ MBCSIsValid(NewConverter *cnvData,
             }
         }
     }
+}
+
+static UBool
+MBCSSingleAddFromUnicode(NewConverter *cnvData,
+                         const uint8_t *bytes, int32_t length,
+                         UChar32 c, uint32_t b,
+                         int8_t isFallback) {
+    MBCSData *mbcsData=(MBCSData *)cnvData;
+    uint16_t *p;
+    uint32_t index;
+    uint16_t old;
+
+    /*
+     * Walk down the triple-stage compact array ("trie") and
+     * allocate parts as necessary.
+     * Note that the first stage 2 and 3 blocks are reserved for all-unassigned mappings.
+     * We assume that length<=maxCharLength and that c<=0x10ffff.
+     */
+
+    /* inspect stage 1 */
+    index=c>>10;
+    if(mbcsData->stage1[index]==MBCS_STAGE_2_ALL_UNASSIGNED_INDEX) {
+        /* allocate another block in stage 2 */
+        if(mbcsData->stage2Top>=MBCS_MAX_STAGE_2_TOP) {
+            fprintf(stderr, "error: too many stage 2 entries at U+%04lx<->0x%02lx\n", c, b);
+            return FALSE;
+        }
+
+        /*
+         * each stage 2 block contains 64 16-bit words:
+         * 6 code point bits 9..4 with 1 stage 3 index
+         */
+        mbcsData->stage1[index]=(uint16_t)mbcsData->stage2Top;
+        mbcsData->stage2Top+=MBCS_STAGE_2_BLOCK_SIZE;
+    }
+
+    /* inspect stage 2 */
+    index=(uint32_t)mbcsData->stage1[index]+((c>>4)&0x3f);
+    if(mbcsData->stage2Single[index]==0) {
+        /* allocate another block in stage 3 */
+        if(mbcsData->stage3Top>=0x10000) {
+            fprintf(stderr, "error: too many code points at U+%04lx<->0x%02lx\n", c, b);
+            return FALSE;
+        }
+        /* each block has 16 uint16_t entries */
+        mbcsData->stage2Single[index]=(uint16_t)mbcsData->stage3Top;
+        uprv_memset(mbcsData->fromUBytes+2*mbcsData->stage3Top, 0, 32);
+        mbcsData->stage3Top+=16;
+    }
+
+    /* write the codepage entry into stage 3 and get the previous entry */
+    p=(uint16_t *)mbcsData->fromUBytes+mbcsData->stage2Single[index]+(c&0xf);
+    old=*p;
+    if(isFallback<=0) {
+        *p=(uint16_t)(0xf00|b);
+    } else if(IS_PRIVATE_USE(c)) {
+        *p=(uint16_t)(0xc00|b);
+    } else {
+        *p=(uint16_t)(0x800|b);
+    }
+
+    /* check that this Unicode code point was still unassigned */
+    if(old>=0xf00) {
+        if(isFallback>=0) {
+            fprintf(stderr, "error: duplicate Unicode code point at U+%04lx<->0x%02lx see 0x%02lx\n", c, b, old);
+            return FALSE;
+        } else if(VERBOSE) {
+            fprintf(stderr, "duplicate Unicode code point at U+%04lx<->0x%02lx see 0x%02lx\n", c, b, old);
+        }
+        /* continue after the above warning if the precision of the mapping is unspecified */
+    }
+
+    return TRUE;
 }
 
 static UBool
@@ -840,60 +941,62 @@ MBCSAddFromUnicode(NewConverter *cnvData,
 
     /* inspect stage 1 */
     index=c>>10;
-    if(mbcsData->table[index]==MBCS_STAGE_2_ALL_UNASSIGNED_INDEX) {
+    if(mbcsData->stage1[index]==MBCS_STAGE_2_ALL_UNASSIGNED_INDEX) {
         /* allocate another block in stage 2 */
+        if(mbcsData->stage2Top>=MBCS_MAX_STAGE_2_TOP) {
+            fprintf(stderr, "error: too many stage 2 entries at U+%04lx<->0x%02lx\n", c, b);
+            return FALSE;
+        }
+
         /*
-         * It is not necessary to check for an overflow in stage 2 because it is allocated
-         * with its maximum possible size. (It is here always mbcsData->stage2Top<MBCS_MAX_STAGE_2_TOP .)
+         * each stage 2 block contains 64 32-bit words:
+         * 6 code point bits 9..4 with value with bits 31..16 "assigned" flags and bits 15..0 stage 3 index
          */
-        /*
-         * each stage 2 block contains 64*2 16-bit words:
-         * 6 code point bits 9..4 with 1 flags value and 1 stage 3 index
-         *
-         * stage 1 entries contain a quarter of the beginning of the
-         * addressed stage 2 blocks; for details about this multiplier,
-         * see the comments at the beginning of ucnvmbcs.c
-         */
-        mbcsData->table[index]=(uint16_t)(mbcsData->stage2Top/MBCS_STAGE_2_MULTIPLIER);
+        mbcsData->stage1[index]=(uint16_t)mbcsData->stage2Top;
         mbcsData->stage2Top+=MBCS_STAGE_2_BLOCK_SIZE;
     }
 
     /* inspect stage 2 */
-    index=MBCS_STAGE_2_MULTIPLIER*(uint32_t)mbcsData->table[index]+((c>>3)&0x7e);
-    if(mbcsData->table[index+1]==0) {
+    index=mbcsData->stage1[index]+((c>>4)&0x3f);
+    if(mbcsData->stage2[index]==0) {
         /* allocate another block in stage 3 */
         if(mbcsData->stage3Top>=0x100000*mbcsData->maxCharLength) {
             fprintf(stderr, "error: too many code points at U+%04lx<->0x%02lx\n", c, b);
             return FALSE;
         }
         /* each block has 16*maxCharLength bytes */
-        mbcsData->table[index+1]=(uint16_t)((mbcsData->stage3Top/16)/mbcsData->maxCharLength);
+        mbcsData->stage2[index]=(mbcsData->stage3Top/16)/mbcsData->maxCharLength;
         uprv_memset(mbcsData->fromUBytes+mbcsData->stage3Top, 0, 16*mbcsData->maxCharLength);
         mbcsData->stage3Top+=16*mbcsData->maxCharLength;
     }
 
     /* write the codepage bytes into stage 3 and get the previous bytes */
     old=0;
-    p=mbcsData->fromUBytes+(16*(uint32_t)mbcsData->table[index+1]+(c&0xf))*mbcsData->maxCharLength;
+    p=mbcsData->fromUBytes+(16*(uint32_t)(uint16_t)mbcsData->stage2[index]+(c&0xf))*mbcsData->maxCharLength;
     switch(mbcsData->maxCharLength) {
-    case 4:
-        old=*p;
-        *p++=(uint8_t)(b>>24);
-    case 3:
-        old=(old<<8)|*p;
-        *p++=(uint8_t)(b>>16);
     case 2:
-        old=(old<<8)|*p;
+        old=*(uint16_t *)p;
+        *(uint16_t *)p=(uint16_t)b;
+        break;
+    case 3:
+        old=(uint32_t)*p<<16;
+        *p++=(uint8_t)(b>>16);
+        old|=(uint32_t)*p<<8;
         *p++=(uint8_t)(b>>8);
-    case 1:
-        old=(old<<8)|*p;
+        old|=*p;
         *p=(uint8_t)b;
+        break;
+    case 4:
+        old=*(uint32_t *)p;
+        *(uint32_t *)p=b;
+        break;
     default:
+        /* will never occur */
         break;
     }
 
     /* check that this Unicode code point was still unassigned */
-    if((mbcsData->table[index]&(1<<(c&0xf)))!=0 || old!=0) {
+    if((mbcsData->stage2[index]&(1UL<<(16+(c&0xf))))!=0 || old!=0) {
         if(isFallback>=0) {
             fprintf(stderr, "error: duplicate Unicode code point at U+%04lx<->0x%02lx see 0x%02lx\n", c, b, old);
             return FALSE;
@@ -904,7 +1007,7 @@ MBCSAddFromUnicode(NewConverter *cnvData,
     }
     if(isFallback<=0) {
         /* set the "assigned" flag */
-        mbcsData->table[index]|=(1<<(c&0xf));
+        mbcsData->stage2[index]|=(1UL<<(16+(c&0xf)));
     }
 
     return TRUE;
@@ -941,8 +1044,8 @@ compactToUnicode2(MBCSData *mbcsData) {
     uprv_memset(count, 0, sizeof(count));
     for(i=0; i<256; ++i) {
         entry=mbcsData->stateTable[leadState][i];
-        if(entry>=0) {
-            ++count[entry&0x7f];
+        if(MBCS_ENTRY_IS_TRANSITION(entry)) {
+            ++count[MBCS_ENTRY_TRANSITION_STATE(entry)];
         }
     }
     trailState=0;
@@ -958,24 +1061,24 @@ compactToUnicode2(MBCSData *mbcsData) {
     /* for each lead byte */
     for(i=0; i<256; ++i) {
         entry=mbcsData->stateTable[leadState][i];
-        if(entry>=0 && (entry&0x7f)==trailState) {
+        if(MBCS_ENTRY_IS_TRANSITION(entry) && (MBCS_ENTRY_TRANSITION_STATE(entry))==trailState) {
             /* the offset is different for each lead byte */
-            offset=entry>>7;
+            offset=MBCS_ENTRY_TRANSITION_OFFSET(entry);
             /* for each trail byte for this lead byte */
             for(j=0; j<256; ++j) {
                 entry=mbcsData->stateTable[trailState][j];
-                switch((uint32_t)entry>>27U) {
-                case 16|MBCS_STATE_VALID_16:
-                    entry=offset+((uint16_t)entry>>7);
+                switch(MBCS_ENTRY_FINAL_ACTION(entry)) {
+                case MBCS_STATE_VALID_16:
+                    entry=offset+MBCS_ENTRY_FINAL_VALUE_16(entry);
                     if(mbcsData->unicodeCodeUnits[entry]==0xfffe && findFallback(mbcsData, entry)<0) {
                         ++count[i];
                     } else {
                         j=999; /* do not count for this lead byte because there are assignments */
                     }
                     break;
-                case 16|MBCS_STATE_VALID_16_PAIR:
-                    entry=offset+((uint16_t)entry>>7);
-                    if(mbcsData->unicodeCodeUnits[entry]==0xfffe && findFallback(mbcsData, entry)<0) {
+                case MBCS_STATE_VALID_16_PAIR:
+                    entry=offset+MBCS_ENTRY_FINAL_VALUE_16(entry);
+                    if(mbcsData->unicodeCodeUnits[entry]==0xfffe) {
                         count[i]+=2;
                     } else {
                         j=999; /* do not count for this lead byte because there are assignments */
@@ -1024,10 +1127,10 @@ compactToUnicode2(MBCSData *mbcsData) {
     /* copy the old trail state, turning all assigned states into unassigned ones */
     for(i=0; i<256; ++i) {
         entry=mbcsData->stateTable[trailState][i];
-        switch((uint32_t)entry>>27U) {
-        case 16|MBCS_STATE_VALID_16:
-        case 16|MBCS_STATE_VALID_16_PAIR:
-            mbcsData->stateTable[newState][i]=(entry&0x8000007f)|0x7fff00|(MBCS_STATE_UNASSIGNED<<27UL);
+        switch(MBCS_ENTRY_FINAL_ACTION(entry)) {
+        case MBCS_STATE_VALID_16:
+        case MBCS_STATE_VALID_16_PAIR:
+            mbcsData->stateTable[newState][i]=MBCS_ENTRY_FINAL_SET_ACTION_VALUE(entry, MBCS_STATE_UNASSIGNED, 0xfffe);
             break;
         default:
             mbcsData->stateTable[newState][i]=entry;
@@ -1038,7 +1141,7 @@ compactToUnicode2(MBCSData *mbcsData) {
     /* in the lead state, redirect all lead bytes with all-unassigned trail bytes to the new state */
     for(i=0; i<256; ++i) {
         if(count[i]>0) {
-            mbcsData->stateTable[leadState][i]=(mbcsData->stateTable[leadState][i]&0xffffff80)|newState;
+            mbcsData->stateTable[leadState][i]=MBCS_ENTRY_SET_STATE(mbcsData->stateTable[leadState][i], newState);
         }
     }
 
@@ -1087,35 +1190,32 @@ compactToUnicode2(MBCSData *mbcsData) {
             /* for each lead byte from there */
             for(i=0; i<256; ++i) {
                 entry=mbcsData->stateTable[leadState][i];
-                if(entry>=0) {
-                    trailState=(uint8_t)(entry&0x7f);
+                if(MBCS_ENTRY_IS_TRANSITION(entry)) {
+                    trailState=(uint8_t)MBCS_ENTRY_TRANSITION_STATE(entry);
                     /* the new state does not have assigned states */
                     if(trailState!=newState) {
-                        trailOffset=entry>>7;
-                        oldTrailOffset=oldStateTable[leadState][i]>>7;
+                        trailOffset=MBCS_ENTRY_TRANSITION_OFFSET(entry);
+                        oldTrailOffset=MBCS_ENTRY_TRANSITION_OFFSET(oldStateTable[leadState][i]);
                         /* for each trail byte */
                         for(j=0; j<256; ++j) {
                             entry=mbcsData->stateTable[trailState][j];
                             /* copy assigned-character code units and adjust fallback offsets */
-                            switch((uint32_t)entry>>27U) {
-                            case 16|MBCS_STATE_VALID_16:
-                                offset=trailOffset+((uint16_t)entry>>7);
+                            switch(MBCS_ENTRY_FINAL_ACTION(entry)) {
+                            case MBCS_STATE_VALID_16:
+                                offset=trailOffset+MBCS_ENTRY_FINAL_VALUE_16(entry);
                                 /* find the old offset according to the old state table */
-                                oldOffset=oldTrailOffset+((uint16_t)oldStateTable[trailState][j]>>7);
+                                oldOffset=oldTrailOffset+MBCS_ENTRY_FINAL_VALUE_16(oldStateTable[trailState][j]);
                                 unit=mbcsData->unicodeCodeUnits[offset]=oldUnicodeCodeUnits[oldOffset];
                                 if(unit==0xfffe && (fallback=findFallback(mbcsData, oldOffset))>=0) {
                                     mbcsData->toUFallbacks[fallback].offset=0x80000000|offset;
                                 }
                                 break;
-                            case 16|MBCS_STATE_VALID_16_PAIR:
-                                offset=trailOffset+((uint16_t)entry>>7);
+                            case MBCS_STATE_VALID_16_PAIR:
+                                offset=trailOffset+MBCS_ENTRY_FINAL_VALUE_16(entry);
                                 /* find the old offset according to the old state table */
-                                oldOffset=oldTrailOffset+((uint16_t)oldStateTable[trailState][j]>>7);
-                                unit=mbcsData->unicodeCodeUnits[offset++]=oldUnicodeCodeUnits[oldOffset++];
+                                oldOffset=oldTrailOffset+MBCS_ENTRY_FINAL_VALUE_16(oldStateTable[trailState][j]);
+                                mbcsData->unicodeCodeUnits[offset++]=oldUnicodeCodeUnits[oldOffset++];
                                 mbcsData->unicodeCodeUnits[offset]=oldUnicodeCodeUnits[oldOffset];
-                                if(unit==0xfffe && (fallback=findFallback(mbcsData, oldOffset))>=0) {
-                                    mbcsData->toUFallbacks[fallback].offset=0x80000000|offset;
-                                }
                                 break;
                             default:
                                 break;
@@ -1155,8 +1255,8 @@ findUnassigned(MBCSData *mbcsData, int32_t state, int32_t offset, uint32_t b) {
     haveAssigned=FALSE;
     for(i=0; i<256; ++i) {
         entry=mbcsData->stateTable[state][i];
-        if(entry>=0) {
-            savings=findUnassigned(mbcsData, entry&0x7f, offset+(entry>>7), (b<<8)|(uint32_t)i);
+        if(MBCS_ENTRY_IS_TRANSITION(entry)) {
+            savings=findUnassigned(mbcsData, MBCS_ENTRY_TRANSITION_STATE(entry), offset+MBCS_ENTRY_TRANSITION_OFFSET(entry), (b<<8)|(uint32_t)i);
             if(savings<0) {
                 haveAssigned=TRUE;
             } else if(savings>0) {
@@ -1164,18 +1264,18 @@ findUnassigned(MBCSData *mbcsData, int32_t state, int32_t offset, uint32_t b) {
                 belowSavings+=savings;
             }
         } else if(!haveAssigned) {
-            switch((uint32_t)entry>>27U) {
-            case 16|MBCS_STATE_VALID_16:
-                entry=offset+((uint16_t)entry>>7);
+            switch(MBCS_ENTRY_FINAL_ACTION(entry)) {
+            case MBCS_STATE_VALID_16:
+                entry=offset+MBCS_ENTRY_FINAL_VALUE_16(entry);
                 if(mbcsData->unicodeCodeUnits[entry]==0xfffe && findFallback(mbcsData, entry)<0) {
                     localSavings+=2;
                 } else {
                     haveAssigned=TRUE;
                 }
                 break;
-            case 16|MBCS_STATE_VALID_16_PAIR:
-                entry=offset+((uint16_t)entry>>7);
-                if(mbcsData->unicodeCodeUnits[entry]==0xfffe && findFallback(mbcsData, entry)<0) {
+            case MBCS_STATE_VALID_16_PAIR:
+                entry=offset+MBCS_ENTRY_FINAL_VALUE_16(entry);
+                if(mbcsData->unicodeCodeUnits[entry]==0xfffe) {
                     localSavings+=4;
                 } else {
                     haveAssigned=TRUE;
@@ -1216,15 +1316,20 @@ compactToUnicodeHelper(MBCSData *mbcsData) {
 static UBool
 transformEUC(MBCSData *mbcsData) {
     uint8_t *p, *q;
-    uint32_t i, oldLength=mbcsData->maxCharLength, old3Top=mbcsData->stage3Top, new3Top;
+    uint32_t i, value, oldLength=mbcsData->maxCharLength, old3Top=mbcsData->stage3Top, new3Top;
     uint8_t b;
 
     if(oldLength<3) {
         return FALSE;
     }
 
+    /* careful: 2-byte and 4-byte codes are stored in platform endianness! */
+
     /* test if all first bytes are in {0, 0x8e, 0x8f} */
     p=mbcsData->fromUBytes;
+    if(!U_IS_BIG_ENDIAN && oldLength==4) {
+        p+=3;
+    }
     for(i=0; i<old3Top; i+=oldLength) {
         b=p[i];
         if(b!=0 && b!=0x8e && b!=0x8f) {
@@ -1232,6 +1337,8 @@ transformEUC(MBCSData *mbcsData) {
             return FALSE;
         }
     }
+    /* restore p if it was modified above */
+    p=mbcsData->fromUBytes;
 
     /* modify outputType and adjust stage3Top */
     mbcsData->header.flags=MBCS_OUTPUT_3_EUC+oldLength-3;
@@ -1241,30 +1348,161 @@ transformEUC(MBCSData *mbcsData) {
      * EUC-encode all byte sequences;
      * see "CJKV Information Processing" (1st ed. 1999) from Ken Lunde, O'Reilly,
      * p. 161 in chapter 4 "Encoding Methods"
+     *
+     * This also must reverse the byte order if the platform is little-endian!
      */
-    q=p;
-    for(i=0; i<old3Top; i+=oldLength) {
-        b=*p++;
-        if(b==0) {
-            /* short sequences are stored directly */
-            /* code set 0 or 1 */
-            *q++=*p++;
-            *q++=*p++;
-        } else if(b==0x8e) {
-            /* code set 2 */
-            *q++=(uint8_t)(*p++&0x7f);
-            *q++=*p++;
-        } else /* b==0x8f */ {
-            /* code set 3 */
-            *q++=*p++;
-            *q++=(uint8_t)(*p++&0x7f);
+    if(oldLength==3) {
+        q=p;
+        for(i=0; i<old3Top; i+=oldLength) {
+            b=*p;
+            if(b==0) {
+                /* short sequences are stored directly */
+                /* code set 0 or 1 */
+                *((uint16_t *)q)++=((uint16_t)p[1]<<8)|p[2];
+            } else if(b==0x8e) {
+                /* code set 2 */
+                *((uint16_t *)q)++=((uint16_t)(p[1]&0x7f)<<8)|p[2];
+            } else /* b==0x8f */ {
+                /* code set 3 */
+                *((uint16_t *)q)++=((uint16_t)p[1]<<8)|(p[2]&0x7f);
+            }
+            p+=3;
         }
-        if(oldLength==4) {
-            *q++=*p++;
+    } else /* oldLength==4 */ {
+        q=p;
+        for(i=0; i<old3Top; i+=4) {
+            value=*((uint32_t *)p)++;
+            if(value<=0xffffff) {
+                /* short sequences are stored directly */
+                /* code set 0 or 1 */
+                *q++=(uint8_t)(value>>16);
+                *q++=(uint8_t)(value>>8);
+                *q++=(uint8_t)value;
+            } else if(value<=0x8effffff) {
+                /* code set 2 */
+                *q++=(uint8_t)((value>>16)&0x7f);
+                *q++=(uint8_t)(value>>8);
+                *q++=(uint8_t)value;
+            } else /* first byte is 0x8f */ {
+                /* code set 3 */
+                *q++=(uint8_t)(value>>16);
+                *q++=(uint8_t)((value>>8)&0x7f);
+                *q++=(uint8_t)value;
+            }
         }
     }
 
     return TRUE;
+}
+
+/*
+ * Compact stage 2 for SBCS by overlapping adjacent stage 2 blocks as far
+ * as possible. Overlapping is done on unassigned head and tail
+ * parts of blocks in steps of MBCS_STAGE_2_MULTIPLIER.
+ * Stage 1 indexes need to be adjusted accordingly.
+ * This function is very similar to genprops/store.c/compactStage().
+ */
+static void
+singleCompactStage2(MBCSData *mbcsData) {
+    /* this array maps the ordinal number of a stage 2 block to its new stage 1 index */
+    uint16_t map[MBCS_STAGE_2_MAX_BLOCKS];
+    uint16_t i, start, prevEnd, newStart;
+
+    /* enter the all-unassigned first stage 2 block into the map */
+    map[0]=MBCS_STAGE_2_ALL_UNASSIGNED_INDEX;
+
+    /* begin with the first block after the all-unassigned one */
+    start=newStart=MBCS_STAGE_2_FIRST_ASSIGNED;
+    while(start<mbcsData->stage2Top) {
+        prevEnd=(uint16_t)(newStart-1);
+
+        /* find the size of the overlap */
+        for(i=0; i<MBCS_STAGE_2_BLOCK_SIZE && mbcsData->stage2Single[start+i]==0 && mbcsData->stage2Single[prevEnd-i]==0; ++i) {}
+
+        if(i>0) {
+            map[start>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT]=(uint16_t)(newStart-i);
+
+            /* move the non-overlapping indexes to their new positions */
+            start+=i;
+            for(i=(uint16_t)(MBCS_STAGE_2_BLOCK_SIZE-i); i>0; --i) {
+                mbcsData->stage2Single[newStart++]=mbcsData->stage2Single[start++];
+            }
+        } else if(newStart<start) {
+            /* move the indexes to their new positions */
+            map[start>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT]=newStart;
+            for(i=MBCS_STAGE_2_BLOCK_SIZE; i>0; --i) {
+                mbcsData->stage2Single[newStart++]=mbcsData->stage2Single[start++];
+            }
+        } else /* no overlap && newStart==start */ {
+            map[start>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT]=start;
+            start=newStart+=MBCS_STAGE_2_BLOCK_SIZE;
+        }
+    }
+
+    /* adjust stage2Top */
+    if(VERBOSE && newStart<mbcsData->stage2Top) {
+        printf("compacting stage 2 from stage2Top=0x%lx to 0x%lx, saving %ld bytes\n",
+               mbcsData->stage2Top, newStart, (mbcsData->stage2Top-newStart)*2);
+    }
+    mbcsData->stage2Top=newStart;
+
+    /* now adjust stage 1 */
+    for(i=0; i<MBCS_STAGE_1_SIZE; ++i) {
+        mbcsData->stage1[i]=map[mbcsData->stage1[i]>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT];
+    }
+}
+
+/* Compact stage 3 for SBCS - same algorithm as above. */
+static void
+singleCompactStage3(MBCSData *mbcsData) {
+    uint16_t *stage3=(uint16_t *)mbcsData->fromUBytes;
+
+    /* this array maps the ordinal number of a stage 3 block to its new stage 2 index */
+    uint16_t map[0x1000];
+    uint16_t i, start, prevEnd, newStart;
+
+    /* enter the all-unassigned first stage 3 block into the map */
+    map[0]=0;
+
+    /* begin with the first block after the all-unassigned one */
+    start=newStart=16;
+    while(start<mbcsData->stage3Top) {
+        prevEnd=(uint16_t)(newStart-1);
+
+        /* find the size of the overlap */
+        for(i=0; i<16 && stage3[start+i]==0 && stage3[prevEnd-i]==0; ++i) {}
+
+        if(i>0) {
+            map[start>>4]=(uint16_t)(newStart-i);
+
+            /* move the non-overlapping indexes to their new positions */
+            start+=i;
+            for(i=(uint16_t)(16-i); i>0; --i) {
+                stage3[newStart++]=stage3[start++];
+            }
+        } else if(newStart<start) {
+            /* move the indexes to their new positions */
+            map[start>>4]=newStart;
+            for(i=16; i>0; --i) {
+                stage3[newStart++]=stage3[start++];
+            }
+        } else /* no overlap && newStart==start */ {
+            map[start>>4]=start;
+            start=newStart+=16;
+        }
+    }
+
+    /* adjust stage3Top */
+    if(VERBOSE && newStart<mbcsData->stage3Top) {
+        printf("compacting stage 3 from stage3Top=0x%lx to 0x%lx, saving %ld bytes\n",
+               mbcsData->stage3Top, newStart, (mbcsData->stage3Top-newStart)*2);
+    }
+    mbcsData->stage3Top=newStart;
+
+    /* now adjust stage 2 */
+    for(i=0; i<mbcsData->stage2Top; ++i) {
+        mbcsData->stage2Single[i]=map[mbcsData->stage2Single[i]>>4];
+    }
 }
 
 /*
@@ -1289,27 +1527,24 @@ compactStage2(MBCSData *mbcsData) {
         prevEnd=(uint16_t)(newStart-1);
 
         /* find the size of the overlap */
-        for(i=0; i<MBCS_STAGE_2_BLOCK_SIZE && mbcsData->table[start+i]==0 && mbcsData->table[prevEnd-i]==0; ++i) {}
-
-        /* overlap by i, adjust it to be a multiple of MBCS_STAGE_2_MULTIPLIER */
-        i&=~(MBCS_STAGE_2_MULTIPLIER-1);
+        for(i=0; i<MBCS_STAGE_2_BLOCK_SIZE && mbcsData->stage2[start+i]==0 && mbcsData->stage2[prevEnd-i]==0; ++i) {}
 
         if(i>0) {
-            map[(start-MBCS_STAGE_1_SIZE)>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT]=(uint16_t)(newStart-i)/MBCS_STAGE_2_MULTIPLIER;
+            map[start>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT]=(uint16_t)(newStart-i);
 
             /* move the non-overlapping indexes to their new positions */
             start+=i;
             for(i=(uint16_t)(MBCS_STAGE_2_BLOCK_SIZE-i); i>0; --i) {
-                mbcsData->table[newStart++]=mbcsData->table[start++];
+                mbcsData->stage2[newStart++]=mbcsData->stage2[start++];
             }
         } else if(newStart<start) {
             /* move the indexes to their new positions */
-            map[(start-MBCS_STAGE_1_SIZE)>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT]=newStart/MBCS_STAGE_2_MULTIPLIER;
+            map[start>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT]=newStart;
             for(i=MBCS_STAGE_2_BLOCK_SIZE; i>0; --i) {
-                mbcsData->table[newStart++]=mbcsData->table[start++];
+                mbcsData->stage2[newStart++]=mbcsData->stage2[start++];
             }
         } else /* no overlap && newStart==start */ {
-            map[(start-MBCS_STAGE_1_SIZE)>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT]=start/MBCS_STAGE_2_MULTIPLIER;
+            map[start>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT]=start;
             start=newStart+=MBCS_STAGE_2_BLOCK_SIZE;
         }
     }
@@ -1317,17 +1552,13 @@ compactStage2(MBCSData *mbcsData) {
     /* adjust stage2Top */
     if(VERBOSE && newStart<mbcsData->stage2Top) {
         printf("compacting stage 2 from stage2Top=0x%lx to 0x%lx, saving %ld bytes\n",
-               mbcsData->stage2Top, newStart, (mbcsData->stage2Top-newStart)*2);
+               mbcsData->stage2Top, newStart, (mbcsData->stage2Top-newStart)*4);
     }
     mbcsData->stage2Top=newStart;
 
     /* now adjust stage 1 */
     for(i=0; i<MBCS_STAGE_1_SIZE; ++i) {
-        /*
-         * map indexing: get stage 2 block ordinals as array indexes -
-         * multiply for the full index, then subtract the base and divide by the block size
-         */
-        mbcsData->table[i]=map[(mbcsData->table[i]*MBCS_STAGE_2_MULTIPLIER-MBCS_STAGE_1_SIZE)>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT];
+        mbcsData->stage1[i]=map[mbcsData->stage1[i]>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT];
     }
 }
 
@@ -1353,8 +1584,8 @@ MBCSPostprocess(NewConverter *cnvData, const UConverterStaticData *staticData) {
              * and the code point is "unassigned" (0xfffe), then change it to
              * the "unassigned" action code with bits 26..23 set to zero and U+fffe.
              */
-            if((entry&0xffffff80)==(int32_t)(0x807fff00|(MBCS_STATE_VALID_DIRECT_16<<27L))) {
-                mbcsData->stateTable[state][cell]=(entry&0x87ffffff)|(MBCS_STATE_UNASSIGNED<<27L);
+            if(MBCS_ENTRY_SET_STATE(entry, 0)==MBCS_ENTRY_FINAL(0, MBCS_STATE_VALID_DIRECT_16, 0xfffe)) {
+                mbcsData->stateTable[state][cell]=MBCS_ENTRY_FINAL_SET_ACTION(entry, MBCS_STATE_UNASSIGNED);
             }
         }
     }
@@ -1379,26 +1610,54 @@ MBCSPostprocess(NewConverter *cnvData, const UConverterStaticData *staticData) {
 
     /* try to compact the fromUnicode tables */
     transformEUC(mbcsData);
-    compactStage2(mbcsData);
+    if(mbcsData->maxCharLength==1) {
+        singleCompactStage3(mbcsData);
+        singleCompactStage2(mbcsData);
+    } else {
+        compactStage2(mbcsData);
+    }
 }
 
 static uint32_t
 MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData, UNewDataMemory *pData) {
     MBCSData *mbcsData=(MBCSData *)cnvData;
-    int32_t stage1Top;
+    int32_t i, stage1Top;
 
-    if(staticData->unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
-        stage1Top=MBCS_STAGE_1_SIZE; /* 0x440==1088 */
-    } else {
-        int32_t i;
-
-        stage1Top=0x40; /* 0x40==64 */
-
-        /* adjust stage 1 entries to include a smaller stage 1 length */
-        for(i=0; i<0x40; ++i) {
-            mbcsData->table[i]-=(MBCS_STAGE_1_SIZE-0x40)/MBCS_STAGE_2_MULTIPLIER;
+    /* adjust stage 1 entries to include the size of stage 1 in the offsets to stage 2 */
+    if(mbcsData->maxCharLength==1) {
+        if(staticData->unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
+            stage1Top=MBCS_STAGE_1_SIZE; /* 0x440==1088 */
+        } else {
+            stage1Top=0x40; /* 0x40==64 */
         }
+        for(i=0; i<stage1Top; ++i) {
+            mbcsData->stage1[i]+=(uint16_t)stage1Top;
+        }
+
+        /* stage2Top has counted 16-bit results, now we need to count bytes */
+        mbcsData->stage2Top*=2;
+
+        /* stage3Top has counted 16-bit results, now we need to count bytes */
+        mbcsData->stage3Top*=2;
+    } else {
+        if(staticData->unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
+            stage1Top=MBCS_STAGE_1_SIZE; /* 0x440==1088 */
+        } else {
+            stage1Top=0x40; /* 0x40==64 */
+        }
+        for(i=0; i<stage1Top; ++i) {
+            mbcsData->stage1[i]+=(uint16_t)stage1Top/2; /* stage 2 contains 32-bit entries, stage 1 16-bit entries */
+        }
+
+        /* stage2Top has counted 32-bit results, now we need to count bytes */
+        mbcsData->stage2Top*=4;
+
+        /* stage3Top has already counted bytes */
     }
+
+    /* round up stage2Top and stage3Top so that the sizes of all data blocks are multiples of 4 */
+    mbcsData->stage2Top=(mbcsData->stage2Top+3)&~3;
+    mbcsData->stage3Top=(mbcsData->stage3Top+3)&~3;
 
     /* fill the header */
     mbcsData->header.offsetToUCodeUnits=
@@ -1409,83 +1668,23 @@ MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData, UNewDat
         mbcsData->header.offsetToUCodeUnits+
         mbcsData->countToUCodeUnits*2;
     mbcsData->header.offsetFromUBytes=
-        mbcsData->header.offsetFromUTable-
-        2*(MBCS_STAGE_1_SIZE-stage1Top)+
-        mbcsData->stage2Top*2;
+        mbcsData->header.offsetFromUTable+
+        stage1Top*2+
+        mbcsData->stage2Top;
 
     /* write the MBCS data */
     udata_writeBlock(pData, &mbcsData->header, sizeof(_MBCSHeader));
     udata_writeBlock(pData, mbcsData->stateTable, mbcsData->header.countStates*1024);
     udata_writeBlock(pData, mbcsData->toUFallbacks, mbcsData->header.countToUFallbacks*sizeof(_MBCSToUFallback));
     udata_writeBlock(pData, mbcsData->unicodeCodeUnits, mbcsData->countToUCodeUnits*2);
-    udata_writeBlock(pData, mbcsData->table, stage1Top*2);
-    udata_writeBlock(pData, mbcsData->table+MBCS_STAGE_1_SIZE, (mbcsData->stage2Top-MBCS_STAGE_1_SIZE)*2);
+    udata_writeBlock(pData, mbcsData->stage1, stage1Top*2);
+    if(mbcsData->maxCharLength==1) {
+        udata_writeBlock(pData, mbcsData->stage2Single, mbcsData->stage2Top);
+    } else {
+        udata_writeBlock(pData, mbcsData->stage2, mbcsData->stage2Top);
+    }
     udata_writeBlock(pData, mbcsData->fromUBytes, mbcsData->stage3Top);
 
     /* return the number of bytes that should have been written */
     return mbcsData->header.offsetFromUBytes+mbcsData->stage3Top;
 }
-
-#if 0
-    /* test code, uses only this file and genmbcs.h */
-
-extern int
-main(int argc, const char *argv[]) {
-    MBCSData *mbcsData;
-    static uint8_t bytes[4];
-    int32_t entry;
-    int i, j;
-
-    /*
-     * sample arguments for shift-jis (max 2):
-     * 0-7f,81-9f:1,a1-df,e0-ef:1  40-7e,80-fc
-     *
-     * sample arguments for euc-jp (max 3):
-     * 0-7f,8e:2,8f:3,a1-fe:1  a1-fe  a1-df  a1-fe:1
-     */
-    if(argc>=2) {
-        mbcsData=MBCSOpen(3);
-
-        for(i=1; i<argc; ++i) {
-            if(!MBCSAddState(mbcsData, argv[i])) {
-                return 2;
-            }
-        }
-        MBCSProcessStates(mbcsData);
-
-        bytes[0]=0x5c;
-        MBCSAddToUnicode(mbcsData, bytes, 1, 0xa5, TRUE);
-        MBCSAddFromUnicode(mbcsData, bytes, 1, 0xa5, TRUE);
-        bytes[0]=0xe2;
-        bytes[1]=0xa3;
-        MBCSAddToUnicode(mbcsData, bytes, 2, 0x4e00, FALSE);
-        MBCSAddFromUnicode(mbcsData, bytes, 2, 0x4e00, FALSE);
-        bytes[0]=0x8e;
-        bytes[1]=0xdf;
-        MBCSAddToUnicode(mbcsData, bytes, 2, 0x3415, FALSE);
-        MBCSAddFromUnicode(mbcsData, bytes, 2, 0x3415, FALSE);
-        bytes[0]=0x8f;
-        bytes[1]=0xbb;
-        bytes[2]=0xcc;
-        MBCSAddToUnicode(mbcsData, bytes, 3, 0x9876, FALSE);
-        MBCSAddFromUnicode(mbcsData, bytes, 3, 0x9876, FALSE);
-
-        MBCSPostprocess(mbcsData, NULL);
-
-        for(i=0; i<(int)mbcsData->header.countStates; ++i) {
-            printf("state=%x: flags=%x\n", i, mbcsData->stateFlags[i]);
-            for(j=0; j<256; ++j) {
-                entry=mbcsData->stateTable[i][j];
-                printf("%2lx  %8lx = %u.%x.%5x.%2x\n", j, entry,
-                       (uint32_t)entry>>31, entry>>27&0xf, entry>>7&0xfffff, entry&0x7f);
-            }
-        }
-
-        MBCSClose(mbcsData);
-    } else {
-        fprintf(stderr, "error: missing state table arguments\n");
-        return 1;
-    }
-    return 0;
-}
-#endif
