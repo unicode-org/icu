@@ -1542,10 +1542,6 @@ InputPath=.\unicode\timezone.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\tzdat.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\ucal.cpp
 # End Source File
 # Begin Source File

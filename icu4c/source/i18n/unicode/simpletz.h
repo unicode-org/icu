@@ -29,12 +29,7 @@
 
 #include "unicode/timezone.h"
 
-struct StandardZone;
-struct DSTZone;
-
 U_NAMESPACE_BEGIN
-
-class TimeZone;
 
 /**
  * <code>SimpleTimeZone</code> is a concrete subclass of <code>TimeZone</code>
@@ -723,15 +718,7 @@ private:
         DOW_LE_DOM_MODE
     };
 
-    friend class TimeZone; // for access to these 2 constructors:
-
     SimpleTimeZone(); // default constructor not implemented
-
-    /**
-     * Construct from memory-mapped data.
-     */
-    SimpleTimeZone(const StandardZone& stdZone, const UnicodeString& id);
-    SimpleTimeZone(const DSTZone& dstZone, const UnicodeString& id);
 
     /**
      * Internal construction method.
