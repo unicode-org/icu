@@ -1232,18 +1232,14 @@ MessageFormat::makeFormat(/*int32_t position, */
             break;
         default:
             newFormat = DateFormat::createDateInstance(DateFormat::kDefault, fLocale);
-            if(newFormat->getDynamicClassID() == SimpleDateFormat::getStaticClassID()){
+            if(newFormat && newFormat->getDynamicClassID() == SimpleDateFormat::getStaticClassID()){
                     ((SimpleDateFormat*)newFormat)->applyPattern(segments[3]);
             }
-                /* Ram: 'success' is not passed to above methods 
-                   and is not set so we donot have to check for failure.
-                if(U_FAILURE(success)) {
-                    fMaxOffset = oldMaxOffset;
-                    success = U_ILLEGAL_ARGUMENT_ERROR;
-                    return;
-                }
-                */
             break;
+        }
+        if (!newFormat) {
+            /* TODO: get the real error from createDateInstance */
+            success = U_MEMORY_ALLOCATION_ERROR;
         }
         break;
     case 5: case 6:// time
@@ -1268,24 +1264,20 @@ MessageFormat::makeFormat(/*int32_t position, */
             break;
         default:
             newFormat = DateFormat::createTimeInstance(DateFormat::kDefault, fLocale);
-            if(newFormat->getDynamicClassID() == SimpleDateFormat::getStaticClassID()){
+            if(newFormat && newFormat->getDynamicClassID() == SimpleDateFormat::getStaticClassID()){
                     ((SimpleDateFormat*)newFormat)->applyPattern(segments[3]);
             }
-                /* Ram: 'success' is not passed to above methods 
-                   and is not set so we donot have to check for failure.
-                if(U_FAILURE(success)) {
-                    fMaxOffset = oldMaxOffset;
-                    success = U_ILLEGAL_ARGUMENT_ERROR;
-                    return;
-                }
-                */
             break;
+        }
+        if (!newFormat) {
+            /* TODO: get the real error from createTimeInstance */
+            success = U_MEMORY_ALLOCATION_ERROR;
         }
         break;
     case 7: case 8:// choice
         fFormatTypeList[argumentNumber] = Formattable::kDouble;
 
-        newFormat = new ChoiceFormat(segments[3],parseError,success);
+        newFormat = new ChoiceFormat(segments[3], parseError, success);
         if(U_FAILURE(success)) {
             fMaxOffset = oldMaxOffset;
             return argumentNumber;
