@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIteratorFactory.java,v $ 
- * $Date: 2004/01/26 23:04:28 $ 
- * $Revision: 1.9 $
+ * $Date: 2004/02/06 21:54:03 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -14,11 +14,11 @@ package com.ibm.icu.text;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUService;
@@ -98,28 +98,30 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
                                              String rulesName,
                                              String dictionaryName) {
 
+		BreakIterator iter = null;
         ResourceBundle bundle = ICULocaleData.getResourceBundle("BreakIteratorRules", where);
         String[] classNames = bundle.getStringArray("BreakIteratorClasses");
-
         String rules = bundle.getString(rulesName);
-
-        BreakIterator iter = null;
-
         if (classNames[kind].equals("RuleBasedBreakIterator")) {
             iter = new RuleBasedBreakIterator(rules);
         }
         else if (classNames[kind].equals("DictionaryBasedBreakIterator")) {
             try {
-                // System.out.println(dictionaryName);
-                Object t = bundle.getObject(dictionaryName);
-                // System.out.println(t);
-                URL url = (URL)t;
-                InputStream dictionary = url.openStream();
+				InputStream dictionary = ICUData.getStream(bundle.getString(dictionaryName));
+//                System.out.println("bundle: " + bundle + " dn: " + dictionaryName);
+//                Object t = bundle.getObject(dictionaryName);
+//                // System.out.println(t);
+//                URL url = (URL)t;
+//                System.out.println("url: " + url);
+//                InputStream dictionary = url.openStream();
+//                System.out.println("stream: " + dictionary);
                 iter = new DictionaryBasedBreakIterator(rules, dictionary);
             }
             catch(IOException e) {
+            	System.out.println(e); // debug
             }
             catch(MissingResourceException e) {
+            	System.out.println(e); // debug
             }
 	    // TODO: we don't have 'bad' resource data, so this should never happen
 	    // in our current tests.

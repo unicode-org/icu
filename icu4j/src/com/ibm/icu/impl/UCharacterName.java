@@ -6,8 +6,8 @@
 *
 * $Source:
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $
-* $Date: 2003/06/09 23:15:00 $
-* $Revision: 1.6 $
+* $Date: 2004/02/06 21:54:02 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -16,7 +16,7 @@ package com.ibm.icu.impl;
 import java.io.InputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import com.ibm.icu.impl.Utility;
+
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.lang.UCharacter;
@@ -65,7 +65,7 @@ public final class UCharacterName
             try {
                 INSTANCE_ = new UCharacterName();
             }catch(IOException e){
-                throw new IllegalArgumentException("Could not construct UCharacterName. Missing unames.icu?");
+                throw new InternalError("Could not construct UCharacterName. Missing unames.icu?");
             }
             catch (Exception e) {
                 throw new RuntimeException(e.getMessage());
@@ -1192,17 +1192,11 @@ public final class UCharacterName
     */
     private UCharacterName() throws IOException
     {
-        InputStream i = getClass().getResourceAsStream(NAME_FILE_NAME_);
-        if(i!=null ){
-          BufferedInputStream b = new BufferedInputStream(i,
-                                                          NAME_BUFFER_SIZE_);
-  
-          UCharacterNameReader reader = new UCharacterNameReader(b);
-          reader.read(this);
-        } else{
-            throw new IOException("unames.icu could not be opened. Is ICUModularBuild?");
-        }
-        i.close();
+		InputStream is = ICUData.getRequiredStream(NAME_FILE_NAME_);
+        BufferedInputStream b = new BufferedInputStream(is, NAME_BUFFER_SIZE_);
+        UCharacterNameReader reader = new UCharacterNameReader(b);
+        reader.read(this);
+        b.close();
     }
 
     // private methods ---------------------------------------------------

@@ -210,8 +210,14 @@ public class JDKTimeZone extends TimeZone {
 		final Class[] argtypes = new Class[0];
 		Method m = zone.getClass().getMethod("getDSTSavings", argtypes); 
 		return ((Integer) m.invoke(zone, args)).intValue();   
-	    } catch (Exception e) {   
-		// should never happen
+	    } catch (Exception e) {
+	    	// if zone is in the sun.foo class hierarchy and we
+	    	// are in a protection domain, we'll get a security
+	    	// exception.  And if we claim to support DST, but 
+	    	// return a value of 0, later java.util.SimpleTimeZone will
+	    	// throw an illegalargument exception.  so... fake
+	    	// the dstoffset;
+	    	return 3600000;
 	    }   
   	}
 	return 0;

@@ -11,6 +11,7 @@
 package com.ibm.icu.impl;
 
 import java.io.*;
+
 import com.ibm.icu.lang.*;
 
 /**
@@ -118,7 +119,7 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
     public UPropertyAliases() throws IOException {
 
         // Open the .icu file from the jar/classpath
-        InputStream is = getClass().getResourceAsStream(DATA_FILE_NAME);
+		InputStream is = ICUData.getRequiredStream(DATA_FILE_NAME);
         BufferedInputStream b = new BufferedInputStream(is, DATA_BUFFER_SIZE);
         // Read and discard Unicode version...
        /* byte unicodeVersion[] = */ICUBinary.readHeader(b, DATA_FORMAT_ID, this);

@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/IDNA.java,v $
- * $Date: 2003/12/02 01:34:32 $
- * $Revision: 1.5 $ 
+ * $Date: 2004/02/06 21:54:03 $
+ * $Revision: 1.6 $ 
  *
  *****************************************************************************************
  */
@@ -14,7 +14,7 @@ package com.ibm.icu.text;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.impl.ICUData;
 
 /**
  *
@@ -88,7 +88,7 @@ public final class IDNA {
     /* private constructor to prevent construction of the object */
     private IDNA(){
         try{
-           InputStream stream = LocaleUtility.getImplDataResourceAsStream("uidna.spp");
+           InputStream stream = ICUData.getRequiredStream("data/uidna.spp");
            namePrep = new StringPrep(stream);
            stream.close();
         }catch (IOException e){

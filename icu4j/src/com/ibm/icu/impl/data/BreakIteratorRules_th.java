@@ -5,24 +5,26 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/BreakIteratorRules_th.java,v $
- * $Date: 2003/07/03 17:48:12 $
- * $Revision: 1.10 $
+ * $Date: 2004/02/06 21:54:04 $
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.impl.data;
 
 import java.util.ListResourceBundle;
-import java.net.URL;
+
+import com.ibm.icu.impl.ICUData;
 
 public class BreakIteratorRules_th extends ListResourceBundle {
-    public Object[][] getContents() {
+	private static final String DATA_NAME = "data/BreakDictionaryData_th.brk";
 
-        URL url = getClass().getResource("BreakDictionaryData_th.brk");
+    public Object[][] getContents() {
+		final boolean exists = ICUData.exists(DATA_NAME);
 
         // if dictionary wasn't found, then this resource bundle doesn't have
         // much to contribute...
-        if (url == null) {
+        if (!exists) {
             return new Object[0][0];
         }
 
@@ -235,8 +237,8 @@ public class BreakIteratorRules_th extends ListResourceBundle {
                         + "\u0e25[^$paiyannoi$_ignore_]);"
             },
 
-            { "WordBreakDictionary", url },
-            { "LineBreakDictionary", url }
+            { "WordBreakDictionary", DATA_NAME }, // now a path to ICU4J-specific resource
+            { "LineBreakDictionary", DATA_NAME }
         };
     }
 }

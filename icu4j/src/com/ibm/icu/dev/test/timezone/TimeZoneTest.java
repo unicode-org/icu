@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneTest.java,v $
- * $Date: 2004/01/05 23:00:14 $
- * $Revision: 1.18 $
+ * $Date: 2004/02/06 21:53:59 $
+ * $Revision: 1.19 $
  *
  *******************************************************************************
  */
@@ -833,7 +833,9 @@ public class TimeZoneTest extends TestFmwk
 	    final Class[] argtypes = new Class[0];
 	    java.lang.reflect.Method m = tz_java.getClass().getMethod("getDSTSavings", argtypes); 
 	    dst_java = ((Integer) m.invoke(tz_java, args)).intValue();   
-	} catch (Exception e) {   
+	} catch (Exception e) {
+		// see JDKTimeZone for the reason for this code
+		dst_java = 3600000;
 	}
 	
 	com.ibm.icu.util.TimeZone tz_icu = com.ibm.icu.util.TimeZone.getTimeZone(tzName);

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2003/11/14 00:06:08 $
- * $Revision: 1.23 $
+ * $Date: 2004/02/06 21:54:00 $
+ * $Revision: 1.24 $
  *******************************************************************************
  */
  
@@ -279,12 +279,12 @@ public final class NormalizerImpl {
     * Constructor
     * @exception thrown when data reading fails or data corrupted
     */
-    private NormalizerImpl() throws IOException{
+    private NormalizerImpl() throws IOException {
         //data should be loaded only once
         if(!isDataLoaded){
             
-            // jar access
-            InputStream i = getClass().getResourceAsStream(DATA_FILE_NAME);
+	        // jar access
+	        InputStream i = ICUData.getRequiredStream(DATA_FILE_NAME);
             BufferedInputStream b = new BufferedInputStream(i,DATA_BUFFER_SIZE);
             NormalizerDataReader reader = new NormalizerDataReader(b);
             
@@ -307,7 +307,6 @@ public final class NormalizerImpl {
             normTrieImpl = new NormTrieImpl();
             auxTrieImpl = new AuxTrieImpl();
                         
-
             // load the rest of the data data and initialize the data members
             reader.read(normBytes, fcdBytes,auxBytes, extraData, combiningTable, 
                         canonStartSets);
@@ -333,7 +332,6 @@ public final class NormalizerImpl {
                                  );
             
             b.close();
-            i.close();
         }
     }
         

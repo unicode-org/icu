@@ -1,4 +1,6 @@
 Manifest-Version: 1.0
+
+Name: com/ibm/icu/
 Specification-Title: ICU for Java
 Specification-Version: 2.8
 Specification-Vendor: ICU
@@ -6,6 +8,5 @@ Implementation-Title: ICU for Java
 Implementation-Version: 2.8.0
 Implementation-Vendor: IBM Corporation
 Implementation-Vendor-Id: com.ibm
-Copyright-Info: Copyright (c) 2002-2003, International Business Machines Corporation and others.  All Rights Reserved.
-
-Name: com/ibm/icu
+Copyright-Info: Copyright (c) 2000-2004, International Business Machines Corporation and others.  All Rights Reserved.
+Sealed: false

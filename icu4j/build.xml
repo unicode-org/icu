@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2004/01/30 19:17:51 $
-* $Revision: 1.87 $
+* $Date: 2004/02/06 21:54:06 $
+* $Revision: 1.88 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -86,6 +86,7 @@
         <property name="jarDocs.file" value="icu4jdocs.jar"/>
         <property name="icu4j.manifest" value="${src.dir}/com/ibm/icu/manifest.stub"/>
         <property name="icu4j.module.manifest" value="${src.dir}/com/ibm/icu/manifest.module.stub"/>
+        <property name="icu4j.tests.manifest" value="${src.dir}/com/ibm/icu/dev/test/manifest.test.stub"/>
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
         <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
 
@@ -239,11 +240,12 @@
             manifest="${icu4j.manifest}"/>
     </target>
 
-    <target name="testJar" depends="tests">
-        <jar jarfile="${testjar.file}"
-            compress="true"
-            includes="com/ibm/icu/dev/test/**/*"
-            basedir="${build.dir}"/>
+    <target name="testJar" depends="tests,jar">
+        <jar jarfile="${testjar.file}" compress="true" manifest="${icu4j.tests.manifest}">
+            <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*"/>
+            <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/TestDataElements*.class"/>
+            <fileset dir="${src.dir}" includes="com/ibm/icu/dev/data/**/*/" excludes="**/*.java"/> <!-- too broad, but easy -->
+        </jar>
     </target>
 
     <target name="jarSrc" depends="init">
@@ -310,24 +312,24 @@
 
     <target name="check" depends="tests">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes">
+        <arg value="-w"/>
         <classpath>
                 <pathelement path="${java.class.path}/"/>
                 <pathelement location="clover.jar"/>
                 <pathelement path="${build.dir}"/>
-            </classpath>
+        </classpath>
     </java>
     </target>
 
-    <target name="secureCheck" depends="tests">
+    <target name="secureCheck" depends="testJar">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes">
         <!-- (use for debugging, LOTS of output) jvmarg value="-Djava.security.debug=access" -->
         <jvmarg value="-Djava.security.manager"/>
-    <jvmarg value="-Djava.security.policy=src/com/ibm/icu/dev/test/security.policy"/>
-    <arg value="-w"/>
+        <jvmarg value="-Djava.security.policy=${src.dir}/com/ibm/icu/dev/test/security.policy"/>
+        <arg value="-w"/>
         <classpath>
-            <pathelement path="${java.class.path}/"/>
             <pathelement location="clover.jar"/>
-            <pathelement path="${build.dir}"/>
+            <pathelement location="${testjar.file}"/>
         </classpath>
     </java>
     </target>
