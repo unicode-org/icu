@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ScriptTagModuleWriter.java,v $
- * $Date: 2003/05/14 18:36:30 $
- * $Revision: 1.4 $
+ * $Date: 2003/05/21 16:32:08 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -46,9 +46,11 @@ public class ScriptTagModuleWriter extends ModuleWriter
             output.print(scriptData.getScriptTagLabel(script));
             output.print("ScriptTag = ");
             output.print(scriptData.makeScriptTag(script));
-            output.print("; /* ");
+            output.print("; /* '");
+            output.print(scriptData.getScriptTag(script));
+            output.print("' (");
             output.print(scriptData.getScriptName(script));
-            output.println(" */");
+            output.println(") */");
         }
         
         output.println(hScriptPostamble);
@@ -61,9 +63,11 @@ public class ScriptTagModuleWriter extends ModuleWriter
             output.print(languageData.getLanguageTagLabel(language));
             output.print("LanguageTag = ");
             output.print(languageData.makeLanguageTag(language));
-            output.print("; /* ");
+            output.print("; /* '");
+            output.print(languageData.getLanguageTag(language));
+            output.print("' (");
             output.print(languageData.getLanguageName(language));
-            output.println(" */");
+            output.println(") */");
         }
         
         output.println(hPostamble);
