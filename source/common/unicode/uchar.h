@@ -1022,6 +1022,27 @@ u_toupper(UChar32 c);
 U_CAPI UChar32 U_EXPORT2
 u_totitle(UChar32 c);
 
+/** Option value for case folding: use all mappings defined in CaseFolding.txt. */
+#define U_FOLD_CASE_DEFAULT 0
+/** Option value for case folding: exclude the mappings for dotted I and dotless i marked with 'I' in CaseFolding.txt. */
+#define U_FOLD_CASE_EXCLUDE_SPECIAL_I 1
+
+/**
+ * The given character is mapped to its case folding equivalent according to
+ * UnicodeData.txt and CaseFolding.txt; if the character has no case folding equivalent, the character 
+ * itself is returned.
+ * Only "simple", single-code point case folding mappings are used.
+ * "Full" mappings are used by u_strFoldCase().
+ *
+ * @param c     the character to be converted
+ * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ * @return      the case folding equivalent of the character, if any;
+ *              otherwise the character itself.
+ * @draft
+ */
+U_CAPI UChar32 U_EXPORT2
+u_foldCase(UChar32 c, uint32_t options);
+
 /**
  * Gets the Unicode version information.  The version array stores the version information
  * for the Unicode standard that is currently used by ICU.  For example, release "1.3.31.2" 

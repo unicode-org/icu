@@ -211,6 +211,8 @@ static UVersionInfo dataVersion={ 3, 0, 0, 0 };
 static const uint16_t *propsTable=NULL;
 #define props32Table ((uint32_t *)propsTable)
 
+static const UChar *ucharsTable=NULL;
+
 static int8_t havePropsData=0;
 
 /* index values loaded from uprops.dat */
@@ -281,6 +283,7 @@ loadPropsData() {
         stage23Bits=(uint16_t)(indexes[INDEX_STAGE_2_BITS]+indexes[INDEX_STAGE_3_BITS]);
         stage2Mask=(uint16_t)((1<<indexes[INDEX_STAGE_2_BITS])-1);
         stage3Mask=(uint16_t)((1<<indexes[INDEX_STAGE_3_BITS])-1);
+        ucharsTable=(const UChar *)(props32Table+indexes[INDEX_UCHARS]);
         havePropsData=1;
 
         /* if a different thread set it first, then close the extra data */
@@ -301,7 +304,8 @@ enum {
     EXC_NUMERIC_VALUE,
     EXC_DENOMINATOR_VALUE,
     EXC_MIRROR_MAPPING,
-    EXC_SPECIAL_CASING
+    EXC_SPECIAL_CASING,
+    EXC_CASE_FOLDING
 };
 
 enum {
@@ -370,6 +374,11 @@ static uint8_t flagsOffset[256]={
         (index)-=EXC_GROUP; \
     } \
     (offset)+=flagsOffset[(flags)&((1<<(index))-1)]; \
+}
+
+U_CFUNC UBool
+uprv_haveProperties() {
+    return HAVE_DATA;
 }
 
 /* API functions ------------------------------------------------------------ */
@@ -967,7 +976,7 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
                      UErrorCode *pErrorCode) {
     UChar buffer[UTF_MAX_CHAR_LENGTH];
     uint32_t *pe;
-    const UChar *uchars, *u;
+    const UChar *u;
     uint32_t props, firstExceptionValue;
     int32_t srcIndex, destIndex, i, loc;
     UChar32 c;
@@ -1006,7 +1015,6 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
     }
 
     /* set up local variables */
-    uchars=(const UChar *)(props32Table+indexes[INDEX_UCHARS]);
     loc=getCaseLocale(locale);
 
     /* case mapping loop */
@@ -1067,7 +1075,7 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
                     }
                 } else {
                     /* get the special case mapping string from the data file */
-                    u=uchars+(props&0xffff);
+                    u=ucharsTable+(props&0xffff);
                     i=(int32_t)(*u++)&0x1f;
                 }
 
@@ -1147,7 +1155,7 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                      UErrorCode *pErrorCode) {
     UChar buffer[UTF_MAX_CHAR_LENGTH];
     uint32_t *pe;
-    const UChar *uchars, *u;
+    const UChar *u;
     uint32_t props, firstExceptionValue;
     int32_t srcIndex, destIndex, i, loc;
     UChar32 c;
@@ -1186,7 +1194,6 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
     }
 
     /* set up local variables */
-    uchars=(const UChar *)(props32Table+indexes[INDEX_UCHARS]);
     loc=getCaseLocale(locale);
 
     /* case mapping loop */
@@ -1252,7 +1259,7 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                     }
                 } else {
                     /* get the special case mapping string from the data file */
-                    u=uchars+(props&0xffff);
+                    u=ucharsTable+(props&0xffff);
                     i=(int32_t)*u++;
 
                     /* skip the lowercase result string */
@@ -1285,6 +1292,272 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                 continue;
             } else if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_UPPERCASE)) {
                 i=EXC_UPPERCASE;
+                ++pe;
+                ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
+                c=(UChar32)*pe;
+            }
+        }
+
+        /* handle 1:1 code point mappings from UnicodeData.txt */
+        if(c<=0xffff) {
+            if( destIndex<destCapacity ||
+                /* attempt to grow the buffer */
+                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+1)+20, destIndex)))
+            ) {
+                dest[destIndex++]=(UChar)c;
+            } else {
+                /* buffer overflow */
+                /* keep incrementing the destIndex for preflighting */
+                ++destIndex;
+            }
+        } else {
+            if( (destIndex+2)<=destCapacity ||
+                /* attempt to grow the buffer */
+                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+2)+20, destIndex)))
+            ) {
+                dest[destIndex++]=(UChar)(0xd7c0+(c>>10));
+                dest[destIndex++]=(UChar)(0xdc00|(c&0x3ff));
+            } else {
+                /* buffer overflow */
+                /* write the first surrogate if possible */
+                if(destIndex<destCapacity) {
+                    dest[destIndex]=(UChar)(0xd7c0+(c>>10));
+                }
+                /* keep incrementing the destIndex for preflighting */
+                destIndex+=2;
+            }
+        }
+    }
+
+    if(destIndex>destCapacity) {
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    }
+    return destIndex;
+}
+
+/* case folding ------------------------------------------------------------- */
+
+/*
+ * Case folding is similar to lowercasing.
+ * The result may be a simple mapping, i.e., a single code point, or
+ * a full mapping, i.e., a string.
+ * If the case folding for a code point is the same as its simple (1:1) lowercase mapping,
+ * then only the lowercase mapping is stored.
+ */
+
+/* return the simple case folding mapping for c */
+U_CAPI UChar32 U_EXPORT2
+u_foldCase(UChar32 c, uint32_t options) {
+    uint32_t props=GET_PROPS(c);
+    if(!PROPS_VALUE_IS_EXCEPTION(props)) {
+        if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
+            return c+GET_SIGNED_VALUE(props);
+        }
+    } else {
+        uint32_t *pe=GET_EXCEPTIONS(props);
+        uint32_t firstExceptionValue=*pe;
+        if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_CASE_FOLDING)) {
+            uint32_t *oldPE=pe;
+            int i=EXC_CASE_FOLDING;
+            ++pe;
+            ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
+            props=*pe;
+            if(props!=0) {
+                /* return the simple mapping, if there is one */
+                const UChar *uchars=ucharsTable+(props&0xffff);
+                UChar32 simple;
+                i=0;
+                UTF_NEXT_CHAR_UNSAFE(uchars, i, simple);
+                if(simple!=0) {
+                    return simple;
+                }
+                /* fall through to use the lowercase exception value if there is no simple mapping */
+                pe=oldPE;
+            } else {
+                /* special case folding mappings, hardcoded */
+                if(options==U_FOLD_CASE_DEFAULT && (uint32_t)(c-0x130)<=1) {
+                    /* map dotted I and dotless i to U+0069 small i */
+                    return 0x69;
+                }
+                /* return c itself because it is excluded from case folding */
+                return c;
+            }
+        }
+        /* not else! - allow to fall through from above */
+        if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_LOWERCASE)) {
+            int i=EXC_LOWERCASE;
+            ++pe;
+            ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
+            return (UChar32)*pe;
+        }
+    }
+    return c; /* no mapping - return c itself */
+}
+
+/* internal, return the full case folding mapping for c, must be used only if uprv_haveProperties() is true */
+U_CFUNC int32_t
+u_internalFoldCase(UChar32 c, UChar dest[32], uint32_t options) {
+    uint32_t props=GET_PROPS_UNSAFE(c);
+    int32_t i;
+
+    if(!PROPS_VALUE_IS_EXCEPTION(props)) {
+        if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
+            c+=GET_SIGNED_VALUE(props);
+        }
+    } else {
+        uint32_t *pe=GET_EXCEPTIONS(props);
+        uint32_t firstExceptionValue=*pe;
+        if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_CASE_FOLDING)) {
+            int i=EXC_CASE_FOLDING;
+            ++pe;
+            ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
+            props=*pe;
+            if(props!=0) {
+                /* return the full mapping */
+                const UChar *uchars=ucharsTable+(props&0xffff)+2;
+                props>>=24;
+
+                /* copy the result string */
+                i=0;
+                while(i<props) {
+                    dest[i++]=*uchars++;
+                }
+                return i;
+            } else {
+                /* special case folding mappings, hardcoded */
+                if(options==U_FOLD_CASE_DEFAULT && (uint32_t)(c-0x130)<=1) {
+                    /* map dotted I and dotless i to U+0069 small i */
+                    dest[0]=0x69;
+                    return 1;
+                }
+                /* return c itself because it is excluded from case folding */
+            }
+        } else if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_LOWERCASE)) {
+            int i=EXC_LOWERCASE;
+            ++pe;
+            ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
+            c=(UChar32)*pe;
+        }
+    }
+
+    /* write c to dest */
+    i=0;
+    UTF_APPEND_CHAR_UNSAFE(dest, i, c);
+    return i;
+}
+
+/* case-fold the source string using the full mappings */
+U_CFUNC int32_t
+u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
+                      const UChar *src, int32_t srcLength,
+                      uint32_t options,
+                      GrowBuffer *growBuffer, void *context,
+                      UErrorCode *pErrorCode) {
+    UChar buffer[UTF_MAX_CHAR_LENGTH];
+    uint32_t *pe;
+    const UChar *uchars, *u;
+    uint32_t props, firstExceptionValue;
+    int32_t srcIndex, destIndex, i;
+    UChar32 c;
+    UBool canGrow;
+
+    /* do not attempt to grow if there is no growBuffer function or if it has failed before */
+    canGrow= growBuffer!=NULL;
+
+    /* test early, once, if there is a data file */
+    if(!HAVE_DATA) {
+        /*
+         * If we do not have real character properties data,
+         * then we only do a fixed-length ASCII case mapping.
+         */
+        if(srcLength<=destCapacity ||
+            /* attempt to grow the buffer */
+            (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, srcLength, 0)))
+        ) {
+            destIndex=srcLength;
+            *pErrorCode=U_USING_DEFAULT_ERROR;
+        } else {
+            destIndex=destCapacity;
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        }
+
+        for(srcIndex=0; srcIndex<destIndex; ++srcIndex) {
+            c=src[srcIndex];
+            if((uint32_t)(c-0x41)<26) {
+                dest[srcIndex]=(UChar)(c+0x20);
+            } else {
+                dest[srcIndex]=(UChar)c;
+            }
+        }
+
+        return srcLength;
+    }
+
+    /* set up local variables */
+    /* add 2 because we always need to skip the 2 UChars for the simple mappings */
+    uchars=ucharsTable+2;
+
+    /* case mapping loop */
+    srcIndex=destIndex=0;
+    while(srcIndex<srcLength) {
+        UTF_NEXT_CHAR(src, srcIndex, srcLength, c);
+        props=GET_PROPS_UNSAFE(c);
+        if(!PROPS_VALUE_IS_EXCEPTION(props)) {
+            if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
+                c+=GET_SIGNED_VALUE(props);
+            }
+        } else {
+            pe=GET_EXCEPTIONS(props);
+            firstExceptionValue=*pe;
+            if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_CASE_FOLDING)) {
+                i=EXC_CASE_FOLDING;
+                ++pe;
+                ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
+                props=*pe;
+                /* fill u and i with the case mapping result string */
+                if(props!=0) {
+                    /* get the case folding string from the data file */
+                    u=uchars+(props&0xffff);
+                    i=(int32_t)(props>>24);
+                } else {
+                    /* special case folding mappings, hardcoded */
+                    u=buffer;
+                    if(options==U_FOLD_CASE_DEFAULT && (uint32_t)(c-0x130)<=1) {
+                        /* map dotted I and dotless i to U+0069 small i */
+                        buffer[0]=0x69;
+                        i=1;
+                    } else {
+                        /* output c itself because it is excluded from case folding */
+                        i=0;
+                        UTF_APPEND_CHAR_UNSAFE(buffer, i, c);
+                    }
+                }
+
+                /* output this case mapping result string */
+                if( (destIndex+i)<=destCapacity ||
+                    /* attempt to grow the buffer */
+                    (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+i)+20, destIndex)))
+                ) {
+                    /* copy the case mapping to the destination */
+                    while(i>0) {
+                        dest[destIndex++]=*u++;
+                        --i;
+                    }
+                } else {
+                    /* buffer overflow */
+                    /* copy as much as possible */
+                    while(destIndex<destCapacity) {
+                        dest[destIndex++]=*u++;
+                        --i;
+                    }
+                    /* keep incrementing the destIndex for preflighting */
+                    destIndex+=i;
+                }
+
+                /* do not fall through to the output of c */
+                continue;
+            } else if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_LOWERCASE)) {
+                i=EXC_LOWERCASE;
                 ++pe;
                 ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
                 c=(UChar32)*pe;

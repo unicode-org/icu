@@ -694,6 +694,22 @@ public:
     static inline UChar32 toTitleCase(UChar32 ch);
 
     /**
+     * The given character is mapped to its case folding equivalent according to
+     * UnicodeData.txt and CaseFolding.txt; if the character has no case folding equivalent, the character 
+     * itself is returned.
+     * Only "simple", single-code point case folding mappings are used.
+     * "Full" mappings are used by UnicodeString::foldCase().
+     *
+     * @param c     the character to be converted
+     * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+     * @return      the case folding equivalent of the character, if any;
+     *              otherwise the character itself.
+     * @draft
+     */
+    static inline UChar32
+    foldCase(UChar32 c, uint32_t options);
+
+    /**
      * Determines if the specified character is a Unicode space character
      * according to Unicode 2.1.2.
      *
@@ -1164,6 +1180,12 @@ Unicode::toTitleCase(UChar32 ch) {
     return u_totitle(ch);
 }
 
+// Transforms the Unicode character to its case folded equivalent.
+inline UChar32       
+Unicode::foldCase(UChar32 ch, uint32_t options) {
+    return u_foldCase(ch, options);
+}
+    
 // Checks if the Unicode character is a space character.
 inline UBool
 Unicode::isSpaceChar(UChar32 ch) {
