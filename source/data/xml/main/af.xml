@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:03 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0036">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Januarie</month>
+				<month id="2">Februarie</month>
+				<month id="3">Maart</month>
+				<month id="4">April</month>
+				<month id="5">Mei</month>
+				<month id="6">Junie</month>
+				<month id="7">Julie</month>
+				<month id="8">Augustus</month>
+				<month id="9">September</month>
+				<month id="10">Oktober</month>
+				<month id="11">November</month>
+				<month id="12">Desember</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Jan</month>
+				<month id="2">Feb</month>
+				<month id="3">Mar</month>
+				<month id="4">Apr</month>
+				<month id="5">Mei</month>
+				<month id="6">Jun</month>
+				<month id="7">Jul</month>
+				<month id="8">Aug</month>
+				<month id="9">Sep</month>
+				<month id="10">Okt</month>
+				<month id="11">Nov</month>
+				<month id="12">Des</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">Sondag </day>
+				<day id="2">Maandag </day>
+				<day id="3">Dinsdag </day>
+				<day id="4">Woensdag </day>
+				<day id="5">Donderdag </day>
+				<day id="6">Vrydag </day>
+				<day id="7">Saterdag </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">So </day>
+				<day id="2">Ma </day>
+				<day id="3">Di </day>
+				<day id="4">Wo </day>
+				<day id="5">Do </day>
+				<day id="6">Vr </day>
+				<day id="7">Sa </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>VM</am><pm>NM</pm>
+		</calendar>
+	</calendars>
+
+</localeData>

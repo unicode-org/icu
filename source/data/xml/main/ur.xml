@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:35 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0020">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">جنورى</month>
+				<month id="2">فرورى</month>
+				<month id="3">مارچ</month>
+				<month id="4">اپريل</month>
+				<month id="5">مئ</month>
+				<month id="6">جون</month>
+				<month id="7">جولاٸ</month>
+				<month id="8">اگست</month>
+				<month id="9">ستمبر</month>
+				<month id="10">اکتوبر</month>
+				<month id="11">نومبر</month>
+				<month id="12">دسمبر</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">جنورى</month>
+				<month id="2">فرورى</month>
+				<month id="3">مارچ</month>
+				<month id="4">اپريل</month>
+				<month id="5">مئ</month>
+				<month id="6">جون</month>
+				<month id="7">جولاٸ</month>
+				<month id="8">اگست</month>
+				<month id="9">ستمبر</month>
+				<month id="10">اکتوبر</month>
+				<month id="11">نومبر</month>
+				<month id="12">دسمبر</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">اتوار </day>
+				<day id="2">پير </day>
+				<day id="3">منگل </day>
+				<day id="4">بدھ </day>
+				<day id="5">جمعرات </day>
+				<day id="6">جمعه </day>
+				<day id="7">هفته </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">اتوار </day>
+				<day id="2">پير </day>
+				<day id="3">منگل </day>
+				<day id="4">بدھ </day>
+				<day id="5">جمعرات </day>
+				<day id="6">جمعه </day>
+				<day id="7">هفته </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+		</calendar>
+	</calendars>
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<normalization>OFF</normalization>
+		</collationElements>
+	</collation>
+
+</localeData>

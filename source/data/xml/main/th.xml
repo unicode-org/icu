@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:34 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="001E">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="aa" >อาฟา</language>
+			<language id="ab" >แอบกาเซีย</language>
+			<language id="af" >แอฟริกัน</language>
+			<language id="am" >อัมฮาริค</language>
+			<language id="ar" >อาระบิค</language>
+			<language id="as" >อัสสัมมิส</language>
+			<language id="ay" >ไอมารา</language>
+			<language id="az" >อาเซอร์ไบจานี</language>
+			<language id="ba" >บาสช์กีร์</language>
+			<language id="be" >บายโลรัสเซีย</language>
+			<language id="bg" >บัลแกเรีย</language>
+			<language id="bh" >บิฮารี</language>
+			<language id="bi" >บิสลามา</language>
+			<language id="bn" >เบนการี</language>
+			<language id="bo" >ทิเบต</language>
+			<language id="br" >บรีทัน</language>
+			<language id="ca" >แคตาแลน</language>
+			<language id="co" >คอร์ซิกา</language>
+			<language id="cs" >เช็ค</language>
+			<language id="cy" >เวลส์</language>
+			<language id="da" >เดนมาร์ก</language>
+			<language id="de" >เยอรมัน</language>
+			<language id="dz" >ภูฐานี</language>
+			<language id="el" >กรีก</language>
+			<language id="en" >อังกฤษ</language>
+			<language id="eo" >เอสเปอรันโต</language>
+			<language id="es" >สเปน</language>
+			<language id="et" >เอสโตเนีย</language>
+			<language id="eu" >แบสก์</language>
+			<language id="fa" >เปอร์เซีย</language>
+			<language id="fi" >ฟิน</language>
+			<language id="fj" >ฟิจิ</language>
+			<language id="fo" >ฟาโรส</language>
+			<language id="fr" >ฝรั่งเศส</language>
+			<language id="fy" >ฟรีสแลนด์</language>
+			<language id="ga" >ไอริช</language>
+			<language id="gd" >สก็อตส์เกลิค</language>
+			<language id="gl" >กะลีเชีย</language>
+			<language id="gn" >กัวรานี</language>
+			<language id="gu" >กูจาราติ</language>
+			<language id="ha" >โฮซา</language>
+			<language id="he" >ยิว</language>
+			<language id="hi" >ฮีนดิ</language>
+			<language id="hr" >โครเอเทีย</language>
+			<language id="hu" >ฮังการี</language>
+			<language id="hy" >อาร์มีเนีย</language>
+			<language id="ia" >อินเตอร์ลิงกวา</language>
+			<language id="id" >อินโดนีเชีย</language>
+			<language id="ie" >อินเตอร์ลิงค์</language>
+			<language id="ik" >ไอนูเปียก</language>
+			<language id="is" >ไอซ์แลนด์ดิค</language>
+			<language id="it" >อิตาลี</language>
+			<language id="iu" >ไอนุกติตัท</language>
+			<language id="ja" >ญี่ปุ่น</language>
+			<language id="jw" >ชวา</language>
+			<language id="ka" >จอร์เจียน</language>
+			<language id="kk" >คาซัค</language>
+			<language id="kl" >กรีนแลนด์ดิค</language>
+			<language id="km" >เขมร</language>
+			<language id="kn" >กานาดา</language>
+			<language id="ko" >เกาหลี</language>
+			<language id="ks" >คัชมีรี</language>
+			<language id="ku" >เคิด</language>
+			<language id="ky" >เคอร์กิซ</language>
+			<language id="la" >ละติน</language>
+			<language id="ln" >ลิงกาลา</language>
+			<language id="lo" >ลาว</language>
+			<language id="lt" >ลิธัวเนีย</language>
+			<language id="lv" >แลตเวีย (เลททิสช์)</language>
+			<language id="mg" >มาลากาซี</language>
+			<language id="mi" >เมารี</language>
+			<language id="mk" >แมซีโดเนีย</language>
+			<language id="ml" >แมละยาลัม</language>
+			<language id="mn" >มองโกล</language>
+			<language id="mo" >โมดาเวีย</language>
+			<language id="mr" >มาราที</language>
+			<language id="ms" >มลายู</language>
+			<language id="mt" >มอลตา</language>
+			<language id="my" >พม่า</language>
+			<language id="na" >นอรู</language>
+			<language id="ne" >เนปาล</language>
+			<language id="nl" >ฮอลันดา</language>
+			<language id="no" >นอร์เวย์</language>
+			<language id="oc" >ออกซิทัน</language>
+			<language id="om" >โอโรโม (อาฟาน)</language>
+			<language id="or" >โอริยา</language>
+			<language id="pa" >ปัญจาป</language>
+			<language id="pl" >โปแลนด์</language>
+			<language id="ps" >พาสช์โต (พุสช์โต)</language>
+			<language id="pt" >โปรตุเกส</language>
+			<language id="qu" >คิวชัว</language>
+			<language id="rm" >เรโต-โรแมนซ์</language>
+			<language id="rn" >คิรันดี</language>
+			<language id="ro" >โรมัน</language>
+			<language id="ru" >รัสเซีย</language>
+			<language id="rw" >คินยาวันดา</language>
+			<language id="sa" >สันสกฤต</language>
+			<language id="sd" >ซินดิ</language>
+			<language id="sg" >สันโค</language>
+			<language id="sh" >เซอร์โบ-โครเอเทียน</language>
+			<language id="si" >สิงหล</language>
+			<language id="sk" >สโลวัค</language>
+			<language id="sl" >สโลเวเนีย</language>
+			<language id="sm" >ซามัว</language>
+			<language id="sn" >โซนา</language>
+			<language id="so" >โซมาลี</language>
+			<language id="sq" >แอลเบเนีย</language>
+			<language id="sr" >เซอร์เบีย</language>
+			<language id="ss" >ซีสวาติ</language>
+			<language id="st" >เซโสโท</language>
+			<language id="su" >ซันดานีส</language>
+			<language id="sv" >สวีเดน</language>
+			<language id="sw" >ซวาฮิรี</language>
+			<language id="ta" >ทมิฬ</language>
+			<language id="te" >ทิลูกู</language>
+			<language id="tg" >ทาจิค</language>
+			<language id="th" >ไทย</language>
+			<language id="ti" >ทิกรินยา</language>
+			<language id="tk" >เติร์กเมน</language>
+			<language id="tl" >ตากาล็อก</language>
+			<language id="tn" >เซตสวานา</language>
+			<language id="to" >ทองก้า</language>
+			<language id="tr" >ตุรกี</language>
+			<language id="ts" >ซองกา</language>
+			<language id="tt" >ตาด</language>
+			<language id="tw" >ทวี</language>
+			<language id="ug" >อุยกัว</language>
+			<language id="uk" >ยูเครน</language>
+			<language id="ur" >อิรดู</language>
+			<language id="uz" >อุสเบค</language>
+			<language id="vi" >เวียดนาม</language>
+			<language id="vo" >โวลาพุก</language>
+			<language id="wo" >วูลอฟ</language>
+			<language id="xh" >โซสา</language>
+			<language id="yi" >ยีดิช</language>
+			<language id="yo" >โยรูบา</language>
+			<language id="za" >จวง</language>
+			<language id="zh" >จีน</language>
+			<language id="zu" >ซูลู</language>
+		</languages >
+		<countries  >
+			<country id="AD">อันดอร์รา</country>
+			<country id="AE">สหรัฐอาหรับเอมิเรตส์</country>
+			<country id="AF">อัฟกานิสถาน</country>
+			<country id="AI">อันกิล่า</country>
+			<country id="AL">แอลเบเนีย</country>
+			<country id="AM">อาร์มีเนีย</country>
+			<country id="AN">เนเธอร์แลนด์แอนทิลล์</country>
+			<country id="AO">อันโกลา</country>
+			<country id="AR">อาร์เจนติน่า</country>
+			<country id="AT">ออสเตรีย</country>
+			<country id="AU">ออสเตรเลีย</country>
+			<country id="AW">อารูบา</country>
+			<country id="AZ">อาเซอร์ไบจัน</country>
+			<country id="BA">บอสเนีย และ เฮิร์ซโกวิเนีย</country>
+			<country id="BB">บาร์บาดอส</country>
+			<country id="BD">บังคลาเทศ</country>
+			<country id="BE">เบลเยี่ยม</country>
+			<country id="BF">เบอร์กินาฟาโซ</country>
+			<country id="BG">บัลแกเรีย</country>
+			<country id="BH">บาห์เรน</country>
+			<country id="BI">บูรันดิ</country>
+			<country id="BJ">เบนิน</country>
+			<country id="BM">เบอร์มิวด้า</country>
+			<country id="BN">บรูไน</country>
+			<country id="BO">โบลิเวีย</country>
+			<country id="BR">บราซิล</country>
+			<country id="BS">บาฮามาส</country>
+			<country id="BT">ภูฐาน</country>
+			<country id="BW">บอตสวานา</country>
+			<country id="BY">เบลลารัส</country>
+			<country id="BZ">เบลิซ</country>
+			<country id="CA">แคนาดา</country>
+			<country id="CF">สาธารณรัฐแอฟริกากลาง</country>
+			<country id="CG">คองโก</country>
+			<country id="CH">สวิสเซอร์แลนด์</country>
+			<country id="CI">ฝั่งทะเลไอวอริ</country>
+			<country id="CL">ชิลี</country>
+			<country id="CM">คาเมรูน</country>
+			<country id="CN">จีน</country>
+			<country id="CO">โคลัมเบีย</country>
+			<country id="CR">คอสตาริก้า</country>
+			<country id="CU">คิวบา</country>
+			<country id="CV">เคพเวอร์ด</country>
+			<country id="CY">ไซปรัส</country>
+			<country id="CZ">สาธารณรัฐเช็ค</country>
+			<country id="DE">เยอรมนี</country>
+			<country id="DJ">ดิโบติ</country>
+			<country id="DK">เดนมาร์ก</country>
+			<country id="DM">โดมินิก้า</country>
+			<country id="DO">สาธารณรัฐโดมินิกัน</country>
+			<country id="DZ">แอลจีเรีย</country>
+			<country id="EC">เอกวาดอร์</country>
+			<country id="EE">เอสโตเนีย</country>
+			<country id="EG">อียิปต์</country>
+			<country id="EH">ซาฮาร่าตะวันตก</country>
+			<country id="ER">อิริทรี</country>
+			<country id="ES">สเปน</country>
+			<country id="ET">เอธิโอเปีย</country>
+			<country id="FI">ฟินแลนด์</country>
+			<country id="FJ">ฟิจิ</country>
+			<country id="FM">ไมโครนิเซีย</country>
+			<country id="FR">ฝรั่งเศส</country>
+			<country id="GA">กาบอน</country>
+			<country id="GB">สหราชอาณาจักร</country>
+			<country id="GE">จอร์เจีย</country>
+			<country id="GF">เฟร็นชกิวน่า</country>
+			<country id="GH">กาน่า</country>
+			<country id="GM">แกมเบีย</country>
+			<country id="GN">กิวนี</country>
+			<country id="GP">กัวเดอลูป</country>
+			<country id="GQ">เอควาโทเรียลกินี</country>
+			<country id="GR">กรีซ</country>
+			<country id="GT">กัวเตมาลา</country>
+			<country id="GW">กิวนี-บิสโซ</country>
+			<country id="GY">กูยาน่า</country>
+			<country id="HK">ฮ่องกง</country>
+			<country id="HN">ฮอนดูรัส</country>
+			<country id="HR">โครเอเชีย</country>
+			<country id="HT">ไฮตี</country>
+			<country id="HU">ฮังการี</country>
+			<country id="ID">อินโดนีเซีย</country>
+			<country id="IE">ไอร์แลนด์</country>
+			<country id="IL">อิสราเอล</country>
+			<country id="IN">อินเดีย</country>
+			<country id="IQ">อิรัก</country>
+			<country id="IR">อิหร่าน</country>
+			<country id="IS">ไอซแลนด์</country>
+			<country id="IT">อิตาลี</country>
+			<country id="JM">จาไมก้า</country>
+			<country id="JO">จอร์แดน</country>
+			<country id="JP">ญี่ปุ่น</country>
+			<country id="KE">เคนย่า</country>
+			<country id="KG">เคอร์กิสถาน</country>
+			<country id="KH">กัมพูชา</country>
+			<country id="KI">คิรีบาติ</country>
+			<country id="KM">โคโมรอส</country>
+			<country id="KP">เกาหลีเหนือ</country>
+			<country id="KR">เกาหลีใต้</country>
+			<country id="KW">คูเวต</country>
+			<country id="KZ">คาซัคสถาน</country>
+			<country id="LA">ลาว</country>
+			<country id="LB">เลบานอน</country>
+			<country id="LI">ไลเทนสไตน์</country>
+			<country id="LK">ศรีลังกา</country>
+			<country id="LR">ลิเบอร์เลีย</country>
+			<country id="LS">เลโซโท</country>
+			<country id="LT">ลิเทอร์เนีย</country>
+			<country id="LU">ลักซ์เซมเบอร์ก</country>
+			<country id="LV">ลาตเวีย</country>
+			<country id="LY">ลิเบีย</country>
+			<country id="MA">โมรอคโค</country>
+			<country id="MC">โมนาโค</country>
+			<country id="MD">โมลโดวา</country>
+			<country id="MG">มาดากาสก้า</country>
+			<country id="MK">แมซีโดเนีย</country>
+			<country id="ML">มาลี</country>
+			<country id="MM">สหภาพพม่า</country>
+			<country id="MN">มองโกเลีย</country>
+			<country id="MO">มาเก๊า</country>
+			<country id="MQ">มาร์ตินิก</country>
+			<country id="MR">มอริทาเนีย</country>
+			<country id="MS">มอนต์เซอราต</country>
+			<country id="MT">มัลต้า</country>
+			<country id="MU">มอริเตียส</country>
+			<country id="MX">แม็กซิโก</country>
+			<country id="MY">มาเลเซีย</country>
+			<country id="MZ">โมแซมบิค</country>
+			<country id="NA">นามิเบีย</country>
+			<country id="NC">นิวคาลิโดเนีย</country>
+			<country id="NE">ไนเจอร์</country>
+			<country id="NG">ไนจีเรีย</country>
+			<country id="NI">นิคารากัว</country>
+			<country id="NL">เนเธอร์แลนด์</country>
+			<country id="NO">นอร์เวย์</country>
+			<country id="NP">เนปาล</country>
+			<country id="NU">นียู</country>
+			<country id="NZ">นิวซีแลนด์</country>
+			<country id="OM">โอมาน</country>
+			<country id="PA">ปานามา</country>
+			<country id="PE">เปรู</country>
+			<country id="PF">เฟร็นชโพลินีเซีย</country>
+			<country id="PG">ปาปัวนิวกีนี</country>
+			<country id="PH">ฟิลิปปินส์</country>
+			<country id="PK">ปากีสถาน</country>
+			<country id="PL">โปแลนด์</country>
+			<country id="PR">เปอร์โตริโก</country>
+			<country id="PT">โปตุกัล</country>
+			<country id="PY">ปารากวัย</country>
+			<country id="QA">กาตาร์</country>
+			<country id="RO">รูเมเนีย</country>
+			<country id="RU">รัสเซีย</country>
+			<country id="RW">ราวัลดา</country>
+			<country id="SA">ซาอุดิอาระเบีย</country>
+			<country id="SC">เซย์แชลล์</country>
+			<country id="SD">ซูดาน</country>
+			<country id="SE">สวีเดน</country>
+			<country id="SG">สิงคโปร์</country>
+			<country id="SI">สโลวิเนีย</country>
+			<country id="SK">สโลวาเกีย</country>
+			<country id="SL">เซียร์ร่าลีออน</country>
+			<country id="SN">ซินีกัล</country>
+			<country id="SO">โซมาเลีย</country>
+			<country id="SP">เซอร์เบีย</country>
+			<country id="SR">ซูรินามิ</country>
+			<country id="SV">เอลซาวาดอร์</country>
+			<country id="SY">ซีเรีย</country>
+			<country id="SZ">สวาซิแลนด์</country>
+			<country id="TD">ชาด</country>
+			<country id="TF">อาณาเขตทางใต้ของฝรั่งเศส</country>
+			<country id="TG">โตโก</country>
+			<country id="TH">ประเทศไทย</country>
+			<country id="TJ">ทาจิกิสถาน</country>
+			<country id="TK">โทกิโล</country>
+			<country id="TL">ติมอร์ตะวันออก</country>
+			<country id="TM">เติร์กเมนิสถาน</country>
+			<country id="TN">ตูนิเซีย</country>
+			<country id="TO">ทองก้า</country>
+			<country id="TR">ตุรกี</country>
+			<country id="TT">ทรินิแดด และโทบาโก</country>
+			<country id="TW">ไต้หวัน</country>
+			<country id="TZ">ทานซาเนีย</country>
+			<country id="UA">ยูเครน</country>
+			<country id="UG">อูกานดา</country>
+			<country id="US">สหรัฐอเมริกา</country>
+			<country id="UY">อุรูกวัย</country>
+			<country id="UZ">อุซเบกิสถาน</country>
+			<country id="VA">วาติกัน</country>
+			<country id="VE">เวเนซูเอล่า</country>
+			<country id="VG">บริทิชเวอร์จินไอส์แลนด์</country>
+			<country id="VI">ยูเอสเวอร์จินไอส์แลนด์</country>
+			<country id="VN">เวียดนาม</country>
+			<country id="VU">วานัวตู</country>
+			<country id="YE">เยเมน</country>
+			<country id="YT">มายอต</country>
+			<country id="YU">ยูโกสลาเวีย</country>
+			<country id="ZA">แอฟริกาใต้</country>
+			<country id="ZM">แซมเบีย</country>
+			<country id="ZR">แซร์</country>
+			<country id="ZW">ซิมบาบเว</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="THA" default="true">
+			<long>
+				<generic>Thailand Time</generic>
+				<standard>Thailand Time</standard>
+				<daylight>Bangkok</daylight>
+			</long>
+			<short>
+				<generic>THA</generic>
+				<standard>THA</standard>
+				<daylight>THA</daylight>
+			</short>
+			<city>Bangkok</city>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">มกราคม</month>
+				<month id="2">กุมภาพันธ์</month>
+				<month id="3">มีนาคม</month>
+				<month id="4">เมษายน</month>
+				<month id="5">พฤษภาคม</month>
+				<month id="6">มิถุนายน</month>
+				<month id="7">กรกฎาคม</month>
+				<month id="8">สิงหาคม</month>
+				<month id="9">กันยายน</month>
+				<month id="10">ตุลาคม</month>
+				<month id="11">พฤศจิกายน</month>
+				<month id="12">ธันวาคม</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">ม.ค.</month>
+				<month id="2">ก.พ.</month>
+				<month id="3">มี.ค.</month>
+				<month id="4">เม.ย.</month>
+				<month id="5">พ.ค.</month>
+				<month id="6">มิ.ย.</month>
+				<month id="7">ก.ค.</month>
+				<month id="8">ส.ค.</month>
+				<month id="9">ก.ย.</month>
+				<month id="10">ต.ค.</month>
+				<month id="11">พ.ย.</month>
+				<month id="12">ธ.ค.</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">วันอาทิตย์ </day>
+				<day id="2">วันจันทร์ </day>
+				<day id="3">วันอังคาร </day>
+				<day id="4">วันพุธ </day>
+				<day id="5">วันพฤหัสบดี </day>
+				<day id="6">วันศุกร์ </day>
+				<day id="7">วันเสาร์ </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">อา. </day>
+				<day id="2">จ. </day>
+				<day id="3">อ. </day>
+				<day id="4">พ. </day>
+				<day id="5">พฤ. </day>
+				<day id="6">ศ. </day>
+				<day id="7">ส. </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">ปีก่อนคริสต์กาลที่</era>
+				<era id="1">ค.ศ.</era>
+			</eras>
+			<am>ก่อนเที่ยง</am><pm>หลังเที่ยง</pm>
+			<patterns> 
+				<chars>GanjkHmsSEDFwWxhKzAe</chars>
+				<time>
+					<full>H' นาฬิกา 'm' นาที 'ss' วินาที'</full>
+					<long>H' นาฬิกา 'm' นาที'</long>
+					<medium>H:mm:ss</medium>
+					<short>H:mm</short>
+				</time>
+				<date>
+					<full>EEEE'ที่ 'd MMMM G yyyy</full>
+					<long>d MMMM yyyy</long>
+					<medium>d MMM yyyy</medium>
+					<short>d/M/yyyy</short>
+				</date>
+ 				<dateTime>{1}, {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<collation version="2.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<normalization>OFF</normalization>
+		<after>Z</after>
+		<gt1>ก</gt1>
+		<gt1>ข</gt1>
+		<gt1>ฃ</gt1>
+		<gt1>ค</gt1>
+		<gt1>ฅ</gt1>
+		<gt1>ฆ</gt1>
+		<gt1>ง</gt1>
+		<gt1>จ</gt1>
+		<gt1>ฉ</gt1>
+		<gt1>ช</gt1>
+		<gt1>ซ</gt1>
+		<gt1>ฌ</gt1>
+		<gt1>ญ</gt1>
+		<gt1>ฎ</gt1>
+		<gt1>ฏ</gt1>
+		<gt1>ฐ</gt1>
+		<gt1>ฑ</gt1>
+		<gt1>ฒ</gt1>
+		<gt1>ณ</gt1>
+		<gt1>ด</gt1>
+		<gt1>ต</gt1>
+		<gt1>ถ</gt1>
+		<gt1>ท</gt1>
+		<gt1>ธ</gt1>
+		<gt1>น</gt1>
+		<gt1>บ</gt1>
+		<gt1>ป</gt1>
+		<gt1>ผ</gt1>
+		<gt1>ฝ</gt1>
+		<gt1>พ</gt1>
+		<gt1>ฟ</gt1>
+		<gt1>ภ</gt1>
+		<gt1>ม</gt1>
+		<gt1>ย</gt1>
+		<gt1>ร</gt1>
+		<gt1>ฤ</gt1>
+		<gt1>ฤๅ</gt1>
+		<gt1>ล</gt1>
+		<gt1>ฦ</gt1>
+		<gt1>ฦๅ</gt1>
+		<gt1>ว</gt1>
+		<gt1>ศ</gt1>
+		<gt1>ษ</gt1>
+		<gt1>ส</gt1>
+		<gt1>ห</gt1>
+		<gt1>ฬ</gt1>
+		<gt1>อ</gt1>
+		<gt1>ฮ</gt1>
+		<gt1>ะ</gt1>
+		<gt1>ั</gt1>
+		<gt1>า</gt1>
+		<gt1>ำ</gt1>
+		<gt1>ิ</gt1>
+		<gt1>ี</gt1>
+		<gt1>ึ</gt1>
+		<gt1>ื</gt1>
+		<gt1>ุ</gt1>
+		<gt1>ู</gt1>
+		<gt1>เ</gt1>
+		<gt1>แ</gt1>
+		<gt1>โ</gt1>
+		<gt1>ใ</gt1>
+		<gt1>ไ</gt1>
+		<gt1>๐</gt1>
+		<gt1>๑</gt1>
+		<gt1>๒</gt1>
+		<gt1>๓</gt1>
+		<gt1>๔</gt1>
+		<gt1>๕</gt1>
+		<gt1>๖</gt1>
+		<gt1>๗</gt1>
+		<gt1>๘</gt1>
+		<gt1>๙</gt1>
+		<gt1>ํ</gt1>
+		<after>}</after>
+		<gt1>ฯ</gt1>
+		<gt1>ๆ</gt1>
+		<gt1>๏</gt1>
+		<gt1>๚</gt1>
+		<gt1>๛</gt1>
+		<gt1>฿</gt1>
+		<gt1>๎</gt1>
+		<gt1>ๅ</gt1>
+		<after>́</after>
+		<gt2>็</gt2>
+		<gt2>่</gt2>
+		<gt2>้</gt2>
+		<gt2>๊</gt2>
+		<gt2>๋</gt2>
+		<gt2>์</gt2>
+		<after>\u0001</after>
+		<eq>ฺ</eq>
+		<eq>.</eq>
+		</collationElements>
+	</collation>
+
+</localeData>

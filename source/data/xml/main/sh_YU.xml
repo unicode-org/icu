@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:31 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<country id="YU" />
+		<correspondsTo vendor="081A">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<am>AM</am><pm>PM</pm>
+		</calendar>
+	</calendars>
+	<currencies>
+		<currency id="YUN" default="true">
+			<symbol>Din</symbol>
+			<name>YUN</name>
+			<decimal>,</decimal>
+		</currency>
+	</currencies>
+
+</localeData>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:35 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<country id="ER" />
+		<correspondsTo vendor="0000">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">ጥሪ</month>
+				<month id="2">ለካቲት</month>
+				<month id="3">መጋቢት</month>
+				<month id="4">ሚያዝያ</month>
+				<month id="5">ግንቦት</month>
+				<month id="6">ሰነ</month>
+				<month id="7">ሓምለ</month>
+				<month id="8">ነሓሰ</month>
+				<month id="9">መስከረም</month>
+				<month id="10">ጥቅምቲ</month>
+				<month id="11">ሕዳር</month>
+				<month id="12">ታሕሳስ</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">ጥሪ</month>
+				<month id="2">ለካቲ</month>
+				<month id="3">መጋቢ</month>
+				<month id="4">ሚያዝ</month>
+				<month id="5">ግንቦ</month>
+				<month id="6">ሰነ</month>
+				<month id="7">ሓምለ</month>
+				<month id="8">ነሓሰ</month>
+				<month id="9">መስከ</month>
+				<month id="10">ጥቅም</month>
+				<month id="11">ሕዳር</month>
+				<month id="12">ታሕሳ</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">ሰንበት </day>
+				<day id="2">ሰኑይ </day>
+				<day id="3">ሰሉስ </day>
+				<day id="4">ረቡዕ </day>
+				<day id="5">ሓሙስ </day>
+				<day id="6">ዓርቢ </day>
+				<day id="7">ቀዳም </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">ሰንበ </day>
+				<day id="2">ሰኑይ </day>
+				<day id="3">ሰሉስ </day>
+				<day id="4">ረቡዕ </day>
+				<day id="5">ሓሙስ </day>
+				<day id="6">ዓርቢ </day>
+				<day id="7">ቀዳም </day>
+			</dayAbbr>
+			<am>ንጉሆ ሰዓተ</am><pm>ድሕር ሰዓት</pm>
+			<patterns> 
+				<time>
+					<full>h:mm:ss a</full>
+					<long>h:mm:ss a</long>
+					<medium>h:mm:ss a</medium>
+					<short>h:mm a</short>
+				</time>
+				<date>
+					<full>EEEE፣ dd MMMM መዓልቲ yyyy G</full>
+					<long>dd MMMM yyyy</long>
+					<medium>dd-MMM-yy</medium>
+					<short>dd/MM/yy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<numberFormat class="decimal" default="true"> 
+		<patterns> 
+			<decimal>#,##0.###;-#,##0.###</decimal>
+			<percent>#,##0%</percent>
+			<scientific>#E0</scientific>
+		</patterns>
+	</numberFormat> 
+	<currencies>
+		<currency id="ETB" default="true">
+			<symbol>$</symbol>
+			<name>ETB</name>
+			<decimal>.</decimal>
+			<pattern>¤#,##0.00;-¤#,##0.00</pattern>
+		</currency>
+	</currencies>
+
+</localeData>

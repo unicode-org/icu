@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:16 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="002D">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">urtarrila</month>
+				<month id="2">otsaila</month>
+				<month id="3">martxoa</month>
+				<month id="4">apirila</month>
+				<month id="5">maiatza</month>
+				<month id="6">ekaina</month>
+				<month id="7">uztaila</month>
+				<month id="8">abuztua</month>
+				<month id="9">iraila</month>
+				<month id="10">urria</month>
+				<month id="11">azaroa</month>
+				<month id="12">abendua</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">urt</month>
+				<month id="2">ots</month>
+				<month id="3">mar</month>
+				<month id="4">api</month>
+				<month id="5">mai</month>
+				<month id="6">eka</month>
+				<month id="7">uzt</month>
+				<month id="8">abu</month>
+				<month id="9">ira</month>
+				<month id="10">urr</month>
+				<month id="11">aza</month>
+				<month id="12">abe</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">igandea </day>
+				<day id="2">astelehena </day>
+				<day id="3">asteartea </day>
+				<day id="4">asteazkena </day>
+				<day id="5">osteguna </day>
+				<day id="6">ostirala </day>
+				<day id="7">larunbata </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">ig </day>
+				<day id="2">al </day>
+				<day id="3">as </day>
+				<day id="4">az </day>
+				<day id="5">og </day>
+				<day id="6">or </day>
+				<day id="7">lr </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+		</calendar>
+	</calendars>
+
+</localeData>

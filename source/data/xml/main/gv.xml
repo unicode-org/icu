@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:19 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0000">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Jerrey-geuree</month>
+				<month id="2">Toshiaght-arree</month>
+				<month id="3">Mayrnt</month>
+				<month id="4">Averil</month>
+				<month id="5">Boaldyn</month>
+				<month id="6">Mean-souree</month>
+				<month id="7">Jerrey-souree</month>
+				<month id="8">Luanistyn</month>
+				<month id="9">Mean-fouyir</month>
+				<month id="10">Jerrey-fouyir</month>
+				<month id="11">Mee Houney</month>
+				<month id="12">Mee ny Nollick</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">J-guer</month>
+				<month id="2">T-arree</month>
+				<month id="3">Mayrnt</month>
+				<month id="4">Avrril</month>
+				<month id="5">Boaldyn</month>
+				<month id="6">M-souree</month>
+				<month id="7">J-souree</month>
+				<month id="8">Luanistyn</month>
+				<month id="9">M-fouyir</month>
+				<month id="10">J-fouyir</month>
+				<month id="11">M.Houney</month>
+				<month id="12">M.Nollick</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">Jedoonee </day>
+				<day id="2">Jelhein </day>
+				<day id="3">Jemayrt </day>
+				<day id="4">Jercean </day>
+				<day id="5">Jerdein </day>
+				<day id="6">Jeheiney </day>
+				<day id="7">Jesarn </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">Jed </day>
+				<day id="2">Jel </day>
+				<day id="3">Jem </day>
+				<day id="4">Jerc </day>
+				<day id="5">Jerd </day>
+				<day id="6">Jeh </day>
+				<day id="7">Jes </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+		</calendar>
+	</calendars>
+
+</localeData>

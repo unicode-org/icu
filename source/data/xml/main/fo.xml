@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:17 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0038">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">januar</month>
+				<month id="2">februar</month>
+				<month id="3">mars</month>
+				<month id="4">apríl</month>
+				<month id="5">mai</month>
+				<month id="6">juni</month>
+				<month id="7">juli</month>
+				<month id="8">august</month>
+				<month id="9">september</month>
+				<month id="10">oktober</month>
+				<month id="11">november</month>
+				<month id="12">desember</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">jan</month>
+				<month id="2">feb</month>
+				<month id="3">mar</month>
+				<month id="4">apr</month>
+				<month id="5">mai</month>
+				<month id="6">jun</month>
+				<month id="7">jul</month>
+				<month id="8">aug</month>
+				<month id="9">sep</month>
+				<month id="10">okt</month>
+				<month id="11">nov</month>
+				<month id="12">des</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">sunnudagur </day>
+				<day id="2">mánadagur </day>
+				<day id="3">týsdagur </day>
+				<day id="4">mikudagur </day>
+				<day id="5">hósdagur </day>
+				<day id="6">fríggjadagur </day>
+				<day id="7">leygardagur </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">sun </day>
+				<day id="2">mán </day>
+				<day id="3">týs </day>
+				<day id="4">mik </day>
+				<day id="5">hós </day>
+				<day id="6">frí </day>
+				<day id="7">ley </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+		</calendar>
+	</calendars>
+
+</localeData>

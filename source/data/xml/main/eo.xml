@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:13 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0000">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="da" >dana</language>
+			<language id="de" >germana</language>
+			<language id="el" >greka</language>
+			<language id="en" >angla</language>
+			<language id="eo" >esperanto</language>
+			<language id="es" >hispana</language>
+			<language id="fi" >finna</language>
+			<language id="it" >itala</language>
+			<language id="ja" >japana</language>
+			<language id="nl" >nederlanda</language>
+			<language id="no" >norvega</language>
+			<language id="pt" >portugala</language>
+			<language id="sv" >sveda</language>
+			<language id="tr" >turka</language>
+		</languages >
+		<countries  >
+			<country id="AT">Aŭstrujo</country>
+			<country id="BE">Belgujo</country>
+			<country id="CA">Kanado</country>
+			<country id="CH">Svisujo</country>
+			<country id="DE">Germanujo</country>
+			<country id="DK">Danujo</country>
+			<country id="ES">Hispanujo</country>
+			<country id="FI">Finnlando</country>
+			<country id="GR">Grekujo</country>
+			<country id="IT">Italujo</country>
+			<country id="JP">Japanujo</country>
+			<country id="NL">Nederlando</country>
+			<country id="NO">Norvego</country>
+			<country id="PT">Portugalujo</country>
+			<country id="SE">Svedujo</country>
+			<country id="TR">Turkujo</country>
+			<country id="US">Usono</country>
+		</countries  >
+
+	</displayNames >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">januaro</month>
+				<month id="2">februaro</month>
+				<month id="3">marto</month>
+				<month id="4">aprilo</month>
+				<month id="5">majo</month>
+				<month id="6">junio</month>
+				<month id="7">julio</month>
+				<month id="8">aŭgusto</month>
+				<month id="9">septembro</month>
+				<month id="10">oktobro</month>
+				<month id="11">novembro</month>
+				<month id="12">decembro</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">jan</month>
+				<month id="2">feb</month>
+				<month id="3">mar</month>
+				<month id="4">apr</month>
+				<month id="5">maj</month>
+				<month id="6">jun</month>
+				<month id="7">jul</month>
+				<month id="8">aŭg</month>
+				<month id="9">sep</month>
+				<month id="10">okt</month>
+				<month id="11">nov</month>
+				<month id="12">dec</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">dimanĉo </day>
+				<day id="2">lundo </day>
+				<day id="3">mardo </day>
+				<day id="4">merkredo </day>
+				<day id="5">ĵaŭdo </day>
+				<day id="6">vendredo </day>
+				<day id="7">sabato </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">di </day>
+				<day id="2">lu </day>
+				<day id="3">ma </day>
+				<day id="4">me </day>
+				<day id="5">ĵa </day>
+				<day id="6">ve </day>
+				<day id="7">sa </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">aK</era>
+				<era id="1">pK</era>
+			</eras>
+			<am>atm</am><pm>ptm</pm>
+			<patterns> 
+				<chars>GjMtkHmslTDUSnahKzJd</chars>
+				<time>
+					<full>H'-a horo kaj 'm z</full>
+					<long>HH:mm:ss z</long>
+					<medium>HH:mm:ss</medium>
+					<short>HH:mm</short>
+				</time>
+				<date>
+					<full>EEEE, d'-a de 'MMMM yyyy</full>
+					<long>yyyy-MMMM-dd</long>
+					<medium>yyyy-MMM-dd</medium>
+					<short>yy-MM-dd</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+
+</localeData>

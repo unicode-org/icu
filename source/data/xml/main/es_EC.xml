@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:14 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<country id="EC" />
+		<correspondsTo vendor="300A">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<time>
+					<full>hh:mm:ss a z</full>
+					<long>hh:mm:ss a z</long>
+					<medium>hh:mm:ss a</medium>
+					<short>hh:mm a</short>
+				</time>
+				<date>
+					<full>EEEE d' de 'MMMM' de 'yyyy</full>
+					<long>d' de 'MMMM' de 'yyyy</long>
+					<medium>dd/MM/yyyy</medium>
+					<short>dd/MM/yy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<numberFormat class="decimal" default="true"> 
+		<patterns> 
+			<decimal>#,##0.###;-#,##0.###</decimal>
+			<percent>#,##0%</percent>
+			<scientific>#E0</scientific>
+		</patterns>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numberFormat> 
+	<currencies>
+		<currency id="ECS" default="true">
+			<symbol>S/.</symbol>
+			<name>ECS</name>
+			<decimal>,</decimal>
+			<pattern>¤#,##0.00;¤-#,##0.00</pattern>
+		</currency>
+	</currencies>
+
+</localeData>

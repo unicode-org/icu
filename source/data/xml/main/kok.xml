@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:25 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0057">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="aa" >अफार</language>
+			<language id="ab" >अबखेज़ियन</language>
+			<language id="af" >अफ्रिकान्स</language>
+			<language id="am" >अमहारिक्</language>
+			<language id="ar" >अरेबिक्</language>
+			<language id="as" >असामी</language>
+			<language id="ay" >ऐमरा</language>
+			<language id="az" >अज़रबैजानी</language>
+			<language id="ba" >बष्किर</language>
+			<language id="be" >बैलोरुसियन्</language>
+			<language id="bg" >बल्गेरियन</language>
+			<language id="bh" >बीहारी</language>
+			<language id="bi" >बिसलमा</language>
+			<language id="bn" >बंगाली</language>
+			<language id="bo" >तिबेतियन</language>
+			<language id="br" >ब्रेटन</language>
+			<language id="ca" >कटलान</language>
+			<language id="co" >कोर्शियन</language>
+			<language id="cs" >ज़ेक्</language>
+			<language id="cy" >वेळ्ष्</language>
+			<language id="da" >डानिष</language>
+			<language id="de" >जर्मन</language>
+			<language id="dz" >भूटानी</language>
+			<language id="el" >ग्रीक्</language>
+			<language id="en" >आंग्ल</language>
+			<language id="eo" >इस्परान्टो</language>
+			<language id="es" >स्पानिष</language>
+			<language id="et" >इस्टोनियन्</language>
+			<language id="eu" >बास्क</language>
+			<language id="fa" >पर्षियन्</language>
+			<language id="fi" >फिन्निष्</language>
+			<language id="fj" >फिजी</language>
+			<language id="fo" >फेरोस्</language>
+			<language id="fr" >फ्रेन्च</language>
+			<language id="fy" >फ्रिशियन्</language>
+			<language id="ga" >ऐरिष</language>
+			<language id="gd" >स्काटस् गेलिक्</language>
+			<language id="gl" >गेलीशियन</language>
+			<language id="gn" >गौरानी</language>
+			<language id="gu" >गुजराती</language>
+			<language id="ha" >हौसा</language>
+			<language id="he" >हेब्रु</language>
+			<language id="hi" >हिन्दी</language>
+			<language id="hr" >क्रोयेषियन्</language>
+			<language id="hu" >हंगेरियन्</language>
+			<language id="hy" >आर्मीनियन्</language>
+			<language id="ia" >इन्टरलिंग्वा</language>
+			<language id="id" >इन्डोनेषियन</language>
+			<language id="ie" >इन्टरलिंग्</language>
+			<language id="ik" >इनूपेयाक्</language>
+			<language id="is" >आईस्लान्डिक</language>
+			<language id="it" >इटालियन</language>
+			<language id="iu" >इन्युकट्ट</language>
+			<language id="ja" >जापनीस्</language>
+			<language id="jw" >जावनीस्</language>
+			<language id="ka" >जार्जियन्</language>
+			<language id="ki" >कोंकणी</language>
+			<language id="kk" >कज़ख्</language>
+			<language id="kl" >ग्रीनलान्डिक</language>
+			<language id="km" >कंबोडियन</language>
+			<language id="kn" >कन्नडा</language>
+			<language id="ko" >कोरियन्</language>
+			<language id="ks" >कश्मीरी</language>
+			<language id="ku" >कुर्दिष</language>
+			<language id="ky" >किर्गिज़</language>
+			<language id="la" >लाटिन</language>
+			<language id="ln" >लिंगाला</language>
+			<language id="lo" >लाओतियन्</language>
+			<language id="lt" >लिथुआनियन्</language>
+			<language id="lv" >लाट्वियन् (लेट्टिष्)</language>
+			<language id="mg" >मलागसी</language>
+			<language id="mi" >माओरी</language>
+			<language id="mk" >मसीडोनियन्</language>
+			<language id="ml" >मळियाळम</language>
+			<language id="mn" >मंगोलियन्</language>
+			<language id="mo" >मोल्डावियन्</language>
+			<language id="mr" >मराठी</language>
+			<language id="ms" >मलय</language>
+			<language id="mt" >मालतीस्</language>
+			<language id="my" >बर्मीज़्</language>
+			<language id="na" >नौरो</language>
+			<language id="ne" >नेपाळी</language>
+			<language id="nl" >डच्</language>
+			<language id="no" >नोर्वेजियन</language>
+			<language id="oc" >ओसिटान्</language>
+			<language id="om" >ओरोमो (अफान)</language>
+			<language id="or" >ओरिया</language>
+			<language id="pa" >पंजाबी</language>
+			<language id="pl" >पोलिष</language>
+			<language id="ps" >पाष्टो (पुष्टो)</language>
+			<language id="pt" >पोर्चुगीज़्</language>
+			<language id="qu" >क्वेच्वा</language>
+			<language id="rm" >रहटो-रोमान्स्</language>
+			<language id="rn" >किरुन्दी</language>
+			<language id="ro" >रोमानियन्</language>
+			<language id="root" >कोंकणी</language>
+			<language id="ru" >रष्यन्</language>
+			<language id="rw" >किन्यार्वान्डा</language>
+			<language id="sa" >संस्कृत</language>
+			<language id="sd" >सिंधी</language>
+			<language id="sg" >सांग्रो</language>
+			<language id="sh" >सेर्बो-क्रोयेषियन्</language>
+			<language id="si" >सिन्हलीस्</language>
+			<language id="sk" >स्लोवाक</language>
+			<language id="sl" >स्लोवेनियन्</language>
+			<language id="sm" >समोन</language>
+			<language id="sn" >शोना</language>
+			<language id="so" >सोमाळी</language>
+			<language id="sq" >आल्बेनियन्</language>
+			<language id="sr" >सेर्बियन्</language>
+			<language id="ss" >सिस्वाती</language>
+			<language id="st" >सेसोथो</language>
+			<language id="su" >सुंदनीस</language>
+			<language id="sv" >स्वीदीष</language>
+			<language id="sw" >स्वाहिली</language>
+			<language id="ta" >तमिळ</language>
+			<language id="te" >तेलुगू</language>
+			<language id="tg" >तजिक</language>
+			<language id="th" >थाई</language>
+			<language id="ti" >तिग्रिन्या</language>
+			<language id="tk" >तुर्कमन</language>
+			<language id="tl" >तगालोग</language>
+			<language id="tn" >सेत्स्वाना</language>
+			<language id="to" >तोंगा</language>
+			<language id="tr" >तुर्किष</language>
+			<language id="ts" >त्सोगा</language>
+			<language id="tt" >तटार</language>
+			<language id="tw" >त्वि</language>
+			<language id="ug" >उधूर</language>
+			<language id="uk" >युक्रेनियन्</language>
+			<language id="ur" >उर्दू</language>
+			<language id="uz" >उज़बेक</language>
+			<language id="vi" >वियत्नामीज़</language>
+			<language id="vo" >ओलापुक</language>
+			<language id="wo" >उलोफ़</language>
+			<language id="xh" >झ़ौसा</language>
+			<language id="yi" >इद्दिष्</language>
+			<language id="yo" >यूरुबा</language>
+			<language id="za" >झ्हुन्ग</language>
+			<language id="zh" >चीनीस्</language>
+			<language id="zu" >जुलू</language>
+		</languages >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Asia/Calcutta" default="true">
+			<long>
+				<generic>भारतीय समय</generic>
+				<standard>भारतीय समय</standard>
+			</long>
+			<short>
+				<generic>Asia/Calcutta</generic>
+				<standard>IST</standard>
+				<daylight>IST</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">जानेवारी</month>
+				<month id="2">फेब्रुवारी</month>
+				<month id="3">मार्च</month>
+				<month id="4">एप्रिल</month>
+				<month id="5">मे</month>
+				<month id="6">जून</month>
+				<month id="7">जुलै</month>
+				<month id="8">ओगस्ट</month>
+				<month id="9">सेप्टेंबर</month>
+				<month id="10">ओक्टोबर</month>
+				<month id="11">नोव्हेंबर</month>
+				<month id="12">डिसेंबर</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">जानेवारी</month>
+				<month id="2">फेबृवारी</month>
+				<month id="3">मार्च</month>
+				<month id="4">एप्रिल</month>
+				<month id="5">मे</month>
+				<month id="6">जून</month>
+				<month id="7">जुलै</month>
+				<month id="8">ओगस्ट</month>
+				<month id="9">सेप्टेंबर</month>
+				<month id="10">ओक्टोबर</month>
+				<month id="11">नोव्हेंबर</month>
+				<month id="12">डिसेंबर</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">आदित्यवार </day>
+				<day id="2">सोमवार </day>
+				<day id="3">मंगळार </day>
+				<day id="4">बुधवार </day>
+				<day id="5">गुरुवार </day>
+				<day id="6">शुक्रवार </day>
+				<day id="7">शनिवार </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">रवि </day>
+				<day id="2">सोम </day>
+				<day id="3">मंगळ </day>
+				<day id="4">बुध </day>
+				<day id="5">गुरु </day>
+				<day id="6">शुक्र </day>
+				<day id="7">शनि </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">क्रिस्तपूर्व</era>
+				<era id="1">क्रिस्तशखा</era>
+			</eras>
+			<am>म.पू.</am><pm>म.नं.</pm>
+		</calendar>
+	</calendars>
+
+</localeData>

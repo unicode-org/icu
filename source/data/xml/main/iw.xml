@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:22 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="000D">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="he" >עברית</language>
+		</languages >
+		<countries  >
+			<country id="IL">ישראל</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Africa/Casablanca" default="true">
+			<long>
+				<generic>GMT</generic>
+				<standard>GMT</standard>
+			</long>
+			<short>
+				<generic>Africa/Casablanca</generic>
+				<standard>GMT</standard>
+				<daylight>GMT</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">ינואר</month>
+				<month id="2">פברואר</month>
+				<month id="3">מרץ</month>
+				<month id="4">אפריל</month>
+				<month id="5">מאי</month>
+				<month id="6">יוני</month>
+				<month id="7">יולי</month>
+				<month id="8">אוגוסט</month>
+				<month id="9">ספטמבר</month>
+				<month id="10">אוקטובר</month>
+				<month id="11">נובמבר</month>
+				<month id="12">דצמבר</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">ינו</month>
+				<month id="2">פבר</month>
+				<month id="3">מרץ</month>
+				<month id="4">אפר</month>
+				<month id="5">מאי</month>
+				<month id="6">יונ</month>
+				<month id="7">יול</month>
+				<month id="8">אוג</month>
+				<month id="9">ספט</month>
+				<month id="10">אוק</month>
+				<month id="11">נוב</month>
+				<month id="12">דצמ</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">יום ראשון </day>
+				<day id="2">יום שני </day>
+				<day id="3">יום שלישי </day>
+				<day id="4">יום רביעי </day>
+				<day id="5">יום חמישי </day>
+				<day id="6">יום שישי </day>
+				<day id="7">שבת </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">א </day>
+				<day id="2">ב </day>
+				<day id="3">ג </day>
+				<day id="4">ד </day>
+				<day id="5">ה </day>
+				<day id="6">ו </day>
+				<day id="7">ש </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">לסה"נ</era>
+				<era id="1">לפסה"נ</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<chars>GanjkHmsSEDFwWxhKzAe</chars>
+				<time>
+					<full>HH:mm:ss z</full>
+					<long>HH:mm:ss z</long>
+					<medium>HH:mm:ss</medium>
+					<short>HH:mm</short>
+				</time>
+				<date>
+					<full>EEEE d MMMM yyyy</full>
+					<long>d MMMM yyyy</long>
+					<medium>dd/MM/yyyy</medium>
+					<short>dd/MM/yy</short>
+				</date>
+ 				<dateTime>{0} {1} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<collation version="2.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<normalization>OFF</normalization>
+		<after>Z</after>
+		<gt1>א</gt1>
+		<gt1>ב</gt1>
+		<gt1>ג</gt1>
+		<gt1>ד</gt1>
+		<gt1>ה</gt1>
+		<gt1>ו</gt1>
+		<gt1>װ</gt1>
+		<gt1>ױ</gt1>
+		<gt1>ז</gt1>
+		<gt1>ח</gt1>
+		<gt1>ט</gt1>
+		<gt1>י</gt1>
+		<gt1>ײ</gt1>
+		<gt1>ך</gt1>
+		<gt3>כ</gt3>
+		<gt1>ל</gt1>
+		<gt1>ם</gt1>
+		<gt3>מ</gt3>
+		<gt1>ן</gt1>
+		<gt3>נ</gt3>
+		<gt1>ס</gt1>
+		<gt1>ע</gt1>
+		<gt1>ף</gt1>
+		<gt3>פ</gt3>
+		<gt1>ץ</gt1>
+		<gt3>צ</gt3>
+		<gt1>ק</gt1>
+		<gt1>ר</gt1>
+		<gt1>ש</gt1>
+		<gt1>ת</gt1>
+		</collationElements>
+	</collation>
+
+</localeData>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:08 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<country id="CH" />
+		<correspondsTo vendor="0807">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<countries  >
+			<country id="BD">Bangladesh</country>
+			<country id="BN">Brunei</country>
+			<country id="BW">Botswana</country>
+			<country id="CV">Kapverden</country>
+			<country id="DJ">Djibouti</country>
+			<country id="GB">Grossbritannien</country>
+			<country id="MH">Marshall-Inseln</country>
+			<country id="RW">Rwanda</country>
+			<country id="SB">Salomon-Inseln</country>
+			<country id="ST">Sao Tomé und Principe</country>
+			<country id="ZW">Zimbabwe</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Africa/Casablanca" default="true">
+			<long>
+				<generic>GMT</generic>
+				<standard>GMT</standard>
+			</long>
+			<short>
+				<generic>Africa/Casablanca</generic>
+				<standard>GMT</standard>
+				<daylight>GMT</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<numberFormat class="decimal" default="true"> 
+		<patterns> 
+			<decimal>#,##0.###;-#,##0.###</decimal>
+			<percent>#,##0%</percent>
+			<scientific>#E0</scientific>
+		</patterns>
+		<symbols>
+			<decimal>.</decimal>
+			<group>'</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numberFormat> 
+	<currencies>
+		<currency id="CHF" default="true">
+			<symbol>SFr.</symbol>
+			<name>CHF</name>
+			<decimal>.</decimal>
+			<pattern>¤ #,##0.00;¤-#,##0.00</pattern>
+		</currency>
+	</currencies>
+
+</localeData>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:20 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<variant id="DIRECT" />
+		<correspondsTo vendor="0039">Windows</correspondsTo>
+	</identity  >
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<gt1>ँ</gt1>
+		<gt1>ं</gt1>
+		<gt1>ः</gt1>
+		<gt1>अ</gt1>
+		<gt1>आ</gt1>
+		<gt1>इ</gt1>
+		<gt1>ई</gt1>
+		<gt1>उ</gt1>
+		<gt1>ऊ</gt1>
+		<gt1>ऋ</gt1>
+		<gt1>ऌ</gt1>
+		<gt1>ऍ</gt1>
+		<gt1>ऎ</gt1>
+		<gt1>ए</gt1>
+		<gt1>ऐ</gt1>
+		<gt1>ऑ</gt1>
+		<gt1>ऒ</gt1>
+		<gt1>ओ</gt1>
+		<gt1>औ</gt1>
+		<gt1>क</gt1>
+		<gt1>ख</gt1>
+		<gt1>ग</gt1>
+		<gt1>घ</gt1>
+		<gt1>ङ</gt1>
+		<gt1>च</gt1>
+		<gt1>छ</gt1>
+		<gt1>ज</gt1>
+		<gt1>झ</gt1>
+		<gt1>ञ</gt1>
+		<gt1>ट</gt1>
+		<gt1>ठ</gt1>
+		<gt1>ड</gt1>
+		<gt1>ढ</gt1>
+		<gt1>ण</gt1>
+		<gt1>त</gt1>
+		<gt1>थ</gt1>
+		<gt1>द</gt1>
+		<gt1>ध</gt1>
+		<gt1>न</gt1>
+		<gt1>ऩ</gt1>
+		<gt1>प</gt1>
+		<gt1>फ</gt1>
+		<gt1>ब</gt1>
+		<gt1>भ</gt1>
+		<gt1>म</gt1>
+		<gt1>य</gt1>
+		<gt1>र</gt1>
+		<gt1>ऱ</gt1>
+		<gt1>ल</gt1>
+		<gt1>ळ</gt1>
+		<gt1>ऴ</gt1>
+		<gt1>व</gt1>
+		<gt1>श</gt1>
+		<gt1>ष</gt1>
+		<gt1>स</gt1>
+		<gt1>ह</gt1>
+		<gt1>़</gt1>
+		<gt1>ऽ</gt1>
+		<gt1>ा</gt1>
+		<gt1>ि</gt1>
+		<gt1>ी</gt1>
+		<gt1>ु</gt1>
+		<gt1>ू</gt1>
+		<gt1>ृ</gt1>
+		<gt1>ॄ</gt1>
+		<gt1>ॅ</gt1>
+		<gt1>ॆ</gt1>
+		<gt1>े</gt1>
+		<gt1>ै</gt1>
+		<gt1>ॉ</gt1>
+		<gt1>ॊ</gt1>
+		<gt1>ो</gt1>
+		<gt1>ौ</gt1>
+		<gt1>्</gt1>
+		<gt1>ॐ</gt1>
+		<gt1>॑</gt1>
+		<gt1>॒</gt1>
+		<gt1>॓</gt1>
+		<gt1>॔</gt1>
+		<gt1>क़</gt1>
+		<gt1>ख़</gt1>
+		<gt1>ग़</gt1>
+		<gt1>ज़</gt1>
+		<gt1>ड़</gt1>
+		<gt1>ढ़</gt1>
+		<gt1>फ़</gt1>
+		<gt1>य़</gt1>
+		<gt1>ॠ</gt1>
+		<gt1>ॡ</gt1>
+		<gt1>ॢ</gt1>
+		<gt1>ॣ</gt1>
+		<gt1>।</gt1>
+		<gt1>॥</gt1>
+		<gt1>०</gt1>
+		<gt1>१</gt1>
+		<gt1>२</gt1>
+		<gt1>३</gt1>
+		<gt1>४</gt1>
+		<gt1>५</gt1>
+		<gt1>६</gt1>
+		<gt1>७</gt1>
+		<gt1>८</gt1>
+		<gt1>९</gt1>
+		<gt1>॰</gt1>
+		</collationElements>
+	</collation>
+
+</localeData>

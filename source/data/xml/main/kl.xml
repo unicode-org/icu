@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:23 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0000">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">januari</month>
+				<month id="2">februari</month>
+				<month id="3">martsi</month>
+				<month id="4">aprili</month>
+				<month id="5">maji</month>
+				<month id="6">juni</month>
+				<month id="7">juli</month>
+				<month id="8">augustusi</month>
+				<month id="9">septemberi</month>
+				<month id="10">oktoberi</month>
+				<month id="11">novemberi</month>
+				<month id="12">decemberi</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">jan</month>
+				<month id="2">feb</month>
+				<month id="3">mar</month>
+				<month id="4">apr</month>
+				<month id="5">maj</month>
+				<month id="6">jun</month>
+				<month id="7">jul</month>
+				<month id="8">aug</month>
+				<month id="9">sep</month>
+				<month id="10">okt</month>
+				<month id="11">nov</month>
+				<month id="12">dec</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">sabaat </day>
+				<day id="2">ataasinngorneq </day>
+				<day id="3">marlunngorneq </day>
+				<day id="4">pingasunngorneq </day>
+				<day id="5">sisamanngorneq </day>
+				<day id="6">tallimanngorneq </day>
+				<day id="7">arfininngorneq </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">sab </day>
+				<day id="2">ata </day>
+				<day id="3">mar </day>
+				<day id="4">pin </day>
+				<day id="5">sis </day>
+				<day id="6">tal </day>
+				<day id="7">arf </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+		</calendar>
+	</calendars>
+
+</localeData>

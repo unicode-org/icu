@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:30 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0018">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="ro" >română</language>
+		</languages >
+		<countries  >
+			<country id="RO">România</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Africa/Casablanca" default="true">
+			<long>
+				<generic>GMT</generic>
+				<standard>GMT</standard>
+			</long>
+			<short>
+				<generic>Africa/Casablanca</generic>
+				<standard>GMT</standard>
+				<daylight>GMT</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">ianuarie</month>
+				<month id="2">februarie</month>
+				<month id="3">martie</month>
+				<month id="4">aprilie</month>
+				<month id="5">mai</month>
+				<month id="6">iunie</month>
+				<month id="7">iulie</month>
+				<month id="8">august</month>
+				<month id="9">septembrie</month>
+				<month id="10">octombrie</month>
+				<month id="11">noiembrie</month>
+				<month id="12">decembrie</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Ian</month>
+				<month id="2">Feb</month>
+				<month id="3">Mar</month>
+				<month id="4">Apr</month>
+				<month id="5">Mai</month>
+				<month id="6">Iun</month>
+				<month id="7">Iul</month>
+				<month id="8">Aug</month>
+				<month id="9">Sep</month>
+				<month id="10">Oct</month>
+				<month id="11">Nov</month>
+				<month id="12">Dec</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">duminică </day>
+				<day id="2">luni </day>
+				<day id="3">marţi </day>
+				<day id="4">miercuri </day>
+				<day id="5">joi </day>
+				<day id="6">vineri </day>
+				<day id="7">sîmbătă </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">D </day>
+				<day id="2">L </day>
+				<day id="3">Ma </day>
+				<day id="4">Mi </day>
+				<day id="5">J </day>
+				<day id="6">V </day>
+				<day id="7">S </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">d.C.</era>
+				<era id="1">î.d.C.</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<chars>GanjkHmsSEDFwWxhKzAe</chars>
+				<time>
+					<full>HH:mm:ss z</full>
+					<long>HH:mm:ss z</long>
+					<medium>HH:mm:ss</medium>
+					<short>HH:mm</short>
+				</time>
+				<date>
+					<full>d MMMM yyyy</full>
+					<long>d MMMM yyyy</long>
+					<medium>dd.MM.yyyy</medium>
+					<short>dd.MM.yyyy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<after>A</after>
+		<gt1>ă</gt1>
+		<gt3>Ă</gt3>
+		<after>D</after>
+		<gt1>đ</gt1>
+		<gt3>Đ</gt3>
+		<after>I</after>
+		<gt1>î</gt1>
+		<gt3>Î</gt3>
+		<after>S</after>
+		<gt1>ş</gt1>
+		<gt3>Ş</gt3>
+		<after>Þ</after>
+		<gt1>ţ</gt1>
+		<gt3>Ţ</gt3>
+		<after>Z</after>
+		<gt1>ż</gt1>
+		<gt3>Ż</gt3>
+		</collationElements>
+	</collation>
+
+</localeData>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:21 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<country id="IT" />
+		<correspondsTo vendor="0410">Windows</correspondsTo>
+	</identity  >
+	<currencies>
+		<currency id="EUR" default="true">
+			<symbol>€</symbol>
+			<name>EUR</name>
+			<decimal>,</decimal>
+		</currency>
+	</currencies>
+
+</localeData>

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:33 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="001D">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="ar" >arabiska</language>
+			<language id="ba" >baskiska</language>
+			<language id="be" >vitryska</language>
+			<language id="bg" >bulgariska</language>
+			<language id="ca" >katalanska</language>
+			<language id="cs" >tjeckiska</language>
+			<language id="da" >danska</language>
+			<language id="de" >tyska</language>
+			<language id="el" >grekiska</language>
+			<language id="en" >engelska</language>
+			<language id="es" >spanska</language>
+			<language id="et" >estniska</language>
+			<language id="fi" >finska</language>
+			<language id="fr" >franska</language>
+			<language id="he" >hebreiska</language>
+			<language id="hr" >kroatiska</language>
+			<language id="hu" >ungerska</language>
+			<language id="it" >italienska</language>
+			<language id="ja" >apanska</language>
+			<language id="ko" >koreanska</language>
+			<language id="lt" >litauiska</language>
+			<language id="lv" >lettiska</language>
+			<language id="mk" >makedonskt</language>
+			<language id="nl" >nederländskt</language>
+			<language id="no" >norska</language>
+			<language id="pl" >polska</language>
+			<language id="pt" >portugisiskt</language>
+			<language id="ro" >rumänskt</language>
+			<language id="ru" >ryska</language>
+			<language id="sk" >slovakiska</language>
+			<language id="sl" >slovenskt</language>
+			<language id="sq" >albanska</language>
+			<language id="sr" >serbiska</language>
+			<language id="sv" >svenska</language>
+			<language id="th" >thailändska</language>
+			<language id="tr" >turkiska</language>
+			<language id="uk" >ukrainska</language>
+			<language id="zh" >kinesiska</language>
+		</languages >
+		<countries  >
+			<country id="AE">Förenade Arabemiraten</country>
+			<country id="AL">Albanien</country>
+			<country id="AS">Asien</country>
+			<country id="AT">Österrike</country>
+			<country id="AU">Australien</country>
+			<country id="BA">Bosnien</country>
+			<country id="BE">Belgien</country>
+			<country id="BG">Bulgarien</country>
+			<country id="BR">Brasilien</country>
+			<country id="BY">Vitryssland</country>
+			<country id="CA">Kanada</country>
+			<country id="CH">Schweiz</country>
+			<country id="CN">Kina (folkrepubliken)</country>
+			<country id="CZ">Tjeckien</country>
+			<country id="DE">Tyskland</country>
+			<country id="DK">Danmark</country>
+			<country id="DO">Dominikanska republiken</country>
+			<country id="DZ">Algeriet</country>
+			<country id="EE">Estland</country>
+			<country id="EG">Egypten</country>
+			<country id="ES">Spanien</country>
+			<country id="FR">Frankrike</country>
+			<country id="GB">Storbritannien</country>
+			<country id="GR">Grekland</country>
+			<country id="HR">Kroatien</country>
+			<country id="HU">Ungern</country>
+			<country id="ID">Indonesien</country>
+			<country id="IE">Irland</country>
+			<country id="IN">Indien</country>
+			<country id="IS">Island</country>
+			<country id="IT">Italien</country>
+			<country id="JO">Jordanien</country>
+			<country id="KR">Korea</country>
+			<country id="LA">LatinAmerika</country>
+			<country id="LB">Libanon</country>
+			<country id="LI">Lichtenstein</country>
+			<country id="LT">Litauen</country>
+			<country id="LU">Luxemburg</country>
+			<country id="LV">Lettland</country>
+			<country id="MA">Marocko</country>
+			<country id="MK">Makedonien</country>
+			<country id="MX">Mexiko</country>
+			<country id="NL">Nederländerna</country>
+			<country id="NO">Norge</country>
+			<country id="NZ">Nya Zeeland</country>
+			<country id="PL">Polen</country>
+			<country id="RO">Rumänien</country>
+			<country id="RU">Ryssland</country>
+			<country id="SA">Saudiarabien</country>
+			<country id="SE">Sverige</country>
+			<country id="SI">Slovenien</country>
+			<country id="SK">Slovakien</country>
+			<country id="SP">Serbien</country>
+			<country id="SY">Syrien</country>
+			<country id="TN">Tunisien</country>
+			<country id="TR">Turkiet</country>
+			<country id="UA">Ukraina</country>
+			<country id="YE">Jemen</country>
+			<country id="ZA">Sydafrika</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Europe/Stockholm" default="true">
+			<long>
+				<generic>Central European Time</generic>
+				<standard>Central European Time (DST)</standard>
+				<daylight>Stockholm</daylight>
+			</long>
+			<short>
+				<generic>Europe/Stockholm</generic>
+				<standard>MET</standard>
+				<daylight>MET</daylight>
+			</short>
+			<city>Stockholm</city>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">januari</month>
+				<month id="2">februari</month>
+				<month id="3">mars</month>
+				<month id="4">april</month>
+				<month id="5">maj</month>
+				<month id="6">juni</month>
+				<month id="7">juli</month>
+				<month id="8">augusti</month>
+				<month id="9">september</month>
+				<month id="10">oktober</month>
+				<month id="11">november</month>
+				<month id="12">december</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">jan</month>
+				<month id="2">feb</month>
+				<month id="3">mar</month>
+				<month id="4">apr</month>
+				<month id="5">maj</month>
+				<month id="6">jun</month>
+				<month id="7">jul</month>
+				<month id="8">aug</month>
+				<month id="9">sep</month>
+				<month id="10">okt</month>
+				<month id="11">nov</month>
+				<month id="12">dec</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">söndag </day>
+				<day id="2">måndag </day>
+				<day id="3">tisdag </day>
+				<day id="4">onsdag </day>
+				<day id="5">torsdag </day>
+				<day id="6">fredag </day>
+				<day id="7">lördag </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">sö </day>
+				<day id="2">må </day>
+				<day id="3">ti </day>
+				<day id="4">on </day>
+				<day id="5">to </day>
+				<day id="6">fr </day>
+				<day id="7">lö </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">f.Kr.</era>
+				<era id="1">e.Kr.</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<time>
+					<full>'kl 'H:mm z</full>
+					<long>HH:mm:ss z</long>
+					<medium>HH:mm:ss</medium>
+					<short>HH:mm</short>
+				</time>
+				<date>
+					<full>'den 'd MMMM yyyy</full>
+					<long>'den 'd MMMM yyyy</long>
+					<medium>yyyy-MMM-dd</medium>
+					<short>yyyy-MM-dd</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<after>Z</after>
+		<gt1>æ</gt1>
+		<gt3>Æ</gt3>
+		<gt1>å</gt1>
+		<gt3>Å</gt3>
+		<gt3>aa</gt3>
+		<gt3>aA</gt3>
+		<gt3>Aa</gt3>
+		<gt3>AA</gt3>
+		<gt1>ä</gt1>
+		<gt3>Ä</gt3>
+		<gt1>ö</gt1>
+		<gt3>Ö</gt3>
+		<gt2>ű</gt2>
+		<gt3>Ű</gt3>
+		<gt1>ő</gt1>
+		<gt3>Ő</gt3>
+		<gt2>ø</gt2>
+		<gt3>Ø</gt3>
+		<after>V</after>
+		<gt2>w</gt2>
+		<gt3>W</gt3>
+		<after>Y</after>
+		<gt3>ü</gt3>
+		<gt3>Ü</gt3>
+		</collationElements>
+	</collation>
+
+</localeData>

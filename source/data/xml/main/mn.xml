@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:27 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0050">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">1 дүгээр сар</month>
+				<month id="2">2 дугаар сар</month>
+				<month id="3">3 дугаар сар</month>
+				<month id="4">4 дүгээр сар</month>
+				<month id="5">5 дугаар сар</month>
+				<month id="6">6 дугаар сар</month>
+				<month id="7">7 дугаар сар</month>
+				<month id="8">8 дугаар сар</month>
+				<month id="9">9 дүгээр сар</month>
+				<month id="10">10 дугаар сар</month>
+				<month id="11">11 дүгээр сар</month>
+				<month id="12">12 дугаар сар</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">I</month>
+				<month id="2">II</month>
+				<month id="3">III</month>
+				<month id="4">IV</month>
+				<month id="5">V</month>
+				<month id="6">VI</month>
+				<month id="7">VII</month>
+				<month id="8">VШ</month>
+				<month id="9">IX</month>
+				<month id="10">X</month>
+				<month id="11">XI</month>
+				<month id="12">XII</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">Ням </day>
+				<day id="2">Даваа </day>
+				<day id="3">Мягмар </day>
+				<day id="4">Лхагва </day>
+				<day id="5">Пүрэв </day>
+				<day id="6">Баасан </day>
+				<day id="7">Бямба </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">Ня </day>
+				<day id="2">Да </day>
+				<day id="3">Мя </day>
+				<day id="4">Лх </day>
+				<day id="5">Пү </day>
+				<day id="6">Ба </day>
+				<day id="7">Бя </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+		</calendar>
+	</calendars>
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<normalization>OFF</normalization>
+		</collationElements>
+	</collation>
+
+</localeData>

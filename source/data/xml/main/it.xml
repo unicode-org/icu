@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:21 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0010">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="it" >italiano</language>
+		</languages >
+		<countries  >
+			<country id="CH">Svizzera</country>
+			<country id="IT">Italia</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Europe/Rome" default="true">
+			<long>
+				<generic>CET</generic>
+				<standard>CET</standard>
+				<daylight>Rome</daylight>
+			</long>
+			<short>
+				<generic>Europe/Rome</generic>
+				<standard>CET</standard>
+				<daylight>CET</daylight>
+			</short>
+			<city>Rome</city>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">gennaio</month>
+				<month id="2">febbraio</month>
+				<month id="3">marzo</month>
+				<month id="4">aprile</month>
+				<month id="5">maggio</month>
+				<month id="6">giugno</month>
+				<month id="7">luglio</month>
+				<month id="8">agosto</month>
+				<month id="9">settembre</month>
+				<month id="10">ottobre</month>
+				<month id="11">novembre</month>
+				<month id="12">dicembre</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">gen</month>
+				<month id="2">feb</month>
+				<month id="3">mar</month>
+				<month id="4">apr</month>
+				<month id="5">mag</month>
+				<month id="6">giu</month>
+				<month id="7">lug</month>
+				<month id="8">ago</month>
+				<month id="9">set</month>
+				<month id="10">ott</month>
+				<month id="11">nov</month>
+				<month id="12">dic</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">domenica </day>
+				<day id="2">lunedì </day>
+				<day id="3">martedì </day>
+				<day id="4">mercoledì </day>
+				<day id="5">giovedì </day>
+				<day id="6">venerdì </day>
+				<day id="7">sabato </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">dom </day>
+				<day id="2">lun </day>
+				<day id="3">mar </day>
+				<day id="4">mer </day>
+				<day id="5">gio </day>
+				<day id="6">ven </day>
+				<day id="7">sab </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">aC</era>
+				<era id="1">dC</era>
+			</eras>
+			<am>m.</am><pm>p.</pm>
+			<patterns> 
+				<time>
+					<full>HH:mm:ss z</full>
+					<long>HH:mm:ss z</long>
+					<medium>HH:mm:ss</medium>
+					<short>HH:mm</short>
+				</time>
+				<date>
+					<full>EEEE d MMMM yyyy</full>
+					<long>dd MMMM yyyy</long>
+					<medium>dd/MMM/yy</medium>
+					<short>dd/MM/yy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+
+</localeData>

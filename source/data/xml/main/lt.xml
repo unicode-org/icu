@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:26 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0027">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="lt" >Lietuviř</language>
+		</languages >
+		<countries  >
+			<country id="LT">Lietuva</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Africa/Casablanca" default="true">
+			<long>
+				<generic>GMT</generic>
+				<standard>GMT</standard>
+			</long>
+			<short>
+				<generic>Africa/Casablanca</generic>
+				<standard>GMT</standard>
+				<daylight>GMT</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Sausio</month>
+				<month id="2">Vasario</month>
+				<month id="3">Kovo</month>
+				<month id="4">Balandžio</month>
+				<month id="5">Gegužės</month>
+				<month id="6">Birželio</month>
+				<month id="7">Liepos</month>
+				<month id="8">Rugpjūčio</month>
+				<month id="9">Rugsėjo</month>
+				<month id="10">Spalio</month>
+				<month id="11">Lapkričio</month>
+				<month id="12">Gruodžio</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Sau</month>
+				<month id="2">Vas</month>
+				<month id="3">Kov</month>
+				<month id="4">Bal</month>
+				<month id="5">Geg</month>
+				<month id="6">Bir</month>
+				<month id="7">Lie</month>
+				<month id="8">Rgp</month>
+				<month id="9">Rgs</month>
+				<month id="10">Spa</month>
+				<month id="11">Lap</month>
+				<month id="12">Grd</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">Sekmadienis </day>
+				<day id="2">Pirmadienis </day>
+				<day id="3">Antradienis </day>
+				<day id="4">Trečiadienis </day>
+				<day id="5">Ketvirtadienis </day>
+				<day id="6">Penktadienis </day>
+				<day id="7">Šeštadienis </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">Sk </day>
+				<day id="2">Pr </day>
+				<day id="3">An </day>
+				<day id="4">Tr </day>
+				<day id="5">Kt </day>
+				<day id="6">Pn </day>
+				<day id="7">Št </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">pr.Kr.</era>
+				<era id="1">po.Kr.</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<chars>GanjkHmsSEDFwWxhKzAe</chars>
+				<time>
+					<full>HH.mm.ss z</full>
+					<long>HH.mm.ss z</long>
+					<medium>HH.mm.ss</medium>
+					<short>HH.mm</short>
+				</time>
+				<date>
+					<full>EEEE, yyyy, MMMM d</full>
+					<long>EEEE, yyyy, MMMM d</long>
+					<medium>yyyy.M.d</medium>
+					<short>yy.M.d</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<after>C</after>
+		<gt1>č</gt1>
+		<gt3>Č</gt3>
+		<after>I</after>
+		<gt2>y</gt2>
+		<eq>ı</eq>
+		<gt3>Y</gt3>
+		<eq>İ</eq>
+		<after>S</after>
+		<gt1>š</gt1>
+		<gt3>Š</gt3>
+		<after>X</after>
+		<gt1>ý</gt1>
+		<gt3>Ý</gt3>
+		<gt1>ŷ</gt1>
+		<gt3>Ŷ</gt3>
+		<gt1>ÿ</gt1>
+		<gt3>Ÿ</gt3>
+		<after>Z</after>
+		<gt1>ž</gt1>
+		<gt3>Ž</gt3>
+		</collationElements>
+	</collation>
+
+</localeData>

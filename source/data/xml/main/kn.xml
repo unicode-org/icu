@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:24 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="004B">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="kn" >ಕನ್ನಡ</language>
+		</languages >
+		<countries  >
+			<country id="IN">ಭಾರತ</country>
+		</countries  >
+
+	</displayNames >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">ಜನವರೀ</month>
+				<month id="2">ಫೆಬ್ರವರೀ</month>
+				<month id="3">ಮಾರ್ಚ್</month>
+				<month id="4">ಎಪ್ರಿಲ್</month>
+				<month id="5">ಮೆ</month>
+				<month id="6">ಜೂನ್</month>
+				<month id="7">ಜುಲೈ</month>
+				<month id="8">ಆಗಸ್ಟ್</month>
+				<month id="9">ಸಪ್ಟೆಂಬರ್</month>
+				<month id="10">ಅಕ್ಟೋಬರ್</month>
+				<month id="11">ನವೆಂಬರ್</month>
+				<month id="12">ಡಿಸೆಂಬರ್</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">ಜನವರೀ</month>
+				<month id="2">ಫೆಬ್ರವರೀ</month>
+				<month id="3">ಮಾರ್ಚ್</month>
+				<month id="4">ಎಪ್ರಿಲ್</month>
+				<month id="5">ಮೆ</month>
+				<month id="6">ಜೂನ್</month>
+				<month id="7">ಜುಲೈ</month>
+				<month id="8">ಆಗಸ್ಟ್</month>
+				<month id="9">ಸಪ್ಟೆಂಬರ್</month>
+				<month id="10">ಅಕ್ಟೋಬರ್</month>
+				<month id="11">ನವೆಂಬರ್</month>
+				<month id="12">ಡಿಸೆಂಬರ್</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">ರವಿವಾರ </day>
+				<day id="2">ಸೋಮವಾರ </day>
+				<day id="3">ಮಂಗಳವಾರ </day>
+				<day id="4">ಬುಧವಾರ </day>
+				<day id="5">ಗುರುವಾರ </day>
+				<day id="6">ಶುಕ್ರವಾರ </day>
+				<day id="7">ಶನಿವಾರ </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">ರ. </day>
+				<day id="2">ಸೋ. </day>
+				<day id="3">ಮಂ. </day>
+				<day id="4">ಬು. </day>
+				<day id="5">ಗು. </day>
+				<day id="6">ಶು. </day>
+				<day id="7">ಶನಿ. </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>ಪೂರ್ವಾಹ್ನ</am><pm>ಅಪರಾಹ್ನ</pm>
+		</calendar>
+	</calendars>
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<normalization>OFF</normalization>
+		</collationElements>
+	</collation>
+
+</localeData>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:25 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0000">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Mys Genver</month>
+				<month id="2">Mys Whevrel</month>
+				<month id="3">Mys Merth</month>
+				<month id="4">Mys Ebrel</month>
+				<month id="5">Mys Me</month>
+				<month id="6">Mys Evan</month>
+				<month id="7">Mys Gortheren</month>
+				<month id="8">Mye Est</month>
+				<month id="9">Mys Gwyngala</month>
+				<month id="10">Mys Hedra</month>
+				<month id="11">Mys Du</month>
+				<month id="12">Mys Kevardhu</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Gen</month>
+				<month id="2">Whe</month>
+				<month id="3">Mer</month>
+				<month id="4">Ebr</month>
+				<month id="5">Me</month>
+				<month id="6">Evn</month>
+				<month id="7">Gor</month>
+				<month id="8">Est</month>
+				<month id="9">Gwn</month>
+				<month id="10">Hed</month>
+				<month id="11">Du</month>
+				<month id="12">Kev</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">De Sul </day>
+				<day id="2">De Lun </day>
+				<day id="3">De Merth </day>
+				<day id="4">De Merher </day>
+				<day id="5">De Yow </day>
+				<day id="6">De Gwener </day>
+				<day id="7">De Sadorn </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">Sul </day>
+				<day id="2">Lun </day>
+				<day id="3">Mth </day>
+				<day id="4">Mhr </day>
+				<day id="5">Yow </day>
+				<day id="6">Gwe </day>
+				<day id="7">Sad </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+		</calendar>
+	</calendars>
+
+</localeData>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:36 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0043">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Январ</month>
+				<month id="2">Феврал</month>
+				<month id="3">Март</month>
+				<month id="4">Апрел</month>
+				<month id="5">Май</month>
+				<month id="6">Июн</month>
+				<month id="7">Июл</month>
+				<month id="8">Август</month>
+				<month id="9">Сентябр</month>
+				<month id="10">Октябр</month>
+				<month id="11">Ноябр</month>
+				<month id="12">Декабр</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Янв</month>
+				<month id="2">Фев</month>
+				<month id="3">Мар</month>
+				<month id="4">Апр</month>
+				<month id="5">Май</month>
+				<month id="6">Июн</month>
+				<month id="7">Июл</month>
+				<month id="8">Авг</month>
+				<month id="9">Сен</month>
+				<month id="10">Окт</month>
+				<month id="11">Ноя</month>
+				<month id="12">Дек</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">якшанба </day>
+				<day id="2">душанба </day>
+				<day id="3">сешанба </day>
+				<day id="4">чоршанба </day>
+				<day id="5">пайшанба </day>
+				<day id="6">жума </day>
+				<day id="7">шанба </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">якш </day>
+				<day id="2">дш </day>
+				<day id="3">сш </day>
+				<day id="4">чш </day>
+				<day id="5">пш </day>
+				<day id="6">ж </day>
+				<day id="7">ш </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+		</calendar>
+	</calendars>
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<normalization>OFF</normalization>
+		</collationElements>
+	</collation>
+
+</localeData>

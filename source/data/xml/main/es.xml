@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:13 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="000A">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="af" >afrikaans</language>
+			<language id="am" >amharic</language>
+			<language id="ar" >árabe</language>
+			<language id="az" >azerbayano</language>
+			<language id="be" >bielorruso</language>
+			<language id="bg" >búlgaro</language>
+			<language id="bh" >bihari</language>
+			<language id="bn" >bengalí</language>
+			<language id="ca" >catalán</language>
+			<language id="cs" >checo</language>
+			<language id="da" >danés</language>
+			<language id="de" >alemán</language>
+			<language id="el" >griego</language>
+			<language id="en" >inglés</language>
+			<language id="eo" >esperanto</language>
+			<language id="es" >español</language>
+			<language id="et" >estonio</language>
+			<language id="eu" >vasco</language>
+			<language id="fa" >farsi</language>
+			<language id="fi" >finlandés</language>
+			<language id="fo" >faroés</language>
+			<language id="fr" >francés</language>
+			<language id="ga" >irlandés</language>
+			<language id="gl" >gallego</language>
+			<language id="gu" >goujaratí</language>
+			<language id="he" >hebreo</language>
+			<language id="hi" >hindi</language>
+			<language id="hr" >croata</language>
+			<language id="hu" >húngaro</language>
+			<language id="hy" >armenio</language>
+			<language id="id" >indonesio</language>
+			<language id="is" >islandés</language>
+			<language id="it" >italiano</language>
+			<language id="ja" >japonés</language>
+			<language id="ka" >georgiano</language>
+			<language id="kk" >kazajo</language>
+			<language id="kl" >groenlandés</language>
+			<language id="km" >kmer</language>
+			<language id="kn" >canara</language>
+			<language id="ko" >coreano</language>
+			<language id="ku" >kurdo</language>
+			<language id="kw" >córnico</language>
+			<language id="ky" >kirghiz</language>
+			<language id="la" >latín</language>
+			<language id="lt" >lituano</language>
+			<language id="lv" >letón</language>
+			<language id="mk" >macedonio</language>
+			<language id="mn" >mongol</language>
+			<language id="mr" >marathi</language>
+			<language id="ms" >malaisio</language>
+			<language id="mt" >maltés</language>
+			<language id="my" >birmano</language>
+			<language id="nl" >holandés</language>
+			<language id="no" >noruego</language>
+			<language id="pa" >punjabí</language>
+			<language id="pl" >polaco</language>
+			<language id="pt" >portugués</language>
+			<language id="ro" >rumano</language>
+			<language id="root" >raíz</language>
+			<language id="ru" >ruso</language>
+			<language id="sh" >serbo-croata</language>
+			<language id="sk" >eslovaco</language>
+			<language id="sl" >esloveno</language>
+			<language id="so" >somalí</language>
+			<language id="sq" >albanés</language>
+			<language id="sr" >servio</language>
+			<language id="sv" >sueco</language>
+			<language id="sw" >swahili</language>
+			<language id="te" >telugu</language>
+			<language id="th" >tailandés</language>
+			<language id="ti" >tigrinya</language>
+			<language id="tr" >turco</language>
+			<language id="tt" >tataro</language>
+			<language id="uk" >ucraniano</language>
+			<language id="ur" >urdu</language>
+			<language id="uz" >uzbeko</language>
+			<language id="vi" >vietnamés</language>
+			<language id="zh" >chino</language>
+			<language id="zu" >zulú</language>
+		</languages >
+		<countries  >
+			<country id="AE">Emiratos Árabes Unidos</country>
+			<country id="AS">Samoa Americana</country>
+			<country id="BE">Bélgica</country>
+			<country id="BH">Bahráin</country>
+			<country id="BR">Brasil</country>
+			<country id="BY">Bielorrusia</country>
+			<country id="BZ">Belice</country>
+			<country id="CA">Canadá</country>
+			<country id="CH">Suiza</country>
+			<country id="CZ">Chequia</country>
+			<country id="DE">Alemania</country>
+			<country id="DK">Dinamarca</country>
+			<country id="DO">República Dominicana</country>
+			<country id="DZ">Argelia</country>
+			<country id="EG">Egipto</country>
+			<country id="ES">España</country>
+			<country id="FI">Finlandia</country>
+			<country id="FO">Islas Feroe</country>
+			<country id="FR">Francia</country>
+			<country id="GB">Reino Unido</country>
+			<country id="GL">Groenlanida</country>
+			<country id="GR">Grecia</country>
+			<country id="HR">Croacia</country>
+			<country id="HU">Hungría</country>
+			<country id="IE">Irlanda</country>
+			<country id="IQ">Irak</country>
+			<country id="IR">Irán</country>
+			<country id="IS">Islandia</country>
+			<country id="IT">Italia</country>
+			<country id="JO">Jordania</country>
+			<country id="JP">Japón</country>
+			<country id="KE">Kenia</country>
+			<country id="KP">Corea del Norte</country>
+			<country id="KR">Corea del Sur</country>
+			<country id="LB">Líbano</country>
+			<country id="LT">Lituania</country>
+			<country id="LU">Luxemburgo</country>
+			<country id="LV">Letonia</country>
+			<country id="MA">Marruecos</country>
+			<country id="MH">Islas Marshall</country>
+			<country id="MP">Islas Marianas del Norte</country>
+			<country id="MX">México</country>
+			<country id="NL">Países Bajos</country>
+			<country id="NO">Noruega</country>
+			<country id="NZ">Nueva Zelanda</country>
+			<country id="OM">Omán</country>
+			<country id="PA">Panamá</country>
+			<country id="PE">Perú</country>
+			<country id="PH">Islas Filipinas</country>
+			<country id="PK">Pakistán</country>
+			<country id="PL">Polonia</country>
+			<country id="RO">Rumania</country>
+			<country id="RU">Rusia</country>
+			<country id="SA">Arabia Saudí</country>
+			<country id="SD">Sudán</country>
+			<country id="SE">Suecia</country>
+			<country id="SG">Singapur</country>
+			<country id="SI">Eslovenia</country>
+			<country id="SK">Eslovaquia</country>
+			<country id="SP">Servia</country>
+			<country id="SY">Siria</country>
+			<country id="TH">Tailandia</country>
+			<country id="TN">Túnez</country>
+			<country id="TR">Turquía</country>
+			<country id="TT">Trinidad y Tabago</country>
+			<country id="TW">Taiwán</country>
+			<country id="UA">Ucraina</country>
+			<country id="UM">Islas Periféricas Menores de los Estados Unidos</country>
+			<country id="US">Estados Unidos</country>
+			<country id="VI">Islas Vírgenes de los Estados Unidos</country>
+			<country id="ZA">Sudáfrica</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Africa/Casablanca" default="true">
+			<long>
+				<generic>GMT</generic>
+				<standard>GMT</standard>
+			</long>
+			<short>
+				<generic>Africa/Casablanca</generic>
+				<standard>GMT</standard>
+				<daylight>GMT</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">enero</month>
+				<month id="2">febrero</month>
+				<month id="3">marzo</month>
+				<month id="4">abril</month>
+				<month id="5">mayo</month>
+				<month id="6">junio</month>
+				<month id="7">julio</month>
+				<month id="8">agosto</month>
+				<month id="9">septiembre</month>
+				<month id="10">octubre</month>
+				<month id="11">noviembre</month>
+				<month id="12">diciembre</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">ene</month>
+				<month id="2">feb</month>
+				<month id="3">mar</month>
+				<month id="4">abr</month>
+				<month id="5">may</month>
+				<month id="6">jun</month>
+				<month id="7">jul</month>
+				<month id="8">ago</month>
+				<month id="9">sep</month>
+				<month id="10">oct</month>
+				<month id="11">nov</month>
+				<month id="12">dic</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">domingo </day>
+				<day id="2">lunes </day>
+				<day id="3">martes </day>
+				<day id="4">miércoles </day>
+				<day id="5">jueves </day>
+				<day id="6">viernes </day>
+				<day id="7">sábado </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">dom </day>
+				<day id="2">lun </day>
+				<day id="3">mar </day>
+				<day id="4">mié </day>
+				<day id="5">jue </day>
+				<day id="6">vie </day>
+				<day id="7">sáb </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">a.C.</era>
+				<era id="1">d.C.</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<chars>GuMtkHmsSEDFwWahKzUe</chars>
+				<time>
+					<full>HH'H'mm'' z</full>
+					<long>HH:mm:ss z</long>
+					<medium>HH:mm:ss</medium>
+					<short>HH:mm</short>
+				</time>
+				<date>
+					<full>EEEE d' de 'MMMM' de 'yyyy</full>
+					<long>d' de 'MMMM' de 'yyyy</long>
+					<medium>dd-MMM-yy</medium>
+					<short>d/MM/yy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<numberFormat class="decimal" default="true"> 
+		<patterns> 
+			<decimal>#,##0.###;-#,##0.###</decimal>
+			<percent>#,##0%</percent>
+			<scientific>#E0</scientific>
+		</patterns>
+	</numberFormat> 
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<after>N</after>
+		<gt1>ñ</gt1>
+		<gt3>Ñ</gt3>
+		</collationElements>
+	</collation>
+
+</localeData>

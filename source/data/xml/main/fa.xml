@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:16 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0029">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">ژانویه</month>
+				<month id="2">فورویه</month>
+				<month id="3">مارس</month>
+				<month id="4">آوریل</month>
+				<month id="5">مه</month>
+				<month id="6">ژوئن</month>
+				<month id="7">ژوئیه</month>
+				<month id="8">اوت</month>
+				<month id="9">سپتامبر</month>
+				<month id="10">اكتبر</month>
+				<month id="11">نوامبر</month>
+				<month id="12">دسامبر</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">ژان</month>
+				<month id="2">فور</month>
+				<month id="3">مار</month>
+				<month id="4">آور</month>
+				<month id="5">مـه</month>
+				<month id="6">ژون</month>
+				<month id="7">ژوی</month>
+				<month id="8">اوت</month>
+				<month id="9">سپت</month>
+				<month id="10">اكت</month>
+				<month id="11">نوا</month>
+				<month id="12">دسا</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">یی‌شنبه </day>
+				<day id="2">دوشنبه </day>
+				<day id="3">سه‌شنبه </day>
+				<day id="4">چهارشنبه </day>
+				<day id="5">پنج‌شنبه </day>
+				<day id="6">جمعه </day>
+				<day id="7">شنبه </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">ی∔ </day>
+				<day id="2">د∔ </day>
+				<day id="3">س∔ </day>
+				<day id="4">چ∔ </day>
+				<day id="5">پ∔ </day>
+				<day id="6">ج∔ </day>
+				<day id="7">ش∔ </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>صبح</am><pm>عصر</pm>
+		</calendar>
+	</calendars>
+	<numberFormat class="decimal" default="true"> 
+		<patterns> 
+			<decimal>#,##0.###;-#,##0.###</decimal>
+			<percent>#,##0%</percent>
+			<scientific>#E0</scientific>
+		</patterns>
+	</numberFormat> 
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<normalization>OFF</normalization>
+		</collationElements>
+	</collation>
+
+</localeData>
