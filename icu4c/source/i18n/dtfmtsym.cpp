@@ -575,11 +575,17 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
 
     /* In case something goes wrong, initialize all of the data to NULL. */
     fEras = NULL;
+    fErasCount = 0;
     fMonths = NULL;
+    fMonthsCount=0;
     fShortMonths = NULL;
+    fShortMonthsCount=0;
     fWeekdays = NULL;
+    fWeekdaysCount=0;
     fShortWeekdays = NULL;
+    fShortWeekdaysCount=0;
     fAmPms = NULL;
+    fAmPmsCount=0;
     fZoneStringsRowCount = 0;
     fZoneStringsColCount = 0;
     fZoneStrings = NULL;

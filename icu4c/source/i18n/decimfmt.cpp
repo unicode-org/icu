@@ -116,7 +116,10 @@ DecimalFormat::DecimalFormat(UErrorCode& status)
   fNegPrefixPattern(0), 
   fNegSuffixPattern(0),
   fCurrencyChoice(0),
-  fSymbols(0)
+  fSymbols(0), fFormatWidth(0),
+  fPad(0), fMinExponentDigits(0),
+  fRoundingIncrement(0),fMultiplier(0),
+  fGroupingSize(0),fGroupingSize2(0)
 {
     UParseError parseError;
     construct(status, parseError);
@@ -134,7 +137,10 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fNegPrefixPattern(0), 
   fNegSuffixPattern(0),
   fCurrencyChoice(0),
-  fSymbols(0)
+  fSymbols(0), fFormatWidth(0),
+  fPad(0), fMinExponentDigits(0),
+  fRoundingIncrement(0),fMultiplier(0),
+  fGroupingSize(0),fGroupingSize2(0)
 {
     UParseError parseError;
     construct(status, parseError, &pattern);
@@ -154,7 +160,10 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fNegPrefixPattern(0), 
   fNegSuffixPattern(0),
   fCurrencyChoice(0),
-  fSymbols(0)
+  fSymbols(0), fFormatWidth(0),
+  fPad(0), fMinExponentDigits(0),
+  fRoundingIncrement(0),fMultiplier(0),
+  fGroupingSize(0),fGroupingSize2(0)
 {
     UParseError parseError;
     if (symbolsToAdopt == NULL)
@@ -172,7 +181,10 @@ DecimalFormat::DecimalFormat(  const UnicodeString& pattern,
   fNegPrefixPattern(0), 
   fNegSuffixPattern(0),
   fCurrencyChoice(0),
-  fSymbols(0)
+  fSymbols(0), fFormatWidth(0),
+  fPad(0), fMinExponentDigits(0),
+  fRoundingIncrement(0),fMultiplier(0),
+  fGroupingSize(0),fGroupingSize2(0)
 {
     if (symbolsToAdopt == NULL)
         status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -192,7 +204,10 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fNegPrefixPattern(0), 
   fNegSuffixPattern(0),
   fCurrencyChoice(0),
-  fSymbols(0)
+  fSymbols(0), fFormatWidth(0),
+  fPad(0), fMinExponentDigits(0),
+  fRoundingIncrement(0),fMultiplier(0),
+  fGroupingSize(0),fGroupingSize2(0)
 {
     UParseError parseError;
     construct(status, parseError, &pattern, new DecimalFormatSymbols(symbols));
