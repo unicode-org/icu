@@ -525,8 +525,6 @@ readHeader(ConvData *data,
     staticData->minBytesPerChar=(int8_t)data->ucm->states.minCharLength;
     staticData->conversionType=data->ucm->states.conversionType;
 
-    /* ### TODO use UCNV_UNSUPPORTED_CONVERTER to indicate an extension-only file? */
-
     if(staticData->conversionType==UCNV_UNSUPPORTED_CONVERTER) {
         fprintf(stderr, "ucm error: missing conversion type (<uconv_class>)\n");
         *pErrorCode=U_INVALID_TABLE_FORMAT;
@@ -537,39 +535,44 @@ readHeader(ConvData *data,
      * Now that we know the type, copy any 'default' values from the table.
      * We need not check the type any further because the parser only
      * recognizes what we have prototypes for.
+     *
+     * For delta (extension-only) tables, copy values from the base file
+     * instead, see createConverter().
      */
-    prototype=ucnv_converterStaticData[staticData->conversionType];
-    if(prototype!=NULL) {
-        if(staticData->name[0]==0) {
-            uprv_strcpy((char *)staticData->name, prototype->name);
-        }
+    if(data->ucm->baseName[0]==0) {
+        prototype=ucnv_converterStaticData[staticData->conversionType];
+        if(prototype!=NULL) {
+            if(staticData->name[0]==0) {
+                uprv_strcpy((char *)staticData->name, prototype->name);
+            }
 
-        if(staticData->codepage==0) {
-            staticData->codepage=prototype->codepage;
-        }
+            if(staticData->codepage==0) {
+                staticData->codepage=prototype->codepage;
+            }
 
-        if(staticData->platform==0) {
-            staticData->platform=prototype->platform;
-        }
+            if(staticData->platform==0) {
+                staticData->platform=prototype->platform;
+            }
 
-        if(staticData->minBytesPerChar==0) {
-            staticData->minBytesPerChar=prototype->minBytesPerChar;
-        }
+            if(staticData->minBytesPerChar==0) {
+                staticData->minBytesPerChar=prototype->minBytesPerChar;
+            }
 
-        if(staticData->maxBytesPerChar==0) {
-            staticData->maxBytesPerChar=prototype->maxBytesPerChar;
-        }
+            if(staticData->maxBytesPerChar==0) {
+                staticData->maxBytesPerChar=prototype->maxBytesPerChar;
+            }
 
-        if(staticData->subCharLen==0) {
-            staticData->subCharLen=prototype->subCharLen;
-            if(prototype->subCharLen>0) {
-                uprv_memcpy(staticData->subChar, prototype->subChar, prototype->subCharLen);
+            if(staticData->subCharLen==0) {
+                staticData->subCharLen=prototype->subCharLen;
+                if(prototype->subCharLen>0) {
+                    uprv_memcpy(staticData->subChar, prototype->subChar, prototype->subCharLen);
+                }
             }
         }
     }
 
     if(data->ucm->states.outputType<0) {
-        data->ucm->states.outputType=(int8_t)data->ucm->states.maxCharLength;
+        data->ucm->states.outputType=(int8_t)data->ucm->states.maxCharLength-1;
     }
 
     if( staticData->subChar1!=0 &&
@@ -662,6 +665,9 @@ createConverter(ConvData *data, const char *converterName, UErrorCode *pErrorCod
     ConvData baseData;
     UBool dataIsBase;
 
+    UConverterStaticData *staticData;
+    UCMStates *states, *baseStates;
+
     if(U_FAILURE(*pErrorCode)) {
         return;
     }
@@ -673,15 +679,24 @@ createConverter(ConvData *data, const char *converterName, UErrorCode *pErrorCod
         return;
     }
 
+    staticData=&data->staticData;
+    states=&data->ucm->states;
+
     if(dataIsBase) {
         data->cnvData=MBCSOpen(data->ucm);
         if(data->cnvData==NULL) {
             *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
 
         } else if(!data->cnvData->isValid(data->cnvData,
-                            data->staticData.subChar, data->staticData.subCharLen)
+                            staticData->subChar, staticData->subCharLen)
         ) {
             fprintf(stderr, "       the substitution character byte sequence is illegal in this codepage structure!\n");
+            *pErrorCode=U_INVALID_TABLE_FORMAT;
+
+        } else if(staticData->subChar1!=0 &&
+                    !data->cnvData->isValid(data->cnvData, &staticData->subChar1, 1)
+        ) {
+            fprintf(stderr, "       the subchar1 byte is illegal in this codepage structure!\n");
             *pErrorCode=U_INVALID_TABLE_FORMAT;
 
         } else if(data->ucm->ext->mappingsLength>0) {
@@ -691,7 +706,7 @@ createConverter(ConvData *data, const char *converterName, UErrorCode *pErrorCod
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
 
             } else if(
-                !ucm_checkBaseExt(&data->ucm->states, data->ucm->base, data->ucm->ext, data->ucm->ext, FALSE) ||
+                !ucm_checkBaseExt(states, data->ucm->base, data->ucm->ext, data->ucm->ext, FALSE) ||
                 !data->extData->addTable(data->extData, data->ucm->ext, &data->staticData)
             ) {
                 *pErrorCode=U_INVALID_TABLE_FORMAT;
@@ -729,12 +744,78 @@ createConverter(ConvData *data, const char *converterName, UErrorCode *pErrorCod
             if(data->extData==NULL) {
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
 
-            } else if(
-                !ucm_checkValidity(data->ucm->ext, &baseData.ucm->states) ||
-                !ucm_checkBaseExt(&baseData.ucm->states, baseData.ucm->base, data->ucm->ext, data->ucm->ext, FALSE) ||
-                !data->extData->addTable(data->extData, data->ucm->ext, &data->staticData)
-            ) {
-                *pErrorCode=U_INVALID_TABLE_FORMAT;
+            } else {
+                /* fill in gaps in extension file header fields */
+                UCMapping *m, *mLimit;
+                uint8_t fallbackFlags;
+
+                baseStates=&baseData.ucm->states;
+                if(states->conversionType==UCNV_DBCS) {
+                    staticData->minBytesPerChar=(int8_t)(states->minCharLength=2);
+                } else if(states->minCharLength==0) {
+                    staticData->minBytesPerChar=(int8_t)(states->minCharLength=baseStates->minCharLength);
+                }
+                if(states->maxCharLength<states->minCharLength) {
+                    staticData->maxBytesPerChar=(int8_t)(states->maxCharLength=baseStates->maxCharLength);
+                }
+
+                if(staticData->subCharLen==0) {
+                    uprv_memcpy(staticData->subChar, baseData.staticData.subChar, 4);
+                    staticData->subCharLen=baseData.staticData.subCharLen;
+                }
+                if(states->minCharLength==1 && states->maxCharLength>=2) {
+                    if(staticData->subChar1==0) {
+                        staticData->subChar1=baseData.staticData.subChar1;
+                    }
+                } else {
+                    staticData->subChar1=0;
+                }
+
+                /* get the fallback flags */
+                fallbackFlags=0;
+                for(m=baseData.ucm->base->mappings, mLimit=m+baseData.ucm->base->mappingsLength;
+                    m<mLimit && fallbackFlags!=3;
+                    ++m
+                ) {
+                    if(m->f==1) {
+                        fallbackFlags|=1;
+                    } else if(m->f==3) {
+                        fallbackFlags|=2;
+                    }
+                }
+                for(m=data->ucm->base->mappings, mLimit=m+data->ucm->base->mappingsLength;
+                    m<mLimit && fallbackFlags!=3;
+                    ++m
+                ) {
+                    if(m->f==1) {
+                        fallbackFlags|=1;
+                    } else if(m->f==3) {
+                        fallbackFlags|=2;
+                    }
+                }
+
+                if(fallbackFlags&1) {
+                    staticData->hasFromUnicodeFallback=TRUE;
+                }
+                if(fallbackFlags&2) {
+                    staticData->hasToUnicodeFallback=TRUE;
+                }
+
+                if(1!=ucm_countChars(baseStates, staticData->subChar, staticData->subCharLen)) {
+                    fprintf(stderr, "       the substitution character byte sequence is illegal in this codepage structure!\n");
+                    *pErrorCode=U_INVALID_TABLE_FORMAT;
+
+                } else if(1!=ucm_countChars(baseStates, &staticData->subChar1, 1)) {
+                    fprintf(stderr, "       the subchar1 byte is illegal in this codepage structure!\n");
+                    *pErrorCode=U_INVALID_TABLE_FORMAT;
+
+                } else if(
+                    !ucm_checkValidity(data->ucm->ext, baseStates) ||
+                    !ucm_checkBaseExt(baseStates, baseData.ucm->base, data->ucm->ext, data->ucm->ext, FALSE) ||
+                    !data->extData->addTable(data->extData, data->ucm->ext, &data->staticData)
+                ) {
+                    *pErrorCode=U_INVALID_TABLE_FORMAT;
+                }
             }
         }
 
