@@ -52,7 +52,7 @@ typedef struct {
 
 
 #define ucol_tok_isSpecialChar(ch)              \
-     (((((ch) <= 0x002F) && ((ch) >= 0x0020))|| \
+    (((((ch) <= 0x002F) && ((ch) >= 0x0020)) || \
       (((ch) <= 0x003F) && ((ch) >= 0x003A)) || \
       (((ch) <= 0x0060) && ((ch) >= 0x005B)) || \
       (((ch) <= 0x007E) && ((ch) >= 0x007B))))
@@ -61,4 +61,5 @@ typedef struct {
 U_CFUNC UColToken *ucol_tok_parse_next_token(UColTokenParser *src, UErrorCode *status);
 U_CFUNC UColToken *ucol_tok_open();
 U_CFUNC uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status);
+
 #endif

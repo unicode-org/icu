@@ -78,7 +78,7 @@ isAcceptableInvUCA(void *context,
 
 uint32_t ucol_inv_findCE(uint32_t CE, uint32_t SecondCE, UErrorCode *status) {
   uint32_t bottom = 0, top = invUCA->tableSize;
-  uint32_t i = (top-bottom)/2;
+  uint32_t i;
   uint32_t first = 0;
   uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
 
@@ -86,7 +86,8 @@ uint32_t ucol_inv_findCE(uint32_t CE, uint32_t SecondCE, UErrorCode *status) {
     return 0;
   }
 
-  while(first != CE && top != bottom) {
+  while(bottom < top-1) {
+    i = (top+bottom)/2;
     first = *(CETable+3*i);
     if(first > CE) {
       top = i;
@@ -95,7 +96,6 @@ uint32_t ucol_inv_findCE(uint32_t CE, uint32_t SecondCE, UErrorCode *status) {
     } else {
       break;
     }
-    i = (top-bottom)/2 + bottom;
   }
 
   if(first == CE) {
@@ -112,7 +112,7 @@ static uint32_t strengthMask[3] = {
   0xFFFFFFFF
 };
 
-uint32_t ucol_inv_getPrevious(uint32_t CE, uint32_t SecondCE, UColAttributeValue strength, UErrorCode *status) {
+uint32_t ucol_inv_getPrevious(uint32_t CE, uint32_t SecondCE, uint32_t strength, UErrorCode *status) {
 
   uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
   uint32_t previousCE;
@@ -134,7 +134,7 @@ uint32_t ucol_inv_getPrevious(uint32_t CE, uint32_t SecondCE, UColAttributeValue
   return previousCE;
 }
 
-uint32_t ucol_inv_getNext(uint32_t CE, uint32_t SecondCE, UColAttributeValue strength, UErrorCode *status) {
+uint32_t ucol_inv_getNext(uint32_t CE, uint32_t SecondCE, uint32_t strength, UErrorCode *status) {
   uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
   uint32_t nextCE;
   uint32_t iCE;
@@ -150,7 +150,7 @@ uint32_t ucol_inv_getNext(uint32_t CE, uint32_t SecondCE, UColAttributeValue str
   nextCE = CE;
 
   while(nextCE == CE) {
-    nextCE = (*(CETable+3*(--iCE))) & strengthMask[strength];
+    nextCE = (*(CETable+3*(++iCE))) & strengthMask[strength];
   }
   return nextCE;
 }
@@ -205,7 +205,8 @@ ucol_close(UCollator *coll)
   }
 }
 
-UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, int32_t resLen, UErrorCode *status) {
+UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, uint32_t *resLen, UErrorCode *status) {
+  int32_t i = 0;
 /*
 2.	Eliminate the negative lists by doing the following for each non-null negative list: 
     o	if previousCE(baseCE, strongestN) != some ListHeader X's baseCE, 
@@ -224,6 +225,10 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, int32_t resLen
       tailoring has & x < z... 
       ?	Then we change the tailoring to & x  <<< X << x' <<< X' < z ... 
 */
+  /* It is possible that this part should be done even while constructing list */
+  /* The problem is that it is unknown what is going to be the strongest weight */
+  /* So we might as well do it here */
+
 /*
     o	Allocate CEs for each token in the list, based on the total number N of the 
     largest level difference, and the gap G between baseCE and nextCE at that 
@@ -241,6 +246,23 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, int32_t resLen
     boundaries except where there is only a single-byte primary. That is to 
     ensure that the script reordering will continue to work. 
 */
+  for(i = 0; i<src->resultLen; i++) {
+    src->lh[i].nextCE = ucol_inv_getNext(src->lh[i].baseCE, 0, 
+      src->lh[i].strongest[UCOL_TOK_POLARITY_POSITIVE], status);
+    /* now we need to generate the CEs */ 
+    /* I'd really like to get them in a UCAElements structure very soon */
+      UColToken *t = src->lh[i].first[UCOL_TOK_POLARITY_POSITIVE];
+      uint32_t strongest = 0;
+      /* Count the strongest */
+      while(t->next != NULL) {
+        if(t->strength == src->lh[i].strongest[UCOL_TOK_POLARITY_POSITIVE]) {
+          strongest++;
+        }
+        t = t->next;
+      }
+
+  }
+
   *status = U_UNSUPPORTED_ERROR;
   return NULL;
 }
@@ -252,7 +274,9 @@ ucol_openRules(    const    UChar                  *rules,
         UCollationStrength      strength,
         UErrorCode              *status)
 {
-  int32_t resLen = 0;
+  uint32_t resLen = 0;
+  uint32_t listLen = 0;
+  UColTokenParser src;
 
   ucol_initUCA(status);
   ucol_initInverseUCA(status);
@@ -283,8 +307,6 @@ ucol_openRules(    const    UChar                  *rules,
 
   /* do we need to normalize the string beforehand? */
 
-  uint32_t listLen = 0;
-  UColTokenParser src;
   src.source = rules;
   src.current = rules;
   src.end = rules+rulesLength;
@@ -298,7 +320,7 @@ ucol_openRules(    const    UChar                  *rules,
     return NULL;
   }
 
-  UCATableHeader *table = ucol_assembleTailoringTable(&src, resLen, status);
+  UCATableHeader *table = ucol_assembleTailoringTable(&src, &resLen, status);
   UCollator *result = ucol_initCollator(table,0,status);
 
   if(U_SUCCESS(*status)) {
