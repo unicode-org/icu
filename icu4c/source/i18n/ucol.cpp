@@ -540,6 +540,8 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
 
     uint8_t variableMax = coll->variableMax;
+    uint8_t UCOL_COMMON_BOT4 = variableMax+1;
+    uint8_t UCOL_BOT_COUNT4 = 0xFF - UCOL_COMMON_BOT4;
 
     int32_t order = UCOL_NULLORDER;
     uint16_t primary = 0;
@@ -572,12 +574,14 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
           primary1 = order >>= 8;
 
           if(isFlagged(ce)) { 
+#if 0
             if(isLongPrimary(ce)) {
               /* if we have a long primary, we'll mark secondary unmarked & add min value to tertiary */
               primary3 = secondary;
               secondary = UCOL_UNMARKED;
               tertiary ^= 0x40;
             }
+#endif /* we have decided to scrap long primaries */
             tertiary ^= 0x80;
           } else {
             /* it appears tht something should be done with the case bit */
@@ -585,6 +589,10 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
           }
 
           if(shifted && primary1 < variableMax && primary1 != 0) { 
+            if(c4 > 0) {
+              currentSize += (c2/UCOL_BOT_COUNT4)+1;
+              c4 = 0;
+            }
             currentSize++;
             if(primary2 != 0) {
               currentSize++;
@@ -644,16 +652,22 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
             }
 
             if(shifted && primary1 > compareQuad) {
-              if(c4 == 0) {
-                currentSize++;
-                c4++;
-              }
-              if(c4 >= 0xFF) {
-                c4 = 0;
-              }
+              c4++;
             }
 
           }
+    }
+
+    if(c2 > 0) {
+      currentSize += (c2/UCOL_BOT_COUNT2)+1;
+    }
+
+    if(c3 > 0) {
+      currentSize += (c3/UCOL_BOT_COUNT3)+1;
+    }
+
+    if(c4 > 0) {
+      currentSize += (c4/UCOL_BOT_COUNT4)+1;
     }
 
     if(compareIdent) {
@@ -713,6 +727,8 @@ ucol_calcSortKey(const    UCollator    *coll,
 	int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
 
     uint8_t variableMax = coll->variableMax;
+    uint8_t UCOL_COMMON_BOT4 = variableMax+1;
+    uint8_t UCOL_BOT_COUNT4 = 0xFF - UCOL_COMMON_BOT4;
 
     UColAttributeValue strength = coll->strength;
 
@@ -783,7 +799,7 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     int32_t compressedSecs = 0;
 
-    uint32_t count2 = 0, count3 = 0;
+    uint32_t count2 = 0, count3 = 0, count4 = 0;
 
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
@@ -809,6 +825,7 @@ ucol_calcSortKey(const    UCollator    *coll,
             primary1 = order >>= 8;
 
             if(isFlagged(ce)) { 
+#if 0
               if(isLongPrimary(ce)) {
                 /* if we have a long primary, we'll mark secondary unmarked & add min value to tertiary */
                 primary3 = secondary;
@@ -817,6 +834,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                   primary1 = scriptOrder[primary1];
                 }
               }
+#endif /* we have decided to scrap long primaries */
               tertiary &= 0x3F;
             } else {
               /* it appears tht something should be done with the case bit */
@@ -839,6 +857,16 @@ ucol_calcSortKey(const    UCollator    *coll,
             /* out to ucol_getSortKeySizeNew.                                                      */
 
             if(shifted && primary1 < variableMax && primary1 != 0) { 
+              if(count4 > 0) {
+				while (count4 >= UCOL_BOT_COUNT4) {
+				  *quads++ = UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4;
+                  sortKeySize++;
+				  count4 -= UCOL_BOT_COUNT4;
+				}
+				*quads++ = UCOL_COMMON_BOT4 + count4;
+                sortKeySize++;
+                count4 = 0;
+              }
               /* We are dealing with a variable and we're treating them as shifted */
               /* This is a shifted ignorable */
               *quads++ = primary1;
@@ -952,12 +980,15 @@ ucol_calcSortKey(const    UCollator    *coll,
                   if(shifted && primary1 > compareQuad) {
                     /* here is only the compression bit, since only one value can happen here: 0xFF */
                     /* sequence size check is included in the if clause */
+                    count4++;
+/*
                     if((uint8_t)(*(quads-1)-variableMax) > (0xFF-variableMax-1)) {
                       *quads++ = variableMax;
                       sortKeySize++;
                     } else {
                       (*(quads-1))++;
                     }
+*/
                   }
                 }
               }
@@ -1047,6 +1078,15 @@ ucol_calcSortKey(const    UCollator    *coll,
         uprv_memcpy(primaries, terStart, tersize);
         primaries += tersize;
         if(compareQuad == 0) {
+            if(count4 > 0) {
+			  while (count4 >= UCOL_BOT_COUNT4) {
+			    *quads++ = UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4;
+                sortKeySize++;
+			    count4 -= UCOL_BOT_COUNT4;
+			  }
+			  *quads++ = UCOL_COMMON_BOT4 + count4;
+              sortKeySize++;
+            }
             *(primaries++) = UCOL_LEVELTERMINATOR;
             uint32_t quadsize = quads - quadStart;
             uprv_memcpy(primaries, quadStart, quadsize);
@@ -1537,15 +1577,26 @@ ucol_strcoll(    const    UCollator    *coll,
     UBool upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST) && checkTertiary;
     UBool shifted = (coll->alternateHandling == UCOL_SHIFTED) && checkQuad;
 
+    uint32_t sCEsArray[512], tCEsArray[512];
+    uint32_t *sCEs = sCEsArray, *tCEs = tCEsArray;
+    uint32_t *sCEend = sCEs+512, *tCEend = tCEs+512;
+
+    uint8_t LVT = shifted*variableMax;
+
     if(!isFrenchSec) {
         for(;;)
         {
+          if(sCEs == sCEend || tCEs == tCEend) {
+            return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
+          }
             /* Get the next collation element in each of the strings, unless */
             /* we've been requested to skip it. */
             if (gets)
             {
                 /*UCOL_GETNEXTCE(sOrder, coll, sColl, &status);*/
                 sOrder = ucol_getNextCE(coll, &sColl, &status);
+                *(sCEs++) = sOrder;
+
             }
             gets = TRUE;
 
@@ -1553,6 +1604,7 @@ ucol_strcoll(    const    UCollator    *coll,
             {
                 /*UCOL_GETNEXTCE(tOrder, coll, tColl, &status);*/
                 tOrder = ucol_getNextCE(coll, &tColl, &status);
+                *(tCEs++) = tOrder;
             }       
             gett = TRUE;
 
@@ -1595,143 +1647,20 @@ ucol_strcoll(    const    UCollator    *coll,
               /* we need to get the shifted thing in here also */
               /* The source and target elements aren't ignorable, but it's still possible  */
               /* for the primary component of one of the elements to be ignorable....      */
-              if (pSOrder == UCOL_PRIMIGNORABLE  || (shifted && pSOrder < variableMax) )  /* primary order in source is ignorable */
-              {
-                  /* The source's primary is ignorable, but the target's isn't.  We treat ignorables */
-                  /* as a secondary difference, so remember that we found one.                       */
-                  if (checkSecTer) {
-                    /*  a secondary or tertiary difference may still matter */
-                    uint32_t secSOrder = UCOL_SECONDARYORDER(sOrder);
-                    uint32_t secTOrder = UCOL_SECONDARYORDER(tOrder);
-
-                    if (secSOrder != secTOrder) {
-                      if(secSOrder == UCOL_SECIGNORABLE || (shifted && pSOrder < variableMax) ) {
-                        if (checkTertiary) {
-                          /*  a tertiary difference may still matter */
-                          uint32_t terSOrder = UCOL_TERTIARYORDER(sOrder);
-                          uint32_t terTOrder = UCOL_TERTIARYORDER(tOrder);
-                          if(terSOrder != terTOrder) {
-                            if(terSOrder == UCOL_TERIGNORABLE || (shifted && pSOrder < variableMax) ) {
-                              UCOL_CHK_QUAD;
-                            } else {
-                              result = (terSOrder < terTOrder) ? UCOL_LESS : UCOL_GREATER;
-                              checkTertiary = FALSE;
-                            }
-                          } else { /* terSOrder == terTOrder */
-                              UCOL_CHK_QUAD;
-                          }
-                        } /* if(checkTertiary) */
-                      } else {
-                        /*  there is a secondary difference */
-                        result = (secSOrder < secTOrder) ? UCOL_LESS : UCOL_GREATER;
-                                                /*  (strength is SECONDARY) */
-                        checkSecTer = FALSE;
-                      } /* if(secSOrder == UCOL_SECIGNORABLE || (shifted && pSOrder < variableMax)) */
-                    } else { /* secSOrder == secTOrder) */
-                      if (checkTertiary) {
-                        /*  a tertiary difference may still matter */
-                        uint32_t terSOrder = UCOL_TERTIARYORDER(sOrder);
-                        uint32_t terTOrder = UCOL_TERTIARYORDER(tOrder);
-                        if(terSOrder != terTOrder) {
-                          result = (terSOrder < terTOrder) ? UCOL_LESS : UCOL_GREATER;
-                          checkTertiary = FALSE;
-                        } else {
-                          if(checkQuad && shifted) { /*  try shifted & stuff */
-                            uint32_t quadSOrder = (pSOrder < variableMax)?pSOrder:0xFFFF;
-                            uint32_t quadTOrder = (pTOrder < variableMax)?pTOrder:0xFFFF;
-                            if(quadSOrder != quadTOrder) {
-                              result = (quadSOrder < quadTOrder) ? UCOL_LESS : UCOL_GREATER;
-                              checkQuad = FALSE;
-                            }
-                          }
-                        }
-                      } 
-                    } /* if (secSOrder != secTOrder)*/
-                  } /* if (checkSecTer) */
-                  /* Skip to the next source element, but don't fetch another target element. */
-                  gett = FALSE;
-                }
-                else if (pTOrder == UCOL_PRIMIGNORABLE || (shifted && pSOrder < variableMax))
+              if (pSOrder <= LVT) { /* primary order in source is ignorable */
+               gett = FALSE;
+              } else if (pTOrder <= LVT) {
+               gets = FALSE;
+              } else {
+                /* Neither of the orders is ignorable, and we already know that the primary */
+                /* orders are different because of the (pSOrder != pTOrder) test above. */
+                /* Record the difference and stop the comparison. */
+                if (pSOrder < pTOrder)
                 {
-                    /* record differences - see the comment above. */
-                    if (checkSecTer) {
-                    /*  a secondary or tertiary difference may still matter */
-                    uint32_t secSOrder = UCOL_SECONDARYORDER(sOrder);
-                    uint32_t secTOrder = UCOL_SECONDARYORDER(tOrder);
-
-                    if (secSOrder != secTOrder) {
-                      if(secTOrder == UCOL_SECIGNORABLE || (shifted && pTOrder < variableMax) ) {
-                        if (checkTertiary) {
-                          /*  a tertiary difference may still matter */
-                          uint32_t terSOrder = UCOL_TERTIARYORDER(sOrder);
-                          uint32_t terTOrder = UCOL_TERTIARYORDER(tOrder);
-                          if(terSOrder != terTOrder) {
-                            if(terTOrder == UCOL_TERIGNORABLE || (shifted && pTOrder < variableMax) ) {
-                              if(checkQuad && shifted) { /*  try shifted & stuff */
-                                uint32_t quadSOrder = (pSOrder < variableMax)?pSOrder:0xFFFF;
-                                uint32_t quadTOrder = (pTOrder < variableMax)?pTOrder:0xFFFF;
-                                if(quadSOrder != quadTOrder) {
-                                  result = (quadSOrder < quadTOrder) ? UCOL_LESS : UCOL_GREATER;
-                                  checkQuad = FALSE;
-                                }
-                              }
-                            } else {
-                              result = (terSOrder < terTOrder) ? UCOL_LESS : UCOL_GREATER;
-                            }
-                          } else { /* terSOrder == terTOrder */
-                            if(checkQuad && shifted) { /*  try shifted & stuff */
-                              uint32_t quadSOrder = (pSOrder < variableMax)?pSOrder:0xFFFF;
-                              uint32_t quadTOrder = (pTOrder < variableMax)?pTOrder:0xFFFF;
-                              if(quadSOrder != quadTOrder) {
-                                result = (quadSOrder < quadTOrder) ? UCOL_LESS : UCOL_GREATER;
-                                checkQuad = FALSE;
-                              }
-                            }
-                          }
-                        } /* if(checkTertiary) */
-                      } else {
-                        /*  there is a secondary difference */
-                        result = (secSOrder < secTOrder) ? UCOL_LESS : UCOL_GREATER;
-                                                /*  (strength is SECONDARY) */
-                        checkSecTer = FALSE;
-                      } /* if(secSOrder == UCOL_SECIGNORABLE || (shifted && pSOrder < variableMax)) */
-                    } else { /* secSOrder == secTOrder) */
-                      if (checkTertiary) {
-                        /*  a tertiary difference may still matter */
-                        uint32_t terSOrder = UCOL_TERTIARYORDER(sOrder);
-                        uint32_t terTOrder = UCOL_TERTIARYORDER(tOrder);
-                        if(terSOrder != terTOrder) {
-                          result = (terSOrder < terTOrder) ? UCOL_LESS : UCOL_GREATER;
-                          checkTertiary = FALSE;
-                        } else {
-                          if(checkQuad && shifted) { /*  try shifted & stuff */
-                            uint32_t quadSOrder = (pSOrder < variableMax)?pSOrder:0xFFFF;
-                            uint32_t quadTOrder = (pTOrder < variableMax)?pTOrder:0xFFFF;
-                            if(quadSOrder != quadTOrder) {
-                              result = (quadSOrder < quadTOrder) ? UCOL_LESS : UCOL_GREATER;
-                              checkQuad = FALSE;
-                            }
-                          }
-                        }
-                      } 
-                    } /* if (secSOrder != secTOrder)*/
-                  } /* if (checkSecTer) */
-
-                    /* Skip to the next target element, but don't fetch another source element. */
-                    gets = FALSE;
+                    return UCOL_LESS;  /* (strength is PRIMARY) */
                 }
-                else
-                {
-                    /* Neither of the orders is ignorable, and we already know that the primary */
-                    /* orders are different because of the (pSOrder != pTOrder) test above. */
-                    /* Record the difference and stop the comparison. */
-                    if (pSOrder < pTOrder)
-                    {
-                        return UCOL_LESS;  /* (strength is PRIMARY) */
-                    }
-
-                    return UCOL_GREATER;  /* (strength is PRIMARY) */
-                }
+                return UCOL_GREATER;  /* (strength is PRIMARY) */
+              }
             } else { /* else of if ( pSOrder != pTOrder )*/
                 /* primary order is the same, but complete order is different. So there*/
                 /* are no base elements at this point, only ignorables (Since the strings are*/
