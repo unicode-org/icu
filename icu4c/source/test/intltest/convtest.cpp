@@ -305,6 +305,8 @@ ConversionTest::TestFromUnicode() {
     }
 }
 
+static const UChar ellipsis[]={ 0x2e, 0x2e, 0x2e };
+
 void
 ConversionTest::TestGetUnicodeSet() {
     char charset[100];
@@ -398,6 +400,9 @@ ConversionTest::TestGetUnicodeSet() {
                 (diffSet=mapSet).removeAll(cnvSet);
                 if(!diffSet.isEmpty()) {
                     diffSet.toPattern(s, TRUE);
+                    if(s.length()>100) {
+                        s.replace(100, 0x7fffffff, ellipsis, LENGTHOF(ellipsis));
+                    }
                     errln("error: ucnv_getUnicodeSet(\"%s\") is missing items - conversion/getUnicodeSet test case %d",
                             charset, i);
                     errln(s);
@@ -407,6 +412,9 @@ ConversionTest::TestGetUnicodeSet() {
                 (diffSet=mapnotSet).retainAll(cnvSet);
                 if(!diffSet.isEmpty()) {
                     diffSet.toPattern(s, TRUE);
+                    if(s.length()>100) {
+                        s.replace(100, 0x7fffffff, ellipsis, LENGTHOF(ellipsis));
+                    }
                     errln("error: ucnv_getUnicodeSet(\"%s\") contains unexpected items - conversion/getUnicodeSet test case %d",
                             charset, i);
                     errln(s);
