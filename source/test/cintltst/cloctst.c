@@ -2189,7 +2189,7 @@ static void TestGetLocale(void) {
         /* TODO MessageFormat is currently just storing the locale it is given.
            As a result, it will return whatever it was given, even if the
            locale is invalid. */
-        test = (_cmpversion("3.1") <= 0) ?
+        test = (_cmpversion("3.2") <= 0) ?
             /* Here is the weakened test for 3.0: */
             (_loccmp(req, valid) >= 0) :
             /* Here is what the test line SHOULD be: */
