@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/ChineseTest.java,v $
- * $Date: 2002/02/16 03:05:05 $
- * $Revision: 1.9 $
+ * $Date: 2003/02/27 21:38:42 $
+ * $Revision: 1.10 $
  */
 package com.ibm.icu.dev.test.calendar;
 import com.ibm.icu.util.*;
@@ -89,11 +89,12 @@ public class ChineseTest extends CalendarTest {
         StringBuffer buf = new StringBuffer();
 
         logln("Gregorian -> Chinese");
-        java.util.Calendar tempcal = java.util.Calendar.getInstance();
-        tempcal.clear();
+        //java.util.Calendar grego = java.util.Calendar.getInstance();
+        Calendar grego = Calendar.getInstance();
+        grego.clear();
         for (int i=0; i<DATA.length; ) {
-            tempcal.set(DATA[i++], DATA[i++]-1, DATA[i++]);
-            Date date = tempcal.getTime();
+            grego.set(DATA[i++], DATA[i++]-1, DATA[i++]);
+            Date date = grego.getTime();
             cal.setTime(date);
             int y = cal.get(Calendar.EXTENDED_YEAR);
             int m = cal.get(Calendar.MONTH)+1; // 0-based -> 1-based
@@ -116,8 +117,8 @@ public class ChineseTest extends CalendarTest {
 
         logln("Chinese -> Gregorian");
         for (int i=0; i<DATA.length; ) {
-            tempcal.set(DATA[i++], DATA[i++]-1, DATA[i++]);
-            Date dexp = tempcal.getTime();
+            grego.set(DATA[i++], DATA[i++]-1, DATA[i++]);
+            Date dexp = grego.getTime();
             int cyear = DATA[i++];
             int cmonth = DATA[i++];
             int cisleapmonth = DATA[i++];
