@@ -38,37 +38,6 @@
  * the resource is of the expected type.
  */
 
-/*
- * Unicode String functions
- *
- * Note that the type value for strings is 0, therefore
- * res itself contains the offset value.
- */ 
-static const UChar nulUChar=0;
-
-static const UChar *
-_res_getString(Resource *pRoot, Resource res, int32_t *pLength) {
-    if(res==0) {
-        *pLength=0;
-        return &nulUChar;
-    } else {
-        int32_t *p=(int32_t *)RES_GET_POINTER(pRoot, res);
-        *pLength=*p++;
-        return (UChar *)p;
-    }
-}
-
-static const uint8_t *
-_res_getBinary(Resource *pRoot, Resource res, int32_t *pLength) {
-    if(res==0) {
-        *pLength=0;
-        return NULL;
-    } else {
-        int32_t *p=(int32_t *)RES_GET_POINTER(pRoot, res);
-        *pLength=*p++;
-        return (uint8_t *)p;
-    }
-}
 
 /*
  * Array functions
@@ -195,10 +164,6 @@ isAcceptable(void *context,
 U_CFUNC UBool
 res_load(ResourceData *pResData,
          const char *path, const char *name, UErrorCode *errorCode) {
-    if(errorCode==NULL || U_FAILURE(*errorCode)) {
-        return FALSE;
-    }
-
     /* load the ResourceBundle file */
     pResData->data=udata_openChoice(path, "res", name, isAcceptable, NULL, errorCode);
     if(U_FAILURE(*errorCode)) {
@@ -230,7 +195,9 @@ res_unload(ResourceData *pResData) {
 U_CFUNC const UChar *
 res_getString(const ResourceData *pResData, const Resource res, int32_t *pLength) {
     if(res!=RES_BOGUS && RES_GET_TYPE(res)==RES_STRING) {
-        return _res_getString(pResData->pRoot, res, pLength);
+        int32_t *p=(int32_t *)RES_GET_POINTER(pResData->pRoot, res);
+        *pLength=*p++;
+        return (UChar *)p;
     } else {
         *pLength=0;
         return NULL;
@@ -239,12 +206,9 @@ res_getString(const ResourceData *pResData, const Resource res, int32_t *pLength
 
 U_CFUNC const uint8_t *
 res_getBinary(const ResourceData *pResData, const Resource res, int32_t *pLength) {
-    if(res!=RES_BOGUS && RES_GET_TYPE(res)==RES_BINARY) {
-        return _res_getBinary(pResData->pRoot, res, pLength);
-    } else {
-        *pLength=0;
-        return NULL;
-    }
+    int32_t *p=(int32_t *)RES_GET_POINTER(pResData->pRoot, res);
+    *pLength=*p++;
+    return (uint8_t *)p;
 }
 
 U_CFUNC int32_t
@@ -302,23 +266,5 @@ U_CFUNC Resource res_getTableItemByIndex(const ResourceData *pResData, const Res
 U_CFUNC int32_t res_getTableSize(const ResourceData *pResData, Resource table) {
     uint16_t *p=(uint16_t *)RES_GET_POINTER(pResData->pRoot, table);
     return *p;
-}
-
-U_CFUNC void
-res_getNextStringTableItem(const ResourceData *pResData, Resource table, const UChar **value, const char **key, int32_t *len, int16_t *indexS) {
-    Resource next;
-    if(*indexS == -1) {
-        *indexS = 0;
-    }
-    next = _res_getTableItem(pResData->pRoot, table, *indexS);
-    if ((next == RES_BOGUS) || (RES_GET_TYPE(next) != RES_STRING)) {
-        *key = NULL;
-        *value = NULL;
-        len = 0;
-        return;
-    }
-    *key = _res_getTableKey(pResData->pRoot, table, *indexS);
-    (*indexS)++;
-    *value = _res_getString(pResData->pRoot, next, len);
 }
 

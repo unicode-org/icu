@@ -74,14 +74,16 @@ struct UResourceBundle {
 };
 
 U_CFUNC const char* ures_getRealLocale(const UResourceBundle* resourceBundle, UErrorCode* status);
-U_CAPI void ures_setIsStackObject( UResourceBundle* resB, UBool state);
-U_CAPI UBool ures_isStackObject( UResourceBundle* resB, UErrorCode *status);
-
+U_CFUNC void ures_setIsStackObject( UResourceBundle* resB, UBool state);
+U_CFUNC UBool ures_isStackObject( UResourceBundle* resB);
 U_CFUNC const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char* * resTag, UResourceDataEntry* *realData, Resource *res, UErrorCode *status);
 U_CFUNC int32_t hashBundle(const void *parm);
 U_CFUNC UBool compareBundles(const void *p1, const void *p2);
 
+/* Some getters used by the copy constructor */
+U_CFUNC const char* ures_getName(const UResourceBundle* resB);
+U_CFUNC const char* ures_getPath(const UResourceBundle* resB);
+
 /* Candidates for export */
 U_CFUNC UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original, UErrorCode *status);
-U_CFUNC const ResourceData * ures_getResData(const UResourceBundle* resB);
 #endif /*URESIMP_H*/

@@ -259,9 +259,6 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* path,
  *                <STRONG>taggedArrays</STRONG>: returns the number of strings in the array
  *                <STRONG>single string</STRONG>: returns 1
  *@see ures_get
- *@see ures_getArrayItem
- *@see ures_getTaggedArrayItem
- *@see ures_get2dArrayItem
  *@draft
  */
 U_CAPI int32_t U_EXPORT2 ures_countArrayItems(const UResourceBundle* resourceBundle,
@@ -489,10 +486,6 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resourceB
  * @stable
  */
 U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, const char* key, int32_t* len, UErrorCode *status);
-
-U_CFUNC const char* ures_getName(const UResourceBundle* resB);
-U_CFUNC const char* ures_getPath(const UResourceBundle* resB);
-U_CFUNC const char* ures_getTag(const UResourceBundle* resB);
 
 #endif /*_URES*/
 /*eof*/
