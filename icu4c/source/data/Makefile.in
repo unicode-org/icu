@@ -127,7 +127,7 @@ clean-local:
 distclean-local: clean-local
 	$(RMV) Makefile
 ifneq ($(wildcard .links),)
-	$(RMV) $(top_builddir)/data/UnicodeData-$(UNICODE_VERSION).txt $(top_builddir)/data/thaidict.brk .links
+	$(RMV) UnicodeData-$(UNICODE_VERSION).txt thaidict.brk unidata .links
 endif
 
 check-local:
@@ -140,14 +140,14 @@ $(top_builddir)/config/Makefile.inc: $(srcdir)/config/Makefile.inc.in  $(top_bui
 	cd $(top_builddir) \
 		&& CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-builddata: $(top_builddir)/data/UnicodeData-$(UNICODE_VERSION).txt $(top_builddir)/data/thaidict.brk
+builddata: UnicodeData-$(UNICODE_VERSION).txt thaidict.brk
 
-$(top_builddir)/data/UnicodeData-$(UNICODE_VERSION).txt: $(top_srcdir)/../data/UnicodeData-$(UNICODE_VERSION).txt
+UnicodeData-$(UNICODE_VERSION).txt: $(top_srcdir)/../data/UnicodeData-$(UNICODE_VERSION).txt
 	$(RMV) $@ && ln -s $< $@
 	touch .links
 
-$(top_builddir)/data/thaidict.brk: $(top_srcdir)/../data/thaidict.brk
+thaidict.brk: $(top_srcdir)/../data/thaidict.brk
 	$(RMV) $@ && ln -s $< $@
-	$(RMV) $(top_srcdir)/../data/unidata && ln -s $(top_srcdir)/../data/unidata $(top_builddir)/data/unidata
+	$(RMV) unidata && ln -s $(top_srcdir)/../data/unidata .
 	touch .links
 
