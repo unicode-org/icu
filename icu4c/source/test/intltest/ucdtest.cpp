@@ -790,11 +790,11 @@ derivedCorePropsIndex[]={
     UCHAR_GRAPHEME_BASE
 };
 
-U_CDECL_BEGIN
-void U_CALLCONV
-UnicodeTest::derivedCorePropsLineFn(void *context,
-                                    char *fields[][2], int32_t /* fieldCount */,
-                                    UErrorCode *pErrorCode) {
+U_CAPI void U_CALLCONV
+derivedCorePropsLineFn(void *context,
+                        char *fields[][2], int32_t /* fieldCount */,
+                        UErrorCode *pErrorCode)
+{
     UnicodeTest *me=(UnicodeTest *)context;
     uint32_t start, end;
     int32_t i;
@@ -814,7 +814,6 @@ UnicodeTest::derivedCorePropsLineFn(void *context,
 
     me->derivedCoreProps[i].add(start, end);
 }
-U_CDECL_END
 
 void UnicodeTest::TestAdditionalProperties() {
     // test DerivedCoreProperties.txt
