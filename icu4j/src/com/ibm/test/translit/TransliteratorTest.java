@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/10/17 19:23:28 $
- * $Revision: 1.54 $
+ * $Date: 2001/10/22 23:24:11 $
+ * $Revision: 1.55 $
  *
  *****************************************************************************************
  */
@@ -1567,8 +1567,7 @@ public class TransliteratorTest extends TestFmwk {
     //======================================================================
     // Ram's tests
     //======================================================================
-
-    /* this test performs  test of rules in ISO 15915 */
+ /* this test performs  test of rules in ISO 15915 */
     public void  TestDevanagariLatinRT(){
         int MAX_LEN= 52;
         String[]  source = {
@@ -1633,7 +1632,7 @@ public class TransliteratorTest extends TestFmwk {
             "a"
         };
         String[]  expected = {
-            "\u092D\u093E\u0930\u0924",   /* bha\u0304rata */
+            "\u092D\u093E\u0930\u0924",    /* bha\u0304rata */
             "\u0915\u094D\u0930",          /* kra         */
             "\u0915\u094D\u0937",          /* ks\u0323a  */
             "\u0916\u094D\u0930",          /* khra        */
@@ -1647,7 +1646,7 @@ public class TransliteratorTest extends TestFmwk {
             "\u091F\u094D\u092F",          /* t\u0323ya  */
             "\u0920\u094D\u0930",          /* t\u0323hra */
             "\u0921\u094D\u092F",          /* d\u0323ya  */
-        //"\u095C\u094D\u092F",            /* r\u0323ya  */ // \u095c is not valid in Devanagari
+        //"\u095C\u094D\u092F",          /* r\u0323ya  */ // \u095c is not valid in Devanagari
             "\u0922\u094D\u092F",          /* d\u0323hya */
             "\u0922\u093C\u094D\u0930",    /* r\u0323hra */
             "\u0923\u094D\u0930",          /* n\u0323ra  */
@@ -1662,9 +1661,9 @@ public class TransliteratorTest extends TestFmwk {
             "\u092D\u094D\u0930",          /* bhra        */
             "\u092E\u094D\u0930",          /* mra         */
             "\u0929\u094D\u0930",          /* n\u0331ra  */
-        //"\u0934\u094D\u0930",        /* l\u0331ra  */
+        //"\u0934\u094D\u0930",          /* l\u0331ra  */
             "\u092F\u094D\u0930",          /* yra         */
-            "\u092F\u093C\u094D\u0930",   /* y\u0307ra  */
+            "\u092F\u093C\u094D\u0930",    /* y\u0307ra  */
         //"l-",
             "\u0935\u094D\u0930",          /* vra         */
             "\u0936\u094D\u0930",          /* s\u0301ra  */
@@ -1682,9 +1681,9 @@ public class TransliteratorTest extends TestFmwk {
             "\u0922\u094D\u092F",          /* d\u0323hya */
         // "hma",                         /* hma         */
             "\u0939\u094D\u092F",          /* hya         */
-            "\u0936\u0943\u0905",          /* s\u0301r\u0325a  */
+            "\u0936\u0943",                /* s\u0301r\u0325a  */
             "\u0936\u094D\u091A",          /* s\u0301ca  */
-            "\u090d",                        /* e\u0306    */
+            "\u090d",                      /* e\u0306    */
             "\u0938\u0902\u091C\u0940\u092C\u094D \u0938\u0947\u0928\u0917\u0941\u092A\u094D\u0924",
             "\u0906\u0928\u0902\u0926\u094D \u0935\u0926\u094D\u0926\u093F\u0930\u093E\u091C\u0941",    
             "\u0906",
@@ -1705,16 +1704,16 @@ public class TransliteratorTest extends TestFmwk {
     public void  TestTeluguLatinRT(){
         int MAX_LEN=10;
         String[]  source = {   
-            "raghur\u0101m vi\u015Bvan\u0101dha",                         /* Raghuram Viswanadha    */
-            "\u0101nand vaddir\u0101ju",                                   /* Anand Vaddiraju 	   */ 	   
-            "r\u0101j\u012Bv ka\u015Barab\u0101da",                      /* Rajeev Kasarabada      */ 
-            "san\u0304j\u012Bv ka\u015Barab\u0101da",                    /* sanjeev kasarabada     */
-            "san\u0304j\u012Bb sen'gupta",                                 /* sanjib sengupata 	   */ 	   
-            "amar\u0113ndra hanum\u0101nula",                              /* Amarendra hanumanula   */ 
-            "ravi kum\u0101r vi\u015Bvan\u0101dha",                       /* Ravi Kumar Viswanadha  */
-            "\u0101ditya kandr\u0113gula",                                 /* Aditya Kandregula      */
-            "\u015Br\u012Bdhar ka\u1E47\u1E6Dama\u015Be\u1E6D\u1E6Di",/* Shridhar Kantamsetty   */
-            "m\u0101dhav de\u015Be\u1E6D\u1E6Di"                         /* Madhav Desetty         */
+            "raghur\u0101m vi\u015Bvan\u0101dha",                           /* Raghuram Viswanadha    */
+            "\u0101nand vaddir\u0101ju",                                    /* Anand Vaddiraju 	      */ 	   
+            "r\u0101j\u012Bv ka\u015Barab\u0101da",                         /* Rajeev Kasarabada      */ 
+            "san\u0304j\u012Bv ka\u015Barab\u0101da",                       /* sanjeev kasarabada     */
+            "san\u0304j\u012Bb sen'gupta",                                  /* sanjib sengupata 	  */ 	   
+            "amar\u0113ndra hanum\u0101nula",                               /* Amarendra hanumanula   */ 
+            "ravi kum\u0101r vi\u015Bvan\u0101dha",                         /* Ravi Kumar Viswanadha  */
+            "\u0101ditya kandr\u0113gula",                                  /* Aditya Kandregula      */
+            "\u015Br\u012Bdhar ka\u1E47\u1E6Dama\u015Be\u1E6D\u1E6Di",      /* Shridhar Kantamsetty   */
+            "m\u0101dhav de\u015Be\u1E6D\u1E6Di"                            /* Madhav Desetty         */
         };
 
         String[]  expected = {
@@ -1745,6 +1744,7 @@ public class TransliteratorTest extends TestFmwk {
     public void  TestSanskritLatinRT(){
         int MAX_LEN =15;
         String[]  source = {
+            "rmk\u1E63\u0113t",
             "\u015Br\u012Bmad",
             "bhagavadg\u012Bt\u0101",
             "adhy\u0101ya",
@@ -1752,7 +1752,7 @@ public class TransliteratorTest extends TestFmwk {
             "vi\u1E63\u0101da",
             "y\u014Dga",
             "dhr\u0325tar\u0101\u1E63\u1E6Dra",
-            "uv\u0101cr\u0325",
+            "uv\u0101cr\u0325a",
             "dharmak\u1E63\u0113tr\u0113",
             "kuruk\u1E63\u0113tr\u0113",
             "samav\u0113t\u0101",
@@ -1763,6 +1763,7 @@ public class TransliteratorTest extends TestFmwk {
             "san\u0304java",
         };
         String[]  expected = {
+            "\u0930\u094D\u092E\u094D\u0915\u094D\u0937\u0947\u0924\u094D",
             "\u0936\u094d\u0930\u0940\u092e\u0926\u094d",
             "\u092d\u0917\u0935\u0926\u094d\u0917\u0940\u0924\u093e",
             "\u0905\u0927\u094d\u092f\u093e\u092f",
@@ -1796,6 +1797,7 @@ public class TransliteratorTest extends TestFmwk {
     public void  TestCompoundLatinRT(){
         int MAX_LEN =15;
         String[]  source = {
+            "rmk\u1E63\u0113t",
             "\u015Br\u012Bmad",
             "bhagavadg\u012Bt\u0101",
             "adhy\u0101ya",
@@ -1803,7 +1805,7 @@ public class TransliteratorTest extends TestFmwk {
             "vi\u1E63\u0101da",
             "y\u014Dga",
             "dhr\u0325tar\u0101\u1E63\u1E6Dra",
-            "uv\u0101cr\u0325",
+            "uv\u0101cr\u0325a",
             "dharmak\u1E63\u0113tr\u0113",
             "kuruk\u1E63\u0113tr\u0113",
             "samav\u0113t\u0101",
@@ -1814,6 +1816,7 @@ public class TransliteratorTest extends TestFmwk {
             "san\u0304java"
         };
         String[]  expected = {
+            "\u0930\u094D\u092E\u094D\u0915\u094D\u0937\u0947\u0924\u094D",
             "\u0936\u094d\u0930\u0940\u092e\u0926\u094d",
             "\u092d\u0917\u0935\u0926\u094d\u0917\u0940\u0924\u093e",
             "\u0905\u0927\u094d\u092f\u093e\u092f",
@@ -1842,6 +1845,7 @@ public class TransliteratorTest extends TestFmwk {
             expect(devToLatinToDev,(expected[i]),(expected[i]));
         }
     }
+
     //======================================================================
     // Support methods
     //======================================================================
