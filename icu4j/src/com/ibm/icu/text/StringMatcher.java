@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringMatcher.java,v $ 
- * $Date: 2001/11/29 22:31:18 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/12/03 21:33:58 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -48,16 +48,20 @@ class StringMatcher implements UnicodeMatcher {
                        int[] offset,
                        int limit,
                        boolean incremental) {
+        // Note (1): We process text in 16-bit code units, rather than
+        // 32-bit code points.  This works because stand-ins are
+        // always in the BMP and because we are doing a literal match
+        // operation, which can be done 16-bits at a time.
         int i;
         int[] cursor = new int[] { offset[0] };
         if (limit < cursor[0]) {
             // Match in the reverse direction
             for (i=pattern.length()-1; i>=0; --i) {
-                char keyChar = pattern.charAt(i);
+                char keyChar = pattern.charAt(i); // OK; see note (1) above
                 UnicodeMatcher subm = data.lookup(keyChar);
                 if (subm == null) {
                     if (cursor[0] >= limit &&
-                        keyChar == text.charAt(cursor[0])) {
+                        keyChar == text.charAt(cursor[0])) { // OK; see note (1) above
                         --cursor[0];
                     } else {
                         return U_MISMATCH;
@@ -84,14 +88,14 @@ class StringMatcher implements UnicodeMatcher {
                     // without completing our match.
                     return U_PARTIAL_MATCH;
                 }
-                char keyChar = pattern.charAt(i);
+                char keyChar = pattern.charAt(i); // OK; see note (1) above
                 UnicodeMatcher subm = data.lookup(keyChar);
                 if (subm == null) {
                     // Don't need the cursor < limit check if
                     // incremental is true (because it's done above); do need
                     // it otherwise.
                     if (cursor[0] < limit &&
-                        keyChar == text.charAt(cursor[0])) {
+                        keyChar == text.charAt(cursor[0])) { // OK; see note (1) above
                         ++cursor[0];
                     } else {
                         return U_MISMATCH;
@@ -123,7 +127,7 @@ class StringMatcher implements UnicodeMatcher {
             result.append('(');
         }
         for (int i=0; i<pattern.length(); ++i) {
-            char keyChar = pattern.charAt(i);
+            char keyChar = pattern.charAt(i); // OK; see note (1) above
             UnicodeMatcher m = data.lookup(keyChar);
             if (m == null) {
                 TransliterationRule.appendToRule(result, keyChar, false, escapeUnprintable, quoteBuf);

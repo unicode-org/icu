@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/12/03 20:26:24 $
- * $Revision: 1.52 $
+ * $Date: 2001/12/03 21:33:59 $
+ * $Revision: 1.53 $
  *
  *****************************************************************************************
  */
@@ -204,7 +204,7 @@ import com.ibm.util.Utility;
  * Unicode property
  * </table>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.52 $ $Date: 2001/12/03 20:26:24 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.53 $ $Date: 2001/12/03 21:33:59 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -396,16 +396,13 @@ public class UnicodeSet extends UnicodeFilter {
         applyPattern(pattern, pos, null, ignoreWhitespace);
 
         int i = pos.getIndex();
-        int n = pattern.length();
 
         // Skip over trailing whitespace
         if (ignoreWhitespace) {
-            while (i < n && Character.isWhitespace(pattern.charAt(i))) {
-                ++i;
-            }
+            i = Utility.skipWhitespace(pattern, i);
         }
 
-        if (i != n) {
+        if (i != pattern.length()) {
             throw new IllegalArgumentException("Parse of \"" + pattern +
                                                "\" failed at " + i);
         }
