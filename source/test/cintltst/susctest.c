@@ -15,13 +15,14 @@
 */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <time.h>
 
 #include "unicode/scsu.h"
 #include "unicode/ustring.h"
 #include "unicode/utypes.h"
 #include "cintltst.h"
+#include "cstring.h"
+#include "cmemory.h"
 
 #ifdef MIN
 #  undef MIN
@@ -109,7 +110,7 @@ unescape(const char *s)
   UChar *retval;
   UChar *alias;
 
-  retval = (UChar*) calloc(strlen(s) + 1, sizeof(UChar));
+  retval = (UChar*) calloc(uprv_strlen(s) + 1, sizeof(UChar));
   if(retval == 0) {
     log_err("calloc error at line %d - memory error..\n", __LINE__);
     return 0; /* flag an error */
@@ -536,7 +537,7 @@ myMultipassTest(const UChar *chars,
     }
 
     /* copy the newly-compressed chunk to the target */
-    memcpy(myCompressed + totalBytesWritten,
+    uprv_memcpy(myCompressed + totalBytesWritten,
        myCompressionBuffer,
        sizeof(uint8_t) * (myCTarget - myCompressionBuffer));
 
@@ -575,7 +576,7 @@ myMultipassTest(const UChar *chars,
     }
     
     /* copy the newly-decompressed chunk to the target */
-    memcpy(myDecompressed + totalCharsWritten,
+    uprv_memcpy(myDecompressed + totalCharsWritten,
        myDecompressionBuffer,
        sizeof(UChar) * (myDTarget - myDecompressionBuffer));
 

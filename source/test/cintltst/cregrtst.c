@@ -25,6 +25,7 @@
 #include "cintltst.h"
 #include "cregrtst.h"
 #include "ccolltst.h"
+#include "cstring.h"
 
 /* -------------------------------------------------------------------------- */
 /**
@@ -44,7 +45,7 @@ void addElement(Vector *q, const char* string)
     Vector *p;
 
     p=(Vector*)malloc(sizeof(Vector));
-    p->text=(UChar*)malloc(sizeof(UChar) * (strlen(string)+1));
+    p->text=(UChar*)malloc(sizeof(UChar) * (uprv_strlen(string)+1));
     u_uastrcpy(p->text, string);
     p->link=NULL;
     while(q->link!=NULL)
