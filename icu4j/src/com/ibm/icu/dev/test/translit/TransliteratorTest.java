@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/07/16 21:02:15 $
- * $Revision: 1.111 $
+ * $Date: 2002/07/16 22:57:13 $
+ * $Revision: 1.112 $
  *
  *****************************************************************************************
  */
@@ -79,8 +79,8 @@ public class TransliteratorTest extends TestFmwk {
         String ID;
         for (Enumeration e = Transliterator.getAvailableIDs(); e.hasMoreElements(); ) {
             ID = (String) e.nextElement();
-            if (ID.equals("Latin-Han/defintion")) {
-                System.out.println("\nHACK: disabling Latin-Han/defintion check for now: fix later");
+            if (ID.equals("Latin-Han/definition")) {
+                System.out.println("\nTODO: disabling Latin-Han/definition check for now: fix later");
                 continue;
             }
             Transliterator t = null;
@@ -2366,8 +2366,6 @@ public class TransliteratorTest extends TestFmwk {
     // Check to see that incremental gets at least part way through a reasonable string.
 
     public void TestIncrementalProgress() {
-        System.out.println("\nTest commented out, to be reinstated later");
-        /* test commented out for future bug fix
         String latinTest = "The Quick Brown Fox.";
         String devaTest = Transliterator.getInstance("Latin-Devanagari").transliterate(latinTest);
         String kataTest = Transliterator.getInstance("Latin-Katakana").transliterate(latinTest);
@@ -2407,7 +2405,6 @@ public class TransliteratorTest extends TestFmwk {
                 }
             }
         }
-        */
     }
 
     public String findMatch (String source, String[][] pairs) {
