@@ -12,7 +12,7 @@
 #include "unicode/unistr.h"
 #include "cmemory.h"
 
-static void _deleteRule(void *rule) {
+static void U_CALLCONV _deleteRule(void *rule) {
     delete (TransliterationRule *)rule;
 }
 

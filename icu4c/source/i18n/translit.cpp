@@ -908,16 +908,19 @@ UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
 }
 
 // TODO Move this into the class
+// NO This should remain a C function for os/390 and Solaris Workshop [grhoten]
 /**
  * Comparison function for UVector.
  */
-static UBool
+U_CDECL_BEGIN
+static UBool U_CALLCONV
 _compareCaselessUnicodeString(const void* a, const void* b) {
     UHashKey s, t;
     s.pointer = (void*) a;
     t.pointer = (void*) b;
     return uhash_compareCaselessUnicodeString(s, t);
 }
+U_CDECL_END
 
 void Transliterator::initializeCache(void) {
     // Lock first, check init boolean second
