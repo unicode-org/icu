@@ -289,7 +289,7 @@ u_vfprintf(    UFILE        *f,
     else {
         pattern = buffer;
     }
-    ufmt_defaultCPToUnicode(patternSpecification, size, pattern, size);
+    u_charsToUChars(patternSpecification, pattern, size);
 
     /* do the work */
     count = u_vfprintf_u(f, pattern, ap);
