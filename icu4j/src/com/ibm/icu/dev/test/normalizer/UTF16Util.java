@@ -1,3 +1,15 @@
+/**
+*******************************************************************************
+* Copyright (C) 2002, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/Attic/UTF16Util.java,v $ 
+* $Date: 2002/12/17 07:31:26 $ 
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
 package com.ibm.icu.dev.test.normalizer;
 
 /**
