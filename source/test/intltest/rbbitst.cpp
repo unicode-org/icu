@@ -1397,6 +1397,7 @@ void RBBITest::TestThaiLineBreak() {
     }
 
     generalIteratorTest(*e, thaiLineSelection);
+    delete e;
 }
 
 
@@ -1473,6 +1474,7 @@ ADD_DATACHUNK(thaiLineSelection, "(\\u0e1b\\u0e23\\u0e30\\u0e40\\u0e17\\u0e28\\u
 
 
     generalIteratorTest(*e, thaiLineSelection);
+    delete e;
 }
 
 
