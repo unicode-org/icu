@@ -2927,19 +2927,6 @@ U_CAPI int32_t U_EXPORT2 usearch_next(UStringSearch *strsrch,
         USearch     *search       = strsrch->search;
         search->reset             = FALSE;
         int32_t      textlength   = search->textLength;
-        int32_t      matchedindex = search->matchedIndex;
-        /*
-        if (search->isForwardSearching) {
-            if (offset == textlength || matchedindex == textlength || 
-                (!search->isOverlap && 
-                    (offset + strsrch->pattern.defaultShiftSize > textlength ||
-                    (matchedindex != USEARCH_DONE && 
-                    matchedindex + search->matchedLength >= textlength)))) {
-                // not enough characters to match
-                setMatchNotFound(strsrch);
-                return USEARCH_DONE; 
-            }
-        }*/
         if (search->isForwardSearching) {
             if (offset == textlength
                 || (!search->isOverlap && 
@@ -2958,10 +2945,10 @@ U_CAPI int32_t U_EXPORT2 usearch_next(UStringSearch *strsrch,
             // string. the iterator would have been set to offset 0 if a 
             // match is not found.
             search->isForwardSearching = TRUE;
-            if (matchedindex != USEARCH_DONE) {
+            if (search->matchedIndex != USEARCH_DONE) {
                 // there's no need to set the collation element iterator
                 // the next call to next will set the offset.
-                return matchedindex;
+                return search->matchedIndex;
             }
         }
 
