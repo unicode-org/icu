@@ -1777,8 +1777,10 @@ zh {
     Currencies {
         CNY { "\uFFE5", "CNY" }
         HKD { "HK$", "HKD" }
-        MOP { "P", "MOP" }
-        SGD { "S$", "SGD" }
+        JPY { "JPY", "JPY" }
+        KRW { "\uFFE6", "KRW" }
+        MOP { "P",   "MOP" }
+        SGD { "S$",  "SGD" }
         TWD { "NT$", "TWD" }
     }
 }
