@@ -5140,6 +5140,7 @@ static void TestJitterbug981(){
     } while (status == U_BUFFER_OVERFLOW_ERROR);
     ucol_close(myCollator);
     ucnv_close(utf8cnv);
+    free(buff);
 }
 
 #endif
