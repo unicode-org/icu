@@ -1902,7 +1902,7 @@ inline uint32_t getDiscontiguos(const UCollator *coll, collIterate *source,
             why am i doing these copies? well, so that the whole chunk of codes
             in the getNextCE, getSpecialCE does not require any changes, i can
             assure you that's going to be really painful. */
-            int length;
+            uint32_t length;
             if (source->flags & UCOL_ITER_INNORMBUF) {
                 u_strcpy(tempdb, source->pos);
             }
@@ -1913,7 +1913,7 @@ inline uint32_t getDiscontiguos(const UCollator *coll, collIterate *source,
                 source->flags       &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
             }
 
-            length = u_strlen(buffer);
+            length = (uint32_t)u_strlen(buffer);
             if (length >= source->writableBufSize) {
                 freeHeapWritableBuffer(source);
                 source->writableBuffer =
@@ -2321,7 +2321,8 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         UChar    schar;
   const UChar    *constart    = NULL;
         uint32_t size;
-        uint32_t firstCE      = UCOL_NOT_FOUND;
+/*        uint32_t firstCE      = UCOL_NOT_FOUND;*/
+        UChar    buffer[UCOL_MAX_BUFFER];
 
   for(;;)
   {
@@ -2392,7 +2393,6 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
             CE = *(coll->contractionCEs + (constart - coll->contractionIndex));
             break;
         }
-        UChar buffer[UCOL_MAX_BUFFER];
         UCharOffset = buffer + (UCOL_MAX_BUFFER - 1);
         *(UCharOffset --) = 0;
         while (ucol_unsafeCP(schar, coll)) {
