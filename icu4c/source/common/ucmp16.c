@@ -535,7 +535,7 @@ U_CAPI  void U_EXPORT2 ucmp16_initFromData(CompactShortArray *this_obj, const ui
  this_obj->fIndex = (uint16_t*) *source;
  (*source) += sizeof(this_obj->fIndex[0])*UCMP16_kIndexCount;
 
- this_obj->fArray = (uint16_t*) *source;
+ this_obj->fArray = (int16_t*) *source;
  (*source) += sizeof(this_obj->fArray[0])*this_obj->fCount;
 
  /* eat up padding */

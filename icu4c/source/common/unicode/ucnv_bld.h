@@ -152,9 +152,9 @@ typedef struct {
 
     int8_t subCharLen;
   
-    uint8_t reserved[3];  /* to round out the structure */
-
     uint8_t subChar[UCNV_MAX_SUBCHAR_LEN]; 
+
+    uint8_t reserved[3];  /* to round out the structure */
 
 } UConverterStaticData;
 
