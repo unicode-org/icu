@@ -1044,7 +1044,7 @@ public:
      *
      * @deprecated See the Unicode class description.
      */
-    static inline int8_t digit(UChar32 ch, int8_t radix);
+    static inline int32_t digit(UChar32 ch, int8_t radix);
 
     /**
      * Determines the character representation for a specific digit in 
@@ -1325,7 +1325,7 @@ Unicode::digitValue(UChar32 ch) {
     return u_charDigitValue(ch);
 }
 
-inline int8_t
+inline int32_t
 Unicode::digit(UChar32 ch, int8_t radix) {
     return u_digit(ch, radix);
 }
