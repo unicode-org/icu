@@ -22,7 +22,7 @@ package com.ibm.icu.dev.tool;
  *
  * This deliberately resembles the icu4c file uoption.[ch].
  */
-class UOption {
+public class UOption {
 
     // Deliberated public data members
     public String  longName;
@@ -57,9 +57,9 @@ class UOption {
      * Create a UOption with the given attributes.
      * Synonym for create(), for C compatibility.
      */
-    public static UOption UOPTION_DEF(String aLongName,
-                                      char aShortName,
-                                      int hasArgument) {
+    public static UOption DEF(String aLongName,
+                              char aShortName,
+                              int hasArgument) {
         return create(aLongName, aShortName, hasArgument);
     }
 
@@ -129,12 +129,16 @@ class UOption {
      * the parser returns with the negative index of the argv[] entry
      * where the error was detected.
      *
-     * @param argv This parameter is modified
-     * @param options This parameter is modified
+     * @param argv this parameter is modified
+     * @param start the first argument in argv[] to examine.  Must be
+     * 0..argv.length-1.  Arguments from 0..start-1 are ignored.
+     * @param options this parameter is modified
+     * @return the number of unprocessed arguments in argv[], including
+     * arguments 0..start-1.
      */
-    public static int parseArgs(String argv[], UOption options[]) {
+    public static int parseArgs(String argv[], int start, UOption options[]) {
         String arg;
-        int i=0, remaining=0;
+        int i=start, remaining=start;
         char c;
         boolean stopOptions=false;
 
@@ -233,6 +237,13 @@ class UOption {
             }
         }
         return remaining;
+    }
+
+    /**
+     * Convenient method.
+     */
+    public static int parseArgs(String argv[], UOption options[]) {
+        return parseArgs(argv, 0, options);
     }
 
     /**
