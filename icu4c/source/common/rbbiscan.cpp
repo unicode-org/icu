@@ -37,13 +37,6 @@ U_NAMESPACE_BEGIN
 
 const char RBBIRuleScanner::fgClassID=0;
 
-//
-//  Forward Declarations
-//
-U_CDECL_BEGIN
-static void  U_EXPORT2 U_CALLCONV RBBISetTable_deleter(void *p);
-U_CDECL_END
-
 //----------------------------------------------------------------------------------------
 //
 // Unicode Set init strings for each of the character classes needed for parsing a rule file.
@@ -75,6 +68,17 @@ static const UChar gRuleSet_name_start_char_pattern[] = {
     0x5b, 0x5f, 0x5c, 0x70, 0x7b, 0x4c, 0x7d, 0x5d, 0 };
 
 static const UChar kAny[] = {0x61, 0x6e, 0x79, 0x00};  // "any"
+
+
+U_CDECL_BEGIN
+static void  U_EXPORT2 U_CALLCONV RBBISetTable_deleter(void *p) {
+    RBBISetTableEl *px = (RBBISetTableEl *)p;
+    delete px->key;
+    // Note:  px->val is owned by the linked list "fSetsListHead" in scanner.
+    //        Don't delete the value nodes here.
+    uprv_free(px);
+};
+U_CDECL_END
 
 
 //----------------------------------------------------------------------------------------
@@ -607,16 +611,6 @@ void RBBIRuleScanner::fixOpStack(RBBINode::OpPrecedence p) {
 //                 If the string is "any", return a set containing all chars.
 //
 //----------------------------------------------------------------------------------------
-U_CDECL_BEGIN
-static void  U_EXPORT2 U_CALLCONV RBBISetTable_deleter(void *p) {
-    RBBISetTableEl *px = (RBBISetTableEl *)p;
-    delete px->key;
-    // Note:  px->val is owned by the linked list "fSetsListHead" in scanner.
-    //        Don't delete the value nodes here.
-    uprv_free(px);
-};
-U_CDECL_END
-
 void RBBIRuleScanner::findSetFor(const UnicodeString &s, RBBINode *node, UnicodeSet *setToAdopt) {
 
     RBBISetTableEl   *el;
