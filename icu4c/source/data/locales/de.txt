@@ -575,8 +575,181 @@ de {
 
     // Currency display names
     Currencies {
+        AED { "AED", "UAE Dirham" }
+        AFA { "AFA", "Afghani" }
+        ALL { "ALL", "Lek" }
+        AMD { "AMD", "Dram" }
+        ANG { "ANG", "Niederl. Antillen Gulden" }
+        AOA { "AOA", "Kwanza" }
+        AON { "AON", "Neuer Kwanza" }
+        AOR { "AOR", "Kwanza Reajustado" }
+        ARS { "ARS", "Argentinischer Peso" }
         ATS { "\u00F6S", "ATS" }
-        CHF { "SFr.", "CHF" }
+        AUD { "AUD", "Australischer Dollar" }
+        AWG { "AWG", "Aruba Florin" }
+        AZM { "AZM", "Aserbeidschan Manat" }
+        BAM { "BAM", "konvertierbare Mark" }
+        BBD { "BBD", "Barbados-Dollar" }
+        BDT { "BDT", "Taka" }
+        BGL { "BGL", "Lew" }
+        BGN { "BGN", "Bulgarian Lev" }
+        BHD { "BHD", "Bahrain-Dinar" }
+        BIF { "BIF", "Burundi-Franc" }
+        BMD { "BMD", "Bermuda-Dollar" }
+        BND { "BND", "Brunei-Dollar" }
+        BOB { "BOB", "Boliviano" }
+        BOV { "BOV", "MVDOL" }
+        BRL { "BRL", "Real" }
+        BSD { "BSD", "Bahama-Dollar" }
+        BTN { "BTN", "Ngultrum" }
+        BWP { "BWP", "Pula" }
+        BYB { "BYB", "Belarus Rubel (alt)" }
+        BYR { "BYR", "Belarussian Ruble (neu)" }
+        BZD { "BZD", "Belize-Dollar" }
+        CAD { "CAD", "Kanadischer Dollar" }
+        CDF { "CDF", "Franc congolais" }
+        CHF { "SFr.", "Schweizer Franken" }
+        CLF { "CLF", "Unidades de Fomento" }
+        CLP { "CLP", "Chilenischer Peso" }
+        CNY { "CNY", "Renminbi Yuan" }
+        COP { "COP", "Kolumbianischer Peso" }
+        CRC { "CRC", "Costa Rica Colon" }
+        CUP { "CUP", "Kubanischer Peso" }
+        CVE { "CVE", "Kap Verde Escudo" }
+        CYP { "CYP", "Zypern Pfund" }
+        CZK { "CZK", "Tschechische Krone" }
         DEM { "DM", "DEM" }
+        DJF { "DJF", "Dschibuti-Franc" }
+        DKK { "DKK", "D\u00E4nische Krone" }
+        DOP { "DOP", "Dominikanischer Peso" }
+        DZD { "DZD", "Algerischer Dinar" }
+        ECS { "ECS", "Sucre" }
+        ECV { "ECV", "Verrechnungseinheit f\u00FCr EC" }
+        EEK { "EEK", "Estnische Krone" }
+        EGP { "EGP", "\u00C4gyptisches Pfund" }
+        ERN { "ERN", "Nakfa" }
+        ETB { "ETB", "Birr" }
+        EUR { "EUR", "Euro" }
+        FJD { "FJD", "Fidschi Dollar" }
+        FKP { "FKP", "Falkland Pfund" }
+        GBP { "GBP", "Pfund Sterling" }
+        GEL { "GEL", "Georgischer Lari" }
+        GHC { "GHC", "Cedi" }
+        GIP { "GIP", "Gibraltar Pfund" }
+        GMD { "GMD", "Dalasi" }
+        GNF { "GNF", "Guinea Franc" }
+        GTQ { "GTQ", "Quetzal" }
+        GWP { "GWP", "Guinea Bissau Peso" }
+        GYD { "GYD", "Guyana Dollar" }
+        HKD { "HKD", "Hongkong Dollar" }
+        HNL { "HNL", "Lempira" }
+        HRK { "HRK", "Kuna" }
+        HTG { "HTG", "Gourde" }
+        HUF { "HUF", "Forint" }
+        IDR { "IDR", "Rupiah" }
+        ILS { "ILS", "Schekel" }
+        INR { "INR", "Indische Rupie" }
+        IQD { "IQD", "Irak Dinar" }
+        IRR { "IRR", "Rial" }
+        ISK { "ISK", "Isl\u00E4ndische Krone" }
+        JMD { "JMD", "Jamaika Dollar" }
+        JOD { "JOD", "Jordanischer Dinar" }
+        JPY { "JPY", "Yen" }
+        KES { "KES", "Kenia Schilling" }
+        KGS { "KGS", "SOM" }
+        KHR { "KHR", "Riel" }
+        KMF { "KMF", "Komoren Franc" }
+        KPW { "KPW", "Nordkoreanischer Won" }
+        KRW { "KRW", "S\u00FCdkoreanischer Won" }
+        KWD { "KWD", "Kuwait Dinar" }
+        KYD { "KYD", "Kaiman-Dollar" }
+        KZT { "KZT", "Tenge" }
+        LAK { "LAK", "Kip" }
+        LBP { "LBP", "Libanesisches Pfund" }
+        LKR { "LKR", "Sri Lanka Rupie" }
+        LRD { "LRD", "Liberianischer Dollar" }
+        LSL { "LSL", "Loti" }
+        LTL { "LTL", "Litauischer Litas" }
+        LVL { "LVL", "Lettischer Lats" }
+        LYD { "LYD", "Libyscher Dinar" }
+        MAD { "MAD", "Marokkanischer Dirham" }
+        MDL { "MDL", "Moldau Leu" }
+        MGF { "MGF", "Madagaskar Franc" }
+        MKD { "MKD", "Denar" }
+        MMK { "MMK", "Kyat" }
+        MNT { "MNT", "Tugrik" }
+        MOP { "MOP", "Pataca" }
+        MRO { "MRO", "Ouguiya" }
+        MTL { "MTL", "Maltesische Lira" }
+        MUR { "MUR", "Mauritius Rupie" }
+        MVR { "MVR", "Rufiyaa" }
+        MWK { "MWK", "Malawi Kwacha" }
+        MXN { "MXN", "Mexikanischer Peso" }
+        MXV { "MXV", "Mexican Unidad de Inversion (UDI)" }
+        MYR { "MYR", "Malaysischer Ringgit" }
+        MZM { "MZM", "Metical" }
+        NAD { "NAD", "Namibia Dollar" }
+        NGN { "NGN", "Naira" }
+        NIO { "NIO", "Gold-Cordoba" }
+        NOK { "NOK", "Norwegische Krone" }
+        NPR { "NPR", "Nepalesische Rupie" }
+        NZD { "NZD", "Neuseeland Dollar" }
+        OMR { "OMR", "Rial Omani" }
+        PAB { "PAB", "Balboa" }
+        PEN { "PEN", "Neuer Sol" }
+        PGK { "PGK", "Kina" }
+        PHP { "PHP", "Philippinischer Peso" }
+        PKR { "PKR", "Pakistanische Rupie" }
+        PLN { "PLN", "Zloty" }
+        PYG { "PYG", "Guarani" }
+        QAR { "QAR", "Katar Riyal" }
+        ROL { "ROL", "Leu" }
+        RUB { "RUB", "Russischer Rubel (neu)" }
+        RUR { "RUR", "Russischer Rubel (alt)" }
+        RWF { "RWF", "Ruanda Franc" }
+        SAR { "SAR", "Saudi Riyal" }
+        SBD { "SBD", "Salomonen Dollar" }
+        SCR { "SCR", "Seychellen Rupie" }
+        SDD { "SDD", "Sudanesischer Dinar" }
+        SEK { "SEK", "Schwedische Krone" }
+        SGD { "SGD", "Singapur Dollar" }
+        SHP { "SHP", "St. Helena Pfund" }
+        SIT { "SIT", "Tolar" }
+        SKK { "SKK", "Slowakische Krone" }
+        SLL { "SLL", "Leone" }
+        SOS { "SOS", "Somalia Schilling" }
+        SRG { "SRG", "Suriname Gulden" }
+        STD { "STD", "Dobra" }
+        SVC { "SVC", "El Salvador Colon" }
+        SYP { "SYP", "Syrisches Pfund" }
+        SZL { "SZL", "Lilangeni" }
+        THB { "THB", "Baht" }
+        TJR { "TJR", "Tadschikistan Rubel" }
+        TMM { "TMM", "Turkmenistan-Manat" }
+        TND { "TND", "Tunesischer Dinar" }
+        TOP { "TOP", "Pa'anga" }
+        TPE { "TPE", "Timor Escudo" }
+        TRL { "TRL", "T\u00FCrkische Lira" }
+        TTD { "TTD", "Trinidad und Tobago Dollar" }
+        TWD { "TWD", "Neuer Taiwan Dollar" }
+        TZS { "TZS", "Tansania Schilling" }
+        UAH { "UAH", "Hryvnia" }
+        UGX { "UGX", "Uganda Schilling" }
+        USD { "USD", "US Dollar" }
+        UYU { "UYU", "Uruguayischer Peso" }
+        UZS { "UZS", "Usbekistan Sum" }
+        VEB { "VEB", "Bolivar" }
+        VND { "VND", "Dong" }
+        VUV { "VUV", "Vatu" }
+        WST { "WST", "Tala" }
+        XAF { "XAF", "CFA Franc (\u00C4quatorial)" }
+        XCD { "XCD", "Ostkaribischer Dollar" }
+        XOF { "XOF", "CFA Franc (West)" }
+        XPF { "XPF", "CFP Franc" }
+        YER { "YER", "Jemen Rial" }
+        YUM { "YUM", "Neuer Dinar" }
+        ZAR { "ZAR", "Rand" }
+        ZMK { "ZMK", "Kwacha" }
+        ZWD { "ZWD", "Simbabwe Dollar" }
     }
 }
