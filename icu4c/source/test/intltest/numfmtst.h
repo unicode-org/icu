@@ -57,6 +57,12 @@ public:
     // New tests for alphaWorks upgrade
     virtual void TestExponent(void);
     virtual void TestScientific(void);
+
+    /**
+     * Test the functioning of the secondary grouping value.
+     */
+    void TestSecondaryGrouping(void);
+        
     void expect(NumberFormat& fmt, const UnicodeString& str, int32_t n);
     void expect(NumberFormat& fmt, const char *str, int32_t n) {
         expect(fmt, UnicodeString(str, ""), n);
@@ -102,7 +108,7 @@ public:
 
 public: // package
     // internal subtest used by TestRounding487
-    virtual void roundingTest(NumberFormat& nf, double x, int32_t maxFractionDigits, const char* expected);
+    void roundingTest(NumberFormat& nf, double x, int32_t maxFractionDigits, const char* expected);
 };
  
 #endif // _NUMBERFORMATTEST_
