@@ -289,6 +289,20 @@ inline UBool collIter_bos(collIterate *source) {
   return FALSE;
 }
 
+static
+inline UBool collIter_SimpleBos(collIterate *source) {
+  // if we're going backwards, we need to know whether there is more in the
+  // iterator, even if we are in the side buffer
+  if(source->flags & UCOL_USE_ITERATOR || source->origFlags & UCOL_USE_ITERATOR) {
+    return !source->iterator->hasPrevious(source->iterator);
+  }
+  if (source->pos == source->string) {
+    return TRUE;
+  }
+  return FALSE;
+}
+    //return (data->pos == data->string) ||
+
 
 /**
 * Checks and free writable buffer if it is not the original stack buffer
@@ -1643,8 +1657,11 @@ UChar peekCharacter(collIterate *source, int32_t offset) {
 */
 static
 inline UBool isAtStartPrevIterate(collIterate *data) {
-    return (collIter_bos(data)) ||
-    //return (data->pos == data->string) ||
+  if(data->pos == NULL && data->iterator != NULL) {
+    return !data->iterator->hasPrevious(data->iterator);
+  }
+  //return (collIter_bos(data)) ||
+  return (data->pos == data->string) ||
             ((data->flags & UCOL_ITER_INNORMBUF) &&
             *(data->pos - 1) == 0 && data->fcdPosition == NULL);
 }
@@ -3290,10 +3307,11 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                                              UCOL_MAX_BUFFER * sizeof(UChar));
                 UCharOffset --;
             }
-            if (collIter_bos(source) ||
-            //if (source->pos == source->string ||
+            //if (collIter_bos(source) ||
+            if ((source->pos && (source->pos == source->string ||
                 ((source->flags & UCOL_ITER_INNORMBUF) &&
-                *(source->pos - 1) == 0 && source->fcdPosition == NULL)) {
+                *(source->pos - 1) == 0 && source->fcdPosition == NULL)))
+                || (source->iterator && !source->iterator->hasPrevious(source->iterator))) {
                 break;
             }
         }
