@@ -7,21 +7,21 @@
 * >       DO NOT EDIT BY HAND       <
 * >      RUN TOOL TO REGENERATE     <
 * Tool: com.ibm.text.Normalizer
-* Creation date: Wed Jul 12 12:31:02 PDT 2000
+* Creation date: Thu Jul 13 15:14:02 PDT 2000
 */
 #include "unicode/utypes.h"
 #include "ucmp8.h"
 #include "ucmp16.h"
 
 struct ComposeData {
-    enum { BASE_COUNT = 773 };
-    enum { COMBINING_COUNT = 61 };
+    enum { BASE_COUNT = 748 };
+    enum { COMBINING_COUNT = 55 };
     enum { MAX_COMPAT = 4341 };
-    enum { MAX_CANONICAL = 5124 };
+    enum { MAX_CANONICAL = 5199 };
     enum { MAX_COMPOSED = 0xFB1D };
-    enum { MAX_INDEX = 8899 };
-    enum { INITIAL_JAMO_INDEX = 8900 };
-    enum { MEDIAL_JAMO_INDEX = 8901 };
+    enum { MAX_INDEX = 8974 };
+    enum { INITIAL_JAMO_INDEX = 8975 };
+    enum { MEDIAL_JAMO_INDEX = 8976 };
     enum { MAX_BASES = 1024 };
     enum { MAX_COMBINE = 64 };
     enum { TYPE_MASK = 0x7 };
