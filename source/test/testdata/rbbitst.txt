@@ -24,7 +24,8 @@
 
 #   Temp debugging tests
 <line>
-<data><>\U0001d7f9\u003b\u2034<></data>
+#     to test for bug #4097920
+<data>•dog,cat,mouse •(one)•(two)\n<100></data>
 
 ########################################################################################
 #
@@ -445,7 +446,7 @@ What is the proper use of the abbreviation pp.•? •Yes, I am definatelly 12" 
 <data>•foo\u00a0bar•</data>
 
 #     to test for bug #4097920
-<data>•dog,•cat,•mouse •(one)•(two)\n<100></data>
+<data>•dog,cat,mouse •(one)•(two)\n<100></data>
 
 #     to test for bug #4035266
 <data>•The •balance •is •$-23,456.78, •not •-•$32,456.78!\n<100></data>
