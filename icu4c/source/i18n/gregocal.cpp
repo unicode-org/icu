@@ -812,9 +812,9 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
 
   // J81 processing. (gregorian cutover)
   UBool inCutoverMonth = FALSE;
-  int32_t cMonthLen; // 'c' for cutover; in days
-  int32_t cDayOfMonth; // no discontinuity: [0, cMonthLen)
-  double cMonthStart; // in ms
+  int32_t cMonthLen=0; // 'c' for cutover; in days
+  int32_t cDayOfMonth=0; // no discontinuity: [0, cMonthLen)
+  double cMonthStart=0.0; // in ms
 
   // Common code - see if we're in the cutover month of the cutover year
   if(internalGet(UCAL_EXTENDED_YEAR) == fGregorianCutoverYear) {
