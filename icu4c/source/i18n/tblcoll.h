@@ -896,34 +896,39 @@ RuleBasedCollator::NormalizerIterator::setText(const UChar* source, int32_t leng
 inline
 void
 
-
 RuleBasedCollator::NormalizerIterator::setModeAndText(Normalizer::EMode mode, const UChar* source, int32_t length, UErrorCode& status)
 {
-    if (cursor != NULL) {
-        if (mode != Normalizer::NO_OP) {
+    if(mode != Normalizer::NO_OP)
+    {
+        /* DO have a mode -  will need a normalizer object */
+        if(cursor != NULL)
+        {
+            /* Just modify the existing cursor */
             cursor->setMode(mode);
 	    cursor->setText(source, length, status);
-        } else {
-            delete cursor; 
-            cursor = 0;
-
-	    text = (UChar*)source;
-	    textLen = length;
-	    currentOffset = 0;
         }
-    } else {
-      if(mode == Normalizer::NO_OP)
-	{
-	  text = (UChar*)source;
-	  textLen = length;
-	  currentOffset = 0;
-
-	}
-      else
+        else
 	{
 	  cursor = new Normalizer(source, length, mode);
 	}
+
+        /* RESET the old data */
+        text = 0;
+        textLen = 0;
     }
+    else 
+    {
+        /* NO_OP mode.. */
+        if(cursor != NULL)
+        { /* get rid of the old cursor */
+            delete cursor; 
+            cursor = 0;
+        }
+
+        text = (UChar*)source;
+        textLen = length;
+    }
+    currentOffset = 0; /* always */
    
     bufferAlias = 0;
     swapOrder = 0;
