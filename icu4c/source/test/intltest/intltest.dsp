@@ -112,6 +112,10 @@ SOURCE=.\caltztst.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\canittst.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\citrtest.cpp
 # End Source File
 # Begin Source File
@@ -466,6 +470,10 @@ SOURCE=.\caltest.h
 # Begin Source File
 
 SOURCE=.\caltztst.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\canittst.h
 # End Source File
 # Begin Source File
 
