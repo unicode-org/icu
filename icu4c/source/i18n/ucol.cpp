@@ -330,15 +330,17 @@ ucol_close(UCollator *coll)
   /* Here, it would be advisable to close: */
   /* - UData for UCA (unless we stuff it in the root resb */
   /* Again, do we need additional housekeeping... HMMM! */
+  if(coll->freeOnClose == FALSE){
+    return; /* for safeClone, if freeOnClose is FALSE, 
+            don't free the other instance data */
+  }
   if(coll->rules != NULL) {
     uprv_free(coll->rules);
   }
   if(coll->rb != NULL) {
     ures_close(coll->rb);
   }
-  if(coll->freeOnClose == TRUE) {
-    uprv_free(coll);
-  }
+  uprv_free(coll);
 }
 
 typedef struct {
@@ -2760,12 +2762,47 @@ ucol_getStrength(const UCollator *coll)
 /* there are new APIs and some compatibility APIs                           */
 /****************************************************************************/
 
-U_CAPI UCollator *ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, UErrorCode *status) {
-	/*return (UCollatorOld *)(((RuleBasedCollator *)coll)->safeClone());*/
-  return 0;
+U_CAPI UCollator *
+ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, UErrorCode *status) 
+{
+    UCollator * localCollator;
+    int32_t bufferSizeNeeded = sizeof(UCollator);
+
+    if (status == NULL || U_FAILURE(*status)){
+        return 0;
+    }
+    if (!pBufferSize || !coll){
+       *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    if (*pBufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+		*pBufferSize = 	bufferSizeNeeded;
+		return 0;
+    }
+    if (*pBufferSize < bufferSizeNeeded || stackBuffer == NULL) { 
+        /* allocate one here...*/
+        int32_t length;
+        const UChar * rules = ucol_getRules(coll, &length);
+       
+        localCollator = ucol_openRules(rules, 
+                                       length, 
+                                       ucol_getNormalization(coll),
+                                       ucol_getStrength(coll), 
+                                       status);
+		if (U_SUCCESS(*status))
+		{
+			*status = U_SAFECLONE_ALLOCATED_ERROR;
+		}
+    } else {
+		localCollator = (UCollator *)stackBuffer;
+    	memcpy(localCollator, coll, sizeof(UCollator));
+		localCollator->freeOnClose = TRUE;
+	}
+	return localCollator;      
 }
 
-U_CAPI int32_t ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen) {
+U_CAPI int32_t 
+ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen) {
 	return 0;
 }
 

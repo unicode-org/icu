@@ -246,14 +246,14 @@ DictionaryBasedBreakIterator::reset()
 // internal type for BufferClone 
 struct bufferCloneStructUChar
 {
-    DictionaryBasedBreakIterator bi;
-    UCharCharacterIterator text;
+    uint8_t bi   [sizeof(DictionaryBasedBreakIterator)] ;
+    uint8_t text [sizeof(UCharCharacterIterator)] ;
 };
 
 struct bufferCloneStructString
 {
-    DictionaryBasedBreakIterator bi;
-    StringCharacterIterator text;
+    uint8_t bi   [sizeof(DictionaryBasedBreakIterator)] ;
+    uint8_t text [sizeof(StringCharacterIterator)] ;
 };
 
 BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuffer,
@@ -307,26 +307,24 @@ BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuff
     if (IterIsUChar) {
         struct bufferCloneStructUChar * localClone 
                 = (struct bufferCloneStructUChar  *)stackBuffer;
-        localIterator = &localClone->bi;
+        localIterator = (DictionaryBasedBreakIterator *)&localClone->bi;
         uprv_memcpy(localIterator, this, sizeof(DictionaryBasedBreakIterator));
         uprv_memcpy(&localClone->text, text, sizeof(UCharCharacterIterator));
-        localClone->text = *(UCharCharacterIterator*)text;
-        localIterator->text = &localClone->text;
+        localIterator->text = (CharacterIterator *) &localClone->text;
     } else if (IterIsString) {
         struct bufferCloneStructString * localClone 
                 = (struct bufferCloneStructString  *)stackBuffer;
-        localIterator = &localClone->bi;
+        localIterator = (DictionaryBasedBreakIterator *)&localClone->bi;
         uprv_memcpy(localIterator, this, sizeof(DictionaryBasedBreakIterator));
         uprv_memcpy(&localClone->text, text, sizeof(StringCharacterIterator));
-        localClone->text = *(StringCharacterIterator*)text;
-        localIterator->text = &localClone->text;
+        localIterator->text = (CharacterIterator *)&localClone->text;
     } else {
         DictionaryBasedBreakIterator * localClone 
                 = (DictionaryBasedBreakIterator *)stackBuffer;
         localIterator = localClone;
         uprv_memcpy(localIterator, this, sizeof(DictionaryBasedBreakIterator));
     }
-    // must not use the old cache if it exists - not threadsafe
+    // must not use (or delete) the copy of the old cache if it exists - not threadsafe
     localIterator->fBufferClone = TRUE;
     localIterator->cachedBreakPositions = NULL;
     localIterator->numCachedBreakPositions = 0;
