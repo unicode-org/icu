@@ -6,8 +6,18 @@
  */
 package com.ibm.icu.dev.test;
 
+import com.ibm.icu.util.VersionInfo;
+
 public abstract class AbstractTestLog implements TestLog {
 
+	public final boolean skipIfICU(int major, int minor) {
+		if (VersionInfo.ICU_VERSION != VersionInfo.getInstance(major, minor)) {
+			return false;	
+		}
+		logln("Test skipped for ICU release " + major + "." + minor);
+		return true;
+	}
+	
     /**
      * Add a message.
      */
