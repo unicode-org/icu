@@ -39,11 +39,10 @@
 *   <p>Accordingly, utf.h defines UChar to be an unsigned 16-bit integer. If this matches wchar_t, then
 *   UChar is defined to be exactly wchar_t, otherwise uint16_t.</p>
 *
-*   <p>UChar32 is always defined to be a 32-bit integer to be large enough for a 21-bit
-*   Unicode code point (Unicode scalar value, 0..0x10ffff). If wchar_t is a 32-bit type, then
-*   UChar32 is defined to be exactly wchar_t, <em>regardless of whether wchar_t is signed or unsigned.
-*   This means that UChar32 may be signed or unsigned depending on the platform!</em>
-*   If wchar_t is not a 32-bit type, then UChar32 is defined to be uint32_t.</p>
+*   <p>UChar32 is defined to be a signed 32-bit integer (int32_t), large enough for a 21-bit
+*   Unicode code point (Unicode scalar value, 0..0x10ffff).
+*   Before ICU 2.4, the definition of UChar32 was similarly platform-dependent as
+*   the definition of UChar. For details see the documentation for UChar32 itself.</p>
 *
 *   <p>utf.h also defines a number of C macros for handling single Unicode code points and
 *   for using UTF Unicode strings. It includes utf8.h, utf16.h, and utf32.h for the actual
@@ -146,16 +145,24 @@
 #   endif
 #endif
 
-/*!
- * \var UChar32
- * Define UChar32 to be wchar_t if that is 32 bits wide; may be signed or unsigned!
- * If wchar_t is not 32 bits wide, then define UChar32 to be uint32_t.
+/**
+ * Define UChar32 as a type for single Unicode code points.
+ * UChar32 is a signed 32-bit integer.
+ *
+ * The Unicode code point range is 0..0x10ffff.
+ * All other values (negative or >=0x110000) are illegal as Unicode code points.
+ * They may be used as sentinel values to indicate "done", "error"
+ * or similar non-code point conditions.
+ *
+ * Before ICU 2.4 (Jitterbug 2146), UChar32 was defined
+ * to be wchar_t if that is 32 bits wide (wchar_t may be signed or unsigned)
+ * or else to be uint32_t.
+ * That is, the definition of UChar32 was platform-dependent.
+ *
+ * @see UTF_SENTINEL
+ * @draft ICU 2.4
  */
-#if U_SIZEOF_WCHAR_T==4
-    typedef wchar_t UChar32;
-#else
-    typedef uint32_t UChar32;
-#endif
+typedef int32_t UChar32;
 
 /**
  * Unicode string and array offset and index type.
@@ -202,6 +209,25 @@ typedef int32_t UTextOffset;
 #define UTF_ERROR_VALUE 0xffff
 
 /* single-code point definitions -------------------------------------------- */
+
+/**
+ * This value is intended for sentinel values for APIs that
+ * (take or) return single code points (UChar32).
+ * It is outside of the Unicode code point range 0..0x10ffff.
+ * 
+ * For example, a "done" or "error" value in a new API
+ * could be indicated with UTF_SENTINEL.
+ *
+ * ICU APIs designed before ICU 2.4 usually define service-specific "done"
+ * values, mostly 0xffff.
+ * Those may need to be distinguished from
+ * actual U+ffff text contents by calling functions like
+ * CharacterIterator::hasNext() or UnicodeString::length().
+ *
+ * @see UChar32
+ * @draft ICU 2.4
+ */
+#define UTF_SENTINEL (-1)
 
 /** Is this code unit or code point a surrogate (U+d800..U+dfff)? */
 #define UTF_IS_SURROGATE(uchar) (((uchar)&0xfffff800)==0xd800)
@@ -257,6 +283,11 @@ typedef int32_t UTextOffset;
  * \var UChar
  * Define UChar to be wchar_t if that is 16 bits wide; always assumed to be unsigned.
  * If wchar_t is not 16 bits wide, then define UChar to be uint16_t.
+ * This makes the definition of UChar platform-dependent
+ * but allows direct string type compatibility with platforms with
+ * 16-bit wchar_t types.
+ *
+ * @stable
  */
 
 #if UTF_SIZE==8
