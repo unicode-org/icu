@@ -790,7 +790,7 @@ UnicodeString& U_EXPORT2 Transliterator::getDisplayName(const UnicodeString& id,
                 uprv_strcpy(key, RB_SCRIPT_DISPLAY_NAME_PREFIX);
                 args[j].getString(s);
                 if (uprv_isInvariantUString(s.getBuffer(), s.length())) {
-                    s.extract(0, sizeof(key)-length-1, key+length, sizeof(key)-length-1, US_INV);
+                    s.extract(0, sizeof(key)-length-1, key+length, (int32_t)sizeof(key)-length-1, US_INV);
 
                     resString = bundle.getStringEx(key, status);
 
