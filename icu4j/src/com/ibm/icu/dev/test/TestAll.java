@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2001/10/19 20:53:54 $ 
- * $Revision: 1.13 $
+ * $Date: 2001/10/22 21:53:10 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -143,7 +143,7 @@ public class TestAll extends TestFmwk {
             new com.ibm.icu.test.format.IntlTestDateFormatAPIC(),
             new com.ibm.icu.test.format.IntlTestDateFormatSymbols(),
             new com.ibm.icu.test.format.IntlTestSimpleDateFormatAPI(),
-            // new com.ibm.icu.test.format.DateFormatRegressionTestJ()
+            new com.ibm.icu.test.format.DateFormatRegressionTestJ()
                 });
     }
 }
