@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UGenReader.java,v $ 
-* $Date: 2000/12/26 20:00:56 $ 
-* $Revision: 1.1 $
+* $Date: 2001/02/26 23:45:37 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -14,6 +14,7 @@ package com.ibm.icu.text;
 
 import java.io.DataInputStream;
 import java.io.EOFException;
+import java.util.Arrays;
 
 /**
 * Internal parent reader class reading binary header data from uprops.dat and 
@@ -168,11 +169,7 @@ abstract class UGenReader
     if (bigendian != BIG_ENDIAN_ || charset != CHAR_SET_ || 
         charsize != CHAR_SIZE_)
       return false;
-    int size = UNICODE_VERSION_.length;
-    for (int i = 0; i < size; i ++)
-      if (UNICODE_VERSION_[i] != unicodeversion[i])
-        return false;
-    return true;
+    return Arrays.equals(UNICODE_VERSION_, unicodeversion);
   }
   
   /**

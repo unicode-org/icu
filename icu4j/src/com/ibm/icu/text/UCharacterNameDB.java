@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UCharacterNameDB.java,v $ 
-* $Date: 2000/12/26 20:00:56 $ 
-* $Revision: 1.1 $
+* $Date: 2001/02/26 23:45:37 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -251,7 +251,7 @@ final class UCharacterNameDB extends UCharacterDB
   */
   protected String getGroupName(int ch, int choice) 
   {
-    if (choice != UCharacterNameChoiceEnum.U_UNICODE_CHAR_NAME && !UNICODE_1_)
+    if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME && !UNICODE_1_)
       // if not modern name requested and semicolon byte value is a character, 
       // not a token number, otherwise since only modern names are stored in 
       // unames.dat and there is no such requested Unicode 1.0 name here
@@ -297,7 +297,7 @@ final class UCharacterNameDB extends UCharacterDB
   */
   protected int getGroupChar(int index, String name, int choice) 
   {
-    if (choice != UCharacterNameChoiceEnum.U_UNICODE_CHAR_NAME && 
+    if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME && 
         !UNICODE_1_) 
       // semicolon byte value is a token number , therefore only modern 
       // names are stored in unames.dat and there is no such requested 
@@ -461,7 +461,7 @@ final class UCharacterNameDB extends UCharacterDB
   */
   private String getGroupName(int index, int length, int choice) 
   {
-    if (choice != UCharacterNameChoiceEnum.U_UNICODE_CHAR_NAME)
+    if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME)
     {
       int oldindex = index;
       index += UCharacterUtil.skipByteSubString(m_groupstring_, index, length, 
@@ -532,7 +532,7 @@ final class UCharacterNameDB extends UCharacterDB
       nindex = 0;
       len = length[result];
       
-      if (choice != UCharacterNameChoiceEnum.U_UNICODE_CHAR_NAME)
+      if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME)
       {
         int oldindex = index;
         index += UCharacterUtil.skipByteSubString(m_groupstring_, index, len, 
