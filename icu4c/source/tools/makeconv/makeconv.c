@@ -83,6 +83,42 @@ static const char STATE_SEPARATORS[9] = { '\r', '\n', '\t', '<', '>' ,'"' , '\0'
 static const char CODEPOINT_SEPARATORS[8] = {  '\r', '>', '\\', 'x', '\n', ' ', '\t', '\0' };
 static const char UNICODE_CODEPOINT_SEPARATORS[6] = {  '<', '>', 'U', ' ', '\t', '\0' };
 
+static const char *
+skipWhitespace(const char *s) {
+    while(*s==' ' || *s=='\t') {
+        ++s;
+    }
+    return s;
+}
+
+static int32_t
+parseCodepageBytes(const char *s, uint32_t *pBytes, const char **pEnd) {
+    char *end;
+    int32_t length=0;
+    uint32_t bytes=0, value;
+
+    while(s[0]=='\\' && s[1]=='x') {
+        if(length==4) {
+            return -1;
+        }
+        value=uprv_strtoul(s+2, &end, 16);
+        s+=4;
+        if(end!=s) {
+            return -1;
+        }
+        bytes=(bytes<<8)|value;
+        ++length;
+    }
+    if(length==0) {
+        return -1;
+    }
+    if(pEnd!=NULL) {
+        *pEnd=s;
+    }
+    *pBytes=bytes;
+    return length;
+}
+
 /* Remove all characters followed by '#'
  */
 static char *
@@ -174,7 +210,7 @@ static UDataInfo dataInfo={
     0,
 
     {0x63, 0x6e, 0x76, 0x74},     /* dataFormat="cnvt" */
-    {6, 1, 0, 0},                 /* formatVersion */
+    {6, 2, 0, 0},                 /* formatVersion */
     {0, 0, 0, 0}                  /* dataVersion (calculated at runtime) */
 };
 
@@ -435,224 +471,212 @@ int32_t getCodepageNumberFromName(char* name)
 void readHeaderFromFile(UConverterSharedData* mySharedData,
                         FileStream* convFile,
                         const char* converterName,
-                        UErrorCode* err)
+                        UErrorCode *pErrorCode)
 {
-  char storeLine[200];
-  char key[16];
-  char value[200];
-  char* line = storeLine;
-  UBool endOfHeader = FALSE;
-  UBool hasConvClass = FALSE;
-  UBool hasSubChar = FALSE;
-  char codepointByte[3];
+    char line[200];
+    char *s, *end, *key, *value;
+    UConverterStaticData *staticData;
+    char c;
 
-  UConverterStaticData *myConverter = (UConverterStaticData *)mySharedData->staticData;
+    if(U_FAILURE(*pErrorCode)) {
+        return;
+    }
 
-  myConverter->conversionType = UCNV_UNSUPPORTED_CONVERTER;
+    staticData=(UConverterStaticData *)mySharedData->staticData;
+    staticData->conversionType=UCNV_UNSUPPORTED_CONVERTER;
+    uprv_strcpy((char*)staticData->name, converterName);
+    staticData->platform=UCNV_IBM;
+    staticData->subCharLen=0;
 
-  if (U_FAILURE(*err)) return;
-  while (T_FileStream_readLine(convFile, line, sizeof(storeLine))) 
-    {
-      removeComments(line);
-      
-      /*skip blank lines*/
-      if (*(line + nextTokenOffset(line, NLTC_SEPARATORS)) != '\0') 
-        {         
-          /*gets the key that will qualify adjacent information*/
-          /*gets the adjacent value*/
-          line = getToken(key, line, NLTC_SEPARATORS);
-          if (uprv_strcmp(key, "uconv_class") == 0)
-            line = getToken(value, line, PLAIN_SEPARATORS);
-          else if (uprv_strcmp(key, "icu:state") == 0)
-            line = getToken(value, line, STATE_SEPARATORS);
-          else
-            line = getToken(value, line, NLTC_SEPARATORS);
-
-          
-          /*
-             Figure out what key was found and fills in myConverter with the appropriate values
-             a switch statement for strings...
-             */
-
-          /*Checks for end of header marker*/
-          if (uprv_strcmp(key, "CHARMAP") == 0)
-            {
-              endOfHeader = TRUE;
-              break;
-            }
-
-          /*get name tag*/
-          else if (uprv_strcmp(key, "code_set_name") == 0) 
-            {
-              if (uprv_strlen(value) != 0) 
-              {
-                  uprv_strcpy((char*)myConverter->name, value);
-                  myConverter->platform = (int8_t)getPlatformFromName(value);
-                  myConverter->codepage = getCodepageNumberFromName(value);
-              } else {
-                  uprv_strcpy((char*)myConverter->name, converterName);
-                  myConverter->platform = UCNV_IBM;
-              }
-
-            }
-
-          /*get conversion type*/
-          else if (uprv_strcmp(key, "uconv_class") == 0)
-            {
-
-              hasConvClass = TRUE;
-#if DEBUG
-                printf("    %s\n", value);
-                fflush(stdout);
-#endif
-              if (uprv_strcmp(value, "DBCS") == 0) 
-                {
-                  myConverter->conversionType = UCNV_DBCS;
-                }
-              else if (uprv_strcmp(value, "SBCS") == 0) 
-                {
-                  myConverter->conversionType = UCNV_SBCS;
-                }
-              else if (uprv_strcmp(value, "MBCS") == 0) 
-                {
-                  myConverter->conversionType = UCNV_MBCS;
-                }
-              else if (uprv_strcmp(value, "EBCDIC_STATEFUL") == 0) 
-                {
-                  myConverter->conversionType = UCNV_EBCDIC_STATEFUL;
-                }
-              else 
-                {
-                  fprintf(stderr, "error: unknown <uconv_class> %s\n", key);
-                  *err = U_INVALID_TABLE_FORMAT;
-                  return;
-                }
-
-              /* Now that we know the type, copy any 'default' values
-                 from the table. */
-              {
-                const UConverterStaticData *prototype = ucnv_converterStaticData[myConverter->conversionType];
-                if ( prototype != NULL )
-                {
-                  if ( myConverter->name[0] == 0 )
-                  {
-                    uprv_strcpy((char*)myConverter->name, prototype->name);
-                  }
-
-                  if ( myConverter->codepage == 0 )
-                  {
-                    myConverter->codepage = prototype->codepage;
-                  }
-
-                  if ( myConverter->platform == 0 )
-                  {
-                    myConverter->platform = prototype->platform;
-                  }
-
-                  if ( myConverter->minBytesPerChar == 0 )
-                  {
-                    myConverter->minBytesPerChar = prototype->minBytesPerChar;
-                  }
-
-                  if ( myConverter->maxBytesPerChar == 0 )
-                  {
-                    myConverter->maxBytesPerChar = prototype->maxBytesPerChar;
-                  }
-
-                  if ( myConverter->subCharLen == 0 )
-                  {
-                    myConverter->subCharLen = prototype->subCharLen;
-                    if(prototype->subCharLen>0) {
-                        uprv_memcpy(myConverter->subChar, prototype->subChar,
-                                    prototype->subCharLen);
-                    }
-                  }
-                }
-              }
-
-            }
-          
-          /*get mb_cur_max amount*/
-          else if (uprv_strcmp(key, "mb_cur_max") == 0) 
-            myConverter->maxBytesPerChar = (int8_t)T_CString_stringToInteger(value, 10);
-          
-          /*get mb_cur_max amount*/
-          else if (uprv_strcmp(key, "mb_cur_min") == 0)
-            myConverter->minBytesPerChar = (int8_t)T_CString_stringToInteger(value, 10);
-         
-          
-          else if (uprv_strcmp(key, "subchar") == 0) 
-            {
-              hasSubChar = TRUE;
-              myConverter->subCharLen = 0;
-              
-              /*readies value for tokenizing, we want to break each byte of the codepoint into single tokens*/
-              line = value;
-              while (*line)
-                {
-                  line = getToken(codepointByte, line, CODEPOINT_SEPARATORS);
-                  myConverter->subChar[(myConverter->subCharLen++)] =
-                    (unsigned char)T_CString_stringToInteger(codepointByte, 16);
-                }
-              
-              /*Initializes data from the mutable area to that found in the immutable area*/
-              
-            }
-          else if (uprv_strcmp(key, "icu:state") == 0)
-            {
-              /* if an SBCS/DBCS/EBCDIC_STATEFUL converter has icu:state, then turn it into MBCS */
-              switch(myConverter->conversionType) {
-              case UCNV_SBCS:
-              case UCNV_DBCS:
-              case UCNV_EBCDIC_STATEFUL:
-                  myConverter->conversionType = UCNV_MBCS;
-                  break;
-              case UCNV_MBCS:
-                  break;
-              default:
-                  fprintf(stderr, "error: <icu:state> entry for non-MBCS table or before the <uconv_class> line\n");
-                  *err = U_INVALID_TABLE_FORMAT;
-                  break;
-              }
-              if(U_FAILURE(*err)) {
-                  break;
-              }
-
-              if (myConverter->maxBytesPerChar == 0)
-                {
-                  fprintf(stderr, "error: <icu:state> before the <mb_cur_max> line\n");
-                  *err = U_INVALID_TABLE_FORMAT;
-                  break;
-                }
-              if (mySharedData->table == NULL)
-                {
-                  mySharedData->table = (UConverterTable *)MBCSOpen(myConverter->maxBytesPerChar);
-                  if (mySharedData->table == NULL)
-                    {
-                      *err = U_MEMORY_ALLOCATION_ERROR;
-                      break;
-                    }
-                }
-              if (!MBCSAddState((NewConverter *)mySharedData->table, value))
-                {
-                  *err = U_INVALID_TABLE_FORMAT;
-                }
+    while(T_FileStream_readLine(convFile, line, sizeof(line))) {
+        /* remove comments and trailing CR and LF and remove whitespace from the end */
+        for(end=line; (c=*end)!=0; ++end) {
+            if(c=='#' || c=='\r' || c=='\n') {
+                break;
             }
         }
-      /*make line point to the beginning of the storage buffer again*/
-      line = storeLine;
+        while(end>line && (*(end-1)==' ' || *(end-1)=='\t')) {
+            --end;
+        }
+        *end=0;
+
+        /* skip leading white space and ignore empty lines */
+        s=(char *)skipWhitespace(line);
+        if(*s==0) {
+            continue;
+        }
+
+        /* stop at the beginning of the mapping section */
+        if(uprv_memcmp(s, "CHARMAP", 7)==0) {
+            break;
+        }
+
+        /* get the key name, bracketed in <> */
+        if(*s!='<') {
+            fprintf(stderr, "error: no header field <key> in line \"%s\"\n", line);
+            *pErrorCode=U_INVALID_TABLE_FORMAT;
+            return;
+        }
+        key=++s;
+        while(*s!='>') {
+            if(*s==0) {
+                fprintf(stderr, "error: incomplete header field <key> in line \"%s\"\n", line);
+                *pErrorCode=U_INVALID_TABLE_FORMAT;
+                return;
+            }
+            ++s;
+        }
+        *s=0;
+
+        /* get the value string, possibly quoted */
+        s=(char *)skipWhitespace(s+1);
+        if(*s!='"') {
+            value=s;
+        } else {
+            /* remove the quotes */
+            value=s+1;
+            if(end>value && *(end-1)=='"') {
+                *--end=0;
+            }
+        }
+
+        /* collect the information from the header field, ignore unknown keys */
+        if(uprv_strcmp(key, "code_set_name")==0) {
+            if(*value!=0) {
+                uprv_strcpy((char*)staticData->name, value);
+                staticData->platform=(int8_t)getPlatformFromName(value);
+                staticData->codepage=getCodepageNumberFromName(value);
+            }
+        } else if(uprv_strcmp(key, "uconv_class")==0) {
+            const UConverterStaticData *prototype;
+
+            if(uprv_strcmp(value, "DBCS")==0) {
+                staticData->conversionType=UCNV_DBCS;
+            } else if(uprv_strcmp(value, "SBCS")==0) {
+                staticData->conversionType = UCNV_SBCS;
+            } else if(uprv_strcmp(value, "MBCS")==0) {
+                staticData->conversionType = UCNV_MBCS;
+            } else if(uprv_strcmp(value, "EBCDIC_STATEFUL")==0) {
+                staticData->conversionType = UCNV_EBCDIC_STATEFUL;
+            } else {
+                fprintf(stderr, "error: unknown <uconv_class> %s\n", value);
+                *pErrorCode=U_INVALID_TABLE_FORMAT;
+                return;
+            }
+
+            /* Now that we know the type, copy any 'default' values from the table. */
+            prototype=ucnv_converterStaticData[staticData->conversionType];
+            if(prototype!=NULL) {
+                if(staticData->name[0]==0) {
+                    uprv_strcpy((char*)staticData->name, prototype->name);
+                }
+
+                if(staticData->codepage==0) {
+                    staticData->codepage = prototype->codepage;
+                }
+
+                if(staticData->platform==0) {
+                    staticData->platform = prototype->platform;
+                }
+
+                if(staticData->minBytesPerChar==0) {
+                    staticData->minBytesPerChar = prototype->minBytesPerChar;
+                }
+
+                if(staticData->maxBytesPerChar==0) {
+                    staticData->maxBytesPerChar = prototype->maxBytesPerChar;
+                }
+
+                if(staticData->subCharLen==0) {
+                    staticData->subCharLen=prototype->subCharLen;
+                    if(prototype->subCharLen>0) {
+                        uprv_memcpy(staticData->subChar, prototype->subChar, prototype->subCharLen);
+                    }
+                }
+            }
+        } else if(uprv_strcmp(key, "mb_cur_max")==0) {
+            if('1'<=*value && *value<='4' && value[1]==0) {
+                staticData->maxBytesPerChar=(int8_t)(*value-'0');
+            } else {
+                fprintf(stderr, "error: illegal <mb_cur_max> %s\n", value);
+                *pErrorCode=U_INVALID_TABLE_FORMAT;
+                return;
+            }
+        } else if(uprv_strcmp(key, "mb_cur_min")==0) {
+            if('1'<=*value && *value<='4' && value[1]==0) {
+                staticData->minBytesPerChar=(int8_t)(*value-'0');
+            } else {
+                fprintf(stderr, "error: illegal <mb_cur_min> %s\n", value);
+                *pErrorCode=U_INVALID_TABLE_FORMAT;
+                return;
+            }
+        } else if(uprv_strcmp(key, "subchar")==0) {
+            uint32_t bytes;
+            int32_t length;
+
+            length=parseCodepageBytes(value, &bytes, (const char **)&end);
+            if(length>0 && *end==0) {
+                staticData->subCharLen=(int8_t)length;
+                do {
+                    staticData->subChar[--length]=(uint8_t)bytes;
+                    bytes>>=8;
+                } while(length>0);
+            } else {
+                fprintf(stderr, "error: illegal <subchar> %s\n", value);
+                *pErrorCode=U_INVALID_TABLE_FORMAT;
+                return;
+            }
+        } else if(uprv_strcmp(key, "subchar1")==0) {
+            uint32_t bytes;
+
+            if(1==parseCodepageBytes(value, &bytes, (const char **)&end) && *end==0) {
+                staticData->subChar1=(uint8_t)bytes;
+            } else {
+                fprintf(stderr, "error: illegal <subchar1> %s\n", value);
+                *pErrorCode=U_INVALID_TABLE_FORMAT;
+                return;
+            }
+        } else if(uprv_strcmp(key, "icu:state")==0) {
+            /* if an SBCS/DBCS/EBCDIC_STATEFUL converter has icu:state, then turn it into MBCS */
+            switch(staticData->conversionType) {
+            case UCNV_SBCS:
+            case UCNV_DBCS:
+            case UCNV_EBCDIC_STATEFUL:
+                staticData->conversionType = UCNV_MBCS;
+                break;
+            case UCNV_MBCS:
+                break;
+            default:
+                fprintf(stderr, "error: <icu:state> entry for non-MBCS table or before the <uconv_class> line\n");
+                *pErrorCode=U_INVALID_TABLE_FORMAT;
+                return;
+            }
+
+            if(staticData->maxBytesPerChar==0) {
+                fprintf(stderr, "error: <icu:state> before the <mb_cur_max> line\n");
+                *pErrorCode=U_INVALID_TABLE_FORMAT;
+                return;
+            }
+            if(mySharedData->table==NULL) {
+                mySharedData->table=(UConverterTable *)MBCSOpen(staticData->maxBytesPerChar);
+                if(mySharedData->table==NULL) {
+                    *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                    return;
+                }
+            }
+            if(!MBCSAddState((NewConverter *)mySharedData->table, value)) {
+                *pErrorCode=U_INVALID_TABLE_FORMAT;
+                return;
+            }
+        }
     }
 
-  if (!endOfHeader || !hasConvClass)
-    {
-      *err = U_INVALID_TABLE_FORMAT;
+    if(staticData->conversionType==UCNV_UNSUPPORTED_CONVERTER) {
+        *pErrorCode=U_INVALID_TABLE_FORMAT;
+    } else if(staticData->conversionType==UCNV_MBCS && mySharedData->table==NULL) {
+        fprintf(stderr, "error: missing state table information (<icu:state>) for MBCS\n");
+        *pErrorCode=U_INVALID_TABLE_FORMAT;
     }
-  else if (myConverter->conversionType == UCNV_MBCS && mySharedData->table == NULL)
-    {
-      fprintf(stderr, "error: missing state table information (<icu:state>) for MBCS\n");
-      *err = U_INVALID_TABLE_FORMAT;
-    }
-  return;
 }
   
 void loadTableFromFile(FileStream* convFile, UConverterSharedData* sharedData, UErrorCode* err)
