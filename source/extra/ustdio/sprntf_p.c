@@ -76,226 +76,226 @@ int32_t
 u_sprintf_parse_spec (const UChar     *fmt,
              u_sprintf_spec    *spec)
 {
-  const UChar *s = fmt;
-  const UChar *backup;
-  u_sprintf_spec_info *info = &(spec->fInfo);
+    const UChar *s = fmt;
+    const UChar *backup;
+    u_sprintf_spec_info *info = &(spec->fInfo);
 
-  /* initialize spec to default values */  
-  spec->fWidthPos     = -1;
-  spec->fPrecisionPos = -1;
-  spec->fArgPos       = -1;
+    /* initialize spec to default values */
+    spec->fWidthPos     = -1;
+    spec->fPrecisionPos = -1;
+    spec->fArgPos       = -1;
 
-  info->fPrecision    = -1;
-  info->fWidth        = -1;
-  info->fSpec         = 0x0000;
-  info->fPadChar      = 0x0020;
-  info->fAlt          = FALSE;
-  info->fSpace        = FALSE;
-  info->fLeft         = FALSE;
-  info->fShowSign     = FALSE;
-  info->fZero         = FALSE;
-  info->fIsLongDouble = FALSE;
-  info->fIsShort      = FALSE;
-  info->fIsLong       = FALSE;
-  info->fIsLongLong   = FALSE;
+    info->fPrecision    = -1;
+    info->fWidth        = -1;
+    info->fSpec         = 0x0000;
+    info->fPadChar      = 0x0020;
+    info->fAlt          = FALSE;
+    info->fSpace        = FALSE;
+    info->fLeft         = FALSE;
+    info->fShowSign     = FALSE;
+    info->fZero         = FALSE;
+    info->fIsLongDouble = FALSE;
+    info->fIsShort      = FALSE;
+    info->fIsLong       = FALSE;
+    info->fIsLongLong   = FALSE;
 
-  /* skip over the initial '%' */
-  s++;
-
-  /* Check for positional argument */
-  if(ISDIGIT(*s)) {
-
-    /* Save the current position */
-    backup = s;
-    
-    /* handle positional parameters */
-    if(ISDIGIT(*s)) {
-      spec->fArgPos = (int) (*s++ - DIGIT_ZERO);
-      
-      while(ISDIGIT(*s)) {
-        spec->fArgPos *= 10;
-        spec->fArgPos += (int) (*s++ - DIGIT_ZERO);
-      }
-    }
-    
-    /* if there is no '$', don't read anything */
-    if(*s != SPEC_DOLLARSIGN) {
-      spec->fArgPos = -1;
-      s = backup;
-    }
-    /* munge the '$' */
-    else
-      s++;
-  }
-  
-  /* Get any format flags */
-  while(ISFLAG(*s)) {
-    switch(*s++) {
-      
-      /* left justify */
-    case FLAG_MINUS:
-      info->fLeft = TRUE;
-      break;
-      
-      /* always show sign */
-    case FLAG_PLUS:
-      info->fShowSign = TRUE;
-      break;
-
-      /* use space if no sign present */
-    case FLAG_SPACE:
-      info->fShowSign = TRUE;
-      info->fSpace = TRUE;
-      break;
-
-      /* use alternate form */
-    case FLAG_POUND:
-      info->fAlt = TRUE;
-      break;
-
-      /* pad with leading zeroes */
-    case FLAG_ZERO:
-      info->fZero = TRUE;
-      info->fPadChar = 0x0030;
-      break;
-
-      /* pad character specified */
-    case FLAG_PAREN:
-
-      /* first four characters are hex values for pad char */
-      info->fPadChar = (UChar)ufmt_digitvalue(*s++);
-      info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
-      info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
-      info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
-      
-      /* final character is ignored */
-      s++;
-      
-      break;
-    }
-  }
-
-  /* Get the width */
-
-  /* width is specified out of line */
-  if(*s == SPEC_ASTERISK) {
-
-    info->fWidth = -2;
-
-    /* Skip the '*' */
+    /* skip over the initial '%' */
     s++;
 
-    /* Save the current position */
-    backup = s;
-    
-    /* handle positional parameters */
+    /* Check for positional argument */
     if(ISDIGIT(*s)) {
-      spec->fWidthPos = (int) (*s++ - DIGIT_ZERO);
-      
-      while(ISDIGIT(*s)) {
-        spec->fWidthPos *= 10;
-        spec->fWidthPos += (int) (*s++ - DIGIT_ZERO);
-      }
-    }
 
-    /* if there is no '$', don't read anything */
-    if(*s != SPEC_DOLLARSIGN) {
-      spec->fWidthPos = -1;
-      s = backup;
-    }
-    /* munge the '$' */
-    else
-      s++;
-  }
-  /* read the width, if present */
-  else if(ISDIGIT(*s)){
-    info->fWidth = (int) (*s++ - DIGIT_ZERO);
-    
-    while(ISDIGIT(*s)) {
-      info->fWidth *= 10;
-      info->fWidth += (int) (*s++ - DIGIT_ZERO);
-    }
-  }
-  
-  /* Get the precision */
-  
-  if(*s == SPEC_PERIOD) {
-    
-    /* eat up the '.' */
-    s++;
-    
-    /* precision is specified out of line */
-    if(*s == SPEC_ASTERISK) {
+        /* Save the current position */
+        backup = s;
 
-      info->fPrecision = -2;
+        /* handle positional parameters */
+        if(ISDIGIT(*s)) {
+            spec->fArgPos = (int) (*s++ - DIGIT_ZERO);
 
-      /* Skip the '*' */
-      s++;
-
-      /* save the current position */
-      backup = s;
-      
-      /* handle positional parameters */
-      if(ISDIGIT(*s)) {
-        spec->fPrecisionPos = (int) (*s++ - DIGIT_ZERO);
-
-        while(ISDIGIT(*s)) {
-          spec->fPrecisionPos *= 10;
-          spec->fPrecisionPos += (int) (*s++ - DIGIT_ZERO);
+            while(ISDIGIT(*s)) {
+                spec->fArgPos *= 10;
+                spec->fArgPos += (int) (*s++ - DIGIT_ZERO);
+            }
         }
-    
+
         /* if there is no '$', don't read anything */
         if(*s != SPEC_DOLLARSIGN) {
-          spec->fPrecisionPos = -1;
-          s = backup;
+            spec->fArgPos = -1;
+            s = backup;
         }
-        else {
-          /* munge the '$' */
-          s++; 
+        /* munge the '$' */
+        else
+            s++;
+    }
+
+    /* Get any format flags */
+    while(ISFLAG(*s)) {
+        switch(*s++) {
+
+            /* left justify */
+        case FLAG_MINUS:
+            info->fLeft = TRUE;
+            break;
+
+            /* always show sign */
+        case FLAG_PLUS:
+            info->fShowSign = TRUE;
+            break;
+
+            /* use space if no sign present */
+        case FLAG_SPACE:
+            info->fShowSign = TRUE;
+            info->fSpace = TRUE;
+            break;
+
+            /* use alternate form */
+        case FLAG_POUND:
+            info->fAlt = TRUE;
+            break;
+
+            /* pad with leading zeroes */
+        case FLAG_ZERO:
+            info->fZero = TRUE;
+            info->fPadChar = 0x0030;
+            break;
+
+            /* pad character specified */
+        case FLAG_PAREN:
+
+            /* first four characters are hex values for pad char */
+            info->fPadChar = (UChar)ufmt_digitvalue(*s++);
+            info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
+            info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
+            info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
+
+            /* final character is ignored */
+            s++;
+
+            break;
         }
-      }
     }
-    /* read the precision */
-    else if(ISDIGIT(*s)){
-      info->fPrecision = (int) (*s++ - DIGIT_ZERO);
-      
-      while(ISDIGIT(*s)) {
-        info->fPrecision *= 10;
-        info->fPrecision += (int) (*s++ - DIGIT_ZERO);
-      }
-    }
-  }
 
-  /* Get any modifiers */
-  if(ISMOD(*s)) {
-    switch(*s++) {
+    /* Get the width */
 
-      /* short */
-    case MOD_H:
-      info->fIsShort = TRUE;
-      break;
+    /* width is specified out of line */
+    if(*s == SPEC_ASTERISK) {
 
-      /* long or long long */
-    case MOD_LOWERL:
-      if(*s == MOD_LOWERL) {
-        info->fIsLongLong = TRUE;
-        /* skip over the next 'l' */
+        info->fWidth = -2;
+
+        /* Skip the '*' */
         s++;
-      }
-      else
-        info->fIsLong = TRUE;
-      break;
-      
-      /* long double */
-    case MOD_L:
-      info->fIsLongDouble = TRUE;
-      break;
+
+        /* Save the current position */
+        backup = s;
+
+        /* handle positional parameters */
+        if(ISDIGIT(*s)) {
+            spec->fWidthPos = (int) (*s++ - DIGIT_ZERO);
+
+            while(ISDIGIT(*s)) {
+                spec->fWidthPos *= 10;
+                spec->fWidthPos += (int) (*s++ - DIGIT_ZERO);
+            }
+        }
+
+        /* if there is no '$', don't read anything */
+        if(*s != SPEC_DOLLARSIGN) {
+            spec->fWidthPos = -1;
+            s = backup;
+        }
+        /* munge the '$' */
+        else
+            s++;
     }
-  }
+    /* read the width, if present */
+    else if(ISDIGIT(*s)){
+        info->fWidth = (int) (*s++ - DIGIT_ZERO);
 
-  /* finally, get the specifier letter */
-  info->fSpec = *s++;
+        while(ISDIGIT(*s)) {
+            info->fWidth *= 10;
+            info->fWidth += (int) (*s++ - DIGIT_ZERO);
+        }
+    }
 
-  /* return # of characters in this specifier */
-  return (s - fmt);
+    /* Get the precision */
+
+    if(*s == SPEC_PERIOD) {
+
+        /* eat up the '.' */
+        s++;
+
+        /* precision is specified out of line */
+        if(*s == SPEC_ASTERISK) {
+
+            info->fPrecision = -2;
+
+            /* Skip the '*' */
+            s++;
+
+            /* save the current position */
+            backup = s;
+
+            /* handle positional parameters */
+            if(ISDIGIT(*s)) {
+                spec->fPrecisionPos = (int) (*s++ - DIGIT_ZERO);
+
+                while(ISDIGIT(*s)) {
+                    spec->fPrecisionPos *= 10;
+                    spec->fPrecisionPos += (int) (*s++ - DIGIT_ZERO);
+                }
+
+                /* if there is no '$', don't read anything */
+                if(*s != SPEC_DOLLARSIGN) {
+                    spec->fPrecisionPos = -1;
+                    s = backup;
+                }
+                else {
+                    /* munge the '$' */
+                    s++;
+                }
+            }
+        }
+        /* read the precision */
+        else if(ISDIGIT(*s)){
+            info->fPrecision = (int) (*s++ - DIGIT_ZERO);
+
+            while(ISDIGIT(*s)) {
+                info->fPrecision *= 10;
+                info->fPrecision += (int) (*s++ - DIGIT_ZERO);
+            }
+        }
+    }
+
+    /* Get any modifiers */
+    if(ISMOD(*s)) {
+        switch(*s++) {
+
+            /* short */
+        case MOD_H:
+            info->fIsShort = TRUE;
+            break;
+
+            /* long or long long */
+        case MOD_LOWERL:
+            if(*s == MOD_LOWERL) {
+                info->fIsLongLong = TRUE;
+                /* skip over the next 'l' */
+                s++;
+            }
+            else
+                info->fIsLong = TRUE;
+            break;
+
+            /* long double */
+        case MOD_L:
+            info->fIsLongDouble = TRUE;
+            break;
+        }
+    }
+
+    /* finally, get the specifier letter */
+    info->fSpec = *s++;
+
+    /* return # of characters in this specifier */
+    return (int32_t)(s - fmt);
 }
