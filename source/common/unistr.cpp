@@ -1364,6 +1364,9 @@ UnicodeString::handleReplaceBetween(int32_t start,
  */
 void 
 UnicodeString::copy(int32_t start, int32_t limit, int32_t dest) {
+    if (limit <= start) {
+        return; // Nothing to do; avoid bogus malloc call
+    }
     UChar* text = (UChar*) uprv_malloc( sizeof(UChar) * (limit - start) );
     extractBetween(start, limit, text, 0);
     insert(dest, text, 0, limit - start);    
