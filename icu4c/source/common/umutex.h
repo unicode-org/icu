@@ -24,6 +24,16 @@
 typedef void * Mutex;
 #endif
 
+/* APP_NO_THREADS is an old symbol. We'll honour it if present. */
+#ifdef APP_NO_THREADS
+# define ICU_USE_THREADS 0
+#endif
+
+/* Default: use threads. */
+#ifndef ICU_USE_THREADS
+# define ICU_USE_THREADS 1
+#endif
+
 /*
  * Code within this library which accesses protected data should
  * instantiate a Mutex object while doing so.  Notice that there is
