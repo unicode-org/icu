@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2003/12/13 00:30:56 $ 
- * $Revision: 1.34 $
+ * $Date: 2004/01/08 22:27:02 $ 
+ * $Revision: 1.35 $
  *
  *****************************************************************************************
  */
@@ -917,16 +917,6 @@ public abstract class NumberFormat extends UFormat {
         return currency;
     }
     
-    
-	/** Get the locale for this date format object. You can choose between valid and actual locale.
-	 *  @param type type of the locale we're looking for (valid or actual) 
-	 *  @return the locale
-	 *  @draft ICU 2.8
-	 */
-	public ULocale getLocale(ULocale.ULocaleDataType type) {
-		return ULocale.getDefault();		
-	}
-	
     // =======================privates===============================
 
     // Hook for service
@@ -934,6 +924,7 @@ public abstract class NumberFormat extends UFormat {
         if (shim == null) {
             return createInstance(desiredLocale, choice);
         } else {
+            // TODO: shims must call setLocale() on object they create
             return getShim().createInstance(desiredLocale, choice);
         }
     }
@@ -949,11 +940,21 @@ public abstract class NumberFormat extends UFormat {
         /*Bug 4408066
          Add codes for the new method getIntegerInstance() [Richard/GCL]
         */
+        // TODO: revisit this -- this is almost certainly not the way we want
+        // to do this.  aliu 1/6/2004
         if (choice == INTEGERSTYLE) {
             format.setMaximumFractionDigits(0);
             format.setDecimalSeparatorAlwaysShown(false);
             format.setParseIntegerOnly(true);
         }
+        
+        // TODO: the actual locale of the *pattern* may differ from that
+        // for the *symbols*.  For now, we use the data for the symbols.
+        // Revisit this.
+        ULocale valid = symbols.getLocale(ULocale.VALID_LOCALE);
+        ULocale actual = symbols.getLocale(ULocale.ACTUAL_LOCALE);
+        format.setLocale(valid, actual);
+        
         return format;
     }
 

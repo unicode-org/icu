@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2003/12/17 00:50:33 $ 
- * $Revision: 1.27 $
+ * $Date: 2004/01/08 22:27:09 $ 
+ * $Revision: 1.28 $
  *
  *****************************************************************************************
  */
@@ -18,6 +18,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -320,6 +321,11 @@ public class SimpleDateFormat extends DateFormat {
         String[] dateTimePatterns = (String[]) cachedLocaleData.get(loc);
         if (dateTimePatterns == null) { /* cache miss */
             ResourceBundle r = ICULocaleData.getLocaleElements(loc);
+            
+            // TODO: get correct actual/valid locale here
+            ULocale uloc = new ULocale(r.getLocale());
+            setLocale(uloc, uloc);
+            
             dateTimePatterns = r.getStringArray("DateTimePatterns");
             /* update cache */
             cachedLocaleData.put(loc, dateTimePatterns);
@@ -1384,6 +1390,7 @@ public class SimpleDateFormat extends DateFormat {
     public void applyPattern (String pattern)
     {
         this.pattern = pattern;
+        setLocale(null, null);
     }
 
     /**
@@ -1394,6 +1401,7 @@ public class SimpleDateFormat extends DateFormat {
         this.pattern = translatePattern(pattern,
                                         formatData.localPatternChars,
                                         DateFormatSymbols.patternChars);
+        setLocale(null, null);
     }
 
     /**
