@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2000 IBM and others. All rights reserved.
+*   Copyright (C) 1999-2004 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *   12/1/99     rtg         Ported from Java
