@@ -863,6 +863,7 @@ root {
         ESP:intvector { 0,  0 }
         IQD:intvector { 3,  0 }
         ITL:intvector { 0,  0 }
+	IRR:intvector { 0,  0 }
         JOD:intvector { 3,  0 }
         JPY:intvector { 0,  0 }
         KWD:intvector { 3,  0 }
