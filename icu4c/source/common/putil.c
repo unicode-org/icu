@@ -656,7 +656,7 @@ uprv_digitsAfterDecimal(double x)
     if (p != 0) {
         int16_t expPos = (int16_t)(p - buffer);
         numDigits -= bytesWritten - expPos;
-        exponent = (int32_t)(atoi(p + 1));
+        exponent = (int32_t)(atol(p + 1));
     }
 
     /* the string representation may still have spurious decimal digits in it, */
