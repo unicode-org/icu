@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2002/09/19 21:19:04 $ 
-* $Revision: 1.1 $
+* $Date: 2002/10/03 19:38:44 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -509,6 +509,29 @@ public final class UCharacterName
             result = m_utilStringBuffer_.toString();
         }
         return result;
+    }
+    
+    /**
+    * Gets the group name of the character
+    * @param ch character to get the group name 
+    * @param choice name choice selector to choose a unicode 1.0 or newer name
+    */
+    public String getGroupName(int ch, int choice) 
+    {            
+        // gets the msb
+        int msb   = getCodepointMSB(ch);
+        int group = getGroup(ch);
+
+        // return this if it is an exact match
+        if (msb == m_groupinfo_[group * m_groupsize_]) {
+            int index = getGroupLengths(group, m_groupoffsets_, 
+                                        m_grouplengths_);
+            int offset = ch & GROUP_MASK_;
+            return getGroupName(index + m_groupoffsets_[offset], 
+                                m_grouplengths_[offset], choice);
+        }
+        
+        return null;
     }
     
     // these are transliterator use methods ---------------------------------
@@ -1338,29 +1361,6 @@ public final class UCharacterName
                                 m_groupinfo_[start + OFFSET_LOW_OFFSET_]);
         }
         return -1;
-    }
-    
-    /**
-    * Gets the group name of the character
-    * @param ch character to get the group name 
-    * @param choice name choice selector to choose a unicode 1.0 or newer name
-    */
-    private String getGroupName(int ch, int choice) 
-    {            
-        // gets the msb
-        int msb   = getCodepointMSB(ch);
-        int group = getGroup(ch);
-
-        // return this if it is an exact match
-        if (msb == m_groupinfo_[group * m_groupsize_]) {
-            int index = getGroupLengths(group, m_groupoffsets_, 
-                                        m_grouplengths_);
-            int offset = ch & GROUP_MASK_;
-            return getGroupName(index + m_groupoffsets_[offset], 
-                                m_grouplengths_[offset], choice);
-        }
-        
-        return null;
     }
     
     /**
