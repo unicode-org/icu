@@ -99,7 +99,7 @@ foreach my $loc (sort keys %aliases) {
     my $aliasee = $aliases{$loc};
     if (!exists($patched{$alias})) {
         # Patch the alias
-        patchAliasee($aliasee);
+        #patchAliasee($aliasee);
         $patched{$aliasee} = 1;
     }
     patchAlias($loc, $aliasee);
@@ -182,10 +182,10 @@ sub patchAliasee {
     open(IN, $file) or die;
     open(OUT, ">$file.new") or die;
     while (<IN>) {
-       # if (/^\s*contents\s*=\s*new\s+Object/) {
-       #     print OUT "        contents = _contents;\n";
+        #if (/^\s*data\s*=\s*new\s+Object/) {
+         #   print OUT "        super.contents = data;\n";
        #     print OUT "    };\n";
-       #     print OUT '    static final Object[][] _contents =', "\n";
+       #     print OUT '    static final Object[][] data =', "\n";
        #     s/^\s*contents\s*=\s*/        /;
        #     print OUT;
        # } elsif (/^\s*\}\s*;/) {
@@ -214,16 +214,17 @@ sub patchAlias {
     my $file = "LocaleElements_$loc.java";
     open(IN, $file) or die;
     open(OUT, ">$file.new") or die;
+    my $var = "static final Object";
     while (<IN>) {
-        if (/^\s*contents\s*=\s*new\s+Object/) {
-            # Consume the next 5 lines
-            <IN>;
-            <IN>;
-            <IN>;
-            <IN>;
-            <IN>;
+	if(/$var/){
             # Output our new data
-            print OUT "        contents = LocaleElements_$aliasee._contents;\n";
+            print OUT "          static final Object[][] data  = LocaleElements_$aliasee.data;\n";
+	   #consume the next 3 lines
+            <IN>;
+            <IN>;
+            <IN>;
+	    <IN>;
+            <IN>;
         } else {
             print OUT;
         }
