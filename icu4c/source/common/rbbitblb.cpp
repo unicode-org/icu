@@ -725,12 +725,12 @@ UBool RBBITableBuilder::setEquals(UVector *a, UVector *b) {
 //                 for each node in the tree.
 //
 //-----------------------------------------------------------------------------
-void RBBITableBuilder::printPosSets(RBBINode *n) {
 #ifdef RBBI_DEBUG
+void RBBITableBuilder::printPosSets(RBBINode *n) {
     if (n==NULL) {
         return;
     }
-    n->print();
+    n->printNode();
     RBBIDebugPrintf("         Nullable:  %s\n", n->fNullable?"TRUE":"FALSE");
 
     RBBIDebugPrintf("         firstpos:  ");
@@ -744,8 +744,8 @@ void RBBITableBuilder::printPosSets(RBBINode *n) {
 
     printPosSets(n->fLeftChild);
     printPosSets(n->fRightChild);
-#endif
 }
+#endif
 
 
 
@@ -841,9 +841,6 @@ void RBBITableBuilder::printSet(UVector *s) {
     }
     RBBIDebugPrintf("\n");
 }
-#else
-/* Use an empty function for non-debug builds to ignore warnings. */
-void RBBITableBuilder::printSet(UVector *) {}
 #endif
 
 
@@ -852,8 +849,8 @@ void RBBITableBuilder::printSet(UVector *) {}
 //   printStates    Debug Function.  Dump the fully constructed state transition table.
 //
 //-----------------------------------------------------------------------------
-void RBBITableBuilder::printStates() {
 #ifdef RBBI_DEBUG
+void RBBITableBuilder::printStates() {
     int     c;    // input "character"
     int     n;    // state number
 
@@ -875,8 +872,8 @@ void RBBITableBuilder::printStates() {
         RBBIDebugPrintf("\n");
     }
     RBBIDebugPrintf("\n\n");
-#endif
 }
+#endif
 
 
 
