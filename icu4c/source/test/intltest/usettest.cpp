@@ -417,6 +417,12 @@ void UnicodeSetTest::TestScriptSet() {
     UnicodeSet set2("[:Greek:]", status);
     if (U_FAILURE(status)) { errln("FAIL"); return; }
     expectContainment(set2, "[:Greek:]", CharsToUnicodeString("\\u0391\\u03B1"), "aA");
+    
+    /* Jitterbug 1423 */
+    UnicodeSet set3("[[:Common:][:Inherited:]]",status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    expectContainment(set3, "[[:Common:][:Inherited:]]", CharsToUnicodeString("\\U00003099\\U0001D169\\u0000"), "aA");
+
 }
 
 /**
@@ -614,14 +620,16 @@ UnicodeSetTest::expectContainment(const UnicodeSet& set,
     UnicodeString bad;
     int32_t i;
     for (i=0; i<charsIn.length(); ++i) {
-        UChar c = charsIn.charAt(i);
+        UChar32 c = charsIn.char32At(i);
+        if(c>0xFFFF) i++;
+
         if (!set.contains(c)) {
             bad.append(c);
         }
     }
     if (bad.length() > 0) {
-        logln((UnicodeString)"Fail: set " + setName + " does not contain " + bad +
-              ", expected containment of " + charsIn);
+        logln((UnicodeString)"Fail: set " + setName + " does not contain " + prettify(bad) +
+              ", expected containment of " + prettify(charsIn));
     } else {
         logln((UnicodeString)"Ok: set " + setName + " contains " + charsIn);
     }
