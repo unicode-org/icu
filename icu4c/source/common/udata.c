@@ -194,7 +194,9 @@ LOAD_LIBRARY(const char *path, const char *basename, bool_t isCommon) {
     pData->p=p;
 
     /* is it acceptable? */
-    if(NULL==getChoice(pData, NULL, DATA_TYPE, COMMON_DATA_NAME, isCommonDataAcceptable, NULL, &errorCode)) {
+    if(NULL==getChoice(pData, NULL, DATA_TYPE, COMMON_DATA_NAME,
+                       isCommon ? isCommonDataAcceptable : NULL, NULL, &errorCode)
+    ) {
         udata_close(pData);
         return NULL;
     }
@@ -351,7 +353,9 @@ LOAD_LIBRARY(const char *path, const char *basename, bool_t isCommon) {
     pData->p =(MappedData *)data;
 
     /* is it acceptable? */
-    if(NULL==getChoice(pData, NULL, DATA_TYPE, COMMON_DATA_NAME, isCommonDataAcceptable, NULL, &errorCode)) {
+    if(NULL==getChoice(pData, NULL, DATA_TYPE, COMMON_DATA_NAME,
+                       isCommon ? isCommonDataAcceptable : NULL, NULL, &errorCode)
+    ) {
         udata_close(pData);
         return NULL;
     }
@@ -823,7 +827,12 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
         if(IS_LIBRARY(lib)) {
             /* look for the entry point */
-            p=getChoice(lib, entryName, type, name, isAcceptable, context, &errorCode);
+#           ifdef UDATA_MAP
+                /* entryName passed as NULL: prevent TOC lookup for single, mapped files */
+                p=getChoice(lib, NULL, type, name, isAcceptable, context, &errorCode);
+#           else
+                p=getChoice(lib, entryName, type, name, isAcceptable, context, &errorCode);
+#           endif
             if(p==NULL) {
                 UNLOAD_LIBRARY(lib);
             }
@@ -850,7 +859,12 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
         if(IS_LIBRARY(lib)) {
             /* look for the entry point */
-            p=getChoice(lib, entryName, type, name, isAcceptable, context, &errorCode);
+#           ifdef UDATA_MAP
+                /* entryName passed as NULL: prevent TOC lookup for single, mapped files */
+                p=getChoice(lib, NULL, type, name, isAcceptable, context, &errorCode);
+#           else
+                p=getChoice(lib, entryName, type, name, isAcceptable, context, &errorCode);
+#           endif
             if(p==NULL) {
                 UNLOAD_LIBRARY(lib);
             }
