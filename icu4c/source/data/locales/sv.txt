@@ -256,7 +256,10 @@ sv {
         // \u00C5L        {"\u00C5land"}
     }
     Currencies {
-        SEK { "kr", "SEK" }
+        EUR { "\u20AC","Euro" }
+        INR { "=0#Rs.|1#Re.|1<Rs.", "Indisk rupie" }
+        JPY { "\u00A5","Japansk yen" }
+        SEK { "kr", "Svensk krona" }
     }
     DateTimeElements:intvector { 
         2,
@@ -297,367 +300,372 @@ sv {
     }
 
     Languages {
-        aa   {"afar"}
-        ab   {"abkhaziska"}
-        ace  {"achinese"}
-        ach  {"acholi"}
-        ada  {"adangme"}
-        ae   {"avestiska"}
-        af   {"afrikaans"}
-        ak   {"akan"}
-        akk  {"akkadiska"}
-        ale  {"aleutiska"}
-        am   {"amhariska"}
-        ar   {"arabiska"}
-        arc  {"arameiska"}
-        arn  {"araukanska"}
-        arp  {"arapaho"}
-        arw  {"arawakiska"}
-        as   {"assami"}
-        ast  {"asturiska"}
-        av   {"avariska"}
-        awa  {"awadhi"}
-        ay   {"aymara"}
-        az   {"azerbadzjanska"}
-        ba   {"basjkiriska"}
-        bad  {"banda"}
-        bal  {"baluchi"}
-        bam  {"bambara"}
-        ban  {"balinesiska"}
-        bas  {"basa"}
-        be   {"vitryska"}
-        bej  {"beyja"}
-        bem  {"bemba"}
-        bg   {"bulgariska"}
-        bh   {"bihari"}
-        bho  {"bhojpuri"}
-        bi   {"bislama"}
-        bik  {"bikol"}
-        bin  {"bini"}
-        bla  {"siksika"}
-        bn   {"bengali"}
-        bo   {"tibetanska"}
-        br   {"bretonska"}
-        bra  {"braj"}
-        bs   {"bosniska"}
-        btk  {"batak"}
-        bua  {"buriat"}
-        bug  {"buginesiska"}
-        ca   {"katalanska"}
-        cad  {"caddo"}
-        car  {"karibiska"}
-        ce   {"tjetjenska"}
-        ceb  {"cebuano"}
-        ch   {"chamorro"}
-        chb  {"chibcha"}
-        chg  {"chagatai"}
-        chk  {"chuukesiska"}
-        chm  {"mari"}
-        chn  {"chinook"}
-        cho  {"choctaw"}
-        chr  {"cherokesiska"}
-        chy  {"cheyenne"}
-        co   {"korsiska"}
-        cop  {"koptiska"}
-        cr   {"cree"}
-        cs   {"tjeckiska"}
-        cv   {"tjuvasjiska"}
-        cy   {"walesiska"}
-        da   {"danska"}
-        dak  {"dakota"}
-        day  {"dayak"}
-        de   {"tyska"}
-        del  {"delaware"}
-        dgr  {"dogrib"}
-        din  {"dinka"}
-        doi  {"dogri"}
-        dua  {"duala"}
-        dv   {"maldiviska"}
-        dyu  {"dyula"}
-        dz   {"dzongkha"}
-        ee   {"ewe"}
-        efi  {"efik"}
-        eka  {"ekajuk"}
-        el   {"grekiska"}
-        elx  {"elamitiska"}
-        en   {"engelska"}
-        eo   {"esperanto"}
-        es   {"spanska"}
-        et   {"estniska"}
-        eu   {"baskiska"}
-        ewo  {"ewondo"}
-        fa   {"farsi"}
-        fan  {"fang"}
-        fat  {"fanti"}
-        ff   {"fulani"}
-        fi   {"finska"}
-        fj   {"fidjianska"}
-        fo   {"f\u00E4r\u00F6iska"}
+        aa  {"afar"}
+        ab  {"abkhaziska"}
+        ace {"achinese"}
+        ach {"acholi"}
+        ada {"adangme"}
+        ae  {"avestiska"}
+        af  {"afrikaans"}
+        ak  {"akan"}
+        akk {"akkadiska"}
+        ale {"aleutiska"}
+        am  {"amhariska"}
+        an  {"aragonesiska"}
+        ar  {"arabiska"}
+        arc {"arameiska"}
+        arn {"araukanska"}
+        arp {"arapaho"}
+        arw {"arawakiska"}
+        as  {"assami"}
+        ast {"asturiska"}
+        av  {"avariska"}
+        awa {"awadhi"}
+        ay  {"aymara"}
+        az  {"azerbadzjanska"}
+        ba  {"basjkiriska"}
+        bad {"banda"}
+        bal {"baluchi"}
+        bam {"bambara"}
+        ban {"balinesiska"}
+        bas {"basa"}
+        be  {"vitryska"}
+        bej {"beyja"}
+        bem {"bemba"}
+        bg  {"bulgariska"}
+        bh  {"bihari"}
+        bho {"bhojpuri"}
+        bi  {"bislama"}
+        bik {"bikol"}
+        bin {"bini"}
+        bla {"siksika"}
+        bm  { "bambara" }
+        bn  {"bengali"}
+        bo  {"tibetanska"}
+        br  {"bretonska"}
+        bra {"braj"}
+        bs  {"bosniska"}
+        btk {"batak"}
+        bua {"buriat"}
+        bug {"buginesiska"}
+        ca  {"katalanska"}
+        cad {"caddo"}
+        car {"karibiska"}
+        ce  {"tjetjenska"}
+        ceb {"cebuano"}
+        ch  {"chamorro"}
+        chb {"chibcha"}
+        chg {"chagatai"}
+        chk {"chuukesiska"}
+        chm {"mari"}
+        chn {"chinook"}
+        cho {"choctaw"}
+        chr {"cherokesiska"}
+        chy {"cheyenne"}
+        co  {"korsiska"}
+        cop {"koptiska"}
+        cr  {"cree"}
+        cs  {"tjeckiska"}
+        cu  { "kyrkoslaviska" }
+        cv  {"tjuvasjiska"}
+        cy  {"walesiska"}
+        da  {"danska"}
+        dak {"dakota"}
+        day {"dayak"}
+        de  {"tyska"}
+        del {"delaware"}
+        dgr {"dogrib"}
+        din {"dinka"}
+        doi {"dogri"}
+        dua {"duala"}
+        dv  {"maldiviska"}
+        dyu {"dyula"}
+        dz  {"dzongkha"}
+        ee  {"ewe"}
+        efi {"efik"}
+        eka {"ekajuk"}
+        el  {"grekiska"}
+        elx {"elamitiska"}
+        en  {"engelska"}
+        eo  {"esperanto"}
+        es  {"spanska"}
+        et  {"estniska"}
+        eu  {"baskiska"}
+        ewo {"ewondo"}
+        fa  {"farsi"}
+        fan {"fang"}
+        fat {"fanti"}
+        ff  {"fulani"}
+        fi  {"finska"}
+        fj  {"fidjianska"}
+        fo  {"f\u00E4r\u00F6iska"}
         // fon  {"fon"}
-        fr   {"franska"}
-        fur  {"friuilian"}
-        fy   {"frisiska"}
-        ga   {"irl\u00E4ndsk gaeliska"}
-        gaa  {"g\u00E0"}
-        gay  {"gayo"}
-        gba  {"gbaya"}
-        gd   {"skotsk gaeliska"}
-        gil  {"gilbertesiska; kiribati"}
-        gl   {"galiciska"}
-        gn   {"guaran\u00ED"}
-        gon  {"gondi"}
-        gor  {"gorontalo"}
-        got  {"gotiska"}
-        grb  {"grebo"}
-        gu   {"gujarati"}
-        gv   {"manx gaeliska"}
-        gwi  {"gwich'in"}
-        ha   {"haussa"}
-        hai  {"haida"}
-        haw  {"hawaiiska"}
-        he   {"hebreiska"}
-        hi   {"hindi"}
-        hil  {"hiligaynon"}
-        him  {"himachali"}
-        hmn  {"hmong"}
-        ho   {"hiri motu"}
-        hr   {"kroatiska"}
-        hu   {"ungerska"}
-        hup  {"hupa"}
-        hy   {"armeniska"}
-        hz   {"herero"}
-        iba  {"iban"}
-        id   {"indonesiska"}
-        ig   {"ibo"}
-        ii   {"yi"}
+        fr  {"franska"}
+        fur {"friuilian"}
+        fy  {"frisiska"}
+        ga  {"irl\u00E4ndsk gaeliska"}
+        gaa {"g\u00E0"}
+        gay {"gayo"}
+        gba {"gbaya"}
+        gd  {"skotsk gaeliska"}
+        gil {"gilbertesiska; kiribati"}
+        gl  {"galiciska"}
+        gn  {"guaran\u00ED"}
+        gon {"gondi"}
+        gor {"gorontalo"}
+        got {"gotiska"}
+        grb {"grebo"}
+        gu  {"gujarati"}
+        gv  {"manx gaeliska"}
+        gwi {"gwich'in"}
+        ha  {"haussa"}
+        hai {"haida"}
+        haw {"hawaiiska"}
+        he  {"hebreiska"}
+        hi  {"hindi"}
+        hil {"hiligaynon"}
+        him {"himachali"}
+        hmn {"hmong"}
+        ho  {"hiri motu"}
+        hr  {"kroatiska"}
+        ht  { "haitiska" }
+        hu  {"ungerska"}
+        hup {"hupa"}
+        hy  {"armeniska"}
+        hz  {"herero"}
+        iba {"iban"}
+        id  {"indonesiska"}
+        ie  { "interlingue" }
+        ig  {"ibo"}
+        ii  { "sichuan yi" }
         //ijo  {"ijo"}
-        ik   {"inupiaq"}
-        ilo  {"iloko"}
-        is   {"isl\u00E4ndska"}
-        it   {"italienska"}
-        iu   {"inuktitut"}
-        ja   {"japanska"}
-        jv   {"javanska"}
-        ka   {"georgiska"}
-        kaa  {"karakalpakiska"}
-        kab  {"kabyliska"}
-        kac  {"kachin"}
-        kam  {"kamba"}
-        kar  {"karen"}
-        kaw  {"kawi"}
-        kg   {"kikongo"}
-        kha  {"khasi"}
-        kho  {"sakiska"}
-        ki   {"kikuyu"}
-        kj   {"kuanyama"}
-        kk   {"kazakiska"}
-        kl   {"gr\u00F6nl\u00E4ndska"}
-        km   {"kambodjanska; khmer"}
-        kmb  {"kinbundu"}
-        kn   {"kanaresiska; kannada"}
-        ko   {"koreanska"}
-        kok  {"konkani"}
-        kos  {"kosreanska"}
-        kpe  {"kpelle"}
-        kr   {"kanuri"}
-        kro  {"kru"}
-        kru  {"kurukh"}
-        ks   {"kashmiri"}
-        ku   {"kurdiska"}
-        kum  {"kumyk"}
-        kut  {"kutenai"}
-        kv   {"kome"}
-        kw   {"korniska"}
-        ky   {"kirgisiska"}
-        la   {"latin"}
-        lah  {"lahnda"}
-        lam  {"lamba"}
-        lb   {"luxemburgiska"}
-        lez  {"lezghien"}
-        lg   {"luganda"}
-        li   {"limburgiska"}
-        ln   {"lingala"}
-        lo   {"laotiska"}
-        lol  {"lolo; mongo"}
-        loz  {"lozi"}
-        lt   {"litauiska"}
-        lu   {"luba-katanga"}
-        lua  {"luba-lulua"}
-        lui  {"luise\u00F1o"}
-        lun  {"lunda"}
-        //luo  {"luo"}
-        lus  {"lushai"}
-        lv   {"lettiska"}
-        mad  {"madurese"}
-        mag  {"magahi"}
-        mai  {"maithili"}
-        mak  {"makasar"}
-        man  {"mande"}
-        mas  {"massajiska"}
-        mdr  {"mandar"}
-        men  {"mende"}
-        mg   {"malagassiska"}
-        mh   {"marshalliska"}
-        mi   {"maori"}
-        mic  {"mic-mac"}
-        min  {"minangkabau"}
-        mk   {"makedonska"}
-        ml   {"malayalam"}
-        mn   {"mongoliska"}
-        mnc  {"manchu"}
-        mni  {"manipuri"}
-        mo   {"moldaviska"}
-        moh  {"mohawk"}
-        mos  {"mossi"}
-        mr   {"marathi"}
-        ms   {"malajiska"}
-        mt   {"maltesiska"}
-        mus  {"muskogee"}
-        mwr  {"marwari"}
-        my   {"burmanska"}
-        na   {"nauru"}
-        nah  {"nahuatl; aztekiska"}
-        nap  {"napolitanska"}
-        nb   {"norskt bokm\u00E5l"}
-        nd   {"nord\u00ADndebele"}
-        ne   {"nepali"}
-        new  {"newari"}
-        ng   {"ndonga"}
-        nia  {"nias"}
-        niu  {"niuean"}
-        nl   {"nederl\u00E4ndska"}
-        nn   {"ny\u00ADnorsk"}
-        no   {"norska"}
-        nr   {"syd\u00ADndebele"}
-        nso  {"nord\u00ADsotho"}
-        nv   {"navaho"}
-        ny   {"nyanja"}
-        nym  {"nyamwezi"}
-        nyn  {"nyankole"}
-        nyo  {"nyoro"}
-        nzi  {"nzima"}
-        oc   {"provensalska"}
-        oj   {"odjibwa; chippewa"}
-        om   {"oromo"}
-        or   {"oriya"}
-        os   {"ossetiska"}
-        osa  {"osage"}
-        pa   {"panjabi"}
-        pag  {"pangasinan"}
-        pam  {"pampanga"}
-        pap  {"papiamento"}
-        pau  {"palauan"}
-        phn  {"kananeiska; feniciska"}
-        pi   {"pali"}
-        pl   {"polska"}
-        pon  {"ponape"}
-        ps   {"pashto; afghanska"}
-        pt   {"portugisiska"}
-        qu   {"quechua"}
-        raj  {"rajasthani"}
-        rap  {"rapanui"}
-        rar  {"rarotongan"}
-        rm   {"r\u00E4to\u00ADromanska"}
-        rn   {"rundi"}
-        ro   {"rum\u00E4nska"}
-        rom  {"romani"}
-        ru   {"ryska"}
-        rw   {"rwanda; kinjarwanda"}
-        sa   {"sanskrit"}
-        sad  {"sandawe"}
-        sah  {"jakutiska"}
-        sam  {"samaritanska"}
-        sas  {"sasak"}
-        sat  {"santali"}
-        sc   {"sardiska"}
-        sco  {"skotska"}
-        sd   {"sindhi"}
-        se   {"nord\u00ADsamiska"}
-        sel  {"selkup"}
-        sg   {"sango"}
-        sh   {"serbokroatiska"}
-        shn  {"shan"}
-        si   {"singalesiska"}
-        sid  {"sidamo"}
-        sk   {"slovakiska"}
-        sl   {"slovenska"}
-        sm   {"samoanska"}
+        ik  {"inupiaq"}
+        ilo {"iloko"}
+        is  {"isl\u00E4ndska"}
+        it  {"italienska"}
+        iu  {"inuktitut"}
+        ja  {"japanska"}
+        jv  {"javanska"}
+        ka  {"georgiska"}
+        kaa {"karakalpakiska"}
+        kab {"kabyliska"}
+        kac {"kachin"}
+        kam {"kamba"}
+        kar {"karen"}
+        kaw {"kawi"}
+        kg  {"kikongo"}
+        kha {"khasi"}
+        kho {"sakiska"}
+        ki  {"kikuyu"}
+        kj  {"kuanyama"}
+        kk  {"kazakiska"}
+        kl  {"gr\u00F6nl\u00E4ndska"}
+        km  {"kambodjanska; khmer"}
+        kmb {"kinbundu"}
+        kn  {"kanaresiska; kannada"}
+        ko  {"koreanska"}
+        kok {"konkani"}
+        kos {"kosreanska"}
+        kpe {"kpelle"}
+        kr  {"kanuri"}
+        kro {"kru"}
+        kru {"kurukh"}
+        ks  {"kashmiri"}
+        ku  {"kurdiska"}
+        kum {"kumyk"}
+        kut {"kutenai"}
+        kv  {"kome"}
+        kw  {"korniska"}
+        ky  {"kirgisiska"}
+        la  {"latin"}
+        lah {"lahnda"}
+        lam {"lamba"}
+        lb  {"luxemburgiska"}
+        lez {"lezghien"}
+        lg  {"luganda"}
+        li  {"limburgiska"}
+        ln  {"lingala"}
+        lo  {"laotiska"}
+        lol {"lolo; mongo"}
+        loz {"lozi"}
+        lt  {"litauiska"}
+        lu  {"luba-katanga"}
+        lua {"luba-lulua"}
+        lui {"luise\u00F1o"}
+        lun {"lunda"}
+        //luo {"luo"}
+        lus {"lushai"}
+        lv  {"lettiska"}
+        mad {"madurese"}
+        mag {"magahi"}
+        mai {"maithili"}
+        mak {"makasar"}
+        man {"mande"}
+        mas {"massajiska"}
+        mdr {"mandar"}
+        men {"mende"}
+        mg  {"malagassiska"}
+        mh  {"marshalliska"}
+        mi  {"maori"}
+        mic {"mic-mac"}
+        min {"minangkabau"}
+        mk  {"makedonska"}
+        ml  {"malayalam"}
+        mn  {"mongoliska"}
+        mnc {"manchu"}
+        mni {"manipuri"}
+        mo  {"moldaviska"}
+        moh {"mohawk"}
+        mos {"mossi"}
+        mr  {"marathi"}
+        ms  {"malajiska"}
+        mt  {"maltesiska"}
+        mus {"muskogee"}
+        mwr {"marwari"}
+        my  {"burmanska"}
+        na  {"nauru"}
+        nah {"nahuatl; aztekiska"}
+        nap {"napolitanska"}
+        nb  {"norskt bokm\u00E5l"}
+        nd  {"nord\u00ADndebele"}
+        ne  {"nepali"}
+        new {"newari"}
+        ng  {"ndonga"}
+        nia {"nias"}
+        niu {"niuean"}
+        nl  {"nederl\u00E4ndska"}
+        nn  {"ny\u00ADnorsk"}
+        no  {"norska"}
+        nr  {"syd\u00ADndebele"}
+        nso {"nord\u00ADsotho"}
+        nv  {"navaho"}
+        ny  {"nyanja"}
+        nym {"nyamwezi"}
+        nyn {"nyankole"}
+        nyo {"nyoro"}
+        nzi {"nzima"}
+        oc  {"provensalska"}
+        oj  {"odjibwa; chippewa"}
+        om  {"oromo"}
+        or  {"oriya"}
+        os  {"ossetiska"}
+        osa {"osage"}
+        pa  {"panjabi"}
+        pag {"pangasinan"}
+        pam {"pampanga"}
+        pap {"papiamento"}
+        pau {"palauan"}
+        phn {"kananeiska; feniciska"}
+        pi  {"pali"}
+        pl  {"polska"}
+        pon {"ponape"}
+        ps  {"pashto; afghanska"}
+        pt  {"portugisiska"}
+        qu  {"quechua"}
+        raj {"rajasthani"}
+        rap {"rapanui"}
+        rar {"rarotongan"}
+        rm  {"r\u00E4to\u00ADromanska"}
+        rn  {"rundi"}
+        ro  {"rum\u00E4nska"}
+        rom {"romani"}
+        ru  {"ryska"}
+        rw  {"rwanda; kinjarwanda"}
+        sa  {"sanskrit"}
+        sad {"sandawe"}
+        sah {"jakutiska"}
+        sam {"samaritanska"}
+        sas {"sasak"}
+        sat {"santali"}
+        sc  {"sardiska"}
+        sco {"skotska"}
+        sd  {"sindhi"}
+        se  {"nord\u00ADsamiska"}
+        sel {"selkup"}
+        sg  {"sango"}
+        sh  {"serbokroatiska"}
+        shn {"shan"}
+        si  {"singalesiska"}
+        sid {"sidamo"}
+        sk  {"slovakiska"}
+        sl  {"slovenska"}
+        sm  {"samoanska"}
         // sma  {"syd\u00ADsamiska"}
         // smj  {"lule\u00ADsamiska"}
         // smn  {"enare\u00ADsamiska"}
         // sms  {"skolt\u00ADsamiska"}
-        sn   {"shona; manshona"}
-        snk  {"soninke"}
-        so   {"somali"}
-        sog  {"sogdiska"}
-        son  {"songhai"}
-        sq   {"albanska"}
-        sr   {"serbiska"}
-        srr  {"serer"}
-        ss   {"swati"}
-        st   {"syd\u00ADsotho"}
-        su   {"sundanesiska"}
-        suk  {"sukuma"}
-        sus  {"susu"}
-        sux  {"sumeriska"}
-        sv   {"svenska"}
-        sw   {"swahili"}
-        syr  {"syriska"}
-        ta   {"tamil"}
-        te   {"telugu"}
-        tem  {"temne"}
-        ter  {"tereno"}
-        tet  {"tetum"}
-        tg   {"tadzjikiska"}
-        th   {"thail\u00e4ndska"}
-        ti   {"tigrinja"}
-        tig  {"tigr\u00E9"}
-        tiv  {"tivi"}
-        tk   {"turkmeniska"}
-        tkl  {"tokelau"}
-        tl   {"tagalog"}
-        tli  {"tlingit"}
-        tmh  {"tamashek"}
-        tn   {"tswana"}
-        to   {"tonga"}
-        tog  {"tonga-Nyasa"}
-        tpi  {"tok pisin"}
-        tr   {"turkiska"}
-        ts   {"tsonga"}
-        tsi  {"tsimshian"}
-        tt   {"tatariska"}
-        tum  {"tumbuka"}
-        tvl  {"tuvaluan"}
-        tw   {"twi"}
-        ty   {"tahitiska"}
-        tyv  {"tuviniska"}
-        ug   {"uiguriska"}
-        uga  {"ugaritiska"}
-        uk   {"ukrainska"}
-        umb  {"umbundu"}
-        ur   {"urdu"}
-        uz   {"uzbekiska"}
-        //vai  {"vai"}
-        ve   {"venda"}
-        vi   {"vietnamesiska"}
-        vot  {"votiska"}
-        wa   {"walloon"}
-        wal  {"walamo"}
-        war  {"waray"}
-        was  {"washo"}
-        wo   {"wolof"}
-        xh   {"xhosa"}
-        //yao  {"yao"}
-        //yap  {"yap"}
-        yi   {"jiddisch"}
-        yo   {"yoruba"}
-        za   {"zhuang"}
-        zap  {"zapotek"}
-        zen  {"zenaga"}
-        zh   {"kinesiska"}
-        znd  {"zand\u00E9"}
-        zu   {"zulu"}
-        zun  {"zu\u00F1i"}
+        sn  {"shona; manshona"}
+        snk {"soninke"}
+        so  {"somali"}
+        sog {"sogdiska"}
+        son {"songhai"}
+        sq  {"albanska"}
+        sr  {"serbiska"}
+        srr {"serer"}
+        ss  {"swati"}
+        st  {"syd\u00ADsotho"}
+        su  {"sundanesiska"}
+        suk {"sukuma"}
+        sus {"susu"}
+        sux {"sumeriska"}
+        sv  {"svenska"}
+        sw  {"swahili"}
+        syr {"syriska"}
+        ta  {"tamil"}
+        te  {"telugu"}
+        tem {"temne"}
+        ter {"tereno"}
+        tet {"tetum"}
+        tg  {"tadzjikiska"}
+        th  {"thail\u00e4ndska"}
+        ti  {"tigrinja"}
+        tig {"tigr\u00E9"}
+        tiv {"tivi"}
+        tk  {"turkmeniska"}
+        tkl {"tokelau"}
+        tl  {"tagalog"}
+        tli {"tlingit"}
+        tmh {"tamashek"}
+        tn  {"tswana"}
+        to  {"tonga"}
+        tog {"tonga-Nyasa"}
+        tpi {"tok pisin"}
+        tr  {"turkiska"}
+        ts  {"tsonga"}
+        tsi {"tsimshian"}
+        tt  {"tatariska"}
+        tum {"tumbuka"}
+        tvl {"tuvaluan"}
+        tw  {"twi"}
+        ty  {"tahitiska"}
+        tyv {"tuviniska"}
+        ug  {"uiguriska"}
+        uga {"ugaritiska"}
+        uk  {"ukrainska"}
+        umb {"umbundu"}
+        ur  {"urdu"}
+        uz  {"uzbekiska"}
+        //vai {"vai"}
+        ve  {"venda"}
+        vi  {"vietnamesiska"}
+        vot {"votiska"}
+        wa  {"walloon"}
+        wal {"walamo"}
+        war {"waray"}
+        was {"washo"}
+        wo  {"wolof"}
+        xh  {"xhosa"}
+        //yao {"yao"}
+        //yap {"yap"}
+        yi  {"jiddisch"}
+        yo  {"yoruba"}
+        za  {"zhuang"}
+        zap {"zapotek"}
+        zen {"zenaga"}
+        zh  {"kinesiska"}
+        znd {"zand\u00E9"}
+        zu  {"zulu"}
+        zun {"zu\u00F1i"}
     }
     MonthAbbreviations { 
         "jan",
@@ -707,6 +715,64 @@ sv {
     }
     ExemplarCharacters { "[a-z\u00e4\u00f6\u00e5\u00e1\u00e9\u00eb\u00fc]" }
 
+    Scripts {
+        Arab { "arabiskt" }
+        Armn { "armeniskt" }
+        Beng { "bengaliskt" }
+        //Bopo { "bopomofo" }
+        //Brai { "braille" }
+        //Buhd { "buhid" }
+        //Cans { "Unified Canadian Aboriginal Symbols" }
+        //Cher { "cherokee" }
+        Cprt { "cypriotiskt" }
+        Cyrl { "kyrilliskt" }
+        //Deva { "devanagari" }
+        //Dsrt { "deseret" }
+        Ethi { "etiopiskt" }
+        Geor { "georgiskt" }
+        Goth { "gotiskt" }
+        Grek { "grekiskt" }
+        //Gujr { "gujarati" }
+        //Guru { "gurmukhi" }
+        //Hang { "hangul" }
+        //Hano { "hanunoo" }
+        //Hani { "han" }
+        Hans { "f\u00F6renklad han" }
+        Hant { "traditionell han" }
+        Hebr { "hebreiskt" }
+        //Hira { "hiragana" }
+        Ital { "fornitaliskt" }
+        //Kana { "katakana" }
+        //Khmr { "khmer" }
+        //Knda { "kannada" }
+        Laoo { "laotiskt" }
+        Latn { "latinskt" }
+        //Limb { "limbu" }
+        //Linb { "linear B" }
+        //Mlym { "malayalam" }
+        Mong { "mongoliskt" }
+        //Mymr { "myanmar" }
+        //Ogam { "ogham" }
+        //Orya { "oriya" }
+        Osma { "osmanskt" }
+        Qaac { "koptiskt" } // Coptic is not a formal part of ISO-15924 yet
+        //Qaai { "inherited" } // PUA
+        Runr { "runskrift" }
+        //Shaw { "shavian" }
+        //Sinh { "sinhala" }
+        Syrc { "syriskt" }
+        //Tagb { "tagbanwa" }
+        //Tale { "tai le" }
+        Taml { "tamilskt" }
+        //Telu { "telugu" }
+        //Tglg { "tagalog" }
+        //Thaa { "thaana" }
+        Thai { "thail\u00E4ndskt" } // Just happens to be a duplicate
+        Tibt { "tibetanskt" }
+        Ugar { "ugaritiskt" }
+        //Yiii { "yi" }
+        //Zyyy { "vanligt" } // This may need to become "undetermined script"
+    }
     //------------------------------------------------------------
     // Rule Based Number Format Support
     //------------------------------------------------------------
@@ -799,7 +865,21 @@ sv {
     }
     Types{
         collation{
-            traditional { "Traditionell Sortera" }
+            direct      { "Direkt ordning"    }
+            phonebook   { "Telefonboksordning" }
+            pinyin      { "Pinyinordning"    }
+            stroke      { "Raderingsordning"    }
+            traditional { "Traditionell ordning" }
+        }
+        calendar{
+            japanese      { "Japansk kalender"  }
+            buddhist      { "Buddistisk kalender"  }
+            islamic       { "Islamisk kalender"   }
+            islamic-civil { "Islamisk civil kalender" }
+            hebrew        { "Hebreisk kalender"    }
+            chinese       { "Kinesisk kalender"   }
+            gregorian     { "Gregoriansk kalender" }
+
         }
     }
     Variants{
