@@ -137,9 +137,11 @@ UBool LegalGreek::is(const UnicodeString& sourceString) const {
                 
     // modern is simpler: don't care about anything but a grave
     if (full == FALSE) {
-        if (sourceString == UnicodeString("\\u039C\\u03C0", "")) {
-            return FALSE;
-        }       
+        // A special case which is legal but should be
+        // excluded from round trip
+        // if (sourceString == UnicodeString("\\u039C\\u03C0", "")) {
+        //    return FALSE;
+        // }       
         for (int32_t i = 0; i < decomp.length(); ++i) {
             UChar c = decomp.charAt(i);
             // exclude all the accents
@@ -677,11 +679,19 @@ void RTTest::test2(UBool quickRt) {
 
     usi.reset(targetRange);
     for (;;) {
-        if (!usi.next() || usi.isString()) break;
-        UChar32 c = usi.getCodepoint();
+        if (!usi.next()) break;
+        
+        UnicodeString* cs;
+        if(usi.isString()){
+            cs = (UnicodeString*)&(usi.getString());
+        }else{
+            UnicodeString temp(usi.getCodepoint());
+            cs = &temp;
+        }
 
-        UnicodeString cs((UChar32)c);
-        targ = cs;
+        UChar32 c = cs->char32At(0);
+        
+        targ = *cs;
         targetToSource->transliterate(targ);
         reverse = targ;
         sourceToTarget->transliterate(reverse);
@@ -696,14 +706,15 @@ void RTTest::test2(UBool quickRt) {
             }
             if (toSource.containsAll(targD) == FALSE || 
                 badCharacters.containsSome(targD) == TRUE) {
-                logWrongScript("Target-Source", cs, targ);
+                logWrongScript("Target-Source", *cs, targ);
                 failTargSource.add((UChar32)c);
                 continue;
             }
         }
-        if (isSame(cs, reverse) == FALSE && 
-            roundtripExclusionsSet.contains(c) == FALSE) {
-            logRoundTripFailure(cs,targetToSource->getID(), targ,sourceToTarget->getID(), reverse);
+        if (isSame(*cs, reverse) == FALSE && 
+            roundtripExclusionsSet.contains(c) == FALSE
+            && roundtripExclusionsSet.contains(*cs)==FALSE) {
+            logRoundTripFailure(*cs,targetToSource->getID(), targ,sourceToTarget->getID(), reverse);
             failRound.add((UChar32)c);
             continue;
         } 
@@ -770,7 +781,8 @@ void RTTest::test2(UBool quickRt) {
             }
             if (isSame(cs, reverse) == FALSE && 
                 roundtripExclusionsSet.contains(c) == FALSE&&
-                roundtripExclusionsSet.contains(d) == FALSE) {
+                roundtripExclusionsSet.contains(d) == FALSE &&
+                roundtripExclusionsSet.contains(cs)== FALSE) {
                 logRoundTripFailure(cs,targetToSource->getID(), targ, sourceToTarget->getID(),reverse);
                 continue;
             } 
@@ -924,7 +936,7 @@ void TransliteratorRoundTripTest::TestGreekUNGEGN() {
     test.test(UnicodeString("[a-zA-Z]", ""), 
               UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", 
                             ""), 
-              "[\\u00B5\\u037A\\u03D0-\\uFFFF]", /* roundtrip exclusions */
+              "[\\u00B5\\u037A\\u03D0-\\uFFFF {\\u039C\\u03C0}]", /* roundtrip exclusions */
               this, quick, legal);
     delete legal;
 }
@@ -935,7 +947,7 @@ void TransliteratorRoundTripTest::Testel() {
     test.test(UnicodeString("[a-zA-Z]", ""), 
               UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", 
                             ""), 
-              "[\\u00B5\\u037A\\u03D0-\\uFFFF]", /* exclusions */
+              "[\\u00B5\\u037A\\u03D0-\\uFFFF {\\u039C\\u03C0}]", /* exclusions */
               this, quick, legal);
     delete legal;
 }
@@ -976,7 +988,7 @@ public:
         nukta.addAll(UnicodeSet("[\\u093c\\u09bc\\u0a3c\\u0abc\\u0b3c]",status));
         virama.addAll(UnicodeSet("[\\u094d\\u09cd\\u0a4d\\u0acd\\u0b4d\\u0bcd\\u0c4d\\u0ccd\\u0d4d]",status));
         sanskritStressSigns.addAll(UnicodeSet("[\\u0951\\u0952\\u0953\\u0954]",status));
-        chandrabindu.addAll(UnicodeSet("[\\u0901\\u0981\\u0A81\\u0b01]",status));
+        chandrabindu.addAll(UnicodeSet("[\\u0901\\u0981\\u0A81\\u0b01\\u0c01]",status));
 
     }
     virtual UBool is(const UnicodeString& sourceString) const;
@@ -1069,7 +1081,7 @@ static const char * const interIndicArray[] = {
     "[\\u0b5f\\u0b56\\u0b57\\u0950\\u090D\\u090e\\u0912\\u0911\\u0931\\u0935]", /*roundtrip exclusions*/
 
     "Tamil-DEVANAGARI", "[:tamil:]", "[:Devanagari:]", 
-    "[\\u093c\\u0943-\\u094a\\u0951-\\u0954\\u0962\\u0963\\u090B\\u090C\\u090D\\u0911\\u0916\\u0917\\u0918\\u091B\\u091D\\u0920\\u0921\\u0922\\u0925\\u0926\\u0927\\u092B\\u092C\\u092D\\u0936\\u093d\\u0950[\\u0958-\\u0961]]", /*roundtrip exclusions*/
+    "[\\u0901\\u093c\\u0943-\\u094a\\u0951-\\u0954\\u0962\\u0963\\u090B\\u090C\\u090D\\u0911\\u0916\\u0917\\u0918\\u091B\\u091D\\u0920\\u0921\\u0922\\u0925\\u0926\\u0927\\u092B\\u092C\\u092D\\u0936\\u093d\\u0950[\\u0958-\\u0961]]", /*roundtrip exclusions*/
 
     "DEVANAGARI-Tamil", "[:Devanagari:]", "[:tamil:]", 
     "[\\u0bd7]", /*roundtrip exclusions*/
@@ -1081,13 +1093,13 @@ static const char * const interIndicArray[] = {
     "[\\u0c55\\u0c56\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
 
     "KANNADA-DEVANAGARI", "[:KANNADA:]", "[:Devanagari:]", 
-    "[\\u0946\\u093c\\u0950\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
+    "[\\u0901\\u0946\\u093c\\u0950\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
 
     "DEVANAGARI-KANNADA", "[:Devanagari:]", "[:KANNADA:]",
     "[\\u0cde\\u0cd5\\u0cd6\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/ 
 
     "MALAYALAM-DEVANAGARI", "[:MALAYALAM:]", "[:Devanagari:]", 
-    "[\\u094a\\u094b\\u094c\\u093c\\u0950\\u0944\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
+    "[\\u0901\\u094a\\u094b\\u094c\\u093c\\u0950\\u0944\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
 
     "DEVANAGARI-MALAYALAM", "[:Devanagari:]", "[:MALAYALAM:]",
     "[\\u0d4c\\u0d57\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
@@ -1111,7 +1123,7 @@ static const char * const interIndicArray[] = {
     "[\\u0b5f\\u0b56\\u0b33\\u0b3d]", /*roundtrip exclusions*/
 
     "Tamil-BENGALI", "[:tamil:]", "[:BENGALI:]", 
-    "[\\u09bc\\u09c3\\u09c4\\u09e2\\u09e3\\u09f0\\u09f1\\u098B\\u098C\\u0996\\u0997\\u0998\\u099B\\u099D\\u09A0\\u09A1\\u09A2\\u09A5\\u09A6\\u09A7\\u09AB\\u09AC\\u09AD\\u09B6\\u09DC\\u09DD\\u09DF\\u09E0\\u09E1]", /*roundtrip exclusions*/
+    "[\\u0981\\u09bc\\u09c3\\u09c4\\u09e2\\u09e3\\u09f0\\u09f1\\u098B\\u098C\\u0996\\u0997\\u0998\\u099B\\u099D\\u09A0\\u09A1\\u09A2\\u09A5\\u09A6\\u09A7\\u09AB\\u09AC\\u09AD\\u09B6\\u09DC\\u09DD\\u09DF\\u09E0\\u09E1]", /*roundtrip exclusions*/
 
     "BENGALI-Tamil", "[:BENGALI:]", "[:tamil:]",
     "[\\u0bc6\\u0bc7\\u0bca\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB3\\u0BB4\\u0BB5]", /*roundtrip exclusions*/
@@ -1123,13 +1135,13 @@ static const char * const interIndicArray[] = {
     "[\\u0c55\\u0c56\\u0c47\\u0c46\\u0c4a\\u0C0E\\u0C12\\u0C31\\u0C33\\u0C35]", /*roundtrip exclusions*/
 
     "KANNADA-BENGALI", "[:KANNADA:]", "[:BENGALI:]", 
-    "[\\u09e2\\u09e3\\u09bc\\u09d7\\u09f0\\u09f1\\u09dc\\u09dd\\u09df]", /*roundtrip exclusions*/
+    "[\\u0981\\u09e2\\u09e3\\u09bc\\u09d7\\u09f0\\u09f1\\u09dc\\u09dd\\u09df]", /*roundtrip exclusions*/
 
     "BENGALI-KANNADA", "[:BENGALI:]", "[:KANNADA:]",
     "[\\u0cc6\\u0cca\\u0cd5\\u0cd6\\u0cc7\\u0C8E\\u0C92\\u0CB1\\u0cb3\\u0cb5\\u0cde]", /*roundtrip exclusions*/ 
 
     "MALAYALAM-BENGALI", "[:MALAYALAM:]", "[:BENGALI:]", 
-    "[\\u09e2\\u09e3\\u09bc\\u09c4\\u09f0\\u09f1\\u09dc\\u09dd\\u09df]", /*roundtrip exclusions*/
+    "[\\u0981\\u09e2\\u09e3\\u09bc\\u09c4\\u09f0\\u09f1\\u09dc\\u09dd\\u09df]", /*roundtrip exclusions*/
 
     "BENGALI-MALAYALAM", "[:BENGALI:]", "[:MALAYALAM:]",
     "[\\u0d46\\u0d4a\\u0d47\\u0d31-\\u0d35\\u0d0e\\u0d12]", /*roundtrip exclusions*/
@@ -1177,7 +1189,7 @@ static const char * const interIndicArray[] = {
     "[\\u0Ac4\\u0Ac5\\u0Ac9\\u0Ac7\\u0A8D\\u0A91\\u0AB5\\u0Ad0]", /*roundtrip exclusions*/
 
     "TAMIL-GUJARATI", "[:TAMIL:]", "[:GUJARATI:]", 
-    "[\\u0abc\\u0ac3\\u0Ac4\\u0Ac5\\u0Ac9\\u0Ac7\\u0A8B\\u0A8D\\u0A91\\u0A96\\u0A97\\u0A98\\u0A9B\\u0A9D\\u0AA0\\u0AA1\\u0AA2\\u0AA5\\u0AA6\\u0AA7\\u0AAB\\u0AAC\\u0AAD\\u0AB6\\u0ABD\\u0AD0\\u0AE0]", /*roundtrip exclusions*/
+    "[\\u0A81\\u0abc\\u0ac3\\u0Ac4\\u0Ac5\\u0Ac9\\u0Ac7\\u0A8B\\u0A8D\\u0A91\\u0A96\\u0A97\\u0A98\\u0A9B\\u0A9D\\u0AA0\\u0AA1\\u0AA2\\u0AA5\\u0AA6\\u0AA7\\u0AAB\\u0AAC\\u0AAD\\u0AB6\\u0ABD\\u0AD0\\u0AE0]", /*roundtrip exclusions*/
 
     "GUJARATI-TAMIL", "[:GUJARATI:]", "[:TAMIL:]",
     "[\\u0Bc6\\u0Bca\\u0Bd7\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4]", /*roundtrip exclusions*/
@@ -1189,19 +1201,19 @@ static const char * const interIndicArray[] = {
     "[\\u0c46\\u0c4a\\u0c55\\u0c56\\u0C0C\\u0C0E\\u0C12\\u0C31\\u0C61]", /*roundtrip exclusions*/
 
     "KANNADA-GUJARATI", "[:KANNADA:]", "[:GUJARATI:]", 
-    "[\\u0abc\\u0Ac5\\u0Ac9\\u0A8D\\u0A91\\u0ABD\\u0Ad0]", /*roundtrip exclusions*/
+    "[\\u0A81\\u0abc\\u0Ac5\\u0Ac9\\u0A8D\\u0A91\\u0ABD\\u0Ad0]", /*roundtrip exclusions*/
 
     "GUJARATI-KANNADA", "[:GUJARATI:]", "[:KANNADA:]",
     "[\\u0cc6\\u0cca\\u0cd5\\u0cd6\\u0C8C\\u0C8E\\u0C92\\u0CB1\\u0CDE\\u0CE1]", /*roundtrip exclusions*/
 
     "MALAYALAM-GUJARATI", "[:MALAYALAM:]", "[:GUJARATI:]", 
-    "[\\u0ac4\\u0acb\\u0acc\\u0abc\\u0Ac5\\u0Ac9\\u0A8D\\u0A91\\u0ABD\\u0Ad0]", /*roundtrip exclusions*/
+    "[\\u0A81\\u0ac4\\u0acb\\u0acc\\u0abc\\u0Ac5\\u0Ac9\\u0A8D\\u0A91\\u0ABD\\u0Ad0]", /*roundtrip exclusions*/
 
     "GUJARATI-MALAYALAM", "[:GUJARATI:]", "[:MALAYALAM:]",
     "[\\u0d46\\u0d4a\\u0d4c\\u0d55\\u0d57\\u0D0C\\u0D0E\\u0D12\\u0D31\\u0D34\\u0D61]", /*roundtrip exclusions*/
 
     "TAMIL-ORIYA", "[:TAMIL:]", "[:ORIYA:]", 
-    "[\\u0b3c\\u0b43\\u0b56\\u0B0B\\u0B0C\\u0B16\\u0B17\\u0B18\\u0B1B\\u0B1D\\u0B20\\u0B21\\u0B22\\u0B25\\u0B26\\u0B27\\u0B2B\\u0B2C\\u0B2D\\u0B36\\u0B3D\\u0B5C\\u0B5D\\u0B5F\\u0B60\\u0B61]", /*roundtrip exclusions*/
+    "[\\u0B01\\u0b3c\\u0b43\\u0b56\\u0B0B\\u0B0C\\u0B16\\u0B17\\u0B18\\u0B1B\\u0B1D\\u0B20\\u0B21\\u0B22\\u0B25\\u0B26\\u0B27\\u0B2B\\u0B2C\\u0B2D\\u0B36\\u0B3D\\u0B5C\\u0B5D\\u0B5F\\u0B60\\u0B61]", /*roundtrip exclusions*/
 
     "ORIYA-TAMIL", "[:ORIYA:]", "[:TAMIL:]",
     "[\\u0bc6\\u0bca\\u0bc7\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4\\u0BB5]", /*roundtrip exclusions*/
@@ -1213,13 +1225,13 @@ static const char * const interIndicArray[] = {
     "[\\u0c44\\u0c46\\u0c4a\\u0c55\\u0c47\\u0C0E\\u0C12\\u0C31\\u0C35]", /*roundtrip exclusions*/
 
     "KANNADA-ORIYA", "[:KANNADA:]", "[:ORIYA:]", 
-    "[\\u0b3c\\u0b57\\u0B3D\\u0B5C\\u0B5D\\u0B5F]", /*roundtrip exclusions*/
+    "[\\u0B01\\u0b3c\\u0b57\\u0B3D\\u0B5C\\u0B5D\\u0B5F]", /*roundtrip exclusions*/
 
     "ORIYA-KANNADA", "[:ORIYA:]", "[:KANNADA:]",
     "[\\u0cc4\\u0cc6\\u0cca\\u0cd5\\u0cc7\\u0C8E\\u0C92\\u0CB1\\u0CB5\\u0CDE]", /*roundtrip exclusions*/
 
     "MALAYALAM-ORIYA", "[:MALAYALAM:]", "[:ORIYA:]", 
-    "[\\u0b3c\\u0b56\\u0B3D\\u0B5C\\u0B5D\\u0B5F]", /*roundtrip exclusions*/
+    "[\\u0B01\\u0b3c\\u0b56\\u0B3D\\u0B5C\\u0B5D\\u0B5F]", /*roundtrip exclusions*/
 
     "ORIYA-MALAYALAM", "[:ORIYA:]", "[:MALAYALAM:]",
     "[\\u0D47\\u0D46\\u0D4a\\u0D0E\\u0D12\\u0D31\\u0D34\\u0D35]", /*roundtrip exclusions*/
@@ -1228,7 +1240,7 @@ static const char * const interIndicArray[] = {
     "[\\u0bd7\\u0ba9\\u0bb4]", /*roundtrip exclusions*/
 
     "TAMIL-TELUGU", "[:TAMIL:]", "[:TELUGU:]",
-    "[\\u0c43\\u0c44\\u0c46\\u0c47\\u0c55\\u0c56\\u0c66\\u0C0B\\u0C0C\\u0C16\\u0C17\\u0C18\\u0C1B\\u0C1D\\u0C20\\u0C21\\u0C22\\u0C25\\u0C26\\u0C27\\u0C2B\\u0C2C\\u0C2D\\u0C36\\u0C60\\u0C61]", /*roundtrip exclusions*/
+    "[\\u0C01\\u0c43\\u0c44\\u0c46\\u0c47\\u0c55\\u0c56\\u0c66\\u0C0B\\u0C0C\\u0C16\\u0C17\\u0C18\\u0C1B\\u0C1D\\u0C20\\u0C21\\u0C22\\u0C25\\u0C26\\u0C27\\u0C2B\\u0C2C\\u0C2D\\u0C36\\u0C60\\u0C61]", /*roundtrip exclusions*/
 
     "KANNADA-TAMIL", "[:KANNADA:]", "[:TAMIL:]", 
     "[\\u0bd7\\u0bc6\\u0ba9\\u0bb4]", /*roundtrip exclusions*/
@@ -1243,13 +1255,13 @@ static const char * const interIndicArray[] = {
     "[\\u0d43\\u0d12\\u0D0B\\u0D0C\\u0D16\\u0D17\\u0D18\\u0D1B\\u0D1D\\u0D20\\u0D21\\u0D22\\u0D25\\u0D26\\u0D27\\u0D2B\\u0D2C\\u0D2D\\u0D36\\u0D60\\u0D61]", /*roundtrip exclusions*/
 
     "KANNADA-TELUGU", "[:KANNADA:]", "[:TELUGU:]", 
-    "[\\u0c3f\\u0c46\\u0c48\\u0c4a]", /*roundtrip exclusions*/
+    "[\\u0C01\\u0c3f\\u0c46\\u0c48\\u0c4a]", /*roundtrip exclusions*/
 
     "TELUGU-KANNADA", "[:TELUGU:]", "[:KANNADA:]",
     "[\\u0cc8\\u0cd5\\u0cd6\\u0CDE]", /*roundtrip exclusions*/
 
     "MALAYALAM-TELUGU", "[:MALAYALAM:]", "[:TELUGU:]", 
-    "[\\u0c44\\u0c4a\\u0c4c\\u0c4b\\u0c55\\u0c56]", /*roundtrip exclusions*/
+    "[\\u0C01\\u0c44\\u0c4a\\u0c4c\\u0c4b\\u0c55\\u0c56]", /*roundtrip exclusions*/
 
     "TELUGU-MALAYALAM", "[:TELUGU:]", "[:MALAYALAM:]",
     "[\\u0d4c\\u0d57\\u0D34]", /*roundtrip exclusions*/
@@ -1286,6 +1298,14 @@ static const char * const interIndicArray[] = {
 
 };
 
+void TransliteratorRoundTripTest::TestDebug(const char* name,const char fromSet[],
+                                            const char* toSet,const char* exclusions,UBool quick){
+
+    RTTest test(name);
+    Legal *legal = new LegalIndic();
+    test.test(UnicodeString(fromSet,""),UnicodeString(toSet,""),exclusions,this,quick,legal);
+}
+
 void TransliteratorRoundTripTest::TestInterIndic() {
     int32_t num = (int32_t)(sizeof(interIndicArray)/(INTER_INDIC_ARRAY_WIDTH*sizeof(char*)));
     if(quick){
@@ -1294,13 +1314,14 @@ void TransliteratorRoundTripTest::TestInterIndic() {
     }
     for(int i = 0; i < num;i++){
         RTTest test(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 0]);
-        Legal *legal = new LegalIndic();
+       Legal *legal = new LegalIndic();
         test.test(UnicodeString(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 1], ""), 
                   UnicodeString(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 2], ""), 
                   interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 3], /* roundtrip exclusions */
                   this, quick, legal);
-        delete legal;
+       delete legal;
     }
+    //TestDebug("Latin-Telugu", latinForIndic, "[:Telugu:]",FALSE,NULL);
 }
 
 // end indic tests ----------------------------------------------------------
