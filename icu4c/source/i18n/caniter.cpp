@@ -178,11 +178,11 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
         pieces_length = 1;
         pieces = new UnicodeString*[1];
         current_length = 1;
-        current = uprv_malloc(1 * sizeof(int32_t));
+        current = (int32_t*)uprv_malloc(1 * sizeof(int32_t));
         current[0] = 0;
         pieces[0] = new UnicodeString[1];
         pieces[0][0] = UnicodeString("");
-        pieces_lengths = uprv_malloc(1 * sizeof(int32_t));
+        pieces_lengths = (int32_t*)uprv_malloc(1 * sizeof(int32_t));
         pieces_lengths[0] = 1;
         return;
     }
@@ -214,10 +214,10 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
     // allocate the arrays, and find the strings that are CE to each segment
     pieces = new UnicodeString*[list_length];
     pieces_length = list_length;
-    pieces_lengths = uprv_malloc(list_length * sizeof(int32_t));
+    pieces_lengths = (int32_t*)uprv_malloc(list_length * sizeof(int32_t));
 
-    current = uprv_malloc(list_length * sizeof(int32_t));
     current_length = list_length;
+    current = (int32_t*)uprv_malloc(list_length * sizeof(int32_t));
     for (i = 0; i < current_length; i++) {
       current[i] = 0;
     }
