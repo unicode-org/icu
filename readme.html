@@ -2,8 +2,6 @@
 
 <html lang="en-US">
   <head>
-    <meta name="generator" content="HTML Tidy, see www.w3.org">
-    <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2003 IBM Corporation and others. All Rights Reserved.">
     <meta name="KEYWORDS" content=
@@ -32,7 +30,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 2.6
     ReadMe</h1>
 
-    <p>Version: 2003-Jun-04<br>
+    <p>Version: 2003-Jun-06<br>
      Copyright &copy; 1997-2003 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -231,12 +229,12 @@
     "http://oss.software.ibm.com/icu/download/2.6/">ICU 2.6 download
     page</a>.</p>
 
-    <h3>ICU code library size</h3>
+    <h3>Library Initialization</h3>
 
-    <p>ICU code libraries can be made smaller by removing functionality. See
-    the <a href=
-    "http://oss.software.ibm.com/icu/userguide/packaging.html">Packaging
-    ICU</a> section of the User's Guide.</p>
+    <p>ICU4C 2.6 introduces a library initialization function. It is required to
+    call&nbsp; it before using any ICU services in a multi-threaded environment.
+    For details please see the <a href="http://oss.software.ibm.com/icu/apiref/">documentation</a>
+    of <code>u_init()</code> in the <code>unicode/uclean.h</code> header file.</p>
 
     <h3>Support for Unicode 4.0</h3>
 
@@ -281,6 +279,13 @@
     "http://oss.software.ibm.com/icu/userguide/localizing.html">Localizing with
     ICU</a> chapter for details. The previous, ICU-specific XML format has been
     withdrawn.</p>
+
+    <h3>ICU code library size</h3>
+
+    <p>ICU code libraries can be made smaller by removing functionality. See
+    the <a href=
+    "http://oss.software.ibm.com/icu/userguide/packaging.html">Packaging
+    ICU</a> section of the User's Guide.</p>
 
     <h3>Flexible data loading</h3>
 
