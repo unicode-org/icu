@@ -248,7 +248,6 @@ af {
     }
 
     // /**************** Info Below is needed ****************/
-    // collations{}
     // localPatternChars{}
 
 }

@@ -94,12 +94,4 @@ pa {
     LocaleScript:array { "Guru" }
 
     ExemplarCharacters { "[[:Guru:]\u200c\u200d]" }
-    collations {
-      standard {
-        Version { "1.0" }
-        Sequence { 
-            "[normalization on]"
-        }
-      }
-    }
 }

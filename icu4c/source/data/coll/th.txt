@@ -1,0 +1,61 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1999-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+th {
+    Version{ "2.0" }
+    // -------------------- ibm.597 --------------------
+    //
+    // First put in all of the consonants, after Z
+    //
+    collations {
+      standard { 
+        Version { "3.0" }
+        Sequence { 
+           // Tailoring of UCA for Thai Royal Institute Dictionary Sort, B.E. 2525
+           "[normalization on]" // needed because Thai uses multiple accents
+
+           // put Ru with Lakkhangyao after Ru and put Lu with Lakkhangyao after Lu
+           // see the comment below on Lakkhangyao
+           "& \u0e24"          // U+0E24 THAI CHARACTER RU
+           "< \u0e24\u0e45"    // U+0E24 THAI CHARACTER RU  U+0E45 THAI CHARACTER LAKKHANGYAO
+           "& \u0e26"          // U+0E26 THAI CHARACTER LU
+           "< \u0e26\u0e45"    // U+0E26 THAI CHARACTER LU U+0E45 THAI CHARACTER LAKKHANGYAO
+
+           // put Lakkhangyao after Sara Ai Maimalai
+           // this rare symbol also comes after all characters. But when it is used in combination
+           // with Ru and Lu, the combination is treated as a seperate letter, ala CH sorting after
+           // C in the traditional Spanish.
+           "& \u0e44"  // U+0E44 THAI CHARACTER SARA AI MAIMALAI
+           "< \u0e45"  // U+0E45 THAI CHARACTER LAKKHANGYAO
+
+           // put Yamakkan just before Maitaikhu. It will behave like an accent (primary ignorable)
+           "& [before 2] \u0E47" // U+0E47 THAI CHARACTER MAITAIKHU
+           "<< \u0E4E"           // U+0E4E THAI CHARACTER YAMAKKAN
+
+           // put Thantakat and Nikhahit just after Mai Chattawa.  They will behave like an accent (primary ignorable)
+            "& \u0E4B"  // U+0E4B  THAI CHARACTER MAI CHATTAWA
+           "<< \u0E4C"  // U+0E4C  THAI CHARACTER THANTAKAT
+           "<< \u0E4D"  // U+0E4D  THAI CHARACTER NIKHAHIT
+
+           // make punctuation and  Paiyannoi...Khomut secondary ignorable. This will make them sort after the same
+           // strings that don't contain them.
+
+           "& [last secondary ignorable]"
+           "<<< ' '"    // Space
+           "<<< '-'"    // Hyphen
+           "<<< '.'"    // Full stop
+           "<<< '...'"  // Ellipsis
+           "<<< \u0E2F" // U+0E2F  THAI CHARACTER PAIYANNOI (abbreviation mark)
+           "<<< \u0E46" // U+0E46  THAI CHARACTER MAIYAMOK (repetition mark)
+           "<<< \u0E4F" // U+0E4F  THAI CHARACTER FONGMAN (ancient symbol used as bullet mark)
+           "<<< \u0E5A" // U+0E5A  THAI CHARACTER ANGKHANKHU (ancient symbol used to mark end of section or episode)
+           "<<< \u0E5B" // U+0E5B  THAI CHARACTER KHOMUT (ancient symbol used to mark end of story)
+ 
+        }
+      }
+    }
+}

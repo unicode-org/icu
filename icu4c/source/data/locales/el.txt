@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 1997-2003, International Business Machines
+// *   Copyright (C) 1997-2004, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -10,12 +10,6 @@ el {
     AmPmMarkers { 
         "\u03A0\u039C",	// The lowercase form is "\u03C0\u03BC". Both are valid. It's also been seen as mixed case too.
         "\u039C\u039C",	// The lowercase form is "\u03BC\u03BC". Both are valid. It's also been seen as mixed case too.
-    }
-    collations {
-        standard {
-            Version { "2.0" }
-            Sequence { "[normalization on]" }
-        }
     }
     Countries { 
         AD { "\u0391\u03BD\u03B4\u03CC\u03C1\u03B1" }

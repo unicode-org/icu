@@ -1,0 +1,20 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ru {
+    Version{ "2.0" }
+    // Using the new options in rules in order to 
+    // improve the performance for Cyrillic chars.
+    collations {
+      standard { 
+        Version { "1.1" }
+        Sequence { 
+            "[suppressContractions [\u0400-\u045f]]"
+        }
+      }
+    }
+}

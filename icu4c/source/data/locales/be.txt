@@ -1,16 +1,12 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 1997-2003, International Business Machines
+// *   Copyright (C) 1997-2004, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 be {
     Version { "2.0" }
-
-    // We use UCA collation table optimized for Cyrillic
-    // as defined in the Russian locale
-    collations:alias { "ru" }
 
     Countries { 
         BY { "\u0411\u0435\u043B\u0430\u0440\u0443\u0441\u044C" }

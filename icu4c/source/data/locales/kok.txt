@@ -240,9 +240,6 @@ kok {
         "Deva"        // ISO 15924 Name 
     }
     ExemplarCharacters{ "[[:Deva:]\u200c\u200d]" }
-//    collations {
-//            ""
-//      }
 
     // Currency display names
     Currencies {
