@@ -167,7 +167,7 @@ void* UVector::orphanElementAt(int32_t index) {
         for (int32_t i=index; i<count-1; ++i) {
             elements[i] = elements[i+1];
         }
-		--count;
+        --count;
     }
     /* else index out of range */
     return e;
