@@ -694,8 +694,10 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
 U_CFUNC
 void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status);
 
+#if 0
 U_CFUNC
 void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status);
+#endif
 
 U_CFUNC
 void ucol_updateInternalState(UCollator *coll);
@@ -711,13 +713,6 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t contCE,
 U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
                                             uint32_t *prevCE, uint32_t *prevContCE,
                                             uint32_t strength);
-U_CFUNC
-int32_t
-ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
-                   const uint8_t *src2, int32_t src2Length,
-                   uint8_t *dest, int32_t destCapacity);
-
-
 
 #ifdef XP_CPLUSPLUS
 /*

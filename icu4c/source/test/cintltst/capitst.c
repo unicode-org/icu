@@ -23,6 +23,76 @@
 #include "cmemory.h"
 #include "ccolltst.h"
 
+static void TestGetSetAttr(void) {
+  UErrorCode status = U_ZERO_ERROR;
+  UCollator *coll = ucol_open(NULL, &status);
+  struct attrTest {
+    UColAttribute att;
+    UColAttributeValue val[5];
+    uint32_t valueSize;
+    UColAttributeValue nonValue;
+  } attrs[] = {
+    {UCOL_FRENCH_COLLATION, {UCOL_ON, UCOL_OFF}, 2, UCOL_SHIFTED},
+    {UCOL_ALTERNATE_HANDLING, {UCOL_NON_IGNORABLE, UCOL_SHIFTED}, 2, UCOL_OFF},/* attribute for handling variable elements*/
+    {UCOL_CASE_FIRST, {UCOL_OFF, UCOL_LOWER_FIRST, UCOL_UPPER_FIRST}, 3, UCOL_SHIFTED},/* who goes first, lower case or uppercase */
+    {UCOL_CASE_LEVEL, {UCOL_ON, UCOL_OFF}, 2, UCOL_SHIFTED},/* do we have an extra case level */
+    {UCOL_NORMALIZATION_MODE, {UCOL_ON, UCOL_OFF}, 2, UCOL_SHIFTED},/* attribute for normalization */
+    {UCOL_DECOMPOSITION_MODE, {UCOL_ON, UCOL_OFF}, 2, UCOL_SHIFTED},
+    {UCOL_STRENGTH,         {UCOL_PRIMARY, UCOL_SECONDARY, UCOL_TERTIARY, UCOL_QUATERNARY, UCOL_IDENTICAL}, 5, UCOL_SHIFTED},/* attribute for strength */
+    {UCOL_HIRAGANA_QUATERNARY_MODE, {UCOL_ON, UCOL_OFF}, 2, UCOL_SHIFTED},/* when turned on, this attribute */
+  };
+  UColAttribute currAttr;
+  UColAttributeValue value; 
+  uint32_t i = 0, j = 0;
+
+  for(i = 0; i<sizeof(attrs)/sizeof(attrs[0]); i++) {
+    currAttr = attrs[i].att;
+    ucol_setAttribute(coll, currAttr, UCOL_DEFAULT, &status);
+    if(U_FAILURE(status)) {
+      log_err("ucol_setAttribute with the default value returned error: %s\n", u_errorName(status));
+      break;
+    }
+    value = ucol_getAttribute(coll, currAttr, &status);
+    if(U_FAILURE(status)) {
+      log_err("ucol_getAttribute returned error: %s\n", u_errorName(status));
+      break;
+    }
+    for(j = 0; j<attrs[i].valueSize; j++) {
+      ucol_setAttribute(coll, currAttr, attrs[i].val[j], &status);
+      if(U_FAILURE(status)) {
+        log_err("ucol_setAttribute with the value %i returned error: %s\n", attrs[i].val[j], u_errorName(status));
+        break;
+      }
+    }
+    status = U_ZERO_ERROR;
+    ucol_setAttribute(coll, currAttr, attrs[i].nonValue, &status);
+    if(U_SUCCESS(status)) {
+      log_err("ucol_setAttribute with the bad value didn't return an error\n");
+      break;
+    }
+    status = U_ZERO_ERROR;
+
+    ucol_setAttribute(coll, currAttr, value, &status);
+    if(U_FAILURE(status)) {
+      log_err("ucol_setAttribute with the default valuereturned error: %s\n", u_errorName(status));
+      break;
+    }
+
+  }
+  status = U_ZERO_ERROR;
+  value = ucol_getAttribute(coll, UCOL_ATTRIBUTE_COUNT, &status);
+  if(U_SUCCESS(status)) {
+    log_err("ucol_getAttribute for UCOL_ATTRIBUTE_COUNT didn't return an error\n");
+  }
+  status = U_ZERO_ERROR;
+  ucol_setAttribute(coll, UCOL_ATTRIBUTE_COUNT, UCOL_DEFAULT, &status);
+  if(U_SUCCESS(status)) {
+    log_err("ucol_setAttribute for UCOL_ATTRIBUTE_COUNT didn't return an error\n");
+  }
+  status = U_ZERO_ERROR;
+
+
+}
 
 
 void addCollAPITest(TestNode** root)
@@ -38,6 +108,7 @@ void addCollAPITest(TestNode** root)
     /*addTest(root, &TestGetDefaultRules, "tscoll/capitst/TestGetDefaultRules");*/
     addTest(root, &TestDecomposition, "tscoll/capitst/TestDecomposition");
     addTest(root, &TestSafeClone, "tscoll/capitst/TestSafeClone");
+    addTest(root, &TestGetSetAttr, "tscoll/capitst/TestGetSetAttr");
     
 }
 
