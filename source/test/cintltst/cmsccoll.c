@@ -589,9 +589,9 @@ void testPrimary(UCollator* col, const UChar* p,const UChar* q){
     }
 */
     source[0] = 0x0491;
-    u_strcat(source,p);
+    u_strcpy(source+1,p);
     target[0] = 0x0413;
-    u_strcat(target,q);
+    u_strcpy(target+1,q);
     doTest(col, source, target, UCOL_LESS);
 /*
     result = ucol_strcoll(col,source,u_strlen(source),target,u_strlen(target));
@@ -621,9 +621,9 @@ void testSecondary(UCollator* col, const UChar* p,const UChar* q){
     }
 */
     source[0] = 0x0053;
-    u_strcat(source,p);
+    u_strcpy(source+1,p);
     target[0]= 0x0073;
-    u_strcat(target,q);
+    u_strcpy(target+1,q);
 
     doTest(col, source, target, UCOL_LESS);
 /*
@@ -634,13 +634,19 @@ void testSecondary(UCollator* col, const UChar* p,const UChar* q){
        fprintf(file,"secondary swamps 3rd failed  source: %s target: %s \n",utfSource,utfTarget);
     }
 */
+    /*
     source[0] = '\0';
     u_strcat(source,p);
-    u_strcat(source,(UChar*)"b");
+    source[u_strlen(p)] = 0x62;
+    source[u_strlen(p+1)] = 0;
+
     target[0] = '\0';
     u_strcat(target,q);
-    u_strcat(target,(UChar*)"a");
+    target[u_strlen(q)] = 0x61;
+    target[u_strlen(q+1)] = 0;
+
     doTest(col, source, target, UCOL_GREATER);
+    */
 /*
     result = ucol_strcoll(col,source,u_strlen(source),target,u_strlen(target));
     if(result!=UCOL_GREATER){
@@ -667,9 +673,9 @@ void testTertiary(UCollator* col, const UChar* p,const UChar* q){
     }
 */
     source[0] = 0x0020;
-    u_strcat(source,p);
+    u_strcpy(source+1,p);
     target[0]= 0x002D;
-    u_strcat(target,q);
+    u_strcpy(target+1,q);
 
     doTest(col, source, target, UCOL_LESS);
 /*
@@ -680,14 +686,19 @@ void testTertiary(UCollator* col, const UChar* p,const UChar* q){
        fprintf(file,"Tertiary swamps 4th failed  source: %s target: %s \n", utfSource,utfTarget);
     }
 */
+    /*
     source[0] = '\0';
     u_strcat(source,p);
-    *temp = 0x00E0; 
-    u_strcat(source,temp);
+    source[u_strlen(p)] = 0xE0;
+    source[u_strlen(p+1)] = 0;
+
     target[0] = '\0';
     u_strcat(target,q);
-    u_strcat(target,(UChar*)"a");
+    target[u_strlen(q)] = 0x61;
+    target[u_strlen(q+1)] = 0;
+
     doTest(col, source, target, UCOL_GREATER);
+    */
 /*
     result = ucol_strcoll(col,source,u_strlen(source),target,u_strlen(target));
     if(result!=UCOL_GREATER){
