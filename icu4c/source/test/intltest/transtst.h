@@ -225,7 +225,7 @@ class TransliteratorTest : public IntlTest {
      * ([abc])+ > x $1 x; applied to "cba" produces "xax"
      */
     void TestQuantifiedSegment(void);
-        
+
     /* Devanagari-Latin rules Test */
     void TestDevanagariLatinRT(void);
 
@@ -240,6 +240,11 @@ class TransliteratorTest : public IntlTest {
     
     /* Test Compound Indic-Latin transliterators*/
     void TestCompoundLatinRT(void);
+
+    /**
+     * Test instantiation from a locale.
+     */
+    void TestLocaleInstantiation(void);        
     
     //======================================================================
     // Support methods
