@@ -132,13 +132,15 @@ uint32_t IntlTestNumberFormat::randLong()
 }
 
 
-/* Make sure that we don't get something too large and multiply into infinity. */
+/* Make sure that we don't get something too large and multiply into infinity.
+   @param smallerThanMax the requested maximum value smaller than DBL_MAX */
 double IntlTestNumberFormat::getSafeDouble(double smallerThanMax) {
     double it;
+    double high = (DBL_MAX/smallerThanMax)/10.0;
+    double low = -high;
     do {
         it = randDouble();
-    } while (-DBL_MAX/smallerThanMax > it || it > DBL_MAX/smallerThanMax);
-    it *= smallerThanMax/10.0;
+    } while (low > it || it > high);
     return it;
 }
 
