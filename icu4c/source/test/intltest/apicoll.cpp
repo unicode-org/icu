@@ -42,6 +42,7 @@
 
 #include "sfwdchit.h"
 #include "cmemory.h"
+#include <stdlib.h>
 
 void
 CollationAPITest::doAssert(UBool condition, const char *message)
