@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
+<ldml draft="true">
+	<identity>
+		<version number="x0.2"/>
+		<generation date="2004-05-13" />
+		<language type="de" /> 
+		<territory type="LI" /> 
+	</identity>
+<numbers>
+	<symbols>
+		<decimal>.</decimal>
+		<group>'</group>
+		<list>;</list>
+		<percentSign>%</percentSign>
+		<nativeZeroDigit>0</nativeZeroDigit>
+		<patternDigit>#</patternDigit>
+		<plusSign>+</plusSign>
+		<minusSign>-</minusSign>
+		<exponential>E</exponential>
+		<perMille>‰</perMille>
+		<infinity>∞</infinity>
+		<nan>�</nan>
+	</symbols>
+</numbers>
+</ldml>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
+<ldml draft="true">
+	<identity>
+		<version number="x0.1"/>
+		<generation date="2004-05-13" />
+		<language type="sid" /> 
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="sid">Sidaamu Afo</language>
+		</languages>
+		<territories>
+			<territory type="ET">Itiyoophiya</territory>
+		</territories>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a-z]</exemplarCharacters>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Jan</month>
+					<month type="2">Feb</month>
+					<month type="3">Mar</month>
+					<month type="4">Apr</month>
+					<month type="5">May</month>
+					<month type="6">Jun</month>
+					<month type="7">Jul</month>
+					<month type="8">Aug</month>
+					<month type="9">Sep</month>
+					<month type="10">Oct</month>
+					<month type="11">Nov</month>
+					<month type="12">Dec</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
+					<month type="1">January</month>
+					<month type="2">February</month>
+					<month type="3">March</month>
+					<month type="4">April</month>
+					<month type="5">May</month>
+					<month type="6">June</month>
+					<month type="7">July</month>
+					<month type="8">August</month>
+					<month type="9">September</month>
+					<month type="10">October</month>
+					<month type="11">November</month>
+					<month type="12">December</month>
+				</monthNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Sam</day>
+					<day type="mon">San</day>
+					<day type="tue">Mak</day>
+					<day type="wed">Row</day>
+					<day type="thu">Ham</day>
+					<day type="fri">Arb</day>
+					<day type="sat">Qid</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
+					<day type="sun">Sambata</day>
+					<day type="mon">Sanyo</day>
+					<day type="tue">Maakisanyo</day>
+					<day type="wed">Roowe</day>
+					<day type="thu">Hamuse</day>
+					<day type="fri">Arbe</day>
+					<day type="sat">Qidaame</day>
+				</dayNames>
+				<am>soodo</am>
+				<pm>hawwaro</pm>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE, MMMM dd, yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>dd MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd-MMM-yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>h:mm a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="ETB">
+				<displayName>ETB</displayName>
+				<symbol>$</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>

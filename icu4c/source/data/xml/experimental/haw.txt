@@ -56,56 +56,67 @@ haw {
         RU { "L\u016bkia" }
         US { "\u02bbAmelika Hui P\u016b \u02bbIa" }
     }
-    DayAbbreviations {
-        "LP",
-        "P1",
-        "P2",
-        "P3",
-        "P4",
-        "P5",
-        "P6",
-    }
-    DayNames {
-        "L\u0101pule",
-        "Po\u02bbakahi",
-        "Po\u02bbalua",
-        "Po\u02bbakolu",
-        "Po\u02bbah\u0101",
-        "Po\u02bbalima",
-        "Po\u02bbaono",
-    }
     ExemplarCharacters{"[\u0101\u0113\u012B\u014D\u016Baeiouhklmnpw\u02BB]"}
     Languages {
         haw { "\u02bb\u014dlelo Hawai\u02bbi" }
     }
     LocaleScript:array{ "Latn" }
-    MonthAbbreviations {
-        "Ian.",
-        "Pep.",
-        "Mal.",
-        "\u02bbAp.",
-        "Mei",
-        "Iun.",
-        "Iul.",
-        "\u02bbAu.",
-        "Kep.",
-        "\u02bbOk.",
-        "Now.",
-        "Kek."
-    }
-    MonthNames {
-        "Ianuali",
-        "Pepeluali",
-        "Malaki",
-        "\u02bbApelila",
-        "Mei",
-        "Iune",
-        "Iulai",
-        "\u02bbAukake",
-        "Kepakemapa",
-        "\u02bbOkakopa",
-        "Nowemapa",
-        "Kekemapa"
+    calendar{
+        gregorian{
+            dayNames{
+                format{
+                    abbreviated{
+                        "LP",
+                        "P1",
+                        "P2",
+                        "P3",
+                        "P4",
+                        "P5",
+                        "P6",
+                    }
+                    wide{
+                        "L\u0101pule",
+                        "Po\u02bbakahi",
+                        "Po\u02bbalua",
+                        "Po\u02bbakolu",
+                        "Po\u02bbah\u0101",
+                        "Po\u02bbalima",
+                        "Po\u02bbaono",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Ian.",
+                        "Pep.",
+                        "Mal.",
+                        "\u02bbAp.",
+                        "Mei",
+                        "Iun.",
+                        "Iul.",
+                        "\u02bbAu.",
+                        "Kep.",
+                        "\u02bbOk.",
+                        "Now.",
+                        "Kek."
+                    }
+                    wide{
+                        "Ianuali",
+                        "Pepeluali",
+                        "Malaki",
+                        "\u02bbApelila",
+                        "Mei",
+                        "Iune",
+                        "Iulai",
+                        "\u02bbAukake",
+                        "Kepakemapa",
+                        "\u02bbOkakopa",
+                        "Nowemapa",
+                        "Kekemapa"
+                    }
+                }
+            }
+        }
     }
 }
-

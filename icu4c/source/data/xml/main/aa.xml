@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
+<ldml draft="true">
+	<identity>
+		<version number="x0.1"/>
+		<generation date="2004-05-13" />
+		<language type="aa" /> 
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="aa">Qafar</language>
+		</languages>
+		<territories>
+			<territory type="DJ">Yabuuti</territory>
+			<territory type="ER">Eretria</territory>
+			<territory type="ET">Otobbia</territory>
+		</territories>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a-z]</exemplarCharacters>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Qun</month>
+					<month type="2">Nah</month>
+					<month type="3">Cig</month>
+					<month type="4">Agd</month>
+					<month type="5">Cax</month>
+					<month type="6">Qas</month>
+					<month type="7">Qad</month>
+					<month type="8">Leq</month>
+					<month type="9">Way</month>
+					<month type="10">Dit</month>
+					<month type="11">Xim</month>
+					<month type="12">Kax</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
+					<month type="1">Qunxa Garablu</month>
+					<month type="2">Naharsi Kudo</month>
+					<month type="3">Ciggilta Kudo</month>
+					<month type="4">Agda Baxisso</month>
+					<month type="5">Caxah Alsa</month>
+					<month type="6">Qasa Dirri</month>
+					<month type="7">Qado Dirri</month>
+					<month type="8">Leqeeni</month>
+					<month type="9">Waysu</month>
+					<month type="10">Diteli</month>
+					<month type="11">Ximoli</month>
+					<month type="12">Kaxxa Garablu</month>
+				</monthNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Aca</day>
+					<day type="mon">Etl</day>
+					<day type="tue">Tal</day>
+					<day type="wed">Arb</day>
+					<day type="thu">Kam</day>
+					<day type="fri">Gum</day>
+					<day type="sat">Sab</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
+					<day type="sun">Acaada</day>
+					<day type="mon">Etleeni</day>
+					<day type="tue">Talaata</day>
+					<day type="wed">Arbaqa</day>
+					<day type="thu">Kamiisi</day>
+					<day type="fri">Gumqata</day>
+					<day type="sat">Sabti</day>
+				</dayNames>
+				<am>saaku</am>
+				<pm>carra</pm>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE, MMMM dd, yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>dd MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd-MMM-yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>h:mm a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="DJF">
+				<displayName>DJF</displayName>
+				<symbol>FD</symbol>
+			</currency>
+			<currency type="ERN">
+				<displayName>ERN</displayName>
+				<symbol>$</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>

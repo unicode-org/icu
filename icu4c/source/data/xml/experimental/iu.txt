@@ -9,54 +9,8 @@
 
 iu {
     Version { "x0.1" }
-    DayAbbreviations {
-        "\u14C8\u1466\u14F0\u1591\u152D", // naatsiinguja - abbreviations are not used
-        "\u14C7\u14A1\u1490\u153E\u152D\u1405", // naggajjau
-        "\u14C7\u14A1\u1490\u153E\u152D\u1405\u14D5\u1585\u146D", // naggajjauliqqi
-        "\u1431\u1593\u1466\u14EF\u1585", // pingatsiq
-        "\u14EF\u1455\u14BB\u14A5\u1585", // sitammiq
-        "\u1455\u14EA\u14D5\u1550\u14A5\u1585", // tallirmiq
-        "\u14C8\u1466\u14F0\u1591\u152D\u14D5\u1585\u157F", // naatsiingujalaarniaq
-    }
-    DayNames {
-        "\u14C8\u1466\u14F0\u1591\u152D", // naatsiinguja
-        "\u14C7\u14A1\u1490\u153E\u152D\u1405", // naggajjau
-        "\u14C7\u14A1\u1490\u153E\u152D\u1405\u14D5\u1585\u146D", // naggajjauliqqi
-        "\u1431\u1593\u1466\u14EF\u1585", // pingatsiq
-        "\u14EF\u1455\u14BB\u14A5\u1585", // sitammiq
-        "\u1455\u14EA\u14D5\u1550\u14A5\u1585", // tallirmiq
-        "\u14C8\u1466\u14F0\u1591\u152D\u14D5\u1585\u157F", // naatsiingujalaarniaq
-    }
     Languages {
         iu { "\u1403\u14C4\u1483\u144E\u1450\u1466 \u144E\u144E\u154B\u1405\u14EF\u1585" }   // inuktitut inuujingajut
-    }
-    MonthAbbreviations {
-        "\u152D\u14D0\u14C4\u140A\u14D5", // jannuali
-        "\u1555\u155D\u1557\u140A\u14D5", // vivvuali
-        "\u14AB\u1466\u14EF", // maatsi
-        "\u140A\u1403\u1449\u1433\u14D7", // aippulu
-        "\u14AA\u1403", // mai
-        "\u152B\u14C2", // juuni
-        "\u152A\u14DA\u1403", // julai
-        "\u140A\u1405\u14A1\u148D\u14EF", // auggusi
-        "\u14F0\u1466\u144F\u155D\u1559", // siittiivva
-        "\u1406\u1466\u1451\u155D\u1559", // uuttuuvva
-        "\u14C5\u1559\u1403\u155D\u1559", // nuuvaivva
-        "\u144F\u14F0\u155D\u1559", // tiisiivva
-    }
-    MonthNames {
-        "\u152D\u14D0\u14C4\u140A\u14D5", // jannuali
-        "\u1555\u155D\u1557\u140A\u14D5", // vivvuali
-        "\u14AB\u1466\u14EF", // maatsi
-        "\u140A\u1403\u1449\u1433\u14D7", // aippulu
-        "\u14AA\u1403", // mai
-        "\u152B\u14C2", // juuni
-        "\u152A\u14DA\u1403", // julai
-        "\u140A\u1405\u14A1\u148D\u14EF", // auggusi
-        "\u14F0\u1466\u144F\u155D\u1559", // siittiivva
-        "\u1406\u1466\u1451\u155D\u1559", // uuttuuvva
-        "\u14C5\u1559\u1403\u155D\u1559", // nuuvaivva
-        "\u144F\u14F0\u155D\u1559", // tiisiivva
     }
 //    NumberElements {
 //        ".",
@@ -83,4 +37,62 @@ iu {
     // ShortLanguage { }
     // localPatternChars{}
     //
+    calendar{
+        gregorian{
+            dayNames{
+                format{
+                    abbreviated{
+                        "\u14C8\u1466\u14F0\u1591\u152D", // naatsiinguja - abbreviations are not used
+                        "\u14C7\u14A1\u1490\u153E\u152D\u1405", // naggajjau
+                        "\u14C7\u14A1\u1490\u153E\u152D\u1405\u14D5\u1585\u146D", // naggajjauliqqi
+                        "\u1431\u1593\u1466\u14EF\u1585", // pingatsiq
+                        "\u14EF\u1455\u14BB\u14A5\u1585", // sitammiq
+                        "\u1455\u14EA\u14D5\u1550\u14A5\u1585", // tallirmiq
+                        "\u14C8\u1466\u14F0\u1591\u152D\u14D5\u1585\u157F", // naatsiingujalaarniaq
+                    }
+                    wide{
+                        "\u14C8\u1466\u14F0\u1591\u152D", // naatsiinguja
+                        "\u14C7\u14A1\u1490\u153E\u152D\u1405", // naggajjau
+                        "\u14C7\u14A1\u1490\u153E\u152D\u1405\u14D5\u1585\u146D", // naggajjauliqqi
+                        "\u1431\u1593\u1466\u14EF\u1585", // pingatsiq
+                        "\u14EF\u1455\u14BB\u14A5\u1585", // sitammiq
+                        "\u1455\u14EA\u14D5\u1550\u14A5\u1585", // tallirmiq
+                        "\u14C8\u1466\u14F0\u1591\u152D\u14D5\u1585\u157F", // naatsiingujalaarniaq
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "\u152D\u14D0\u14C4\u140A\u14D5", // jannuali
+                        "\u1555\u155D\u1557\u140A\u14D5", // vivvuali
+                        "\u14AB\u1466\u14EF", // maatsi
+                        "\u140A\u1403\u1449\u1433\u14D7", // aippulu
+                        "\u14AA\u1403", // mai
+                        "\u152B\u14C2", // juuni
+                        "\u152A\u14DA\u1403", // julai
+                        "\u140A\u1405\u14A1\u148D\u14EF", // auggusi
+                        "\u14F0\u1466\u144F\u155D\u1559", // siittiivva
+                        "\u1406\u1466\u1451\u155D\u1559", // uuttuuvva
+                        "\u14C5\u1559\u1403\u155D\u1559", // nuuvaivva
+                        "\u144F\u14F0\u155D\u1559", // tiisiivva
+                    }
+                    wide{
+                        "\u152D\u14D0\u14C4\u140A\u14D5", // jannuali
+                        "\u1555\u155D\u1557\u140A\u14D5", // vivvuali
+                        "\u14AB\u1466\u14EF", // maatsi
+                        "\u140A\u1403\u1449\u1433\u14D7", // aippulu
+                        "\u14AA\u1403", // mai
+                        "\u152B\u14C2", // juuni
+                        "\u152A\u14DA\u1403", // julai
+                        "\u140A\u1405\u14A1\u148D\u14EF", // auggusi
+                        "\u14F0\u1466\u144F\u155D\u1559", // siittiivva
+                        "\u1406\u1466\u1451\u155D\u1559", // uuttuuvva
+                        "\u14C5\u1559\u1403\u155D\u1559", // nuuvaivva
+                        "\u144F\u14F0\u155D\u1559", // tiisiivva
+                    }
+                }
+            }
+        }
+    }
 }

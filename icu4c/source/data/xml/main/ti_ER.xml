@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="ti" /> 
 		<territory type="ER" /> 
 	</identity>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">ጥሪ</month>
+					<month type="2">ለካቲ</month>
+					<month type="3">መጋቢ</month>
+					<month type="4">ሚያዝ</month>
+					<month type="5">ግንቦ</month>
+					<month type="6">ሰነ</month>
+					<month type="7">ሓምለ</month>
+					<month type="8">ነሓሰ</month>
+					<month type="9">መስከ</month>
+					<month type="10">ጥቅም</month>
+					<month type="11">ሕዳር</month>
+					<month type="12">ታሕሳ</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">ጥሪ</month>
 					<month type="2">ለካቲት</month>
 					<month type="3">መጋቢት</month>
@@ -29,21 +38,16 @@
 					<month type="11">ሕዳር</month>
 					<month type="12">ታሕሳስ</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">ጥሪ</month>
-					<month type="2">ለካቲ</month>
-					<month type="3">መጋቢ</month>
-					<month type="4">ሚያዝ</month>
-					<month type="5">ግንቦ</month>
-					<month type="6">ሰነ</month>
-					<month type="7">ሓምለ</month>
-					<month type="8">ነሓሰ</month>
-					<month type="9">መስከ</month>
-					<month type="10">ጥቅም</month>
-					<month type="11">ሕዳር</month>
-					<month type="12">ታሕሳ</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">ሰንበ</day>
+					<day type="mon">ሰኑይ</day>
+					<day type="tue">ሰሉስ</day>
+					<day type="wed">ረቡዕ</day>
+					<day type="thu">ሓሙስ</day>
+					<day type="fri">ዓርቢ</day>
+					<day type="sat">ቀዳም</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">ሰንበት</day>
 					<day type="mon">ሰኑይ</day>
 					<day type="tue">ሰሉስ</day>
@@ -52,15 +56,6 @@
 					<day type="fri">ዓርቢ</day>
 					<day type="sat">ቀዳም</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">ሰንበ</day>
-					<day type="mon">ሰኑይ</day>
-					<day type="tue">ሰሉስ</day>
-					<day type="wed">ረቡዕ</day>
-					<day type="thu">ሓሙስ</day>
-					<day type="fri">ዓርቢ</day>
-					<day type="sat">ቀዳም</day>
-				</dayAbbr>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

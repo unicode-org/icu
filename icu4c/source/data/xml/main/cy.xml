@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
+<ldml draft="true">
+	<identity>
+		<version number="x0.1"/>
+		<generation date="2004-05-13" />
+		<language type="cy" /> 
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="cy">Cymraeg</language>
+		</languages>
+		<territories>
+			<territory type="GB">Prydain Fawr</territory>
+		</territories>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a-z âäáàêëéèîïíìôöóòûüúùŵẅẃẁŷÿýỳ]</exemplarCharacters>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Ion</month>
+					<month type="2">Chwef</month>
+					<month type="3">Mawrth</month>
+					<month type="4">Ebrill</month>
+					<month type="5">Mai</month>
+					<month type="6">Meh</month>
+					<month type="7">Gorff</month>
+					<month type="8">Awst</month>
+					<month type="9">Medi</month>
+					<month type="10">Hyd</month>
+					<month type="11">Tach</month>
+					<month type="12">Rhag</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
+					<month type="1">Ionawr</month>
+					<month type="2">Chwefror</month>
+					<month type="3">Mawrth</month>
+					<month type="4">Ebrill</month>
+					<month type="5">Mai</month>
+					<month type="6">Mehefin</month>
+					<month type="7">Gorffenaf</month>
+					<month type="8">Awst</month>
+					<month type="9">Medi</month>
+					<month type="10">Hydref</month>
+					<month type="11">Tachwedd</month>
+					<month type="12">Rhagfyr</month>
+				</monthNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Sul</day>
+					<day type="mon">Llun</day>
+					<day type="tue">Maw</day>
+					<day type="wed">Mer</day>
+					<day type="thu">Iau</day>
+					<day type="fri">Gwen</day>
+					<day type="sat">Sad</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
+					<day type="sun">Dydd Sul</day>
+					<day type="mon">Dydd Llun</day>
+					<day type="tue">Dydd Mawrth</day>
+					<day type="wed">Dydd Mercher</day>
+					<day type="thu">Dydd Iau</day>
+					<day type="fri">Dydd Gwener</day>
+					<day type="sat">Dydd Sadwrn</day>
+				</dayNames>
+			</calendar>
+		</calendars>
+	</dates>
+</ldml>

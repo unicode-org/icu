@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE supplementalData SYSTEM "http://www.openi18n.org/spec/ldml/1.0/ldmlSupplemental.dtd" >
+<!DOCTYPE supplementalData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlSupplemental.dtd" >
 <supplementalData>
     <currencyData>
         <fractions>
@@ -26,7 +26,6 @@
             <info iso4217="RWF" digits="0"  />
             <info iso4217="TND" digits="3"  />
             <info iso4217="TRL" digits="0"  />
-            <info iso4217="TTD" digits="0"  />
             <info iso4217="VUV" digits="0"  />
             <info iso4217="XAF" digits="0"  />
             <info iso4217="XOF" digits="0"  />
@@ -260,7 +259,7 @@
             </currency>
         </region>
         <region iso3166="EC">
-            <currency iso4217="ECS" >
+            <currency iso4217="USD" >
             </currency>
         </region>
         <region iso3166="EE">

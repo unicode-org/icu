@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
+<ldml draft="true">
+	<identity>
+		<version number="x0.2"/>
+		<generation date="2004-05-13" />
+		<language type="uz" /> 
+		<territory type="UZ" /> 
+	</identity>
+</ldml>

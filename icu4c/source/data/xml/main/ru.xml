@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="ru" /> 
 	</identity>
 	<localeDisplayNames>
@@ -398,17 +393,26 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[а-я ё і ѣ ѳ ѵ]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Cyrl</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
-		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">янв</month>
+					<month type="2">фев</month>
+					<month type="3">мар</month>
+					<month type="4">апр</month>
+					<month type="5">май</month>
+					<month type="6">июн</month>
+					<month type="7">июл</month>
+					<month type="8">авг</month>
+					<month type="9">сен</month>
+					<month type="10">окт</month>
+					<month type="11">ноя</month>
+					<month type="12">дек</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">Январь</month>
 					<month type="2">Февраль</month>
 					<month type="3">Март</month>
@@ -422,21 +426,16 @@
 					<month type="11">Ноябрь</month>
 					<month type="12">Декабрь</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">янв</month>
-					<month type="2">фев</month>
-					<month type="3">мар</month>
-					<month type="4">апр</month>
-					<month type="5">май</month>
-					<month type="6">июн</month>
-					<month type="7">июл</month>
-					<month type="8">авг</month>
-					<month type="9">сен</month>
-					<month type="10">окт</month>
-					<month type="11">ноя</month>
-					<month type="12">дек</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Вс</day>
+					<day type="mon">Пн</day>
+					<day type="tue">Вт</day>
+					<day type="wed">Ср</day>
+					<day type="thu">Чт</day>
+					<day type="fri">Пт</day>
+					<day type="sat">Сб</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">воскресенье</day>
 					<day type="mon">понедельник</day>
 					<day type="tue">вторник</day>
@@ -445,25 +444,6 @@
 					<day type="fri">пятница</day>
 					<day type="sat">суббота</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">Вс</day>
-					<day type="mon">Пн</day>
-					<day type="tue">Вт</day>
-					<day type="wed">Ср</day>
-					<day type="thu">Чт</day>
-					<day type="fri">Пт</day>
-					<day type="sat">Сб</day>
-				</dayAbbr>
-				<week>
-					<minDays count="1"/>
-					<firstDay day="mon"/>
-				</week>
-				<eras>
-					<eraAbbr>
-						<era type="1">до н.э.</era>
-						<era type="2">н.э.</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -532,29 +512,4 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
-ноль; один; два; три; четыре; пят; шест; семь; восемь; девят;
-10: десят; одиннадцать;
-двеннадцать; тринадцать; четырнадцать;
-15: пятнадцать; шестнадцать; семнадцать; восемнадцать; девятнадцать;
-20: двадцать[ &gt;&gt;];
-30: трлдцать[ &gt;&gt;];
-40: сорок[ &gt;&gt;];
-50: пятьдесят[ &gt;&gt;];
-60: шестьдесят[ &gt;&gt;];
-70: семьдесят[ &gt;&gt;];
-80: восемьдесят[ &gt;&gt;];
-90: девяносто[ &gt;&gt;];
-100: сто[ &gt;&gt;];
-200: &lt;&lt; сто[ &gt;&gt;];
-1000: тысяча[ &gt;&gt;];
-2000: &lt;&lt; тысяча[ &gt;&gt;];
-1,000,000: миллион[ &gt;&gt;];
-2,000,000: &lt;&lt; миллион[ &gt;&gt;];
-1,000,000,000: =#,##0=;
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>

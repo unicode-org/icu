@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="so" /> 
 	</identity>
 	<localeDisplayNames>
@@ -120,16 +115,25 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Kob</month>
+					<month type="2">Lab</month>
+					<month type="3">Sad</month>
+					<month type="4">Afr</month>
+					<month type="5">Sha</month>
+					<month type="6">Lix</month>
+					<month type="7">Tod</month>
+					<month type="8">Sid</month>
+					<month type="9">Sag</month>
+					<month type="10">Tob</month>
+					<month type="11">KIT</month>
+					<month type="12">LIT</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">Bisha Koobaad</month>
 					<month type="2">Bisha Labaad</month>
 					<month type="3">Bisha Saddexaad</month>
@@ -143,21 +147,16 @@
 					<month type="11">Bisha Kow iyo Tobnaad</month>
 					<month type="12">Bisha Laba iyo Tobnaad</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">Kob</month>
-					<month type="2">Lab</month>
-					<month type="3">Sad</month>
-					<month type="4">Afr</month>
-					<month type="5">Sha</month>
-					<month type="6">Lix</month>
-					<month type="7">Tod</month>
-					<month type="8">Sid</month>
-					<month type="9">Sag</month>
-					<month type="10">Tob</month>
-					<month type="11">KIT</month>
-					<month type="12">LIT</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Axa</day>
+					<day type="mon">Isn</day>
+					<day type="tue">Sal</day>
+					<day type="wed">Arb</day>
+					<day type="thu">Kha</day>
+					<day type="fri">Jim</day>
+					<day type="sat">Sab</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">Axad</day>
 					<day type="mon">Isniin</day>
 					<day type="tue">Salaaso</day>
@@ -166,27 +165,8 @@
 					<day type="fri">Jimco</day>
 					<day type="sat">Sabti</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">Axa</day>
-					<day type="mon">Isn</day>
-					<day type="tue">Sal</day>
-					<day type="wed">Arb</day>
-					<day type="thu">Kha</day>
-					<day type="fri">Jim</day>
-					<day type="sat">Sab</day>
-				</dayAbbr>
-				<week>
-					<minDays count="1"/>
-					<firstDay day="sat"/>
-				</week>
 				<am>sn</am>
 				<pm>gn</pm>
-				<eras>
-					<eraAbbr>
-						<era type="1">Ciise ka hor</era>
-						<era type="2">Ciise ka dib</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

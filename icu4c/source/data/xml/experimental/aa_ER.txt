@@ -12,20 +12,6 @@
 
 aa_ER {
     Version{ "x0.1" }
-    MonthNames {
-        "Qunxa Garablu",
-        "Kudo",
-        "Ciggilta Kudo",
-        "Agda Baxis",
-        "Caxah Alsa",
-        "Qasa Dirri",
-        "Qado Dirri",
-        "Liiqen",
-        "Waysu",
-        "Diteli",
-        "Ximoli",
-        "Kaxxa Garablu",
-    }
 
     // Measurement { "Metric" }
 //    NumberElements {
@@ -52,4 +38,26 @@ aa_ER {
     //    Width { "210" }
     //    Units { "mm" }
     // }
- }
+    calendar{
+        gregorian{
+            monthNames{
+                format{
+                    wide{
+                        "Qunxa Garablu",
+                        "Kudo",
+                        "Ciggilta Kudo",
+                        "Agda Baxis",
+                        "Caxah Alsa",
+                        "Qasa Dirri",
+                        "Qado Dirri",
+                        "Liiqen",
+                        "Waysu",
+                        "Diteli",
+                        "Ximoli",
+                        "Kaxxa Garablu",
+                    }
+                }
+            }
+        }
+    }
+}

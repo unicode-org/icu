@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="3.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="cs" /> 
 	</identity>
 	<localeDisplayNames>
@@ -294,7 +289,7 @@
 			<territory type="ML">Mali</territory>
 			<territory type="MM">Myanmar (Burma)</territory>
 			<territory type="MN">Mongolsko</territory>
-			<territory type="MO">Macao S.A.R. China</territory>
+			<territory type="MO">Macao S.A.R., China</territory>
 			<territory type="MP">Severní Mariany</territory>
 			<territory type="MQ">Martinik</territory>
 			<territory type="MR">Mauritánie</territory>
@@ -399,17 +394,26 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z ý á é í ó ú ě ů č ď ň ř š ť ž]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
-		<localizedPatternChars>GuMtkHmsSEDFwWahKzUe</localizedPatternChars>
+		<localizedPatternChars>GuMtkHmsSEDFwWahKzUeygAZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">I</month>
+					<month type="2">II</month>
+					<month type="3">III</month>
+					<month type="4">IV</month>
+					<month type="5">V</month>
+					<month type="6">VI</month>
+					<month type="7">VII</month>
+					<month type="8">VIII</month>
+					<month type="9">IX</month>
+					<month type="10">X</month>
+					<month type="11">XI</month>
+					<month type="12">XII</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">leden</month>
 					<month type="2">únor</month>
 					<month type="3">březen</month>
@@ -423,21 +427,16 @@
 					<month type="11">listopad</month>
 					<month type="12">prosinec</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">I</month>
-					<month type="2">II</month>
-					<month type="3">III</month>
-					<month type="4">IV</month>
-					<month type="5">V</month>
-					<month type="6">VI</month>
-					<month type="7">VII</month>
-					<month type="8">VIII</month>
-					<month type="9">IX</month>
-					<month type="10">X</month>
-					<month type="11">XI</month>
-					<month type="12">XII</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">ne</day>
+					<day type="mon">po</day>
+					<day type="tue">út</day>
+					<day type="wed">st</day>
+					<day type="thu">čt</day>
+					<day type="fri">pá</day>
+					<day type="sat">so</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">neděle</day>
 					<day type="mon">pondělí</day>
 					<day type="tue">úterý</day>
@@ -446,27 +445,8 @@
 					<day type="fri">pátek</day>
 					<day type="sat">sobota</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">ne</day>
-					<day type="mon">po</day>
-					<day type="tue">út</day>
-					<day type="wed">st</day>
-					<day type="thu">čt</day>
-					<day type="fri">pá</day>
-					<day type="sat">so</day>
-				</dayAbbr>
-				<week>
-					<minDays count="1"/>
-					<firstDay day="mon"/>
-				</week>
 				<am>dop.</am>
 				<pm>odp.</pm>
-				<eras>
-					<eraAbbr>
-						<era type="1">př.Kr.</era>
-						<era type="2">po Kr.</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

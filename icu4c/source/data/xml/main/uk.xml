@@ -1,157 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="uk" /> 
 	</identity>
 	<localeDisplayNames>
-		<languages>
-			<language type="aa">Афарська</language>
-			<language type="ab">Абхазька</language>
-			<language type="af">Африканс</language>
-			<language type="am">Амхарік</language>
-			<language type="ar">Арабська</language>
-			<language type="as">Ассамська</language>
-			<language type="ay">Аумара</language>
-			<language type="az">Азербайджанська</language>
-			<language type="ba">Башкирська</language>
-			<language type="be">Білоруська</language>
-			<language type="bg">Болгарська</language>
-			<language type="bh">Біхарійська</language>
-			<language type="bi">Бісламійська</language>
-			<language type="bn">Бенгальська</language>
-			<language type="bo">Тібетська</language>
-			<language type="br">Бретонська</language>
-			<language type="ca">Каталонська</language>
-			<language type="co">Корсиканська</language>
-			<language type="cs">Чеська</language>
-			<language type="cy">Валлійська</language>
-			<language type="da">Датська</language>
-			<language type="de">Німецька</language>
-			<language type="dz">Бхутані</language>
-			<language type="el">Грецька</language>
-			<language type="en">Англійська</language>
-			<language type="eo">Есперанто</language>
-			<language type="es">Іспанська</language>
-			<language type="et">Естонська</language>
-			<language type="eu">Басква</language>
-			<language type="fa">Перська</language>
-			<language type="fi">Фінська</language>
-			<language type="fj">Фіджі</language>
-			<language type="fo">Фарерська</language>
-			<language type="fr">Французька</language>
-			<language type="fy">Фризька</language>
-			<language type="ga">Ірландська</language>
-			<language type="gd">Гаельська</language>
-			<language type="gl">Галісійська</language>
-			<language type="gn">Гуарані</language>
-			<language type="gu">Гуяраті</language>
-			<language type="ha">Хауса</language>
-			<language type="he">Іврит</language>
-			<language type="hi">Хінді</language>
-			<language type="hr">Хорватська</language>
-			<language type="hu">Угорська</language>
-			<language type="hy">Вірменська</language>
-			<language type="ia">Інтерлінгва</language>
-			<language type="id">Індонезійська</language>
-			<language type="ie">Інтерлінгва</language>
-			<language type="ik">Інупіак</language>
-			<language type="is">Ісландська</language>
-			<language type="it">Італійська</language>
-			<language type="ja">Японська</language>
-			<language type="jv">Яванська</language>
-			<language type="ka">Грузинська</language>
-			<language type="kk">Казахська</language>
-			<language type="kl">Гринландік</language>
-			<language type="km">Кампучійська</language>
-			<language type="kn">Дравідійська</language>
-			<language type="ko">Корейська</language>
-			<language type="ks">Кашмірська</language>
-			<language type="ku">Курдська</language>
-			<language type="ky">Киргизька</language>
-			<language type="la">Латинська</language>
-			<language type="ln">Лінгала</language>
-			<language type="lo">Лаоська</language>
-			<language type="lt">Литовська</language>
-			<language type="lv">Латвійська</language>
-			<language type="mg">Малагасійська</language>
-			<language type="mi">Маорі</language>
-			<language type="mk">Македонська</language>
-			<language type="ml">Малайялам</language>
-			<language type="mn">Монгольська</language>
-			<language type="mo">Молдавська</language>
-			<language type="mr">Маратхі</language>
-			<language type="ms">Малайська</language>
-			<language type="mt">Мальтійська</language>
-			<language type="my">Бурмісійська</language>
-			<language type="na">Науру</language>
-			<language type="ne">Непальська</language>
-			<language type="nl">Голландська</language>
-			<language type="no">Норвезька</language>
-			<language type="oc">Окитан</language>
-			<language type="om">Оромо</language>
-			<language type="or">Орія</language>
-			<language type="pa">Панджабі</language>
-			<language type="pl">Польська</language>
-			<language type="ps">Пашто</language>
-			<language type="pt">Португальська</language>
-			<language type="qu">Кечуа</language>
-			<language type="rm">Ретороманська</language>
-			<language type="rn">Кірундійська</language>
-			<language type="ro">Румунська</language>
-			<language type="ru">Російська</language>
-			<language type="rw">Кінаруанда</language>
-			<language type="sa">Санскрит</language>
-			<language type="sd">Сіндтхі</language>
-			<language type="sg">Сангро</language>
-			<language type="sh">Сербсько-хорватська</language>
-			<language type="si">Сингальська</language>
-			<language type="sk">Словацька</language>
-			<language type="sl">Словенська</language>
-			<language type="sm">Самоанська</language>
-			<language type="sn">Шона</language>
-			<language type="so">Сомалі</language>
-			<language type="sq">Албанська</language>
-			<language type="sr">Сербська</language>
-			<language type="ss">Сісваті</language>
-			<language type="st">Сесотхо</language>
-			<language type="su">Суданська</language>
-			<language type="sv">Шведська</language>
-			<language type="sw">Суахілі</language>
-			<language type="ta">Тамільська</language>
-			<language type="te">Телугу</language>
-			<language type="tg">Таджицька</language>
-			<language type="th">Тайська</language>
-			<language type="ti">Тигріні</language>
-			<language type="tk">Туркменська</language>
-			<language type="tl">Тагальська</language>
-			<language type="tn">Сетсванська</language>
-			<language type="to">Тонга</language>
-			<language type="tr">Турецька</language>
-			<language type="ts">Тсонго</language>
-			<language type="tt">Татарська</language>
-			<language type="tw">Тві</language>
-			<language type="ug">Уйгурська</language>
-			<language type="uk">Українська</language>
-			<language type="ur">Урду</language>
-			<language type="uz">Узбецька</language>
-			<language type="vi">В'єтнамська</language>
-			<language type="vo">Волапак</language>
-			<language type="wo">Волоф</language>
-			<language type="xh">Кхоса</language>
-			<language type="yi">Ідиш</language>
-			<language type="yo">Йоруба</language>
-			<language type="za">Зуанг</language>
-			<language type="zh">Китайська</language>
-			<language type="zu">Зулуська</language>
-		</languages>
 		<territories>
 			<territory type="AD">Андорра</territory>
 			<territory type="AE">Сполучені Арабські Емірати</territory>
@@ -394,47 +249,19 @@
 			<territory type="ZW">Зімбабве</territory>
 		</territories>
 	</localeDisplayNames>
-	<characters>
-		<exemplarCharacters>[а-щюьяєіїґ]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Cyrl</icu:script>
-			</icu:scripts>
-		</special>
-	</characters>
 	<dates>
-		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
-					<month type="1">січня</month>
-					<month type="2">лютого</month>
-					<month type="3">березня</month>
-					<month type="4">квітня</month>
-					<month type="5">травня</month>
-					<month type="6">червня</month>
-					<month type="7">липня</month>
-					<month type="8">серпня</month>
-					<month type="9">вересня</month>
-					<month type="10">жовтня</month>
-					<month type="11">листопада</month>
-					<month type="12">грудня</month>
-				</monthNames>
-				<monthAbbr>
-					<month type="1">січ</month>
-					<month type="2">лют</month>
-					<month type="3">бер</month>
-					<month type="4">квіт</month>
-					<month type="5">трав</month>
-					<month type="6">черв</month>
-					<month type="7">лип</month>
-					<month type="8">серп</month>
-					<month type="9">вер</month>
-					<month type="10">жовт</month>
-					<month type="11">лист</month>
-					<month type="12">груд</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Нд</day>
+					<day type="mon">Пн</day>
+					<day type="tue">Вт</day>
+					<day type="wed">Ср</day>
+					<day type="thu">Чт</day>
+					<day type="fri">Пт</day>
+					<day type="sat">Сб</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">Неділя</day>
 					<day type="mon">Понеділок</day>
 					<day type="tue">Вівторок</day>
@@ -443,25 +270,6 @@
 					<day type="fri">П'ятниця</day>
 					<day type="sat">Субота</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">Нд</day>
-					<day type="mon">Пн</day>
-					<day type="tue">Вт</day>
-					<day type="wed">Ср</day>
-					<day type="thu">Чт</day>
-					<day type="fri">Пт</day>
-					<day type="sat">Сб</day>
-				</dayAbbr>
-				<week>
-					<minDays count="1"/>
-					<firstDay day="mon"/>
-				</week>
-				<eras>
-					<eraAbbr>
-						<era type="1">до н.е.</era>
-						<era type="2">н.е.</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -519,20 +327,6 @@
 		</calendars>
 	</dates>
 	<numbers>
-		<symbols>
-			<decimal>,</decimal>
-			<group> </group>
-			<list>;</list>
-			<percentSign>%</percentSign>
-			<nativeZeroDigit>0</nativeZeroDigit>
-			<patternDigit>#</patternDigit>
-			<plusSign>+</plusSign>
-			<minusSign>-</minusSign>
-			<exponential>E</exponential>
-			<perMille>‰</perMille>
-			<infinity>∞</infinity>
-			<nan>�</nan>
-		</symbols>
 		<currencies>
 			<currency type="UAH">
 				<displayName>UAH</displayName>
@@ -540,38 +334,4 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
-нуль; один; два; три; чотири; п'ять; шість; сім; вісім; дев'ять;
-10: десять; одинадцять;
-дванадцять; тринадцять; чотирнадцять;
-15: п'ятнадцять; шістнадцять; сімнадцять; вісімнадцять; дев'ятнадцять;
-20: двадцять[ &gt;&gt;];
-30: тридцять[ &gt;&gt;];
-40: сорок[ &gt;&gt;];
-50: п'ятдесят[ &gt;&gt;];
-60: шістдесят[ &gt;&gt;];
-70: сімдесят[ &gt;&gt;];
-80: вісімдесят[ &gt;&gt;];
-90: дев'яносто[ &gt;&gt;];
-100: сто[ &gt;&gt;];
-200: двісті[ &gt;&gt;];
-300: триста[ &gt;&gt;];
-400: чотириста[ &gt;&gt;];
-500: п'ятсот[ &gt;&gt;];
-600: шістсот[ &gt;&gt;];
-700: сімсот[ &gt;&gt;];
-800: вісімсот[ &gt;&gt;];
-900: дев'ятсот[ &gt;&gt;];
-1000: тисяча[ &gt;&gt;];
-2000: &lt;&lt; тисячі[ &gt;&gt;];
-5000: &lt;&lt; тисяч[ &gt;&gt;];
-1,000,000: мільйон[ &gt;&gt;];
-2,000,000: &lt;&lt; мільйони[ &gt;&gt;];
-5,000,000: &lt;&lt; мільйонів[ &gt;&gt;];
-1,000,000,000: &lt;&lt; мільярд[ &gt;&gt;];
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>

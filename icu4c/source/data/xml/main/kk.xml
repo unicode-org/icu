@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="1.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="kk" /> 
 	</identity>
 	<localeDisplayNames>
@@ -21,16 +16,25 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[а-яыэёіқңүұә]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Cyrl</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">қаң.</month>
+					<month type="2">ақп.</month>
+					<month type="3">нау.</month>
+					<month type="4">сәу.</month>
+					<month type="5">мам.</month>
+					<month type="6">мау.</month>
+					<month type="7">шіл.</month>
+					<month type="8">там.</month>
+					<month type="9">қыр.</month>
+					<month type="10">қаз.</month>
+					<month type="11">қар.</month>
+					<month type="12">желт.</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">қаңтар</month>
 					<month type="2">ақпан</month>
 					<month type="3">наурыз</month>
@@ -44,21 +48,16 @@
 					<month type="11">қараша</month>
 					<month type="12">желтоқсан</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">қаң.</month>
-					<month type="2">ақп.</month>
-					<month type="3">нау.</month>
-					<month type="4">сәу.</month>
-					<month type="5">мам.</month>
-					<month type="6">мау.</month>
-					<month type="7">шіл.</month>
-					<month type="8">там.</month>
-					<month type="9">қыр.</month>
-					<month type="10">қаз.</month>
-					<month type="11">қар.</month>
-					<month type="12">желт.</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">жс.</day>
+					<day type="mon">дс.</day>
+					<day type="tue">сс.</day>
+					<day type="wed">ср.</day>
+					<day type="thu">бс.</day>
+					<day type="fri">жм.</day>
+					<day type="sat">сһ.</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">жексені</day>
 					<day type="mon">дуйсенбі</day>
 					<day type="tue">сейсенбі</day>
@@ -67,19 +66,6 @@
 					<day type="fri">жұма</day>
 					<day type="sat">сенбі</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">жс.</day>
-					<day type="mon">дс.</day>
-					<day type="tue">сс.</day>
-					<day type="wed">ср.</day>
-					<day type="thu">бс.</day>
-					<day type="fri">жм.</day>
-					<day type="sat">сһ.</day>
-				</dayAbbr>
-				<week>
-					<minDays count="1"/>
-					<firstDay day="mon"/>
-				</week>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

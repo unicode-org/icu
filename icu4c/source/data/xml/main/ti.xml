@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="ti" /> 
 	</identity>
 	<localeDisplayNames>
@@ -291,16 +286,25 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[:Ethi:]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Ethi</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">ጃንዩ</month>
+					<month type="2">ፌብሩ</month>
+					<month type="3">ማርች</month>
+					<month type="4">ኤፕረ</month>
+					<month type="5">ሜይ</month>
+					<month type="6">ጁን</month>
+					<month type="7">ጁላይ</month>
+					<month type="8">ኦገስ</month>
+					<month type="9">ሴፕቴ</month>
+					<month type="10">ኦክተ</month>
+					<month type="11">ኖቬም</month>
+					<month type="12">ዲሴም</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">ጃንዩወሪ</month>
 					<month type="2">ፌብሩወሪ</month>
 					<month type="3">ማርች</month>
@@ -314,21 +318,16 @@
 					<month type="11">ኖቬምበር</month>
 					<month type="12">ዲሴምበር</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">ጃንዩ</month>
-					<month type="2">ፌብሩ</month>
-					<month type="3">ማርች</month>
-					<month type="4">ኤፕረ</month>
-					<month type="5">ሜይ</month>
-					<month type="6">ጁን</month>
-					<month type="7">ጁላይ</month>
-					<month type="8">ኦገስ</month>
-					<month type="9">ሴፕቴ</month>
-					<month type="10">ኦክተ</month>
-					<month type="11">ኖቬም</month>
-					<month type="12">ዲሴም</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">ሰንበ</day>
+					<day type="mon">ሰኑይ</day>
+					<day type="tue">ሠሉስ</day>
+					<day type="wed">ረቡዕ</day>
+					<day type="thu">ኃሙስ</day>
+					<day type="fri">ዓርቢ</day>
+					<day type="sat">ቀዳም</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">ሰንበት</day>
 					<day type="mon">ሰኑይ</day>
 					<day type="tue">ሠሉስ</day>
@@ -337,27 +336,8 @@
 					<day type="fri">ዓርቢ</day>
 					<day type="sat">ቀዳም</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">ሰንበ</day>
-					<day type="mon">ሰኑይ</day>
-					<day type="tue">ሠሉስ</day>
-					<day type="wed">ረቡዕ</day>
-					<day type="thu">ኃሙስ</day>
-					<day type="fri">ዓርቢ</day>
-					<day type="sat">ቀዳም</day>
-				</dayAbbr>
-				<week>
-					<minDays count="1"/>
-					<firstDay day="sat"/>
-				</week>
 				<am>ንጉሆ ሰዓተ</am>
 				<pm>ድሕር ሰዓት</pm>
-				<eras>
-					<eraAbbr>
-						<era type="1">ዓ/ዓ</era>
-						<era type="2">ዓ/ም</era>
-					</eraAbbr>
-				</eras>
 			</calendar>
 		</calendars>
 	</dates>

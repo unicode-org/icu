@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="lt" /> 
 	</identity>
 	<localeDisplayNames>
@@ -290,17 +285,26 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z ą ę į ų ė ū č š ž]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
-		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Sau</month>
+					<month type="2">Vas</month>
+					<month type="3">Kov</month>
+					<month type="4">Bal</month>
+					<month type="5">Geg</month>
+					<month type="6">Bir</month>
+					<month type="7">Lie</month>
+					<month type="8">Rgp</month>
+					<month type="9">Rgs</month>
+					<month type="10">Spa</month>
+					<month type="11">Lap</month>
+					<month type="12">Grd</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">Sausio</month>
 					<month type="2">Vasario</month>
 					<month type="3">Kovo</month>
@@ -314,21 +318,16 @@
 					<month type="11">Lapkričio</month>
 					<month type="12">Gruodžio</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">Sau</month>
-					<month type="2">Vas</month>
-					<month type="3">Kov</month>
-					<month type="4">Bal</month>
-					<month type="5">Geg</month>
-					<month type="6">Bir</month>
-					<month type="7">Lie</month>
-					<month type="8">Rgp</month>
-					<month type="9">Rgs</month>
-					<month type="10">Spa</month>
-					<month type="11">Lap</month>
-					<month type="12">Grd</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Sk</day>
+					<day type="mon">Pr</day>
+					<day type="tue">An</day>
+					<day type="wed">Tr</day>
+					<day type="thu">Kt</day>
+					<day type="fri">Pn</day>
+					<day type="sat">Št</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">Sekmadienis</day>
 					<day type="mon">Pirmadienis</day>
 					<day type="tue">Antradienis</day>
@@ -337,25 +336,6 @@
 					<day type="fri">Penktadienis</day>
 					<day type="sat">Šeštadienis</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">Sk</day>
-					<day type="mon">Pr</day>
-					<day type="tue">An</day>
-					<day type="wed">Tr</day>
-					<day type="thu">Kt</day>
-					<day type="fri">Pn</day>
-					<day type="sat">Št</day>
-				</dayAbbr>
-				<week>
-					<minDays count="4"/>
-					<firstDay day="mon"/>
-				</week>
-				<eras>
-					<eraAbbr>
-						<era type="1">pr.Kr.</era>
-						<era type="2">po.Kr.</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="zh" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
 			<language type="aa">阿法文</language>
 			<language type="ab">阿布哈西亚文</language>
+			<language type="ae">阿维斯塔文</language>
 			<language type="af">南非荷兰文</language>
+			<language type="ak">阿肯文</language>
 			<language type="am">阿姆哈拉文</language>
 			<language type="ar">阿拉伯文</language>
 			<language type="as">阿萨姆文</language>
+			<language type="av">阿瓦尔文</language>
 			<language type="ay">艾马拉文</language>
 			<language type="az">阿塞拜疆文</language>
 			<language type="ba">巴什客尔文</language>
@@ -26,16 +24,26 @@
 			<language type="bg">保加利亚文</language>
 			<language type="bh">比哈尔文</language>
 			<language type="bi">比斯拉马文</language>
+			<language type="bm">班巴拉文</language>
 			<language type="bn">孟加拉文</language>
 			<language type="bo">西藏文</language>
 			<language type="br">布里多尼文</language>
+			<language type="bs">波斯尼亚文</language>
+			<language type="byn">布林文</language>
 			<language type="ca">加泰罗尼亚文</language>
+			<language type="ce">车臣文</language>
+			<language type="ch">查莫罗文</language>
 			<language type="co">科西嘉文</language>
+			<language type="cr">克里族文</language>
 			<language type="cs">捷克文</language>
+			<language type="cu">宗教斯拉夫文</language>
+			<language type="cv">楚瓦什文</language>
 			<language type="cy">威尔士文</language>
 			<language type="da">丹麦文</language>
 			<language type="de">德文</language>
+			<language type="dv">迪维希文</language>
 			<language type="dz">不丹文</language>
+			<language type="ee">幽文</language>
 			<language type="el">希腊文</language>
 			<language type="en">英文</language>
 			<language type="eo">世界文</language>
@@ -43,6 +51,7 @@
 			<language type="et">爱沙尼亚文</language>
 			<language type="eu">巴斯克文</language>
 			<language type="fa">波斯文</language>
+			<language type="ff">夫拉文</language>
 			<language type="fi">芬兰文</language>
 			<language type="fj">斐济文</language>
 			<language type="fo">法罗文</language>
@@ -50,6 +59,7 @@
 			<language type="fy">弗里斯兰文</language>
 			<language type="ga">爱尔兰文</language>
 			<language type="gd">苏格兰- 盖尔文</language>
+			<language type="gez">吉兹文</language>
 			<language type="gl">加利西亚文</language>
 			<language type="gn">瓜拉尼文</language>
 			<language type="gu">古加拉提文</language>
@@ -58,34 +68,49 @@
 			<language type="haw">夏威夷文</language>
 			<language type="he">希伯来文</language>
 			<language type="hi">印地文</language>
+			<language type="ho">新里木托文</language>
 			<language type="hr">克罗地亚文</language>
 			<language type="hu">匈牙利文</language>
 			<language type="hy">亚美尼亚文</language>
+			<language type="hz">赫雷罗文</language>
 			<language type="ia">拉丁国际文</language>
 			<language type="id">印度尼西亚文</language>
 			<language type="ie">拉丁国际文</language>
+			<language type="ig">伊格博文</language>
+			<language type="ii">四川话</language>
 			<language type="ik">依奴皮维克文</language>
+			<language type="io">爱德莪文（人工语言）</language>
 			<language type="is">冰岛文</language>
 			<language type="it">意大利文</language>
 			<language type="iu">爱斯基摩文</language>
 			<language type="ja">日文</language>
 			<language type="jv">爪哇文</language>
 			<language type="ka">格鲁吉亚文</language>
+			<language type="kg">刚果文</language>
+			<language type="ki">吉库尤文</language>
+			<language type="kj">关琊玛文</language>
 			<language type="kk">哈萨克文</language>
 			<language type="kl">格陵兰文</language>
 			<language type="km">柬埔寨文</language>
 			<language type="kn">埃纳德文</language>
 			<language type="ko">韩文</language>
+			<language type="kr">卡努里文</language>
 			<language type="ks">克什米尔文</language>
 			<language type="ku">库尔德文</language>
+			<language type="kv">科米文</language>
 			<language type="kw">凯尔特文</language>
 			<language type="ky">吉尔吉斯文</language>
 			<language type="la">拉丁文</language>
+			<language type="lb">卢森堡文</language>
+			<language type="lg">卢干达文</language>
+			<language type="li">淋布尔吉文</language>
 			<language type="ln">林加拉文</language>
 			<language type="lo">老挝文</language>
 			<language type="lt">立陶宛文</language>
+			<language type="lu">鲁巴加丹加文</language>
 			<language type="lv">拉脫維亞文</language>
 			<language type="mg">马尔加什文</language>
+			<language type="mh">马绍尔文</language>
 			<language type="mi">毛利文</language>
 			<language type="mk">马其顿文</language>
 			<language type="ml">马来亚拉姆文</language>
@@ -97,14 +122,22 @@
 			<language type="my">缅甸文</language>
 			<language type="na">瑙鲁文</language>
 			<language type="nb">挪威博克马尔文</language>
+			<language type="nd">北恩德贝勒文</language>
 			<language type="ne">尼泊尔文</language>
+			<language type="ng">恩东加文</language>
 			<language type="nl">荷兰文</language>
 			<language type="nn">挪威尼诺斯克文</language>
 			<language type="no">挪威文</language>
+			<language type="nr">南部恩德贝勒文</language>
+			<language type="nv">纳瓦霍文</language>
+			<language type="ny">尼昂加文；切瓦文；切瓦文</language>
 			<language type="oc">奥西坦文</language>
+			<language type="oj">奥季布瓦文</language>
 			<language type="om">阿曼文</language>
 			<language type="or">欧里亚文</language>
+			<language type="os">奥塞提文</language>
 			<language type="pa">旁遮普文</language>
+			<language type="pi">帕利文</language>
 			<language type="pl">波兰文</language>
 			<language type="ps">普什图文</language>
 			<language type="pt">葡萄牙文</language>
@@ -115,10 +148,13 @@
 			<language type="ru">俄文</language>
 			<language type="rw">卢旺达文</language>
 			<language type="sa">梵文</language>
+			<language type="sc">萨丁文</language>
 			<language type="sd">苏丹文</language>
+			<language type="se">北萨迷文</language>
 			<language type="sg">桑戈文</language>
 			<language type="sh">塞波尼斯-克罗地亚文</language>
 			<language type="si">僧伽罗文</language>
+			<language type="sid">悉达摩文</language>
 			<language type="sk">斯洛伐克文</language>
 			<language type="sl">斯洛文尼亚文</language>
 			<language type="sm">萨摩亚文</language>
@@ -131,11 +167,13 @@
 			<language type="su">苏丹文</language>
 			<language type="sv">瑞典文</language>
 			<language type="sw">斯瓦希里文</language>
+			<language type="syr">叙利亚文</language>
 			<language type="ta">泰米尔文</language>
 			<language type="te">泰卢固文</language>
 			<language type="tg">塔吉克文</language>
 			<language type="th">泰文</language>
 			<language type="ti">提格里尼亚文</language>
+			<language type="tig">提格雷文</language>
 			<language type="tk">土库曼文</language>
 			<language type="tl">塔加路族文</language>
 			<language type="tn">突尼斯文</language>
@@ -144,12 +182,15 @@
 			<language type="ts">特松加文</language>
 			<language type="tt">鞑靼文</language>
 			<language type="tw">台湾文</language>
+			<language type="ty">塔西提文</language>
 			<language type="ug">维吾尔文</language>
 			<language type="uk">乌克兰文</language>
 			<language type="ur">乌尔都文</language>
 			<language type="uz">乌兹别克文</language>
+			<language type="ve">文达文</language>
 			<language type="vi">越南文</language>
 			<language type="vo">沃拉普克文</language>
+			<language type="wa">華隆文</language>
 			<language type="wo">沃尔夫文</language>
 			<language type="xh">班图文</language>
 			<language type="yi">依地文</language>
@@ -158,6 +199,61 @@
 			<language type="zh">中文</language>
 			<language type="zu">祖鲁文</language>
 		</languages>
+		<scripts>
+			<script type="Arab">阿拉伯语</script>
+			<script type="Armn">亚美尼亚语</script>
+			<script type="Beng">孟加拉语</script>
+			<script type="Bopo">汉语拼音</script>
+			<script type="Brai">布拉耶语</script>
+			<script type="Buhd">布希德语</script>
+			<script type="Cans">加拿大土著统一符号语</script>
+			<script type="Cher">切罗基语</script>
+			<script type="Cprt">塞浦路斯语</script>
+			<script type="Cyrl">西里尔语</script>
+			<script type="Deva">梵文</script>
+			<script type="Dsrt">戴泽雷特语</script>
+			<script type="Ethi">埃塞俄比亚语</script>
+			<script type="Geor">乔治亚语</script>
+			<script type="Goth">哥特语</script>
+			<script type="Grek">希腊语</script>
+			<script type="Gujr">古吉拉特语</script>
+			<script type="Guru">果鲁穆奇语</script>
+			<script type="Hang">韩语</script>
+			<script type="Hani">汉语</script>
+			<script type="Hano">汉奴罗语</script>
+			<script type="Hans">简体汉语</script>
+			<script type="Hant">繁体汉语</script>
+			<script type="Hebr">希伯来语</script>
+			<script type="Hira">平假名</script>
+			<script type="Ital">古意大利语</script>
+			<script type="Kana">片假名</script>
+			<script type="Khmr">高棉语</script>
+			<script type="Knda">卡纳塔克语</script>
+			<script type="Laoo">老挝语</script>
+			<script type="Latn">拉丁语</script>
+			<script type="Limb">林布语</script>
+			<script type="Mlym">马拉亚拉姆语</script>
+			<script type="Mong">蒙古语</script>
+			<script type="Mymr">缅甸</script>
+			<script type="Ogam">欧甘语</script>
+			<script type="Orya">奥里亚语</script>
+			<script type="Osma">奥斯曼亚语</script>
+			<script type="Qaac">克普特语</script>
+			<script type="Runr">北欧语</script>
+			<script type="Shaw">萧伯纳式语</script>
+			<script type="Sinh">辛哈拉语</script>
+			<script type="Syrc">叙利亚语</script>
+			<script type="Tagb">塔格班瓦语</script>
+			<script type="Tale">泰乐语</script>
+			<script type="Taml">泰米尔语</script>
+			<script type="Telu">泰卢固语</script>
+			<script type="Tglg">塔加路语</script>
+			<script type="Thaa">塔安娜语</script>
+			<script type="Thai">泰语</script>
+			<script type="Tibt">藏语</script>
+			<script type="Ugar">乌加里特语</script>
+			<script type="Yiii">彝语</script>
+		</scripts>
 		<territories>
 			<territory type="AD">安道尔</territory>
 			<territory type="AE">阿拉伯联合酋长国</territory>
@@ -403,8 +499,21 @@
 		<variants>
 			<variant type="REVISED">已修订</variant>
 		</variants>
+		<keys>
+			<key type="calendar">日历</key>
+			<key type="collation">对照</key>
+			<key type="currency">货币</key>
+		</keys>
 		<types>
-			<type type="traditional" key="calendar">传统历法</type>
+			<type type="buddhist" key="calendar">佛教日历</type>
+			<type type="chinese" key="calendar">农历</type>
+			<type type="gregorian" key="calendar">公历</type>
+			<type type="hebrew" key="calendar">希伯来日历</type>
+			<type type="islamic" key="calendar">伊斯兰日历</type>
+			<type type="islamic-civil" key="calendar">伊斯兰希吉来历</type>
+			<type type="japanese" key="calendar">日本日历</type>
+			<type type="direct" key="collation">顺序</type>
+			<type type="phonebook" key="collation">电话簿顺序</type>
 			<type type="pinyin" key="collation">拼音顺序</type>
 			<type type="stroke" key="collation">笔划顺序</type>
 			<type type="traditional" key="collation">传统历法</type>
@@ -412,17 +521,12 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[一-丁七丈-不专-且世丙-业东-丝丢两-严丧个中串临丸-主丽-举乃久么-义之-乌乎-乐乔乖乘-乙九也-乡书买-乱乾了予-争事-二于-亏云-互五-井亚-些亡交亦亨享-京亮亲人亿-仁仅仇今-介仍-从仔他付-仙代-以仪们仰仲件任份仿企伊伍伏休众伙-会伟-传伤伦伯-估伴伸似但位-住佑体何余佛-作你佩佳使例供依侠侦-侨侬侯侵便促俊俗保信俩修俱倍倒候-倚借倦值倾假偏做停健偶-偷储催傲傻像儒允元-充先-光克免兔入全八-兮兰-共关-典养-兽再冒写军-农冠冬冰冲冷准凌凝凡凤凭凯-凰出-击函刀分-切刊刑列-创初判利到制-刷刺-刻剂前剑剧剩-剪副割力劝-务劣动-劫励-劳势勇勉勒勤勾-勿包-匆化-北匙区-医十千升-午半华-协卒单-南博占-卡卫印-危即卷厅-历厉压-厌厚原去县参又-反发叔取-变口-另叫-叭可-台史-右叶-叹吃-各合-吊同-后吐-向吓吗君吝吟否-吧含吵吸-吹吻吾呀呆呈告员呜呢呦周味呵呼-命和咖咦-咧咪咬咱哀-品哇-哉响-哎哟哥-哦哩-哪哭哲唉唐唤唬售-唯唱唷商啊啡啥-啦啪喂善喇喊喔喜-喝喵喷喻嗨嗯嘉嘛嘴嘻嘿器四回因团园困围固国-图圆圈土在地场圾址均坐-坑块坚-坜坡坤坦坪垂-垃型垒埋城域培-基堂堆堕堡堪塑塔塞填境增墨壁士壮声处备夏夕-外多夜夥大天-夫央失头夹-夺奇-奉奋奏契奔套女奶她好如妇-妈妖妙妥妨妮妹妻姆姊-始姐-姑姓-委姿威娃娘娟婆婚媒嫁嫌子孔-孕字-孙孝孟季-孤学孩它宇-安宋-完宏宗-定宜-实审-室宪害家容宽-宿寂寄密富寒寝-察寡寸-对寻-导寿封射将尊小少尔尖尘尚尝尤就尺尼-尾局-层居屋屏展属屠山岁-岂岚-岛岳岸峰崇川-州巡工-巨巫差己-已巴巷币-布帅师希帐帝带席-帮常帽幅幕干-年幸幻-幽广庆床序库-底店庙府废度-座庭康-庸廉廖延-廷建开弃-弄弊式引弘弟-张弥-弦弯弱弹归-当形彩彬-彭彰-影彷役彻-彼往-征径-待很律-後徐徒得循微徵德心必-忆忌-忍志-忙忠忧快念忽态怎怒怕-怖思怡急性-怨怪总恋恐恢恨-恩恭息-恰恶恼悄悉悔悟-悠患您悲情惑惜惠惧-惨惯想惹愁愈-愉意愚感愧慈慎慕慢慧慰憾懂懒戏-戒或战截戴房-扁扇手才打托扣执扩扫-扯批找-技抄把抑抓投抗-折抢护-报披-抬抱抵抹抽担-拆拉拍拒拔拖拘招-拜拟拥-拦拨-择括拳拷拼拾-拿持指按挑挖挡挤-挥振挺捉捐捕损捡-换捷授-掉掌排探接控-措描-提插握援搜搞搬-搭摄摆摊摔摘摩摸撒撞播操-擎擦支收改攻放-政故效敌敏救教敝敢-散敦敬数敲整文斋斗料斜斥断斯-新方於-施旁旅旋族旗无既日-早旭时旺昆昌明-昏易星-映春昨昭是显晃晋晓晚晨普-景晴晶智暂暑暖-暗暮暴曰曲更曹曼曾-最月-有朋服朗望朝期木未-札术朱朵杀杂-权杉李材-村杜束条来杨杯-杰松-板析林果-枝枢枪-枫架柏-某染-柔查柯柳-柴标栋栏树校样-根格桃框案桌桑档桥梁梅梦梯-械检棋棒棚森椅植椰楚楼概榜模樱欠-欣欧欲欺款歉歌止-武歪死殊-残段毅母每毒比-毕毛毫氏民氛水永求汉汗汝江-污汤汪汽沈-沉沙沟沧河油治沿泉-泊法泛泡-泣泥注泰泳泽洋洗洛洞津洪洲活洽-派流浅测济浑浓浩-浪浮浴海消-涉涛涨涯液涵淑淡深混添清渐渡港渴游湖湾源溜溪滋滑满滥滴漂漏演漠漫潘潜潮澎激灌火灭灯-灰灵灿炉炎炮炸-点烂烈烤烦-烧热焦然煌煞照煮熊熟燃燕爆爬爱爵-爸爽片-版牌牙牛牡-牢牧物牲牵特-牺犯状犹狂狐狗狠独狮狱狼猛-猜献玄率玉王玛玩玫环-现玲玻珊珍珠班球理琪琳-琴瑜瑞瑰璃瓜瓦瓶甘甚甜生用田-申电男画畅界留略番疏疑疗疯疲疼疾病痕痛痴登白-百的皆-皇皮盈益监-盒盖盘盛盟目直相盼盾省眉看真-眠眼睛睡督瞧矛矣知短石码-砂砍研破础硕硬碍-碎碗碟碧碰磁磨示礼社祖祝-神祥票祸禁禅福秀-私秋科-秒秘租秤秦秩积-称移稀程稍稣稳稿究-穷穹-空穿突窗窝立站竞-章童端竹笑笔笛符笨第等筋答策筹签简算管箭箱篇篮籍米类粉粒粗精糊糕-糖糟系素索紧紫累繁红约-级纪纯纲-纳纵纷-纸纽练-组细-终绍经结绕绘-给络统继绩-绪续维-绵综缓编缘缠缩缴缸缺罐罗罚罢罪置署羊美羞群羯羽翁翅翔翘翠翻-翼耀-老考者而-耍耐耗耳耶聊职联聚聪肉肚股肤-肥肩肯育胁胆背胎胖胞胡胶胸能脆脑脸腐腰腹腾-腿臂臣自臭至-致舍舒舞-舟航般舰船良色艺艾节芒芬-芭花芳苍苏苗若-苦英茂茫茶草荒荣药荷莉莎莫莱-莲获菜菩菲萍萤-营萧-萨落著葛蒋蒙蓉蓝蔡薄薪藉藏藤虎虑虫虹虽-虾蚁蛇蛋蛙蛮蜂蜜蝶融蟹蠢血行街衡衣补表袋被袭裁-裂装裕裤西要覆见-观规视览-觉角解言誉誓警计-订认讨-让训-记讲许论设-访证评识诉词译试诗诚话-诞询该-详语误说请-诸诺-读课谁调谅谈谊-谋谓谜谢谨谱谷豆象豪貌贝-负贡-败货-贪购贯贱贴-贵费-贺贼资赋-赌赏-赐赔赖赚-赛赞赠赢赤走赵起趁超越-趋趣足跃跌跑距跟路跳踏踢踩身躲车轨-轩转轮-轰轻载较辅-辆辈-辉辑输辛辞辨-辩辱边达迁迅过-迈迎运-近返还-这进-迟迪-迫述迷追退-送逃逆选-逊透-逐递途通-逛逝速-造逢逸逻-逼遇遍道遗遭遵避-邀邓那邦邪邮邱邻郎郑部郭都配酒酷-酸醉醒采释里-量金针钓钟钢钦钱钻铁铃铭银销-锁锅锋错锦键锺镇镜长门闪闭-问间闷闹闻阁阐阔队阮防-阶阻阿-陀附-陆陈降限院除险-陪陵-陷隆随-隐隔障难雄-集雨雪雯雳零-雷雾需震霖露霸-霹青靖静非靠面革鞋韩音页-顶项-须顽-顿预领-颇频颗-题额风飘-飙飞-食餐饭-饮饰-饱饼馆首香馨马驱驶驻驾验骑骗骚骤骨高鬼魂魅魔鱼鲁鲜鸟鸣鸭鸿鹅鹤鹰鹿麦麻黎黑默鼓鼠鼻齐齿龄龙龟]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Hani</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
-		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
 					<month type="1">一月</month>
 					<month type="2">二月</month>
 					<month type="3">三月</month>
@@ -436,7 +540,21 @@
 					<month type="11">十一月</month>
 					<month type="12">十二月</month>
 				</monthNames>
-				<monthAbbr>
+				<monthNames context="format" width="narrow">
+					<month type="1">1月</month>
+					<month type="2">2月</month>
+					<month type="3">3月</month>
+					<month type="4">4月</month>
+					<month type="5">5月</month>
+					<month type="6">6月</month>
+					<month type="7">7月</month>
+					<month type="8">8月</month>
+					<month type="9">9月</month>
+					<month type="10">10月</month>
+					<month type="11">11月</month>
+					<month type="12">12月</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">一月</month>
 					<month type="2">二月</month>
 					<month type="3">三月</month>
@@ -449,8 +567,26 @@
 					<month type="10">十月</month>
 					<month type="11">十一月</month>
 					<month type="12">十二月</month>
-				</monthAbbr>
-				<dayNames>
+				</monthNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">日</day>
+					<day type="mon">一</day>
+					<day type="tue">二</day>
+					<day type="wed">三</day>
+					<day type="thu">四</day>
+					<day type="fri">五</day>
+					<day type="sat">六</day>
+				</dayNames>
+				<dayNames context="format" width="narrow" >
+					<day type="sun">日</day>
+					<day type="mon">一</day>
+					<day type="tue">二</day>
+					<day type="wed">三</day>
+					<day type="thu">四</day>
+					<day type="fri">五</day>
+					<day type="sat">六</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">星期日</day>
 					<day type="mon">星期一</day>
 					<day type="tue">星期二</day>
@@ -459,55 +595,1480 @@
 					<day type="fri">星期五</day>
 					<day type="sat">星期六</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">日</day>
-					<day type="mon">一</day>
-					<day type="tue">二</day>
-					<day type="wed">三</day>
-					<day type="thu">四</day>
-					<day type="fri">五</day>
-					<day type="sat">六</day>
-				</dayAbbr>
 				<am>上午</am>
 				<pm>下午</pm>
-				<eras>
-					<eraAbbr>
-						<era type="1">公元前</era>
-						<era type="2">公元</era>
-					</eraAbbr>
-				</eras>
 			</calendar>
 		</calendars>
 	</dates>
 	<numbers>
 		<currencies>
+			<currency type="ADD">
+				<displayName>安道尔第纳尔元</displayName>
+				<symbol>ADD</symbol>
+			</currency>
+			<currency type="ADP">
+				<displayName>安道尔比塞塔元</displayName>
+				<symbol>ADP</symbol>
+			</currency>
+			<currency type="AED">
+				<displayName>阿联酋迪拉姆</displayName>
+				<symbol>AED</symbol>
+			</currency>
+			<currency type="AFA">
+				<displayName>阿富汗尼 (1927-2002)</displayName>
+				<symbol>AFA</symbol>
+			</currency>
+			<currency type="AFN">
+				<displayName>阿富汗尼</displayName>
+				<symbol>Af</symbol>
+			</currency>
+			<currency type="AIF">
+				<displayName>阿发和伊萨法郎</displayName>
+				<symbol>AIF</symbol>
+			</currency>
+			<currency type="ALK">
+				<displayName>阿尔巴尼亚列克 (1946-1961)</displayName>
+				<symbol>ALK</symbol>
+			</currency>
+			<currency type="ALL">
+				<displayName>阿尔巴尼亚列克</displayName>
+				<symbol>lek</symbol>
+			</currency>
+			<currency type="ALV">
+				<displayName>阿尔巴尼亚列克币</displayName>
+				<symbol>ALV</symbol>
+			</currency>
+			<currency type="ALX">
+				<displayName>阿尔巴尼亚元外汇券</displayName>
+				<symbol>ALX</symbol>
+			</currency>
+			<currency type="AMD">
+				<displayName>亚美尼亚德拉姆</displayName>
+				<symbol>dram</symbol>
+			</currency>
+			<currency type="ANG">
+				<displayName>荷兰安替兰盾</displayName>
+				<symbol>NA f.</symbol>
+			</currency>
+			<currency type="AOA">
+				<displayName>安戈拉宽扎</displayName>
+				<symbol>AOA</symbol>
+			</currency>
+			<currency type="AOK">
+				<displayName>安戈拉宽扎 (1977-1990)</displayName>
+				<symbol>AOK</symbol>
+			</currency>
+			<currency type="AON">
+				<displayName>安戈拉新宽扎 (1990-2000)</displayName>
+				<symbol>AON</symbol>
+			</currency>
+			<currency type="AOR">
+				<displayName>安戈拉宽扎 Reajustado (1995-1999)</displayName>
+				<symbol>AOR</symbol>
+			</currency>
+			<currency type="AOS">
+				<displayName>安哥拉埃斯库多</displayName>
+				<symbol>AOS</symbol>
+			</currency>
+			<currency type="ARA">
+				<displayName>阿根廷奥斯特</displayName>
+				<symbol>ARA</symbol>
+			</currency>
+			<currency type="ARM">
+				<displayName>阿根廷比索标准局</displayName>
+				<symbol>ARM</symbol>
+			</currency>
+			<currency type="ARP">
+				<displayName>阿根廷比索 (1983-1985)</displayName>
+				<symbol>ARP</symbol>
+			</currency>
+			<currency type="ARS">
+				<displayName>阿根廷比索</displayName>
+				<symbol>Arg$</symbol>
+			</currency>
+			<currency type="ATS">
+				<displayName>奥地利西令</displayName>
+				<symbol>ATS</symbol>
+			</currency>
+			<currency type="AUD">
+				<displayName>澳大利亚元</displayName>
+				<symbol>$A</symbol>
+			</currency>
+			<currency type="AUP">
+				<displayName>澳大利亚磅</displayName>
+				<symbol>AUP</symbol>
+			</currency>
+			<currency type="AWG">
+				<displayName>阿鲁巴基尔德元</displayName>
+				<symbol>AWG</symbol>
+			</currency>
+			<currency type="BAD">
+				<displayName>波士尼亚-赫塞哥维纳第纳尔元</displayName>
+				<symbol>BAD</symbol>
+			</currency>
+			<currency type="BAM">
+				<displayName>波士尼亚-赫塞哥维纳兑换券</displayName>
+				<symbol>KM</symbol>
+			</currency>
+			<currency type="BAN">
+				<displayName>波士尼亚-赫塞哥维纳新第纳尔元</displayName>
+				<symbol>BAN</symbol>
+			</currency>
+			<currency type="BBD">
+				<displayName>巴巴多斯元</displayName>
+				<symbol>BDS$</symbol>
+			</currency>
+			<currency type="BDT">
+				<displayName>孟加拉达卡</displayName>
+				<symbol>Tk</symbol>
+			</currency>
+			<currency type="BEC">
+				<displayName>比利时法郎兑换券</displayName>
+				<symbol>BEC</symbol>
+			</currency>
+			<currency type="BEF">
+				<displayName>比利时法郎</displayName>
+				<symbol>BF</symbol>
+			</currency>
+			<currency type="BEL">
+				<displayName>比利时法郎（金融）</displayName>
+				<symbol>BEL</symbol>
+			</currency>
+			<currency type="BGL">
+				<displayName>保加利亚硬列克</displayName>
+				<symbol>lev</symbol>
+			</currency>
+			<currency type="BGM">
+				<displayName>保加利亚社会主义列克</displayName>
+				<symbol>BGM</symbol>
+			</currency>
+			<currency type="BGN">
+				<displayName>保加利亚新列克</displayName>
+				<symbol>BGN</symbol>
+			</currency>
+			<currency type="BGO">
+				<displayName>保加利亚列克 (1879-1952)</displayName>
+				<symbol>BGO</symbol>
+			</currency>
+			<currency type="BGX">
+				<displayName>保加利亚列克外汇券</displayName>
+				<symbol>BGX</symbol>
+			</currency>
+			<currency type="BHD">
+				<displayName>巴林第纳尔元</displayName>
+				<symbol>BD</symbol>
+			</currency>
+			<currency type="BIF">
+				<displayName>布隆迪法郎</displayName>
+				<symbol>Fbu</symbol>
+			</currency>
+			<currency type="BMD">
+				<displayName>百慕大元</displayName>
+				<symbol>Ber$</symbol>
+			</currency>
+			<currency type="BMP">
+				<displayName>百慕大磅</displayName>
+				<symbol>BMP</symbol>
+			</currency>
+			<currency type="BND">
+				<displayName>汶莱元</displayName>
+				<symbol>BND</symbol>
+			</currency>
+			<currency type="BOB">
+				<displayName>玻利维亚</displayName>
+				<symbol>Bs</symbol>
+			</currency>
+			<currency type="BOL">
+				<displayName>玻利维亚 (1863-1962)</displayName>
+				<symbol>BOL</symbol>
+			</currency>
+			<currency type="BOP">
+				<displayName>玻利维亚比索</displayName>
+				<symbol>BOP</symbol>
+			</currency>
+			<currency type="BRB">
+				<displayName>巴西克鲁赛罗 (1967-1986)</displayName>
+				<symbol>BRB</symbol>
+			</currency>
+			<currency type="BRC">
+				<displayName>巴西克鲁塞罗</displayName>
+				<symbol>BRC</symbol>
+			</currency>
+			<currency type="BRE">
+				<displayName>巴西克鲁塞罗 (1990-1993)</displayName>
+				<symbol>BRE</symbol>
+			</currency>
+			<currency type="BRL">
+				<displayName>巴西里尔</displayName>
+				<symbol>R$</symbol>
+			</currency>
+			<currency type="BRN">
+				<displayName>巴西克鲁塞罗 Cruzado Novo</displayName>
+				<symbol>BRN</symbol>
+			</currency>
+			<currency type="BRR">
+				<displayName>巴西克鲁塞罗</displayName>
+				<symbol>BRR</symbol>
+			</currency>
+			<currency type="BRZ">
+				<displayName>巴西克鲁塞罗 (1942-1967)</displayName>
+				<symbol>BRZ</symbol>
+			</currency>
+			<currency type="BSD">
+				<displayName>巴哈马元</displayName>
+				<symbol>BSD</symbol>
+			</currency>
+			<currency type="BSP">
+				<displayName>巴哈马磅</displayName>
+				<symbol>BSP</symbol>
+			</currency>
+			<currency type="BTN">
+				<displayName>不丹努扎姆</displayName>
+				<symbol>Nu</symbol>
+			</currency>
+			<currency type="BTR">
+				<displayName>不丹卢比</displayName>
+				<symbol>BTR</symbol>
+			</currency>
+			<currency type="BUK">
+				<displayName>缅元</displayName>
+				<symbol>BUK</symbol>
+			</currency>
+			<currency type="BUR">
+				<displayName>缅甸卢比</displayName>
+				<symbol>BUR</symbol>
+			</currency>
+			<currency type="BWP">
+				<displayName>波渣那扑拉</displayName>
+				<symbol>BWP</symbol>
+			</currency>
+			<currency type="BYB">
+				<displayName>白俄罗斯新卢布 (1994-1999)</displayName>
+				<symbol>BYB</symbol>
+			</currency>
+			<currency type="BYL">
+				<displayName>白俄罗斯卢布 (1992-1994)</displayName>
+				<symbol>BYL</symbol>
+			</currency>
+			<currency type="BYR">
+				<displayName>白俄罗斯卢布</displayName>
+				<symbol>Rbl</symbol>
+			</currency>
+			<currency type="BZD">
+				<displayName>伯利兹元</displayName>
+				<symbol>BZ$</symbol>
+			</currency>
+			<currency type="BZH">
+				<displayName>属洪都拉斯元</displayName>
+				<symbol>BZH</symbol>
+			</currency>
+			<currency type="CAD">
+				<displayName>加拿大元</displayName>
+				<symbol>Can$</symbol>
+			</currency>
+			<currency type="CDF">
+				<displayName>刚果法郎</displayName>
+				<symbol>CDF</symbol>
+			</currency>
+			<currency type="CDG">
+				<displayName>刚果共和国法郎</displayName>
+				<symbol>CDG</symbol>
+			</currency>
+			<currency type="CDL">
+				<displayName>刚果扎伊尔</displayName>
+				<symbol>CDL</symbol>
+			</currency>
+			<currency type="CFF">
+				<displayName>中非共和国 CFA 法郎</displayName>
+				<symbol>CFF</symbol>
+			</currency>
+			<currency type="CHF">
+				<displayName>瑞士法郎</displayName>
+				<symbol>SwF</symbol>
+			</currency>
+			<currency type="CKD">
+				<displayName>库克群岛元</displayName>
+				<symbol>CKD</symbol>
+			</currency>
+			<currency type="CLC">
+				<displayName>智利肯杜</displayName>
+				<symbol>CLC</symbol>
+			</currency>
+			<currency type="CLE">
+				<displayName>智利埃斯库多</displayName>
+				<symbol>CLE</symbol>
+			</currency>
+			<currency type="CLF">
+				<displayName>智利 Unidades de Fomento</displayName>
+				<symbol>CLF</symbol>
+			</currency>
+			<currency type="CLP">
+				<displayName>智利 比索</displayName>
+				<symbol>Ch$</symbol>
+			</currency>
+			<currency type="CMF">
+				<displayName>喀麦隆 CFA 法郎</displayName>
+				<symbol>CMF</symbol>
+			</currency>
+			<currency type="CNP">
+				<displayName>中国人民票元</displayName>
+				<symbol>CNP</symbol>
+			</currency>
+			<currency type="CNX">
+				<displayName>中国美元外汇券</displayName>
+				<symbol>CNX</symbol>
+			</currency>
 			<currency type="CNY">
-				<displayName>CNY</displayName>
+				<displayName>人民币</displayName>
 				<symbol>￥</symbol>
 			</currency>
+			<currency type="COB">
+				<displayName>哥伦比亚纸比索</displayName>
+				<symbol>COB</symbol>
+			</currency>
+			<currency type="COF">
+				<displayName>刚果 CFA 法郎</displayName>
+				<symbol>COF</symbol>
+			</currency>
+			<currency type="COP">
+				<displayName>哥伦比亚比索</displayName>
+				<symbol>Col$</symbol>
+			</currency>
+			<currency type="CRC">
+				<displayName>哥斯达黎加科隆</displayName>
+				<symbol>C</symbol>
+			</currency>
+			<currency type="CSC">
+				<displayName>捷克克郎</displayName>
+				<symbol>CSC</symbol>
+			</currency>
+			<currency type="CSK">
+				<displayName>捷克硬克郎</displayName>
+				<symbol>CSK</symbol>
+			</currency>
+			<currency type="CUP">
+				<displayName>古巴比索</displayName>
+				<symbol>CUP</symbol>
+			</currency>
+			<currency type="CUX">
+				<displayName>古巴外汇券</displayName>
+				<symbol>CUX</symbol>
+			</currency>
+			<currency type="CVE">
+				<displayName>佛得角埃斯库多</displayName>
+				<symbol>CVEsc</symbol>
+			</currency>
+			<currency type="CWG">
+				<displayName>库拉盾</displayName>
+				<symbol>CWG</symbol>
+			</currency>
+			<currency type="CYP">
+				<displayName>塞浦路斯磅</displayName>
+				<symbol>£C</symbol>
+			</currency>
+			<currency type="CZK">
+				<displayName>捷克克郎</displayName>
+				<symbol>CZK</symbol>
+			</currency>
+			<currency type="DDM">
+				<displayName>东德奥斯特马克</displayName>
+				<symbol>DDM</symbol>
+			</currency>
+			<currency type="DEM">
+				<displayName>德国马克</displayName>
+				<symbol>DEM</symbol>
+			</currency>
+			<currency type="DES">
+				<displayName>德国司萡马克</displayName>
+				<symbol>DES</symbol>
+			</currency>
+			<currency type="DJF">
+				<displayName>吉布提法郎</displayName>
+				<symbol>DF</symbol>
+			</currency>
+			<currency type="DKK">
+				<displayName>丹麦克朗</displayName>
+				<symbol>DKr</symbol>
+			</currency>
+			<currency type="DOP">
+				<displayName>多米尼加比索</displayName>
+				<symbol>RD$</symbol>
+			</currency>
+			<currency type="DZD">
+				<displayName>阿尔及利亚第纳尔元</displayName>
+				<symbol>DA</symbol>
+			</currency>
+			<currency type="DZF">
+				<displayName>阿尔及利亚新法郎</displayName>
+				<symbol>DZF</symbol>
+			</currency>
+			<currency type="DZG">
+				<displayName>阿尔及利亚法郎比斯查</displayName>
+				<symbol>DZG</symbol>
+			</currency>
+			<currency type="ECS">
+				<displayName>厄瓜多尔苏克雷</displayName>
+				<symbol>ECS</symbol>
+			</currency>
+			<currency type="EEK">
+				<displayName>爱沙尼亚克朗</displayName>
+				<symbol>EEK</symbol>
+			</currency>
+			<currency type="EGP">
+				<displayName>埃及磅</displayName>
+				<symbol>EGP</symbol>
+			</currency>
+			<currency type="ERN">
+				<displayName>厄立特里亚纳福卡</displayName>
+				<symbol>ERN</symbol>
+			</currency>
+			<currency type="ESP">
+				<displayName>西班牙马赛塔</displayName>
+				<symbol>ESP</symbol>
+			</currency>
+			<currency type="ETB">
+				<displayName>埃塞俄比亚比尔</displayName>
+				<symbol>Br</symbol>
+			</currency>
+			<currency type="ETD">
+				<displayName>埃塞俄比亚元</displayName>
+				<symbol>ETD</symbol>
+			</currency>
+			<currency type="EUR">
+				<displayName>欧元</displayName>
+				<symbol>€</symbol>
+			</currency>
+			<currency type="FIM">
+				<displayName>芬兰玛卡</displayName>
+				<symbol>FIM</symbol>
+			</currency>
+			<currency type="FIN">
+				<displayName>芬兰玛卡 (1860-1962)</displayName>
+				<symbol>FIN</symbol>
+			</currency>
+			<currency type="FJD">
+				<displayName>斐济元</displayName>
+				<symbol>F$</symbol>
+			</currency>
+			<currency type="FJP">
+				<displayName>斐济磅</displayName>
+				<symbol>FJP</symbol>
+			</currency>
+			<currency type="FKP">
+				<displayName>福克兰群岛磅</displayName>
+				<symbol>FKP</symbol>
+			</currency>
+			<currency type="FOK">
+				<displayName>法罗群岛克朗</displayName>
+				<symbol>FOK</symbol>
+			</currency>
+			<currency type="FRF">
+				<displayName>法国法郎</displayName>
+				<symbol>FRF</symbol>
+			</currency>
+			<currency type="FRG">
+				<displayName>法国法郎比斯查/法郎庞加莱</displayName>
+				<symbol>FRG</symbol>
+			</currency>
+			<currency type="GBP">
+				<displayName>英磅</displayName>
+				<symbol>£</symbol>
+			</currency>
+			<currency type="GEK">
+				<displayName>乔治亚库蓬拉瑞特</displayName>
+				<symbol>GEK</symbol>
+			</currency>
+			<currency type="GEL">
+				<displayName>乔治亚库蓬拉瑞</displayName>
+				<symbol>lari</symbol>
+			</currency>
+			<currency type="GHC">
+				<displayName>加纳塞第</displayName>
+				<symbol>GHC</symbol>
+			</currency>
+			<currency type="GHO">
+				<displayName>加纳旧塞第</displayName>
+				<symbol>GHO</symbol>
+			</currency>
+			<currency type="GHP">
+				<displayName>加纳磅</displayName>
+				<symbol>GHP</symbol>
+			</currency>
+			<currency type="GHR">
+				<displayName>加纳重评估塞第</displayName>
+				<symbol>GHR</symbol>
+			</currency>
+			<currency type="GIP">
+				<displayName>直布罗陀磅</displayName>
+				<symbol>GIP</symbol>
+			</currency>
+			<currency type="GLK">
+				<displayName>格陵兰克朗</displayName>
+				<symbol>GLK</symbol>
+			</currency>
+			<currency type="GMD">
+				<displayName>冈比亚达拉西</displayName>
+				<symbol>GMD</symbol>
+			</currency>
+			<currency type="GMP">
+				<displayName>冈比亚磅</displayName>
+				<symbol>GMP</symbol>
+			</currency>
+			<currency type="GNF">
+				<displayName>几内亚法郎</displayName>
+				<symbol>GF</symbol>
+			</currency>
+			<currency type="GNI">
+				<displayName>几内亚法郎 (1960-1972)</displayName>
+				<symbol>GNI</symbol>
+			</currency>
+			<currency type="GNS">
+				<displayName>几内亚Syli</displayName>
+				<symbol>GNS</symbol>
+			</currency>
+			<currency type="GPF">
+				<displayName>瓜德罗普岛法郎</displayName>
+				<symbol>GPF</symbol>
+			</currency>
+			<currency type="GQE">
+				<displayName>赤道几内亚爱克威乐</displayName>
+				<symbol>GQE</symbol>
+			</currency>
+			<currency type="GQF">
+				<displayName>赤道几内亚法郎</displayName>
+				<symbol>GQF</symbol>
+			</currency>
+			<currency type="GQP">
+				<displayName>赤道几内亚匹塞塔</displayName>
+				<symbol>GQP</symbol>
+			</currency>
+			<currency type="GRD">
+				<displayName>希腊德拉克马</displayName>
+				<symbol>GRD</symbol>
+			</currency>
+			<currency type="GRN">
+				<displayName>希腊新德拉克马</displayName>
+				<symbol>GRN</symbol>
+			</currency>
+			<currency type="GTQ">
+				<displayName>危地马拉</displayName>
+				<symbol>Q</symbol>
+			</currency>
+			<currency type="GUF">
+				<displayName>法国属圭亚那法郎</displayName>
+				<symbol>GUF</symbol>
+			</currency>
+			<currency type="GWE">
+				<displayName>葡萄牙几内亚埃斯库多</displayName>
+				<symbol>GWE</symbol>
+			</currency>
+			<currency type="GWM">
+				<displayName>葡萄牙几内亚迷洱瑞</displayName>
+				<symbol>GWM</symbol>
+			</currency>
+			<currency type="GWP">
+				<displayName>几内亚比索</displayName>
+				<symbol>GWP</symbol>
+			</currency>
+			<currency type="GYD">
+				<displayName>圭亚那元</displayName>
+				<symbol>G$</symbol>
+			</currency>
 			<currency type="HKD">
-				<displayName>HKD</displayName>
+				<displayName>港元</displayName>
 				<symbol>HK$</symbol>
 			</currency>
+			<currency type="HNL">
+				<displayName>洪都拉斯勒皮拉</displayName>
+				<symbol>L</symbol>
+			</currency>
+			<currency type="HRD">
+				<displayName>克罗地亚第纳尔元</displayName>
+				<symbol>HRD</symbol>
+			</currency>
+			<currency type="HRK">
+				<displayName>克罗地亚库娜元</displayName>
+				<symbol>HRK</symbol>
+			</currency>
+			<currency type="HTG">
+				<displayName>海地古德</displayName>
+				<symbol>HTG</symbol>
+			</currency>
+			<currency type="HUF">
+				<displayName>匈牙利缶瑞特</displayName>
+				<symbol>Ft</symbol>
+			</currency>
+			<currency type="IBP">
+				<displayName>北爱尔兰磅</displayName>
+				<symbol>IBP</symbol>
+			</currency>
+			<currency type="IDG">
+				<displayName>印度尼西亚尼卡盾</displayName>
+				<symbol>IDG</symbol>
+			</currency>
+			<currency type="IDJ">
+				<displayName>印度尼西亚爪哇盾</displayName>
+				<symbol>IDJ</symbol>
+			</currency>
+			<currency type="IDN">
+				<displayName>印度尼西亚新盾</displayName>
+				<symbol>IDN</symbol>
+			</currency>
+			<currency type="IDR">
+				<displayName>印度尼西亚盾</displayName>
+				<symbol>Rp</symbol>
+			</currency>
+			<currency type="IEP">
+				<displayName>爱尔兰磅</displayName>
+				<symbol>IR£</symbol>
+			</currency>
+			<currency type="ILL">
+				<displayName>以色列谢客尔</displayName>
+				<symbol>ILL</symbol>
+			</currency>
+			<currency type="ILP">
+				<displayName>以色列磅</displayName>
+				<symbol>ILP</symbol>
+			</currency>
+			<currency type="ILS">
+				<displayName>以色列新谢客尔</displayName>
+				<symbol>ILS</symbol>
+			</currency>
+			<currency type="IMP">
+				<displayName>曼岛磅</displayName>
+				<symbol>IMP</symbol>
+			</currency>
+			<currency type="INR">
+				<displayName>印度卢比</displayName>
+				<symbol>=0#Rs.|1#Re.|1&lt;Rs.</symbol>
+			</currency>
+			<currency type="IQD">
+				<displayName>伊拉克第纳尔元</displayName>
+				<symbol>ID</symbol>
+			</currency>
+			<currency type="IRR">
+				<displayName>伊朗里亚 尔</displayName>
+				<symbol>RI</symbol>
+			</currency>
+			<currency type="ISK">
+				<displayName>冰岛克朗</displayName>
+				<symbol>ISK</symbol>
+			</currency>
+			<currency type="ITL">
+				<displayName>意大利里拉</displayName>
+				<symbol>₤</symbol>
+			</currency>
+			<currency type="JEP">
+				<displayName>泽西磅</displayName>
+				<symbol>JEP</symbol>
+			</currency>
+			<currency type="JMD">
+				<displayName>牙买加元</displayName>
+				<symbol>J$</symbol>
+			</currency>
+			<currency type="JMP">
+				<displayName>牙买加磅</displayName>
+				<symbol>JMP</symbol>
+			</currency>
+			<currency type="JOD">
+				<displayName>约旦第纳尔元</displayName>
+				<symbol>JD</symbol>
+			</currency>
 			<currency type="JPY">
-				<displayName>JPY</displayName>
-				<symbol>JPY</symbol>
+				<displayName>日元</displayName>
+				<symbol>JP¥</symbol>
+			</currency>
+			<currency type="KES">
+				<displayName>肯尼亚先令</displayName>
+				<symbol>K Sh</symbol>
+			</currency>
+			<currency type="KGS">
+				<displayName>吉尔吉斯坦萨姆</displayName>
+				<symbol>som</symbol>
+			</currency>
+			<currency type="KHO">
+				<displayName>柬埔寨旧里尔</displayName>
+				<symbol>KHO</symbol>
+			</currency>
+			<currency type="KHR">
+				<displayName>柬埔寨里尔</displayName>
+				<symbol>CR</symbol>
+			</currency>
+			<currency type="KID">
+				<displayName>基里巴斯元</displayName>
+				<symbol>KID</symbol>
+			</currency>
+			<currency type="KMF">
+				<displayName>科摩罗法郎</displayName>
+				<symbol>CF</symbol>
+			</currency>
+			<currency type="KPP">
+				<displayName>北朝鲜人民币</displayName>
+				<symbol>KPP</symbol>
+			</currency>
+			<currency type="KPW">
+				<displayName>北朝鲜币</displayName>
+				<symbol>KPW</symbol>
+			</currency>
+			<currency type="KRH">
+				<displayName>韩国元</displayName>
+				<symbol>KRH</symbol>
+			</currency>
+			<currency type="KRO">
+				<displayName>韩国旧币</displayName>
+				<symbol>KRO</symbol>
 			</currency>
 			<currency type="KRW">
-				<displayName>KRW</displayName>
+				<displayName>韩国币</displayName>
 				<symbol>￦</symbol>
 			</currency>
+			<currency type="KWD">
+				<displayName>科威特第纳尔元</displayName>
+				<symbol>KD</symbol>
+			</currency>
+			<currency type="KYD">
+				<displayName>开曼岛元</displayName>
+				<symbol>KYD</symbol>
+			</currency>
+			<currency type="KZR">
+				<displayName>哈萨克卢布</displayName>
+				<symbol>KZR</symbol>
+			</currency>
+			<currency type="KZT">
+				<displayName>哈萨克腾额</displayName>
+				<symbol>T</symbol>
+			</currency>
+			<currency type="LAK">
+				<displayName>老挝基普</displayName>
+				<symbol>LAK</symbol>
+			</currency>
+			<currency type="LBP">
+				<displayName>黎巴嫩磅</displayName>
+				<symbol>LL</symbol>
+			</currency>
+			<currency type="LIF">
+				<displayName>列支敦士登法郎</displayName>
+				<symbol>LIF</symbol>
+			</currency>
+			<currency type="LKR">
+				<displayName>斯里兰卡卢比</displayName>
+				<symbol>SL Re</symbol>
+			</currency>
+			<currency type="LNR">
+				<displayName>锡兰卢比</displayName>
+				<symbol>LNR</symbol>
+			</currency>
+			<currency type="LRD">
+				<displayName>利比亚元</displayName>
+				<symbol>LRD</symbol>
+			</currency>
+			<currency type="LSL">
+				<displayName>莱索托</displayName>
+				<symbol>M</symbol>
+			</currency>
+			<currency type="LTL">
+				<displayName>立陶宛利塔</displayName>
+				<symbol>LTL</symbol>
+			</currency>
+			<currency type="LTT">
+				<displayName>立陶宛塔咯呐司</displayName>
+				<symbol>LTT</symbol>
+			</currency>
+			<currency type="LUF">
+				<displayName>卢森堡法郎</displayName>
+				<symbol>LUF</symbol>
+			</currency>
+			<currency type="LVL">
+				<displayName>拉脱维亚拉特</displayName>
+				<symbol>LVL</symbol>
+			</currency>
+			<currency type="LVR">
+				<displayName>拉脱维亚卢布</displayName>
+				<symbol>LVR</symbol>
+			</currency>
+			<currency type="LYB">
+				<displayName>利比亚英国军队军方里拉</displayName>
+				<symbol>LYB</symbol>
+			</currency>
+			<currency type="LYD">
+				<displayName>利比亚第纳尔元</displayName>
+				<symbol>LD</symbol>
+			</currency>
+			<currency type="LYP">
+				<displayName>利比亚磅</displayName>
+				<symbol>LYP</symbol>
+			</currency>
+			<currency type="MAD">
+				<displayName>摩洛哥迪拉姆</displayName>
+				<symbol>MAD</symbol>
+			</currency>
+			<currency type="MAF">
+				<displayName>摩洛哥法郎</displayName>
+				<symbol>MAF</symbol>
+			</currency>
+			<currency type="MCF">
+				<displayName>摩洛哥新法郎</displayName>
+				<symbol>MCF</symbol>
+			</currency>
+			<currency type="MCG">
+				<displayName>摩洛哥革命时期货币</displayName>
+				<symbol>MCG</symbol>
+			</currency>
+			<currency type="MDC">
+				<displayName>南特市列伊币</displayName>
+				<symbol>MDC</symbol>
+			</currency>
+			<currency type="MDL">
+				<displayName>南特市列伊</displayName>
+				<symbol>MDL</symbol>
+			</currency>
+			<currency type="MDR">
+				<displayName>南特市卢布</displayName>
+				<symbol>MDR</symbol>
+			</currency>
+			<currency type="MGA">
+				<displayName>马达加斯加阿日瑞</displayName>
+				<symbol>MGA</symbol>
+			</currency>
+			<currency type="MGF">
+				<displayName>马达加斯加法郎</displayName>
+				<symbol>MGF</symbol>
+			</currency>
+			<currency type="MHD">
+				<displayName>马绍尔群岛元</displayName>
+				<symbol>MHD</symbol>
+			</currency>
+			<currency type="MKD">
+				<displayName>马其顿戴纳</displayName>
+				<symbol>MDen</symbol>
+			</currency>
+			<currency type="MKN">
+				<displayName>马其顿戴纳 (1992-1993)</displayName>
+				<symbol>MKN</symbol>
+			</currency>
+			<currency type="MLF">
+				<displayName>马里法郎</displayName>
+				<symbol>MLF</symbol>
+			</currency>
+			<currency type="MMK">
+				<displayName>缅甸开亚特</displayName>
+				<symbol>MMK</symbol>
+			</currency>
+			<currency type="MMX">
+				<displayName>缅甸元外汇券</displayName>
+				<symbol>MMX</symbol>
+			</currency>
+			<currency type="MNT">
+				<displayName>蒙古图格里克</displayName>
+				<symbol>Tug</symbol>
+			</currency>
 			<currency type="MOP">
-				<displayName>MOP</displayName>
+				<displayName>澳门元</displayName>
 				<symbol>P</symbol>
 			</currency>
+			<currency type="MQF">
+				<displayName>马蒂尼法郎</displayName>
+				<symbol>MQF</symbol>
+			</currency>
+			<currency type="MRO">
+				<displayName>里塔尼亚乌吉亚</displayName>
+				<symbol>UM</symbol>
+			</currency>
+			<currency type="MTL">
+				<displayName>马尔他里拉</displayName>
+				<symbol>Lm</symbol>
+			</currency>
+			<currency type="MTP">
+				<displayName>马尔他磅</displayName>
+				<symbol>MTP</symbol>
+			</currency>
+			<currency type="MUR">
+				<displayName>毛里求斯卢比</displayName>
+				<symbol>MUR</symbol>
+			</currency>
+			<currency type="MVP">
+				<displayName>马尔代夫群岛卢比</displayName>
+				<symbol>MVP</symbol>
+			</currency>
+			<currency type="MVR">
+				<displayName>马尔代夫群岛芦菲亚</displayName>
+				<symbol>MVR</symbol>
+			</currency>
+			<currency type="MWK">
+				<displayName>马拉维夸恰</displayName>
+				<symbol>MK</symbol>
+			</currency>
+			<currency type="MWP">
+				<displayName>马拉维磅</displayName>
+				<symbol>MWP</symbol>
+			</currency>
+			<currency type="MXN">
+				<displayName>墨西哥比索</displayName>
+				<symbol>MEX$</symbol>
+			</currency>
+			<currency type="MXP">
+				<displayName>墨西哥银比索 (1861-1992)</displayName>
+				<symbol>MXP</symbol>
+			</currency>
+			<currency type="MYR">
+				<displayName>马来西亚币</displayName>
+				<symbol>RM</symbol>
+			</currency>
+			<currency type="MZE">
+				<displayName>莫桑比克埃斯库多</displayName>
+				<symbol>MZE</symbol>
+			</currency>
+			<currency type="MZM">
+				<displayName>莫桑比克币</displayName>
+				<symbol>Mt</symbol>
+			</currency>
+			<currency type="NAD">
+				<displayName>纳米比亚元</displayName>
+				<symbol>N$</symbol>
+			</currency>
+			<currency type="NCF">
+				<displayName>新卡里多尼亚新法郎</displayName>
+				<symbol>NCF</symbol>
+			</currency>
+			<currency type="NGN">
+				<displayName>尼日利亚奈拉.</displayName>
+				<symbol>NGN</symbol>
+			</currency>
+			<currency type="NGP">
+				<displayName>尼日利亚磅</displayName>
+				<symbol>NGP</symbol>
+			</currency>
+			<currency type="NHF">
+				<displayName>新赫布里底 CFP 法郎</displayName>
+				<symbol>NHF</symbol>
+			</currency>
+			<currency type="NIC">
+				<displayName>尼加拉瓜科多巴</displayName>
+				<symbol>NIC</symbol>
+			</currency>
+			<currency type="NIG">
+				<displayName>尼加拉瓜金科多巴</displayName>
+				<symbol>NIG</symbol>
+			</currency>
+			<currency type="NIO">
+				<displayName>尼加拉瓜金哥多华</displayName>
+				<symbol>NIO</symbol>
+			</currency>
+			<currency type="NLG">
+				<displayName>荷兰盾</displayName>
+				<symbol>NLG</symbol>
+			</currency>
+			<currency type="NOK">
+				<displayName>挪威克朗</displayName>
+				<symbol>NKr</symbol>
+			</currency>
+			<currency type="NPR">
+				<displayName>尼泊尔卢比</displayName>
+				<symbol>Nrs</symbol>
+			</currency>
+			<currency type="NZD">
+				<displayName>新西兰元</displayName>
+				<symbol>$NZ</symbol>
+			</currency>
+			<currency type="NZP">
+				<displayName>新西兰磅</displayName>
+				<symbol>NZP</symbol>
+			</currency>
+			<currency type="OMR">
+				<displayName>阿曼里尔</displayName>
+				<symbol>RO</symbol>
+			</currency>
+			<currency type="OMS">
+				<displayName>阿曼里尔塞迪</displayName>
+				<symbol>OMS</symbol>
+			</currency>
+			<currency type="PAB">
+				<displayName>巴拿马巴波亚</displayName>
+				<symbol>PAB</symbol>
+			</currency>
+			<currency type="PDK">
+				<displayName>车城卢布券</displayName>
+				<symbol>PDK</symbol>
+			</currency>
+			<currency type="PDN">
+				<displayName>车城新卢布</displayName>
+				<symbol>PDN</symbol>
+			</currency>
+			<currency type="PDR">
+				<displayName>车城卢布</displayName>
+				<symbol>PDR</symbol>
+			</currency>
+			<currency type="PEI">
+				<displayName>秘鲁因蒂</displayName>
+				<symbol>PEI</symbol>
+			</currency>
+			<currency type="PEN">
+				<displayName>秘鲁索额奴艾挝</displayName>
+				<symbol>PEN</symbol>
+			</currency>
+			<currency type="PES">
+				<displayName>秘鲁索额</displayName>
+				<symbol>PES</symbol>
+			</currency>
+			<currency type="PGK">
+				<displayName>巴布亚新几内亚基那</displayName>
+				<symbol>PGK</symbol>
+			</currency>
+			<currency type="PHP">
+				<displayName>菲律宾比索</displayName>
+				<symbol>PHP</symbol>
+			</currency>
+			<currency type="PKR">
+				<displayName>巴基斯坦卢比</displayName>
+				<symbol>Pra</symbol>
+			</currency>
+			<currency type="PLN">
+				<displayName>波兰兹罗提</displayName>
+				<symbol>Zl</symbol>
+			</currency>
+			<currency type="PLX">
+				<displayName>波兰美元 外汇券</displayName>
+				<symbol>PLX</symbol>
+			</currency>
+			<currency type="PLZ">
+				<displayName>波兰兹罗提 (1950-1995)</displayName>
+				<symbol>PLZ</symbol>
+			</currency>
+			<currency type="PSP">
+				<displayName>巴勒斯坦磅</displayName>
+				<symbol>PSP</symbol>
+			</currency>
+			<currency type="PTC">
+				<displayName>葡萄牙倥涂</displayName>
+				<symbol>PTC</symbol>
+			</currency>
+			<currency type="PTE">
+				<displayName>葡萄牙铃木</displayName>
+				<symbol>PTE</symbol>
+			</currency>
+			<currency type="PYG">
+				<displayName>巴拉圭币</displayName>
+				<symbol>PYG</symbol>
+			</currency>
+			<currency type="QAR">
+				<displayName>卡塔尔里亚尔</displayName>
+				<symbol>QR</symbol>
+			</currency>
+			<currency type="REF">
+				<displayName>留尼汪联合会法郎</displayName>
+				<symbol>REF</symbol>
+			</currency>
+			<currency type="ROL">
+				<displayName>罗马尼亚镭</displayName>
+				<symbol>leu</symbol>
+			</currency>
+			<currency type="RON">
+				<displayName>罗马尼亚新镭</displayName>
+				<symbol>RON</symbol>
+			</currency>
+			<currency type="RUB">
+				<displayName>俄国卢布</displayName>
+				<symbol>RUB</symbol>
+			</currency>
+			<currency type="RUR">
+				<displayName>俄国卢布 (1991-1998)</displayName>
+				<symbol>RUR</symbol>
+			</currency>
+			<currency type="RWF">
+				<displayName>卢旺达法郎</displayName>
+				<symbol>RWF</symbol>
+			</currency>
+			<currency type="SAR">
+				<displayName>沙特里亚尔</displayName>
+				<symbol>SRl</symbol>
+			</currency>
+			<currency type="SAS">
+				<displayName>沙特特权里亚尔</displayName>
+				<symbol>SAS</symbol>
+			</currency>
+			<currency type="SBD">
+				<displayName>所罗门群岛元</displayName>
+				<symbol>SI$</symbol>
+			</currency>
+			<currency type="SCR">
+				<displayName>塞舌尔卢比</displayName>
+				<symbol>SR</symbol>
+			</currency>
+			<currency type="SDD">
+				<displayName>苏丹第纳尔元</displayName>
+				<symbol>SDD</symbol>
+			</currency>
+			<currency type="SDP">
+				<displayName>苏丹磅</displayName>
+				<symbol>SDP</symbol>
+			</currency>
+			<currency type="SEK">
+				<displayName>瑞士克朗</displayName>
+				<symbol>SKr</symbol>
+			</currency>
 			<currency type="SGD">
-				<displayName>SGD</displayName>
+				<displayName>新加坡元</displayName>
 				<symbol>S$</symbol>
 			</currency>
+			<currency type="SHP">
+				<displayName>圣赫勒拿磅</displayName>
+				<symbol>SHP</symbol>
+			</currency>
+			<currency type="SIB">
+				<displayName>斯洛文尼亚淘拉磅</displayName>
+				<symbol>SIB</symbol>
+			</currency>
+			<currency type="SIT">
+				<displayName>斯洛文尼亚淘拉</displayName>
+				<symbol>SIT</symbol>
+			</currency>
+			<currency type="SKK">
+				<displayName>斯洛伐克科路那</displayName>
+				<symbol>Sk</symbol>
+			</currency>
+			<currency type="SLL">
+				<displayName>赛拉里昂币</displayName>
+				<symbol>SLL</symbol>
+			</currency>
+			<currency type="SML">
+				<displayName>圣马利诺里拉</displayName>
+				<symbol>SML</symbol>
+			</currency>
+			<currency type="SOS">
+				<displayName>索马里先令</displayName>
+				<symbol>So. Sh.</symbol>
+			</currency>
+			<currency type="SQS">
+				<displayName>索马里大陆先令</displayName>
+				<symbol>SQS</symbol>
+			</currency>
+			<currency type="SRG">
+				<displayName>苏里南基尔</displayName>
+				<symbol>Sf</symbol>
+			</currency>
+			<currency type="SSP">
+				<displayName>苏格兰磅</displayName>
+				<symbol>SSP</symbol>
+			</currency>
+			<currency type="STD">
+				<displayName>圣多美普林西比都比拉</displayName>
+				<symbol>Db</symbol>
+			</currency>
+			<currency type="STE">
+				<displayName>圣多美普林西比铃木</displayName>
+				<symbol>STE</symbol>
+			</currency>
+			<currency type="SUN">
+				<displayName>苏联新卢布</displayName>
+				<symbol>SUN</symbol>
+			</currency>
+			<currency type="SUR">
+				<displayName>苏联卢布</displayName>
+				<symbol>SUR</symbol>
+			</currency>
+			<currency type="SVC">
+				<displayName>萨尔瓦多科洛涅</displayName>
+				<symbol>SVC</symbol>
+			</currency>
+			<currency type="SYP">
+				<displayName>叙利亚磅</displayName>
+				<symbol>LS</symbol>
+			</currency>
+			<currency type="SZL">
+				<displayName>斯威士兰币</displayName>
+				<symbol>E</symbol>
+			</currency>
+			<currency type="TCC">
+				<displayName>特克斯和凯科斯群岛克朗</displayName>
+				<symbol>TCC</symbol>
+			</currency>
+			<currency type="THB">
+				<displayName>泰铢</displayName>
+				<symbol>THB</symbol>
+			</currency>
+			<currency type="TJR">
+				<displayName>塔吉克斯坦卢布</displayName>
+				<symbol>TJR</symbol>
+			</currency>
+			<currency type="TJS">
+				<displayName>塔吉克斯坦索莫尼</displayName>
+				<symbol>TJS</symbol>
+			</currency>
+			<currency type="TMM">
+				<displayName>土库曼斯坦币</displayName>
+				<symbol>TMM</symbol>
+			</currency>
+			<currency type="TND">
+				<displayName>突尼斯第纳尔元</displayName>
+				<symbol>TND</symbol>
+			</currency>
+			<currency type="TOP">
+				<displayName>汤加币</displayName>
+				<symbol>T$</symbol>
+			</currency>
+			<currency type="TOS">
+				<displayName>汤加磅</displayName>
+				<symbol>TOS</symbol>
+			</currency>
+			<currency type="TPE">
+				<displayName>帝汶埃斯库多</displayName>
+				<symbol>TPE</symbol>
+			</currency>
+			<currency type="TPP">
+				<displayName>帝汶帕塔卡</displayName>
+				<symbol>TPP</symbol>
+			</currency>
+			<currency type="TRL">
+				<displayName>土耳其里拉</displayName>
+				<symbol>TL</symbol>
+			</currency>
+			<currency type="TTD">
+				<displayName>特立尼达和多巴哥元</displayName>
+				<symbol>TT$</symbol>
+			</currency>
+			<currency type="TTO">
+				<displayName>特立尼达和多巴哥旧元</displayName>
+				<symbol>TTO</symbol>
+			</currency>
+			<currency type="TVD">
+				<displayName>图瓦卢元</displayName>
+				<symbol>TVD</symbol>
+			</currency>
 			<currency type="TWD">
-				<displayName>TWD</displayName>
+				<displayName>新台币</displayName>
 				<symbol>NT$</symbol>
+			</currency>
+			<currency type="TZS">
+				<displayName>坦桑尼亚先令</displayName>
+				<symbol>T Sh</symbol>
+			</currency>
+			<currency type="UAH">
+				<displayName>乌克兰赫里纳</displayName>
+				<symbol>UAH</symbol>
+			</currency>
+			<currency type="UAK">
+				<displayName>乌克兰币</displayName>
+				<symbol>UAK</symbol>
+			</currency>
+			<currency type="UGS">
+				<displayName>乌干达先令 (1966-1987)</displayName>
+				<symbol>UGS</symbol>
+			</currency>
+			<currency type="UGX">
+				<displayName>乌干达先令</displayName>
+				<symbol>U Sh</symbol>
+			</currency>
+			<currency type="USD">
+				<displayName>美元</displayName>
+				<symbol>US$</symbol>
+			</currency>
+			<currency type="USN">
+				<displayName>美元 (下一天)</displayName>
+				<symbol>USN</symbol>
+			</currency>
+			<currency type="USS">
+				<displayName>美元 (同一天)</displayName>
+				<symbol>USS</symbol>
+			</currency>
+			<currency type="UYF">
+				<displayName>乌拉圭比索伏尔特</displayName>
+				<symbol>UYF</symbol>
+			</currency>
+			<currency type="UYP">
+				<displayName>乌拉圭比索 (1975-1993)</displayName>
+				<symbol>UYP</symbol>
+			</currency>
+			<currency type="UYU">
+				<displayName>乌拉圭比索</displayName>
+				<symbol>Ur$</symbol>
+			</currency>
+			<currency type="UZC">
+				<displayName>乌兹别克斯坦货币券</displayName>
+				<symbol>UZC</symbol>
+			</currency>
+			<currency type="UZS">
+				<displayName>乌兹别克斯坦币</displayName>
+				<symbol>UZS</symbol>
+			</currency>
+			<currency type="VAL">
+				<displayName>梵谛冈里拉</displayName>
+				<symbol>VAL</symbol>
+			</currency>
+			<currency type="VDD">
+				<displayName>北越皮艾斯特盾</displayName>
+				<symbol>VDD</symbol>
+			</currency>
+			<currency type="VDN">
+				<displayName>北越皮艾斯特新盾</displayName>
+				<symbol>VDN</symbol>
+			</currency>
+			<currency type="VDP">
+				<displayName>北越皮艾斯特明盾</displayName>
+				<symbol>VDP</symbol>
+			</currency>
+			<currency type="VEB">
+				<displayName>内瑞拉博利瓦</displayName>
+				<symbol>Be</symbol>
+			</currency>
+			<currency type="VGD">
+				<displayName>英国维京群岛币</displayName>
+				<symbol>VGD</symbol>
+			</currency>
+			<currency type="VND">
+				<displayName>越南盾</displayName>
+				<symbol>VND</symbol>
+			</currency>
+			<currency type="VNN">
+				<displayName>越南明盾</displayName>
+				<symbol>VNN</symbol>
+			</currency>
+			<currency type="VNR">
+				<displayName>越南共和国盾</displayName>
+				<symbol>VNR</symbol>
+			</currency>
+			<currency type="VNS">
+				<displayName>越南国家盾</displayName>
+				<symbol>VNS</symbol>
+			</currency>
+			<currency type="VUV">
+				<displayName>瓦努阿图</displayName>
+				<symbol>VT</symbol>
+			</currency>
+			<currency type="WSP">
+				<displayName>西萨摩亚磅</displayName>
+				<symbol>WSP</symbol>
+			</currency>
+			<currency type="WST">
+				<displayName>西萨摩亚塔拉</displayName>
+				<symbol>WST</symbol>
+			</currency>
+			<currency type="XAD">
+				<displayName>亚洲第纳尔元帐户单位</displayName>
+				<symbol>XAD</symbol>
+			</currency>
+			<currency type="XAM">
+				<displayName>亚洲货币单位</displayName>
+				<symbol>XAM</symbol>
+			</currency>
+			<currency type="XAU">
+				<displayName>黄金</displayName>
+				<symbol>XAU</symbol>
+			</currency>
+			<currency type="XBA">
+				<displayName>欧洲复合单位</displayName>
+				<symbol>XBA</symbol>
+			</currency>
+			<currency type="XBB">
+				<displayName>欧洲金融单位</displayName>
+				<symbol>XBB</symbol>
+			</currency>
+			<currency type="XCD">
+				<displayName>东加勒比元</displayName>
+				<symbol>EC$</symbol>
+			</currency>
+			<currency type="XDR">
+				<displayName>特别提款权</displayName>
+				<symbol>XDR</symbol>
+			</currency>
+			<currency type="XEU">
+				<displayName>欧洲货币单位</displayName>
+				<symbol>XEU</symbol>
+			</currency>
+			<currency type="XFO">
+				<displayName>法国金法郎</displayName>
+				<symbol>XFO</symbol>
+			</currency>
+			<currency type="XID">
+				<displayName>伊斯兰第纳尔元</displayName>
+				<symbol>XID</symbol>
+			</currency>
+			<currency type="XMF">
+				<displayName>法国城市偌佛法郎</displayName>
+				<symbol>XMF</symbol>
+			</currency>
+			<currency type="XNF">
+				<displayName>法国安的列斯 CFA 法郎</displayName>
+				<symbol>XNF</symbol>
+			</currency>
+			<currency type="XPS">
+				<displayName>磅</displayName>
+				<symbol>XPS</symbol>
+			</currency>
+			<currency type="XSS">
+				<displayName>先令</displayName>
+				<symbol>XSS</symbol>
+			</currency>
+			<currency type="YDD">
+				<displayName>也门第纳尔元</displayName>
+				<symbol>YDD</symbol>
+			</currency>
+			<currency type="YEI">
+				<displayName>也门阿马迪里尔</displayName>
+				<symbol>YEI</symbol>
+			</currency>
+			<currency type="YER">
+				<displayName>也门里尔</displayName>
+				<symbol>YRl</symbol>
+			</currency>
+			<currency type="YUD">
+				<displayName>南斯拉夫硬第纳尔元</displayName>
+				<symbol>YUD</symbol>
+			</currency>
+			<currency type="YUF">
+				<displayName>南斯拉夫联邦第纳尔元</displayName>
+				<symbol>YUF</symbol>
+			</currency>
+			<currency type="YUG">
+				<displayName>南斯拉夫 1994 第纳尔元</displayName>
+				<symbol>YUG</symbol>
+			</currency>
+			<currency type="YUM">
+				<displayName>南斯拉夫偌威第纳尔元</displayName>
+				<symbol>YUM</symbol>
+			</currency>
+			<currency type="YUN">
+				<displayName>南斯拉夫兑换第纳尔元</displayName>
+				<symbol>YUN</symbol>
+			</currency>
+			<currency type="YUO">
+				<displayName>南斯拉夫十月第纳尔元</displayName>
+				<symbol>YUO</symbol>
+			</currency>
+			<currency type="YUR">
+				<displayName>南斯拉夫改革第纳尔元</displayName>
+				<symbol>YUR</symbol>
+			</currency>
+			<currency type="ZAL">
+				<displayName>南非兰特 (金融)</displayName>
+				<symbol>ZAL</symbol>
+			</currency>
+			<currency type="ZAP">
+				<displayName>南非磅</displayName>
+				<symbol>ZAP</symbol>
+			</currency>
+			<currency type="ZAR">
+				<displayName>南非兰特</displayName>
+				<symbol>R</symbol>
+			</currency>
+			<currency type="ZMK">
+				<displayName>赞比亚马拉维</displayName>
+				<symbol>ZMK</symbol>
+			</currency>
+			<currency type="ZMP">
+				<displayName>赞比亚磅</displayName>
+				<symbol>ZMP</symbol>
+			</currency>
+			<currency type="ZRN">
+				<displayName>新扎伊尔元</displayName>
+				<symbol>ZRN</symbol>
+			</currency>
+			<currency type="ZRZ">
+				<displayName>扎伊尔元</displayName>
+				<symbol>ZRZ</symbol>
+			</currency>
+			<currency type="ZWD">
+				<displayName>津巴布韦元</displayName>
+				<symbol>Z$</symbol>
 			</currency>
 		</currencies>
 	</numbers>
