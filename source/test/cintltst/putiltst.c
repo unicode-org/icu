@@ -209,10 +209,10 @@ static void TestPUtilAPI(){
     }
     log_verbose("Testing the API u_errorName()...\n");
     str=(char*)u_errorName((UErrorCode)-127);
-    if(strcmp(str, "U_USING_DEFAULT_ERROR") != 0){
-        log_err("ERROR: u_getVersion() failed. Expected: U_USING_DEFAULT_ERROR Got=%s\n",  str);
+    if(strcmp(str, "U_USING_DEFAULT_WARNING") != 0){
+        log_err("ERROR: u_getVersion() failed. Expected: U_USING_DEFAULT_WARNING Got=%s\n",  str);
     }
-    log_verbose("Testing the API u_errorName().. with BOGUD ERRORCODE...\n");
+    log_verbose("Testing the API u_errorName().. with BOGUS ERRORCODE...\n");
     str=(char*)u_errorName((UErrorCode)200);
     if(strcmp(str, "[BOGUS UErrorCode]") != 0){
         log_err("ERROR: u_getVersion() failed. Expected: [BOGUS UErrorCode] Got=%s\n",  str);
