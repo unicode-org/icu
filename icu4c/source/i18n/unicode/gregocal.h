@@ -524,6 +524,8 @@ protected:
                                                    UBool useMonth) const;
 
     virtual int32_t handleComputeJulianDay(UCalendarDateFields bestField)  ;
+    virtual void computeFields(UErrorCode& ec);
+
 
 
     /**
