@@ -1306,7 +1306,7 @@ UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
  * IMPORTANT: Upon entry, registryMutex must be LOCKED.  The entirely
  * initialization is done with the lock held.  There is NO REASON to
  * unlock, since no other thread that is waiting on the registryMutex
- * can itself proceed until the registry is initialized.
+ * cannot itself proceed until the registry is initialized.
  */
 UBool Transliterator::initializeRegistry() {
     if (registry != 0) {
