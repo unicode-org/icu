@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CanonicalIterator.java,v $ 
- * $Date: 2002/03/14 22:43:03 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/03/19 00:18:44 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -144,40 +144,50 @@ public class CanonicalIterator {
      * Simple implementation of permutation. 
 	 *<br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
      * @param source the string to find permutations for
-     * @return the results in a set.
+     * @param the set to add the results to
      * @internal
      */
-    public static Set permute(String source) {
+    public static void permute(String source, boolean skipZeros, Set output) {
     	// TODO: optimize
         //if (PROGRESS) System.out.println("Permute: " + source);
-        Set result = new TreeSet();
         
         // optimization:
         // if zero or one character, just return a set with it
         // we check for length < 2 to keep from counting code points all the time
         if (source.length() <= 2 && UTF16.countCodePoint(source) <= 1) {
-            result.add(source);
-            return result;
+            output.add(source);
+            return;
         }
         
         // otherwise iterate through the string, and recursively permute all the other characters
+        Set subpermute = new HashSet();
         int cp;
         for (int i = 0; i < source.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(source, i);
-            String chStr = UTF16.valueOf(source, i);
+            
+        	// optimization:
+        	// if the character is canonical combining class zero,
+        	// don't permute it
+        	if (skipZeros && i != 0 && UCharacter.getCombiningClass(cp) == 0) {
+        		//System.out.println("Skipping " + Utility.hex(UTF16.valueOf(source, i)));
+	        	continue;
+        	}            
             
             // see what the permutations of the characters before and after this one are
-            Set subpermute = permute(source.substring(0,i) + source.substring(i + UTF16.getCharCount(cp)));
+            subpermute.clear();
+            permute(source.substring(0,i) 
+            	+ source.substring(i + UTF16.getCharCount(cp)), skipZeros, subpermute);
             
             // prefix this character to all of them
+            String chStr = UTF16.valueOf(source, i);
             Iterator it = subpermute.iterator();
             while (it.hasNext()) {
                 String piece = chStr + (String) it.next();
                 //if (PROGRESS) System.out.println("  Piece: " + piece);
-                result.add(piece);
+                output.add(piece);
             }
         }
-        return result;
+        return;
     }
     
     // FOR TESTING
@@ -206,6 +216,7 @@ public class CanonicalIterator {
     // debug
     private static boolean PROGRESS = false; // debug progress
     private static Transliterator NAME = PROGRESS ? Transliterator.getInstance("name") : null;
+    private static boolean SKIP_ZEROS = true;
  
     // fields
     private String source;
@@ -222,8 +233,9 @@ public class CanonicalIterator {
     
     // we have a segment, in NFD. Find all the strings that are canonically equivalent to it.
     private String[] getEquivalents(String segment) {
-        Set result = new TreeSet();
+        Set result = new HashSet();
         Set basic = getEquivalents2(segment);
+        Set permutations = new HashSet();
         
         // now get all the permutations
         // add only the ones that are canonically equivalent
@@ -231,16 +243,24 @@ public class CanonicalIterator {
         Iterator it = basic.iterator();
         while (it.hasNext()) {
             String item = (String) it.next();
-            Set permutations = permute(item);
+        	permutations.clear();
+            permute(item, SKIP_ZEROS, permutations);
             Iterator it2 = permutations.iterator();
             while (it2.hasNext()) {
                 String possible = (String) it2.next();
-                String attempt = Normalizer.normalize(possible, Normalizer.DECOMP, 0);
-                if (attempt.equals(segment)) {
-                    if (PROGRESS) System.out.println("Adding Permutation: " + NAME.transliterate(possible));
-                    result.add(possible);
+                
+				String attempt = Normalizer.normalize(possible, Normalizer.DECOMP, 0);
+				if (attempt.equals(segment)) {
+					if (PROGRESS) System.out.println("Adding Permutation: " + NAME.transliterate(possible));
+					result.add(possible);
+
+/*
+                if (isEquivalent(possible, Normalizer.DECOMP)) {
+            		if (PROGRESS) System.out.println("Adding Permutation: " + NAME.transliterate(possible));
+                	result.add(possible);
+*/
                 } else {
-                    if (PROGRESS) System.out.println("-Skipping Permutation: " + NAME.transliterate(possible));
+            		if (PROGRESS) System.out.println("-Skipping Permutation: " + NAME.transliterate(possible));
                 }
             }
         }
@@ -251,8 +271,16 @@ public class CanonicalIterator {
         return finalResult;
     }
     
+    /**
+     * TODO: Should be method on Normalizer; and MUCH faster
+     */
+     
+    private boolean isEquivalent(String possible, Normalizer.Mode normalizerType) {
+        return possible.equals(Normalizer.normalize(possible, normalizerType, 0));
+	}
+    
     private Set getEquivalents2(String segment) {
-        Set result = new TreeSet();
+        Set result = new HashSet();
         if (PROGRESS) System.out.println("Adding: " + NAME.transliterate(segment));
         result.add(segment);
         StringBuffer workingBuffer = new StringBuffer();
@@ -349,17 +377,19 @@ public class CanonicalIterator {
         return getEquivalents2(remainder);
     }
     
+    /*
     // TODO: fix once we have a codepoint interface to get the canonical combining class
     // TODO: Need public access to canonical combining class in UCharacter!
     private static int getClass(int cp) {
         return Normalizer.getClass((char)cp);
     }
+    */
     
    // ================= BUILDER =========================
     // TODO: Flatten this data so it doesn't have to be reconstructed each time!
     
     private static final UnicodeSet EMPTY = new UnicodeSet(); // constant, don't change
-    private static final Set SET_WITH_NULL_STRING = new TreeSet(); // constant, don't change
+    private static final Set SET_WITH_NULL_STRING = new HashSet(); // constant, don't change
     static {
         SET_WITH_NULL_STRING.add("");
     }
@@ -367,7 +397,7 @@ public class CanonicalIterator {
     private static UnicodeSet SAFE_START = new UnicodeSet();
     private static CharMap AT_START = new CharMap();
     
-        // WARNING, NORMALIZER doesn't have supplementaries yet;
+        // TODO: WARNING, NORMALIZER doesn't have supplementaries yet !!;
         // Change FFFF to 10FFFF in C, and in Java when normalizer is upgraded.
     private static int LAST_UNICODE = 0xFFFF;
     static {
@@ -380,7 +410,7 @@ public class CanonicalIterator {
         if (PROGRESS) System.out.println("Getting Safe Start");
         for (int cp = 0; cp <= LAST_UNICODE; ++cp) {
             if (PROGRESS & (cp & 0x7FF) == 0) System.out.print('.');
-            int cc = getClass(cp);
+            int cc = UCharacter.getCombiningClass(cp);
             if (cc == 0) SAFE_START.add(cp);
             // will fix to be really safe below
         }
@@ -404,7 +434,7 @@ public class CanonicalIterator {
                 component = UTF16.charAt(decomp, i);
                 if (i == 0) {
                     AT_START.add(component, cp);
-                } else if (getClass(component) == 0) {
+                } else if (UCharacter.getCombiningClass(component) == 0) {
                     SAFE_START.remove(component);
                 }
             }
