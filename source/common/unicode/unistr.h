@@ -28,7 +28,6 @@
 class Locale;               // unicode/locid.h
 class UCharReference;
 class UnicodeConverter;     // unicode/convert.h
-struct UConverter;          // unicode/ucnv.h
 class UnicodeStreamer;      // unicode/ustream.h
 
 /* The <iostream> include has been moved to unicode/ustream.h */
@@ -2400,14 +2399,6 @@ private:
     kWriteableAlias=0
   };
 
-  // statics
-
-  // default converter cache
-  static UConverter* getDefaultConverter(UErrorCode& status);
-  static void releaseDefaultConverter(UConverter *converter);
-
-  static UConverter *fgDefaultConverter;
-
   friend class UnicodeConverter;
   friend class Normalizer;
 
@@ -2437,30 +2428,6 @@ private:
   UChar     fStackBuffer [ US_STACKBUF_SIZE ]; // buffer for small strings
 
 public:
-
-#ifdef ICU_UNICODESTRING_USE_DEPRECATES
-  //========================================
-  // Deprecated API
-  //========================================
-
-  /* size() -> length()
-   * @deprecated Remove after 2000-dec-31. Use length() instead. */
-  inline int32_t size(void) const;
-
-  // parameters reordered for consistency
-   /* @deprecated To be removed in first release in 2001. Use the other versions of this function */
-  inline UnicodeString& findAndReplace(const UnicodeString& oldText,
-                const UnicodeString& newText,
-                UTextOffset start,
-                int32_t length);
-
-   /* @deprecated Remove after 2000-dec-31. There is no replacement. */
-  inline void* operator new(size_t size);
-   /* @deprecated Remove after 2000-dec-31. There is no replacement. */
-  inline void* operator new(size_t size, void *location);
-   /* @deprecated Remove after 2000-dec-31. There is no replacement. */
-  inline void operator delete(void *location);
-#endif
 
   //========================================
   // Non-public API - will be removed!
@@ -3368,34 +3335,6 @@ inline int32_t
 UnicodeString::setRefCount(int32_t count)
 { return (*((int32_t *)fArray - 1) = count); }
 
-#ifdef ICU_UNICODESTRING_USE_DEPRECATES
-
-// deprecated API - remove later
-inline int32_t
-UnicodeString::size() const
-{ return fLength; }
-
-inline UnicodeString& 
-UnicodeString::findAndReplace(const UnicodeString& oldText,
-                  const UnicodeString& newText,
-                  UTextOffset start,
-                  int32_t length)
-{ return findAndReplace(start, length, oldText, newText); }
-
-inline void*
-UnicodeString::operator new(size_t size)
-{ return ::operator new(size); }
-
-inline void* 
-UnicodeString::operator new(size_t, 
-              void *location)
-{ return location; }
-
-inline void
-UnicodeString::operator delete(void *location)
-{ ::operator delete(location); }
-
-#endif
 
 //========================================
 // Static members
