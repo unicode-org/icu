@@ -24,6 +24,8 @@
 #include "currcoll.h"
 #endif
 
+#include "sfwdchit.h"
+
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
 CollationCurrencyTest::CollationCurrencyTest()
@@ -94,6 +96,7 @@ void CollationCurrencyTest::currencyTest(/*char *par*/)
             }
 
             Collator::EComparisonResult compareResult = c->compare(source, target);
+            Collator::EComparisonResult incResult = c->compare(SimpleFwdCharIterator(source), SimpleFwdCharIterator(target));
 
             CollationKey sourceKey, targetKey;
             UErrorCode status = U_ZERO_ERROR;
@@ -116,8 +119,7 @@ void CollationCurrencyTest::currencyTest(/*char *par*/)
 
             Collator::EComparisonResult keyResult = sourceKey.compareTo(targetKey);
 
-            reportCResult(source, target, sourceKey, targetKey,
-                          compareResult, keyResult, expectedResult);
+            reportCResult( source, target, sourceKey, targetKey, compareResult, keyResult, incResult, expectedResult );
 
         }
     }
