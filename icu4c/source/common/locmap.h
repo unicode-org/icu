@@ -21,10 +21,10 @@
 *============================================================================
 */
 
-#include "unicode/utypes.h"
-
 #ifndef LOCMAP_H
 #define LOCMAP_H
+
+#include "unicode/utypes.h"
 
 #define LANGUAGE_LCID(hostID) (uint16_t)(0x03FF & hostID)
 
