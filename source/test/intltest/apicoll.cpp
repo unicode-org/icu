@@ -586,8 +586,10 @@ CollationAPITest::TestCollationKey(/* char* par */)
     doAssert(sortk2 == sortk7, "sortk2 == sortk7 Failed.");
     doAssert(sortk1 != sortk7, "sortk1 != sortk7 Failed.");
 
-    delete [] byteArray1; byteArray1 = 0;
-    delete [] byteArray2; byteArray2 = 0;
+    uprv_free(byteArray1);
+    byteArray1 = 0;
+    uprv_free(byteArray2);
+    byteArray2 = 0;
 
     sortk3 = sortk1;
     doAssert(sortk1 == sortk3, "sortk1 = sortk3 assignment Failed.");
