@@ -120,7 +120,7 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
         return;
     }
 
-    uprv_strcpy(tmp, LIB_PREFIX);
+    uprv_strcpy(tmp, LIB_STATIC_PREFIX);
     uprv_strcat(tmp, o->cShortName);
     uprv_strcat(tmp, UDATA_LIB_SUFFIX);
 
