@@ -527,6 +527,10 @@ SOURCE=.\unhxtrts.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\uobjtest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\usettest.cpp
 # End Source File
 # Begin Source File
@@ -900,6 +904,10 @@ SOURCE=.\ufltlgts.h
 # Begin Source File
 
 SOURCE=.\unhxtrts.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\uobjtest.h
 # End Source File
 # Begin Source File
 
