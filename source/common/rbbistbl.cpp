@@ -19,17 +19,22 @@
 #include "rbbinode.h"
 
 
+//
+//  RBBISymbolTableEntry_deleter    Used by the UHashTable to delete the contents
+//                                  when the hash table is deleted.
+//
+U_CDECL_BEGIN
+static void  U_EXPORT2 U_CALLCONV RBBISymbolTableEntry_deleter(void *p) {
+    RBBISymbolTableEntry *px = (RBBISymbolTableEntry *)p;
+    delete px;
+};
+U_CDECL_END
+
+
+
 U_NAMESPACE_BEGIN
 
 const char RBBISymbolTable::fgClassID=0;
-
-//
-//  Forward Declarations
-//
-U_CDECL_BEGIN
-static void  U_EXPORT2 U_CALLCONV RBBISymbolTableEntry_deleter(void *p);
-U_CDECL_END
-
 
 
 
@@ -42,8 +47,8 @@ RBBISymbolTable::RBBISymbolTable(RBBIRuleScanner *rs, const UnicodeString &rules
         return;
     }
 
-     fHashTable = uhash_open(uhash_hashUnicodeString, uhash_compareUnicodeString, &status);
-     uhash_setValueDeleter(fHashTable, RBBISymbolTableEntry_deleter);
+    fHashTable = uhash_open(uhash_hashUnicodeString, uhash_compareUnicodeString, &status);
+    uhash_setValueDeleter(fHashTable, RBBISymbolTableEntry_deleter);
 };
 
 
@@ -198,17 +203,6 @@ void            RBBISymbolTable::addEntry  (const UnicodeString &key, RBBINode *
     uhash_put( fHashTable, &e->key, e, &err);
 };
 
-
-//
-//  RBBISymbolTableEntry_deleter    Used by the UHashTable to delete the contents
-//                                  when the hash table is deleted.
-//
-U_CDECL_BEGIN
-static void  U_EXPORT2 U_CALLCONV RBBISymbolTableEntry_deleter(void *p) {
-    RBBISymbolTableEntry *px = (RBBISymbolTableEntry *)p;
-    delete px;
-};
-U_CDECL_END
 
 const char RBBISymbolTableEntry::fgClassID=0;
 
