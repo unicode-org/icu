@@ -50,7 +50,7 @@ ucbuf_autodetect_fs(FileStream* in, const char** cp, UConverter** conv, int32_t*
 
     UChar target[1]={ 0 };
     UChar* pTarget;
-    char* pStart;
+    const char* pStart;
 
     /* read a few bytes */
     numRead=T_FileStream_read(in, start, sizeof(start));
@@ -533,7 +533,7 @@ ucbuf_rewind(UCHARBUF* buf,UErrorCode* error){
             UChar target[1]={ 0 };
             UChar* pTarget;
             char start[8];
-            char* pStart;
+            const char* pStart;
             int32_t numRead;
 
             /* read the signature bytes */
@@ -583,28 +583,28 @@ ucbuf_getBuffer(UCHARBUF* buf,int32_t* len,UErrorCode* error){
 
 U_CAPI const char* U_EXPORT2
 ucbuf_resolveFileName(const char* inputDir, const char* fileName, char* target, int32_t* len, UErrorCode* status){
-	int32_t requiredLen = 0;
-	int32_t dirlen =  0;
-	int32_t filelen = 0;
-	if(status==NULL || U_FAILURE(*status)){
-		return NULL;
-	}
-    
-	if(inputDir == NULL || fileName == NULL || len==NULL || (target==NULL && *len>0)){
-		*status = U_ILLEGAL_ARGUMENT_ERROR;
-		return NULL;
-	}
-    
+    int32_t requiredLen = 0;
+    int32_t dirlen =  0;
+    int32_t filelen = 0;
+    if(status==NULL || U_FAILURE(*status)){
+        return NULL;
+    }
 
-	dirlen  = (int32_t)uprv_strlen(inputDir);
-	filelen = (int32_t)uprv_strlen(fileName);
+    if(inputDir == NULL || fileName == NULL || len==NULL || (target==NULL && *len>0)){
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
+
+    dirlen  = (int32_t)uprv_strlen(inputDir);
+    filelen = (int32_t)uprv_strlen(fileName);
     if(inputDir[dirlen-1] != U_FILE_SEP_CHAR) {
-		requiredLen = dirlen + filelen + 2;
-		if((*len < requiredLen) || target==NULL){
-			*len = requiredLen;
-			*status = U_BUFFER_OVERFLOW_ERROR;
-			return NULL;
-		}
+        requiredLen = dirlen + filelen + 2;
+        if((*len < requiredLen) || target==NULL){
+            *len = requiredLen;
+            *status = U_BUFFER_OVERFLOW_ERROR;
+            return NULL;
+        }
 
         target[0] = '\0';
         /*
@@ -624,74 +624,74 @@ ucbuf_resolveFileName(const char* inputDir, const char* fileName, char* target, 
         }
         target[dirlen + 1] = '\0';
     } else {
-		requiredLen = dirlen + filelen + 1;
-		if((*len < requiredLen) || target==NULL){
-			*len = requiredLen;
-			*status = U_BUFFER_OVERFLOW_ERROR;
-			return NULL;
-		}
-
-        uprv_strcpy(target, inputDir);   
+        requiredLen = dirlen + filelen + 1;
+        if((*len < requiredLen) || target==NULL){
+            *len = requiredLen;
+            *status = U_BUFFER_OVERFLOW_ERROR;
+            return NULL;
+        }
+        
+        uprv_strcpy(target, inputDir);
     }
 
     uprv_strcat(target, fileName);
-	return target;
+    return target;
 }
 U_CAPI const UChar* U_EXPORT2
 ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
-	UChar* temp = buf->currentPos;
+    UChar* temp = buf->currentPos;
     UChar* savePos =NULL;
-	UChar c=0x0000;
-	if(buf->isBuffered){
-		/* The input is buffered we have to do more 
-		 * for returning a pointer U_TRUNCATED_CHAR_FOUND
-		 */
-		for(;;){
-			c = *temp++;
-			/* Watch for CR, LF, EOF; these finish off a line.*/
-			if (c == 0xd) {
-				continue;
-			}
-			if(buf->remaining==0){
-				*err = (UErrorCode) U_EOF;
-			}
-			if(temp>=buf->bufLimit && buf->currentPos == buf->buffer){
-				*err= U_TRUNCATED_CHAR_FOUND;
-				return NULL;
-			}else{
-				ucbuf_fillucbuf(buf,err);
-				if(U_FAILURE(*err)){
-					return NULL;
-				}
-			}
-			if (c == 0x0a || c==0x2028) {  /* Unipad inserts 2028 line separators! */
-				*len = temp - buf->currentPos;
-                savePos = buf->currentPos;
-				buf->currentPos = temp;
-				return savePos;
-			}
-		}
-	}else{
-		/* we know that all input is read into the internal
-		 * buffer so we can safely return pointers
-		 */
-		for(;;){
-			c = *temp++;
-			/* Watch for CR, LF, EOF; these finish off a line.*/
-			if (c == 0xd) {
-				continue;
-			}
-			if(buf->currentPos==buf->bufLimit){
-				*err = (UErrorCode) U_EOF;
+    UChar c=0x0000;
+    if(buf->isBuffered){
+    /* The input is buffered we have to do more 
+    * for returning a pointer U_TRUNCATED_CHAR_FOUND
+        */
+        for(;;){
+            c = *temp++;
+            /* Watch for CR, LF, EOF; these finish off a line.*/
+            if (c == 0xd) {
+                continue;
+            }
+            if(buf->remaining==0){
+                *err = (UErrorCode) U_EOF;
+            }
+            if(temp>=buf->bufLimit && buf->currentPos == buf->buffer){
+                *err= U_TRUNCATED_CHAR_FOUND;
                 return NULL;
-			}
-			if (temp>=buf->bufLimit || c == 0x0a || c==0x2028) {  /* Unipad inserts 2028 line separators! */
-				*len = temp - buf->currentPos;
+            }else{
+                ucbuf_fillucbuf(buf,err);
+                if(U_FAILURE(*err)){
+                    return NULL;
+                }
+            }
+            if (c == 0x0a || c==0x2028) {  /* Unipad inserts 2028 line separators! */
+                *len = temp - buf->currentPos;
                 savePos = buf->currentPos;
-				buf->currentPos = temp;
-				return savePos;
-			}
-		}
-	}
-	return NULL;
+                buf->currentPos = temp;
+                return savePos;
+            }
+        }
+    }else{
+    /* we know that all input is read into the internal
+    * buffer so we can safely return pointers
+        */
+        for(;;){
+            c = *temp++;
+            /* Watch for CR, LF, EOF; these finish off a line.*/
+            if (c == 0xd) {
+                continue;
+            }
+            if(buf->currentPos==buf->bufLimit){
+                *err = (UErrorCode) U_EOF;
+                return NULL;
+            }
+            if (temp>=buf->bufLimit || c == 0x0a || c==0x2028) {  /* Unipad inserts 2028 line separators! */
+                *len = temp - buf->currentPos;
+                savePos = buf->currentPos;
+                buf->currentPos = temp;
+                return savePos;
+            }
+        }
+    }
+    return NULL;
 }
