@@ -509,7 +509,7 @@ public:
   * @param info the version # information, the result will be filled in
   * @stable
   */
-  void getVersion(UVersionInfo info) const;
+  virtual void getVersion(UVersionInfo info) const = 0;
 
   /**
   * Returns a unique class ID POLYMORPHICALLY. Pure virtual method.
@@ -693,7 +693,8 @@ private:
   UCollationStrength  strength;
   Normalizer::EMode  decmp;
   */
-  static const UVersionInfo fVersion;
+    /* This is useless information */
+/*  static const UVersionInfo fVersion;*/
 };
 
 // Collator inline methods -----------------------------------------------
