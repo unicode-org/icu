@@ -25,7 +25,7 @@
 #include "unicode/dbbi.h"
 #include "unicode/brkiter.h"
 #include "unicode/udata.h"
-#include "unicode/resbund.h"
+#include "unicode/ures.h"
 #include "cstring.h"
 #include "mutex.h"
 #include "iculserv.h"
@@ -497,11 +497,12 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
 
     // this is more of a placeholder. All the break iterators have the same actual locale: root
     // except the Thai one
-    ResourceBundle res(NULL, loc, status);
+    UResourceBundle *res = ures_open(NULL, loc.getName(), &status);
     U_LOCALE_BASED(locBased, *result);
-    locBased.setLocaleIDs(res.getLocale(ULOC_VALID_LOCALE, status).getName(),
+    locBased.setLocaleIDs(ures_getLocaleByType(res, ULOC_VALID_LOCALE, &status),
                           (uprv_strcmp(loc.getLanguage(), "th") == 0) ?
                           "th" : "root");
+    ures_close(res);
     return result;
 }
 
