@@ -1,16 +1,16 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2002, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  genprops.h
+*   file name:  gennorm.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
 *
-*   created on: 1999dec13
+*   created on: 2001may25
 *   created by: Markus W. Scherer
 */
 
@@ -38,6 +38,28 @@ typedef struct Norm {
     USet *canonStart;
     UBool unsafeStart;
 } Norm;
+
+/*
+ * modularization flags
+ *
+ * Corresponding bits in gStoreFlags control whether certain kinds of data
+ * are to be stored in (1) or omitted from (0) the data file.
+ * The flags are controlled by a command-line argument, with a letter
+ * per flag.
+ */
+enum {
+    UGENNORM_STORE_COMPAT,      /* (k) compatibility decompositions */
+    UGENNORM_STORE_COMPOSITION, /* (c) composition data */
+    UGENNORM_STORE_FCD,         /* (f) FCD data */
+    UGENNORM_STORE_AUX,         /* (a) auxiliary trie and associated data */
+    UGENNORM_STORE_EXCLUSIONS,  /* (x) exclusion sets */
+    UGENNORM_STORE_COUNT
+};
+
+extern uint32_t gStoreFlags;
+
+#define DO_STORE(flag)      (0!=(gStoreFlags&U_MASK(flag)))
+#define DO_NOT_STORE(flag)  (0==(gStoreFlags&U_MASK(flag)))
 
 /* global flags */
 extern UBool beVerbose, haveCopyright;
