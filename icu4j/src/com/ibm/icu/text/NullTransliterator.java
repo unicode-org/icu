@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NullTransliterator.java,v $ 
- * $Date: 2002/02/16 03:06:11 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/12/03 18:57:36 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -15,6 +15,7 @@ import java.util.*;
 
 /**
  * A transliterator that leaves text unchanged.
+ * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
  */
 public class NullTransliterator extends Transliterator {
     private static final String COPYRIGHT =
@@ -28,6 +29,7 @@ public class NullTransliterator extends Transliterator {
 
     /**
      * Constructs a transliterator.
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     public NullTransliterator() {
         super(_ID, null);
@@ -35,6 +37,7 @@ public class NullTransliterator extends Transliterator {
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean incremental) {

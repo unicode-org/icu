@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UnicodeToHexTransliterator.java,v $ 
- * $Date: 2002/02/16 03:06:23 $ 
- * $Revision: 1.12 $
+ * $Date: 2002/12/03 18:56:46 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -32,7 +32,7 @@ import java.util.*;
  * default is uppercase.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.12 $ $Date: 2002/02/16 03:06:23 $
+ * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
  */
 public class UnicodeToHexTransliterator extends Transliterator {
 
@@ -92,6 +92,7 @@ public class UnicodeToHexTransliterator extends Transliterator {
      * Ignored if direction is HEX_UNICODE.
      * @param filter the filter for this transliterator, or
      * null if none.
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     public UnicodeToHexTransliterator(String pattern, boolean uppercase,
                                       UnicodeFilter filter) {
@@ -104,6 +105,7 @@ public class UnicodeToHexTransliterator extends Transliterator {
      * Constructs an uppercase transliterator with no filter.
      * @param pattern The pattern for this transliterator.  See
      * applyPattern() for pattern syntax.
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     public UnicodeToHexTransliterator(String pattern) {
         this(pattern, true, null);
@@ -112,6 +114,7 @@ public class UnicodeToHexTransliterator extends Transliterator {
     /**
      * Constructs a transliterator with the default prefix "&#092;u"
      * that outputs four uppercase hex digits.
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     public UnicodeToHexTransliterator() {
         super(_ID, null);
@@ -147,6 +150,7 @@ public class UnicodeToHexTransliterator extends Transliterator {
      * <p>Limitations: There is no way to set the uppercase attribute
      * in the pattern.  (applyPattern() does not alter the uppercase
      * attribute.)
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     public void applyPattern(String thePattern) {
         StringBuffer prefixBuf = null;
@@ -236,6 +240,7 @@ public class UnicodeToHexTransliterator extends Transliterator {
 
     /**
      * Return this transliterator's pattern.
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     public String toPattern() {
         return pattern;
@@ -244,6 +249,7 @@ public class UnicodeToHexTransliterator extends Transliterator {
     /**
      * Returns the string that precedes the four hex digits.
      * @return prefix string
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     public String getPrefix() {
         return prefix;
@@ -256,6 +262,7 @@ public class UnicodeToHexTransliterator extends Transliterator {
      * multiple threads.  The prefix should not be changed by one
      * thread while another thread may be transliterating.
      * @param prefix prefix string
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     public void setPrefix(String prefix) {
         this.prefix = prefix;
@@ -263,6 +270,7 @@ public class UnicodeToHexTransliterator extends Transliterator {
 
     /**
      * Returns true if this transliterator outputs uppercase hex digits.
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     public boolean isUppercase() {
         return uppercase;
@@ -276,6 +284,7 @@ public class UnicodeToHexTransliterator extends Transliterator {
      * one thread while another thread may be transliterating.
      * @param outputUppercase if true, then this transliterator
      * outputs uppercase hex digits.
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     public void setUppercase(boolean outputUppercase) {
         uppercase = outputUppercase;
@@ -283,6 +292,7 @@ public class UnicodeToHexTransliterator extends Transliterator {
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean incremental) {

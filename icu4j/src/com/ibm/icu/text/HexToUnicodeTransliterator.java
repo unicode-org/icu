@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/HexToUnicodeTransliterator.java,v $ 
- * $Date: 2002/02/25 22:43:58 $ 
- * $Revision: 1.13 $
+ * $Date: 2002/12/03 18:56:44 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -24,7 +24,7 @@ import com.ibm.icu.impl.Utility;
  * applyPattern() for details.
  *
  * @author Alan Liu
- * @version $RCSfile: HexToUnicodeTransliterator.java,v $ $Revision: 1.13 $ $Date: 2002/02/25 22:43:58 $
+ * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
  */
 public class HexToUnicodeTransliterator extends Transliterator {
     private static final String COPYRIGHT =
@@ -70,6 +70,7 @@ public class HexToUnicodeTransliterator extends Transliterator {
 
     /**
      * Constructs a transliterator.
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     public HexToUnicodeTransliterator() {
         super(_ID, null);
@@ -78,6 +79,7 @@ public class HexToUnicodeTransliterator extends Transliterator {
 
     /**
      * Constructs a transliterator.
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     public HexToUnicodeTransliterator(String thePattern) {
         this(thePattern, null);
@@ -85,6 +87,7 @@ public class HexToUnicodeTransliterator extends Transliterator {
     
     /**
      * Constructs a transliterator.
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     public HexToUnicodeTransliterator(String thePattern,
                                       UnicodeFilter theFilter) {
@@ -117,6 +120,7 @@ public class HexToUnicodeTransliterator extends Transliterator {
      * suffix-char := [^special-char] | '\\' special-char
      * special-char := ';' | '0' | '#' | '\\'
      * </pre>
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     public void applyPattern(String pattern) {
 
@@ -258,6 +262,7 @@ public class HexToUnicodeTransliterator extends Transliterator {
 
     /**
      * Return this transliterator's pattern.
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     public String toPattern() {
         return pattern;
@@ -265,6 +270,7 @@ public class HexToUnicodeTransliterator extends Transliterator {
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
+     * @deprecated ICU 2.4 This class to be removed after 2003-12-01. Use the Transliterator factory methods.
      */
     protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean isIncremental) {

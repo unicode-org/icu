@@ -2,8 +2,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/SimpleTimeZoneAdapter.java,v $ 
- * $Date: 2002/02/16 03:06:30 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/12/03 18:56:15 $ 
+ * $Revision: 1.3 $
  */
 package com.ibm.icu.util;
 import java.util.Date;
@@ -32,6 +32,7 @@ import java.util.Date;
  *
  * @see com.ibm.icu.util.TimeZone#setDefault
  * @author Alan Liu
+ * @stable
  */
 public class SimpleTimeZoneAdapter extends java.util.TimeZone {
 
@@ -40,13 +41,18 @@ public class SimpleTimeZoneAdapter extends java.util.TimeZone {
      * We delegate all methods to this object.
      */
     private SimpleTimeZone zone;
-
+    
+    /**
+     * Constructs an adapter for a SimpleTimeZone object.
+     * @stable
+     */
     public SimpleTimeZoneAdapter(SimpleTimeZone zone) {
         this.zone = zone;
     }
 
     /**
      * Override TimeZone
+     * @stable
      */
     public String getID() {
         return zone.getID();
@@ -54,6 +60,7 @@ public class SimpleTimeZoneAdapter extends java.util.TimeZone {
 
     /**
      * Override TimeZone
+     * @stable
      */
     public void setID(String ID) {
         zone.setID(ID);
@@ -61,6 +68,7 @@ public class SimpleTimeZoneAdapter extends java.util.TimeZone {
 
     /**
      * Override TimeZone
+     * @stable
      */
     public boolean hasSameRules(java.util.TimeZone other) {
         return other instanceof SimpleTimeZoneAdapter &&
@@ -69,6 +77,7 @@ public class SimpleTimeZoneAdapter extends java.util.TimeZone {
 
     /**
      * Override TimeZone
+     * @stable
      */
     public int getOffset(int era, int year, int month, int day, int dayOfWeek,
                          int millis) {
@@ -92,6 +101,7 @@ public class SimpleTimeZoneAdapter extends java.util.TimeZone {
     /**
      * Overrides TimeZone
      * Gets the GMT offset for this time zone.
+     * @stable
      */
     public int getRawOffset() {
         return zone.getRawOffset();
@@ -99,6 +109,7 @@ public class SimpleTimeZoneAdapter extends java.util.TimeZone {
 
     /**
      * Overrides TimeZone
+     * @stable
      */
     public void setRawOffset(int offsetMillis) {
         zone.setRawOffset(offsetMillis);
@@ -106,6 +117,7 @@ public class SimpleTimeZoneAdapter extends java.util.TimeZone {
 
     /**
      * Overrides TimeZone
+     * @stable
      */
     public boolean useDaylightTime() {
         return zone.useDaylightTime();
@@ -113,6 +125,7 @@ public class SimpleTimeZoneAdapter extends java.util.TimeZone {
 
     /**
      * Overrides TimeZone
+     * @stable
      */
     public boolean inDaylightTime(Date date) {
         return zone.inDaylightTime(date);
@@ -120,6 +133,7 @@ public class SimpleTimeZoneAdapter extends java.util.TimeZone {
 
     /**
      * Overrides Cloneable
+     * @stable
      */
     public Object clone() {
         return new SimpleTimeZoneAdapter((SimpleTimeZone)zone.clone());
@@ -127,6 +141,7 @@ public class SimpleTimeZoneAdapter extends java.util.TimeZone {
 
     /**
      * Override hashCode.
+     * @stable
      */
     public synchronized int hashCode() {
         return zone.hashCode();
@@ -138,6 +153,7 @@ public class SimpleTimeZoneAdapter extends java.util.TimeZone {
      * @param obj  The SimpleTimeZone object to be compared with.
      * @return     True if the given obj is the same as this SimpleTimeZone
      *             object; false otherwise.
+     * @stable
      */
     public boolean equals(Object obj) {
         if (obj instanceof SimpleTimeZoneAdapter) {
@@ -149,6 +165,7 @@ public class SimpleTimeZoneAdapter extends java.util.TimeZone {
     /**
      * Return a string representation of this time zone.
      * @return  a string representation of this time zone.
+     * @stable
      */
     public String toString() {
         // Should probably show our class name here...fix later.

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $
- * $Date: 2002/07/26 21:12:36 $
- * $Revision: 1.57 $
+ * $Date: 2002/12/03 18:57:36 $
+ * $Revision: 1.58 $
  *
  *****************************************************************************************
  */
@@ -279,7 +279,7 @@ import com.ibm.icu.impl.data.ResourceReader;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.57 $ $Date: 2002/07/26 21:12:36 $
+ * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -294,6 +294,7 @@ public class RuleBasedTransliterator extends Transliterator {
      * @param direction either FORWARD or REVERSE.
      * @exception IllegalArgumentException if rules are malformed
      * or direction is invalid.
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     public RuleBasedTransliterator(String ID, String rules, int direction,
                                    UnicodeFilter filter) {
@@ -319,6 +320,7 @@ public class RuleBasedTransliterator extends Transliterator {
      * @param rules rules, separated by ';'
      * @exception IllegalArgumentException if rules are malformed
      * or direction is invalid.
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     public RuleBasedTransliterator(String ID, String rules) {
         this(ID, rules, FORWARD, null);
@@ -332,6 +334,7 @@ public class RuleBasedTransliterator extends Transliterator {
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     protected void handleTransliterate(Replaceable text,
                                        Position index, boolean incremental) {
@@ -444,6 +447,7 @@ public class RuleBasedTransliterator extends Transliterator {
      * \\Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.
      * @return rules string
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     public String toRules(boolean escapeUnprintable) {
         return data.ruleSet.toRules(escapeUnprintable);
@@ -452,6 +456,7 @@ public class RuleBasedTransliterator extends Transliterator {
     /**
      * Return the set of all characters that may be modified by this
      * Transliterator, ignoring the effect of our filter.
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     protected UnicodeSet handleGetSourceSet() {
         return data.ruleSet.getSourceTargetSet(false);
@@ -460,6 +465,7 @@ public class RuleBasedTransliterator extends Transliterator {
     /**
      * Returns the set of all characters that may be generated as
      * replacement text by this transliterator.
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     public UnicodeSet getTargetSet() {
         return data.ruleSet.getSourceTargetSet(true);
@@ -468,6 +474,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.58  2002/12/03 18:57:36  alan
+ * jitterbug 2087: fix @ tags
+ *
  * Revision 1.57  2002/07/26 21:12:36  alan
  * jitterbug 1997: use UCharacterProperty.isRuleWhiteSpace() in parsers
  *
