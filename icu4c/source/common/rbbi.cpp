@@ -591,7 +591,11 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
     }
 
     // no matter what, we always advance at least one character forward
-    int32_t result = fText->getIndex() + 1;
+    int32_t temp = fText->getIndex();
+    fText->next32();
+    int32_t result = fText->getIndex();
+    fText->setIndex(temp);
+
     int32_t lookaheadResult = 0;
 
     // Initialize the state machine.  Begin in state 1
