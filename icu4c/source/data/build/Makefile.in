@@ -1,0 +1,200 @@
+## Makefile.in for ICU data/build
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
+
+## Source directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+
+top_builddir = ../..
+
+include $(top_builddir)/icudefs.mk
+
+include @platform_make_fragment@
+
+## Build directory information
+subdir = data/build
+
+# OBJDATADIR must be a short path (with ..'s) to the data.
+
+
+SRCDATADIR=$(top_srcdir)/../data
+UNICODEDATADIR=$(SRCDATADIR)/unidata
+TESTSRCDATADIR=$(top_srcdir)/test/testdata
+TESTOBJDATADIR=$(top_builddir)/test/testdata
+SRCLISTDEPS=Makefile Makefile.in $(SRCDATADIR)/resfiles.mk $(SRCDATADIR)/ucmfiles.mk
+
+OBJDATADIR=.
+CURDIR=$(shell /bin/pwd)
+
+# relative lib links from pkgdata are the same as for tmp
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/extra/ustdio:$$$(LDLIBRARYPATH_ENVVAR)
+TOOLDIR=$(top_builddir)/tools
+
+## List of phony targets
+.PHONY : all all-local all-recursive install install-local install-files install-dlls build-cmnfile build-dll		\
+install-recursive clean clean-local clean-recursive distclean		\
+distclean-local distclean-recursive dist dist-local dist-recursive	\
+check check-local check-recursive build-testdlls build-basetestdata build-local
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: 
+clean: clean-local
+distclean : distclean
+dist: 
+check: all
+
+all-local: thaidict.brk build-local 
+
+
+##### Define all the data files. the build rule that depends on them is below.
+
+## DAT files - Misc. data files.
+DAT_FILES=uprops.dat unames.dat cnvalias.dat tz.dat
+TEST_DAT_FILES=$(TESTOBJDATADIR)/test.dat
+
+## BRK files
+# ALL of these files can be deleted (the following BRK files) - they are copied
+BRK_FILES=char.brk line.brk line_th.brk sent.brk word.brk word_th.brk
+# don't include thaidict.brk - it goes into a resource bundle - plus it isn't deleted
+
+## UCM files 
+include $(SRCDATADIR)/ucmfiles.mk
+-include $(SRCDATADIR)/ucmlocal.mk
+ALL_UCM_SOURCE= $(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
+UCM_FILES = $(ALL_UCM_SOURCE:%=$(SRCDATADIR)/%)
+CNV_FILES = $(ALL_UCM_SOURCE:%.ucm=%.cnv)
+
+TEST_UCM_SOURCE= test1.ucm test3.ucm test4.ucm
+TEST_UCM_FILES=$(TEST_UCM_SOURCE:%=$(TESTSRCDATADIR)/data/%)
+TEST_CNV_FILES=$(TEST_UCM_SOURCE:%.ucm=%.cnv)
+
+## RES files
+include $(SRCDATADIR)/resfiles.mk
+-include $(SRCDATADIR)/reslocal.mk
+ALL_RES_SOURCE= $(GENRB_SOURCE) $(TRANSLIT_SOURCE) $(RESOURCE_SRC) $(GENRB_SOURCE_LOCAL)
+RES_SRC_FILES = $(ALL_RES_SOURCE:%=$(SRCDATADIR)/%)
+RES_FILES = $(ALL_RES_SOURCE:%.txt=%.res)
+
+TEST_RES = root.txt te.txt te_IN.txt testtypes.txt
+TEST_RES_SRC_FILES=$(ALL_TEST_RES_SOURCE:%=$(TESTSRCDATADIR)/%)
+TEST_RES_FILES=$(TEST_RES:%.txt=$(TESTOBJDATADIR)/%.res)
+
+## All generated files
+ALL_FILES = $(DAT_FILES) $(BRK_FILES) $(CNV_FILES) $(RES_FILES)
+
+ALL_TEST_FILES = $(TEST_DAT_FILES) $(TEST_BRK_FILES) $(TEST_CNV_FILES) $(TEST_RES_FILES)
+
+#####################################################
+# General data build rules
+
+## Files to remove for 'make clean'
+CLEANFILES = *~ $(ALL_FILES) $(ALL_TEST_FILES)
+
+icudata.lst: $(SRCLISTDEPS)
+	@echo Generating $@ list of data files
+	@-$(RMV) $@
+	@for file in $(ALL_FILES); do \
+	  echo $$file >> $@; \
+	done;
+
+$(TESTOBJDATADIR)/testdata.lst: $(SRCLISTDEPS)
+	@echo Generating $@ list of data files
+	@-$(RMV) $@
+	@for file in $(TEST_RES_FILES) $(TEST_DAT_FILES); do \
+	  echo $$file >> $@; \
+	done;
+
+build-local: build-data build-testdata
+
+build-data: $(ALL_FILES) icudata.lst
+	@echo "ICU data files are up to date."
+
+clean-local:
+	@echo '#' removing built files: .brk .dat .cnv .res ...
+	@$(RMV) $(CLEANFILES) thaidict.brk
+	@echo Cleaning up..
+
+#$(ALL_TEST_FILES)
+
+build-testdata:  $(ALL_TEST_FILES) $(TESTOBJDATADIR)/testdata.lst
+	@echo "ICU test data files are up to date."
+
+# Now, sections for building each kind of data.
+
+####################################################    DAT
+# DAT FILES
+# uprops.dat
+uprops.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/Mirror.txt $(TOOLDIR)/genprops/genprops
+	@echo Creating uprops.dat
+	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genprops/genprops -s $(UNICODEDATADIR) -d . -u $(UNICODE_VERSION)
+
+# unames.dat
+unames.dat: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLDIR)/gennames/gennames
+	@echo Creating unames.dat
+	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gennames/gennames -d . $(UNICODEDATADIR)/UnicodeData.txt -u $(UNICODE_VERSION)
+
+# cnvalias.dat
+cnvalias.dat: $(SRCDATADIR)/convrtrs.txt $(TOOLDIR)/gencnval/gencnval
+	@echo Creating $@
+	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gencnval/gencnval -d . $(SRCDATADIR)/convrtrs.txt
+
+# tz.dat
+tz.dat: $(SRCDATADIR)/timezone.txt $(TOOLDIR)/gentz/gentz
+	@echo Creating $@
+	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gentz/gentz -d . $(SRCDATADIR)/timezone.txt
+
+# test.dat
+$(TESTOBJDATADIR)/test.dat: $(TOOLDIR)/gentest/gentest
+	@echo Creating $@
+	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gentest/gentest -d $(TESTOBJDATADIR) 
+
+####################################################    BRK
+# BRK FILES
+
+thaidict.brk: $(SRCDATADIR)/thaidict.brk
+	@echo $@
+	@$(RMV) $@ && ln -s $< $@
+
+# copy the right endianness
+
+ifeq (@U_IS_BIG_ENDIAN@,1)
+%.brk: $(SRCDATADIR)/%BE.brk
+	cp $< $@
+else
+%.brk: $(SRCDATADIR)/%LE.brk
+	cp $< $@
+endif
+
+####################################################    CNV
+# CNV FILES
+%.cnv: $(SRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/makeconv
+	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/makeconv/makeconv -c -d . $(SRCDATADIR)/$(<F)
+
+%.cnv: $(TESTSRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/makeconv
+	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/makeconv/makeconv -c -d . $(TESTSRCDATADIR)/$(<F)
+
+####################################################    RES
+# RES FILES
+$(TESTOBJDATADIR)/%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb
+	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -s $(TESTSRCDATADIR) -d $(TESTOBJDATADIR) $(<F)
+
+%.res: $(SRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb
+	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -s $(SRCDATADIR) -d . $(<F)
+
+
+###################################################################
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+
+
+
+
+
