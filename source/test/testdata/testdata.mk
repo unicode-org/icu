@@ -33,7 +33,7 @@ test.dat
 
 TESTDATA_ENC:
 	@echo Making Test Resource Bundle file with encoding ISO-2022-JP
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s$(TESTDATA) -eISO_2022_JP -d$(TESTDATAOUT) ja_data.txt
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s$(TESTDATA) -eISO_2022_JP -d$(TESTDATAOUT) ja_data.txt >null
 
 $(TESTDATAOUT)test.dat : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
 	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -d$(TESTDATAOUT)
