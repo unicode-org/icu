@@ -250,6 +250,9 @@ static void TestNewTypes() {
     const UChar *empty = NULL;
     const UChar *zeroString;
     UChar expected[] = { 'a','b','c','\0','d','e','f' };
+    const char* expect ="tab:\t cr:\r ff:\f newline:\n backslash:\\\\ quote=\\\' doubleQuote=\\\" singlequoutes=''";
+    UChar uExpect[200];
+    u_charsToUChars(expect,uExpect,uprv_strlen(expect)+1);
     strcpy(action, "Construction of testtypes bundle");
 
     strcpy(testdatapath, directory);
@@ -357,6 +360,15 @@ static void TestNewTypes() {
         CONFIRM_INT_EQ(intResult, 123);
     }
 
+    /* this tests if escapes are preserved or not */
+    {
+        int len =0;
+        const UChar* str = ures_getStringByKey(theBundle,"testescape",&len,&status);
+        CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+        if(u_strcmp(uExpect,str)){
+            log_err("Did not get the expected string for testescape");
+        }
+    }
     ures_close(res);
     ures_close(theBundle);
 
