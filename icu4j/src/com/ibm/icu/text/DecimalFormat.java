@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2004/02/11 00:00:18 $ 
- * $Revision: 1.41 $
+ * $Date: 2004/02/12 01:01:38 $ 
+ * $Revision: 1.42 $
  *
  *****************************************************************************************
  */
@@ -771,8 +771,6 @@ public class DecimalFormat extends NumberFormat {
                     .multiply(roundingIncrement);
         }
 
-        // At this point we are guaranteed a nonnegative finite
-        // number.
         synchronized(digitList) {
             digitList.set(number, precision(false), !useExponentialNotation);
             return subformat(result, fieldPosition, number.signum() < 0, false);
@@ -802,8 +800,6 @@ public class DecimalFormat extends NumberFormat {
                     .multiply(ri);
         }
 
-        // At this point we are guaranteed a nonnegative finite
-        // number.
         synchronized(digitList) {
             digitList.set(number, precision(false), !useExponentialNotation);
             return subformat(result, fieldPosition, number.signum() < 0, false);
@@ -836,14 +832,6 @@ public class DecimalFormat extends NumberFormat {
      * Return the number of digits to show.
      */
     private int precision(boolean isIntegral) {
-        int maxIntDig = getMaximumIntegerDigits();
-        int minIntDig = getMinimumIntegerDigits();
-        if (useExponentialNotation && maxIntDig > MAX_SCIENTIFIC_INTEGER_DIGITS) {
-            maxIntDig = 1;
-	    if (maxIntDig < minIntDig) {
-		maxIntDig = minIntDig;
-	    }
-        }
 	return useExponentialNotation 
 	    ? getMinimumIntegerDigits() + getMaximumFractionDigits() 
 	    : (isIntegral ? 0 : getMaximumFractionDigits());
