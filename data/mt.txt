@@ -23,39 +23,55 @@
 //  but, U+0307 is the DOT ABOVE needed for z., c., and g. (in collation rules)
 
 mt {
-    Version { "0.6" }
+    Version { "0.7" }
     ShortLanguage { mlt }
     Languages {
 
  root    { "G\u0127erq" } // the root locale
 
 // Some of these tags look like they are in other languages, not Maltese.
+
  ar { G\u0127arbi }
- cs { \u010Aesky } 
+ bg { "Bulgaru" }
+ cs { "\u010Aek" }
  cy { \u010Aymraeg } 
  da { Dansk } 
  de { "\u0120ermani\u017C" } // [CI]
- el { Ellinika }  // <-- FIX?
- en { English } 
+ el { "Grieg" }
+ en { "Ingli\u017C" }
  es { "Spanjol" } 
- et { Eesti }  // <-- FIX
+ et { "Estonjan" }
+ eu { "Bask" }
+ fa { "Persjan" }
  fi { Suomi } // <-- FIX?
  fr { "Fran\u010Bi\u017c" } 
  hr { Hrvatski } 
+ hu { "Ungeri\u017C" }
+ hy { "Armenjan" }
+ id { "Indone\u017Cjan" }
  is { "Íslenska" }  // <-- FIX
  it { Taljan }  // CI dictionary
  ja { "\u0120appuni\u017C" } // srl, after [BM]
  lt { Lietuviskai } 
  lv { Latviski } 
  mt { Malti }
- pl { Polski } 
+ pl { "Pollakk" }
  pt { "Portugi\u017c" }
- ro { Romana } 
- ru { Russkij } 
- sv { Svenska } 
+ ro { "Rumen" }
+ ru { "Russu" }
+ sh { "Serbo-Kroat" }
+ sk { "Slovakk" }
+ sq { "Albani\u017C" }
+ sr { "Serb" }
+ sv { "Svedi\u017C" }
+ sw { "Swa\u0127ili" }
  th { "Tajlandi\u017c" }
  tr { "Tork" } 
  uk { "Ukranjan" }
+ ur { "Urdu" }
+ vi { "Vjetnami\u017C" }
+ zh { "\u010Aini\u017C" }
+ zu { "\u017Bulu" }
 
 // x1 { Magyar } 
 // x2 { Makedonski } 
