@@ -66,6 +66,7 @@ cs {
         CN { "\u010C\u00EDna" }
         CO { "Kolumbie" }
         CR { "Kostarika" }
+        CU { "Kuba" }
         CV { "Kapverdy" }
         CX { "V\u00E1no\u010Dn\u00ED ostrovy" }
         CY { "Kypr" }
@@ -118,6 +119,8 @@ cs {
         IL { "Izrael" }
         IN { "Indie" }
         IO { "Britsk\u00E9 \u00FAzem\u00ED v Indick\u00E9m oce\u00E1nu" }
+        IQ { "Ir\u00E1k" }
+        IR { "\u00CDr\u00E1n" }
         IS { "Island" }
         IT { "It\u00E1lie" }
         JM { "Jamajka" }
@@ -129,7 +132,8 @@ cs {
         //KI { "Kiribati" }
         KM { "Komory" }
         KN { "Svat\u00FD Kitts a Nevis" }
-        KR { "Korea, republika" }
+        KP { "Severn\u00ED Korea" } // alternate name { "Korea, lidov\u011B demokratick\u00E1 republika" }
+        KR { "Ji\u017En\u00ED Korea" } // alternate name { "Korea, republika" }
         KW { "Kuvajt" }
         KY { "Kajmansk\u00E9 ostrovy" }
         KZ { "Kazachst\u00E1n" }
@@ -143,6 +147,7 @@ cs {
         LT { "Litva" }
         LU { "Lucembursko" }
         LV { "Loty\u0161sko" }
+        LY { "Libye" }    // alternate name { "Libye" }
         MA { "Maroko" }
         MC { "Monako" }
         MD { "Moldavsko, republika" }
@@ -199,6 +204,7 @@ cs {
         SA { "Sa\u00FAdsk\u00E1 Ar\u00E1bie" }
         SB { "\u0160alamounovy ostrovy" }
         SC { "Seychely" }
+        SD { "S\u00FAd\u00E1n" }
         SE { "\u0160v\u00E9dsko" }
         SG { "Singapur" }
         SH { "Svat\u00E1 Helena" }
@@ -212,6 +218,7 @@ cs {
         SR { "Surinam" }
         ST { "Svat\u00FD Tom\u00E1\u0161" }
         //SV { "El Salvador" }
+        SY { "S\u00FDrie" }    // alternate name { "S\u00FDrie" }
         SZ { "Svazijsko" }
         TC { "Ostrovy Caicos a Turks" }
         TD { "\u010Cad" }

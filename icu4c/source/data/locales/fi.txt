@@ -23,14 +23,14 @@ fi {
         AQ { "Antarktis" }
         AR { "Argentiina" }
         AS { "Amerikan Samoa" }
-        AT { "It\u00e4valta" }
+        AT { "It\u00E4valta" }
         AZ { "Azerbaidzan" }
         BA { "Bosnia ja Hertsegovina" }
         BE { "Belgia" }
         BR { "Brasilia" }
         BS { "Bahama" }
         BV { "Bouvet'nsaari" }
-        BY { "Valko-Ven\u00e4j\u00e4" }
+        BY { "Valko-Ven\u00E4j\u00E4" }
         CA { "Kanada" }
         CC { "Kookossaaret" }
         CD { "Kongon demokraattinen tasavalta" }
@@ -42,6 +42,7 @@ fi {
         CM { "Kamerun" }
         CN { "Kiina" }
         CO { "Kolumbia" }
+        CU { "Kuuba" }
         CV { "Kap Verde" }
         CX { "Joulusaari" }
         CY { "Kypros" }
@@ -83,8 +84,8 @@ fi {
         KH { "Kambodza" }
         KM { "Komorit" }
         KN { "Saint Kitts ja Nevis" }
-        //KR { "Korea" } //  Old Value
-        KR { "Korean tasavalta" }
+        KP { "Pohjois-Korea" }    // alternate name { "Korean demokraattinen kansantasavalta" }
+        KR { "Etel\u00E4-Korea" }    // alternate name { "Korean tasavalta" }
         KY { "Caymansaaret" }
         KZ { "Kazakstan" }
         //LA { "Laos" }
@@ -135,6 +136,7 @@ fi {
         //TM { "Turkmenistan" }
         TR { "Turkki" }
         TT { "Trinidad ja Tobago" }
+        TW { "Kiinan maakunta Taiwan" }
         TZ { "Tansania" }
         UA { "Ukraina" }
         UM { "Yhdysvaltain pienet erillissaaret" }
@@ -146,7 +148,7 @@ fi {
         WF { "Wallis ja Futuna" }
         YE { "Jemen" }
         YU { "Jugoslavia" }
-        ZA { "Etel\u00e4-Afrikka" }
+        ZA { "Etel\u00E4-Afrikka" }
         ZM { "Sambia" }
     }
     Languages { 
