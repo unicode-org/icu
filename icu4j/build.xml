@@ -23,14 +23,20 @@
         </clover-setup>
     </target>
 
-    <target name="clover.html" depends="with.clover">
+    <target name="clover.summary" depends="with.clover">
         <clover-report >
-            <current outfile="icu4j_html" >
-                <format type="html" />
+            <current outfile="icu4j_html" summary="true">
+                <format type="html" srcLevel="false"/>
             </current>
         </clover-report>
     </target>
-
+   <target name="clover.report" depends="with.clover">
+        <clover-report >
+            <current outfile="icu4j_html">
+                <format type="html"/>
+            </current>
+        </clover-report>
+    </target>
     <target name="clover.log" depends="with.clover">
         <clover-log level="method">
              <package name="com.ibm.icu.text"/>
@@ -482,7 +488,7 @@
     </target>
 
     <target name="secureCheck" depends="testJar" description="run secure (applet-like) icu4j test suite">
-    <java classname="com.ibm.icu.dev.test.TestAll" fork="yes">
+    <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
     <!-- jvmarg value="-verbose"/ -->
         <!-- (use for debugging, LOTS of output) <jvmarg value="-Djava.security.debug=access:trace"/ -->
         <jvmarg value="-Djava.security.manager"/>
