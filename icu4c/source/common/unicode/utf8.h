@@ -40,7 +40,7 @@
 /* internal definitions ----------------------------------------------------- */
 
 #ifdef U_UTF8_IMPL
-U_CAPI const uint8_t U_EXPORT2 
+U_CAPI const uint8_t 
 utf8_countTrailBytes[256];
 #else
 U_CFUNC const uint8_t /* U_IMPORT2? */ U_IMPORT
