@@ -485,6 +485,7 @@ public:
   * @param type can be either requested, valid or actual locale. For more
   *             information see the definition of ULocDataLocaleType in
   *             uloc.h
+  * @param status the error code status.
   * @return locale where the collation data lives. If the collator
   *         was instantiated from rules, locale is empty.
   * @stable ICU 2.1
@@ -955,7 +956,7 @@ public:
 	 * Its contents must never change.
 	 * @param count output parameter for the number of locales supported by the factory
 	 * @param status the in/out error code
-	 * @param return a pointer to an array of count UnicodeStrings.
+	 * @return a pointer to an array of count UnicodeStrings.
      */
     virtual const UnicodeString * getSupportedIDs(int32_t &count, UErrorCode& status) = 0;
 };

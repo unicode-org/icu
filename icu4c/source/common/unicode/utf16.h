@@ -106,8 +106,8 @@
 /**
  * Get the lead surrogate (0xd800..0xdbff) for a
  * supplementary code point (0x10000..0x10ffff).
- * @param c 32-bit code point (U+10000..U+10ffff)
- * @return lead surrogate (U+d800..U+dbff) for c
+ * @param supplementary 32-bit code point (U+10000..U+10ffff)
+ * @return lead surrogate (U+d800..U+dbff) for supplementary
  * @draft ICU 2.4
  */
 #define U16_LEAD(supplementary) (UChar)(((supplementary)>>10)+0xd7c0)
@@ -115,8 +115,8 @@
 /**
  * Get the trail surrogate (0xdc00..0xdfff) for a
  * supplementary code point (0x10000..0x10ffff).
- * @param c 32-bit code point (U+10000..U+10ffff)
- * @return trail surrogate (U+dc00..U+dfff) for c
+ * @param supplementary 32-bit code point (U+10000..U+10ffff)
+ * @return trail surrogate (U+dc00..U+dfff) for supplementary
  * @draft ICU 2.4
  */
 #define U16_TRAIL(supplementary) (UChar)(((supplementary)&0x3ff)|0xdc00)
@@ -469,7 +469,6 @@
  * @param s const UChar * string
  * @param start starting string offset (usually 0)
  * @param i string offset, start<=i
- * @param length string length
  * @param c output UChar32 variable
  * @see U16_PREV_UNSAFE
  * @draft ICU 2.4
@@ -549,8 +548,8 @@
  * "Safe" macro, handles unpaired surrogates and checks for string boundaries.
  *
  * @param s const UChar * string
+ * @param start start of string
  * @param i string offset, i<length
- * @param length string length
  * @param n number of code points to skip
  * @see U16_BACK_N_UNSAFE
  * @draft ICU 2.4

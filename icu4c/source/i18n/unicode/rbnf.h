@@ -722,7 +722,7 @@ public:
    * Redeclared Format method.
    * @param text   The string to parse
    * @param result the result of the parse, either a double or a long.
-   * @status       Output param set to success/failure code.
+   * @param status Output param set to failure code when a problem occurs.
    * @stable ICU 2.0
    */
   virtual inline void parse(const UnicodeString& text,
@@ -782,6 +782,7 @@ public:
    * to the initial default rule set.  If the rule set is not a public rule set name,
    * U_ILLEGAL_ARGUMENT_ERROR is returned in status.
    * @param ruleSetName the name of the rule set, or null to reset the initial default.
+   * @param status Output param set to failure code when a problem occurs.
    * @draft ICU 2.6
    */
   virtual void setDefaultRuleSet(const UnicodeString& ruleSetName, UErrorCode& status);

@@ -165,7 +165,7 @@ public:
 
   /**
    * Copy constructor.
-   * @param the RuleBasedCollator object to be copied
+   * @param other the RuleBasedCollator object to be copied
    * @see Locale
    * @stable ICU 2.0
    */
@@ -382,6 +382,7 @@ public:
   * you need to do repeated comparisions on the same string. For a single
   * comparison the compare method will be faster.
   * @param source the source string.
+  * @param sourceLength the length of the source string.
   * @param key the transformed key of the source string.
   * @param status the error code status.
   * @return the transformed key.
