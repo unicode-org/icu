@@ -73,18 +73,19 @@ translit_index {
 { "Latin-Arabic", "file", "t_Arab_Latn", "REVERSE" },
 { "Arabic-Latin", "file", "t_Arab_Latn", "FORWARD" },
 
-{ "Tone-Digit", "internal", "t_Tone_Digit", "FORWARD" },
-{ "Digit-Tone", "internal", "t_Tone_Digit", "REVERSE" },
-
-{ "Latin-NumericPinyin", "file", "t_Latn_NPinyn", "FORWARD" },
-{ "NumericPinyin-Latin", "file", "t_Latn_NPinyn", "REVERSE" },
-
-{ "Han-Spacedhan", "internal", "t_Hani_SpHan", "FORWARD" },
-{ "Spacedhan-Han", "alias", "null", "" },
-
-{ "Han-Latin", "file", "t_Hani_Latn", "FORWARD" },
-//Latin-Han:file:Transliterator_Han_Latin.txt:UTF8:REVERSE # no round trip!
-{ "Latin-Han", "alias", "null", "" },
+// Disable until working
+//|{ "Tone-Digit", "internal", "t_Tone_Digit", "FORWARD" },
+//|{ "Digit-Tone", "internal", "t_Tone_Digit", "REVERSE" },
+//|
+//|{ "Latin-NumericPinyin", "file", "t_Latn_NPinyn", "FORWARD" },
+//|{ "NumericPinyin-Latin", "file", "t_Latn_NPinyn", "REVERSE" },
+//|
+//|{ "Han-Spacedhan", "internal", "t_Hani_SpHan", "FORWARD" },
+//|{ "Spacedhan-Han", "alias", "null", "" },
+//|
+//|{ "Han-Latin", "file", "t_Hani_Latn", "FORWARD" },
+//|//Latin-Han:file:Transliterator_Han_Latin.txt:UTF8:REVERSE # no round trip!
+//|{ "Latin-Han", "alias", "null", "" },
 
 // Comment these out; they are only for testing
 // Latin-Han/definition:file:Transliterator_Han_Latin_Definition.txt:UTF8:REVERSE
