@@ -285,7 +285,7 @@ ucal_equivalentTo(    const UCalendar*      cal1,
             const UCalendar*      cal2)
 {
 
-  return *((Calendar*)cal1)==(*((Calendar*)cal2));
+  return ((Calendar*)cal1)->isEquivalentTo(*((Calendar*)cal2));
 }
 
 U_CAPI void  U_EXPORT2
