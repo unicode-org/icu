@@ -67,7 +67,7 @@ public:
      * lowest address. On little endian platforms, the FF will
      * be in the byte with the highest address.
      *
-     * @return true if the platform is big endian
+     * @return TRUE if the platform is big endian
      *
      * @stable ICU 2.8
      */

@@ -376,7 +376,7 @@ void LayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le
         }
     }
 
-    DefaultCharMapper charMapper(true, mirror);
+    DefaultCharMapper charMapper(TRUE, mirror);
 
     fFontInstance->mapCharsToGlyphs(chars, offset, count, reverse, &charMapper, glyphs);
 }

@@ -34,7 +34,7 @@ struct ScriptTable
     le_uint16           langSysCount;
     LangSysRecord       langSysRecordArray[ANY_NUMBER];
 
-    const LangSysTable  *findLanguage(LETag languageTag, le_bool exactMatch = false) const;
+    const LangSysTable  *findLanguage(LETag languageTag, le_bool exactMatch = FALSE) const;
 };
 
 typedef TagAndOffsetRecord ScriptRecord;
@@ -45,7 +45,7 @@ struct ScriptListTable
     ScriptRecord        scriptRecordArray[ANY_NUMBER];
 
     const ScriptTable   *findScript(LETag scriptTag) const;
-    const LangSysTable  *findLanguage(LETag scriptTag, LETag languageTag, le_bool exactMatch = false) const;
+    const LangSysTable  *findLanguage(LETag scriptTag, LETag languageTag, le_bool exactMatch = FALSE) const;
 };
 
 U_NAMESPACE_END

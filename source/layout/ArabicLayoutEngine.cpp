@@ -127,7 +127,7 @@ void ArabicOpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], l
     } else if (fGDEFTable != NULL) {
         GDEFMarkFilter filter(fGDEFTable);
 
-        adjustMarkGlyphs(glyphs, glyphCount, false, &filter, positions, success);
+        adjustMarkGlyphs(glyphs, glyphCount, FALSE, &filter, positions, success);
     } else {
         GlyphDefinitionTableHeader *gdefTable = (GlyphDefinitionTableHeader *) ArabicShaping::glyphDefinitionTable;
         GDEFMarkFilter filter(gdefTable);
@@ -206,7 +206,7 @@ le_int32 UnicodeArabicOpenTypeLayoutEngine::glyphPostProcessing(LEGlyphID tempGl
 
     charIndices = tempCharIndices;
 
-    ArabicOpenTypeLayoutEngine::mapCharsToGlyphs(tempChars, 0, tempGlyphCount, false, true, glyphs, charIndices, success);
+    ArabicOpenTypeLayoutEngine::mapCharsToGlyphs(tempChars, 0, tempGlyphCount, FALSE, TRUE, glyphs, charIndices, success);
 
     LE_DELETE_ARRAY(tempChars);
 

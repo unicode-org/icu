@@ -126,66 +126,66 @@ le_int32 StyleRuns::getRuns(le_int32 runLimits[], le_int32 styleIndices[])
 }
 
 /*
- * NOTE: This table only has "true" values for
+ * NOTE: This table only has "TRUE" values for
  * those scripts which the LayoutEngine can currently
  * process, rather for all scripts which require
  * complex processing for correct rendering.
  */
 static const le_bool complexTable[] = {
-    false , /* Zyyy */
-    false,  /* Qaai */
-    true,   /* Arab */
-    false,  /* Armn */
-    true,   /* Beng */
-    false,  /* Bopo */
-    false,  /* Cher */
-    false,  /* Qaac */
-    false,  /* Cyrl */
-    false,  /* Dsrt */
-    true,   /* Deva */
-    false,  /* Ethi */
-    false,  /* Geor */
-    false,  /* Goth */
-    false,  /* Grek */
-    true,   /* Gujr */
-    true,   /* Guru */
-    false,  /* Hani */
-    false,  /* Hang */
-    true,   /* Hebr */
-    false,  /* Hira */
-    true,   /* Knda */
-    false,  /* Kana */
-    false,  /* Khmr */
-    false,  /* Laoo */
-    false,  /* Latn */
-    true,   /* Mlym */
-    false,  /* Mong */
-    false,  /* Mymr */
-    false,  /* Ogam */
-    false,  /* Ital */
-    true,   /* Orya */
-    false,  /* Runr */
-    false,  /* Sinh */
-    false,  /* Syrc */
-    true,   /* Taml */
-    true,   /* Telu */
-    false,  /* Thaa */
-    true,   /* Thai */
-    false,  /* Tibt */
-    false,  /* Cans */
-    false,  /* Yiii */
-    false,  /* Tglg */
-    false,  /* Hano */
-    false,  /* Buhd */
-    false,  /* Tagb */
-    false,  /* Brai */
-    false,  /* Cprt */
-    false,  /* Limb */
-    false,  /* Linb */
-    false,  /* Osma */
-    false,  /* Shaw */
-    false,  /* Tale */
-    false   /* Ugar */
+    FALSE , /* Zyyy */
+    FALSE,  /* Qaai */
+    TRUE,   /* Arab */
+    FALSE,  /* Armn */
+    TRUE,   /* Beng */
+    FALSE,  /* Bopo */
+    FALSE,  /* Cher */
+    FALSE,  /* Qaac */
+    FALSE,  /* Cyrl */
+    FALSE,  /* Dsrt */
+    TRUE,   /* Deva */
+    FALSE,  /* Ethi */
+    FALSE,  /* Geor */
+    FALSE,  /* Goth */
+    FALSE,  /* Grek */
+    TRUE,   /* Gujr */
+    TRUE,   /* Guru */
+    FALSE,  /* Hani */
+    FALSE,  /* Hang */
+    TRUE,   /* Hebr */
+    FALSE,  /* Hira */
+    TRUE,   /* Knda */
+    FALSE,  /* Kana */
+    FALSE,  /* Khmr */
+    FALSE,  /* Laoo */
+    FALSE,  /* Latn */
+    TRUE,   /* Mlym */
+    FALSE,  /* Mong */
+    FALSE,  /* Mymr */
+    FALSE,  /* Ogam */
+    FALSE,  /* Ital */
+    TRUE,   /* Orya */
+    FALSE,  /* Runr */
+    FALSE,  /* Sinh */
+    FALSE,  /* Syrc */
+    TRUE,   /* Taml */
+    TRUE,   /* Telu */
+    FALSE,  /* Thaa */
+    TRUE,   /* Thai */
+    FALSE,  /* Tibt */
+    FALSE,  /* Cans */
+    FALSE,  /* Yiii */
+    FALSE,  /* Tglg */
+    FALSE,  /* Hano */
+    FALSE,  /* Buhd */
+    FALSE,  /* Tagb */
+    FALSE,  /* Brai */
+    FALSE,  /* Cprt */
+    FALSE,  /* Limb */
+    FALSE,  /* Linb */
+    FALSE,  /* Osma */
+    FALSE,  /* Shaw */
+    FALSE,  /* Tale */
+    FALSE   /* Ugar */
 };
 
 
@@ -220,7 +220,7 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
 								 LEErrorCode &status)
                                  : fChars(chars), fCharCount(count),
                                    fFontRuns(NULL), fLevelRuns(levelRuns), fScriptRuns(scriptRuns), fLocaleRuns(localeRuns),
-                                   fVertical(vertical), fClientLevels(true), fClientScripts(true), fClientLocales(true), fEmbeddingLevels(NULL),
+                                   fVertical(vertical), fClientLevels(TRUE), fClientScripts(TRUE), fClientLocales(TRUE), fEmbeddingLevels(NULL),
                                    fAscent(0), fDescent(0), fLeading(0),
                                    fGlyphToCharMap(NULL), fCharToMinGlyphMap(NULL), fCharToMaxGlyphMap(NULL), fGlyphWidths(NULL), fGlyphCount(0),
                                    fParaBidi(NULL), fLineBidi(NULL),
@@ -363,21 +363,21 @@ ParagraphLayout::~ParagraphLayout()
         delete (ValueRuns *) fLevelRuns;
         fLevelRuns = NULL;
 
-        fClientLevels = true;
+        fClientLevels = TRUE;
     }
 
     if (! fClientScripts) {
         delete (ValueRuns *) fScriptRuns;
         fScriptRuns = NULL;
 
-        fClientScripts = true;
+        fClientScripts = TRUE;
     }
 
     if (! fClientLocales) {
         delete (LocaleRuns *) fLocaleRuns;
         fLocaleRuns = NULL;
 
-        fClientLocales = true;
+        fClientLocales = TRUE;
     }
 
     if (fEmbeddingLevels != NULL) {
@@ -452,11 +452,11 @@ le_bool ParagraphLayout::isComplex(const LEUnicode chars[], le_int32 count)
 
     while (uscript_nextRun(sr, NULL, NULL, &scriptCode)) {
         if (isComplex(scriptCode)) {
-            return true;
+            return TRUE;
         }
     }
 
-    return false;
+    return FALSE;
 }
 
 le_int32 ParagraphLayout::getAscent() const
@@ -567,7 +567,7 @@ void ParagraphLayout::computeLevels(UBiDiLevel paragraphLevel)
         }
 
         fLevelRuns    = levelRuns;
-        fClientLevels = false;
+        fClientLevels = FALSE;
     }
 }
 
@@ -586,7 +586,7 @@ void ParagraphLayout::computeScripts()
     uscript_closeRun(sr);
 
     fScriptRuns    = scriptRuns;
-    fClientScripts = false;
+    fClientScripts = FALSE;
 }
 
 void ParagraphLayout::computeLocales()
@@ -597,7 +597,7 @@ void ParagraphLayout::computeLocales()
     localeRuns->add(defaultLocale, fCharCount);
 
     fLocaleRuns    = localeRuns;
-    fClientLocales = false;
+    fClientLocales = FALSE;
 }
 
 void ParagraphLayout::computeSubFonts(const FontRuns *fontRuns, LEErrorCode &status)
@@ -756,7 +756,7 @@ le_int32 ParagraphLayout::getLanguageCode(const Locale *locale)
 le_bool ParagraphLayout::isComplex(UScriptCode script)
 {
     if (script < 0 || script >= USCRIPT_CODE_LIMIT) {
-        return false;
+        return FALSE;
     }
 
     return complexTable[script];

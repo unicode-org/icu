@@ -63,7 +63,7 @@ void InitParagraph(HWND hwnd, Context *context)
         si.nMin = 0;
         si.nMax = context->paragraph->getLineCount() - 1;
         si.nPage = context->height / context->paragraph->getLineHeight();
-        SetScrollInfo(hwnd, SB_VERT, &si, true);
+        SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
     }
 }
 
@@ -211,7 +211,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
 
         si.fMask = SIF_POS;
-        SetScrollInfo(hwnd, SB_VERT, &si, true);
+        SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
         GetScrollInfo(hwnd, SB_VERT, &si);
 
         context = (Context *) GetWindowLong(hwnd, 0);
@@ -304,7 +304,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
                     context->paragraph = newParagraph;
                     InitParagraph(hwnd, context);
                     PrettyTitle(hwnd, szTitleName);
-                    InvalidateRect(hwnd, NULL, true);
+                    InvalidateRect(hwnd, NULL, TRUE);
 
                 }
             }

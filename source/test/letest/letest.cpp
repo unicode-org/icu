@@ -26,7 +26,7 @@ le_bool compareResults(le_int32 testNumber, TestResult *expected, TestResult *ac
     /* NOTE: we'll stop on the first failure 'cause once there's one error, it may cascade... */
     if (actual->glyphCount != expected->glyphCount) {
         printf("incorrect glyph count: exptected %d, got %d\n", expected->glyphCount, actual->glyphCount);
-        return false;
+        return FALSE;
     }
 
     le_int32 i;
@@ -34,14 +34,14 @@ le_bool compareResults(le_int32 testNumber, TestResult *expected, TestResult *ac
     for (i = 0; i < actual->glyphCount; i += 1) {
         if (actual->glyphs[i] != expected->glyphs[i]) {
             printf("incorrect id for glyph %d: expected %4X, got %4X\n", i, expected->glyphs[i], actual->glyphs[i]);
-            return false;
+            return FALSE;
         }
     }
 
     for (i = 0; i < actual->glyphCount; i += 1) {
         if (actual->indices[i] != expected->indices[i]) {
             printf("incorrect index for glyph %d: expected %8X, got %8X\n", i, expected->indices[i], actual->indices[i]);
-            return false;
+            return FALSE;
         }
     }
 
@@ -50,7 +50,7 @@ le_bool compareResults(le_int32 testNumber, TestResult *expected, TestResult *ac
 
         if (xError > 0.0001) {
             printf("incorrect x position for glyph %d: expected %f, got %f\n", i, expected->positions[i * 2], actual->positions[i * 2]);
-            return false;
+            return FALSE;
         }
 
         double yError = fabs(actual->positions[i * 2 + 1] - expected->positions[i * 2 + 1]);
@@ -61,11 +61,11 @@ le_bool compareResults(le_int32 testNumber, TestResult *expected, TestResult *ac
 
         if (yError > 0.0001) {
             printf("incorrect y position for glyph %d: expected %f, got %f\n", i, expected->positions[i * 2 + 1], actual->positions[i * 2 + 1]);
-            return false;
+            return FALSE;
         }
     }
 
-    return true;
+    return TRUE;
 }
 
 int main(int argc, char *argv[])

@@ -83,11 +83,11 @@ le_bool ClassDefFormat1Table::hasGlyphClass(le_int32 glyphClass) const
 
     for (i = 0; i < count; i += 1) {
         if (SWAPW(classValueArray[i]) == glyphClass) {
-            return true;
+            return TRUE;
         }
     }
 
-    return false;
+    return FALSE;
 }
 
 le_int32 ClassDefFormat2Table::getGlyphClass(LEGlyphID glyphID) const
@@ -111,11 +111,11 @@ le_bool ClassDefFormat2Table::hasGlyphClass(le_int32 glyphClass) const
 
     for (i = 0; i < rangeCount; i += 1) {
         if (SWAPW(classRangeRecordArray[i].rangeValue) == glyphClass) {
-            return true;
+            return TRUE;
         }
     }
 
-    return false;
+    return FALSE;
 }
 
 U_NAMESPACE_END

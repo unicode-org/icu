@@ -608,10 +608,10 @@ float resultPositions3[] =
 
 TestInput testInputs[] = 
 {
-    {"raghu.ttf", inputText0, 136, devaScriptCode, false},
-    {"CODE2000.TTF", inputText1, 252, arabScriptCode, true},
-    {"LucidaSansRegular.ttf", inputText2, 252, arabScriptCode, true},
-    {"Thonburi.ttf", inputText3, 168, thaiScriptCode, false},
+    {"raghu.ttf", inputText0, 136, devaScriptCode, FALSE},
+    {"CODE2000.TTF", inputText1, 252, arabScriptCode, TRUE},
+    {"LucidaSansRegular.ttf", inputText2, 252, arabScriptCode, TRUE},
+    {"Thonburi.ttf", inputText3, 168, thaiScriptCode, FALSE},
 };
 
 le_int32 testCount = ARRAY_LENGTH(testInputs);

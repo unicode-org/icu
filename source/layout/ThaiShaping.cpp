@@ -247,16 +247,16 @@ le_bool ThaiShaping::isLegalHere(LEUnicode ch, le_uint8 prevState)
     case tF:
     case tG:
     case tH:
-        return true;
+        return TRUE;
             
     case tR:
     case tS:
-        return false;
+        return FALSE;
             
     default:
         // FIXME: if we get here, there's an error
         // in the state table!
-        return false;
+        return FALSE;
     }
 }
     

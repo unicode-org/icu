@@ -2,8 +2,8 @@
  * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/IndicReordering.cpp,v $
- * $Date: 2003/06/03 20:58:21 $
- * $Revision: 1.13 $
+ * $Date: 2003/12/08 22:41:38 $
+ * $Revision: 1.14 $
  *
  */
 
@@ -319,8 +319,8 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             le_int32 baseConsonant = lastConsonant;
             le_int32 postBase = lastConsonant + 1;
             le_int32 postBaseLimit = classTable->scriptFlags & IndicClassTable::SF_POST_BASE_LIMIT_MASK;
-            le_bool  seenVattu = false;
-            le_bool  seenBelowBaseForm = false;
+            le_bool  seenVattu = FALSE;
+            le_bool  seenBelowBaseForm = FALSE;
 
             while (baseConsonant > baseLimit) {
                 IndicClassTable::CharClass charClass = classTable->getCharClass(chars[baseConsonant]);
@@ -341,7 +341,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
 
                         postBase = baseConsonant;
                     } else if (IndicClassTable::hasBelowBaseForm(charClass)) {
-                        seenBelowBaseForm = true;
+                        seenBelowBaseForm = TRUE;
                     }
 
                     postBaseLimit -= 1;
@@ -362,7 +362,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             }
 
             // write any pre-base consonants
-            le_bool supressVattu = true;
+            le_bool supressVattu = TRUE;
 
             for (i = baseLimit; i < baseConsonant; i += 1) {
                 LEUnicode ch = chars[i];

@@ -33,7 +33,7 @@ public:
      *
      * @param glyph - the glyph index to be tested
      *
-     * @return true if the glyph index is in the set.
+     * @return TRUE if the glyph index is in the set.
      *
      * @internal
      */

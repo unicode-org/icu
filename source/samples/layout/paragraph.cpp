@@ -40,7 +40,7 @@ Paragraph::Paragraph(const LEUnicode chars[], int32_t charCount, const FontRuns 
     fChars = LE_NEW_ARRAY(LEUnicode, charCount);
     LE_ARRAY_COPY(fChars, chars, charCount);
 
-    fParagraphLayout = new ParagraphLayout(fChars, charCount, fontRuns, NULL, NULL, locales, UBIDI_DEFAULT_LTR, false, status);
+    fParagraphLayout = new ParagraphLayout(fChars, charCount, fontRuns, NULL, NULL, locales, UBIDI_DEFAULT_LTR, FALSE, status);
 
 	if (LE_FAILURE(status)) {
 		return;

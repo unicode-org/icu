@@ -161,12 +161,12 @@ public:
      * to glyph mapping.
      *
      * The default implementation of this method will return
-     * <code>true</code> if <code>mapCharToGlyph(ch)</code>
+     * <code>TRUE</code> if <code>mapCharToGlyph(ch)</code>
      * returns a non-zero value.
      *
      * @param ch - the character to be tested
      *
-     * @return true if the font can render ch.
+     * @return TRUE if the font can render ch.
      *
      * @draft ICU 2.6
      */
@@ -189,7 +189,7 @@ public:
      * @param chars - the character array
      * @param offset - the index of the first character
      * @param count - the number of characters
-     * @param reverse - if true, store the glyph indices in reverse order.
+     * @param reverse - if TRUE, store the glyph indices in reverse order.
      * @param mapper - the character mapper.
      * @param glyphs - the output glyph array
      *
@@ -251,7 +251,7 @@ public:
      * @param pointNumber - the number of the point
      * @param point - the point's X and Y pixel values will be stored here
      *
-     * @return true if the point coordinates could be stored.
+     * @return TRUE if the point coordinates could be stored.
      *
      * @stable ICU 2.8
      */
