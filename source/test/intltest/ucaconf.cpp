@@ -26,6 +26,10 @@ status(U_ZERO_ERROR)
   }
 
   uprv_strcpy(testDataPath, IntlTest::loadTestData(status));
+  if (U_FAILURE(status)) {
+    errln("ERROR: could not open test data %s", u_errorName(status));
+    return;
+  }
   char* index = 0;
  
   index=strrchr(testDataPath,(char)U_FILE_SEP_CHAR);

@@ -945,7 +945,10 @@ void MultithreadTest::TestCollators()
   char testDataPath[1024];
   uprv_strcpy(testDataPath, IntlTest::loadTestData(status));
   char* index = 0;
- 
+  if (U_FAILURE(status)) {
+      errln("ERROR: could not open test data %s", u_errorName(status));
+	  return;
+  }
   index=strrchr(testDataPath,(char)U_FILE_SEP_CHAR);
 
   if((unsigned int)(index-testDataPath) != (strlen(testDataPath)-1)){

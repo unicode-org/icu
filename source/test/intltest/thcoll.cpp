@@ -117,6 +117,10 @@ void CollationThaiTest::TestNamesList(void) {
     uprv_strcpy(buffer,IntlTest::loadTestData(status) );
     char* index = 0;
    
+    if (U_FAILURE(status)) {
+        errln("ERROR: could not open test data %s", u_errorName(status));
+	    return;
+    }
     index=strrchr(buffer,(char)U_FILE_SEP_CHAR);
 
     if((unsigned int)(index-buffer) != (strlen(buffer)-1)){
@@ -183,6 +187,10 @@ void CollationThaiTest::TestDictionary(void) {
     uprv_strcpy(buffer,IntlTest::loadTestData(status) );
     char* index = 0;
    
+    if (U_FAILURE(status)) {
+        errln("ERROR: could not open test data %s", u_errorName(status));
+	    return;
+    }
     index=strrchr(buffer,(char)U_FILE_SEP_CHAR);
 
     if((unsigned int)(index-buffer) != (strlen(buffer)-1)){

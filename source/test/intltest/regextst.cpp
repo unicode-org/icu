@@ -1116,6 +1116,10 @@ void RegexTest::Extended() {
     //  Open and read the test data file.
     //
     const char *testDataDirectory = loadTestData(status);
+    if (U_FAILURE(status)) {
+        errln("ERROR: could not open test data %s", u_errorName(status));
+	    return;
+    }
     UnicodeString tdd(testDataDirectory);
     tdd = RegexMatcher("([/\\\\])out[/\\\\]testdata", tdd, 0, status).
         replaceFirst("$1regextst.txt", status);
@@ -1433,6 +1437,10 @@ void RegexTest::PerlTests() {
     //  Open and read the test data file.
     //
     const char *testDataDirectory = loadTestData(status);
+    if (U_FAILURE(status)) {
+        errln("ERROR: could not open test data %s", u_errorName(status));
+	    return;
+    }
     UnicodeString tdd(testDataDirectory);
     tdd = RegexMatcher("([/\\\\])out[/\\\\]testdata", tdd, 0, status).
         replaceFirst("$1re_tests.txt", status);
