@@ -299,7 +299,7 @@ public:
      * @param status     Output param set to success/failure code on
      *                   exit. If the pattern is invalid, this will be
      *                   set to a failure result.
-     * @draft
+     * @draft ICU 2.0
      */
     virtual void applyPattern(const UnicodeString& pattern,
                              UParseError& parseError,
@@ -317,7 +317,11 @@ public:
      * Sets formats to use on parameters.
      * See the class description about format numbering.
      * The caller should not delete the Format objects after this call.
-     * @draft HSYS: possible semantic change on limitation of the size of array
+     * Note that the array formatsToAdopt is not itself adopted, its
+     * ownership is retained by the caller. If the count is over 
+     * the maximum allowed (10), any additional items will be deleted.
+     * 
+     * @stable
      * @param formatsToAdopt    the format to be adopted.
      * @param count             the size of the array.
      */
@@ -326,7 +330,11 @@ public:
     /**
      * Sets formats to use on parameters.
      * See the class description about format numbering.
-     * @draft HSYS: possible semantic change on limitation of the size of array
+     * Each item in the array is cloned into the internal array.
+     * If the count is over the maximum allowed (10), any additional
+     *  items will be ignored.
+     * 
+     * @stable
      * @param newFormats the new format to be set.
      * @param cnt        the size of the array.
      */
@@ -337,7 +345,9 @@ public:
      * Sets formats individually to use on parameters.
      * See the class description about format numbering.
      * The caller should not delete the Format object after this call.
-     * @draft HSYS: possible semantic change on limitation of the size of array
+     * If the number is over the number of formats already set,
+     * the item will be deleted and ignored.
+     * @stable
      * @param formatNumber     index of the parameter.
      * @param formatToAdopt    the format to be adopted.
      */
@@ -346,6 +356,8 @@ public:
     /**
      * Sets formats individually to use on parameters.
      * See the class description about format numbering.
+     * If the number is over the number of formats already set,
+     * the item will be ignored.
      * @param variable         index of the parameter.
      * @param newFormat    the format to be set.
      * @stable
@@ -355,7 +367,7 @@ public:
     /**
      * Gets formats that were set with setFormats.
      * See the class description about format numbering.
-     * @draft HSYS: possible semantic change on limitation of the size of array
+     * @stable
      * @param count    the size of the array.
      */
     virtual const Format** getFormats(int32_t& count) const;
