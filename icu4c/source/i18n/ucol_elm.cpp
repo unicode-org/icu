@@ -470,7 +470,7 @@ int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
       start = mid;                                                           
     }                                                                        
   } 
-      
+
   if (*start == endexpansion) {                                                     
     result = start - pendexpansionce;  
   }                                                                          
@@ -478,7 +478,7 @@ int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
     if (*limit == endexpansion) {                                                     
       result = limit - pendexpansionce;      
     }                                            
-      
+
   if (result > -1) {
     /* found the ce in expansion, we'll just modify the size if it is 
        smaller */
@@ -494,7 +494,7 @@ int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
     int      shiftsize     = (pendexpansionce + pos) - start;
     uint32_t *shiftpos     = start + 1;
     uint8_t  *sizeshiftpos = pexpansionsize + (shiftpos - pendexpansionce);
-    
+
     /* okay need to rearrange the array into sorted order */
     if (shiftsize == 0 || *(pendexpansionce + pos) < endexpansion) {
       *(pendexpansionce + pos + 1) = endexpansion;
@@ -631,7 +631,7 @@ int uprv_uca_setMaxJamoExpansion(UChar                  ch,
   *(pendexpansionce + maxexpansion->position) = endexpansion;
   *(maxexpansion->isV + maxexpansion->position) = isV;
   maxexpansion->position ++;
-  
+
   return maxexpansion->position;
 }
 
@@ -1012,9 +1012,12 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
   if(U_FAILURE(*status)) {
       return 0xFFFF;
   }
+
+  element->mapCE = 0; // clear mapCE so that we can catch expansions
+
   if(element->noOfCEs == 1) {
     if(element->isThai == FALSE) {
-      element->mapCE = element->CEs[0];
+		  element->mapCE = element->CEs[0];      
     } else { /* add thai - totally bad here */
       expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (THAI_TAG<<UCOL_TAG_SHIFT) 
         | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4) 
@@ -1048,10 +1051,10 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
         | ((element->CEs[0]>>8) & 0xFFFF00) // first and second byte of primary
         | ((element->CEs[1]>>24) & 0xFF);   // third byte of primary
     } else {
-      expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
-        | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4)
-        & 0xFFFFF0);
-
+	  expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
+		| ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4)
+		& 0xFFFFF0);
+		
       for(i = 1; i<element->noOfCEs; i++) {
         uprv_uca_addExpansion(expansions, element->CEs[i], status);
       }
@@ -1074,6 +1077,32 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
                                  status);
       }
     }
+  }
+
+  // We treat digits differently - they are "uber special" and should be
+  // processed differently if numeric collation is on. 
+  UChar32 uniChar = 0;
+  //printElement(element);
+  if ((element->cSize == 2) && U16_IS_LEAD(element->uchars[0])){
+	  uniChar = U16_GET_SUPPLEMENTARY(element->uchars[0], element->uchars[1]);	  
+  } else if (element->cSize == 1){
+	  uniChar = element->uchars[0];
+  }
+
+  // Here, we either have one normal CE OR mapCE is set. Therefore, we stuff only
+  // one element to the expansion buffer. When we encounter a digit and we don't 
+  // do numeric collation, we will just pick the CE we have and break out of case
+  // (see ucol.cpp ucol_prv_getSpecialCE && ucol_prv_getSpecialPrevCE). If we picked
+  // a special, further processing will occur. If it's a simple CE, we'll return due
+  // to how the loop is constructed.
+  if (uniChar != 0 && u_isdigit(uniChar)){
+	  expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (DIGIT_TAG<<UCOL_TAG_SHIFT) | 1); // prepare the element
+      if(element->mapCE) { // if there is an expansion, we'll pick it here
+        expansion |= ((uprv_uca_addExpansion(expansions, element->mapCE, status)+(headersize>>2))<<4);
+      } else {
+	    expansion |= ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4);
+      }
+	  element->mapCE = expansion;
   }
 
   // here we want to add the prefix structure.
@@ -1157,7 +1186,7 @@ void uprv_uca_getMaxExpansionJamo(UNewTrie       *mapping,
   const uint32_t TBASE  = 0x11A8;
   const uint32_t VCOUNT = 21;
   const uint32_t TCOUNT = 28;
-  
+
   uint32_t v = VBASE + VCOUNT - 1;
   uint32_t t = TBASE + TCOUNT - 1;
   uint32_t ce;
@@ -1556,3 +1585,5 @@ uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status)
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_COLLATION */
+
+

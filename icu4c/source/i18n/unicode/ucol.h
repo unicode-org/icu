@@ -228,7 +228,13 @@ typedef enum {
       * non-ignorables on quaternary level
       * This is a sneaky way to produce JIS
       * sort order */     
-     UCOL_HIRAGANA_QUATERNARY_MODE, 
+     UCOL_HIRAGANA_QUATERNARY_MODE,
+     /** when turned on, this attribute 
+      * generates a collation key
+      * for the numeric value of substrings
+      * of digits. This is a way to get '100' 
+      * to sort AFTER '2'.*/          
+     UCOL_NUMERIC_COLLATION, 
      UCOL_ATTRIBUTE_COUNT
 } UColAttribute;
 
@@ -793,3 +799,4 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status);
 #endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif
+

@@ -2657,7 +2657,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
           }
           // Now we have the character that needs to be decomposed
           // if the normalizing buffer was not used, we can just use our structure and be happy.
-          if(source->flags & UCOL_ITER_INNORMBUF == 0) {
+          if((source->flags & UCOL_ITER_INNORMBUF) == 0) {
             // decompose into writable buffer
             int32_t decompLen = unorm_getDecomposition(cp, FALSE, &(source->writableBuffer[1]), UCOL_WRITABLE_BUFFER_SIZE-1);
             if(decompLen < 0) {
@@ -3025,6 +3025,221 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
           *(source->CEpos++) = *CEOffset++;
         }
       }
+      return CE;
+      }
+    case DIGIT_TAG:      
+      {
+      /* 
+      	 We do a check to see if we want to collate digits as numbers; if so we generate
+         a custom collation key. Otherwise we pull out the value stored in the expansion table.
+      */
+      uint32_t size;
+      uint32_t i;    /* general counter */
+      collIterateState digitState;
+
+      if (coll->numericCollation == UCOL_ON){
+		UChar32 char32 = 0;		
+		
+		uint32_t digIndx = 0; 
+		uint32_t endIndex = 0;		
+		uint32_t trailingZeroIndex = 0;
+
+		uint32_t primWeight = 0;
+		
+		uint32_t digVal = 0;		
+		uint8_t	collateVal = 0;
+		
+		UBool nonZeroValReached = false;
+
+		uint8_t *numTempBuf;
+		uint8_t stackNumTempBuf[UCOL_MAX_BUFFER]; // I just need a temporary place to store my generated CEs.
+		uint32_t numTempBufSize = UCOL_MAX_BUFFER;
+		
+		numTempBuf = stackNumTempBuf;
+		/*
+			 We parse the source string until we hit a char that's NOT a digit.
+      		Use this u_charDigitValue. This might be slow because we have to 
+      		handle surrogates...
+      	*/
+/*      	
+      	if (U16_IS_LEAD(ch)){
+          if (!collIter_eos(source)) {
+            backupState(source, &digitState);
+            UChar trail = getNextNormalizedChar(source);
+            if(U16_IS_TRAIL(trail)) {
+			  char32 = U16_GET_SUPPLEMENTARY(ch, trail);
+            } else {
+              loadState(source, &digitState, TRUE);
+              char32 = ch;
+            }
+          } else {
+		    char32 = ch;
+          }
+        } else {
+		  char32 = ch;
+        }
+		digVal = u_charDigitValue(char32);
+*/
+        digVal = u_charDigitValue(cp); // if we have arrived here, we have
+        // already processed possible supplementaries that trigered the digit tag -
+        // all supplementaries are marked in the UCA.
+		/* 
+			We  pad a zero in front of the first element anyways. This takes
+			care of the (probably) most common case where people are sorting things followed
+		 	by a single digit
+		*/
+		digIndx++;
+      	for(;;){
+      	// Make sure we have enough space.
+      	if (digIndx >= ((numTempBufSize - 2) * 2) + 1)
+      	{
+      		numTempBufSize *= 2;
+      		if (numTempBuf == stackNumTempBuf){
+      			numTempBuf = (uint8_t *)malloc(sizeof(uint8_t) * numTempBufSize);
+      			memcpy(numTempBuf, stackNumTempBuf, UCOL_MAX_BUFFER);
+      		}else
+      			realloc(numTempBuf, numTempBufSize);
+      	}
+      	
+			// Skipping over leading zeroes.      	
+      		if (digVal != 0 || nonZeroValReached){
+				if (digVal != 0 && !nonZeroValReached)
+					nonZeroValReached = true;
+				
+				/*
+					We parse the digit string into base 100 numbers (this fits into a byte).
+				 	We only add to the buffer in twos, thus if we are parsing an odd character,
+					that serves as the 'tens' digit while the if we are parsing an even one, that 
+				 	is the 'ones' digit. We dumped the parsed base 100 value (collateVal) into 
+				 	a buffer. We multiply each collateVal by 2 (to give us room) and add 5 (to avoid
+				 	overlapping magic CE byte values). The last byte we subtract 1 to ensure it is less
+				 	than all the other bytes. 
+				 */
+
+				if (digIndx % 2 == 1){
+					collateVal += (uint8_t)digVal;	
+					 
+					 // This removes trailing zeroes.
+					if (collateVal == 0 && !trailingZeroIndex)
+						trailingZeroIndex = ((digIndx-1)/2) + 2;
+					else if (trailingZeroIndex)
+						trailingZeroIndex = 0;
+						
+					numTempBuf[((digIndx-1)/2) + 2] = collateVal*2 + 6;
+					collateVal = 0;
+				}
+				else{
+					// We drop the collation value into the buffer so if we need to do
+					// a "front patch" we don't have to check to see if we're hitting the
+					// last element.
+					collateVal = (uint8_t)(digVal * 10);
+					numTempBuf[((digIndx)/2) + 2] = collateVal*2 + 6;
+				}
+				digIndx++;
+      		}
+      		
+      		// Get next character.
+      		if (!collIter_eos(source)){
+				ch = getNextNormalizedChar(source);
+				if (U16_IS_LEAD(ch)){
+                  if (!collIter_eos(source)) {
+                    backupState(source, &digitState);
+                    UChar trail = getNextNormalizedChar(source);
+                    if(U16_IS_TRAIL(trail)) {
+					  char32 = U16_GET_SUPPLEMENTARY(ch, trail);
+                    } else {
+                      loadState(source, &digitState, TRUE);
+                      char32 = ch;
+                    }
+                  }
+                } else {
+				  char32 = ch;
+                }
+					
+				if ((digVal = u_charDigitValue(char32)) == -1){
+					// Resetting position to point to the next unprocessed char. We
+					// overshot it when doing our test/set for numbers.
+                  if (char32 > 0xFFFF) { // For surrogates.
+                    loadState(source, &digitState, TRUE);
+					//goBackOne(source);
+                  }
+  				  goBackOne(source);
+				  break;
+				}
+            } else {
+			  break;
+            }
+		}
+		
+		if (nonZeroValReached == false){
+			digIndx = 2;
+			numTempBuf[2] = 6;
+		}
+		
+		endIndex = trailingZeroIndex ? trailingZeroIndex : ((digIndx/2) + 2) ;				
+		if (digIndx % 2 != 0){
+			/* 
+				We missed a value. Since digIndx isn't even, stuck too many values into the buffer (this is what
+				we get for padding the first byte with a zero). "Front-patch" now by pushing all nybbles forward. 
+				Doing it this way ensures that at least 50% of the time (statistically speaking) we'll only be doing a
+				single pass and optimizes for strings with single digits. I'm just assuming that's the more common case.
+			*/
+
+			for(i = 2; i < endIndex; i++){
+				numTempBuf[i] = 	(((((numTempBuf[i] - 6)/2) % 10) * 10) + 
+									(((numTempBuf[i+1])-6)/2) / 10) * 2 + 6;
+			}
+			--digIndx;
+		}
+		
+		// Subtract one off of the last byte. 
+		numTempBuf[endIndex-1] -= 1;			
+				
+		/* 
+			We want to skip over the first two slots in the buffer. The first slot
+			is reserved for the header byte 0x1B. The second slot is for the 
+			sign/exponent byte: 0x80 + (decimalPos/2) & 7f.
+		*/ 
+		numTempBuf[0] = 0x1B;
+		numTempBuf[1] = (uint8_t)(0x80 + ((digIndx/2) & 0x7F));
+		
+		// Now transfer the collation key to our collIterate struct.
+		// The total size for our collation key is endIndx bumped up to the next largest even value divided by two.
+		  size = ((endIndex+1) & ~1)/2;
+		  CE = (((numTempBuf[0] << 8) | numTempBuf[1]) << UCOL_PRIMARYORDERSHIFT) | //Primary weight
+		  		(UCOL_BYTE_COMMON << UCOL_SECONDARYORDERSHIFT) | // Secondary weight
+		  		UCOL_BYTE_COMMON; // Tertiary weight.
+		  i = 2; // Reset the index into the buffer.
+		  while(i < endIndex)
+		  {
+			primWeight = numTempBuf[i++] << 8;
+			if ( i < endIndex)
+				primWeight |= numTempBuf[i++];
+			*(source->CEpos++) = (primWeight << UCOL_PRIMARYORDERSHIFT) | UCOL_CONTINUATION_MARKER;
+		  }
+		  
+		  if (numTempBuf != stackNumTempBuf)
+		  	free(numTempBuf);
+      } else {
+        // no numeric mode, we'll just switch to whatever we stashed and continue
+		  CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
+		  CE = *CEOffset++;
+          break;
+#if 0
+		  CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
+		  size = getExpansionCount(CE);
+		  CE = *CEOffset++;
+		  if(size != 0) { /* if there are less than 16 elements in expansion, we don't terminate */
+			for(i = 1; i<size; i++) {
+			  *(source->CEpos++) = *CEOffset++;
+			}
+		  } else { /* else, we do */
+			while(*CEOffset != 0) {
+			  *(source->CEpos++) = *CEOffset++;
+			}
+		  }
+#endif
+	  }
       return CE;
       }
     /* various implicits optimization */
@@ -3492,6 +3707,217 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         source->CEpos = source->CEs;
       }
       return *(source->toReturn);
+     case DIGIT_TAG:      
+      {
+      /* 
+      	 We do a check to see if we want to collate digits as numbers; if so we generate
+         a custom collation key. Otherwise we pull out the value stored in the expansion table.
+      */
+      //uint32_t size;
+      uint32_t i;    /* general counter */
+      collIterateState state;
+
+      if (coll->numericCollation == UCOL_ON){
+		UChar32 char32 = 0;		
+		
+		uint32_t digIndx = 0; 
+		uint32_t endIndex = 0;		
+		uint32_t leadingZeroIndex = 0;
+
+		uint32_t primWeight = 0;
+		
+		uint32_t digVal = 0;		
+		uint8_t	collateVal = 0;
+		
+		UBool nonZeroValReached = false;
+
+		uint8_t *numTempBuf;
+		uint8_t stackNumTempBuf[UCOL_MAX_BUFFER]; // I just need a temporary place to store my generated CEs.
+		uint32_t numTempBufSize = UCOL_MAX_BUFFER;
+		
+		numTempBuf = stackNumTempBuf;
+		/*
+			 We parse the source string until we hit a char that's NOT a digit.
+      		Use this u_charDigitValue. This might be slow because we have to 
+      		handle surrogates...
+      	*/
+      	
+      	if (U16_IS_TRAIL (ch)){
+      		if (!collIter_bos(source)){
+              UChar lead = getPrevNormalizedChar(source);
+              if(U16_IS_LEAD(lead)) {
+				char32 = U16_GET_SUPPLEMENTARY(lead,ch);
+				goBackOne(source);
+              } else {
+                char32 = ch;
+              }
+            } else {
+				char32 = ch;
+            }
+        } else {
+			char32 = ch;
+        }
+		digVal = u_charDigitValue(char32);
+		
+      	for(;;){
+      	// Make sure we have enough space.
+      	if (digIndx >= ((numTempBufSize - 2) * 2) + 1)
+      	{
+      		numTempBufSize *= 2;
+      		if (numTempBuf == stackNumTempBuf){
+      			numTempBuf = (uint8_t *)malloc(sizeof(uint8_t) * numTempBufSize);
+      			memcpy(numTempBuf, stackNumTempBuf, UCOL_MAX_BUFFER);
+      		}else
+      			realloc(numTempBuf, numTempBufSize);
+      	}
+      	
+			// Skipping over "trailing" zeroes but we still add to digIndx.
+      		if (digVal != 0 || nonZeroValReached){
+				if (digVal != 0 && !nonZeroValReached)
+					nonZeroValReached = true;
+				
+				/*
+					We parse the digit string into base 100 numbers (this fits into a byte).
+				 	We only add to the buffer in twos, thus if we are parsing an odd character,
+					that serves as the 'tens' digit while the if we are parsing an even one, that 
+				 	is the 'ones' digit. We dumped the parsed base 100 value (collateVal) into 
+				 	a buffer. We multiply each collateVal by 2 (to give us room) and add 5 (to avoid
+				 	overlapping magic CE byte values). The last byte we subtract 1 to ensure it is less
+				 	than all the other bytes. 
+				 	
+				 	Since we're doing in this reverse we want to put the first digit encountered into the
+				 	ones place and the second digit encountered into the tens place.
+				 */
+				
+				if (digIndx % 2 == 1){
+					collateVal += (uint8_t)(digVal * 10);
+					
+					 // This removes leading zeroes.
+					if (collateVal == 0 && !leadingZeroIndex)
+						leadingZeroIndex = ((digIndx-1)/2) + 2;
+					else if (leadingZeroIndex)
+						leadingZeroIndex = 0;
+											
+					numTempBuf[((digIndx-1)/2) + 2] = collateVal*2 + 6;
+					collateVal = 0;
+				}
+				else{
+					collateVal = (uint8_t)digVal;	
+				}
+      		}
+      		digIndx++;
+      		
+      		if (!collIter_bos(source)){
+				ch = getPrevNormalizedChar(source);
+				//goBackOne(source);
+				if (U16_IS_TRAIL(ch)){
+                    backupState(source, &state);
+					if (!collIter_bos(source))
+					{
+						goBackOne(source);
+                        UChar lead = getPrevNormalizedChar(source);
+                        if(U16_IS_LEAD(lead)) {
+						  char32 = U16_GET_SUPPLEMENTARY(lead,ch);
+                        } else {
+                          loadState(source, &state, FALSE);
+                          char32 = ch;
+                        }
+					}
+				}
+				else
+					char32 = ch;
+					
+				if ((digVal = u_charDigitValue(char32)) == -1){
+                  if (char32 > 0xFFFF) {// For surrogates.
+                    loadState(source, &state, FALSE);
+                  }
+					// Don't need to "reverse" the goBackOne call,
+					// as this points to the next position to process..
+					//if (char32 > 0xFFFF) // For surrogates.
+						//getNextNormalizedChar(source);
+					break;
+				}
+                goBackOne(source);
+			}else
+				break;
+		}
+
+		if (nonZeroValReached == false){
+			digIndx = 2;
+			numTempBuf[2] = 6;
+		}
+
+		if (digIndx % 2 != 0){
+				numTempBuf[((digIndx)/2) + 2] = collateVal*2 + 6;
+				digIndx += 1;				
+		}
+		
+		endIndex = leadingZeroIndex ? leadingZeroIndex : ((digIndx/2) + 2) ;				
+		
+		// Subtract one off of the last byte. Really the first byte here, but it's reversed...
+		numTempBuf[2] -= 1;			
+				
+		/* 
+			We want to skip over the first two slots in the buffer. The first slot
+			is reserved for the header byte 0x1B. The second slot is for the 
+			sign/exponent byte: 0x80 + (decimalPos/2) & 7f.
+		*/ 
+		numTempBuf[0] = 0x1B;
+		numTempBuf[1] = (uint8_t)(0x80 + ((digIndx/2) & 0x7F));
+		
+		// Now transfer the collation key to our collIterate struct.
+		// The total size for our collation key is endIndx bumped up to the next largest even value divided by two.
+		//size = ((endIndex+1) & ~1)/2;
+		  *(source->CEpos++) = (((numTempBuf[0] << 8) | numTempBuf[1]) << UCOL_PRIMARYORDERSHIFT) | //Primary weight
+		  		(UCOL_BYTE_COMMON << UCOL_SECONDARYORDERSHIFT) | // Secondary weight
+		  		UCOL_BYTE_COMMON; // Tertiary weight.
+		  i = endIndex - 1; // Reset the index into the buffer.
+		  while(i >= 2)
+		  {
+			primWeight = numTempBuf[i--] << 8;
+			if ( i >= 2)
+				primWeight |= numTempBuf[i--];
+			*(source->CEpos++) = (primWeight << UCOL_PRIMARYORDERSHIFT) | UCOL_CONTINUATION_MARKER;
+		  }
+		  if (numTempBuf != stackNumTempBuf)
+		  	free(numTempBuf);
+		  	
+		  source->toReturn = source->CEpos -1;
+		  return *(source->toReturn);
+      }
+      else {
+		  CEOffset = (uint32_t *)coll->image + getExpansionOffset(CE);
+          CE = *(CEOffset++);
+          break;
+#if 0
+		/* find the offset to expansion table */
+		  CEOffset = (uint32_t *)coll->image + getExpansionOffset(CE);
+		  size     = getExpansionCount(CE);
+		  if (size != 0) {
+			/*
+			if there are less than 16 elements in expansion, we don't terminate
+			*/
+			uint32_t count;
+			for (count = 0; count < size; count++) {
+			  *(source->CEpos ++) = *CEOffset++;
+			}
+		  }
+		  else {
+			/* else, we do */
+			while (*CEOffset != 0) {
+			  *(source->CEpos ++) = *CEOffset ++;
+			}
+		  }
+		  source->toReturn = source->CEpos - 1;
+          // in case of one element expansion, we 
+          // want to immediately return CEpos
+          if(source->toReturn == source->CEs) {
+            source->CEpos = source->CEs;
+          }
+		  return *(source->toReturn);
+#endif
+	  }
+      }  
     case HANGUL_SYLLABLE_TAG: /* AC00-D7AF*/
       {
         const uint32_t
@@ -6485,6 +6911,20 @@ ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value,
     UColAttributeValue oldFrench = coll->frenchCollation;
     UColAttributeValue oldCaseFirst = coll->caseFirst;
     switch(attr) {
+    case UCOL_NUMERIC_COLLATION: /* sort substrings of digits as numbers */
+      if(value == UCOL_ON) {
+        coll->numericCollation = UCOL_ON;
+        coll->numericCollationisDefault = FALSE;
+      } else if (value == UCOL_OFF) {
+        coll->numericCollation = UCOL_OFF;
+        coll->numericCollationisDefault = FALSE;
+      } else if (value == UCOL_DEFAULT) {
+        coll->numericCollationisDefault = TRUE;
+        coll->numericCollation = (UColAttributeValue)coll->options->numericCollation;
+      } else {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+      }
+      break;
     case UCOL_HIRAGANA_QUATERNARY_MODE: /* special quaternary values for Hiragana */
       if(value == UCOL_ON) {
         coll->hiraganaQ = UCOL_ON;
@@ -6602,6 +7042,8 @@ ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status)
       return UCOL_DEFAULT;
     }
     switch(attr) {
+    case UCOL_NUMERIC_COLLATION:
+      return coll->numericCollation;    
     case UCOL_HIRAGANA_QUATERNARY_MODE:
       return coll->hiraganaQ;
     case UCOL_FRENCH_COLLATION: /* attribute for direction of secondary weights*/
@@ -8399,3 +8841,4 @@ returnResult:
 
 }
 #endif /* #if !UCONFIG_NO_COLLATION */
+
