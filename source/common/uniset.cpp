@@ -1364,6 +1364,14 @@ UChar32 UnicodeSet::getRangeEnd(int32_t index) const {
     return list[index*2 + 1] - 1;
 }
 
+int32_t UnicodeSet::getStringCount() const {
+    return strings->size();
+}
+
+const UnicodeString* UnicodeSet::getString(int32_t index) const {
+    return (const UnicodeString*) strings->elementAt(index);
+}
+
 /**
  * Reallocate this objects internal structures to take up the least
  * possible space, without changing this object's value.
