@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/UInfo.java,v $ 
- * $Date: 2001/03/15 23:31:12 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/08/23 00:57:21 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -444,8 +444,8 @@ public final class UInfo {
         // classes...".  A better way to do this might be to get it
         // from a system property that is defined on the command line,
         // e.g., "java -Dicu4j=D:/icu4j..." - liu
-        this("src/data/unicode/UnicodeData.txt",
-             "src/data/unicode/CompositionExclusions.txt");
+        this("src/data/unicode/UnicodeData-3.0.0.txt",
+             "src/data/unicode/CompositionExclusions-1.txt");
     }
 
     /*
