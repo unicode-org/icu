@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/11/28 02:03:39 $
- * $Revision: 1.80 $
+ * $Date: 2001/11/28 04:49:08 $
+ * $Revision: 1.81 $
  *
  *****************************************************************************************
  */
@@ -166,7 +166,7 @@ public class TransliteratorTest extends TestFmwk {
                                                        "$lu > '*';" +
                                                        "a>ERROR");
         expect(t, "abcdefgABCDEFGU", "&bcd&fg!^**!^*&");
-    }
+    }                                                    
 
     /**
      * Test inline set syntax and set variable syntax.
@@ -1627,7 +1627,6 @@ public class TransliteratorTest extends TestFmwk {
     //======================================================================
  /* this test performs  test of rules in ISO 15915 */
     public void  TestDevanagariLatinRT(){
-        int MAX_LEN= 52;
         String[]  source = {
             "bh\u0101rata",
             "kra",
@@ -1681,13 +1680,11 @@ public class TransliteratorTest extends TestFmwk {
             // \u0939\u094d\u092E         - hma
             // CharsToUnicodeString("hma"),
             "hya",
-            "\u015Br\u0325a",
+            "\u015Br\u0325",
             "\u015Bca",
             "\u0115",
             "san\u0304j\u012Bb s\u0113nagupta",
             "\u0101nand vaddir\u0101ju",
-            "\u0101",
-            "a"
         };
         String[]  expected = {
             "\u092D\u093E\u0930\u0924",    /* bha\u0304rata */
@@ -1744,15 +1741,13 @@ public class TransliteratorTest extends TestFmwk {
             "\u090d",                      /* e\u0306    */
             "\u0938\u0902\u091C\u0940\u092C\u094D \u0938\u0947\u0928\u0917\u0941\u092A\u094D\u0924",
             "\u0906\u0928\u0902\u0926\u094D \u0935\u0926\u094D\u0926\u093F\u0930\u093E\u091C\u0941",
-            "\u0906",
-            "\u0905",
         };
 
         Transliterator latinToDev=Transliterator.getInstance("Latin-Devanagari", Transliterator.FORWARD );
         Transliterator devToLatin=Transliterator.getInstance("Devanagari-Latin", Transliterator.FORWARD);
 
         String gotResult;
-        for(int i= 0; i<MAX_LEN; i++){
+        for(int i= 0; i<source.length; i++){
             gotResult = source[i];
             expect(latinToDev,(source[i]),(expected[i]));
             expect(devToLatin,(expected[i]),(source[i]));
@@ -1760,7 +1755,6 @@ public class TransliteratorTest extends TestFmwk {
 
     }
     public void  TestTeluguLatinRT(){
-        int MAX_LEN=10;
         String[]  source = {   
             "raghur\u0101m vi\u015Bvan\u0101dha",                           /* Raghuram Viswanadha    */
             "\u0101nand vaddir\u0101ju",                                    /* Anand Vaddiraju 	      */ 	   
@@ -1792,7 +1786,7 @@ public class TransliteratorTest extends TestFmwk {
         Transliterator devToLatin=Transliterator.getInstance("Telugu-Latin", Transliterator.FORWARD);
 
         String gotResult;
-        for(int i= 0; i<MAX_LEN; i++){
+        for(int i= 0; i<source.length; i++){
             gotResult = source[i];
             expect(latinToDev,(source[i]),(expected[i]));
             expect(devToLatin,(expected[i]),(source[i]));
@@ -1810,12 +1804,12 @@ public class TransliteratorTest extends TestFmwk {
             "vi\u1E63\u0101da",
             "y\u014Dga",
             "dhr\u0325tar\u0101\u1E63\u1E6Dra",
-            "uv\u0101cr\u0325a",
+            "uv\u0101cr\u0325",
             "dharmak\u1E63\u0113tr\u0113",
             "kuruk\u1E63\u0113tr\u0113",
             "samav\u0113t\u0101",
-            "yuyutsava-\u1E25",
-            "m\u0101mak\u0101-\u1E25",
+            "yuyutsava\u1E25",
+            "m\u0101mak\u0101\u1E25",
         // "p\u0101\u1E47\u1E0Dav\u0101\u015Bcaiva",
             "kimakurvata",
             "san\u0304java",
@@ -1851,7 +1845,6 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
 
-
     public void  TestCompoundLatinRT(){
         int MAX_LEN =15;
         String[]  source = {
@@ -1863,12 +1856,12 @@ public class TransliteratorTest extends TestFmwk {
             "vi\u1E63\u0101da",
             "y\u014Dga",
             "dhr\u0325tar\u0101\u1E63\u1E6Dra",
-            "uv\u0101cr\u0325a",
+            "uv\u0101cr\u0325",
             "dharmak\u1E63\u0113tr\u0113",
             "kuruk\u1E63\u0113tr\u0113",
             "samav\u0113t\u0101",
-            "yuyutsava-\u1E25",
-            "m\u0101mak\u0101-\u1E25",
+            "yuyutsava\u1E25",
+            "m\u0101mak\u0101\u1E25",
         // "p\u0101\u1E47\u1E0Dav\u0101\u015Bcaiva",
             "kimakurvata",
             "san\u0304java"
@@ -2145,7 +2138,7 @@ public class TransliteratorTest extends TestFmwk {
     // These tests are not mirrored (yet) in icu4c at
     // source/test/intltest/transtst.cpp
     //======================================================================
-
+    
     /**
      * Test anchor masking
      */
@@ -2422,3 +2415,5 @@ public class TransliteratorTest extends TestFmwk {
         return pass;
     }
 }
+
+

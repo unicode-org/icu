@@ -16,8 +16,8 @@
 #--------------------------------------------------------------------
 # Oriya-InterIndic
 #:: NFD (NFC) ;
-\u0B21\u0B3C>\uE05C;# LETTER RRA
-\u0B22\u0B3C>\uE05D;# LETTER RHA
+#\u0B21\u0B3C>\uE05C;# LETTER RRA
+#\u0B22\u0B3C>\uE05D;# LETTER RHA
 \u0B47\u0B56>\uE048;# VOWEL SIGN AI
 \u0B47\u0B3E>\uE04B;# VOWEL SIGN O
 \u0B47\u0B57>\uE04C;# VOWEL SIGN AU
