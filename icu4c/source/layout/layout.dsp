@@ -258,6 +258,14 @@ SOURCE=.\IndicReordering.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\KhmerLayoutEngine.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\KhmerReordering.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\LayoutEngine.cpp
 # End Source File
 # Begin Source File
@@ -539,6 +547,14 @@ SOURCE=.\IndicRearrangementProcessor.h
 # Begin Source File
 
 SOURCE=.\IndicReordering.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\KhmerLayoutEngine.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\KhmerReordering.h
 # End Source File
 # Begin Source File
 
