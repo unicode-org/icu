@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/LocaleWriter.java,v $ 
- * $Date: 2002/01/31 01:22:18 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/01/31 02:47:26 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -372,7 +372,7 @@ public abstract class LocaleWriter {
             } else {
                 final String parentLocName = x.substring(0, ndx);
                 final Locale parentLoc = localeFromString(parentLocName);
-                return ResourceBundle.getBundle("com.ibm.jtc.localeconverter.myLocaleElements", parentLoc);
+                return ResourceBundle.getBundle("com.ibm.tools.localeconverter.myLocaleElements", parentLoc);
             }
         } catch (MissingResourceException e) {
             return null;
