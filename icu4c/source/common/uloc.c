@@ -76,6 +76,8 @@ static int32_t _installedLocalesCount = 0;
     3 character codes are duplicates.  This avoids bad searches
     going from 3 to 2 character codes.*/
 
+/* This list MUST be in sorted order, and MUST contain the two-letter codes
+if one exists otherwise use the three letter code */
 static const char * const _languages[] = {
     "aa",  "ab",  "ace", "ach", "ada", "ae",  "af",  "afa",
     "afh", "aka", "akk", "ale", "alg", "am",  "ang", "apa",
@@ -137,9 +139,9 @@ NULL,
 NULL
 };
 
-/* This list MUST be in sorted order, and MUST contain the two-letter codes
-if one exists otherwise use the three letter code */
-
+/* This list MUST contain a three-letter code for every two-letter code in the
+   list above, and they MUST ne in the same order (i.e., the same language must
+   be in the same place in both lists)! */
 static const char * const _languages3[] = {
 /*  "aa",  "ab",  "ace", "ach", "ada", "ae",  "af",  "afa",    */
     "aar", "abk", "ace", "ach", "ada", "ave", "afr", "afa",
@@ -256,15 +258,17 @@ NULL,
     "ind", "heb", "yid", "jaw", "srp",
 NULL
 };
-/* This list MUST contain a three-letter code for every two-letter code in the
-   list above, and they MUST ne in the same order (i.e., the same language must
-   be in the same place in both lists)! */
 
 /* ZR(ZAR) is now CD(COD) and FX(FXX) is PS(PSE) as per
  http://www.evertype.com/standards/iso3166/iso3166-1-en.html 
  added new codes keeping the old ones for compatibility
  updated to include 1999/12/03 revisions *CWB*/
 
+/* RO(ROM) is now RO(ROU) according to 
+ http://www.iso.org/iso/en/prods-services/iso3166ma/03updates-on-iso-3166/nlv3e-rou.html
+*/
+
+/* This list MUST be in sorted order, and MUST contain only two-letter codes! */
 static const char * const _countries[] = {
     "AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",
     "AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AZ",
@@ -297,11 +301,12 @@ static const char * const _countries[] = {
     "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",
     "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",  
 NULL,
-    "FX",  "ZR",   /* obsolete country codes */
+    "FX",  "RO",  "ZR",   /* obsolete country codes */
 NULL
 };
-/* This list MUST be in sorted order, and MUST contain only two-letter codes! */
 
+/* This list MUST contain a three-letter code for every two-letter code in
+   the above list, and they MUST be listed in the same order! */
 static const char * const _countries3[] = {
 /*  "AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",     */
     "AND", "ARE", "AFG", "ATG", "AIA", "ALB", "ARM", "ANT",
@@ -348,7 +353,7 @@ static const char * const _countries3[] = {
 /*  "PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",     */
     "PHL", "PAK", "POL", "SPM", "PCN", "PRI", "PSE", "PRT",
 /*  "PW",  "PY",  "QA",  "RE",  "RO",  "RU",  "RW",  "SA",     */
-    "PLW", "PRY", "QAT", "REU", "ROM", "RUS", "RWA", "SAU",
+    "PLW", "PRY", "QAT", "REU", "ROU", "RUS", "RWA", "SAU",
 /*  "SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",     */
     "SLB", "SYC", "SDN", "SWE", "SGP", "SHN", "SVN", "SJM",
 /*  "SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",     */
@@ -364,12 +369,10 @@ static const char * const _countries3[] = {
 /*  "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",            */
     "WSM", "YEM", "MYT", "YUG", "ZAF", "ZMB", "ZWE",
 NULL,
-/*  "FX",  "ZR",   */
-    "FXX", "ZAR",
+/*  "FX",  "RO",  "ZR",   */
+    "FXX", "ROM", "ZAR",
 NULL
 };
-/* This list MUST contain a three-letter code for every two-letter code in
-   the above list, and they MUST be listed in the same order! */
 
 /*******************************************************************************
   Implementation function definitions
