@@ -17,10 +17,16 @@ U_NAMESPACE_BEGIN
 //
 //  debugging support.  Enable one or more of the #defines immediately following
 //
+#ifdef DEBUG
 //#define REGEX_SCAN_DEBUG
 #define REGEX_DUMP_DEBUG
 #define REGEX_RUN_DEBUG
+#endif
 //  End of #defines inteded to be directly set.
+
+#if defined(REGEX_SCAN_DEBUG) || defined(REGEX_RUN_DEBUG) || defined(REGEX_DUMP_DEBUG)
+#include <stdio.h>
+#endif
 
 #ifdef REGEX_SCAN_DEBUG
 #define REGEX_SCAN_DEBUG_PRINTF printf
@@ -39,10 +45,6 @@ U_NAMESPACE_BEGIN
 #define REGEX_DUMP_DEBUG_PRINTF printf
 #else
 #define REGEX_RUN_DEBUG_PRINTF
-#endif
-
-#if defined(REGEX_SCAN_DEBUG) || defined(REGEX_RUN_DEBUG) || defined(REGEX_DUMP_DEBUG)
-#include <stdio.h>
 #endif
 
 
