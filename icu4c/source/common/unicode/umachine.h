@@ -51,6 +51,12 @@
 #   include "unicode/platform.h"
 #endif
 
+/*
+ * ANSI C headers:
+ * stddef.h defines wchar_t
+ */
+#include <stddef.h>
+
 /*==========================================================================*/
 /* XP_CPLUSPLUS is a cross-platform symbol which should be defined when     */
 /* using C++.  It should not be defined when compiling under C.             */
@@ -240,6 +246,107 @@ typedef int8_t UBool;
 #   define FALSE 0
 #endif
 
+
+/*==========================================================================*/
+/* Unicode data types                                                       */
+/*==========================================================================*/
+
+/* wchar_t-related definitions -------------------------------------------- */
+
+/**
+ * \def U_HAVE_WCHAR_H
+ * Indicates whether <wchar.h> is available (1) or not (0). Set to 1 by default.
+ *
+ * @stable ICU 2.0
+ */
+#ifndef U_HAVE_WCHAR_H
+#   define U_HAVE_WCHAR_H 1
+#endif
+
+/**
+ * \def U_SIZEOF_WCHAR_T
+ * U_SIZEOF_WCHAR_T==sizeof(wchar_t) (0 means it is not defined or autoconf could not set it)
+ *
+ * @stable ICU 2.0
+ */
+#if U_SIZEOF_WCHAR_T==0
+#   undef U_SIZEOF_WCHAR_T
+#   define U_SIZEOF_WCHAR_T 4
+#endif
+
+/*
+ * \def U_WCHAR_IS_UTF16
+ * Defined if wchar_t uses UTF-16.
+ *
+ * @stable ICU 2.0
+ */
+/*
+ * \def U_WCHAR_IS_UTF32
+ * Defined if wchar_t uses UTF-32.
+ *
+ * @stable ICU 2.0
+ */
+#if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32)
+#   ifdef __STDC_ISO_10646__ 
+#       if (U_SIZEOF_WCHAR_T==2)
+#           define U_WCHAR_IS_UTF16
+#       elif (U_SIZEOF_WCHAR_T==4)
+#           define  U_WCHAR_IS_UTF32
+#       endif
+#   elif defined __UCS2__
+#       if (__OS390__ || __OS400__) && (U_SIZEOF_WCHAR_T==2)
+#           define U_WCHAR_IS_UTF16
+#       endif
+#   elif defined __UCS4__
+#       if (U_SIZEOF_WCHAR_T==4)
+#           define U_WCHAR_IS_UTF32
+#       endif
+#   elif defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#       define U_WCHAR_IS_UTF16    
+#   endif
+#endif
+
+/* UChar and UChar32 definitions -------------------------------------------- */
+
+/** Number of bytes in a UChar. @stable ICU 2.0 */
+#define U_SIZEOF_UCHAR 2
+
+/**
+ * \var UChar
+ * Define UChar to be wchar_t if that is 16 bits wide; always assumed to be unsigned.
+ * If wchar_t is not 16 bits wide, then define UChar to be uint16_t.
+ * This makes the definition of UChar platform-dependent
+ * but allows direct string type compatibility with platforms with
+ * 16-bit wchar_t types.
+ *
+ * @stable ICU 2.0
+ */
+
+/* Define UChar to be compatible with wchar_t if possible. */
+#if U_SIZEOF_WCHAR_T==2
+    typedef wchar_t UChar;
+#else
+    typedef uint16_t UChar;
+#endif
+
+/**
+ * Define UChar32 as a type for single Unicode code points.
+ * UChar32 is a signed 32-bit integer (same as int32_t).
+ *
+ * The Unicode code point range is 0..0x10ffff.
+ * All other values (negative or >=0x110000) are illegal as Unicode code points.
+ * They may be used as sentinel values to indicate "done", "error"
+ * or similar non-code point conditions.
+ *
+ * Before ICU 2.4 (Jitterbug 2146), UChar32 was defined
+ * to be wchar_t if that is 32 bits wide (wchar_t may be signed or unsigned)
+ * or else to be uint32_t.
+ * That is, the definition of UChar32 was platform-dependent.
+ *
+ * @see U_SENTINEL
+ * @stable ICU 2.4
+ */
+typedef int32_t UChar32;
 
 /*==========================================================================*/
 /* U_INLINE and U_ALIGN_CODE   Set default values if these are not already  */
