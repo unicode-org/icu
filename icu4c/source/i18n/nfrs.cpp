@@ -135,7 +135,7 @@ NFRuleSet::NFRuleSet(UnicodeString* descriptions, int32_t index, UErrorCode& sta
     if (description.length() == 0) {
         // throw new IllegalArgumentException("Empty rule set description");
         status = U_PARSE_ERROR;
-    return;
+        return;
     }
 
     // if the description begins with a rule set name (the rule set
@@ -817,7 +817,6 @@ int64_t util64_atoi(const char* str, uint32_t radix)
     }
     return result;
 }
-#endif
 
 int64_t util64_utoi(const UChar* str, uint32_t radix)
 {
@@ -846,7 +845,6 @@ int64_t util64_utoi(const UChar* str, uint32_t radix)
     return result;
 }
 
-#ifdef RBNF_DEBUG
 uint32_t util64_toa(int64_t w, char* buf, uint32_t len, uint32_t radix, UBool raw)
 {    
     if (radix > 36) {
