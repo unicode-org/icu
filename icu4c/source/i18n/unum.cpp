@@ -42,7 +42,7 @@ unum_open(  UNumberFormatStyle    style,
     { 
         return 0;
     }
-    if(style!=UNUM_IGNORE){
+    if(style!=UNUM_PATTERN){
         UNumberFormat *retVal = 0;
         
         switch(style) {
