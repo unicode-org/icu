@@ -50,7 +50,7 @@ public:
     UBool operator==(const NFRule& rhs) const;
     UBool operator!=(const NFRule& rhs) const { return !operator==(rhs); }
 
-    ERuleType getType() const { return (ERuleType)(baseValue <= 0 ? baseValue : kOtherRule); }
+    ERuleType getType() const { return (ERuleType)(baseValue <= kNoBase ? (ERuleType)baseValue : kOtherRule); }
     void setType(ERuleType ruleType) { baseValue = (int32_t)ruleType; }
 
     int64_t getBaseValue() const { return baseValue; }
