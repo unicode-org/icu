@@ -792,7 +792,7 @@ void Builder::fixupMiscellaneousOffsets() {
     header.nameGroupPool_offset = nameGroupPool_offset;
     header.nameGroupPool_count = (int16_t) nameGroupPool_count;
     header.stringPool_offset = stringPool_offset;
-    header.stringPool_count = (int16_t) stringPool_count;
+    header.stringPool_count = (int16_t) stringPool_count - 1; // don't include "" entry
 
 	U_ASSERT(valueMap_count <= 0x7FFF);
 	U_ASSERT(nameGroupPool_count <= 0x7FFF);
