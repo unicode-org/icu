@@ -1466,18 +1466,20 @@ TestCharNames() {
             log_err("u_charName(0x%lx) error %s\n", names[i].code, u_errorName(errorCode));
             return;
         }
-        if(length<=0 || 0!=uprv_strcmp(name, names[i].name) || length!=(uint16_t)uprv_strlen(name)) {
-            log_err("u_charName(0x%lx) gets %s length %ld instead of %s\n", names[i].code, name, length, names[i].name);
+        if(length<0 || 0!=uprv_strcmp(name, names[i].name) || length!=(uint16_t)uprv_strlen(name)) {
+            log_err("u_charName(0x%lx) gets: %s (length %ld) instead of: %s\n", names[i].code, name, length, names[i].name);
         }
 
         /* find the modern name */
-        c=u_charFromName(U_UNICODE_CHAR_NAME, names[i].name, &errorCode);
-        if(U_FAILURE(errorCode)) {
-            log_err("u_charFromName(%s) error %s\n", names[i].name, u_errorName(errorCode));
-            return;
-        }
-        if(c!=names[i].code) {
-            log_err("u_charFromName(%s) gets 0x%lx instead of 0x%lx\n", names[i].name, c, names[i].code);
+        if (*names[i].name) {
+            c=u_charFromName(U_UNICODE_CHAR_NAME, names[i].name, &errorCode);
+            if(U_FAILURE(errorCode)) {
+                log_err("u_charFromName(%s) error %s\n", names[i].name, u_errorName(errorCode));
+                return;
+            }
+            if(c!=names[i].code) {
+                log_err("u_charFromName(%s) gets 0x%lx instead of 0x%lx\n", names[i].name, c, names[i].code);
+            }
         }
 
         /* Unicode 1.0 character name */
