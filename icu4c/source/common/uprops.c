@@ -22,7 +22,6 @@
 #include "unicode/uscript.h"
 #include "cstring.h"
 #include "unormimp.h"
-#include "ucase.h"
 #include "uprops.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))

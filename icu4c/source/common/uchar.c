@@ -22,18 +22,12 @@
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 #include "unicode/udata.h"
-#include "unicode/uloc.h"
-#include "unicode/uiter.h"
-#include "unicode/uset.h"
 #include "umutex.h"
 #include "cmemory.h"
 #include "ucln_cmn.h"
 #include "utrie.h"
-#include "ustr_imp.h"
 #include "udataswp.h"
-#include "ucase.h"
 #include "uprops.h"
-#include "uassert.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
