@@ -716,14 +716,14 @@ TestConsistentCountryInfo(void) {
 }
 
 static int32_t
-findStringSetMismatch(const UChar *string, int32_t langSize,
+findStringSetMismatch(const char *currLoc, const UChar *string, int32_t langSize,
                       const UChar *exemplarCharacters, int32_t exemplarLen,
                       UBool ignoreNumbers) {
     UErrorCode errorCode = U_ZERO_ERROR;
     USet *exemplarSet = uset_openPatternOptions(exemplarCharacters, exemplarLen, USET_CASE_INSENSITIVE, &errorCode);
     int32_t strIdx;
     if (U_FAILURE(errorCode)) {
-        log_err("error uset_openPattern returned %s\n", u_errorName(errorCode));
+      log_err("%s: error uset_openPattern returned %s\n", currLoc, u_errorName(errorCode));
         return -1;
     }
 
@@ -877,7 +877,7 @@ static void VerifyTranslation(void) {
                 log_err("error uloc_getDisplayLanguage returned %s\n", u_errorName(errorCode));
             }
             else {
-                strIdx = findStringSetMismatch(langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE);
+                strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE);
                 if (strIdx >= 0) {
                     log_err("getDisplayLanguage(%s) at index %d returned characters not in the exemplar characters.\n",
                         currLoc, strIdx);
@@ -888,7 +888,7 @@ static void VerifyTranslation(void) {
                 log_err("error uloc_getDisplayCountry returned %s\n", u_errorName(errorCode));
             }
             else {
-                strIdx = findStringSetMismatch(langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE);
+              strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE);
                 if (strIdx >= 0) {
                     log_err("getDisplayCountry(%s) at index %d returned characters not in the exemplar characters.\n",
                         currLoc, strIdx);
@@ -918,7 +918,7 @@ static void VerifyTranslation(void) {
                         log_err("error ures_getStringByIndex(%d) returned %s\n", idx, u_errorName(errorCode));
                         continue;
                     }
-                    strIdx = findStringSetMismatch(fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE);
+                    strIdx = findStringSetMismatch(currLoc, fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE);
                     if (strIdx >= 0) {
                         log_err("getDayNames(%s, %d) at index %d returned characters not in the exemplar characters.\n",
                             currLoc, idx, strIdx);
@@ -947,7 +947,7 @@ static void VerifyTranslation(void) {
                         log_err("error ures_getStringByIndex(%d) returned %s\n", idx, u_errorName(errorCode));
                         continue;
                     }
-                    strIdx = findStringSetMismatch(fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE);
+                    strIdx = findStringSetMismatch(currLoc, fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE);
                     if (strIdx >= 0) {
                         log_err("getMonthNames(%s, %d) at index %d returned characters not in the exemplar characters.\n",
                             currLoc, idx, strIdx);
