@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorServiceShim.java,v $
-* $Date: 2003/05/05 23:42:17 $
-* $Revision: 1.2 $
+* $Date: 2003/05/13 16:33:01 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -111,7 +111,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
                 }
             }
 
-            registerFactory(new CollatorFactory());
+            this.registerFactory(new CollatorFactory());
             markDefault();
         }
 
