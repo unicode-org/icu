@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/07/30 02:32:55 $ 
-* $Revision: 1.15 $
+* $Date: 2002/09/19 21:24:30 $ 
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -1386,7 +1386,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
   	/**
      * UnicodeData.txt property object
      */
-    public static UCharacterProperty INSTANCE_ = null;   
+    private static UCharacterProperty INSTANCE_ = null;   
         
     /**
     * Default name of the datafile

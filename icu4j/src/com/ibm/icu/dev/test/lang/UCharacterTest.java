@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/08/08 22:44:52 $ 
-* $Revision: 1.41 $
+* $Date: 2002/09/19 21:24:29 $ 
+* $Revision: 1.42 $
 *
 *******************************************************************************
 */
@@ -20,11 +20,14 @@ import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ValueIterator;
 import com.ibm.icu.util.VersionInfo;
+import com.ibm.icu.impl.UCharacterName;
 
 import java.io.BufferedReader;
+import java.util.Arrays;
 /**
 * Testing class for UCharacter
 * Mostly following the test cases for ICU
@@ -56,9 +59,10 @@ public final class UCharacterTest extends TestFmwk
     	try
     	{
       		UCharacterTest test = new UCharacterTest();
+            long starttime = System.currentTimeMillis();
       		test.run(arg);
-      		//test.TestGetAge();
-      		//test.TestAdditionalProperties();
+            System.out.println(System.currentTimeMillis() - starttime);
+      		// test.TestNames();
     	}
     	catch (Exception e)
     	{
@@ -563,6 +567,12 @@ public final class UCharacterTest extends TestFmwk
   	*/
   	public void TestNames()
   	{
+        int length = UCharacterName.getInstance().getMaxCharNameLength(); 
+        if (length < 83) { // Unicode 3.2 max char name length 
+           errln("getMaxCharNameLength()=" + length + " is too short"); 
+        }
+        // ### TODO same tests for max ISO comment length as for max name length
+
     	int c[] = {0x0061, 0x000284, 0x003401, 0x007fed, 0x00ac00, 0x00d7a3, 
     		       0x00d800, 0x00dc00, 0xff08, 0x00ffe5, 0x00ffff, 
     		       0x0023456};
@@ -671,6 +681,74 @@ public final class UCharacterTest extends TestFmwk
             		break;
           		}
         	}
+        }
+        
+        // Test getCharNameCharacters
+        if (getInclusion() >= 10) {
+            boolean map[] = new boolean[256];
+            
+            UnicodeSet set = new UnicodeSet(1, 0); // empty set
+            UnicodeSet dumb = new UnicodeSet(1, 0); // empty set
+    
+            // uprv_getCharNameCharacters() will likely return more lowercase
+            // letters than actual character names contain because
+            // it includes all the characters in lowercased names of
+            // general categories, for the full possible set of extended names.
+            UCharacterName.getInstance().getCharNameCharacters(set);
+    
+            // build set the dumb (but sure-fire) way
+            Arrays.fill(map, false);
+    
+            int maxLength = 0;
+            for (int cp = 0; cp < 0x110000; ++ cp) {
+                String n = UCharacter.getExtendedName(cp);
+                int len = n.length();
+                if (len > maxLength) {
+                    maxLength = len;
+                }
+    
+                for (int i = 0; i < len; ++ i) {
+                    char ch = n.charAt(i);
+                    if (!map[ch & 0xff]) {
+                        dumb.add(ch);
+                        map[ch & 0xff] = true;
+                    }
+                }
+            }
+    
+            length = UCharacterName.getInstance().getMaxCharNameLength();
+            if (length != maxLength) {
+                errln("getMaxCharNameLength()=" + length 
+                      + " differs from the maximum length " + maxLength
+                      + " of all extended names");
+            }
+    
+            // compare the sets.  Where is my uset_equals?!!
+            boolean ok = true;
+            for (int i = 0; i < 256; ++ i) {
+                if (set.contains(i) != dumb.contains(i)) {
+                    if (0x61 <= i && i <= 0x7a // a-z
+                        && set.contains(i) && !dumb.contains(i)) {
+                        // ignore lowercase a-z that are in set but not in dumb
+                        ok = true;
+                    } 
+                    else {
+                        ok = false;
+                        break;
+                    }
+                }
+            }
+    
+            String pattern1 = set.toPattern(true);
+            String pattern2 = dumb.toPattern(true);
+            
+            if (!ok) {
+                errln("FAIL: getCharNameCharacters() returned " + pattern1
+                      + " expected " + pattern2 
+                      + " (too many lowercase a-z are ok)");
+            } else {
+                logln("Ok: getCharNameCharacters() returned " + pattern1);
+            }
         }
   	}
   
