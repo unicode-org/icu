@@ -221,6 +221,9 @@ udata_swapDataHeader(const UDataSwapper *ds,
         }
         outHeader=(DataHeader *)outData;
 
+        outHeader->info.isBigEndian = ds->outIsBigEndian;
+        outHeader->info.charsetFamily = ds->outCharset;
+
         /* swap headerSize */
         ds->swapArray16(ds, &pHeader->dataHeader.headerSize, 2, &outHeader->dataHeader.headerSize, pErrorCode);
 
