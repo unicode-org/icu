@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.156 2002/02/20 22:28:44 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.157 2002/03/08 00:25:51 srl Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -875,6 +875,16 @@ if test "${FORCE_LIBS}" != ""; then
    echo " *** Overriding automatically chosen [LIBS=$LIBS], using instead [FORCE_LIBS=${FORCE_LIBS}]"  1>&6
    LIBS=${FORCE_LIBS}
 fi
+
+
+if test "${AIX_SHLIB}" != ""; then
+   echo " *** setting AIX_SHLIB (AIX only) to ${AIX_SHLIB}]"  1>&6
+else
+   AIX_SHLIB=makeC++SharedLib_r
+fi
+
+AC_SUBST(AIX_SHLIB)
+
 
 dnl SPECIAL handling for HPUX 10 and also '11 & --enable-hpuxcma=true'
 if test $hpuxcma = true; then
