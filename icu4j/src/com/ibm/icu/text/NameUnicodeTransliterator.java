@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NameUnicodeTransliterator.java,v $ 
- * $Date: 2001/11/17 20:45:35 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/11/21 20:56:50 $ 
+ * $Revision: 1.5 $
  */
 package com.ibm.text;
 import java.util.*;
@@ -111,12 +111,13 @@ class NameUnicodeTransliterator extends Transliterator {
                     int ch = UCharacter.getCharFromName(new String(buf, 0, ibuf));
                     if (ch != -1) {
                         // Lookup succeeded
-                        text.replace(openPos, cursor+1, String.valueOf((char) ch));
+                        String str = UTF16.valueOf(ch);
+                        text.replace(openPos, cursor+1, str);
 
                         // Adjust indices for the change in the length of
                         // the string.  Do not assume that str.length() ==
                         // 1, in case of surrogates.
-                        int delta = cursor + 1 - openPos - 1/*str.length()*/;
+                        int delta = cursor + 1 - openPos - str.length();
                         cursor -= delta;
                         limit -= delta;
                         // assert(cursor == openPos + str.length());
