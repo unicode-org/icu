@@ -57,8 +57,7 @@
  * </ul>
  *
  * <hr>
- *
- * <h2><a name="Module">Module List</a></h2>
+ *\htmlonly <h2><a NAME="Module">Module List</a></h2> \endhtmlonly
  * <table border="1" cols="3" align="center">
  *   <tr>
  *     <td><strong>Module Name</strong></td>
