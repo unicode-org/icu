@@ -504,7 +504,7 @@ void TransliteratorRegistry::remove(const UnicodeString& ID) {
  * To retrieve the actual IDs, call getAvailableID(i) with
  * i from 0 to countAvailableIDs() - 1.
  */
-int32_t TransliteratorRegistry::countAvailableIDs(void) {
+int32_t TransliteratorRegistry::countAvailableIDs(void) const {
     return availableIDs.size();
 }
 
@@ -514,23 +514,23 @@ int32_t TransliteratorRegistry::countAvailableIDs(void) {
  * and countAvailableIDs() - 1, inclusive.  If index is out of
  * range, the result of getAvailableID(0) is returned.
  */
-const UnicodeString& TransliteratorRegistry::getAvailableID(int32_t index) {
+const UnicodeString& TransliteratorRegistry::getAvailableID(int32_t index) const {
     if (index < 0 || index >= availableIDs.size()) {
         index = 0;
     }
     return *(const UnicodeString*) availableIDs[index];
 }
 
-StringEnumeration* TransliteratorRegistry::getAvailableIDs() {
+StringEnumeration* TransliteratorRegistry::getAvailableIDs() const {
     return new Enumeration(*this);
 }
 
-int32_t TransliteratorRegistry::countAvailableSources(void) {
+int32_t TransliteratorRegistry::countAvailableSources(void) const {
     return specDAG.count();
 }
 
 UnicodeString& TransliteratorRegistry::getAvailableSource(int32_t index,
-                                                          UnicodeString& result) {
+                                                          UnicodeString& result) const {
     int32_t pos = -1;
     const UHashElement *e = 0;
     while (index-- >= 0) {
@@ -547,14 +547,14 @@ UnicodeString& TransliteratorRegistry::getAvailableSource(int32_t index,
     return result;
 }
 
-int32_t TransliteratorRegistry::countAvailableTargets(const UnicodeString& source) {
+int32_t TransliteratorRegistry::countAvailableTargets(const UnicodeString& source) const {
     Hashtable *targets = (Hashtable*) specDAG.get(source);
     return (targets == 0) ? 0 : targets->count();
 }
 
 UnicodeString& TransliteratorRegistry::getAvailableTarget(int32_t index,
                                                           const UnicodeString& source,
-                                                          UnicodeString& result) {
+                                                          UnicodeString& result) const {
     Hashtable *targets = (Hashtable*) specDAG.get(source);
     if (targets == 0) {
         result.truncate(0); // invalid source
@@ -577,7 +577,7 @@ UnicodeString& TransliteratorRegistry::getAvailableTarget(int32_t index,
 }
 
 int32_t TransliteratorRegistry::countAvailableVariants(const UnicodeString& source,
-                                                       const UnicodeString& target) {
+                                                       const UnicodeString& target) const {
     Hashtable *targets = (Hashtable*) specDAG.get(source);
     if (targets == 0) {
         return 0;
@@ -590,7 +590,7 @@ int32_t TransliteratorRegistry::countAvailableVariants(const UnicodeString& sour
 UnicodeString& TransliteratorRegistry::getAvailableVariant(int32_t index,
                                                            const UnicodeString& source,
                                                            const UnicodeString& target,
-                                                           UnicodeString& result) {
+                                                           UnicodeString& result) const {
     Hashtable *targets = (Hashtable*) specDAG.get(source);
     if (targets == 0) {
         result.truncate(0); // invalid source
@@ -614,7 +614,7 @@ UnicodeString& TransliteratorRegistry::getAvailableVariant(int32_t index,
 // class TransliteratorRegistry::Enumeration
 //----------------------------------------------------------------------
 
-TransliteratorRegistry::Enumeration::Enumeration(TransliteratorRegistry& _reg) :
+TransliteratorRegistry::Enumeration::Enumeration(const TransliteratorRegistry& _reg) :
     reg(_reg), index(0) {
 }
 
@@ -796,7 +796,7 @@ void TransliteratorRegistry::removeSTV(const UnicodeString& source,
  */
 Entry* TransliteratorRegistry::findInDynamicStore(const Spec& src,
                                                   const Spec& trg,
-                                                  const UnicodeString& variant) {
+                                                  const UnicodeString& variant) const {
     UnicodeString ID;
     TransliteratorIDParser::STVtoID(src, trg, variant, ID);
     Entry *e = (Entry*) registry.get(ID);
