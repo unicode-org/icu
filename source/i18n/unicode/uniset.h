@@ -769,7 +769,7 @@ private:
     //----------------------------------------------------------------
 
     /**
-     * Returns the character after the given position, or '\uFFFF' if
+     * Returns the character after the given position, or '\uFFFE' if
      * there is none.
      */
     static UChar charAfter(const UnicodeString& str, int32_t i);
