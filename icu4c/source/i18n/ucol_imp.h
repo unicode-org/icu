@@ -402,9 +402,9 @@ ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status);
 #define getExpansionSuffix(coleiter) ((coleiter)->iteratordata_.CEpos - (coleiter)->iteratordata_.toReturn)
 #define setExpansionSuffix(coleiter, offset) ((coleiter)->iteratordata_.toReturn = (coleiter)->iteratordata_.CEpos - leftoverces)
 
-#define UCA_DATA_TYPE "dat"
+#define UCA_DATA_TYPE "icu"
 #define UCA_DATA_NAME "ucadata"
-#define INVC_DATA_TYPE "dat"
+#define INVC_DATA_TYPE "icu"
 #define INVC_DATA_NAME "invuca"
 
 /* This is an enum that lists magic special byte values from the fractional UCA */
