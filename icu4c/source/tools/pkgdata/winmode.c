@@ -39,8 +39,11 @@ void writeCmnRules(UPKGOptions *o,  FileStream *makefile)
 
     infiles = o->filePaths;
 
-    sprintf(tmp, "\"$(TARGETDIR)\\$(CMNTARGET)\" : $(DATAFILEPATHS)\n\t@\"$(GENCMN)\" -C \"%s\" -d \"%s\" -n \"$(NAME)\" 0 <<\n",
-        o->comment, o->targetDir);
+    sprintf(tmp, "\"$(TARGETDIR)\\$(CMNTARGET)\" : $(DATAFILEPATHS)\n"
+        "\t@\"$(GENCMN)\" %s%s%s-d \"$(TARGETDIR)\" -n \"$(NAME)\" 0 <<\n",
+        (o->comment ? "-C \"" : ""),
+        (o->comment ? o->comment : ""),
+        (o->comment ? "\" " : ""));
     T_FileStream_writeLine(makefile, tmp);
 
     pkg_writeCharList(makefile, infiles, "\n", -1);
@@ -97,7 +100,10 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 
         sprintf(tmp2,
             "LINK32 = link.exe\n"
-            "LINK32_FLAGS = /nologo /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /DLL /NOENTRY /base:\"0x4ad00000\" /implib:\"$(TARGETDIR)\\$(ENTRYPOINT).lib\" /comment:\"%s\"\n",
+            "LINK32_FLAGS = /nologo /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /DLL /NOENTRY /base:\"0x4ad00000\" /implib:\"$(TARGETDIR)\\$(ENTRYPOINT).lib\" %s%s%s\n",
+            (o->comment ? "/comment:\"" : ""),
+            (o->comment ? o->comment : ""),
+            (o->comment ? "\"" : ""),
             o->comment
             );
         T_FileStream_writeLine(makefile, tmp2);

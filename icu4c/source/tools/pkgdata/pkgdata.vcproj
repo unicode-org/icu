@@ -138,7 +138,7 @@
 				RelativePath=".\filemode.c">
 			</File>
 			<File
-				RelativePath=".\nmake.c">
+				RelativePath=".\make.c">
 			</File>
 			<File
 				RelativePath=".\pkgdata.c">
