@@ -21,7 +21,6 @@
 #include "cstring.h"
 
 
-
 enum OptionsList {
     UCOL_SIT_LANGUAGE = 0,
     UCOL_SIT_SCRIPT,
@@ -978,19 +977,23 @@ ucol_getContractions( const UCollator *coll,
 
 }
 
+
 U_CAPI int32_t U_EXPORT2
 ucol_getUnsafeSet( const UCollator *coll,
                   USet *unsafe,
                   UErrorCode *status)
 {
+    UChar buffer[internalBufferSize];
+    int32_t len = 0;
+
     uset_clear(unsafe);
 
+    // cccpattern = "[[:^tccc=0:][:^lccc=0:]]", unfortunately variant
+    static const UChar cccpattern[25] = { 0x5b, 0x5b, 0x3a, 0x5e, 0x74, 0x63, 0x63, 0x63, 0x3d, 0x30, 0x3a, 0x5d,
+                                    0x5b, 0x3a, 0x5e, 0x6c, 0x63, 0x63, 0x63, 0x3d, 0x30, 0x3a, 0x5d, 0x5d, 0x00 };
+
     // add chars that fail the fcd check
-    UChar buffer[internalBufferSize];
-    static const char* fcdUnsafes = "[[:^tccc=0:][:^lccc=0:]]";
-    int32_t len = uprv_strlen(fcdUnsafes);   
-    u_charsToUChars(fcdUnsafes, buffer, internalBufferSize);
-    uset_applyPattern(unsafe, buffer, len, USET_IGNORE_SPACE, status);
+    uset_applyPattern(unsafe, cccpattern, 24, USET_IGNORE_SPACE, status);
 
     // add Thai/Lao prevowels
     uset_addRange(unsafe, 0xe40, 0xe44);
