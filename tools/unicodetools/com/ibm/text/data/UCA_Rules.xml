@@ -2,7 +2,7 @@
 <!--
 UCA Rules
 This file contains the UCA tables for the given version, but transformed into rule syntax.
-Generated:   2002-06-27,18:40:47 GMT [MD]
+Generated:   2002-07-02,10:20:09 GMT [MD]
 NOTE: Since UCA handles canonical equivalents, no composites are necessary
 (except in extensions).
 For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_Intro.html
@@ -140,7 +140,6 @@ For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_I
   <eq/>⁭
   <eq/>⁮
   <eq/>⁯
-  <eq/><codepoint hex="DBFF"/>
   <eq/>﻿
   <eq/>￹
   <eq/>￺
@@ -674,7 +673,7 @@ For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_I
   <t/>！
   <t/>‼
 <x/>!
-  <eq/>⁉
+  <t/>⁉
 <x/>?
   <t/>﹗
   <p/>¡
@@ -745,223 +744,223 @@ For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_I
 <x/>1)
   <t/>⑽
 <x/>10)
-  <eq/>⑾
+  <t/>⑾
 <x/>11)
-  <eq/>⑿
+  <t/>⑿
 <x/>12)
-  <eq/>⒀
+  <t/>⒀
 <x/>13)
-  <eq/>⒁
+  <t/>⒁
 <x/>14)
-  <eq/>⒂
+  <t/>⒂
 <x/>15)
-  <eq/>⒃
+  <t/>⒃
 <x/>16)
-  <eq/>⒄
+  <t/>⒄
 <x/>17)
-  <eq/>⒅
+  <t/>⒅
 <x/>18)
-  <eq/>⒆
+  <t/>⒆
 <x/>19)
-  <eq/>⑵
+  <t/>⑵
 <x/>2)
   <t/>⒇
 <x/>20)
-  <eq/>⑶
+  <t/>⑶
 <x/>3)
-  <eq/>⑷
+  <t/>⑷
 <x/>4)
-  <eq/>⑸
+  <t/>⑸
 <x/>5)
-  <eq/>⑹
+  <t/>⑹
 <x/>6)
-  <eq/>⑺
+  <t/>⑺
 <x/>7)
-  <eq/>⑻
+  <t/>⑻
 <x/>8)
-  <eq/>⑼
+  <t/>⑼
 <x/>9)
-  <eq/>⒜
+  <t/>⒜
 <x/>a)
-  <eq/>⒝
+  <t/>⒝
 <x/>b)
-  <eq/>⒞
+  <t/>⒞
 <x/>c)
-  <eq/>⒟
+  <t/>⒟
 <x/>d)
-  <eq/>⒠
+  <t/>⒠
 <x/>e)
-  <eq/>⒡
+  <t/>⒡
 <x/>f)
-  <eq/>⒢
+  <t/>⒢
 <x/>g)
-  <eq/>⒣
+  <t/>⒣
 <x/>h)
-  <eq/>⒤
+  <t/>⒤
 <x/>i)
-  <eq/>⒥
+  <t/>⒥
 <x/>j)
-  <eq/>⒦
+  <t/>⒦
 <x/>k)
-  <eq/>⒧
+  <t/>⒧
 <x/>l)
-  <eq/>⒨
+  <t/>⒨
 <x/>m)
-  <eq/>⒩
+  <t/>⒩
 <x/>n)
-  <eq/>⒪
+  <t/>⒪
 <x/>o)
-  <eq/>⒫
+  <t/>⒫
 <x/>p)
-  <eq/>⒬
+  <t/>⒬
 <x/>q)
-  <eq/>⒭
+  <t/>⒭
 <x/>r)
-  <eq/>⒮
+  <t/>⒮
 <x/>s)
-  <eq/>⒯
+  <t/>⒯
 <x/>t)
-  <eq/>⒰
+  <t/>⒰
 <x/>u)
-  <eq/>⒱
+  <t/>⒱
 <x/>v)
-  <eq/>⒲
+  <t/>⒲
 <x/>w)
-  <eq/>⒳
+  <t/>⒳
 <x/>x)
-  <eq/>⒴
+  <t/>⒴
 <x/>y)
-  <eq/>⒵
+  <t/>⒵
 <x/>z)
-  <eq/>㈀
+  <t/>㈀
 <x/>ᄀ)
   <t/>㈎
 <x/>가)
-  <eq/>㈁
+  <t/>㈁
 <x/>ᄂ)
   <t/>㈏
 <x/>나)
-  <eq/>㈂
+  <t/>㈂
 <x/>ᄃ)
   <t/>㈐
 <x/>다)
-  <eq/>㈃
+  <t/>㈃
 <x/>ᄅ)
   <t/>㈑
 <x/>라)
-  <eq/>㈄
+  <t/>㈄
 <x/>ᄆ)
   <t/>㈒
 <x/>마)
-  <eq/>㈅
+  <t/>㈅
 <x/>ᄇ)
   <t/>㈓
 <x/>바)
-  <eq/>㈆
+  <t/>㈆
 <x/>ᄉ)
   <t/>㈔
 <x/>사)
-  <eq/>㈇
+  <t/>㈇
 <x/>ᄋ)
   <t/>㈕
 <x/>아)
-  <eq/>㈈
+  <t/>㈈
 <x/>ᄌ)
   <t/>㈖
 <x/>자)
-  <eq/>㈜
+  <t/>㈜
 <x/>주)
-  <eq/>㈉
+  <t/>㈉
 <x/>ᄎ)
   <t/>㈗
 <x/>차)
-  <eq/>㈊
+  <t/>㈊
 <x/>ᄏ)
   <t/>㈘
 <x/>카)
-  <eq/>㈋
+  <t/>㈋
 <x/>ᄐ)
   <t/>㈙
 <x/>타)
-  <eq/>㈌
+  <t/>㈌
 <x/>ᄑ)
   <t/>㈚
 <x/>파)
-  <eq/>㈍
+  <t/>㈍
 <x/>ᄒ)
   <t/>㈛
 <x/>하)
-  <eq/>㈠
+  <t/>㈠
 <x/>一)
-  <eq/>㈦
+  <t/>㈦
 <x/>七)
-  <eq/>㈢
+  <t/>㈢
 <x/>三)
-  <eq/>㈨
+  <t/>㈨
 <x/>九)
-  <eq/>㈡
+  <t/>㈡
 <x/>二)
-  <eq/>㈤
+  <t/>㈤
 <x/>五)
-  <eq/>㈹
+  <t/>㈹
 <x/>代)
-  <eq/>㈽
+  <t/>㈽
 <x/>企)
-  <eq/>㉁
+  <t/>㉁
 <x/>休)
-  <eq/>㈧
+  <t/>㈧
 <x/>八)
-  <eq/>㈥
+  <t/>㈥
 <x/>六)
-  <eq/>㈸
+  <t/>㈸
 <x/>労)
-  <eq/>㈩
+  <t/>㈩
 <x/>十)
-  <eq/>㈿
+  <t/>㈿
 <x/>協)
-  <eq/>㈴
+  <t/>㈴
 <x/>名)
-  <eq/>㈺
+  <t/>㈺
 <x/>呼)
-  <eq/>㈣
+  <t/>㈣
 <x/>四)
-  <eq/>㈯
+  <t/>㈯
 <x/>土)
-  <eq/>㈻
+  <t/>㈻
 <x/>学)
-  <eq/>㈰
+  <t/>㈰
 <x/>日)
-  <eq/>㈪
+  <t/>㈪
 <x/>月)
-  <eq/>㈲
+  <t/>㈲
 <x/>有)
-  <eq/>㈭
+  <t/>㈭
 <x/>木)
-  <eq/>㈱
+  <t/>㈱
 <x/>株)
-  <eq/>㈬
+  <t/>㈬
 <x/>水)
-  <eq/>㈫
+  <t/>㈫
 <x/>火)
-  <eq/>㈵
+  <t/>㈵
 <x/>特)
-  <eq/>㈼
+  <t/>㈼
 <x/>監)
-  <eq/>㈳
+  <t/>㈳
 <x/>社)
-  <eq/>㈷
+  <t/>㈷
 <x/>祝)
-  <eq/>㉀
+  <t/>㉀
 <x/>祭)
-  <eq/>㉂
+  <t/>㉂
 <x/>自)
-  <eq/>㉃
+  <t/>㉃
 <x/>至)
-  <eq/>㈶
+  <t/>㈶
 <x/>財)
-  <eq/>㈾
+  <t/>㈾
 <x/>資)
-  <eq/>㈮
+  <t/>㈮
 <x/>金)
   <t/>﹙
   <t/>⁽
@@ -1164,7 +1163,7 @@ For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_I
   <p/>°
   <t/>℃
 <x/>C
-  <eq/>℉
+  <t/>℉
 <x/>F
   <p/>҂
   <p/>۩
@@ -3042,12 +3041,12 @@ p<variableTop/>
   <s/>๐
   <s/>໐
   <s/>༠
-  <s/>༳
+  <eq/>༳
   <s/>၀
   <s/>០
   <s/>᠐
   <s/>〇
-  <t/>０
+  <s/>０
   <t/>㍘
 <x/>点
   <t/>𝟎
@@ -3075,86 +3074,86 @@ p<variableTop/>
   <s/>๑
   <s/>໑
   <s/>༡
-  <s/>༪
+  <eq/>༪
   <s/>၁
   <s/>១
   <s/>᠑
   <s/>〡
   <s/>𐌠
-  <t/>１
+  <s/>１
   <t/>⒈
 <x/>.
   <t/>⒑
 <x/>0.
   <t/>㏩
 <x/>0日
-  <eq/>㋉
+  <t/>㋉
 <x/>0月
-  <eq/>㍢
+  <t/>㍢
 <x/>0点
-  <eq/>⒒
+  <t/>⒒
 <x/>1.
   <t/>㏪
 <x/>1日
-  <eq/>㋊
+  <t/>㋊
 <x/>1月
-  <eq/>㍣
+  <t/>㍣
 <x/>1点
-  <eq/>⒓
+  <t/>⒓
 <x/>2.
   <t/>㏫
 <x/>2日
-  <eq/>㋋
+  <t/>㋋
 <x/>2月
-  <eq/>㍤
+  <t/>㍤
 <x/>2点
-  <eq/>⒔
+  <t/>⒔
 <x/>3.
   <t/>㏬
 <x/>3日
-  <eq/>㍥
+  <t/>㍥
 <x/>3点
-  <eq/>⒕
+  <t/>⒕
 <x/>4.
   <t/>㏭
 <x/>4日
-  <eq/>㍦
+  <t/>㍦
 <x/>4点
-  <eq/>⒖
+  <t/>⒖
 <x/>5.
   <t/>㏮
 <x/>5日
-  <eq/>㍧
+  <t/>㍧
 <x/>5点
-  <eq/>⒗
+  <t/>⒗
 <x/>6.
   <t/>㏯
 <x/>6日
-  <eq/>㍨
+  <t/>㍨
 <x/>6点
-  <eq/>⒘
+  <t/>⒘
 <x/>7.
   <t/>㏰
 <x/>7日
-  <eq/>㍩
+  <t/>㍩
 <x/>7点
-  <eq/>⒙
+  <t/>⒙
 <x/>8.
   <t/>㏱
 <x/>8日
-  <eq/>㍪
+  <t/>㍪
 <x/>8点
-  <eq/>⒚
+  <t/>⒚
 <x/>9.
   <t/>㏲
 <x/>9日
-  <eq/>㍫
+  <t/>㍫
 <x/>9点
-  <eq/>㏠
+  <t/>㏠
 <x/>日
-  <eq/>㋀
+  <t/>㋀
 <x/>月
-  <eq/>㍙
+  <t/>㍙
 <x/>点
   <t/>𝟏
   <eq/>𝟙
@@ -3162,44 +3161,44 @@ p<variableTop/>
   <eq/>𝟭
   <eq/>𝟷
   <t/>①
+  <t/>⑩
+<x/>0
+  <t/>⑪
+<x/>1
+  <t/>⑫
+<x/>2
+  <t/>⑬
+<x/>3
+  <t/>⑭
+<x/>4
+  <t/>⑮
+<x/>5
+  <t/>⑯
+<x/>6
+  <t/>⑰
+<x/>7
+  <t/>⑱
+<x/>8
+  <t/>⑲
+<x/>9
   <s/>❶
   <s/>➀
   <s/>➊
-  <eq/>⑩
-<x/>0
-  <eq/>⑪
-<x/>1
-  <eq/>⑫
-<x/>2
-  <eq/>⑬
-<x/>3
-  <eq/>⑭
-<x/>4
-  <eq/>⑮
-<x/>5
-  <eq/>⑯
-<x/>6
-  <eq/>⑰
-<x/>7
-  <eq/>⑱
-<x/>8
-  <eq/>⑲
-<x/>9
-  <t/>¹
+  <s/>¹
   <t/>₁
   <t/>⅟
 <x/>⁄
   <t/>½
 <x/>⁄2
-  <eq/>⅓
+  <t/>⅓
 <x/>⁄3
-  <eq/>¼
+  <t/>¼
 <x/>⁄4
-  <eq/>⅕
+  <t/>⅕
 <x/>⁄5
-  <eq/>⅙
+  <t/>⅙
 <x/>⁄6
-  <eq/>⅛
+  <t/>⅛
 <x/>⁄8
   <p/>2
   <s/>٢
@@ -3218,51 +3217,51 @@ p<variableTop/>
   <s/>๒
   <s/>໒
   <s/>༢
-  <s/>༫
+  <eq/>༫
   <s/>၂
   <s/>២
   <s/>᠒
   <s/>〢
-  <t/>２
+  <s/>２
   <t/>⒉
 <x/>.
   <t/>⒛
 <x/>0.
   <t/>㏳
 <x/>0日
-  <eq/>㍬
+  <t/>㍬
 <x/>0点
-  <eq/>㏴
+  <t/>㏴
 <x/>1日
-  <eq/>㍭
+  <t/>㍭
 <x/>1点
-  <eq/>㏵
+  <t/>㏵
 <x/>2日
-  <eq/>㍮
+  <t/>㍮
 <x/>2点
-  <eq/>㏶
+  <t/>㏶
 <x/>3日
-  <eq/>㍯
+  <t/>㍯
 <x/>3点
-  <eq/>㏷
+  <t/>㏷
 <x/>4日
-  <eq/>㍰
+  <t/>㍰
 <x/>4点
-  <eq/>㏸
+  <t/>㏸
 <x/>5日
-  <eq/>㏹
+  <t/>㏹
 <x/>6日
-  <eq/>㏺
+  <t/>㏺
 <x/>7日
-  <eq/>㏻
+  <t/>㏻
 <x/>8日
-  <eq/>㏼
+  <t/>㏼
 <x/>9日
-  <eq/>㏡
+  <t/>㏡
 <x/>日
-  <eq/>㋁
+  <t/>㋁
 <x/>月
-  <eq/>㍚
+  <t/>㍚
 <x/>点
   <t/>𝟐
   <eq/>𝟚
@@ -3270,16 +3269,16 @@ p<variableTop/>
   <eq/>𝟮
   <eq/>𝟸
   <t/>②
+  <t/>⑳
+<x/>0
   <s/>❷
   <s/>➁
   <s/>➋
-  <eq/>⑳
-<x/>0
-  <t/>²
+  <s/>²
   <t/>₂
   <t/>⅔
 <x/>⁄3
-  <eq/>⅖
+  <t/>⅖
 <x/>⁄5
   <p/>3
   <s/>٣
@@ -3298,23 +3297,23 @@ p<variableTop/>
   <s/>๓
   <s/>໓
   <s/>༣
-  <s/>༬
+  <eq/>༬
   <s/>၃
   <s/>៣
   <s/>᠓
   <s/>〣
-  <t/>３
+  <s/>３
   <t/>⒊
 <x/>.
   <t/>㏽
 <x/>0日
-  <eq/>㏾
+  <t/>㏾
 <x/>1日
-  <eq/>㏢
+  <t/>㏢
 <x/>日
-  <eq/>㋂
+  <t/>㋂
 <x/>月
-  <eq/>㍛
+  <t/>㍛
 <x/>点
   <t/>𝟑
   <eq/>𝟛
@@ -3325,13 +3324,13 @@ p<variableTop/>
   <s/>❸
   <s/>➂
   <s/>➌
-  <t/>³
+  <s/>³
   <t/>₃
   <t/>¾
 <x/>⁄4
-  <eq/>⅗
+  <t/>⅗
 <x/>⁄5
-  <eq/>⅜
+  <t/>⅜
 <x/>⁄8
   <p/>4
   <s/>٤
@@ -3350,19 +3349,19 @@ p<variableTop/>
   <s/>๔
   <s/>໔
   <s/>༤
-  <s/>༭
+  <eq/>༭
   <s/>၄
   <s/>៤
   <s/>᠔
   <s/>〤
-  <t/>４
+  <s/>４
   <t/>⒋
 <x/>.
   <t/>㏣
 <x/>日
-  <eq/>㋃
+  <t/>㋃
 <x/>月
-  <eq/>㍜
+  <t/>㍜
 <x/>点
   <t/>𝟒
   <eq/>𝟜
@@ -3373,7 +3372,7 @@ p<variableTop/>
   <s/>❹
   <s/>➃
   <s/>➍
-  <t/>⁴
+  <s/>⁴
   <t/>₄
   <t/>⅘
 <x/>⁄5
@@ -3393,20 +3392,20 @@ p<variableTop/>
   <s/>๕
   <s/>໕
   <s/>༥
-  <s/>༮
+  <eq/>༮
   <s/>၅
   <s/>៥
   <s/>᠕
   <s/>〥
   <s/>𐌡
-  <t/>５
+  <s/>５
   <t/>⒌
 <x/>.
   <t/>㏤
 <x/>日
-  <eq/>㋄
+  <t/>㋄
 <x/>月
-  <eq/>㍝
+  <t/>㍝
 <x/>点
   <t/>𝟓
   <eq/>𝟝
@@ -3417,11 +3416,11 @@ p<variableTop/>
   <s/>❺
   <s/>➄
   <s/>➎
-  <t/>⁵
+  <s/>⁵
   <t/>₅
   <t/>⅚
 <x/>⁄6
-  <eq/>⅝
+  <t/>⅝
 <x/>⁄8
   <p/>6
   <s/>٦
@@ -3439,19 +3438,19 @@ p<variableTop/>
   <s/>๖
   <s/>໖
   <s/>༦
-  <s/>༯
+  <eq/>༯
   <s/>၆
   <s/>៦
   <s/>᠖
   <s/>〦
-  <t/>６
+  <s/>６
   <t/>⒍
 <x/>.
   <t/>㏥
 <x/>日
-  <eq/>㋅
+  <t/>㋅
 <x/>月
-  <eq/>㍞
+  <t/>㍞
 <x/>点
   <t/>𝟔
   <eq/>𝟞
@@ -3462,7 +3461,7 @@ p<variableTop/>
   <s/>❻
   <s/>➅
   <s/>➏
-  <t/>⁶
+  <s/>⁶
   <t/>₆
   <p/>7
   <s/>٧
@@ -3480,19 +3479,19 @@ p<variableTop/>
   <s/>๗
   <s/>໗
   <s/>༧
-  <s/>༰
+  <eq/>༰
   <s/>၇
   <s/>៧
   <s/>᠗
   <s/>〧
-  <t/>７
+  <s/>７
   <t/>⒎
 <x/>.
   <t/>㏦
 <x/>日
-  <eq/>㋆
+  <t/>㋆
 <x/>月
-  <eq/>㍟
+  <t/>㍟
 <x/>点
   <t/>𝟕
   <eq/>𝟟
@@ -3503,7 +3502,7 @@ p<variableTop/>
   <s/>❼
   <s/>➆
   <s/>➐
-  <t/>⁷
+  <s/>⁷
   <t/>₇
   <t/>⅞
 <x/>⁄8
@@ -3523,19 +3522,19 @@ p<variableTop/>
   <s/>๘
   <s/>໘
   <s/>༨
-  <s/>༱
+  <eq/>༱
   <s/>၈
   <s/>៨
   <s/>᠘
   <s/>〨
-  <t/>８
+  <s/>８
   <t/>⒏
 <x/>.
   <t/>㏧
 <x/>日
-  <eq/>㋇
+  <t/>㋇
 <x/>月
-  <eq/>㍠
+  <t/>㍠
 <x/>点
   <t/>𝟖
   <eq/>𝟠
@@ -3546,7 +3545,7 @@ p<variableTop/>
   <s/>❽
   <s/>➇
   <s/>➑
-  <t/>⁸
+  <s/>⁸
   <t/>₈
   <p/>9
   <s/>٩
@@ -3564,19 +3563,19 @@ p<variableTop/>
   <s/>๙
   <s/>໙
   <s/>༩
-  <s/>༲
+  <eq/>༲
   <s/>၉
   <s/>៩
   <s/>᠙
   <s/>〩
-  <t/>９
+  <s/>９
   <t/>⒐
 <x/>.
   <t/>㏨
 <x/>日
-  <eq/>㋈
+  <t/>㋈
 <x/>月
-  <eq/>㍡
+  <t/>㍡
 <x/>点
   <t/>𝟗
   <eq/>𝟡
@@ -3587,15 +3586,15 @@ p<variableTop/>
   <s/>❾
   <s/>➈
   <s/>➒
-  <t/>⁹
+  <s/>⁹
   <t/>₉
   <p/>a
   <t/>ａ
   <t/>℀
 <x/>/c
-  <eq/>℁
+  <t/>℁
 <x/>/s
-  <eq/>ẚ
+  <t/>ẚ
 <x/>ʾ
   <t/>𝐚
   <eq/>𝑎
@@ -3684,7 +3683,7 @@ p<variableTop/>
   <t/>ⅽ
   <t/>℅
 <x/>/o
-  <eq/>℆
+  <t/>℆
 <x/>/u
   <t/>𝐜
   <eq/>𝑐
@@ -3719,19 +3718,19 @@ p<variableTop/>
   <t/>Ⓒ
   <t/>㎈
 <x/>al
-  <eq/>㏄
+  <t/>㏄
 <x/>c
-  <eq/>㏅
+  <t/>㏅
 <x/>d
-  <eq/>㎝
+  <t/>㎝
 <x/>m
   <t/>㎠
 <x/>m2
-  <eq/>㎤
+  <t/>㎤
 <x/>m3
   <t/>㏆
 <x/>∕kg
-  <eq/>㏇
+  <t/>㏇
 <x/>o.
   <p/>ƈ
   <t/>Ƈ
@@ -3745,9 +3744,9 @@ p<variableTop/>
 <x/>z
   <t/>ǆ
 <x/>ž
-  <eq/>ʥ
+  <t/>ʥ
 <x/>ʑ
-  <eq/>ʤ
+  <t/>ʤ
 <x/>ʒ
   <t/>𝐝
   <eq/>𝑑
@@ -3790,9 +3789,9 @@ p<variableTop/>
   <t/>Ⓓ
   <t/>㍲
 <x/>a
-  <eq/>㏈
+  <t/>㏈
 <x/>B
-  <eq/>㎗
+  <t/>㎗
 <x/>l
   <p/>đ
   <t/>Đ
@@ -3857,13 +3856,13 @@ p<variableTop/>
 <x/>f
   <t/>ﬃ
 <x/>fi
-  <eq/>ﬄ
+  <t/>ﬄ
 <x/>fl
-  <eq/>ﬁ
+  <t/>ﬁ
 <x/>i
-  <eq/>ﬂ
+  <t/>ﬂ
 <x/>l
-  <eq/>ʩ
+  <t/>ʩ
 <x/>ŋ
   <t/>𝐟
   <eq/>𝑓
@@ -3935,9 +3934,9 @@ p<variableTop/>
 <x/>B
   <t/>㎓
 <x/>Hz
-  <eq/>㎬
+  <t/>㎬
 <x/>Pa
-  <eq/>㏉
+  <t/>㏉
 <x/>y
   <p/>ɢ
   <p/>ǥ
@@ -3990,7 +3989,7 @@ p<variableTop/>
 <x/>Pa
   <t/>㏋
 <x/>P
-  <eq/>㎐
+  <t/>㎐
 <x/>z
   <p/>ʜ
   <p/>ƕ
@@ -4010,11 +4009,11 @@ p<variableTop/>
 <x/>i
   <t/>ⅲ
 <x/>ii
-  <eq/>ĳ
+  <t/>ĳ
 <x/>j
-  <eq/>ⅳ
+  <t/>ⅳ
 <x/>v
-  <eq/>ⅸ
+  <t/>ⅸ
 <x/>x
   <t/>ℹ
   <eq/>𝐢
@@ -4038,11 +4037,11 @@ p<variableTop/>
 <x/>I
   <t/>Ⅲ
 <x/>Ii
-  <eq/>Ĳ
+  <t/>Ĳ
 <x/>J
-  <eq/>Ⅳ
+  <t/>Ⅳ
 <x/>V
-  <eq/>Ⅸ
+  <t/>Ⅸ
 <x/>X
   <t/>ℐ
   <eq/>ℑ
@@ -4138,33 +4137,33 @@ p<variableTop/>
 <x/>A
   <t/>㎉
 <x/>cal
-  <eq/>㎏
+  <t/>㎏
 <x/>g
   <t/>㎑
 <x/>Hz
-  <eq/>㎘
+  <t/>㎘
 <x/>l
-  <eq/>㎞
+  <t/>㎞
 <x/>m
   <t/>㎢
 <x/>m2
-  <eq/>㎦
+  <t/>㎦
 <x/>m3
-  <eq/>㎪
+  <t/>㎪
 <x/>Pa
-  <eq/>㏏
+  <t/>㏏
 <x/>t
-  <eq/>㎸
+  <t/>㎸
 <x/>V
-  <eq/>㎾
+  <t/>㎾
 <x/>W
-  <eq/>㏀
+  <t/>㏀
 <x/>Ω
   <t/>㎅
 <x/>B
-  <eq/>㏍
+  <t/>㏍
 <x/>K
-  <eq/>㏎
+  <t/>㏎
 <x/>M
   <p/>ƙ
   <t/>Ƙ
@@ -4174,11 +4173,11 @@ p<variableTop/>
   <t/>ⅼ
   <t/>ŀ
 <x/>·
-  <eq/>ǉ
+  <t/>ǉ
 <x/>j
-  <eq/>ʪ
+  <t/>ʪ
 <x/>s
-  <eq/>ʫ
+  <t/>ʫ
 <x/>z
   <t/>ℓ
   <eq/>𝐥
@@ -4199,7 +4198,7 @@ p<variableTop/>
   <t/>Ⅼ
   <t/>Ŀ
 <x/>·
-  <eq/>ǈ
+  <t/>ǈ
 <x/>j
   <t/>Ǉ
 <x/>J
@@ -4220,11 +4219,11 @@ p<variableTop/>
   <t/>ˡ
   <t/>㏐
 <x/>m
-  <eq/>㏑
+  <t/>㏑
 <x/>n
   <t/>㏒
 <x/>og
-  <eq/>㏓
+  <t/>㏓
 <x/>x
   <p/>ʟ
   <p/>ł
@@ -4274,45 +4273,45 @@ p<variableTop/>
 <x/>∕s
   <t/>㎨
 <x/>∕s2
-  <eq/>㎡
+  <t/>㎡
 <x/>2
-  <eq/>㎥
+  <t/>㎥
 <x/>3
-  <eq/>㎃
+  <t/>㎃
 <x/>A
-  <eq/>㏔
+  <t/>㏔
 <x/>b
-  <eq/>㎎
+  <t/>㎎
 <x/>g
   <t/>㏕
 <x/>il
-  <eq/>㎖
+  <t/>㎖
 <x/>l
-  <eq/>㎜
+  <t/>㎜
 <x/>m
   <t/>㎟
 <x/>m2
-  <eq/>㎣
+  <t/>㎣
 <x/>m3
-  <eq/>㏖
+  <t/>㏖
 <x/>ol
-  <eq/>㎳
+  <t/>㎳
 <x/>s
-  <eq/>㎷
+  <t/>㎷
 <x/>V
-  <eq/>㎽
+  <t/>㎽
 <x/>W
   <t/>㎆
 <x/>B
   <t/>㎒
 <x/>Hz
-  <eq/>㎫
+  <t/>㎫
 <x/>Pa
-  <eq/>㎹
+  <t/>㎹
 <x/>V
-  <eq/>㎿
+  <t/>㎿
 <x/>W
-  <eq/>㏁
+  <t/>㏁
 <x/>Ω
   <p/>ɱ
   <p/>n
@@ -4339,7 +4338,7 @@ p<variableTop/>
 <x/>j
   <t/>Ǌ
 <x/>J
-  <eq/>№
+  <t/>№
 <x/>o
   <t/>ℕ
   <eq/>𝐍
@@ -4358,15 +4357,15 @@ p<variableTop/>
   <t/>ⁿ
   <t/>㎁
 <x/>A
-  <eq/>㎋
+  <t/>㎋
 <x/>F
-  <eq/>㎚
+  <t/>㎚
 <x/>m
-  <eq/>㎱
+  <t/>㎱
 <x/>s
-  <eq/>㎵
+  <t/>㎵
 <x/>V
-  <eq/>㎻
+  <t/>㎻
 <x/>W
   <p/>ɴ
   <p/>ɲ
@@ -4379,7 +4378,7 @@ p<variableTop/>
   <t/>ｏ
   <s/>œ
 <x/>e
-  <t/>ℴ
+  <s/>ℴ
   <eq/>𝐨
   <eq/>𝑜
   <eq/>𝒐
@@ -4397,7 +4396,7 @@ p<variableTop/>
   <t/>Ｏ
   <s/>Œ
 <x/>e
-  <t/>𝐎
+  <s/>𝐎
   <eq/>𝑂
   <eq/>𝑶
   <eq/>𝒪
@@ -4458,25 +4457,25 @@ p<variableTop/>
   <t/>Ⓟ
   <t/>㏘
 <x/>.m.
-  <eq/>㎀
+  <t/>㎀
 <x/>A
-  <eq/>㍶
+  <t/>㍶
 <x/>c
-  <eq/>㎊
+  <t/>㎊
 <x/>F
-  <eq/>㎰
+  <t/>㎰
 <x/>s
-  <eq/>㎴
+  <t/>㎴
 <x/>V
-  <eq/>㎺
+  <t/>㎺
 <x/>W
   <t/>㎩
 <x/>a
-  <eq/>㏗
+  <t/>㏗
 <x/>H
   <t/>㏙
 <x/>Pm
-  <eq/>㏚
+  <t/>㏚
 <x/>R
   <p/>ƥ
   <t/>Ƥ
@@ -4571,16 +4570,16 @@ p<variableTop/>
   <t/>ʶ
   <p/>s
   <t/>ｓ
-  <s/>ſ
-  <s/>ẛ
-<x/>̇
+  <t/>ﬆ
+<x/>t
   <s/>ß
 <x/>s
-  <eq/>ﬆ
+  <s/>ſ
+  <t/>ẛ
+<x/>̇
+  <t/>ﬅ
 <x/>t
-  <s/>ﬅ
-<x/>t
-  <t/>𝐬
+  <s/>𝐬
   <eq/>𝑠
   <eq/>𝒔
   <eq/>𝓈
@@ -4627,9 +4626,9 @@ p<variableTop/>
   <t/>ｔ
   <t/>ʨ
 <x/>ɕ
-  <eq/>ʦ
+  <t/>ʦ
 <x/>s
-  <eq/>ʧ
+  <t/>ʧ
 <x/>ʃ
   <t/>𝐭
   <eq/>𝑡
@@ -5138,19 +5137,19 @@ p<variableTop/>
   <eq/>𝞛
   <t/>㎂
 <x/>A
-  <eq/>㎌
+  <t/>㎌
 <x/>F
-  <eq/>㎍
+  <t/>㎍
 <x/>g
-  <eq/>㎕
+  <t/>㎕
 <x/>l
-  <eq/>㎛
+  <t/>㎛
 <x/>m
-  <eq/>㎲
+  <t/>㎲
 <x/>s
-  <eq/>㎶
+  <t/>㎶
 <x/>V
-  <eq/>㎼
+  <t/>㎼
 <x/>W
   <p/>ν
   <t/>𝛎
@@ -5358,7 +5357,7 @@ p<variableTop/>
   <t/>В
   <p/>г
   <s/>ґ
-  <t/>Г
+  <s/>Г
   <s/>Ґ
   <p/>ғ
   <t/>Ғ
@@ -5679,11 +5678,11 @@ p<variableTop/>
   <p/>մ
   <t/>ﬔ
 <x/>ե
-  <eq/>ﬕ
+  <t/>ﬕ
 <x/>ի
-  <eq/>ﬗ
+  <t/>ﬗ
 <x/>խ
-  <eq/>ﬓ
+  <t/>ﬓ
 <x/>ն
   <t/>Մ
   <p/>յ
@@ -5742,7 +5741,7 @@ p<variableTop/>
   <p/>ו
   <t/>װ
 <x/>ו
-  <eq/>ױ
+  <t/>ױ
 <x/>י
   <p/>ז
   <p/>ח
@@ -5782,7 +5781,7 @@ p<variableTop/>
   <p/>ء
   <eq/>ٴ
   <s/>۽
-  <t/>ﺀ
+  <s/>ﺀ
   <p/>آ
   <t/>ﺂ
   <t/>ﺁ
@@ -5804,78 +5803,78 @@ p<variableTop/>
   <t/>ﺋ
   <t/>ﲗ
 <x/>ج
-  <eq/>ﲘ
+  <t/>ﲘ
 <x/>ح
-  <eq/>ﲙ
+  <t/>ﲙ
 <x/>خ
-  <eq/>ﲚ
+  <t/>ﲚ
 <x/>م
-  <eq/>ﲛ
+  <t/>ﲛ
 <x/>ه
-  <eq/>ﯻ
+  <t/>ﯻ
 <x/>ى
-  <eq/>ﯸ
+  <t/>ﯸ
 <x/>ې
   <t/>ﺌ
   <t/>ﳟ
 <x/>م
-  <eq/>ﳠ
+  <t/>ﳠ
 <x/>ه
   <t/>ﺊ
   <t/>ﯫ
 <x/>ا
-  <eq/>ﱤ
+  <t/>ﱤ
 <x/>ر
-  <eq/>ﱥ
+  <t/>ﱥ
 <x/>ز
-  <eq/>ﱦ
+  <t/>ﱦ
 <x/>م
-  <eq/>ﱧ
+  <t/>ﱧ
 <x/>ن
-  <eq/>ﯭ
+  <t/>ﯭ
 <x/>ە
-  <eq/>ﯯ
+  <t/>ﯯ
 <x/>و
-  <eq/>ﯳ
+  <t/>ﯳ
 <x/>ۆ
-  <eq/>ﯱ
+  <t/>ﯱ
 <x/>ۇ
-  <eq/>ﯵ
+  <t/>ﯵ
 <x/>ۈ
-  <eq/>ﯺ
+  <t/>ﯺ
 <x/>ى
   <eq/>ﱨ
 <x/>ى
-  <eq/>ﱩ
+  <t/>ﱩ
 <x/>ي
-  <eq/>ﯷ
+  <t/>ﯷ
 <x/>ې
   <t/>ﺉ
   <t/>ﯪ
 <x/>ا
-  <eq/>ﰀ
+  <t/>ﰀ
 <x/>ج
-  <eq/>ﰁ
+  <t/>ﰁ
 <x/>ح
-  <eq/>ﰂ
+  <t/>ﰂ
 <x/>م
-  <eq/>ﯬ
+  <t/>ﯬ
 <x/>ە
-  <eq/>ﯮ
+  <t/>ﯮ
 <x/>و
-  <eq/>ﯲ
+  <t/>ﯲ
 <x/>ۆ
-  <eq/>ﯰ
+  <t/>ﯰ
 <x/>ۇ
-  <eq/>ﯴ
+  <t/>ﯴ
 <x/>ۈ
-  <eq/>ﯹ
+  <t/>ﯹ
 <x/>ى
   <eq/>ﰃ
 <x/>ى
-  <eq/>ﰄ
+  <t/>ﰄ
 <x/>ي
-  <eq/>ﯶ
+  <t/>ﯶ
 <x/>ې
   <p/>ا
   <t/>ٵ
@@ -5888,54 +5887,54 @@ p<variableTop/>
 <x/>ً
   <t/>ﷳ
 <x/>كبر
-  <eq/>ﷲ
+  <t/>ﷲ
 <x/>لله
   <p/>ب
   <t/>ﺑ
   <t/>ﲜ
 <x/>ج
-  <eq/>ﲝ
+  <t/>ﲝ
 <x/>ح
-  <eq/>ﲞ
+  <t/>ﲞ
 <x/>خ
-  <eq/>ﲟ
+  <t/>ﲟ
 <x/>م
-  <eq/>ﲠ
+  <t/>ﲠ
 <x/>ه
   <t/>ﺒ
   <t/>ﳡ
 <x/>م
-  <eq/>ﳢ
+  <t/>ﳢ
 <x/>ه
   <t/>ﺐ
   <t/>ﷂ
 <x/>حي
-  <eq/>ﶞ
+  <t/>ﶞ
 <x/>خي
-  <eq/>ﱪ
+  <t/>ﱪ
 <x/>ر
-  <eq/>ﱫ
+  <t/>ﱫ
 <x/>ز
-  <eq/>ﱬ
+  <t/>ﱬ
 <x/>م
-  <eq/>ﱭ
+  <t/>ﱭ
 <x/>ن
-  <eq/>ﱮ
+  <t/>ﱮ
 <x/>ى
-  <eq/>ﱯ
+  <t/>ﱯ
 <x/>ي
   <t/>ﺏ
   <t/>ﰅ
 <x/>ج
-  <eq/>ﰆ
+  <t/>ﰆ
 <x/>ح
-  <eq/>ﰇ
+  <t/>ﰇ
 <x/>خ
-  <eq/>ﰈ
+  <t/>ﰈ
 <x/>م
-  <eq/>ﰉ
+  <t/>ﰉ
 <x/>ى
-  <eq/>ﰊ
+  <t/>ﰊ
 <x/>ي
   <p/>ٻ
   <t/>ﭔ
@@ -5961,70 +5960,70 @@ p<variableTop/>
 <x/>ج
   <t/>ﵐ
 <x/>جم
-  <eq/>ﲢ
+  <t/>ﲢ
 <x/>ح
   <t/>ﵒ
 <x/>حج
-  <eq/>ﵓ
+  <t/>ﵓ
 <x/>حم
-  <eq/>ﲣ
+  <t/>ﲣ
 <x/>خ
   <t/>ﵔ
 <x/>خم
-  <eq/>ﲤ
+  <t/>ﲤ
 <x/>م
   <t/>ﵕ
 <x/>مج
-  <eq/>ﵖ
+  <t/>ﵖ
 <x/>مح
-  <eq/>ﵗ
+  <t/>ﵗ
 <x/>مخ
-  <eq/>ﲥ
+  <t/>ﲥ
 <x/>ه
   <t/>ﺘ
   <t/>ﳣ
 <x/>م
-  <eq/>ﳤ
+  <t/>ﳤ
 <x/>ه
   <t/>ﺖ
   <t/>ﶠ
 <x/>جى
-  <eq/>ﶟ
+  <t/>ﶟ
 <x/>جي
-  <eq/>ﵑ
+  <t/>ﵑ
 <x/>حج
-  <eq/>ﶢ
+  <t/>ﶢ
 <x/>خى
-  <eq/>ﶡ
+  <t/>ﶡ
 <x/>خي
-  <eq/>ﱰ
+  <t/>ﱰ
 <x/>ر
-  <eq/>ﱱ
+  <t/>ﱱ
 <x/>ز
-  <eq/>ﱲ
+  <t/>ﱲ
 <x/>م
   <t/>ﶤ
 <x/>مى
-  <eq/>ﶣ
+  <t/>ﶣ
 <x/>مي
-  <eq/>ﱳ
+  <t/>ﱳ
 <x/>ن
-  <eq/>ﱴ
+  <t/>ﱴ
 <x/>ى
-  <eq/>ﱵ
+  <t/>ﱵ
 <x/>ي
   <t/>ﺕ
   <t/>ﰋ
 <x/>ج
-  <eq/>ﰌ
+  <t/>ﰌ
 <x/>ح
-  <eq/>ﰍ
+  <t/>ﰍ
 <x/>خ
-  <eq/>ﰎ
+  <t/>ﰎ
 <x/>م
-  <eq/>ﰏ
+  <t/>ﰏ
 <x/>ى
-  <eq/>ﰐ
+  <t/>ﰐ
 <x/>ي
   <p/>ث
   <t/>ﺛ
@@ -6033,29 +6032,29 @@ p<variableTop/>
   <t/>ﺜ
   <t/>ﳥ
 <x/>م
-  <eq/>ﳦ
+  <t/>ﳦ
 <x/>ه
   <t/>ﺚ
   <t/>ﱶ
 <x/>ر
-  <eq/>ﱷ
+  <t/>ﱷ
 <x/>ز
-  <eq/>ﱸ
+  <t/>ﱸ
 <x/>م
-  <eq/>ﱹ
+  <t/>ﱹ
 <x/>ن
-  <eq/>ﱺ
+  <t/>ﱺ
 <x/>ى
-  <eq/>ﱻ
+  <t/>ﱻ
 <x/>ي
   <t/>ﺙ
   <t/>ﰑ
 <x/>ج
-  <eq/>ﰒ
+  <t/>ﰒ
 <x/>م
-  <eq/>ﰓ
+  <t/>ﰓ
 <x/>ى
-  <eq/>ﰔ
+  <t/>ﰔ
 <x/>ي
   <p/>ٹ
   <t/>ﭨ
@@ -6078,7 +6077,7 @@ p<variableTop/>
   <t/>ﺟ
   <t/>ﲧ
 <x/>ح
-  <eq/>ﲨ
+  <t/>ﲨ
 <x/>م
   <t/>ﵙ
 <x/>مح
@@ -6086,28 +6085,28 @@ p<variableTop/>
   <t/>ﺞ
   <t/>ﶦ
 <x/>حى
-  <eq/>ﶾ
+  <t/>ﶾ
 <x/>حي
-  <eq/>ﵘ
+  <t/>ﵘ
 <x/>مح
-  <eq/>ﶧ
+  <t/>ﶧ
 <x/>مى
-  <eq/>ﶥ
+  <t/>ﶥ
 <x/>مي
-  <eq/>ﴝ
+  <t/>ﴝ
 <x/>ى
-  <eq/>ﴞ
+  <t/>ﴞ
 <x/>ي
   <t/>ﺝ
   <t/>ﰕ
 <x/>ح
   <t/>ﷻ
 <x/>ل جلاله
-  <eq/>ﰖ
+  <t/>ﰖ
 <x/>م
-  <eq/>ﴁ
+  <t/>ﴁ
 <x/>ى
-  <eq/>ﴂ
+  <t/>ﴂ
 <x/>ي
   <p/>ڃ
   <t/>ﭸ
@@ -6134,51 +6133,51 @@ p<variableTop/>
   <t/>ﺣ
   <t/>ﲩ
 <x/>ج
-  <eq/>ﲪ
+  <t/>ﲪ
 <x/>م
   <t/>ﺤ
   <t/>ﺢ
   <t/>ﶿ
 <x/>جي
-  <eq/>ﵛ
+  <t/>ﵛ
 <x/>مى
-  <eq/>ﵚ
+  <t/>ﵚ
 <x/>مي
-  <eq/>ﴛ
+  <t/>ﴛ
 <x/>ى
-  <eq/>ﴜ
+  <t/>ﴜ
 <x/>ي
   <t/>ﺡ
   <t/>ﰗ
 <x/>ج
-  <eq/>ﰘ
+  <t/>ﰘ
 <x/>م
-  <eq/>ﳿ
+  <t/>ﳿ
 <x/>ى
-  <eq/>ﴀ
+  <t/>ﴀ
 <x/>ي
   <p/>خ
   <t/>ﺧ
   <t/>ﲫ
 <x/>ج
-  <eq/>ﲬ
+  <t/>ﲬ
 <x/>م
   <t/>ﺨ
   <t/>ﺦ
   <t/>ﴟ
 <x/>ى
-  <eq/>ﴠ
+  <t/>ﴠ
 <x/>ي
   <t/>ﺥ
   <t/>ﰙ
 <x/>ج
-  <eq/>ﰚ
+  <t/>ﰚ
 <x/>ح
-  <eq/>ﰛ
+  <t/>ﰛ
 <x/>م
-  <eq/>ﴃ
+  <t/>ﴃ
 <x/>ى
-  <eq/>ﴄ
+  <t/>ﴄ
 <x/>ي
   <p/>ځ
   <p/>ڂ
@@ -6237,133 +6236,133 @@ p<variableTop/>
 <x/>ج
   <t/>ﵝ
 <x/>جح
-  <eq/>ﲮ
+  <t/>ﲮ
 <x/>ح
   <t/>ﵜ
 <x/>حج
-  <eq/>ﲯ
+  <t/>ﲯ
 <x/>خ
-  <eq/>ﲰ
+  <t/>ﲰ
 <x/>م
   <t/>ﵡ
 <x/>مج
-  <eq/>ﵠ
+  <t/>ﵠ
 <x/>مح
-  <eq/>ﵣ
+  <t/>ﵣ
 <x/>مم
-  <eq/>ﴱ
+  <t/>ﴱ
 <x/>ه
   <t/>ﺴ
   <t/>ﴴ
 <x/>ج
-  <eq/>ﴵ
+  <t/>ﴵ
 <x/>ح
-  <eq/>ﴶ
+  <t/>ﴶ
 <x/>خ
-  <eq/>ﳧ
+  <t/>ﳧ
 <x/>م
-  <eq/>ﳨ
+  <t/>ﳨ
 <x/>ه
   <t/>ﺲ
   <t/>ﵞ
 <x/>جى
-  <eq/>ﶨ
+  <t/>ﶨ
 <x/>خى
-  <eq/>ﷆ
+  <t/>ﷆ
 <x/>خي
-  <eq/>ﴪ
+  <t/>ﴪ
 <x/>ر
   <t/>ﵟ
 <x/>مح
-  <eq/>ﵢ
+  <t/>ﵢ
 <x/>مم
-  <eq/>ﴗ
+  <t/>ﴗ
 <x/>ى
-  <eq/>ﴘ
+  <t/>ﴘ
 <x/>ي
   <t/>ﺱ
   <t/>ﰜ
 <x/>ج
-  <eq/>ﰝ
+  <t/>ﰝ
 <x/>ح
-  <eq/>ﰞ
+  <t/>ﰞ
 <x/>خ
-  <eq/>ﴎ
+  <t/>ﴎ
 <x/>ر
-  <eq/>ﰟ
+  <t/>ﰟ
 <x/>م
-  <eq/>ﳻ
+  <t/>ﳻ
 <x/>ى
-  <eq/>ﳼ
+  <t/>ﳼ
 <x/>ي
   <p/>ش
   <t/>ﺷ
   <t/>ﴭ
 <x/>ج
-  <eq/>ﴮ
+  <t/>ﴮ
 <x/>ح
   <t/>ﵨ
 <x/>حم
-  <eq/>ﴯ
+  <t/>ﴯ
 <x/>خ
-  <eq/>ﴰ
+  <t/>ﴰ
 <x/>م
   <t/>ﵫ
 <x/>مخ
-  <eq/>ﵭ
+  <t/>ﵭ
 <x/>مم
-  <eq/>ﴲ
+  <t/>ﴲ
 <x/>ه
   <t/>ﺸ
   <t/>ﴷ
 <x/>ج
-  <eq/>ﴸ
+  <t/>ﴸ
 <x/>ح
-  <eq/>ﴹ
+  <t/>ﴹ
 <x/>خ
-  <eq/>ﳩ
+  <t/>ﳩ
 <x/>م
-  <eq/>ﳪ
+  <t/>ﳪ
 <x/>ه
   <t/>ﺶ
   <t/>ﴥ
 <x/>ج
   <t/>ﵩ
 <x/>جي
-  <eq/>ﴦ
+  <t/>ﴦ
 <x/>ح
   <t/>ﵧ
 <x/>حم
-  <eq/>ﶪ
+  <t/>ﶪ
 <x/>حي
-  <eq/>ﴧ
+  <t/>ﴧ
 <x/>خ
-  <eq/>ﴩ
+  <t/>ﴩ
 <x/>ر
-  <eq/>ﴨ
+  <t/>ﴨ
 <x/>م
   <t/>ﵪ
 <x/>مخ
-  <eq/>ﵬ
+  <t/>ﵬ
 <x/>مم
-  <eq/>ﴙ
+  <t/>ﴙ
 <x/>ى
-  <eq/>ﴚ
+  <t/>ﴚ
 <x/>ي
   <t/>ﺵ
   <t/>ﴉ
 <x/>ج
-  <eq/>ﴊ
+  <t/>ﴊ
 <x/>ح
-  <eq/>ﴋ
+  <t/>ﴋ
 <x/>خ
-  <eq/>ﴍ
+  <t/>ﴍ
 <x/>ر
-  <eq/>ﴌ
+  <t/>ﴌ
 <x/>م
-  <eq/>ﳽ
+  <t/>ﳽ
 <x/>ى
-  <eq/>ﳾ
+  <t/>ﳾ
 <x/>ي
   <p/>ښ
   <p/>ڛ
@@ -6375,9 +6374,9 @@ p<variableTop/>
 <x/>ح
   <t/>ﵥ
 <x/>حح
-  <eq/>ﲲ
+  <t/>ﲲ
 <x/>خ
-  <eq/>ﲳ
+  <t/>ﲳ
 <x/>م
   <t/>ﷅ
 <x/>مم
@@ -6385,75 +6384,75 @@ p<variableTop/>
   <t/>ﺺ
   <t/>ﵤ
 <x/>حح
-  <eq/>ﶩ
+  <t/>ﶩ
 <x/>حي
-  <eq/>ﴫ
+  <t/>ﴫ
 <x/>ر
   <t/>ﵦ
 <x/>مم
-  <eq/>ﴡ
+  <t/>ﴡ
 <x/>ى
-  <eq/>ﴢ
+  <t/>ﴢ
 <x/>ي
   <t/>ﺹ
   <t/>ﰠ
 <x/>ح
-  <eq/>ﴏ
+  <t/>ﴏ
 <x/>ر
   <t/>ﷵ
 <x/>لعم
-  <eq/>ﷹ
+  <t/>ﷹ
 <x/>لى
   <t/>ﷺ
 <x/>لى الله عليه وسلم
-  <eq/>ﷰ
+  <t/>ﷰ
 <x/>لے
-  <eq/>ﰡ
+  <t/>ﰡ
 <x/>م
-  <eq/>ﴅ
+  <t/>ﴅ
 <x/>ى
-  <eq/>ﴆ
+  <t/>ﴆ
 <x/>ي
   <p/>ض
   <t/>ﺿ
   <t/>ﲴ
 <x/>ج
-  <eq/>ﲵ
+  <t/>ﲵ
 <x/>ح
-  <eq/>ﲶ
+  <t/>ﲶ
 <x/>خ
   <t/>ﵰ
 <x/>خم
-  <eq/>ﲷ
+  <t/>ﲷ
 <x/>م
   <t/>ﻀ
   <t/>ﺾ
   <t/>ﵮ
 <x/>حى
-  <eq/>ﶫ
+  <t/>ﶫ
 <x/>حي
-  <eq/>ﵯ
+  <t/>ﵯ
 <x/>خم
-  <eq/>ﴬ
+  <t/>ﴬ
 <x/>ر
-  <eq/>ﴣ
+  <t/>ﴣ
 <x/>ى
-  <eq/>ﴤ
+  <t/>ﴤ
 <x/>ي
   <t/>ﺽ
   <t/>ﰢ
 <x/>ج
-  <eq/>ﰣ
+  <t/>ﰣ
 <x/>ح
-  <eq/>ﰤ
+  <t/>ﰤ
 <x/>خ
-  <eq/>ﴐ
+  <t/>ﴐ
 <x/>ر
-  <eq/>ﰥ
+  <t/>ﰥ
 <x/>م
-  <eq/>ﴇ
+  <t/>ﴇ
 <x/>ى
-  <eq/>ﴈ
+  <t/>ﴈ
 <x/>ي
   <p/>ڝ
   <p/>ڞ
@@ -6462,11 +6461,11 @@ p<variableTop/>
   <t/>ﻃ
   <t/>ﲸ
 <x/>ح
-  <eq/>ﴳ
+  <t/>ﴳ
 <x/>م
   <t/>ﵲ
 <x/>مح
-  <eq/>ﵳ
+  <t/>ﵳ
 <x/>مم
   <t/>ﻄ
   <t/>ﴺ
@@ -6474,20 +6473,20 @@ p<variableTop/>
   <t/>ﻂ
   <t/>ﵱ
 <x/>مح
-  <eq/>ﵴ
+  <t/>ﵴ
 <x/>مي
-  <eq/>ﴑ
+  <t/>ﴑ
 <x/>ى
-  <eq/>ﴒ
+  <t/>ﴒ
 <x/>ي
   <t/>ﻁ
   <t/>ﰦ
 <x/>ح
-  <eq/>ﰧ
+  <t/>ﰧ
 <x/>م
-  <eq/>ﳵ
+  <t/>ﳵ
 <x/>ى
-  <eq/>ﳶ
+  <t/>ﳶ
 <x/>ي
   <p/>ظ
   <t/>ﻇ
@@ -6507,7 +6506,7 @@ p<variableTop/>
 <x/>ج
   <t/>ﷄ
 <x/>جم
-  <eq/>ﲻ
+  <t/>ﲻ
 <x/>م
   <t/>ﵷ
 <x/>مم
@@ -6515,53 +6514,53 @@ p<variableTop/>
   <t/>ﻊ
   <t/>ﵵ
 <x/>جم
-  <eq/>ﵶ
+  <t/>ﵶ
 <x/>مم
-  <eq/>ﵸ
+  <t/>ﵸ
 <x/>مى
-  <eq/>ﶶ
+  <t/>ﶶ
 <x/>مي
-  <eq/>ﴓ
+  <t/>ﴓ
 <x/>ى
-  <eq/>ﴔ
+  <t/>ﴔ
 <x/>ي
   <t/>ﻉ
   <t/>ﰩ
 <x/>ج
   <t/>ﷷ
 <x/>ليه
-  <eq/>ﰪ
+  <t/>ﰪ
 <x/>م
-  <eq/>ﳷ
+  <t/>ﳷ
 <x/>ى
-  <eq/>ﳸ
+  <t/>ﳸ
 <x/>ي
   <p/>غ
   <t/>ﻏ
   <t/>ﲼ
 <x/>ج
-  <eq/>ﲽ
+  <t/>ﲽ
 <x/>م
   <t/>ﻐ
   <t/>ﻎ
   <t/>ﵹ
 <x/>مم
-  <eq/>ﵻ
+  <t/>ﵻ
 <x/>مى
-  <eq/>ﵺ
+  <t/>ﵺ
 <x/>مي
-  <eq/>ﴕ
+  <t/>ﴕ
 <x/>ى
-  <eq/>ﴖ
+  <t/>ﴖ
 <x/>ي
   <t/>ﻍ
   <t/>ﰫ
 <x/>ج
-  <eq/>ﰬ
+  <t/>ﰬ
 <x/>م
-  <eq/>ﳹ
+  <t/>ﳹ
 <x/>ى
-  <eq/>ﳺ
+  <t/>ﳺ
 <x/>ي
   <p/>ڠ
   <p/>ۼ
@@ -6569,36 +6568,36 @@ p<variableTop/>
   <t/>ﻓ
   <t/>ﲾ
 <x/>ج
-  <eq/>ﲿ
+  <t/>ﲿ
 <x/>ح
-  <eq/>ﳀ
+  <t/>ﳀ
 <x/>خ
   <t/>ﵽ
 <x/>خم
-  <eq/>ﳁ
+  <t/>ﳁ
 <x/>م
   <t/>ﻔ
   <t/>ﻒ
   <t/>ﵼ
 <x/>خم
-  <eq/>ﷁ
+  <t/>ﷁ
 <x/>مي
-  <eq/>ﱼ
+  <t/>ﱼ
 <x/>ى
-  <eq/>ﱽ
+  <t/>ﱽ
 <x/>ي
   <t/>ﻑ
   <t/>ﰭ
 <x/>ج
-  <eq/>ﰮ
+  <t/>ﰮ
 <x/>ح
-  <eq/>ﰯ
+  <t/>ﰯ
 <x/>خ
-  <eq/>ﰰ
+  <t/>ﰰ
 <x/>م
-  <eq/>ﰱ
+  <t/>ﰱ
 <x/>ى
-  <eq/>ﰲ
+  <t/>ﰲ
 <x/>ي
   <p/>ڡ
   <p/>ڢ
@@ -6618,7 +6617,7 @@ p<variableTop/>
   <t/>ﻗ
   <t/>ﳂ
 <x/>ح
-  <eq/>ﳃ
+  <t/>ﳃ
 <x/>م
   <t/>ﶴ
 <x/>مح
@@ -6626,24 +6625,24 @@ p<variableTop/>
   <t/>ﻖ
   <t/>ﵾ
 <x/>مح
-  <eq/>ﵿ
+  <t/>ﵿ
 <x/>مم
-  <eq/>ﶲ
+  <t/>ﶲ
 <x/>مي
-  <eq/>ﱾ
+  <t/>ﱾ
 <x/>ى
-  <eq/>ﱿ
+  <t/>ﱿ
 <x/>ي
   <t/>ﻕ
   <t/>ﰳ
 <x/>ح
   <t/>ﷱ
 <x/>لے
-  <eq/>ﰴ
+  <t/>ﰴ
 <x/>م
-  <eq/>ﰵ
+  <t/>ﰵ
 <x/>ى
-  <eq/>ﰶ
+  <t/>ﰶ
 <x/>ي
   <p/>ڧ
   <p/>ڨ
@@ -6651,52 +6650,52 @@ p<variableTop/>
   <t/>ﻛ
   <t/>ﳄ
 <x/>ج
-  <eq/>ﳅ
+  <t/>ﳅ
 <x/>ح
-  <eq/>ﳆ
+  <t/>ﳆ
 <x/>خ
-  <eq/>ﳇ
+  <t/>ﳇ
 <x/>ل
-  <eq/>ﳈ
+  <t/>ﳈ
 <x/>م
   <t/>ﷃ
 <x/>مم
   <t/>ﻜ
   <t/>ﳫ
 <x/>ل
-  <eq/>ﳬ
+  <t/>ﳬ
 <x/>م
   <t/>ﻚ
   <t/>ﲀ
 <x/>ا
-  <eq/>ﲁ
+  <t/>ﲁ
 <x/>ل
-  <eq/>ﲂ
+  <t/>ﲂ
 <x/>م
   <t/>ﶻ
 <x/>مم
-  <eq/>ﶷ
+  <t/>ﶷ
 <x/>مي
-  <eq/>ﲃ
+  <t/>ﲃ
 <x/>ى
-  <eq/>ﲄ
+  <t/>ﲄ
 <x/>ي
   <t/>ﻙ
   <t/>ﰷ
 <x/>ا
-  <eq/>ﰸ
+  <t/>ﰸ
 <x/>ج
-  <eq/>ﰹ
+  <t/>ﰹ
 <x/>ح
-  <eq/>ﰺ
+  <t/>ﰺ
 <x/>خ
-  <eq/>ﰻ
+  <t/>ﰻ
 <x/>ل
-  <eq/>ﰼ
+  <t/>ﰼ
 <x/>م
-  <eq/>ﰽ
+  <t/>ﰽ
 <x/>ى
-  <eq/>ﰾ
+  <t/>ﰾ
 <x/>ي
   <p/>ک
   <t/>ﮐ
@@ -6736,21 +6735,21 @@ p<variableTop/>
 <x/>ج
   <t/>ﶃ
 <x/>جج
-  <eq/>ﶺ
+  <t/>ﶺ
 <x/>جم
-  <eq/>ﳊ
+  <t/>ﳊ
 <x/>ح
   <t/>ﶵ
 <x/>حم
-  <eq/>ﳋ
+  <t/>ﳋ
 <x/>خ
   <t/>ﶆ
 <x/>خم
-  <eq/>ﳌ
+  <t/>ﳌ
 <x/>م
   <t/>ﶈ
 <x/>مح
-  <eq/>ﳍ
+  <t/>ﳍ
 <x/>ه
   <t/>ﻠ
   <t/>ﳭ
@@ -6758,56 +6757,56 @@ p<variableTop/>
   <t/>ﻞ
   <t/>ﻶ
 <x/>آ
-  <eq/>ﻸ
+  <t/>ﻸ
 <x/>أ
-  <eq/>ﻺ
+  <t/>ﻺ
 <x/>إ
-  <eq/>ﻼ
+  <t/>ﻼ
 <x/>ا
   <t/>ﶄ
 <x/>جج
-  <eq/>ﶼ
+  <t/>ﶼ
 <x/>جم
-  <eq/>ﶬ
+  <t/>ﶬ
 <x/>جي
-  <eq/>ﶀ
+  <t/>ﶀ
 <x/>حم
-  <eq/>ﶂ
+  <t/>ﶂ
 <x/>حى
-  <eq/>ﶁ
+  <t/>ﶁ
 <x/>حي
-  <eq/>ﶅ
+  <t/>ﶅ
 <x/>خم
-  <eq/>ﲅ
+  <t/>ﲅ
 <x/>م
   <t/>ﶇ
 <x/>مح
-  <eq/>ﶭ
+  <t/>ﶭ
 <x/>مي
-  <eq/>ﲆ
+  <t/>ﲆ
 <x/>ى
-  <eq/>ﲇ
+  <t/>ﲇ
 <x/>ي
   <t/>ﻝ
   <t/>ﻵ
 <x/>آ
-  <eq/>ﻷ
+  <t/>ﻷ
 <x/>أ
-  <eq/>ﻹ
+  <t/>ﻹ
 <x/>إ
-  <eq/>ﻻ
+  <t/>ﻻ
 <x/>ا
-  <eq/>ﰿ
+  <t/>ﰿ
 <x/>ج
-  <eq/>ﱀ
+  <t/>ﱀ
 <x/>ح
-  <eq/>ﱁ
+  <t/>ﱁ
 <x/>خ
-  <eq/>ﱂ
+  <t/>ﱂ
 <x/>م
-  <eq/>ﱃ
+  <t/>ﱃ
 <x/>ى
-  <eq/>ﱄ
+  <t/>ﱄ
 <x/>ي
   <p/>ڵ
   <p/>ڶ
@@ -6815,28 +6814,28 @@ p<variableTop/>
   <p/>ڸ
   <p/>م
   <s/>۾
-  <t/>ﻣ
+  <s/>ﻣ
   <t/>ﳎ
 <x/>ج
   <t/>ﶌ
 <x/>جح
-  <eq/>ﶒ
+  <t/>ﶒ
 <x/>جخ
-  <eq/>ﶍ
+  <t/>ﶍ
 <x/>جم
-  <eq/>ﳏ
+  <t/>ﳏ
 <x/>ح
   <t/>ﶉ
 <x/>حج
-  <eq/>ﶊ
+  <t/>ﶊ
 <x/>حم
-  <eq/>ﳐ
+  <t/>ﳐ
 <x/>خ
   <t/>ﶎ
 <x/>خج
-  <eq/>ﶏ
+  <t/>ﶏ
 <x/>خم
-  <eq/>ﳑ
+  <t/>ﳑ
 <x/>م
   <t/>ﻤ
   <t/>ﻢ
@@ -6844,28 +6843,28 @@ p<variableTop/>
 <x/>ا
   <t/>ﷀ
 <x/>جي
-  <eq/>ﶋ
+  <t/>ﶋ
 <x/>حي
-  <eq/>ﶹ
+  <t/>ﶹ
 <x/>خي
-  <eq/>ﲉ
+  <t/>ﲉ
 <x/>م
   <t/>ﶱ
 <x/>مي
   <t/>ﻡ
   <t/>ﱅ
 <x/>ج
-  <eq/>ﱆ
+  <t/>ﱆ
 <x/>ح
   <t/>ﷴ
 <x/>حمد
-  <eq/>ﱇ
+  <t/>ﱇ
 <x/>خ
-  <eq/>ﱈ
+  <t/>ﱈ
 <x/>م
-  <eq/>ﱉ
+  <t/>ﱉ
 <x/>ى
-  <eq/>ﱊ
+  <t/>ﱊ
 <x/>ي
   <p/>ن
   <t/>ﻧ
@@ -6873,64 +6872,64 @@ p<variableTop/>
 <x/>ج
   <t/>ﶸ
 <x/>جح
-  <eq/>ﶘ
+  <t/>ﶘ
 <x/>جم
-  <eq/>ﳓ
+  <t/>ﳓ
 <x/>ح
   <t/>ﶕ
 <x/>حم
-  <eq/>ﳔ
+  <t/>ﳔ
 <x/>خ
-  <eq/>ﳕ
+  <t/>ﳕ
 <x/>م
-  <eq/>ﳖ
+  <t/>ﳖ
 <x/>ه
   <t/>ﻨ
   <t/>ﳮ
 <x/>م
-  <eq/>ﳯ
+  <t/>ﳯ
 <x/>ه
   <t/>ﻦ
   <t/>ﶽ
 <x/>جح
-  <eq/>ﶗ
+  <t/>ﶗ
 <x/>جم
-  <eq/>ﶙ
+  <t/>ﶙ
 <x/>جى
-  <eq/>ﷇ
+  <t/>ﷇ
 <x/>جي
-  <eq/>ﶖ
+  <t/>ﶖ
 <x/>حى
-  <eq/>ﶳ
+  <t/>ﶳ
 <x/>حي
-  <eq/>ﲊ
+  <t/>ﲊ
 <x/>ر
-  <eq/>ﲋ
+  <t/>ﲋ
 <x/>ز
-  <eq/>ﲌ
+  <t/>ﲌ
 <x/>م
   <t/>ﶛ
 <x/>مى
-  <eq/>ﶚ
+  <t/>ﶚ
 <x/>مي
-  <eq/>ﲍ
+  <t/>ﲍ
 <x/>ن
-  <eq/>ﲎ
+  <t/>ﲎ
 <x/>ى
-  <eq/>ﲏ
+  <t/>ﲏ
 <x/>ي
   <t/>ﻥ
   <t/>ﱋ
 <x/>ج
-  <eq/>ﱌ
+  <t/>ﱌ
 <x/>ح
-  <eq/>ﱍ
+  <t/>ﱍ
 <x/>خ
-  <eq/>ﱎ
+  <t/>ﱎ
 <x/>م
-  <eq/>ﱏ
+  <t/>ﱏ
 <x/>ى
-  <eq/>ﱐ
+  <t/>ﱐ
 <x/>ي
   <p/>ں
   <t/>ﮟ
@@ -6947,24 +6946,24 @@ p<variableTop/>
   <t/>ﻫ
   <t/>ﳙ
 <x/>ٰ
-  <eq/>ﳗ
+  <t/>ﳗ
 <x/>ج
-  <eq/>ﳘ
+  <t/>ﳘ
 <x/>م
   <t/>ﶓ
 <x/>مج
-  <eq/>ﶔ
+  <t/>ﶔ
 <x/>مم
   <t/>ﻬ
   <t/>ﻪ
   <t/>ﻩ
   <t/>ﱑ
 <x/>ج
-  <eq/>ﱒ
+  <t/>ﱒ
 <x/>م
-  <eq/>ﱓ
+  <t/>ﱓ
 <x/>ى
-  <eq/>ﱔ
+  <t/>ﱔ
 <x/>ي
   <p/>ھ
   <t/>ﮬ
@@ -7031,54 +7030,54 @@ p<variableTop/>
   <t/>ﻳ
   <t/>ﳚ
 <x/>ج
-  <eq/>ﳛ
+  <t/>ﳛ
 <x/>ح
-  <eq/>ﳜ
+  <t/>ﳜ
 <x/>خ
-  <eq/>ﳝ
+  <t/>ﳝ
 <x/>م
   <t/>ﶝ
 <x/>مم
-  <eq/>ﳞ
+  <t/>ﳞ
 <x/>ه
   <t/>ﻴ
   <t/>ﳰ
 <x/>م
-  <eq/>ﳱ
+  <t/>ﳱ
 <x/>ه
   <t/>ﻲ
   <t/>ﶯ
 <x/>جي
-  <eq/>ﶮ
+  <t/>ﶮ
 <x/>حي
-  <eq/>ﲑ
+  <t/>ﲑ
 <x/>ر
-  <eq/>ﲒ
+  <t/>ﲒ
 <x/>ز
-  <eq/>ﲓ
+  <t/>ﲓ
 <x/>م
   <t/>ﶜ
 <x/>مم
-  <eq/>ﶰ
+  <t/>ﶰ
 <x/>مي
-  <eq/>ﲔ
+  <t/>ﲔ
 <x/>ن
-  <eq/>ﲕ
+  <t/>ﲕ
 <x/>ى
-  <eq/>ﲖ
+  <t/>ﲖ
 <x/>ي
   <t/>ﻱ
   <t/>ﱕ
 <x/>ج
-  <eq/>ﱖ
+  <t/>ﱖ
 <x/>ح
-  <eq/>ﱗ
+  <t/>ﱗ
 <x/>خ
-  <eq/>ﱘ
+  <t/>ﱘ
 <x/>م
-  <eq/>ﱙ
+  <t/>ﱙ
 <x/>ى
-  <eq/>ﱚ
+  <t/>ﱚ
 <x/>ي
   <p/>ی
   <t/>ﯾ
@@ -8234,7 +8233,7 @@ p<variableTop/>
   <p/>ຫ
   <t/>ໜ
 <x/>ນ
-  <eq/>ໝ
+  <t/>ໝ
 <x/>ມ
   <p/>ອ
   <p/>ຮ
@@ -9367,9 +9366,9 @@ p<variableTop/>
   <s/>ᚤ
   <s/>ᚥ
   <p/>ᚦ
-  <s/>ᚧ
-  <eq/>ᛰ
+  <t/>ᛰ
 <x/>ᚦ
+  <s/>ᚧ
   <p/>ᚨ
   <s/>ᚩ
   <s/>ᚬ
@@ -9398,9 +9397,9 @@ p<variableTop/>
   <p/>ᛃ
   <s/>ᛄ
   <p/>ᛅ
-  <s/>ᛆ
-  <eq/>ᛮ
+  <t/>ᛮ
 <x/>ᛚ
+  <s/>ᛆ
   <p/>ᛇ
   <p/>ᛈ
   <s/>ᛕ
@@ -9420,9 +9419,9 @@ p<variableTop/>
   <p/>ᛖ
   <p/>ᛗ
   <s/>ᛘ
-  <s/>ᛙ
-  <s/>ᛯ
+  <t/>ᛯ
 <x/>ᛗ
+  <s/>ᛙ
   <p/>ᛚ
   <s/>ᛛ
   <p/>ᛜ
@@ -9881,7 +9880,7 @@ p<variableTop/>
 <x/>ーる
   <t/>㌀
 <x/>ぱーと
-  <eq/>㌁
+  <t/>㌁
 <x/>るふあ
   <t/>㌂
 <x/>んぺあ
@@ -9894,7 +9893,7 @@ p<variableTop/>
   <t/>㋑
   <t/>㌄
 <x/>にんぐ
-  <eq/>㌅
+  <t/>㌅
 <x/>んち
   <p/>ぅ
   <t/>う
@@ -9925,7 +9924,7 @@ p<variableTop/>
   <t/>㋔
   <t/>㌊
 <x/>ーむ
-  <eq/>㌉
+  <t/>㌉
 <x/>んす
   <p/>か
   <t/>ヵ
@@ -9936,11 +9935,11 @@ p<variableTop/>
 <x/>いり
   <t/>㌌
 <x/>らつと
-  <eq/>㌍
+  <t/>㌍
 <x/>ろりー
-  <eq/>㌎
+  <t/>㌎
 <x/>゙ろん
-  <eq/>㌏
+  <t/>㌏
 <x/>゙んま
   <p/>き
   <t/>キ
@@ -9948,19 +9947,19 @@ p<variableTop/>
   <t/>㋖
   <t/>㌐
 <x/>゙が
-  <eq/>㌑
+  <t/>㌑
 <x/>゙にー
-  <eq/>㌒
+  <t/>㌒
 <x/>ゆりー
   <t/>㌓
 <x/>゙るだー
-  <eq/>㌔
+  <t/>㌔
 <x/>ろ
   <t/>㌕
 <x/>ろぐらむ
-  <eq/>㌖
+  <t/>㌖
 <x/>ろめーとる
-  <eq/>㌗
+  <t/>㌗
 <x/>ろわつと
   <p/>く
   <t/>ク
@@ -9970,9 +9969,9 @@ p<variableTop/>
 <x/>゙らむ
   <t/>㌙
 <x/>゙らむとん
-  <eq/>㌚
+  <t/>㌚
 <x/>るぜいろ
-  <eq/>㌛
+  <t/>㌛
 <x/>ろーね
   <p/>け
   <t/>ヶ
@@ -9987,7 +9986,7 @@ p<variableTop/>
   <t/>㋙
   <t/>㌞
 <x/>ーぽ
-  <eq/>㌝
+  <t/>㌝
 <x/>るな
   <p/>さ
   <t/>サ
@@ -10015,7 +10014,7 @@ p<variableTop/>
   <t/>㋝
   <t/>㌢
 <x/>んち
-  <eq/>㌣
+  <t/>㌣
 <x/>んと
   <p/>そ
   <t/>ソ
@@ -10050,7 +10049,7 @@ p<variableTop/>
   <t/>㋣
   <t/>㌦
 <x/>゙る
-  <eq/>㌧
+  <t/>㌧
 <x/>ん
   <p/>な
   <t/>ナ
@@ -10082,11 +10081,11 @@ p<variableTop/>
   <t/>㋩
   <t/>㌫
 <x/>゚ーせんと
-  <eq/>㌬
+  <t/>㌬
 <x/>゚ーつ
   <t/>㌭
 <x/>゙ーれる
-  <eq/>㌪
+  <t/>㌪
 <x/>いつ
   <p/>ひ
   <t/>ヒ
@@ -10094,11 +10093,11 @@ p<variableTop/>
   <t/>㋪
   <t/>㌮
 <x/>゚あすとる
-  <eq/>㌯
+  <t/>㌯
 <x/>゚くる
-  <eq/>㌰
+  <t/>㌰
 <x/>゚こ
-  <eq/>㌱
+  <t/>㌱
 <x/>゙る
   <p/>ふ
   <t/>フ
@@ -10106,11 +10105,11 @@ p<variableTop/>
   <t/>㋫
   <t/>㌲
 <x/>あらつど
-  <eq/>㌳
+  <t/>㌳
 <x/>いーと
   <t/>㌴
 <x/>゙つしえる
-  <eq/>㌵
+  <t/>㌵
 <x/>らん
   <p/>へ
   <t/>ヘ
@@ -10118,15 +10117,15 @@ p<variableTop/>
   <t/>㋬
   <t/>㌻
 <x/>゚ーじ
-  <eq/>㌼
+  <t/>㌼
 <x/>゙ーた
   <t/>㌶
 <x/>くたーる
-  <eq/>㌷
+  <t/>㌷
 <x/>゚そ
   <t/>㌸
 <x/>゚にひ
-  <eq/>㌹
+  <t/>㌹
 <x/>るつ
   <t/>㌺
 <x/>゚んす
@@ -10136,13 +10135,13 @@ p<variableTop/>
   <t/>㋭
   <t/>㍁
 <x/>ーる
-  <eq/>㍂
+  <t/>㍂
 <x/>ーん
   <t/>㌽
 <x/>゚いんと
-  <eq/>㌾
+  <t/>㌾
 <x/>゙ると
-  <eq/>㌿
+  <t/>㌿
 <x/>ん
   <t/>㍀
 <x/>゚んど
@@ -10152,11 +10151,11 @@ p<variableTop/>
   <t/>㋮
   <t/>㍃
 <x/>いくろ
-  <eq/>㍄
+  <t/>㍄
 <x/>いる
-  <eq/>㍅
+  <t/>㍅
 <x/>つは
-  <eq/>㍆
+  <t/>㍆
 <x/>るく
   <t/>㍇
 <x/>んしよん
@@ -10166,7 +10165,7 @@ p<variableTop/>
   <t/>㋯
   <t/>㍈
 <x/>くろん
-  <eq/>㍉
+  <t/>㍉
 <x/>り
   <t/>㍊
 <x/>りばーる
@@ -10180,7 +10179,7 @@ p<variableTop/>
   <t/>㋱
   <t/>㍍
 <x/>ーとる
-  <eq/>㍋
+  <t/>㍋
 <x/>が
   <t/>㍌
 <x/>がとん
@@ -10197,7 +10196,7 @@ p<variableTop/>
   <t/>㋳
   <t/>㍎
 <x/>ーど
-  <eq/>㍏
+  <t/>㍏
 <x/>ーる
   <p/>ゅ
   <t/>ゆ
@@ -10225,7 +10224,7 @@ p<variableTop/>
   <t/>㋷
   <t/>㍑
 <x/>つとる
-  <eq/>㍒
+  <t/>㍒
 <x/>ら
   <p/>る
   <t/>ル
@@ -10233,7 +10232,7 @@ p<variableTop/>
   <t/>㋸
   <t/>㍔
 <x/>ーぶる
-  <eq/>㍓
+  <t/>㍓
 <x/>ぴー
   <p/>れ
   <t/>レ
@@ -10327,7 +10326,7 @@ p<variableTop/>
   <p/>ㄦ
   <p/>ㄧ
   <s/>ㆪ
-  <s/>ㆳ
+  <t/>ㆳ
   <p/>ㄨ
   <s/>ㆫ
   <s/>ㆨ
@@ -11056,12 +11055,12 @@ p<variableTop/>
   <t/>⼁
 <reset/>丶<!-- U+4E36 CJK UNIFIED IDEOGRAPH-4E36-->
   <t/>⼂
-  <s/>⺀
+  <t/>⺀
 <reset/>丿<!-- U+4E3F CJK UNIFIED IDEOGRAPH-4E3F-->
   <t/>⼃
 <reset/>乙<!-- U+4E59 CJK UNIFIED IDEOGRAPH-4E59-->
   <t/>⼄
-  <s/>⺄
+  <t/>⺄
 <reset/>亅<!-- U+4E85 CJK UNIFIED IDEOGRAPH-4E85-->
   <t/>⼅
 <reset/>二<!-- U+4E8C CJK UNIFIED IDEOGRAPH-4E8C-->
@@ -11078,19 +11077,19 @@ p<variableTop/>
   <t/>⼋
 <reset/>冂<!-- U+5182 CJK UNIFIED IDEOGRAPH-5182-->
   <t/>⼌
-  <s/>⺆
+  <t/>⺆
 <reset/>冖<!-- U+5196 CJK UNIFIED IDEOGRAPH-5196-->
   <t/>⼍
 <reset/>冫<!-- U+51AB CJK UNIFIED IDEOGRAPH-51AB-->
   <t/>⼎
 <reset/>几<!-- U+51E0 CJK UNIFIED IDEOGRAPH-51E0-->
   <t/>⼏
-  <s/>⺇
+  <t/>⺇
 <reset/>凵<!-- U+51F5 CJK UNIFIED IDEOGRAPH-51F5-->
   <t/>⼐
 <reset/>刀<!-- U+5200 CJK UNIFIED IDEOGRAPH-5200-->
   <t/>⼑
-  <s/>⺈
+  <t/>⺈
 <reset/>力<!-- U+529B CJK UNIFIED IDEOGRAPH-529B-->
   <t/>⼒
 <reset/>勹<!-- U+52F9 CJK UNIFIED IDEOGRAPH-52F9-->
@@ -11110,13 +11109,13 @@ p<variableTop/>
   <t/>〺
 <reset/>卜<!-- U+535C CJK UNIFIED IDEOGRAPH-535C-->
   <t/>⼘
-  <s/>⺊
+  <t/>⺊
 <reset/>卩<!-- U+5369 CJK UNIFIED IDEOGRAPH-5369-->
   <t/>⼙
-  <s/>⺋
+  <t/>⺋
 <reset/>厂<!-- U+5382 CJK UNIFIED IDEOGRAPH-5382-->
   <t/>⼚
-  <s/>⺁
+  <t/>⺁
 <reset/>厶<!-- U+53B6 CJK UNIFIED IDEOGRAPH-53B6-->
   <t/>⼛
 <reset/>又<!-- U+53C8 CJK UNIFIED IDEOGRAPH-53C8-->
@@ -11147,11 +11146,11 @@ p<variableTop/>
   <t/>⼨
 <reset/>小<!-- U+5C0F CJK UNIFIED IDEOGRAPH-5C0F-->
   <t/>⼩
-  <s/>⺌
-  <s/>⺍
+  <t/>⺌
+  <t/>⺍
 <reset/>尢<!-- U+5C22 CJK UNIFIED IDEOGRAPH-5C22-->
   <t/>⼪
-  <s/>⺎
+  <t/>⺎
 <reset/>尣<!-- U+5C23 CJK UNIFIED IDEOGRAPH-5C23-->
   <s/>⺑
 <reset/>尸<!-- U+5C38 CJK UNIFIED IDEOGRAPH-5C38-->
@@ -11184,14 +11183,14 @@ p<variableTop/>
   <t/>⼸
 <reset/>彐<!-- U+5F50 CJK UNIFIED IDEOGRAPH-5F50-->
   <t/>⼹
-  <s/>⺕
+  <t/>⺕
 <reset/>彡<!-- U+5F61 CJK UNIFIED IDEOGRAPH-5F61-->
   <t/>⼺
 <reset/>彳<!-- U+5F73 CJK UNIFIED IDEOGRAPH-5F73-->
   <t/>⼻
 <reset/>心<!-- U+5FC3 CJK UNIFIED IDEOGRAPH-5FC3-->
   <t/>⼼
-  <s/>⺗
+  <t/>⺗
 <reset/>戈<!-- U+6208 CJK UNIFIED IDEOGRAPH-6208-->
   <t/>⼽
 <reset/>戶<!-- U+6236 CJK UNIFIED IDEOGRAPH-6236-->
@@ -11214,12 +11213,12 @@ p<variableTop/>
   <t/>⽆
 <reset/>日<!-- U+65E5 CJK UNIFIED IDEOGRAPH-65E5-->
   <t/>⽇
-  <s/>⺜
+  <t/>⺜
 <reset/>曰<!-- U+66F0 CJK UNIFIED IDEOGRAPH-66F0-->
   <t/>⽈
 <reset/>月<!-- U+6708 CJK UNIFIED IDEOGRAPH-6708-->
   <t/>⽉
-  <s/>⺝
+  <t/>⺝
 <reset/>木<!-- U+6728 CJK UNIFIED IDEOGRAPH-6728-->
   <t/>⽊
 <reset/>欠<!-- U+6B20 CJK UNIFIED IDEOGRAPH-6B20-->
@@ -11264,7 +11263,7 @@ p<variableTop/>
   <t/>⽛
 <reset/>牛<!-- U+725B CJK UNIFIED IDEOGRAPH-725B-->
   <t/>⽜
-  <s/>⺧
+  <t/>⺧
 <reset/>犬<!-- U+72AC CJK UNIFIED IDEOGRAPH-72AC-->
   <t/>⽝
 <reset/>玄<!-- U+7384 CJK UNIFIED IDEOGRAPH-7384-->
@@ -11287,7 +11286,7 @@ p<variableTop/>
   <t/>⽥
 <reset/>疋<!-- U+758B CJK UNIFIED IDEOGRAPH-758B-->
   <t/>⽦
-  <s/>⺪
+  <t/>⺪
 <reset/>疒<!-- U+7592 CJK UNIFIED IDEOGRAPH-7592-->
   <t/>⽧
 <reset/>癶<!-- U+7676 CJK UNIFIED IDEOGRAPH-7676-->
@@ -11300,7 +11299,7 @@ p<variableTop/>
   <t/>⽫
 <reset/>目<!-- U+76EE CJK UNIFIED IDEOGRAPH-76EE-->
   <t/>⽬
-  <s/>⺫
+  <t/>⺫
 <reset/>矛<!-- U+77DB CJK UNIFIED IDEOGRAPH-77DB-->
   <t/>⽭
 <reset/>矢<!-- U+77E2 CJK UNIFIED IDEOGRAPH-77E2-->
@@ -11309,7 +11308,7 @@ p<variableTop/>
   <t/>⽯
 <reset/>示<!-- U+793A CJK UNIFIED IDEOGRAPH-793A-->
   <t/>⽰
-  <s/>⺬
+  <t/>⺬
 <reset/>禸<!-- U+79B8 CJK UNIFIED IDEOGRAPH-79B8-->
   <t/>⽱
 <reset/>禾<!-- U+79BE CJK UNIFIED IDEOGRAPH-79BE-->
@@ -11320,7 +11319,7 @@ p<variableTop/>
   <t/>⽴
 <reset/>竹<!-- U+7AF9 CJK UNIFIED IDEOGRAPH-7AF9-->
   <t/>⽵
-  <s/>⺮
+  <t/>⺮
 <reset/>米<!-- U+7C73 CJK UNIFIED IDEOGRAPH-7C73-->
   <t/>⽶
 <reset/>糸<!-- U+7CF8 CJK UNIFIED IDEOGRAPH-7CF8-->
@@ -11333,11 +11332,11 @@ p<variableTop/>
   <s/>⺵
 <reset/>罓<!-- U+7F53 CJK UNIFIED IDEOGRAPH-7F53-->
   <s/>⺳
-  <s/>⺴
+  <t/>⺴
 <reset/>羊<!-- U+7F8A CJK UNIFIED IDEOGRAPH-7F8A-->
   <t/>⽺
-  <s/>⺶
-  <s/>⺷
+  <t/>⺶
+  <t/>⺷
 <reset/>羽<!-- U+7FBD CJK UNIFIED IDEOGRAPH-7FBD-->
   <t/>⽻
 <reset/>一<!-- U+4E00 CJK UNIFIED IDEOGRAPH-4E00-->
@@ -11457,19 +11456,19 @@ p<variableTop/>
 <reset/>甲<!-- U+7532 CJK UNIFIED IDEOGRAPH-7532-->
   <t/>㆙
 <reset/>大<!-- U+5927 CJK UNIFIED IDEOGRAPH-5927-->
-  <t/>㍽
+  <p/>㍽
 <x/>正
 <reset/>平<!-- U+5E73 CJK UNIFIED IDEOGRAPH-5E73-->
-  <t/>㍻
+  <p/>㍻
 <x/>成
 <reset/>明<!-- U+660E CJK UNIFIED IDEOGRAPH-660E-->
-  <t/>㍾
+  <p/>㍾
 <x/>治
 <reset/>昭<!-- U+662D CJK UNIFIED IDEOGRAPH-662D-->
-  <t/>㍼
+  <p/>㍼
 <x/>和
 <reset/>株<!-- U+682A CJK UNIFIED IDEOGRAPH-682A-->
-  <t/>㍿
+  <p/>㍿
 <x/>式会社
 <reset/>耂<!-- U+8002 CJK UNIFIED IDEOGRAPH-8002-->
   <eq/>⺹
@@ -11774,10 +11773,10 @@ p<variableTop/>
   <t/>⽿
 <reset/>聿<!-- U+807F CJK UNIFIED IDEOGRAPH-807F-->
   <t/>⾀
-  <s/>⺻
+  <t/>⺻
 <reset/>肉<!-- U+8089 CJK UNIFIED IDEOGRAPH-8089-->
   <t/>⾁
-  <s/>⺼
+  <t/>⺼
 <reset/>臣<!-- U+81E3 CJK UNIFIED IDEOGRAPH-81E3-->
   <t/>⾂
 <reset/>自<!-- U+81EA CJK UNIFIED IDEOGRAPH-81EA-->
@@ -11786,7 +11785,7 @@ p<variableTop/>
   <t/>⾄
 <reset/>臼<!-- U+81FC CJK UNIFIED IDEOGRAPH-81FC-->
   <t/>⾅
-  <s/>⺽
+  <t/>⺽
 <reset/>舌<!-- U+820C CJK UNIFIED IDEOGRAPH-820C-->
   <t/>⾆
 <reset/>舛<!-- U+821B CJK UNIFIED IDEOGRAPH-821B-->
@@ -11801,7 +11800,7 @@ p<variableTop/>
   <t/>⾋
 <reset/>艹<!-- U+8279 CJK UNIFIED IDEOGRAPH-8279-->
   <s/>⺿
-  <s/>⻀
+  <t/>⻀
 <reset/>虍<!-- U+864D CJK UNIFIED IDEOGRAPH-864D-->
   <t/>⾌
 <reset/>虫<!-- U+866B CJK UNIFIED IDEOGRAPH-866B-->
@@ -11818,7 +11817,7 @@ p<variableTop/>
   <t/>⾒
 <reset/>角<!-- U+89D2 CJK UNIFIED IDEOGRAPH-89D2-->
   <t/>⾓
-  <s/>⻇
+  <t/>⻇
 <reset/>言<!-- U+8A00 CJK UNIFIED IDEOGRAPH-8A00-->
   <t/>⾔
 <reset/>谷<!-- U+8C37 CJK UNIFIED IDEOGRAPH-8C37-->
@@ -11837,7 +11836,7 @@ p<variableTop/>
   <t/>⾛
 <reset/>足<!-- U+8DB3 CJK UNIFIED IDEOGRAPH-8DB3-->
   <t/>⾜
-  <s/>⻊
+  <t/>⻊
 <reset/>身<!-- U+8EAB CJK UNIFIED IDEOGRAPH-8EAB-->
   <t/>⾝
 <reset/>車<!-- U+8ECA CJK UNIFIED IDEOGRAPH-8ECA-->
@@ -11850,10 +11849,10 @@ p<variableTop/>
   <t/>⾡
 <reset/>辶<!-- U+8FB6 CJK UNIFIED IDEOGRAPH-8FB6-->
   <s/>⻍
-  <s/>⻎
+  <t/>⻎
 <reset/>邑<!-- U+9091 CJK UNIFIED IDEOGRAPH-9091-->
   <t/>⾢
-  <s/>⻏
+  <t/>⻏
 <reset/>酉<!-- U+9149 CJK UNIFIED IDEOGRAPH-9149-->
   <t/>⾣
 <reset/>釆<!-- U+91C6 CJK UNIFIED IDEOGRAPH-91C6-->
@@ -11868,14 +11867,14 @@ p<variableTop/>
   <t/>⾨
 <reset/>阜<!-- U+961C CJK UNIFIED IDEOGRAPH-961C-->
   <t/>⾩
-  <s/>⻕
+  <t/>⻕
 <reset/>隶<!-- U+96B6 CJK UNIFIED IDEOGRAPH-96B6-->
   <t/>⾪
 <reset/>隹<!-- U+96B9 CJK UNIFIED IDEOGRAPH-96B9-->
   <t/>⾫
 <reset/>雨<!-- U+96E8 CJK UNIFIED IDEOGRAPH-96E8-->
   <t/>⾬
-  <s/>⻗
+  <t/>⻗
 <reset/>靑<!-- U+9751 CJK UNIFIED IDEOGRAPH-9751-->
   <t/>⾭
 <reset/>非<!-- U+975E CJK UNIFIED IDEOGRAPH-975E-->
@@ -11902,14 +11901,14 @@ p<variableTop/>
   <s/>⻞
 <reset/>首<!-- U+9996 CJK UNIFIED IDEOGRAPH-9996-->
   <t/>⾸
-  <s/>⻡
+  <t/>⻡
 <reset/>香<!-- U+9999 CJK UNIFIED IDEOGRAPH-9999-->
   <t/>⾹
 <reset/>馬<!-- U+99AC CJK UNIFIED IDEOGRAPH-99AC-->
   <t/>⾺
 <reset/>骨<!-- U+9AA8 CJK UNIFIED IDEOGRAPH-9AA8-->
   <t/>⾻
-  <s/>⻣
+  <t/>⻣
 <reset/>高<!-- U+9AD8 CJK UNIFIED IDEOGRAPH-9AD8-->
   <t/>⾼
 <reset/>髟<!-- U+9ADF CJK UNIFIED IDEOGRAPH-9ADF-->
@@ -11922,14 +11921,14 @@ p<variableTop/>
   <t/>⿀
 <reset/>鬼<!-- U+9B3C CJK UNIFIED IDEOGRAPH-9B3C-->
   <t/>⿁
-  <s/>⻤
+  <t/>⻤
 <reset/>魚<!-- U+9B5A CJK UNIFIED IDEOGRAPH-9B5A-->
   <t/>⿂
 <reset/>鳥<!-- U+9CE5 CJK UNIFIED IDEOGRAPH-9CE5-->
   <t/>⿃
 <reset/>鹵<!-- U+9E75 CJK UNIFIED IDEOGRAPH-9E75-->
   <t/>⿄
-  <s/>⻧
+  <t/>⻧
 <reset/>鹿<!-- U+9E7F CJK UNIFIED IDEOGRAPH-9E7F-->
   <t/>⿅
 <reset/>麥<!-- U+9EA5 CJK UNIFIED IDEOGRAPH-9EA5-->
@@ -11956,17 +11955,17 @@ p<variableTop/>
   <t/>⿐
 <reset/>齊<!-- U+9F4A CJK UNIFIED IDEOGRAPH-9F4A-->
   <t/>⿑
-  <s/>⻫
+  <t/>⻫
 <reset/>齒<!-- U+9F52 CJK UNIFIED IDEOGRAPH-9F52-->
   <t/>⿒
-  <s/>⻭
+  <t/>⻭
 <reset/>龍<!-- U+9F8D CJK UNIFIED IDEOGRAPH-9F8D-->
   <t/>⿓
-  <s/>⻯
+  <t/>⻯
 <reset/>龜<!-- U+9F9C CJK UNIFIED IDEOGRAPH-9F9C-->
   <t/>⿔
-  <s/>⻱
-  <s/>⻲
+  <t/>⻱
+  <t/>⻲
 <reset/>龟<!-- U+9F9F CJK UNIFIED IDEOGRAPH-9F9F-->
   <t/>⻳
 <reset/>龠<!-- U+9FA0 CJK UNIFIED IDEOGRAPH-9FA0-->
