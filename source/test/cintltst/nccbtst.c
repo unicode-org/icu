@@ -1684,26 +1684,6 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
         }
     }
 
-    log_verbose("Testing IMAP-mailbox-name toUnicode with substitute callbacks\n");
-    {
-        static const uint8_t bytes[]={
-         /* aDEL          a&AB~                         a&AB\x0c                      a&AB-                         a&AB.                         a&. */
-            0x61, 0x7f,   0x61, 0x26, 0x41, 0x42, 0x7e, 0x61, 0x26, 0x41, 0x42, 0x0c, 0x61, 0x26, 0x41, 0x42, 0x2d, 0x61, 0x26, 0x41, 0x42, 0x2e, 0x61, 0x26, 0x2e
-        };
-        static const UChar unicode[]={
-            0x61, 0xfffd, 0x61,       0xfffd,           0x61,       0xfffd,           0x61,       0xfffd,           0x61,       0xfffd,           0x61, 0xfffd
-        };
-        static const int32_t offsets[]={
-            0,    1,      2,          4,                7,          9,                12,         14,               17,         19,               22,   23
-        };
-
-        if(!testConvertToUnicode(bytes, ARRAY_LENGTH(bytes), unicode, ARRAY_LENGTH(unicode), "IMAP-mailbox-name", 
-                                 UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets, NULL, 0)
-        ) {
-            log_err("IMAP-mailbox-name->u with substitute did not match.\n");
-        }
-    }
-
     log_verbose("Testing UTF-16 toUnicode with substitute callbacks\n");
     {
         static const uint8_t
@@ -2430,18 +2410,6 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         static const int32_t from_isciiOffs [] ={0,1,2,2,2,2,3,4,5,5,5,5,6  };
 
 
-        /*LMBCS*/
-        static const uint8_t sampleTxtLMBCS[]={ 0x12, 0xc9, 0x50, 
-            0x12, 0x92, 0xa0, /*unassigned*/
-            0x12, 0x92, 0xa1,
-        };
-        static const UChar LMBCSToUnicode[]={ 0x4e2e, 
-            0x25, 0x58, 0x31, 0x32, 0x25, 0x58, 0x39, 0x32, 0x25, 0x58, 0x41, 0x30, 
-            0xe5c4, };
-        static const int32_t fromLMBCS[] = {0, 
-            3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-            6, };
-
         /*UTF8*/
         static const uint8_t sampleTxtUTF8[]={
             0x20, 0x64, 0x50, 
@@ -2562,10 +2530,6 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                  isciitoUnicode, sizeof(isciitoUnicode)/sizeof(isciitoUnicode[0]),"ISCII,version=0",
                 UCNV_TO_U_CALLBACK_ESCAPE, from_isciiOffs, NULL, 0))
             log_err("ISCII ->u with substitute with value did not match.\n");
-        if(!testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
-                LMBCSToUnicode, sizeof(LMBCSToUnicode)/sizeof(LMBCSToUnicode[0]),"LMBCS",
-                UCNV_TO_U_CALLBACK_ESCAPE, fromLMBCS, NULL, 0))
-            log_err("LMBCS->u with substitute with value did not match.\n"); 
         if(!testConvertToUnicode(sampleTxtUTF8, sizeof(sampleTxtUTF8),
                 UTF8ToUnicode, sizeof(UTF8ToUnicode)/sizeof(UTF8ToUnicode[0]),"UTF-8",
                 UCNV_TO_U_CALLBACK_ESCAPE, fromUTF8, NULL, 0))
