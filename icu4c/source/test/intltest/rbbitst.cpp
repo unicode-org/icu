@@ -202,6 +202,12 @@ void RBBITest::TestDefaultRuleBasedCharacterIteration()
     chardata->addElement(CharsToUnicodeString("\\u1105\\u1169"));
     chardata->addElement(CharsToUnicodeString("\\u1100\\u116d"));
     chardata->addElement(CharsToUnicodeString("\\u1112\\u116c"));
+
+    // Surrogate pairs stay together
+    chardata->addElement(CharsToUnicodeString("\\ud800\\udc00"));
+    chardata->addElement(CharsToUnicodeString("\\udbff\\udfff"));
+
+    // Run the test...
     generalIteratorTest(*charIterDefault, chardata);
 
     delete charIterDefault;
@@ -309,6 +315,28 @@ void RBBITest::TestDefaultRuleBasedWordIteration()
     worddata->addElement(" ");
     worddata->addElement("you");
     worddata->addElement(" ");
+
+    // Words containing surrogates
+    //    Hi surrogates of d801-d802-d834-d835 are letters.
+    worddata->addElement(CharsToUnicodeString("abc\\ud800\\udc00def"));
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("abc\\ud801\\udc00def"));
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("abc\\ud834\\udc00def"));
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("abc\\ud835\\udc00def"));
+    worddata->addElement(" ");
+
+    worddata->addElement(CharsToUnicodeString("abc"));  // same test with surrogate outside of letter range.
+    worddata->addElement(CharsToUnicodeString("\\ud802\\udc00"));   
+    worddata->addElement(CharsToUnicodeString("def"));
+    worddata->addElement(" ");
+
+    // Kanji stays together, including extended chars, but separates from Latin.
+    worddata->addElement(CharsToUnicodeString("abc"));
+    worddata->addElement(CharsToUnicodeString("\\ud840\\udc00\\u9f00\\ud841\\udc01\\ud870\\udc03\\u4e00"));
+    worddata->addElement(CharsToUnicodeString("xyz"));
+
     generalIteratorTest(*wordIterDefault, worddata);
 
     delete wordIterDefault;
@@ -523,6 +551,14 @@ void RBBITest::TestDefaultRuleBasedLineIteration()
       linedata->addElement(CharsToUnicodeString("\\u4e01\\uff0e"));
       linedata->addElement(CharsToUnicodeString("\\u4e02\\uff01"));
       linedata->addElement(CharsToUnicodeString("\\u4e03\\uff1f"));
+
+    // Surrogate line break tests.  
+      linedata->addElement(CharsToUnicodeString("\\u4e01"));          // BMP ideograph
+      linedata->addElement(CharsToUnicodeString("\\ud840\\udc01"));   // Extended ideograph
+      linedata->addElement(CharsToUnicodeString("\\u4e02"));          // BMP Ideograph
+      linedata->addElement(CharsToUnicodeString("abc"));              // latin
+      linedata->addElement(CharsToUnicodeString("\\ue000"));          // PUA
+      linedata->addElement(CharsToUnicodeString("\\udb80\\udc01"));   // Extended PUA.  Treated as ideograph.
 
     generalIteratorTest(*lineIterDefault, linedata);
 
