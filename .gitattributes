@@ -351,6 +351,7 @@ icu4j/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt -text svneol=unset#application/o
 icu4j/src/com/ibm/icu/dev/test/search/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/tool/compression/package.html svneol=native#text/html
+icu4j/src/com/ibm/icu/dev/tool/docs/icu4j28.api.gz -text svneol=unset#application/gzip
 icu4j/src/com/ibm/icu/dev/tool/rbbi/readme.html svneol=native#text/html
 icu4j/src/com/ibm/icu/impl/data/icudata.jar -text svneol=unset#application/java-archive
 icu4j/src/com/ibm/icu/impl/data/package.html svneol=native#text/html
