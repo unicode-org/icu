@@ -399,10 +399,6 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     result->variableTopValueisDefault = TRUE;
     result->alternateHandlingisDefault = TRUE;
 
-    uint32_t variableMaxCE = ucmp32_get(result->mapping, result->variableTopValue);
-    result->variableMax1 = (uint8_t)((variableMaxCE & 0xFF000000) >> 24);
-    result->variableMax2 = (uint8_t)((variableMaxCE & 0x00FF0000) >> 16);
-
     result->scriptOrder = NULL;
 
     result->zero = 0;
@@ -2391,6 +2387,10 @@ UCollationResult ucol_compareUsingSortKeys(const    UCollator    *coll,
 /* there are new APIs and some compatibility APIs                           */
 /****************************************************************************/
 void ucol_updateInternalState(UCollator *coll) {
+      uint32_t variableMaxCE = ucmp32_get(coll->mapping, coll->variableTopValue);
+      coll->variableMax1 = (uint8_t)((variableMaxCE & 0xFF000000) >> 24);
+      coll->variableMax2 = (uint8_t)((variableMaxCE & 0x00FF0000) >> 16);
+
       if(coll->caseFirst == UCOL_UPPER_FIRST) {
         coll->caseSwitch = UCOL_CASE_SWITCH;
       } else {
