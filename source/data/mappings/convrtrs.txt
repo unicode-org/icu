@@ -291,3 +291,7 @@ gb_2312_80-1	           # Can be used by other converters if	pure DBCS conversio
 iso-ir-165		           # Can be used by other converters if	pure DBCS conversion is needed
 ksc_5601_1		           # Can be used by other converters if	pure DBCS conversion is needed
 cns-11643-1992	           # ISO-2022-CN specific.Cannot be used by other converters
+
+# GB 18030 is partly algorithmic, using the MBCS converter
+# ### IMPORTANT: THIS IS ALPHA-VERSION DATA AND MAY CHANGE WITHOUT NOTICE
+gb18030
