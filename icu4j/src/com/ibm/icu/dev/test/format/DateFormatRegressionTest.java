@@ -878,4 +878,91 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             logln("OK: " + s + " == " + tests);
         }
     }
+
+    static final char kArabicZero = 0x0660;
+    static final char kHindiZero  = 0x0966;
+    static final char kLatinZero  = 0x0030;
+
+    public void TestHindiArabicDigits()
+    {
+        String s;
+        char first;
+        String what;
+
+        {
+            DateFormat df = DateFormat.getInstance(new GregorianCalendar(), new Locale("hi","IN"));
+            what = "Gregorian Calendar, hindi";
+            s = df.format(new Date(0)); /* 31/12/1969 */
+            logln(what + "=" + s);
+            first = s.charAt(0);
+            if(first<kHindiZero || first>(kHindiZero+9)) {
+                errln(what + "- wrong digit,  got " + s + " (integer digit value " + new Integer((int)first).toString());
+            }
+        }
+
+        {
+            DateFormat df = DateFormat.getInstance(new IslamicCalendar(), new Locale("ar","IQ"));
+            s = df.format(new Date(0)); /* 21/10/1989 */
+            what = "Islamic Calendar, Arabic";
+            logln(what + ": " + s);
+            first = s.charAt(0);
+            if(first<kArabicZero || first>(kArabicZero+9)) {
+                errln(what + " wrong digit, got " + s + " (integer digit value " + new Integer((int)first).toString());
+            }
+        }
+
+        {
+            DateFormat df = DateFormat.getInstance(new GregorianCalendar(), new Locale("ar","IQ"));
+            s = df.format(new Date(0)); /* 31/12/1969 */
+            what = "Gregorian,  ar_IQ, df.getInstance";
+            logln(what + ": " + s);
+            first = s.charAt(0);
+            if(first<kArabicZero || first>(kArabicZero+9)) {
+                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer((int)first).toString());
+            }
+        }
+        {
+            DateFormat df = DateFormat.getInstance(new GregorianCalendar(), new Locale("mt","MT"));
+            s = df.format(new Date(0)); /* 31/12/1969 */
+            what = "Gregorian,  mt_MT, df.getInstance";
+            logln(what + ": " + s);
+            first = s.charAt(0);
+            if(first<kLatinZero || first>(kLatinZero+9)) {
+                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer((int)first).toString());
+            }
+        }
+
+        {
+            DateFormat df = DateFormat.getInstance(new IslamicCalendar(), new Locale("ar","IQ"));
+            s = df.format(new Date(0)); /* 31/12/1969 */
+            what = "Islamic calendar, ar_IQ, df.getInstance";
+            logln(what+ ": " + s);
+            first = s.charAt(0);
+            if(first<kArabicZero || first>(kArabicZero+9)) {
+                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer((int)first).toString());
+            }
+        }
+
+        {
+            DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, new Locale("ar","IQ"));
+            s = df.format(new Date(0)); /* 31/12/1969 */
+            what = "ar_IQ, getDateTimeInstance";
+            logln(what+ ": " + s);
+            first = s.charAt(0);
+            if(first<kArabicZero || first>(kArabicZero+9)) {
+                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer((int)first).toString());
+            }
+        }
+
+        {
+            DateFormat df = DateFormat.getInstance(new JapaneseCalendar(), new Locale("ar","IQ"));
+            s = df.format(new Date(0)); /* 31/12/1969 */
+            what = "ar_IQ, Japanese Calendar, getInstance";
+            logln(what+ ": " + s);
+            first = s.charAt(0);
+            if(first<kArabicZero || first>(kArabicZero+9)) {
+                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer((int)first).toString());
+            }
+        }
+    }
 }
