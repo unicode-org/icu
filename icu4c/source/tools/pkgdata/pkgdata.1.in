@@ -194,7 +194,9 @@ Specify options for the builder. The builder is used internally by
 to generate the correct packaged file. Such options include, but are
 not limited to, setting variables used by
 .BR make (1)
-during the build of the packaged file.
+during the build of the packaged file. Note: If 
+.BR icu-config 
+is available, then this option is not needed.
 .TP
 .BI "\-p\fP, \fB\-\-name" " name"
 Set the packaged file name to
