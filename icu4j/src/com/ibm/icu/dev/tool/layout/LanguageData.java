@@ -6,7 +6,7 @@
  *
  * Created on Apr 4, 2003
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/LanguageData.java,v $ $Date: 2003/04/15 01:23:49 $ $Revision: 1.1 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/LanguageData.java,v $ $Date: 2003/04/15 20:15:53 $ $Revision: 1.2 $
  * 
  *******************************************************************************
  */
@@ -40,6 +40,16 @@ public class LanguageData
         {
             return name;
         }
+        
+        public String label()
+        {
+            return TagUtilities.tagLabel(tag);
+        }
+        
+        public String makeTag()
+        {
+            return TagUtilities.makeTag(tag);
+        }
     }
         
     /*
@@ -48,7 +58,7 @@ public class LanguageData
      */
     private Record[] languages =
     {
-        new Record("",    "(Default)"),
+        new Record("",    "null"),
         new Record("ARA", "Arabic"),
         new Record("ASM", "Assamese"),
         new Record("BEN", "Bengali"),
@@ -81,7 +91,7 @@ public class LanguageData
     };
     
     private int minLanguage = 0;
-    private int maxLanguage = languages.length - 1;
+    private int maxLanguage = minLanguage + languages.length - 1;
     
     public int getMinLanguage()
     {
@@ -93,38 +103,38 @@ public class LanguageData
         return maxLanguage;
     }
     
-    public String getLanguageTag(int i)
+    public String getLanguageTag(int language)
     {
-        if (i < minLanguage || i > maxLanguage) {
+        if (language < minLanguage || language > maxLanguage) {
             return null;
         }
         
-        return languages[i - minLanguage].tag();
+        return languages[language - minLanguage].tag();
     }
     
-    public String getLanguageTagLabel(int i)
+    public String getLanguageTagLabel(int language)
     {
-        if (i < minLanguage || i > maxLanguage) {
+        if (language < minLanguage || language > maxLanguage) {
             return null;
         }
         
-        return TagUtilities.tagLabel(languages[i - minLanguage].tag());
+        return languages[language - minLanguage].label();
     }
     
-    public String makeLanguageTag(int i)
+    public String makeLanguageTag(int language)
     {
-        if (i < minLanguage || i > maxLanguage) {
+        if (language < minLanguage || language > maxLanguage) {
             return null;
         }
         
-        return TagUtilities.makeTag(languages[i - minLanguage].tag());
+        return languages[language - minLanguage].makeTag();
     }
     
-    public String getLanguageName(int i) {
-        if (i < minLanguage || i > maxLanguage) {
-            return "UNKNOWN";
+    public String getLanguageName(int language) {
+        if (language < minLanguage || language > maxLanguage) {
+            return "(UNKNOWN)";
         }
         
-        return languages[i - minLanguage].name();
+        return languages[language - minLanguage].name();
     }
 }
