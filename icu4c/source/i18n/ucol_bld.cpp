@@ -251,7 +251,9 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokListHeader *lh) {
 }
 
 U_CFUNC uint32_t ucol_getNextGenerated(ucolCEGenerator *g, UErrorCode *status) {
+  if(U_SUCCESS(*status)) {
   g->current = ucol_nextWeight(g->ranges, &g->noOfRanges);
+  }
   return g->current;
 }
 
@@ -293,8 +295,8 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
   uint32_t count = tok->toInsert+(fbHigh[strength]-fbLow[strength]);
 
   if(low == high && strength > UCOL_PRIMARY) {
-    uint32_t s = strength;
-    while(s >= UCOL_PRIMARY) {
+    int32_t s = strength;
+    for(;;) {
       s--;
       if(lows[fStrength*3+s] != highs[fStrength*3+s]) {
         if(strength == UCOL_SECONDARY) {
@@ -305,6 +307,10 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
           high = 0x40000000;
         }
         break;
+      }
+      if(s<0) {
+        *status = U_INTERNAL_PROGRAM_ERROR;
+        return 0;
       }
     }
   } 
@@ -553,17 +559,11 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
     }
 
     /* copy UChars */
-/*
-      key.source = newCharsLen << 24 | charsOffset;
-      key.expansion = newExtensionsLen << 24 | extensionOffset;
-*/
+
     UChar buff[128];
     uint32_t decompSize;
     uprv_memcpy(buff, (tok->source & 0x00FFFFFF) + src->source, (tok->source >> 24)*sizeof(UChar));
     decompSize = unorm_normalize(buff, tok->source >> 24, UNORM_NFD, 0, el.uchars, 128, status);
-    /*uprv_memcpy(el.uchars, (tok->source & 0x00FFFFFF) + src->source, (tok->source >> 24)*sizeof(UChar));*/
-    /* I think I don't want to have expansion chars in chars for UCAelement... HMMM! */
-    /*uprv_memcpy(el.uchars+(tok->source >> 24), (tok->expansion & 0x00FFFFFF) + src->source, (tok->expansion >> 24)*sizeof(UChar));*/
     el.cSize = decompSize; /*(tok->source >> 24); *//* + (tok->expansion >> 24);*/
     el.cPoints = el.uchars;
 
@@ -848,7 +848,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
   UCATableHeader *myData = NULL;
   {
     UChar decomp[256];
-    uint32_t noOfDec = 0, i = 0, CE = UCOL_NOT_FOUND;
+    uint32_t noOfDec = 0, CE = UCOL_NOT_FOUND;
     UChar u = 0;
     UCAElements el;
     el.isThai = FALSE;

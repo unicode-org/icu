@@ -245,10 +245,9 @@ struct incrementalContext {
           (result) = ucmp32_get((coll)->mapping, ch);                        \
         }                                                                    \
       if ((order) >= UCOL_NOT_FOUND) {                                       \
-        (order) = getSpecialPrevCE((coll), (order), &(data), (length),       \
-                                                             (status));      \
+        (order) = getSpecialPrevCE((coll), (order), &(data), (status));      \
         if ((order) == UCOL_NOT_FOUND) {                                     \
-          (order) = ucol_getPrevUCA(ch, &(data), (length), (status));        \
+          (order) = ucol_getPrevUCA(ch, &(data), (status));                  \
         }                                                                    \
       }                                                                      \
     }                                                                        \
@@ -297,12 +296,10 @@ struct incrementalContext {
 
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status);
 uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE, 
-                          collIterate *source, uint32_t length, 
-                          UErrorCode *status);
+                          collIterate *source, UErrorCode *status);
 U_CFUNC uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
 uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
-uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource, 
-                         uint32_t length, UErrorCode *status);
+uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
 
 void incctx_cleanUpContext(incrementalContext *ctx);
 UChar incctx_appendChar(incrementalContext *ctx, UChar c);

@@ -26,11 +26,9 @@
 #include "ucol_elm.h"
 #include "unicode/uchar.h"
 
-void uprv_uca_reverseElement(ExpansionTable *expansions, UCAElements *el) {
-    int32_t i = 0;
+void uprv_uca_reverseElement(UCAElements *el) {
+    uint32_t i = 0;
     UChar temp;
-    uint32_t tempCE = 0, expansion = 0;
-    UErrorCode status = U_ZERO_ERROR;
 
     for(i = 0; i<el->cSize/2; i++) {
         temp = el->cPoints[i];
@@ -40,6 +38,8 @@ void uprv_uca_reverseElement(ExpansionTable *expansions, UCAElements *el) {
 
 #if 0
     /* Syn Wee does not need reversed expansions at all */
+    UErrorCode status = U_ZERO_ERROR;
+    uint32_t tempCE = 0, expansion = 0;
     if(el->noOfCEs>1) { /* this is an expansion that needs to be reversed and added - also, we need to change the mapValue */
     uint32_t buffer[256];
 #if 0
@@ -335,7 +335,7 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
   ExpansionTable *expansions = t->expansions;
   CntTable *contractions = t->contractions; 
 
-  int32_t i = 1;
+  uint32_t i = 1;
   uint32_t expansion = 0;
   uint32_t CE;
 
@@ -352,7 +352,6 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
       element->mapCE = expansion;
     }
   } else {     
-    static int count = 0;
     expansion = UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
       | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(paddedsize(sizeof(UCATableHeader))>>2))<<4)
       & 0xFFFFF0;
@@ -378,7 +377,7 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
   CE = ucmp32_get(mapping, element->cPoints[0]);
 
   if(element->cSize > 1) { /* we're adding a contraction */
-    int32_t  i;
+    uint32_t  i;
     for (i=1; i<element->cSize; i++) {   /* First add contraction chars to unsafe CP hash table */
         unsafeCPSet(t->unsafeCP, element->cPoints[i]);
     }
@@ -395,7 +394,7 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
       ucmp32_set(mapping, element->cPoints[0], result);
     }
     /* add the reverse order */
-    uprv_uca_reverseElement(expansions, element);
+    uprv_uca_reverseElement(element);
     CE = ucmp32_get(mapping, element->cPoints[0]);
     result = uprv_uca_processContraction(contractions, element, CE, FALSE, status);
     if(CE == UCOL_NOT_FOUND || !isContraction(CE)) {

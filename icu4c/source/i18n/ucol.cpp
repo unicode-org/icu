@@ -678,7 +678,7 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
 * of implicit CEs                              
 */
 uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource, 
-                         uint32_t length, UErrorCode *status) 
+                         UErrorCode *status) 
 {
   uint32_t order;
   if (ch < 0xFF) {
@@ -689,7 +689,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
   }
   
   if (order >= UCOL_NOT_FOUND) {
-    order = getSpecialPrevCE(UCA, order, collationSource, length, status); 
+    order = getSpecialPrevCE(UCA, order, collationSource, status); 
   }
   
   if (order == UCOL_NOT_FOUND) 
@@ -992,7 +992,7 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
 * It is called by both getPrevCE and getPrevUCA                        
 */
 uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE, 
-                          collIterate *source, uint32_t length, 
+                          collIterate *source, 
                           UErrorCode *status) 
 {
         uint32_t count        = 0;
@@ -1266,7 +1266,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     uint8_t UCOL_COMMON_BOT4 = (uint8_t)(variableMax1+1);
     uint8_t UCOL_BOT_COUNT4 = (uint8_t)(0xFF - UCOL_COMMON_BOT4);
 
-    int32_t order = UCOL_NO_MORE_CES;
+    uint32_t order = UCOL_NO_MORE_CES;
     uint8_t primary1 = 0;
     uint8_t primary2 = 0;
     uint32_t ce = 0;
@@ -1472,7 +1472,6 @@ ucol_calcSortKey(const    UCollator    *coll,
     UBool  compareIdent = (strength == UCOL_IDENTICAL);
     UBool  doCase = (coll->caseLevel == UCOL_ON);
     UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
-    UBool  upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST) && (compareTer == 0);
     UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
     UBool  qShifted = shifted && (compareQuad == 0);
     const uint8_t *scriptOrder = coll->scriptOrder;
@@ -1989,7 +1988,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
     uint32_t secSize = UCOL_SECONDARY_MAX_BUFFER, terSize = UCOL_TERTIARY_MAX_BUFFER;
 
-    int32_t sortKeySize = 3; /* it is always \0 terminated plus separators for secondary and tertiary */
+    uint32_t sortKeySize = 3; /* it is always \0 terminated plus separators for secondary and tertiary */
 
     UChar normBuffer[UCOL_NORMALIZATION_MAX_BUFFER];
     UChar *normSource = normBuffer;
@@ -2251,7 +2250,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
 /* this function makes a string with representation of a sortkey */
 U_CAPI char U_EXPORT2 *ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len) {
-  uint32_t strength = UCOL_PRIMARY;
+  int32_t strength = UCOL_PRIMARY;
   uint32_t res_size = 0;
   UBool doneCase = FALSE;
 
@@ -2302,6 +2301,10 @@ U_CAPI char U_EXPORT2 *ucol_sortKeyToString(const UCollator *coll, const uint8_t
   }
   sprintf(current, "]");
   current += 3;
+
+  if(res_size > *len) {
+    return NULL;
+  }
 
   return buffer;
 
@@ -2622,7 +2625,7 @@ U_CAPI int32_t
 ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen) {
   int32_t len = 0;
   int32_t UCAlen = 0;
-  const UChar* ucaRules;
+  const UChar* ucaRules = 0;
   const UChar *rules = ucol_getRules(coll, &len);
   if(delta == UCOL_FULL_RULES) {
     UErrorCode status = U_ZERO_ERROR;
@@ -2887,7 +2890,6 @@ ucol_strcoll(    const    UCollator    *coll,
     UBool checkIdent = (strength == UCOL_IDENTICAL);
     UBool checkCase = (coll->caseLevel == UCOL_ON);
     UBool isFrenchSec = (coll->frenchCollation == UCOL_ON) && checkSecTer;
-    UBool upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST) && checkTertiary;
     UBool shifted = (coll->alternateHandling == UCOL_SHIFTED);
     UBool qShifted = shifted && checkQuad;
 
@@ -3536,11 +3538,6 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
     UCollationResult result = UCOL_EQUAL;
     UErrorCode status = U_ZERO_ERROR;
 
-    UChar normSource[UCOL_MAX_BUFFER], normTarget[UCOL_MAX_BUFFER];
-    UChar *normSourceP = normSource;
-    UChar *normTargetP = normTarget;
-    uint32_t normSourceLength = UCOL_MAX_BUFFER, normTargetLength = UCOL_MAX_BUFFER;
-
     if(coll->normalizationMode != UCOL_OFF) { /*  run away screaming!!!! */
         return alternateIncrementalProcessing(coll, &sColl, &tColl);
     }
@@ -3554,7 +3551,6 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
     UBool checkIdent = (strength == UCOL_IDENTICAL);
     UBool checkCase = (coll->caseLevel == UCOL_ON);
     UBool isFrenchSec = (coll->frenchCollation == UCOL_ON) && checkSecTer;
-    UBool upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST) && checkTertiary;
     UBool shifted = (coll->alternateHandling == UCOL_SHIFTED);
     UBool qShifted = shifted && checkQuad;
 
@@ -4195,8 +4191,7 @@ uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, U
 
 
 int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, uint32_t CE, incrementalContext *source, UErrorCode *status) {
-  int32_t i = 0; /* general counter */
-  uint32_t firstCE = UCOL_NOT_FOUND;
+  uint32_t i = 0; /* general counter */
 
   if(U_FAILURE(*status)) return -1;
 

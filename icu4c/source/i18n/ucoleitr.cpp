@@ -201,9 +201,9 @@ ucol_previous(UCollationElements *elems,
                                                                        
         if ((result) >= UCOL_NOT_FOUND) 
         {
-          (result) = getSpecialPrevCE(coll, result, data, length, status);      
+          (result) = getSpecialPrevCE(coll, result, data, status);      
           if ((result) == UCOL_NOT_FOUND)
-            (result) = ucol_getPrevUCA(ch, data, length, status);                                      
+            (result) = ucol_getPrevUCA(ch, data, status);                                      
         }                                                                      
       }                                                                        
     } 
