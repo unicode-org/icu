@@ -67,7 +67,7 @@ static int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
         orders[size++] = order;
     }
 
-    if (maxSize > size)
+    if (maxSize > size && size > 0)
     {
         temp = (int32_t*)malloc(sizeof(int32_t) * size);
 
@@ -1353,6 +1353,7 @@ static void genericLocaleStarter(const char *locale, const char *s[], uint32_t s
   } else {
     log_err("Unable to open collator for locale %s\n", locale);
   }
+  ucol_close(coll);
 }
 
 static void genericRulesStarterWithOptions(const char *rules, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize) {
@@ -1375,6 +1376,7 @@ static void genericRulesStarterWithOptions(const char *rules, const char *s[], u
   } else {
     log_err("Unable to open collator with rules %s\n", rules);
   }
+  ucol_close(coll);
 }
 
 static void genericRulesStarter(const char *rules, const char *s[], uint32_t size) {
@@ -1391,6 +1393,7 @@ static void genericRulesStarter(const char *rules, const char *s[], uint32_t siz
   } else {
     log_err("Unable to open collator with rules %s\n", rules);
   }
+  ucol_close(coll);
 }
 
 const static char chTest[][20] = {
@@ -2784,6 +2787,7 @@ static void TestVariableTopSetting() {
   if(status != U_INTERNAL_PROGRAM_ERROR) {
     log_err("Bad reaction to passed error!\n");
   }
+  ucol_close(coll);
 }
 
 static void TestNonChars() {
@@ -2818,6 +2822,7 @@ static void TestNonChars() {
     log_err("Unable to open collator\n");
   }
   
+  ucol_close(coll);
 }
 
 static void TestExtremeCompression() {
