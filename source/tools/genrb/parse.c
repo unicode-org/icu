@@ -498,7 +498,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
         }
     }
 
-    result = string_open(bundle, tag, pTarget, (int32_t)(target - pTarget - 1), NULL, status);
+    result = string_open(bundle, tag, pTarget, (int32_t)(target - pTarget), NULL, status);
 
     ucbuf_close(ucbuf);
     uprv_free(pTarget);
