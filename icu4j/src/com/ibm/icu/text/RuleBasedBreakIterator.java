@@ -79,7 +79,14 @@ public class RuleBasedBreakIterator extends BreakIterator {
         RuleBasedBreakIterator result = (RuleBasedBreakIterator) super.clone();
         result.delegatedThis = result;
         if (delegatedThis != this) {
-        	result.delegatedThis = (RuleBasedBreakIterator) delegatedThis.clone();
+            // We will come here if "this" is an actual RuleBasedBreakIterator that
+            //  was instantiated via a constructor.  In this situation, delegatedThis
+            //  refers to a separately instantiated RuleBasedBreakIterator_old, to
+            //  which all operations are delegated.  For the more common case of a
+            //  break iterator instantiated from one of the factory methods, the
+            //  actual object type is RuleBasedBreakIterator_New, and delegatedThis
+            //  for the object refers to itself.
+            result.delegatedThis = (RuleBasedBreakIterator) delegatedThis.clone();
         }
         return result;
     }
