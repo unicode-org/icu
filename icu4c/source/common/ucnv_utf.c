@@ -1377,9 +1377,10 @@ static const UConverterImpl _UTF32BEImpl = {
 
 /** Todo: These numbers are probably in correct. */
 const UConverterStaticData _UTF32BEStaticData = {
-  sizeof(UConverterStaticData),
-"UTF32_BigEndian",
-    1200, UCNV_IBM, UCNV_UTF32_BigEndian, 4, 4,
+    sizeof(UConverterStaticData),
+    "UTF32_BigEndian",
+    0,  /* Should be the UTF-32 CCSID */
+    UCNV_IBM, UCNV_UTF32_BigEndian, 4, 4,
     { 0, 0, 0xff, 0xfd }, 4, FALSE, FALSE,
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 };
@@ -1604,9 +1605,10 @@ static const UConverterImpl _UTF32LEImpl = {
 
 /** Todo: These numbers are probably in correct. */
 const UConverterStaticData _UTF32LEStaticData = {
-  sizeof(UConverterStaticData),
-"UTF32_LittleEndian",
-    1200, UCNV_IBM, UCNV_UTF32_BigEndian, 4, 4,
+    sizeof(UConverterStaticData),
+    "UTF32_LittleEndian",
+    0,  /* Should be the UTF-32 CCSID */
+    UCNV_IBM, UCNV_UTF32_BigEndian, 4, 4,
     { 0xfd, 0xff, 0, 0 }, 4, FALSE, FALSE,
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 };
