@@ -47,13 +47,21 @@ CLEANFILES = *~
 ## Target information
 TARGET = cal
 
+ENABLE_STATIC = @ENABLE_STATIC@
+
+ifneq ($(ENABLE_STATIC),)
+LINK = $(LINK.cc)
+else
+LINK = $(LINK.c)
+endif
+
 DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
 $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/i18n
-LIBS = $(LIBICU-UC) $(LIBICU-I18N) @LIBS@ @LIB_M@
+LIBS = $(LIBICU-I18N) $(LIBICU-UC) @LIBS@ @LIB_M@
 
 OBJECTS = uprint.o cal.o
 
@@ -94,7 +102,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.c) -o $@ $^ $(LIBS)
+	$(LINK) -o $@ $^ $(LIBS)
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)

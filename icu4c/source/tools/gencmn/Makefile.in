@@ -48,13 +48,21 @@ CLEANFILES = *~ mkmap.tmp
 ## Target information
 TARGET = gencmn
 
+ENABLE_STATIC = @ENABLE_STATIC@
+
+ifneq ($(ENABLE_STATIC),)
+LINK = $(LINK.cc)
+else
+LINK = $(LINK.c)
+endif
+
 DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
 $(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/toolutil@ld_rpath_suf@$(LD_RPATH_PRE)$(libdir)
-LIBS = $(LIBICU-UC)  @LIBS@ @LIB_M@   $(LIBICU-TOOLUTIL)
+LIBS = $(LIBICU-TOOLUTIL) $(LIBICU-UC) @LIBS@ @LIB_M@
 
 OBJECTS = gencmn.o
 
@@ -99,7 +107,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.c) -o $@ $^ $(LIBS) 
+	$(LINK) -o $@ $^ $(LIBS) 
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
