@@ -6,11 +6,11 @@
 #   If you are thinking of modifying this file, READ THIS. 
 #
 # Instead of changing this file [unless you want to check it back in],
-# you should consider creating a 'genrblocal.mk' file in this same directory.
+# you should consider creating a 'reslocal.mk' file in this same directory.
 # Then, you can have your local changes remain even if you upgrade or re
 # configure the ICU.
 #
-# Example 'genrblocal.mk' files:
+# Example 'reslocal.mk' files:
 #
 #  * To add an additional converter to the list: 
 #    _____________________________________________________
@@ -19,7 +19,7 @@
 #  * To REPLACE the default list and only build with a few
 #     converters:
 #    _____________________________________________________
-#    |  GENRB_SOURCE =default.txt index.txt ar.txt ar_AE.txt
+#    |  GENRB_SOURCE = root.txt index.txt ar.txt ar_AE.txt
 #
 #
 
