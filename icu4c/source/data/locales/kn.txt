@@ -55,7 +55,7 @@ kn {
   ""
  }
 
- MonthAbbreviation{
+ MonthAbbreviations{
   "\u0C9C\u0CA8\u0CB5\u0CB0\u0CC0",
   "\u0CAB\u0CC6\u0CAC\u0CCD\u0CB0\u0CB5\u0CB0\u0CC0",
   "\u0CAE\u0CBE\u0CB0\u0CCD\u0C9A\u0CCD",

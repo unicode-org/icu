@@ -50,7 +50,7 @@ pa {
   ""
  }
 
- MonthAbbreviation{
+ MonthAbbreviations{
   "\u0A1C\u0A28\u0A35\u0A30\u0A40",
   "\u0A5E\u0A30\u0A35\u0A30\u0A40",
   "\u0A2E\u0A3E\u0A30\u0A1A",

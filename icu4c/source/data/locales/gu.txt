@@ -51,7 +51,7 @@ gu {
   ""
  }
 
- MonthAbbreviation{
+ MonthAbbreviations {
   "\u0A9C\u0ABE\u0AA8\u0ACD\u0AAF\u0AC1",
   "\u0AAB\u0AC7\u0AAC\u0ACD\u0AB0\u0AC1",
   "\u0AAE\u0ABE\u0AB0\u0ACD\u0A9A",
