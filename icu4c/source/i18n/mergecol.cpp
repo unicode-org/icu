@@ -309,11 +309,6 @@ void MergeCollation::addPattern(const   UnicodeString&  pattern,
 
       entry = parser->next(success);
 
-      if (entry == (PatternEntry *)0x032ac2c0)
-      {
-            int i=0;
-      }
-    }
   // WEIV tentatively - is there a leak at the end???
   delete parser;
 }
