@@ -1486,6 +1486,7 @@ static struct {
   const char *v; /* value */
   const char *x; /* expected */
 } kwSetTestCases[] = {
+#if 1
   { "en_US", "calendar", "japanese", "en_US@calendar=japanese" },
   { "en_US@", "calendar", "japanese", "en_US@calendar=japanese" },
   { "en_US@calendar=islamic", "calendar", "japanese", "en_US@calendar=japanese" },
@@ -1494,14 +1495,42 @@ static struct {
   { "de", "Currency", "CHF", "de@currency=CHF" },
   { "de", "Currency", "CHF", "de@currency=CHF" },
 
-  { "en_US@collation=phonebook", "calendar", "japanese", "en_US@collation=phonebook;calendar=japanese" },
+  { "en_US@collation=phonebook", "calendar", "japanese", "en_US@calendar=japanese;collation=phonebook" },
+  { "en_US@calendar=japanese", "collation", "phonebook", "en_US@calendar=japanese;collation=phonebook" },
   { "de@collation=phonebook", "Currency", "CHF", "de@collation=phonebook;currency=CHF" },
   { "en_US@calendar=gregorian;collation=phonebook", "calendar", "japanese", "en_US@calendar=japanese;collation=phonebook" },
   { "en_US@calendar=slovakian;collation=phonebook", "calendar", "gregorian", "en_US@calendar=gregorian;collation=phonebook" }, /* don't know what this means, but it has the same # of chars as gregorian */
-  { "en_US@collation=phonebook;calendar=slovakian", "calendar", "gregorian", "en_US@collation=phonebook;calendar=gregorian" }, /* don't know what this means, but it has the same # of chars as gregorian */
+  { "en_US@calendar=slovakian;collation=videobook", "collation", "phonebook", "en_US@calendar=slovakian;collation=phonebook" }, /* don't know what this means, but it has the same # of chars as gregorian */
   { "en_US@calendar=islamic;collation=phonebook", "calendar", "japanese", "en_US@calendar=japanese;collation=phonebook" },
+  { "de@collation=phonebook", "Currency", "CHF", "de@collation=phonebook;currency=CHF" },
+#endif
+#if 1
+  { "mt@a=0;b=1;c=2;d=3", "c","j", "mt@a=0;b=1;c=j;d=3" },
+  { "mt@a=0;b=1;c=2;d=3", "x","j", "mt@a=0;b=1;c=2;d=3;x=j" },
+  { "mt@a=0;b=1;c=2;d=3", "a","f", "mt@a=f;b=1;c=2;d=3" },
+  { "mt@a=0;aa=1;aaa=3", "a","x", "mt@a=x;aa=1;aaa=3" },
+  { "mt@a=0;aa=1;aaa=3", "aa","x", "mt@a=0;aa=x;aaa=3" },
+  { "mt@a=0;aa=1;aaa=3", "aaa","x", "mt@a=0;aa=1;aaa=x" },
+  { "mt@a=0;aa=1;aaa=3", "a","yy", "mt@a=yy;aa=1;aaa=3" },
+  { "mt@a=0;aa=1;aaa=3", "aa","yy", "mt@a=0;aa=yy;aaa=3" },
+  { "mt@a=0;aa=1;aaa=3", "aaa","yy", "mt@a=0;aa=1;aaa=yy" },
+#endif
+#if 1
+  /* removal tests */
+  /* 1. removal of item at end */
+  { "de@collation=phonebook;currency=CHF", "currency",   "", "de@collation=phonebook" },
+  { "de@collation=phonebook;currency=CHF", "currency", NULL, "de@collation=phonebook" },
+  /* 2. removal of item at beginning */
+  { "de@collation=phonebook;currency=CHF", "collation", "", "de@currency=CHF" },
+  { "de@collation=phonebook;currency=CHF", "collation", NULL, "de@currency=CHF" },
+  /* 3. removal of an item not there */
+  { "de@collation=phonebook;currency=CHF", "calendar", NULL, "de@collation=phonebook;currency=CHF" },
+  /* 4. removal of only item */
+  { "de@collation=phonebook", "collation", NULL, "de" },
+#endif
   { "de@collation=phonebook", "Currency", "CHF", "de@collation=phonebook;currency=CHF" }
 };
+
 
 static void TestKeywordSet(void)
 {
@@ -1509,21 +1538,33 @@ static void TestKeywordSet(void)
     int32_t resultLen = 0;
     char buffer[1024];
 
+    char cbuffer[1024];
+
     for(i = 0; i < sizeof(kwSetTestCases)/sizeof(kwSetTestCases[0]); i++) {
         UErrorCode status = U_ZERO_ERROR;
         memset(buffer,'%',1023);
         strcpy(buffer, kwSetTestCases[i].l);
+
+        uloc_canonicalize(kwSetTestCases[i].l, cbuffer, 1023, &status);
+        if(strcmp(buffer,cbuffer)) {
+          log_verbose("note: [%d] wasn't canonical, should be: '%s' not '%s'. Won't check for canonicity in output.\n", i, cbuffer, buffer);
+        }
+          /* sanity check test case results for canonicity */
+        uloc_canonicalize(kwSetTestCases[i].x, cbuffer, 1023, &status);
+        if(strcmp(kwSetTestCases[i].x,cbuffer)) {
+          log_err("%s:%d: ERROR: kwSetTestCases[%d].x = '%s', should be %s (must be canonical)\n", __FILE__, __LINE__, i, kwSetTestCases[i].x, cbuffer);
+        }
+
         resultLen = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, 1023, &status);
         if(U_FAILURE(status)) {
-            log_err("Err on test case %d: got error %s\n", i, u_errorName(status));
-            continue;
+          log_err("Err on test case %d: got error %s\n", i, u_errorName(status));
+          continue;
         }
         if(strcmp(buffer,kwSetTestCases[i].x) || (strlen(buffer)!=resultLen)) {
-            log_err("FAIL: #%d: %s + [%s=%s] -> %s (%d) expected %s (%d)\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k,
-                kwSetTestCases[i].v, buffer, resultLen, kwSetTestCases[i].x, strlen(buffer));
+          log_err("FAIL: #%d: %s + [%s=%s] -> %s (%d) expected %s (%d)\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k,
+                  kwSetTestCases[i].v, buffer, resultLen, kwSetTestCases[i].x, strlen(buffer));
         } else {
-            log_verbose("pass: #%d: %s + [%s=%s] -> %s\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v,
-                buffer);
+          log_verbose("pass: #%d: %s + [%s=%s] -> %s\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v,buffer);
         }
     }
 }
