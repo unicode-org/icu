@@ -39,12 +39,8 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
         case 1: name = "collate"; 
                 if (exec) {
                     logln("TestSuite Collator----"); logln();
-                    logln("Is currently not being executed---");
-                    /*
-                    synwee TODO
                     IntlTestCollator test;
                     callTest( test, par );
-                    */
                 }
                 break;
 
