@@ -1006,7 +1006,7 @@ static void TestAlias() {
         { "UTF-32BE", "UTF32_BigEndian" },
         { "UTF-32LE", "UTF32_LittleEndian" },
         { "UTF-32",   "ISO-10646-UCS-4" },
-        { "UTF-32",   "UTF32_PlatformEndian" },
+        { "UTF32_PlatformEndian", "UTF32_PlatformEndian" },
         { "UTF-32",   "ucs-4" }
     };
     int32_t CONVERTERS_NAMES_LENGTH = sizeof(CONVERTERS_NAMES) / sizeof(*CONVERTERS_NAMES);
