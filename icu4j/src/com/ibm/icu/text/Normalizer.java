@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2000/03/10 04:07:21 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/07/12 16:40:58 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -422,7 +422,7 @@ public final class Normalizer {
 
             out("Got char " + hex(ch) + ", type=" + type + ", index=" + index);
 
-            if (type == ComposeData.BASE || type == ComposeData.EXPLODING_BASE && index < minExplode) {
+            if (type == ComposeData.BASE || type == ComposeData.NON_COMPOSING_COMBINING && index < minExplode) {
                 classesSeen = 0;
                 baseIndex = index;
                 basePos = result.length();
@@ -576,7 +576,7 @@ public final class Normalizer {
             int type = charInfo & ComposeData.TYPE_MASK;
             int index = charInfo >>> ComposeData.INDEX_SHIFT;
 
-            if (type == ComposeData.BASE || type == ComposeData.EXPLODING_BASE && index < minExplode) {
+            if (type == ComposeData.BASE || type == ComposeData.NON_COMPOSING_COMBINING && index < minExplode) {
                 if (buffer.length() > 0 && chFromText && explodePos == EMPTY) {
                     // When we hit a base char in the source text, we can return the text
                     // that's been composed so far.  We'll re-process this char next time through.
@@ -760,7 +760,7 @@ public final class Normalizer {
             int charInfo = composeLookup(ch);
             int type = charInfo & ComposeData.TYPE_MASK;
 
-            if (type == ComposeData.BASE || type == ComposeData.EXPLODING_BASE || type == ComposeData.HANGUL
+            if (type == ComposeData.BASE || type == ComposeData.NON_COMPOSING_COMBINING || type == ComposeData.HANGUL
                 || type == ComposeData.INITIAL_JAMO || type == ComposeData.IGNORE)
             {
                 break;
