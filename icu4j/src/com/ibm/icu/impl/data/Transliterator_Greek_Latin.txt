@@ -3,14 +3,14 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Greek_Latin.txt,v $
-# $Date: 2002/07/21 08:39:23 $
-# $Revision: 1.21 $
+# $Date: 2004/04/16 14:16:48 $
+# $Revision: 1.22 $
 #--------------------------------------------------------------------
 
 # Rules are predicated on running NFD first, and NFC afterwards
 # :: [\u0000-\u007F \u0370-\u03FF [:Greek:] [:nonspacing mark:]] ;
 # MINIMAL FILTER GENERATED FOR: Greek-Latin
-:: [;\u00B5\u00B7\u00C4\u00CB\u00CF\u00D6\u00DC\u00E4\u00EB\u00EF\u00F6\u00FC\u00FF-\u0101\u0112-\u0113\u012A-\u012B\u014C-\u014D\u016A-\u016B\u0178\u01D5-\u01DC\u01DE-\u01E3\u01EC-\u01ED\u022A-\u022D\u0230-\u0233\u0304\u0308\u0313-\u0314\u0342-\u0345\u037A\u037E\u0386-\u038A\u038C\u038E-\u03A1\u03A3-\u03CE\u03D0-\u03D7\u03DB\u03DD\u03DF\u03E1\u03E3\u03E5\u03E7\u03E9\u03EB\u03ED\u03EF-\u03F5\u0401\u0407\u0451\u0457\u04D2-\u04D3\u04DA-\u04DF\u04E2-\u04E7\u04EA-\u04F1\u04F4-\u04F5\u04F8-\u04F9\u1E14-\u1E17\u1E20-\u1E21\u1E26-\u1E27\u1E2E-\u1E2F\u1E38-\u1E39\u1E4E-\u1E53\u1E5C-\u1E5D\u1E7A-\u1E7B\u1E84-\u1E85\u1E8C-\u1E8D\u1E97\u1F00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC1-\u1FC4\u1FC6-\u1FCC\u1FCF-\u1FD3\u1FD6-\u1FDB\u1FDF-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u2126] ;
+:: [;\u00B5\u00B7\u00C4\u00CB\u00CF\u00D6\u00DC\u00E4\u00EB\u00EF\u00F6\u00FC\u00FF-\u0101\u0112-\u0113\u012A-\u012B\u014C-\u014D\u016A-\u016B\u0178\u01D5-\u01DC\u01DE-\u01E3\u01EC-\u01ED\u022A-\u022D\u0230-\u0233\u0304\u0308\u0313-\u0314\u0342-\u0345\u037A\u037E\u0386-\u038A\u038C\u038E-\u03A1\u03A3-\u03CE\u03D0-\u03D7\u03DB\u03DD\u03DF\u03E1\u03E3\u03E5\u03E7\u03E9\u03EB\u03ED\u03EF-\u03F5\u03F7-\u07FB\u0401\u0407\u0451\u0457\u04D2-\u04D3\u04DA-\u04DF\u04E2-\u04E7\u04EA-\u04F1\u04F4-\u04F5\u04F8-\u04F9\u1E14-\u1E17\u1E20-\u1E21\u1E26-\u1E27\u1E2E-\u1E2F\u1E38-\u1E39\u1E4E-\u1E53\u1E5C-\u1E5D\u1E7A-\u1E7B\u1E84-\u1E85\u1E8C-\u1E8D\u1E97\u1F00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC1-\u1FC4\u1FC6-\u1FCC\u1FCF-\u1FD3\u1FD6-\u1FDB\u1FDF-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u2126\u03F9] ;
 
 :: NFD (NFC) ; 
 
@@ -251,10 +251,16 @@ $smooth > ;
 ρ <> r ; 
 Ρ <> R ; 
 
-# insert separator
+# insert separator before things that turn into s
 
-[Pp] { } ς > \' ; 
-[Pp] { } σ > \' ;
+[Pp] { } [ςσΣϷϸϺϻ] > \' ; 
+
+# special S variants
+
+Ϸ <> Š ; # Ϸ GREEK CAPITAL LETTER SHO Uppercase_Letter Grek - L 
+ϸ <> š ; #ϸ GREEK SMALL LETTER SHO Lowercase_Letter Grek - L 
+Ϻ <> Ŝ ; # Ϻ GREEK CAPITAL LETTER SAN Uppercase_Letter Grek - L 
+ϻ <> ŝ ; # ϻ GREEK SMALL LETTER SAN Lowercase_Letter Grek - L 
 
 # underbar means exception
 
@@ -270,7 +276,7 @@ $afterLetter { ς <> $afterLetter { s ;
 ς <> s $underbar;
 σ <> s ;
 
-[Pp] { Σ <> \'S ; 
+# [Pp] { Σ <> \'S ; 
 Σ <> S ; 
 
 τ <> t ; 
@@ -322,6 +328,7 @@ $rough <> h ;
 ϰ > | κ ;
 ϱ > | ρ ;
 ϲ > | σ ;
+Ϲ > | Σ; #U+03F9 GREEK CAPITAL LUNATE SIGMA SYMBOL
 ϳ > j ;
 ϴ > | Θ ;
 ϵ > | ε ;
