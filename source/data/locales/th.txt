@@ -616,6 +616,6 @@ th {
         "%%alt-ones:\n"
         "  \u0e28\u0e39\u0e19\u0e22\u0e4c;\n"
         "  \u0e40\u0e2d\u0e47\u0e14;\n"
-        "  =%default=;\n";
+        "  =%default=;\n"
     }
 }
