@@ -22,6 +22,7 @@
 #include "putil.h"
 #include "intltest.h"
 #include "strtest.h"
+#include "ustring.h"
 
 void StringTest::TestEndian() {
     union {
@@ -49,6 +50,8 @@ void StringTest::TestCharsetFamily() {
     }
 }
 
+U_STRING_DECL(ustringVar, "aZ0 -", 5);
+
 void StringTest::runIndexedTest(int32_t index, bool_t exec, char *&name, char *par) {
     if(exec) {
         logln("TestSuite Character and String Test: ");
@@ -70,6 +73,23 @@ void StringTest::runIndexedTest(int32_t index, bool_t exec, char *&name, char *p
         name="TestCharsetFamily";
         if(exec) {
             TestCharsetFamily();
+        }
+        break;
+    case 3:
+        name="Test_U_STRING";
+        if(exec) {
+            U_STRING_INIT(ustringVar, "aZ0 -", 5);
+            if( sizeof(ustringVar)/sizeof(*ustringVar)!=6 ||
+                ustringVar[0]!=0x61 ||
+                ustringVar[1]!=0x5a ||
+                ustringVar[2]!=0x30 ||
+                ustringVar[3]!=0x20 ||
+                ustringVar[4]!=0x2d ||
+                ustringVar[5]!=0
+            ) {
+                errln("Test_U_STRING: U_STRING_DECL with U_STRING_INIT does not work right! "
+                      "See putil.h and utypes.h with platform.h.");
+            }
         }
         break;
     default:
