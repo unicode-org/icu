@@ -215,6 +215,7 @@ icu4c/source/test/letest/Release
 icu4c/source/test/letest/tmp
 icu4c/source/test/testdata/Makefile
 icu4c/source/test/testdata/out
+icu4c/source/test/testdata/pkgdata.inc
 icu4c/source/test/testmap/*.d
 icu4c/source/test/testmap/Debug
 icu4c/source/test/testmap/Makefile
