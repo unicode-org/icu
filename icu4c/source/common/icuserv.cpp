@@ -589,13 +589,11 @@ UObject*
 ICUService::get(const UnicodeString& descriptor, UnicodeString* actualReturn, UErrorCode& status) const 
 {
   UObject* result = NULL;
-  if (U_SUCCESS(status)) {
-    Key* key = createKey(&descriptor);
+    Key* key = createKey(&descriptor, status);
     if (key) {
       result = getKey(*key, actualReturn, NULL, status);
       delete key;
     }
-  }
   return result;
 }
 
@@ -843,7 +841,7 @@ ICUService::getVisibleIDs(UVector& result, const UnicodeString* matchID, UErrorC
     Mutex mutex(&ncthis->lock);
     const Hashtable* map = getVisibleIDMap(status);
     if (map != NULL) {
-      Key* fallbackKey = createKey(matchID);
+      Key* fallbackKey = createKey(matchID, status);
 
       for (int32_t pos = 0;;) {
         const UHashElement* e = map->nextElement(pos);
@@ -930,8 +928,9 @@ ICUService::getDisplayName(const UnicodeString& id, UnicodeString& result, const
 UVector& 
 ICUService::getDisplayNames(UVector& result, UErrorCode& status) const 
 {
-	return getDisplayNames(result, Locale::getDefault(), NULL, status);
+  return getDisplayNames(result, Locale::getDefault(), NULL, status);
 }
+
 
 UVector& 
 ICUService::getDisplayNames(UVector& result, const Locale& locale, UErrorCode& status) const 
@@ -987,7 +986,7 @@ ICUService::getDisplayNames(UVector& result,
     }
   }
 
-  Key* matchKey = createKey(matchID);
+  Key* matchKey = createKey(matchID, status);
   int32_t pos = 0;
   const UHashElement *entry = NULL;
   while (entry = dnCache->cache.nextElement(pos)) {
@@ -1009,23 +1008,23 @@ ICUService::getDisplayNames(UVector& result,
 }
 
 const Factory* 
-ICUService::registerObject(UObject* objToAdopt, const UnicodeString& id) 
+ICUService::registerObject(UObject* objToAdopt, const UnicodeString& id, UErrorCode& status) 
 {
-  return registerObject(objToAdopt, id, TRUE);
+  return registerObject(objToAdopt, id, TRUE, status);
 }
 
 const Factory* 
-ICUService::registerObject(UObject* objToAdopt, const UnicodeString& id, UBool visible) 
+ICUService::registerObject(UObject* objToAdopt, const UnicodeString& id, UBool visible, UErrorCode& status) 
 {
-  Key* key = createKey(&id);
+  Key* key = createKey(&id, status);
   if (key != NULL) {
     UnicodeString canonicalID;
     key->canonicalID(canonicalID);
     delete key;
 
-    Factory* f = createSimpleFactory(objToAdopt, canonicalID, visible);
+    Factory* f = createSimpleFactory(objToAdopt, canonicalID, visible, status);
     if (f != NULL) {
-      return registerFactory(f);
+      return registerFactory(f, status);
     }
   }
   delete objToAdopt;
@@ -1033,18 +1032,23 @@ ICUService::registerObject(UObject* objToAdopt, const UnicodeString& id, UBool v
 }
 
 Factory* 
-ICUService::createSimpleFactory(UObject* objToAdopt, const UnicodeString& id, UBool visible)
+ICUService::createSimpleFactory(UObject* objToAdopt, const UnicodeString& id, UBool visible, UErrorCode& status)
 {
-  return new SimpleFactory(objToAdopt, id, visible);
+  if (U_SUCCESS(status)) {
+    if ((objToAdopt != NULL) && (!id.isBogus())) {
+      return new SimpleFactory(objToAdopt, id, visible);
+    }
+    status = U_ILLEGAL_ARGUMENT_ERROR;
+  }
+  return NULL;
 }
 
 const Factory* 
-ICUService::registerFactory(Factory* factoryToAdopt) 
+ICUService::registerFactory(Factory* factoryToAdopt, UErrorCode& status) 
 {
-  if (factoryToAdopt != NULL) {
+  if (U_SUCCESS(status) && factoryToAdopt != NULL) {
     Mutex mutex(&lock);
 
-    UErrorCode status = U_ZERO_ERROR;
     if (factories == NULL) {
       factories = new UVector(deleteUObject, NULL, status);
       if (U_FAILURE(status)) {
@@ -1069,7 +1073,7 @@ ICUService::registerFactory(Factory* factoryToAdopt)
 }
 
 UBool 
-ICUService::unregisterFactory(Factory* factory) 
+ICUService::unregisterFactory(Factory* factory, UErrorCode& status) 
 {
   UBool result = FALSE;
   if (factory != NULL && factories != NULL) {
@@ -1078,6 +1082,9 @@ ICUService::unregisterFactory(Factory* factory)
     if (factories->removeElement(factory)) {
       clearCaches();
       result = TRUE;
+    } else {
+      status = U_ILLEGAL_ARGUMENT_ERROR;
+      delete factory;
     }
   }
   if (result) {
@@ -1108,13 +1115,13 @@ ICUService::reInitializeFactories()
 UBool 
 ICUService::isDefault() const 
 {
-  return factories == NULL || factories->size() == 0;
+  return countFactories() == 0;
 }
 
 Key* 
-ICUService::createKey(const UnicodeString* id) const 
+ICUService::createKey(const UnicodeString* id, UErrorCode& status) const 
 {
-  return id == NULL ? NULL : new Key(*id);
+  return (U_FAILURE(status) || id == NULL) ? NULL : new Key(*id);
 }
 
 void 

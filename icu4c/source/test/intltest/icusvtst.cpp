@@ -99,8 +99,8 @@ const char Integer::fgClassID = '\0';
 // use locale keys
 class TestIntegerService : public ICUService {
     public:
-    Key* createKey(const UnicodeString* id) const {
-        return LocaleKey::createWithCanonicalFallback(id, NULL); // no fallback locale
+    Key* createKey(const UnicodeString* id, UErrorCode& status) const {
+        return LocaleKey::createWithCanonicalFallback(id, NULL, status); // no fallback locale
     }
 
     virtual Factory* createSimpleFactory(UObject* obj, const UnicodeString& id, UBool visible) 
@@ -313,8 +313,9 @@ ICUServiceTest::testAPI_One()
     // register an object with one locale, 
     // search for an object with a more specific locale
     // should return the original object
+	UErrorCode status = U_ZERO_ERROR;
     Integer* singleton0 = new Integer(0);
-    service.registerObject(singleton0, "en_US");
+    service.registerObject(singleton0, "en_US", status);
     {
         UErrorCode status = U_ZERO_ERROR;
         Integer* result = (Integer*)service.get("en_US_FOO", status);
@@ -326,7 +327,7 @@ ICUServiceTest::testAPI_One()
     // search for an object with that locale
     // should return the new object
     Integer* singleton1 = new Integer(1);
-    service.registerObject(singleton1, "en_US_FOO");
+    service.registerObject(singleton1, "en_US_FOO", status);
     {
         UErrorCode status = U_ZERO_ERROR;
         Integer* result = (Integer*)service.get("en_US_FOO", status);
@@ -349,7 +350,7 @@ ICUServiceTest::testAPI_One()
 
     // register a new object with yet another locale
     Integer* singleton2 = new Integer(2);
-    service.registerObject(singleton2, "en");
+    service.registerObject(singleton2, "en", status);
     {
         confirmIdentical("5) factory size", service.countFactories(), 3);
     }
@@ -366,7 +367,7 @@ ICUServiceTest::testAPI_One()
 
     // register a new object with an old id, should hide earlier factory using this id, but leave it there
     Integer* singleton3 = new Integer(3);
-    const Factory* s3factory = service.registerObject(singleton3, "en_US");
+    const Factory* s3factory = service.registerObject(singleton3, "en_US", status);
     {
         confirmIdentical("9) factory size", service.countFactories(), 4);
     }
@@ -383,7 +384,8 @@ ICUServiceTest::testAPI_One()
     // should have fewer factories again
     // singleton3 dead!
     {
-        service.unregisterFactory((Factory*)s3factory);
+		UErrorCode status = U_ZERO_ERROR;
+        service.unregisterFactory((Factory*)s3factory, status);
         confirmIdentical("11) factory size", service.countFactories(), 3);
     }
 
@@ -415,7 +417,7 @@ ICUServiceTest::testAPI_One()
 
     // should be able to register non-canonical strings and get them canonicalized
     Integer* singleton4 = new Integer(4);
-    service.registerObject(singleton4, "eN_ca_dUde");
+    service.registerObject(singleton4, "eN_ca_dUde", status);
     {
         UnicodeString resultID;
         UErrorCode status = U_ZERO_ERROR;
@@ -429,7 +431,7 @@ ICUServiceTest::testAPI_One()
     // be visible by default, but if you know the secret password you
     // can still access these services...
     Integer* singleton5 = new Integer(5);
-    service.registerObject(singleton5, "en_US_BAR", FALSE);
+    service.registerObject(singleton5, "en_US_BAR", FALSE, status);
     {
         UErrorCode status = U_ZERO_ERROR;
         Integer* result = (Integer*)service.get("en_US_BAR", status);
@@ -457,8 +459,8 @@ ICUServiceTest::testAPI_One()
 
 class TestStringService : public ICUService {
     public:
-    Key* createKey(const UnicodeString* id) const {
-        return LocaleKey::createWithCanonicalFallback(id, NULL); // no fallback locale
+    Key* createKey(const UnicodeString* id, UErrorCode& status) const {
+        return LocaleKey::createWithCanonicalFallback(id, NULL, status); // no fallback locale
     }
 
     virtual Factory* createSimpleFactory(UObject* obj, const UnicodeString& id, UBool visible) 
@@ -577,8 +579,9 @@ const char TestMultipleKeyStringFactory::fgClassID = '\0';
 void 
 ICUServiceTest::testAPI_Two()
 {
+	UErrorCode status = U_ZERO_ERROR;
     TestStringService service;
-    service.registerFactory(new AnonymousStringFactory());
+    service.registerFactory(new AnonymousStringFactory(), status);
 
     // anonymous factory will still handle the id
     {
@@ -601,7 +604,7 @@ ICUServiceTest::testAPI_Two()
 
     // we can override for particular ids
     UnicodeString* singleton0 = new UnicodeString("Zero");
-    service.registerObject(singleton0, "en_US_BAR");
+    service.registerObject(singleton0, "en_US_BAR", status);
     {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeString* result = (UnicodeString*)service.get("en_US_BAR", status);
@@ -628,7 +631,7 @@ ICUServiceTest::testAPI_Two()
         int32_t count = sizeof(xids)/sizeof(UnicodeString);
 
         Factory* f = new TestMultipleKeyStringFactory(xids, count, "Later");
-        service.registerFactory(f);
+        service.registerFactory(f, status);
     }
 
 
@@ -686,7 +689,7 @@ ICUServiceTest::testAPI_Two()
         int32_t count = sizeof(xids)/sizeof(UnicodeString);
 
         Factory* f = new TestMultipleKeyStringFactory(xids, count, "Rad dude");
-        service.registerFactory(f);
+        service.registerFactory(f, status);
     }
 
     // this time, we have seven display names
@@ -839,8 +842,9 @@ void
 ICUServiceTest::testRBF()
 {
     // resource bundle factory.
+	UErrorCode status = U_ZERO_ERROR;
     TestStringService service;
-    service.registerFactory(new ICUResourceBundleFactory());
+    service.registerFactory(new ICUResourceBundleFactory(), status);
 
     // list all of the resources 
     {
@@ -867,7 +871,7 @@ ICUServiceTest::testRBF()
         }
     }
 
-    service.registerFactory(new CalifornioLanguageFactory());
+    service.registerFactory(new CalifornioLanguageFactory(), status);
 
     // get all the display names of these resources
     {
@@ -927,9 +931,9 @@ ICUServiceTest::testNotification()
         ls.addListener(&two, status);
 
         logln("registering foo... ");
-        ls.registerObject(new UnicodeString("Foo"), "en_FOO");
+        ls.registerObject(new UnicodeString("Foo"), "en_FOO", status);
         logln("registering bar... ");
-        ls.registerObject(new UnicodeString("Bar"), "en_BAR");
+        ls.registerObject(new UnicodeString("Bar"), "en_BAR", status);
         logln("getting foo...");
         UnicodeString* result = (UnicodeString*)ls.get("en_FOO", status);
         logln(*result);
@@ -938,11 +942,11 @@ ICUServiceTest::testNotification()
         logln("removing listener 2...");
         ls.removeListener(&two, status);
         logln("registering baz...");
-        ls.registerObject(new UnicodeString("Baz"), "en_BAZ");
+        ls.registerObject(new UnicodeString("Baz"), "en_BAZ", status);
         logln("removing listener 1");
         ls.removeListener(&one, status);
         logln("registering burp...");
-        ls.registerObject(new UnicodeString("Burp"), "en_BURP");
+        ls.registerObject(new UnicodeString("Burp"), "en_BURP", status);
 
         // should only get one notification even if register multiple times
         logln("... trying multiple registration");
@@ -950,7 +954,7 @@ ICUServiceTest::testNotification()
         ls.addListener(&one, status);
         ls.addListener(&one, status);
         ls.addListener(&two, status);
-        ls.registerObject(new UnicodeString("Foo"), "en_FOO");
+        ls.registerObject(new UnicodeString("Foo"), "en_FOO", status);
         logln("... registered foo");
     }
 #if 0
@@ -981,6 +985,7 @@ class TestStringLocaleService : public ICULocaleService {
 };
 
 void ICUServiceTest::testLocale() {
+	UErrorCode status = U_ZERO_ERROR;
     TestStringLocaleService service;
 
     UnicodeString* root = new UnicodeString("root");
@@ -989,11 +994,11 @@ void ICUServiceTest::testLocale() {
     UnicodeString* japanese = new UnicodeString("japanese");
     UnicodeString* japan = new UnicodeString("japanese_Japan");
 
-    service.registerObject(root, "");
-    service.registerObject(german, "de");
-    service.registerObject(germany, Locale::getGermany());
-    service.registerObject(japanese, "ja");
-    service.registerObject(japan, Locale::getJapan());
+    service.registerObject(root, "", status);
+    service.registerObject(german, "de", status);
+    service.registerObject(germany, Locale::getGermany(), status);
+    service.registerObject(japanese, "ja", status);
+    service.registerObject(japan, Locale::getJapan(), status);
 
     {
         UErrorCode status = U_ZERO_ERROR;
@@ -1045,8 +1050,8 @@ void ICUServiceTest::testLocale() {
     UnicodeString* one = new UnicodeString("one/de_US");
     UnicodeString* two = new UnicodeString("two/de_US");
 
-    service.registerObject(one, "de_US", 1);
-    service.registerObject(two, "de_US", 2);
+    service.registerObject(one, "de_US", 1, status);
+    service.registerObject(two, "de_US", 2, status);
 
     {
         UErrorCode status = U_ZERO_ERROR;
@@ -1070,10 +1075,11 @@ void ICUServiceTest::testLocale() {
     }
 
     {
+		UErrorCode status = U_ZERO_ERROR;
         UnicodeString english = "en";
         Locale localeResult;
         UnicodeString result;
-        LocaleKey* lkey = LocaleKey::createWithCanonicalFallback(&english, NULL, 1234);
+        LocaleKey* lkey = LocaleKey::createWithCanonicalFallback(&english, NULL, 1234, status);
         logln("lkey prefix: " + lkey->prefix(result));
         result.remove();
         logln("lkey descriptor: " + lkey->currentDescriptor(result));
@@ -1098,7 +1104,6 @@ void ICUServiceTest::testLocale() {
     }
 
     Locale loc = Locale::getDefault();
-    UErrorCode status = U_ZERO_ERROR;
     Locale::setDefault(Locale::getJapanese(), status);
     {
         UErrorCode status = U_ZERO_ERROR;
@@ -1212,9 +1217,9 @@ ICUServiceTest::testWrapFactory()
 {
     UnicodeString* greeting = new UnicodeString("Hello There");
     UnicodeString greetingID = "greeting";
-
+	UErrorCode status = U_ZERO_ERROR;
     TestStringService service;
-    service.registerObject(greeting, greetingID);
+    service.registerObject(greeting, greetingID, status);
 
     {
         UErrorCode status = U_ZERO_ERROR;
@@ -1225,7 +1230,7 @@ ICUServiceTest::testWrapFactory()
         }
     }
 
-    service.registerFactory(new WrapFactory());
+    service.registerFactory(new WrapFactory(), status);
     {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeString* result = (UnicodeString*)service.get(greetingID, status);
