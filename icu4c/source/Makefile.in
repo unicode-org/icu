@@ -27,6 +27,8 @@ include @platform_make_fragment@
 ## Optional directory setup
 @EXTRAS_TRUE@EXTRA = extra
 @EXTRAS_FALSE@EXTRA = 
+@LAYOUT_TRUE@LAYOUT = layout
+@LAYOUT_FALSE@LAYOUT = 
 @TESTS_TRUE@TEST = test
 @TESTS_FALSE@TEST = 
 @SAMPLES_TRUE@SAMPLE = samples
@@ -36,7 +38,7 @@ include @platform_make_fragment@
 CLEANFILES = *~ 
 
 DOCDIRS = common i18n
-SUBDIRS = data common i18n $(EXTRA) tools $(TEST) $(SAMPLE)
+SUBDIRS =  common i18n $(EXTRA) $(LAYOUT) tools data $(TEST) $(SAMPLE)
 
 ## Extra files to install [nothing at present]
 EXTRA_DATA =
