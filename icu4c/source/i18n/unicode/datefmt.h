@@ -124,6 +124,10 @@ class TimeZone;
  *   <li>   Align any particular field, or find out where it is for selection
  *          on the screen.
  * </ul>
+ *
+ * <p><em>User subclasses are not supported.</em> While clients may write
+ * subclasses, such code will not necessarily work and will not be
+ * guaranteed to work stably from release to release.
  */
 class U_I18N_API DateFormat : public Format {
 public:

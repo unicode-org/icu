@@ -83,13 +83,9 @@ class ResourceBundle;
  * retured for methods which take no ParsePosition.  For the method
  * that takes a ParsePosition, the index parameter is left unchanged.
  * <P>
- * [Subclassing.] All base classes that provide static functions that
- * create objects for Locales must implement the following static:
- * <pre>
- * \code
- *       public static const Locale* getAvailableLocales(long&)
- * \endcode
- * </pre>
+ * <em>User subclasses are not supported.</em> While clients may write
+ * subclasses, such code will not necessarily work and will not be
+ * guaranteed to work stably from release to release.
  */
 class U_I18N_API Format : public UObject {
 public:

@@ -550,6 +550,12 @@ class ChoiceFormat;
  *
  * <p>DecimalFormat objects are not synchronized.  Multiple
  * threads should not access one formatter concurrently.
+ *
+ * <p><strong>Subclassing</strong>
+ *
+ * <p><em>User subclasses are not supported.</em> While clients may write
+ * subclasses, such code will not necessarily work and will not be
+ * guaranteed to work stably from release to release.
  */
 class U_I18N_API DecimalFormat: public NumberFormat {
 public:
