@@ -26,8 +26,13 @@ SHLIB.cc=	makeC++SharedLib_r -p 5000
 LD_RPATH=	-I
 LD_RPATH_PRE=	
 
+
+###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
+## Prefix for the ICU library names
+LIBICU = libicu-
 ## Shared object suffix
 SO=		a
+
 
 ## Link commands to link to ICU libs
 LIBICU-UC= 	-L$(top_builddir)/common -licu-uc

@@ -185,7 +185,7 @@ $(COMMONFILE):	$(DATAFILES) gencmn/mkmap.tmp
 	@echo -n Generating common file $(COMMONFILE).  Number of files:
 	-@wc -l gencmn/mkmap.tmp
 	-rm -f $(COMMONFILE)
-	@gencmn/gencmn -c -d $(OBJDATADIR) 1000000 gencmn/mkmap.tmp
+	(cd gencmn ; ./gencmn -c -d ../$(OBJDATADIR) 1000000 mkmap.tmp )
 	-@ls -l $(COMMONFILE)
 
 build-dll: $(DATAFILES) gencmn/mkmap.tmp $(COMMONDLL)
@@ -193,13 +193,13 @@ build-dll: $(DATAFILES) gencmn/mkmap.tmp $(COMMONDLL)
 build-testdlls: $(TESTDATADLL) $(BASEDATADLL) $(BASETESTDATADLL)
 
 %_dat.c: %.dat
-	genccode/genccode $<
+	(cd genccode ; ./genccode ../$< )
 
 %_cnv.c: %.cnv
-	genccode/genccode $<
+	(cd genccode ; ./genccode ../$< )
 
 %_brk.c: %.brk
-	genccode/genccode $<
+	(cd genccode ; ./genccode ../$< )
 
 ## Note: this generates a dummy C++ file to cause the HPUX CC linker
 ## to load exception handling (when requested..) 
@@ -217,7 +217,7 @@ hpux_junk_obj.o: hpux_junk_obj.cpp
 # HPUX_JUNK_OBJ is usually unset except by mh-hpux-cc
 
 $(OBJDATADIR)/icudata_dat.c: $(DATAFILES) gencmn/mkmap.tmp
-	@gencmn/gencmn -S -d $(OBJDATADIR) 1000000 gencmn/mkmap.tmp
+	@(cd gencmn ; gencmn -S -d ../$(OBJDATADIR) 1000000 mkmap.tmp )
 
 $(COMMONDLL): $(OBJDATAFILES) $(HPUX_JUNK_OBJ)
 	$(SHLIB.c) -o $@ $^
