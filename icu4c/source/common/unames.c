@@ -859,6 +859,9 @@ enumNames(UCharNames *names,
             return enumGroupNames(names, group, start, limit-1, fn, context, nameChoice);
         }
     } else {
+        groupCount=*(uint16_t *)((char *)names+names->groupsOffset);
+        groupLimit=(Group *)((char *)names+names->groupsOffset+2)+groupCount;
+
         if(startGroupMSB==group->groupMSB) {
             /* enumerate characters in the partial start group */
             if((start&GROUP_MASK)!=0) {
@@ -876,17 +879,14 @@ enumNames(UCharNames *names,
                 if (end > limit) {
                     end = limit;
                 }
-		if (!enumExtNames(start, end - 1, fn, context)) {
-		    return FALSE;
-		}
-	    }
+                if (!enumExtNames(start, end - 1, fn, context)) {
+                    return FALSE;
+                }
+            }
             ++group;
         }
 
         /* enumerate entire groups between the start- and end-groups */
-        groupCount=*(uint16_t *)((char *)names+names->groupsOffset);
-        groupLimit=(Group *)((char *)names+names->groupsOffset+2)+groupCount;
-
         while(group<groupLimit && group->groupMSB<endGroupMSB) {
             start=(UChar32)group->groupMSB<<GROUP_SHIFT;
             if(!enumGroupNames(names, group, start, start+LINES_PER_GROUP-1, fn, context, nameChoice)) {
@@ -897,11 +897,11 @@ enumNames(UCharNames *names,
                 if (end > limit) {
                     end = limit;
                 }
-		if (!enumExtNames((group->groupMSB + 1) << GROUP_SHIFT, end - 1, fn, context)) {
-		    return FALSE;
-		}
-	    }
-	    ++group;
+                if (!enumExtNames((group->groupMSB + 1) << GROUP_SHIFT, end - 1, fn, context)) {
+                    return FALSE;
+                }
+            }
+            ++group;
         }
 
         /* enumerate within the end group (group->groupMSB==endGroupMSB) */
