@@ -785,7 +785,7 @@ UnicodeString::extract(UTextOffset start,
   myTargetLimit = myTarget + arraySize;
 
   if(myTargetLimit < myTarget)  /* ptr wrapped around: pin to U_MAX_PTR */
-    myTargetLimit = U_MAX_PTR; 
+    myTargetLimit = (char*)U_MAX_PTR; 
 
   // perform the conversion
   // there is no loop here since we assume the buffer is large enough
