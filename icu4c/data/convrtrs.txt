@@ -10,7 +10,36 @@
 #Actual File Name || Algorithm name     alias1 alias2 ...
 #except for column1(file names) case insensitive
 
-# Algorithmic: DO NOT CHANGE LEFT COLUMN OF ALGORITHMIC CONVERTERS
+# The world is getting more complicated...
+# Supporting XML parsers, HTML, MIME, and similar applications
+# that mark encodings with unique charset names, we are forced to
+# make this table much more static than before.
+
+# It means that a new encoding, one that differs from an
+# old one by changing a code point, e.g., to the Euro sign,
+# must not get an old alias, because it would mean that
+# old files with this alias would be interpreted differently.
+
+# If an encoding gets updated by assigning characters to previously
+# unassigned code points, then a new name is not necessary.
+# Also, some codepages map unassigned codepage byte values
+# to the same numbers in Unicode for roundtripping. It may be
+# industry practice to keep the encoding name in such a case, too
+# (example: Windows codepages).
+
+# Especially, the aliases listed in the list of character sets
+# that is maintained by the IANA (http://www.iana.org/) must
+# not be changed to mean encodings different from what this
+# list shows.
+# Currently, the IANA list is at
+# http://www.isi.edu/in-notes/iana/assignments/character-sets
+
+# Name matching is case-insensitive.
+# However, the names in the left column are directly file names
+# or names of algorithmic converters, and their case must not
+# be changed - or else code and/or file names must also be changed.
+
+# Algorithmic
 UTF8                    utf-8 utf8 ibm-1208 utf_8 ibm1208 cp1208
 UTF16_BigEndian         utf-16be
 UTF16_LittleEndian      utf-16le
@@ -104,82 +133,105 @@ ibm-1280                macgr                   # Apple Greek
 ibm-1281                mactr                   # Apple Turkish
 ibm-1282                macce                   # Apple Central Europe
 ibm-1283                maccy                   # Apple Cyrillic
-ibm-834                 #Korean Host DBCS
 
-# EBCDIC codepages
-
-ibm-16804              IBM420 ebcdic-cp-ar1 csIBM420 ibm-420         ebcdic-ar  cp420 cpibm16804       # EBCDIC Arabic (w/ euro update)
-ibm-12712              IBM424 ebcdic-cp-he csIBM424 ebcdic-he  cp424 ibm-424 cpibm12712       # EBCDIC Hebrew (w/ euro, new sheqel, control charaters update)
-ibm-1390               cp930 cpibm1390           # Japan EBCDIC MIXED (w/ euro update)
-ibm-930                cpibm930# Japan EBCDIC MIXED (w/o euro update)
-ibm-933                ibm933 cp933 cpibm933           # Korea EBCDIC MIXED 
-ibm-935                ibm935 cp935 cpibm935           # China EBCDIC MIXED 
-ibm-1371               cp937 cpibm1371           # Taiwan EBCDIC MIXED (w/ euro update)
-ibm-937                cpibm937  # Taiwan EBCDIC MIXED (w/o euro update)
-ibm-1047               cpibm1047                        # EBCDIC Open systems Latin1
-ibm-1123               cpibm1123                        # Cyrillic Ukraine EBCDIC
-ibm-1140               IBM037 ebcdic-cp-ca ebcdic-cp-wt ebcdic-cp-nl csIBM037 ebcdic-us cp37  ebcdic-cp-us cp037 cpibm1140             # EBCDIC US... (w/ euro update)
-ibm-37                 ibm-037 cpibm37            #EBCDIC (w/o euro update) update
-ibm-1141               IBM273 csIBM273 ebcdic-de  cp273 cpibm1141       # EBCDIC Germanay, Austria... (w/ euro update)
-ibm-1142               IBM277 EBCDIC-CP-DK EBCDIC-CP-NO csIBM277 ebcdic-dk  cp277 cpibm1142       # EBCDIC Denmark... (w/ euro update)
-ibm-1143               IBM278 ebcdic-cp-fi ebcdic-cp-se csIBM278 ebcdic-sv  cp278 cpibm1143       # EBCDIC Sweden (w/ euro update)
-ibm-1144               IBM280 ebcdic-cp-it csIBM280 csEBCDICIT ebcdic-it   cp280 cpibm1144       # EBCDIC Italy (w/ euro update)
-ibm-1145               IBM284 ebcdic-cp-es csIBM284 csEBCDICES ebcdic-es  cp284 cpibm1145       # EBCDIC Spain (w/ euro update)
-ibm-1146               IBM285 ebcdic-cp-gb csIBM285 ebcdic-gb  cp285 cpibm1146       # EBCDIC UK Ireland (w/ euro update)
-ibm-1147               IBM297 ebcdic-cp-fr csIBM297 csEBCDICFR ebcdic-fr  cp297 cpibm1147       # EBCDIC France (w/ euro update)
-ibm-1148               IBM500 ebcdic-cp-be ebcdic-cp-ch csIBM500 IBM274 cp274 csIBM274 ebcdic-be  cp500 cpibm1148       #!!! EBCDIC International Latin1 (w/ euro update)
-
-ibm-273                cpibm273   # EBCDIC Germanay, Austria... (w/o euro update)
-ibm-277                cpibm277   # EBCDIC Denmark... (w/o euro update)
-ibm-278                cpibm278   # EBCDIC Sweden (w/o euro update)
-ibm-280                cpibm280   # EBCDIC Italy (w/o euro update)
-ibm-284                cpibm284   # EBCDIC Spain (w/o euro update)
-ibm-285                cpibm285   # EBCDIC UK Ireland (w/o euro update)
-ibm-297                cpibm297   # EBCDIC France (w/o euro update)
-ibm-500                cpibm500   # EBCDIC International Latin1 (w/o euro update)
-
-ibm-871                cpibm871   # EBCDIC Iceland (w/o euro update)
 # Added for more euro support
-ibm-1149               IBM871 ebcdic-cp-is csIBM871 ebcdic-is  cp871 cpibm1149       # EBCDIC Iceland (w/ euro update)
-ibm-1154               cp1025 cpibm1154                         # EBCDIC Cyrillic Multilingual (w/ euro update)
-ibm-1153               IBM870 ebcdic-cp-roece ebcdic-cp-yu csIBM870 cp870 cpibm1153 # EBCDIC latin 2 (w/ euro update)
-ibm-1155               IBM1026 csIBM1026 cp1026 cpibm1155       # EBCDIC Turkey (w/ euro update)
-ibm-1156               cp1112 cpibm1156                         # EBCDIC Baltic Multilingual (w/ euro update)
-ibm-1160               cp9030 cpibm1160                         # EBCDIC Thailand (w/ euro update)
-ibm-1164               cp1130 cpibm1164                         # EBCDIC Viet Nam (w/ euro update)
-ibm-849                cp1131                                   # PC Belarus (w/ euro update)
-ibm-1157               cp1122 cpibm1157                         # EBCDIC Estonia (w/ euro update)
-ibm-8482               IBM290 EBCDIC-JP-kana csIBM290 cp290     # host SBCS (Katakana) (w/ euro update)
-ibm-1158               cp1123 cpibm1158                         # Cyrillic Ukraine EBCDIC (w/ euro update)
-ibm-4899               cp803 cpibm4899                          # Old EBCDIC Hebrew (w/ euro update)
-ibm-4971               cp875 cpibm4971                          # EBCDIC Greek (w/ euro update)
+
+ibm-849                cp1131          # PC Belarus (w/ euro update)
 ibm-848                cp1125          # PC Ukraine (w/ euro update)
 ibm-5104               cp1008          # 8-bit Arabic (w/ euro update)
 ibm-9238               cp1046          # PC Arabic Extended (w/ euro update)
 #ibm-1161              cp9066          # PC Thailand (IBM "version) (w/ euro update)
-ibm-1399               cp939           # Host MBCS (Latin-Kanji) (w/ euro update)
-ibm-4930               cp4930 cp834    # Korean DBCS Host (w/ euro update)
-ibm-1364               cp1364 cp933    # Korean Host Mixed (w/ euro update)
 ibm-1362               cp1362          # Korean Windows DBCS (w/ euro update)
 ibm-1363               cp1363          # Korean Windows MBCS (w/ euro update)
 ibm-5210               cp1114          # PC SBCS Big-5 (w/ euro update)
 ibm-21427              cp947           # PC DBCS Big-5 (w/ euro update)
-ibm-1159               cp28709         # SBCS T-Ch Host (w/ euro update)
-ibm-9027               cp835           # DBCS T-Ch Host (w/ euro update)
-ibm-5123               cp1027          # Host Roman Jis (w/ euro update)
-ibm-16684              cp300           # Jis + Roman Jis Host (w/ euro update)
+
+# EBCDIC codepages according to the CDRA
+
+# without Euro
+ibm-37                 IBM037 ibm-037 cpibm37 ebcdic-cp-ca ebcdic-cp-wt ebcdic-cp-nl csIBM037 cp37 ebcdic-cp-us cp037 # EBCDIC US
+ibm-273                IBM273 csIBM273 ebcdic-de cp273 cpibm273 # EBCDIC Germanay, Austria...
+ibm-277                IBM277 EBCDIC-CP-DK EBCDIC-CP-NO csIBM277 ebcdic-dk  cp277 cpibm277 # EBCDIC Denmark...
+ibm-278                IBM278 ebcdic-cp-fi ebcdic-cp-se csIBM278 ebcdic-sv  cp278 cpibm278 # EBCDIC Sweden
+ibm-280                IBM280 ebcdic-cp-it csIBM280 cp280 cpibm280 # EBCDIC Italy
+ibm-284                IBM284 ebcdic-cp-es csIBM284 cp284 cpibm284 # EBCDIC Spain
+ibm-285                IBM285 ebcdic-cp-gb csIBM285 ebcdic-gb cp285 cpibm285 # EBCDIC UK Ireland
+ibm-290                IBM290 EBCDIC-JP-kana csIBM290 cp290 # host SBCS (Katakana)
+ibm-297                IBM297 ebcdic-cp-fr csIBM297 cp297 cpibm297 # EBCDIC France
+ibm-420                IBM420 ebcdic-cp-ar1 csIBM420 ibm-420 cp420
+ibm-424                IBM424 ebcdic-cp-he csIBM424 cp424 ibm-424
+ibm-500                IBM500 cpibm500 csIBM500 cp500 ebcdic-cp-be ebcdic-cp-ch # EBCDIC International Latin1
+ibm-803                cp803 # Old EBCDIC Hebrew
+ibm-834                cp834 # Korean DBCS Host
+ibm-835                cp835 # DBCS T-Ch Host
+ibm-871                IBM871 ebcdic-cp-is csIBM871 cpibm871 cp871 # EBCDIC Iceland
+ibm-930                cp930 cpibm930   # Japan EBCDIC MIXED
+ibm-933                ibm933 cp933 cpibm933           # Korea EBCDIC MIXED 
+ibm-935                ibm935 cp935 cpibm935           # China EBCDIC MIXED 
+ibm-937                cp937 cpibm937 # Taiwan EBCDIC MIXED
+ibm-939                cp939 # Host MBCS (Latin-Kanji)
+
+# with Euro
+ibm-1390               cpibm1390 # Japan EBCDIC MIXED
+ibm-1371               cpibm1371 # Taiwan EBCDIC MIXED
+ibm-1047               cpibm1047 # EBCDIC Open systems Latin1
+ibm-1123               cpibm1123 # Cyrillic Ukraine EBCDIC
+ibm-1140               cpibm1140 ibm1140 # EBCDIC US...
+ibm-1141               cpibm1141 ibm1141 # EBCDIC Germanay, Austria...
+ibm-1142               cpibm1142 ibm1142 # EBCDIC Denmark...
+ibm-1143               cpibm1143 ibm1143 # EBCDIC Sweden
+ibm-1144               cpibm1144 ibm1144 # EBCDIC Italy
+ibm-1145               cpibm1145 ibm1145 # EBCDIC Spain
+ibm-1146               cpibm1146 ibm1146 # EBCDIC UK Ireland
+ibm-1147               cpibm1147 ibm1147 # EBCDIC France
+ibm-1148               cpibm1148 ibm1148 # EBCDIC International Latin1
+ibm-1149               cpibm1149 ibm1149 ebcdic-is # EBCDIC Iceland
+ibm-1153               cpibm1153 ibm1153 # EBCDIC latin 2
+ibm-1154               cp1025 cpibm1154                         # EBCDIC Cyrillic Multilingual
+ibm-1155               IBM1026 csIBM1026 cp1026 cpibm1155       # EBCDIC Turkey
+ibm-1156               cp1112 cpibm1156                         # EBCDIC Baltic Multilingual
+ibm-1157               cp1122 cpibm1157                         # EBCDIC Estonia
+ibm-1158               cp1123 cpibm1158                         # Cyrillic Ukraine EBCDIC
+ibm-1159               cp28709         # SBCS T-Ch Host
+ibm-1160               cp9030 cpibm1160                         # EBCDIC Thailand
+ibm-1164               cp1130 cpibm1164                         # EBCDIC Viet Nam
+
+ibm-1399               # Host MBCS (Latin-Kanji)
+ibm-4930               cp4930 # Korean DBCS Host
+ibm-1364               cp1364 # Korean Host Mixed
+ibm-8482               # host SBCS (Katakana)
+ibm-4899               cpibm4899                          # Old EBCDIC Hebrew
+ibm-4971               cp875 cpibm4971                          # EBCDIC Greek
+ibm-1159               cp28709         # SBCS T-Ch Host
+ibm-9027               # DBCS T-Ch Host
+ibm-5123               cp1027          # Host Roman Jis
+ibm-12712              cpibm12712 ibm12712 ebcdic-he # EBCDIC Hebrew (new sheqel, control charaters update)
+ibm-16684              cp300           # Jis + Roman Jis Host
+ibm-16804              cpibm16804 ibm16804 ebcdic-ar # EBCDIC Arabic
+
+# unsupported IANA names
+# ebcdic-us
+# ebcdic-it csEBCDICIT
+# ebcdic-es csEBCDICES
+# csEBCDICFR ebcdic-fr
+# ibm-274                IBM274 cp274 csIBM274 ebcdic-be
+# IBM870 ebcdic-cp-roece ebcdic-cp-yu csIBM870 cp870
 
 # EBCDIC codepages for S/390, with LF and NL codes swapped
 
-ibm-1140-s390      IBM037-s390 ebcdic-cp-ca-s390 ebcdic-cp-wt-s390 ebcdic-cp-nl-s390 csIBM037-s390 ebcdic-us-s390 cp37-s390  ebcdic-cp-us-s390 cp037-s390 cpibm1140-s390             # EBCDIC US... (w/ euro update)
-ibm-1142-s390      IBM277-s390 EBCDIC-CP-DK-s390 EBCDIC-CP-NO-s390 csIBM277-s390 ebcdic-dk-s390 cp277-s390 cpibm1142-s390       # EBCDIC Denmark... (w/ euro update)
-ibm-1143-s390      IBM278-s390 ebcdic-cp-fi-s390 ebcdic-cp-se-s390 csIBM278-s390 ebcdic-sv-s390 cp278-s390 cpibm1143-s390       # EBCDIC Sweden (w/ euro update)
-ibm-1144-s390      IBM280-s390 ebcdic-cp-it-s390 csIBM280-s390 csEBCDICIT-s390 ebcdic-it-s390   cp280-s390 cpibm1144-s390       # EBCDIC Italy (w/ euro update)
-ibm-1145-s390      IBM284-s390 ebcdic-cp-es-s390 csIBM284-s390 csEBCDICES-s390 ebcdic-es-s390  cp284-s390 cpibm1145-s390       # EBCDIC Spain (w/ euro update)
-ibm-1146-s390      IBM285-s390 ebcdic-cp-gb-s390 csIBM285-s390 ebcdic-gb-s390  cp285-s390 cpibm1146-s390       # EBCDIC UK Ireland (w/ euro update)
-ibm-1147-s390      IBM297-s390 ebcdic-cp-fr-s390 csIBM297-s390 csEBCDICFR-s390 ebcdic-fr-s390  cp297-s390 cpibm1147-s390       # EBCDIC France (w/ euro update)
-ibm-1148-s390      IBM500-s390 ebcdic-cp-be-s390 ebcdic-cp-ch-s390 csIBM500-s390 IBM274-s390 cp274-s390 csIBM274-s390 ebcdic-be-s390  cp500-s390 cpibm1148-s390       #!!! EBCDIC International Latin1 (w/ euro update)
-ibm-1149-s390      IBM871-s390 ebcdic-cp-is-s390 csIBM871-s390 ebcdic-is-s390  cp871-s390 cpibm1149-s390       # EBCDIC Iceland (w/ euro update)
-ibm-1153-s390      IBM870-s390 ebcdic-cp-roece-s390 ebcdic-cp-yu-s390 csIBM870-s390 cp870-s390 cpibm1153-s390 # EBCDIC latin 2 (w/ euro update)
-ibm-12712-s390     IBM424-s390 ebcdic-cp-he-s390 csIBM424-s390 ebcdic-he-s390  cp424-s390 ibm-424-s390 cpibm12712-s390       # EBCDIC Hebrew (w/ euro, new sheqel, control charaters update)
-ibm-16804-s390     IBM420-s390 ebcdic-cp-ar1-s390 csIBM420-s390 ibm-420-s390 ebcdic-ar-s390 cp420-s390 cpibm16804-s390       # EBCDIC Arabic (w/ euro update)
+# without Euro
+ibm-37-s390        ibm037-s390   # EBCDIC US
+
+# with Euro
+ibm-1140-s390      ibm1140-s390  # EBCDIC US
+ibm-1142-s390      ibm1142-s390  # EBCDIC Denmark
+ibm-1143-s390      ibm1143-s390  # EBCDIC Sweden
+ibm-1144-s390      ibm1144-s390  # EBCDIC Italy
+ibm-1145-s390      ibm1145-s390  # EBCDIC Spain
+ibm-1146-s390      ibm1146-s390  # EBCDIC UK Ireland
+ibm-1147-s390      ibm1147-s390  # EBCDIC France
+ibm-1148-s390      ibm1148-s390  # EBCDIC International Latin1
+ibm-1149-s390      ibm1149-s390  # EBCDIC Iceland
+ibm-1153-s390      ibm1153-s390  # EBCDIC latin 2
+ibm-12712-s390     ibm12712-s390 # EBCDIC Hebrew
+ibm-16804-s390     ibm16804-s390 # EBCDIC Arabic
