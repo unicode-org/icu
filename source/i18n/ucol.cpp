@@ -227,7 +227,7 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokListHeader *lh) {
         lh->fStrToken[tokStrength] = lh->fStrToken[tokStrength+1];
         lh->fStrToken[tokStrength+1] = NULL;
         lh->lStrToken[tokStrength+1] = NULL;
-        lh->pos[tokStrength] = -1;
+        lh->pos[tokStrength+1] = -1;
       }
     }
 
@@ -439,20 +439,20 @@ U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok) {
   for(i = 0; i<3; i++) {
     ucol_countBytes(CEparts[i], noOfBytes[i]);
   }
-  fprintf(stderr, "[%8X, %8X, %8X]\n", CEparts[0] >> (32-8*noOfBytes[0]), CEparts[1] >> (32-8*noOfBytes[1]), CEparts[2]>> (32-8*noOfBytes[2]));
+  fprintf(stderr, "str: %i, [%08X, %08X, %08X]\n", tok->strength, CEparts[0] >> (32-8*noOfBytes[0]), CEparts[1] >> (32-8*noOfBytes[1]), CEparts[2]>> (32-8*noOfBytes[2]));
 }
 
 U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status) {
   ucolCEGenerator Gens[3];
 
-  uint32_t CEparts[3];
+  uint32_t CEparts[0x10];
 
   uint32_t i = 0;
 
   UColToken *tok = lh->last[UCOL_TOK_POLARITY_POSITIVE];
   uint32_t t[3];
 
-  for(i=0; i<3; i++) {
+  for(i=0; i<0x10; i++) {
     t[i] = 0;
   }
 
@@ -492,8 +492,18 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
 
   ucol_inv_getGapPositions(lh);
 
+  fprintf(stderr, "BaseCE: %08X %08X\n", lh->baseCE, lh->baseContCE);
+  int32_t j = 2;
+  for(j = 2; j >= 0; j--) {
+    fprintf(stderr, "gapsLo[%i] [%08X %08X %08X]\n", j, lh->gapsLo[j*3], lh->gapsLo[j*3+1], lh->gapsLo[j*3+2]);
+    fprintf(stderr, "gapsHi[%i] [%08X %08X %08X]\n", j, lh->gapsHi[j*3], lh->gapsHi[j*3+1], lh->gapsHi[j*3+2]);
+  }
+
   tok = lh->first[UCOL_TOK_POLARITY_POSITIVE];
   uint32_t fStrength = tok->strength;
+
+  /* Treat starting identicals */
+  /* &0 = nula = zero */
 
   if(tok != NULL && fStrength == 2) { /* starting with tertiary */
     if(lh->pos[fStrength] == -1) {
@@ -505,6 +515,7 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
         exit(-1);
       }
     }
+
     CEparts[0] = lh->gapsLo[fStrength*3];
     CEparts[1] = lh->gapsLo[fStrength*3+1];
     CEparts[2] = ucol_getCEGenerator(&Gens[2], lh->gapsLo[fStrength*3+2], lh->gapsHi[fStrength*3+2], tok->toInsert);
@@ -513,6 +524,9 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
 
     while(tok != NULL && tok->strength == 2) {
       tok = tok->next;
+    /* Treat identicals in starting tertiaries*/
+    /* &0, <funny_tertiary_different_zero> = FunnyZero */
+
       if(tok->strength == 2) {
         CEparts[2] = ucol_getNextGenerated(&Gens[2]);
         ucol_doCE(CEparts, tok);
@@ -530,6 +544,9 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
       }
     }
     if(tok->next != NULL) {
+    /* Treat identicals in starting secondaries*/
+    /* &0 [, <funny_tertiary_different_zero>] ;  <funny_secondary_different_zero> = FunnySecZero */
+
       CEparts[0] = lh->gapsLo[fStrength*3];
       CEparts[1] = ucol_getCEGenerator(&Gens[1], lh->gapsLo[fStrength*3+1], lh->gapsHi[fStrength*3+1], tok->toInsert);
       if(tok->next->strength == 2) {
@@ -600,26 +617,30 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
       tok = tok->next;
 
       while(tok->next != NULL) {
-        if(tok->strength == 2) {
+    /* Treat identicals*/
+    /* < 1 = one = jedan < 2 = two = dva < 3 = three = tri ... */
+        if(tok->strength == UCOL_IDENTICAL) {
+          ucol_doCE(CEparts, tok);
+        } else if(tok->strength == UCOL_TERTIARY) {
           CEparts[2] = ucol_getNextGenerated(&Gens[2]);
           ucol_doCE(CEparts, tok);
-        } else if(tok->strength == 1) {
+        } else if(tok->strength == UCOL_SECONDARY) {
           CEparts[1] = ucol_getNextGenerated(&Gens[1]);
-          if(tok->next->strength == 2) {
+          if(tok->next->strength == UCOL_TERTIARY) {
             CEparts[2] = ucol_getCEGenerator(&Gens[2], 0x02000000, 0xFF000000, tok->next->toInsert);
-          } else {
+          } else { /* UCOL_SECONDARY */
             CEparts[2] = 0x03000000;
           }
           ucol_doCE(CEparts, tok);
         } else {
           CEparts[0] = ucol_getNextGenerated(&Gens[0]);
-          if(tok->next->strength == 0) {
+          if(tok->next->strength == UCOL_PRIMARY) {
             CEparts[1] = 0x03000000;
             CEparts[2] = 0x03000000;
           } else {
-            if(tok->next->strength == 1) {
+            if(tok->next->strength == UCOL_SECONDARY) {
               CEparts[2] = 0x03000000;
-            } else {
+            } else { /* UCOL_TERTIARY */
               CEparts[2] = ucol_getCEGenerator(&Gens[2], 0x02000000, 0xFF000000, tok->next->toInsert);
             }
             CEparts[1] = ucol_getCEGenerator(&Gens[1], 0x02000000, 0xFF000000, tok->next->toInsert);
@@ -975,6 +996,61 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
       /* We have to check if ch is possibly a first surrogate - then we need to take the next code unit */
       /* and make a bigger CE */
       UChar nextChar;
+      const int 
+        SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7,
+        LCount = 19, VCount = 21, TCount = 28,
+        NCount = VCount * TCount,   // 588
+        SCount = LCount * NCount,   // 11172
+        LLimit = LBase + LCount,    // 1113
+        VLimit = VBase + VCount,    // 1176
+        TLimit = TBase + TCount,    // 11C3
+        SLimit = SBase + SCount;    // D7A4
+
+        // once we have failed to find a match for codepoint cp, and are in the implicit code.
+ 
+        unsigned int L = ch - SBase;
+        //if (ch < SLimit) { // since it is unsigned, catchs zero case too
+        if (L < SCount) { // since it is unsigned, catchs zero case too
+
+          // divide into pieces
+
+          int T = L % TCount; // we do it in this order since some compilers can do % and / in one operation
+          L /= TCount;
+          int V = L % VCount;
+          L /= VCount;
+
+          // offset them
+
+          L += LBase;
+          V += VBase;
+          T += TBase;
+
+          // return the first CE, but first put the rest into the expansion buffer
+
+          if (!collationSource->JamoSpecial) { // FAST PATH
+            *(collationSource->CEpos++) = ucmp32_get(UCA->mapping, V);
+            if (T != TBase) {
+                *(collationSource->CEpos++) = ucmp32_get(UCA->mapping, T);
+            }
+            return ucmp32_get(UCA->mapping, L); // return first one
+
+          } else { // Jamo is Special
+
+            // do recursive processing of L, V, and T with fetchCE (but T only if not equal to TBase!!)
+            // Since fetchCE returns a CE, and (potentially) stuffs items into the ce buffer,
+            // this is how it is done.
+/*
+            int firstCE = fetchCE(L, ...);
+            int* lastExpansion = expansionBufferEnd++; // set pointer, leave gap!
+            *lastExpansion = fetchCE(V,...);
+            if (T != TBase) {
+              lastExpansion = expansionBufferEnd++; // set pointer, leave gap!
+              *lastExpansion = fetchCE(T,...);
+            }
+*/
+          }
+      }
+
       if(UTF_IS_FIRST_SURROGATE(ch)) {
         if( (collationSource->pos<collationSource->len) &&
           UTF_IS_SECOND_SURROGATE((nextChar=*collationSource->pos))) {
@@ -1441,7 +1517,10 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
-    if((normMode != UCOL_OFF) && (u_quickCheck(source, len, UNORM_NFC, status) != UQUICK_CHECK_YES)) {
+    if((normMode != UCOL_OFF) 
+      && (u_quickCheck(source, len, UNORM_NFD, status) != UQUICK_CHECK_YES) 
+      && (u_quickCheck(source, len, UNORM_NFC, status) != UQUICK_CHECK_YES)) {
+      fprintf(stderr, ".");
         normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
         if(U_FAILURE(*status)) {
             *status=U_ZERO_ERROR;
@@ -1872,7 +1951,9 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
     /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
-    if((normMode != UCOL_OFF) && (u_quickCheck(source, len, UNORM_NFC, status) != UQUICK_CHECK_YES)) {
+    if((normMode != UCOL_OFF) 
+      && (u_quickCheck(source, len, UNORM_NFD, status) != UQUICK_CHECK_YES)
+      && (u_quickCheck(source, len, UNORM_NFC, status) != UQUICK_CHECK_YES)) {
         normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
         if(U_FAILURE(*status)) {
             *status=U_ZERO_ERROR;
@@ -2468,7 +2549,9 @@ ucol_strcoll(    const    UCollator    *coll,
 
     
     init_collIterate(source, sourceLength, &sColl, FALSE);
-    if((coll->normalizationMode == UCOL_ON) && (u_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFC, &status) != UQUICK_CHECK_YES)) {
+    if((coll->normalizationMode == UCOL_ON)
+      && (u_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFD, &status) != UQUICK_CHECK_YES)
+      && (u_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFC, &status) != UQUICK_CHECK_YES)) {
         normSourceLength = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLength, &status);
         /* if we don't have enough space in buffers, we'll recursively call strcoll, so that we have single point */
         /* of exit - to free buffers we allocated. Otherwise, returns from strcoll are in various places and it   */
@@ -2497,7 +2580,9 @@ ucol_strcoll(    const    UCollator    *coll,
     }
 
     init_collIterate(target, targetLength, &tColl, FALSE);
-    if((coll->normalizationMode == UCOL_ON) && (u_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFC, &status) != UQUICK_CHECK_YES)) {
+    if((coll->normalizationMode == UCOL_ON)
+      && (u_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFD, &status) != UQUICK_CHECK_YES)
+      && (u_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFC, &status) != UQUICK_CHECK_YES)) {
       normTargetLength = u_normalize(target, targetLength, UNORM_NFD, 0, normTarget, normTargetLength, &status);
       if(U_FAILURE(status)) { /* This would be buffer overflow */
           UColAttributeValue mode = coll->normalizationMode;
