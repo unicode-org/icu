@@ -378,17 +378,6 @@ int main(int argc, const char *argv[])
 }
 
 
-void copyPlatformString(char* platformString, UConverterPlatform pltfrm)
-{
-  switch (pltfrm)
-    {
-    case UCNV_IBM: {uprv_strcpy(platformString, "ibm");break;}
-    default: {uprv_strcpy(platformString, "");break;}
-    };
- 
-  return;
-}
-
 UConverterPlatform getPlatformFromName(char* name)
 {
   char myPlatform[10];

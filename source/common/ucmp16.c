@@ -42,14 +42,14 @@
 #define UCMP16_kBlockMask_int (UCMP16_kBlockCount_int - 1)
 
 
-const int32_t UCMP16_kMaxUnicode = UCMP16_kMaxUnicode_int;
-const int32_t UCMP16_kUnicodeCount = UCMP16_kUnicodeCount_int;
-const int32_t UCMP16_kBlockShift = UCMP16_kBlockShift_int;
-const int32_t UCMP16_kBlockCount = UCMP16_kBlockCount_int;
-const int32_t UCMP16_kBlockBytes = UCMP16_kBlockBytes_int;
-const int32_t UCMP16_kIndexShift = UCMP16_kIndexShift_int;
-const int32_t UCMP16_kIndexCount = UCMP16_kIndexCount_int;
-const uint32_t UCMP16_kBlockMask = UCMP16_kBlockMask_int;
+static const int32_t UCMP16_kMaxUnicode = UCMP16_kMaxUnicode_int;
+static const int32_t UCMP16_kUnicodeCount = UCMP16_kUnicodeCount_int;
+static const int32_t UCMP16_kBlockShift = UCMP16_kBlockShift_int;
+static const int32_t UCMP16_kBlockCount = UCMP16_kBlockCount_int;
+static const int32_t UCMP16_kBlockBytes = UCMP16_kBlockBytes_int;
+static const int32_t UCMP16_kIndexShift = UCMP16_kIndexShift_int;
+static const int32_t UCMP16_kIndexCount = UCMP16_kIndexCount_int;
+static const uint32_t UCMP16_kBlockMask = UCMP16_kBlockMask_int;
 
 /**
  * Sets the array to the invalid memory state.
