@@ -26,7 +26,6 @@
 #include "cmemory.h"
 #include "umutex.h"
 #include "ustr_imp.h"
-#include "ucln_cmn.h"
 
 /* forward declaractions of definitions for the shared default converter */
 
@@ -1312,16 +1311,6 @@ u_austrcpy(char *s1,
 }
 
 /* mutexed access to a shared default converter ----------------------------- */
-
-UBool ustring_cleanup(void) {
-    if (gDefaultConverter) {
-        ucnv_close(gDefaultConverter);
-        gDefaultConverter = NULL;
-    }
-    
-    /* it's safe to close a 0 converter  */
-    return TRUE;
-}
 
 U_CAPI UConverter* U_EXPORT2
 u_getDefaultConverter(UErrorCode *status)

@@ -67,7 +67,6 @@ u_cleanup(void)
     unames_cleanup();
     pname_cleanup();
     uchar_cleanup();
-    ustring_cleanup();
     ucnv_cleanup();
     ucnv_io_cleanup();
     udata_cleanup();

@@ -33,6 +33,7 @@
 #include "cstring.h"
 #include "cmemory.h"
 #include "ucln_cmn.h"
+#include "ustr_imp.h"
 
 
 #if 0
@@ -711,6 +712,10 @@ ucnv_flushCache ()
     int32_t pos = -1;
     int32_t tableDeletedNum = 0;
     const UHashElement *e;
+    UErrorCode status = U_ILLEGAL_ARGUMENT_ERROR;
+
+    /* Close the default converter without creating a new one so that everything will be flushed. */
+    ucnv_close(u_getDefaultConverter(&status));
 
     /*if shared data hasn't even been lazy evaluated yet
     * return 0
