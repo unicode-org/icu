@@ -4,7 +4,7 @@
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
-## Makefile.in for ICU - icu.so
+## Makefile.in for ICU - icuuc.so
 ## Stephen F. Booth
 
 ## Source directory information
@@ -15,6 +15,7 @@ top_builddir = ..
 
 ## All the flags and other definitions are included here.
 include $(top_builddir)/icudefs.mk
+-include Makefile.local
 
 ## Build directory information
 subdir = common
@@ -27,7 +28,7 @@ CLEANFILES = *~ $(DEPS)
 TARGET_STUBNAME=uc
 
 ifneq ($(ENABLE_STATIC),)
-TARGET = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).a
+TARGET = $(LIBSICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).$(A)
 endif
 
 ifneq ($(ENABLE_SHARED),)

@@ -2,9 +2,6 @@
 ## others. All Rights Reserved.
 ## Makefile.in for ICU - layout
 
-SO_TARGET_VERSION = @LIB_VERSION@
-SO_TARGET_VERSION_MAJOR = @LIB_VERSION_MAJOR@
-
 ## Install directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -24,7 +21,7 @@ CLEANFILES = *~ $(DEPS)
 TARGET_STUBNAME=le
 
 ifneq ($(ENABLE_STATIC),)
-TARGET = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).a
+TARGET = $(LIBSICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).$(A)
 endif
 
 ifneq ($(ENABLE_SHARED),)

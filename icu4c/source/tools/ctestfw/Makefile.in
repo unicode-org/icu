@@ -20,7 +20,7 @@ CLEANFILES = *~ $(DEPS) $(ALL_TARGETS)
 ## Target information
 
 ifneq ($(ENABLE_STATIC),)
-TARGET = $(LIBICU)ctestfw$(ICULIBSUFFIX).a
+TARGET = $(LIBSICU)ctestfw$(ICULIBSUFFIX).a
 endif
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil

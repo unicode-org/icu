@@ -147,6 +147,11 @@ MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
 ICUPREFIX = icu
 LIBICU = lib$(ICUPREFIX)
 
+# Static library prefix and file extension
+STATIC_PREFIX = s
+LIBSICU = lib$(STATIC_PREFIX)$(ICUPREFIX)
+A = a
+
 # Force removal [for make clean]
 RMV = rm -rf
 # Platform commands to remove or move executable and library targets
