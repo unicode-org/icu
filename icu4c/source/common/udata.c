@@ -250,10 +250,6 @@ struct UDataMemory {
 /* Do we need to check the platform here? */
 #include <dlfcn.h>
 
-#ifndef MAP_FAILED
-#define MAP_FAILED ((void*)-1)
-#endif
-
 
 typedef void *Library;
 
@@ -282,7 +278,11 @@ getChoice(Library lib, const char *entry,
 #include <unistd.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
-#include <sys/fcntl.h>
+#include <fcntl.h>
+
+#ifndef MAP_FAILED
+#define MAP_FAILED ((void*)-1)
+#endif
 
 struct UDataMemory {
   size_t length;
