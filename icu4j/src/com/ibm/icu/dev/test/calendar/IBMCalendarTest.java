@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2002/04/08 19:54:50 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/07/31 18:23:42 $ 
+ * $Revision: 1.10 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
@@ -255,5 +255,13 @@ public class IBMCalendarTest extends CalendarTest {
             logln("FAIL: large field difference incorrect " + d + ", " + d2 +
                   ", expect +/- 13359");
         }
+    }
+
+    /**
+     * Test ms_MY "Malay (Malaysia)" locale.  Bug 1543.
+     */
+    public void TestMalaysianInstance() {
+        Locale loc = new Locale("ms", "MY");  // Malay (Malaysia)
+        Calendar cal = Calendar.getInstance(loc);
     }
 }
