@@ -28,6 +28,7 @@
 #include "itercoll.h"
 //#include "capicoll.h"   // CollationCAPITest
 #include "tstnorm.h"
+#include "normconf.h"
 #include "thcoll.h"
 
 void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
@@ -253,6 +254,15 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, char* &name, c
         break;
 
     case 16:
+        name = "NormalizerConformanceTest"; 
+        if (exec) {
+            logln("NormalizerConformanceTest---"); logln("");
+            NormalizerConformanceTest test;
+            callTest( test, par );
+        }
+        break;
+
+    case 17:
         name = "CollationThaiTest"; 
         if (exec) {
             logln("CollationThaiTest---"); logln("");
