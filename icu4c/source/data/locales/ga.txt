@@ -670,10 +670,6 @@ ga{
         ZRZ { "ZRZ", "Zaire Sáíreach"        } // 10/27/1971-11/01/1993
         ZWD { "Z$",  "Dollar Siombábach"      } // 04/18/1980-
     }
-    DateTimeElements:intvector { 
-        2,
-        1,
-    }
     DayAbbreviations { 
         "Domh",
         "Luan",
