@@ -41,8 +41,6 @@
 #include "callcoll.h"
 #include "unicode/ustring.h"
 
-static UCollator *myCollation;
-
 /* perform test with strength PRIMARY */
 static void TestPrimary(void);
 
@@ -286,6 +284,7 @@ static void TestTertiary()
 {
     int32_t len,i;
     UChar *rules;
+    UCollator *myCollation;
     UErrorCode status=U_ZERO_ERROR;
     const char* str="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
     len = strlen(str);
@@ -312,6 +311,7 @@ static void TestPrimary( )
 {
     int32_t len,i;
     UChar *rules;
+    UCollator *myCollation;
     UErrorCode status=U_ZERO_ERROR;
     const char* str="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";   
     len = strlen(str);
@@ -339,6 +339,7 @@ static void TestSecondary()
     int32_t i;
     int32_t len;
     UChar *rules;
+    UCollator *myCollation;
     UErrorCode status=U_ZERO_ERROR;
     const char* str="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
     len = strlen(str);
@@ -364,6 +365,7 @@ static void TestIdentical()
     int32_t i;
     int32_t len;
     UChar *rules = 0;
+    UCollator *myCollation;
     UErrorCode status=U_ZERO_ERROR;
     const char* str="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
     len = strlen(str);
@@ -388,6 +390,7 @@ static void TestExtra()
     int32_t i, j;
     int32_t len;
     UChar *rules;
+    UCollator *myCollation;
     UErrorCode status = U_ZERO_ERROR;
     const char* str="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
     len = strlen(str);
