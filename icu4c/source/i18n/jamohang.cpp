@@ -22,6 +22,7 @@ const char* JamoHangulTransliterator::_ID = "Jamo-Hangul";
  */
 JamoHangulTransliterator::JamoHangulTransliterator(UnicodeFilter* adoptedFilter) :
     Transliterator(_ID, adoptedFilter) {
+    setMaximumContextLength(3);
 }
 
 /**
@@ -48,26 +49,10 @@ Transliterator* JamoHangulTransliterator::clone(void) const {
 }
 
 /**
- * Transliterates a segment of a string.  <code>Transliterator</code> API.
- * @param text the string to be transliterated
- * @param start the beginning index, inclusive; <code>0 <= start
- * <= limit</code>.
- * @param limit the ending index, exclusive; <code>start <= limit
- * <= text.length()</code>.
- * @return the new limit index
+ * Implements {@link Transliterator#handleTransliterate}.
  */
-int32_t JamoHangulTransliterator::transliterate(Replaceable& text,
-                                                int32_t start, int32_t limit) const {
-    int32_t offsets[3] = { start, limit, start };
-    handleKeyboardTransliterate(text, offsets);
-    return offsets[LIMIT];
-}
-
-/**
- * Implements {@link Transliterator#handleKeyboardTransliterate}.
- */
-void JamoHangulTransliterator::handleKeyboardTransliterate(Replaceable& text,
-                                                           int32_t offsets[3]) const {
+void JamoHangulTransliterator::handleTransliterate(Replaceable& text,
+                                                   int32_t offsets[3]) const {
     /**
      * Performs transliteration changing Jamo to Hangul 
      */
@@ -138,21 +123,3 @@ UChar JamoHangulTransliterator::composeHangul(UChar last, UChar ch) {
   // if neither case was true, skip
   return 0x0000;
 }    
-
-UChar JamoHangulTransliterator::filteredCharAt(Replaceable& text, int32_t i) const {
-    UChar c;
-    const UnicodeFilter* filter = getFilter();
-    return (filter == 0) ? text.charAt(i) :
-        (filter->isIn(c = text.charAt(i)) ? c : (UChar)0xFFFF);
-}
-
-/**
- * Return the length of the longest context required by this transliterator.
- * This is <em>preceding</em> context.
- * @param direction either <code>FORWARD</code> or <code>REVERSE</code>
- * @return maximum number of preceding context characters this
- * transliterator needs to examine
- */
-int32_t JamoHangulTransliterator::getMaximumContextLength(void) const {
-    return 3;
-}

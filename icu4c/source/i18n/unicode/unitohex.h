@@ -111,30 +111,10 @@ public:
     virtual void setUppercase(bool_t outputUppercase);
 
     /**
-     * Transliterates a segment of a string.  <code>Transliterator</code> API.
-     * @param text the string to be transliterated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @return the new limit index
+     * Implements {@link Transliterator#handleTransliterate}.
      */
-    virtual int32_t transliterate(Replaceable& text, int32_t start, int32_t limit) const;
-
-    /**
-     * Implements {@link Transliterator#handleKeyboardTransliterate}.
-     */
-    virtual void handleKeyboardTransliterate(Replaceable& text,
-                                             int32_t offsets[3]) const;
-
-    /**
-     * Return the length of the longest context required by this transliterator.
-     * This is <em>preceding</em> context.
-     * @param direction either <code>FORWARD</code> or <code>REVERSE</code>
-     * @return maximum number of preceding context characters this
-     * transliterator needs to examine
-     */
-    virtual int32_t getMaximumContextLength(void);
+    virtual void handleTransliterate(Replaceable& text,
+                                     int32_t offsets[3]) const;
 
 private:
 

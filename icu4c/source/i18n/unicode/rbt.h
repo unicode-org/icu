@@ -297,18 +297,10 @@ public:
                                   int32_t start, int32_t limit) const;
 
     /**
-     * Implements {@link Transliterator#handleKeyboardTransliterate}.
+     * Implements {@link Transliterator#handleTransliterate}.
      */
-    virtual void handleKeyboardTransliterate(Replaceable& text,
-                                             int32_t index[3]) const;
-
-    /**
-     * Returns the length of the longest context required by this transliterator.
-     * This is <em>preceding</em> context.
-     * @return Maximum number of preceding context characters this
-     * transliterator needs to examine
-     */
-    virtual int32_t getMaximumContextLength(void) const;
+    virtual void handleTransliterate(Replaceable& text,
+                                     int32_t index[3]) const;
 
 private:
 

@@ -113,27 +113,10 @@ void UnicodeToHexTransliterator::setUppercase(bool_t outputUppercase) {
 }
 
 /**
- * Transliterates a segment of a string.  <code>Transliterator</code> API.
- * @param text the string to be transliterated
- * @param start the beginning index, inclusive; <code>0 <= start
- * <= limit</code>.
- * @param limit the ending index, exclusive; <code>start <= limit
- * <= text.length()</code>.
- * @return the new limit index
+ * Implements {@link Transliterator#handleTransliterate}.
  */
-int32_t UnicodeToHexTransliterator::transliterate(Replaceable& text,
-                                                  int32_t start,
-                                                  int32_t limit) const {
-    int32_t offsets[3] = { start, limit, start };
-    handleKeyboardTransliterate(text, offsets);
-    return offsets[LIMIT];
-}
-
-/**
- * Implements {@link Transliterator#handleKeyboardTransliterate}.
- */
-void UnicodeToHexTransliterator::handleKeyboardTransliterate(Replaceable& text,
-                                     int32_t offsets[3]) const {
+void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text,
+                                                     int32_t offsets[3]) const {
     /**
      * Performs transliteration changing all characters to
      * Unicode hexadecimal escapes.  For example, '@' -> "U+0040",
@@ -161,17 +144,6 @@ void UnicodeToHexTransliterator::handleKeyboardTransliterate(Replaceable& text,
 
     offsets[LIMIT] = limit;
     offsets[CURSOR] = cursor;
-}
-
-/**
- * Return the length of the longest context required by this transliterator.
- * This is <em>preceding</em> context.
- * @param direction either <code>FORWARD</code> or <code>REVERSE</code>
- * @return maximum number of preceding context characters this
- * transliterator needs to examine
- */
-int32_t UnicodeToHexTransliterator::getMaximumContextLength(void) {
-    return 0;
 }
 
 UChar UnicodeToHexTransliterator::HEX_DIGITS[32] = {

@@ -110,7 +110,8 @@ const char* Transliterator::RB_RULE = "Rule";
  */
 Transliterator::Transliterator(const UnicodeString& theID,
                                UnicodeFilter* adoptedFilter) :
-    ID(theID), filter(adoptedFilter) {}
+    ID(theID), filter(adoptedFilter),
+    maximumContextLength(0) {}
 
 /**
  * Destructor.
@@ -123,7 +124,8 @@ Transliterator::~Transliterator() {
  * Copy constructor.
  */
 Transliterator::Transliterator(const Transliterator& other) :
-    ID(other.ID), filter(0) {
+    ID(other.ID), filter(0),
+    maximumContextLength(other.maximumContextLength) {
     if (other.filter != 0) {
         // We own the filter, so we must have our own copy
         filter = other.filter->clone();
@@ -135,9 +137,26 @@ Transliterator::Transliterator(const Transliterator& other) :
  */
 Transliterator& Transliterator::operator=(const Transliterator& other) {
     ID = other.ID;
+    maximumContextLength = other.maximumContextLength;
     filter = (other.filter == 0) ?
         0 : other.filter->clone();
     return *this;
+}
+
+/**
+ * Transliterates a segment of a string.  <code>Transliterator</code> API.
+ * @param text the string to be transliterated
+ * @param start the beginning index, inclusive; <code>0 <= start
+ * <= limit</code>.
+ * @param limit the ending index, exclusive; <code>start <= limit
+ * <= text.length()</code>.
+ * @return the new limit index
+ */
+int32_t Transliterator::transliterate(Replaceable& text,
+                                      int32_t start, int32_t limit) const {
+    int32_t offsets[3] = { start, limit, start };
+    handleTransliterate(text, offsets);
+    return offsets[LIMIT];
 }
 
 /**
@@ -243,15 +262,15 @@ void Transliterator::transliterate(Replaceable& text) const {
  * @see #START
  * @see #LIMIT
  * @see #CURSOR
- * @see #handleKeyboardTransliterate
+ * @see #handleTransliterate
  * @exception IllegalArgumentException if <code>index[]</code>
  * is invalid
  */
-void Transliterator::keyboardTransliterate(Replaceable& text,
-                                           int32_t index[3],
-                                           const UnicodeString& insertion,
-                                           UErrorCode &status) const {
-    _keyboardTransliterate(text, index, &insertion, status);
+void Transliterator::transliterate(Replaceable& text,
+                                   int32_t index[3],
+                                   const UnicodeString& insertion,
+                                   UErrorCode &status) const {
+    _transliterate(text, index, &insertion, status);
 }
 
 /**
@@ -259,53 +278,53 @@ void Transliterator::keyboardTransliterate(Replaceable& text,
  * transliterated unambiguosly after a new character has been
  * inserted, typically as a result of a keyboard event.  This is a
  * convenience method; see {@link
- * #keyboardTransliterate(Replaceable, int[], String)} for details.
+ * #transliterate(Replaceable, int[], String)} for details.
  * @param text the buffer holding transliterated and
  * untransliterated text
  * @param index an array of three integers.  See {@link
- * #keyboardTransliterate(Replaceable, int[], String)}.
+ * #transliterate(Replaceable, int[], String)}.
  * @param insertion text to be inserted and possibly
  * transliterated into the translation buffer at
  * <code>index[LIMIT]</code>.
- * @see #keyboardTransliterate(Replaceable, int[], String)
+ * @see #transliterate(Replaceable, int[], String)
  */
-void Transliterator::keyboardTransliterate(Replaceable& text,
-                                           int32_t index[3],
-                                           UChar insertion,
-                                           UErrorCode& status) const {
+void Transliterator::transliterate(Replaceable& text,
+                                   int32_t index[3],
+                                   UChar insertion,
+                                   UErrorCode& status) const {
     UnicodeString str(insertion);
-    _keyboardTransliterate(text, index, &str, status);
+    _transliterate(text, index, &str, status);
 }
 
 /**
  * Transliterates the portion of the text buffer that can be
  * transliterated unambiguosly.  This is a convenience method; see
- * {@link #keyboardTransliterate(Replaceable, int[], String)} for
+ * {@link #transliterate(Replaceable, int[], String)} for
  * details.
  * @param text the buffer holding transliterated and
  * untransliterated text
  * @param index an array of three integers.  See {@link
- * #keyboardTransliterate(Replaceable, int[], String)}.
- * @see #keyboardTransliterate(Replaceable, int[], String)
+ * #transliterate(Replaceable, int[], String)}.
+ * @see #transliterate(Replaceable, int[], String)
  */
-void Transliterator::keyboardTransliterate(Replaceable& text,
-                                           int32_t index[3],
-                                           UErrorCode& status) const {
-    _keyboardTransliterate(text, index, 0, status);
+void Transliterator::transliterate(Replaceable& text,
+                                   int32_t index[3],
+                                   UErrorCode& status) const {
+    _transliterate(text, index, 0, status);
 }
 
 /**
  * Finishes any pending transliterations that were waiting for
  * more characters.  Clients should call this method as the last
  * call after a sequence of one or more calls to
- * <code>keyboardTransliterate()</code>.
+ * <code>transliterate()</code>.
  * @param text the buffer holding transliterated and
  * untransliterated text.
  * @param index the array of indices previously passed to {@link
- * #keyboardTransliterate}
+ * #transliterate}
  */
-void Transliterator::finishKeyboardTransliteration(Replaceable& text,
-                                                   int32_t index[3]) const {
+void Transliterator::finishTransliteration(Replaceable& text,
+                                           int32_t index[3]) const {
     transliterate(text, index[START], index[LIMIT]);
 }
 
@@ -313,13 +332,13 @@ void Transliterator::finishKeyboardTransliteration(Replaceable& text,
  * This internal method does keyboard transliteration.  If the
  * 'insertion' is non-null then we append it to 'text' before
  * proceeding.  This method calls through to the pure virtual
- * framework method handleKeyboardTransliterate() to do the actual
+ * framework method handleTransliterate() to do the actual
  * work.
  */
-void Transliterator::_keyboardTransliterate(Replaceable& text,
-                                            int32_t index[3],
-                                            const UnicodeString* insertion,
-                                            UErrorCode &status) const {
+void Transliterator::_transliterate(Replaceable& text,
+                                    int32_t index[3],
+                                    const UnicodeString* insertion,
+                                    UErrorCode &status) const {
     if (U_FAILURE(status)) {
         return;
     }
@@ -338,26 +357,18 @@ void Transliterator::_keyboardTransliterate(Replaceable& text,
         index[LIMIT] += insertion->length();
     }
 
-    handleKeyboardTransliterate(text, index);
+    handleTransliterate(text, index);
 
     index[START] = uprv_max(index[CURSOR] - getMaximumContextLength(),
                            originalStart);
 }
 
 /**
- * Returns the length of the longest context required by this transliterator.
- * This is <em>preceding</em> context.  The default implementation supplied
- * by <code>Transliterator</code> returns zero; subclasses
- * that use preceding context should override this method to return the
- * correct value.  For example, if a transliterator translates "ddd" (where
- * d is any digit) to "555" when preceded by "(ddd)", then the preceding
- * context length is 5, the length of "(ddd)".
- *
- * @return The maximum number of preceding context characters this
- * transliterator needs to examine
+ * Method for subclasses to use to set the maximum context length.
+ * @see #getMaximumContextLength
  */
-int32_t Transliterator::getMaximumContextLength(void) const {
-    return 0;
+void Transliterator::setMaximumContextLength(int32_t maxContextLength) {
+    maximumContextLength = maxContextLength;
 }
 
 /**
@@ -816,6 +827,17 @@ const UnicodeString& Transliterator::getAvailableID(int32_t index) {
     }
     Mutex lock(&cacheMutex);
     return *(const UnicodeString*) cacheIDs[index];
+}
+
+/**
+ * Method for subclasses to use to obtain a character in the given
+ * string, with filtering.
+ */
+UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
+    UChar c;
+    const UnicodeFilter* filter = getFilter();
+    return (filter == 0) ? text.charAt(i) :
+        (filter->isIn(c = text.charAt(i)) ? c : (UChar)0xFFFF);
 }
 
 /**
