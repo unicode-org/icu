@@ -714,6 +714,8 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
 
         extraBytesToWrite = (uint16_t)bytesFromUTF8[myByte];
         if (extraBytesToWrite == 0) {
+            isLegalSequence = FALSE;
+            ch = 0;
             goto CALL_ERROR_FUNCTION;
         }
 
