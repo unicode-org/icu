@@ -39,6 +39,8 @@ private:
 
     void TestAPI(void);
 
+    void TestScriptSet(void);
+
     void TestExhaustive(void);
 
 private:
