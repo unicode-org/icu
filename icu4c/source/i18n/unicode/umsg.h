@@ -240,7 +240,7 @@ u_vformatMessage(   const char  *locale,
  * Parse a message.
  * For numeric arguments, this function will always use doubles.  Integer types
  * should not be passed.
- * This function is not able to parse all output from \Ref{u_formatMessage}.
+ * This function is not able to parse all output from {@link #u_formatMessage }.
  * @param locale The locale for which the message is formatted
  * @param pattern The pattern specifying the message's format
  * @param patternLength The length of pattern
@@ -265,7 +265,7 @@ u_parseMessage( const char   *locale,
  * Parse a message.
  * For numeric arguments, this function will always use doubles.  Integer types
  * should not be passed.
- * This function is not able to parse all output from \Ref{u_formatMessage}.
+ * This function is not able to parse all output from {@link #u_formatMessage }.
  * @param locale The locale for which the message is formatted
  * @param pattern The pattern specifying the message's format
  * @param patternLength The length of pattern
@@ -349,7 +349,7 @@ u_vformatMessageWithError(  const char   *locale,
  * Parse a message.
  * For numeric arguments, this function will always use doubles.  Integer types
  * should not be passed.
- * This function is not able to parse all output from \Ref{u_formatMessage}.
+ * This function is not able to parse all output from {@link #u_formatMessage }.
  * @param locale The locale for which the message is formatted
  * @param pattern The pattern specifying the message's format
  * @param patternLength The length of pattern
@@ -377,7 +377,7 @@ u_parseMessageWithError(const char  *locale,
  * Parse a message.
  * For numeric arguments, this function will always use doubles.  Integer types
  * should not be passed.
- * This function is not able to parse all output from \Ref{u_formatMessage}.
+ * This function is not able to parse all output from {@link #u_formatMessage }.
  * @param locale The locale for which the message is formatted
  * @param pattern The pattern specifying the message's format
  * @param patternLength The length of pattern
@@ -554,7 +554,7 @@ umsg_vformat(   const UMessageFormat *fmt,
  * Parse a message.
  * For numeric arguments, this function will always use doubles.  Integer types
  * should not be passed.
- * This function is not able to parse all output from \Ref{umsg_format}.
+ * This function is not able to parse all output from {@link #umsg_format }.
  * @param fmt           The formatter to use 
  * @param source        The text to parse.
  * @param sourceLength  The length of source, or -1 if null-terminated.
@@ -576,7 +576,7 @@ umsg_parse( const UMessageFormat *fmt,
  * Parse a message.
  * For numeric arguments, this function will always use doubles.  Integer types
  * should not be passed.
- * This function is not able to parse all output from \Ref{umsg_format}.
+ * This function is not able to parse all output from {@link #umsg_format }.
  * @param fmt           The formatter to use 
  * @param source        The text to parse.
  * @param sourceLength  The length of source, or -1 if null-terminated.

@@ -193,8 +193,8 @@ typedef enum UNumberFormatPadPosition {
 /**
  * Create and return a new UNumberFormat for formatting and parsing
  * numbers.  A UNumberFormat may be used to format numbers by calling
- * \Ref{unum_format}, and to parse numbers by calling \Ref{unum_parse}.
- * The caller must call \Ref{unum_close} when done to release resources
+ * {@link #unum_format }, and to parse numbers by calling {@link #unum_parse }.
+ * The caller must call {@link #unum_close } when done to release resources
  * used by this object.
  * @param style The type of number format to open: one of
  * UNUM_DECIMAL, UNUM_CURRENCY, UNUM_PERCENT, UNUM_SCIENTIFIC, UNUM_SPELLOUT,
@@ -509,7 +509,7 @@ unum_getAvailable(int32_t index);
 * Determine how many locales have decimal formatting patterns available.  The
 * results of this call are not valid for rule-based number formats.
 * This function is useful for determining the loop ending condition for
-* calls to \Ref{unum_getAvailable}.
+* calls to {@link #unum_getAvailable }.
 * @return The number of locales for which decimal formatting patterns are available.
 * @see unum_getAvailable
 * @stable ICU 2.0

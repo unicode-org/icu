@@ -252,7 +252,7 @@ typedef enum {
  * Open a UCollator for comparing strings.
  * The UCollator pointer is used in all the calls to the Collation 
  * service. After finished, collator must be disposed of by calling
- * \Ref{ucol_close}.
+ * {@link #ucol_close }.
  * @param loc The locale containing the required collation rules. 
  *            Special values for locales can be passed in - 
  *            if NULL is passed for the locale, the default locale
@@ -272,7 +272,7 @@ ucol_open(const char *loc, UErrorCode *status);
  * Produce an UCollator instance according to the rules supplied.
  * The rules are used to change the default ordering, defined in the
  * UCA in a process called tailoring. The resulting UCollator pointer
- * can be used in the same way as the one obtained by \Ref{ucol_strcoll}.
+ * can be used in the same way as the one obtained by {@link #ucol_strcoll }.
  * @param rules A string describing the collation rules. For the syntax
  *              of the rules please see users guide.
  * @param rulesLength The length of rules, or -1 if null-terminated.
@@ -391,7 +391,7 @@ ucol_strcoll(    const    UCollator    *coll,
 
 /**
  * Determine if one string is greater than another.
- * This function is equivalent to \Ref{ucol_strcoll} == UCOL_GREATER
+ * This function is equivalent to {@link #ucol_strcoll } == UCOL_GREATER
  * @param coll The UCollator containing the comparison rules.
  * @param source The source string.
  * @param sourceLength The length of source, or -1 if null-terminated.
@@ -410,7 +410,7 @@ ucol_greater(const UCollator *coll,
 
 /**
  * Determine if one string is greater than or equal to another.
- * This function is equivalent to \Ref{ucol_strcoll} != UCOL_LESS
+ * This function is equivalent to {@link #ucol_strcoll } != UCOL_LESS
  * @param coll The UCollator containing the comparison rules.
  * @param source The source string.
  * @param sourceLength The length of source, or -1 if null-terminated.
@@ -429,7 +429,7 @@ ucol_greaterOrEqual(const UCollator *coll,
 
 /**
  * Compare two strings for equality.
- * This function is equivalent to \Ref{ucol_strcoll} == UCOL_EQUAL
+ * This function is equivalent to {@link #ucol_strcoll } == UCOL_EQUAL
  * @param coll The UCollator containing the comparison rules.
  * @param source The source string.
  * @param sourceLength The length of source, or -1 if null-terminated.
@@ -523,7 +523,7 @@ ucol_getAvailable(int32_t index);
 /**
  * Determine how many locales have collation rules available.
  * This function is most useful as determining the loop ending condition for
- * calls to \Ref{ucol_getAvailable}.
+ * calls to {@link #ucol_getAvailable }.
  * @return The number of locales for which collation rules are available.
  * @see ucol_getAvailable
  * @stable ICU 2.0
