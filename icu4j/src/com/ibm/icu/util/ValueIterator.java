@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ValueIterator.java,v $
-* $Date: 2002/03/13 01:26:38 $
-* $Revision: 1.3 $
+* $Date: 2002/03/13 04:48:59 $
+* $Revision: 1.4 $
 *
 ******************************************************************************
 */
@@ -48,7 +48,7 @@ public interface ValueIterator
     * common value all integers between [start, limit - 1] has.
     * @draft 2.1
     */
-    public final class Element
+    public static final class Element
     {
         /**
         * Integer of the current iteration
