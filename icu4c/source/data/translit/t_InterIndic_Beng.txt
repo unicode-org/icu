@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2004, International Business Machines
+// Copyright (c) 1999-2002, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
-// Source: C:\work\DevICU4J\icu4j\src\com\ibm\icu\impl\data/Transliterator_InterIndic_Bengali.txt
-// Date: Fri Mar  1 16:15:45 2002
+// Tool: dumpicurules.bat
+// Source: ../../../impl/data/Transliterator_InterIndic_Bengali.txt
+// Date: Sat Jul 27 10:31:07 2002
 //--------------------------------------------------------------------
 
 // InterIndic_Bengali
@@ -125,14 +125,20 @@ t_InterIndic_Beng {
 "\uE06D>\u09ED;"          // DIGIT SEVEN
 "\uE06E>\u09EE;"          // DIGIT EIGHT
 "\uE06F>\u09EF;"          // DIGIT NINE
-"\uE070>;"
+"\uE070>\u09F0;"          //  UNMAPPED Bengali-InterIndic: LETTER RA WITH MIDDLE DIAGONAL
 "\uE071>;"
-"\uE0FA>\u09FA;"          // ISSHAR
 "0 > \u09E6;"       // FALLBACK FOR TAMIL
 "1 > \u09E7;"
 "\ue072>;"
 "\ue073>;"
 "\ue074>;"
+
+"\ue075>\u09F5;"
+"\ue076>\u09F6;"
+"\ue077>\u09F7;"
+"\ue078>\u09F8;"
+"\ue079>\u09F9;"
+"\ue07A>\u09FA;"		// ISSHAR
 
 //    :: NFC (NFD) ;
 // eof
