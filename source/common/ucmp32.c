@@ -19,7 +19,6 @@
 #include "ucmp32.h"
 #include "cmemory.h"
 #include "filestrm.h"
-#include <stdlib.h>
 
 
 
