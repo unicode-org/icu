@@ -4430,34 +4430,29 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
 
 U_CAPI int32_t
 ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen) {
+  UErrorCode status = U_ZERO_ERROR;
   int32_t len = 0;
   int32_t UCAlen = 0;
   const UChar* ucaRules = 0;
   const UChar *rules = ucol_getRules(coll, &len);
   if(delta == UCOL_FULL_RULES) {
-    UErrorCode status = U_ZERO_ERROR;
     /* take the UCA rules and append real rules at the end */
     /* UCA rules will be probably coming from the root RB */
     ucaRules = ures_getStringByKey(coll->rb,"%%UCARULES",&UCAlen,&status);
   }
-  if(buffer){
+  if(U_FAILURE(status)) {
+    return 0;
+  }
+  if(buffer!=0 && bufferLen>0){
       *buffer=0;
-      if(bufferLen >= len + UCAlen) {
-        if(UCAlen >0) {
-            u_memcpy(buffer, ucaRules, UCAlen);
-        }
-        u_memcpy(buffer+UCAlen, rules, len);
-      } else {
-        if(bufferLen >= UCAlen) {
-          u_memcpy(buffer, ucaRules, UCAlen);
-          u_memcpy(buffer+UCAlen, rules, bufferLen-UCAlen);
-        } else {
-          u_memcpy(buffer, ucaRules, bufferLen);
-        }
-
+      if(UCAlen > 0) {
+        u_memcpy(buffer, ucaRules, uprv_min(UCAlen, bufferLen));
+      }
+      if(len > 0 && bufferLen > UCAlen) {
+        u_memcpy(buffer+UCAlen, rules, uprv_min(len, bufferLen-UCAlen));
       }
   }
-  return len+UCAlen;
+  return u_terminateUChars(buffer, bufferLen, len+UCAlen, &status);
 }
 
 static const UChar _NUL = 0;
