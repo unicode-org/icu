@@ -18,12 +18,6 @@
 
 U_NAMESPACE_BEGIN
 
-#ifndef ICU_UNORM_USE_DEPRECATES
-enum {
-    IGNORE_HANGUL=1
-};
-#endif /* ICU_UNORM_USE_DEPRECATES */
-
 const char Normalizer::fgClassID=0;
 
 //-------------------------------------------------------------------------
@@ -197,7 +191,7 @@ Normalizer::normalize(const UnicodeString& source,
         UChar *buffer=dest->getBuffer(source.length());
         int32_t length=unorm_internalNormalize(buffer, dest->getCapacity(),
                                                source.getBuffer(), source.length(),
-                                               mode, (options&IGNORE_HANGUL)!=0,
+                                               mode, options,
                                                &status);
         dest->releaseBuffer(length);
         if(status==U_BUFFER_OVERFLOW_ERROR) {
@@ -205,7 +199,7 @@ Normalizer::normalize(const UnicodeString& source,
             buffer=dest->getBuffer(length);
             length=unorm_internalNormalize(buffer, dest->getCapacity(),
                                            source.getBuffer(), source.length(),
-                                           mode, (options&IGNORE_HANGUL)!=0,
+                                           mode, options,
                                            &status);
             dest->releaseBuffer(length);
         }
@@ -243,7 +237,7 @@ Normalizer::compose(const UnicodeString& source,
         UChar *buffer=dest->getBuffer(source.length());
         int32_t length=unorm_compose(buffer, dest->getCapacity(),
                                      source.getBuffer(), source.length(),
-                                     compat, (options&IGNORE_HANGUL)!=0,
+                                     compat, options,
                                      &status);
         dest->releaseBuffer(length);
         if(status==U_BUFFER_OVERFLOW_ERROR) {
@@ -251,7 +245,7 @@ Normalizer::compose(const UnicodeString& source,
             buffer=dest->getBuffer(length);
             length=unorm_compose(buffer, dest->getCapacity(),
                                  source.getBuffer(), source.length(),
-                                 compat, (options&IGNORE_HANGUL)!=0,
+                                 compat, options,
                                  &status);
             dest->releaseBuffer(length);
         }
@@ -289,7 +283,7 @@ Normalizer::decompose(const UnicodeString& source,
         UChar *buffer=dest->getBuffer(source.length());
         int32_t length=unorm_decompose(buffer, dest->getCapacity(),
                                      source.getBuffer(), source.length(),
-                                     compat, (options&IGNORE_HANGUL)!=0,
+                                     compat, options,
                                      &status);
         dest->releaseBuffer(length);
         if(status==U_BUFFER_OVERFLOW_ERROR) {
@@ -297,7 +291,7 @@ Normalizer::decompose(const UnicodeString& source,
             buffer=dest->getBuffer(length);
             length=unorm_decompose(buffer, dest->getCapacity(),
                                    source.getBuffer(), source.length(),
-                                   compat, (options&IGNORE_HANGUL)!=0,
+                                   compat, options,
                                    &status);
             dest->releaseBuffer(length);
         }

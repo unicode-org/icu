@@ -147,6 +147,44 @@ enum {
     _NORM_DECOMP_LENGTH_MASK=0x7f
 };
 
+/* Constants for options flags for tailored normalization. ### TODO prototype, see unorm.cpp */
+enum {
+    /** Options bit 0, do not decompose Hangul syllables. @draft ICU 2.6 */
+    UNORM_DX_HANGUL=1,
+    /** Options bit 1, do not decompose CJK compatibility characters. @draft ICU 2.6 */
+    UNORM_DX_CJK_COMPAT=2,
+    /** Options bit 2, do not decompose a-umlaut, only for testing. @internal */
+    UNORM_DX_A_UMLAUT=4,
+    /** This many of the least significant options bits are used to specify decomposition exclusions. @draft ICU 2.6 */
+    UNORM_DX_COUNT=4,
+    /** Options bit mask for decomposition exclusions. @draft ICU 2.6 */
+    UNORM_DX_MASK=(1<<UNORM_DX_COUNT)-1
+};
+
+/**
+ * Lowest-order bit number of unorm_compare() options bits corresponding to
+ * normalization options bits.
+ *
+ * The options parameter for unorm_compare() uses most bits for
+ * itself and for various comparison and folding flags.
+ * The most significant bits, however, are shifted down and passed on
+ * to the normalization implementation.
+ * (options>>UNORM_COMPARE_NORM_OPTIONS_SHIFT)
+ *
+ * ### TODO prototype, see unorm.cpp
+ * @draft ICU 2.6
+ */
+#define UNORM_COMPARE_NORM_OPTIONS_SHIFT 20
+
+/**
+ * ### TODO prototype, see unorm.cpp
+ * @draft ICU 2.6
+ */
+U_CAPI UNormalizationCheckResult U_EXPORT2
+unorm_quickCheckTailored(const UChar *src, int32_t srcLength, 
+                         UNormalizationMode mode, int32_t options,
+                         UErrorCode *pErrorCode);
+
 /**
  * Is the normalizer data loaded?
  * This is used internally before other internal normalizer functions
@@ -170,7 +208,7 @@ unorm_haveData(UErrorCode *pErrorCode);
 U_CAPI int32_t U_EXPORT2
 unorm_internalNormalize(UChar *dest, int32_t destCapacity,
                         const UChar *src, int32_t srcLength,
-                        UNormalizationMode mode, UBool ignoreHangul,
+                        UNormalizationMode mode, int32_t options,
                         UErrorCode *pErrorCode);
 
 /**
@@ -180,7 +218,7 @@ unorm_internalNormalize(UChar *dest, int32_t destCapacity,
 U_CAPI int32_t U_EXPORT2
 unorm_decompose(UChar *dest, int32_t destCapacity,
                 const UChar *src, int32_t srcLength,
-                UBool compat, UBool ignoreHangul,
+                UBool compat, int32_t options,
                 UErrorCode *pErrorCode);
 
 /**
@@ -190,7 +228,7 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
 U_CAPI int32_t U_EXPORT2
 unorm_compose(UChar *dest, int32_t destCapacity,
               const UChar *src, int32_t srcLength,
-              UBool compat, UBool ignoreHangul,
+              UBool compat, int32_t options,
               UErrorCode *pErrorCode);
 
 /**
