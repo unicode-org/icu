@@ -241,16 +241,14 @@ static const UConverterImpl _SBCSImpl={
     NULL
 };
 
-const UConverterStaticData _SBCSStaticData={
-  sizeof(UConverterStaticData),
-  "SBCS",
-    0, UCNV_IBM, UCNV_SBCS, 1, 1,
-  1, { 0, 0, 0, 0 }
-};
+
+/* Static data is in tools/makeconv/ucnvstat.c for data-based
+ * converters. Be sure to update it as well.
+ */
 
 const UConverterSharedData _SBCSData={
     sizeof(UConverterSharedData), 1,
-    NULL, NULL, &_SBCSStaticData, FALSE, &_SBCSImpl, 
+    NULL, NULL, NULL, FALSE, &_SBCSImpl, 
     0
 };
 
@@ -533,15 +531,13 @@ static const UConverterImpl _DBCSImpl={
     NULL
 };
 
-const UConverterStaticData _DBCSStaticData={
-  sizeof(UConverterStaticData),
-  "DBCS",
-    0, UCNV_IBM, UCNV_DBCS, 2, 2,
-     1, { 0, 0, 0, 0 }  /* subchar */
-};
+
+/* Static data is in tools/makeconv/ucnvstat.c for data-based
+ * converters. Be sure to update it as well.
+ */
 
 const UConverterSharedData _DBCSData={
     sizeof(UConverterSharedData), 1,
-    NULL, NULL, &_DBCSStaticData, FALSE, &_DBCSImpl, 
+    NULL, NULL, NULL, FALSE, &_DBCSImpl, 
     0, /* tounicodestatus */
 };

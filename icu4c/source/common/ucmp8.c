@@ -492,7 +492,7 @@ U_CAPI  void U_EXPORT2 ucmp8_initFromData(CompactByteArray *this_obj, const uint
  this_obj->fIndex = (uint16_t*) *source;
  (*source) += sizeof(this_obj->fIndex[0])*UCMP8_kIndexCount;
 
- this_obj->fArray = (uint8_t*) *source;
+ this_obj->fArray = (int8_t*) *source;
  (*source) += sizeof(this_obj->fArray[0])*this_obj->fCount;
 
  /* eat up padding */

@@ -573,16 +573,12 @@ static const UConverterImpl _MBCSImpl={
 };
 
 
-const UConverterStaticData _MBCSStaticData={
-  sizeof(UConverterStaticData),
-  "MBCS",
-    0, UCNV_IBM, UCNV_MBCS, 1, 1,
-    1, { 0, 0, 0, 0 }
-};
-
+/* Static data is in tools/makeconv/ucnvstat.c for data-based
+ * converters. Be sure to update it as well.
+ */
 
 const UConverterSharedData _MBCSData={
     sizeof(UConverterSharedData), 1,
-    NULL, NULL, &_MBCSStaticData, FALSE, &_MBCSImpl, 
+    NULL, NULL, NULL, FALSE, &_MBCSImpl, 
     0
 };

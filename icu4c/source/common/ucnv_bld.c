@@ -79,34 +79,6 @@ static UConverterSharedData *createConverterFromFile (const char *converterName,
 
 static const UConverterSharedData *getAlgorithmicTypeFromName (const char *realName);
 
-/*Defines the struct of a UConverterSharedData the immutable, shared part of
- *UConverter -
- * This is the definition from ICU 1.4, necessary to read converter data
- * version 1 because the structure is directly embedded in the data.
- * See udata.html for why this is bad (pointers, enums, padding...).
- */
-typedef struct
-  {
-    uint32_t structSize;        /* Size of this structure */
-    void *dataMemory;
-    uint32_t referenceCounter;	/*used to count number of clients */
-    char name[UCNV_MAX_CONVERTER_NAME_LENGTH];	/*internal name of the converter */
-    UConverterPlatform platform;	/*platform of the converter (only IBM now) */
-    int32_t codepage;		/*codepage # (now IBM-$codepage) */
-    UConverterType conversionType;	/*conversion type */
-    int8_t minBytesPerChar;	/*Minimum # bytes per char in this codepage */
-    int8_t maxBytesPerChar;	/*Maximum # bytes per char in this codepage */
-    struct
-      {				/*initial values of some members of the mutable part of object */
-	uint32_t toUnicodeStatus;
-	int8_t subCharLen;
-	unsigned char subChar[UCNV_MAX_SUBCHAR_LEN];
-      }
-    defaultConverterValues;
-    UConverterTable *table;	/*Pointer to conversion data */
-  }
-UConverterSharedData_1_4;
-
 /**
  * Un flatten shared data from a UDATA..
  */
@@ -373,7 +345,6 @@ UConverter *
 UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
 {
     const uint8_t *raw = (const uint8_t *)udata_getMemory(pData);
-    /* version 1.0 of .cnv files directly contains a UConverterSharedData_1_4 structure */
     const UConverterStaticData *source = (const UConverterStaticData *) raw;
     UConverterSharedData *data;
     UConverterType type = source->conversionType;

@@ -1301,16 +1301,12 @@ static const UConverterImpl _EBCDICStatefulImpl={
     NULL
 };
 
-const UConverterStaticData _EBCDICStatefulStaticData={
-  sizeof(UConverterStaticData),
- "EBCDICStateful",
-    0, UCNV_IBM, UCNV_EBCDIC_STATEFUL, 1, 1,
-    1, { 0, 0, 0, 0 }, 
-  { 0,0,0} /* reserved */
-};
+/* Static data is in tools/makeconv/ucnvstat.c for data-based
+ * converters. Be sure to update it as well.
+ */
 
 const UConverterSharedData _EBCDICStatefulData={
     sizeof(UConverterSharedData), 1,
-    NULL, NULL, &_EBCDICStatefulStaticData, FALSE, &_EBCDICStatefulImpl,
+    NULL, NULL, NULL, FALSE, &_EBCDICStatefulImpl,
     0
 };
