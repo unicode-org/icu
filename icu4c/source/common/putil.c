@@ -128,7 +128,7 @@ static char* u_bottomNBytesOfDouble(double* d, int n);
   ---------------------------------------------------------------------------*/
 
 /* Assume POSIX, and modify as necessary below*/
-#if defined(_WIN32) || defined(XP_MAC) || defined(OS400) || defined(OS2) || defined(U_RHAPSODY) || defined(U_DARWIN)
+#if defined(_WIN32) || defined(XP_MAC) || defined(OS400) || defined(OS2) || defined(U_DARWIN)
 #   undef POSIX
 #else
 #   define POSIX
@@ -676,7 +676,7 @@ uprv_tzset()
 int32_t 
 uprv_timezone()
 {
-#if defined(POSIX) && !defined(U_RHAPSODY) && !defined(U_DARWIN)
+#if defined(POSIX)
 #if defined(OS390)
   return _timezone;
 #else
@@ -684,7 +684,7 @@ uprv_timezone()
 #endif
 #endif
 
-#if defined(OS400) || defined(XP_MAC) || defined(U_RHAPSODY) || defined(U_DARWIN)
+#if defined(OS400) || defined(XP_MAC) || defined(U_DARWIN)
   time_t t, t1, t2;
   struct tm tmrec;
   UBool dst_checked;
@@ -711,11 +711,11 @@ uprv_timezone()
 char* 
 uprv_tzname(int n)
 {
-#if defined(POSIX) && !defined(U_RHAPSODY) && !defined(U_DARWIN)
+#if defined(POSIX)
   return tzname[n];
 #endif
 
-#if defined(OS400) || defined(XP_MAC) || defined(U_RHAPSODY) || defined(U_DARWIN)
+#if defined(OS400) || defined(XP_MAC) || defined(U_DARWIN)
   return "";
 #endif
 
