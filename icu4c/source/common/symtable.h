@@ -31,7 +31,7 @@ class UnicodeString;
  * <p>Currently, RuleBasedTransliterator and UnicodeSet use this
  * interface to share variable definitions.
  */
-class SymbolTable /* not : public UObject because this is an interface/mixin class */ {
+class U_COMMON_API SymbolTable /* not : public UObject because this is an interface/mixin class */ {
 public:
 
     /**
