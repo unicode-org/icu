@@ -208,14 +208,14 @@ el {
 
         "$caron = \u030C;"
 
-        "$afterLetter = [:^L:] [\'[:M:]]* ;"
-        "$beforeLetter = [\'[:M:]]* [:^L:] ;"
+        "$afterLetter = [:^L:] [\\'[:M:]]* ;"
+        "$beforeLetter = [\\'[:M:]]* [:^L:] ;"
 
 
         "# Fix punctuation\n"
 
-        "\; <> \? ;"
-        "\u00b7 <> \: ;"
+        "\\; <> \\? ;"
+        "\u00b7 <> \\: ;"
 
         "# Fix any ancient characters that creep in\n"
 
@@ -297,9 +297,9 @@ el {
         "\u03bc <> m ; "
         "\u039c <> M ; "
 
-        "\u03bd } $gammaLike > n\' ; "
+        "\u03bd } $gammaLike > n\\' ; "
         "\u03bd <> n ; "
-        "\u039d } $gammaLike <> N\' ; "
+        "\u039d } $gammaLike <> N\\' ; "
         "\u039d <> N ; "
 
         "\u03be <> x ; "
@@ -314,8 +314,8 @@ el {
         "\u03c1 <> r ; "
         "\u03a1 <> R ; "
 
-        "[Pp] { } \u03c2 > \' ; "
-        "[Pp] { } \u03c3 > \' ;"
+        "[Pp] { } \u03c2 > \\' ; "
+        "[Pp] { } \u03c3 > \\' ;"
 
         "# Caron means exception\n"
 
@@ -331,7 +331,7 @@ el {
         "\u03c2 <> s $caron;"
         "\u03c3 <> s ;"
 
-        "[Pp] { \u03a3 <> \'S ; "
+        "[Pp] { \u03a3 <> \\'S ; "
         "\u03a3 <> S ; "
 
         "\u03c4 <> t ; "
@@ -379,8 +379,8 @@ el {
 
         "# delete any trailing ' marks used for roundtripping\n"
 
-        " < [\u03a0\u03c0] { \' } [Ss] ;"
-        " < [\u039d\u03bd] { \' } $egammaLike ;"
+        " < [\u03a0\u03c0] { \\' } [Ss] ;"
+        " < [\u039d\u03bd] { \\' } $egammaLike ;"
 
         "::NFC (NFD) ; "
      }
