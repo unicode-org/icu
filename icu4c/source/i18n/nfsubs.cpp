@@ -200,7 +200,7 @@ NFSubstitution::~NFSubstitution()
  * @param exponent The exponent of the divisor
  */
 void
-NFSubstitution::setDivisor(int32_t radix, int32_t exponent) {
+NFSubstitution::setDivisor(int32_t /*radix*/, int32_t /*exponent*/) {
     // a no-op for all substitutions except multiplier and modulus substitutions
 }
 
@@ -792,7 +792,7 @@ UBool
 FractionalPartSubstitution::doParse(const UnicodeString& text,
                 ParsePosition& parsePosition,
                 double baseValue,
-                double upperBound,
+                double /*upperBound*/,
                 UBool lenientParse,
                 Formattable& resVal) const
 {
