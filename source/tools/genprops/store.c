@@ -458,9 +458,10 @@ makeProps(Props *p) {
                 */
             } else if(value<UPROPS_MIN_VALUE || UPROPS_MAX_VALUE<value) {
                 printf("*** U+%04x needs an exception because its value is out-of-bounds at %ld (not [%ld..%ld]\n",
-                    p->code, (long)value, (long)UPROPS_MIN_VALUE, (long)UPROPS_MAX_VALUE);
+                    (int)p->code, (long)value, (long)UPROPS_MIN_VALUE, (long)UPROPS_MAX_VALUE);
             } else {
-                printf("*** U+%04x needs an exception because it has %u values\n", p->code, count);
+                printf("*** U+%04x needs an exception because it has %u values\n",
+                    (int)p->code, count);
             }
         }
 
@@ -471,7 +472,7 @@ makeProps(Props *p) {
         value=exceptionsTop;
         if(value>=UPROPS_MAX_EXCEPTIONS_COUNT) {
             fprintf(stderr, "genprops: out of exceptions memory at U+%06x. (%d exceeds allocated space)\n",
-                    p->code, value);
+                    (int)p->code, (int)value);
             exit(U_MEMORY_ALLOCATION_ERROR);
         } else {
             uint32_t first=0;
@@ -707,7 +708,8 @@ compactProps(void) {
 
     /* we saved some space */
     if(beVerbose) {
-        printf("compactProps() reduced propsTop from %u to %u\n", propsTop, newIndex);
+        printf("compactProps() reduced propsTop from %u to %u\n",
+            (int)propsTop, (int)newIndex);
     }
     propsTop=newIndex;
 
@@ -802,11 +804,11 @@ generateData(const char *dataDir) {
     indexes[UPROPS_ADDITIONAL_TRIE_INDEX]=offset;
 
     if(beVerbose) {
-        printf("trie size in bytes:                    %5u\n", trieSize);
-        printf("number of unique properties values:    %5u\n", propsTop);
+        printf("trie size in bytes:                    %5u\n", (int)trieSize);
+        printf("number of unique properties values:    %5u\n", (int)propsTop);
         printf("number of code points with exceptions: %5u\n", exceptionsCount);
         printf("size in bytes of exceptions:           %5u\n", 4*exceptionsTop);
-        printf("number of UChars for special mappings: %5u\n", ucharsTop);
+        printf("number of UChars for special mappings: %5u\n", (int)ucharsTop);
     }
 
     additionalPropsSize=writeAdditionalData(additionalProps, sizeof(additionalProps), indexes);

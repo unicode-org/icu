@@ -1037,7 +1037,7 @@ postParseFn(void *context, uint32_t code, Norm *norm) {
         } else {
             uset_add(otherNorm->canonStart, code);
             if(!uset_contains(otherNorm->canonStart, code)) {
-                fprintf(stderr, "gennorm error: uset_add(setOf(U+%4x), U+%4x)\n", c, code);
+                fprintf(stderr, "gennorm error: uset_add(setOf(U+%4x), U+%4x)\n", (int)c, (int)code);
                 exit(U_INTERNAL_PROGRAM_ERROR);
             }
         }
@@ -1300,7 +1300,7 @@ makeCanonSetFn(void *context, uint32_t code, Norm *norm) {
         canonStartSets[_NORM_SET_INDEX_CANON_SETS_LENGTH]=(uint16_t)canonStartSetsTop;
 
         if(U_FAILURE(errorCode)) {
-            fprintf(stderr, "gennorm error: uset_serialize()->%s (canonStartSetsTop=%d)\n", u_errorName(errorCode), canonStartSetsTop);
+            fprintf(stderr, "gennorm error: uset_serialize()->%s (canonStartSetsTop=%d)\n", u_errorName(errorCode), (int)canonStartSetsTop);
             exit(errorCode);
         }
         if(tableLength>_NORM_MAX_SET_SEARCH_TABLE_LENGTH) {
@@ -1369,8 +1369,8 @@ doesComposeConsume(const uint32_t *s, int32_t length, uint32_t c, uint8_t cc) {
     for(i=1; i<length; ++i) {
         starter=combine((uint32_t)starter, s[i]);
         if(starter<0) {
-            fprintf(stderr, "error: unable to consume normal decomposition in doesComposeConsume(<%04x, %04x, ...>[%ld], U+%04lx, %u)\n",
-                s[0], s[1], (long)length, (long)c, cc);
+            fprintf(stderr, "error: unable to consume normal decomposition in doesComposeConsume(<%04x, %04x, ...>[%d], U+%04x, %u)\n",
+                (int)s[0], (int)s[1], (int)length, (int)c, cc);
             exit(U_INTERNAL_PROGRAM_ERROR);
         }
     }
@@ -1777,16 +1777,16 @@ generateData(const char *dataDir) {
         canonStartSetsTop*2;
 
     if(beVerbose) {
-        printf("size of normalization trie              %5u bytes\n", normTrieSize);
-        printf("size of 16-bit extra memory             %5u UChars/uint16_t\n", utm_countItems(extraMem));
+        printf("size of normalization trie              %5u bytes\n", (int)normTrieSize);
+        printf("size of 16-bit extra memory             %5u UChars/uint16_t\n", (int)utm_countItems(extraMem));
         printf("  of that: FC_NFKC_Closure size         %5u UChars/uint16_t\n", ((uint16_t *)utm_getStart(extraMem))[0]);
         printf("size of combining table                 %5u uint16_t\n", combiningTableTop);
-        printf("size of FCD trie                        %5u bytes\n", fcdTrieSize);
-        printf("size of auxiliary trie                  %5u bytes\n", auxTrieSize);
-        printf("size of canonStartSets[]                %5u uint16_t\n", canonStartSetsTop);
+        printf("size of FCD trie                        %5u bytes\n", (int)fcdTrieSize);
+        printf("size of auxiliary trie                  %5u bytes\n", (int)auxTrieSize);
+        printf("size of canonStartSets[]                %5u uint16_t\n", (int)canonStartSetsTop);
         printf("  number of indexes                     %5u uint16_t\n", _NORM_SET_INDEX_TOP);
         printf("  size of sets                          %5u uint16_t\n", canonStartSets[_NORM_SET_INDEX_CANON_SETS_LENGTH]-_NORM_SET_INDEX_TOP);
-        printf("  number of sets                        %5d\n", canonSetsCount);
+        printf("  number of sets                        %5d\n", (int)canonSetsCount);
         printf("  size of BMP search table              %5u uint16_t\n", canonStartSets[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH]);
         printf("  size of supplementary search table    %5u uint16_t\n", canonStartSets[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH]);
         printf("size of " U_ICUDATA_NAME "_" DATA_NAME "." DATA_TYPE " contents: %ld bytes\n", (long)size);

@@ -198,7 +198,8 @@ CharList *pkg_appendToList(CharList *l, CharList** end, const char *str)
   return l;
 }
 
-CharList *pkg_appendFromStrings(CharList *l, CharList** end, const char *s, int32_t len)
+static CharList *
+pkg_appendFromStrings(CharList *l, CharList** end, const char *s, int32_t len)
 {
   CharList *endptr = NULL;
   const char *p;
