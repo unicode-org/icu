@@ -76,15 +76,16 @@ CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
 /**
  * Private constructor for Transliterator from a vector of
  * transliterators.  The vector order is FORWARD, so if dir is REVERSE
- * then the vector order will be reversed.
+ * then the vector order will be reversed.  The caller is responsible
+ * for fixing up the ID.
  */
-CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
-                                               UTransDirection dir,
+CompoundTransliterator::CompoundTransliterator(UTransDirection dir,
                                                UVector& list,
                                                UErrorCode& status) :
-    Transliterator(ID, 0),
+    Transliterator(UnicodeString("", ""), 0),
     trans(0), filters(0), compoundRBTIndex(-1) {
-    init(list, dir, 0, TRUE, status);
+    init(list, dir, 0, FALSE, status);
+    // assume caller will fixup ID
 }
 
 /**
@@ -122,7 +123,8 @@ void CompoundTransliterator::init(const UnicodeString& id,
     }
 
     UVector list;
-    Transliterator::parseCompoundID(id, direction,
+    UnicodeString regenID;
+    Transliterator::parseCompoundID(id, regenID, direction,
                                     idSplitPoint, adoptedSplitTrans,
                                     list, compoundRBTIndex,
                                     NULL, status);
@@ -246,7 +248,7 @@ UnicodeString CompoundTransliterator::joinIDs(Transliterator* const transliterat
  * Copy constructor.
  */
 CompoundTransliterator::CompoundTransliterator(const CompoundTransliterator& t) :
-    Transliterator(t), trans(0), filters(0), count(0) {
+    Transliterator(t), trans(0), filters(0), count(0), compoundRBTIndex(-1) {
     *this = t;
 }
 
@@ -301,6 +303,7 @@ CompoundTransliterator& CompoundTransliterator::operator=(
             filters[i] = t.filters[i]->clone();
         }
     }
+    compoundRBTIndex = t.compoundRBTIndex;
     return *this;
 }
 

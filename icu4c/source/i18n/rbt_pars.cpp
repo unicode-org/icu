@@ -628,8 +628,9 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
             }
             int32_t p = pos;
             UBool sawDelim;
-            Transliterator::parseID(rules, p, sawDelim, direction, NULL, FALSE);
-            if (p == pos) {
+            UnicodeString regenID;
+            Transliterator::parseID(rules, regenID, p, sawDelim, direction, NULL, FALSE);
+            if (p == pos || !sawDelim) {
                 // Invalid ::id
                 status = U_ILLEGAL_ARGUMENT_ERROR;
             } else {
