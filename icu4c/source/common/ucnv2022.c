@@ -28,8 +28,6 @@
 
 #include "unicode/utypes.h"
 #include "cmemory.h"
-#include "ucmp16.h"
-/* SBCS needed: #include "ucmp8.h" */
 #include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
 #include "unicode/ucnv.h"
@@ -1094,10 +1092,9 @@ static const char* getEndOfBuffer_2022(const char** source,
 /**************************************ISO-2022-JP*************************************************/
 
 /************************************** IMPORTANT **************************************************
-* The UConverter_fromUnicode_ISO2022_JP converter doesnot use ucnv_fromUnicode() functions for SBCS,DBCS and
-* MBCS instead the values are obtained directly by accessing the sharedData structs through ucmp8_getU() 
-* ucmp16_getU() macros,and for MBCS by emulating the Markus's code to increase speed, reduce the 
-* overhead of function call and make it efficient.The converter iterates over each Unicode codepoint 
+* The UConverter_fromUnicode_ISO2022_JP converter does not use ucnv_fromUnicode() functions for SBCS,DBCS and
+* MBCS; instead, the values are obtained directly by calling _MBCSFromUChar32().
+* The converter iterates over each Unicode codepoint 
 * to obtain the equivalent codepoints from the codepages supported. Since the source buffer is 
 * processed one char at a time it would make sense to reduce the extra processing a canned converter 
 * would do as far as possible.
@@ -1205,10 +1202,6 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
     int32_t mySourceLength = args->sourceLimit - args->source;
     int32_t mySourceIndex = 0;
     int32_t myTargetIndex = 0;
-    CompactShortArray *myFromUnicodeDBCS = NULL;
-    CompactShortArray *myFromUnicodeDBCSFallback = NULL;
-    /* SBCS was: CompactByteArray  *myFromUnicodeSBCS = NULL; */
-    /* SBCS was: CompactByteArray  *myFromUnicodeSBCSFallback = NULL; */
     UChar32 targetUniChar = missingCharMarker;
     StateEnum currentState=ASCII;
     Cnv2022Type myType =ASCII1;
@@ -1324,41 +1317,16 @@ getTrail:
                              * If mySourceChar is unassigned, then _MBCSSingleFromUChar32() returns -1
                              * which becomes the same as missingCharMarker with the cast to uint16_t.
                              */
-#if 0
-                            /* SBCS was: */
-                            if( mySourceChar <0xffff) {
-                                myFromUnicodeSBCS = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
-                                myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
-                    
-                                targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
-                               
-                                /* There are no fallbacks in ISO_8859_1, ISO_8859_7,JISX201 so we can
-                                 * safely ignore the codepaths below
-                                 */
-                                /*if ((targetUniChar==0) && UCNV_FROM_U_USE_FALLBACK(args->converter, mySourceChar) &&
-                                    (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                                    targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
-                                } */
-                                /* ucmp8_getU returns 0 for missing char so explicitly set it missingCharMarker*/
-                                targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
-                            }
-#endif
                             break;
                     
                         case DBCS:
-                            if(mySourceChar < 0xffff){
-                                myFromUnicodeDBCS = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicode;
-                                myFromUnicodeDBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicodeFallback;
-                                targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCS, mySourceChar);
-                                
-                                /* There are no fallbacks in JISX208,JISX212, KSC5601,GB2312 so we can
-                                 * safely ignore the codepaths below
-                                 */
-                                /*
-                                if ((targetUniChar==missingCharMarker) && UCNV_FROM_U_USE_FALLBACK(args->converter, mySourceChar) &&
-                                    (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                                    targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
-                                } */
+                            {
+                                uint32_t value;
+                                if(2 == _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData, mySourceChar, &value, FALSE)) {
+                                    targetUniChar = (uint16_t)value;
+                                } else {
+                                    targetUniChar = missingCharMarker;
+                                }
                             }
                             break;
 
@@ -1522,10 +1490,6 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnic
     int32_t mySourceLength = args->sourceLimit - args->source;
     int32_t mySourceIndex = 0;
     int32_t myTargetIndex = 0;
-    CompactShortArray *myFromUnicodeDBCS = NULL;
-    CompactShortArray *myFromUnicodeDBCSFallback = NULL;
-    /* SBCS was: CompactByteArray  *myFromUnicodeSBCS = NULL; */
-    /* SBCS was: CompactByteArray  *myFromUnicodeSBCSFallback = NULL; */
     UChar32 targetUniChar = missingCharMarker;
     StateEnum currentState=ASCII;
     Cnv2022Type myType=ASCII1;
@@ -1642,42 +1606,16 @@ getTrail:
                              * If mySourceChar is unassigned, then _MBCSSingleFromUChar32() returns -1
                              * which becomes the same as missingCharMarker with the cast to uint16_t.
                              */
-#if 0
-                            /* SBCS was: */
-                            if(mySourceChar < 0xffff){
-                                myFromUnicodeSBCS = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
-                                myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
-                    
-                                targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
-                    
-                                /* There are no fallbacks in ISO_8859_1, ISO_8859_7,JISX201 so we can
-                                 * safely ignore the codepaths below
-                                 */
-                                /*if ((targetUniChar==0) && UCNV_FROM_U_USE_FALLBACK(args->converter, mySourceChar) &&
-                                    (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                                    targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
-                                } */
-
-                                /* ucmp8_getU returns 0 for missing char so explicitly set it missingCharMarker*/
-                                targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
-                            }
-#endif
                             break;
                     
                         case DBCS:
-                            if(mySourceChar < 0xffff){
-                                myFromUnicodeDBCS = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicode;
-                                myFromUnicodeDBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicodeFallback;
-                                targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCS, mySourceChar);
-                                /* There are no fallbacks in JISX208,JISX212, KSC5601,GB2312 so we can
-                                 * safely ignore the codepaths below
-                                 */
-                                /*
-                                if ((targetUniChar==missingCharMarker) && UCNV_FROM_U_USE_FALLBACK(args->converter, mySourceChar) &&
-                                    (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                                    targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
+                            {
+                                uint32_t value;
+                                if(2 == _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData, mySourceChar, &value, FALSE)) {
+                                    targetUniChar = (uint16_t)value;
+                                } else {
+                                    targetUniChar = missingCharMarker;
                                 }
-                                */
                             }
                             break;
 
@@ -1989,8 +1927,6 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
     UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
-    CompactShortArray *myToUnicodeDBCS=NULL, *myToUnicodeFallbackDBCS = NULL; 
-    UChar *myToUnicodeSBCS = NULL, *myToUnicodeFallbackSBCS = NULL;
     int plane=0; /*dummy variable*/
     pBuf = &tempBuf[0];
     /*Arguments Check*/
@@ -2075,24 +2011,6 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                 case SBCS:
                     if(args->converter->toUnicodeStatus == 0x00){
                         targetUniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(myData->currentConverter->sharedData, mySourceChar);
-#if 0
-                        /* SBCS was: */
-                        myToUnicodeSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicode;
-                        myToUnicodeFallbackSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicodeFallback;
-                        targetUniChar = myToUnicodeSBCS[(unsigned char) mySourceChar];
-                        /* There are no fallbacks in ISO_8859_1, ISO_8859_7,JISX201 so we can
-                         * safely ignore the codepaths below
-                         */
-                        /*
-                        if(targetUniChar> 0xfffe){
-                            if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
-                                (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                            
-                                targetUniChar = myToUnicodeFallbackSBCS[(unsigned char) mySource[mySourceIndex-1]];
-                            }
-                        }
-                        */
-#endif
                     }
                     else{
                         goto SAVE_STATE;
@@ -2100,32 +2018,16 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                     break;
                 
                 case DBCS:
-                    myToUnicodeDBCS = &myData->currentConverter->sharedData->table->dbcs.toUnicode;
-                    myToUnicodeFallbackDBCS = &myData->currentConverter->sharedData->table->dbcs.toUnicodeFallback;
-                
                     if(args->converter->toUnicodeStatus == 0x00){
                         args->converter->toUnicodeStatus = (UChar) mySourceChar;
                         continue;
                     }
                     else{
-                        tempBuf[0] = (char) args->converter->toUnicodeStatus ;
+                        tempBuf[0] = (char) args->converter->toUnicodeStatus;
                         tempBuf[1] = (char) mySourceChar;
-                        mySourceChar = (UChar)((args->converter->toUnicodeStatus << 8) | (mySourceChar & 0x00ff));
-                        args->converter->toUnicodeStatus =0x00;
-                    
-                        targetUniChar = ucmp16_getu(myToUnicodeDBCS,mySourceChar);
-                        /* There are no fallbacks in JISX208,JISX212, KSC5601,GB2312 so we can
-                         * safely ignore the codepaths below
-                         */
-                        /*
-                        if(targetUniChar> 0xfffe){
-                            if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
-                                (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                            
-                                targetUniChar = (UChar) ucmp16_getu(myToUnicodeFallbackDBCS, mySourceChar);
-                            }
-                        }
-                        */
+                        args->converter->toUnicodeStatus = 0;
+                        pBuf = tempBuf;
+                        targetUniChar = _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData, &pBuf, tempBuf+2, FALSE);
                     }
                 
                     break;
@@ -2231,8 +2133,6 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
     UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
-    CompactShortArray *myToUnicodeDBCS=NULL, *myToUnicodeFallbackDBCS = NULL; 
-    UChar *myToUnicodeSBCS = NULL, *myToUnicodeFallbackSBCS = NULL;
     int plane = 0; /*dummy variable*/
     /*Arguments Check*/
     if (U_FAILURE(*err)) 
@@ -2315,24 +2215,6 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                 case SBCS:
                     if(args->converter->toUnicodeStatus == 0x00){
                         targetUniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(myData->currentConverter->sharedData, mySourceChar);
-#if 0
-                        /* SBCS was: */
-                        myToUnicodeSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicode;
-                        myToUnicodeFallbackSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicodeFallback;
-                        targetUniChar = myToUnicodeSBCS[(unsigned char) mySourceChar];
-                        /* There are no fallbacks in ISO_8859_1, ISO_8859_7,JISX201 so we can
-                         * safely ignore the codepaths below
-                         */
-                        /*
-                        if(targetUniChar> 0xfffe){
-                            if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
-                                (myData->currentConverter->sharedData->staticData->hasToUnicodeFallback == TRUE)){
-                            
-                                targetUniChar = myToUnicodeFallbackSBCS[(unsigned char) mySource[mySourceIndex-1]];
-                            }
-                        }
-                        */
-#endif
                     }
                     else{
                         goto SAVE_STATE;
@@ -2340,32 +2222,18 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                     break;
                 
                 case DBCS:
-                    myToUnicodeDBCS = &myData->currentConverter->sharedData->table->dbcs.toUnicode;
-                    myToUnicodeFallbackDBCS = &myData->currentConverter->sharedData->table->dbcs.toUnicodeFallback;
-                
                     if(args->converter->toUnicodeStatus == 0x00){
                         args->converter->toUnicodeStatus = (UChar) mySourceChar;
                         continue;
                     }
                     else{
-                        tempBuf[0] = (char) args->converter->toUnicodeStatus ;
+                        const char *pBuf;
+
+                        tempBuf[0] = (char) args->converter->toUnicodeStatus;
                         tempBuf[1] = (char) mySourceChar;
-                        mySourceChar= (UChar)((args->converter->toUnicodeStatus << 8) | (mySourceChar & 0x00ff));
-                        args->converter->toUnicodeStatus =0x00;
-                    
-                        targetUniChar = ucmp16_getu(myToUnicodeDBCS,mySourceChar);
-                        /* There are no fallbacks in JISX208,JISX212, KSC5601,GB2312 so we can
-                         * safely ignore the codepaths below
-                         */
-                        /*
-                        if(targetUniChar> 0xfffe){
-                            if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
-                                (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                            
-                                targetUniChar = (UChar) ucmp16_getu(myToUnicodeFallbackDBCS, mySourceChar);
-                            }
-                        } 
-                        */
+                        args->converter->toUnicodeStatus = 0;
+                        pBuf = tempBuf;
+                        targetUniChar = _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData, &pBuf, tempBuf+2, FALSE);
                     }
                 
                     break;
@@ -2397,7 +2265,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                 *(myTarget++)=(UChar)targetUniChar;
                 targetUniChar=missingCharMarker;
             }
-            else if(targetUniChar>=0xfffe){
+            else{
 SAVE_STATE:
                 {
                     const char *saveSource = args->source;
@@ -3378,8 +3246,6 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
     int32_t myTargetIndex = 0;
     int32_t length  =0;
     int plane = 0;
-    CompactShortArray *myFromUnicodeDBCS = NULL;
-    CompactShortArray *myFromUnicodeDBCSFallback = NULL;
 
     UChar32 targetUniChar = missingCharMarker;
     
@@ -3467,22 +3333,15 @@ getTrail:
                     switch (myConverterTypeCN[currentState]){
                     
                         case DBCS:
-                            if(mySourceChar<0xffff){
-                                myFromUnicodeDBCS = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicode;
-                                myFromUnicodeDBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicodeFallback;
-                                targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCS, mySourceChar);
-                               
-                                /* There are no fallbacks in ISO-IR-165 or GB_2312_1 so we can
-                                 * safely ignore the codepaths below
-                                 */
-                                /*
-                                if ((targetUniChar==missingCharMarker) && UCNV_FROM_U_USE_FALLBACK(args->converter, mySourceChar) &&
-                                    (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                                    targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
-                                } */
-                            }
                             if(( myConverterData->version) == 0 && currentState==ISO_IR_165){
                                 targetUniChar=missingCharMarker;
+                            } else {
+                                uint32_t value;
+                                if(2 == _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData, mySourceChar, &value, FALSE)) {
+                                    targetUniChar = (uint16_t)value;
+                                } else {
+                                    targetUniChar = missingCharMarker;
+                                }
                             }
                             break;
                     
@@ -3684,8 +3543,6 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnic
     int32_t myTargetIndex = 0;
     int32_t length  =0;
     int plane = 0;
-    CompactShortArray *myFromUnicodeDBCS = NULL;
-    CompactShortArray *myFromUnicodeDBCSFallback = NULL;
     UChar32 targetUniChar = missingCharMarker;
     int32_t currentOffset=0;
     StateEnumCN currentState=ASCII;
@@ -3772,20 +3629,15 @@ getTrail:
                     switch (myConverterTypeCN[currentState]){
                                                                                        
                         case DBCS:
-                            if(mySourceChar<0xffff){
-                                myFromUnicodeDBCS = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicode;
-                                myFromUnicodeDBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicodeFallback;
-                                targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCS, mySourceChar);
-                                /* There are no fallbacks in ISO-IR-165 or GB_2312_1 so we can
-                                 * safely ignore the codepaths below
-                                 */
-                                /*if ((targetUniChar==missingCharMarker) && UCNV_FROM_U_USE_FALLBACK(args->converter, mySourceChar) &&
-                                    (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                                    targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
-                                } */
-                            }
                             if(( myConverterData->version) == 0 && currentState==ISO_IR_165){
                                 targetUniChar=missingCharMarker;
+                            } else {
+                                uint32_t value;
+                                if(2 == _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData, mySourceChar, &value, FALSE)) {
+                                    targetUniChar = (uint16_t)value;
+                                } else {
+                                    targetUniChar = missingCharMarker;
+                                }
                             }
                             break;
                     
@@ -4234,7 +4086,6 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
     UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
-    CompactShortArray *myToUnicodeDBCS=NULL, *myToUnicodeFallbackDBCS = NULL; 
     
     plane=myData->plane;
     /*Arguments Check*/
@@ -4340,30 +4191,16 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                     break;
                 
                 case DBCS:
-                    myToUnicodeDBCS = &myData->currentConverter->sharedData->table->dbcs.toUnicode;
-                    myToUnicodeFallbackDBCS = &myData->currentConverter->sharedData->table->dbcs.toUnicodeFallback;
-                
                     if(args->converter->toUnicodeStatus == 0x00){
                         args->converter->toUnicodeStatus = (UChar) mySourceChar;
                         continue;
                     }
                     else{
-                        tempBuf[0] = (char) args->converter->toUnicodeStatus ;
+                        tempBuf[0] = (char) args->converter->toUnicodeStatus;
                         tempBuf[1] = (char) mySourceChar;
-                        mySourceChar= (UChar)((args->converter->toUnicodeStatus << 8) | (mySourceChar & 0x00ff));
-                        args->converter->toUnicodeStatus =0x00;
-                    
-                        targetUniChar = ucmp16_getu(myToUnicodeDBCS,mySourceChar); 
-                        /* There are no fallbacks in ISO-IR-165 or GB_2312_1 so we can
-                         * safely ignore the codepaths below
-                         */
-                        /*if(targetUniChar> 0xfffe){
-                            if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
-                                (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                            
-                                targetUniChar = (UChar) ucmp16_getu(myToUnicodeFallbackDBCS, mySourceChar);
-                            }
-                        } */
+                        args->converter->toUnicodeStatus = 0;
+                        pBuf = tempBuf;
+                        targetUniChar = _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData, &pBuf, tempBuf+2, FALSE);
                     }
                 
                     break;
@@ -4486,7 +4323,6 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
     UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
-    CompactShortArray *myToUnicodeDBCS=NULL, *myToUnicodeFallbackDBCS = NULL; 
     
     /*Arguments Check*/
     if (U_FAILURE(*err)) 
@@ -4583,31 +4419,16 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                 break;
                 
             case DBCS:
-                myToUnicodeDBCS = &myData->currentConverter->sharedData->table->dbcs.toUnicode;
-                myToUnicodeFallbackDBCS = &myData->currentConverter->sharedData->table->dbcs.toUnicodeFallback;
-                
                 if(args->converter->toUnicodeStatus == 0x00){
                     args->converter->toUnicodeStatus = (UChar) mySourceChar;
                     continue;
                 }
                 else{
-                    tempBuf[0] = (char) args->converter->toUnicodeStatus ;
+                    tempBuf[0] = (char) args->converter->toUnicodeStatus;
                     tempBuf[1] = (char) mySourceChar;
-                    mySourceChar= (UChar)((args->converter->toUnicodeStatus << 8) | (mySourceChar & 0x00ff));
-                    args->converter->toUnicodeStatus =0x00;
-                    
-                    targetUniChar = ucmp16_getu(myToUnicodeDBCS,mySourceChar);
-                    /* There are no fallbacks in ISO-IR-165 or GB_2312_1 so we can
-                     * safely ignore the codepaths below
-                     */
-                    /*
-                    if(targetUniChar> 0xfffe){
-                        if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
-                            (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                            
-                            targetUniChar = (UChar) ucmp16_getu(myToUnicodeFallbackDBCS, mySourceChar);
-                        }
-                    } */
+                    args->converter->toUnicodeStatus = 0;
+                    pBuf = tempBuf;
+                    targetUniChar = _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData, &pBuf, tempBuf+2, FALSE);
                 }
                 
                 break;
