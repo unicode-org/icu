@@ -200,7 +200,7 @@ isPOSIXClose(const UnicodeString &pattern, int32_t pos) {
  * pinning values > UNICODESET_HIGH-1 to UNICODESET_HIGH-1.
  * It modifies its argument in-place and also returns it.
  */
-inline UChar32 pinCodePoint(UChar32& c) {
+static inline UChar32 pinCodePoint(UChar32& c) {
     if (c < UNICODESET_LOW) {
         c = UNICODESET_LOW;
     } else if (c > (UNICODESET_HIGH-1)) {
