@@ -531,7 +531,7 @@ public:
 
     /**
      * Register a new break iterator of the indicated kind, to use in the given locale.
-     * The break iterator will be adoped.  Clones of the iterator will be returned
+     * The break iterator will be adopted.  Clones of the iterator will be returned
      * if a request for a break iterator of the given kind matches or falls back to
      * this locale.
      * @param toAdopt the BreakIterator instance to be adopted
