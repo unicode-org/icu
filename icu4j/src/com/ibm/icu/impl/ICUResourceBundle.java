@@ -457,7 +457,7 @@ public abstract class ICUResourceBundle extends UResourceBundle{
             try {
                     ICUResourceBundle irb = r.get(resName);
                    /* UResourceBundle urb = */irb.get(kwVal);
-                    fullBase = r.getULocale(); // If the get() completed, we have the full base locale
+                    fullBase = irb.getULocale(); // If the get() completed, we have the full base locale
 
                     // If we fell back to an ancestor of the old 'default',
                     // we need to re calculate the "default" keyword.
