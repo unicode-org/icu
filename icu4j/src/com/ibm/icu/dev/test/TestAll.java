@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2002/07/22 23:28:21 $ 
- * $Revision: 1.30 $
+ * $Date: 2002/07/25 21:22:54 $ 
+ * $Revision: 1.31 $
  *
  *****************************************************************************************
  */
@@ -195,5 +195,17 @@ public class TestAll extends TestFmwk {
         run(new TestFmwk[] {
         new com.ibm.icu.dev.test.util.VersionInfoTest()
         });        
+    }
+    
+    public void TestIterator() throws Exception {
+        run(new TestFmwk[] {
+            new com.ibm.icu.dev.test.iterator.TestUCharacterIterator(),
+        });
+    }
+    
+    public void TestUtil() throws Exception {
+        run(new TestFmwk[] {
+            new com.ibm.icu.dev.test.util.ICUListResourceBundleTest(),
+            });
     }
 }

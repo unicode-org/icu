@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $
- * $Date: 2002/07/24 01:04:41 $
- * $Revision: 1.13 $
+ * $Date: 2002/07/25 21:22:54 $
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -63,6 +63,7 @@ public class BasicTest extends TestFmwk {
         { "\uFF76\u3099",       "\uFF76\u3099",         "\uFF76\u3099"      }, // hw_ka + ten
 
         { "A\u0300\u0316", "A\u0316\u0300", "\u00C0\u0316" },
+        {"\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e","\\U0001D157\\U0001D165\\U0001D157\\U0001D165\\U0001D157\\U0001D165", "\\U0001D157\\U0001D165\\U0001D157\\U0001D165\\U0001D157\\U0001D165"},
     };
 
     String[][] compatTests = {
@@ -673,8 +674,8 @@ public class BasicTest extends TestFmwk {
                              String[][] tests, int outCol) throws Exception{
         for (int i = 0; i < tests.length; i++)
         {
-            String input = tests[i][0];
-            String expect = tests[i][outCol];
+            String input = Utility.unescape(tests[i][0]);
+            String expect = Utility.unescape(tests[i][outCol]);
 
             logln("Normalizing '" + input + "' (" + hex(input) + ")" );
 
@@ -689,8 +690,8 @@ public class BasicTest extends TestFmwk {
         char[] output = new char[1];
         for (int i = 0; i < tests.length; i++)
         {
-            char[] input = tests[i][0].toCharArray();
-            String expect = tests[i][outCol];
+            char[] input = Utility.unescape(tests[i][0]).toCharArray();
+            String expect =Utility.unescape( tests[i][outCol]);
 
             logln("Normalizing '" + new String(input) + "' (" +
                         hex(new String(input)) + ")" );
@@ -718,8 +719,8 @@ public class BasicTest extends TestFmwk {
                              String[][] tests, int outCol) throws Exception{
         for (int i = 0; i < tests.length; i++)
         {
-            String input = tests[i][0];
-            String expect = tests[i][outCol];
+            String input = Utility.unescape(tests[i][0]);
+            String expect = Utility.unescape(tests[i][outCol]);
 
             logln("Normalizing '" + input + "' (" + hex(input) + ")" );
 
@@ -734,8 +735,8 @@ public class BasicTest extends TestFmwk {
         char[] output = new char[1];
         for (int i = 0; i < tests.length; i++)
         {
-            char[] input = tests[i][0].toCharArray();
-            String expect = tests[i][outCol];
+            char[] input = Utility.unescape(tests[i][0]).toCharArray();
+            String expect = Utility.unescape(tests[i][outCol]);
 
             logln("Normalizing '" + new String(input) + "' (" +
                         hex(new String(input)) + ")" );
@@ -759,12 +760,13 @@ public class BasicTest extends TestFmwk {
             }
         }
     }
+
     private void composeTest(Normalizer.Mode mode,
                              String[][] tests, int outCol) throws Exception{
         for (int i = 0; i < tests.length; i++)
         {
-            String input = tests[i][0];
-            String expect = tests[i][outCol];
+            String input = Utility.unescape(tests[i][0]);
+            String expect = Utility.unescape(tests[i][outCol]);
 
             logln("Normalizing '" + input + "' (" + hex(input) + ")" );
 
@@ -779,8 +781,8 @@ public class BasicTest extends TestFmwk {
         char[] output = new char[1];
         for (int i = 0; i < tests.length; i++)
         {
-            char[] input = tests[i][0].toCharArray();
-            String expect = tests[i][outCol];
+            char[] input = Utility.unescape(tests[i][0]).toCharArray();
+            String expect = Utility.unescape(tests[i][outCol]);
 
             logln("Normalizing '" + new String(input) + "' (" +
                         hex(new String(input)) + ")" );
@@ -807,8 +809,8 @@ public class BasicTest extends TestFmwk {
     private void iterateTest(Normalizer iter, String[][] tests, int outCol){
         for (int i = 0; i < tests.length; i++)
         {
-            String input = tests[i][0];
-            String expect = tests[i][outCol];
+            String input = Utility.unescape(tests[i][0]);
+            String expect = Utility.unescape(tests[i][outCol]);
 
             logln("Normalizing '" + input + "' (" + hex(input) + ")" );
 
@@ -821,31 +823,33 @@ public class BasicTest extends TestFmwk {
     {
         int index = 0;
         int ch;
-        for (ch = iter.first();ch!=iter.DONE;ch=iter.next())
-        {
+        UCharacterIterator cIter =  UCharacterIterator.getInstance(expected);
+        
+        while ((ch=iter.next())!= iter.DONE){
             if (index >= expected.length()) {
                 errln("FAIL: " + msg + "Unexpected character '" + (char)ch
                         + "' (" + hex(ch) + ")"
                         + " at index " + index);
                 break;
             }
-            char want = expected.charAt(index);
+            int want = UTF16.charAt(expected,index);
             if (ch != want) {
                 errln("FAIL: " + msg + "got '" + (char)ch
                         + "' (" + hex(ch) + ")"
                         + " but expected '" + want + "' (" + hex(want)+ ")"
                         + " at index " + index);
             }
-            index++;
+            index+=  UTF16.getCharCount(ch);
         }
         if (index < expected.length()) {
             errln("FAIL: " + msg + "Only got " + index + " chars, expected "
             + expected.length());
         }
-
+        
+        cIter.setToLimit();
         while((ch=iter.previous())!=iter.DONE){
-            char want = expected.charAt(--index);
-            if (ch != want) {
+            int want = cIter.previousCodePoint();
+            if (ch != want ) {
                 errln("FAIL: " + msg + "got '" + (char)ch
                         + "' (" + hex(ch) + ")"
                         + " but expected '" + want + "' (" + hex(want) + ")"
@@ -1173,6 +1177,41 @@ public class BasicTest extends TestFmwk {
             }
         }
     }
+    
+    public void TestDeprecatedAPI(){
+         // instantiate a Normalizer from a CharacterIterator
+        String s=Utility.unescape("a\u0308\uac00\\U0002f800");
+        // make s a bit longer and more interesting
+        java.text.CharacterIterator iter = new StringCharacterIterator(s+s);
+        //test deprecated constructors
+        Normalizer norm = new Normalizer(iter, Normalizer.NFC,0);
+        Normalizer norm2 = new Normalizer(s,Normalizer.NFC,0);
+        if(norm.next()!=0xe4) {
+            errln("error in Normalizer(CharacterIterator).next()");
+        }       
+        // test clone(), ==, and hashCode()
+        Normalizer clone=(Normalizer)norm.clone();
+        if(clone.getBeginIndex()!= norm.getBeginIndex()){
+           errln("error in Normalizer.getBeginIndex()");
+        }
+        
+        if(clone.getEndIndex()!= norm.getEndIndex()){
+           errln("error in Normalizer.getEndIndex()");
+        }
+        // test setOption() and getOption()
+        clone.setOption(0xaa0000, true);
+        clone.setOption(0x20000, false);
+        if(clone.getOption(0x880000) ==0|| clone.getOption(0x20000)==1) {
+           errln("error in Normalizer::setOption() or Normalizer::getOption()");
+        }
+        //test deprecated normalize method
+        Normalizer.normalize(s,Normalizer.NFC,0);
+        //test deprecated compose method
+        Normalizer.compose(s,false,0);
+        //test deprecated decompose method
+        Normalizer.decompose(s,false,0);
+
+    }
 
 	// test APIs that are not otherwise used - improve test coverage
 	public void TestNormalizerAPI() {
@@ -1191,6 +1230,11 @@ public class BasicTest extends TestFmwk {
 	    if(clone.equals(norm)) {
 	        errln("error in Normalizer(Normalizer(CharacterIterator)).clone()!=norm");
 	    }
+
+        
+        if(clone.getLength()!= norm.getLength()){
+           errln("error in Normalizer.getBeginIndex()");
+        } 
 	    // clone must have the same hashCode()
 	    //if(clone.hashCode()!=norm.hashCode()) {
 	    //    errln("error in Normalizer(Normalizer(CharacterIterator)).clone().hashCode()!=copy.hashCode()");
@@ -1240,7 +1284,24 @@ public class BasicTest extends TestFmwk {
         ) {
             errln("error in Normalizer::setText() or Normalizer::getText()");
         }
-
+ 
+        char[] fillIn1 = new char[clone.getLength()];
+        char[] fillIn2 = new char[iter.getLength()];
+        int len = clone.getText(fillIn1);
+        iter.getText(fillIn2,0);
+        if(!Utility.arrayRegionMatches(fillIn1,0,fillIn2,0,len)){
+            errln("error in Normalizer.getText(). Normalizer: "+
+                            Utility.hex(new String(fillIn1))+ 
+                            " Iter: " + Utility.hex(new String(fillIn2)));
+        }
+        
+        clone.setText(fillIn1);
+        len = clone.getText(fillIn2);
+        if(!Utility.arrayRegionMatches(fillIn1,0,fillIn2,0,len)){
+            errln("error in Normalizer.setText() or Normalizer.getText()"+
+                            Utility.hex(new String(fillIn1))+ 
+                            " Iter: " + Utility.hex(new String(fillIn2)));
+        }
 
 	    // test setText(UChar *), getUMode() and setMode()
 	    clone.setText(s);
@@ -1252,15 +1313,6 @@ public class BasicTest extends TestFmwk {
 	    if(clone.next()!=0x308 || clone.next()!=0x1100) {
 	        errln("error in Normalizer::setText() or Normalizer::setMode()");
 	    }
-
-
-	    // test setOption() and getOption()
-	    //setOption() and getOption() are deprecated
-        //clone.setOption(0xaa0000, true);
-	    //clone.setOption(0x20000, false);
-	    //if(clone.getOption(0x880000) ==0|| clone.getOption(0x20000)==1) {
-	    //   errln("error in Normalizer::setOption() or Normalizer::getOption()");
-	    //}
 
 	    // test last()/previous() with an internal buffer overflow
 	    StringBuffer buf = new StringBuffer("aaaaaaaaaa");
@@ -1623,6 +1675,8 @@ public class BasicTest extends TestFmwk {
 
 	        "\u00cc",
 	        "\u0069\u0300",
+            "a\u0360\u0345\u0360\u0345b",
+            "a\u0345\u0360\u0345\u0360b",
 
     };
 
@@ -1978,5 +2032,28 @@ public class BasicTest extends TestFmwk {
             errln("Reordering of combining marks failed. Expected: "+Utility.hex(expected)+" Got: "+ Utility.hex(result));
         }
     }
+    /*
+     * Re-enable this test when UTC fixes UAX 21
+    public void TestUAX21Failure(){
+        final String[][] cases = new String[][]{
+		        {"\u0061\u0345\u0360\u0345\u0062", "\u0061\u0360\u0345\u0345\u0062"},
+				{"\u0061\u0345\u0345\u0360\u0062", "\u0061\u0360\u0345\u0345\u0062"},
+				{"\u0061\u0345\u0360\u0362\u0360\u0062", "\u0061\u0362\u0360\u0360\u0345\u0062"},
+				{"\u0061\u0360\u0345\u0360\u0362\u0062", "\u0061\u0362\u0360\u0360\u0345\u0062"},
+				{"\u0061\u0345\u0360\u0362\u0361\u0062", "\u0061\u0362\u0360\u0361\u0345\u0062"},
+				{"\u0061\u0361\u0345\u0360\u0362\u0062", "\u0061\u0362\u0361\u0360\u0345\u0062"},
+        };
+        for(int i = 0; i< cases.length; i++){
+	        String s1 =cases[0][0]; 
+	        String s2 = cases[0][1];
+	        if( (Normalizer.compare(s1,s2,Normalizer.FOLD_CASE_DEFAULT ==0)//case sensitive compare
+                &&
+                (Normalizer.compare(s1,s2,Normalizer.COMPARE_IGNORE_CASE)!=0)){
+	            errln("Normalizer.compare() failed for s1: " 
+	                    + Utility.hex(s1) +" s2: " + Utility.hex(s2));
+	        }
+        }
+    }
+    */
 
 }

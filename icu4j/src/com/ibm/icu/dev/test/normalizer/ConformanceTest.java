@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/ConformanceTest.java,v $ 
- * $Date: 2002/06/20 01:16:24 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/07/25 21:22:54 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -16,10 +16,8 @@ package com.ibm.icu.dev.test.normalizer;
 import com.ibm.icu.dev.test.TestUtil;
 import java.io.*;
 import com.ibm.icu.dev.test.*;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.impl.Utility;
-import com.ibm.icu.impl.UCharacterProperty;
 
 public class ConformanceTest extends TestFmwk {
 
@@ -34,6 +32,14 @@ public class ConformanceTest extends TestFmwk {
         // them later as needed.
         normalizer = new Normalizer("", Normalizer.NFC);
     }
+    // more interesting conformance test cases, not in the unicode.org NormalizationTest.txt
+	static  String[] moreCases ={
+	    // Markus 2001aug30
+	    "0061 0332 0308;00E4 0332;0061 0332 0308;00E4 0332;0061 0332 0308; # Markus 0",
+	
+	    // Markus 2001oct26 - test edge case for iteration: U+0f73.cc==0 but decomposition.lead.cc==129
+	    "0061 0301 0F73;00E1 0F71 0F72;0061 0F71 0F72 0301;00E1 0F71 0F72;0061 0F71 0F72 0301; # Markus 1"
+	};
 
     /**
      * Test the conformance of NewNormalizer to
@@ -47,12 +53,22 @@ public class ConformanceTest extends TestFmwk {
         StringBuffer buf = new StringBuffer();
         int passCount = 0;
         int failCount = 0;
-        InputStream is = null;
+        UnicodeSet other = new UnicodeSet(0, 0x10ffff);
+        int c=0;
         try {
             input = TestUtil.getDataReader("unicode/NormalizationTest.txt");
             for (int count = 0;;++count) {
                 line = input.readLine();
-                if (line == null) break;
+                if (line == null) {
+                    //read the extra test cases
+	                if(count > moreCases.length) {
+		                count = 0;
+		            } else if(count == moreCases.length) {
+		                // all done
+		                break;
+		            }
+                    line = moreCases[count++];
+                }
                 if (line.length() == 0) continue;
 
                 // Expect 5 columns of this format:
@@ -63,6 +79,19 @@ public class ConformanceTest extends TestFmwk {
 
                 // Parse out the fields
                 hexsplit(line, ';', fields, buf);
+                
+                // Remove a single code point from the "other" UnicodeSet
+		        if(fields[0].length()==UTF16.moveCodePointOffset(fields[0],0, 1)) {
+		            c=UTF16.charAt(fields[0],0); 
+		            if(0xac20<=c && c<=0xd73f) {
+		                // not an exhaustive test run: skip most Hangul syllables
+		                if(c==0xac20) {
+		                    other.remove(0xac20, 0xd73f);
+		                }
+		                continue;
+		            }
+		            other.remove(c);
+		        }
                 if (checkConformance(fields, line)) {
                     ++passCount;
                 } else {
@@ -92,7 +121,7 @@ public class ConformanceTest extends TestFmwk {
             logln("Total: " + passCount + " lines passed");
         }
     }
-
+    
     /**
      * Verify the conformance of the given line of the Unicode
      * normalization (UTR 15) test suite file.  For each line,
@@ -113,7 +142,6 @@ public class ConformanceTest extends TestFmwk {
         StringBuffer buf = new StringBuffer(); // scratch
         String out,fcd;
         int i=0;
-        UTF16.StringComparator comp = new UTF16.StringComparator();
         for (i=0; i<5; ++i) {
             if (i<3) {
                 out = Normalizer.normalize(field[i], Normalizer.NFC);
@@ -145,7 +173,6 @@ public class ConformanceTest extends TestFmwk {
                 
                 out = iterativeNorm(new StringCharacterIterator(field[i]), Normalizer.NFD, buf, -1);
                 pass &= assertEqual("D(-1)", field[i], out, field[2], "c3!=D(c" + (i+1));
-                
             }
             out = Normalizer.normalize(field[i], Normalizer.NFKC);
             pass &= assertEqual("KC", field[i], out, field[3], "c4!=KC(c" + (i+1));
@@ -179,6 +206,8 @@ public class ConformanceTest extends TestFmwk {
             pass &= assertEqual("KD(-1)", field[i], out, field[4], "c5!=KD(c" + (i+1));
               
         }
+        compare(field[1],field[2]);
+        compare(field[0],field[1]);
          // test quick checks
 	    if(Normalizer.NO == Normalizer.quickCheck(field[1], Normalizer.NFC)) {
 	        errln("Normalizer error: quickCheck(NFC(s), NewNormalizer.NFC) is NewNormalizer.NO");
@@ -213,23 +242,46 @@ public class ConformanceTest extends TestFmwk {
             errln("Normalizer error: isNormalized(s, NewNormalizer.NFKC) is TRUE");
             pass = false;
         }
-	
+	    // test api that takes a char[]
+        if(!Normalizer.isNormalized(field[1].toCharArray(),0,field[1].length(), Normalizer.NFC)) {
+            errln("Normalizer error: isNormalized(NFC(s), NewNormalizer.NFC) is false");
+            pass = false;
+        }
+        // test api that takes a codepoint
+        if(!Normalizer.isNormalized(UTF16.charAt(field[1],0), Normalizer.NFC)) {
+            errln("Normalizer error: isNormalized(NFC(s), NewNormalizer.NFC) is false");
+            pass = false;
+        }
 	    // test FCD quick check and "makeFCD"
-	    fcd=Normalizer.normalize(field[0], Normalizer.FCD);
+        fcd=Normalizer.normalize(field[0], Normalizer.FCD);
 	    if(Normalizer.NO == Normalizer.quickCheck(fcd, Normalizer.FCD)) {
 	        errln("Normalizer error: quickCheck(FCD(s), NewNormalizer.FCD) is NewNormalizer.NO");
 	        pass = false;
 	    }
+        if(Normalizer.NO == Normalizer.quickCheck(fcd, Normalizer.FCD)) {
+            errln("Normalizer error: quickCheck(FCD(s), NewNormalizer.FCD) is NewNormalizer.NO");
+            pass = false;
+        }
 	    if(Normalizer.NO == Normalizer.quickCheck(field[2], Normalizer.FCD)) {
 	        errln("Normalizer error: quickCheck(NFD(s), NewNormalizer.FCD) is NewNormalizer.NO");
 	        pass = false;
 	    }
+
 	    if(Normalizer.NO == Normalizer.quickCheck(field[4], Normalizer.FCD)) {
 	        errln("Normalizer error: quickCheck(NFKD(s), NewNormalizer.FCD) is NewNormalizer.NO");
 	        pass = false;
 	    }
-	
-	    out=Normalizer.normalize(fcd, Normalizer.NFD);
+        
+        out = iterativeNorm(new StringCharacterIterator(field[0]), Normalizer.FCD, buf, +1);
+        out = iterativeNorm(new StringCharacterIterator(field[0]), Normalizer.FCD, buf, -1);
+        
+        out = iterativeNorm(new StringCharacterIterator(field[2]), Normalizer.FCD, buf, +1);
+        out = iterativeNorm(new StringCharacterIterator(field[2]), Normalizer.FCD, buf, -1);
+        
+        out = iterativeNorm(new StringCharacterIterator(field[4]), Normalizer.FCD, buf, +1);
+        out = iterativeNorm(new StringCharacterIterator(field[4]), Normalizer.FCD, buf, -1);
+        
+        out=Normalizer.normalize(fcd, Normalizer.NFD);
 	    if(!out.equals(field[2])) {
 	        errln("Normalizer error: NFD(FCD(s))!=NFD(s)");
 	        pass = false;
@@ -240,8 +292,28 @@ public class ConformanceTest extends TestFmwk {
        
         return pass;
     }
-    
-
+    private void compare(String s1, String s2){
+        if(s1.length()==1 && s2.length()==1){
+            if(Normalizer.compare(UTF16.charAt(s1,0),UTF16.charAt(s2,0),Normalizer.COMPARE_IGNORE_CASE)!=0){
+                errln("Normalizer.compare(int,int) failed for s1: "
+                        +Utility.hex(s1) + " s2: " + Utility.hex(s2));
+            }    
+        }
+        if(s1.length()==1 && s2.length()>1){
+            if(Normalizer.compare(UTF16.charAt(s1,0),s2,Normalizer.COMPARE_IGNORE_CASE)!=0){
+                errln("Normalizer.compare(int,String) failed for s1: "
+                        +Utility.hex(s1) + " s2: " + Utility.hex(s2));
+            }    
+        }
+        if(s1.length()>1 && s2.length()>1){
+            // TODO: Re-enable this tests after UTC fixes UAX 21
+            if(s1.indexOf('\u0345')>=0)return;
+            if(Normalizer.compare(s1.toCharArray(),s2.toCharArray(),Normalizer.COMPARE_IGNORE_CASE)!=0){
+                errln("Normalizer.compare(char[],char[]) failed for s1: "
+                        +Utility.hex(s1) + " s2: " + Utility.hex(s2));
+            }    
+        }    
+    }
     /**
      * Do a normalization using the iterative API in the given direction.
      * @param buf scratch buffer
@@ -391,4 +463,6 @@ public class ConformanceTest extends TestFmwk {
         hexsplit(line, ';', fields, buf);
         checkConformance(fields, line);
     }
+    
+
 }

@@ -16,7 +16,7 @@ public final class ICUListResourceBundleTest extends TestFmwk
 
     public void TestReferences() {
 		ResourceBundle rb = ICULocaleData.getLocaleElements("th");
-		System.out.println("got rb:" + rb);
+		logln("got rb:" + rb);
 	
 		byte[] binaryData = null;//(byte[])rb.getObject("%%CollationBin");
 		Object colElem = rb.getObject("CollationElements");
@@ -26,14 +26,14 @@ public final class ICUListResourceBundleTest extends TestFmwk
 	           binaryData = (byte[]) colElemArr[0][1];
             }
         }
-        System.out.println("got binaryData: " + binaryData + " length: " + (binaryData == null ? 0 : binaryData.length));
+        logln("got binaryData: " + binaryData + " length: " + (binaryData == null ? 0 : binaryData.length));
 		Object[] stringArrayData = (Object[])rb.getObject("CollationElements");
 		//String[] collationData = new String[] {
 		 //   (String)stringArrayData[0],
 		 //   (String)stringArrayData[0]
 		//};
-		System.out.println("got stringData: " + stringArrayData + " length: " + stringArrayData.length);
-		System.out.println("got stringDataElement: " + stringArrayData[0] + " length: " + stringArrayData.length);
+		logln("got stringData: " + stringArrayData + " length: " + stringArrayData.length);
+		logln("got stringDataElement: " + stringArrayData[0] + " length: " + stringArrayData.length);
 		//System.out.println("got sdee: " + collationData[0]);
 		//	System.out.println("char data length: " + stringArrayData.length());
     }
