@@ -474,3 +474,8 @@ bool_t UnicodeConverterCPP::isAmbiguous(void) const
 {
     return ucnv_isAmbiguous(myUnicodeConverter);
 }
+
+
+
+
+
