@@ -10,6 +10,7 @@
 
 #include "unicode/uniset.h"
 #include "unicode/parsepos.h"
+#include "unicode/unicode.h"
 #include "symtable.h"
 #include "cmemory.h"
 #include "rbt_rule.h"
