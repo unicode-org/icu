@@ -77,7 +77,7 @@ icu4c/source/data/brkitr/word_thLE.brk -text
 icu4c/source/data/unidata/UCARules.txt -text
 icu4c/source/samples/ucnv/data02.bin -text
 icu4c/source/test/testdata/importtest.bin -text
-icu4c/source/test/testdata/uni-text.txt -text
+icu4c/source/test/testdata/uni-text.bin -text
 icu4j/src/com/ibm/data/misc/english.dict -text
 icu4j/src/com/ibm/icu/dev/data/holidays_jp.ucs -text
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text

@@ -133,7 +133,7 @@ static void TestConvert()
 
     const char* CodePagesTestFiles[NUM_CODEPAGE]    =
     { 
-      "uni-text.txt"
+      "uni-text.bin"
     };
 
     
