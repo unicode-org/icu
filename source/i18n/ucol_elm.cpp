@@ -128,7 +128,9 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, const UCollator *UC
 void uprv_uca_closeTempTable(tempUCATable *t) {
   uprv_free(t->expansions->CEs);
   uprv_free(t->expansions);
-  uprv_cnttab_close(t->contractions);
+  if(t->contractions != NULL) {
+    uprv_cnttab_close(t->contractions);
+  }
   ucmp32_close(t->mapping);
 
   uprv_free(t->maxExpansions->endExpansionCE);
@@ -377,6 +379,7 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
             /* This loop has to change the CE at the end of contraction REDO!*/
             uprv_cnttab_changeLastCE(contractions, CE, element->mapCE, TRUE, status);
         } else {
+          ucmp32_set(mapping, element->cPoints[0], element->mapCE);
 #ifdef UCOL_DEBUG
           fprintf(stderr, "Warning - trying to overwrite existing data %08X for cp %04X with %08X\n", CE, element->cPoints[0], element->CEs[0]);
           //*status = U_ILLEGAL_ARGUMENT_ERROR;
