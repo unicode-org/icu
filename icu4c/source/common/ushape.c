@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -231,6 +231,7 @@ _shapeToArabicDigitsWithContext(UChar *s, int32_t length,
     int32_t i;
     UChar c;
 
+    errorCode=U_ZERO_ERROR;
     bdp=ubidi_getSingleton(&errorCode);
     if(U_FAILURE(errorCode)) {
         return;
