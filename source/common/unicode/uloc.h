@@ -333,7 +333,7 @@ uloc_getLanguage(const char*    localeID,
  *
  * @param localeID the locale to get the country code with
  * @param country the country code for localeID
- * @param languageCapacity the size of the coutry buffer to store the  
+ * @param countryCapacity the size of the country buffer to store the  
  * country code with
  * @param err error information if retrieving the country code failed
  * @return the actual buffer size needed for the country code.  If it's greater 
@@ -449,7 +449,7 @@ uloc_getDisplayLanguage(const char* locale,
  *                 inLocale would result in "Anglais", while passing Locale::getGerman()
  *                 for inLocale would result in "Englisch".
  * @param country the displayable country code for localeID
- * @param languageCapacity the size of the coutry buffer to store the  
+ * @param countryCapacity the size of the country buffer to store the  
  * displayable country code with
  * @param status error information if retrieving the displayable country code failed
  * @return the actual buffer size needed for the displayable country code.  If it's greater 
