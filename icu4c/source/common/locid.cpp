@@ -545,7 +545,13 @@ Locale& Locale::init(const char* localeID)
             fieldLen[fieldIdx-1] = separator - field[fieldIdx-1];
             fieldIdx++;
         }
-        if((separator = uprv_strchr(field[fieldIdx-1], '@'))) {
+        // variant may contain @foo or .foo POSIX cruft; remove it
+        separator = uprv_strchr(field[fieldIdx-1], '@');
+        char* sep2 = uprv_strchr(field[fieldIdx-1], '.');
+        if (separator!=0 || sep2!=0) {
+            if (separator > sep2) {
+                separator = sep2;
+            }
             fieldLen[fieldIdx-1] = separator - field[fieldIdx-1];
         } else {
             fieldLen[fieldIdx-1] = length - (int32_t)(field[fieldIdx-1] - fullName);
