@@ -23,6 +23,10 @@ ifneq ($(ENABLE_STATIC),)
 TARGET = $(LIBICU)ctestfw$(ICULIBSUFFIX).a
 endif
 
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
+DEFS += -DT_CTEST_IMPLEMENTATION
+
+
 ifneq ($(ENABLE_SHARED),)
 SO_TARGET = $(LIBICU)ctestfw$(ICULIBSUFFIX).$(SO)
 ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET)
