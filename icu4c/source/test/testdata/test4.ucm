@@ -52,5 +52,7 @@ CHARMAP
 
 # <subchar1> non-mapping
 <U50005>    \xe1 |2
+# add a mapping that turns the above's Unicode side into a prefix
+<U50005><U60006> \x06 |1
 
 END CHARMAP
