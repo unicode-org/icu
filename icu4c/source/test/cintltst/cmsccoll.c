@@ -1488,29 +1488,40 @@ static void TestComposeDecompose(void) {
             t[noCases]->u = u;
             noCases++;
             t[noCases] = (tester *)uprv_malloc(sizeof(tester));
+            uprv_memset(t[noCases], 0, sizeof(tester));
         }
     }
+
+    log_verbose("Testing UCA extensively\n");
+    coll = ucol_open("", &status);
+
+    for(u=0; u<noCases; u++) {
+        doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
+    }
+
+    ucol_close(coll);
 
     for(i = 0; i<noOfLoc; i++) {
         status = U_ZERO_ERROR;
         locName = uloc_getAvailable(i);
         if(hasCollationElements(locName)) {
-            if (VERBOSITY) {
-                char cName[256];
-                UChar name[256];
-                int32_t nameSize = uloc_getDisplayName(locName, NULL, name, sizeof(cName), &status);
+            char cName[256];
+            UChar name[256];
+            int32_t nameSize = uloc_getDisplayName(locName, NULL, name, sizeof(cName), &status);
 
-                for(j = 0; j<nameSize; j++) {
-                    cName[j] = (char)name[j];
-                }
-                cName[nameSize] = 0;
-                log_verbose("\nTesting locale %s (%s)\n", locName, cName);
+            for(j = 0; j<nameSize; j++) {
+                cName[j] = (char)name[j];
             }
+            cName[nameSize] = 0;
+            log_verbose("\nTesting locale %s (%s)\n", locName, cName);
 
             coll = ucol_open(locName, &status);
 
             for(u=0; u<noCases; u++) {
-                doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
+              if(!ucol_equal(coll, t[u]->NFC, -1, t[u]->NFD, -1)) {
+                log_err("Failure: codePoint %04X fails TestComposeDecompose for locale %s\n", t[u]->u, cName);
+                /*doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);*/
+              }
             }
 
             ucol_close(coll);
@@ -2474,8 +2485,28 @@ static void TestExpansion() {
     }
 }
 
+static void TestBocsuCoverage() {
+  UErrorCode status = U_ZERO_ERROR;
+  char *testString = "\\u0041\\u0441\\u4441\\U00044441\\u4441\\u0441\\u0041";
+  UChar       test[256] = {0};
+  uint32_t    tlen     = u_unescape(testString, test, 32);
+  uint8_t key[256]     = {0};
+  uint32_t klen         = 0;
+
+  UCollator *coll = ucol_open("", &status);
+  ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_IDENTICAL, &status);
+
+  klen = ucol_getSortKey(coll, test, tlen, key, 256);
+
+  ucol_close(coll);
+  
+
+
+}
+
 void addMiscCollTest(TestNode** root)
 {
+    addTest(root, &TestBocsuCoverage, "tscoll/cmsccoll/TestBocsuCoverage");
     addTest(root, &TestCyrillicTailoring, "tscoll/cmsccoll/TestCyrillicTailoring");
     addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
     addTest(root, &IncompleteCntTest, "tscoll/cmsccoll/IncompleteCntTest");
