@@ -4203,7 +4203,6 @@ trap 'rm -fr `echo "icudefs.mk \
 		test/intltest/Makefile \
 		test/cintltst/Makefile \
 		test/iotest/Makefile \
-		test/ieeetest/Makefile \
 		test/thaitest/Makefile \
 		test/testmap/Makefile \
 		test/letest/Makefile \
@@ -4397,7 +4396,6 @@ CONFIG_FILES=\${CONFIG_FILES-"icudefs.mk \
 		test/intltest/Makefile \
 		test/cintltst/Makefile \
 		test/iotest/Makefile \
-		test/ieeetest/Makefile \
 		test/thaitest/Makefile \
 		test/testmap/Makefile \
 		test/letest/Makefile \

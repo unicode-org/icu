@@ -963,7 +963,6 @@ AC_OUTPUT([icudefs.mk \
 		test/intltest/Makefile \
 		test/cintltst/Makefile \
 		test/iotest/Makefile \
-		test/ieeetest/Makefile \
 		test/thaitest/Makefile \
 		test/testmap/Makefile \
 		test/letest/Makefile \
