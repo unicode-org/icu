@@ -1251,10 +1251,9 @@ UnicodeString::extract(UTextOffset start,
 
 
   /* Pin the limit to U_MAX_PTR.  NULL check is for AS/400. */
-  /* [grhoten] What sort of silly assumption is this? */
-/*  if((myTargetLimit < myTarget) || (myTargetLimit == NULL)) {
+  if((myTargetLimit < myTarget) || (myTargetLimit == NULL)) {
     myTargetLimit = (char*)U_MAX_PTR;
-  }*/
+  }
 
   if (myTarget != NULL) {
     ucnv_fromUnicode(converter, &myTarget, myTargetLimit,
