@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2003/04/04 19:20:52 $ 
- * $Revision: 1.11 $
+ * $Date: 2003/04/19 05:51:50 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -219,28 +219,25 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * Test localized currency patterns.
      */
     public void TestCurrency() {
-        NumberFormat currencyFmt = 
-            NumberFormat.getCurrencyInstance(Locale.CANADA_FRENCH);
-    
-        String s;
-        s = currencyFmt.format(1.50);
-        logln("Un pauvre ici a..........." + s);
-            
-        if (!s.equals("1,50 $"))
-            errln("FAIL: Expected 1,50 $, got " + s);
-        s = "";
-        currencyFmt = NumberFormat.getCurrencyInstance(Locale.GERMANY);
-        s = currencyFmt.format(1.50);
-        logln("Un pauvre en Allemagne a.." + s);
-        if (!s.equals("1,50 " + EURO))
-            errln("FAIL: Expected 1,50 DM, got " + s);
-        s = "";
-        currencyFmt = NumberFormat.getCurrencyInstance(Locale.FRANCE);
-        s = currencyFmt.format(1.50);
-        logln("Un pauvre en France a....." + s);
-        if (!s.equals("1,50 " + EURO))
-            errln("FAIL: Expected 1,50 F, got " + s);
-    
+        String[] DATA = {
+            "fr", "CA", "", "1,50 $",
+            "de", "DE", "", "1,50 \u20AC",
+            "de", "DE", "PREEURO", "1,50 DM",
+            "fr", "FR", "", "1,50 \u20AC",
+            "fr", "FR", "PREEURO", "1,50 F",
+        };
+
+        for (int i=0; i<DATA.length; i+=4) {
+            Locale locale = new Locale(DATA[i], DATA[i+1], DATA[i+2]);
+            NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
+            String s = fmt.format(1.50);
+            if (s.equals(DATA[i+3])) {
+                logln("Ok: 1.50 x " + locale + " => " + s);
+            } else {
+                logln("FAIL: 1.50 x " + locale + " => " + s +
+                      ", expected " + DATA[i+3]);
+            }
+        }
     }
 
     /**
@@ -305,7 +302,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                        1234.56, "\uFFE51,235"); // Yen
 
         expectCurrency(fmt, Currency.getInstance(new Locale("fr", "CH", "")),
-                       1234.56, "CHF1,234.50"); // 0.25 rounding
+                       1234.56, "SwF1,234.55"); // 0.05 rounding
 
         expectCurrency(fmt, Currency.getInstance(Locale.US),
                        1234.56, "$1,234.56");
@@ -318,7 +315,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                        1234.56, "1 235 \uFFE5"); // Yen
 
         expectCurrency(fmt, Currency.getInstance(new Locale("fr", "CH", "")),
-                       1234.56, "1 234,50 CHF"); // 0.25 rounding
+                       1234.56, "1 234,55 sFr."); // 0.25 rounding
 
         expectCurrency(fmt, Currency.getInstance(Locale.US),
                        1234.56, "1 234,56 USD");
@@ -327,22 +324,6 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                        1234.56, "1 234,56 \u20AC"); // Euro
     }
     
-    private void expectCurrency(NumberFormat nf, Currency curr,
-                                double value, String string) {
-        DecimalFormat fmt = (DecimalFormat) nf;
-        if (curr != null) {
-            fmt.setCurrency(curr);
-        }
-        String s = fmt.format(value).replace('\u00A0', ' ');
-
-        if (s.equals(string)) {
-            logln("Ok: " + value + " x " + curr + " => " + s);
-        } else {
-            errln("FAIL: " + value + " x " + curr + " => " + s +
-                  ", expected " + string);
-        }
-    }
-
     public void TestCurrencyPatterns() {
         int i;
         Locale[] locs = NumberFormat.getAvailableLocales();
@@ -363,8 +344,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 
             // Make sure EURO currency formats have exactly 2 fraction digits
             if (nf instanceof DecimalFormat) {
-                DecimalFormat df = (DecimalFormat) nf;
-                if ("EUR".equals(df.getCurrency().getCurrencyCode())) {
+                Currency curr = ((DecimalFormat) nf).getCurrency();
+                if (curr != null && "EUR".equals(curr.getCurrencyCode())) {
                     if (min != 2 || max != 2) {
                         String a = nf.format(1.0);
                         errln("FAIL: " + locs[i] +
@@ -473,57 +454,15 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * Upgrade to alphaWorks
      */
-    public void expect(NumberFormat fmt, String str, int n) {
-        Long num = new Long(0);
-        try {
-        num = (Long)fmt.parse(str);
-        } catch (java.text.ParseException e) {
-            logln(e.getMessage());
-        }
-        String pat = ((DecimalFormat)fmt).toPattern();
-        if (num.longValue() == n) {
-            logln("Ok   \"" + str + "\" x " +
-                  pat + " = " +
-                  num.toString());
-        } else {
-            errln("FAIL \"" + str + "\" x " +
-                  pat + " = " +
-                  num.toString() + ", expected " + n + "L");
-        }
-    }
-    
-    /**
-     * Upgrade to alphaWorks
-     */        
-    public void expect(NumberFormat fmt, final double n, final String exp) {
-        StringBuffer saw = new StringBuffer("");
-        FieldPosition pos = new FieldPosition(0); 
-        saw = fmt.format(n, saw, pos);
-        String pat = ((DecimalFormat)fmt).toPattern();
-        if (saw.toString().equals(exp)) {
-            logln("Ok   " + Double.toString(n) + " x " +
-                  pat + " = \"" +
-                  saw + "\"");
-        } else {
-            errln("FAIL " + Double.toString(n) + " x " +
-                  pat + " = \"" +
-                  saw + "\", expected \"" + exp + "\"");
-        }    
-    }
-    
-    /**
-     * Upgrade to alphaWorks
-     */
     public void TestExponent() {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         DecimalFormat fmt1 = new DecimalFormat("0.###E0", US);
         DecimalFormat fmt2 = new DecimalFormat("0.###E+0", US);
         int n = 1234;
-        expect(fmt1, n, "1.234E3");
-        expect(fmt2, n, "1.234E+3");
-        expect(fmt1, "1.234E3", n);
+        expect2(fmt1, n, "1.234E3");
+        expect2(fmt2, n, "1.234E+3");
         expect(fmt1, "1.234E+3", n); // Either format should parse "E+3"
-        expect(fmt2, "1.234E+3", n);
+
     }
     
     /**
@@ -570,27 +509,27 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     
-        expect(new DecimalFormat("#E0", US), 12345.0, "1.2345E4");
+        expect2(new DecimalFormat("#E0", US), 12345.0, "1.2345E4");
         expect(new DecimalFormat("0E0", US), 12345.0, "1E4");
     
         // pattern of NumberFormat.getScientificInstance(Locale.US) = "0.######E0" not "#E0"
         // so result = 1.234568E4 not 1.2345678901E4
         //when the pattern problem is finalized, delete comment mark'//' 
         //of the following code
-        expect(NumberFormat.getScientificInstance(Locale.US), 12345.678901, "1.2345678901E4");
+        expect2(NumberFormat.getScientificInstance(Locale.US), 12345.678901, "1.2345678901E4");
     
         expect(new DecimalFormat("##0.###E0", US), 12345.0, "12.34E3");
         expect(new DecimalFormat("##0.###E0", US), 12345.00001, "12.35E3");
-        expect(new DecimalFormat("##0.####E0", US), 12345, "12.345E3");
+        expect2(new DecimalFormat("##0.####E0", US), 12345, "12.345E3");
     
         // pattern of NumberFormat.getScientificInstance(Locale.US) = "0.######E0" not "#E0"
         // so result = 1.234568E4 not 1.2345678901E4
-        expect(NumberFormat.getScientificInstance(Locale.FRANCE), 12345.678901, "1,2345678901E4");
+        expect2(NumberFormat.getScientificInstance(Locale.FRANCE), 12345.678901, "1,2345678901E4");
     
         expect(new DecimalFormat("##0.####E0", US), 789.12345e-9, "789.12E-9");
-        expect(new DecimalFormat("##0.####E0", US), 780.e-9, "780E-9");
+        expect2(new DecimalFormat("##0.####E0", US), 780.e-9, "780E-9");
         expect(new DecimalFormat(".###E0", US), 45678.0, ".457E5");
-        expect(new DecimalFormat(".###E0", US), 0, ".0E0");
+        expect2(new DecimalFormat(".###E0", US), 0, ".0E0");
         /*
         expect(new DecimalFormat[] { new DecimalFormat("#E0", US),
                                      new DecimalFormat("##E0", US),
@@ -612,9 +551,9 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         ! Unroll this test into individual tests below...
         !
         */
-        expect(new DecimalFormat("#E0", US), 45678000, "4.5678E7");
-        expect(new DecimalFormat("##E0", US), 45678000, "45.678E6");
-        expect(new DecimalFormat("####E0", US), 45678000, "4567.8E4");
+        expect2(new DecimalFormat("#E0", US), 45678000, "4.5678E7");
+        expect2(new DecimalFormat("##E0", US), 45678000, "45.678E6");
+        expect2(new DecimalFormat("####E0", US), 45678000, "4567.8E4");
         expect(new DecimalFormat("0E0", US), 45678000, "5E7");
         expect(new DecimalFormat("00E0", US), 45678000, "46E6");
         expect(new DecimalFormat("000E0", US), 45678000, "457E5");
@@ -634,15 +573,15 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         ! Unroll this test into individual tests below...
         !
         */
-        expect(new DecimalFormat("###E0", US), 0.0000123, "12.3E-6");
-        expect(new DecimalFormat("###E0", US), 0.000123, "123E-6");
-        expect(new DecimalFormat("###E0", US), 0.00123, "1.23E-3");
-        expect(new DecimalFormat("###E0", US), 0.0123, "12.3E-3");
-        expect(new DecimalFormat("###E0", US), 0.123, "123E-3");
-        expect(new DecimalFormat("###E0", US), 1.23, "1.23E0");
-        expect(new DecimalFormat("###E0", US), 12.3, "12.3E0");
-        expect(new DecimalFormat("###E0", US), 123.0, "123E0");
-        expect(new DecimalFormat("###E0", US), 1230.0, "1.23E3");
+        expect2(new DecimalFormat("###E0", US), 0.0000123, "12.3E-6");
+        expect2(new DecimalFormat("###E0", US), 0.000123, "123E-6");
+        expect2(new DecimalFormat("###E0", US), 0.00123, "1.23E-3");
+        expect2(new DecimalFormat("###E0", US), 0.0123, "12.3E-3");
+        expect2(new DecimalFormat("###E0", US), 0.123, "123E-3");
+        expect2(new DecimalFormat("###E0", US), 1.23, "1.23E0");
+        expect2(new DecimalFormat("###E0", US), 12.3, "12.3E0");
+        expect2(new DecimalFormat("###E0", US), 123.0, "123E0");
+        expect2(new DecimalFormat("###E0", US), 1230.0, "1.23E3");
         /*
         expect(new DecimalFormat("0.#E+00", US, status),
                new Object[] { new Double(0.00012), "1.2E-04",
@@ -652,8 +591,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         ! Unroll this test into individual tests below...
         !
         */
-        expect(new DecimalFormat("0.#E+00", US), 0.00012, "1.2E-04");
-        expect(new DecimalFormat("0.#E+00", US), 12000, "1.2E+04");
+        expect2(new DecimalFormat("0.#E+00", US), 0.00012, "1.2E-04");
+        expect2(new DecimalFormat("0.#E+00", US), 12000, "1.2E+04");
     }
     
     /**
@@ -662,9 +601,9 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     public void TestPad() {
     
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
-        expect(new DecimalFormat("*^##.##", US), 0, "^^^^0");
-        expect(new DecimalFormat("*^##.##", US), -1.3, "^-1.3");
-        expect(
+        expect2(new DecimalFormat("*^##.##", US), 0, "^^^^0");
+        expect2(new DecimalFormat("*^##.##", US), -1.3, "^-1.3");
+        expect2(
             new DecimalFormat("##0.0####E0*_ g-m/s^2", US), 
             0, 
             "0.0E0______ g-m/s^2"); 
@@ -672,7 +611,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             new DecimalFormat("##0.0####E0*_ g-m/s^2", US), 
             1.0 / 3, 
             "333.333E-3_ g-m/s^2"); 
-        expect(new DecimalFormat("##0.0####*_ g-m/s^2", US), 0, "0.0______ g-m/s^2");
+        expect2(new DecimalFormat("##0.0####*_ g-m/s^2", US), 0, "0.0______ g-m/s^2");
         expect(
             new DecimalFormat("##0.0####*_ g-m/s^2", US), 
             1.0 / 3, 
@@ -680,43 +619,43 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     
         // Test padding before a sign
         final String formatStr = "*x#,###,###,##0.0#;*x(###,###,##0.0#)";
-        expect(new DecimalFormat(formatStr, US), -10, "xxxxxxxxxx(10.0)");
-        expect(new DecimalFormat(formatStr, US), -1000, "xxxxxxx(1,000.0)");
-        expect(new DecimalFormat(formatStr, US), -1000000, "xxx(1,000,000.0)");
-        expect(new DecimalFormat(formatStr, US), -100.37, "xxxxxxxx(100.37)");
-        expect(new DecimalFormat(formatStr, US), -10456.37, "xxxxx(10,456.37)");
-        expect(new DecimalFormat(formatStr, US), -1120456.37, "xx(1,120,456.37)");
-        expect(new DecimalFormat(formatStr, US), -112045600.37, "(112,045,600.37)");
-        expect(new DecimalFormat(formatStr, US), -1252045600.37, "(1,252,045,600.37)");
+        expect2(new DecimalFormat(formatStr, US), -10, "xxxxxxxxxx(10.0)");
+        expect2(new DecimalFormat(formatStr, US), -1000, "xxxxxxx(1,000.0)");
+        expect2(new DecimalFormat(formatStr, US), -1000000, "xxx(1,000,000.0)");
+        expect2(new DecimalFormat(formatStr, US), -100.37, "xxxxxxxx(100.37)");
+        expect2(new DecimalFormat(formatStr, US), -10456.37, "xxxxx(10,456.37)");
+        expect2(new DecimalFormat(formatStr, US), -1120456.37, "xx(1,120,456.37)");
+        expect2(new DecimalFormat(formatStr, US), -112045600.37, "(112,045,600.37)");
+        expect2(new DecimalFormat(formatStr, US), -1252045600.37, "(1,252,045,600.37)");
     
-        expect(new DecimalFormat(formatStr, US), 10, "xxxxxxxxxxxx10.0");
-        expect(new DecimalFormat(formatStr, US), 1000, "xxxxxxxxx1,000.0");
-        expect(new DecimalFormat(formatStr, US), 1000000, "xxxxx1,000,000.0");
-        expect(new DecimalFormat(formatStr, US), 100.37, "xxxxxxxxxx100.37");
-        expect(new DecimalFormat(formatStr, US), 10456.37, "xxxxxxx10,456.37");
-        expect(new DecimalFormat(formatStr, US), 1120456.37, "xxxx1,120,456.37");
-        expect(new DecimalFormat(formatStr, US), 112045600.37, "xx112,045,600.37");
-        expect(new DecimalFormat(formatStr, US), 10252045600.37, "10,252,045,600.37");
+        expect2(new DecimalFormat(formatStr, US), 10, "xxxxxxxxxxxx10.0");
+        expect2(new DecimalFormat(formatStr, US), 1000, "xxxxxxxxx1,000.0");
+        expect2(new DecimalFormat(formatStr, US), 1000000, "xxxxx1,000,000.0");
+        expect2(new DecimalFormat(formatStr, US), 100.37, "xxxxxxxxxx100.37");
+        expect2(new DecimalFormat(formatStr, US), 10456.37, "xxxxxxx10,456.37");
+        expect2(new DecimalFormat(formatStr, US), 1120456.37, "xxxx1,120,456.37");
+        expect2(new DecimalFormat(formatStr, US), 112045600.37, "xx112,045,600.37");
+        expect2(new DecimalFormat(formatStr, US), 10252045600.37, "10,252,045,600.37");
     
         // Test padding between a sign and a number
         final String formatStr2 = "#,###,###,##0.0#*x;(###,###,##0.0#*x)";
-        expect(new DecimalFormat(formatStr2, US), -10, "(10.0xxxxxxxxxx)");
-        expect(new DecimalFormat(formatStr2, US), -1000, "(1,000.0xxxxxxx)");
-        expect(new DecimalFormat(formatStr2, US), -1000000, "(1,000,000.0xxx)");
-        expect(new DecimalFormat(formatStr2, US), -100.37, "(100.37xxxxxxxx)");
-        expect(new DecimalFormat(formatStr2, US), -10456.37, "(10,456.37xxxxx)");
-        expect(new DecimalFormat(formatStr2, US), -1120456.37, "(1,120,456.37xx)");
-        expect(new DecimalFormat(formatStr2, US), -112045600.37, "(112,045,600.37)");
-        expect(new DecimalFormat(formatStr2, US), -1252045600.37, "(1,252,045,600.37)"); 
+        expect2(new DecimalFormat(formatStr2, US), -10, "(10.0xxxxxxxxxx)");
+        expect2(new DecimalFormat(formatStr2, US), -1000, "(1,000.0xxxxxxx)");
+        expect2(new DecimalFormat(formatStr2, US), -1000000, "(1,000,000.0xxx)");
+        expect2(new DecimalFormat(formatStr2, US), -100.37, "(100.37xxxxxxxx)");
+        expect2(new DecimalFormat(formatStr2, US), -10456.37, "(10,456.37xxxxx)");
+        expect2(new DecimalFormat(formatStr2, US), -1120456.37, "(1,120,456.37xx)");
+        expect2(new DecimalFormat(formatStr2, US), -112045600.37, "(112,045,600.37)");
+        expect2(new DecimalFormat(formatStr2, US), -1252045600.37, "(1,252,045,600.37)"); 
     
-        expect(new DecimalFormat(formatStr2, US), 10, "10.0xxxxxxxxxxxx");
-        expect(new DecimalFormat(formatStr2, US), 1000, "1,000.0xxxxxxxxx");
-        expect(new DecimalFormat(formatStr2, US), 1000000, "1,000,000.0xxxxx");
-        expect(new DecimalFormat(formatStr2, US), 100.37, "100.37xxxxxxxxxx");
-        expect(new DecimalFormat(formatStr2, US), 10456.37, "10,456.37xxxxxxx");
-        expect(new DecimalFormat(formatStr2, US), 1120456.37, "1,120,456.37xxxx");
-        expect(new DecimalFormat(formatStr2, US), 112045600.37, "112,045,600.37xx");
-        expect(new DecimalFormat(formatStr2, US), 10252045600.37, "10,252,045,600.37");
+        expect2(new DecimalFormat(formatStr2, US), 10, "10.0xxxxxxxxxxxx");
+        expect2(new DecimalFormat(formatStr2, US), 1000, "1,000.0xxxxxxxxx");
+        expect2(new DecimalFormat(formatStr2, US), 1000000, "1,000,000.0xxxxx");
+        expect2(new DecimalFormat(formatStr2, US), 100.37, "100.37xxxxxxxxxx");
+        expect2(new DecimalFormat(formatStr2, US), 10456.37, "10,456.37xxxxxxx");
+        expect2(new DecimalFormat(formatStr2, US), 1120456.37, "1,120,456.37xxxx");
+        expect2(new DecimalFormat(formatStr2, US), 112045600.37, "112,045,600.37xx");
+        expect2(new DecimalFormat(formatStr2, US), 10252045600.37, "10,252,045,600.37");
     
         //testing the setPadCharacter(UnicodeString) and getPadCharacterString()
         DecimalFormat fmt = new DecimalFormat("#", US);
@@ -849,7 +788,142 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expect(fmt, "a b1234c ", n);
         expect(fmt, "a   b1234c   ", n);
     }
+
+    /**
+     * Test currencies whose display name is a ChoiceFormat.
+     */
+    public void TestComplexCurrency() {
+        Locale loc = new Locale("en", "IN", "");
+        NumberFormat fmt = NumberFormat.getCurrencyInstance(loc);
+
+        expect2(fmt, 1.0, "Re1.00");
+        // TODO: Make this work!
+        // expect(fmt, 1.001, "Re1.00");
+        expect2(fmt, 12345678.0, "Rs1,23,45,678.00");
+        expect2(fmt, 0.5, "Rs0.50");
+        expect2(fmt, -1.0, "-Re1.00");
+        expect2(fmt, -10.0, "-Rs10.00");
+    }
     
+    //------------------------------------------------------------------
+    // Support methods
+    //------------------------------------------------------------------
+
+    // Format-Parse test
+    public void expect2(NumberFormat fmt, Number n, String exp) {
+        // Don't round-trip format test, since we explicitly do it
+        expect(fmt, n, exp, false);
+        expect(fmt, exp, n);
+    }
+
+    // Format-Parse test (convenience)
+    public void expect2(NumberFormat fmt, double n, String exp) {
+        expect2(fmt, new Double(n), exp);
+    }
+
+    // Format-Parse test (convenience)
+    public void expect2(NumberFormat fmt, long n, String exp) {
+        expect2(fmt, new Long(n), exp);
+    }
+
+    // Format test
+    public void expect(NumberFormat fmt, Number n, String exp, boolean rt) {
+        StringBuffer saw = new StringBuffer();
+        FieldPosition pos = new FieldPosition(0); 
+        fmt.format(n, saw, pos);
+        String pat = ((DecimalFormat)fmt).toPattern();
+        if (saw.toString().equals(exp)) {
+            logln("Ok   " + n + " x " +
+                  pat + " = \"" +
+                  saw + "\"");
+            // We should be able to round-trip the formatted string =>
+            // number => string (but not the other way around: number
+            // => string => number2, might have number2 != number):
+            if (rt) {
+                try {
+                    Number n2 = fmt.parse(exp);
+                    StringBuffer saw2 = new StringBuffer();
+                    fmt.format(n2, saw2, pos);
+                    if (!saw2.toString().equals(exp)) {
+                        errln("FAIL \"" + exp + "\" => " + n2 +
+                              " => \"" + saw2 + '"');
+                    }
+                } catch (java.text.ParseException e) {
+                    errln(e.getMessage());
+                    return;
+                }
+            }
+        } else {
+            errln("FAIL " + n + " x " +
+                  pat + " = \"" +
+                  saw + "\", expected \"" + exp + "\"");
+        }
+    }
+    
+    // Format test (convenience)
+    public void expect(NumberFormat fmt, Number n, String exp) {
+        expect(fmt, n, exp, true);
+    }
+
+    // Format test (convenience)
+    public void expect(NumberFormat fmt, double n, String exp) {
+        expect(fmt, new Double(n), exp);
+    }
+    
+    // Format test (convenience)
+    public void expect(NumberFormat fmt, long n, String exp) {
+        expect(fmt, new Long(n), exp);
+    }
+    
+    // Parse test
+    public void expect(NumberFormat fmt, String str, Number n) {
+        Number num = null;
+        try {
+            num = (Number) fmt.parse(str);
+        } catch (java.text.ParseException e) {
+            errln(e.getMessage());
+            return;
+        }
+        String pat = ((DecimalFormat)fmt).toPattern();
+        // A little tricky here -- make sure Double(12345.0) and
+        // Long(12345) match.
+        if (num.equals(n) || num.doubleValue() == n.doubleValue()) {
+            logln("Ok   \"" + str + "\" x " +
+                  pat + " = " +
+                  num);
+        } else {
+            errln("FAIL \"" + str + "\" x " +
+                  pat + " = " +
+                  num + ", expected " + n);
+        }
+    }
+    
+    // Parse test (convenience)
+    public void expect(NumberFormat fmt, String str, double n) {
+        expect(fmt, str, new Double(n));
+    }
+    
+    // Parse test (convenience)
+    public void expect(NumberFormat fmt, String str, long n) {
+        expect(fmt, str, new Long(n));
+    }
+    
+    private void expectCurrency(NumberFormat nf, Currency curr,
+                                double value, String string) {
+        DecimalFormat fmt = (DecimalFormat) nf;
+        if (curr != null) {
+            fmt.setCurrency(curr);
+        }
+        String s = fmt.format(value).replace('\u00A0', ' ');
+
+        if (s.equals(string)) {
+            logln("Ok: " + value + " x " + curr + " => " + s);
+        } else {
+            errln("FAIL: " + value + " x " + curr + " => " + s +
+                  ", expected " + string);
+        }
+    }
+
     public void expectPad(DecimalFormat fmt, String pat, int pos) {
         expectPad(fmt, pat, pos, 0, (char)0);
     }
