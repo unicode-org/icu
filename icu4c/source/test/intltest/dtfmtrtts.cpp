@@ -146,8 +146,12 @@ void DateFormatRoundTripTest::test(const Locale& loc)
         if(TEST_TABLE[itable++]) {
             logln("Testing style " + UnicodeString(styleName((DateFormat::EStyle)style)));
             DateFormat *df = DateFormat::createDateInstance((DateFormat::EStyle)style, loc);
-            test(df, loc);
-            delete df;
+            if(df == NULL) {
+              errln(UnicodeString("Could not DF::createDateInstance ") + UnicodeString(styleName((DateFormat::EStyle)style)) +      " Locale: " + loc.getDisplayName(temp));
+            } else {
+              test(df, loc);
+              delete df;
+            }
         }
     }
     
@@ -155,8 +159,12 @@ void DateFormatRoundTripTest::test(const Locale& loc)
         if (TEST_TABLE[itable++]) {
           logln("Testing style " + UnicodeString(styleName((DateFormat::EStyle)style)));
             DateFormat *df = DateFormat::createTimeInstance((DateFormat::EStyle)style, loc);
-            test(df, loc, TRUE);
-            delete df;
+            if(df == NULL) {
+              errln(UnicodeString("Could not DF::createTimeInstance ") + UnicodeString(styleName((DateFormat::EStyle)style)) + " Locale: " + loc.getDisplayName(temp));
+            } else {
+              test(df, loc, TRUE);
+              delete df;
+            }
         }
     }
     
@@ -165,8 +173,12 @@ void DateFormatRoundTripTest::test(const Locale& loc)
             if(TEST_TABLE[itable++]) {
               logln("Testing dstyle" + UnicodeString(styleName((DateFormat::EStyle)dstyle)) + ", tstyle" + UnicodeString(styleName((DateFormat::EStyle)tstyle)) );
                 DateFormat *df = DateFormat::createDateTimeInstance((DateFormat::EStyle)dstyle, (DateFormat::EStyle)tstyle, loc);
-                test(df, loc);
-                delete df;
+                if(df == NULL) {
+                  errln(UnicodeString("Could not DF::createDateTimeInstance ") + UnicodeString(styleName((DateFormat::EStyle)dstyle)) + ", tstyle" + UnicodeString(styleName((DateFormat::EStyle)tstyle))    + "Locale: " + loc.getDisplayName(temp));
+                } else {
+                  test(df, loc);
+                  delete df;
+                }
             }
         }
     }

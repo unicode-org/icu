@@ -12,10 +12,25 @@
 #include "unicode/gregocal.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/simpletz.h"
- 
+
 // *****************************************************************************
 // class CalendarTest
 // *****************************************************************************
+
+static UnicodeString fieldName(UCalendarDateFields f);
+
+static UnicodeString calToStr(const Calendar & cal)
+{
+
+  UnicodeString out;
+  UErrorCode status;
+  int i;
+  for(i = 0;i<UCAL_FIELD_COUNT;i++) {
+    out += (UnicodeString("+") + fieldName((UCalendarDateFields)i) + "=" +  cal.get((UCalendarDateFields)i, status) + UnicodeString(", "));
+  }
+
+  return out;
+}
 
 void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
@@ -194,6 +209,7 @@ void
 CalendarTest::TestGenericAPI()
 {
     UErrorCode status = U_ZERO_ERROR;
+    UDate d;
     UnicodeString str;
 
     UDate when = date(90, UCAL_APRIL, 15);
@@ -357,13 +373,15 @@ CalendarTest::TestGenericAPI()
     delete gc;
 
     gc = new GregorianCalendar(1998, 10, 14, 21, 43, status);
-    if (gc->getTime(status) != date(98, 10, 14, 21, 43) || U_FAILURE(status))
-        errln("FAIL: new GregorianCalendar(ymdhm) failed");
+    if (gc->getTime(status) != (d =date(98, 10, 14, 21, 43) )|| U_FAILURE(status))
+      errln("FAIL: new GregorianCalendar(ymdhm) failed with " + UnicodeString(u_errorName(status)) + ",  cal="  + gc->getTime(status)  + UnicodeString(calToStr(*gc)) + ", d=" + d);
+    else
+      logln(UnicodeString("GOOD: cal=")  +gc->getTime(status)  + UnicodeString(calToStr(*gc)) + ", d=" + d);
     delete gc;
 
     gc = new GregorianCalendar(1998, 10, 14, 21, 43, 55, status);
-    if (gc->getTime(status) != date(98, 10, 14, 21, 43, 55) || U_FAILURE(status))
-        errln("FAIL: new GregorianCalendar(ymdhms) failed");
+    if (gc->getTime(status) != (d=date(98, 10, 14, 21, 43, 55)) || U_FAILURE(status))
+      errln("FAIL: new GregorianCalendar(ymdhms) failed with " + UnicodeString(u_errorName(status)));
 
     GregorianCalendar gc2(Locale::getEnglish(), status);
     if (failure(status, "new GregorianCalendar")) return;
