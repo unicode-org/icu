@@ -129,16 +129,16 @@ public class XMLValidator {
         // This is used to suppress validation warnings
         ErrorHandler nullHandler = new ErrorHandler() {
             public void warning(SAXParseException e) throws SAXException {
-                System.err.println("Warning: " + e.getMessage());
+                System.err.println(filename + ": Warning: " + e.getMessage());
 
             }
             public void error(SAXParseException e) throws SAXException {
-                System.err.println("Element " + e.getPublicId()
-                        + " is not valid because " + e.getMessage());
-                System.err.println("Error: " + "at line " + e.getLineNumber()
-                        + ", column " + e.getColumnNumber());
+                int col = e.getColumnNumber();
+                System.err.println(filename + ":" + e.getLineNumber() +  (col>=0?":" + col:"") + " Element " + e.getPublicId()
+                                   + " is not valid because " + e.getMessage());
             }
             public void fatalError(SAXParseException e) throws SAXException {
+                System.err.println(filename + ": error");
                 throw e;
             }
         };
@@ -154,17 +154,17 @@ public class XMLValidator {
             doc = docBuilder.parse(docSrc);
         } catch (Throwable se) {
             // ... if we couldn't parse as XML, attempt parse as HTML...
-            System.out.println("ERROR :" + se.toString());
             if (se instanceof SAXParseException) {
                 SAXParseException pe = (SAXParseException) se;
-                System.out.println("At line: " + pe.getLineNumber()
-                        + " column: " + pe.getColumnNumber());
-
+                int col = pe.getColumnNumber();
+                System.err.println(filename + ":" + pe.getLineNumber() + (col>=0?":" + col:"") + ": ERROR:" + se.toString());
+            } else {
+                System.err.println(filename + ": ERROR:" + se.toString());
             }
             try {
                 // @todo need to find an HTML to DOM parser we can use!!!
                 // doc = someHTMLParser.parse(new InputSource(filename));
-                throw new RuntimeException("XMLComparator no HTML parser!");
+                throw new RuntimeException(filename + ": XMLComparator not HTML parser!");
             } catch (Exception e) {
                 if (filename != null) {
                     // ... if we can't parse as HTML, then just parse the text
