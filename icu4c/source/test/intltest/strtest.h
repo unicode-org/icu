@@ -31,8 +31,7 @@ public:
 
 private:
     void TestEndian(void);
-    void TestSizeofWCharT(void);
-    void TestSizeofInt64(void);
+    void TestSizeofTypes(void);
     void TestCharsetFamily(void);
 };
 

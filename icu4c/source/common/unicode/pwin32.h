@@ -119,29 +119,21 @@ typedef unsigned short uint16_t;
 #endif
 
 #if ! U_HAVE_INT32_T
-#   if defined(_LP64)
-      typedef signed int  int32_t;
-#   else
-      typedef signed long int32_t;
-#   endif
+typedef signed int int32_t;
 #endif
 
 #if ! U_HAVE_UINT32_T
-#   if defined(_LP64)
-      typedef unsigned int  uint32_t;
-#   else
-      typedef unsigned long uint32_t;
-#   endif
+typedef unsigned int uint32_t;
 #endif
 
 #if ! U_HAVE_INT64_T
     /* Could use _MSC_VER to detect Microsoft compiler. */
-    typedef signed __int64   int64_t;
+    typedef signed __int64 int64_t;
 #endif
 
 #if ! U_HAVE_UINT64_T
     /* Could use _MSC_VER to detect Microsoft compiler. */
-    typedef unsigned __int64   uint64_t;
+    typedef unsigned __int64 uint64_t;
 #endif
 
 #endif
