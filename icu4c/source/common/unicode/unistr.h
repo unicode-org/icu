@@ -75,7 +75,8 @@ class UnicodeConverter;     // unicode/convert.h
  * This is the same as with multi-byte char* strings in traditional string handling.
  * Operations on partial strings typically do not test for code point boundaries.
  * If necessary, the user needs to take care of such boundaries by testing for the code unit
- * values or by using functions like UnicodeString::getCharStart() and UnicodeString::getCharLimit()
+ * values or by using functions like
+ * UnicodeString::getChar32Start() and UnicodeString::getChar32Limit()
  * (or, in C, the equivalent macros UTF_SET_CHAR_START() and UTF_SET_CHAR_LIMIT(), see utf.h).</p>
  *
  * <p>UnicodeString uses four storage models:
@@ -1097,6 +1098,29 @@ public:
    * to the first surrogate.
    * @param offset a valid offset into one code point of the text
    * @return offset of the first code unit of the same code point
+   * @draft ICU 2.0
+   */
+  inline UTextOffset getChar32Start(UTextOffset offset) const;
+
+  /**
+   * Same as getChar32Start().
+   * This original function name (without "32")
+   * was meant to look like UTF_SET_CHAR_START,
+   * but since most code point-related function names in C++ APIs
+   * contain a "32", this caused confusion.
+   *
+   * Adjust a random-access offset so that
+   * it points to the beginning of a Unicode character.
+   * The offset that is passed in points to
+   * any code unit of a code point,
+   * while the returned offset will point to the first code unit
+   * of the same code point.
+   * In UTF-16, if the input offset points to a second surrogate
+   * of a surrogate pair, then the returned offset will point
+   * to the first surrogate.
+   * @param offset a valid offset into one code point of the text
+   * @return offset of the first code unit of the same code point
+   * @deprecated To be removed after 2002-sep-30. Use getChar32Start().
    */
   inline UTextOffset getCharStart(UTextOffset offset) const;
 
@@ -1113,6 +1137,30 @@ public:
    * behind the second surrogate (i.e., to the first surrogate).
    * @param offset a valid offset after any code unit of a code point of the text
    * @return offset of the first code unit after the same code point
+   * @draft ICU 2.0
+   */
+  inline UTextOffset getChar32Limit(UTextOffset offset) const;
+
+  /**
+   * Same as getChar32Limit().
+   * This original function name (without "32")
+   * was meant to look like UTF_SET_CHAR_LIMIT,
+   * but since most code point-related function names in C++ APIs
+   * contain a "32", this caused confusion.
+   *
+   * Adjust a random-access offset so that
+   * it points behind a Unicode character.
+   * The offset that is passed in points behind
+   * any code unit of a code point,
+   * while the returned offset will point behind the last code unit
+   * of the same code point.
+   * In UTF-16, if the input offset points behind the first surrogate
+   * (i.e., to the second surrogate)
+   * of a surrogate pair, then the returned offset will point
+   * behind the second surrogate (i.e., to the first surrogate).
+   * @param offset a valid offset after any code unit of a code point of the text
+   * @return offset of the first code unit after the same code point
+   * @deprecated To be removed after 2002-sep-30. Use getChar32Limit().
    */
   inline UTextOffset getCharLimit(UTextOffset offset) const;
 
@@ -1338,7 +1386,18 @@ public:
   /**
    * Determine if this string is empty.
    * @return TRUE if this string contains 0 characters, FALSE otherwise.
-   * @stable
+   * @draft ICU 2.0
+   */
+  inline UBool isEmpty(void) const;
+
+  /**
+   * Determine if this string is empty.
+   * This function was renamed to isEmtpy() because it caused confusion.
+   * If you need to determine if a string is empty, then use isEmpty().
+   * If you want to remove a string's contents, then call truncate(0).
+   *
+   * @return TRUE if this string contains 0 characters, FALSE otherwise.
+   * @deprecated To be removed after 2002-sep-30. Use isEmtpy() or truncate(0).
    */
   inline UBool empty(void) const;
 
@@ -3303,7 +3362,7 @@ UnicodeString::char32At(UTextOffset offset) const
 }
 
 inline UTextOffset
-UnicodeString::getCharStart(UTextOffset offset) const {
+UnicodeString::getChar32Start(UTextOffset offset) const {
   if((uint32_t)offset < (uint32_t)fLength) {
     UTF_SET_CHAR_START(fArray, 0, offset);
     return offset;
@@ -3313,7 +3372,7 @@ UnicodeString::getCharStart(UTextOffset offset) const {
 }
 
 inline UTextOffset
-UnicodeString::getCharLimit(UTextOffset offset) const {
+UnicodeString::getChar32Limit(UTextOffset offset) const {
   if((uint32_t)offset < (uint32_t)fLength) {
     UTF_SET_CHAR_LIMIT(fArray, 0, offset, fLength);
     return offset;
@@ -3322,9 +3381,25 @@ UnicodeString::getCharLimit(UTextOffset offset) const {
   }
 }
 
+inline UTextOffset
+UnicodeString::getCharStart(UTextOffset offset) const {
+  return getChar32Start(offset);
+}
+
+inline UTextOffset
+UnicodeString::getCharLimit(UTextOffset offset) const {
+  return getChar32Limit(offset);
+}
+
 inline UBool
-UnicodeString::empty() const
-{ return fLength == 0; }
+UnicodeString::isEmpty() const {
+  return fLength == 0;
+}
+
+inline UBool
+UnicodeString::empty() const {
+  return isEmpty();
+}
 
 //========================================
 // Read-only implementation methods
