@@ -972,7 +972,7 @@ void RBBITest::generalIteratorTest(RuleBasedBreakIterator& bi, Vector* expectedR
     UnicodeString text = createTestData(elems);
     delete elems;
 
-    bi.setText(&text);
+    bi.setText(text);
 
     Vector *nextResults = testFirstAndNext(bi, text);
     Vector *previousResults = testLastAndPrevious(bi, text);
@@ -1178,7 +1178,7 @@ void RBBITest::testIsBoundary(RuleBasedBreakIterator& bi, UnicodeString& text, i
 void RBBITest::doMultipleSelectionTest(RuleBasedBreakIterator& iterator,
                                                   UnicodeString& testText)
 {
-    iterator.setText(&testText);
+    iterator.setText(testText);
 
     RuleBasedBreakIterator* testIterator =(RuleBasedBreakIterator*)iterator.clone();
     int32_t offset = iterator.first();

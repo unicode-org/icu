@@ -678,7 +678,7 @@ void IntlTestTextBoundary::TestLineInvariants()
             work[1] = noBreak[j];
             for (k = 0; k < testChars.length(); k++) {
                 work[2] = testChars[k];
-                e->setText(&work);
+                e->setText(work);
                 for (int l = e->first(); l != BreakIterator::DONE; l = e->next())
                     if (l == 1 || l == 2) {
                         errln("Got break between U+" + UCharToUnicodeString(work[l - 1]) + 
@@ -714,7 +714,7 @@ void IntlTestTextBoundary::TestLineInvariants()
                     c == 0xfeff)
                     continue;
                 work[2] = c;
-                e->setText(&work);
+                e->setText(work);
                 UBool saw2 = FALSE;
                 for (int l = e->first(); l != BreakIterator::DONE; l = e->next())
                     if (l == 2)
@@ -894,7 +894,7 @@ void IntlTestTextBoundary::TestJapaneseLineBreak()
 
     for (i = 0; i < precedingChars.length(); i++) {
         testString[1] = precedingChars[i];
-        iter->setText(&testString);
+        iter->setText(testString);
         int32_t j = iter->first();
         if (j != 0)
             errln("ja line break failure: failed to start at 0");
@@ -910,7 +910,7 @@ void IntlTestTextBoundary::TestJapaneseLineBreak()
 
     for (i = 0; i < followingChars.length(); i++) {
         testString[1] = followingChars[i];
-        iter->setText(&testString);
+        iter->setText(testString);
         int j = iter->first();
         if (j != 0)
             errln("ja line break failure: failed to start at 0");
@@ -986,7 +986,7 @@ void IntlTestTextBoundary::TestEndBehaviour()
         errln("Failed to create the BreakIterator for default locale in TestEndBehaviour.\n");
         return;
     }
-    wb->setText(&testString);
+    wb->setText(testString);
 
     if (wb->first() != 0)
         errln("Didn't get break at beginning of string.");
@@ -1038,7 +1038,7 @@ void IntlTestTextBoundary::TestPreceding()
         return;
     }
 
-    e->setText( &words3 );
+    e->setText( words3 );
     e->first();
     UTextOffset p1 = e->next();
     UTextOffset p2 = e->next();
@@ -1103,7 +1103,7 @@ void IntlTestTextBoundary::generalIteratorTest(BreakIterator& bi, Vector* expect
     UnicodeString text = createTestData(elems);
     delete elems;
 
-    bi.setText(&text);
+    bi.setText(text);
 
     Vector *nextResults = testFirstAndNext(bi, text);
     Vector *previousResults = testLastAndPrevious(bi, text);
@@ -1310,7 +1310,7 @@ void IntlTestTextBoundary::testIsBoundary(BreakIterator& bi, UnicodeString& text
 void IntlTestTextBoundary::doMultipleSelectionTest(BreakIterator& iterator,
                                                    UnicodeString& testText)
 {
-    iterator.setText(&testText);
+    iterator.setText(testText);
     
     BreakIterator* testIterator = iterator.clone();
     int32_t offset = iterator.first();
@@ -1378,7 +1378,7 @@ void IntlTestTextBoundary::doBreakInvariantTest(BreakIterator& tb, UnicodeString
                     continue;
 
                 work[2] = testChars[k];
-                tb.setText(&work);
+                tb.setText(work);
                 UBool seen2 = FALSE;
                 for (int l = tb.first(); l != BreakIterator::DONE; l = tb.next()) {
                     if (l == 2)
@@ -1407,7 +1407,7 @@ void IntlTestTextBoundary::doOtherInvariantTest(BreakIterator& tb, UnicodeString
         work[0] = testChars[i];
         for (j = 0; j < testChars.length(); j++) {
             work[3] = testChars[j];
-            tb.setText(&work);
+            tb.setText(work);
             for (int32_t k = tb.first(); k != BreakIterator::DONE; k = tb.next())
                 if (k == 2) {
                     errln("Break between CR and LF in string U+" + UCharToUnicodeString(work[0]) + 
@@ -1434,7 +1434,7 @@ void IntlTestTextBoundary::doOtherInvariantTest(BreakIterator& tb, UnicodeString
                 (Unicode::getType(c) != Unicode::ENCLOSING_MARK))
                 continue;
             work[2] = c;
-            tb.setText(&work);
+            tb.setText(work);
             for (int k = tb.first(); k != BreakIterator::DONE; k = tb.next())
                 if (k == 2) {
                     errln("Break between U+" + UCharToUnicodeString(work[1])
@@ -1455,7 +1455,7 @@ void IntlTestTextBoundary::sample(BreakIterator& tb,
     UBool verboseWas = verbose;
     verbose = TRUE;
     logln("-------------------------"+title+" length = "+text.length());
-    tb.setText(&text);
+    tb.setText(text);
     int32_t start = tb.first();
     int32_t end;
     for (end = tb.next(); end != BreakIterator::DONE; end = tb.next()) {
