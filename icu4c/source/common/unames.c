@@ -24,6 +24,7 @@
 #include "cstring.h"
 #include "ucln_cmn.h"
 #include "udataswp.h"
+#include "uprops.h"
 
 /* prototypes ------------------------------------------------------------- */
 

@@ -154,7 +154,6 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
             int32_t numberElementsStrLen[kFormatSymbolCount];
             int32_t i = 0;
             for(i = 0; i<numberElementsLength; i++) {
-                int32_t len = 0;
                 numberElements[i] = ures_getStringByIndex(numberElementsRes, i, &numberElementsStrLen[i], &status);
             }
 
@@ -209,9 +208,13 @@ DecimalFormatSymbols::initialize(const UChar** numberElements, int32_t *numberEl
         {kPlusSignSymbol, 11},
         {kMonetarySeparatorSymbol, 0}
     };
+    static const int32_t TYPE_MAPPING_LEN = (int32_t)(sizeof(TYPE_MAPPING)/sizeof(TYPE_MAPPING[0]));
     int32_t idx;
+    if (numberElementsLength > TYPE_MAPPING_LEN) {
+        numberElementsLength = TYPE_MAPPING_LEN;
+    }
 
-    for (idx = 0; idx < (int32_t)(sizeof(TYPE_MAPPING)/sizeof(TYPE_MAPPING[0])); idx++) {
+    for (idx = 0; idx < numberElementsLength; idx++) {
         fSymbols[TYPE_MAPPING[idx][0]].setTo(TRUE, numberElements[TYPE_MAPPING[idx][1]], numberElementsStrLen[TYPE_MAPPING[idx][1]]);
     }
 

@@ -58,6 +58,7 @@
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
+#include "putilimp.h"
 #include "uassert.h"
 #include "umutex.h"
 #include "cmemory.h"
@@ -1897,7 +1898,6 @@ int_getDefaultCodepage()
     char *name = NULL;
     char *euro = NULL;
     const char *localeName = NULL;
-    const char *defaultTable = NULL;
 
     uprv_memset(codesetName, 0, sizeof(codesetName));
 
