@@ -221,7 +221,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     RegexMatcher        *matcher       = NULL;
     UVector             groupStarts(status);
     UVector             groupEnds(status);
-    UBool               isMatch;
+    UBool               isMatch        = FALSE;
     UBool               failed         = FALSE;
     int                 numFinds;
     int                 i;
