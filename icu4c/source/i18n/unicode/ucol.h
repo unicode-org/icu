@@ -632,39 +632,6 @@ U_CAPI int32_t ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UCha
 /* include backward compatibility */
 #include "unicode/ucoleitr.h"
 
-typedef enum {
-	UCOL_JUST_STATE = 0,
-	UCOL_INCLUDE_TAILORING,
-	UCOL_INCLUDE_TAILORING_AND_UCA
-} UColStateEnum;
-
-/**
- * This API would save (freeze) the current state of a collator so that a collator with same functionality 
- * can be later constructed according to this data. The state blob can optionally contain binary tailoring 
- * data as well as the binary version of the UCA, in order to facilitate independence from ICU data. 
- * @draft
- */
-int32_t ucol_getState(const UCollator *coll, UColStateEnum contents, 
-                      uint8_t *buffer, int32_t buflen, 
-                      UErrorCode *status);
-
-/**
- * This API would compare the frozen state with the current implementation of ICU and will set status to one of four values:
- * U_ZERO_ERROR - most desirable result, meaning that the frozen collator in entirety matches the current ICU implementation, and that the same results would be obtained with simple opening of a collator (with a caveat: opening from state resurrects the attributes, while simple opening doesn't). 
- * U_COLLATOR_OLD_WARN - this is a warning. This collator can be constructed - however, the current implementation would not give the same results, so compatibility layer is used. This fact can affect performance and memory usage of collation. Also, it means that eventually this collator will not be available. It is users responsibility to consider regenerating the data that depends on the collator while it is 'old'.
- * U_MISSING_RESOURCE_ERROR - this is an error that means that the data required to construct a collator is missing. If the user supplies the required data, it will be able to construct the collator, either in regular OR compatibility mode.
- * U_COLLATOR_VERSION_TOO_OLD_ERROR - This is an error and means that this collator cannot be instantiated because this version is no longer supported by ICU. The user needs either to regenerate the data OR install an older version of ICU.
- * @draft
- */
-void ucol_checkState (const uint8_t *state, UErrorCode *status);
-
-/**
- * This API tries to construct a collator based on a state blob passed. 
- * @draft
- */
-UCollator *ucol_openState(const uint8_t *state, UErrorCode *status);
-
-
 /********************************* Deprecated API ********************************/
 /**
  *@deprecated Remove after Aug 2002
