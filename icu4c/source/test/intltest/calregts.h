@@ -66,6 +66,7 @@ public:
     void TestJ438(void);
     void TestLeapFieldDifference(void);
     void TestMalaysianInstance(void);
+    void TestWeekShift(void);
 
     void printdate(GregorianCalendar *cal, const char *string);
     void dowTest(UBool lenient) ;
