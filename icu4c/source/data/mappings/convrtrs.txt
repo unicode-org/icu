@@ -19,10 +19,12 @@
 #
 # except for column 1 (file names) case insensitive
 #
-# Aliases can be tagged by including a comma-separated list of tags in
+# All names can be tagged by including a comma-separated list of tags in
 # curly braces, as in ISO_8859-1:1987{IANA} iso-8859-1 { MIME } or
 # some-charset{MIME IANA}. The order of tags does not matter, and
-# whitespace is allowed between the alias name and the tags list.
+# whitespace is allowed between the tagged name and the tags list.
+#
+# The tags can be used to get standard names using ucnv_getStandardName().
 #
 # Here is a list of tags used in this file:
 #
