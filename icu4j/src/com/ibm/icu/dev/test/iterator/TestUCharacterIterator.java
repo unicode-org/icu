@@ -6,7 +6,7 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.StringCharacterIterator;
 import com.ibm.icu.text.ReplaceableString;
 import java.text.CharacterIterator;
-
+import com.ibm.icu.impl.UnicodeCharacterIterator;
 
 /**
  * @author ram
@@ -384,7 +384,101 @@ public class TestUCharacterIterator extends TestFmwk{
             }
         }
     }
+    public void TestUnicodeCharacaterIterator(){
+        int expect[]={
+            0x2f999,
+            0x1d15f,
+            0xc4,
+            0x1ed0
+        };
     
+        // expected src indexes corresponding to expect indexes
+        int expectIndex[]={
+            0,0,
+            1,1,
+            2,
+            3,
+            4 //needed 
+        };
+    
+        // initial indexes into the src and expect strings
+        
+        final int SRC_MIDDLE=4;
+        final int EXPECT_MIDDLE=2;
+        
+    
+        // movement vector
+        // - for previous(), 0 for current(), + for next()
+        // not const so that we can terminate it below for the error message
+        String moves="0+0+0--0-0-+++0--+++++++0--------";
+    
+        
+        UCharIterator iter32 = new UCharIterator(expect, expect.length, 
+                                                     EXPECT_MIDDLE);
+        
+        UnicodeCharacterIterator iter = new UnicodeCharacterIterator(new String(src)); 
+        int c1, c2;
+        char m;
+      
+        // initially set the indexes into the middle of the strings
+        iter.setIndex(SRC_MIDDLE);
+    
+        // move around and compare the iteration code points with
+        // the expected ones
+        int movesIndex =0;
+        while(movesIndex<moves.length()) {
+            m=moves.charAt(movesIndex++);
+            if(m=='-') {
+                c1=iter.previousCodePoint();
+                c2=iter32.previous();
+            } else if(m=='0') {
+                c1=iter.currentCodePoint();
+                c2=iter32.current();
+            } else  {// m=='+' 
+                c1=iter.nextCodePoint();
+                c2=iter32.next();
+            }
+    
+            // compare results
+            if(c1!=c2) {
+                // copy the moves until the current (m) move, and terminate
+                String history = moves.substring(0,movesIndex);
+                errln("error: mismatch in Normalizer iteration at "+history+": "
+                      +"got c1= " + hex(c1) +" != expected c2= "+ hex(c2));
+                break;
+            }
+    
+            // compare indexes
+            if(expectIndex[iter.getIndex()]!=iter32.getIndex()) {
+                // copy the moves until the current (m) move, and terminate
+                String history = moves.substring(0,movesIndex);
+                errln("error: index mismatch in Normalizer iteration at "
+                      +history+ " : "+ "Normalizer index " +iter.getIndex()
+                      +" expected "+ expectIndex[iter32.getIndex()]);
+                break;
+            }
+        }
+        {
+	        //test previous code point
+	        char[] src = new char[]{ '\uDC00','\uD800','\uDC01','\uD802','\uDC02','\uDC03'};
+	        UnicodeCharacterIterator iter1 = new UnicodeCharacterIterator(new String(src));
+	        iter1.setIndex(1);
+	        int ch;
+	        // this should never go into a infinite loop
+	        // if it does then we have a problem
+	        while((ch=iter1.previousCodePoint())!=iter.DONE_CODEPOINT){
+	            if(ch!=0xDc00){
+	                errln("iter.previousCodePoint() failed");
+	            }
+	        }
+	        iter1.setIndex(5);
+	        while((ch=iter1.nextCodePoint()) !=iter.DONE_CODEPOINT){
+	            if(ch!= 0xDC03){
+	                errln("iter.nextCodePoint() failed");
+	            } 
+	        }      
+	    }
+    }
     public void TestUCharacterIteratorWrapper(){
         String source ="asdfasdfjoiuyoiuy2341235679886765";
         UCharacterIterator it = UCharacterIterator.getInstance(source);
