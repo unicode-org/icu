@@ -636,7 +636,7 @@ repeatProps(void) {
         { 0xdc00, 0xdfff },     /* Low Surrogates */
         { 0xe000, 0xf8ff },     /* Private Use */
         { 0xf0000, 0xffffd },   /* Private Use */
-        { 0xf0000, 0x10fffd }   /* Private Use */
+        { 0x100000, 0x10fffd }  /* Private Use */
     };
 
     /*
@@ -659,6 +659,9 @@ repeatProps(void) {
     /* set the properties for the plane 15/16 Private Use area if necessary */
     if(getProps(0xf0000, &i1, &i2, &i3)==0) {
         setProps(0xf0000, getProps(0xe000, &i1, &i2, &i3), &i1, &i2, &i3);
+    }
+    if(getProps(0x100000, &i1, &i2, &i3)==0) {
+        setProps(0x100000, getProps(0xe000, &i1, &i2, &i3), &i1, &i2, &i3);
     }
 
     /* fill in the repetitive properties */
