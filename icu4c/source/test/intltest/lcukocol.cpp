@@ -33,7 +33,14 @@ LotusCollationKoreanTest::LotusCollationKoreanTest()
 {
     UErrorCode status = U_ZERO_ERROR;
     myCollation = Collator::createInstance("ko_kr", status);
-    myCollation->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
+    if(U_SUCCESS(status)) {
+      myCollation->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
+    } else {
+      errln("Couldn't instantiate the collator with %s", u_errorName(status));
+      delete myCollation;
+      myCollation = 0;
+    }
+
 }
 
 LotusCollationKoreanTest::~LotusCollationKoreanTest()
@@ -67,9 +74,14 @@ void LotusCollationKoreanTest::TestTertiary(/* char* par */)
 void LotusCollationKoreanTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite LotusCollationKoreanTest: ");
-    switch (index) {
-        case 0: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
-        default: name = ""; break;
+    if(myCollation) {
+      switch (index) {
+          case 0: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
+          default: name = ""; break;
+      }
+    } else {
+      errln("Class collator not instantiated");
+      name = "";
     }
 }
 

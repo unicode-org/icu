@@ -2743,6 +2743,11 @@ void TransliteratorTest::TestGurmukhiDevanagari(){
     UnicodeSetIterator vIter(vowel);
     UnicodeSetIterator nvIter(non_vowel);
     Transliterator* trans = Transliterator::createInstance("Devanagari-Gurmukhi",UTRANS_FORWARD, parseError, status);
+    if(U_FAILURE(status)) {
+      errln("Error creating transliterator %s", u_errorName(status));
+      delete trans;
+      return;
+    }
     UnicodeString src (" \\u0902");
     UnicodeString expected(" \\u0A02");
     src = src.unescape();
@@ -3824,7 +3829,12 @@ void TransliteratorTest::TestAllCodepoints(){
         if(code == USCRIPT_INVALID_CODE){
             errln("uscript_getScript for codepoint \\U%08X failed.\n", i);
         }
-        uprv_strcpy(id,uscript_getName(code));
+        const char* myId = uscript_getName(code);
+        if(!myId) {
+          errln("Valid script code returned NULL name. Check your data!");
+          return;
+        }
+        uprv_strcpy(id,myId);
         uprv_strcpy(abbr,uscript_getShortName(code));
 
         uprv_strcpy(newId,"[:");

@@ -617,6 +617,8 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
 
         if(status != expectedStatus){
             errln( "Did not get the expected error for %s null terminated source failed. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
+            uprv_free(tSrc);
+            return;
         } 
         if(testUnassigned ){
             status = U_ZERO_ERROR;

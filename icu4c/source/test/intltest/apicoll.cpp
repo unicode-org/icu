@@ -409,6 +409,13 @@ CollationAPITest::TestSafeClone() {
     someCollators[0] = Collator::createInstance("en_US", err);
     someCollators[1] = Collator::createInstance("ko", err);
     someCollators[2] = Collator::createInstance("ja_JP", err);
+    if(U_FAILURE(err)) {
+      errln("Couldn't instantiate collators. Error: %s", u_errorName(err));
+      delete someCollators[0];
+      delete someCollators[1];
+      delete someCollators[2];
+      return;
+    }
 
     /* change orig & clone & make sure they are independent */
 
@@ -497,12 +504,12 @@ CollationAPITest::TestCollationKey(/* char* par */)
     Collator *col = 0;
     UErrorCode success=U_ZERO_ERROR;
     col = Collator::createInstance(Locale::getEnglish(), success);
-    col->setStrength(Collator::TERTIARY);
     if (U_FAILURE(success))
     {
         errln("Default collation creation failed.");
         return;
     }
+    col->setStrength(Collator::TERTIARY);
 
     CollationKey sortk1, sortk2;
     UnicodeString test1("Abcda"), test2("abcda");
@@ -1175,6 +1182,10 @@ void CollationAPITest::TestMaxExpansion()
 
     UnicodeString rule("&a < ab < c/aba < d < z < ch");
     RuleBasedCollator coll(rule, status);
+    if(U_FAILURE(status)) {
+      errln("Collator creation failed with error %s", u_errorName(status));
+      return;
+    }
     UnicodeString str(ch);
     CollationElementIterator *iter =
                                   coll.createCollationElementIterator(str);
@@ -1410,6 +1421,11 @@ void CollationAPITest::TestVariableTopSetting() {
   UChar vt[256] = { 0 };
 
   Collator *coll = Collator::createInstance(status);
+  if(U_FAILURE(status)) {
+    delete coll;
+    errln("Collator creation failed with error %s", u_errorName(status));
+    return;
+  }
 
   uint32_t oldVarTop = coll->getVariableTop(status);
 
@@ -1484,6 +1500,12 @@ void CollationAPITest::TestGetLocale() {
   {
     Collator *defaultColl = Collator::createInstance(NULL, status);
     coll = Collator::createInstance("blahaha", status);
+    if(U_FAILURE(status)) {
+      log("Failed to open collator with %s\n", u_errorName(status));
+      delete coll;
+      delete defaultColl;
+      return;
+    }
     if(coll->getLocale(ULOC_REQUESTED_LOCALE, status) != "blahaha") {
       log("Nonexisting locale didn't preserve the requested locale\n");
     }
@@ -1539,6 +1561,11 @@ void CollationAPITest::TestBounds(void) {
     UErrorCode status = U_ZERO_ERROR;
 
     Collator *coll = Collator::createInstance(Locale("sh"), status);
+    if(U_FAILURE(status)) {
+      delete coll;
+      errln("Collator creation failed with %s", u_errorName(status));
+      return;
+    }
 
     uint8_t sortkey[512], lower[512], upper[512];
     UChar buffer[512];
@@ -1712,6 +1739,11 @@ void CollationAPITest::TestUClassID()
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *coll 
         = (RuleBasedCollator *)Collator::createInstance(status);
+    if(U_FAILURE(status)) {
+      delete coll;
+      errln("Collator creation failed with %s", u_errorName(status));
+      return;
+    }
     id = *((char *)coll->getDynamicClassID());
     if (id != 0) {
         errln("Dynamic class id for RuleBasedCollator should be 0");

@@ -481,21 +481,23 @@ IntlTestCollator::doTest(Collator* col, const UChar *source, const UChar *target
 void 
 IntlTestCollator::doTest(Collator* col, const UnicodeString &source, const UnicodeString &target, Collator::EComparisonResult result)
 {
-  doTestVariant(col, source, target, result);
-  if(result == Collator::LESS) {
-    doTestVariant(col, target, source, Collator::GREATER);
-  } else if (result == Collator::GREATER) {
-    doTestVariant(col, target, source, Collator::LESS);
-  }
+  if(col) {
+    doTestVariant(col, source, target, result);
+    if(result == Collator::LESS) {
+      doTestVariant(col, target, source, Collator::GREATER);
+    } else if (result == Collator::GREATER) {
+      doTestVariant(col, target, source, Collator::LESS);
+    }
 
-  UErrorCode status = U_ZERO_ERROR;
-  CollationElementIterator* c = ((RuleBasedCollator *)col)->createCollationElementIterator( source );
-  logln("Testing iterating source: "+source);
-  backAndForth(*c);
-  c->setText(target, status);
-  logln("Testing iterating target: "+target);
-  backAndForth(*c);
-  delete c;
+    UErrorCode status = U_ZERO_ERROR;
+    CollationElementIterator* c = ((RuleBasedCollator *)col)->createCollationElementIterator( source );
+    logln("Testing iterating source: "+source);
+    backAndForth(*c);
+    c->setText(target, status);
+    logln("Testing iterating target: "+target);
+    backAndForth(*c);
+    delete c;
+  }
 }
 
 

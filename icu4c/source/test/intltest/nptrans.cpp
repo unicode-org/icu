@@ -67,6 +67,9 @@ NamePrepTransform::NamePrepTransform(UParseError& parseError, UErrorCode& status
         
         mapping = Transliterator::createFromRules(UnicodeString("NamePrepTransform", ""), rule,
                                                    UTRANS_FORWARD, parseError,status);
+        if(U_FAILURE(status)) {
+          return;
+        }
 
         //create the unassigned set
         int32_t patternLen =0;
