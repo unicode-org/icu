@@ -189,188 +189,188 @@ typedef enum UCharDirection UCharDirection;
  * These are the same values as Unicode::EUnicodeScript
  * @draft
  */
-enum UCharScript {
+enum UCharBlock {
 /* Script names */
     /** */
-    U_BASIC_LATIN,
+    U_BASIC_LATIN_BLOCK,
     /** */
-    U_LATIN_1_SUPPLEMENT,
+    U_LATIN_1_SUPPLEMENT_BLOCK,
     /** */
-    U_LATIN_EXTENDED_A,
+    U_LATIN_EXTENDED_A_BLOCK,
     /** */
-    U_LATIN_EXTENDED_B,
+    U_LATIN_EXTENDED_B_BLOCK,
     /** */
-    U_IPA_EXTENSIONS,
+    U_IPA_EXTENSIONS_BLOCK,
     /** */
-    U_SPACING_MODIFIER_LETTERS,
+    U_SPACING_MODIFIER_LETTERS_BLOCK,
     /** */
-    U_COMBINING_DIACRITICAL_MARKS,
+    U_COMBINING_DIACRITICAL_MARKS_BLOCK,
     /** */
-    U_GREEK,
+    U_GREEK_BLOCK,
     /** */
-    U_CYRILLIC,
+    U_CYRILLIC_BLOCK,
     /** */
-    U_ARMENIAN,
+    U_ARMENIAN_BLOCK,
     /** */
-    U_HEBREW,
+    U_HEBREW_BLOCK,
     /** */
-    U_ARABIC,
+    U_ARABIC_BLOCK,
     /** */
-    U_SYRIAC,
+    U_SYRIAC_BLOCK,
     /** */
-    U_THAANA,
+    U_THAANA_BLOCK,
     /** */
-    U_DEVANAGARI,
+    U_DEVANAGARI_BLOCK,
     /** */
-    U_BENGALI,
+    U_BENGALI_BLOCK,
     /** */
-    U_GURMUKHI,
+    U_GURMUKHI_BLOCK,
     /** */
-    U_GUJARATI,
+    U_GUJARATI_BLOCK,
     /** */
-    U_ORIYA,
+    U_ORIYA_BLOCK,
     /** */
-    U_TAMIL,
+    U_TAMIL_BLOCK,
     /** */
-    U_TELUGU,
+    U_TELUGU_BLOCK,
     /** */
-    U_KANNADA,
+    U_KANNADA_BLOCK,
     /** */
-    U_MALAYALAM,
+    U_MALAYALAM_BLOCK,
     /** */
-    U_SINHALA,
+    U_SINHALA_BLOCK,
     /** */
-    U_THAI,
+    U_THAI_BLOCK,
     /** */
-    U_LAO,
+    U_LAO_BLOCK,
     /** */
-    U_TIBETAN,
+    U_TIBETAN_BLOCK,
     /** */
-    U_MYANMAR,
+    U_MYANMAR_BLOCK,
     /** */
-    U_GEORGIAN,
+    U_GEORGIAN_BLOCK,
     /** */
-    U_HANGUL_JAMO,
+    U_HANGUL_JAMO_BLOCK,
     /** */
-    U_ETHIOPIC,
+    U_ETHIOPIC_BLOCK,
     /** */
-    U_CHEROKEE,
+    U_CHEROKEE_BLOCK,
     /** */
-    U_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS,
+    U_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_BLOCK,
     /** */
-    U_OGHAM,
+    U_OGHAM_BLOCK,
     /** */
-    U_RUNIC,
+    U_RUNIC_BLOCK,
     /** */
-    U_KHMER,
+    U_KHMER_BLOCK,
     /** */
-    U_MONGOLIAN,
+    U_MONGOLIAN_BLOCK,
     /** */
-    U_LATIN_EXTENDED_ADDITIONAL,
+    U_LATIN_EXTENDED_ADDITIONAL_BLOCK,
     /** */
-    U_GREEK_EXTENDED,
+    U_GREEK_EXTENDED_BLOCK,
     /** */
-    U_GENERAL_PUNCTUATION,
+    U_GENERAL_PUNCTUATION_BLOCK,
     /** */
-    U_SUPERSCRIPTS_AND_SUBSCRIPTS,
+    U_SUPERSCRIPTS_AND_SUBSCRIPTS_BLOCK,
     /** */
-    U_CURRENCY_SYMBOLS,
+    U_CURRENCY_SYMBOLS_BLOCK,
     /** */
-    U_COMBINING_MARKS_FOR_SYMBOLS,
+    U_COMBINING_MARKS_FOR_SYMBOLS_BLOCK,
     /** */
-    U_LETTERLIKE_SYMBOLS,
+    U_LETTERLIKE_SYMBOLS_BLOCK,
     /** */
-    U_NUMBER_FORMS,
+    U_NUMBER_FORMS_BLOCK,
     /** */
-    U_ARROWS,
+    U_ARROWS_BLOCK,
     /** */
-    U_MATHEMATICAL_OPERATORS,
+    U_MATHEMATICAL_OPERATORS_BLOCK,
     /** */
-    U_MISCELLANEOUS_TECHNICAL,
+    U_MISCELLANEOUS_TECHNICAL_BLOCK,
     /** */
-    U_CONTROL_PICTURES,
+    U_CONTROL_PICTURES_BLOCK,
     /** */
-    U_OPTICAL_CHARACTER_RECOGNITION,
+    U_OPTICAL_CHARACTER_RECOGNITION_BLOCK,
     /** */
-    U_ENCLOSED_ALPHANUMERICS,
+    U_ENCLOSED_ALPHANUMERICS_BLOCK,
     /** */
-    U_BOX_DRAWING,
+    U_BOX_DRAWING_BLOCK,
     /** */
-    U_BLOCK_ELEMENTS,
+    U_BLOCK_ELEMENTS_BLOCK,
     /** */
-    U_GEOMETRIC_SHAPES,
+    U_GEOMETRIC_SHAPES_BLOCK,
     /** */
-    U_MISCELLANEOUS_SYMBOLS,
+    U_MISCELLANEOUS_SYMBOLS_BLOCK,
     /** */
-    U_DINGBATS,
+    U_DINGBATS_BLOCK,
     /** */
-    U_BRAILLE_PATTERNS,
+    U_BRAILLE_PATTERNS_BLOCK,
     /** */
-    U_CJK_RADICALS_SUPPLEMENT,
+    U_CJK_RADICALS_SUPPLEMENT_BLOCK,
     /** */
-    U_KANGXI_RADICALS,
+    U_KANGXI_RADICALS_BLOCK,
     /** */
-    U_IDEOGRAPHIC_DESCRIPTION_CHARACTERS,
+    U_IDEOGRAPHIC_DESCRIPTION_CHARACTERS_BLOCK,
     /** */
-    U_CJK_SYMBOLS_AND_PUNCTUATION,
+    U_CJK_SYMBOLS_AND_PUNCTUATION_BLOCK,
     /** */
-    U_HIRAGANA,
+    U_HIRAGANA_BLOCK,
     /** */
-    U_KATAKANA,
+    U_KATAKANA_BLOCK,
     /** */
-    U_BOPOMOFO,
+    U_BOPOMOFO_BLOCK,
     /** */
-    U_HANGUL_COMPATIBILITY_JAMO,
+    U_HANGUL_COMPATIBILITY_JAMO_BLOCK,
     /** */
-    U_KANBUN,
+    U_KANBUN_BLOCK,
     /** */
-    U_BOPOMOFO_EXTENDED,
+    U_BOPOMOFO_EXTENDED_BLOCK,
     /** */
-    U_ENCLOSED_CJK_LETTERS_AND_MONTHS,
+    U_ENCLOSED_CJK_LETTERS_AND_MONTHS_BLOCK,
     /** */
-    U_CJK_COMPATIBILITY,
+    U_CJK_COMPATIBILITY_BLOCK,
     /** */
-    U_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A,
+    U_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A_BLOCK,
     /** */
-    U_CJK_UNIFIED_IDEOGRAPHS,
+    U_CJK_UNIFIED_IDEOGRAPHS_BLOCK,
     /** */
-    U_YI_SYLLABLES,
+    U_YI_SYLLABLES_BLOCK,
     /** */
-    U_YI_RADICALS,
+    U_YI_RADICALS_BLOCK,
     /** */
-    U_HANGUL_SYLLABLES,
+    U_HANGUL_SYLLABLES_BLOCK,
     /** */
-    U_HIGH_SURROGATES,
+    U_HIGH_SURROGATES_BLOCK,
     /** */
-    U_HIGH_PRIVATE_USE_SURROGATES,
+    U_HIGH_PRIVATE_USE_SURROGATES_BLOCK,
     /** */
-    U_LOW_SURROGATES,
+    U_LOW_SURROGATES_BLOCK,
     /** */
-    U_PRIVATE_USE_AREA,
+    U_PRIVATE_USE_AREA_BLOCK,
     /** */
-    U_CJK_COMPATIBILITY_IDEOGRAPHS,
+    U_CJK_COMPATIBILITY_IDEOGRAPHS_BLOCK,
     /** */
-    U_ALPHABETIC_PRESENTATION_FORMS,
+    U_ALPHABETIC_PRESENTATION_FORMS_BLOCK,
     /** */
-    U_ARABIC_PRESENTATION_FORMS_A,
+    U_ARABIC_PRESENTATION_FORMS_A_BLOCK,
     /** */
-    U_COMBINING_HALF_MARKS,
+    U_COMBINING_HALF_MARKS_BLOCK,
     /** */
-    U_CJK_COMPATIBILITY_FORMS,
+    U_CJK_COMPATIBILITY_FORMS_BLOCK,
     /** */
-    U_SMALL_FORM_VARIANTS,
+    U_SMALL_FORM_VARIANTS_BLOCK,
     /** */
-    U_ARABIC_PRESENTATION_FORMS_B,
+    U_ARABIC_PRESENTATION_FORMS_B_BLOCK,
     /** */
-    U_SPECIALS,
+    U_SPECIALS_BLOCK,
     /** */
-    U_HALFWIDTH_AND_FULLWIDTH_FORMS,
+    U_HALFWIDTH_AND_FULLWIDTH_FORMS_BLOCK,
     /** */
-    U_CHAR_SCRIPT_COUNT,
+    U_SCRIPT_BLOCK_COUNT,
     /** */
-    U_NO_SCRIPT=U_CHAR_SCRIPT_COUNT
+    U_NO_SCRIPT=U_SCRIPT_BLOCK_COUNT
 };
-typedef enum UCharScript UCharScript;
+typedef enum UCharBlock UCharBlock;
 
 /**
  * Values returned by the u_getCellWidth() function.
@@ -408,10 +408,6 @@ enum UCharNameChoice {
 };
 
 typedef enum UCharNameChoice UCharNameChoice;
-
-/**
- * Functions to classify characters.
- */
 
 /**
  * Determines whether the specified UChar is a lowercase character
@@ -730,8 +726,9 @@ u_charDigitValue(UChar32 c);
  *
  * @see #UCharScript
  * @draft
+ * @deprecated
  */
-U_CAPI UCharScript     U_EXPORT2
+U_CAPI UCharBlock     U_EXPORT2
 u_charScript(UChar32    ch);
 
 /**

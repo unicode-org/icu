@@ -893,11 +893,11 @@ const UChar cellWidthValues[] =
 const int16_t numCellWidthValues = 16;
 
 /* Get the script associated with the character*/
-UCharScript
+UCharBlock
 u_charScript(UChar32 ch)
 {
     int32_t i, j;
-    UCharScript returnValue = U_NO_SCRIPT;
+    UCharBlock returnValue = U_NO_SCRIPT;
 
     /* surrogate support is still incomplete */
     if((uint32_t)ch>0xffff) {
@@ -909,14 +909,14 @@ u_charScript(UChar32 ch)
     for( j = 0; i == -1 && fScriptIndex[j].fFirstCode != 0xFFFF; ++j )
         if( fScriptIndex[j].fFirstCode <= ch && ch <= fScriptIndex[j].fLastCode ) {
             i = j;
-            if(j == U_CHAR_SCRIPT_COUNT) /* "U_SPECIALS 2" */
-                i = U_SPECIALS;
+            if(j == U_SCRIPT_BLOCK_COUNT) /* "U_SPECIALS 2" */
+                i = U_SPECIALS_BLOCK;
         }
-    if(i >= U_CHAR_SCRIPT_COUNT) {
+    if(i >= U_SCRIPT_BLOCK_COUNT) {
         returnValue = U_NO_SCRIPT;
     }
     else if( i != -1 ) {
-        returnValue = (UCharScript)i;
+        returnValue = (UCharBlock)i;
     } 
 
     return returnValue;
@@ -1631,3 +1631,4 @@ u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
     }
     return destIndex;
 }
+
