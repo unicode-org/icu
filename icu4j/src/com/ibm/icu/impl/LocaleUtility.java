@@ -5,13 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/LocaleUtility.java,v $
- * $Date: 2003/06/03 18:49:32 $
- * $Revision: 1.8 $
+ * $Date: 2003/08/21 23:41:25 $
+ * $Revision: 1.9 $
  *  *****************************************************************************************
  */
  
 package com.ibm.icu.impl;
 
+import java.io.InputStream;
 import java.util.Locale;
 
 /**
@@ -130,5 +131,11 @@ public class LocaleUtility {
             return null; // All parts were empty
         }
         return new Locale(parts[0], parts[1], parts[2]);
+    }
+    
+    public static InputStream getImplDataResourceAsStream(String name){   
+        Class myClass = new LocaleUtility().getClass();
+        String fullName = "data/"+name;
+        return myClass.getResourceAsStream(fullName); 
     }
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestUtil.java,v $
- * $Date: 2003/06/03 18:49:28 $
- * $Revision: 1.5 $
+ * $Date: 2003/08/21 23:42:03 $
+ * $Revision: 1.6 $
  *
  *******************************************************************************
  */
@@ -14,8 +14,10 @@ package com.ibm.icu.dev.test;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class TestUtil {
     /**
@@ -85,6 +87,14 @@ public class TestUtil {
      */
     public static final BufferedReader getDataReader(String name) throws IOException {
         return getDataReader(name, 1024);
+    }
+    /**
+     * Return an input stream on the data file at path 'name' rooted at the data path
+     */
+    public static final InputStream getDataStream(String name) throws IOException{
+        File file = getDataFile(name);
+        FileInputStream st = new FileInputStream(file);
+        return st;
     }
     static final char DIGITS[] = {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
