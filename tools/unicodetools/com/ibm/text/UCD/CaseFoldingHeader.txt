@@ -27,15 +27,16 @@
 # C: common case folding, common mappings shared by both simple and full mappings.
 # F: full case folding, mappings that cause strings to grow in length. Multiple characters are separated by spaces.
 # S: simple case folding, mappings to single characters where different from F.
-# I: special case for dotted uppercase I and dotless lowercase i
-#    - If this mapping is included, the result is case-insensitive, but dotless and dotted I's are not distinguished.
-#    - If this mapping is excluded, the result is not fully case-insensitive, but dotless and dotted I's are distinguished.
+# T: special case for uppercase I and dotted uppercase I
+#    - For non-Turkic languages, this mapping is normally not used.
+#    - For Turkic languages (tr, az), this mapping can be used instead of the normal mapping for these characters.
 #
 # Usage:
-#  A. To do a simple case folding, use the mappings with status C + S + I.
-#  B. To do a full case folding, use the mappings with status C + F + I.
-#    The mappings with status I can be omitted depending on the desired case-folding
-#    behavior. (The default option is to retain them.)
+#  A. To do a simple case folding, use the mappings with status C + S.
+#  B. To do a full case folding, use the mappings with status C + F.
+#
+#    The mappings with status T can be used or omitted depending on the desired case-folding
+#    behavior. (The default option is to exclude them.)
 #
 # =================================================================
 
