@@ -697,27 +697,27 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
     /*ISO-2022*/
     if(!testConvertToU(expectedISO2022, sizeof(expectedISO2022),
                sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "iso-2022", fmISO2022Offs ))
-      log_err("iso-2022  -> u  did not match"); 
+      log_err("iso-2022  -> u  did not match.\n");
     /*UTF16 LE*/
     if(!testConvertToU(expectedUTF16LE, sizeof(expectedUTF16LE),
                sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-16le", fmUTF16LEOffs ))
-      log_err("utf-16le -> u  did not match");
+      log_err("utf-16le -> u  did not match.\n");
     /*UTF16 BE*/
     if(!testConvertToU(expectedUTF16BE, sizeof(expectedUTF16BE),
                sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-16be", fmUTF16BEOffs ))
-      log_err("utf-16be -> u  did not match");
+      log_err("utf-16be -> u  did not match.\n");
     /*EBCDIC_STATEFUL*/
     if(!testConvertToU(expectedIBM930, sizeof(expectedIBM930),
                sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "ibm-930", fmIBM930Offs ))
-      log_err("ibm-930  -> u  did not match");
+      log_err("ibm-930  -> u  did not match.\n");
     /*MBCS*/
     if(!testConvertToU(expectedIBM943, sizeof(expectedIBM943),
                sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "ibm-943", fmIBM943Offs ))
-      log_err("ibm-943 -> u  did not match");
+      log_err("ibm-943 -> u  did not match.\n");
 
     if(!testConvertToU(expectedUTF16LE, sizeof(expectedUTF16LE),
                sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-16le", fmUTF16LEOffs ))
-      log_err("utf-16le -> u  did not match");
+      log_err("utf-16le -> u  did not match.\n");
 
     if(!testConvertToU(expectedMaltese913, sizeof(expectedMaltese913),
                malteseUChars, sizeof(malteseUChars)/sizeof(malteseUChars[0]), "latin3", NULL))
@@ -733,7 +733,7 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         log_err("u-> LMBCS-1 did not match.\n");
     if(!testConvertToU(expectedLMBCS, sizeof(expectedLMBCS),
                LMBCSUChars, sizeof(LMBCSUChars)/sizeof(LMBCSUChars[0]), "LMBCS-1", fmLMBCSOffs ))
-      log_err("LMBCS-1 -> u  did not match");
+      log_err("LMBCS-1 -> u  did not match.\n");
  
 }  
      
