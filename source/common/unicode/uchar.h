@@ -115,11 +115,16 @@ typedef enum UProperty {
         "Enumerated property Script", "Double property Numeric_Value",
         and "String property Age" are read by genpname. */
 
-    /** First constant for binary Unicode properties. @draft ICU 2.1 */
-    UCHAR_BINARY_START=0,
+    /** Note: Place UCHAR_ALPHABETIC before UCHAR_BINARY_START so that
+	debuggers display UCHAR_ALPHABETIC as the symbolic name for 0,
+	rather than UCHAR_BINARY_START.  Likewise for other *_START
+	identifiers. */
+    
     /** Binary property Alphabetic. Same as u_isUAlphabetic, different from u_isalpha.
         Lu+Ll+Lt+Lm+Lo+Nl+Other_Alphabetic @draft ICU 2.1 */
-    UCHAR_ALPHABETIC=UCHAR_BINARY_START,
+    UCHAR_ALPHABETIC=0,
+    /** First constant for binary Unicode properties. @draft ICU 2.1 */
+    UCHAR_BINARY_START=UCHAR_ALPHABETIC,
     /** Binary property ASCII_Hex_Digit. 0-9 A-F a-f @draft ICU 2.1 */
     UCHAR_ASCII_HEX_DIGIT,
     /** Binary property Bidi_Control.
@@ -239,11 +244,11 @@ typedef enum UProperty {
     /** One more than the last constant for binary Unicode properties. @draft ICU 2.1 */
     UCHAR_BINARY_LIMIT,
 
-    /** First constant for enumerated/integer Unicode properties. @draft ICU 2.2 */
-    UCHAR_INT_START=0x1000,
     /** Enumerated property Bidi_Class.
         Same as u_charDirection, returns UCharDirection values. @draft ICU 2.2 */
-    UCHAR_BIDI_CLASS=UCHAR_INT_START,
+    UCHAR_BIDI_CLASS=0x1000,
+    /** First constant for enumerated/integer Unicode properties. @draft ICU 2.2 */
+    UCHAR_INT_START=UCHAR_BIDI_CLASS,
     /** Enumerated property Block.
         Same as ublock_getCode, returns UBlockCode values. @draft ICU 2.2 */
     UCHAR_BLOCK,
@@ -278,19 +283,19 @@ typedef enum UProperty {
     /** One more than the last constant for enumerated/integer Unicode properties. @draft ICU 2.2 */
     UCHAR_INT_LIMIT,
 
-    /** First constant for double Unicode properties. @draft ICU 2.4 */
-    UCHAR_DOUBLE_START=0x2000,
     /** Double property Numeric_Value.
         Corresponds to u_getNumericValue. @draft ICU 2.4 */
-    UCHAR_NUMERIC_VALUE=UCHAR_DOUBLE_START,
+    UCHAR_NUMERIC_VALUE=0x2000,
+    /** First constant for double Unicode properties. @draft ICU 2.4 */
+    UCHAR_DOUBLE_START=UCHAR_NUMERIC_VALUE,
     /** One more than the last constant for double Unicode properties. @draft ICU 2.4 */
     UCHAR_DOUBLE_LIMIT,
 
-    /** First constant for string Unicode properties. @draft ICU 2.4 */
-    UCHAR_STRING_START=0x3000,
     /** String property Age.
         Corresponds to u_charAge. @draft ICU 2.4 */
-    UCHAR_AGE=UCHAR_STRING_START,
+    UCHAR_AGE=0x3000,
+    /** First constant for string Unicode properties. @draft ICU 2.4 */
+    UCHAR_STRING_START=UCHAR_AGE,
     /** String property Bidi_Mirroring_Glyph.
         Corresponds to u_charMirror. @draft ICU 2.4 */
     UCHAR_BIDI_MIRRORING_GLYPH,
