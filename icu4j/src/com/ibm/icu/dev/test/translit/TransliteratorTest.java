@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2001/03/31 01:31:03 $ 
- * $Revision: 1.32 $
+ * $Date: 2001/04/03 18:21:57 $ 
+ * $Revision: 1.33 $
  *
  *****************************************************************************************
  */
@@ -729,22 +729,40 @@ public class TransliteratorTest extends TestFmwk {
     public void TestFilterIDs() {
         String[] DATA = {
             "Unicode-Hex[aeiou]",
+            "Hex-Unicode[aeiou]",
             "quizzical",
             "q\\u0075\\u0069zz\\u0069c\\u0061l",
             
             "Unicode-Hex[aeiou];Hex-Unicode[^5]",
+            "Unicode-Hex[^5];Hex-Unicode[aeiou]",
             "quizzical",
             "q\\u0075izzical",
+            
+            "Null[abc]",
+            "Null[abc]",
+            "xyz",
+            "xyz",
         };
         
-        for (int i=0; i<DATA.length; i+=3) {
+        for (int i=0; i<DATA.length; i+=4) {
             String ID = DATA[i];
             Transliterator t = Transliterator.getInstance(ID);
-            expect(t, DATA[i+1], DATA[i+2]);
-            // Now check the ID
+            expect(t, DATA[i+2], DATA[i+3]);
+
+            // Check the ID
             if (!ID.equals(t.getID())) {
                 errln("FAIL: getInstance(" + ID + ").getID() => " +
                       t.getID());
+            }
+
+            // Check the inverse
+            String uID = DATA[i+1];
+            Transliterator u = t.getInverse();
+            if (u == null) {
+                errln("FAIL: " + ID + ".getInverse() returned NULL");
+            } else if (!u.getID().equals(uID)) {
+                errln("FAIL: " + ID + ".getInverse().getID() => " +
+                      u.getID() + ", expected " + uID);
             }
         }
     }
