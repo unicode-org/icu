@@ -31,6 +31,7 @@
 *   04/20/99    stephen     Cleaned up & reworked for autoconf.
 *                           Renamed to utypes.h.
 *   05/05/99    stephen     Changed to use <inttypes.h>
+*   12/07/99    helena      Moved copyright notice string from ucnv_bld.h here.
 *******************************************************************************
 */
 
@@ -406,6 +407,11 @@ errorName(UErrorCode code)
                 _uErrorInfoName[code-U_ERROR_INFO_START] : \
                 "[BOGUS UErrorCode]"
 #endif
+
+#define U_COPYRIGHT_STRING \
+  " Copyright (C) 1999, International Business Machines Corporation and others.  All Rights Reserved. "
+
+#define U_COPYRIGHT_STRING_LENGTH  160
 
 /*===========================================================================*/
 /* Include header for platform utilies */

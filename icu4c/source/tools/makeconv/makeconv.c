@@ -182,7 +182,7 @@ void writeConverterData(UConverterSharedData *mySharedData, const char *cName, U
     cnvName = cName;
   
   
-  mem = udata_create("cnv", cnvName, &dataInfo, UCNV_COPYRIGHT_STRING, status);
+  mem = udata_create("cnv", cnvName, &dataInfo, U_COPYRIGHT_STRING, status);
   
   WriteConverterSharedData(mem, mySharedData);
 
@@ -317,7 +317,7 @@ void writeUConverterSharedDataToFile(const char* filename,
 
   /*Writes a Sentinel value*/
   T_FileStream_write(outfile, &myCheck, sizeof(int32_t));
-  T_FileStream_write(outfile, UCNV_COPYRIGHT_STRING, UCNV_COPYRIGHT_STRING_LENGTH);
+  T_FileStream_write(outfile, U_COPYRIGHT_STRING, U_COPYRIGHT_STRING_LENGTH);
   
   /*Writes NULL in places where there is a pointer in order
    *to enable bitwise equivalence of binary files
