@@ -1051,7 +1051,7 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
         int32_t revSetStart, revSetLimit, dummy;
         if (!parseIDBounds(ID, revStart+1, TRUE, revLimit,
                            revSetStart, revSetLimit, dummy, revFilter)) {
-            delete filter;
+            delete fwdFilter;
             delete revFilter;
             return 0;
         }
@@ -1061,11 +1061,13 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
             idLimit = revLimit;
             setStart = revSetStart;
             setLimit = revSetLimit;
-            delete filter;
+            delete fwdFilter;
+            fwdFilter = NULL;
             filter = revFilter;
         } else {
             idLimit = revStart;
             delete revFilter;
+            revFilter = NULL;
         }
         // assert(revLimit < ID.length() && ID.charAt(revLimit) == ')');
         limit = revLimit+1;
@@ -1205,6 +1207,10 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
             // with [abc].
             t->adoptFilter(UnicodeFilterLogic::createAdoptingAnd(filter, t->orphanFilter()));
         }
+
+        else {
+            delete filter;
+        }
     }
     
     // Set the ID.  This is normally just a substring of the input
@@ -1315,6 +1321,7 @@ UBool Transliterator::parseIDBounds(const UnicodeString& ID,
         filter->applyPattern(ID, ppos, 0, status);
         if (U_FAILURE(status)) {
             delete filter;
+            filter = NULL;
             return FALSE;
         }
         setLimit = ppos.getIndex();
@@ -1615,6 +1622,7 @@ U_NAMESPACE_END
  * user, because RBTs hold pointers to common data objects.
  */
 U_CFUNC UBool transliterator_cleanup(void) {
+    TitlecaseTransliterator::cleanup();
     delete registry;
     registry = 0;
     umtx_destroy(&registryMutex);

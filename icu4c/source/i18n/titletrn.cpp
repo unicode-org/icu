@@ -12,6 +12,7 @@
 #include "unicode/titletrn.h"
 #include "unicode/uniset.h"
 #include "mutex.h"
+#include "ucln_in.h"
 
 U_NAMESPACE_BEGIN
 
@@ -77,6 +78,7 @@ void TitlecaseTransliterator::handleTransliterate(
             UErrorCode ec = U_ZERO_ERROR;
             SKIP = new UnicodeSet(UnicodeString("[\\u00AD \\u2019 \\' [:Mn:] [:Me:] [:Cf:]]", ""), ec);
             CASED = new UnicodeSet(UnicodeString("[[:Lu:] [:Ll:] [:Lt:]]", ""), ec);
+            ucln_i18n_registerCleanup();
         }
     }
 
@@ -117,6 +119,16 @@ void TitlecaseTransliterator::handleTransliterate(
     }
     
     offsets.start = start;
+}
+
+/**
+ * Static memory cleanup function.
+ */
+void TitlecaseTransliterator::cleanup() {
+    if (SKIP != NULL) {
+        delete SKIP; SKIP = NULL;
+        delete CASED; CASED = NULL;
+    }
 }
 
 U_NAMESPACE_END
