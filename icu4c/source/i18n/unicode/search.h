@@ -445,6 +445,8 @@ protected:
      * @param position The index in the target text at which the search 
      *                 should start.
      * @param status for error codes if it occurs.
+     * @return index at which the match starts, else if match is not found 
+     *         USEARCH_DONE is returned
      */
     virtual UTextOffset handleNext(UTextOffset position, UErrorCode &status) 
                                                                          = 0;
@@ -463,6 +465,8 @@ protected:
      * @param position The index in the target text at which the search 
      *                 should start.
      * @param status for error codes if it occurs.
+     * @return index at which the match starts, else if match is not found 
+     *         USEARCH_DONE is returned
      */
      virtual UTextOffset handlePrev(UTextOffset position, UErrorCode &status) 
                                                                          = 0;

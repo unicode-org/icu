@@ -2343,6 +2343,9 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_open(const UChar *pattern,
                                           UBreakIterator *breakiter,
                                           UErrorCode     *status) 
 {
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
     if (locale) {
         // ucol_open internally checks for status
         UCollator     *collator = ucol_open(locale, status);
@@ -2375,6 +2378,9 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
                                         UBreakIterator *breakiter,
                                         UErrorCode     *status) 
 {
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
     if (pattern == NULL || text == NULL || collator == NULL) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
     }
@@ -2614,7 +2620,7 @@ U_CAPI void U_EXPORT2 usearch_setBreakIterator(UStringSearch  *strsrch,
                                                UBreakIterator *breakiter,
                                                UErrorCode     *status)
 {
-    if (strsrch) {
+    if (U_SUCCESS(*status) && strsrch) {
         strsrch->search->breakIter = breakiter;
         if (breakiter) {
             ubrk_setText(breakiter, strsrch->search->text, 
