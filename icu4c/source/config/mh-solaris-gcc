@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-solaris-gcc,v 1.26 2002/05/01 23:48:09 grhoten-oss Exp $
+## $Id: mh-solaris-gcc,v 1.27 2002/05/29 16:50:13 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -fPIC
@@ -15,8 +15,8 @@ GEN_DEPS.c= 	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -G
-SHLIB.cc=	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -G
+SHLIB.c=	$(CC) $(CFLAGS) $(LDFLAGS) -G
+SHLIB.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -G
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-R
