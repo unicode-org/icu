@@ -22,7 +22,7 @@ builddir_relative_srcdir = $(builddir_relative_topdir)/$(srcdir)
 # Getting the ICU version numbers, stolen from configure.in (that's okay, I
 # wrote the configure.in part anyway)
 
-version := $(shell sed -n 's/^[ 	]*\#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' $(srcdir)/common/unicode/uversion.h $(srcdir)/common/unicode/*.h)
+version := $(shell sed -n -e 's/^[ 	]*\#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' $(srcdir)/common/unicode/uversion.h)
 libversion := $(shell echo $(version) | sed -e 's/\.//' -e 's/^\([^.]*\)$$/\1.0/')
 major := $(shell echo $(libversion) | sed 's/\..*//')
 
