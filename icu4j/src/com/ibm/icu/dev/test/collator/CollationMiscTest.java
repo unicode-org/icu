@@ -1,4 +1,4 @@
-/*
+ /*
  *******************************************************************************
  * Copyright (C) 2002, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
@@ -27,7 +27,7 @@ public class CollationMiscTest extends TestFmwk{
 
     public static void main(String[] args) throws Exception {
         new CollationMiscTest().run(args);
-        // new CollationMiscTest().TestLocaleRuleBasedCollators();
+        // new CollationMiscTest().TestLocaleRuleBasedCollators(); 
     }
     
     public void TestRuleOptions() {
@@ -622,7 +622,7 @@ public class CollationMiscTest extends TestFmwk{
             "\u0410\u0306a",
             "\u04d0A"
         };
-        genericLocaleStarter(new Locale("ru", ""), test);
+        genericLocaleStarter(new Locale("en", ""), test);
         genericRulesStarter("&\u0410 = \u0410", test);
         genericRulesStarter("&Z < \u0410", test);
         genericRulesStarter("&\u0410 = \u0410 < \u04d0", test);
@@ -630,7 +630,23 @@ public class CollationMiscTest extends TestFmwk{
         genericRulesStarter("&\u0410 = \u0410 < \u0410\u0301", test);
         genericRulesStarter("&Z < \u0410 < \u0410\u0301", test);
     }
-    
+
+    public void TestSuppressContractions() {
+            String testNoCont2[] = {
+            "\u0410\u0302a",
+            "\u0410\u0306b",
+            "\u0410c"            
+        };
+        String testNoCont[] = {
+            "a\u0410",            
+            "A\u0410\u0306",
+            "\uFF21\u0410\u0302"
+        };
+            
+        genericRulesStarter("[suppressContractions [\u0400-\u047f]]", testNoCont);
+        genericRulesStarter("[suppressContractions [\u0400-\u047f]]", testNoCont2);
+    }
+        
     public void TestCase() {
         String gRules = "\u0026\u0030\u003C\u0031\u002C\u2460\u003C\u0061\u002C\u0041";
         String[] testCase = {
@@ -1607,4 +1623,23 @@ public class CollationMiscTest extends TestFmwk{
             }
         }
     }
+    
+    public void TestOptimize() {
+      /* this is not really a test - just trying out 
+       * whether copying of UCA contents will fail 
+       * Cannot really test, since the functionality 
+       * remains the same.
+       */
+       String rules[] = {
+        "[optimize [\\uAC00-\\uD7FF]]"
+       };
+       String data[][] = {
+         { "a", "b"}
+       };
+       int i = 0;
+    
+      for(i = 0; i<rules.length; i++) {
+        genericRulesStarter(rules[i], data[i]);
+      }
+    }    
 }
