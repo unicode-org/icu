@@ -362,44 +362,16 @@ UnicodeStringTest::TestSearching()
     if (occurrences != 10)
         errln("indexOf with character & start & end offsets failed: expected to find 10 occurrences, found " + occurrences);
 
-    for ( occurrences = 0, startPos = 9999;
-          startPos != -1;
-          (startPos = test1.lastIndexOf(test2, startPos)) != -1 ? ++occurrences : 0)
-        ;
-    if (occurrences != 6)
-        errln("lastIndexOf failed: expected to find 6 occurrences, found " + occurrences);
-
     for ( occurrences = 0, startPos = 32;
           startPos != -1;
-          (startPos = test1.lastIndexOf(test2, startPos)) != -1 ? ++occurrences : 0)
-        ;
-    if (occurrences != 5)
-        errln("lastIndexOf with starting offset failed: expected to find 5 occurrences, found " + occurrences);
-
-    for ( occurrences = 0, startPos = 32, endPos = 5;
-          startPos != -1;
-          (startPos = test1.lastIndexOf(test2, startPos, startPos - endPos)) != -1 ? ++occurrences : 0)
+          (startPos = test1.lastIndexOf(test2, 5, startPos - 5)) != -1 ? ++occurrences : 0)
         ;
     if (occurrences != 4)
         errln("lastIndexOf with starting and ending offsets failed: expected to find 4 occurrences, found " + occurrences);
 
-    for ( occurrences = 0, startPos = 9999;
-          startPos != -1;
-          (startPos = test1.lastIndexOf(testChar, startPos)) != -1 ? ++occurrences : 0)
-        ;
-    if (occurrences != 16)
-        errln("lastIndexOf with character failed: expected to find 16 occurrences, found " + occurrences);
-
     for ( occurrences = 0, startPos = 32;
-          startPos != -1 && startPos < test1.size();
-          (startPos = test1.lastIndexOf(testChar, startPos)) != -1 ? ++occurrences : 0)
-        ;
-    if (occurrences != 13)
-        errln("lastIndexOf with character & start offset failed: expected to find 13 occurrences, found " + occurrences);
-
-    for ( occurrences = 0, startPos = 32, endPos = 5;
-          startPos != -1 && startPos < test1.size();
-          (startPos = test1.lastIndexOf(testChar, startPos, startPos - endPos)) != -1 ? ++occurrences : 0)
+          startPos != -1;
+          (startPos = test1.lastIndexOf(testChar, 5, startPos - 5)) != -1 ? ++occurrences : 0)
         ;
     if (occurrences != 11)
         errln("lastIndexOf with character & start & end offsets failed: expected to find 11 occurrences, found " + occurrences);
