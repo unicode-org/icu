@@ -35,7 +35,7 @@ include $(srcdir)/ucmfiles.mk
 -include $(srcdir)/ucmlocal.mk
 
 ## Install program information
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
 
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -115,9 +115,9 @@ check: all check-local
 all-local: $(TARGET) $(CNV_FILES) $(TEST_CNV_FILES) $(ALL_MAN_FILES)
 
 install-local: all-local install-man
-	$(mkinstalldirs) $(DESTDIR)$(sbindir)
+	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
-#	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/$(VERSION)
+#	$(MKINSTALLDIRS) $(DESTDIR)$(pkgdatadir)/$(VERSION)
 #	@list='$(notdir $(CNV_FILES)) convrtrs.txt'; for file in $$list; do \
 #		echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
 #		$(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
@@ -150,7 +150,7 @@ $(TARGET): $(OBJECTS)
 
 install-man: install-manx
 install-manx: $(MANX_FILES)
-	$(mkinstalldirs) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
 	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
 
 %.$(SECTION): $(srcdir)/%.$(SECTION).in

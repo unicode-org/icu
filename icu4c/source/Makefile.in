@@ -31,7 +31,7 @@ top_builddir = .
 subdir = .
 
 ## Install program information
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
 
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -111,10 +111,10 @@ clean-recursive-with-twist:
 all-local: $(srcdir)/configure
 
 install-local: $(top_builddir)/config/Makefile.inc $(EXTRA_DATA:%=$(DESTDIR)$(pkgdatadir)/$(VERSION)/%)
-	@$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
-	@$(mkinstalldirs) $(DESTDIR)$(sbindir)
+	@$(MKINSTALLDIRS) $(DESTDIR)$(pkgdatadir)
+	@$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkgdatadir)/Makefile.inc
-	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(sbindir)/mkinstalldirs
+	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(pkgdatadir)/mkinstalldirs
 
 $(DESTDIR)$(pkgdatadir)/$(VERSION)/%: $(top_srcdir)/../data/%
 	$(INSTALL_DATA) $< $@

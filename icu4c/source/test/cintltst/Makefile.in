@@ -25,7 +25,7 @@ pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
 ## Install program information
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
 
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
