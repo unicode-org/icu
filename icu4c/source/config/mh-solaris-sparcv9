@@ -2,6 +2,8 @@
 ## Solaris-specific setup using Sun's workshop compilers
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
+##
+## $Id: mh-solaris-sparcv9,v 1.13 2000/10/16 18:05:34 yves Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -xtarget=ultra -xarch=v9 -xM $(DEFS) $(CPPFLAGS)

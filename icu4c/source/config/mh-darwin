@@ -3,6 +3,8 @@
 ## to Rhapsody, aka Mac OS X Server)
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
+##
+## $Id: mh-darwin,v 1.15 2000/10/16 18:05:34 yves Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -dynamic

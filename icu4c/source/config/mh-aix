@@ -2,6 +2,8 @@
 ## Aix-specific setup (for xlC)
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
+##
+## $Id: mh-aix,v 1.16 2000/10/16 18:05:34 yves Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
