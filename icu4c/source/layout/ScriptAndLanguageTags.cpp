@@ -13,44 +13,46 @@
 #include "OpenTypeLayoutEngine.h"
 
 const LETag OpenTypeLayoutEngine::scriptTags[] = {
+    zyyyScriptTag, /* 'zyyy' (COMMON) */
     qaaiScriptTag, /* 'qaai' (INHERITED) */
-    latnScriptTag, /* 'latn' (LATIN) */
-    grekScriptTag, /* 'grek' (GREEK) */
-    cyrlScriptTag, /* 'cyrl' (CYRILLIC) */
-    armnScriptTag, /* 'armn' (ARMENIAN) */
-    hebrScriptTag, /* 'hebr' (HEBREW) */
     arabScriptTag, /* 'arab' (ARABIC) */
-    syrcScriptTag, /* 'syrc' (SYRIAC) */
-    thaaScriptTag, /* 'thaa' (THAANA) */
-    devaScriptTag, /* 'deva' (DEVANAGARI) */
+    armnScriptTag, /* 'armn' (ARMENIAN) */
     bengScriptTag, /* 'beng' (BENGALI) */
-    guruScriptTag, /* 'guru' (GURMUKHI) */
+    bopoScriptTag, /* 'bopo' (BOPOMOFO) */
+    cherScriptTag, /* 'cher' (CHEROKEE) */
+    qaacScriptTag, /* 'qaac' (COPTIC) */
+    cyrlScriptTag, /* 'cyrl' (CYRILLIC) */
+    dsrtScriptTag, /* 'dsrt' (DESERET) */
+    devaScriptTag, /* 'deva' (DEVANAGARI) */
+    ethiScriptTag, /* 'ethi' (ETHIOPIC) */
+    georScriptTag, /* 'geor' (GEORGIAN) */
+    gothScriptTag, /* 'goth' (GOTHIC) */
+    grekScriptTag, /* 'grek' (GREEK) */
     gujrScriptTag, /* 'gujr' (GUJARATI) */
+    guruScriptTag, /* 'guru' (GURMUKHI) */
+    haniScriptTag, /* 'hani' (HAN) */
+    hangScriptTag, /* 'hang' (HANGUL) */
+    hebrScriptTag, /* 'hebr' (HEBREW) */
+    hiraScriptTag, /* 'hira' (HIRAGANA) */
+    kndaScriptTag, /* 'knda' (KANNADA) */
+    kataScriptTag, /* 'kata' (KATAKANA) */
+    khmrScriptTag, /* 'khmr' (KHMER) */
+    laooScriptTag, /* 'laoo' (LAO) */
+    latnScriptTag, /* 'latn' (LATIN) */
+    mlymScriptTag, /* 'mlym' (MALAYALAM) */
+    mongScriptTag, /* 'mong' (MONGOLIAN) */
+    mymrScriptTag, /* 'mymr' (MYANMAR) */
+    ogamScriptTag, /* 'ogam' (OGHAM) */
+    italScriptTag, /* 'ital' (OLD-ITALIC) */
     oryaScriptTag, /* 'orya' (ORIYA) */
+    runrScriptTag, /* 'runr' (RUNIC) */
+    sinhScriptTag, /* 'sinh' (SINHALA) */
+    syrcScriptTag, /* 'syrc' (SYRIAC) */
     tamlScriptTag, /* 'taml' (TAMIL) */
     teluScriptTag, /* 'telu' (TELUGU) */
-    kndaScriptTag, /* 'knda' (KANNADA) */
-    mlymScriptTag, /* 'mlym' (MALAYALAM) */
-    sinhScriptTag, /* 'sinh' (SINHALA) */
+    thaaScriptTag, /* 'thaa' (THAANA) */
     thaiScriptTag, /* 'thai' (THAI) */
-    laooScriptTag, /* 'laoo' (LAO) */
     tibtScriptTag, /* 'tibt' (TIBETAN) */
-    mymrScriptTag, /* 'mymr' (MYANMAR) */
-    georScriptTag, /* 'geor' (GEORGIAN) */
-    hangScriptTag, /* 'hang' (HANGUL) */
-    ethiScriptTag, /* 'ethi' (ETHIOPIC) */
-    cherScriptTag, /* 'cher' (CHEROKEE) */
-    cansScriptTag, /* 'cans' (UCAS) */
-    ogamScriptTag, /* 'ogam' (OGHAM) */
-    runrScriptTag, /* 'runr' (RUNIC) */
-    khmrScriptTag, /* 'khmr' (KHMER) */
-    mongScriptTag, /* 'mong' (MONGOLIAN) */
-    hiraScriptTag, /* 'hira' (HIRAGANA) */
-    kataScriptTag, /* 'kata' (KATAKANA) */
-    bopoScriptTag, /* 'bopo' (BOPOMOFO) */
-    haniScriptTag, /* 'hani' (HAN) */
-    yiiiScriptTag, /* 'yiii' (YI) */
-    italScriptTag, /* 'ital' (OLD_ITALIC) */
-    gothScriptTag, /* 'goth' (GOTHIC) */
-    dsrtScriptTag  /* 'dsrt' (DESERET) */
+    cansScriptTag, /* 'cans' (CANADIAN-ABORIGINAL) */
+    yiiiScriptTag  /* 'yiii' (YI) */
 };
