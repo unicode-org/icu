@@ -38,6 +38,7 @@
 #include "unesctrn.h"
 #include "util.h"
 #include "tridpars.h"
+#include "anytrans.h"
 
 static const UChar TARGET_SEP  = 0x002D; /*-*/
 static const UChar ID_DELIM    = 0x003B; /*;*/
@@ -1323,6 +1324,7 @@ void Transliterator::initializeRegistry(void) {
     EscapeTransliterator::registerIDs();
     UnescapeTransliterator::registerIDs();
     NormalizationTransliterator::registerIDs();
+    AnyTransliterator::registerIDs();
     ucln_i18n_registerCleanup();
 }
 
