@@ -286,10 +286,12 @@ parseMappings(FILE *f, Mapping *mappings) {
     Mapping *oldMappings;
     char *s, *end;
     long mappingsTop=0;
+    long lineNum=0;
 
     oldMappings=mappings;
     while(fgets(line, sizeof(line), f)!=NULL) {
         s=(char *)skipWhitespace(line);
+    lineNum++;
 
         /* skip empty lines */
         if(*s==0 || *s=='\n' || *s=='\r') {
@@ -374,7 +376,7 @@ parseMappings(FILE *f, Mapping *mappings) {
                 }
                 mappings->b|=prefix<<(4*(end-s));
             } else {
-                fprintf(stderr, "error parsing codepage bytes on \"%s\"\n", line);
+                fprintf(stderr, "%d: error parsing codepage bytes on \"%s\"\n", lineNum, line);
                 exit(2);
             }
         }
@@ -853,6 +855,7 @@ processTable(const char *arg) {
             exit(1);
         }
     }
+    puts(filename);
     strcpy(tpname, filename+length-17);
 
     /* parse both files */
@@ -935,7 +938,8 @@ main(int argc, const char *argv[]) {
     }
 
     while(--argc>0) {
-        processTable(*++argv);
+        puts(*++argv);
+        processTable(*argv);
     }
 
     return 0;
