@@ -154,6 +154,9 @@ icuio {
                 {
                     "%lld", "1311768467463790320", "8", "123456789abcdef0"
                 }
+                {// Ignore the + sign argument
+                    "%+u", "2328760884", "4", "8ace1234"
+                }
             }
         }
         printfPrecision {
