@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2003/09/29 23:20:36 $ 
- * $Revision: 1.53 $
+ * $Date: 2003/10/07 17:22:14 $ 
+ * $Revision: 1.54 $
  *
  *****************************************************************************************
  */
@@ -1211,6 +1211,26 @@ public class UnicodeSetTest extends TestFmwk {
                   " => \"" + text.substring(start,i) + "\"");
             pos.setIndex(i);
             return text.substring(start,i);
+        }
+    }
+
+    public void TestSurrogate() {
+        String DATA[] = {
+            // These should all behave identically
+            "[abc\\uD800\\uDC00]",
+            "[abc\uD800\uDC00]",
+            "[abc\\U00010000]",
+        };
+        for (int i=0; i<DATA.length; ++i) {
+            logln("Test pattern " + i + " :" + Utility.escape(DATA[i]));
+            UnicodeSet set = new UnicodeSet(DATA[i]);
+            expectContainment(set,
+                              CharsToUnicodeString("abc\\U00010000"),
+                              "\uD800;\uDC00"); // split apart surrogate-pair
+            if (set.size() != 4) {
+                errln(Utility.escape("FAIL: " + DATA[i] + ".size() == " + 
+                      set.size() + ", expected 4"));
+            }
         }
     }
 

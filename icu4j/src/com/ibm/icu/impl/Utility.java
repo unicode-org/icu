@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2003/10/07 16:51:56 $
- * $Revision: 1.46 $
+ * $Date: 2003/10/07 17:22:14 $
+ * $Revision: 1.47 $
  *
  *****************************************************************************************
  */
@@ -802,6 +802,27 @@ public final class Utility {
             }
             if (result < 0 || result >= 0x110000) {
                 return -1;
+            }
+            // If a 'u' escape sequence (16-bit) specifies a lead
+            // surrogate, see if there is a trail surrogate after it,
+            // either as a 'u' escape or as a literal.  If so, join
+            // them up into a supplementary.
+            if (maxDig == 4 && offset < length &&
+                UTF16.isLeadSurrogate((char) result)) {
+                c = s.charAt(offset); // [sic] get 16-bit code unit
+                int ahead = offset+1;
+                // ONLY parse backslash 'u', nothing else
+                if (c == '\\' && (offset+1) < length &&
+                    s.charAt(offset+1) == 'u') {
+                    int o[] = new int[] { ahead };
+                    c = unescapeAt(s, o);
+                    ahead = o[0];
+                }
+                if (UTF16.isTrailSurrogate((char) c)) {
+                    offset = ahead;
+	            result = UCharacterProperty.getRawSupplementary(
+                                  (char) result, (char) c);
+                }
             }
             offset16[0] = offset;
             return result;
