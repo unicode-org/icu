@@ -34,7 +34,7 @@ struct URegularExpression {
                                      // TODO: regexp engine should not depend on UnicodeString.
 };
 
-static const int32_t REXP_MAGIC = 'rexp';
+static const int32_t REXP_MAGIC = 0x72657870; // "rexp" in ASCII
 
 U_NAMESPACE_USE
 
