@@ -32,8 +32,6 @@ sysconfdir = @sysconfdir@
 PACKAGE = @PACKAGE@
 VERSION = @VERSION@
 UNICODE_VERSION = @UNICODE_VERSION@
-SO_TARGET_VERSION = @LIB_VERSION@
-SO_TARGET_VERSION_MAJOR = @LIB_VERSION_MAJOR@
 
 # Should be the same as U_ICUDATA_NAME
 ICUDATA_BASENAME_VERSION = icudt@LIB_VERSION_MAJOR@
@@ -115,3 +113,5 @@ LIBCTESTFW=     -L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw$(ICULIBSUF
 LIBICUTOOLUTIL= -L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)
 LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio$(ICULIBSUFFIX)
 
+# Invoke, set library path for all ICU libraries.
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/extra/ustdio:$(top_builddir)/tools/ctestfw:$(top_builddir)/data:$(top_builddir)/stubdata/:$$$(LDLIBRARYPATH_ENVVAR)
