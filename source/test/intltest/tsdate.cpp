@@ -23,7 +23,7 @@ void IntlTestDateFormat::runIndexedTest( int32_t index, UBool exec, const char* 
 {
     if (exec) logln("TestSuite DateFormat");
     switch (index) {
-        case 0: name = "Generic test (Default Locale)"; 
+        case 0: name = "GenericTest";
             if (exec) {
                 logln(name);
                 fFormat = DateFormat::createInstance();
@@ -32,21 +32,21 @@ void IntlTestDateFormat::runIndexedTest( int32_t index, UBool exec, const char* 
                 testFormat(/* par */);
             }
             break;
-        case 1: name = "Default Locale";
+        case 1: name = "DefaultLocale";
             if (exec) {
                 logln(name);
                 testLocale(/*par, */Locale::getDefault(), "Default Locale");
             }
             break;
 
-        case 2: name = "Determine Available Locales"; 
+        case 2: name = "TestAvailableLocales";
             if (exec) {
                 logln(name);
                 testAvailableLocales(/* par */);
             }
             break;
 
-        case 3: name = "Test Available Locales"; 
+        case 3: name = "MonsterTest";
             if (exec) {
                 logln(name);
                 monsterTest(/*par*/);
@@ -159,7 +159,7 @@ void IntlTestDateFormat::tryDate(UDate theDate)
         if (U_FAILURE(status))
         {
             describeTest();
-            errln("**** FAIL: Parse of " + string[i-1] + " failed.");
+            errln("**** FAIL: Parse of " + prettify(string[i-1], FALSE) + " failed.");
             dump = TRUE;
             break;
         }
