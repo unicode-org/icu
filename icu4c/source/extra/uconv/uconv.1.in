@@ -50,6 +50,7 @@ List all the available encodings and exit.
 .TP
 .BI "\-\-default-code"
 Print the name of the default encoding and exit.
+.TP
 .BI "\--canon"
 If used with
 .BI "\-l\fP, \fB\-\-list"
