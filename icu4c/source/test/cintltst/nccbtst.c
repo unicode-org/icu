@@ -1065,6 +1065,29 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
             log_err("utf8->u with substitute did not match.\n");;
     }
 
+    log_verbose("Testing ibm-930 subchar/subchar1\n");
+    {
+        static const UChar u1[]={         0x6d63,           0x6d64,     0x6d65,     0x6d66,     0xdf };
+        static const uint8_t s1[]={       0x0e, 0x5d, 0x5f, 0x5d, 0x63, 0xfe, 0xfe, 0x46, 0x6b, 0x0f, 0x3f };
+        static const int32_t offsets1[]={ 0,    0,    0,    1,    1,    2,    2,    3,    3,    4,    4 };
+
+        static const UChar u2[]={         0x6d63,           0x6d64,     0xfffd,     0x6d66,     0x1a };
+        static const uint8_t s2[]={       0x0e, 0x5d, 0x5f, 0x5d, 0x63, 0xfc, 0xfc, 0x46, 0x6b, 0x0f, 0x57 };
+        static const int32_t offsets2[]={ 1,                3,          5,          7,          10 };
+
+        if(!testConvertFromUnicode(u1, ARRAY_LENGTH(u1), s1, ARRAY_LENGTH(s1), "ibm-930", 
+                                   (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0)
+        ) {
+            log_err("u->ibm-930 subchar/subchar1 did not match.\n");
+        }
+
+        if(!testConvertToUnicode(s2, ARRAY_LENGTH(s2), u2, ARRAY_LENGTH(u2), "ibm-930", 
+                                 (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets2, NULL, 0)
+        ) {
+            log_err("ibm-930->u subchar/subchar1 did not match.\n");
+        }
+    }
+
     log_verbose("Testing GB 18030 with substitute callbacks\n");
     {
         static const UChar u1[]={
