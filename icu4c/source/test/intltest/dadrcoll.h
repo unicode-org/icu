@@ -18,6 +18,7 @@
 #include "unicode/sortkey.h"
 #include "unicode/schriter.h"
 #include "unicode/ures.h"
+#include "tedadrvr.h"
 
 
 class DataDrivenCollatorTest: public IntlTestCollator {
@@ -26,27 +27,16 @@ public:
     DataDrivenCollatorTest();
     ~DataDrivenCollatorTest();
 protected:
-    // These two should probably go down in IntlTest
-    const char* loadTestData(UErrorCode& err);
-    UResourceBundle* getTestBundle(const char* bundleName);
 
     void DataDrivenTest(char *par);
-    void processReadyCollator(UResourceBundle *test, Collator *col, UErrorCode &status);
-    void processCollatorTests(UResourceBundle *test, Collator *col, UErrorCode &status);
-    void processTest(UResourceBundle *test, UErrorCode &status);
+    void processSequence(Collator* col, const UnicodeString &sequence, UErrorCode &status);
+    void processTest(UErrorCode &status);
     void processArguments(Collator *col, const UChar *start, int32_t optLen, UErrorCode &status);
     UBool setTestSequence(const UnicodeString &setSequence, UnicodeString &source, Collator::EComparisonResult &relation, UErrorCode &status);
     UBool getNextInSequence(UnicodeString &source, Collator::EComparisonResult &relation, UErrorCode &status);
-    void processSequence(Collator* col, const UnicodeString &sequence, UErrorCode &status);
 private:
   StringCharacterIterator seq;
-  UResourceBundle *testBundle;
-  UResourceBundle *testData;
-  UResourceBundle *currentTest;
-  UResourceBundle *purpose;
-  UResourceBundle *parsing;
-  int32_t numberOfTests;
-  UBool dataTestValid;
+  TestDataDriver *driver;
 };
 
 
