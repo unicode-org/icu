@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2004/03/11 21:42:41 $ 
-* $Revision: 1.37 $
+* $Date: 2004/03/13 00:06:20 $ 
+* $Revision: 1.38 $
 *
 *******************************************************************************
 */
@@ -1073,7 +1073,7 @@ public final class UTF16
      * @param target the buffer to append to
      * @param cp the code point to append
      * @return the updated StringBuffer
-     * @throw IllegalArgumentException if cp is not a valid code point
+     * @throws IllegalArgumentException if cp is not a valid code point
      * @draft ICU 3.0
      */
     public static StringBuffer appendCodePoint(StringBuffer target, int cp) {
