@@ -35,9 +35,11 @@
 #include "umutex.h"
 #include "uhash.h"
 
+// This one is ALWAYS needed, as INT_MAX is used in fractionalFCD check
+#include <limits.h>
+
 #ifdef UCOL_DEBUG
 #include <stdio.h>
-#include <limits.h>
 #endif
 
 /* added by synwee for trie manipulation*/
