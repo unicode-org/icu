@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.h,v $ 
- * $Date: 2002/03/11 17:48:33 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/03/13 18:29:24 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -130,7 +130,7 @@ private:
      * If so, take the remainder, and return the equivalents 
      */
     //Set extract(int comp, String segment, int segmentPos, StringBuffer buffer);
-    const Hashtable *extract(UChar32 comp, UnicodeString segment, int32_t segmentPos, UnicodeString buffer, UErrorCode status);
+    Hashtable *extract(UChar32 comp, UnicodeString segment, int32_t segmentPos, UnicodeString buffer, UErrorCode status);
 
     void cleanPieces();
 };
