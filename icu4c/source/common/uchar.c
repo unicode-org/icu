@@ -920,8 +920,29 @@ void u_getUnicodeVersion(UVersionInfo versionArray) {
 
 enum {
     LOC_ROOT,
-    LOC_TURKISH
+    LOC_TURKISH,
+    LOC_LITHUANIAN
 };
+
+static int32_t
+getCaseLocale(const char *locale) {
+    if(locale==NULL) {
+        locale=uloc_getDefault();
+        if(locale==NULL) {
+            return LOC_ROOT;
+        }
+    }
+    if( ((locale[0]=='t' && locale[1]=='r') ||
+         (locale[0]=='a' && locale[1]=='z')) &&
+        (locale[2]=='_' || locale[2]==0)
+    ) {
+        return LOC_TURKISH;
+    } else if(locale[0]=='l' && locale[1]=='t' && (locale[2]=='_' || locale[2]==0)) {
+        return LOC_LITHUANIAN;
+    } else {
+        return LOC_ROOT;
+    }
+}
 
 U_CFUNC int32_t
 u_internalStrToLower(UChar *dest, int32_t destCapacity,
@@ -971,14 +992,7 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
 
     /* set up local variables */
     uchars=(const UChar *)(props32Table+indexes[INDEX_UCHARS]);
-    if(locale==NULL) {
-        locale=uloc_getDefault();
-    }
-    if(locale[0]=='t' && locale[1]=='r' && (locale[2]=='_' || locale[2]==0)) {
-        loc=LOC_TURKISH;
-    } else {
-        loc=LOC_ROOT;
-    }
+    loc=getCaseLocale(locale);
 
     /* case mapping loop */
     srcIndex=destIndex=0;
@@ -1158,14 +1172,7 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
 
     /* set up local variables */
     uchars=(const UChar *)(props32Table+indexes[INDEX_UCHARS]);
-    if(locale==NULL) {
-        locale=uloc_getDefault();
-    }
-    if(locale[0]=='t' && locale[1]=='r' && (locale[2]=='_' || locale[2]==0)) {
-        loc=LOC_TURKISH;
-    } else {
-        loc=LOC_ROOT;
-    }
+    loc=getCaseLocale(locale);
 
     /* case mapping loop */
     srcIndex=destIndex=0;
@@ -1195,6 +1202,32 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                         } else {
                             /* other languages: i maps to I */
                             buffer[0]=0x49;
+                        }
+                        i=1;
+                    } else if(c==0x307) {
+                        if(loc==LOC_LITHUANIAN) {
+                            /* lithuanian: remove DOT ABOVE after U+0069 "i" with upper or titlecase */
+                            /* ### TODO: test this with Unicode 3.1 SpecialCasing.txt */
+                            /* search backwards for the base letter - this works only because src and dest do not overlap! */
+                            i=srcIndex;
+                            while(i>0) {
+                                UTF_PREV_CHAR(src, 0, i, c);
+                                props=GET_PROPS_UNSAFE(c);
+                                if(GET_CATEGORY(props)!=U_NON_SPACING_MARK) { /* Mn */
+                                    break;
+                                }
+                            }
+                            /* is the base letter an 'i' (U+0069)? */
+                            if(c==0x69) {
+                                /* yes, remove the dot (continue without output) */
+                                continue;
+                            } else {
+                                /* no, keep the dot */
+                                buffer[0]=0x307;
+                            }
+                        } else {
+                            /* other languages: keep the dot */
+                            buffer[0]=0x307;
                         }
                         i=1;
                     } else {
