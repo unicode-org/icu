@@ -124,10 +124,11 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(42,TestUndefinedVariable);
         TESTCASE(43,TestEmptyContext);
         TESTCASE(44,TestCompoundFilterID);
-        TESTCASE(45,TestDevanagariLatinRT);
-        TESTCASE(46,TestTeluguLatinRT);
-        TESTCASE(47,TestCompoundLatinRT);
-        TESTCASE(48,TestSanskritLatinRT);
+        TESTCASE(45,TestPropertySet);
+        TESTCASE(46,TestDevanagariLatinRT);
+        TESTCASE(47,TestTeluguLatinRT);
+        TESTCASE(48,TestCompoundLatinRT);
+        TESTCASE(49,TestSanskritLatinRT);
         default: name = ""; break;
     }
 }
@@ -2064,6 +2065,15 @@ void TransliteratorTest::TestCompoundFilterID(void) {
                   u_errorName(ec));
         }
     }
+}
+
+/**
+ * Test new property set syntax
+ */
+void TransliteratorTest::TestPropertySet() {
+    expect("a>A; \\p{Lu}>x; \\p{ANY}>y;", "abcDEF", "Ayyxxx");
+    expect("(.+)>'[' $1 ']';", " a stitch \n in time \r saves 9",
+           "[ a stitch ]\n[ in time ]\r[ saves 9]");
 }
 
 //======================================================================

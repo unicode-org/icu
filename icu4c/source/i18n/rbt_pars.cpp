@@ -41,14 +41,19 @@
 #define SEGMENT_CLOSE      ((UChar)0x0029) /*)*/
 #define CONTEXT_ANTE       ((UChar)0x007B) /*{*/
 #define CONTEXT_POST       ((UChar)0x007D) /*}*/
-#define SET_OPEN           ((UChar)0x005B) /*[*/
-#define SET_CLOSE          ((UChar)0x005D) /*]*/
 #define CURSOR_POS         ((UChar)0x007C) /*|*/
 #define CURSOR_OFFSET      ((UChar)0x0040) /*@*/
 #define ANCHOR_START       ((UChar)0x005E) /*^*/
 #define KLEENE_STAR        ((UChar)0x002A) /***/
 #define ONE_OR_MORE        ((UChar)0x002B) /*+*/
 #define ZERO_OR_ONE        ((UChar)0x003F) /*?*/
+
+#define DOT                ((UChar)46)     /*.*/
+
+static const UChar DOT_SET[] = { // "[^[:Zp:][:Zl:]\r\n$]";
+    91, 94, 91, 58, 90, 112, 58, 93, 91, 58, 90,
+    108, 58, 93, 92, 114, 92, 110, 36, 93, 0
+};
 
 // By definition, the ANCHOR_END special character is a
 // trailing SymbolTable.SYMBOL_REF character.
@@ -514,6 +519,15 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
             // Text after a presumed end anchor is a syntax err
             return syntaxError(U_MALFORMED_VARIABLE_REFERENCE, rule, start);
         }
+        if (UnicodeSet::resemblesPattern(rule, pos-1)) {
+            pp.setIndex(pos-1); // Backup to opening '['
+            buf.append(parser.parseSet(rule, pp));
+            if (U_FAILURE(parser.status)) {
+                return syntaxError(U_MALFORMED_SET, rule, start);
+            }
+            pos = pp.getIndex();                    
+            continue;
+        }
         // Handle escapes
         if (c == ESCAPE) {
             if (pos == limit) {
@@ -653,14 +667,6 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
             }
             post = buf.length();
             break;
-        case SET_OPEN:
-            pp.setIndex(pos-1); // Backup to opening '['
-            buf.append(parser.parseSet(rule, pp));
-            if (U_FAILURE(parser.status)) {
-                return syntaxError(U_MALFORMED_SET, rule, start);
-            }
-            pos = pp.getIndex();
-            break;
         case CURSOR_POS:
             if (cursor >= 0) {
                 return syntaxError(U_MULTIPLE_CURSORS, rule, start);
@@ -688,6 +694,9 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                     return syntaxError(U_MISPLACED_CURSOR_OFFSET, rule, start);
                 }
             }
+            break;
+        case DOT:
+            buf.append(parser.getDotStandIn());
             break;
         case KLEENE_STAR:
         case ONE_OR_MORE:
@@ -749,7 +758,6 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                 buf.append(parser.generateStandInFor(m));
             }
             break;
-        // case SET_CLOSE:
         default:
             // Disallow unquoted characters other than [0-9A-Za-z]
             // in the printable ASCII range.  These characters are
@@ -892,6 +900,7 @@ void TransliteratorParser::parseRules(const UnicodeString& rules,
     }
     parseData->data = data;
     determineVariableRange(rules);
+    dotStandIn = (UChar) -1;
 
     UnicodeString str; // scratch
     idBlock.truncate(0);
@@ -1255,6 +1264,17 @@ UChar TransliteratorParser::generateStandInFor(UnicodeMatcher* adopted) {
     }
     variablesVector->addElement(adopted, status);
     return variableNext++;
+}
+
+/**
+ * Return the stand-in for the dot set.  It is allocated the first
+ * time and reused thereafter.
+ */
+UChar TransliteratorParser::getDotStandIn() {
+    if (dotStandIn == (UChar) -1) {
+        dotStandIn = generateStandInFor(new UnicodeSet(DOT_SET, status));
+    }
+    return dotStandIn;
 }
 
 /**
