@@ -639,9 +639,17 @@ inline  uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSou
 void collPrevIterNormalize(collIterate *data)
 {
     UErrorCode  status = U_ZERO_ERROR;
-    UChar      *pEnd   = data->pos + 1;     /* End normalize + 1 */
-    UChar      *pStart = data->fcdPosition; /* Start normalize */
+    UChar      *pEnd   = data->pos + 1;         /* End normalize + 1 */
+    UChar      *pStart;
     uint32_t    normLen;
+
+    /* Start normalize */
+    if (data->fcdPosition == NULL) {
+        pStart = data->string;
+    }
+    else {
+        pStart = data->fcdPosition + 1; 
+    }
 
     normLen = unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, 
                               data->writableBuffer, data->writableBufSize, 
@@ -733,7 +741,12 @@ inline void collPrevIterFCD(collIterate *data)
         }
     }
     
-    data->fcdPosition = data->string + length;
+    if (length == 0) {
+        data->fcdPosition = NULL;
+    }
+    else {
+        data->fcdPosition = data->string + length;
+    }
 
     if (needNormalize) {
         collPrevIterNormalize(data);
@@ -786,8 +799,16 @@ inline uint32_t ucol_getPrevCE(const UCollator *coll, collIterate *data,
                     /* 
                     At the start of the normalize side buffer. 
                     Go back to string.
+                    Because pointer points to the last accessed character,
+                    hence we have to increment it by one here.
                     */
-                    data->pos   = data->fcdPosition;
+                    if (data->fcdPosition == NULL) {
+                        data->pos = data->string;
+                        return UCOL_NO_MORE_CES;
+                    }
+                    else {
+                        data->pos   = data->fcdPosition + 1;
+                    }
                     data->flags = data->origFlags;
                     continue;
                 }
@@ -1522,7 +1543,12 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
           Indicate where to continue in main input string after exhausting 
           the writableBuffer 
           */
-          source->fcdPosition       = source->pos - 1; 
+          if (source->pos - 1 == source->string) {
+              source->fcdPosition = NULL;
+          }
+          else {
+            source->fcdPosition       = source->pos - 2; 
+          }
           source->pos               = source->writableBuffer + 2;
           source->origFlags         = source->flags;
           source->flags            |= UCOL_ITER_INNORMBUF;
