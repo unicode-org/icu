@@ -4,6 +4,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <title>ReadMe for ICU4J</title>
+<!--
+*******************************************************************************
+* Copyright (C) 2001-2002, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/icu4j/readme.html,v $
+* $Date: 2002/08/15 17:39:50 $
+* $Revision: 1.32 $
+*
+*******************************************************************************
+-->
 </head>
 
 <body bgcolor="#FFFFFF" link="#0000FF" vlink="#800080" lang="EN-US">
@@ -31,6 +43,7 @@ Reserved. </p>
   <li><a href="#API">Where to Get Documentation</a></li>
   <li><a href="#HowToInstallJavac">How to Install and Build</a></li>
   <li><a href="#tryingout">Trying Out ICU4J</a></li>
+  <li><a href="#resources">ICU4J Resource Information</a></li>
   <li><a href="#WhereToFindMore">Where to Find More Information</a></li>
   <li><a href="#SubmittingComments">Submitting Comments, Requesting Features and Reporting
     Bugs</a></li>
@@ -52,8 +65,8 @@ Reserved. </p>
     Unicode Normalization – NFC, NFD, NFKD, NFKC
     	<blockquote>Produces canonical text representations, needed for XML and the net.</blockquote>
     <li>
-    International Calendars – Arabic, Buddhist, Hebrew, and Japanese
-              <blockquote>Required for correct presentation of dates in some countries.</blockquote>
+    International Calendars – Arabic, Buddhist, Hebrew, and Japanese<br>
+        <blockquote>Required for correct presentation of dates in some countries.</blockquote>
     <li> 
     Number Format Enhancements – Scientific Notation, Spelled-out Numbers
               <blockquote>Enhances standard Java number formatting. The spelled-out format is used
@@ -75,14 +88,14 @@ are using Java 1.3, you can use the ICU4J package until you upgrade to 1.4.
 
 <h3><a name=license></a><u>License Information</u></h3>
 <p>
-The ICU projects (ICU4C and ICU4J) now use the X license.&nbsp; The X license is a non-viral and recommended free software license that is compatible with the GNU GPL license.&nbsp; This became effective with release 1.8.1 of ICU4C and release 1.3.1 of ICU4J in mid-2001. All new ICU releases will adopt the X license; previous ICU releases continue to utilize the IPL (IBM Public License).&nbsp; Users of previous releases of ICU who want to adopt new ICU releases will need to accept the terms and conditions of the X license.
+The ICU projects (ICU4C and ICU4J) use the X license.&nbsp; The X license is a <b>non-viral</b> and recommended free software license that is compatible with the GNU GPL license.&nbsp; This became effective with release 1.8.1 of ICU4C and release 1.3.1 of ICU4J in mid-2001. All new ICU releases will adopt the X license; previous ICU releases continue to utilize the IPL (IBM Public License).&nbsp; Users of previous releases of ICU who want to adopt new ICU releases will need to accept the terms and conditions of the X license.
 </p>
 <p>
 The main effect of the change is to provide GPL compatibility.&nbsp; The X license is listed as GPL compatible, see the gnu page at <a href=http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses>
-http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses</a>
+http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses</a>.  This means that GPL projects can now use ICU code, it does <b>not</b> mean that projects using ICU become subject to GPL.
 </p>
 <p>
-The text of the X license is available at <a href=http://www.x.org/terms.htm>http://www.x.org/terms.htm</a>. The IBM version contains the essential text of the license, omitting the X-specific trademarks and copyright notices.
+The text of the X license is available at <a href=http://www.x.org/terms.htm>http://www.x.org/terms.htm</a>. The IBM version contains the essential text of the license, omitting the X-specific trademarks and copyright notices.  The full copy of the license is included in the download package.
 </p>
 <p>
 For more details please see the <a href=http://oss.software.ibm.com/icu/press.html>press announcement</a> and the <a href=http://oss.software.ibm.com/icu/project_faq.html#license>Project FAQ</a>.
@@ -98,11 +111,17 @@ For more details please see the <a href=http://oss.software.ibm.com/icu/press.ht
       the components on these JVMs at your own risk.</P>
       <p>
       The reference platforms which we support and test ICU4J on are:<ul>
-<li> Win2000, IBM JDK 1.3
-<li> Solaris 2.7, Sun JDK 1.3.1
-<li> AIX 5.1, IBM JDK 1.3
+<li> Win2000, IBM JDK 1.3</li>
+<li> Solaris 2.7, Sun JDK 1.3.1</li>
+<li> AIX 5.1, IBM JDK 1.3</li>
 </ul>
 </p>
+
+<p>Additionally, we have built and tested ICU4J on the following <b>unsupported</b> platforms:
+<ul>
+<li> Win98, WinNT, WinXP / IBM JDK 1.3, Sun JDK 1.3.1, 1.4</li>
+<li> Solaris 2.6 / Sun JDK 1.3.1, 1.4</li>
+</ul>
 
 <h3><a NAME="obtaining"></a><u>How to Download ICU4J</u></h3>
 
@@ -119,7 +138,6 @@ For more details please see the <a href=http://oss.software.ibm.com/icu/press.ht
     at <a href="http://oss.software.ibm.com/icu4j/download/index.html">http://oss.software.ibm.com/icu4j/download/index.html</a>.&nbsp; If a packaged snapshot is named <b>ICU4JXXXXXX.zip</b>, where XXXXXX is
     the release version number.&nbsp; Please unzip this file.&nbsp; It
     will reconstruct the source directory. </li>
-
 </ul>
 
 <ul type="disc">
@@ -179,13 +197,17 @@ href="http://oss.software.ibm.com/icu4j/download/index.html">http://oss.software
 &quot;drive:\...\icu4j&quot; in your environment. &quot;drive:\...&quot; stands for any
 drive and any directory on that drive that you chose to install icu4j into. </p>
 
-<p><b>The following files describe the code drop:</b></p>
+<p><b>Information and build files:</b></p>
 
 <table BORDER="1" CELLPADDING="3">
   <tr>
     <td>readme.html<br>
         (this file)</td>
     <td>A description of ICU4J (International Components for Unicode for Java)</td>
+  </tr>
+  <tr>
+    <td>releasenotes.html
+    <td>A description of features and changes in this and prior releases of ICU4J</td>
   </tr>
   <tr>
     <td>license.html</td>
@@ -205,28 +227,33 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
   </tr>
 </table>
 
-<p><b>The source directories mirror the package structure of the code.&nbsp; They contain source code and data files:</b> </p>
+<p><b>The source directories mirror the package structure of the code.</b><br><font color="blue">Core</font> packages become part of the ICU4J jar file.<br><font color="blue">API</font> packages contain classes with supported API.</p>
 
 <table BORDER="1" CELLPADDING="3" WIDTH="623">
   <tr>
-    <td>$Root/src/com/ibm/icu/dev</td>
-    <td>Package that is used for internal developements. Demos, tests and tools are located here. For information about running the tests, see $Root/src/com/ibm/icu/dev/test/TestAll.java.</td>
+    <td>$Root/src/com/ibm/icu/dev<br><font color="blue">Non-Core, Non-API</font></td>
+    <td>Packages used for internal development:
+    <ul>
+    <li>Data: data used by tests and in building ICU</li>
+    <li>Demos: Calendar, Holiday, Break Iterator, Rule-based Number Format, Transformations<br>(See <a href="#tryingout">below</a> for more information about the demos.)</li>
+    <li>Tests: API and coverage tests of all functionality.<br>For information about running the tests, see $Root/src/com/ibm/icu/dev/test/TestAll.java.</li>
+    <li>Tools: tools used to build data tables, etc.</td>
   </tr>
   <tr>
-    <td>$Root/src/com/ibm/icu/impl</td>
-    <td>This package is for internal use. Classes used by different ICU4J packages but not intended for public use are located here.</td>
+    <td>$Root/src/com/ibm/icu/impl<br><font color="blue">Core, Non-API</font></td>
+    <td>These are utility classes used from different ICU4J core packages.</td>
   </tr>
   <tr>
-    <td>$Root/src/com/ibm/icu/lang</td>
+    <td>$Root/src/com/ibm/icu/lang<br><font color="blue">Core, API</font></td>
     <td>Character properties package.</td>
   </tr>
   <tr>
-    <td>$Root/src/com/ibm/icu/math</td>
-    <td>Mathematic manipulation.</td>
+    <td>$Root/src/com/ibm/icu/math<br><font color="blue">Core, API</font></td>
+    <td>Additional math classes.</td>
   </tr>
   <tr>
-    <td>$Root/src/com/ibm/icu/text</td>
-    <td>Main package, containing the following components:
+    <td>$Root/src/com/ibm/icu/text<br><font color="blue">Core, API</font></td>
+    <td>Additional text classes.  These add to, and in some cases replace, related core Java classes:
       <ul>
       <li>Arabic shaping
       <li>Break iteration
@@ -243,8 +270,16 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
     </td>
   </tr>
   <tr>
-    <td>$Root/src/com/ibm/icu/util</td>
-    <td>Calendars, time zones and other utility classes</td>
+    <td>$Root/src/com/ibm/icu/util<br><font color="blue">Core, API</font></td>
+    <td>Additional utility classes:
+    <ul>
+    <li>Calendars - Gregorian, Buddhist, Hebrew, Islamic, Japanese
+    <li>Holiday</li>
+    <li>TimeZone</li>
+    <li>VersionInfo</li>
+    <li>Iteration</li>
+    </ul>
+    </td>
   </tr>
   <tr>
     <td>$Root/src/com/ibm/richtext</td> <td>Styled text editing
@@ -274,11 +309,11 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
 
 <p><b>Data organization:</b> </p>
 
-<p>Data used in ICU4J is stored in the following locations as described:
+<p>ICU4J data is stored in the following locations:
 
 <ul>
-  <li>The ICU4J core tools, namely the packages <code>com.ibm.icu.lang</code>, <code>com.ibm.icu.text</code>, <code>com.ibm.icu.util</code>, <code>com.ibm.icu.math</code> and <code>com.ibm.icu.text</code>, stores data it use in the package <code>com.ibm.icu.impl.data</code>. All resource bundles are stored in <code>com.ibm.icu.impl.data</code></li>
-  <li>Data that is not part of ICU4J core, but rather part of a test, sample, or demo, is stored in the package <code>com.ibm.icu.dev.data</code>.</li>
+  <li>The package <code>com.ibm.icu.impl.data</code> holds data used by the ICU4J core packages (<code>com.ibm.icu.lang</code>, <code>com.ibm.icu.text</code>, <code>com.ibm.icu.util</code>, <code>com.ibm.icu.math</code> and <code>com.ibm.icu.text</code>). In particular, all resource information is stored here.</li>
+  <li>The package <code>com.ibm.icu.dev.data</code> holds data that is not part of ICU4J core, but rather part of a test, sample, or demo.</li>
 </ul>
 
 <h3><u><a name="API"></a>Where to get Documentation</u></h3>
@@ -443,6 +478,7 @@ or disappear without notice.</p>
 <p>The icu4j.jar file contains only the core ICU4J classes, not the
 demo classes, so unless you build ICU4J there is little to try out.
 
+<h4>Rich Edit</h4>
 To try out the <strong>richedit</strong> package, first build the richeditJar target.
 This is a 'runnable' jar file.  To run the richedit demo, type: 
 <tt><blockquote>  java -jar $Root/richedit/richedit.jar</blockquote></tt>
@@ -466,6 +502,7 @@ with Arabic or Hebrew you will want to use an input method.  You will
 need to use a font that supports Arabic or Hebrew, 'Lucida Sans' (provided
 with Java) supports these languages.</p>
 
+<h4>Other demos</h4>
 <p>The other demo programs are <strong>not supported</strong> and exist only to let you
 experiment with the ICU4J classes.  First, build ICU4J using <tt>ant&nbsp;all</tt>.  Then try
 one of the following:
@@ -476,6 +513,181 @@ one of the following:
 <li><tt>java -classpath classes com.ibm.icu.dev.demo.rbnf.RbnfDemo</tt>
 <li><tt>java -classpath classes com.ibm.icu.dev.demo.translit.Demo</tt>
 </ul>
+</p>
+
+<a name="resources">
+<h3><u>ICU4J Resource Information</u></h3>
+</a>
+Starting with release 2.1, ICU4J includes its own 
+resource information
+which is completely independent of the JDK resource information.  The
+new ICU4J information is equivalent to the information in ICU4C and
+ultimately derives from the same source.  This allows ICU4J 2.1 and above 
+to be
+built on, and run on, JDK 1.4.
+</p>
+<p>
+By default the ICU4J distribution includes all of the new resource
+information.  It is located in the package com.ibm.icu.impl.data, as a
+set of class files named "LocaleElements" followed by the names of
+locales in the form _xx_YY_ZZZZ, where 'xx' is the two-letter language
+code, 'YY' is the country code, and 'ZZ' (which can be any length) is
+a variant.  Many of these fields can be omitted.  Locale naming is
+documented the Locale class, java.util.Locale, and the use of these
+names in searching for resources is documented in
+java.util.ResourceBundle.
+</p>
+<p>
+Some of these files require separate binary data.  The names of the
+binary data files start with "CollationElements", then the
+corresponding Locale string, and end with '.res'.  Another data file
+(only one at the moment) starts with the name "BreakDictionaryData",
+the corresponding Locale string, and ends with '.ucs'.
+</p>
+<p>
+Some of the LocaleElements files share data with other LocaleElements
+files, because some Locale names have changed. For example, he_IL used
+to be iw_IL.  In order to support both names but not duplicate the
+data, one of the class files refers to the other class file's data.
+</p>
+<p>
+The list of supported resources is found in a file called
+LocaleElements_index.class.  This contains the names of all the
+LocaleElements resources and is the source of the information returned
+by API such as Calendar.getAvailableLocales. (Note: for ease of
+customization this probably should be a text file).
+</p>
+<p>
+LocaleElements files form a hierarchy, with up to four levels: a root,
+language, region (country), and variant.  Searches for locale data
+attempt to match as far down the hierarchy as possible, for example,
+'he_IL' will match LocaleElements_he_IL, but 'he_US' will match
+LocaleElements_he (since there is no 'US' variant for 'he', and
+'xx_YY' will match LocaleElements (since there is no 'xx' language
+code in the LocaleElements hierarchy).  Again, see
+java.util.ResourceBundle for more information.
+</p>
+<p>
+With this in mind, the way to remove LocaleData is to make sure to
+remove all dependencies on that data as well.  For example, if you
+remove LocaleElements_he.class, you need to remove
+LocaleElements_he_IL.class, since it is lower in the hierarchy, and
+you must remove LocaleElements_iw.class, since it references
+LocaleElements_he, and LocaleELements_iw_IL.class, since it depends on
+it (and also references LocaleElements_he_IL).  For another example,
+if you remove CollationElements_zh__PINYIN.res, you must also remove
+LocaleElements_zh__PINYIN.class, since it depends on the
+CollationElements_zh__PINYIN.res.
+</p>
+
+<p>
+Unfortunately, the jar tool in the JDK provides no way to remove items
+from a jar file.  Thus you have to extract the resources, remove the
+ones you don't want, and then create a new jar file with the remining
+resources.  See the jar tool information for how to do this.  Before
+'rejaring' the files, be sure to thoroughly test your application with
+the remaining resources, making sure each required resource is
+present.
+</p>
+
+<h3>Developing Resources to be used with ICU4J</h3>
+<p>
+ICU4J 2.1 and above uses the standard class lookup mechanism.  This means 
+any ppropriately named resource on the CLASSPATH will be located, in the
+order listed in the classpath.
+</p>
+<p>
+If you create a resource file
+com.ibm.icu.impl.data.LocaleElements_xx_YY.class, and list it on the
+CLASSPATH before icu4j.jar, your resource will be used in place of any
+existing LocaleElements_xx_YY resource in icu4j.  This is a good way
+to try out changes to resources.  You can, for example, include the
+resource in your application's jar file and list it ahead of
+icu4j.jar.
+</p>
+<p>
+In order to create new resources, you first must thoroughly understand
+the various elements contained in the resource files, their syntax and
+dependencies.  You cannot simply 'patch' existing resource files with
+a single change because the new file completely replaces the old file
+in the resource hierarchy.  In general, the new resource file should
+contain all the different data that the old one did, plus your
+changes.
+</p>
+<p>
+Adding a new 'leaf' resource is easiest.  Elements defined in that
+resource will override corresponding ones in the resources further up
+the hierarchy.  Thus you can, for example, try out new localized names
+of days of the week, as they are all contained in one element.  The
+variant mechanism can be used to temporarily try out new versions of
+existing resource elements (though we don't recommend shipping this
+way).  Note though that some resources have detailed dependencies on
+each other, so that you cannot simply assume that a new element with
+the same structure and number of contents will 'just work.'
+</p>
+<p>
+Patching an 'internal' resource (say, one corresponding to an existing
+language resource that has children) requires careful analysis of the
+contents of the resources.
+</p>
+
+<p>
+LocaleElements resource data in ICU4J is checked in to the
+repository as precompiled class files.  This means that inspecting the
+contents of these resources is difficult.  They are compiled from java
+files that in turn are machine-generated from ICU4C binary data, using
+the genrb tool in ICU4C.  You can view the contents of the ICU4C text
+resource files to understand the contents of the ICU4J resources, as
+they are the same.
+</p>
+
+<h3>Developing ICU4J Resources</h3>
+<p>
+Currently only the LocaleElements resource data is shared, other ICU
+resources (calendar, transliterator, etc.) are still checked in
+directly to ICU4J as source files.  This means that development and
+maintenance of these resources continues as before, only
+LocaleElements resource data has been changed in ICU4J 2.1.  This
+probably will change in the future once we work out a reasonable
+mechanism for storing and generating the resource data.
+</p>
+<p>
+One goal of using the same resource data as ICU4C is to avoid keeping
+redundant copies of the resource data.  Currently there is no separate
+repository of the 'master' resource data, it is checked in to ICU4C,
+and the tools for converting it to .java files are ICU4C tools.  This
+is inconvenient for working in Java, but since maintenance of ICU4J
+and ICU4C is supposed to go on 'in parallel,' as a practical matter
+people will have to be familiar with development in both C and Java,
+and with the conventions and structure of each project.  Additionally,
+sharing of data means that modifications to data immediately impact
+both projects (as it should) and thus both projects need to be tested
+when such changes are made.  The bulk of the tools are currently on
+the ICU4C side, and will likely stay that way, so this seems like a
+reasonable initial approach to sharing the data.
+</p>
+
+<p>
+While prototyping of LocaleElements data can occur in either Java or
+C, the final version should be checked in to ICU4C in text format.
+Genrb is then run to generate the .java and .res files.  They are then
+compiled and jar'd into the file ICULocaleData.jar.  The resulting jar
+file is then checked in to ICU4J as
+src/com/ibm/icu/dev/data/ICULocaleData.jar.  (This is not great but it
+allows ICU4J to be downloaded and built as one project, instead of
+two, one for locale data and one for ICU4J proper.  Given the 2.2
+schedule it wasn't possible to work out the larger data sharing
+problem in time, so we tried to limit the impact to just what was
+needed to get JDK 1.4 support up and running.)
+</p>
+
+<p>
+The files in ICULocaleData.jar get extracted to com/ibm/icu/impl/data in
+the build directory when the 'core' target is built.  Thereafter, as
+long as the file LocaleElements_index.class file is untouched, they will
+not be extracted again.  Building the 'resource' target will force the
+resources to once again be extracted.  Extraction will 
+overwrite any corresponding .class files already in that directory.
 </p>
 
 <h3><a name="WhereToFindMore"></a><u>Where to Find More Information</u></h3>
