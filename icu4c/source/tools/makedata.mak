@@ -164,8 +164,9 @@ CLEAN :
 
 # Inference rule for creating resource bundles
 .txt.res::
+	@echo Making Resource Bundle files
 	@cd $(ICUDATA)
-	$(ICUTOOLS)\genrb\$(CFG)\genrb $<
+	@$(ICUTOOLS)\genrb\$(CFG)\genrb $<
 
 # Inference rule for creating converters, with a kludge to create
 # c versions of converters at the same time
@@ -180,7 +181,7 @@ CLEAN :
 .txt.col::
 	@echo Making Collation files
 	@cd $(ICUDATA)
-	$(ICUTOOLS)\genrb\$(CFG)\genrb $<
+	@$(ICUTOOLS)\genrb\$(CFG)\genrb $<
 
 # Inference rule for compiling :)
 .c.obj::
@@ -191,24 +192,30 @@ $(CPP_FLAGS) $<
 
 # Targets for unames.dat
 unames.dat : UnicodeData-3.0.0.txt
-	$(ICUTOOLS)\gennames\$(CFG)\gennames -v- -c- UnicodeData-3.0.0.txt
+	@echo Creating data file for Unicode Names
+	@$(ICUTOOLS)\gennames\$(CFG)\gennames -v- -c- UnicodeData-3.0.0.txt
 
 unames_dat.c : unames.dat 
-	$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
+	@echo Creating C source file for Unicode Names
+	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
 
 # Targets for converters
 cnvalias.dat : convrtrs.txt
-	$(ICUTOOLS)\gencnval\$(CFG)\gencnval -c-
+	@echo Creating data file for Converter Aliases
+	@$(ICUTOOLS)\gencnval\$(CFG)\gencnval -c-
 	
 cnvalias_dat.c : cnvalias.dat 
-	$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
+	@echo Creating C source file for Converter Aliases
+	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
 
 # Targets for tz
 tz.dat : {$(ICUTOOLS)\gentz}tz.txt
-	$(ICUTOOLS)\gentz\$(CFG)\gentz -c- $(ICUTOOLS)\gentz\tz.txt
+	@echo Creating data file for Timezones
+	@$(ICUTOOLS)\gentz\$(CFG)\gentz -c- $(ICUTOOLS)\gentz\tz.txt
 
 tz_dat.c : tz.dat
-	$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
+	@echo Creating C source file for Timezones
+	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
 
 # Dependencies on the tools
 UnicodeData-3.0.0.txt : {$(ICUTOOLS)\gennames\$(CFG)}gennames.exe
