@@ -20,7 +20,7 @@ InterIndic_Malayalam {
 //--------------------------------------------------------------------
 
 // InterIndic-Malayalam
-":: NFD (NFC) ;"
+//":: NFD (NFC) ;"
 "\ue001>\u0d02;" // REMAP (indicExceptions.txt): \u0d01>\u0d02 = SIGN CANDRABINDU>SIGN ANUSVARA
 "\ue002>\u0d02;" // SIGN ANUSVARA
 "\ue003>\u0d03;" // SIGN VISARGA
@@ -118,7 +118,7 @@ InterIndic_Malayalam {
 "\ue031>\u0d31;" // LETTER RRA
 "\ue046>\u0d46;" // VOWEL SIGN E
 "\ue04a>\u0d4a;" // VOWEL SIGN O
-    ":: NFC (NFD) ;"
+//    ":: NFC (NFD) ;"
 // eof
   }
 }

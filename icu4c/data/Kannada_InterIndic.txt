@@ -20,7 +20,7 @@ Kannada_InterIndic {
 //--------------------------------------------------------------------
 
 // Kannada-InterIndic
-":: NFD (NFC) ;"
+//":: NFD (NFC) ;"
 "\u0c82>\ue002;" // SIGN ANUSVARA
 "\u0c83>\ue003;" // SIGN VISARGA
 "\u0c85>\ue005;" // LETTER A
@@ -101,7 +101,7 @@ Kannada_InterIndic {
 "\u0ced>\ue06d;" // DIGIT SEVEN
 "\u0cee>\ue06e;" // DIGIT EIGHT
 "\u0cef>\ue06f;" // DIGIT NINE
-    ":: NFC (NFD) ;"
+//    ":: NFC (NFD) ;"
 // eof
   }
 }

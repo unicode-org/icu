@@ -20,7 +20,7 @@ InterIndic_Bengali {
 //--------------------------------------------------------------------
 
 // InterIndic-Bengali
-":: NFD (NFC) ;"
+//":: NFD (NFC) ;"
 "\ue001>\u0981;" // SIGN CANDRABINDU
 "\ue002>\u0982;" // SIGN ANUSVARA
 "\ue003>\u0983;" // SIGN VISARGA
@@ -118,7 +118,7 @@ InterIndic_Bengali {
 "\ue031>\u09dc;" // LETTER RRA
 "\ue047>\u09c7;" // VOWEL SIGN E
 "\ue04b>\u09cb;" // VOWEL SIGN O
-    ":: NFC (NFD) ;"
+//    ":: NFC (NFD) ;"
 // eof
   }
 }

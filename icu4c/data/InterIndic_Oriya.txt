@@ -20,7 +20,7 @@ InterIndic_Oriya {
 //--------------------------------------------------------------------
 
 // InterIndic-Oriya
-":: NFD (NFC) ;"
+//":: NFD (NFC) ;"
 "\ue001>\u0b01;" // SIGN CANDRABINDU
 "\ue002>\u0b02;" // SIGN ANUSVARA
 "\ue003>\u0b03;" // SIGN VISARGA
@@ -118,7 +118,7 @@ InterIndic_Oriya {
 "\ue031>\u0b5c;" // LETTER RRA
 "\ue047>\u0b47;" // VOWEL SIGN E
 "\ue04b>\u0b4b;" // VOWEL SIGN O
-    ":: NFC (NFD) ;"
+//    ":: NFC (NFD) ;"
 // eof
   }
 }

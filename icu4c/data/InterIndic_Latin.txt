@@ -7,7 +7,7 @@
 
 InterIndic_Latin{
   Rule{
-    ":: NFD (NFC) ;"
+//    ":: NFD (NFC) ;"
     //\u0e00 reserved
     //consonants
     "$chandrabindu=\ue001;"
@@ -409,6 +409,6 @@ InterIndic_Latin{
 
     // blow away any remaining viramas
     "$virama>;"
-    ":: NFC (NFD) ;"
+//    ":: NFC;"
   }
 }
