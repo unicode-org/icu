@@ -107,3 +107,6 @@ icu4j/src/com/ibm/util/resources/package.html svneol=native#text/html
 icu4j/src/data/holidays_jp.ucs -text svneol=native#application/octet-stream
 icu4j/src/data/thai6.ucs -text
 icu4j/src/data/unicode/Draft-TestSuite.txt -text svneol=unset#application/octet-stream
+tools/unicodetools/com/ibm/text/UCA/charts.css svneol=native#text/css
+tools/unicodetools/com/ibm/text/UCA/help.html svneol=native#text/html
+tools/unicodetools/com/ibm/text/UCA/index.html svneol=native#text/html
