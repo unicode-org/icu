@@ -26,40 +26,6 @@
 
 /* helper definitions ------------------------------------------------------- */
 
-#define FLAG(n) ((uint32_t)1<<(n))
-
-/* flags for general categories in the order of UCharCategory */
-#define _Cn     FLAG(U_GENERAL_OTHER_TYPES)
-#define _Lu     FLAG(U_UPPERCASE_LETTER)
-#define _Ll     FLAG(U_LOWERCASE_LETTER)
-#define _Lt     FLAG(U_TITLECASE_LETTER)
-#define _Lm     FLAG(U_MODIFIER_LETTER)
-#define _Lo     FLAG(U_OTHER_LETTER)
-#define _Mn     FLAG(U_NON_SPACING_MARK)
-#define _Me     FLAG(U_ENCLOSING_MARK)
-#define _Mc     FLAG(U_COMBINING_SPACING_MARK)
-#define _Nd     FLAG(U_DECIMAL_DIGIT_NUMBER)
-#define _Nl     FLAG(U_LETTER_NUMBER)
-#define _No     FLAG(U_OTHER_NUMBER)
-#define _Zs     FLAG(U_SPACE_SEPARATOR)
-#define _Zl     FLAG(U_LINE_SEPARATOR)
-#define _Zp     FLAG(U_PARAGRAPH_SEPARATOR)
-#define _Cc     FLAG(U_CONTROL_CHAR)
-#define _Cf     FLAG(U_FORMAT_CHAR)
-#define _Co     FLAG(U_PRIVATE_USE_CHAR)
-#define _Cs     FLAG(U_SURROGATE)
-#define _Pd     FLAG(U_DASH_PUNCTUATION)
-#define _Ps     FLAG(U_START_PUNCTUATION)
-#define _Pe     FLAG(U_END_PUNCTUATION)
-#define _Pc     FLAG(U_CONNECTOR_PUNCTUATION)
-#define _Po     FLAG(U_OTHER_PUNCTUATION)
-#define _Sm     FLAG(U_MATH_SYMBOL)
-#define _Sc     FLAG(U_CURRENCY_SYMBOL)
-#define _Sk     FLAG(U_MODIFIER_SYMBOL)
-#define _So     FLAG(U_OTHER_SYMBOL)
-#define _Pi     FLAG(U_INITIAL_PUNCTUATION)
-#define _Pf     FLAG(U_FINAL_PUNCTUATION)
-
 #define CGJ     0x34f
 
 /**
