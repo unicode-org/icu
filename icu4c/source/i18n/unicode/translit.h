@@ -14,7 +14,7 @@
 class Replaceable;
 class UnicodeFilter;
 class TransliterationRuleData;
-struct UHashtable;
+class Hashtable;
 class U_I18N_API UVector;
 class CompoundTransliterator;
 
@@ -321,7 +321,7 @@ private:
      * RuleBasedTransliterator constructor.
      * </ul>
      */
-    static UHashtable* cache;
+    static Hashtable* cache;
 
     /**
      * The mutex controlling access to the cache.
@@ -799,8 +799,6 @@ private:
      * under Locale::getDataDirectory().  It ends in a path separator.
      */
     static const char* getDataDirectory(void);
-
-    static int32_t hash(const UnicodeString& str);
 
     /**
      * Returns a transliterator object given its ID.  Unlike getInstance(),

@@ -8,7 +8,7 @@
 **********************************************************************
 */
 #include "rbt_data.h"
-#include "uhash.h"
+#include "hash.h"
 #include "unicode/unistr.h"
 
 TransliterationRuleData::TransliterationRuleData(UErrorCode& status) :
@@ -16,15 +16,13 @@ TransliterationRuleData::TransliterationRuleData(UErrorCode& status) :
     if (U_FAILURE(status)) {
         return;
     }
-    variableNames = uhash_open((UHashFunction)uhash_hashUString, &status);
+    variableNames = new Hashtable(status);
     setVariables = 0;
     setVariablesLength = 0;
 }
 
 TransliterationRuleData::~TransliterationRuleData() {
-    if (variableNames != 0) {
-        uhash_close(variableNames);
-    }
+    delete variableNames;
     delete[] setVariables;
 }
 
@@ -32,9 +30,8 @@ void
 TransliterationRuleData::defineVariable(const UnicodeString& name,
                                         UChar value,
                                         UErrorCode& status) {
-    uhash_putKey(variableNames, name.hashCode() & 0x7FFFFFFF,
-                 (void*) value,
-                 &status);
+    int32_t v = value | 0x10000; // Set bit 16
+    variableNames->put(name, (void*) v, status);
 }
 
 UChar
@@ -43,7 +40,10 @@ TransliterationRuleData::lookupVariable(const UnicodeString& name,
     if (U_FAILURE(status)) {
         return 0;
     }
-    void* value = uhash_get(variableNames, name.hashCode() & 0x7FFFFFFF);
+    void* value = variableNames->get(name);
+    /* Even U+0000 can be stored in the table because we set
+     * bit 16 in defineVariable().
+     */
     if (value == 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
@@ -58,5 +58,5 @@ TransliterationRuleData::lookupSet(UChar standIn) const {
 
 bool_t
 TransliterationRuleData::isVariableDefined(const UnicodeString& name) const {
-    return 0 != uhash_get(variableNames, name.hashCode() & 0x7FFFFFFF);
+    return 0 != variableNames->get(name);
 }
