@@ -36,14 +36,14 @@
 
 /**
  *\file
- * \brief C API: BIDI algorithm 
+ * \brief C API: BIDI algorithm
  *
  * <h2>BIDI algorithm for ICU</h2>
  *
  * This is an implementation of the Unicode Bidirectional algorithm.
  * The algorithm is defined in the
- * <a href="http://www.unicode.org/unicode/reports/tr9/">Unicode Technical Report 9</a>,
- * version 5, also described in The Unicode Standard, Version 3.0 .<p>
+ * <a href="http://www.unicode.org/unicode/reports/tr9/">Unicode Standard Annex #9</a>,
+ * version 13, also described in The Unicode Standard, Version 4.0 .<p>
  *
  * Note: Libraries that perform a bidirectional algorithm and
  * reorder strings accordingly are sometimes called "Storage Layout Engines".
@@ -297,7 +297,7 @@
  *\endcode
  * </pre>
  */
- 
+
 /*DOCXX_TAG*/
 /*@{*/
 
@@ -316,7 +316,7 @@
  * specifying the level of a character to <i>override</i> whatever the
  * BiDi implementation would resolve it to.</li>
  * <li><code>paraLevel</code> can be set to the
- * pesudo-level values <code>UBIDI_DEFAULT_LTR</code>
+ * pseudo-level values <code>UBIDI_DEFAULT_LTR</code>
  * and <code>UBIDI_DEFAULT_RTL</code>.</li>
  * </ul>
  *
@@ -362,8 +362,8 @@ typedef uint8_t UBiDiLevel;
  */
 #define UBIDI_MAX_EXPLICIT_LEVEL 61
 
-/** Bit flag for level input. 
- *  Overrides directional properties. 
+/** Bit flag for level input.
+ *  Overrides directional properties.
  * @stable ICU 2.0
  */
 #define UBIDI_LEVEL_OVERRIDE 0x80
@@ -459,8 +459,10 @@ ubidi_openSized(int32_t maxLength, int32_t maxRunCount, UErrorCode *pErrorCode);
  * associated with a UBiDi object.<p>
  *
  * <strong>Important: </strong>
- * If a <code>UBiDi</code> object is the <quote>child</quote>
- * of another one (its <quote>parent</quote>), after calling
+ * A parent <code>UBiDi</code> object must not be destroyed or reused if
+ * it still has children.
+ * If a <code>UBiDi</code> object is the <i>child</i>
+ * of another one (its <i>parent</i>), after calling
  * <code>ubidi_setLine()</code>, then the child object must
  * be destroyed (closed) or reused (by calling
  * <code>ubidi_setPara()</code> or <code>ubidi_setLine()</code>)
@@ -484,13 +486,13 @@ ubidi_close(UBiDi *pBiDi);
  * in the Unicode Technical Report is to take text stored in logical
  * (keyboard, typing) order and to determine the reordering of it for visual
  * rendering.
- * Some legacy codepages store text in visual order, and for operations
+ * Some legacy systems store text in visual order, and for operations
  * with standard, Unicode-based algorithms, the text needs to be transformed
  * to logical order. This is effectively the inverse algorithm of the
  * described BiDi algorithm. Note that there is no standard algorithm for
  * this "inverse BiDi" and that the current implementation provides only an
  * approximation of "inverse BiDi".</p>
- * 
+ *
  * <p>With <code>isInverse</code> set to <code>TRUE</code>,
  * this function changes the behavior of some of the subsequent functions
  * in a way that they can be used for the inverse BiDi algorithm.
@@ -528,12 +530,12 @@ ubidi_isInverse(UBiDi *pBiDi);
 
 /**
  * Perform the Unicode BiDi algorithm. It is defined in the
- * <a href="http://www.unicode.org/unicode/reports/tr9/">Unicode Technical Report 9</a>,
- * version 5,
- * also described in The Unicode Standard, Version 3.0 .<p>
+ * <a href="http://www.unicode.org/unicode/reports/tr9/">Unicode Standard Anned #9</a>,
+ * version 13,
+ * also described in The Unicode Standard, Version 4.0 .<p>
  *
  * This function takes a single plain text paragraph with or without
- * externally specified embedding levels from <quote>styled</quote> text
+ * externally specified embedding levels from <i>styled</i> text
  * and computes the left-right-directionality of each character.<p>
  *
  * If the entire paragraph consists of text of only one direction, then
@@ -609,7 +611,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
  * specified by referring to a <code>UBiDi</code> object representing
  * this information for a paragraph of text, and by specifying
  * a range of indexes in this paragraph.<p>
- * In the new line object, the indexes will range from 0 to <code>limit-start</code>.<p>
+ * In the new line object, the indexes will range from 0 to <code>limit-start-1</code>.<p>
  *
  * This is used after calling <code>ubidi_setPara()</code>
  * for a paragraph, and after line-breaking on that paragraph.
@@ -1069,6 +1071,12 @@ ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
  * characters; see the description of the <code>destSize</code>
  * and <code>options</code> parameters and of the option bit flags.
  *
+ * @see UBIDI_DO_MIRRORING
+ * @see UBIDI_INSERT_LRM_FOR_NUMERIC
+ * @see UBIDI_KEEP_BASE_COMBINING
+ * @see UBIDI_OUTPUT_REVERSE
+ * @see UBIDI_REMOVE_BIDI_CONTROLS
+ *
  * @param pBiDi A pointer to a <code>UBiDi</code> object that
  *              is set by <code>ubidi_setPara()</code> or
  *              <code>ubidi_setLine()</code> and contains the reordering
@@ -1102,6 +1110,12 @@ ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
  *                to logically stored text (although this is still an
  *                imperfect implementation of an "inverse BiDi" algorithm
  *                because it uses the "forward BiDi" algorithm at its core).
+ *                The available options are:
+ *                <code>#UBIDI_DO_MIRRORING</code>,
+ *                <code>#UBIDI_INSERT_LRM_FOR_NUMERIC</code>,
+ *                <code>#UBIDI_KEEP_BASE_COMBINING</code>,
+ *                <code>#UBIDI_OUTPUT_REVERSE</code>,
+ *                <code>#UBIDI_REMOVE_BIDI_CONTROLS</code>
  *
  * @param pErrorCode must be a valid pointer to an error code value,
  *        which must not indicate a failure before the function call.
@@ -1154,7 +1168,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
  *
  * @param options A bit set of options for the reordering that control
  *                how the reordered text is written.
- *                See <code>ubidi_writeReordered()</code>.
+ *                See the <code>options</code> parameter in <code>ubidi_writeReordered()</code>.
  *
  * @param pErrorCode must be a valid pointer to an error code value,
  *        which must not indicate a failure before the function call.
