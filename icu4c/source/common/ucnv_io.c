@@ -553,7 +553,7 @@ findTaggedConverterNum(const char *alias, const char *standard, UErrorCode *pErr
             for (idx = convStart; idx < convLimit; idx++) {
                 listOffset = gTaggedAliasArray[idx];
                 if (listOffset && isAliasInList(alias, listOffset)) {
-                    return convNum;
+                    return idx-convStart;
                 }
             }
             /* The standard doesn't know about the alias */
@@ -933,6 +933,7 @@ ucnv_openAllNames(UErrorCode *pErrorCode) {
     return myEnum;
 }
 
+#ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
 U_CFUNC void
 ucnv_io_fillAvailableConverters(const char **aliases, UErrorCode *pErrorCode) {
     if (haveAvailableConverterList(pErrorCode)) {
@@ -942,6 +943,7 @@ ucnv_io_fillAvailableConverters(const char **aliases, UErrorCode *pErrorCode) {
         }
     }
 }
+#endif
 
 U_CFUNC uint16_t
 ucnv_io_countAvailableAliases(UErrorCode *pErrorCode) {
