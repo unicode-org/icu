@@ -188,8 +188,9 @@ UBool UnicodePropertySet::resemblesPattern(const UnicodeString& pattern,
  * failure.
  */
 UnicodeSet* UnicodePropertySet::createFromPattern(const UnicodeString& pattern,
-                                                  ParsePosition& ppos) {
-    init();
+                                                  ParsePosition& ppos,
+                                                  UErrorCode &status) {
+    init(status);
 
     UnicodeSet* set = NULL;
 
@@ -248,7 +249,7 @@ UnicodeSet* UnicodePropertySet::createFromPattern(const UnicodeString& pattern,
             // 'false', or 'f'.
             int32_t v = BOOLEAN_VALUE_MAP->geti(valueName) - MAPVAL;
             if (v >= 0) {
-                set = createBinaryPropertySet(typeName);
+                set = createBinaryPropertySet(typeName, status);
                 invert ^= !v;
             }
 
@@ -257,23 +258,23 @@ UnicodeSet* UnicodePropertySet::createFromPattern(const UnicodeString& pattern,
                 return NULL;
             }
         } else {
-            set = (*factory)(valueName);
+            set = (*factory)(valueName, status);
         }
     } else {
         // No equals seen; parse short format \p{Cf}
         UnicodeString shortName = munge(pattern, pos, close);
 
         // First try general category
-        set = createCategorySet(shortName);
+        set = createCategorySet(shortName, status);
 
         // If this fails, try script
         if (set == NULL) {
-            set = createScriptSet(shortName);
+            set = createScriptSet(shortName, status);
         }
 
         // If this fails, try binary property
         if (set == NULL) {
-            set = createBinaryPropertySet(shortName);
+            set = createBinaryPropertySet(shortName, status);
         }
     }
 
@@ -305,18 +306,24 @@ static UBool _numericValueFilter(UChar32 c, void* context) {
     return u_charDigitValue(c) == value;
 }
 
-UnicodeSet* UnicodePropertySet::createNumericValueSet(const UnicodeString& valueName) {
+UnicodeSet* UnicodePropertySet::createNumericValueSet(const UnicodeString& valueName,
+                                                      UErrorCode &status)
+{
     CharString cvalueName(valueName);
     UnicodeSet* set = new UnicodeSet();
     char* end;
     double value = uprv_strtod(cvalueName, &end);
     int32_t ivalue = (int32_t) value;
+    if (set == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
     if (ivalue != value || ivalue < 0 || *end != 0) {
         // UCharacter doesn't support negative or non-integral
         // values, so just return an empty set
         return set;
     }
-    initSetFromFilter(*set, _numericValueFilter, &ivalue);
+    initSetFromFilter(*set, _numericValueFilter, &ivalue, status);
     return set;
 }
 
@@ -325,20 +332,26 @@ static UBool _combiningClassFilter(UChar32 c, void* context) {
     return u_getCombiningClass(c) == value;
 }
 
-UnicodeSet* UnicodePropertySet::createCombiningClassSet(const UnicodeString& valueName) {
+UnicodeSet* UnicodePropertySet::createCombiningClassSet(const UnicodeString& valueName,
+                                                        UErrorCode &status)
+{
     CharString cvalueName(valueName);
     UnicodeSet* set = new UnicodeSet();
     char* end;
     double value = uprv_strtod(cvalueName, &end);
     int32_t ivalue = (int32_t) value;
+    if (set == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
     if (ivalue != value || ivalue < 0 || *end != 0) {
-    // We have a non-integral or negative value, or non-numeric text.
-    // Try to lookup a symbolic combining class name
-    ivalue = COMBINING_CLASS_MAP->geti(valueName) - MAPVAL;
+        // We have a non-integral or negative value, or non-numeric text.
+        // Try to lookup a symbolic combining class name
+        ivalue = COMBINING_CLASS_MAP->geti(valueName) - MAPVAL;
     }
     if (ivalue >= 0) {
-    // We have a potentially valid combining class
-        initSetFromFilter(*set, _combiningClassFilter, &ivalue);
+        // We have a potentially valid combining class
+        initSetFromFilter(*set, _combiningClassFilter, &ivalue, status);
     }
     return set;
 }
@@ -348,13 +361,19 @@ static UBool _bidiClassFilter(UChar32 c, void* context) {
     return u_charDirection(c) == value;
 }
 
-UnicodeSet* UnicodePropertySet::createBidiClassSet(const UnicodeString& valueName) {
+UnicodeSet* UnicodePropertySet::createBidiClassSet(const UnicodeString& valueName,
+                                                   UErrorCode &status)
+{
     int32_t valueCode = BIDI_CLASS_MAP->geti(valueName) - MAPVAL;
     if (valueCode < 0) {
         return NULL;
     }
     UnicodeSet* set = new UnicodeSet();
-    initSetFromFilter(*set, _bidiClassFilter, &valueCode);
+    if (set == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    initSetFromFilter(*set, _bidiClassFilter, &valueCode, status);
     return set;
 }
 
@@ -363,13 +382,19 @@ UnicodeSet* UnicodePropertySet::createBidiClassSet(const UnicodeString& valueNam
  * set and return it, or return null if the name is invalid.
  * @param valueName a pre-munged general category value name
  */
-UnicodeSet* UnicodePropertySet::createCategorySet(const UnicodeString& valueName) {
+UnicodeSet* UnicodePropertySet::createCategorySet(const UnicodeString& valueName,
+                                                  UErrorCode &status)
+{
     int32_t valueCode = CATEGORY_MAP->geti(valueName);
     if (valueCode == 0) {
         return NULL;
     }
 
     UnicodeSet* set = new UnicodeSet();
+    if (set == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
     if (valueCode == ANY) {
         set->set(0x00, 0x10FFFF);
     } else if (valueCode == ASCII) {
@@ -389,7 +414,9 @@ UnicodeSet* UnicodePropertySet::createCategorySet(const UnicodeString& valueName
  * return it, or return null if the name is invalid.
  * @param valueName a pre-munged script value name
  */
-UnicodeSet* UnicodePropertySet::createScriptSet(const UnicodeString& valueName) {
+UnicodeSet* UnicodePropertySet::createScriptSet(const UnicodeString& valueName,
+                                                UErrorCode &status)
+{
     CharString cvalueName(valueName);
     UErrorCode ec = U_ZERO_ERROR;
     const int32_t capacity = 10;
@@ -403,7 +430,7 @@ UnicodeSet* UnicodePropertySet::createScriptSet(const UnicodeString& valueName) 
         // Syntax error; unknown short name
         return NULL;
     }
-    return new UnicodeSet(getScriptSet(script[0]));
+    return new UnicodeSet(getScriptSet(script[0], status));
 }
 
 static UBool _binaryPropertyFilter(UChar32 c, void* context) {
@@ -416,25 +443,31 @@ static UBool _binaryPropertyFilter(UChar32 c, void* context) {
  * set and return it, or return null if the name is invalid.
  * @param valueName a pre-munged binary property name
  */
-UnicodeSet* UnicodePropertySet::createBinaryPropertySet(const UnicodeString& name) {
+UnicodeSet* UnicodePropertySet::createBinaryPropertySet(const UnicodeString& name,
+                                                        UErrorCode &status)
+{
     int32_t code = BINARY_PROPERTY_MAP->geti(name) - MAPVAL;
     if (code < 0) {
         return NULL;
     }
 
     UnicodeSet* set = new UnicodeSet(); 
-    initSetFromFilter(*set, _binaryPropertyFilter, &code);
+    if (set == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    initSetFromFilter(*set, _binaryPropertyFilter, &code, status);
     return set;
 }
 
 UnicodeSet
-UnicodePropertySet::getRuleWhiteSpaceSet() {
+UnicodePropertySet::getRuleWhiteSpaceSet(UErrorCode &status) {
     UnicodeSet set;
     int32_t code;
 
     /* "white space" in the sense of ICU rule parsers: Cf+White_Space */
     code = UCHAR_WHITE_SPACE;
-    initSetFromFilter(set, _binaryPropertyFilter, &code);
+    initSetFromFilter(set, _binaryPropertyFilter, &code, status);
 
     set.addAll(getCategorySet(U_FORMAT_CHAR));
 
@@ -463,13 +496,6 @@ U_CDECL_END
  * Callers MUST NOT MODIFY the returned set.
  */
 const UnicodeSet& UnicodePropertySet::getCategorySet(int32_t cat) {
-    if (CATEGORY_CACHE == 0) {
-        CATEGORY_CACHE = new UnicodeSet[32]; // 32 is guaranteed by the Unicode standard
-        if (CATEGORY_CACHE == 0) {
-            return *((const UnicodeSet *)0);
-        }
-        u_enumCharTypes(_enumCategoryRange, 0);
-    }
     return CATEGORY_CACHE[cat];
 }
 
@@ -486,9 +512,11 @@ static UBool _scriptFilter(UChar32 c, void* context) {
  *
  * Callers MUST NOT MODIFY the returned set.
  */
-const UnicodeSet& UnicodePropertySet::getScriptSet(UScriptCode script) {
+const UnicodeSet& UnicodePropertySet::getScriptSet(UScriptCode script,
+                                                   UErrorCode &status)
+{
     if (SCRIPT_CACHE[script].isEmpty()) {
-        initSetFromFilter(SCRIPT_CACHE[script], _scriptFilter, &script);
+        initSetFromFilter(SCRIPT_CACHE[script], _scriptFilter, &script, status);
     }
     return SCRIPT_CACHE[script];
 }
@@ -543,7 +571,8 @@ int32_t UnicodePropertySet::skipWhitespace(const UnicodeString& str,
 //----------------------------------------------------------------
 
 void UnicodePropertySet::initSetFromFilter(UnicodeSet& set, Filter filter,
-                                           void* context) {
+                                           void* context,
+                                           UErrorCode &status) {
     // Walk through all Unicode characters, noting the start
     // and end of each range for which filter.contain(c) is
     // true.  Add each range to a set.
@@ -558,13 +587,7 @@ void UnicodePropertySet::initSetFromFilter(UnicodeSet& set, Filter filter,
     // use internal property data to initialize UnicodeSets for
     // those properties.  Scanning code points is slow.
 
-    if (INCLUSIONS == NULL) {
-        Mutex lock;
-        if (INCLUSIONS == NULL) {
-            UErrorCode ec = U_ZERO_ERROR;
-            INCLUSIONS = new UnicodeSet(INCLUSIONS_PATTERN, ec);
-        }
-    }
+    init(status);
 
     set.clear();
 
@@ -626,11 +649,12 @@ void UnicodePropertySet::addValue(Hashtable* map,
     }
 }
 
-void UnicodePropertySet::init() {
+void UnicodePropertySet::init(UErrorCode &status) {
     if (NAME_MAP != NULL) {
         return;
     }
 
+    Mutex lock;
     NAME_MAP = new Hashtable(TRUE);
     CATEGORY_MAP = new Hashtable(TRUE);
     COMBINING_CLASS_MAP = new Hashtable(TRUE);
@@ -638,6 +662,17 @@ void UnicodePropertySet::init() {
     BINARY_PROPERTY_MAP = new Hashtable(TRUE);
     BOOLEAN_VALUE_MAP = new Hashtable(TRUE);
     SCRIPT_CACHE = new UnicodeSet[(size_t)USCRIPT_CODE_LIMIT];
+    CATEGORY_CACHE = new UnicodeSet[32]; // 32 is guaranteed by the Unicode standard
+    INCLUSIONS = new UnicodeSet(INCLUSIONS_PATTERN, status);
+
+    if (!NAME_MAP || !CATEGORY_MAP || !COMBINING_CLASS_MAP || !BINARY_PROPERTY_MAP
+        || !BOOLEAN_VALUE_MAP || !SCRIPT_CACHE || !CATEGORY_CACHE || !INCLUSIONS)
+    {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+
+    u_enumCharTypes(_enumCategoryRange, 0);
 
     // NOTE:  All short and long names taken from
     // PropertyAliases.txt and PropertyValueAliases.txt.

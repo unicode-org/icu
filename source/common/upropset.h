@@ -92,16 +92,18 @@ class UnicodePropertySet /* not : public UObject because all methods are static 
      * failure.
      */
     static UnicodeSet* createFromPattern(const UnicodeString& pattern,
-                                         ParsePosition& ppos);
+                                         ParsePosition& ppos,
+                                         UErrorCode &status);
 
 
-    typedef UnicodeSet* (*SetFactory)(const UnicodeString& valueName);
+    typedef UnicodeSet* (*SetFactory)(const UnicodeString& valueName,
+                                      UErrorCode &status);
 
     /**
      * "white space" in the sense of ICU rule parsers
      * @internal
      */
-    static UnicodeSet getRuleWhiteSpaceSet();
+    static UnicodeSet getRuleWhiteSpaceSet(UErrorCode &status);
 
  private:
 
@@ -111,7 +113,8 @@ class UnicodePropertySet /* not : public UObject because all methods are static 
     // based property retrieval.
     //----------------------------------------------------------------
 
-    static UnicodeSet* createNumericValueSet(const UnicodeString& valueName);
+    static UnicodeSet* createNumericValueSet(const UnicodeString& valueName,
+                                             UErrorCode &status);
 
     /**
      * Given a combining class name, or number, create a corresponding
@@ -119,34 +122,39 @@ class UnicodePropertySet /* not : public UObject because all methods are static 
      * symbolic, as in \p{cc=Below Left}.  If the name is invalid,
      * return an empty set.
      */
-    static UnicodeSet* createCombiningClassSet(const UnicodeString& valueName);
+    static UnicodeSet* createCombiningClassSet(const UnicodeString& valueName,
+                                               UErrorCode &status);
 
     /**
      * Given a bidi class name create a corresponding set and return
      * it.  If the name is invalid, return NULL.
      */
-    static UnicodeSet* createBidiClassSet(const UnicodeString& valueName);
+    static UnicodeSet* createBidiClassSet(const UnicodeString& valueName,
+                                          UErrorCode &status);
 
     /**
      * Given a general category value name, create a corresponding
      * set and return it, or return null if the name is invalid.
      * @param valueName a pre-munged general category value name
      */
-    static UnicodeSet* createCategorySet(const UnicodeString& valueName);
+    static UnicodeSet* createCategorySet(const UnicodeString& valueName,
+                                         UErrorCode &status);
 
     /**
      * Given a script value name, create a corresponding set and
      * return it, or return null if the name is invalid.
      * @param valueName a pre-munged script value name
      */
-    static UnicodeSet* createScriptSet(const UnicodeString& valueName);
+    static UnicodeSet* createScriptSet(const UnicodeString& valueName,
+                                      UErrorCode &status);
 
     /**
      * Given a binary property name, create a corresponding
      * set and return it, or return null if the name is invalid.
      * @param valueName a pre-munged binary property name
      */
-    static UnicodeSet* createBinaryPropertySet(const UnicodeString& valueName);
+    static UnicodeSet* createBinaryPropertySet(const UnicodeString& valueName,
+                                               UErrorCode &status);
 
     //----------------------------------------------------------------
     // Utility methods
@@ -168,7 +176,8 @@ class UnicodePropertySet /* not : public UObject because all methods are static 
      *
      * Callers MUST NOT MODIFY the returned set.
      */
-    static const UnicodeSet& getScriptSet(UScriptCode script);
+    static const UnicodeSet& getScriptSet(UScriptCode script,
+                                          UErrorCode &status);
 
     /**
      * Given a string, munge it to upper case and lose the whitespace.
@@ -208,7 +217,8 @@ class UnicodePropertySet /* not : public UObject because all methods are static 
      * to the filter function.
      */
     static void initSetFromFilter(UnicodeSet& set, Filter filter,
-                                  void* context);
+                                  void* context,
+                                  UErrorCode &status);
 
     //----------------------------------------------------------------
     // Type and value name maps
@@ -229,7 +239,7 @@ class UnicodePropertySet /* not : public UObject because all methods are static 
                          const UnicodeString& longName,
                          int32_t value);
 
-    static void init();
+    static void init(UErrorCode &status);
 
  private:
     // do not instantiate
