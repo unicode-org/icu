@@ -322,6 +322,7 @@ UBool TransliteratorIDParser::parseCompoundID(const UnicodeString& id, int32_t d
                                               UVector& list,
                                               UnicodeSet*& globalFilter) {
     UErrorCode ec = U_ZERO_ERROR;
+    int32_t i;
     int32_t pos = 0;
     int32_t withParens = 1;
     list.removeAllElements();
@@ -371,7 +372,7 @@ UBool TransliteratorIDParser::parseCompoundID(const UnicodeString& id, int32_t d
     }
 
     // Construct canonical ID
-    for (int32_t i=0; i<list.size(); ++i) {
+    for (i=0; i<list.size(); ++i) {
         SingleID* single = (SingleID*) list.elementAt(i);
         canonID.append(single->canonID);
         if (i != (list.size()-1)) {
