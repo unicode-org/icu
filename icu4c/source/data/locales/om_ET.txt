@@ -13,13 +13,13 @@
 // * are those considered to be canonical in the Oromo language under
 // * contemporary and progressive usage adopted by government bureaus
 // * across the Oromo region.  Regional synonyms naturally exist for many
-// * of the month and days names.
+// * of the month and day names.
 
 om_ET {
     Version{ "x0.1" }
     AmPmMarkers {
-            "WD",
-            "WB",
+            "WD",  // WD = Waaree Dura
+            "WB",  // WD = Waaree Booda
     }
     // CountryISBNNumber { "231" }
     // CountryNumber { "231" }
@@ -33,9 +33,9 @@ om_ET {
             "hh:mm:ss a",
             "h:mm:ss a",
             "h:mm a",
-            "EEEE dd MMMM yyyy",
+            "EEEE, MMMM d, yyyy",
             "dd MMMM yyyy",
-            "MMM dd,yy",
+            "dd-MMM-yy",
             "dd/MM/yy",
             "{1} {0}",
     }

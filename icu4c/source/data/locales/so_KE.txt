@@ -4,22 +4,18 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // *******************************************************************************
-// * Oromo language locale for Kenya.
-// * Contributed by Daniel Yacob <yacob@geez.org>
-// *
-// * Oromo terms are provided by Mahdi Hamid Muudee of Sagalee Oromoo
-// * Publishing Co. Inc and formatted in Posix format locale by Daniel Yacob of
-// * the Ge'ez Frontier Foundation.  The Oromo language terms used here
-// * are those considered to be canonical in the Oromo language under
-// * contemporary and progressive usage adopted by government bureaus
-// * across the Oromo region.  Regional synonyms naturally exist for many
-// * of the month and day names.
+// * Somali language locale for Kenya.
+// * Contributed by :
+// *             Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
+// *             Mohamed Diriye Abdullahi <diriyeam@magellan.umontreal.ca>
+// *             Department of Linguistics and Translation, Universite de Montreal, Montreal
 
-om_KE {
+
+so_KE {
     Version{ "x0.1" }
     AmPmMarkers {
-            "WD",  // WD = Waaree Dura
-            "WB",  // WD = Waaree Booda
+            "sn",
+            "gn",
     }
     // CountryISBNNumber { "404" }
     // CountryNumber { "404" }
@@ -27,17 +23,6 @@ om_KE {
             "Ksh",
             "KES",
             ".",
-    }
-    DateTimePatterns { 
-            "hh:mm:ss a",
-            "hh:mm:ss a",
-            "h:mm:ss a",
-            "h:mm a",
-            "EEEE, MMMM d, yyyy",
-            "dd MMMM yyyy",
-            "dd-MMM-yy",
-            "dd/MM/yy",
-            "{1} {0}",
     }
     // Measurement { "Metric" }
     NumberElements {
@@ -63,4 +48,4 @@ om_KE {
     //    Width { "210" }
     //    Units { "mm" }
     // }
-}
+ }

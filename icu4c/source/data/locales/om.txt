@@ -13,7 +13,7 @@
 // * are those considered to be canonical in the Oromo language under
 // * contemporary and progressive usage adopted by government bureaus
 // * across the Oromo region.  Regional synonyms naturally exist for many
-// * of the month and days names.
+// * of the month and day names.
 
 om{
     Version{ "x0.1" }
@@ -41,8 +41,8 @@ om{
             "Gur",
             "Bit",
             "Elb",
-            "Kam",
             "Cam",
+            "Wax",
             "Ado",
             "Hag",
             "Ful",
@@ -56,8 +56,8 @@ om{
             "Guraandhala",
             "Bitooteessa",
             "Elba",
-            "Kamiisa",
             "Caamsa",
+            "Waxabajjii",
             "Adooleessa",
             "Hagayya",
             "Fuulbana",
@@ -66,5 +66,15 @@ om{
             "Muddee",
             "",
     }
-    
+    Eras { 
+            "KD",  // KD = Kiristoos Dura = Before Christ
+            "KB",  // KB = Kiristoos Booda = After Christ
+    }
+    Languages { 
+        om { "Oromoo" }
+    }
+    Countries { 
+        ET { "Itoophiyaa" }
+        KE { "Keeniyaa" }
+    }
 }
