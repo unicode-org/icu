@@ -179,7 +179,7 @@ LookupFn(const UDataMemory *pData,
  *                  These keep track of everything about the memeory                *
  *                                                                                  *
  *----------------------------------------------------------------------------------*/
-typedef struct UDataMemory {
+struct UDataMemory {
     MemoryMap         map;         /* Handle, or whatever.  OS dependent.             */
                                    /* Only set if a close operation should unmap the  */
                                    /*  associated data.                               */
@@ -201,13 +201,13 @@ typedef struct UDataMemory {
 #define IS_DATA_MEMORY_LOADED(pData) ((pData)->pHeader!=NULL)
 
 
-static void UDataMemory_init(UDataMemory *This) {  
+static void UDataMemory_init(UDataMemory *This) {
     uprv_memset(This, 0, sizeof(UDataMemory));
 }
 
 
 static void UDatamemory_assign(UDataMemory *dest, UDataMemory *source) {
-    /* UDataMemory Assignment.  Destination UDataMemory must be initialized first. 
+    /* UDataMemory Assignment.  Destination UDataMemory must be initialized first.
      *                          Malloced flag of the destination is preserved,
      *                          since it indicates where the UDataMemory struct itself
      *                          is allocated. */
@@ -255,11 +255,11 @@ typedef struct {
          UDataMemory *pData,    /* Fill in with info on the result doing the mapping. */
                                 /*   Output only; any original contents are cleared.  */
          const char *path       /* File path to be opened/mapped                      */
-         ) 
+         )
     {
         HANDLE map;
         HANDLE file;
-        
+
         UDataMemory_init(pData); /* Clear the output struct.        */
 
         /* open the input file */
@@ -269,14 +269,14 @@ typedef struct {
         if(file==INVALID_HANDLE_VALUE) {
             return FALSE;
         }
-        
+
         /* create an unnamed Windows file-mapping object for the specified file */
         map=CreateFileMapping(file, NULL, PAGE_READONLY, 0, 0, NULL);
         CloseHandle(file);
         if(map==NULL) {
             return FALSE;
         }
-        
+
         /* map a view of the file into our address space */
         pData->pHeader=(const DataHeader *)MapViewOfFile(map, FILE_MAP_READ, 0, 0, 0);
         if(pData->pHeader==NULL) {
@@ -418,7 +418,7 @@ typedef struct {
 #endif
 
 
-    
+
 /*----------------------------------------------------------------------------------*
  *                                                                                  *
  *    entry point lookup implementations                                            *
@@ -641,12 +641,12 @@ typedef struct DataCacheElement {
     char          *path;
     UDataMemory    item;
 } DataCacheElement;
- 
+
 static UHashtable *gHashTable = NULL;
 
 
 /*
- * Deleter function for DataCacheElements.    
+ * Deleter function for DataCacheElements.
  *         udata cleanup function closes the hash table; hash table in turn calls back to
  *         here for each entry.
  */
@@ -661,14 +661,14 @@ static void  U_CALLCONV DataCacheElement_deleter(void *pDCEl) {
  /*   udata_getCacheHashTable()
  *     Get the hash table used to store the data cache entries.
  *     Lazy create it if it doesn't yet exist.
- */  
+ */
 static UHashtable *udata_getHashTable() {
     UErrorCode err = U_ZERO_ERROR;
 
     if (gHashTable != NULL) {
         return gHashTable;
     }
-    umtx_lock(NULL); 
+    umtx_lock(NULL);
     if (gHashTable == NULL) {
         gHashTable = uhash_open(uhash_hashChars, uhash_compareChars, &err);
         uhash_setValueDeleter(gHashTable, DataCacheElement_deleter);
@@ -690,7 +690,7 @@ static UDataMemory *udata_findCachedData(const char *path)
     DataCacheElement  *el;
 
     htable = udata_getHashTable();
-    umtx_lock(NULL); 
+    umtx_lock(NULL);
     el = (DataCacheElement *)uhash_get(htable, path);
     umtx_unlock(NULL);
     if (el != NULL) {
@@ -731,12 +731,12 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
     /* Stick the new DataCacheElement into the hash table.
     */
     htable = udata_getHashTable();
-    umtx_lock(NULL); 
+    umtx_lock(NULL);
     oldValue = uhash_get(htable, path);
     if (oldValue != NULL) {
         *pErr = U_USING_DEFAULT_WARNING; }
     else {
-        uhash_put( 
+        uhash_put(
             htable,
             newElement->path,               /* Key   */
             newElement,                     /* Value */
@@ -764,7 +764,7 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
  *----------------------------------------------------------------------*/
 static void checkCommonData(UDataMemory *udm, UErrorCode *err) {
     if (U_FAILURE(*err)) {
-        return;  
+        return;
     }
 
     if(!(udm->pHeader->dataHeader.magic1==0xda &&
@@ -794,7 +794,7 @@ static void checkCommonData(UDataMemory *udm, UErrorCode *err) {
         /* dataFormat="ToCP" */
         udm->lookupFn=pointerTOCLookupFn;
         udm->toc=(const char *)udm->pHeader+udm->pHeader->dataHeader.headerSize;
-    } 
+    }
     else {
         /* dataFormat not recognized */
         *err=U_INVALID_FORMAT_ERROR;
@@ -856,15 +856,15 @@ openCommonData(
     if (U_FAILURE(*pErrorCode)) {
         return NULL;
     }
-    
+
     UDataMemory_init(&tData);
-    
+
     if (isICUData) {
         /* "mini-cache" for common ICU data */
         if(IS_DATA_MEMORY_LOADED(&commonICUData)) {
             return &commonICUData;
         }
-        
+
         tData.pHeader = &U_ICUDATA_ENTRY_POINT;
         checkCommonData(&tData, pErrorCode);
         if (U_SUCCESS(*pErrorCode)) {
@@ -875,9 +875,9 @@ openCommonData(
             return NULL;
         }
     }
-        
-    
-    /* request is NOT for ICU Data.    
+
+
+    /* request is NOT for ICU Data.
     * Is the requested data already cached?  */
     {
         UDataMemory  *dataToReturn = udata_findCachedData(path);
@@ -885,7 +885,7 @@ openCommonData(
             return dataToReturn;
         }
     }
-    
+
     /* Requested item is not in the cache.
      * Hunt it down, trying all the fall back locations.
      */
@@ -896,32 +896,32 @@ openCommonData(
         *pErrorCode=U_FILE_ACCESS_ERROR;
         return NULL;
     }
-    
-    
+
+
     /* set up the file name */
     suffix=strcpy_returnEnd(basename, inBasename);
     uprv_strcpy(suffix, "." DATA_TYPE);      /*  DATA_TYPE is ".dat" */
-    
+
     /* try path/basename first, then basename only */
     uprv_mapFile(&tData, pathBuffer);
-    
+
     if (!IS_DATA_MEMORY_LOADED(&tData)) {
         if (basename!=pathBuffer) {
             uprv_mapFile(&tData, basename);
         }
     }
-    
+
     if (!IS_DATA_MEMORY_LOADED(&tData)) {
         /* no common data */
         *pErrorCode=U_FILE_ACCESS_ERROR;
         return NULL;
     }
-    
+
     /* we have mapped a file, check its header */
     tData.pHeader=tData.pHeader;
     checkCommonData(&tData, pErrorCode);
-    
-    
+
+
     /* Cache the UDataMemory struct for this .dat file,
      *   so we won't need to hunt it down and map it again next time
      *   something is needed from it.                */
@@ -948,13 +948,13 @@ udata_setCommonData(const void *data, UErrorCode *pErrorCode) {
         *pErrorCode=U_USING_DEFAULT_ERROR;
         return;
     }
-    
+
     /* normalize the data pointer and test for validity */
     UDataMemory_init(&dataMemory);
     dataMemory.pHeader = normalizeDataPointer((const DataHeader *)data);
     checkCommonData(&dataMemory, pErrorCode);
     if (U_FAILURE(*pErrorCode)) {return;}
-    
+
     /* we have common data */
     if (setCommonICUData(&dataMemory) == FALSE) {
         /* some thread passed us */
@@ -970,11 +970,11 @@ udata_setCommonData(const void *data, UErrorCode *pErrorCode) {
  *  udata_setAppData
  *
  *---------------------------------------------------------------------------- */
-U_CAPI void U_EXPORT2 
+U_CAPI void U_EXPORT2
 udata_setAppData(const char *path, const void *data, UErrorCode *err)
 {
     UDataMemory     udm;
-    
+
     if(err==NULL || U_FAILURE(*err)) {
         return;
     }
@@ -982,7 +982,7 @@ udata_setAppData(const char *path, const void *data, UErrorCode *err)
         *err=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    
+
     UDataMemory_init(&udm);
     udm.pHeader = data;
     checkCommonData(&udm, err);
@@ -1001,7 +1001,7 @@ udata_setAppData(const char *path, const void *data, UErrorCode *err)
  *                                                                              *
  *------------------------------------------------------------------------------*/
 static UDataMemory *
-checkDataItem 
+checkDataItem
 (
  const DataHeader         *pHeader,         /* The data item to be checked.                */
  UDataMemoryIsAcceptable  *isAcceptable,    /* App's call-back function                    */
@@ -1015,7 +1015,7 @@ checkDataItem
  )
 {
     UDataMemory  *rDataMem = NULL;          /* the new UDataMemory, to be returned.        */
-    
+
     if (U_FAILURE(*fatalErr)) {
         return NULL;
     }
@@ -1096,28 +1096,28 @@ setEntryNames(const char *type, const char *name,
  *  udata_setCommonData(), ownership remains with the user.
  *
  *  UDataMemory objects themselves, as opposed to the memory they describe,
- *  can be anywhere - heap, stack/local or global.  
+ *  can be anywhere - heap, stack/local or global.
  *  They have a flag bit to indicate when they're heap allocated and thus
  *  must be deleted when closed.
  */
-    
+
 
 /* main data loading function ----------------------------------------------- */
 
 static UDataMemory *
 doOpenChoice(const char *path, const char *type, const char *name,
              UDataMemoryIsAcceptable *isAcceptable, void *context,
-             UErrorCode *pErrorCode) 
+             UErrorCode *pErrorCode)
 {
     char                pathBuffer[1024];
     char                tocEntryName[100];
     char                dllEntryName[100];
     UDataMemory         dataMemory;
-    UDataMemory        *pCommonData; 
+    UDataMemory        *pCommonData;
     UDataMemory        *pEntryData;
     const DataHeader   *pHeader;
     const char         *inBasename;
-    char               *basename; 
+    char               *basename;
     char               *suffix;
     UErrorCode          errorCode=U_ZERO_ERROR;
     UBool               isICUData= (UBool)(path==NULL);
@@ -1148,7 +1148,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
                 return pEntryData;
             }
         }
-        
+
     }
 
     /*  TODO:   fall back to alternate/extended common data for 390
@@ -1175,28 +1175,28 @@ doOpenChoice(const char *path, const char *type, const char *name,
         uprv_strcpy(suffix, tocEntryName);
 
         if( uprv_mapFile(&dataMemory, pathBuffer) ||
-            (basename!=pathBuffer && uprv_mapFile(&dataMemory, basename))) 
+            (basename!=pathBuffer && uprv_mapFile(&dataMemory, basename)))
         {
             /* We mapped a file.  Check out its contents.   */
             pEntryData = checkDataItem(dataMemory.pHeader, isAcceptable, context, type, name, &errorCode, pErrorCode);
-            if (pEntryData != NULL) 
+            if (pEntryData != NULL)
             {
                /* Got good data.
                 *  Hand off ownership of the backing memory to the user's UDataMemory.
                 *  and return it. */
-                pEntryData->mapAddr = dataMemory.mapAddr;   
+                pEntryData->mapAddr = dataMemory.mapAddr;
                 pEntryData->map     = dataMemory.map;
                 return pEntryData;
             }
-            
+
             /* the data is not acceptable, or some error occured.  Either way, unmap the memory */
             uprv_unmapFile(&dataMemory);
-            
+
             /* If we had a nasty error, bail out completely.  */
             if (U_FAILURE(*pErrorCode)) {
                 return NULL;
             }
-            
+
             /* Otherwise remember that we found data but didn't like it for some reason,
             *  and continue looking
             */
@@ -1207,26 +1207,26 @@ doOpenChoice(const char *path, const char *type, const char *name,
     /* try path+entryName next */
     uprv_strcpy(basename, tocEntryName);
     if( uprv_mapFile(&dataMemory, pathBuffer) ||
-        (basename!=pathBuffer && uprv_mapFile(&dataMemory, basename))) 
+        (basename!=pathBuffer && uprv_mapFile(&dataMemory, basename)))
     {
         pEntryData = checkDataItem(dataMemory.pHeader, isAcceptable, context, type, name, &errorCode, pErrorCode);
         if (pEntryData != NULL) {
            /* Data is good.
             *  Hand off ownership of the backing memory to the user's UDataMemory.
             *  and return it.   */
-            pEntryData->mapAddr = dataMemory.mapAddr;   
+            pEntryData->mapAddr = dataMemory.mapAddr;
             pEntryData->map     = dataMemory.map;
             return pEntryData;
         }
-        
+
         /* the data is not acceptable, or some error occured.  Either way, unmap the memory */
         uprv_unmapFile(&dataMemory);
-        
+
         /* If we had a nasty error, bail out completely.  */
         if (U_FAILURE(*pErrorCode)) {
             return NULL;
         }
-        
+
         /* Otherwise remember that we found data but didn't like it for some reason  */
         errorCode=U_INVALID_FORMAT_ERROR;
     }
@@ -1294,7 +1294,7 @@ udata_close(UDataMemory *pData) {
 #ifdef UDATA_DEBUG
     fprintf(stderr, "udata_close()\n");fflush(stderr);
 #endif
-    
+
     if(pData!=NULL) {
         unloadDataMemory(pData);
         if(pData->flags & MALLOCED_UDATAMEMORY_FLAG ) {
