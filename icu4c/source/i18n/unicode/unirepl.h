@@ -32,6 +32,12 @@ class U_I18N_API UnicodeReplacer /* not : public UObject because this is an inte
  public:
 
     /**
+     * Destructor.
+     * @draft ICU 2.4
+     */
+    virtual inline ~UnicodeReplacer() {};
+
+    /**
      * Replace characters in 'text' from 'start' to 'limit' with the
      * output text of this object.  Update the 'cursor' parameter to
      * give the cursor position and return the length of the
