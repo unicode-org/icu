@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Any_Accents.txt
-// Date: Thu Oct 25 22:17:21 2001
+// Date: Wed Nov  7 09:34:03 2001
 //--------------------------------------------------------------------
 
 // Any_Accents
@@ -18,8 +18,8 @@ translit_Any_Accents {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/source/data/translit/Attic/t_Any_Accents.txt,v $
-// $Date: 2001/10/26 05:41:15 $
-// $Revision: 1.1 $
+// $Date: 2001/11/07 18:50:25 $
+// $Revision: 1.2 $
 //--------------------------------------------------------------------
 
 ":: NFD (NFC) ;"
@@ -29,21 +29,21 @@ translit_Any_Accents {
 // define special conversion characters.
 // varients of this could use different characters, or set one or the other to null.
 
-"$pre = \< ;"
-"$post = \> ;"
+"$pre = \\\< ;"
+"$post = \\\> ;"
 
 // Provide keyboard equivalents for common diacritics used in transliteration
 
-"$pre \` $post <> \u0300 ;" // COMBINING GRAVE ACCENT
-"$pre \' $post <> \u0301 ;" // COMBINING ACUTE ACCENT
-"$pre \^ $post <> \u0302 ;" // COMBINING CIRCUMFLEX ACCENT
-"$pre \~ $post <> \u0303 ;" // COMBINING TILDE
-"$pre \- $post <> \u0304 ;" // COMBINING MACRON
-"$pre \" $post <> \u0308 ;" // COMBINING DIAERESIS
-"$pre \* $post <> \u030A ;" // COMBINING RING ABOVE
-"$pre \, $post <> \u0327 ;" // COMBINING CEDILLA
+"$pre \\\` $post <> \u0300 ;" // COMBINING GRAVE ACCENT
+"$pre \\\' $post <> \u0301 ;" // COMBINING ACUTE ACCENT
+"$pre \\\^ $post <> \u0302 ;" // COMBINING CIRCUMFLEX ACCENT
+"$pre \\\~ $post <> \u0303 ;" // COMBINING TILDE
+"$pre \\\- $post <> \u0304 ;" // COMBINING MACRON
+"$pre \\\" $post <> \u0308 ;" // COMBINING DIAERESIS
+"$pre \\\* $post <> \u030A ;" // COMBINING RING ABOVE
+"$pre \\\, $post <> \u0327 ;" // COMBINING CEDILLA
 "$pre '/' $post <> \u0338 ;" // COMBINING LONG SOLIDUS OVERLAY
-"$pre \. $post <> \u0323 ;" // COMBINING DOT BELOW
+"$pre \\\. $post <> \u0323 ;" // COMBINING DOT BELOW
 
 // Combine common characters
 

@@ -5,7 +5,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: Transliterator_index.txt
-// Date: Thu Oct 25 22:17:22 2001
+// Date: Wed Nov  7 10:34:20 2001
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
@@ -22,7 +22,7 @@ translit_index {
   RuleBasedTransliteratorIDs {
 // Copyright (c) 2001, International Business Machines Corporation and
 // others. All Rights Reserved.
-// 
+//
 // TRANSLITERATOR INDEX FILE.  This file lists the non-algorithmic
 // system transliterators.  It allows arbitrary mappings between
 // transliterator IDs and file names, and also allows the system to
@@ -31,29 +31,29 @@ translit_index {
 // "Latin-Jamo;Jamo-Hangul".  Internal IDs may also be defined; these
 // are invisible to the user, but can be composed together by the
 // system to create visible transliterators.
-// 
+//
 // Blank lines and lines beginning with '#' are ignored.
-// 
+//
 // Lines in this file have one of the following forms (text not
 // enclosed by <> is literal):
-// 
+//
 //   <id>:file:<resource>:<encoding>:<direction>
 //   <id>:internal:<resource>:<encoding>:<direction>
 //   <id>:alias:<getInstanceArg>
-//  
+//
 // <id> is the ID of the system transliterator being defined.  These
 // are public IDs enumerated by Transliterator.getAvailableIDs(),
 // unless the second field is "internal".
-// 
+//
 // <resource> is a ResourceReader resource name.  Currently these refer
 // to file names under com/ibm/text/resources.  This string is passed
 // directly to ResourceReader, together with <encoding>.
-// 
+//
 // <encoding> is the character encoding to use when reading <resource>;
 // passed directly to ResourceReader.  E.g., "UTF8".
-// 
+//
 // <direction> is either "FORWARD" or "REVERSE".
-// 
+//
 // <getInstanceArg> is a string to be passed directly to
 // Transliterator.getInstance().  The returned Transliterator object
 // then has its ID changed to <id> and is returned.
@@ -74,7 +74,7 @@ translit_index {
 { "Greek-Latin/UNGEGN", "alias", "el-Latin/UNGEGN", "" },
 
 { "LowerLatin-Jamo", "internal", "translit_Latin_Jamo", "FORWARD" },
-{ "Latin-Jamo", "alias", "Any-Lower;LowerLatin-Jamo", "" },
+{ "Latin-Jamo", "alias", "[\\p{Latin}]Any-Lower;LowerLatin-Jamo", "" },
 { "Jamo-Latin", "file", "translit_Latin_Jamo", "REVERSE" },
 
 { "Latin-Katakana", "file", "translit_Latin_Katakana", "FORWARD" },
@@ -100,8 +100,8 @@ translit_index {
 
 // Compound rules
 
-{ "Latin-Hangul", "alias", "[\p{Latin}];Latin-Jamo;[\u1100-\u11FF]NFC", "" },
-{ "Hangul-Latin", "alias", "[\uAC00-\uD7AF];NFD;Jamo-Latin", "" },
+{ "Latin-Hangul", "alias", "[\\p{Latin}];NFD;Latin-Jamo;NFC", "" },
+{ "Hangul-Latin", "alias", "[\\p{Hangul}];NFD;Jamo-Latin", "" },
 
 // Inter-Indic composed rules
 { "Latin-InterIndic", "internal", "translit_Latin_InterIndic", "FORWARD" },
@@ -127,15 +127,15 @@ translit_index {
 { "InterIndic-Malayalam", "internal", "translit_InterIndic_Malayalam", "FORWARD" },
 
 //Latin-Indic transliterators
-{ "Latin-Devanagari", "alias", "NFD;Latin-InterIndic;InterIndic-Devanagari;NFC", "" },
-{ "Latin-Bengali", "alias", "NFD;Latin-InterIndic;InterIndic-Bengali;NFC", "" },
-{ "Latin-Gurmukhi", "alias", "NFD;Latin-InterIndic;InterIndic-Gurmukhi;NFC", "" },
-{ "Latin-Gujarati", "alias", "NFD;Latin-InterIndic;InterIndic-Gujarati;NFC", "" },
-{ "Latin-Oriya", "alias", "NFD;Latin-InterIndic;InterIndic-Oriya;NFC", "" },
-{ "Latin-Tamil", "alias", "NFD;Latin-InterIndic;InterIndic-Tamil;NFC", "" },
-{ "Latin-Telugu", "alias", "NFD;Latin-InterIndic;InterIndic-Telugu;NFC", "" },
-{ "Latin-Kannada", "alias", "NFD;Latin-InterIndic;InterIndic-Kannada;NFC", "" },
-{ "Latin-Malayalam", "alias", "NFD;Latin-InterIndic;InterIndic-Malayalam;NFC", "" },
+{ "Latin-Devanagari", "alias", "NFD;[\\p{Latin}]Lower;Latin-InterIndic;InterIndic-Devanagari;NFC", "" },
+{ "Latin-Bengali", "alias", "NFD;[\\p{Latin}]Lower;Latin-InterIndic;InterIndic-Bengali;NFC", "" },
+{ "Latin-Gurmukhi", "alias", "NFD;[\\p{Latin}]Lower;Latin-InterIndic;InterIndic-Gurmukhi;NFC", "" },
+{ "Latin-Gujarati", "alias", "NFD;[\\p{Latin}]Lower;Latin-InterIndic;InterIndic-Gujarati;NFC", "" },
+{ "Latin-Oriya", "alias", "NFD;[\\p{Latin}]Lower;Latin-InterIndic;InterIndic-Oriya;NFC", "" },
+{ "Latin-Tamil", "alias", "NFD;[\\p{Latin}]Lower;Latin-InterIndic;InterIndic-Tamil;NFC", "" },
+{ "Latin-Telugu", "alias", "NFD;[\\p{Latin}]Lower;Latin-InterIndic;InterIndic-Telugu;NFC", "" },
+{ "Latin-Kannada", "alias", "NFD;[\\p{Latin}]Lower;Latin-InterIndic;InterIndic-Kannada;NFC", "" },
+{ "Latin-Malayalam", "alias", "NFD;[\\p{Latin}]Lower;Latin-InterIndic;InterIndic-Malayalam;NFC", "" },
 
 //Indic-Latin transliterators
 { "Devanagari-Latin", "alias", "NFD;Devanagari-InterIndic;InterIndic-Latin;NFC", "" },
