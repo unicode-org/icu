@@ -121,7 +121,7 @@
  *
  *  <tr>
  *    <td>1 sec</td>
- *    <td align="right">5.84542×10&#x00B9;&#x00B9;</td>
+ *    <td align="right">5.84542x10<sup>22</sup></td>
  *    <td align="right">285,420,920.94</td>
  *    <td align="right">136.10</td>
  *  </tr>
