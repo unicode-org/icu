@@ -326,7 +326,26 @@ Locale& Locale::init(const char* localeID)
     if (k > 1)  
     {
         if (this->fullName[l] == '\0') this->variant = this->fullName + l;
-        else this->variant = this->fullName + l + 1 ;
+        else
+	{
+	  int32_t varLength;
+	  UErrorCode intErr = U_ZERO_ERROR;
+	  varLength = uloc_getVariant(this->fullName, NULL, 0,  &intErr);
+	  
+	  if(U_FAILURE(intErr) && (intErr != U_BUFFER_OVERFLOW_ERROR))
+          {
+	    this->variant = (char*)u_errorName(intErr);
+          } else if(varLength <= 0)
+	  {   /* bail  - point at teh null*/
+	    //	    this->variant = this->fullName + j;
+	    this->variant = "Len<=0";
+	  }
+	  else
+	  {
+	    /* variant is at the end. We just don't know where exactly it might be. */
+	    this->variant = this->fullName + j - varLength + 1 ;
+	  }
+	}
     }
     else
         this->variant = this->fullName + l - 1;
