@@ -219,7 +219,7 @@ public:
     return result;
   }
 
-  const UnicodeString* const getSupportedIDs(int32_t& _count, UErrorCode& status) {
+  const UnicodeString* getSupportedIDs(int32_t& _count, UErrorCode& status) {
     if (U_SUCCESS(status)) {
       if (!ids) {
         ids = new UnicodeString[count];
