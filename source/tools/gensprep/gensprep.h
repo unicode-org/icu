@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  genidn.h
+*   file name:  gensprep.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -18,7 +18,6 @@
 #define __GENIDN_H__
 
 #include "unicode/utypes.h"
-#include "unicode/uset.h"
 #include "sprpimpl.h"
 
 /* file definitions */
@@ -80,5 +79,3 @@ processData(void);
  * End:
  *
  */
-
-
