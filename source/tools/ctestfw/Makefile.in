@@ -1,4 +1,6 @@
 ## Makefile.in for ICU - tools/ctestfw
+## Copyright (c) 1999, International Business Machines Corporation and
+## others. All Rights Reserved.
 ## Stephen F. Booth
 
 ## Shell to use

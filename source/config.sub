@@ -44,6 +44,9 @@
 # or in some cases, the newer four-part form:
 #	CPU_TYPE-MANUFACTURER-KERNEL-OPERATING_SYSTEM
 # It is wrong to echo any other type of specification.
+#
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
 
 if [ x$1 = x ]
 then
