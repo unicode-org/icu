@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/02/27 00:52:07 $
-* $Revision: 1.33 $
+* $Date: 2003/02/27 20:59:29 $
+* $Revision: 1.34 $
 *
 *******************************************************************************
 */
@@ -1012,22 +1012,13 @@ public final class RuleBasedCollator extends Collator
 
         // Find the length of any leading portion that is equal
         int offset = getFirstUnmatchedOffset(source, target);
-        if (offset == source.length()) {
-            if (offset == target.length() || checkIgnorable(target, offset)) {
-                return 0;
-            }
-            return -1;
-        }
-        else if (target.length() == offset) {
-            if (checkIgnorable(source, offset)) {
-                return 0;
-            }
-            return 1;
-        }
-
         //return compareRegular(source, target, offset);
         if(latinOneUse_) {
-          if (source.charAt(offset) > ENDOFLATINONERANGE_ || target.charAt(offset) > ENDOFLATINONERANGE_) { // source or target start with non-latin-1
+          if ((offset < source.length() 
+               && source.charAt(offset) > ENDOFLATINONERANGE_) 
+              || (offset < target.length() 
+                  && target.charAt(offset) > ENDOFLATINONERANGE_)) { 
+              // source or target start with non-latin-1
             return compareRegular(source, target, offset);
           } else {
             return compareUseLatin1(source, target, offset);

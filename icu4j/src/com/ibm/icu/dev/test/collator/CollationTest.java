@@ -5,16 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/CollationTest.java,v $
- * $Date: 2003/02/05 05:45:16 $
- * $Revision: 1.10 $
+ * $Date: 2003/02/27 20:59:29 $
+ * $Revision: 1.11 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.collator;
 
 import com.ibm.icu.dev.test.ModuleTest;
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.CollationKey;
@@ -49,7 +47,7 @@ public class CollationTest extends ModuleTest
             processTest();
         }
     }
-
+    
     // private data members --------------------------------------------------
 
     private String m_sequence_;
@@ -347,9 +345,10 @@ public class CollationTest extends ModuleTest
             warnln("Could not load locale data skipping.");
         }
     }
-
-    private void doTest(RuleBasedCollator myCollation,
-                               String source, String target, int result)
+    
+    private
+     void doTest(RuleBasedCollator myCollation,
+                              String source, String target, int result)
     {
         doTestVariant(myCollation, source, target, result);
         if (result == 0) {
