@@ -776,14 +776,14 @@ mt {
    CollationElements
    {
         Version { "1.0" }
-        Sequence { "& B < ċ , Ċ" // ċ  Ċ
-                   "    < c,C"      
-                   "& F < ġ, Ġ "              // ġ  Ġ
-                   "    < g,G"
-                   "    < għ , gĦ , Għ , GĦ "
-                   "& H < ħ  , Ħ "           
-                   "& Y < ż, Ż"               // ż Ż
-                   "    < z,Z" }
+        Sequence { "& B < ċ <<< Ċ" // ċ  Ċ
+                   "    < c<<<C"      
+                   "& F < ġ<<< Ġ "              // ġ  Ġ
+                   "    < g<<<G"
+                   "    < għ <<< gĦ <<< Għ <<< GĦ "
+                   "& H < ħ  <<< Ħ "           
+                   "& Y < ż<<< Ż"               // ż Ż
+                   "    < z<<<Z" }
    }
 
 // Time zone

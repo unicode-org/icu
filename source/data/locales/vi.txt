@@ -9,9 +9,9 @@ vi {
     Version { "1.1" }
     CollationElements { 
         Version { "2.0" }
-        Sequence { "[normalization on]&\u0300;\u0309;\u0303;\u0301;"
-        "\u0323;\u0306;\u0302;\u031B"
-        "&D<\u0111,\u0110" }
+        Sequence { "[normalization on]&\u0300<<\u0309<<\u0303<<\u0301<<"
+        "\u0323<<\u0306<<\u0302<<\u031B"
+        "&D<\u0111<<<\u0110" }
     }
     Countries {
         VN { "Vi\u1EC7t Nam" }
