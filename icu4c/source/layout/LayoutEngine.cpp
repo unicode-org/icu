@@ -166,7 +166,7 @@ void LayoutEngine::positionGlyphs(const LEGlyphID glyphs[], le_int32 glyphCount,
     }
 
     if (positions == NULL) {
-        positions = (float *)uprv_malloc((2 * (glyphCount + 1)) * sizeof(float));
+        positions = LE_NEW_ARRAY(float, 2 * (glyphCount + 1));
 
         if (positions == NULL) {
             success = LE_MEMORY_ALLOCATION_ERROR;
@@ -243,7 +243,7 @@ void LayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le
     }
 
     if (glyphs == NULL) {
-        glyphs = (LEGlyphID *)uprv_malloc(count * sizeof(LEGlyphID));
+        glyphs = LE_NEW_ARRAY(LEGlyphID, count);
 
         if (glyphs == NULL) {
             success = LE_MEMORY_ALLOCATION_ERROR;
@@ -259,7 +259,7 @@ void LayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le
             dir = -1;
         }
 
-        charIndices = (le_int32 *)uprv_malloc(count * sizeof(le_int32));
+        charIndices = LE_NEW_ARRAY(le_int32, count);
 
         if (charIndices == NULL) {
             success = LE_MEMORY_ALLOCATION_ERROR;
@@ -303,17 +303,17 @@ void LayoutEngine::reset()
     fGlyphCount = 0;
 
     if (fGlyphs != NULL) {
-        uprv_free(fGlyphs);
+        LE_DELETE_ARRAY(fGlyphs);
         fGlyphs = NULL;
     }
 
     if (fCharIndices != NULL) {
-        uprv_free(fCharIndices);
+        LE_DELETE_ARRAY(fCharIndices);
         fCharIndices = NULL;
     }
 
     if (fPositions != NULL) {
-        uprv_free(fPositions);
+        LE_DELETE_ARRAY(fPositions);
         fPositions = NULL;
     }
 }
