@@ -960,8 +960,10 @@ main(int argc, char* argv[])
     UBool quick = TRUE;
     UBool name = FALSE;
     UBool leaks = FALSE;
+    UBool warnOnMissingData = FALSE;
     UErrorCode errorCode = U_ZERO_ERROR;
     UConverter *cnv = NULL;
+    const char *warnOrErr = "Failure"; 
 
     /* This must be tested before using anything! */
     MutexTest::gMutexInitialized = umtx_isInitialized(NULL);
@@ -1008,7 +1010,10 @@ main(int argc, char* argv[])
                 leaks = TRUE;
             else if (strcmp("l", str) == 0)
                 leaks = TRUE;
-            else {
+            else if (strcmp("w", str) == 0) {
+              warnOnMissingData = TRUE;
+              warnOrErr = "WARNING";
+            } else {
                 syntax = TRUE;
             }
         }else{
@@ -1067,11 +1072,14 @@ main(int argc, char* argv[])
         ucnv_close(cnv);
     } else {
         fprintf(stdout,
-                "*** Failure! The default converter [%s] cannot be opened.\n"
+                "*** %s! The default converter [%s] cannot be opened.\n"
                 "*** Check the ICU_DATA environment variable and\n"
                 "*** check that the data files are present.\n",
-                ucnv_getDefaultName());
-        return 1;
+                warnOrErr, ucnv_getDefaultName());
+        if(!warnOnMissingData) {
+          fprintf(stdout, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+          return 1;
+        }
     }
 
     // try more data
@@ -1081,10 +1089,13 @@ main(int argc, char* argv[])
         ucnv_close(cnv);
     } else {
         fprintf(stdout,
-                "*** Failure! The converter for " TRY_CNV_2 " cannot be opened.\n"
+                "*** %s! The converter for " TRY_CNV_2 " cannot be opened.\n"
                 "*** Check the ICU_DATA environment variable and \n"
-                "*** check that the data files are present.\n");
-        return 1;
+                "*** check that the data files are present.\n", warnOrErr);
+        if(!warnOnMissingData) {
+          fprintf(stdout, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+          return 1;
+        }
     }
 
     UResourceBundle *rb = ures_open(0, "en", &errorCode);
@@ -1093,10 +1104,13 @@ main(int argc, char* argv[])
         ures_close(rb);
     } else {
         fprintf(stdout,
-                "*** Failure! The \"en\" locale resource bundle cannot be opened.\n"
+                "*** %s! The \"en\" locale resource bundle cannot be opened.\n"
                 "*** Check the ICU_DATA environment variable and \n"
-                "*** check that the data files are present.\n");
-        return 1;
+                "*** check that the data files are present.\n", warnOrErr);
+        if(!warnOnMissingData) {
+          fprintf(stdout, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+          return 1;
+        }
     }
 
     /* TODO: Add option to call u_cleanup and rerun tests. */
