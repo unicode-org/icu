@@ -230,7 +230,7 @@ void HebrewCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& 
           }
           month -= ELUL+1;
           ++year;
-          acrossAdar1 = true;
+          acrossAdar1 = TRUE;
         }
       } else {
         acrossAdar1 = (month > ADAR_1); // started after ADAR_1?
@@ -244,7 +244,7 @@ void HebrewCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& 
           }
           month += ELUL+1;
           --year;
-          acrossAdar1 = true;
+          acrossAdar1 = TRUE;
         }
       }
       set(UCAL_MONTH, month);
