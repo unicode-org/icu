@@ -2011,10 +2011,30 @@ uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate 
           return ucmpe32_get(UCA->mapping, L); // return first one
 
         } else { // Jamo is Special
-          collIterate jamos;
-          UChar jamoString[3];
+          //collIterate jamos;
+          //UChar jamoString[3];
           uint32_t CE = UCOL_NOT_FOUND;
           const UCollator *collator = source->coll;
+          // Move Jamos into normalization buffer
+          source->writableBuffer[0] = (UChar)L;
+          source->writableBuffer[1] = (UChar)V;
+
+          source->fcdPosition       = source->pos+1;   // Indicate where to continue in main input string
+                                                         //   after exhausting the writableBuffer
+          source->pos   = source->writableBuffer;
+          source->origFlags         = source->flags;
+          source->flags            |= UCOL_ITER_INNORMBUF;
+          source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
+
+          if (T != TBase) {
+            source->writableBuffer[2] = (UChar)T;
+            source->writableBuffer[3] = 0;
+          } else {
+            source->writableBuffer[2] = 0;
+          }
+
+          CE = UCOL_IGNORABLE;
+/*
           jamoString[0] = (UChar)L;
           jamoString[1] = (UChar)V;
           if (T != TBase) {
@@ -2031,6 +2051,7 @@ uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate 
             CE = ucol_IGetNextCE(collator, &jamos, status);
           }
           return *(source->toReturn++);
+*/
         }
       }
     case CHARSET_TAG:
@@ -2496,6 +2517,40 @@ uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
           source->toReturn = source->CEpos - 1;
           return *(source->toReturn);
         } else {
+
+          /*
+          Move the prevowel and the following base Consonant into the
+          normalization buffer with their order swapped
+          */
+          UChar *tempbuffer = source->writableBuffer +
+                              (source->writableBufSize - 1);
+          *(tempbuffer)     = (UChar)L;
+          *(tempbuffer - 1) = (UChar)V;
+
+          /*
+          Indicate where to continue in main input string after exhausting
+          the writableBuffer
+          */
+          if (source->pos - 1 == source->string) {
+              source->fcdPosition = NULL;
+          }
+          else {
+            source->fcdPosition       = source->pos - 1;
+          }
+
+          source->pos               = tempbuffer;
+          source->origFlags         = source->flags;
+          source->flags            |= UCOL_ITER_INNORMBUF;
+          source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
+
+          if (T != TBase) {
+            *(tempbuffer - 2) = (UChar)T;
+            *(tempbuffer - 3) = 0;
+          } else {
+            *(tempbuffer - 2) = 0;
+          }
+          CE = UCOL_IGNORABLE;
+/*
           collIterate jamos;
           UChar jamoString[3];
           uint32_t CE = UCOL_NOT_FOUND;
@@ -2517,6 +2572,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
           }
           source->toReturn = source->CEpos - 1;
           return *(source->toReturn);
+*/
         }
       }
     case LEAD_SURROGATE_TAG:  /* D800-DBFF*/
