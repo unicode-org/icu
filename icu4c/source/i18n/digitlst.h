@@ -137,7 +137,8 @@ public:
      * this method to determine if this is so; you cannot check directly,
      * because a special format is used to handle this.
      */
-    UBool isLONG_MIN(void) const;
+    // This code is unused.
+    //UBool isLONG_MIN(void) const;
 
 public:
     /**
