@@ -159,25 +159,22 @@ static void T_UConverter_fromCodepageToCodepage (UConverter * outConverter,
 
 const char* ucnv_getDefaultName ()
 {
-  return icu_getDefaultCodepage();
+  return ucnv_io_getDefaultConverterName();
 }
 
 void   ucnv_setDefaultName (const char *converterName)
 {
-  icu_strcpy ((char*)icu_getDefaultCodepage(), converterName);
+  ucnv_io_setDefaultConverterName(converterName);
 }
 /*Calls through createConverter */
 UConverter* ucnv_open (const char *name,
 		       UErrorCode * err)
 {
-  if (U_FAILURE (*err))
+  if (err == NULL || U_FAILURE (*err)) {
     return NULL;
+  }
 
-  /*In case "name" is NULL we want to open the default converter */
-  if (name != NULL)
-    return createConverter (name, err);
-  else
-    return createConverter (icu_getDefaultCodepage(), err);
+  return createConverter (name, err);
 }
 
 /*Extracts the UChar* to a char* and calls through createConverter */

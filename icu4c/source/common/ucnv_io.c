@@ -27,6 +27,7 @@
 #include "utypes.h"
 #include "umutex.h"
 #include "cstring.h"
+#include "cmemory.h"
 #include "ucnv_io.h"
 #include "udata.h"
 
@@ -286,6 +287,70 @@ ucnv_io_fillAvailableAliases(const char **aliases, UErrorCode *pErrorCode) {
             *aliases++=(const char *)aliasTable+*p;
             p+=2;
             --count;
+        }
+    }
+}
+
+/* default converter name --------------------------------------------------- */
+
+/*
+ * In order to be really thread-safe, the get function would have to take
+ * a buffer parameter and copy the current string inside a mutex block.
+ * This implementation only tries to be really thread-safe while
+ * setting the name.
+ * It assumes that setting a pointer is atomic.
+ */
+
+static const char *defaultConverterNameBuffer[100];
+static const char *defaultConverterName = NULL;
+
+U_CFUNC const char *
+ucnv_io_getDefaultConverterName() {
+    /* local variable to be thread-safe */
+    const char *name=defaultConverterName;
+    if(name==NULL) {
+        const char *codepage=icu_getDefaultCodepage();
+        if(codepage!=NULL) {
+            UErrorCode errorCode=U_ZERO_ERROR;
+            name=ucnv_io_getConverterName(codepage, &errorCode);
+            if(U_FAILURE(errorCode) || name==NULL) {
+                name=codepage;
+            }
+            defaultConverterName=name;
+        }
+    }
+    return name;
+}
+
+U_CFUNC void
+ucnv_io_setDefaultConverterName(const char *converterName) {
+    if(converterName==NULL) {
+        /* reset to the default codepage */
+        defaultConverterName=NULL;
+    } else {
+        UErrorCode errorCode=U_ZERO_ERROR;
+        const char *name=ucnv_io_getConverterName(converterName, &errorCode);
+        if(U_SUCCESS(errorCode) && name!=NULL) {
+            defaultConverterName=name;
+        } else {
+            /* do not set the name if the alias lookup failed and it is too long */
+            int32_t length=icu_strlen(converterName);
+            if(length<sizeof(defaultConverterNameBuffer)) {
+                /* it was not found as an alias, so copy it - accept an empty name */
+                bool_t didLock;
+                if(defaultConverterName==defaultConverterNameBuffer) {
+                    umtx_lock(NULL);
+                    didLock=TRUE;
+                } else {
+                    didLock=FALSE;
+                }
+                icu_memcpy(defaultConverterNameBuffer, converterName, length);
+                defaultConverterNameBuffer[length]=0;
+                defaultConverterName=defaultConverterNameBuffer;
+                if(didLock) {
+                    umtx_unlock(NULL);
+                }
+            }
         }
     }
 }
