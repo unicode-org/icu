@@ -108,3 +108,8 @@ endif
 ifeq ($(strip $(PLATFORM)),U_LINUX)
   TOOL=env LD_LIBRARY_PATH=$(LPATHS)
 endif
+
+ifeq ($(strip $(PLATFORM)),U_BSD)
+  TOOL=env LD_LIBRARY_PATH=$(LPATHS)
+endif
+
