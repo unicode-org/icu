@@ -75,15 +75,16 @@ compareFiles(const void *file1, const void *file2);
 /* -------------------------------------------------------------------------- */
 
 static UOption options[]={
-    UOPTION_HELP_H,
-    UOPTION_HELP_QUESTION_MARK,
-    UOPTION_VERBOSE,
-    UOPTION_COPYRIGHT,
-    UOPTION_DESTDIR,
-    UOPTION_DEF( "comment", 'C', UOPT_REQUIRES_ARG),
-    UOPTION_DEF( "name", 'n', UOPT_REQUIRES_ARG),
-    UOPTION_DEF( "type", 't', UOPT_REQUIRES_ARG),
-    UOPTION_DEF( "source", 'S', UOPT_NO_ARG)
+/*0*/ UOPTION_HELP_H,
+/*1*/ UOPTION_HELP_QUESTION_MARK,
+/*2*/ UOPTION_VERBOSE,
+/*3*/ UOPTION_COPYRIGHT,
+/*4*/ UOPTION_DESTDIR,
+/*5*/ UOPTION_DEF( "comment", 'C', UOPT_REQUIRES_ARG),
+/*6*/ UOPTION_DEF( "name", 'n', UOPT_REQUIRES_ARG),
+/*7*/ UOPTION_DEF( "type", 't', UOPT_REQUIRES_ARG),
+/*8*/ UOPTION_DEF( "source", 'S', UOPT_NO_ARG),
+/*9*/ UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG)
 };
 
 char symPrefix[100];
@@ -98,6 +99,7 @@ main(int argc, char* argv[]) {
     UErrorCode errorCode=U_ZERO_ERROR;
     uint32_t i, fileOffset, basenameOffset, length;
     UBool sourceTOC;
+    const char *entrypointName = NULL;
 
     /* preset then read command line options */
     options[4].value=u_getDataDirectory();
@@ -142,6 +144,7 @@ main(int argc, char* argv[]) {
             "\t\t-n or --name        name of the destination file, defaults to " COMMON_DATA_NAME "\n"
             "\t\t-t or --type        type of the destination file, defaults to " DATA_TYPE "\n"
             "\t\t-S or --source      write a .c source file with the table of contents\n",
+            "\t\t-e or --entrypoint  override the c entrypoint name (default: <name>_<type> )",
             argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
@@ -314,6 +317,13 @@ main(int argc, char* argv[]) {
         }
         T_FileStream_writeLine(out, ";\n\n");
 
+        /* If an entrypoint is specified, use it. */
+        if(options[9].doesOccur) {
+            entrypointName = options[9].value;
+        } else {
+            entrypointName = options[6].value;
+        }
+
         sprintf(
             buffer,
             "U_EXPORT const struct {\n"
@@ -337,7 +347,7 @@ main(int argc, char* argv[]) {
             "    \"\", %lu, 0, {\n",
             32-4-sizeof(UDataInfo),
             fileCount,
-            options[6].value,
+            entrypointName,
             sizeof(UDataInfo),
             U_IS_BIG_ENDIAN,
             U_CHARSET_FAMILY,
