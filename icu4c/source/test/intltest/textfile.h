@@ -58,12 +58,12 @@ class TextFile {
     UBool ensureCapacity(int32_t capacity);
     UBool setBuffer(int32_t index, char c, UErrorCode& ec);
 
+    FileStream* file;
     char* name;
     char* encoding;
-    int32_t lineNo;
     char* buffer;
     int32_t capacity;
-    FileStream* file;
+    int32_t lineNo;
 };
 
 inline int32_t TextFile::getLineNumber() const {
