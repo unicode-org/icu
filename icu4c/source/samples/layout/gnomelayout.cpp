@@ -142,7 +142,7 @@ int main (int argc, char *argv[])
 
     // FIXME: is it cheating to pass NULL for surface, since we know that
     // GnomeFontInstance won't use it?
-    context.paragraph = Paragraph::paragraphFactory("Sample.utf8", fontMap, guiSupport, NULL);
+    context.paragraph = Paragraph::paragraphFactory("Sample.txt", fontMap, guiSupport, NULL);
 
     if (context.paragraph != NULL) {
         gnome_init("gnomelayout", "1.0", argc, argv);

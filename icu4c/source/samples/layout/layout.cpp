@@ -98,7 +98,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
             return 0;
         }
 
-        paragraph = Paragraph::paragraphFactory("Sample.utf8", fontMap, guiSupport, hdc);
+        paragraph = Paragraph::paragraphFactory("Sample.txt", fontMap, guiSupport, hdc);
         SetWindowLong(hwnd, 0, (LONG) paragraph);
 
         windowCount += 1;
