@@ -179,112 +179,6 @@
 U_NAMESPACE_BEGIN
 class U_COMMON_API Locale : public UObject {
 public:
-#ifdef ICU_LOCID_USE_DEPRECATES
-    /**
-     * A proxy for the Locale. 
-     * This is defined to stay source code compatible and to remove static initialization.
-     * Treat it just like a Locale.
-     * @obsolete ICU 2.4. Use one of the other Locale get functions instead since this API will be removed in that release.
-     */
-    typedef struct U_COMMON_API LocaleProxy {
-
-        /* Try not to access this. This is not meant for normal use. */
-        int32_t magicLocaleNumber;
-
-        /** Calls Locale's equivalent function */
-        inline const char *getLanguage( ) const;
-        /** Calls Locale's equivalent function */
-        inline const char *getCountry( ) const;
-        /** Calls Locale's equivalent function */
-        inline const char *getVariant( ) const;
-        /** Calls Locale's equivalent function */
-        inline const char *getName() const;
-        /** Calls Locale's equivalent function */
-        inline const char *getISO3Language() const;
-        /** Calls Locale's equivalent function */
-        inline const char *getISO3Country() const;
-        /** Calls Locale's equivalent function */
-        inline uint32_t getLCID(void) const;
-        /** Calls Locale's equivalent function */
-        inline UnicodeString&  getDisplayLanguage(UnicodeString&   dispLang) const;
-        /** Calls Locale's equivalent function */
-        inline UnicodeString&  getDisplayLanguage( const   Locale&         inLocale,
-                                                    UnicodeString&  dispLang) const;
-        /** Calls Locale's equivalent function */
-        inline UnicodeString&  getDisplayCountry(          UnicodeString& dispCountry) const;
-        /** Calls Locale's equivalent function */
-        inline UnicodeString&  getDisplayCountry(  const   Locale&         inLocale,
-                                                    UnicodeString&  dispCountry) const;
-        /** Calls Locale's equivalent function */
-        inline UnicodeString&  getDisplayVariant(      UnicodeString& dispVar) const;
-        /** Calls Locale's equivalent function */
-        inline UnicodeString&  getDisplayVariant(  const   Locale&         inLocale,
-                                                    UnicodeString&  dispVar) const;
-
-        /** Calls Locale's equivalent function */
-        inline UnicodeString&  getDisplayName(         UnicodeString&  name) const;
-        /** Calls Locale's equivalent function */
-        inline UnicodeString&  getDisplayName( const   Locale&         inLocale,
-                                                UnicodeString&  name) const;
-        /** Calls Locale's equivalent function */
-        inline int32_t         hashCode(void) const;
-
-        /** Cast a LocaleProxy into a Locale. This is the magic behind this proxy. */
-        operator const Locale&() const;
-    } LocaleProxy;
-
-    /**
-     * Useful constants for language.
-     */
-    /** @obsolete ICU 2.4. Use getEnglish() instead since this API will be removed in that release. */
-    static const LocaleProxy ENGLISH;
-    /** @obsolete ICU 2.4. Use getFrench() instead since this API will be removed in that release. */
-    static const LocaleProxy FRENCH;
-    /** @obsolete ICU 2.4. Use getGerman() instead since this API will be removed in that release. */
-    static const LocaleProxy GERMAN;
-    /** @obsolete ICU 2.4. Use getItalian() instead since this API will be removed in that release. */
-    static const LocaleProxy ITALIAN;
-    /** @obsolete ICU 2.4. Use getJapanese() instead since this API will be removed in that release. */
-    static const LocaleProxy JAPANESE;
-    /** @obsolete ICU 2.4. Use getKorean() instead since this API will be removed in that release. */
-    static const LocaleProxy KOREAN;
-    /** @obsolete ICU 2.4. Use getChinese() instead since this API will be removed in that release. */
-    static const LocaleProxy CHINESE;
-    /** @obsolete ICU 2.4. Use getSimplifiedChinese() instead since this API will be removed in that release. */
-    static const LocaleProxy SIMPLIFIED_CHINESE;
-    /** @obsolete ICU 2.4. Use getTraditionalChinese() instead since this API will be removed in that release. */
-    static const LocaleProxy TRADITIONAL_CHINESE;
-
-    /**
-     * Useful constants for country.
-     */
-    /** @obsolete ICU 2.4. Use getFrance() instead since this API will be removed in that release. */
-    static const LocaleProxy FRANCE;
-    /** @obsolete ICU 2.4. Use getGermany() instead since this API will be removed in that release. */
-    static const LocaleProxy GERMANY;
-    /** @obsolete ICU 2.4. Use getItaly() instead since this API will be removed in that release. */
-    static const LocaleProxy ITALY;
-    /** @obsolete ICU 2.4. Use getJapan() instead since this API will be removed in that release. */
-    static const LocaleProxy JAPAN;
-    /** @obsolete ICU 2.4. Use getKorea() instead since this API will be removed in that release. */
-    static const LocaleProxy KOREA;
-    /** @obsolete ICU 2.4. Use getChina() instead since this API will be removed in that release. */
-    static const LocaleProxy CHINA;      /* Alias for PRC */
-    /** @obsolete ICU 2.4. Use getPRC() instead since this API will be removed in that release. */
-    static const LocaleProxy PRC;        /* Peoples Republic of China */
-    /** @obsolete ICU 2.4. Use getTaiwan() instead since this API will be removed in that release. */
-    static const LocaleProxy TAIWAN;
-    /** @obsolete ICU 2.4. Use getUK() instead since this API will be removed in that release. */
-    static const LocaleProxy UK;
-    /** @obsolete ICU 2.4. Use getUS() instead since this API will be removed in that release. */
-    static const LocaleProxy US;
-    /** @obsolete ICU 2.4. Use getCanada() instead since this API will be removed in that release. */
-    static const LocaleProxy CANADA;
-    /** @obsolete ICU 2.4. Use getCanadaFrench() instead since this API will be removed in that release. */
-    static const LocaleProxy CANADA_FRENCH;
-
-#endif /* ICU_LOCID_USE_DEPRECATES */
-
     /** Useful constant for this language. @stable ICU 2.0 */
     static const Locale &getEnglish(void);
     /** Useful constant for this language. @stable ICU 2.0 */
@@ -701,13 +595,6 @@ private:
      */
     static const char fgClassID;
     
-//    static Locale *localeList;
-//    static int32_t localeListCount;
-
-#ifdef ICU_LOCID_USE_DEPRECATES
-    friend struct LocaleProxy;
-#endif
-
     static const Locale &getLocale(int locid);
 
     friend void locale_set_default_internal(const char *);
@@ -753,95 +640,9 @@ Locale::getName() const
 
 inline UBool 
 Locale::isBogus(void) const {
-  return fIsBogus;
+    return fIsBogus;
 }
 
-#ifdef ICU_LOCID_USE_DEPRECATES
-/* Proxy functions */
-inline const char *Locale::LocaleProxy::getLanguage( ) const
-{
-    return ((const Locale)*this).getLanguage();
-}
-
-inline const char *Locale::LocaleProxy::getCountry( ) const
-{
-    return ((const Locale)*this).getCountry();
-}
-
-inline const char *Locale::LocaleProxy::getVariant( ) const
-{
-    return ((const Locale)*this).getVariant();
-}
-
-inline const char *Locale::LocaleProxy::getName() const
-{
-    return ((const Locale)*this).getName();
-}
-
-inline const char *Locale::LocaleProxy::getISO3Language() const
-{
-    return ((const Locale)*this).getISO3Language();
-}
-
-inline const char *Locale::LocaleProxy::getISO3Country() const
-{
-    return ((const Locale)*this).getISO3Country();
-}
-
-inline uint32_t Locale::LocaleProxy::getLCID(void) const
-{
-    return ((const Locale)*this).getLCID();
-}
-
-inline UnicodeString&  Locale::LocaleProxy::getDisplayLanguage(UnicodeString&   dispLang) const
-{
-    return ((const Locale)*this).getDisplayLanguage(dispLang);
-}
-
-inline UnicodeString&  Locale::LocaleProxy::getDisplayLanguage( const   Locale&         inLocale,
-                                            UnicodeString&  dispLang) const
-{
-    return ((const Locale)*this).getDisplayLanguage(inLocale, dispLang);
-}
-
-inline UnicodeString&  Locale::LocaleProxy::getDisplayCountry(UnicodeString& dispCountry) const
-{
-    return ((const Locale)*this).getDisplayCountry(dispCountry);
-}
-
-inline UnicodeString&  Locale::LocaleProxy::getDisplayCountry(const   Locale&         inLocale,
-                                            UnicodeString&  dispCountry) const
-{
-    return ((const Locale)*this).getDisplayCountry(inLocale, dispCountry);
-}
-
-inline UnicodeString&  Locale::LocaleProxy::getDisplayVariant(UnicodeString& dispVar) const
-{
-    return ((const Locale)*this).getDisplayVariant(dispVar);
-}
-
-inline UnicodeString&  Locale::LocaleProxy::getDisplayVariant(const   Locale&         inLocale,
-                                            UnicodeString&  dispVar) const
-{
-    return ((const Locale)*this).getDisplayVariant(inLocale, dispVar);
-}
-
-inline UnicodeString&  Locale::LocaleProxy::getDisplayName(UnicodeString&  name) const
-{
-    return ((const Locale)*this).getDisplayName(name);
-}
-
-inline UnicodeString&  Locale::LocaleProxy::getDisplayName(const   Locale&         inLocale,
-                                        UnicodeString&  name) const
-{
-    return ((const Locale)*this).getDisplayName(inLocale, name);
-}
-
-inline int32_t         Locale::LocaleProxy::hashCode(void) const
-{
-    return ((const Locale)*this).hashCode();
-}
-#endif /* !ICU_LOCID_USE_DEPRECATES */
 U_NAMESPACE_END
 
 #endif

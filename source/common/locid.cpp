@@ -137,40 +137,6 @@ U_NAMESPACE_BEGIN
 // In the platform codepage.
 #define SEP_CHAR '_'
 
-/**
- * static variables
- */
-#ifdef ICU_LOCID_USE_DEPRECATES
-const Locale::LocaleProxy Locale::ENGLISH  = {eENGLISH};
-const Locale::LocaleProxy Locale::FRENCH   = {eFRENCH};
-const Locale::LocaleProxy Locale::GERMAN   = {eGERMAN};
-const Locale::LocaleProxy Locale::ITALIAN  = {eITALIAN};
-const Locale::LocaleProxy Locale::JAPANESE = {eJAPANESE};
-const Locale::LocaleProxy Locale::KOREAN   = {eKOREAN};
-const Locale::LocaleProxy Locale::CHINESE  = {eCHINESE};
-const Locale::LocaleProxy Locale::SIMPLIFIED_CHINESE={eCHINA};
-const Locale::LocaleProxy Locale::TRADITIONAL_CHINESE={eTAIWAN};
-
-const Locale::LocaleProxy Locale::FRANCE   = {eFRANCE};
-const Locale::LocaleProxy Locale::GERMANY  = {eGERMANY};
-const Locale::LocaleProxy Locale::ITALY    = {eITALY};
-const Locale::LocaleProxy Locale::JAPAN    = {eJAPAN};
-const Locale::LocaleProxy Locale::KOREA    = {eKOREA};
-const Locale::LocaleProxy Locale::CHINA    = {eCHINA};
-const Locale::LocaleProxy Locale::PRC      = {eCHINA};
-const Locale::LocaleProxy Locale::TAIWAN   = {eTAIWAN};
-const Locale::LocaleProxy Locale::UK       = {eUK};
-const Locale::LocaleProxy Locale::US       = {eUS};
-const Locale::LocaleProxy Locale::CANADA   = {eCANADA};
-const Locale::LocaleProxy Locale::CANADA_FRENCH={eCANADA_FRENCH};
-
-Locale::LocaleProxy::operator const Locale&(void) const
-{
-    return Locale::getLocale(magicLocaleNumber);
-}
-
-#endif
-
 Locale::~Locale()
 {   
     /*if fullName is on the heap, we free it*/

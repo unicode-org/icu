@@ -122,17 +122,6 @@ public:
      */
     ResourceBundle(UErrorCode &err);
 
-#ifdef ICU_RESOURCEBUNDLE_USE_DEPRECATES
-    /**
-     * Constructs a ResourceBundle
-     *
-     * @obsolete ICU 2.4. Use const char * pathnames instead since this API will be removed in that release.
-     */
-    ResourceBundle(const wchar_t* path,
-                   const Locale& locale,
-                   UErrorCode& err);
-#endif /* ICU_RESOURCEBUNDLE_USE_DEPRECATES */
-
     /**
      * Standard constructor, onstructs a resource bundle for the locale-specific
      * bundle in the specified path.
@@ -441,12 +430,6 @@ public:
 private:
     UResourceBundle *resource;
     void constructForLocale(const UnicodeString& path, const Locale& locale, UErrorCode& error);
-#ifdef ICU_RESOURCEBUNDLE_USE_DEPRECATES
-    /**
-     * @obsolete ICU 2.4. Use const char * pathnames instead since this API will be removed in that release.
-     */
-    void constructForLocale(const wchar_t* path, const Locale& locale, UErrorCode& error);
-#endif /* ICU_RESOURCEBUNDLE_USE_DEPRECATES */
     Locale *locName;
 
     /**

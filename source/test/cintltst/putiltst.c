@@ -246,39 +246,6 @@ static void TestPUtilAPI(void){
         tzoffset=uprv_getUTCtime();
 
     }
-
-/* We can deprecate the test code right away; the API itself goes 2002-Jun-30 */
-#ifdef ICU_ENABLE_DEPRECATED_NEXTDOUBLE
-    log_verbose("Testing uprv_nextDouble() where the value is NaN ...\n");
-    expn1=uprv_nextDouble(uprv_getNaN(), TRUE);
-    doAssert(expn1, uprv_getNaN(), "uprv_nextDouble(uprv_getNaN(), TRUE) failed.");
-
-#if defined(OS400)
-    /* This is oddly enough the same value as DBL_MIN on Windows. */
-    /* This number is used because really small IEEE 754 numbers get an underflow exception on this platform */
-    y1=2.2250738585072014e-308;
-#elif IEEE_754
-    /* OS390 may define IEEE_754, so check it first */
-    y1=4.9406564584125e-324;
-#elif defined(OS390) || defined(XP_MAC)
-    y1=4.9406564584125e-78;
-#else
-    /* This is the default IEEE754 value. The test should fail if it's not correct. */
-    y1=4.9406564584125e-324;
-#endif
-    doAssert(uprv_nextDouble(0, TRUE),   y1, "uprv_nextDouble(0, TRUE) failed.");
-    doAssert(uprv_nextDouble(0, FALSE), -y1, "uprv_nextDouble(0, FALSE) failed.");
-       
-    expn1=uprv_nextDouble(1.0, TRUE);
-    if(expn1 < 1.0 || expn1 > 1.0001){
-        log_err("ERROR: uprv_nextDouble failed. Expected : %lf, Got: %f\n", y1, expn1);
-    }
-    expn1=uprv_nextDouble(1.0, FALSE);
-    if(expn1 > 1.0 || expn1 < 0.9999){
-        log_err("ERROR: uprv_nextDouble failed. Expected : %lf, Got: %f\n", y1, expn1);
-    }
-#endif
-
 }
 
 #if 0

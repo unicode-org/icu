@@ -94,9 +94,6 @@ void addResourceBundleTest(TestNode** root)
     addTest(root, &TestFallback, "tsutil/crestst/TestFallback");
     addTest(root, &TestAliasConflict, "tsutil/crestst/TestAliasConflict");
     addTest(root, &TestFileStream, "tsutil/crestst/TestFileStream");
-#ifdef ICU_URES_USE_DEPRECATES
-    addTest(root, &TestConstruction2, "tsutil/crestst/TestConstruction2");
-#endif
 }
 
 
@@ -216,67 +213,6 @@ void TestConstruction1()
     ures_close(test1);
     ures_close(test2);
 }
-
-#ifdef ICU_URES_USE_DEPRECATES
-void TestConstruction2()
-{
-  int n;
-  int32_t resultLen;
-  UChar temp[7];
-  UResourceBundle *test4 = 0;
-  const UChar*   result4;
-  UErrorCode   err = U_ZERO_ERROR;
-  const char*    locale="te_IN";
-  wchar_t widedirectory[256];
-  const char *testdatapath;
-
-  testdatapath=loadTestData(&err);
-  mbstowcs(widedirectory, testdatapath, 256);
-
-  log_verbose("Testing ures_openW().......\n");
-
-  test4=ures_openW(widedirectory, locale, &err);
-  if(U_FAILURE(err)){
-    log_err("Error in the construction using ures_openW():  %s\n", myErrorName(err));
-    return;
-  }
-
-  result4=ures_getStringByKey(test4, "string_in_Root_te_te_IN", &resultLen, &err);
-
-  if (U_FAILURE(err)) {
-    log_err("Something threw an error in TestConstruction()  %s\n", myErrorName(err));
-    return;
-  }
-
-  log_verbose("for string_in_Root_te_te_IN, te_IN.txt had  %s\n", austrdup(result4));
-  u_uastrcpy(temp, "TE_IN");
-
-  if(u_strcmp(result4, temp)!=0)
-  {
-
-    log_err("Construction test failed for ures_openW();\n");
-    if(!VERBOSITY)
-         log_info("(run verbose for more information)\n");
-
-      log_verbose("\nGot->");
-    for(n=0;result4[n];n++)
-       {
-         log_verbose("%04X ",result4[n]);
-       }
-    log_verbose("<\n");
-
-    log_verbose("\nWant>");
-    for(n=0;temp[n];n++)
-       {
-         log_verbose("%04X ",temp[n]);
-       }
-    log_verbose("<\n");
-
-  }
-
-  ures_close(test4);
-}
-#endif
 
 /*****************************************************************************/
 /*****************************************************************************/
