@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/NormalizerBuilder.java,v $ 
- * $Date: 2000/09/21 22:37:55 $ 
- * $Revision: 1.11 $
+ * $Date: 2001/03/15 23:36:02 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -19,6 +19,7 @@ import com.ibm.text.*;
 import com.ibm.util.CompactByteArray;
 import com.ibm.util.CompactCharArray;
 import com.ibm.util.Utility;
+import com.ibm.icu.internal.UInfo;
 
 public final class NormalizerBuilder
 {

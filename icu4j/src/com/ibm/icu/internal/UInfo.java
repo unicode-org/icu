@@ -1,17 +1,17 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2001, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UInfo.java,v $ 
- * $Date: 2000/09/21 22:37:41 $ 
- * $Revision: 1.7 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/internal/Attic/UInfo.java,v $ 
+ * $Date: 2001/03/15 23:31:12 $ 
+ * $Revision: 1.1 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.text;
+package com.ibm.icu.internal;
 
 import java.io.*;
 import java.util.*;
