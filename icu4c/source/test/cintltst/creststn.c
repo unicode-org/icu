@@ -2445,9 +2445,9 @@ static void TestGetFunctionalEquivalent(void) {
         "f",    "de_CN@calendar=japanese",     "de",
         "t",    "de@calendar=japanese",        "de",
         "t",    "zh_TW@collation=big5han",    "zh@collation=big5han",
-        "t",    "zh_TW@collation=gb2312han", "zh@collation=gb2312han", /* this one is bad - should go to zh */
+        "t",    "zh_TW@collation=gb2312han", "zh@collation=gb2312han",
         "f",    "zh_CN@collation=big5han",    "zh@collation=big5han",
-        "f",    "zh_CN@collation=gb2312han", "zh@collation=gb2312han", /* this one is bad - should go to zh */
+        "f",    "zh_CN@collation=gb2312han", "zh@collation=gb2312han",
         "t",    "zh@collation=big5han",       "zh@collation=big5han",
         "t",    "zh@collation=gb2312han",    "zh@collation=gb2312han",
         "f",    "hi_IN@collation=direct",      "hi@collation=direct",
