@@ -13,7 +13,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
     <title>ReadMe for ICU</title>
-<style type="text/css">
+    <style type="text/css">
       h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
       h2 {margin-top: 3em; text-decoration: underline; page-break-before: always}
       h2.TOC {page-break-before: auto}
@@ -31,7 +31,7 @@
     <h1>International Components for Unicode<br>
      ICU 2.2 ReadMe</h1>
 
-    <p>Version: 2002-Sep-19<br>
+    <p>Version: 2002-Oct-01<br>
      Copyright &copy; 1997-2002 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -66,6 +66,11 @@
 
           <li><a href="#HowToBuildOS400">OS/400 (iSeries)</a></li>
         </ul>
+      </li>
+
+      <li>
+        <a href="#MakeICUSmaller">
+        How to Make ICU Smaller</a>
       </li>
 
       <li>
@@ -212,6 +217,11 @@
     this release, see the <a href=
     "http://oss.software.ibm.com/icu/download/2.2/">ICU 2.2 download
     page</a>.</p>
+
+    <h3>ICU code library size</h3>
+
+    <p>ICU code libraries can be made smaller by removing functionality. See <a href="#MakeICUSmaller">How
+    to Make ICU Smaller</a>.</p>
 
     <h3>Support for Unicode 3.2</h3>
 
@@ -1243,6 +1253,37 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
       </li>
     </ul>
 
+    <h2><a name="MakeICUSmaller">How to Make ICU Smaller</a></h2>
+
+    <p>For some environments, ICU &quot;is too large&quot;. There are two ways
+    to remove parts and make it smaller: Remove some of its library code modules
+    from the build (reducing functionality), or remove some of its data
+    (possibly reducing only codepage/locale/etc. coverage without sacrifycing
+    overall functionality). For details about reducing the data size see the <a href="http://oss.software.ibm.com/icu/userguide/">User
+    Guide</a> &quot;ICU Data&quot; chapter.</p>
+
+    <p>The header file <code>source/common/unicode/uconfig.h</code> contains
+    source-code-level &quot;switches&quot; corresponding to <code>#if</code>
+    directives in the ICU source code. Setting one of the <code>UCONFIG_NO_...</code>
+    switches to 1 (by setting <code>CFLAGS/CPPFLAGS</code> or adding a <code>#define</code>
+    at the beginning of <code>uconfig.h</code>) turns off the code associated
+    with one of the ICU service modules. Setting one of the <code>UCONFIG_ONLY_...</code>
+    switches to 1 turns off all modules that are not essential for the
+    functioning of the associated &quot;only&quot; service. For the current set
+    of available switches see <code>uconfig.h</code> itself.</p>
+
+    <p>When a source code module is turned off, then the data-building makefiles
+    should be modified to not generate the data files that are used with that
+    module. Some of the data-generating genxyz tools rely on the module itself
+    to build its data; they will generate dummy data files to satisfy the
+    dependencies of the unmodified makefiles (to make these switches easily
+    testable). Other data files for which the tools do not rely on the related
+    library modules (e.g., mapping tables [<code>.cnv</code>] and transliterator
+    files [<code>.res</code>, from <code>source/data/translit/</code>]) continue
+    to be built unless the data makefiles are modified. For further details on
+    data building see the <a href="http://oss.software.ibm.com/icu/userguide/">User
+    Guide</a> &quot;ICU Data&quot; chapter.</p>
+
     <h2><a name="ImportantNotes" href="#ImportantNotes">Important Notes About
     Using ICU</a></h2>
 
@@ -1416,24 +1457,24 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 #  define U_USE_DEPRECATED_FORMAT_API 1
 #endif
 
-#include "unicode/udat.h"
+#include &quot;unicode/udat.h&quot;
 
 int main(){
     UDateFormat *def, *fr, *fr_pat ;
     UErrorCode status = U_ZERO_ERROR;
     UChar temp[30];
 
-    fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL,0, &amp;status);
+    fr = udat_open(UDAT_FULL, UDAT_DEFAULT, &quot;fr_FR&quot;, NULL,0, &amp;status);
     if(U_FAILURE(status)){
-        printf("Error creating the french dateformat using full time style\n %s\n",
+        printf(&quot;Error creating the french dateformat using full time style\n %s\n&quot;,
             myErrorName(status) );
     }
     /* This is supposed to open default date format,
-       but later on it treats it like it is "en_US".
+       but later on it treats it like it is &quot;en_US&quot;.
        This is very bad when you try to run the tests
-       on a machine where the default locale is NOT "en_US"
+       on a machine where the default locale is NOT &quot;en_US&quot;
     */
-    def = udat_open(UDAT_SHORT, UDAT_SHORT, "en_US", NULL, 0, &amp;status);
+    def = udat_open(UDAT_SHORT, UDAT_SHORT, &quot;en_US&quot;, NULL, 0, &amp;status);
     if(U_FAILURE(status)){
         .... /* handle the error */
     }
