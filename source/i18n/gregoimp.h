@@ -346,7 +346,7 @@ class U_I18N_API CalendarData : public UObject {
      * @return   The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID(void);
 
  private:
   void initData(const char *locale, const char *type, UErrorCode& status);

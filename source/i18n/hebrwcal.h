@@ -214,7 +214,7 @@ public:
      * @return   The class ID for all objects of this class.
      * @internal
      */
-    static UClassID getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * return the calendar type, "hebrew".

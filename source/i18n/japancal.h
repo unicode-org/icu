@@ -130,7 +130,7 @@ public:
      * @return   The class ID for all objects of this class.
      * @internal
      */
-    static inline UClassID getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * return the calendar type, "japanese".
@@ -159,8 +159,6 @@ public:
 
 private:
     JapaneseCalendar(); // default constructor not implemented
-
-    static const char fgClassID;
 
 protected:
     /** 
@@ -197,15 +195,6 @@ protected:
      */
     virtual int32_t getDefaultDayInMonth(int32_t month);
 };
-
-inline UClassID
-JapaneseCalendar::getStaticClassID(void)
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-JapaneseCalendar::getDynamicClassID(void) const
-{ return JapaneseCalendar::getStaticClassID(); }
-
 
 U_NAMESPACE_END
 

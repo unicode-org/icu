@@ -95,7 +95,7 @@ class U_I18N_API CurrencyAmount: public Measure {
      * @return The class ID for all objects of this class.
      * @draft ICU 3.0
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * Return the currency unit object of this object.

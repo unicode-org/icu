@@ -519,7 +519,7 @@ public:
      *
      * @stable ICU 2.2
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * Deprecated variant of getLong(UErrorCode&).

@@ -87,7 +87,7 @@ class U_I18N_API CurrencyUnit: public MeasureUnit {
      * @return The class ID for all objects of this class.
      * @draft ICU 3.0
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * Return the ISO currency code of this object.

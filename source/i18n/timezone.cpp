@@ -354,7 +354,7 @@ static UBool loadOlsonIDs() {
 
 // -------------------------------------
 
-const TimeZone*
+const TimeZone* U_EXPORT2
 TimeZone::getGMT(void)
 {
     umtx_init(&LOCK);   /* This is here to prevent race conditions. */
@@ -419,7 +419,7 @@ TimeZone::operator==(const TimeZone& that) const
 
 // -------------------------------------
 
-TimeZone*
+TimeZone* U_EXPORT2
 TimeZone::createTimeZone(const UnicodeString& ID)
 {
     /* We first try to lookup the zone ID in our system list.  If this
@@ -585,7 +585,7 @@ TimeZone::initDefault()
 
 // -------------------------------------
 
-TimeZone*
+TimeZone* U_EXPORT2
 TimeZone::createDefault()
 {
     umtx_init(&LOCK);   /* This is here to prevent race conditions. */
@@ -602,7 +602,7 @@ TimeZone::createDefault()
 
 // -------------------------------------
 
-void
+void U_EXPORT2
 TimeZone::adoptDefault(TimeZone* zone)
 {
     if (zone != NULL)
@@ -621,7 +621,7 @@ TimeZone::adoptDefault(TimeZone* zone)
 }
 // -------------------------------------
 
-void
+void U_EXPORT2
 TimeZone::setDefault(const TimeZone& zone)
 {
     adoptDefault(zone.clone());
@@ -824,26 +824,24 @@ private:
         return U_SUCCESS(ec);
     }
 
-    static const char fgClassID;
-
 public:
-    static inline UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
-    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
+    static UClassID U_EXPORT2 getStaticClassID(void);
+    virtual UClassID getDynamicClassID(void) const;
 };
 
-const char TZEnumeration::fgClassID = '\0';
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TZEnumeration)
 
-StringEnumeration*
+StringEnumeration* U_EXPORT2
 TimeZone::createEnumeration() {
     return new TZEnumeration();
 }
 
-StringEnumeration*
+StringEnumeration* U_EXPORT2
 TimeZone::createEnumeration(int32_t rawOffset) {
     return new TZEnumeration(rawOffset);
 }
 
-StringEnumeration*
+StringEnumeration* U_EXPORT2
 TimeZone::createEnumeration(const char* country) {
     return new TZEnumeration(country);
 }
@@ -976,7 +974,7 @@ TimeZone::createAvailableIDs(int32_t& numIDs)
 
 // ---------------------------------------
 
-int32_t
+int32_t U_EXPORT2
 TimeZone::countEquivalentIDs(const UnicodeString& id) {
     int32_t result = 0;
     UErrorCode ec = U_ZERO_ERROR;
@@ -1006,7 +1004,7 @@ TimeZone::countEquivalentIDs(const UnicodeString& id) {
 
 // ---------------------------------------
 
-const UnicodeString
+const UnicodeString U_EXPORT2
 TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
     U_DEBUG_TZ_MSG(("gEI(%d)\n", index));
     UnicodeString result;

@@ -112,7 +112,7 @@ class U_I18N_API FunctionReplacer : public UnicodeFunctor, public UnicodeReplace
      *
      * @draft ICU 2.2
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 };
 
 U_NAMESPACE_END

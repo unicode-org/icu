@@ -19,7 +19,7 @@ U_NAMESPACE_BEGIN
 
 MeasureFormat::MeasureFormat() {}
 
-MeasureFormat* MeasureFormat::createCurrencyFormat(const Locale& locale,
+MeasureFormat* U_EXPORT2 MeasureFormat::createCurrencyFormat(const Locale& locale,
                                                    UErrorCode& ec) {
     CurrencyFormat* fmt = NULL;
     if (U_SUCCESS(ec)) {
@@ -32,7 +32,7 @@ MeasureFormat* MeasureFormat::createCurrencyFormat(const Locale& locale,
     return fmt;
 }
 
-MeasureFormat* MeasureFormat::createCurrencyFormat(UErrorCode& ec) {
+MeasureFormat* U_EXPORT2 MeasureFormat::createCurrencyFormat(UErrorCode& ec) {
     if (U_FAILURE(ec)) {
         return NULL;
     }

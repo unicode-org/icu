@@ -372,7 +372,7 @@ NumberFormat::setParseIntegerOnly(UBool value)
 // -------------------------------------
 // Create a number style NumberFormat instance with the default locale.
 
-NumberFormat*
+NumberFormat* U_EXPORT2
 NumberFormat::createInstance(UErrorCode& status)
 {
     return createInstance(Locale::getDefault(), kNumberStyle, status);
@@ -381,7 +381,7 @@ NumberFormat::createInstance(UErrorCode& status)
 // -------------------------------------
 // Create a number style NumberFormat instance with the inLocale locale.
 
-NumberFormat*
+NumberFormat* U_EXPORT2
 NumberFormat::createInstance(const Locale& inLocale, UErrorCode& status)
 {
     return createInstance(inLocale, kNumberStyle, status);
@@ -390,7 +390,7 @@ NumberFormat::createInstance(const Locale& inLocale, UErrorCode& status)
 // -------------------------------------
 // Create a currency style NumberFormat instance with the default locale.
 
-NumberFormat*
+NumberFormat* U_EXPORT2
 NumberFormat::createCurrencyInstance(UErrorCode& status)
 {
     return createCurrencyInstance(Locale::getDefault(),  status);
@@ -399,7 +399,7 @@ NumberFormat::createCurrencyInstance(UErrorCode& status)
 // -------------------------------------
 // Create a currency style NumberFormat instance with the inLocale locale.
 
-NumberFormat*
+NumberFormat* U_EXPORT2
 NumberFormat::createCurrencyInstance(const Locale& inLocale, UErrorCode& status)
 {  
     return createInstance(inLocale, kCurrencyStyle, status);
@@ -408,7 +408,7 @@ NumberFormat::createCurrencyInstance(const Locale& inLocale, UErrorCode& status)
 // -------------------------------------
 // Create a percent style NumberFormat instance with the default locale.
 
-NumberFormat*
+NumberFormat* U_EXPORT2
 NumberFormat::createPercentInstance(UErrorCode& status)
 {
     return createInstance(Locale::getDefault(), kPercentStyle, status);
@@ -417,7 +417,7 @@ NumberFormat::createPercentInstance(UErrorCode& status)
 // -------------------------------------
 // Create a percent style NumberFormat instance with the inLocale locale.
 
-NumberFormat*
+NumberFormat* U_EXPORT2
 NumberFormat::createPercentInstance(const Locale& inLocale, UErrorCode& status)
 {
     return createInstance(inLocale, kPercentStyle, status);
@@ -426,7 +426,7 @@ NumberFormat::createPercentInstance(const Locale& inLocale, UErrorCode& status)
 // -------------------------------------
 // Create a scientific style NumberFormat instance with the default locale.
 
-NumberFormat*
+NumberFormat* U_EXPORT2
 NumberFormat::createScientificInstance(UErrorCode& status)
 {
     return createInstance(Locale::getDefault(), kScientificStyle, status);
@@ -435,7 +435,7 @@ NumberFormat::createScientificInstance(UErrorCode& status)
 // -------------------------------------
 // Create a scientific style NumberFormat instance with the inLocale locale.
 
-NumberFormat*
+NumberFormat* U_EXPORT2
 NumberFormat::createScientificInstance(const Locale& inLocale, UErrorCode& status)
 {
     return createInstance(inLocale, kScientificStyle, status);
@@ -443,7 +443,7 @@ NumberFormat::createScientificInstance(const Locale& inLocale, UErrorCode& statu
 
 // -------------------------------------
 
-const Locale*
+const Locale* U_EXPORT2
 NumberFormat::getAvailableLocales(int32_t& count)
 {
     return Locale::getAvailableLocales(count);
@@ -462,99 +462,99 @@ static ICULocaleService* gService = NULL;
 
 class ICUNumberFormatFactory : public ICUResourceBundleFactory {
 protected:
-  virtual UObject* handleCreate(const Locale& loc, int32_t kind, const ICUService* /* service */, UErrorCode& status) const {
-// !!! kind is not an EStyles, need to determine how to handle this
-	  return NumberFormat::makeInstance(loc, (NumberFormat::EStyles)kind, status);
-  }
+    virtual UObject* handleCreate(const Locale& loc, int32_t kind, const ICUService* /* service */, UErrorCode& status) const {
+        // !!! kind is not an EStyles, need to determine how to handle this
+        return NumberFormat::makeInstance(loc, (NumberFormat::EStyles)kind, status);
+    }
 };
 
 // -------------------------------------
 
 class NFFactory : public LocaleKeyFactory {
 private:
-  NumberFormatFactory* _delegate;
-  Hashtable* _ids;
+    NumberFormatFactory* _delegate;
+    Hashtable* _ids;
 
 public:
-  NFFactory(NumberFormatFactory* delegate) 
-    : LocaleKeyFactory(delegate->visible() ? VISIBLE : INVISIBLE)
-    , _delegate(delegate)
-    , _ids(NULL)
-  {
-  }
-
-  virtual ~NFFactory()
-  {
-    delete _delegate;
-    delete _ids;
-  }
-
-  virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const
-  {
-    if (handlesKey(key, status)) {
-      const LocaleKey& lkey = (const LocaleKey&)key;
-      Locale loc;
-      lkey.canonicalLocale(loc);
-      int32_t kind = lkey.kind();
-
-      UObject* result = _delegate->createFormat(loc, (UNumberFormatStyle)(kind+1));
-      if (result == NULL) {
-        result = service->getKey((ICUServiceKey&)key /* cast away const */, NULL, this, status);
-      }
-      return result;
+    NFFactory(NumberFormatFactory* delegate) 
+        : LocaleKeyFactory(delegate->visible() ? VISIBLE : INVISIBLE)
+        , _delegate(delegate)
+        , _ids(NULL)
+    {
     }
-    return NULL;
-  }
+
+    virtual ~NFFactory()
+    {
+        delete _delegate;
+        delete _ids;
+    }
+
+    virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const
+    {
+        if (handlesKey(key, status)) {
+            const LocaleKey& lkey = (const LocaleKey&)key;
+            Locale loc;
+            lkey.canonicalLocale(loc);
+            int32_t kind = lkey.kind();
+
+            UObject* result = _delegate->createFormat(loc, (UNumberFormatStyle)(kind+1));
+            if (result == NULL) {
+                result = service->getKey((ICUServiceKey&)key /* cast away const */, NULL, this, status);
+            }
+            return result;
+        }
+        return NULL;
+    }
 
 protected:
-  /**
-   * Return the set of ids that this factory supports (visible or 
-   * otherwise).  This can be called often and might need to be
-   * cached if it is expensive to create.
-   */
-  virtual const Hashtable* getSupportedIDs(UErrorCode& status) const
-  {
-    if (U_SUCCESS(status)) {
-      if (!_ids) {
-        int32_t count = 0;
-        const UnicodeString * const idlist = _delegate->getSupportedIDs(count, status);
-        ((NFFactory*)this)->_ids = new Hashtable(status); /* cast away const */
-        if (_ids) {
-          for (int i = 0; i < count; ++i) {
-            _ids->put(idlist[i], (void*)this, status);
-          }
+    /**
+     * Return the set of ids that this factory supports (visible or 
+     * otherwise).  This can be called often and might need to be
+     * cached if it is expensive to create.
+     */
+    virtual const Hashtable* getSupportedIDs(UErrorCode& status) const
+    {
+        if (U_SUCCESS(status)) {
+            if (!_ids) {
+                int32_t count = 0;
+                const UnicodeString * const idlist = _delegate->getSupportedIDs(count, status);
+                ((NFFactory*)this)->_ids = new Hashtable(status); /* cast away const */
+                if (_ids) {
+                    for (int i = 0; i < count; ++i) {
+                        _ids->put(idlist[i], (void*)this, status);
+                    }
+                }
+            }
+            return _ids;
         }
-      }
-      return _ids;
+        return NULL;
     }
-    return NULL;
-  }
 };
 
 class ICUNumberFormatService : public ICULocaleService {
 public:
-  ICUNumberFormatService()
-    : ICULocaleService("Number Format")
-  {
-    UErrorCode status = U_ZERO_ERROR;
-    registerFactory(new ICUNumberFormatFactory(), status);
-  }
+    ICUNumberFormatService()
+        : ICULocaleService("Number Format")
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        registerFactory(new ICUNumberFormatFactory(), status);
+    }
 
-  virtual UObject* cloneInstance(UObject* instance) const {
-	  return ((NumberFormat*)instance)->clone();
-  }
+    virtual UObject* cloneInstance(UObject* instance) const {
+        return ((NumberFormat*)instance)->clone();
+    }
 
-  virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* /* actualID */, UErrorCode& status) const {
-	LocaleKey& lkey = (LocaleKey&)key;
-	int32_t kind = lkey.kind();
-	Locale loc;
-	lkey.currentLocale(loc);
-	return NumberFormat::makeInstance(loc, (NumberFormat::EStyles)kind, status);
-  }
+    virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* /* actualID */, UErrorCode& status) const {
+        LocaleKey& lkey = (LocaleKey&)key;
+        int32_t kind = lkey.kind();
+        Locale loc;
+        lkey.currentLocale(loc);
+        return NumberFormat::makeInstance(loc, (NumberFormat::EStyles)kind, status);
+    }
 
-  virtual UBool isDefault() const {
-	return countFactories() == 1;
-  }
+    virtual UBool isDefault() const {
+        return countFactories() == 1;
+    }
 };
 
 // -------------------------------------
@@ -588,7 +588,7 @@ getNumberFormatService(void)
 
 // -------------------------------------
 
-URegistryKey 
+URegistryKey U_EXPORT2
 NumberFormat::registerFactory(NumberFormatFactory* toAdopt, UErrorCode& status)
 {
   ICULocaleService *service = getNumberFormatService();
@@ -601,7 +601,7 @@ NumberFormat::registerFactory(NumberFormatFactory* toAdopt, UErrorCode& status)
 
 // -------------------------------------
 
-UBool 
+UBool U_EXPORT2
 NumberFormat::unregister(URegistryKey key, UErrorCode& status)
 {
     if (U_SUCCESS(status)) {
@@ -617,7 +617,7 @@ NumberFormat::unregister(URegistryKey key, UErrorCode& status)
 }
 
 // -------------------------------------
-StringEnumeration* 
+StringEnumeration* U_EXPORT2
 NumberFormat::getAvailableLocales(void)
 {
   ICULocaleService *service = getNumberFormatService();
@@ -629,7 +629,7 @@ NumberFormat::getAvailableLocales(void)
 #endif /* UCONFIG_NO_SERVICE */
 // -------------------------------------
 
-NumberFormat*
+NumberFormat* U_EXPORT2
 NumberFormat::createInstance(const Locale& loc, EStyles kind, UErrorCode& status)
 {
 #if !UCONFIG_NO_SERVICE

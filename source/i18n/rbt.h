@@ -443,7 +443,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
-    static UClassID getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * Returns a unique class ID <b>polymorphically</b>.  This method
@@ -451,18 +451,6 @@ public:
      * compilers support genuine RTTI.  Polymorphic operator==() and
      * clone() methods call this method.
      * 
-     * <p>Concrete subclasses of Transliterator that wish clients to
-     * be able to identify them should implement getDynamicClassID()
-     * and also a static method and data member:
-     * 
-     * <pre>
-     * static UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-     * static char fgClassID;
-     * </pre>
-     *
-     * Subclasses that do not implement this method will have a
-     * dynamic class ID of Transliterator::getStatisClassID().
-     *
      * @return The class ID for this object. All objects of a given
      * class have the same class ID.  Objects of other classes have
      * different class IDs.

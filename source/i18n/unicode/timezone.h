@@ -125,7 +125,7 @@ public:
      * @return the GMT time zone.
      * @stable ICU 2.0
      */
-    static const TimeZone* getGMT(void);
+    static const TimeZone* U_EXPORT2 getGMT(void);
 
     /**
      * Creates a <code>TimeZone</code> for the given ID.
@@ -138,7 +138,7 @@ public:
      * return result.
      * @stable ICU 2.0
      */
-    static TimeZone* createTimeZone(const UnicodeString& ID);
+    static TimeZone* U_EXPORT2 createTimeZone(const UnicodeString& ID);
 
     /**
      * Returns an enumeration over all recognized time zone IDs. (i.e.,
@@ -147,7 +147,7 @@ public:
      * @return an enumeration object, owned by the caller.
      * @stable ICU 2.4
      */
-    static StringEnumeration* createEnumeration();
+    static StringEnumeration* U_EXPORT2 createEnumeration();
 
     /**
      * Returns an enumeration over time zone IDs with a given raw
@@ -163,10 +163,10 @@ public:
      *
      * @param rawOffset an offset from GMT in milliseconds, ignoring
      * the effect of daylight savings time, if any
-     * @return an enumeration object, owned by the caller 
+     * @return an enumeration object, owned by the caller
      * @stable ICU 2.4
      */
-    static StringEnumeration* createEnumeration(int32_t rawOffset);
+    static StringEnumeration* U_EXPORT2 createEnumeration(int32_t rawOffset);
 
     /**
      * Returns an enumeration over time zone IDs associated with the
@@ -175,10 +175,10 @@ public:
      *
      * @param country The ISO 3166 two-letter country code, or NULL to
      * retrieve zones not affiliated with any country.
-     * @return an enumeration object, owned by the caller 
+     * @return an enumeration object, owned by the caller
      * @stable ICU 2.4
      */
-    static StringEnumeration* createEnumeration(const char* country);
+    static StringEnumeration* U_EXPORT2 createEnumeration(const char* country);
 
 #ifdef U_USE_TIMEZONE_OBSOLETE_2_8
     /**
@@ -260,7 +260,7 @@ public:
      * @see #getEquivalentID
      * @stable ICU 2.0
      */
-    static int32_t countEquivalentIDs(const UnicodeString& id);
+    static int32_t U_EXPORT2 countEquivalentIDs(const UnicodeString& id);
 
     /**
      * Returns an ID in the equivalency group that
@@ -281,7 +281,7 @@ public:
      * @see #countEquivalentIDs
      * @stable ICU 2.0
      */
-    static const UnicodeString getEquivalentID(const UnicodeString& id,
+    static const UnicodeString U_EXPORT2 getEquivalentID(const UnicodeString& id,
                                                int32_t index);
 
     /**
@@ -296,7 +296,7 @@ public:
      *           object returned.
      * @stable ICU 2.0
      */
-    static TimeZone* createDefault(void);
+    static TimeZone* U_EXPORT2 createDefault(void);
 
     /**
      * Sets the default time zone (i.e., what's returned by getDefault()) to be the
@@ -307,7 +307,7 @@ public:
      * @param zone  A pointer to the new TimeZone object to use as the default.
      * @stable ICU 2.0
      */
-    static void adoptDefault(TimeZone* zone);
+    static void U_EXPORT2 adoptDefault(TimeZone* zone);
 
     /**
      * Same as adoptDefault(), except that the TimeZone object passed in is NOT adopted;
@@ -316,7 +316,7 @@ public:
      * @param zone  The given timezone.
      * @system
      */
-    static void setDefault(const TimeZone& zone);
+    static void U_EXPORT2 setDefault(const TimeZone& zone);
 
     /**
      * Returns true if the two TimeZones are equal.  (The TimeZone version only compares
@@ -578,11 +578,11 @@ public:
 
     /**
      * Return the class ID for this class.  This is useful only for
-     * comparing to a return value from getDynamicClassID().  
+     * comparing to a return value from getDynamicClassID().
      * @return The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * Returns a unique class ID POLYMORPHICALLY. This method is to

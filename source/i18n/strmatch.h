@@ -205,7 +205,7 @@ class StringMatcher : public UnicodeFunctor, public UnicodeMatcher, public Unico
      *
      * @draft ICU 2.2
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * Union the set of all characters that may output by this object
