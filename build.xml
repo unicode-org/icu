@@ -1,0 +1,314 @@
+<!--
+/*
+*******************************************************************************
+* Copyright (C) 1997-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
+* $Date: 2002/12/03 06:27:43 $
+* $Revision: 1.59 $
+*
+*******************************************************************************
+* This is the ant build file for ICU4J.  See readme.html for more information.
+*/
+-->
+
+<project name="ICU4J" default="core" basedir=".">
+
+    <!-- ### begin clover setup ### -->
+    <property name="clover.initstring" value="tmp/icu4j.db"/>
+    <path id="clover.classpath">
+	<!-- ***** you will need to change the paths below to point
+	           to clover.jar and velocity.jar on your filesystem ***** -->
+    <pathelement path="${java.class.path}/"/>
+	<pathelement location="clover.jar"/>
+	<pathelement location="velocity.jar"/>
+    </path>
+
+    <!-- target to switch Clover on -->
+    <target name="with.clover">
+		<property name="build.compiler" value="org.apache.tools.ant.taskdefs.CloverCompilerAdapter"/>
+
+		<!-- instruct clover to use a class-based instrumentation strategy when instrumenting SimpleTimeZone.java -->
+		<property name="clover.useclass.includes" value="**/SimpleTimeZone.java"/>
+    </target>
+
+    <!-- target to generate a Clover html report -->
+    <target name="clover.report">
+	<java classname="com.cortexeb.tools.clover.reporters.html.HtmlReporter" fork="yes">
+	    <arg line="--outputdir tmp/icu4j_html --showSrc --initstring ${clover.initstring} --title 'icu4j core'"/>
+	    <classpath refid="clover.classpath"/>
+	</java>
+    </target>
+    <!-- ### end clover setup ### -->
+
+    <target name="anthack1">
+        <!-- It's a real pain to set properties conditionally.
+          Ant 1.5 isn't really any better than 1.4, in fact 1.5 enforces that
+          properties are write-once so you can't even set a default and then
+          override it, which we used to do for Ant 1.4. -->
+        <condition property="version.1.4">
+        <or>
+	    <equals arg1="${ant.java.version}" arg2="1.4"/>
+        </or>
+        </condition>
+
+	<condition property="doc.params"
+	    value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet">
+            <equals arg1="${version.1.4}" arg2="true"/>
+	</condition>
+    </target>
+
+    <target name="anthack2" unless="doc.params">
+        <property name="doc.params" value=""/>
+    </target>
+
+    <target name="init">
+        <tstamp/>
+        <property name="src.dir" value="src"/>
+        <property name="build.dir" value="classes"/>
+        <property name="doc.dir" value="doc"/>
+        <property name="jar.file" value="icu4j.jar"/>
+        <property name="icu4j.manifest" value="${src.dir}/com/ibm/icu/manifest.stub"/>
+        <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
+        <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
+
+	<path id="build.classpath">
+	    <pathelement path="${build.dir}"/>
+	    <path refid="clover.classpath"/>
+	</path>
+
+        <property name="richedit.dir" value="richedit"/>
+        <property name="richedit.doc.dir" value="${richedit.dir}/doc"/>
+        <property name="richedit.jar.file" value="${richedit.dir}/richedit.jar"/>
+        <property name="richedit.zip.file" value="${richedit.dir}/richedit.zip"/>
+        <property name="richedit.manifest" value="${src.dir}/com/ibm/richtext/manifest.stub"/>
+
+        <mkdir dir="${build.dir}"/>
+	<uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar">
+	    <!-- note must not have '/' before 'com' in srcfiles includes arg! -->
+	    <srcfiles dir="${build.dir}" includes="com/ibm/icu/impl/data/LocaleElements_index.class"/>
+	</uptodate>
+        <echo message="java home: ${java.home}"/>
+        <echo message="java version: ${java.version}"/>
+        <echo message="ant java version: ${ant.java.version}"/>
+        <echo message="${ant.version}"/>
+    </target>
+
+    <!-- build everything but dist-related stuff -->
+    <target name="all" depends="core,tests,tools,richedit,demos,jar,docs"/>
+
+	<target name="resources" depends="init">
+    	<!-- use this target to force resources to be rebuilt -->
+		<unjar src="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar" dest="${build.dir}"/>
+ 		<touch file="${build.dir}/com/ibm/icu/impl/data/LocaleElements_index.class"/>
+	</target>
+
+	<target name="_resources" depends="init" if="icu4j.resources">
+    	<!-- use this target to conditionally build resources only if icu4j.resources is set -->
+		<unjar src="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar" dest="${build.dir}"/>
+ 		<touch file="${build.dir}/com/ibm/icu/impl/data/LocaleElements_index.class"/>
+	</target>
+
+	<!-- core does not build richedit or tests -->
+    <target name="core" depends="init,coreData,_resources">
+        <copy file="${src.dir}/com/ibm/icu/impl/data/thai_dict"
+            todir="${build.dir}/com/ibm/icu/impl/data/"/><!-- only needed if you are using html reporter -->
+        <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
+            excludes="**/CVS/**/*"
+            srcdir="${src.dir}"
+    	    destdir="${build.dir}"
+    	    classpathref="build.classpath"
+            debug="on" deprecation="off"/>
+    </target>
+
+    <target name="tests" depends="core,testData">
+        <javac includes="com/ibm/icu/dev/test/**/*.java"
+            excludes="**/CVS/**/*"
+    	    srcdir="${src.dir}"
+    	    destdir="${build.dir}"
+    	    classpathref="build.classpath"
+            debug="on" deprecation="off"/>
+    </target>
+
+    <target name="demos" depends="core,testData">
+        <javac includes="com/ibm/icu/dev/demo/**/*.java"
+            excludes="**/CVS/**/*"
+    	    srcdir="${src.dir}"
+    	    destdir="${build.dir}"
+    	    classpathref="build.classpath"
+            debug="on" deprecation="off"/>
+    </target>
+
+    <target name="one4tools" depends="anthack1,anthack2" if="version.1.4">
+        <javac includes="com/ibm/icu/dev/tool/docs/*.java"
+            excludes="**/CVS/**/*"
+    	    srcdir="${src.dir}"
+    	    destdir="${build.dir}"
+    	    classpathref="build.classpath"
+            debug="on" deprecation="off"/>
+    </target>
+
+    <target name="tools" depends="core,one4tools">
+        <javac includes="com/ibm/icu/dev/tool/**/*.java"
+            excludes="com/ibm/icu/dev/tool/docs/*,**/CVS/**/*"
+    	    srcdir="${src.dir}"
+    	    destdir="${build.dir}"
+    	    classpathref="build.classpath"
+            debug="on" deprecation="off"/>
+    </target>
+
+    <target name="docs" depends="anthack1,anthack2,tools">
+        <echo message="doc params: ${doc.params}"/>
+        <mkdir dir="${doc.dir}"/>
+        <javadoc packagenames="com.ibm.icu.lang,com.ibm.icu.dev.tool.translit,com.ibm.icu.text,com.ibm.icu.impl.data,com.ibm.icu.dev.tool.compression,com.ibm.icu.dev.tool.normalizer,com.ibm.icu.util,com.ibm.icu.dev.tool.rbbi,com.ibm.icu.math,com.ibm.richtext.textlayout,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.awtui,com.ibm.richtext.print,com.ibm.richtext.styledtext,com.ibm.richtext.swingui,com.ibm.richtext.textapps,com.ibm.richtext.textformat,com.ibm.richtext.textpanel,com.ibm.richtext.uiimpl,com.ibm.richtext.uiimpl.resources,com.ibm.richtext.textapps.resources"
+            sourcepath="${src.dir}"
+            destdir="${doc.dir}"
+            nodeprecatedlist="true"
+	    windowtitle="icu4j"
+	    doctitle="icu4j"
+	    encoding="iso-8859-1"
+	    docencoding="iso-8859-1"
+	    bottom="&lt;font size=-1>Copyright (c) 2002 IBM Corporation and others.&lt;/font>"
+	    additionalparam="${doc.params}"
+        />
+    </target>
+
+    <target name ="coreData" depends="init">
+        <copy todir="${build.dir}/com/ibm/icu/impl/data">
+        <fileset dir="${src.dir}/com/ibm/icu/impl/data"
+                 includes="Transliterator_*.txt,*.icu"/>
+        </copy>
+    </target>
+
+    <target name ="testData" depends="init">
+        <copy file="${src.dir}/com/ibm/icu/dev/data/rbbi/english.dict"
+    	      todir="${build.dir}/com/ibm/icu/dev/data/rbbi"/>
+    	<javac includes="com/ibm/icu/dev/data/*.java"
+		            excludes="**/CVS/**/*"
+		    	    srcdir="${src.dir}"
+		    	    destdir="${build.dir}"
+		    	    classpathref="build.classpath"
+            debug="on" deprecation="off"/>
+    </target>
+
+    <!-- builds richedit and richedit tests -->
+    <target name="richedit" depends="init">
+        <javac includes="com/ibm/richtext/**/*.java"
+            excludes="**/CVS/**/*"
+    	    srcdir="${src.dir}"
+    	    destdir="${build.dir}"
+    	    classpathref="build.classpath"
+            debug="on" deprecation="off"/>
+    </target>
+
+    <target name="jar" depends="core">
+        <jar jarfile="${jar.file}"
+            compress="false"
+            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
+            basedir="${build.dir}"
+            manifest="${icu4j.manifest}"/>
+    </target>
+
+    <!-- jars up richedit but without tests -->
+    <target name="richeditJar" depends="richedit">
+        <mkdir dir="${richedit.dir}"/>
+        <jar jarfile="${richedit.jar.file}"
+            compress="false"
+            includes="com/ibm/richtext/**/*"
+	    excludes="com/ibm/richtext/test/**/*"
+            basedir="${build.dir}"
+            manifest="${richedit.manifest}"/>
+    </target>
+
+    <!--
+        Note:  I used to use -linkoffline http://java.sun.com/products/jdk/1.2/docs/api/ C:\jdk1.2.2\docs\api
+        This links to core docs on Sun's site - a very nice feature.  But it requires the 1.2 docs to be
+        on the build machine at a known location.
+    -->
+
+    <!-- the 'public' docs for richedit -->
+    <target name="richeditDocs" depends="init">
+        <mkdir dir="${richedit.doc.dir}"/>
+        <javadoc  packagenames="com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.print"
+            sourcepath="${src.dir}"
+            destdir="${richedit.doc.dir}"
+            nodeprecatedlist="true"
+	        windowtitle="RichEdit Control"
+	        doctitle="RichEdit Control"
+	        encoding="iso-8859-1"
+	        docencoding="iso-8859-1"
+	        bottom="&lt;font size=-1>Copyright (c) 1998-2002 IBM Corporation and others.&lt;/font>"
+    		    />
+    </target>
+
+    <!-- richedit alphaworks distribution - jar and docs, but no source -->
+    <target name="richeditZip" depends="richeditJar,richeditDocs">
+        <!--Create a zip archive of the richedit jar and readme -->
+	<copy file="license.html" todir="${richedit.dir}"/>
+        <zip zipfile="${richedit.zip.file}"
+            basedir="${richedit.dir}"
+            includes="doc/**/*,richedit.jar,license.html"/>
+    </target>
+
+    <target name="zip" depends="docs,jar">
+        <!--Create a zip archive of the source, docs, and jar file for
+        distribution.  The zip file will be created in the directory above
+        the root ICU4J directory. The exclude pattern ${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt
+        and ${src.dir}/data/unicode/SpecialCasing-*.txt
+        eliminates old archive copies like SpecialCasing-2.txt and
+        UnicodeData-2.1.8.txt etc -->
+        <zip zipfile="${zip.file}"
+            basedir="."
+            excludes="${richedit.dir}/**/*,test_*,${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
+    </target>
+
+    <target name="zipSrc" depends="init">
+        <!--Create a zip archive of just the source for distribution.  The
+        zip file will be created in the directory above the root ICU4J
+        directory. The exclude pattern ${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt
+        and ${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt
+        eliminates old archive copies like SpecialCasing-2.txt and
+        UnicodeData-2.1.8.txt -->
+        <zip zipfile="${zipSrc.file}"
+            basedir="."
+            excludes="${richedit.dir}/**/*,test_*,${src.dir}/com/ibm/icu/dev/data/unicode//UnicodeData-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,${jar.file}"/>
+    </target>
+
+    <target name="check" depends="tests">
+	<java classname="com.ibm.icu.dev.test.TestAll">
+	    <classpath>
+                <pathelement path="${java.class.path}/"/>
+                <pathelement path="${build.dir}"/>
+            </classpath>
+	</java>
+    </target>
+
+    <target name="_requires14" unless="version.1.4">
+        <echo message="One of your targets requires JAVA_HOME to be set to JDK version 1.4"/>
+    </target>
+
+    <target name="_checktags" depends="anthack1,anthack2,tools" if="version.1.4">
+        <echo message="doc params: ${doc.params}"/>
+        <javadoc sourcepath="${src.dir}" 
+                 packagenames="com.ibm.icu.*"
+                 excludepackagenames="com.ibm.icu.dev.*,com.ibm.icu.impl.*"
+                 classpath="${build.dir}">
+            <doclet name="com.ibm.icu.dev.tool.docs.CheckTags"
+                    path="${build.dir}">
+                <param name="-brief"/>
+            </doclet>       
+        </javadoc>
+    </target>
+
+    <target name="checktags" depends="anthack1,anthack2,_requires14,_checktags"/>
+
+    <target name="clean" depends="init">
+        <delete dir="${build.dir}"/>
+        <delete dir="${doc.dir}"/>
+        <delete file="${jar.file}"/>
+	<delete dir="${richedit.dir}"/>
+    </target>
+
+</project>
