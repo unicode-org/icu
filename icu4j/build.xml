@@ -293,9 +293,11 @@
 
     <target name ="testData" depends="init">
         <copy file="${src.dir}/com/ibm/icu/dev/data/rbbi/english.dict"
-            todir="${build.dir}/com/ibm/icu/dev/data/rbbi"/>
+	    todir="${build.dir}/com/ibm/icu/dev/data/rbbi"/>
         <copy file="${src.dir}/com/ibm/icu/dev/test/rbbi/rbbitst.txt"
-            todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
+	    todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
+        <copy file="${src.dir}/com/ibm/icu/dev/data/riwords.txt"
+            todir="${build.dir}/com/ibm/icu/dev/data"/>
         <javac includes="com/ibm/icu/dev/data/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -306,6 +308,10 @@
             <fileset dir="${src.dir}/com/ibm/icu/dev/data"
                 includes="*.spp"/>
         </copy>
+        <copy todir="${build.dir}/com/ibm/icu/dev/data/unicode">
+	    <fileset dir="${src.dir}/com/ibm/icu/dev/data/unicode"
+	        includes="*.txt"/>
+	</copy>
         <copy file="${src.dir}/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt"
             todir="${build.dir}/com/ibm/icu/dev/test/format"/>
         <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
@@ -477,12 +483,14 @@
 
     <target name="secureCheck" depends="testJar" description="run secure (applet-like) icu4j test suite">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes">
-        <!-- (use for debugging, LOTS of output) jvmarg value="-Djava.security.debug=access" -->
+    <!-- jvmarg value="-verbose"/ -->
+        <!-- (use for debugging, LOTS of output) <jvmarg value="-Djava.security.debug=access:trace"/ -->
         <jvmarg value="-Djava.security.manager"/>
         <jvmarg value="-Djava.security.policy=${src.dir}/com/ibm/icu/dev/test/security.policy"/>
         <arg value="-w"/>
         <classpath>
             <pathelement location="clover.jar"/>
+            <pathelement location="${jar.file}"/>
             <pathelement location="${testjar.file}"/>
         </classpath>
     </java>
