@@ -43,6 +43,7 @@ static const UDataInfo ucaDataInfo={
     0,
 
     {0x55, 0x43, 0x6f, 0x6c},     /* dataFormat="UCol"            */
+    /* 03/26/2002 bumped up version since format has changed */
     {2, 0, 0, 0},                 /* formatVersion                */
     {3, 0, 0, 0}                  /* dataVersion = Unicode Version*/
 };
@@ -58,6 +59,7 @@ static const UDataInfo invUcaDataInfo={
     0,
 
     {0x49, 0x6E, 0x76, 0x43},     /* dataFormat="InvC"            */
+    /* 03/26/2002 bumped up version since format has changed */
     {2, 0, 0, 0},                 /* formatVersion                */
     {3, 0, 0, 0}                  /* dataVersion = Unicode Version*/
 };
