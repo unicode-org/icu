@@ -107,8 +107,8 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 
         T_FileStream_writeLine(makefile, "\n"
             "# Windows specific DLL version information.\n"
-            "!IF EXISTS(\".\\icudata.res\")\n"
-            "DATA_VER_INFO=\".\\icudata.res\"\n"
+            "!IF EXISTS(\".\\$(NAME)_icudata.res\")\n"
+            "DATA_VER_INFO=\".\\$(NAME)_icudata.res\"\n"
             "!ELSE\n"
             "DATA_VER_INFO=\n"
             "!ENDIF\n\n");
@@ -156,8 +156,8 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 
         T_FileStream_writeLine(makefile, "\n"
             "# Windows specific LIB version information.\n"
-            "!IF EXISTS(\".\\icudata.res\")\n"
-            "DATA_VER_INFO=\".\\icudata.res\"\n"
+            "!IF EXISTS(\".\\$(NAME)_icudata.res\")\n"
+            "DATA_VER_INFO=\".\\$(NAME)_icudata.res\"\n"
             "!ELSE\n"
             "DATA_VER_INFO=\n"
             "!ENDIF\n\n");
