@@ -108,6 +108,7 @@ UBool RBTestData::nextSettings(const DataMap *& settings, UErrorCode &status)
     } else {
       ((RBDataMap *)fCurrSettings)->init(data, status);
     }
+    ures_close(data);
     settings = fCurrSettings;
     return TRUE;
   } else {
@@ -126,6 +127,7 @@ UBool RBTestData::nextCase(const DataMap *& nextCase, UErrorCode &status)
     } else {
       ((RBDataMap *)fCurrCase)->init(fHeaders, currCase, status);
     }
+    ures_close(currCase);
     nextCase = fCurrCase;
     return TRUE;
   } else {
