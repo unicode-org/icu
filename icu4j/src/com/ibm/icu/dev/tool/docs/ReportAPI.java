@@ -113,6 +113,18 @@ public class ReportAPI {
         public String get(int typ, boolean brief) {
             return added.get(typ, brief);
         }
+
+	public void print(PrintWriter pw, boolean detail, boolean html) {
+	    pw.print("    ");
+	    removed.print(pw, detail, html);
+	    if (html) {
+		pw.println("</br>");
+	    } else {
+		pw.println();
+		pw.print("--> ");
+	    }
+	    added.print(pw, detail, html);
+	}
     }
 
     public static void main(String[] args) {
@@ -465,28 +477,29 @@ public class ReportAPI {
                     }
                     clas = className;
                 }
-                pw.print("    ");
+//                 pw.print("    ");
             }
 
             if (html) {
                 pw.print("<li>");
-                if (info instanceof DeltaInfo) {
-                    DeltaInfo dinfo = (DeltaInfo)info;
-                    dinfo.removed.print(pw, isChangedAPIs, html);
-                    pw.println("</br>");
-                    dinfo.added.print(pw, isChangedAPIs, html);
-                } else {
+//                 if (info instanceof DeltaInfo) {
+//                     DeltaInfo dinfo = (DeltaInfo)info;
+//                     dinfo.removed.print(pw, isChangedAPIs, html);
+//                     pw.println("</br>");
+//                     dinfo.added.print(pw, isChangedAPIs, html);
+//                 } else {
                     info.print(pw, isChangedAPIs, html);
-                }
+//                 }
                 pw.println("</li>");
             } else {
-                if (info instanceof DeltaInfo) {
-                    DeltaInfo dinfo = (DeltaInfo)info;
-                    dinfo.removed.println(pw, isChangedAPIs, html);
-                    dinfo.added.println(pw, isChangedAPIs, html);
-                } else {
+//                 if (info instanceof DeltaInfo) {
+//                     DeltaInfo dinfo = (DeltaInfo)info;
+//                     dinfo.removed.println(pw, isChangedAPIs, html);
+// 		    pw.print("    --> ");
+//                     dinfo.added.println(pw, isChangedAPIs, html);
+//                 } else {
                     info.println(pw, isChangedAPIs, html);
-                }
+//                 }
             }
         }
 
