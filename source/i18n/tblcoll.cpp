@@ -792,8 +792,7 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
   //  language
   // Root: (aka DEFAULTRULES)
 
-  UnicodeString localeName;
-  desiredLocale.getName(localeName);
+  UnicodeString localeName(desiredLocale.getName(), "");
   enum { eTryDefaultLocale, eTryDefaultCollation, eDone } next = eTryDefaultLocale;
     
   for (;;)
@@ -823,7 +822,7 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
 	  // srl write out default.col
 	  {
 	    UnicodeString defLocaleName = UnicodeString(ResourceBundle::kDefaultFilename,""); 
-	    char *binaryFilePath = createPathName(UnicodeString(Locale::getDataDirectory(),""), 
+	    char *binaryFilePath = createPathName(UnicodeString(u_getDataDirectory(),""), 
 						  defLocaleName, UnicodeString(kFilenameSuffix,""));
 	    bool_t ok = writeToFile(binaryFilePath);
 	    delete [] binaryFilePath;
@@ -833,7 +832,7 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
 	  }
 
           data->desiredLocale = desiredLocale;
-          desiredLocale.getName(localeName);
+          localeName = desiredLocale.getName();
           data->realLocaleName = localeName;
           addToCache(localeName);
 
@@ -849,7 +848,7 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
             {
             case eTryDefaultLocale:
           status = U_USING_DEFAULT_ERROR;
-          Locale::getDefault().getName(localeName);
+          localeName = Locale::getDefault().getName();
           next = eTryDefaultCollation;
           break;
 
@@ -945,7 +944,7 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
     data = 0;
   }
   
-  char *binaryFilePath = createPathName(UnicodeString(Locale::getDataDirectory(),""), 
+  char *binaryFilePath = createPathName(UnicodeString(u_getDataDirectory(),""), 
 					localeFileName, UnicodeString(kFilenameSuffix,""));
   
   if(tryBinaryFile) {
@@ -962,10 +961,16 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
     }
 
   // Now try to load it up from a resource bundle text source file
-  UnicodeString dataDir = UnicodeString(Locale::getDataDirectory(),"");
+  UnicodeString dataDir = UnicodeString(u_getDataDirectory(),"");
 
-  ResourceBundle bundle(dataDir, localeFileName, status);
+    char *ch;
+    ch = new char[localeFileName.size() + 1];
+    ch[localeFileName.extract(0, 0x7fffffff, ch, "")] = 0;
 
+    ResourceBundle bundle(dataDir, ch, status);
+  
+    delete [] ch;
+  
   // if there is no resource bundle file for the give locale, break out
   if(U_FAILURE(status))
   {

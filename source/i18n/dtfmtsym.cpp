@@ -427,7 +427,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, bool
      * We cast away const here, but that's okay; we won't delete any of
      * these.
      */
-    ResourceBundle resource(Locale::getDataDirectory(), locale, status);
+    ResourceBundle resource(u_getDataDirectory(), locale, status);
     if (U_FAILURE(status))
     {
         if (useLastResortData)

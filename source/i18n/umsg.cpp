@@ -411,7 +411,7 @@ u_vformatMessage(    const    char        *locale,
 
   // just call through to the C++ implementation
   UnicodeString patString((UChar*)pattern, patLen, patLen);
-  MessageFormat fmt(patString, Locale().init(locale), *status);
+  MessageFormat fmt(patString, Locale(locale), *status);
   UnicodeString res(result, 0, resultLength);
   FieldPosition fp;
   fmt.format(args, count, res, fp, *status);
@@ -462,7 +462,7 @@ u_vparseMessage(    const    char        *locale,
   int32_t srcLen = (sourceLength == -1 ? u_strlen(source) : sourceLength);
   
   UnicodeString patString((UChar*)pattern, patLen, patLen);
-  MessageFormat fmt(patString, Locale().init(locale), *status);
+  MessageFormat fmt(patString, Locale(locale), *status);
   UnicodeString srcString((UChar*)source, srcLen, srcLen);
   int32_t count = 0;
   Formattable *args = fmt.parse(srcString, count, *status);

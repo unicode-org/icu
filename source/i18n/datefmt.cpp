@@ -242,7 +242,7 @@ DateFormat::getAvailableLocales(int32_t& count)
         for (i=0; i<localesCount; ++i)
         {
             UErrorCode status = U_ZERO_ERROR;
-            ResourceBundle resource(Locale::getDataDirectory(), locales[i], status);
+            ResourceBundle resource(u_getDataDirectory(), locales[i], status);
             int32_t ignoredCount;
             resource.getStringArray(SimpleDateFormat::fgDateTimePatternsTag, ignoredCount, status);
             if (U_SUCCESS(status))

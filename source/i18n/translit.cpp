@@ -383,7 +383,7 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
                                               const Locale& inLocale,
                                               UnicodeString& result) {
     UErrorCode status = U_ZERO_ERROR;
-    ResourceBundle bundle(Locale::getDataDirectory(), inLocale, status);
+    ResourceBundle bundle(u_getDataDirectory(), inLocale, status);
     // Suspend checking status until later...
 
     // build the char* key
@@ -572,7 +572,7 @@ const char* Transliterator::RESOURCE_SUB_DIR = "translit";
 /**
  * Returns the directory in which the transliterator resource bundle
  * files are located.  This is a subdirectory, named RESOURCE_SUB_DIR,
- * under Locale::getDataDirectory().  It ends in a path separator.
+ * under u_getDataDirectory().  It ends in a path separator.
  */
 const char* Transliterator::getDataDirectory(void) {
     if (DATA_DIR == 0) {
@@ -581,7 +581,7 @@ const char* Transliterator::getDataDirectory(void) {
             /* Construct the transliterator data directory path.  This
              * is a subdirectory of the locale data directory.
              */
-            const char* data = Locale::getDataDirectory();
+            const char* data = u_getDataDirectory();
             int32_t len = uprv_strlen(data);
             DATA_DIR = (char*) uprv_malloc(
                                  len + uprv_strlen(RESOURCE_SUB_DIR) + 2);
@@ -642,7 +642,11 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
         // 2-d array at static init time, as a locale language.  We're
         // just using the locale mechanism to map through to a file
         // name; this in no way represents an actual locale.
-        Locale fakeLocale(entry->rbFile);
+        char *ch;
+        ch = new char[entry->rbFile.size() + 1];
+        ch[entry->rbFile.extract(0, 0x7fffffff, ch, "")] = 0;
+        Locale fakeLocale(ch);
+        delete [] ch;
 
         ResourceBundle bundle(Transliterator::getDataDirectory(),
                               fakeLocale, status);
@@ -864,7 +868,7 @@ void Transliterator::initializeCache(void) {
      * }
      */
 
-    Locale indexLoc(UNICODE_STRING("index", 5));
+    Locale indexLoc("index");
     ResourceBundle bundle(Transliterator::getDataDirectory(),
                           indexLoc, status);
 
