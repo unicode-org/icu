@@ -91,6 +91,12 @@ root
         tag13 { ROOT13 } 
         tag8 { ROOT8 } 
     }
+    rootAliasClient:alias {"/LOCALE/rootAliasDestination"}
+    rootAliasDestination {"wrong"}
+    nestedRootAliasClient:alias {"/LOCALE/rootAliasTable/destination"}
+    rootAliasTable {
+        destination { "correct" }
+    }
 }
 
 //eof

@@ -88,7 +88,7 @@ te_IN
         tag3 { TE_IN3 } 
         tag7 { TE_IN7 } 
     }
-    aliasDestination {"teindest" }
+    aliasDestination {"correct" }
 }
 
 //eof
