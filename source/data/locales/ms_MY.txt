@@ -6,17 +6,17 @@
 // ***************************************************************************
 
 ms_MY {
-    Version{ "x1.0" }
+    Version{ "x1.1" }
     CurrencyElements { 
         "R",
         "MYR",
         ".",
     }
     DateTimePatterns { 
-        "hh:mm:ss aa z",
-        "hh:mm:ss  z",
-        "hh:mm:ss  z",
-        "hh:mm:ss  z",
+        "h:mm:ss a z",
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm",
         "EEEE dd MMM yyyy",
         "dd MMMM yyyy",
         "dd MMMM yyyy",
@@ -24,19 +24,19 @@ ms_MY {
         "{1} {0}",
     }
 
-    NumberElements { 
-        ".",
-        ",",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
-    }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221E",
+//        "\uFFFD",
+//    }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
         "\u00A4#,##0.00;(\u00A4#,##0.00)",

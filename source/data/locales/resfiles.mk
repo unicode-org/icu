@@ -50,7 +50,7 @@ es_PE.txt es_PR.txt es_PY.txt es_SV.txt es_US.txt\
 es_UY.txt es_VE.txt\
 et.txt et_EE.txt\
 eu.txt eu_ES.txt eu_ES_PREEURO.txt\
-fa.txt fa_IR.txt\
+fa.txt fa_IN.txt fa_IR.txt\
 fi.txt fi_FI.txt fi_FI_PREEURO.txt\
 fo.txt fo_FO.txt\
 fr.txt fr_BE.txt fr_BE_PREEURO.txt fr_CA.txt fr_CH.txt\

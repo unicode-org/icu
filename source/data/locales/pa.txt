@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 pa {
-    Version{ "x2.0"}
+    Version{ "x2.1"}
     LocaleID:int { 0x46 }
     AmPmMarkers{
         "\u0A38\u0A35\u0A47\u0A30\u0A47",
@@ -68,9 +68,9 @@ pa {
     NumberElements{
         ".",
         ",",
-        ",",
+        ";",
         "%",
-        ",",
+        "\u0a66",
         "#",
         "-",
         "E",
@@ -80,13 +80,13 @@ pa {
     }
 
     NumberPatterns {
-        "#,##,##0.###;-#,##,##0.###",
-        "\u00A4 #,##,##0.00;-\u00A4 #,##,##0.00",
-        "#,##,##0%"
+        "##,##,##0.###;-##,##,##0.###",
+        "\u00A4 ##,##,##0.00;-\u00A4 ##,##,##0.00",
+        "##,##,##0%",
         "#E0",
     }
     LocaleScript:array { "Guru" }
-    CollationElements {	    
+    CollationElements {     
         Version { "1.0" }
         Sequence { 
             "[normalization on]"

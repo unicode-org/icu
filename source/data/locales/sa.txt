@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 sa {
-    Version { "x1.0" }
+    Version { "x1.1" }
     LocaleID:int { 0x4F }
     AmPmMarkers{
         "\u092A\u0942\u0930\u094D\u0935\u093E\u0939\u094D\u0928",
@@ -68,9 +68,9 @@ sa {
     NumberElements{
         ".",
         ",",
-        ",",
+        ";",
         "%",
-        ",",
+        "\u0966",
         "#",
         "-",
         "E",
@@ -79,13 +79,13 @@ sa {
         "\ufffd",
     }
     NumberPatterns {
-        "#,##,##0.###;-#,##,##0.###",
-        "\u00A4 #,##,##0.00;-\u00A4 #,##,##0.00",
-        "#,##,##0%",
+        "##,##,##0.###;-##,##,##0.###",
+        "\u00A4 ##,##,##0.00;-\u00A4 ##,##,##0.00",
+        "##,##,##0%",
         "#E0",
     }
-    LocaleScript{ "Deva" }
-    CollationElements {	    
+    LocaleScript:array{ "Deva" }
+    CollationElements {     
         Version { "1.0" }
         Sequence { 
             "[normalization on]"

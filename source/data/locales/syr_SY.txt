@@ -6,11 +6,11 @@
 // ***************************************************************************
 
 syr_SY{
-    Version{ "x0.2" }
+    Version{ "x0.3" }
     LocaleID:int { 0x045A }
-    ShortCountry{
-        "SYR"
-    }
+//    ShortCountry{
+//        "SYR"
+//    }
     CurrencyElements{
         "\u0644.\u0633.\u200F",
         "SYP",
@@ -18,10 +18,10 @@ syr_SY{
     }
 
     DateTimePatterns{
-        "h:mm:ss aa",
-        "H:mm:ss",
-        "hh:mm:ss a",
-        "H:mm:ss",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm:ss",
+        "h:mm",
         "dd MMMM, yyyy",
         "dd MMMM, yyyy",
         "dd/MM/yyyy",
@@ -29,6 +29,12 @@ syr_SY{
         "{1} {0}",
     }
 
+    NumberPatterns { 
+        "#,##0.###;#,##0.###-",
+        "\u00A4 #,##0.00;\u00A4 #,##0.00-",
+        "#,##0%",
+        "#E0",
+    }
     DateTimeElements:intvector {
         5,
         1

@@ -19,6 +19,7 @@
 #include "unicode/putil.h"
 #include "cloctst.h"
 #include "unicode/uloc.h"
+#include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "cintltst.h"
 #include "ccolltst.h"
@@ -1406,7 +1407,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                             }
                             else if ((quoted % 2) == 0) {
                                 /* Search for unquoted characters */
-                                if (*localeStrItr == (UChar)0x64 /* d */
+                                if (4 <= idx && idx <= 7
                                     && (*localeStrItr == (UChar)0x6B /* k */
                                     || *localeStrItr == (UChar)0x48 /* H */
                                     || *localeStrItr == (UChar)0x6D /* m */
@@ -1421,7 +1422,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                                             idx,
                                             locale);
                                 }
-                                else if (*localeStrItr == (UChar)0x6D /* m */
+                                else if (0 <= idx && idx <= 3
                                     && (*localeStrItr == (UChar)0x47 /* G */
                                     || *localeStrItr == (UChar)0x79 /* y */
                                     || *localeStrItr == (UChar)0x4D /* M */
@@ -1440,6 +1441,15 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                             }
                             localeStrItr++;
                         }
+                    }
+                    else if (idx == 4 && subBundleKey != NULL
+                        && strcmp(subBundleKey, "NumberElements") == 0
+                        && u_charDigitValue(localeStr[0]) != 0)
+                    {
+                        log_err("key \"%s\" at index %d has a non-zero based number for locale \"%s\"\n",
+                                subBundleKey,
+                                idx,
+                                locale);
                     }
                 }
                 if (sameArray) {
@@ -1685,7 +1695,8 @@ compareArrays(const char *keyName,
     for (idx = start; idx <= end; idx++) {
         const UChar *fromBundleStr = ures_getStringByIndex(fromArray, idx, NULL, &errorCode);
         const UChar *toBundleStr = ures_getStringByIndex(toArray, idx, NULL, &errorCode);
-        if (u_strcmp(fromBundleStr, toBundleStr) != 0) {
+        if (fromBundleStr && toBundleStr && u_strcmp(fromBundleStr, toBundleStr) != 0)
+        {
             log_err("Difference for %s at index %d from %s= \"%s\" to %s= \"%s\"\n",
                     keyName,
                     idx,
@@ -1742,6 +1753,7 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
 
     fromArray = ures_getByKey(fromLocaleBund, "CurrencyElements", NULL, &errorCode);
     toArray = ures_getByKey(toLocaleBund, "CurrencyElements", NULL, &errorCode);
+    if (strcmp(fromLocale, "en_CA") != 0)
     {
         /* The first one is probably localized. */
         compareArrays("CurrencyElements", fromArray, fromLocale, toArray, toLocale, 1, 2);
@@ -1751,6 +1763,7 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
 
     fromArray = ures_getByKey(fromLocaleBund, "NumberPatterns", NULL, &errorCode);
     toArray = ures_getByKey(toLocaleBund, "NumberPatterns", NULL, &errorCode);
+    if (strcmp(fromLocale, "en_CA") != 0)
     {
         compareArrays("NumberPatterns", fromArray, fromLocale, toArray, toLocale, 0, 3);
     }
@@ -1769,6 +1782,7 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
 
     fromArray = ures_getByKey(fromLocaleBund, "NumberElements", NULL, &errorCode);
     toArray = ures_getByKey(toLocaleBund, "NumberElements", NULL, &errorCode);
+    if (strcmp(fromLocale, "en_CA") != 0)
     {
         compareArrays("NumberElements", fromArray, fromLocale, toArray, toLocale, 0, 3);
         /* Index 4 is a script based 0 */

@@ -1,9 +1,9 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2004, International Business Machines
+// *   Copyright (C) 2001-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 // * Oromo language locale for Ethiopia.
 // * Contributed by Daniel Yacob <yacob@geez.org>
 // *
@@ -16,50 +16,51 @@
 // * of the month and day names.
 
 om_ET {
-    Version{ "x0.1" }
+    Version{ "x0.2" }
     AmPmMarkers {
-            "WD",  // WD = Waaree Dura
-            "WB",  // WD = Waaree Booda
+        "WD",  // WD = Waaree Dura
+        "WB",  // WD = Waaree Booda
     }
     // CountryISBNNumber { "231" }
     // CountryNumber { "231" }
     CurrencyElements {
-            "$",
-            "ETB",
-            ".",
+        "$",
+        "ETB",
+        ".",
     }
     DateTimePatterns { 
-            "hh:mm:ss a",
-            "hh:mm:ss a",
-            "h:mm:ss a",
-            "h:mm a",
-            "EEEE, MMMM d, yyyy",
-            "dd MMMM yyyy",
-            "dd-MMM-yy",
-            "dd/MM/yy",
-            "{1} {0}",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE, MMMM d, yyyy",
+        "dd MMMM yyyy",
+        "dd-MMM-yy",
+        "dd/MM/yy",
+        "{1} {0}",
     }
     // Measurement { "Metric" }
-    NumberElements {
-            ".",
-            ",",
-            ";",
-            "%",
-            "0",
-            "#",
-            "-",
-            "E",
-            "\u2030",
-            "\u221E",
-            "\uFFFD",
-    }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221E",
+//        "\uFFFD",
+//    }
     NumberPatterns {
-            "#,##0.###;-#,##0.###",
-            "\u00A4#,##0.00;-\u00A4#,##0.00",
-            "#,##0%",
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
     }
     // PaperSize {
-    //    Hieght { "297" }
+    //    Height { "297" }
     //    Width { "210" }
     //    Units { "mm" }
     // }

@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 syr{
-    Version{ "x0.1" }
+    Version{ "x0.2" }
     LocaleID:int { 0x5A }
     AmPmMarkers{
         "\u0729.\u071B",
@@ -47,7 +47,7 @@ syr{
         "\u071F\u0722\u0718\u0722\u00A0\u0729\u0715\u071D\u0721",
     }
 
-    MonthAbbreviations{
+    MonthAbbreviations {
         "\u070F\u071F\u0722\u00A0\u070F\u0712",
         "\u072B\u0712\u071B",
         "\u0710\u0715\u072A",
@@ -62,21 +62,21 @@ syr{
         "\u070F\u071F\u0722\u00A0\u070F\u0710",
     }
 
-    NumberElements{
-        ".",
-        ",",
-        ",",
-        "%",
-        ",",
-        "#",
-        "-",
-        "E",
-        "\u2030",
-        "\u221e",
-        "\ufffd",
-    }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221e",
+//        "\ufffd",
+//    }
     LocaleScript:array { "Syrc" }
-    CollationElements {	    
+    CollationElements {     
         Version { "1.0" }
         Sequence { 
             "[normalization on]"

@@ -275,7 +275,7 @@ ucol_open(    const    char         *loc,
   UResourceBundle *b = ures_open(NULL, loc, status);
   /* first take on tailoring version: */
   /* get CollationElements -> Version */
-  UResourceBundle *binary = ures_getByKey(b, "%%CollationNew", NULL, status);
+  UResourceBundle *binary = ures_getByKey(b, "%%CollationBin", NULL, status);
 
   if(*status == U_MISSING_RESOURCE_ERROR) { /* if we don't find tailoring, we'll fallback to UCA */
     *status = U_USING_DEFAULT_ERROR;

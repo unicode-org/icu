@@ -578,7 +578,7 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
 
                 if (U_SUCCESS(intStatus) && data != NULL)
                 {
-                    member = bin_open(bundle, "%%CollationNew", len, data, status);
+                    member = bin_open(bundle, "%%CollationBin", len, data, status);
                     table_add(bundle->fRoot, member, line, status);
                     uprv_free(data);
                 }

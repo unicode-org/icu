@@ -9,12 +9,12 @@ kk{
     Version{ "x0.2" }
     LocaleID:int { 0x3f }
     DateTimePatterns { 
-        "hh:mm:ss aa",
-        "H:mm:ss",
-        "H:mm:ss",
+        "HH:mm:ss z",
+        "HH:mm:ss z",
         "HH:mm:ss",
+        "HH:mm",
+        "EEEE, d MMMM yyyy '\u0436.'",
         "d MMMM yyyy '\u0436.'",
-        "EEEE,dd MMMM yyyy '\u0436.'HH:mm:ss z",
         "dd.MM.yyyy",
         "dd.MM.yy",
         "{1} {0}",
@@ -79,7 +79,7 @@ kk{
         "\u221E",
         "\uFFFD",
     }
-    LocaleScript{ "Cyrl" }
+    LocaleScript:array{ "Cyrl" }
 
     CollationElements {	    
     	Version { "1.0" }
