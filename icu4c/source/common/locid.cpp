@@ -35,11 +35,11 @@
 #include "mutex.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "uhash.h"
 #include "ucln_cmn.h"
 
 /*Character separating the posix id fields*/
 // '_'
-#define SEP_UCHAR 0x005F
 // In the platform codepage.
 #define SEP_CHAR '_'
 
@@ -154,6 +154,7 @@ Locale::~Locale()
 }
 
 Locale::Locale()
+    : fullName(fullNameBuffer)
 {
     init(NULL);
 }
@@ -161,6 +162,7 @@ Locale::Locale()
 Locale::Locale( const   char * newLanguage, 
                 const   char * newCountry, 
                 const   char * newVariant) 
+    : fullName(fullNameBuffer)
 {
     if( (newLanguage==NULL) && (newCountry == NULL) && (newVariant == NULL) )
     {
@@ -277,50 +279,34 @@ Locale::Locale( const   char * newLanguage,
     }
 }
 
-Locale::Locale(const    Locale& other)
-
+Locale::Locale(const Locale &other)
+    : fullName(fullNameBuffer)
 {
-    /*Copy the language and country fields*/
-    uprv_strcpy(language, other.language);
-    uprv_strcpy(country, other.country);
-
-    /*make fullName point to the heap if necessary*/
-    if (other.fullName != other.fullNameBuffer)
-    {
-        fullName = new char[uprv_strlen(other.fullName)+1];
-    }
-    else {
-        fullName = fullNameBuffer;
-    }
-
-    uprv_strcpy(fullName, other.fullName);
-
-    /*Make the variant point to the same offset as the copied*/
-    variantBegin = other.variantBegin;
+    *this = other;
 }
 
-Locale& Locale::operator=(const Locale& other)
+Locale &Locale::operator=(const Locale &other)
 {
-    uprv_strcpy(language, other.language);
-    uprv_strcpy(country, other.country);
-    if (other.fullName == other.fullNameBuffer)
-    {
+    /* Free our current storage */
+    if(fullName != fullNameBuffer) {
+        delete [] fullName;
         fullName = fullNameBuffer;
     }
-    else 
-    {
-        /*In case the assigner has some of its data on the heap
-        * we need to do the same*/
-        if (fullName != fullNameBuffer)
-        {
-            delete []fullName;
-        }
+
+    /* Allocate the full name if necessary */
+    if(other.fullName != other.fullNameBuffer) {
         fullName = new char[(uprv_strlen(other.fullName)+1)];
     }
-    uprv_strcpy(fullName, other.fullName);
-    /*Make the variant point to the same offset as the assigner*/
-    variantBegin = other.variantBegin;
 
+    /* Copy the full name */
+    uprv_strcpy(fullName, other.fullName);
+
+    /* Copy the language and country fields */
+    uprv_strcpy(language, other.language);
+    uprv_strcpy(country, other.country);
+
+    /* The variantBegin is an offset into fullName, just copy it */
+    variantBegin = other.variantBegin;
     return *this;
 }
 
@@ -333,91 +319,97 @@ Locale::operator==( const   Locale& other) const
 /*This function initializes a Locale from a C locale ID*/
 Locale& Locale::init(const char* localeID)
 {
-    char *separator, *prev;
-    int32_t length;
-    UErrorCode err;
+    // not a loop:
+    // just an easy way to have a common error-exit
+    // without goto and without another function
+    do {
+        char *separator, *prev;
+        int32_t length;
+        UErrorCode err;
 
-    fullName = fullNameBuffer;
-    if (localeID == NULL)
-    {
-        return *this = getLocale(eDEFAULT);
-    }
-
-    err = U_ZERO_ERROR;
-    length = uloc_getName(localeID, fullName, sizeof(fullNameBuffer), &err);
-    if(U_FAILURE(err) || err == U_STRING_NOT_TERMINATED_WARNING) {
-        /*Go to heap for the fullName if necessary*/
-        fullName = new char[length + 1];
-        if(fullName == 0) {
-            fullName = fullNameBuffer;
-            return *this = getLocale(eDEFAULT);
+        if(localeID == NULL) {
+            // not an error, just set the default locale
+            break;
         }
-        err = U_ZERO_ERROR;
-        length = uloc_getName(localeID, fullName, length + 1, &err);
-    }
-    if(U_FAILURE(err) || err == U_STRING_NOT_TERMINATED_WARNING) {
-        /* should never occur */
+
+        // "canonicalize" the locale ID to ICU/Java format
         fullName = fullNameBuffer;
-        return *this = getLocale(eDEFAULT);
-    }
-
-    /* preset all fields to empty */
-    language[0] = country[0] = 0;
-    variantBegin = uprv_strlen(fullName);
-
-    /* after uloc_getName() we know that only '_' are separators */
-    separator = uprv_strchr(fullName, '_');
-    if(separator != 0) {
-        /* there is a country field */
-        length = separator - fullName;
-        if(length > 0) {
-            if(length >= sizeof(language)) {
-                fullName = fullNameBuffer;
-                return *this = getLocale(eDEFAULT);
+        err = U_ZERO_ERROR;
+        length = uloc_getName(localeID, fullName, sizeof(fullNameBuffer), &err);
+        if(U_FAILURE(err) || err == U_STRING_NOT_TERMINATED_WARNING) {
+            /*Go to heap for the fullName if necessary*/
+            fullName = new char[length + 1];
+            if(fullName == 0) {
+                break;
             }
-            uprv_memcpy(language, fullName, length);
+            err = U_ZERO_ERROR;
+            length = uloc_getName(localeID, fullName, length + 1, &err);
         }
-        language[length] = 0;
+        if(U_FAILURE(err) || err == U_STRING_NOT_TERMINATED_WARNING) {
+            /* should never occur */
+            break;
+        }
 
-        prev = separator + 1;
-        separator = uprv_strchr(prev, '_');
+        /* preset all fields to empty */
+        language[0] = country[0] = 0;
+        variantBegin = uprv_strlen(fullName);
+
+        /* after uloc_getName() we know that only '_' are separators */
+        separator = uprv_strchr(fullName, SEP_CHAR);
         if(separator != 0) {
-            /* there is a variant field */
-            length = separator - prev;
+            /* there is a country field */
+            length = separator - fullName;
             if(length > 0) {
-                if(length >= sizeof(country)) {
-                    fullName = fullNameBuffer;
-                    return *this = getLocale(eDEFAULT);
+                if(length >= sizeof(language)) {
+                    break;
                 }
-                uprv_memcpy(country, prev, length);
+                uprv_memcpy(language, fullName, length);
             }
-            country[length] = 0;
+            language[length] = 0;
 
-            variantBegin = (separator + 1) - fullName;
+            prev = separator + 1;
+            separator = uprv_strchr(prev, SEP_CHAR);
+            if(separator != 0) {
+                /* there is a variant field */
+                length = separator - prev;
+                if(length > 0) {
+                    if(length >= sizeof(country)) {
+                        break;
+                    }
+                    uprv_memcpy(country, prev, length);
+                }
+                country[length] = 0;
+
+                variantBegin = (separator + 1) - fullName;
+            } else {
+                /* variantBegin==strlen(fullName), length==strlen(language)==prev-1-fullName */
+                if((variantBegin - length - 1) >= sizeof(country)) {
+                    break;
+                }
+                uprv_strcpy(country, prev);
+            }
         } else {
-            /* variantBegin==strlen(fullName), length==strlen(language)==prev-1-fullName */
-            if((variantBegin - length - 1) >= sizeof(country)) {
-                fullName = fullNameBuffer;
-                return *this = getLocale(eDEFAULT);
+            /* variantBegin==strlen(fullName) */
+            if(variantBegin >= sizeof(language)) {
+                break;
             }
-            uprv_strcpy(country, prev);
+            uprv_strcpy(language, fullName);
         }
-    } else {
-        /* variantBegin==strlen(fullName) */
-        if(variantBegin >= sizeof(language)) {
-            fullName = fullNameBuffer;
-            return *this = getLocale(eDEFAULT);
-        }
-        uprv_strcpy(language, fullName);
-    }
 
-    return *this;
+        // successful end of init()
+        return *this;
+    } while(0);
+
+    // when an error occurs, then set the default locale (there is no UErrorCode here)
+    return *this = getLocale(eDEFAULT);
 }
 
 int32_t
 Locale::hashCode() const 
 {
-    return UnicodeString(fullName, "").hashCode();
+    UHashKey hashKey;
+    hashKey.pointer = fullName;
+    return uhash_hashChars(hashKey);
 }
 
 
