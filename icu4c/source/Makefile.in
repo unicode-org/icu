@@ -40,10 +40,10 @@ include @platform_make_fragment@
 DOXYGEN = @DOXYGEN@
 
 ## Files to remove for 'make clean'
-CLEANFILES = *~ README
+CLEANFILES = *~ 
 
 ## Files built (autoconfed) and installed
-INSTALLED_BUILT_FILES = $(top_builddir)/config/Makefile.inc $(top_builddir)/config/icu-config @platform_make_fragment@ README $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/%)
+INSTALLED_BUILT_FILES = $(top_builddir)/config/Makefile.inc $(top_builddir)/config/icu-config @platform_make_fragment@ $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/%)
 
 ## Files built (autoconfed) but not installed
 LOCAL_BUILT_FILES = icudefs.mk
@@ -131,7 +131,6 @@ install-icu: $(INSTALLED_BUILT_FILES)
 	    $(RM) Makefile.inc && ln -s current/Makefile.inc .
 	$(INSTALL_DATA) @platform_make_fragment@ $(DESTDIR)$(pkgdatadir)/config/@platform_make_fragment_name@
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(pkgdatadir)/mkinstalldirs
-	$(INSTALL_DATA) README $(DESTDIR)$(pkgdatadir)/README
 	$(INSTALL_DATA) $(top_srcdir)/../license.html $(DESTDIR)$(pkgdatadir)/license.html
 	$(INSTALL_SCRIPT) $(top_builddir)/config/icu-config $(DESTDIR)$(bindir)/icu-config
 
@@ -164,10 +163,6 @@ check-local:
 #	cd $(srcdir) && $(AUTOCONF)
 
 icudefs.mk: $(srcdir)/icudefs.mk.in  $(top_builddir)/config.status
-	cd $(top_builddir) \
-		&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
-README: $(srcdir)/README.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 		&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
