@@ -34,6 +34,10 @@ ifneq ($(ENABLE_SHARED),)
 SO_TARGET = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).$(SO)
 ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET)
 
+ifeq ($(ENABLE_SO_VERSION_DATA),1)
+SO_VERSION_DATA = common.res
+endif
+
 ifeq ($(OS390BATCH),1)
 BATCH_TARGET = $(BATCH_COMMON_TARGET)
 BATCH_LIBS = $(BATCH_LIBICUDT) -lm
@@ -133,7 +137,7 @@ dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS)
+	$(RMV) $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS) $(SO_VERSION_DATA)
 
 distclean-local: clean-local
 	$(RMV) Makefile icucfg.h unicode/platform.h
@@ -154,7 +158,7 @@ $(TARGET): $(TARGET)($(STATIC_OBJECTS))
 endif
 
 ifneq ($(ENABLE_SHARED),)
-$(FINAL_SO_TARGET): $(OBJECTS)
+$(FINAL_SO_TARGET): $(OBJECTS) $(SO_VERSION_DATA)
 	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(LIBS)
 
 ifeq ($(OS390BATCH),1)
