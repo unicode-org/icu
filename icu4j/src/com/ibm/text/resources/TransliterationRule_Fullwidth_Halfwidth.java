@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Fullwidth_Halfwidth.java,v $ 
- * $Date: 2000/03/10 04:07:29 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/05/23 16:47:48 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -22,8 +22,7 @@ public class TransliterationRule_Fullwidth_Halfwidth extends ListResourceBundle 
         return new Object[][] {
             { "Rule", ""
             
-            /* Mechanically generated from Unicode Character Database
-             */
+            // Mechanically generated from Unicode Character Database
 
     // multicharacter
 
