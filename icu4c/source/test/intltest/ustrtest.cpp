@@ -185,19 +185,35 @@ UnicodeStringTest::TestCompare()
 void
 UnicodeStringTest::TestExtract()
 {
-    UnicodeString   test1("Now is the time for all good men to come to the aid of their country.");
-    UnicodeString   test2;
-    UChar         test3[13];
-    char            test4[13];
-    UnicodeString   test5;
+    UnicodeString  test1("Now is the time for all good men to come to the aid of their country.");
+    UnicodeString  test2;
+    UChar          test3[13] = {1, 2, 3, 4, 5, 6, 7, 8, 8, 10, 11, 12, 13};
+    char           test4[13] = {1, 2, 3, 4, 5, 6, 7, 8, 8, 10, 11, 12, 13};
+    UnicodeString  test5;
+    char           test6[13] = {1, 2, 3, 4, 5, 6, 7, 8, 8, 10, 11, 12, 13};
 
     test1.extract(11, 12, test2);
     test1.extract(11, 12, test3);
-    test1.extract(11, 12, test4);
+    if (test1.extract(11, 12, test4) != 12 || test4[12] != 13) {
+        errln("UnicodeString.extract(char *) failed to return the correct size of destination buffer.");
+    }
     test1.extractBetween(11, 23, test5);
+    if (test1.extract(60, 71, test6) != 9) {
+        errln("UnicodeString.extract() failed to return the correct size of destination buffer for end of buffer.");
+    }
+    if (test1.extract(11, 12, test6) != 12) {
+        errln("UnicodeString.extract() failed to return the correct size of destination buffer.");
+    }
 
     // convert test4 back to Unicode for comparison
     UnicodeString test4b(test4, 12);
+
+    if (test1.extract(11, 12, (char *)NULL) != 12) {
+        errln("UnicodeString.extract(NULL) failed to return the correct size of destination buffer.");
+    }
+    if (test1.extract(11, -1, test6) != 0) {
+        errln("UnicodeString.extract(-1) failed to stop reading the string.");
+    }
 
     for (UTextOffset i = 0; i < 12; i++) {
         if (test1[(UTextOffset)(11 + i)] != test2[i]) {
