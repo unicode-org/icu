@@ -345,7 +345,7 @@ utrans_enum_unext(UEnumeration *uenum,
     }
 
     if(resultLength!=NULL) {
-        *resultLength=NULL;
+        *resultLength=0;
     }
     return NULL;
 }
