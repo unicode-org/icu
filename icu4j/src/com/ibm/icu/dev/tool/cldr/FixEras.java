@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2004, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ *
  * Created on Sep 17, 2004
  *
  * TODO To change the template for this generated file go to
