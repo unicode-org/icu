@@ -369,7 +369,7 @@ void TransliteratorAPITest::TestTransliterate3(){
 }
 
 void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
-         logln("simple call to keyboardtransliterate");
+         logln("simple call to transliterate");
 		 UErrorCode status=U_ZERO_ERROR;
          Transliterator* t=Transliterator::createInstance("Unicode-Hex");
 		 if(t == 0)
@@ -378,14 +378,14 @@ void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
          UnicodeString rs= "Transliterate this-''";
          UnicodeString insertion="abc";
          UnicodeString expected="Transliterate this-'\\u0061\\u0062\\u0063'";
-         t->keyboardTransliterate(rs, index, insertion, status);
+         t->transliterate(rs, index, insertion, status);
          if(U_FAILURE(status))
-			 errln("FAIL: " + t->getID()+ ".keyboardTransliterator(Replaceable, int[], UnicodeString, UErrorCode)-->" + (UnicodeString)u_errorName(status));
-         t->finishKeyboardTransliteration(rs, index);
-		 UnicodeString message="keyboardTransliterate";
+			 errln("FAIL: " + t->getID()+ ".translitere(Replaceable, int[], UnicodeString, UErrorCode)-->" + (UnicodeString)u_errorName(status));
+         t->finishTransliteration(rs, index);
+		 UnicodeString message="transliterate";
 		 doTest(message, rs, expected);
           
-         logln("try calling keyboardTransliterate with invalid index values");
+         logln("try calling transliterate with invalid index values");
          int32_t index1[][3]={
              //START, LIMIT, CURSOR
              {10, 10, 12},   //invalid since CURSOR>LIMIT valid:-START <= CURSOR <= LIMIT
@@ -395,7 +395,7 @@ void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
          };
          for(int i=0; i<sizeof(index1)/sizeof(index1[0]); i++){
            status=U_ZERO_ERROR;
-           t->keyboardTransliterate(rs, index1[i], insertion, status);
+           t->transliterate(rs, index1[i], insertion, status);
            if(status == U_ILLEGAL_ARGUMENT_ERROR)
 			   logln("OK: invalid index values handled correctly");
            else
@@ -424,19 +424,19 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
 		int32_t index[] = {0, 0, 0};
 	    UErrorCode status=U_ZERO_ERROR;
         UnicodeString s;
-        logln("Testing keyboardTransliterator(Replaceable, int32_t, UnicodeString, UErrorCode)");
+        logln("Testing transliterate(Replaceable, int32_t, UnicodeString, UErrorCode)");
         for (int i=0; i<10; i=i+2) {
            UnicodeString log;
            if (Data[i+0] != "") {
                log = s + " + " + Data[i+0] + " -> ";
-               t->keyboardTransliterate(s, index, Data[i+0], status);
+               t->transliterate(s, index, Data[i+0], status);
                if(U_FAILURE(status)){
-                   errln("FAIL: " + t->getID()+ ".keyboardTransliterator(Replaceable, int32_t[], UnicodeString, UErrorCode)-->" + (UnicodeString)u_errorName(status));
+                   errln("FAIL: " + t->getID()+ ".transliterate(Replaceable, int32_t[], UnicodeString, UErrorCode)-->" + (UnicodeString)u_errorName(status));
 				   continue;
 			   }
            }else {
                log = s + " => ";
-               t->finishKeyboardTransliteration(s, index);
+               t->finishTransliteration(s, index);
            }
 		   // Show the start index '{' and the cursor '|'
            displayOutput(s, Data[i+1], log, index);
@@ -447,19 +447,19 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
 		status=U_ZERO_ERROR;
 	    for(i=0;i<3;i++)
 			index[i]=0;
-		logln("Testing keyboardTransliterator(Replaceable, int32_t, UChar, UErrorCode)");
+		logln("Testing transliterate(Replaceable, int32_t, UChar, UErrorCode)");
 		for(i=10; i<sizeof(Data)/sizeof(Data[0]); i=i+2){
 			UnicodeString log;
              if (Data[i+0] != "") {
                log = s + " + " + Data[i+0] + " -> ";
                UChar c=Data[i+0].charAt(0);
-               t->keyboardTransliterate(s, index, c, status);
+               t->transliterate(s, index, c, status);
                if(U_FAILURE(status))
-                   errln("FAIL: " + t->getID()+ ".keyboardTransliterator(Replaceable, int32_t[], UChar, UErrorCode)-->" + (UnicodeString)u_errorName(status));
+                   errln("FAIL: " + t->getID()+ ".transliterate(Replaceable, int32_t[], UChar, UErrorCode)-->" + (UnicodeString)u_errorName(status));
 			       continue;
 			 }else {
                log = s + " => ";
-               t->finishKeyboardTransliteration(s, index);
+               t->finishTransliteration(s, index);
 			 }
 		    // Show the start index '{' and the cursor '|'
             displayOutput(s, Data[i+1], log, index); 
@@ -488,7 +488,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator2(){
         Transliterator *t;
         UnicodeString rs;
         UnicodeString dataStr;
-		logln("Testing keyboardTransliterator(Replaceable, int32_t, UnicodeString, UErrorCode)");       
+		logln("Testing transliterate(Replaceable, int32_t, UnicodeString, UErrorCode)");       
         
 		rs="Initial String: add--";
         t=Transliterator::createInstance("Unicode-Hex");
@@ -520,7 +520,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
 	
 	UErrorCode status=U_ZERO_ERROR;
 	int32_t index[]={0, 0, 0};
-	logln("Testing keyboardTransliterator(Replaceable, int32_t, UErrorCode)");
+	logln("Testing transliterate(Replaceable, int32_t, UErrorCode)");
 	Transliterator *t=Transliterator::createInstance("Unicode-Hex");
 	if(t == 0)
 			errln("FAIL : construction");
@@ -529,12 +529,12 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
 		index[0]=getInt(Data[i+0]);
         index[1]=getInt(Data[i+1]);
         index[2]=getInt(Data[i+2]);
-        t->keyboardTransliterate(s, index, status);
+        t->transliterate(s, index, status);
         if(U_FAILURE(status)){
-           errln("FAIL: " + t->getID()+ ".keyboardTransliterator(Replaceable, int32_t[], UErrorCode)-->" + (UnicodeString)u_errorName(status));
+           errln("FAIL: " + t->getID()+ ".transliterate(Replaceable, int32_t[], UErrorCode)-->" + (UnicodeString)u_errorName(status));
 		   continue;
 		}
-		t->finishKeyboardTransliteration(s, index);
+		t->finishTransliteration(s, index);
 		log = s + " => ";
 		// Show the start index '{' and the cursor '|'
         displayOutput(s, Data[i+3], log, index); 
@@ -550,7 +550,7 @@ class TestFilter1 : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestFilter1(*this);
     }
-    virtual bool_t isIn(UChar c) const {
+    virtual bool_t contains(UChar c) const {
        if(c=='c' || c=='a' || c=='C' || c=='A')
           return FALSE;
        else
@@ -561,7 +561,7 @@ class TestFilter2 : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestFilter2(*this);
     }
-    virtual bool_t isIn(UChar c) const {
+    virtual bool_t contains(UChar c) const {
         if(c=='e' || c=='l')
            return FALSE;
         else
@@ -572,7 +572,7 @@ class TestFilter3 : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestFilter3(*this);
     }
-    virtual bool_t isIn(UChar c) const {
+    virtual bool_t contains(UChar c) const {
         if(c=='o' || c=='w')
            return FALSE;
         else
@@ -654,14 +654,14 @@ void TransliteratorAPITest::keyboardAux(Transliterator *t, UnicodeString DATA[],
                  index[0]=getInt(DATA[i+2]);
                  index[1]=getInt(DATA[i+3]);
                  index[2]=getInt(DATA[i+4]);
-                 t->keyboardTransliterate(s, index, DATA[i+0], status);
+                 t->transliterate(s, index, DATA[i+0], status);
                  if(U_FAILURE(status)){
-					 errln("FAIL: " + t->getID()+ ".keyboardTransliterator(Replaceable, int32_t[], UnicodeString, UErrorCode)-->" + (UnicodeString)u_errorName(status));
+					 errln("FAIL: " + t->getID()+ ".transliterate(Replaceable, int32_t[], UnicodeString, UErrorCode)-->" + (UnicodeString)u_errorName(status));
 				 continue;
 				 }
 			} else {
                log = s + " => ";
-               t->finishKeyboardTransliteration(s, index);
+               t->finishTransliteration(s, index);
             }
 			 // Show the start index '{' and the cursor '|'
           displayOutput(s, DATA[i+1], log, index);
