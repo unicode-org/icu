@@ -129,7 +129,9 @@
 \uE07E>;       # IRI
 \uE07F>;       # URA
 \uE080>;       # EK ONKAR
-\uE081>\u0B71;  # LETTER WA
+\uE081>\u0B71; # LETTER WA
+\uE082>;       # Devanagari Glottal Stop
+\uE083>\u0b24\u0b4d;  # Bengali Khanda-ta
 0 > \u0b66;    # FALLBACK FOR TAMIL
 1 > \u0b67;
 

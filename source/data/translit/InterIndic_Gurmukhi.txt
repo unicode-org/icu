@@ -65,7 +65,7 @@ $consonant{\ue002>\u0a70; # SIGN TIPPI
 \ue030>\u0a30; # LETTER RA
 \ue031>\u0a30\u0a3c; # FALLBACK LETTER RA+NUKTA
 \ue032>\u0a32; # LETTER LA
-\ue033>\u0a33; # LETTER LLA
+\ue033>\u0a32; # LETTER LLA
 \ue034>\u0a33; # REMAP (indicExceptions.txt): \u0a34>\u0a33 = LETTER LLLA>LETTER LLA
 \ue035>\u0a35; # LETTER VA
 \ue036>\u0a36; # LETTER SHA
@@ -139,7 +139,9 @@ $consonant{\ue002>\u0a70; # SIGN TIPPI
 \uE07E>\u0a72;     # IRI
 \uE07F>\u0a73;     # URA
 \uE080>\u0a74;     # EK ONKAR
-\uE081>\u0a35;      # FALLBACK FOR ORIYA LETTER WA 
+\uE081>\u0a35;     # FALLBACK FOR ORIYA LETTER WA 
+\uE082>;           # Devanagari Glottal Stop
+\uE083>\u0a24\u0a4d;  # Bengali Khanda-ta
 
 0 > \u0a66;       # FALLBACK FOR TAMIL
 1 > \u0a67;

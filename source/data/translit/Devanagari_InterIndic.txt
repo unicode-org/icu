@@ -114,4 +114,6 @@
  \u096E>\uE06E;  # DIGIT EIGHT
  \u096F>\uE06F;  # DIGIT NINE
  \u0970>\uE070;  # Devanagari-InterIndic: ABBREVIATION SIGN
+ \u097d>\uE082;  # Devanagari Glottal Stop
+ 
 #    :: NFC (NFD) ;

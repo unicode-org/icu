@@ -69,6 +69,7 @@
 \u09CC>\uE04C;
 #
 \u09CD>\uE04D; # SIGN VIRAMA
+\u09ce>\ue083; # Khanda-ta
 \u09D7>\uE057; # AU LENGTH MARK
 #
 \u09E0>\uE060; # LETTER VOCALIC RR
@@ -96,7 +97,6 @@
 \u09F8>\ue079; # Bengali-InterIndic: CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
 \u09F9>\ue07A; # Bengali-InterIndic: CURRENCY DENOMINATOR SIXTEEN
 \u09FA>\ue07B; # ISSHAR
-
 \u0964>\ue064;        # DANDA
 \u0965>\ue065;        # DOUBLE DANDA
 #    :: NFC (NFD) ;
