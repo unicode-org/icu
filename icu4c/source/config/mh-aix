@@ -3,21 +3,21 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix,v 1.17 2000/11/04 02:16:11 srl Exp $
+## $Id: mh-aix,v 1.18 2001/04/23 23:12:28 rviswanadha Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
 
 ## Commands to compile
-COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
-COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS)  -brtl -c
+COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -brtl  -c
 
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
 ##  our libraries contain C++ code (C++ static init not called)
-#LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-LINK.c=		$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+#LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) 
+LINK.c=		$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) 
 LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
@@ -31,16 +31,22 @@ LD_RPATH_PRE=
 ## Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = LIBPATH
 
+## Compiler switch to embed a library name
+#LD_SONAME = -Wl, 
+
 ## Versioned target for a shared library.
 FINAL_SO_TARGET = $(SO_TARGET)
-MIDDLE_SO_TARGET = 
+MIDDLE_SO_TARGET = $(SO_TARGET)
 
 ###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
 ## Prefix for the ICU library names
 ICUPREFIX = icu
 LIBICU = lib$(ICUPREFIX)
 ## Shared object suffix
-SO=		a
+#AIX does not have versioning support
+#so we tag the major and minor versions to so
+SO=		so.$(SO_TARGET_VERSION_MAJOR)
+
 ## Non-shared intermediate object suffix
 STATIC_O = o
 
