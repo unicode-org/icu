@@ -180,17 +180,20 @@ mirrorLineFn(void *context,
     mirrorMappings[mirrorCount][0]=uprv_strtoul(fields[0][0], &end, 16);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         fprintf(stderr, "genprops: syntax error in Mirror.txt field 0 at %s\n", fields[0][0]);
+        *pErrorCode = U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
 
     mirrorMappings[mirrorCount][1]=uprv_strtoul(fields[1][0], &end, 16);
     if(end<=fields[1][0] || end!=fields[1][1]) {
         fprintf(stderr, "genprops: syntax error in Mirror.txt field 1 at %s\n", fields[1][0]);
+        *pErrorCode = U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
 
     if(++mirrorCount==MAX_MIRROR_COUNT) {
         fprintf(stderr, "genprops: too many mirror mappings\n");
+        *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
         exit(U_INDEX_OUTOFBOUNDS_ERROR);
     }
 }
@@ -264,6 +267,7 @@ unicodeDataLineFn(void *context,
     p.code=uprv_strtoul(fields[0][0], &end, 16);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         fprintf(stderr, "genprops: syntax error in field 0 at %s\n", fields[0][0]);
+        *pErrorCode = U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
 
@@ -276,6 +280,7 @@ unicodeDataLineFn(void *context,
         }
         if(++i==U_CHAR_CATEGORY_COUNT) {
             fprintf(stderr, "genprops: unknown general category \"%s\" at code 0x%lx\n", fields[2][0], p.code);
+            *pErrorCode = U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
     }
@@ -284,6 +289,7 @@ unicodeDataLineFn(void *context,
     p.canonicalCombining=(uint8_t)uprv_strtoul(fields[3][0], &end, 10);
     if(end<=fields[3][0] || end!=fields[3][1]) {
         fprintf(stderr, "genprops: syntax error in field 3 at code 0x%lx\n", p.code);
+        *pErrorCode = U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
 
@@ -296,6 +302,7 @@ unicodeDataLineFn(void *context,
         }
         if(++i==U_CHAR_DIRECTION_COUNT) {
             fprintf(stderr, "genprops: unknown BiDi category \"%s\" at code 0x%lx\n", fields[4][0], p.code);
+            *pErrorCode = U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
     }
@@ -305,6 +312,7 @@ unicodeDataLineFn(void *context,
         value=uprv_strtoul(fields[6][0], &end, 10);
         if(end!=fields[6][1] || value>0x7fff) {
             fprintf(stderr, "genprops: syntax error in field 6 at code 0x%lx\n", p.code);
+            *pErrorCode = U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
         p.decimalDigitValue=(int16_t)value;
@@ -315,6 +323,7 @@ unicodeDataLineFn(void *context,
         value=uprv_strtoul(fields[7][0], &end, 10);
         if(end!=fields[7][1] || value>0x7fff) {
             fprintf(stderr, "genprops: syntax error in field 7 at code 0x%lx\n", p.code);
+            *pErrorCode = U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
         p.digitValue=(int16_t)value;
@@ -328,11 +337,13 @@ unicodeDataLineFn(void *context,
             p.denominator=uprv_strtoul(end+1, &end, 10);
             if(p.denominator==0) {
                 fprintf(stderr, "genprops: denominator is 0 in field 8 at code 0x%lx\n", p.code);
+                *pErrorCode = U_PARSE_ERROR;
                 exit(U_PARSE_ERROR);
             }
         }
         if(end!=fields[8][1] || value>0x7fffffff) {
             fprintf(stderr, "genprops: syntax error in field 8 at code 0x%lx\n", p.code);
+            *pErrorCode = U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
         p.numericValue=(int32_t)value;
@@ -344,6 +355,7 @@ unicodeDataLineFn(void *context,
         p.isMirrored=1;
     } else if(fields[9][1]-fields[9][0]!=1 || *fields[9][0]!='N') {
         fprintf(stderr, "genprops: syntax error in field 9 at code 0x%lx\n", p.code);
+        *pErrorCode = U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
 
@@ -351,6 +363,7 @@ unicodeDataLineFn(void *context,
     value=uprv_strtoul(fields[12][0], &end, 16);
     if(end!=fields[12][1]) {
         fprintf(stderr, "genprops: syntax error in field 12 at code 0x%lx\n", p.code);
+        *pErrorCode = U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
     p.upperCase=value;
@@ -359,6 +372,7 @@ unicodeDataLineFn(void *context,
     value=uprv_strtoul(fields[13][0], &end, 16);
     if(end!=fields[13][1]) {
         fprintf(stderr, "genprops: syntax error in field 13 at code 0x%lx\n", p.code);
+        *pErrorCode = U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
     p.lowerCase=value;
@@ -367,6 +381,7 @@ unicodeDataLineFn(void *context,
     value=uprv_strtoul(fields[14][0], &end, 16);
     if(end!=fields[14][1]) {
         fprintf(stderr, "genprops: syntax error in field 14 at code 0x%lx\n", p.code);
+        *pErrorCode = U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
     p.titleCase=value;
