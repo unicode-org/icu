@@ -898,21 +898,47 @@ public:
    * [<tt>start</TT>, <tt>start + length</TT>) into an array of characters
    * in a specified codepage.
    * @param start offset of first character which will be copied
-   * @param length the number of characters to extract
+   * @param startLength the number of characters to extract
    * @param target the target buffer for extraction
    * @param codepage the desired codepage for the characters.  0 has 
    * the special meaning of the default codepage
    * If <code>codepage</code> is an empty string (<code>""</code>),
    * then a simple conversion is performed on the codepage-invariant
    * subset ("invariant characters") of the platform encoding. See utypes.h.
-   * @return the number of characters written to <TT>dst</TT>
+   * If <TT>target</TT> is NULL, then the number of bytes required for
+   * <TT>target</TT> is returned. It is assumed that the target is big enough
+   * to fit all of the characters.
+   * @return the number of characters written to <TT>target</TT>
+   * @stable
+   */
+  inline int32_t extract(UTextOffset start,
+                 int32_t startLength,
+                 char *target,
+                 const char *codepage = 0) const;
+
+  /**
+   * Copy the characters in the range 
+   * [<tt>start</TT>, <tt>start + length</TT>) into an array of characters
+   * in a specified codepage.
+   * @param start offset of first character which will be copied
+   * @param startLength the number of characters to extract
+   * @param target the target buffer for extraction
+   * @param targetLength the length of the target buffer
+   * @param codepage the desired codepage for the characters.  0 has 
+   * the special meaning of the default codepage
+   * If <code>codepage</code> is an empty string (<code>""</code>),
+   * then a simple conversion is performed on the codepage-invariant
+   * subset ("invariant characters") of the platform encoding. See utypes.h.
+   * If <TT>target</TT> is NULL, then the number of bytes required for
+   * <TT>target</TT> is returned.
+   * @return the number of characters written to <TT>target</TT>
    * @stable
    */
   int32_t extract(UTextOffset start,
-           int32_t length,
-           char *dst,
+           int32_t startLength,
+           char *target,
+           uint32_t targetLength,
            const char *codepage = 0) const;
-  
 
   /* Length operations */
 
@@ -931,7 +957,7 @@ public:
    */
   inline UBool empty(void) const;
 
- 
+
   /* Other operations */
 
   /**
@@ -2530,15 +2556,22 @@ UnicodeString::doExtract(UTextOffset start,
 inline void  
 UnicodeString::extract(UTextOffset start, 
                int32_t length, 
-               UChar *dst, 
-               UTextOffset dstStart) const
-{ doExtract(start, length, dst, dstStart); }
+               UChar *target, 
+               UTextOffset targetStart) const
+{ doExtract(start, length, target, targetStart); }
 
 inline void 
 UnicodeString::extract(UTextOffset start,
                int32_t length,
                UnicodeString& target) const
 { doExtract(start, length, target); }
+
+inline int32_t
+UnicodeString::extract(UTextOffset start,
+               int32_t length,
+               char *dst,
+               const char *codepage) const
+{return extract(start, length, dst, 0x0FFFFFFF, codepage);}
 
 inline void  
 UnicodeString::extractBetween(UTextOffset start, 
