@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/12/01 21:46:25 $
- * $Revision: 1.50 $
+ * $Date: 2001/12/03 02:10:24 $
+ * $Revision: 1.51 $
  *
  *****************************************************************************************
  */
@@ -204,7 +204,7 @@ import com.ibm.util.Utility;
  * Unicode property
  * </table>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.50 $ $Date: 2001/12/01 21:46:25 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.51 $ $Date: 2001/12/03 02:10:24 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -905,6 +905,33 @@ public class UnicodeSet extends UnicodeFilter {
         }
         return true;
     }
+    
+    // TODO: Make this public
+    /**
+     * Some character in s is in the set.
+     */
+    boolean containsSome(String s) {
+        int cp;
+        for (int i = 0; i < s.length(); i += UTF16.getCharCount(i)) {
+            cp = UTF16.charAt(s, i);
+            if (contains(cp)) return true;
+        }
+        return false;
+    }
+        
+    // TODO: Make this public
+    /**
+     * Every character in s is in the set.
+     */
+    boolean containsAll(String s) {
+        int cp;
+        for (int i = 0; i < s.length(); i += UTF16.getCharCount(i)) {
+            cp = UTF16.charAt(s, i);
+            if (!contains(cp)) return false;
+        }
+        return true;
+    }
+    
 
     /**
      * Adds all of the elements in the specified set to this set if
