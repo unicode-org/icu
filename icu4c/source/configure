@@ -3910,7 +3910,6 @@ trap 'rm -fr `echo "README icudefs.mk \
 		test/Makefile test/testdata/Makefile test/intltest/Makefile test/cintltst/Makefile \
 		test/ieeetest/Makefile \
 		samples/Makefile samples/date/Makefile samples/cal/Makefile \
-		samples/XMLConverter/Makefile \
 		common/unicode/platform.h common/icucfg.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -4068,7 +4067,6 @@ CONFIG_FILES=\${CONFIG_FILES-"README icudefs.mk \
 		test/Makefile test/testdata/Makefile test/intltest/Makefile test/cintltst/Makefile \
 		test/ieeetest/Makefile \
 		samples/Makefile samples/date/Makefile samples/cal/Makefile \
-		samples/XMLConverter/Makefile \
 		common/unicode/platform.h"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
