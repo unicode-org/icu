@@ -16,6 +16,7 @@
  *   Date        Name        Description
  * 
  *   06/20/2000  helena      OS/400 port changes; mostly typecast.
+ *   06/29/2000  helena      Major rewrite of the callback interface.
 */
 
 
@@ -23,7 +24,7 @@
 #include "uhash.h"
 #include "ucmp16.h"
 #include "ucmp8.h"
-#include "unicode/ucnv_bld.h"
+#include "ucnv_bld.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_cnv.h"
 #include "ucnv_imp.h"

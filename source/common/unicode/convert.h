@@ -3,6 +3,10 @@
  *   Copyright (C) 1998-1999, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
+ *
+ *   Change history:
+ *
+ *   06/29/2000  helena      Major rewrite of the callback APIs.
  *******************************************************************************/
 
 #ifndef CONVERT_H
@@ -288,21 +292,34 @@ const char*  getName( UErrorCode&  err) const;
  /**
   * Sets the current setting action taken when a character from a codepage is
   * missing. (Currently STOP or SUBSTITUTE).
-  * @param action the action constant if an equivalent codepage character is missing
+  * @param newAction the action constant if an equivalent codepage character is missing
+  * @param newContext the new toUnicode callback function state
+  * @param oldAction the original action constant, saved for later restoration.
+  * @param oldContext the old toUnicode callback function state
+  * @param err the error status code
   * @stable
   */
- void  setMissingCharAction(UConverterToUCallback     action,
+ void  setMissingCharAction(UConverterToUCallback     newAction,
+                void* newContext,
+                UConverterToUCallback oldAction, 
+                void** oldContext,
                 UErrorCode&            err);
 
 /**
  * Sets the current setting action taken when a unicode character is missing.
  * (currently T_UnicodeConverter_MissingUnicodeAction is either STOP or SUBSTITUTE,
  *  SKIP, CLOSEST_MATCH, ESCAPE_SEQ may be added in the future).
- * @param action the action constant if an equivalent Unicode character is missing
+ * @param newAction the action constant if an equivalent Unicode character is missing
+ * @param newContext the new fromUnicode callback function state
+ * @param oldAction the original action constant, saved for later restoration.
+ * @param oldContext the old fromUnicode callback function state
  * @param err the error status code
  * @stable
  */
- void  setMissingUnicodeAction(UConverterFromUCallback  action,
+ void  setMissingUnicodeAction(UConverterFromUCallback  newAction,
+                   void* newContext,
+                   UConverterFromUCallback oldAction,
+                   void** oldContext,
                    UErrorCode&            err);
 /**
  * Returns the localized name of the UnicodeConverter, if for any reason it is

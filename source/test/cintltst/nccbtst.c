@@ -435,6 +435,8 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 	char junk[9999];
 	char offset_str[9999];
 	char *p;
+    UConverterFromUCallback oldAction;
+    void* oldContext = NULL;
 	
 	
 	for(i=0;i<NEW_MAX_BUFFER;i++)
@@ -457,7 +459,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 	/*----setting the callback routine----*/
 	   
     
-	ucnv_setFromUCallBack (conv,  /*action*/callback, &status);
+	ucnv_setFromUCallBack (conv,  /*action*/callback, NULL, oldAction, &oldContext, &status);
 	if (U_FAILURE(status)) 
     { 
 		log_err("FAILURE in setting the callback Function! %s\n", myErrorName(status));  
@@ -616,7 +618,9 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 	char junk[9999];
 	char offset_str[9999];
 	UChar *p;
-	UConverterToUCallback action;	
+	UConverterToUCallback action;
+    UConverterToUCallback oldAction;
+    void* oldContext = NULL;
 
 	int32_t   realBufferSize;
 	UChar *realBufferEnd;
@@ -651,7 +655,7 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
     /*----setting the callback routine----*/
 	
        
-	ucnv_setToUCallBack (conv, callback, &status);
+	ucnv_setToUCallBack (conv, callback, NULL, oldAction, &oldContext, &status);
 	if (U_FAILURE(status)) 
     { 
 		log_err("FAILURE in setting the callback Function! %s\n", myErrorName(status));  

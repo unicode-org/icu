@@ -16,7 +16,8 @@ class Mutex;
 #include "mutex.h"
 extern "C" {
 #include "ucnv_io.h"
-#include "unicode/ucnv_bld.h"
+#include "unicode/ucnv_err.h"
+#include "ucnv_bld.h"
 #include "unicode/ucnv.h"
 }
 #include "unicode/convert.h"
@@ -337,17 +338,23 @@ UnicodeConverterCPP::getMissingUnicodeAction() const
 
 
 void
-UnicodeConverterCPP::setMissingCharAction(UConverterToUCallback  action,
+UnicodeConverterCPP::setMissingCharAction(UConverterToUCallback  newAction,
+                                          void *newContext,
+                                          UConverterToUCallback oldAction,
+                                          void **oldContext,
                                           UErrorCode&         err)
 {
-    ucnv_setToUCallBack(myUnicodeConverter, action, &err);
+    ucnv_setToUCallBack(myUnicodeConverter, newAction, newContext, oldAction, oldContext, &err);
 }
 
 void
-UnicodeConverterCPP::setMissingUnicodeAction(UConverterFromUCallback   action,
+UnicodeConverterCPP::setMissingUnicodeAction(UConverterFromUCallback   newAction,
+                                             void* newContext,
+                                             UConverterFromUCallback   oldAction,
+                                             void** oldContext,
                                              UErrorCode&             err)
 {
-    ucnv_setFromUCallBack(myUnicodeConverter, action, &err);
+    ucnv_setFromUCallBack(myUnicodeConverter, newAction, newContext, oldAction, oldContext, &err);
 }
 
 
