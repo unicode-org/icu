@@ -614,6 +614,9 @@ void Transliterator::filteredTransliterate(Replaceable& text,
 
             // Delete the rollback copy
             text.handleReplaceBetween(rollbackOrigin, rollbackOrigin + runLength, EMPTY);
+
+            // Move start past committed text
+            index.start = passStart;
         }
 
         else {
@@ -622,15 +625,25 @@ void Transliterator::filteredTransliterate(Replaceable& text,
             handleTransliterate(text, index, isIncrementalRun);
             delta = index.limit - limit; // change in length
 
+            // In a properly written transliterator, start == limit after
+            // handleTransliterate() returns when incremental is false.
+            // Catch cases where the subclass doesn't do this, and throw
+            // an exception.  (Just pinning start to limit is a bad idea,
+            // because what's probably happening is that the subclass
+            // isn't transliterating all the way to the end, and it should
+            // in non-incremental mode.)
+            if (!incremental && index.start != index.limit) {
+                // We can't throw an exception, so just fudge things
+                index.start = index.limit;
+            }
+
             // Adjust overall limit for insertions/deletions.  Don't need
             // to worry about contextLimit because handleTransliterate()
             // maintains that.
             globalLimit += delta;
         }
 
-        // If we failed to complete transliterate this run,
-        // then we are done.
-        if (index.start != index.limit) {
+        if (filter == NULL || isIncrementalRun) {
             break;
         }
 
