@@ -18,6 +18,8 @@
 #define SPRPIMPL_H
 
 #include "unicode/utypes.h"
+#include "unicode/ustring.h"
+#include "unicode/parseerr.h"
 
 #if !UCONFIG_NO_IDNA
 
@@ -43,6 +45,44 @@ enum {
     _IDNA_MAP_TO_NOTHING = 0x7FF
 };
 
+
+static inline 
+void syntaxError(const UChar* rules, 
+                 int32_t pos,
+                 int32_t rulesLen,
+                 UParseError* parseError) {
+
+    if(parseError == NULL){
+        return;
+    }
+    if(pos == rulesLen && rulesLen >0){
+        pos--;
+    }
+    parseError->offset = pos;
+    parseError->line = 0 ; // we are not using line numbers 
+    
+    // for pre-context
+    int32_t start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1));
+    int32_t stop  = pos;
+    
+    u_memcpy(parseError->preContext,rules+start,stop-start);
+    //null terminate the buffer
+    parseError->preContext[stop-start] = 0;
+    
+    //for post-context
+    start = pos;
+    if(start<rulesLen) {
+        U16_FWD_1(rules, start, rulesLen);
+    }
+
+    stop  = ((pos+U_PARSE_CONTEXT_LEN)<= rulesLen )? (pos+(U_PARSE_CONTEXT_LEN)) : 
+                                                            rulesLen;
+
+    u_memcpy(parseError->postContext,rules+start,stop-start);
+    //null terminate the buffer
+    parseError->postContext[stop-start]= 0;
+    
+}
 
 
 /* error codes for prototyping 
