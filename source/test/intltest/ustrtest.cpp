@@ -817,14 +817,14 @@ UnicodeStringTest::TestMiscellaneous()
 
 #if U_IOSTREAM_SOURCE
     logln("Testing the operator \"<<\" \n");
-    cout<<"Testing the \"<<\" operator---test1="<<test1<<". "<<test3<<"\n";
+    cout<<"Testing the \"<<\" operator---test1="<<test1<<". "<<test3<<endl;
 #endif
 }
 
 void
 UnicodeStringTest::TestStackAllocation()
 {
-     UChar            testString[] ={ 
+    UChar           testString[] ={ 
         0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x63, 0x72, 0x61, 0x7a, 0x79, 0x20, 0x74, 0x65, 0x73, 0x74, 0x2e, 0 };
     UChar           guardWord = 0x4DED;
     UnicodeString*  test = 0;
