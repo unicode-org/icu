@@ -4227,9 +4227,9 @@ static void TestJitterbug792()
 static void TestEBCDICUS4XML()
 {
     UChar unicodes_x[] = {0x0000, 0x0000, 0x0000, 0x0000};
-    const UChar toUnicodeMaps_x[] = {0x000A, 0x000A, 0x000D, 0x0000};
-    const char fromUnicodeMaps_x[] = {0x25, 0x25, 0x0D, 0x00};
-    const char newLines_x[] = {0x25, 0x15, 0x0D, 0x00};
+    static const UChar toUnicodeMaps_x[] = {0x000A, 0x000A, 0x000D, 0x0000};
+    static const char fromUnicodeMaps_x[] = {0x25, 0x25, 0x0D, 0x00};
+    static const char newLines_x[] = {0x25, 0x15, 0x0D, 0x00};
     char target_x[] = {0x00, 0x00, 0x00, 0x00};
     UChar *unicodes = unicodes_x;
     const UChar *toUnicodeMaps = toUnicodeMaps_x;
@@ -4241,15 +4241,22 @@ static void TestEBCDICUS4XML()
     cnv = ucnv_open("ebcdic-xml-us", &status);
     if (U_FAILURE(status) || cnv == 0) {
         log_err("Failed to open the converter for EBCDIC-XML-US.\n");
-                return;
+        return;
     }
     ucnv_toUnicode(cnv, &unicodes, unicodes+3, (const char**)&newLines, newLines+3, NULL, TRUE, &status);
     if (U_FAILURE(status) || memcmp(unicodes_x, toUnicodeMaps, sizeof(UChar)*3) != 0) {
-        log_err("To Unicode conversion failed in EBCDICUS4XML test.\n");
+        log_err("To Unicode conversion failed in EBCDICUS4XML test. %s\n",
+            u_errorName(status));
+        printUSeqErr(unicodes_x, 3);
+        printUSeqErr(toUnicodeMaps, 3);
     }
+    status = U_ZERO_ERROR;
     ucnv_fromUnicode(cnv, &target, target+3, (const UChar**)&toUnicodeMaps, toUnicodeMaps+3, NULL, TRUE, &status);
     if (U_FAILURE(status) || memcmp(target_x, fromUnicodeMaps, sizeof(char)*3) != 0) {
-        log_err("From Unicode conversion failed in EBCDICUS4XML test.\n");
+        log_err("From Unicode conversion failed in EBCDICUS4XML test. %s\n",
+            u_errorName(status));
+        printSeqErr(target_x, 3);
+        printSeqErr(fromUnicodeMaps, 3);
     }
     ucnv_close(cnv);
 }
