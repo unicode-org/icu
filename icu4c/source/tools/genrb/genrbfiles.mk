@@ -39,6 +39,7 @@ es_PR.txt es_PY.txt es_SV.txt es_UY.txt es_VE.txt \
 et.txt et_EE.txt fi.txt fi_FI.txt fi_FI_EURO.txt \
 fr.txt fr_BE.txt fr_BE_EURO.txt fr_CA.txt fr_CH.txt \
 fr_FR.txt fr_FR_EURO.txt fr_LU.txt fr_LU_EURO.txt \
+he.txt he_IL.txt \
 hr.txt hr_HR.txt hu.txt hu_HU.txt is.txt \
 is_IS.txt it.txt it_CH.txt it_IT.txt it_IT_EURO.txt \
 iw.txt iw_IL.txt ja.txt ja_JP.txt ko.txt \
