@@ -87,6 +87,10 @@ typedef void (*UConverterWriteSub) (UConverterFromUnicodeArgs *pArgs, int32_t of
  * For converter-specific safeClone processing
  * If this function is not set, then ucnv_safeClone assumes that the converter has no private data that changes
  * after the converter is done opening.
+ * If this function is set, then it is called just after a memcpy() of
+ * converter data to the new, empty converter, and is expected to set up
+ * the initial state of the converter.  It is not expected to increment the
+ * reference counts of the standard data types such as the shared data.
  */
 typedef UConverter * (*UConverterSafeClone) (const UConverter   *cnv, 
                                              void               *stackBuffer,

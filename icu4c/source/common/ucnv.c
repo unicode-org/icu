@@ -148,6 +148,27 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
     UConverter * localConverter;
     int32_t bufferSizeNeeded;
     char *stackBufferChars = (char *)stackBuffer;
+    UErrorCode cbErr;
+    UConverterToUnicodeArgs toUArgs = {
+        sizeof(UConverterToUnicodeArgs),
+            TRUE,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL
+    };
+    UConverterFromUnicodeArgs fromUArgs = {
+        sizeof(UConverterFromUnicodeArgs),
+            TRUE,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL
+    };
 
     if (status == NULL || U_FAILURE(*status)){
         return 0;
@@ -164,6 +185,7 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
         *pBufferSize -= offsetUp;
         stackBufferChars += offsetUp;
     }
+
     stackBuffer = (void *)stackBufferChars;
     
     if (cnv->sharedData->impl->safeClone != NULL) {
@@ -173,6 +195,7 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
     }
     else
     {
+        /* inherent sizing */
         bufferSizeNeeded = sizeof(UConverter);
     }
 
@@ -181,26 +204,59 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
         return 0;
     }
 
+
+    /* Now, see if we must allocate any memory */
     if (*pBufferSize < bufferSizeNeeded || stackBuffer == NULL)
     {
         /* allocate one here...*/
-        localConverter = ucnv_createConverter (ucnv_getName (cnv, status), status);
-        if (U_SUCCESS(*status))
-        {
+        localConverter = (UConverter *) uprv_malloc (bufferSizeNeeded);
+
+        if(localConverter == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+        
+        if (U_SUCCESS(*status)) {
             *status = U_SAFECLONE_ALLOCATED_ERROR;
         }
+        
+        /* record the fact that memory was allocated */
+        *pBufferSize = bufferSizeNeeded;
     } else {
-        if (cnv->sharedData->impl->safeClone != NULL) {
-            /* call the custom safeClone function */
-            localConverter = cnv->sharedData->impl->safeClone(cnv, stackBuffer, pBufferSize, status);
-        }
-        else
-        {
-            localConverter = (UConverter *)stackBuffer;
-            uprv_memcpy(localConverter, cnv, sizeof(UConverter));
-            localConverter->isCopyLocal = TRUE;
-        }
+        /* just use the stack buffer */
+        localConverter = (UConverter*) stackBuffer;
     }
+
+    /* increment refcount of shared data if needed */
+    if (cnv->sharedData->referenceCounter != ~0) {
+        umtx_lock (NULL);
+        if (cnv->sharedData->referenceCounter != ~0) {
+            cnv->sharedData->referenceCounter++;
+        }
+        umtx_unlock (NULL);
+    }
+
+    /* Copy initial state */
+    uprv_memcpy(localConverter, cnv, sizeof(UConverter));
+
+    /* now either call the safeclone fcn or not */
+    if (cnv->sharedData->impl->safeClone != NULL) {
+        /* call the custom safeClone function */
+        localConverter = cnv->sharedData->impl->safeClone(cnv, localConverter, pBufferSize, status);
+    }
+
+    if(localConverter == (UConverter*)stackBuffer) {
+        /* we're using user provided data - set to not destroy */
+        localConverter->isCopyLocal = TRUE;
+    }
+
+    /* allow callback functions to handle any memory allocation */
+    toUArgs.converter = fromUArgs.converter = localConverter;
+    cbErr = U_ZERO_ERROR;
+    cnv->fromCharErrorBehaviour(cnv->toUContext, &toUArgs, NULL, 0, UCNV_CLONE, &cbErr);
+    cbErr = U_ZERO_ERROR;
+    cnv->fromUCharErrorBehaviour(cnv->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_CLONE, &cbErr);
+
     return localConverter;
 }
 

@@ -3306,8 +3306,6 @@ _ISO_2022_SafeClone(
 
     uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataISO2022));
 
-    localClone->cnv.isCopyLocal = TRUE;
-    
     /* clone the current converter if it is open in ISO-2022 converter and since it 
      * preserves conversion state in currentConverter object we need to clone it
      */
