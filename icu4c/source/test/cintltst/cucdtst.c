@@ -1846,7 +1846,7 @@ static void TestUScriptCodeAPI(){
     {
         UErrorCode err = U_ZERO_ERROR;
         int32_t capacity=0;
-        UScriptCode jaCode[2]={ USCRIPT_KATAKANA,USCRIPT_HIRAGANA};
+        UScriptCode jaCode[]={ USCRIPT_KATAKANA,USCRIPT_HIRAGANA,USCRIPT_HAN};
         UScriptCode script[10]={USCRIPT_INVALID_CODE};
         int32_t num = uscript_getCode("ja",script,capacity, &err);
         /* preflight */
