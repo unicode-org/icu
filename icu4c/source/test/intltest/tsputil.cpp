@@ -16,13 +16,14 @@ PUtilTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /
     //if (exec) logln("TestSuite PUtilTest: ");
     switch (index) {
 
-        CASE(0, testIEEEremainder)
-        CASE(1, testMaxMin)
+        CASE(0, testMaxMin)
+//        CASE(1, testIEEEremainder)
 
         default: name = ""; break; //needed to end loop
     }
 }
 
+#if 0
 void
 PUtilTest::testIEEEremainder()
 {
@@ -87,6 +88,7 @@ PUtilTest::remainderTest(double x, double y, double exp)
         logln(UnicodeString("OK: IEEEremainder(") + x + ", " + y + ") is " + result);
 
 }
+#endif
 
 void
 PUtilTest::testMaxMin()

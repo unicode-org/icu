@@ -419,6 +419,8 @@ uprv_pow10(int32_t x)
  * and is preferred; the latter may work on platforms where the former
  * fails, but will introduce inaccuracies.
  */
+#if 0
+/* Several compilers can't optimize this properly, and no one uses it. */
 double
 uprv_IEEEremainder(double x, double p)
 {
@@ -505,6 +507,7 @@ uprv_IEEEremainder(double x, double p)
     return x;
 #endif
 }
+#endif
 
 double
 uprv_fmax(double x, double y)
