@@ -17,6 +17,7 @@ case "${host}" in
 		icu_cv_host_frag=$srcdir/config/mh-solaris 
 	fi ;;
 *-*-linux*) 	icu_cv_host_frag=$srcdir/config/mh-linux ;;
+*-*-freebsd*) 	icu_cv_host_frag=$srcdir/config/mh-freebsd ;;
 *-*-aix*) 	icu_cv_host_frag=$srcdir/config/mh-aix ;;
 *-*-hpux*)
 	case "$CXX" in 
@@ -40,4 +41,25 @@ if $2; then
 else
   $1_TRUE='#'
   $1_FALSE=
+fi])
+
+dnl FreeBSD -pthread check - Jonathan McDowell <noodles@earth.li>
+AC_DEFUN(AC_PTHREAD_FREEBSD,
+[AC_MSG_CHECKING([if we need -pthread for threads])
+AC_CACHE_VAL(ac_ldflag_pthread,
+[ac_save_LDFLAGS="$LDFLAGS"
+LDFLAGS="-pthread $LDFLAGS"
+AC_TRY_LINK(
+[
+char pthread_create();
+],
+pthread_create();,
+eval "ac_ldflag_pthread=yes",
+eval "ac_ldflag_pthread=no"),
+LIBS="$ac_save_LDFLAGS"
+])
+if eval "test \"`echo $ac_ldflag_pthread`\" = yes"; then
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
 fi])
