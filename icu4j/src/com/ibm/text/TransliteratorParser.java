@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliteratorParser.java,v $
-* $Date: 2001/11/27 21:43:00 $
-* $Revision: 1.15 $
+* $Date: 2001/11/27 21:48:31 $
+* $Revision: 1.16 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -1129,7 +1129,7 @@ class TransliteratorParser {
      * does not contain quantifiers or other special input-only elements.
      */
     private boolean isValidOutput(String output) {
-        for (int i=0; i<output.length(); ++i) {
+        for (int i=0; i<output.length(); ) {
             int c = UTF16.charAt(output, i);
             i += UTF16.getCharCount(c);
             if (parseData.lookupMatcher(c) != null) {
@@ -1260,7 +1260,7 @@ class TransliteratorParser {
     }
 
     static final int ruleEnd(String rule, int start, int limit) {
-        int end = quotedIndexOf(rule, start, limit, ";");
+        int end = Utility.quotedIndexOf(rule, start, limit, ";");
         if (end < 0) {
             end = limit;
         }
@@ -1341,38 +1341,6 @@ class TransliteratorParser {
             }
         }
         return data.getSegmentStandin(r);
-    }
-
-    /**
-     * Returns the index of the first character in a set, ignoring quoted text.
-     * For example, in the string "abc'hide'h", the 'h' in "hide" will not be
-     * found by a search for "h".  Unlike String.indexOf(), this method searches
-     * not for a single character, but for any character of the string
-     * <code>setOfChars</code>.
-     * @param text text to be searched
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param setOfChars string with one or more distinct characters
-     * @return Offset of the first character in <code>setOfChars</code>
-     * found, or -1 if not found.
-     * @see #indexOf
-     */
-    private static int quotedIndexOf(String text, int start, int limit,
-                                     String setOfChars) {
-        for (int i=start; i<limit; ++i) {
-            char c = text.charAt(i);
-            if (c == ESCAPE) {
-                ++i;
-            } else if (c == QUOTE) {
-                while (++i < limit
-                       && text.charAt(i) != QUOTE) {}
-            } else if (setOfChars.indexOf(c) >= 0) {
-                return i;
-            }
-        }
-        return -1;
     }
 }
 
