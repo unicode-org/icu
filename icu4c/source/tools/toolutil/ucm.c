@@ -1058,11 +1058,13 @@ ucm_mappingType(UCMStates *baseStates,
      * Suitable for an ICU conversion base table means:
      * - a 1:1 mapping
      * - not a |2 SUB mappings for <subchar1>
-     * - not a |1 fallback from something other than U+0000 to 0x00
+     * - not a |1 fallback to 0x00
+     * - no leading 0x00 bytes
      */
     if( m->uLen==1 && count==1 &&
         !((m->f==2 && m->bLen==1 && baseStates->maxCharLength>1) ||
-          (m->f==1 && m->bLen==1 && bytes[0]==0 && !(m->uLen==1 && codePoints[0]==0)))
+          (m->f==1 && m->bLen==1 && bytes[0]==0) ||
+          (m->bLen>1 && bytes[0]==0))
     ) {
         return 0; /* suitable for a base table */
     } else {
