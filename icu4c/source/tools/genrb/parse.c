@@ -16,6 +16,7 @@
 *******************************************************************************
 */
 
+#include "ucolimp.h"
 #include "parse.h"
 #include "error.h"
 #include "uhash.h"
@@ -25,7 +26,6 @@
 #include "ustr.h"
 #include "reslist.h"
 #include "unicode/ustring.h"
-#include "unicode/ucol.h"
 
 U_CAPI const UChar * U_EXPORT2 ucol_getDefaultRulesArray(uint32_t *size);
 
