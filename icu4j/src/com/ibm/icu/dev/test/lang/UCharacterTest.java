@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $
-* $Date: 2003/04/04 00:17:36 $
-* $Revision: 1.52 $
+* $Date: 2003/04/04 01:41:06 $
+* $Revision: 1.53 $
 *
 *******************************************************************************
 */
@@ -1241,11 +1241,14 @@ public final class UCharacterTest extends TestFmwk
         int defaultBidi[][]={{ 0x0590, UCharacterDirection.LEFT_TO_RIGHT },
             { 0x0600, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x07C0, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0x0900, UCharacterDirection.RIGHT_TO_LEFT },
             { 0xFB1D, UCharacterDirection.LEFT_TO_RIGHT },
             { 0xFB50, UCharacterDirection.RIGHT_TO_LEFT },
             { 0xFE00, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
             { 0xFE70, UCharacterDirection.LEFT_TO_RIGHT },
             { 0xFF00, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0x10800, UCharacterDirection.LEFT_TO_RIGHT },
+        	{ 0x11000, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x110000, UCharacterDirection.LEFT_TO_RIGHT }};
 
         RangeValueIterator iterator = UCharacter.getTypeIterator();
