@@ -20,7 +20,7 @@ MAN_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
 subdir = tools/genuca
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(MAN_FILES) $(DEPS) 
+CLEANFILES = *~ $(MAN_FILES) $(DEPS)
 
 ## Target information
 TARGET = genuca$(EXEEXT)

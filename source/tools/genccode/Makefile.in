@@ -23,7 +23,7 @@ MANX_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
 ALL_MAN_FILES = $(MANX_FILES)
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) $(ALL_MAN_FILES)
+CLEANFILES = *~ $(DEPS) $(ALL_MAN_FILES)
 
 ## Target information
 TARGET = genccode$(EXEEXT)
@@ -51,7 +51,7 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES) $(ALL_MAN_FILES)
+all-local: $(TARGET) $(ALL_MAN_FILES)
 
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
