@@ -3148,10 +3148,10 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
       	{
       		numTempBufSize *= 2;
       		if (numTempBuf == stackNumTempBuf){
-      			numTempBuf = (uint8_t *)malloc(sizeof(uint8_t) * numTempBufSize);
-      			memcpy(numTempBuf, stackNumTempBuf, UCOL_MAX_BUFFER);
+      			numTempBuf = (uint8_t *)uprv_malloc(sizeof(uint8_t) * numTempBufSize);
+      			uprv_memcpy(numTempBuf, stackNumTempBuf, UCOL_MAX_BUFFER);
       		}else
-      			realloc(numTempBuf, numTempBufSize);
+      			uprv_realloc(numTempBuf, numTempBufSize);
       	}
       	
 			// Skipping over leading zeroes.      	
@@ -3281,7 +3281,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
 		  }
 		  
 		  if (numTempBuf != stackNumTempBuf)
-		  	free(numTempBuf);
+		  	uprv_free(numTempBuf);
       } else {
         // no numeric mode, we'll just switch to whatever we stashed and continue
 		  CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
@@ -3826,10 +3826,10 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
       	{
       		numTempBufSize *= 2;
       		if (numTempBuf == stackNumTempBuf){
-      			numTempBuf = (uint8_t *)malloc(sizeof(uint8_t) * numTempBufSize);
-      			memcpy(numTempBuf, stackNumTempBuf, UCOL_MAX_BUFFER);
+      			numTempBuf = (uint8_t *)uprv_malloc(sizeof(uint8_t) * numTempBufSize);
+      			uprv_memcpy(numTempBuf, stackNumTempBuf, UCOL_MAX_BUFFER);
       		}else
-      			realloc(numTempBuf, numTempBufSize);
+      			uprv_realloc(numTempBuf, numTempBufSize);
       	}
       	
 			// Skipping over "trailing" zeroes but we still add to digIndx.
@@ -3950,7 +3950,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 			*(source->CEpos++) = (primWeight << UCOL_PRIMARYORDERSHIFT) | UCOL_CONTINUATION_MARKER;
 		  }
 		  if (numTempBuf != stackNumTempBuf)
-		  	free(numTempBuf);
+		  	uprv_free(numTempBuf);
 		  	
 		  source->toReturn = source->CEpos -1;
 		  return *(source->toReturn);
@@ -6650,7 +6650,7 @@ U_CAPI char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t
 
   while(strength <= UCOL_QUATERNARY && strength <= coll->strength) {
     if(strength > UCOL_PRIMARY) {
-      strcat(current, " . ");
+      uprv_strcat(current, " . ");
     }
     while(*currentSk != 0x01 && *currentSk != 0x00) { /* print a level */
       uprv_appendByteToHexString(current, *currentSk++);
