@@ -56,6 +56,7 @@ uprv_cnttab_open(CompactEIntArray *mapping, UErrorCode *status) {
     tbl->CEs = NULL;
     tbl->codePoints = NULL;
     tbl->offsets = NULL;
+    tbl->currentTag = NOT_FOUND_TAG;
     return tbl;
 }
 
@@ -75,16 +76,21 @@ ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *s
     *key = table->size++;
 
     if(table->size == table->capacity) {
+        ContractionTable **newElements = (ContractionTable **)uprv_malloc(table->capacity*2*sizeof(ContractionTable *));
         // do realloc
-        table->elements = (ContractionTable **)realloc(table->elements, table->capacity*2*sizeof(ContractionTable *));
-        uprv_memset(table->elements+table->capacity, 0, table->capacity*sizeof(ContractionTable *));
-        if(table->elements == NULL) {
+/*        table->elements = (ContractionTable **)realloc(table->elements, table->capacity*2*sizeof(ContractionTable *));*/
+        if(newElements == NULL) {
 #ifdef UCOL_DEBUG
           fprintf(stderr, "out of memory for contraction parts\n");
 #endif
           *status = U_MEMORY_ALLOCATION_ERROR;
         } else {
+          ContractionTable **oldElements = table->elements;
+          uprv_memcpy(newElements, oldElements, table->capacity*sizeof(ContractionTable *));
+          uprv_memset(newElements+table->capacity, 0, table->capacity*sizeof(ContractionTable *));
           table->capacity *= 2;
+          table->elements = newElements;
+          uprv_free(oldElements);
         }
     }
 
