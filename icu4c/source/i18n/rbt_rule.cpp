@@ -15,6 +15,7 @@
 #include "unicode/unicode.h"
 #include "cmemory.h"
 #include "strmatch.h"
+#include "util.h"
 
 static const UChar APOSTROPHE = 0x0027; // '\''
 static const UChar BACKSLASH  = 0x005C; // '\' 
@@ -574,7 +575,7 @@ void TransliterationRule::appendToRule(UnicodeString& rule,
     // quotes.  \u and \U are not recognized within quotes.  The same
     // logic applies to literals, but literals are never escaped.
     if (isLiteral ||
-        (escapeUnprintable && UnicodeSet::_isUnprintable(c))) {
+        (escapeUnprintable && Utility::isUnprintable(c))) {
         if (quoteBuf.length() > 0) {
             // We prefer backslash APOSTROPHE to double APOSTROPHE
             // (more readable, less similar to ") so if there are
@@ -609,7 +610,7 @@ void TransliterationRule::appendToRule(UnicodeString& rule,
             }
         }
         if (c != (UChar32)-1) {
-            if (!escapeUnprintable || !UnicodeSet::_escapeUnprintable(rule, c)) {
+            if (!escapeUnprintable || !Utility::escapeUnprintable(rule, c)) {
                 rule.append(c);
             }
         }

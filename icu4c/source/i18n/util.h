@@ -40,6 +40,21 @@ class Utility {
                                        int32_t radix = 10,
                                        int32_t minDigits = 1);
 
+    /**
+     * Return true if the character is NOT printable ASCII.
+     *
+     * This method should really be in UnicodeString (or similar).  For
+     * now, we implement it here and share it with friend classes.
+     */
+    static UBool isUnprintable(UChar32 c);
+
+    /**
+     * Escape unprintable characters using \uxxxx notation for U+0000 to
+     * U+FFFF and \Uxxxxxxxx for U+10000 and above.  If the character is
+     * printable ASCII, then do nothing and return FALSE.  Otherwise,
+     * append the escaped notation and return TRUE.
+     */
+    static UBool escapeUnprintable(UnicodeString& result, UChar32 c);
 };
 
 U_NAMESPACE_END

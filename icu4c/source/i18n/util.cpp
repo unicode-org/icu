@@ -10,6 +10,12 @@
 
 #include "util.h"
 
+// Define UChar constants using hex for EBCDIC compatibility
+// Used #define to reduce private static exports and memory access time.
+#define BACKSLASH       ((UChar)0x005C) /*\*/
+#define UPPER_U         ((UChar)0x0055) /*U*/
+#define LOWER_U         ((UChar)0x0075) /*u*/
+
 // "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 static const UChar DIGITS[] = {
     48,49,50,51,52,53,54,55,56,57,
@@ -48,6 +54,43 @@ UnicodeString& Utility::appendNumber(UnicodeString& result, int32_t n,
         r /= radix;
     }
     return result;
+}
+
+static const UChar HEX[16] = {48,49,50,51,52,53,54,55,  // 0-7
+                              56,57,65,66,67,68,69,70}; // 8-9 A-F
+
+/**
+ * Return true if the character is NOT printable ASCII.
+ */
+UBool Utility::isUnprintable(UChar32 c) {
+    return !(c == 0x0A || (c >= 0x20 && c <= 0x7E));
+}
+
+/**
+ * Escape unprintable characters using \uxxxx notation for U+0000 to
+ * U+FFFF and \Uxxxxxxxx for U+10000 and above.  If the character is
+ * printable ASCII, then do nothing and return FALSE.  Otherwise,
+ * append the escaped notation and return TRUE.
+ */
+UBool Utility::escapeUnprintable(UnicodeString& result, UChar32 c) {
+    if (isUnprintable(c)) {
+        result.append(BACKSLASH);
+        if (c & ~0xFFFF) {
+            result.append(UPPER_U);
+            result.append(HEX[0xF&(c>>28)]);
+            result.append(HEX[0xF&(c>>24)]);
+            result.append(HEX[0xF&(c>>20)]);
+            result.append(HEX[0xF&(c>>16)]);
+        } else {
+            result.append(LOWER_U);
+        }
+        result.append(HEX[0xF&(c>>12)]);
+        result.append(HEX[0xF&(c>>8)]);
+        result.append(HEX[0xF&(c>>4)]);
+        result.append(HEX[0xF&c]);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 //eof
