@@ -2462,6 +2462,11 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
         *status = U_ILLEGAL_ARGUMENT_ERROR;
     }
 
+    // string search does not really work when numeric collation is turned on
+    if(ucol_getAttribute(collator, UCOL_NUMERIC_COLLATION, status) == UCOL_ON) {
+        *status = U_UNSUPPORTED_ERROR;
+    }
+
     if (U_SUCCESS(*status)) {
         initializeFCD(status);
         if (U_FAILURE(*status)) {

@@ -209,6 +209,8 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_open(const UChar          *pattern,
 * Creating a search iterator data struct using the argument collator language
 * rule set. Note, user retains the ownership of this collator, thus the 
 * responsibility of deletion lies with the user.
+* NOTE: string search cannot be instantiated from a collator that has 
+* collate digits as numbers (CODAN) turned on.
 * @param pattern for matching
 * @param patternlength length of the pattern, -1 for null-termination
 * @param text text string
