@@ -26,18 +26,29 @@
 // class DateFormatSymbols
 // *****************************************************************************
 
+/**
+ * These are static arrays we use only in the case where we have no
+ * resource data.
+ */
+
 #define PATTERN_CHARS_LEN 20
 
-// generic date-format pattern symbols.  For their meanings, see class docs
-// for SimpleDateFormat
-UnicodeString DateFormatSymbols::fgPatternChars = UNICODE_STRING("GyMdkHmsSEDFwWahKzYe", PATTERN_CHARS_LEN);
+/**
+ * Unlocalized date-time pattern characters. For example: 'y', 'd', etc. All
+ * locales use the same these unlocalized pattern characters.
+ */
+static const UChar gPatternChars[] = 
+{
+    0x47, 0x79, 0x4D, 0x64, 0x6B, 0x48, 0x6D, 0x73, 0x53, 0x45,
+    0x44, 0x46, 0x77, 0x57, 0x61, 0x68, 0x4B, 0x7A, 0x59, 0x65, 0 /* "GyMdkHmsSEDFwWahKzYe" */
+};
 
 //------------------------------------------------------
 // Strings of last resort.  These are only used if we have no resource
 // files.  They aren't designed for actual use, just for backup.
 
 // These are the month names and abbreviations of last resort.
-const UChar DateFormatSymbols::fgLastResortMonthNames[13][3] =
+static const UChar gLastResortMonthNames[13][3] =
 {
     {0x0030, 0x0031, 0x0000}, /* "01" */
     {0x0030, 0x0032, 0x0000}, /* "02" */
@@ -55,7 +66,7 @@ const UChar DateFormatSymbols::fgLastResortMonthNames[13][3] =
 };
 
 // These are the weekday names and abbreviations of last resort.
-const UChar DateFormatSymbols::fgLastResortDayNames[8][2] =
+static const UChar gLastResortDayNames[8][2] =
 {
     {0x0000, 0x0000}, /* "" */
     {0x0031, 0x0000}, /* "1" */
@@ -68,13 +79,13 @@ const UChar DateFormatSymbols::fgLastResortDayNames[8][2] =
 };
 
 // These are the am/pm and BC/AD markers of last resort.
-const UChar DateFormatSymbols::fgLastResortAmPmMarkers[2][3] =
+static const UChar gLastResortAmPmMarkers[2][3] =
 {
     {0x0041, 0x004D, 0x0000}, /* "AM" */
     {0x0050, 0x004D, 0x0000}  /* "PM" */
 };
 
-const UChar DateFormatSymbols::fgLastResortEras[2][3] =
+static const UChar gLastResortEras[2][3] =
 {
     {0x0042, 0x0043, 0x0000}, /* "BC" */
     {0x0041, 0x0044, 0x0000}  /* "AD" */
@@ -82,7 +93,7 @@ const UChar DateFormatSymbols::fgLastResortEras[2][3] =
 
 
 // These are the zone strings of last resort.
-const UChar DateFormatSymbols::fgLastResortZoneStrings[5][4] =
+static const UChar gLastResortZoneStrings[5][4] =
 {
     {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
     {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
@@ -395,6 +406,15 @@ DateFormatSymbols::setZoneStrings(const UnicodeString* const *strings, int32_t r
 
 //------------------------------------------------------
 
+const UnicodeString&
+DateFormatSymbols::getPatternChars(void)
+{
+    static const UnicodeString gPatternCharsStr(gPatternChars);
+    return gPatternCharsStr;
+}
+
+//------------------------------------------------------
+
 UnicodeString&
 DateFormatSymbols::getLocalPatternChars(UnicodeString& result) const
 {
@@ -470,17 +490,17 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
 
             status = U_USING_FALLBACK_ERROR;
 
-            initField(&fEras, fErasCount, (const UChar *)fgLastResortEras, kEraNum, kEraLen, status);
-            initField(&fMonths, fMonthsCount, (const UChar *)fgLastResortMonthNames, kMonthNum, kMonthLen,  status);
-            initField(&fShortMonths, fShortMonthsCount, (const UChar *)fgLastResortMonthNames, kMonthNum, kMonthLen, status);
-            initField(&fWeekdays, fWeekdaysCount, (const UChar *)fgLastResortDayNames, kDayNum, kDayLen, status);
-            initField(&fShortWeekdays, fShortWeekdaysCount, (const UChar *)fgLastResortDayNames, kDayNum, kDayLen, status);
-            initField(&fAmPms, fAmPmsCount, (const UChar *)fgLastResortAmPmMarkers, kAmPmNum, kAmPmLen, status);
+            initField(&fEras, fErasCount, (const UChar *)gLastResortEras, kEraNum, kEraLen, status);
+            initField(&fMonths, fMonthsCount, (const UChar *)gLastResortMonthNames, kMonthNum, kMonthLen,  status);
+            initField(&fShortMonths, fShortMonthsCount, (const UChar *)gLastResortMonthNames, kMonthNum, kMonthLen, status);
+            initField(&fWeekdays, fWeekdaysCount, (const UChar *)gLastResortDayNames, kDayNum, kDayLen, status);
+            initField(&fShortWeekdays, fShortWeekdaysCount, (const UChar *)gLastResortDayNames, kDayNum, kDayLen, status);
+            initField(&fAmPms, fAmPmsCount, (const UChar *)gLastResortAmPmMarkers, kAmPmNum, kAmPmLen, status);
 
             fZoneStrings = new UnicodeString*[1];
             fZoneStringsRowCount = 1;
-            initField(fZoneStrings, fZoneStringsColCount, (const UChar *)fgLastResortZoneStrings, kZoneNum, kZoneLen, status);
-            fLocalPatternChars = fgPatternChars;
+            initField(fZoneStrings, fZoneStringsColCount, (const UChar *)gLastResortZoneStrings, kZoneNum, kZoneLen, status);
+            fLocalPatternChars = gPatternChars;
         }
         else {
             fEras = NULL;
@@ -537,9 +557,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     
     // If the locale data does not include new pattern chars, use the defaults
     if (fLocalPatternChars.length() < PATTERN_CHARS_LEN) {
-        UnicodeString str;
-        fgPatternChars.extractBetween(fLocalPatternChars.length(), PATTERN_CHARS_LEN, str);
-        fLocalPatternChars.append(str);
+        fLocalPatternChars.append(&gPatternChars[fLocalPatternChars.length()]);
     }
 }
 
