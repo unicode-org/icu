@@ -1375,7 +1375,7 @@ static const UConverterImpl _UTF32BEImpl = {
     T_UConverter_fromUnicode_UTF32_BE,
     NULL,
 /*    T_UConverter_fromUnicode_UTF32_BE_OFFSETS_LOGIC, */
-    T_UConverter_getNextUChar_UTF32_BE,
+    NULL, /* T_UConverter_getNextUChar_UTF32_BE, */
 
     NULL,
     NULL
@@ -1604,7 +1604,7 @@ static const UConverterImpl _UTF32LEImpl = {
     T_UConverter_fromUnicode_UTF32_LE,
     NULL,
 /*    T_UConverter_fromUnicode_UTF32_LE_OFFSETS_LOGIC, */
-    T_UConverter_getNextUChar_UTF32_LE,
+    NULL, /* T_UConverter_getNextUChar_UTF32_LE, */
 
     NULL,
     NULL
