@@ -268,15 +268,16 @@ public:
      * Example: using the US locale: "yyyy.MM.dd e 'at' HH:mm:ss zzz" ->>
      * 1996.07.10 AD at 15:08:56 PDT
      *
-     * @param date          The date-time value to be formatted into a date-time string.
+     * @param cal           a Calendar set to the date and time to be formatted
+     *                      into a date/time string.
      * @param toAppendTo    The result of the formatting operation is appended to this
      *                      string.
      * @param pos           The formatting position. On input: an alignment field,
      *                      if desired. On output: the offsets of the alignment field.
      * @return              A reference to 'toAppendTo'.
-     * @stable
+     * @draft ICU 2.1
      */
-    virtual UnicodeString& format(  UDate date,
+    virtual UnicodeString& format(  Calendar& cal,
                                     UnicodeString& toAppendTo,
                                     FieldPosition& pos) const;
 
@@ -305,6 +306,14 @@ public:
 
     /**
      * Redeclared DateFormat method.
+     * @draft ICU 2.1
+     */
+    UnicodeString& format(UDate date,
+                          UnicodeString& result,
+                          FieldPosition& fieldPosition) const;
+
+    /**
+     * Redeclared DateFormat method.
      * @stable
      */
     UnicodeString& format(const Formattable& obj,
@@ -316,6 +325,27 @@ public:
      * @stable
      */
     UnicodeString& format(UDate date, UnicodeString& result) const;
+
+    /**
+     * Parse a date/time string beginning at the given parse position. For
+     * example, a time text "07/10/96 4:5 PM, PDT" will be parsed into a Date
+     * that is equivalent to Date(837039928046).
+     * <P>
+     * By default, parsing is lenient: If the input is not in the form used by
+     * this object's format method but can still be parsed as a date, then the
+     * parse succeeds. Clients may insist on strict adherence to the format by
+     * calling setLenient(false).
+     *
+     * @param text  The date/time string to be parsed
+     * @param pos   On input, the position at which to start parsing; on
+     *              output, the position at which parsing terminated, or the
+     *              start position if the parse failed.
+     * @return      A valid UDate if the input could be parsed.
+     * @draft ICU 2.1
+     */
+    virtual void parse( const UnicodeString& text,
+                        Calendar& cal,
+                        ParsePosition& pos) const;
 
     /**
      * Parse a date/time string starting at the given parse position. For
@@ -336,8 +366,8 @@ public:
      * @return      A valid UDate if the input could be parsed.
      * @stable
      */
-    virtual UDate parse( const UnicodeString& text,
-                        ParsePosition& pos) const;
+    UDate parse( const UnicodeString& text,
+                 ParsePosition& pos) const;
 
 
     /**
@@ -547,6 +577,7 @@ private:
                                 int32_t count,
                                 int32_t beginOffset,
                                 FieldPosition& pos,
+                                Calendar& cal,
                                 UErrorCode& status) const; // in case of illegal argument
 
     /**
@@ -593,7 +624,7 @@ private:
      * indicating matching failure, otherwise.
      */
     int32_t matchString(const UnicodeString& text, UTextOffset start, Calendar::EDateFields field,
-                    const UnicodeString* stringArray, int32_t stringArrayCount) const;
+                        const UnicodeString* stringArray, int32_t stringArrayCount, Calendar& cal) const;
 
     /**
      * Private member function that converts the parsed date strings into
@@ -607,7 +638,7 @@ private:
      * indicating matching failure, otherwise.
      */
     int32_t subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
-                 UBool obeyCount, UBool ambiguousYear[]) const;
+                     UBool obeyCount, UBool ambiguousYear[], Calendar& cal) const;
 
     /**
      * Parse the given text, at the given position, as a numeric value, using
@@ -743,6 +774,15 @@ SimpleDateFormat::format(const Formattable& obj,
     // Don't use Format:: - use immediate base class only,
     // in case immediate base modifies behavior later.
     return DateFormat::format(obj, result, status);
+}
+
+inline UnicodeString&
+SimpleDateFormat::format(UDate date,
+                         UnicodeString& result,
+                         FieldPosition& fieldPosition) const {
+    // Don't use Format:: - use immediate base class only,
+    // in case immediate base modifies behavior later.
+    return DateFormat::format(date, result, fieldPosition);
 }
 
 inline UnicodeString&
