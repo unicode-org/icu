@@ -1,6 +1,7 @@
 package com.ibm.test.translit;
 import com.ibm.test.*;
 import com.ibm.text.*;
+import com.ibm.util.Utility;
 import java.io.*;
 import java.text.ParseException;
 
@@ -29,7 +30,7 @@ public class RoundTripTest extends TestFmwk {
     public void TestArabic() throws IOException, ParseException {
         new Test("Latin-Arabic", 
           TestUtility.LATIN_SCRIPT, TestUtility.ARABIC_SCRIPT)
-          .test(null, "[\u0620-\u065F-[\u0640]]", this);
+          .test("[a-z]", "[\u0620-\u065F-[\u0640]]", this);
     }
 
     public void TestHebrew() throws IOException, ParseException {
@@ -67,7 +68,7 @@ public class RoundTripTest extends TestFmwk {
     public void TestCyrillic() throws IOException, ParseException {
         new Test("Latin-Cyrillic", 
           TestUtility.LATIN_SCRIPT, TestUtility.CYRILLIC_SCRIPT)
-          .test(null, "[\u0401\u0410-\u0451]", this);
+          .test(null, "[\u0401\u0410-\u044F\u0451]", this);
     }
 
     static class Test {
@@ -112,9 +113,12 @@ public class RoundTripTest extends TestFmwk {
                 this.targetRange = new UnicodeSet(targetRange);
             }
 
-            if (this.sourceRange == null) this.sourceRange = new UnicodeSet("[a-Z]");
+            if (this.sourceRange == null) this.sourceRange = new UnicodeSet("[a-zA-Z]");
 
             this.log = log;
+
+            log.logln(Utility.escape("Source: " + this.sourceRange));
+            log.logln(Utility.escape("Target: " + this.targetRange));
 
             // make a UTF-8 output file we can read with a browser
 
@@ -158,7 +162,7 @@ public class RoundTripTest extends TestFmwk {
             log.logln("Checking that all source characters convert to target - Singles");
 
             for (char c = 0; c < 0xFFFF; ++c) {
-                if (Character.getType(c) == Character.UNASSIGNED ||
+                if (TestUtility.isUnassigned(c) ||
                     !isSource(c)) continue;
                 String cs = String.valueOf(c);
                 String targ = sourceToTarget.transliterate(String.valueOf(cs));
@@ -170,7 +174,7 @@ public class RoundTripTest extends TestFmwk {
             log.logln("Checking that all source characters convert to target - Doubles");
 
             for (char c = 0; c < 0xFFFF; ++c) {
-                if (Character.getType(c) == Character.UNASSIGNED ||
+                if (TestUtility.isUnassigned(c) ||
                     !isSource(c)) continue;
                 for (char d = 0; d < 0xFFFF; ++d) {
                     if (Character.getType(d) == Character.UNASSIGNED ||
@@ -186,7 +190,7 @@ public class RoundTripTest extends TestFmwk {
             log.logln("Checking that target characters convert to source and back - Singles");
 
             for (char c = 0; c < 0xFFFF; ++c) {
-                if (Character.getType(c) == Character.UNASSIGNED ||
+                if (TestUtility.isUnassigned(c) ||
                     !isTarget(c)) continue;
                 String cs = String.valueOf(c);
                 String targ = targetToSource.transliterate(cs);
@@ -202,7 +206,7 @@ public class RoundTripTest extends TestFmwk {
             int count = 0;
             StringBuffer buf = new StringBuffer("aa");
             for (char c = 0; c < 0xFFFF; ++c) {
-                if (Character.getType(c) == Character.UNASSIGNED ||
+                if (TestUtility.isUnassigned(c) ||
                     !isTarget(c)) continue;
                 if (++count > pairLimit) {
                     throw new TestTruncated("Test truncated at " + pairLimit + " x 64k pairs");
@@ -258,7 +262,7 @@ public class RoundTripTest extends TestFmwk {
         public boolean isSource(char c) {
             byte script = TestUtility.getScript(c);
             if (script != sourceScript) return false;
-            if (!Character.isLetter(c)) return false;
+            if (!TestUtility.isLetter(c)) return false;
             if (!sourceRange.contains(c)) return false;
             return true;
         }
@@ -279,7 +283,7 @@ public class RoundTripTest extends TestFmwk {
         public boolean isTarget(char c) {
             byte script = TestUtility.getScript(c);
             if (script != targetScript) return false;
-            if (!Character.isLetter(c)) return false;
+            if (!TestUtility.isLetter(c)) return false;
             if (targetRange != null && !targetRange.contains(c)) return false;
             return true;
         }
