@@ -1149,29 +1149,36 @@ LocaleTest::TestEuroSupport()
     }
 
     UnicodeString dollarStr("USD", ""), euroStr("EUR", ""), genericStr((UChar)0x00a4), resultStr;
+    UChar tmp[4];
     status = U_ZERO_ERROR;
 
-    resultStr = ucurr_forLocale("en_US", &status);
+    ucurr_forLocale("en_US", tmp, 4, &status);
+    resultStr.setTo(tmp);
     if (dollarStr != resultStr) {
         errln("Fail: en_US didn't return USD");
     }
-    resultStr = ucurr_forLocale("en_US_EURO", &status);
+    ucurr_forLocale("en_US_EURO", tmp, 4, &status);
+    resultStr.setTo(tmp);
     if (euroStr != resultStr) {
         errln("Fail: en_US_EURO didn't return EUR");
     }
-    resultStr = ucurr_forLocale("en_GB_EURO", &status);
+    ucurr_forLocale("en_GB_EURO", tmp, 4, &status);
+    resultStr.setTo(tmp);
     if (euroStr != resultStr) {
         errln("Fail: en_GB_EURO didn't return EUR");
     }
-    resultStr = ucurr_forLocale("en_US_PREEURO", &status);
+    ucurr_forLocale("en_US_PREEURO", tmp, 4, &status);
+    resultStr.setTo(tmp);
     if (dollarStr != resultStr) {
         errln("Fail: en_US_PREEURO didn't fallback to en_US");
     }
-    resultStr = ucurr_forLocale("en_US_Q", &status);
+    ucurr_forLocale("en_US_Q", tmp, 4, &status);
+    resultStr.setTo(tmp);
     if (dollarStr != resultStr) {
         errln("Fail: en_US_Q didn't fallback to en_US");
     }
-    if (NULL != ucurr_forLocale("en_QQ", &status) || U_SUCCESS(status)) {
+    int32_t invalidLen = ucurr_forLocale("en_QQ", tmp, 4, &status);
+    if (invalidLen || U_SUCCESS(status)) {
         errln("Fail: en_QQ didn't return NULL");
     }
 }
