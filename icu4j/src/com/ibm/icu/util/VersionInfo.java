@@ -91,8 +91,7 @@ public final class VersionInfo
     
     /**
      * Unicode 4.0 version
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static final VersionInfo UNICODE_4_0;
     

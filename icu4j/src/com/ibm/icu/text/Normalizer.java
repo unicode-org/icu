@@ -141,8 +141,7 @@ public final class Normalizer implements Cloneable {
      * Options bit set value to select Unicode 3.2 normalization
      * (except NormalizationCorrections).
      * At most one Unicode version can be selected at a time.
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static final int UNICODE_3_2=0x20;
 
@@ -165,8 +164,7 @@ public final class Normalizer implements Cloneable {
 
         /**
          * This method is used for method dispatch
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         protected int normalize(char[] src, int srcStart, int srcLimit,
                                 char[] dest,int destStart,int destLimit, 
@@ -182,8 +180,7 @@ public final class Normalizer implements Cloneable {
 
         /**
          * This method is used for method dispatch
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         protected int normalize(char[] src, int srcStart, int srcLimit,
                                 char[] dest,int destStart,int destLimit,
@@ -196,8 +193,7 @@ public final class Normalizer implements Cloneable {
         
         /**
          * This method is used for method dispatch
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         protected String normalize(String src, int options) {
             return src;
@@ -237,8 +233,7 @@ public final class Normalizer implements Cloneable {
 
         /**
          * This method is used for method dispatch
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         protected QuickCheckResult quickCheck(char[] src,int start, int limit, 
                                               boolean allowMaybe,UnicodeSet nx) {
@@ -739,8 +734,7 @@ public final class Normalizer implements Cloneable {
      * internal normalization functions.)
      *
      * @see #compare
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static final int COMPARE_NORM_OPTIONS_SHIFT  = 20;
         
@@ -764,8 +758,7 @@ public final class Normalizer implements Cloneable {
      *            Currently the only available option is {@link #UNICODE_3_2}.
      *            If you want the default behavior corresponding to one of the
      *            standard Unicode Normalization Forms, use 0 for this argument.
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public Normalizer(String str, Mode mode, int opt) {
         this.text = UCharacterIterator.getInstance(str);
@@ -786,8 +779,7 @@ public final class Normalizer implements Cloneable {
      *            Currently the only available option is {@link #UNICODE_3_2}.
      *            If you want the default behavior corresponding to one of the
      *            standard Unicode Normalization Forms, use 0 for this argument.
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public Normalizer(CharacterIterator iter, Mode mode, int opt) {
         this.text = UCharacterIterator.getInstance(
@@ -806,8 +798,7 @@ public final class Normalizer implements Cloneable {
      *
      * @param mode  The normalization mode.
      * @param options The normalization options, ORed together (0 for no options).
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public Normalizer(UCharacterIterator iter, Mode mode, int options) {
         try {
@@ -872,8 +863,7 @@ public final class Normalizer implements Cloneable {
      *                    NFC rules.
      * @param options    The only recognized option is UNICODE_3_2
      * @return String    The composed string   
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */            
     public static String compose(String str, boolean compat, int options) {
            
@@ -914,8 +904,7 @@ public final class Normalizer implements Cloneable {
      *                result, the output was truncated.
      * @exception IndexOutOfBoundsException if target.length is less than the 
      *             required length
-     * @draft ICU 2.6  
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6  
      */         
     public static int compose(char[] source,char[] target, boolean compat, int options) {
         UnicodeSet nx = NormalizerImpl.getNX(options);
@@ -954,8 +943,7 @@ public final class Normalizer implements Cloneable {
      *                result, the output was truncated.
      * @exception IndexOutOfBoundsException if target.length is less than the 
      *             required length 
-     * @draft ICU 2.6 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6 
      */         
     public static int compose(char[] src,int srcStart, int srcLimit,
                               char[] dest,int destStart, int destLimit,
@@ -1005,8 +993,7 @@ public final class Normalizer implements Cloneable {
      *                 rules.
      * @param options The normalization options, ORed together (0 for no options).
      * @return String The decomposed string 
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */         
     public static String decompose(String str, boolean compat, int options) {
         
@@ -1040,8 +1027,7 @@ public final class Normalizer implements Cloneable {
      * @param options The normalization options, ORed together (0 for no options).
      * @exception IndexOutOfBoundsException if the target capacity is less than
      *             the required length   
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static int decompose(char[] source,char[] target, boolean compat, int options) {
         int[] trailCC = new int[1];
@@ -1073,8 +1059,7 @@ public final class Normalizer implements Cloneable {
      *                result,the output was truncated.
      * @exception IndexOutOfBoundsException if the target capacity is less than
      *             the required length  
-     * @draft ICU 2.6 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6 
      */
     public static int decompose(char[] src,int srcStart, int srcLimit,
                                 char[] dest,int destStart, int destLimit,
@@ -1120,8 +1105,7 @@ public final class Normalizer implements Cloneable {
      * @param mode      the normalization mode
      * @param options   the optional features to be enabled.
      * @return String   the normalized string
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static String normalize(String str, Mode mode, int options) {
         return mode.normalize(str,options);
@@ -1156,8 +1140,7 @@ public final class Normalizer implements Cloneable {
      *                result, the output was truncated.
      * @exception    IndexOutOfBoundsException if the target capacity is less 
      *                than the required length
-     * @draft ICU 2.6     
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6     
      */
     public static int normalize(char[] source,char[] target, Mode  mode, int options) {
         int length = normalize(source,0,source.length,target,0,target.length,mode, options);
@@ -1186,8 +1169,7 @@ public final class Normalizer implements Cloneable {
      *                   result, the output was truncated.
      * @exception       IndexOutOfBoundsException if the target capacity is 
      *                   less than the required length
-     * @draft ICU 2.6    
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6    
      */       
     public static int normalize(char[] src,int srcStart, int srcLimit, 
                                 char[] dest,int destStart, int destLimit,
@@ -1208,8 +1190,7 @@ public final class Normalizer implements Cloneable {
      * @param options   Options for use with exclusion set an tailored Normalization
      *                                   The only option that is currently recognized is UNICODE_3_2
      * @return String   The normalized string
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      * @see #UNICODE_3_2
      */
     // TODO: actually do the optimization when the guts of Normalizer are 
@@ -1224,8 +1205,7 @@ public final class Normalizer implements Cloneable {
      * @param mode      The normalization mode
      * @return String   The normalized string
      * @see #UNICODE_3_2                
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     // TODO: actually do the optimization when the guts of Normalizer are 
     // upgraded --has just dumb implementation for now
@@ -1257,8 +1237,7 @@ public final class Normalizer implements Cloneable {
      *                                   The only option that is currently recognized is UNICODE_3_2     
      * @return         Return code to specify if the text is normalized or not 
      *                     (Normalizer.YES, Normalizer.NO or Normalizer.MAYBE)
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static QuickCheckResult quickCheck( String source, Mode mode, int options) {
         return mode.quickCheck(source.toCharArray(),0,source.length(),true,NormalizerImpl.getNX(options));
@@ -1275,8 +1254,7 @@ public final class Normalizer implements Cloneable {
      *                                   The only option that is currently recognized is UNICODE_3_2
      * @return       Return code to specify if the text is normalized or not 
      *                (Normalizer.YES, Normalizer.NO or Normalizer.MAYBE)
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static QuickCheckResult quickCheck(char[] source, Mode mode, int options) {
         return mode.quickCheck(source,0,source.length,true, NormalizerImpl.getNX(options));
@@ -1303,8 +1281,7 @@ public final class Normalizer implements Cloneable {
      * @return          Return code to specify if the text is normalized or not 
      *                   (Normalizer.YES, Normalizer.NO or
      *                   Normalizer.MAYBE)
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
 
     public static QuickCheckResult quickCheck(char[] source,int start, 
@@ -1334,8 +1311,7 @@ public final class Normalizer implements Cloneable {
      *                                   The only option that is currently recognized is UNICODE_3_2    
      * @return Boolean value indicating whether the source string is in the
      *         "mode" normalization form
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static boolean isNormalized(char[] src,int start,
                                        int limit, Mode mode, 
@@ -1351,8 +1327,7 @@ public final class Normalizer implements Cloneable {
      * @param options   Options for use with exclusion set an tailored Normalization
      *                                   The only option that is currently recognized is UNICODE_3_2   
      * @see #isNormalized
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static boolean isNormalized(String str, Mode mode, int options) {
         return (mode.quickCheck(str.toCharArray(),0,str.length(),false,NormalizerImpl.getNX(options))==YES);
@@ -1367,8 +1342,7 @@ public final class Normalizer implements Cloneable {
      *                                   The only option that is currently recognized is UNICODE_3_2    
      *
      * @see #isNormalized
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     // TODO: actually do the optimization when the guts of Normalizer are 
     // upgraded --has just dumb implementation for now
@@ -2065,8 +2039,7 @@ public final class Normalizer implements Cloneable {
      *                  turn the option on and <tt>false</tt> to turn it off.
      *
      * @see #getOption
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public void setOption(int option,boolean value) {
         if (value) {
@@ -2080,8 +2053,7 @@ public final class Normalizer implements Cloneable {
      * Determine whether an option is turned on or off.
      * <p>
      * @see #setOption
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public int getOption(int option) {
         if((options & option)!=0) {

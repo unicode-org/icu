@@ -2146,8 +2146,7 @@ public final class ULocale implements Serializable {
                         if (subtableName != null) {
                             table = table.getWithFallback(subtableName);
                         }
-                        table = table.get(item); // no fallback?
-                        return table.getString();
+                        return table.getStringWithFallback(item);
                     }
                     catch (MissingResourceException e) {
                         String fallbackLocale = table.getWithFallback("Fallback").getString();

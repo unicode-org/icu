@@ -602,8 +602,7 @@ public final class RuleBasedCollator extends Collator
      *            </ul>
      * @see #getVariableTop
      * @see RuleBasedCollator#setAlternateHandlingShifted
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public int setVariableTop(String varTop)
     {
@@ -648,8 +647,7 @@ public final class RuleBasedCollator extends Collator
      *               getVariableTop
      * @see #getVariableTop
      * @see #setVariableTop
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public void setVariableTop(int varTop)
     {
@@ -695,8 +693,7 @@ public final class RuleBasedCollator extends Collator
      *        the tailored rules
      * @return the current rules that defines this Collator.
      * @see #getRules
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public String getRules(boolean fullrules)
     {
@@ -936,8 +933,7 @@ public final class RuleBasedCollator extends Collator
      * Lower 16 bits are undefined and should be ignored.
      * @return the variable top value of a Collator.
      * @see #setVariableTop
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public int getVariableTop()
     {
@@ -4449,8 +4445,9 @@ public final class RuleBasedCollator extends Collator
 //        versionInfo[3] = coll->UCA->image->UCAVersion[0];
     }
     
-    /** Get the UCA version of this collator object.
-     *  @return the version object associated with this collator
+    /** 
+     * Get the UCA version of this collator object.
+     * @return the version object associated with this collator
      * @draft ICU 2.8
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
