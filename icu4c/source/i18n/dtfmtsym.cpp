@@ -551,6 +551,8 @@ void
 DateFormatSymbols::initializeData(const Locale& locale, const char *type, UErrorCode& status, UBool useLastResortData)
 {
     int32_t i;
+    int32_t len = 0;
+    const UChar *resStr;
 
     /* In case something goes wrong, initialize all of the data to NULL. */
     fEras = NULL;
@@ -578,10 +580,15 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
      * these.
      */
     CalendarData calData(locale, type, status);
-    ResourceBundle nonCalendarData((char*)0, locale, status);
+    UResourceBundle *nonCalendarData = ures_open((char*)0, locale.getName(), &status);
 
-    ResourceBundle eras = calData.getBundleByKey(gErasTag, status); // load the first data item
-    ResourceBundle data = eras.getWithFallback(gAbbreviatedTag, status); 
+    // load the first data item
+    ResourceBundle eras(calData.getBundleByKey(gErasTag, status).getWithFallback(gAbbreviatedTag, status));
+    ResourceBundle lsweekdaysData(calData.getBundleByKey2(gDayNamesTag, gNamesAbbrTag, status));
+    ResourceBundle weekdaysData(calData.getBundleByKey2(gDayNamesTag, gNamesWideTag, status));
+    UResourceBundle *zoneArray = ures_getByKey(nonCalendarData, gZoneStringsTag, NULL, &status);
+    UResourceBundle *zoneRow = ures_getByIndex(zoneArray, (int32_t)0, NULL, &status);
+    U_LOCALE_BASED(locBased, *this);
     if (U_FAILURE(status))
     {
         if (useLastResortData)
@@ -604,62 +611,59 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
             /* test for NULL */
             if (fZoneStrings == 0) {
                 status = U_MEMORY_ALLOCATION_ERROR;
-                return;
             }
             fZoneStringsRowCount = 1;
             initField(fZoneStrings, fZoneStringsColCount, (const UChar *)gLastResortZoneStrings, kZoneNum, kZoneLen, status);
             fLocalPatternChars = gPatternChars;
         }
-        return;
+        goto cleanup;
     }
 
     // if we make it to here, the resource data is cool, and we can get everything out
     // of it that we need except for the time-zone and localized-pattern data, which
     // are stored in a separate file
-    U_LOCALE_BASED(locBased, *this);
-    locBased.setLocaleIDs(data.getLocale(ULOC_VALID_LOCALE, status).getName(),
-                          data.getLocale(ULOC_ACTUAL_LOCALE, status).getName());
-    initField(&fEras, fErasCount, data, status);
+    locBased.setLocaleIDs(eras.getLocale(ULOC_VALID_LOCALE, status).getName(),
+                          eras.getLocale(ULOC_ACTUAL_LOCALE, status).getName());
+    initField(&fEras, fErasCount, eras, status);
     initField(&fMonths, fMonthsCount, calData.getBundleByKey2(gMonthNamesTag, gNamesWideTag, status), status);
     initField(&fShortMonths, fShortMonthsCount, calData.getBundleByKey2(gMonthNamesTag, gNamesAbbrTag, status), status);
     initField(&fAmPms, fAmPmsCount, calData.getBundleByKey(gAmPmMarkersTag, status), status);
 
-    // fastCopyFrom() - see assignArray comments
-    fLocalPatternChars.fastCopyFrom(nonCalendarData.getStringEx(gLocalPatternCharsTag, status));
+    // fastCopyFrom()/setTo() - see assignArray comments
+    resStr = ures_getStringByKey(nonCalendarData, gLocalPatternCharsTag, &len, &status);
+    fLocalPatternChars.setTo(TRUE, resStr, len);
 
-    ResourceBundle zoneArray(nonCalendarData.get(gZoneStringsTag, status));
-    fZoneStringsRowCount = zoneArray.getSize();
-    ResourceBundle zoneRow(zoneArray.get((int32_t)0, status));
     /* TODO: Fix the case where the zoneStrings is not a perfect square array of information. */
-    fZoneStringsColCount = zoneRow.getSize();
+    fZoneStringsRowCount = ures_getSize(zoneArray);
+    fZoneStringsColCount = ures_getSize(zoneRow);
     fZoneStrings = (UnicodeString **)uprv_malloc(fZoneStringsRowCount * sizeof(UnicodeString *));
     /* test for NULL */
     if (fZoneStrings == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        return;
+        goto cleanup;
     }
     for(i = 0; i<fZoneStringsRowCount; i++) {
         *(fZoneStrings+i) = newUnicodeStringArray(fZoneStringsColCount);
         /* test for NULL */
         if ((*(fZoneStrings+i)) == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
-            return;
+            goto cleanup;
         }
-        zoneRow = zoneArray.get(i, status);
+        zoneRow = ures_getByIndex(zoneArray, i, zoneRow, &status);
         for(int32_t j = 0; j<fZoneStringsColCount; j++) {
-            // fastCopyFrom() - see assignArray comments
-            fZoneStrings[i][j].fastCopyFrom(zoneRow.getStringEx(j, status));
+            resStr = ures_getStringByIndex(zoneRow, j, &len, &status);
+            // setTo() - see assignArray comments
+            fZoneStrings[i][j].setTo(TRUE, resStr, len);
         }
     }
 
     // {sfb} fixed to handle 1-based weekdays
-    ResourceBundle weekdaysData(calData.getBundleByKey2(gDayNamesTag, gNamesWideTag, status));
     fWeekdaysCount = weekdaysData.getSize();
     fWeekdays = new UnicodeString[fWeekdaysCount+1];
     /* test for NULL */
     if (fWeekdays == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        return;
+        goto cleanup;
     }
     // leave fWeekdays[0] empty
     for(i = 0; i<fWeekdaysCount; i++) {
@@ -668,13 +672,12 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     }
     fWeekdaysCount++;
 
-    ResourceBundle lsweekdaysData(calData.getBundleByKey2(gDayNamesTag, gNamesAbbrTag, status));
     fShortWeekdaysCount = lsweekdaysData.getSize();
     fShortWeekdays = new UnicodeString[fShortWeekdaysCount+1];
     /* test for NULL */
     if (fShortWeekdays == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        return;
+        goto cleanup;
     }
     // leave fShortWeekdays[0] empty
     for(i = 0; i<fShortWeekdaysCount; i++) {
@@ -684,9 +687,14 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     fShortWeekdaysCount++;
 
     // If the locale data does not include new pattern chars, use the defaults
-    if (fLocalPatternChars.length() < PATTERN_CHARS_LEN) {
-        fLocalPatternChars.append(&gPatternChars[fLocalPatternChars.length()]);
+    len = fLocalPatternChars.length();
+    if (len < PATTERN_CHARS_LEN) {
+        fLocalPatternChars.append(UnicodeString(TRUE, &gPatternChars[len], PATTERN_CHARS_LEN-len));
     }
+cleanup:
+    ures_close(zoneRow);
+    ures_close(zoneArray);
+    ures_close(nonCalendarData);
 }
 
 /**
