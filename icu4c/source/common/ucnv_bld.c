@@ -20,14 +20,15 @@
 */
 
 
-#include "ucnv_io.h"
-#include "uhash.h"
-#include "ucnv_bld.h"
-#include "unicode/ucnv_err.h"
-#include "ucnv_cnv.h"
-#include "ucnv_imp.h"
 #include "unicode/udata.h"
 #include "unicode/ucnv.h"
+#include "unicode/ucnv_err.h"
+#include "unicode/uloc.h"
+#include "ucnv_io.h"
+#include "ucnv_bld.h"
+#include "ucnv_cnv.h"
+#include "ucnv_imp.h"
+#include "uhash.h"
 #include "umutex.h"
 #include "cstring.h"
 #include "cmemory.h"
@@ -306,18 +307,27 @@ ucnv_deleteSharedConverterData(UConverterSharedData * deadSharedData)
 
 static void
 parseConverterOptions(const char *inName,
-                      char *cnvName, char *locale, uint32_t *pFlags) {
+                      char *cnvName,
+                      char *locale,
+                      uint32_t *pFlags,
+                      UErrorCode *err)
+{
     char c;
+    int32_t len = 0;
 
     /* copy the converter name itself to cnvName */
     while((c=*inName)!=0 && c!=UCNV_OPTION_SEP_CHAR) {
+        if (++len>=UCNV_MAX_CONVERTER_NAME_LENGTH) {
+            *err = U_BUFFER_OVERFLOW_ERROR;
+            return;
+        }
         *cnvName++=c;
-        ++inName;
+        inName++;
     }
     *cnvName=0;
 
-    /* parse options */
-    if(c==UCNV_OPTION_SEP_CHAR) {
+    /* parse options. No more name copying should occur. */
+    if (c == UCNV_OPTION_SEP_CHAR) {
         ++inName;
         for(;;) {
             /* inName is behind an option separator */
@@ -358,10 +368,7 @@ parseConverterOptions(const char *inName,
                 /* ignore any other options until we define some */
                 do {
                     c=*inName++;
-                    if(c==0) {
-                        return;
-                    }
-                } while(c!=UCNV_OPTION_SEP_CHAR);
+                } while(c!=0 && c!=UCNV_OPTION_SEP_CHAR);
             }
         }
     }
@@ -377,7 +384,7 @@ parseConverterOptions(const char *inName,
 UConverter *
 ucnv_createConverter (const char *converterName, UErrorCode * err)
 {
-    char cnvName[100], locale[20];
+    char cnvName[UCNV_MAX_CONVERTER_NAME_LENGTH], locale[ULOC_FULLNAME_CAPACITY];
     const char *realName;
     UConverter *myUConverter = NULL;
     UConverterSharedData *mySharedConverterData = NULL;
@@ -398,7 +405,7 @@ ucnv_createConverter (const char *converterName, UErrorCode * err)
         /* the default converter name is already canonical */
     } else {
         /* separate the converter name from the options */
-        parseConverterOptions(converterName, cnvName, locale,&options);
+        parseConverterOptions(converterName, cnvName, locale, &options, &internalErrorCode);
 
         /* get the canonical converter name */
         realName = ucnv_io_getConverterName(cnvName, &internalErrorCode);
@@ -413,12 +420,12 @@ ucnv_createConverter (const char *converterName, UErrorCode * err)
 
     /* separate the converter name from the options */
     if(realName != cnvName) {
-        parseConverterOptions(realName, cnvName, locale,&options);
+        parseConverterOptions(realName, cnvName, locale, &options, err);
         realName = cnvName;
     }
     
     /* get the shared data for an algorithmic converter, if it is one */
-    mySharedConverterData = (UConverterSharedData *)getAlgorithmicTypeFromName (realName);
+    mySharedConverterData = (UConverterSharedData *)getAlgorithmicTypeFromName(realName);
     if (mySharedConverterData == NULL)
     {
         /* it is a data-based converter, get its shared data.               */
