@@ -1,4 +1,4 @@
-# Copyright (c) 2001-2003 International Business Machines
+# Copyright (c) 2001-2004 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 #  file:  
@@ -100,7 +100,7 @@
 "A."                           "A\u000a "# no match
 
 # \d for decimal digits
-"\d*"                          "<0>0123456789\u0660\u06F9\u0969\u0A66\u1369\u17E2\uFF10\U0001D7CE\U0001D7FF</0>non-digits"
+"\d*"                          "<0>0123456789\u0660\u06F9\u0969\u0A66\u17E2\uFF10\U0001D7CE\U0001D7FF</0>non-digits"
 "\D+"                          "<0>non digits</0>"
 "\D*(\d*)(\D*)"                "<0>non-digits<1>3456666</1><2>more non digits</2></0>"
 
