@@ -816,7 +816,7 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
     converterData=(UConverterDataISCII*)args->converter->extraInfo;
     useFallback = args->converter->useFallback;
     newDelta=converterData->currentDeltaFromUnicode;
-    range = (uint16_t)((newDelta-INDIC_BLOCK_BEGIN)/DELTA);
+    range = (uint16_t)(newDelta/DELTA);
     
     if(args->converter->fromUSurrogateLead!=0 && target <targetLimit) {
         goto getTrail;
