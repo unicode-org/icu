@@ -163,6 +163,19 @@ void UVector::insertElementAt(void* obj, int32_t index, UErrorCode &status) {
     /* else index out of range */
 }
 
+void UVector::insertElementAt(int32_t elem, int32_t index, UErrorCode &status) {
+    // must have 0 <= index <= count
+    if (0 <= index && index <= count && ensureCapacity(count + 1, status)) {
+        for (int32_t i=count; i>index; --i) {
+            elements[i] = elements[i-1];
+        }
+        elements[index].pointer = NULL;
+        elements[index].integer = elem;
+        ++count;
+    }
+    /* else index out of range */
+}
+
 void* UVector::elementAt(int32_t index) const {
     return (0 <= index && index < count) ? elements[index].pointer : 0;
 }

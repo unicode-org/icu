@@ -18,14 +18,15 @@
 #include "unicode/brkiter.h"
 #include "unicode/udata.h"
 #include "unicode/parseerr.h"
-#include "utrie.h"
 
-#include "rbbidata.h"
+struct UTrie;
 
 U_NAMESPACE_BEGIN
 
+struct RBBIDataHeader;
 class RuleBasedBreakIteratorTables;
 class BreakIterator;
+class RBBIDataWrapper;
 
 
 
@@ -130,6 +131,11 @@ protected:
 
     // Rule {tag} value for the most recent match.
     int32_t             fLastBreakTag;
+
+    // Rule tag value valid flag.
+    // Some iterator operations don't intrinsically set the correct tag value.
+    // This flag lets us lazily compute it if we are ever asked for the value.
+    UBool               fLastBreakTagValid;
 
     //
     // Counter for the number of characters encountered with the "dictionary"

@@ -14,6 +14,7 @@
 #include "rbbitblb.h"
 #include "rbbirb.h"
 #include "rbbisetb.h"
+#include "rbbidata.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>

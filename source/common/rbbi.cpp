@@ -160,7 +160,7 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
 
 
 //-----------------------------------------------------------------------------
-//
+// 
 //    init()      Shared initialization routine.   Used by all the constructors.
 //
 //-----------------------------------------------------------------------------
@@ -172,6 +172,7 @@ void RuleBasedBreakIterator::init() {
     fData                = NULL;
     fCharMappings        = NULL;
     fLastBreakTag        = 0;
+    fLastBreakTagValid   = TRUE;
     fDictionaryCharCount = 0;
 
     if (debugInitDone == FALSE) {
@@ -309,14 +310,23 @@ int32_t RuleBasedBreakIterator::first(void) {
  */
 int32_t RuleBasedBreakIterator::last(void) {
     reset();
-    if (fText == NULL)
+    if (fText == NULL) {
+        fLastBreakTag      = 0;
+        fLastBreakTagValid = TRUE;
         return BreakIterator::DONE;
+    }
 
     // I'm not sure why, but t.last() returns the offset of the last character,
     // rather than the past-the-end offset
+    //
+    //   (It's so a loop like for(p=it.last(); p!=DONE; p=it.previous()) ...
+    //     will work correctly.)   
 
+
+    fLastBreakTagValid = FALSE;
     int32_t pos = fText->endIndex();
     fText->setIndex(pos);
+
     return pos;
 }
 
@@ -356,8 +366,11 @@ int32_t RuleBasedBreakIterator::next(void) {
  */
 int32_t RuleBasedBreakIterator::previous(void) {
     // if we're already sitting at the beginning of the text, return DONE
-    if (fText == NULL || current() == fText->startIndex())
+    if (fText == NULL || current() == fText->startIndex()) {
+        fLastBreakTag      = 0;
+        fLastBreakTagValid = TRUE;
         return BreakIterator::DONE;
+    }
 
     // set things up.  handlePrevious() will back us up to some valid
     // break position before the current position (we back our internal
@@ -366,22 +379,42 @@ int32_t RuleBasedBreakIterator::previous(void) {
     // where we started
     int32_t start = current();
     fText->previous32();
-    int32_t lastResult = handlePrevious();
-    int32_t result = lastResult;
+    int32_t lastResult    = handlePrevious();
+    int32_t result        = lastResult;
+    int32_t lastTag       = 0;
+    UBool   breakTagValid = FALSE;
 
     // iterate forward from the known break position until we pass our
     // starting point.  The last break position before the starting
     // point is our return value
-    while (result != BreakIterator::DONE && result < start) {
-        lastResult = result;
-        result = handleNext();
+    for (;;) {
+        result         = handleNext();
+        if (result == BreakIterator::DONE || result >= start) {
+            break;
+        }
+        lastResult     = result;
+        lastTag        = fLastBreakTag;
+        breakTagValid  = TRUE;
     }
+
+    // fLastBreakTag wants to have the value for section of text preceding
+    // the result position that we are to return (in lastResult.)  If
+    // the backwards rules overshot and the above loop had to do two or more
+    //  handleNext()s to move up to the desired return position, we will have a valid
+    //  tag value.  But, if handlePrevious() took us to exactly the correct result positon,
+    //  we wont have a tag value for that position, which is only set by handleNext().
+
 
     // set the current iteration position to be the last break position
     // before where we started, and then return that value
     fText->setIndex(lastResult);
+    fLastBreakTag      = lastTag;       // for use by getRuleStatus()
+    fLastBreakTagValid = breakTagValid;
     return lastResult;
 }
+
+
+
 
 /**
  * Sets the iterator to refer to the first boundary position following
@@ -393,10 +426,14 @@ int32_t RuleBasedBreakIterator::following(int32_t offset) {
     // if the offset passed in is already past the end of the text,
     // just return DONE; if it's before the beginning, return the
     // text's starting offset
+    fLastBreakTag = 0;
+    fLastBreakTagValid = TRUE;
     if (fText == NULL || offset >= fText->endIndex()) {
+        // fText->setToEnd();
         return BreakIterator::DONE;
     }
     else if (offset < fText->startIndex()) {
+        // fText->setToStart();
         return fText->startIndex();
     }
 
@@ -414,9 +451,12 @@ int32_t RuleBasedBreakIterator::following(int32_t offset) {
     // position at or before our starting position.  Advance forward
     // from here until we've passed the starting position.  The position
     // we stop on will be the first break position after the specified one.
-    int32_t result = handlePrevious();
-    while (result != BreakIterator::DONE && result <= offset)
-        result = handleNext();
+
+    int32_t result = previous();
+    while (result != BreakIterator::DONE && result <= offset) {
+        result = next();
+    }
+
     return result;
 }
 
@@ -496,9 +536,15 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
     if (fTrace) {
         printf("Handle Next   pos   char  state category  \n");
     }
+
+    // No matter what, handleNext alway correctly sets the break tag value.
+    fLastBreakTagValid = TRUE;
+
     // if we're already at the end of the text, return DONE.
-    if (fText == NULL || fData == NULL || fText->getIndex() == fText->endIndex())
+    if (fText == NULL || fData == NULL || fText->getIndex() == fText->endIndex()) {
+        fLastBreakTag = 0;
         return BreakIterator::DONE;
+    }
 
     // no matter what, we always advance at least one character forward
     int32_t result = fText->getIndex() + 1;
@@ -619,7 +665,8 @@ continueOn:
     // (the theory here is that if there are no characters at all after the lookahead
     // position, that always matches the lookahead criteria)
     if (c == CharacterIterator::DONE && lookaheadResult == fText->endIndex()) {
-        result = lookaheadResult;
+        result          = lookaheadResult;
+        fLastBreakTag   = lookaheadTag;
     }
 
 
@@ -780,7 +827,21 @@ RuleBasedBreakIterator::reset()
 //
 //-------------------------------------------------------------------------------
 int32_t  RuleBasedBreakIterator::getRuleStatus() const {
-    return fLastBreakTag;
+    // If the break tag value is unkown, back the iterator up, then move
+    //   forward again.  Moving forward will set the fLastBreakTag value correctly.
+    RuleBasedBreakIterator *nonConstThis  = (RuleBasedBreakIterator *)this;
+    if (fLastBreakTagValid == FALSE) {
+        if (current() == fText->startIndex()) {
+            nonConstThis->fLastBreakTag = 0;
+            nonConstThis->fLastBreakTagValid = TRUE;
+        } else {
+            int32_t pa = current();
+            nonConstThis->previous();
+            int32_t pb = nonConstThis->next();
+            assert(pa == pb);
+        }
+    }
+    return nonConstThis->fLastBreakTag;
 }
 
 
