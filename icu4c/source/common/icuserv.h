@@ -1010,7 +1010,7 @@ class U_COMMON_API ICUService : public ICUNotifier {
 
 private:
 
-    friend class ICUServiceTest; // give tests access to countFactories.
+    friend class ::ICUServiceTest; // give tests access to countFactories.
 };
 
 U_NAMESPACE_END
