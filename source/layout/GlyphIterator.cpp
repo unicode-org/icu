@@ -102,13 +102,6 @@ GlyphIterator::GlyphIterator(GlyphIterator &that, le_uint16 newLookupFlags)
     markAttachClassDefinitionTable = that.markAttachClassDefinitionTable;
 }
 
-static LEGlyphStorage dummyGlyphStorage;
-
-GlyphIterator::GlyphIterator()
- : glyphStorage(dummyGlyphStorage)
-{
-};
-
 GlyphIterator::~GlyphIterator()
 {
     // nothing to do, right?
@@ -457,8 +450,8 @@ le_bool GlyphIterator::filterGlyph(le_uint32 index) const
     }
 }
 
-const LETag emptyTag = 0;
-const LETag defaultTag = 0xFFFFFFFF;
+static const LETag emptyTag = 0;
+static const LETag defaultTag = 0xFFFFFFFF;
 
 le_bool GlyphIterator::hasFeatureTag() const
 {
