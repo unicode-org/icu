@@ -343,7 +343,7 @@ donefornow:
 
 }
 
-void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
+U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
                                     UErrorCode * err)
 {
   const UChar *mySource = args->source;
@@ -447,7 +447,7 @@ void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
   return;
 }
 
-void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
+U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                                                   UErrorCode * err)
 {
   const UChar *mySource = args->source;
@@ -555,7 +555,7 @@ void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * ar
   return;
 }
 
-UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
+U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
                                                UErrorCode* err)
 {
   /*safe keeps a ptr to the beginning in case we need to step back*/
@@ -755,7 +755,7 @@ U_CFUNC void T_UConverter_toUnicode_UTF16_BE (UConverterToUnicodeArgs * args,
   return;
 }
 
-void  T_UConverter_fromUnicode_UTF16_BE (UConverterFromUnicodeArgs * args,
+U_CFUNC void  T_UConverter_fromUnicode_UTF16_BE (UConverterFromUnicodeArgs * args,
                                          UErrorCode * err)
 {
   const UChar *mySource = args->source;
@@ -798,7 +798,7 @@ void  T_UConverter_fromUnicode_UTF16_BE (UConverterFromUnicodeArgs * args,
   return;
 }
 
-UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args,
+U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
 {
   UChar32 myUChar;
@@ -945,7 +945,7 @@ U_CFUNC void  T_UConverter_toUnicode_UTF16_LE (UConverterToUnicodeArgs * args,
   return;
 }
 
-void   T_UConverter_fromUnicode_UTF16_LE (UConverterFromUnicodeArgs * args,
+U_CFUNC void   T_UConverter_fromUnicode_UTF16_LE (UConverterFromUnicodeArgs * args,
                                           UErrorCode * err)
 {
   const UChar *mySource = args->source;
@@ -989,7 +989,7 @@ void   T_UConverter_fromUnicode_UTF16_LE (UConverterFromUnicodeArgs * args,
   return;
 }
 
-UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args,
+U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
 {
   UChar32 myUChar;
