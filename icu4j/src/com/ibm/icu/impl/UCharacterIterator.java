@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/UCharacterIterator.java,v $ 
- * $Date: 2002/06/21 01:16:06 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/07/16 00:31:35 $ 
+ * $Revision: 1.8 $
  *
  *******************************************************************************
  */
@@ -379,9 +379,9 @@ public abstract class UCharacterIterator
      */
     public int moveCodePointIndex(int delta){
         if(delta>0){
-            while(delta-->0 && nextCodePoint() != DONE);
+            while(delta>0 && nextCodePoint() != DONE){delta--;}
         }else{
-	        while(delta++<0 && previousCodePoint() != DONE);
+	        while(delta<0 && previousCodePoint() != DONE){delta++;}
         }
         if(delta!=0){
             throw new IndexOutOfBoundsException();
