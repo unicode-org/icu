@@ -172,7 +172,8 @@ static uint32_t table_write(UNewDataMemory *mem, struct SResource *res,
                             uint32_t usedOffset, UErrorCode *status) {
     uint8_t   pad       = 0;
     uint32_t  i         = 0;
-    uint16_t *keys      = NULL;
+    uint16_t *keys16    = NULL;
+    int32_t  *keys32    = NULL;
     uint32_t *resources = NULL;
 
     struct SResource *current = NULL;
@@ -184,17 +185,25 @@ static uint32_t table_write(UNewDataMemory *mem, struct SResource *res,
     pad = calcPadding(res->fSize);
 
     if (res->u.fTable.fCount > 0) {
-        keys = (uint16_t *) uprv_malloc(sizeof(uint16_t) * res->u.fTable.fCount);
-
-        if (keys == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return 0;
+        if(res->fType == URES_TABLE) {
+            keys16 = (uint16_t *) uprv_malloc(sizeof(uint16_t) * res->u.fTable.fCount);
+            if (keys16 == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                return 0;
+            }
+        } else {
+            keys32 = (int32_t *) uprv_malloc(sizeof(int32_t) * res->u.fTable.fCount);
+            if (keys32 == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                return 0;
+            }
         }
 
         resources = (uint32_t *) uprv_malloc(sizeof(uint32_t) * res->u.fTable.fCount);
 
         if (resources == NULL) {
-            uprv_free(keys);
+            uprv_free(keys16);
+            uprv_free(keys32);
             *status = U_MEMORY_ALLOCATION_ERROR;
             return 0;
         }
@@ -205,8 +214,12 @@ static uint32_t table_write(UNewDataMemory *mem, struct SResource *res,
         while (current != NULL) {
             assert(i < res->u.fTable.fCount);
 
-            /* where the key is plus root pointer */
-            keys[i] = (uint16_t) current->fKey;
+            /* where the key is */
+            if(res->fType == URES_TABLE) {
+                keys16[i] = (uint16_t) current->fKey;
+            } else {
+                keys32[i] = current->fKey;
+            }
 
             if (current->fType == URES_INT) {
                 resources[i] = (current->fType << 28) | (current->u.fIntValue.fValue & 0xFFFFFFF);
@@ -226,18 +239,30 @@ static uint32_t table_write(UNewDataMemory *mem, struct SResource *res,
             current = current->fNext;
         }
 
-        udata_write16(mem, res->u.fTable.fCount);
+        if(res->fType == URES_TABLE) {
+            udata_write16(mem, (uint16_t)res->u.fTable.fCount);
 
-        udata_writeBlock(mem, keys, sizeof(uint16_t) * res->u.fTable.fCount);
-        udata_writePadding(mem, pad);
+            udata_writeBlock(mem, keys16, sizeof(uint16_t) * res->u.fTable.fCount);
+            udata_writePadding(mem, pad);
+        } else {
+            udata_write32(mem, res->u.fTable.fCount);
+
+            udata_writeBlock(mem, keys32, sizeof(int32_t) * res->u.fTable.fCount);
+        }
+
         udata_writeBlock(mem, resources, sizeof(uint32_t) * res->u.fTable.fCount);
 
-        uprv_free(keys);
+        uprv_free(keys16);
+        uprv_free(keys32);
         uprv_free(resources);
     } else {
         /* table is empty */
-        udata_write16(mem, 0);
-        udata_writePadding(mem, pad);
+        if(res->fType == URES_TABLE) {
+            udata_write16(mem, 0);
+            udata_writePadding(mem, pad);
+        } else {
+            udata_write32(mem, 0);
+        }
     }
 
     return usedOffset;
@@ -264,6 +289,7 @@ uint32_t res_write(UNewDataMemory *mem, struct SResource *res,
         case URES_ARRAY:
             return array_write     (mem, res, usedOffset, status);
         case URES_TABLE:
+        case URES_TABLE32:
             return table_write     (mem, res, usedOffset, status);
 
         default:
@@ -407,6 +433,7 @@ struct SResource* res_open(const struct UString* comment, UErrorCode* status){
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
+    uprv_memset(res, 0, sizeof(struct SResource));
     
     res->fComment = NULL;
     if(comment != NULL){
@@ -425,7 +452,6 @@ struct SResource* table_open(struct SRBRoot *bundle, char *tag,  const struct US
 
     struct SResource *res = res_open(comment, status);
 
-    res->fType = URES_TABLE;
     res->fKey  = bundle_addtag(bundle, tag, status);
  
     if (U_FAILURE(*status)) {
@@ -435,6 +461,12 @@ struct SResource* table_open(struct SRBRoot *bundle, char *tag,  const struct US
     }
 
     res->fNext = NULL;
+
+    /*
+     * always open a table not a table32 in case it remains empty -
+     * try to use table32 only when necessary
+     */
+    res->fType = URES_TABLE;
     res->fSize = sizeof(uint16_t);
 
     res->u.fTable.fCount        = 0;
@@ -657,6 +689,7 @@ struct SRBRoot *bundle_open(const struct UString* comment, UErrorCode *status) {
     bundle->fLocale   = NULL;
 
     bundle->fKeys     = (char *) uprv_malloc(sizeof(char) * KEY_SPACE_SIZE);
+    bundle->fKeysCapacity = KEY_SPACE_SIZE;
 
     if(comment != NULL){
             
@@ -774,7 +807,8 @@ void res_close(struct SResource *res, UErrorCode *status) {
         case URES_ARRAY:
             array_close(res, status);
             break;
-        case URES_TABLE :
+        case URES_TABLE:
+        case URES_TABLE32:
             table_close(res, status);
             break;
         default:
@@ -830,16 +864,31 @@ void table_add(struct SResource *table, struct SResource *res, int linenumber, U
     /* here we need to traverse the list */
     list = &(table->u.fTable);
 
+    if(table->fType == URES_TABLE && res->fKey > 0xffff) {
+        /* this table straddles the 64k strings boundary, update to a table32 */
+        table->fType = URES_TABLE32;
+
+        /*
+         * increase the size because count and each string offset
+         * increase from uint16_t to int32_t
+         */
+        table->fSize += (1 + list->fCount) * 2;
+    }
+
     ++(list->fCount);
-    if(list->fCount > list->fRoot->fMaxTableLength) {
+    if(list->fCount > (uint32_t)list->fRoot->fMaxTableLength) {
         list->fRoot->fMaxTableLength = list->fCount;
     }
 
-    table->fSize += sizeof(uint32_t) + sizeof(uint16_t);
+    /*
+     * URES_TABLE:   6 bytes = 1 uint16_t key string offset + 1 uint32_t Resource
+     * URES_TABLE32: 8 bytes = 1 int32_t key string offset + 1 uint32_t Resource
+     */
+    table->fSize += table->fType == URES_TABLE ? 6 : 8;
 
     table->u.fTable.fChildrenSize += res->fSize + calcPadding(res->fSize);
 
-    if (res->fType == URES_TABLE) {
+    if (res->fType == URES_TABLE || res->fType == URES_TABLE32) {
         table->u.fTable.fChildrenSize += res->u.fTable.fChildrenSize;
     } else if (res->fType == URES_ARRAY) {
         table->u.fTable.fChildrenSize += res->u.fArray.fChildrenSize;
@@ -901,7 +950,7 @@ void array_add(struct SResource *array, struct SResource *res, UErrorCode *statu
     array->fSize += sizeof(uint32_t);
     array->u.fArray.fChildrenSize += res->fSize + calcPadding(res->fSize);
 
-    if (res->fType == URES_TABLE) {
+    if (res->fType == URES_TABLE || res->fType == URES_TABLE32) {
         array->u.fArray.fChildrenSize += res->u.fTable.fChildrenSize;
     } else if (res->fType == URES_ARRAY) {
         array->u.fArray.fChildrenSize += res->u.fArray.fChildrenSize;
@@ -961,9 +1010,14 @@ bundle_addtag(struct SRBRoot *bundle, const char *tag, UErrorCode *status) {
 
     bundle->fKeyPoint += length = (int32_t) (uprv_strlen(tag) + 1);
 
-    if (bundle->fKeyPoint > KEY_SPACE_SIZE) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return -1;
+    if (bundle->fKeyPoint >= bundle->fKeysCapacity) {
+        /* overflow - resize the keys buffer */
+        bundle->fKeysCapacity += KEY_SPACE_SIZE;
+        bundle->fKeys = uprv_realloc(bundle->fKeys, bundle->fKeysCapacity);
+        if(bundle->fKeys == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return -1;
+        }
     }
 
     uprv_memcpy(bundle->fKeys + keypos, tag, length);
