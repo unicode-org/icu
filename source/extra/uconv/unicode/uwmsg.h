@@ -18,12 +18,12 @@ and print it to stderr
 /* Set the path to wmsg's bundle.
    Caller owns storage.
 */
-U_CAPI UResourceBundle *u_wmsg_setPath(const char *path, UErrorCode *err);
+U_CFUNC UResourceBundle *u_wmsg_setPath(const char *path, UErrorCode *err);
 
 /* Format a message and print it's output to a given file stream */
-U_CAPI int u_wmsg(FILE *fp, const char *tag, ... );
+U_CFUNC int u_wmsg(FILE *fp, const char *tag, ... );
 
 /* format an error message */
-U_CAPI const UChar* u_wmsg_errorName(UErrorCode err);
+U_CFUNC const UChar* u_wmsg_errorName(UErrorCode err);
 
 #endif
