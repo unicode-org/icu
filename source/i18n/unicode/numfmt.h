@@ -535,8 +535,8 @@ private:
 
     static NumberFormat* createInstance(const Locale& desiredLocale, EStyles choice, UErrorCode& success);
 
-    static const int32_t         fgNumberPatternsCount;
-    static const UnicodeString     fgLastResortNumberPatterns[];
+    static const int32_t    fgNumberPatternsCount;
+    static const UChar*     fgLastResortNumberPatterns[];
 
     UBool      fGroupingUsed;
     int32_t     fMaxIntegerDigits;
