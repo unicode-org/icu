@@ -40,6 +40,7 @@ ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET)
 
 ifeq ($(OS390BATCH),1)
 BATCH_TARGET = "//'${LOADMOD}(IXMICUUC)'"
+BATCH_LIBS = $(BATCH_LIBICUDT) -lm
 endif   # OS390BATCH
 
 endif   # ENABLE_SHARED
@@ -61,7 +62,7 @@ endif
 
 # todo:  need t make $(LIBICUDT) conditional on using dll-based data.
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = $(BATCH_LIBICUDT) $(LIBICUDT) @LIBS@
+LIBS = $(LIBICUDT) @LIBS@
 
 # Data packaging options are set at configure time with --with-data-packaging.
 CPPFLAGS += @DATA_PACKAGING_CPPFLAGS@
@@ -154,7 +155,7 @@ $(FINAL_SO_TARGET): $(OBJECTS)
 
 ifeq ($(OS390BATCH),1)
 $(BATCH_TARGET): $(OBJECTS)
-	$(SHLIB.cc) $(LD_SONAME) -o $@ $^ $(LIBS)
+	$(SHLIB.cc) $(LD_SONAME) -o $@ $^ $(BATCH_LIBS)
 endif   # OS390BATCH
 
 endif   # ENABLE_SHARED
