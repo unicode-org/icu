@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.184 2003/04/25 21:43:50 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.185 2003/05/23 03:41:52 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -74,6 +74,7 @@ AC_CHECK_STRICT_COMPILE
 dnl Check if we can build and use 64-bit libraries
 AC_CHECK_64BIT_LIBS
 AC_SUBST(ARFLAGS)
+AC_SUBST(COMPILE_LINK_ENVVAR)
 
 ICU_CHECK_MH_FRAG
 
