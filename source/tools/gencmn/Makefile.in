@@ -1,0 +1,104 @@
+## Makefile.in for ICU - tools/gencmn
+## Copyright (c) 1999-2001, International Business Machines Corporation and
+## others. All Rights Reserved.
+## Steven R. Loomis
+
+## Source directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+
+top_builddir = ../..
+
+include $(top_builddir)/icudefs.mk
+
+## Platform-specific setup
+include @platform_make_fragment@
+
+## Build directory information
+subdir = tools/gencmn
+
+## Extra files to remove for 'make clean'
+CLEANFILES = *~ mkmap.tmp $(DEPS) $(RES_FILES) $(TEST_FILES) $(DECMN_DEP)
+
+## Target information
+TARGET = gencmn
+DECMN = decmn
+
+ENABLE_STATIC = @ENABLE_STATIC@
+
+ifneq ($(ENABLE_STATIC),)
+LINK = $(LINK.cc)
+else
+LINK = $(LINK.c)
+endif
+
+DEFS = @DEFS@
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil $(BIR_CPPFLAGS)
+CFLAGS = @CFLAGS@
+CXXFLAGS = @CXXFLAGS@
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
+LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@
+
+OBJECTS = gencmn.o
+DECMN_OBJ = decmn.o
+
+DEPS = $(OBJECTS:.o=.d)
+DECMN_DEP = $(DECMN_OBJ:.o=.d)
+
+## List of phony targets
+.PHONY : all all-local install install-local clean clean-local		\
+distclean distclean-local dist dist-local check	\
+check-local
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: install-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
+check: all check-local
+
+all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES) $(DECMN)
+
+install-local: all-local
+	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+	$(INSTALL) $(DECMN) $(DESTDIR)$(sbindir)/$(DECMN)
+
+dist-local:
+
+clean-local:
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(TARGET) $(OBJECTS) $(DECMN) $(DECMN_OBJ)
+
+distclean-local: clean-local
+	$(RMV) Makefile
+
+check-local: all-local
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+$(TARGET) : $(OBJECTS)
+	$(LINK) -o $@ $^ $(LIBS) 
+
+$(DECMN) : $(DECMN_OBJ)
+	$(LINK) -o $@ $^ $(LIBS) 
+
+ifeq (,$(MAKECMDGOALS))
+-include $(DEPS)
+-include $(DECMN_DEP)
+else
+ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
+-include $(DEPS)
+-include $(DECMN_DEP)
+endif
+endif

@@ -1,0 +1,1441 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2001, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+//  Date        Name        Description
+//  11/17/99    aliu        Added support for transliterators.
+
+// Please search for 'DUP FIXME' - duplicate lang/country names commented out
+
+
+
+root {
+    Version { "3.1.1" }
+
+    // each variant name that occurs in locales should be listed with %% and a display string
+    "%%EURO" { "Euro" }         // Euro variant display name
+    "%%B"    { "Bokm\u00e5l" }  // Norwegian variant display name
+    "%%NY"   { "Nynorsk" }      // Norwegian variant display name
+    "%%AL"   { "\u00C5land" }   // Aland variant display name
+
+    "%%POSIX" { "POSIX" }
+
+    // variants for collation (traditional may also be used for traditional chinese)
+    "%%PHONEBOOK" { "Phonebook Order" }
+    "%%PINYIN" { "Pinyin Order" }
+    "%%TRADITIONAL" { "Traditional" }
+    "%%STROKE" { "Stroke Order" }
+    "%%DIRECT" { "Direct Order" }
+
+    // this is a special tag that makes genrb include UCARules.txt for collation
+    "%%UCARULES" { "UCARules.txt"} // UCARules
+
+    // no collation elements any more
+    // CollationElements { 
+    //	    Version { "1.0" }
+    //		Override { "FALSE" }
+    //		Sequence { "" }
+    // }    
+    // Formats for the display name of a locale, for a list of
+    // items, and for composing two items in a list into one item.
+    // The list patterns are used in the variant name and in the
+    // full display name.
+    //
+    // This is the language-neutral form of this resource.
+    //
+    LocaleNamePatterns {
+         {
+            "{0,choice,0#|1#{1}|2#{1} ({2})}", // Display name
+            "{0,choice,0#|1#{1}|2#{1},{2}|3#{1},{2},{3}}", // List
+            "{0},{1}" // List composition
+         }
+    }
+
+    //------------------------------------------------------------
+    // BEGIN Transliterator support
+    //------------------------------------------------------------
+     
+    // See also icu/data/translit/index.txt
+
+    TransliteratorNamePattern {
+        // Format for the display name of a Transliterator.
+        // This is the language-neutral form of this resource.
+        "{0,choice,0#|1#{1}|2#{1}-{2}}" // Display name
+    }
+
+    //------------------------------------------------------------
+    // END Transliterator support
+    //------------------------------------------------------------
+
+    //------------------------------------------------------------
+    // BEGIN BreakIterator support
+    //------------------------------------------------------------
+
+    CharacterBreakRules {
+        // ignore non-spacing marks and enclosing marks (since we never
+        // put a break before ignore characters, this keeps combining
+        // accents with the base characters they modify)
+        "$ignore=[[:Mn:][:Me:]];"
+
+        // other category definitions
+        "choseong=[\u1100-\u115f];"
+        "jungseong=[\u1160-\u11a7];"
+        "jongseong=[\u11a8-\u11ff];"
+        "surr-hi=[\ud800-\udbff];"
+        "surr-lo=[\udc00-\udfff];"
+
+        // break after every character, except as follows:
+        ".;"
+
+        // keep CRLF sequences together
+        "\r\n;"
+
+        // keep surrogate pairs together
+        "{surr-hi}{surr-lo};"
+
+        // keep Hangul syllables spelled out using conjoining jamo together
+        "{choseong}*{jungseong}*{jongseong}*;"
+
+        // various additions for Hindi support
+        "nukta=[\u093c];"
+        "danda=[\u0964\u0965];"
+        "virama=[\u094d];"
+        "devVowelSign=[\u093e-\u094c\u0962\u0963];"
+        "devConsonant=[\u0915-\u0939];"
+        "devNuktaConsonant=[\u0958-\u095f];"
+        "devCharEnd=[\u0902\u0903\u0951-\u0954];"
+        "zwj=[\u200d];"
+        
+        "devCAMN=({devConsonant}{nukta}?);"
+        "devConsonant1=({devNuktaConsonant}|{devCAMN});"
+        "devConjunct=(({devConsonant1}{virama}{zwj}?)?{devConsonant1});"
+
+        "{devConjunct}{devVowelSign}?{devCharEnd}?;"
+        "{danda}{nukta};"
+    }
+
+    // default rules for finding word boundaries
+    WordBreakRules {
+        // ignore non-spacing marks, enclosing marks, and format characters,
+        // all of which should not influence the algorithm
+        "$ignore=[[:Mn:][:Me:][:Cf:]];"
+
+        // Hindi phrase separator, kanji, katakana, hiragana, CJK diacriticals,
+        // other letters, and digits
+        "danda=[\u0964\u0965];"
+        "kanji=[\u3005\u4e00-\u9fa5\uf900-\ufa2d];"
+        "kata=[\u3099-\u309c\u30a1-\u30fe];"
+        "hira=[\u3041-\u309e\u30fc];"
+        "let=[[[:L:][:Mc:]]-[{kanji}{kata}{hira}]];"
+        "dgt=[:N:];"
+
+        // punctuation that can occur in the middle of a word: currently
+        // dashes, apostrophes, quotation marks, and periods
+        "mid-word=[[:Pd:]\u00ad\u2027\\\"\\\'\\.];"
+
+        // punctuation that can occur in the middle of a number: currently
+        // apostrophes, qoutation marks, periods, commas, and the Arabic
+        // decimal point
+        "mid-num=[\\\"\\\'\\,\u066b\\.];"
+
+        // punctuation that can occur at the beginning of a number: currently
+        // the period, the number sign, and all currency symbols except the cents sign
+        "pre-num=[[[:Sc:]-[\u00a2]]\\#\\.];"
+
+        // punctuation that can occur at the end of a number: currently
+        // the percent, per-thousand, per-ten-thousand, and Arabic percent
+        // signs, the cents sign, and the ampersand
+        "post-num=[\\%\\&\u00a2\u066a\u2030\u2031];"
+
+        // line separators: currently LF, FF, PS, and LS
+        "ls=[\n\u000c\u2028\u2029];"
+
+        // whitespace: all space separators and the tab character
+        "ws=[[:Zs:]\t];"
+
+        // a word is a sequence of letters that may contain internal
+        // punctuation, as long as it begins and ends with a letter and
+        // never contains two punctuation marks in a row
+        "word=({let}+({mid-word}{let}+)*{danda}?);"
+
+        // a number is a sequence of digits that may contain internal
+        // punctuation, as long as it begins and ends with a digit and
+        // never contains two punctuation marks in a row.
+        "number=({dgt}+({mid-num}{dgt}+)*);"
+
+        // break after every character, with the following exceptions
+        // (this will cause punctuation marks that aren't considered
+        // part of words or numbers to be treated as words unto themselves)
+        ".;"
+
+        // keep together any sequence of contiguous words and numbers
+        // (including just one of either), plus an optional trailing
+        // number-suffix character
+        "{word}?({number}{word})*({number}{post-num}?)?;"
+
+        // keep together and sequence of contiguous words and numbers
+        // that starts with a number-prefix character and a number,
+        // and may end with a number-suffix character
+        "{pre-num}({number}{word})*({number}{post-num}?)?;"
+
+        // keep together runs of whitespace (optionally with a single trailing
+        // line separator or CRLF sequence)
+        "{ws}*\r?{ls}?;"
+
+        // keep together runs of Katakana
+        "{kata}*;"
+
+        // keep together runs of Hiragana
+        "{hira}*;"
+
+        // keep together runs of Kanji
+        "{kanji}*;"
+    }
+
+    // default rules for determining legal line-breaking positions
+    LineBreakRules {
+        // ignore non-spacing marks, enclosing marks, and format characters
+        "$ignore=[[:Mn:][:Me:][:Cf:]];"
+
+        // Hindi phrase separators
+        "danda=[\u0964\u0965];"
+
+        // characters that always cause a break: ETX, tab, LF, FF, LS, and PS
+        "break=[\u0003\t\n\f\u2028\u2029];"
+
+        // characters that always prevent a break: the non-breaking space
+        // and similar characters
+        "nbsp=[\u00a0\u2007\u2011\ufeff];"
+
+        // whitespace: space separators and control characters, except for
+        // CR and the other characters mentioned above
+        "space=[[[:Zs:][:Cc:]]-[{nbsp}{break}\r]];"
+
+        // dashes: dash punctuation and the discretionary hyphen, except for
+        // non-breaking hyphens
+        "dash=[[[:Pd:]\u00ad]-[{nbsp}]];"
+
+        // characters that stick to a word if they precede it: currency symbols
+        // (except the cents sign) and starting punctuation
+        "pre-word=[[[:Sc:]-[\u00a2]][:Ps:]\\\"\\\'];"
+
+        // characters that stick to a word if they follow it: ending punctuation,
+        // other punctuation that usually occurs at the end of a sentence,
+        // small Kana characters, some CJK diacritics, etc.
+        "post-word=[[:Pe:]\\!\\\"\\\'\\%\\.\\,\\:\\;\\?\u00a2\u00b0\u066a\u2030-\u2034"
+                "\u2103\u2105\u2109\u3001\u3002\u3005\u3041\u3043\u3045\u3047\u3049\u3063"
+                "\u3083\u3085\u3087\u308e\u3099-\u309e\u30a1\u30a3\u30a5\u30a7\u30a9"
+                "\u30c3\u30e3\u30e5\u30e7\u30ee\u30f5\u30f6\u30fc-\u30fe\uff01\uff0c"
+                "\uff0e\uff1f];"
+
+        // Kanji: actually includes both Kanji and Kana, except for small Kana and
+        // CJK diacritics
+        "kanji=[[\u4e00-\u9fa5\uf900-\ufa2d\u3041-\u3094\u30a1-\u30fa]-[{post-word}{$ignore}]];"
+
+        // digits
+        "digit=[[:Nd:][:No:]];"
+
+        // punctuation that can occur in the middle of a number: periods and commas
+        "mid-num=[\\.\\,];"
+
+        // everything not mentioned above, plus the quote marks (which are both
+        // <pre-word>, <post-word>, and <char>)
+        "char=[^{break}{space}{dash}{kanji}{nbsp}{$ignore}{pre-word}{post-word}{mid-num}{danda}\r\\\"\\\'];"
+
+        // a "number" is a run of prefix characters and dashes, followed by one or
+        // more digits with isolated number-punctuation characters interspersed
+        "number=([{pre-word}{dash}]*{digit}+({mid-num}{digit}+)*);"
+
+        // the basic core of a word can be either a "number" as defined above, a single
+        // "Kanji" character, or a run of any number of not-explicitly-mentioned
+        // characters (this includes Latin letters)
+        "word-core=([{pre-word}{char}]*|{kanji}|{number});"
+
+        // a word may end with an optional suffix that be either a run of one or
+        // more dashes or a run of word-suffix characters, followed by an optional
+        // run of whitespace
+        "word-suffix=(({dash}+|{post-word}*){space}*);"
+
+        // a word, thus, is an optional run of word-prefix characters, followed by
+        // a word core and a word suffix (the syntax of <word-core> and <word-suffix>
+        // actually allows either of them to match the empty string, putting a break
+        // between things like ")(" or "aaa(aaa"
+        "word=({pre-word}*{word-core}{word-suffix});"
+
+        // finally, the rule that does the work: Keep together any run of words that
+        // are joined by runs of one of more non-spacing mark.  Also keep a trailing
+        // line-break character or CRLF combination with the word.  (line separators
+        // "win" over nbsp's)
+        "{word}({nbsp}+{word})*\r?{break}?;"
+    }
+
+    // default rules for finding sentence boundaries
+    SentenceBreakRules {
+        // ignore non-spacing marks, enclosing marks, and format characters
+        "$ignore=[[:Mn:][:Me:][:Cf:]];"
+
+        // lowercase letters
+        "lc=[:Ll:];"
+        
+        // uppercase Latin letters
+        "ucLatin=[A-Z];"
+
+        // whitespace (line separators are treated as whitespace)
+        "space=[\t\r\f\n\u2028[:Zs:]];"
+
+        // punctuation which may occur at the beginning of a sentence: "starting
+        // punctuation" and quotation marks
+        "start=[[:Ps:]\\\"\\\'];"
+
+        // punctuation with may occur at the end of a sentence: "ending punctuation"
+        // and quotation marks
+        "end=[[:Pe:]\\\"\\\'];"
+
+        // digits
+        "digit=[:N:];"
+
+        // characters that unambiguously signal the end of a sentence
+        "term=[\\!\\?\u3002\uff01\uff1f];"
+
+        // periods, which MAY signal the end of a sentence
+        "period=[\\.\uff0e];"
+
+        // characters that may occur at the beginning of a sentence: basically anything
+        // not mentioned above (lowercase letters and digits are specifically excluded)
+        "sent-start=[^{lc}{ucLatin}{space}{start}{end}{digit}{term}{period}\u2029{$ignore}];"
+
+        // Hindi phrase separator
+        "danda=[\u0964\u0965];"
+
+        // always break sentences after paragraph separators
+        ".*?\u2029?;"
+
+        // always break after a danda, if it's followed by whitespace
+        ".*?{danda}{space}*;"
+
+        // if you see a period, skip over additional periods and ending punctuation
+        // and if the next character is a paragraph separator, break after the
+        // paragraph separator
+        ".*?{period}[{period}{end}]*{space}*\u2029;"
+
+        // if you see a period, skip over additional periods and ending punctuation,
+        // followed by optional whitespace, followed by optional starting punctuation,
+        // and if the next character is something that can start a sentence
+        // (basically, a capital letter), then put the sentence break between the
+        // whitespace and the opening punctuation
+        ".*?{period}[{period}{end}]*{space}*/({start}*{sent-start}|{start}+{ucLatin});"
+        
+        // same as above, except that there's a sentence break before a Latin capital
+        // letter only if there's at least one space after the period
+        ".*?{period}[{period}{end}]*{space}+/{ucLatin};"
+
+        // if you see a sentence-terminating character, skip over any additional
+        // terminators, periods, or ending punctuation, followed by any whitespace,
+        // followed by a SINGLE optional paragraph separator, and put the break there
+        ".*?{term}[{term}{period}{end}]*{space}*\u2029?;"
+
+        // The following rules are here to aid in backwards iteration.  The automatically
+        // generated backwards state table will rewind to the beginning of the
+        // paragraph all the time (or all the way to the beginning of the document
+        // if the document doesn't use the Unicode PS character) because the only
+        // unambiguous character pairs are those involving paragraph separators.
+        // These specify a few more unambiguous breaking situations.
+
+        // if you see a sentence-starting character, followed by starting punctuation
+        // (remember, we're iterating backwards), followed by an optional run of
+        // whitespace, followed by an optional run of ending punctuation, followed
+        // by a period, this is a safe place to turn around
+        "![{sent-start}{ucLatin}]{start}*{space}+{end}*{period};"
+
+        // if you see a letter or a digit, followed by an optional run of
+        // starting punctuation, followed by an optional run of whitespace,
+        // followed by an optional run of ending punctuation, followed by
+        // a sentence terminator, this is a safe place to turn around
+        "![{sent-start}{lc}{digit}]{start}*{space}*{end}*{term};"
+    }
+
+    //------------------------------------------------------------
+    // END BreakIterator support
+    //------------------------------------------------------------
+
+    AmPmMarkers { 
+            "AM",
+            "PM",
+    }
+    Countries { 
+        AF { "Afghanistan" }
+        AL { "Albania" }
+        DZ { "Algeria" }
+        AS { "American Samoa" }
+        AD { "Andorra" }
+        AO { "Angola" }
+        AI { "Anguilla" }
+        AR { "Argentina" }
+        AM { "Armenia" }
+        AW { "Aruba" }
+        AU { "Australia" }
+        AT { "Austria" }
+        AZ { "Azerbaijan" }
+        BS { "Bahamas" }
+        BH { "Bahrain" }
+        BD { "Bangladesh" }
+        BB { "Barbados" }
+        BY { "Belarus" }
+        BE { "Belgium" }
+        BZ { "Belize" }
+        BJ { "Benin" }
+        BM { "Bermuda" }
+        BT { "Bhutan" }
+        BO { "Bolivia" }
+        BA { "Bosnia and Herzegovina" }
+        BW { "Botswana" }
+        BR { "Brazil" }
+        BN { "Brunei" }
+        BG { "Bulgaria" }
+        BF { "Burkina Faso" }
+        BI { "Burundi" }
+        KH { "Cambodia" }
+        CM { "Cameroon" }
+        CA { "Canada" }
+        CV { "Cape Verde" }
+        CF { "Central African Republic" }
+        TD { "Chad" }
+        CL { "Chile" }
+        CN { "China" }
+        CO { "Colombia" }
+        KM { "Comoros" }
+        CG { "Congo" }
+        CR { "Costa Rica" }
+        CI { "C\u00F4te d'Ivoire" }
+        HR { "Croatia" }
+        CU { "Cuba" }
+        CY { "Cyprus" }
+        CZ { "Czech Republic" }
+        DK { "Denmark" }
+        DJ { "Djibouti" }
+        DM { "Dominica" }
+        DO { "Dominican Republic" }
+        TP { "East Timor" }
+        EC { "Ecuador" }
+        EG { "Egypt" }
+        SV { "El Salvador" }
+        GQ { "Equatorial Guinea" }
+        ER { "Eritrea" }
+        EE { "Estonia" }
+        ET { "Ethiopia" }
+        FJ { "Fiji" }
+        FI { "Finland" }
+        FO { "Faroe Islands" } // http://www.din.de/gremien/nas/nabd/iso3166ma/codlstp1/en_listp1.html
+        FR { "France" }
+        GF { "French Guiana" }
+        GL { "Greenland" } // http://www.din.de/gremien/nas/nabd/iso3166ma/codlstp1/en_listp1.html
+        PF { "French Polynesia" }
+        TF { "French Southern Territories" }
+        GA { "Gabon" }
+        GM { "Gambia" }
+        GE { "Georgia" }
+        DE { "Germany" }
+        GH { "Ghana" }
+        GR { "Greece" }
+        GP { "Guadeloupe" }
+        GU { "Guam" }
+        GT { "Guatemala" }
+        GN { "Guinea" }
+        GW { "Guinea-Bissau" }
+        GY { "Guyana" }
+        HT { "Haiti" }
+        HN { "Honduras" }
+        HK { "Hong Kong S.A.R., China" }
+        HU { "Hungary" }
+        IS { "Iceland" }
+        IN { "India" }
+        ID { "Indonesia" }
+        IR { "Iran" }
+        IQ { "Iraq" }
+        IE { "Ireland" }
+        IL { "Israel" }
+        IT { "Italy" }
+        JM { "Jamaica" }
+        JP { "Japan" }
+        JO { "Jordan" }
+        KZ { "Kazakhstan" }
+        KE { "Kenya" }
+        KI { "Kiribati" }
+        KP { "North Korea" }
+        KR { "South Korea" }
+        KW { "Kuwait" }
+        KG { "Kyrgyzstan" }
+        LA { "Laos" }
+        LV { "Latvia" }
+        LB { "Lebanon" }
+        LS { "Lesotho" }
+        LR { "Liberia" }
+        LY { "Libya" }
+        LI { "Liechtenstein" }
+        LT { "Lithuania" }
+        LU { "Luxembourg" }
+        MK { "Macedonia" }
+        MG { "Madagascar" }
+        MY { "Malaysia" }
+        ML { "Mali" }
+        MT { "Malta" }
+        MP { "Northern Mariana Islands"}
+        MH { "Marshall Islands"}
+        MQ { "Martinique" }
+        MR { "Mauritania" }
+        MU { "Mauritius" }
+        YT { "Mayotte" }
+        MX { "Mexico" }
+        FM { "Micronesia" }
+        MD { "Moldova" }
+        MC { "Monaco" }
+        MN { "Mongolia" }
+        MS { "Montserrat" }
+        MA { "Morocco" }
+        MZ { "Mozambique" }
+        MM { "Myanmar" }
+        NA { "Namibia" }
+        NP { "Nepal" }
+        NL { "Netherlands" }
+        AN { "Netherlands Antilles" }
+        NC { "New Caledonia" }
+        NZ { "New Zealand" }
+        NI { "Nicaragua" }
+        NE { "Niger" }
+        NG { "Nigeria" }
+        NU { "Niue" }
+        NO { "Norway" }
+        OM { "Oman" }
+        PK { "Pakistan" }
+        PA { "Panama" }
+        PG { "Papua New Guinea" }
+        PY { "Paraguay" }
+        PE { "Peru" }
+        PH { "Philippines" }
+        PL { "Poland" }
+        PT { "Portugal" }
+        PR { "Puerto Rico" }
+        QA { "Qatar" }
+        RO { "Romania" }
+        RU { "Russia" }
+        RW { "Rwanda" }
+        SA { "Saudi Arabia" }
+        SN { "Senegal" }
+        SP { "Serbia" }
+        SC { "Seychelles" }
+        SL { "Sierra Leone" }
+        SG { "Singapore" }
+        SK { "Slovakia" }
+        SI { "Slovenia" }
+        SO { "Somalia" }
+        ZA { "South Africa" }
+        ES { "Spain" }
+        LK { "Sri Lanka" }
+        SD { "Sudan" }
+        SR { "Suriname" }
+        SZ { "Swaziland" }
+        SE { "Sweden" }
+        CH { "Switzerland" }
+        SY { "Syria" }
+        TW { "Taiwan" }
+        TJ { "Tajikistan" }
+        TZ { "Tanzania" }
+        TH { "Thailand" }
+        TG { "Togo" }
+        TK { "Tokelau" }
+        TO { "Tonga" }
+        TT { "Trinidad and Tobago" }
+        TN { "Tunisia" }
+        TR { "Turkey" }
+        TM { "Turkmenistan" }
+        UG { "Uganda" }
+        UA { "Ukraine" }
+        AE { "United Arab Emirates" }
+        GB { "United Kingdom" }
+        US { "United States" }
+        UY { "Uruguay" }
+        UZ { "Uzbekistan" }
+        VU { "Vanuatu" }
+        VA { "Vatican" }
+        VE { "Venezuela" }
+        VN { "Vietnam" }
+        VG { "British Virgin Islands" }
+        VI { "U.S. Virgin Islands" }
+        EH { "Western Sahara" }
+        YE { "Yemen" }
+        YU { "Yugoslavia" }
+        ZR { "Zaire" }
+        ZM { "Zambia" }
+        ZW { "Zimbabwe" }
+    }
+    CurrencyElements { 
+            "\u00A4",
+            "XXX",
+            "",
+    }
+    DateTimeElements { 
+            "1",
+            "1",
+    }
+    DateTimePatterns { 
+            "h:mm:ss a z",
+            "h:mm:ss a z",
+            "h:mm:ss a",
+            "h:mm a",
+            "EEEE, MMMM d, yyyy",
+            "MMMM d, yyyy",
+            "MMM d, yyyy",
+            "M/d/yy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "Sun",
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat",
+    }
+    DayNames { 
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+    }
+    Eras { 
+            "BC",
+            "AD",
+    }
+    Languages { 
+        aa  { "Afar" }
+        ab  { "Abkhazian" }
+        ace { "Achinese" }
+        ach { "Acoli" } 
+        ada { "Adangme" }      
+        ae  { "Avestan" }  
+        af  { "Afrikaans" }
+        afa { "Afro-Asiatic (Other)" }
+        afh { "Afrihili" }               
+        aka { "Akan" }
+        akk { "Akkadien" }          
+        ale { "Aleut" } 
+        alg {  "Algonquian Languages" }
+        am  { "Amharic" }
+        ang { "English, Old (ca.450-1100)" }        
+        apa { "Apache Languages"}            
+        ar  { "Arabic" }
+        arc { "Aramaic" }
+        arn { "Araucanian" }
+        arp { "Arapaho" }
+        art { "Artificial (Other)" }           
+        arw { "Arawak" }             
+        as  { "Assamese" }    
+        ath { "Athapaskan Languages" }
+        aus { "Australian Languages" }
+        ava { "Avaric" }       
+        awa { "Awadhi" }                      
+        ay  { "Aymara" }             
+        az  { "Azerbaijani" }        
+        ba  { "Bashkir" }
+        bad { "Banda" }
+        bai { "Bamileke Languages" }
+        bal { "Baluuchi" }
+        bam { "Bambara" }
+        ban { "Balinese" }
+        bas { "Basa" }
+        bat { "Baltic (Other)" }
+        be  { "Belarusian" }
+        bej { "Beja" }
+        bem { "Bemba" }             
+        ber { "Beber" }
+        bg  { "Bulgarian" }               
+        bh  { "Bihari" }   
+        bho { "Bhojpuri" }
+        bi  { "Bislama" }
+        bik { "Bikol" }
+        bin { "Bini" }
+        bla { "Siksika" }
+        bn  { "Bengali" }
+        bnt { "Bantu" }
+        bo  { "Tibetan" }
+        br  { "Brenton" }
+        bra { "Braj" }
+        bs  { "Bosnian"}
+        btk { "Batak" }
+        bua { "Buriat" }                     
+        bug { "Buginese" }
+        ca  { "Catalan" }
+        cad { "Caddo" }
+        cai { "Central American Indian (Other)" }
+        car { "Carib" }
+        cau { "Caucasian (Other) " }              
+        ce  { "Chechen" }
+        ceb { "Cebuano" }
+        cel { "Celtic (Other)" } 
+        ch  { "Chamorro" }
+        chb { "Chibcha" }   
+        chg { "Chagatai" }
+        chk { "Chuukese" }
+        chm { "Mari" }        
+        chn { "Chinook Jargon" }
+        cho { "Choctaw" }
+        chp { "Chipewyan" }
+        chr { "Cherokee" }
+        chy { "Cheyenne" }
+        cmc { "Chamic Languages" }
+        co  { "Corsican" }
+        cop { "Coptic" }
+        cpe { "Creoles and Pidgins, English-based (Other)" }
+        cpf { "Creoles and Pidgins, French-based (Other)" }           
+        cre { "Cree" }
+        crp { "Creoles and Pidgins (Other)" }
+        cs  { "Czech" }
+        cu  { "Church Slavic" }
+        cus { "Cushitic (Other)" }           
+        cv  { "Chuvash" }
+        cy  { "Welsh" }              
+        da  { "Danish" } 
+        dak { "Dakota" }              
+        day { "Dayak" }
+        de  { "German" }
+        del { "Delaware" }
+        den { "Slave" }
+        dgr { "Dogrib" }
+        din { "Dinka" }
+        div { "Divehi" }
+        doi { "Dogri" }
+        dra { "Dravidian (Other)" }
+        dua { "Duala" }            
+        dum { "Dutch, Middle (ca. 1050-1350)" }
+        dyu { "Dyula" }
+        dz  { "Bhutani" } 
+        dzo { "Dzongkha" }
+        efi { "Efik" }
+        egy { "Egyptian (Ancient)" }
+        eka { "Ekajuk" }
+        el  { "Greek" } //  Modern (1453-)
+        elx { "Elamite" }
+        en  { "English" }
+        enm { "English, Middle( 1100 -1500)" }
+        eo  { "Esperanto" }          
+        es  { "Spanish" }            
+        et  { "Estonian" }
+        eu  { "Basque" }
+        ewe { "Ewe" }
+        ewo { "Ewondo" }
+        fa  { "Persian" } 
+        fan { "Fang" }
+        fat { "Fanti" }          
+        fi  { "Finnish" }
+        fiu { "Finno - Ugrian" }
+        fj  { "Fiji" }               
+        fo  { "Faeroese" }           
+        fon { "Fon" }            
+        fr  { "French" }
+        frm { "French, Middle (ca.1400-1600)" }
+        fro { "French, Old (842-ca.1400)" }
+        ful { "Fulah" }
+        fur { "Friulian" }
+        fy  { "Frisian" } 
+        ga  { "Irish" }
+        gaa { "Ga" }
+        gay { "Gayo" }
+        gba {"Gbaya" }           
+        gd  { "Scots Gaelic" }  
+        gem { "Germanic (Other)" }
+        gil { "Gilbertese" }
+		gl  { "Gallegan" } 
+        gla { "Gaelic (Scots)" }  
+        gmh { "German, Middle High (ca.1050-1500)" }
+        gn  { "Guarani" }            
+        goh { " German, Old High (ca.750-1050)" }
+        gon { "Gondi" }
+        gor { "Gorontalo" }
+        got { "Gothic" }
+        grb { "Gerbo" }
+        grc { "Greek, Ancient (to 1453)" }
+        gu  { "Gujarati" }
+        gv  { "Manx" }           
+        gwi { "Gwich'in" }
+        hai { "Haida" }
+        hau { "Hausa" }
+        haw { "Hawaiian" }            
+        he  { "Hebrew" }
+        hi  { "Hindi" } 
+        him { "Himachali" }             
+        hit { "Hittite" }
+        hmn { "Hmong" }             
+        ho  { "Hiri Motu" }
+        hr  { "Croatian" }
+        hu  { "Hungarian" }
+        hup { "Hupa" }
+        hy  { "Armenian" }
+        hz  { "Herero" }
+        ia  { "Interlingua" }        
+        iba { "Iban" }          
+        ibo { "Igbo" }
+        id  { "Indonesian" }               
+        ie  { "Interlingue" }        
+        ijo { "Ijo" }
+        ik  { "Inupiak" }
+        ilo { "Iloko" }
+        inc { "Indic (Other)" }
+        ine { "Indo-European" }          
+        ira { "Iranian " }            
+        iro { "Iroguoian  Languages" }              
+        is  { "Icelandic" }
+        it  { "Italian" }            
+        iu  { "Inukitut" }           
+        iw  { "Hebrew" }             
+        ja  { "Japanese" }           
+        jpr { "Judeo-Persian" }
+        jrb { "Judeo-Arabic" }
+        jw  { "Javanese" }           
+        ka  { "Georgian" }           
+        kaa { "Kara-Kalpak" }
+        kab { "Kabyle" }
+        kac { "Kachin" }
+        kam { "Kamba" }
+        kar { "Karen" }            
+        kau { "Kanuri" }
+        kaw { "Kawi" }           
+        kha { "Khasi" }
+        khi { "Khoisan" }
+        kho { "Khotanese" }
+        ki  { "Kikuyu" }   
+        kk  { "Kazakh" }
+        kl  { "Kalaallisut" }   
+        km  { "Khmer" }  
+        kmb { "Kimbundu" }         
+        kn  { "Kannada" }
+        ko  { "Korean" }   
+        kok { "Konkani" }            
+        kon { "Kongo" }
+        kos { "Kosrean" }
+        kpe { "Kpelle" }
+        kro { "Kru" }
+        kru { "Kuruckh" }
+        ks  { "Kashmiri" }
+        ku  { "Kurdish" }
+        kum { "Kumyk" }      
+        kut { "Kutenai" }
+        kv  { "Komi" }
+        kw  { "Cornish" }            
+        ky  { "Kirghiz" }
+        la  { "Latin" }              
+        lad { "Ladino" }
+        lah { "Lahnda" }
+        lam { "Lamba" }
+        lb  { "Letzeburgesch" } 
+        lez { "Lezghian" }
+        lin { "Lingala" }
+        lit { "Lithuanian" }
+        ln  { "Lingala" }            
+        lo  { "Lao" }
+        lol { "Mongo" }          
+        loz { "Lozi" }
+        lt  { "Lithuanian" }         
+        lua { "Luba-Lulua" }
+        lub { "Luba-Katanga" }
+        lug { "Ganda" }
+        lui { "Luiseeno" }
+        lun { "Lunda" }
+        luo { "Lua" }
+        lus { "Lushai" }
+        lv  { "Latvian (Lettish)" }
+        mad { "Madurese" }
+        mag { "Magahi" }
+        mai { "Maithili" }
+        mak { "Makasar" }        
+        man { "Mandingue" }
+        map { "Austronesian" }
+        mas { "Masai" }
+        mdr { "Mandar" }
+        men { "Mende" }
+        mg  { "Malagasy" }           
+        mga { "Irish, Middle (900-1200)" }
+        mh  { "Marshall"}
+        mi  { "Maori" }              
+        mic { "Mic-Mac" }
+        min { "Minangkabau" }
+        mis { "Miscellaneous Languages" }
+        mk  { "Macedonian" }     
+        mkh { "Mon-Khmer (Ohter)" }
+        ml  { "Malayalam" }          
+        mn  { "Mongolian" }
+        mnc { "Manchu" }
+        mni { "Manipuri" }
+        mno { "Manobo Languages" }
+        mo  { "Moldavian" }
+        moh { "Mohawk" }          
+        mos { "Mossi" }
+        mr  { "Marathi" } 
+        ms  { "Malay" }              
+        mt  { "Maltese" } 
+        mul { "Multiple Languages" }
+        mun { "Munda Languages" }
+        mus { "Creek" }
+        mwr { "Marwari" } 
+        my  { "Burmese" }
+        myn { "Mayan" }
+        na  { "Nauru" } 
+        nah { "Nahuatl" }
+        nai { "North American Indian (Ohter)" }
+        nb  { "Norwegian Bokm\u00e5l" }    
+        nd  { "Ndebele, North" }   
+        nds { "Low German; Low Saxon" } 
+        ne  { "Nepali" }  
+        new { "Newari" }    
+        ng  { "Ndonga" }   
+        nia { "Nias" }
+        nic { "Niger - Kordofanian" }
+        niu { "Niuean" }
+        nl  { "Dutch" }  
+        nn  { "Norwegian Nynorsk" }
+        no  { "Norwegian" }
+        non { "Norse, Old" } 
+        nr  { "Ndebele, South" }
+        nso { "Sotho, Northern" }
+        nub { "Nubian Languages" }
+        nv  {"Navajo"}
+        ny  { " Chichewa; Nyanja" }           
+        nym { "Nyamwezi" }
+        nyo { "Nyoro" } 
+        nzi { "Nzima" }
+        oc  { "Proven\u00E7al; Occitan (post 1500)"}
+        oji { "Ojibwa" }          
+        om  { "Oromo (Afan)" }
+        or  { "Oriya" }              
+        os  { "Ossetic" }
+        osa { "Osage" }     
+        ota { "Turkish (Ottoman Empire)" }      
+        oto { "Otomian Languages" }
+        pa  { "Punjabi" }            
+        paa { "Papuan (Ohter)" }
+        pag { "Pangasinan" }
+        pal { "Pahlavi" }
+        pam { "pampamga" }
+        pap { "Papiamento" }
+        pau { "Palauan" }
+        peo { "Persian Old (ca.600-400 B.C.)"  }    
+        phi { "Philippine (Other)" }
+        phn { "Phoenician" }    
+        pi  { "Pali" }  
+        pl  { "Polish" }             
+        pon { "Pohnpeian" }
+        pra { "Prakrit Languages" }
+        pro { "Proven\u00E7al, Old (to 1500)" }     
+        ps  { "Pashto (Pushto)" }  
+        pt  { "Portuguese" }
+        qu  { "Quechua" }            
+        raj { "Rajastani" }
+        rap { "Rapanui" }
+        rar { "Rarotongan" }
+        rm  { "Rhaeto-Romance" }
+        rn  { "Rundi" }        
+        ro  { "Romanian" }   
+        roa { "Romance (Other)" }
+        rom { "Romany" }    
+        ru  { "Russian" }     
+        rw  { "Kinyarwanda" }        
+        sa  { "Sanskrit" }
+        sad { "Sandawe" }   
+        sah { "Yakut" }
+        sai { "South American Indian (Ohter)" }           
+        sal { "Salishan" }
+        sam { "Samritan" }
+        sas { "Saska" }
+        sat { "Santali" }
+        sc  { "Sardinian" }  
+        sco { "Scots" }
+        sd  { "Sindhi" }
+        se  { "Northern Sami" }
+// http://lcweb.loc.gov/standards/iso639-2/englangn.html 
+// should provide the correct language code soon 
+//        se { "Sami Languages" }        // DUP FIXME
+        sel { "Selkup" }
+        sem { "Semitic" }         
+        sg  { "Sango" }
+        sga { "Irish, Old (to 900)" }
+        sgn { "Sign Languages" }
+        sh  { "Serbo-Croatian" }     
+        shn { "Shan" }   
+        si  { "Sinhalese" }
+        sid { "Sidamo" }
+        sio { "Siouan Languages" }
+        sit { "Sino-Tibetan (Other)" }
+        sk  { "Slovak" }             
+        sl  { "Slovenian" }   
+        sm  { "Samoan" }          
+        sn  { "Shona" }
+        snk { "Soninke" }
+        so  { "Somali" }
+        sog { "Sogdien" }       
+        son { "Songhai" }
+        sq  { "Albanian" }
+        sr  { "Serbian" }   
+        srr { "Serer" }     
+        ss  { "Swati" }   
+        ssa { "Nilo-Saharam" }               
+        st  { "Sotho, Southern" }
+        su  { "Sundanese" }
+        suk { "Sukuma" }
+        sus { "Susu" }          
+        sux { "Sumerian"}
+        sv  { "Swedish" }
+        sw  { "Swahili" }            
+        syr { "Syriac" }
+        ta  { "Tamil" }              
+        tai { "Tai (Other)" }            
+        te  { "Telugu" }     
+        tem { "Timne" }
+        ter { "Tereno" }
+        tet { "Tetum" }        
+        tg  { "Tajik" }        
+        th  { "Thai" }               
+        tig { "Tigre" }            
+        tir { "Tigrinya" } 
+        tiv { "Tiv" }
+        tk  { "Turkmen" } 
+        tl  { "Tagalog" }
+        tli { "Tlingit" }          
+        tmh { "Tamashek" }      
+        tn  { "Tswana" }
+        tog { "Tonga (Nyasa)" }
+        ton { "Tongan (Tonga Islands)" }
+        tr  { "Turkish" }            
+        ts  { "Tsonga" }    
+        tsi { "Tsimshian" }           
+        tt  { "Tatar" }              
+        tum { "Tumbuka" }
+        tur { "Turkish" }
+        tut { "Altaic (Other)" }          
+        tvl { "Tuvalu" }
+        tw  { "Twi" }    
+        ty  { "Tahitian" }          
+        tyv { "Tuvinian" }           
+        ug  { "Uighur" }             
+        uga { "Ugaritic" }            
+        uk  { "Ukrainian" }   
+        umb { "Umbundu" }
+        und { "Undetermined" }       
+        ur  { "Urdu" }               
+        uz  { "Uzbek" }            
+        vai { "Vai" }
+        ven { "Venda" }  
+        vi  { "Vietnamese" }         
+        vo  { "Volapuk" }    
+        vot  { "Votic" }
+        wak { "Wakashan Languages" }
+        wal { "Walamo" }
+        war { "Waray" }
+        was { "Washo" }        
+        wen { "Sorbian Languages" }
+        wo  { "Wolof" }              
+        xh  { "Xhosa" }
+        yao { "Yao" }
+        yap { "Yapese" }              
+        yi  { "Yiddish" }            
+        yor  { "Yoruba" }       
+        ypk { "Yupik Languages" }
+        za  { "Zhuang" }             
+        zap { "Zapotec" }
+        zen { "Zenaga" }      
+        zh  { "Chinese" }
+        znd { "Zande" }
+        zu  { "Zulu" }     
+        zun { "Zuni" }          
+    }
+    LocaleID { "0000" }
+    LocaleString { "en" }
+    MonthAbbreviations { 
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+            "",
+    }
+    MonthNames { 
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+            "",
+    }
+    NumberElements { 
+            ".",
+            ",",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "\u00A4 #,##0.00;-\u00A4 #,##0.00",
+            "#,##0%",
+	    "#E0"
+    }
+    ShortCountry { "" }
+    ShortLanguage { "eng" }
+    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
+    zoneStrings { 
+        {
+                "PST",
+                "Pacific Standard Time",
+                "PST",
+                "Pacific Daylight Time",
+                "PDT",
+                "San Francisco",
+        }
+        {
+                "MST",
+                "Mountain Standard Time",
+                "MST",
+                "Mountain Daylight Time",
+                "MDT",
+                "Denver",
+        }
+        {
+                "PNT",
+                "Mountain Standard Time",
+                "MST",
+                "Mountain Standard Time",
+                "MST",
+                "Phoenix",
+        }
+        {
+                "CST",
+                "Central Standard Time",
+                "CST",
+                "Central Daylight Time",
+                "CDT",
+                "Chicago",
+        }
+        {
+                "EST",
+                "Eastern Standard Time",
+                "EST",
+                "Eastern Daylight Time",
+                "EDT",
+                "New York",
+        }
+        {
+                "IET",
+                "Eastern Standard Time",
+                "EST",
+                "Eastern Standard Time",
+                "EST",
+                "Indianapolis",
+        }
+        {
+                "PRT",
+                "Atlantic Standard Time",
+                "AST",
+                "Atlantic Daylight Time",
+                "ADT",
+                "Halifax",
+        }
+        {
+                "HST",
+                "Hawaii Standard Time",
+                "HST",
+                "Hawaii Daylight Time",
+                "HDT",
+                "Honolulu",
+        }
+        {
+                "AST",
+                "Alaska Standard Time",
+                "AST",
+                "Alaska Daylight Time",
+                "ADT",
+                "Anchorage",
+        }
+    }
+
+
+    LocaleScript{
+        "Latn",
+    }
+
+    //------------------------------------------------------------
+    // Rule Based Number Format Support
+    //------------------------------------------------------------
+
+//         * Spellout rules for U.S. English.  This rule set has two variants:
+//         * %simplified is a set of rules showing the simple method of spelling
+//         * out numbers in English: 289 is formatted as "two hundred eighty-nine".
+//         * %default uses a more complicated algorithm to format
+//         * numbers in a more natural way: 289 is formatted as "two hundred AND
+//         * eighty-nine" and commas are inserted between the thousands groups for
+//         * values above 100,000.
+
+     SpelloutRules {
+            // This rule set shows the normal simple formatting rules for English
+            "%simplified:\n"
+                   // negative number rule.  This rule is used to format negative
+                   // numbers.  The result of formatting the number's absolute
+                   // value is placed where the >> is.
+            "    -x: minus >>;\n"
+                   // faction rule.  This rule is used for formatting numbers
+                   // with fractional parts.  The result of formatting the
+                   // number's integral part is substituted for the <<, and
+                   // the result of formatting the number's fractional part
+                   // (one digit at a time, e.g., 0.123 is "zero point one two
+                   // three") replaces the >>.
+            "    x.x: << point >>;\n"
+                   // the rules for the values from 0 to 19 are simply the
+                   // words for those numbers
+            "    zero; one; two; three; four; five; six; seven; eight; nine;\n"
+            "    ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;\n"
+            "        seventeen; eighteen; nineteen;\n"
+                   // beginning at 20, we use the >> to mark the position where
+                   // the result of formatting the number's ones digit.  Thus,
+                   // we only need a new rule at every multiple of 10.  Text in
+                   // backets is omitted if the value being formatted is an
+                   // even multiple of 10.
+            "    20: twenty[->>];\n"
+            "    30: thirty[->>];\n"
+            "    40: forty[->>];\n"
+            "    50: fifty[->>];\n"
+            "    60: sixty[->>];\n"
+            "    70: seventy[->>];\n"
+            "    80: eighty[->>];\n"
+            "    90: ninety[->>];\n"
+                   // beginning at 100, we can use << to mark the position where
+                   // the result of formatting the multiple of 100 is to be
+                   // inserted.  Notice also that the meaning of >> has shifted:
+                   // here, it refers to both the ones place and the tens place.
+                   // The meanings of the << and >> tokens depend on the base value
+                   // of the rule.  A rule's divisor is (usually) the highest
+                   // power of 10 that is less than or equal to the rule's base
+                   // value.  The value being formatted is divided by the rule's
+                   // divisor, and the integral quotient is used to get the text
+                   // for <<, while the remainder is used to produce the text
+                   // for >>.  Again, text in brackets is omitted if the value
+                   // being formatted is an even multiple of the rule's divisor
+                   // (in this case, an even multiple of 100)
+            "    100: << hundred[ >>];\n"
+                   // The rules for the higher numbers work the same way as the
+                   // rule for 100: Again, the << and >> tokens depend on the
+                   // rule's divisor, which for all these rules is also the rule's
+                   // base value.  To group by thousand, we simply don't have any
+                   // rules between 1,000 and 1,000,000.
+            "    1000: << thousand[ >>];\n"
+            "    1,000,000: << million[ >>];\n"
+            "    1,000,000,000: << billion[ >>];\n"
+            "    1,000,000,000,000: << trillion[ >>];\n"
+                   // overflow rule.  This rule specifies that values of a
+                   // quadrillion or more are shown in numerals rather than words.
+                   // The == token means to format (with new rules) the value
+                   // being formatted by this rule and place the result where
+                   // the == is.  The #,##0 inside the == signs is a
+                   // DecimalFormat pattern.  It specifies that the value should
+                   // be formatted with a DecimalFormat object, and that it
+                   // should be formatted with no decimal places, at least one
+                   // digit, and a thousands separator.
+            "    1,000,000,000,000,000: =#,##0=;\n"
+
+            // %default is a more elaborate form of %simplified;  It is basically
+            // the same, except that it introduces "and" before the ones digit
+            // when appropriate (basically, between the tens and ones digits) and
+            // separates the thousands groups with commas in values over 100,000.
+            "%default:\n"
+                   // negative-number and fraction rules.  These are the same
+                   // as those for %simplified, but have to be stated here too
+                   // because this is an entry point
+            "    -x: minus >>;\n"
+            "    x.x: << point >>;\n"
+                   // just use %simplified for values below 100
+            "    =%simplified=;\n"
+                   // for values from 100 to 9,999 use %%and to decide whether or
+                   // not to interpose the "and"
+            "    100: << hundred[ >%%and>];\n"
+            "    1000: << thousand[ >%%and>];\n"
+                   // for values of 100,000 and up, use %%commas to interpose the
+                   // commas in the right places (and also to interpose the "and")
+            "    100,000>>: << thousand[>%%commas>];\n"
+            "    1,000,000: << million[>%%commas>];\n"
+            "    1,000,000,000: << billion[>%%commas>];\n"
+            "    1,000,000,000,000: << trillion[>%%commas>];\n"
+            "    1,000,000,000,000,000: =#,##0=;\n"
+            // if the value passed to this rule set is greater than 100, don't
+            // add the "and"; if it's less than 100, add "and" before the last
+            // digits
+            "%%and:\n"
+            "    and =%default=;\n"
+            "    100: =%default=;\n"
+            // this rule set is used to place the commas
+            "%%commas:\n"
+                   // for values below 100, add "and" (the apostrophe at the
+                   // beginning is ignored, but causes the space that follows it
+                   // to be significant: this is necessary because the rules
+                   // calling %%commas don't put a space before it)
+            "    ' and =%default=;\n"
+                   // put a comma after the thousands (or whatever preceded the
+                   // hundreds)
+            "    100: , =%default=;\n"
+                   // put a comma after the millions (or whatever precedes the
+                   // thousands)
+            "    1000: , <%default< thousand, >%default>;\n"
+                   // and so on...
+            "    1,000,000: , =%default=;"
+            // %%lenient-parse isn't really a set of number formatting rules;
+            // it's a set of collation rules.  Lenient-parse mode uses a Collator
+            // object to compare fragments of the text being parsed to the text
+            // in the rules, allowing more leeway in the matching text.  This set
+            // of rules tells the formatter to ignore commas when parsing (it
+            // already ignores spaces, which is why we refer to the space; it also
+            // ignores hyphens, making "twenty one" and "twenty-one" parse
+            // identically)
+            "%%lenient-parse:\n"
+            //            "    & ' ' , ',' ;\n"
+            "   &\u0000 << ' ' << ',' << '-'; \n"
+    }
+
+
+//         * This rule set adds an English ordinal abbreviation to the end of a
+//         * number.  For example, 2 is formatted as "2nd".  Parsing doesn't work with
+//         * this rule set.  To parse, use DecimalFormat on the numeral.
+    OrdinalRules {
+            // this rule set formats the numeral and calls %%abbrev to
+            // supply the abbreviation
+            "%main:\n"
+            "    =#,##0==%%abbrev=;\n"
+            // this rule set supplies the abbreviation
+            "%%abbrev:\n"
+                   // the abbreviations.  Everything from 4 to 19 ends in "th"
+            "    th; st; nd; rd; th;\n"
+                   // at 20, we begin repeating the cycle every 10 (13 is "13th",
+                   // but 23 and 33 are "23rd" and "33rd")  We do this by
+                   // ignoring all bug the ones digit in selecting the abbreviation
+            "    20: >>;\n"
+                   // at 100, we repeat the whole cycle by considering only the
+                   // tens and ones digits in picking an abbreviation
+            "    100: >>;\n"
+    }
+
+//         * This rule set formats a number of seconds in sexagesimal notation
+//         * (i.e., hours, minutes, and seconds).  %with-words formats it with
+//         * words (3,740 is "1 hour, 2 minutes, 20 seconds") and %in-numerals
+//         * formats it entirely in numerals (3,740 is "1:02:20").
+    DurationRules {
+            // main rule set for formatting with words
+            "%with-words:\n"
+                   // take care of singular and plural forms of "second"
+            "    0 seconds; 1 second; =0= seconds;\n"
+                   // use %%min to format values greater than 60 seconds
+            "    60/60: <%%min<[, >>];\n"
+                   // use %%hr to format values greater than 3,600 seconds
+                   // (the ">>>" below causes us to see the number of minutes
+                   // when when there are zero minutes)
+            "    3600/60: <%%hr<[, >>>];\n"
+            // this rule set takes care of the singular and plural forms
+            // of "minute"
+            "%%min:\n"
+            "    0 minutes; 1 minute; =0= minutes;\n"
+            // this rule set takes care of the singular and plural forms
+            // of "hour"
+            "%%hr:\n"
+            "    0 hours; 1 hour; =0= hours;\n"
+
+            // main rule set for formatting in numerals
+            "%in-numerals:\n"
+                   // values below 60 seconds are shown with "sec."
+            "    =0= sec.;\n"
+                   // higher values are shown with colons: %%min-sec is used for
+                   // values below 3,600 seconds...
+            "    60: =%%min-sec=;\n"
+                   // ...and %%hr-min-sec is used for values of 3,600 seconds
+                   // and above
+            "    3600: =%%hr-min-sec=;\n"
+            // this rule causes values of less than 10 minutes to show without
+            // a leading zero
+            "%%min-sec:\n"
+            "    0: :=00=;\n"
+            "    60/60: <0<>>;\n"
+            // this rule set is used for values of 3,600 or more.  Minutes are always
+            // shown, and always shown with two digits
+            "%%hr-min-sec:\n"
+            "    0: :=00=;\n"
+            "    60/60: <00<>>;\n"
+            "    3600/60: <#,##0<:>>>;\n"
+            // the lenient-parse rules allow several different characters to be used
+            // as delimiters between hours, minutes, and seconds
+            "%%lenient-parse:\n"
+            "    & ':' = '.' = ' ' = '-';\n" 
+    }
+    Scripts { 
+        ARAB { "Arabic" }
+        ARMN { "Armenian" }
+        BENG { "Bengali" }
+        BOPO { "Bopomofo" }
+        CANS { "Unified Canadian Aboriginal Symbols" }
+        CHER { "Cherokee" }
+        CYRL { "Cyrillic" }
+        DEVA { "Devanagari" }
+        DSRT { "Deseret" }
+        ETHI { "Ethiopic" }
+        GEOR { "Georgian" }
+        GOTH { "Gothic" }
+        GREK { "Greek" }
+        GUJR { "Gujarati" }
+        GURU { "Gurmukhi" }
+        HANG { "Hangul" }
+        HANI { "Han" }
+        HEBR { "Hebrew" }
+        HIRA { "Hiragana" }
+        ITAL { "Old_italic" }
+        KANA { "Katakana" }
+        KHMR { "Khmer" }
+        KNDA { "Kannada" }
+        LAO  { "Lao" }
+        LATN { "Latin" }
+        MLYM { "Malayalam" }
+        MONG { "Mongolian" }
+        MYMR { "Myanmar" }
+        OGAM { "Ogham" }
+        ORYA { "Oriya" }
+        QAAC { "Coptic" }
+        QAAI { "Inherited" }
+        RUNR { "Runic" }
+        SINH { "Sinhala" }
+        SYRC { "Syriac" }
+        TAML { "Tamil" }
+        TELU { "Telugu" }
+        THAA { "Thana" }
+        THAI { "Thai" }
+        TIBT { "Tibetan" }
+        YIII { "Yi" }
+        ZYYY { "Common" }  
+   }
+}
+

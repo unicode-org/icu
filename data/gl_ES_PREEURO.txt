@@ -1,0 +1,19 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2001, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+gl_ES_PREEURO {
+    CurrencyElements { 
+            "Pta",
+            "ESP",
+            ",",
+    }
+    NumberPatterns { 
+            "#,#0.##;-#,#0.##",
+            "\u00a4 #,##0.#;-\u00a4 #,##0.#",
+            "#,#0%",
+    }
+}

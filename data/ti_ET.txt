@@ -1,0 +1,58 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+// * Tigrigna language locale for Ethiopia.
+// * Contributed by Daniel Yacob <yacob@geez.org>
+
+ti_ET {
+    Version{ "x0.1" }
+    AmPmMarkers {
+            "\u1295\u1309\u1206 \u1230\u12D3\u1270",
+            "\u12F5\u1215\u122D \u1230\u12D3\u1275",
+    }
+    // CountryISBNNumber { "231" }
+    // CountryNumber { "231" }
+    CurrencyElements {
+            "$",
+            "ETB ",
+            ".",
+    }
+    DateTimePatterns { 
+            "hh:mm:ss a",
+            "hh:mm:ss a",
+            "h:mm:ss a",
+            "h:mm a",
+            "EEEE dd MMMM yyyy",
+            "dd MMMM yyyy",
+            "MMM dd,yy",
+            "dd/MM/yy",
+            "{1} {0}",
+    }
+    // Measurement { "Metric" }
+    NumberElements {
+            ".",
+            ",",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    NumberPatterns {
+            "#,##0.###;-#,##0.###",
+            "\u00A4#,##0.00;-\u00A4#,##0.00",
+            "#,##0%",
+    }
+    // PaperSize {
+    //    Hieght { "297" }
+    //    Width { "210" }
+    //    Units { "mm" }
+    // }
+}
