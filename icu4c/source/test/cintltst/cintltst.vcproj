@@ -408,6 +408,9 @@
 			<File
 				RelativePath=".\cnumtst.h">
 			</File>
+			<File
+				RelativePath=".\utmstest.c">
+			</File>
 		</Filter>
 		<Filter
 			Name="locales &amp; resources"
