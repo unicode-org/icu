@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -33,6 +33,7 @@ U_CDECL_BEGIN
  * to load required data out of the ICU data library, but it can be used to
  * load data out of other places.
  *
+ * See the User Guide Data Management chapter.
  */
 
 /**
@@ -151,6 +152,8 @@ UDataMemoryIsAcceptable(void *context,
  * @return A pointer (handle) to a data memory object, or <code>NULL</code>
  *         if an error occurs. Call <code>udata_getMemory()</code>
  *         to get a pointer to the actual data.
+ *
+ * @see udata_openChoice
  * @stable ICU 2.0
  */
 U_CAPI UDataMemory * U_EXPORT2
@@ -179,22 +182,12 @@ udata_open(const char *path, const char *type, const char *name,
  * matching the type and name.</p>
  *
  * <p>If <code>path==NULL</code>, then ICU data is loaded.
- * Otherwise, it is separated into a basename and a basename-less path string.
- * If the path string is empty, then <code>u_getDataDirectory()</code>
- * is set in its place.
- * When data is loaded from files or DLLs (shared libraries) and
- * may be stored in common files, then the data finding is roughly as follows:
- * <ul>
- *     <li>common file at path/basename has entry name_type?</li>
- *     <li>common file at basename has entry name_type?</li>
- *     <li>separate file at path/basename_name_type?</li>
- *     <li>separate file at basename_name_type?</li>
- *     <li>separate file at path/name_type?</li>
- *     <li>separate file at name_type?</li>
- * </ul>
- * If the basename is empty, then only the last two options are attempted.
- * Otherwise, it serves as a name for a common data file or as a basename
- * (collection name) prefix for individual files.</p>
+ * Otherwise, it is separated into a basename and a basename-less directory string.
+ * The basename is used as the data package name, and the directory is
+ * logically prepended to the ICU data directory string.</p>
+ *
+ * <p>For details about ICU data loading see the User Guide
+ * Data Management chapter. (http://oss.software.ibm.com/icu/userguide/icudata.html)</p>
  *
  * @param path Specifies an absolute path and/or a basename for the
  *             finding of the data in the file system.
@@ -301,25 +294,26 @@ udata_setCommonData(const void *data, UErrorCode *err);
  * data and allows you to force the it to come out of a user-specified
  * pointer.
  *
- * The format of this data is that of the icu common data file, like 'icudata.dat'
+ * The format of this data is that of the icu common data file, like 'icudt26l.dat'
+ * or the corresponding shared library (DLL) file.
  * The application must read in or otherwise construct an image of the data and then
  * pass the address of it to this function.
  *
  *
- * Warning:  setAppData will fail with a U_USING_DEFAULT_ERROR error if
+ * Warning:  setAppData will set a U_USING_DEFAULT_WARNING code if
  *           data with the specifed path that has already been opened, or
  *           if setAppData with the same path has already been called.
  *           Any such calls to setAppData will have no effect.
  *
  *
- * @param path pointer to the path name by which the application will refer
- *             to (open) this data.
+ * @param packageName the package name by which the application will refer
+ *             to (open) this data
  * @param data pointer to the data
- * @param err outgoing error status <code>U_USING_DEFAULT_ERROR, U_UNSUPPORTED_ERROR</code>
+ * @param err outgoing error status <code>U_USING_DEFAULT_WARNING, U_UNSUPPORTED_ERROR</code>
  * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
-udata_setAppData(const char *path, const void *data, UErrorCode *err);
+udata_setAppData(const char *packageName, const void *data, UErrorCode *err);
 
 U_CDECL_END
 
