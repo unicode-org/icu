@@ -50,7 +50,10 @@
 #include "cmemory.h"
 
 //-----------------------------------------------------------------------------
-const UVersionInfo Collator::fVersion = {1, 0, 0, 0};
+// History
+// ICU 1.6: fVersion[3] 0->1 due to update to Normalizer algorithm and
+//          tables to Unicode 3.0 / UTR15 - Liu
+const UVersionInfo Collator::fVersion = {1, 0, 0, 1};
 
 Collator::Collator()
   : strength(Collator::TERTIARY), decmp(Normalizer::DECOMP)
