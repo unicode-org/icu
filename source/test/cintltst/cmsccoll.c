@@ -4398,9 +4398,46 @@ static void TestBeforePinyin(void) {
         "l\\u0113n ",
         "len "
     };
+    char *test2[] = {
+        "x\\u0101",
+        "x\\u0100",
+        "X\\u0101",
+        "X\\u0100",
+        "x\\u00E1",
+        "x\\u00C1",
+        "X\\u00E1",
+        "X\\u00C1",
+        "x\\u01CE",
+        "x\\u01CD",
+        "X\\u01CE",
+        "X\\u01CD",
+        "x\\u00E0",
+        "x\\u00C0",
+        "X\\u00E0",
+        "X\\u00C0",
+        "xa",
+        "xA",
+        "Xa",
+        "XA",
 
+
+        "x\\u0101x",
+        "x\\u0100x",
+        "x\\u00E1x",
+        "x\\u00C1x",
+        "x\\u01CEx",
+        "x\\u01CDx",
+        "x\\u00E0x",
+        "x\\u00C0x",
+        "xax",
+        "xAx"
+    };
+/*
     genericRulesStarter(rules, test, sizeof(test)/sizeof(test[0]));
     genericLocaleStarter("zh", test, sizeof(test)/sizeof(test[0]));
+    */
+    genericRulesStarter(rules, test2, sizeof(test2)/sizeof(test2[0]));
+    genericLocaleStarter("zh", test2, sizeof(test2)/sizeof(test2[0]));
 }
 
 static void TestBeforeTightening(void) {
