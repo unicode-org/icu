@@ -406,7 +406,7 @@ u_strtok_r(UChar    *src,
  * @param s1 A string to compare.
  * @param s2 A string to compare.
  * @return 0 if <code>s1</code> and <code>s2</code> are bitwise equal; a negative
- * value if <code>s1</code> is bitwise less than <code>s2,/code>; a positive
+ * value if <code>s1</code> is bitwise less than <code>s2,</code>; a positive
  * value if <code>s1</code> is bitwise greater than <code>s2</code>.
  * @stable ICU 2.0
  */
@@ -547,8 +547,8 @@ u_strCaseCompare(const UChar *s1, int32_t length1,
  * @param ucs2 A string to compare.
  * @param n The maximum number of characters to compare.
  * @return 0 if <code>s1</code> and <code>s2</code> are bitwise equal; a negative
- * value if <code>s1</code> is bitwise less than <code>s2,/code>; a positive
- * value if <code>s1</code> is bitwise greater than <code>s2,/code>.
+ * value if <code>s1</code> is bitwise less than <code>s2</code>; a positive
+ * value if <code>s1</code> is bitwise greater than <code>s2</code>.
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2

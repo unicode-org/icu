@@ -184,9 +184,9 @@ uregex_pattern(const  URegularExpression   *regexp,
 
 /**
   * Get the match mode flags that were specified when compiling this regular expression.
-  * @param status     Receives errors detected by this function.
-  * @param regexp     The compiled regular expression.
-  * @param return     The match mode flags
+  * @param status   Receives errors detected by this function.
+  * @param regexp   The compiled regular expression.
+  * @return         The match mode flags
   * @see URegexpFlag
   * @draft ICU 3.0
   */
@@ -354,7 +354,7 @@ uregex_group(URegularExpression *regexp,
   *   Group #1 refers to the text matched by the first set of capturing parentheses.
   *
   *    @param   regexp      The compiled regular expression.
-  *    @param   group       The capture group number
+  *    @param   groupNum    The capture group number
   *    @param   status      A reference to a UErrorCode to receive any errors.
   *    @return              the starting position in the input of the text matched 
   *                         by the specified group.
@@ -373,7 +373,7 @@ uregex_start(URegularExpression *regexp,
   *   Group #1 refers to the text matched by the first set of capturing parentheses.
   *
   *    @param   regexp      The compiled regular expression.
-  *    @param   group       The capture group number
+  *    @param   groupNum    The capture group number
   *    @param   status      A reference to a UErrorCode to receive any errors.
   *    @return              the index of the position following the last matched character.
   *    @draft ICU 3.0
@@ -494,9 +494,9 @@ uregex_replaceFirst(URegularExpression  *regexp,
   *                        input string as it is copied to the destination buffer.
   *                        The replacement text may contain references ($1, for
   *                        example) to capture groups from the match.
-  *   @param   replacementTextLength  The length of the replacement text string,
+  *   @param   replacementLength  The length of the replacement text string,
   *                        or -1 if the string is NUL terminated.
-  *   @param   dest        The buffer into which the results of the
+  *   @param   destBuf     The buffer into which the results of the
   *                        find-and-replace are placed.  On return, this pointer
   *                        will be updated to refer to the beginning of the
   *                        unused portion of buffer, leaving it in position for
@@ -531,7 +531,7 @@ uregex_appendReplacement(URegularExpression    *regexp,
   *   @param   regexp      The regular expression object.  This is needed to 
   *                        obtain the input string and with the position
   *                        of the last match within it.
-  *   @param   dest        The buffer in which the results of the
+  *   @param   destBuf     The buffer in which the results of the
   *                        find-and-replace are placed.  On return, the pointer
   *                        will be updated to refer to the beginning of the
   *                        unused portion of buffer.

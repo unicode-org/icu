@@ -51,8 +51,8 @@ public:
    * The iteration range is the whole string, and the starting
    * position is specified by "textPos".  If "textPos" is outside the valid
    * iteration range, the behavior of this object is undefined.  
-   * @textStr The unicode string used to create an iterator 
-   * @textPos The starting position of the iteration
+   * @param textStr The unicode string used to create an iterator 
+   * @param textPos The starting position of the iteration
    * @stable ICU 2.0
    */
   StringCharacterIterator(const UnicodeString&    textStr,

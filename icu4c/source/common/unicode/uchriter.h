@@ -189,7 +189,7 @@ public:
    * Sets the iterator to refer to the "position"-th code unit
    * in the text-storage object the iterator refers to, and
    * returns that code unit.  
-   * @position the position within the text-storage object
+   * @param position the position within the text-storage object
    * @return the code unit
    * @stable ICU 2.0
    */
@@ -202,7 +202,7 @@ public:
    * returns that code point.
    * The current position is adjusted to the beginning of the code point
    * (its first code unit).
-   * @position the position within the text-storage object
+   * @param position the position within the text-storage object
    * @return the code unit
    * @stable ICU 2.0
    */
@@ -308,9 +308,9 @@ public:
    * iteration range, or relative to the current position itself.
    * The movement is expressed in numbers of code units forward
    * or backward by specifying a positive or negative delta.
-   * @delta the position relative to origin. A positive delta means forward;
+   * @param delta the position relative to origin. A positive delta means forward;
    * a negative delta means backward.
-   * @origin Origin enumeration {kStart, kCurrent, kEnd}
+   * @param origin Origin enumeration {kStart, kCurrent, kEnd}
    * @return the new position
    * @stable ICU 2.0
    */
@@ -321,9 +321,9 @@ public:
    * iteration range, or relative to the current position itself.
    * The movement is expressed in numbers of code points forward
    * or backward by specifying a positive or negative delta.
-   * @delta the position relative to origin. A positive delta means forward;
+   * @param delta the position relative to origin. A positive delta means forward;
    * a negative delta means backward.
-   * @origin Origin enumeration {kStart, kCurrent, kEnd}
+   * @param origin Origin enumeration {kStart, kCurrent, kEnd}
    * @return the new position
    * @stable ICU 2.0
    */
