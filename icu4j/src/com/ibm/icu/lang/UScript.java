@@ -831,7 +831,7 @@ public final class UScript {
                 return  scriptCodeIndex[middle].scriptCode;
             }
         }
-        return -1;
+        return COMMON;
     }
     
         
