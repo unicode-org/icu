@@ -291,6 +291,7 @@ Formattable::adoptArray(Formattable* array, int32_t count)
     fValue.fArrayAndCount.fCount = count;
 } 
 
+#if 0
 //----------------------------------------------------
 // console I/O
 //----------------------------------------------------
@@ -364,4 +365,5 @@ FormattableStreamer::streamOut(ostream& stream, const Formattable& obj)
 }
 #endif
 
+#endif
 //eof
