@@ -188,7 +188,13 @@ typedef enum UBreakIteratorType {
   UBRK_LINE,
   /** Sentence breaks */
   UBRK_SENTENCE,
-  /** Title Case breaks */
+  /** 
+   * Title Case breaks 
+   * The iterator created using this type locates title boundaries as described for 
+   * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
+   * please use Word Boundary iterator.
+   *
+   */
   UBRK_TITLE
 } UBreakIteratorType;
 
