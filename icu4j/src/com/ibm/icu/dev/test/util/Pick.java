@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/Pick.java,v $
- * $Date: 2003/12/20 03:06:53 $
- * $Revision: 1.3 $
+ * $Date: 2004/02/04 18:59:47 $
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -516,7 +516,7 @@ abstract public class Pick {
             return true;
         }
         public String getInternal(int depth, Set alreadySeen) {
-            return indent(depth) + "?";
+            return indent(depth) + "\u00F8";
         }
     }
     */
