@@ -37,6 +37,7 @@ struct UCHARBUF {
 
 typedef struct UCHARBUF UCHARBUF;
 #define U_EOF 0xFFFF
+#define U_ERR 0xFFFFFFFF
   
 U_CAPI UChar32 U_EXPORT2
 ucbuf_getc(UCHARBUF* buf,UErrorCode* err);
