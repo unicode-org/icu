@@ -347,7 +347,7 @@ pkg_mak_writeAssemblyHeader(FileStream *f, const UPKGOptions *o)
     T_FileStream_writeLine(f, "\n");
     T_FileStream_writeLine(f, "BASE_OBJECTS=$(NAME)_dat.o\n");
     T_FileStream_writeLine(f, "\n");
-    T_FileStream_writeLine(f, "$(TEMP_DIR)/$(NAME).dat: $(CMNLIST)\n");
+    T_FileStream_writeLine(f, "$(TEMP_DIR)/$(NAME).dat: $(CMNLIST) $(DATAFILEPATHS)\n");
     T_FileStream_writeLine(f, "\t$(INVOKE) $(GENCMN) -c -e $(ENTRYPOINT) -n $(NAME) -t dat -d $(TEMP_DIR) 0 $(CMNLIST)\n");
     T_FileStream_writeLine(f, "\n");
     T_FileStream_writeLine(f, "$(TEMP_DIR)/$(NAME)_dat.o : $(TEMP_DIR)/$(NAME).dat\n");
