@@ -68,7 +68,8 @@ void T_UConverter_toUnicode_SBCS (UConverter * _this,
                                   UBool flush,
                                   UErrorCode * err)
 {
-  char *mySource = (char *) *source, *srcTemp;
+  char *mySource = (char *) *source;
+  const char *srcTemp;
   UChar *myTarget = *target, *tgtTemp;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
@@ -121,7 +122,7 @@ void T_UConverter_toUnicode_SBCS (UConverter * _this,
                   args.pSource = &srcTemp;
                   args.sourceLimit = sourceLimit;
                   args.flush = flush;
-                  args.offsets = offsets+myTargetIndex;
+                  args.offsets = offsets?offsets+myTargetIndex:0;
                   args.size = sizeof(args);
 
                   /* to do hsys: add more smarts to the codeUnits and length later */
@@ -162,7 +163,8 @@ void T_UConverter_fromUnicode_SBCS (UConverter * _this,
                                  UErrorCode * err)
 {
   const UChar *mySource = *source, *srcTemp;
-  unsigned char *myTarget = (unsigned char *) *target, *tgtTemp;
+  unsigned char *myTarget = (unsigned char *) *target;
+  char *tgtTemp;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - (char *) myTarget;
@@ -212,7 +214,7 @@ void T_UConverter_fromUnicode_SBCS (UConverter * _this,
               args.pSource = &srcTemp;
               args.sourceLimit = sourceLimit;
               args.flush = flush;
-              args.offsets = offsets+myTargetIndex;
+              args.offsets = offsets?offsets+myTargetIndex:0;
               args.size = sizeof(args);
 /* Needed explicit cast for myTarget on MVS to make compiler happy - JJD */
               /* HSYS: to do: more smarts */
@@ -227,7 +229,7 @@ void T_UConverter_fromUnicode_SBCS (UConverter * _this,
                 {
                   break;
                 }
-              myTargetIndex = *(args.pTarget) - myTarget;
+              myTargetIndex = *(args.pTarget) - (char*)myTarget;
               mySourceIndex = *(args.pSource) - mySource;
               _this->invalidUCharLength = 0;
           }               
@@ -455,7 +457,7 @@ void   T_UConverter_toUnicode_DBCS (UConverter * _this,
                   args.pSource = &srcTemp;
                   args.sourceLimit = sourceLimit;
                   args.flush = flush;
-                  args.offsets = offsets+myTargetIndex;
+                  args.offsets = offsets?offsets+myTargetIndex:0;
                   args.size = sizeof(args);
 
                   /* to do hsys: add more smarts to the codeUnits and length later */
@@ -511,7 +513,8 @@ void   T_UConverter_fromUnicode_DBCS (UConverter * _this,
                                       UErrorCode * err)
 {
   const UChar *mySource = *source, *srcTemp;
-  unsigned char *myTarget = (unsigned char *) *target, *tgtTemp;
+  unsigned char *myTarget = (unsigned char *) *target;
+  char *tgtTemp;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - (char *) myTarget;
@@ -588,7 +591,7 @@ void   T_UConverter_fromUnicode_DBCS (UConverter * _this,
               args.pSource = &srcTemp;
               args.sourceLimit = sourceLimit;
               args.flush = flush;
-              args.offsets = offsets+myTargetIndex;
+              args.offsets = offsets?offsets+myTargetIndex:0;
               args.size = sizeof(args);
               FromU_CALLBACK_MACRO(args.converter->fromUContext,
                                      args,
@@ -601,7 +604,7 @@ void   T_UConverter_fromUnicode_DBCS (UConverter * _this,
                 {
                   break;
                 }
-              myTargetIndex = *(args.pTarget) - myTarget;
+              myTargetIndex = *(args.pTarget) - (char*)myTarget;
               mySourceIndex = *(args.pSource) - mySource;
               _this->invalidUCharLength = 0;
             }

@@ -797,7 +797,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
                   args.pSource = &srcTemp;
                   args.sourceLimit = sourceLimit;
                   args.flush = flush;
-                  args.offsets = offsets+myTargetIndex;
+                  args.offsets = offsets?offsets+myTargetIndex:0;
                   args.size = sizeof(args);
 
                   ToU_CALLBACK_MACRO(_this->toUContext,
@@ -934,7 +934,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
                   args.pSource = &srcTemp;
                   args.sourceLimit = sourceLimit;
                   args.flush = flush;
-                  args.offsets = offsets+myTargetIndex;
+                  args.offsets = offsets?offsets+myTargetIndex:0;
                   args.size = sizeof(args);
                   /* call back handles the offset array */
                   ToU_CALLBACK_MACRO(_this->toUContext,
@@ -1077,7 +1077,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
               args.pSource = &srcTemp;
               args.sourceLimit = sourceLimit;
               args.flush = flush;
-              args.offsets = offsets+myTargetIndex;
+              args.offsets = offsets?offsets+myTargetIndex:0;
               args.size = sizeof(args);
               /* HSYS: to do: more smarts */
               FromU_CALLBACK_MACRO(args.converter->fromUContext,
@@ -1213,7 +1213,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
               args.pSource = &srcTemp;
               args.sourceLimit = sourceLimit;
               args.flush = flush;
-              args.offsets = offsets+myTargetIndex;
+              args.offsets = offsets?offsets+myTargetIndex:0;
               args.size = sizeof(args);
               /* HSYS: to do: more smarts, including offsets */
               FromU_CALLBACK_MACRO(args.converter->fromUContext,

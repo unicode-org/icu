@@ -25,6 +25,10 @@
 #ifndef UCNV_H
 #define UCNV_H
 
+/* Forward declaring the UConverter structure */
+struct UConverter;
+typedef struct UConverter UConverter;
+
 #include "unicode/utypes.h"
 #include "unicode/ucnv_err.h"
 

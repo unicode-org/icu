@@ -70,7 +70,8 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
                                   UBool flush,
                                   UErrorCode * err)
 {
-  const unsigned char *mySource = (unsigned char *) *source, *srcTemp;
+  const unsigned char *mySource = (unsigned char *) *source;
+  const char *srcTemp; /* to match the Args definition */
   UChar *myTarget = *target, *tgtTemp;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
@@ -185,7 +186,7 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
                   args.pSource = &srcTemp;
                   args.sourceLimit = sourceLimit;
                   args.flush = flush;
-                  args.offsets = offsets+myTargetIndex;
+                  args.offsets = offsets?offsets+myTargetIndex:0;
                   args.size = sizeof(args);
                   ToU_CALLBACK_MACRO(_this->toUContext,
                                      args,
@@ -196,7 +197,7 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
                   if (U_FAILURE (*err))   break;
                   _this->invalidCharLength = 0;
                   myTargetIndex = *(args.pTarget) - myTarget;
-                  mySourceIndex = *(args.pSource) - mySource;
+                  mySourceIndex = *(args.pSource) - (const char *)mySource;
                 }
             }
         }
@@ -223,7 +224,8 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
                                                 UBool flush,
                                                 UErrorCode * err)
 {
-  const unsigned char *mySource = (unsigned char *) *source, *srcTemp;
+  const unsigned char *mySource = (unsigned char *) *source;
+  const char *srcTemp;
   UChar *myTarget = *target, *tgtTemp;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
@@ -331,7 +333,7 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
                   args.pSource = &srcTemp;
                   args.sourceLimit = sourceLimit;
                   args.flush = flush;
-                  args.offsets = offsets+myTargetIndex;
+                  args.offsets = offsets?offsets+myTargetIndex:0;
                   args.size = sizeof(args);
                   /* To do HSYS: more smarts here, including offsets */
                   ToU_CALLBACK_MACRO(_this->toUContext,
@@ -346,7 +348,7 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
                   if (U_FAILURE (*err))   break;
                   _this->invalidCharLength = 0;
                   myTargetIndex = *(args.pTarget) - myTarget;
-                  mySourceIndex = *(args.pSource) - mySource;
+                  mySourceIndex = *(args.pSource) - (const char*)mySource;
                 }
             }
         }
