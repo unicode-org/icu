@@ -1219,7 +1219,7 @@ ures_findResource(const char* path, UResourceBundle *fillIn, UErrorCode *status)
     }
   }
 
-  localeEnd = strchr(locale, RES_PATH_SEPARATOR);
+  localeEnd = uprv_strchr(locale, RES_PATH_SEPARATOR);
   if(localeEnd != NULL) {
     *localeEnd = 0;
   }
@@ -1790,7 +1790,7 @@ U_CFUNC UBool ures_isStackObject(UResourceBundle* resB) {
 
 
 U_CFUNC void ures_initStackObject(UResourceBundle* resB) {
-  memset(resB, 0, sizeof(UResourceBundle));
+  uprv_memset(resB, 0, sizeof(UResourceBundle));
   ures_setIsStackObject(resB, TRUE);
 }
 

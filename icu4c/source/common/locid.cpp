@@ -1246,7 +1246,7 @@ Locale::getBaseName() const
     ((Locale *)this)->baseName = ((Locale *)this)->baseNameBuffer;
     int32_t baseNameSize = uloc_getBaseName(fullName, baseName, ULOC_FULLNAME_CAPACITY, &status);
     if(baseNameSize >= ULOC_FULLNAME_CAPACITY) {
-      ((Locale *)this)->baseName = (char *)malloc(sizeof(char) * baseNameSize + 1);
+      ((Locale *)this)->baseName = (char *)uprv_malloc(sizeof(char) * baseNameSize + 1);
       uloc_getBaseName(fullName, baseName, baseNameSize+1, &status);
     } 
     baseName[baseNameSize] = 0;
