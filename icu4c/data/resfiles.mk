@@ -92,7 +92,7 @@ sk.txt sk_SK.txt\
 sl.txt sl_SI.txt\
 sq.txt sq_AL.txt\
 sr.txt sr_YU.txt\
-sv.txt sv_FI.txt sv_FI_AL.txt sv_SE.txt\
+sv.txt sv_FI.txt sv_SE.txt\
 sw.txt sw_KE.txt sw_TZ.txt\
 ta.txt ta_IN.txt\
 te.txt te_IN.txt\
