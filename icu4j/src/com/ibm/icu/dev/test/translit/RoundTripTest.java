@@ -447,9 +447,10 @@ public class RoundTripTest extends TestFmwk {
             num = 5;
         }
         for(int i=0; i<num;i++){
-           new Test(array[0][0])
-                .test(array[0][1], array[0][2], 
-                array[0][3],
+           logln("Testing " + array[i][0] );
+           new Test(array[i][0])
+                .test(array[i][1], array[i][2], 
+                array[i][3],
                 this, new Legal());
         }
     }
