@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Gujarati.txt
-// Date: Fri Nov 30 13:01:41 2001
+// Date: Fri Nov 30 19:39:31 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Gujarati
@@ -125,6 +125,8 @@ translit_InterIndic_Gujarati {
 "\ue061>\u0ab2\u0ac3;" // REMAP (indicExceptions.txt): \u0ae1>\u0ab2\u0ac3 = LETTER VOCALIC LL>LETTER LA.VOWEL SIGN VOCALIC R
 "\ue062>\u0abf\u0abc;" // REMAP (indicExceptions.txt): \u0ae2>\u0abf\u0abc = VOWEL SIGN VOCALIC L>VOWEL SIGN I.SIGN NUKTA
 "\ue063>\u0ac0\u0abc;" // REMAP (indicExceptions.txt): \u0ae3>\u0ac0\u0abc = VOWEL SIGN VOCALIC LL>VOWEL SIGN II.SIGN NUKTA
+"\uE064>\u0964;"          // DANDA
+"\uE065>\u0965;"          // DOUBLE DANDA
 "\ue066>\u0ae6;" // DIGIT ZERO
 "\ue067>\u0ae7;" // DIGIT ONE
 "\ue068>\u0ae8;" // DIGIT TWO

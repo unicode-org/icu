@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Telugu.txt
-// Date: Fri Nov 30 13:01:42 2001
+// Date: Fri Nov 30 19:39:31 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Telugu
@@ -126,6 +126,8 @@ translit_InterIndic_Telugu {
 "\ue061>\u0c61;" // LETTER VOCALIC LL
 "\ue062>\u0c3f;" // REMAP (indicExceptions.txt): \u0c62>\u0c3f = VOWEL SIGN VOCALIC L>VOWEL SIGN I
 "\ue063>\u0c40;" // REMAP (indicExceptions.txt): \u0c63>\u0c40 = VOWEL SIGN VOCALIC LL>VOWEL SIGN II
+"\ue064>'.'   ;" // FALLBACK FOR DANDA
+"\ue065>'.'   ;" // FALLBACK FOR DOUBLE DANDA	
 "\ue066>\u0c66;" // DIGIT ZERO
 "\ue067>\u0c67;" // DIGIT ONE
 "\ue068>\u0c68;" // DIGIT TWO

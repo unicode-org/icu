@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Kannada.txt
-// Date: Fri Nov 30 13:01:41 2001
+// Date: Fri Nov 30 19:39:31 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Kannada
@@ -129,6 +129,8 @@ translit_InterIndic_Kannada {
 "\ue061>\u0ce1;" // LETTER VOCALIC LL
 "\ue062>\u0cbf;" // REMAP (indicExceptions.txt): \u0ce2>\u0cbf = VOWEL SIGN VOCALIC L>VOWEL SIGN I
 "\ue063>\u0cc0;" // REMAP (indicExceptions.txt): \u0ce3>\u0cc0 = VOWEL SIGN VOCALIC LL>VOWEL SIGN II
+"\ue064>'.'   ;" // FALLBACK FOR DANDA
+"\ue065>'.'   ;" // FALLBACK FOR DOUBLE DANDA	
 "\ue066>\u0ce6;" // DIGIT ZERO
 "\ue067>\u0ce7;" // DIGIT ONE
 "\ue068>\u0ce8;" // DIGIT TWO
