@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliteratorParser.java,v $
-* $Date: 2001/11/12 18:25:46 $
-* $Revision: 1.10 $
+* $Date: 2001/11/14 19:16:41 $
+* $Revision: 1.11 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -1099,7 +1099,8 @@ class TransliteratorParser {
             //(right.cursorOffset > (left.text.length() - left.post)) ||
             //(-right.cursorOffset > left.ante) ||
             right.anchorStart || right.anchorEnd ||
-            !isValidOutput(right.text)) {
+            !isValidOutput(right.text) ||
+            left.ante > left.post) {
             syntaxError("Malformed rule", rule, start);
         }
 

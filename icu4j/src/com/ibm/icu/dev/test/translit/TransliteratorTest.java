@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/11/14 18:19:13 $
- * $Revision: 1.67 $
+ * $Date: 2001/11/14 19:16:18 $
+ * $Revision: 1.68 $
  *
  *****************************************************************************************
  */
@@ -1983,6 +1983,25 @@ public class TransliteratorTest extends TestFmwk {
                 Transliterator.createFromRules("ID", rule, Transliterator.FORWARD);
         } catch (IllegalArgumentException e) {
             logln("Ok: " + e.getMessage());
+            return;
+        }
+        errln("FAIL: No syntax error");
+    }
+
+    /**
+     * Test invalid post context error handling
+     */
+    public void TestInvalidPostContext() {
+        try {
+            Transliterator t =
+                Transliterator.createFromRules("ID", "a}b{c>d;", Transliterator.FORWARD);
+        } catch (IllegalArgumentException e) {
+            String msg = e.getMessage();
+            if (msg.indexOf("a}b{c") >= 0) {
+                logln("Ok: " + msg);
+            } else {
+                errln("FAIL: " + msg);
+            }
             return;
         }
         errln("FAIL: No syntax error");
