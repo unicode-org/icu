@@ -32,10 +32,23 @@ es {
     Variants {
         REVISED { "Revisado" }
     }
-    CollationElements {
-        Version { "1.0" }
-        Sequence { "& N < n\u0303<<< N\u0303" }
+    collations {
+	standard {
+          Version { "1.0" }
+          Sequence { "& N < n\u0303<<< N\u0303" }
+        }
+	traditional {
+          Version { "1.0" }
+          Sequence { "& N < n\u0303<<< N\u0303"
+            "&C < ch <<< Ch <<< CH"
+            "&l < ll <<< Ll <<< LL"
+          }
+	}
     }
+    //CollationElements {
+        //Version { "1.0" }
+        //Sequence { "& N < n\u0303<<< N\u0303" }
+    //}
     /* Duplicates from root commented out. */
     Countries { 
         Fallback{ "en"}
