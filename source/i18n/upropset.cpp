@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/upropset.cpp,v $
-* $Date: 2001/11/30 00:06:11 $
-* $Revision: 1.11 $
+* $Date: 2002/01/12 00:22:55 $
+* $Revision: 1.12 $
 **********************************************************************
 */
 #include "upropset.h"
@@ -323,9 +323,10 @@ UnicodeSet* UnicodePropertySet::createScriptSet(const UnicodeString& valueName) 
 // Utility methods
 //----------------------------------------------------------------
 
-static UBool _categoryFilter(UChar32 c, void* context) {
-    int32_t value = * (int32_t*) context;
-    return u_charType(c) == value;
+static UBool U_CALLCONV
+_enumCategoryRange(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {
+    CATEGORY_CACHE[type].add(start, limit-1);
+    return TRUE;
 }
 
 /**
@@ -336,8 +337,12 @@ static UBool _categoryFilter(UChar32 c, void* context) {
  * Callers MUST NOT MODIFY the returned set.
  */
 const UnicodeSet& UnicodePropertySet::getCategorySet(int32_t cat) {
-    if (CATEGORY_CACHE[cat].isEmpty()) {
-        initSetFromFilter(CATEGORY_CACHE[cat], _categoryFilter, &cat);
+    if (CATEGORY_CACHE == 0) {
+        CATEGORY_CACHE = new UnicodeSet[32]; // 32 is guaranteed by the Unicode standard
+        if (CATEGORY_CACHE == 0) {
+            return *((const UnicodeSet *)0);
+        }
+        u_enumCharTypes(_enumCategoryRange, 0);
     }
     return CATEGORY_CACHE[cat];
 }
@@ -501,7 +506,6 @@ void UnicodePropertySet::init() {
 
     NAME_MAP = new Hashtable(TRUE);
     CATEGORY_MAP = new Hashtable(TRUE);
-    CATEGORY_CACHE = new UnicodeSet[(size_t)U_CHAR_CATEGORY_COUNT];
     SCRIPT_CACHE = new UnicodeSet[(size_t)USCRIPT_CODE_LIMIT];
 
     ucln_i18n_registerCleanup(); // Call this when allocating statics
