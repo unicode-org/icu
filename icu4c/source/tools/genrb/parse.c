@@ -37,10 +37,10 @@ U_STRING_DECL(k_start_int, "int", 3);
 U_STRING_DECL(k_start_array, "array", 5);
 U_STRING_DECL(k_start_intvector, "intvector", 9);
 U_STRING_DECL(k_start_reserved, "reserved", 8);
-U_STRING_DECL(rootName, "root", 4);
+/* U_STRING_DECL(rootName, "root", 4);*/
 
 static UBool didInit=FALSE;
-static UBool didInitRoot=FALSE;
+/* static UBool didInitRoot=FALSE;*/
 
 /* Node IDs for the state transition table. */
 enum ENode {
@@ -232,7 +232,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
     struct SResource *temp2 = NULL;
     UBool colEl = FALSE, colOverride = FALSE, ucaEl = FALSE;
     UChar trueValue[] = {0x0054, 0x0052, 0x0055, 0x0045, 0x0000}; /* Just to store "TRUE" and "FALSE" */
-    UChar falseValue[] = {0x0046, 0x0041, 0x004C, 0x0053, 0x0045, 0x0000};
+/*  UChar falseValue[] = {0x0046, 0x0041, 0x004C, 0x0053, 0x0045, 0x0000}; */ /* Unicode for "FALSE" */
 
     /* Hashtable for keeping track of seen tag names */
     struct UHashtable *data;
@@ -501,7 +501,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 int fileLength = 0;
                 char fileName[256]={'\0'};
                 char cs[128] = { '\0'};
-                char* cp=NULL;
+                const char* cpStr=NULL;
                 char start[3] ={'0'};
                 ucaEl=FALSE; /* reset ucaEL */
                 /* make the fileName including the directory */
@@ -515,13 +515,13 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 in = T_FileStream_open(fileName, "rb");
                 T_FileStream_read(in, start, 3);
                 if(start[0] == '\xFE' && start[1] == '\xFF') {
-                    cp = "UTF16_BigEndian";
+                    cpStr = "UTF16_BigEndian";
                 } else if(start[0] == '\xFF' && start[1] == '\xFE') {
-                     cp = "UTF16_LittleEndian";
+                    cpStr = "UTF16_LittleEndian";
                 } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
-                    cp = "UTF8";
+                    cpStr = "UTF8";
                 }
-                ufile = u_finit((FILE*) in,0, cp);
+                ufile = u_finit((FILE*) in,0, cpStr);
                 if(in && ufile){
                     fileLength =T_FileStream_size(in);
                     ucaRulesStr = (UChar*)uprv_malloc(sizeof(UChar) * fileLength);
@@ -695,7 +695,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
             if (colEl && (uprv_strcmp(cSubTag, "Sequence") == 0))
             {
                 UErrorCode intStatus = U_ZERO_ERROR;
-                uint32_t defaultRulesArrayLength = 0;
+                /* uint32_t defaultRulesArrayLength = 0;*/
                 /* do the collation elements */
                 int32_t len = 0;
                 uint8_t *binColData = NULL;
