@@ -1393,10 +1393,10 @@ _SCSUSafeClone(const UConverter *cnv,
     }
 
     localClone = (struct cloneStruct *)stackBuffer;
-    memcpy(&localClone->cnv, cnv, sizeof(UConverter));
+    uprv_memcpy(&localClone->cnv, cnv, sizeof(UConverter));
     localClone->cnv.isCopyLocal = TRUE;
 
-    memcpy(&localClone->mydata, cnv->extraInfo, sizeof(SCSUData));
+    uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(SCSUData));
     localClone->cnv.extraInfo = &localClone->mydata;
 
     return &localClone->cnv;
