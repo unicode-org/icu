@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/CaseInsensitiveString.java,v $
- * $Date: 2002/12/03 22:04:17 $
- * $Revision: 1.4 $
+ * $Date: 2002/12/05 01:25:12 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -18,7 +18,7 @@ import com.ibm.icu.lang.UCharacter;
  * A string used as a key in java.util.Hashtable and other
  * collections.  It retains case information, but its equals() and
  * hashCode() methods ignore case.
- * @stable
+ * @stable ICU 2.0
  */
 public class CaseInsensitiveString {
     
@@ -28,7 +28,7 @@ public class CaseInsensitiveString {
     /**
      * Constructs an CaseInsentiveString object from the given string
      * @param s The string to construct this object from 
-     * @stable
+     * @stable ICU 2.0
      */
     public CaseInsensitiveString(String s) {
         string = s;
@@ -36,7 +36,7 @@ public class CaseInsensitiveString {
     /**
      * returns the underlying string 
      * @return String
-     * @stable
+     * @stable ICU 2.0
      */
     public String getString() {
         return string;
@@ -44,7 +44,7 @@ public class CaseInsensitiveString {
     /**
      * Compare the object with this 
      * @param o Object to compare this object with 
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean equals(Object o) {
         try {
@@ -61,7 +61,7 @@ public class CaseInsensitiveString {
     /**
      * Returns the hashCode of this object
      * @return int hashcode
-     * @stable
+     * @stable ICU 2.0
      */
     public int hashCode() {
         if (hash == 0) {

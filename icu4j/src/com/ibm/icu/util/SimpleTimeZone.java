@@ -25,7 +25,7 @@ import java.util.Date;
  * @see      GregorianCalendar
  * @see      TimeZone
  * @author   David Goldsmith, Mark Davis, Chen-Lieh Huang, Alan Liu
- * @stable
+ * @stable ICU 2.0
  */
 public class SimpleTimeZone extends TimeZone {
     /**
@@ -37,7 +37,7 @@ public class SimpleTimeZone extends TimeZone {
      * @param rawOffset  The given base time zone offset to GMT.
      * @param ID         The time zone ID which is obtained from
      *                   TimeZone.getAvailableIDs.
-     * @stable
+     * @stable ICU 2.0
      */
     public SimpleTimeZone(int rawOffset, String ID)
     {
@@ -102,7 +102,7 @@ public class SimpleTimeZone extends TimeZone {
      *                        member description for an example.
      * @exception IllegalArgumentException the month, day, dayOfWeek, or time
      * parameters are out of range for the start or end rule
-     * @stable
+     * @stable ICU 2.0
      */
     public SimpleTimeZone(int rawOffset, String ID,
                           int startMonth, int startDay, int startDayOfWeek, int startTime,
@@ -120,7 +120,7 @@ public class SimpleTimeZone extends TimeZone {
      * @param dstSavings   The amount of time in ms saved during DST.
      * @exception IllegalArgumentException the month, day, dayOfWeek, or time
      * parameters are out of range for the start or end rule
-     * @stable
+     * @stable ICU 2.0
      */
     public SimpleTimeZone(int rawOffset, String ID,
                           int startMonth, int startDay, int startDayOfWeek, int startTime,
@@ -194,7 +194,7 @@ public class SimpleTimeZone extends TimeZone {
      * Sets the daylight savings starting year.
      *
      * @param year  The daylight savings starting year.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setStartYear(int year)
     {
@@ -220,7 +220,7 @@ public class SimpleTimeZone extends TimeZone {
      *                          the member description for an example.
      * @exception IllegalArgumentException the month, dayOfWeekInMonth,
      * dayOfWeek, or time parameters are out of range
-     * @stable
+     * @stable ICU 2.0
      */
     public void setStartRule(int month, int dayOfWeekInMonth, int dayOfWeek,
                              int time)
@@ -244,7 +244,7 @@ public class SimpleTimeZone extends TimeZone {
      *                      standard time in this case.
      * @exception IllegalArgumentException the month,
      * dayOfMonth, or time parameters are out of range
-     * @stable
+     * @stable ICU 2.0
      */
     public void setStartRule(int month, int dayOfMonth, int time) {
         setStartRule(month, dayOfMonth, 0, time);
@@ -265,7 +265,7 @@ public class SimpleTimeZone extends TimeZone {
      *                      the last dayOfWeek on or before dayOfMonth.
      * @exception IllegalArgumentException the month, dayOfMonth,
      * dayOfWeek, or time parameters are out of range
-     * @stable
+     * @stable ICU 2.0
      */
     public void setStartRule(int month, int dayOfMonth, int dayOfWeek, int time, boolean after)
     {
@@ -293,7 +293,7 @@ public class SimpleTimeZone extends TimeZone {
      *                          member description for an example.
      * @exception IllegalArgumentException the month, dayOfWeekInMonth,
      * dayOfWeek, or time parameters are out of range
-     * @stable
+     * @stable ICU 2.0
      */
     public void setEndRule(int month, int dayOfWeekInMonth, int dayOfWeek,
                            int time)
@@ -317,7 +317,7 @@ public class SimpleTimeZone extends TimeZone {
      *                      time in this case.
      * @exception IllegalArgumentException the month,
      * dayOfMonth, or time parameters are out of range
-     * @stable
+     * @stable ICU 2.0
      */
     public void setEndRule(int month, int dayOfMonth, int time)
     {
@@ -339,7 +339,7 @@ public class SimpleTimeZone extends TimeZone {
      *                      the last dayOfWeek on or before dayOfMonth.
      * @exception IllegalArgumentException the month, dayOfMonth,
      * dayOfWeek, or time parameters are out of range
-     * @stable
+     * @stable ICU 2.0
      */
     public void setEndRule(int month, int dayOfMonth, int dayOfWeek, int time, boolean after)
     {
@@ -373,7 +373,7 @@ public class SimpleTimeZone extends TimeZone {
      * @return          The milliseconds to add to UTC to get local time.
      * @exception       IllegalArgumentException the era, month, day,
      *                  dayOfWeek, or millis parameters are out of range
-     * @stable
+     * @stable ICU 2.0
      */
     public int getOffset(int era, int year, int month, int day, int dayOfWeek,
                          int millis)
@@ -616,7 +616,7 @@ public class SimpleTimeZone extends TimeZone {
     /**
      * Overrides TimeZone
      * Gets the GMT offset for this time zone.
-     * @stable
+     * @stable ICU 2.0
      */
     public int getRawOffset()
     {
@@ -630,7 +630,7 @@ public class SimpleTimeZone extends TimeZone {
      * Sets the base time zone offset to GMT.
      * This is the offset to add *to* UTC to get local time.
      * Please see TimeZone.setRawOffset for descriptions on the parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setRawOffset(int offsetMillis)
     {
@@ -642,7 +642,7 @@ public class SimpleTimeZone extends TimeZone {
      * @param millisSavedDuringDST the number of milliseconds the time is
      * advanced with respect to standard time when the daylight savings rules
      * are in effect. A positive number, typically one hour (3600000).
-     * @stable
+     * @stable ICU 2.0
      */
     public void setDSTSavings(int millisSavedDuringDST) {
         if (millisSavedDuringDST <= 0) {
@@ -656,7 +656,7 @@ public class SimpleTimeZone extends TimeZone {
      * @return the number of milliseconds the time is
      * advanced with respect to standard time when the daylight savings rules
      * are in effect. A positive number, typically one hour (3600000).
-     * @stable
+     * @stable ICU 2.0
      */
     public int getDSTSavings() {
         return dstSavings;
@@ -665,7 +665,7 @@ public class SimpleTimeZone extends TimeZone {
     /**
      * Overrides TimeZone
      * Queries if this time zone uses Daylight Savings Time.
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean useDaylightTime()
     {
@@ -675,7 +675,7 @@ public class SimpleTimeZone extends TimeZone {
     /**
      * Overrides TimeZone
      * Queries if the given date is in Daylight Savings Time.
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean inDaylightTime(Date date)
     {
@@ -686,7 +686,7 @@ public class SimpleTimeZone extends TimeZone {
 
     /**
      * Overrides Cloneable
-     * @stable
+     * @stable ICU 2.0
      */
     public Object clone()
     {
@@ -697,7 +697,7 @@ public class SimpleTimeZone extends TimeZone {
     /**
      * Override hashCode.
      * Generates the hash code for the SimpleDateFormat object
-     * @stable
+     * @stable ICU 2.0
      */
     public synchronized int hashCode()
     {
@@ -711,7 +711,7 @@ public class SimpleTimeZone extends TimeZone {
      * @param obj  The SimpleTimeZone object to be compared with.
      * @return     True if the given obj is the same as this SimpleTimeZone
      *             object; false otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean equals(Object obj)
     {
@@ -730,7 +730,7 @@ public class SimpleTimeZone extends TimeZone {
      * Return true if this zone has the same rules and offset as another zone.
      * @param other the TimeZone object to be compared with
      * @return true if the given zone has the same rules and offset as this one
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean hasSameRules(TimeZone other) {
         if (this == other) return true;
@@ -759,7 +759,7 @@ public class SimpleTimeZone extends TimeZone {
     /**
      * Return a string representation of this time zone.
      * @return  a string representation of this time zone.
-     * @stable
+     * @stable ICU 2.0
      */
     public String toString() {
         return getClass().getName() +

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeFilter.java,v $ 
- * $Date: 2002/12/03 21:07:56 $ 
- * $Revision: 1.13 $
+ * $Date: 2002/12/05 01:23:06 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -18,7 +18,7 @@ package com.ibm.icu.text;
  * Currently, filters are used in conjunction with classes like {@link
  * Transliterator} to only process selected characters through a
  * transformation.
- * @stable
+ * @stable ICU 2.0
  */
 public abstract class UnicodeFilter implements UnicodeMatcher {
 
@@ -27,14 +27,14 @@ public abstract class UnicodeFilter implements UnicodeMatcher {
      * subset.  In other words, if a character is <b>to be
      * filtered</b>, then <tt>contains()</tt> returns
      * <b><tt>false</tt></b>.
-     * @stable
+     * @stable ICU 2.0
      */
     public abstract boolean contains(int c);
 
     /**
      * Default implementation of UnicodeMatcher::matches() for Unicode
      * filters.  Matches a single 16-bit code unit at offset.
-     * @stable
+     * @stable ICU 2.0
      */
     public int matches(Replaceable text,
                        int[] offset,

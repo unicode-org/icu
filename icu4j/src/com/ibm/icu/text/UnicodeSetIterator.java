@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSetIterator.java,v $ 
- * $Date: 2002/12/03 21:48:03 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/12/05 01:24:02 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,7 @@ import java.io.*;
  * }
  * </pre>
  * @author M. Davis
- * @stable
+ * @stable ICU 2.0
  */
 public final class UnicodeSetIterator {
 	
@@ -54,14 +54,14 @@ public final class UnicodeSetIterator {
      * Value of <tt>codepoint</tt> if the iterator points to a string.
      * If <tt>codepoint == IS_STRING</tt>, then examine
      * <tt>string</tt> for the current iteration result.
-     * @stable
+     * @stable ICU 2.0
      */
 	public static int IS_STRING = -1;
 	
 	/**
      * Current code point, or the special value <tt>IS_STRING</tt>, if
      * the iterator points to a string.
-     * @stable
+     * @stable ICU 2.0
      */
 	public int codepoint;
 
@@ -72,7 +72,7 @@ public final class UnicodeSetIterator {
      * iterating over code points using <tt>next()</tt>, or if
      * <tt>codepoint == IS_STRING</tt>, then the value of
      * <tt>codepointEnd</tt> is undefined.
-     * @stable
+     * @stable ICU 2.0
      */
 	public int codepointEnd;
 
@@ -80,14 +80,14 @@ public final class UnicodeSetIterator {
      * If <tt>codepoint == IS_STRING</tt>, then <tt>string</tt> points
      * to the current string.  If <tt>codepoint != IS_STRING</tt>, the
      * value of <tt>string</tt> is undefined.
-     * @stable
+     * @stable ICU 2.0
      */
 	public String string;
 
     /**
      * Create an iterator over the given set.
      * @param set set to iterate over
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSetIterator(UnicodeSet set) {
         reset(set);
@@ -97,7 +97,7 @@ public final class UnicodeSetIterator {
      * Create an iterator over nothing.  <tt>next()</tt> and
      * <tt>nextRange()</tt> return false. This is a convenience
      * constructor allowing the target to be set later.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSetIterator() {
         reset(new UnicodeSet());
@@ -120,7 +120,7 @@ public final class UnicodeSetIterator {
      *
      * @return true if there was another element in the set and this
      * object contains the element.
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean next() {
         if (nextElement <= endElement) {
@@ -160,7 +160,7 @@ public final class UnicodeSetIterator {
      *
      * @return true if there was another element in the set and this
      * object contains the element.
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean nextRange() {
         if (nextElement <= endElement) {
@@ -191,7 +191,7 @@ public final class UnicodeSetIterator {
      * resets it to the start of that set.  The iterator is valid only
      * so long as <tt>set</tt> is valid.
      * @param set the set to iterate over.
-     * @stable
+     * @stable ICU 2.0
      */
     public void reset(UnicodeSet set) {
         this.set = set;
@@ -200,7 +200,7 @@ public final class UnicodeSetIterator {
         
     /**
      * Resets this iterator to the start of the set.
-     * @stable
+     * @stable ICU 2.0
      */
     public void reset() {
         endRange = set.getRangeCount() - 1;

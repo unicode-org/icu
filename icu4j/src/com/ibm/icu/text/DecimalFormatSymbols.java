@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormatSymbols.java,v $ 
- * $Date: 2002/12/03 19:45:38 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/12/05 01:21:42 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -39,14 +39,14 @@ import java.util.ResourceBundle;
  * @see          DecimalFormat
  * @author       Mark Davis
  * @author       Alan Liu
- * @stable
+ * @stable ICU 2.0
  */
 
 final public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Create a DecimalFormatSymbols object for the default locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public DecimalFormatSymbols() {
         initialize( Locale.getDefault() );
@@ -55,7 +55,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Create a DecimalFormatSymbols object for the given locale.
      * @param locale the locale
-     * @stable
+     * @stable ICU 2.0
      */
     public DecimalFormatSymbols( Locale locale ) {
         initialize( locale );
@@ -64,7 +64,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Return the character used for zero. Different for Arabic, etc.
      * @return the character
-     * @stable
+     * @stable ICU 2.0
      */
     public char getZeroDigit() {
         return zeroDigit;
@@ -73,7 +73,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Set the character used for zero.
      * @param zeroDigit the zero character.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setZeroDigit(char zeroDigit) {
         this.zeroDigit = zeroDigit;
@@ -82,7 +82,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Return the character used for thousands separator. Different for French, etc.
      * @return the thousands character
-     * @stable
+     * @stable ICU 2.0
      */
     public char getGroupingSeparator() {
         return groupingSeparator;
@@ -91,7 +91,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Set the character used for thousands separator. Different for French, etc.
      * @param groupingSeparator the thousands character
-     * @stable
+     * @stable ICU 2.0
      */
     public void setGroupingSeparator(char groupingSeparator) {
         this.groupingSeparator = groupingSeparator;
@@ -100,7 +100,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Return the character used for decimal sign. Different for French, etc.
      * @return the decimal character
-     * @stable
+     * @stable ICU 2.0
      */
     public char getDecimalSeparator() {
         return decimalSeparator;
@@ -109,7 +109,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Set the character used for decimal sign. Different for French, etc.
      * @param decimalSeparator the decimal character
-     * @stable
+     * @stable ICU 2.0
      */
     public void setDecimalSeparator(char decimalSeparator) {
         this.decimalSeparator = decimalSeparator;
@@ -118,7 +118,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Return the character used for mille percent sign. Different for Arabic, etc.
      * @return the mille percent character
-     * @stable
+     * @stable ICU 2.0
      */
     public char getPerMill() {
         return perMill;
@@ -127,7 +127,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Set the character used for mille percent sign. Different for Arabic, etc.
      * @param perMill the mille percent character
-     * @stable
+     * @stable ICU 2.0
      */
     public void setPerMill(char perMill) {
         this.perMill = perMill;
@@ -136,7 +136,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Return the character used for percent sign. Different for Arabic, etc.
      * @return the percent character
-     * @stable
+     * @stable ICU 2.0
      */
     public char getPercent() {
         return percent;
@@ -145,7 +145,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Set the character used for percent sign. Different for Arabic, etc.
      * @param percent the percent character
-     * @stable
+     * @stable ICU 2.0
      */
     public void setPercent(char percent) {
         this.percent = percent;
@@ -154,7 +154,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Return the character used for a digit in a pattern.
      * @return the digit pattern character
-     * @stable
+     * @stable ICU 2.0
      */
     public char getDigit() {
         return digit;
@@ -163,7 +163,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Set the character used for a digit in a pattern.
      * @param digit the digit pattern character
-     * @stable
+     * @stable ICU 2.0
      */
     public void setDigit(char digit) {
         this.digit = digit;
@@ -173,7 +173,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * Return the character used to separate positive and negative subpatterns
      * in a pattern.
      * @return the pattern separator character
-     * @stable
+     * @stable ICU 2.0
      */
     public char getPatternSeparator() {
         return patternSeparator;
@@ -183,7 +183,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * Set the character used to separate positive and negative subpatterns
      * in a pattern.
      * @param patternSeparator the pattern separator character
-     * @stable
+     * @stable ICU 2.0
      */
     public void setPatternSeparator(char patternSeparator) {
         this.patternSeparator = patternSeparator;
@@ -193,7 +193,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * Return the String used to represent infinity. Almost always left
      * unchanged.
      * @return the Infinity string
-     * @stable
+     * @stable ICU 2.0
      */
      //Bug 4194173 [Richard/GCL]
 
@@ -205,7 +205,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * Set the String used to represent infinity. Almost always left
      * unchanged.
      * @param infinity the Infinity String
-     * @stable
+     * @stable ICU 2.0
      */
     public void setInfinity(String infinity) {
         this.infinity = infinity;
@@ -215,7 +215,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * Return the String used to represent NaN. Almost always left
      * unchanged.
      * @return the NaN String
-     * @stable
+     * @stable ICU 2.0
      */
      //Bug 4194173 [Richard/GCL]
     public String getNaN() {
@@ -226,7 +226,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * Set the String used to represent NaN. Almost always left
      * unchanged.
      * @param NaN the NaN String
-     * @stable
+     * @stable ICU 2.0
      */
     public void setNaN(String NaN) {
         this.NaN = NaN;
@@ -237,7 +237,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * negative format is specified, one is formed by prefixing
      * minusSign to the positive format.
      * @return the minus sign character
-     * @stable
+     * @stable ICU 2.0
      */
     public char getMinusSign() {
         return minusSign;
@@ -248,7 +248,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * negative format is specified, one is formed by prefixing
      * minusSign to the positive format.
      * @param minusSign the minus sign character
-     * @stable
+     * @stable ICU 2.0
      */
     public void setMinusSign(char minusSign) {
         this.minusSign = minusSign;
@@ -257,7 +257,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Return the string denoting the local currency.
      * @return the local currency String.
-     * @stable
+     * @stable ICU 2.0
      */
     public String getCurrencySymbol()
     {
@@ -267,7 +267,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Set the string denoting the local currency.
      * @param currency the local currency String.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setCurrencySymbol(String currency)
     {
@@ -277,7 +277,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Return the international string denoting the local currency.
      * @return the international string denoting the local currency
-     * @stable
+     * @stable ICU 2.0
      */
     public String getInternationalCurrencySymbol()
     {
@@ -287,7 +287,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Set the international string denoting the local currency.
      * @param currency the international string denoting the local currency.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setInternationalCurrencySymbol(String currency)
     {
@@ -297,7 +297,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Return the monetary decimal separator.
      * @return the monetary decimal separator character
-     * @stable
+     * @stable ICU 2.0
      */
     public char getMonetaryDecimalSeparator()
     {
@@ -307,7 +307,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Set the monetary decimal separator.
      * @param sep the monetary decimal separator character
-     * @stable
+     * @stable ICU 2.0
      */
     public void setMonetaryDecimalSeparator(char sep)
     {
@@ -321,7 +321,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @return the localized exponent symbol, used in localized patterns
      * and formatted strings
      * @see #setExponentSeparator
-     * @stable
+     * @stable ICU 2.0
      */
     public String getExponentSeparator()
     {
@@ -335,7 +335,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @param exp the localized exponent symbol, used in localized patterns
      * and formatted strings
      * @see #getExponentSeparator
-     * @stable
+     * @stable ICU 2.0
      */
     public void setExponentSeparator(String exp)
     {
@@ -350,7 +350,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @see #setPlusSign
      * @see #setMinusSign
      * @see #getMinusSign
-     * @stable
+     * @stable ICU 2.0
      */
     public char getPlusSign() {
         return plusSign;
@@ -364,7 +364,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @see #getPlusSign
      * @see #setMinusSign
      * @see #getMinusSign
-     * @stable
+     * @stable ICU 2.0
      */
     public void setPlusSign(char plus) {
         plusSign = plus;
@@ -381,7 +381,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @see DecimalFormat#getFormatWidth
      * @see DecimalFormat#getPadPosition
      * @see DecimalFormat#getPadCharacter
-     * @stable
+     * @stable ICU 2.0
      */
     public char getPadEscape() {
         return padEscape;
@@ -397,7 +397,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @see DecimalFormat#setFormatWidth
      * @see DecimalFormat#setPadPosition
      * @see DecimalFormat#setPadCharacter
-     * @stable
+     * @stable ICU 2.0
      */
     public void setPadEscape(char c) {
         padEscape = c;
@@ -406,7 +406,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Returns the locale for which this object was constructed.
      * @return the locale for which this object was constructed
-     * @stable
+     * @stable ICU 2.0
      */
     public Locale getLocale() {
         return locale;
@@ -414,7 +414,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Standard override.
-     * @stable
+     * @stable ICU 2.0
      */
     public Object clone() {
         try {
@@ -427,7 +427,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Override equals.
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean equals(Object obj) {
         if (obj == null) return false;
@@ -454,7 +454,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * Override hashCode
-     * @stable
+     * @stable ICU 2.0
      */
     public int hashCode() {
             int result = zeroDigit;

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/ReplaceableString.java,v $ 
- * $Date: 2002/12/03 18:56:30 $ 
- * $Revision: 1.12 $
+ * $Date: 2002/12/05 01:22:04 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -26,7 +26,7 @@ import com.ibm.icu.impl.Utility;
  *
  * @see Replaceable
  * @author Alan Liu
- * @stable
+ * @stable ICU 2.0
  */
 public class ReplaceableString implements Replaceable {
     private StringBuffer buf;
@@ -37,7 +37,7 @@ public class ReplaceableString implements Replaceable {
     /**
      * Construct a new object with the given initial contents.
      * @param str initial contents
-     * @stable
+     * @stable ICU 2.0
      */
     public ReplaceableString(String str) {
         buf = new StringBuffer(str);
@@ -50,7 +50,7 @@ public class ReplaceableString implements Replaceable {
      * Modifications to <code>buf</code> will modify this object, and
      * vice versa.</em>
      * @param buf object to be used as internal storage
-     * @stable
+     * @stable ICU 2.0
      */
     public ReplaceableString(StringBuffer buf) {
         this.buf = buf;
@@ -58,7 +58,7 @@ public class ReplaceableString implements Replaceable {
 
     /**
      * Construct a new empty object.
-     * @stable
+     * @stable ICU 2.0
      */
     public ReplaceableString() {
         buf = new StringBuffer();
@@ -67,7 +67,7 @@ public class ReplaceableString implements Replaceable {
     /**
      * Return the contents of this object as a <code>String</code>.
      * @return string contents of this object
-     * @stable
+     * @stable ICU 2.0
      */
     public String toString() {
         return buf.toString();
@@ -75,7 +75,7 @@ public class ReplaceableString implements Replaceable {
 
     /**
      * Return a substring of the given string.
-     * @stable
+     * @stable ICU 2.0
      */
     public String substring(int start, int limit) {
         return buf.substring(start, limit);
@@ -84,7 +84,7 @@ public class ReplaceableString implements Replaceable {
     /**
      * Return the number of characters contained in this object.
      * <code>Replaceable</code> API.
-     * @stable
+     * @stable ICU 2.0
      */ 
     public int length() {
         return buf.length();
@@ -95,7 +95,7 @@ public class ReplaceableString implements Replaceable {
      * <code>Replaceable</code> API.
      * @param offset offset into the contents, from 0 to
      * <code>length()</code> - 1
-     * @stable
+     * @stable ICU 2.0
      */
     public char charAt(int offset) {
         return buf.charAt(offset);
@@ -110,7 +110,7 @@ public class ReplaceableString implements Replaceable {
      * @param offset an integer between 0 and <code>length()</code>-1
      * inclusive
      * @return 32-bit code point of text at given offset
-     * @stable
+     * @stable ICU 2.0
      */
     public int char32At(int offset) {
         return UTF16.charAt(buf, offset);
@@ -132,7 +132,7 @@ public class ReplaceableString implements Replaceable {
      * <code>start <= limit <= length()</code>.
      * @param dst the destination array.
      * @param dstStart the start offset in the destination array.
-     * @stable
+     * @stable ICU 2.0
      */
     public void getChars(int srcStart, int srcLimit, char dst[], int dstStart) {
         Utility.getChars(buf, srcStart, srcLimit, dst, dstStart);
@@ -147,7 +147,7 @@ public class ReplaceableString implements Replaceable {
      * <= length()</code>.
      * @param text new text to replace characters <code>start</code> to
      * <code>limit - 1</code>
-     * @stable
+     * @stable ICU 2.0
      */
     public void replace(int start, int limit, String text) {
         buf.replace(start, limit, text);
@@ -164,7 +164,7 @@ public class ReplaceableString implements Replaceable {
      * @param charsStart the beginning index into <code>chars</code>,
      * inclusive; <code>0 <= start <= limit</code>.
      * @param charsLen the number of characters of <code>chars</code>.
-     * @stable
+     * @stable ICU 2.0
      */
     public void replace(int start, int limit, char[] chars,
                         int charsStart, int charsLen) {
@@ -185,7 +185,7 @@ public class ReplaceableString implements Replaceable {
      * <code>start..limit-1</code> will be copied to <code>dest</code>.
      * Implementations of this method may assume that <code>dest <= start ||
      * dest >= limit</code>.
-     * @stable
+     * @stable ICU 2.0
      */
     public void copy(int start, int limit, int dest) {
         if (start == limit && start >= 0 && start <= buf.length()) {
@@ -198,7 +198,7 @@ public class ReplaceableString implements Replaceable {
     
     /**
      * Implements Replaceable
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean hasMetaData() {
     	return false;

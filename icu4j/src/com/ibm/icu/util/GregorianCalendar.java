@@ -161,7 +161,7 @@ import java.util.Locale;
  * @see          Calendar
  * @see          TimeZone
  * @author David Goldsmith, Mark Davis, Chen-Lieh Huang, Alan Liu
- * @stable
+ * @stable ICU 2.0
  */
 public class GregorianCalendar extends Calendar {
     /*
@@ -206,7 +206,7 @@ public class GregorianCalendar extends Calendar {
      * The sequence of years at the transition from <code>BC</code> to <code>AD</code> is
      * ..., 2 BC, 1 BC, 1 AD, 2 AD,...
      * @see Calendar#ERA
-     * @stable
+     * @stable ICU 2.0
      */
     public static final int BC = 0;
 
@@ -216,7 +216,7 @@ public class GregorianCalendar extends Calendar {
      * The sequence of years at the transition from <code>BC</code> to <code>AD</code> is
      * ..., 2 BC, 1 BC, 1 AD, 2 AD,...
      * @see Calendar#ERA
-     * @stable
+     * @stable ICU 2.0
      */
     public static final int AD = 1;
 
@@ -273,7 +273,7 @@ public class GregorianCalendar extends Calendar {
     };
 
     /**
-     * @stable
+     * @stable ICU 2.0
      */
     protected int handleGetLimit(int field, int limitType) {
         return LIMITS[field][limitType];
@@ -306,13 +306,13 @@ public class GregorianCalendar extends Calendar {
 
     /**
      * Used by handleComputeJulianDay() and handleComputeMonthStart().
-     * @stable
+     * @stable ICU 2.0
      */
     transient protected boolean isGregorian;
 
     /**
      * Used by handleComputeJulianDay() and handleComputeMonthStart().
-     * @stable
+     * @stable ICU 2.0
      */
     transient protected boolean invertGregorian;
 
@@ -323,7 +323,7 @@ public class GregorianCalendar extends Calendar {
     /**
      * Constructs a default GregorianCalendar using the current time
      * in the default time zone with the default locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public GregorianCalendar() {
         this(TimeZone.getDefault(), Locale.getDefault());
@@ -333,7 +333,7 @@ public class GregorianCalendar extends Calendar {
      * Constructs a GregorianCalendar based on the current time
      * in the given time zone with the default locale.
      * @param zone the given time zone.
-     * @stable
+     * @stable ICU 2.0
      */
     public GregorianCalendar(TimeZone zone) {
         this(zone, Locale.getDefault());
@@ -343,7 +343,7 @@ public class GregorianCalendar extends Calendar {
      * Constructs a GregorianCalendar based on the current time
      * in the default time zone with the given locale.
      * @param aLocale the given locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public GregorianCalendar(Locale aLocale) {
         this(TimeZone.getDefault(), aLocale);
@@ -354,7 +354,7 @@ public class GregorianCalendar extends Calendar {
      * in the given time zone with the given locale.
      * @param zone the given time zone.
      * @param aLocale the given locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public GregorianCalendar(TimeZone zone, Locale aLocale) {
         super(zone, aLocale);
@@ -368,7 +368,7 @@ public class GregorianCalendar extends Calendar {
      * @param month the value used to set the MONTH time field in the calendar.
      * Month value is 0-based. e.g., 0 for January.
      * @param date the value used to set the DATE time field in the calendar.
-     * @stable
+     * @stable ICU 2.0
      */
     public GregorianCalendar(int year, int month, int date) {
         super(TimeZone.getDefault(), Locale.getDefault());
@@ -389,7 +389,7 @@ public class GregorianCalendar extends Calendar {
      * in the calendar.
      * @param minute the value used to set the MINUTE time field
      * in the calendar.
-     * @stable
+     * @stable ICU 2.0
      */
     public GregorianCalendar(int year, int month, int date, int hour,
                              int minute) {
@@ -415,7 +415,7 @@ public class GregorianCalendar extends Calendar {
      * in the calendar.
      * @param second the value used to set the SECOND time field
      * in the calendar.
-     * @stable
+     * @stable ICU 2.0
      */
     public GregorianCalendar(int year, int month, int date, int hour,
                              int minute, int second) {
@@ -443,7 +443,7 @@ public class GregorianCalendar extends Calendar {
      * set the change date to <code>Date(Long.MIN_VALUE)</code>.
      *
      * @param date the given Gregorian cutover date.
-     * @stable
+     * @stable ICU 2.0
      */
     public void setGregorianChange(Date date) {
         gregorianCutover = date.getTime();
@@ -474,7 +474,7 @@ public class GregorianCalendar extends Calendar {
      * October 15, 1582. Previous to this, dates will be in the Julian
      * calendar.
      * @return the Gregorian cutover date for this calendar.
-     * @stable
+     * @stable ICU 2.0
      */
     public final Date getGregorianChange() {
         return new Date(gregorianCutover);
@@ -485,7 +485,7 @@ public class GregorianCalendar extends Calendar {
      * given year is a leap year.
      * @param year the given year.
      * @return true if the given year is a leap year; false otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean isLeapYear(int year) {
         return year >= gregorianCutoverYear ?
@@ -508,7 +508,7 @@ public class GregorianCalendar extends Calendar {
     /**
      * Override hashCode.
      * Generates the hash code for the GregorianCalendar object
-     * @stable
+     * @stable ICU 2.0
      */
     public int hashCode() {
         return super.hashCode() ^ (int)gregorianCutover;
@@ -522,7 +522,7 @@ public class GregorianCalendar extends Calendar {
      * @param field the time field.
      * @param amount the amount of date or time to be added to the field.
      * @exception IllegalArgumentException if an unknown field is given.
-     * @stable
+     * @stable ICU 2.0
      */
     public void add(int field, int amount) {
         switch (field) {
@@ -546,7 +546,7 @@ public class GregorianCalendar extends Calendar {
 
     /**
      * Roll a field by a signed amount.
-     * @stable
+     * @stable ICU 2.0
      */
     public void roll(int field, int amount) {
 
@@ -615,7 +615,7 @@ public class GregorianCalendar extends Calendar {
     /**
      * Return the minimum value that this field could have, given the current date.
      * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
-     * @stable
+     * @stable ICU 2.0
      */
     public int getActualMinimum(int field) {
         return getMinimum(field);
@@ -626,7 +626,7 @@ public class GregorianCalendar extends Calendar {
      * For example, with the date "Feb 3, 1997" and the DAY_OF_MONTH field, the actual
      * maximum would be 28; for "Feb 3, 1996" it s 29.  Similarly for a Hebrew calendar,
      * for some years the actual maximum for MONTH is 12, and for others 13.
-     * @stable
+     * @stable ICU 2.0
      */
     public int getActualMaximum(int field) {
         /* It is a known limitation that the code here (and in getActualMinimum)
@@ -724,14 +724,14 @@ public class GregorianCalendar extends Calendar {
 /////////////////////
 
     /**
-     * @stable
+     * @stable ICU 2.0
      */
     protected int handleGetMonthLength(int extendedYear, int month) {
         return MONTH_COUNT[month][isLeapYear(extendedYear)?1:0];
     }
 
     /**
-     * @stable
+     * @stable ICU 2.0
      */
     protected int handleGetYearLength(int eyear) {
         return isLeapYear(eyear) ? 366 : 365;
@@ -751,7 +751,7 @@ public class GregorianCalendar extends Calendar {
      * <li>DAY_OF_MONTH
      * <li>DAY_OF_YEAR
      * <li>EXTENDED_YEAR</ul>
-     * @stable
+     * @stable ICU 2.0
      */
     protected void handleComputeFields(int julianDay) {
         int eyear, month, dayOfMonth, dayOfYear;
@@ -807,7 +807,7 @@ public class GregorianCalendar extends Calendar {
 /////////////////////////////
 
     /**
-     * @stable
+     * @stable ICU 2.0
      */
     protected int handleGetExtendedYear() {
         int year;
@@ -833,7 +833,7 @@ public class GregorianCalendar extends Calendar {
      * @param millis milliseconds of the date fields
      * @param millisInDay milliseconds of the time fields; may be out
      * or range.
-     * @stable
+     * @stable ICU 2.0
      */
     protected int computeZoneOffset(long millis, int millisInDay) {
 
@@ -878,7 +878,7 @@ public class GregorianCalendar extends Calendar {
     }
 
     /**
-     * @stable
+     * @stable ICU 2.0
      */
     protected int handleComputeJulianDay(int bestField) {
 
@@ -898,7 +898,7 @@ public class GregorianCalendar extends Calendar {
 
     /**
      * Return JD of start of given month/year
-     * @stable
+     * @stable ICU 2.0
      */
     protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
 

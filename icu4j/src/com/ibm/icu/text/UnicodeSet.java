@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/12/04 00:25:51 $
- * $Revision: 1.81 $
+ * $Date: 2002/12/05 01:23:18 $
+ * $Revision: 1.82 $
  *
  *****************************************************************************************
  */
@@ -250,7 +250,7 @@ import java.util.Iterator;
  * </blockquote>
  *
  * @author Alan Liu
- * @stable
+ * @stable ICU 2.0
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -260,13 +260,13 @@ public class UnicodeSet extends UnicodeFilter {
 
     /**
      * Minimum value that can be stored in a UnicodeSet.
-     * @stable
+     * @stable ICU 2.0
      */
     public static final int MIN_VALUE = LOW;
 
     /**
      * Maximum value that can be stored in a UnicodeSet.
-     * @stable
+     * @stable ICU 2.0
      */
     public static final int MAX_VALUE = HIGH - 1;
 
@@ -314,7 +314,7 @@ public class UnicodeSet extends UnicodeFilter {
 
     /**
      * Constructs an empty set.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet() {
         list = new int[1 + START_EXTRA];
@@ -323,7 +323,7 @@ public class UnicodeSet extends UnicodeFilter {
 
     /**
      * Constructs a copy of an existing set.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet(UnicodeSet other) {
         set(other);
@@ -335,7 +335,7 @@ public class UnicodeSet extends UnicodeFilter {
      *
      * @param start first character, inclusive, of range
      * @param end last character, inclusive, of range
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet(int start, int end) {
         this();
@@ -348,7 +348,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @param pattern a string specifying what characters are in the set
      * @exception java.lang.IllegalArgumentException if the pattern contains
      * a syntax error.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet(String pattern) {
         this(pattern, true);
@@ -362,7 +362,7 @@ public class UnicodeSet extends UnicodeFilter {
      * UCharacterProperty.isRuleWhiteSpace() returns true
      * @exception java.lang.IllegalArgumentException if the pattern contains
      * a syntax error.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet(String pattern, boolean ignoreWhitespace) {
         this();
@@ -379,7 +379,7 @@ public class UnicodeSet extends UnicodeFilter {
      * and chars to UnicodeSets
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet(String pattern, ParsePosition pos, SymbolTable symbols) {
         this();
@@ -413,7 +413,7 @@ public class UnicodeSet extends UnicodeFilter {
 
     /**
      * Return a new set that is equivalent to this one.
-     * @stable
+     * @stable ICU 2.0
      */
     public Object clone() {
         return new UnicodeSet(this);
@@ -426,7 +426,7 @@ public class UnicodeSet extends UnicodeFilter {
      *
      * @param start first character in the set, inclusive
      * @param end last character in the set, inclusive
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet set(int start, int end) {
         clear();
@@ -438,7 +438,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Make this object represent the same set as <code>other</code>.
      * @param other a <code>UnicodeSet</code> whose value will be
      * copied to this object
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet set(UnicodeSet other) {
         list = (int[]) other.list.clone();
@@ -455,7 +455,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @param pattern a string specifying what characters are in the set
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
-     * @stable
+     * @stable ICU 2.0
      */
     public final UnicodeSet applyPattern(String pattern) {
         return applyPattern(pattern, true);
@@ -470,7 +470,7 @@ public class UnicodeSet extends UnicodeFilter {
      * UCharacterProperty.isRuleWhiteSpace() returns true are ignored
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet applyPattern(String pattern, boolean ignoreWhitespace) {
         ParsePosition pos = new ParsePosition(0);
@@ -493,7 +493,7 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Return true if the given position, in the given pattern, appears
      * to be the start of a UnicodeSet pattern.
-     * @stable
+     * @stable ICU 2.0
      */
     public static boolean resemblesPattern(String pattern, int pos) {
         return ((pos+1) < pattern.length() &&
@@ -551,7 +551,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Returns a string representation of this set.  If the result of
      * calling this function is passed to a UnicodeSet constructor, it
      * will produce another set that is equal to this one.
-     * @stable
+     * @stable ICU 2.0
      */
     public String toPattern(boolean escapeUnprintable) {
         StringBuffer result = new StringBuffer();
@@ -600,7 +600,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Generate and append a string representation of this set to result.
      * This does not use this.pat, the cleaned up copy of the string
      * passed to applyPattern().
-     * @stable
+     * @stable ICU 2.0
      */
     public StringBuffer _generatePattern(StringBuffer result,
                                          boolean escapeUnprintable) {
@@ -668,7 +668,7 @@ public class UnicodeSet extends UnicodeFilter {
      * <em>n</em>, where <code>0 <= </code><em>n</em><code> <= 65536</code>.
      *
      * @return the number of elements in this set (its cardinality).
-     * @stable
+     * @stable ICU 2.0
      */
     public int size() {
         int n = 0;
@@ -683,7 +683,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Returns <tt>true</tt> if this set contains no elements.
      *
      * @return <tt>true</tt> if this set contains no elements.
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean isEmpty() {
         return len == 1 && strings.size() == 0;
@@ -694,7 +694,7 @@ public class UnicodeSet extends UnicodeFilter {
      * this set contains any character whose low byte is the given
      * value.  This is used by <tt>RuleBasedTransliterator</tt> for
      * indexing.
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean matchesIndexValue(int v) {
         /* The index value v, in the range [0,255], is contained in this set if
@@ -737,7 +737,7 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Implementation of UnicodeMatcher.matches().  Always matches the
      * longest possible multichar string.
-     * @stable
+     * @stable ICU 2.0
      */
     public int matches(Replaceable text,
                        int[] offset,
@@ -884,7 +884,7 @@ public class UnicodeSet extends UnicodeFilter {
      * is not in this set, return -1.  The inverse of this method is
      * <code>charAt()</code>.
      * @return an index from 0..size()-1, or -1
-     * @stable
+     * @stable ICU 2.0
      */
     public int indexOf(int c) {
         if (c < MIN_VALUE || c > MAX_VALUE) {
@@ -912,7 +912,7 @@ public class UnicodeSet extends UnicodeFilter {
      * <code>indexOf()</code>.
      * @param index an index from 0..size()-1
      * @return the character at the given index, or -1.
-     * @stable
+     * @stable ICU 2.0
      */
     public int charAt(int index) {
         if (index >= 0) {
@@ -942,7 +942,7 @@ public class UnicodeSet extends UnicodeFilter {
      * to this set.
      * @param end last character, inclusive, of range to be added
      * to this set.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet add(int start, int end) {
         if (start < MIN_VALUE || start > MAX_VALUE) {
@@ -982,7 +982,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Adds the specified character to this set if it is not already
      * present.  If this set already contains the specified character,
      * the call leaves this set unchanged.
-     * @stable
+     * @stable ICU 2.0
      */
     public final UnicodeSet add(int c) {
         if (c < MIN_VALUE || c > MAX_VALUE) {
@@ -1076,7 +1076,7 @@ public class UnicodeSet extends UnicodeFilter {
 	 * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
      * @param s the source string
      * @return this object, for chaining
-     * @stable
+     * @stable ICU 2.0
      */
     public final UnicodeSet add(String s) {
         
@@ -1115,7 +1115,7 @@ public class UnicodeSet extends UnicodeFilter {
      * If this set already any particular character, it has no effect on that character.
      * @param s the source string
      * @return this object, for chaining
-     * @stable
+     * @stable ICU 2.0
      */
     public final UnicodeSet addAll(String s) {
         int cp;
@@ -1131,7 +1131,7 @@ public class UnicodeSet extends UnicodeFilter {
      * If this set already any particular character, it has no effect on that character.
      * @param s the source string
      * @return this object, for chaining
-     * @stable
+     * @stable ICU 2.0
      */
     public final UnicodeSet retainAll(String s) {
     	return retainAll(fromAll(s));
@@ -1142,7 +1142,7 @@ public class UnicodeSet extends UnicodeFilter {
      * If this set already any particular character, it has no effect on that character.
      * @param s the source string
      * @return this object, for chaining
-     * @stable
+     * @stable ICU 2.0
      */
     public final UnicodeSet complementAll(String s) {
     	return complementAll(fromAll(s));
@@ -1153,7 +1153,7 @@ public class UnicodeSet extends UnicodeFilter {
      * If this set already any particular character, it has no effect on that character.
      * @param s the source string
      * @return this object, for chaining
-     * @stable
+     * @stable ICU 2.0
      */
     public final UnicodeSet removeAll(String s) {
     	return removeAll(fromAll(s));
@@ -1164,7 +1164,7 @@ public class UnicodeSet extends UnicodeFilter {
 	 * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
      * @param s the source string
      * @return a newly created set containing the given string
-     * @stable
+     * @stable ICU 2.0
      */
     public static UnicodeSet from(String s) {
         return new UnicodeSet().add(s);
@@ -1175,7 +1175,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Makes a set from each of the characters in the string. Thus "ch" => {"c", "h"}
      * @param s the source string
      * @return a newly created set containing the given characters
-     * @stable
+     * @stable ICU 2.0
      */
     public static UnicodeSet fromAll(String s) {
         return new UnicodeSet().addAll(s);
@@ -1191,7 +1191,7 @@ public class UnicodeSet extends UnicodeFilter {
      * to this set.
      * @param end last character, inclusive, of range to be retained
      * to this set.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet retain(int start, int end) {
         if (start < MIN_VALUE || start > MAX_VALUE) {
@@ -1210,7 +1210,7 @@ public class UnicodeSet extends UnicodeFilter {
 
     /**
      * Retain the specified character from this set if it is present.
-     * @stable
+     * @stable ICU 2.0
      */
     public final UnicodeSet retain(int c) {
         return retain(c, c);
@@ -1222,7 +1222,7 @@ public class UnicodeSet extends UnicodeFilter {
      * returns.
      * @param s the source string
      * @return this object, for chaining
-     * @stable
+     * @stable ICU 2.0
      */
     public final UnicodeSet retain(String s) {
         int cp = getSingleCP(s);
@@ -1247,7 +1247,7 @@ public class UnicodeSet extends UnicodeFilter {
      * from this set.
      * @param end last character, inclusive, of range to be removed
      * from this set.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet remove(int start, int end) {
         if (start < MIN_VALUE || start > MAX_VALUE) {
@@ -1266,7 +1266,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Removes the specified character from this set if it is present.
      * The set will not contain the specified character once the call
      * returns.
-     * @stable
+     * @stable ICU 2.0
      */
     public final UnicodeSet remove(int c) {
         return remove(c, c);
@@ -1278,7 +1278,7 @@ public class UnicodeSet extends UnicodeFilter {
      * returns.
      * @param s the source string
      * @return this object, for chaining
-     * @stable
+     * @stable ICU 2.0
      */
     public final UnicodeSet remove(String s) {
         int cp = getSingleCP(s);
@@ -1301,7 +1301,7 @@ public class UnicodeSet extends UnicodeFilter {
      * from this set.
      * @param end last character, inclusive, of range to be removed
      * from this set.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet complement(int start, int end) {
         if (start < MIN_VALUE || start > MAX_VALUE) {
@@ -1321,7 +1321,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Complements the specified character in this set.  The character
      * will be removed if it is in this set, or will be added if it is
      * not in this set.
-     * @stable
+     * @stable ICU 2.0
      */
     public final UnicodeSet complement(int c) {
         return complement(c, c);
@@ -1330,7 +1330,7 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * This is equivalent to
      * <code>complement(MIN_VALUE, MAX_VALUE)</code>.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet complement() {
         if (list[0] == LOW) {
@@ -1353,7 +1353,7 @@ public class UnicodeSet extends UnicodeFilter {
 	 * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
      * @param s the string to complement
      * @return this object, for chaining
-     * @stable
+     * @stable ICU 2.0
      */
     public final UnicodeSet complement(String s) {
         int cp = getSingleCP(s);
@@ -1371,7 +1371,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Returns true if this set contains the given character.
      * @param c character to be checked for containment
      * @return true if the test condition is met
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean contains(int c) {
         if (c < MIN_VALUE || c > MAX_VALUE) {
@@ -1554,7 +1554,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @param start first character, inclusive, of the range
      * @param end last character, inclusive, of the range
      * @return true if the test condition is met
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean contains(int start, int end) {
         if (start < MIN_VALUE || start > MAX_VALUE) {
@@ -1576,7 +1576,7 @@ public class UnicodeSet extends UnicodeFilter {
      * multicharacter string.
      * @param s string to be checked for containment
      * @return <tt>true</tt> if this set contains the specified string
-     * @stable
+     * @stable ICU 2.0
      */
     public final boolean contains(String s) {
         
@@ -1593,7 +1593,7 @@ public class UnicodeSet extends UnicodeFilter {
      * of the given set.
      * @param c set to be checked for containment
      * @return true if the test condition is met
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean containsAll(UnicodeSet c) {
         // The specified set is a subset if all of its pairs are contained in
@@ -1614,7 +1614,7 @@ public class UnicodeSet extends UnicodeFilter {
      * of the given string.
      * @param s string containing characters to be checked for containment
      * @return true if the test condition is met
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean containsAll(String s) {
         int cp;
@@ -1631,7 +1631,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @param start first character, inclusive, of the range
      * @param end last character, inclusive, of the range
      * @return true if the test condition is met
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean containsNone(int start, int end) {
         if (start < MIN_VALUE || start > MAX_VALUE) {
@@ -1652,7 +1652,7 @@ public class UnicodeSet extends UnicodeFilter {
      * of the given set.
      * @param c set to be checked for containment
      * @return true if the test condition is met
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean containsNone(UnicodeSet c) {
         // The specified set is a subset if all of its pairs are contained in
@@ -1673,7 +1673,7 @@ public class UnicodeSet extends UnicodeFilter {
      * of the given string.
      * @param s string containing characters to be checked for containment
      * @return true if the test condition is met
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean containsNone(String s) {
         int cp;
@@ -1690,7 +1690,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @param start first character, inclusive, of the range
      * @param end last character, inclusive, of the range
      * @return true if the condition is met
-     * @stable
+     * @stable ICU 2.0
      */
     public final boolean containsSome(int start, int end) {
     	return !containsNone(start, end);
@@ -1701,7 +1701,7 @@ public class UnicodeSet extends UnicodeFilter {
      * and strings of the given set.
      * @param c set to be checked for containment
      * @return true if the condition is met
-     * @stable
+     * @stable ICU 2.0
      */
     public final boolean containsSome(UnicodeSet s) {
     	return !containsNone(s);
@@ -1712,7 +1712,7 @@ public class UnicodeSet extends UnicodeFilter {
      * of the given string.
      * @param s string containing characters to be checked for containment
      * @return true if the condition is met
-     * @stable
+     * @stable ICU 2.0
      */
     public final boolean containsSome(String s) {
     	return !containsNone(s);
@@ -1727,7 +1727,7 @@ public class UnicodeSet extends UnicodeFilter {
      * collection is modified while the operation is in progress.
      *
      * @param c set whose elements are to be added to this set.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet addAll(UnicodeSet c) {
         add(c.list, c.len, 0);
@@ -1743,7 +1743,7 @@ public class UnicodeSet extends UnicodeFilter {
      * the <i>intersection</i> of the two sets.
      *
      * @param c set that defines which elements this set will retain.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet retainAll(UnicodeSet c) {
         retain(c.list, c.len, 0);
@@ -1759,7 +1759,7 @@ public class UnicodeSet extends UnicodeFilter {
      *
      * @param c set that defines which elements will be removed from
      *          this set.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet removeAll(UnicodeSet c) {
         retain(c.list, c.len, 2);
@@ -1774,7 +1774,7 @@ public class UnicodeSet extends UnicodeFilter {
      *
      * @param c set that defines which elements will be complemented from
      *          this set.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet complementAll(UnicodeSet c) {
         xor(c.list, c.len, 0);
@@ -1785,7 +1785,7 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Removes all of the elements from this set.  This set will be
      * empty after this call returns.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet clear() {
         list[0] = HIGH;
@@ -1800,7 +1800,7 @@ public class UnicodeSet extends UnicodeFilter {
      * this set.
      * @see #getRangeStart
      * @see #getRangeEnd
-     * @stable
+     * @stable ICU 2.0
      */
     public int getRangeCount() {
         return len/2;
@@ -1813,7 +1813,7 @@ public class UnicodeSet extends UnicodeFilter {
      * the range <code>0..getRangeCount()-1</code>
      * @see #getRangeCount
      * @see #getRangeEnd
-     * @stable
+     * @stable ICU 2.0
      */
     public int getRangeStart(int index) {
         return list[index*2];
@@ -1826,7 +1826,7 @@ public class UnicodeSet extends UnicodeFilter {
      * the range <code>0..getRangeCount()-1</code>
      * @see #getRangeStart
      * @see #getRangeEnd
-     * @stable
+     * @stable ICU 2.0
      */
     public int getRangeEnd(int index) {
         return (list[index*2 + 1] - 1);
@@ -1835,7 +1835,7 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Reallocate this objects internal structures to take up the least
      * possible space, without changing this object's value.
-     * @stable
+     * @stable ICU 2.0
      */
     public UnicodeSet compact() {
         if (len != list.length) {
@@ -1857,7 +1857,7 @@ public class UnicodeSet extends UnicodeFilter {
      *
      * @param o Object to be compared for equality with this set.
      * @return <tt>true</tt> if the specified Object is equal to this set.
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean equals(Object o) {
         try {
@@ -1878,7 +1878,7 @@ public class UnicodeSet extends UnicodeFilter {
      *
      * @return the hash code value for this set.
      * @see java.lang.Object#hashCode()
-     * @stable
+     * @stable ICU 2.0
      */
     public int hashCode() {
         int result = len;
@@ -1891,7 +1891,7 @@ public class UnicodeSet extends UnicodeFilter {
 
     /**
      * Return a programmer-readable string representation of this object.
-     * @stable
+     * @stable ICU 2.0
      */
     public String toString() {
         return toPattern(true);

@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/ChineseDateFormatSymbols.java,v $
- * $Date: 2002/12/03 19:45:38 $
- * $Revision: 1.3 $
+ * $Date: 2002/12/05 01:21:31 $
+ * $Revision: 1.4 $
  */
 package com.ibm.icu.text;
 import com.ibm.icu.util.*;
@@ -20,7 +20,7 @@ import java.util.MissingResourceException;
  * @see ChineseDateFormat
  * @see com.ibm.icu.util.ChineseCalendar
  * @author Alan Liu
- * @stable
+ * @stable ICU 2.0
  */
 public class ChineseDateFormatSymbols extends DateFormatSymbols {
     
@@ -32,7 +32,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
 
     /**
      * Construct a ChineseDateFormatSymbols for the default locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public ChineseDateFormatSymbols() {
         this(Locale.getDefault());
@@ -41,7 +41,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
     /**
      * Construct a ChineseDateFormatSymbols for the provided locale.
      * @param locale the locale
-     * @stable
+     * @stable ICU 2.0
      */
     public ChineseDateFormatSymbols(Locale locale) {
         super(ChineseCalendar.class, locale);
@@ -51,7 +51,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
      * Construct a ChineseDateFormatSymbols for the provided calendar and locale.
      * @param cal the Calendar
      * @param locale the locale
-     * @stable
+     * @stable ICU 2.0
      */
     public ChineseDateFormatSymbols(Calendar cal, Locale locale) {
         super(cal==null?null:cal.getClass(), locale);
@@ -59,7 +59,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
 
     // New API
     /**
-     * @stable
+     * @stable ICU 2.0
      */
     public String getLeapMonth(int isLeapMonth) {
         return this.isLeapMonth[isLeapMonth];
@@ -67,7 +67,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
 
     /**
      * Override DateFormatSymbols.
-     * @stable
+     * @stable ICU 2.0
      */
     protected void constructCalendarSpecific(ResourceBundle bundle) {
         super.constructCalendarSpecific(bundle);

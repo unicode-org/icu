@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DictionaryBasedBreakIterator.java,v $
- * $Date: 2002/12/04 01:45:51 $
- * $Revision: 1.10 $
+ * $Date: 2002/12/05 01:21:42 $
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -45,7 +45,7 @@ import java.io.*;
  * slow) BuildDictionaryFile utility for creating dictionary files, but aren't
  * currently making it public.  Contact us for help.
  *
- * @stable
+ * @stable ICU 2.0
  */
 public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
 
@@ -93,7 +93,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
      * except for the special meaning of DICTIONARY_VAR.  This parameter is just
      * passed through to RuleBasedBreakIterator's constructor.
      * @param dictionaryFilename The filename of the dictionary file to use
-     * @stable
+     * @stable ICU 2.0
      */
     public DictionaryBasedBreakIterator(String description,
                                         InputStream dictionaryStream) throws IOException {
@@ -131,7 +131,7 @@ switch (categoryFlags.length % 4) {
 }
 }
 
-    /** @stable */
+    /** @stable ICU 2.0 */
     public void setText(CharacterIterator newText) {
         super.setText(newText);
         cachedBreakPositions = null;
@@ -143,7 +143,7 @@ switch (categoryFlags.length % 4) {
      * Sets the current iteration position to the beginning of the text.
      * (i.e., the CharacterIterator's starting offset).
      * @return The offset of the beginning of the text.
-     * @stable
+     * @stable ICU 2.0
      */
     public int first() {
         cachedBreakPositions = null;
@@ -156,7 +156,7 @@ switch (categoryFlags.length % 4) {
      * Sets the current iteration position to the end of the text.
      * (i.e., the CharacterIterator's ending offset).
      * @return The text's past-the-end offset.
-     * @stable
+     * @stable ICU 2.0
      */
     public int last() {
         cachedBreakPositions = null;
@@ -169,7 +169,7 @@ switch (categoryFlags.length % 4) {
      * Advances the iterator one step backwards.
      * @return The position of the last boundary position before the
      * current iteration position
-     * @stable
+     * @stable ICU 2.0
      */
     public int previous() {
         CharacterIterator text = getText();
@@ -199,7 +199,7 @@ switch (categoryFlags.length % 4) {
      * before the specified position.
      * @param offset The position to begin searching from
      * @return The position of the last boundary before "offset"
-     * @stable
+     * @stable ICU 2.0
      */
     public int preceding(int offset) {
         CharacterIterator text = getText();
@@ -234,7 +234,7 @@ switch (categoryFlags.length % 4) {
      * the specified position.
      * @param offset The position to begin searching forward from
      * @return The position of the first boundary after "offset"
-     * @stable
+     * @stable ICU 2.0
      */
     public int following(int offset) {
         CharacterIterator text = getText();

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2002/12/03 19:45:38 $ 
- * $Revision: 1.20 $
+ * $Date: 2002/12/05 01:21:42 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -162,7 +162,7 @@ import com.ibm.icu.impl.LocaleUtility;
  * @author       Mark Davis
  * @author       Helena Shih
  * @author       Alan Liu
- * @stable
+ * @stable ICU 2.0
  */
 public abstract class NumberFormat extends Format{
 
@@ -177,7 +177,7 @@ public abstract class NumberFormat extends Format{
      * Field constant used to construct a FieldPosition object. Signifies that
      * the position of the integer part of a formatted number should be returned.
      * @see java.text.FieldPosition
-     * @stable
+     * @stable ICU 2.0
      */
     public static final int INTEGER_FIELD = 0;
 
@@ -185,7 +185,7 @@ public abstract class NumberFormat extends Format{
      * Field constant used to construct a FieldPosition object. Signifies that
      * the position of the fraction part of a formatted number should be returned.
      * @see java.text.FieldPosition
-     * @stable
+     * @stable ICU 2.0
      */
     public static final int FRACTION_FIELD = 1;
 
@@ -193,7 +193,7 @@ public abstract class NumberFormat extends Format{
      * <strong><font face=helvetica color=red>CHANGED</font></strong>
      * Format an object.  Change: recognizes <code>BigInteger</code>
      * and <code>BigDecimal</code> objects now.
-     * @stable
+     * @stable ICU 2.0
      */
     public final StringBuffer format(Object number,
                                      StringBuffer toAppendTo,
@@ -215,7 +215,7 @@ public abstract class NumberFormat extends Format{
     }
 
     /**
-     * @stable
+     * @stable ICU 2.0
      */
     public final Object parseObject(String source,
                                     ParsePosition parsePosition)
@@ -226,7 +226,7 @@ public abstract class NumberFormat extends Format{
    /**
      * Specialization of format.
      * @see java.text.Format#format(Object)
-     * @stable
+     * @stable ICU 2.0
      */
     public final String format (double number) {
         return format(number,new StringBuffer(),
@@ -236,7 +236,7 @@ public abstract class NumberFormat extends Format{
    /**
      * Specialization of format.
      * @see java.text.Format#format(Object)
-     * @stable
+     * @stable ICU 2.0
      */
     public final String format (long number) {
         return format(number,new StringBuffer(),
@@ -246,7 +246,7 @@ public abstract class NumberFormat extends Format{
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Convenience method to format a BigInteger.
-     * @stable
+     * @stable ICU 2.0
      */
     public final String format(BigInteger number) {
         return format(number, new StringBuffer(),
@@ -256,7 +256,7 @@ public abstract class NumberFormat extends Format{
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Convenience method to format a BigDecimal.
-     * @stable
+     * @stable ICU 2.0
      */
     public final String format(java.math.BigDecimal number) {
         return format(number, new StringBuffer(),
@@ -266,7 +266,7 @@ public abstract class NumberFormat extends Format{
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Convenience method to format a BigDecimal.
-     * @stable
+     * @stable ICU 2.0
      */
     public final String format(com.ibm.icu.math.BigDecimal number) {
         return format(number, new StringBuffer(),
@@ -276,7 +276,7 @@ public abstract class NumberFormat extends Format{
    /**
      * Specialization of format.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
-     * @stable
+     * @stable ICU 2.0
      */
     public abstract StringBuffer format(double number,
                                         StringBuffer toAppendTo,
@@ -285,7 +285,7 @@ public abstract class NumberFormat extends Format{
    /**
      * Specialization of format.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
-     * @stable
+     * @stable ICU 2.0
      */
     public abstract StringBuffer format(long number,
                                         StringBuffer toAppendTo,
@@ -295,7 +295,7 @@ public abstract class NumberFormat extends Format{
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigInteger.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
-     * @stable
+     * @stable ICU 2.0
      */
     public abstract StringBuffer format(BigInteger number,
                                         StringBuffer toAppendTo,
@@ -305,7 +305,7 @@ public abstract class NumberFormat extends Format{
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
-     * @stable
+     * @stable ICU 2.0
      */
     public abstract StringBuffer format(java.math.BigDecimal number,
                                         StringBuffer toAppendTo,
@@ -315,7 +315,7 @@ public abstract class NumberFormat extends Format{
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
-     * @stable
+     * @stable ICU 2.0
      */
     public abstract StringBuffer format(com.ibm.icu.math.BigDecimal number,
                                         StringBuffer toAppendTo,
@@ -331,7 +331,7 @@ public abstract class NumberFormat extends Format{
      * unchanged!
      * @see #isParseIntegerOnly
      * @see java.text.Format#parseObject(String, ParsePosition)
-     * @stable
+     * @stable ICU 2.0
      */
     public abstract Number parse(String text, ParsePosition parsePosition);
 
@@ -344,7 +344,7 @@ public abstract class NumberFormat extends Format{
      * @exception ParseException if the beginning of the specified string 
      * cannot be parsed.
      * @see #format
-     * @stable
+     * @stable ICU 2.0
      */
     //Bug 4375399 [Richard/GCL]
     public Number parse(String text) throws ParseException {
@@ -365,7 +365,7 @@ public abstract class NumberFormat extends Format{
      * would stop at the "." character.  Of course, the exact format accepted
      * by the parse operation is locale dependant and determined by sub-classes
      * of NumberFormat.
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean isParseIntegerOnly() {
         return parseIntegerOnly;
@@ -374,7 +374,7 @@ public abstract class NumberFormat extends Format{
     /**
      * Sets whether or not numbers should be parsed as integers only.
      * @see #isParseIntegerOnly
-     * @stable
+     * @stable ICU 2.0
      */
     public void setParseIntegerOnly(boolean value) {
         parseIntegerOnly = value;
@@ -388,7 +388,7 @@ public abstract class NumberFormat extends Format{
      * factory methods: getNumberInstance, getIntegerInstance,
      * getCurrencyInstance or getPercentInstance.
      * Exactly which one is locale dependant.
-     * @stable
+     * @stable ICU 2.0
      */
     //Bug 4408066 [Richard/GCL]
     public final static NumberFormat getInstance() {
@@ -400,7 +400,7 @@ public abstract class NumberFormat extends Format{
      * The default format is one of the styles provided by the other
      * factory methods: getNumberInstance, getCurrencyInstance or getPercentInstance.
      * Exactly which one is locale dependant.
-     * @stable
+     * @stable ICU 2.0
      */
     public static NumberFormat getInstance(Locale inLocale) {
         return getInstance(inLocale, NUMBERSTYLE);
@@ -408,7 +408,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Returns a general-purpose number format for the current default locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static NumberFormat getNumberInstance() {
         return getInstance(Locale.getDefault(), NUMBERSTYLE);
@@ -416,7 +416,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Returns a general-purpose number format for the specified locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public static NumberFormat getNumberInstance(Locale inLocale) {
         return getInstance(inLocale, NUMBERSTYLE);
@@ -431,7 +431,7 @@ public abstract class NumberFormat extends Format{
      * #isParseIntegerOnly isParseIntegerOnly}).
      *
      * @return a number format for integer values
-     * @stable
+     * @stable ICU 2.0
      */
     //Bug 4408066 [Richard/GCL]
     public final static NumberFormat getIntegerInstance() {
@@ -448,7 +448,7 @@ public abstract class NumberFormat extends Format{
      *
      * @param inLocale the locale for which a number format is needed
      * @return a number format for integer values
-     * @stable
+     * @stable ICU 2.0
      */
     //Bug 4408066 [Richard/GCL]
     public static NumberFormat getIntegerInstance(Locale inLocale) {
@@ -457,7 +457,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Returns a currency format for the current default locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static NumberFormat getCurrencyInstance() {
         return getInstance(Locale.getDefault(), CURRENCYSTYLE);
@@ -465,7 +465,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Returns a currency format for the specified locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public static NumberFormat getCurrencyInstance(Locale inLocale) {
         return getInstance(inLocale, CURRENCYSTYLE);
@@ -473,7 +473,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Returns a percentage format for the current default locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static NumberFormat getPercentInstance() {
         return getInstance(Locale.getDefault(), PERCENTSTYLE);
@@ -481,7 +481,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Returns a percentage format for the specified locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public static NumberFormat getPercentInstance(Locale inLocale) {
         return getInstance(inLocale, PERCENTSTYLE);
@@ -490,7 +490,7 @@ public abstract class NumberFormat extends Format{
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Returns a scientific format for the current default locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public final static NumberFormat getScientificInstance() {
         return getInstance(Locale.getDefault(), SCIENTIFICSTYLE);
@@ -499,7 +499,7 @@ public abstract class NumberFormat extends Format{
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Returns a scientific format for the specified locale.
-     * @stable
+     * @stable ICU 2.0
      */
     public static NumberFormat getScientificInstance(Locale inLocale) {
         return getInstance(inLocale, SCIENTIFICSTYLE);
@@ -579,7 +579,7 @@ public abstract class NumberFormat extends Format{
     /**
      * Get the set of Locales for which NumberFormats are installed
      * @return available locales
-     * @stable
+     * @stable ICU 2.0
      */
     public static Locale[] getAvailableLocales() {
         if (service == null) {
@@ -640,7 +640,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Overrides hashCode
-     * @stable
+     * @stable ICU 2.0
      */
     public int hashCode() {
         return maximumIntegerDigits * 37 + maxFractionDigits;
@@ -649,7 +649,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Overrides equals
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean equals(Object obj) {
         if (obj == null) return false;
@@ -668,7 +668,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Overrides Cloneable
-     * @stable
+     * @stable ICU 2.0
      */
     public Object clone()
     {
@@ -682,7 +682,7 @@ public abstract class NumberFormat extends Format{
      * as "1,234,567". The grouping separator as well as the size of each group
      * is locale dependant and is determined by sub-classes of NumberFormat.
      * @see #setGroupingUsed
-     * @stable
+     * @stable ICU 2.0
      */
     public boolean isGroupingUsed() {
         return groupingUsed;
@@ -691,7 +691,7 @@ public abstract class NumberFormat extends Format{
     /**
      * Set whether or not grouping will be used in this format.
      * @see #isGroupingUsed
-     * @stable
+     * @stable ICU 2.0
      */
     public void setGroupingUsed(boolean newValue) {
         groupingUsed = newValue;
@@ -701,7 +701,7 @@ public abstract class NumberFormat extends Format{
      * Returns the maximum number of digits allowed in the integer portion of a
      * number.
      * @see #setMaximumIntegerDigits
-     * @stable
+     * @stable ICU 2.0
      */
     public int getMaximumIntegerDigits() {
         return maximumIntegerDigits;
@@ -717,7 +717,7 @@ public abstract class NumberFormat extends Format{
      * less than zero, then zero is used. The concrete subclass may enforce an
      * upper limit to this value appropriate to the numeric type being formatted.
      * @see #getMaximumIntegerDigits
-     * @stable
+     * @stable ICU 2.0
      */
     public void setMaximumIntegerDigits(int newValue) {
         maximumIntegerDigits = Math.max(0,newValue);
@@ -729,7 +729,7 @@ public abstract class NumberFormat extends Format{
      * Returns the minimum number of digits allowed in the integer portion of a
      * number.
      * @see #setMinimumIntegerDigits
-     * @stable
+     * @stable ICU 2.0
      */
     public int getMinimumIntegerDigits() {
         return minimumIntegerDigits;
@@ -745,7 +745,7 @@ public abstract class NumberFormat extends Format{
      * less than zero, then zero is used. The concrete subclass may enforce an
      * upper limit to this value appropriate to the numeric type being formatted.
      * @see #getMinimumIntegerDigits
-     * @stable
+     * @stable ICU 2.0
      */
     public void setMinimumIntegerDigits(int newValue) {
         minimumIntegerDigits = Math.max(0,newValue);
@@ -757,7 +757,7 @@ public abstract class NumberFormat extends Format{
      * Returns the maximum number of digits allowed in the fraction portion of a
      * number.
      * @see #setMaximumFractionDigits
-     * @stable
+     * @stable ICU 2.0
      */
     public int getMaximumFractionDigits() {
         return maximumFractionDigits;
@@ -773,7 +773,7 @@ public abstract class NumberFormat extends Format{
      * less than zero, then zero is used. The concrete subclass may enforce an
      * upper limit to this value appropriate to the numeric type being formatted.
      * @see #getMaximumFractionDigits
-     * @stable
+     * @stable ICU 2.0
      */
     public void setMaximumFractionDigits(int newValue) {
         maximumFractionDigits = Math.max(0,newValue);
@@ -785,7 +785,7 @@ public abstract class NumberFormat extends Format{
      * Returns the minimum number of digits allowed in the fraction portion of a
      * number.
      * @see #setMinimumFractionDigits
-     * @stable
+     * @stable ICU 2.0
      */
     public int getMinimumFractionDigits() {
         return minimumFractionDigits;
@@ -801,7 +801,7 @@ public abstract class NumberFormat extends Format{
      * less than zero, then zero is used. The concrete subclass may enforce an
      * upper limit to this value appropriate to the numeric type being formatted.
      * @see #getMinimumFractionDigits
-     * @stable
+     * @stable ICU 2.0
      */
     public void setMinimumFractionDigits(int newValue) {
         minimumFractionDigits = Math.max(0,newValue);
