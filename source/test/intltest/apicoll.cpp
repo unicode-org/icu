@@ -1959,6 +1959,7 @@ void CollationAPITest::TestSubclass()
     if (abc != keyarray) {
         errln("TestCollator collationkey API is returning wrong values");
     }
+    uprv_free(bytearray);
 
 	UnicodeSet expectedset(0, 0x10FFFF);
 	UnicodeSet *defaultset = col1.getTailoredSet(status);
