@@ -171,7 +171,7 @@ void tryPat994(UDateFormat* format, const char* pattern, const char* s, UDate ex
 void TestRunTogetherPattern985()
 {
     int32_t pos;
-    UChar *pattern, *now, *then;
+    UChar *pattern=NULL, *now=NULL, *then=NULL;
     UDateFormat *format;
     UDate date1, date2;
     UErrorCode status = U_ZERO_ERROR;
@@ -203,7 +203,7 @@ void TestRunTogetherPattern985()
 void TestCzechMonths459()
 {
     int32_t lneed, pos;
-    UChar *pattern, *tzID;
+    UChar *pattern=NULL, *tzID=NULL;
     UChar *juneStr, *julyStr;
     UDateFormat *fmt;
     UCalendar *cal;

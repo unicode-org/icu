@@ -1409,7 +1409,7 @@ void doBackwardSelectionTest(UBreakIterator* iterator, UChar* testText, Vector* 
 void doFirstSelectionTest(UBreakIterator* iterator, UChar* testText, Vector* result)
 {
     int32_t selectionStart, selectionEnd;
-    UChar* expectedFirstSelection;
+    UChar* expectedFirstSelection=NULL;
     UChar* tempFirst = NULL;
     UBool success = TRUE;
     
@@ -1450,7 +1450,7 @@ void doFirstSelectionTest(UBreakIterator* iterator, UChar* testText, Vector* res
 void doLastSelectionTest(UBreakIterator* iterator, UChar* testText, Vector* result)
 {
     int32_t selectionEnd, selectionStart;
-    UChar *expectedLastSelection;
+    UChar *expectedLastSelection=NULL;
     UChar *tempLast = NULL;
     UBool success = TRUE;
   

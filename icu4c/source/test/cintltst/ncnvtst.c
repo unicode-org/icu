@@ -336,14 +336,14 @@ void TestToUnicodeErrorBehaviour()
         uint8_t sampleText[] = { 0xa2, 0xFF};
         const UChar expected[] = { 0x00c2 };
 
-        uint8_t sampleText2[] = { 0xa2, 0x70 };
-        const UChar expected2[] = { 0x0073 };
+      /*  uint8_t sampleText2[] = { 0xa2, 0x70 };
+        const UChar expected2[] = { 0x0073 };*/
 
         if(!convertToU(sampleText, sizeof(sampleText), 
-                expected, sizeof(expected)/sizeof(expected[0]), "ibm-1051", 0, TRUE, U_ZERO_ERROR ))
+                (const char*)expected, sizeof(expected)/sizeof(expected[0]), "ibm-1051", 0, TRUE, U_ZERO_ERROR ))
             log_err("SBCS (ibm-1051)->Unicode  did not match.\n");
         if(!convertToU(sampleText, sizeof(sampleText), 
-                expected, sizeof(expected)/sizeof(expected[0]), "ibm-1051", 0, FALSE, U_ZERO_ERROR ))
+                (const char*)expected, sizeof(expected)/sizeof(expected[0]), "ibm-1051", 0, FALSE, U_ZERO_ERROR ))
             log_err("SBCS (ibm-1051)->Unicode  with flush = false did not match.\n");
 
     }
@@ -552,8 +552,8 @@ void TestWithBufferSize(int32_t insize, int32_t outsize){
             { 0x31, 0x32, 0x33, 0x00, 0xe4, 0xb8, 0x80, 0xe4, 0xba, 0x8c, 0xe4, 0xb8, 0x89, 0x2E };
         int32_t  toUTF8Offs[] = 
             { 0x00, 0x01, 0x02, 0x03, 0x04, 0x04, 0x04, 0x05, 0x05, 0x05, 0x06, 0x06, 0x06, 0x07};
-        int32_t fmUTF8Offs[] = 
-            { 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0007, 0x000a, 0x000d };
+       /* int32_t fmUTF8Offs[] = 
+            { 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0007, 0x000a, 0x000d };*/
 
         /*UTF-8*/
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),

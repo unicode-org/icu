@@ -107,7 +107,7 @@ UBool isEuroAware(const UConverter* myConv)
   UChar euroBack[2];
   int32_t targetSize, euroBackSize;
   UErrorCode err = U_ZERO_ERROR;
-  const char* myName =   ucnv_getName(myConv, &err);
+  /*const char* myName =   ucnv_getName(myConv, &err);*/
 
   targetSize = ucnv_fromUChars(myConv,
 	  target,

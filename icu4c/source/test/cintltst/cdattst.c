@@ -51,8 +51,8 @@ void TestDateFormat()
     UFieldPosition pos;
     UDate d = 837039928046.0;
     double num = -10456.37;
-    const char* str="yyyy.MM.dd G 'at' hh:mm:ss z";
-    const char t[]="2/3/76 2:50 AM";
+    /*const char* str="yyyy.MM.dd G 'at' hh:mm:ss z";
+    const char t[]="2/3/76 2:50 AM";*/
     /*Testing udat_open() to open a dateformat */
     log_verbose("\nTesting udat_open() with various parameters\n");
     fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL,0, &status);
@@ -311,7 +311,7 @@ void TestSymbols()
 {
     UDateFormat *def, *fr;
     UErrorCode status = U_ZERO_ERROR;
-    UChar *value; 
+    UChar *value=NULL; 
     UChar *result = NULL;
     int32_t resultlength;
     int32_t resultlengthout;
@@ -524,9 +524,9 @@ free(pattern);
 /*INTERNAL FUNCTIONS USED*/
 void VerifygetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t index, const char* expected)
 {
-    UChar *pattern;
+    UChar *pattern=NULL;
     UErrorCode status = U_ZERO_ERROR;
-    UChar *result;
+    UChar *result=NULL;
     int32_t resultlength, resultlengthout;
 
     
@@ -559,8 +559,8 @@ void VerifygetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t i
 
 void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t index, const char* expected)
 {
-    UChar *result;
-    UChar *value;
+    UChar *result=NULL;
+    UChar *value=NULL;
     int32_t resultlength, resultlengthout;
     UErrorCode status = U_ZERO_ERROR;
 
@@ -601,8 +601,8 @@ void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t i
 
 void VerifygetsetSymbols(UDateFormat* from, UDateFormat* to, UDateFormatSymbolType type, int32_t index)
 {
-    UChar *result;
-    UChar *value;
+    UChar *result=NULL;
+    UChar *value=NULL;
     int32_t resultlength, resultlengthout;
     UErrorCode status = U_ZERO_ERROR;
     
@@ -656,7 +656,7 @@ void VerifygetsetSymbols(UDateFormat* from, UDateFormat* to, UDateFormatSymbolTy
 
 UChar* myNumformat(const UNumberFormat* numfor, double d)
 {
-    UChar *result2;
+    UChar *result2=NULL;
     int32_t resultlength, resultlengthneeded;
     UFieldPosition pos;
     UErrorCode status = U_ZERO_ERROR;

@@ -37,8 +37,8 @@ void addNumForTest(TestNode** root)
 /* test Number Format API */
 void TestNumberFormat()
 {
-    UChar *result;
-    UChar *temp1;
+    UChar *result=NULL;
+    UChar *temp1=NULL;
 
     UChar temp[5];
     
