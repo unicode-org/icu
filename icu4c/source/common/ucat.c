@@ -17,8 +17,8 @@
 static const char SEPARATOR = '%';
 
 /* Maximum length of a set_num/msg_num key, incl. terminating zero.
- * Longest possible key is "2147483647%2147483647" */
-#define MAX_KEY_LEN (22)
+ * Longest possible key is "-2147483648%-2147483648" */
+#define MAX_KEY_LEN (24)
 
 /**
  * Fill in buffer with a set_num/msg_num key string, given the numeric
@@ -28,7 +28,6 @@ static const char SEPARATOR = '%';
 static char*
 _catkey(char* buffer, int32_t set_num, int32_t msg_num) {
     int32_t i = 0;
-    U_ASSERT(set_num>=0 && msg_num>=0);
     i = T_CString_integerToString(buffer, set_num, 10);
     buffer[i++] = SEPARATOR;
     T_CString_integerToString(buffer+i, msg_num, 10);
