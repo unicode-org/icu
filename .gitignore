@@ -1,4 +1,5 @@
 icu4c/*-stamp
+icu4c/build
 icu4c/data/*.cnv
 icu4c/data/*.dat
 icu4c/data/*.lst
