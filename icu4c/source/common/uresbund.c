@@ -277,9 +277,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
     }
 
     if(path != NULL) { /* if we actually have path, we'll use it */
-        if(uprv_strcmp(path, u_getDataDirectory()) != 0) { /* unless it is system default path */
-            myPath = path;
-        }
+      myPath = path;
     }
 
     find.fName = name;
