@@ -58,7 +58,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     /**
      * @draft ICU 3.0
      */
-    public static final String ICU_COLLATION_BASE_NAME = "/"+ICU_BASE_NAME + "coll";
+    public static final String ICU_COLLATION_BASE_NAME = ICU_BASE_NAME + "/coll";
     
     /**
      * @draft ICU 3.0

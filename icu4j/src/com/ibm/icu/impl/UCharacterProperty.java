@@ -1312,7 +1312,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     /**
     * Default name of the datafile
     */
-    private static final String DATA_FILE_NAME_ = UResourceBundle.ICU_BUNDLE+"uprops.icu";
+    private static final String DATA_FILE_NAME_ = UResourceBundle.ICU_BUNDLE+"/uprops.icu";
       
     /**
     * Default buffer size of datafile

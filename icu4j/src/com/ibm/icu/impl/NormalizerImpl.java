@@ -47,7 +47,7 @@ public final class NormalizerImpl {
 	 * unorm.icu, which is generated with the gennorm tool.
 	 * The format of that file is described at the end of this file.
 	 */
-	private static final String DATA_FILE_NAME = UResourceBundle.ICU_BUNDLE+"unorm.icu";
+	private static final String DATA_FILE_NAME = UResourceBundle.ICU_BUNDLE+"/unorm.icu";
 	
 	// norm32 value constants 
 	

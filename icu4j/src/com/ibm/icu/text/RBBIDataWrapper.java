@@ -452,7 +452,7 @@ public class RBBIDataWrapper {
         }
         System.out.println("RBBIDataWrapper.main(" + s + ") ");
         
-        String versionedName = ICUResourceBundle.ICU_BUNDLE+ s + ".brk";
+        String versionedName = ICUResourceBundle.ICU_BUNDLE+"/"+ s + ".brk";
         
         try {
             RBBIDataWrapper This = RBBIDataWrapper.get(versionedName);
