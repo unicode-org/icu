@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UTF16Test.java,v $ 
-* $Date: 2002/10/28 21:59:23 $ 
-* $Revision: 1.20 $
+* $Date: 2004/03/11 16:51:50 $ 
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -1439,7 +1439,64 @@ public final class UTF16Test extends TestFmwk
         e.printStackTrace();
         }
     }
-    
+
+    public void TestNewString() {
+	final int[] codePoints = {
+	    UCharacter.toCodePoint(UCharacter.MIN_HIGH_SURROGATE, UCharacter.MAX_LOW_SURROGATE),
+	    UCharacter.toCodePoint(UCharacter.MAX_HIGH_SURROGATE, UCharacter.MIN_LOW_SURROGATE),
+	    UCharacter.MAX_HIGH_SURROGATE,
+	    'A',
+	    -1,
+	};
+
+	final String cpString = "" +
+	    UCharacter.MIN_HIGH_SURROGATE +
+	    UCharacter.MAX_LOW_SURROGATE +
+	    UCharacter.MAX_HIGH_SURROGATE +
+	    UCharacter.MIN_LOW_SURROGATE +
+	    UCharacter.MAX_HIGH_SURROGATE +
+	    'A';
+
+	final int[][] tests = {
+	    { 0, 1, 0, 2 },
+	    { 0, 2, 0, 4 },
+	    { 1, 1, 2, 2 },
+	    { 1, 2, 2, 3 },
+	    { 1, 3, 2, 4 },
+	    { 2, 2, 4, 2 },
+	    { 2, 3, 0, -1 },
+	    { 4, 5, 0, -1 },
+	    { 3, -1, 0, -1 }
+	};
+
+ 	for (int i = 0; i < tests.length; ++i) {
+	    int[] t = tests[i];
+	    int s = t[0];
+	    int c = t[1];
+	    int rs = t[2];
+	    int rc = t[3];
+
+	    Exception e = null;		
+	    try {
+		String str = UTF16.newString(codePoints, s, c);
+		if (rc == -1 || !str.equals(cpString.substring(rs, rs+rc))) {
+		    errln("failed codePoints iter: " + i + " start: " + s + " len: " + c);
+		}
+		continue;
+	    }
+	    catch (IndexOutOfBoundsException e1) {
+		e = e1;
+	    }
+	    catch (IllegalArgumentException e2) {
+		e = e2;
+	    }
+	    if (rc != -1) {
+		errln(e.getMessage());
+	    }
+	}
+    }
+
+
     // private data members ----------------------------------------------
     
     private final static String INDEXOF_SUPPLEMENTARY_STRING_ =
