@@ -172,12 +172,14 @@ el {
     TransliterateLATIN {
         "UNGEGN",
 
-        "# Rules are predicated on running NFD first, and NFC afterwards\n"
-        "::NFD (NFC) ; "
+       // Rules are predicated on running NFD first, and NFC afterwards
 
-        "# For modern Greek.\n"
+        ":: [\\u0000-\\u007F \\u00B7 [:Greek:] [:nonspacing mark:]] ;"
+        "::NFKD (NFC) ; "
 
-        "# Useful variables\n"
+        // For modern Greek.
+
+        // Useful variables
 
         "$lower = [:Ll:] ; "
         "$upper = [:Lu:] ; "
@@ -208,16 +210,16 @@ el {
 
         "$caron = \u030C;"
 
-        "$afterLetter = [:^L:] [\\'[:M:]]* ;"
-        "$beforeLetter = [\\'[:M:]]* [:^L:] ;"
+        "$afterLetter = [:L:] [\\'[:M:]]* ;"
+        "$beforeLetter = [\\'[:M:]]* [:L:] ;"
 
 
-        "# Fix punctuation\n"
+        // Fix punctuation
 
         "\\; <> \\? ;"
         "\u00b7 <> \\: ;"
 
-        "# Fix any ancient characters that creep in\n"
+        // Fix any ancient characters that creep in
 
         "\u0342 > \u0301 ;"
         "\u0302 > \u0301 ;"
@@ -227,7 +229,7 @@ el {
         "$iotasub > ;"
         "\u037A > ;"
 
-        "# need to have these up here so the rules don't mask\n"
+        // need to have these up here so the rules don't mask
 
         "\u03b7 <> i $under ;"
         "\u0397 <> I $under ;"
@@ -239,18 +241,18 @@ el {
         "\u03c9 <> o $under ;"
         "\u03a9 <>  O $under;"
 
-        "# at begining or end of word, convert mp to b\n"
+        // at begining or end of word, convert mp to b
 
-        "[^[:L:][:M:]] } \u03bc\u03c0 > b ; "
+        "[^[:L:][:M:]] { \u03bc\u03c0 > b ; "
         "\u03bc\u03c0 } [^[:L:][:M:]] > b ; "
-        "[^[:L:][:M:]] } [\u039c\u03bc][\u03a0\u03c0] > B ; "
+        "[^[:L:][:M:]] { [\u039c\u03bc][\u03a0\u03c0] > B ; "
         "[\u039c\u03bc][\u03a0\u03c0] } [^[:L:][:M:]] > B ;"
 
         "\u03bc\u03c0 < b ; "
         "\u039c\u03c0 < B { $beforeLower ; "
         "\u039c\u03a0 < B ; "
 
-        "# handle diphthongs ending with upsilon\n"
+        // handle diphthongs ending with upsilon
 
         "$vowel { \u03c5 } $softener <> v $under ; "
         "$vowel { \u03c5 } <> f $under; "
@@ -259,7 +261,7 @@ el {
         "$vowel { \u03a5 <> U $under ; "
         "\u03a5 <> Y ; "
 
-        "# NORMAL\n"
+        // NORMAL
 
         "\u03b1 <> a ; "
         "\u0391 <> A ; "
@@ -317,18 +319,18 @@ el {
         "[Pp] { } \u03c2 > \\' ; "
         "[Pp] { } \u03c3 > \\' ;"
 
-        "# Caron means exception\n"
+        // Caron means exception
 
-        "# before a letter, initial\n"
-        "\u03c2 } $beforeLetter <> s $caron } $beforeLetter;"
+        // before a letter, initial
+        "\u03c2 } $beforeLetter <> s $under } $beforeLetter;"
         "\u03c3 } $beforeLetter <> s } $beforeLetter;"
 
-        "# otherwise, after a letter = final\n"
-        "$afterLetter { \u03c3 <> $afterLetter { s $caron;"
+        // otherwise, after a letter = final
+        "$afterLetter { \u03c3 <> $afterLetter { s $under;"
         "$afterLetter { \u03c2 <> $afterLetter { s ;"
 
-        "# otherwise (isolated) = initial\n"
-        "\u03c2 <> s $caron;"
+        // otherwise (isolated) = initial
+        "\u03c2 <> s $under;"
         "\u03c3 <> s ;"
 
         "[Pp] { \u03a3 <> \\'S ; "
@@ -344,7 +346,7 @@ el {
         "\u03a7 } $beforeLower <> Ch ; "
         "\u03a7 <> CH ; "
 
-        "# Completeness for ASCII\n"
+        // Completeness for ASCII
 
         "$ignore = [[:Mark:]''] * ;"
 
@@ -362,7 +364,7 @@ el {
         "| Y < W ;"
         "| Y < U ;"
 
-        "# Completeness for Greek\n"
+        // Completeness for Greek
 
         "\u03d0 > | \u03b2 ;"
         "\u03d1 > | \u03b8 ;"
@@ -376,12 +378,15 @@ el {
         "\u03f3 > j ;"
         "\u03f4 > | \u0398 ;"
         "\u03f5 > | \u03b5 ;"
+        "\u00B5 > | \u03BC ; "
 
-        "# delete any trailing ' marks used for roundtripping\n"
+        // delete any trailing ' marks used for roundtripping
 
         " < [\u03a0\u03c0] { \\' } [Ss] ;"
         " < [\u039d\u03bd] { \\' } $egammaLike ;"
 
-        "::NFC (NFD) ; "
+        "::NFC (NFKD) ; "
+
+        ":: ([\\u0000-\\u007F [:Latin:] [:nonspacing mark:]]) ;"
      }
 }
