@@ -97,26 +97,6 @@ typedef unsigned long uint32_t;
 #endif
 
 /*===========================================================================*/
-/* See utypes.h for the normal defintion                                     */
-/*===========================================================================*/
-
-/*
-With the provided macro we should never be out of range of a given segment
-(a traditional/typical segment that is).  Our segments have 5 bytes for the id
-and 3 bytes for the offset.  The key is that the casting takes care of only
-retrieving the offset portion minus x1000.  Hence, the smallest offset seen in
-a program is x001000 and when casted to an int would be 0.  That's why we can
-only add 0xffefff.  Otherwise, we would exceed the segment.
-
-Currently, 16MB is the current addressing limitation on as/400.  This macro
-may eventually be changed to use 2GB addressability for the newer version of
-as/400 machines.
-*/
-#ifndef U_MAX_PTR
-#define U_MAX_PTR(ptr) ((void*)(((char*)ptr)-((int32_t)(ptr))+((int32_t)0xffefff)))
-#endif
-
-/*===========================================================================*/
 /* Character data types                                                      */
 /*===========================================================================*/
 
