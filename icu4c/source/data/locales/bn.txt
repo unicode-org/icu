@@ -62,4 +62,8 @@ bn {
     }
     LocaleString { "bn" }
     LocaleID { "45" }
+    LocaleScript{
+            "Bengali",
+            "Beng"
+    }
 }

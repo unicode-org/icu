@@ -136,4 +136,8 @@ ar {
                 "GMT",
         }
     }
+    LocaleScript{
+            "Arabic",
+            "Arab"
+    }
 }
