@@ -55,8 +55,8 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 icuuc.lib /nologo /base:"0x4a900000" /dll /machine:I386 /out:"..\..\bin\icuin22.dll" /implib:"..\..\lib\icuin.lib" /libpath:"..\..\lib"
-# SUBTRACT LINK32 /pdb:none /debug
+# ADD LINK32 icuuc.lib /nologo /base:"0x4a900000" /dll /debug /machine:I386 /out:"..\..\bin\icuin22.dll" /implib:"..\..\lib\icuin.lib" /libpath:"..\..\lib"
+# SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
@@ -279,7 +279,19 @@ SOURCE=.\rbt_set.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\regexcmp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rematch.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\remtrans.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\repattrn.cpp
 # End Source File
 # Begin Source File
 
@@ -1373,6 +1385,65 @@ SOURCE=.\rbt_rule.h
 # Begin Source File
 
 SOURCE=.\rbt_set.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\regex.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\regex.h
+
+"..\..\include\unicode\regex.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\regex.h
+
+"..\..\include\unicode\regex.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\regex.h
+
+"..\..\include\unicode\regex.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\regex.h
+
+"..\..\include\unicode\regex.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\regexcmp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\regexcst.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\regeximp.h
 # End Source File
 # Begin Source File
 

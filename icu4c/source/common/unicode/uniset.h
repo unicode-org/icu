@@ -942,6 +942,7 @@ private:
     friend class TransliterationRule;
 
     friend class RBBIRuleScanner;
+    friend class RegexCompile;
 
     /**
      * Constructs a set from the given pattern.  See the class description

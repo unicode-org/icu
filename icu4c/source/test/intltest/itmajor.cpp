@@ -26,6 +26,7 @@
 #include "itrbnf.h"
 #include "itrbnfrt.h"
 #include "normconf.h"
+#include "regextst.h"
 #include "tstnorm.h"
 #include "canittst.h"
 
@@ -67,8 +68,12 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
 #endif
                 break;
 
-        case 3: name = "unused";
-                // Used to be text bounds.
+        case 3: name = "regex";
+                if (exec) {
+                    logln("TestSuite Regex---"); logln();
+                    RegexTest test;
+                    callTest( test, par );
+                }
                 break;
 
         case 4: name = "format";

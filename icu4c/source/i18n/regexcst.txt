@@ -1,0 +1,231 @@
+
+#*****************************************************************************
+#
+#   Copyright (C) 2002, International Business Machines Corporation and others.
+#   All Rights Reserved.
+#
+#*****************************************************************************
+#
+#  file:  regexcst.txt
+#  ICU Regular Expression Parser State Table
+#
+#     This state table is used when reading and parsing a regular expression pattern
+#     The pattern parser uses a state machine; the data in this file define the
+#     state transitions that occur for each input character.
+#
+#     *** This file defines the regex pattern grammar.   This is it.
+#     *** The determination of what is accepted is here.
+#
+#     This file is processed by a perl script "regexcst.pl" to produce initialized C arrays
+#     that are then built with the rule parser.
+#
+
+#
+# Here is the syntax of the state definitions in this file:
+#
+#
+#StateName:
+#   input-char           n next-state           ^push-state     action    
+#   input-char           n next-state           ^push-state     action    
+#       |                |   |                      |             |
+#       |                |   |                      |             |--- action to be performed by state machine
+#       |                |   |                      |                  See function RBBIRuleScanner::doParseActions()
+#       |                |   |                      |
+#       |                |   |                      |--- Push this named state onto the state stack.
+#       |                |   |                           Later, when next state is specified as "pop",
+#       |                |   |                           the pushed state will become the current state.
+#       |                |   |
+#       |                |   |--- Transition to this state if the current input character matches the input
+#       |                |        character or char class in the left hand column.  "pop" causes the next
+#       |                |        state to be popped from the state stack.
+#       |                |
+#       |                |--- When making the state transition specified on this line, advance to the next
+#       |                     character from the input only if 'n' appears here.
+#       |
+#       |--- Character or named character classes to test for.  If the current character being scanned
+#            matches, peform the actions and go to the state specified on this line.
+#            The input character is tested sequentally, in the order written.  The characters and
+#            character classes tested for do not need to be mutually exclusive.  The first match wins.
+#            
+
+
+
+
+#
+#  start state, scan position is at the beginning of the pattern.
+#
+start:
+   default                 term                 ^finish             doPatStart
+    
+#
+#  finish  -  We've scanned off the end of the pattern string.
+#             The "doPatFinish" action will stop the pattern scanning state machine.
+#
+finish:
+    default                finish                                   doPatFinish
+     
+
+    
+    
+#
+#  term.  Eat through a single rule character, or a composite thing, which
+#         could be a parenthesized expression  or a Unicode Set.
+#
+term:
+    quoted               n string                                   doStartString
+    rule_char            n string                                   doStartString
+    '['                  n expr-quant     		            doScanUnicodeSet
+    '('                  n open-paren            ^expr-quant          
+    '.'                  n expr-quant                               doDotAny
+    eof		           pop
+    default                errorDeath                               doRuleError
+    
+
+#
+#   string        We've encountered a literal character, or an escaped character.
+#                 Continue with any additional literal chars, building the sequence
+#                 into a string.
+#
+string:
+    quoted                n string                                  doStringChar
+    rule_char             n string                                  doStringChar
+    # If the string ends in a quatinfier, we need to split off the last character so that
+    #   the quantifier effects only it, and not the entire string.  (e.g.  "ABC*")
+    '?'                     expr-quant                              doSplitString
+    '+'                     expr-quant                              doSplitString
+    '*'                     expr-quant                              doSplitString
+    '{'                     expr-quant                              doSplitString
+    default                 expr-quant                              doEndString
+
+#
+#   expr-quant    We've just finished scanning a term, now look for the optional
+#                 trailing quantifier - *, +, ?, *?,  etc.
+#
+expr-quant:
+    '*'                  n  quant-star                       
+    '+'                  n  quant-plus                              
+    '?'                  n  quant-opt        
+    default                 expr-cont 
+    
+    
+#
+#  expr-cont      Expression, continuation.  At a point where additional terms are
+#                                            allowed, but not required.
+#
+expr-cont:
+    quoted                  term                                    
+    rule_char               term                                    
+    '['                     term                                    
+    '('                     term                                    
+    '.'                     term                                    
+    '|'                  n  term                                    doOrOperator
+    ')'                  n  pop                                     doCloseParen
+    default                 pop                                     doExprFinished
+    
+
+#
+#   open-paren    We've got an open paren.  We need to scan further to
+#                 determine what kind of quantifier it is - plain (, (?:, (?>, or whatever.
+#
+open-paren:
+    '?'                  n  open-paren-extended
+    default                 term            ^expr-quant             doOpenCaptureParen
+    
+open-paren-extended:
+    ':'                  n  term            ^expr-quant             doOpenNonCaptureParen  #  (?:
+    '>'                  n  term            ^expr-quant             doOpenAtomicParen      #  (?>
+    '='                  n  term            ^expr-cont              doOpenLookAhead        #  (?=
+    '!'                  n  term            ^expr-cont              doOpenLookAheadNeg     #  (?!
+    '<'                  n  open-paren-lookbehind
+    default                 errorDeath                              doBadOpenParenType
+    
+open-paren-lookbehind:
+    '='                  n  term            ^expr-cont              doOpenLookBehind       #  (?<=
+    '!'                  n  term            ^expr-cont              doOpenLookBehindNeg    #  (?<!
+    default                 errorDeath                              doBadOpenParenType
+    
+
+#
+#  quant-star     Scanning a '*' quantifier.  Need to look ahead to decide
+#                 between plain '*', '*?', '*+'
+#
+quant-star:
+     '?'                 n  expr-cont                               doNGStar               #  *?
+     '+'                 n  expr-cont                               doPossesiveStar        #  *+
+     default                expr-cont                               doStar
+
+
+#
+#  quant-plus     Scanning a '+' quantifier.  Need to look ahead to decide
+#                 between plain '+', '+?', '++'
+#
+quant-plus:
+     '?'                 n  expr-cont                               doNGPlus               #  *?
+     '+'                 n  expr-cont                               doPossesivePlus        #  *+
+     default                expr-cont                               doPlus
+
+
+#
+#  quant-opt  Scanning a '?' quantifier.  Need to look ahead to decide
+#                  between plain '?', '??', '?+'
+#
+quant-opt:
+     '?'                 n  expr-cont                               doNGOpt                 #  *?
+     '+'                 n  expr-cont                               doPossesiveOpt          #  *+
+     default                expr-cont                               doOpt
+
+
+#
+#   Interval         scanning a '{', the opening delimiter for an interval specification
+#                                   {number} or {min, max}
+#
+interval-open:
+    white_space          n  interval-open
+    digit_char              interval-value                          doIntervalMinValue
+    default                 errorDeath                              doNumberExpectedError
+    
+interval-value:
+    white_space          n  interval-close
+    '}'                     interval-close
+    digit_char           n  interval-value                          doIntervalDigit
+    default                 errorDeath                              doNumberExpectedError
+    
+interval-close:
+    white_space          n  interval-close
+    '}'                  n  expr-cont-no-interval                   doTagValue
+    default                 errorDeath                              doNumberExpectedError
+    
+    
+    
+#
+#  expr-cont-no-tag    Expression, continuation.  At a point where additional terms are
+#                                            allowed, but not required.  Just like
+#                                            expr-cont, above, except that no interval
+#                                            specification {min, max}  is permitted.
+#
+expr-cont-no-interval:
+    quoted                  term                                    
+    rule_char               term                                    
+    '['                     term                                    
+    '('                     term                                    
+    '.'                     term                                    
+    '|'                  n  term                                    doExprOrOperator
+    ')'                  n  pop                                     doExprRParen
+    default                 pop                                     doExprFinished
+    
+    
+
+
+    
+    
+
+    
+#
+# errorDeath.   This state is specified as the next state whenever a syntax error
+#               in the source rules is detected.  Barring bugs, the state machine will never
+#               actually get here, but will stop because of the action associated with the error.
+#               But, just in case, this state asks the state machine to exit.
+errorDeath:
+    default              n errorDeath                               doExit
+
+
