@@ -256,7 +256,7 @@ le_int32 thaiSampleLength = ARRAY_LENGTH(thaiSample);
 
 TestInput testInputs[] = {
     {"raghu.ttf",             devaText,   devaTextLength,   devaScriptCode, false},
-    {"Times.TTF",             arabText,   arabTextLength,   arabScriptCode, true},
+    {"CODE2000.TTF",             arabText,   arabTextLength,   arabScriptCode, true},
     {"LucidaSansRegular.ttf", arabText,   arabTextLength,   arabScriptCode, true},
     {"Thonburi.ttf",          thaiSample, thaiSampleLength, thaiScriptCode, false}
 };

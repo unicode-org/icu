@@ -1,7 +1,6 @@
 # This is a sample FontMap file for Linux.
 # Fonts are specified by file names.
 
-     LATIN: Times.TTF
-DEVANAGARI: raghu.ttf
-    ARABIC: Times.TTF
-      THAI: THONBURI.TTF
+ DEVANAGARI: raghu.ttf
+       THAI: THONBURI.TTF
+	DEFAULT: CODE2000.TTF

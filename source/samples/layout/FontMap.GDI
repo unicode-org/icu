@@ -1,8 +1,8 @@
+
 # This is a sample FontMap file for Windows.
 # Fonts are specified by font name, as shown
 # in the "Fonts" folder.
 
-     LATIN: Times New Roman
-DEVANAGARI: Raghindi
-    ARABIC: Times New Roman
-      THAI: Thonburi
+ DEVANAGARI: Raghindi
+       THAI: Thonburi
+    DEFAULT: Code2000
