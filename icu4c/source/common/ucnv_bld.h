@@ -29,6 +29,12 @@
 #include "unicode/ucnv_err.h"
 #include "ucnvmbcs.h"
 
+/* size of the overflow buffers in UConverter, enough for escaping callbacks */
+#define UCNV_ERROR_BUFFER_LENGTH 32
+
+#define UCNV_MAX_SUBCHAR_LEN 4
+#define UCNV_MAX_AMBIGUOUSCCSIDS 5
+
 /* ### move the following typedef and array into implementation files! */
 typedef struct
 {
