@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCaseTest.java,v $ 
-* $Date: 2002/07/08 23:52:13 $ 
-* $Revision: 1.3 $
+* $Date: 2002/07/09 05:30:38 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -372,8 +372,7 @@ public final class UCharacterCaseTest extends TestFmwk
 		  	// reading in the SpecialCasing file
 		  	BufferedReader input = TestUtil.getDataReader(
 		  	                                      "unicode/SpecialCasing.txt");
-            int count = 0; 
-		  	while (true)
+            while (true)
 	      	{
                 String s = input.readLine();
 	        	if (s == null) {
@@ -382,95 +381,11 @@ public final class UCharacterCaseTest extends TestFmwk
                 if (s.length() == 0 || s.charAt(0) == '#') {
 	            	continue;
 	        	}
-                if (count ++ >= 103) {
+                
+                String chstr[] = getUnicodeStrings(s);
+	        	if (chstr.length >= 5) {
+	            	// conditional casing tested in other tests
                     break;
-                    // synwee todo
-                    // System.out.println(count ++);
-                }
-	        	String chstr[] = getUnicodeStrings(s);
-	        	if (chstr.length == 5) {
-	            	StringBuffer strbuffer   = new StringBuffer(chstr[0]);
-	            	StringBuffer lowerbuffer = new StringBuffer(chstr[1]); 
-	            	StringBuffer upperbuffer = new StringBuffer(chstr[3]); 
-	            
-	            	if (chstr[4].indexOf("AFTER_i NOT_MORE_ABOVE") != -1) {
-	                	strbuffer.insert(0, 'i');
-	                	lowerbuffer.insert(0, strbuffer);
-	                	upperbuffer.insert(0, (char)(0x130));
-	            	}	 
-	            	else {
-	                	if (chstr[4].indexOf("MORE_ABOVE") != -1) {
-	                    	strbuffer.append((char)0x300);
-	                    	lowerbuffer.append((char)0x300);
-	                    	upperbuffer.append((char)0x300);
-	                	}
-	                	if (chstr[4].indexOf("AFTER_i") != -1) {
-	                    	strbuffer.insert(0, 'i');
-	                    	lowerbuffer.insert(0, 'i');
-	                    	upperbuffer.insert(0, 'I');
-	                	}
-	                	if (chstr[4].indexOf("FINAL_SIGMA") != -1) {
-	                    	strbuffer.insert(0, 'c');
-	                    	lowerbuffer.insert(0, 'c');
-	                    	upperbuffer.insert(0, 'C');
-	                	}
-	            	}
-	            	if (UCharacter.isLowerCase(chstr[4].charAt(0))) {
-	                	Locale locale = new Locale(chstr[4].substring(0, 2), 
-	                	                           "");
-	                	if (!UCharacter.toLowerCase(locale, 
-	                        				strbuffer.toString()).equals(
-	                        				lowerbuffer.toString())) {
-	                    	errln(s);
-	                    	errln("Fail: toLowerCase for locale " + locale + 
-	                        	", character " + 
-	                        	Utility.escape(strbuffer.toString()) +
-	                        	", expected " + 
-	                        	Utility.escape(lowerbuffer.toString()) 
-	                        	+ " but resulted in " + 
-	                        	Utility.escape(UCharacter.toLowerCase(locale, 
-	                                                   strbuffer.toString())));
-	                	}
-	                	if (!UCharacter.toUpperCase(locale, 
-	                       		strbuffer.toString()).equals(
-	                       		                     upperbuffer.toString())) {
-	                    	errln(s);
-	                    	errln("Fail: toUpperCase for locale " + locale + 
-	                        	", character " + 
-	                        	Utility.escape(strbuffer.toString()) 
-	                        	+ ", expected "
-	                        	+ Utility.escape(upperbuffer.toString()) + 
-	                        	" but resulted in " + 
-	             	           	Utility.escape(UCharacter.toUpperCase(locale, 
-	                                                   strbuffer.toString())));
-	                	}
-	            	}
-	            	else {
-	                	if (!UCharacter.toLowerCase(
-	                	                         strbuffer.toString()).equals(
-	                                                lowerbuffer.toString())) {
-	                    	errln(s);
-	                    	errln("Fail: toLowerCase for character " + 
-	                          	Utility.escape(strbuffer.toString()) + 
-	                          	", expected " 
-	                          	+ Utility.escape(lowerbuffer.toString()) 
-	                          	+ " but resulted in " + 
-	                          	Utility.escape(UCharacter.toLowerCase( 
-	                                                   strbuffer.toString())));
-	                	}
-	                	if (!UCharacter.toUpperCase(
-	                	                         strbuffer.toString()).equals(
-	                                                upperbuffer.toString())) {
-	                    	errln(s);
-	                    	errln("Fail: toUpperCase for character " + 
-	                          	Utility.escape(strbuffer.toString()) + 
-	                          	", expected "
-	                          	+ Utility.escape(upperbuffer.toString()) + 
-	                          	" but resulted in " + 
-	                          	Utility.escape(UCharacter.toUpperCase( 
-	                                                  strbuffer.toString())));
-	                	}
-	            	}
 	        	}
 	        	else {
 	            	if (!UCharacter.toLowerCase(chstr[0]).equals(chstr[1])) {
@@ -670,34 +585,38 @@ public final class UCharacterCaseTest extends TestFmwk
   	private String[] getUnicodeStrings(String str)
   	{
     	Vector v = new Vector(10);
-    	int end = str.indexOf("; ");
-    	int start = 0;
-    	while (end != -1) {
-        	StringBuffer buffer = new StringBuffer(10);
-	        int tempstart = start;
-	        int tempend   = str.indexOf(' ', tempstart);
-	        while (tempend != -1 && tempend < end) {
-	           buffer.append((char)Integer.parseInt(str.substring(tempstart, 
-	                                                            tempend), 16));
-	           tempstart = tempend + 1;
-	           tempend   = str.indexOf(' ', tempstart);
-	        }
-	        String s = str.substring(tempstart, end);
-	        try {
-	            if (s.length() != 0) {
-	                buffer.append((char)Integer.parseInt(s, 16));
-	            }
-	        } catch (NumberFormatException e) {
-	            buffer.append(s);
-	        }
-	        start = end + 2;
-	        end   = str.indexOf("; ", start);
-	        v.addElement(buffer.toString());
-	    }
-	    String s = str.substring(start);
-	    if (s.charAt(0) != '#') {
-	        v.addElement(s);
-	    }
+        int start = 0;
+        for (int casecount = 4; casecount > 0; casecount --) {
+            int end = str.indexOf("; ", start);
+            String casestr = str.substring(start, end);
+            StringBuffer buffer = new StringBuffer();
+            int spaceoffset = 0;
+            while (spaceoffset < casestr.length()) {
+                int nextspace = casestr.indexOf(' ', spaceoffset);
+                if (nextspace == -1) {
+                    nextspace = casestr.length();
+                }
+                buffer.append((char)Integer.parseInt(
+                                     casestr.substring(spaceoffset, nextspace),
+                                                      16));
+                spaceoffset = nextspace + 1;
+            }
+            start = end + 2;
+            v.add(buffer.toString());
+        }
+        int comments = str.indexOf('#', start);
+        if (comments != -1 && comments != start) {
+            String conditions = str.substring(start, comments);
+            int offset = 0;
+    	    while (offset < conditions.length()) {
+                int spaceoffset = conditions.indexOf(' ', offset);
+                if (spaceoffset == -1) {
+                    spaceoffset = conditions.length();
+                }
+                v.add(conditions.substring(offset, spaceoffset));
+                offset = spaceoffset + 1;
+            }
+        }
 	    int size = v.size();
 	    String result[] = new String[size];
 	    for (int i = 0; i < size; i ++) {
