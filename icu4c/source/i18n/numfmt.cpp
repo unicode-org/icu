@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2003, International Business Machines Corporation and    *
+* Copyright (C) 1997-2004, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -343,19 +343,6 @@ Formattable& NumberFormat::parseCurrency(const UnicodeString& text,
         getEffectiveCurrency(curr, ec);
         if (U_SUCCESS(ec)) {
             result.setCurrency(curr);
-        }
-    }
-    return result;
-}
-
-Formattable& NumberFormat::parseCurrency(const UnicodeString& text,
-                                         Formattable& result,
-                                         UErrorCode& ec) const {
-    if (U_SUCCESS(ec)) {
-        ParsePosition pos(0);
-        parseCurrency(text, result, pos);
-        if (pos.getIndex() == 0) {
-            ec = U_INVALID_FORMAT_ERROR;
         }
     }
     return result;

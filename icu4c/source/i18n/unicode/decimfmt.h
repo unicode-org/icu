@@ -885,34 +885,11 @@ public:
      * on output, the position after the last matched character. If
      * the parse fails, the position in unchanged upon output.
      * @return a reference to result
-     * @draft ICU 3.0
+     * @internal
      */
     virtual Formattable& parseCurrency(const UnicodeString& text,
                                        Formattable& result,
                                        ParsePosition& pos) const;
-
-    // Redeclare here, otherwise function will be hidden
-    /**
-     * Parses text from the beginning of the given string as a
-     * currency amount.  The method might not use the entire text of
-     * the given string.  Unlike the parse() method, this method will
-     * attempt to parse a generic currency name, searching for a match
-     * of this object's locale's currency display names, or for a
-     * 3-letter ISO currency code.  This method will fail if this
-     * format is not a currency format, that is, if it does not
-     * contain the currency pattern symbol (U+00A4) in its prefix or
-     * suffix.
-     *
-     * @param text the string to parse
-     * @param result output parameter to receive result. This will have
-     * its currency set to the parsed ISO currency code.
-     * @param status input-output error code
-     * @return a reference to result
-     * @draft ICU 3.0
-     */
-    Formattable& parseCurrency(const UnicodeString& text,
-                               Formattable& result,
-                               UErrorCode& status) const;
 
     /**
      * Returns the decimal format symbols, which is generally not changed
