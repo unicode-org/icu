@@ -59,7 +59,7 @@ char pthread_create();
 pthread_create();,
 eval "ac_ldflag_pthread=yes",
 eval "ac_ldflag_pthread=no"),
-LIBS="$ac_save_LDFLAGS"
+LDFLAGS="$ac_save_LDFLAGS"
 ])
 if eval "test \"`echo $ac_ldflag_pthread`\" = yes"; then
 	AC_MSG_RESULT(yes)
