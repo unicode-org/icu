@@ -2979,7 +2979,7 @@ _ISO_2022_SafeClone(
 
 static void
 _ISO_2022_GetUnicodeSet(const UConverter *cnv,
-                    USetAdder *sa,
+                    const USetAdder *sa,
                     UConverterUnicodeSet which,
                     UErrorCode *pErrorCode)
 {

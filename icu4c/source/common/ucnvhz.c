@@ -510,7 +510,7 @@ _HZ_SafeClone(const UConverter *cnv,
 
 static void
 _HZ_GetUnicodeSet(const UConverter *cnv,
-                  USetAdder *sa,
+                  const USetAdder *sa,
                   UConverterUnicodeSet which,
                   UErrorCode *pErrorCode) {
     /* the tilde '~' is hardcoded in the converter */

@@ -963,6 +963,32 @@ void UnicodeSetTest::TestCloseOver() {
         CASE,
         "[ABC]","[A-Ca-c]",
 
+        CASE, "[i]", "[iI]",
+
+        CASE, "[\\u0130]",          "[\\u0130{i\\u0307}]", // dotted I
+        CASE, "[{i\\u0307}]",       "[\\u0130{i\\u0307}]", // i with dot
+
+        CASE, "[\\u0131]",          "[\\u0131]", // dotless i
+
+        CASE, "[\\u0390]",          "[\\u0390\\u1FD3{\\u03B9\\u0308\\u0301}]",
+
+        CASE, "[\\u03c2]",          "[\\u03a3\\u03c2\\u03c3]", // sigmas
+
+        CASE, "[\\u03f2]",          "[\\u03f2\\u03f9]", // lunate sigmas
+
+        CASE, "[\\u03f7]",          "[\\u03f7\\u03f8]",
+
+        CASE, "[\\u1fe3]",          "[\\u03b0\\u1fe3{\\u03c5\\u0308\\u0301}]",
+
+        CASE, "[\\ufb05]",          "[\\ufb05\\ufb06{st}]",
+        CASE, "[{st}]",             "[\\ufb05\\ufb06{st}]",
+
+        CASE, "[\\U0001044F]",      "[\\U00010427\\U0001044F]",
+
+        CASE, "[{a\\u02BE}]",       "[\\u1E9A{a\\u02BE}]", // first in sorted table
+
+        CASE, "[{\\u1f7c\\u03b9}]", "[\\u1ff2{\\u1f7c\\u03b9}]", // last in sorted table
+
         CASE_MAPPINGS,
         "[aq\\u00DF{Bc}{bC}{Fi}]",
         "[aAqQ\\u00DF{ss}{Ss}{SS}{Bc}{BC}{bC}{bc}{FI}{Fi}{fi}]",
@@ -980,6 +1006,7 @@ void UnicodeSetTest::TestCloseOver() {
 
     UnicodeSet s;
     UnicodeSet t;
+    UnicodeString buf;
     for (int32_t i=0; DATA[i]!=NULL; i+=3) {
         int32_t selector = DATA[i][0];
         UnicodeString pat(DATA[i+1]);
@@ -994,11 +1021,71 @@ void UnicodeSetTest::TestCloseOver() {
         if (s == t) {
             logln((UnicodeString)"Ok: " + pat + ".closeOver(" + selector + ") => " + exp);
         } else {
-            UnicodeString buf;
             errln((UnicodeString)"FAIL: " + pat + ".closeOver(" + selector + ") => " +
                   s.toPattern(buf, TRUE) + ", expected " + exp);
         }
     }
+
+#if 0
+    /*
+     * Unused test code.
+     * This was used to compare the old implementation (using USET_CASE)
+     * with the new one (using 0x100 temporarily)
+     * while transitioning from hardcoded case closure tables in uniset.cpp
+     * (moved to uniset_props.cpp) to building the data by gencase into ucase.icu.
+     * and using ucase.c functions for closure.
+     * See Jitterbug 3432 RFE: Move uniset.cpp data to a data file
+     *
+     * Note: The old and new implementation never fully matched because
+     * the old implementation turned out to not map U+0130 and U+0131 correctly
+     * (dotted I and dotless i) and because the old implementation's data tables
+     * were outdated compared to Unicode 4.0.1 at the time of the change to the
+     * new implementation. (So sigmas and some other characters were not handled
+     * according to the newer Unicode version.)
+     */
+    UnicodeSet sens("[:case_sensitive:]", ec), sens2, s2;
+    UnicodeSetIterator si(sens);
+    UnicodeString str, buf2;
+    const UnicodeString *pStr;
+    UChar32 c;
+    while(si.next()) {
+        if(!si.isString()) {
+            c=si.getCodepoint();
+            s.clear();
+            s.add(c);
+
+            str.setTo(c);
+            str.foldCase();
+            sens2.add(str);
+
+            t=s;
+            s.closeOver(USET_CASE);
+            t.closeOver(0x100);
+            if(s!=t) {
+                errln("FAIL: closeOver(U+%04x) differs: ", c);
+                errln((UnicodeString)"old "+s.toPattern(buf, TRUE)+" new: "+t.toPattern(buf2, TRUE));
+            }
+        }
+    }
+    // remove all code points
+    // should contain all full case folding mapping strings
+    sens2.remove(0, 0x10ffff);
+    si.reset(sens2);
+    while(si.next()) {
+        if(si.isString()) {
+            pStr=&si.getString();
+            s.clear();
+            s.add(*pStr);
+            t=s2=s;
+            s.closeOver(USET_CASE);
+            t.closeOver(0x100);
+            if(s!=t) {
+                errln((UnicodeString)"FAIL: closeOver("+s2.toPattern(buf, TRUE)+") differs: ");
+                errln((UnicodeString)"old "+s.toPattern(buf, TRUE)+" new: "+t.toPattern(buf2, TRUE));
+            }
+        }
+    }
+#endif
 
     // Test the pattern API
     s.applyPattern("[abc]", USET_CASE_INSENSITIVE, NULL, ec);

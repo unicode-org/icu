@@ -373,7 +373,7 @@ ucnv_MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
  */
 U_CFUNC void
 ucnv_MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
-                           USetAdder *sa,
+                           const USetAdder *sa,
                            UConverterUnicodeSet which,
                            uint8_t state, int32_t lowByte, int32_t highByte,
                            UErrorCode *pErrorCode);
@@ -388,7 +388,7 @@ ucnv_MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
  */
 U_CFUNC void
 ucnv_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
-                             USetAdder *sa,
+                             const USetAdder *sa,
                              UConverterUnicodeSet which,
                              UErrorCode *pErrorCode);
 

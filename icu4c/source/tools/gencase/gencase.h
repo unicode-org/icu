@@ -28,6 +28,21 @@ U_CDECL_BEGIN
 #define UGENCASE_EXC_SHIFT     16
 #define UGENCASE_EXC_MASK      0xffff0000
 
+/*
+ * Values for the ucase.icu unfold[] data array, see store.c.
+ * The values are stored in ucase.icu so that the runtime code will work with
+ * changing values, but they are hardcoded for gencase for simplicity.
+ * They are optimized, that is, provide for minimal table column widths,
+ * for the actual Unicode data, so that the table size is minimized.
+ * Future versions of Unicode may require increases of some of these values.
+ */
+enum {
+    UGENCASE_UNFOLD_STRING_WIDTH=3,
+    UGENCASE_UNFOLD_CP_WIDTH=2,
+    UGENCASE_UNFOLD_WIDTH=UGENCASE_UNFOLD_STRING_WIDTH+UGENCASE_UNFOLD_CP_WIDTH,
+    UGENCASE_UNFOLD_MAX_ROWS=250
+};
+
 /* special casing data */
 typedef struct {
     UChar32 code;
@@ -45,6 +60,7 @@ typedef struct {
 /* case mapping properties */
 typedef struct {
     UChar32 code, lowerCase, upperCase, titleCase;
+    UChar32 closure[8];
     SpecialCasing *specialCasing;
     CaseFolding *caseFolding;
     uint8_t gc, cc;

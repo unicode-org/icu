@@ -1718,7 +1718,7 @@ uprv_getMaxISOCommentLength() {
  * @param uset USet to receive characters. Existing contents are deleted.
  */
 static void
-charSetToUSet(uint32_t cset[8], USetAdder *sa) {
+charSetToUSet(uint32_t cset[8], const USetAdder *sa) {
     UChar us[256];
     char cs[256];
 
@@ -1755,7 +1755,7 @@ charSetToUSet(uint32_t cset[8], USetAdder *sa) {
  * @param set USet to receive characters.
  */
 U_CAPI void U_EXPORT2
-uprv_getCharNameCharacters(USetAdder *sa) {
+uprv_getCharNameCharacters(const USetAdder *sa) {
     charSetToUSet(gNameSet, sa);
 }
 
@@ -1769,7 +1769,7 @@ urename.h and uprops.h changed accordingly.
  * @param set USetAdder to receive characters.
  */
 U_CAPI void U_EXPORT2
-uprv_getISOCommentCharacters(USetAdder *sa) {
+uprv_getISOCommentCharacters(const USetAdder *sa) {
     charSetToUSet(gISOCommentSet, sa);
 }
 #endif
