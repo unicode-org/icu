@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/05/31 01:41:04 $
-* $Revision: 1.16 $
+* $Date: 2002/06/02 05:07:08 $
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -535,6 +535,9 @@ public final class Utility {    // COMMON UTILITIES
         return openPrintWriter(filename, true, true);
     }
     
+    // Normally use false, false.
+    // But for UCD files use true, true
+    // Or if they are UTF8, use true, false
     public static PrintWriter openPrintWriter(String filename, boolean removeCR, boolean latin1) throws IOException {
         File file = new File(getOutputName(filename));
         System.out.println("Creating File: " + file);

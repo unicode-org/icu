@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2002/05/31 01:41:03 $ 
-* $Revision: 1.11 $
+* $Date: 2002/06/02 05:07:08 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -639,9 +639,72 @@ final public class UCA implements Comparator {
     }
     
     
-    static boolean isImplicitCE(int ce) {
-    	int primary = getPrimary(ce);
-    	return primary >= UNSUPPORTED_BASE && primary <= UNSUPPORTED_TOP;
+    static boolean isImplicitLeadCE(int ce) {
+    	return isImplicitLeadPrimary(getPrimary(ce));
+    }
+    
+    static boolean isImplicitLeadPrimary(int primary) {
+    	return primary >= UNSUPPORTED_BASE && primary < UNSUPPORTED_LIMIT;
+    }
+    
+            
+
+/*
+The formula from the UCA:
+
+BASE:
+
+FB40 CJK Ideograph 
+FB80 CJK Ideograph Extension A/B 
+FBC0 Any other code point 
+
+AAAA = BASE + (CP >> 15);
+BBBB = (CP & 0x7FFF) | 0x8000;The mapping given to CP is then given by:
+
+CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
+*/		
+    
+    /**
+     * Returns implicit value as pair, first part in high word; second part in low word
+     * So to get first part use (x >>> 16) -- remember the >>>!
+     * and to get the second part use (x & 0xFFFF)
+     */
+    
+    static void CodepointToImplicit(int cp, int[] output) {
+		int base = UNSUPPORTED_OTHER_BASE;
+        if (isCJK(cp)) base = UNSUPPORTED_CJK_BASE;
+        else if (isCJK_AB(cp)) base = UNSUPPORTED_CJK_AB_BASE;
+        output[0] = base + (cp >>> 15);
+        output[1] = (cp & 0x7FFF) | 0x8000;
+    }
+    
+    /**
+     * Takes implicit value as pair, first part in high word; second part in low word
+     * So to get first part use (x >>> 16) -- remember the >>>!
+     * and to get the second part use (x & 0xFFFF)
+     */
+    
+    static int ImplicitToCodePoint(int leadImplicit, int trailImplicit) {
+    	// could probably optimize all this, but it is not worth it.
+    	if (leadImplicit < UNSUPPORTED_BASE || leadImplicit >= UNSUPPORTED_LIMIT) {
+    		throw new IllegalArgumentException("Lead implicit out of bounds: " + Utility.hex(leadImplicit));
+    	}
+    	if ((trailImplicit & 0x8000) == 0) {
+    		throw new IllegalArgumentException("Trail implicit out of bounds: " + Utility.hex(trailImplicit));
+    	}
+    	int base;
+    	if (leadImplicit >= UNSUPPORTED_OTHER_BASE) base = UNSUPPORTED_OTHER_BASE;
+    	else if (leadImplicit >= UNSUPPORTED_CJK_AB_BASE) base = UNSUPPORTED_CJK_AB_BASE;
+    	else base = UNSUPPORTED_CJK_BASE;
+    	
+    	int result = ((leadImplicit - base) << 15) | (trailImplicit & 0x7FFF);
+    	
+    	if (result > 0x10FFFF) {
+    		throw new IllegalArgumentException("Resulting character out of  bounds: "
+    			+ Utility.hex(leadImplicit) + ", " + Utility.hex(trailImplicit) 
+    			+ " => " + result);
+    	}
+    	return result;
     }
     
     /**
@@ -785,9 +848,16 @@ final public class UCA implements Comparator {
 // =============================================================
 
     /**
+     * Used to composed Hangul and Han characters
+     */
+     
+    static final int NEUTRAL_SECONDARY = 0x20;
+    static final int NEUTRAL_TERTIARY = 0x02;
+    
+    /**
      * Temporary buffer used in getSortKey for the decomposed string
      */
-    StringBuffer decompositionBuffer = new StringBuffer();
+    private StringBuffer decompositionBuffer = new StringBuffer();
     
     /**
      * The collation element data is stored a couple of different structures.
@@ -798,20 +868,14 @@ final public class UCA implements Comparator {
      * table of simple collation elements, indexed by char.<br>
      * Exceptional cases: expanding, contracting, unsupported are handled as described below.
      */
-    int[] collationElements = new int[65536];
+    private int[] collationElements = new int[65536];
     
     /**
      * A special bit combination in a CE is used to reserve exception cases. This has the effect
      * of removing a small number of the primary key values out of the 65536 possible.
      */
-    static final int EXCEPTION_CE_MASK = 0xF8000000;
+    private static final int EXCEPTION_CE_MASK = 0xF8000000;
     
-    /**
-     * Used to composed Hangul and Han characters
-     */
-     
-    static final int NEUTRAL_SECONDARY = 0x20;
-    static final int NEUTRAL_TERTIARY = 0x02;
        
     /**
      * Any unsupported characters (those not in the UCA data tables) 
@@ -820,14 +884,14 @@ final public class UCA implements Comparator {
      * There are at least 34 values, so that we can use a range for surrogates
      * However, we do add to the first weight if we have surrogate pairs!
      */
-    public static final int UNSUPPORTED_CJK_BASE = 0xFF40;
-    public static final int UNSUPPORTED_CJK_AB_BASE = 0xFF80;
-    public static final int UNSUPPORTED_OTHER_BASE = 0xFFC0;
+    private static final int UNSUPPORTED_CJK_BASE = 0xFF40;
+    private static final int UNSUPPORTED_CJK_AB_BASE = 0xFF80;
+    private static final int UNSUPPORTED_OTHER_BASE = 0xFFC0;
     
-    public static final int UNSUPPORTED_BASE = UNSUPPORTED_CJK_BASE;
-    public static final int UNSUPPORTED_TOP = UNSUPPORTED_OTHER_BASE + 0x40;
+    private static final int UNSUPPORTED_BASE = UNSUPPORTED_CJK_BASE;
+    private static final int UNSUPPORTED_LIMIT = UNSUPPORTED_OTHER_BASE + 0x40;
     
-    static final int UNSUPPORTED = makeKey(UNSUPPORTED_BASE, NEUTRAL_SECONDARY, NEUTRAL_TERTIARY);
+    private static final int UNSUPPORTED = makeKey(UNSUPPORTED_BASE, NEUTRAL_SECONDARY, NEUTRAL_TERTIARY);
     
     // was 0xFFC20101;
     
@@ -838,7 +902,7 @@ final public class UCA implements Comparator {
      * to be looked up (with following characters) in the contractingTable.<br>
      * This isn't a MASK since there is exactly one value.
      */
-    static final int CONTRACTING = 0xFA310000;
+    private static final int CONTRACTING = 0xFA310000;
 
     /**
      * Expanding characters are marked with a exception bit combination
@@ -846,7 +910,7 @@ final public class UCA implements Comparator {
      * This means that they map to more than one CE, which is looked up in
      * the expansionTable by index. See EXCEPTION_INDEX_MASK
      */
-    static final int EXPANDING_MASK = 0xFA300000; // marks expanding range start
+    private static final int EXPANDING_MASK = 0xFA300000; // marks expanding range start
     
     /**
      * This mask is used to get the index from an EXPANDING exception.
@@ -860,12 +924,12 @@ final public class UCA implements Comparator {
      * as the table is built from the UCA data, they are narrowed in.
      * The first three values are used in building; the last two in testing.
     */
-    int variableLow = '\uFFFF';
-    int nonVariableLow = '\uFFFF'; // HACK '\u089A';
-    int variableHigh = '\u0000';
+    private int variableLow = '\uFFFF';
+    private int nonVariableLow = '\uFFFF'; // HACK '\u089A';
+    private int variableHigh = '\u0000';
     
-    int variableLowCE;  // used for testing against
-    int variableHighCE; // used for testing against
+    private int variableLowCE;  // used for testing against
+    private int variableHighCE; // used for testing against
     
     /**
      * Although a single character can expand into multiple CEs, we don't want to burden
@@ -875,19 +939,19 @@ final public class UCA implements Comparator {
      * will be used for the expansion. The implementation is as a stack; this just makes it
      * easy to generate.
      */
-    IntStack expandingTable = new IntStack(3600); // initial number is from compKeys
+    private IntStack expandingTable = new IntStack(3600); // initial number is from compKeys
         
     /**
      * For now, this is just a simple mapping of strings to collation elements.
      * The implementation depends on the contracting characters being "completed",
      * so that it can be efficiently determined when to stop looking.
      */
-    Hashtable contractingTable = new Hashtable();
+    private Hashtable contractingTable = new Hashtable();
     
     /**
      *  Special char value that means failed or terminated
      */
-    static final char NOT_A_CHAR = '\uFFFF';
+    private static final char NOT_A_CHAR = '\uFFFF';
     
     /**
      * Marks whether we are using the full data set, or an abbreviated version for
@@ -1006,37 +1070,19 @@ final public class UCA implements Comparator {
                 index++; // skip next char
                 bigChar = 0x10000 + ((ch - 0xD800) << 10) + (ch2 - 0xDC00); // extract value
             }
-            
 
-/*
-The formula from the UCA:
-
-BASE:
-
-FB40 CJK Ideograph 
-FB80 CJK Ideograph Extension A/B 
-FBC0 Any other code point 
-
-AAAA = BASE + (CP >> 15);
-BBBB = (CP & 0x7FFF) | 0x8000;The mapping given to CP is then given by:
-
-CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
-*/		
-			// divide the three cases
+			// find the implicit values; returned in 0 and 1
+			int[] implicit = new int[2];
+			CodepointToImplicit(bigChar, implicit);
 			
-			int base = UNSUPPORTED_OTHER_BASE;
-            if (isCJK(bigChar)) base = UNSUPPORTED_CJK_BASE;
-            else if (isCJK_AB(bigChar)) base = UNSUPPORTED_CJK_AB_BASE;
-            
             // Now compose the two keys
-            // first push BBBB
+            // first push BBBB, which is #1
                         
-            // HACK: expandingStack.push(makeKey((bigChar & 0x7FFF) | 0x8000, 0, 0));
-            expandingStack.push(makeKey((bigChar & 0x7FFF) | 0x8000, NEUTRAL_SECONDARY, NEUTRAL_TERTIARY));
+            expandingStack.push(makeKey(implicit[1], NEUTRAL_SECONDARY, NEUTRAL_TERTIARY));
             
-            // now return AAAA
+            // now return AAAA, which is #0
             
-            return makeKey(base + (bigChar >>> 15), NEUTRAL_SECONDARY, NEUTRAL_TERTIARY);
+            return makeKey(implicit[0], NEUTRAL_SECONDARY, NEUTRAL_TERTIARY);
 
         }
         if (ce == CONTRACTING) {
@@ -1113,17 +1159,64 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         return expandingStack.pop(); // pop last (guaranteed to exist!)
     }
     
-    public final boolean isCJK(int bigChar) {
-        return (0x4E00 <= bigChar && bigChar <= 0x9FFF);
+    // Neither Mapped nor Composite CJK: [\u3400-\u4DB5\u4E00-\u9FA5\U00020000-\U0002A6D6]
+    
+    public static boolean isCJK(int cp) {
+        return (CJK_BASE <= cp && cp < CJK_LIMIT 
+        || cp == 0xFA0E	// compat characters that don't decompose.
+        || cp == 0xFA0F
+        || cp == 0xFA11
+        || cp == 0xFA13
+        || cp == 0xFA14
+        || cp == 0xFA1F
+        || cp == 0xFA21
+        || cp == 0xFA23
+        || cp == 0xFA24
+        || cp == 0xFA27
+        || cp == 0xFA28
+        || cp == 0xFA29
+        || cp == 0xFA2E
+        || cp == 0xFA2F
+        );
     }
-    public final boolean isCJK_AB(int bigChar) {
-        return (0x3400 <= bigChar && bigChar <= 0x4DBF
-             || 0x20000 <= bigChar && bigChar <= 0x2A6DF);
+    
+    public static final int 
+    	CJK_BASE = 0x4E00,
+    	CJK_LIMIT = 0x9FFF+1,
+    	CJK_BASE_COMPAT_USED = 0xFA0E,
+    	CJK_LIMIT_COMPAT_USED = 0xFA2F+1,
+    	CJK_A_BASE = 0x3400,
+    	CJK_A_LIMIT = 0x4DBF+1,
+    	CJK_B_BASE = 0x20000,
+    	CJK_B_LIMIT = 0x2A6DF+1;
+    
+    public static final boolean isCJK_AB(int bigChar) {
+        return (CJK_A_BASE <= bigChar && bigChar < CJK_A_LIMIT
+             || CJK_B_BASE <= bigChar && bigChar < CJK_B_LIMIT);
     }
 /*
+2E80..2EFF; CJK Radicals Supplement
+2F00..2FDF; Kangxi Radicals
+
 3400..4DBF; CJK Unified Ideographs Extension A
 4E00..9FFF; CJK Unified Ideographs
+F900..FAFF; CJK Compatibility Ideographs
+
 20000..2A6DF; CJK Unified Ideographs Extension B
+2F800..2FA1F; CJK Compatibility Ideographs Supplement
+
+Compat:
+# F900..FA0D     [270] CJK COMPATIBILITY IDEOGRAPH-F900..CJK COMPATIBILITY IDEOGRAPH-FA0D
+# FA10                 CJK COMPATIBILITY IDEOGRAPH-FA10
+# FA12                 CJK COMPATIBILITY IDEOGRAPH-FA12
+# FA15..FA1E      [10] CJK COMPATIBILITY IDEOGRAPH-FA15..CJK COMPATIBILITY IDEOGRAPH-FA1E
+# FA20                 CJK COMPATIBILITY IDEOGRAPH-FA20
+# FA22                 CJK COMPATIBILITY IDEOGRAPH-FA22
+# FA25..FA26       [2] CJK COMPATIBILITY IDEOGRAPH-FA25..CJK COMPATIBILITY IDEOGRAPH-FA26
+# FA2A..FA2D       [4] CJK COMPATIBILITY IDEOGRAPH-FA2A..CJK COMPATIBILITY IDEOGRAPH-FA2D
+# FA30..FA6A      [59] CJK COMPATIBILITY IDEOGRAPH-FA30..CJK COMPATIBILITY IDEOGRAPH-FA6A
+# 2F800..2FA1D   [542] CJK COMPATIBILITY IDEOGRAPH-2F800..CJK COMPATIBILITY IDEOGRAPH-2FA1D
+
 */
     
     private final boolean isHangul(int bigChar) {
@@ -1348,6 +1441,8 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         IntStack tempStack = new IntStack(100); // used for reversal
         StringBuffer multiChars = new StringBuffer(); // used for contracting chars
         String inputLine = "";
+        boolean[] wasImplicitLeadPrimary = new boolean[1];
+            
         while (true) try {
             inputLine = in.readLine();
             if (inputLine == null) break;       // means file is done
@@ -1413,8 +1508,10 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
             	System.out.println("debug");
             }
             
-            int ce = getCEFromLine(value, line, position, record);
-            int ce2 = getCEFromLine(value, line, position, record);
+            wasImplicitLeadPrimary[0] = false;
+            
+            int ce = getCEFromLine(value, line, position, record, wasImplicitLeadPrimary);
+            int ce2 = getCEFromLine(value, line, position, record, wasImplicitLeadPrimary);
             if (CHECK_UNIQUE && (ce2 == TERMINATOR || CHECK_UNIQUE_EXPANSIONS)) {
                 if (!CHECK_UNIQUE_VARIABLES) {
                     checkUnique(value, ce, 0, inputLine); // only need to check first value
@@ -1433,7 +1530,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
                 // set collationElement to exception value, plus index
                 ce = EXPANDING_MASK | expandingTable.getTop();
                 while (true) {
-                    ce2 = getCEFromLine(value, line, position, record);
+                    ce2 = getCEFromLine(value, line, position, record, wasImplicitLeadPrimary);
                     if (ce2 == TERMINATOR) break;
                     tempStack.push(ce2);
                 } 
@@ -1700,7 +1797,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
     boolean haveVariableWarning = false;
     boolean haveZeroVariableWarning = false;
     
-    private int getCEFromLine(char value, String line, int[] position, boolean record) {
+    private int getCEFromLine(char value, String line, int[] position, boolean record, boolean[] lastWasImplicitLead) {
         int start = line.indexOf('[', position[0]);
         if (start == -1) return TERMINATOR;
         boolean variable = line.charAt(start+1) == '*';
@@ -1711,7 +1808,13 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         int key2 = Integer.parseInt(line.substring(start+7,start+11),16);
         int key3 = Integer.parseInt(line.substring(start+12,start+16),16);
         if (record) {
-            primarySet.set(key1);
+        	if (lastWasImplicitLead[0]) {
+        		lastWasImplicitLead[0] = false;
+            } else if (isImplicitLeadPrimary(key1)) {
+            	lastWasImplicitLead[0] = true;
+            } else {
+            	primarySet.set(key1);
+            }
             secondarySet.set(key2);
             secondaryCount[key2]++;
             tertiarySet.set(key3);
