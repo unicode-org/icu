@@ -541,22 +541,34 @@ u_fgets(UChar        *s,
     return s;
 }
 
+U_CFUNC UBool U_EXPORT2
+ufile_getch(UFILE *f, UChar *ch)
+{
+    UBool isValidChar = FALSE;
+
+    *ch = U_EOF;
+    /* if we have an available character in the buffer, return it */
+    if(f->str.fPos < f->str.fLimit){
+        *ch = *(f->str.fPos)++;
+        isValidChar = TRUE;
+    }
+    else if (f) {
+        /* otherwise, fill the buffer and return the next character */
+        ufile_fill_uchar_buffer(f);
+        if(f->str.fPos < f->str.fLimit) {
+            *ch = *(f->str.fPos)++;
+            isValidChar = TRUE;
+        }
+    }
+    return isValidChar;
+}
+
 U_CAPI UChar U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fgetc(UFILE        *f)
 {
-    /* if we have an available character in the buffer, return it */
-    if(f->str.fPos < f->str.fLimit)
-        return *(f->str.fPos)++;
-    /* otherwise, fill the buffer and return the next character */
-    else {
-        ufile_fill_uchar_buffer(f);
-        if(f->str.fPos < f->str.fLimit) {
-            return *(f->str.fPos)++;
-        }
-        else {
-            return U_EOF;
-        }
-    }
+    UChar ch;
+    ufile_getch(f, &ch);
+    return ch;
 }
 
 /* Read a UChar from a UFILE and process escape sequences */
