@@ -88,7 +88,7 @@ public:
    * Destructor.
    * @stable ICU 2.0
    */
-  ~UCharCharacterIterator();
+  virtual ~UCharCharacterIterator();
 
   /**
    * Assignment operator.  *this is altered to iterate over the sane
