@@ -1586,7 +1586,11 @@ static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
                    goto fail;
                }
            }
-           if ((primary != 0 && primary < primarymax) || ((primary & 0xFF) == 0xFF) || (((primary>>8) & 0xFF) == 0xFF) || (primary >= 0xFE00 && !isContinuation(ce))) {
+           if ((primary != 0 && primary < primarymax) 
+               || ((primary & 0xFF) == 0xFF) || (((primary>>8) & 0xFF) == 0xFF) 
+               || ((primary & 0xFF) && ((primary & 0xFF) <= 0x03)) 
+               || (((primary>>8) & 0xFF) && ((primary>>8) & 0xFF) <= 0x03)
+               || (primary >= 0xFE00 && !isContinuation(ce))) {
                log_err("UCA primary weight out of bounds: %04X for string starting with %04X\n", 
                    primary, codepoints[0]);
                goto fail;
