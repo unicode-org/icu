@@ -795,6 +795,7 @@ static void TestAddRollExtensive()
         return;
     }
     status=U_ZERO_ERROR;
+    ucal_clear(cal);
     ucal_setDateTime(cal, 1999, UCAL_FEBRUARY, 28, 10, 30, 45,  &status);
     if(U_FAILURE(status)){
         log_err("error is setting the datetime: %s\n", u_errorName(status));
