@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ByteArrayWrapper.java,v $ 
- * $Date: 2003/12/01 21:17:31 $ 
- * $Revision: 1.3 $
+ * $Date: 2004/01/23 20:33:39 $ 
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -98,7 +98,7 @@ public class ByteArrayWrapper
     public final void append(byte[] src, int start, int limit) 
     {
         int len = limit - start;
-        ensureCapacity(len);
+        ensureCapacity(size + len);
         copyBytes(src, start, bytes, size, len);
         size += len;
     }
