@@ -30,7 +30,7 @@
 
 void writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
 {
-  char *p, *baseName;
+  const char *p, *baseName;
   char tmp[1024];
   char stanza[1024];
   char cfile[1024];
@@ -39,7 +39,6 @@ void writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
   CharList *parents = NULL, *commands = NULL;
 
   infiles = o->filePaths;
-
 
   for(;infiles;infiles = infiles->next) {
     baseName = findBasename(infiles->str);
