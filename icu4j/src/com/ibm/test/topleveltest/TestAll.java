@@ -62,7 +62,7 @@ public class TestAll extends TestFmwk {
 		run(new com.ibm.test.translit.TransliteratorTest());
 	}
 	
-	private void run(TestFmwk test) {
+	private void run(TestFmwk test) throws Exception {
 		test.setParent(this);
 		test.run(new String[0]);
 	}
