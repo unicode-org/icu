@@ -295,10 +295,12 @@ int main(int argc, char* argv[])
             "\t-c or --copyright   include a copyright notice\n"
             "\t-d or --destdir     destination directory, followed by the path\n"
             "\t-v or --verbose     Turn on verbose output\n",
-            "\t-p or --pkgname     sets the 'package' name for output files.  If ICUDATA, then the default\n"
-                "\t                    icu package name will be used.\n"
-			"\t-t or --touchfile   Generate additional small file without packagename, for nmake\n",
             argv[0]);
+        fprintf(stderr,
+            "\t-p or --pkgname     sets the 'package' name for output files.\n"
+            "\t                    If name is ICUDATA, then the default icu package\n"
+            "\t                    name will be used.\n"
+            "\t-t or --touchfile   Generate additional small file without packagename, for nmake\n");
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
@@ -314,7 +316,7 @@ int main(int argc, char* argv[])
 
    if(!options[6].doesOccur)
     {
-        fprintf(stderr, "%s :  option -p (package name) is required.\n", 
+        fprintf(stderr, "%s :  option -p (package name) is required.\n",
                 argv[0]);
         exit(1);
     }
@@ -329,12 +331,12 @@ int main(int argc, char* argv[])
         {
             pkgName = NULL;
 
-			if(TOUCHFILE)
-			{
-				fprintf(stderr, "%s: Don't use touchfile option with an empty packagename.\n",
-							argv[0]);
-				exit(1);
-			}
+            if(TOUCHFILE)
+            {
+                fprintf(stderr, "%s: Don't use touchfile option with an empty packagename.\n",
+                        argv[0]);
+                exit(1);
+            }
         }
     }
 
@@ -404,10 +406,10 @@ int main(int argc, char* argv[])
       uprv_strcpy(cnvName, outBasename);
 
       if(TOUCHFILE)
-	  {
-		  uprv_strcpy(touchFileName, outBasename);
-		  uprv_strcat(touchFileName, ".cnv");
-	  }
+      {
+          uprv_strcpy(touchFileName, outBasename);
+          uprv_strcat(touchFileName, ".cnv");
+      }
 
       if(pkgName != NULL)
       {
@@ -416,7 +418,7 @@ int main(int argc, char* argv[])
           uprv_strcat(outBasename, "_");
           uprv_strcat(outBasename, cnvName);
       }
-                      
+
 
       /*Adds the target extension*/
       uprv_strcat(outBasename, CONVERTER_FILE_EXTENSION);
@@ -460,27 +462,27 @@ int main(int argc, char* argv[])
 
           writeConverterData(mySharedData, cnvNameWithPkg, destdir, &err);
           ((NewConverter *)mySharedData->table)->close((NewConverter *)mySharedData->table);
-		  if(TOUCHFILE)
-		  {
-			  FileStream *q;
-			  char msg[1024];
-			  
-			  sprintf(msg, "This empty file tells nmake that %s in package %s has been updated.\n",
-					cnvName, pkgName);
+          if(TOUCHFILE)
+          {
+              FileStream *q;
+              char msg[1024];
 
-			  q = T_FileStream_open(touchFileName, "w");
-			  if(q == NULL)
-			  {
-				  fprintf(stderr, "Error writing touchfile \"%s\"\n", touchFileName);
-				  err = U_FILE_ACCESS_ERROR;
-			  }
+              sprintf(msg, "This empty file tells nmake that %s in package %s has been updated.\n",
+                  cnvName, pkgName);
 
-			  else
-			  {
-				  T_FileStream_write(q, msg, uprv_strlen(msg));
-				  T_FileStream_close(q);
-			  }
-		  }
+              q = T_FileStream_open(touchFileName, "w");
+              if(q == NULL)
+              {
+                  fprintf(stderr, "Error writing touchfile \"%s\"\n", touchFileName);
+                  err = U_FILE_ACCESS_ERROR;
+              }
+
+              else
+              {
+                  T_FileStream_write(q, msg, uprv_strlen(msg));
+                  T_FileStream_close(q);
+              }
+          }
 
     /* write the information data */
           uprv_free((UConverterStaticData *)mySharedData->staticData);
@@ -878,52 +880,52 @@ void loadTableFromFile(FileStream* convFile, UConverterSharedData* sharedData, U
 /*creates a UConverterStaticData, fills in necessary links to it the appropriate function pointers*/
 UConverterSharedData* createConverterFromTableFile(const char* converterName, UErrorCode* err)
 {
-  FileStream* convFile = NULL;
-  UConverterSharedData* mySharedData = NULL;
-  UConverterStaticData* myStaticData = NULL;
+    FileStream* convFile = NULL;
+    UConverterSharedData* mySharedData = NULL;
+    UConverterStaticData* myStaticData = NULL;
 
-  if (U_FAILURE(*err)) return NULL;
+    if (U_FAILURE(*err)) return NULL;
 
-  convFile = T_FileStream_open(converterName, "r");
-  if (convFile == NULL)
+    convFile = T_FileStream_open(converterName, "r");
+    if (convFile == NULL)
     {
-      *err = U_FILE_ACCESS_ERROR;
-      return NULL;
+        *err = U_FILE_ACCESS_ERROR;
+        return NULL;
     }
 
 
-  mySharedData = (UConverterSharedData*) uprv_malloc(sizeof(UConverterSharedData));
-  if (mySharedData == NULL)
+    mySharedData = (UConverterSharedData*) uprv_malloc(sizeof(UConverterSharedData));
+    if (mySharedData == NULL)
     {
-      *err = U_MEMORY_ALLOCATION_ERROR;
-      T_FileStream_close(convFile);
-      return NULL;
+        *err = U_MEMORY_ALLOCATION_ERROR;
+        T_FileStream_close(convFile);
+        return NULL;
     }
 
-  uprv_memset(mySharedData, 0, sizeof(UConverterSharedData));
+    uprv_memset(mySharedData, 0, sizeof(UConverterSharedData));
 
-  mySharedData->structSize = sizeof(UConverterSharedData);
+    mySharedData->structSize = sizeof(UConverterSharedData);
 
-  myStaticData =  (UConverterStaticData*) uprv_malloc(sizeof(UConverterStaticData));
-  if (myStaticData == NULL)
+    myStaticData =  (UConverterStaticData*) uprv_malloc(sizeof(UConverterStaticData));
+    if (myStaticData == NULL)
     {
-      *err = U_MEMORY_ALLOCATION_ERROR;
-      T_FileStream_close(convFile);
-      return NULL;
+        *err = U_MEMORY_ALLOCATION_ERROR;
+        T_FileStream_close(convFile);
+        return NULL;
     }
-  uprv_memset(myStaticData, 0, sizeof(UConverterStaticData));
-  mySharedData->staticData = myStaticData;
-  myStaticData->structSize = sizeof(UConverterStaticData);
-/*  mySharedData->staticDataOwned = FALSE; */ /* not owned if in udata */
-  mySharedData->sharedDataCached = FALSE;
+    uprv_memset(myStaticData, 0, sizeof(UConverterStaticData));
+    mySharedData->staticData = myStaticData;
+    myStaticData->structSize = sizeof(UConverterStaticData);
+    /*  mySharedData->staticDataOwned = FALSE; */ /* not owned if in udata */
+    mySharedData->sharedDataCached = FALSE;
 
-  mySharedData->dataMemory = NULL; /* for init */
+    mySharedData->dataMemory = NULL; /* for init */
 
-  readHeaderFromFile(mySharedData, convFile, converterName, err);
+    readHeaderFromFile(mySharedData, convFile, converterName, err);
 
-  if (U_FAILURE(*err)) return NULL;
+    if (U_FAILURE(*err)) return NULL;
 
-  switch (myStaticData->conversionType)
+    switch (myStaticData->conversionType)
     {
     case UCNV_SBCS:
       {
@@ -1013,10 +1015,10 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
       }
 
     default :
-      fprintf(stderr, "error: <uconv_class> omitted\n");
-      *err = U_INVALID_TABLE_FORMAT;
-      mySharedData->table = NULL;
-      break;
+        fprintf(stderr, "error: <uconv_class> omitted\n");
+        *err = U_INVALID_TABLE_FORMAT;
+        mySharedData->table = NULL;
+        break;
     };
 
     if(U_SUCCESS(*err) && mySharedData->table != NULL)
@@ -1024,9 +1026,9 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
         loadTableFromFile(convFile, mySharedData, err);
     }
 
-  T_FileStream_close(convFile);
+    T_FileStream_close(convFile);
 
-  return mySharedData;
+    return mySharedData;
 }
 
 /*
