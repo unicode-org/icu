@@ -155,7 +155,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
 #endif
         }
 
-#if defined XP_MAC || defined __alpha__ || defined OS400
+#if defined XP_MAC || defined __alpha__ || defined OS400 || defined U_OSF
 // These machines don't support denormalized doubles,
 // so the low-end range doesn't match Windows
         test(fmt, randomDouble(1e-292));
