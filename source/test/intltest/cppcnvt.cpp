@@ -46,14 +46,14 @@ void ConvertTest::TestConvert()
     FILE*               ucs_file_in         = NULL;
     UChar               BOM                 = 0x0000;
     UChar               myUChar             = 0x0000;
-    char                mytarget[MAX_FILE_LEN];
-    char*               mytarget_1 = mytarget;
+    char*               mytarget            = new char[MAX_FILE_LEN];
+    char*               mytarget_1          = mytarget;
     char*               mytarget_use        = mytarget;
     char*               consumed            = NULL;
-    char                output_cp_buffer[MAX_FILE_LEN];
-    UChar               ucs_file_buffer[MAX_FILE_LEN];
+    char*               output_cp_buffer    = new char[MAX_FILE_LEN];
+    UChar*              ucs_file_buffer     = new UChar[MAX_FILE_LEN];
     UChar*              ucs_file_buffer_use = ucs_file_buffer;
-    UChar               my_ucs_file_buffer[MAX_FILE_LEN];
+    UChar*              my_ucs_file_buffer  = new UChar[MAX_FILE_LEN];
     UChar*              my_ucs_file_buffer_1 = my_ucs_file_buffer;
     int32_t             i                   = 0;
     int8_t              ii                  = 0;
@@ -75,7 +75,7 @@ void ConvertTest::TestConvert()
        "IBM-949"
     };
 
-    const uint16_t CodePageNumberToTest[NUM_CODEPAGE] =
+    const uint16_t   CodePageNumberToTest[NUM_CODEPAGE] =
     {
         949
     };
@@ -617,7 +617,10 @@ void ConvertTest::TestConvert()
             logln("jitterbug 778 test ok");
         }
     }
-
+    delete []mytarget;
+    delete []output_cp_buffer;
+    delete []ucs_file_buffer;
+    delete []my_ucs_file_buffer;
 }
 
 void WriteToFile(const UnicodeString *a, FILE *myfile)
