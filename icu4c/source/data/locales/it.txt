@@ -99,6 +99,7 @@ it {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    ShortLanguage { "ita" }
     zoneStrings { 
@@ -216,5 +217,11 @@ it {
         "    1000: omille; omill[>%%with-i>];\n"
         "    2000: <%%with-o<mila; <%%with-o<mil[>%%with-a>];\n"
         "    100,000: =%main=;\n" 
+    }
+
+    // Currency display names
+    Currencies {
+        CHF { "SFr.", "CHF" }
+        ITL { "L.", "ITL" }
     }
 }

@@ -7,11 +7,6 @@
 
 sl_SI {
     Version{ "1.0" }
-    CurrencyElements { 
-        "SIT",
-        "SIT",
-        ",",
-    }
 //    LocaleString { "sl_SI" }
 //    NumberPatterns { 
 //        "#,##0.###;-#,##0.###",

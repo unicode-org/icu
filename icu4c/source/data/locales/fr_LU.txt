@@ -7,11 +7,6 @@
 
 fr_LU {
     Version{"1.0"}
-    CurrencyElements { 
-        "\u20AC",
-        "EUR",
-        ",",
-    }
     DateTimeElements:intvector {
         2,
         1,
@@ -28,8 +23,14 @@ fr_LU {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    LocaleString { "fr_LU" }
 //    ShortCountry { "LUX" }
     LocaleID:int { 0x140c }
+
+    // Currency display names
+    Currencies {
+        LUF { "F", "LUF" }
+    }
 }

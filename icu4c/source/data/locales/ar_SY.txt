@@ -7,11 +7,6 @@
 
 ar_SY {
     Version{ "1.0" }
-    CurrencyElements { 
-        "\u0644.\u0633.\u200F",
-        "SYP",
-        ".",
-    }
     DayAbbreviations { 
         "\u0627\u0644\u0623\u062D\u062F",
         "\u0627\u0644\u0627\u062B\u0646\u064A\u0646",

@@ -26,8 +26,9 @@ en_US_POSIX {
         "-",
         "E",
         "0/00",
-        "INF",  // Older programs can parse infinity this way.
+        "INF",
         "\uFFFD",
+        ".",
     }
 //    LocaleString { "en_US_POSIX" }
     LocaleID:int { 0x7F }

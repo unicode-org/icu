@@ -7,11 +7,6 @@
 
 lv_LV {
     Version{ "1.1" }
-    CurrencyElements { 
-        "Ls",
-        "LVL",
-        ",",
-    }
 //    LocaleString { "lv_LV" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

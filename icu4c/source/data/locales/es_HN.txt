@@ -7,11 +7,6 @@
 
 es_HN {
     Version { "1.0" }
-    CurrencyElements { 
-        "L.",
-        "HNL",
-        ".",
-    }
     DateTimePatterns { 
         "hh:mm:ss a z",
         "hh:mm:ss a z",

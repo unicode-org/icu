@@ -63,8 +63,9 @@ id {
         "-",
         "E",
         "\u2030",
-        "\u221e",
-        "\ufffd",
+        "\u221E",
+        "\uFFFD",
+        ",",
     }
     NumberPatterns {
         "#,##0.###;-#,##0.###",
@@ -84,4 +85,9 @@ id {
     // ShortLanguage { }
     // localPatternChars{}
     //
+
+    // Currency display names
+    Currencies {
+        IDR { "Rp", "IDR" }
+    }
 }

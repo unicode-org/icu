@@ -8,11 +8,6 @@
 af_ZA {
     Version { "1.0" }
 
-    CurrencyElements { 
-        "R",
-        "ZAR",
-        ".",
-    }
     DateTimePatterns { 
         "h:mm:ss a",
         "h:mm:ss a",

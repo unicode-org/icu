@@ -7,11 +7,6 @@
 
 cs_CZ {
     Version{ "1.0" }
-    CurrencyElements { 
-        "K\u010D",
-        "CZK",
-        ",",
-    }
 //    LocaleString { "cs_CZ" }
     NumberPatterns { 
         "#,##0.##;-#,##0.##",

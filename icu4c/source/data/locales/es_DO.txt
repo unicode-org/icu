@@ -7,11 +7,6 @@
 
 es_DO {
     Version { "1.0" }
-    CurrencyElements { 
-        "RD$",
-        "DOP",
-        ".",
-    }
     DateTimePatterns { 
         "hh:mm:ss a z",
         "hh:mm:ss a z",

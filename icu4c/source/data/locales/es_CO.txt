@@ -7,11 +7,6 @@
 
 es_CO {
     Version { "1.0" }
-    CurrencyElements { 
-        "$",
-        "COP",
-        ",",
-    }
     DateTimePatterns { 
         "hh:mm:ss a z",
         "hh:mm:ss a z",
@@ -37,6 +32,12 @@ es_CO {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    ShortCountry { "COL" }
+
+    // Currency display names
+    Currencies {
+        COP { "$", "COP" }
+    }
 }

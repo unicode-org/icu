@@ -21,13 +21,6 @@ om_ET {
         "WD",  // WD = Waaree Dura
         "WB",  // WD = Waaree Booda
     }
-    // CountryISBNNumber { "231" }
-    // CountryNumber { "231" }
-    CurrencyElements {
-        "$",
-        "ETB",
-        ".",
-    }
     DateTimePatterns { 
         "h:mm:ss a",
         "h:mm:ss a",
@@ -64,4 +57,9 @@ om_ET {
     //    Width { "210" }
     //    Units { "mm" }
     // }
+
+    // Currency display names
+    Currencies {
+        ETB { "$", "ETB" }
+    }
 }

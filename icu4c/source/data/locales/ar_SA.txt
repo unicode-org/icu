@@ -7,11 +7,6 @@
 
 ar_SA {
     Version{"1.0"}
-    CurrencyElements { 
-        "\u0631.\u0633.\u200F",
-        "SAR",
-        ".",
-    }
 //    LocaleString { "ar_SA" }
 //    ShortCountry { "SAU" }
     LocaleID:int { 0x0401 }

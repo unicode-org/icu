@@ -90,4 +90,9 @@ so{
         "dd/MM/yy",
         "{1} {0}",
     }
+
+    // Currency display names
+    Currencies {
+        KES { "Ksh", "KES" }
+    }
 }

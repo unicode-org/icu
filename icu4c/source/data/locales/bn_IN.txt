@@ -8,11 +8,6 @@
 
 bn_IN {
     Version{ "1.1" }
-    CurrencyElements { 
-        "\u099F\u09BE\u0995\u09BE",
-        "INR",
-        ".",
-    }
     DateTimePatterns { 
         "h:mm:ss a z",
         "h:mm:ss a z",

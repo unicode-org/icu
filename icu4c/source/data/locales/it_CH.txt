@@ -7,11 +7,6 @@
 
 it_CH {
     Version{ "1.0" }
-    CurrencyElements { 
-        "SFr.",
-        "CHF",
-        ".",
-    }
     DateTimePatterns { 
         "HH.mm' h' z",
         "HH:mm:ss z",
@@ -37,6 +32,7 @@ it_CH {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ".",
     }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

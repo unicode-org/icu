@@ -90,6 +90,7 @@ ca {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    ShortLanguage { "cat" }
     localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
@@ -107,4 +108,9 @@ ca {
 //    }
     ExemplarCharacters { "[a-z \u00e9 \u00ed \u00f3 \u00fa \u00e0 \u00e8 \u00f2 \u00ef \u00fc \u0140 \u00e7 \u00f1]" }
 
+
+    // Currency display names
+    Currencies {
+        ESP { "Pts", "ESP" }
+    }
 }

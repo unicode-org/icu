@@ -7,11 +7,6 @@
 
 sr_YU {
     Version{ "1.0" }
-    CurrencyElements { 
-        "\u0414\u0438\u043D",
-        "YUN",
-        ",",
-    }
 //    LocaleString { "sr_YU" }
     /* Discarding duplicate data for tag: NumberPatterns */
 //    ShortCountry { "YUG" }

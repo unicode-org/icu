@@ -7,11 +7,6 @@
 
 ko_KR {
     Version { "1.2" }
-    CurrencyElements { 
-        "\u20A9",
-        "KRW",
-        ".",
-    }
 //    LocaleString { "ko_KR" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

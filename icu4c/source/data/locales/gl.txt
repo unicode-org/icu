@@ -56,7 +56,6 @@ gl {
     NumberElements { 
         ",",
         ".",
-// not used - but cannot be empty
         ";",
         "%",
         "0",
@@ -66,6 +65,7 @@ gl {
         "‰",
         "∞",
         "�",
+        ",",
     }
     LocaleID:int { 0x56 }
 //    LocaleScript{ 
@@ -82,4 +82,9 @@ gl {
     // localPatternChars{}
     //
 
+
+    // Currency display names
+    Currencies {
+        ESP { "Pta", "ESP" }
+    }
 }

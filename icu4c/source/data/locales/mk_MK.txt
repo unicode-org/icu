@@ -7,11 +7,6 @@
 
 mk_MK {
     Version{ "1.1" }
-    CurrencyElements { 
-        "Den",
-        "MKD",
-        ",",
-    }
 //    LocaleString { "mk_MK" }
     NumberPatterns { 
         "#,##0.###;(#,##0.###)",

@@ -28,11 +28,6 @@ de_CH {
         ZW { "Zimbabwe" }
         GB { "Grossbritannien" }
     }
-    CurrencyElements { 
-        "SFr.",
-        "CHF",
-        ".",
-    }
     LocaleID:int { 0x0807 }
 //    LocaleString { "de_CH" }
     NumberElements { 
@@ -47,6 +42,7 @@ de_CH {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ".",
     }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

@@ -87,4 +87,9 @@ af {
     // ShortLanguage { }
     // localPatternChars{}
     //
+
+    // Currency display names
+    Currencies {
+        ZAR { "R", "ZAR" }
+    }
 }

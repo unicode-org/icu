@@ -89,6 +89,7 @@ nl {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    ShortLanguage { "nld" }
     zoneStrings { 
@@ -132,5 +133,11 @@ nl {
         "1,000,000: << miljoen[ >>];\n"
         "1,000,000,000: << biljoen[ >>];\n"
         "1,000,000,000,000: =#,##0="
+    }
+
+    // Currency display names
+    Currencies {
+        BEF { "BF", "BEF" }
+        NLG { "fl", "NLG" }
     }
 }

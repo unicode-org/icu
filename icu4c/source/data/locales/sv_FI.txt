@@ -7,11 +7,6 @@
 
 sv_FI {
     Version { "1.0" }
-    CurrencyElements { 
-        "\u20AC",
-        "EUR",
-        ",",
-    }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
         "#,##0.00 \u00A4;-#,##0.00 \u00A4",

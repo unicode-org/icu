@@ -990,6 +990,11 @@ mt {
     }
 
 
+
+    // Currency display names
+    Currencies {
+        MTL { "Lm", "MTL" }
+    }
 }
 
 

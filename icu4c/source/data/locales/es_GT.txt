@@ -7,11 +7,6 @@
 
 es_GT {
     Version { "1.0" }
-    CurrencyElements { 
-        "Q",
-        "GTQ",
-        ".",
-    }
     DateTimePatterns { 
         "hh:mm:ss a z",
         "hh:mm:ss a z",

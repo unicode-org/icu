@@ -493,7 +493,7 @@ void NumberFormatTest::TestCurrencyObject() {
                    1234.56, CharsToUnicodeString("\\uFFE51,235")); // Yen
 
     expectCurrency(*fmt, Locale("fr", "CH", ""),
-                   1234.56, "CHF1,234.50"); // 0.25 rounding
+                   1234.56, "SwF1,234.55"); // 0.05 rounding
 
     expectCurrency(*fmt, Locale::getUS(),
                    1234.56, "$1,234.56");
@@ -513,7 +513,7 @@ void NumberFormatTest::TestCurrencyObject() {
                    1234.56, CharsToUnicodeString("1 235 \\uFFE5")); // Yen
 
     expectCurrency(*fmt, Locale("fr", "CH", ""),
-                   1234.56, "1 234,50 CHF"); // 0.25 rounding
+                   1234.56, "1 234,55 sFr."); // 0.05 rounding
 
     expectCurrency(*fmt, Locale::getUS(),
                    1234.56, "1 234,56 USD");

@@ -16,11 +16,6 @@ en_GB {
 //        AU { "Australia" }
 //        NZ { "New Zealand" }
 //    }
-    CurrencyElements { 
-        "\u00A3",
-        "GBP",
-        ".",
-    }
     DateTimeElements:intvector {
         2,
         1,

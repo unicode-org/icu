@@ -7,11 +7,6 @@
 
 hr_HR {
     Version{ "1.2" }
-    CurrencyElements { 
-        "Kn",
-        "HRK",
-        ",",
-    }
 //    LocaleString { "hr_HR" }
 //    NumberPatterns { 
 //        "#,##0.###;-#,##0.###",

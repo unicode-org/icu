@@ -7,11 +7,6 @@
 
 pt_PT {
     Version{ "1.1" }
-    CurrencyElements { 
-        "\u20AC",
-        "EUR",
-        "$",
-    }
 //    LocaleString { "pt_PT" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
@@ -21,4 +16,19 @@ pt_PT {
     }
 //    ShortCountry { "PRT" }
     LocaleID:int { 0x0816 }
+
+    NumberElements {
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        "$",
+    }
 }

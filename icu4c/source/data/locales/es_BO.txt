@@ -7,11 +7,6 @@
 
 es_BO {
     Version { "1.0" }
-    CurrencyElements { 
-        "$b",
-        "BOB",
-        ",",
-    }
     DateTimePatterns { 
         "hh:mm:ss a z",
         "hh:mm:ss a z",
@@ -37,6 +32,7 @@ es_BO {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    ShortCountry { "BOL" }
 }

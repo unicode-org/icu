@@ -13,13 +13,6 @@
 
 so_SO {
     Version{ "1.0" }
-    // CountryISBNNumber { "706" }
-    // CountryNumber { "706" }
-    CurrencyElements {
-        "$",
-        "SOS",
-        ".",
-    }
     // Measurement { "Metric" }
 //    NumberElements {
 //        ".",
@@ -45,4 +38,9 @@ so_SO {
     //    Width { "210" }
     //    Units { "mm" }
     // }
+
+    // Currency display names
+    Currencies {
+        SOS { "$", "SOS" }
+    }
  }

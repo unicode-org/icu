@@ -245,6 +245,11 @@ kok {
 //    CollationElements {
 //            ""
 //      }
+
+    // Currency display names
+    Currencies {
+        INR { "\u0930\u0941", "INR" }
+    }
 }
 
 

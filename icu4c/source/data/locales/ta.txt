@@ -256,5 +256,10 @@ ta {
         "Taml"   // ISO 15924 Name 
     }
     ExemplarCharacters{"[[:Taml:]\u200c\u200d]"}
+
+    // Currency display names
+    Currencies {
+        INR { "\u0BB0\u0BC2", "INR" }
+    }
 }
 

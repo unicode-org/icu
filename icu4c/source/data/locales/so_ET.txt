@@ -13,13 +13,6 @@
 
 so_ET {
     Version{ "1.0" }
-    // CountryISBNNumber { "231" }
-    // CountryNumber { "231" }
-    CurrencyElements {
-        "$",
-        "ETB",
-        ".",
-    }
     // Measurement { "Metric" }
 //    NumberElements {
 //        ".",
@@ -45,4 +38,9 @@ so_ET {
     //    Width { "210" }
     //    Units { "mm" }
     // }
+
+    // Currency display names
+    Currencies {
+        ETB { "$", "ETB" }
+    }
  }

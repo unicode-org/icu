@@ -331,4 +331,10 @@ ru {
         "2,000,000: << \u043c\u0438\u043b\u043b\u0438\u043e\u043d[ >>];\n"
         "1,000,000,000: =#,##0=;" 
     }
+
+    // Currency display names
+    Currencies {
+        RUR { "\u0440.", "RUR" }
+        UAH { "\u0433\u0440\u043D.", "UAH" }
+    }
 }

@@ -12,11 +12,6 @@ en_PH {
 //        "PM",
 //    }
 
-    CurrencyElements { 
-        "Php",
-        "PHP",
-        ".",
-    }
     DateTimePatterns { 
         "h:mm:ss a z",
         "h:mm:ss a z",
