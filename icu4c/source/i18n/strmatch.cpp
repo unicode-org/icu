@@ -211,7 +211,7 @@ void StringMatcher::addMatchSetTo(UnicodeSet& toUnionTo) const {
 int32_t StringMatcher::replace(Replaceable& text,
                                int32_t start,
                                int32_t limit,
-                               int32_t& cursor) {
+                               int32_t& /*cursor*/) {
     
     int32_t outLen = 0;
     
@@ -235,7 +235,7 @@ int32_t StringMatcher::replace(Replaceable& text,
  * UnicodeReplacer API
  */
 UnicodeString& StringMatcher::toReplacerPattern(UnicodeString& rule,
-                                                UBool escapeUnprintable) const {
+                                                UBool /*escapeUnprintable*/) const {
     // assert(segmentNumber > 0);
     rule.truncate(0);
     rule.append((UChar)0x0024 /*$*/);
