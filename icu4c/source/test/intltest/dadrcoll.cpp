@@ -292,8 +292,8 @@ DataDrivenCollatorTest::processSequence(Collator* col, const UnicodeString &sequ
   UnicodeString source;
   UnicodeString target;
   UnicodeString temp;
-  Collator::EComparisonResult relation = Collator::EComparisonResult::EQUAL;
-  Collator::EComparisonResult nextRelation = Collator::EComparisonResult::EQUAL;
+  Collator::EComparisonResult relation = Collator::EQUAL;
+  Collator::EComparisonResult nextRelation = Collator::EQUAL;
   UBool hasNext;
 
   setTestSequence(sequence, source, relation, status);
