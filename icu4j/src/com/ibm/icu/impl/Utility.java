@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2004/01/09 03:07:11 $
- * $Revision: 1.49 $
+ * $Date: 2004/01/22 06:39:04 $
+ * $Revision: 1.50 $
  *
  *****************************************************************************************
  */
@@ -964,7 +964,29 @@ public final class Utility {
         StringBuffer buf = new StringBuffer();
         return appendNumber(buf, ch, 16, width).toString();
     }
-
+    /**
+     * Supplies a zero-padded hex representation of an integer (without 0x)
+     */
+    static public String hex(long i, int places) {
+    	if (i == Long.MIN_VALUE) return "-8000000000000000";
+    	boolean negative = i < 0;
+    	if (negative) {
+    		i = -i;
+    	}
+    	String result = Long.toString(i, 16).toUpperCase();
+    	if (result.length() < places) {
+    		result = "0000000000000000".substring(result.length(),places) + result;
+    	}
+    	if (negative) {
+    		return '-' + result;
+    	}
+    	return result;
+    }
+    
+    public static String hex(long ch) {
+    	return hex(ch,4);
+    }
+    
     /**
      * Convert a string to comma-separated groups of 4 hex uppercase
      * digits.  E.g., hex('ab') => "0041,0042".  Append the output
