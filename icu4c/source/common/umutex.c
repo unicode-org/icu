@@ -157,7 +157,7 @@ if( mutex == NULL ) /* initialize the global mutex */
 
   *mutex = uprv_malloc(sizeof(pthread_mutex_t));
 
-#if defined(HPUX)
+#if defined(HPUX_CMA)
     pthread_mutex_init((pthread_mutex_t*)*mutex, pthread_mutexattr_default);
 #else
     pthread_mutex_init((pthread_mutex_t*)*mutex,NULL);
