@@ -1158,7 +1158,7 @@ UnicodeString::caseMap(BreakIterator *titleIter,
       cTitleIter = (UBreakIterator *)titleIter;
     } else {
       errorCode = U_ZERO_ERROR;
-      cTitleIter = ubrk_open(UBRK_TITLE, locale.getName(),
+      cTitleIter = ubrk_open(UBRK_WORD, locale.getName(),
                              oldArray, oldLength,
                              &errorCode);
       if(U_FAILURE(errorCode)) {
