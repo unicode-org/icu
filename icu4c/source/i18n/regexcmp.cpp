@@ -2121,8 +2121,10 @@ void   RegexCompile::matchStartType() {
         // If the op we are now at was the destination of a branch in the pattern,
         // and that path has a shorter minimum length than the current accumulated value,
         // replace the current accumulated value.
+        U_ASSERT(currentLen>=0 && currentLen < INT32_MAX);
         if (forwardedLength.elementAti(loc) < currentLen) {
             currentLen = forwardedLength.elementAti(loc);
+            U_ASSERT(currentLen>=0 && currentLen < INT32_MAX);
         }
 
         switch (opType) {
@@ -2165,6 +2167,7 @@ void   RegexCompile::matchStartType() {
                 // This character could appear at the start of a match.
                 //   Add it to the set of possible starting characters.
                 fRXPat->fInitialChars->add(URX_VAL(op));
+                numInitialStrings += 2;
             }
             currentLen++;
             atStart = FALSE;
@@ -2177,6 +2180,7 @@ void   RegexCompile::matchStartType() {
                 U_ASSERT(sn > 0 && sn < fRXPat->fSets->size());
                 const UnicodeSet *s = (UnicodeSet *)fRXPat->fSets->elementAt(sn);
                 fRXPat->fInitialChars->addAll(*s);
+                numInitialStrings += 2;
             }
             currentLen++;
             atStart = FALSE;
@@ -2196,6 +2200,7 @@ void   RegexCompile::matchStartType() {
                 } else {
                     fRXPat->fInitialChars->addAll(*s);
                 }
+                numInitialStrings += 2;
             }
             currentLen++;
             atStart = FALSE;
@@ -2212,6 +2217,7 @@ void   RegexCompile::matchStartType() {
                      s.complement();
                  }
                  fRXPat->fInitialChars->addAll(s);
+                 numInitialStrings += 2;
             }
             currentLen++;
             atStart = FALSE;
@@ -2233,6 +2239,7 @@ void   RegexCompile::matchStartType() {
                     //   set of possible starting chars.
                     fRXPat->fInitialChars->add(c);
                 }
+                numInitialStrings += 2;
             }
             currentLen++;
             atStart = FALSE;
@@ -2253,8 +2260,9 @@ void   RegexCompile::matchStartType() {
             break;
 
 
-        case URX_JMP:
         case URX_JMPX:
+            loc++;             // Except for extra operand on URX_JMPX, same as URX_JMP.
+        case URX_JMP:
             {
                 int32_t  jmpDest = URX_VAL(op);
                 if (jmpDest < loc) {
@@ -2342,6 +2350,7 @@ void   RegexCompile::matchStartType() {
                     UnicodeSet s(c, c);
                     s.closeOver(USET_CASE);
                     fRXPat->fInitialChars->addAll(s);
+                    numInitialStrings += 2;  // Matching on an initial string not possible.
                 }
                 currentLen += stringLen;
                 atStart = FALSE;
@@ -2354,7 +2363,19 @@ void   RegexCompile::matchStartType() {
             {
                 // Loop Init Ops.  These don't change the min length, but they are 4 word ops
                 //   so location must be updated accordingly.
-                loc+=3;
+                // Loop Init Ops.  
+                //   If the min loop count == 0
+                //      move loc forwards to the end of the loop, skipping over the body.
+                //   If the min count is > 0, 
+                //      continue normal processing of the body of the loop.
+                int32_t loopEndLoc   = fRXPat->fCompiledPat->elementAti(loc+1);
+                        loopEndLoc   = URX_VAL(loopEndLoc);
+                int32_t minLoopCount = fRXPat->fCompiledPat->elementAti(loc+2);
+                if (minLoopCount == 0) {
+                    loc = loopEndLoc;
+                } else {
+                    loc+=3;  // Skips over operands of CTR_INIT
+                }
             }
             atStart = FALSE;
             break;
@@ -2387,6 +2408,16 @@ void   RegexCompile::matchStartType() {
                             break;
                         }
                         depth--;
+                    }
+                    if (URX_TYPE(op) == URX_STATE_SAVE) {
+                        // Need this because neg lookahead blocks will FAIL to outside
+                        //   of the block.
+                        int32_t  jmpDest = URX_VAL(op);
+                        if (jmpDest > loc) {
+                            if (currentLen < forwardedLength.elementAti(jmpDest)) {
+                                forwardedLength.setElementAt(currentLen, jmpDest);
+                            }
+                        }
                     }
                     U_ASSERT(loc <= end);  
                 }
@@ -2428,7 +2459,7 @@ void   RegexCompile::matchStartType() {
     if (fRXPat->fStartType == START_START) {
         // Match only at the start of an input text string.
         //    start type is already set.  We're done.
-    } else if (numInitialStrings == 1 && fRXPat->fInitialChars->size() == 1) {
+    } else if (numInitialStrings == 1 && fRXPat->fMinMatchLen > 0) {
         // Match beginning only with a literal string.
         UChar32  c = fRXPat->fLiteralText.char32At(fRXPat->fInitialStringIdx);
         U_ASSERT(fRXPat->fInitialChars->contains(c));
@@ -2436,12 +2467,16 @@ void   RegexCompile::matchStartType() {
     } else if (fRXPat->fStartType == START_LINE) {
         // Match at start of line in Mulit-Line mode.
         // Nothing to do here; everything is already set.
+    } else if (fRXPat->fMinMatchLen == 0) {
+        // Zero length match possible.  We could start anywhere.
+        fRXPat->fStartType = START_NO_INFO;
     } else if (fRXPat->fInitialChars->size() == 1) {
         // All matches begin with the same char.
         fRXPat->fStartType   = START_CHAR;
         fRXPat->fInitialChar = fRXPat->fInitialChars->charAt(0);
         U_ASSERT(fRXPat->fInitialChar != (UChar32)-1);
-    } else if (fRXPat->fInitialChars->contains((UChar32)0, (UChar32)0x10ffff) == FALSE) {
+    } else if (fRXPat->fInitialChars->contains((UChar32)0, (UChar32)0x10ffff) == FALSE &&
+        fRXPat->fMinMatchLen > 0) {
         // Matches start with a set of character smaller than the set of all chars.
         fRXPat->fStartType = START_SET;
     } else {
@@ -2502,8 +2537,10 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
         // If the op we are now at was the destination of a branch in the pattern,
         // and that path has a shorter minimum length than the current accumulated value,
         // replace the current accumulated value.
+        U_ASSERT(currentLen>=0 && currentLen < INT32_MAX);
         if (forwardedLength.elementAti(loc) < currentLen) {
             currentLen = forwardedLength.elementAti(loc);
+            U_ASSERT(currentLen>=0 && currentLen < INT32_MAX);
         }
 
         switch (opType) {
@@ -2546,15 +2583,16 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
             break;
 
 
-        case URX_JMP:
         case URX_JMPX:
+            loc++;              // URX_JMPX has an extra operand, ignored here,
+                                //   otherwise processed identically to URX_JMP.
+        case URX_JMP:
             {
                 int32_t  jmpDest = URX_VAL(op);
                 if (jmpDest < loc) {
                     // Loop of some kind.  Can safely ignore, the worst that will happen
                     //  is that we understate the true minimum length
                     currentLen = forwardedLength.elementAti(loc+1);
-                   
                 } else {
                     // Forward jump.  Propagate the current min length to the target loc of the jump.
                     U_ASSERT(jmpDest <= end+1);
@@ -2566,9 +2604,12 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
             break;
 
         case URX_FAIL:
-            // Fails are kind of like a branch, except that the min length was
-            //   propagated already, by the state save.
-            currentLen = forwardedLength.elementAti(loc+1);
+            {
+                // Fails are kind of like a branch, except that the min length was
+                //   propagated already, by the state save.
+                currentLen = forwardedLength.elementAti(loc+1);
+                U_ASSERT(currentLen>=0 && currentLen < INT32_MAX);
+            }
             break;
 
 
@@ -2586,8 +2627,6 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
             break;
             
 
-
-
         case URX_STRING:
         case URX_STRING_I:
             {
@@ -2602,9 +2641,19 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
         case URX_CTR_INIT_NG:
         case URX_CTR_INIT_P:
             {
-                // Loop Init Ops.  These don't change the min length, but they are 4 word ops
-                //   so location must be updated accordingly.
-                loc+=3;
+                // Loop Init Ops.  
+                //   If the min loop count == 0
+                //      move loc forwards to the end of the loop, skipping over the body.
+                //   If the min count is > 0, 
+                //      continue normal processing of the body of the loop.
+                int32_t loopEndLoc   = fRXPat->fCompiledPat->elementAti(loc+1);
+                        loopEndLoc   = URX_VAL(loopEndLoc);
+                int32_t minLoopCount = fRXPat->fCompiledPat->elementAti(loc+2);
+                if (minLoopCount == 0) {
+                    loc = loopEndLoc;
+                } else {
+                    loc+=3;  // Skips over operands of CTR_INIT
+                }
             }
             break;
 
@@ -2638,6 +2687,17 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
                         }
                         depth--;
                     }
+                    if (URX_TYPE(op) == URX_STATE_SAVE) {
+                        // Need this because neg lookahead blocks will FAIL to outside
+                        //   of the block.
+                        int32_t  jmpDest = URX_VAL(op);
+                        if (jmpDest > loc) {
+                            if (currentLen < forwardedLength.elementAti(jmpDest)) {
+                                forwardedLength.setElementAt(currentLen, jmpDest);
+                            }
+                        }
+                    }
+                        
                     U_ASSERT(loc <= end);  
                 }
             }
@@ -2662,6 +2722,7 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
     //   propagated a shorter length to location end+1.
     if (forwardedLength.elementAti(end+1) < currentLen) {
         currentLen = forwardedLength.elementAti(end+1);
+        U_ASSERT(currentLen>=0 && currentLen < INT32_MAX);
     }
             
     return currentLen;

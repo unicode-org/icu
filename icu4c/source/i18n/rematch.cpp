@@ -277,6 +277,11 @@ UBool RegexMatcher::find() {
 
     int32_t startPos = fMatchEnd;
     int32_t inputLen = fInput->length();
+    int32_t testLen  = inputLen - fPattern->fMinMatchLen;
+    if (startPos > testLen) {
+        return FALSE;
+    }
+
     const UChar *inputBuf = fInput->getBuffer();
     UChar32  c;
     U_ASSERT(startPos >= 0);
@@ -284,9 +289,7 @@ UBool RegexMatcher::find() {
     switch (fPattern->fStartType) {
     case START_LINE:
     case START_STRING:
-    case START_CHAR:
     case START_NO_INFO:
-    case START_SET:
         // No optimization was found. 
         //  Try a match at each input position.
         for (;;) {
@@ -297,13 +300,13 @@ UBool RegexMatcher::find() {
             if (fMatch) {
                 return TRUE;
             }
-            if (startPos >= inputLen) {
+            if (startPos >= testLen) {
                 return FALSE;
             }
             U16_FWD_1(inputBuf, startPos, inputLen);
             // Note that it's perfectly OK for a pattern to have a zero-length
             //   match at the end of a string, so we must make sure that the loop
-            //   runs with startPos == inputLen the last time through.
+            //   runs with startPos == testLen the last time through.
         }
         U_ASSERT(FALSE);
 
@@ -320,26 +323,55 @@ UBool RegexMatcher::find() {
         return fMatch;
 
 
-    //case START_SET:
-        // Match may start on any char from a pre-computed set.
-        U16_GET(inputBuf, 0, startPos, inputLen, c);
-        for (;;) {
-            if (fPattern->fInitialChars->contains(c)) {
-                MatchAt(startPos, status);
-                if (U_FAILURE(status)) {
+    case START_SET:
+        {
+            // Match may start on any char from a pre-computed set.
+            U_ASSERT(fPattern->fMinMatchLen > 0);
+            for (;;) {
+                int32_t pos = startPos;
+                U16_NEXT(inputBuf, startPos, inputLen, c);  // like c = inputBuf[startPos++];
+                if (fPattern->fInitialChars->contains(c)) {
+                    MatchAt(pos, status);
+                    if (U_FAILURE(status)) {
+                        return FALSE;
+                    }
+                    if (fMatch) {
+                        return TRUE;
+                    }
+                }
+                if (pos >= testLen) {
                     return FALSE;
                 }
-                if (fMatch) {
-                    return TRUE;
+            }
+        }
+        U_ASSERT(FALSE);
+
+    case START_CHAR:
+        {
+            // Match starts on exactly one char.
+            U_ASSERT(fPattern->fMinMatchLen > 0);
+            UChar32 theChar = fPattern->fInitialChar;
+            for (;;) {
+                int32_t pos = startPos;
+                U16_NEXT(inputBuf, startPos, inputLen, c);  // like c = inputBuf[startPos++];
+                if (c == theChar) {
+                    MatchAt(pos, status);
+                    if (U_FAILURE(status)) {
+                        return FALSE;
+                    }
+                    if (fMatch) {
+                        return TRUE;
+                    }
+                }
+                if (pos >= testLen) {
+                    return FALSE;
                 }
             }
-            if (startPos >= inputLen) {
-                return FALSE;
-            }
-            U16_NEXT(inputBuf, startPos, inputLen, c);
         }
         U_ASSERT(FALSE);
     }
+
+
 
     U_ASSERT(FALSE);
     return FALSE;
