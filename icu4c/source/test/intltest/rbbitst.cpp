@@ -2958,6 +2958,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, char *name, uint
     char             expectedBreaks[TESTSTRINGLEN*2 + 1];
     char             forwardBreaks[TESTSTRINGLEN*2 + 1];
     char             reverseBreaks[TESTSTRINGLEN*2+1];
+    char             isBoundaryBreaks[TESTSTRINGLEN*2+1];
     int              i;
     int              loopCount = 0;
 
@@ -3034,11 +3035,27 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, char *name, uint
             reverseBreaks[i] = 1;
         }
 
+        // Find the break positions using isBoundary() tests.
+        memset(isBoundaryBreaks, 0, sizeof(isBoundaryBreaks));
+        U_ASSERT(sizeof(isBoundaryBreaks) > testText.length());
+        for (i=0; i<=testText.length(); i++) {
+            isBoundaryBreaks[i] = bi->isBoundary(i);
+        }
+
+
         // Compare the expected and actual results.
         for (i=0; i<=testText.length(); i++) {
-            UBool forwardError = forwardBreaks[i] != expectedBreaks[i];
-            UBool anyError     = forwardError || reverseBreaks[i] != expectedBreaks[i];
-            if (anyError) {
+            char  *errorType = NULL;
+            if  (forwardBreaks[i] != expectedBreaks[i]) {
+                errorType = "next()";
+            } else if (reverseBreaks[i] != expectedBreaks[i]) {
+                errorType = "previous()";
+            } else if (isBoundaryBreaks[i] != expectedBreaks[i]) {
+                errorType = "isBoundary()";
+            }
+
+
+            if (errorType != NULL) {
                 // Format a range of the test text that includes the failure as
                 //  a data item that can be included in the rbbi test data file.
 
@@ -3097,9 +3114,9 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, char *name, uint
                 UErrorCode status = U_ZERO_ERROR;
                 errorText.extract(charErrorTxt, sizeof(charErrorTxt), NULL, status);
                 charErrorTxt[sizeof(charErrorTxt)-1] = 0;
-                errln("%s break monkey test error.  %s. Direction = %s; Random seed = %d;  buf Idx = %d\n%s",
+                errln("%s break monkey test error.  %s. Operation = %s; Random seed = %d;  buf Idx = %d\n%s",
                     name, (expectedBreaks[i]? "break expected but not found" : "break found but not expected"),
-                    (forwardError?"forward":"reverse"), seed, i, charErrorTxt);
+                    errorType, seed, i, charErrorTxt);
                 break;
             }
         }
