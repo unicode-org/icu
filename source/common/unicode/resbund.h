@@ -51,11 +51,6 @@
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
 
-#if U_HAVE_WCHAR_H
-# include <wchar.h>
-#endif
-
-
 #ifndef _FILESTRM
 typedef struct _FileStream FileStream;
 #endif
