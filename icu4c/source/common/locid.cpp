@@ -406,8 +406,15 @@ Locale& Locale::init(const char* localeID)
         return *this;
     } while(0);
 
-    // when an error occurs, then set the default locale (there is no UErrorCode here)
-    return *this = getLocale(eDEFAULT);
+    if (gLocaleCache) {
+        // when an error occurs, then set the default locale (there is no UErrorCode here)
+        return *this = getLocale(eDEFAULT);
+    }
+    else {
+        // Prevent any possible infinite recursion
+        // for bad default Locale IDs
+        return init("en");
+    }
 }
 
 int32_t
