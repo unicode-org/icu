@@ -174,7 +174,7 @@ class U_I18N_API OlsonTimeZone: public TimeZone {
     /**
      * The millis for the start of the first year for which finalZone
      * is to be used, or DBL_MAX if finalZone is 0.  NOTE: This is
-     * 0:00 GMT Jan 1, <finalYear + 1> (not <finalMilils>).
+     * 0:00 GMT Jan 1, <finalYear + 1> (not <finalMillis>).
      */
     double finalMillis;
 
