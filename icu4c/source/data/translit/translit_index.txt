@@ -3,9 +3,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
+// Tool: \icu4j\src\com\ibm\icu\dev\tool\translit\dumpICURules.bat
 // Source: Transliterator_index.txt
-// Date: Tue May 18 17:24:48 2004
+// Date: Fri May 28 17:07:30 2004
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
@@ -20,7 +20,6 @@
 
 translit_index {
   RuleBasedTransliteratorIDs {
-//--------------------------------------------------------------------
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
 //
@@ -73,6 +72,15 @@ translit_index {
 
 { "Latin-Arabic", "file", "t_Arab_Latn", "REVERSE" },
 { "Arabic-Latin", "file", "t_Arab_Latn", "FORWARD" },
+
+{ "Tone-Digit", "internal", "t_Tone_Digit", "FORWARD" },
+{ "Digit-Tone", "internal", "t_Tone_Digit", "REVERSE" },
+
+{ "Latin-NumericPinyin", "file", "t_Latn_NPinyn", "FORWARD" },
+{ "NumericPinyin-Latin", "file", "t_Latn_NPinyn", "REVERSE" },
+
+{ "Han-Spacedhan", "internal", "t_Hani_SpHan", "FORWARD" },
+{ "Spacedhan-Han", "alias", "null", "" },
 
 { "Han-Latin", "file", "t_Hani_Latn", "FORWARD" },
 //Latin-Han:file:Transliterator_Han_Latin.txt:UTF8:REVERSE # no round trip!
