@@ -114,7 +114,7 @@ public class ByteArrayWrapper implements Comparable
      * byte array of length capacity will be allocated.  
      * The contents of the array (between 0 and size) remain unchanged. 
      * @param capacity minimum length of internal byte array.
-     * @param return this ByteArrayWrapper
+     * @return this ByteArrayWrapper
      * @draft ICU 3.2
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
