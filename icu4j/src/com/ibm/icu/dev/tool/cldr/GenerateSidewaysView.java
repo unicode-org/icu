@@ -108,7 +108,7 @@ import com.ibm.icu.util.UResourceBundle;
                 String baseName = contents[i].substring(0,contents[i].length()-4);
                 GenerateSidewaysView temp = getCLDR(baseName);
                 if (baseName.equals("zh_TW")) baseName = "zh_Hant_TW";
-                if (baseName.equals("root")) temp.addMissing();
+                //if (baseName.equals("root")) temp.addMissing();
                 temp.writeTo(options[DESTDIR].value, baseName);
                 sidewaysView.putData(temp.data, baseName);
                 log.flush();          
@@ -171,12 +171,13 @@ import com.ibm.icu.util.UResourceBundle;
     /**
      * 
      */
-    private void addMissing() {
+    /*private void addMissing() {
         String[] currencies = getCodes(new ULocale("en","",""), "Currencies");
         //<ldml><numbers><currencies><currency type="AUD"><displayName>
         addCurrencies(currencies, "displayName");
         addCurrencies(currencies, "symbol");
     }
+    */
 
     private void addCurrencies(String[] currencies, String lastElement) {
         ElementChain temp = new ElementChain();
@@ -278,7 +279,7 @@ import com.ibm.icu.util.UResourceBundle;
 
     private void writeTo(String dir, String filename) throws IOException {
         PrintWriter out = BagFormatter.openUTF8Writer(dir, filename + ".xml");
-        out.print(this);
+        out.println(this);
         out.close();
     }
 
