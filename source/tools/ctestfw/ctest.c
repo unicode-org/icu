@@ -572,6 +572,10 @@ int processArgs(const TestNode* root,
                 REPEAT_TESTS++;
             }
         }
+        else if ((strcmp( argv[i], "-a") == 0) || (strcmp(argv[i],"-all") == 0))
+        {
+            subtreeOptionSeen=FALSE;
+        }
         else if (strcmp( argv[1], "-h" )==0 )
         {
             help( argv[0] );
