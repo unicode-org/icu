@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UTF16.java,v $ 
-* $Date: 2001/03/23 19:51:38 $ 
-* $Revision: 1.3 $
+* $Date: 2001/07/25 20:41:33 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -162,7 +162,8 @@ public final class UTF16
   public static int charAt(String source, int offset16) 
   {
     if (offset16 < 0 || offset16 >= source.length())
-      return -1;
+      //return -1;
+      throw new StringIndexOutOfBoundsException(offset16);
       
     char single = source.charAt(offset16);
     if (!isSurrogate(single)) 
@@ -413,6 +414,9 @@ public final class UTF16
     int size = source.length(),
         result = 0,
         count = offset32;
+    if (offset32 < 0 || offset32 > size) {
+      throw new StringIndexOutOfBoundsException(offset32);
+    }
     while (result < size && count > 0)
     {
       ch = source.charAt(result);
@@ -451,7 +455,7 @@ public final class UTF16
   */
   public static int findCodePointOffset(String source, int offset16) 
   {
-    if (offset16 >= source.length()) {
+    if (offset16 < 0 || offset16 >= source.length()) {
       throw new StringIndexOutOfBoundsException(offset16);
     }
      
