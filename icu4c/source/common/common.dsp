@@ -2903,6 +2903,10 @@ InputPath=.\unicode\uset.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\uset_props.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\usetiter.cpp
 # End Source File
 # Begin Source File
