@@ -14,6 +14,7 @@
 #include "unicode/unistr.h"
 #include "unicode/chariter.h"
 #include "unicode/unorm.h"
+#include "unormimp.h" // ### TODO remove when prototyping is done!!
 
 struct UCharIterator;
 typedef struct UCharIterator UCharIterator; /**< C typedef for struct UCharIterator. @draft ICU 2.1 */
@@ -275,6 +276,10 @@ public:
   static inline UNormalizationCheckResult
   quickCheck(const UnicodeString &source, UNormalizationMode mode, UErrorCode &status);
 
+  /** ### TODO @draft ICU 2.6 */
+  static inline UNormalizationCheckResult
+  quickCheck(const UnicodeString &source, UNormalizationMode mode, int32_t options, UErrorCode &status);
+
   /**
    * Test if a string is in a given normalization form.
    * This is semantically equivalent to source.equals(normalize(source, mode)) .
@@ -297,6 +302,10 @@ public:
    */
   static inline UBool
   isNormalized(const UnicodeString &src, UNormalizationMode mode, UErrorCode &errorCode);
+
+  /** ### TODO @draft ICU 2.6 */
+  static inline UBool
+  isNormalized(const UnicodeString &src, UNormalizationMode mode, int32_t options, UErrorCode &errorCode);
 
   /**
    * Concatenate normalized strings, making sure that the result is normalized as well.
@@ -1101,6 +1110,18 @@ Normalizer::quickCheck(const UnicodeString& source,
                             mode, &status);
 }
 
+inline UNormalizationCheckResult
+Normalizer::quickCheck(const UnicodeString& source,
+                       UNormalizationMode mode, int32_t options,
+                       UErrorCode &status) {
+    if(U_FAILURE(status)) {
+        return UNORM_MAYBE;
+    }
+
+    return unorm_quickCheckWithOptions(source.getBuffer(), source.length(),
+                                       mode, options, &status);
+}
+
 inline UBool
 Normalizer::isNormalized(const UnicodeString& source,
                          UNormalizationMode mode, 
@@ -1111,6 +1132,18 @@ Normalizer::isNormalized(const UnicodeString& source,
 
     return unorm_isNormalized(source.getBuffer(), source.length(),
                               mode, &status);
+}
+
+inline UBool
+Normalizer::isNormalized(const UnicodeString& source,
+                         UNormalizationMode mode, int32_t options,
+                         UErrorCode &status) {
+    if(U_FAILURE(status)) {
+        return FALSE;
+    }
+
+    return unorm_isNormalizedWithOptions(source.getBuffer(), source.length(),
+                                         mode, options, &status);
 }
 
 inline int32_t

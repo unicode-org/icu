@@ -624,7 +624,7 @@ Normalizer::nextNormalize() {
     errorCode=U_ZERO_ERROR;
     p=buffer.getBuffer(-1);
     length=unorm_next(text, p, buffer.getCapacity(),
-                      fUMode, fOptions!=0,
+                      fUMode, fOptions,
                       TRUE, 0,
                       &errorCode);
     buffer.releaseBuffer(length);
@@ -633,7 +633,7 @@ Normalizer::nextNormalize() {
         text->move(text, nextIndex, UITER_ZERO);
         p=buffer.getBuffer(length);
         length=unorm_next(text, p, buffer.getCapacity(),
-                          fUMode, fOptions!=0,
+                          fUMode, fOptions,
                           TRUE, 0,
                           &errorCode);
         buffer.releaseBuffer(length);

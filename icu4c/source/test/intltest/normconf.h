@@ -12,8 +12,7 @@
 #include "unicode/normlzr.h"
 #include "intltest.h"
 
-#define TEST_SUITE_DIR  "unidata"
-#define TEST_SUITE_FILE "NormalizationTest.txt"
+typedef struct _FileStream FileStream;
 
 class NormalizerConformanceTest : public IntlTest {
     Normalizer normalizer;
@@ -27,15 +26,18 @@ class NormalizerConformanceTest : public IntlTest {
     /**
      * Test the conformance of Normalizer to
      * http://www.unicode.org/Public/UNIDATA/NormalizationTest.txt
-     * This file must be located at the path specified as TEST_SUITE_FILE.
      */
-    void TestConformance(void);
+    void TestConformance();
+    void TestConformance32();
+    void TestConformance(FileStream *input, int32_t options);
 
     // Specific tests for debugging.  These are generally failures taken from
     // the conformance file, but culled out to make debugging easier.
     void TestCase6(void);
 
  private:
+    FileStream *openNormalizationTestFile(const char *filename);
+
     /**
      * Verify the conformance of the given line of the Unicode
      * normalization (UTR 15) test suite file.  For each line,
@@ -52,10 +54,11 @@ class NormalizerConformanceTest : public IntlTest {
      * @return true if the test passes
      */
     UBool checkConformance(const UnicodeString* field,
-                           const char *line);
+                           const char *line,
+                           int32_t options);
 
     void iterativeNorm(const UnicodeString& str,
-                       UNormalizationMode mode,
+                       UNormalizationMode mode, int32_t options,
                        UnicodeString& result,
                        int8_t dir);
 
