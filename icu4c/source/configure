@@ -4275,6 +4275,7 @@ trap 'rm -fr `echo "README icudefs.mk \
 		test/cintltst/Makefile \
 		test/iotest/Makefile \
 		test/ieeetest/Makefile \
+		test/testmap/Makefile \
 		test/thaitest/Makefile \
 		test/letest/Makefile \
 		test/threadtest/Makefile \
@@ -4473,6 +4474,7 @@ CONFIG_FILES=\${CONFIG_FILES-"README icudefs.mk \
 		test/iotest/Makefile \
 		test/ieeetest/Makefile \
 		test/thaitest/Makefile \
+		test/testmap/Makefile \
 		test/letest/Makefile \
 		test/threadtest/Makefile \
 		samples/Makefile samples/date/Makefile \
