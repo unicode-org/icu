@@ -100,7 +100,7 @@ class StringEnumeration;
  * Anywhere the API requires an ID, you can use either form.
  * <P>
  * To create a new TimeZone, you call the factory function TimeZone::createTimeZone()
- * and pass it a time zone ID.  You can use the createAvailableIDs() function to
+ * and pass it a time zone ID.  You can use the createEnumeration() function to
  * obtain a list of all the time zone IDs recognized by createTimeZone().
  * <P>
  * You can also use TimeZone::createDefault() to create a TimeZone.  This function uses
@@ -147,8 +147,8 @@ public:
     static TimeZone* createTimeZone(const UnicodeString& ID);
 
     /**
-     * Returns an enumeration over all recognized time zone IDs, i.e.,
-     * all strings that createTimeZone() accepts.
+     * Returns an enumeration over all recognized time zone IDs. (i.e.,
+     * all strings that createTimeZone() accepts)
      *
      * @return an enumeration object, owned by the caller.
      * @draft ICU 2.4
