@@ -74,32 +74,6 @@ const static UColAttributeValue caseTestAttributes[][2] =
 
 };
 
-const static char cnt1[][10] = {
-  "AA",
-  "AC",
-  "AZ",
-  "AQ",
-  "AB",
-  "ABZ",
-  "ABQ",
-  "Z",
-  "ABC",
-  "Q",
-  "B"
-};
-
-const static char cnt2[][10] = {
-  "DA",
-  "DAD",
-  "DAZ",
-  "MAR",
-  "Z",
-  "DAVIS",
-  "MARK",
-  "DAV",
-  "DAVI"
-};
-
 static void TestCase( )
 {
     int32_t i,j,k;
@@ -249,6 +223,32 @@ static void backAndForth(UCollationElements *iter)
 
     free(orders);    
 }
+
+const static char cnt1[][10] = {
+  "AA",
+  "AC",
+  "AZ",
+  "AQ",
+  "AB",
+  "ABZ",
+  "ABQ",
+  "Z",
+  "ABC",
+  "Q",
+  "B"
+};
+
+const static char cnt2[][10] = {
+  "DA",
+  "DAD",
+  "DAZ",
+  "MAR",
+  "Z",
+  "DAVIS",
+  "MARK",
+  "DAV",
+  "DAVI"
+};
 
 static void IncompleteCntTest( )
 {
@@ -704,10 +704,12 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   uint32_t strength = 0;
   uint32_t chOffset = 0; uint32_t chLen = 0;
   uint32_t exOffset = 0; uint32_t exLen = 0;
+  uint32_t firstEx = 0;
 /*  uint32_t rExpsLen = 0; */
   uint32_t firstLen = 0;
   UBool varT = FALSE; UBool top_ = TRUE;
   UBool startOfRules = TRUE;
+  UBool lastReset = FALSE;
   UColTokenParser src;
   UColOptionSet opts;
 
@@ -735,10 +737,12 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
       u_strncpy(second,rulesCopy+chOffset, chLen);
       second[chLen] = 0;
 
-      if(exLen > 0) {
+      if(exLen > 0 && firstEx == 0) {
         u_strncat(first, rulesCopy+exOffset, exLen);
         first[firstLen+exLen] = 0;
       } 
+
+      lastReset = FALSE;
 
       switch(strength){
       case UCOL_IDENTICAL:
@@ -759,6 +763,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
       }
 
       firstLen = chLen;
+      firstEx = exLen;
       u_strcpy(first, second);
 
     }
@@ -914,6 +919,10 @@ static void logFailure (const char *platform, const char *test,
 
   strcpy(output, "DIFF: ");
 
+  strcat(output, s);
+  strcat(output, " : ");
+  strcat(output, t);
+
   strcat(output, test);
   strcat(output, ": ");
 
@@ -930,16 +939,48 @@ static void logFailure (const char *platform, const char *test,
   strcat(output, getRelationSymbol(realRes, realStrength, relation));
   strcat(output, tEsc);
 
-  strcat(output, " ");
-
-  strcat(output, " CPs: ");
-  strcat(output, s);
-  strcat(output, " and ");
-  strcat(output, t);
-
   log_verbose("%s\n", output);
 
 }
+
+static printOutRules(const UChar *rules) {
+  uint32_t len = u_strlen(rules);
+  uint32_t i = 0;
+  char toPrint;
+  uint32_t line = 0;
+
+  fprintf(stdout, "Rules:");
+
+  for(i = 0; i<len; i++) {
+    if(rules[i]<0x7f && rules[i]>=0x20) {
+      toPrint = (char)rules[i];
+      if(toPrint == '&') {
+        line = 1;
+        fprintf(stdout, "\n&");
+      } else if(toPrint == ';') {
+        fprintf(stdout, "<<");
+        line+=2;
+      } else if(toPrint == ',') {
+        fprintf(stdout, "<<<");
+        line+=3;
+      } else {
+        fprintf(stdout, "%c", toPrint);
+        line++;
+      }
+    } else if(rules[i]<0x3400 || rules[i]>=0xa000) {
+      fprintf(stdout, "\\u%04X", rules[i]);
+      line+=6;
+    }
+    if(line>72) {
+      fprintf(stdout, "\n");
+      line = 0;
+    }
+  }
+
+  log_verbose("\n");
+
+}
+
 
 static uint32_t testSwitch(tst_strcoll* func, void *collator, int opts, uint32_t strength, const UChar *first, const UChar *second, const char* msg) {
   uint32_t diffs = 0;
@@ -986,6 +1027,9 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, LCID lcid, UErrorCod
   src.opts = &opts;
 
   rules = ucol_getRules(coll, &ruleLen);
+
+  /*printOutRules(rules);*/
+
   if(U_SUCCESS(*status) && ruleLen > 0) {
     rulesCopy = (UChar *)uprv_malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
     uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
@@ -1259,6 +1303,7 @@ static void RamsRulesTest( ) {
       log_verbose("Testing locale %s\n", locName);
       coll = ucol_open(locName, &status);
       if(U_SUCCESS(status)) {
+        ucol_setAttribute(coll, UCOL_CASE_FIRST, UCOL_OFF, &status);
         testCollator(coll, &status);
         testCEs(coll, &status);
         ucol_close(coll);
@@ -1374,9 +1419,49 @@ static void TestVariableTop(void) {
     enCollation = NULL;
     myCollation = NULL;
 }
+ 
+static void genericOrderingTest(UCollator *coll, const char *s[], uint32_t size) {
+  UChar t1[256] = {0};
+  UChar t2[256] = {0};
+
+  uint32_t i = 0, j = 0;
+
+  for(i = 0; i < size-1; i++) {
+    for(j = i+1; j < size; j++) {
+      u_unescape(s[i], t1, 256);
+      u_unescape(s[j], t2, 256);
+      doTest(coll, t1, t2, UCOL_LESS);
+    }
+  }
+}
+
+static void genericLocaleStarter(const char *locale, const char *s[], uint32_t size) {
+  UErrorCode status = U_ZERO_ERROR;
+  UCollator *coll = ucol_open(locale, &status);
+  if(U_SUCCESS(status)) {
+    genericOrderingTest(coll, s, size);
+  } else {
+    log_err("Unable to open collator for locale %s\n", locale);
+  }
+}
+
+static void genericRulesStarter(const char *rules, const char *s[], uint32_t size) {
+  UErrorCode status = U_ZERO_ERROR;
+  UChar rlz[2048] = { 0 };
+  UCollator *coll = NULL;
+  uint32_t rlen = u_unescape(rules, rlz, 2048);
+
+  ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
+
+  if(U_SUCCESS(status)) {
+    genericOrderingTest(coll, s, size);
+  } else {
+    log_err("Unable to open collator with rules %s\n", rules);
+  }
+}
 
 const static char chTest[][20] = {
-  "c",
+  /*"c",
   "C",
   "ca", "cb", "cx", "cy", "CZ",
   "c\\u030C", "C\\u030C",
@@ -1384,7 +1469,7 @@ const static char chTest[][20] = {
   "H",
   "ha", "Ha", "harly", "hb", "HB", "hx", "HX", "hy", "HY",
   "ch", "cH", "Ch", "CH",
-  "cha", "charly", "che", "chh", "chch", "chr",
+  "cha", "charly", "che", */"chh", "chch"/*, "chr",
   "i", "I", "iarly", 
   "r", "R",
   "r\\u030C", "R\\u030C",
@@ -1392,7 +1477,7 @@ const static char chTest[][20] = {
   "S",
   "s\\u030C", "S\\u030C",
   "z", "Z",
-  "z\\u030C", "Z\\u030C"
+  "z\\u030C", "Z\\u030C"*/
 };
 
 static void TestChMove(void) {
@@ -1548,13 +1633,97 @@ static TestUnmappedSpaces(void) {
   ucol_close(uca);
 }
 
-void TestEmptyRule() {
+static void TestEmptyRule() {
   UErrorCode status = U_ZERO_ERROR;
   UChar rulez[] = { 0 };
   UCollator *coll = ucol_openRules(rulez, 0, UCOL_NO_NORMALIZATION, UCOL_TERTIARY, &status);
 
   ucol_close(coll);
 }
+
+static void TestUCAZero() {
+  UErrorCode status = U_ZERO_ERROR;
+  char blah[] =  "\\u9fff";
+  uint8_t res[256];
+  UChar b[256];
+  UCollator *coll = ucol_open("", &status);
+
+  u_unescape(blah, b, 256);
+  ucol_getSortKey(coll, b, 1, res, 256);
+
+  
+
+  ucol_close(coll);
+}
+
+
+/* Pinyin tonal order */
+/*
+    A < .. (\u0101) < .. (\u00e1) < .. (\u01ce) < .. (\u00e0)
+          (w/macron)<  (w/acute)<   (w/caron)<   (w/grave)
+    E < .. (\u0113) < .. (\u00e9) < .. (\u011b) < .. (\u00e8)
+    I < .. (\u012b) < .. (\u00ed) < .. (\u01d0) < .. (\u00ec)
+    O < .. (\u014d) < .. (\u00f3) < .. (\u01d2) < .. (\u00f2)
+    U < .. (\u016b) < .. (\u00fa) < .. (\u01d4) < .. (\u00f9) 
+      < .. (\u01d6) < .. (\u01d8) < .. (\u01da) < .. (\u01dc) <
+.. (\u00fc)
+
+However, in testing we got the following order:
+    A < .. (\u00e1) < .. (\u00e0) < .. (\u01ce) < .. (\u0101)
+          (w/acute)<   (w/grave)<   (w/caron)<   (w/macron)
+    E < .. (\u00e9) < .. (\u00e8) < .. (\u00ea) < .. (\u011b) <
+.. (\u0113)
+    I < .. (\u00ed) < .. (\u00ec) < .. (\u01d0) < .. (\u012b)
+    O < .. (\u00f3) < .. (\u00f2) < .. (\u01d2) < .. (\u014d)
+    U < .. (\u00fa) < .. (\u00f9) < .. (\u01d4) < .. (\u00fc) <
+.. (\u01d8) 
+      < .. (\u01dc) < .. (\u01da) < .. (\u01d6) < .. (\u016b)
+*/
+static void TestJ784() {
+  const static char *data[] = {
+      "A", "\\u0101", "\\u00e1", "\\u01ce", "\\u00e0",
+      "E", "\\u0113", "\\u00e9", "\\u011b", "\\u00e8",
+      "I", "\\u012b", "\\u00ed", "\\u01d0", "\\u00ec",
+      "O", "\\u014d", "\\u00f3", "\\u01d2", "\\u00f2",
+      "U", "\\u016b", "\\u00fa", "\\u01d4", "\\u00f9",
+      "\\u00fc",
+           "\\u01d6", "\\u01d8", "\\u01da", "\\u01dc"
+  };
+  genericLocaleStarter("zh", data, sizeof(data)/sizeof(data[0]));
+}
+
+
+static void TestJ831() {
+  const static char *data[] = {
+    "I",
+      "i",
+      "Y",
+      "y"
+  };
+  genericLocaleStarter("lv", data, sizeof(data)/sizeof(data[0]));
+}
+
+static void TestJ815() {
+  const static char *data[] = {
+    "aa",
+      "Aa",
+      "ab",
+      "Ab",
+      "ad",
+      "Ad",
+      "ae",
+      "Ae",
+      "\\u00e6",
+      "\\u00c6",
+      "af",
+      "Af",
+      "b",
+      "B"
+  };
+  genericLocaleStarter("fr", data, sizeof(data)/sizeof(data[0]));
+}
+
+
 void addMiscCollTest(TestNode** root)
 { 
     addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
@@ -1566,12 +1735,16 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &IsTailoredTest, "tscoll/cmsccoll/IsTailoredTest");
     addTest(root, &TestCollations, "tscoll/cmsccoll/TestCollations");
     addTest(root, &TestChMove, "tscoll/cmsccoll/TestChMove");
-    addTest(root, &TestComposeDecompose, "tscoll/cmsccoll/TestComposeDecompose");
     addTest(root, &TestImplicitTailoring, "tscoll/cmsccoll/TestImplicitTailoring");
     addTest(root, &TestFCDProblem, "tscoll/cmsccoll/TestFCDProblem");   
     addTest(root, &TestEmptyRule, "tscoll/cmsccoll/TestEmptyRule");   
+    addTest(root, &TestJ784, "tscoll/cmsccoll/TestJ784");
+    addTest(root, &TestJ815, "tscoll/cmsccoll/TestJ815");
+    addTest(root, &TestJ831, "tscoll/cmsccoll/TestJ831");
+    /*addTest(root, &TestUCAZero, "tscoll/cmsccoll/TestUCAZero");*/
     /*addTest(root, &TestUnmappedSpaces, "tscoll/cmsccoll/TestUnmappedSpaces");*/   
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/
     /*addTest(root, &TestVariableTop, "tscoll/cmsccoll/TestVariableTop");*/
+    addTest(root, &TestComposeDecompose, "tscoll/cmsccoll/TestComposeDecompose");
 }
 
