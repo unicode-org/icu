@@ -903,7 +903,6 @@ UBool checkNextExactContractionMatch(UStringSearch *strsrch,
         uint32_t *patternce       = strsrch->pattern.CE;
         int32_t   patterncelength = strsrch->pattern.CELength;
         int32_t   count           = 0;
-        int32_t   textlength      = strsrch->search->textLength;
         while (count < patterncelength) {
             uint32_t ce = getCE(strsrch, ucol_next(coleiter, status));
             if (ce == UCOL_IGNORABLE) {
@@ -1232,8 +1231,7 @@ inline uint32_t getPreviousSafeOffset(const UCollator   *collator,
 * @param coleiter collation element iterator for safe text
 */
 inline void cleanUpSafeText(const UStringSearch *strsrch, UChar *safetext,
-                                  UChar         *safebuffer, 
-                                  UCollationElements *coleiter)
+                                  UChar         *safebuffer)
 {
     if (safetext != safebuffer && safetext != strsrch->canonicalSuffixAccents) 
     {
@@ -1294,10 +1292,10 @@ UTextOffset doNextCanonicalSuffixMatch(UStringSearch *strsrch,
         if (textce == UCOL_NULLORDER) {
             // check if we have passed the safe buffer
             if (coleiter == strsrch->textIter) {
-                cleanUpSafeText(strsrch, safetext, safebuffer, coleiter);
+                cleanUpSafeText(strsrch, safetext, safebuffer);
                 return USEARCH_DONE;
             }
-            cleanUpSafeText(strsrch, safetext, safebuffer, coleiter);
+            cleanUpSafeText(strsrch, safetext, safebuffer);
             safetext = safebuffer;
             coleiter = strsrch->textIter;
             ucol_setOffset(coleiter, safeoffset, status);
@@ -1310,13 +1308,13 @@ UTextOffset doNextCanonicalSuffixMatch(UStringSearch *strsrch,
             UTextOffset failedoffset = getColElemIterOffset(coleiter, FALSE);
             if (isSafe && failedoffset >= safelength) {
                 // alas... no hope. failed at rearranged accent set
-                cleanUpSafeText(strsrch, safetext, safebuffer, coleiter);
+                cleanUpSafeText(strsrch, safetext, safebuffer);
                 return USEARCH_DONE;
             }
             else {
                 if (isSafe) {
                     failedoffset += safeoffset;
-                    cleanUpSafeText(strsrch, safetext, safebuffer, coleiter);
+                    cleanUpSafeText(strsrch, safetext, safebuffer);
                 }
                 
                 // try rearranging the front accents
@@ -1337,7 +1335,7 @@ UTextOffset doNextCanonicalSuffixMatch(UStringSearch *strsrch,
         UTextOffset result     = getColElemIterOffset(coleiter, FALSE);
         // sets the text iterator here with the correct expansion and offset
         int32_t    leftoverces = getExpansionPrefix(coleiter);
-        cleanUpSafeText(strsrch, safetext, safebuffer, coleiter);
+        cleanUpSafeText(strsrch, safetext, safebuffer);
         if (result >= safelength) { 
             result = textoffset;
         }
@@ -1809,13 +1807,12 @@ UTextOffset doPreviousCanonicalSuffixMatch(UStringSearch *strsrch,
         unorm_normalize(text + offset, end - offset, UNORM_NFD, 0, accents, 
                         INITIAL_ARRAY_SIZE_, status);    
         
-        UTextOffset accentsindex[INITIAL_ARRAY_SIZE_];      
-        UTextOffset accentsize = getUnblockedAccentIndex(accents, 
+        UTextOffset         accentsindex[INITIAL_ARRAY_SIZE_];      
+        UTextOffset         accentsize = getUnblockedAccentIndex(accents, 
                                                          accentsindex);
-              UTextOffset         count    = (2 << (accentsize - 1)) - 2;  
-              UChar               buffer[INITIAL_ARRAY_SIZE_];
-        const UCollator          *collator = strsrch->collator;
-              UCollationElements *coleiter = strsrch->utilIter;
+        UTextOffset         count      = (2 << (accentsize - 1)) - 2;  
+        UChar               buffer[INITIAL_ARRAY_SIZE_];
+        UCollationElements *coleiter = strsrch->utilIter;
         while (U_SUCCESS(*status) && count > 0) {
             UChar *rearrange = strsrch->canonicalSuffixAccents;
             // copy the base characters
@@ -1914,10 +1911,10 @@ UTextOffset doPreviousCanonicalPrefixMatch(UStringSearch *strsrch,
         if (textce == UCOL_NULLORDER) {
             // check if we have passed the safe buffer
             if (coleiter == strsrch->textIter) {
-                cleanUpSafeText(strsrch, safetext, safebuffer, coleiter);
+                cleanUpSafeText(strsrch, safetext, safebuffer);
                 return USEARCH_DONE;
             }
-            cleanUpSafeText(strsrch, safetext, safebuffer, coleiter);
+            cleanUpSafeText(strsrch, safetext, safebuffer);
             safetext = safebuffer;
             coleiter = strsrch->textIter;
             ucol_setOffset(coleiter, safeoffset, status);
@@ -1930,13 +1927,13 @@ UTextOffset doPreviousCanonicalPrefixMatch(UStringSearch *strsrch,
             UTextOffset failedoffset = ucol_getOffset(coleiter);
             if (isSafe && failedoffset <= prefixlength) {
                 // alas... no hope. failed at rearranged accent set
-                cleanUpSafeText(strsrch, safetext, safebuffer, coleiter);
+                cleanUpSafeText(strsrch, safetext, safebuffer);
                 return USEARCH_DONE;
             }
             else {
                 if (isSafe) {
                     failedoffset = safeoffset - failedoffset;
-                    cleanUpSafeText(strsrch, safetext, safebuffer, coleiter);
+                    cleanUpSafeText(strsrch, safetext, safebuffer);
                 }
                 
                 // try rearranging the end accents
@@ -1957,7 +1954,7 @@ UTextOffset doPreviousCanonicalPrefixMatch(UStringSearch *strsrch,
         UTextOffset result      = ucol_getOffset(coleiter);
         // sets the text iterator here with the correct expansion and offset
         int32_t     leftoverces = getExpansionSuffix(coleiter);
-        cleanUpSafeText(strsrch, safetext, safebuffer, coleiter);
+        cleanUpSafeText(strsrch, safetext, safebuffer);
         if (result <= prefixlength) { 
             result = textoffset;
         }
@@ -2210,24 +2207,20 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_open(const UChar *pattern,
     }
 
     if (U_SUCCESS(*status)) {
-        UCollator     *collator = ucol_open(locale, status);
-        UStringSearch *result;
+        UCollator *collator = ucol_open(locale, status);
+        if (U_SUCCESS(*status)) {
+            UStringSearch *result = usearch_openFromCollator(pattern, 
+                                              patternlength, text, textlength, 
+                                              collator, breakiter, status);
 
-        if (U_FAILURE(*status)) {
-            return NULL;
+            if (result == NULL || U_FAILURE(*status)) {
+                ucol_close(collator);
+            }
+            else {
+                result->ownCollator = TRUE;
+            }
+            return result;
         }
-
-        result = usearch_openFromCollator(pattern, patternlength, text,
-                                          textlength, collator, breakiter,
-                                          status);
-
-        if (result == NULL) {
-            ucol_close(collator);
-        }
-        else {
-            result->ownCollator = TRUE;
-        }
-        return result;
     }
     return NULL;
 }
@@ -2565,7 +2558,7 @@ U_CAPI void U_EXPORT2 usearch_setPattern(      UStringSearch *strsrch,
                                                int32_t        patternlength,
                                                UErrorCode    *status)
 {
-    if (pattern == NULL) {
+    if (strsrch == NULL || pattern == NULL) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
     }
     if (U_SUCCESS(*status)) {
@@ -2746,6 +2739,7 @@ U_CAPI UTextOffset U_EXPORT2 usearch_previous(UStringSearch *strsrch,
             offset                     = search->textLength;
             search->isForwardSearching = FALSE;
             search->reset              = FALSE;
+            ucol_setOffset(strsrch->textIter, offset, status);
         }
         else {
             offset = usearch_getOffset(strsrch);
