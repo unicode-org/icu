@@ -50,7 +50,7 @@
 
 // static initialization
 char TimeZone::fgClassID = 0; // Value is irrelevant
-
+int32_t TimeZone::fTimezoneCount = 0;
 TimeZone*  TimeZone::fgDefaultZone = NULL;
 UHashtable* TimeZone::fgHashtable   = NULL;
 
@@ -88,7 +88,7 @@ UErrorCode                TimeZone::fgStatus = U_ZERO_ERROR;
 with complex objects */
 /*const int32_t TimeZone::kSystemTimeZonesCount = 320;*/
 /* {sfb} illegal to have non-const array dimension */
-#define kSystemTimeZonesCount 320
+#define kSystemTimeZonesCount 500
 bool_t TimeZone::kSystemInited = FALSE;
 SimpleTimeZone* TimeZone::kSystemTimeZones[kSystemTimeZonesCount];
 
@@ -1778,6 +1778,7 @@ TimeZone::initSystemTimeZones(void)
     new SimpleTimeZone(6*U_MILLIS_PER_HOUR, "Asia/Thimbu" /*BTT*/);
     // Asia/Thimbu  Bhutan(BT)  6:00    -   BTT # Bhutan Time
     //----------------------------------------------------------
+    fTimezoneCount = n;
   }
 }
 // ---------------- END GENERATED DATA ----------------
@@ -1843,7 +1844,6 @@ TimeZone::getHashtable()
   if (fgAvailableIDs == 0)
     {
       UHashtable *newHashtable;
-      int32_t    newTimeZonesCount;
       UnicodeString *newAvailableIds;
      
       // build a hashtable that contains all the TimeZone objects in kSystemTimeZones
@@ -1852,11 +1852,10 @@ TimeZone::getHashtable()
       newHashtable = uhash_open((UHashFunction) uhash_hashUString, &err);
       uhash_setValueDeleter(newHashtable, TimeZone::deleteTimeZone);
       
-      newTimeZonesCount = kSystemTimeZonesCount;
-      newAvailableIds = new UnicodeString[newTimeZonesCount];
+      newAvailableIds = new UnicodeString[fTimezoneCount];
 
         int32_t i;
-        for (i=0; i<kSystemTimeZonesCount; ++i)
+        for (i=0; i<fTimezoneCount; ++i)
         {
             SimpleTimeZone *tz = kSystemTimeZones[i];
         uhash_putKey(newHashtable, (tz->getID(newAvailableIds[i])).hashCode() & 0x7FFFFFFF, tz , &err);
@@ -1867,7 +1866,7 @@ TimeZone::getHashtable()
         if (fgHashtable == 0)
       {
         fgHashtable = newHashtable;
-        fgAvailableIDsCount = newTimeZonesCount;
+        fgAvailableIDsCount = fTimezoneCount;
         fgAvailableIDs = newAvailableIds;
       }
     else
