@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2002/07/30 02:31:34 $ 
- * $Revision: 1.33 $
+ * $Date: 2002/08/06 21:48:55 $ 
+ * $Revision: 1.34 $
  *
  *****************************************************************************************
  */
@@ -73,6 +73,7 @@ public class TestAll extends TestFmwk {
     
     public void TestCollator() throws Exception {
         run(new TestFmwk[] {
+            new com.ibm.icu.dev.test.collator.CollationTest(),
             new com.ibm.icu.dev.test.collator.CollationAPITest(),
             new com.ibm.icu.dev.test.collator.CollationCurrencyTest(),
             new com.ibm.icu.dev.test.collator.CollationDanishTest(),
