@@ -437,6 +437,7 @@
                  packagenames="com.ibm.icu.*"
                  excludepackagenames="com.ibm.icu.dev.*,com.ibm.icu.impl.*"
                  classpath="${build.dir}"
+                 classpath="${build.dir}"
                  source="1.4">
             <doclet name="com.ibm.icu.dev.tool.docs.CheckTags"
                     path="${build.dir}">
@@ -532,6 +533,7 @@
             excludes="**/CVS/**/*,com/ibm/icu/lang/UScriptRun.java, com/ibm/icu/impl/ICUListResourceBundle.java, com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/UnicodeCharacterIterator.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
+        	source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
@@ -540,6 +542,7 @@
             excludes="**/CVS/**/*,com/ibm/icu/dev/test/normalizer/TestDeprecatedNormalizerAPI.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
+        	source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
@@ -554,6 +557,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+         	source="1.4"
             debug="on" deprecation="off"/>
     </target>
     <target name="collatorTests" depends="collator">
@@ -574,6 +578,7 @@
             excludes="**/CVS/**/*,com/ibm/icu/impl/UtilityExtensions.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
+         	source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
@@ -583,6 +588,7 @@
             excludes="**/CVS/**/*,com/ibm/icu/impl/UtilityExtensions.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
+         	source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
             <copy file="${src.dir}/com/ibm/icu/impl/data/unames.icu"
@@ -611,6 +617,7 @@
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
+         	source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
@@ -632,6 +639,7 @@
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
+         	source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
             <!-- Calendar does not require Collation data, BreakIterator data -->
@@ -656,6 +664,7 @@
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java,com/ibm/icu/text/UnicodeFilterLogic*.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
+         	source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
          <copy todir="${build.dir}/com/ibm/icu/impl/data">
@@ -687,6 +696,7 @@
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
+         	source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
@@ -708,6 +718,7 @@
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
+         	source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
             <!-- BreakIterator does not require collation data so delete it -->
