@@ -291,7 +291,7 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
 ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 const UnicodeString&    localeName,
                                 UErrorCode&              status)
-  :   fPath(path, kDefaultSuffix),
+  :   fPath(path, UnicodeString(kDefaultSuffix,"")),
 	  fRealLocale(localeName),
       fIsDataOwned(TRUE),
       fVersionID(0),
@@ -948,21 +948,24 @@ const UnicodeString*
 ResourceBundle::listInstalledLocales(const UnicodeString& path,
                                      int32_t&   numInstalledLocales)
 {
-  const UHashtable* h = getFromCache(PathInfo(path, kDefaultSuffix), 
-				     kIndexLocaleName, fgUserCache);
+  const UnicodeString kDefaultSuffixString = UnicodeString(kDefaultSuffix,"");
+
+
+  const UHashtable* h = getFromCache(PathInfo(path, kDefaultSuffixString), 
+				     UnicodeString(kIndexLocaleName,""), fgUserCache);
   
   if(h == 0) {
     UErrorCode error = U_ZERO_ERROR;
-    if(parseIfUnparsed(PathInfo(path, kDefaultSuffix), 
-		       kIndexFilename, fgUserCache, 
+    if(parseIfUnparsed(PathInfo(path, kDefaultSuffixString), 
+		       UnicodeString(kIndexFilename,""), fgUserCache, 
 		       fgUserVisitedFiles, error)) {
-      h = getFromCache(PathInfo(path, kDefaultSuffix), 
-		       kIndexLocaleName, fgUserCache);
+      h = getFromCache(PathInfo(path, kDefaultSuffixString), 
+		       UnicodeString(kIndexLocaleName,""), fgUserCache);
     }
   }
   
   if(h != 0) {
-    UnicodeString ukIndexTag = kIndexTag;
+    UnicodeString ukIndexTag = UnicodeString(kIndexTag,"");
     ResourceBundleData *data = 
       (ResourceBundleData*) uhash_get(h, ukIndexTag.hashCode() & 0x7FFFFFFF);
     if(data != 0 
@@ -997,7 +1000,7 @@ listInstalledLocalesImplementation(const char* path,
   // ResourceBundle and does the work, and a hidden method with C
   // linkage that calls it and is used by the C implementation of
   // Locale.  Disgusting, isn't it?  --rtg 11/30/98
-  const UnicodeString* array = (ResourceBundle::listInstalledLocales(path, *numInstalledLocales));
+  const UnicodeString* array = (ResourceBundle::listInstalledLocales(UnicodeString(path,""), *numInstalledLocales));
   const UnicodeString**  arrayOfPtrs = (const UnicodeString**) new UnicodeString*[*numInstalledLocales];
   for(int i = 0; i < *numInstalledLocales; i++)
     arrayOfPtrs[i] = &array[i];
@@ -1327,7 +1330,7 @@ ResourceBundle::PathInfo::openFile(const UnicodeString& localeName) const
     UnicodeString workingName(makeCacheKey(localeName));
     int32_t size = workingName.size();
     char* returnVal = new char[size + 1];
-    workingName.extract(0, size, returnVal);
+    workingName.extract(0, size, returnVal, "");
     returnVal[size] = 0;
     FileStream* result = T_FileStream_open(returnVal, "rb");
     delete [] returnVal;

@@ -1138,6 +1138,13 @@ T_UnicodeString_getUChars(const UnicodeString *s)
   return s->getUChars();
 }
 
+// private function for C API
+U_CFUNC int32_t
+T_UnicodeString_extract(const UnicodeString *s, char *dst)
+{
+  return s->extract(0,s->size(),dst,"");
+}
+
 
 //========================================
 // Default converter caching
