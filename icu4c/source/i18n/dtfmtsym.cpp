@@ -568,6 +568,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     ResourceBundle zoneArray = resource.get(fgZoneStringsTag, status);
     fZoneStringsRowCount = zoneArray.getSize();
     ResourceBundle zoneRow = zoneArray.get((int32_t)0, status);
+    /* TODO: Fix the case where the zoneStrings is not a perfect square array of information. */
     fZoneStringsColCount = zoneRow.getSize();
     fZoneStrings = new UnicodeString * [fZoneStringsRowCount];
     for(i = 0; i<fZoneStringsRowCount; i++) {
