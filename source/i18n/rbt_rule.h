@@ -87,6 +87,21 @@ private:
     UnicodeString output;
 
     /**
+     * Array of segments.  These are segments of the input string that may be
+     * referenced and appear in the output string.  Each segment is stored as an
+     * offset, limit pair.  Segments are referenced by a 1-based index;
+     * reference i thus includes characters at offset segments[2*i-2] to
+     * segments[2*i-1]-1 in the pattern string.
+     *
+     * In the output string, a segment reference is indicated by a character in
+     * a special range, as defined by RuleBasedTransliterator.Data.
+     *
+     * Most rules have no segments, in which case segments is null, and the
+     * output string need not be checked for segment reference characters.
+     */
+    int32_t* segments;
+
+    /**
      * The length of the string that must match before the key.  If
      * zero, then there is no matching requirement before the key.
      * Substring [0,anteContextLength) of pattern is the anteContext.
@@ -125,6 +140,35 @@ public:
      * <code>output</code>; that is, -1 is equivalent to
      * <code>output.length()</code>.  If greater than
      * <code>output.length()</code> then an exception is thrown.
+     * @param adoptedSegs array of 2n integers.  Each of n pairs consists of offset,
+     * limit for a segment of the input string.  Characters in the output string
+     * refer to these segments if they are in a special range determined by the
+     * associated RuleBasedTransliterator.Data object.  May be null if there are
+     * no segments.
+     */
+    TransliterationRule(const UnicodeString& input,
+                        int32_t anteContextPos, int32_t postContextPos,
+                        const UnicodeString& output,
+                        int32_t cursorPos, int32_t cursorOffset,
+                        int32_t* adoptedSegs,
+                        UErrorCode& status);
+
+    /**
+     * Construct a new rule with the given input, output text, and other
+     * attributes.  A cursor position may be specified for the output text.
+     * @param input input string, including key and optional ante and
+     * post context
+     * @param anteContextPos offset into input to end of ante context, or -1 if
+     * none.  Must be <= input.length() if not -1.
+     * @param postContextPos offset into input to start of post context, or -1
+     * if none.  Must be <= input.length() if not -1, and must be >=
+     * anteContextPos.
+     * @param output output string
+     * @param cursorPos offset into output at which cursor is located, or -1 if
+     * none.  If less than zero, then the cursor is placed after the
+     * <code>output</code>; that is, -1 is equivalent to
+     * <code>output.length()</code>.  If greater than
+     * <code>output.length()</code> then an exception is thrown.
      */
     TransliterationRule(const UnicodeString& input,
                         int32_t anteContextPos, int32_t postContextPos,
@@ -136,18 +180,6 @@ public:
      * Destructor.
      */
     virtual ~TransliterationRule();
-
-    /**
-     * Return the length of the key.  Equivalent to <code>getKey().length()</code>.
-     * @return the length of the match key.
-     */
-    virtual int32_t getKeyLength(void) const;
-
-    /**
-     * Return the output string.
-     * @return the output string.
-     */
-    virtual const UnicodeString& getOutput(void) const;
 
     /**
      * Return the position of the cursor within the output string.
@@ -168,7 +200,24 @@ public:
      * unless the first character of the key is a set.  If it's a
      * set, or otherwise can match multiple keys, the index value is -1.
      */
-    int16_t getIndexValue(const TransliterationRuleData& data);
+    int16_t getIndexValue(const TransliterationRuleData& data) const;
+
+    /**
+     * Do a replacement of the input pattern with the output text in
+     * the given string, at the given offset.  This method assumes
+     * that a match has already been found in the given text at the
+     * given position.
+     * @param text the text containing the substring to be replaced
+     * @param offset the offset into the text at which the pattern
+     * matches.  This is the offset to the point after the ante
+     * context, if any, and before the match string and any post
+     * context.
+     * @param data the RuleBasedTransliterator.Data object specifying
+     * context for this transliterator.
+     * @return the change in the length of the text
+     */
+    int32_t replace(Replaceable& text, int32_t offset,
+                    const TransliterationRuleData& data) const;
 
     /**
      * Internal method.  Returns true if this rule matches the given
@@ -181,7 +230,7 @@ public:
      * then it will match any key.
      */
     UBool matchesIndexValue(uint8_t v,
-                             const TransliterationRuleData& data);
+                             const TransliterationRuleData& data) const;
 
     /**
      * Return true if this rule masks another rule.  If r1 masks r2 then
@@ -289,6 +338,15 @@ public:
     virtual UBool charMatches(UChar keyChar, UChar textChar,
                                const TransliterationRuleData& data,
                                const UnicodeFilter* filter) const;
+
+private:
+
+    void init(const UnicodeString& input,
+              int32_t anteContextPos, int32_t postContextPos,
+              const UnicodeString& output,
+              int32_t cursorPos, int32_t cursorOffset,
+              int32_t* adoptedSegs,
+              UErrorCode& status);
 };
 
 #endif

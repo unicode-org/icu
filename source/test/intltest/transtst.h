@@ -96,6 +96,22 @@ class TransliteratorTest : public IntlTest {
      */
     void TestJ329(void);
 
+    /**
+     * Test segments and segment references.
+     */
+    void TestSegments();
+    
+    /**
+     * Test cursor positioning outside of the key
+     */
+    void TestCursorOffset();
+    
+    /**
+     * Test zero length and > 1 char length variable values.  Test
+     * use of variable refs in UnicodeSets.
+     */
+    void TestArbitraryVariableValues();
+
     //======================================================================
     // Support methods
     //======================================================================

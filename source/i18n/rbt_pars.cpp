@@ -17,27 +17,31 @@
 #include "unicode/parsepos.h"
 #include "symtable.h"
 #include "unicode/parseerr.h"
+#include "hash.h"
 
 // Operators
-const UChar TransliterationRuleParser::VARIABLE_DEF_OP = 0x003D/*=*/;
-const UChar TransliterationRuleParser::FORWARD_RULE_OP = 0x003E/*>*/;
-const UChar TransliterationRuleParser::REVERSE_RULE_OP = 0x003C/*<*/;
-const UChar TransliterationRuleParser::FWDREV_RULE_OP  = 0x007E/*~*/; // internal rep of <> op
-const UnicodeString TransliterationRuleParser::OPERATORS = UNICODE_STRING("=><", 3);
+#define VARIABLE_DEF_OP ((UChar)0x003D) /*=*/
+#define FORWARD_RULE_OP ((UChar)0x003E) /*>*/
+#define REVERSE_RULE_OP ((UChar)0x003C) /*<*/
+#define FWDREV_RULE_OP  ((UChar)0x007E) /*~*/ // internal rep of <> op
+#define OPERATORS       UNICODE_STRING("=><", 3)
 
 // Other special characters
-const UChar TransliterationRuleParser::QUOTE = 0x0027/*'*/;
-const UChar TransliterationRuleParser::ESCAPE = 0x005C/*\*/;
-const UChar TransliterationRuleParser::END_OF_RULE = 0x003B/*;*/;
-const UChar TransliterationRuleParser::RULE_COMMENT_CHAR = 0x0023/*#*/;
+#define QUOTE             ((UChar)0x0027) /*'*/
+#define ESCAPE            ((UChar)0x005C) /*\*/
+#define END_OF_RULE       ((UChar)0x003B) /*;*/
+#define RULE_COMMENT_CHAR ((UChar)0x0023) /*#*/
 
-const UChar TransliterationRuleParser::VARIABLE_REF_OPEN = 0x007B/*{*/;
-const UChar TransliterationRuleParser::VARIABLE_REF_CLOSE = 0x007D/*}*/;
-const UChar TransliterationRuleParser::CONTEXT_OPEN = 0x0028/*(*/;
-const UChar TransliterationRuleParser::CONTEXT_CLOSE = 0x0029/*)*/;
-const UChar TransliterationRuleParser::SET_OPEN = 0x005B/*[*/;
-const UChar TransliterationRuleParser::SET_CLOSE = 0x005D/*]*/;
-const UChar TransliterationRuleParser::CURSOR_POS = 0x007C/*|*/;
+#define SEGMENT_OPEN       ((UChar)0x0028) /*(*/
+#define SEGMENT_CLOSE      ((UChar)0x0029) /*)*/
+#define CONTEXT_ANTE       ((UChar)0x007B) /*{*/
+#define CONTEXT_POST       ((UChar)0x007D) /*}*/
+#define SET_OPEN           ((UChar)0x005B) /*[*/
+#define SET_CLOSE          ((UChar)0x005D) /*]*/
+#define CURSOR_POS         ((UChar)0x007C) /*|*/
+#define CURSOR_OFFSET      ((UChar)0x0040) /*@*/
+
+const UnicodeString TransliterationRuleParser::gOPERATORS = OPERATORS;
 
 //----------------------------------------------------------------------
 // BEGIN ParseData
@@ -58,14 +62,12 @@ public:
     ParseData(const TransliterationRuleData* data = 0,
               const UVector* setVariablesVector = 0);
 
-    /**
-     * Lookup the object associated with this string and return it.
-     * Return U_ILLEGAL_ARGUMENT_ERROR status if the name does not
-     * exist.  Return a non-NULL set if the name is mapped to a set;
-     * otherwise return a NULL set.
-     */
-    virtual void lookup(const UnicodeString& name, UChar& c, UnicodeSet*& set,
-                        UErrorCode& status) const;
+    virtual const UnicodeString* lookup(const UnicodeString& s) const;
+
+    virtual const UnicodeSet* lookupSet(UChar ch) const;
+
+    virtual UnicodeString parseReference(const UnicodeString& text,
+                                         ParsePosition& pos, int32_t limit) const;
 };
 
 ParseData::ParseData(const TransliterationRuleData* d,
@@ -73,21 +75,389 @@ ParseData::ParseData(const TransliterationRuleData* d,
     data(d), setVariablesVector(sets) {}
 
 /**
- * Implement SymbolTable API.  Lookup a variable, returning
- * either a Character, a UnicodeSet, or null.
+ * Implement SymbolTable API.
  */
-void ParseData::lookup(const UnicodeString& name, UChar& c, UnicodeSet*& set,
-                       UErrorCode& status) const {
-    c = data->lookupVariable(name, status);
-    if (U_SUCCESS(status)) {
-        int32_t i = c - data->setVariablesBase;
+const UnicodeString* ParseData::lookup(const UnicodeString& name) const {
+    return (const UnicodeString*) data->variableNames->get(name);
+}
+
+/**
+ * Implement SymbolTable API.
+ */
+const UnicodeSet* ParseData::lookupSet(UChar ch) const {
+    // Note that we cannot use data.lookupSet() because the
+    // set array has not been constructed yet.
+    const UnicodeSet* set = NULL;
+    int32_t i = ch - data->setVariablesBase;
+    if (i >= 0 && i < setVariablesVector->size()) {
+        int32_t i = ch - data->setVariablesBase;
         set = (i < setVariablesVector->size()) ?
             (UnicodeSet*) setVariablesVector->elementAt(i) : 0;
     }
+    return set;
+}
+
+/**
+ * Implement SymbolTable API.  Parse out a symbol reference
+ * name.
+ */
+UnicodeString ParseData::parseReference(const UnicodeString& text,
+                                        ParsePosition& pos, int32_t limit) const {
+    int32_t start = pos.getIndex();
+    int32_t i = start;
+    UnicodeString result;
+    while (i < limit) {
+        UChar c = text.charAt(i);
+        if ((i==start && !Unicode::isUnicodeIdentifierStart(c)) ||
+            !Unicode::isUnicodeIdentifierPart(c)) {
+            break;
+        }
+        ++i;
+    }
+    if (i == start) { // No valid name chars
+        return result; // Indicate failure with empty string
+        //if (start > 0) {
+        //    --start;
+        //}
+        //limit = ruleEnd(text, start, limit);
+        //throw new IllegalArgumentException("Illegal variable reference " +
+        //                                   text.substring(start, limit));
+    }
+    pos.setIndex(i);
+    text.extractBetween(start, i, result);
+    return result;
 }
 
 //----------------------------------------------------------------------
-// END ParseData
+// BEGIN RuleHalf
+//----------------------------------------------------------------------
+
+/**
+ * A class representing one side of a rule.  This class knows how to
+ * parse half of a rule.  It is tightly coupled to the method
+ * RuleBasedTransliterator.Parser.parseRule().
+ */
+class RuleHalf {
+
+public:
+
+    UnicodeString text;
+
+    int32_t cursor; // position of cursor in text
+    int32_t ante;   // position of ante context marker '{' in text
+    int32_t post;   // position of post context marker '}' in text
+
+    // Record the position of the segment substrings and references.  A
+    // given side should have segments or segment references, but not
+    // both.
+    UVector* segments; // ref substring start,limits
+    int32_t maxRef;       // index of largest ref (1..9)
+
+    // Record the offset to the cursor either to the left or to the
+    // right of the key.  This is indicated by characters on the output
+    // side that allow the cursor to be positioned arbitrarily within
+    // the matching text.  For example, abc{def} > | @@@ xyz; changes
+    // def to xyz and moves the cursor to before abc.  Offset characters
+    // must be at the start or end, and they cannot move the cursor past
+    // the ante- or postcontext text.  Placeholders are only valid in
+    // output text.
+    int32_t cursorOffset; // only nonzero on output side
+
+    TransliterationRuleParser& parser;
+
+    static const UnicodeString gOperators;
+
+    //--------------------------------------------------
+    // Methods
+
+    RuleHalf(TransliterationRuleParser& parser);
+    ~RuleHalf();
+
+    /**
+     * Parse one side of a rule, stopping at either the limit,
+     * the END_OF_RULE character, or an operator.  Return
+     * the pos of the terminating character (or limit).
+     */
+    int32_t parse(const UnicodeString& rule, int32_t pos, int32_t limit,
+                  TransliterationRuleParser& parser);
+
+    /**
+     * Remove context.
+     */
+    void removeContext();
+
+    /**
+     * Create and return an int[] array of segments.
+     */
+    int32_t* createSegments() const;
+
+    int syntaxError(int32_t code,
+                    const UnicodeString& rule,
+                    int32_t start) {
+        return parser.syntaxError(code, rule, start);
+    }
+};
+
+const UnicodeString RuleHalf::gOperators = OPERATORS;
+
+RuleHalf::RuleHalf(TransliterationRuleParser& p) : parser(p) {
+    cursor = -1;
+    ante = -1;
+    post = -1;
+    segments = NULL;
+    maxRef = -1;
+    cursorOffset = 0;
+}
+
+RuleHalf::~RuleHalf() {
+    delete segments;
+}
+
+/**
+ * Parse one side of a rule, stopping at either the limit,
+ * the END_OF_RULE character, or an operator.  Return
+ * the pos of the terminating character (or limit).
+ */
+int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit,
+              TransliterationRuleParser& parser) {
+    int32_t start = pos;
+    UnicodeString& buf = text;
+    ParsePosition pp;
+    int32_t cursorOffsetPos = 0; // Position of first CURSOR_OFFSET on _right_
+    UnicodeString scratch;
+    bool_t done = FALSE;
+
+    while (pos < limit && !done) {
+        UChar c = rule.charAt(pos++);
+        if (Unicode::isWhitespace(c)) {
+            // Ignore whitespace.  Note that this is not Unicode
+            // spaces, but Java spaces -- a subset, representing
+            // whitespace likely to be seen in code.
+            continue;
+        }
+        // Handle escapes
+        if (c == ESCAPE) {
+            if (pos == limit) {
+                return syntaxError(RuleBasedTransliterator::TRAILING_BACKSLASH, rule, start);
+            }
+
+            // UNLIKE THE JAVA version, we parse \uXXXX escapes.  We
+            // do not do this in Java because the compiler has already
+            // done it when the ResourceBundle file was compiled.
+            // Parse \uXXXX escapes
+            c = rule.charAt(pos++);
+            if (c == 0x0075/*u*/) {
+                if ((pos+4) > limit) {
+                    return syntaxError(RuleBasedTransliterator::MALFORMED_UNICODE_ESCAPE, rule, start);
+                }
+                c = (UChar)0x0000;
+                for (int32_t plim=pos+4; pos<plim; ++pos) { // [sic]
+                    int32_t digit = Unicode::digit(rule.charAt(pos), 16);
+                    if (digit<0) {
+                        return syntaxError(RuleBasedTransliterator::MALFORMED_UNICODE_ESCAPE, rule, start);
+                    }
+                    c = (UChar) ((c << 4) | digit);
+                }
+            }
+ 
+            buf.append(c);
+            continue;
+        }
+        // Handle quoted matter
+        if (c == QUOTE) {
+            int32_t iq = rule.indexOf(QUOTE, pos);
+            if (iq == pos) {
+                buf.append(c); // Parse [''] outside quotes as [']
+                ++pos;
+            } else {
+                /* This loop picks up a segment of quoted text of the
+                 * form 'aaaa' each time through.  If this segment
+                 * hasn't really ended ('aaaa''bbbb') then it keeps
+                 * looping, each time adding on a new segment.  When it
+                 * reaches the final quote it breaks.
+                 */
+                for (;;) {
+                    if (iq < 0) {
+                        return syntaxError(RuleBasedTransliterator::UNTERMINATED_QUOTE, rule, start);
+                    }
+                    scratch.truncate(0);
+                    rule.extractBetween(pos, iq, scratch);
+                    buf.append(scratch);
+                    pos = iq+1;
+                    if (pos < limit && rule.charAt(pos) == QUOTE) {
+                        // Parse [''] inside quotes as [']
+                        iq = rule.indexOf(QUOTE, pos+1);
+                        // Continue looping
+                    } else {
+                        break;
+                    }
+                }
+            }
+            continue;
+        }
+        if (gOperators.indexOf(c) >= 0) {
+            --pos; // Backup to point to operator
+            break;
+        }
+        switch (c) {
+        case SEGMENT_OPEN:
+        case SEGMENT_CLOSE:
+            // Handle segment definitions "(" and ")"
+            // Parse "(", ")"
+            if (segments == NULL) {
+                segments = new UVector();
+            }
+            if ((c == SEGMENT_OPEN) !=
+                (segments->size() % 2 == 0)) {
+                return syntaxError(RuleBasedTransliterator::MISMATCHED_SEGMENT_DELIMITERS,
+                                   rule, start);
+            }
+            segments->addElement((void*) buf.length());
+            break;
+        case END_OF_RULE:
+            --pos; // Backup to point to END_OF_RULE
+            done = TRUE;
+            break;
+        case SymbolTable::SYMBOL_REF:
+            // Handle variable references and segment references "$1" .. "$9"
+            {
+                // A variable reference must be followed immediately
+                // by a Unicode identifier start and zero or more
+                // Unicode identifier part characters, or by a digit
+                // 1..9 if it is a segment reference.
+                if (pos == limit) {
+                    return syntaxError(RuleBasedTransliterator::MALFORMED_SYMBOL_REFERENCE, rule, start);
+                }
+                // Parse "$1" "$2" .. "$9"
+                c = rule.charAt(pos);
+                int32_t r = Unicode::digit(c, 10);
+                if (r >= 1 && r <= 9) {
+                    if (r > maxRef) {
+                        maxRef = r;
+                    }
+                    buf.append(parser.data->getSegmentStandin(r));
+                    ++pos;
+                } else {
+                    pp.setIndex(pos);
+                    UnicodeString name = parser.parseData->
+                                    parseReference(rule, pp, limit);
+                    if (name.length() == 0) {
+                        return syntaxError(RuleBasedTransliterator::MALFORMED_VARIABLE_REFERENCE,
+                                           rule, start);
+                    }
+                    pos = pp.getIndex();
+                    // If this is a variable definition statement,
+                    // then the LHS variable will be undefined.  In
+                    // that case appendVariableDef() will append the
+                    // special placeholder char variableLimit-1.
+
+                    //buf.append(parser.getVariableDef(name));
+                    parser.appendVariableDef(name, buf);
+                }
+            }
+            break;
+        case CONTEXT_ANTE:
+            if (ante >= 0) {
+                return syntaxError(RuleBasedTransliterator::MULTIPLE_ANTE_CONTEXTS, rule, start);
+            }
+            ante = buf.length();
+            break;
+        case CONTEXT_POST:
+            if (post >= 0) {
+                return syntaxError(RuleBasedTransliterator::MULTIPLE_POST_CONTEXTS, rule, start);
+            }
+            post = buf.length();
+            break;
+        case SET_OPEN:
+            pp.setIndex(pos-1); // Backup to opening '['
+            buf.append(parser.parseSet(rule, pp));
+            if (U_FAILURE(parser.status)) {
+                return syntaxError(RuleBasedTransliterator::MALFORMED_SET, rule, start);
+            }
+            pos = pp.getIndex();
+            break;
+        case CURSOR_POS:
+            if (cursor >= 0) {
+                return syntaxError(RuleBasedTransliterator::MULTIPLE_CURSORS, rule, start);
+            }
+            cursor = buf.length();
+            break;
+        case CURSOR_OFFSET:
+            if (cursorOffset < 0) {
+                if (buf.length() > 0) {
+                    return syntaxError(RuleBasedTransliterator::MISPLACED_CURSOR_OFFSET, rule, start);
+                }
+                --cursorOffset;
+            } else if (cursorOffset > 0) {
+                if (buf.length() != cursorOffsetPos || cursor >= 0) {
+                    return syntaxError(RuleBasedTransliterator::MISPLACED_CURSOR_OFFSET, rule, start);
+                }
+                ++cursorOffset;
+            } else {
+                if (cursor == 0 && buf.length() == 0) {
+                    cursorOffset = -1;
+                } else if (cursor < 0) {
+                    cursorOffsetPos = buf.length();
+                    cursorOffset = 1;
+                } else {
+                    return syntaxError(RuleBasedTransliterator::MISPLACED_CURSOR_OFFSET, rule, start);
+                }
+            }
+            break;
+        // case SET_CLOSE:
+        default:
+            // Disallow unquoted characters other than [0-9A-Za-z]
+            // in the printable ASCII range.  These characters are
+            // reserved for possible future use.
+            if (c >= 0x0021 && c <= 0x007E &&
+                !((c >= 0x0030/*'0'*/ && c <= 0x0039/*'9'*/) ||
+                  (c >= 0x0041/*'A'*/ && c <= 0x005A/*'Z'*/) ||
+                  (c >= 0x0061/*'a'*/ && c <= 0x007A/*'z'*/))) {
+                return syntaxError(RuleBasedTransliterator::UNQUOTED_SPECIAL, rule, start);
+            }
+            buf.append(c);
+            break;
+        }
+    }
+
+    if (cursorOffset > 0 && cursor != cursorOffsetPos) {
+        return syntaxError(RuleBasedTransliterator::MISPLACED_CURSOR_OFFSET, rule, start);
+    }
+    // text = buf.toString();
+    return pos;
+}
+
+/**
+ * Remove context.
+ */
+void RuleHalf::removeContext() {
+    //text = text.substring(ante < 0 ? 0 : ante,
+    //                      post < 0 ? text.length() : post);
+    if (post >= 0) {
+        text.remove(post);
+    }
+    if (ante >= 0) {
+        text.removeBetween(0, ante);
+    }
+    ante = post = -1;
+}
+
+/**
+ * Create and return an int32_t[] array of segments.
+ */
+int32_t* RuleHalf::createSegments() const {
+    if (segments == NULL) {
+        return NULL;
+    }
+    int32_t* result = new int32_t[segments->size()];
+    for (int32_t i=0; i<segments->size(); ++i) {
+        result[i] = (int32_t) segments->elementAt(i);
+    }
+    return result;
+}
+
+//----------------------------------------------------------------------
+// END RuleHalf
 //----------------------------------------------------------------------
 
 TransliterationRuleData*
@@ -206,250 +576,141 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
     // Locate the left side, operator, and right side
     int32_t start = pos;
     UChar op = 0;
+    const UnicodeString& rule = rules; // TEMPORARY: FIX LATER
 
-    UnicodeString buf;
-    int32_t cursor = -1; // position of cursor in buf
-    int32_t ante = -1;   // position of ante context marker ')' in buf
-    int32_t post = -1;   // position of post context marker '(' in buf
-    int32_t postClose = -1; // position of post context close ')' in buf
+    // Use pointers to automatics to make swapping possible.
+    RuleHalf _left(*this), _right(*this);
+    RuleHalf* left = &_left;
+    RuleHalf* right = &_right;
 
-    // Assigned to buf and its adjuncts after the LHS has been
-    // parsed.  Thereafter, buf etc. refer to the RHS.
-    UnicodeString left;
-    int32_t leftCursor = -1, leftAnte = -1, leftPost = -1, leftPostClose = -1;
-
-    UnicodeString scratch;
-
-    while (pos < limit) {
-        UChar c = rules.charAt(pos++);
-        if (Unicode::isWhitespace(c)) {
-            // Ignore whitespace.  Note that this is not Unicode
-            // spaces, but Java spaces -- a subset, representing
-            // whitespace likely to be seen in code.
-            continue;
-        }
-        // Handle escapes
-        if (c == ESCAPE) {
-            if (pos == limit) {
-                return syntaxError(RuleBasedTransliterator::TRAILING_BACKSLASH, rules, start);
-            }
-            // Parse \uXXXX escapes
-            c = rules.charAt(pos++);
-            if (c == 0x0075/*u*/) {
-                if ((pos+4) > limit) {
-                    return syntaxError(RuleBasedTransliterator::MALFORMED_UNICODE_ESCAPE, rules, start);
-                }
-                c = (UChar)0x0000;
-                for (int32_t plim=pos+4; pos<plim; ++pos) { // [sic]
-                    int32_t digit = Unicode::digit(rules.charAt(pos), 16);
-                    if (digit<0) {
-                        return syntaxError(RuleBasedTransliterator::MALFORMED_UNICODE_ESCAPE, rules, start);
-                    }
-                    c = (UChar) ((c << 4) | digit);
-                }
-            }
-
-            buf.append(c);
-            continue;
-        }
-        // Handle quoted matter
-        if (c == QUOTE) {
-            int32_t iq = rules.indexOf(QUOTE, pos);
-            if (iq == pos) {
-                buf.append(c); // Parse [''] outside quotes as [']
-                ++pos;
-            } else {
-                /* This loop picks up a segment of quoted text of the
-                 * form 'aaaa' each time through.  If this segment
-                 * hasn't really ended ('aaaa''bbbb') then it keeps
-                 * looping, each time adding on a new segment.  When it
-                 * reaches the final quote it breaks.
-                 */
-                for (;;) {
-                    if (iq < 0) {
-                        return syntaxError(RuleBasedTransliterator::UNTERMINATED_QUOTE, rules, start);
-                    }
-                    scratch.truncate(0);
-                    rules.extractBetween(pos, iq, scratch);
-                    buf.append(scratch);
-                    pos = iq+1;
-                    if (pos < limit && rules.charAt(pos) == QUOTE) {
-                        // Parse [''] inside quotes as [']
-                        iq = rules.indexOf(QUOTE, pos+1);
-                        // Continue looping
-                    } else {
-                        break;
-                    }
-                }
-            }
-            continue;
-        }
-        if (OPERATORS.indexOf(c) >= 0) {
-            if (op != 0) {
-                return syntaxError(RuleBasedTransliterator::UNQUOTED_SPECIAL, rules, start);
-            }
-            // Found an operator char.  Check for forward-reverse operator.
-            if (c == REVERSE_RULE_OP &&
-                (pos < limit && rules.charAt(pos) == FORWARD_RULE_OP)) {
-                ++pos;
-                op = FWDREV_RULE_OP;
-            } else {
-                op = c;
-            }
-            left = buf; // lhs
-            leftCursor = cursor;
-            leftAnte = ante;
-            leftPost = post;
-            leftPostClose = postClose;
-
-            buf.truncate(0);
-            cursor = ante = post = postClose = -1;
-            continue;
-        }
-        if (c == END_OF_RULE) {
-            break;
-        }
-        switch (c) {
-        case VARIABLE_REF_OPEN:
-            {
-                int32_t j = rules.indexOf(VARIABLE_REF_CLOSE, pos);
-                if (pos == j || j < 0) { // empty or unterminated
-                    return syntaxError(RuleBasedTransliterator::MALFORMED_VARIABLE_REFERENCE, rules, start);
-                }
-                scratch.truncate(0);
-                rules.extractBetween(pos, j, scratch);
-                pos = j+1;
-                UChar v = data->lookupVariable(scratch, status);
-                if (U_FAILURE(status)) {
-                    return syntaxError(RuleBasedTransliterator::UNDEFINED_VARIABLE, rules, start);
-                }
-                buf.append(v);
-            }
-            break;
-        case CONTEXT_OPEN:
-            if (post >= 0) {
-                return syntaxError(RuleBasedTransliterator::MULTIPLE_POST_CONTEXTS, rules, start);
-            }
-            // Ignore CONTEXT_OPEN if buffer length is zero -- that means
-            // this is the optional opening delimiter for the ante context.
-            if (buf.length() > 0) {
-                post = buf.length();
-            }
-            break;
-        case CONTEXT_CLOSE:
-            if (postClose >= 0) {
-                return syntaxError(RuleBasedTransliterator::UNEXPECTED_CLOSE_CONTEXT, rules, start);
-            }
-            if (post >= 0) {
-                // This is probably the optional closing delimiter
-                // for the post context; save the pos and check later.
-                postClose = buf.length();
-            } else if (ante >= 0) {
-                return syntaxError(RuleBasedTransliterator::MULTIPLE_ANTE_CONTEXTS, rules, start);
-            } else {
-                ante = buf.length();
-            }
-            break;
-        case SET_OPEN: {
-            ParsePosition pp(pos-1); // Backup to opening '['
-            buf.append(registerSet(new UnicodeSet(rules, pp, *parseData, status)));
-            if (U_FAILURE(status)) {
-                return syntaxError(RuleBasedTransliterator::MALFORMED_SET, rules, start);
-            }
-            pos = pp.getIndex(); }
-            break;
-        case VARIABLE_REF_CLOSE:
-        case SET_CLOSE:
-            return syntaxError(RuleBasedTransliterator::UNQUOTED_SPECIAL, rules, start);
-        case CURSOR_POS:
-            if (cursor >= 0) {
-                return syntaxError(RuleBasedTransliterator::MULTIPLE_CURSORS, rules, start);
-            }
-            cursor = buf.length();
-            break;
-        default:
-            buf.append(c);
-            break;
-        }
-    }
-    if (op == 0) {
-        return syntaxError(RuleBasedTransliterator::MISSING_OPERATOR, rules, start);
+    undefinedVariableName.remove();
+    pos = left->parse(rule, pos, limit, *this);
+    if (U_FAILURE(status)) {
+        return start;
     }
 
-    // Check context close parameters
-    if ((leftPostClose >= 0 && leftPostClose != left.length()) ||
-        (postClose >= 0 && postClose != buf.length())) {
-        return syntaxError(RuleBasedTransliterator::TEXT_AFTER_CLOSE_CONTEXT, rules, start);
+    if (pos == limit ||
+        gOPERATORS.indexOf(op = rule.charAt(pos++)) < 0) {
+        return syntaxError(RuleBasedTransliterator::MISSING_OPERATOR, rule, start);
     }
 
-    // Context is only allowed on the input side; that is, the left side
-    // for forward rules.  Cursors are only allowed on the output side;
-    // that is, the right side for forward rules.  Bidirectional rules
-    // ignore elements that do not apply.
+    // Found an operator char.  Check for forward-reverse operator.
+    if (op == REVERSE_RULE_OP &&
+        (pos < limit && rule.charAt(pos) == FORWARD_RULE_OP)) {
+        ++pos;
+        op = FWDREV_RULE_OP;
+    }
 
-    switch (op) {
-    case VARIABLE_DEF_OP:
+    pos = right->parse(rule, pos, limit, *this);
+    if (U_FAILURE(status)) {
+        return start;
+    }
+
+    if (pos < limit) {
+        if (rule.charAt(pos) == END_OF_RULE) {
+            ++pos;
+        } else {
+            // RuleHalf parser must have terminated at an operator
+            return syntaxError(RuleBasedTransliterator::UNQUOTED_SPECIAL, rule, start);
+        }
+    }
+
+    if (op == VARIABLE_DEF_OP) {
         // LHS is the name.  RHS is a single character, either a literal
         // or a set (already parsed).  If RHS is longer than one
         // character, it is either a multi-character string, or multiple
         // sets, or a mixture of chars and sets -- syntax error.
-        if (buf.length() != 1) {
-            return syntaxError(RuleBasedTransliterator::MALFORMED_RHS, rules, start);
-        }
-        if (data->isVariableDefined(left)) {
-            return syntaxError(RuleBasedTransliterator::DUPLICATE_VARIABLE_DEFINITION, rules, start);
-        }
-        data->defineVariable(left, buf.charAt(0), status);
-        break;
 
-    case FORWARD_RULE_OP:
-        if (direction == RuleBasedTransliterator::FORWARD) {
-            if (ante >= 0 || post >= 0 || leftCursor >= 0) {
-                return syntaxError(RuleBasedTransliterator::MALFORMED_RULE, rules, start);
-            }
-            data->ruleSet.addRule(new TransliterationRule(
-                                     left, leftAnte, leftPost,
-                                     buf, cursor, status), status);
-        } // otherwise ignore the rule; it's not the direction we want
-        break;
-
-    case REVERSE_RULE_OP:
-        if (direction == RuleBasedTransliterator::REVERSE) {
-            if (leftAnte >= 0 || leftPost >= 0 || cursor >= 0) {
-                return syntaxError(RuleBasedTransliterator::MALFORMED_RULE, rules, start);
-            }
-            data->ruleSet.addRule(new TransliterationRule(
-                                     buf, ante, post,
-                                     left, leftCursor, status), status);
-        } // otherwise ignore the rule; it's not the direction we want
-        break;
-
-    case FWDREV_RULE_OP:
-        if (direction == RuleBasedTransliterator::FORWARD) {
-            // The output side is the right; trim off any context
-            if (post >= 0) {
-                buf.remove(post);
-            }
-            if (ante >= 0) {
-                buf.removeBetween(0, ante);
-            }
-            data->ruleSet.addRule(new TransliterationRule(
-                                     left, leftAnte, leftPost,
-                                     buf, cursor, status), status);
-        } else {
-            // The output side is the left; trim off any context
-            if (leftPost >= 0) {
-                left.remove(leftPost);
-            }
-            if (leftAnte >= 0) {
-                left.removeBetween(0, leftAnte);
-            }
-            data->ruleSet.addRule(new TransliterationRule(
-                                     buf, ante, post,
-                                     left, leftCursor, status), status);
+        // We expect to see a single undefined variable (the one being
+        // defined).
+        if (undefinedVariableName.length() == 0) {
+            // "Missing '$' or duplicate definition"
+            return syntaxError(RuleBasedTransliterator::BAD_VARIABLE_DEFINITION, rule, start);
         }
-        break;
+        if (left->text.length() != 1 || left->text.charAt(0) != variableLimit) {
+            // "Malformed LHS"
+            return syntaxError(RuleBasedTransliterator::MALFORMED_VARIABLE_DEFINITION, rule, start);
+        }
+        // We allow anything on the right, including an empty string.
+        UnicodeString* value = new UnicodeString(right->text);
+        data->variableNames->put(undefinedVariableName, value, status);
+
+        ++variableLimit;
+        return pos;
     }
+
+    // If this is not a variable definition rule, we shouldn't have
+    // any undefined variable names.
+    if (undefinedVariableName.length() != 0) {
+        syntaxError(// "Undefined variable $" + undefinedVariableName,
+                    RuleBasedTransliterator::UNDEFINED_VARIABLE,
+                    rule, start);
+    }
+
+    // If the direction we want doesn't match the rule
+    // direction, do nothing.
+    if (op != FWDREV_RULE_OP &&
+        ((direction == Transliterator::FORWARD) != (op == FORWARD_RULE_OP))) {
+        return pos;
+    }
+
+    // Transform the rule into a forward rule by swapping the
+    // sides if necessary.
+    if (direction == Transliterator::REVERSE) {
+        left = &_right;
+        right = &_left;
+    }
+
+    // Remove non-applicable elements in forward-reverse
+    // rules.  Bidirectional rules ignore elements that do not
+    // apply.
+    if (op == FWDREV_RULE_OP) {
+        right->removeContext();
+        delete right->segments;
+        right->segments = NULL;
+        left->cursor = left->maxRef = -1;
+        left->cursorOffset = 0;
+    }
+
+    // Normalize context
+    if (left->ante < 0) {
+        left->ante = 0;
+    }
+    if (left->post < 0) {
+        left->post = left->text.length();
+    }
+
+    // Context is only allowed on the input side.  Cursors are only
+    // allowed on the output side.  Segment delimiters can only appear
+    // on the left, and references on the right.  Cursor offset
+    // cannot appear without an explicit cursor.  Cursor offset
+    // cannot place the cursor outside the limits of the context.
+    if (right->ante >= 0 || right->post >= 0 || left->cursor >= 0 ||
+        right->segments != NULL || left->maxRef >= 0 ||
+        (right->cursorOffset != 0 && right->cursor < 0) ||
+        (right->cursorOffset > (left->text.length() - left->post)) ||
+        (-right->cursorOffset > left->ante)) {
+        return syntaxError(RuleBasedTransliterator::MALFORMED_RULE, rule, start);
+    }
+
+    // Check integrity of segments and segment references.  Each
+    // segment's start must have a corresponding limit, and the
+    // references must not refer to segments that do not exist.
+    if (left->segments != NULL) {
+        int n = left->segments->size();
+        if (n % 2 != 0) {
+            return syntaxError(RuleBasedTransliterator::MISSING_SEGMENT_CLOSE, rule, start);
+        }
+        n /= 2;
+        if (right->maxRef > n) {
+            return syntaxError(RuleBasedTransliterator::UNDEFINED_SEGMENT_REFERENCE, rule, start);
+        }
+    }
+
+    data->ruleSet.addRule(new TransliterationRule(
+                                 left->text, left->ante, left->post,
+                                 right->text, right->cursor, right->cursorOffset,
+                                 left->createSegments(), status), status);
 
     return pos;
 }
@@ -474,6 +735,9 @@ int32_t TransliterationRuleParser::syntaxError(int32_t parseErrorCode,
         if (end < 0) {
             end = rule.length();
         }
+        if (end > (start + 80)) { // In case end wasn't found
+            end = start + 80;
+        }
         rule.extractBetween(start, end, parseError->context); // Current rule
     }
     status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -481,18 +745,50 @@ int32_t TransliterationRuleParser::syntaxError(int32_t parseErrorCode,
 }
 
 /**
- * Allocate a private-use substitution character for the given set,
- * register it in the setVariables hash, and return the substitution
- * character.
+ * Parse a UnicodeSet out, store it, and return the stand-in character
+ * used to represent it.
  */
-UChar TransliterationRuleParser::registerSet(UnicodeSet* adoptedSet) {
+UChar TransliterationRuleParser::parseSet(const UnicodeString& rule,
+                                          ParsePosition& pos) {
+    UnicodeSet* set = new UnicodeSet(rule, pos, *parseData, status);
     if (variableNext >= variableLimit) {
         // throw new RuntimeException("Private use variables exhausted");
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    setVariablesVector.addElement(adoptedSet);
+    setVariablesVector.addElement(set);
     return variableNext++;
+}
+
+/**
+ * Append the value of the given variable name to the given
+ * UnicodeString.
+ */
+void TransliterationRuleParser::appendVariableDef(const UnicodeString& name,
+                                                  UnicodeString& buf) {
+    const UnicodeString* s = (const UnicodeString*) data->variableNames->get(name);
+    if (s == NULL) {
+        // We allow one undefined variable so that variable definition
+        // statements work.  For the first undefined variable we return
+        // the special placeholder variableLimit-1, and save the variable
+        // name.
+        if (undefinedVariableName.length() == 0) {
+            undefinedVariableName = name;
+            if (variableNext >= variableLimit) {
+                // throw new RuntimeException("Private use variables exhausted");
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+            buf.append((UChar) --variableLimit);
+        } else {
+            //throw new IllegalArgumentException("Undefined variable $"
+            //                                   + name);
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+    } else {
+        buf.append(*s);
+    }
 }
 
 /**
@@ -511,7 +807,9 @@ void TransliterationRuleParser::determineVariableRange(void) {
     data->setVariablesBase = variableNext = variableLimit = (UChar) 0;
     
     if (r != 0) {
-        data->setVariablesBase = variableNext = r->start;
+        // Allocate 9 characters for segment references 1 through 9
+        data->segmentBase = r->start;
+        data->setVariablesBase = variableNext = (UChar) (data->segmentBase + 9);
         variableLimit = (UChar) (r->start + r->length);
         delete r;
     }

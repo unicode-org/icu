@@ -10,20 +10,56 @@
 #ifndef SYMTABLE_H
 #define SYMTABLE_H
 
+class ParsePosition;
+class UnicodeSet;
+class UnicodeString;
+
 /**
- * An abstract class that maps strings to objects.
+ * An interface that maps strings to objects.  This interface defines
+ * both lookup protocol and parsing.  This allows different components
+ * to share a symbol table and to handle name parsing uniformly.  It
+ * is expected that client parse code look for the SYMBOL_REF
+ * character and, when seen, attempt to parse the characters after it
+ * using parseReference().
+ *
+ * <p>Currently, RuleBasedTransliterator and UnicodeSet use this
+ * interface to share variable definitions.
  */
 class SymbolTable {
 public:
 
     /**
-     * Lookup the object associated with this string and return it.
-     * Return U_ILLEGAL_ARGUMENT_ERROR status if the name does not
-     * exist.  Return a non-NULL set if the name is mapped to a set;
-     * otherwise return a NULL set.
+     * The character preceding a symbol reference name.
      */
-    virtual void lookup(const UnicodeString& name, UChar& c, UnicodeSet*& set,
-                        UErrorCode& status) const = 0;
+    enum { SYMBOL_REF = 0x0024 /*$*/ };
+
+    /**
+     * Lookup the characters associated with this string and return it.
+     * Return <tt>NULL</tt> if no such name exists.  The resultant
+     * string may have length zero.
+     */
+    virtual const UnicodeString* lookup(const UnicodeString& s) const = 0;
+
+    /**
+     * Lookup the UnicodeSet associated with the given character, and
+     * return it.  Return <tt>null</tt> if not found.
+     */
+    virtual const UnicodeSet* lookupSet(UChar ch) const = 0;
+
+    /**
+     * Parse a symbol reference name from the given string, starting
+     * at the given position.  If no valid symbol reference name is
+     * found, throw an exception.
+     * @param text the text to parse for the name
+     * @param pos on entry, the index of the first character to parse.
+     * This is the character following the SYMBOL_REF character.  On
+     * exit, the index after the last parsed character.
+     * @param limit the index after the last character to be parsed.
+     * @return the parsed name.
+     * @exception IllegalArgumentException if no valid name is found.
+     */
+    virtual UnicodeString parseReference(const UnicodeString& text,
+                                         ParsePosition& pos, int32_t limit) const = 0;
 };
 
 #endif
