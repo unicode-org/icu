@@ -241,7 +241,7 @@ StringCaseTest::TestCaseConversion()
         // remove dot above if there was a capital I before and there are no more accents above
         UnicodeString
             dots=UnicodeString("I \\u0130 I\\u0307 I\\u0327\\u0307 I\\u0301\\u0307 I\\u0327\\u0307\\u0301", "").unescape(),
-            dotsTurkish=UnicodeString("\\u0131 i i\\u0307 i\\u0327\\u0307 \\u0131\\u0301\\u0307 i\\u0327\\u0307\\u0301", "").unescape(),
+            dotsTurkish=UnicodeString("\\u0131 i i i\\u0327 \\u0131\\u0301\\u0307 i\\u0327\\u0301", "").unescape(),
             dotsDefault=UnicodeString("i i\\u0307 i\\u0307 i\\u0327\\u0307 i\\u0301\\u0307 i\\u0327\\u0307\\u0301", "").unescape();
 
         (t=dots).toLower("tr");
