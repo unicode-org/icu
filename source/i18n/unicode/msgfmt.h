@@ -191,7 +191,7 @@ class NumberFormat;
  */
 class U_I18N_API MessageFormat : public Format {
 public:
-    static enum EFormatNumber { kMaxFormat = 10 };
+    enum EFormatNumber { kMaxFormat = 10 };
     /**
      * Construct a new MessageFormat using the given pattern.
      *

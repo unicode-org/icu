@@ -23,7 +23,7 @@
 
 #include "ucol_imp.h"
 #include "uhash.h"
-#include "unicode\parseerr.h"
+#include "unicode/parseerr.h"
 
 #define UCOL_TOK_UNSET 0xFFFFFFFF
 #define UCOL_TOK_RESET 0xDEADBEEF
