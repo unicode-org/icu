@@ -354,10 +354,6 @@ SOURCE=.\unifltlg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\unirange.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\uniset.cpp
 # End Source File
 # Begin Source File
@@ -1667,10 +1663,6 @@ InputPath=.\unicode\unimatch.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\unirange.h
 # End Source File
 # Begin Source File
 
