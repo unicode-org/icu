@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/05/02 22:32:45 $
-* $Revision: 1.26 $
+* $Date: 2003/05/08 22:05:36 $
+* $Revision: 1.27 $
 *
 *******************************************************************************
 */
@@ -18,10 +18,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.ibm.icu.impl.ICULocaleData;
-import com.ibm.icu.impl.ICULocaleService;
-import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
-import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.LocaleUtility;
 
 /**
