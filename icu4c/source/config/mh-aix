@@ -3,26 +3,26 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix,v 1.18 2001/04/23 23:12:28 rviswanadha Exp $
+## $Id: mh-aix,v 1.19 2001/04/25 01:29:13 rviswanadha Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
 
 ## Commands to compile
-COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS)  -brtl -c
-COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -brtl  -c
+COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
 ##  our libraries contain C++ code (C++ static init not called)
 #LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) 
-LINK.c=		$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) 
-LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.c=		$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) 
+LINK.cc=	$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	makeC++SharedLib_r -p 5000
-SHLIB.cc=	makeC++SharedLib_r -p 5000
+SHLIB.c=	makeC++SharedLib_r -p 5000 -brtl
+SHLIB.cc=	makeC++SharedLib_r -p 5000 -brtl
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
@@ -35,8 +35,8 @@ LDLIBRARYPATH_ENVVAR = LIBPATH
 #LD_SONAME = -Wl, 
 
 ## Versioned target for a shared library.
-FINAL_SO_TARGET = $(SO_TARGET)
-MIDDLE_SO_TARGET = $(SO_TARGET)
+FINAL_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
+MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
 
 ###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
 ## Prefix for the ICU library names
@@ -45,7 +45,7 @@ LIBICU = lib$(ICUPREFIX)
 ## Shared object suffix
 #AIX does not have versioning support
 #so we tag the major and minor versions to so
-SO=		so.$(SO_TARGET_VERSION_MAJOR)
+SO=		so
 
 ## Non-shared intermediate object suffix
 STATIC_O = o
@@ -56,11 +56,11 @@ INSTALL-S = $(INSTALL_PROGRAM)
 INSTALL-L = $(INSTALL_DATA)
 
 ## Link commands to link to ICU libs
-LIBICUUC= 	-L$(top_builddir)/common -l$(ICUPREFIX)uc
-LIBICUI18N= 	-L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
-LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
-LIBICUTOOLUTIL=-L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
-LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
+LIBICUUC=       -brtl -L$(top_builddir)/common -l$(ICUPREFIX)uc
+LIBICUI18N= 	-brtl -L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
+LIBCTESTFW= 	-brtl -L$(top_builddir)/tools/ctestfw -lctestfw
+LIBICUTOOLUTIL= -brtl -L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
+LIBUSTDIO=      -brtl -L$(top_builddir)/extra/ustdio -lustdio
 
 ## Special AIX rules
 
@@ -100,6 +100,11 @@ LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 %.u : $(srcdir)/%.cpp
 	@echo "Generating dependency information for $<"
 	@$(SHELL) -ec '$(GEN_DEPS.cc) $< > /dev/null 2>&1'
+
+## Versioned libraries rules
+%.$(SO): 
+	@echo "Generating symbolic link for $@ : $<"
+	@$(SHELL) -ec  'rm -f $@; ln -fs $(FINAL_SO_TARGET) $@'
 
 ## BIR  - bind with internal references [so app data and icu data doesn't collide]
 BIR_LDFLAGS= -E$(NAME).map -bnoexpall
