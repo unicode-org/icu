@@ -773,9 +773,13 @@ void RTTest::test2(UBool quickRt, int32_t density) {
                 parent->errln("FAIL: Internal error during decomposition%s\n", u_errorName(status));
                 return;
             }
-            if (toSource.containsAll(targD) == FALSE || 
-                badCharacters.containsSome(targD) == TRUE) {
+            if (toSource.containsAll(targD) == FALSE) {
                 logWrongScript("Target-Source", srcStr, targ);
+                failTargSource.add(c);
+                continue;
+            }
+            if (badCharacters.containsSome(targD) == TRUE) {
+                logWrongScript("Target-Source*", srcStr, targ);
                 failTargSource.add(c);
                 continue;
             }
@@ -1118,16 +1122,11 @@ void TransliteratorRoundTripTest::Testel() {
 
 
 void TransliteratorRoundTripTest::TestArabic() {
-    /*
     UnicodeString ARABIC("[\\u060C\\u061B\\u061F\\u0621\\u0627-\\u063A\\u0641-\\u0655\\u0660-\\u066C\\u067E\\u0686\\u0698\\u06A4\\u06AD\\u06AF\\u06CB-\\u06CC\\u06F0-\\u06F9]");
-    //long start = System.currentTimeMillis();
     Legal *legal = new Legal();
     RTTest test("Latin-Arabic");
-        test.test("[a-zA-Z\\u02BE\\u02BF]", ARABIC, "[a-zA-Z\\u02BE\\u02BF\\u207F]",this, quick, legal); //
-    //showElapsed(start, "TestArabic");
+        test.test("[a-zA-Z\\u02BE\\u02BF\\u207F]", ARABIC, "[a-zA-Z\\u02BE\\u02BF\\u207F]",this, quick, legal); //
    delete legal;
-   */
-    infoln("TestArabic comented out due to failures.");
 }
 class LegalHebrew : public Legal {
 private:
