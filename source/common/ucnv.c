@@ -70,7 +70,7 @@ static const UAmbiguousConverter ambiguousConverters[]={
 
 const char* ucnv_getDefaultName ()
 {
-  return ucnv_io_getDefaultConverterName();
+    return ucnv_io_getDefaultConverterName();
 }
 
 void   ucnv_setDefaultName (const char *converterName)
@@ -81,29 +81,29 @@ void   ucnv_setDefaultName (const char *converterName)
 UConverter* ucnv_open (const char *name,
                        UErrorCode * err)
 {
-  if (err == NULL || U_FAILURE (*err)) {
-    return NULL;
-  }
+    if (err == NULL || U_FAILURE (*err)) {
+        return NULL;
+    }
 
-  return createConverter (name, err);
+    return createConverter (name, err);
 }
 
 /*Extracts the UChar* to a char* and calls through createConverter */
 UConverter*  ucnv_openU (const UChar * name,
                          UErrorCode * err)
 {
-  char asciiName[UCNV_MAX_CONVERTER_NAME_LENGTH];
-  
-  if (U_FAILURE (*err))
-    return NULL;
-  if (name == NULL)
-    return ucnv_open (NULL, err);
-  if (u_strlen (name) > UCNV_MAX_CONVERTER_NAME_LENGTH)
+    char asciiName[UCNV_MAX_CONVERTER_NAME_LENGTH];
+
+    if (U_FAILURE (*err))
+        return NULL;
+    if (name == NULL)
+        return ucnv_open (NULL, err);
+    if (u_strlen (name) > UCNV_MAX_CONVERTER_NAME_LENGTH)
     {
-      *err = U_ILLEGAL_ARGUMENT_ERROR;
-      return NULL;
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
     }
-  return ucnv_open (u_austrcpy (asciiName, name), err);
+    return ucnv_open (u_austrcpy (asciiName, name), err);
 }
 
 /*Assumes a $platform-#codepage.$CONVERTER_FILE_EXTENSION scheme and calls
@@ -112,17 +112,19 @@ UConverter*  ucnv_openCCSID (int32_t codepage,
                              UConverterPlatform platform,
                              UErrorCode * err)
 {
-  char myName[UCNV_MAX_CONVERTER_NAME_LENGTH];
+    char myName[UCNV_MAX_CONVERTER_NAME_LENGTH];
+    int32_t myNameLen;
 
-  if (U_FAILURE (*err))
-    return NULL;
+    if (U_FAILURE (*err))
+        return NULL;
 
-  copyPlatformString (myName, platform);
-  uprv_strcat (myName, "-");
-  T_CString_integerToString (myName + uprv_strlen (myName), codepage, 10);
+    copyPlatformString (myName, platform);
+    myNameLen = uprv_strlen(myName);
+    myName[myNameLen++] = '-';
+    myName[myNameLen] = 0;
+    T_CString_integerToString (myName + myNameLen, codepage, 10);
 
-
-  return createConverter (myName, err);
+    return createConverter (myName, err);
 }
 
 /* Creating a temporary stack-based object that can be used in one thread, 
