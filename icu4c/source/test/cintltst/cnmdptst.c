@@ -63,7 +63,7 @@ static void TestPatterns(void)
     {
       status = U_ZERO_ERROR;
       u_uastrcpy(upat, pat[i]);
-      fmt= unum_openPattern(upat, u_strlen(upat), "en_US", &status);
+      fmt= unum_open(UNUM_IGNORE,upat, u_strlen(upat), "en_US",NULL, &status);
       if (U_FAILURE(status)) {
         log_err("FAIL: Number format constructor failed for pattern %s\n", pat[i]);
         continue; 
@@ -116,7 +116,7 @@ static void TestQuotes(void)
   char tempBuf[256];
   log_verbose("\nTestting the handling of quotes in number format\n");
   u_uastrcpy(pat, "a'fo''o'b#");
-  fmt =unum_openPattern(pat, u_strlen(pat), "en_US", &status);
+  fmt =unum_open(UNUM_IGNORE,pat, u_strlen(pat), "en_US",NULL, &status);
   if(U_FAILURE(status)){
     log_err("Error in number format costruction using pattern \"a'fo''o'b#\"\n");
   }
@@ -144,7 +144,7 @@ static void TestQuotes(void)
   u_uastrcpy(pat, "a''b#");
 
 
-  fmt =unum_openPattern(pat, u_strlen(pat), "en_US", &status);
+  fmt =unum_open(UNUM_IGNORE,pat, u_strlen(pat), "en_US",NULL, &status);
   if(U_FAILURE(status)){
     log_err("Error in number format costruction using pattern \"a''b#\"\n");
   }
@@ -237,7 +237,7 @@ static void TestExponential(void)
     {
       upat=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(pat[p])+1) );
       u_uastrcpy(upat, pat[p]);
-      fmt=unum_openPattern(upat, u_strlen(upat), "en_US", &status);
+      fmt=unum_open(UNUM_IGNORE,upat, u_strlen(upat), "en_US",NULL, &status);
       if (U_FAILURE(status)) { 
         log_err("FAIL: Bad status returned by Number format construction with pattern %s\n, pat[i]"); 
         continue; 
@@ -333,7 +333,7 @@ static void TestCurrencySign(void)
   pattern=(UChar*)uprv_malloc(sizeof(UChar) * (strlen("*#,##0.00;-*#,##0.00") + 1) );
   u_uastrcpy(pattern, "*#,##0.00;-*#,##0.00");
   pattern[0]=pattern[11]=0xa4; /* insert latin-1 currency symbol */
-  fmt = unum_openPattern(pattern, u_strlen(pattern), "en_US", &status);
+  fmt = unum_open(UNUM_IGNORE,pattern, u_strlen(pattern), "en_US",NULL, &status);
   if(U_FAILURE(status)){
     log_err("Error in number format construction with pattern  \"\\xA4#,##0.00;-\\xA4#,##0.00\\\" \n");
   }
@@ -399,7 +399,7 @@ static void TestCurrency(void)
   log_verbose("\nTesting the number format with different currency patterns\n");
   for(i=0; i < 3; i++)
     {
-      currencyFmt = unum_open(UNUM_CURRENCY, locale[i], &status);
+      currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,locale[i],NULL, &status);
       if(U_FAILURE(status)){
           log_err("Error in the construction of number format with style currency:\n%s\n",
                   myErrorName(status));
@@ -433,7 +433,7 @@ static void TestRounding487(void)
   /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
      - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
   /* nnf = unum_open(UNUM_DEFAULT, NULL, &status); */
-  nnf = unum_open(UNUM_DEFAULT, "en_US", &status);
+  nnf = unum_open(UNUM_DEFAULT, NULL,0,"en_US",NULL, &status);
   if(U_FAILURE(status)){
     log_err("FAIL: failure in the construction of number format: %s\n", myErrorName(status));
   }
@@ -493,7 +493,7 @@ static void TestDoubleAttribute(void)
     UNumberFormatAttribute attr;
     UNumberFormatStyle style= UNUM_DEFAULT;
     UNumberFormat *def;
-    def=unum_open(style, NULL, &status);
+    def=unum_open(style, NULL,0,NULL,NULL, &status);
     log_verbose("\nTesting get and set DoubleAttributes\n");
     attr=UNUM_ROUNDING_INCREMENT;
     dvalue=unum_getDoubleAttribute(def, attr);
@@ -515,7 +515,7 @@ static void TestDoubleAttribute(void)
 static void TestSecondaryGrouping(void) {
     UErrorCode status = U_ZERO_ERROR;
     UNumberFormat *f = NULL, *g= NULL;
-    UNumberFormat *us = unum_open(UNUM_DECIMAL, "en_US", &status);
+    UNumberFormat *us = unum_open(UNUM_DECIMAL,NULL,0, "en_US", NULL,&status);
     UNumberFormatSymbols usSymbols;
     UFieldPosition pos;
     UChar resultBuffer[512];
@@ -529,7 +529,7 @@ static void TestSecondaryGrouping(void) {
     CHECK(status, "DecimalFormatSymbols ct");
 
     u_uastrcpy(buffer, "#,##,###");
-    f = unum_openPattern(buffer, -1, "en_US", &status);
+    f = unum_open(UNUM_IGNORE,buffer, -1, "en_US",NULL, &status);
     CHECK(status, "DecimalFormat ct");
 
     pos.field = 0;
@@ -551,7 +551,7 @@ static void TestSecondaryGrouping(void) {
     }
     memset(resultBuffer,0, sizeof(UChar)*512);
     u_uastrcpy(buffer, "#,###");
-    unum_applyPattern(f, FALSE, buffer, -1);
+    unum_applyPattern(f, FALSE, buffer, -1,NULL,NULL);
     if (U_FAILURE(status))
     {
         log_err("Fail: applyPattern call failed\n");
@@ -571,7 +571,7 @@ static void TestSecondaryGrouping(void) {
         log_err("Fail: toPattern() got %s, expected %s\n", resultBuffer, "#,####,###");
     }
     memset(resultBuffer,0, sizeof(UChar)*512);
-    g = unum_open(UNUM_DECIMAL, "hi_IN", &status);
+    g = unum_open(UNUM_DECIMAL, NULL,0,"hi_IN",NULL, &status);
     if (U_FAILURE(status))
     {
         log_err("Fail: Cannot create UNumberFormat for \"hi_IN\" locale.\n");

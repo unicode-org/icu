@@ -22,6 +22,10 @@ The main root for C API tests
 #include "unicode/utypes.h"
 #include "unicode/ctest.h"
 
+#ifndef U_USE_DEPRECATED_API
+#define U_USE_DEPRECATED_API 1
+#endif
+
 U_CFUNC void addAllTests(TestNode** root);
 
 /**
