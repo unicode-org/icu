@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2002/07/13 01:36:45 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/07/26 22:51:49 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -14,6 +14,7 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.UCharacterProperty;
 
 import java.math.BigInteger;
 import java.text.FieldPosition;
@@ -471,7 +472,7 @@ import java.util.Vector;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.8 $ $Date: 2002/07/13 01:36:45 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.9 $ $Date: 2002/07/26 22:51:49 $
  * @see NumberFormat
  * @see DecimalFormat
  */
@@ -1109,7 +1110,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
                     lpEnd = description.length() - 1;
                 }
                 int lpStart = lp + "%%lenient-parse:".length();
-                while (Character.isWhitespace(description.charAt(lpStart))) {
+                while (UCharacterProperty.isRuleWhiteSpace(description.charAt(lpStart))) {
                     ++lpStart;
                 }
 
@@ -1191,7 +1192,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
         while (start != -1 && start < description.length()) {
             // seek to the first non-whitespace character...
             while (start < description.length()
-                   && Character.isWhitespace(description.charAt(start))) {
+                   && UCharacterProperty.isRuleWhiteSpace(description.charAt(start))) {
                 ++start;
             }
 
