@@ -104,7 +104,7 @@ static UOption options[]={
 
 extern int
 testData(TestIDNA& test) {
-    char filename[300];
+    char* filename = (char*) malloc(strlen(IntlTest::pathToDataDirectory())*3);
     //TODO get the srcDir dynamically 
     const char *srcDir=IntlTest::pathToDataDirectory(), *destDir=NULL, *suffix=NULL;
     char *basename=NULL;
@@ -178,6 +178,7 @@ testData(TestIDNA& test) {
 
     cleanup();
     pTestIDNA = NULL;
+    free(filename);
     return errorCode;
 }
 U_CDECL_BEGIN
