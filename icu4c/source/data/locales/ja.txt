@@ -1666,10 +1666,10 @@ ja {
                 "\u5efa\u5fb3",             // 1370 Kentoku
                 "\u6587\u4e2d",             // 1372 Bunchu
                 "\u5929\u6388",             // 1375 Tenju
+                "\u5eb7\u66a6",             // 1379 Koryaku
                 "\u5f18\u548c",             // 1381 Kowa
                 "\u5143\u4e2d",             // 1384 Genchu
                 "\u81f3\u5fb3",             // 1384 Meitoku
-                "\u5eb7\u66a6",             // 1379 Koryaku
                 "\u5609\u6176",             // 1387 Kakei
                 "\u5eb7\u5fdc",             // 1389 Koo
                 "\u660e\u5fb3",             // 1390 Meitoku
