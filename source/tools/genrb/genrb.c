@@ -200,7 +200,9 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     in = 0;
 
     /* Open the input file for reading */
-    if(inputDir == NULL) {
+    if (!uprv_strcmp(filename, "-")) {
+        in = T_FileStream_stdin();
+    } else if(inputDir == NULL) {
         const char *filenameBegin = uprv_strrchr(filename, U_FILE_SEP_CHAR);
         if (filenameBegin != NULL) {
             /*
@@ -301,7 +303,9 @@ finish:
     }
 
     /* Clean up */
-    T_FileStream_close(in);
+    if (in != T_FileStream_stdin()) {
+        T_FileStream_close(in);
+    }
 
     if (rbname) {
         uprv_free(rbname);
