@@ -31,7 +31,10 @@
 #include "unewdata.h"
 #include "uoptions.h"
 #include "uparse.h"
+
+U_CDECL_BEGIN
 #include "genprops.h"
+U_CDECL_END
 
 UBool beVerbose=FALSE, haveCopyright=TRUE;
 
