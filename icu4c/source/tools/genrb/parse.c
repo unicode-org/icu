@@ -301,7 +301,7 @@ parse(FileStream *f, const char *cp,
 	        *status = U_INTERNAL_PROGRAM_ERROR;
 	        goto finish;
         }
-        temp = string_open(bundle, cTag, token.fChars, status);
+        temp = string_open(bundle, cTag, token.fChars, token.fLength, status);
         table_add(rootTable, temp, status);
 		if(colEl == TRUE) {
 			const UChar * defaultRulesArray;
@@ -348,7 +348,7 @@ parse(FileStream *f, const char *cp,
 	        goto finish;
         }
         temp = array_open(bundle, cTag, status);
-        temp1 = string_open(bundle, NULL, token.fChars, status);
+        temp1 = string_open(bundle, NULL, token.fChars, token.fLength, status);
         array_add(temp, temp1, status);
         temp1 = NULL;
         if(U_FAILURE(*status)) goto finish;
@@ -356,7 +356,7 @@ parse(FileStream *f, const char *cp,
       
       /* Record a comma-delimited list string */      
     case eListStr:
-        temp1 = string_open(bundle, NULL, token.fChars, status);
+        temp1 = string_open(bundle, NULL, token.fChars, token.fLength, status);
         array_add(temp, temp1, status);
         temp1 = NULL;
         if(U_FAILURE(*status)) goto finish;
@@ -392,7 +392,7 @@ parse(FileStream *f, const char *cp,
         break;
       
     case e2dStr:
-        temp2 = string_open(bundle, NULL, token.fChars, status);
+        temp2 = string_open(bundle, NULL, token.fChars, token.fLength, status);
         array_add(temp1, temp2, status);
         temp2 = NULL;
         if(U_FAILURE(*status)) goto finish;
@@ -423,7 +423,7 @@ parse(FileStream *f, const char *cp,
         break;
       
     case eTaggedStr:
-        temp1 = string_open(bundle, cSubTag, token.fChars, status);
+        temp1 = string_open(bundle, cSubTag, token.fChars, token.fLength, status);
         table_add(temp, temp1, status);
         temp1 = NULL;
         if(U_FAILURE(*status)) goto finish;
