@@ -1,0 +1,137 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright International Business Machines Corporation,  1999         *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+// Feedback to : schererm@us.ibm.com
+
+eo {
+    Version { "1.0" } 
+    Countries { 
+        AT { "A\u016dstrujo" }
+        BE { "Belgujo" }
+        CA { "Kanado" }
+        CH { "Svisujo" }
+        DE { "Germanujo" }
+        DK { "Danujo" }
+        ES { "Hispanujo" }
+        FI { "Finnlando" }
+        GR { "Grekujo" }
+        IT { "Italujo" }
+        JP { "Japanujo" }
+        NL { "Nederlando" }
+        NO { "Norvego" }
+        PT { "Portugalujo" }
+        SE { "Svedujo" }
+        TR { "Turkujo" }
+        US { "Usono" }
+    }
+    DateTimePatterns { 
+            "H'-a horo kaj 'm z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "EEEE, d'-a de 'MMMM yyyy",
+            "yyyy-MMMM-dd",
+            "yyyy-MMM-dd",
+            "yy-MM-dd",
+            "{1} {0}",
+    }
+    DateTimeElements { 
+            "2",
+            "4",
+    }
+    AmPmMarkers { 
+            "atm",
+            "ptm",
+    }
+    DayAbbreviations { 
+            "di",
+            "lu",
+            "ma",
+            "me",
+            "\u0135a",
+            "ve",
+            "sa",
+    }
+    DayNames { 
+            "diman\u0109o",
+            "lundo",
+            "mardo",
+            "merkredo",
+            "\u0135a\u016ddo",
+            "vendredo",
+            "sabato",
+    }
+    Eras { 
+            "aK",
+            "pK",
+    }
+    Languages { 
+        da { "dana" }
+        de { "germana" }
+        el { "greka" }
+        en { "angla" }
+        eo { "Esperanto" }
+        es { "hispana" }
+        fi { "finna" }
+        it { "itala" }
+        ja { "japana" }
+        nl { "nederlanda" }
+        no { "norvega" }
+        pt { "portugala" }
+        sv { "sveda" }
+        tr { "turka" }
+    }
+    LocaleID { "07e0" }
+    LocaleString { "eo" }
+    MonthAbbreviations { 
+            "jan",
+            "feb",
+            "mar",
+            "apr",
+            "maj",
+            "jun",
+            "jul",
+            "a\u016dg",
+            "sep",
+            "okt",
+            "nov",
+            "dec",
+            "",
+    }
+    MonthNames { 
+            "januaro",
+            "februaro",
+            "marto",
+            "aprilo",
+            "majo",
+            "junio",
+            "julio",
+            "a\u016dgusto",
+            "septembro",
+            "oktobro",
+            "novembro",
+            "decembro",
+            "",
+    }
+    NumberElements { 
+            ",",
+            "\u00a0",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "epo" }
+    localPatternChars { "GjMtkHmslTJUSnahKz" }
+}

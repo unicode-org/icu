@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 9">
+<meta name=Originator content="Microsoft Word 9">
+<link rel=File-List href="./intltest_files/filelist.xml">
+<link rel=Edit-Time-Data href="./intltest_files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<title>IntlTest Test Suite Doumentation</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Helena Shih</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>Helena Shih</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:Created>2000-01-15T02:21:00Z</o:Created>
+  <o:LastSaved>2000-01-15T02:22:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>269</o:Words>
+  <o:Characters>1534</o:Characters>
+  <o:Company>IBM</o:Company>
+  <o:Lines>12</o:Lines>
+  <o:Paragraphs>3</o:Paragraphs>
+  <o:CharactersWithSpaces>1883</o:CharactersWithSpaces>
+  <o:Version>9.2720</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]-->
+<style>
+<!--
+ /* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+p
+	{font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+pre
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+<!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="1027"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body bgcolor=white lang=EN-US link=blue vlink=blue style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<h1>IntlTest Test Suite Documentation</h1>
+
+
+<div class=MsoNormal align=center style='text-align:center'>
+
+<hr size=2 width="100%" align=center>
+
+</div>
+
+
+<p class=MsoNormal><span style="mso-spacerun: yes">&nbsp;</span>Copyright (C)
+1997-2000, International Business Machines Corporation and others.<span
+style="mso-spacerun: yes">&nbsp; </span>All Rights Reserved.<o:p></o:p></p>
+
+
+<div class=MsoNormal align=center style='text-align:center'>
+
+<hr size=2 width="100%" align=center>
+
+</div>
+
+
+<p>The IntlTest suite contains all of the tests for the C++ API of 
+International Components for Unicode. These tests may be automatically run by typing
+&quot;intltest&quot; at the command line. Since the verbose option prints out a
+lot of information, it is recommended that the output be redirected to a file:<br>
+&quot;intltest -v &gt; testOutput&quot;. </p>
+
+<h3>Building</h3>
+
+<p>To compile this test suite using MSVC, follow the instructions in <a
+href="../readme.html#HowToInstall">icu/readme.html#HowToInstall</a> for
+building the &quot;alCPP&quot; (All C++ interfaces) workspace. This builds the
+libraries as well as the intltest executable.</p>
+
+<h3>Executing</h3>
+
+<p>To run the test suite from the command line, change directories to
+&quot;intlwork/source/test/intltest/Debug&quot;, then type:<br>
+&quot;intltest -v &gt; testOutput&quot;.&nbsp; For the release build, the
+executable will reside in &quot;intlwork/source/test/intltest/Release&quot;.</p>
+
+<h3>Usage</h3>
+
+<p>Type just &quot;intltest -h&quot; to see the usage:</p>
+
+<pre>### Syntax:</pre><pre>### IntlTest [-option1 -option2 ...] [testname1 testname2 ...] </pre><pre>### where options are: verbose (v), all (a), noerrormsg (n), </pre><pre>### exhaustive (e) and leaks (l). </pre><pre>### (Specify either -all (shortcut -a) or a test name). </pre><pre>### -all will run all of the tests.</pre><pre>### </pre><pre>### To get a list of the test names type: intltest LIST </pre><pre>### To run just the utility tests type: intltest utility </pre><pre>### </pre><pre>### Test names can be nested using slashes (&quot;testA/subtest1&quot;) </pre><pre>### For example to list the utility tests type: intltest utility/LIST </pre><pre>### To run just the Locale test type: intltest utility/LocaleTest </pre><pre>### </pre><pre>### A parameter can be specified for a test by appending '@' and the value </pre><pre>### to the testname. </pre>
+
+<p><a href="../readme.html">ReadMe for </a><a href="../readme.html#API"><span
+style="mso-spacerun: yes">&nbsp;</span>International Components for Unicode</a></p>
+
+
+<div class=MsoNormal align=center style='text-align:center'>
+
+<hr size=2 width="100%" align=center>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
