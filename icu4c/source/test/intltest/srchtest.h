@@ -77,6 +77,7 @@ private:
     void TestGetSetOffsetCanonical();
     void TestSupplementaryCanonical();
     void TestContractionCanonical();
+    void TestSearchIterator();
 };
 
 #endif

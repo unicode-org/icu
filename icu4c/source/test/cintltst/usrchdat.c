@@ -197,7 +197,8 @@ static const SearchData SUPPLEMENTARY[] = {
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
-static const char *CONTRACTIONRULE = "&z < AB < X\\u0300 < ABC < X\\u0300\\u0315";
+static const char *CONTRACTIONRULE = 
+    "&z = ab/c < AB < X\\u0300 < ABC < X\\u0300\\u0315";
 
 static const SearchData CONTRACTION[] = {
     /* common discontiguous */
@@ -222,6 +223,7 @@ static const SearchData CONTRACTION[] = {
     /* blocked discontiguous */
     {"X\\u0300\\u031A\\u0315D", "\\u031A\\u0315D", NULL, UCOL_TERTIARY, NULL, 
     {-1}, {0}},
+    {"ab", "z", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
@@ -435,6 +437,7 @@ static const SearchData CONTRACTIONCANONICAL[] = {
     /* blocked discontiguous */
     {"X\\u0300\\u031A\\u0315D", "\\u031A\\u0315D", NULL, UCOL_TERTIARY, NULL, 
     {1, -1}, {4}},
+    {"ab", "z", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 

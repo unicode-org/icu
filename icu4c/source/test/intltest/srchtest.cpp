@@ -113,6 +113,7 @@ void StringSearchTest::runIndexedTest(int32_t index, UBool exec,
         CASE(30, TestGetSetOffsetCanonical)
         CASE(31, TestSupplementaryCanonical)
         CASE(32, TestContractionCanonical)
+        CASE(33, TestSearchIterator)
         default: name = ""; break;
     }
 }
@@ -547,15 +548,9 @@ void StringSearchTest::TestInitialization()
     {
         errln("Error copying StringSearch");
     }
-    delete result;
     delete copy;
 
-    /* testing if an extremely large pattern will fail the initialization */
-    for (int count = 0; count < 512; count ++) {
-        pattern.append(temp);
-    }
-    result = new StringSearch(pattern, text, m_en_us_, NULL, status);
-    copy   = new StringSearch(*result);
+    copy = (StringSearch *)result->safeClone();
     if (*(copy->getCollator()) != *(result->getCollator()) ||
         copy->getBreakIterator() != result->getBreakIterator() ||
         copy->getMatchedLength() != result->getMatchedLength() ||
@@ -563,8 +558,31 @@ void StringSearchTest::TestInitialization()
         copy->getOffset() != result->getOffset() ||
         copy->getPattern() != result->getPattern() ||
         copy->getText() != result->getText() ||
-        *(copy) != *(result))
-    {
+        *(copy) != *(result)) {
+        errln("Error copying StringSearch");
+    }
+    delete result;
+    
+    /* testing if an extremely large pattern will fail the initialization */
+    for (int count = 0; count < 512; count ++) {
+        pattern.append(temp);
+    }
+    result = new StringSearch(pattern, text, m_en_us_, NULL, status);
+    if (*result != *result) {
+        errln("Error: string search object expected to match itself");
+    }
+    if (*result == *copy) {
+        errln("Error: string search objects are not expected to match");
+    }
+    *copy  = *result;
+    if (*(copy->getCollator()) != *(result->getCollator()) ||
+        copy->getBreakIterator() != result->getBreakIterator() ||
+        copy->getMatchedLength() != result->getMatchedLength() ||
+        copy->getMatchedStart() != result->getMatchedStart() ||
+        copy->getOffset() != result->getOffset() ||
+        copy->getPattern() != result->getPattern() ||
+        copy->getText() != result->getText() ||
+        *(copy) != *(result)) {
         errln("Error copying StringSearch");
     }
     if (U_FAILURE(status)) {
@@ -1015,7 +1033,8 @@ void StringSearchTest::TestText()
 
     u_unescape(TEXT[0].text, temp, 128);
     text.setTo(temp, u_strlen(temp));
-    strsrch->setText(text, status);
+    StringCharacterIterator chariter(text);
+    strsrch->setText(chariter, status);
     if (text != strsrch->getText()) {
         errln("Error setting text");
         delete strsrch;
@@ -1309,8 +1328,8 @@ void StringSearchTest::TestSetMatch()
 void StringSearchTest::TestReset()
 {
     UErrorCode     status  = U_ZERO_ERROR;
-    UnicodeString  text("text text text");
-    UnicodeString  pattern("pattern");
+    UnicodeString  text("fish fish");
+    UnicodeString  pattern("s");
     StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
                                               status);
     if (U_FAILURE(status)) {
@@ -1322,7 +1341,7 @@ void StringSearchTest::TestReset()
     }
     strsrch->setAttribute(USEARCH_OVERLAP, USEARCH_ON, status);
     strsrch->setAttribute(USEARCH_CANONICAL_MATCH, USEARCH_ON, status);
-    strsrch->setOffset(10, status);
+    strsrch->setOffset(9, status);
     if (U_FAILURE(status)) {
         errln("Error setting attributes and offsets");
     }
@@ -1333,6 +1352,11 @@ void StringSearchTest::TestReset()
             strsrch->getOffset() != 0 || strsrch->getMatchedLength() != 0 ||
             strsrch->getMatchedStart() != USEARCH_DONE) {
             errln("Error resetting string search");
+        }
+        strsrch->previous(status);
+        if (strsrch->getMatchedStart() != 7 ||
+            strsrch->getMatchedLength() != 1) {
+            errln("Error resetting string search\n");
         }
     }
     delete strsrch;
@@ -1937,6 +1961,101 @@ void StringSearchTest::TestContractionCanonical()
     }
     delete strsrch;
     delete collator;
+}
+
+class TempSearch : public SearchIterator
+{
+public:
+    TempSearch();
+    TempSearch(TempSearch &search);
+    ~TempSearch();
+    void            setOffset(UTextOffset position, UErrorCode &status);
+    UTextOffset     getOffset() const;
+    SearchIterator* safeClone() const;
+protected:
+    UTextOffset     handleNext(UTextOffset position, UErrorCode &status);
+    UTextOffset     handlePrev(UTextOffset position, UErrorCode &status);
+};
+
+TempSearch::TempSearch() : SearchIterator()
+{
+}
+
+TempSearch::TempSearch(TempSearch &search) : SearchIterator(search) 
+{
+}
+
+TempSearch::~TempSearch()
+{
+}
+
+void TempSearch::setOffset(UTextOffset position, UErrorCode &status)
+{
+}
+
+UTextOffset TempSearch::getOffset() const
+{
+    return USEARCH_DONE;
+}
+
+SearchIterator * TempSearch::safeClone() const 
+{
+    return NULL;
+}
+
+UTextOffset TempSearch::handleNext(UTextOffset position, UErrorCode &status)
+{
+    return USEARCH_DONE;
+}
+
+UTextOffset TempSearch::handlePrev(UTextOffset position, UErrorCode &status)
+{
+    return USEARCH_DONE;
+}
+
+void StringSearchTest::TestSearchIterator()
+{
+    TempSearch search;
+    if (search.getBreakIterator() != NULL || 
+        search.getAttribute(USEARCH_OVERLAP) != USEARCH_OFF || 
+        search.getAttribute(USEARCH_CANONICAL_MATCH) != USEARCH_OFF ||
+        search.getMatchedStart() != USEARCH_DONE ||
+        search.getMatchedLength() != 0 || search.getText().length() != 0) {
+        errln("Error subclassing SearchIterator, default constructor failed");
+        return;
+    }
+    if (search.getAttribute(USEARCH_ATTRIBUTE_COUNT) != USEARCH_DEFAULT) {
+        errln("Error getting illegal attribute failed");
+        return;
+    }
+    UnicodeString           text("abc");
+    StringCharacterIterator striter(text);
+    UErrorCode              status = U_ZERO_ERROR;
+    search.setText(text, status);
+    TempSearch search2;
+    search2.setText(striter, status);
+    if (U_FAILURE(status) || search != search2) {
+        errln("Error setting text");
+        return;
+    }
+    if (search != search) {
+        errln("Error: search object has to be equals to itself");
+        return;
+    }
+    TempSearch search3(search);
+    if (search != search3) {
+        errln("Error: search object has to be equals to its copy");
+        return;
+    }
+    search.setAttribute(USEARCH_OVERLAP, USEARCH_ON, status);
+    if (U_FAILURE(status) || 
+        search.getAttribute(USEARCH_OVERLAP) != USEARCH_ON) {
+        errln("Error setting overlap attribute");
+    }
+    search.reset();
+    if (search.getAttribute(USEARCH_OVERLAP) != USEARCH_OFF) {
+        errln("Error resetting search");
+    }
 }
 
 
