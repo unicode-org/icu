@@ -183,6 +183,13 @@ private:
                            UnicodeString& buf);
 
     /**
+     * Return a stand-in character that refers to the given segments.
+     * @param r a reference number >= 1
+     * @return a stand-in for the given segment reference
+     */
+    UChar getSegmentStandin(int32_t r);
+
+    /**
      * Determines what part of the private use region of Unicode we can use for
      * variable stand-ins.  The correct way to do this is as follows: Parse each
      * rule, and for forward and reverse rules, take the FROM expression, and
