@@ -30,6 +30,8 @@
  * create one that iterates over only a subrange of a UnicodeString
  * (iterators over different subranges of the same UnicodeString don't
  * compare equal).
+ * @see CharacterIterator
+ * @see ForwardCharacterIterator
  */
 class U_COMMON_API StringCharacterIterator : public UCharCharacterIterator {
 public:
@@ -97,7 +99,7 @@ public:
    * same string and are pointing at the same character.  
    * @stable
    */
-  virtual bool_t          operator==(const CharacterIterator& that) const;
+  virtual bool_t          operator==(const ForwardCharacterIterator& that) const;
 
   /**
    * Returns a new StringCharacterIterator referring to the same
@@ -116,8 +118,8 @@ public:
   /**
    * Copies the UnicodeString under iteration into the UnicodeString
    * referred to by "result".  Even if this iterator iterates across
-   * only a part of this string, the whole string is copied.  @param
-   * result Receives a copy of the text under iteration.  
+   * only a part of this string, the whole string is copied.
+   * @param result Receives a copy of the text under iteration.  
    * @stable
    */
   virtual void            getText(UnicodeString& result);

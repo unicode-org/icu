@@ -75,7 +75,7 @@ StringCharacterIterator::operator=(const StringCharacterIterator& that) {
 }
 
 bool_t
-StringCharacterIterator::operator==(const CharacterIterator& that) const {
+StringCharacterIterator::operator==(const ForwardCharacterIterator& that) const {
     if (this == &that) {
         return TRUE;
     }
