@@ -18,10 +18,8 @@
 #define __UNORMIMP_H__
 
 #include "unicode/utypes.h"
+#include "unicode/uiter.h"
 #include "unicode/unorm.h"
-#ifdef XP_CPLUSPLUS
-#   include "unicode/chariter.h"
-#endif
 #include "utrie.h"
 #include "ustr_imp.h"
 
@@ -225,115 +223,6 @@ U_NAMESPACE_END
 #endif
 
 U_CDECL_BEGIN
-
-struct UCharIterator;
-typedef struct UCharIterator UCharIterator;
-
-enum UCharIteratorOrigin {
-    UITERATOR_START, UITERATOR_CURRENT, UITERATOR_END
-};
-typedef enum UCharIteratorOrigin UCharIteratorOrigin;
-
-typedef int32_t U_CALLCONV
-UCharIteratorMove( UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin);
-
-typedef UBool U_CALLCONV
-UCharIteratorHasNext(UCharIterator *iter);
-
-typedef UBool U_CALLCONV
-UCharIteratorHasPrevious(UCharIterator *iter);
- 
-typedef UChar U_CALLCONV
-UCharIteratorCurrent(UCharIterator *iter);
-
-typedef UChar U_CALLCONV
-UCharIteratorNext(UCharIterator *iter);
-
-typedef UChar U_CALLCONV
-UCharIteratorPrevious(UCharIterator *iter);
-
-
-/**
- * C API for code unit iteration.
- * This can be used as a C wrapper around
- * CharacterIterator, Replaceable, or implemented using simple strings, etc.
- *
- * @internal for normalization
- */
-struct UCharIterator {
-    /**
-     * (protected) Pointer to string or wrapped object or similar.
-     * Not used by caller.
-     */
-    void *context;
-
-    /**
-     * (protected) Length of string or similar.
-     * Not used by caller.
-     */
-    int32_t length;
-
-    /**
-     * (protected) Start index or similar.
-     * Not used by caller.
-     */
-    int32_t start;
-
-    /**
-     * (protected) Current index or similar.
-     * Not used by caller.
-     */
-    int32_t index;
-
-    /**
-     * (protected) Limit index or similar.
-     * Not used by caller.
-     */
-    int32_t limit;
-
-    /**
-     * (public) Moves the current position relative to the start or end of the
-     * iteration range, or relative to the current position itself.
-     * The movement is expressed in numbers of code units forward
-     * or backward by specifying a positive or negative delta.
-     *
-     * @param delta can be positive, zero, or negative
-     * @param origin move relative to the start, end, or current index
-     * @return the new index
-     */
-    UCharIteratorMove *move;
-
-    /**
-     * (public) Check if current() and next() can still
-     * return another code unit.
-     */
-    UCharIteratorHasNext *hasNext;
-
-    /**
-     * (public) Check if previous() can still return another code unit.
-     */
-    UCharIteratorHasPrevious *hasPrevious;
-
-    /**
-     * (public) Return the code unit at the current position,
-     * or 0xffff if there is none (index is at the end).
-     */
-    UCharIteratorCurrent *current;
-
-    /**
-     * (public) Return the code unit at the current index and increment
-     * the index (post-increment, like s[i++]),
-     * or return 0xffff if there is none (index is at the end).
-     */
-    UCharIteratorNext *next;
-
-    /**
-     * (public) Decrement the index and return the code unit from there
-     * (pre-decrement, like s[--i]),
-     * or return 0xffff if there is none (index is at the start).
-     */
-    UCharIteratorPrevious *previous;
-};
 
 /**
  * Internal API for iterative normalizing - see Normalizer.
