@@ -2150,7 +2150,7 @@ ucnv_getType(const UConverter* converter)
     int8_t type = converter->sharedData->staticData->conversionType;
 #if !UCONFIG_NO_LEGACY_CONVERSION
     if(type == UCNV_MBCS) {
-        return _MBCSGetType(converter);
+        return ucnv_MBCSGetType(converter);
     }
 #endif
     return (UConverterType)type;

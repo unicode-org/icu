@@ -79,8 +79,6 @@ struct UResourceBundle {
 };
 
 U_CAPI void U_EXPORT2 ures_initStackObject(UResourceBundle* resB);
-U_CFUNC void ures_setIsStackObject( UResourceBundle* resB, UBool state);
-U_CFUNC UBool ures_isStackObject(const UResourceBundle* resB);
 
 /* Some getters used by the copy constructor */
 U_CFUNC const char* ures_getName(const UResourceBundle* resB);

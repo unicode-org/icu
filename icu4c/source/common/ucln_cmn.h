@@ -57,11 +57,6 @@ U_CFUNC UBool umtx_cleanup(void);
 
 U_CFUNC UBool utrace_cleanup(void);
 
-/* Only mutexes should be initialized in these functions. */
-
-U_CFUNC void ucnv_init(UErrorCode *status);
-
-U_CFUNC void ures_init(UErrorCode *status);
 
 
 #endif
