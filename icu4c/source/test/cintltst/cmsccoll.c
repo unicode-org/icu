@@ -4055,14 +4055,25 @@ static void TestNumericCollation(void)
 	const static char *basicTestStrings[]={
 	"hello1",
 	"hello2",
-	"hello123456"
+	"hello2002",
+	"hello2003",
+	"hello123456",
+	"hello1234567",
+	"hello10000000",
+	"hello100000000",
+	"hello1000000000",
+	"hello10000000000",
 	};
 	
 	const static char *preZeroTestStrings[]={
-	"avery1",
-	"avery01",
-	"avery001",
-	"avery0001"
+	"avery10000",
+	"avery010000",
+	"avery0010000",
+	"avery00010000",
+	"avery000010000",
+	"avery0000010000",
+	"avery00000010000",
+	"avery000000010000",
 	};
 	
 	const static char *thirtyTwoBitNumericStrings[]={
@@ -4101,7 +4112,7 @@ static void TestNumericCollation(void)
     };
 
     const static char *evenZeroes[] = {
-      /*"2000",*/ /* fix backward iteration before enabling '2000' */
+      "2000",
       "2001",
         "2002",
         "2003"
@@ -4135,26 +4146,7 @@ static void TestNumericCollation(void)
        Testing that prepended zeroes still yield the correct collation behavior. 
        We expect that every element in our strings array will be equal.
     */
-    size = sizeof(preZeroTestStrings)/sizeof(preZeroTestStrings[0]);
-    for(i = 0; i < size-1; i++) {
-      for(j = i+1; j < size; j++) {
-        u_uastrcpy(t1, preZeroTestStrings[i]);
-        u_uastrcpy(t2, preZeroTestStrings[j]);
-        doTest(coll, t1, t2, UCOL_EQUAL);
-        iter=ucol_openElements(coll, t2, u_strlen(t2), &status);
-        backAndForth(iter);
-        ucol_closeElements(iter);
-      }
-    }
-
-	/* 
-      Testing collation element iterator. Running backAndForth on 
-      a string with numbers in it should be sufficient.
-     */
-	u_uastrcpy(t1, basicTestStrings[2]);	
-	iter=ucol_openElements(coll, t1, u_strlen(t1), &status);
-	backAndForth(iter);
-    ucol_closeElements(iter);
+    genericOrderingTestWithResult(coll, preZeroTestStrings, sizeof(preZeroTestStrings)/sizeof(preZeroTestStrings[0]), UCOL_EQUAL);
    
     ucol_close(coll);
 }
