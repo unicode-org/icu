@@ -554,17 +554,35 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
             t = 0;
         }
     } else {
+        // The 'facadeID' is the ID to be applied to an alias
+        // transliterator like Hangul-Latin, which is really
+        // Hangul-Jamo;Jamo-Latin, but which should have a getID()
+        // result of "Hangul-Latin".  The 'facadeID' is only used in
+        // that way for alias transliterators.  The 'alias' parameter
+        // is non-empty if _createInstance() finds that the given ID
+        // refers to an alias.  The reason _createInstance() doesn't
+        // call createInstance() (this method) directly is to avoid
+        // deadlock.  There are other ways to do this but this is one
+        // of the more efficient ways.
+        UnicodeString alias, facadeID;
         if (dir == UTRANS_REVERSE) {
             int32_t i = ID.indexOf(ID_SEP);
             if (i >= 0) {
-                UnicodeString inverseID, right;
-                ID.extractBetween(i+1, ID.length(), inverseID);
+                UnicodeString right;
+                ID.extractBetween(i+1, ID.length(), facadeID);
                 ID.extractBetween(0, i, right);
-                inverseID.append(ID_SEP).append(right);
-                t = _createInstance(inverseID, parseError);
+                facadeID.append(ID_SEP).append(right);
+                t = _createInstance(facadeID, alias, parseError);
             }
         } else {
-            t = _createInstance(ID, parseError);
+            t = _createInstance(ID, alias, parseError);
+            facadeID = ID;
+        }
+        if (alias.length() > 0) { // assert(t==0)
+            t = createInstance(alias);
+            if (t != 0) {
+                t->setID(ID);
+            }
         }
     }
     return t;
@@ -573,8 +591,12 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
 /**
  * Returns a transliterator object given its ID.  Unlike getInstance(),
  * this method returns null if it cannot make use of the given ID.
+ * @param aliasReturn if ID is an alias transliterator this is set
+ * the the parameter to be passed to createInstance() and 0 is
+ * returned; otherwise, this is unchanged
  */
 Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
+                                                UnicodeString& aliasReturn,
                                                 UParseError* parseError) {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -601,11 +623,9 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
     } else if (entry->entryType == CacheEntry::PROTOTYPE) {
         return entry->u.prototype->clone();
     } else if (entry->entryType == CacheEntry::ALIAS) {
-        Transliterator *t = createInstance(entry->stringArg);
-        if (t != 0) {
-            t->setID(ID);
-        }
-        return t;
+        // We can't call createInstance() here because of deadlock.
+        aliasReturn = entry->stringArg;
+        return 0;
     } else {
         // At this point entry type must be either RULES_FORWARD
         // or RULES_REVERSE

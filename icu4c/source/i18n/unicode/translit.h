@@ -715,8 +715,12 @@ private:
     /**
      * Returns a transliterator object given its ID.  Unlike getInstance(),
      * this method returns null if it cannot make use of the given ID.
+     * @param aliasReturn if ID is an alias transliterator this is set
+     * the the parameter to be passed to createInstance() and 0 is
+     * returned; otherwise, this is unchanged
      */
     static Transliterator* _createInstance(const UnicodeString& ID,
+                                           UnicodeString& aliasReturn,
                                            UParseError* parseError = 0);
 
 public:
