@@ -39,7 +39,7 @@
 #define UCNV_PRV_ESCAPE_XML_DEC 'D'
 #define UCNV_PRV_ESCAPE_XML_HEX 'X'
 #define UCNV_PRV_ESCAPE_JAVA    'J'
-#define UCNV_PRV_ESCAPE_CODEPOINT 'U'
+#define UCNV_PRV_ESCAPE_UNICODE 'U'
 
 /*Function Pointer STOPS at the ILLEGAL_SEQUENCE */
 U_CAPI void    U_EXPORT2
@@ -256,7 +256,7 @@ UCNV_FROM_U_CALLBACK_ESCAPE (
             valueString[valueStringLength++] = (UChar) UNICODE_SEMICOLON_CODEPOINT; /* adding ; */
           break;
 
-        case UCNV_PRV_ESCAPE_CODEPOINT:
+        case UCNV_PRV_ESCAPE_UNICODE:
           while (i < length)
           {
             valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT;    /* adding U */
