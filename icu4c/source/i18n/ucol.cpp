@@ -317,7 +317,7 @@ ucol_openRules(    const    UChar                  *rules,
         UCollationStrength      strength,
         UErrorCode              *status)
 {
-  uint32_t listLen = 0, nSize = 0;
+  uint32_t listLen = 0;
   UColTokenParser src;
   UColAttributeValue norm;
 
@@ -341,32 +341,9 @@ ucol_openRules(    const    UChar                  *rules,
 
   if(U_FAILURE(*status)) return 0;
 
-  /*src.source = rules;*/
-  src.source = (UChar *)uprv_malloc((2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
-  nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src.source, 2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
-  if(nSize > (uint32_t)(2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE) || *status == U_BUFFER_OVERFLOW_ERROR) {
-    *status = U_ZERO_ERROR;
-    src.source = (UChar *)realloc(src.source, (nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
-    nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src.source, nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
-  }
-  //uprv_memcpy(src.source, rules, rulesLength*sizeof(UChar));
-  src.current = src.source;
-  src.end = src.source+nSize;
-  //src.end = src.source+rulesLength;
-  src.sourceCurrent = src.source;
-  src.extraCurrent = src.end;
-  src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
-  src.UCA = UCA;
-  src.invUCA = ucol_initInverseUCA(status);
-  src.resultLen = 0;
-  src.lh = 0;
-  src.varTop = NULL;
-
-  src.opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
-
-  uprv_memcpy(src.opts, UCA->options, sizeof(UColOptionSet));
-
+  ucol_tok_initTokenList(&src, rules, rulesLength, UCA, status);
   listLen = ucol_tok_assembleTokenList(&src, status);
+
   if(U_FAILURE(*status)) {
     /* if status is U_ILLEGAL_ARGUMENT_ERROR, src->current points at the offending option */
     /* if status is U_INVALID_FORMAT_ERROR, src->current points after the problematic part of the rules */
@@ -399,7 +376,6 @@ ucol_openRules(    const    UChar                  *rules,
     result->hasRealData = FALSE;
   }
 
-
   if(U_SUCCESS(*status)) {
     result->dataInfo.dataVersion[0] = UCOL_BUILDER_VERSION;
     result->rules = (UChar *)uprv_malloc((u_strlen(rules)+1)*sizeof(UChar));
@@ -418,6 +394,7 @@ ucol_openRules(    const    UChar                  *rules,
     }
     result = NULL;
   }
+
   ucol_tok_closeTokenList(&src);
 
   return result;
