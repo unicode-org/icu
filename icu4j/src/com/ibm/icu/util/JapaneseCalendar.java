@@ -408,10 +408,10 @@ public class JapaneseCalendar extends GregorianCalendar {
         1370,    7, 24,     // Kentoku
         1372,    4,  1,     // Bunch\u0169
         1375,    5, 27,     // Tenju
+        1379,    3, 22,     // Koryaku
         1381,    2, 10,     // Kowa
         1384,    4, 28,     // Gench\u0169
         1384,    2, 27,     // Meitoku
-        1379,    3, 22,     // Koryaku
         1387,    8, 23,     // Kakei
         1389,    2,  9,     // Koo
         1390,    3, 26,     // Meitoku
@@ -548,7 +548,8 @@ public class JapaneseCalendar extends GregorianCalendar {
                     int d = ERAS[i] - ERAS[i-3];
                     if (d < min) {
                         min = d;
-                    } else if (d > max) {
+                    }
+                    if (d > max) {
                         max = d;
                     }
                 }
