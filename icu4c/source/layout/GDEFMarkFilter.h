@@ -14,36 +14,19 @@
 
 U_NAMESPACE_BEGIN
 
-class GDEFMarkFilter : public UObject, public LEGlyphFilter
+class GDEFMarkFilter : public UMemory, public LEGlyphFilter
 {
 private:
     const GlyphClassDefinitionTable *classDefTable;
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
+    GDEFMarkFilter(const GDEFMarkFilter &other); // forbid copying of this class
+    GDEFMarkFilter &operator=(const GDEFMarkFilter &other); // forbid copying of this class
 
 public:
     GDEFMarkFilter(const GlyphDefinitionTableHeader *gdefTable);
     virtual ~GDEFMarkFilter();
 
     virtual le_bool accept(LEGlyphID glyph) const;
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 };
 
 U_NAMESPACE_END

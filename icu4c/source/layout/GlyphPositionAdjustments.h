@@ -13,7 +13,7 @@
 
 U_NAMESPACE_BEGIN
 
-class GlyphPositionAdjustment : public UObject {
+class GlyphPositionAdjustment : public UMemory {
 public:
 
     GlyphPositionAdjustment();
@@ -39,20 +39,6 @@ public:
     void    adjustXAdvance(float xAdjustment);
     void    adjustYAdvance(float yAdjustment);
 
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
 private:
     float xPlacement;
     float yPlacement;
@@ -61,11 +47,7 @@ private:
 
     le_int32 baseOffset;
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
+    // allow copying of this class because all of its fields are simple types
 };
 
 inline GlyphPositionAdjustment::GlyphPositionAdjustment()

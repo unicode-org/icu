@@ -12,8 +12,6 @@
 
 U_NAMESPACE_BEGIN
 
-const char SubtableProcessor::fgClassID=0;
-
 SubtableProcessor::SubtableProcessor()
 {
 }

@@ -16,7 +16,7 @@
 
 U_NAMESPACE_BEGIN
 
-class GlyphIterator : public UObject {
+class GlyphIterator : public UMemory {
 public:
     GlyphIterator(LEGlyphID *theGlyphs, GlyphPositionAdjustment *theGlyphPositionAdjustments, le_int32 theGlyphCount,
         le_bool rightToLeft, le_uint16 theLookupFlags, LETag theFeatureTag, const LETag *theGlyphTags[],
@@ -65,20 +65,6 @@ public:
     void adjustCursiveLastGlyphPositionAdjustment(float xPlacmentAdjust, float yPlacementAdjust,
                                            float xAdvanceAdjust, float yAdvanceAdjust);
 
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
 private:
     GlyphIterator();
     le_bool filterGlyph(le_uint32 index) const;
@@ -102,11 +88,7 @@ private:
     const GlyphClassDefinitionTable *glyphClassDefinitionTable;
     const MarkAttachClassDefinitionTable *markAttachClassDefinitionTable;
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
+    GlyphIterator &operator=(const GlyphIterator &other); // forbid copying of this class
 };
 
 U_NAMESPACE_END
