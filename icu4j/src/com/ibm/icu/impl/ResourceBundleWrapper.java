@@ -25,7 +25,7 @@ public class ResourceBundleWrapper extends UResourceBundle {
         if(baseName.indexOf('.')>-1){
             bundle = ResourceBundle.getBundle(baseName, LocaleUtility.getLocaleFromName(localeID), loader);   
         }else{
-            bundle = ICULocaleData.getResourceBundle(baseName, LocaleUtility.getLocaleFromName(localeID));
+            bundle = ICULocaleData.getResourceBundle(baseName, new ULocale(localeID));
             if(bundle==null){
                 throw new MissingResourceException("Can't find the bundle "
                         +baseName
@@ -51,7 +51,7 @@ public class ResourceBundleWrapper extends UResourceBundle {
     }
     
     public ULocale getULocale(){
-        return new ULocale(bundle.getLocale());   
+        return ULocale.forLocale(bundle.getLocale());   
     }
     
     public UResourceBundle getParent(){

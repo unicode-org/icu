@@ -1,13 +1,12 @@
 /*
  * @(#)TimeZone.java    1.51 00/01/19
  *
- *
- *   Copyright (C) 1996-2003, International Business Machines
- *   Corporation and others.  All Rights Reserved.
+ * Copyright (C) 1996-2004, International Business Machines
+ * Corporation and others.  All Rights Reserved.
  */
 
-
 package com.ibm.icu.util;
+
 import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.util.Date;
@@ -371,7 +370,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public final String getDisplayName() {
-        return getDisplayName(false, LONG, Locale.getDefault());
+        return getDisplayName(false, LONG, ULocale.getDefault());
     }
 
     /**
@@ -387,6 +386,22 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public final String getDisplayName(Locale locale) {
+        return getDisplayName(false, LONG, ULocale.forLocale(locale));
+    }
+
+    /**
+     * Returns a name of this time zone suitable for presentation to the user
+     * in the specified locale.
+     * This method returns the long name, not including daylight savings.
+     * If the display name is not available for the locale,
+     * then this method returns a string in the format
+     * <code>GMT[+-]hh:mm</code>.
+     * @param locale the ulocale in which to supply the display name.
+     * @return the human-readable name of this time zone in the given locale
+     * or in the default ulocale if the given ulocale is not recognized.
+     * @stable ICU 2.0
+     */
+    public final String getDisplayName(ULocale locale) {
         return getDisplayName(false, LONG, locale);
     }
 
@@ -402,7 +417,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public final String getDisplayName(boolean daylight, int style) {
-        return getDisplayName(daylight, style, Locale.getDefault());
+        return getDisplayName(daylight, style, ULocale.getDefault());
     }
 
     /**
@@ -420,6 +435,25 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public String getDisplayName(boolean daylight, int style, Locale locale) {
+        return getDisplayName(daylight, style, ULocale.forLocale(locale));
+    }
+
+    /**
+     * Returns a name of this time zone suitable for presentation to the user
+     * in the specified locale.
+     * If the display name is not available for the locale,
+     * then this method returns a string in the format
+     * <code>GMT[+-]hh:mm</code>.
+     * @param daylight if true, return the daylight savings name.
+     * @param style either <code>LONG</code> or <code>SHORT</code>
+     * @param locale the locale in which to supply the display name.
+     * @return the human-readable name of this time zone in the given locale
+     * or in the default locale if the given locale is not recognized.
+     * @exception IllegalArgumentException style is invalid.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public String getDisplayName(boolean daylight, int style, ULocale locale) {
         /* NOTES:
          * (1) We use SimpleDateFormat for simplicity; we could do this
          * more efficiently but it would duplicate the SimpleDateFormat code

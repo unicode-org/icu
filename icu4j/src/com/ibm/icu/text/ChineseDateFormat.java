@@ -49,7 +49,19 @@ public class ChineseDateFormat extends SimpleDateFormat {
      * @stable ICU 2.0
      */
    public ChineseDateFormat(String pattern, Locale locale) {
+       // TODO: convert to use ULocale
         super(pattern, new ChineseDateFormatSymbols(locale), true);
+    }
+
+    /**
+     * Construct a ChineseDateFormat from a date format pattern and locale
+     * @param pattern the pattern
+     * @param locale the locale
+     * @stable ICU 2.0
+     */
+   public ChineseDateFormat(String pattern, ULocale locale) {
+       // TODO: convert CDFS to use ULocale
+        super(pattern, new ChineseDateFormatSymbols(locale.toLocale()), true);
     }
 
 // NOTE: This API still exists; we just inherit it from SimpleDateFormat

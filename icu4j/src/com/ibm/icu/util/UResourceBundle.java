@@ -177,7 +177,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      */
 
     public static final UResourceBundle getBundleInstance(String baseName, Locale locale){
-        return getBundleInstance(baseName, new ULocale(locale));
+        return getBundleInstance(baseName, ULocale.forLocale(locale));
     }
    
     /**

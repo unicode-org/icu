@@ -13,6 +13,7 @@ import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.SoftReference;
@@ -287,7 +288,7 @@ public class SimpleDateFormat extends DateFormat {
      * @stable ICU 2.0
      */
     public SimpleDateFormat() {
-        this(SHORT, SHORT, Locale.getDefault());
+        this(SHORT, SHORT, ULocale.getDefault());
     }
 
     /**
@@ -298,7 +299,19 @@ public class SimpleDateFormat extends DateFormat {
      */
     public SimpleDateFormat(String pattern)
     {
-        this(pattern, Locale.getDefault());
+        this(pattern, ULocale.getDefault());
+    }
+
+    /**
+     * Construct a SimpleDateFormat using the given pattern and locale.
+     * <b>Note:</b> Not all locales support SimpleDateFormat; for full
+     * generality, use the factory methods in the DateFormat class.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public SimpleDateFormat(String pattern, Locale loc)
+    {
+        this(pattern, ULocale.forLocale(loc));
     }
 
     /**
@@ -307,7 +320,7 @@ public class SimpleDateFormat extends DateFormat {
      * generality, use the factory methods in the DateFormat class.
      * @stable ICU 2.0
      */
-    public SimpleDateFormat(String pattern, Locale loc)
+    public SimpleDateFormat(String pattern, ULocale loc)
     {
         this.pattern = pattern;
         this.formatData = new DateFormatSymbols(loc);
@@ -322,13 +335,13 @@ public class SimpleDateFormat extends DateFormat {
      */
     public SimpleDateFormat(String pattern, DateFormatSymbols formatData)
     {
-        this(pattern, formatData, Locale.getDefault());
+        this(pattern, formatData, ULocale.getDefault());
     }
 
     /**
      * @internal ICU 3.2
      */
-    public SimpleDateFormat(String pattern, DateFormatSymbols formatData, Locale loc)
+    public SimpleDateFormat(String pattern, DateFormatSymbols formatData, ULocale loc)
     {
         this.pattern = pattern;
         this.formatData = (DateFormatSymbols) formatData.clone();
@@ -345,7 +358,7 @@ public class SimpleDateFormat extends DateFormat {
                      boolean useFastFormat) {
         this.pattern = pattern;
         this.formatData = (DateFormatSymbols) formatData.clone();
-        initialize(Locale.getDefault());
+        initialize(ULocale.getDefault());
         // this.useFastFormat is set by initialize(); fix it up afterwards
         this.useFastFormat = useFastFormat;
     }
@@ -356,7 +369,7 @@ public class SimpleDateFormat extends DateFormat {
     private static SoftReference highCacheRef;
     
     /* Package-private, called by DateFormat factory methods */
-    SimpleDateFormat(int timeStyle, int dateStyle, Locale loc) {
+    SimpleDateFormat(int timeStyle, int dateStyle, ULocale loc) {
         // try a high level cache first!
 
         Map map = null;
@@ -392,7 +405,7 @@ public class SimpleDateFormat extends DateFormat {
         /* try the cache first */
         String[] dateTimePatterns = (String[]) cachedLocaleData.get(loc);
         if (dateTimePatterns == null) { /* cache miss */
-            CalendarData calData = new CalendarData(new ULocale(loc), null); // TODO: type?
+            CalendarData calData = new CalendarData(loc, null); // TODO: type?
             // TODO: get correct actual/valid locale here
             ULocale uloc = calData.getULocale();
             setLocale(uloc, uloc);
@@ -428,13 +441,14 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     /* Initialize calendar and numberFormat fields */
-    private void initialize(Locale loc) {
+    private void initialize(ULocale loc) {
         // The format object must be constructed using the symbols for this zone.
         // However, the calendar should use the current default TimeZone.
         // If this is not contained in the locale zone strings, then the zone
         // will be formatted using generic GMT+/-H:MM nomenclature.
         calendar = Calendar.getInstance(TimeZone.getDefault(), loc);
-        numberFormat = NumberFormat.getInstance(loc);
+	// TODO: convert to use ULocale APIs when we get to the text package
+        numberFormat = NumberFormat.getInstance(loc.toLocale());
         numberFormat.setGroupingUsed(false);
         ///CLOVER:OFF
         // difficult to test for case where NumberFormat.getInstance does not 

@@ -1973,7 +1973,7 @@ public class DecimalFormat extends NumberFormat {
                     }
                     // Delegate parse of display name => ISO code to Currency
                     ParsePosition ppos = new ParsePosition(pos);
-                    String iso = Currency.parse(uloc.toLocale(), text, ppos);
+                    String iso = Currency.parse(uloc, text, ppos);
 
                     // If parse succeeds, populate currency[0]
                     if (iso != null) {
@@ -2853,7 +2853,7 @@ public class DecimalFormat extends NumberFormat {
                 if (currency != null) {
                     if (!intl) {
                         boolean isChoiceFormat[] = new boolean[1];
-                        s = currency.getName(symbols.getLocale(),
+                        s = currency.getName(symbols.getULocale(),
                                              Currency.SYMBOL_NAME,
                                              isChoiceFormat);
                         if (isChoiceFormat[0]) {
@@ -3846,7 +3846,7 @@ public class DecimalFormat extends NumberFormat {
         super.setCurrency(theCurrency);
         if (theCurrency != null) {
             boolean[] isChoiceFormat = new boolean[1];
-            String s = theCurrency.getName(symbols.getLocale(),
+            String s = theCurrency.getName(symbols.getULocale(),
                     Currency.SYMBOL_NAME,
                     isChoiceFormat);
         	symbols.setCurrencySymbol(s);

@@ -29,18 +29,27 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
         return service.getAvailableLocales();
     }
 
-    Currency createInstance(Locale loc) {
+    ULocale[] getAvailableULocales() {
+        if (service.isDefault()) {
+            return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
+        }
+        return service.getAvailableULocales();
+    }
+
+    Currency createInstance(ULocale loc) {
+	// TODO: convert to ULocale when service switches over
+
         if (service.isDefault()) {
             return Currency.createCurrency(loc);
         }
         Locale[] actualLoc = new Locale[1];
-        Currency curr = (Currency)service.get(loc, actualLoc);
-        ULocale uloc = new ULocale(actualLoc[0]);
+        Currency curr = (Currency)service.get(loc.toLocale(), actualLoc);
+        ULocale uloc = ULocale.forLocale(actualLoc[0]);
         curr.setLocale(uloc, uloc); // services make no distinction between actual & valid
         return curr;
     }
 
-    Object registerInstance(Currency currency, Locale locale) {
+    Object registerInstance(Currency currency, ULocale locale) {
         return service.registerObject(currency, locale);
     }
     
@@ -54,7 +63,8 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
 
             class CurrencyFactory extends ICUResourceBundleFactory {
                 protected Object handleCreate(Locale loc, int kind, ICUService service) {
-                    return Currency.createCurrency(loc);
+		    // TODO: fix when service switches over
+                    return Currency.createCurrency(ULocale.forLocale(loc));
                 }
             }
             

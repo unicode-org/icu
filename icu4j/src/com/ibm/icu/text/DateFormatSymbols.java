@@ -88,7 +88,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     {
         initializeData(ULocale.getDefault(), ""); // TODO: type?
     }
-
     
     /**
      * Construct a DateFormatSymbols object by loading format data from
@@ -101,7 +100,22 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     public DateFormatSymbols(Locale locale)
     {
-        initializeData(new ULocale(locale), ""); // TODO: type?
+        initializeData(ULocale.forLocale(locale), ""); // TODO: type?
+    }
+
+    /**
+     * Construct a DateFormatSymbols object by loading format data from
+     * resources for the given ulocale.
+     *
+     * @throws  java.util.MissingResourceException
+     *          if the resources for the specified locale cannot be
+     *          found or cannot be loaded.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public DateFormatSymbols(ULocale locale)
+    {
+        initializeData(locale, ""); // TODO: type?
     }
 
     /**
@@ -415,12 +429,12 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-
     protected void initializeData(ULocale desiredLocale, String type)
     {
         CalendarData calData = new CalendarData(desiredLocale, type);
         initializeData(desiredLocale, calData);
     }
+
     /**
      * 
      * @param desiredLocale
@@ -451,7 +465,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         ampms = calData.getStringArray("AmPmMarkers");
 
         // These really do use rb and not calData
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,desiredLocale);
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, desiredLocale);
         // hack around class cast problem
         // zoneStrings = (String[][])rb.getObject("zoneStrings");
         ICUResourceBundle zoneObject = rb.get("zoneStrings");
@@ -630,7 +644,72 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public DateFormatSymbols(Calendar cal, Locale locale) {
-        initializeData(new ULocale(locale), cal.getType());
+        initializeData(ULocale.forLocale(locale), cal.getType());
+    }
+
+    /**
+     * Get the {@link DateFormatSymbols} object that should be used to format a
+     * calendar system's dates in the given locale.
+     * <p>
+     * <b>Subclassing:</b><br>
+     * When creating a new Calendar subclass, you must create the
+     * {@link ResourceBundle ResourceBundle}
+     * containing its {@link DateFormatSymbols DateFormatSymbols} in a specific place.
+     * The resource bundle name is based on the calendar's fully-specified
+     * class name, with ".resources" inserted at the end of the package name
+     * (just before the class name) and "Symbols" appended to the end.
+     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
+     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
+     * <p>
+     * Within the ResourceBundle, this method searches for five keys:
+     * <ul>
+     * <li><b>DayNames</b> -
+     *      An array of strings corresponding to each possible
+     *      value of the <code>DAY_OF_WEEK</code> field.  Even though
+     *      <code>DAY_OF_WEEK</code> starts with <code>SUNDAY</code> = 1,
+     *      This array is 0-based; the name for Sunday goes in the
+     *      first position, at index 0.  If this key is not found
+     *      in the bundle, the day names are inherited from the
+     *      default <code>DateFormatSymbols</code> for the requested locale.
+     *
+     * <li><b>DayAbbreviations</b> -
+     *      An array of abbreviated day names corresponding
+     *      to the values in the "DayNames" array.  If this key
+     *      is not found in the resource bundle, the "DayNames"
+     *      values are used instead.  If neither key is found,
+     *      the day abbreviations are inherited from the default
+     *      <code>DateFormatSymbols</code> for the locale.
+     *
+     * <li><b>MonthNames</b> -
+     *      An array of strings corresponding to each possible
+     *      value of the <code>MONTH</code> field.  If this key is not found
+     *      in the bundle, the month names are inherited from the
+     *      default <code>DateFormatSymbols</code> for the requested locale.
+     *
+     * <li><b>MonthAbbreviations</b> -
+     *      An array of abbreviated day names corresponding
+     *      to the values in the "MonthNames" array.  If this key
+     *      is not found in the resource bundle, the "MonthNames"
+     *      values are used instead.  If neither key is found,
+     *      the day abbreviations are inherited from the default
+     *      <code>DateFormatSymbols</code> for the locale.
+     *
+     * <li><b>Eras</b> -
+     *      An array of strings corresponding to each possible
+     *      value of the <code>ERA</code> field.  If this key is not found
+     *      in the bundle, the era names are inherited from the
+     *      default <code>DateFormatSymbols</code> for the requested locale.
+     * </ul>
+     * <p>
+     * @param cal       The calendar system whose date format symbols are desired.
+     * @param locale    The ulocale whose symbols are desired.
+     *
+     * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public DateFormatSymbols(Calendar cal, ULocale locale) {
+        initializeData(locale, cal.getType());
     }
 
     /**
@@ -640,12 +719,23 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 2.2
      */
     public DateFormatSymbols(Class calendarClass, Locale locale) {
+        this(calendarClass, ULocale.forLocale(locale));
+    }
+
+    /**
+     * Variant of DateFormatSymbols(Calendar, ULocale) that takes the Calendar class
+     * instead of a Calandar instance.
+     * @see #DateFormatSymbols(Calendar, Locale)
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public DateFormatSymbols(Class calendarClass, ULocale locale) {
         String fullName = calendarClass.getName();
         int lastDot = fullName.lastIndexOf('.');
         String className = fullName.substring(lastDot+1);
         String calType = className.replaceAll("Calendar","").toLowerCase();
         
-        initializeData(new ULocale(locale), calType);
+        initializeData(locale, calType);
     }
 
     /**
@@ -656,10 +746,21 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public DateFormatSymbols(ResourceBundle bundle, Locale locale) {
-        initializeData(new ULocale(locale), 
-                    new CalendarData((ICUResourceBundle)bundle, null));
+        this(bundle, ULocale.forLocale(locale));
     }
 
+    /**
+     * Fetch a custom calendar's DateFormatSymbols out of the given resource
+     * bundle.  Symbols that are not overridden are inherited from the
+     * default DateFormatSymbols for the locale.
+     * @see DateFormatSymbols#DateFormatSymbols
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public DateFormatSymbols(ResourceBundle bundle, ULocale locale) {
+        initializeData(locale, 
+            new CalendarData((ICUResourceBundle)bundle, null));
+    }
 
     /**
      * Find the ResourceBundle containing the date format information for
@@ -673,6 +774,22 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     static public ResourceBundle getDateFormatBundle(Class calendarClass, Locale locale)
+        throws MissingResourceException {
+        return getDateFormatBundle(calendarClass, ULocale.forLocale(locale));
+    }
+        
+    /**
+     * Find the ResourceBundle containing the date format information for
+     * a specified calendar subclass in a given locale.
+     * <p>
+     * The resource bundle name is based on the calendar's fully-specified
+     * class name, with ".resources" inserted at the end of the package name
+     * (just before the class name) and "Symbols" appended to the end.
+     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
+     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
+     * @stable ICU 2.0
+     */
+    static public ResourceBundle getDateFormatBundle(Class calendarClass, ULocale locale)
         throws MissingResourceException {
         
         // Find the calendar's class name, which we're going to use to construct the
@@ -708,6 +825,18 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 2.2
      */
     public static ResourceBundle getDateFormatBundle(Calendar cal, Locale locale)
+        throws MissingResourceException {
+        return getDateFormatBundle(cal.getClass(), locale);
+    }
+    
+    /**
+     * Variant of getDateFormatBundle(java.lang.Class, java.util.Locale) that takes
+     * a Calendar instance instead of a Calendar class.
+     * @see #getDateFormatBundle(java.lang.Class, java.util.Locale)
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static ResourceBundle getDateFormatBundle(Calendar cal, ULocale locale)
         throws MissingResourceException {
         return getDateFormatBundle(cal.getClass(), locale);
     }

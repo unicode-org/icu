@@ -51,12 +51,13 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
     }
     
     public BreakIterator createBreakIterator(Locale locale, int kind) {
+	// TODO: convert to ULocale when service switches over
         if (service.isDefault()) {
             return createBreakInstance(locale, kind);
         }
         Locale[] actualLoc = new Locale[1];
         BreakIterator iter = (BreakIterator)service.get(locale, kind, actualLoc);
-        ULocale uloc = new ULocale(actualLoc[0]);
+        ULocale uloc = ULocale.forLocale(actualLoc[0]);
         iter.setLocale(uloc, uloc); // services make no distinction between actual & valid
         return iter;
     }
@@ -110,7 +111,8 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
                                              String dictionaryName) {
 
         BreakIterator iter = null;
-        ResourceBundle bundle = ICULocaleData.getResourceBundle("BreakIteratorRules", where);
+	// TODO: convert API to use ULocale
+        ResourceBundle bundle = ICULocaleData.getResourceBundle("BreakIteratorRules", ULocale.forLocale(where));
         String[] classNames = bundle.getStringArray("BreakIteratorClasses");
         String rules = bundle.getString(rulesName);
         if (classNames[kind].equals("RuleBasedBreakIterator")) {
@@ -168,7 +170,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         }
 
         // TODO: Determine valid and actual locale correctly.
-        ULocale uloc = new ULocale(bundle.getLocale());
+        ULocale uloc = ULocale.forLocale(bundle.getLocale());
         iter.setLocale(uloc, uloc);
         return iter;
     }

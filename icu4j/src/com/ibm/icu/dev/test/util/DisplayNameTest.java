@@ -104,7 +104,7 @@ public class DisplayNameTest extends TestFmwk {
         check("Currencies", locale, currencies, currencyFormats, new DisplayNameGetter() {
             public String get(ULocale locale, String code, Object context) {
                 Currency s = Currency.getInstance(code);
-                return s.getName(locale.toLocale(), ((Integer)context).intValue(), new boolean[1]);
+                return s.getName(locale, ((Integer)context).intValue(), new boolean[1]);
             }
         });
         // comment this out, because the zone string information is lost
@@ -371,8 +371,7 @@ public class DisplayNameTest extends TestFmwk {
                 String otherCode = (String) codeToName[k].get(name);
                 if (otherCode != null) {
                     errln(
-                        "Display Names collide for\t" + type
-                        + "\t(" + ((context != null) ? context : "") + ")"
+                        "Display Names collide for\t" + type                        + "\t(" + ((context != null) ? context : "") + ")"
                         + ":\t" + locale + " [" + locale.getDisplayName(ULocale.ENGLISH) + "]"
                         + "\t" + code + " [" + getter.get(ULocale.ENGLISH, code, context) + "]"
                         + "\t& " + otherCode + " [" + getter.get(ULocale.ENGLISH, otherCode, context) + "]"

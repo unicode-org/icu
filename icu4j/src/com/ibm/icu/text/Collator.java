@@ -450,7 +450,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @stable ICU 2.8
      */
     public static final Collator getInstance(Locale locale) {
-        return getInstance(new ULocale(locale));
+        return getInstance(ULocale.forLocale(locale));
     }
 
     /**

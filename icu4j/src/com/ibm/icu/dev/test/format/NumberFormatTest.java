@@ -1134,9 +1134,9 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     tok = tokens.next();
                     if (!tok.equals("-")) {
                         mloc = tok;
-                        Locale l = LocaleUtility.getLocaleFromName(mloc);
+                        ULocale l = new ULocale(mloc);
                         try {
-                            mfmt = MeasureFormat.getCurrencyFormat(new ULocale(l));
+                            mfmt = MeasureFormat.getCurrencyFormat(l);
                         } catch (IllegalArgumentException iae) {
                             errln(where + "Loc \"" + tok + '"');
                             iae.printStackTrace();

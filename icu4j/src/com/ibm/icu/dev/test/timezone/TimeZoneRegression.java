@@ -601,13 +601,16 @@ public class TimeZoneRegression extends TestFmwk {
         }
         z = TimeZone.getTimeZone("GMT");
         try {
-            z.getDisplayName(false, TimeZone.SHORT, null);
+	    // {dlf} requiring cast for disambiguation is ok for compatibility since null
+	    // is not a valid argument to this API
+            z.getDisplayName(false, TimeZone.SHORT, (ULocale)null);
             errln("FAIL: Null allowed in getDisplayName(3)");
         } catch (NullPointerException e) {
             System.out.print("");
         }
         try {
-            z.getDisplayName(null);
+	    // {dlf} see above
+            z.getDisplayName((ULocale)null);
             errln("FAIL: Null allowed in getDisplayName(1)");
         } catch (NullPointerException e) {
             System.out.print("");

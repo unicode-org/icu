@@ -8,6 +8,7 @@ package com.ibm.icu.text;
 //import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.UFormat;
@@ -576,7 +577,7 @@ public abstract class DateFormat extends UFormat {
      */
     public final static DateFormat getTimeInstance()
     {
-        return get(-1, DEFAULT, Locale.getDefault());
+        return get(-1, DEFAULT, ULocale.getDefault());
     }
 
     /**
@@ -589,7 +590,7 @@ public abstract class DateFormat extends UFormat {
      */
     public final static DateFormat getTimeInstance(int style)
     {
-        return get(-1, style, Locale.getDefault());
+        return get(-1, style, ULocale.getDefault());
     }
 
     /**
@@ -604,7 +605,23 @@ public abstract class DateFormat extends UFormat {
     public final static DateFormat getTimeInstance(int style,
                                                  Locale aLocale)
     {
-        return get(-1, style, aLocale);
+        return get(-1, style, ULocale.forLocale(aLocale));
+    }
+
+    /**
+     * Gets the time formatter with the given formatting style
+     * for the given locale.
+     * @param style the given formatting style. For example,
+     * SHORT for "h:mm a" in the US locale.
+     * @param aLocale the given locale.
+     * @return a time formatter.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public final static DateFormat getTimeInstance(int style,
+                                                 ULocale locale)
+    {
+        return get(-1, style, locale);
     }
 
     /**
@@ -615,7 +632,7 @@ public abstract class DateFormat extends UFormat {
      */
     public final static DateFormat getDateInstance()
     {
-        return get(DEFAULT, -1, Locale.getDefault());
+        return get(DEFAULT, -1, ULocale.getDefault());
     }
 
     /**
@@ -628,7 +645,7 @@ public abstract class DateFormat extends UFormat {
      */
     public final static DateFormat getDateInstance(int style)
     {
-        return get(style, -1, Locale.getDefault());
+        return get(style, -1, ULocale.getDefault());
     }
 
     /**
@@ -643,7 +660,23 @@ public abstract class DateFormat extends UFormat {
     public final static DateFormat getDateInstance(int style,
                                                  Locale aLocale)
     {
-        return get(style, -1, aLocale);
+        return get(style, -1, ULocale.forLocale(aLocale));
+    }
+
+    /**
+     * Gets the date formatter with the given formatting style
+     * for the given locale.
+     * @param style the given formatting style. For example,
+     * SHORT for "M/d/yy" in the US locale.
+     * @param aLocale the given locale.
+     * @return a date formatter.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public final static DateFormat getDateInstance(int style,
+                                                 ULocale locale)
+    {
+        return get(style, -1, locale);
     }
 
     /**
@@ -654,7 +687,7 @@ public abstract class DateFormat extends UFormat {
      */
     public final static DateFormat getDateTimeInstance()
     {
-        return get(DEFAULT, DEFAULT, Locale.getDefault());
+        return get(DEFAULT, DEFAULT, ULocale.getDefault());
     }
 
     /**
@@ -670,7 +703,7 @@ public abstract class DateFormat extends UFormat {
     public final static DateFormat getDateTimeInstance(int dateStyle,
                                                        int timeStyle)
     {
-        return get(dateStyle, timeStyle, Locale.getDefault());
+        return get(dateStyle, timeStyle, ULocale.getDefault());
     }
 
     /**
@@ -685,7 +718,23 @@ public abstract class DateFormat extends UFormat {
     public final static DateFormat
         getDateTimeInstance(int dateStyle, int timeStyle, Locale aLocale)
     {
-        return get(dateStyle, timeStyle, aLocale);
+        return get(dateStyle, timeStyle, ULocale.forLocale(aLocale));
+    }
+
+    /**
+     * Gets the date/time formatter with the given formatting styles
+     * for the given locale.
+     * @param dateStyle the given date formatting style.
+     * @param timeStyle the given time formatting style.
+     * @param aLocale the given locale.
+     * @return a date/time formatter.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public final static DateFormat
+        getDateTimeInstance(int dateStyle, int timeStyle, ULocale locale)
+    {
+        return get(dateStyle, timeStyle, locale);
     }
 
     /**
@@ -705,6 +754,16 @@ public abstract class DateFormat extends UFormat {
     public static Locale[] getAvailableLocales()
     {
         return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
+    }
+
+    /**
+     * Gets the set of locales for which DateFormats are installed.
+     * @return the set of locales for which DateFormats are installed.
+     * @stable ICU 2.0
+     */
+    public static ULocale[] getAvailableULocales()
+    {
+        return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
     }
 
     /**
@@ -841,7 +900,7 @@ public abstract class DateFormat extends UFormat {
      * or -1 to indicate no time
      * @param loc the locale for the format
      */
-    private static DateFormat get(int dateStyle, int timeStyle, Locale loc) {
+    private static DateFormat get(int dateStyle, int timeStyle, ULocale loc) {
         if (timeStyle < -1 || timeStyle > 3) {
             throw new IllegalArgumentException("Illegal time style " + timeStyle);
         }
@@ -886,6 +945,25 @@ public abstract class DateFormat extends UFormat {
      */
     static final public DateFormat getDateInstance(Calendar cal, int dateStyle, Locale locale)
     {
+        return getDateTimeInstance(cal, dateStyle, -1, ULocale.forLocale(locale));
+    }
+    
+    /**
+     * Create a {@link DateFormat} object that can be used to format dates in
+     * the calendar system specified by <code>cal</code>.
+     * <p>
+     * @param cal   The calendar system for which a date format is desired.
+     *
+     * @param dateStyle The type of date format desired.  This can be
+     *              {@link DateFormat#SHORT}, {@link DateFormat#MEDIUM},
+     *              etc.
+     *
+     * @param locale The locale for which the date format is desired.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    static final public DateFormat getDateInstance(Calendar cal, int dateStyle, ULocale locale)
+    {
         return getDateTimeInstance(cal, dateStyle, -1, locale);
     }
     
@@ -908,6 +986,30 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 2.0
      */
     static final public DateFormat getTimeInstance(Calendar cal, int timeStyle, Locale locale)
+    {
+        return getDateTimeInstance(cal, -1, timeStyle, ULocale.forLocale(locale));
+    }
+    
+    /**
+     * Create a {@link DateFormat} object that can be used to format times in
+     * the calendar system specified by <code>cal</code>.
+     * <p>
+     * <b>Note:</b> When this functionality is moved into the core JDK, this method
+     * will probably be replaced by a new overload of {@link DateFormat#getInstance}.
+     * <p>
+     * @param cal   The calendar system for which a time format is desired.
+     *
+     * @param timeStyle The type of time format desired.  This can be
+     *              {@link DateFormat#SHORT}, {@link DateFormat#MEDIUM},
+     *              etc.
+     *
+     * @param locale The locale for which the time format is desired.
+     *
+     * @see DateFormat#getTimeInstance
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    static final public DateFormat getTimeInstance(Calendar cal, int timeStyle, ULocale locale)
     {
         return getDateTimeInstance(cal, -1, timeStyle, locale);
     }
@@ -937,6 +1039,35 @@ public abstract class DateFormat extends UFormat {
     static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle,
                                                  int timeStyle, Locale locale)
     {
+        return cal.getDateTimeFormat(dateStyle, timeStyle, ULocale.forLocale(locale));
+    }
+
+    /**
+     * Create a {@link DateFormat} object that can be used to format dates and times in
+     * the calendar system specified by <code>cal</code>.
+     * <p>
+     * <b>Note:</b> When this functionality is moved into the core JDK, this method
+     * will probably be replaced by a new overload of {@link DateFormat#getInstance}.
+     * <p>
+     * @param cal   The calendar system for which a date/time format is desired.
+     *
+     * @param dateStyle The type of date format desired.  This can be
+     *              {@link DateFormat#SHORT}, {@link DateFormat#MEDIUM},
+     *              etc.
+     *
+     * @param timeStyle The type of time format desired.  This can be
+     *              {@link DateFormat#SHORT}, {@link DateFormat#MEDIUM},
+     *              etc.
+     *
+     * @param locale The locale for which the date/time format is desired.
+     *
+     * @see DateFormat#getDateTimeInstance
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle,
+                                                 int timeStyle, ULocale locale)
+    {
         return cal.getDateTimeFormat(dateStyle, timeStyle, locale);
     }
 
@@ -945,6 +1076,15 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 2.0
      */
     static final public DateFormat getInstance(Calendar cal, Locale locale) {
+        return getDateTimeInstance(cal, SHORT, SHORT, ULocale.forLocale(locale));
+    }
+
+    /**
+     * Convenience overload
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    static final public DateFormat getInstance(Calendar cal, ULocale locale) {
         return getDateTimeInstance(cal, SHORT, SHORT, locale);
     }
 
@@ -953,7 +1093,7 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 2.0
      */
     static final public DateFormat getInstance(Calendar cal) {
-        return getInstance(cal, Locale.getDefault());
+        return getInstance(cal, ULocale.getDefault());
     }
 
     /**
@@ -961,7 +1101,7 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 2.0
      */
     static final public DateFormat getDateInstance(Calendar cal, int dateStyle) {
-        return getDateInstance(cal, dateStyle, Locale.getDefault());
+        return getDateInstance(cal, dateStyle, ULocale.getDefault());
     }
 
     /**
@@ -969,7 +1109,7 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 2.0
      */
     static final public DateFormat getTimeInstance(Calendar cal, int timeStyle) {
-        return getTimeInstance(cal, timeStyle, Locale.getDefault());
+        return getTimeInstance(cal, timeStyle, ULocale.getDefault());
     }
 
     /**
@@ -977,6 +1117,6 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 2.0
      */
     static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle, int timeStyle) {
-        return getDateTimeInstance(cal, dateStyle, timeStyle, Locale.getDefault());
+        return getDateTimeInstance(cal, dateStyle, timeStyle, ULocale.getDefault());
     }
 }

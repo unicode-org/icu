@@ -1,8 +1,9 @@
 /*
-*   Copyright (C) 1996-2004, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*/
+ * Copyright (C) 1996-2004, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ */
 package com.ibm.icu.util;
+
 import java.util.Date;
 import java.util.Locale;
 
@@ -326,7 +327,7 @@ public class GregorianCalendar extends Calendar {
      * @stable ICU 2.0
      */
     public GregorianCalendar() {
-        this(TimeZone.getDefault(), Locale.getDefault());
+        this(TimeZone.getDefault(), ULocale.getDefault());
     }
 
     /**
@@ -336,7 +337,7 @@ public class GregorianCalendar extends Calendar {
      * @stable ICU 2.0
      */
     public GregorianCalendar(TimeZone zone) {
-        this(zone, Locale.getDefault());
+        this(zone, ULocale.getDefault());
     }
 
     /**
@@ -347,6 +348,17 @@ public class GregorianCalendar extends Calendar {
      */
     public GregorianCalendar(Locale aLocale) {
         this(TimeZone.getDefault(), aLocale);
+    }
+
+    /**
+     * Constructs a GregorianCalendar based on the current time
+     * in the default time zone with the given locale.
+     * @param aLocale the given locale.
+     * @draftICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public GregorianCalendar(ULocale locale) {
+        this(TimeZone.getDefault(), locale);
     }
 
     /**
@@ -362,6 +374,19 @@ public class GregorianCalendar extends Calendar {
     }
 
     /**
+     * Constructs a GregorianCalendar based on the current time
+     * in the given time zone with the given locale.
+     * @param zone the given time zone.
+     * @param locale the given ulocale.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public GregorianCalendar(TimeZone zone, ULocale locale) {
+        super(zone, locale);
+        setTimeInMillis(System.currentTimeMillis());
+    }
+
+    /**
      * Constructs a GregorianCalendar with the given date set
      * in the default time zone with the default locale.
      * @param year the value used to set the YEAR time field in the calendar.
@@ -371,7 +396,7 @@ public class GregorianCalendar extends Calendar {
      * @stable ICU 2.0
      */
     public GregorianCalendar(int year, int month, int date) {
-        super(TimeZone.getDefault(), Locale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault());
         set(ERA, AD);
         set(YEAR, year);
         set(MONTH, month);
@@ -393,7 +418,7 @@ public class GregorianCalendar extends Calendar {
      */
     public GregorianCalendar(int year, int month, int date, int hour,
                              int minute) {
-        super(TimeZone.getDefault(), Locale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault());
         set(ERA, AD);
         set(YEAR, year);
         set(MONTH, month);
@@ -419,7 +444,7 @@ public class GregorianCalendar extends Calendar {
      */
     public GregorianCalendar(int year, int month, int date, int hour,
                              int minute, int second) {
-        super(TimeZone.getDefault(), Locale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault());
         set(ERA, AD);
         set(YEAR, year);
         set(MONTH, month);
@@ -858,7 +883,7 @@ public class GregorianCalendar extends Calendar {
     public static CalendarFactory factory() {
         if (factory == null) {
             factory = new CalendarFactory() {
-                public Calendar create(TimeZone tz, Locale loc) {
+                public Calendar create(TimeZone tz, ULocale loc) {
                     return new GregorianCalendar(tz, loc);
                 }
 

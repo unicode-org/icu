@@ -3,7 +3,6 @@
 *   Corporation and others.  All Rights Reserved.
 */
 
-
 package com.ibm.icu.util;
 
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -1499,7 +1498,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     protected Calendar()
     {
-        this(TimeZone.getDefault(), Locale.getDefault());
+        this(TimeZone.getDefault(), ULocale.getDefault());
     }
 
     /**
@@ -1510,8 +1509,19 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     protected Calendar(TimeZone zone, Locale aLocale)
     {
+        this(zone, ULocale.forLocale(aLocale));
+    }
+
+    /**
+     * Constructs a calendar with the specified time zone and locale.
+     * @param zone the time zone to use
+     * @param aLocale the locale for the week data
+     * @stable ICU 2.0
+     */
+    protected Calendar(TimeZone zone, ULocale locale)
+    {
         this.zone = zone;
-        setWeekData(aLocale);
+        setWeekData(locale);
         initInternal();
     }
 
@@ -1547,7 +1557,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public static synchronized Calendar getInstance()
     {
-        return getInstance(TimeZone.getDefault(), Locale.getDefault(), null);
+        return getInstance(TimeZone.getDefault(), ULocale.getDefault(), null);
     }
 
     /**
@@ -1558,7 +1568,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public static synchronized Calendar getInstance(TimeZone zone)
     {
-        return getInstance(zone, Locale.getDefault(), null);
+        return getInstance(zone, ULocale.getDefault(), null);
     }
 
     /**
@@ -1569,7 +1579,19 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public static synchronized Calendar getInstance(Locale aLocale)
     {
-        return getInstance(TimeZone.getDefault(), aLocale, null);
+        return getInstance(TimeZone.getDefault(), ULocale.forLocale(aLocale), null);
+    }
+
+    /**
+     * Gets a calendar using the default time zone and specified locale.
+     * @param aLocale the locale for the week data
+     * @return a Calendar.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static synchronized Calendar getInstance(ULocale locale)
+    {
+        return getInstance(TimeZone.getDefault(), locale, null);
     }
 
     /**
@@ -1581,7 +1603,20 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public static synchronized Calendar getInstance(TimeZone zone,
                                                     Locale aLocale) {
-        return getInstance(zone, aLocale, null);
+        return getInstance(zone, ULocale.forLocale(aLocale), null);
+    }
+
+    /**
+     * Gets a calendar with the specified time zone and locale.
+     * @param zone the time zone to use
+     * @param locale the ulocale for the week data
+     * @return a Calendar.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static synchronized Calendar getInstance(TimeZone zone,
+                                                    ULocale locale) {
+        return getInstance(zone, locale, null);
     }
 
     // ==== Factory Stuff ====
@@ -1594,7 +1629,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @prototype
      */
     /* public */ static synchronized Calendar getInstance(TimeZone zone,
-                                                    Locale locale,
+                                                    ULocale locale,
                                                     String factoryName)
     {
         CalendarFactory factory = null;
@@ -1602,7 +1637,7 @@ public abstract class Calendar implements Serializable, Cloneable {
             factory = (CalendarFactory)getFactoryMap().get(factoryName);
         }
 
-        Locale[] actualReturn = new Locale[1];
+        ULocale[] actualReturn = new ULocale[1];
         if (factory == null && service != null) {
             factory = (CalendarFactory)service.get(locale, actualReturn);
         }
@@ -1613,7 +1648,7 @@ public abstract class Calendar implements Serializable, Cloneable {
             Calendar result = factory.create(zone, locale);
 
             // TODO: get the actual/valid locale properly
-            ULocale uloc = new ULocale(actualReturn[0]);
+            ULocale uloc = actualReturn[0];
             result.setLocale(uloc, uloc);
 
             return result;
@@ -1631,6 +1666,19 @@ public abstract class Calendar implements Serializable, Cloneable {
             ? ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME)
             : service.getAvailableLocales();
     }
+
+    /**
+     * Gets the list of locales for which Calendars are installed.
+     * @return the list of locales for which Calendars are installed.
+     * @stable ICU 2.0
+     */
+    public static ULocale[] getAvailableULocales()
+    {
+        return service == null
+            ? ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME)
+            : service.getAvailableULocales();
+    }
+
     ///CLOVER:OFF
     private static Map factoryMap;
     private static Map getFactoryMap() {
@@ -1663,7 +1711,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     }
 
     /**
-     * Register a new CalendarFactory.  getInstance(TimeZone, Locale, String) will
+     * Register a new CalendarFactory.  getInstance(TimeZone, ULocale, String) will
      * try to locate a registered factories matching the factoryName.  Only registered
      * factories will be found.
      * @prototype
@@ -1676,10 +1724,10 @@ public abstract class Calendar implements Serializable, Cloneable {
     }
 
     /**
-     * Convenience override of register(CalendarFactory, Locale, boolean);
+     * Convenience override of register(CalendarFactory, ULocale, boolean);
      * @prototype
      */
-    /* public */ static Object register(CalendarFactory factory, Locale locale) {
+    /* public */ static Object register(CalendarFactory factory, ULocale locale) {
         return register(factory, locale, true);
     }
 
@@ -1689,7 +1737,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * registerFactory, it will be.
      * @prototype
      */
-    /* public */ static Object register(CalendarFactory factory, Locale locale, boolean visible) {
+    /* public */ static Object register(CalendarFactory factory, ULocale locale, boolean visible) {
         if (factory == null) {
             throw new IllegalArgumentException("calendar must not be null");
         }
@@ -2821,6 +2869,15 @@ public abstract class Calendar implements Serializable, Cloneable {
         return this.getClass().getName();
     }
 
+    /**
+     * Return the name of this calendar in the language of the given locale.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public String getDisplayName(ULocale loc) {
+        return this.getClass().getName();
+    }
+
     //-------------------------------------------------------------------------
     // Interface for creating custon DateFormats for different types of Calendars
     //-------------------------------------------------------------------------
@@ -2833,6 +2890,18 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public DateFormat getDateTimeFormat(int dateStyle, int timeStyle, Locale loc) {
+        return formatHelper(this, ULocale.forLocale(loc), dateStyle, timeStyle);
+    }
+
+    /**
+     * Return a <code>DateFormat</code> appropriate to this calendar.
+     * Subclasses wishing to specialize this behavior should override
+     * <code>handleGetDateFormat()</code>
+     * @see #handleGetDateFormat
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public DateFormat getDateTimeFormat(int dateStyle, int timeStyle, ULocale loc) {
         return formatHelper(this, loc, dateStyle, timeStyle);
     }
 
@@ -2848,11 +2917,27 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     protected DateFormat handleGetDateFormat(String pattern, Locale locale) {
+	return handleGetDateFormat(pattern, ULocale.forLocale(locale));
+    }
+
+    /**
+     * Create a <code>DateFormat</code> appropriate to this calendar.
+     * This is a framework method for subclasses to override.  This method
+     * is responsible for creating the calendar-specific DateFormat and
+     * DateFormatSymbols objects as needed.
+     * @param pattern the pattern, specific to the <code>DateFormat</code>
+     * subclass
+     * @param locale the locale for which the symbols should be drawn
+     * @return a <code>DateFormat</code> appropriate to this calendar
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    protected DateFormat handleGetDateFormat(String pattern, ULocale locale) {
         DateFormatSymbols symbols = new DateFormatSymbols(this, locale);
         return new SimpleDateFormat(pattern, symbols, locale);
     }
 
-    static private DateFormat formatHelper(Calendar cal, Locale loc,
+    static private DateFormat formatHelper(Calendar cal, ULocale loc,
                                             int dateStyle, int timeStyle)
     {
         // See if there are any custom resources for this calendar
@@ -2860,7 +2945,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         DateFormat result = null;
  
             try {
-                CalendarData calData = new CalendarData(new ULocale(loc), cal.getType());
+                CalendarData calData = new CalendarData(loc, cal.getType());
                String[] patterns = calData.get("DateTimePatterns").getStringArray();
 
                 String pattern = null;
@@ -3681,14 +3766,14 @@ public abstract class Calendar implements Serializable, Cloneable {
      * locale.
      * @param locale the locale
      */
-    private void setWeekData(Locale locale)
+    private void setWeekData(ULocale locale)
     {
         /* try to get the Locale data from the cache */
         WeekData data = (WeekData) cachedLocaleData.get(locale);
         
         if (data == null) {  /* cache miss */
 
-            CalendarData calData = new CalendarData(new ULocale(locale), getType());
+            CalendarData calData = new CalendarData(locale, getType());
             int[] dateTimeElements = calData.get("DateTimeElements").getIntVector();
             int[] weekend = calData.get("weekend").getIntVector();
             data = new WeekData(dateTimeElements[0],dateTimeElements[1],

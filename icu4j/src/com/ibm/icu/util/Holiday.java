@@ -25,7 +25,7 @@ public abstract class Holiday implements DateRule
      */
     public static Holiday[] getHolidays()
     {
-        return getHolidays(Locale.getDefault());
+        return getHolidays(ULocale.getDefault());
     }
 
     /**
@@ -33,6 +33,15 @@ public abstract class Holiday implements DateRule
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static Holiday[] getHolidays(Locale locale)
+    {
+        return getHolidays(ULocale.forLocale(locale));
+    }
+
+    /**
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static Holiday[] getHolidays(ULocale locale)
     {
         Holiday[] result = noHolidays;
 
@@ -131,7 +140,7 @@ public abstract class Holiday implements DateRule
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayName() {
-        return getDisplayName(Locale.getDefault());
+        return getDisplayName(ULocale.getDefault());
     }
 
     /**
@@ -147,6 +156,23 @@ public abstract class Holiday implements DateRule
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayName(Locale locale)
+    {
+        return getDisplayName(ULocale.forLocale(locale));
+    }
+
+    /**
+     * Return the name of this holiday in the language of the specified locale
+     * The <code>name</code> parameter passed to this object's constructor is used
+     * as a key to look up the holiday's localized name in a ResourceBundle object
+     * named HolidayBundle.
+     *
+     * @param locale   A locale specifying the language in which the name is desired.
+     *
+     * @see ResourceBundle
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public String getDisplayName(ULocale locale)
     {
         String name = this.name;
 

@@ -12,7 +12,7 @@ import java.util.Locale;
  * @prototype
  */
 interface CalendarFactory {
-    public Calendar create(TimeZone tz, Locale loc);
+    public Calendar create(TimeZone tz, ULocale loc);
     public String factoryName();
 }
         

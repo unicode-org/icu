@@ -10,6 +10,7 @@ package com.ibm.icu.util;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -229,6 +230,30 @@ public final class ULocale implements Serializable {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale CANADA_FRENCH = new ULocale("fr_CA", Locale.CANADA_FRENCH);
+
+    private static final HashMap CACHE = new HashMap(20);
+    static {
+	CACHE.put(Locale.ENGLISH, ENGLISH);
+	CACHE.put(Locale.FRENCH, FRENCH);
+	CACHE.put(Locale.GERMAN, GERMAN);
+	CACHE.put(Locale.ITALIAN, ITALIAN);
+	CACHE.put(Locale.JAPANESE, JAPANESE);
+	CACHE.put(Locale.KOREAN, KOREAN);
+	CACHE.put(Locale.CHINESE, CHINESE);
+	CACHE.put(Locale.SIMPLIFIED_CHINESE, SIMPLIFIED_CHINESE);
+	CACHE.put(Locale.TRADITIONAL_CHINESE, TRADITIONAL_CHINESE);
+	CACHE.put(Locale.FRANCE, FRANCE);
+	CACHE.put(Locale.GERMANY, GERMANY);
+	CACHE.put(Locale.ITALY, ITALY);
+	CACHE.put(Locale.JAPAN, JAPAN);
+	CACHE.put(Locale.KOREA, KOREA);
+	CACHE.put(Locale.CHINA, CHINA);
+	CACHE.put(Locale.TAIWAN, TAIWAN);
+	CACHE.put(Locale.UK, UK);
+	CACHE.put(Locale.US, US);
+	CACHE.put(Locale.CANADA, CANADA);
+	CACHE.put(Locale.CANADA_FRENCH, CANADA_FRENCH);
+    }
 
     /**
      * Handy constant.
@@ -707,9 +732,25 @@ public final class ULocale implements Serializable {
      * @draft ICU 2.8
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public ULocale(Locale loc) {
+    private ULocale(Locale loc) {
         this.localeID = getName(loc.toString());
         this.locale = loc;
+    }
+
+    /**
+     * Return a ULocale object for a {@link java.util.Locale}.
+     * @param loc a JDK locale
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static ULocale forLocale(Locale loc) {
+	ULocale result = (ULocale)CACHE.get(loc);
+	if (result == null && defaultULocale != null && loc == defaultULocale.locale) {
+	    result = defaultULocale;
+	} else {
+	    result = new ULocale(loc);
+	}
+	return result;
     }
 
     /**
