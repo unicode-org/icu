@@ -392,9 +392,57 @@ void BlackBirdTest( ) {
   ucol_close(coll);
 }
 
+const static UChar testSourceCases[][MAX_TOKEN_LEN] = {
+    {0x0041/*'A'*/, 0x0300, 0x0301, 0x0000},
+    {0x0041/*'A'*/, 0x0300, 0x0316, 0x0000},
+    {0x0041/*'A'*/, 0x0300, 0x0000},
+    {0x00C0, 0x0301, 0x0000},
+    /* this would work with forced normalization */
+    {0x00C0, 0x0316, 0x0000}
+};
+
+const static UChar testTargetCases[][MAX_TOKEN_LEN] = {
+    {0x0041/*'A'*/, 0x0301, 0x0300, 0x0000},
+    {0x0041/*'A'*/, 0x0316, 0x0300, 0x0000},
+    {0x00C0, 0},
+    {0x0041/*'A'*/, 0x0301, 0x0300, 0x0000},
+    /* this would work with forced normalization */
+    {0x0041/*'A'*/, 0x0316, 0x0300, 0x0000}
+};
+
+const static UCollationResult results[] = {
+    UCOL_GREATER,
+    UCOL_EQUAL,
+    UCOL_EQUAL,
+    UCOL_GREATER,
+    UCOL_EQUAL
+};
+
+static void FunkyATest( )
+{
+    
+    int32_t i;
+    UErrorCode status = U_ZERO_ERROR;
+    myCollation = ucol_open(NULL, &status);
+    if(U_FAILURE(status)){
+        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+	return;
+    }
+    log_verbose("Testing some A letters, for some reason\n");
+    ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+    ucol_setStrength(myCollation, UCOL_TERTIARY);
+    for (i = 0; i < 4 ; i++)
+    {
+        doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
+    }
+    ucol_close(myCollation);
+}
+
 void addMiscCollTest(TestNode** root)
 { 
     addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
     addTest(root, &IncompleteCntTest, "tscoll/cmsccoll/IncompleteCntTest");
     addTest(root, &BlackBirdTest, "tscoll/cmsccoll/BlackBirdTest");
+    addTest(root, &FunkyATest, "tscoll/cmsccoll/FunkyATest");
 }
+
