@@ -325,7 +325,7 @@ le_uint32 ChainingContextualSubstitutionSubtable::process(const LookupProcessor 
     }
 }
 
-const LETag emptyTag = 0;
+static const LETag emptyTag = 0;
 
 le_uint32 ChainingContextualSubstitutionFormat1Subtable::process(const LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
                                                               const LEFontInstance *fontInstance) const

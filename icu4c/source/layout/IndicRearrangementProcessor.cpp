@@ -16,7 +16,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char IndicRearrangementProcessor::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(IndicRearrangementProcessor)
 
 IndicRearrangementProcessor::IndicRearrangementProcessor(const MorphSubtableHeader *morphSubtableHeader)
   : StateTableProcessor(morphSubtableHeader)

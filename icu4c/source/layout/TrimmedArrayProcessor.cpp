@@ -15,7 +15,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char TrimmedArrayProcessor::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TrimmedArrayProcessor)
 
 TrimmedArrayProcessor::TrimmedArrayProcessor()
 {

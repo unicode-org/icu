@@ -15,7 +15,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char SingleTableProcessor::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SingleTableProcessor)
 
 SingleTableProcessor::SingleTableProcessor()
 {

@@ -105,13 +105,13 @@ CharSubstitutionFilter::~CharSubstitutionFilter()
 }
 
 
-const char LayoutEngine::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LayoutEngine)
 
-const LETag emptyTag = 0x00000000;
+static const LETag emptyTag = 0x00000000;
 
-const LETag ccmpFeatureTag = LE_CCMP_FEATURE_TAG;
+static const LETag ccmpFeatureTag = LE_CCMP_FEATURE_TAG;
 
-const LETag canonFeatures[] = {ccmpFeatureTag, emptyTag};
+static const LETag canonFeatures[] = {ccmpFeatureTag, emptyTag};
 
 LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
     : fGlyphStorage(NULL), fFontInstance(fontInstance), fScriptCode(scriptCode), fLanguageCode(languageCode)

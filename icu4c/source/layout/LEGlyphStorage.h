@@ -86,12 +86,6 @@ private:
      */
     le_int32 fDestIndex;
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
-
 protected:
     /**
      * This implements <code>LEInsertionCallback</code>. The <code>LEInsertionList</code>
@@ -484,14 +478,14 @@ public:
      *
      * @draft ICU 3.0
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 3.0
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static UClassID getStaticClassID();
 };
 
 inline LEGlyphID &LEGlyphStorage::operator[](le_int32 glyphIndex) const

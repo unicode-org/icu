@@ -15,7 +15,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char ThaiLayoutEngine::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ThaiLayoutEngine)
 
 ThaiLayoutEngine::ThaiLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
     : LayoutEngine(fontInstance, scriptCode, languageCode)

@@ -15,7 +15,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char SimpleArrayProcessor::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SimpleArrayProcessor)
 
 SimpleArrayProcessor::SimpleArrayProcessor()
 {

@@ -20,7 +20,7 @@ struct InsertionRecord
     LEGlyphID glyphs[ANY_NUMBER];
 };
 
-const char LEInsertionList::fgClassID = 0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LEInsertionList)
 
 LEInsertionList::LEInsertionList(le_bool rightToLeft)
 : head(NULL), tail(NULL), growAmount(0), append(rightToLeft)
