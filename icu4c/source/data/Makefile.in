@@ -242,15 +242,6 @@ $(BUILDDIR)/tz.dat: $(MISCSRCDIR)/timezone.txt $(TOOLDIR)/gentz/gentz$(EXEEXT)
 $(TESTBUILDDIR)/test.dat: $(TOOLDIR)/gentest/gentest$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gentest/gentest -d $(TESTBUILDDIR) 
 
-####################################################    BRK
-# BRK FILES
-
-thaidict.brk: $(SRCDATADIR)/thaidict.brk
-	$(RMV) $@ && ln -s $(BUILDDIR) $@
-
-$(BUILDDIR)/%.brk: $(BRKSRCDIR)/%.txt $(TOOLDIR)/genbrk/genbrk$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genbrk/genbrk -r $< -o $@
-
 ####################################################    CNV
 # CNV FILES
 $(BUILDDIR)/%.cnv: $(UCMSRCDIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
@@ -259,20 +250,29 @@ $(BUILDDIR)/%.cnv: $(UCMSRCDIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
 $(TESTOUTDIR)/%.cnv: $(TESTSRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/makeconv/makeconv -c -d $(TESTOUTDIR) $(TESTSRCDATADIR)/$(<F)
 
+####################################################    BRK
+# BRK FILES
+
+thaidict.brk: $(SRCDATADIR)/thaidict.brk
+	$(RMV) $@ && ln -s $(BUILDDIR) $@
+
+$(BUILDDIR)/%.brk: $(BRKSRCDIR)/%.txt $(TOOLDIR)/genbrk/genbrk$(EXEEXT) $(CNV_FILES)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genbrk/genbrk -r $< -o $@
+
 ####################################################    RES
 # RES FILES
-$(TESTBUILDDIR)/%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT)
+$(TESTBUILDDIR)/%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(CNV_FILES)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) $(<F)
 
-$(TESTBUILDDIR)/ja_data.res:  $(TESTSRCDATADIR)/ja_data.bin $(TOOLDIR)/genrb/genrb$(EXEEXT)
+$(TESTBUILDDIR)/ja_data.res:  $(TESTSRCDATADIR)/ja_data.bin $(TOOLDIR)/genrb/genrb$(EXEEXT) $(CNV_FILES)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(TESTSRCDATADIR) -eISO_2022_JP -d $(TESTBUILDDIR) $(<F) >/dev/null  
 
 
 
-$(BUILDDIR)/%.res: $(LOCSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(BUILDDIR)/ucadata.dat $(BUILDDIR)/uprops.dat $(BUILDDIR)/unorm.dat
+$(BUILDDIR)/%.res: $(LOCSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(BUILDDIR)/ucadata.dat $(BUILDDIR)/uprops.dat $(BUILDDIR)/unorm.dat $(CNV_FILES)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
 
-$(BUILDDIR)/%.res: $(TRNSSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) 
+$(BUILDDIR)/%.res: $(TRNSSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(CNV_FILES)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(TRNSSRCDIR) -d $(BUILDDIR) $(<F)
 
 $(BUILDDIR)/res_index.txt: $(SRCLISTDEPS)
