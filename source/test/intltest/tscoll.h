@@ -17,6 +17,8 @@
 #include "unicode/sortkey.h"
 #include "unicode/schriter.h"
 #include "unicode/ures.h"
+#include "unicode/coleitr.h"
+#include "cmemory.h"
 
 
 class IntlTestCollator: public IntlTest {
@@ -34,6 +36,13 @@ protected:
 
     static UnicodeString &prettify(const CollationKey &source, UnicodeString &target);
     static UnicodeString &appendCompareResult(Collator::EComparisonResult result, UnicodeString &target);
+    void backAndForth(CollationElementIterator &iter);
+    /**
+     * Return an integer array containing all of the collation orders
+     * returned by calls to next on the specified iterator
+     */
+    int32_t *getOrders(CollationElementIterator &iter, int32_t &orderLength);
+
 };
 
 
