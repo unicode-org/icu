@@ -639,7 +639,7 @@ ConvertFile::convertFile(const char *pname,
     } else {
         infilestr = "-";
         infile = stdin;
-#ifdef WIN32
+#if defined(WIN32) || defined(U_CYGWIN)
         if (setmode(fileno(stdin), O_BINARY) == -1) {
             initMsg(pname);
             u_wmsg(stderr, "cantSetInBinMode");
@@ -1340,7 +1340,7 @@ main(int argc, char **argv)
     } else {
         outfilestr = "-";
         outfile = stdout;
-#ifdef WIN32
+#if defined(WIN32) || defined(U_CYGWIN)
         if (setmode(fileno(outfile), O_BINARY) == -1) {
             u_wmsg(stderr, "cantSetOutBinMode");
             exit(-1);
