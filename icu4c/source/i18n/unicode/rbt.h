@@ -327,7 +327,7 @@ public:
         UNDEFINED_VARIABLE,
         UNEXPECTED_CLOSE_CONTEXT,
         UNQUOTED_SPECIAL,
-        UNTERMINATED_QUOTE,
+        UNTERMINATED_QUOTE
     };
 
 private:
