@@ -277,3 +277,21 @@ TransliterationRuleSet::findIncrementalMatch(const Replaceable& text,
     }
     return NULL;
 }
+
+/**
+ * Create rule strings that represents this rule set.
+ */
+UnicodeString& TransliterationRuleSet::toRules(UnicodeString& ruleSource,
+                                               const TransliterationRuleData& data,
+                                               UBool escapeUnprintable) const {
+    int32_t i;
+    int32_t count = index[256];
+    ruleSource.truncate(0);
+    for (i=0; i<count; ++i) {
+        if (i != 0) {
+            ruleSource.append((UChar) 0x000A /*\n*/);
+        }
+        rules[i]->toRule(ruleSource, data, escapeUnprintable);
+    }
+    return ruleSource;
+}
