@@ -638,6 +638,24 @@ UnicodeString::getChar32At(UTextOffset offset) const {
   return char32At(offset);
 }
 
+UTextOffset
+UnicodeString::moveIndex32(UTextOffset index, int32_t delta) const {
+  // pin index
+  if(index<0) {
+    index=0;
+  } else if(index>fLength) {
+    index=fLength;
+  }
+
+  if(delta>0) {
+    UTF_FWD_N(fArray, index, fLength, delta);
+  } else {
+    UTF_BACK_N(fArray, 0, index, -delta);
+  }
+
+  return index;
+}
+
 void
 UnicodeString::doExtract(UTextOffset start,
              int32_t length,
