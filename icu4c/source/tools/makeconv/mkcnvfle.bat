@@ -1,5 +1,8 @@
 @echo off
 
+echo This file is obsolete.  Please use source\tools\makedata.bat instead.
+goto :end
+
 rem Bertrand A. DAMIBA - IBM Corp.
 rem This is a batch file that should be included in the MSVC build process
 rem it's purpose is to build all the converter binary files (".cnv") from the 
