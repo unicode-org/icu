@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.42 2002/07/12 02:24:04 grhoten-oss Exp $
+## $Id: mh-os390,v 1.43 2002/07/18 22:01:30 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -58,11 +58,9 @@ GEN_DEPS.cc=	makedep
 COMPILE.c       = $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
 COMPILE.cc      = _CXX_CXXSUFFIX="cpp" $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
 
-LDFLAGS += -Wl,dll
-
 # Commands to link
-LINK.c=		$(CC) $(CFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS)
+LINK.c=		$(CC) $(CFLAGS) -Wl,dll $(LDFLAGS)
+LINK.cc=	$(CXX) $(CXXFLAGS) -Wl,dll $(LDFLAGS)
 
 ## Commands for shared library (dll)
 SHLIB.c=	$(LINK.c)
