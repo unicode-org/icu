@@ -78,8 +78,6 @@ class TransliteratorParser {
      */
     UnicodeString undefinedVariableName;
 
-    static const UnicodeString gOPERATORS;
-
 public:
 
     static TransliterationRuleData*

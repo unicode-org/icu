@@ -20,7 +20,8 @@
 #include "unicode/parsepos.h"
 #include "unicode/putil.h"
 #include "unicode/rbt.h"
-#include "unicode/unicode.h"
+#include "unicode/uchar.h"
+#include "unicode/ustring.h"
 #include "unicode/uniset.h"
 
 // Operators
@@ -28,7 +29,6 @@
 #define FORWARD_RULE_OP ((UChar)0x003E) /*>*/
 #define REVERSE_RULE_OP ((UChar)0x003C) /*<*/
 #define FWDREV_RULE_OP  ((UChar)0x007E) /*~*/ // internal rep of <> op
-#define OPERATORS       UNICODE_STRING("=><", 3)
 
 // Other special characters
 #define QUOTE             ((UChar)0x0027) /*'*/
@@ -53,7 +53,9 @@
 // trailing SymbolTable.SYMBOL_REF character.
 // private static final char ANCHOR_END       = '$';
 
-const UnicodeString TransliteratorParser::gOPERATORS = OPERATORS;
+static const UChar gOPERATORS[] = {
+    0x3D, 0x3E, 0x3C, 0     // "=><"
+};
 
 // These are also used in Transliterator::toRules()
 static const int32_t ID_TOKEN_LEN = 2;
@@ -124,8 +126,7 @@ UnicodeString ParseData::parseReference(const UnicodeString& text,
     UnicodeString result;
     while (i < limit) {
         UChar c = text.charAt(i);
-        if ((i==start && !Unicode::isUnicodeIdentifierStart(c)) ||
-            !Unicode::isUnicodeIdentifierPart(c)) {
+        if ((i==start && !u_isIDStart(c)) || !u_isIDPart(c)) {
             break;
         }
         ++i;
@@ -387,8 +388,6 @@ public:
 
     TransliteratorParser& parser;
 
-    static const UnicodeString gOperators;
-
     //--------------------------------------------------
     // Methods
 
@@ -424,8 +423,6 @@ private:
     RuleHalf& operator=(const RuleHalf&);
 };
 
-const UnicodeString RuleHalf::gOperators = OPERATORS;
-
 RuleHalf::RuleHalf(TransliteratorParser& p) : parser(p) {
     cursor = -1;
     ante = -1;
@@ -459,13 +456,13 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
 
     while (pos < limit && !done) {
         UChar c = rule.charAt(pos++);
-        if (Unicode::isWhitespace(c)) {
+        if (u_isWhitespace(c)) {
             // Ignore whitespace.  Note that this is not Unicode
             // spaces, but Java spaces -- a subset, representing
             // whitespace likely to be seen in code.
             continue;
         }
-        if (gOperators.indexOf(c) >= 0) {
+        if (u_strchr(gOPERATORS, c) != NULL) {
             --pos; // Backup to point to operator
             break;
         }
@@ -876,7 +873,7 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
     int32_t mode = 0;
     while (pos < limit && U_SUCCESS(status)) {
         UChar c = rules.charAt(pos++);
-        if (Unicode::isWhitespace(c)) {
+        if (u_isWhitespace(c)) {
             // Ignore leading whitespace.
             continue;
         }
@@ -897,7 +894,7 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
             rules.compare(pos, ID_TOKEN_LEN, ID_TOKEN) == 0) {
             pos += ID_TOKEN_LEN;
             c = rules.charAt(pos);
-            while (Unicode::isWhitespace(c) && pos < limit) {
+            while (u_isWhitespace(c) && pos < limit) {
                 ++pos;
                 c = rules.charAt(pos);
             }
@@ -987,8 +984,7 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
         return start;
     }
 
-    if (pos == limit ||
-        gOPERATORS.indexOf(op = rule.charAt(pos++)) < 0) {
+    if (pos == limit || u_strchr(gOPERATORS, (op = rule.charAt(pos++))) == NULL) {
         return syntaxError(RuleBasedTransliterator::MISSING_OPERATOR, rule, start);
     }
 
