@@ -115,6 +115,12 @@ uchar_cleanup()
 static int8_t
 loadPropsData(void) {
     /* load Unicode character properties data from file if necessary */
+
+    /*
+     * This lazy intialization with double-checked locking (without mutex protection for
+     * haveNormData==0) is transiently unsafe under certain circumstances.
+     * Check the readme and use u_init() if necessary.
+     */
     if(havePropsData==0) {
         UTrie trie={ 0 }, trie2={ 0 };
         UErrorCode errorCode=U_ZERO_ERROR;
