@@ -1,25 +1,21 @@
 /*
-   ********************************************************************************
-   *                                                                              *
-   * COPYRIGHT:                                                                   *
-   *   (C) Copyright International Business Machines Corporation, 1998            *
-   *   Licensed Material - Program-Property of IBM - All Rights Reserved.         *
-   *   US Government Users Restricted Rights - Use, duplication, or disclosure    *
-   *   restricted by GSA ADP Schedule Contract with IBM Corp.                     *
-   *                                                                              *
-   ********************************************************************************
-   *
-   *
-   *  ucnv.c:
-   *  Implements APIs for the ICU's codeset conversion library
-   *  mostly calls through internal functions created and maintained 
-   *  by Bertrand A. Damiba
-   *
-   * Modification History:
-   *
-   *   Date        Name        Description
-   *   04/04/99    helena      Fixed internal header inclusion.
- */
+*******************************************************************************
+*
+*   Copyright (C) 1998-1999, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*
+*  ucnv.c:
+*  Implements APIs for the ICU's codeset conversion library
+*  mostly calls through internal functions created and maintained 
+*  by Bertrand A. Damiba
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   04/04/99    helena      Fixed internal header inclusion.
+*/
 #include "umutex.h"
 #include "unicode/ures.h"
 #include "uhash.h"
