@@ -3034,7 +3034,7 @@ static void TestNewJapanese() {
       "\\u3077\\u309d",
       "\\u30d7\\u30fd",
       "\\u3077\\u3075",
-  };
+};
 
   static const char *test2[] = {
     "\\u306f\\u309d", /* H\\u309d */
@@ -3072,48 +3072,40 @@ static void TestNewJapanese() {
   };
 
   static const char *test3[] = {
-    "\\u3071\\u309d", /* H\\u309c\\u309d */
-    "\\u30d1\\u30fd", /* K\\u309c\\u30fd */
-    "\\u3074\\u309d",
-    "\\u30d4\\u30fd",
-    "\\u3077\\u309d",
-    "\\u30d7\\u30fd",
-    "\\u307a\\u309d",
-    "\\u30da\\u30fd",
+    "\\u221er\\u221e",
+    "\\u221eR#",
+    "\\u221et\\u221e",
+    "#r\\u221e",
+    "#R#",
+    "#t%",
+    "#T%",
+    "8t\\u221e",
+    "8T\\u221e",
+    "8t#",
+    "8T#",
+    "8t%",
+    "8T%",
+    "8t8",
+    "8T8",
+    "\\u03c9r\\u221e",
+    "\\u03a9R%",
+    "rr\\u221e",
+    "rR\\u221e",
+    "Rr\\u221e",
+    "RR\\u221e",
+    "RT%",
+    "rt8",
+    "tr\\u221e",
+    "tr8",
+    "TR8",
+    "tt8",
+    "\\u30b7\\u30e3\\u30fc\\u30ec",
   };
   genericLocaleStarter("ja_JP_JIS", test1, sizeof(test1)/sizeof(test1[0]));
   genericLocaleStarter("ja_JP_JIS", test2, sizeof(test2)/sizeof(test2[0]));
-  /*
-  genericLocaleStarter("ja_JP_JIS", test3, sizeof(test3)/sizeof(test3[0]));
-  */
+  /*genericLocaleStarter("ja_JP_JIS", test3, sizeof(test3)/sizeof(test3[0]));*/
+
 }
-/* this peace of code should be in some sort of verbose mode     */
-/* it gets the collation elements for elements and prints them   */
-/* This is useful when trying to see whether the problem is      */
-/* 
-  uint32_t i = 0;
-  UCollationElements *it = NULL;
-  uint32_t CE;
-
-
-  coll = ucol_open("ja_JP_JIS", &status);
-  it = ucol_openElements(coll, string, 0, &status);
-
-  for(i = 0; i < sizeof(test)/sizeof(test[0]); i++) {
-    log_verbose("%s\n", test[i]);
-    uStringLen = u_unescape(test[i], string, 256);
-    ucol_setText(it, string, uStringLen, &status);
-
-    while((CE=ucol_next(it, &status)) != UCOL_NULLORDER) {
-      log_verbose("%08X\n", CE);
-    }
-    log_verbose("\n");
-
-  }
-
-  ucol_closeElements(it);
-  ucol_close(coll);
-*/
 
 static void TestStrCollIdenticalPrefix() {
   const char* rule = "&\\ud9b0\\udc70=\\ud9b0\\udc71";
@@ -3124,9 +3116,62 @@ static void TestStrCollIdenticalPrefix() {
   genericRulesTestWithResult(rule, test, sizeof(test)/sizeof(test[0]), UCOL_EQUAL);
 }
 
+static void TestBeforePrefixFailure() {
+  const char* rule1 = 
+        "&\\u30A7=\\u30A7=\\u3047=\\uff6a"
+        "&\\u30A8=\\u30A8=\\u3048=\\uff74"
+        "&[before 3]\\u30a7<<<\\u30c6|\\u30fc";
+  const char* rule2 = 
+        "&[before 3]\\u30a7<<<\\u30c6|\\u30fc"
+        "&\\u30A7=\\u30A7=\\u3047=\\uff6a"
+        "&\\u30A8=\\u30A8=\\u3048=\\uff74";
+  const char* test[] = {
+      "\\u30c6\\u30fc\\u30bf", 
+      "\\u30c6\\u30a7\\u30bf",
+  };
+  genericRulesStarter(rule1, test, sizeof(test)/sizeof(test[0]));
+  genericRulesStarter(rule2, test, sizeof(test)/sizeof(test[0]));
+/* this peace of code should be in some sort of verbose mode     */
+/* it gets the collation elements for elements and prints them   */
+/* This is useful when trying to see whether the problem is      */
+  { 
+    UErrorCode status = U_ZERO_ERROR;
+    uint32_t i = 0;
+    UCollationElements *it = NULL;
+    uint32_t CE;
+    UChar string[256];
+    uint32_t uStringLen;
+    UCollator *coll = NULL;
+
+    uStringLen = u_unescape(rule1, string, 256);
+
+    coll = ucol_openRules(string, uStringLen, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
+
+    /*coll = ucol_open("ja_JP_JIS", &status);*/
+    it = ucol_openElements(coll, string, 0, &status);
+
+    for(i = 0; i < sizeof(test)/sizeof(test[0]); i++) {
+      log_verbose("%s\n", test[i]);
+      uStringLen = u_unescape(test[i], string, 256);
+      ucol_setText(it, string, uStringLen, &status);
+
+      while((CE=ucol_next(it, &status)) != UCOL_NULLORDER) {
+        log_verbose("%08X\n", CE);
+      }
+      log_verbose("\n");
+
+    }
+
+    ucol_closeElements(it);
+    ucol_close(coll);
+  }
+}
+
+
 
 void addMiscCollTest(TestNode** root)
 {
+    /*addTest(root, &TestBeforePrefixFailure, "tscoll/cmsccoll/TestBeforePrefixFailure");*/
     addTest(root, &TestStrCollIdenticalPrefix, "tscoll/cmsccoll/TestStrCollIdenticalPrefix");
     addTest(root, &TestPrefix, "tscoll/cmsccoll/TestPrefix");
     addTest(root, &TestNewJapanese, "tscoll/cmsccoll/TestNewJapanese"); 
