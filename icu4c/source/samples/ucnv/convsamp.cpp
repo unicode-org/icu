@@ -26,6 +26,7 @@
 #include <ctype.h>            /* for isspace, etc.    */
 #include <assert.h>
 #include <string.h>
+#include <stdlib.h>  /* malloc */
 
 #include "unicode/utypes.h"   /* Basic ICU data types */
 #include "unicode/ucnv.h"     /* C   Converter API    */
