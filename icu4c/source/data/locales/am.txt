@@ -57,7 +57,7 @@ am {
         "\u12F2\u1234\u121D\u1260\u122D",
     }
     LocaleScript {
-    	"Ethi",
+        "Ethi",
     }
     ExemplarCharacters{"[:Ethi:]"}
     DateTimeElements:intvector { 
