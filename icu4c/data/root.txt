@@ -354,6 +354,7 @@ root {
         AF { "Afghanistan" }
         AL { "Albania" }
         DZ { "Algeria" }
+        AS { "American Samoa" }
         AD { "Andorra" }
         AO { "Angola" }
         AI { "Anguilla" }
@@ -425,6 +426,7 @@ root {
         GH { "Ghana" }
         GR { "Greece" }
         GP { "Guadeloupe" }
+        GU { "Guam" }
         GT { "Guatemala" }
         GN { "Guinea" }
         GW { "Guinea-Bissau" }
@@ -465,6 +467,8 @@ root {
         MY { "Malaysia" }
         ML { "Mali" }
         MT { "Malta" }
+        MP { "Northern Mariana Islands"}
+        MH { "Marshall Islands"}
         MQ { "Martinique" }
         MR { "Mauritania" }
         MU { "Mauritius" }
@@ -842,7 +846,7 @@ root {
         men { "Mende" }
         mg  { "Malagasy" }           
         mga { "Irish, Middle (900-1200)" }
-        mh	{ "Marshall"}
+        mh  { "Marshall"}
         mi  { "Maori" }              
         mic { "Mic-Mac" }
         min { "Minangkabau" }
