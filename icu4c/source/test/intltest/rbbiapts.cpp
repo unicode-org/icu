@@ -352,7 +352,7 @@ void RBBIAPITest::TestFirstNextFollowing()
         doTest(testString, p, q, 17, " here."); 
         // hindi starts here
         p=q;
-        q=charIter1->next(4);
+        q=charIter1->next(5);
         doTest(testString, p, q, 22, " \\u092d\\u093e\\u0930\\u0924");
         p=q;
         q=charIter1->next(2);
@@ -515,7 +515,10 @@ void RBBIAPITest::TestLastPreviousPreceding()
         doTest(testString, p, q, 31, "\\u0964");
         p=q;
         q=charIter1->previous();
-        doTest(testString, p, q, 29, "\\u0939\\u094c");
+        doTest(testString, p, q, 30, "\\u094c");
+        p=q;
+        q=charIter1->previous();
+        doTest(testString, p, q, 29, "\\u0939");
         q=charIter1->preceding(26);
         doTest(testString, 26, q, 23, "\\u0938\\u0941\\u0902");
         q=charIter1->preceding(16);
@@ -609,7 +612,7 @@ void RBBIAPITest::TestIsBoundary(){
         errln("FAIL: in construction");
     else{
          charIter1->setText(testString1);
-         int32_t bounds1[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 20, 21, 22, 23, 25, 26};
+         int32_t bounds1[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 20, 21, 22, 23, 24, 25, 26};
          doBoundaryTest(*charIter1, testString1, bounds1);
     }
 
