@@ -664,7 +664,7 @@ _LMBCSSafeClone(const UConverter *cnv,
 
 static void
 _LMBCSGetUnicodeSet(const UConverter *cnv,
-                   USetAdder *sa,
+                   const USetAdder *sa,
                    UConverterUnicodeSet which,
                    UErrorCode *pErrorCode) {
     /* all but U+F6xx, see LMBCS explanation above (search for F6xx) */

@@ -452,7 +452,7 @@ unorm_getNX(int32_t options, UErrorCode *pErrorCode);
  * @internal
  */
 U_CAPI void U_EXPORT2
-unorm_addPropertyStarts(USetAdder *sa, UErrorCode *pErrorCode);
+unorm_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode);
 
 /**
  * Swap unorm.icu. See udataswp.h.

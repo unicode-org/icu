@@ -57,6 +57,25 @@ enum {
      * will match 'a', 'A', 'b', and 'B'.  "[^ab]" with this flag will
      * match all except 'a', 'A', 'b', and 'B'. This performs a full
      * closure over case mappings, e.g. U+017F for s.
+     *
+     * The resulting set is a superset of the input for the code points but
+     * not for the strings.
+     * It performs a case mapping closure of the code points and adds
+     * full case folding strings for the code points, and reduces strings of
+     * the original set to their full case folding equivalents.
+     *
+     * This is designed for case-insensitive matches, for example
+     * in regular expressions. The full code point case closure allows to check
+     * an input character directly against the closure set.
+     * Strings are matched by comparing the case-folded form from the closure
+     * set with an incremental case folding of the string in question.
+     *
+     * The closure set will also contain single code points if the original
+     * set contained case-equivalent strings (like U+00DF for "ss" or "Ss" etc.).
+     * This is not necessary (that is, redundant) for the above matching method
+     * but results in the same closure sets regardless of whether the original
+     * set contained the code point or a string.
+     *
      * @stable ICU 2.4
      */
     USET_CASE_INSENSITIVE = 2,  

@@ -305,7 +305,7 @@ uprv_getMaxISOCommentLength();
  * @param sa USetAdder to receive characters.
  */
 U_CAPI void U_EXPORT2
-uprv_getCharNameCharacters(USetAdder *sa);
+uprv_getCharNameCharacters(const USetAdder *sa);
 
 #if 0
 /* 
@@ -318,7 +318,7 @@ urename.h and unames.c changed accordingly.
  * @param sa USetAdder to receive characters.
  */
 U_CAPI void U_EXPORT2
-uprv_getISOCommentCharacters(USetAdder *sa);
+uprv_getISOCommentCharacters(const USetAdder *sa);
 */
 #endif
 
@@ -360,14 +360,14 @@ uprops_getSource(UProperty which);
  * @internal
  */
 U_CAPI void U_EXPORT2
-uchar_addPropertyStarts(USetAdder *sa, UErrorCode *pErrorCode);
+uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode);
 
 /**
  * Same as uchar_addPropertyStarts() but only for Hangul_Syllable_Type.
  * @internal
  */
 U_CAPI void U_EXPORT2
-uhst_addPropertyStarts(USetAdder *sa, UErrorCode *pErrorCode);
+uhst_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode);
 
 /**
  * Return a set of characters for property enumeration.
@@ -378,7 +378,7 @@ uhst_addPropertyStarts(USetAdder *sa, UErrorCode *pErrorCode);
  * @internal
  */
 U_CAPI void U_EXPORT2
-uprv_getInclusions(USetAdder *sa, UErrorCode *pErrorCode);
+uprv_getInclusions(const USetAdder *sa, UErrorCode *pErrorCode);
 
 /**
  * Swap the ICU Unicode properties file. See uchar.c.

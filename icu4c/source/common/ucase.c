@@ -33,6 +33,7 @@ struct UCaseProps {
     UDataMemory *mem;
     const int32_t *indexes;
     const uint16_t *exceptions;
+    const UChar *unfold;
 
     UTrie trie;
     uint8_t formatVersion[4];
@@ -68,38 +69,50 @@ static UCaseProps *
 ucase_openData(UCaseProps *cspProto,
                const uint8_t *bin, int32_t length, UErrorCode *pErrorCode) {
     UCaseProps *csp;
-    int32_t size, trieSize;
+    int32_t size;
 
     cspProto->indexes=(const int32_t *)bin;
-    if( cspProto->indexes[UCASE_IX_INDEX_TOP]<16 ||
-        (length>=0 && length<cspProto->indexes[UCASE_IX_LENGTH])
+    if( (length>=0 && length<16*4) ||
+        cspProto->indexes[UCASE_IX_INDEX_TOP]<16
     ) {
+        /* length or indexes[] too short for minimum indexes[] length of 16 */
         *pErrorCode=U_INVALID_FORMAT_ERROR;
         return NULL;
     }
-
-    /* get the trie address, after indexes[] */
     size=cspProto->indexes[UCASE_IX_INDEX_TOP]*4;
-    bin+=size;
-    if(length>=0 && (length-=size)<16) {
-        *pErrorCode=U_INVALID_FORMAT_ERROR;
-        return NULL;
+    if(length>=0) {
+        if(length>=size && length>=cspProto->indexes[UCASE_IX_LENGTH]) {
+            length-=size;
+        } else {
+            /* length too short for indexes[] or for the whole data length */
+            *pErrorCode=U_INVALID_FORMAT_ERROR;
+            return NULL;
+        }
     }
+    bin+=size;
+    /* from here on, assume that the sizes of the items fit into the total length */
 
-    /* unserialize the trie */
-    trieSize=cspProto->indexes[UCASE_IX_TRIE_SIZE];
-    trieSize=utrie_unserialize(&cspProto->trie, bin, length>=0 ? length : trieSize, pErrorCode);
+    /* unserialize the trie, after indexes[] */
+    size=cspProto->indexes[UCASE_IX_TRIE_SIZE];
+    utrie_unserialize(&cspProto->trie, bin, size, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         return NULL;
     }
+    bin+=size;
 
     /* get exceptions[] */
-    bin+=trieSize;
-    if(length>=0 && (length-=trieSize)<2*cspProto->indexes[UCASE_IX_EXC_LENGTH]) {
-        *pErrorCode=U_INVALID_FORMAT_ERROR;
-        return NULL;
-    }
+    size=2*cspProto->indexes[UCASE_IX_EXC_LENGTH];
     cspProto->exceptions=(const uint16_t *)bin;
+    bin+=size;
+
+    /* get unfold[] */
+    size=2*cspProto->indexes[UCASE_IX_UNFOLD_LENGTH];
+    if(size!=0) {
+        cspProto->unfold=(const UChar *)bin;
+        bin+=size;
+    } else {
+        cspProto->unfold=NULL;
+    }
 
     /* allocate, copy, and return the new UCaseProps */
     csp=(UCaseProps *)uprv_malloc(sizeof(UCaseProps));
@@ -322,8 +335,8 @@ ucase_swap(const UDataSwapper *ds,
         utrie_swap(ds, inBytes+offset, count, outBytes+offset, pErrorCode);
         offset+=count;
 
-        /* swap the uint16_t exceptions[] */
-        count=indexes[UCASE_IX_EXC_LENGTH]*2;
+        /* swap the uint16_t exceptions[] and unfold[] */
+        count=(indexes[UCASE_IX_EXC_LENGTH]+indexes[UCASE_IX_UNFOLD_LENGTH])*2;
         ds->swapArray16(ds, inBytes+offset, count, outBytes+offset, pErrorCode);
         offset+=count;
 
@@ -338,13 +351,13 @@ ucase_swap(const UDataSwapper *ds,
 static UBool U_CALLCONV
 _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
     /* add the start code point to the USet */
-    USetAdder *sa=(USetAdder *)context;
+    const USetAdder *sa=(const USetAdder *)context;
     sa->add(sa->set, start);
     return TRUE;
 }
 
 U_CAPI void U_EXPORT2
-ucase_addPropertyStarts(const UCaseProps *csp, USetAdder *sa, UErrorCode *pErrorCode) {
+ucase_addPropertyStarts(const UCaseProps *csp, const USetAdder *sa, UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return;
     }
@@ -368,8 +381,6 @@ ucase_addPropertyStarts(const UCaseProps *csp, USetAdder *sa, UErrorCode *pError
 #define GET_PROPS(csp, c, result) \
     UTRIE_GET16(&(csp)->trie, c, result);
 
-#define GET_CASE_TYPE(props) ((props)&UCASE_TYPE_MASK)
-#define GET_SIGNED_DELTA(props) ((int16_t)(props)>>UCASE_DELTA_SHIFT)
 #define GET_EXCEPTIONS(csp, props) ((csp)->exceptions+((props)>>UCASE_EXC_SHIFT))
 
 #define PROPS_HAS_EXCEPTION(props) ((props)&UCASE_EXCEPTION)
@@ -423,8 +434,8 @@ ucase_tolower(const UCaseProps *csp, UChar32 c) {
     uint16_t props;
     GET_PROPS(csp, c, props);
     if(!PROPS_HAS_EXCEPTION(props)) {
-        if(GET_CASE_TYPE(props)>=UCASE_UPPER) {
-            c+=GET_SIGNED_DELTA(props);
+        if(UCASE_GET_TYPE(props)>=UCASE_UPPER) {
+            c+=UCASE_GET_DELTA(props);
         }
     } else {
         const uint16_t *pe=GET_EXCEPTIONS(csp, props);
@@ -441,8 +452,8 @@ ucase_toupper(const UCaseProps *csp, UChar32 c) {
     uint16_t props;
     GET_PROPS(csp, c, props);
     if(!PROPS_HAS_EXCEPTION(props)) {
-        if(GET_CASE_TYPE(props)==UCASE_LOWER) {
-            c+=GET_SIGNED_DELTA(props);
+        if(UCASE_GET_TYPE(props)==UCASE_LOWER) {
+            c+=UCASE_GET_DELTA(props);
         }
     } else {
         const uint16_t *pe=GET_EXCEPTIONS(csp, props);
@@ -459,8 +470,8 @@ ucase_totitle(const UCaseProps *csp, UChar32 c) {
     uint16_t props;
     GET_PROPS(csp, c, props);
     if(!PROPS_HAS_EXCEPTION(props)) {
-        if(GET_CASE_TYPE(props)==UCASE_LOWER) {
-            c+=GET_SIGNED_DELTA(props);
+        if(UCASE_GET_TYPE(props)==UCASE_LOWER) {
+            c+=UCASE_GET_DELTA(props);
         }
     } else {
         const uint16_t *pe=GET_EXCEPTIONS(csp, props);
@@ -478,12 +489,231 @@ ucase_totitle(const UCaseProps *csp, UChar32 c) {
     return c;
 }
 
+U_CAPI void U_EXPORT2
+ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa) {
+    uint16_t props;
+
+    /*
+     * Hardcode the case closure of i and its relatives and ignore the
+     * data file data for these characters.
+     * The Turkic dotless i and dotted I with their case mapping conditions
+     * and case folding option make the related characters behave specially.
+     * This code matches their closure behavior to their case folding behavior.
+     */
+    static const UChar
+        iDot[2]=        { 0x69, 0x307 };
+
+    switch(c) {
+    case 0x49:
+        /* regular i and I are in one equivalence class */
+        sa->add(sa->set, 0x69);
+        return;
+    case 0x69:
+        sa->add(sa->set, 0x49);
+        return;
+    case 0x130:
+        /* dotted I is in a class with <0069 0307> (for canonical equivalence with <0049 0307>) */
+        sa->addString(sa->set, iDot, 2);
+        return;
+    case 0x131:
+        /* dotless i is in a class by itself */
+        return;
+    default:
+        /* otherwise use the data file data */
+        break;
+    }
+
+    GET_PROPS(csp, c, props);
+    if(!PROPS_HAS_EXCEPTION(props)) {
+        if(UCASE_GET_TYPE(props)!=UCASE_NONE) {
+            /* add the one simple case mapping, no matter what type it is */
+            int32_t delta=UCASE_GET_DELTA(props);
+            if(delta!=0) {
+                sa->add(sa->set, c+delta);
+            }
+        }
+    } else {
+        /*
+         * c has exceptions, so there may be multiple simple and/or
+         * full case mappings. Add them all.
+         */
+        const uint16_t *pe0, *pe=GET_EXCEPTIONS(csp, props);
+        const UChar *closure;
+        uint16_t excWord=*pe++;
+        int32_t index, closureLength, fullLength, length;
+
+        pe0=pe;
+
+        /* add all simple case mappings */
+        for(index=UCASE_EXC_LOWER; index<=UCASE_EXC_TITLE; ++index) {
+            if(HAS_SLOT(excWord, index)) {
+                pe=pe0;
+                GET_SLOT_VALUE(excWord, index, pe, c);
+                sa->add(sa->set, c);
+            }
+        }
+
+        /* get the closure string pointer & length */
+        if(HAS_SLOT(excWord, UCASE_EXC_CLOSURE)) {
+            pe=pe0;
+            GET_SLOT_VALUE(excWord, UCASE_EXC_CLOSURE, pe, closureLength);
+            closureLength&=UCASE_CLOSURE_MAX_LENGTH; /* higher bits are reserved */
+            closure=(const UChar *)pe+1; /* behind this slot, unless there are full case mappings */
+        } else {
+            closureLength=0;
+        }
+
+#if 0
+        /* add all full case mappings */
+        if(HAS_SLOT(excWord, UCASE_EXC_FULL_MAPPINGS)) {
+            pe=pe0;
+            GET_SLOT_VALUE(excWord, UCASE_EXC_FULL_MAPPINGS, pe, fullLength);
+            ++pe;
+            fullLength&=0xffff; /* bits 16 and higher are reserved */
+            while(fullLength!=0) {
+                length=fullLength&0xf;
+                if(length!=0) {
+                    sa->addString(sa->set, (const UChar *)pe, length);
+                    pe+=length;
+                }
+                fullLength>>=4;
+            }
+            closure=(const UChar *)pe; /* behind full case mappings */
+        }
+#endif
+
+        /* add the full case folding */
+        if(HAS_SLOT(excWord, UCASE_EXC_FULL_MAPPINGS)) {
+            pe=pe0;
+            GET_SLOT_VALUE(excWord, UCASE_EXC_FULL_MAPPINGS, pe, fullLength);
+
+            /* start of full case mapping strings */
+            ++pe;
+
+            fullLength&=0xffff; /* bits 16 and higher are reserved */
+
+            /* skip the lowercase result string */
+            pe+=fullLength&UCASE_FULL_LOWER;
+            fullLength>>=4;
+
+            /* add the full case folding string */
+            length=fullLength&0xf;
+            if(length!=0) {
+                sa->addString(sa->set, (const UChar *)pe, length);
+                pe+=length;
+            }
+
+            /* skip the uppercase and titlecase strings */
+            fullLength>>=4;
+            pe+=fullLength&0xf;
+            fullLength>>=4;
+            pe+=fullLength;
+
+            closure=(const UChar *)pe; /* behind full case mappings */
+        }
+
+        /* add each code point in the closure string */
+        for(index=0; index<closureLength;) {
+            U16_NEXT_UNSAFE(closure, index, c);
+            sa->add(sa->set, c);
+        }
+    }
+}
+
+/*
+ * compare s, which has a length, with t, which has a maximum length or is NUL-terminated
+ * must be length>0 and max>0 and length<=max
+ */
+static U_INLINE int32_t
+strcmpMax(const UChar *s, int32_t length, const UChar *t, int32_t max) {
+    int32_t c1, c2;
+
+    max-=length; /* we require length<=max, so no need to decrement max in the loop */
+    do {
+        c1=*s++;
+        c2=*t++;
+        if(c2==0) {
+            return 1; /* reached the end of t but not of s */
+        }
+        c1-=c2;
+        if(c1!=0) {
+            return c1; /* return difference result */
+        }
+    } while(--length>0);
+    /* ends with length==0 */
+
+    if(max==0 || *t==0) {
+        return 0; /* equal to length of both strings */
+    } else {
+        return -max; /* return lengh difference */
+    }
+}
+
+U_CAPI UBool U_EXPORT2
+ucase_addStringCaseClosure(const UCaseProps *csp, const UChar *s, int32_t length, const USetAdder *sa) {
+    const UChar *unfold, *p;
+    int32_t i, start, limit, result, unfoldRows, unfoldRowWidth, unfoldStringWidth, unfoldCPWidth;
+
+    if(csp->unfold==NULL || s==NULL) {
+        return FALSE; /* no reverse case folding data, or no string */
+    }
+    if(length<=1) {
+        /* the string is too short to find any match */
+        /*
+         * more precise would be:
+         * if(!u_strHasMoreChar32Than(s, length, 1))
+         * but this does not make much practical difference because
+         * a single supplementary code point would just not be found
+         */
+        return FALSE;
+    }
+
+    unfold=csp->unfold;
+    unfoldRows=unfold[UCASE_UNFOLD_ROWS];
+    unfoldRowWidth=unfold[UCASE_UNFOLD_ROW_WIDTH];
+    unfoldStringWidth=unfold[UCASE_UNFOLD_STRING_WIDTH];
+    unfoldCPWidth=unfoldRowWidth-unfoldStringWidth;
+    unfold+=unfoldRowWidth;
+
+    if(length>unfoldStringWidth) {
+        /* the string is too long to find any match */
+        return FALSE;
+    }
+
+    /* do a binary search for the string */
+    start=0;
+    limit=unfoldRows;
+    while(start<limit) {
+        i=(start+limit)/2;
+        p=unfold+(i*unfoldRowWidth);
+        result=strcmpMax(s, length, p, unfoldStringWidth);
+
+        if(result==0) {
+            /* found the string: add each code point, and its case closure */
+            UChar32 c;
+
+            for(i=unfoldStringWidth; i<unfoldRowWidth && p[i]!=0;) {
+                U16_NEXT_UNSAFE(p, i, c);
+                sa->add(sa->set, c);
+                ucase_addCaseClosure(csp, c, sa);
+            }
+            return TRUE;
+        } else if(result<0) {
+            limit=i;
+        } else /* result>0 */ {
+            start=i+1;
+        }
+    }
+
+    return FALSE; /* string not found */
+}
+
 /** @return UCASE_NONE, UCASE_LOWER, UCASE_UPPER, UCASE_TITLE */
 U_CAPI int32_t U_EXPORT2
 ucase_getType(const UCaseProps *csp, UChar32 c) {
     uint16_t props;
     GET_PROPS(csp, c, props);
-    return GET_CASE_TYPE(props);
+    return UCASE_GET_TYPE(props);
 }
 
 /** @return same as ucase_getType(), or <0 if c is case-ignorable */
@@ -492,7 +722,7 @@ ucase_getTypeOrIgnorable(const UCaseProps *csp, UChar32 c) {
     int32_t type;
     uint16_t props;
     GET_PROPS(csp, c, props);
-    type=GET_CASE_TYPE(props);
+    type=UCASE_GET_TYPE(props);
     if(type!=UCASE_NONE) {
         return type;
     } else if(
@@ -775,7 +1005,7 @@ isFollowedByCasedLetter(const UCaseProps *csp, UCaseContextIterator *iter, void 
 
     for(/* dir!=0 sets direction */; (c=iter(context, dir))>=0; dir=0) {
         GET_PROPS(csp, c, props);
-        if(GET_CASE_TYPE(props)!=UCASE_NONE) {
+        if(UCASE_GET_TYPE(props)!=UCASE_NONE) {
             return TRUE; /* followed by cased letter */
         } else if(c==0x307 || (props&(UCASE_EXCEPTION|UCASE_CASE_IGNORABLE))==UCASE_CASE_IGNORABLE) {
             /* case-ignorable, continue with the loop */
@@ -934,8 +1164,8 @@ ucase_toFullLower(const UCaseProps *csp, UChar32 c,
     result=c;
     GET_PROPS(csp, c, props);
     if(!PROPS_HAS_EXCEPTION(props)) {
-        if(GET_CASE_TYPE(props)>=UCASE_UPPER) {
-            result=c+GET_SIGNED_DELTA(props);
+        if(UCASE_GET_TYPE(props)>=UCASE_UPPER) {
+            result=c+UCASE_GET_DELTA(props);
         }
     } else {
         const uint16_t *pe=GET_EXCEPTIONS(csp, props), *pe2;
@@ -1081,8 +1311,8 @@ toUpperOrTitle(const UCaseProps *csp, UChar32 c,
     result=c;
     GET_PROPS(csp, c, props);
     if(!PROPS_HAS_EXCEPTION(props)) {
-        if(GET_CASE_TYPE(props)==UCASE_LOWER) {
-            result=c+GET_SIGNED_DELTA(props);
+        if(UCASE_GET_TYPE(props)==UCASE_LOWER) {
+            result=c+UCASE_GET_DELTA(props);
         }
     } else {
         const uint16_t *pe=GET_EXCEPTIONS(csp, props), *pe2;
@@ -1236,8 +1466,8 @@ ucase_fold(UCaseProps *csp, UChar32 c, uint32_t options) {
     uint16_t props;
     GET_PROPS(csp, c, props);
     if(!PROPS_HAS_EXCEPTION(props)) {
-        if(GET_CASE_TYPE(props)>=UCASE_UPPER) {
-            c+=GET_SIGNED_DELTA(props);
+        if(UCASE_GET_TYPE(props)>=UCASE_UPPER) {
+            c+=UCASE_GET_DELTA(props);
         }
     } else {
         const uint16_t *pe=GET_EXCEPTIONS(csp, props);
@@ -1305,8 +1535,8 @@ ucase_toFullFolding(const UCaseProps *csp, UChar32 c,
     result=c;
     GET_PROPS(csp, c, props);
     if(!PROPS_HAS_EXCEPTION(props)) {
-        if(GET_CASE_TYPE(props)>=UCASE_UPPER) {
-            result=c+GET_SIGNED_DELTA(props);
+        if(UCASE_GET_TYPE(props)>=UCASE_UPPER) {
+            result=c+UCASE_GET_DELTA(props);
         }
     } else {
         const uint16_t *pe=GET_EXCEPTIONS(csp, props), *pe2;
