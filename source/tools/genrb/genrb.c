@@ -187,6 +187,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     UCHARBUF       *ucbuf        = NULL;
     char           *rbname       = NULL;
     char           *openFileName = NULL;
+    char           *inputDirBuf  = NULL;
 
     if (U_FAILURE(*status)) {
         return;
@@ -197,12 +198,26 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
 
     /* Open the input file for reading */
     if(inputDir == NULL) {
+        const char *filenameBegin = uprv_strrchr(filename, U_FILE_SEP_CHAR);
+        if (filenameBegin != NULL) {
+            /*
+             * When a filename ../../../data/root.txt is specified, 
+             * we presume that the input directory is ../../../data
+             * This is very important when the resource file includes
+             * another file, like UCARules.txt or thaidict.brk.
+             */
+            int32_t filenameSize = filenameBegin - filename + 1;
+            inputDirBuf = uprv_strncpy(uprv_malloc(filenameSize), filename, filenameSize);
+            inputDirBuf[filenameSize - 1] = 0;
+            inputDir = inputDirBuf;
+        }
         in = T_FileStream_open(filename, "rb");
     } else {
         int32_t dirlen  = (int32_t)uprv_strlen(inputDir);
         int32_t filelen = (int32_t)uprv_strlen(filename);
         if(inputDir[dirlen-1] != U_FILE_SEP_CHAR) {
             openFileName = (char *) uprv_malloc(dirlen + filelen + 2);
+            openFileName[0] = '\0';
             /*
              * append the input dir to openFileName if the first char in 
              * filename is not file seperation char and the last char input directory is  not '.'.
@@ -217,11 +232,8 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
             if( (filename[0] != U_FILE_SEP_CHAR) && (inputDir[dirlen-1] !='.')){
                 uprv_strcpy(openFileName, inputDir);
                 openFileName[dirlen]     = U_FILE_SEP_CHAR;
-                openFileName[dirlen + 1] = '\0';
             }
-            else {
-                openFileName[0] = '\0';
-            }
+            openFileName[dirlen + 1] = '\0';
             uprv_strcat(openFileName, filename);
         } else {
             openFileName = (char *) uprv_malloc(dirlen + filelen + 1);
@@ -267,6 +279,10 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     bundle_close(data, status);
 
 finish:
+
+    if (inputDirBuf != NULL) {
+        uprv_free(inputDirBuf);
+    }
 
     if (openFileName != NULL) {
         uprv_free(openFileName);
