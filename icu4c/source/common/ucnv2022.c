@@ -72,6 +72,7 @@ typedef enum  {
         JISX212 = 5,
         GB2312  =6,
         KSC5601 =7,
+        HWKANA_7BIT=8,    /* Halfwidth Katakana 7 bit */
         INVALID_STATE
 
 } StateEnum;
@@ -94,13 +95,13 @@ typedef struct{
     UConverter *fromUnicodeConverter;
     UBool isFirstBuffer;
     StateEnum toUnicodeCurrentState;
-    StateEnum fromUnicodeCurrentState;
-    StateEnum initIterState;
+    int fromUnicodeCurrentState;
+    StateEnum toUnicodeSaveState;
     Cnv2022Type currentType;
     int plane;
     uint8_t escSeq2022[10];
     UConverter* myConverterArray[9];
-      UBool isEscapeAppended;
+    UBool isEscapeAppended;
     UBool isShiftAppended;
     UBool isLocaleSpecified;
     uint32_t key;
@@ -118,6 +119,8 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
 
 U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                                                           UErrorCode * err);
+U_CFUNC void _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
+                            UErrorCode *pErrorCode);
 
 /* Protos */
 /***************** ISO-2022 ********************************/
@@ -145,7 +148,9 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
 
 U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs* args, 
                                                             UErrorCode* err);
-
+/* Special function for getting output from IBM-25546 code page*/
+U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterToUnicodeArgs *args,
+                                                            UErrorCode* err);
 /***************** ISO-2022-CN ********************************/
 
 U_CFUNC void UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, 
@@ -210,7 +215,7 @@ int8_t normalize_esq_chars_2022[256] = {
          0     ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0
         ,0     ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0
         ,0     ,0      ,0      ,0      ,0      ,0      ,0      ,1      ,0      ,0
-        ,0     ,0      ,0      ,0      ,0      ,0      ,4      ,7      ,0      ,0
+        ,0     ,0      ,0      ,0      ,0      ,0      ,4      ,7      ,29      ,0
         ,2     ,24     ,26     ,27     ,0      ,3      ,23     ,6      ,0      ,0
         ,0     ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0
         ,0     ,0      ,0      ,0      ,5      ,8      ,9      ,10     ,11     ,12
@@ -237,43 +242,42 @@ int8_t normalize_esq_chars_2022[256] = {
 
 #define MAX_STATES_2022 74
 int32_t escSeqStateTable_Key_2022[MAX_STATES_2022] = {
-    /*      0           1           2           3           4           5           6           7           8           9           */
+/*   0           1           2           3           4           5           6           7           8           9           */
 
-         1          ,34         ,36         ,39         ,55         ,57         ,60         ,1093       ,1096       ,1097
-        ,1098       ,1099       ,1100       ,1101       ,1102       ,1103       ,1104       ,1105       ,1106       ,1109
-        ,1154       ,1157       ,1160       ,1161       ,1176       ,1178       ,1179       ,1254       ,1257       ,1768
-        ,1773       ,35105      ,36933      ,36936      ,36937      ,36938      ,36939      ,36940      ,36942      ,36943
-        ,36944      ,36945      ,36946      ,36947      ,36948      ,37640      ,37642      ,37644      ,37646      ,37711
-        ,37744      ,37745      ,37746      ,37747      ,37748      ,40133      ,40136      ,40138      ,40139      ,40140
-        ,40141      ,1123363    ,35947624   ,35947625   ,35947626   ,35947627   ,35947629   ,35947630   ,35947631   ,35947635
-        ,35947636   ,35947638
+     1          ,34         ,36         ,39         ,55         ,57         ,60         ,61         ,1093       ,1096
+    ,1097       ,1098       ,1099       ,1100       ,1101       ,1102       ,1103       ,1104       ,1105       ,1106
+    ,1109       ,1154       ,1157       ,1160       ,1161       ,1176       ,1178       ,1179       ,1254       ,1257
+    ,1768       ,1773       ,1957       ,35105      ,36933      ,36936      ,36937      ,36938      ,36939      ,36940
+    ,36942      ,36943      ,36944      ,36945      ,36946      ,36947      ,36948      ,37640      ,37642      ,37644
+    ,37646      ,37711      ,37744      ,37745      ,37746      ,37747      ,37748      ,40133      ,40136      ,40138
+    ,40139      ,40140      ,40141      ,1123363    ,35947624   ,35947625   ,35947626   ,35947627   ,35947629   ,35947630
+    ,35947631   ,35947635   ,35947636   ,35947638
 };
 
 
 const char* escSeqStateTable_Result_2022[MAX_STATES_2022] = {
- /*      0                      1                    2                      3                   4               5                           6                          7                    8                   9    */
+ /*  0                      1                        2                      3                   4                   5                        6                      7                       8                       9    */
 
-         NULL                   ,NULL               ,NULL                ,NULL              ,NULL               ,NULL                   ,NULL                   ,"latin1"               ,"latin1"               ,"latin1"
-        ,"ibm-865"              ,"ibm-865"          ,"ibm-865"          ,"ibm-865"          ,"ibm-865"          ,"ibm-865"              ,"JISX-201"             ,"JISX-201"             ,"latin1"               ,"latin1"
-        ,NULL                   ,"JISX-208"         ,"gb_2312_80-1"     ,"JISX-208"         ,NULL               ,NULL                   ,NULL                   ,NULL                   ,"UTF8"                 ,"ISO-8859-1"
-        ,"ISO-8859-7"           ,NULL               ,"ibm-955"          ,"ibm-367"          ,"ibm-952"          ,"ibm-949"              ,"JISX-212"             ,"ibm-1383"             ,"ibm-952"              ,"ibm-964"
-        ,"ibm-964"              ,"ibm-964"          ,"ibm-964"          ,"ibm-964"          ,"ibm-964"          ,"gb_2312_80-1"         ,"ibm-949"              ,"ISO-IR-165"           ,"CNS-11643-1992,1"     ,"CNS-11643-1992,2"
-        ,"CNS-11643-1992,3"     ,"CNS-11643-1992,4" ,"CNS-11643-1992,5" ,"CNS-11643-1992,6" ,"CNS-11643-1992,7" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian"
-        ,"UTF16_PlatformEndian" ,NULL               ,"latin1"           ,"ibm-912"          ,"ibm-913"          ,"ibm-914"              ,"ibm-813"              ,"ibm-1089"             ,"ibm-920"              ,"ibm-915"
-        ,"ibm-915"              ,"latin1"
+     NULL                   ,NULL                   ,NULL                   ,NULL               ,NULL               ,NULL                   ,NULL                   ,NULL                   ,"latin1"               ,"latin1"
+    ,"latin1"               ,"ibm-865"              ,"ibm-865"              ,"ibm-865"          ,"ibm-865"          ,"ibm-865"              ,"ibm-865"              ,"JISX-201"             ,"JISX-201"             ,"latin1"
+    ,"latin1"               ,NULL                   ,"JISX-208"             ,"gb_2312_80-1"     ,"JISX-208"         ,NULL                   ,NULL                   ,NULL                   ,NULL                   ,"UTF8"
+    ,"ISO-8859-1"           ,"ISO-8859-7"           ,"JIS-X-208"            ,NULL               ,"ibm-955"          ,"ibm-367"              ,"ibm-952"              ,"ibm-949"              ,"JISX-212"             ,"ibm-1383"
+    ,"ibm-952"              ,"ibm-964"              ,"ibm-964"              ,"ibm-964"          ,"ibm-964"          ,"ibm-964"              ,"ibm-964"              ,"gb_2312_80-1"         ,"ibm-949"              ,"ISO-IR-165"
+    ,"CNS-11643-1992,1"     ,"CNS-11643-1992,2"     ,"CNS-11643-1992,3"     ,"CNS-11643-1992,4" ,"CNS-11643-1992,5" ,"CNS-11643-1992,6"     ,"CNS-11643-1992,7"     ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian"
+    ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,NULL               ,"latin1"           ,"ibm-912"              ,"ibm-913"              ,"ibm-914"              ,"ibm-813"              ,"ibm-1089"
+    ,"ibm-920"              ,"ibm-915"              ,"ibm-915"              ,"latin1"
 };
 
 UCNV_TableStates_2022 escSeqStateTable_Value_2022[MAX_STATES_2022] = {
-    /*          0                           1                         2                             3                           4                           5                               6                        7                          8                           9       */
-
-         VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022     ,VALID_NON_TERMINAL_2022    ,VALID_SS2_SEQUENCE        ,VALID_SS3_SEQUENCE         ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_MAYBE_TERMINAL_2022
-        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
-        ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
-        ,VALID_TERMINAL_2022        ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
-        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
-        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
-        ,VALID_TERMINAL_2022        ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
-        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
+/*          0                           1                         2                             3                           4                           5                               6                        7                          8                           9       */
+     VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022     ,VALID_NON_TERMINAL_2022    ,VALID_SS2_SEQUENCE        ,VALID_SS3_SEQUENCE         ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
+    ,VALID_MAYBE_TERMINAL_2022  ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
+    ,VALID_TERMINAL_2022        ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022
+    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
+    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
+    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
+    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
+    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
 };
 
 
@@ -314,6 +318,7 @@ U_CFUNC void _ISO2022Reset(UConverter *converter, UConverterResetChoice choice);
 static const char* _ISO2022getName(const UConverter* cnv);
 U_CFUNC void _ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *err);
 U_CFUNC UConverter * _ISO_2022_SafeClone(const UConverter *cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
+
 /************ protos of functions for setting the initial state *********************/
 static void setInitialStateToUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData);
 static void setInitialStateFromUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData);
@@ -547,7 +552,8 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             myConverterData->myConverterArray[5]=   ucnv_open("jisx-212", errorCode);
             myConverterData->myConverterArray[6]=   ucnv_open("gb_2312_80-1", errorCode);
             myConverterData->myConverterArray[7]=   ucnv_open("ksc_5601_1", errorCode);
-            myConverterData->myConverterArray[8]=   NULL;
+            myConverterData->myConverterArray[8]=   ucnv_open("jisx-201", errorCode);
+            myConverterData->myConverterArray[9]=   NULL;
 
             /* initialize the state variables */
             setInitialStateToUnicodeJPCN(cnv, myConverterData);
@@ -557,20 +563,28 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             cnv->sharedData=(UConverterSharedData*)(&_ISO2022JPData);
             uprv_strcpy(myConverterData->locale,"ja");
             uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja");
-            if(options){
-                switch (options & UCNV_OPTIONS_VERSION_MASK){
-                    case 1:
-                        myConverterData->version = 1;
-                        uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=1");
-                        break;
-                    case 2:
-                        myConverterData->version = 2;
-                        uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=2");
-                        break;
-                    default:
-                        myConverterData->version = 0;
-                }
+            
+            switch (options & UCNV_OPTIONS_VERSION_MASK){
+                case 1:
+                    myConverterData->version = 1;
+                    uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=1");
+                    break;
+                case 2:
+                    myConverterData->version = 2;
+                    uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=2");
+                    break;
+                case 3:
+                    myConverterData->version = 3;
+                    uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=3");
+                    break;
+                case 4:
+                    myConverterData->version =4;
+                    uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=4");
+                    break;
+                default:
+                    myConverterData->version = 0;
             }
+            
         }
         else if(myLocale[0]=='k' && (myLocale[1]=='o'|| myLocale[1]=='r') && 
             (myLocale[2]=='_' || myLocale[2]=='\0')){
@@ -578,14 +592,20 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             /* initialize the state variables */
             setInitialStateToUnicodeKR(cnv, myConverterData);
             setInitialStateFromUnicodeKR(cnv,myConverterData);
-
-            myConverterData->currentConverter=myConverterData->fromUnicodeConverter  = ucnv_open("ibm-949",errorCode);
+       
+            if ((options  & UCNV_OPTIONS_VERSION_MASK)==1){
+                    myConverterData->version = 1;
+                    myConverterData->currentConverter=ucnv_open("ibm-25546_P100",errorCode);
+                    uprv_strcpy(myConverterData->name,"ISO_2022,locale=cn,version=1");
+            }else{
+                    myConverterData->currentConverter=myConverterData->fromUnicodeConverter  = ucnv_open("ibm-949",errorCode);
+                    myConverterData->version = 0;
+            }
 
             /* set the function pointers to appropriate funtions */
             cnv->sharedData=(UConverterSharedData*)&_ISO2022KRData;
             cnv->mode=UCNV_SI;
             uprv_strcpy(myConverterData->locale,"kr");
-            uprv_strcpy(myConverterData->name,"ISO_2022,locale=kr");
             myConverterData->version=0;
 
         }
@@ -609,18 +629,13 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             uprv_strcpy(myConverterData->locale,"cn");
             uprv_strcpy(myConverterData->name,"ISO_2022,locale=cn");
 
-            if(options){
-                switch (options  & UCNV_OPTIONS_VERSION_MASK){
-                    case 1:
-                        myConverterData->version = 1;
-                        uprv_strcpy(myConverterData->name,"ISO_2022,locale=cn,version=1");
-                        break;
-                    default:
-                        myConverterData->version = 0;
-                }
+            if ((options  & UCNV_OPTIONS_VERSION_MASK)==1){
+                
+                    myConverterData->version = 1;
+                    uprv_strcpy(myConverterData->name,"ISO_2022,locale=cn,version=1");
+            }else{
+                    myConverterData->version = 0;
             }
-
-
         }
         else{
             /* append the UTF-8 escape sequence */
@@ -715,6 +730,7 @@ static void setInitialStateToUnicodeJPCN(UConverter* converter,UConverterDataISO
     myConverterData->toUnicodeCurrentState =ASCII;
     myConverterData->currentConverter = NULL;
     myConverterData->isFirstBuffer = TRUE;
+    myConverterData->toUnicodeSaveState = -1;
     converter->mode = UCNV_SI;
 
 }
@@ -1121,7 +1137,7 @@ static const char* getEndOfBuffer_2022(const char** source,
 *          ISO-8859-1 : Algorithmic implemented as LATIN1 case
 *          ISO-8859-7 : alisas to ibm-9409 mapping table
 */
-#define MAX_VALID_CP_JP 8
+#define MAX_VALID_CP_JP 9
 static Cnv2022Type myConverterType[MAX_VALID_CP_JP]={
     ASCII1,
     LATIN1,
@@ -1131,13 +1147,16 @@ static Cnv2022Type myConverterType[MAX_VALID_CP_JP]={
     DBCS,
     DBCS,
     DBCS,
+    SBCS,
 
 };
 
-static StateEnum nextStateArray[3][MAX_VALID_CP_JP]= {
-    {JISX201 ,INVALID_STATE,INVALID_STATE,JISX208,ASCII,INVALID_STATE,INVALID_STATE,INVALID_STATE},
-    {JISX201,INVALID_STATE,INVALID_STATE,JISX208,JISX212,ASCII,INVALID_STATE,INVALID_STATE},
-    {ISO8859_1,ISO8859_7,JISX201,JISX208,JISX212,GB2312,KSC5601,ASCII}
+static StateEnum nextStateArray[5][MAX_VALID_CP_JP]= {
+    {JISX201 ,INVALID_STATE,INVALID_STATE,JISX208,ASCII,INVALID_STATE,INVALID_STATE,INVALID_STATE,INVALID_STATE},
+    {JISX201,INVALID_STATE,INVALID_STATE,JISX208,JISX212,ASCII,INVALID_STATE,INVALID_STATE,INVALID_STATE},
+    {ISO8859_1,ISO8859_7,JISX201,JISX208,JISX212,GB2312,KSC5601,ASCII,INVALID_STATE},
+    {JISX201,INVALID_STATE,INVALID_STATE,JISX208,JISX212,HWKANA_7BIT,INVALID_STATE,INVALID_STATE,ASCII},
+    {JISX201,INVALID_STATE,INVALID_STATE,JISX208,JISX212,ASCII,INVALID_STATE,INVALID_STATE,INVALID_STATE},
 };
 static  const char* escSeqChars[MAX_VALID_CP_JP] ={
     "\x1B\x28\x42",         /* <ESC>(B  ASCII       */
@@ -1148,6 +1167,7 @@ static  const char* escSeqChars[MAX_VALID_CP_JP] ={
     "\x1B\x24\x28\x44",     /* <ESC>$(D JISX-212    */
     "\x1B\x24\x41",         /* <ESC>$A  GB2312      */
     "\x1B\x24\x28\x43",     /* <ESC>$(C KSC5601     */
+    "\x1B\x28\x49"          /* <ESC>(I  HWKANA_7BIT */
 
 };
 static  const int32_t escSeqCharsLen[MAX_VALID_CP_JP] ={
@@ -1159,6 +1179,7 @@ static  const int32_t escSeqCharsLen[MAX_VALID_CP_JP] ={
     sizeof(escSeqChars[5]),
     sizeof(escSeqChars[6]) - 1,
     sizeof(escSeqChars[7]),
+    sizeof(escSeqChars[8]) - 1
 };
 
 
@@ -1192,10 +1213,9 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnic
     int len =0; /*length of escSeq chars*/
     UConverterCallbackReason reason;
 
-
     /* state variables*/
     StateEnum* currentState       = &converterData->fromUnicodeCurrentState;
-    StateEnum* initIterState      = &converterData->initIterState;
+    StateEnum initIterState       = ASCII;
     UConverter** currentConverter = &converterData->fromUnicodeConverter;
     Cnv2022Type* currentType      = &converterData->currentType;
     UConverter** convArray        = converterData->myConverterArray;
@@ -1210,7 +1230,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnic
         return;
     }
 
-    *initIterState = *currentState;
+    initIterState = *currentState;
 
     /* check if the last codepoint of previous buffer was a lead surrogate*/
     if(args->converter->fromUSurrogateLead!=0 && target< targetLimit) {
@@ -1228,65 +1248,83 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnic
 
             sourceChar  = *(source++);
             if(sourceChar > SPACE) {
-
                 do{
                     switch (*currentType){
-                        /* most common case*/
-                        case DBCS:
-                            {
-                                uint32_t value;
-                                if(2 == _MBCSFromUChar32((*currentConverter)->sharedData, 
-                                                         sourceChar, &value, FALSE)) {
-                                    targetUniChar = (uint16_t)value;
-                                }
+                    /* most common case*/
+                    case DBCS:
+                        {
+                            uint32_t value;
+                            if(2 == _MBCSFromUChar32((*currentConverter)->sharedData, 
+                                                     sourceChar, &value, args->converter->useFallback)) {
+                                targetUniChar = (uint16_t)value;
                             }
-                            break;
-                        case ASCII1:
-                            if(sourceChar < 0x7f){
-                                targetUniChar = sourceChar;
+                        }
+                        break;
+                    case ASCII1:
+                        if(sourceChar < 0x7f){
+                            targetUniChar = sourceChar;
+                        }
+                        break;
+
+                    case SBCS:
+                        targetUniChar = (uint16_t)_MBCSSingleFromUChar32((*currentConverter)->sharedData, 
+                                                                    sourceChar, args->converter->useFallback);
+                        /*
+                         * If mySourceChar is unassigned, then _MBCSSingleFromUChar32() returns -1
+                         * which becomes the same as missingCharMarker with the cast to uint16_t.
+                         */
+                        /* Check if the sourceChar is in the HW Kana range*/
+                        if(0xFF9F-sourceChar<=(0xFF9F-0xFF61)){
+                            if( converterData->version==3){
+                                /*we get a1-df from _MBCSSingleFromUChar32 so subtract 0x80*/
+                                targetUniChar-=0x80; 
+                                *currentState = HWKANA_7BIT;
                             }
-                            break;
-
-                        case SBCS:
-                            targetUniChar = (uint16_t)_MBCSSingleFromUChar32((*currentConverter)->sharedData, 
-                                                                        sourceChar, FALSE);
-                            /*
-                             * If mySourceChar is unassigned, then _MBCSSingleFromUChar32() returns -1
-                             * which becomes the same as missingCharMarker with the cast to uint16_t.
-                             */
-                            break;
-
-                        case LATIN1:
-                            if(sourceChar <= 0x00FF){
-                                targetUniChar = sourceChar;
+                            else if( converterData->version==4){
+                                *currentState = JISX201;
                             }
+                            else{
+                                targetUniChar=missingCharMarker;
+                            }
+                            *currentConverter = convArray[(*currentConverter==NULL) ? 0 : (int)*currentState];
+                            *currentType = (Cnv2022Type) myConverterType[*currentState];
+                        }
+                        break;
 
-                            break;
+                    case LATIN1:
+                        if(sourceChar <= 0x00FF){
+                            targetUniChar = sourceChar;
+                        }
 
-                        default:
-                            /*not expected */
-                            break;
+                        break;
+                    default:
+                        /*not expected */
+                        break;
                     }
                     if(targetUniChar==missingCharMarker){
                         *currentState = nextStateArray[converterData->version][*currentState];
                         *currentConverter = convArray[(*currentConverter==NULL) ? 0 : (int)*currentState];
                         *currentType = (Cnv2022Type) myConverterType[*currentState];
                    }
+                   else
+                       /*got the mapping so break from while loop*/
+                       break;
 
-                }while(targetUniChar == missingCharMarker && *initIterState != *currentState);
+                }while(initIterState != *currentState);
+                /* Half width Kantakana Range */
+                if(sourceChar >= 0xFF61 && sourceChar <=0xFF96){
 
+                }
             }
             else{
-
                 targetUniChar = sourceChar;
                 *currentState = ASCII;
                 *currentType = (Cnv2022Type) myConverterType[*currentState];
-
             }
 
             if(targetUniChar != missingCharMarker){
 
-                if( *currentState != *initIterState){
+                if( *currentState != initIterState){
 
                     escSeq = escSeqChars[(int)*currentState];
                     len = escSeqCharsLen[(int)*currentState];
@@ -1300,7 +1338,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnic
                         CONCAT_ESCAPE_EX(args, target, targetLimit,offsets, escSeq,len,err);
                     }
                 }
-                *initIterState = *currentState;
+                initIterState = *currentState;
                 /* write the targetUniChar  to target */
                 if(targetUniChar <= 0x00FF){
                     if( target <targetLimit){
@@ -1423,7 +1461,7 @@ getTrail:
                     args->source=saveSource;
                     args->target=saveTarget;
                     args->offsets=saveOffsets;
-                    *initIterState = *currentState;
+                    initIterState = *currentState;
                     args->converter->invalidUCharLength = 0;
                     args->converter->fromUSurrogateLead=0x00;
                     if (U_FAILURE (*err)){
@@ -1476,45 +1514,61 @@ getTrail:
  * <ESC>$A  GB2312
  * <ESC>$(C KSC5601
  */
-static StateEnum nextStateToUnicodeJP[3][MAX_STATES_2022]= {
-
+static StateEnum nextStateToUnicodeJP[5][MAX_STATES_2022]= {
     {
 /*      0                1               2               3               4               5               6               7               8               9    */
-
-        INVALID_STATE   ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,ASCII
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,JISX201        ,JISX201        ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,JISX208        ,INVALID_STATE  ,JISX208        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE
+    INVALID_STATE   ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,ASCII          ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,JISX201        ,HWKANA_7BIT    ,JISX201        ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,JISX208        ,INVALID_STATE  ,JISX208        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,JISX208        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
     },
-
     {
 /*      0                1               2               3               4               5               6               7               8               9    */
-
-        INVALID_STATE   ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,ASCII
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,JISX201        ,JISX201        ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,JISX208        ,INVALID_STATE  ,JISX208        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,JISX212        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE
+    INVALID_STATE   ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,ASCII          ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,JISX201        ,HWKANA_7BIT    ,JISX201        ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,JISX208        ,INVALID_STATE  ,JISX208        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,JISX208        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,JISX212        ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
     },
-
     {
 /*      0                1               2               3               4               5               6               7               8               9    */
-
-        INVALID_STATE   ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,ASCII
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,JISX201        ,JISX201        ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,JISX208        ,GB2312         ,JISX208        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,ISO8859_1
-        ,ISO8859_7      ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,KSC5601        ,JISX212        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE
+    INVALID_STATE   ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,ASCII          ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,JISX201        ,HWKANA_7BIT    ,JISX201        ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,JISX208        ,GB2312         ,JISX208        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,ISO8859_1      ,ISO8859_7      ,JISX208        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,KSC5601        ,JISX212        ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    },
+    {
+/*      0                1               2               3               4               5               6               7               8               9    */
+    INVALID_STATE   ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,ASCII          ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,JISX201        ,HWKANA_7BIT    ,JISX201        ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,JISX208        ,GB2312         ,JISX208        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,ISO8859_1      ,ISO8859_7      ,JISX208        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,KSC5601        ,JISX212        ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    },
+    {
+/*      0                1               2               3               4               5               6               7               8               9    */
+    INVALID_STATE   ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,ASCII          ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,JISX201        ,HWKANA_7BIT    ,JISX201        ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,JISX208        ,GB2312         ,JISX208        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,ISO8859_1      ,ISO8859_7      ,JISX208        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,KSC5601        ,JISX212        ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
     }
 };
 
@@ -1547,9 +1601,46 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
         if(myTarget < args->targetLimit){
 
             mySourceChar= (unsigned char) *mySource++;
+            
+            switch(mySourceChar){
 
-            /*consume the escape sequence*/
-            if(myData->key!=0 || mySourceChar== ESC_2022){
+            case UCNV_SI:
+                 if(myData->version==3 && *toUnicodeStatus==0x00){
+                    if(myData->toUnicodeSaveState!=-1){
+                        *currentState = (StateEnum) myData->toUnicodeSaveState;
+                        continue;
+                    }
+                    else{
+                        *err =U_ILLEGAL_CHAR_FOUND;
+                        goto SAVE_STATE;
+                    }
+                
+                }
+                else
+                    goto SAVE_STATE;
+
+            case UCNV_SO:
+                if(myData->version==3 && *toUnicodeStatus==0x00){
+                    myData->toUnicodeSaveState= (int) *currentState;
+                    *currentState = HWKANA_7BIT;
+                    continue;
+                }
+                else
+                    goto SAVE_STATE;
+            default:
+                if(myData->key==0){
+                    if(mySourceChar<=SPACE){
+                        if(*toUnicodeStatus== 0x00){
+                            *currentState = ASCII;
+
+                        }
+                        else
+                            goto SAVE_STATE;
+
+                    }
+                    break;
+                }
+            case ESC_2022:
                 if(*toUnicodeStatus== 0x00){
                     mySource--;
                     changeState_2022(args->converter,&(mySource), 
@@ -1567,70 +1658,71 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                 }
                 else
                     goto SAVE_STATE;
-
-            }
-            else if(mySourceChar<=SPACE){
-                if(*toUnicodeStatus== 0x00){
-                    *currentState = ASCII;
-
-                }
-                else
-                    goto SAVE_STATE;
-
             }
 
             switch(myConverterType[*currentState]){
 
-                 case ASCII1:
-                    if(*toUnicodeStatus== 0x00 && mySourceChar < 0x7F){
-                        targetUniChar = (UChar) mySourceChar;
-                    }
-                    break;
+            case ASCII1:
+                if( mySourceChar < 0x7F){
+                    targetUniChar = (UChar) mySourceChar;
+                }
+                else if((uint8_t)(mySourceChar - 0xa1) <= (0xdf - 0xa1) && myData->version==4) {
+                    /* 8-bit halfwidth katakana in any single-byte mode for JIS8 */
+                    targetUniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(myData->myConverterArray[JISX201]->sharedData, mySourceChar);
+                }
 
-                case SBCS:
-                    if(*toUnicodeStatus== 0x00){
-                        targetUniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(myData->currentConverter->sharedData, mySourceChar);
-                    }
-                    break;
+                break;
 
-                case DBCS:
-                    if(*toUnicodeStatus== 0x00){
-                        *toUnicodeStatus= (UChar) mySourceChar;
-                        continue;
-                    }
-                    else{
-                        const char *pBuf;
+            case SBCS:
+                if((uint8_t)(mySourceChar - 0xa1) <= (0xdf - 0xa1) && myData->version==4) {
+                    /* 8-bit halfwidth katakana in any single-byte mode for JIS8 */
+                    targetUniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(myData->myConverterArray[JISX201]->sharedData, mySourceChar);
+                }
+                else if(*currentState==HWKANA_7BIT){
+                    targetUniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(myData->myConverterArray[JISX201]->sharedData, mySourceChar+0x80);   
+                }
+                else {
+                    targetUniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(myData->currentConverter->sharedData, mySourceChar);
+                }
 
-                        tempBuf[0] = (char) args->converter->toUnicodeStatus;
-                        tempBuf[1] = (char) mySourceChar;
-                        mySourceChar+= (args->converter->toUnicodeStatus)<<8;
-                        *toUnicodeStatus= 0;
-                        pBuf = tempBuf;
-                        targetUniChar = _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData, &pBuf, tempBuf+2, FALSE);
-                    }
-                    break;
+                break;
 
-                case LATIN1:
-                    if(args->converter->fromUnicodeStatus == 0x00 && mySourceChar < 0x100){
-                        targetUniChar = (UChar) mySourceChar;
+            case DBCS:
+                if(*toUnicodeStatus== 0x00){
+                    *toUnicodeStatus= (UChar) mySourceChar;
+                    continue;
+                }
+                else{
+                    const char *pBuf;
 
-                    }
-                    break;
+                    tempBuf[0] = (char) args->converter->toUnicodeStatus;
+                    tempBuf[1] = (char) mySourceChar;
+                    mySourceChar+= (args->converter->toUnicodeStatus)<<8;
+                    *toUnicodeStatus= 0;
+                    pBuf = tempBuf;
+                    targetUniChar = _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData, &pBuf, tempBuf+2, args->converter->useFallback);
+                }
+                break;
 
-                case INVALID_STATE:
-                    *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                    args->target = myTarget;
-                    args->source = mySource;
-                    return;
+            case LATIN1:
+                
+                targetUniChar = (UChar) mySourceChar;
+                break;
 
-                default:
-                    /* For non-valid state MBCS and others */
-                    break;
+            case INVALID_STATE:
+                *err = U_ILLEGAL_ESCAPE_SEQUENCE;
+                args->target = myTarget;
+                args->source = mySource;
+                return;
+
+            default:
+                /* For non-valid state MBCS and others */
+                break;
             }
             if(targetUniChar < 0xfffe){
                 if(args->offsets){
                     args->offsets[myTarget - args->target]= mySource - args->source - 2 
-                                                            +(myConverterType[*currentState] < SBCS);
+                                                            +(myConverterType[*currentState] <= SBCS);
 
                 }
                 *(myTarget++)=(UChar)targetUniChar;
@@ -1770,6 +1862,15 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
     if(args->converter->fromUSurrogateLead!=0 && myTargetIndex <targetLength) {
         goto getTrail;
     }
+    /* if the version is 1 then the user is requesting 
+     * conversion with ibm-25546 pass the arguments to 
+     * MBCS converter and return
+     */
+    if(myConverterData->version==1){
+        _MBCSFromUnicodeWithOffsets(args,err);
+        return;
+    }
+
     /*writing the char to the output stream */
     while (mySourceIndex < mySourceLength){
 
@@ -1785,8 +1886,8 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
             /* only DBCS or SBCS characters are expected*/
             /* DB haracters with high bit set to 1 are expected */
             if(length > 2 || length==0 ||(((targetUniChar & 0x8080) != 0x8080)&& length==2)){
-                reason =UCNV_UNASSIGNED;
-                *err =U_INVALID_CHAR_FOUND;
+
+                targetUniChar=missingCharMarker;
             }
             if (targetUniChar != missingCharMarker){
 
@@ -1841,6 +1942,11 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
 
             }
             else{
+                /* oops.. the code point is unassingned
+                 * set the error and reason
+                 */
+                reason =UCNV_UNASSIGNED;
+                *err =U_INVALID_CHAR_FOUND;
                 /*check if the char is a First surrogate*/
                 if(UTF_IS_SURROGATE(mySourceChar)) {
                     if(UTF_IS_SURROGATE_FIRST(mySourceChar)) {
@@ -1854,7 +1960,8 @@ getTrail:
                                 ++mySourceIndex;
                                 mySourceChar=UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead, trail);
                                 args->converter->fromUSurrogateLead=0x00;
-                                /* convert this surrogate code point */
+                                /* there are no surrogates in KSC5601*/
+                                reason=UCNV_UNASSIGNED;
                                 /* exit this condition tree */
                             } else {
                                 /* this is an unmatched lead code unit (1st surrogate) */
@@ -1965,6 +2072,64 @@ getTrail:
 
 /************************ To Unicode ***************************************/
 
+U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterToUnicodeArgs *args,
+                                                            UErrorCode* err){
+    int32_t myOffset=0;
+    int32_t base = 0;
+    const char* mySourceLimit;
+    char const* sourceStart;
+    UConverter* saveThis;
+    int plane =0; /*dummy variable */
+    UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
+    do{
+
+        /*Find the end of the buffer e.g : Next Escape Seq | end of Buffer*/
+        mySourceLimit = getEndOfBuffer_2022(&(args->source), args->sourceLimit, args->flush);
+
+        if (args->converter->mode == UCNV_SO) /*Already doing some conversion*/{
+            const UChar* myTargetStart = args->target;
+            saveThis = args->converter;
+            args->offsets = NULL;
+            args->converter = myData->currentConverter;
+            ucnv_toUnicode(args->converter,
+                &args->target,
+                args->targetLimit,
+                &args->source,
+                mySourceLimit,
+                args->offsets,
+                args->flush,
+                err);
+            args->converter = saveThis;
+            if(args->offsets){
+                int32_t lim =  args->target - myTargetStart;
+                int32_t i = 0;
+                for (i=base; i < lim;i++){
+                    args->offsets[i] += myOffset;
+                }
+                base += lim;
+            }
+        }
+
+        /*-Done with buffer with entire buffer
+        -Error while converting
+        */
+        if (U_FAILURE(*err) || (args->source == args->sourceLimit)) 
+            return;
+
+        sourceStart = args->source;
+        changeState_2022(args->converter,
+               &(args->source), 
+               args->sourceLimit,
+               TRUE,
+               ISO_2022,
+               &plane,
+               err);
+        /* args->source = sourceStart; */
+
+
+    }while(args->source < args->sourceLimit);
+    /* return*/
+}
 
 U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                                             UErrorCode* err){
@@ -1987,7 +2152,10 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeA
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-
+    if(myData->version==1){
+      UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(args,err);
+      return;
+    }
     while(mySource< args->sourceLimit){
 
         targetUniChar = missingCharMarker;
@@ -2146,6 +2314,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeA
 
     args->target = myTarget;
     args->source = mySource;
+
 }
 
 /*************************** END ISO2022-KR *********************************/
@@ -2245,7 +2414,18 @@ static const char* escSeqCharsCN[10] ={
         "\x1B\x24\x2B\x4C", /* CNS 11643-1992 Plane 6 */
         "\x1B\x24\x2B\x4D"  /* CNS 11643-1992 Plane 7 */
 };
-
+static int escSeqCharsLenCN[10] = {
+     sizeof(escSeqCharsCN[0])-3,
+     sizeof(escSeqCharsCN[1]),
+     sizeof(escSeqCharsCN[2]),
+     sizeof(escSeqCharsCN[3]),
+     sizeof(escSeqCharsCN[4]),
+     sizeof(escSeqCharsCN[5]),
+     sizeof(escSeqCharsCN[6]),
+     sizeof(escSeqCharsCN[7]),
+     sizeof(escSeqCharsCN[8]),
+     sizeof(escSeqCharsCN[9]),
+};
 static const char* shiftSeqCharsCN[10] ={
         "",
         (const char*) "\x0E",
@@ -2257,6 +2437,18 @@ static const char* shiftSeqCharsCN[10] ={
         UCNV_SS3,
         UCNV_SS3,
         UCNV_SS3
+};
+static int shiftSeqCharsLenCN[10] ={
+     sizeof(shiftSeqCharsCN[0])-4,
+     sizeof(shiftSeqCharsCN[1])-3,
+     sizeof(shiftSeqCharsCN[2])-3,
+     sizeof(shiftSeqCharsCN[3])-3,
+     sizeof(shiftSeqCharsCN[4])-2,
+     sizeof(shiftSeqCharsCN[5])-2,
+     sizeof(shiftSeqCharsCN[6])-2,
+     sizeof(shiftSeqCharsCN[7])-2,
+     sizeof(shiftSeqCharsCN[8])-2,
+     sizeof(shiftSeqCharsCN[9])-2,
 };
 
 typedef enum  {
@@ -2296,7 +2488,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnic
 
     /* state variables*/
     StateEnumCN* currentState       = (StateEnumCN*)&converterData->fromUnicodeCurrentState;
-    StateEnumCN* initIterState      = (StateEnumCN*)&converterData->initIterState;
+    StateEnumCN initIterState      = ASCII_1;//(StateEnumCN*)&converterData->initIterState;
     UConverter** currentConverter = &converterData->fromUnicodeConverter;
     UBool* isShiftAppended        = &converterData->isShiftAppended;
     UBool* isEscapeAppended       = &converterData->isEscapeAppended;
@@ -2313,7 +2505,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnic
         return;
     }
 
-    *initIterState = *currentState;
+    initIterState = *currentState;
 
     /* check if the last codepoint of previous buffer was a lead surrogate*/
     if(args->converter->fromUSurrogateLead!=0 && target< targetLimit) {
@@ -2322,10 +2514,8 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnic
 
 
     while( source < sourceLimit){
-        *currentConverter = (*currentConverter==NULL) ?
-                converterData->myConverterArray[0] :
-                converterData->myConverterArray[(int)*currentState];
 
+        *currentConverter =converterData->myConverterArray[(*currentConverter==NULL) ? 0 : (int)*currentState];
         targetUniChar =missingCharMarker;
         lPlane =0;
 
@@ -2385,33 +2575,33 @@ getTrail:
                         len= _MBCSFromUChar32((*currentConverter)->sharedData,sourceChar,
                                                     &targetValue,args->converter->useFallback);
                         switch(len){
-                            case 0:
+                        case 0:
+                            targetUniChar = missingCharMarker;
+                            break;
+                        case 2:
+                            if(( converterData->version) == 0 && *currentState ==ISO_IR_165){
                                 targetUniChar = missingCharMarker;
-                                break;
-                            case 2:
-                                if(( converterData->version) == 0 && *currentState ==ISO_IR_165){
-                                    targetUniChar = missingCharMarker;
-                                }else{
-                                    targetUniChar = (UChar32) targetValue;
-                                }
-                                break;
-                            case 3:
+                            }else{
                                 targetUniChar = (UChar32) targetValue;
-                                planeVal = (uint8_t) ((targetValue)>>16);
-                                if(planeVal >0x80 && planeVal<0x89){
-                                    lPlane = (int)(planeVal - 0x80);
-                                    targetUniChar -= (planeVal<<16);
-                                }else {
-                                    lPlane =-1;
-                                }
-                                if(converterData->version == 0 && lPlane >2){
-                                    targetUniChar = missingCharMarker;
-                                }
-                                break;
-                            default:
-                                reason =UCNV_ILLEGAL;
-                                *err =U_INVALID_CHAR_FOUND;
-                                break;
+                            }
+                            break;
+                        case 3:
+                            targetUniChar = (UChar32) targetValue;
+                            planeVal = (uint8_t) ((targetValue)>>16);
+                            if(planeVal >0x80 && planeVal<0x89){
+                                lPlane = (int)(planeVal - 0x80);
+                                targetUniChar -= (planeVal<<16);
+                            }else {
+                                lPlane =-1;
+                            }
+                            if(converterData->version == 0 && lPlane >2){
+                                targetUniChar = missingCharMarker;
+                            }
+                            break;
+                        default:
+                            reason =UCNV_ILLEGAL;
+                            *err =U_INVALID_CHAR_FOUND;
+                            break;
                         }
                     }else{
                         if(sourceChar < 0x7f){
@@ -2421,17 +2611,15 @@ getTrail:
                     if(targetUniChar==missingCharMarker){
 
                         *currentState=(StateEnumCN)((*currentState<3)? *currentState+1:0);
-
-                        *currentConverter = (*currentConverter == NULL) ?
-                                   converterData->myConverterArray[0] :
-                                   converterData->myConverterArray[(int)*currentState];
-
+                        *currentConverter =converterData->myConverterArray[(*currentConverter==NULL) ? 0 : (int)*currentState];
                         targetUniChar =missingCharMarker;
                         *isEscapeAppended = FALSE;
                         *isShiftAppended = FALSE;
 
                     }
-                }while(targetUniChar==missingCharMarker && *initIterState != *currentState);
+                    else
+                        break;
+                }while(initIterState != *currentState);
 
             }
 
@@ -2440,40 +2628,37 @@ getTrail:
                 args->converter->fromUnicodeStatus=(UBool) (*currentState > ASCII_1);
                 /* Append the escpace sequence */
                 if(!*isEscapeAppended ||(*plane != lPlane)){
-
-                    escSeq = (*currentState==CNS_11643) ? 
-                                escSeqCharsCN[(int)*currentState+lPlane-1]:
-                                escSeqCharsCN[(int)*currentState];
-                    len =strlen(escSeq);
-
+                    int temp =0;
+                    temp =(*currentState==CNS_11643) ? ((int)*currentState+lPlane-1):(int)*currentState ;
+                    escSeq = escSeqCharsCN[temp];
+                    len =escSeqCharsLenCN[temp];
                     CONCAT_ESCAPE_EX(args, target, targetLimit, offsets, escSeq,len,err);
                     *plane=lPlane;
                     *isEscapeAppended=TRUE;
-
                 }
 
                 /* Append Shift Sequences */
                 switch(*currentState){
-                    case ASCII1:
-                        break;
-                    case GB2312_1:
-                        /*falls through */
-                    case ISO_IR_165:
-                             if(!*isShiftAppended){
-                                len =strlen(shiftSeqCharsCN[*currentState]);
-                                escSeq = shiftSeqCharsCN[*currentState];
-                                CONCAT_ESCAPE_EX(args, target, targetLimit, offsets, escSeq,len,err);
-                                *isShiftAppended=TRUE;
-                             }
-                             break;
-                    default:
-                            len =strlen(shiftSeqCharsCN[*currentState+*plane]);
-                            escSeq = shiftSeqCharsCN[*currentState+*plane];
+                case ASCII1:
+                    break;
+                case GB2312_1:
+                    /*falls through */
+                case ISO_IR_165:
+                         if(!*isShiftAppended){
+                            len =shiftSeqCharsLenCN[*currentState];
+                            escSeq = shiftSeqCharsCN[*currentState];
                             CONCAT_ESCAPE_EX(args, target, targetLimit, offsets, escSeq,len,err);
-                            break;
+                            *isShiftAppended=TRUE;
+                         }
+                         break;
+                default:
+                        len =strlen(shiftSeqCharsCN[*currentState+*plane]);
+                        escSeq = shiftSeqCharsCN[*currentState+*plane];
+                        CONCAT_ESCAPE_EX(args, target, targetLimit, offsets, escSeq,len,err);
+                        break;
                 }
 
-                *initIterState = *currentState;
+                initIterState = *currentState;
 
                 /* write the targetUniChar  to target */
                 if(targetUniChar <= 0x00FF){
@@ -2543,7 +2728,7 @@ callback:
                     args->source = source;
                     args->offsets = offsets;
 
-                    *currentState= *initIterState = ASCII_1;
+                    *currentState= initIterState = ASCII_1;
                     /*copies current values for the ErrorFunctor to update */
                     /*Calls the ErrorFunctor */
                     args->converter->fromUCharErrorBehaviour ( args->converter->fromUContext, 
@@ -2607,30 +2792,27 @@ callback:
 
 /*************** to unicode *******************/
 static StateEnumCN nextStateToUnicodeCN[2][MAX_STATES_2022]= {
-
     {
 /*      0                1               2               3               4               5               6               7               8               9    */
-
-         INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,GB2312_1       ,INVALID_STATE  ,INVALID_STATE  ,CNS_11643      ,CNS_11643
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE
+     INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,GB2312_1       ,INVALID_STATE  ,INVALID_STATE
+    ,CNS_11643      ,CNS_11643      ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
     },
-
     {
 /*      0                1               2               3               4               5               6               7               8               9    */
-         INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,GB2312_1       ,INVALID_STATE  ,ISO_IR_165     ,CNS_11643      ,CNS_11643
-        ,CNS_11643      ,CNS_11643      ,CNS_11643      ,CNS_11643      ,CNS_11643      ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
-        ,INVALID_STATE  ,INVALID_STATE
+     INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,GB2312_1       ,INVALID_STATE  ,ISO_IR_165
+    ,CNS_11643      ,CNS_11643      ,CNS_11643      ,CNS_11643      ,CNS_11643      ,CNS_11643      ,CNS_11643      ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
+    ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
     }
 };
 
@@ -2653,112 +2835,114 @@ static void changeState_2022(UConverter* _this,
     do{
 
         value = getKey_2022(**source,(int32_t *) &key, &offset);
+        
         switch (value){
-            case VALID_NON_TERMINAL_2022 : 
-                break;
 
-            case VALID_TERMINAL_2022:
-                {
-                    (*source)++;
-                    chosenConverterName = escSeqStateTable_Result_2022[offset];
-                    key = 0;
-                    goto DONE;
-                };
-                break;
+        case VALID_NON_TERMINAL_2022 : 
+            break;
 
-            case INVALID_2022:
-                {
-                    myData2022->key = 0;
-                    *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                    return;
-                }
-            case VALID_SS2_SEQUENCE:
-                /*falls through*/
+        case VALID_TERMINAL_2022:
+            {
+                (*source)++;
+                chosenConverterName = escSeqStateTable_Result_2022[offset];
+                key = 0;
+                goto DONE;
+            };
+            break;
 
-            case VALID_SS3_SEQUENCE:
-                {
-                    (*source)++;
-                    key = 0;
-                    goto DONE;
-                }
+        case INVALID_2022:
+            {
+                myData2022->key = 0;
+                *err = U_ILLEGAL_ESCAPE_SEQUENCE;
+                return;
+            }
+        case VALID_SS2_SEQUENCE:
+            /*falls through*/
 
-            case VALID_MAYBE_TERMINAL_2022:
-                {
-                    const char* mySource = (*source+1);
-                    int32_t myKey = key;
-                    UCNV_TableStates_2022 myValue = value;
-                    int32_t myOffset=0;
-                    if(*mySource==ESC_2022){
-                        while ((mySource < sourceLimit) && 
-                            ((myValue == VALID_MAYBE_TERMINAL_2022)||(myValue == VALID_NON_TERMINAL_2022))){
-                            myValue = getKey_2022(*(mySource++), &myKey, &myOffset);
-                        }
+        case VALID_SS3_SEQUENCE:
+            {
+                (*source)++;
+                key = 0;
+                goto DONE;
+            }
+
+        case VALID_MAYBE_TERMINAL_2022:
+            {
+                const char* mySource = (*source+1);
+                int32_t myKey = key;
+                UCNV_TableStates_2022 myValue = value;
+                int32_t myOffset=0;
+                if(*mySource==ESC_2022){
+                    while ((mySource < sourceLimit) && 
+                        ((myValue == VALID_MAYBE_TERMINAL_2022)||(myValue == VALID_NON_TERMINAL_2022))){
+                        myValue = getKey_2022(*(mySource++), &myKey, &myOffset);
                     }
-                    else{
+                }
+                else{
+                    (*source)++;
+                    myValue=(UCNV_TableStates_2022) 1;
+                    myOffset = 8;
+                }
+
+                switch (myValue){
+                case INVALID_2022:
+                    {
+                        /*Backs off*/
+                        chosenConverterName = escSeqStateTable_Result_2022[offset];
+                        value = VALID_TERMINAL_2022;
+                        goto DONE;
+                    };
+                    break;
+
+                case VALID_TERMINAL_2022:
+                    {
+                        /*uses longer escape sequence*/
+                        chosenConverterName = escSeqStateTable_Result_2022[myOffset];
+                        key = 0;
+                        value = VALID_TERMINAL_2022;
+                        goto DONE;
+                    };
+                    break;
+
+                /* Not expected. Added to make the gcc happy */
+                case VALID_SS2_SEQUENCE:
+                    /*falls through*/
+                /* Not expected. Added to make the gcc happy */
+                case VALID_SS3_SEQUENCE:
+                    {
                         (*source)++;
-                        myValue=(UCNV_TableStates_2022) 1;
-                        myOffset = 7;
+                        key = 0;
+                        goto DONE;
                     }
 
-                    switch (myValue){
-                        case INVALID_2022:
-                            {
-                                /*Backs off*/
-                                chosenConverterName = escSeqStateTable_Result_2022[offset];
-                                value = VALID_TERMINAL_2022;
-                                goto DONE;
-                            };
-                            break;
-
-                        case VALID_TERMINAL_2022:
-                            {
-                                /*uses longer escape sequence*/
-                                chosenConverterName = escSeqStateTable_Result_2022[myOffset];
-                                key = 0;
-                                value = VALID_TERMINAL_2022;
-                                goto DONE;
-                            };
-                            break;
-
-                        /* Not expected. Added to make the gcc happy */
-                        case VALID_SS2_SEQUENCE:
-                            /*falls through*/
-                        /* Not expected. Added to make the gcc happy */
-                        case VALID_SS3_SEQUENCE:
-                            {
-                                (*source)++;
-                                key = 0;
-                                goto DONE;
-                            }
-
-                        case VALID_NON_TERMINAL_2022: 
-                            /*falls through*/
-                        case VALID_MAYBE_TERMINAL_2022:
-                            {
-                                if (flush){
-                                    /*Backs off*/
-                                    chosenConverterName = escSeqStateTable_Result_2022[offset];
-                                    value = VALID_TERMINAL_2022;
-                                    key = 0;
-                                    goto DONE;
-                                }
-                                else{
-                                    key = myKey;
-                                    value = VALID_NON_TERMINAL_2022;
-                                }
-                            };
-                            break;
+                case VALID_NON_TERMINAL_2022: 
+                    /*falls through*/
+                case VALID_MAYBE_TERMINAL_2022:
+                    {
+                        if (flush){
+                            /*Backs off*/
+                            chosenConverterName = escSeqStateTable_Result_2022[offset];
+                            value = VALID_TERMINAL_2022;
+                            key = 0;
+                            goto DONE;
+                        }
+                        else{
+                            key = myKey;
+                            value = VALID_NON_TERMINAL_2022;
+                        }
                     };
                     break;
                 };
                 break;
+            };
+            break;
         }
     }while (++(*source) < sourceLimit);
 
 DONE:
     myData2022->key = key;
-    if(offset<55 && offset>47){
-        *plane = offset-47;
+    if(offset<57 && offset>49){
+        *plane = offset-49;
     }
 
     if ((value == VALID_NON_TERMINAL_2022) || (value == VALID_MAYBE_TERMINAL_2022)) {
@@ -2771,41 +2955,41 @@ DONE:
         }
         else{
             switch(var){
-                case ISO_2022:
+            case ISO_2022:
+                _this->mode = UCNV_SI;
+                ucnv_close(myData2022->currentConverter);
+                myData2022->currentConverter = myUConverter = ucnv_open(chosenConverterName, err);
+                break;
+            case ISO_2022_JP:
+                {
+                     StateEnum tempState=nextStateToUnicodeJP[myData2022->version][offset];
                     _this->mode = UCNV_SI;
-                    ucnv_close(myData2022->currentConverter);
-                    myData2022->currentConverter = myUConverter = ucnv_open(chosenConverterName, err);
+                    myData2022->currentConverter = myUConverter = 
+                        (tempState!=INVALID_STATE)? myData2022->myConverterArray[tempState]:NULL;
+                    myData2022->toUnicodeCurrentState = tempState;
+                    *err= (tempState==INVALID_STATE)?U_ILLEGAL_ESCAPE_SEQUENCE :U_ZERO_ERROR;
+                }
+                break;
+            case ISO_2022_CN:
+                {
+                     StateEnumCN tempState=nextStateToUnicodeCN[myData2022->version][offset];
+                    _this->mode = UCNV_SI;
+                    myData2022->currentConverter = myUConverter = 
+                        (tempState!=INVALID_STATE)? myData2022->myConverterArray[tempState]:NULL;
+                    myData2022->toUnicodeCurrentState =(StateEnum) tempState;
+                    *err= (tempState==INVALID_STATE)?U_ILLEGAL_ESCAPE_SEQUENCE :U_ZERO_ERROR;
+                }
+                break;
+            case ISO_2022_KR:
+                if(offset==0x30){
+                    _this->mode = UCNV_SI;
+                    myUConverter = myData2022->currentConverter=myData2022->fromUnicodeConverter;
                     break;
-                case ISO_2022_JP:
-                    {
-                         StateEnum tempState=nextStateToUnicodeJP[myData2022->version][offset];
-                        _this->mode = UCNV_SI;
-                        myData2022->currentConverter = myUConverter = 
-                            (tempState!=INVALID_STATE)? myData2022->myConverterArray[tempState]:NULL;
-                        myData2022->toUnicodeCurrentState = tempState;
-                        *err= (tempState==INVALID_STATE)?U_ILLEGAL_ESCAPE_SEQUENCE :U_ZERO_ERROR;
-                    }
-                    break;
-                case ISO_2022_CN:
-                    {
-                         StateEnumCN tempState=nextStateToUnicodeCN[myData2022->version][offset];
-                        _this->mode = UCNV_SI;
-                        myData2022->currentConverter = myUConverter = 
-                            (tempState!=INVALID_STATE)? myData2022->myConverterArray[tempState]:NULL;
-                        myData2022->toUnicodeCurrentState =(StateEnum) tempState;
-                        *err= (tempState==INVALID_STATE)?U_ILLEGAL_ESCAPE_SEQUENCE :U_ZERO_ERROR;
-                    }
-                    break;
-                case ISO_2022_KR:
-                    if(offset==0x2e){
-                        _this->mode = UCNV_SI;
-                        myUConverter = myData2022->currentConverter=myData2022->fromUnicodeConverter;
-                        break;
-                    }
+                }
 
-                default:
-                    myUConverter=NULL;
-                    *err = U_ILLEGAL_ESCAPE_SEQUENCE;
+            default:
+                myUConverter=NULL;
+                *err = U_ILLEGAL_ESCAPE_SEQUENCE;
             }
 
         }
@@ -2861,91 +3045,91 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
 
             switch(mySourceChar){
 
-                case UCNV_SI:
-                    if(args->converter->toUnicodeStatus != 0x00){
-                        break;
-                    }
-                    myData->currentType = ASCII1;
-                    myData->plane=plane = 0;
-                    continue;
+            case UCNV_SI:
+                if(args->converter->toUnicodeStatus != 0x00){
+                    break;
+                }
+                myData->currentType = ASCII1;
+                myData->plane=plane = 0;
+                continue;
 
-                case UCNV_SO:
-                    if(args->converter->toUnicodeStatus != 0x00){
-                        break;
-                    }
+            case UCNV_SO:
+                if(args->converter->toUnicodeStatus != 0x00){
+                    break;
+                }
 
-                    myData->currentType = MBCS;
-                    continue;
+                myData->currentType = MBCS;
+                continue;
 
-                case CR:
-                    /*falls through*/
-                case LF:
-                    if(args->converter->toUnicodeStatus != 0x00){
-                        break;
-                    }
-                    myData->currentType = ASCII1;
-                    myData->plane=plane = 0;
-                    /* falls through */
-                default:
-                    /* if we are in the middle of consuming an escape sequence 
-                     * we fall through else we process the input
-                     */
-                    if(myData->key==0){
-                         if(myData->currentType != ASCII1){
-                            if(args->converter->toUnicodeStatus == 0x00){
-                                args->converter->toUnicodeStatus = (UChar) mySourceChar;
-                                continue;
-                            }
-                            else{
-                                if(plane >0){
-                                    tempBuf[0] = (char) (0x80+plane);
-                                    tempBuf[1] = (char) (args->converter->toUnicodeStatus);
-                                    tempBuf[2] = (char) (mySourceChar);
-                                    tempLimit  = &tempBuf[2]+1;
-
-                                }else{
-                                    tempBuf[0] = (char) args->converter->toUnicodeStatus;
-                                    tempBuf[1] = (char) mySourceChar;
-                                    tempLimit  = &tempBuf[2];
-                                }
-                                mySourceChar+= (uint32_t) args->converter->toUnicodeStatus<<8;
-                                args->converter->toUnicodeStatus = 0;
-                                pBuf = tempBuf;
-                                targetUniChar = _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData, &pBuf, tempLimit, FALSE);
-                            }
+            case CR:
+                /*falls through*/
+            case LF:
+                if(args->converter->toUnicodeStatus != 0x00){
+                    break;
+                }
+                myData->currentType = ASCII1;
+                myData->plane=plane = 0;
+                /* falls through */
+            default:
+                /* if we are in the middle of consuming an escape sequence 
+                 * we fall through else we process the input
+                 */
+                if(myData->key==0){
+                     if(myData->currentType != ASCII1){
+                        if(args->converter->toUnicodeStatus == 0x00){
+                            args->converter->toUnicodeStatus = (UChar) mySourceChar;
+                            continue;
                         }
                         else{
-                            if(args->converter->toUnicodeStatus == 0x00){
-                                targetUniChar = (UChar) mySourceChar;
+                            if(plane >0){
+                                tempBuf[0] = (char) (0x80+plane);
+                                tempBuf[1] = (char) (args->converter->toUnicodeStatus);
+                                tempBuf[2] = (char) (mySourceChar);
+                                tempLimit  = &tempBuf[2]+1;
+
+                            }else{
+                                tempBuf[0] = (char) args->converter->toUnicodeStatus;
+                                tempBuf[1] = (char) mySourceChar;
+                                tempLimit  = &tempBuf[2];
                             }
+                            mySourceChar+= (uint32_t) args->converter->toUnicodeStatus<<8;
+                            args->converter->toUnicodeStatus = 0;
+                            pBuf = tempBuf;
+                            targetUniChar = _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData, &pBuf, tempLimit, FALSE);
                         }
-                        break;
                     }
-                case ESC_2022:
-                    if(args->converter->toUnicodeStatus != 0x00){
-                       break;
+                    else{
+                        if(args->converter->toUnicodeStatus == 0x00){
+                            targetUniChar = (UChar) mySourceChar;
+                        }
                     }
-                    mySource--;
-                    changeState_2022(args->converter,&(mySource), 
-                        args->sourceLimit, args->flush,ISO_2022_CN,&plane,err);
+                    break;
+                }
+            case ESC_2022:
+                if(args->converter->toUnicodeStatus != 0x00){
+                   break;
+                }
+                mySource--;
+                changeState_2022(args->converter,&(mySource), 
+                    args->sourceLimit, args->flush,ISO_2022_CN,&plane,err);
 
-                    myData->plane=plane;
-                    if(plane>0){
-                        myData->currentType = MBCS;
-                    }
-                    else if(myData->currentConverter &&  
-                                uprv_stricmp("latin_1", 
-                                myData->currentConverter->sharedData->staticData->name)==0){
+                myData->plane=plane;
+                if(plane>0){
+                    myData->currentType = MBCS;
+                }
+                else if(myData->currentConverter &&  
+                            uprv_stricmp("latin_1", 
+                            myData->currentConverter->sharedData->staticData->name)==0){
 
-                        myData->currentType=ASCII1;
-                    }
-                    /* invalid or illegal escape sequence */
-                    if(U_FAILURE(*err)){
-                        args->target = myTarget;
-                        args->source = mySource;
-                        return;
-                    }
-                    continue;
+                    myData->currentType=ASCII1;
+                }
+                /* invalid or illegal escape sequence */
+                if(U_FAILURE(*err)){
+                    args->target = myTarget;
+                    args->source = mySource;
+                    return;
+                }
+                continue;
 
             }
             if(targetUniChar < 0xfffe){
@@ -3055,36 +3239,36 @@ _ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorC
 
     p = buffer;
     switch(myConverterData->locale[0]){
-        case 'j':
-               if(myConverterData->fromUnicodeCurrentState!= ASCII){
-                    myConverterData->fromUnicodeCurrentState= ASCII;
-                    myConverterData->currentType = (Cnv2022Type) myConverterType[myConverterData->fromUnicodeCurrentState];
-                    *p++ = '\x1b';
-                    *p++ = '\x28';
-                    *p++ = '\x42';
+    case 'j':
+           if(myConverterData->fromUnicodeCurrentState!= ASCII){
+                myConverterData->fromUnicodeCurrentState= ASCII;
+                myConverterData->currentType = (Cnv2022Type) myConverterType[myConverterData->fromUnicodeCurrentState];
+                *p++ = '\x1b';
+                *p++ = '\x28';
+                *p++ = '\x42';
 
-                }
-                *p++ = cnv->subChar[0];
-                break;
-        case 'c':
-            if(args->converter->fromUnicodeStatus) {
-                    /* DBCS mode and SBCS sub char: change to SBCS */
-                    myConverterData->fromUnicodeCurrentState=ASCII;
-                    *p++ = UCNV_SI;
-                }
-                *p++ = cnv->subChar[0];
-            break;
-        case 'k':
-            if(args->converter->fromUnicodeStatus){
-                args->converter->fromUnicodeStatus=0x00;
-                *p++= UCNV_SI;
             }
-
-            *p++ =  cnv->subChar[0];
-
-        default:
-            /* not expected */
+            *p++ = cnv->subChar[0];
             break;
+    case 'c':
+        if(args->converter->fromUnicodeStatus) {
+                /* DBCS mode and SBCS sub char: change to SBCS */
+                myConverterData->fromUnicodeCurrentState=ASCII;
+                *p++ = UCNV_SI;
+            }
+            *p++ = cnv->subChar[0];
+        break;
+    case 'k':
+        if(args->converter->fromUnicodeStatus){
+            args->converter->fromUnicodeStatus=0x00;
+            *p++= UCNV_SI;
+        }
+
+        *p++ =  cnv->subChar[0];
+
+    default:
+        /* not expected */
+        break;
     }
     ucnv_cbFromUWriteBytes(args,
                            buffer, (int32_t)(p - buffer),
