@@ -529,6 +529,30 @@ void CalendarRegressionTest::dowTest(UBool lenient)
     if (dow != UCAL_SUNDAY) 
         errln("FAIL: Day of week should be SUNDAY Got " + dow);
 
+    if(U_FAILURE(status)) {
+      errln("Error checking Calendar: %s", u_errorName(status));
+      delete cal;
+      return;
+    }
+
+    if(cal->getActualMinimum(UCAL_DAY_OF_WEEK) != min) {
+        errln("FAIL: actual minimum differs from minimum");
+    }
+    if(cal->getActualMinimum(Calendar::DAY_OF_WEEK) != min) {
+        errln("FAIL: actual minimum (Calendar::DAY_OF_WEEK) differs from minimum");
+    }
+    if(((Calendar*)cal)->getActualMinimum(UCAL_DAY_OF_WEEK, status) != min) {
+        errln("FAIL: actual minimum (UCAL_DAY_OF_WEEK, status) differs from minimum");
+    }
+    // Does not exist!
+//    if(((Calendar*)cal)->getActualMinimum(Calendar::DAY_OF_WEEK, status) != min) {
+//        errln("FAIL: actual minimum (Calendar::DAY_OF_WEEK, status) differs from minimum");
+//    }
+    if(U_FAILURE(status)) {
+      errln("Error getting actual minimum: %s", u_errorName(status));
+      return;
+    }
+    
     delete cal;
 }
 
@@ -2134,6 +2158,13 @@ void CalendarRegressionTest::TestJ438(void) {
             int32_t dd = cal.fieldDifference(date2, UCAL_DATE, ec);
             if (failure(ec, "fieldDifference"))
                 break;
+            int32_t dd_x=cal.fieldDifference(date2, Calendar::DATE,ec);
+            if (failure(ec, "fieldDifference(date, Calendar::DATE, ec)"))
+                break;
+            if(dd_x != dd){
+                errln("fieldDifference(UCAL_DATE) and fieldDifference(Calendar::DATE) give different results.\n");
+            }
+
 
             logln(UnicodeString("") +
                   fmt.format(date2, s.remove()) + " - " +
