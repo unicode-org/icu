@@ -231,7 +231,7 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
     }
 
     if (isDataOwned==FALSE) {
-        umtx_lock(&transliteratorDataMutex);
+        //umtx_lock(&transliteratorDataMutex);
     }
     while (index.start < index.limit &&
            loopCount <= loopLimit &&
@@ -239,7 +239,7 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
         ++loopCount;
     }
     if (isDataOwned==FALSE) {
-        umtx_unlock(&transliteratorDataMutex);
+        //umtx_unlock(&transliteratorDataMutex);
     }
 }
 
