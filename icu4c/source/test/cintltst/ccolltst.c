@@ -161,7 +161,7 @@ typedef struct {
     const UChar *end;
 } testContext;
 
-UChar testInc(void *context) {
+UChar U_CALLCONV testInc(void *context) {
     testContext *s = (testContext *)context;
     if(s->start == s->end) {
         return 0xFFFF;

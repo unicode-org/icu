@@ -136,7 +136,7 @@ const static UChar testTargetCases[][MAX_TOKEN_LEN] = {
 
 const static UCollationResult results[] = {
         UCOL_LESS, 
-        UCOL_GREATER,
+        UCOL_LESS, /*UCOL_GREATER,*/
         UCOL_LESS,
         UCOL_GREATER,
         UCOL_GREATER,
@@ -144,7 +144,7 @@ const static UCollationResult results[] = {
         UCOL_LESS,
         UCOL_LESS,
         UCOL_LESS,
-        UCOL_GREATER,                                                          /* 10 */
+        UCOL_LESS, /*UCOL_GREATER,*/                                                          /* 10 */
         UCOL_GREATER,
         UCOL_LESS,
         UCOL_EQUAL,
@@ -236,9 +236,9 @@ const static UChar testAcute[][MAX_TOKEN_LEN] = {
 
 static const UChar testMore[][MAX_TOKEN_LEN] = {
     {(UChar)0x0061 /* 'a' */, (UChar)0x0065 /* 'e' */, 0},
+    {(UChar)0x0061 /* 'a' */, (UChar)0x0066 /* 'f' */, 0},
     { 0x00E6, 0},
     { 0x00C6, 0},
-    {(UChar)0x0061 /* 'a' */, (UChar)0x0066 /* 'f' */, 0},
     {(UChar)0x006F /* 'o' */, (UChar)0x0065 /* 'e' */, 0},
     { 0x0153, 0},
     { 0x0152, 0},

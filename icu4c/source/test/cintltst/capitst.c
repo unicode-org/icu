@@ -33,7 +33,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestCompare,       "tscoll/capitst/TestCompare");
     addTest(root, &TestSortKey,       "tscoll/capitst/TestSortKey");
     addTest(root, &TestHashCode,      "tscoll/capitst/TestHashCode");
-    /*addTest(root, &TestElemIter,      "tscoll/capitst/TestElemIter");*/
+    addTest(root, &TestElemIter,      "tscoll/capitst/TestElemIter");
     addTest(root, &TestGetAll,        "tscoll/capitst/TestGetAll");
     /*addTest(root, &TestGetDefaultRules, "tscoll/capitst/TestGetDefaultRules");*/
     addTest(root, &TestDecomposition, "tscoll/capitst/TestDecomposition");
@@ -155,8 +155,11 @@ void TestProperty()
     u_uastrcpy(target, "AB");
 
     doAssert((ucol_strcoll(col, source, u_strlen(source), target, u_strlen(target)) == UCOL_LESS), "ab < AB comparison failed");
-    u_uastrcpy(source, "black-bird");
-    u_uastrcpy(target, "blackbird");
+/*    u_uastrcpy(source, "black-bird");
+    u_uastrcpy(target, "blackbird"); */
+    u_uastrcpy(target, "black-bird");
+    u_uastrcpy(source, "blackbird");
+
     doAssert((ucol_strcoll(col, source, u_strlen(source), target, u_strlen(target)) == UCOL_GREATER), 
         "black-bird > blackbird comparison failed");
     u_uastrcpy(source, "black bird");
@@ -527,7 +530,10 @@ void TestSortKey()
 {   
     uint8_t *sortk1 = NULL, *sortk2 = NULL, *sortk3 = NULL;
     uint8_t sortk2_compat[] = { 
-        0x02, 0x54, 0x02, 0x55, 0x02, 0x56, 0x02, 0x57, 0x02, 0x54, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x00
+        /*this is a 1.8 sortkey */
+        0x17, 0x19, 0x1B, 0x1D, 0x17, 0x01, 0x08, 0x01, 0x08, 0x00
+        /*this is a 1.7 sortkey */
+        /*0x02, 0x54, 0x02, 0x55, 0x02, 0x56, 0x02, 0x57, 0x02, 0x54, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x00*/
         /* this is a 1.6 sortkey */
       /*0x00, 0x53, 0x00, 0x54, 0x00, 0x55, 0x00, 0x56, 0x00, 0x53, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00*/
     };
