@@ -13,11 +13,9 @@
 *******************************************************************************
 */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include "unicode/utypes.h"
 #include "cintltst.h"
+#include "cmemory.h"
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
 
@@ -27,6 +25,7 @@ static void remainderTest(double x, double y, double exp);
 static void doAssert(double expect, double got, const char *message);
 static UBool compareWithNAN(double x, double y);
 
+void addPUtilTest(TestNode** root);
 
 void
 addPUtilTest(TestNode** root)
@@ -58,7 +57,7 @@ static void TestPUtilAPI(){
              expn1, n1, expy1, y1);
     }
     if(VERBOSITY){
-        printf("[float]  x = %f  n = %f y = %f\n", value1, n1, y1);
+        log_verbose("[float]  x = %f  n = %f y = %f\n", value1, n1, y1);
     }
     log_verbose("Testing the API uprv_fmod()\n");
     expn1=uprv_fmod(30.50, 15.00);
@@ -232,7 +231,7 @@ static void TestPUtilAPI(){
         /*dataDirectory=u_getDataDirectory();*/
 
         dataDirectory="directory1";  /*no backslashes*/
-        udataDir=(UChar*)malloc(sizeof(UChar) * (strlen(dataDirectory) + 1));
+        udataDir=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(dataDirectory) + 1));
         u_charsToUChars(dataDirectory, udataDir, (strlen(dataDirectory)+1));
         u_uastrcpy(temp, dataDirectory);
        
@@ -240,14 +239,14 @@ static void TestPUtilAPI(){
             log_err("ERROR: u_charsToUChars failed. Expected %s, Got %s\n", austrdup(temp), austrdup(udataDir));
         }
         log_verbose("Testing UChars to chars\n");
-        charvalue=(char*)malloc(sizeof(char) * (u_strlen(udataDir) + 1));
+        charvalue=(char*)uprv_malloc(sizeof(char) * (u_strlen(udataDir) + 1));
 
         u_UCharsToChars(udataDir, charvalue, (u_strlen(udataDir)+1));
         if(strcmp(charvalue, dataDirectory) != 0){
             log_err("ERROR: u_UCharsToChars failed. Expected %s, Got %s\n", charvalue, dataDirectory);
         }
-        free(charvalue);
-        free(udataDir);
+        uprv_free(charvalue);
+        uprv_free(udataDir);
     }
    
     log_verbose("Testing uprv_timezone()....\n");
