@@ -716,6 +716,7 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
         UObject* service = f->create(key, this, status);
         if (U_FAILURE(status)) {
           delete cacheDescriptorList;
+          delete service;
           return NULL;
         }
         if (service != NULL) {
