@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UTF16Test.java,v $ 
-* $Date: 2002/07/11 21:25:23 $ 
-* $Revision: 1.18 $
+* $Date: 2002/10/26 05:50:40 $ 
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -835,8 +835,8 @@ public final class UTF16Test extends TestFmwk
         String test2     = "test";
         int    testChar1 = 0x74;
         int    testChar2 = 0x20402;
-        int    testChar3 = 0xdc02;
-        int    testChar4 = 0xd841;
+        // int    testChar3 = 0xdc02;
+        // int    testChar4 = 0xd841;
         String test3     = "\ud841\udc02\u0071\udc02\ud841\u0071\ud841\udc02\u0071\u0072\ud841\udc02\u0071\ud841\udc02\u0071\udc02\ud841\u0073";
         String test4     = UCharacter.toString(testChar2);
 
@@ -1042,7 +1042,7 @@ public final class UTF16Test extends TestFmwk
         	     if (UTF16.indexOf(INDEXOF_SUPPLEMENTARY_STRING_, ch, index) !=
         	         expected ||
         	         UTF16.indexOf(INDEXOF_SUPPLEMENTARY_STRING_, 
-        	                       UTF16.toString(ch), index) !=
+        	                       UCharacter.toString(ch), index) !=
         	         expected) {
         	         errln("Failed finding index for supplementary 0x" + 
         	               Integer.toHexString(ch));
@@ -1054,7 +1054,8 @@ public final class UTF16Test extends TestFmwk
         	     if (UTF16.lastIndexOf(INDEXOF_SUPPLEMENTARY_STRING_, ch, 
         	                           index) != expected ||
         	         UTF16.lastIndexOf(INDEXOF_SUPPLEMENTARY_STRING_, 
-        	                           UTF16.toString(ch), index) != expected) 
+        	                           UCharacter.toString(ch), index) 
+                                       != expected) 
         	     {
         	         errln("Failed finding last index for supplementary 0x" + 
         	               Integer.toHexString(ch));
@@ -1172,7 +1173,85 @@ public final class UTF16Test extends TestFmwk
             errln("reverse() failed with supplementary characters");
         }
     }
-  
+    
+    /**
+     * Testing the setter and getter apis for StringComparator
+     */
+    public void TestStringComparator() 
+    {
+        UTF16.StringComparator compare = new UTF16.StringComparator();
+        if (compare.getCodePointCompare() != false) {
+            errln("Default string comparator should be code unit compare");
+        }
+        if (compare.getIgnoreCase() != false) {
+            errln("Default string comparator should be case sensitive compare");
+        }
+        if (compare.getIgnoreCaseOption() 
+            != UTF16.StringComparator.FOLD_CASE_DEFAULT) {
+            errln("Default string comparator should have fold case default compare");
+        }
+        compare.setCodePointCompare(true);
+        if (compare.getCodePointCompare() != true) {
+            errln("Error setting code point compare");
+        }       
+        compare.setCodePointCompare(false);
+        if (compare.getCodePointCompare() != false) {
+            errln("Error setting code point compare");
+        }   
+        compare.setIgnoreCase(true, UTF16.StringComparator.FOLD_CASE_DEFAULT);
+        if (compare.getIgnoreCase() != true
+            || compare.getIgnoreCaseOption() 
+                != UTF16.StringComparator.FOLD_CASE_DEFAULT) {
+            errln("Error setting ignore case and options");
+        }   
+        compare.setIgnoreCase(false, UTF16.StringComparator.FOLD_CASE_EXCLUDE_SPECIAL_I);
+        if (compare.getIgnoreCase() != false
+            || compare.getIgnoreCaseOption() 
+                != UTF16.StringComparator.FOLD_CASE_EXCLUDE_SPECIAL_I) {
+            errln("Error setting ignore case and options");
+        }
+        compare.setIgnoreCase(true, UTF16.StringComparator.FOLD_CASE_EXCLUDE_SPECIAL_I);
+        if (compare.getIgnoreCase() != true
+            || compare.getIgnoreCaseOption() 
+                != UTF16.StringComparator.FOLD_CASE_EXCLUDE_SPECIAL_I) {
+            errln("Error setting ignore case and options");
+        }  
+        compare.setIgnoreCase(false, UTF16.StringComparator.FOLD_CASE_DEFAULT);
+        if (compare.getIgnoreCase() != false
+            || compare.getIgnoreCaseOption() 
+                != UTF16.StringComparator.FOLD_CASE_DEFAULT) {
+            errln("Error setting ignore case and options");
+        }    
+    }
+    
+    public void TestCodePointCompare()
+    {
+        // these strings are in ascending order
+        String str[] = {"\u0061", "\u20ac\ud801", "\u20ac\ud800\udc00",  
+                        "\ud800", "\ud800\uff61", "\udfff", 
+                        "\uff61\udfff", "\uff61\ud800\udc02", "\ud800\udc02",
+                        "\ud84d\udc56"};
+        UTF16.StringComparator cpcompare 
+            = new UTF16.StringComparator(true, false, 
+                                     UTF16.StringComparator.FOLD_CASE_DEFAULT);
+        UTF16.StringComparator cucompare 
+            = new UTF16.StringComparator();
+        for (int i = 0; i < str.length - 1; ++ i) {
+            if (cpcompare.compare(str[i], str[i + 1]) >= 0) {
+                errln("error: compare() in code point order fails for string "
+                      + Utility.hex(str[i]) + " and " 
+                      + Utility.hex(str[i + 1]));
+            }
+            // test code unit compare
+            if (cucompare.compare(str[i], str[i + 1]) 
+                != str[i].compareTo(str[i + 1])) {
+                errln("error: compare() in code unit order fails for string "
+                      + Utility.hex(str[i]) + " and " 
+                      + Utility.hex(str[i + 1]));
+            }
+        }
+    }
+    
     public void TestCaseCompare() 
     {
         String mixed = "\u0061\u0042\u0131\u03a3\u00df\ufb03\ud93f\udfff";
@@ -1262,13 +1341,133 @@ public final class UTF16Test extends TestFmwk
         */
     }
 
+    public void TestHasMoreCodePointsThan()
+    {
+        String str = "\u0061\u0062\ud800\udc00\ud801\udc01\u0063\ud802\u0064"
+                     + "\udc03\u0065\u0066\ud804\udc04\ud805\udc05\u0067";
+        int length = str.length();
+        while (length >= 0) {
+            for (int i = 0; i <= length; ++ i) {
+                String s = str.substring(0, i);
+                for (int number = -1; number <= ((length - i) + 2); ++ number) {
+                    boolean flag = UTF16.hasMoreCodePointsThan(s, number);
+                    if (flag != (UTF16.countCodePoint(s) > number)) {
+                        errln("hasMoreCodePointsThan(" + Utility.hex(s) 
+                              + ", " + number + ") = " + flag + " is wrong");
+                    }
+                }
+            }
+            -- length;
+        }
+        
+        // testing for null bad input 
+        for(length = -1; length <= 1; ++ length) {
+            for (int i = 0; i <= length; ++ i) {
+                for (int number = -2; number <= 2; ++ number) {
+                    boolean flag = UTF16.hasMoreCodePointsThan((String)null, 
+                                                               number);
+                    if (flag != (UTF16.countCodePoint((String)null) > number)) {
+                        errln("hasMoreCodePointsThan(null, " + number + ") = " 
+                        + flag + " is wrong");
+                    }
+                }
+            }
+        }
+        
+        length = str.length();
+        while (length >= 0) {
+            for (int i = 0; i <= length; ++ i) {
+                StringBuffer s = new StringBuffer(str.substring(0, i));
+                for (int number = -1; number <= ((length - i) + 2); ++ number) {
+                    boolean flag = UTF16.hasMoreCodePointsThan(s, number);
+                    if (flag != (UTF16.countCodePoint(s) > number)) {
+                        errln("hasMoreCodePointsThan(" + Utility.hex(s) 
+                              + ", " + number + ") = " + flag + " is wrong");
+                    }
+                }
+            }
+            -- length;
+        }
+        
+        // testing for null bad input 
+        for (length = -1; length <= 1; ++ length) {
+            for (int i = 0; i <= length; ++ i) {
+                for (int number = -2; number <= 2; ++ number) {
+                    boolean flag = UTF16.hasMoreCodePointsThan(
+                                                  (StringBuffer)null, number);
+                    if (flag 
+                        != (UTF16.countCodePoint((StringBuffer)null) > number)) 
+                    {
+                        errln("hasMoreCodePointsThan(null, " + number + ") = " 
+                        + flag + " is wrong");
+                    }
+                }
+            }
+        }
+        
+        char strarray[] = str.toCharArray();
+        while (length >= 0) {
+            for (int limit = 0; limit <= length; ++ limit) {
+                for (int start = 0; start <= limit; ++ start) {
+                    for (int number = -1; number <= ((limit - start) + 2); 
+                         ++ number) {
+                        boolean flag = UTF16.hasMoreCodePointsThan(strarray, 
+                                                      start, limit, number);
+                        if (flag != (UTF16.countCodePoint(strarray, start, 
+                                                          limit) > number)) {
+                            errln("hasMoreCodePointsThan(" 
+                                  + Utility.hex(str.substring(start, limit)) 
+                                  + ", " + start + ", " + limit + ", " + number 
+                                  + ") = " + flag + " is wrong");
+                        }
+                    }
+                }
+            }
+            -- length;
+        }
+        
+        // testing for null bad input 
+        for (length = -1; length <= 1; ++ length) {
+            for (int i = 0; i <= length; ++ i) {
+                for (int number = -2; number <= 2; ++ number) {
+                    boolean flag = UTF16.hasMoreCodePointsThan(
+                                                  (StringBuffer)null, number);
+                    if (flag 
+                        != (UTF16.countCodePoint((StringBuffer)null) > number)) 
+                    {
+                        errln("hasMoreCodePointsThan(null, " + number + ") = " 
+                              + flag + " is wrong");
+                    }
+                }
+            }
+        }
+        
+        // bad input
+        try {
+            UTF16.hasMoreCodePointsThan(strarray, -2, -1, 5);
+            errln("hasMoreCodePointsThan(chararray) with negative indexes has to throw an exception");
+        } catch (Exception e) {
+        }
+        try {
+            UTF16.hasMoreCodePointsThan(strarray, 5, 2, 5);
+            errln("hasMoreCodePointsThan(chararray) with limit less than start index has to throw an exception");
+        } catch (Exception e) {
+        }
+        try {
+            if (UTF16.hasMoreCodePointsThan(strarray, -2, 2, 5)) {
+                errln("hasMoreCodePointsThan(chararray) with negative start indexes can't return true");
+            }
+        } catch (Exception e) {
+        }   
+    }
+    
     public static void main(String[] arg)
     {
     	try
         {
             UTF16Test test = new UTF16Test();
-            // test.TestIndexOf();
             test.run(arg);
+            // test.TestCodePointCompare();
         }
         catch (Exception e)
         {
@@ -1294,5 +1493,7 @@ public final class UTF16Test extends TestFmwk
 	private final static String INDEXOF_SUPPLEMENTARY_STR_ = "\udc02\ud841";
     private final static int INDEXOF_SUPPLEMENTARY_STR_INDEX_[] = 
                                                     {3, 16};								                
+                                                    
+    // private methods ---------------------------------------------------
 }
 
