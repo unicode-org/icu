@@ -30,6 +30,7 @@
 #include <stdlib.h>
 
 #include "cmemory.h"
+#include "cstring.h"
 
 // This is the UConverter headerfile
 #include "unicode/ucnv.h"
@@ -217,16 +218,51 @@ static int printConverters(const char *pname, const char *lookfor, int canon)
 }
 
 // Print all available transliterators
-static int printTransliterators(const char *pname) {
+static int printTransliterators(const char *pname, int canon) {
     int32_t numtrans = utrans_countAvailableIDs(), i;
-    char buf[512];
-    
+    int buflen = 512;
+    char *buf = (char *) uprv_malloc(buflen);
+    char staticbuf[512];
+
+    char sepchar = canon ? '\n' : ' ';
+
+    if (!buf) {
+        buf = staticbuf;
+        buflen = sizeof(staticbuf);
+    }
+
     for (i = 0; i < numtrans; ++i) {
-        utrans_getAvailableID(i, buf, sizeof(buf));
+        int32_t len = utrans_getAvailableID(i, buf, buflen);
+        if (len >= buflen -1) {
+            if (buf != staticbuf) {
+                buflen <<= 1;
+                if (buflen < len) {
+                    buflen = len + 64;
+                }
+                buf = (char *) uprv_realloc(buf, buflen);
+                if (!buf) {
+                    buf = staticbuf;
+                    buflen = sizeof(staticbuf);
+                }
+            }
+            utrans_getAvailableID(i, buf, buflen);
+            if (len >= buflen) {
+                uprv_strcpy(buf + buflen - 4, "...");
+            }
+        }
+
         printf("%s", buf);
         if (i < numtrans - 1) {
-            putchar(' ');
+            putchar(sepchar);
         }
+    }
+
+    if (sepchar != '\n') {
+        putchar('\n');
+    }
+
+    if (buf != staticbuf) {
+        uprv_free(buf);
     }
 
     return 0;
@@ -521,7 +557,7 @@ int main(int argc, char** argv)
     if (printConvs || printName) {
         return printConverters(pname, printName, printCanon) ? 2 : 0;
     } else if (printTranslits) {
-        return printTransliterators(pname) ? 3 : 0;
+        return printTransliterators(pname, printCanon) ? 3 : 0;
     }
 
     if (fromcpage==0 && tocpage==0)
