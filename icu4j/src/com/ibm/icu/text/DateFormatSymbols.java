@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateFormatSymbols.java,v $
- * $Date: 2004/02/10 21:52:48 $
- * $Revision: 1.25 $
+ * $Date: 2004/03/09 22:24:14 $
+ * $Revision: 1.26 $
  *
  *****************************************************************************************
  */
@@ -185,9 +185,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Unlocalized date-time pattern characters. For example: 'y', 'd', etc.
-     * All locales use the same these unlocalized pattern characters.
+     * All locales use the same unlocalized pattern characters.
      */
-    static final String  patternChars = "GyMdkHmsSEDFwWahKzu";
+    static final String  patternChars = "GyMdkHmsSEDFwWahKzYeugAZ";
 
     /**
      * Localized date-time pattern characters. For example, a locale may
