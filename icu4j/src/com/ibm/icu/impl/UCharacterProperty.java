@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/10/31 22:35:19 $ 
-* $Revision: 1.19 $
+* $Date: 2002/12/10 21:47:31 $ 
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -360,6 +360,28 @@ public final class UCharacterProperty implements Trie.DataManipulate
                      m_additionalTrie_.getCodePointValue(codepoint) + column]; 
    	} 
    	
+    public boolean isOptimizedLetter(int ch)
+    {
+        return 0 != (MY_MASK 
+            & m_property_[m_trie_.m_data_[
+            (m_trie_.m_index_[ch >> 5] << 2) + (ch & 0x1F)]]);
+        /*
+        int index = (m_trie_.m_index_[ch >> 5] << 2) + (ch & 0x1F);
+        return 0 != (MY_MASK 
+            & m_property_[index > 0 
+                ? m_trie_.m_data_[index]
+                : m_trie_.m_initialValue_]);
+        */
+    }
+    
+    static final int MY_MASK = UCharacterProperty.TYPE_MASK
+        & ((1<<UCharacterCategory.UPPERCASE_LETTER) |
+            (1<<UCharacterCategory.LOWERCASE_LETTER) | 
+            (1<<UCharacterCategory.TITLECASE_LETTER) | 
+            (1<<UCharacterCategory.MODIFIER_LETTER) |
+            (1<<UCharacterCategory.OTHER_LETTER));
+
+
    	/**
      * <p>Get the "age" of the code point.</p>
      * <p>The "age" is the Unicode version when the code point was first
@@ -1294,6 +1316,16 @@ public final class UCharacterProperty implements Trie.DataManipulate
     public int getMaxBlockScriptValues() 
     {
         return m_maxBlockScriptValue_;
+    }
+    
+    /**
+     * Gets the type mask
+     * @param type character type
+     * @return mask
+     */
+    public static int getMask(int type) 
+    {
+        return 1 << type;
     }
     
     // protected variables -----------------------------------------------

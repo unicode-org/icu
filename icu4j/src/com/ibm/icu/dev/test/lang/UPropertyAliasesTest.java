@@ -100,8 +100,10 @@ public class UPropertyAliasesTest extends TestFmwk {
                     break;
                 } else if (p>=UProperty.DOUBLE_LIMIT) {
                     p = UProperty.STRING_START - 1;
-                } else if (p>=UProperty.INT_LIMIT) {
+                } else if (p>=UProperty.MASK_LIMIT) {
                     p = UProperty.DOUBLE_START - 1;
+                } else if (p>=UProperty.INT_LIMIT) {
+                    p = UProperty.MASK_START - 1;
                 } else if (p>=UProperty.BINARY_LIMIT) {
                     p = UProperty.INT_START - 1;
                 }
