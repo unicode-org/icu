@@ -34,6 +34,7 @@
 class SimpleTimeZone;
 struct TZHeader;
 struct OffsetIndex;
+struct TZEquivalencyGroup;
   
 /**
  * <code>TimeZone</code> represents a time zone offset, and also figures out daylight
@@ -170,6 +171,44 @@ public:
      * @stable
      */
     static const UnicodeString** const createAvailableIDs(int32_t& numIDs);
+
+    /**
+     * Returns the number of IDs in the equivalency group that
+     * includes the given ID.  An equivalency group contains zones
+     * that have the same GMT offset and rules.
+     *
+     * <p>The returned count includes the given ID; it is always >= 1.
+     * The given ID must be a system time zone.  If it is not, returns
+     * zero.
+     * @param id a system time zone ID
+     * @return the number of zones in the equivalency group containing
+     * 'id', or zero if 'id' is not a valid system ID
+     * @see #getEquivalentID
+     * @draft
+     */
+    static int32_t countEquivalentIDs(const UnicodeString& id);
+
+    /**
+     * Returns an ID in the equivalency group that
+     * includes the given ID.  An equivalency group contains zones
+     * that have the same GMT offset and rules.
+     *
+     * <p>The given index must be in the range 0..n-1, where n is the
+     * value returned by <code>countEquivalentIDs(id)</code>.  For
+     * some value of 'index', the returned value will be equal to the
+     * given id.  If the given id is not a valid system time zone, or
+     * if 'index' is out of range, then returns an empty string.
+     * @param id a system time zone ID
+     * @param index a value from 0 to n-1, where n is the value
+     * returned by <code>countEquivalentIDs(id)</code>
+     * @return the ID of the index-th zone in the equivalency group
+     * containing 'id', or an empty string if 'id' is not a valid
+     * system ID or 'index' is out of range
+     * @see #countEquivalentIDs
+     * @draft
+     */
+    static const UnicodeString getEquivalentID(const UnicodeString& id,
+                                               int32_t index);
 
     /**
      * Creates a new copy of the default TimeZone for this host. Unless the default time
@@ -543,6 +582,9 @@ private:
 
     // See source file for documentation
     static TimeZone* createSystemTimeZone(const UnicodeString& name);
+
+    // See source file for documentation
+    static const TZEquivalencyGroup* lookupEquivalencyGroup(const UnicodeString& id);
 
     UnicodeString           fID;    // this time zone's ID
 };

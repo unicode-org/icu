@@ -17,7 +17,7 @@
 // class TimeZoneRegressionTest
 // *****************************************************************************
 
-#define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
+#define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
 
 void 
 TimeZoneRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
@@ -25,22 +25,23 @@ TimeZoneRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
     // if (exec) logln((UnicodeString)"TestSuite NumberFormatRegressionTest");
     switch (index) {
 
-        CASE(0, Test4052967)
-        CASE(1, Test4073209)
-        CASE(2, Test4073215)
-        CASE(3, Test4084933)
-        CASE(4, Test4096952)
-        CASE(5, Test4109314)
-        CASE(6, Test4126678)
-        CASE(7, Test4151406)
-        CASE(8, Test4151429)
-        CASE(9, Test4154537)
-        CASE(10, Test4154542)
-        CASE(11, Test4154650)
-        CASE(12, Test4154525)
-        CASE(13, Test4162593)
-        CASE(14, TestJ186)
-        CASE(15, TestJDK12API)
+        CASE(0, Test4052967);
+        CASE(1, Test4073209);
+        CASE(2, Test4073215);
+        CASE(3, Test4084933);
+        CASE(4, Test4096952);
+        CASE(5, Test4109314);
+        CASE(6, Test4126678);
+        CASE(7, Test4151406);
+        CASE(8, Test4151429);
+        CASE(9, Test4154537);
+        CASE(10, Test4154542);
+        CASE(11, Test4154650);
+        CASE(12, Test4154525);
+        CASE(13, Test4162593);
+        CASE(14, TestJ186);
+        CASE(15, TestJ449);
+        CASE(16, TestJDK12API);
 
         default: name = ""; break;
     }
@@ -875,6 +876,63 @@ void TimeZoneRegressionTest::TestJ186() {
     if (z.getDSTSavings() == 0) {
         errln("Fail: dst savings == 0 with rules set");
     }
+}
+
+/**
+ * Test to see if DateFormat understands zone equivalency groups.  It
+ * might seem that this should be a DateFormat test, but it's really a
+ * TimeZone test -- the changes to DateFormat are minor.
+ *
+ * We use two known, stable zones that shouldn't change much over time
+ * -- America/Vancouver and America/Los_Angeles.  However, they MAY
+ * change at some point -- if that happens, replace them with any two
+ * zones in an equivalency group where one zone has localized name
+ * data, and the other doesn't, in some locale.
+ */
+void TimeZoneRegressionTest::TestJ449() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString str;
+
+    // Modify the following three as necessary.  The two IDs must
+    // specify two zones in the same equivalency group.  One must have
+    // locale data in 'loc'; the other must not.
+    const char* idWithLocaleData = "America/Los_Angeles";
+    const char* idWithoutLocaleData = "America/Vancouver";
+    const Locale loc("en", "", "");
+
+    TimeZone *zoneWith = TimeZone::createTimeZone(idWithLocaleData);
+    TimeZone *zoneWithout = TimeZone::createTimeZone(idWithoutLocaleData);
+    // Make sure we got valid zones
+    if (zoneWith->getID(str) != UnicodeString(idWithLocaleData) ||
+        zoneWithout->getID(str) != UnicodeString(idWithoutLocaleData)) {
+        errln("Fail: Unable to create zones");
+    } else {
+        GregorianCalendar calWith(*zoneWith, status);
+        GregorianCalendar calWithout(*zoneWithout, status);
+        SimpleDateFormat fmt("MMM d yyyy hh:mm a zzz", loc, status);
+        if (U_FAILURE(status)) {
+            errln("Fail: Unable to create GregorianCalendar/SimpleDateFormat");
+        } else {
+            UDate date = 0;
+            UnicodeString strWith, strWithout;
+            fmt.setCalendar(calWith);
+            fmt.format(date, strWith);
+            fmt.setCalendar(calWithout);
+            fmt.format(date, strWithout);
+            if (strWith == strWithout) {
+                logln((UnicodeString)"Ok: " + idWithLocaleData + " -> " +
+                      strWith + "; " + idWithoutLocaleData + " -> " +
+                      strWithout);
+            } else {
+                errln((UnicodeString)"FAIL: " + idWithLocaleData + " -> " +
+                      strWith + "; " + idWithoutLocaleData + " -> " +
+                      strWithout);
+            }
+        }
+    }
+
+    delete zoneWith;
+    delete zoneWithout;
 }
 
 // test new API for JDK 1.2 8/31 putback

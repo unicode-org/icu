@@ -40,6 +40,7 @@ public:
     void Test4154525(void);
     void Test4162593(void);
     void TestJ186(void);
+    void TestJ449(void);
     void TestJDK12API(void);
 
     UBool checkCalendar314(GregorianCalendar *testCal, TimeZone *testTZ);

@@ -344,6 +344,9 @@ private:
      */
     int32_t getZoneIndex(const UnicodeString& ID) const;
 
+    // Internal method; see source for documentation
+    int32_t _getZoneIndex(const UnicodeString& id) const;
+
     /**
      * Delete all the storage owned by this object and reset the fIsOwned flag
      * to indicate that arrays have been deleted.

@@ -218,6 +218,22 @@ TimeZone::createSystemTimeZone(const UnicodeString& name) {
         return 0;
     }
     
+    const TZEquivalencyGroup *eg = lookupEquivalencyGroup(name);
+    if (eg != 0) {
+        return eg->isDST ?
+            new SimpleTimeZone(eg->u.d.zone, name) :
+            new SimpleTimeZone(eg->u.s.zone, name);                
+    }
+    return 0;
+}
+
+/**
+ * Lookup the given ID in the system time zone equivalency group table.
+ * Return a pointer to the equivalency group, or NULL if not found.
+ * DATA MUST BE INITIALIZED AND NON-NULL.
+ */
+const TZEquivalencyGroup*
+TimeZone::lookupEquivalencyGroup(const UnicodeString& id) {
     // Perform a binary search.  Possible optimization: Unroll the
     // search.  Not worth it given the small number of zones (416 in
     // 1999j).
@@ -227,22 +243,15 @@ TimeZone::createSystemTimeZone(const UnicodeString& name) {
         // Invariant: match, if present, must be in the range [low,
         // high).
         uint32_t i = (low + high) / 2;
-        int8_t c = name.compare(ZONE_IDS[i]);
+        int8_t c = id.compare(ZONE_IDS[i]);
         if (c == 0) {
-            const TZEquivalencyGroup *eg = (TZEquivalencyGroup*)
-                ((int8_t*)DATA + INDEX_BY_ID[i]);
-            // NOTE: standard zones must be before DST zones.  We test
-            // for this when loading up the data; see loadZoneData().
-            return eg->isDST ?
-                new SimpleTimeZone(eg->u.d.zone, name) :
-                new SimpleTimeZone(eg->u.s.zone, name);                
+            return (TZEquivalencyGroup*) ((int8_t*)DATA + INDEX_BY_ID[i]);
         } else if (c < 0) {
             high = i;
         } else {
             low = i + 1;
         }
     }
-
     return 0;
 }
 
@@ -469,6 +478,39 @@ TimeZone::createAvailableIDs(int32_t& numIDs)
 
     numIDs = DATA->count;
     return result;
+}
+
+// ---------------------------------------
+
+int32_t
+TimeZone::countEquivalentIDs(const UnicodeString& id) {
+    if (!DATA_LOADED) {
+        loadZoneData();
+    }
+    if (0 == DATA) {
+        return 0;
+    }
+    const TZEquivalencyGroup *eg = lookupEquivalencyGroup(id);
+    return (eg != 0) ? (eg->isDST ? eg->u.d.count : eg->u.s.count) : 0;
+}
+
+// ---------------------------------------
+
+const UnicodeString
+TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
+    if (!DATA_LOADED) {
+        loadZoneData();
+    }
+    if (0 != DATA) {
+        const TZEquivalencyGroup *eg = lookupEquivalencyGroup(id);
+        if (eg != 0) {
+            const uint16_t *p = eg->isDST ? &eg->u.d.count : &eg->u.s.count;
+            if (index >= 0 && index < *p) {
+                return ZONE_IDS[p[index+1]];
+            }
+        }
+    }
+    return UnicodeString();
 }
 
 // ---------------------------------------

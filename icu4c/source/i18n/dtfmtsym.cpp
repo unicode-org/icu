@@ -566,6 +566,34 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
  */
 int32_t DateFormatSymbols::getZoneIndex(const UnicodeString& ID) const
 {
+    int32_t result = _getZoneIndex(ID);
+    if (result >= 0) {
+        return result;
+    }
+
+    // Do a search through the equivalency group for the given ID
+    int32_t n = TimeZone::countEquivalentIDs(ID);
+    if (n > 1) {
+        int32_t i;
+        for (i=0; i<n; ++i) {
+            UnicodeString equivID = TimeZone::getEquivalentID(ID, i);
+            if (equivID != ID) {
+                int32_t equivResult = _getZoneIndex(equivID);
+                if (equivResult >= 0) {
+                    return equivResult;
+                }
+            }
+        }
+    }
+
+    return -1;
+}
+
+/**
+ * Lookup the given ID.  Do NOT do an equivalency search.
+ */
+int32_t DateFormatSymbols::_getZoneIndex(const UnicodeString& ID) const
+{
     // {sfb} kludge to support case-insensitive comparison
     UnicodeString lcaseID(ID);
     lcaseID.toLower();
@@ -573,8 +601,9 @@ int32_t DateFormatSymbols::getZoneIndex(const UnicodeString& ID) const
     for(int32_t index = 0; index < fZoneStringsRowCount; index++) {
         UnicodeString lcase(fZoneStrings[index][0]);
         lcase.toLower();
-        if (lcaseID == lcase) 
+        if (lcaseID == lcase) {
             return index;
+        }
     }
 
     return -1;
