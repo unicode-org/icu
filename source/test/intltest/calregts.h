@@ -65,7 +65,8 @@ public:
     void Test4165343(void) ;
     void Test4166109(void) ;
     void Test4167060(void) ;
-    void Test4197699();
+    void Test4197699(void);
+    void TestJ81(void);
 
     void printdate(GregorianCalendar *cal, char *string);
     void dowTest(bool_t lenient) ;
@@ -76,6 +77,7 @@ public:
 
     static const UDate EARLIEST_SUPPORTED_MILLIS;
     static const UDate LATEST_SUPPORTED_MILLIS;
+    static const char* FIELD_NAME[];
 
 protected:
     bool_t failure(UErrorCode status, const char* msg);

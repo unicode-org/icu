@@ -71,10 +71,33 @@ CalendarRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &name,
         CASE(33,Test4166109) 
         CASE(34,Test4167060) 
         CASE(35,Test4197699)
+        CASE(36,TestJ81)
 
     default: name = ""; break;
     }
 }
+
+const char* CalendarRegressionTest::FIELD_NAME [] = {
+    "ERA", 
+    "YEAR", 
+    "MONTH", 
+    "WEEK_OF_YEAR", 
+    "WEEK_OF_MONTH", 
+    "DAY_OF_MONTH", 
+    "DAY_OF_YEAR", 
+    "DAY_OF_WEEK", 
+    "DAY_OF_WEEK_IN_MONTH", 
+    "AM_PM", 
+    "HOUR", 
+    "HOUR_OF_DAY", 
+    "MINUTE", 
+    "SECOND", 
+    "MILLISECOND", 
+    "ZONE_OFFSET", 
+    "DST_OFFSET",
+    "YEAR_WOY",
+    "DOW_LOCAL"
+};
 
 bool_t 
 CalendarRegressionTest::failure(UErrorCode status, const char* msg)
@@ -1244,25 +1267,6 @@ CalendarRegressionTest::test4031502()
      */
     void CalendarRegressionTest::test4147269() 
     {
-        const char* fieldName [] = {
-            "ERA", 
-            "YEAR", 
-            "MONTH", 
-            "WEEK_OF_YEAR", 
-            "WEEK_OF_MONTH", 
-            "DAY_OF_MONTH", 
-            "DAY_OF_YEAR", 
-            "DAY_OF_WEEK", 
-            "DAY_OF_WEEK_IN_MONTH", 
-            "AM_PM", 
-            "HOUR", 
-            "HOUR_OF_DAY", 
-            "MINUTE", 
-            "SECOND", 
-            "MILLISECOND", 
-            "ZONE_OFFSET", 
-            "DST_OFFSET"
-        };
         UErrorCode status = U_ZERO_ERROR;
         GregorianCalendar *calendar = new GregorianCalendar(status);
         calendar->setLenient(FALSE);
@@ -1280,7 +1284,7 @@ CalendarRegressionTest::test4031502()
                 // We expect an exception to be thrown. If we fall through
                 // to the next line, then we have a bug.
                 if(U_SUCCESS(status))
-                errln(UnicodeString("Test failed with field ") + fieldName[field] +
+                errln(UnicodeString("Test failed with field ") + FIELD_NAME[field] +
                       ", date before: " + date +
                       ", date after: " + calendar->getTime(status) +
                       ", value: " + value + " (max = " + max +")");
@@ -1639,6 +1643,215 @@ void CalendarRegressionTest::Test4197699() {
     }
 }
 
+/**
+ * Rolling and adding across the Gregorian cutover should work as expected.
+ * Jitterbug 81.
+ */
+void CalendarRegressionTest::TestJ81() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString temp, temp2, temp3;
+    int32_t ONE_HOUR = (int32_t)60*60*1000;
+    int32_t ONE_DAY = (int32_t)24*ONE_HOUR;
+    int32_t i;
+    GregorianCalendar cal(TimeZone::createTimeZone("GMT"), status);
+    SimpleDateFormat fmt("HH:mm 'w'w 'd'D E d MMM yyyy", Locale::US, status);
+    if (U_FAILURE(status)) {
+        errln("Error: Cannot create calendar or format");
+        return;
+    }
+    fmt.setCalendar(cal);
+    // Get the Gregorian cutover
+    UDate cutover = cal.getGregorianChange();
+    logln(UnicodeString("Cutover: {") +
+          fmt.format(cutover, temp) + "}(" + cutover/ONE_DAY + ")");
+
+    // Check woy and doy handling.  Reference data:
+    /* w40 d274 Mon 1 Oct 1582
+       w40 d275 Tue 2 Oct 1582
+       w40 d276 Wed 3 Oct 1582
+       w40 d277 Thu 4 Oct 1582
+       w40 d278 Fri 15 Oct 1582
+       w40 d279 Sat 16 Oct 1582
+       w41 d280 Sun 17 Oct 1582
+       w41 d281 Mon 18 Oct 1582
+       w41 d282 Tue 19 Oct 1582
+       w41 d283 Wed 20 Oct 1582
+       w41 d284 Thu 21 Oct 1582
+       w41 d285 Fri 22 Oct 1582
+       w41 d286 Sat 23 Oct 1582
+       w42 d287 Sun 24 Oct 1582
+       w42 d288 Mon 25 Oct 1582
+       w42 d289 Tue 26 Oct 1582
+       w42 d290 Wed 27 Oct 1582
+       w42 d291 Thu 28 Oct 1582
+       w42 d292 Fri 29 Oct 1582
+       w42 d293 Sat 30 Oct 1582
+       w43 d294 Sun 31 Oct 1582
+       w43 d295 Mon 1 Nov 1582 */
+    int32_t DOY_DATA[] = {
+        // dom, woy, doy
+        1, 40, 274, Calendar::MONDAY,
+        4, 40, 277, Calendar::THURSDAY,
+        15, 40, 278, Calendar::FRIDAY,
+        17, 41, 280, Calendar::SUNDAY,
+        24, 42, 287, Calendar::SUNDAY,
+        25, 42, 288, Calendar::MONDAY,
+        26, 42, 289, Calendar::TUESDAY,
+        27, 42, 290, Calendar::WEDNESDAY,
+        28, 42, 291, Calendar::THURSDAY,
+        29, 42, 292, Calendar::FRIDAY,
+        30, 42, 293, Calendar::SATURDAY,
+        31, 43, 294, Calendar::SUNDAY
+    };
+    int32_t DOY_DATA_length = sizeof(DOY_DATA) / sizeof(DOY_DATA[0]);
+    for (i=0; i<DOY_DATA_length; i+=4) {
+        // Test time->fields
+        cal.set(1582, Calendar::OCTOBER, DOY_DATA[i]);
+        int32_t woy = cal.get(Calendar::WEEK_OF_YEAR, status);
+        int32_t doy = cal.get(Calendar::DAY_OF_YEAR, status);
+        if (U_FAILURE(status)) {
+            errln("Error: get() failed");
+            break;
+        }
+        if (woy != DOY_DATA[i+1] || doy != DOY_DATA[i+2]) {
+            errln((UnicodeString)"Fail: expect woy=" + DOY_DATA[i+1] +
+                  ", doy=" + DOY_DATA[i+2] + " on " +
+                  fmt.format(cal.getTime(status), temp.remove()));
+            status = U_ZERO_ERROR;
+        }
+
+        // Test fields->time for WOY
+        cal.clear();
+        cal.set(Calendar::YEAR, 1582);
+        cal.set(Calendar::WEEK_OF_YEAR, DOY_DATA[i+1]);
+        cal.set(Calendar::DAY_OF_WEEK, DOY_DATA[i+3]);
+        int32_t dom = cal.get(Calendar::DAY_OF_MONTH, status);
+        if (U_FAILURE(status)) {
+            errln("Error: get() failed");
+            break;
+        }
+        if (dom != DOY_DATA[i]) {
+            errln((UnicodeString)"Fail: set woy=" + DOY_DATA[i+1] +
+                  " dow=" + DOY_DATA[i+3] + " => " +
+                  fmt.format(cal.getTime(status), temp.remove()) +
+                  ", expected 1582 Oct " + DOY_DATA[i]);
+            status = U_ZERO_ERROR;
+        }
+
+        // Test fields->time for DOY
+        cal.clear();
+        cal.set(Calendar::YEAR, 1582);
+        cal.set(Calendar::DAY_OF_YEAR, DOY_DATA[i+2]);
+        dom = cal.get(Calendar::DAY_OF_MONTH, status);
+        if (U_FAILURE(status)) {
+            errln("Error: get() failed");
+            break;
+        }
+        if (dom != DOY_DATA[i]) {
+            errln((UnicodeString)"Fail: set doy=" + DOY_DATA[i+2] +
+                  " => " +
+                  fmt.format(cal.getTime(status), temp.remove()) +
+                  ", expected 1582 Oct " + DOY_DATA[i]);
+            status = U_ZERO_ERROR;
+        }
+    }
+    status = U_ZERO_ERROR;
+
+    // Test cases
+    enum Action { ADD=1, ROLL=2 };
+    enum Sign { PLUS=1, MINUS=2 };
+    struct {
+        Calendar::EDateFields field;
+        int8_t actionMask; // ADD or ROLL or both
+        int8_t signMask; // PLUS or MINUS or both
+        int32_t amount;
+        int32_t before; // ms before cutover
+        int32_t after;  // ms after cutover
+    } DATA[] = {
+        { Calendar::WEEK_OF_YEAR, ADD|ROLL, PLUS|MINUS, 1, -ONE_DAY, +6*ONE_DAY },
+        { Calendar::WEEK_OF_MONTH, ADD|ROLL, PLUS|MINUS, 1, -ONE_DAY, +6*ONE_DAY },
+        { Calendar::DAY_OF_MONTH, ADD|ROLL, PLUS|MINUS, 2, -ONE_DAY, +1*ONE_DAY },
+        { Calendar::DAY_OF_MONTH, ROLL, PLUS, -6, -ONE_DAY, +14*ONE_DAY },
+        { Calendar::DAY_OF_MONTH, ROLL, PLUS, -7, 0, +14*ONE_DAY },
+        { Calendar::DAY_OF_MONTH, ROLL, PLUS, -7, +ONE_DAY, +15*ONE_DAY },
+        { Calendar::DAY_OF_MONTH, ROLL, PLUS, +18, -ONE_DAY, -4*ONE_DAY },
+        { Calendar::DAY_OF_YEAR, ADD|ROLL, PLUS|MINUS, 2, -ONE_DAY, +1*ONE_DAY },
+        { Calendar::DAY_OF_WEEK, ADD|ROLL, PLUS|MINUS, 2, -ONE_DAY, +1*ONE_DAY },
+        { Calendar::DAY_OF_WEEK_IN_MONTH, ADD|ROLL, PLUS|MINUS, 1, -ONE_DAY, +6*ONE_DAY },
+        { Calendar::AM_PM, ADD, PLUS|MINUS, 4, -12*ONE_HOUR, +36*ONE_HOUR },
+        { Calendar::HOUR, ADD, PLUS|MINUS, 48, -12*ONE_HOUR, +36*ONE_HOUR },
+        { Calendar::HOUR_OF_DAY, ADD, PLUS|MINUS, 48, -12*ONE_HOUR, +36*ONE_HOUR },
+        { Calendar::MINUTE, ADD, PLUS|MINUS, 48*60, -12*ONE_HOUR, +36*ONE_HOUR },
+        { Calendar::SECOND, ADD, PLUS|MINUS, 48*60*60, -12*ONE_HOUR, +36*ONE_HOUR },
+        { Calendar::MILLISECOND, ADD, PLUS|MINUS, 48*ONE_HOUR, -12*ONE_HOUR, +36*ONE_HOUR },
+        // NOTE: These are not supported yet.  See jitterbug 180.
+        // Uncomment these lines when add/roll supported on these fields.
+        // { Calendar::YEAR_WOY, ADD|ROLL, 1, -ONE_DAY, +6*ONE_DAY },
+        // { Calendar::DOW_LOCAL, ADD|ROLL, 2, -ONE_DAY, +1*ONE_DAY }
+    };
+    int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+
+    // Now run the tests
+    for (i=0; i<DATA_length; ++i) {
+        for (Action action=ADD; action<=ROLL; action=(Action)(action+1)) {
+            if (!(DATA[i].actionMask & action)) {
+                continue;
+            }
+            for (Sign sign=PLUS; sign<=MINUS; sign=(Sign)(sign+1)) {
+                if (!(DATA[i].signMask & sign)) {
+                    continue;
+                }
+                status = U_ZERO_ERROR;
+                int32_t amount = DATA[i].amount * (sign==MINUS?-1:1);
+                UDate date = cutover + 
+                    (sign==PLUS>0 ? DATA[i].before : DATA[i].after);
+                UDate expected = cutover + 
+                    (sign==PLUS>0 ? DATA[i].after : DATA[i].before);
+                cal.setTime(date, status);
+                if (U_FAILURE(status)) {
+                    errln((UnicodeString)"FAIL: setTime returned error code " + status);
+                    continue;
+                }
+                if (action == ADD) {
+                    cal.add(DATA[i].field, amount, status);
+                } else {
+                    cal.roll(DATA[i].field, amount, status);
+                }
+                if (U_FAILURE(status)) {
+                    errln((UnicodeString)"FAIL: " +
+                          (action==ADD?"add ":"roll ") + FIELD_NAME[DATA[i].field] +
+                          " returned error code " + status);
+                    continue;
+                }
+                UDate result = cal.getTime(status);
+                if (U_FAILURE(status)) {
+                    errln((UnicodeString)"FAIL: getTime returned error code " + status);
+                    continue;
+                }
+                if (result == expected) {
+                    logln((UnicodeString)"Ok: {" + 
+                          fmt.format(date, temp.remove()) +
+                          "}(" + date/ONE_DAY +
+                          (action==ADD?") add ":") roll ") +                  
+                          amount + " " + FIELD_NAME[DATA[i].field] + " -> {" +
+                          fmt.format(result, temp2.remove()) +
+                          "}(" + result/ONE_DAY + ")");                  
+                } else {
+                    errln((UnicodeString)"FAIL: {" + 
+                          fmt.format(date, temp.remove()) +
+                          "}(" + date/ONE_DAY +
+                          (action==ADD?") add ":") roll ") +                  
+                          amount + " " + FIELD_NAME[DATA[i].field] + " -> {" +
+                          fmt.format(result, temp2.remove()) +
+                          "}(" + result/ONE_DAY + "), expect {" +
+                          fmt.format(expected, temp3.remove()) +
+                          "}(" + expected/ONE_DAY + ")");
+                }
+            }
+        }
+    }
+}
+        
 UDate
 CalendarRegressionTest::makeDate(int32_t y, int32_t m, int32_t d,
                                     int32_t hr, int32_t min, int32_t sec)

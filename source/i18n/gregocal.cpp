@@ -31,6 +31,8 @@
 *                           {JDK bug 4210209 4209272}
 *   11/15/99    weiv        Added YEAR_WOY and DOW_LOCAL computation
 *                           to timeToFields method, updated kMinValues, kMaxValues & kLeastMaxValues
+*   12/09/99    aliu        Fixed j81, calculation errors and roll bugs
+*                           in year of cutover.
 ********************************************************************************
 */
 
@@ -452,6 +454,13 @@ GregorianCalendar::timeToFields(UDate theTime, bool_t quick, UErrorCode& status)
     if (year < 1) {
         era = BC;
         year = 1 - year;
+    }
+
+    // Adjust the doy for the cutover year.  Do this AFTER the above
+    // computations using doy!  [j81 - aliu]
+    if (rawYear == fGregorianCutoverYear &&
+        theTime >= fNormalizedGregorianCutover) {
+        dayOfYear -= 10;
     }
 
     // Calculate year of week of year
@@ -1089,6 +1098,11 @@ GregorianCalendar::computeJulianDay(bool_t isGregorian, int32_t year)
         }
         else if (bestStamp == doyStamp) {
             julianDay += internalGet(DAY_OF_YEAR);
+
+            // Adjust for cutover year [j81 - aliu]
+            if (year == fGregorianCutoverYear && isGregorian) {
+                julianDay -= 10;
+            }
         }
         else if (bestStamp == woyStamp) {
             // Compute from day of week plus week of year
@@ -1118,6 +1132,11 @@ GregorianCalendar::computeJulianDay(bool_t isGregorian, int32_t year)
             date += 7 * (internalGet(WEEK_OF_YEAR) - 1);
 
             julianDay += date;
+
+            // Adjust for cutover year [j81 - aliu]
+            if (year == fGregorianCutoverYear && isGregorian) {
+                julianDay -= 10;
+            }
         }
     }
 
@@ -1366,6 +1385,34 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
         max = getMaximum(field);
     }
 
+    /* Some of the fields require special handling to work in the month
+     * containing the Gregorian cutover point.  Do shared computations
+     * for these fields here.  [j81 - aliu] */
+    bool_t inCutoverMonth = FALSE;
+    int32_t cMonthLen; // 'c' for cutover; in days
+    int32_t cDayOfMonth; // no discontinuity: [0, cMonthLen)
+    double cMonthStart; // in ms
+    switch (field) {
+    case DAY_OF_MONTH:
+    case WEEK_OF_MONTH:
+        {
+            max = monthLength(internalGet(MONTH));
+            double t = internalGetTime();
+            // We subtract 1 from the DAY_OF_MONTH to make it zero-based, and an
+            // additional 10 if we are after the cutover.  Thus the monthStart
+            // value will be correct iff we actually are in the cutover month.
+            cDayOfMonth = internalGet(DAY_OF_MONTH) - ((t >= fGregorianCutover) ? 10 : 0);
+            cMonthStart = t - ((cDayOfMonth - 1) * kOneDay);
+
+            // A month containing the cutover is 10 days shorter.
+            if ((cMonthStart < fGregorianCutover) &&
+                (cMonthStart + (cMonthLen=(max-10))*kOneDay >= fGregorianCutover)) {
+                inCutoverMonth = TRUE;
+            }
+        }
+        break;
+    }
+
     switch (field) {
     case ERA:
     case YEAR:
@@ -1424,7 +1471,7 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
     case WEEK_OF_YEAR:
         {
             // Unlike WEEK_OF_MONTH, WEEK_OF_YEAR never shifts the day of the
-            // week.  Also, rolling the week of the year can have seemingly
+            // week.  However, rolling the week of the year can have seemingly
             // strange effects simply because the year of the week of year
             // may be different from the calendar year.  For example, the
             // date Dec 28, 1997 is the first day of week 1 of 1998 (if
@@ -1499,15 +1546,24 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
             // the phantom days that we added, we recognize this and pin to
             // the first or the last day of the month.  Easy, eh?
 
+            // Another wrinkle: To fix jitterbug 81, we have to make all this
+            // work in the oddball month containing the Gregorian cutover.
+            // This month is 10 days shorter than usual, and also contains
+            // a discontinuity in the days; e.g., the default cutover month
+            // is Oct 1582, and goes from day of month 4 to day of month 15.
+
             // Normalize the DAY_OF_WEEK so that 0 is the first day of the week
             // in this locale.  We have dow in 0..6.
             int32_t dow = internalGet(DAY_OF_WEEK) - getFirstDayOfWeek();
             if (dow < 0) 
                 dow += 7;
 
+            // Find the day of month, compensating for cutover discontinuity.
+            int32_t dom = inCutoverMonth ? cDayOfMonth : internalGet(DAY_OF_MONTH);
+
             // Find the day of the week (normalized for locale) for the first
             // of the month.
-            int32_t fdm = (dow - internalGet(DAY_OF_MONTH) + 1) % 7;
+            int32_t fdm = (dow - dom + 1) % 7;
             if (fdm < 0) 
                 fdm += 7;
 
@@ -1523,8 +1579,8 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
 
             // Get the day of the week (normalized for locale) for the last
             // day of the month.
-            int32_t monthLen = monthLength(internalGet(MONTH));
-            int32_t ldm = (monthLen - internalGet(DAY_OF_MONTH) + dow) % 7;
+            int32_t monthLen = inCutoverMonth ? cMonthLen : monthLength(internalGet(MONTH));
+            int32_t ldm = (monthLen - dom + dow) % 7;
             // We know monthLen >= DAY_OF_MONTH so we skip the += 7 step here.
 
             // Get the limit day for the blocked-off rectangular month; that
@@ -1535,17 +1591,16 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
 
             // Now roll between start and (limit - 1).
             gap = limit - start;
-            int32_t day_of_month = (internalGet(DAY_OF_MONTH) + amount*7 -
-                                start) % gap;
-            if (day_of_month < 0) 
-                day_of_month += gap;
-            day_of_month += start;
+            int32_t newDom = (dom + amount*7 - start) % gap;
+            if (newDom < 0) 
+                newDom += gap;
+            newDom += start;
 
             // Finally, pin to the real start and end of the month.
-            if (day_of_month < 1) 
-                day_of_month = 1;
-            if (day_of_month > monthLen) 
-                day_of_month = monthLen;
+            if (newDom < 1) 
+                newDom = 1;
+            if (newDom > monthLen) 
+                newDom = monthLen;
 
             // Set the DAY_OF_MONTH.  We rely on the fact that this field
             // takes precedence over everything else (since all other fields
@@ -1553,11 +1608,34 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
             // disambiguation algorithm changes) then we will have to unset
             // the appropriate fields here so that DAY_OF_MONTH is attended
             // to.
-            set(DAY_OF_MONTH, day_of_month);
+
+            // If we are in the cutover month, manipulate ms directly.  Don't do
+            // this in general because it doesn't work across DST boundaries
+            // (details, details).  This takes care of the discontinuity.
+            if (inCutoverMonth) {
+                setTimeInMillis(cMonthStart + (newDom-1)*kOneDay, status);                
+            } else {
+                set(DAY_OF_MONTH, newDom);
+            }
             return;
         }
     case DAY_OF_MONTH:
-        max = monthLength(internalGet(MONTH));
+        if (inCutoverMonth) {            
+            // The default computation works except when the current month
+            // contains the Gregorian cutover.  We handle this special case
+            // here.  [j81 - aliu]
+            double monthLen = cMonthLen * kOneDay;
+            double msIntoMonth = icu_fmod(internalGetTime() - cMonthStart +
+                                          amount * kOneDay, monthLen);
+            if (msIntoMonth < 0) {
+                msIntoMonth += monthLen;
+            }
+            setTimeInMillis(cMonthStart + msIntoMonth, status);
+            return;
+        } else {
+            max = monthLength(internalGet(MONTH));
+            // ...else fall through to default computation
+        }
         break;
     case DAY_OF_YEAR:
         {
@@ -1632,6 +1710,7 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
     value += min;
 
     set(field, value);
+
 }
 
 // -------------------------------------
