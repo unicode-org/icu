@@ -113,16 +113,6 @@ getFoldedRBBIValue(UNewTrie *trie, UChar32 start, int32_t offset) {
 }
 
 
-
-/* if bit 15 is set, then the folding offset is in bits 14..0 of the 16-bit trie result */
-static int32_t U_CALLCONV
-getFoldingRBBIOffset(uint32_t data) {
-    if(data&0x8000) {
-        return (int32_t)(data&0x7fff);
-    } else {
-        return 0;
-    }
-}
 U_CDECL_END
 
 
