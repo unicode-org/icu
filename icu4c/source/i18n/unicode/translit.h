@@ -356,7 +356,7 @@ public:
      * Implements Cloneable.
      * All subclasses are encouraged to implement this method if it is
      * possible and reasonable to do so.  Subclasses that are to be
-     * registered with the system using <tt>registerInstance()<tt>
+     * registered with the system using <tt>registerInstance()</tt>
      * are required to implement this method.  If a subclass does not
      * implement clone() properly and is registered with the system
      * using registerInstance(), then the default clone() implementation
