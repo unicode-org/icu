@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/11/22 01:05:45 $
- * $Revision: 1.103 $
+ * $Date: 2003/11/25 00:34:56 $
+ * $Revision: 1.104 $
  *
  *****************************************************************************************
  */
@@ -2340,13 +2340,8 @@ public class UnicodeSet extends UnicodeFilter {
 
     /**
      * Add the contents of the collection (as strings) into this UnicodeSet.
-<<<<<<< UnicodeSet.java
      * @param source the collection to add
      * @draft ICU 2.8
-=======
-     * @param source
-     * @draft ICU 2.8
->>>>>>> 1.102
      */
     public void addAll(Collection source) {
         Iterator it = source.iterator();
