@@ -216,7 +216,6 @@ ibm-849                cp1131          # PC     Belarus (w/ euro update)
 ibm-848                cp1125          # PC     Ukraine (w/ euro update)
 ibm-5104               cp1008          # 8-bit Arabic (w/ euro update)
 ibm-9238               cp1046          # PC     Arabic Extended (w/     euro update)
-ibm-1362               cp1362          # Korean Windows DBCS (w/ euro update)
 ibm-1363_P100-2000     ibm-1363 ibm-1363_VASCII_VSUB_VPUA # Korean KSC Korean Windows MBCS 
 ibm-1363_P11B-2000     ibm-1363_VSUB_VPUA windows-949 cp949 cp1363 ksc korean 
 ibm-5210               cp1114          # PC     SBCS Big-5 (w/ euro     update)
@@ -283,7 +282,7 @@ ibm-1123               cpibm1123 # Cyrillic Ukraine     EBCDIC
 ibm-1140               cpibm1140 IBM01140 { IANA } # EBCDIC US...
 ibm-1141               cpibm1141 IBM01141 { IANA } # EBCDIC Germanay,   Austria...
 ibm-1142               cpibm1142 IBM01142 { IANA } # EBCDIC Denmark...
-ibm-1143               cpibm1143 IBM01143 { IANA }  # EBCDIC Sweden
+ibm-1143               cpibm1143 IBM01143 { IANA } # EBCDIC Sweden
 ibm-1144               cpibm1144 # EBCDIC Italy
 ibm-1145               cpibm1145 # EBCDIC Spain
 ibm-1146               cpibm1146 # EBCDIC UK Ireland
@@ -291,21 +290,20 @@ ibm-1147               cpibm1147 # EBCDIC France
 ibm-1148               cpibm1148 # EBCDIC International Latin1
 ibm-1149               cpibm1149 ebcdic-is # EBCDIC     Iceland
 ibm-1153               cpibm1153 # EBCDIC latin 2
-ibm-1154               cp1025 cpibm1154                         # EBCDIC Cyrillic Multilingual
-ibm-1155               cpibm1155   # EBCDIC Turkey
+ibm-1154               cp1025 cpibm1154              # EBCDIC Cyrillic Multilingual
+ibm-1155               cpibm1155                     # EBCDIC Turkey
 ibm-1156               cpibm1156                     # EBCDIC Baltic Multilingual
 ibm-1157               cpibm1157                     # EBCDIC Estonia
-ibm-1158               cp1123 cpibm1158 1123                        # Cyrillic Ukraine EBCDIC
-ibm-1159               cp28709         # SBCS T-Ch Host
-ibm-1160               cp9030 cpibm1160                         # EBCDIC Thailand
-ibm-1164               cp1130 cpibm1164                         # EBCDIC Viet Nam
+ibm-1158               cp1123 cpibm1158 1123         # Cyrillic Ukraine EBCDIC
+ibm-1159               cp28709                       # SBCS T-Ch Host
+ibm-1160               cp9030 cpibm1160              # EBCDIC Thailand
+ibm-1164               cp1130 cpibm1164              # EBCDIC Viet Nam
 
 ibm-1399               # Host MBCS (Latin-Kanji)
-ibm-4930               cp4930 # Korean DBCS     Host
-ibm-1364               cp1364 # Korean Host     Mixed
+ibm-1364               ibm-1364_VPUA cp1364 # Korean Host Mixed
 ibm-8482               # host SBCS (Katakana)
-ibm-4899               cpibm4899                          # Old EBCDIC Hebrew
-ibm-4971               cpibm4971                       # EBCDIC Greek
+ibm-4899               cpibm4899            # Old EBCDIC Hebrew
+ibm-4971               cpibm4971            # EBCDIC Greek
 ibm-9027               # DBCS T-Ch Host
 ibm-5123               cp1027          # Host Roman Jis
 ibm-12712              cpibm12712 ebcdic-he # EBCDIC Hebrew (new sheqel, control charaters update)

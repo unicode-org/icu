@@ -30,7 +30,7 @@ ibm-1255.ucm ibm-864.ucm\
 ibm-1256.ucm ibm-437.ucm ibm-865.ucm\
 ibm-1051.ucm ibm-1257.ucm ibm-866.ucm\
 ibm-1089.ucm ibm-1258.ucm ibm-4909.ucm ibm-867.ucm\
-ibm-4930.ucm ibm-868.ucm\
+ibm-868.ucm\
 ibm-869.ucm\
 ibm-1275.ucm\
 ibm-1276.ucm ibm-5104.ucm ibm-872.ucm\
@@ -40,7 +40,7 @@ ibm-1281.ucm ibm-5346.ucm ibm-901.ucm\
 ibm-1282.ucm ibm-5347.ucm ibm-902.ucm\
 ibm-1283.ucm ibm-5349.ucm ibm-9027.ucm\
 ibm-5350.ucm ibm-9044.ucm\
-ibm-1362.ucm ibm-5351.ucm ibm-9049.ucm\
+ibm-5351.ucm ibm-9049.ucm\
 ibm-1363_P100-2000.ucm ibm-1363_P11B-2000.ucm\
 ibm-5352.ucm ibm-9061.ucm\
 ibm-5353.ucm ibm-912.ucm\
