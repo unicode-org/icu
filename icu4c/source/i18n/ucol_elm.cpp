@@ -378,32 +378,34 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
 
 U_CAPI void  U_EXPORT2
 uprv_uca_closeTempTable(tempUCATable *t) {
-  uprv_free(t->expansions->CEs);
-  uprv_free(t->expansions);
-  if(t->contractions != NULL) {
-    uprv_cnttab_close(t->contractions);
+  if(t != NULL) {
+    uprv_free(t->expansions->CEs);
+    uprv_free(t->expansions);
+    if(t->contractions != NULL) {
+      uprv_cnttab_close(t->contractions);
+    }
+    /*ucmpe32_close(t->mapping);*/
+    utrie_close(t->mapping);
+
+    if(t->prefixLookup != NULL) {
+      uhash_close(t->prefixLookup);
+    }
+
+    uprv_free(t->maxExpansions->endExpansionCE);
+    uprv_free(t->maxExpansions->expansionCESize);
+    uprv_free(t->maxExpansions);
+
+    if (t->maxJamoExpansions->size > 0) {
+      uprv_free(t->maxJamoExpansions->endExpansionCE);
+      uprv_free(t->maxJamoExpansions->isV);
+    }
+    uprv_free(t->maxJamoExpansions);
+
+    uprv_free(t->unsafeCP);
+    uprv_free(t->contrEndCP);
+
+    uprv_free(t);
   }
-  /*ucmpe32_close(t->mapping);*/
-  utrie_close(t->mapping);
-
-  if(t->prefixLookup != NULL) {
-    uhash_close(t->prefixLookup);
-  }
-
-  uprv_free(t->maxExpansions->endExpansionCE);
-  uprv_free(t->maxExpansions->expansionCESize);
-  uprv_free(t->maxExpansions);
-
-  if (t->maxJamoExpansions->size > 0) {
-    uprv_free(t->maxJamoExpansions->endExpansionCE);
-    uprv_free(t->maxJamoExpansions->isV);
-  }
-  uprv_free(t->maxJamoExpansions);
-
-  uprv_free(t->unsafeCP);
-  uprv_free(t->contrEndCP);
-
-  uprv_free(t);
 }
 
 /**
@@ -1567,19 +1569,19 @@ uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status)
   context.noOfClosures = 0;
   if(U_SUCCESS(*status)) {
     UCollator *tempColl = NULL;
+    tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
+
+    UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
+    tempColl = ucol_initCollator(tempData, 0, status);
+    uprv_uca_closeTempTable(tempTable);    
+
     if(U_SUCCESS(*status)) {
-      tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
-
-      UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
-      tempColl = ucol_initCollator(tempData, 0, status);
-
-      if(U_SUCCESS(*status)) {
-        tempColl->rb = NULL;
-        tempColl->binary = NULL;
-        tempColl->requestedLocale = NULL;
-        tempColl->hasRealData = TRUE;
-      }
-      uprv_uca_closeTempTable(tempTable);    
+      tempColl->rb = NULL;
+      tempColl->binary = NULL;
+      tempColl->requestedLocale = NULL;
+      tempColl->hasRealData = TRUE;
+    } else if(tempData != 0) {
+      uprv_free(tempData);
     }
 
     /* produce canonical closure */
