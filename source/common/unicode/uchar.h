@@ -79,6 +79,19 @@ U_CDECL_BEGIN
 #define U_MASK(x) ((uint32_t)1<<(x))
 
 /**
+ * !! Note: Several comments in this file are machine-read by the
+ * genpname tool.  These comments describe the correspondence between
+ * icu enum constants and UCD entities.  Do not delete them.  Update
+ * these comments as needed.
+ *
+ * Any comment of the form "/*[name]* /" (space added) is such
+ * a comment.
+ *
+ * The U_JG_* and U_GC_*_MASK constants are matched by their symbolic
+ * name, which must match PropertyValueAliases.txt.
+ */
+
+/**
  * Selection constants for Unicode properties.
  * These constants are used in functions like u_hasBinaryProperty to select
  * one of the Unicode properties.
@@ -98,11 +111,15 @@ U_CDECL_BEGIN
  * @draft ICU 2.1
  */
 typedef enum UProperty {
+    /** See note !!.  Comments of the form "Binary property Dash",
+        "Enumerated property Script", "Double property Numeric_Value",
+        and "String property Age" are read by genpname. */
+
+    /** First constant for binary Unicode properties. @draft ICU 2.1 */
+    UCHAR_BINARY_START=0,
     /** Binary property Alphabetic. Same as u_isUAlphabetic, different from u_isalpha.
         Lu+Ll+Lt+Lm+Lo+Nl+Other_Alphabetic @draft ICU 2.1 */
-    UCHAR_ALPHABETIC,
-    /** First constant for binary Unicode properties. @draft ICU 2.1 */
-    UCHAR_BINARY_START=UCHAR_ALPHABETIC,
+    UCHAR_ALPHABETIC=UCHAR_BINARY_START,
     /** Binary property ASCII_Hex_Digit. 0-9 A-F a-f @draft ICU 2.1 */
     UCHAR_ASCII_HEX_DIGIT,
     /** Binary property Bidi_Control.
@@ -222,11 +239,11 @@ typedef enum UProperty {
     /** One more than the last constant for binary Unicode properties. @draft ICU 2.1 */
     UCHAR_BINARY_LIMIT,
 
+    /** First constant for enumerated/integer Unicode properties. @draft ICU 2.2 */
+    UCHAR_INT_START=0x1000,
     /** Enumerated property Bidi_Class.
         Same as u_charDirection, returns UCharDirection values. @draft ICU 2.2 */
-    UCHAR_BIDI_CLASS=0x1000,
-    /** First constant for enumerated/integer Unicode properties. @draft ICU 2.2 */
-    UCHAR_INT_START=UCHAR_BIDI_CLASS,
+    UCHAR_BIDI_CLASS=UCHAR_INT_START,
     /** Enumerated property Block.
         Same as ublock_getCode, returns UBlockCode values. @draft ICU 2.2 */
     UCHAR_BLOCK,
@@ -258,9 +275,63 @@ typedef enum UProperty {
     /** Enumerated property Script.
         Same as uscript_getScript, returns UScriptCode values. @draft ICU 2.2 */
     UCHAR_SCRIPT,
-
     /** One more than the last constant for enumerated/integer Unicode properties. @draft ICU 2.2 */
-    UCHAR_INT_LIMIT
+    UCHAR_INT_LIMIT,
+
+    /** First constant for double Unicode properties. @draft ICU 2.4 */
+    UCHAR_DOUBLE_START=0x2000,
+    /** Double property Numeric_Value.
+        Corresponds to u_getNumericValue. @draft ICU 2.4 */
+    UCHAR_NUMERIC_VALUE=UCHAR_DOUBLE_START,
+    /** One more than the last constant for double Unicode properties. @draft ICU 2.4 */
+    UCHAR_DOUBLE_LIMIT,
+
+    /** First constant for string Unicode properties. @draft ICU 2.4 */
+    UCHAR_STRING_START=0x3000,
+    /** String property Age.
+        Corresponds to u_charAge. @draft ICU 2.4 */
+    UCHAR_AGE=UCHAR_STRING_START,
+    /** String property Bidi_Mirroring_Glyph.
+        Corresponds to u_charMirror. @draft ICU 2.4 */
+    UCHAR_BIDI_MIRRORING_GLYPH,
+    /** String property Case_Folding.
+        Corresponds to u_strFoldCase in ustring.h. @draft ICU 2.4 */
+    UCHAR_CASE_FOLDING,
+    /** String property ISO_Comment.
+        Corresponds to u_getISOComment. @draft ICU 2.4 */
+    UCHAR_ISO_COMMENT,
+    /** String property Lowercase_Mapping.
+        Corresponds to u_strToLower in ustring.h. @draft ICU 2.4 */
+    UCHAR_LOWERCASE_MAPPING,
+    /** String property Name.
+        Corresponds to u_charName. @draft ICU 2.4 */
+    UCHAR_NAME,
+    /** String property Simple_Case_Folding.
+        Corresponds to u_foldCase. @draft ICU 2.4 */
+    UCHAR_SIMPLE_CASE_FOLDING,
+    /** String property Simple_Lowercase_Mapping.
+        Corresponds to u_tolower. @draft ICU 2.4 */
+    UCHAR_SIMPLE_LOWERCASE_MAPPING,
+    /** String property Simple_Titlecase_Mapping.
+        Corresponds to u_totitle. @draft ICU 2.4 */
+    UCHAR_SIMPLE_TITLECASE_MAPPING,
+    /** String property Simple_Uppercase_Mapping.
+        Corresponds to u_toupper. @draft ICU 2.4 */
+    UCHAR_SIMPLE_UPPERCASE_MAPPING,
+    /** String property Titlecase_Mapping.
+        Corresponds to u_strToTitle in ustring.h. @draft ICU 2.4 */
+    UCHAR_TITLECASE_MAPPING,
+    /** String property Unicode_1_Name.
+        Corresponds to u_charName. @draft ICU 2.4 */
+    UCHAR_UNICODE_1_NAME,
+    /** String property Uppercase_Mapping.
+        Corresponds to u_strToUpper in ustring.h. @draft ICU 2.4 */
+    UCHAR_UPPERCASE_MAPPING,
+    /** One more than the last constant for string Unicode properties. @draft ICU 2.4 */
+    UCHAR_STRING_LIMIT,
+
+    /** Represents a nonexistent or invalid property or property value. @draft ICU 2.4 */
+    UCHAR_INVALID_CODE = -1
 } UProperty;
 
 /**
@@ -270,6 +341,8 @@ typedef enum UProperty {
  */
 typedef enum UCharCategory
 {
+    /** See note !!.  Comments of the form "Cn" are read by genpname. */
+
     /** Non-category for unassigned and non-character code points. @stable */
     U_UNASSIGNED              = 0,
     /** Cn "Other, Not Assigned (no characters in [UnicodeData.txt] have this property)" (same as U_UNASSIGNED!) @draft ICU 2.0 */
@@ -393,6 +466,9 @@ typedef enum UCharCategory
 #define U_GC_L_MASK \
             (U_GC_LU_MASK|U_GC_LL_MASK|U_GC_LT_MASK|U_GC_LM_MASK|U_GC_LO_MASK)
 
+#define U_GC_LC_MASK \
+            (U_GC_LU_MASK|U_GC_LL_MASK|U_GC_LT_MASK)
+
 #define U_GC_M_MASK (U_GC_MN_MASK|U_GC_ME_MASK|U_GC_MC_MASK)
 
 #define U_GC_N_MASK (U_GC_ND_MASK|U_GC_NL_MASK|U_GC_NO_MASK)
@@ -413,6 +489,8 @@ typedef enum UCharCategory
  * @stable
  */
 typedef enum UCharDirection { 
+    /** See note !!.  Comments of the form "EN" are read by genpname. */
+
     /** L @stable */
     U_LEFT_TO_RIGHT               = 0, 
     /** R @stable */
@@ -462,241 +540,241 @@ typedef enum UCharDirection {
  */
 enum UBlockCode {
     /** @draft ICU 2.0 */
-    UBLOCK_BASIC_LATIN = 1,
+    UBLOCK_BASIC_LATIN = 1, /*[0000]*/ /*See note !!*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_LATIN_1_SUPPLEMENT=2,
+    UBLOCK_LATIN_1_SUPPLEMENT=2, /*[0080]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_LATIN_EXTENDED_A =3,
+    UBLOCK_LATIN_EXTENDED_A =3, /*[0100]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_LATIN_EXTENDED_B =4,
+    UBLOCK_LATIN_EXTENDED_B =4, /*[0180]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_IPA_EXTENSIONS =5,
+    UBLOCK_IPA_EXTENSIONS =5, /*[0250]*/
     
     /** @draft ICU 2.0 */
-    UBLOCK_SPACING_MODIFIER_LETTERS =6,
+    UBLOCK_SPACING_MODIFIER_LETTERS =6, /*[02B0]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_COMBINING_DIACRITICAL_MARKS =7,
+    UBLOCK_COMBINING_DIACRITICAL_MARKS =7, /*[0300]*/
     
     /**
      * Unicode 3.2 renames this block to "Greek and Coptic".
      * @draft ICU 2.0
      */
-    UBLOCK_GREEK =8,
+    UBLOCK_GREEK =8, /*[0370]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_CYRILLIC =9,
+    UBLOCK_CYRILLIC =9, /*[0400]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_ARMENIAN =10,
+    UBLOCK_ARMENIAN =10, /*[0530]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_HEBREW =11,
+    UBLOCK_HEBREW =11, /*[0590]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_ARABIC =12,
+    UBLOCK_ARABIC =12, /*[0600]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_SYRIAC =13,
+    UBLOCK_SYRIAC =13, /*[0700]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_THAANA =14,
+    UBLOCK_THAANA =14, /*[0780]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_DEVANAGARI =15,
+    UBLOCK_DEVANAGARI =15, /*[0900]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_BENGALI =16,
+    UBLOCK_BENGALI =16, /*[0980]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_GURMUKHI =17,
+    UBLOCK_GURMUKHI =17, /*[0A00]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_GUJARATI =18,
+    UBLOCK_GUJARATI =18, /*[0A80]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_ORIYA =19,
+    UBLOCK_ORIYA =19, /*[0B00]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_TAMIL =20,
+    UBLOCK_TAMIL =20, /*[0B80]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_TELUGU =21,
+    UBLOCK_TELUGU =21, /*[0C00]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_KANNADA =22,
+    UBLOCK_KANNADA =22, /*[0C80]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_MALAYALAM =23,
+    UBLOCK_MALAYALAM =23, /*[0D00]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_SINHALA =24,
+    UBLOCK_SINHALA =24, /*[0D80]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_THAI =25,
+    UBLOCK_THAI =25, /*[0E00]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_LAO =26,
+    UBLOCK_LAO =26, /*[0E80]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_TIBETAN =27,
+    UBLOCK_TIBETAN =27, /*[0F00]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_MYANMAR =28,
+    UBLOCK_MYANMAR =28, /*[1000]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_GEORGIAN =29,
+    UBLOCK_GEORGIAN =29, /*[10A0]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_HANGUL_JAMO =30,
+    UBLOCK_HANGUL_JAMO =30, /*[1100]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_ETHIOPIC =31,
+    UBLOCK_ETHIOPIC =31, /*[1200]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_CHEROKEE =32,
+    UBLOCK_CHEROKEE =32, /*[13A0]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS =33,
+    UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS =33, /*[1400]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_OGHAM =34,
+    UBLOCK_OGHAM =34, /*[1680]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_RUNIC =35,
+    UBLOCK_RUNIC =35, /*[16A0]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_KHMER =36,
+    UBLOCK_KHMER =36, /*[1780]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_MONGOLIAN =37,
+    UBLOCK_MONGOLIAN =37, /*[1800]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_LATIN_EXTENDED_ADDITIONAL =38,
+    UBLOCK_LATIN_EXTENDED_ADDITIONAL =38, /*[1E00]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_GREEK_EXTENDED =39,
+    UBLOCK_GREEK_EXTENDED =39, /*[1F00]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_GENERAL_PUNCTUATION =40,
+    UBLOCK_GENERAL_PUNCTUATION =40, /*[2000]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_SUPERSCRIPTS_AND_SUBSCRIPTS =41,
+    UBLOCK_SUPERSCRIPTS_AND_SUBSCRIPTS =41, /*[2070]*/
     
     /** @draft ICU 2.0 */
-    UBLOCK_CURRENCY_SYMBOLS =42,
+    UBLOCK_CURRENCY_SYMBOLS =42, /*[20A0]*/
     
     /**
      * Unicode 3.2 renames this block to "Combining Diacritical Marks for Symbols".
      * @draft ICU 2.0
      */
-    UBLOCK_COMBINING_MARKS_FOR_SYMBOLS =43,
+    UBLOCK_COMBINING_MARKS_FOR_SYMBOLS =43, /*[20D0]*/
     
     /** @draft ICU 2.0 */
-    UBLOCK_LETTERLIKE_SYMBOLS =44,
+    UBLOCK_LETTERLIKE_SYMBOLS =44, /*[2100]*/
     
     /** @draft ICU 2.0 */
-    UBLOCK_NUMBER_FORMS =45,
+    UBLOCK_NUMBER_FORMS =45, /*[2150]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_ARROWS =46,
+    UBLOCK_ARROWS =46, /*[2190]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_MATHEMATICAL_OPERATORS =47,
+    UBLOCK_MATHEMATICAL_OPERATORS =47, /*[2200]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_MISCELLANEOUS_TECHNICAL =48,
+    UBLOCK_MISCELLANEOUS_TECHNICAL =48, /*[2300]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_CONTROL_PICTURES =49,
+    UBLOCK_CONTROL_PICTURES =49, /*[2400]*/
+ 
+    /** @draft ICU 2.0 */
+    UBLOCK_OPTICAL_CHARACTER_RECOGNITION =50, /*[2440]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_OPTICAL_CHARACTER_RECOGNITION =50,
+    UBLOCK_ENCLOSED_ALPHANUMERICS =51, /*[2460]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_ENCLOSED_ALPHANUMERICS =51,
+    UBLOCK_BOX_DRAWING =52, /*[2500]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_BOX_DRAWING =52,
+    UBLOCK_BLOCK_ELEMENTS =53, /*[2580]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_BLOCK_ELEMENTS =53,
+    UBLOCK_GEOMETRIC_SHAPES =54, /*[25A0]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_GEOMETRIC_SHAPES =54,
+    UBLOCK_MISCELLANEOUS_SYMBOLS =55, /*[2600]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_MISCELLANEOUS_SYMBOLS =55,
+    UBLOCK_DINGBATS =56, /*[2700]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_DINGBATS =56,
+    UBLOCK_BRAILLE_PATTERNS =57, /*[2800]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_BRAILLE_PATTERNS =57,
+    UBLOCK_CJK_RADICALS_SUPPLEMENT =58, /*[2E80]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_CJK_RADICALS_SUPPLEMENT =58,
+    UBLOCK_KANGXI_RADICALS =59, /*[2F00]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_KANGXI_RADICALS =59,
+    UBLOCK_IDEOGRAPHIC_DESCRIPTION_CHARACTERS =60, /*[2FF0]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_IDEOGRAPHIC_DESCRIPTION_CHARACTERS =60,
+    UBLOCK_CJK_SYMBOLS_AND_PUNCTUATION =61, /*[3000]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_CJK_SYMBOLS_AND_PUNCTUATION =61,
+    UBLOCK_HIRAGANA =62, /*[3040]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_HIRAGANA =62,
+    UBLOCK_KATAKANA =63, /*[30A0]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_KATAKANA =63,
+    UBLOCK_BOPOMOFO =64, /*[3100]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_BOPOMOFO =64,
+    UBLOCK_HANGUL_COMPATIBILITY_JAMO =65, /*[3130]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_HANGUL_COMPATIBILITY_JAMO =65,
+    UBLOCK_KANBUN =66, /*[3190]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_KANBUN =66,
+    UBLOCK_BOPOMOFO_EXTENDED =67, /*[31A0]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_BOPOMOFO_EXTENDED =67,
+    UBLOCK_ENCLOSED_CJK_LETTERS_AND_MONTHS =68, /*[3200]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_ENCLOSED_CJK_LETTERS_AND_MONTHS =68,
+    UBLOCK_CJK_COMPATIBILITY =69, /*[3300]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_CJK_COMPATIBILITY =69,
+    UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A =70, /*[3400]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A =70,
+    UBLOCK_CJK_UNIFIED_IDEOGRAPHS =71, /*[4E00]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_CJK_UNIFIED_IDEOGRAPHS =71,
+    UBLOCK_YI_SYLLABLES =72, /*[A000]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_YI_SYLLABLES =72,
+    UBLOCK_YI_RADICALS =73, /*[A490]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_YI_RADICALS =73,
+    UBLOCK_HANGUL_SYLLABLES =74, /*[AC00]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_HANGUL_SYLLABLES =74,
+    UBLOCK_HIGH_SURROGATES =75, /*[D800]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_HIGH_SURROGATES =75,
+    UBLOCK_HIGH_PRIVATE_USE_SURROGATES =76, /*[DB80]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_HIGH_PRIVATE_USE_SURROGATES =76,
-
-    /** @draft ICU 2.0 */
-    UBLOCK_LOW_SURROGATES =77,
+    UBLOCK_LOW_SURROGATES =77, /*[DC00]*/
 
     /**
      * Same as UBLOCK_PRIVATE_USE_AREA.
@@ -717,84 +795,84 @@ enum UBlockCode {
      *
      * @draft ICU 2.0
      */
-    UBLOCK_PRIVATE_USE_AREA =UBLOCK_PRIVATE_USE,
+    UBLOCK_PRIVATE_USE_AREA =UBLOCK_PRIVATE_USE, /*[E000]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS =79,
+    UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS =79, /*[F900]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_ALPHABETIC_PRESENTATION_FORMS =80,
+    UBLOCK_ALPHABETIC_PRESENTATION_FORMS =80, /*[FB00]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_ARABIC_PRESENTATION_FORMS_A =81,
+    UBLOCK_ARABIC_PRESENTATION_FORMS_A =81, /*[FB50]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_COMBINING_HALF_MARKS =82,
+    UBLOCK_COMBINING_HALF_MARKS =82, /*[FE20]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_CJK_COMPATIBILITY_FORMS =83,
+    UBLOCK_CJK_COMPATIBILITY_FORMS =83, /*[FE30]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_SMALL_FORM_VARIANTS =84,
+    UBLOCK_SMALL_FORM_VARIANTS =84, /*[FE50]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_ARABIC_PRESENTATION_FORMS_B =85,
+    UBLOCK_ARABIC_PRESENTATION_FORMS_B =85, /*[FE70]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_SPECIALS =86,
+    UBLOCK_SPECIALS =86, /*[FFF0]*/
 
     /** @draft ICU 2.0 */
-    UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS =87,
+    UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS =87, /*[FF00]*/
     
     /** @draft ICU 2.0 */
-    UBLOCK_OLD_ITALIC = 88  ,
+    UBLOCK_OLD_ITALIC = 88  , /*[10300]*/
     /** @draft ICU 2.0 */
-    UBLOCK_GOTHIC = 89 ,
+    UBLOCK_GOTHIC = 89 , /*[10330]*/
     /** @draft ICU 2.0 */
-    UBLOCK_DESERET = 90 ,
+    UBLOCK_DESERET = 90 , /*[10400]*/
     /** @draft ICU 2.0 */
-    UBLOCK_BYZANTINE_MUSICAL_SYMBOLS = 91 ,
+    UBLOCK_BYZANTINE_MUSICAL_SYMBOLS = 91 , /*[1D000]*/
     /** @draft ICU 2.0 */
-    UBLOCK_MUSICAL_SYMBOLS = 92 ,
+    UBLOCK_MUSICAL_SYMBOLS = 92 , /*[1D100]*/
     /** @draft ICU 2.0 */
-    UBLOCK_MATHEMATICAL_ALPHANUMERIC_SYMBOLS = 93  ,
+    UBLOCK_MATHEMATICAL_ALPHANUMERIC_SYMBOLS = 93  , /*[1D400]*/
     /** @draft ICU 2.0 */
-    UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B  = 94 ,
+    UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B  = 94 , /*[20000]*/
     /** @draft ICU 2.0 */
-    UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT = 95 ,
+    UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT = 95 , /*[2F800]*/
     /** @draft ICU 2.0 */
-    UBLOCK_TAGS = 96,
+    UBLOCK_TAGS = 96, /*[E0000]*/
 
     /* New blocks in Unicode 3.2 */
 
     /** @draft ICU 2.2 */
-    UBLOCK_CYRILLIC_SUPPLEMENTARY = 97,
+    UBLOCK_CYRILLIC_SUPPLEMENTARY = 97, /*[0500]*/
     /** @draft ICU 2.2 */
-    UBLOCK_TAGALOG = 98,
+    UBLOCK_TAGALOG = 98, /*[1700]*/
     /** @draft ICU 2.2 */
-    UBLOCK_HANUNOO = 99,
+    UBLOCK_HANUNOO = 99, /*[1720]*/
     /** @draft ICU 2.2 */
-    UBLOCK_BUHID = 100,
+    UBLOCK_BUHID = 100, /*[1740]*/
     /** @draft ICU 2.2 */
-    UBLOCK_TAGBANWA = 101,
+    UBLOCK_TAGBANWA = 101, /*[1760]*/
     /** @draft ICU 2.2 */
-    UBLOCK_MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A = 102,
+    UBLOCK_MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A = 102, /*[27C0]*/
     /** @draft ICU 2.2 */
-    UBLOCK_SUPPLEMENTAL_ARROWS_A = 103,
+    UBLOCK_SUPPLEMENTAL_ARROWS_A = 103, /*[27F0]*/
     /** @draft ICU 2.2 */
-    UBLOCK_SUPPLEMENTAL_ARROWS_B = 104,
+    UBLOCK_SUPPLEMENTAL_ARROWS_B = 104, /*[2900]*/
     /** @draft ICU 2.2 */
-    UBLOCK_MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B = 105,
+    UBLOCK_MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B = 105, /*[2980]*/
     /** @draft ICU 2.2 */
-    UBLOCK_SUPPLEMENTAL_MATHEMATICAL_OPERATORS = 106,
+    UBLOCK_SUPPLEMENTAL_MATHEMATICAL_OPERATORS = 106, /*[2A00]*/
     /** @draft ICU 2.2 */
-    UBLOCK_KATAKANA_PHONETIC_EXTENSIONS = 107,
+    UBLOCK_KATAKANA_PHONETIC_EXTENSIONS = 107, /*[31F0]*/
     /** @draft ICU 2.2 */
-    UBLOCK_VARIATION_SELECTORS = 108,
+    UBLOCK_VARIATION_SELECTORS = 108, /*[FE00]*/
     /** @draft ICU 2.2 */
-    UBLOCK_SUPPLEMENTARY_PRIVATE_USE_AREA_A = 109,
+    UBLOCK_SUPPLEMENTARY_PRIVATE_USE_AREA_A = 109, /*[F0000]*/
     /** @draft ICU 2.2 */
-    UBLOCK_SUPPLEMENTARY_PRIVATE_USE_AREA_B = 110,
+    UBLOCK_SUPPLEMENTARY_PRIVATE_USE_AREA_B = 110, /*[100000]*/
 
     /** @draft ICU 2.0 */
     UBLOCK_COUNT,
@@ -1017,12 +1095,12 @@ typedef enum UCellWidth
  * @draft ICU 2.2
  */
 typedef enum UEastAsianWidth {
-    U_EA_NEUTRAL,
-    U_EA_AMBIGUOUS,
-    U_EA_HALFWIDTH,
-    U_EA_FULLWIDTH,
-    U_EA_NARROW,
-    U_EA_WIDE,
+    U_EA_NEUTRAL,   /*[N]*/ /*See note !!*/
+    U_EA_AMBIGUOUS, /*[A]*/
+    U_EA_HALFWIDTH, /*[H]*/
+    U_EA_FULLWIDTH, /*[F]*/
+    U_EA_NARROW,    /*[Na]*/
+    U_EA_WIDE,      /*[W]*/
     U_EA_COUNT
 } UEastAsianWidth;
 /*
@@ -1049,30 +1127,49 @@ typedef enum UCharNameChoice {
 } UCharNameChoice;
 
 /**
+ * Selector constants for u_getPropertyName() and
+ * u_getPropertyValueName().  These selectors are used to choose which
+ * name is returned for a given property or value.  All properties and
+ * values have a long name.  Most have a short name, but some do not.
+ * Unicode allows for additional names, beyond the long and short
+ * name, which would be indicated by U_LONG_PROPERTY_NAME + i, where
+ * i=1, 2,...
+ *
+ * @see u_getPropertyName()
+ * @see u_getPropertyValueName()
+ * @draft ICU 2.4
+ */
+typedef enum UPropertyNameChoice {
+    U_SHORT_PROPERTY_NAME,
+    U_LONG_PROPERTY_NAME,
+    U_PROPERTY_NAME_CHOICE_COUNT
+} UPropertyNameChoice;
+
+/**
  * Decomposition Type constants.
  *
  * @see UCHAR_DECOMPOSITION_TYPE
  * @draft ICU 2.2
  */
 typedef enum UDecompositionType {
-    U_DT_NONE,
-    U_DT_CANONICAL,
-    U_DT_COMPAT,
-    U_DT_CIRCLE,
-    U_DT_FINAL,
-    U_DT_FONT,
-    U_DT_FRACTION,
-    U_DT_INITIAL,
-    U_DT_ISOLATED,
-    U_DT_MEDIAL,
-    U_DT_NARROW,
-    U_DT_NOBREAK,
-    U_DT_SMALL,
-    U_DT_SQUARE,
-    U_DT_SUB,
-    U_DT_SUPER,
-    U_DT_VERTICAL,
-    U_DT_WIDE,
+    U_DT_NONE,              /*[none]*/ /*See note !!*/
+    U_DT_CANONICAL,         /*[can]*/
+    U_DT_COMPAT,            /*[com]*/
+    U_DT_CIRCLE,            /*[enc]*/
+    U_DT_FINAL,             /*[fin]*/
+    U_DT_FONT,              /*[font]*/
+    U_DT_FRACTION,          /*[fra]*/
+    U_DT_INITIAL,           /*[init]*/
+    U_DT_ISOLATED,          /*[iso]*/
+    U_DT_MEDIAL,            /*[med]*/
+    U_DT_NARROW,            /*[nar]*/
+    U_DT_NOBREAK,           /*[nb]*/
+    U_DT_SMALL,             /*[sml]*/
+    U_DT_SQUARE,            /*[sqr]*/
+    U_DT_SUB,               /*[sub]*/
+    U_DT_SUPER,             /*[sup]*/
+    U_DT_VERTICAL,          /*[vert]*/
+    U_DT_WIDE,              /*[wide]*/
     U_DT_COUNT /* 18 */
 } UDecompositionType;
 
@@ -1083,12 +1180,12 @@ typedef enum UDecompositionType {
  * @draft ICU 2.2
  */
 typedef enum UJoiningType {
-    U_JT_NON_JOINING,
-    U_JT_JOIN_CAUSING,
-    U_JT_DUAL_JOINING,
-    U_JT_LEFT_JOINING,
-    U_JT_RIGHT_JOINING,
-    U_JT_TRANSPARENT,
+    U_JT_NON_JOINING,       /*[U]*/ /*See note !!*/
+    U_JT_JOIN_CAUSING,      /*[C]*/
+    U_JT_DUAL_JOINING,      /*[D]*/
+    U_JT_LEFT_JOINING,      /*[L]*/
+    U_JT_RIGHT_JOINING,     /*[R]*/
+    U_JT_TRANSPARENT,       /*[T]*/
     U_JT_COUNT /* 6 */
 } UJoiningType;
 
@@ -1160,35 +1257,35 @@ typedef enum UJoiningGroup {
  * @draft ICU 2.2
  */
 typedef enum ULineBreak {
-    U_LB_UNKNOWN,
-    U_LB_AMBIGUOUS,
-    U_LB_ALPHABETIC,
-    U_LB_BREAK_BOTH,
-    U_LB_BREAK_AFTER,
-    U_LB_BREAK_BEFORE,
-    U_LB_MANDATORY_BREAK,
-    U_LB_CONTINGENT_BREAK,
-    U_LB_CLOSE_PUNCTUATION,
-    U_LB_COMBINING_MARK,
-    U_LB_CARRIAGE_RETURN,
-    U_LB_EXCLAMATION,
-    U_LB_GLUE,
-    U_LB_HYPHEN,
-    U_LB_IDEOGRAPHIC,
-    U_LB_INSEPERABLE,
-    U_LB_INFIX_NUMERIC,
-    U_LB_LINE_FEED,
-    U_LB_NONSTARTER,
-    U_LB_NUMERIC,
-    U_LB_OPEN_PUNCTUATION,
-    U_LB_POSTFIX_NUMERIC,
-    U_LB_PREFIX_NUMERIC,
-    U_LB_QUOTATION,
-    U_LB_COMPLEX_CONTEXT,
-    U_LB_SURROGATE,
-    U_LB_SPACE,
-    U_LB_BREAK_SYMBOLS,
-    U_LB_ZWSPACE,
+    U_LB_UNKNOWN,           /*[XX]*/ /*See note !!*/
+    U_LB_AMBIGUOUS,         /*[AI]*/
+    U_LB_ALPHABETIC,        /*[AL]*/
+    U_LB_BREAK_BOTH,        /*[B2]*/
+    U_LB_BREAK_AFTER,       /*[BA]*/
+    U_LB_BREAK_BEFORE,      /*[BB]*/
+    U_LB_MANDATORY_BREAK,   /*[BK]*/
+    U_LB_CONTINGENT_BREAK,  /*[CB]*/
+    U_LB_CLOSE_PUNCTUATION, /*[CL]*/
+    U_LB_COMBINING_MARK,    /*[CM]*/
+    U_LB_CARRIAGE_RETURN,   /*[CR]*/
+    U_LB_EXCLAMATION,       /*[EX]*/
+    U_LB_GLUE,              /*[GL]*/
+    U_LB_HYPHEN,            /*[HY]*/
+    U_LB_IDEOGRAPHIC,       /*[ID]*/
+    U_LB_INSEPERABLE,       /*[IN]*/
+    U_LB_INFIX_NUMERIC,     /*[IS]*/
+    U_LB_LINE_FEED,         /*[LF]*/
+    U_LB_NONSTARTER,        /*[NS]*/
+    U_LB_NUMERIC,           /*[NU]*/
+    U_LB_OPEN_PUNCTUATION,  /*[OP]*/
+    U_LB_POSTFIX_NUMERIC,   /*[PO]*/
+    U_LB_PREFIX_NUMERIC,    /*[PR]*/
+    U_LB_QUOTATION,         /*[QU]*/
+    U_LB_COMPLEX_CONTEXT,   /*[SA]*/
+    U_LB_SURROGATE,         /*[SG]*/
+    U_LB_SPACE,             /*[SP]*/
+    U_LB_BREAK_SYMBOLS,     /*[SY]*/
+    U_LB_ZWSPACE,           /*[ZW]*/
     U_LB_COUNT /* 29 */
 } ULineBreak;
 
@@ -1199,10 +1296,10 @@ typedef enum ULineBreak {
  * @draft ICU 2.2
  */
 typedef enum UNumericType {
-    U_NT_NONE,
-    U_NT_DECIMAL,
-    U_NT_DIGIT,
-    U_NT_NUMERIC,
+    U_NT_NONE,              /*[None]*/ /*See note !!*/
+    U_NT_DECIMAL,           /*[de]*/
+    U_NT_DIGIT,             /*[di]*/
+    U_NT_NUMERIC,           /*[nu]*/
     U_NT_COUNT
 } UNumericType;
 
@@ -1318,7 +1415,7 @@ u_isUWhiteSpace(UChar32 c);
  * UBool b=(UBool)u_getIntPropertyValue(c, UCHAR_IDEOGRAPHIC);
  *
  * @param c Code point to test.
- * @param which UProperty selector constant, identifies which binary property to check.
+ * @param which UProperty selector constant, identifies which property to check.
  *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
  *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT.
  * @return Numeric value that is directly the property value or,
@@ -1944,6 +2041,127 @@ u_enumCharNames(UChar32 start, UChar32 limit,
                 void *context,
                 UCharNameChoice nameChoice,
                 UErrorCode *pErrorCode);
+
+/**
+ * Return the Unicode name for a given property, as given in the
+ * Unicode database file PropertyAliases.txt.
+ *
+ * @param property UProperty selector other than UCHAR_INVALID_CODE.
+ *         If out of range, NULL is returned.
+ *
+ * @param nameChoice selector for which name to get.  If out of range,
+ *         NULL is returned.  All properties have a long name.  Most
+ *         have a short name, but some do not.  Unicode allows for
+ *         additional names; if present these will be returned by
+ *         U_LONG_PROPERTY_NAME + i, where i=1, 2,...
+ *
+ * @return a pointer to the name, or NULL if either the
+ *         property or the nameChoice is out of range.  If a given
+ *         nameChoice returns NULL, then all larger values of
+ *         nameChoice will return NULL, with one exception: if NULL is
+ *         returned for U_SHORT_PROPERTY_NAME, then
+ *         U_LONG_PROPERTY_NAME (and higher) may still return a
+ *         non-NULL value.  The returned pointer is valid until
+ *         u_cleanup() is called.
+ *
+ * @see UProperty
+ * @see UPropertyNameChoice
+ * @draft ICU 2.4
+ */
+U_CAPI const char* U_EXPORT2
+u_getPropertyName(UProperty property,
+                  UPropertyNameChoice nameChoice);
+
+/**
+ * Return the UProperty enum for a given property name, as specified
+ * in the Unicode database file PropertyAliases.txt.  Short, long, and
+ * any other variants are recognized.
+ *
+ * @param alias the property name to be matched.  The name is compared
+ *         using "loose matching" as described in PropertyAliases.txt.
+ *
+ * @return a UProperty enum, or UCHAR_INVALID_CODE if the given name
+ *         does not match any property.
+ *
+ * @see UProperty
+ * @draft ICU 2.4
+ */
+U_CAPI UProperty U_EXPORT2
+u_getPropertyEnum(const char* alias);
+
+/**
+ * Return the Unicode name for a given property value, as given in the
+ * Unicode database file PropertyValueAliases.txt.
+ *
+ * @param property UProperty selector in the range UCHAR_INT_START <=
+ *         x < UCHAR_INT_LIMIT or UCHAR_BINARY_START <= x <
+ *         UCHAR_BINARY_LIMIT.  If out of range, NULL is returned.
+ *
+ * @param value selector for a value for the given property.  If out
+ *         of range, NULL is returned.  In general, valid values range
+ *         from 0 up to some maximum.  There are a few exceptions:
+ *         (1.) UCHAR_BLOCK values begin at the non-zero value
+ *         UBLOCK_BASIC_LATIN.  (2.)  UCHAR_CANONICAL_COMBINING_CLASS
+ *         values are not contiguous and range from 0..240.  (3.)
+ *         UCHAR_GENERAL_CATEGORY values are not values of
+ *         UCharCategory, but rather mask values produced by
+ *         U_GET_GC_MASK().  This allows grouped categories such as
+ *         [:L:] to be represented.  Mask values range
+ *         non-contiguously from 1..U_GC_P_MASK.
+ *
+ * @param nameChoice selector for which name to get.  If out of range,
+ *         NULL is returned.  All values have a long name.  Most have
+ *         a short name, but some do not.  Unicode allows for
+ *         additional names; if present these will be returned by
+ *         U_LONG_PROPERTY_NAME + i, where i=1, 2,...
+
+ * @return a pointer to the name, or NULL if either the
+ *         property or the nameChoice is out of range.  If a given
+ *         nameChoice returns NULL, then all larger values of
+ *         nameChoice will return NULL, with one exception: if NULL is
+ *         returned for U_SHORT_PROPERTY_NAME, then
+ *         U_LONG_PROPERTY_NAME (and higher) may still return a
+ *         non-NULL value.  The returned pointer is valid until
+ *         u_cleanup() is called.
+ *
+ * @see UProperty
+ * @see UPropertyNameChoice
+ * @draft ICU 2.4
+ */
+U_CAPI const char* U_EXPORT2
+u_getPropertyValueName(UProperty property,
+                       int32_t value,
+                       UPropertyNameChoice nameChoice);
+
+/**
+ * Return the property value integer for a given value name, as
+ * specified in the Unicode database file PropertyValueAliases.txt.
+ * Short, long, and any other variants are recognized.
+ *
+ * @param prop the UProperty selector for the property to which
+ *         the given value alias belongs.  It should be in the range
+ *         UCHAR_INT_START <= x < UCHAR_INT_LIMIT or
+ *         UCHAR_BINARY_START <= x < UCHAR_BINARY_LIMIT; only these
+ *         properties define value names and enums.  If out of range,
+ *         UCHAR_INVALID_CODE is returned.
+ *
+ * @param alias the value name to be matched.  The name is compared
+ *         using "loose matching" as described in
+ *         PropertyValueAliases.txt.
+ *
+ * @return a value integer or UCHAR_INVALID_CODE if the given name
+ *         does not match any value of the given property, or if the
+ *         property is invalid.  Note: U CHAR_GENERAL_CATEGORY values
+ *         are not values of UCharCategory, but rather mask values
+ *         produced by U_GET_GC_MASK().  This allows grouped
+ *         categories such as [:L:] to be represented.
+ *
+ * @see UProperty
+ * @draft ICU 2.4
+ */
+U_CAPI int32_t U_EXPORT2
+u_getPropertyValueEnum(UProperty property,
+                       const char* alias);
 
 /** 
  * The following functions are java specific.
