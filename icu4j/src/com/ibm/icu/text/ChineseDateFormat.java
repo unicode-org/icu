@@ -3,11 +3,12 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/ChineseDateFormat.java,v $
- * $Date: 2002/12/05 01:21:29 $
- * $Revision: 1.7 $
+ * $Date: 2003/03/13 23:18:30 $
+ * $Revision: 1.8 $
  */
 package com.ibm.icu.text;
 import com.ibm.icu.util.*;
+import com.ibm.icu.impl.Utility;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Locale;
@@ -79,25 +80,15 @@ public class ChineseDateFormat extends SimpleDateFormat {
      * @stable ICU 2.0
      */
     protected int subParse(String text, int start, char ch, int count,
-                           boolean obeyCount, boolean[] ambiguousYear, Calendar cal) {
+                           boolean obeyCount, boolean allowNegative, boolean[] ambiguousYear, Calendar cal) {
         if (ch != 'G' && ch != 'l' && ch != 'y') {
-            return super.subParse(text, start, ch, count, obeyCount, ambiguousYear, cal);
+            return super.subParse(text, start, ch, count, obeyCount, allowNegative, ambiguousYear, cal);
         }
+
+        // Skip whitespace
+        start = Utility.skipWhitespace(text, start);
 
         ParsePosition pos = new ParsePosition(start);
-
-        // If there are any spaces here, skip over them.  If we hit the end
-        // of the string, then fail.
-        for (;;) {
-            if (pos.getIndex() >= text.length()) {
-                return -start;
-            }
-            char c = text.charAt(pos.getIndex());
-            if (c != ' ' && c != '\t') { // TODO Shouldn't this be isWhitespace?
-                break;
-            }
-            pos.setIndex(pos.getIndex()+1);
-        }
 
         switch (ch) {
         case 'G': // 'G' - ERA
