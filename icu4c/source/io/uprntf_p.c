@@ -292,6 +292,7 @@ u_printf_double_handler(const u_printf_stream_handler  *handler,
     int32_t        prefixBufferLen = sizeof(prefixBuffer);
     int32_t        minDecimalDigits;
     int32_t        maxDecimalDigits;
+    int32_t        resultLen;
     UErrorCode     status        = U_ZERO_ERROR;
 
     prefixBuffer[0] = 0;
@@ -332,7 +333,11 @@ u_printf_double_handler(const u_printf_stream_handler  *handler,
     }
 
     /* format the number */
-    unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
+    resultLen = unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
+
+    if (U_FAILURE(status)) {
+        resultLen = 0;
+    }
 
     /* restore the number format */
     /* TODO: Is this needed? */
@@ -345,7 +350,7 @@ u_printf_double_handler(const u_printf_stream_handler  *handler,
         u_printf_reset_sign(format, info, prefixBuffer, &prefixBufferLen, &localStatus);
     }
 
-    return handler->pad_and_justify(context, info, result, u_strlen(result));
+    return handler->pad_and_justify(context, info, result, resultLen);
 }
 
 /* HSYS */
@@ -362,6 +367,7 @@ u_printf_integer_handler(const u_printf_stream_handler  *handler,
     UChar           prefixBuffer[UPRINTF_BUFFER_SIZE];
     int32_t         prefixBufferLen = sizeof(prefixBuffer);
     int32_t         minDigits     = -1;
+    int32_t         resultLen;
     UErrorCode      status        = U_ZERO_ERROR;
 
     prefixBuffer[0] = 0;
@@ -394,7 +400,11 @@ u_printf_integer_handler(const u_printf_stream_handler  *handler,
     }
 
     /* format the number */
-    unum_formatInt64(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
+    resultLen = unum_formatInt64(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
+
+    if (U_FAILURE(status)) {
+        resultLen = 0;
+    }
 
     /* restore the number format */
     if (minDigits != -1) {
@@ -407,7 +417,7 @@ u_printf_integer_handler(const u_printf_stream_handler  *handler,
         u_printf_reset_sign(format, info, prefixBuffer, &prefixBufferLen, &localStatus);
     }
 
-    return handler->pad_and_justify(context, info, result, u_strlen(result));
+    return handler->pad_and_justify(context, info, result, resultLen);
 }
 
 static int32_t
@@ -492,6 +502,7 @@ u_printf_uinteger_handler(const u_printf_stream_handler *handler,
     UChar           prefixBuffer[UPRINTF_BUFFER_SIZE];
     int32_t         prefixBufferLen = sizeof(prefixBuffer);
     int32_t         minDigits     = -1;
+    int32_t         resultLen;
     UErrorCode      status        = U_ZERO_ERROR;
 
     prefixBuffer[0] = 0;
@@ -524,7 +535,11 @@ u_printf_uinteger_handler(const u_printf_stream_handler *handler,
     }
 
     /* format the number */
-    unum_formatInt64(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
+    resultLen = unum_formatInt64(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
+
+    if (U_FAILURE(status)) {
+        resultLen = 0;
+    }
 
     /* restore the number format */
     if (minDigits != -1) {
@@ -537,7 +552,7 @@ u_printf_uinteger_handler(const u_printf_stream_handler *handler,
         u_printf_reset_sign(format, info, prefixBuffer, &prefixBufferLen, &localStatus);
     }
 
-    return handler->pad_and_justify(context, info, result, u_strlen(result));
+    return handler->pad_and_justify(context, info, result, resultLen);
 }
 
 static int32_t
@@ -573,6 +588,7 @@ u_printf_scientific_handler(const u_printf_stream_handler  *handler,
     UErrorCode      status        = U_ZERO_ERROR;
     UChar srcExpBuf[UPRINTF_SYMBOL_BUFFER_SIZE];
     int32_t srcLen, expLen;
+    int32_t resultLen;
     UChar expBuf[UPRINTF_SYMBOL_BUFFER_SIZE];
 
     prefixBuffer[0] = 0;
@@ -641,7 +657,11 @@ u_printf_scientific_handler(const u_printf_stream_handler  *handler,
     }
 
     /* format the number */
-    unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
+    resultLen = unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
+
+    if (U_FAILURE(status)) {
+        resultLen = 0;
+    }
 
     /* restore the number format */
     /* TODO: Is this needed? */
@@ -662,7 +682,7 @@ u_printf_scientific_handler(const u_printf_stream_handler  *handler,
         u_printf_reset_sign(format, info, prefixBuffer, &prefixBufferLen, &localStatus);
     }
 
-    return handler->pad_and_justify(context, info, result, u_strlen(result));
+    return handler->pad_and_justify(context, info, result, resultLen);
 }
 
 static int32_t
@@ -679,6 +699,7 @@ u_printf_percent_handler(const u_printf_stream_handler  *handler,
     int32_t         prefixBufferLen = sizeof(prefixBuffer);
     int32_t         minDecimalDigits;
     int32_t         maxDecimalDigits;
+    int32_t         resultLen;
     UErrorCode      status        = U_ZERO_ERROR;
 
     prefixBuffer[0] = 0;
@@ -719,7 +740,11 @@ u_printf_percent_handler(const u_printf_stream_handler  *handler,
     }
 
     /* format the number */
-    unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
+    resultLen = unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
+
+    if (U_FAILURE(status)) {
+        resultLen = 0;
+    }
 
     /* restore the number format */
     /* TODO: Is this needed? */
@@ -732,7 +757,7 @@ u_printf_percent_handler(const u_printf_stream_handler  *handler,
         u_printf_reset_sign(format, info, prefixBuffer, &prefixBufferLen, &localStatus);
     }
 
-    return handler->pad_and_justify(context, info, result, u_strlen(result));
+    return handler->pad_and_justify(context, info, result, resultLen);
 }
 
 static int32_t
@@ -878,6 +903,7 @@ u_printf_spellout_handler(const u_printf_stream_handler *handler,
     int32_t         prefixBufferLen = sizeof(prefixBuffer);
     int32_t         minDecimalDigits;
     int32_t         maxDecimalDigits;
+    int32_t         resultLen;
     UErrorCode      status        = U_ZERO_ERROR;
 
     prefixBuffer[0] = 0;
@@ -918,7 +944,11 @@ u_printf_spellout_handler(const u_printf_stream_handler *handler,
     }
 
     /* format the number */
-    unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
+    resultLen = unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
+
+    if (U_FAILURE(status)) {
+        resultLen = 0;
+    }
 
     /* restore the number format */
     /* TODO: Is this needed? */
@@ -931,7 +961,7 @@ u_printf_spellout_handler(const u_printf_stream_handler *handler,
         u_printf_reset_sign(format, info, prefixBuffer, &prefixBufferLen, &localStatus);
     }
 
-    return handler->pad_and_justify(context, info, result, u_strlen(result));
+    return handler->pad_and_justify(context, info, result, resultLen);
 }
 
 /* Use US-ASCII characters only for formatting. Most codepages have
@@ -1039,327 +1069,348 @@ static const u_printf_info g_u_printf_infos[UPRINTF_NUM_FMT_HANDLERS] = {
 
 /* We parse the argument list in Unicode */
 U_CFUNC int32_t
-u_printf_print_spec(const u_printf_stream_handler *streamHandler,
-                    const UChar     *fmt,
-                    void            *context,
-                    ULocaleBundle   *formatBundle,
-                    int32_t         patCount,
-                    int32_t         *written,
-                    va_list         *ap)
+u_printf_parse(const u_printf_stream_handler *streamHandler,
+               const UChar     *fmt,
+               void            *context,
+               u_localized_print_string *locStringContext,
+               ULocaleBundle   *formatBundle,
+               int32_t         *written,
+               va_list         ap)
 {
     uint16_t         handlerNum;
     ufmt_args        args;
     ufmt_type_info   argType;
     u_printf_handler *handler;
     u_printf_spec    spec;
-
-    const UChar *s = fmt;
-    const UChar *backup;
     u_printf_spec_info *info = &(spec.fInfo);
 
-    /* initialize spec to default values */
-    spec.fWidthPos     = -1;
-    spec.fPrecisionPos = -1;
-    spec.fArgPos       = -1;
+    const UChar *alias = fmt;
+    const UChar *backup;
+    const UChar *lastAlias;
 
-    info->fPrecision    = -1;
-    info->fWidth        = -1;
-    info->fSpec         = 0x0000;
-    info->fPadChar      = 0x0020;
-    info->fAlt          = FALSE;
-    info->fSpace        = FALSE;
-    info->fLeft         = FALSE;
-    info->fShowSign     = FALSE;
-    info->fZero         = FALSE;
-    info->fIsLongDouble = FALSE;
-    info->fIsShort      = FALSE;
-    info->fIsLong       = FALSE;
-    info->fIsLongLong   = FALSE;
+    /* iterate through the pattern */
+    while(!locStringContext || locStringContext->available > 0) {
 
-    /* skip over the initial '%' */
-    s++;
-
-    /* Check for positional argument */
-    if(ISDIGIT(*s)) {
-
-        /* Save the current position */
-        backup = s;
-
-        /* handle positional parameters */
-        if(ISDIGIT(*s)) {
-            spec.fArgPos = (int) (*s++ - DIGIT_ZERO);
-
-            while(ISDIGIT(*s)) {
-                spec.fArgPos *= 10;
-                spec.fArgPos += (int) (*s++ - DIGIT_ZERO);
-            }
+        /* find the next '%' */
+        lastAlias = alias;
+        while(*alias != UP_PERCENT && *alias != 0x0000) {
+            alias++;
         }
 
-        /* if there is no '$', don't read anything */
-        if(*s != SPEC_DOLLARSIGN) {
-            spec.fArgPos = -1;
-            s = backup;
-        }
-        /* munge the '$' */
-        else
-            s++;
-    }
-
-    /* Get any format flags */
-    while(ISFLAG(*s)) {
-        switch(*s++) {
-
-            /* left justify */
-        case FLAG_MINUS:
-            info->fLeft = TRUE;
-            break;
-
-            /* always show sign */
-        case FLAG_PLUS:
-            info->fShowSign = TRUE;
-            break;
-
-            /* use space if no sign present */
-        case FLAG_SPACE:
-            info->fShowSign = TRUE;
-            info->fSpace = TRUE;
-            break;
-
-            /* use alternate form */
-        case FLAG_POUND:
-            info->fAlt = TRUE;
-            break;
-
-            /* pad with leading zeroes */
-        case FLAG_ZERO:
-            info->fZero = TRUE;
-            info->fPadChar = 0x0030;
-            break;
-
-            /* pad character specified */
-        case FLAG_PAREN:
-
-            /* TODO test that all four are numbers */
-            /* first four characters are hex values for pad char */
-            info->fPadChar = (UChar)ufmt_digitvalue(*s++);
-            info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
-            info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
-            info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
-
-            /* final character is ignored */
-            s++;
-
-            break;
-        }
-    }
-
-    /* Get the width */
-
-    /* width is specified out of line */
-    if(*s == SPEC_ASTERISK) {
-
-        info->fWidth = -2;
-
-        /* Skip the '*' */
-        s++;
-
-        /* Save the current position */
-        backup = s;
-
-        /* handle positional parameters */
-        if(ISDIGIT(*s)) {
-            spec.fWidthPos = (int) (*s++ - DIGIT_ZERO);
-
-            while(ISDIGIT(*s)) {
-                spec.fWidthPos *= 10;
-                spec.fWidthPos += (int) (*s++ - DIGIT_ZERO);
-            }
+        /* write any characters before the '%' */
+        if(alias > lastAlias) {
+            *written += (streamHandler->write)(context, lastAlias, (int32_t)(alias - lastAlias));
         }
 
-        /* if there is no '$', don't read anything */
-        if(*s != SPEC_DOLLARSIGN) {
-            spec.fWidthPos = -1;
-            s = backup;
+        /* break if at end of string */
+        if(*alias == 0x0000) {
+            break;
         }
-        /* munge the '$' */
-        else
-            s++;
-    }
-    /* read the width, if present */
-    else if(ISDIGIT(*s)){
-        info->fWidth = (int) (*s++ - DIGIT_ZERO);
 
-        while(ISDIGIT(*s)) {
-            info->fWidth *= 10;
-            info->fWidth += (int) (*s++ - DIGIT_ZERO);
-        }
-    }
+        /* initialize spec to default values */
+        spec.fWidthPos     = -1;
+        spec.fPrecisionPos = -1;
+        spec.fArgPos       = -1;
 
-    /* Get the precision */
+        info->fPrecision    = -1;
+        info->fWidth        = -1;
+        info->fSpec         = 0x0000;
+        info->fPadChar      = 0x0020;
+        info->fAlt          = FALSE;
+        info->fSpace        = FALSE;
+        info->fLeft         = FALSE;
+        info->fShowSign     = FALSE;
+        info->fZero         = FALSE;
+        info->fIsLongDouble = FALSE;
+        info->fIsShort      = FALSE;
+        info->fIsLong       = FALSE;
+        info->fIsLongLong   = FALSE;
 
-    if(*s == SPEC_PERIOD) {
+        /* skip over the initial '%' */
+        alias++;
 
-        /* eat up the '.' */
-        s++;
+        /* Check for positional argument */
+        if(ISDIGIT(*alias)) {
 
-        /* precision is specified out of line */
-        if(*s == SPEC_ASTERISK) {
-
-            info->fPrecision = -2;
-
-            /* Skip the '*' */
-            s++;
-
-            /* save the current position */
-            backup = s;
+            /* Save the current position */
+            backup = alias;
 
             /* handle positional parameters */
-            if(ISDIGIT(*s)) {
-                spec.fPrecisionPos = (int) (*s++ - DIGIT_ZERO);
+            if(ISDIGIT(*alias)) {
+                spec.fArgPos = (int) (*alias++ - DIGIT_ZERO);
 
-                while(ISDIGIT(*s)) {
-                    spec.fPrecisionPos *= 10;
-                    spec.fPrecisionPos += (int) (*s++ - DIGIT_ZERO);
-                }
-
-                /* if there is no '$', don't read anything */
-                if(*s != SPEC_DOLLARSIGN) {
-                    spec.fPrecisionPos = -1;
-                    s = backup;
-                }
-                else {
-                    /* munge the '$' */
-                    s++;
+                while(ISDIGIT(*alias)) {
+                    spec.fArgPos *= 10;
+                    spec.fArgPos += (int) (*alias++ - DIGIT_ZERO);
                 }
             }
-        }
-        /* read the precision */
-        else if(ISDIGIT(*s)){
-            info->fPrecision = (int) (*s++ - DIGIT_ZERO);
 
-            while(ISDIGIT(*s)) {
-                info->fPrecision *= 10;
-                info->fPrecision += (int) (*s++ - DIGIT_ZERO);
+            /* if there is no '$', don't read anything */
+            if(*alias != SPEC_DOLLARSIGN) {
+                spec.fArgPos = -1;
+                alias = backup;
             }
-        }
-    }
-
-    /* Get any modifiers */
-    if(ISMOD(*s)) {
-        switch(*s++) {
-
-            /* short */
-        case MOD_H:
-            info->fIsShort = TRUE;
-            break;
-
-            /* long or long long */
-        case MOD_LOWERL:
-            if(*s == MOD_LOWERL) {
-                info->fIsLongLong = TRUE;
-                /* skip over the next 'l' */
-                s++;
-            }
+            /* munge the '$' */
             else
-                info->fIsLong = TRUE;
-            break;
-
-            /* long double */
-        case MOD_L:
-            info->fIsLongDouble = TRUE;
-            break;
-        }
-    }
-
-    /* finally, get the specifier letter */
-    info->fSpec = *s++;
-
-    /* fill in the precision and width, if specified out of line */
-
-    /* width specified out of line */
-    if(spec.fInfo.fWidth == -2) {
-        if(spec.fWidthPos == -1) {
-            /* read the width from the argument list */
-            info->fWidth = va_arg(*ap, int32_t);
-        }
-        else {
-            /* handle positional parameter */
+                alias++;
         }
 
-        /* if it's negative, take the absolute value and set left alignment */
-        if(info->fWidth < 0) {
-            info->fWidth     *= -1;
-            info->fLeft     = TRUE;
-        }
-    }
+        /* Get any format flags */
+        while(ISFLAG(*alias)) {
+            switch(*alias++) {
 
-    /* precision specified out of line */
-    if(info->fPrecision == -2) {
-        if(spec.fPrecisionPos == -1) {
-            /* read the precision from the argument list */
-            info->fPrecision = va_arg(*ap, int32_t);
-        }
-        else {
-            /* handle positional parameter */
-        }
-
-        /* if it's negative, set it to zero */
-        if(info->fPrecision < 0)
-            info->fPrecision = 0;
-    }
-
-    handlerNum = (uint16_t)(info->fSpec - UPRINTF_BASE_FMT_HANDLERS);
-    if (handlerNum < UPRINTF_NUM_FMT_HANDLERS) {
-        /* query the info function for argument information */
-        argType = g_u_printf_infos[ handlerNum ].info;
-        if(argType > ufmt_simple_percent) {
-            switch(argType) {
-            case ufmt_count:
-                /* set the spec's width to the # of chars written */
-                info->fWidth = *written;
-                /* fall through to set the pointer */
-            case ufmt_string:
-            case ufmt_ustring:
-            case ufmt_pointer:
-                args.ptrValue = va_arg(*ap, void*);
+                /* left justify */
+            case FLAG_MINUS:
+                info->fLeft = TRUE;
                 break;
-            case ufmt_char:
-            case ufmt_uchar:
-            case ufmt_int:
-                if (info->fIsLongLong) {
-                    args.int64Value = va_arg(*ap, int64_t);
-                }
-                else {
-                    args.int64Value = va_arg(*ap, int);
-                }
+
+                /* always show sign */
+            case FLAG_PLUS:
+                info->fShowSign = TRUE;
                 break;
-            case ufmt_float:
-                args.floatValue = (float) va_arg(*ap, double);
+
+                /* use space if no sign present */
+            case FLAG_SPACE:
+                info->fShowSign = TRUE;
+                info->fSpace = TRUE;
                 break;
-            case ufmt_double:
-                args.doubleValue = va_arg(*ap, double);
+
+                /* use alternate form */
+            case FLAG_POUND:
+                info->fAlt = TRUE;
                 break;
-            default:
-                break;  /* Should never get here */
+
+                /* pad with leading zeroes */
+            case FLAG_ZERO:
+                info->fZero = TRUE;
+                info->fPadChar = 0x0030;
+                break;
+
+                /* pad character specified */
+            case FLAG_PAREN:
+
+                /* TODO test that all four are numbers */
+                /* first four characters are hex values for pad char */
+                info->fPadChar = (UChar)ufmt_digitvalue(*alias++);
+                info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*alias++));
+                info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*alias++));
+                info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*alias++));
+
+                /* final character is ignored */
+                alias++;
+
+                break;
             }
         }
 
-        /* call the handler function */
-        handler = g_u_printf_infos[ handlerNum ].handler;
-        if(handler != 0) {
-            *written += (*handler)(streamHandler, context, formatBundle, info, &args);
+        /* Get the width */
+
+        /* width is specified out of line */
+        if(*alias == SPEC_ASTERISK) {
+
+            info->fWidth = -2;
+
+            /* Skip the '*' */
+            alias++;
+
+            /* Save the current position */
+            backup = alias;
+
+            /* handle positional parameters */
+            if(ISDIGIT(*alias)) {
+                spec.fWidthPos = (int) (*alias++ - DIGIT_ZERO);
+
+                while(ISDIGIT(*alias)) {
+                    spec.fWidthPos *= 10;
+                    spec.fWidthPos += (int) (*alias++ - DIGIT_ZERO);
+                }
+            }
+
+            /* if there is no '$', don't read anything */
+            if(*alias != SPEC_DOLLARSIGN) {
+                spec.fWidthPos = -1;
+                alias = backup;
+            }
+            /* munge the '$' */
+            else
+                alias++;
+        }
+        /* read the width, if present */
+        else if(ISDIGIT(*alias)){
+            info->fWidth = (int) (*alias++ - DIGIT_ZERO);
+
+            while(ISDIGIT(*alias)) {
+                info->fWidth *= 10;
+                info->fWidth += (int) (*alias++ - DIGIT_ZERO);
+            }
+        }
+
+        /* Get the precision */
+
+        if(*alias == SPEC_PERIOD) {
+
+            /* eat up the '.' */
+            alias++;
+
+            /* precision is specified out of line */
+            if(*alias == SPEC_ASTERISK) {
+
+                info->fPrecision = -2;
+
+                /* Skip the '*' */
+                alias++;
+
+                /* save the current position */
+                backup = alias;
+
+                /* handle positional parameters */
+                if(ISDIGIT(*alias)) {
+                    spec.fPrecisionPos = (int) (*alias++ - DIGIT_ZERO);
+
+                    while(ISDIGIT(*alias)) {
+                        spec.fPrecisionPos *= 10;
+                        spec.fPrecisionPos += (int) (*alias++ - DIGIT_ZERO);
+                    }
+
+                    /* if there is no '$', don't read anything */
+                    if(*alias != SPEC_DOLLARSIGN) {
+                        spec.fPrecisionPos = -1;
+                        alias = backup;
+                    }
+                    else {
+                        /* munge the '$' */
+                        alias++;
+                    }
+                }
+            }
+            /* read the precision */
+            else if(ISDIGIT(*alias)){
+                info->fPrecision = (int) (*alias++ - DIGIT_ZERO);
+
+                while(ISDIGIT(*alias)) {
+                    info->fPrecision *= 10;
+                    info->fPrecision += (int) (*alias++ - DIGIT_ZERO);
+                }
+            }
+        }
+
+        /* Get any modifiers */
+        if(ISMOD(*alias)) {
+            switch(*alias++) {
+
+                /* short */
+            case MOD_H:
+                info->fIsShort = TRUE;
+                break;
+
+                /* long or long long */
+            case MOD_LOWERL:
+                if(*alias == MOD_LOWERL) {
+                    info->fIsLongLong = TRUE;
+                    /* skip over the next 'l' */
+                    alias++;
+                }
+                else
+                    info->fIsLong = TRUE;
+                break;
+
+                /* long double */
+            case MOD_L:
+                info->fIsLongDouble = TRUE;
+                break;
+            }
+        }
+
+        /* finally, get the specifier letter */
+        info->fSpec = *alias++;
+
+        /* fill in the precision and width, if specified out of line */
+
+        /* width specified out of line */
+        if(spec.fInfo.fWidth == -2) {
+            if(spec.fWidthPos == -1) {
+                /* read the width from the argument list */
+                info->fWidth = va_arg(ap, int32_t);
+            }
+            else {
+                /* handle positional parameter */
+            }
+
+            /* if it's negative, take the absolute value and set left alignment */
+            if(info->fWidth < 0) {
+                info->fWidth     *= -1;
+                info->fLeft     = TRUE;
+            }
+        }
+
+        /* precision specified out of line */
+        if(info->fPrecision == -2) {
+            if(spec.fPrecisionPos == -1) {
+                /* read the precision from the argument list */
+                info->fPrecision = va_arg(ap, int32_t);
+            }
+            else {
+                /* handle positional parameter */
+            }
+
+            /* if it's negative, set it to zero */
+            if(info->fPrecision < 0)
+                info->fPrecision = 0;
+        }
+
+        handlerNum = (uint16_t)(info->fSpec - UPRINTF_BASE_FMT_HANDLERS);
+        if (handlerNum < UPRINTF_NUM_FMT_HANDLERS) {
+            /* query the info function for argument information */
+            argType = g_u_printf_infos[ handlerNum ].info;
+            if(argType > ufmt_simple_percent) {
+                switch(argType) {
+                case ufmt_count:
+                    /* set the spec's width to the # of chars written */
+                    info->fWidth = *written;
+                    /* fall through to set the pointer */
+                case ufmt_string:
+                case ufmt_ustring:
+                case ufmt_pointer:
+                    args.ptrValue = va_arg(ap, void*);
+                    break;
+                case ufmt_char:
+                case ufmt_uchar:
+                case ufmt_int:
+                    if (info->fIsLongLong) {
+                        args.int64Value = va_arg(ap, int64_t);
+                    }
+                    else {
+                        args.int64Value = va_arg(ap, int32_t);
+                    }
+                    break;
+                case ufmt_float:
+                    args.floatValue = (float) va_arg(ap, double);
+                    break;
+                case ufmt_double:
+                    args.doubleValue = va_arg(ap, double);
+                    break;
+                default:
+                    break;  /* Should never get here */
+                }
+            }
+
+            /* call the handler function */
+            handler = g_u_printf_infos[ handlerNum ].handler;
+            if(handler != 0) {
+                *written += (*handler)(streamHandler, context, formatBundle, info, &args);
+            }
+            else {
+                /* just echo unknown tags */
+                *written += (streamHandler->write)(context, fmt, (int32_t)(alias - lastAlias));
+            }
         }
         else {
             /* just echo unknown tags */
-            *written += (streamHandler->write)(context, fmt, patCount);
+            *written += (streamHandler->write)(context, fmt, (int32_t)(alias - lastAlias));
         }
     }
-    else {
-        /* just echo unknown tags */
-        *written += (streamHandler->write)(context, fmt, patCount);
-    }
-    /* return # of characters in this specifier */
-    return (int32_t)(s - fmt);
+    /* return # of characters in this format that have been parsed. */
+    return (int32_t)(alias - fmt);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
