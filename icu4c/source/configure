@@ -1093,6 +1093,8 @@ case "${host}" in
 *-*-solaris*) 	
 	if test "$ac_cv_prog_gcc" = yes; then	
 		icu_cv_host_frag=$srcdir/config/mh-solaris-gcc 
+        elif test "$host_cpu" = sparcv9; then         
+                icu_cv_host_frag=$srcdir/config/mh-solaris-sparcv9  
 	else
 		icu_cv_host_frag=$srcdir/config/mh-solaris 
 	fi ;;
