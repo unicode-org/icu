@@ -1751,11 +1751,13 @@ The leftmost codepage (.xxx) wins.
     /* See if we are using the POSIX locale.  Any of the
     * following are equivalent and use the same QLGPGCMA
     * (POSIX) locale.
+    * QLGPGCMA2 means UCS2
+    * QLGPGCMA_4 means UTF-32
+    * QLGPGCMA_8 means UTF-8
     */
     if ((uprv_strcmp("C", correctedLocale) == 0) ||
         (uprv_strcmp("POSIX", correctedLocale) == 0) ||
-        (uprv_strcmp("QLGPGCMA", correctedLocale) == 0) ||
-        (uprv_strcmp("QLGPGCMA2", correctedLocale) == 0))
+        (uprv_strncmp("QLGPGCMA", correctedLocale, 8) == 0))
     {
         uprv_strcpy(correctedLocale, "en_US_POSIX");
     }
