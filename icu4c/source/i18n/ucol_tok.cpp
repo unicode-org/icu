@@ -691,9 +691,12 @@ ucol_tok_parseNextToken(UColTokenParser *src,
     }else if(isEscaped){
       isEscaped =FALSE;
       if (newStrength == UCOL_TOK_UNSET) {
-        *status = U_INVALID_FORMAT_ERROR;
+        /* enabling rules to start with non-tokens a < b
+		*status = U_INVALID_FORMAT_ERROR;
         syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
         return NULL;
+		*/
+		newStrength = UCOL_TOK_RESET;
       }
       if(ch != 0x0000  && src->current != src->end) {
           if (inChars) {
@@ -854,6 +857,8 @@ ucol_tok_parseNextToken(UColTokenParser *src,
         case 0x000A/*'\n'*/:
         case 0x0020/*' '*/:  
           break; /* skip whitespace TODO use Unicode */
+		case 0x0021/*! skip java thai modifier reordering*/:
+			break; 
         case 0x002F/*'/'*/:
           wasInQuote = FALSE; /* if we were copying source characters, we want to stop now */
           inChars = FALSE; /* we're now processing expansion */
@@ -864,9 +869,13 @@ ucol_tok_parseNextToken(UColTokenParser *src,
         /* found a quote, we're gonna start copying */
         case 0x0027/*'\''*/:
           if (newStrength == UCOL_TOK_UNSET) { /* quote is illegal until we have a strength */
-            *status = U_INVALID_FORMAT_ERROR;
+            /*
+			enabling rules to start with a non-token character a < b
+			*status = U_INVALID_FORMAT_ERROR;
             syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
             return NULL;
+			*/
+            newStrength = UCOL_TOK_RESET;
           }
 
           inQuote = TRUE;
@@ -939,9 +948,12 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                    // the '|' is going to get lost.
         default:
           if (newStrength == UCOL_TOK_UNSET) {
-            *status = U_INVALID_FORMAT_ERROR;
+            /* enabling rules to start with non-tokens a < b
+			*status = U_INVALID_FORMAT_ERROR;
             syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
             return NULL;
+			*/
+			newStrength = UCOL_TOK_RESET;
           }
 
           if (ucol_tok_isSpecialChar(ch) && (inQuote == FALSE)) {

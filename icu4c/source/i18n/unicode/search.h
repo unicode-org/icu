@@ -89,7 +89,9 @@ public:
      * This method takes the argument index and sets the position in the text 
      * string accordingly without checking if the index is pointing to a 
      * valid starting point to begin searching. 
-     * @param position within the text to be set
+     * @param position within the text to be set. If position is less
+     * 			than or greater than the text range for searching, 
+     *          an U_INDEX_OUTOFBOUNDS_ERROR will be returned
      * @param status for errors if it occurs
      * @draft ICU 2.0
      */
@@ -279,7 +281,9 @@ public:
      * match position if one was found. If a match is not found, 
      * <tt>USEARCH_DONE</tt> will be returned and the iterator will be 
      * adjusted to the index USEARCH_DONE
-     * @param  position where search if to start from
+     * @param  position where search if to start from. If position is less
+     * 			than or greater than the text range for searching, 
+     *          an U_INDEX_OUTOFBOUNDS_ERROR will be returned
      * @param  status for errors if it occurs
      * @return The character index of the first match following 
      *         <tt>position</tt>, or <tt>USEARCH_DONE</tt> if there are no 
@@ -309,7 +313,9 @@ public:
      * position if one was found. If a match is not found, 
      * <tt>USEARCH_DONE</tt> will be returned and the iterator will be 
      * adjusted to the index USEARCH_DONE
-     * @param  position where search is to start from
+     * @param  position where search is to start from. If position is less
+     * 			than or greater than the text range for searching, 
+     *          an U_INDEX_OUTOFBOUNDS_ERROR will be returned
      * @param  status for errors if it occurs
      * @return The character index of the first match preceding 
      *         <tt>position</tt>, or <tt>USEARCH_DONE</tt> if there are 

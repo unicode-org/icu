@@ -810,7 +810,11 @@ UBool hasAccentsAfterMatch(const UStringSearch *strsrch, int32_t start,
             }
             int32_t count = 1;
             while (count < strsrch->pattern.CELength) {
-                ucol_next(coleiter, &status);
+                if (getCE(strsrch, ucol_next(coleiter, &status)) 
+                    == UCOL_IGNORABLE) {
+                    // Thai can give an ignorable here.
+                    count --;
+                }
                 if (U_FAILURE(status)) {
                     return TRUE;
                 }

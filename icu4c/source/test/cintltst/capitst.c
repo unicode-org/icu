@@ -386,12 +386,14 @@ void TestProperty()
 void TestRuleBasedColl()
 {
     UCollator *col1, *col2, *col3, *col4;
+	UCollationElements *iter1, *iter2;
     UChar ruleset1[60];
     UChar ruleset2[50];
+	UChar teststr[10];
+	UChar teststr2[10];
     const UChar *rule1, *rule2, *rule3, *rule4;
     int32_t tempLength;
     UErrorCode status = U_ZERO_ERROR;
-    
     u_uastrcpy(ruleset1, "&9 < a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E");
     u_uastrcpy(ruleset2, "&9 < a, A < b, B < c, C < d, D, e, E");
     
@@ -442,7 +444,60 @@ void TestRuleBasedColl()
     ucol_close(col2);
     ucol_close(col3);
     ucol_close(col4);
-        
+	
+	/* tests that modifier ! is always ignored */
+    u_uastrcpy(ruleset1, "!&a<b");
+    teststr[0] = 0x0e40;
+	teststr[1] = 0x0e01;
+	teststr[2] = 0x0e2d;
+    col1 = ucol_openRules(ruleset1, u_strlen(ruleset1), UCOL_DEFAULT, UCOL_DEFAULT_STRENGTH, NULL, &status);
+	if (U_FAILURE(status)) {
+        log_err("RuleBased Collator creation failed.: %s\n", myErrorName(status));
+        return;
+    }
+	col2 = ucol_open("en_US", &status);
+	if (U_FAILURE(status)) {
+        log_err("en_US Collator creation failed.: %s\n", myErrorName(status));
+        return;
+    }
+	iter1 = ucol_openElements(col1, teststr, 3, &status);
+    iter2 = ucol_openElements(col2, teststr, 3, &status);
+    if(U_FAILURE(status)) {
+        log_err("ERROR: CollationElement iterator creation failed.: %s\n", myErrorName(status));
+        return;
+    }
+    while (TRUE) {
+        /* testing with en since thai has its own tailoring */
+        uint32_t ce = ucol_next(iter1, &status);
+        uint32_t ce2 = ucol_next(iter2, &status);
+		if(U_FAILURE(status)) {
+            log_err("ERROR: CollationElement iterator creation failed.: %s\n", myErrorName(status));
+            return;
+		}
+        if (ce2 != ce) {
+             log_err("! modifier test failed");
+        }
+        if (ce == UCOL_NULLORDER) {
+            break;
+        }
+    }
+	ucol_closeElements(iter1);
+	ucol_closeElements(iter2);
+	ucol_close(col1);
+	ucol_close(col2);
+    /* test that we can start a rule without a & or < */
+    u_uastrcpy(ruleset1, "z < a");
+    col1 = ucol_openRules(ruleset1, u_strlen(ruleset1), UCOL_DEFAULT, UCOL_DEFAULT_STRENGTH, NULL, &status);
+	if (U_FAILURE(status)) {
+        log_err("RuleBased Collator creation failed.: %s\n", myErrorName(status));
+        return;
+    }
+    u_uastrcpy(teststr, "z");
+	u_uastrcpy(teststr2, "a");
+    if (ucol_greaterOrEqual(col1, teststr, 1, teststr2, 1)) {
+        log_err("Rule \"z < a\" fails");
+    }    
+	ucol_close(col1);
 }
 
 void TestCompare()
