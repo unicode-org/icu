@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacterEnums.java,v $ 
- * $Date: 2004/03/10 02:21:37 $ 
- * $Revision: 1.1 $
+ * $Date: 2004/03/13 00:06:21 $ 
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -245,7 +245,7 @@ public class UCharacterEnums {
      * of names, those used in ICU, and those used in the JDK.  The
      * JDK constants are compatible in name <b>but not in value</b> 
      * with those defined in <code>java.lang.Character</code>.
-     * @see UCharacterDirection.
+     * @see UCharacterDirection
      * @draft ICU 3.0
      */
     public static interface ECharacterDirection {

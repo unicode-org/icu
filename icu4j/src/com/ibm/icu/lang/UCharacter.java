@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2004/03/11 07:02:15 $ 
-* $Revision: 1.88 $
+* $Date: 2004/03/13 00:06:21 $ 
+* $Revision: 1.89 $
 *
 *******************************************************************************
 */
@@ -4441,56 +4441,56 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
 
     /**
      * Cover the JDK 1.5 API, for convenience.
-     * @see UTF16.LEAD_SURROGATE_MIN_VALUE
+     * @see UTF16#LEAD_SURROGATE_MIN_VALUE
      * @draft ICU 3.0
      */
     public static final char MIN_HIGH_SURROGATE = UTF16.LEAD_SURROGATE_MIN_VALUE;
 
     /**
      * Cover the JDK 1.5 API, for convenience.
-     * @see UTF16.LEAD_SURROGATE_MAX_VALUE
+     * @see UTF16#LEAD_SURROGATE_MAX_VALUE
      * @draft ICU 3.0
      */
     public static final char MAX_HIGH_SURROGATE = UTF16.LEAD_SURROGATE_MAX_VALUE;
 
     /**
      * Cover the JDK 1.5 API, for convenience.
-     * @see UTF16.TRAIL_SURROGATE_MIN_VALUE
+     * @see UTF16#TRAIL_SURROGATE_MIN_VALUE
      * @draft ICU 3.0
      */
     public static final char MIN_LOW_SURROGATE = UTF16.TRAIL_SURROGATE_MIN_VALUE;
 
     /**
      * Cover the JDK 1.5 API, for convenience.
-     * @see UTF16.TRAIL_SURROGATE_MAX_VALUE
+     * @see UTF16#TRAIL_SURROGATE_MAX_VALUE
      * @draft ICU 3.0
      */
     public static final char MAX_LOW_SURROGATE = UTF16.TRAIL_SURROGATE_MAX_VALUE;
 
     /**
      * Cover the JDK 1.5 API, for convenience.
-     * @see UTF16.SURROGATE_MIN_VALUE
+     * @see UTF16#SURROGATE_MIN_VALUE
      * @draft ICU 3.0
      */
     public static final char MIN_SURROGATE = UTF16.SURROGATE_MIN_VALUE;
 
     /**
      * Cover the JDK 1.5 API, for convenience.
-     * @see UTF16.SURROGATE_MAX_VALUE
+     * @see UTF16#SURROGATE_MAX_VALUE
      * @draft ICU 3.0
      */
     public static final char MAX_SURROGATE = UTF16.SURROGATE_MAX_VALUE;
 
     /**
      * Cover the JDK 1.5 API, for convenience.
-     * @see UTF16.SUPPLEMENTARY_MIN_VALUE
+     * @see UTF16#SUPPLEMENTARY_MIN_VALUE
      * @draft ICU 3.0
      */
     public static final int  MIN_SUPPLEMENTARY_CODE_POINT = UTF16.SUPPLEMENTARY_MIN_VALUE;
 
     /**
      * Cover the JDK 1.5 API, for convenience.
-     * @see UTF16.CODEPOINT_MAX_VALUE
+     * @see UTF16#CODEPOINT_MAX_VALUE
      * @draft ICU 3.0
      */
     public static final int  MAX_CODE_POINT = UTF16.CODEPOINT_MAX_VALUE;
@@ -4554,7 +4554,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * code point for validity.
      * @param cp the code point to check
      * @param return the number of chars needed to represent the code point
-     * @see UTF16.getCharCount
+     * @see UTF16#getCharCount
      * @draft ICU 3.0
      */
     public static int charCount(int cp) {
