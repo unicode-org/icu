@@ -74,7 +74,7 @@ LINK32=link.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /i "../common" /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -577,6 +577,8 @@ SOURCE=.\ucal.cpp
 SOURCE=.\ucol.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
+
+# ADD CPP /Gd
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
@@ -1937,6 +1939,12 @@ InputPath=.\unicode\utrans.h
 # Begin Group "Resource Files"
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+
+SOURCE=.\i18n.rc
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409 /i "../common"
+# End Source File
 # End Group
 # End Target
 # End Project
