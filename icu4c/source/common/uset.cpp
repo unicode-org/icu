@@ -72,6 +72,11 @@ uset_add(USet* set, UChar32 c) {
 }
 
 U_CAPI void U_EXPORT2
+uset_addRange(USet* set, UChar32 start, UChar32 end) {
+    ((UnicodeSet*) set)->add(start, end);    
+}
+
+U_CAPI void U_EXPORT2
 uset_addString(USet* set, const UChar* str, int32_t strLen) {
   // WRONG! Do not alias, it will stay aliased, even after 
   // copying. TODO: do we need a copy ctor that unaliases
@@ -87,6 +92,11 @@ uset_addString(USet* set, const UChar* str, int32_t strLen) {
 U_CAPI void U_EXPORT2
 uset_remove(USet* set, UChar32 c) {
     ((UnicodeSet*) set)->remove(c);
+}
+
+U_CAPI void U_EXPORT2
+uset_removeRange(USet* set, UChar32 start, UChar32 end) {
+    ((UnicodeSet*) set)->remove(start, end);
 }
 
 U_CAPI void U_EXPORT2
@@ -113,6 +123,11 @@ uset_isEmpty(const USet* set) {
 U_CAPI UBool U_EXPORT2
 uset_contains(const USet* set, UChar32 c) {
     return ((const UnicodeSet*) set)->contains(c);
+}
+
+U_CAPI UBool U_EXPORT2
+uset_containsRange(const USet* set, UChar32 start, UChar32 end) {
+    return ((const UnicodeSet*) set)->contains(start, end);
 }
 
 U_CAPI UBool U_EXPORT2

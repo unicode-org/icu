@@ -105,6 +105,17 @@ U_CAPI void U_EXPORT2
 uset_add(USet* set, UChar32 c);
 
 /**
+ * Adds the given range of characters to the given USet.  After this call,
+ * uset_contains(set, start, end) will return TRUE.
+ * @param set the object to which to add the character
+ * @param start the first character of the range to add, inclusive
+ * @param end the last character of the range to add, inclusive
+ * @draft ICU 2.2
+ */
+U_CAPI void U_EXPORT2
+uset_addRange(USet* set, UChar32 start, UChar32 end);
+
+/**
  * Adds the given string to the given USet.  After this call,
  * uset_containsString(set, str, strLen) will return TRUE.
  * @param set the object to which to add the character
@@ -122,6 +133,17 @@ uset_addString(USet* set, const UChar* str, int32_t strLen);
  */
 U_CAPI void U_EXPORT2
 uset_remove(USet* set, UChar32 c);
+
+/**
+ * Removes the given range of characters from the given USet.  After this call,
+ * uset_contains(set, start, end) will return FALSE.
+ * @param set the object to which to add the character
+ * @param start the first character of the range to remove, inclusive
+ * @param end the last character of the range to remove, inclusive
+ * @draft ICU 2.2
+ */
+U_CAPI void U_EXPORT2
+uset_removeRange(USet* set, UChar32 start, UChar32 end);
 
 /**
  * Removes the given string to the given USet.  After this call,
@@ -166,6 +188,17 @@ uset_isEmpty(const USet* set);
  */
 U_CAPI UBool U_EXPORT2
 uset_contains(const USet* set, UChar32 c);
+
+/**
+ * Returns TRUE if the given USet contains all characters c
+ * where start <= c && c <= end.
+ * @param start the first character of the range to test, inclusive
+ * @param end the last character of the range to test, inclusive
+ * @return TRUE if set contains the range
+ * @draft ICU 2.2
+ */
+U_CAPI UBool U_EXPORT2
+uset_containsRange(const USet* set, UChar32 start, UChar32 end);
 
 /**
  * Returns TRUE if the given USet contains the given string.
