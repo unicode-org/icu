@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/upropset.h,v $
-* $Date: 2001/10/17 19:20:41 $
-* $Revision: 1.1 $
+* $Date: 2001/10/18 17:20:02 $
+* $Revision: 1.2 $
 **********************************************************************
 */
 #ifndef _UPROPSET_H_
@@ -59,7 +59,7 @@ class Hashtable;
  * '+' indicates a supported property.
  *
  * @author Alan Liu
- * @version $RCSfile: upropset.h,v $ $Revision: 1.1 $ $Date: 2001/10/17 19:20:41 $
+ * @version $RCSfile: upropset.h,v $ $Revision: 1.2 $ $Date: 2001/10/18 17:20:02 $
  */
 class UnicodePropertySet {
 
@@ -96,6 +96,9 @@ class UnicodePropertySet {
     static UnicodeSet* createFromPattern(const UnicodeString& pattern,
                                          ParsePosition& ppos);
 
+
+    typedef UnicodeSet* (*SetFactory)(const UnicodeString& valueName);
+
  private:
 
     //----------------------------------------------------------------
@@ -103,8 +106,6 @@ class UnicodePropertySet {
     // NOTE: This will change/go away when we implement UCharacter
     // based property retrieval.
     //----------------------------------------------------------------
-
-    typedef UnicodeSet* (*SetFactory)(const UnicodeString& valueName);
 
     static UnicodeSet* createNumericValueSet(const UnicodeString& valueName);
 
