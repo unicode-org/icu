@@ -338,7 +338,7 @@ void IntlTestRBNF::TestLLongConstructors()
     // copy constructor
     LLAssert(llong(llong(0, 1)).asDouble() == 1);
     LLAssert(llong(llong(1, 0)).asDouble() == llong::kD32);
-    LLAssert(llong(llong((uint32_t)-1, (uint32_t)-1)).asDouble() == -1);
+    LLAssert(llong(llong(-1, (uint32_t)-1)).asDouble() == -1);
 
     // asInt - test unsigned to signed narrowing conversion
     LLAssert(llong((uint32_t)-1).asInt() == (int32_t)0x7fffffff);
