@@ -94,6 +94,8 @@
 /* Generic data types                                                        */
 /*===========================================================================*/
 
+#include <sys/types.h>
+
 /* If your platform does not have the <inttypes.h> header, you may
    need to edit the typedefs below. */
 #if U_HAVE_INTTYPES_H
@@ -118,7 +120,6 @@ typedef unsigned char uint8_t;
 
 #else /* U_HAVE_INTTYPES_H */
 
-#include <sys/types.h>
 #if STDC_HEADERS
 #include <stdlib.h>
 #include <stddef.h>
