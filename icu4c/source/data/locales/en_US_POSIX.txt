@@ -6,6 +6,9 @@
 // * Source File: ../../../locale/common/main/en_US_POSIX.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main/en_US_POSIX.xml
+ */
 en_US_POSIX{
     NumberElements{
         ".",
@@ -28,4 +31,7 @@ en_US_POSIX{
         "0.000000E+000",
     }
     Version{"1.2"}
+    boundaries{
+        word{"word_POSIX"}
+    }
 }
