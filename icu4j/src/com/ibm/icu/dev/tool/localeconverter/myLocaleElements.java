@@ -7,8 +7,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/myLocaleElements.java,v $ 
- * $Date: 2003/09/10 23:36:08 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/11/21 19:46:25 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -513,7 +513,7 @@ public class myLocaleElements extends ListResourceBundle {
                     "1" // min days in first week
                 }
             },
-            { "CollationElements",new String[][]{
+            { "collations",new String[][]{
                                     {"Version","1.0"},
                                     {"Overide","false"},
                                     {"Sequence",""}

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ConvertPOSIXLocale.java,v $ 
- * $Date: 2002/06/20 01:17:11 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/11/21 19:46:25 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -123,7 +123,7 @@ charMapFile
 
 Conversion to ICU and Java:
 
-CollationElements
+collations
     Converted from the LC_COLLATE section.  The "..." directive is ignored.
     The "replace-after" directive is ignored.
 
@@ -175,7 +175,7 @@ LC_TIME
     t_fmt_ampm, era, era_year, era_d_fmt, alt_digits.
 
 LC_COLLATE
-    Converted to CollationElements in the resource file.
+    Converted to collations in the resource file.
     
     
 */

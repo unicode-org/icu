@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUListResourceBundleTest.java,v $
- * $Date: 2003/11/21 00:23:34 $
- * $Revision: 1.10 $
+ * $Date: 2003/11/21 19:46:25 $
+ * $Revision: 1.11 $
  *
  *******************************************************************************
  */
@@ -34,7 +34,7 @@ public final class ICUListResourceBundleTest extends TestFmwk
 		logln("got rb:" + rb);
 	
 		byte[] binaryData = null;//(byte[])rb.getObject("%%CollationBin");
-		Object colElem = rb.getObject("CollationElements");
+		Object colElem = rb.getObject("collations");
         if(colElem instanceof Object[][]){
             Object[][] colElemArr = (Object[][])colElem;
             if(((String)colElemArr[0][0]).equals("%%CollationBin")){   
@@ -44,7 +44,7 @@ public final class ICUListResourceBundleTest extends TestFmwk
             errln("Did not get the expected object");
         }
         logln("got binaryData: " + binaryData + " length: " + (binaryData == null ? 0 : binaryData.length));
-		Object[] stringArrayData = (Object[])rb.getObject("CollationElements");
+		Object[] stringArrayData = (Object[])rb.getObject("collations");
 		//String[] collationData = new String[] {
 		 //   (String)stringArrayData[0],
 		 //   (String)stringArrayData[0]
@@ -160,7 +160,7 @@ public final class ICUListResourceBundleTest extends TestFmwk
     }
     public void TestAliases(){
         ResourceBundle rb = ICULocaleData.getResourceBundle("com.ibm.icu.dev.data","TestDataElements","testaliases");
-        //rb.getObject("CollationElements");
+        //rb.getObject("collations");
         String s1 = rb.getString("simplealias");
         if(s1.equals(simpleAlias)){
             logln("Alias mechanism works for simplealias");
@@ -171,7 +171,7 @@ public final class ICUListResourceBundleTest extends TestFmwk
             // test aliasing through another alias
             s1 = rb.getString("referencingalias");
             ResourceBundle uk = ICULocaleData.getResourceBundle("com.ibm.icu.impl.data","LocaleElements","uk");
-            Object o = uk.getObject("CollationElements");
+            Object o = uk.getObject("collations");
             if(o instanceof Object[][]){
                 Object[][] val = (Object[][]) o;
                 if(s1.equals(val[1][1])){
@@ -180,7 +180,7 @@ public final class ICUListResourceBundleTest extends TestFmwk
                     errln("Did not get the expected result for referencingalias");
                 }
             }else{
-                errln("Did not get the expected result for CollationElements resource of uk bundle");
+                errln("Did not get the expected result for collations resource of uk bundle");
             }
             Object anotheralias = rb.getObject("anotheralias");
             if(anotheralias instanceof Object[][]&& o instanceof Object[][]){
@@ -193,16 +193,16 @@ public final class ICUListResourceBundleTest extends TestFmwk
             }else{
                 errln("Alias mechanism failed for anotheralias in TestAlias");
             }
-            Object o1 = rb.getObject("CollationElements");
+            Object o1 = rb.getObject("collations");
             if(o1 instanceof Object[][]&& o instanceof Object[][]){
                 if(arrayEquals((Object[][])o, (Object[][])o1)){
-                    logln("Alias mechanism works for CollationElements");
+                    logln("Alias mechanism works for collations");
                 }else{
-                    errln("Did not get the expected output for CollationElements");
+                    errln("Did not get the expected output for collations");
                 }
             
             }else{
-                errln("Alias mechanism failed for CollationElements in TestAlias");
+                errln("Alias mechanism failed for collations in TestAlias");
             }
     
         }
@@ -261,7 +261,7 @@ public final class ICUListResourceBundleTest extends TestFmwk
             errln("Alias mechanism failed for fr_BE SpelloutRules");
         }
         rb = ICULocaleData.getResourceBundle("com.ibm.icu.impl.data","LocaleElements","zh_TW");
-        o = rb.getObject("CollationElements");
+        o = rb.getObject("collations");
         if(o instanceof Object[][]){
             Object[][] arr = (Object[][])o;
             if(((String)arr[0][0])== "%%CollationBin"){
