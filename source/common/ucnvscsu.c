@@ -1347,7 +1347,7 @@ U_CFUNC void
 _SCSUWriteSub(UConverterFromUnicodeArgs *pArgs,
                int32_t offsetIndex,
                UErrorCode *pErrorCode) {
-    static const char squ_fffd[]={ SQU, 0xffu, 0xfdu };
+    static const char squ_fffd[]={ (char)SQU, (char)0xffu, (char)0xfdu };
 
     /*
      * The substitution character is U+fffd={ ff, fd }.
