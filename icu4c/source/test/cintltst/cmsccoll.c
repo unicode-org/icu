@@ -1097,7 +1097,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
 
       if(strength == UCOL_TOK_RESET) {
         if(top_ == TRUE) {
-          nextCE = baseCE = currCE = 0x9FFF0000;
+          nextCE = baseCE = currCE = UCOL_RESET_TOP_VALUE;
           nextContCE = baseContCE = currContCE = 0;
         } else {
           nextCE = baseCE = currCE;
@@ -1107,9 +1107,9 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
       } else {
         if(strength < maxStrength) {
           maxStrength = strength;
-          if(baseCE == 0x9FFF0000) {
+          if(baseCE == UCOL_RESET_TOP_VALUE) {
               log_verbose("Resetting to [top]\n");
-              nextCE = 0xD0000000;
+              nextCE = UCOL_NEXT_TOP_VALUE;
               nextContCE = 0;
           } else {
             result = ucol_inv_getNextCE(baseCE, baseContCE, &nextCE, &nextContCE, maxStrength);
