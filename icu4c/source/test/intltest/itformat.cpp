@@ -51,7 +51,7 @@
 void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     // for all format tests, always set default Locale and TimeZone to ENGLISH and PST.
-    TimeZone* saveDefaultTimeZone;
+    TimeZone* saveDefaultTimeZone = NULL;
     Locale  saveDefaultLocale = Locale::getDefault();
     if (exec) {
         saveDefaultTimeZone = TimeZone::createDefault();
@@ -59,7 +59,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TimeZone::setDefault(*tz);
         delete tz;
         UErrorCode status = U_ZERO_ERROR;
-        Locale::setDefault( Locale::ENGLISH, status );
+        Locale::setDefault( Locale::getEnglish(), status );
         if (U_FAILURE(status)) {
             errln("itformat: couldn't set default Locale to ENGLISH!");
         }
