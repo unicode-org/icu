@@ -16,7 +16,7 @@ root {
     "%%EURO" { "Euro" }         // Euro variant display name
     "%%B"    { "Bokm\u00e5l" }  // Norwegian variant display name
     "%%NY"   { "Nynorsk" }      // Norwegian variant display name
-    "%%AL" { "\u00C5LAND" } // Aland variant display name
+    "%%AL" { "\u00C5land" } // Aland variant display name
     // Formats for the display name of a locale, for a list of
     // items, and for composing two items in a list into one item.
     // The list patterns are used in the variant name and in the
@@ -405,8 +405,10 @@ root {
         ET { "Ethiopia" }
         FJ { "Fiji" }
         FI { "Finland" }
+        FO { "Faroe Islands" } // http://www.din.de/gremien/nas/nabd/iso3166ma/codlstp1/en_listp1.html
         FR { "France" }
         GF { "French Guiana" }
+        GL { "Greenland" } // http://www.din.de/gremien/nas/nabd/iso3166ma/codlstp1/en_listp1.html
         PF { "French Polynesia" }
         TF { "French Southern Territories" }
         GA { "Gabon" }

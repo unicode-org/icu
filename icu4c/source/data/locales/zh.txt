@@ -841,7 +841,9 @@ zh {
         CN { "\u4E2D\u83EF\u4EBA\u6C11\u5171\u548C\u570B" }
         TW { "\u53F0\u6E7E" }
         HK { "\u9999\u6E2F" }
+        SG { "\u65B0\u52A0\u5761"} // from zh_SG.txt
     }
+
     DateTimePatterns { 
             "HH'\u65F6'mm'\u5206'ss'\u79D2' z",
             "ahh'\u65F6'mm'\u5206'ss'\u79D2'",
@@ -877,6 +879,7 @@ zh {
     }
     Languages { 
         zh { "\u4E2D\u6587" }
+        en { "\u82f1\u6587" }
     }
     LocaleID { "04" }
     LocaleString { "zh" }

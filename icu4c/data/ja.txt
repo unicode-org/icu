@@ -793,6 +793,7 @@ ja {
 	}
     Countries { 
         JP { "\u65E5\u672C" }
+        CN { "\u4E2D\u56FD" }
     }
     DateTimePatterns { 
             "H'\u6642'mm'\u5206'ss'\u79D2'z",
@@ -829,6 +830,9 @@ ja {
     }
     Languages { 
         ja { "\u65E5\u672C\u8A9E" }
+        th { "\u30BF\u30A4" }
+        zh { "\u4E2D\u56FD\u8A9E" }
+
     }
     LocaleID { "11" }
     LocaleString { "ja" }
