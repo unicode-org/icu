@@ -3063,7 +3063,9 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, char *name, uint
             UnicodeSet *classSet = (UnicodeSet *)chClasses->elementAt(aClassNum);
             int32_t   charIdx = m_rand() % classSet->size();
             UChar32   c = classSet->charAt(charIdx);
-            assert(c >= 0);   // TODO:  deal with sets containing strings.
+            if (c < 0) {   // TODO:  deal with sets containing strings.
+                errln("c < 0");
+            }
             testText.append(c);
         }
 
@@ -3077,7 +3079,9 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, char *name, uint
             if (breakPos == -1) {
                 break;
             }
-            assert(breakPos <= testText.length());
+            if (breakPos > testText.length()) {
+                errln("breakPos > testText.length()");
+            }
             expectedBreaks[breakPos] = 1;
         }
 
