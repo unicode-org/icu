@@ -358,6 +358,14 @@ void TestUnicodeData()
       {
 	log_err("Testing u_getVersion() - expected %s got %s\n", expectString, u_getVersion());
       }
+
+#if defined(ICU_UNICODE_VERSION)
+    /* test only happens where we have configure.in with UNICODE_VERSION - sanity check. */
+    if(strcmp(expectVersion, ICU_UNICODE_VERSION))
+      {
+         log_err("Testing configure.in's UNICODE_VERSION - expected %s got %s\n",  expectVersion, ICU_UNICODE_VERSION);
+      }
+#endif
     
     input = fopen(newPath, "r");
 

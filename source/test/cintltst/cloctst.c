@@ -307,6 +307,7 @@ void TestDataDirectory()
     UErrorCode       err = U_ZERO_ERROR;
     const char path[40] ="d:\\icu\\source\\test\\intltest\\" ; /*give the required path */
 
+    path[strlen(path)-1] =U_FILE_SEP_CHAR; /* c'mon.. at least end it with a valid sepchar for this platform! */
     
     log_verbose("Testing getDataDirectory()\n");
     temp = uloc_getDataDirectory();
@@ -326,7 +327,7 @@ void TestDataDirectory()
     if(strcmp(path, uloc_getDataDirectory())==0)
         log_verbose("setDataDirectory working fine\n");
     else
-        log_err("Error in setDataDirectory. Directory not set correctly");
+        log_err("Error in setDataDirectory. Directory not set correctly - came back as [%s], expected [%s]\n", uloc_getDataDirectory(), path);
         
     testValue2=uloc_getISO3Language("en_US");
     log_verbose("second fetch of language retrieved  %s \n", testValue2);
