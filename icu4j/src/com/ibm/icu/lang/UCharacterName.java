@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2002/03/02 01:50:51 $ 
-* $Revision: 1.13 $
+* $Date: 2002/03/08 02:04:00 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -273,8 +273,7 @@ final class UCharacterName
                         indexes[0] = offset;
 
                         // joining up the factorized strings 
-                        if (compareFactorString(indexes, 
-                                                name.substring(prefixlen))) {
+                        if (compareFactorString(indexes, name, prefixlen)) {
                             return ch;
                         }
                     }
@@ -337,16 +336,18 @@ final class UCharacterName
         * the argument string
         * @param index array with each index corresponding to each factor block
         * @param str string to compare with
+        * @param offset of str to start comparison
         * @return true if string matches
         */
-        private boolean compareFactorString(int index[], String str)
+        private boolean compareFactorString(int index[], String str, 
+                                            int offset)
         {
             int size = m_factor_.length;
             if (index == null || index.length != size)
                 return false;
                 
             int count = 0;
-            int strcount = 0;
+            int strcount = offset;
             int factor;
             size --;
             for (int i = 0; i <= size; i ++)
@@ -371,6 +372,22 @@ final class UCharacterName
             return true;
         }
     }
+    
+    // protected data members --------------------------------------------
+    
+    /**
+     * Maximum number of groups
+     */
+    protected int m_groupcount_ = 0;
+    /**
+     * Size of each groups
+     */
+    protected int m_groupsize_ = 0;
+    /**
+    * Number of lines per group 
+    * 1 << GROUP_SHIFT_
+    */
+    protected static final int LINES_PER_GROUP_ = 1 << 5;
     
     // protected constructor ---------------------------------------------
     
@@ -541,113 +558,6 @@ final class UCharacterName
         return false; 
     }
     
-    // private data members ----------------------------------------------
-    
-    /**
-    * Data used in unames.dat
-    */
-    private char m_tokentable_[];
-    private byte m_tokenstring_[];
-    private char m_groupinfo_[];
-    private byte m_groupstring_[];
-    private AlgorithmName m_algorithm_[];
-      
-    /**
-    * Number of group sets
-    */
-    private int m_groupcount_ = 0;
-    private int m_groupsize_ = 0;
-      
-    /**
-    * Default name of the name datafile
-    */
-    private static final String NAME_FILE_NAME_ = 
-                                           "/com/ibm/icu/impl/data/unames.dat";
-      
-    /**
-    * Default buffer size of datafile
-    */
-    private static final int NAME_BUFFER_SIZE_ = 100000;
-      
-    /**
-    * Shift count to retrieve group information
-    */
-    private static final int GROUP_SHIFT_ = 5;
-      
-    /**
-    * Number of lines per group
-    */
-    private static final int LINES_PER_GROUP_ = 1 << GROUP_SHIFT_;
-      
-    /**
-    * Mask to retrieve the offset for a particular character within a group
-    */
-    private static final int GROUP_MASK_ = LINES_PER_GROUP_ - 1;
-      
-    /**
-    * Position of offsethigh in group information array
-    */
-    private static final int OFFSET_HIGH_OFFSET_ = 1;
-      
-    /**
-    * Position of offsetlow in group information array
-    */
-    private static final int OFFSET_LOW_OFFSET_ = 2;
-    /**
-    * Double nibble indicator, any nibble > this number has to be combined
-    * with its following nibble
-    */
-    private static final int SINGLE_NIBBLE_MAX_ = 11;
-      
-    // private methods ---------------------------------------------------
-      
-    /**
-    * Gets the algorithmic name for the argument character
-    * @param ch character to determine name for
-    * @param choice name choice
-    * @return the algorithmic name or null if not found
-    */
-    private String getAlgName(int ch, int choice) 
-    {
-    	// Do not write algorithmic Unicode 1.0 names because Unihan names are 
-        // the same as the modern ones, extension A was only introduced with 
-        // Unicode 3.0, and the Hangul syllable block was moved and changed 
-        // around Unicode 1.1.5.
-        if (choice != UCharacterNameChoice.U_UNICODE_10_CHAR_NAME) {
-       	 	// index in terms integer index
-        	StringBuffer s = new StringBuffer();
-        
-        	for (int index = m_algorithm_.length - 1; index >= 0; index --) {
-         	   if (m_algorithm_[index].contains(ch)) {
-          	      if (index >= 0) {
-           	 	      m_algorithm_[index].appendName(ch, s);
-            	      return s.toString();
-             	   }
-         	   }
-            }
-        }
-        return null;
-    }
-      
-    /**
-    * Getting the character with the tokenized argument name
-    * @param name of the character
-    * @return character with the tokenized argument name or -1 if character
-    *         is not found
-    */
-    private int getGroupChar(String name, int choice) 
-    {
-        int result = 0;
-        
-        for (int i = 0; i < m_groupcount_; i ++) {
-            result = getGroupChar(i, name, choice);
-            if (result != -1) {
-                return result;
-            }
-        }
-        return -1;
-    }
-      
     /**
     * Reads a block of compressed lengths of 32 strings and expands them into 
     * offsets and lengths for each string. Lengths are stored with a 
@@ -664,7 +574,7 @@ final class UCharacterName
     * @return next index of the data string immediately after the lengths 
     *         in terms of byte address
     */
-    private int getGroupLengths(int index, char offsets[], char lengths[]) 
+    protected int getGroupLengths(int index, char offsets[], char lengths[]) 
     {
         char length = 0xffff;
         byte b = 0,
@@ -687,22 +597,22 @@ final class UCharacterName
                 // getting nibble
                 n = (byte)((b >> shift) & 0x0F);   
                 if (length == 0xffff && n > SINGLE_NIBBLE_MAX_) {
-                length = (char)((n - 12) << 4);
+                	length = (char)((n - 12) << 4);
                 }
                 else {
-                if (length != 0xffff) {
-                    lengths[i] = (char)((length | n) + 12);
-                }
-                else {
-                    lengths[i] = (char)n;
-                }
+                	if (length != 0xffff) {
+                 	   lengths[i] = (char)((length | n) + 12);
+                	}
+                	else {
+                 	   lengths[i] = (char)n;
+                	}
                     
-                if (i < LINES_PER_GROUP_) {
-                    offsets[i + 1] = (char)(offsets[i] + lengths[i]);
-                }
+                	if (i < LINES_PER_GROUP_) {
+                 	   offsets[i + 1] = (char)(offsets[i] + lengths[i]);
+                	}
                     
-                length = 0xffff;
-                i ++;
+                	length = 0xffff;
+                	i ++;
                 }
                       
                 shift -= 4;
@@ -710,7 +620,7 @@ final class UCharacterName
         }
         return stringoffset;
     }
-      
+    
     /**
     * Gets the name of the argument group index
     * @param index of the group name string in byte count
@@ -718,13 +628,13 @@ final class UCharacterName
     * @param choice of Unicode 1.0 name or the most current name
     * @return name of the group 
     */
-    private String getGroupName(int index, int length, int choice) 
+    protected String getGroupName(int index, int length, int choice) 
     {
         if (choice == UCharacterNameChoice.U_UNICODE_10_CHAR_NAME) {
-            int oldindex = index;
-            index += UCharacterUtil.skipByteSubString(m_groupstring_, index, 
-                                                      length, (byte)';');
-            length -= (index - oldindex);
+        	int oldindex = index;
+         	index += UCharacterUtil.skipByteSubString(m_groupstring_, 
+         		                               index, length, (byte)';');   
+         	length -= (index - oldindex);
         }
         
         StringBuffer s = new StringBuffer();
@@ -736,7 +646,7 @@ final class UCharacterName
               
             if (b >= m_tokentable_.length) {
                 if (b == ';') {
-                break;
+                	break;
                 }
                 s.append(b); // implicit letter
             }
@@ -750,6 +660,13 @@ final class UCharacterName
                 }
                 if (token == 0xFFFF) {
                     if (b == ';') {
+                    	// skip the semicolon if we are seeking extended 
+                    	// names and there was no 2.0 name but there
+                        // is a 1.0 name.
+                    	if (s.length() == 0 && choice == 
+                    	       UCharacterNameChoice.U_EXTENDED_CHAR_NAME) {
+                        	continue;
+                    	}
                         break;
                     }
                     s.append((char)(b & 0x00ff)); // explicit letter
@@ -765,6 +682,300 @@ final class UCharacterName
             return null;
         }
         return s.toString();
+    }
+    
+    /**
+    * Retrieves the extended name
+    */
+    protected String getExtendedName(int ch) 
+    {    
+        String result = getName(ch, UCharacterNameChoice.U_UNICODE_CHAR_NAME);    
+        if (result == null) {        
+            if (getType(ch) == UCharacterCategory.CONTROL) {            
+                result = getName(ch, 
+                                 UCharacterNameChoice.U_UNICODE_10_CHAR_NAME);        
+            }        
+            if (result == null) {            
+                result = getExtendedOr10Name(ch);
+            }
+        }    
+        return result;
+    }
+    
+    /**
+     * Gets the group index for the codepoint, or the group before it.
+     * @param codepoint
+     * @return group index containing codepoint or the group before it.
+     */
+    protected int getGroup(int codepoint)
+    {
+    	int endGroup = m_groupcount_;
+    	int msb      = getCodepointMSB(codepoint);
+        int result   = 0;    
+        // binary search for the group of names that contains the one for 
+        // code
+        // find the group that contains codepoint, or the highest before it
+        while (result < endGroup - 1) {
+            int gindex = (result + endGroup) >> 1;
+            if (msb < getGroupMSB(gindex)) {
+               	endGroup = gindex;
+            }
+            else {
+               	result = gindex;
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Gets the extended and 1.0 name when the most current unicode names
+     * fail
+     * @param ch codepoint
+     * @return name of codepoint extended or 1.0
+     */
+    protected String getExtendedOr10Name(int ch)
+    {
+    	String result = null;
+    	if (getType(ch) == UCharacterCategory.CONTROL) {            
+            result = getName(ch, 
+                             UCharacterNameChoice.U_UNICODE_10_CHAR_NAME);        
+        }        
+        if (result == null) {            
+            int type = getType(ch);    
+            // Return unknown if the table of names above is not up to 
+            // date.
+            if (type >= UCharacterCategory.TYPE_NAMES_.length) {       
+                result = UCharacterCategory.UNKNOWN_TYPE_NAME_;    
+            } 
+            else {        
+                result = UCharacterCategory.TYPE_NAMES_[type];    
+            }
+            StringBuffer tempResult = new StringBuffer(result);
+            tempResult.insert(0, '<');
+            tempResult.append('-');
+            String chStr = Integer.toHexString(ch).toUpperCase();
+            int zeros = 4 - chStr.length();
+            while (zeros > 0) {
+                tempResult.append('0');
+                zeros --;
+            }
+            tempResult.append(chStr);
+            tempResult.append('>');
+            result = tempResult.toString();
+        }
+        return result;
+    }
+    
+    // these are all UCharacterNameIterator use methods -------------------
+    
+    /**
+     * Gets the MSB from the group index
+     * @param gindex group index
+     * @return the MSB of the group if gindex is valid, -1 otherwise
+     */
+    protected int getGroupMSB(int gindex)
+    {
+    	if (gindex >= m_groupcount_) {
+    		return -1;
+    	}
+    	return m_groupinfo_[gindex * m_groupsize_];
+    }
+    
+    /**
+     * Gets the MSB of the codepoint
+     * @param codepoint 
+     * @return the MSB of the codepoint
+     */
+    protected int getCodepointMSB(int codepoint)
+    {
+    	return codepoint >> GROUP_SHIFT_;
+    }
+    
+    /**
+     * Gets the maximum codepoint + 1 of the group
+     * @param msb most significant byte of the group
+     * @return limit codepoint of the group
+     */
+    protected int getGroupLimit(int msb)
+    {
+    	return (msb << GROUP_SHIFT_) + LINES_PER_GROUP_;
+    }
+    
+    /**
+     * Gets the minimum codepoint of the group
+     * @param msb most significant byte of the group
+     * @return minimum codepoint of the group
+     */
+    protected int getGroupMin(int msb)
+    {
+    	return msb << GROUP_SHIFT_;
+    }
+    
+    /**
+     * Gets the offset to a group
+     * @param codepoint 
+     * @return offset to a group
+     */
+    protected int getGroupOffset(int codepoint)
+    {
+    	return codepoint & GROUP_MASK_;
+    }
+
+	/**
+     * Gets the minimum codepoint of a group
+     * @param codepoint
+     * @return minimum codepoint in the group which codepoint belongs to
+     */
+    protected int getGroupMinFromCodepoint(int codepoint)
+    {
+    	return codepoint & ~GROUP_MASK_;
+    }
+    
+    /**
+     * Get the Algorithm range length 
+     * @return Algorithm range length
+     */
+    protected int getAlgorithmLength()
+    {
+    	return m_algorithm_.length;
+    }
+        
+    /**
+     * Gets the start of the range
+     * @param index algorithm index
+     * @return algorithm range start
+     */
+    protected int getAlgorithmStart(int index)
+    {
+      	return m_algorithm_[index].m_rangestart_;
+    }
+        
+    /**
+     * Gets the end of the range
+     * @param index algorithm index
+     * @return algorithm range end
+     */
+    protected int getAlgorithmEnd(int index)
+    {
+      	return m_algorithm_[index].m_rangeend_;
+    }
+    
+    /**
+     * Gets the Algorithmic name of the codepoint
+     * @param index algorithmic range index
+     * @param codepoint 
+     * @return algorithmic name of codepoint
+     */
+    protected String getAlgorithmName(int index, int codepoint) 
+    {
+    	StringBuffer result = new StringBuffer();
+    	m_algorithm_[index].appendName(codepoint, result);
+        return result.toString();
+    }
+    
+        
+    // private data members ----------------------------------------------
+    
+    /**
+    * Data used in unames.dat
+    */
+    private char m_tokentable_[];
+    private byte m_tokenstring_[];
+    private char m_groupinfo_[];
+    private byte m_groupstring_[];
+    private AlgorithmName m_algorithm_[];
+      
+    /**
+    * Group use
+    */
+    private char m_groupoffsets_[] = new char[LINES_PER_GROUP_ + 1];
+    private char m_grouplengths_[] = new char[LINES_PER_GROUP_ + 1];
+      	 
+    /**
+    * Default name of the name datafile
+    */
+    private static final String NAME_FILE_NAME_ = 
+                                           "/com/ibm/icu/impl/data/unames.dat";
+    /**
+    * Shift count to retrieve group information
+    */
+    private static final int GROUP_SHIFT_ = 5;
+    /**
+    * Mask to retrieve the offset for a particular character within a group
+    */
+    private static final int GROUP_MASK_ = LINES_PER_GROUP_ - 1;
+    /**
+    * Default buffer size of datafile
+    */
+    private static final int NAME_BUFFER_SIZE_ = 100000;
+      
+    /**
+    * Position of offsethigh in group information array
+    */
+    private static final int OFFSET_HIGH_OFFSET_ = 1;
+      
+    /**
+    * Position of offsetlow in group information array
+    */
+    private static final int OFFSET_LOW_OFFSET_ = 2;
+    /**
+    * Double nibble indicator, any nibble > this number has to be combined
+    * with its following nibble
+    */
+    private static final int SINGLE_NIBBLE_MAX_ = 11;
+     
+      
+    // private methods ---------------------------------------------------
+      
+    /**
+    * Gets the algorithmic name for the argument character
+    * @param ch character to determine name for
+    * @param choice name choice
+    * @return the algorithmic name or null if not found
+    */
+    private String getAlgName(int ch, int choice) 
+    {
+    	// Do not write algorithmic Unicode 1.0 names because Unihan names are 
+        // the same as the modern ones, extension A was only introduced with 
+        // Unicode 3.0, and the Hangul syllable block was moved and changed 
+        // around Unicode 1.1.5.
+        if (choice != UCharacterNameChoice.U_UNICODE_10_CHAR_NAME) {
+       	 	// index in terms integer index
+        	StringBuffer s = new StringBuffer();
+        
+        	for (int index = m_algorithm_.length - 1; index >= 0; index --) {
+         	   if (m_algorithm_[index].contains(ch)) {
+          	      m_algorithm_[index].appendName(ch, s);
+            	  return s.toString();
+         	   }
+            }
+        }
+        return null;
+    }
+      
+    /**
+    * Getting the character with the tokenized argument name
+    * @param name of the character
+    * @return character with the tokenized argument name or -1 if character
+    *         is not found
+    */
+    private synchronized int getGroupChar(String name, int choice) 
+    {
+    	for (int i = 0; i < m_groupcount_; i ++) {
+        	// populating the data set of grouptable
+        	
+        	int startgpstrindex = getGroupLengths(i, m_groupoffsets_, 
+                                                  m_grouplengths_);
+          
+        	// shift out to function
+        	int result = getGroupChar(startgpstrindex, m_grouplengths_, name, 
+        	                          choice);
+        	if (result != -1) {
+            	return (m_groupinfo_[i * m_groupsize_] << GROUP_SHIFT_) 
+            	         | result;
+        	}
+        }
+        return -1;
     }
       
     /**
@@ -884,62 +1095,45 @@ final class UCharacterName
     * @param ch character to get the group name 
     * @param choice name choice selector to choose a unicode 1.0 or newer name
     */
-    private String getGroupName(int ch, int choice) 
+    private synchronized String getGroupName(int ch, int choice) 
     {            
         // gets the msb
-        int msb = ch >> GROUP_SHIFT_,
-            end = m_groupcount_,
-            start,
-            gindex = 0;
-        
-        // binary search for the group of names that contains the one for 
-        // code
-        for (start = 0; start < end - 1;) {
-            gindex = (start + end) >> 1;
-            if (msb < m_groupinfo_[gindex * m_groupsize_]) {
-                end = gindex;
-            }
-            else {
-                start = gindex;
-            }
-        }
+        int msb   = getCodepointMSB(ch);
+        int group = getGroup(ch);
 
         // return this if it is an exact match
-        if (msb == m_groupinfo_[start * m_groupsize_]) {
-            char offsets[] = new char[LINES_PER_GROUP_ + 1];
-            char lengths[] = new char[LINES_PER_GROUP_ + 1];
-                        
-            int index = getGroupLengths(start, offsets, lengths);
+        if (msb == m_groupinfo_[group * m_groupsize_]) {
+            int index = getGroupLengths(group, m_groupoffsets_, 
+                                        m_grouplengths_);
             int offset = ch & GROUP_MASK_;
-            return getGroupName(index + offsets[offset], lengths[offset], 
-                                choice);
+            return getGroupName(index + m_groupoffsets_[offset], 
+                                m_grouplengths_[offset], choice);
         }
         
         return null;
     }
-      
+    
     /**
-    * Getting the character with the tokenized argument name
-    * @param index of the group to check
-    * @param name of the character
-    * @param choice of Unicode version used
-    * @return character with the tokenized argument name or -1 if character 
-    *         is not found
+    * Gets the character extended type
+    * @param ch character to be tested
+    * @return extended type it is associated with
     */
-    private int getGroupChar(int index, String name, int choice) 
+    private int getType(int ch)
     {
-        // populating the data set of grouptable
-        char offsets[] = new char[LINES_PER_GROUP_ + 1];
-        char lengths[] = new char[LINES_PER_GROUP_ + 1];
-        int startgpstrindex = getGroupLengths(index, offsets, lengths);
-          
-        // shift out to function
-        int result = getGroupChar(startgpstrindex, lengths, name, choice);
-        if (result != -1) {
-            return (m_groupinfo_[index * m_groupsize_] << GROUP_SHIFT_) | 
-                   result;
-        }
-        return -1;
+        if (UCharacter.isNonCharacter(ch)) {  
+            // not a character we return a invalid category count
+            return UCharacterCategory.NON_CHARACTER_;    
+        }    
+        int result = UCharacter.getType(ch);
+        if (result == UCharacterCategory.SURROGATE) {            
+            if (ch <= UnicodeProperty.LEAD_SURROGATE_MAX_VALUE) {
+                result = UCharacterCategory.LEAD_SURROGATE_;
+            }
+            else {
+                result = UCharacterCategory.TRAIL_SURROGATE_;
+            }    
+        }    
+        return result;
     }
     
     /**
@@ -986,66 +1180,5 @@ final class UCharacterName
             return -1; 
         }    
         return -2;
-    }
-    
-    /**
-    * Gets the character extended type
-    * @param ch character to be tested
-    * @return extended type it is associated with
-    */
-    private int getType(int ch)
-    {
-        if (UCharacter.isNonCharacter(ch)) {  
-            // not a character we return a invalid category count
-            return UCharacterCategory.NON_CHARACTER_;    
-        }    
-        int result = UCharacter.getType(ch);
-        if (result == UCharacterCategory.SURROGATE) {            
-            if (ch <= UnicodeProperty.LEAD_SURROGATE_MAX_VALUE) {
-                result = UCharacterCategory.LEAD_SURROGATE_;
-            }
-            else {
-                result = UCharacterCategory.TRAIL_SURROGATE_;
-            }    
-        }    
-        return result;
-    }
-    
-    /**
-    * Retrieves the extended name
-    */
-    private String getExtendedName(int ch) 
-    {    
-        String result = getName(ch, UCharacterNameChoice.U_UNICODE_CHAR_NAME);    
-        if (result == null) {        
-            if (getType(ch) == UCharacterCategory.CONTROL) {            
-                result = getName(ch, 
-                                 UCharacterNameChoice.U_UNICODE_10_CHAR_NAME);        
-            }        
-            if (result == null) {            
-                int type = getType(ch);    
-                // Return unknown if the table of names above is not up to 
-                // date.
-                if (type >= UCharacterCategory.TYPE_NAMES_.length) {       
-                    result = UCharacterCategory.UNKNOWN_TYPE_NAME_;    
-                } 
-                else {        
-                    result = UCharacterCategory.TYPE_NAMES_[type];    
-                }
-                StringBuffer tempResult = new StringBuffer(result);
-                tempResult.insert(0, '<');
-                tempResult.append('-');
-                String chStr = Integer.toHexString(ch).toUpperCase();
-                int zeros = 4 - chStr.length();
-                while (zeros > 0) {
-                    tempResult.append('0');
-                    zeros --;
-                }
-                tempResult.append(chStr);
-                tempResult.append('>');
-                result = tempResult.toString();
-            }
-        }    
-        return result;
     }
 }
