@@ -85,6 +85,7 @@ ucol_reset(UCollationElements *elems)
 {
   collIterate *ci = &(elems->iteratordata_);
   elems->reset_   = TRUE;
+  ci->start       = ci->string;
   ci->pos         = ci->string;
   ci->len         = ci->string + elems->length_;
   ci->CEpos       = ci->toReturn = ci->CEs;
@@ -175,14 +176,13 @@ ucol_previous(UCollationElements *elems,
     }                                                                          
     else 
     {                    
-      /* weiv tentatively changed */
-      /*if (data->pos == data->string || data->pos == data->writableBuffer)*/
-      if ((data->pos <= data->string && data->isUsingWritable == FALSE) || (data->pos <= data->writableBuffer && data->isUsingWritable == TRUE)) {
-        if ((data->pos < data->string && data->isUsingWritable == FALSE) || (data->pos < data->writableBuffer && data->isUsingWritable == TRUE)) {
+      if (data->pos == data->start) {
+        if (data->pos < data->start) {
           fprintf(stderr, "less pos:%x string:%x writable:%x\n", data->pos, data->string, data->writableBuffer);
-        }  
+        }
         (result) = UCOL_NO_MORE_CES;                                                                                                                    
-     } else 
+      } 
+      else 
       {                  
         data->pos --;                                 
       
@@ -190,15 +190,13 @@ ucol_previous(UCollationElements *elems,
         if (ch <= 0xFF)                                                
           (result) = (coll)->latinOneMapping[ch];                                                                                       
         else {
-          if (data->isThai && UCOL_ISTHAIBASECONSONANT(ch) && 
-                (data->pos) != data->string &&
-                (data->pos) != data->writableBuffer &&
-                UCOL_ISTHAIPREVOWEL(*(data->pos -1))) {
+          if (data->isThai && UCOL_ISTHAIBASECONSONANT(ch) && data->pos > data->start 
+              && UCOL_ISTHAIPREVOWEL(*(data->pos -1))) {
             result = UCOL_THAI;                     
-         }
+          }
           else {
             (result) = ucmp32_get((coll)->mapping, ch);
-         }
+          }
         }
                                                                        
         if ((result) >= UCOL_NOT_FOUND) 
@@ -262,11 +260,7 @@ U_CAPI UTextOffset
 ucol_getOffset(const UCollationElements *elems)
 {
   const collIterate *ci = &(elems->iteratordata_);
-  if (ci->isThai == TRUE) {
-    return ci->pos - ci->string;
-  }
-
-  return ci->pos - ci->writableBuffer;
+  return ci->pos - ci->start;
 }
 
 U_CAPI void
@@ -278,6 +272,8 @@ ucol_setOffset(UCollationElements    *elems,
     return;
   }
 
+  /* this methods will clean up any use of the writable buffer and points to the
+     original string */
   collIterate *ci = &(elems->iteratordata_);
   ci->pos         = ci->string + offset;
   ci->CEpos       = ci->toReturn = ci->CEs;
