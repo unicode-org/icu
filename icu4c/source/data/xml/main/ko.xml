@@ -7,8 +7,8 @@
 >
 <ldml>
 	<identity>
-		<version number="3.0"/>
-		<generation date="2004-06-01" />
+		<version number="1.1"/>
+		<generation date="2004-06-04" />
 		<language type="ko" /> 
 	</identity>
 	<localeDisplayNames>
@@ -2336,10 +2336,6 @@
 			<currency type="XMF">
 				<displayName>프랑스 메트로폴리탄 누보 프랑</displayName>
 				<symbol>XMF</symbol>
-			</currency>
-			<currency type="XSS">
-				<displayName>실링 스털링</displayName>
-				<symbol>XSS</symbol>
 			</currency>
 			<currency type="YDD">
 				<displayName>예멘 디나르</displayName>

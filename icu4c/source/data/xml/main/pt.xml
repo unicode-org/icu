@@ -7,8 +7,8 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-06-01" />
+		<version number="1.1"/>
+		<generation date="2004-06-04" />
 		<language type="pt" /> 
 	</identity>
 	<localeDisplayNames>
@@ -2717,10 +2717,6 @@
 			<currency type="XPF">
 				<displayName>Franco CFP</displayName>
 				<symbol>CFPF</symbol>
-			</currency>
-			<currency type="XSS">
-				<displayName>Xelim Esterlino</displayName>
-				<symbol>XSS</symbol>
 			</currency>
 			<currency type="XTR">
 				<displayName>Rublo transferível do COMECON</displayName>

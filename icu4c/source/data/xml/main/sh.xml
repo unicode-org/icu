@@ -7,8 +7,8 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-06-01" />
+		<version number="1.1"/>
+		<generation date="2004-06-04" />
 		<language type="sh" /> 
 	</identity>
 	<localeDisplayNames>
@@ -109,7 +109,7 @@
 			<territory type="BY">Belorusija</territory>
 			<territory type="BZ">Belise</territory>
 			<territory type="CA">Kanada</territory>
-			<territory type="CC">Cocos Islands</territory>
+			<territory type="CC">Cocos (Keeling) Islands</territory>
 			<territory type="CD">Democratic Republic of the Congo</territory>
 			<territory type="CF">Centralno Afrička Republika</territory>
 			<territory type="CG">Kongo</territory>
@@ -159,7 +159,7 @@
 			<territory type="GP">Gvadelupe</territory>
 			<territory type="GQ">Ekvatorijalna Gvineja</territory>
 			<territory type="GR">Grčka</territory>
-			<territory type="GS">South Georgia and South Sandwich Islands</territory>
+			<territory type="GS">South Georgia and the South Sandwich Islands</territory>
 			<territory type="GT">Gvatemala</territory>
 			<territory type="GU">Guam</territory>
 			<territory type="GW">Gvineja-Bisao</territory>

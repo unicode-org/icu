@@ -7,8 +7,8 @@
 >
 <ldml>
 	<identity>
-		<version number="3.0"/>
-		<generation date="2004-06-01" />
+		<version number="1.1"/>
+		<generation date="2004-06-04" />
 		<language type="zh" /> 
 		<territory type="TW" /> 
 	</identity>
@@ -2574,10 +2574,6 @@
 			<currency type="XPF">
 				<displayName>CFP 法郎</displayName>
 				<symbol>XPF</symbol>
-			</currency>
-			<currency type="XSS">
-				<displayName>先令英鎊</displayName>
-				<symbol>XSS</symbol>
 			</currency>
 			<currency type="XTR">
 				<displayName>COMECON 可轉移盧布</displayName>
