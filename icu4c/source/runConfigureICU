@@ -113,8 +113,8 @@ case $platform in
 		THE_COMP=xlC
                 CC=/usr/lpp/xlC/bin/xlc; export CC
                 CXX=/usr/lpp/xlC/bin/xlC_r; export CXX
-		RELEASE_CFLAGS=-O4
-		RELEASE_CXXFLAGS=-O4
+		RELEASE_CFLAGS=-O2 -Q
+		RELEASE_CXXFLAGS=-O2 -Q
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
 		;;
@@ -123,8 +123,8 @@ case $platform in
 		THE_COMP=xlC
                 CC=/usr/ibmcxx/bin/xlc; export CC
                 CXX=/usr/ibmcxx/bin/xlC_r; export CXX
-		RELEASE_CFLAGS=-O4
-		RELEASE_CXXFLAGS=-O4
+		RELEASE_CFLAGS=-O2 -Q
+		RELEASE_CXXFLAGS=-O2 -Q
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
 		;;
@@ -133,8 +133,8 @@ case $platform in
 		THE_COMP=xlC
                 CC=/usr/vacpp/bin/xlc; export CC
                 CXX=/usr/vacpp/bin/xlC_r; export CXX
-		RELEASE_CFLAGS=-O4
-		RELEASE_CXXFLAGS=-O4
+		RELEASE_CFLAGS=-O2 -Q
+		RELEASE_CXXFLAGS=-O2 -Q
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
                 ;;
@@ -157,8 +157,8 @@ case $platform in
 		THE_COMP="Sun's CC"
                 CC=/usr/local/SUNWspro/bin/cc; export CC
                 CXX=/usr/local/SUNWspro/bin/CC; export CXX 
-		RELEASE_CFLAGS=-xO5
-		RELEASE_CXXFLAGS=-O5
+		RELEASE_CFLAGS=-xO4
+		RELEASE_CXXFLAGS=-O4
                 ;;
         SOLARISX86)
 		THE_OS="SOLARIS X86"
@@ -168,8 +168,8 @@ case $platform in
                 CXX_FLAGS="-w -O";export CXX_FLAGS
                 C_FLAGS="-w -O";export C_FLAGS
                 LDFLAGS="-L -lCrun";export LDFLAGS
-		RELEASE_CFLAGS=-xO5
-		RELEASE_CXXFLAGS=-O5
+		RELEASE_CFLAGS=-xO4
+		RELEASE_CXXFLAGS=-O4
                 ;;
         LinuxRedHat*)
 		THE_OS=Linux
@@ -182,32 +182,32 @@ case $platform in
 		THE_COMP="HP's CC"
 		CC=cc; export CC
 		CXX=CC; export CXX
-		RELEASE_CFLAGS=+O4
-		RELEASE_CXXFLAGS=+O4
+		RELEASE_CFLAGS=+O3
+		RELEASE_CXXFLAGS=+O3
 		;;
         HP/UX10.2ACC)
 		THE_OS="HP-UX 10.2"
 		THE_COMP="aCC"
 		CC=cc; export CC
 		CXX=aCC; export CXX
-		RELEASE_CFLAGS=+O4
-		RELEASE_CXXFLAGS=+O4
+		RELEASE_CFLAGS=+O3
+		RELEASE_CXXFLAGS=+O3
 		;;
         HP/UX11CC)
 		THE_OS="HP-UX 11"
 		THE_COMP="HP's CC"
                 CC=cc; export CC
 		CXX=/opt/CC/bin/CC; export CXX
-		RELEASE_CFLAGS=+O4
-		RELEASE_CXXFLAGS=+O4
+		RELEASE_CFLAGS=+O3
+		RELEASE_CXXFLAGS=+O3
                 ;;
         HP/UX11ACC)
 		THE_OS="HP-UX 11"
 		THE_COMP="aCC"
                 CC=cc; export CC
 		CXX=/opt/aCC/bin/aCC; export CXX
-		RELEASE_CFLAGS=+O4
-		RELEASE_CXXFLAGS=+O4
+		RELEASE_CFLAGS=+O3
+		RELEASE_CXXFLAGS=+O3
 		;;
         PTX)
 		THE_OS="PTX"
@@ -249,7 +249,6 @@ then
 		;;
 	esac
     fi
-    CXXFLAGS="$CXXFLAGS $RELEASE_CXXFLAGS"
     if test x$RELEASE_CXXFLAGS != x
     then
 	CXXFLAGS="$CXXFLAGS $RELEASE_CXXFLAGS"
