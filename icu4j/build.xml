@@ -73,6 +73,7 @@
         <tstamp/>
         <property name="src.dir" value="src"/>
         <property name="build.dir" value="classes"/>
+        <property name="api.dir" value="${src.dir}/com/ibm/icu/dev/tool/docs"/>
         <property name="doc.dir" value="doc"/>
         <property name="testjar.file" value="icu4jtests.jar"/>
         <property name="jar.file" value="icu4j.jar"/>
@@ -87,13 +88,13 @@
         <property name="ime.indic.jar.file" value="icuindicime.jar"/>
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
         <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
-    	<!-- fix the data folder every time there is a version update-->
-		<property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt30b/" />
-    	<property name="icu4j.testdata.path" value="com/ibm/icu/dev/data/testdata/" />
+        <!-- fix the data folder every time there is a version update-->
+                <property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt30b/" />
+        <property name="icu4j.testdata.path" value="com/ibm/icu/dev/data/testdata/" />
 
-	    <path id="build.classpath">
-	        <pathelement path="${build.dir}"/>
-	    </path>
+            <path id="build.classpath">
+                <pathelement path="${build.dir}"/>
+            </path>
 
         <property name="richedit.dir" value="richedit"/>
         <property name="richedit.doc.dir" value="${richedit.dir}/doc"/>
@@ -101,21 +102,21 @@
         <property name="richedit.zip.file" value="${richedit.dir}/richedit.zip"/>
         <property name="richedit.manifest" value="${src.dir}/com/ibm/richtext/manifest.stub"/>
         <mkdir dir="${build.dir}"/>
-    	<echo message="java home: ${java.home}"/>
+        <echo message="java home: ${java.home}"/>
         <echo message="java version: ${java.version}"/>
         <echo message="ant java version: ${ant.java.version}"/>
         <echo message="${ant.version}"/>
         <echo message="clover initstring = '${clover.initstring}'"/>
 
-    	<uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data">
-        	<!-- note must not have '/' before 'com' in srcfiles includes arg! -->
-        	<srcfiles dir="${build.dir}" includes="${icu4j.data.path}/res_index.res"/>
-    	</uptodate>
+        <uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data">
+                <!-- note must not have '/' before 'com' in srcfiles includes arg! -->
+                <srcfiles dir="${build.dir}" includes="${icu4j.data.path}/res_index.res"/>
+        </uptodate>
 
-    	<uptodate property="icu4j.testdata.resources" targetfile="${src.dir}/com/ibm/icu/dev/data">
-        	<!-- note must not have '/' before 'com' in srcfiles includes arg! -->
-        	<srcfiles dir="${build.dir}" includes="${icu4j.testdatadata.path}/root.res"/>
-    	</uptodate>
+        <uptodate property="icu4j.testdata.resources" targetfile="${src.dir}/com/ibm/icu/dev/data">
+                <!-- note must not have '/' before 'com' in srcfiles includes arg! -->
+                <srcfiles dir="${build.dir}" includes="${icu4j.testdatadata.path}/root.res"/>
+        </uptodate>
 
     </target>
 
@@ -123,22 +124,22 @@
     <target name="all" depends="core,tests,tools,richedit,demos,jar,docs"/>
 
     <target name="resources" depends="init">
-	<unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
-	<touch file="${build.dir}/${icu4j.data.path}/res_index.res"/>
-	<unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
-	<touch file="${build.dir}/${icu4j.testdata.path}/root.res"/>
+        <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
+        <touch file="${build.dir}/${icu4j.data.path}/res_index.res"/>
+        <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
+        <touch file="${build.dir}/${icu4j.testdata.path}/root.res"/>
     </target>
 
     <target name="icudata" depends="init" if="icu4j.resources">
         <!-- use this target to force resources to be rebuilt -->
         <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
-    	<touch file="${build.dir}/${icu4j.data.path}/res_index.res"/>
+        <touch file="${build.dir}/${icu4j.data.path}/res_index.res"/>
     </target>
 
     <target name="testdata" depends="init" if="icu4j.testdata.resources">
         <!-- use this target to force resources to be rebuilt -->
         <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
-    	<touch file="${build.dir}/${icu4j.testdata.path}/root.res"/>
+        <touch file="${build.dir}/${icu4j.testdata.path}/root.res"/>
     </target>
 
 <!--
@@ -310,12 +311,12 @@
               todir="${build.dir}/com/ibm/icu/dev/tool/ime/translit"/>
         <jar jarfile="${ime.translit.jar.file}"
             compress="true"
-	    basedir="${build.dir}"
+            basedir="${build.dir}"
             includes="com/ibm/icu/dev/tool/ime/translit/**/*"
             manifest="${ime.translit.manifest}">
 
-	    <metainf dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="services/*"/>
-	</jar>
+            <metainf dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="services/*"/>
+        </jar>
     </target>
 
     <target name="indicIMEJar" depends="init">
@@ -329,12 +330,12 @@
               todir="${build.dir}/com/ibm/icu/dev/tool/ime/indic"/>
         <jar jarfile="${ime.indic.jar.file}"
             compress="true"
-	    basedir="${build.dir}"
+            basedir="${build.dir}"
             includes="com/ibm/icu/dev/tool/ime/indic/**/*"
             manifest="${ime.indic.manifest}">
 
-	    <metainf dir="${src.dir}/com/ibm/icu/dev/tool/ime/indic" includes="services/*"/>
-	</jar>
+            <metainf dir="${src.dir}/com/ibm/icu/dev/tool/ime/indic" includes="services/*"/>
+        </jar>
     </target>
 
 <!--
@@ -345,17 +346,17 @@
             destdir="${build.dir}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
-	<copy toDir="${build.dir}/com/ibm/icu/dev/tool/ime/translit">
-	      <fileset dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="*.properties"/>
-	</copy>
+        <copy toDir="${build.dir}/com/ibm/icu/dev/tool/ime/translit">
+              <fileset dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="*.properties"/>
+        </copy>
         <jar jarfile="${ime.jar.file}"
             compress="true"
-	    basedir="${build.dir}"
+            basedir="${build.dir}"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,com/ibm/icu/dev/tool/ime/translit/**/*"
             manifest="${ime.translit.manifest}">
 
-	    <metainf dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="services/*"/>
-	</jar>
+            <metainf dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="services/*"/>
+        </jar>
     </target>
 -->
 
@@ -436,15 +437,41 @@
                  packagenames="com.ibm.icu.*"
                  excludepackagenames="com.ibm.icu.dev.*,com.ibm.icu.impl.*"
                  classpath="${build.dir}"
-		 source="1.4">
+                 source="1.4">
             <doclet name="com.ibm.icu.dev.tool.docs.CheckTags"
                     path="${build.dir}">
-		    <param name="-short"/>
+                    <param name="-short"/>
             </doclet>
         </javadoc>
     </target>
 
     <target name="checktags" depends="anthack1,anthack2,_requires14,_checktags"/>
+
+    <target name="gatherapi" depends="tools" if="version.1.4">
+        <javadoc classpath="${build.dir}"
+                 sourcepath="${src.dir}"
+                 packagenames="com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.text,com.ibm.icu.util"
+                 source="1.4">
+            <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData"
+                    path="${build.dir}">
+                    <param name="-name" value="ICU4J 3.0"/>
+                    <param name="-output" value="${api.dir}/icu4j30.api"/>
+                    <!-- <param name="-gzip"/> -->
+            </doclet>
+        </javadoc>
+    </target>
+
+    <target name="apireport" depends="tools" if="version.1.4">
+        <java classname="com.ibm.icu.dev.tool.docs.ReportAPI" classpath="${build.dir}">
+            <arg value="-old:"/>
+            <arg value="${api.dir}/icu4j28.api.gz"/>
+            <arg value="-new:"/>
+            <arg value="${api.dir}/icu4j30.api.gz"/>
+            <!-- <arg value="-html"/> -->
+            <arg value="-out:"/>
+            <arg value="${api.dir}/icu4j_compare_28_30.txt"/>
+        </java>
+    </target>
 
     <target name="clean" depends="init">
         <delete dir="${build.dir}"/>
@@ -457,28 +484,28 @@
         Targets to copy the required *.icu files
      -->
     <target name="copyICUData" depends="init">
-	<unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
-	    
-	    <patternset>
+        <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+            
+            <patternset>
                 <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
-	        <include name="**/unorm.icu"/>
-	        <include name="**/uprops.icu"/>
-	        <include name="**/unames.icu"/>
-	        <include name="**/pnames.icu"/>
-	    </patternset>
-	</unjar>
+                <include name="**/unorm.icu"/>
+                <include name="**/uprops.icu"/>
+                <include name="**/unames.icu"/>
+                <include name="**/pnames.icu"/>
+            </patternset>
+        </unjar>
     </target>
 
     <target name="copyICUPropsData" depends="init">
-	<unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+        <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
             <!-- For basic support names data is not needed -->
-	    <patternset>
+            <patternset>
                 <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
-	        <include name="**/unorm.icu"/>
-	        <include name="**/uprops.icu"/>
-	        <include name="**/pnames.icu"/>
-	    </patternset>
-	</unjar>
+                <include name="**/unorm.icu"/>
+                <include name="**/uprops.icu"/>
+                <include name="**/pnames.icu"/>
+            </patternset>
+        </unjar>
     </target>
 
     <target name="copyAllICUData" depends="init">
@@ -705,7 +732,7 @@
               <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="Transliterator_Han_Latin_*.txt"/>
         </copy>
     </target>
-    <!-- Taget for builing XLIFF2ICUConverter Jar -->
+    <!-- Target for builing XLIFF2ICUConverter Jar -->
     <target name="xliff" depends="init">
         <javac includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.java,com/ibm/icu/dev/tool/UOption.java,com/ibm/icu/dev/tool/xmlcomparator/XMLValidator.java"
             srcdir="${src.dir}"
