@@ -199,7 +199,7 @@ singleEnumLineFn(void *context,
     uv=(uint32_t)(value<<sen->vecShift);
     if((uv&sen->vecMask)!=uv) {
         fprintf(stderr, "genprops error: %s value overflow (0x%x) at %s\n",
-                        sen->propName, uv, s);
+                        sen->propName, (int)uv, s);
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
 
@@ -350,7 +350,7 @@ binariesLineFn(void *context,
 
     if(bin->binaries[i].vecShift>=32) {
         fprintf(stderr, "genprops error: shift value %d>=32 for %s %s\n",
-                        bin->binaries[i].vecShift, bin->ucdFile, bin->binaries[i].propName);
+                        (int)bin->binaries[i].vecShift, bin->ucdFile, bin->binaries[i].propName);
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
     uv=U_MASK(bin->binaries[i].vecShift);
@@ -630,7 +630,7 @@ numericLineFn(void *context,
         }
 
         if(beVerbose) {
-            printf("adding U+%04x numeric type %d value %u\n", start, U_NT_NUMERIC, value);
+            printf("adding U+%04x numeric type %d value %u\n", (int)start, U_NT_NUMERIC, (int)value);
         }
 
         /* reconstruct the properties and set the new numeric type and value */
@@ -700,7 +700,7 @@ bidiClassLineFn(void *context,
     }
 
     if(didSet && beVerbose) {
-        printf("setting U+%04x..U+%04x bidi class %d\n", oldStart, limit-1, value);
+        printf("setting U+%04x..U+%04x bidi class %d\n", (int)oldStart, (int)limit-1, (int)value);
     }
 }
 
@@ -721,7 +721,7 @@ writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_C
         p+=length;
         capacity-=length;
         if(beVerbose) {
-            printf("size in bytes of additional props trie:%5u\n", length);
+            printf("size in bytes of additional props trie:%5u\n", (int)length);
         }
 
         /* set indexes */
@@ -745,7 +745,7 @@ writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_C
     if(p!=NULL && (pvCount*4)<=capacity) {
         uprv_memcpy(p, pv, pvCount*4);
         if(beVerbose) {
-            printf("number of additional props vectors:    %5u\n", pvCount/UPROPS_VECTOR_WORDS);
+            printf("number of additional props vectors:    %5u\n", (int)pvCount/UPROPS_VECTOR_WORDS);
             printf("number of 32-bit words per vector:     %5u\n", UPROPS_VECTOR_WORDS);
         }
     }
