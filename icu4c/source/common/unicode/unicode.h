@@ -135,6 +135,10 @@ public:
         GENERAL_TYPES_COUNT     = 30
     };
 
+    /* Please keep these values in sync with UCharScript */
+    /**
+     * These are the same values as uchar.h::UCharScript
+     */
     enum EUnicodeScript 
     {
         kBasicLatin,
@@ -149,6 +153,8 @@ public:
         kArmenian,
         kHebrew,
         kArabic,
+        kSyriac,
+        kThaana,
         kDevanagari,
         kBengali,
         kGurmukhi,
@@ -158,11 +164,20 @@ public:
         kTelugu,
         kKannada,
         kMalayalam,
+        kSinhala,
         kThai,
         kLao,
         kTibetan,
+        kMyanmar,
         kGeorgian,
         kHangulJamo,
+        kEthiopic,
+        kCherokee,
+        kUnifiedCanadianAboriginalSyllabics,
+        kogham,
+        kRunic,
+        kKhmer,
+        kMongolian,
         kLatinExtendedAdditional,
         kGreekExtended,
         kGeneralPunctuation,
@@ -182,15 +197,23 @@ public:
         kGeometricShape,
         kMiscSymbol,
         kDingbat,
+        kBraillePatterns,
+        kCJKRadicalsSupplement,
+        kKangxiRadicals,
+        kIdeographicDescriptionCharacters,
         kCJKSymbolPunctuation,
         kHiragana,
         kKatakana,
         kBopomofo,
         kHangulCompatibilityJamo,
         kKanbun,
+        kBopomofoExtended,
         kEnclosedCJKLetterMonth,
         kCJKCompatibility,
+        kCJKUnifiedIdeographExtensionA,
         kCJKUnifiedIdeograph,
+        kYiSyllables,
+        kYiRadicals,
         kHangulSyllable,
         kHighSurrogate,
         kHighPrivateUseSurrogate,

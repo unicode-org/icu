@@ -179,8 +179,11 @@ typedef enum UCharDirection UCharDirection;
  * Script range as defined in the Unicode standard.
  */
 
-/** Generated from Unicode Data files 
- *  @draft
+/* Please keep these values in sync with EUnicodeScript */
+/**
+ * Generated from Unicode Data files 
+ * These are the same values as Unicode::EUnicodeScript
+ * @draft
  */
 enum UCharScript {
 /* Script names */
