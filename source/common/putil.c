@@ -65,7 +65,15 @@
 #include "cstring.h"
 #include "locmap.h"
 #include "ucln_cmn.h"
-#include "udataswp.h"
+
+/* Include standard headers. */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include <locale.h>
+#include <float.h>
+#include <time.h>
 
 /* include system headers */
 #ifdef WIN32
@@ -108,14 +116,9 @@
 #include <sys/neutrino.h>
 #endif
 
-/* Include standard headers. */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <locale.h>
-#include <float.h>
-#include <time.h>
+#ifndef WIN32
+#include <sys/time.h> 
+#endif
 
 /*
  * Only include langinfo.h if we have a way to get the codeset. If we later
@@ -207,14 +210,26 @@ u_bottomNBytesOfDouble(double* d, int n)
 #endif
 }
 
+#if defined(WIN32)
+typedef union {
+    uint64_t int64;
+    FILETIME fileTime;
+} FileTimeConversion;   /* This is like a ULARGE_INTEGER */
+
+/* Number of 100 nanoseconds from 1/1/1601 to 1/1/1970 */
+#define EPOCH_BIAS  UINT64_C(116444736000000000)
+#define HECTONANOSECOND_PER_MILLISECOND   10000
+
+#endif
+
 /*---------------------------------------------------------------------------
   Universal Implementations
-  These are designed to work on all platforms.  Try these, and if they don't
-  work on your platform, then special case your platform with new
+  These are designed to work on all platforms.  Try these, and if they
+  don't work on your platform, then special case your platform with new
   implementations.
-  ---------------------------------------------------------------------------*/
+---------------------------------------------------------------------------*/
 
-/* Get UTC (GMT) time measured in seconds since 0:00 on 1/1/70.*/
+/* Return UTC (GMT) time measured in milliseconds since 0:00 on 1/1/70.*/
 U_CAPI UDate U_EXPORT2
 uprv_getUTCtime()
 {
@@ -232,7 +247,17 @@ uprv_getUTCtime()
     uprv_memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
     t2 = mktime(&tmrec);    /* seconds of current GMT*/
     return (UDate)(t2 - t1) * U_MILLIS_PER_SECOND;         /* GMT (or UTC) in seconds since 1970*/
+/*#elif defined(WIN32)
+
+    FileTimeConversion winTime;
+    GetSystemTimeAsFileTime(&winTime.fileTime);
+    return (UDate)((winTime.int64 - EPOCH_BIAS) / HECTONANOSECOND_PER_MILLISECOND);*/
 #else
+/*
+    struct timeval posixTime;
+    gettimeofday(&posixTime, NULL);
+    return ((UDate)posixTime.tv_sec * U_MILLIS_PER_SECOND) + ((UDate)posixTime.tv_usec/1000);
+*/
     time_t epochtime;
     time(&epochtime);
     return (UDate)epochtime * U_MILLIS_PER_SECOND;
