@@ -53,13 +53,23 @@ static UDataMemory *uCharNamesData=NULL;
 static UCharNames *uCharNames=NULL;
 
 static UBool
+isDataLoaded(UErrorCode *pErrorCode);
+
+static UBool
 isAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo);
 
+static Group *
+getGroup(UCharNames *names, uint32_t code);
+
 static uint16_t
 getName(UCharNames *names, uint32_t code, UCharNameChoice nameChoice,
         char *buffer, uint16_t bufferLength);
+
+static const uint8_t *
+expandGroupLengths(const uint8_t *s,
+                   uint16_t offsets[LINES_PER_GROUP+1], uint16_t lengths[LINES_PER_GROUP+1]);
 
 static uint16_t
 expandGroupName(UCharNames *names, Group *group,
@@ -68,17 +78,35 @@ expandGroupName(UCharNames *names, Group *group,
 
 static uint16_t
 expandName(UCharNames *names,
-           uint8_t *name, uint16_t nameLength, UCharNameChoice nameChoice,
+           const uint8_t *name, uint16_t nameLength, UCharNameChoice nameChoice,
            char *buffer, uint16_t bufferLength);
+
+static UBool
+enumGroupNames(UCharNames *names, Group *group,
+               UChar32 start, UChar32 end,
+               UEnumCharNamesFn *fn, void *context,
+               UCharNameChoice nameChoice);
+
+static UBool
+enumNames(UCharNames *names,
+          UChar32 start, UChar32 limit,
+          UEnumCharNamesFn *fn, void *context,
+          UCharNameChoice nameChoice);
 
 static uint16_t
 getAlgName(AlgorithmicRange *range, uint32_t code, UCharNameChoice nameChoice,
         char *buffer, uint16_t bufferLength);
 
+static UBool
+enumAlgNames(AlgorithmicRange *range,
+             UChar32 start, UChar32 limit,
+             UEnumCharNamesFn *fn, void *context,
+             UCharNameChoice nameChoice);
+
 /* public API --------------------------------------------------------------- */
 
 U_CAPI UTextOffset U_EXPORT2
-u_charName(uint32_t code, UCharNameChoice nameChoice,
+u_charName(UChar32 code, UCharNameChoice nameChoice,
            char *buffer, UTextOffset bufferLength,
            UErrorCode *pErrorCode) {
     AlgorithmicRange *algRange;
@@ -93,10 +121,135 @@ u_charName(uint32_t code, UCharNameChoice nameChoice,
         return 0;
     }
 
-    if(code>0x10ffff) {
+    if((uint32_t)code>0x10ffff) {
         return 0;
     }
 
+    if(!isDataLoaded(pErrorCode)) {
+        return 0;
+    }
+
+    /* try algorithmic names first */
+    if(nameChoice==U_UNICODE_CHAR_NAME) {
+        /*
+         * Do not try algorithmic names for Unicode 1.0 because
+         * Unihan names are the same as the modern ones,
+         * extension A was only introduced with Unicode 3.0, and
+         * the Hangul syllable block was moved and changed around Unicode 1.1.5.
+         */
+        p=(uint32_t *)((uint8_t *)uCharNames+uCharNames->algNamesOffset);
+        i=*p;
+        algRange=(AlgorithmicRange *)(p+1);
+        while(i>0) {
+            if(algRange->start<=(uint32_t)code && (uint32_t)code<=algRange->end) {
+                return getAlgName(algRange, (uint32_t)code, nameChoice, buffer, (uint16_t)bufferLength);
+            }
+            algRange=(AlgorithmicRange *)((uint8_t *)algRange+algRange->size);
+            --i;
+        }
+    }
+
+    /* normal character name */
+    return getName(uCharNames, (uint32_t)code, nameChoice, buffer, (uint16_t)bufferLength);
+}
+
+/* ### TBD */
+U_CAPI UChar32 U_EXPORT2
+u_charFromName(UCharNameChoice nameChoice,
+               const char *name,
+               UErrorCode *pErrorCode) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0xffff;
+    }
+
+    if(nameChoice>=U_CHAR_NAME_CHOICE_COUNT || name==NULL || *name==0) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0xffff;
+    }
+
+    if(!isDataLoaded(pErrorCode)) {
+        return 0xffff;
+    }
+
+    *pErrorCode=U_UNSUPPORTED_ERROR;
+    return 0xffff;
+}
+
+U_CAPI void U_EXPORT2
+u_enumCharNames(UChar32 start, UChar32 limit,
+                UEnumCharNamesFn *fn,
+                void *context,
+                UCharNameChoice nameChoice,
+                UErrorCode *pErrorCode) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    if(nameChoice>=U_CHAR_NAME_CHOICE_COUNT || fn==NULL) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    if((uint32_t)limit>0x110000) {
+        limit=0x110000;
+    }
+    if((uint32_t)start>=(uint32_t)limit) {
+        return;
+    }
+
+    if(!isDataLoaded(pErrorCode)) {
+        return;
+    }
+
+    if(nameChoice==U_UNICODE_CHAR_NAME) {
+        /* for modern Unicode character names, interleave the data-driven ones with the algorithmic ones */
+        AlgorithmicRange *algRange;
+        uint32_t *p;
+        uint32_t i;
+
+        /* iterate over all algorithmic ranges; assume that they are in ascending order */
+        p=(uint32_t *)((uint8_t *)uCharNames+uCharNames->algNamesOffset);
+        i=*p;
+        algRange=(AlgorithmicRange *)(p+1);
+        while(i>0) {
+            /* enumerate the character names before the current algorithmic range */
+            /* here: start<limit */
+            if((uint32_t)start<algRange->start) {
+                if((uint32_t)limit<=algRange->start) {
+                    enumNames(uCharNames, start, limit, fn, context, nameChoice);
+                    return;
+                }
+                if(!enumNames(uCharNames, start, (UChar32)algRange->start, fn, context, nameChoice)) {
+                    return;
+                }
+                start=(UChar32)algRange->start;
+            }
+            /* enumerate the character names in the current algorithmic range */
+            /* here: algRange->start<=start<limit */
+            if((uint32_t)start<=algRange->end) {
+                if((uint32_t)limit<=(algRange->end+1)) {
+                    enumAlgNames(algRange, start, limit, fn, context, nameChoice);
+                    return;
+                }
+                if(!enumAlgNames(algRange, start, (UChar32)algRange->end+1, fn, context, nameChoice)) {
+                    return;
+                }
+                start=(UChar32)algRange->end+1;
+            }
+            /* continue to the next algorithmic range (here: start<limit) */
+            algRange=(AlgorithmicRange *)((uint8_t *)algRange+algRange->size);
+            --i;
+        }
+    }
+    /* enumerate the character names after the last algorithmic range */
+    /* for Unicode 1.0 names, use only the data-driven ones */
+    enumNames(uCharNames, start, limit, fn, context, nameChoice);
+}
+
+/* implementation ----------------------------------------------------------- */
+
+static UBool
+isDataLoaded(UErrorCode *pErrorCode) {
     /* load UCharNames from file if necessary */
     if(uCharNames==NULL) {
         UCharNames *names;
@@ -105,7 +258,7 @@ u_charName(uint32_t code, UCharNameChoice nameChoice,
         /* open the data outside the mutex block */
         data=udata_openChoice(NULL, DATA_TYPE, DATA_NAME, isAcceptable, NULL, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
-            return 0;
+            return FALSE;
         }
 
         names=(UCharNames *)udata_getMemory(data);
@@ -127,56 +280,8 @@ u_charName(uint32_t code, UCharNameChoice nameChoice,
             udata_close(data); /* NULL if it was set correctly */
         }
     }
-
-    /* try algorithmic names first */
-    if(nameChoice==U_UNICODE_CHAR_NAME) {
-        /*
-         * Do not try algorithmic names for Unicode 1.0 because
-         * Unihan names are the same as the modern ones,
-         * extension A was only introduced with Unicode 3.0, and
-         * the Hangul syllable block was moved and changed around Unicode 1.1.5.
-         */
-        p=(uint32_t *)((uint8_t *)uCharNames+uCharNames->algNamesOffset);
-        i=*p;
-        algRange=(AlgorithmicRange *)(p+1);
-        while(i>0) {
-            if(algRange->start<=code && code<=algRange->end) {
-                return getAlgName(algRange, code, nameChoice, buffer, (uint16_t)bufferLength);
-            }
-            algRange=(AlgorithmicRange *)((uint8_t *)algRange+algRange->size);
-            --i;
-        }
-    }
-
-    /* normal character name */
-    return getName(uCharNames, code, nameChoice, buffer, (uint16_t)bufferLength);
+    return TRUE;
 }
-
-/* ### TBD */
-U_CAPI UChar32 U_EXPORT2
-u_charFromName(UCharNameChoice nameChoice,
-               const char *name,
-               UErrorCode *pErrorCode) {
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
-    *pErrorCode=U_UNSUPPORTED_ERROR;
-    return 0xffff;
-}
-
-U_CAPI void U_EXPORT2
-u_enumCharNames(UChar32 start, UChar32 limit,
-                UEnumCharNamesFn *fn,
-                void *context,
-                UCharNameChoice nameChoice,
-                UErrorCode *pErrorCode) {
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    }
-    *pErrorCode=U_UNSUPPORTED_ERROR;
-}
-
-/* implementation ----------------------------------------------------------- */
 
 static UBool
 isAcceptable(void *context,
@@ -193,9 +298,15 @@ isAcceptable(void *context,
         pInfo->formatVersion[0]==1);
 }
 
-static uint16_t
-getName(UCharNames *names, uint32_t code, UCharNameChoice nameChoice,
-        char *buffer, uint16_t bufferLength) {
+/*
+ * getGroup() does a binary search for the group that contains the
+ * Unicode code point "code".
+ * The return value is always a valid Group* that may contain "code"
+ * or else is the highest group before "code".
+ * If the lowest group is after "code", then that one is returned.
+ */
+static Group *
+getGroup(UCharNames *names, uint32_t code) {
     uint16_t groupMSB=(uint16_t)(code>>GROUP_SHIFT),
              start=0,
              limit=*(uint16_t *)((char *)names+names->groupsOffset),
@@ -212,8 +323,16 @@ getName(UCharNames *names, uint32_t code, UCharNameChoice nameChoice,
         }
     }
 
-    if(groupMSB==groups[start].groupMSB) {
-        return expandGroupName(names, groups+start, (uint16_t)(code&GROUP_MASK), nameChoice,
+    /* return this regardless of whether it is an exact match */
+    return groups+start;
+}
+
+static uint16_t
+getName(UCharNames *names, uint32_t code, UCharNameChoice nameChoice,
+        char *buffer, uint16_t bufferLength) {
+    Group *group=getGroup(names, code);
+    if((uint16_t)(code>>GROUP_SHIFT)==group->groupMSB) {
+        return expandGroupName(names, group, (uint16_t)(code&GROUP_MASK), nameChoice,
                                buffer, bufferLength);
     } else {
         /* group not found */
@@ -225,15 +344,21 @@ getName(UCharNames *names, uint32_t code, UCharNameChoice nameChoice,
     }
 }
 
-static uint16_t
-expandGroupName(UCharNames *names, Group *group,
-                uint16_t lineNumber, UCharNameChoice nameChoice,
-                char *buffer, uint16_t bufferLength) {
-    uint8_t *s=(uint8_t *)names+names->groupStringOffset+
-                   (group->offsetHigh<<16|group->offsetLow);
-
-    /* read the length of this string and get the group strings offset */
-    uint16_t i=0, offset=0, length=0, nameOffset=0, nameLength=0;
+/*
+ * expandGroupLengths() reads a block of compressed lengths of 32 strings and
+ * expands them into offsets and lengths for each string.
+ * Lengths are stored with a variable-width encoding in consecutive nibbles:
+ * If a nibble<0xc, then it is the length itself (0=empty string).
+ * If a nibble>=0xc, then it forms a length value with the following nibble.
+ * Calculation see below.
+ * The offsets and lengths arrays must be at least 33 (one more) long because
+ * there is no check here at the end if the last nibble is still used.
+ */
+static const uint8_t *
+expandGroupLengths(const uint8_t *s,
+                   uint16_t offsets[LINES_PER_GROUP+1], uint16_t lengths[LINES_PER_GROUP+1]) {
+    /* read the lengths of the 32 strings in this group and get each string's offset */
+    uint16_t i=0, offset=0, length=0;
     uint8_t lengthByte;
 
     /* all 32 lengths must be read to get the offset of the first group string */
@@ -254,10 +379,8 @@ expandGroupName(UCharNames *names, Group *group,
             lengthByte&=0xf;
         }
 
-        if(i==lineNumber) {
-            nameOffset=offset;
-            nameLength=length;
-        }
+        *offsets++=offset;
+        *lengths++=length;
 
         offset+=length;
         ++i;
@@ -268,10 +391,8 @@ expandGroupName(UCharNames *names, Group *group,
             length=lengthByte;
             if(length<12) {
                 /* single-nibble length in LSBs */
-                if(i==lineNumber) {
-                    nameOffset=offset;
-                    nameLength=length;
-                }
+                *offsets++=offset;
+                *lengths++=length;
 
                 offset+=length;
                 ++i;
@@ -281,7 +402,19 @@ expandGroupName(UCharNames *names, Group *group,
         }
     }
 
-    return expandName(names, s+nameOffset, nameLength, nameChoice,
+    /* now, s is at the first group string */
+    return s;
+}
+
+static uint16_t
+expandGroupName(UCharNames *names, Group *group,
+                uint16_t lineNumber, UCharNameChoice nameChoice,
+                char *buffer, uint16_t bufferLength) {
+    uint16_t offsets[LINES_PER_GROUP+2], lengths[LINES_PER_GROUP+2];
+    const uint8_t *s=(uint8_t *)names+names->groupStringOffset+
+                                    (group->offsetHigh<<16|group->offsetLow);
+    s=expandGroupLengths(s, offsets, lengths);
+    return expandName(names, s+offsets[lineNumber], lengths[lineNumber], nameChoice,
                       buffer, bufferLength);
 }
 
@@ -295,7 +428,7 @@ expandGroupName(UCharNames *names, Group *group,
 
 static uint16_t
 expandName(UCharNames *names,
-           uint8_t *name, uint16_t nameLength, UCharNameChoice nameChoice,
+           const uint8_t *name, uint16_t nameLength, UCharNameChoice nameChoice,
            char *buffer, uint16_t bufferLength) {
     uint16_t *tokens=(uint16_t *)names+8;
     uint16_t token, tokenCount=*tokens++, bufferPos=0;
@@ -368,6 +501,87 @@ expandName(UCharNames *names,
     }
 
     return bufferPos;
+}
+
+static UBool
+enumGroupNames(UCharNames *names, Group *group,
+               UChar32 start, UChar32 end,
+               UEnumCharNamesFn *fn, void *context,
+               UCharNameChoice nameChoice) {
+    uint16_t offsets[LINES_PER_GROUP+2], lengths[LINES_PER_GROUP+2];
+    char buffer[200];
+    const uint8_t *s=(uint8_t *)names+names->groupStringOffset+
+                                    (group->offsetHigh<<16|group->offsetLow);
+    uint16_t length;
+
+    s=expandGroupLengths(s, offsets, lengths);
+    while(start<=end) {
+        length=expandName(names, s+offsets[start&GROUP_MASK], lengths[start&GROUP_MASK], nameChoice,
+                          buffer, sizeof(buffer));
+        /* here, we assume that the buffer is large enough */
+        if(length>0) {
+            if(!fn(context, start, nameChoice, buffer, length)) {
+                return FALSE;
+            }
+        }
+        ++start;
+    }
+    return TRUE;
+}
+
+static UBool
+enumNames(UCharNames *names,
+          UChar32 start, UChar32 limit,
+          UEnumCharNamesFn *fn, void *context,
+          UCharNameChoice nameChoice) {
+    uint16_t startGroupMSB, endGroupMSB, groupCount;
+    Group *group, *groupLimit;
+
+    startGroupMSB=(uint16_t)(start>>GROUP_SHIFT);
+    endGroupMSB=(uint16_t)((limit-1)>>GROUP_SHIFT);
+
+    /* find the group that contains start, or the highest before it */
+    group=getGroup(names, start);
+
+    if(startGroupMSB==endGroupMSB) {
+        if(startGroupMSB==group->groupMSB) {
+            /* if start and limit-1 are in the same group, then enumerate only in that one */
+            return enumGroupNames(names, group, start, limit-1, fn, context, nameChoice);
+        }
+    } else {
+        if(startGroupMSB==group->groupMSB) {
+            /* enumerate characters in the partial start group */
+            if((start&GROUP_MASK)!=0) {
+                if(!enumGroupNames(names, group,
+                                   start, ((UChar32)startGroupMSB<<GROUP_SHIFT)+LINES_PER_GROUP-1,
+                                   fn, context, nameChoice)) {
+                    return FALSE;
+                }
+            }
+            ++group; /* continue with the next group */
+        } else if(startGroupMSB>group->groupMSB) {
+            /* make sure that we start enumerating with the first group after start */
+            ++group;
+        }
+
+        /* enumerate entire groups between the start- and end-groups */
+        groupCount=*(uint16_t *)((char *)names+names->groupsOffset);
+        groupLimit=(Group *)((char *)names+names->groupsOffset+2)+groupCount;
+
+        while(group<groupLimit && group->groupMSB<endGroupMSB) {
+            start=(UChar32)group->groupMSB<<GROUP_SHIFT;
+            if(!enumGroupNames(names, group, start, start+LINES_PER_GROUP-1, fn, context, nameChoice)) {
+                return FALSE;
+            }
+            ++group;
+        }
+
+        /* enumerate within the end group (group->groupMSB==endGroupMSB) */
+        if(group<groupLimit && group->groupMSB==endGroupMSB) {
+            return enumGroupNames(names, group, (limit-1)&~GROUP_MASK, limit-1, fn, context, nameChoice);
+        }
+    }
+    return TRUE;
 }
 
 static uint16_t
@@ -492,4 +706,13 @@ getAlgName(AlgorithmicRange *range, uint32_t code, UCharNameChoice nameChoice,
     }
 
     return bufferPos;
+}
+
+static UBool
+enumAlgNames(AlgorithmicRange *range,
+             UChar32 start, UChar32 limit,
+             UEnumCharNamesFn *fn, void *context,
+             UCharNameChoice nameChoice) {
+    /* ### */
+    return TRUE;
 }
