@@ -656,11 +656,16 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
 
     if (U_FAILURE(*err))
     {
-        umtx_lock(&cnvCacheMutex);
+        /*
+        Checking whether it's an algorithic converter is okay
+        in multithreaded applications because the value never changes.
+        Don't check referenceCounter for any other value.
+        */
         if (mySharedConverterData->referenceCounter != ~0) {
+            umtx_lock(&cnvCacheMutex);
             --mySharedConverterData->referenceCounter;
+            umtx_unlock(&cnvCacheMutex);
         }
-        umtx_unlock(&cnvCacheMutex);
         return NULL;
     }
 
