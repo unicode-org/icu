@@ -224,7 +224,7 @@ public class LDML2ICUConverter {
                     // TODO: save/restore writeDraft
                 }
                 if(specialsDir!=null){
-                    String icuSpecialFile = specialsDir+File.separator+ args[i];
+                    String icuSpecialFile = specialsDir+"/"+ args[i];
                     if(new File(icuSpecialFile).exists()) {
                         printInfo("Parsing ICU specials from: " + icuSpecialFile);
                         specialsDoc = LDMLUtilities.parseAndResolveAliases(args[i], specialsDir, true);
@@ -1641,7 +1641,41 @@ public class LDML2ICUConverter {
         ss.next = ds;
         return ss;
     }
-      
+    private ICUResourceWriter.Resource parseLeapMonth(){
+        if(specialsDoc!=null){
+            Node root = LDMLUtilities.getNode(specialsDoc,"//ldml/dates/calendars/calendar[@type='chinese']/special");
+            if(root!=null){
+                for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
+                    if(node.getNodeType()!=Node.ELEMENT_NODE){
+                        continue;
+                    }
+                    String name = node.getNodeName();
+                    if(name.equals(ICU_IS_LEAP_MONTH)){
+                        Node nonLeapSymbol = LDMLUtilities.getNode(node, "icu:nonLeapSymbol", root);
+                        Node leapSymbol = LDMLUtilities.getNode(node, "icu:leapSymbol", root);
+                        if(nonLeapSymbol!=null && leapSymbol!=null){
+                            ICUResourceWriter.ResourceArray arr = new ICUResourceWriter.ResourceArray();
+                            arr.name = "isLeapMonth";
+                            ICUResourceWriter.ResourceString str1 = new ICUResourceWriter.ResourceString();
+                            ICUResourceWriter.ResourceString str2 = new ICUResourceWriter.ResourceString();
+                            str1.val = LDMLUtilities.getNodeValue(nonLeapSymbol);
+                            str2.val = LDMLUtilities.getNodeValue(leapSymbol);
+                            arr.first = str1;
+                            str1.next = str2;
+                            return arr;
+                        }else{
+                            System.err.println("Did not get required number of elements for isLeapMonth resource. Please check the data.");
+                            System.exit(-1);
+                        }
+                    }else{
+                        System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
+                        System.exit(-1); 
+                    }
+                }
+            }
+        }
+        return null;
+    }
     private ICUResourceWriter.Resource parseCalendar(Node root, StringBuffer xpath){
         ICUResourceWriter.ResourceTable table = new ICUResourceWriter.ResourceTable();
         ICUResourceWriter.Resource current = null;
@@ -1699,6 +1733,8 @@ public class LDML2ICUConverter {
                     res = parseDTF(node, xpath);
                     writtenDTF = true;
                 }
+            }else if(name.equals(LDMLConstants.SPECIAL)){
+                res = parseSpecialElements(node, xpath);
             }else{
                 System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
@@ -1715,9 +1751,13 @@ public class LDML2ICUConverter {
             }
             xpath.delete(oldLength, xpath.length());
         }
+        //TODO remove this hack once isLeapMonth data
+        // is represented in LDML
+        if(table.name.equals("chinese") && table.first!=null){
+             findLast(table.first).next = parseLeapMonth();
+        }
         xpath.delete(savedLength, xpath.length());
         if(table.first!=null){
-//            table.sort();
             return table;
         }
         return null;
@@ -2832,14 +2872,14 @@ public class LDML2ICUConverter {
                 if(DEBUG)System.out.println("");
                 
                 int index = rules.length();
-                rules.append("[suppressContractions");
+                rules.append("[suppressContractions ");
                 rules.append(LDMLUtilities.getNodeValue(node));
-                rules.append("]");
+                rules.append(" ]");
                 if(DEBUG) System.out.println(rules.substring(index));
             }else if(name.equals(LDMLConstants.OPTIMIZE)){
-                rules.append("[optimize");
+                rules.append("[optimize ");
                 rules.append(LDMLUtilities.getNodeValue(node));
-                rules.append("]");
+                rules.append(" ]");
             }else if (name.equals(LDMLConstants.BASE)){
                 //TODO Dont know what to do here
             }else{
@@ -3291,6 +3331,7 @@ public class LDML2ICUConverter {
         }
         return null;
     }
+    private static final String ICU_IS_LEAP_MONTH = "icu:isLeapMonth";
     private ICUResourceWriter.Resource parseSpecialElements(Node root, StringBuffer xpath){
         ICUResourceWriter.Resource current = null, first = null;
         int savedLength = xpath.length();
@@ -3329,6 +3370,8 @@ public class LDML2ICUConverter {
                 }else{
                     System.err.println("WARNING: icu:breakDictionaryData element does not have either import or importFile attributes!");
                 }
+            }else if(name.equals(ICU_IS_LEAP_MONTH)){
+                // just continue .. already handled
             }else{
                 System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
@@ -3392,6 +3435,7 @@ public class LDML2ICUConverter {
                 //collations are resolved in parseCollation
                 continue;
             }else if(name.equals(LDMLConstants.DATES)){
+               // will be handled by parseCalendar
                 res = parseDates(node, xpath);
             }else if(name.indexOf("icu:")>-1|| name.indexOf("openOffice:")>-1){
                 //TODO: these are specials .. ignore for now ... figure out

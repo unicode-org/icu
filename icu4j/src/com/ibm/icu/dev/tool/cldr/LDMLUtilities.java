@@ -908,6 +908,23 @@ public class LDMLUtilities {
             throw new RuntimeException(ex.getMessage());
         }
     }
+    public static Node getNode(Node context, String resToFetch, Node namespaceNode){
+        try{
+            NodeList nl = XPathAPI.selectNodeList(context, "./"+resToFetch, namespaceNode);
+            int len = nl.getLength();
+            //TODO watch for attribute "alt"
+            if(len>1){
+              throw new IllegalArgumentException("The XPATH returned more than 1 node!. Check XPATH: "+resToFetch);   
+            }
+            if(len==0){
+                return null;
+            }
+            return nl.item(0);
+
+        }catch(TransformerException ex){
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
     /**
      * Fetches the node from the document which matches the xpath
      * @param node
