@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2003/04/09 21:36:26 $
- * $Revision: 1.18 $
+ * $Date: 2003/04/10 08:02:28 $
+ * $Revision: 1.19 $
  *******************************************************************************
  */
  
@@ -2760,18 +2760,28 @@ public final class NormalizerImpl {
         /* add the start code point of each same-value range of each trie */
         //utrie_enum(&normTrie, NULL, _enumPropertyStartsRange, set);
         TrieIterator normIter = new TrieIterator(normTrieImpl.normTrie);
-        RangeValueIterator.Element result = new RangeValueIterator.Element();
+        RangeValueIterator.Element normResult = new RangeValueIterator.Element();
         
-        while(normIter.next(result)){
-            set.add(result.start);
+        while(normIter.next(normResult)){
+            set.add(normResult.start);
         }
         
-        TrieIterator fcdIter  = new TrieIterator(fcdTrieImpl.fcdTrie);
         //utrie_enum(&fcdTrie, NULL, _enumPropertyStartsRange, set);
-        while(normIter.next(result)){
-            set.add(result.start);
+        TrieIterator fcdIter  = new TrieIterator(fcdTrieImpl.fcdTrie);
+        RangeValueIterator.Element fcdResult = new RangeValueIterator.Element();
+
+        while(fcdIter.next(fcdResult)){
+            set.add(fcdResult.start);
         }
-    
+        
+        if(isFormatVersion_2_1){
+            //utrie_enum(&auxTrie, NULL, _enumPropertyStartsRange, set);
+            TrieIterator auxIter  = new TrieIterator(auxTrieImpl.auxTrie);
+            RangeValueIterator.Element auxResult = new RangeValueIterator.Element();
+            while(auxIter.next(auxResult)){
+                set.add(auxResult.start);
+            }
+        }
         /* add Hangul LV syllables and LV+1 because of skippables */
         for(c=HANGUL_BASE; c<HANGUL_BASE+HANGUL_COUNT; c+=JAMO_T_COUNT) {
             set.add(c);
