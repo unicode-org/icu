@@ -2593,6 +2593,21 @@ void RBBILineMonkey::rule67Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPo
     if (hangultype != U_HST_NOT_APPLICABLE) {
         nPos = fCharBI->following(pos);   // Advance by grapheme cluster, which
                                           //  contains the logic to locate Hangul syllables.
+        // Grapheme Cluster Ugliness: some Grapheme_Extend chars, which are absorbed
+        //   into a grapheme cluster, are NOT Line Break CM. (Some are GL, for example.)
+        //   We don't want consume any of these.  The Approach is
+        //      1.  Back nPos up, undoing the consumption of any
+        //          Grapheme_Extend chars by the char break iterator.
+        //      2.  Let the LB 7b logic below reconsume any Line Break CM chars.
+        for (;;) {
+            nPos = fText->moveIndex32(nPos, -1);
+            UChar32 possiblyExtendChar = fText->char32At(nPos);
+            if (fID->contains(possiblyExtendChar)) {
+                // We hit into the Hangul Syllable itself, class is ID.
+                nPos = fText->moveIndex32(nPos, +1);
+                break;
+            }
+        }
     }
     
     // LB 7b  Keep combining sequences together.
