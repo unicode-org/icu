@@ -1136,6 +1136,8 @@ main(int argc, char* argv[])
         }
     }
 
+    Locale originalLocale;  // Save the default locale for comparison later on.
+
     /* TODO: Add option to call u_cleanup and rerun tests. */
     if (all) {
         major.runTest();
@@ -1172,12 +1174,17 @@ main(int argc, char* argv[])
     free(_testDataPath);
     _testDataPath = 0;
 
+    Locale lastDefaultLocale;
+    if (originalLocale != lastDefaultLocale) {
+        major.errln("FAILURE: A test changed the default locale without resetting it.");
+    }
+
     fprintf(stdout, "\n--------------------------------------\n");
     if (major.getErrors() == 0) {
         /* Call it twice to make sure that the defaults were reset. */
         /* Call it before the OK message to verify proper cleanup. */
         u_cleanup();
-     u_cleanup();
+        u_cleanup();
 
         fprintf(stdout, "OK: All tests passed without error.\n");
     }else{

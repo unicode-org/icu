@@ -1063,6 +1063,7 @@ LocaleTest::TestAtypicalLocales()
 
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
+    Locale saveLocale;
     Locale::setDefault(Locale::getUS(), status);
     for (i = 0; i < 9; ++i) {
         UnicodeString name;
@@ -1107,6 +1108,7 @@ LocaleTest::TestAtypicalLocales()
             errln("Lookup in Bengali failed: expected \"" + bengaliDisplayNames[i]
                         + "\", got \"" + name + "\"");
     }
+    Locale::setDefault(saveLocale, status);
 }
 
 #if !UCONFIG_NO_FORMATTING
@@ -1429,7 +1431,10 @@ LocaleTest::Test4147552()
                                                  "norsk (Noreg, NY)"
                                                  //"Norsk (Noreg, Nynorsk)"
     };
+    UErrorCode status = U_ZERO_ERROR;
 
+    Locale saveLocale;
+    Locale::setDefault(Locale::getEnglish(), status);
     for (int32_t i = 0; i < 3; ++i) {
         Locale loc = locales[i];
         UnicodeString temp;
@@ -1441,6 +1446,7 @@ LocaleTest::Test4147552()
                    norwegianDisplayNames[i] + ", got " +
                    loc.getDisplayName(loc, temp));
     }
+    Locale::setDefault(saveLocale, status);
 }
 
 void

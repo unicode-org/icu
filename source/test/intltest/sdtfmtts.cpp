@@ -26,11 +26,13 @@ void IntlTestSimpleDateFormatAPI::runIndexedTest( int32_t index, UBool exec, con
                 if (exec) {
                     logln("SimpleDateFormat API test---"); logln("");
                     UErrorCode status = U_ZERO_ERROR;
+                    Locale saveLocale;
                     Locale::setDefault(Locale::getEnglish(), status);
                     if(U_FAILURE(status)) {
                         errln("ERROR: Could not set default locale, test may not give correct results");
                     }
                     testAPI(/*par*/);
+                    Locale::setDefault(saveLocale, status);
                 }
                 break;
 
