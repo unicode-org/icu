@@ -307,6 +307,19 @@ UnicodeStringTest::TestExtract()
             break;
         }
     }
+
+    // test preflighting and overflows with invariant conversion
+    if (test1.extract(0, 10, (char *)NULL, "") != 10) {
+        errln("UnicodeString.extract(0, 10, (char *)NULL, \"\") != 10");
+    }
+
+    test4[2] = (char)0xff;
+    if (test1.extract(0, 10, test4, 2, "") != 2) {
+        errln("UnicodeString.extract(0, 10, test4, 2, \"\") != 2");
+    }
+    if (test4[2] != (char)0xff) {
+        errln("UnicodeString.extract(0, 10, test4, 2, \"\") overwrote test4[2]");
+    }
 }
 
 void
