@@ -381,10 +381,21 @@ public:
      * Return the minimum value that this field could have, given the current date.
      * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
      * @param field    the time field.
+     * @param status
      * @return         the minimum value that this field could have, given the current date.
-     * @draft ICU 2.6.
+     * @deprecated ICU 2.6. Use getActualMinimum(UCalendarDateFields field) instead. (Added to ICU 3.0 for signature consistency)
      */
-    int32_t getActualMinimum(UCalendarDateFields field) const;
+    int32_t getActualMinimum(EDateFields field, UErrorCode& status) const;
+
+    /**
+     * Return the minimum value that this field could have, given the current date.
+     * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
+     * @param field    the time field.
+     * @param status   error result.
+     * @return         the minimum value that this field could have, given the current date.
+     * @draft ICU 3.0
+     */
+    int32_t getActualMinimum(UCalendarDateFields field, UErrorCode &status) const;
 
     /**
      * Return the maximum value that this field could have, given the current date.
