@@ -15,7 +15,7 @@ import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UnicodeSet;
 
-public class CharacterData
+public class ArabicCharacterData
 {
     public class Record
     {
@@ -68,7 +68,7 @@ public class CharacterData
         private String decomposition;
     }
     
-    private CharacterData(int charCount)
+    private ArabicCharacterData(int charCount)
     {
         records = new Record[charCount];
     }
@@ -97,10 +97,10 @@ public class CharacterData
     // after the iteration is done, so we'd have to use a vector
     // to hold the Records at first and copy it to an array
     // when we're done...   
-    public static CharacterData factory(UnicodeSet characterSet)
+    public static ArabicCharacterData factory(UnicodeSet characterSet)
     {
         int charCount = characterSet.size();
-        CharacterData data = new CharacterData(charCount);
+        ArabicCharacterData data = new ArabicCharacterData(charCount);
         
         for (int i = 0; i < charCount; i += 1) {
             data.add(characterSet.charAt(i));

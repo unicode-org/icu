@@ -69,6 +69,24 @@ public class LigatureTree
             return null;
         }
 
+        String ligatureString(int[] chars)
+        {
+            StringBuffer result = new StringBuffer();
+            int len = chars.length - 1;
+            
+            for (int i = 0; i < len; i += 1) {
+                if (i > 0) {
+                    result.append(" + ");
+                }
+                
+                result.append(Utility.hex(chars[i], 6));
+           }
+            
+            result.append(" => " + Utility.hex(chars[len], 6));
+            
+            return result.toString();
+        }
+        
         void insert(int[] chars, int index)
         {
             int c = chars[index];
@@ -76,10 +94,12 @@ public class LigatureTree
 
             if (len == index + 1) {
                 if (ligature != -1) {
-                    System.out.println("overwriting ligature " + Utility.hex(ligature, 6) + " with " + Utility.hex(c, 6));
+                    System.out.println("ignoring ligature " + ligatureString(chars) +
+                                       ": already have " + Utility.hex(ligature, 6));
+                } else {
+                    ligature = c;
                 }
 
-                ligature = c;
                 return;
             }
 

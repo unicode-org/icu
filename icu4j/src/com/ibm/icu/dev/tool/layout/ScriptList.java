@@ -15,31 +15,30 @@ public class ScriptList
 {
     static class LangSysRecord extends TaggedRecord
     {
-        private int[] featureIndices;
+        private Feature[] features;
         private int featureCount;
         
         public LangSysRecord(String theLanguageTag)
         {
             super(theLanguageTag);
             
-            featureIndices = new int[10];
+            features = new Feature[10];
             featureCount = 0;
         }
         
-        public void addFeature(int theFeatureIndex)
+        public void addFeature(Feature feature)
         {
-            if (featureCount > featureIndices.length) {
-                int[] newFeatureIndices = new int[featureIndices.length + 5];
+            if (featureCount > features.length) {
+                Feature[] newFeatures = new Feature[features.length + 5];
                 
-                System.arraycopy(featureIndices, 0, newFeatureIndices, 0, featureIndices.length);
-                featureIndices = newFeatureIndices;
+                System.arraycopy(features, 0, newFeatures, 0, features.length);
+                features = newFeatures;
             }
             
-            featureIndices[featureCount] = theFeatureIndex;
-            featureCount += 1;
+            features[featureCount++] = feature;
         }
         
-        public void writeLangSysRecord(OpenTypeTableWriter writer)
+         public void writeLangSysRecord(OpenTypeTableWriter writer)
         {
             writer.writeData(0);      // lookupOrder (must be NULL)
             writer.writeData(0xFFFF); // reqFeatureIndex (0xFFFF means none)
@@ -47,7 +46,7 @@ public class ScriptList
             writer.writeData(featureCount);
             
             for (int i = 0; i < featureCount; i += 1) {
-                writer.writeData(featureIndices[i]);
+                writer.writeData(features[i].getFeatureIndex());
             }
         }
     }
@@ -162,11 +161,11 @@ public class ScriptList
         return newScriptRecord.findLangSysRecord(languageTag);
     }
     
-    public void addFeature(String scriptTag, String languageTag, int featureIndex)
+    public void addFeature(String scriptTag, String languageTag, Feature feature)
     {
         LangSysRecord langSysRecord = findLangSysRecord(scriptTag, languageTag);
         
-        langSysRecord.addFeature(featureIndex);
+        langSysRecord.addFeature(feature);
     }
     
     public void writeScriptList(OpenTypeTableWriter writer)

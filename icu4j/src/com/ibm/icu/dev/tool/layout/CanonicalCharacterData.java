@@ -7,7 +7,9 @@
 
 package com.ibm.icu.dev.tool.layout;
 
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.CanonicalIterator;
 import com.ibm.icu.text.UTF16;
@@ -15,10 +17,12 @@ import java.util.Vector;
 
 public class CanonicalCharacterData
 {
+    private static int THRESHOLD = 4;
+    
     public class Record
     {
         // TODO: might want to save arrays of Char32's rather than UTF16 strings...
-        Record(int character)
+        Record(int character, int script)
         {
             String char32 = UCharacter.toString(character);
             CanonicalIterator iterator = new CanonicalIterator(char32);
@@ -36,12 +40,16 @@ public class CanonicalCharacterData
             
             int nEquivalents = equivs.size();
             
-            if (nEquivalents > maxEquivalents) {
-                maxEquivalents = nEquivalents;
+            if (nEquivalents > maxEquivalents[script]) {
+                maxEquivalents[script] = nEquivalents;
             }
             
             if (nEquivalents > 0) {
                 equivalents = new String[nEquivalents];
+                
+                if (nEquivalents > THRESHOLD) {
+                    dumpEquivalents(character, equivs);
+                }
                 
                 for (int e = 0; e < nEquivalents; e += 1) {
                     equivalents[e] = (String) equivs.elementAt(e);
@@ -61,6 +69,7 @@ public class CanonicalCharacterData
             if (equivalents == null) {
                 return 0;
             }
+            
             return equivalents.length;
         }
         
@@ -78,48 +87,91 @@ public class CanonicalCharacterData
             return equivalents[index];
         }
         
+        private void dumpEquivalents(int character, Vector equivs)
+        {
+            int count = equivs.size();
+            
+            System.out.println(Utility.hex(character, 6) + " - " + count + ":");
+            
+            for (int i = 0; i < count; i += 1) {
+                String equiv = (String) equivs.elementAt(i);
+                int codePoints = UTF16.countCodePoint(equiv);
+                
+                for (int c = 0; c < codePoints; c += 1) {
+                    if (c > 0) {
+                        System.out.print(" ");
+                    }
+                    
+                    System.out.print(Utility.hex(UTF16.charAt(equiv, c), 6));
+                }
+                
+                System.out.println();
+            }
+            
+            System.out.println();
+        }
+        
         private int composed;
         private String[] equivalents = null;
     }
     
-    public CanonicalCharacterData(int charCount)
+    public CanonicalCharacterData()
     {
-        records = new Record[charCount];
+        // nothing to do...
     }
     
     public void add(int character)
     {
-        records[recordIndex++] = new Record(character);
+        int script = UScript.getScript(character);
+        Vector recordVector = recordVectors[script];
+        
+        if (recordVector == null) {
+            recordVector = recordVectors[script] = new Vector();
+        }
+        
+        recordVector.add(new Record(character, script));
     }
     
-    public int getCharacterCount()
+    public int getMaxEquivalents(int script)
     {
-        return recordIndex;
+        if (script < 0 || script >= UScript.CODE_LIMIT) {
+            return 0;
+        }
+        
+        return maxEquivalents[script];
     }
     
-    public int getMaxEquivalents()
+    public Record getRecord(int script, int index)
     {
-        return maxEquivalents;
-    }
-    
-    public Record getRecord(int index)
-    {
-        if (index < 0 || index >= records.length) {
+        if (script < 0 || script >= UScript.CODE_LIMIT) {
             return null;
         }
         
-        return records[index];
+        Vector recordVector = recordVectors[script];
+        
+        if (recordVector == null || index < 0 || index >= recordVector.size()) {
+            return null;
+        }
+        
+        return (Record) recordVector.elementAt(index);
     }
     
-    public int countRecords()
+    public int countRecords(int script)
     {
-        return records.length;
+        if (script < 0 || script >= UScript.CODE_LIMIT ||
+            recordVectors[script] == null) {
+            return 0;
+        }
+        
+        return recordVectors[script].size();
     }
  
     public static CanonicalCharacterData factory(UnicodeSet characterSet)
     {
         int charCount = characterSet.size();
-        CanonicalCharacterData data = new CanonicalCharacterData(charCount);
+        CanonicalCharacterData data = new CanonicalCharacterData();
+        
+        System.out.println("There are " + charCount + " characters with a canonical decomposition.");
         
         for (int i = 0; i < charCount; i += 1) {
             data.add(characterSet.charAt(i));
@@ -160,8 +212,7 @@ public class CanonicalCharacterData
         }
     }
         
-    private Record[] records;
-    private int recordIndex = 0;
-    private int maxEquivalents = 0;
+    private Vector recordVectors[] = new Vector[UScript.CODE_LIMIT];
+    private int maxEquivalents[] = new int[UScript.CODE_LIMIT];
 
 }
