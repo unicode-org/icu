@@ -299,6 +299,30 @@ TimeZone::createTimeZone(const UnicodeString& ID)
 }
 
 /**
+ * Given an ID, open the appropriate resource for the given time zone.
+ * Dereference aliases if necessary.
+ * @param id zone id
+ * @param res resource, which must be ready for use (initialized but not open)
+ * @param ec input-output error code
+ * @return top-level resource bundle
+ */
+static UResourceBundle* openOlsonResource(const UnicodeString& id,
+                                          UResourceBundle& res,
+                                          UErrorCode& ec) {
+    char buf[128];
+    id.extract(0, sizeof(buf)-1, buf, sizeof(buf), "");
+    UResourceBundle *top = ures_openDirect(0, ZONEINFO, &ec);
+    ures_getByKey(top, buf, &res, &ec);
+    // Dereference if this is an alias
+    if (ures_getSize(&res) == 1) {
+        int32_t deref = ures_getInt(&res, &ec);
+        ures_close(&res);
+        ures_getByIndex(top, deref, &res, &ec);
+    }
+    return top;
+}
+
+/**
  * Lookup the given name in our system zone table.  If found,
  * instantiate a new zone of that name and return it.  If not
  * found, return 0.
@@ -306,13 +330,10 @@ TimeZone::createTimeZone(const UnicodeString& ID)
 TimeZone*
 TimeZone::createSystemTimeZone(const UnicodeString& id) {
     TimeZone* z = 0;
-    char buf[128];
-    id.extract(0, sizeof(buf)-1, buf, sizeof(buf), "");
     UErrorCode ec = U_ZERO_ERROR;
-    UResourceBundle *top = ures_openDirect(0, ZONEINFO, &ec);
     UResourceBundle res;
     ures_initStackObject(&res);
-    ures_getByKey(top, buf, &res, &ec);
+    UResourceBundle *top = openOlsonResource(id, res, ec);
     if (U_SUCCESS(ec)) {
         z = new OlsonTimeZone(top, &res, ec);
     }
@@ -949,18 +970,60 @@ TimeZone::createAvailableIDs(int32_t& numIDs)
 
 int32_t
 TimeZone::countEquivalentIDs(const UnicodeString& id) {
-    // As of ICU 2.8, we no longer have equivalency data.
-    // TODO Add equivalency data
-    return 0;
+    int32_t result = 0;
+    UErrorCode ec = U_ZERO_ERROR;
+    UResourceBundle res;
+    ures_initStackObject(&res);
+    UResourceBundle *top = openOlsonResource(id, res, ec);
+    if (U_SUCCESS(ec)) {
+        int32_t size = ures_getSize(&res);
+        if (size == 4 || size == 6) {
+            UResourceBundle r;
+            ures_initStackObject(&r);
+            ures_getByIndex(&res, size-1, &r, &ec);
+            result = ures_getSize(&r);
+            ures_close(&r);
+        }
+    }
+    ures_close(&res);
+    ures_close(top);
+    return result;
 }
 
 // ---------------------------------------
 
 const UnicodeString
 TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
-    // As of ICU 2.8, we no longer have equivalency data.
-    // TODO Add equivalency data
-    return UnicodeString();
+    UnicodeString result;
+    UErrorCode ec = U_ZERO_ERROR;
+    UResourceBundle res;
+    ures_initStackObject(&res);
+    UResourceBundle *top = openOlsonResource(id, res, ec);
+    int32_t zone = -1;
+    if (U_SUCCESS(ec)) {
+        int32_t size = ures_getSize(&res);
+        if (size == 4 || size == 6) {
+            UResourceBundle r;
+            ures_initStackObject(&r);
+            ures_getByIndex(&res, size-1, &r, &ec);
+            const int32_t* v = ures_getIntVector(&r, &size, &ec);
+            if (index >= 0 && index < size) {
+                zone = v[index];
+            }
+            ures_close(&r);
+        }
+    }
+    ures_close(&res);
+    if (zone >= 0) {
+        ures_getByIndex(top, zone, &res, &ec);
+        if (U_SUCCESS(ec)) {
+            const char* key = ures_getKey(&res);
+            result = UnicodeString(key, "");
+        }
+        ures_close(&res);
+    }
+    ures_close(top);
+    return result;
 }
 
 // ---------------------------------------

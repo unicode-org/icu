@@ -43,9 +43,10 @@ void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
         CASE(7, TestDisplayName);
         CASE(8, TestDSTSavings);
         CASE(9, TestAlternateRules);
-        CASE(10,TestCountries);
+        CASE(10,TestCountries); 
         CASE(11,TestHistorical);
-        default: name = ""; break;
+        CASE(12,TestEquivalentIDs);
+       default: name = ""; break;
     }
 }
 
@@ -1240,6 +1241,15 @@ void TimeZoneTest::TestHistorical() {
             }
         }
         delete tz;
+    }
+}
+
+void TimeZoneTest::TestEquivalentIDs() {
+    int32_t n = TimeZone::countEquivalentIDs("PST");
+    logln((UnicodeString)"PST: " + n);
+    for (int32_t i=0; i<n; ++i) {
+        UnicodeString id = TimeZone::getEquivalentID("PST", i);
+        logln((UnicodeString)i + " : " + id);
     }
 }
 

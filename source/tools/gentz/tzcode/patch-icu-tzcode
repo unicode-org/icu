@@ -50,7 +50,7 @@ diff --unified --recursive ../tzcode.orig/Makefile ./Makefile
  right_only:	zic leapseconds $(TDATA)
  		$(ZIC) -y $(YEARISTYPE) -d $(TZDIR) -L leapseconds $(TDATA)
  
-+icu_data:	tz2icu
++icu_data:	tz2icu posix_only
 +		./tz2icu zoneinfo zone.tab
 +
  # In earlier versions of this makefile, the other two directories were

@@ -68,18 +68,17 @@ HOWTO
 
 1. Obtain the current versions of tzcodeYYYYV.tar.gz (aka `tzcode')
    and tzdataYYYYV.tar.gz (aka `tzdata') from the FTP site given
-   above.
+   above.  Either manually download or use wget:
 
-2. Unpack tzcode directly into the directory gentz/tzcode:
+   $ cd <path_to>/icu/source/tools/gentz/tzcode
+   $ wget "ftp://elsie.nci.nih.gov/pub/tz*.tar.gz"
 
-   $ cd icu/source/tools/gentz/tzcode
-   $ tar xzvf <path_to>/tzcodeYYYYV.tar.gz
+2. Unpack tzcode and tzdata directly into the directory gentz/tzcode:
 
-3. Unpack tzdata into the same directory.
+   $ tar xzvf tzcode*.tar.gz
+   $ tar xzvf tzdata*.tar.gz
 
-   $ tar xzvf <path_to>/tzdataYYYYV.tar.gz
-
-5. Apply the ICU patch to zic.c:
+3. Apply the ICU patch to zic.c:
 
    $ patch < patch-icu-tzcode
 
@@ -87,20 +86,11 @@ HOWTO
    manually addressed.  See the CVS log of `patch-icu-tzcode' for
    version details.
 
-6. Build:
-
-   $ make
-
-7. Build the zoneinfo data.  This results in a directory `zoneinfo'
-   and a file `icu_zone.txt'.
-
-   $ make posix_only
-
-8. Build the ICU data.  This results in a file `zoneinfo.txt'.
+4. Build:
 
    $ make icu_data
 
-9. Copy the data file to the correct location in the ICU source tree:
+5. Copy the data file to the correct location in the ICU source tree:
 
    $ cp zoneinfo.txt ../../../data/misc/
 
