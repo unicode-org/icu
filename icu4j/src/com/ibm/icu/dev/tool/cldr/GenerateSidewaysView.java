@@ -179,10 +179,11 @@ import com.ibm.icu.util.UResourceBundle;
     }
     */
 
+    /*
     private void addCurrencies(String[] currencies, String lastElement) {
         ElementChain temp = new ElementChain();
         temp.push("ldml",null).push("numbers",null).push("currencies",null)
-            .push("currency",null).push(lastElement,null);
+            .push("currency",null).push(lastElement,null,null);
         for (int i = 0; i < currencies.length; ++i) {
             temp.setAttribute("currency","type",currencies[i]);
             String value = (String) data.get(temp);
@@ -190,6 +191,7 @@ import com.ibm.icu.util.UResourceBundle;
             putData(temp, currencies[i]);
         }
     }
+    */
     
     // UGLY hack
     private static String[] getCodes(ULocale locale, String tableName) {
@@ -238,10 +240,11 @@ import com.ibm.icu.util.UResourceBundle;
        }
     }
     
-    Set badTimezoneIDs = null;
     
-    private void detectAliases(String filename) {
-        /*
+    /*
+    Set badTimezoneIDs = null;
+     private void detectAliases(String filename) {
+      
         Set problems = new TreeSet();
         for (Iterator it = data.iterator(); it.hasNext();) {
             ElementChain key = (ElementChain) it.next();
@@ -258,13 +261,13 @@ import com.ibm.icu.util.UResourceBundle;
                 }
             }
         }
-        */
+       
         for (Iterator it = badTimezoneIDs.iterator(); it.hasNext();) {
             String oldOne = (String)it.next();
             String newOne = TimeZoneAliases.get(oldOne);
         	log.println("Fix Timezone Alias: " + filename + "\t" + oldOne + " => " + newOne);
         }
-    }
+    } */
     
     private void removeAll(GenerateSidewaysView temp) {
         data.removeAll(temp.data);
@@ -310,7 +313,7 @@ import com.ibm.icu.util.UResourceBundle;
         + "<!DOCTYPE ldml SYSTEM \"http://www.unicode.org/cldr/dtd/1.2/alpha/ldml.dtd\">\r\n");
         
         Set duplicateZoneIDs = findDuplicateZoneIDs();
-        badTimezoneIDs = new TreeSet();
+        //badTimezoneIDs = new TreeSet();
         
         ElementChain empty = new ElementChain();
         ElementChain old = empty;
@@ -325,13 +328,23 @@ import com.ibm.icu.util.UResourceBundle;
                     }
                 }
             }
+            if (true) {
+                // weekendEnd draft="true" time="00:00" NEVER ok
+                Element zoneElement = key.getElement("weekendEnd");
+                if (zoneElement != null) {
+                    String zoneTypeValue = zoneElement.getValue("time");
+                    if ("00:00".equals(zoneTypeValue)) {
+                        log.println("BAD WEEKENDEND TIME: " + zoneTypeValue);
+                    }
+                }
+            }
             String value = (String) data.get(key);
             key.getDifference(old, value, buffer);
             old = key;           
         }
         empty.getDifference(old, "", buffer);
         if (finalComment != null) {
-        	buffer.append("\r\n<!--\r\n");
+        	buffer.append("\r\n<!--");
             buffer.append(finalComment);
             buffer.append("\r\n-->");
         }
@@ -483,11 +496,13 @@ import com.ibm.icu.util.UResourceBundle;
     class Element implements Comparable {
         String elementName;
         SimpleAttributes attributes;
+        String comment;
 
-        Element(String elementName, Attributes attributes) {
+        Element(String elementName, Attributes attributes, String comment) {
             //elementOrdering.add(elementName);
             this.elementName = elementName;
             this.attributes = new SimpleAttributes(attributes, elementName);
+            this.comment = comment;
         }
         /**
 		 * @param string
@@ -507,6 +522,7 @@ import com.ibm.icu.util.UResourceBundle;
             //elementOrdering.add(elementName);
             this.elementName = other.elementName;
             this.attributes = new SimpleAttributes(other.attributes, elementName);
+            this.comment = other.comment;
         }
         public String toString() {return toString(true);}
         public String toString(boolean path) {
@@ -537,7 +553,8 @@ import com.ibm.icu.util.UResourceBundle;
         public boolean equals(Object o) {
         	return compareTo(o) == 0;
         }
-        /* public void addComment(String in_comment) {
+        /*
+        public void addComment(String in_comment) {
             if (comment == null) comment = in_comment;
             else comment += "\r\n" + in_comment;
             return;
@@ -585,9 +602,9 @@ import com.ibm.icu.util.UResourceBundle;
             contexts = new ArrayList(other.contexts);
         }
         
-        public ElementChain push(String elementName, Attributes attributes) {
+        public ElementChain push(String elementName, Attributes attributes, String comment) {
             elementOrdering.add(elementName);
-            contexts.add(new Element(elementName, attributes));
+            contexts.add(new Element(elementName, attributes, comment));
             return this;
         }
         
@@ -652,23 +669,42 @@ import com.ibm.icu.util.UResourceBundle;
             
             // write new elements if needed.
             for (; common < csize-1; ++common) {
+                Element ee = ((Element)contexts.get(common));
+                writeElementComment(out, ee, common);
                 indent(common, out);
-                out.append(((Element)contexts.get(common)).toString(Element.START_VALUE, false));
+                out.append(ee.toString(Element.START_VALUE, false));
                 out.append("\r\n");
             }
             // now write the very current element
+            Element ee = ((Element)contexts.get(csize-1));
+            writeElementComment(out, ee, common);
             indent(common, out);
-            if (value.length() == 0) {
-                out.append(((Element)contexts.get(csize-1)).toString(Element.NO_VALUE, false));
+            if (value.length() == 0) {                           
+                out.append(ee.toString(Element.NO_VALUE, false));
             } else {
-                out.append(((Element)contexts.get(csize-1)).toString(Element.START_VALUE, false));
+                out.append(ee.toString(Element.START_VALUE, false));
                 out.append(BagFormatter.toHTML.transliterate(value));
-                out.append(((Element)contexts.get(csize-1)).toString(Element.END_VALUE, false));
+                out.append(ee.toString(Element.END_VALUE, false));
             }
             out.append("\r\n");
         }
 
         /**
+		 * @param out
+		 * @param ee
+		 */
+		private void writeElementComment(StringBuffer out, Element ee, int common) {
+			if (ee.comment != null) {
+                indent(common, out);
+			    out.append("<!--");
+			    out.append(ee.comment);
+                out.append("r\n");
+                indent(common, out);
+			    out.append("-->\r\n");
+			}
+		}
+
+		/**
          * @param string
          * @return
          */
@@ -1006,7 +1042,8 @@ import com.ibm.icu.util.UResourceBundle;
                 //data.put(new ContextStack(contextStack), lastChars);
                 //lastChars = "";
                 try {
-                    contextStack.push(qName, attributes);               
+                    contextStack.push(qName, attributes, finalComment);
+                    finalComment = null;
                     if (DEBUG) System.out.println("startElement:\t" + contextStack);
                     justPopped = false;
                 } catch (RuntimeException e) {
@@ -1117,7 +1154,7 @@ import com.ibm.icu.util.UResourceBundle;
 		}
 		public void comment(char[] ch, int start, int length) throws SAXException {
             if (commentStack != 0) return;
-            String comment = new String(ch, start,length);
+            String comment = new String(ch, start,length).trim();
             if (finalComment == null) finalComment = comment;
             else finalComment += "\r\n" + comment;
             if (DEBUG2) System.out.println("comment: " + comment);
