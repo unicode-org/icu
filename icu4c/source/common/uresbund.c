@@ -1013,19 +1013,18 @@ U_CAPI UResourceBundle* ures_openW(const wchar_t* myPath,
                     const char* localeID,
                     UErrorCode* status)
 {
-    char path[100];
     UResourceBundle *r;
-    size_t tempSize = uprv_wcstombs(NULL, myPath, ((size_t)-1) >> 1);
-    /*char *temp = new char[tempSize + 1];*/
+    size_t pathSize = (uprv_wcslen(myPath) + 1) * sizeof(int32_t);
+    char *path = (char *)uprv_malloc(pathSize);
 
-    tempSize = uprv_wcstombs(path, myPath, tempSize);
-    path[tempSize] = 0;
+    uprv_wcstombs(path, myPath, pathSize);
 
     /*u_UCharsToChars(myPath, path, uprv_wcslen(myPath)+1);*/
 
     r = ures_open(path, localeID, status);
+    uprv_free(path);
 
-    if (r == FALSE || U_FAILURE(*status)) {
+    if (U_FAILURE(*status)) {
         return NULL;
     }
 
@@ -1037,17 +1036,16 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath,
                   const char* localeID, 
                   UErrorCode* status)
 {
-    char path[100];
     UResourceBundle *r;
-    int32_t pathlen = u_strlen(myPath);
+    int32_t pathSize = u_strlen(myPath) + 1;
+    char *path = (char *)uprv_malloc(pathSize);
 
-
-    u_UCharsToChars(myPath, path, pathlen);
-    path[pathlen] = 0;
+    u_UCharsToChars(myPath, path, pathSize);
 
     r = ures_open(path, localeID, status);
+    uprv_free(path);
 
-    if (r == FALSE || U_FAILURE(*status)) {
+    if (U_FAILURE(*status)) {
         return NULL;
     }
 
