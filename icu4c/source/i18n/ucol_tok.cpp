@@ -96,6 +96,7 @@ ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, UColAt
   switch(attrib) {
   case UCOL_HIRAGANA_QUATERNARY_MODE:
     opts->hiraganaQ = value;
+    break;
   case UCOL_FRENCH_COLLATION:
     opts->frenchCollation = value;
     break;
@@ -120,7 +121,7 @@ ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, UColAt
   }
 }
 
-#define UTOK_OPTION_COUNT 14
+#define UTOK_OPTION_COUNT 15
 
 static UBool didInit = FALSE;
 /* we can be strict, or we can be lenient */
@@ -136,6 +137,8 @@ U_STRING_DECL(suboption_05, "on",             2);
 U_STRING_DECL(suboption_06, "1",              1);
 U_STRING_DECL(suboption_07, "2",              1);
 U_STRING_DECL(suboption_08, "3",              1);
+U_STRING_DECL(suboption_09, "4",              1);
+U_STRING_DECL(suboption_10, "I",              1);
 
 
 
@@ -153,6 +156,7 @@ U_STRING_DECL(option_10,    "charsetname",   11);
 U_STRING_DECL(option_11,    "charset",        7);  
 U_STRING_DECL(option_12,    "before",         6);  
 U_STRING_DECL(option_13,    "hiraganaQ",      9);
+U_STRING_DECL(option_14,    "strength",       8);
 
 
 ucolTokSuboption alternateSub[2] = {
@@ -181,6 +185,13 @@ ucolTokSuboption beforeSub[3] = {
   {suboption_08, 1, UCOL_TERTIARY}
 };
 
+ucolTokSuboption strengthSub[5] = {
+  {suboption_06, 1, UCOL_PRIMARY},
+  {suboption_07, 1, UCOL_SECONDARY},
+  {suboption_08, 1, UCOL_TERTIARY},
+  {suboption_09, 1, UCOL_QUATERNARY},
+  {suboption_10, 1, UCOL_IDENTICAL},
+};
 
 ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
  {option_02,  9, alternateSub, 2, UCOL_ALTERNATE_HANDLING}, /*"alternate" */
@@ -189,6 +200,7 @@ ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
  {option_08,  9, caseFirstSub, 3, UCOL_CASE_FIRST}, /*"caseFirst"   */
  {option_06, 13, onOffSub, 2, UCOL_NORMALIZATION_MODE}, /*"normalization" */
  {option_13, 9, onOffSub, 2, UCOL_HIRAGANA_QUATERNARY_MODE}, /*"hiraganaQ" */
+ {option_14, 8, strengthSub, 5, UCOL_STRENGTH}, /*"strength" */
  {option_04, 12, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"variable top"   */
  {option_01,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"rearrange"      */
  {option_05,  3, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"top"            */
@@ -235,6 +247,8 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, 
     U_STRING_INIT(suboption_06, "1",              1);
     U_STRING_INIT(suboption_07, "2",              1);
     U_STRING_INIT(suboption_08, "3",              1);
+    U_STRING_INIT(suboption_09, "4",              1);
+    U_STRING_INIT(suboption_10, "I",              1);
 
 
     U_STRING_INIT(option_00, "undefined",      9);
@@ -251,6 +265,7 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, 
     U_STRING_INIT(option_11, "charset",        7);  
     U_STRING_INIT(option_12, "before",         6);  
     U_STRING_INIT(option_13, "hiraganaQ",      9);
+    U_STRING_INIT(option_14, "strength",       8);
   }
   start++; /*skip opening '['*/
   while(i < UTOK_OPTION_COUNT) {
@@ -272,7 +287,7 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, 
     return FALSE;
   }
 
-  if(i<6) {
+  if(i<7) {
     if(optionArg) {
       for(j = 0; j<rulesOptions[i].subSize; j++) {
         if(u_strncmpNoCase(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
@@ -283,13 +298,13 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, 
     }
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return FALSE;
-  } else if(i == 6) { /* variable top */
+  } else if(i == 7) { /* variable top */
     return UCOL_TOK_SUCCESS | UCOL_TOK_VARIABLE_TOP;
-  } else if(i == 7) {  /*rearange */
+  } else if(i == 8) {  /*rearange */
     return UCOL_TOK_SUCCESS;
-  } else if(i == 8) {  /*top */
+  } else if(i == 9) {  /*top */
     return UCOL_TOK_SUCCESS | UCOL_TOK_TOP;
-  } else if(i == 9) {  /*before*/
+  } else if(i == 10) {  /*before*/
     if(optionArg) {
       for(j = 0; j<rulesOptions[i].subSize; j++) {
         if(u_strncmpNoCase(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
