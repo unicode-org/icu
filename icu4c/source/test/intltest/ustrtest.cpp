@@ -463,7 +463,7 @@ UnicodeStringTest::TestCaseConversion()
         if( s.length()!=(sizeof(lowerRoot)/U_SIZEOF_UCHAR) ||
             s!=UnicodeString(FALSE, lowerRoot, s.length())
         ) {
-            errln("error in toLower(root locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, lowerRoot, sizeof(lowerRoot)/U_SIZEOF_UCHAR) + "\"");
+            errln("error in toLower(root locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, lowerRoot, (int32_t)(sizeof(lowerRoot)/U_SIZEOF_UCHAR)) + "\"");
         }
 
         /* lowercase with turkish locale */
@@ -472,7 +472,7 @@ UnicodeStringTest::TestCaseConversion()
         if( s.length()!=(sizeof(lowerTurkish)/U_SIZEOF_UCHAR) ||
             s!=UnicodeString(FALSE, lowerTurkish, s.length())
         ) {
-            errln("error in toLower(turkish locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, lowerTurkish, sizeof(lowerTurkish)/U_SIZEOF_UCHAR) + "\"");
+            errln("error in toLower(turkish locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, lowerTurkish, (int32_t)(sizeof(lowerTurkish)/U_SIZEOF_UCHAR)) + "\"");
         }
 
         /* uppercase with root locale */
@@ -481,7 +481,7 @@ UnicodeStringTest::TestCaseConversion()
         if( s.length()!=(sizeof(upperRoot)/U_SIZEOF_UCHAR) ||
             s!=UnicodeString(FALSE, upperRoot, s.length())
         ) {
-            errln("error in toUpper(root locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, upperRoot, sizeof(upperRoot)/U_SIZEOF_UCHAR) + "\"");
+            errln("error in toUpper(root locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, upperRoot, (int32_t)(sizeof(upperRoot)/U_SIZEOF_UCHAR)) + "\"");
         }
 
         /* uppercase with turkish locale */
@@ -490,7 +490,7 @@ UnicodeStringTest::TestCaseConversion()
         if( s.length()!=(sizeof(upperTurkish)/U_SIZEOF_UCHAR) ||
             s!=UnicodeString(FALSE, upperTurkish, s.length())
         ) {
-            errln("error in toUpper(turkish locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, upperTurkish, sizeof(upperTurkish)/U_SIZEOF_UCHAR) + "\"");
+            errln("error in toUpper(turkish locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, upperTurkish, (int32_t)(sizeof(upperTurkish)/U_SIZEOF_UCHAR)) + "\"");
         }
 
         /* uppercase a short string with root locale */
@@ -499,7 +499,7 @@ UnicodeStringTest::TestCaseConversion()
         if( s.length()!=(sizeof(miniUpper)/U_SIZEOF_UCHAR) ||
             s!=UnicodeString(FALSE, miniUpper, s.length())
         ) {
-            errln("error in toUpper(root locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, miniUpper, sizeof(miniUpper)/U_SIZEOF_UCHAR) + "\"");
+            errln("error in toUpper(root locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, miniUpper, (int32_t)(sizeof(miniUpper)/U_SIZEOF_UCHAR)) + "\"");
         }
     }
 }
@@ -757,23 +757,28 @@ UnicodeStringTest::TestCellWidth()
     UChar     testData3[] = { 0x31, 0x39, 0x39, 0x37, 0x5e74, 0x20, 0x516d, 0x6708, 0x20, 0x30, 0x33, 0x65e5, 0x5e73, 0x6210, 0x0000 };
     UChar     testData4[] = { 0x39, 0x37, 0xb144, 0x36, 0xc6d4, 0x30, 0x33, 0xc77c, 0x0000 };
     UChar     testData5[] = { 0x39, 0x37, 0x1103, 0x1167, 0x11ab, 0x36, 0x110b, 0x117b, 0x11af, 0x30, 0x33, 0x110b, 0x1175, 0x11af, 0x0000 };
-    
+
     UnicodeString   test1("The rain in Spain stays mainly on the plain.");
     UnicodeString   test2(testData2);
     UnicodeString   test3(testData3);
     UnicodeString   test4(testData4);
     UnicodeString   test5(testData5);
+    int32_t testVal = test1.numDisplayCells();
 
-    if (test1.numDisplayCells() != 44)
-        errln("numDisplayCells() failed: expected 44, got " + test1.numDisplayCells());
-    if (test2.numDisplayCells() != 11)
-        errln("numDisplayCells() failed: expected 11, got " + test2.numDisplayCells());
-    if (test3.numDisplayCells() != 20)
-        errln("numDisplayCells() failed: expected 20, got " + test3.numDisplayCells());
-    if (test4.numDisplayCells() != 11)
-        errln("numDisplayCells() failed: expected 11, got " + test4.numDisplayCells());
-    if (test5.numDisplayCells() != 11)
-        errln("numDisplayCells() failed: expected 11, got " + test5.numDisplayCells());
+    if (testVal != 44)
+        errln("test1.numDisplayCells() failed: expected 44, got %d", testVal);
+    testVal = test2.numDisplayCells();
+    if (testVal != 11)
+        errln("test2.numDisplayCells() failed: expected 11, got %d", testVal);
+    testVal = test3.numDisplayCells();
+    if (testVal != 20)
+        errln("test3.numDisplayCells() failed: expected 20, got %d", testVal);
+    testVal = test4.numDisplayCells();
+    if (testVal != 11)
+        errln("test4.numDisplayCells() failed: expected 11, got %d", testVal);
+    testVal = test5.numDisplayCells();
+    if (testVal != 11)
+        errln("test5.numDisplayCells() failed: expected 11, got %d", testVal);
 }
 
 void
