@@ -274,7 +274,7 @@ public:
      * or direction is invalid.
      * @draft
      */
-    RuleBasedTransliterator(const UnicodeString& ID,
+    RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
                             UTransDirection direction,
                             UnicodeFilter* adoptedFilter,
@@ -288,7 +288,7 @@ public:
      * @exception IllegalArgumentException if rules are malformed
      * or direction is invalid.
      */
-    RuleBasedTransliterator(const UnicodeString& ID,
+    RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
                             UTransDirection direction,
                             UnicodeFilter* adoptedFilter,
@@ -298,7 +298,7 @@ public:
      * Covenience constructor with no filter.
      * @draft
      */
-    RuleBasedTransliterator(const UnicodeString& ID,
+    RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
                             UTransDirection direction,
                             UErrorCode& status);
@@ -307,7 +307,7 @@ public:
      * Covenience constructor with no filter and FORWARD direction.
      * @draft
      */
-    RuleBasedTransliterator(const UnicodeString& ID,
+    RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
                             UErrorCode& status);
 
@@ -315,7 +315,7 @@ public:
      * Covenience constructor with FORWARD direction.
      * @draft
      */
-    RuleBasedTransliterator(const UnicodeString& ID,
+    RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
                             UnicodeFilter* adoptedFilter,
                             UErrorCode& status);
@@ -324,7 +324,7 @@ public:
      * Covenience constructor.
      * @draft
      */
-    RuleBasedTransliterator(const UnicodeString& ID,
+    RuleBasedTransliterator(const UnicodeString& id,
                             const TransliterationRuleData* theData,
                             UnicodeFilter* adoptedFilter = 0);
 
@@ -392,13 +392,13 @@ private:
  * or direction is invalid.
  */
 inline RuleBasedTransliterator::RuleBasedTransliterator(
-                            const UnicodeString& ID,
+                            const UnicodeString& id,
                             const UnicodeString& rules,
                             UTransDirection direction,
                             UnicodeFilter* adoptedFilter,
                             UParseError& parseError,
                             UErrorCode& status) :
-    Transliterator(ID, adoptedFilter) {
+    Transliterator(id, adoptedFilter) {
     _construct(rules, direction, status, &parseError);
 }
 
@@ -410,12 +410,12 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
  * or direction is invalid.
  */
 inline RuleBasedTransliterator::RuleBasedTransliterator(
-                            const UnicodeString& ID,
+                            const UnicodeString& id,
                             const UnicodeString& rules,
                             UTransDirection direction,
                             UnicodeFilter* adoptedFilter,
                             UErrorCode& status) :
-    Transliterator(ID, adoptedFilter) {
+    Transliterator(id, adoptedFilter) {
     _construct(rules, direction, status);
 }
 
@@ -423,11 +423,11 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
  * Covenience constructor with no filter.
  */
 inline RuleBasedTransliterator::RuleBasedTransliterator(
-                            const UnicodeString& ID,
+                            const UnicodeString& id,
                             const UnicodeString& rules,
                             UTransDirection direction,
                             UErrorCode& status) :
-    Transliterator(ID, 0) {
+    Transliterator(id, 0) {
     _construct(rules, direction, status);
 }
 
@@ -435,10 +435,10 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
  * Covenience constructor with no filter and FORWARD direction.
  */
 inline RuleBasedTransliterator::RuleBasedTransliterator(
-                            const UnicodeString& ID,
+                            const UnicodeString& id,
                             const UnicodeString& rules,
                             UErrorCode& status) :
-    Transliterator(ID, 0) {
+    Transliterator(id, 0) {
     _construct(rules, UTRANS_FORWARD, status);
 }
 
@@ -446,11 +446,11 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
  * Covenience constructor with FORWARD direction.
  */
 inline RuleBasedTransliterator::RuleBasedTransliterator(
-                            const UnicodeString& ID,
+                            const UnicodeString& id,
                             const UnicodeString& rules,
                             UnicodeFilter* adoptedFilter,
                             UErrorCode& status) :
-    Transliterator(ID, adoptedFilter) {
+    Transliterator(id, adoptedFilter) {
     _construct(rules, UTRANS_FORWARD, status);
 }
 
