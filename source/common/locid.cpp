@@ -395,6 +395,32 @@ Locale::setDefault( const   Locale&     newLocale,
     fgDefaultLocale = newLocale;
 }
 
+Locale
+Locale::createFromName (const char *name)
+{
+  char stack[128];
+  char *heap = NULL;
+  char *buf = stack;
+  int buflen = 128;
+  int   n;
+  UErrorCode status;
+
+  status = U_ZERO_ERROR;
+
+  /* for some reason */
+  if(uprv_strlen(name) > buflen) {
+    buflen = uprv_strlen(name)+1;
+    heap = (char*)uprv_malloc(buflen);
+    buf = heap;
+  }
+  
+  n = uloc_getName(name, buf, buflen, &status);
+  
+  Locale l(buf);
+  free(heap);
+  return l;
+}
+
 const char *
 Locale::getCountry() const
 {
