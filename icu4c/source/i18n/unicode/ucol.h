@@ -595,6 +595,7 @@ U_CDECL_END
  * @param targetContext data to be passed to the second iterating function.
  * @return The result of comparing the strings; one of UCOL_EQUAL,
  * UCOL_GREATER, UCOL_LESS
+ * @deprecated will be removed in ICU 2.0. Do not use, not synchronized with the rest of the framework.
  */
 U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll, 
 								 UCharForwardIterator *source, void *sourceContext,
