@@ -9287,7 +9287,7 @@ ucol_cloneBinary(const UCollator *coll,
 {
     int32_t length = 0;
     if(U_FAILURE(*status)) {
-        return NULL;
+        return length;
     }
     if(coll->hasRealData == TRUE) {
         length = coll->image->size;
