@@ -36,6 +36,7 @@
 
 #define CTST_LEAK_CHECK 1
 #ifdef CTST_LEAK_CHECK
+U_CFUNC void ctst_freeAll(void);
 U_CFUNC void ctst_init(void);
 #endif
 
@@ -120,8 +121,6 @@ int main(int argc, const char* const argv[])
     /* To check for leaks */
 
     u_cleanup(); /* nuke the hashtable.. so that any still-open cnvs are leaked */
-        /* above function must be enabled in ucnv_bld.c */
-    umtx_destroy(NULL);
 #endif
 
     return nerrors ? 1 : 0;
