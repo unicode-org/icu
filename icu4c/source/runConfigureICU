@@ -192,6 +192,8 @@ case $platform in
         THE_COMP="the GNU C++"
         CXXFLAGS=-I/usr/local/include/g++; export CXXFLAGS
         LDFLAGS=-R/usr/local/lib; export LDFLAGS
+        RELEASE_CXXFLAGS=-O
+        RELEASE_CFLAGS=-O3
         ;;
     HP-UX11CC)
         THE_OS="HP-UX 11"
