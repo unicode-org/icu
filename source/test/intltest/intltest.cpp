@@ -1154,7 +1154,7 @@ main(int argc, char* argv[])
         /* Call it twice to make sure that the defaults were reset. */
         /* Call it before the OK message to verify proper cleanup. */
         u_cleanup();
-        u_cleanup();
+     u_cleanup();
 
         fprintf(stdout, "OK: All tests passed without error.\n");
     }else{
