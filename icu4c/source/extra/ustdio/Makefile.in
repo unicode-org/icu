@@ -69,11 +69,14 @@ endif
 ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS)
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
+CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
-LDFLAGS = @LDFLAGS@ \
-$(LD_RPATH)$(LD_RPATH_PRE)$(libdir)@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/i18n
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBICU-UC) $(LIBICU-I18N) @LIBS@
 
 OBJECTS = locbund.o loccache.o ufile.o ufmt_cmn.o uprintf.o uprntf_p.o	\
@@ -105,10 +108,10 @@ install-local: all-local install-headers install-library
 install-library: all-local
 	$(mkinstalldirs) $(DESTDIR)$(libdir)
 ifneq ($(ENABLE_STATIC),)
-	$(INSTALL-S) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
+	$(INSTALL-L) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
 endif
 ifneq ($(ENABLE_SHARED),)
-	$(INSTALL-S) $(FINAL_SO_TARGET) $(DESTDIR)$(libdir)/$(FINAL_SO_TARGET)
+	$(INSTALL-L) $(FINAL_SO_TARGET) $(DESTDIR)$(libdir)/$(FINAL_SO_TARGET)
 ifneq ($(FINAL_SO_TARGET),$(SO_TARGET))
 	cd $(DESTDIR)$(libdir) && $(RM) $(MIDDLE_SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(MIDDLE_SO_TARGET)
 	cd $(DESTDIR)$(libdir) && $(RM) $(SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(SO_TARGET)
