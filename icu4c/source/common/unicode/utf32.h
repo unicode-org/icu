@@ -54,7 +54,7 @@
     (c)=(s)[i]; \
 }
 
-#define UTF32_GET_CHAR_SAFE(s, i, length, c, strict) { \
+#define UTF32_GET_CHAR_SAFE(s, start, i, length, c, strict) { \
     (c)=(s)[i]; \
     if(!UTF32_IS_SAFE(c, strict)) { \
         (c)=UTF_ERROR_VALUE; \
@@ -107,7 +107,7 @@
     } \
 }
 
-#define UTF32_SET_CHAR_START_SAFE(s, i) { \
+#define UTF32_SET_CHAR_START_SAFE(s, start, i) { \
 }
 
 /* definitions with backward iteration -------------------------------------- */
@@ -127,24 +127,21 @@
 #define UTF32_SET_CHAR_LIMIT_UNSAFE(s, i) { \
 }
 
-#define UTF32_PREV_CHAR_SAFE(s, i, c, strict) { \
+#define UTF32_PREV_CHAR_SAFE(s, start, i, c, strict) { \
     (c)=(s)[--(i)]; \
     if(!UTF32_IS_SAFE(c, strict)) { \
         (c)=UTF_ERROR_VALUE; \
     } \
 }
 
-#define UTF32_BACK_1_SAFE(s, i) { \
-    if((i)>0) { \
-        --(i); \
-    } \
+#define UTF32_BACK_1_SAFE(s, start, i) { \
+    --(i); \
 }
 
-#define UTF32_BACK_N_SAFE(s, i, n) { \
-    if((i)>=(n)) { \
-        (i)-=(n); \
-    } else { \
-        (i)=0; \
+#define UTF32_BACK_N_SAFE(s, start, i, n) { \
+    (i)-=(n); \
+    if((i)<(start)) { \
+        (i)=(start); \
     } \
 }
 

@@ -72,7 +72,7 @@
     } \
 }
 
-#define UTF16_GET_CHAR_SAFE(s, i, length, c, strict) { \
+#define UTF16_GET_CHAR_SAFE(s, start, i, length, c, strict) { \
     (c)=(s)[i]; \
     if(UTF_IS_SURROGATE(c)) { \
         uint16_t __c2; \
@@ -85,7 +85,7 @@
                 (c)=UTF_ERROR_VALUE; \
             } \
         } else { \
-            if((i)>0 && UTF_IS_FIRST_SURROGATE(__c2=(s)[(i)-1])) { \
+            if((i)>(start) && UTF_IS_FIRST_SURROGATE(__c2=(s)[(i)-1])) { \
                 (c)=UTF16_GET_PAIR_VALUE(__c2, (c)); \
                 /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() */ \
             } else if(strict) {\
@@ -207,8 +207,8 @@
     } \
 }
 
-#define UTF16_SET_CHAR_START_SAFE(s, i) { \
-    if(UTF_IS_SECOND_SURROGATE((s)[i]) && (i)>0 && UTF_IS_FIRST_SURROGATE((s)[(i)-1])) { \
+#define UTF16_SET_CHAR_START_SAFE(s, start, i) { \
+    if(UTF_IS_SECOND_SURROGATE((s)[i]) && (i)>(start) && UTF_IS_FIRST_SURROGATE((s)[(i)-1])) { \
         --(i); \
     } \
 }
@@ -267,11 +267,11 @@
 
 /* safe versions with error-checking and optional regularity-checking */
 
-#define UTF16_PREV_CHAR_SAFE(s, i, c, strict) { \
+#define UTF16_PREV_CHAR_SAFE(s, start, i, c, strict) { \
     (c)=(s)[--(i)]; \
     if(UTF_IS_SECOND_SURROGATE(c)) { \
         uint16_t __c2; \
-        if((i)>0 && UTF_IS_FIRST_SURROGATE(__c2=(s)[(i)-1])) { \
+        if((i)>(start) && UTF_IS_FIRST_SURROGATE(__c2=(s)[(i)-1])) { \
             --(i); \
             (c)=UTF16_GET_PAIR_VALUE(__c2, (c)); \
             /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() */ \
@@ -286,22 +286,22 @@
     } \
 }
 
-#define UTF16_BACK_1_SAFE(s, i) { \
-    if(UTF_IS_SECOND_SURROGATE((s)[--(i)]) && (i)>0 && UTF_IS_FIRST_SURROGATE((s)[(i)-1])) { \
+#define UTF16_BACK_1_SAFE(s, start, i) { \
+    if(UTF_IS_SECOND_SURROGATE((s)[--(i)]) && (i)>(start) && UTF_IS_FIRST_SURROGATE((s)[(i)-1])) { \
         --(i); \
     } \
 }
 
-#define UTF16_BACK_N_SAFE(s, i, n) { \
+#define UTF16_BACK_N_SAFE(s, start, i, n) { \
     UTextOffset __N=(n); \
-    while(__N>0 && (i)>0) { \
-        UTF16_BACK_1_SAFE(s, i); \
+    while(__N>0 && (i)>(start)) { \
+        UTF16_BACK_1_SAFE(s, start, i); \
         --__N; \
     } \
 }
 
-#define UTF16_SET_CHAR_LIMIT_SAFE(s, i, length) { \
-    if((i)<(length) && UTF_IS_FIRST_SURROGATE((s)[(i)-1]) && UTF_IS_SECOND_SURROGATE((s)[i])) { \
+#define UTF16_SET_CHAR_LIMIT_SAFE(s, start, i, length) { \
+    if((start)<(i) && (i)<(length) && UTF_IS_FIRST_SURROGATE((s)[(i)-1]) && UTF_IS_SECOND_SURROGATE((s)[i])) { \
         ++(i); \
     } \
 }
