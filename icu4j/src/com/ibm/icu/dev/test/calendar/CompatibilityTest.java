@@ -1,12 +1,12 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2002, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CompatibilityTest.java,v $
- * $Date: 2003/05/14 19:02:52 $
- * $Revision: 1.10 $
+ * $Date: 2003/06/03 18:49:28 $
+ * $Revision: 1.11 $
  *
  *******************************************************************************
  */

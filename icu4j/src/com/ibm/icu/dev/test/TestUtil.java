@@ -1,12 +1,12 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2002, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestUtil.java,v $
- * $Date: 2003/02/01 00:51:29 $
- * $Revision: 1.4 $
+ * $Date: 2003/06/03 18:49:28 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */

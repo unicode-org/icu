@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2003/05/14 19:03:30 $
- * $Revision: 1.49 $
+ * $Date: 2003/06/03 18:49:35 $
+ * $Revision: 1.50 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,7 @@ import com.ibm.icu.impl.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.49 $ $Date: 2003/05/14 19:03:30 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.50 $ $Date: 2003/06/03 18:49:35 $
  */
 class TransliterationRule {
 
@@ -583,6 +583,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.50  2003/06/03 18:49:35  alan
+ * jitterbug 2959: update copyright dates to include 2003
+ *
  * Revision 1.49  2003/05/14 19:03:30  rviswanadha
  * jitterbug 2836: fix compiler warnings
  *

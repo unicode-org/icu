@@ -1,12 +1,12 @@
 /**
 *******************************************************************************
-* Copyright (C) 2002, International Business Machines Corporation and    *
+* Copyright (C) 2002-2003, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/docs/CheckTags.java,v $ 
-* $Date: 2003/05/23 19:06:08 $ 
-* $Revision: 1.16 $
+* $Date: 2003/06/03 18:49:31 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */

@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/TestAll.java,v $
- * $Date: 2003/04/19 00:01:52 $
- * $Revision: 1.3 $
+ * $Date: 2003/06/03 18:49:29 $
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */

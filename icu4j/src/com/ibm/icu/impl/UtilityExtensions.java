@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UtilityExtensions.java,v $
- * $Date: 2003/05/14 18:37:40 $
- * $Revision: 1.2 $
+ * $Date: 2003/06/03 18:49:33 $
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */

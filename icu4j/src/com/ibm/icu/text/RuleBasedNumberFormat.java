@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2003/05/23 16:23:58 $ 
- * $Revision: 1.15 $
+ * $Date: 2003/06/03 18:49:35 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -474,7 +474,7 @@ import java.util.ResourceBundle;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.15 $ $Date: 2003/05/23 16:23:58 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.16 $ $Date: 2003/06/03 18:49:35 $
  * @see NumberFormat
  * @see DecimalFormat
  * @stable ICU 2.0

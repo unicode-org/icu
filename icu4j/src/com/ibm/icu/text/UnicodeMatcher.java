@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeMatcher.java,v $
- * $Date: 2003/05/26 17:35:54 $
- * $Revision: 1.10 $
+ * $Date: 2003/06/03 18:49:35 $
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */

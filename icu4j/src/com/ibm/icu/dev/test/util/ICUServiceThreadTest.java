@@ -1,12 +1,12 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2002, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUServiceThreadTest.java,v $
- * $Date: 2003/05/23 17:37:23 $
- * $Revision: 1.9 $
+ * $Date: 2003/06/03 18:49:31 $
+ * $Revision: 1.10 $
  *
  *******************************************************************************
  */

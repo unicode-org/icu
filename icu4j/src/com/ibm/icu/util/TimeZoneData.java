@@ -1,10 +1,10 @@
 /*********************************************************************
- * Copyright (C) 2001, International Business Machines Corporation and
+ * Copyright (C) 2001-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/TimeZoneData.java,v $
- * $Date: 2003/05/28 23:45:33 $
- * $Revision: 1.8 $
+ * $Date: 2003/06/03 18:49:36 $
+ * $Revision: 1.9 $
  */
 package com.ibm.icu.util;
 import java.util.Hashtable;

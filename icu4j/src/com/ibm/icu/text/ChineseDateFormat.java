@@ -1,10 +1,10 @@
 /*********************************************************************
- * Copyright (C) 2000, International Business Machines Corporation and
+ * Copyright (C) 2000-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/ChineseDateFormat.java,v $
- * $Date: 2003/03/13 23:18:30 $
- * $Revision: 1.8 $
+ * $Date: 2003/06/03 18:49:33 $
+ * $Revision: 1.9 $
  */
 package com.ibm.icu.text;
 import com.ibm.icu.util.*;

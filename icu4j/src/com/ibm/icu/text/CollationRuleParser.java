@@ -1,12 +1,12 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2002, International Business Machines Corporation and    *
+* Copyright (C) 1996-2003, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationRuleParser.java,v $ 
-* $Date: 2003/05/27 16:49:23 $ 
-* $Revision: 1.14 $
+* $Date: 2003/06/03 18:49:33 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
