@@ -324,7 +324,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 goto finish;
             }
              strcpy(lastTag, cTag);
-           /*  fprintf(stderr, "%d: %s\n", lineCount,  lastTag); //[prints all tags]
+           /*  fprintf(stdout, "%d: %s\n", lineCount,  lastTag); //[prints all tags]
             */
 
             if(get(data, &tag)) {
@@ -362,11 +362,11 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                       uint32_t i = 0, bytesConverted = 0;
                       uint8_t val = 0;
                       uint8_t *newValue;
-                      fprintf(stderr, "bin\n");
+                      fprintf(stdout, "bin\n");
                       binaryValue = getModificationData(file, status);
                       if(U_SUCCESS(*status) && binaryValue != NULL) {
                         /* do the parsing & outputing of the data */
-                        fprintf(stderr, "Will parse binary value  %s and store it in tag: %s\n", binaryValue, cTag);
+                        fprintf(stdout, "Will parse binary value  %s and store it in tag: %s\n", binaryValue, cTag);
                         newValue = uprv_malloc(sizeof(uint8_t)*uprv_strlen(binaryValue));
                         for(i = 0; i<uprv_strlen(binaryValue); i+=2) {
                           toConv[0] = *(binaryValue+i);
@@ -393,15 +393,15 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                     else if(uprv_strcmp(modificator, "int") == 0) {
                       char *intValue;
                       int32_t val;
-                      fprintf(stderr, "int\n");
+                      fprintf(stdout, "int\n");
                       intValue = getModificationData(file, status);
                       if(U_SUCCESS(*status) && intValue != NULL) {
                         /* do the parsing & outputing of the data */
-                        fprintf(stderr, "Will parse integer value  %s and store it in tag: %s\n", intValue, cTag);
+                        fprintf(stdout, "Will parse integer value  %s and store it in tag: %s\n", intValue, cTag);
                         val = uprv_strtol(intValue, NULL, 10);
                         uprv_free(intValue);
                         temp1 = int_open(bundle, cTag, val, status);
-                        fprintf(stderr, "Added integer %s, value %d -> %s\n", cTag, val,
+                        fprintf(stdout, "Added integer %s, value %d -> %s\n", cTag, val,
                           u_errorName(*status) );
                         table_add(rootTable, temp1, status);
 
@@ -420,11 +420,11 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                       int32_t len; 
                       uint8_t *binData;
                       char *fileName;
-                      fprintf(stderr, "import\n");
+                      fprintf(stdout, "import\n");
                       fileName = getModificationData(file, status);
                       if(U_SUCCESS(*status) && fileName != NULL) {
                         /* do the reading & outputing of the file */
-                        fprintf(stderr, "Will read %s and store it in tag:  %s\n", fileName, cTag);
+                        fprintf(stdout, "Will read %s and store it in tag:  %s\n", fileName, cTag);
                         /* Open the input file for reading */
                         if(inputDir == NULL) {
                           importFile = T_FileStream_open(fileName, "rb");
@@ -459,7 +459,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                         T_FileStream_close(importFile);
 
                         temp1 = bin_open(bundle, cTag, len, binData, status);
-                        fprintf(stderr, "Added %s, len %d -> %s\n", cTag, len,
+                        fprintf(stdout, "Added %s, len %d -> %s\n", cTag, len,
                                   u_errorName(*status) );
                         table_add(rootTable, temp1, status);
                         uprv_free(binData);
@@ -475,11 +475,11 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                     }
                     /* array of integers, still unimplemented */
                     else if(uprv_strcmp(modificator, "intarray") == 0) {
-                      fprintf(stderr, "intarray\n");
+                      fprintf(stdout, "intarray\n");
                     }
                     /* unknown tupe - an error */
                     else {
-                      fprintf(stderr, "Unknown\n");
+                      fprintf(stderr, "Unknown %s\n", modificator);
                     }
 
                 } else if(uprv_strcmp(cTag, "CollationElements") == 0) {
