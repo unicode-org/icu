@@ -74,13 +74,12 @@ typedef struct {
       (((ch) <= 0x007E) && ((ch) >= 0x007B))))
 
 
-U_CFUNC UColToken *ucol_tok_parse_next_token(UColTokenParser *src, UErrorCode *status);
 U_CFUNC uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status);
+U_CFUNC void ucol_tok_closeTokenList(UColTokenParser *src);
 
 int32_t uhash_hashTokens(const void *k);
 UBool uhash_compareTokens(const void *key1, const void *key2);
 void ucol_tok_initTokenList(UColTokenParser *src, UErrorCode *status);
-void ucol_tok_closeTokenList(void);
 uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status);
 
 #endif
