@@ -29,6 +29,7 @@ static void printUSeq(const UChar* a, int len);
 void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
 void TestConverterTypesAndStarters(void);
 void TestAmbiguous(void);
+void TestUTF8(void);
 
 #define NEW_MAX_BUFFER 999
 
@@ -102,6 +103,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestOutBufSizes, "tsconv/nucnvtst/TestOutBufSizes");
    addTest(root, &TestConverterTypesAndStarters, "tsconv/nucnvtst/TestConverterTypesAndStarters");
    addTest(root, &TestAmbiguous, "tsconv/nucnvtst/TestAmbiguous");
+   addTest(root, &TestUTF8, "tsconv/nucnvtst/TestUTF8");
 }
 
 
@@ -689,3 +691,49 @@ void TestAmbiguous()
     ucnv_close(ascii_cnv);
 }
   
+void
+TestUTF8() {
+    /* test input */
+    static const uint8_t in[]={
+        0x61,
+        0xc0, 0x80,
+        0xe0, 0x80, 0x80,
+        0xf0, 0x80, 0x80, 0x80
+    };
+
+    /* expected test results */
+    static const uint32_t results[]={
+        /* number of bytes read, code point */
+        1, 0x61,
+        2, 0,
+        3, 0,
+        4, 0,
+    };
+
+    const char *s=(const char *)in, *s0, *limit=(const char *)in+sizeof(in);
+    const uint32_t *r=results;
+
+    UErrorCode errorCode=U_ZERO_ERROR;
+    uint32_t c;
+
+    UConverter *cnv=ucnv_open("UTF-8", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a UTF-8 converter: %s\n", u_errorName(errorCode));
+    }
+
+    while(s<limit) {
+        s0=s;
+        c=ucnv_getNextUChar(cnv, &s, limit, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("UTF-8 ucnv_getNextUChar() failed: %s\n", u_errorName(errorCode));
+            break;
+        } else if((uint32_t)(s-s0)!=*r || c!=*(r+1)) {
+            log_err("UTF-8 ucnv_getNextUChar() result %lx from %d bytes, should have been %lx from %d bytes.\n",
+                c, (s-s0), *(r+1), *r);
+            break;
+        }
+        r+=2;
+    }
+
+    ucnv_close(cnv);
+}
