@@ -25,46 +25,6 @@
 // class DecimalFormatSymbols
 // *****************************************************************************
  
-const int32_t DecimalFormatSymbols::fgNumberElementsLength = 11;
-const int32_t DecimalFormatSymbols::fgCurrencyElementsLength = 3;
-
-/**
- * These are the tags we expect to see in normal resource bundle files associated
- * with a locale.
- */
-const char *DecimalFormatSymbols::fgNumberElements="NumberElements";
-const char *DecimalFormatSymbols::fgCurrencyElements="CurrencyElements";
-
-// Because the C-compiler doesn't parse \u escape sequences, we encode the
-// \u last resort strings as UChar arrays.
-const UChar DecimalFormatSymbols::fgLastResortPermill[]      = { 0x2030, 0 };
-const UChar DecimalFormatSymbols::fgLastResortInfinity[]     = { 0x221E, 0 };
-const UChar DecimalFormatSymbols::fgLastResortNaN[]          = { 0xFFFD, 0 };
-const UChar DecimalFormatSymbols::fgLastResortCurrency[]     = { 0x00A4, 0 };
-const UChar DecimalFormatSymbols::fgLastResortIntlCurrency[] = { 0x00A4, 0x00A4, 0 };
-
-const UnicodeString DecimalFormatSymbols::fgLastResortNumberElements[] =
-{
-    UNICODE_STRING(".", 1),    // decimal separator
-    UnicodeString(),           // group (thousands) separator
-    UNICODE_STRING(";", 1),    // pattern separator
-    UNICODE_STRING("%", 1),    // percent sign
-    UNICODE_STRING("0", 1),    // native 0 digit
-    UNICODE_STRING("#", 1),    // pattern digit
-    UNICODE_STRING("-", 1),    // minus sign
-    UNICODE_STRING("E", 1),    // exponential
-    DecimalFormatSymbols::fgLastResortPermill,  // per mill
-    DecimalFormatSymbols::fgLastResortInfinity, // infinite
-    DecimalFormatSymbols::fgLastResortNaN       // NaN
-};
-
-const UnicodeString DecimalFormatSymbols::fgLastResortCurrencyElements[] =
-{
-    DecimalFormatSymbols::fgLastResortCurrency,
-    DecimalFormatSymbols::fgLastResortIntlCurrency,
-    UNICODE_STRING(".", 1)     // monetary decimal separator
-};
-
 // -------------------------------------
 // Initializes this with the decimal format symbols in the default locale.
  
@@ -92,7 +52,7 @@ DecimalFormatSymbols::~DecimalFormatSymbols()
 
 DecimalFormatSymbols::DecimalFormatSymbols(const DecimalFormatSymbols &source) {
     int i;
-    for(i = 0; i < (int)ENumberFormatSymbol::kCount; ++i) {
+    for(i = 0; i < (int)kFormatSymbolCount; ++i) {
         fSymbols[(ENumberFormatSymbol)i] = source.fSymbols[(ENumberFormatSymbol)i];
     }
 }
@@ -106,7 +66,7 @@ DecimalFormatSymbols::operator=(const DecimalFormatSymbols& rhs)
     if (this != &rhs)
     {
         int i;
-        for(i = 0; i < (int)ENumberFormatSymbol::kCount; ++i) {
+        for(i = 0; i < (int)kFormatSymbolCount; ++i) {
             fSymbols[(ENumberFormatSymbol)i] = rhs.fSymbols[(ENumberFormatSymbol)i];
         }
     }
@@ -123,7 +83,7 @@ DecimalFormatSymbols::operator==(const DecimalFormatSymbols& that) const
     }
 
     int i;
-    for(i = 0; i < (int)ENumberFormatSymbol::kCount; ++i) {
+    for(i = 0; i < (int)kFormatSymbolCount; ++i) {
         if(fSymbols[(ENumberFormatSymbol)i] != that.fSymbols[(ENumberFormatSymbol)i]) {
             return FALSE;
         }
@@ -147,14 +107,14 @@ DecimalFormatSymbols::initialize(const Locale& locale, UErrorCode& status,
         if (useLastResortData)
         {
             status = U_USING_FALLBACK_ERROR;
-            initialize(fgLastResortNumberElements, fgLastResortCurrencyElements);
+            initialize();
         }
         return;
     }
 
     // Gets the number element array.
     int32_t i = 0;
-    ResourceBundle numberElementsRes = resource.get(fgNumberElements, status);
+    ResourceBundle numberElementsRes = resource.get("NumberElements", status);
     int32_t numberElementsLength = numberElementsRes.getSize();
     UnicodeString* numberElements = new UnicodeString[numberElementsLength];
     for(i = 0; i<numberElementsLength; i++) {
@@ -162,7 +122,7 @@ DecimalFormatSymbols::initialize(const Locale& locale, UErrorCode& status,
     }
 
     // Gets the currency element array.
-    ResourceBundle currencyElementsRes = resource.get(fgCurrencyElements, status);
+    ResourceBundle currencyElementsRes = resource.get("CurrencyElements", status);
     int32_t currencyElementsLength = currencyElementsRes.getSize();
     UnicodeString* currencyElements = new UnicodeString[currencyElementsLength];
     for(i = 0; i<currencyElementsLength; i++) {
@@ -173,8 +133,8 @@ DecimalFormatSymbols::initialize(const Locale& locale, UErrorCode& status,
 
     // If the array size is too small, something is wrong with the resource
     // bundle, returns the failure error code.
-    if (numberElementsLength < fgNumberElementsLength ||
-        currencyElementsLength < fgCurrencyElementsLength) {
+    if (numberElementsLength < 11 ||
+        currencyElementsLength < 3) {
         status = U_INVALID_FORMAT_ERROR;
         return;
     }
@@ -188,30 +148,56 @@ DecimalFormatSymbols::initialize(const Locale& locale, UErrorCode& status,
 void
 DecimalFormatSymbols::initialize(const UnicodeString* numberElements, const UnicodeString* currencyElements)
 {
-    fSymbols[ENumberFormatSymbol::kDecimalSeparator] = numberElements[0];
-    fSymbols[ENumberFormatSymbol::kGroupingSeparator] = numberElements[1];
-    fSymbols[ENumberFormatSymbol::kPatternSeparator] = numberElements[2];
-    fSymbols[ENumberFormatSymbol::kPercent] = numberElements[3];
-    fSymbols[ENumberFormatSymbol::kZeroDigit] = numberElements[4];
-    fSymbols[ENumberFormatSymbol::kDigit] = numberElements[5];
-    fSymbols[ENumberFormatSymbol::kMinusSign] = numberElements[6];
-    fSymbols[ENumberFormatSymbol::kPlusSign] = (UChar)0x002b; // '+' Hard coded for now; get from resource later
-    fSymbols[ENumberFormatSymbol::kCurrency] = currencyElements[0];
-    fSymbols[ENumberFormatSymbol::kIntlCurrency] = currencyElements[1];
+    fSymbols[kDecimalSeparatorSymbol] = numberElements[0];
+    fSymbols[kGroupingSeparatorSymbol] = numberElements[1];
+    fSymbols[kPatternSeparatorSymbol] = numberElements[2];
+    fSymbols[kPercentSymbol] = numberElements[3];
+    fSymbols[kZeroDigitSymbol] = numberElements[4];
+    fSymbols[kDigitSymbol] = numberElements[5];
+    fSymbols[kMinusSignSymbol] = numberElements[6];
+    fSymbols[kPlusSignSymbol] = (UChar)0x002b; // '+' Hard coded for now; get from resource later
+    fSymbols[kCurrencySymbol] = currencyElements[0];
+    fSymbols[kIntlCurrencySymbol] = currencyElements[1];
 
     // if the resource data specified the empty string as the monetary decimal
     // separator, that means we should just use the regular separator as the
     // monetary separator
-    fSymbols[ENumberFormatSymbol::kMonetarySeparator] =
+    fSymbols[kMonetarySeparatorSymbol] =
         currencyElements[2].length() > 0 ?
             currencyElements[2] :
-            fSymbols[ENumberFormatSymbol::kDecimalSeparator];
+            fSymbols[kDecimalSeparatorSymbol];
 
-    fSymbols[ENumberFormatSymbol::kExponential] = numberElements[7];
-    fSymbols[ENumberFormatSymbol::kPermill] = numberElements[8];
-    fSymbols[ENumberFormatSymbol::kPadEscape] = (UChar)0x002a; // '*' Hard coded for now; get from resource later
-    fSymbols[ENumberFormatSymbol::kInfinity] = numberElements[9];
-    fSymbols[ENumberFormatSymbol::kNaN] = numberElements[10];
+    fSymbols[kExponentialSymbol] = numberElements[7];
+    fSymbols[kPermillSymbol] = numberElements[8];
+    fSymbols[kPadEscapeSymbol] = (UChar)0x002a; // '*' Hard coded for now; get from resource later
+    fSymbols[kInfinitySymbol] = numberElements[9];
+    fSymbols[kNaNSymbol] = numberElements[10];
+}
+
+// initialize with default values
+void
+DecimalFormatSymbols::initialize() {
+    /*
+     * These strings used to be in static arrays, but the HP/UX aCC compiler
+     * cannot initialize a static array with class constructors.
+     *  markus 2000may25
+     */
+    fSymbols[kDecimalSeparatorSymbol] = (UChar)0x2e;    // '.' decimal separator
+    fSymbols[kGroupingSeparatorSymbol].remove();        //     group (thousands) separator
+    fSymbols[kPatternSeparatorSymbol] = (UChar)0x3b;    // ';' pattern separator
+    fSymbols[kPercentSymbol] = (UChar)0x25;             // '%' percent sign
+    fSymbols[kZeroDigitSymbol] = (UChar)0x30;           // '0' native 0 digit
+    fSymbols[kDigitSymbol] = (UChar)0x23;               // '#' pattern digit
+    fSymbols[kMinusSignSymbol] = (UChar)0x2d;           // '-' minus sign
+    fSymbols[kPlusSignSymbol] = (UChar)0x002b;          // '+' plus sign
+    fSymbols[kCurrencySymbol] = (UChar)0xa4;            // 'OX' currency symbol
+    (fSymbols[kIntlCurrencySymbol] = (UChar)0xa4).append((UChar)0xa4);
+    fSymbols[kMonetarySeparatorSymbol] = (UChar)0x2e;   // '.' monetary decimal separator
+    fSymbols[kExponentialSymbol] = (UChar)0x45;         // 'E' exponential
+    fSymbols[kPermillSymbol] = (UChar)0x2030;           // '%o' per mill
+    fSymbols[kPadEscapeSymbol] = (UChar)0x2a;           // '*' pad escape symbol
+    fSymbols[kInfinitySymbol] = (UChar)0x221e;          // 'oo' infinite
+    fSymbols[kNaNSymbol] = (UChar)0xfffd;               // SUB NaN
 }
 
 //eof
