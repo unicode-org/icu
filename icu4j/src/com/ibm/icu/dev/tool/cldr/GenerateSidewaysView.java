@@ -56,6 +56,8 @@ import com.ibm.icu.util.UResourceBundle;
  * one element, where the file would otherwise be too large.
  * @author medavis
  */public class GenerateSidewaysView {
+    
+    static boolean VALIDATING = false;
 
     private static final int 
         HELP1 = 0,
@@ -147,7 +149,7 @@ import com.ibm.icu.util.UResourceBundle;
         
     OrderedMap data = new OrderedMap();
     MyContentHandler DEFAULT_HANDLER = new MyContentHandler();
-    XMLReader xmlReader = createXMLReader();
+    XMLReader xmlReader = createXMLReader(VALIDATING);
 
     /*SAXParser SAX;
     {
@@ -340,16 +342,16 @@ import com.ibm.icu.util.UResourceBundle;
             old = key;           
         }
         empty.getDifference(old, "", buffer);
-        if (finalComment != null) {
-        	buffer.append(NEWLINE+"<!--");
-            buffer.append(finalComment);
-            buffer.append(NEWLINE+"-->");
-        }
+        writeElementComment(buffer,finalComment,0);
+
         return buffer.toString();
     }
     
 
-    public static final Set IGNOREABLE = new HashSet(Arrays.asList(new String[] {"draft", "sources"}));
+    public static final Set IGNOREABLE = new HashSet(Arrays.asList(new String[] {
+            "draft", 
+            "references",
+            "standard"}));
 
     static class SimpleAttribute implements Comparable {
         String name;
@@ -559,6 +561,21 @@ import com.ibm.icu.util.UResourceBundle;
         */
     }
     
+    private void writeElementComment(StringBuffer out, String comment, int common) {
+        if (comment != null) {
+            indent(common, out);
+            out.append("<!-- ");
+            out.append(comment);
+            if (comment.indexOf('\n') >= 0) {
+                out.append("\r\n");
+                indent(common, out);
+            } else {
+            	out.append(" ");
+            }
+            out.append("-->\r\n");
+        }
+    }
+    
     class ElementChain implements Comparable {
         List contexts;
         
@@ -667,14 +684,14 @@ import com.ibm.icu.util.UResourceBundle;
             // write new elements if needed.
             for (; common < csize-1; ++common) {
                 Element ee = ((Element)contexts.get(common));
-                writeElementComment(out, ee, common);
+                writeElementComment(out, ee.comment, common);
                 indent(common, out);
                 out.append(ee.toString(Element.START_VALUE, false));
                 out.append(NEWLINE);
             }
             // now write the very current element
             Element ee = ((Element)contexts.get(csize-1));
-            writeElementComment(out, ee, common);
+            writeElementComment(out, ee.comment, common);
             indent(common, out);
             if (value.length() == 0) {                           
                 out.append(ee.toString(Element.NO_VALUE, false));
@@ -685,21 +702,6 @@ import com.ibm.icu.util.UResourceBundle;
             }
             out.append(NEWLINE);
         }
-
-        /**
-		 * @param out
-		 * @param ee
-		 */
-		private void writeElementComment(StringBuffer out, Element ee, int common) {
-			if (ee.comment != null) {
-                indent(common, out);
-			    out.append("<!--");
-			    out.append(ee.comment);
-                out.append(NEWLINE);
-                indent(common, out);
-			    out.append("-->"+NEWLINE);
-			}
-		}
 
 		/**
          * @param string
@@ -1187,29 +1189,30 @@ import com.ibm.icu.util.UResourceBundle;
     
     String finalComment = null;
     
-    XMLReader createXMLReader() {
+    XMLReader createXMLReader(boolean validating) {
+        XMLReader result = null;
 		try { // Xerces
-			return XMLReaderFactory
+			result =  XMLReaderFactory
 					.createXMLReader("org.apache.xerces.parsers.SAXParser");
 		} catch (SAXException e1) {
 			try { // Crimson
-				return XMLReaderFactory
+				result =  XMLReaderFactory
 						.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
 			} catch (SAXException e2) {
 				try { // Ælfred
-					return XMLReaderFactory
+					result =  XMLReaderFactory
 							.createXMLReader("gnu.xml.aelfred2.XmlReader");
 				} catch (SAXException e3) {
 					try { // Piccolo
-						return XMLReaderFactory
+						result =  XMLReaderFactory
 								.createXMLReader("com.bluecast.xml.Piccolo");
 					} catch (SAXException e4) {
 						try { // Oracle
-							return XMLReaderFactory
+							result =  XMLReaderFactory
 									.createXMLReader("oracle.xml.parser.v2.SAXParser");
 						} catch (SAXException e5) {
 							try { // default
-								return XMLReaderFactory.createXMLReader();
+								result =  XMLReaderFactory.createXMLReader();
 							} catch (SAXException e6) {
 								throw new NoClassDefFoundError(
 										"No SAX parser is available");
@@ -1221,6 +1224,12 @@ import com.ibm.icu.util.UResourceBundle;
 				}
 			}
 		}
+        try {
+			result.setFeature("http://xml.org/sax/features/validation", validating);
+		} catch (SAXException e) {
+			System.out.println("WARNING: Can't set parser validation to: " + validating);
+		}
+        return result;
 	}
 }
  
