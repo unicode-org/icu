@@ -27,6 +27,7 @@ public:
      * Test everything
      **/
     void TestConvert(void);
+    void TestAmbiguous(void);
 };
 
 

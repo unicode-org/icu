@@ -30,6 +30,7 @@ void ConvertTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char*
     if (exec) logln("TestSuite ConvertTest: ");
     switch (index) {
         case 0: name = "TestConvert"; if (exec) TestConvert(); break;
+        case 1: name = "TestAmbiguous"; if (exec) TestAmbiguous(); break;
         default: name = ""; break; //needed to end loop
     }
 }
@@ -552,4 +553,64 @@ UConverterToUCallback otherCharAction(UConverterToUCallback MIA)
 
 {
     return (MIA==(UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP)?(UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE:(UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP;
+}
+void ConvertTest::TestAmbiguous() 
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeConverterCPP *ascii_cnv = 0, *sjis_cnv = 0;
+    const char *target = "\\usr\\local\\share\\data\\icutest.txt";
+    UnicodeString asciiResult, sjisResult;
+    
+    sjis_cnv = new UnicodeConverterCPP("SJIS", status);
+    if (U_FAILURE(status))
+    {
+	    errln("Failed to create a SJIS converter\n");
+        return;
+    }
+    ascii_cnv = new UnicodeConverterCPP("LATIN-1", status);
+    if (U_FAILURE(status))
+    {
+	    errln("Failed to create a SJIS converter\n");
+        delete sjis_cnv;
+        return;
+    }
+    /* convert target from SJIS to Unicode */
+    sjis_cnv->toUnicodeString(sjisResult, target, strlen(target), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to convert the SJIS string.\n");
+        delete sjis_cnv;
+        delete ascii_cnv;
+        return;
+    }
+
+    /* convert target from Latin-1 to Unicode */
+    ascii_cnv->toUnicodeString(asciiResult, target, strlen(target), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to convert the Latin-1 string.\n");
+        delete sjis_cnv;
+        delete ascii_cnv;
+        return;
+    }
+    
+    if (!sjis_cnv->isAmbiguous())
+    {
+        errln("SJIS converter should contain ambiguous character mappings.\n");
+        delete sjis_cnv;
+        delete ascii_cnv;
+        return;
+    }
+    if (sjisResult == asciiResult)
+    {
+        errln("File separators for SJIS don't need to be fixed.\n");
+    }
+    sjis_cnv->fixFileSeparator(sjisResult);
+    if (sjisResult != asciiResult)
+    {
+        errln("Fixing file separator for SJIS failed.\n");
+    }
+    delete sjis_cnv;
+    delete ascii_cnv;
+
 }
