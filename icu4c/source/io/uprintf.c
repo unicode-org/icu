@@ -150,6 +150,7 @@ u_vfprintf_u(    UFILE        *f,
              va_list        ap)
 {
     const UChar      *alias = patternSpecification; /* alias the pattern */
+    const UChar      *lastAlias;
     int32_t          patCount;
     int32_t          written = 0;   /* haven't written anything yet */
 
@@ -157,15 +158,14 @@ u_vfprintf_u(    UFILE        *f,
     for(;;) {
 
         /* find the next '%' */
-        patCount = 0;
+        lastAlias = alias;
         while(*alias != UP_PERCENT && *alias != 0x0000) {
             alias++;
-            ++patCount;
         }
 
         /* write any characters before the '%' */
-        if(patCount > 0) {
-            written += (*g_stream_handler.write)(f, alias - patCount, patCount);
+        if(alias > lastAlias) {
+            written += (*g_stream_handler.write)(f, lastAlias, (int32_t)(alias - lastAlias));
         }
 
         /* break if at end of string */
@@ -174,7 +174,7 @@ u_vfprintf_u(    UFILE        *f,
         }
 
         /* parse and print the specifier */
-        patCount = u_printf_print_spec(&g_stream_handler, alias, f, &f->str.fBundle, patCount, &written, (va_list*)&ap);
+        patCount = u_printf_print_spec(&g_stream_handler, alias, f, &f->str.fBundle, (int32_t)(alias - lastAlias), &written, (va_list*)&ap);
 
         /* update the pointer in pattern and continue */
         alias += patCount;
