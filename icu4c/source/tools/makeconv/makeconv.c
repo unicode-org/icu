@@ -683,6 +683,7 @@ readFile(ConvData *data, const char* converterName,
                   (*(end-1)=='\n' || *(end-1)=='\r' || *(end-1)==' ' || *(end-1)=='\t')) {
                 --end;
             }
+            *end=0;
 
             if(0==uprv_strcmp(line, "CHARMAP")) {
                 /* read the extension table */
