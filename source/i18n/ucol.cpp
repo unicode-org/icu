@@ -1344,6 +1344,12 @@ ucol_initUCA(UErrorCode *status) {
             uprv_free(newUCA);
         }
 
+        // init FCD data
+        if (fcdTrieIndex == NULL) {
+            fcdTrieIndex = unorm_getFCDTrie(status);
+            ucln_i18n_registerCleanup();
+        }
+
         if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
             newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, newUCA, status);
             if(U_SUCCESS(*status)){
@@ -1361,11 +1367,6 @@ ucol_initUCA(UErrorCode *status) {
                     newUCA = NULL;
                 }
                 umtx_unlock(NULL);
-
-                if (fcdTrieIndex == NULL) {
-                    fcdTrieIndex = unorm_getFCDTrie(status);
-                    ucln_i18n_registerCleanup();
-                }
 
                 if(newUCA != NULL) {
                     udata_close(result);
