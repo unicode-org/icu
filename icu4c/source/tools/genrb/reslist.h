@@ -32,7 +32,7 @@
 /* Resource bundle root table */
 struct SRBRoot {
   char *fLocale;
-  int16_t fKeyPoint;
+  uint16_t fKeyPoint;
   char *fKeys;
   int32_t fCount;
   struct SResource *fRoot; 
