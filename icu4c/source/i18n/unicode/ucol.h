@@ -149,7 +149,7 @@ typedef enum {
  * Diacritical differences on the same base letter represent a secondary
  * difference.  Set comparison level to UCOL_SECONDARY to ignore tertiary
  * differences. Use this to set the strength of a Collator object.
- * Example of secondary difference, "ä" >> "a".
+ * Example of secondary difference, "&#x00E4;" >> "a".
  *
  * Uppercase and lowercase versions of the same character represents a
  * tertiary difference.  Set comparison level to UCOL_TERTIARY to include
@@ -159,7 +159,7 @@ typedef enum {
  *
  * Two characters are considered "identical" when they have the same
  * unicode spellings.  UCOL_IDENTICAL.
- * For example, "ä" == "ä".
+ * For example, "&#x00E4;" == "&#x00E4;".
  *
  * UCollationStrength is also used to determine the strength of sort keys 
  * generated from UCollator objects
