@@ -118,6 +118,87 @@ if (!T_FileStream_error(os))
     }
 }
 
+U_CAPI void ucmp32_streamMemIn(CompactIntArray* this_obj, UMemoryStream* is)
+{
+int32_t  newCount, len;
+char c;
+    if (!uprv_mstrm_error(is))
+    {
+        
+        uprv_mstrm_read(is, &newCount, sizeof(newCount));
+        if (this_obj->fCount != newCount)
+        {
+            this_obj->fCount = newCount;
+            uprv_free(this_obj->fArray);
+            this_obj->fArray = 0;
+            this_obj->fArray = (int32_t*)uprv_malloc(this_obj->fCount * sizeof(int32_t));
+            if (!this_obj->fArray) {
+                this_obj->fBogus = TRUE;
+                return;
+            }
+        }
+        uprv_mstrm_read(is, this_obj->fArray, sizeof(*(this_obj->fArray)) * this_obj->fCount);
+        uprv_mstrm_read(is, &len, sizeof(len));
+        if (len == 0)
+        {
+            uprv_free(this_obj->fIndex);
+            this_obj->fIndex = 0;
+        }
+        else if (len == UCMP32_kIndexCount)
+        {
+            if (this_obj->fIndex == 0) 
+                this_obj->fIndex =(uint16_t*)uprv_malloc(UCMP32_kIndexCount * sizeof(uint16_t));
+            if (!this_obj->fIndex) {
+                this_obj->fBogus = TRUE;
+                uprv_free(this_obj->fArray); 
+                this_obj->fArray = 0;
+                return;
+            }
+            uprv_mstrm_read(is, this_obj->fIndex, sizeof(*(this_obj->fIndex)) * UCMP32_kIndexCount);
+        }
+        else
+        {
+            this_obj->fBogus = TRUE;
+            return;
+        }
+        /* char instead of int8_t for Mac compilation*/
+        uprv_mstrm_read(is, (char*)&c, sizeof(c));
+        this_obj->fCompact = (c != 0);
+    }
+}
+
+U_CAPI void ucmp32_streamMemOut(CompactIntArray* this_obj, UMemoryStream* os)
+{
+    char c;
+if (!uprv_mstrm_error(os))
+    {
+        if (this_obj->fCount != 0 && this_obj->fArray != 0)
+        {
+            uprv_mstrm_write(os, (uint8_t *)&(this_obj->fCount), sizeof(this_obj->fCount));
+            uprv_mstrm_write(os, (uint8_t *)this_obj->fArray, sizeof(*(this_obj->fArray)) * this_obj->fCount);
+        }
+        else
+        {
+            int32_t  zero = 0;
+            uprv_mstrm_write(os, (uint8_t *)&zero, sizeof(zero));
+        }
+
+        if (this_obj->fIndex == 0)
+        {
+            int32_t len = 0;
+            uprv_mstrm_write(os, (uint8_t *)&len, sizeof(len));
+        }
+        else
+        {
+            int32_t len = UCMP32_kIndexCount;
+            uprv_mstrm_write(os, (uint8_t *)&len, sizeof(len));
+            uprv_mstrm_write(os, (uint8_t *)this_obj->fIndex, sizeof(*(this_obj->fIndex)) * UCMP32_kIndexCount);
+        }
+        c = this_obj->fCompact ? 1 : 0;  /* char instead of int8_t for Mac compilation*/
+        uprv_mstrm_write(os, (const char*)&c, sizeof(c));
+    }
+}
+
 CompactIntArray* ucmp32_open(int32_t defaultValue)
 {
   uint16_t  i;

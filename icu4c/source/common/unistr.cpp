@@ -1633,6 +1633,63 @@ UnicodeStringStreamer::streamIn(UnicodeString *s,
   s->fLength = newSize;
 }
 
+void
+UnicodeStringStreamer::streamOut(const UnicodeString *s,
+                 UMemoryStream *os)
+{
+  if(!uprv_mstrm_error(os)) {
+    uprv_mstrm_write(os, (uint8_t*)&s->fLength, sizeof(s->fLength));
+  }
+
+  const UChar *c   = s->getArrayStart();
+  const UChar *end = c + s->fLength;
+
+  while(c != end && ! uprv_mstrm_error(os)) {
+    uprv_mstrm_write(os, (uint8_t*)c, sizeof(*c));
+    c++;
+  }
+}
+
+void
+UnicodeStringStreamer::streamIn(UnicodeString *s,
+                UMemoryStream *is)
+{
+  int32_t newSize;
+
+  // handle error conditions
+  if(uprv_mstrm_error(is) || uprv_mstrm_eof(is)) {
+    s->setToBogus();
+    return;
+  }
+  uprv_mstrm_read(is, (uint8_t *)&newSize, sizeof(int32_t));
+  if((newSize < 0) || uprv_mstrm_error(is)
+     || ((newSize > 0) && uprv_mstrm_eof(is))) {
+    s->setToBogus(); //error condition
+    return;
+  }
+
+  // clone s's array, if needed
+  if(!s->cloneArrayIfNeeded(newSize, newSize, FALSE)) {
+    return;
+  }
+
+  UChar *c = s->getArrayStart();
+  UChar *end = c + newSize;
+
+  while(c < end && ! (uprv_mstrm_error(is) || uprv_mstrm_eof(is))) {
+    uprv_mstrm_read(is, (uint8_t *)c, sizeof(*c));
+    c++;
+  }
+
+  // couldn't read all chars
+  if(c < end) {
+    s->setToBogus();
+    return;
+  }
+
+  s->fLength = newSize;
+}
+
 // console IO
 
 #if U_IOSTREAM_SOURCE >= 198506

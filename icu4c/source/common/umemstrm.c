@@ -36,6 +36,7 @@ U_CAPI UMemoryStream * U_EXPORT2 uprv_mstrm_openNew(int32_t size) {
     MS->fPos = 0;
     MS->fReadPos = 0;
     MS->fError = FALSE;
+    MS->fEof = FALSE;
     MS->fStart = (uint8_t *)uprv_malloc(MS->fSize);
     if(MS->fStart == NULL) {
         MS->fError = TRUE;
@@ -52,9 +53,10 @@ U_CAPI UMemoryStream * U_EXPORT2 uprv_mstrm_openBuffer(uint8_t *buffer, int32_t 
     }
     MS->fReadOnly = TRUE;
     MS->fStart = buffer;
-    MS->fPos = 0;
+    MS->fPos = len;
     MS->fReadPos = 0;
     MS->fError = FALSE;
+    MS->fEof = FALSE;
     return MS;
 }
 
@@ -74,11 +76,16 @@ U_CAPI UBool U_EXPORT2 uprv_mstrm_error(UMemoryStream *MS){
     return MS->fError;
 }
 
+U_CAPI UBool U_EXPORT2 uprv_mstrm_eof(UMemoryStream *MS){
+    return MS->fEof;
+}
+
 U_CAPI int32_t U_EXPORT2 uprv_mstrm_read(UMemoryStream *MS, void* addr, int32_t len) {
     if(MS->fError == FALSE) {
         if(len + MS->fReadPos > MS->fPos) {
             len = MS->fPos - MS->fReadPos;
             MS->fError = TRUE;
+	    MS->fEof = TRUE;
         }
 
         uprv_memcpy(addr, MS->fStart+MS->fReadPos, len);
@@ -89,13 +96,13 @@ U_CAPI int32_t U_EXPORT2 uprv_mstrm_read(UMemoryStream *MS, void* addr, int32_t 
     }
 }
 
-U_CAPI int32_t U_EXPORT2 uprv_mstrm_write(UMemoryStream *MS, uint8_t *buffer, int32_t len){
+U_CAPI int32_t U_EXPORT2 uprv_mstrm_write(UMemoryStream *MS, const uint8_t *buffer, int32_t len){
     if(MS->fError == FALSE) {
         if(MS->fReadOnly == FALSE) {
             if(len + MS->fPos > MS->fSize) {
-                uint8_t *newstart = (uint8_t *)uprv_realloc(MS->fStart, 2*MS->fSize);
+                uint8_t *newstart = (uint8_t *)uprv_realloc(MS->fStart, MS->fSize+len);
                 if(newstart != NULL) {
-                    MS->fSize*=2;
+                    MS->fSize+=len;
                     MS->fStart = newstart;
                 } else {
                     MS->fError = TRUE;
