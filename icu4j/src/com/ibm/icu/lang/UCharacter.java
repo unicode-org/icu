@@ -5,22 +5,22 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/02/25 22:43:59 $ 
-* $Revision: 1.25 $
+* $Date: 2002/02/28 23:55:16 $ 
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
 
-
 package com.ibm.icu.lang;
 
 import java.util.Locale;
-import com.ibm.icu.impl.Trie;
+import com.ibm.icu.impl.UnicodeProperty;
+import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.Utility; 
 import com.ibm.icu.util.RangeValueIterator;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
-import com.ibm.icu.text.UTF16;
+
 /**
 * <p>
 * The UCharacter class provides extensions to the 
@@ -48,7 +48,7 @@ import com.ibm.icu.text.UTF16;
 * </p>
 * <p>
 * For more information about the data file format, please refer to 
-* <a href=http://oss.software.ibm.com/icu4j/doc/com.ibm.icu.text/ReadMe.html>
+* <a href=http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/lang/ReadMe.html>
 * Read Me</a>.
 * </p>
 * <p>
@@ -71,24 +71,11 @@ import com.ibm.icu.text.UTF16;
 *      methods.  New methods unicodeDigit, and
 *      getUnicodeNumericValue do not treat the above code points 
 *      as having numeric values.  This is a semantic change from ICU4J 1.3.1.
-* <li> For consistency with ICU4C's data, control code points below have their 
-*      Unicode general category reset to the types below.
-*      <ul>
-*      <li> TAB 0x9 : U_SPACE_SEPARATOR 
-*      <li> VT 0xb : U_SPACE_SEPARATOR 
-*      <li> LF 0xa : U_PARAGRAPH_SEPARATOR 
-*      <li> FF 0xc : U_LINE_SEPARATOR 
-*      <li> CR 0xd : U_PARAGRAPH_SEPARATOR 
-*      <li> FS 0x1c : U_PARAGRAPH_SEPARATOR 
-*      <li> GS 0x1d : U_PARAGRAPH_SEPARATOR 
-*      <li> RS 0x1e : U_PARAGRAPH_SEPARATOR 
-*      <li> US 0x1f : U_SPACE_SEPARATOR 
-*      <li> NL 0x85 : U_PARAGRAPH_SEPARATOR
-*      </ul>
+* </ul>
 * <p>
 * Further detail differences can be determined from the program 
-*        <a href = http://oss.software.ibm.com/developerworks/opensource/cvs/icu4j/~checkout~/icu4j/src/com.ibm.icu.dev.test/text/UCharacterCompare.java>
-*        com.ibm.icu.dev.test.text.UCharacterCompare</a>
+*        <a href = http://oss.software.ibm.com/developerworks/opensource/cvs/icu4j/~checkout~/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java>
+*        com.ibm.icu.dev.test.lang.UCharacterCompare</a>
 * </p>
 * @author Syn Wee Quek
 * @since oct 06 2000
@@ -103,7 +90,7 @@ public final class UCharacter
     /** 
     * The lowest Unicode code point value.
     */
-    public static final int MIN_VALUE = 0;
+    public static final int MIN_VALUE = UnicodeProperty.MIN_VALUE;
 
     /**
     * The highest Unicode code point value (scalar value) according to the 
@@ -111,12 +98,13 @@ public final class UCharacter
     * This is a 21-bit value (21 bits, rounded up).<br>
     * Up-to-date Unicode implementation of java.lang.Character.MIN_VALUE
     */
-    public static final int MAX_VALUE = 0x10ffff;
+    public static final int MAX_VALUE = UnicodeProperty.MAX_VALUE; 
       
     /**
     * The minimum value for Supplementary code points
     */
-    public static final int SUPPLEMENTARY_MIN_VALUE = 0x10000;
+    public static final int SUPPLEMENTARY_MIN_VALUE = 
+                                          UnicodeProperty.SUPPLEMENTARY_MIN_VALUE;
       
     /**
     * Unicode value used when translating into Unicode encoding form and there 
@@ -357,8 +345,13 @@ public final class UCharacter
         return (cat == UCharacterCategory.SPACE_SEPARATOR || 
                 cat == UCharacterCategory.LINE_SEPARATOR ||
                 cat == UCharacterCategory.PARAGRAPH_SEPARATOR) && 
-                (ch != NO_BREAK_SPACE_) && (ch != NARROW_NO_BREAK_SPACE_) && 
-                (ch != ZERO_WIDTH_NO_BREAK_SPACE_);
+                (ch != NO_BREAK_SPACE_) && 
+                (ch != NARROW_NO_BREAK_SPACE_) && 
+                (ch != ZERO_WIDTH_NO_BREAK_SPACE_) ||
+                // TAB VT LF FF CR FS GS RS US NL are all control characters
+                // that are white spaces.
+                (ch >= 0x9 && ch <= 0xd) || (ch >= 0x1c && ch <= 0x1f) ||
+                (ch == 0x85);
     }
        
     /**
@@ -374,7 +367,11 @@ public final class UCharacter
         // if props == 0, it will just fall through and return false
         return cat == UCharacterCategory.SPACE_SEPARATOR || 
             cat == UCharacterCategory.LINE_SEPARATOR ||
-            cat == UCharacterCategory.PARAGRAPH_SEPARATOR;
+            cat == UCharacterCategory.PARAGRAPH_SEPARATOR ||
+            // TAB VT LF FF CR FS GS RS US NL are all control characters
+            // that are white spaces.
+            (ch >= 0x9 && ch <= 0xd) || (ch >= 0x1c && ch <= 0x1f) ||
+            (ch == 0x85);
     }
                                     
     /**
@@ -484,11 +481,6 @@ public final class UCharacter
     */
     public static boolean isIdentifierIgnorable(int ch)
     {
-        /*
-        int cat = getType(ch);
-        // if props == 0, it will just fall through and return false
-        return cat == UCharacterCategory.FORMAT;
-        */
         // see java.lang.Character.isIdentifierIgnorable() on range of 
         // ignorable characters.
         return ch <= 8 || (ch >= 0xe && ch <= 0x1b) ||
@@ -577,14 +569,7 @@ public final class UCharacter
             return null;
         }
         
-        if (ch < UCharacter.SUPPLEMENTARY_MIN_VALUE) {
-            return String.valueOf((char)ch);
-        }
-        
-        char result[] = new char[2];
-        result[0] = (char)UTF16.getLeadSurrogate(ch);
-        result[1] = (char)UTF16.getTrailSurrogate(ch);
-        return new String(result);
+        return UnicodeProperty.toString(ch);
     }
                                     
     /**
@@ -703,9 +688,6 @@ public final class UCharacter
     */
     public static boolean isPrintable(int ch)
     {
-        if (isISOControl(ch)) {
-            return false;
-        }
         int cat = getType(ch);
         // if props == 0, it will just fall through and return false
         return (cat != UCharacterCategory.UNASSIGNED && 
@@ -818,17 +800,17 @@ public final class UCharacter
     {
         int props = getProps(ch);
         if(!UCharacterProperty.isExceptionIndicator(props)) {
-        if (UCharacterProperty.getPropType(props) == 
+        	if (UCharacterProperty.getPropType(props) == 
                                         UCharacterCategory.NON_SPACING_MARK) {
-            return PROPERTY_.getUnsignedValue(props);
+         	   return PROPERTY_.getUnsignedValue(props);
+        	}
+        	else {
+         	   return 0;
+        	}
         }
         else {
-            return 0;
-        }
-        }
-        else {
-        // the combining class is in bits 23..16 of the first exception value
-        return (PROPERTY_.getException(
+            // the combining class is in bits 23..16 of the first exception value
+            return (PROPERTY_.getException(
                                     PROPERTY_.getExceptionIndex(props), 
                                     UCharacterProperty.EXC_COMBINING_CLASS_)
                                     >> SHIFT_16_) & LAST_BYTE_MASK_;
@@ -851,10 +833,10 @@ public final class UCharacter
         if (ch < MIN_VALUE) {
             return false;
         }
-        if (ch < SURROGATE_MIN_VALUE_) {
+        if (ch < UnicodeProperty.SURROGATE_MIN_VALUE) {
             return true;
         }
-        if (ch <= SURROGATE_MAX_VALUE_) {
+        if (ch <= UnicodeProperty.SURROGATE_MAX_VALUE) {
             return false;
         }
         if (isNonCharacter(ch)) {
@@ -881,7 +863,7 @@ public final class UCharacter
         int codepoint;
         for (int i = 0; i < size; i ++)
         {
-            codepoint = UTF16.charAt(str, i);
+            codepoint = UnicodeProperty.charAt(str, i);
             if (!isLegal(codepoint)) {
                 return false;
             }
@@ -1021,8 +1003,11 @@ public final class UCharacter
     */
     public static int getCodePoint(char lead, char trail) 
     {
-        if (UTF16.isLeadSurrogate(lead) && UTF16.isTrailSurrogate(trail)) {
-            return getRawSupplementary(lead, trail);
+        if (lead >= UnicodeProperty.LEAD_SURROGATE_MIN_VALUE && 
+	        lead <= UnicodeProperty.LEAD_SURROGATE_MAX_VALUE &&
+            trail >= UnicodeProperty.TRAIL_SURROGATE_MIN_VALUE && 
+	        trail <= UnicodeProperty.TRAIL_SURROGATE_MAX_VALUE) {
+            return UnicodeProperty.getRawSupplementary(lead, trail);
         }
         return UCharacter.REPLACEMENT_CHAR;
     }
@@ -1108,43 +1093,7 @@ public final class UCharacter
     */
     public static String toUpperCase(Locale locale, String str)
     {
-        int size = str.length();
-        StringBuffer result = new StringBuffer(size); // initial buffer
-        int offset = 0;
-        
-        while (offset < size)
-        {
-            int ch     = UTF16.charAt(str, offset);
-            int chsize = UTF16.getCharCount(ch);
-            int props = PROPERTY_.getProperty(ch);
-            if (!UCharacterProperty.isExceptionIndicator(props)) 
-            {
-                if (UCharacterProperty.getPropType(props) == 
-                    UCharacterCategory.LOWERCASE_LETTER) {
-                    ch -= UCharacterProperty.getSignedValue(props);
-                }
-                UTF16.append(result, ch);
-            }
-            else 
-            {
-                int index = UCharacterProperty.getExceptionIndex(props);
-                if (PROPERTY_.hasExceptionValue(index, 
-                                  UCharacterProperty.EXC_SPECIAL_CASING_)) {
-                    getSpecialUpperCase(ch, index, result, str, offset, 
-                                        locale);          
-                }
-                else {
-                    if (PROPERTY_.hasExceptionValue(index, 
-                                         UCharacterProperty.EXC_UPPERCASE_)) {
-                        ch = PROPERTY_.getException(index, 
-                                         UCharacterProperty.EXC_UPPERCASE_);
-                    }
-                    UTF16.append(result, ch);
-                }
-            }
-            offset += chsize;
-        }
-        return result.toString();
+        return UnicodeProperty.toUpperCase(locale, str, 0, str.length());
     }
       
     /**
@@ -1156,41 +1105,7 @@ public final class UCharacter
     */
     public static String toLowerCase(Locale locale, String str)
     {
-        // case mapping loop
-        int offset = 0;
-        int length = str.length();
-        StringBuffer result = new StringBuffer(length);
-        while (offset < length) {
-            int ch = UTF16.charAt(str, offset);
-            int chsize = UTF16.getCharCount(ch);
-            int props = PROPERTY_.getProperty(ch);
-            if (!UCharacterProperty.isExceptionIndicator(props)) {
-                int type = UCharacterProperty.getPropType(props);
-                if (type == UCharacterCategory.UPPERCASE_LETTER ||
-                    type == UCharacterCategory.TITLECASE_LETTER) {
-                    ch += UCharacterProperty.getSignedValue(props);
-                }
-                UTF16.append(result, ch);
-            }
-            else {
-                int index = UCharacterProperty.getExceptionIndex(props);
-                if (PROPERTY_.hasExceptionValue(index, 
-                                  UCharacterProperty.EXC_SPECIAL_CASING_)) {
-                    getSpecialLowerCase(ch, index, result, str, offset, 
-                                        locale);          
-                }
-                else {
-                    if (PROPERTY_.hasExceptionValue(index, 
-                                       UCharacterProperty.EXC_LOWERCASE_)) {
-                        ch = PROPERTY_.getException(index, 
-                                         UCharacterProperty.EXC_LOWERCASE_);
-                    }
-                    UTF16.append(result, ch);
-                }
-            }
-            offset += chsize;
-        }
-        return result.toString();
+        return UnicodeProperty.toLowerCase(locale, str, 0, str.length());
     }
     
     /**
@@ -1259,10 +1174,12 @@ public final class UCharacter
                 else {
                     // special case folding mappings, hardcoded
                     if (defaultmapping && 
-                                 (ch == LATIN_SMALL_LETTER_DOTLESS_I_ || 
-                                  ch == LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_)) {
+                        (ch == UnicodeProperty.LATIN_SMALL_LETTER_DOTLESS_I_ || 
+                         ch == 
+                           UnicodeProperty.LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_)) 
+                    {
                         // map dotted I and dotless i to U+0069 small i
-                        return LATIN_SMALL_LETTER_I_;
+                        return UnicodeProperty.LATIN_SMALL_LETTER_I_;
                     }
                     // return ch itself because it is excluded from case folding
                     return ch;
@@ -1304,8 +1221,8 @@ public final class UCharacter
 
         // case mapping loop
         while (offset < size) {
-            ch = UTF16.charAt(str, offset);
-            offset += UTF16.getCharCount(ch);
+            ch = UnicodeProperty.charAt(str, offset);
+            offset += UnicodeProperty.getCharCount(ch);
             int props = PROPERTY_.getProperty(ch);
             if (!UCharacterProperty.isExceptionIndicator(props)) {
                 int type = UCharacterProperty.getPropType(props);
@@ -1327,15 +1244,17 @@ public final class UCharacter
                     else {
                         // special case folding mappings, hardcoded
                         if (defaultmapping && 
-                                (ch == LATIN_SMALL_LETTER_DOTLESS_I_ || 
-                                ch == LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_)) {
+                            (ch == UnicodeProperty.LATIN_SMALL_LETTER_DOTLESS_I_ || 
+                             ch == 
+                           UnicodeProperty.LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_)) 
+                        {
                             // map dotted I and dotless i to U+0069 small i
-                            result.append(LATIN_SMALL_LETTER_I_);
+                            result.append(UnicodeProperty.LATIN_SMALL_LETTER_I_);
                         } 
                         else {
                             // output c itself because it is excluded from 
                             // case folding
-                            UTF16.append(result, ch);
+                            UnicodeProperty.append(result, ch);
                         }
                     }
                     // do not fall through to the output of c
@@ -1348,10 +1267,11 @@ public final class UCharacter
                                           UCharacterProperty.EXC_LOWERCASE_);
                     }
                 }
+                
             }
 
             // handle 1:1 code point mappings from UnicodeData.txt
-            UTF16.append(result, ch);
+            UnicodeProperty.append(result, ch);
         }
         
         return result.toString();
@@ -1442,187 +1362,31 @@ public final class UCharacter
         return new UCharacterTypeIterator();
     }
     
-    // protected data members --------------------------------------------
+    // protected methods -------------------------------------------------
+      
+    /**
+    * Determines if codepoint is a non character
+    * @param ch codepoint
+    * @return true if codepoint is a non character false otherwise
+    */
+    static boolean isNonCharacter(int ch) 
+    {
+        if ((ch & NON_CHARACTER_SUFFIX_MIN_3_0_) == 
+                                            NON_CHARACTER_SUFFIX_MIN_3_0_) {
+            return true;
+        }
+        
+        return ch >= NON_CHARACTER_MIN_3_1_ && ch <=  NON_CHARACTER_MAX_3_1_;
+    }
+        
+    // private variables -------------------------------------------------
     
     /**
     * Database storing the sets of character property
     */
-    protected static final UCharacterProperty PROPERTY_;
-    
-    /**
-    * Initialization of the UCharacterProperty instance. 
-    * RuntimeException thrown when data is missing or data has been corrupted.
-    */
-    static
-    {
-        try
-        {
-            PROPERTY_ = new UCharacterProperty();
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-    
-	/**
-    * Shift and mask value for surrogates
-    */
-	public static final int LEAD_SURROGATE_SHIFT_ = 10;
-	public static final int TRAIL_SURROGATE_MASK_ = 0x3FF;
-                              
-    // protected methods -------------------------------------------------
-      
-    /**
-    * Forms a supplementary code point from the argument character<br>
-    * Note this is for internal use hence no checks for the validity of the
-    * surrogate characters are done
-    * @param lead lead surrogate character
-    * @param trail trailing surrogate character
-    * @return code point of the supplementary character
-    */
-    public static int getRawSupplementary(char lead, char trail)
-    {
-        return (lead << LEAD_SURROGATE_SHIFT_) + trail + SURROGATE_OFFSET_;
-    }
-    
-    /**
-     * returns the maximum amount that a single character will expand in
-     * upper, lower, title, or fold case operations
-     */
-    public static int getMaxCaseExpansion() {
-        return 10;
-    }
-
-    /**
-     * produces the result of converting a single (possibly surrogate)
-     * character in a string.
-     * @param result 
-     * @return length of returned value IF there is a change. -1 otherwise.
-     */
-    public static int toLowerCase(Locale locale, String str, int offset, 
-                           char[] result) {
-        // NOTE: we have to keep the original string around, because it is 
-        // used for the context
-        
-        int ch = UTF16.charAt(str, offset);
-        int props = PROPERTY_.getProperty(ch);
-        if (!UCharacterProperty.isExceptionIndicator(props)) {
-            int type = UCharacterProperty.getPropType(props);
-            if (type == UCharacterCategory.UPPERCASE_LETTER ||
-                type == UCharacterCategory.TITLECASE_LETTER) {
-                int chDelta = UCharacterProperty.getSignedValue(props);
-                if (chDelta == 0) return -1;
-                return UTF16.append(result, 0, ch + chDelta);
-            }
-        } else {
-            int index = UCharacterProperty.getExceptionIndex(props);
-            if (PROPERTY_.hasExceptionValue(index, 
-                                UCharacterProperty.EXC_SPECIAL_CASING_)) {
-                // TODO: avoid StringBuffer, put directly into array?
-                StringBuffer buf = new StringBuffer();
-                getSpecialLowerCase(ch, index, buf, str, offset, 
-                                    locale);
-                Utility.getChars(buf, 0, buf.length(), result, 0);
-                return buf.length();
-            } else if (PROPERTY_.hasExceptionValue(index, 
-                                    UCharacterProperty.EXC_LOWERCASE_)) {
-                return UTF16.append(result, 0, PROPERTY_.getException(index, 
-                                    UCharacterProperty.EXC_LOWERCASE_));
-            }
-        }
-        return -1;
-    }
-    
- 
-    /**
-     * produces the result of converting a single (possibly surrogate)
-     * character in a string.
-     * @param result 
-     * @return length of returned value IF there is a change. -1 otherwise.
-     */
-    public static int toUpperCase(Locale locale, String str, int offset, 
-                           char[] result) {
-        // NOTE: we have to keep the original string around, because it is 
-        // used for the context
-        
-        int ch = UTF16.charAt(str, offset);
-        int props = PROPERTY_.getProperty(ch);
-        if (!UCharacterProperty.isExceptionIndicator(props)) {
-            int type = UCharacterProperty.getPropType(props);
-            if (type == UCharacterCategory.LOWERCASE_LETTER ||
-                type == UCharacterCategory.TITLECASE_LETTER) {
-                int chDelta = UCharacterProperty.getSignedValue(props);
-                if (chDelta == 0) return -1;
-                return UTF16.append(result, 0, ch - chDelta);
-            }
-        } else {
-            int index = UCharacterProperty.getExceptionIndex(props);
-            if (PROPERTY_.hasExceptionValue(index, 
-                                UCharacterProperty.EXC_SPECIAL_CASING_)) {
-                // TODO: avoid StringBuffer, put directly into array?
-                StringBuffer buf = new StringBuffer();
-                getSpecialUpperCase(ch, index, buf, str, offset, 
-                                    locale);
-                Utility.getChars(buf, 0, buf.length(), result, 0);
-                return buf.length();
-            } else if (PROPERTY_.hasExceptionValue(index, 
-                                    UCharacterProperty.EXC_UPPERCASE_)) {
-                return UTF16.append(result, 0, PROPERTY_.getException(index, 
-                                    UCharacterProperty.EXC_UPPERCASE_));
-            }
-        }
-        return -1;
-    }
-
-    /**
-     * produces the result of converting a single (possibly surrogate)
-     * character in a string.
-     * @param result 
-     * @return length of returned value IF there is a change. -1 otherwise.
-     */
-    public static int toTitleCase(Locale locale, String str, int offset, 
-                           char[] result) {
-        // NOTE: we have to keep the original string around, because it is 
-        // used for the context
-        // TODO: simplify code by checking for the few special titlecases,
-        // and just jump to uppercase for the rest. 
-        
-        int ch = UTF16.charAt(str, offset);
-        int props = PROPERTY_.getProperty(ch);
-        if (!UCharacterProperty.isExceptionIndicator(props)) {
-            int type = UCharacterProperty.getPropType(props);
-            if (type == UCharacterCategory.LOWERCASE_LETTER) {
-                // here, titlecase is same as uppercase
-                int chDelta = UCharacterProperty.getSignedValue(props);
-                if (chDelta == 0) return -1;
-                return UTF16.append(result, 0, ch - chDelta);
-            }
-        } else {
-            int index = UCharacterProperty.getExceptionIndex(props);
-            if (PROPERTY_.hasExceptionValue(index, 
-                                UCharacterProperty.EXC_TITLECASE_)) {
-                return UTF16.append(result, 0, PROPERTY_.getException(index, 
-                                    UCharacterProperty.EXC_TITLECASE_));
-            } else if (PROPERTY_.hasExceptionValue(index, 
-                                UCharacterProperty.EXC_SPECIAL_CASING_)) {
-                // TODO: avoid StringBuffer, put directly into array?
-                StringBuffer buf = new StringBuffer();
-                getSpecialUpperCase(ch, index, buf, str, offset, 
-                                    locale);
-                Utility.getChars(buf, 0, buf.length(), result, 0);
-                return buf.length();
-            } else if (PROPERTY_.hasExceptionValue(index, 
-                                    UCharacterProperty.EXC_UPPERCASE_)) {
-                return UTF16.append(result, 0, PROPERTY_.getException(index, 
-                                    UCharacterProperty.EXC_UPPERCASE_));
-            }
-        }
-        return -1;
-    }
-    
-    // private variables -------------------------------------------------
-
+    private static final UCharacterProperty PROPERTY_ = 
+                                                    UnicodeProperty.PROPERTY;
+   
     /**
     * Database storing the sets of character name
     */
@@ -1641,18 +1405,6 @@ public final class UCharacter
         }
     }
 
-    /** 
-    * Offset to add to combined surrogate pair to avoid msking.
-    */
-    private static final int SURROGATE_OFFSET_ = 
-        SUPPLEMENTARY_MIN_VALUE - (0xD800 << LEAD_SURROGATE_SHIFT_) - 0xDC00;
-      
-    /**
-    * Surrogate code point values
-    */
-    private static final int SURROGATE_MIN_VALUE_ = 0xD800;
-    private static final int SURROGATE_MAX_VALUE_ = 0xDFFF;
-      
     /**
     * To get the last character out from a data type
     */
@@ -1687,8 +1439,7 @@ public final class UCharacter
     /**
     * New non character range in Unicode 3.1
     */
-    private static final int NON_CHARACTER_RANGE_3_1_ = 
-                                             0xFDEF - NON_CHARACTER_MIN_3_1_;
+    private static final int NON_CHARACTER_MAX_3_1_ = 0xFDEF;
       
     /**
     * Decimal radix
@@ -1776,61 +1527,6 @@ public final class UCharacter
     private static final int DELETE_ = 0x007F;
       
     /**
-    * Turkish ISO 639 2 character code
-    */
-    private static final String TURKISH_ = "tr";
-      
-    /**
-    * Azerbaijani ISO 639 2 character code
-    */
-    private static final String AZERBAIJANI_ = "az";
-      
-    /**
-    * Lithuanian ISO 639 2 character code
-    */
-    private static final String LITHUANIAN_ = "lt";
-      
-    /**
-    * Latin owercase i
-    */
-    private static final char LATIN_SMALL_LETTER_I_ = 0x69;
-      
-    /**
-    * Latin uppercase I
-    */
-    private static final char LATIN_CAPITAL_LETTER_I_ = 0x49;
-      
-    /**
-    * Latin capital letter i with dot above
-    */ 
-    private static final char LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_ = 0x130;
-      
-    /**
-    * Latin small letter i with dot above
-    */ 
-    private static final char LATIN_SMALL_LETTER_DOTLESS_I_ = 0x131;
-      
-    /**
-    * Combining dot above
-    */
-    private static final char COMBINING_DOT_ABOVE_ = 0x307;
-      
-    /**
-    * Greek capital letter sigma
-    */
-    private static final char GREEK_CAPITAL_LETTER_SIGMA_ = 0x3a3;
-      
-    /**
-    * Greek small letter sigma
-    */
-    private static final char GREEK_SMALL_LETTER_SIGMA_ = 0x3c3;
-      
-    /**
-    * Greek small letter rho
-    */
-    private static final char GREEK_SMALL_LETTER_RHO_ = 0x3c2;
-      
-    /**
     * ISO control character first range upper limit 0x0 - 0x1F
     */
     private static final int ISO_CONTROL_FIRST_RANGE_MAX_ = 0x1F;
@@ -1857,77 +1553,6 @@ public final class UCharacter
     private static final int CJK_IDEOGRAPH_TEN_THOUSAND_     = 0x824c;    
     private static final int CJK_IDEOGRAPH_HUNDRED_MILLION_  = 0x5104;
     
-    /**
-    * Hyphens
-    */
-    private static final int HYPHEN_      = 0x2010;
-    private static final int SOFT_HYPHEN_ = 0xAD;
-    
-    /**
-    * LATIN SMALL LETTER J
-    */
-    private static final int LATIN_SMALL_LETTER_J_ = 0x6a;
-    
-    /**
-    * LATIN SMALL LETTER I WITH OGONEK
-    */
-    private static final int LATIN_SMALL_LETTER_I_WITH_OGONEK_ = 0x12f;
-    
-    /**
-    * LATIN SMALL LETTER I WITH TILDE BELOW
-    */
-    private static final int LATIN_SMALL_LETTER_I_WITH_TILDE_BELOW_ = 0x1e2d;
-    
-    /**
-    * LATIN SMALL LETTER I WITH DOT BELOW
-    */
-    private static final int LATIN_SMALL_LETTER_I_WITH_DOT_BELOW_ = 0x1ecb;
-    
-    /**
-    * Combining class for combining mark above
-    */
-    private static final int COMBINING_MARK_ABOVE_CLASS_ = 230;
-    
-    /**
-    * LATIN CAPITAL LETTER J
-    */
-    private static final int LATIN_CAPITAL_LETTER_J_ = 0x4a;
-    
-    /**
-    * LATIN CAPITAL LETTER I WITH OGONEK
-    */
-    private static final int LATIN_CAPITAL_I_WITH_OGONEK_ = 0x12e;
-    
-    /**
-    * LATIN CAPITAL LETTER I WITH TILDE
-    */
-    private static final int LATIN_CAPITAL_I_WITH_TILDE_ = 0x128;
-    
-    /**
-    * LATIN CAPITAL LETTER I WITH GRAVE
-    */
-    private static final int LATIN_CAPITAL_I_WITH_GRAVE_ = 0xcc;
-    
-    /**
-    * LATIN CAPITAL LETTER I WITH ACUTE
-    */
-    private static final int LATIN_CAPITAL_I_WITH_ACUTE_ = 0xcd;
-    
-    /**
-    * COMBINING GRAVE ACCENT
-    */
-    private static final int COMBINING_GRAVE_ACCENT_ = 0x300;
-    
-    /**
-    * COMBINING ACUTE ACCENT
-    */
-    private static final int COMBINING_ACUTE_ACCENT_ = 0x301;
-    
-    /**
-    * COMBINING TILDE
-    */
-    private static final int COMBINING_TILDE_ = 0x303;
-    
     // private constructor -----------------------------------------------
       
     /**
@@ -1946,7 +1571,7 @@ public final class UCharacter
     */
     private static int getProps(int ch)
     {
-        if (ch >= UCharacter.MIN_VALUE & ch <= UCharacter.MAX_VALUE) {
+        if (ch >= MIN_VALUE & ch <= MAX_VALUE) {
             return PROPERTY_.getProperty(ch);
         }
         return 0;
@@ -1966,389 +1591,14 @@ public final class UCharacter
             return locale;
         }
 
-        if (language.equals(TURKISH_) || language.equals(AZERBAIJANI_)) {
+        if (language.equals(UnicodeProperty.TURKISH_) || 
+            language.equals(UnicodeProperty.AZERBAIJANI_)) {
             return new Locale("tr", "TR");
         } 
-        if (language.equals(LITHUANIAN_)) {
+        if (language.equals(UnicodeProperty.LITHUANIAN_)) {
             return new Locale("lt", "LT");
         }
         return locale;
-    }
-    
-    /**  
-    * In Unicode 3.1.1, an ignorable sequence is a sequence of *zero* or more 
-    * characters from the set {HYPHEN, SOFT HYPHEN, general category = Mn}.
-    * (Expected to change!) 
-    * @param ch codepoint
-    * @param cat category of the argument codepoint
-    * @return true if ch is case ignorable.
-    */
-    private static boolean isIgnorable(int ch, int cat) 
-    {
-        return cat == UCharacterCategory.NON_SPACING_MARK || ch == HYPHEN_ || 
-                      ch == SOFT_HYPHEN_;
-    }
-
-    /** 
-    * Determines if offset is not followed by a sequence consisting of
-    * an ignorable sequence and then a cased letter {Ll, Lu, Lt}.
-    * @param str string to determine
-    * @param offset offset in string to check
-    * @return false if any character after index in src is a cased letter
-    * @see SpecialCasing.txt
-    */
-    private static boolean isCFINAL(String str, int offset) 
-    {
-        int length = str.length();
-        offset += UTF16.getCharCount(UTF16.charAt(str, offset));
-        while (offset < length) {
-            int ch = UTF16.charAt(str, offset);
-            int cat = getType(ch);
-            if (cat == UCharacterCategory.LOWERCASE_LETTER || 
-                cat == UCharacterCategory.UPPERCASE_LETTER ||
-                cat == UCharacterCategory.TITLECASE_LETTER) {
-                return false; // followed by cased letter
-            }
-            if (!isIgnorable(ch, cat)) {
-                return true; // not ignorable
-            }
-            offset += UTF16.getCharCount(ch);
-        }
-
-        return true;
-    }
-
-    /**
-    * Determines if offset is not preceded by a sequence consisting of a cased 
-    * letter {Ll, Lu, Lt} and an ignorable sequence. 
-    * @param str string to determine
-    * @param offset offset in string to check
-    * @return true if any character before index in src is a cased letter
-    * @see SpecialCasing.txt
-    */
-    private static boolean isNotCINITIAL(String str, int offset) 
-    {
-        offset --;
-        while (offset >= 0) {
-            int ch = UTF16.charAt(str, offset);
-            int cat = getType(ch);
-            if (cat == UCharacterCategory.LOWERCASE_LETTER || 
-                cat == UCharacterCategory.UPPERCASE_LETTER ||
-                cat == UCharacterCategory.TITLECASE_LETTER) {
-                return true; // preceded by cased letter
-            }
-            if (!isIgnorable(ch, cat)) {
-                return false; // not ignorable
-            }
-            offset -= UTF16.getCharCount(ch);
-        }
-
-        return false; 
-    }
-
-    /**
-    * Determines if a string at offset is preceded by any base characters 
-    * { 'i', 'j', U+012f, U+1e2d, U+1ecb } with no intervening character with
-    * combining class = 230
-    * @param str string to be determined
-    * @param offset offset in string to check
-    * @return true if some characters preceding the offset index belongs to
-    *         the set { 'i', 'j', U+012f, U+1e2d, U+1ecb }
-    * @see SpecialCasing.txt
-    */
-    private static boolean isAFTER_i(String str, int offset) 
-    {
-        offset --;
-        while (offset >= 0) {
-            int ch = UTF16.charAt(str, offset);
-            if (ch == LATIN_SMALL_LETTER_I_ || ch == LATIN_SMALL_LETTER_J_ || 
-                ch == LATIN_SMALL_LETTER_I_WITH_OGONEK_ ||
-                ch == LATIN_SMALL_LETTER_I_WITH_TILDE_BELOW_ || 
-                ch == LATIN_SMALL_LETTER_I_WITH_DOT_BELOW_) {
-                return true; // preceded by TYPE_i
-            }
-    
-            int cc = getCombiningClass(ch);
-            if (cc == 0 || cc == COMBINING_MARK_ABOVE_CLASS_) {
-                // preceded by different base character not TYPE_i), or 
-                // intervening cc == 230
-                return false; 
-            }
-            offset -= UTF16.getCharCount(ch);
-        }
-
-        return false; // not preceded by TYPE_i
-    }
-
-    /**
-    * Determines if a string at offset is preceded by base characters 'I' with 
-    * no intervening combining class = 230
-    * @param str string to be determined
-    * @param offset offset in string to check
-    * @return true if some characters preceding the offset index is the
-    *         character 'I' with no intervening combining class = 230
-    * @see SpecialCasing.txt
-    */
-    private static boolean isAFTER_I(String str, int offset) 
-    {
-        offset --;
-        while (offset >= 0) {
-            int ch = UTF16.charAt(str, offset);
-            if (ch == LATIN_CAPITAL_LETTER_I_) {
-                return true; // preceded by I
-            }
-
-            int cc = getCombiningClass(ch);
-            if (cc == 0 || cc == COMBINING_MARK_ABOVE_CLASS_) {
-                // preceded by different base character (not I), or 
-                // intervening cc == 230
-                return false; 
-            }
-            offset -= UTF16.getCharCount(ch);
-        }
-
-        return false; // not preceded by I
-    }
-
-    /** 
-    * Determines if a string at offset is followed by one or more characters 
-    * of combining class = 230.
-    * @param str string to be determined
-    * @param offset offset in string to check
-    * @return true if a string at offset is followed by one or more characters 
-    *         of combining class = 230.
-    * @see SpecialCasing.txt
-    */
-    private static boolean isFollowedByMOREABOVE(String str, int offset) 
-    {
-        int length = str.length();
-        offset += UTF16.getCharCount(UTF16.charAt(str, 0));
-        while (offset < length) {
-            int ch = UTF16.charAt(str, offset);
-            int cc = getCombiningClass(ch);
-            if (cc == COMBINING_MARK_ABOVE_CLASS_) {
-                return true; // at least one cc==230 following 
-            }
-            if (cc == 0) {
-                return false; // next base character, no more cc==230 following
-            }
-            offset += UTF16.getCharCount(ch);
-        }
-
-        return false; // no more cc == 230 following
-    }
-
-    /** 
-    * Determines if a string at offset is followed by a dot above 
-    * with no characters of combining class == 230 in between 
-    * @param str string to be determined
-    * @param offset offset in string to check
-    * @return true if a string at offset is followed by oa dot above 
-    *         with no characters of combining class == 230 in between
-    * @see SpecialCasing.txt
-    */
-    private static boolean isFollowedByDotAbove(String str, int offset) 
-    {
-        int length = str.length();
-        offset += UTF16.getCharCount(UTF16.charAt(str, 0));
-        while (offset < length) {
-            int ch = UTF16.charAt(str, offset);
-            if (ch == COMBINING_DOT_ABOVE_) {
-                return true;
-            }
-            int cc = getCombiningClass(ch);
-            if (cc == 0 || cc == COMBINING_MARK_ABOVE_CLASS_) {
-                return false; // next base character or cc==230 in between
-            }
-            offset += UTF16.getCharCount(ch);
-        }
-
-        return false; // no dot above following
-    }
-  
-    /**
-    * Special casing uppercase management
-    * @param ch code point to convert
-    * @param index of exception containing special case information
-    * @param buffer to add uppercase
-    * @param str original string
-    * @param offset index of ch in str
-    * @param tr_az if uppercase is to be made with TURKISH or AZERBAIJANI 
-    *        in mind
-    * @param lt if uppercase is to be made with LITHUANIAN in mind
-    */
-    private static void getSpecialUpperCase(int ch, int index, 
-                                            StringBuffer buffer, String str, 
-                                            int offset, Locale locale)
-    {
-        int exception = PROPERTY_.getException(index, 
-                                    UCharacterProperty.EXC_SPECIAL_CASING_);
-        if (exception < 0) {
-            String language = locale.getLanguage();
-            // use hardcoded conditions and mappings
-            if ((language.equals(TURKISH_) || language.equals(AZERBAIJANI_))
-                && ch == LATIN_SMALL_LETTER_I_) {
-                // turkish: i maps to dotted I
-                buffer.append(LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_);
-            } 
-            else {
-                if (language.equals(LITHUANIAN_) && ch == COMBINING_DOT_ABOVE_ 
-                    && isAFTER_i(str, offset)) {
-                    // lithuanian: remove DOT ABOVE after U+0069 "i" with 
-                    // upper or titlecase
-                    return; // remove the dot (continue without output)
-                } 
-                else {
-                    // no known conditional special case mapping, use a normal 
-                    // mapping
-                    if (PROPERTY_.hasExceptionValue(index, 
-                        UCharacterProperty.EXC_UPPERCASE_)) {
-                        UTF16.append(buffer, PROPERTY_.getException(index, 
-                                        UCharacterProperty.EXC_UPPERCASE_)); 
-                    }
-                    else {
-                        UTF16.append(buffer, ch);
-                    }
-                }
-            }
-        }
-        else {
-            // get the special case mapping string from the data file
-            index = exception & LAST_CHAR_MASK_;
-            PROPERTY_.getUpperCase(index, buffer);
-        }
-    }
-      
-    /**
-    * Special casing lowercase management
-    * @param ch code point to convert
-    * @param index of exception containing special case information
-    * @param buffer to add lowercase
-    * @param str original string
-    * @param offset index of ch in str
-    * @param locale current locale
-    */
-    private static void getSpecialLowerCase(int ch, int index, 
-                                            StringBuffer buffer, String str, 
-                                            int offset, Locale locale)
-    {
-        int exception = PROPERTY_.getException(index, 
-                                    UCharacterProperty.EXC_SPECIAL_CASING_);
-        if (exception < 0) {
-            // fill u and i with the case mapping result string
-            // use hardcoded conditions and mappings
-            if (locale.getLanguage().equals(LITHUANIAN_) &&
-                // base characters, find accents above
-                (((ch == LATIN_CAPITAL_LETTER_I_ || 
-                   ch == LATIN_CAPITAL_LETTER_J_ ||
-                   ch == LATIN_CAPITAL_I_WITH_OGONEK_) &&
-                  isFollowedByMOREABOVE(str, offset)) ||
-                  // precomposed with accent above, no need to find one
-                  (ch == LATIN_CAPITAL_I_WITH_GRAVE_ || 
-                   ch == LATIN_CAPITAL_I_WITH_ACUTE_ || 
-                   ch == LATIN_CAPITAL_I_WITH_TILDE_))) {
-                   // lithuanian: add a dot above if there are more accents 
-                   // above (to always have the dot)
-                   switch(ch) {
-                   case LATIN_CAPITAL_LETTER_I_: 
-                        buffer.append((char)LATIN_SMALL_LETTER_I_);
-                        buffer.append((char)COMBINING_DOT_ABOVE_);
-                        break;
-                   case LATIN_CAPITAL_LETTER_J_: 
-                        buffer.append((char)LATIN_SMALL_LETTER_J_);
-                        buffer.append((char)COMBINING_DOT_ABOVE_);
-                        break;
-                   case LATIN_CAPITAL_I_WITH_OGONEK_:
-                        buffer.append((char)LATIN_SMALL_LETTER_I_WITH_OGONEK_);
-                        buffer.append((char)COMBINING_DOT_ABOVE_);
-                        break;
-                   case LATIN_CAPITAL_I_WITH_GRAVE_: 
-                        buffer.append((char)LATIN_SMALL_LETTER_I_);
-                        buffer.append((char)COMBINING_DOT_ABOVE_);
-                        buffer.append((char)COMBINING_GRAVE_ACCENT_);
-                        break;
-                   case LATIN_CAPITAL_I_WITH_ACUTE_: 
-                        buffer.append((char)LATIN_SMALL_LETTER_I_);
-                        buffer.append((char)COMBINING_DOT_ABOVE_);
-                        buffer.append((char)COMBINING_ACUTE_ACCENT_);
-                        break;
-                   case LATIN_CAPITAL_I_WITH_TILDE_:
-                        buffer.append((char)LATIN_SMALL_LETTER_I_);
-                        buffer.append((char)COMBINING_DOT_ABOVE_);
-                        buffer.append((char)COMBINING_TILDE_);
-                        break;
-                   }
-                   /*
-                   Note: This handling of I and of dot above differs from 
-                   Unicode 3.1.1's SpecialCasing-5.txt because the AFTER_i 
-                   condition there does not work for decomposed I+dot above.
-                   This fix is being proposed to the UTC.
-                   */
-            } 
-            else {
-                String language = locale.getLanguage();
-                if ((language.equals(TURKISH_) || 
-                     language.equals(AZERBAIJANI_)) && 
-                    ch == LATIN_CAPITAL_LETTER_I_ && 
-                    !isFollowedByDotAbove(str, offset)) {
-                    // turkish: I maps to dotless i
-                    // other languages or turkish with decomposed I+dot above: 
-                    // I maps to i
-                    buffer.append(LATIN_SMALL_LETTER_DOTLESS_I_);
-                } 
-                else {
-                    if (ch == COMBINING_DOT_ABOVE_ && 
-                        isAFTER_I(str, offset) && 
-                        !isFollowedByMOREABOVE(str, offset)) {
-                        // decomposed I+dot above becomes i (see handling of 
-                        // U+0049 for turkish) and removes the dot above
-                        return; // remove the dot (continue without output)
-                    } 
-                    else {
-                        if (ch == GREEK_CAPITAL_LETTER_SIGMA_ &&
-                            isCFINAL(str, offset) &&
-                            isNotCINITIAL(str, offset)) {
-                            // greek capital sigma maps depending on 
-                            // surrounding cased letters
-                            buffer.append(GREEK_SMALL_LETTER_RHO_);
-                        } 
-                        else {
-                            // no known conditional special case mapping, use 
-                            // a normal mapping
-                            if (PROPERTY_.hasExceptionValue(index, 
-                                       UCharacterProperty.EXC_LOWERCASE_)) {
-                                UTF16.append(buffer, 
-                                             PROPERTY_.getException(index, 
-                                         UCharacterProperty.EXC_LOWERCASE_)); 
-                            }
-                            else {
-                                UTF16.append(buffer, ch);
-                            }
-                        }
-                    } 
-                }
-            }
-        }
-        else {
-            // get the special case mapping string from the data file
-            index = exception & LAST_CHAR_MASK_;
-            PROPERTY_.getLowerCase(index, buffer);
-        }
-    }
-      
-    /**
-    * Determines if codepoint is a non character
-    * @param ch codepoint
-    * @return true if codepoint is a non character false otherwise
-    */
-    private static boolean isNonCharacter(int ch) 
-    {
-        if ((ch & LAST_CHAR_MASK_) >= NON_CHARACTER_SUFFIX_MIN_3_0_) {
-            return true;
-        }
-        
-        int difference = ch - NON_CHARACTER_MIN_3_1_;
-        return difference >= 0 && difference <=  NON_CHARACTER_RANGE_3_1_;
     }
     
     private static boolean isEuropeanDigit(int ch) {
