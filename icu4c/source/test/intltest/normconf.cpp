@@ -170,7 +170,7 @@ void NormalizerConformanceTest::TestConformance(void) {
         }
 
         fields[0]=fields[1]=fields[2]=fields[3]=fields[4].setTo(c);
-        sprintf(lineBuf, "not mentioned code point U+%04lx", c);
+        sprintf(lineBuf, "not mentioned code point U+%04lx", (long)c);
 
         if (checkConformance(fields, UnicodeString(lineBuf, ""))) {
             ++passCount;
