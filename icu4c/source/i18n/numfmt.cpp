@@ -99,8 +99,8 @@ UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(NumberFormat)
 NumberFormatFactory::~NumberFormatFactory() {}
 SimpleNumberFormatFactory::SimpleNumberFormatFactory(const Locale& locale, UBool visible)
     : _visible(visible)
-    , _id(locale.getName())
 {
+    LocaleUtility::initNameFromLocale(locale, _id);
 }
 
 SimpleNumberFormatFactory::~SimpleNumberFormatFactory() {}
@@ -555,7 +555,7 @@ protected:
 class ICUNumberFormatService : public ICULocaleService {
 public:
     ICUNumberFormatService()
-        : ICULocaleService("Number Format")
+        : ICULocaleService(UNICODE_STRING_SIMPLE("Number Format"))
     {
         UErrorCode status = U_ZERO_ERROR;
         registerFactory(new ICUNumberFormatFactory(), status);
