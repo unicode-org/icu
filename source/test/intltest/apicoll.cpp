@@ -1501,12 +1501,16 @@ void CollationAPITest::TestGetLocale() {
 struct teststruct {
     const char *original;
     uint8_t key[256];
-} ;
+};
 
 
-static int compare_teststruct(const void *string1, const void *string2) {
+
+U_CDECL_BEGIN
+static int U_CALLCONV
+compare_teststruct(const void *string1, const void *string2) {
   return(strcmp((const char *)((struct teststruct *)string1)->key, (const char *)((struct teststruct *)string2)->key));
 }
+U_CDECL_END
 
 
 void CollationAPITest::TestBounds(void) {
