@@ -10,7 +10,7 @@
 
 te_IN
 {
-    Version { 55 }
+    Version { 55.0 }
 
     string_only_in_te_IN { TE_IN }
 
