@@ -1,0 +1,106 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2003-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// Hawaiian language
+// Based on data from Keola Donaghy, University of Hawaii
+// Submitted by Deborah Goldsmith, Apple Computer, Inc.
+
+haw {
+    Version { "x0.1" } 
+    CollationElements { 
+        // "&a <<< A" is redundant but is included for clarity
+        Version { "1.0" }
+        Sequence {
+        "&a < e < i < o < u < h < k < l < m < n < p < w < \u02bb < b < c < d < f < g < j < q < r < s < t < v < x < y < z"
+//        "&a <<< A"
+//        "&e <<< E"
+//        "&i <<< I"
+//        "&o <<< O"
+//        "&u <<< U"
+//        "&h <<< H"
+//        "&k <<< K"
+//        "&l <<< L"
+//        "&m <<< M"
+//        "&n <<< N"
+//        "&p <<< P"
+//        "&w <<< W"
+//        "&b <<< B"
+//        "&c <<< C"
+//        "&d <<< D"
+//        "&f <<< F"
+//        "&g <<< G"
+//        "&j <<< J"
+//        "&q <<< Q"
+//        "&r <<< R"
+//        "&s <<< S"
+//        "&t <<< T"
+//        "&v <<< V"
+//        "&x <<< X"
+//        "&y <<< Y"
+//        "&z <<< Z"
+        }
+    }
+
+    DayAbbreviations {
+        "LP",
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+    }
+
+    DayNames {
+        "L\u0101pule",
+        "Po\u02bbakahi",
+        "Po\u02bbalua",
+        "Po\u02bbakolu",
+        "Po\u02bbah\u0101",
+        "Po\u02bbalima",
+        "Po\u02bbaono",
+    }
+
+    MonthAbbreviations {
+        "Ian.",
+        "Pep.",
+        "Mal.",
+        "\u02bbAp.",
+        "Mei.",
+        "Iun.",
+        "Iul.",
+        "\u02bbAu.",
+        "Kep.",
+        "\u02bbOk.",
+        "Now.",
+        "Kek.",
+    }
+
+    MonthNames {
+        "Ianuali",
+        "Pepeluali",
+        "Malaki",
+        "\u02bbApelila",
+        "Mei",
+        "Iune",
+        "Iulai",
+        "\u02bbAukake",
+        "Kepakemapa",
+        "\u02bbOkakopa",
+        "Nowemapa",
+        "Kekemapa",
+    }
+
+    Countries {
+        US { "\u02bbAmelika Hui P\u016b \u02bbIa" }
+    }
+    Languages {
+        haw { "\u02bb\u014dlelo Hawai\u02bbi" }
+    }
+
+    ExemplarCharacters{"[a-z \u02bb \u0101 \u0113 \u012b \u014d \u016b ]"}
+
+}
