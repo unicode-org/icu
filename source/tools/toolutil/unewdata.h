@@ -54,7 +54,7 @@ typedef struct UNewDataMemory UNewDataMemory;
  * @param pErrorCode An ICU UErrorCode parameter. It must not be <code>NULL</code>.
  */
 U_CAPI UNewDataMemory * U_EXPORT2
-udata_create(const char *type, const char *name,
+udata_create(const char *type, const char *name, const char *dir,
              const UDataInfo *pInfo,
              const char *comment,
              UErrorCode *pErrorCode);
@@ -90,5 +90,15 @@ udata_writeString(UNewDataMemory *pData, const char *s, UTextOffset length);
 /** @memo Write a <code>UChar*</code> string of Unicode character code units to the file. */
 U_CAPI void U_EXPORT2
 udata_writeUString(UNewDataMemory *pData, const UChar *s, UTextOffset length);
+
+
+/*
+ * Hey, Emacs, please set the following:
+ *
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ *
+ */
 
 #endif

@@ -29,13 +29,12 @@ struct UNewDataMemory {
 };
 
 U_CAPI UNewDataMemory * U_EXPORT2
-udata_create(const char *type, const char *name,
+udata_create(const char *type, const char *name, const char *dir,
              const UDataInfo *pInfo,
              const char *comment,
              UErrorCode *pErrorCode) {
     UNewDataMemory *pData;
     uint16_t headerSize, commentLength;
-    const char *path;
     char filename[512];
     uint8_t bytes[16];
 
@@ -54,9 +53,16 @@ udata_create(const char *type, const char *name,
     }
 
     /* open the output file */
-    path=u_getDataDirectory();
-    if(path!=NULL) {
-        uprv_strcpy(filename, path);
+    if(dir==NULL) {
+        dir=u_getDataDirectory();
+    }
+    if(dir!=NULL && *dir) {
+        char *p = filename + strlen(dir) - 1;
+        uprv_strcpy(filename, dir);
+        if (*p != U_FILE_SEP_CHAR) {
+            *++p = U_FILE_SEP_CHAR;
+            *p = 0;
+        }
     } else {
         filename[0]=0;
     }
@@ -203,3 +209,12 @@ udata_writeUString(UNewDataMemory *pData, const UChar *s, UTextOffset length) {
         }
     }
 }
+
+/*
+ * Hey, Emacs, please set the following:
+ *
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ *
+ */
