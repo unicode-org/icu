@@ -1530,6 +1530,10 @@ protected:
      */
     UCalendarDateFields resolveFields(const UFieldResolutionTable *precedenceTable);
 
+
+    /**
+     * @internal
+     */
     virtual const UFieldResolutionTable* getFieldResolutionTable() const;
 
     /**
@@ -1974,7 +1978,7 @@ private:
 
     /**
      * Ensure that each field is within its valid range by calling {@link
-     * #validateField(int)} on each field that has been set.  This method
+     * #validateField(int, int&)} on each field that has been set.  This method
      * should only be called if this calendar is not lenient.
      * @see #isLenient
      * @see #validateField(int, int&)
