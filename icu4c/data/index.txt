@@ -95,6 +95,8 @@ index {
         fr_FR_EURO,
         fr_LU,
         fr_LU_EURO,
+		he,
+		he_IL,
         hr,
         hr_HR,
         hu,
