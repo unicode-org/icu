@@ -254,7 +254,7 @@ int32_t ucol_inv_getNext(UColTokListHeader *lh, uint32_t strength) {
   return iCE;
 }
 
-U_CFUNC void ucol_inv_getGapPositions(UColTokListHeader *lh) {
+U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *lh, UErrorCode *status) {
   /* reset all the gaps */
   int32_t i = 0;
   uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
@@ -279,7 +279,27 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokListHeader *lh) {
     lh->pos[i] = -1;
   }
 
-  if(lh->baseCE == UCOL_RESET_TOP_VALUE && lh->baseContCE == 0) {
+  if(lh->baseCE >= 0xEC000000 && lh->baseCE < 0xF0000000) { /* implicits */ 
+    lh->pos[0] = 0;
+    t1 = lh->baseCE;
+    t2 = lh->baseContCE;
+    lh->gapsLo[0] = (t1 & UCOL_PRIMARYMASK);
+    lh->gapsLo[1] = (t1 & UCOL_SECONDARYMASK) << 16;
+    lh->gapsLo[2] = (UCOL_TERTIARYORDER(t1)) << 24;
+    if(lh->baseCE < 0xEF000000) {
+    /* first implicits have three byte primaries, with a gap of one */
+    /* so we esentially need to add 2 to the top byte in lh->baseContCE */
+      t2 += 0x02000000;
+    } else {
+    /* second implicits have four byte primaries, with a gap of IMPLICIT_LAST2_MULTIPLIER_ */
+    /* Now, this guy is not really accessible here, so until we find a better way to pass it */
+    /* around, we'll assume that the gap is 1 */
+      t2 += 0x00020000;
+    }
+    lh->gapsHi[0] = (t1 & UCOL_PRIMARYMASK);
+    lh->gapsHi[1] = (t1 & UCOL_SECONDARYMASK) << 16;
+    lh->gapsHi[2] = (UCOL_TERTIARYORDER(t1)) << 24;
+  } else if(lh->baseCE == UCOL_RESET_TOP_VALUE && lh->baseContCE == 0) {
     lh->pos[0] = 0;
     t1 = UCOL_RESET_TOP_VALUE;
     t2 = 0;
@@ -296,9 +316,9 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokListHeader *lh) {
       if(tokStrength < UCOL_CE_STRENGTH_LIMIT) {
         if((lh->pos[tokStrength] = ucol_inv_getNext(lh, tokStrength)) >= 0) {
           lh->fStrToken[tokStrength] = tok;
-        } else {
+        } else { /* The CE must be implicit, since it's not in the table */
           /* Error */
-          fprintf(stderr, "Error! couldn't find the CE!\n");
+          *status = U_INTERNAL_PROGRAM_ERROR;
         }
       }
 
@@ -535,7 +555,7 @@ U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UHash
   } 
 
   tok->toInsert = t[tok->strength];
-  ucol_inv_getGapPositions(lh);
+  ucol_inv_getGapPositions(src, lh, status);
 
 #if UCOL_DEBUG
   fprintf(stderr, "BaseCE: %08X %08X\n", lh->baseCE, lh->baseContCE);
@@ -662,7 +682,8 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
           init_collIterate(src->UCA, source, normSize, &s);
 
           for(;;) {
-            UCOL_GETNEXTCE(order, src->UCA, s, status);
+            order = ucol_getNextCE(src->UCA, &s, status);
+            /*UCOL_GETNEXTCE(order, src->UCA, s, status);*/
             if(order == UCOL_NO_MORE_CES) {
                 break;
             }
