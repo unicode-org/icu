@@ -168,9 +168,10 @@ $(TRANSLIT_FILES:.res =.res
 $(BRK_FILES:.brk" =.brk"
 )
 <<KEEP
-	move $(U_ICUDATA_NAME).dll $(DLL_OUTPUT)
-	move $(U_ICUDATA_NAME).lib $(TESTDATAOUT)\..\lib
-	move $(U_ICUDATA_NAME).dat ..\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat
+	copy "$(U_ICUDATA_NAME).dll" "$(DLL_OUTPUT)"
+	-@erase "$(U_ICUDATA_NAME).dll"
+	copy "$(U_ICUDATA_NAME).dat" "..\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat"
+	-@erase "$(U_ICUDATA_NAME).dat"
 
 
 
@@ -200,31 +201,16 @@ GODATA :
 
 # This is to remove all the data files
 CLEAN :
+	@echo Cleaning up the data files.
 	@cd "$(ICUDBLD)"
 	-@erase "*.cnv"
 	-@erase "*.res"
-	-@erase "$(TRANS)*.res"
-	-@erase "uprops*.*"
-	-@erase "unames*.*"
-	-@erase "unorm*.*"
-	-@erase "cnvalias*.*"
-	-@erase "tz*.*"
-	-@erase "ibm*_cnv.c"
-	-@erase "*_brk.c"
-	-@erase "icudt*.*"
 	-@erase "*.obj"
-	-@erase "sent.brk"
-	-@erase "char.brk"
-	-@erase "line.brk"
-	-@erase "word.brk"
-	-@erase "line_th.brk"
-	-@erase "word_th.brk"
-	-@erase "test*.*"
-	-@erase "base*.*"
-	-@erase $(U_ICUDATA_NAME).dll
-	@cd "$(DLL_OUTPUT)"
+	-@erase "*.brk"
+	-@erase "*.dat"
+	@cd "$(TESTDATAOUT)"
+	-@erase "*.dat"
 	-@erase "*.cnv"
-	@cd "$(TESTDATA)"
 	-@erase "*.res"
 	@cd "$(ICUTOOLS)"
 
