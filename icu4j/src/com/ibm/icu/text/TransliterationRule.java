@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2001/10/30 18:04:08 $
- * $Revision: 1.34 $
+ * $Date: 2001/11/02 17:46:05 $
+ * $Revision: 1.35 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.34 $ $Date: 2001/10/30 18:04:08 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.35 $ $Date: 2001/11/02 17:46:05 $
  */
 class TransliterationRule {
 
@@ -564,15 +564,17 @@ class TransliterationRule {
                     // If there was no match, that means that a quantifier
                     // matched zero-length.  E.g., x (a)* y matched "xy".
                     if (start >= 0) {
-                        // Adjust indices for segments in post context
-                        // for any inserted text between the key and
-                        // the post context.
-                        if (start >= keyLimit) {
-                            start += dest - keyLimit;
-                            limit += dest - keyLimit;
+                        if (start != limit) {
+                            // Adjust indices for segments in post context
+                            // for any inserted text between the key and
+                            // the post context.
+                            if (start >= keyLimit) {
+                                start += dest - keyLimit;
+                                limit += dest - keyLimit;
+                            }
+                            text.copy(start, limit, dest);
+                            dest += limit - start;
                         }
-                        text.copy(start, limit, dest);
-                        dest += limit - start;
                     }
                 }
                 oOutput += UTF16.getCharCount(c);
@@ -851,6 +853,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.35  2001/11/02 17:46:05  alan
+ * jitterbug 1426: eliminate NOP call to copy()
+ *
  * Revision 1.34  2001/10/30 18:04:08  alan
  * jitterbug 1406: make quantified segments behave like perl counterparts
  *

@@ -498,15 +498,17 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
                 // If there was no match, that means that a quantifier
                 // matched zero-length.  E.g., x (a)* y matched "xy".
                 if (start >= 0) {
-                    // Adjust indices for segments in post context
-                    // for any inserted text between the key and
-                    // the post context.
-                    if (start >= keyLimit) {
-                        start += dest - keyLimit;
-                        limit += dest - keyLimit;
+                    if (start != limit) {
+                        // Adjust indices for segments in post context
+                        // for any inserted text between the key and
+                        // the post context.
+                        if (start >= keyLimit) {
+                            start += dest - keyLimit;
+                            limit += dest - keyLimit;
+                        }
+                        text.copy(start, limit, dest);
+                        dest += limit - start;
                     }
-                    text.copy(start, limit, dest);
-                    dest += limit - start;
                 }
             }
             oOutput += UTF_CHAR_LENGTH(c);
