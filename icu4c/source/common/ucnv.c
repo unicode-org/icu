@@ -212,6 +212,15 @@ ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
     }
 }
 
+U_CAPI const char *ucnv_getStandardName(const char *name, const char *standard, UErrorCode *pErrorCode) {
+    if (!pErrorCode || U_FAILURE(*pErrorCode)) {
+	return NULL;
+    }
+
+    *pErrorCode = U_UNSUPPORTED_ERROR;
+    return NULL;
+}
+
 void   ucnv_getSubstChars (const UConverter * converter,
 			   char *mySubChar,
 			   int8_t * len,
