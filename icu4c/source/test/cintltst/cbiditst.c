@@ -219,7 +219,6 @@ testReordering(UBiDi *pBiDi, int testNumber) {
     UBiDiLevel levels[200];
     UTextOffset i, length=ubidi_getLength(pBiDi);
     UTextOffset runCount, visualIndex, logicalStart, runLength;
-    int result=0;
     UBool odd;
 
     if(length<=0) {
@@ -264,7 +263,7 @@ testReordering(UBiDi *pBiDi, int testNumber) {
 
     log_verbose("\n----%2d runs:", runCount);
     for(i=0; i<runCount; ++i) {
-        odd=ubidi_getVisualRun(pBiDi, i, &logicalStart, &runLength);
+        odd=(UBool)(ubidi_getVisualRun(pBiDi, i, &logicalStart, &runLength));
         log_verbose(" (%c @%d[%d])", odd ? 'R' : 'L', logicalStart, runLength);
     }
     log_verbose("\n");

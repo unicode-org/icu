@@ -51,7 +51,7 @@ itoa1(int32_t i, char* buf)
   /* Output digits in reverse order */
   p = buf;
   do {
-    *p++ = '0' + (i % 10);
+    *p++ = (char)('0' + (i % 10));
     i /= 10;
   }
   while(i);

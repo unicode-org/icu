@@ -48,11 +48,10 @@ void TestUDataOpen(){
    UDataMemory *result;
    UErrorCode status=U_ZERO_ERROR;
    const char* memMap[][2]={
-	   {"tz", "dat"},
-	   {"cnvalias", "dat"},
-	   {"unames",   "dat"},
-	   {"ibm-1141", "cnv"}
-	   
+       {"tz", "dat"},
+       {"cnvalias", "dat"},
+       {"unames",   "dat"},
+       {"ibm-1141", "cnv"}
    };
    const char* name = "test";
    const char* type="dat";
@@ -403,7 +402,6 @@ void TestUDataGetInfo() {
 
 void TestUDataGetMemory() {
 
-	FILE *fHandler =NULL;
 	UDataMemory *result;
 	const uint16_t *table=NULL;
 	uint16_t* intValue=0;

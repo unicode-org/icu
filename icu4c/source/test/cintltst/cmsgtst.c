@@ -8,7 +8,7 @@
 * File CMSGTST.C
 *
 * Modification History:
-*        Name                     Description            
+*        Name                     Description
 *     Madhu Katragadda              Creation
 *********************************************************************************
 */
@@ -317,17 +317,17 @@ void TestMsgFormatChoice()
         resultlength=resultLengthOut+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, 100., str);
+        if(u_strcmp(result, expected)==0)
+            log_verbose("PASS: MessagFormat successful on test#6\n");
+        else{
+            log_err("FAIL: Error in MessageFormat on test#6\n GOT %s EXPECTED %s\n", austrdup(result),
+                austrdup(expected) );
+        }
+        free(result);
     }
     if(U_FAILURE(status)){
         log_err("ERROR: failure in message format on test#6 : %s\n", myErrorName(status));
     }
-    if(u_strcmp(result, expected)==0)
-        log_verbose("PASS: MessagFormat successful on test#6\n");
-    else{
-        log_err("FAIL: Error in MessageFormat on test#6\n GOT %s EXPECTED %s\n", austrdup(result),
-            austrdup(expected) );
-    }
-    free(result);
 
     log_verbose("Testing message format with choice test #7\n:");
     u_uastrcpy(expected, "The disk MyDisk contains no files");
@@ -339,18 +339,19 @@ void TestMsgFormatChoice()
         resultlength=resultLengthOut+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, 0., str);
+
+        if(u_strcmp(result, expected)==0)
+            log_verbose("PASS: MessagFormat successful on test#7\n");
+        else{
+            log_err("FAIL: Error in MessageFormat on test#7\n GOT: %s EXPECTED %s\n", austrdup(result), 
+                austrdup(expected) );
+        }
+        free(result);
     }
     if(U_FAILURE(status)){
         log_err("ERROR: failure in message format on test#7 : %s\n", myErrorName(status));
     }
-    if(u_strcmp(result, expected)==0)
-        log_verbose("PASS: MessagFormat successful on test#7\n");
-    else{
-        log_err("FAIL: Error in MessageFormat on test#7\n GOT: %s EXPECTED %s\n", austrdup(result), 
-            austrdup(expected) );
-    }
 
-    free(result);
     log_verbose("Testing message format with choice test #8\n:");
     u_uastrcpy(expected, "The disk MyDisk contains one file");
     resultlength=0;
@@ -361,18 +362,20 @@ void TestMsgFormatChoice()
         resultlength=resultLengthOut+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, 1., str);
+
+        if(u_strcmp(result, expected)==0)
+            log_verbose("PASS: MessagFormat successful on test#8\n");
+        else{
+            log_err("FAIL: Error in MessageFormat on test#8\n GOT %s EXPECTED: %s\n", austrdup(result), 
+                austrdup(expected) );
+        }
+
+        free(result);
     }
     if(U_FAILURE(status)){
         log_err("ERROR: failure in message format on test#8 : %s\n", myErrorName(status));
     }
-    if(u_strcmp(result, expected)==0)
-        log_verbose("PASS: MessagFormat successful on test#8\n");
-    else{
-        log_err("FAIL: Error in MessageFormat on test#8\n GOT %s EXPECTED: %s\n", austrdup(result), 
-            austrdup(expected) );
-    }
 
-    free(result);
     free(str);
 
 }
@@ -479,7 +482,6 @@ void TestMessageFormatWithValist( void )
 void CallParseMessage(const char* locale, UChar* pattern, int32_t patternLength, 
                        UChar* source, int32_t sourceLength, UErrorCode *status, ...)
 {
-    int32_t len = 0;
     va_list ap;
     va_start(ap, status);
     u_vparseMessage(locale, pattern, patternLength, source, sourceLength, ap, status);
