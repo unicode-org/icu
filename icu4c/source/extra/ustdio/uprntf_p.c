@@ -821,6 +821,9 @@ u_printf_scidbl_handler(const u_printf_stream_handler  *handler,
     {
         /* use 'e' or 'E' notation */
         scidbl_info.fSpec = scidbl_info.fSpec - 2;
+        if (scidbl_info.fPrecision == -1) {
+            scidbl_info.fPrecision = 5;
+        }
         /* call the scientific handler */
         return u_printf_scientific_handler(handler, context, formatBundle, &scidbl_info, args);
     }
