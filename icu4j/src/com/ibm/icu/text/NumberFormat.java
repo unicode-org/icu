@@ -376,10 +376,13 @@ public abstract class NumberFormat extends UFormat {
 
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Parses text from the given string as a CurrencyAmount.  This
-     * method will fail if this format is not a currency format, that
-     * is, if it does not contain the currency pattern symbol (U+00A4)
-     * in its prefix or suffix.
+     * Parses text from the given string as a CurrencyAmount.  Unlike
+     * the parse() method, this method will attempt to parse a generic
+     * currency name, searching for a match of this object's locale's
+     * currency display names, or for a 3-letter ISO currency code.
+     * This method will fail if this format is not a currency format,
+     * that is, if it does not contain the currency pattern symbol
+     * (U+00A4) in its prefix or suffix.
      *
      * @param text the string to parse
      * @param pos input-output position; on input, the position within
@@ -387,36 +390,12 @@ public abstract class NumberFormat extends UFormat {
      * on output, the position after the last matched character. If
      * the parse fails, the position in unchanged upon output.
      * @return a CurrencyAmount, or null upon failure
-     * @draft ICU 3.0
+     * @internal
      */
-    public CurrencyAmount parseCurrency(String text, ParsePosition pos) {
+    CurrencyAmount parseCurrency(String text, ParsePosition pos) {
         // Default implementation only -- subclasses should override
         Number n = parse(text, pos);
         return n == null ? null : new CurrencyAmount(n, getEffectiveCurrency());
-    }
-
-    /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Parses text from the beginning of the given string as a
-     * CurrencyAmount.  The method might not use the entire text of
-     * the given string.  This method will fail if this format is not
-     * a currency format, that is, if it does not contain the currency
-     * pattern symbol (U+00A4) in its prefix or suffix.
-     *
-     * @param text the string to parse
-     * @return a non-null CurrencyAmount
-     * @exception ParseException if the beginning of the specified string 
-     * cannot be parsed.
-     * @draft ICU 3.0
-     */
-    public CurrencyAmount parseCurrency(String text) throws ParseException {
-        ParsePosition pos = new ParsePosition(0);
-        CurrencyAmount result = parseCurrency(text, pos);
-        if (pos.getIndex() == 0) {
-            throw new ParseException("Unparseable currency: \"" + text + '"',
-                                     pos.getErrorIndex());
-        }
-        return result;
     }
 
     /**
