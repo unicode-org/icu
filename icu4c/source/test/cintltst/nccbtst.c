@@ -189,6 +189,11 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
             expskipIBM_930, sizeof(expskipIBM_930), "ibm-930",
             UCNV_FROM_U_CALLBACK_SKIP, toIBM930Offsskip , NULL, 0))
         log_err("u-> ibm-930 with skip did not match.\n");
+    
+    if(!testConvertFromUnicodeWithContext(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
+            expskipIBM_930, sizeof(expskipIBM_930), "ibm-930",
+            UCNV_FROM_U_CALLBACK_SKIP, toIBM930Offsskip , NULL, 0,"i", U_ILLEGAL_CHAR_FOUND))
+        log_err("u-> ibm-930 with skip did not match.\n");
 
     {
         static const UChar fromU[] = { 0x61, 0xff5e, 0x62, 0x6d63, 0xff5e, 0x6d64, 0x63, 0xff5e, 0x6d66 };
@@ -516,9 +521,16 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
             UCNV_TO_U_CALLBACK_SKIP, fromIBM943Offs, NULL, 0 ))
         log_err("ibm-943->u with skip did not match.\n");
 
+
     if(!testConvertToUnicode(expskipIBM_930, sizeof(expskipIBM_930),
              IBM_930skiptoUnicode, sizeof(IBM_930skiptoUnicode)/sizeof(IBM_930skiptoUnicode[0]),"ibm-930",
             UCNV_TO_U_CALLBACK_SKIP, fromIBM930Offs, NULL, 0 ))
+        log_err("ibm-930->u with skip did not match.\n");
+
+    
+    if(!testConvertToUnicodeWithContext(expskipIBM_930, sizeof(expskipIBM_930),
+             IBM_930skiptoUnicode, sizeof(IBM_930skiptoUnicode)/sizeof(IBM_930skiptoUnicode[0]),"ibm-930",
+            UCNV_TO_U_CALLBACK_SKIP, fromIBM930Offs, NULL, 0,"i",U_ILLEGAL_CHAR_FOUND ))
         log_err("ibm-930->u with skip did not match.\n");
 
     {
@@ -684,7 +696,10 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
             UCNV_TO_U_CALLBACK_SKIP, from_EBCIDIC_STATEFULOffsets, NULL, 0 ))
         log_err("EBCIDIC_STATEFUL->u with skip did not match.\n");
 
-
+        if(!testConvertToUnicodeWithContext(sampleTxtEBCIDIC_STATEFUL, sizeof(sampleTxtEBCIDIC_STATEFUL),
+             EBCIDIC_STATEFUL_toUnicode, sizeof(EBCIDIC_STATEFUL_toUnicode)/sizeof(EBCIDIC_STATEFUL_toUnicode[0]),"ibm-930",
+            UCNV_TO_U_CALLBACK_SKIP, from_EBCIDIC_STATEFULOffsets, NULL, 0,"i",U_ILLEGAL_CHAR_FOUND ))
+        log_err("EBCIDIC_STATEFUL->u with skip did not match.\n");
 
         if(!testConvertToUnicode(sampleTxt_euc_jp, sizeof(sampleTxt_euc_jp),
                  euc_jptoUnicode, sizeof(euc_jptoUnicode)/sizeof(euc_jptoUnicode[0]),"euc-jp",
@@ -1098,6 +1113,25 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
             0xfd, 0xfe, 0xfd, 0xfe,
             0x61, 0xe6, 0xca, 0x8a,
         };
+
+        /*ISO-2022-JP*/
+        UChar iso_2022_jp_inputText[]={ 0x0041, 0x00E9, 0x0042,0x00E9,0x3000 };
+        const uint8_t to_iso_2022_jp[]={  
+               0x41,   
+               0x1a, 
+               0x42,
+               0x1a,
+               0x1b,  0x24,   0x42,   0x21,   0x21, 
+        };
+
+        int32_t from_iso_2022_jpOffs [] ={ 
+            0,
+            1,
+            2,
+            3,
+            4,4,4,4,4
+        };
+
         int32_t from_euc_twOffs [] ={ 0, 1, 1, 2, 2, 2, 2, 3, 3, 5, 5, 6, 7, 7, 8,};
 
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
@@ -1113,7 +1147,13 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
         if(!testConvertFromUnicode(euc_tw_inputText, sizeof(euc_tw_inputText)/sizeof(euc_tw_inputText[0]),
                 to_euc_tw, sizeof(to_euc_tw), "euc-tw",
                 UCNV_FROM_U_CALLBACK_SUBSTITUTE, from_euc_twOffs, NULL, 0 ))
-            log_err("u-> euc-tw with substitute did not match.\n");  
+            log_err("u-> euc-tw with substitute did not match.\n");
+
+        if(!testConvertFromUnicodeWithContext(iso_2022_jp_inputText, sizeof(iso_2022_jp_inputText)/sizeof(iso_2022_jp_inputText[0]),
+                to_iso_2022_jp, sizeof(to_iso_2022_jp), "iso-2022-jp",
+                UCNV_FROM_U_CALLBACK_SUBSTITUTE, from_iso_2022_jpOffs, NULL, 0,"i",U_ILLEGAL_CHAR_FOUND ))
+            log_err("u-> iso-2022-jp with substitute did not match.\n");
+        
 
     }
     log_verbose("Testing fromUnicode for SCSU with UCNV_FROM_U_CALLBACK_SUBSTITUTE \n");
@@ -1133,10 +1173,23 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
             2,
 
         };
+        const uint8_t to_SCSU_1[]={    
+            0x41,
+           
+        };
+        int32_t from_SCSUOffs_1 [] ={ 
+            0,
+
+        };
         if(!testConvertFromUnicode(SCSU_inputText, sizeof(SCSU_inputText)/sizeof(SCSU_inputText[0]),
                 to_SCSU, sizeof(to_SCSU), "SCSU",
                 UCNV_FROM_U_CALLBACK_SUBSTITUTE, from_SCSUOffs, NULL, 0 ))
             log_err("u-> SCSU with skip did not match.\n");
+                
+        if(!testConvertFromUnicodeWithContext(SCSU_inputText, sizeof(SCSU_inputText)/sizeof(SCSU_inputText[0]),
+                to_SCSU_1, sizeof(to_SCSU_1), "SCSU",
+                UCNV_FROM_U_CALLBACK_SUBSTITUTE, from_SCSUOffs_1, NULL, 0,"i",U_ILLEGAL_CHAR_FOUND ))
+            log_err("u-> SCSU with substitute did not match.\n");
 
     
     }
@@ -1200,6 +1253,13 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
            euc_twtoUnicode, sizeof(euc_twtoUnicode)/sizeof(euc_twtoUnicode[0]),"euc-tw",
           UCNV_TO_U_CALLBACK_SUBSTITUTE, from_euc_twOffs, NULL, 0 ))
             log_err("euc-tw->u with substitute  did not match.\n");
+
+        
+        if(!testConvertToUnicodeWithContext(sampleTxt_euc_jp, sizeof(sampleTxt_euc_jp),
+           euc_jptoUnicode, sizeof(euc_jptoUnicode)/sizeof(euc_jptoUnicode[0]),"euc-jp",
+          UCNV_TO_U_CALLBACK_SUBSTITUTE, from_euc_jpOffs, NULL, 0 ,"i", U_ILLEGAL_CHAR_FOUND))
+            log_err("euc-jp->u with substitute did not match.\n");
+
 
 
     }
@@ -1677,6 +1737,8 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             log_err("u-> iso_2022_jp with subst with value did not match.\n");
         /*ESCAPE OPTIONS*/
         {
+             /* surrogate pair*/
+             UChar iso_2022_jp_inputText2[]={ 0x3000, 0xD84D, 0xDC56, 0x3001,0xD84D,0xDC56, 0x0042,0x0901c } ;
             const uint8_t to_iso_2022_jp2_v2[]={  
                     0x1b,   0x24,   0x42,   0x21,   0x21,   
                     0x1b,   0x28,   0x42,   0x26,   0x23,   0x31,  0x34,   0x34,   0x34,   0x37, 0x30, 0x3b,   
@@ -1685,6 +1747,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                     0x1b,   0x28,   0x42,   0x26,   0x23,  0x31,  0x34,   0x34,   0x34,   0x37, 0x30, 0x3b, 
                     
                     0x42,
+                    0x26,   0x23,   0x33,   0x36,   0x38,   0x39,   0x32,   0x3b, 
                     };
 
             int32_t from_iso_2022_jpOffs2_v2 [] ={ 
@@ -1695,14 +1758,17 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                 4,4,4,4,4,4,4,4,4,4,4,4,
 
                 6,
+                7,7,7,7,7,7,7,7,7
             };
 
             if(!testConvertFromUnicodeWithContext(iso_2022_jp_inputText2, sizeof(iso_2022_jp_inputText2)/sizeof(iso_2022_jp_inputText2[0]),
                     to_iso_2022_jp2_v2, sizeof(to_iso_2022_jp2_v2), "iso-2022-jp",
                     UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs2_v2, NULL, 0,UCNV_ESCAPE_XML_DEC,U_ZERO_ERROR ))
-                log_err("u-> iso-2022-jp with skip & UCNV_ESCAPE_XML_DEC did not match.\n"); 
+                log_err("u-> iso-2022-jp with sub & UCNV_ESCAPE_XML_DEC did not match.\n"); 
         }
         {
+             /* surrogate pair*/
+             UChar iso_2022_jp_inputText2[]={ 0x3000, 0xD84D, 0xDC56, 0x3001,0xD84D,0xDC56, 0x0042,0x0901c } ;
              const uint8_t to_iso_2022_jp2_v3[]={  
                     0x1b,   0x24,   0x42,   0x21,   0x21,   
                     0x1b,   0x28,   0x42,   0x26,   0x23,   0x78,  0x32,   0x33,   0x34,   0x35, 0x36, 0x3b ,  
@@ -1711,6 +1777,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                     0x1b,   0x28,   0x42,   0x26,   0x23,   0x78,  0x32,   0x33,   0x34,   0x35, 0x36, 0x3b ,
                     
                     0x42,
+                    0x26,   0x23,   0x78,   0x39,   0x30,   0x31,   0x43,   0x3b,
                     };
 
             int32_t from_iso_2022_jpOffs2_v3 [] ={ 
@@ -1721,14 +1788,16 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                 4,4,4,4,4,4,4,4,4,4,4,4,
 
                 6,
+                7,7,7,7,7,7,7,7
             };
             if(!testConvertFromUnicodeWithContext(iso_2022_jp_inputText2, sizeof(iso_2022_jp_inputText2)/sizeof(iso_2022_jp_inputText2[0]),
                 to_iso_2022_jp2_v3, sizeof(to_iso_2022_jp2_v3), "iso-2022-jp",
                 UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs2_v3, NULL, 0,UCNV_ESCAPE_XML_HEX,U_ZERO_ERROR ))
-                log_err("u-> iso-2022-jp with skip & UCNV_ESCAPE_XML_HEX did not match.\n"); 
+                log_err("u-> iso-2022-jp with sub & UCNV_ESCAPE_XML_HEX did not match.\n"); 
 
         }
         {
+            UChar iso_2022_cn_inputText4[]={ 0x3000, 0xD84D, 0xDC56, 0x3001,0xD84D,0xDC56, 0x0042,0x0902};
             const uint8_t to_iso_2022_cn4_v2[]={  
                              0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
                              0x0f,   0x5c,   0x75,   0x44,   0x38,   0x34,   0x44,   
@@ -1736,7 +1805,8 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                              0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22,   
                              0x0f,   0x5c,   0x75,   0x44,   0x38,   0x34,   0x44,   
                              0x5c,   0x75,   0x44,   0x43,   0x35,   0x36,   
-                             0x42, 
+                             0x42,
+                             0x0f,   0x5c,   0x75,   0x30,   0x39,   0x30,   0x32,
                              };
             int32_t from_iso_2022_cnOffs4_v2 [] ={ 
                 0,0,0,0,0,0,0,
@@ -1746,12 +1816,59 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                 4,4,4,4,4,4,4,
                 4,4,4,4,4,4,
                 6, 
-
+                7,7,7,7,7,7,7
             };
             if(!testConvertFromUnicodeWithContext(iso_2022_cn_inputText4, sizeof(iso_2022_cn_inputText4)/sizeof(iso_2022_cn_inputText4[0]),
                 to_iso_2022_cn4_v2, sizeof(to_iso_2022_cn4_v2), "iso-2022-cn",
                 UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs4_v2, NULL, 0,UCNV_ESCAPE_JAVA,U_ZERO_ERROR ))
-                log_err("u-> iso-2022-cn with skip & UCNV_ESCAPE_JAVA did not match.\n"); 
+                log_err("u-> iso-2022-cn with sub & UCNV_ESCAPE_JAVA did not match.\n"); 
+
+        }
+        {
+            UChar iso_2022_cn_inputText4[]={ 0x3000, 0xD84D, 0xDC56, 0x3001,0xD84D,0xDC56, 0x0042,0x0902};
+            const uint8_t to_iso_2022_cn4_v2[]={  
+                                0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
+                                0x0f,   0x7b,   0x55,   0x2b,   0x32,   0x33,   0x34,   0x35,   0x36,   0x7d,   
+                                0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22,   
+                                0x0f,   0x7b,   0x55,   0x2b,   0x32,   0x33,   0x34,   0x35,   0x36,   0x7d,   
+                                0x42,   
+                                0x0f,   0x7b,   0x55,   0x2b,   0x30,   0x39,   0x30,   0x32,   0x7d
+                             };
+            int32_t from_iso_2022_cnOffs4_v2 [] ={ 
+                    0,  0,  0,  0,  0,  0,  0,  
+                    1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  
+                    3,  3,  3,  3,  3,  3,  3,  
+                    4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  
+                    6, 
+                    7,  7,  7,  7,  7,  7,  7,  7,  7,
+            };
+            if(!testConvertFromUnicodeWithContext(iso_2022_cn_inputText4, sizeof(iso_2022_cn_inputText4)/sizeof(iso_2022_cn_inputText4[0]),
+                to_iso_2022_cn4_v2, sizeof(to_iso_2022_cn4_v2), "iso-2022-cn",
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs4_v2, NULL, 0,UCNV_ESCAPE_UNICODE,U_ZERO_ERROR ))
+                log_err("u-> iso-2022-cn with sub & UCNV_ESCAPE_UNICODE did not match.\n"); 
+
+        }
+        {
+            UChar iso_2022_cn_inputText4[]={ 0x3000, 0xD84D, 0xDC56, 0x3001,0xD84D,0xDC56, 0x0042,0x0902};
+            const uint8_t to_iso_2022_cn4_v2[]={  
+                                0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
+                                0x0f,   0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   0x25,   0x55,   0x44,   0x43,   0x35,   0x36,   
+                                0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22,   
+                                0x0f,   0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   0x25,   0x55,   0x44,   0x43,   0x35,   0x36,   
+                                0x42,   0x0f,   0x25,   0x55,   0x30,   0x39,   0x30,   0x32, 
+                            };
+            int32_t from_iso_2022_cnOffs4_v2 [] ={ 
+                                0,  0,  0,  0,  0,  0,  0,  
+                                1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  
+                                3,  3,  3,  3,  3,  3,  3,  
+                                4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  
+                                6,  
+                                7,  7,  7,  7,  7,  7,  7,
+            };
+            if(!testConvertFromUnicodeWithContext(iso_2022_cn_inputText4, sizeof(iso_2022_cn_inputText4)/sizeof(iso_2022_cn_inputText4[0]),
+                to_iso_2022_cn4_v2, sizeof(to_iso_2022_cn4_v2), "iso-2022-cn",
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs4_v2, NULL, 0,"K" ,U_ZERO_ERROR ))
+                log_err("u-> iso-2022-cn with sub & K did not match.\n"); 
 
         }
         {
@@ -1975,6 +2092,11 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         if(!testConvertToUnicode(sampleTxt_iso_2022_jp, sizeof(sampleTxt_iso_2022_jp),
                  iso_2022_jptoUnicode, sizeof(iso_2022_jptoUnicode)/sizeof(iso_2022_jptoUnicode[0]),"iso-2022-jp",
                 UCNV_TO_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs, NULL, 0))
+            log_err("iso-2022-jp->u with substitute with value did not match.\n");
+       
+        if(!testConvertToUnicodeWithContext(sampleTxt_iso_2022_jp, sizeof(sampleTxt_iso_2022_jp),
+                 iso_2022_jptoUnicode, sizeof(iso_2022_jptoUnicode)/sizeof(iso_2022_jptoUnicode[0]),"iso-2022-jp",
+                UCNV_TO_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs, NULL, 0,"K",U_ZERO_ERROR))
             log_err("iso-2022-jp->u with substitute with value did not match.\n");
         
         {/* test UCNV_TO_U_CALLBACK_ESCAPE with options */
@@ -2545,7 +2667,7 @@ UBool testConvertFromUnicodeWithContext(const UChar *source, int sourceLen,  con
     if(mySubChar != NULL){
         ucnv_setSubstChars(conv, mySubChar, len, &status);
         if (U_FAILURE(status))  { 
-            log_err("FAILURE in setting the callback Function! %s\n", myErrorName(status));
+            log_err("FAILURE in setting substitution chars! %s\n", myErrorName(status));
         }
     }
     /*------------*/
