@@ -19,13 +19,64 @@ int8_t TestUtility::getScript(int8_t block) {
   return blockToScript[block];
 }
 
+struct Split {
+    UChar ch;
+    int8_t i1;
+    int8_t i2;
+};
+
+static const Split gTestUtilitySplit[] = {
+    {0x0250, 4, 5}, // -1
+    {0x02B0, 5, 6}, // -2
+    {0x0370, 7, 8}, // -3
+    {0x0530, 0, 10}, // -4
+    {0x0590, 10, 11}, // -5
+    {0x0750, 13, 0}, // -6
+    {0x07C0, 14, 0}, // -7
+    {0x10A0, 28, 29}, // -8
+    {0x13A0, 0, 32}, // -9
+    {0x16A0, 34, 35}, // -10
+    {0x18B0, 37, 0}, // -11
+    {0x2070, 40, 41}, // -12
+    {0x20A0, 41, -31}, // -13
+    {0x2150, 44, 45}, // -14
+    {0x2190, 45, 46}, // -15
+    {0x2440, 49, -32}, // -16
+    {0x25A0, 53, 54}, // -17
+    {0x27C0, 56, 0}, // -18
+    {0x2FE0, 59, -33}, // -19
+    {0x3040, 61, 62}, // -20
+    {0x30A0, 62, 63}, // -21
+    {0x3130, 64, 65}, // -22
+    {0x3190, 65, -34}, // -23
+    {0x4DB6, 70, 0}, // -24
+    {0xA490, 72, -35}, // -25
+    {0xD7A4, 74, 0}, // -26
+    {0xFB50, 80, 81}, // -27
+    {0xFE20, 0, -36}, // -28
+    {0xFEFF, 85, 86}, // -29
+    {0xFFF0, 87, -37}, // -30
+    {0x20D0, 42, 43}, // -31
+    {0x2460, 50, 51}, // -32
+    {0x2FF0, 0, 60}, // -33
+    {0x31A0, 66, -38}, // -34
+    {0xA4D0, 73, 0}, //-35
+    {0xFE30, 82, -39}, //-36
+    {0xFFFE, 88, 0}, //-37
+    {0x31C0, 67, 0}, // -38
+    {0xFE50, 83, -40}, //-39
+    {0xFE70, 84, 85} // -40
+};
+
 int8_t TestUtility::getBlock(UChar c) {
   int32_t index = c >> 7;
   int8_t block = charToBlock[index];
   while (block < 0) { // take care of exceptions, blocks split across 128 boundaries
-      const Split tuple = split[-block-1];
-      if (c < tuple.ch) block = tuple.i1;
-      else block = tuple.i2;
+      const Split tuple = gTestUtilitySplit[-block-1];
+      if (c < tuple.ch)
+          block = tuple.i1;
+      else
+          block = tuple.i2;
   }
   return block;
 }
@@ -157,49 +208,6 @@ const int8_t TestUtility::blockToScript[] = {
     COMMON_SCRIPT, // 86, SPECIALS
     COMMON_SCRIPT, // 87, HALFWIDTH_AND_FULLWIDTH_FORMS
     COMMON_SCRIPT, // 88, SPECIALS
-};
-
-const TestUtility::Split TestUtility::split[] = {
-    {0x0250, 4, 5}, // -1
-    {0x02B0, 5, 6}, // -2
-    {0x0370, 7, 8}, // -3
-    {0x0530, 0, 10}, // -4
-    {0x0590, 10, 11}, // -5
-    {0x0750, 13, 0}, // -6
-    {0x07C0, 14, 0}, // -7
-    {0x10A0, 28, 29}, // -8
-    {0x13A0, 0, 32}, // -9
-    {0x16A0, 34, 35}, // -10
-    {0x18B0, 37, 0}, // -11
-    {0x2070, 40, 41}, // -12
-    {0x20A0, 41, -31}, // -13
-    {0x2150, 44, 45}, // -14
-    {0x2190, 45, 46}, // -15
-    {0x2440, 49, -32}, // -16
-    {0x25A0, 53, 54}, // -17
-    {0x27C0, 56, 0}, // -18
-    {0x2FE0, 59, -33}, // -19
-    {0x3040, 61, 62}, // -20
-    {0x30A0, 62, 63}, // -21
-    {0x3130, 64, 65}, // -22
-    {0x3190, 65, -34}, // -23
-    {0x4DB6, 70, 0}, // -24
-    {0xA490, 72, -35}, // -25
-    {0xD7A4, 74, 0}, // -26
-    {0xFB50, 80, 81}, // -27
-    {0xFE20, 0, -36}, // -28
-    {0xFEFF, 85, 86}, // -29
-    {0xFFF0, 87, -37}, // -30
-    {0x20D0, 42, 43}, // -31
-    {0x2460, 50, 51}, // -32
-    {0x2FF0, 0, 60}, // -33
-    {0x31A0, 66, -38}, // -34
-    {0xA4D0, 73, 0}, //-35
-    {0xFE30, 82, -39}, //-36
-    {0xFFFE, 88, 0}, //-37
-    {0x31C0, 67, 0}, // -38
-    {0xFE50, 83, -40}, //-39
-    {0xFE70, 84, 85} // -40
 };
 
 const int8_t TestUtility::charToBlock[] = {
