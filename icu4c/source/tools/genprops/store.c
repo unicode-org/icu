@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -27,9 +27,18 @@
 #include "utrie.h"
 #include "unicode/udata.h"
 #include "unewdata.h"
+#include "uprops.h"
 #include "genprops.h"
 
 #define DO_DEBUG_OUT 0
+
+/*
+ * ### TODO
+ * document structure with additional properties
+ * increment version number
+ * use index enums in uchar.c
+ * improve UTrie compaction: remove identical data blocks before folding! - need to remember which ones are skipped?!
+ */
 
 /* Unicode character properties file format ------------------------------------
 
@@ -739,7 +748,7 @@ compareProps(const void *l, const void *r) {
 /* generate output data ----------------------------------------------------- */
 
 /* folding value: just store the offset (16 bits) if there is any non-0 entry */
-static uint32_t U_CALLCONV
+U_CAPI uint32_t U_EXPORT2
 getFoldedPropsValue(UNewTrie *trie, UChar32 start, int32_t offset) {
     uint32_t value;
     UChar32 limit;
@@ -768,11 +777,12 @@ generateData(const char *dataDir) {
         0, 0, 0, 0
     };
     static uint8_t trieBlock[40000];
+    static uint8_t additionalProps[40000];
 
     UNewDataMemory *pData;
     UErrorCode errorCode=U_ZERO_ERROR;
     uint32_t size;
-    int32_t trieSize, offset;
+    int32_t trieSize, additionalPropsSize, offset;
     long dataLength;
 
     compactProps();
@@ -788,20 +798,18 @@ generateData(const char *dataDir) {
     /* round up trie size to 4-alignement */
     trieSize=(trieSize+3)&~3;
     offset+=trieSize>>2;
-    indexes[0]=offset;                      /* uint32_t offset to props[] */
+    indexes[UPROPS_PROPS32_INDEX]=offset;   /* uint32_t offset to props[] */
 
     offset+=propsTop;
-    indexes[1]=offset;                      /* uint32_t offset to exceptions[] */
+    indexes[UPROPS_EXCEPTIONS_INDEX]=offset;/* uint32_t offset to exceptions[] */
 
     offset+=exceptionsTop;                  /* uint32_t offset to the first unit after exceptions[] */
-    indexes[2]=offset;
+    indexes[UPROPS_EXCEPTIONS_TOP_INDEX]=offset;
 
     /* round up UChar count to 4-alignement */
     ucharsTop=(ucharsTop+1)&~1;
     offset+=(uint16_t)(ucharsTop/2);        /* uint32_t offset to the first unit after uchars[] */
-    indexes[3]=offset;
-
-    size=4*offset;                          /* total size of data */
+    indexes[UPROPS_ADDITIONAL_TRIE_INDEX]=offset;
 
     if(beVerbose) {
         printf("trie size in bytes:                    %5u\n", trieSize);
@@ -809,6 +817,12 @@ generateData(const char *dataDir) {
         printf("number of code points with exceptions: %5u\n", exceptionsCount);
         printf("size in bytes of exceptions:           %5u\n", 4*exceptionsTop);
         printf("number of UChars for special mappings: %5u\n", ucharsTop);
+    }
+
+    additionalPropsSize=writeAdditionalData(additionalProps, sizeof(additionalProps), indexes);
+
+    size=4*offset+additionalPropsSize;      /* total size of data */
+    if(beVerbose) {
         printf("data size:                            %6lu\n", (unsigned long)size);
     }
 
@@ -825,6 +839,7 @@ generateData(const char *dataDir) {
     udata_writeBlock(pData, props32, 4*propsTop);
     udata_writeBlock(pData, exceptions, 4*exceptionsTop);
     udata_writeBlock(pData, uchars, 2*ucharsTop);
+    udata_writeBlock(pData, additionalProps, additionalPropsSize);
 
     /* finish up */
     dataLength=udata_finish(pData, &errorCode);

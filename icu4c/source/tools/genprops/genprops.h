@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -18,6 +18,7 @@
 #define __GENPROPS_H__
 
 #include "unicode/utypes.h"
+#include "utrie.h"
 
 /* file definitions */
 #define DATA_NAME "uprops"
@@ -59,6 +60,9 @@ extern const char *const
 genCategoryNames[];
 
 /* prototypes */
+U_CFUNC void
+writeUCDFilename(char *basename, const char *filename, const char *suffix);
+
 extern void
 setUnicodeVersion(const char *v);
 
@@ -74,8 +78,18 @@ addProps(uint32_t c, uint32_t props);
 extern void
 repeatProps(uint32_t first, uint32_t last, uint32_t props);
 
+U_CAPI uint32_t U_EXPORT2
+getFoldedPropsValue(UNewTrie *trie, UChar32 start, int32_t offset);
+
 extern void
 generateData(const char *dataDir);
+
+/* props2.c */
+U_CFUNC void
+generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pErrorCode);
+
+U_CFUNC int32_t
+writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[16]);
 
 #endif
 

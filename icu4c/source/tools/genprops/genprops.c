@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -135,48 +135,24 @@ main(int argc, char* argv[]) {
     initStore();
 
     /* process BidiMirroring.txt */
-    if(suffix==NULL) {
-        uprv_strcpy(basename, "BidiMirroring.txt");
-    } else {
-        uprv_strcpy(basename, "BidiMirroring");
-        basename[6]='-';
-        uprv_strcpy(basename+7, suffix);
-        uprv_strcat(basename+7, ".txt");
-    }
+    writeUCDFilename(basename, "BidiMirroring", suffix);
     parseBidiMirroring(filename, &errorCode);
 
     /* process SpecialCasing.txt */
-    if(suffix==NULL) {
-        uprv_strcpy(basename, "SpecialCasing.txt");
-    } else {
-        uprv_strcpy(basename, "SpecialCasing");
-        basename[13]='-';
-        uprv_strcpy(basename+14, suffix);
-        uprv_strcat(basename+14, ".txt");
-    }
+    writeUCDFilename(basename, "SpecialCasing", suffix);
     parseSpecialCasing(filename, &errorCode);
 
     /* process CaseFolding.txt */
-    if(suffix==NULL) {
-        uprv_strcpy(basename, "CaseFolding.txt");
-    } else {
-        uprv_strcpy(basename, "CaseFolding");
-        basename[11]='-';
-        uprv_strcpy(basename+12, suffix);
-        uprv_strcat(basename+12, ".txt");
-    }
+    writeUCDFilename(basename, "CaseFolding", suffix);
     parseCaseFolding(filename, &errorCode);
 
     /* process UnicodeData.txt */
-    if(suffix==NULL) {
-        uprv_strcpy(basename, "UnicodeData.txt");
-    } else {
-        uprv_strcpy(basename, "UnicodeData");
-        basename[11]='-';
-        uprv_strcpy(basename+12, suffix);
-        uprv_strcat(basename+12, ".txt");
-    }
+    writeUCDFilename(basename, "UnicodeData", suffix);
     parseDB(filename, &errorCode);
+
+    /* process additional properties files */
+    *basename=0;
+    generateAdditionalProperties(filename, suffix, &errorCode);
 
     /* process parsed data */
     if(U_SUCCESS(errorCode)) {
@@ -187,12 +163,16 @@ main(int argc, char* argv[]) {
     return errorCode;
 }
 
-static const char *
-skipWhitespace(const char *s) {
-    while(*s==' ' || *s=='\t') {
-        ++s;
+U_CFUNC void
+writeUCDFilename(char *basename, const char *filename, const char *suffix) {
+    int32_t length=uprv_strlen(filename);
+    uprv_strcpy(basename, filename);
+    if(suffix!=NULL) {
+        basename[length++]='-';
+        uprv_strcpy(basename+length, suffix);
+        length+=uprv_strlen(suffix);
     }
-    return s;
+    uprv_strcpy(basename+length, ".txt");
 }
 
 /*
@@ -217,7 +197,7 @@ parseCodePoints(const char *s,
     count=0;
     i=1; /* leave dest[0] for the length value */
     for(;;) {
-        s=skipWhitespace(s);
+        s=u_skipWhitespace(s);
         if(*s==';' || *s==0) {
             dest[0]=(UChar)(i-1);
             return count;
@@ -321,8 +301,8 @@ specialCasingLineFn(void *context,
     char *end;
 
     /* get code point */
-    specialCasings[specialCasingCount].code=(uint32_t)uprv_strtoul(skipWhitespace(fields[0][0]), &end, 16);
-    end=(char *)skipWhitespace(end);
+    specialCasings[specialCasingCount].code=(uint32_t)uprv_strtoul(u_skipWhitespace(fields[0][0]), &end, 16);
+    end=(char *)u_skipWhitespace(end);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         fprintf(stderr, "genprops: syntax error in SpecialCasing.txt field 0 at %s\n", fields[0][0]);
         *pErrorCode=U_PARSE_ERROR;
@@ -330,7 +310,7 @@ specialCasingLineFn(void *context,
     }
 
     /* is this a complex mapping? */
-    if(*skipWhitespace(fields[4][0])!=0) {
+    if(*u_skipWhitespace(fields[4][0])!=0) {
         /* there is some condition text in the fifth field */
         specialCasings[specialCasingCount].isComplex=TRUE;
 
@@ -416,8 +396,8 @@ caseFoldingLineFn(void *context,
     char status;
 
     /* get code point */
-    caseFoldings[caseFoldingCount].code=(uint32_t)uprv_strtoul(skipWhitespace(fields[0][0]), &end, 16);
-    end=(char *)skipWhitespace(end);
+    caseFoldings[caseFoldingCount].code=(uint32_t)uprv_strtoul(u_skipWhitespace(fields[0][0]), &end, 16);
+    end=(char *)u_skipWhitespace(end);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         fprintf(stderr, "genprops: syntax error in CaseFolding.txt field 0 at %s\n", fields[0][0]);
         *pErrorCode=U_PARSE_ERROR;
@@ -425,7 +405,7 @@ caseFoldingLineFn(void *context,
     }
 
     /* get the status of this mapping */
-    caseFoldings[caseFoldingCount].status=status=*skipWhitespace(fields[1][0]);
+    caseFoldings[caseFoldingCount].status=status=*u_skipWhitespace(fields[1][0]);
     if(status!='L' && status!='E' && status!='C' && status!='S' && status!='F' && status!='I') {
         fprintf(stderr, "genprops: unrecognized status field in CaseFolding.txt at %s\n", fields[0][0]);
         *pErrorCode=U_PARSE_ERROR;
