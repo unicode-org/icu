@@ -295,7 +295,7 @@ void TestUDataOpenChoiceDemo2() {
 		result=udata_openChoice(path, type, name, isAcceptable, &p, &status);
 		if(p<2) {
 			if(U_FAILURE(status) && status==U_INVALID_FORMAT_ERROR){
-				log_verbose("Loads the data but rejects it as expected %s\n");
+				log_verbose("Loads the data but rejects it as expected %s\n", myErrorName(status));
 				status=U_ZERO_ERROR;
 				p++;
 			}
