@@ -113,8 +113,8 @@ case $platform in
         THE_COMP=xlC
         CC=/usr/ibmcxx/bin/xlc; export CC
         CXX=/usr/ibmcxx/bin/xlC_r; export CXX
-        RELEASE_CFLAGS="-O"
-        RELEASE_CXXFLAGS="-O"
+        RELEASE_CFLAGS="-O -qmaxmem=-1"
+        RELEASE_CXXFLAGS="-O -qmaxmem=-1"
         ;;
     AIX4.3VA)
         THE_OS=AIX
