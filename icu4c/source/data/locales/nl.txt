@@ -8,8 +8,238 @@
 nl {
     Version { "2.0" }
     Countries { 
-        NL { "Nederland" }
+        //AD { "Andorra" }
+        AE { "Verenigde Arabische Emiraten" }
+        //AF { "Afghanistan" }
+        AG { "Antigua en Barbuda" }
+        //AI { "Anguilla" }
+        AL { "Albani\u00EB" }
+        AM { "Armeni\u00EB" }
+        AN { "Nederlandse Antillen" }
+        //AO { "Angola" }
+        //AQ { "Antarctica" }
+        AR { "Argentini\u00EB" }
+        AS { "Amerikaans Samoa" }
+        AT { "Oostenrijk" }
+        AU { "Australi\u00EB" }
+        //AW { "Aruba" }
+        AZ { "Azerbeidzjan" }
+        BA { "Bosni\u00EB Herzegovina" }
+        //BB { "Barbados" }
+        //BD { "Bangladesh" }
         BE { "Belgi\u00EB" }
+        //BF { "Burkina Faso" }
+        BG { "Bulgarije" }
+        BH { "Bahrein" }
+        //BI { "Burundi" }
+        //BJ { "Benin" }
+        //BM { "Bermuda" }
+        BN { "Brunei Darussalam" }
+        //BO { "Bolivia" }
+        BR { "Brazili\u00EB" }
+        BS { "Bahama's" }
+        //BT { "Bhutan" }
+        BV { "Bouveteiland" }
+        //BW { "Botswana" }
+        BY { "Wit-Rusland" }
+        //BZ { "Belize" }
+        //CA { "Canada" }
+        CC { "Cocoseilanden" }
+        CD { "Congo, Democratische Republiek" }
+        CF { "Centraal-Afrikaanse Republiek" }
+        //CG { "Congo" }
+        CH { "Zwitserland" }
+        CI { "Ivoorkust" }
+        CK { "Cookeilanden" }
+        CL { "Chili" }
+        CM { "Kameroen" }
+        //CN { "China" }
+        //CO { "Colombia" }
+        //CR { "Costa Rica" }
+        CV { "Kaapverdi\u00EB" }
+        CX { "Christmaseiland" }
+        //CY { "Cyprus" }
+        CZ { "Tsjechi\u00EB" }
+        DE { "Duitsland" }
+        //DJ { "Djibouti" }
+        DK { "Denemarken" }
+        //DM { "Dominica" }
+        DO { "Dominicaanse Republiek" }
+        DZ { "Algerije" }
+        //EC { "Ecuador" }
+        EE { "Estland" }
+        EG { "Egypte" }
+        EH { "West-Sahara" }
+        //ER { "Eritrea" }
+        ES { "Spanje" }
+        ET { "Ethiopi\u00EB" }
+        //FI { "Finland" }
+        //FJ { "Fiji" }
+        FK { "Falklandeilanden" }
+        FM { "Micronesia, Federale Staten van" }
+        FO { "Faer\u00F6er" }
+        FR { "Frankrijk" }
+        //GA { "Gabon" }
+        GB { "Verenigd Koninkrijk" }
+        //GD { "Grenada" }
+        GE { "Georgi\u00EB" }
+        GF { "Frans-Guyana" }
+        //GH { "Ghana" }
+        //GI { "Gibraltar" }
+        GL { "Groenland" }
+        //GM { "Gambia" }
+        //GN { "Guinea" }
+        //GP { "Guadeloupe" }
+        GQ { "Equatoriaal-Guinea" }
+        GR { "Griekenland" }
+        GS { "Zuid-Georgi\u00EB en Zuidelijke Sandwicheilanden" }
+        //GT { "Guatemala" }
+        //GU { "Guam" }
+        GW { "Guinee-Bissau" }
+        //GY { "Guyana" }
+        HK { "Hongkong S.A.R. van China" }
+        HM { "Heardeiland en McDonaldeiland" }
+        //HN { "Honduras" }
+        HR { "Kroati\u00EB" }
+        HT { "Ha\u00EFti" }
+        HU { "Hongarije" }
+        ID { "Indonesi\u00EB" }
+        IE { "Ierland" }
+        IL { "Isra\u00EBl" }
+        //IN { "India" }
+        IO { "Brits Territorium in de Indische Oceaan" }
+        IS { "IJsland" }
+        IT { "Itali\u00EB" }
+        //JM { "Jamaica" }
+        JO { "Jordani\u00EB" }
+        //JP { "Japan" }
+        KE { "Kenia" }
+        KG { "Kirgizstan" }
+        KH { "Cambodja" }
+        //KI { "Kiribati" }
+        KM { "Comoren" }
+        KN { "Saint Kitts en Nevis" }
+        KR { "Korea, Republiek" }
+        KW { "Koeweit" }
+        KY { "Caymaneilanden" }
+        KZ { "Kazakstan" }
+        //LA { "Laos" }
+        LB { "Libanon" }
+        //LC { "Saint Lucia" }
+        //LI { "Liechtenstein" }
+        //LK { "Sri Lanka" }
+        //LR { "Liberia" }
+        //LS { "Lesotho" }
+        LT { "Litouwen" }
+        LU { "Luxemburg" }
+        LV { "Letland" }
+        MA { "Marokko" }
+        //MC { "Monaco" }
+        MD { "Moldova, Republiek" }
+        MG { "Madagaskar" }
+        MH { "Marshalleilanden" }
+        MK { "Macedoni\u00EB, Republiek" }
+        //ML { "Mali" }
+        //MM { "Myanmar" }
+        MN { "Mongoli\u00EB" }
+        MO { "Macao S.A.R. van China" }
+        MP { "Noordelijke Marianeneilanden" }
+        //MQ { "Martinique" }
+        MR { "Mauritani\u00EB" }
+        //MS { "Montserrat" }
+        //MT { "Malta" }
+        //MU { "Mauritius" }
+        MV { "Malediven" }
+        //MW { "Malawi" }
+        //MX { "Mexico" }
+        MY { "Maleisi\u00EB" }
+        //MZ { "Mozambique" }
+        NA { "Namibi\u00EB" }
+        NC { "Nieuw-Caledoni\u00EB" }
+        //NE { "Niger" }
+        NF { "Norfolkeiland" }
+        //NG { "Nigeria" }
+        //NI { "Nicaragua" }
+        NL { "Nederland" }
+        NO { "Noorwegen" }
+        //NP { "Nepal" }
+        //NR { "Nauru" }
+        //NU { "Niue" }
+        NZ { "Nieuw-Zeeland" }
+        //OM { "Oman" }
+        //PA { "Panama" }
+        //PE { "Peru" }
+        PF { "Frans-Polynesi\u00EB" }
+        PG { "Papoea-Nieuw-Guinea" }
+        PH { "Filippijnen" }
+        //PK { "Pakistan" }
+        PL { "Polen" }
+        PM { "Saint Pierre en Miquelon" }
+        //PN { "Pitcairn" }
+        //PR { "Puerto Rico" }
+        PS { "Palestijns Gebied" }
+        //PT { "Portugal" }
+        //PW { "Palau" }
+        //PY { "Paraguay" }
+        QA { "Katar" }
+        //RE { "R\u00E9union" }
+        RO { "Roemeni\u00EB" }
+        RU { "Russische Federatie" }
+        //RW { "Rwanda" }
+        SA { "Saoedi-Arabi\u00EB" }
+        SB { "Salomonseilanden" }
+        SC { "Seychellen" }
+        SE { "Zweden" }
+        //SG { "Singapore" }
+        //SH { "Saint Helena" }
+        SI { "Sloveni\u00EB" }
+        SJ { "Svalbard en Jan Mayen" }
+        SK { "Slowakije" }
+        //SL { "Sierra Leone" }
+        //SM { "San Marino" }
+        //SN { "Senegal" }
+        SO { "Somali\u00EB" }
+        //SR { "Suriname" }
+        ST { "Sao Tom\u00E9 en Principe" }
+        //SV { "El Salvador" }
+        //SZ { "Swaziland" }
+        TC { "Turks- en Caicoseilanden" }
+        TD { "Tsjaad" }
+        TF { "Franse Gebieden in de zuidelijke Indische Oceaan" }
+        //TG { "Togo" }
+        //TH { "Thailand" }
+        TJ { "Tadzjikistan" }
+        //TK { "Tokelau" }
+        TL { "Oost-Timor" }
+        //TM { "Turkmenistan" }
+        TN { "Tunesi\u00EB" }
+        //TO { "Tonga" }
+        TR { "Turkije" }
+        TT { "Trinidad en Tobago" }
+        //TV { "Tuvalu" }
+        //TW { "Taiwan" }
+        //TZ { "Tanzania" }
+        UA { "Oekra\u00EFne" }
+        UG { "Oeganda" }
+        UM { "Amerikaanse ondergeschikte afgelegen eilanden" }
+        US { "Verenigde Staten" }
+        //UY { "Uruguay" }
+        UZ { "Oezbekistan" }
+        VA { "Vaticaanstad" }
+        VC { "Saint Vincent en de Grenadines" }
+        //VE { "Venezuela" }
+        VG { "Britse Maagdeneilanden" }
+        VI { "Amerikaanse Maagdeneilanden" }
+        //VN { "Vietnam" }
+        //VU { "Vanuatu" }
+        WF { "Wallis en Futuna" }
+        //WS { "Samoa" }
+        YE { "Jemen" }
+        //YT { "Mayotte" }
+        YU { "Joegoslavi\u00EB" }
+        ZA { "Zuid-Afrika" }
+        //ZM { "Zambia" }
+        //ZW { "Zimbabwe" }
     }
     DateTimeElements:intvector { 
         2,
@@ -45,7 +275,38 @@ nl {
         "zaterdag",
     }
     Languages { 
+        ar { "Arabisch" }
+        bg { "Bulgaars" }
+        cs { "Tsjechisch" }
+        da { "Deens" }
+        de { "Duits" }
+        el { "Grieks" }
+        en { "Engels" }
+        es { "Spaans" }
+        et { "Estlands" }
+        fi { "Fins" }
+        fr { "Frans" }
+        he { "Hebreeuws" }
+        hr { "Kroatisch" }
+        hu { "Hongaars" }
+        it { "Italiaans" }
+        ja { "Japans" }
+        ko { "Koreaans" }
+        lt { "Litouws" }
+        lv { "Letlands" }
         nl { "Nederlands" }
+        no { "Noors" }
+        pl { "Pools" }
+        pt { "Portugees" }
+        ro { "Roemeens" }
+        ru { "Russisch" }
+        sk { "Slowaaks" }
+        sl { "Sloveens" }
+        sv { "Zweeds" }
+        tr { "Turks" }
+        zh { "Chinees" }
+        //zh_cn { "Chinees (Vereenvoudigd)" }
+        //zh_tw { "Chinees (Traditioneel)" }
     }
     MonthAbbreviations { 
         "jan",

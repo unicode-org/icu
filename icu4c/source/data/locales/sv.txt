@@ -29,7 +29,7 @@ sv {
         AT {"\u00D6sterrike"}
         AU {"Australien"}
         AZ {"Azerbajdzjan"}
-        BA {"Bosnien Herzegovina"}
+        BA {"Bosnien och Hercegovina"}
         // BB {"Barbados"}
         // BD {"Bangladesh"}
         BE {"Belgien"}
@@ -44,11 +44,13 @@ sv {
         BR {"Brasilien"}
         // BS {"Bahamas"}
         // BT {"Bhutan"}
+        BV { "Bouvet\u00F6n" }
         // BW {"Botswana"}
         BY {"Vitryssland"}
         // BZ {"Belize"}
         CA {"Kanada"}
-        CD {"Kongo"}
+        CC {"Kokos\u00F6arna (Keeling\u00F6arna)"}
+        CD {"Demokratiska republiken Kongo"}
         CF {"Centralafrikanska republiken"}
         CG {"Kongo"}
         CH {"Schweiz"}
@@ -60,7 +62,8 @@ sv {
         // CO {"Colombia"}
         // CR {"Costa Rica"}
         CU {"Kuba"}
-        CV {"Cap Verde"}
+        //CV {"Cap Verde"} // Old value
+        CV {"Kap Verde"}
         CX {"Jul\u00F6n"}
         CY {"Cypern"}
         CZ {"Tjeckien"}
@@ -96,11 +99,13 @@ sv {
         GP {"Guadelope"}
         GQ {"Ekvatorialguinea"}
         GR {"Grekland"}
+        GS { "Sydgeorgien och S\u00F6dra Sandwich\u00F6arna" }
         // GT {"Guatemala"}
         // GU {"Guam"}
         // GW {"Guinea-Bissau"}
         // GY {"Guyana"}
-        HK {"Hong Kong"}
+        //HK { "Hongkong (Kina)" }
+        HM { "Heard- och McDonald\u00F6arna" }
         // HN {"Honduras"}
         HR {"Kroatien"}
         // HT {"Haiti"}
@@ -109,6 +114,7 @@ sv {
         IE {"Irland"}
         // IL {"Israel"}
         IN {"Indien"}
+        IO {"Brittiska Indiska ocean\u00F6arna"}
         IQ {"Irak"}
         // IR {"Iran"}
         IS {"Island"}
@@ -124,8 +130,9 @@ sv {
         KN {"S:t Christopher och Nevis"}
         KP {"Nordkorea"}
         KR {"Sydkorea"}
+        //KR { "Republiken Korea" } // Old value
         // KW {"Kuwait"}
-        KY {"Cayman\u00F6arna"}
+        KY {"Kajman\u00F6arna"}
         KZ {"Kazachstan"}
         // LA {"Laos"}
         LB {"Libanon"}
@@ -158,9 +165,9 @@ sv {
         // MW {"Malawi"}
         MX {"Mexiko"}
         // MY {"Malaysia"}
-        // MZ {"Mozambique"}
+        MZ {"Mo\u00E7ambique"}
         // NA {"Namibia"}
-        NC {"Nya Caledonien"}
+        NC {"Nya Kaledonien"}
         // NE {"Niger"}
         NF {"Norfolk\u00F6n"}
         // NG {"Nigeria"}
@@ -169,7 +176,7 @@ sv {
         NO {"Norge"}
         // NP {"Nepal"}
         // NR {"Nauru"}
-        // NU {"Niue"}
+        NU { "Niue\u00F6n" }
         NZ {"Nya Zeeland"}
         // OM {"Oman"}
         // PA {"Panama"}
@@ -182,8 +189,9 @@ sv {
         PM {"S:t Pierre och Miquelon"}
         // PN {"Pitcairn"}
         // PR {"Puerto Rico"}
-        // PS {"Palestina"}
+        PS {"Palestinska territoriet"}
         // PT {"Portugal"}
+        // PW { "Palau" }
         // PY {"Paraguay"}
         // QA {"Qatar"}
         // RE {"R\u00E9union"}
@@ -211,10 +219,11 @@ sv {
         // SZ {"Swaziland"}
         TC {"Turks- och Caicos\u00F6arna"}
         TD {"Tchad"}
+        TF { "Franska Sydterritorierna" }
         // TG {"Togo"}
         // TH {"Thailand"}
         TJ {"Tadzjikistan"}
-        // TK {"Tokelau"}
+        TK { "Tokelau\u00F6arna" }
         TL {"\u00D6sttimor"}
         // TM {"Turkmenistan"}
         TN {"Tunisien"}
@@ -226,18 +235,19 @@ sv {
         // TZ {"Tanzania"}
         UA {"Ukraina"}
         // UG {"Uganda"}
-        US {"USA"}
+        UM { "Sm\u00E5, avl\u00E4gset bel\u00E4gna \u00F6ar som tillh\u00F6r F\u00F6renta staterna" }
+        // US {"USA"} // Poor translation. USA -> United States
         // UY {"Uruguay"}
         // UZ {"Uzbekistan"}
         VA {"Vatikanstaten"}
         VC {"S:t Vincent och Grenadinerna"}
         // VE {"Venezuela"}
-        WF {"Wallis och Futuna"}
         VG {"Brittiska Jungfru\u00F6arna"}
         VI {"Amerikanska Jungfru\u00F6arna"}
         // VN {"Vietnam"}
-        // WS {"Samoa"}
         // VU {"Vanuatu"}
+        WF { "Wallis och Futuna\u00F6arna" }
+        // WS {"Samoa"}
         YE {"Jemen"}
         // YT {"Mayotte"}
         YU {"Jugoslavien"}
