@@ -176,7 +176,7 @@ paren-flag:
 #
 quant-star:
      '?'                 n  expr-cont                               doNGStar               #  *?
-     '+'                 n  expr-cont                               doPossesiveStar        #  *+
+     '+'                 n  expr-cont                               doPossessiveStar       #  *+
      default                expr-cont                               doStar
 
 
@@ -186,7 +186,7 @@ quant-star:
 #
 quant-plus:
      '?'                 n  expr-cont                               doNGPlus               #  *?
-     '+'                 n  expr-cont                               doPossesivePlus        #  *+
+     '+'                 n  expr-cont                               doPossessivePlus       #  *+
      default                expr-cont                               doPlus
 
 
@@ -196,7 +196,7 @@ quant-plus:
 #
 quant-opt:
      '?'                 n  expr-cont                               doNGOpt                 #  ??
-     '+'                 n  expr-cont                               doPossesiveOpt          #  ?+
+     '+'                 n  expr-cont                               doPossessiveOpt         #  ?+
      default                expr-cont                               doOpt                   #  ?
 
 
@@ -222,7 +222,7 @@ interval-upper:
     
 interval-type:
     '?'                  n  expr-cont                               doNGInterval                # {n,m}?
-    '+'                  n  expr-cont                               doPossesiveInterval         # {n,m}+
+    '+'                  n  expr-cont                               doPossessiveInterval        # {n,m}+
     default                 expr-cont                               doInterval                  # {m,n}
     
     

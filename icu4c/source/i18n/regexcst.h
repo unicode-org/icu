@@ -22,6 +22,7 @@ U_NAMESPACE_BEGIN
 
 
 enum Regex_PatternParseAction {
+    doPossessivePlus,
     doCloseParen,
     doProperty,
     doBeginMatchMode,
@@ -34,7 +35,6 @@ enum Regex_PatternParseAction {
     doOctal,
     doNGOpt,
     doBackslashw,
-    doPossesiveStar,
     doMismatchedParenErr,
     doOpenLookBehind,
     doBackslashz,
@@ -42,7 +42,6 @@ enum Regex_PatternParseAction {
     doStar,
     doCaret,
     doEnterQuoteMode,
-    doPossesivePlus,
     doNGStar,
     doMatchMode,
     doIntervalUpperDigit,
@@ -55,7 +54,7 @@ enum Regex_PatternParseAction {
     doSetMatchMode,
     doPatFinish,
     doBackslashD,
-    doPossesiveOpt,
+    doPossessiveInterval,
     doEscapeError,
     doBackslashG,
     doSuppressComments,
@@ -63,7 +62,6 @@ enum Regex_PatternParseAction {
     doOpt,
     doInterval,
     doLiteralChar,
-    doPossesiveInterval,
     doIntervalInit,
     doOpenAtomicParen,
     doBackslashS,
@@ -76,12 +74,14 @@ enum Regex_PatternParseAction {
     doScanUnicodeSet,
     doBackslashZ,
     doPerlInline,
+    doPossessiveOpt,
     doNOP,
     doConditionalExpr,
     doExit,
     doNGInterval,
     doPatStart,
     doBackslashb,
+    doPossessiveStar,
     doBackslashd,
     doIntervalSame,
     doOpenLookBehindNeg,
@@ -161,13 +161,13 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doMatchModeParen, 58 /* : */, 2, 14, TRUE}     //  55 
     , {doNOP, 255, 100,0,  FALSE}     //  56 
     , {doNGStar, 63 /* ? */, 20,0,  TRUE}     //  57      quant-star
-    , {doPossesiveStar, 43 /* + */, 20,0,  TRUE}     //  58 
+    , {doPossessiveStar, 43 /* + */, 20,0,  TRUE}     //  58 
     , {doStar, 255, 20,0,  FALSE}     //  59 
     , {doNGPlus, 63 /* ? */, 20,0,  TRUE}     //  60      quant-plus
-    , {doPossesivePlus, 43 /* + */, 20,0,  TRUE}     //  61 
+    , {doPossessivePlus, 43 /* + */, 20,0,  TRUE}     //  61 
     , {doPlus, 255, 20,0,  FALSE}     //  62 
     , {doNGOpt, 63 /* ? */, 20,0,  TRUE}     //  63      quant-opt
-    , {doPossesiveOpt, 43 /* + */, 20,0,  TRUE}     //  64 
+    , {doPossessiveOpt, 43 /* + */, 20,0,  TRUE}     //  64 
     , {doOpt, 255, 20,0,  FALSE}     //  65 
     , {doNOP, 129, 66,0,  TRUE}     //  66      interval-open
     , {doNOP, 128, 69,0,  FALSE}     //  67 
@@ -180,7 +180,7 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doNOP, 125 /* } */, 76,0,  TRUE}     //  74 
     , {doIntervalError, 255, 100,0,  FALSE}     //  75 
     , {doNGInterval, 63 /* ? */, 20,0,  TRUE}     //  76      interval-type
-    , {doPossesiveInterval, 43 /* + */, 20,0,  TRUE}     //  77 
+    , {doPossessiveInterval, 43 /* + */, 20,0,  TRUE}     //  77 
     , {doInterval, 255, 20,0,  FALSE}     //  78 
     , {doBackslashA, 65 /* A */, 2,0,  TRUE}     //  79      backslash
     , {doBackslashB, 66 /* B */, 2,0,  TRUE}     //  80 
