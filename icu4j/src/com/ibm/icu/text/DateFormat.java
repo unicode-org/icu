@@ -254,7 +254,7 @@ public abstract class DateFormat extends Format {
      * Overrides Format.
      * Formats a time object into a time string. Examples of time objects
      * are a time value expressed in milliseconds and a Date object.
-     * @param obj must be a Number or a Date.
+     * @param obj must be a Number or a Date or a Calendar.
      * @param toAppendTo the string buffer for the returning time string.
      * @return the formatted time string.
      * @param fieldPosition keeps track of the position of the field
