@@ -21,6 +21,7 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.Holiday;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.UResourceTypeMismatchException;
 
 
 public final class ICUResourceBundleTest extends TestFmwk {
@@ -759,6 +760,26 @@ public final class ICUResourceBundleTest extends TestFmwk {
             }
         }catch(IllegalArgumentException ex){
             errln("Caught an unexpected expected");
+        }
+    }
+    public void TestJB4102(){
+        try {
+            ICUResourceBundle root =(ICUResourceBundle) ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "root");
+            ICUResourceBundle t = null;    
+            try{
+                t = root.getWithFallback("calendar/islamic-civil/DateTimePatterns");
+                errln("Second resource does not exist. How did it get here?\n");
+            }catch(MissingResourceException ex){
+                logln("Got the expected exception");
+            }
+            try{
+                t = root.getWithFallback("calendar/islamic-civil/eras/abbreviated/0/mikimaus/pera");
+                errln("Second resource does not exist. How did it get here?\n");
+            }catch(UResourceTypeMismatchException ex){
+                logln("Got the expected exception");
+            }
+        } catch (MissingResourceException e) {
+           warnln("Could not load the locale data");
         }
     }
 }

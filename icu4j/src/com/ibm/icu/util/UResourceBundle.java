@@ -464,7 +464,9 @@ public abstract class UResourceBundle extends ResourceBundle{
                 }else{
                     parent = ICUResourceBundle.createBundle(baseName, rootLocale, root);   
                 }
-                b.setParent(parent);
+                if(!b.equals(parent)){
+                    b.setParent(parent);
+                }
             }      
         }
         return b;

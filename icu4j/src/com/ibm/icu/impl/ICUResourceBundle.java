@@ -1007,5 +1007,14 @@ public abstract class ICUResourceBundle extends UResourceBundle{
         }
         return sub;
     }
-
+    public boolean equals(Object other){
+        if(other instanceof ICUResourceBundle){
+            ICUResourceBundle o = (ICUResourceBundle)other;
+            if(getBaseName().equals(o.getBaseName())&& 
+                    getULocale().equals(o.getULocale())){
+                return true;
+            }
+        }
+        return false;
+    }
 }
