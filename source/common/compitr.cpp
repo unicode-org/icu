@@ -99,7 +99,7 @@ void ComposedCharIter::getDecomposition(UnicodeString& result) const
         Normalizer::doAppend(DecompData::contents, pos, result);
     } 
     else if (hangul && curChar >= Normalizer::HANGUL_BASE && curChar < Normalizer::HANGUL_LIMIT) {
-        Normalizer::hangulToJamo(curChar, result, minDecomp);
+        Normalizer::hangulToJamo(curChar, result, (uint16_t)minDecomp);
     } 
     else {
         result += curChar;

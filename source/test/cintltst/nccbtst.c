@@ -371,12 +371,11 @@ bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *e
 	UConverterFromUCallback action;
 	char junk[9999];
 	char offset_str[9999];
-	char expOff[9999];
 	char *p;
 	
 	
 	for(i=0;i<NEW_MAX_BUFFER;i++)
-		junkout[i] = 0xF0;
+		junkout[i] = (char)0xF0;
 	for(i=0;i<NEW_MAX_BUFFER;i++)
 		junokout[i] = 0xFF;
 	setNuConvTestName(codepage, "FROM");
@@ -604,7 +603,7 @@ bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *exp
 			    &src,
 			    srcLimit,
 			    checkOffsets ? offs : NULL,
-			    (srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
+			    (bool_t)(srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
 			    &status);
 
 	   	   

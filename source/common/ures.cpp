@@ -177,7 +177,7 @@ U_CAPI void ures_close(    UResourceBundle*    resourceBundle)
  * it contains are owned by ICU and should not be deleted or written through
  * by the caller.  The array is terminated by a null pointer.
  */
-extern "C" void T_ResourceBundle_getTaggedArrayUChars(const ResourceBundle*   UResourceBundle,
+extern "C" void T_ResourceBundle_getTaggedArrayUChars(const ResourceBundle*   resourceBundle,
                             const UnicodeString&    resourceTag,
                             UChar const**         itemTags,
                             UChar const**         items,
