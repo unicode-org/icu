@@ -2096,6 +2096,10 @@ SOURCE=.\uloc.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ulocimp.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\uloc.h
 
 !IF  "$(CFG)" == "common - Win32 Release"

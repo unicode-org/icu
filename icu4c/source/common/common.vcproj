@@ -1190,6 +1190,9 @@
 				RelativePath=".\uloc.c">
 			</File>
 			<File
+				RelativePath=".\ulocimp.h">
+			</File>
+			<File
 				RelativePath=".\unicode\uloc.h">
 				<FileConfiguration
 					Name="Release|Win32">
