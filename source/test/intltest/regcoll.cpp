@@ -933,6 +933,7 @@ void CollationRegressionTest::Test4141640(/* char* par */)
     {
         Collator *c = NULL;
         
+		status = U_ZERO_ERROR;
         c = Collator::createInstance(locales[i], status);
 
         if (c == NULL || U_FAILURE(status))
