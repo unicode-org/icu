@@ -416,7 +416,7 @@ static int16_t _findIndex(const char* const* list, const char* key)
 }
 
 /* count the length of src while copying it to dest; return strlen(src) */
-U_INLINE int32_t
+static U_INLINE int32_t
 _copyCount(char *dest, int32_t destCapacity, const char *src) {
     const char *anchor;
     char c;
