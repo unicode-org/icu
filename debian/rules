@@ -16,7 +16,8 @@ srcdir = source
 
 # ICU installation directories, w/o the initial slash
 icudatadir = usr/share/icu/$(version)
-datasrcdir = usr/share/icu/$(version)/src
+iculibdir = usr/lib/icu/$(version)
+datasrcdir = usr/share/icu/$(version)/data
 
 # shared library versions, option 1
 version:=$(shell sed -n 's/^[ 	]*\#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' $(srcdir)/common/unicode/utypes.h)
@@ -108,19 +109,19 @@ binary-arch: build install debian/icu.conffiles debian/icu.postinst
 	# build icu package by moving files from icu-dev
 	#
 	dh_movefiles -picu \
-	    etc/icu \
+	    etc \
 	    usr/sbin \
-	    $(icudatadir)/*.cnv \
 	    $(icudatadir)/*.txt \
-	    $(icudatadir)/u*.dat \
-	    $(icudatadir)/tz.dat \
+	    $(iculibdir)/*.cnv \
+	    $(iculibdir)/u*.dat \
+	    $(iculibdir)/tz.dat \
 	    usr/share/man
-	rm debian/tmp/$(icudatadir)/cnvalias.dat
+	rm debian/tmp/$(iculibdir)/cnvalias.dat
 	#
 	# build icu-locales package by moving files from icu-dev
 	#
 	dh_movefiles -picu-locales \
-	    $(icudatadir)
+	    $(iculibdir)
 	#
 	# build icu-data from the source data
 	#
@@ -147,7 +148,7 @@ binary-arch: build install debian/icu.conffiles debian/icu.postinst
 	#
 	# do a bit of cleanup
 	#
-	rm -rf debian/tmp/usr/sbin \
+	rm -rf debian/tmp/etc debian/tmp/usr/sbin \
 	    debian/tmp/usr/share/icu/$(version) \
 	    debian/tmp/usr/share/man
 	#
