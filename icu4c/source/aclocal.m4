@@ -114,12 +114,12 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
     if test "$ENABLE_64BIT_LIBS" = no; then
         case "${host}" in
         *-*-hpux*)
-            case "${CXX}" in
-            *CC)
-                CFLAGS="${CFLAGS} +DAportable"
-                CXXFLAGS="${CXXFLAGS} +DAportable"
-                ;;
-            esac;;
+#            case "${CXX}" in
+#            *CC)
+#                CFLAGS="${CFLAGS} +DAportable"
+#                CXXFLAGS="${CXXFLAGS} +DAportable"
+#                ;;
+#            esac;;
         esac
     else
         case "${host}" in
