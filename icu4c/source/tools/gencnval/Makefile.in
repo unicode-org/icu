@@ -19,7 +19,7 @@ subdir = tools/gencnval
 SECTION = 1
 
 MANX_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
-MAN5_FILES = convrtrs.txt.5 $(srcdir)/cnvalias.dat.5
+MAN5_FILES = convrtrs.txt.5
 
 GENERATED_MAN_FILES = $(TARGET).$(SECTION) convrtrs.txt.5
 
