@@ -1051,22 +1051,155 @@ enum {
 
 static int32_t
 getCaseLocale(const char *locale) {
-    if(locale==NULL) {
-        locale=uloc_getDefault();
-        if(locale==NULL) {
-            return LOC_ROOT;
-        }
+    char lang[32];
+    UErrorCode errorCode;
+    int32_t length;
+
+    errorCode=U_ZERO_ERROR;
+    length=uloc_getLanguage(locale, lang, sizeof(lang), &errorCode);
+    if(U_FAILURE(errorCode) || length!=2) {
+        return LOC_ROOT;
     }
-    if( ((locale[0]=='t' && locale[1]=='r') ||
-         (locale[0]=='a' && locale[1]=='z')) &&
-        (locale[2]=='_' || locale[2]==0)
+
+    if( (locale[0]=='t' && locale[1]=='r') ||
+        (locale[0]=='a' && locale[1]=='z')
     ) {
         return LOC_TURKISH;
-    } else if(locale[0]=='l' && locale[1]=='t' && (locale[2]=='_' || locale[2]==0)) {
+    } else if(locale[0]=='l' && locale[1]=='t') {
         return LOC_LITHUANIAN;
     } else {
         return LOC_ROOT;
     }
+}
+
+/* Is case-ignorable? In Unicode 3.1.1, is {HYPHEN, SOFT HYPHEN, {Mn}} ? (Expected to change!) */
+U_INLINE UBool
+isCaseIgnorable(UChar32 c, uint32_t category) {
+    return category==U_NON_SPACING_MARK || c==0x2010 || c==0xad;
+}
+
+/* Is followed by {case-ignorable}* {Ll, Lu, Lt}  ? */
+static UBool
+isFollowedByCasedLetter(const UChar *src, UTextOffset srcIndex, int32_t srcLength) {
+    uint32_t props, category;
+    UChar32 c;
+
+    while(srcIndex<srcLength) {
+        UTF_NEXT_CHAR(src, srcIndex, srcLength, c);
+        props=GET_PROPS_UNSAFE(c);
+        category=GET_CATEGORY(props);
+        if((1UL<<category)&(1UL<<U_LOWERCASE_LETTER|1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
+            return TRUE; /* followed by cased letter */
+        }
+        if(!isCaseIgnorable(c, category)) {
+            return FALSE; /* not ignorable */
+        }
+    }
+
+    return FALSE; /* not followed by cased letter */
+}
+
+/* Is preceded by {Ll, Lu, Lt} {case-ignorable}*  ? */
+static UBool
+isPrecededByCasedLetter(const UChar *src, UTextOffset srcIndex) {
+    uint32_t props, category;
+    UChar32 c;
+
+    while(0<srcIndex) {
+        UTF_PREV_CHAR(src, 0, srcIndex, c);
+        props=GET_PROPS_UNSAFE(c);
+        category=GET_CATEGORY(props);
+        if((1UL<<category)&(1UL<<U_LOWERCASE_LETTER|1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
+            return TRUE; /* preceded by cased letter */
+        }
+        if(!isCaseIgnorable(c, category)) {
+            return FALSE; /* not ignorable */
+        }
+    }
+
+    return FALSE; /* not followed by cased letter */
+}
+
+/* Is preceded by base character { 'i', 'j', U+012f, U+1e2d, U+1ecb } with no intervening cc=230 ? */
+static UBool
+isAfter_i(const UChar *src, UTextOffset srcIndex) {
+    UChar32 c;
+    uint8_t cc;
+
+    while(0<srcIndex) {
+        UTF_PREV_CHAR(src, 0, srcIndex, c);
+        if(c==0x69 || c==0x6a || c==0x12f || c==0x1e2d || c==0x1ecb) {
+            return TRUE; /* preceded by TYPE_i */
+        }
+
+        cc=u_internalGetCombiningClass(c);
+        if(cc==0 || cc==230) {
+            return FALSE; /* preceded by different base character (not TYPE_i), or intervening cc==230 */
+        }
+    }
+
+    return FALSE; /* not preceded by TYPE_i */
+}
+
+/* Is preceded by base character 'I' with no intervening cc=230 ? */
+static UBool
+isAfter_I(const UChar *src, UTextOffset srcIndex) {
+    UChar32 c;
+    uint8_t cc;
+
+    while(0<srcIndex) {
+        UTF_PREV_CHAR(src, 0, srcIndex, c);
+        if(c==0x49) {
+            return TRUE; /* preceded by I */
+        }
+
+        cc=u_internalGetCombiningClass(c);
+        if(cc==0 || cc==230) {
+            return FALSE; /* preceded by different base character (not I), or intervening cc==230 */
+        }
+    }
+
+    return FALSE; /* not preceded by I */
+}
+
+/* Is followed by one or more cc==230 ? */
+static UBool
+isFollowedByMoreAbove(const UChar *src, UTextOffset srcIndex, int32_t srcLength) {
+    UChar32 c;
+    uint8_t cc;
+
+    while(srcIndex<srcLength) {
+        UTF_NEXT_CHAR(src, srcIndex, srcLength, c);
+        cc=u_internalGetCombiningClass(c);
+        if(cc==230) {
+            return TRUE; /* at least one cc==230 following */
+        }
+        if(cc==0) {
+            return FALSE; /* next base character, no more cc==230 following */
+        }
+    }
+
+    return FALSE; /* no more cc==230 following */
+}
+
+/* Is followed by a dot above (without cc==230 in between) ? */
+static UBool
+isFollowedByDotAbove(const UChar *src, UTextOffset srcIndex, int32_t srcLength) {
+    UChar32 c;
+    uint8_t cc;
+
+    while(srcIndex<srcLength) {
+        UTF_NEXT_CHAR(src, srcIndex, srcLength, c);
+        if(c==0x307) {
+            return TRUE;
+        }
+        cc=u_internalGetCombiningClass(c);
+        if(cc==0 || cc==230) {
+            return FALSE; /* next base character or cc==230 in between */
+        }
+    }
+
+    return FALSE; /* no dot above following */
 }
 
 U_CFUNC int32_t
@@ -1075,10 +1208,10 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
                      const char *locale,
                      UGrowBuffer *growBuffer, void *context,
                      UErrorCode *pErrorCode) {
-    UChar buffer[UTF_MAX_CHAR_LENGTH];
+    UChar buffer[8];
     uint32_t *pe;
     const UChar *u;
-    uint32_t props, firstExceptionValue;
+    uint32_t props, firstExceptionValue, specialCasing;
     int32_t srcIndex, destIndex, i, loc;
     UChar32 c;
     UBool canGrow;
@@ -1134,49 +1267,81 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
                 i=EXC_SPECIAL_CASING;
                 ++pe;
                 ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
-                props=*pe;
+                specialCasing=*pe;
                 /* fill u and i with the case mapping result string */
-                if(props&0x80000000) {
+                if(specialCasing&0x80000000) {
                     /* use hardcoded conditions and mappings */
                     u=buffer;
-                    if(c==0x49) {
-                        if(loc==LOC_TURKISH) {
-                            /* turkish: I maps to dotless i */
-                            buffer[0]=0x131;
-                        } else {
-                            /* other languages: I maps to i */
+                    if( loc==LOC_LITHUANIAN &&
+                            /* base characters, find accents above */
+                            (((c==0x49 || c==0x4a || c==0x12e) &&
+                                isFollowedByMoreAbove(src, srcIndex, srcLength)) ||
+                            /* precomposed with accent above, no need to find one */
+                            (c==0xcc || c==0xcd || c==0x128))
+                    ) {
+                        /* lithuanian: add a dot above if there are more accents above (to always have the dot) */
+                        buffer[1]=0x307;
+                        switch(c) {
+                        case 0x49:  /* LATIN CAPITAL LETTER I */
                             buffer[0]=0x69;
+                            i=2;
+                            break;
+                        case 0x4a:  /* LATIN CAPITAL LETTER J */
+                            buffer[0]=0x6a;
+                            i=2;
+                            break;
+                        case 0x12e: /* LATIN CAPITAL LETTER I WITH OGONEK */
+                            buffer[0]=0x12f;
+                            i=2;
+                            break;
+                        case 0xcc:  /* LATIN CAPITAL LETTER I WITH GRAVE */
+                            buffer[0]=0x69;
+                            buffer[2]=0x300;
+                            i=3;
+                            break;
+                        case 0xcd:  /* LATIN CAPITAL LETTER I WITH ACUTE */
+                            buffer[0]=0x69;
+                            buffer[2]=0x301;
+                            i=3;
+                            break;
+                        case 0x128: /* LATIN CAPITAL LETTER I WITH TILDE */
+                            buffer[0]=0x69;
+                            buffer[2]=0x303;
+                            i=3;
+                            break;
+                        default:
+                            i=0; /* will not occur */
+                            break;
                         }
+                    /*
+                     * Note: This handling of I and of dot above differs from Unicode 3.1.1's SpecialCasing-5.txt
+                     * because the AFTER_i condition there does not work for decomposed I+dot above.
+                     * This fix is being proposed to the UTC.
+                     */
+                    } else if(loc==LOC_TURKISH && c==0x49 && !isFollowedByDotAbove(src, srcIndex, srcLength)) {
+                        /* turkish: I maps to dotless i */
+                        buffer[0]=0x131;
                         i=1;
-                    } else if(c==0x3a3) {
-                        /* greek capital sigma maps depending on whether the following character is a letter (L*) */
-                        /* get the following character and check its general category */
-                        if(srcIndex<srcLength) {
-                            i=srcIndex;
-                            UTF_NEXT_CHAR(src, i, srcLength, c);
-                            if( /* is letter: is L* (Lu, Ll, Lt, Lm, or Lo) */
-                                (1UL<<GET_CATEGORY(GET_PROPS_UNSAFE(c)))&
-                                (1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER)
-                            ) {
-                                /* NONFINAL: the following is a letter */
-                                buffer[0]=0x3c3; /* greek small sigma */
-                            } else {
-                                /* FINAL: the following is not a letter */
-                                buffer[0]=0x3c2; /* greek small final sigma */
-                            }
-                        } else {
-                            /* FINAL: this is the last character in the string */
-                            buffer[0]=0x3c2; /* greek small final sigma */
-                        }
+                        /* other languages (or turkish with decomposed I+dot above): I maps to i */
+                    } else if(c==0x307 && isAfter_I(src, srcIndex-1) && !isFollowedByMoreAbove(src, srcIndex, srcLength)) {
+                        /* decomposed I+dot above becomes i (see handling of U+0049 for turkish) and removes the dot above */
+                        continue; /* remove the dot (continue without output) */
+                    } else if(  c==0x3a3 &&
+                                !isFollowedByCasedLetter(src, srcIndex, srcLength) &&
+                                isPrecededByCasedLetter(src, srcIndex-1)
+                    ) {
+                        /* greek capital sigma maps depending on surrounding cased letters (see SpecialCasing-5.txt) */
+                        buffer[0]=0x3c2; /* greek small final sigma */
                         i=1;
                     } else {
-                        /* no known conditional special case mapping, output the code point itself */
-                        i=0;
-                        UTF_APPEND_CHAR_UNSAFE(buffer, i, c);
+                        /* no known conditional special case mapping, use a normal mapping */
+                        pe=GET_EXCEPTIONS(props); /* restore the initial exception pointer */
+                        firstExceptionValue=*pe;
+                        goto notSpecial;
                     }
                 } else {
                     /* get the special case mapping string from the data file */
-                    u=ucharsTable+(props&0xffff);
+                    u=ucharsTable+(specialCasing&0xffff);
                     i=(int32_t)(*u++)&0x1f;
                 }
 
@@ -1203,7 +1368,10 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
 
                 /* do not fall through to the output of c */
                 continue;
-            } else if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_LOWERCASE)) {
+            }
+
+notSpecial:
+            if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_LOWERCASE)) {
                 i=EXC_LOWERCASE;
                 ++pe;
                 ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
@@ -1254,10 +1422,10 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                      const char *locale,
                      UGrowBuffer *growBuffer, void *context,
                      UErrorCode *pErrorCode) {
-    UChar buffer[UTF_MAX_CHAR_LENGTH];
+    UChar buffer[8];
     uint32_t *pe;
     const UChar *u;
-    uint32_t props, firstExceptionValue;
+    uint32_t props, firstExceptionValue, specialCasing;
     int32_t srcIndex, destIndex, i, loc;
     UChar32 c;
     UBool canGrow;
@@ -1313,54 +1481,28 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                 i=EXC_SPECIAL_CASING;
                 ++pe;
                 ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
-                props=*pe;
+                specialCasing=*pe;
                 /* fill u and i with the case mapping result string */
-                if(props&0x80000000) {
+                if(specialCasing&0x80000000) {
                     /* use hardcoded conditions and mappings */
                     u=buffer;
-                    if(c==0x69) {
-                        if(loc==LOC_TURKISH) {
-                            /* turkish: i maps to dotted I */
-                            buffer[0]=0x130;
-                        } else {
-                            /* other languages: i maps to I */
-                            buffer[0]=0x49;
-                        }
+                    if(loc==LOC_TURKISH && c==0x69) {
+                        /* turkish: i maps to dotted I */
+                        buffer[0]=0x130;
                         i=1;
-                    } else if(c==0x307) {
-                        if(loc==LOC_LITHUANIAN) {
-                            /* lithuanian: remove DOT ABOVE after U+0069 "i" with upper or titlecase */
-                            /* ### TODO: test this with Unicode 3.1 SpecialCasing.txt */
-                            /* search backwards for the base letter - this works only because src and dest do not overlap! */
-                            i=srcIndex;
-                            while(i>0) {
-                                UTF_PREV_CHAR(src, 0, i, c);
-                                props=GET_PROPS_UNSAFE(c);
-                                if(GET_CATEGORY(props)!=U_NON_SPACING_MARK) { /* Mn */
-                                    break;
-                                }
-                            }
-                            /* is the base letter an 'i' (U+0069)? */
-                            if(c==0x69) {
-                                /* yes, remove the dot (continue without output) */
-                                continue;
-                            } else {
-                                /* no, keep the dot */
-                                buffer[0]=0x307;
-                            }
-                        } else {
-                            /* other languages: keep the dot */
-                            buffer[0]=0x307;
-                        }
+                    } else if(loc==LOC_LITHUANIAN && c==0x307 && isAfter_i(src, srcIndex-1)) {
+                        /* lithuanian: remove DOT ABOVE after U+0069 "i" with upper or titlecase */
+                        continue; /* remove the dot (continue without output) */
                         i=1;
                     } else {
-                        /* no known conditional special case mapping, output the code point itself */
-                        i=0;
-                        UTF_APPEND_CHAR_UNSAFE(buffer, i, c);
+                        /* no known conditional special case mapping, use a normal mapping */
+                        pe=GET_EXCEPTIONS(props); /* restore the initial exception pointer */
+                        firstExceptionValue=*pe;
+                        goto notSpecial;
                     }
                 } else {
                     /* get the special case mapping string from the data file */
-                    u=ucharsTable+(props&0xffff);
+                    u=ucharsTable+(specialCasing&0xffff);
                     i=(int32_t)*u++;
 
                     /* skip the lowercase result string */
@@ -1391,7 +1533,10 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
 
                 /* do not fall through to the output of c */
                 continue;
-            } else if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_UPPERCASE)) {
+            }
+
+notSpecial:
+            if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_UPPERCASE)) {
                 i=EXC_UPPERCASE;
                 ++pe;
                 ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
