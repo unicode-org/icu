@@ -51,7 +51,7 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
                          pkg_countCharList(o->fileListFiles));
   T_FileStream_writeLine(f, linebuf);
 
-  pkg_writeCharListWrap(f, o->fileListFiles, " ", " \\\n");
+  pkg_writeCharListWrap(f, o->fileListFiles, " ", " \\\n",0);
 
   T_FileStream_writeLine(f, "\n\n\n");
 
@@ -61,7 +61,7 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
 
   T_FileStream_writeLine(f, linebuf);
 
-  pkg_writeCharListWrap(f, o->files, " ", " \\\n");
+  pkg_writeCharListWrap(f, o->files, " ", " \\\n"-1);
 
   T_FileStream_writeLine(f, "\n\n\n");
 
@@ -71,7 +71,7 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
 
   T_FileStream_writeLine(f, linebuf);
 
-  pkg_writeCharListWrap(f, o->filePaths, " ", " \\\n");
+  pkg_writeCharListWrap(f, o->filePaths, " ", " \\\n",1);
 
   T_FileStream_writeLine(f, "\n\n\n");
 

@@ -31,7 +31,7 @@
 
 #define WINBUILDMODE (*(o->options)=='R'?"Release":"Debug")
 
-void writeCmnRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
+void writeCmnRules(UPKGOptions *o,  FileStream *makefile)
 {
   char tmp[1024];
   CharList *infiles;
@@ -62,7 +62,6 @@ void writeCmnRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
 void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) {
   char tmp[1024];
   char tmp2[1024];
-  CharList *objects = NULL;
   const char *separator = o->icuroot[uprv_strlen(o->icuroot)-1]=='\\'?"":"\\";
   UBool isDll = (UBool)(uprv_strcmp(o->mode, "dll") == 0);
 
@@ -168,6 +167,6 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
   T_FileStream_writeLine(makefile, tmp2);
 
 	/* Write compile rules */
-  writeCmnRules(o, makefile, &objects);
+  writeCmnRules(o, makefile);
 }
 

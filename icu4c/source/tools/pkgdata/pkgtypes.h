@@ -32,7 +32,7 @@ typedef struct _CharList
 } CharList;
 
 
-#ifdef WIN32
+
 /* 
  * write CharList 'l' into stream 's' using deliminter 'delim' (delim can be NULL). quoted: -1 remove, 0 as is, 1 add quotes
  */
@@ -42,17 +42,8 @@ const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim, int
  * Same, but use line breaks. quoted: -1 remove, 0 as is, 1 add quotes
  */
 const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim, const char *brk, int32_t quoted);
-#else
-/* 
- * write CharList 'l' into stream 's' using deliminter 'delim' (delim can be NULL)
- */
-const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim);
 
-/*
- * Same, but use line breaks
- */
-const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim, const char *brk);
-#endif
+
 /*
  * Count items . 0 if null
  */

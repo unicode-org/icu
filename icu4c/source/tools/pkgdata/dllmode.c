@@ -156,28 +156,9 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
   T_FileStream_writeLine(makefile, "BASE_OBJECTS= $(TOCOBJ) ");
 
-  pkg_writeCharListWrap(makefile, objects, " ", " \\\n");
+  pkg_writeCharListWrap(makefile, objects, " ", " \\\n",0);
   T_FileStream_writeLine(makefile, "\n\n");
   T_FileStream_writeLine(makefile, "OBJECTS=$(BASE_OBJECTS:%=$(TEMP_DIR)/%)\n\n");
-
-#if 0
-  for(iter=suffixes; iter; iter = iter->next) {
-    sprintf(tmp, "$(TEMP_DIR)/%%_%s.c: %%.%s\n\t$(INVOKE) $(GENCCODE) -d $(TEMP_DIR) $<\n\n",
-            iter->str,iter->str);
-    T_FileStream_writeLine(makefile, tmp);
-  }
-#endif
-
-#if 0
-  for(iter=objects; iter; iter = iter->next) {
-    char sourcefile[200];
-    strcpy(sourcefile,iter->str);
-    strcpy(sourcefile+strlen(sourcefile)-strlen(OBJ_SUFFIX), ".c" );
-    sprintf(tmp, "$(TEMP_DIR)/%s: $(TEMP_DIR)/%s\n\t$(COMPILE.c) -o $@ $<\n\n",
-            iter->str,sourcefile);
-    T_FileStream_writeLine(makefile, tmp);
-  }
-#endif
 
   T_FileStream_writeLine(makefile,"$(TEMP_DIR)/%.o: $(TEMP_DIR)/%.c\n\t  $(COMPILE.c) -o $@ $<\n\n");
 
