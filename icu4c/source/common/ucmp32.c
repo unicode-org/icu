@@ -287,6 +287,15 @@ CompactIntArray* ucmp32_openAlias(uint16_t *indexArray,
   return this_obj;
 }
 
+CompactIntArray* ucmp32_openFromData(      const uint8_t **source, 
+                                           UErrorCode *status)
+{
+  CompactIntArray* this_obj = (CompactIntArray*) uprv_malloc(sizeof(CompactIntArray));
+
+  ucmp32_initFromData(this_obj, source, status);
+  this_obj->fIAmOwned = FALSE;
+  return this_obj;
+}
 /*=======================================================*/
  
 CompactIntArray* ucmp32_initAdopt(CompactIntArray* this_obj,
