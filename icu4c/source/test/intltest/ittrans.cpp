@@ -30,6 +30,7 @@
 #include "usettest.h"
 #include "jamotest.h"
 #include "trnserr.h"
+#include "reptest.h"
 
 #define CASE(id,test) case id:                                \
                           name = #test;                       \
@@ -54,6 +55,8 @@ void IntlTestTransliterator::runIndexedTest( int32_t index, UBool exec, const ch
         CASE(7, UnicodeSetTest);
         CASE(8, JamoTest);
         CASE(9, TransliteratorErrorTest);
+        CASE(10, ReplaceableTest);
+
         default: name=""; break;
     }
 }
