@@ -19,6 +19,8 @@
 
 #include "umemstrm.h"
 #include "cmemory.h"
+#include "cstring.h" 
+#include "unicode/ustring.h" 
 
 U_CAPI UMemoryStream * U_EXPORT2 uprv_mstrm_openNew(int32_t size) {
     UMemoryStream *MS = (UMemoryStream *)uprv_malloc(sizeof(UMemoryStream));
@@ -97,7 +99,7 @@ U_CAPI int32_t U_EXPORT2 uprv_mstrm_read(UMemoryStream *MS, void* addr, int32_t 
     }
 }
 
-U_CAPI int32_t U_EXPORT2 uprv_mstrm_write(UMemoryStream *MS, const uint8_t *buffer, int32_t len){
+U_CAPI int32_t U_EXPORT2 uprv_mstrm_write(UMemoryStream *MS, const void *buffer, int32_t len){
     if(MS->fError == FALSE) {
         if(MS->fReadOnly == FALSE) {
             if(len + MS->fPos > MS->fSize) {
@@ -131,3 +133,85 @@ U_CAPI uint8_t * U_EXPORT2 uprv_mstrm_getBuffer(UMemoryStream *MS, int32_t *len)
         return NULL;
     }
 }
+
+U_CAPI void U_EXPORT2
+uprv_mstrm_write8(UMemoryStream *MS, uint8_t byte) {
+    if(MS!=NULL) {
+        uprv_mstrm_write(MS, &byte, 1);
+    }
+}
+
+U_CAPI void U_EXPORT2
+uprv_mstrm_write16(UMemoryStream *MS, uint16_t word) {
+    if(MS!=NULL) {
+        uprv_mstrm_write(MS, &word, 2);
+    }
+}
+
+U_CAPI void U_EXPORT2
+uprv_mstrm_write32(UMemoryStream *MS, uint32_t wyde) {
+    if(MS!=NULL) {
+        uprv_mstrm_write(MS, &wyde, 4);
+    }
+}
+
+U_CAPI void U_EXPORT2
+uprv_mstrm_writeBlock(UMemoryStream *MS, const void *s, UTextOffset length) {
+    if(MS!=NULL) {
+        if(length>0) {
+            uprv_mstrm_write(MS, s, length);
+        }
+    }
+}
+
+U_CAPI void U_EXPORT2
+uprv_mstrm_writePadding(UMemoryStream *MS, UTextOffset length) {
+    static uint8_t padding[16]={
+        0xaa, 0xaa, 0xaa, 0xaa,
+        0xaa, 0xaa, 0xaa, 0xaa,
+        0xaa, 0xaa, 0xaa, 0xaa,
+        0xaa, 0xaa, 0xaa, 0xaa
+    };
+    if(MS!=NULL) {
+        while(length>=16) {
+            uprv_mstrm_write(MS, padding, 16);
+            length-=16;
+        }
+        if(length>0) {
+            uprv_mstrm_write(MS, padding, length);
+        }
+    }
+}
+
+U_CAPI void U_EXPORT2
+uprv_mstrm_writeString(UMemoryStream *MS, const char *s, UTextOffset length) {
+    if(MS!=NULL) {
+        if(length==-1) {
+            length=uprv_strlen(s);
+        }
+        if(length>0) {
+            uprv_mstrm_write(MS, s, length);
+        }
+    }
+}
+
+U_CAPI void U_EXPORT2
+uprv_mstrm_writeUString(UMemoryStream *MS, const UChar *s, UTextOffset length) {
+    if(MS!=NULL) {
+        if(length==-1) {
+            length=u_strlen(s);
+        }
+        if(length>0) {
+            uprv_mstrm_write(MS, s, length*sizeof(UChar));
+        }
+    }
+}
+
+/*
+ * Hey, Emacs, please set the following:
+ *
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ *
+ */

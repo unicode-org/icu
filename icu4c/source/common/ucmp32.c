@@ -13,6 +13,7 @@
  * 05/07/97     helena      Added isBogus()
  * 04/26/99     Madhu       Ported to C for C Implementation
  * 11/12/99     srl         macroized ucmp32_get()
+ * 11/07/00     weiv        aligned implementation with ucmp8
  *===============================================================================
  */
 #include "ucmp32.h"
@@ -207,11 +208,14 @@ CompactIntArray* ucmp32_open(int32_t defaultValue)
   CompactIntArray* this_obj = (CompactIntArray*) uprv_malloc(sizeof(CompactIntArray));
   if (this_obj == NULL) return NULL;
   
+  this_obj->fStructSize = sizeof(CompactIntArray);
+  this_obj->fArray = NULL;
+  this_obj->fIndex = NULL;
   this_obj->fCount = UCMP32_kUnicodeCount;
   this_obj->fCompact = FALSE; 
   this_obj->fBogus = FALSE;
-  this_obj->fArray = NULL;
-  this_obj->fIndex = NULL;
+  this_obj->fAlias = FALSE;
+  this_obj->fIAmOwned = FALSE;
   
 /*set up the index array and the data array.
  * the index array always points into particular parts of the data array
@@ -280,9 +284,13 @@ CompactIntArray* ucmp32_initAdopt(CompactIntArray* this_obj,
   if (this_obj) {
     this_obj->fCount = count; 
     this_obj->fBogus = FALSE;
+    this_obj->fStructSize = sizeof(CompactIntArray);
+
     this_obj->fArray = newValues;
     this_obj->fIndex = indexArray;
     this_obj->fCompact = (UBool)((count < UCMP32_kUnicodeCount) ? TRUE : FALSE);
+    this_obj->fAlias = FALSE;
+    this_obj->fIAmOwned = FALSE;
   }
 
   return this_obj;
@@ -293,13 +301,17 @@ CompactIntArray* ucmp32_initAdopt(CompactIntArray* this_obj,
 void ucmp32_close(CompactIntArray* this_obj) 
 {
   if(this_obj != NULL) {
-    if(this_obj->fArray != NULL) {
-      uprv_free(this_obj->fArray);
+    if(!this_obj->fAlias) {
+        if(this_obj->fArray != NULL) {
+          uprv_free(this_obj->fArray);
+        }
+        if(this_obj->fIndex != NULL) {
+          uprv_free(this_obj->fIndex);
+        }
     }
-    if(this_obj->fIndex != NULL) {
-      uprv_free(this_obj->fIndex);
+    if(!this_obj->fIAmOwned) { /* Called if 'init' was called instead of 'open'. */
+        uprv_free(this_obj);
     }
-    uprv_free(this_obj);
   }
 }
 
@@ -503,3 +515,66 @@ void ucmp32_compact(CompactIntArray* this_obj, int32_t cycle) {
     } /* endif (!this_obj->fCompact)*/
 }
 
+U_CAPI  uint32_t U_EXPORT2 uprv_mstrm_write_ucmp32 (UMemoryStream *MS, const CompactIntArray* array)
+{
+  int32_t size = 0;
+
+  uprv_mstrm_write32(MS, ICU_UCMP32_VERSION);
+  size += 4;
+  
+  uprv_mstrm_write32(MS, array->fCount);
+  size += 4;
+
+  uprv_mstrm_writeBlock(MS, array->fIndex, sizeof(array->fIndex[0])*UCMP32_kIndexCount);
+  size += sizeof(array->fIndex[0])*UCMP32_kIndexCount;
+  
+  uprv_mstrm_writeBlock(MS, array->fArray, sizeof(array->fArray[0])*array->fCount);
+  size += sizeof(array->fArray[0])*array->fCount;
+  
+  while(size%4) /* end padding */
+  {
+      uprv_mstrm_writePadding(MS, 1); /* Pad total so far to even size */
+      size += 1;
+  }
+
+  return size;
+}
+
+U_CAPI  void U_EXPORT2 ucmp32_initFromData(CompactIntArray *this_obj, const uint8_t **source, UErrorCode *status)
+{
+  uint32_t i;
+  const uint8_t *oldSource = *source;
+
+  if(U_FAILURE(*status))
+    return;
+
+ this_obj->fArray = NULL;
+ this_obj->fIndex = NULL; 
+ this_obj->fBogus = FALSE;
+ this_obj->fStructSize = sizeof(CompactIntArray);
+ this_obj->fCompact = TRUE;
+ this_obj->fAlias = TRUE;
+ this_obj->fIAmOwned = TRUE;
+  
+ i = * ((const uint32_t*) *source);
+ (*source) += 4;
+
+ if(i != ICU_UCMP32_VERSION)
+ {
+   *status = U_INVALID_FORMAT_ERROR;
+   return;
+ }
+  
+ this_obj->fCount = * ((const uint32_t*)*source);
+ (*source) += 4;
+
+ this_obj->fIndex = (uint16_t*) *source;
+ (*source) += sizeof(this_obj->fIndex[0])*UCMP32_kIndexCount;
+
+ this_obj->fArray = (int32_t*) *source;
+ (*source) += sizeof(this_obj->fArray[0])*this_obj->fCount;
+
+ /* eat up padding */
+ while((*source-(oldSource))%4)
+    (*source)++;
+}

@@ -31,17 +31,6 @@
 
 #define arrayRegionMatches(source, sourceStart, target, targetStart, len) (uprv_memcmp(&source[sourceStart], &target[targetStart], len * sizeof(int16_t)) != 0)
 
-/* internal constants*/
-#define UCMP16_kMaxUnicode_int 65535
-#define UCMP16_kUnicodeCount_int (UCMP16_kMaxUnicode_int + 1)
-#define UCMP16_kBlockShift_int 7
-#define UCMP16_kBlockCount_int (1 << UCMP16_kBlockShift_int)
-#define UCMP16_kBlockBytes_int (UCMP16_kBlockCount_int * sizeof(int16_t))
-#define UCMP16_kIndexShift_int (16 - UCMP16_kBlockShift_int)
-#define UCMP16_kIndexCount_int (1 << UCMP16_kIndexShift_int)
-#define UCMP16_kBlockMask_int (UCMP16_kBlockCount_int - 1)
-
-
 static const int32_t UCMP16_kMaxUnicode = UCMP16_kMaxUnicode_int;
 static const int32_t UCMP16_kUnicodeCount = UCMP16_kUnicodeCount_int;
 static const int32_t UCMP16_kBlockShift = UCMP16_kBlockShift_int;
@@ -573,6 +562,37 @@ const int16_t* ucmp16_getArray(const CompactShortArray* this_obj)
 const uint16_t* ucmp16_getIndex(const CompactShortArray* this_obj)
 {
     return this_obj->fIndex;
+}
+
+U_CAPI  uint32_t U_EXPORT2 uprv_mstrm_write_ucmp16 (UMemoryStream *MS, const CompactShortArray* array)
+{
+  int32_t size = 0;
+
+  uprv_mstrm_write32(MS, ICU_UCMP16_VERSION);
+  size += 4;
+  
+  uprv_mstrm_write32(MS, array->fCount);
+  size += 4;
+  
+  uprv_mstrm_write32(MS, array->kBlockShift);
+  size += 4;
+  
+  uprv_mstrm_write32(MS, array->kBlockMask);
+  size += 4;
+  
+  uprv_mstrm_writeBlock(MS, array->fIndex, sizeof(array->fIndex[0])*UCMP16_kIndexCount);
+  size += sizeof(array->fIndex[0])*UCMP16_kIndexCount;
+  
+  uprv_mstrm_writeBlock(MS, array->fArray, sizeof(array->fArray[0])*array->fCount);
+  size += sizeof(array->fArray[0])*array->fCount;
+  
+  while(size%4) /* end padding */
+  {
+      uprv_mstrm_writePadding(MS, 1); /* Pad total so far to even size */
+      size += 1;
+  }
+
+  return size;
 }
 
 
