@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2003/08/27 22:28:45 $ 
-* $Revision: 1.24 $
+* $Date: 2003/09/15 18:43:18 $ 
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -493,7 +493,13 @@ final class CollationParsedRuleBuilder
 		    // now we need to generate the CEs  
 		    // We stuff the initial value in the buffers, and increase the 
             // appropriate buffer according to strength
-		    initBuffers(m_parser_.m_listHeader_[i]);
+            if  (m_parser_.m_listHeader_[i].m_first_ != null) { 
+                // if there are any elements
+                // due to the way parser works, subsequent tailorings
+                // may remove all the elements from a sequence, therefore
+                // leaving an empty tailoring sequence.
+		        initBuffers(m_parser_.m_listHeader_[i]);
+            }
 	    }
 		
         if (m_parser_.m_variableTop_ != null) { 
