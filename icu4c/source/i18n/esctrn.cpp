@@ -78,12 +78,12 @@ void EscapeTransliterator::registerIDs() {
  * Constructs an escape transliterator with the given ID and
  * parameters.  See the class member documentation for details.
  */
-EscapeTransliterator::EscapeTransliterator(const UnicodeString& ID,
+EscapeTransliterator::EscapeTransliterator(const UnicodeString& newID,
                          const UnicodeString& _prefix, const UnicodeString& _suffix,
                          int32_t _radix, int32_t _minDigits,
                          UBool _grokSupplementals,
                          EscapeTransliterator* adoptedSupplementalHandler) :
-    Transliterator(ID, NULL)
+    Transliterator(newID, NULL)
 {
     this->prefix = _prefix;
     this->suffix = _suffix;
