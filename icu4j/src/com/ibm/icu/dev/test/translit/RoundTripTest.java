@@ -31,14 +31,6 @@ import java.util.MissingResourceException;
  */
 public class RoundTripTest extends TestFmwk {
 
-    // Time bomb code to temporarily modify the behavior of this test
-    // to account for changes in the Unicode properties for ICU 2.8.*.
-    static VersionInfo ICU28 = VersionInfo.getInstance(2,8,0,0);
-    static VersionInfo ICU34 = VersionInfo.getInstance(3,4,0,0);
-    static boolean isICUVersionAtLeast(VersionInfo version) {
-        return ICU28.compareTo(VersionInfo.ICU_VERSION) >= 0;
-    }
-
     static final boolean EXTRA_TESTS = true;
     static final boolean PRINT_RULES = true;
 
@@ -215,12 +207,12 @@ public class RoundTripTest extends TestFmwk {
 
     String getGreekSet() {
         // Time bomb
-        if (isICUVersionAtLeast(ICU34)) {
+        if (skipIfBeforeICU(3,4)) {
             // We temporarily filter against Unicode 4.1, but we only do this
             // before version 3.4.
-            errln("TestGreek needs to be updated to remove delete the [:Age=4.0:] filter ");
-        } else {
             logln("TestGreek needs to be updated to remove delete the section marked [:Age=4.0:] filter");
+        } else {
+            errln("TestGreek needs to be updated to remove delete the [:Age=4.0:] filter ");
         }
         return 
         // isICU28() ? "[[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]&[:Age=3.2:]]" :
@@ -357,7 +349,7 @@ public class RoundTripTest extends TestFmwk {
 
     public void TestDevanagariLatin() throws IOException {
         long start = System.currentTimeMillis();
-        if(isICUVersionAtLeast(ICU28)){
+        if(skipIfBeforeICU(2,8)){
             new Test("Latin-DEVANAGARI", 50)
               .test(latinForIndic, "[[:Devanagari:][\u094d][\u0964\u0965] & [:Age=3.2:]]", "[\u0965]", this, new LegalIndic());
 
@@ -731,7 +723,7 @@ public class RoundTripTest extends TestFmwk {
         }
         for(int i=0; i<num;i++){
            logln("Testing " + interIndicArray[i][0] + " at index " + i   );
-           if(isICUVersionAtLeast(ICU28)){
+           if(skipIfBeforeICU(2,8)){
                new Test(interIndicArray[i][0], 50)
                     .test("[" + interIndicArray[i][1]+" & [:Age=3.2:]]",
                           "[" + interIndicArray[i][2]+" & [:Age=3.2:]]",
