@@ -27,7 +27,7 @@
 #include "unicode/uloc.h"
 #include "unicode/ures.h"
 #include "crestst.h"
-#include "ctest.h"
+#include "unicode/ctest.h"
 
 void TestFallback(void);
 
