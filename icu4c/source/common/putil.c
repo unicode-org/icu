@@ -1585,12 +1585,33 @@ u_versionToString(UVersionInfo versionArray, char *versionString) {
     }
 
     /* count how many fields need to be written */
-    for(count=4; count>0 && versionArray[count-1]==0; --count) {}
+    for(count=4; count>0 && versionArray[count-1]==0; --count) {
+    }
 
-    if(count>0) {
-        /* write the first part */
+    if(count <= 1) {
+        count = 2;
+    }
+
+    /* write the first part */
+    /* write the decimal field value */
+    field=versionArray[0];
+    if(field>=100) {
+        *versionString++=(char)('0'+field/100);
+        field%=100;
+    }
+    if(field>=10) {
+        *versionString++=(char)('0'+field/10);
+        field%=10;
+    }
+    *versionString++=(char)('0'+field);
+
+    /* write the following parts */
+    for(part=1; part<count; ++part) {
+        /* write a dot first */
+        *versionString++=U_VERSION_DELIMITER;
+
         /* write the decimal field value */
-        field=versionArray[0];
+        field=versionArray[part];
         if(field>=100) {
             *versionString++=(char)('0'+field/100);
             field%=100;
@@ -1600,24 +1621,6 @@ u_versionToString(UVersionInfo versionArray, char *versionString) {
             field%=10;
         }
         *versionString++=(char)('0'+field);
-
-        /* write the following parts */
-        for(part=1; part<count; ++part) {
-            /* write a dot first */
-            *versionString++=U_VERSION_DELIMITER;
-
-            /* write the decimal field value */
-            field=versionArray[part];
-            if(field>=100) {
-                *versionString++=(char)('0'+field/100);
-                field%=100;
-            }
-            if(field>=10) {
-                *versionString++=(char)('0'+field/10);
-                field%=10;
-            }
-            *versionString++=(char)('0'+field);
-        }
     }
 
     /* NUL-terminate */
