@@ -62,6 +62,18 @@ int main(int argc, const char* const argv[])
 #ifdef CTST_LEAK_CHECK
         ctst_init();
 #endif
+        /* try opening the data from dll instead of the dat file */
+        cnv = ucnv_open("iso-8859-7", &errorCode);
+        if(cnv != 0) {
+            /* ok */
+            ucnv_close(cnv);
+        } else {
+            fprintf(stderr,
+                    "#### WARNING! The converter for iso-8859-7 cannot be loaded from data dll/so."
+                    "Proceeding to load data from dat file.\n");
+            errorCode = U_ZERO_ERROR;
+
+        }
 
         /* If no ICU_DATA environment was set, try to fake up one. */
         ctest_setICU_DATA();
