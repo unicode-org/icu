@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberRegression.java,v $ 
- * $Date: 2002/05/08 23:57:32 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/08/01 20:27:21 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  **/
@@ -23,17 +23,12 @@
  * @summary Regression tests for NumberFormat and associated classes
  */
 
-/*
-(C) Copyright Taligent, Inc. 1996 - All Rights Reserved
-(C) Copyright IBM Corp. 1996, 2001 - All Rights Reserved
-
-  The original version of this source code and documentation is copyrighted and
-owned by Taligent, Inc., a wholly-owned subsidiary of IBM. These materials are
-provided under terms of a License Agreement between Taligent and Sun. This
-technology is protected by multiple US and International patents. This notice and
-attribution to Taligent may not be removed.
-  Taligent is a registered trademark of Taligent, Inc.
-*/
+/***************************************************************************
+*
+*   Copyright (C) 1996-2002, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+************************************************************************/
 
 package com.ibm.icu.dev.test.format;
 

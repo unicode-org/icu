@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $
- * $Date: 2002/03/20 05:11:15 $
- * $Revision: 1.19 $
+ * $Date: 2002/08/01 20:27:21 $
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
@@ -15,17 +15,6 @@
 /*
  * @(#)RuleBasedBreakIterator.java	1.3 99/04/07
  *
- * (C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
- * (C) Copyright IBM Corp. 1996 - 1998 - All Rights Reserved
- *
- * The original version of this source code and documentation
- * is copyrighted and owned by Taligent, Inc., a wholly-owned
- * subsidiary of IBM. These materials are provided under terms
- * of a License Agreement between Taligent and Sun. This technology
- * is protected by multiple US and International patents.
- *
- * This notice and attribution to Taligent may not be removed.
- * Taligent is a registered trademark of Taligent, Inc.
  */
 
 package com.ibm.icu.text;
@@ -240,7 +229,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.19 $ $Date: 2002/03/20 05:11:15 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.20 $ $Date: 2002/08/01 20:27:21 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
