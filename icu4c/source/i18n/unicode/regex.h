@@ -46,7 +46,7 @@ U_NAMESPACE_BEGIN
 // Forward Declarations...
 class RegexMatcher;
 class UVector;
-class UStack;
+class UVector32;
 class UnicodeSet;
 
 
@@ -301,7 +301,7 @@ private:
     UnicodeString   fPattern;      // The original pattern string.
     uint32_t        fFlags;        // The flags used when compiling the pattern.
                                    //   
-    UVector         *fCompiledPat; // The compiled pattern.
+    UVector32       *fCompiledPat; // The compiled pattern.
     UnicodeString   fLiteralText;  // Any literal string data from the pattern, 
                                    //   after un-escaping, for use during the match.
     UVector         *fSets;        // Any UnicodeSets referenced from the pattern.
@@ -665,14 +665,21 @@ private:
 
     const RegexPattern  *fPattern;
     const UnicodeString *fInput;
+    const UChar         *fInputUC;
+
     int32_t              fInputLength;
     UBool                fMatch;           // True if the last match was successful.
     int32_t              fMatchStart;      // Position of the start of the most recent match
     int32_t              fMatchEnd;        // First position after the end of the most recent match
     int32_t              fLastMatchEnd;    // First position after the end of the previous match.
-    UStack              *fBackTrackStack;
-    UVector             *fCaptureStarts;
-    UVector             *fCaptureEnds;
+    UVector32           *fBackTrackStack;
+    UVector32           *fCaptureStarts;
+    UVector32           *fCaptureEnds;
+
+    // Cache the capture vector data pointers, for faster access.
+    int32_t             *fCapStarts;
+    int32_t             *fCapEnds;
+    int32_t              fCaptureStateSize;
 
     /**
      * The address of this static class variable serves as this class's ID

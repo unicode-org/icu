@@ -24,6 +24,7 @@
 #include "uprops.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "uvectr32.h"
 #include "uassert.h"
 #include "ucln_in.h"
 #include "mutex.h"

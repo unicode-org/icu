@@ -17,7 +17,7 @@
 //  debugging support.  Enable one or more of the #defines immediately following
 //
 //#define REGEX_SCAN_DEBUG
-//#define REGEX_DUMP_DEBUG
+#define REGEX_DUMP_DEBUG
 //#define REGEX_RUN_DEBUG
 //  End of #defines inteded to be directly set.
 
