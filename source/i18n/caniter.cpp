@@ -10,6 +10,8 @@
 #include "hash.h"
 #include "unormimp.h"
 #include "caniter.h"
+#include "unicode/normlzr.h"
+#include "unicode/uchar.h"
 #include "cmemory.h"
 
 /**
