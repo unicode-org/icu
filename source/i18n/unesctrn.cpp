@@ -73,7 +73,7 @@ static const UChar SPEC_Any[] = {
     END
 };
 
-const char UnescapeTransliterator::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnescapeTransliterator)
 
 /**
  * Factory methods.  Ignore the context.

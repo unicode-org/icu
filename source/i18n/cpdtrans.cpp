@@ -30,7 +30,7 @@ static const UChar EMPTY[] = {0}; //""
 
 U_NAMESPACE_BEGIN
 
-const char CompoundTransliterator::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CompoundTransliterator)
 
 /**
  * Constructs a new compound transliterator given an array of

@@ -170,7 +170,7 @@ void ScriptRunIterator::adjustLimit(int32_t delta) {
 //------------------------------------------------------------
 // AnyTransliterator
 
-const char AnyTransliterator::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(AnyTransliterator)
 
 AnyTransliterator::AnyTransliterator(const UnicodeString& id,
                                      const UnicodeString& theTarget,

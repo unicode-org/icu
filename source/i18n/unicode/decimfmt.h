@@ -1088,7 +1088,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static inline UClassID getStaticClassID(void);
+    static UClassID getStaticClassID(void);
 
     /**
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
@@ -1104,8 +1104,6 @@ public:
     virtual UClassID getDynamicClassID(void) const;
 
 private:
-    static const char fgClassID;
-
     DecimalFormat(); // default constructor not implemented
 
     /**
@@ -1287,29 +1285,6 @@ private:
     int32_t                 fFormatWidth;
     EPadPosition            fPadPosition;
 
-    // Constants for characters used in programmatic (unlocalized) patterns.
-    static const UChar    kPatternZeroDigit;
-    static const UChar    kPatternGroupingSeparator;
-    static const UChar    kPatternDecimalSeparator;
-    static const UChar    kPatternPerMill;
-    static const UChar    kPatternPercent;
-    static const UChar    kPatternDigit;
-    static const UChar    kPatternSeparator;
-    static const UChar    kPatternExponent;
-    static const UChar    kPatternPlus;
-    static const UChar    kPatternMinus;
-    static const UChar    kPatternPadEscape;
-
-    /**
-     * The CURRENCY_SIGN is the standard Unicode symbol for currency.  It
-     * is used in patterns and substitued with either the currency symbol,
-     * or if it is doubled, with the international currency symbol.  If the
-     * CURRENCY_SIGN is seen in a pattern, then the decimal separator is
-     * replaced with the monetary decimal separator.
-     */
-    static const UChar    kCurrencySign;
-    static const UChar    kQuote;
-
 protected:
   /** number of integer digits 
    * @draft ICU 2.4
@@ -1320,14 +1295,6 @@ protected:
    */  
     static const int32_t  kDoubleFractionDigits;
 };
-
-inline UClassID
-DecimalFormat::getStaticClassID(void)
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-DecimalFormat::getDynamicClassID(void) const
-{ return DecimalFormat::getStaticClassID(); }
 
 inline UnicodeString&
 DecimalFormat::format(const Formattable& obj,
