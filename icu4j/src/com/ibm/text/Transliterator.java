@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $ 
- * $Date: 2000/08/30 20:40:30 $ 
- * $Revision: 1.21 $
+ * $Date: 2000/10/06 23:07:40 $ 
+ * $Revision: 1.22 $
  *
  *****************************************************************************************
  */
@@ -210,7 +210,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.21 $ $Date: 2000/08/30 20:40:30 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.22 $ $Date: 2000/10/06 23:07:40 $
  */
 public abstract class Transliterator {
     /**
@@ -920,11 +920,11 @@ public abstract class Transliterator {
                 String left  = ID.substring(0, i);
                 String right = ID.substring(i+1);
                 Vector path = new Vector();
-                if (findComposedPath(left, right, path, composedCache)) {
-                    Transliterator[] components = new Transliterator[path.size()];
-                    for (int j=0; j<path.size(); ++j) {
-                        String id = left + "-" + (String) path.elementAt(j);
-                        left = (String) path.elementAt(j);
+                if (findComposedPath(left, right, path)) {
+                    Transliterator[] components = new Transliterator[path.size()-1];
+                    for (int j=0; j<path.size()-1; ++j) {
+                        String id = (String) path.elementAt(j) + "-" +
+                            path.elementAt(j+1);
                         components[j] = internalGetInstance(id);
                         if (components[j] == null) {
                             return null;
@@ -939,39 +939,44 @@ public abstract class Transliterator {
     }
 
     /**
-     * Find a path through a graph.  This will not necessarily be the
-     * only path, or the shortest path.  This is a simple recursive
-     * algorithm.
+     * Find a path through the composed transliterator graph.  This
+     * will not necessarily be the only path, or the shortest path.
+     * This is a simple recursive algorithm.
+     * 
+     * <p><code>composedCache</code> is the links table.
+     * composedCache.get(x) should return a String[] array, each of
+     * which is a node that x is connected to.
      * @param start the starting node
      * @param end the ending node
-     * @param path the result vector.  Upon success, it will contain
-     * successive nodes on the path from start to end.  It will not
-     * include start, but will include the end node.  If false is
-     * returned, then the contents of path are undefined.
-     * @param map the links table.  map.get(x) should return
-     * a String[] array, each of which is a node that x is connected
-     * to.
-     * @return true if successful
+     * @param path the result vector; should be empty on entry.  Upon
+     * success, it will contain successive nodes on the path from
+     * start to end, including start and end.  If false is returned,
+     * then path is unchanged.
+     * @return true if a path from start to end is found
      */
     private static boolean findComposedPath(String start, String end,
-                                            Vector path, Hashtable map) {
-        // map contains a list of all the links emanating from each node
-        String[] links = (String[]) map.get(start);
-        if (links == null) {
-            return false;
-        }
-        for (int i=0; i<links.length; ++i) {
-            if (links[i].equals(end)) {
-                path.addElement(end);
-                return true;
+                                            Vector path) {
+        path.addElement(start);
+        // composedCache lists all links emanating from a node
+        String[] links = (String[]) composedCache.get(start);
+        if (links != null) {
+            for (int i=0; i<links.length; ++i) {
+                if (links[i].equals(end)) {
+                    path.addElement(end);
+                    return true;
+                }
+            }
+            for (int i=0; i<links.length; ++i) {
+                // Avoid cycles: ignore links already on our path
+                if (path.indexOf(links[i]) >= 0) {
+                    continue;
+                }
+                if (findComposedPath(links[i], end, path)) {
+                    return true;
+                }
             }
         }
-        for (int i=0; i<links.length; ++i) {
-            if (findComposedPath(links[i], end, path, map)) {
-                path.insertElementAt(links[i], 0);
-                return true;
-            }
-        }
+        path.removeElementAt(path.size() - 1);    
         return false;
     }
 
@@ -1056,7 +1061,7 @@ public abstract class Transliterator {
                         links = new String[] { right };
                     } else {
                         // We assume that most links are 1-1.  When
-                        // this assumption becomes false we need a
+                        // this assumption becomes false consider a
                         // more efficient build procedure.
                         String[] s = new String[links.length + 1];
                         System.arraycopy(links, 0, s, 0, links.length);
@@ -1064,6 +1069,10 @@ public abstract class Transliterator {
                         links = s;
                     }
                     composedCache.put(left, links);
+                    // We must ALSO add this to the main RBT lookup cache
+                    // so we can instantiate the component RBTs.  The ID
+                    // must be fixed; i.e., "a~b" -> "a-b".
+                    cache.put(left + "-" + right, RULE_BASED_PLACEHOLDER);
                 } else {
                     boolean isReverse = (ID.charAt(0) == '*');
                     if (isReverse) {
