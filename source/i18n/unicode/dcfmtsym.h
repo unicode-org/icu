@@ -293,20 +293,24 @@ private:
 
 inline UnicodeString
 DecimalFormatSymbols::getSymbol(ENumberFormatSymbol symbol) const {
-    if(symbol<kFormatSymbolCount) {
-        return fSymbols[symbol];
+    const UnicodeString *strPtr;
+    if(symbol < kFormatSymbolCount) {
+        strPtr = &fSymbols[symbol];
     } else {
-        return fNoSymbol;
+        strPtr = &fNoSymbol;
     }
+    return *strPtr;
 }
 
 inline const UnicodeString &
 DecimalFormatSymbols::getConstSymbol(ENumberFormatSymbol symbol) const {
-    if(symbol<kFormatSymbolCount) {
-        return fSymbols[symbol];
+    const UnicodeString *strPtr;
+    if(symbol < kFormatSymbolCount) {
+        strPtr = &fSymbols[symbol];
     } else {
-        return fNoSymbol;
+        strPtr = &fNoSymbol;
     }
+    return *strPtr;
 }
 
 // -------------------------------------
