@@ -68,52 +68,47 @@ static UColAttributeValue ATTRIBUTE_[UCOL_ATTRIBUTE_COUNT] = {
 
 static UNormalizationMode NORMALIZATION_ = UCOL_DEFAULT_NORMALIZATION;
 
-static const char *ATTRIBUTE_NAME_[UCOL_ATTRIBUTE_COUNT] = {
-                        "UCOL_FRENCH_COLLATION", 
-                        "UCOL_ALTERNATE_HANDLING", 
-                        "UCOL_CASE_FIRST", 
-                        "UCOL_CASE_LEVEL", 
-                        "UCOL_NORMALIZATION_MODE|UCOL_DECOMPOSITION_MODE",
-                        "UCOL_STRENGTH"};
-     
-static const char *ATTRIBUTE_VALUE_[UCOL_ATTRIBUTE_VALUE_COUNT] = {
-                                        "UCOL_PRIMARY",
-                                        "UCOL_SECONDARY",
-                                        "UCOL_TERTIARY|UCOL_DEFAULT_STRENGTH",
-                                        "UCOL_QUATERNARY",
-                                        "",
-                                        "",
-                                        "",
-                                        "",
-                                        "",
-                                        "",
-                                        "",
-                                        "",
-                                        "",
-                                        "",
-                                        "",
-                                        "UCOL_IDENTICAL",
-                                        "UCOL_OFF",
-                                        "UCOL_ON",
-                                        "",
-                                        "",
-                                        "UCOL_SHIFTED",
-                                        "UCOL_NON_IGNORABLE",
-                                        "",
-                                        "",
-                                        "UCOL_LOWER_FIRST",
-                                        "UCOL_UPPER_FIRST",
-                                        "",
-                                        "",
-                                        "UCOL_ON_WITHOUT_HANGUL"};
+typedef struct {
+    int   value;
+    char *name;
+} EnumNameValuePair;
 
-static const char *NORMALIZATION_VALUE_[UNORM_MODE_COUNT] = {
-    "",
-    "UCOL_NO_NORMALIZATION|UNORM_NONE",
-    "UCOL_DECOMP_CAN|UNORM_NFD",
-    "UCOL_DECOMP_COMPAT|UNORM_NFKD|UCOL_DEFAULT_NORMALIZATION",
-    "UCOL_DECOMP_CAN_COMP_COMPAT|UNORM_DEFAULT|UNORM_NFC",
-    "UCOL_DECOMP_COMPAT_COMP_CAN|UNORM_NFKC"
+static const EnumNameValuePair ATTRIBUTE_NAME_[] = {
+    {UCOL_FRENCH_COLLATION, "UCOL_FRENCH_COLLATION"},
+    {UCOL_ALTERNATE_HANDLING, "UCOL_ALTERNATE_HANDLING"}, 
+    {UCOL_CASE_FIRST, "UCOL_CASE_FIRST"}, 
+    {UCOL_CASE_LEVEL, "UCOL_CASE_LEVEL"}, 
+    {UCOL_NORMALIZATION_MODE, 
+        "UCOL_NORMALIZATION_MODE|UCOL_DECOMPOSITION_MODE"},
+    {UCOL_STRENGTH, "UCOL_STRENGTH"},
+    NULL
+};
+     
+static const EnumNameValuePair ATTRIBUTE_VALUE_[] = {
+    {UCOL_PRIMARY, "UCOL_PRIMARY"},
+    {UCOL_SECONDARY, "UCOL_SECONDARY"},
+    {UCOL_TERTIARY, "UCOL_TERTIARY|UCOL_DEFAULT_STRENGTH"},
+    {UCOL_QUATERNARY, "UCOL_QUATERNARY"},
+    {UCOL_IDENTICAL, "UCOL_IDENTICAL"},
+    {UCOL_OFF, "UCOL_OFF"},
+    {UCOL_ON, "UCOL_ON"},
+    {UCOL_SHIFTED, "UCOL_SHIFTED"},
+    {UCOL_NON_IGNORABLE, "UCOL_NON_IGNORABLE"},
+    {UCOL_LOWER_FIRST, "UCOL_LOWER_FIRST"},
+    {UCOL_UPPER_FIRST, "UCOL_UPPER_FIRST"},
+    {UCOL_ON_WITHOUT_HANGUL, "UCOL_ON_WITHOUT_HANGUL"},
+    NULL
+};
+
+static const EnumNameValuePair NORMALIZATION_VALUE_[] = {
+    {UCOL_NO_NORMALIZATION, "UCOL_NO_NORMALIZATION|UNORM_NONE"},
+    {UCOL_DECOMP_CAN, "UCOL_DECOMP_CAN|UNORM_NFD"},
+    {UCOL_DECOMP_COMPAT, 
+        "UCOL_DECOMP_COMPAT|UNORM_NFKD|UCOL_DEFAULT_NORMALIZATION"},
+    {UCOL_DECOMP_CAN_COMP_COMPAT, 
+        "UCOL_DECOMP_CAN_COMP_COMPAT|UNORM_DEFAULT|UNORM_NFC"},
+    {UCOL_DECOMP_COMPAT_COMP_CAN, "UCOL_DECOMP_COMPAT_COMP_CAN|UNORM_NFKC"},
+    NULL
 };
 
 /**
@@ -287,11 +282,28 @@ void outputAttribute(UCollator *collator, UErrorCode *error)
 {
     UColAttribute attribute = UCOL_FRENCH_COLLATION;
     while (attribute < UCOL_ATTRIBUTE_COUNT) {
-        fprintf(OUTPUT_, "%s = %s\n", ATTRIBUTE_NAME_[attribute],
-            ATTRIBUTE_VALUE_[ucol_getAttribute(collator, attribute, error)]);
+        int count = 0;
+        while (TRUE) {
+            // getting attribute name
+            if (ATTRIBUTE_NAME_[count].value == attribute) {
+                fprintf(OUTPUT_, "%s = ", ATTRIBUTE_NAME_[count].name);
+                break;
+            }
+            count ++;
+        }
+        count = 0;
+        int attributeval = ucol_getAttribute(collator, attribute, error);
         if (U_FAILURE(*error)) {
             fprintf(stdout, "Failure in reading collator attribute\n");
             return;
+        }
+        while (TRUE) {
+            // getting attribute value
+            if (ATTRIBUTE_VALUE_[count].value == attributeval) {
+                fprintf(OUTPUT_, "%s\n", ATTRIBUTE_VALUE_[count].name);
+                break;
+            }
+            count ++;
         }
         attribute = (UColAttribute)(attribute + 1);
     }
@@ -303,8 +315,17 @@ void outputAttribute(UCollator *collator, UErrorCode *error)
 */
 void outputNormalization(UCollator *collator) 
 {
+    int normmode = ucol_getNormalization(collator);
+    int count = 0;
+    while (TRUE) {
+        // getting attribute name
+        if (NORMALIZATION_VALUE_[count].value == normmode) {
+            break;
+        }
+        count ++;
+    }
     fprintf(OUTPUT_, "NORMALIZATION MODE = %s\n", 
-            NORMALIZATION_VALUE_[ucol_getNormalization(collator)]);
+        NORMALIZATION_VALUE_[count].name);
 }
 
 /**
@@ -320,7 +341,7 @@ void serialize(const char *locale, UBool tailoredonly) {
 
     fprintf(OUTPUT_, "# This file contains the serialized collation elements\n");
     fprintf(OUTPUT_, "# as of the collation version indicated below.\n");
-    fprintf(OUTPUT_, "# Data format: xxxx xxxx..; [yyyy, yyyy, yyyyyy] [yyyy, yyyy, yyyyyy] ... [yyyy, yyyy, yyyyyy] [zz zz..\n");
+    fprintf(OUTPUT_, "# Data format: xxxx xxxx..; [yyyy, yy, yy] [yyyy, yy, yy] ... [yyyy, yy, yy] [zz zz..\n");
     fprintf(OUTPUT_, "#              where xxxx are codepoints in hexadecimals,\n");
     fprintf(OUTPUT_, "#              yyyyyyyy are the corresponding\n");
     fprintf(OUTPUT_, "#              collation elements in hexadecimals\n");
@@ -619,41 +640,37 @@ CLOSERULES :
 /**
 * Parse for enum values.
 * Note this only works for positive enum values.
-* @param enumarray array containing names of the enum values in string at their
-*        corresponding value index. use "" at indexes with no corresponding 
+* @param enumarray array containing names of the enum values in string and 
+*        their corresponding value.
 *        declared enum value.
-* @param enumlength length of enum array
 * @param str string to be parsed
 * @return corresponding integer enum value or -1 if value is not found.
 */
-int parseEnums(const char *enumarray[], int enumlength, const char *str) 
+int parseEnums(const EnumNameValuePair enumarray[], const char *str) 
 {
-    const char *enumvalue = enumarray[0];
+    const char *enumname = enumarray[0].name;
     int result = atoi(str);
     if (result == 0 && str[0] != '0') {
-        while (enumvalue[0] == 0 || strcmp(enumvalue, str) != 0) {
+        while (strcmp(enumname, str) != 0) {
             // checking for multiple enum names sharing the same values
-            enumvalue = strstr(enumvalue, str);
-            if (enumvalue != NULL) {
-                int size = strchr(enumvalue, '|') - enumvalue;
+            enumname = strstr(enumname, str);
+            if (enumname != NULL) {
+                int size = strchr(enumname, '|') - enumname;
                 if (size < 0) {
-                    size = strlen(enumvalue);
+                    size = strlen(enumname);
                 }
                 if (size == (int)strlen(str)) {
-                    return result;
+                    return enumarray[result].value;
                 }
             }
             result ++;
-            if (result == enumlength) {
+            if (&(enumarray[result]) == NULL) {
                 return -1;
             }
-            enumvalue = enumarray[result];
+            enumname = enumarray[result].name;
         }
     }
-    if (result >= enumlength) {
-        return -1;
-    }
-    return result;
+    return -1;
 }
 
 /**
@@ -677,7 +694,7 @@ void parseAttributes() {
         strncpy(str, pname, count);
         str[count] = 0;
 
-        int name = parseEnums(ATTRIBUTE_NAME_, UCOL_ATTRIBUTE_COUNT, str);
+        int name = parseEnums(ATTRIBUTE_NAME_, str);
         if (name == -1) {
             fprintf(stdout, "Attribute name not found: %s\n", str);
             return;
@@ -692,8 +709,7 @@ void parseAttributes() {
         count = pname - pvalue;
         strncpy(str, pvalue, count);
         str[count] = 0;
-        int value = parseEnums(ATTRIBUTE_VALUE_, UCOL_ATTRIBUTE_VALUE_COUNT, 
-                               str);
+        int value = parseEnums(ATTRIBUTE_VALUE_, str);
         if (value == -1) {
             fprintf(stdout, "Attribute value not found: %s\n", str);
             return;
@@ -708,7 +724,7 @@ void parseAttributes() {
 */
 void parseNormalization() {
     const char *str = options[6].value;
-    int norm = parseEnums(NORMALIZATION_VALUE_, UNORM_MODE_COUNT, str);
+    int norm = parseEnums(NORMALIZATION_VALUE_, str);
     if (norm == -1) {
         fprintf(stdout, "Normalization mode not found: %s\n", str);
         return;
