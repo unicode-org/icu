@@ -123,7 +123,7 @@ LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCo
 le_int32 LayoutEngine::getGlyphCount() const
 {
     return fGlyphStorage->getGlyphCount();
-};
+}
 
 void LayoutEngine::getCharIndices(le_int32 charIndices[], le_int32 indexBase, LEErrorCode &success) const
 {

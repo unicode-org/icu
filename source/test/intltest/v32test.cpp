@@ -27,12 +27,12 @@
 //---------------------------------------------------------------------------
 UVector32Test::UVector32Test() 
 {
-};
+}
 
 
 UVector32Test::~UVector32Test()
 {
-};
+}
 
 
 
@@ -490,6 +490,6 @@ void UVector32Test::UVector32_API() {
     TEST_CHECK_STATUS(status);
     delete a;
 
-};
+}
 
 
