@@ -30,6 +30,15 @@
 // Decimal digits in a 32-bit int
 //#define LONG_DIGITS 19 
 
+typedef enum EDigitListValues {
+    MAX_DIGITS = DBL_DIG,
+    MAX_EXPONENT = DBL_DIG,
+    DIGIT_PADDING = 3,
+
+     // "+." + fDigits + "e" + fDecimalAt
+    MAX_DEC_DIGITS = DBL_DIG + DIGIT_PADDING + MAX_EXPONENT
+} EDigitListValues;
+
 /**
  * Digit List. Private to DecimalFormat.  Handles the transcoding
  * between numeric values and strings of characters.  Only handles
@@ -128,22 +137,6 @@ public:
      */
     UBool isLONG_MIN(void) const;
 
-    /**
-     * This is the zero digit.  Array elements fDigits[i] have values from
-     * kZero to kZero + 9.  Typically, this is '0'.
-     */
-    static const char kZero;
-
-private:
-    enum {
-        MAX_DIGITS = DBL_DIG,
-        MAX_EXPONENT = DBL_DIG,
-        DIGIT_PADDING = 3,
-
-         // "+." + fDigits + "e" + fDecimalAt
-        MAX_DEC_DIGITS = DBL_DIG + DIGIT_PADDING + MAX_EXPONENT
-    };
-
 public:
     /**
      * These data members are intentionally public and can be set directly.
@@ -176,10 +169,6 @@ private:
     /* One character before fDigits for the decimal*/
     char        fDecimalDigits[MAX_DEC_DIGITS + 1];
 
-//    static char LONG_MIN_REP[LONG_DIGITS];
-//    static const char LONG_MIN_REP[];
-//    static int32_t    LONG_MIN_REP_LENGTH;
-
     /**
      * Round the representation to the given number of digits.
      * @param maximumDigits The maximum number of digits to be shown.
@@ -193,16 +182,6 @@ private:
     /*static void initializeLONG_MIN_REP(void);*/
 
     UBool shouldRoundUp(int32_t maximumDigits);
-
-    /**
-     * Formats a number into a base 10 string representation, and NULL terminates it.
-     * @param number The number to format
-     * @param outputStr The string to output to
-     * @param outputLen The maximum number of characters to put into outputStr
-     *                  (including NULL).
-     * @return the number of digits written, not including the sign.
-     */
-    static int32_t formatBase10(int32_t number, char *outputStr, int32_t outputLen);
 };
  
 // -------------------------------------
@@ -218,7 +197,5 @@ DigitList::append(char digit)
 }
 
 #endif // _DIGITLST
+
 //eof
-
-
-
