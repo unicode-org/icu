@@ -726,11 +726,22 @@ static void TestConvert()
                 log_verbose(" getDisplayName o.k.\n");
         }
         /*test ucnv_getDiaplayName with error condition*/
-        log_verbose("\n---Testing ucnv_getDisplayName()...\n");
         err= U_ILLEGAL_ARGUMENT_ERROR;
         len=ucnv_getDisplayName(myConverter,locale,displayname,disnamelen+1, &err);  
         if( len !=0 ){
             log_err("ucnv_getDisplayName() with err != U_ZERO_ERROR is supposed to return 0\n");
+        }
+        /*test ucnv_getDiaplayName with error condition*/
+        err=U_ZERO_ERROR;
+        len=ucnv_getDisplayName(NULL,locale,displayname,disnamelen+1, &err);  
+        if( len !=0 || U_SUCCESS(err)){
+            log_err("ucnv_getDisplayName(NULL) with cnv == NULL is supposed to return 0\n");
+        }
+        /*test ucnv_getDiaplayName with preflight condition*/
+        err=U_ZERO_ERROR;
+        len=ucnv_getDisplayName(myConverter,locale,NULL,0, &err);  
+        if( len ==0 || err != U_BUFFER_OVERFLOW_ERROR){
+            log_err("ucnv_getDisplayName() preflighting doesn't work. len = %d, err = %s\n", len, u_errorName(err));
         }
         err=U_ZERO_ERROR;
 
