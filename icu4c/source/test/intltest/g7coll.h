@@ -31,21 +31,10 @@
 #ifndef _G7COLL
 #define _G7COLL
 
-#ifndef _UTYPES
 #include "unicode/utypes.h"
-#endif
-
-#ifndef _COLL
 #include "unicode/coll.h"
-#endif
-
-#ifndef _TBLCOLL
 #include "unicode/tblcoll.h"
-#endif
-
-#ifndef _INTLTEST
 #include "intltest.h"
-#endif
 
 class G7CollationTest: public IntlTest {
 public:
@@ -84,7 +73,5 @@ public:
 private:
     static const UChar testCases[][MAX_TOKEN_LEN];
     static const int32_t results[TESTLOCALES][TOTALTESTSET];
-
-    static const Locale locales[];
 };
 #endif

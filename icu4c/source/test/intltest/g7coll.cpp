@@ -4,39 +4,13 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-#ifndef _COLL
 #include "unicode/coll.h"
-#endif
-
-#ifndef _TBLCOLL
 #include "unicode/tblcoll.h"
-#endif
-
-#ifndef _UNISTR
 #include "unicode/unistr.h"
-#endif
-
-#ifndef _SORTKEY
 #include "unicode/sortkey.h"
-#endif
-
-#ifndef _G7COLL
 #include "g7coll.h"
-#endif
-
 #include "sfwdchit.h"
 
-
-const Locale G7CollationTest::locales[8] = {
-    Locale("en", "US", ""),
-    Locale("en", "GB", ""),
-    Locale("en", "CA", ""),
-    Locale("fr", "FR", ""),
-    Locale("fr", "CA", ""),
-    Locale("de", "DE", ""),
-    Locale("it", "IT", ""),
-    Locale("ja", "JP", "")
-};
 
 const UChar G7CollationTest::testCases[][G7CollationTest::MAX_TOKEN_LEN] = {
     {  0x0062 /*'b'*/, 0x006c /*'l'*/, 0x0061 /*'a'*/, 0x0062 /*'c'*/, 0x006b /*'k'*/, 
@@ -116,6 +90,17 @@ void G7CollationTest::doTest( Collator* myCollation, UnicodeString source, Unico
 void G7CollationTest::TestG7Locales(/* char* par */)
 {
     int32_t i;
+    const Locale locales[8] = {
+        Locale("en", "US", ""),
+        Locale("en", "GB", ""),
+        Locale("en", "CA", ""),
+        Locale("fr", "FR", ""),
+        Locale("fr", "CA", ""),
+        Locale("de", "DE", ""),
+        Locale("it", "IT", ""),
+        Locale("ja", "JP", "")
+    };
+
 
     for (i = 0; i < 8; i++)
     {
