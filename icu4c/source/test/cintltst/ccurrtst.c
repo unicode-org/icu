@@ -104,7 +104,7 @@ void currTest()
     UCollationResult compareResult, keyResult, incResult;
     UCollationResult expectedResult = UCOL_EQUAL;
     log_verbose("Testing currency of all locales\n");
-    c = ucol_open(NULL, &status);
+    c = ucol_open("en_US", &status);
     if (U_FAILURE(status))
     {
         log_err("collator open failed! :%s\n", myErrorName(status));

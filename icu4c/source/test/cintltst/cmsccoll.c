@@ -91,7 +91,7 @@ static void TestCase( )
     
     int32_t i,j,k;
     UErrorCode status = U_ZERO_ERROR;
-    myCollation = ucol_open(NULL, &status);
+    myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
 	return;
@@ -349,7 +349,7 @@ void BlackBirdTest( ) {
 
   uint32_t i = 0, j = 0;
   uint32_t size = 0;
-  UCollator *coll = ucol_open(NULL, &status);
+  UCollator *coll = ucol_open("en_US", &status);
 
   ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_OFF, &status);
   ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, &status);
@@ -423,7 +423,7 @@ static void FunkyATest( )
     
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
-    myCollation = ucol_open(NULL, &status);
+    myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
 	return;
@@ -494,7 +494,7 @@ static void PrintMarkDavis( )
   UErrorCode status = U_ZERO_ERROR;
   UChar m[256];
   uint8_t sortkey[256];
-  UCollator *coll = ucol_open(NULL, &status);
+  UCollator *coll = ucol_open("en_US", &status);
   uint32_t h,i,j,k, sortkeysize;
   uint32_t sizem = 0;
   char buffer[512];

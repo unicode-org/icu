@@ -157,7 +157,7 @@ void TestProperty()
     
     log_verbose("The property tests begin : \n");
     log_verbose("Test ucol_strcoll : \n");
-    col = ucol_open(NULL, &status);
+    col = ucol_open("en_US", &status);
     if (U_FAILURE(status)) {
         log_err("Default Collator creation failed.: %s\n", myErrorName(status));
         return;

@@ -214,9 +214,8 @@ static void TestG7Locales()
 static void TestDemo1()
 {
     UCollator *col, *myCollation;
-    const UChar *baseRules;
-    UChar *newRules, *temp;
-    int32_t len, rlen, j, n;
+    UChar *temp;
+    int32_t len, j, n;
 
     UErrorCode status = U_ZERO_ERROR;
     log_verbose("Demo Test 1 : Create a new table collation with rules \" & Z < p, P \" \n");
@@ -227,18 +226,12 @@ static void TestDemo1()
         return;
     }
 
-    baseRules = ucol_getRules(col, &rlen);
     temp=(UChar*)malloc(sizeof(UChar) * 15);
     u_uastrcpy(temp, "& Z < p, P");
 
-    len=rlen + u_strlen(temp);
-    newRules=(UChar*)malloc(sizeof(UChar) * (len+1));
-/*
-    my_strncpy(newRules, baseRules, rlen);
-    my_strcat(newRules, temp, rlen);
-*/
-    my_strncpy(newRules, temp, len);
-    myCollation = ucol_openRules(newRules, len, UCOL_NO_NORMALIZATION, 
+    len=u_strlen(temp);
+
+    myCollation = ucol_openRules(temp, len, UCOL_NO_NORMALIZATION, 
                                                     UCOL_DEFAULT_STRENGTH, &status);
 
     if (U_FAILURE(status))
@@ -258,16 +251,14 @@ static void TestDemo1()
     ucol_close(myCollation); 
     ucol_close(col);
     free(temp);
-    free(newRules);
 }
 
 static void TestDemo2()
 {
     UCollator *col, *myCollation;
     UErrorCode status = U_ZERO_ERROR;
-    const UChar *baseRules;
-    UChar *newRules, *temp;
-    int32_t len, rlen, j, n;
+    UChar *temp;
+    int32_t len, j, n;
 
     log_verbose("Demo Test 2 : Create a new table collation with rules \"& C < ch , cH, Ch, CH\"");
     status = U_ZERO_ERROR;
@@ -276,19 +267,12 @@ static void TestDemo2()
         log_err("Error in creation of Collator in Demo1  : %s\n", myErrorName(status));
         return;
     }
-    baseRules = ucol_getRules(col, &rlen);
     temp=(UChar*)malloc(sizeof(UChar) * 70);
     u_uastrcpy(temp, "& C < ch , cH, Ch, CH");
 
-    len=rlen + u_strlen(temp);
-    newRules=(UChar*)malloc(sizeof(UChar) * (len+1));
-/*
-    my_strncpy(newRules, baseRules, rlen);
-    my_strcat(newRules, temp, rlen);
-*/
-    my_strncpy(newRules, temp, len);
+    len=u_strlen(temp);
 
-    myCollation = ucol_openRules(newRules, len, UCOL_NO_NORMALIZATION, 
+    myCollation = ucol_openRules(temp, len, UCOL_NO_NORMALIZATION, 
                                                     UCOL_DEFAULT_STRENGTH, &status);
 
     if (U_FAILURE(status))
@@ -306,7 +290,6 @@ static void TestDemo2()
     ucol_close(myCollation); 
     ucol_close(col);
     free(temp);
-    free(newRules);
     
 }
 
@@ -314,9 +297,8 @@ static void TestDemo3()
 {
     UCollator *col, *myCollation;
     UErrorCode status = U_ZERO_ERROR;
-    const UChar *baseRules;
-    UChar *newRules, *temp;
-    int32_t rlen, j, n, len;
+    UChar *temp;
+    int32_t j, n, len;
     
     log_verbose("Demo Test 3 : Create a new table collation with rules \"& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'\" \n");
     status = U_ZERO_ERROR;
@@ -325,18 +307,12 @@ static void TestDemo3()
         log_err("Error in creation of Collator in Demo3  : %s\n", myErrorName(status));
         return;
     }
-    baseRules = ucol_getRules(col, &rlen);
     temp=(UChar*)malloc(sizeof(UChar) * 70);
     u_uastrcpy(temp, "& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'");
     
-    len=rlen + u_strlen(temp);
-    newRules=(UChar*)malloc(sizeof(UChar) * (len+1));
-/*
-    my_strncpy(newRules, baseRules, rlen);
-    my_strcat(newRules, temp, rlen);
-*/
-    my_strncpy(newRules, temp, len);
-    myCollation = ucol_openRules(newRules, len, UCOL_NO_NORMALIZATION, 
+    len=u_strlen(temp);
+
+    myCollation = ucol_openRules(temp, len, UCOL_NO_NORMALIZATION, 
                                                     UCOL_DEFAULT_STRENGTH, &status);
 
     if (U_FAILURE(status))
@@ -355,7 +331,6 @@ static void TestDemo3()
     ucol_close(myCollation); 
     ucol_close(col);
     free(temp);
-    free(newRules);
     
 }
 
@@ -363,9 +338,8 @@ static void TestDemo4()
 {
     UCollator *col, *myCollation;
     UErrorCode status = U_ZERO_ERROR;
-    const UChar *baseRules;
-    UChar *newRules, *temp;
-    int32_t rlen, j, n, len;
+    UChar *temp;
+    int32_t j, n, len;
     
     log_verbose("Demo Test 4 : Create a new table collation with rules \" & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' \"\n");
     status = U_ZERO_ERROR;
@@ -374,18 +348,12 @@ static void TestDemo4()
         log_err("Error in creation of Collator in Demo1  : %s\n", myErrorName(status));
         return;
     }
-    baseRules = ucol_getRules(col, &rlen);
+
     temp=(UChar*)malloc(sizeof(UChar) * 90);
     u_uastrcpy(temp, " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' ");
     
-    len=rlen + u_strlen(temp);
-    newRules=(UChar*)malloc(sizeof(UChar) * (len+1));
-/*
-    my_strncpy(newRules, baseRules, rlen);
-    my_strcat(newRules, temp, rlen);
-*/
-    my_strncpy(newRules, temp, len);
-    myCollation = ucol_openRules(newRules, len, UCOL_NO_NORMALIZATION, 
+    len=u_strlen(temp);
+    myCollation = ucol_openRules(temp, len, UCOL_NO_NORMALIZATION, 
                                                     UCOL_DEFAULT_STRENGTH, &status);
 
     if (U_FAILURE(status))
@@ -403,5 +371,4 @@ static void TestDemo4()
     ucol_close(myCollation); 
     ucol_close(col);
     free(temp);
-    free(newRules);
 }

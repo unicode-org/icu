@@ -57,7 +57,7 @@ void Test4029195()
     log_verbose("Testing date format and parse function in regression test\n");
     today = ucal_getNow();
     
-    df = udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,NULL, NULL, 0, &status);
+    df = udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,"en_US", NULL, 0, &status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using default date and time style : %s\n", myErrorName(status));
