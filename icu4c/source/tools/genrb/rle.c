@@ -148,7 +148,6 @@ int32_t
 usArrayToRLEString(const uint16_t* src,int32_t srcLen,uint16_t* buffer, int32_t bufLen,UErrorCode* status) {
     uint16_t* bufLimit =  buffer+bufLen;
 	uint16_t* saveBuffer = buffer;
-    int32_t num = 0;
     if(buffer < bufLimit){
         *buffer++ =  (uint16_t)(srcLen>>16);
         if(buffer<bufLimit){
