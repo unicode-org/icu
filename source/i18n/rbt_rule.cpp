@@ -488,9 +488,10 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
 
 void TransliterationRule::setData(const TransliterationRuleData* d) {
     data = d;
-    anteContext->setData(d);
-    postContext->setData(d);
-    key->setData(d);
+    if (anteContext != NULL) anteContext->setData(d);
+    if (postContext != NULL) postContext->setData(d);
+    if (key != NULL) key->setData(d);
+    // assert(output != NULL);
     output->setData(d);
     // Don't have to do segments since they are in the context or key
 }
