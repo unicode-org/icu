@@ -4635,16 +4635,20 @@ TestThaiSortKey(void)
 {
   UChar yamakan = 0x0E4E;
   UErrorCode status = U_ZERO_ERROR;
-  UCollator *coll = ucol_open("th", &status);
   uint8_t key[256];
-  int32_t keyLen = ucol_getSortKey(coll, &yamakan, 1, key, 256);
+  int32_t keyLen = 0;
   uint8_t expectedKey[256] = { 0x01, 0xd9, 0xb2, 0x01, 0x05, 0x00 };
+  UCollator *coll = ucol_open("th", &status);
+  if(U_FAILURE(status)) {
+    log_err("Could not open a collator, exiting (%s)\n", u_errorName(status));
+  }
 
+  keyLen = ucol_getSortKey(coll, &yamakan, 1, key, 256);
   if(strcmp((char *)key, (char *)expectedKey)) {
     log_err("Yamakan key is different from ICU 262!\n");
   }
 
-
+  ucol_close(coll);
 }
 
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
