@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/11/21 02:16:07 $
- * $Revision: 1.77 $
+ * $Date: 2001/11/25 23:12:22 $
+ * $Revision: 1.78 $
  *
  *****************************************************************************************
  */
@@ -2158,6 +2158,13 @@ public class TransliteratorTest extends TestFmwk {
     }
     
     static final String[][] testCases = {
+        // ff, i, dotless-i, I, dotted-I, LJLjlj deseret deeDEE
+        {"Title", "\uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 \u1043C\u10414", 
+                  "Ffi\u0131ii \u01C8\u01C9\u01C9 \u10414\u1043C"}, 
+        {"Upper", "\uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 \u1043C\u10414", 
+                  "FFIII\u0130 \u01C7\u01C7\u01C7 \u1043C\u1043C"},
+        {"Lower", "\uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 \u1043C\u10414", 
+                  "\uFB00i\u0131ii \u01C9\u01C9\u01C9 \u10414\u10414"},
         {"Greek-Latin/UNGEGN", "(\u03BC\u03C0)", "(b)"}, // mp -> b BUG
         {"Greek-Latin/UNGEGN", "\u03C3 \u03C3\u03C2 \u03C2\u03C3", "s ss s\u0331s\u0331"}, // FORMS OF S
         {"Latin-Greek/UNGEGN", "s ss s\u0331s\u0331", "\u03C3 \u03C3\u03C2 \u03C2\u03C3"}, // FORMS OF S
@@ -2165,16 +2172,16 @@ public class TransliteratorTest extends TestFmwk {
         {"Latin-Greek", "s ss s\u0331s\u0331", "\u03C3 \u03C3\u03C2 \u03C2\u03C3"}, // FORMS OF S
     };
     
+    // TODO - use expects
+    
     public void TestSpecialCases() {
         for (int i = 0; i < testCases.length; ++i) {
             Transliterator t = Transliterator.getInstance(testCases[i][0]);
             String result = t.transliterate(testCases[i][1]);
             if (!result.equals(testCases[i][2])) {
-                errln(testCases[i][0] 
-                    + "\tconverts '" 
-                    + testCases[i][1]
-                    + "' to '" + result
-                    + "'; should be '" + testCases[i][2] + "'");
+                errln("FAIL: " + testCases[i][0] + " of " + "'" + testCases[i][1] + "'");
+                logln("  is:        '" + result + "'");
+                logln("  should be: '" + testCases[i][2] + "'");
             }
         }
     }

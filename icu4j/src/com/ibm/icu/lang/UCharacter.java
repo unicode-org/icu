@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2001/11/12 21:51:02 $ 
-* $Revision: 1.17 $
+* $Date: 2001/11/25 23:12:22 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -1177,7 +1177,149 @@ public final class UCharacter
         }
         return result.toString();
     }
-      
+    
+    // TODO: Make public API
+    /**
+     * returns the maximum amount that a single character will expand in
+     * upper, lower, title, or fold case operations
+     */
+    static int getMaxCaseExpansion() {
+        return 10;
+    }
+    
+    // TODO: Make public API?
+    /**
+     * produces the result of converting a single (possibly surrogate)
+     * character in a string.
+     * @param result 
+     * @return length of returned value IF there is a change. -1 otherwise.
+     */
+    static int toLowerCase(Locale locale, String str, int offset, char[] result) {
+
+    // NOTE: we have to keep the original string around, because it is used
+    // for the context
+        
+        int ch = UTF16.charAt(str, offset);
+        int props = PROPERTY_DB_.getProperty(ch);
+        if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
+            int type = UCharacterPropertyDB.getPropType(props);
+            if (type == UCharacterCategory.UPPERCASE_LETTER ||
+                type == UCharacterCategory.TITLECASE_LETTER) {
+                int chDelta = UCharacterPropertyDB.getSignedValue(props);
+                if (chDelta == 0) return -1;
+                int len = str.length();
+                return UTF16.append(result, 0, ch + chDelta);
+            }
+        } else {
+            int index = UCharacterPropertyDB.getExceptionIndex(props);
+            if (PROPERTY_DB_.hasExceptionValue(index, 
+                                UCharacterPropertyDB.EXC_SPECIAL_CASING_)) {
+                // TODO: avoid StringBuffer, put directly into array?
+                StringBuffer buf = new StringBuffer();
+                getSpecialLowerCase(ch, index, buf, str, offset, 
+                                    locale);
+                buf.getChars(0, buf.length(), result, 0);
+                return buf.length();
+            } else if (PROPERTY_DB_.hasExceptionValue(index, 
+                                    UCharacterPropertyDB.EXC_LOWERCASE_)) {
+                return UTF16.append(result, 0, PROPERTY_DB_.getException(index, 
+                                    UCharacterPropertyDB.EXC_LOWERCASE_));
+            }
+        }
+        return -1;
+    }
+    
+    // TODO: Make public API?
+    /**
+     * produces the result of converting a single (possibly surrogate)
+     * character in a string.
+     * @param result 
+     * @return length of returned value IF there is a change. -1 otherwise.
+     */
+    static int toUpperCase(Locale locale, String str, int offset, char[] result) {
+
+    // NOTE: we have to keep the original string around, because it is used
+    // for the context
+        
+        int ch = UTF16.charAt(str, offset);
+        int props = PROPERTY_DB_.getProperty(ch);
+        if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
+            int type = UCharacterPropertyDB.getPropType(props);
+            if (type == UCharacterCategory.LOWERCASE_LETTER ||
+                type == UCharacterCategory.TITLECASE_LETTER) {
+                int chDelta = UCharacterPropertyDB.getSignedValue(props);
+                if (chDelta == 0) return -1;
+                int len = str.length();
+                return UTF16.append(result, 0, ch - chDelta);
+            }
+        } else {
+            int index = UCharacterPropertyDB.getExceptionIndex(props);
+            if (PROPERTY_DB_.hasExceptionValue(index, 
+                                UCharacterPropertyDB.EXC_SPECIAL_CASING_)) {
+                // TODO: avoid StringBuffer, put directly into array?
+                StringBuffer buf = new StringBuffer();
+                getSpecialUpperCase(ch, index, buf, str, offset, 
+                                    locale);
+                buf.getChars(0, buf.length(), result, 0);
+                return buf.length();
+            } else if (PROPERTY_DB_.hasExceptionValue(index, 
+                                    UCharacterPropertyDB.EXC_UPPERCASE_)) {
+                return UTF16.append(result, 0, PROPERTY_DB_.getException(index, 
+                                    UCharacterPropertyDB.EXC_UPPERCASE_));
+            }
+        }
+        return -1;
+    }
+  
+    // TODO: Make public API?
+    /**
+     * produces the result of converting a single (possibly surrogate)
+     * character in a string.
+     * @param result 
+     * @return length of returned value IF there is a change. -1 otherwise.
+     */
+    static int toTitleCase(Locale locale, String str, int offset, char[] result) {
+
+    // NOTE: we have to keep the original string around, because it is used
+    // for the context
+    
+    // TODO: simplify code by checking for the few special titlecases,
+    // and just jump to uppercase for the rest.
+        
+        int ch = UTF16.charAt(str, offset);
+        int props = PROPERTY_DB_.getProperty(ch);
+        if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
+            int type = UCharacterPropertyDB.getPropType(props);
+            if (type == UCharacterCategory.LOWERCASE_LETTER) {
+                // here, titlecase is same as uppercase
+                int chDelta = UCharacterPropertyDB.getSignedValue(props);
+                if (chDelta == 0) return -1;
+                int len = str.length();
+                return UTF16.append(result, 0, ch - chDelta);
+            }
+        } else {
+            int index = UCharacterPropertyDB.getExceptionIndex(props);
+            if (PROPERTY_DB_.hasExceptionValue(index, 
+                                UCharacterPropertyDB.EXC_TITLECASE_)) {
+                return UTF16.append(result, 0, PROPERTY_DB_.getException(index, 
+                                    UCharacterPropertyDB.EXC_TITLECASE_));
+            } else if (PROPERTY_DB_.hasExceptionValue(index, 
+                                UCharacterPropertyDB.EXC_SPECIAL_CASING_)) {
+                // TODO: avoid StringBuffer, put directly into array?
+                StringBuffer buf = new StringBuffer();
+                getSpecialUpperCase(ch, index, buf, str, offset, 
+                                    locale);
+                buf.getChars(0, buf.length(), result, 0);
+                return buf.length();
+            } else if (PROPERTY_DB_.hasExceptionValue(index, 
+                                    UCharacterPropertyDB.EXC_UPPERCASE_)) {
+                return UTF16.append(result, 0, PROPERTY_DB_.getException(index, 
+                                    UCharacterPropertyDB.EXC_UPPERCASE_));
+            }
+        }
+        return -1;
+    }
+    
     /**
     * The given character is mapped to its case folding equivalent according to
     * UnicodeData.txt and CaseFolding.txt; if the character has no case folding 
