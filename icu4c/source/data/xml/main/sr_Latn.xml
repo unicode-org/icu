@@ -9,7 +9,8 @@
 	<identity>
 		<version number="2.0"/>
 		<generation date="2004-08-11" />
-		<language type="sh" /> 
+		<language type="sr" /> 
+    <script type="Latn" />
 	</identity>
 	<characters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
