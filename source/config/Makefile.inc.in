@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999-2001, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.25 $
+# $Revision: 1.26 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
@@ -58,7 +58,9 @@ LIB_VERSION = @LIB_VERSION@
 LIB_VERSION_MAJOR = @LIB_VERSION_MAJOR@
 CC = @CC@
 CXX = @CXX@
-
+AIX_SHLIB = @AIX_SHLIB@
+AR = @AR@
+RANLIB = @RANLIB@
 # Commands to make a shared library
 #   (Overridden when necessary in -mh files)
 SHLIB.c=      $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared
