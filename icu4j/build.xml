@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/07/03 20:47:33 $
-* $Revision: 1.74 $
+* $Date: 2003/07/03 20:48:58 $
+* $Revision: 1.75 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -288,7 +288,7 @@
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes">
         <classpath>
                 <pathelement path="${java.class.path}/"/>
-                <!-- pathelement location="clover.jar"--/>
+                <!-- pathelement location="clover.jar"-->
                 <pathelement path="${build.dir}"/>
             </classpath>
     </java>
