@@ -10,7 +10,8 @@
 
 haw {
     Version { "x0.2" } 
-    CollationElements { 
+    collations {
+      standard {
         Version { "1.1" }
         Sequence {
             "&a < e < i < o < u < h < k < l < m < n < p < w < \u02bb"
@@ -31,6 +32,7 @@ haw {
             // or maybe
             //"&u < h < k < l < m < n < p < w < \u02bb < b < c < d < f < g < j < q < r < s < t < v < x < y < z"
         }
+      }
     }
     Countries {
         US { "\u02bbAmelika Hui P\u016b \u02bbIa" }

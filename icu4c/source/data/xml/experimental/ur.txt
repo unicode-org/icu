@@ -7,11 +7,13 @@
 
 ur {
     Version{ "x0.4" }
-    CollationElements {
+    collations {
+      standard {
         Version { "1.0" }
         Sequence { 
             "[normalization on]"
         }
+      }
     }
     Currencies {
         PKR { "Rs", "PKR" }

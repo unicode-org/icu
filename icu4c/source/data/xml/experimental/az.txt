@@ -7,11 +7,13 @@
 
 az{
     Version{ "x0.3" }
-    CollationElements {
+    collations {
+      standard {
         Version { "1.0" }
         Sequence { 
              "[normalization on]"
         }
+      }
     }
     Countries {
         AZ { "\u0410\u0437\u04D9\u0440\u0431\u0430\u0458\u04B9\u0430\u043D" }
