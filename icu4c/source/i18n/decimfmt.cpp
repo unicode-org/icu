@@ -448,7 +448,7 @@ DecimalFormat::operator=(const DecimalFormat& rhs)
         fPadPosition = rhs.fPadPosition;
         /* end sfb */
         fMinSignificantDigits = rhs.fMinSignificantDigits;
-        fMinSignificantDigits = rhs.fMaxSignificantDigits;
+        fMaxSignificantDigits = rhs.fMaxSignificantDigits;
         fUseSignificantDigits = rhs.fUseSignificantDigits;
     }
     return *this;
