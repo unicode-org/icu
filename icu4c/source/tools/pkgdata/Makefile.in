@@ -18,7 +18,7 @@ subdir = tools/pkgdata
 
 SECTION = 1
 
-MANX_FILES = $(TARGET).$(SECTION)
+MANX_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
 
 ALL_MAN_FILES = $(MANX_FILES)
 
@@ -26,13 +26,13 @@ ALL_MAN_FILES = $(MANX_FILES)
 CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) mkmap.tmp $(ALL_MAN_FILES)
 
 ## Target information
-TARGET = pkgdata
+TARGET = pkgdata$(EXEEXT)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 DEFS += -DUDATA_SO_SUFFIX=\".$(SO)\" -DSTATIC_O=\"$(STATIC_O)\"
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
-OBJECTS = pkgdata.o pkgtypes.o gmake.o dllmode.o cmnmode.o filemode.o sttcmode.o
+OBJECTS = pkgdata.o pkgtypes.o gmake.o dllmode.o cmnmode.o filemode.o sttcmode.o winmode.o
 
 DEPS = $(OBJECTS:.o=.d)
 
@@ -88,7 +88,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.c) -o $@ $^ $(LIBS) 
+	$(LINK.c) $(OUTOPT)$@ $^ $(LIBS) 
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
