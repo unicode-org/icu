@@ -120,7 +120,8 @@ void IntlTestDateFormat::testFormat(/* char* par */)
     tryDate(now + 6.0*30*ONEDAY);
 
     UDate limit = now * 10; // Arbitrary limit
-    for (int32_t i=0; i<2; ++i) tryDate(uprv_floor(randDouble() * limit));
+    for (int32_t i=0; i<3; ++i)
+        tryDate(uprv_floor(randDouble() * limit));
 
     delete fFormat;
 }
@@ -144,46 +145,51 @@ void IntlTestDateFormat::tryDate(UDate theDate)
     int32_t stringMatch = 0;
     UBool dump = FALSE;
     int32_t i;
-    for (i=0; i<DEPTH; ++i)
+
+    date[0] = theDate;
+    fFormat->format(theDate, string[0]);
+
+    for (i=1; i<DEPTH; ++i)
     {
         UErrorCode status = U_ZERO_ERROR;
-        if (i == 0) date[i] = theDate;
-        else date[i] = fFormat->parse(string[i-1], status);
+        date[i] = fFormat->parse(string[i-1], status);
         if (U_FAILURE(status))
         {
             describeTest();
-            errln("********** FAIL: Parse of " + string[i-1] + " failed.");
+            errln("**** FAIL: Parse of " + string[i-1] + " failed.");
             dump = TRUE;
             break;
         }
         fFormat->format(date[i], string[i]);
-        if (i > 0)
+        if (dateMatch == 0 && date[i] == date[i-1])
+            dateMatch = i;
+        else if (dateMatch > 0 && date[i] != date[i-1])
         {
-            if (dateMatch == 0 && date[i] == date[i-1]) dateMatch = i;
-            else if (dateMatch > 0 && date[i] != date[i-1])
-            {
-                describeTest();
-                errln("********** FAIL: Date mismatch after match.");
-                dump = TRUE;
-                break;
-            }
-            if (stringMatch == 0 && string[i] == string[i-1]) stringMatch = i;
-            else if (stringMatch > 0 && string[i] != string[i-1])
-            {
-                describeTest();
-                errln("********** FAIL: String mismatch after match.");
-                dump = TRUE;
-                break;
-            }
+            describeTest();
+            errln("**** FAIL: Date mismatch after match for " + string[i]);
+            dump = TRUE;
+            break;
         }
-        if (dateMatch > 0 && stringMatch > 0) break;
+        if (stringMatch == 0 && string[i] == string[i-1])
+            stringMatch = i;
+        else if (stringMatch > 0 && string[i] != string[i-1])
+        {
+            describeTest();
+            errln("**** FAIL: String mismatch after match for " + string[i]);
+            dump = TRUE;
+            break;
+        }
+        if (dateMatch > 0 && stringMatch > 0)
+            break;
     }
-    if (i == DEPTH) --i;
+    if (i == DEPTH)
+        --i;
 
     if (stringMatch > fLimit || dateMatch > fLimit)
     {
         describeTest();
-        errln((UnicodeString)"********** FAIL: No string and/or date match within " + fLimit + " iterations.");
+        errln((UnicodeString)"**** FAIL: No string and/or date match within " + fLimit
+            + " iterations for the Date " + string[0] + " (" + theDate + ").");
         dump = TRUE;
     }
 
@@ -241,7 +247,7 @@ void IntlTestDateFormat::testAvailableLocales(/* char* par */)
         }
         logln(all);
     }
-    else errln((UnicodeString)"********** FAIL: Zero available locales or null array pointer");
+    else errln((UnicodeString)"**** FAIL: Zero available locales or null array pointer");
 }
 
 void IntlTestDateFormat::monsterTest(/*char *par*/)
