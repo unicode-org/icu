@@ -219,7 +219,7 @@ void RTTest::test2() {
 
     UChar c;
     UnicodeString cs, targ, reverse;
-    int8_t type[0xFFFF];
+    int8_t *type = new int8_t[0xFFFF];
 
     Transliterator* sourceToTarget = Transliterator::createInstance(transliteratorID);
     if (sourceToTarget == NULL) {
@@ -330,6 +330,7 @@ void RTTest::test2() {
         }
     }
     log->logln("");
+    delete []type;
 }
 
 void RTTest::logWrongScript(const UnicodeString& label,
