@@ -245,6 +245,9 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
             "\t-@erase \"$(TARGETDIR)\\$(CMNOBJTARGET)\"\n"
             "\t-@erase \"$(TARGETDIR)\\$(CMNTARGET)\"\n\n");
         T_FileStream_writeLine(makefile, tmp2);
+
+        T_FileStream_writeLine(makefile, "install: \"$(TARGETDIR)\\$(DLLTARGET)\"\n"
+                                         "\tcopy \"$(TARGETDIR)\\$(DLLTARGET)\" \"$(INSTALLTO)\\$(DLLTARGET)\"\n\n");
     } else { /* common */
         sprintf(tmp, "all: \"$(TARGETDIR)\\$(CMNTARGET)\"\n\n");
         T_FileStream_writeLine(makefile, tmp);
@@ -253,10 +256,10 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
             "clean:\n"
             "\t-@erase \"$(TARGETDIR)\\$(CMNTARGET)\"\n\n");
         T_FileStream_writeLine(makefile, tmp2);
-    }
 
-    T_FileStream_writeLine(makefile, "install: \"$(TARGETDIR)\\$(DLLTARGET)\"\n"
-                                     "\tcopy \"$(TARGETDIR)\\$(DLLTARGET)\" \"$(INSTALLTO)\\$(DLLTARGET)\"\n\n");
+        T_FileStream_writeLine(makefile, "install: \"$(TARGETDIR)\\$(CMNTARGET)\"\n"
+                                         "\tcopy \"$(TARGETDIR)\\$(CMNTARGET)\" \"$(INSTALLTO)\\$(CMNTARGET)\"\n\n");
+    }
 
     T_FileStream_writeLine(makefile, "rebuild: clean all\n\n");
 

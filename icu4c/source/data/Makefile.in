@@ -124,8 +124,7 @@ endif
 install-local: $(OUTTMPDIR)/icudata.lst ./icupkg.inc packagedata $(OS390INSTALL)
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUPKGDATA_DIR)
 ifneq ($(ENABLE_STATIC),)
-# It is done this way just in case the $(SO) == $(A)
-	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(OUTTMPDIR)/icudata.lst -I $(call native_dir,$(DESTDIR)$(ICUPKGDATA_DIR))
+	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(OUTTMPDIR)/icudata.lst -I $(call native_dir,$(libdir))
 endif
 	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(OUTTMPDIR)/icudata.lst -I $(call native_dir,$(DESTDIR)$(ICUPKGDATA_DIR))
 
