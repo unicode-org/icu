@@ -1819,7 +1819,7 @@ charSetToUSet(uint32_t cset[8], USet* uset) {
     /* build a char string with all chars that are used in character names */
     length=0;
     for(i=0; i<256; ++i) {
-        if(SET_CONTAINS(gNameSet, i)) {
+        if(SET_CONTAINS(cset, i)) {
             cs[length++]=(char)i;
         }
     }
