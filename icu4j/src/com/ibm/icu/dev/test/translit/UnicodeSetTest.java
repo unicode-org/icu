@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2002/06/06 16:28:58 $ 
- * $Revision: 1.29 $
+ * $Date: 2002/06/06 22:39:31 $ 
+ * $Revision: 1.30 $
  *
  *****************************************************************************************
  */
@@ -701,15 +701,15 @@ public class UnicodeSetTest extends TestFmwk {
 
             // Combining class: @since ICU 2.2
             // Check both symbolic and numeric
-            "\\p{cc=Nuktas}",
+            "\\p{ccc=Nukta}",
             "\u0ABC",
             "abc",
 
-            "\\p{Combining Class = 11}",
+            "\\p{Canonical Combining Class = 11}",
             "\u05B1",
             "\u05B2",
 
-            "[:c c = iota subscript :]",
+            "[:c c c = iota subscript :]",
             "\u0345",
             "xyz",
 
@@ -719,15 +719,13 @@ public class UnicodeSetTest extends TestFmwk {
             "\u0671\u0672",
 
             // Binary properties: @since ICU 2.2
-            /* TODO: Enable when supported
             "\\p{ideographic}",
             "\u4E0A",
             "x",
 
-            "[:^math:]",
+            "[:math=false:]",
             "q",
             "(*+)",
-            */
         };
 
         for (int i=0; i<DATA.length; i+=3) {
