@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ValueIterator.java,v $
-* $Date: 2002/03/08 18:23:52 $
-* $Revision: 1.2 $
+* $Date: 2002/03/13 01:26:38 $
+* $Revision: 1.3 $
 *
 ******************************************************************************
 */
@@ -48,7 +48,7 @@ public interface ValueIterator
     * common value all integers between [start, limit - 1] has.
     * @draft 2.1
     */
-    public class Element
+    public final class Element
     {
         /**
         * Integer of the current iteration
@@ -83,9 +83,15 @@ public interface ValueIterator
     public void reset();
     
     /**
-     * Sets the range of integers to iterate.
-     * If range is not set, a default range defined by implementation 
-     * will be used.
+     * <p>Restricts the range of integers to iterate.</p>
+     * <p>If setRange() is not performed before next() is called, the 
+     * iteration will start from a minimum integer index and ends at a 
+     * maximum integer index that is determined by the specific implementation
+     * of ValueIterator.</p>
+     * <p>For instance the Unicode character name iterator provided by
+     * com.ibm.icu.lang.UCharacter.getNameIterator() will iterate the names 
+     * from UCharacter.MIN_VALUE to UCharacter.MAX_VALUE if setRange() was 
+     * never called.</p>
      * @param start first integer in range to iterate
      * @param limit 1 integer after the last integer in range 
      * @draft 2.1
