@@ -44,13 +44,13 @@ _UTF16BEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     char overflow[4];
 
     source=pArgs->source;
-    length=pArgs->sourceLimit-source;
+    length=(int32_t)(pArgs->sourceLimit-source);
     if(length<=0) {
         /* no input, nothing to do */
         return;
     }
 
-    targetCapacity=pArgs->targetLimit-pArgs->target;
+    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
     if(targetCapacity<=0) {
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         return;
@@ -210,7 +210,7 @@ _UTF16BEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                              (char **)&target, pArgs->targetLimit,
                              &offsets, sourceIndex,
                              pErrorCode);
-        targetCapacity=pArgs->targetLimit-(char *)target;
+        targetCapacity=(int32_t)(pArgs->targetLimit-(char *)target);
     }
 
     if(U_SUCCESS(*pErrorCode) && source<pArgs->sourceLimit && targetCapacity==0) {
@@ -236,13 +236,13 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 
     cnv=pArgs->converter;
     source=(const uint8_t *)pArgs->source;
-    length=(const uint8_t *)pArgs->sourceLimit-source;
+    length=(int32_t)((const uint8_t *)pArgs->sourceLimit-source);
     if(length<=0 && cnv->toUnicodeStatus==0) {
         /* no input, nothing to do */
         return;
     }
 
-    targetCapacity=pArgs->targetLimit-pArgs->target;
+    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
     if(targetCapacity<=0) {
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         return;
@@ -586,13 +586,13 @@ _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     char overflow[4];
 
     source=pArgs->source;
-    length=pArgs->sourceLimit-source;
+    length=(int32_t)(pArgs->sourceLimit-source);
     if(length<=0) {
         /* no input, nothing to do */
         return;
     }
 
-    targetCapacity=pArgs->targetLimit-pArgs->target;
+    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
     if(targetCapacity<=0) {
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         return;
@@ -752,7 +752,7 @@ _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                              (char **)&target, pArgs->targetLimit,
                              &offsets, sourceIndex,
                              pErrorCode);
-        targetCapacity=pArgs->targetLimit-(char *)target;
+        targetCapacity=(int32_t)(pArgs->targetLimit-(char *)target);
     }
 
     if(U_SUCCESS(*pErrorCode) && source<pArgs->sourceLimit && targetCapacity==0) {
@@ -778,13 +778,13 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 
     cnv=pArgs->converter;
     source=(const uint8_t *)pArgs->source;
-    length=(const uint8_t *)pArgs->sourceLimit-source;
+    length=(int32_t)((const uint8_t *)pArgs->sourceLimit-source);
     if(length<=0 && cnv->toUnicodeStatus==0) {
         /* no input, nothing to do */
         return;
     }
 
-    targetCapacity=pArgs->targetLimit-pArgs->target;
+    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
     if(targetCapacity<=0) {
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         return;
@@ -1206,10 +1206,10 @@ _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                 ++source;
                 if(state==1) {
                     state=8; /* detect UTF-16BE */
-                    offsetDelta=source-pArgs->source;
+                    offsetDelta=(int32_t)(source-pArgs->source);
                 } else if(state==5) {
                     state=9; /* detect UTF-16LE */
-                    offsetDelta=source-pArgs->source;
+                    offsetDelta=(int32_t)(source-pArgs->source);
                 }
             } else {
                 /* switch to UTF-16BE and pass the previous bytes */

@@ -259,8 +259,8 @@ directMode:
          * In Direct Mode, only the sourceIndex is used.
          */
         byteIndex=0;
-        length=sourceLimit-source;
-        targetCapacity=targetLimit-target;
+        length=(int32_t)(sourceLimit-source);
+        targetCapacity=(int32_t)(targetLimit-target);
         if(length>targetCapacity) {
             length=targetCapacity;
         }
@@ -482,8 +482,8 @@ _UTF7FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     if(inDirectMode) {
 directMode:
-        length=sourceLimit-source;
-        targetCapacity=targetLimit-target;
+        length=(int32_t)(sourceLimit-source);
+        targetCapacity=(int32_t)(targetLimit-target);
         if(length>targetCapacity) {
             length=targetCapacity;
         }
@@ -917,8 +917,8 @@ directMode:
          * In Direct Mode, only the sourceIndex is used.
          */
         byteIndex=0;
-        length=sourceLimit-source;
-        targetCapacity=targetLimit-target;
+        length=(int32_t)(sourceLimit-source);
+        targetCapacity=(int32_t)(targetLimit-target);
         if(length>targetCapacity) {
             length=targetCapacity;
         }
@@ -1167,8 +1167,8 @@ _IMAPFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     if(inDirectMode) {
 directMode:
-        length=sourceLimit-source;
-        targetCapacity=targetLimit-target;
+        length=(int32_t)(sourceLimit-source);
+        targetCapacity=(int32_t)(targetLimit-target);
         if(length>targetCapacity) {
             length=targetCapacity;
         }

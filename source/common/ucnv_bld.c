@@ -1066,7 +1066,7 @@ ucnv_swap(const UDataSwapper *ds,
         ds->swapArray32(ds, &inStaticData->codepage, 4,
                            &outStaticData->codepage, pErrorCode);
 
-        ds->swapInvChars(ds, inStaticData->name, uprv_strlen(inStaticData->name),
+        ds->swapInvChars(ds, inStaticData->name, (int32_t)uprv_strlen(inStaticData->name),
                             outStaticData->name, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             udata_printError(ds, "ucnv_swap(): error swapping converter name\n");
@@ -1167,7 +1167,7 @@ ucnv_swap(const UDataSwapper *ds,
                  */
 
                 /* swap the base name, between the header and the extension data */
-                ds->swapInvChars(ds, inMBCSHeader+1, uprv_strlen((const char *)(inMBCSHeader+1)),
+                ds->swapInvChars(ds, inMBCSHeader+1, (int32_t)uprv_strlen((const char *)(inMBCSHeader+1)),
                                     outMBCSHeader+1, pErrorCode);
             } else {
                 /* normal file with base table data */

@@ -1411,7 +1411,7 @@ ucnv_MBCSSingleToBMPWithOffsets(UConverterToUnicodeArgs *pArgs,
     source=(const uint8_t *)pArgs->source;
     sourceLimit=(const uint8_t *)pArgs->sourceLimit;
     target=pArgs->target;
-    targetCapacity=pArgs->targetLimit-pArgs->target;
+    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
     offsets=pArgs->offsets;
 
     if((cnv->options&UCNV_OPTION_SWAP_LFNL)!=0) {
@@ -1428,7 +1428,7 @@ ucnv_MBCSSingleToBMPWithOffsets(UConverterToUnicodeArgs *pArgs,
      * since the conversion here is 1:1 UChar:uint8_t, we need only one counter
      * for the minimum of the sourceLength and targetCapacity
      */
-    length=sourceLimit-source;
+    length=(int32_t)(sourceLimit-source);
     if(length<targetCapacity) {
         targetCapacity=length;
     }
@@ -1578,8 +1578,8 @@ unrolled:
             }
 
             /* recalculate the targetCapacity after an extension mapping */
-            targetCapacity=pArgs->targetLimit-target;
-            length=sourceLimit-source;
+            targetCapacity=(int32_t)(pArgs->targetLimit-target);
+            length=(int32_t)(sourceLimit-source);
             if(length<targetCapacity) {
                 targetCapacity=length;
             }
@@ -2531,7 +2531,7 @@ ucnv_MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     source=pArgs->source;
     sourceLimit=pArgs->sourceLimit;
     target=(uint8_t *)pArgs->target;
-    targetCapacity=pArgs->targetLimit-pArgs->target;
+    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
     offsets=pArgs->offsets;
 
     table=cnv->sharedData->mbcs.fromUnicodeTable;
@@ -2650,7 +2650,7 @@ unassigned:
                     /* a mapping was written to the target, continue */
 
                     /* recalculate the targetCapacity after an extension mapping */
-                    targetCapacity=pArgs->targetLimit-(char *)target;
+                    targetCapacity=(int32_t)(pArgs->targetLimit-(char *)target);
 
                     /* normal end of conversion: prepare for a new character */
                     sourceIndex=nextSourceIndex;
@@ -2736,7 +2736,7 @@ ucnv_MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     source=pArgs->source;
     sourceLimit=pArgs->sourceLimit;
     target=(uint8_t *)pArgs->target;
-    targetCapacity=pArgs->targetLimit-pArgs->target;
+    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
     offsets=pArgs->offsets;
 
     table=cnv->sharedData->mbcs.fromUnicodeTable;
@@ -2855,7 +2855,7 @@ unassigned:
                     /* a mapping was written to the target, continue */
 
                     /* recalculate the targetCapacity after an extension mapping */
-                    targetCapacity=pArgs->targetLimit-(char *)target;
+                    targetCapacity=(int32_t)(pArgs->targetLimit-(char *)target);
 
                     /* normal end of conversion: prepare for a new character */
                     sourceIndex=nextSourceIndex;
@@ -2906,7 +2906,7 @@ ucnv_MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
     source=pArgs->source;
     sourceLimit=pArgs->sourceLimit;
     target=(uint8_t *)pArgs->target;
-    targetCapacity=pArgs->targetLimit-pArgs->target;
+    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
     offsets=pArgs->offsets;
 
     table=cnv->sharedData->mbcs.fromUnicodeTable;
@@ -2935,7 +2935,7 @@ ucnv_MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
      * since the conversion here is 1:1 UChar:uint8_t, we need only one counter
      * for the minimum of the sourceLength and targetCapacity
      */
-    length=sourceLimit-source;
+    length=(int32_t)(sourceLimit-source);
     if(length<targetCapacity) {
         targetCapacity=length;
     }
@@ -3086,8 +3086,8 @@ getTrail:
             /* a mapping was written to the target, continue */
 
             /* recalculate the targetCapacity after an extension mapping */
-            targetCapacity=pArgs->targetLimit-(char *)target;
-            length=sourceLimit-source;
+            targetCapacity=(int32_t)(pArgs->targetLimit-(char *)target);
+            length=(int32_t)(sourceLimit-source);
             if(length<targetCapacity) {
                 targetCapacity=length;
             }
@@ -3177,7 +3177,7 @@ ucnv_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     source=pArgs->source;
     sourceLimit=pArgs->sourceLimit;
     target=(uint8_t *)pArgs->target;
-    targetCapacity=pArgs->targetLimit-pArgs->target;
+    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
     offsets=pArgs->offsets;
 
     table=cnv->sharedData->mbcs.fromUnicodeTable;
@@ -3475,7 +3475,7 @@ unassigned:
                     /* a mapping was written to the target, continue */
 
                     /* recalculate the targetCapacity after an extension mapping */
-                    targetCapacity=pArgs->targetLimit-(char *)target;
+                    targetCapacity=(int32_t)(pArgs->targetLimit-(char *)target);
 
                     /* normal end of conversion: prepare for a new character */
                     if(offsets!=NULL) {

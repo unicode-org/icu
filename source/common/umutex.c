@@ -221,7 +221,7 @@ umtx_lock(UMTX *mutex)
     }
     /* This handles gGlobalMutex too, but only if there is no pMutexLockFn */
     else if (pMutexLockFn == NULL) { /* see comments above */
-        int i = ((CRITICAL_SECTION*)*mutex) - &gMutexes[0];
+        size_t i = ((CRITICAL_SECTION*)*mutex) - &gMutexes[0];
         U_ASSERT(i >= 0 && i < MAX_MUTEXES);
         ++gRecursionCountPool[i];
 
@@ -263,7 +263,7 @@ umtx_unlock(UMTX* mutex)
     }
     /* This handles gGlobalMutex too, but only if there is no pMutexLockFn */
     else if (pMutexLockFn == NULL) { /* see comments above */
-        int i = ((CRITICAL_SECTION*)*mutex) - &gMutexes[0];
+        size_t i = ((CRITICAL_SECTION*)*mutex) - &gMutexes[0];
         U_ASSERT(i >= 0 && i < MAX_MUTEXES);
         --gRecursionCountPool[i];
 

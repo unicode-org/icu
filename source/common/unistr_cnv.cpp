@@ -267,7 +267,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
     return;
   }
   if(dataLength == -1) {
-    dataLength = uprv_strlen(codepageData);
+    dataLength = (int32_t)uprv_strlen(codepageData);
   }
 
   UErrorCode status = U_ZERO_ERROR;

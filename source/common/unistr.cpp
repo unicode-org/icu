@@ -302,7 +302,7 @@ UnicodeString::UnicodeString(const char *src, int32_t length, EInvariant)
     // treat as an empty string
   } else {
     if(length<0) {
-      length=uprv_strlen(src);
+      length=(int32_t)uprv_strlen(src);
     }
     if(cloneArrayIfNeeded(length, length, FALSE)) {
       u_charsToUChars(src, getArrayStart(), length);
@@ -759,7 +759,7 @@ UnicodeString::indexOf(const UChar *srcChars,
   if(match == NULL) {
     return -1;
   } else {
-    return match - fArray;
+    return (int32_t)(match - fArray);
   }
 }
 
@@ -776,7 +776,7 @@ UnicodeString::doIndexOf(UChar c,
   if(match == NULL) {
     return -1;
   } else {
-    return match - fArray;
+    return (int32_t)(match - fArray);
   }
 }
 
@@ -792,7 +792,7 @@ UnicodeString::doIndexOf(UChar32 c,
   if(match == NULL) {
     return -1;
   } else {
-    return match - fArray;
+    return (int32_t)(match - fArray);
   }
 }
 
@@ -820,7 +820,7 @@ UnicodeString::lastIndexOf(const UChar *srcChars,
   if(match == NULL) {
     return -1;
   } else {
-    return match - fArray;
+    return (int32_t)(match - fArray);
   }
 }
 
@@ -841,7 +841,7 @@ UnicodeString::doLastIndexOf(UChar c,
   if(match == NULL) {
     return -1;
   } else {
-    return match - fArray;
+    return (int32_t)(match - fArray);
   }
 }
 
@@ -857,7 +857,7 @@ UnicodeString::doLastIndexOf(UChar32 c,
   if(match == NULL) {
     return -1;
   } else {
-    return match - fArray;
+    return (int32_t)(match - fArray);
   }
 }
 

@@ -534,7 +534,7 @@ static void udata_pathiter_init(UDataPathIterator *iter, const char *path, const
      *   Get an upper bound of possible string size, and make sure that the buffer
      *   is big enough (sum of length of each piece, 2 extra delimiters, + trailing NULL) */
     {
-        int32_t  maxPathLen = (int32_t)uprv_strlen(iter->path) + uprv_strlen(item) + uprv_strlen(iter->suffix) + iter->packageStubLen + 3;  
+        int32_t  maxPathLen = (int32_t)(uprv_strlen(iter->path) + uprv_strlen(item) + uprv_strlen(iter->suffix) + iter->packageStubLen + 3);
         iter->pathBuffer = iter->pathBufferA;
         if (maxPathLen >= U_DATA_PATHITER_BUFSIZ) {
             iter->pathBuffer = (char *)uprv_malloc(maxPathLen);
