@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeMatcher.java,v $ 
- * $Date: 2002/02/16 03:06:21 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/03/15 19:02:25 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -62,11 +62,11 @@ public interface UnicodeMatcher {
      * If limit == offset then the only match possible is a zero
      * character match (which subclasses may implement if desired).
      *
-     * As a side effect, advance the offset parameter to the limit of
-     * the matched substring.  In the forward direction, this will be
-     * the index of the last matched character plus one.  In the
-     * reverse direction, this will be the index of the last matched
-     * character minus one.
+     * If U_MATCH is returned, then as a side effect, advance the
+     * offset parameter to the limit of the matched substring.  In the
+     * forward direction, this will be the index of the last matched
+     * character plus one.  In the reverse direction, this will be the
+     * index of the last matched character minus one.
      *
      * @param text the text to be matched
      * @param offset on input, the index into text at which to begin
