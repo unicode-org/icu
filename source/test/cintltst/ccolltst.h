@@ -40,4 +40,21 @@ ctst_strcollTestIncremental(    const    UCollator    *coll,
         int32_t            targetLength);
 
 
+void addCollAPITest(TestNode**);
+void addCurrencyTest(TestNode**);
+void addNormTest(TestNode**);
+void addDanishCollTest(TestNode**);
+void addGermanCollTest(TestNode**);
+void addSpanishCollTest(TestNode**);
+void addFrenchCollTest(TestNode**);
+void addKannaCollTest(TestNode**);
+void addTurkishCollTest(TestNode**);
+void addEnglishCollTest(TestNode**);
+void addFinnishCollTest(TestNode**);
+
+void addRuleBasedCollTest(TestNode**);
+void addCollIterTest(TestNode**);
+void addAllCollTest(TestNode**);
+void addMiscCollTest(TestNode**);
+
 #endif
