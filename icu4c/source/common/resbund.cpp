@@ -61,6 +61,7 @@
 
 #include "cmemory.h"
 
+
 /*-----------------------------------------------------------------------------
  * Implementation Notes
  *
@@ -264,7 +265,8 @@ ResourceBundle& ResourceBundle::operator=(const ResourceBundle& other)
         resource = 0;
     }
     UErrorCode status = U_ZERO_ERROR;
-    if(other.resource->fData != 0) {
+    //if(other.resource->fData != 0) {
+    if(other.resource->fIsTopLevel == TRUE) {
         constructForLocale(ures_getPath(other.resource), Locale(ures_getName(other.resource)), status);
     } else {
         resource = copyResb(resource, other.resource);
@@ -303,6 +305,7 @@ ResourceBundle::constructForLocale(const UnicodeString& path,
     fItemCache = 0;
     int32_t patlen = path.length();
 
+
     if(patlen > 0) {
         //u_UCharsToChars(path.getUChars(), name, path.length()+1);
         path.extract(0, patlen, name, "");
@@ -340,6 +343,14 @@ UnicodeString ResourceBundle::getString(UErrorCode& status) const {
     int32_t len = 0;
     const UChar *r = ures_getString(resource, &len, &status);
     return UnicodeString(TRUE, r, len);
+}
+
+const uint8_t *ResourceBundle::getBinary(int32_t& len, UErrorCode& status) const {
+  return ures_getBinary(resource, &len, &status);
+}
+
+const char *ResourceBundle::getName(void) {
+  return ures_getName(resource);
 }
 
 const char *ResourceBundle::getKey(void) {

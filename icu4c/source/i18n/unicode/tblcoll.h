@@ -772,7 +772,7 @@ private:
                       UErrorCode& status);
   void                constructFromCache( const UnicodeString& key,
                       UErrorCode& status);
-  void                constructFromBundle(const char* fileName,
+  const char*         constructFromBundle(const char* fileName,
 					  UErrorCode& status);
 
 

@@ -312,21 +312,14 @@ parse(FileStream *f, const char *cp,
 			int32_t len = 0;
 			uint8_t *data = NULL;
 			UCollator *coll = NULL; 
-			const UChar *rules1 = NULL;
-			int32_t len1 = 0;
-			UCollator *tstColl = NULL;
-			const UChar *rules2 = NULL;
-			int32_t len2 = 0;
 			UChar *rules = NULL;
 			defaultRulesArray = ucol_getDefaultRulesArray(&defaultRulesArrayLength);
 			rules = uprv_malloc(sizeof(defaultRulesArray[0])*(defaultRulesArrayLength + token.fLength));
 			uprv_memcpy(rules, defaultRulesArray, defaultRulesArrayLength*sizeof(defaultRulesArray[0]));
 			uprv_memcpy(rules + defaultRulesArrayLength, token.fChars, token.fLength*sizeof(token.fChars[0]));
 			
-			coll = ucol_openRules(rules, defaultRulesArrayLength + token.fLength, 0, 0, status);
-			/*tstColl = ucol_open("da", status);*/
-			rules1 = ucol_getRules(coll, &len1);
-			/*rules2 = ucol_getRules(tstColl, &len2);*/
+			coll = ucol_openRules(rules, defaultRulesArrayLength + token.fLength, UCOL_DECOMP_CAN, 0, status);
+			ucol_setNormalization(coll, UCOL_NO_NORMALIZATION);
 
 			if(U_SUCCESS(*status) && coll !=NULL) {
 				data = ucol_cloneRuleData(coll, &len, status);
@@ -464,25 +457,17 @@ parse(FileStream *f, const char *cp,
 			uint8_t *data = NULL;
 			uint8_t *data2 = NULL;
 			UCollator *coll = NULL; 
-			UCollator *tstColl = NULL;
-			const UChar *rules1 = NULL;
-			const UChar *rules2 = NULL;
-			int32_t len1 = 0;
-			int32_t len2 = 0;
 
 			UChar *rules = NULL;
 			defaultRulesArray = ucol_getDefaultRulesArray(&defaultRulesArrayLength);
 			rules = uprv_malloc(sizeof(defaultRulesArray[0])*(defaultRulesArrayLength));
 			uprv_memcpy(rules, defaultRulesArray, defaultRulesArrayLength*sizeof(defaultRulesArray[0]));
 			
-			coll = ucol_openRules(rules, defaultRulesArrayLength, 0, 0, status);
-			/*tstColl = ucol_open("root", status);*/
-			rules1 = ucol_getRules(coll, &len1);
-			/*rules2 = ucol_getRules(tstColl, &len2);*/
+			coll = ucol_openRules(rules, defaultRulesArrayLength, UCOL_DECOMP_CAN, 0, status);
+			ucol_setNormalization(coll, UCOL_DEFAULT_NORMALIZATION);
 
 			if(U_SUCCESS(*status) && coll !=NULL) {
 				data = ucol_cloneRuleData(coll, &len, status);
-				/*data2 = ucol_cloneRuleData(tstColl, &len2, status);*/
 				if(U_SUCCESS(*status) && data != NULL) {
 					temp1 = bin_open(bundle, "%%Collation", len, data, status);
 					table_add(rootTable, temp1, status);

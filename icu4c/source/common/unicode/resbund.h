@@ -211,6 +211,8 @@ public:
  * @draft
  */
     UnicodeString getString(UErrorCode& status) const;
+    const uint8_t *getBinary(int32_t& len, UErrorCode& status) const;
+
 /**
  * Checks whether the resource has another element to iterate over.
  *
@@ -233,6 +235,9 @@ public:
  * @draft
  */
     const char *getKey(void);
+
+    const char *getName(void);
+
 
 /**
  * Returns the type of a resource. Available types are defined in enum UResType

@@ -42,7 +42,7 @@ struct  UMemoryStream{
 };
 
 U_CAPI UMemoryStream * U_EXPORT2 uprv_mstrm_openNew(int32_t size);
-U_CAPI UMemoryStream * U_EXPORT2 uprv_mstrm_openBuffer(uint8_t *buffer, int32_t len);
+U_CAPI UMemoryStream * U_EXPORT2 uprv_mstrm_openBuffer(const uint8_t *buffer, int32_t len);
 U_CAPI void U_EXPORT2 uprv_mstrm_close(UMemoryStream *MS);
 U_CAPI UBool U_EXPORT2 uprv_mstrm_setError(UMemoryStream *MS);
 U_CAPI UBool U_EXPORT2 uprv_mstrm_error(UMemoryStream *MS);

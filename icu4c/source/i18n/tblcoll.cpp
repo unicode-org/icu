@@ -758,18 +758,19 @@ RuleBasedCollator::constructFromFile(const char* fileName,
     T_FileStream_close(ifs);
 }
 
-void
-RuleBasedCollator::constructFromBundle(const char* fileName,
+const char *
+RuleBasedCollator::constructFromBundle(const char* name,
                                   UErrorCode& status)
 {
-    // This method tries to read in a flattened RuleBasedCollator that
-    // has been previously streamed out using the streamOut() method.
-    // The 'fileName' parameter should contain a full pathname valid on
-    // the local environment.
+  // This method tries to locate binary collation data which has been 
+  // previously streamed to a binary object "%%Collation" in a 
+  // resource bundle. If the data is found, it is cached.
+  // cache is checked before actually streaming in data
+  // resource bundle fallback mechanism is used.
 
     if (U_FAILURE(status))
     {
-        return;
+        return 0;
     }
 
     if (dataIsOwned)
@@ -777,47 +778,58 @@ RuleBasedCollator::constructFromBundle(const char* fileName,
         delete data;
         data = 0;
     }
+    const char* realName = 0;
 
     mPattern = 0;
     isOverIgnore = FALSE;
     setStrength(Collator::TERTIARY); // This is the default strength
 
-    FileStream* ifs = T_FileStream_open(fileName, "rb");
-    //UMemoryStream* ifs = uprv_mstrm_openBuffer(NULL, 0);
-    if (ifs == 0) {
-        status = U_FILE_ACCESS_ERROR;
-        return;
+    ResourceBundle rb(0, name, status);
+    if(U_SUCCESS(status)) {
+      ResourceBundle binary = rb.get("%%Collation", status); //This is the bundle that actually contains the collation data
+      realName = binary.getName();
+      if(U_SUCCESS(status)) {
+	UErrorCode intStatus = U_ZERO_ERROR;
+	constructFromCache(realName, intStatus); // check whether we already have this data in cache
+	if(U_SUCCESS(intStatus)) {
+	  return realName;
+	}
+	int32_t inDataLen = 0;
+	const uint8_t *inData = binary.getBinary(inDataLen, status); //This got us the real binary data
+	
+	UMemoryStream *ifs = uprv_mstrm_openBuffer(inData, inDataLen);
+	
+	if (ifs == 0) {
+	  status = U_FILE_ACCESS_ERROR;
+	  return 0;
+	}
+
+	// The streamIn function does the actual work here...
+	RuleBasedCollatorStreamer::streamIn(this, ifs);
+
+	if (!uprv_mstrm_error(ifs)) {
+	}
+	else if (data && data->isBogus()) {
+	  status = U_MEMORY_ALLOCATION_ERROR;
+	  delete data;
+	  data = 0;
+	} else {
+	  status = U_MISSING_RESOURCE_ERROR;
+	  delete data;
+	  data = 0;
+	}
+
+	// We constructed the data when streaming it in, so we own it
+	dataIsOwned = TRUE;
+
+	uprv_mstrm_close(ifs);
+	addToCache(realName); // add the newly constructed data to cache
+	return realName;
+      } else {
+	status = U_MISSING_RESOURCE_ERROR;
+	return 0;
+      }
     }
-
-    // The streamIn function does the actual work here...
-    RuleBasedCollatorStreamer::streamIn(this, ifs);
-
-    if (!T_FileStream_error(ifs))
-    {
-        status = U_ZERO_ERROR;
-    }
-    else if (data && data->isBogus())
-    {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        delete data;
-        data = 0;
-    }
-    else
-    {
-        status = U_MISSING_RESOURCE_ERROR;
-        delete data;
-        data = 0;
-    }
-
-#ifdef COLLDEBUG
-    fprintf(stderr, "binary read %s size %d, %s\n", fileName, T_FileStream_size(ifs), u_errorName(status));
-#endif
-
-    // We constructed the data when streaming it in, so we own it
-    dataIsOwned = TRUE;
-
-    T_FileStream_close(ifs);
-    //uprv_mstrm_close(ifs);
 }
 
 RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
@@ -834,10 +846,9 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
 {
 
 
-  if (U_FAILURE(status))
-    {
-      return;
-    }
+  if (U_FAILURE(status)) {
+    return;
+  }
   
   // Try to load, in order:
   // 1. The desired locale's collation.
@@ -856,129 +867,39 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
   //  language+country
   //  language
   // Root: (aka DEFAULTRULES)
+  // steps 1-5 are handled by resource bundle fallback mechanism. 
+  // however, in a very unprobable situation that no resource bundle
+  // data exists, step 5 is repeated with hardcoded default rules.
 
-  UnicodeString localeName(desiredLocale.getName(), "");
-  enum { eTryDefaultLocale, eTryDefaultCollation, eDone } next = eTryDefaultLocale;
-    
-  for (;;)
-    {
-      if (localeName.length() == 0)
-    {
-      if (next == eDone)
-            {
-          // We've failed to load a locale, but should never return U_MISSING_RESOURCE_ERROR
-          UErrorCode intStatus = U_ZERO_ERROR;
-
-          constructFromRules(RuleBasedCollator::DEFAULTRULES, intStatus);
-          if (intStatus == U_ZERO_ERROR)
-        {
-          status = U_USING_DEFAULT_ERROR;
-        }
-          else
-        {
-          status = intStatus;     // bubble back
-        }
-
-          if (status == U_MEMORY_ALLOCATION_ERROR)
-        {
-          return;
-        }
-
-	  // srl write out default.col
-	  {
-	    UnicodeString defLocaleName = UnicodeString(ResourceBundle::kDefaultFilename,""); 
-	    char *binaryFilePath = createPathName(UnicodeString(u_getDataDirectory(),""), 
-						  defLocaleName, UnicodeString(kFilenameSuffix,""));
-	    UBool ok = writeToFile(binaryFilePath);
-	    delete [] binaryFilePath;
-#ifdef COLLDEBUG
-	    cerr << defLocaleName << " [default] binary write " << (ok? "OK" : "Failed") << endl;
-#endif
-	  }
-
-          data->desiredLocale = desiredLocale;
-          localeName = desiredLocale.getName();
-          data->realLocaleName = localeName;
-          addToCache(localeName);
-
-          setDecomposition(Normalizer::NO_OP);
-
-          const UnicodeString& rules = getRules();
-          break;
-            }
-
-      // We've exhausted our inheritance attempts with this locale.
-      // Try the next step.
-      switch (next)
-            {
-            case eTryDefaultLocale:
-          status = U_USING_DEFAULT_ERROR;
-          localeName = Locale::getDefault().getName();
-          next = eTryDefaultCollation;
-          break;
-
-            case eTryDefaultCollation:
-          // There is no distinction between this condition of
-          // using a default collation object and the condition of
-          // using a default locale to get a collation object currently.
-          // That is, the caller can't distinguish based on UErrorCode.
-          status = U_USING_DEFAULT_ERROR;
-          localeName = ResourceBundle::kDefaultFilename;
-          next = eDone;
-          break;
-            }
-       }
-
-      // First try to load the collation from the in-memory static cache.
-      // Note that all of the caching logic is handled here, and in the
-      // call to RuleBasedCollator::addToCache, below.
-      UErrorCode intStatus = U_ZERO_ERROR;
-
-      constructFromCache(localeName, intStatus);
-      if (U_SUCCESS(intStatus))
-    {
-      break; // Done!
-    }
-
-      // The collation we want is not in the cache.  The second thing
-      // to try is loading from a file, either binary or ASCII.  So:
-      // Try to load the locale's collation data.  This will try to load
-      // a binary collation file, or if that is unavailable, it will go
-      // to the text resource bundle file (with the corresponding name)
-      // and try to get the collation table there.
-      intStatus = U_ZERO_ERROR;
-      constructFromFile(desiredLocale, localeName, TRUE, intStatus);
-      if (U_SUCCESS(intStatus))
-        {
-      // If we succeeded in loading the collation from a file, now is the
-      // time to add it to the in-memory cache.  We record the real
-      // location at which the collation data was found, so we can reload
-      // the rule table quickly, if it is requested, in the future.
-      // See getRules().
-      data->desiredLocale = desiredLocale;
-      data->realLocaleName = localeName;
-      addToCache(localeName);
-
+  const char *locName = constructFromBundle(desiredLocale.getName(), status);  /*!*/
+  data->desiredLocale = desiredLocale;
+  
+  if (U_SUCCESS(status)) {
+    data->realLocaleName = locName;
+    if(status != U_USING_DEFAULT_ERROR) {
       setDecomposition(Normalizer::NO_OP);
-      break; // Done!
-        }
-      if (intStatus == U_MEMORY_ALLOCATION_ERROR)
-    {
-      status = intStatus;
-      return;
-        }
-
-      // Having failed, chop off the end of the locale name, making
-      // it less specific, and try again.  Indicate the use of a
-      // fallback locale, unless we've already fallen through to
-      // a default locale -- then leave the status as is.
-      if (status == U_ZERO_ERROR)
-    {
-      status = U_USING_FALLBACK_ERROR;
     }
-
-      chopLocale(localeName);
+  } else {
+    UErrorCode intStatus = U_ZERO_ERROR;
+    constructFromCache(ResourceBundle::kDefaultFilename, intStatus);
+    if(U_FAILURE(intStatus)) {
+      intStatus = U_ZERO_ERROR;
+      constructFromRules(RuleBasedCollator::DEFAULTRULES, intStatus);
+      if (intStatus == U_ZERO_ERROR) {
+	status = U_USING_DEFAULT_ERROR;
+      } else {
+	status = intStatus;     // bubble back
+      }
+    
+      if (status == U_MEMORY_ALLOCATION_ERROR) {
+	return;
+      }
     }
+    data->realLocaleName = ResourceBundle::kDefaultFilename;
+    setDecomposition(Normalizer::NO_OP);
+    addToCache(ResourceBundle::kDefaultFilename);
+  }
+  return;
 }
 
 void
@@ -1111,7 +1032,7 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
     // binary file to the disk.  The next time the system wants to
     // get this collation, it will load up very quickly from the
     // binary file.
-    UBool ok = writeToFile(binaryFilePath);
+    /*UBool ok = writeToFile(binaryFilePath);*/ /*!*/
     delete [] binaryFilePath;
 #ifdef COLLDEBUG
     cerr << localeFileName << " binary write " << (ok? "OK" : "Failed") << endl;
