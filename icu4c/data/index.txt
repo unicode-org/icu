@@ -7,7 +7,8 @@
 
 index {
     InstalledLocales {
-    // For testing: the first few locales shouldn't be experimental
+        af, // experimental
+        af_ZA, // experimental
         ar,
         ar_AE,
         ar_BH,
@@ -26,9 +27,6 @@ index {
         ar_SY,
         ar_TN,
         ar_YE,
-        af, // experimental
-        af_ZA, // experimental
-
         be,
         be_BY,
         bg,
@@ -60,7 +58,7 @@ index {
         en_IE_EURO,
         en_MT,
         en_NZ,
-        en_SG // experimental
+        en_SG,
         en_US,
         en_ZA,
         en_ZW,
@@ -200,6 +198,5 @@ index {
         zh_HK,
         zh_SG,
         zh_TW,
-
     }
 }
