@@ -159,7 +159,7 @@ unorm_normalize(const UChar*            source,
   return uprv_fillOutputString(dst, result, resultLength, status);
 }
 
-static UBool
+static UBool U_CALLCONV
 isQuickCheckAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {
@@ -380,7 +380,7 @@ unorm_quickCheck(const UChar             *source,
 
 /* private methods ---------------------------------------------------------- */
 
-static UBool
+static UBool U_CALLCONV
 isFCDCheckAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {
