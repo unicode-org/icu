@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/UnicodeSetTest.java,v $ 
- * $Date: 2001/11/12 20:55:06 $ 
- * $Revision: 1.16 $
+ * $Date: 2001/11/30 23:59:23 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -25,6 +25,191 @@ public class UnicodeSetTest extends TestFmwk {
 
     public static void main(String[] args) throws Exception {
         new UnicodeSetTest().run(args);
+    }
+    
+    // Needs porting to C!!
+    
+    public void TestToPattern() throws Exception {
+        for (int i = 0; i < 0x10FFFF; ++i) {
+            if (i <= 0xFF & !UCharacter.isLetter(i) || UCharacter.isWhitespace(i)) {
+                // check various combinations to make sure they all work.
+                if (i != 0 && !toPatternAux(i, i)) continue;
+                if (!toPatternAux(0, i)) continue;
+                if (!toPatternAux(i, 0xFFFF)) continue;
+            }
+        }
+    }
+    
+    public boolean toPatternAux(int start, int end) {
+        // use Integer.toString because Utility.hex doesn't handle ints
+        String pat = "";
+        String source = "0x" + Integer.toString(start,16).toUpperCase();
+        if (start != end) source += "..0x" + Integer.toString(end,16).toUpperCase();
+        try {
+            UnicodeSet testSet = new UnicodeSet();
+            testSet.add(start, end);
+            
+            pat = testSet.toPattern(true);
+            if (!checkPat(source, testSet, pat)) return false;
+            
+            String pat0 = pat;
+            pat = unescapeLeniently(pat);
+            if (!checkPat(source + " (in code)", testSet, pat)) return false;
+            
+            String pat1 = pat;
+            pat = testSet.toPattern(false);
+            if (!checkPat(source, testSet, pat)) return false;
+            
+            String pat2 = pat;
+            pat = unescapeLeniently(pat);
+            if (!checkPat(source + " (in code)", testSet, pat)) return false;
+            
+            logln(source + " => " + pat0 + ", " + pat1 + ", " + pat2 + ", " + pat);
+        } catch (Exception e) {
+            errln("EXCEPTION in toPattern: " + source + " => " + pat);
+            return false;
+        }
+        return true;
+    }
+    
+    boolean checkPat (String source, UnicodeSet testSet, String pat) {
+        UnicodeSet testSet2 = new UnicodeSet(pat);
+        if (!testSet2.equals(testSet)) {
+            errln("Fail toPattern: " + source + " => " + pat);
+            return false;
+        }
+        return true;
+    }
+    
+    
+    // NOTE: copied the following from Utility. There ought to be a version in there with a flag
+    // that does the Java stuff
+    
+    public static int unescapeAt(String s, int[] offset16) {
+        int c;
+        int result = 0;
+        int n = 0;
+        int minDig = 0;
+        int maxDig = 0;
+        int bitsPerDigit = 4;
+        int dig;
+        int i;
+
+        /* Check that offset is in range */
+        int offset = offset16[0];
+        int length = s.length();
+        if (offset < 0 || offset >= length) {
+            return -1;
+        }
+
+        /* Fetch first UChar after '\\' */
+        c = UTF16.charAt(s, offset);
+        offset += UTF16.getCharCount(c);
+
+        /* Convert hexadecimal and octal escapes */
+        switch (c) {
+        case 'u':
+            minDig = maxDig = 4;
+            break;
+        /*
+        case 'U':
+            minDig = maxDig = 8;
+            break;
+        case 'x':
+            minDig = 1;
+            maxDig = 2;
+            break;
+        */
+        default:
+            dig = UCharacter.digit(c, 8);
+            if (dig >= 0) {
+                minDig = 1;
+                maxDig = 3;
+                n = 1; /* Already have first octal digit */
+                bitsPerDigit = 3;
+                result = dig;
+            }
+            break;
+        }
+        if (minDig != 0) {
+            while (offset < length && n < maxDig) {
+                // TEMPORARY
+                // TODO: Restore the char32-based code when UCharacter.digit
+                // is working (Bug 66).
+
+                //c = UTF16.charAt(s, offset);
+                //dig = UCharacter.digit(c, (bitsPerDigit == 3) ? 8 : 16);
+                c = s.charAt(offset);
+                dig = Character.digit((char)c, (bitsPerDigit == 3) ? 8 : 16);
+                if (dig < 0) {
+                    break;
+                }
+                result = (result << bitsPerDigit) | dig;
+                //offset += UTF16.getCharCount(c);
+                ++offset;
+                ++n;
+            }
+            if (n < minDig) {
+                return -1;
+            }
+            offset16[0] = offset;
+            return result;
+        }
+
+        /* Convert C-style escapes in table */
+        for (i=0; i<UNESCAPE_MAP.length; i+=2) {
+            if (c == UNESCAPE_MAP[i]) {
+                offset16[0] = offset;
+                return UNESCAPE_MAP[i+1];
+            } else if (c < UNESCAPE_MAP[i]) {
+                break;
+            }
+        }
+
+        /* If no special forms are recognized, then consider
+         * the backslash to generically escape the next character. */
+        offset16[0] = offset;
+        return c;
+    }
+
+    /* This map must be in ASCENDING ORDER OF THE ESCAPE CODE */
+    static private final char[] UNESCAPE_MAP = {
+        /*"   0x22, 0x22 */
+        /*'   0x27, 0x27 */
+        /*?   0x3F, 0x3F */
+        /*\   0x5C, 0x5C */
+        /*a*/ 0x61, 0x07,
+        /*b*/ 0x62, 0x08,
+        /*f*/ 0x66, 0x0c,
+        /*n*/ 0x6E, 0x0a,
+        /*r*/ 0x72, 0x0d,
+        /*t*/ 0x74, 0x09,
+        /*v*/ 0x76, 0x0b
+    };
+
+    /**
+     * Convert all escapes in a given string using unescapeAt().
+     * Leave invalid escape sequences unchanged.
+     */
+    public static String unescapeLeniently(String s) {
+        StringBuffer buf = new StringBuffer();
+        int[] pos = new int[1];
+        for (int i=0; i<s.length(); ) {
+            char c = s.charAt(i++);
+            if (c == '\\') {
+                pos[0] = i;
+                int e = unescapeAt(s, pos);
+                if (e < 0) {
+                    buf.append(c);
+                } else {
+                    UTF16.append(buf, e);
+                    i = pos[0];
+                }
+            } else {
+                buf.append(c);
+            }
+        }
+        return buf.toString();
     }
 
     public void TestPatterns() {
