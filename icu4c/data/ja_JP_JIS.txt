@@ -7,264 +7,73 @@
 
 ja_JP_JIS {
     CollationElements { 
-	    Version { "3.0" }
-		Sequence {
-		"&\u30A1=\u3041"
-		"&\u30A2=\u3042"
-		"&\u30A3=\u3043"
-		"&\u30A4=\u3044"
-		"&\u30A5=\u3045"
-		"&\u30A6=\u3046"
-		"&\u30A7=\u3047"
-		"&\u30A8=\u3048"
-		"&\u30A9=\u3049"
-		"&\u30AA=\u304A"
-		"&\u30AB=\u304B"
-		"&\u30AB\u3099=\u304B\u3099"
-		"&\u30AD=\u304D"
-		"&\u30AD\u3099=\u304D\u3099"
-		"&\u30AF=\u304F"
-		"&\u30AF\u3099=\u304F\u3099"
-		"&\u30B1=\u3051"
-		"&\u30B1\u3099=\u3051\u3099"
-		"&\u30B3=\u3053"
-		"&\u30B3\u3099=\u3053\u3099"
-		"&\u30B5=\u3055"
-		"&\u30B5\u3099=\u3055\u3099"
-		"&\u30B7=\u3057"
-		"&\u30B7\u3099=\u3057\u3099"
-		"&\u30B9=\u3059"
-		"&\u30B9\u3099=\u3059\u3099"
-		"&\u30BB=\u305B"
-		"&\u30BB\u3099=\u305B\u3099"
-		"&\u30BD=\u305D"
-		"&\u30BD\u3099=\u305D\u3099"
-		"&\u30BF=\u305F"
-		"&\u30BF\u3099=\u305F\u3099"
-		"&\u30C1=\u3061"
-		"&\u30C1\u3099=\u3061\u3099"
-		"&\u30C3=\u3063"
-		"&\u30C4=\u3064"
-		"&\u30C4\u3099=\u3064\u3099"
-		"&\u30C6=\u3066"
-		"&\u30C6\u3099=\u3066\u3099"
-		"&\u30C8=\u3068"
-		"&\u30C8\u3099=\u3068\u3099"
-		"&\u30CA=\u306A"
-		"&\u30CB=\u306B"
-		"&\u30CC=\u306C"
-		"&\u30CD=\u306D"
-		"&\u30CE=\u306E"
-		"&\u30CF=\u306F"
-		"&\u30CF\u3099=\u306F\u3099"
-		"&\u30CF\u309A=\u306F\u309A"
-		"&\u30D2=\u3072"
-		"&\u30D2\u3099=\u3072\u3099"
-		"&\u30D2\u309A=\u3072\u309A"
-		"&\u30D5=\u3075"
-		"&\u30D5\u3099=\u3075\u3099"
-		"&\u30D5\u309A=\u3075\u309A"
-		"&\u30D8=\u3078"
-		"&\u30D8\u3099=\u3078\u3099"
-		"&\u30D8\u309A=\u3078\u309A"
-		"&\u30DB=\u307B"
-		"&\u30DB\u3099=\u307B\u3099"
-		"&\u30DB\u309A=\u307B\u309A"
-		"&\u30DE=\u307E"
-		"&\u30DF=\u307F"
-		"&\u30E0=\u3080"
-		"&\u30E1=\u3081"
-		"&\u30E2=\u3082"
-		"&\u30E3=\u3083"
-		"&\u30E4=\u3084"
-		"&\u30E5=\u3085"
-		"&\u30E6=\u3086"
-		"&\u30E7=\u3087"
-		"&\u30E8=\u3088"
-		"&\u30E9=\u3089"
-		"&\u30EA=\u308A"
-		"&\u30EB=\u308B"
-		"&\u30EC=\u308C"
-		"&\u30ED=\u308D"
-		"&\u30EE=\u308E"
-		"&\u30EF=\u308F"
-		"&\u30F0=\u3090"
-		"&\u30F1=\u3091"
-		"&\u30F2=\u3092"
-		"&\u30F3=\u3093"
-		"&\u30A6\u3099=\u3046\u3099"
-		"&' '=\u3000" // IDEOGRAPHIC SPACE
-		"&'!'=\uff01" // FULLWIDTH EXCLAMATION MARK
-		"&'\u0022'=\uff02" // FULLWIDTH QUOTATION MARK
-		"&'#'=\uff03" // FULLWIDTH NUMBER SIGN
-		"&'$'=\uff04" // FULLWIDTH DOLLAR SIGN
-		"&'%'=\uff05" // FULLWIDTH PERCENT SIGN
-		"&'&'=\uff06" // FULLWIDTH AMPERSAND
-		"&''=\uff07" // FULLWIDTH APOSTROPHE
-		"&'('=\uff08" // FULLWIDTH LEFT PARENTHESIS
-		"&')'=\uff09" // FULLWIDTH RIGHT PARENTHESIS
-		"&'*'=\uff0a" // FULLWIDTH ASTERISK
-		"&'+'=\uff0b" // FULLWIDTH PLUS SIGN
-		"&','=\uff0c" // FULLWIDTH COMMA
-		"&'-'=\uff0d" // FULLWIDTH HYPHEN-MINUS
-		"&'.'=\uff0e" // FULLWIDTH FULL STOP
-		"&'/'=\uff0f" // FULLWIDTH SOLIDUS
-		"&'0'=\uff10" // FULLWIDTH DIGIT ZERO
-		"&'1'=\uff11" // FULLWIDTH DIGIT ONE
-		"&'2'=\uff12" // FULLWIDTH DIGIT TWO
-		"&'3'=\uff13" // FULLWIDTH DIGIT THREE
-		"&'4'=\uff14" // FULLWIDTH DIGIT FOUR
-		"&'5'=\uff15" // FULLWIDTH DIGIT FIVE
-		"&'6'=\uff16" // FULLWIDTH DIGIT SIX
-		"&'7'=\uff17" // FULLWIDTH DIGIT SEVEN
-		"&'8'=\uff18" // FULLWIDTH DIGIT EIGHT
-		"&'9'=\uff19" // FULLWIDTH DIGIT NINE
-		"&':'=\uff1a" // FULLWIDTH COLON
-		"&';'=\uff1b" // FULLWIDTH SEMICOLON
-		"&'<'=\uff1c" // FULLWIDTH LESS-THAN SIGN
-		"&'='=\uff1d" // FULLWIDTH EQUALS SIGN
-		"&'>'=\uff1e" // FULLWIDTH GREATER-THAN SIGN
-		"&'?'=\uff1f" // FULLWIDTH QUESTION MARK
-		"&'@'=\uff20" // FULLWIDTH COMMERCIAL AT
-		"&'A'=\uff21" // FULLWIDTH LATIN CAPITAL LETTER A
-		"&'B'=\uff22" // FULLWIDTH LATIN CAPITAL LETTER B
-		"&'C'=\uff23" // FULLWIDTH LATIN CAPITAL LETTER C
-		"&'D'=\uff24" // FULLWIDTH LATIN CAPITAL LETTER D
-		"&'E'=\uff25" // FULLWIDTH LATIN CAPITAL LETTER E
-		"&'F'=\uff26" // FULLWIDTH LATIN CAPITAL LETTER F
-		"&'G'=\uff27" // FULLWIDTH LATIN CAPITAL LETTER G
-		"&'H'=\uff28" // FULLWIDTH LATIN CAPITAL LETTER H
-		"&'I'=\uff29" // FULLWIDTH LATIN CAPITAL LETTER I
-		"&'J'=\uff2a" // FULLWIDTH LATIN CAPITAL LETTER J
-		"&'K'=\uff2b" // FULLWIDTH LATIN CAPITAL LETTER K
-		"&'L'=\uff2c" // FULLWIDTH LATIN CAPITAL LETTER L
-		"&'M'=\uff2d" // FULLWIDTH LATIN CAPITAL LETTER M
-		"&'N'=\uff2e" // FULLWIDTH LATIN CAPITAL LETTER N
-		"&'O'=\uff2f" // FULLWIDTH LATIN CAPITAL LETTER O
-		"&'P'=\uff30" // FULLWIDTH LATIN CAPITAL LETTER P
-		"&'Q'=\uff31" // FULLWIDTH LATIN CAPITAL LETTER Q
-		"&'R'=\uff32" // FULLWIDTH LATIN CAPITAL LETTER R
-		"&'S'=\uff33" // FULLWIDTH LATIN CAPITAL LETTER S
-		"&'T'=\uff34" // FULLWIDTH LATIN CAPITAL LETTER T
-		"&'U'=\uff35" // FULLWIDTH LATIN CAPITAL LETTER U
-		"&'V'=\uff36" // FULLWIDTH LATIN CAPITAL LETTER V
-		"&'W'=\uff37" // FULLWIDTH LATIN CAPITAL LETTER W
-		"&'X'=\uff38" // FULLWIDTH LATIN CAPITAL LETTER X
-		"&'Y'=\uff39" // FULLWIDTH LATIN CAPITAL LETTER Y
-		"&'Z'=\uff3a" // FULLWIDTH LATIN CAPITAL LETTER Z
-		"&'['=\uff3b" // FULLWIDTH LEFT SQUARE BRACKET
-		"&'\u005c'=\uff3c" // FULLWIDTH REVERSE SOLIDUS
-		"&']'=\uff3d" // FULLWIDTH RIGHT SQUARE BRACKET
-		"&'^'=\uff3e" // FULLWIDTH CIRCUMFLEX ACCENT
-		"&'_'=\uff3f" // FULLWIDTH LOW LINE
-		"&'`'=\uff40" // FULLWIDTH GRAVE ACCENT
-		"&'a'=\uff41" // FULLWIDTH LATIN SMALL LETTER A
-		"&'b'=\uff42" // FULLWIDTH LATIN SMALL LETTER B
-		"&'c'=\uff43" // FULLWIDTH LATIN SMALL LETTER C
-		"&'d'=\uff44" // FULLWIDTH LATIN SMALL LETTER D
-		"&'e'=\uff45" // FULLWIDTH LATIN SMALL LETTER E
-		"&'f'=\uff46" // FULLWIDTH LATIN SMALL LETTER F
-		"&'g'=\uff47" // FULLWIDTH LATIN SMALL LETTER G
-		"&'h'=\uff48" // FULLWIDTH LATIN SMALL LETTER H
-		"&'i'=\uff49" // FULLWIDTH LATIN SMALL LETTER I
-		"&'j'=\uff4a" // FULLWIDTH LATIN SMALL LETTER J
-		"&'k'=\uff4b" // FULLWIDTH LATIN SMALL LETTER K
-		"&'l'=\uff4c" // FULLWIDTH LATIN SMALL LETTER L
-		"&'m'=\uff4d" // FULLWIDTH LATIN SMALL LETTER M
-		"&'n'=\uff4e" // FULLWIDTH LATIN SMALL LETTER N
-		"&'o'=\uff4f" // FULLWIDTH LATIN SMALL LETTER O
-		"&'p'=\uff50" // FULLWIDTH LATIN SMALL LETTER P
-		"&'q'=\uff51" // FULLWIDTH LATIN SMALL LETTER Q
-		"&'r'=\uff52" // FULLWIDTH LATIN SMALL LETTER R
-		"&'s'=\uff53" // FULLWIDTH LATIN SMALL LETTER S
-		"&'t'=\uff54" // FULLWIDTH LATIN SMALL LETTER T
-		"&'u'=\uff55" // FULLWIDTH LATIN SMALL LETTER U
-		"&'v'=\uff56" // FULLWIDTH LATIN SMALL LETTER V
-		"&'w'=\uff57" // FULLWIDTH LATIN SMALL LETTER W
-		"&'x'=\uff58" // FULLWIDTH LATIN SMALL LETTER X
-		"&'y'=\uff59" // FULLWIDTH LATIN SMALL LETTER Y
-		"&'z'=\uff5a" // FULLWIDTH LATIN SMALL LETTER Z
-		"&'{'=\uff5b" // FULLWIDTH LEFT CURLY BRACKET
-		"&'|'=\uff5c" // FULLWIDTH VERTICAL LINE
-		"&'}'=\uff5d" // FULLWIDTH RIGHT CURLY BRACKET
-		"&'~'=\uff5e" // FULLWIDTH TILDE
-		"&'\u3002'=\uff61" // HALFWIDTH IDEOGRAPHIC FULL STOP
-		"&'\u300c'=\uff62" // HALFWIDTH LEFT CORNER BRACKET
-		"&'\u300d'=\uff63" // HALFWIDTH RIGHT CORNER BRACKET
-		"&'\u3001'=\uff64" // HALFWIDTH IDEOGRAPHIC COMMA
-		"&'\u30fb'=\uff65" // HALFWIDTH KATAKANA MIDDLE DOT
-		"&'\u30f2'=\uff66" // HALFWIDTH KATAKANA LETTER WO
-		"&'\u30a1'=\uff67" // HALFWIDTH KATAKANA LETTER SMALL A
-		"&'\u30a3'=\uff68" // HALFWIDTH KATAKANA LETTER SMALL I
-		"&'\u30a5'=\uff69" // HALFWIDTH KATAKANA LETTER SMALL U
-		"&'\u30a7'=\uff6a" // HALFWIDTH KATAKANA LETTER SMALL E
-		"&'\u30a9'=\uff6b" // HALFWIDTH KATAKANA LETTER SMALL O
-		"&'\u30e3'=\uff6c" // HALFWIDTH KATAKANA LETTER SMALL YA
-		"&'\u30e5'=\uff6d" // HALFWIDTH KATAKANA LETTER SMALL YU
-		"&'\u30e7'=\uff6e" // HALFWIDTH KATAKANA LETTER SMALL YO
-		"&'\u30c3'=\uff6f" // HALFWIDTH KATAKANA LETTER SMALL TU
-		"&'\u30fc'=\uff70" // HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
-		"&'\u30a2'=\uff71" // HALFWIDTH KATAKANA LETTER A
-		"&'\u30a4'=\uff72" // HALFWIDTH KATAKANA LETTER I
-		"&'\u30a6'=\uff73" // HALFWIDTH KATAKANA LETTER U
-		"&'\u30a8'=\uff74" // HALFWIDTH KATAKANA LETTER E
-		"&'\u30aa'=\uff75" // HALFWIDTH KATAKANA LETTER O
-		"&'\u30ab'=\uff76" // HALFWIDTH KATAKANA LETTER KA
-		"&'\u30ad'=\uff77" // HALFWIDTH KATAKANA LETTER KI
-		"&'\u30af'=\uff78" // HALFWIDTH KATAKANA LETTER KU
-		"&'\u30b1'=\uff79" // HALFWIDTH KATAKANA LETTER KE
-		"&'\u30b3'=\uff7a" // HALFWIDTH KATAKANA LETTER KO
-		"&'\u30b5'=\uff7b" // HALFWIDTH KATAKANA LETTER SA
-		"&'\u30b7'=\uff7c" // HALFWIDTH KATAKANA LETTER SI
-		"&'\u30b9'=\uff7d" // HALFWIDTH KATAKANA LETTER SU
-		"&'\u30bb'=\uff7e" // HALFWIDTH KATAKANA LETTER SE
-		"&'\u30bd'=\uff7f" // HALFWIDTH KATAKANA LETTER SO
-		"&'\u30bf'=\uff80" // HALFWIDTH KATAKANA LETTER TA
-		"&'\u30c1'=\uff81" // HALFWIDTH KATAKANA LETTER TI
-		"&'\u30c4'=\uff82" // HALFWIDTH KATAKANA LETTER TU
-		"&'\u30c6'=\uff83" // HALFWIDTH KATAKANA LETTER TE
-		"&'\u30c8'=\uff84" // HALFWIDTH KATAKANA LETTER TO
-		"&'\u30ca'=\uff85" // HALFWIDTH KATAKANA LETTER NA
-		"&'\u30cb'=\uff86" // HALFWIDTH KATAKANA LETTER NI
-		"&'\u30cc'=\uff87" // HALFWIDTH KATAKANA LETTER NU
-		"&'\u30cd'=\uff88" // HALFWIDTH KATAKANA LETTER NE
-		"&'\u30ce'=\uff89" // HALFWIDTH KATAKANA LETTER NO
-		"&'\u30cf'=\uff8a" // HALFWIDTH KATAKANA LETTER HA
-		"&'\u30d2'=\uff8b" // HALFWIDTH KATAKANA LETTER HI
-		"&'\u30d5'=\uff8c" // HALFWIDTH KATAKANA LETTER HU
-		"&'\u30d8'=\uff8d" // HALFWIDTH KATAKANA LETTER HE
-		"&'\u30db'=\uff8e" // HALFWIDTH KATAKANA LETTER HO
-		"&'\u30de'=\uff8f" // HALFWIDTH KATAKANA LETTER MA
-		"&'\u30df'=\uff90" // HALFWIDTH KATAKANA LETTER MI
-		"&'\u30e0'=\uff91" // HALFWIDTH KATAKANA LETTER MU
-		"&'\u30e1'=\uff92" // HALFWIDTH KATAKANA LETTER ME
-		"&'\u30e2'=\uff93" // HALFWIDTH KATAKANA LETTER MO
-		"&'\u30e4'=\uff94" // HALFWIDTH KATAKANA LETTER YA
-		"&'\u30e6'=\uff95" // HALFWIDTH KATAKANA LETTER YU
-		"&'\u30e8'=\uff96" // HALFWIDTH KATAKANA LETTER YO
-		"&'\u30e9'=\uff97" // HALFWIDTH KATAKANA LETTER RA
-		"&'\u30ea'=\uff98" // HALFWIDTH KATAKANA LETTER RI
-		"&'\u30eb'=\uff99" // HALFWIDTH KATAKANA LETTER RU
-		"&'\u30ec'=\uff9a" // HALFWIDTH KATAKANA LETTER RE
-		"&'\u30ed'=\uff9b" // HALFWIDTH KATAKANA LETTER RO
-		"&'\u30ef'=\uff9c" // HALFWIDTH KATAKANA LETTER WA
-		"&'\u30f3'=\uff9d" // HALFWIDTH KATAKANA LETTER N
-		"&'\u3099'=\uff9e" // HALFWIDTH KATAKANA VOICED SOUND MARK
-		"&'\u309a'=\uff9f" // HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK
-		"&'\u00a2'=\uffe0" // FULLWIDTH CENT SIGN
-		"&'\u00a3'=\uffe1" // FULLWIDTH POUND SIGN
-		"&'\u00ac'=\uffe2" // FULLWIDTH NOT SIGN
-		"&' \u0304'=\uffe3" // FULLWIDTH MACRON
-		"&'\u00a6'=\uffe4" // FULLWIDTH BROKEN BAR
-		"&'\u00a5'=\uffe5" // FULLWIDTH YEN SIGN
-		"&'\u20a9'=\uffe6" // FULLWIDTH WON SIGN
-		"&'\u2502'=\uffe8" // HALFWIDTH FORMS LIGHT VERTICAL
-		"&'\u2190'=\uffe9" // HALFWIDTH LEFTWARDS ARROW
-		"&'\u2191'=\uffea" // HALFWIDTH UPWARDS ARROW
-		"&'\u2192'=\uffeb" // HALFWIDTH RIGHTWARDS ARROW
-		"&'\u2193'=\uffec" // HALFWIDTH DOWNWARDS ARROW
-		"&'\u25a0'=\uffed" // HALFWIDTH BLACK SQUARE
-		"&'\u25cb'=\uffee" // HALFWIDTH WHITE CIRCLE
+        Version { "3.0" }
+        Sequence {
+        // Make Hiragana, Katakana & compatibility forms equal on the first three levels
+        "&\u30A1=\u3041=\uff67" // SMALL A
+        "&\u30A2=\u3042=\uff71" // A
+        "&\u30A3=\u3043=\uff68" // SMALL I
+        "&\u30A4=\u3044=\uff72" // I
+        "&\u30A5=\u3045=\uff69" // SMALL U
+        "&\u30A6=\u3046=\uff73" // U
+        "&\u30A7=\u3047=\uff6a" // SMALL E
+        "&\u30A8=\u3048=\uff74" // E
+        "&\u30A9=\u3049=\uff6b" // SMALL O
+        "&\u30AA=\u304A=\uff75" // O
+        "&\u30AB=\u304B=\uff76" // KA
+        "&\u30AD=\u304D=\uff77" // KI
+        "&\u30AF=\u304F=\uff78" // KU
+        "&\u30B1=\u3051=\uff79" // KE
+        "&\u30B3=\u3053=\uff7a" // KO
+        "&\u30B5=\u3055=\uff7b" // SA
+        "&\u30B7=\u3057=\uff7c" // SI
+        "&\u30B9=\u3059=\uff7d" // SU
+        "&\u30BB=\u305B=\uff7e" // SE
+        "&\u30BD=\u305D=\uff7f" // SO
+        "&\u30BF=\u305F=\uff80" // TA
+        "&\u30C1=\u3061=\uff81" // TI
+        "&\u30C3=\u3063=\uff6f" // SMALL TU
+        "&\u30C4=\u3064=\uff82" // TU
+        "&\u30C6=\u3066=\uff83" // TE
+        "&\u30C8=\u3068=\uff84" // TO
+        "&\u30CA=\u306A=\uff85" // NA
+        "&\u30CB=\u306B=\uff86" // NI
+        "&\u30CC=\u306C=\uff87" // NU
+        "&\u30CD=\u306D=\uff88" // NE
+        "&\u30CE=\u306E=\uff89" // NO
+        "&\u30CF=\u306F=\uff8a" // HA
+        "&\u30D2=\u3072=\uff8b" // HI
+        "&\u30D5=\u3075=\uff8c" // HU
+        "&\u30D8=\u3078=\uff8d" // HE
+        "&\u30DB=\u307B=\uff8e" // HO
+        "&\u30DE=\u307E=\uff8f" // MA
+        "&\u30DF=\u307F=\uff90" // MI
+        "&\u30E0=\u3080=\uff91" // MU
+        "&\u30E1=\u3081=\uff92" // ME
+        "&\u30E2=\u3082=\uff93" // MO
+        "&\u30E3=\u3083=\uff6c" // SMALL YA
+        "&\u30E4=\u3084=\uff94" // YA
+        "&\u30E5=\u3085=\uff6d" // SMALL YU
+        "&\u30E6=\u3086=\uff95" // YU
+        "&\u30E7=\u3087=\uff6e" // SMALL YO
+        "&\u30E8=\u3088=\uff96" // YO
+        "&\u30E9=\u3089=\uff97" // RA
+        "&\u30EA=\u308A=\uff98" // RI
+        "&\u30EB=\u308B=\uff99" // RU
+        "&\u30EC=\u308C=\uff9a" // RE
+        "&\u30ED=\u308D=\uff9b" // RO
+        "&\u30EE=\u308E"        // SMALL WA
+        "&\u30EF=\u308F=\uff9c" // WA
+        "&\u30F0=\u3090"        // WI
+        "&\u30F1=\u3091"        // WE
+        "&\u30F2=\u3092=\uff66" // WO
+        "&\u30F3=\u3093=\uff9d" // N
+
+        "&\u30fc=\uff70" // KATAKANA-HIRAGANA PROLONGED SOUND MARK
+
+        "&\u3099=\uff9e" // VOICED SOUND MARK
+        "&\u309a=\uff9f" // SEMI-VOICED SOUND MARK
+
         "&[before 3]\u30a2"
         "<<<\u30a1|\u30fc=\u30a2|\u30fc=\u30ab|\u30fc=\u30f5|\u30fc"
           "=\u30b5|\u30fc=\u30bf|\u30fc=\u30ca|\u30fc=\u30cf|\u30fc"
@@ -272,6 +81,7 @@ ja_JP_JIS {
           "=\u30ef|\u30fc=\u30ee|\u30fc"
           "=\u30ab\u3099|\u30fc=\u30b5\u3099|\u30fc=\u30bf\u3099|\u30fc=\u30cf\u3099|\u30fc"
           "=\u30cf\u309a|\u30fc"
+
         "&[before 3]\u30a4"
         "<<<\u30a3|\u30fc=\u30a4|\u30fc=\u30ad|\u30fc=\u30b7|\u30fc"
           "=\u30c1|\u30fc=\u30cb|\u30fc=\u30d2|\u30fc=\u30df|\u30fc"
@@ -279,6 +89,7 @@ ja_JP_JIS {
           "=\u30ad\u3099|\u30fc=\u30b7\u3099|\u30fc=\u30c1\u3099|\u30fc"
           "=\u30d2\u3099|\u30fc=\u30f0\u3099\u30fc"
           "=\u30d2\u309a\u30fc"
+
         "&[before 3]\u30a6"
         "<<<\u30a5|\u30fc=\u30a6|\u30fc=\u30af|\u30fc=\u30b9|\u30fc"
           "=\u30c4|\u30fc=\u30c3|\u30fc=\u30cc|\u30fc=\u30d5|\u30fc"
@@ -286,13 +97,15 @@ ja_JP_JIS {
           "=\u30af\u3099|\u30fc=\u30b9\u3099|\u30fc=\u30c4\u3099|\u30fc"
           "=\u30d5\u3099|\u30fc=\u30a6\u3099|\u30fc"
           "=\u30d5\u309a\u30fc"
+
         "&[before 3]\u30a8"
         "<<<\u30a7|\u30fc=\u30a8|\u30fc=\u30b1|\u30fc=\u30f6|\u30fc"
           "=\u30bb|\u30fc=\u30c6|\u30fc=\u30cd|\u30fc=\u30d8|\u30fc"
           "=\u30e1|\u30fc=\u30ec|\u30fc=\u30f1|\u30fc"
           "=\u30b1\u3099|\u30fc=\u30bb\u3099|\u30fc\u30c6\u3099|\u30fc"
-          "\u30d8\u3099|\u30fc=\u30f1\u3099|\u30fc"
+          "=\u30d8\u3099|\u30fc=\u30f1\u3099|\u30fc"
           "=\u30d8\u309a|\u30fc"
+
         "&[before 3]\u30aa"
         "<<<\u30a9|\u30fc=\u30aa|\u30fc=\u30b3|\u30fc=\u30bd|\u30fc"
           "=\u30c8|\u30fc=\u30ce|\u30fc=\u30db|\u30fc=\u30e2|\u30fc"
@@ -300,181 +113,203 @@ ja_JP_JIS {
           "=\u30b3\u3099|\u30fc=\u30bd\u3099|\u30fc=\u30c8\u3099|\u30fc"
           "=\u30db\u3099|\u30fc=\u30f2\u3099|\u30fc"
           "=\u30db\u309a|\u30aa=\u30db\u309a|\u30fc"
-		"&\u3041<<<\u3041|\u309d"
-		"&[before 3]\u3042<<<\u3042|\u309d"
-		"&\u3043<<<\u3043|\u309d"
-		"&[before 3]\u3044<<<\u3044|\u309d"
-		"&\u3045<<<\u3045|\u309d"
-		"&[before 3]\u3046<<<\u3046|\u309d"
-		"&\u3047<<<\u3047|\u309d"
-		"&[before 3]\u3048<<<\u3048|\u309d"
-		"&\u3049<<<\u3049|\u309d"
-		"&[before 3]\u304a<<<\u304a|\u309d"
-		"&[before 3]\u304b<<<\u304b|\u309d"
-		"&[before 3]\u304b\u3099<<<\u304b\u3099|\u309d=\u304b|\u309e=\u304b\u3099|\u309e"
-		"&[before 3]\u304d<<<\u304d|\u309d"
-		"&[before 3]\u304d\u3099<<<\u304d\u3099|\u309d=\u304d|\u309e=\u304d\u3099|\u309e"
-		"&[before 3]\u304f<<<\u304f|\u309d"
-		"&[before 3]\u304f\u3099<<<\u304f\u3099|\u309d=\u304f|\u309e=\u304f\u3099|\u309e"
-		"&[before 3]\u3051<<<\u3051|\u309d"
-		"&[before 3]\u3051\u3099<<<\u3051\u3099|\u309d=\u3051|\u309e=\u3051\u3099|\u309e"
-		"&[before 3]\u3053<<<\u3053|\u309d"
-		"&[before 3]\u3053\u3099<<<\u3053\u3099|\u309d=\u3053|\u309e=\u3053\u3099|\u309e"
-		"&[before 3]\u3055<<<\u3055|\u309d"
-		"&[before 3]\u3055\u3099<<<\u3055\u3099|\u309d=\u3055|\u309e=\u3055\u3099|\u309e"
-		"&[before 3]\u3057<<<\u3057|\u309d"
-		"&[before 3]\u3057\u3099<<<\u3057\u3099|\u309d=\u3057|\u309e=\u3057\u3099|\u309e"
-		"&[before 3]\u3059<<<\u3059|\u309d"
-		"&[before 3]\u3059\u3099<<<\u3059\u3099|\u309d=\u3059|\u309e=\u3059\u3099|\u309e"
-		"&[before 3]\u305b<<<\u305b|\u309d"
-		"&[before 3]\u305b\u3099<<<\u305b\u3099|\u309d=\u305b|\u309e=\u305b\u3099|\u309e"
-		"&[before 3]\u305d<<<\u305d|\u309d"
-		"&[before 3]\u305d\u3099<<<\u305d\u3099|\u309d=\u305d|\u309e=\u305d\u3099|\u309e"
-		"&[before 3]\u305f<<<\u305f|\u309d"
-		"&[before 3]\u305f\u3099<<<\u305f\u3099|\u309d=\u305f|\u309e=\u305f\u3099|\u309e"
-		"&[before 3]\u3061<<<\u3061|\u309d"
-		"&[before 3]\u3061\u3099<<<\u3061\u3099|\u309d=\u3061|\u309e=\u3061\u3099|\u309e"
-		"&\u3063<<<\u3063|\u309d"
-		"&[before 3]\u3064<<<\u3064|\u309d"
-		"&[before 3]\u3064\u3099<<<\u3064\u3099|\u309d=\u3064|\u309e=\u3064\u3099|\u309e"
-		"&[before 3]\u3066<<<\u3066|\u309d"
-		"&[before 3]\u3066\u3099<<<\u3066\u3099|\u309d=\u3066|\u309e=\u3066\u3099|\u309e"
-		"&[before 3]\u3068<<<\u3068|\u309d"
-		"&[before 3]\u3068\u3099<<<\u3068\u3099|\u309d=\u3068|\u309e=\u3068\u3099|\u309e"
-		"&[before 3]\u306a<<<\u306a|\u309d"
-		"&[before 3]\u306b<<<\u306b|\u309d"
-		"&[before 3]\u306c<<<\u306c|\u309d"
-		"&[before 3]\u306d<<<\u306d|\u309d"
-		"&[before 3]\u306e<<<\u306e|\u309d"
-		"&[before 3]\u306f<<<\u306f|\u309d"
-		"&[before 3]\u306f\u3099<<<\u306f\u3099|\u309d=\u306f|\u309e=\u306f\u309a|\u309e=\u306f\u3099|\u309e"
-		"&[before 3]\u306f\u309a<<<\u306f\u309a|\u309d"
-		"&[before 3]\u3072<<<\u3072|\u309d"
-		"&[before 3]\u3072\u3099<<<\u3072\u3099|\u309d=\u3072|\u309e=\u3072\u309a|\u309e=\u3072\u3099|\u309e"
-		"&[before 3]\u3072\u309a<<<\u3072\u309a|\u309d"
-		"&[before 3]\u3075<<<\u3075|\u309d"
-		"&[before 3]\u3075\u3099<<<\u3075\u3099|\u309d=\u3075|\u309e=\u3075\u309a|\u309e=\u3075\u3099|\u309e"
-		"&[before 3]\u3075\u309a<<<\u3075\u309a|\u309d"
-		"&[before 3]\u3078<<<\u3078|\u309d"
-		"&[before 3]\u3078\u3099<<<\u3078\u3099|\u309d=\u3078|\u309e=\u3078\u309a|\u309e=\u3078\u3099|\u309e"
-		"&[before 3]\u3078\u309a<<<\u3078\u309a|\u309d"
-		"&[before 3]\u307b<<<\u307b|\u309d"
-		"&[before 3]\u307b\u3099<<<\u307b\u3099|\u309d=\u307b|\u309e=\u307b\u309a|\u309e=\u307b\u3099|\u309e"
-		"&[before 3]\u307b\u309a<<<\u307b\u309a|\u309d"
-		"&[before 3]\u307e<<<\u307e|\u309d"
-		"&[before 3]\u307f<<<\u307f|\u309d"
-		"&[before 3]\u3080<<<\u3080|\u309d"
-		"&[before 3]\u3081<<<\u3081|\u309d"
-		"&[before 3]\u3082<<<\u3082|\u309d"
-		"&\u3083<<<\u3083|\u309d"
-		"&[before 3]\u3084<<<\u3084|\u309d"
-		"&\u3085<<<\u3085|\u309d"
-		"&[before 3]\u3086<<<\u3086|\u309d"
-		"&\u3087<<<\u3087|\u309d"
-		"&[before 3]\u3088<<<\u3088|\u309d"
-		"&[before 3]\u3089<<<\u3089|\u309d"
-		"&[before 3]\u308a<<<\u308a|\u309d"
-		"&[before 3]\u308b<<<\u308b|\u309d"
-		"&[before 3]\u308c<<<\u308c|\u309d"
-		"&[before 3]\u308d<<<\u308d|\u309d"
-		"&\u308e<<<\u308e|\u309d"
-		"&[before 3]\u308f<<<\u308f|\u309d"
-		"&[before 3]\u3090<<<\u3090|\u309d"
-		"&[before 3]\u3091<<<\u3091|\u309d"
-		"&[before 3]\u3092<<<\u3092|\u309d"
-		"&[before 3]\u3093<<<\u3093|\u309d"
-		"&[before 3]\u3046\u3099<<<\u3046\u3099|\u309d=\u3046|\u309e=\u3046\u3099|\u309e"
-		"&\u30a1<<<\u30a1|\u30fd"
-		"&[before 3]\u30a2<<<\u30a2|\u30fd"
-		"&\u30a3<<<\u30a3|\u30fd"
-		"&[before 3]\u30a4<<<\u30a4|\u30fd"
-		"&\u30a5<<<\u30a5|\u30fd"
-		"&[before 3]\u30a6<<<\u30a6|\u30fd"
-		"&\u30a7<<<\u30a7|\u30fd"
-		"&[before 3]\u30a8<<<\u30a8|\u30fd"
-		"&\u30a9<<<\u30a9|\u30fd"
-		"&[before 3]\u30aa<<<\u30aa|\u30fd"
-		"&[before 3]\u30ab<<<\u30ab|\u30fd"
-		"&[before 3]\u30ab\u3099<<<\u30ab\u3099|\u30fd=\u30ab|\u30fe=\u30ab\u3099|\u30fe"
-		"&[before 3]\u30ad<<<\u30ad|\u30fd"
-		"&[before 3]\u30ad\u3099<<<\u30ad\u3099|\u30fd=\u30ad|\u30fe=\u30ad\u3099|\u30fe"
-		"&[before 3]\u30af<<<\u30af|\u30fd"
-		"&[before 3]\u30af\u3099<<<\u30af\u3099|\u30fd=\u30af|\u30fe=\u30af\u3099|\u30fe"
-		"&[before 3]\u30b1<<<\u30b1|\u30fd"
-		"&[before 3]\u30b1\u3099<<<\u30b1\u3099|\u30fd=\u30b1|\u30fe=\u30b1\u3099|\u30fe"
-		"&[before 3]\u30b3<<<\u30b3|\u30fd"
-		"&[before 3]\u30b3\u3099<<<\u30b3\u3099|\u30fd=\u30b3|\u30fe=\u30b3\u3099|\u30fe"
-		"&[before 3]\u30b5<<<\u30b5|\u30fd"
-		"&[before 3]\u30b5\u3099<<<\u30b5\u3099|\u30fd=\u30b5|\u30fe=\u30b5\u3099|\u30fe"
-		"&[before 3]\u30b7<<<\u30b7|\u30fd"
-		"&[before 3]\u30b7\u3099<<<\u30b7\u3099|\u30fd=\u30b7|\u30fe=\u30b7\u3099|\u30fe"
-		"&[before 3]\u30b9<<<\u30b9|\u30fd"
-		"&[before 3]\u30b9\u3099<<<\u30b9\u3099|\u30fd=\u30b9|\u30fe=\u30b9\u3099|\u30fe"
-		"&[before 3]\u30bb<<<\u30bb|\u30fd"
-		"&[before 3]\u30bb\u3099<<<\u30bb\u3099|\u30fd=\u30bb|\u30fe=\u30bb\u3099|\u30fe"
-		"&[before 3]\u30bd<<<\u30bd|\u30fd"
-		"&[before 3]\u30bd\u3099<<<\u30bd\u3099|\u30fd=\u30bd|\u30fe=\u30bd\u3099|\u30fe"
-		"&[before 3]\u30bf<<<\u30bf|\u30fd"
-		"&[before 3]\u30bf\u3099<<<\u30bf\u3099|\u30fd=\u30bf|\u30fe=\u30bf\u3099|\u30fe"
-		"&[before 3]\u30c1<<<\u30c1|\u30fd"
-		"&[before 3]\u30c1\u3099<<<\u30c1\u3099|\u30fd=\u30c1|\u30fe=\u30c1\u3099|\u30fe"
-		"&\u30c3<<<\u30c3|\u30fd"
-		"&[before 3]\u30c4<<<\u30c4|\u30fd"
-		"&[before 3]\u30c4\u3099<<<\u30c4\u3099|\u30fd=\u30c4|\u30fe=\u30c4\u3099|\u30fe"
-		"&[before 3]\u30c6<<<\u30c6|\u30fd"
-		"&[before 3]\u30c6\u3099<<<\u30c6\u3099|\u30fd=\u30c6|\u30fe=\u30c6\u3099|\u30fe"
-		"&[before 3]\u30c8<<<\u30c8|\u30fd"
-		"&[before 3]\u30c8\u3099<<<\u30c8\u3099|\u30fd=\u30c8|\u30fe=\u30c8\u3099|\u30fe"
-		"&[before 3]\u30ca<<<\u30ca|\u30fd"
-		"&[before 3]\u30cb<<<\u30cb|\u30fd"
-		"&[before 3]\u30cc<<<\u30cc|\u30fd"
-		"&[before 3]\u30cd<<<\u30cd|\u30fd"
-		"&[before 3]\u30ce<<<\u30ce|\u30fd"
-		"&[before 3]\u30cf<<<\u30cf|\u30fd"
-		"&[before 3]\u30cf\u3099<<<\u30cf\u3099|\u30fd=\u30cf|\u30fe=\u30cf\u309a|\u30fe=\u30cf\u3099|\u30fe"
-		"&[before 3]\u30cf\u309a<<<\u30cf\u309a|\u30fd"
-		"&[before 3]\u30d2<<<\u30d2|\u30fd"
-		"&[before 3]\u30d2\u3099<<<\u30d2\u3099|\u30fd=\u30d2|\u30fe=\u30d2\u309a|\u30fe=\u30d2\u3099|\u30fe"
-		"&[before 3]\u30d2\u309a<<<\u30d2\u309a|\u30fd"
-		"&[before 3]\u30d5<<<\u30d5|\u30fd"
-		"&[before 3]\u30d5\u3099<<<\u30d5\u3099|\u30fd=\u30d5|\u30fe=\u30d5\u309a|\u30fe=\u30d5\u3099|\u30fe"
-		"&[before 3]\u30d5\u309a<<<\u30d5\u309a|\u30fd"
-		"&[before 3]\u30d8<<<\u30d8|\u30fd"
-		"&[before 3]\u30d8\u3099<<<\u30d8\u3099|\u30fd=\u30d8|\u30fe=\u30d8\u309a|\u30fe=\u30d8\u3099|\u30fe"
-		"&[before 3]\u30d8\u309a<<<\u30d8\u309a|\u30fd"
-		"&[before 3]\u30db<<<\u30db|\u30fd"
-		"&[before 3]\u30db\u3099<<<\u30db\u3099|\u30fd=\u30db|\u30fe=\u30db\u309a|\u30fe=\u30db\u3099|\u30fe"
-		"&[before 3]\u30db\u309a<<<\u30db\u309a|\u30fd"
-		"&[before 3]\u30de<<<\u30de|\u30fd"
-		"&[before 3]\u30df<<<\u30df|\u30fd"
-		"&[before 3]\u30e0<<<\u30e0|\u30fd"
-		"&[before 3]\u30e1<<<\u30e1|\u30fd"
-		"&[before 3]\u30e2<<<\u30e2|\u30fd"
-		"&\u30e3<<<\u30e3|\u30fd"
-		"&[before 3]\u30e4<<<\u30e4|\u30fd"
-		"&\u30e5<<<\u30e5|\u30fd"
-		"&[before 3]\u30e6<<<\u30e6|\u30fd"
-		"&\u30e7<<<\u30e7|\u30fd"
-		"&[before 3]\u30e8<<<\u30e8|\u30fd"
-		"&[before 3]\u30e9<<<\u30e9|\u30fd"
-		"&[before 3]\u30ea<<<\u30ea|\u30fd"
-		"&[before 3]\u30eb<<<\u30eb|\u30fd"
-		"&[before 3]\u30ec<<<\u30ec|\u30fd"
-		"&[before 3]\u30ed<<<\u30ed|\u30fd"
-		"&\u30ee<<<\u30ee|\u30fd"
-		"&[before 3]\u30ef<<<\u30ef|\u30fd"
-		"&[before 3]\u30f0<<<\u30f0|\u30fd"
-		"&[before 3]\u30f1<<<\u30f1|\u30fd"
-		"&[before 3]\u30f2<<<\u30f2|\u30fd"
-		"&[before 3]\u30f3<<<\u30f3|\u30fd"
-		"&[before 3]\u30a6\u3099<<<\u30a6\u3099|\u30fd=\u30a6|\u30fe=\u30a6\u3099|\u30fe"
-		"&\u30f5<<<\u30f5|\u30fd"
-		"&\u30f6<<<\u30f6|\u30fd"
-		"&[before 3]\u30ef\u3099<<<\u30ef\u3099|\u30fd=\u30ef|\u30fe=\u30ef\u3099|\u30fe"
-		"&[before 3]\u30f0\u3099<<<\u30f0\u3099|\u30fd=\u30f0|\u30fe=\u30f0\u3099|\u30fe"
-		"&[before 3]\u30f1\u3099<<<\u30f1\u3099|\u30fd=\u30f1|\u30fe=\u30f1\u3099|\u30fe"
-		"&[before 3]\u30f2\u3099<<<\u30f2\u3099|\u30fd=\u30f2|\u30fe=\u30f2\u3099|\u30fe"
-"& [top] "
+
+        // Iteration mark  
+        "&\u30a1<<<\u30a1|\u30fd=\u3041|\u309d              // SMALL A
+        "&[before 3]\u30a2<<<\u30a2|\u30fd=\u3042|\u309d"   // A
+
+        "&\u30a3<<<\u30a3|\u30fd=\u3043|\u309d"             // SMALL I
+        "&[before 3]\u30a4<<<\u30a4|\u30fd=\u3044|\u309d"   // I
+
+        "&\u30a5<<<\u30a5|\u30fd=\u3045|\u309d"             // SMALL U
+        "&[before 3]\u30a6<<<\u30a6|\u30fd=\u3046|\u309d"   // U
+
+        "&\u30a7<<<\u30a7|\u30fd=\u3047|\u309d"             // SMALL E
+        "&[before 3]\u30a8<<<\u30a8|\u30fd=\u3048|\u309d"   // E
+
+        "&\u30a9<<<\u30a9|\u30fd=\u3049|\u309d"             // SMALL O
+        "&[before 3]\u30aa<<<\u30aa|\u30fd=\u304a|\u309d"   // O
+
+        "&[before 3]\u30ab<<<\u30ab|\u30fd=\u30ab\u3099|\u30fd=\u304b|\u309d=\u304b\u3099|\u309d" // KA
+        "=\u30ab|\u30fe/\u3099=\u30ab\u3099|\u30fe/\u3099=\u304b|\u309e/\u3099=\u304b\u3099|\u309e/\u3099" // GA
+
+        "&[before 3]\u30ad<<<\u30ad|\u30fd=\u30ad\u3099|\u30fd=\u304d|\u309d=\u304d\u3099|\u309d" // KI
+        "=\u30ad|\u30fe/\u3099=\u30ad\u3099|\u30fe/\u3099=\u304d|\u309e/\u3099=\u304d\u3099|\u309e/\u3099" // GI
+
+        "&[before 3]\u30af<<<\u30af|\u30fd=\u30af\u3099|\u30fd=\u304f|\u309d=\u304f\u3099|\u309d" // KU
+        "=\u30af|\u30fe/\u3099=\u30af\u3099|\u30fe/\u3099=\u304f|\u309e/\u3099=\u304f\u3099|\u309e/\u3099" // GU
+
+        "&[before 3]\u30b1<<<\u30b1|\u30fd=\u30b1\u3099|\u30fd=\u3051|\u309d=\u3051\u3099|\u309d" // KE
+        "=\u30b1|\u30fe/\u3099=\u30b1\u3099|\u30fe/\u3099=\u3051|\u309e/\u3099=\u3051\u3099|\u309e/\u3099" // GE
+
+        "&[before 3]\u30b3<<<\u30b3|\u30fd=\u30b3\u3099|\u30fd=\u3053|\u309d=\u3053\u3099|\u309d" // KO
+        "\u30b3|\u30fe/\u3099=\u30b3\u3099|\u30fe/\u3099=\u3053|\u309e/\u3099=\u3053\u3099|\u309e/\u3099" // GO
+
+        "&[before 3]\u30b5<<<\u30b5|\u30fd=\u30b5\u3099|\u30fd=\u3055|\u309d=\u3055\u3099|\u309d" // SA
+        "=\u30b5|\u30fe/\u3099=\u30b5\u3099|\u30fe/\u3099=\u3055|\u309e/\u3099=\u3055\u3099|\u309e/\u3099" // ZA
+
+        "&[before 3]\u30b7<<<\u30b7|\u30fd=\u30b7\u3099|\u30fd=\u3057|\u309d=\u3057\u3099|\u309d" // SI
+        "=\u30b7|\u30fe/\u3099=\u30b7\u3099|\u30fe/\u3099=\u3057|\u309e/\u3099=\u3057\u3099|\u309e/\u3099" // ZI
+
+        "&[before 3]\u30b9<<<\u30b9|\u30fd=\u30b9\u3099|\u30fd=\u3059|\u309d=\u3059\u3099|\u309d" // SU
+        "=\u30b9|\u30fe/\u3099=\u30b9\u3099|\u30fe/\u3099=\u3059|\u309e/\u3099=\u3059\u3099|\u309e/\u3099" // ZU
+
+        "&[before 3]\u305b<<<\u305b|\u309d"
+        "&[before 3]\u305b\u3099<<<\u305b\u3099|\u309d=\u305b|\u309e=\u305b\u3099|\u309e"
+
+        "&[before 3]\u305d<<<\u305d|\u309d"
+        "&[before 3]\u305d\u3099<<<\u305d\u3099|\u309d=\u305d|\u309e=\u305d\u3099|\u309e"
+
+        "&[before 3]\u305f<<<\u305f|\u309d"
+        "&[before 3]\u305f\u3099<<<\u305f\u3099|\u309d=\u305f|\u309e=\u305f\u3099|\u309e"
+
+        "&[before 3]\u3061<<<\u3061|\u309d"
+        "&[before 3]\u3061\u3099<<<\u3061\u3099|\u309d=\u3061|\u309e=\u3061\u3099|\u309e"
+
+        "&\u3063<<<\u3063|\u309d"
+        "&[before 3]\u3064<<<\u3064|\u309d"
+        "&[before 3]\u3064\u3099<<<\u3064\u3099|\u309d=\u3064|\u309e=\u3064\u3099|\u309e"
+
+        "&[before 3]\u3066<<<\u3066|\u309d"
+        "&[before 3]\u3066\u3099<<<\u3066\u3099|\u309d=\u3066|\u309e=\u3066\u3099|\u309e"
+
+        "&[before 3]\u3068<<<\u3068|\u309d"
+        "&[before 3]\u3068\u3099<<<\u3068\u3099|\u309d=\u3068|\u309e=\u3068\u3099|\u309e"
+
+        "&[before 3]\u306a<<<\u306a|\u309d"
+
+        "&[before 3]\u306b<<<\u306b|\u309d"
+
+        "&[before 3]\u306c<<<\u306c|\u309d"
+
+        "&[before 3]\u306d<<<\u306d|\u309d"
+
+        "&[before 3]\u306e<<<\u306e|\u309d"
+
+        "&[before 3]\u306f<<<\u306f|\u309d"
+        "&[before 3]\u306f\u3099<<<\u306f\u3099|\u309d=\u306f|\u309e=\u306f\u309a|\u309e=\u306f\u3099|\u309e"
+        "&[before 3]\u306f\u309a<<<\u306f\u309a|\u309d"
+
+        "&[before 3]\u3072<<<\u3072|\u309d"
+        "&[before 3]\u3072\u3099<<<\u3072\u3099|\u309d=\u3072|\u309e=\u3072\u309a|\u309e=\u3072\u3099|\u309e"
+        "&[before 3]\u3072\u309a<<<\u3072\u309a|\u309d"
+
+        "&[before 3]\u3075<<<\u3075|\u309d"
+        "&[before 3]\u3075\u3099<<<\u3075\u3099|\u309d=\u3075|\u309e=\u3075\u309a|\u309e=\u3075\u3099|\u309e"
+        "&[before 3]\u3075\u309a<<<\u3075\u309a|\u309d"
+
+        "&[before 3]\u3078<<<\u3078|\u309d"
+        "&[before 3]\u3078\u3099<<<\u3078\u3099|\u309d=\u3078|\u309e=\u3078\u309a|\u309e=\u3078\u3099|\u309e"
+        "&[before 3]\u3078\u309a<<<\u3078\u309a|\u309d"
+
+        "&[before 3]\u307b<<<\u307b|\u309d"
+        "&[before 3]\u307b\u3099<<<\u307b\u3099|\u309d=\u307b|\u309e=\u307b\u309a|\u309e=\u307b\u3099|\u309e"
+        "&[before 3]\u307b\u309a<<<\u307b\u309a|\u309d"
+
+        "&[before 3]\u307e<<<\u307e|\u309d"
+
+        "&[before 3]\u307f<<<\u307f|\u309d"
+
+        "&[before 3]\u3080<<<\u3080|\u309d"
+
+        "&[before 3]\u3081<<<\u3081|\u309d"
+
+        "&[before 3]\u3082<<<\u3082|\u309d"
+
+        "&\u3083<<<\u3083|\u309d"
+        "&[before 3]\u3084<<<\u3084|\u309d"
+
+        "&\u3085<<<\u3085|\u309d"
+        "&[before 3]\u3086<<<\u3086|\u309d"
+
+        "&\u3087<<<\u3087|\u309d"
+        "&[before 3]\u3088<<<\u3088|\u309d"
+
+        "&[before 3]\u3089<<<\u3089|\u309d"
+
+        "&[before 3]\u308a<<<\u308a|\u309d"
+
+        "&[before 3]\u308b<<<\u308b|\u309d"
+
+        "&[before 3]\u308c<<<\u308c|\u309d"
+
+        "&[before 3]\u308d<<<\u308d|\u309d"
+
+        "&\u308e<<<\u308e|\u309d"
+        "&[before 3]\u308f<<<\u308f|\u309d"
+        "&[before 3]\u3090<<<\u3090|\u309d"
+        "&[before 3]\u3091<<<\u3091|\u309d"
+        "&[before 3]\u3092<<<\u3092|\u309d"
+        "&[before 3]\u3093<<<\u3093|\u309d"
+        "&[before 3]\u3046\u3099<<<\u3046\u3099|\u309d=\u3046|\u309e=\u3046\u3099|\u309e"
+
+        "&[before 3]\u30bb<<<\u30bb|\u30fd"
+        "&[before 3]\u30bb\u3099<<<\u30bb\u3099|\u30fd=\u30bb|\u30fe=\u30bb\u3099|\u30fe"
+        "&[before 3]\u30bd<<<\u30bd|\u30fd"
+        "&[before 3]\u30bd\u3099<<<\u30bd\u3099|\u30fd=\u30bd|\u30fe=\u30bd\u3099|\u30fe"
+        "&[before 3]\u30bf<<<\u30bf|\u30fd"
+        "&[before 3]\u30bf\u3099<<<\u30bf\u3099|\u30fd=\u30bf|\u30fe=\u30bf\u3099|\u30fe"
+        "&[before 3]\u30c1<<<\u30c1|\u30fd"
+        "&[before 3]\u30c1\u3099<<<\u30c1\u3099|\u30fd=\u30c1|\u30fe=\u30c1\u3099|\u30fe"
+        "&\u30c3<<<\u30c3|\u30fd"
+        "&[before 3]\u30c4<<<\u30c4|\u30fd"
+        "&[before 3]\u30c4\u3099<<<\u30c4\u3099|\u30fd=\u30c4|\u30fe=\u30c4\u3099|\u30fe"
+        "&[before 3]\u30c6<<<\u30c6|\u30fd"
+        "&[before 3]\u30c6\u3099<<<\u30c6\u3099|\u30fd=\u30c6|\u30fe=\u30c6\u3099|\u30fe"
+        "&[before 3]\u30c8<<<\u30c8|\u30fd"
+        "&[before 3]\u30c8\u3099<<<\u30c8\u3099|\u30fd=\u30c8|\u30fe=\u30c8\u3099|\u30fe"
+        "&[before 3]\u30ca<<<\u30ca|\u30fd"
+        "&[before 3]\u30cb<<<\u30cb|\u30fd"
+        "&[before 3]\u30cc<<<\u30cc|\u30fd"
+        "&[before 3]\u30cd<<<\u30cd|\u30fd"
+        "&[before 3]\u30ce<<<\u30ce|\u30fd"
+        "&[before 3]\u30cf<<<\u30cf|\u30fd"
+        "&[before 3]\u30cf\u3099<<<\u30cf\u3099|\u30fd=\u30cf|\u30fe=\u30cf\u309a|\u30fe=\u30cf\u3099|\u30fe"
+        "&[before 3]\u30cf\u309a<<<\u30cf\u309a|\u30fd"
+        "&[before 3]\u30d2<<<\u30d2|\u30fd"
+        "&[before 3]\u30d2\u3099<<<\u30d2\u3099|\u30fd=\u30d2|\u30fe=\u30d2\u309a|\u30fe=\u30d2\u3099|\u30fe"
+        "&[before 3]\u30d2\u309a<<<\u30d2\u309a|\u30fd"
+        "&[before 3]\u30d5<<<\u30d5|\u30fd"
+        "&[before 3]\u30d5\u3099<<<\u30d5\u3099|\u30fd=\u30d5|\u30fe=\u30d5\u309a|\u30fe=\u30d5\u3099|\u30fe"
+        "&[before 3]\u30d5\u309a<<<\u30d5\u309a|\u30fd"
+        "&[before 3]\u30d8<<<\u30d8|\u30fd"
+        "&[before 3]\u30d8\u3099<<<\u30d8\u3099|\u30fd=\u30d8|\u30fe=\u30d8\u309a|\u30fe=\u30d8\u3099|\u30fe"
+        "&[before 3]\u30d8\u309a<<<\u30d8\u309a|\u30fd"
+        "&[before 3]\u30db<<<\u30db|\u30fd"
+        "&[before 3]\u30db\u3099<<<\u30db\u3099|\u30fd=\u30db|\u30fe=\u30db\u309a|\u30fe=\u30db\u3099|\u30fe"
+        "&[before 3]\u30db\u309a<<<\u30db\u309a|\u30fd"
+        "&[before 3]\u30de<<<\u30de|\u30fd"
+        "&[before 3]\u30df<<<\u30df|\u30fd"
+        "&[before 3]\u30e0<<<\u30e0|\u30fd"
+        "&[before 3]\u30e1<<<\u30e1|\u30fd"
+        "&[before 3]\u30e2<<<\u30e2|\u30fd"
+        "&\u30e3<<<\u30e3|\u30fd"
+        "&[before 3]\u30e4<<<\u30e4|\u30fd"
+        "&\u30e5<<<\u30e5|\u30fd"
+        "&[before 3]\u30e6<<<\u30e6|\u30fd"
+        "&\u30e7<<<\u30e7|\u30fd"
+        "&[before 3]\u30e8<<<\u30e8|\u30fd"
+        "&[before 3]\u30e9<<<\u30e9|\u30fd"
+        "&[before 3]\u30ea<<<\u30ea|\u30fd"
+        "&[before 3]\u30eb<<<\u30eb|\u30fd"
+        "&[before 3]\u30ec<<<\u30ec|\u30fd"
+        "&[before 3]\u30ed<<<\u30ed|\u30fd"
+        "&\u30ee<<<\u30ee|\u30fd"
+        "&[before 3]\u30ef<<<\u30ef|\u30fd"
+        "&[before 3]\u30f0<<<\u30f0|\u30fd"
+        "&[before 3]\u30f1<<<\u30f1|\u30fd"
+        "&[before 3]\u30f2<<<\u30f2|\u30fd"
+        "&[before 3]\u30f3<<<\u30f3|\u30fd"
+        "&[before 3]\u30a6\u3099<<<\u30a6\u3099|\u30fd=\u30a6|\u30fe=\u30a6\u3099|\u30fe"
+        "&\u30f5<<<\u30f5|\u30fd"
+        "&\u30f6<<<\u30f6|\u30fd"
+        "&[before 3]\u30ef\u3099<<<\u30ef\u3099|\u30fd=\u30ef|\u30fe=\u30ef\u3099|\u30fe"
+        "&[before 3]\u30f0\u3099<<<\u30f0\u3099|\u30fd=\u30f0|\u30fe=\u30f0\u3099|\u30fe"
+        "&[before 3]\u30f1\u3099<<<\u30f1\u3099|\u30fd=\u30f1|\u30fe=\u30f1\u3099|\u30fe"
+        "&[before 3]\u30f2\u3099<<<\u30f2\u3099|\u30fd=\u30f2|\u30fe=\u30f2\u3099|\u30fe"
+
+        // Kanji, positioned over the top
+        "& [top] "
         "<\u4e9c<\u5516<\u5a03<\u963f<\u54c0<\u611b<\u6328<\u59f6<\u9022"
         "<\u8475<\u831c<\u7a50<\u60aa<\u63e1<\u6e25<\u65ed<\u8466<\u82a6"
         "<\u9bf5<\u6893<\u5727<\u65a1<\u6271<\u5b9b<\u59d0<\u867b<\u98f4"
@@ -1182,6 +1017,152 @@ ja_JP_JIS {
         "<\u9f5f<\u9f60<\u9f61<\u9f66<\u9f67<\u9f6c<\u9f6a<\u9f77<\u9f72"
         "<\u9f76<\u9f95<\u9f9c<\u9fa0<\u582f<\u69c7<\u9059<\u7464<\u51dc"
         "<\u7199"
+
+        // Fullwidth compatibility characters
+        "&' '=\u3000" // IDEOGRAPHIC SPACE
+        "&'!'=\uff01" // FULLWIDTH EXCLAMATION MARK
+        "&'\u0022'=\uff02" // FULLWIDTH QUOTATION MARK
+        "&'#'=\uff03" // FULLWIDTH NUMBER SIGN
+        "&'$'=\uff04" // FULLWIDTH DOLLAR SIGN
+        "&'%'=\uff05" // FULLWIDTH PERCENT SIGN
+        "&'&'=\uff06" // FULLWIDTH AMPERSAND
+        "&''=\uff07" // FULLWIDTH APOSTROPHE
+        "&'('=\uff08" // FULLWIDTH LEFT PARENTHESIS
+        "&')'=\uff09" // FULLWIDTH RIGHT PARENTHESIS
+        "&'*'=\uff0a" // FULLWIDTH ASTERISK
+        "&'+'=\uff0b" // FULLWIDTH PLUS SIGN
+        "&','=\uff0c" // FULLWIDTH COMMA
+        "&'-'=\uff0d" // FULLWIDTH HYPHEN-MINUS
+        "&'.'=\uff0e" // FULLWIDTH FULL STOP
+        "&'/'=\uff0f" // FULLWIDTH SOLIDUS
+        "&'0'=\uff10" // FULLWIDTH DIGIT ZERO
+        "&'1'=\uff11" // FULLWIDTH DIGIT ONE
+        "&'2'=\uff12" // FULLWIDTH DIGIT TWO
+        "&'3'=\uff13" // FULLWIDTH DIGIT THREE
+        "&'4'=\uff14" // FULLWIDTH DIGIT FOUR
+        "&'5'=\uff15" // FULLWIDTH DIGIT FIVE
+        "&'6'=\uff16" // FULLWIDTH DIGIT SIX
+        "&'7'=\uff17" // FULLWIDTH DIGIT SEVEN
+        "&'8'=\uff18" // FULLWIDTH DIGIT EIGHT
+        "&'9'=\uff19" // FULLWIDTH DIGIT NINE
+        "&':'=\uff1a" // FULLWIDTH COLON
+        "&';'=\uff1b" // FULLWIDTH SEMICOLON
+        "&'<'=\uff1c" // FULLWIDTH LESS-THAN SIGN
+        "&'='=\uff1d" // FULLWIDTH EQUALS SIGN
+        "&'>'=\uff1e" // FULLWIDTH GREATER-THAN SIGN
+        "&'?'=\uff1f" // FULLWIDTH QUESTION MARK
+        "&'@'=\uff20" // FULLWIDTH COMMERCIAL AT
+        "&'A'=\uff21" // FULLWIDTH LATIN CAPITAL LETTER A
+        "&'B'=\uff22" // FULLWIDTH LATIN CAPITAL LETTER B
+        "&'C'=\uff23" // FULLWIDTH LATIN CAPITAL LETTER C
+        "&'D'=\uff24" // FULLWIDTH LATIN CAPITAL LETTER D
+        "&'E'=\uff25" // FULLWIDTH LATIN CAPITAL LETTER E
+        "&'F'=\uff26" // FULLWIDTH LATIN CAPITAL LETTER F
+        "&'G'=\uff27" // FULLWIDTH LATIN CAPITAL LETTER G
+        "&'H'=\uff28" // FULLWIDTH LATIN CAPITAL LETTER H
+        "&'I'=\uff29" // FULLWIDTH LATIN CAPITAL LETTER I
+        "&'J'=\uff2a" // FULLWIDTH LATIN CAPITAL LETTER J
+        "&'K'=\uff2b" // FULLWIDTH LATIN CAPITAL LETTER K
+        "&'L'=\uff2c" // FULLWIDTH LATIN CAPITAL LETTER L
+        "&'M'=\uff2d" // FULLWIDTH LATIN CAPITAL LETTER M
+        "&'N'=\uff2e" // FULLWIDTH LATIN CAPITAL LETTER N
+        "&'O'=\uff2f" // FULLWIDTH LATIN CAPITAL LETTER O
+        "&'P'=\uff30" // FULLWIDTH LATIN CAPITAL LETTER P
+        "&'Q'=\uff31" // FULLWIDTH LATIN CAPITAL LETTER Q
+        "&'R'=\uff32" // FULLWIDTH LATIN CAPITAL LETTER R
+        "&'S'=\uff33" // FULLWIDTH LATIN CAPITAL LETTER S
+        "&'T'=\uff34" // FULLWIDTH LATIN CAPITAL LETTER T
+        "&'U'=\uff35" // FULLWIDTH LATIN CAPITAL LETTER U
+        "&'V'=\uff36" // FULLWIDTH LATIN CAPITAL LETTER V
+        "&'W'=\uff37" // FULLWIDTH LATIN CAPITAL LETTER W
+        "&'X'=\uff38" // FULLWIDTH LATIN CAPITAL LETTER X
+        "&'Y'=\uff39" // FULLWIDTH LATIN CAPITAL LETTER Y
+        "&'Z'=\uff3a" // FULLWIDTH LATIN CAPITAL LETTER Z
+        "&'['=\uff3b" // FULLWIDTH LEFT SQUARE BRACKET
+        "&'\u005c'=\uff3c" // FULLWIDTH REVERSE SOLIDUS
+        "&']'=\uff3d" // FULLWIDTH RIGHT SQUARE BRACKET
+        "&'^'=\uff3e" // FULLWIDTH CIRCUMFLEX ACCENT
+        "&'_'=\uff3f" // FULLWIDTH LOW LINE
+        "&'`'=\uff40" // FULLWIDTH GRAVE ACCENT
+        "&'a'=\uff41" // FULLWIDTH LATIN SMALL LETTER A
+        "&'b'=\uff42" // FULLWIDTH LATIN SMALL LETTER B
+        "&'c'=\uff43" // FULLWIDTH LATIN SMALL LETTER C
+        "&'d'=\uff44" // FULLWIDTH LATIN SMALL LETTER D
+        "&'e'=\uff45" // FULLWIDTH LATIN SMALL LETTER E
+        "&'f'=\uff46" // FULLWIDTH LATIN SMALL LETTER F
+        "&'g'=\uff47" // FULLWIDTH LATIN SMALL LETTER G
+        "&'h'=\uff48" // FULLWIDTH LATIN SMALL LETTER H
+        "&'i'=\uff49" // FULLWIDTH LATIN SMALL LETTER I
+        "&'j'=\uff4a" // FULLWIDTH LATIN SMALL LETTER J
+        "&'k'=\uff4b" // FULLWIDTH LATIN SMALL LETTER K
+        "&'l'=\uff4c" // FULLWIDTH LATIN SMALL LETTER L
+        "&'m'=\uff4d" // FULLWIDTH LATIN SMALL LETTER M
+        "&'n'=\uff4e" // FULLWIDTH LATIN SMALL LETTER N
+        "&'o'=\uff4f" // FULLWIDTH LATIN SMALL LETTER O
+        "&'p'=\uff50" // FULLWIDTH LATIN SMALL LETTER P
+        "&'q'=\uff51" // FULLWIDTH LATIN SMALL LETTER Q
+        "&'r'=\uff52" // FULLWIDTH LATIN SMALL LETTER R
+        "&'s'=\uff53" // FULLWIDTH LATIN SMALL LETTER S
+        "&'t'=\uff54" // FULLWIDTH LATIN SMALL LETTER T
+        "&'u'=\uff55" // FULLWIDTH LATIN SMALL LETTER U
+        "&'v'=\uff56" // FULLWIDTH LATIN SMALL LETTER V
+        "&'w'=\uff57" // FULLWIDTH LATIN SMALL LETTER W
+        "&'x'=\uff58" // FULLWIDTH LATIN SMALL LETTER X
+        "&'y'=\uff59" // FULLWIDTH LATIN SMALL LETTER Y
+        "&'z'=\uff5a" // FULLWIDTH LATIN SMALL LETTER Z
+        "&'{'=\uff5b" // FULLWIDTH LEFT CURLY BRACKET
+        "&'|'=\uff5c" // FULLWIDTH VERTICAL LINE
+        "&'}'=\uff5d" // FULLWIDTH RIGHT CURLY BRACKET
+        "&'~'=\uff5e" // FULLWIDTH TILDE
+
+        "&'\u3002'=\uff61" // HALFWIDTH IDEOGRAPHIC FULL STOP
+        "&'\u300c'=\uff62" // HALFWIDTH LEFT CORNER BRACKET
+        "&'\u300d'=\uff63" // HALFWIDTH RIGHT CORNER BRACKET
+        "&'\u3001'=\uff64" // HALFWIDTH IDEOGRAPHIC COMMA
+        "&'\u30fb'=\uff65" // HALFWIDTH KATAKANA MIDDLE DOT
+        "&'\u00a2'=\uffe0" // FULLWIDTH CENT SIGN
+        "&'\u00a3'=\uffe1" // FULLWIDTH POUND SIGN
+        "&'\u00ac'=\uffe2" // FULLWIDTH NOT SIGN
+        "&' \u0304'=\uffe3" // FULLWIDTH MACRON
+        "&'\u00a6'=\uffe4" // FULLWIDTH BROKEN BAR
+        "&'\u00a5'=\uffe5" // FULLWIDTH YEN SIGN
+        "&'\u20a9'=\uffe6" // FULLWIDTH WON SIGN
+        "&'\u2502'=\uffe8" // HALFWIDTH FORMS LIGHT VERTICAL
+        "&'\u2190'=\uffe9" // HALFWIDTH LEFTWARDS ARROW
+        "&'\u2191'=\uffea" // HALFWIDTH UPWARDS ARROW
+        "&'\u2192'=\uffeb" // HALFWIDTH RIGHTWARDS ARROW
+        "&'\u2193'=\uffec" // HALFWIDTH DOWNWARDS ARROW
+        "&'\u25a0'=\uffed" // HALFWIDTH BLACK SQUARE
+        "&'\u25cb'=\uffee" // HALFWIDTH WHITE CIRCLE
+
+// Voiced and semivoiced syllables
+//		"&\u30A6\u3099=\u3046\u3099"
+//		"&\u30AB\u3099=\u304B\u3099"
+//		"&\u30AD\u3099=\u304D\u3099"
+//		"&\u30AF\u3099=\u304F\u3099"
+//		"&\u30B1\u3099=\u3051\u3099"
+//		"&\u30B3\u3099=\u3053\u3099"
+//		"&\u30B5\u3099=\u3055\u3099"
+//		"&\u30B7\u3099=\u3057\u3099"
+//		"&\u30B9\u3099=\u3059\u3099"
+//		"&\u30BB\u3099=\u305B\u3099"
+//		"&\u30BD\u3099=\u305D\u3099"
+//		"&\u30BF\u3099=\u305F\u3099"
+//		"&\u30C1\u3099=\u3061\u3099"
+//		"&\u30C4\u3099=\u3064\u3099"
+//		"&\u30C6\u3099=\u3066\u3099"
+//		"&\u30C8\u3099=\u3068\u3099"
+//		"&\u30CF\u3099=\u306F\u3099"
+//		"&\u30CF\u309A=\u306F\u309A"
+//		"&\u30D2\u3099=\u3072\u3099"
+//		"&\u30D2\u309A=\u3072\u309A"
+//		"&\u30D5\u3099=\u3075\u3099"
+//		"&\u30D5\u309A=\u3075\u309A"
+//		"&\u30D8\u3099=\u3078\u3099"
+//		"&\u30D8\u309A=\u3078\u309A"
+//		"&\u30DB\u3099=\u307B\u3099"
+//		"&\u30DB\u309A=\u307B\u309A"
+
 		}
 	}
 }
