@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/VersionInfoTest.java,v $ 
-* $Date: 2002/03/04 04:34:31 $ 
-* $Revision: 1.1 $
+* $Date: 2002/03/08 00:24:09 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -56,56 +56,56 @@ public final class VersionInfoTest extends TestFmwk
     	try {
     		version = VersionInfo.getInstance("a");
     		errln("\"a\" should produce an exception");
-    	} catch (Exception e) {
+    	} catch (RuntimeException e) {
     	}
     	try {
     		version = VersionInfo.getInstance("2");
     		errln("\"2\" should produce an exception");
-    	} catch (Exception e) {
+    	} catch (RuntimeException e) {
     	}
     	try {
     		version = VersionInfo.getInstance("2.0");
     		errln("\"2.0\" should produce an exception");
-    	} catch (Exception e) {
+    	} catch (RuntimeException e) {
     	}
     	try {
     		version = VersionInfo.getInstance("2.0.0");
     		errln("\"2.0.0\" should produce an exception");
-    	} catch (Exception e) {
+    	} catch (RuntimeException e) {
     	}
     	try {
     		version = VersionInfo.getInstance("-2.0.0");
     		errln("\"2.0.0\" should produce an exception");
-    	} catch (Exception e) {
+    	} catch (RuntimeException e) {
     	}
     	try {
     		version = VersionInfo.getInstance("2.300.0");
     		errln("\"2.0.0\" should produce an exception");
-    	} catch (Exception e) {
+    	} catch (RuntimeException e) {
     	}
     	try {
     		version = VersionInfo.getInstance("2.0.0.0");
-    	} catch (Exception e) {
+    	} catch (RuntimeException e) {
     		errln("\"2.0.0.0\" should produce an valid version");
     	}
     	try {
     		version = VersionInfo.getInstance("2.100.100.100");
-    	} catch (Exception e) {
+    	} catch (RuntimeException e) {
     		errln("\"2.0.0.0\" should produce an valid version");
     	}
     	try {
     		version = VersionInfo.getInstance(-2, 0, 0, 0);
     		errln("-2.0.0.0 should produce an exception");
-    	} catch (Exception e) {
+    	} catch (RuntimeException e) {
     	}
     	try {
     		version = VersionInfo.getInstance(2, 300, 0, 0);
     		errln("2.300.0.0 should produce an exception");
-    	} catch (Exception e) {
+    	} catch (RuntimeException e) {
     	}
     	try {
     		version = VersionInfo.getInstance(2, 0, 0, 0);
-    	} catch (Exception e) {
+    	} catch (RuntimeException e) {
     		errln("\"2.0.0.0\" should produce an valid version");
     	}
     }
