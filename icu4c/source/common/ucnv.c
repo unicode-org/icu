@@ -1703,7 +1703,7 @@ ucnv_getNextUChar(UConverter *cnv,
                 /* convert once more, to buffer[1] */
                 args.targetLimit=buffer+2;
                 _toUnicodeWithCallback(&args, err);
-                if(*err=U_BUFFER_OVERFLOW_ERROR) {
+                if(*err==U_BUFFER_OVERFLOW_ERROR) {
                     *err=U_ZERO_ERROR;
                 }
 

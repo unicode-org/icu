@@ -696,7 +696,7 @@ public:
      * is returned in count;
      * @draft ICU 2.6
      */
-    virtual const UnicodeString * const getSupportedIDs(int32_t &count, UErrorCode& status) const = 0;
+    virtual const UnicodeString * getSupportedIDs(int32_t &count, UErrorCode& status) const = 0;
 
     /**
      * Return a number format of the appropriate type.  If the locale
@@ -746,7 +746,7 @@ public:
     /**
      * @draft ICU 2.6
      */
-    virtual const UnicodeString * const getSupportedIDs(int32_t &count, UErrorCode& status) const 
+    virtual const UnicodeString * getSupportedIDs(int32_t &count, UErrorCode& status) const 
       {
         if (U_SUCCESS(status)) {
           count = 1;
