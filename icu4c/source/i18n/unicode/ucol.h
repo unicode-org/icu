@@ -539,7 +539,7 @@ ucol_getVersion(const UCollator* coll, UVersionInfo info);
  * @param attr attribute type 
  * @param value attribute value
  * @param status to indicate whether the operation went on smoothly or there were errors
- * @draft API 1.7 freeze
+ * @draft
  */
 U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status);
 
@@ -549,9 +549,41 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
  * @param attr attribute type
  * @return attribute value
  * @param status to indicate whether the operation went on smoothly or there were errors
- * @draft API 1.7 freeze
+ * @draft
  */
 U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status);
+
+/** 
+ * Sets the variable top to a collation element value of a string supplied. 
+ * @param coll collator which variable top needs to be changed
+ * @param varTop one or more (if contraction) UChars to which the variable top should be set
+ * @param len length of variable top string. If -1 it is considered to be zero terminated.
+ * @param status error code. If error code is set, the return value is undefined. Errors set by this function are: <br>
+ *    U_CE_NOT_FOUND_ERROR if more than one character was passed and there is no such a contraction<br>
+ *    U_PRIMARY_TOO_LONG_ERROR if the primary for the variable top has more than two bytes
+ * @return a 32 bit value containing the value of the variable top in upper 16 bits. Lower 16 bits are undefined
+ * @draft
+ */
+U_CAPI uint32_t ucol_setVariableTop(UCollator *coll, const UChar *varTop, const int32_t len, UErrorCode *status);
+
+/** 
+ * Gets the variable top value of a Collator. 
+ * Lower 16 bits are undefined and should be ignored.
+ * @param coll collator which variable top needs to be retrieved
+ * @param status error code (not changed by function). If error code is set, the return value is undefined.
+ * @draft
+ */
+U_CAPI uint32_t ucol_getVariableTop(const UCollator *coll, UErrorCode *status);
+
+/** 
+ * Sets the variable top to a collation element value supplied. Variable top is set to the upper 16 bits. 
+ * Lower 16 bits are ignored.
+ * @param coll collator which variable top needs to be changed
+ * @param varTop CE value, as returned by ucol_setVariableTop or ucol)getVariableTop
+ * @param status error code (not changed by function)
+ * @draft
+ */
+U_CAPI void ucol_restoreVariableTop(UCollator *coll, const uint32_t varTop, UErrorCode *status);
 
 /**
  * Thread safe cloning operation
