@@ -40,6 +40,8 @@ TestConcatenate(void);
 static void
 TestNextPrevious(void);
 
+static void TestIsNormalized(void);
+
 const static char* canonTests[][3] = {
     /* Input*/                    /*Decomposed*/                /*Composed*/
     { "cat",                    "cat",                        "cat"                    },
@@ -108,6 +110,7 @@ void addNormTest(TestNode** root)
     addTest(root, &TestCompatDecompCompose, "tscoll/cnormtst/CompatDecompCompose");
     addTest(root, &TestNull, "tscoll/cnormtst/TestNull");
     addTest(root, &TestQuickCheck, "tscoll/cnormtst/TestQuickCheck");
+    addTest(root, &TestIsNormalized, "tscoll/cnormtst/TestIsNormalized");
     addTest(root, &TestCheckFCD, "tscoll/cnormtst/TestCheckFCD");
     addTest(root, &TestNormCoverage, "tscoll/cnormtst/TestNormCoverage");
     addTest(root, &TestConcatenate, "tscoll/cnormtst/TestConcatenate");
@@ -559,6 +562,75 @@ void TestQuickCheck()
   TestQuickCheckResultYES();
   TestQuickCheckResultMAYBE();
   TestQuickCheckStringResult(); 
+}
+
+/*
+ * The intltest/NormalizerConformanceTest tests a lot of strings that _are_
+ * normalized, and some that are not.
+ * Here we pick some specific cases and test the C API.
+ */
+static void TestIsNormalized(void) {
+    static const UChar notNFC[][8]={            /* strings that are not in NFC */
+        { 0x62, 0x61, 0x300, 0x63, 0 },         /* 0061 0300 compose */
+        { 0xfb1d, 0 },                          /* excluded from composition */
+        { 0x0627, 0x0653, 0 },                  /* 0627 0653 compose */
+        { 0x3071, 0x306f, 0x309a, 0x3073, 0 }   /* 306F 309A compose */
+    };
+    static const UChar notNFKC[][8]={           /* strings that are not in NFKC */
+        { 0x1100, 0x1161, 0 },                  /* Jamo compose */
+        { 0x1100, 0x314f, 0 },                  /* compatibility Jamo compose */
+        { 0x03b1, 0x1f00, 0x0345, 0x03b3, 0 }   /* 1F00 0345 compose */
+    };
+
+    int32_t i;
+    UErrorCode errorCode;
+
+    /* API test */
+
+    /* normal case with length>=0 (length -1 used for special cases below) */
+    errorCode=U_ZERO_ERROR;
+    if(!unorm_isNormalized(notNFC[0]+2, 1, UNORM_NFC, &errorCode) || U_FAILURE(errorCode)) {
+        log_err("error: !isNormalized(<U+0300>, NFC) (%s)\n", u_errorName(errorCode));
+    }
+
+    /* incoming U_FAILURE */
+    errorCode=U_TRUNCATED_CHAR_FOUND;
+    (void)unorm_isNormalized(notNFC[0]+2, 1, UNORM_NFC, &errorCode);
+    if(errorCode!=U_TRUNCATED_CHAR_FOUND) {
+        log_err("error: isNormalized(U_TRUNCATED_CHAR_FOUND) changed the error code to %s\n", u_errorName(errorCode));
+    }
+
+    /* NULL source */
+    errorCode=U_ZERO_ERROR;
+    (void)unorm_isNormalized(NULL, 1, UNORM_NFC, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("error: isNormalized(NULL) did not set U_ILLEGAL_ARGUMENT_ERROR but %s\n", u_errorName(errorCode));
+    }
+
+    /* bad length */
+    errorCode=U_ZERO_ERROR;
+    (void)unorm_isNormalized(notNFC[0]+2, -2, UNORM_NFC, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("error: isNormalized([-2]) did not set U_ILLEGAL_ARGUMENT_ERROR but %s\n", u_errorName(errorCode));
+    }
+
+    /* specific cases */
+    for(i=0; i<ARRAY_LENGTH(notNFC); ++i) {
+        errorCode=U_ZERO_ERROR;
+        if(unorm_isNormalized(notNFC[i], -1, UNORM_NFC, &errorCode) || U_FAILURE(errorCode)) {
+            log_err("error: isNormalized(notNFC[%d], NFC) is wrong (%s)\n", i, u_errorName(errorCode));
+        }
+        errorCode=U_ZERO_ERROR;
+        if(unorm_isNormalized(notNFC[i], -1, UNORM_NFKC, &errorCode) || U_FAILURE(errorCode)) {
+            log_err("error: isNormalized(notNFC[%d], NFKC) is wrong (%s)\n", i, u_errorName(errorCode));
+        }
+    }
+    for(i=0; i<ARRAY_LENGTH(notNFKC); ++i) {
+        errorCode=U_ZERO_ERROR;
+        if(unorm_isNormalized(notNFKC[i], -1, UNORM_NFKC, &errorCode) || U_FAILURE(errorCode)) {
+            log_err("error: isNormalized(notNFKC[%d], NFKC) is wrong (%s)\n", i, u_errorName(errorCode));
+        }
+    }
 }
 
 void TestCheckFCD() 
