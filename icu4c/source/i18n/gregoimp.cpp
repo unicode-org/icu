@@ -15,6 +15,7 @@
 #include "unicode/ucal.h"
 #include "uresimp.h"
 #include "cstring.h"
+#include "uassert.h"
 
 int32_t Math::floorDivide(int32_t numerator, int32_t denominator) {
     return (numerator >= 0) ?
@@ -27,6 +28,40 @@ int32_t Math::floorDivide(double numerator, int32_t denominator,
     quotient = uprv_floor(numerator / denominator);
     remainder = (int32_t) (numerator - (quotient * denominator));
     return (int32_t) quotient;
+}
+
+double Math::floorDivide(double dividend, double divisor,
+                         double& remainder) {
+    // Only designed to work for positive divisors
+    U_ASSERT(divisor > 0);
+    double quotient = floorDivide(dividend, divisor);
+    remainder = dividend - (quotient * divisor);
+    // N.B. For certain large dividends, on certain platforms, there
+    // is a bug such that the quotient is off by one.  If you doubt
+    // this to be true, set a breakpoint below and run cintltst.
+    if (remainder < 0 || remainder >= divisor) {
+        // E.g. 6.7317038241449352e+022 / 86400000.0 is wrong on my
+        // machine (too high by one).  4.1792057231752762e+024 /
+        // 86400000.0 is wrong the other way (too low).
+        double q = quotient;
+        quotient += (remainder < 0) ? -1 : +1;
+        if (q == quotient) {
+            // For quotients > ~2^53, we won't be able to add or
+            // subtract one, since the LSB of the mantissa will be >
+            // 2^0; that is, the exponent (base 2) will be larger than
+            // the length, in bits, of the mantissa.  In that case, we
+            // can't give a correct answer, so we set the remainder to
+            // zero.  This has the desired effect of making extreme
+            // values give back an approximate answer rather than
+            // crashing.  For example, UDate values above a ~10^25
+            // might all have a time of midnight.
+            remainder = 0;
+        } else {
+            remainder = dividend - (quotient * divisor);
+        }
+    }
+    U_ASSERT(0 <= remainder && remainder < divisor);
+    return quotient;
 }
 
 const int32_t JULIAN_1_CE    = 1721426; // January 1, 1 CE Gregorian
