@@ -40,6 +40,7 @@ void TestSBCS(void);
 void TestDBCS(void);
 void TestMBCS(void);
 void TestISO_2022(void);
+void TestISO_2022_JP(void);
 void TestEBCDIC_STATEFUL(void);
 void TestLMBCS(void);
 void TestJitterbug255(void);
@@ -163,6 +164,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestDBCS, "tsconv/nucnvtst/TestDBCS");
    addTest(root, &TestMBCS, "tsconv/nucnvtst/TestMBCS");
    addTest(root, &TestISO_2022, "tsconv/nucnvtst/TestISO_2022");
+   addTest(root, &TestISO_2022_JP, "tsconv/nucnvtst/TestISO_2022_JP");
    addTest(root, &TestEBCDIC_STATEFUL, "tsconv/nucnvtst/TestEBCDIC_STATEFUL");
    addTest(root, &TestLMBCS, "tsconv/nucnvtst/TestLMBCS");
    addTest(root, &TestJitterbug255, "tsconv/nucnvtst/TestJitterbug255");
@@ -518,7 +520,7 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
     const uint8_t expectedISO2022[] = 
      { 0x1b, 0x25, 0x42, 0x31, 0x32, 0x33, 0x00, 0xe4, 0xb8, 0x80, 0xe4, 0xba, 0x8c, 0xe4, 0xb8, 0x89, 0x2E };
     int32_t  toISO2022Offs[]     = 
-     { 0xff, 0xff, 0xff, 0x00, 0x01, 0x02, 0x03, 0x04, 0x04,  
+     { -1, -1, -1, 0x00, 0x01, 0x02, 0x03, 0x04, 0x04,  
        0x04, 0x05, 0x05, 0x05, 0x06, 0x06, 0x06, 0x07 }; /* right? */
     int32_t fmISO2022Offs[] = 
      { 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x000a, 0x000d, 0x0010 }; /* is this right? */
@@ -622,8 +624,8 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 
     }
     /*ISO-2022*/
-    if(/* broken for icu 1.6, do not test */uprv_strcmp("1.6", U_ICU_VERSION) != 0 && !testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedISO2022, sizeof(expectedISO2022), "iso-2022", toISO2022Offs ))
+    if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+            expectedISO2022, sizeof(expectedISO2022), "ISO_2022", toISO2022Offs ))
         log_err("u-> iso-2022 did not match.\n");
     /*UTF16 LE*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -674,8 +676,8 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
                sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf8", fmUTF8Offs ))
       log_err("utf8 -> u did not match\n");
     /*ISO-2022*/
-    if(/* broken for icu 1.6, do not test */uprv_strcmp("1.6", U_ICU_VERSION) != 0 && !testConvertToU(expectedISO2022, sizeof(expectedISO2022),
-               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "iso-2022", fmISO2022Offs ))
+    if(/* broken for icu 1.6, do not test uprv_strcmp("1.6", U_ICU_VERSION) != 0 && */!testConvertToU(expectedISO2022, sizeof(expectedISO2022),
+               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "ISO_2022", fmISO2022Offs ))
       log_err("iso-2022  -> u  did not match.\n");
     /*UTF16 LE*/
     if(!testConvertToU(expectedUTF16LE, sizeof(expectedUTF16LE),
@@ -1172,6 +1174,8 @@ TestISO_2022() {
       
     };
 
+
+
     /* expected test results */
     static const uint32_t results[]={
         /* number of bytes read, code point */
@@ -1188,16 +1192,12 @@ TestISO_2022() {
     UErrorCode errorCode=U_ZERO_ERROR;
     UConverter *cnv;
 
-    if(/* broken for icu 1.6, do not test */uprv_strcmp("1.6", U_ICU_VERSION) == 0) {
-        return;
-    }
-
-    cnv=ucnv_open("iso-2022", &errorCode);
+    cnv=ucnv_open("ISO_2022", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
         return;
     }
-    TestNextUChar(cnv, source, limit, results, "iso-2022");
+    TestNextUChar(cnv, source, limit, results, "ISO_2022");
 
     /*Test the condition when source > sourceLimit*/
     TestNextUCharError(cnv, source, source-1, U_ILLEGAL_ARGUMENT_ERROR, "sourceLimit < source");
@@ -1214,6 +1214,71 @@ TestISO_2022() {
     }
     ucnv_close(cnv);
 }
+void
+TestISO_2022_JP() {
+    /* test input */
+    static const uint16_t in[]={
+		0x4E00,  0x4E20,  0x000A,  0x000D,  0x4E30,  0x4E40,  0x4E71,  0x4E73,  0x4E38,  0x000A,  
+		0x000D,  0x4E15,  0x4EC5,  0x4EF3,  0x4EF1,  0x4EB1,  0x4E56,  0x4E14,  0x4E12,  0x000A,  
+		0x000D,  0x4E01,  0x4E01,  0x4E12,  0x4E56,  0x4E86,  0x4E69,  0x4E46,  0x4E72,  0x4E21,
+		0xAC13,  0xAC25,  0xAC95,  0xACA8,  0xAC27,  0x000A,  0x000D,  0x4E01,  0x4E33,  0x4EA9,  
+		0x4EA1,  0xF9D9,  0xF978,  0xF978,  0xF983,  0xF9D2,  0xF990,  0xF931,  0xF937,  0xF9B9,  
+		0xF9D7,  0xF9D3,  0x000A,  0x000D,  0xFE40,  0xFF15,  0xFF2D,  0xFF0E,  0xFE33,  0xFE30,  
+		0xFF21,  0xFF26,  0xFF19,  0xFE40,  0xFE44,  0xFE61,  0x000A,  0x000D,  0xF9B7,  0xF9EB,  
+		0xF98C,  0xF962,  0xF912,  0xF911,  0xF9D1,  0x3053,  0x30A4,  0x30B9,  0x307C,  0x3055,  
+		0x3093,  0x3109,  0x3109,  0x000A,  0x000D,  0x30CB,  0x315B,  0x317B,  0x3177,  0x3172, 
+		0x318B,  0x319F,  0x319E,  0x313B,  0x30EB,  0x30CA,  0x30B6,  0x3127,  0x3168,  0x000A,  
+		0x000D,  0x3155,  0x3167,  0x3145,  0x3181,  0x3173,  0x3204,  0x3207, 	0x3228,  0x320B,  
+		0x320F,  0x3221,  0x000A,  0x000D
+      };
+	const UChar* uSource;
+	const UChar* uSourceLimit;
+	const char* cSource;
+	const char* cSourceLimit;
+	UChar *uTargetLimit =NULL;
+	UChar *uTarget;
+	char *cTarget;
+	const char *cTargetLimit;
+	char *cBuf; 
+	int8_t i=0;
+	UChar *uBuf,*test;
+    int32_t uBufSize = 120;
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UConverter *cnv;
+
+    cnv=ucnv_open("ISO_2022,locale=jp", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
+        return;
+    }
+
+	uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
+	cBuf =(char*)malloc(uBufSize * sizeof(char) * 5);
+	uSource = &in[0];
+	uSourceLimit=&in[sizeof(in)/2];
+	cTarget = cBuf;
+	cTargetLimit = cBuf +uBufSize*5;
+	uTarget = uBuf;
+	uTargetLimit = uBuf+ uBufSize*5;
+	ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,TRUE, &errorCode);
+	cSource = cBuf;
+	cSourceLimit =++cTarget;
+	test =uBuf;
+	ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,TRUE,&errorCode);
+	uSource = &in[0];
+	while(*uSource){
+		if(*test=!*uSource){
+			log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
+		}
+		*uSource++;
+		*test++;
+	}
+
+	ucnv_close(cnv);
+	free(uBuf);
+	free(cBuf);
+}
+
 void
 TestEBCDIC_STATEFUL() {
     /* test input */
