@@ -5,13 +5,21 @@
 // *
 // ***************************************************************************
 
-kk{
+kk {
     Version{ "1.0" }
-    Languages {
-        kk { "\u049A\u0430\u0437\u0430\u049B" }
+    collations {
+        standard {
+            Version { "1.0" }
+            Sequence { 
+                "[normalization on]"
+            }
+        }
     }
     Countries {
         KZ { "\u049A\u0430\u0437\u0430\u049B\u0441\u0442\u0430\u043D" }
+    }
+    Currencies {
+        KZT { "\u0442\u04A3\u0433.", "KZT" }
     }
     DateTimePatterns { 
         "HH:mm:ss z",
@@ -42,6 +50,12 @@ kk{
         "\u0436\u04B1\u043C\u0430",
         "\u0441\u0435\u043D\u0431\u0456",
     }
+    Languages {
+        kk { "\u049A\u0430\u0437\u0430\u049B" }
+    }
+    // \u049B should be removed if it's not in the native language and country names.
+    ExemplarCharacters { "[\u0430-\u044f\u044b\u044d\u0451\u0456\u049B\u04A3\u04AF\u04B1\u04D9]" }
+    LocaleScript:array { "Cyrl" }
     MonthAbbreviations { 
         "\u049B\u0430\u04A3.",
         "\u0430\u049B\u043F.",
@@ -70,7 +84,6 @@ kk{
         "\u049B\u0430\u0440\u0430\u0448\u0430",
         "\u0436\u0435\u043B\u0442\u043E\u049B\u0441\u0430\u043D",
     }
-
     NumberElements { 
         ",",
         "\u00A0",
@@ -85,19 +98,5 @@ kk{
         "\uFFFD",
         ",",
         "+",
-    }
-    Currencies {
-        KZT { "\u0442\u04A3\u0433.", "KZT" }
-    }
-    LocaleScript:array { "Cyrl" }
-    // \u049B should be removed if it's not in the native language and country names.
-    ExemplarCharacters { "[\u0430-\u044f\u044b\u044d\u0451\u0456\u049B\u04A3]" }
-    collations {
-      standard {
-        Version { "1.0" }
-        Sequence { 
-            "[normalization on]"
-        }
-      }
     }
 }
