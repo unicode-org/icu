@@ -36,6 +36,7 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
     fPattern           = pat;
     fPatternOwned      = FALSE;
     fInput             = NULL;
+    fTraceDebug        = FALSE;
     UErrorCode  status = U_ZERO_ERROR;
     fStack             = new UVector32(status);   // TODO:  do something with status.
     fData              = fSmallData;
@@ -51,8 +52,9 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
 RegexMatcher::RegexMatcher(const UnicodeString &regexp, const UnicodeString &input,
                            uint32_t flags, UErrorCode &status) {
     UParseError    pe;
-    fPattern       = RegexPattern::compile(regexp, flags, pe, status);
-    fPatternOwned  = TRUE;
+    fPattern           = RegexPattern::compile(regexp, flags, pe, status);
+    fPatternOwned      = TRUE;
+    fTraceDebug        = FALSE;
     fStack             = new UVector32(status); 
     fData              = fSmallData;
     if (fPattern->fDataSize > sizeof(fSmallData)/sizeof(int32_t)) {
@@ -67,6 +69,7 @@ RegexMatcher::RegexMatcher(const UnicodeString &regexp,
     UParseError    pe;
     fPattern           = RegexPattern::compile(regexp, flags, pe, status);
     fPatternOwned      = TRUE;
+    fTraceDebug        = FALSE;
     fStack             = new UVector32(status); 
     fData              = fSmallData;
     if (fPattern->fDataSize > sizeof(fSmallData)/sizeof(int32_t)) {
@@ -478,6 +481,19 @@ REStackFrame *RegexMatcher::resetStack() {
     return (REStackFrame *)iFrame;
 }
 
+
+
+//--------------------------------------------------------------------------------
+//
+//    setTrace
+//
+//--------------------------------------------------------------------------------
+void RegexMatcher::setTrace(UBool state) {
+    fTraceDebug = state;
+}
+
+
+
 //--------------------------------------------------------------------------------
 //
 //     start
@@ -614,6 +630,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
     int32_t     opValue;               //    and the operand value.
 
     #ifdef REGEX_RUN_DEBUG
+    if (fTraceDebug)
     {
         printf("MatchAt(startIdx=%d)\n", startIdx);
         printf("Original Pattern: ");
@@ -670,9 +687,11 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
         opType  = URX_TYPE(op);
         opValue = URX_VAL(op);
         #ifdef REGEX_RUN_DEBUG
+        if (fTraceDebug) {
             printf("inputIdx=%d   inputChar=%c   sp=%3d  ", fp->fInputIdx,
                 fInput->char32At(fp->fInputIdx), (int32_t *)fp-fStack->getBuffer());
             fPattern->dumpOp(fp->fPatIdx);
+        }
         #endif
         fp->fPatIdx++;
 
@@ -1227,11 +1246,15 @@ breakFromLoop:
         fLastMatchEnd = fMatchEnd;
         fMatchStart   = startIdx;
         fMatchEnd     = fp->fInputIdx;
-        REGEX_RUN_DEBUG_PRINTF("Match.  start=%d   end=%d\n\n", fMatchStart, fMatchEnd);
+        if (fTraceDebug) {
+            REGEX_RUN_DEBUG_PRINTF("Match.  start=%d   end=%d\n\n", fMatchStart, fMatchEnd);
+        }
         }
     else
     {
-        REGEX_RUN_DEBUG_PRINTF("No match\n\n");
+        if (fTraceDebug) {
+            REGEX_RUN_DEBUG_PRINTF("No match\n\n");
+        }
     }
 
     fFrame = fp;                // The active stack frame when the engine stopped.
