@@ -429,6 +429,6 @@ bool_t TransliterationRule::charMatches(UChar keyChar, UChar textChar,
                                         const UnicodeFilter* filter) const {
     UnicodeSet* set = 0;
     return (filter == 0 || filter->isIn(textChar)) &&
-        ((set = data.lookupSet(keyChar)) == 0) ?
-        keyChar == textChar : set->contains(textChar);
+        (((set = data.lookupSet(keyChar)) == 0) ?
+         keyChar == textChar : set->contains(textChar));
 }
