@@ -478,13 +478,13 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
 
     static const UChar    MBCSText[] = 
      { 0x0001, 0x263a, 0x2013, 0x2014, 0x263b, 0x0002};
-    static const  uint8_t expectedIBM1370[] = 
+    static const  uint8_t expectedIBM950[] = 
      {  0x01, 0x01, 0xa1, 0x56, 0xa1, 0x56, 0x02, 0x02};
     static const UChar retrievedMBCSText[]=
        { 0x0001, 0x0001, 0x2014, 0x2014, 0x0002, 0x0002};
-    static const int32_t  toIBM1370Offs    [] = 
+    static const int32_t  toIBM950Offs    [] = 
      {  0x00, 0x01, 0x02, 0x02, 0x03, 0x03, 0x04, 0x05};
-    static const int32_t fromIBM1370offs []  = 
+    static const int32_t fromIBM950offs []  = 
     {  0, 1, 2, 4, 6, 7};
 
     static const UChar    MBCSText1363[] = 
@@ -560,30 +560,30 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
   
     /*MBCS*/
     if(!testConvertFromUnicode(MBCSText, sizeof(MBCSText)/sizeof(MBCSText[0]),
-        expectedIBM1370, sizeof(expectedIBM1370), "ibm-1370", TRUE, toIBM1370Offs ))
-       log_err("u-> ibm-1370(MBCS) with FallBack did not match.\n");
+        expectedIBM950, sizeof(expectedIBM950), "ibm-950", TRUE, toIBM950Offs ))
+       log_err("u-> ibm-950(MBCS) with FallBack did not match.\n");
 
-    if(!testConvertToUnicode(expectedIBM1370, sizeof(expectedIBM1370), 
-        retrievedMBCSText, sizeof(retrievedMBCSText)/sizeof(retrievedMBCSText[0]),"ibm-1370", TRUE, fromIBM1370offs ))
-        log_err("ibm-1370->u(MBCS) with Fallback did not match.\n");
+    if(!testConvertToUnicode(expectedIBM950, sizeof(expectedIBM950), 
+        retrievedMBCSText, sizeof(retrievedMBCSText)/sizeof(retrievedMBCSText[0]),"ibm-950", TRUE, fromIBM950offs ))
+        log_err("ibm-950->u(MBCS) with Fallback did not match.\n");
     
    /*commented untill data table is available*/
     log_verbose("toUnicode fallback with fallback data for MBCS\n");
     {
-        const uint8_t IBM1370input[] =   {  
+        const uint8_t IBM950input[] =   {  
             0xf4, 0x87, 0xa4, 0x4a, 0xf4, 0x88, 0xa4, 0x4b,
                 0xf9, 0x92, 0xdc, 0xb0, };
         UChar expectedUnicodeText[]= { 0x5165, 0x5165, 0x516b, 0x516b, 0x9ef9, 0x9ef9};
-        int32_t fromIBM1370inputOffs []  =   {  0, 2, 4, 6, 8, 10};
+        int32_t fromIBM950inputOffs []  =   {  0, 2, 4, 6, 8, 10};
         /* for testing reverse fallback behavior */
         UChar expectedFallbackFalse[]= { 0x5165, 0x5165, 0x516b, 0x516b, 0x9ef9, 0x9ef9};
 
-        if(!testConvertToUnicode(IBM1370input, sizeof(IBM1370input), 
-                expectedUnicodeText, sizeof(expectedUnicodeText)/sizeof(expectedUnicodeText[0]),"ibm-1370", TRUE, fromIBM1370inputOffs ))
-            log_err("ibm-1370->u(MBCS) with Fallback did not match.\n");
-        if(!testConvertToUnicode(IBM1370input, sizeof(IBM1370input), 
-                expectedFallbackFalse, sizeof(expectedFallbackFalse)/sizeof(expectedFallbackFalse[0]),"ibm-1370", FALSE, fromIBM1370inputOffs ))
-            log_err("ibm-1370->u(MBCS) with Fallback  did not match.\n");
+        if(!testConvertToUnicode(IBM950input, sizeof(IBM950input), 
+                expectedUnicodeText, sizeof(expectedUnicodeText)/sizeof(expectedUnicodeText[0]),"ibm-950", TRUE, fromIBM950inputOffs ))
+            log_err("ibm-950->u(MBCS) with Fallback did not match.\n");
+        if(!testConvertToUnicode(IBM950input, sizeof(IBM950input), 
+                expectedFallbackFalse, sizeof(expectedFallbackFalse)/sizeof(expectedFallbackFalse[0]),"ibm-950", FALSE, fromIBM950inputOffs ))
+            log_err("ibm-950->u(MBCS) with Fallback  did not match.\n");
 
     }
     log_verbose("toUnicode fallback with fallback data for euc-tw\n");

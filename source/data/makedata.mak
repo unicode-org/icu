@@ -145,7 +145,7 @@ PKGOPT=R:$(ICUP)
 # They are necessary on EBCDIC machines, and
 # the following logic is much easier if UCM_SOURCE is never empty.
 # (They are small.)
-UCM_SOURCE=ibm-37.ucm ibm-1047.ucm
+UCM_SOURCE=ibm-37_P100-1995.ucm ibm-1047_P100-1995.ucm
 
 !IF EXISTS("$(ICUSRCDATA)\$(ICUUCM)\ucmcore.mk")
 !INCLUDE "$(ICUSRCDATA)\$(ICUUCM)\ucmcore.mk"
