@@ -53,6 +53,11 @@ ucol_openElements(const UCollator  *coll,
   }
 
   result = (UCollationElements *)uprv_malloc(sizeof(UCollationElements));
+  //test for NULL
+  if (result == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return NULL;
+  }
 
   result->reset_   = TRUE;
   result->isWritable = FALSE;

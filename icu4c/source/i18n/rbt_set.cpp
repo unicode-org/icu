@@ -282,6 +282,11 @@ void TransliterationRuleSet::freeze(UParseError& parseError,UErrorCode& status) 
      * Be careful not to call malloc(0).
      */
     int16_t* indexValue = (int16_t*) uprv_malloc( sizeof(int16_t) * (n > 0 ? n : 1) );
+    //test for NULL
+    if (indexValue == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     for (j=0; j<n; ++j) {
         TransliterationRule* r = (TransliterationRule*) ruleVector->elementAt(j);
         indexValue[j] = r->getIndexValue();
@@ -312,6 +317,11 @@ void TransliterationRuleSet::freeze(UParseError& parseError,UErrorCode& status) 
      */
     delete[] rules; // Contains alias pointers
     rules = new TransliterationRule*[v.size()];
+    //test for NULL
+    if (rules == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     for (j=0; j<v.size(); ++j) {
         rules[j] = (TransliterationRule*) v.elementAt(j);
     }

@@ -912,6 +912,11 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
         break;
     default:
         t = new CompoundTransliterator(list, parseError, status);
+        //test for NULL
+        if (t == 0) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
         if (U_FAILURE(status)) {
             delete t;
             return NULL;
@@ -1003,6 +1008,11 @@ Transliterator* Transliterator::createFromRules(const UnicodeString& ID,
             // ordinary RBT_DATA.
             t = new RuleBasedTransliterator(ID, parser.orphanData(), TRUE); // TRUE == adopt data object
         }
+        //test for NULL
+        if (t == 0) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
     } else {
         if (parser.data == NULL) {
             // idBlock, no data -- this is an alias.  The ID has
@@ -1018,8 +1028,18 @@ Transliterator* Transliterator::createFromRules(const UnicodeString& ID,
             // RBT
             UnicodeString id("_", "");
             t = new RuleBasedTransliterator(id, parser.orphanData(), TRUE); // TRUE == adopt data object
+            //test for NULL
+            if (t == 0) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return 0;
+            }
             t = new CompoundTransliterator(ID, parser.idBlock, parser.idSplitPoint,
                                            t, status);
+            //test for NULL
+            if (t == 0) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return 0;
+            }
             if (U_FAILURE(status)) {
                 delete t;
                 t = 0;
@@ -1060,21 +1080,21 @@ UnicodeString& Transliterator::toRules(UnicodeString& rulesSource,
 UnicodeSet& Transliterator::getSourceSet(UnicodeSet& result) const {
     handleGetSourceSet(result);
     if (filter != NULL) {
-	UnicodeSet* filterSet;
-	UBool deleteFilterSet = FALSE;
-	// Most, but not all filters will be UnicodeSets.  Optimize for
-	// the high-runner case.
-	if (filter->getDynamicClassID() == UnicodeSet::getStaticClassID()) {
-	    filterSet = (UnicodeSet*) filter;
-	} else {
-	    filterSet = new UnicodeSet();
-	    deleteFilterSet = TRUE;
-	    filter->addMatchSetTo(*filterSet);
-	}
-	result.retainAll(*filterSet);
-	if (deleteFilterSet) {
-	    delete filterSet;
-	}
+    UnicodeSet* filterSet;
+    UBool deleteFilterSet = FALSE;
+    // Most, but not all filters will be UnicodeSets.  Optimize for
+    // the high-runner case.
+    if (filter->getDynamicClassID() == UnicodeSet::getStaticClassID()) {
+        filterSet = (UnicodeSet*) filter;
+    } else {
+        filterSet = new UnicodeSet();
+        deleteFilterSet = TRUE;
+        filter->addMatchSetTo(*filterSet);
+    }
+    result.retainAll(*filterSet);
+    if (deleteFilterSet) {
+        delete filterSet;
+    }
     }
     return result;
 }

@@ -130,9 +130,14 @@ RuleBasedNumberFormat::clone(void) const
     UErrorCode status = U_ZERO_ERROR;
     UParseError perror;
     result = new RuleBasedNumberFormat(rules, locale, perror, status);
+    //test for NULL
+    if (result == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+    }
     if (U_FAILURE(status)) {
         delete result;
-        result = NULL;
+        result = 0;
     } else {
         result->lenient = lenient;
     }
@@ -418,6 +423,11 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
             // copy out the lenient-parse rules and delete them
             // from the description
             lenientParseRules = new UnicodeString();
+            //test for NULL
+            if (lenientParseRules == 0) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
             lenientParseRules->setTo(description, lpStart, lpEnd - lpStart);
 
             description.remove(lp, lpEnd + 1 - lp);
@@ -436,6 +446,12 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
 
     // our rule list is an array of the appropriate size
     ruleSets = new NFRuleSet*[numRuleSets + 1];
+    //test for NULL
+    if (ruleSets == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+
     for (int i = 0; i <= numRuleSets; ++i) {
         ruleSets[i] = NULL;
     }
@@ -448,6 +464,11 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
     // because we have to know the names and locations of all the rule
     // sets before we can actually set everything up
     UnicodeString* ruleSetDescriptions = new UnicodeString[numRuleSets];
+    //test for NULL
+    if (ruleSetDescriptions == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
 
     {
         int curRuleSet = 0;
@@ -455,11 +476,21 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
         for (int32_t p = description.indexOf(gSemiPercent); p != -1; p = description.indexOf(gSemiPercent, start)) {
             ruleSetDescriptions[curRuleSet].setTo(description, start, p + 1 - start);
             ruleSets[curRuleSet] = new NFRuleSet(ruleSetDescriptions, curRuleSet, status);
+            //test for NULL
+            if (ruleSets[curRuleSet] == 0) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
             ++curRuleSet;
             start = p + 1;
         }
         ruleSetDescriptions[curRuleSet].setTo(description, start, description.length() - start);
         ruleSets[curRuleSet] = new NFRuleSet(ruleSetDescriptions, curRuleSet, status);
+        //test for NULL
+        if (ruleSets[curRuleSet] == 0) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
     }
 
     // now we can take note of the formatter's default rule set, which

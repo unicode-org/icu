@@ -920,6 +920,11 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     ensure that the script reordering will continue to work. 
 */
   UCATableHeader *image = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
+  //test for NULL
+  if (image == NULL) {
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    return NULL;
+  }
   uprv_memcpy(image, src->UCA->image, sizeof(UCATableHeader));
 
   for(i = 0; i<src->resultLen; i++) {

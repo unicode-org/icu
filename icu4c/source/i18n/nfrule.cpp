@@ -102,6 +102,11 @@ NFRule::makeRules(UnicodeString& description,
     // (this also strips the rule descriptor, if any, off the
     // descripton string)
     NFRule* rule1 = new NFRule(rbnf);
+    //test for NULL
+    if (rule1 == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     rule1->parseRuleDescriptor(description, status);
 
     // check the description to see whether there's text enclosed
@@ -139,6 +144,11 @@ NFRule::makeRules(UnicodeString& description,
             // increment the original rule's base value ("rule1" actually
             // goes SECOND in the rule set's rule list)
             rule2 = new NFRule(rbnf);
+            //test for NULL
+            if (rule2 == 0) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
             if (rule1->baseValue >= 0) {
                 rule2->baseValue = rule1->baseValue;
                 if (!ruleSet->isFractionRuleSet()) {

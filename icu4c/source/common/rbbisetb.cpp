@@ -469,6 +469,12 @@ RangeDescriptor::RangeDescriptor(const RangeDescriptor &other, UErrorCode &statu
     this->fNum          = other.fNum;
     this->fNext         = NULL;
     this->fIncludesSets = new UVector(status);
+    //test for NULL
+    if (this->fIncludesSets == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    
     for (i=0; i<other.fIncludesSets->size(); i++) {
         this->fIncludesSets->addElement(other.fIncludesSets->elementAt(i), status);
     }
@@ -486,6 +492,12 @@ RangeDescriptor::RangeDescriptor(UErrorCode &status) {
     this->fNum          = 0;
     this->fNext         = NULL;
     this->fIncludesSets = new UVector(status);
+    //test for NULL
+    if(this->fIncludesSets == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    
 }
 
 
@@ -507,6 +519,12 @@ RangeDescriptor::~RangeDescriptor() {
 void RangeDescriptor::split(UChar32 where, UErrorCode &status) {
     assert(where>fStartChar && where<=fEndChar);
     RangeDescriptor *nr = new RangeDescriptor(*this, status);
+    //test for NULL
+    if(nr == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    
     //  RangeDescriptor copy constructor copies all fields.
     //  Only need to update those that are different after the split.
     nr->fStartChar = where;

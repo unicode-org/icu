@@ -90,6 +90,11 @@ Transliterator* TransliteratorAlias::create(UParseError& pe,
     } else {
         t = new CompoundTransliterator(ID, aliasID, idSplitPoint,
                                        trans, ec);
+        //test for NULL
+        if (t == 0) {
+            ec = U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
         trans = 0; // so we don't delete it later
         if (compoundFilter) {
             t->adoptFilter((UnicodeSet*) compoundFilter->clone());
@@ -172,6 +177,10 @@ Spec::Spec(const UnicodeString& theSpec) : top(theSpec) {
     CharString topch(top);
     Locale toploc(topch);
     res = new ResourceBundle(u_getDataDirectory(), toploc, status);
+    //test for NULL
+    if (res == 0) {
+        return;
+    }
     if (U_FAILURE(status) ||
         status == U_USING_DEFAULT_ERROR) {
         delete res;
@@ -1012,12 +1021,21 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
             return entry->u.prototype->clone();
         } else if (entry->entryType == Entry::ALIAS) {
             aliasReturn = new TransliteratorAlias(entry->stringArg);
+            //test for NULL
+            if (aliasReturn == 0) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+            }
             return 0;
         } else if (entry->entryType == Entry::FACTORY) {
             return entry->u.factory.function(ID, entry->u.factory.context);
         } else if (entry->entryType == Entry::COMPOUND_RBT) {
             UnicodeString id("_", "");
             Transliterator *t = new RuleBasedTransliterator(id, entry->u.data);
+            //test for NULL
+            if (t == 0) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return 0;
+            }
             aliasReturn = new TransliteratorAlias(ID, entry->stringArg, t, entry->intArg, entry->compoundFilter);
             return 0;
         }

@@ -169,6 +169,11 @@ NFSubstitution::NFSubstitution(int32_t _pos,
     // belonging to our formatter)
     else if (workingDescription.charAt(0) == gPound || workingDescription.charAt(0) ==gZero) {
         this->numberFormat = new DecimalFormat(workingDescription, *(formatter->getDecimalFormatSymbols()), status);
+        //test for NULL
+        if (this->numberFormat == 0) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
         // this->numberFormat->setDecimalFormatSymbols(formatter->getDecimalFormatSymbols());
     }
     // if the description is ">>>", this substitution bypasses the

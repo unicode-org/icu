@@ -37,6 +37,12 @@ uset_openPattern(const UChar* pattern, int32_t patternLength,
                  UErrorCode* ec) {
     UnicodeString pat(patternLength==-1, pattern, patternLength);
     UnicodeSet* set = new UnicodeSet(pat, *ec);
+    //test for NULL
+    if(set == NULL) {
+        *ec = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+    }
+    
     if (U_FAILURE(*ec)) {
         delete set;
         set = NULL;

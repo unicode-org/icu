@@ -207,6 +207,12 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
     buffer(0)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
+    //test for NULL
+    if(list == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;    
+    }
+    
     allocateStrings();
     applyPattern(pattern, status);
     _dbgct(this);
@@ -220,6 +226,11 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
     buffer(0)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
+    //test for NULL
+    if(list == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;    
+    }
     allocateStrings();
     applyPattern(pattern, pos, &symbols, status);
     _dbgct(this);
@@ -232,6 +243,11 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
     buffer(0)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
+    //test for NULL
+    if(list == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;    
+    }
     allocateStrings();
     applyPattern(pattern, pos, NULL, status);
     _dbgct(this);
@@ -257,6 +273,11 @@ UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
             pattern.insert(0, OPEN);
             pattern.append(CLOSE);
             list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
+            //test for NULL
+            if(list == 0) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;    
+            }
             allocateStrings();
             applyPattern(pattern, status);
         }
