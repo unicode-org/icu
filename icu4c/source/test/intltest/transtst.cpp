@@ -909,31 +909,46 @@ void TransliteratorTest::TestInterIndic(void) {
  */
 void TransliteratorTest::TestFilterIDs(void) {
     // Array of 3n strings:
-    // <id>, <input>, <expected output>
+    // <id>, <inverse id>, <input>, <expected output>
     const char* DATA[] = {
         "Unicode-Hex[aeiou]",
+        "Hex-Unicode[aeiou]",
         "quizzical",
         "q\\u0075\\u0069zz\\u0069c\\u0061l",
         
         "Unicode-Hex[aeiou];Hex-Unicode[^5]",
+        "Unicode-Hex[^5];Hex-Unicode[aeiou]",
         "quizzical",
         "q\\u0075izzical",
     };
 
-    for (int i=0; i<6; i+=3) {
+    for (int i=0; i<6; i+=4) {
         UnicodeString ID(DATA[i], "");
         Transliterator *t = Transliterator::createInstance(ID);
         if (t == 0) {
             errln("FAIL: createInstance(" + ID + ") returned NULL");
             return;
         }
-        expect(*t, DATA[i+1], DATA[i+2]);
-        // Now check the ID
+        expect(*t, DATA[i+2], DATA[i+3]);
+
+        // Check the ID
         if (ID != t->getID()) {
             errln("FAIL: createInstance(" + ID + ").getID() => " +
                   t->getID());
         }
+
+        // Check the inverse
+        UnicodeString uID(DATA[i+1], "");
+        Transliterator *u = t->createInverse();
+        if (u == 0) {
+            errln("FAIL: " + ID + ".createInverse() returned NULL");
+        } else if (u->getID() != uID) {
+            errln("FAIL: " + ID + ".createInverse().getID() => " +
+                  u->getID() + ", expected " + uID);
+        }
+
         delete t;
+        delete u;
     }
 }
 
