@@ -6,6 +6,9 @@
 #define UCOL_TOK_POLARITY_NEGATIVE 0
 #define UCOL_TOK_POLARITY_POSITIVE 1
 
+#define UCOL_RESET_TOP_VALUE 0x9F000303
+#define UCOL_NEXT_TOP_VALUE  0xD0000303
+
 typedef struct UColToken UColToken;
 
 typedef struct  {
@@ -24,18 +27,12 @@ typedef struct  {
   uint32_t nextContCE;
   uint32_t previousCE;
   uint32_t previousContCE;
-/*  uint32_t strongest[2];*/
   int32_t pos[UCOL_STRENGTH_LIMIT];
   uint32_t gapsLo[3*UCOL_CE_STRENGTH_LIMIT];
   uint32_t gapsHi[3*UCOL_CE_STRENGTH_LIMIT];
   uint32_t numStr[UCOL_CE_STRENGTH_LIMIT];
   UColToken* fStrToken[UCOL_CE_STRENGTH_LIMIT];
   UColToken* lStrToken[UCOL_CE_STRENGTH_LIMIT];
-
-/*
-  UColAttributeValue strongestP;
-  UColAttributeValue strongestN;
-*/
 } UColTokListHeader;
 
 struct UColToken {
@@ -67,6 +64,19 @@ typedef struct {
   UColTokListHeader *lh;
 } UColTokenParser;
 
+typedef struct {
+  const UChar *subName;
+  int32_t subLen;
+  UColAttributeValue attrVal;
+} ucolTokSuboption;
+
+typedef struct {
+   const UChar *optionName;
+   int32_t optionLen;
+   ucolTokSuboption *subopts;
+   int32_t subSize;
+   UColAttribute attr;
+} ucolTokOption;
 
 #define ucol_tok_isSpecialChar(ch)              \
     (((((ch) <= 0x002F) && ((ch) >= 0x0020)) || \
