@@ -314,7 +314,7 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
 }
 
 void 
-IntlTestCollator::doTestVariant(Collator* col, UnicodeString &source, UnicodeString &target, Collator::EComparisonResult result)
+IntlTestCollator::doTestVariant(Collator* col, const UnicodeString &source, const UnicodeString &target, Collator::EComparisonResult result)
 {   
   UErrorCode status = U_ZERO_ERROR;
 
@@ -340,8 +340,13 @@ IntlTestCollator::doTestVariant(Collator* col, UnicodeString &source, UnicodeStr
 */
 }
 
+void
+IntlTestCollator::doTest(Collator* col, const UChar *source, const UChar *target, Collator::EComparisonResult result) {
+  doTest(col, UnicodeString(source), UnicodeString(target), result);
+}
+
 void 
-IntlTestCollator::doTest(Collator* col, UnicodeString source, UnicodeString target, Collator::EComparisonResult result)
+IntlTestCollator::doTest(Collator* col, const UnicodeString &source, const UnicodeString &target, Collator::EComparisonResult result)
 {
   doTestVariant(col, source, target, result);
   if(result == Collator::LESS) {
@@ -364,7 +369,7 @@ IntlTestCollator::doTest(Collator* col, UnicodeString source, UnicodeString targ
 // used for collation result reporting, defined here for convenience
 // (maybe moved later)
 void
-IntlTestCollator::reportCResult( UnicodeString &source, UnicodeString &target,
+IntlTestCollator::reportCResult( const UnicodeString &source, const UnicodeString &target,
              CollationKey &sourceKey, CollationKey &targetKey,
              Collator::EComparisonResult compareResult,
              Collator::EComparisonResult keyResult,

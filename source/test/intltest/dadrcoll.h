@@ -1,11 +1,13 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 2002, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
 /**
- * MajorTestLevel is the top level test class for everything in the directory "IntlWork".
+ * DataDrivenCollatorTest is a test class that uses data stored in resource
+ * bundles to perform testing. For more details on data structure, see
+ * source/test/testdata/DataDrivenCollationTest.txt
  */
 
 #ifndef _INTLTESTDATADRIVENCOLLATOR
@@ -13,6 +15,7 @@
 
 
 #include "tscoll.h"
+#include "uvector.h"
 #include "unicode/coll.h"
 #include "unicode/tblcoll.h"
 #include "unicode/sortkey.h"
@@ -20,6 +23,11 @@
 #include "unicode/ures.h"
 #include "tstdtmod.h"
 
+class SeqElement {
+public:
+  UnicodeString source;
+  Collator::EComparisonResult relation;
+};
 
 class DataDrivenCollatorTest: public IntlTestCollator {
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL );
@@ -29,15 +37,16 @@ public:
 protected:
 
     void DataDrivenTest(char *par);
-    void processSequence(Collator* col, const UnicodeString &sequence, UErrorCode &status);
-    void processTest(TestData *testData, UErrorCode &status);
-    void processArguments(Collator *col, const UChar *start, int32_t optLen, UErrorCode &status);
-    UBool setTestSequence(const UnicodeString &setSequence, UnicodeString &source, Collator::EComparisonResult &relation, UErrorCode &status);
-    UBool getNextInSequence(UnicodeString &source, Collator::EComparisonResult &relation, UErrorCode &status);
+    void processSequence(Collator* col, const UnicodeString &sequence);
+    void processTest(TestData *testData);
+    void processArguments(Collator *col, const UChar *start, int32_t optLen);
+    UBool setTestSequence(const UnicodeString &setSequence, SeqElement &el);
+    UBool getNextInSequence(SeqElement &el);
 private:
   StringCharacterIterator seq;
-  //TestDataDriver *driver;
   TestDataModule *driver;
+  UErrorCode status;
+  UVector sequences;
 };
 
 
