@@ -30,9 +30,6 @@ public:
     virtual ~CollationEnglishTest();
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
-    // main test routine, tests rules defined by the "en" locale
-    void doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result);
-
     // performs test with strength PRIMARY
     void TestPrimary(/* char* par */);
 

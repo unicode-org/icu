@@ -44,8 +44,6 @@ public:
 private:
     void report(UnicodeString& s, UnicodeString& t, int32_t result, int32_t revResult);
 
-    void doTest(RuleBasedCollator *myCollation, UnicodeString source, UnicodeString target, Collator::EComparisonResult result);
-
     const UnicodeString source;
 
     Collator *myCollator;

@@ -29,9 +29,6 @@ public:
     virtual ~CollationTurkishTest();
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
-    // main test routine, tests rules specific to turkish locale
-    void doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result);
-
     // perform tests for turkish locale with strength PRIMARY
     void TestPrimary(/* char* par */);
 
