@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorReader.java,v $ 
-* $Date: 2003/09/19 00:14:36 $ 
-* $Revision: 1.15 $
+* $Date: 2003/11/11 20:12:31 $ 
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -226,8 +226,8 @@ final class CollatorReader
         rbc.m_defaultIsNumericCollation_ = (m_dataInputStream_.readInt() 
                                       == RuleBasedCollator.AttributeValue.ON_);
         readcount += 4;
-        m_dataInputStream_.skip(64); // reserved for future use
-        readcount += 64;
+        m_dataInputStream_.skip(60); // reserved for future use
+        readcount += 60;
         m_dataInputStream_.skipBytes(m_optionSize_ - readcount);
         if (m_optionSize_ < readcount) {
             throw new IOException("Internal Error: Option size error");
