@@ -57,6 +57,7 @@ ucol_openElements(const UCollator  *coll,
     textLength = u_strlen(text);
 
   result->length_ = textLength;
+  result->reset_   = TRUE;
   init_collIterate(text, textLength, &result->iteratordata_, FALSE);
 
   return result;
@@ -77,6 +78,7 @@ U_CAPI void
 ucol_reset(UCollationElements *elems)
 {
   collIterate *ci = &(elems->iteratordata_);
+  elems->reset_   = TRUE;
   ci->pos         = ci->string;
   ci->len         = ci->string + elems->length_;
   ci->CEpos       = ci->toReturn = ci->CEs;
@@ -97,40 +99,42 @@ U_CAPI int32_t
 ucol_next(UCollationElements *elems,
           UErrorCode         *status)
 {
+  int32_t result;
   if (U_FAILURE(*status)) 
     return UCOL_NULLORDER;
 
-  int32_t result;
+  elems->reset_ = FALSE;
+  
   UCOL_GETNEXTCE(result, elems->collator_, elems->iteratordata_, status);
   /*
   if ((elems->iteratordata_).CEpos > (elems->iteratordata_).toReturn) 
-  {                       
-    result = *((elems->iteratordata_).toReturn++);                                      
-    if ((elems->iteratordata_).CEpos == (elems->iteratordata_).toReturn)
-      (elems->iteratordata_).CEpos = (elems->iteratordata_).toReturn = 
-      (elems->iteratordata_).CEs; 
-  } 
-  else 
-    if ((elems->iteratordata_).pos < (elems->iteratordata_).len) 
-    {                        
-      UChar ch = *(elems->iteratordata_).pos++;     
-      if (ch <= 0xFF)
-        (result) = (elems->collator_)->latinOneMapping[ch];                                          
-      else
-        (result) = ucmp32_get((elems->collator_)->mapping, ch);                                      
-                                                                                    
-      if((result) >= UCOL_NOT_FOUND) 
-      {
-        (result) = getSpecialCE((elems->collator_), (result), 
-                                &(elems->iteratordata_), (status));        
-        if ((result) == UCOL_NOT_FOUND)
-          (result) = ucol_getNextUCA(ch, &(elems->iteratordata_), (status));                                                                            
-      }                                                                               
+    {                       
+      result = *((elems->iteratordata_).toReturn++);                                      
+      if ((elems->iteratordata_).CEpos == (elems->iteratordata_).toReturn)
+        (elems->iteratordata_).CEpos = (elems->iteratordata_).toReturn = 
+        (elems->iteratordata_).CEs; 
     } 
-    else
-      (result) = UCOL_NO_MORE_CES;                                                     
+    else 
+      if ((elems->iteratordata_).pos < (elems->iteratordata_).len) 
+      {                        
+        UChar ch = *(elems->iteratordata_).pos++;     
+        if (ch <= 0xFF)
+          (result) = (elems->collator_)->latinOneMapping[ch];                                          
+        else
+          (result) = ucmp32_get((elems->collator_)->mapping, ch);                                      
+                                                                                    
+        if((result) >= UCOL_NOT_FOUND) 
+        {
+          (result) = getSpecialCE((elems->collator_), (result), 
+                                  &(elems->iteratordata_), (status));        
+          if ((result) == UCOL_NOT_FOUND)
+            (result) = ucol_getNextUCA(ch, &(elems->iteratordata_), (status));                                                                            
+        }                                                                               
+      } 
+      else
+        (result) = UCOL_NO_MORE_CES;
   */
-    
+  
   if (result == UCOL_NO_MORE_CES)
     result = UCOL_NULLORDER;
   return result;
@@ -142,62 +146,61 @@ ucol_previous(UCollationElements *elems,
 {
   if(U_FAILURE(*status)) 
     return UCOL_NULLORDER;
+  else
+  {
+    int32_t result;
 
-  int32_t result;
-  UCOL_GETPREVCE(result, elems->collator_, elems->iteratordata_, 
-                 elems->length_, status);
+    if (elems->reset_ && 
+        (elems->iteratordata_.pos == elems->iteratordata_.string))
+      elems->iteratordata_.pos = elems->iteratordata_.len;
 
-  /* synwee : to be removed, only for testing 
-  const UCollator   *coll  = elems->collator_;
-        collIterate *data  = &(elems->iteratordata_);
-        int32_t     length = elems->length_;
+    elems->reset_ = FALSE;
 
-  if (data->CEpos > data->CEs) 
-  {              
-    data->toReturn --;
-    (result) = *(data->toReturn);                                           
-    if (data->CEs == data->toReturn)                                
-      data->CEpos = data->toReturn = data->CEs; 
-  }                                                                          
-  else 
-  {                    
-    /* pointers are always at the next position to be retrieved for getnextce 
-    for every first previous step after a next, value returned will the same 
-    as the last next value
-    */
-    /*if (data->len - data->pos == length)
-      (result) = UCOL_NO_MORE_CES;                                                                                                                    
+    UCOL_GETPREVCE(result, elems->collator_, elems->iteratordata_, 
+                   elems->length_, status);
+
+    /* synwee : to be removed, only for testing */
+    /*
+    const UCollator   *coll  = elems->collator_;
+          collIterate *data  = &(elems->iteratordata_);
+          int32_t     length = elems->length_;
+
+    if (data->CEpos > data->CEs) 
+    {              
+      data->toReturn --;
+      (result) = *(data->toReturn);                                           
+      if (data->CEs == data->toReturn)                                
+        data->CEpos = data->toReturn = data->CEs; 
+    }                                                                          
     else 
-    {                  
-      if (data->pos != data->writableBuffer)
-        data->pos --;                                 
+    {                    
+      if (data->pos == data->string || data->pos == data->writableBuffer)
+        (result) = UCOL_NO_MORE_CES;                                                                                                                    
       else 
-      {                                                                 
-        data->pos = data->string +                                             
-                            (length - (data->len - data->writableBuffer));     
-        data->len = data->string + length;                                     
-        data->isThai = TRUE;                                                  
-      }                
-
-      UChar ch = *(data->pos);
-      if (ch <= 0xFF)                                                
-        (result) = (coll)->latinOneMapping[ch];                                                                                       
-      else
-        (result) = ucmp32_get((coll)->mapping, ch);                           
+      {                  
+        data->pos --;                                 
+      
+        UChar ch = *(data->pos);
+        if (ch <= 0xFF)                                                
+          (result) = (coll)->latinOneMapping[ch];                                                                                       
+        else
+          (result) = ucmp32_get((coll)->mapping, ch);                           
                                                                        
-      if ((result) >= UCOL_NOT_FOUND) 
-      {
-        (result) = getSpecialPrevCE(coll, result, data, length, status);      
-        if ((result) == UCOL_NOT_FOUND)
-          (result) = ucol_getPrevUCA(ch, data, length, status);                                      
-      }                                                                      
-    }                                                                        
-  }   */
+        if ((result) >= UCOL_NOT_FOUND) 
+        {
+          (result) = getSpecialPrevCE(coll, result, data, length, status);      
+          if ((result) == UCOL_NOT_FOUND)
+            (result) = ucol_getPrevUCA(ch, data, length, status);                                      
+        }                                                                      
+      }                                                                        
+    } 
+    */
+    
+    if (result == UCOL_NO_MORE_CES)
+      result = UCOL_NULLORDER;
 
-  if (result == UCOL_NO_MORE_CES)
-    result = UCOL_NULLORDER;
-
-  return result;
+    return result;
+  }
 }
 
 U_CAPI int32_t
@@ -240,14 +243,7 @@ ucol_getOffset(const UCollationElements *elems)
   if (ci->isThai == TRUE)
     return ci->pos - ci->string;
 
-  /* 
-  if it is a thai string with reversed elements, since getNextCE does not 
-  store only a substring in writeablebuffer, we'll have to do some calculation
-  to get the offset out.
-  need discussion to see if it is a better idea to store the whole string 
-  instead.
-  */
-  return elems->length_ - (ci->len - ci->pos);
+  return ci->pos - ci->writableBuffer;
 }
 
 U_CAPI void

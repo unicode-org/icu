@@ -87,6 +87,10 @@ struct UCollationElements
   * Source text length
   */
         int32_t            length_;
+  /**
+  * Indicates if this data has been reset.
+  */
+        UBool              reset_;
 };
 
 struct incrementalContext {
@@ -240,20 +244,12 @@ struct incrementalContext {
     }                                                                        \
   }                                                                          \
   else {                                                                     \
-    if ((data).len - (data).pos == length) {                                 \
+    if ((data).pos == (data).string || (data).pos == (data).writableBuffer) {\
       (order) = UCOL_NO_MORE_CES;                                            \
     }                                                                        \
     else {                                                                   \
       UChar ch;                                                              \
-      if ((data).pos != (data).writableBuffer) {                             \
-        (data).pos --;                                                       \
-      }                                                                      \
-      else {                                                                 \
-        (data).pos = (data).string +                                         \
-                            (length - ((data).len - (data).writableBuffer)); \
-        (data).len = (data).string + length;                                 \
-        (data).isThai = TRUE;                                                \
-      }                                                                      \
+      (data).pos --;                                                         \
       ch = *((data).pos);                                                    \
       if (ch <= 0xFF) {                                                      \
         (order) = (coll)->latinOneMapping[ch];                               \
