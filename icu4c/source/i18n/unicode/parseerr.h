@@ -55,7 +55,9 @@ typedef struct _UParseError {
     /**
      * The line on which the error occured.  If the parse engine
      * is not using this field, it should set it to zero.  Otherwise
-     * it should be a positive integer.
+     * it should be a positive integer. The default value of this field
+     * is -1. It will be set to 0 if the code populating this struct is not
+     * using line numbers.
      */
     int32_t        line;
 
@@ -63,7 +65,9 @@ typedef struct _UParseError {
      * The character offset to the error.  If the line field is
      * being used, then this offset is from the start of the line.
      * If the line field is not being used, then this offset is from
-     * the start of the text.
+     * the start of the text.The default value of this field
+     * is -1. It will be set to appropriate value by the code that 
+     * populating the struct.
      */
     UTextOffset    offset;
 
