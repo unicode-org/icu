@@ -177,11 +177,10 @@ ucm_checkValidity(UCMTable *ext, UCMStates *baseStates);
  * if(intersectBase) then mappings that exist in the base table but not in
  * the extension table are moved to moveTarget instead of showing an error.
  *
- * Special mode: If the base table is an SISO table (indicated in the baseStates)
- * and intersectBase==2 for a DBCS extension table, then SBCS mappings are
+ * Special mode:
+ * If intersectBase==2 for a DBCS extension table, then SBCS mappings are
  * not moved out of the base unless their Unicode input requires it.
- * This helps ucmkbase generate base tables for where the dbcsonly converter
- * option will be employed.
+ * This helps ucmkbase generate base tables for DBCS-only extension .cnv files.
  *
  * For both tables in the same file, the extension table is automatically
  * built.
