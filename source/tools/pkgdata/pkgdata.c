@@ -91,7 +91,7 @@ static UOption options[]={
 const char options_help[][160]={
     "Set the data name",
 #ifdef WIN32
-    "R:icupath for release version or D:icupath for debug version, where icupath is the directory where ICU is located",
+    "The directory where the ICU is located (e.g. <ICUROOT> which contains the bin directory)",
 #else
     "Specify options for the builder. (Autdetected if icu-config is available)",
 #endif
@@ -266,13 +266,14 @@ main(int argc, char* argv[]) {
             if(*pathstuff == ':') {
                 *pathstuff = '\0';
                 pathstuff++;
-            } else {
+            }
+/*            else {
                 fprintf(stderr, "Error: invalid windows build mode, should be R (release) or D (debug).\n", o.mode, progname);
                 return 1;
             }
         } else {
             fprintf(stderr, "Error: invalid windows build mode, should be R (release) or D (debug).\n", o.mode, progname);
-            return 1;
+            return 1;*/
         }
         o.icuroot = pathstuff;
     }
