@@ -22,35 +22,9 @@
 #include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
 #include "ucnvmbcs.h"
-/* SBCS needed: #include "ucmp8.h" */
-#include "ucmp16.h"
-
-#if 0
-/* SBCS was: */
-/*Table Node Definitions */
-typedef struct
-  {
-    UChar *toUnicode;  /* [256]; */
-    CompactByteArray fromUnicode;
-    UChar *toUnicodeFallback;
-    CompactByteArray fromUnicodeFallback;
-  }
-UConverterSBCSTable;
-#endif
-
-typedef struct
-  {
-    CompactShortArray toUnicode;
-    CompactShortArray fromUnicode;
-    CompactShortArray toUnicodeFallback;
-    CompactShortArray fromUnicodeFallback;
-  }
-UConverterDBCSTable;
 
 union UConverterTable
   {
-    /* UConverterSBCSTable sbcs; */
-    UConverterDBCSTable dbcs;
     UConverterMBCSTable mbcs;
   };
 
@@ -230,9 +204,9 @@ struct UConverterImpl {
 };
 
 extern const UConverterSharedData
-    _SBCSData, _DBCSData, _MBCSData, _Latin1Data,
+    _MBCSData, _Latin1Data,
     _UTF8Data, _UTF16BEData, _UTF16LEData, _UTF32BEData, _UTF32LEData,
-    _EBCDICStatefulData, _ISO2022Data, 
+    _ISO2022Data, 
     _LMBCSData1,_LMBCSData2, _LMBCSData3, _LMBCSData4, _LMBCSData5, _LMBCSData6,
     _LMBCSData8,_LMBCSData11,_LMBCSData16,_LMBCSData17,_LMBCSData18,_LMBCSData19,
     _HZData, _SCSUData, _ASCIIData;
