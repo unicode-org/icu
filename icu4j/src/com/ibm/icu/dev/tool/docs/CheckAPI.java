@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/docs/CheckAPI.java,v $
-* $Date: 2004/02/13 00:10:32 $
-* $Revision: 1.1 $
+* $Date: 2004/02/13 17:52:50 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -70,7 +70,13 @@ public class CheckAPI {
     private static final int EXC = 11;
     private static final int NUM_TYPES = 11;
 
-    final static class Info {
+    static abstract class APIInfo {
+	public abstract int getVal(int typ);
+	public abstract String get(int typ, boolean brief);
+	public abstract void write(BufferedWriter w, boolean brief, boolean html, boolean detail);
+    }
+	
+    final static class Info extends APIInfo {
 	private int    info;
 	private String pack; // package
 	private String cls; // enclosing class
@@ -130,7 +136,7 @@ public class CheckAPI {
 	    throw new IllegalArgumentException("unrecognized value '" + val + "' for type '" + typeNames[typ] + "'");
 	}
 
-	public void write(BufferedWriter w, boolean brief) {
+	public void write(BufferedWriter w, boolean brief, boolean html, boolean detail) {
 	    try {
 		if (brief) {
 		    for (int i = 0; i < NUM_TYPES; ++i) {
@@ -143,24 +149,33 @@ public class CheckAPI {
 		} else {
 		    // remove all occurrences of icu packages from the param string
 		    // fortunately, all the packages have 4 chars (lang, math, text, util).
-		    final String ICUPACK = "com.ibm.icu.";
-		    StringBuffer buf = new StringBuffer();
-		    for (int i = 0; i < sig.length();) {
-			int n = sig.indexOf(ICUPACK, i);
-			if (n == -1) {
-			    buf.append(sig.substring(i));
-			    break;
+		    String xsig = sig;
+		    if (!detail) {
+			final String ICUPACK = "com.ibm.icu.";
+			StringBuffer buf = new StringBuffer();
+			for (int i = 0; i < sig.length();) {
+			    int n = sig.indexOf(ICUPACK, i);
+			    if (n == -1) {
+				buf.append(sig.substring(i));
+				break;
+			    }
+			    buf.append(sig.substring(i, n));
+			    i = n + ICUPACK.length() + 5; // trailing 'xxxx.'
 			}
-			buf.append(sig.substring(i, n));
-			i = n + ICUPACK.length() + 5; // trailing 'xxxx.'
+			xsig = buf.toString();
 		    }
-		    String xsig = buf.toString();
 
 		    // construct signature
-		    for (int i = VIS; i < CAT; ++i) { // omit status
+		    for (int i = STA; i < CAT; ++i) { // include status
 			String s = get(i, false);
 			if (s != null && s.length() > 0) {
-			    w.write(s);
+			    if (i == STA) {
+				w.write('(');
+				w.write(s);
+				w.write(')');
+			    } else {
+				w.write(s);
+			    }
 			    w.write(' ');
 			}
 		    }
@@ -178,15 +193,15 @@ public class CheckAPI {
 			    w.write('.');
 			}
 			w.write(name);
+			if (detail) {
+			    w.write(' ');
+			    w.write(sig);
+			}
 			break;
 
 		    case CAT_FIELD:
 			w.write(xsig);
 			w.write(' ');
-//  			if (cls.length() > 0) {
-//  			    w.write(cls);
-//  			    w.write('.');
-//  			}
 			w.write(name);
 			break;
 
@@ -199,12 +214,6 @@ public class CheckAPI {
 			} else {
 			    n = 0;
 			}
-//  			if (val != CAT_METHOD) {
-//  			    if (cls.length() > 0) {
-//  				w.write(cls);
-//  				w.write('.');
-//  			    }
-//  			}
 			w.write(name);
 			w.write(xsig.substring(n));
 			break;
@@ -467,8 +476,47 @@ public class CheckAPI {
 	    if (typ < 0 || typ > NUM_TYPES) {
 		throw new IllegalArgumentException("bad type index: " + typ);
 	    }
-	};
-    };
+	}
+
+	public String toString() {
+	    return get(NAM, true);
+	}
+    }
+
+    static final class DeltaInfo extends APIInfo {
+	private Info a;
+	private Info b;
+
+	DeltaInfo(Info a, Info b) {
+	    this.a = a;
+	    this.b = b;
+	}
+
+	public int getVal(int typ) {
+	    return a.getVal(typ);
+	}
+
+	public String get(int typ, boolean brief) {
+	    return a.get(typ, brief);
+	}
+
+	public void write(BufferedWriter w, boolean brief, boolean html, boolean detail) {
+	    a.write(w, brief, html, detail);
+	    try {
+		if (html) {
+		    w.write("<br>");
+		}
+		w.newLine();
+	    } 
+	    catch (Exception e) {
+	    }
+	    b.write(w, brief, html, detail);
+	}
+
+	public String toString() {
+	    return a.get(NAM, true);
+	}
+    }
 
     public static int optionLength(String option) {
         if (option.equals("-html")) {
@@ -561,7 +609,7 @@ public class CheckAPI {
 		bw.write(String.valueOf(DATA_FILE_VERSION) + SEP); // header version
 		bw.write(srcName + SEP); // source name
 		bw.newLine();
-		writeResults(results, bw, true, false);
+		writeResults(results, bw, true, false, false);
 	    } else {
 		// writing comparison info
 		TreeSet removed = (TreeSet)compareSet.clone();
@@ -584,7 +632,7 @@ public class CheckAPI {
 		    } else if (result > 0) {
 			r = null;
 		    } else {
-			changed.add(a);
+			changed.add(new DeltaInfo(a, r));
 			a = null; ai.remove();
 			r = null; ri.remove();
 		    }
@@ -620,7 +668,7 @@ public class CheckAPI {
 		    bw.newLine();
 
 		    if (removed.size() > 0) {
-			writeResults(removed, bw, false, true);
+			writeResults(removed, bw, false, true, false);
 		    } else {
 			bw.write("<p>(no API removed)</p>");
 		    }
@@ -634,7 +682,7 @@ public class CheckAPI {
 		    bw.newLine();
 
 		    if (changed.size() > 0) {
-			writeResults(changed, bw, false, true);
+			writeResults(changed, bw, false, true, true);
 		    } else {
 			bw.write("<p>(no API changed)</p>");
 		    }
@@ -648,7 +696,7 @@ public class CheckAPI {
 		    bw.newLine();
 
 		    if (added.size() > 0) {
-			writeResults(added, bw, false, true);
+			writeResults(added, bw, false, true, false);
 		    } else {
 			bw.write("<p>(no API added)</p>");
 		    }
@@ -669,7 +717,7 @@ public class CheckAPI {
 		    bw.write("=== Removed from " + compareName + " ===");
 		    bw.newLine();
 		    if (removed.size() > 0) {
-			writeResults(removed, bw, false, false);
+			writeResults(removed, bw, false, false, false);
 		    } else {
 			bw.write("(no API removed)");
 		    }
@@ -679,7 +727,7 @@ public class CheckAPI {
 		    bw.write("=== Changed in " + srcName + " ===");
 		    bw.newLine();
 		    if (changed.size() > 0) {
-			writeResults(changed, bw, false, false);
+			writeResults(changed, bw, false, false, true);
 		    } else {
 			bw.write("(no API changed)");
 		    }
@@ -689,7 +737,7 @@ public class CheckAPI {
 		    bw.write("=== Added in " + srcName + " ===");
 		    bw.newLine();
 		    if (added.size() > 0) {
-			writeResults(added, bw, false, false);
+			writeResults(added, bw, false, false, false);
 		    } else {
 			bw.write("(no API added)");
 		    }
@@ -746,14 +794,14 @@ public class CheckAPI {
 	return false;
     }
 
-    private static void writeResults(Collection c, BufferedWriter w, boolean brief, boolean html) {
+    private static void writeResults(Collection c, BufferedWriter w, boolean brief, boolean html, boolean detail) {
 	Iterator iter = c.iterator();
 	String pack = null;
 	String clas = null;
 	while (iter.hasNext()) {
-	    Info info = (Info)iter.next();
+	    APIInfo info = (APIInfo)iter.next();
 	    if (brief) {
-		info.write(w, brief);
+		info.write(w, brief, false, detail);
 	    } else {
 		try {
 		    String p = info.get(PAK, true);
@@ -808,14 +856,14 @@ public class CheckAPI {
 		    }
 		    if (html) {
 			w.write("<li>");
-			info.write(w, brief);
+			info.write(w, brief, html, detail);
 			w.write("</li>");
 		    } else {
-			info.write(w, brief);
+			info.write(w, brief, html, detail);
 		    }
 		}
 		catch (IOException e) {
-		    System.err.println("IOException " + e.getMessage() + " writing " + info.get(NAM, true));
+		    System.err.println("IOException " + e.getMessage() + " writing " + info);
 		}
 	    }
 	}
