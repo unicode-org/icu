@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/BreakIteratorTest.java,v $ 
- * $Date: 2002/02/16 03:05:15 $ 
- * $Revision: 1.8 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/BreakIteratorTest.java,v $
+ * $Date: 2002/03/01 18:57:19 $
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -27,6 +27,7 @@ public class BreakIteratorTest extends TestFmwk
     private BreakIterator wordBreak;
     private BreakIterator lineBreak;
     private BreakIterator sentenceBreak;
+    private BreakIterator titleBreak;
 
     public static void main(String[] args) throws Exception {
         new BreakIteratorTest().run(args);
@@ -40,6 +41,7 @@ public class BreakIteratorTest extends TestFmwk
         //logln("Creating sentence iterator...");
         sentenceBreak = BreakIterator.getSentenceInstance();
         //logln("Finished creating sentence iterator...");
+        titleBreak = BreakIterator.getTitleInstance();
     }
 
     //=========================================================================
@@ -1053,6 +1055,23 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
         generalIteratorTest(characterBreak, characterSelectionData);
     }
 
+    public void TestTitleBreak()
+    {
+        Vector titleData = new Vector();
+        titleData.addElement("   ");
+        titleData.addElement("This ");
+        titleData.addElement("is ");
+        titleData.addElement("a ");
+        titleData.addElement("simple ");
+        titleData.addElement("sample ");
+        titleData.addElement("sentence. ");
+        titleData.addElement("This ");
+
+        generalIteratorTest(titleBreak, titleData);
+    }
+
+
+
     /*
      * @bug 4153072
      */
@@ -1304,9 +1323,9 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
         if (wb.current() != 4 && wb.next() != 4)
             errln("Didn't get break at end of string.");
     }
-    
+
     // The Following two tests are ported from ICU4C 1.8.1 [Richard/GCL]
-    /** 
+    /**
      * Port From:   ICU4C v1.8.1 : textbounds : IntlTestTextBoundary
      * Source File: $ICU4CRoot/source/test/intltest/ittxtbd.cpp
      **/
@@ -1322,26 +1341,26 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
         int p2 = e.next();
         int p3 = e.next();
         int p4 = e.next();
-        
+
         int f = e.following(p2+1);
         int p = e.preceding(p2+1);
         if (f!=p3)
             errln("IntlTestTextBoundary::TestPreceding: f!=p3");
         if (p!=p2)
             errln("IntlTestTextBoundary::TestPreceding: p!=p2");
-        
+
         if (p1+1!=p2)
             errln("IntlTestTextBoundary::TestPreceding: p1+1!=p2");
-        
+
         if (p3+1!=p4)
             errln("IntlTestTextBoundary::TestPreceding: p3+1!=p4");
-        
+
         if (!e.isBoundary(p2) || e.isBoundary(p2+1) || !e.isBoundary(p3))
         {
             errln("IntlTestTextBoundary::TestPreceding: isBoundary err");
         }
     }
-    
+
     /**
      * Test Thai word break using generalIteratorTest()
      **/
@@ -1396,7 +1415,7 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
         thaiWordSelection.addElement("\u0E40\u0E2E"); // 65
         thaiWordSelection.addElement("\u0E19\u0E23\u0E35\u0E0A\u0E32\u0E27\u0E44\u0E23\u0E48\u0E41\u0E25\u0E30"); //77
 
-        BreakIterator e = BreakIterator.getWordInstance(new Locale("th","","")); 
+        BreakIterator e = BreakIterator.getWordInstance(new Locale("th","",""));
 
         generalIteratorTest(e, thaiWordSelection);
     }
