@@ -74,6 +74,37 @@ UVector::~UVector() {
     elements = 0;
 }
 
+/**
+ * Assign this object to another (make this a copy of 'other').
+ * Use the 'assign' function to assign each element.
+ */
+void UVector::assign(const UVector& other, UTokenAssigner assign, UErrorCode &ec) {
+    if (ensureCapacity(other.count, ec)) {
+        setSize(other.count);
+        for (int32_t i=0; i<other.count; ++i) {
+            if (elements[i].pointer != 0 && deleter != 0) {
+                (*deleter)(elements[i].pointer);
+            }
+            (*assign)(elements[i], other.elements[i]);
+        }
+    }
+}
+
+// This only does something sensible if this object has a non-null comparer
+UBool UVector::operator==(const UVector& other) {
+    int32_t i;
+    if (count != other.count) return FALSE;
+    if (comparer != NULL) {
+        // Compare using this object's comparer
+        for (i=0; i<count; ++i) {
+            if (!(*comparer)(elements[i], other.elements[i])) {
+                return FALSE;
+            }
+        }
+    }
+    return TRUE;
+}
+
 void UVector::addElement(void* obj, UErrorCode &status) {
     if (ensureCapacity(count + 1, status)) {
         elements[count++].pointer = obj;
@@ -126,6 +157,48 @@ int32_t UVector::elementAti(int32_t index) const {
     return (0 <= index && index < count) ? elements[index].integer : 0;
 }
 
+UBool UVector::containsAll(const UVector& other) const {
+    for (int32_t i=0; i<other.size(); ++i) {
+        if (indexOf(other.elements[i]) < 0) {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+UBool UVector::containsNone(const UVector& other) const {
+    for (int32_t i=0; i<other.size(); ++i) {
+        if (indexOf(other.elements[i]) >= 0) {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+UBool UVector::removeAll(const UVector& other) {
+    UBool changed = FALSE;
+    for (int32_t i=0; i<other.size(); ++i) {
+        int32_t j = indexOf(other.elements[i]);
+        if (j >= 0) {
+            removeElementAt(j);
+            changed = TRUE;
+        }
+    }
+    return changed;
+}
+
+UBool UVector::retainAll(const UVector& other) {
+    UBool changed = FALSE;
+    for (int32_t j=size()-1; j>=0; --j) {
+        int32_t i = other.indexOf(elements[j]);
+        if (i < 0) {
+            removeElementAt(j);
+            changed = TRUE;
+        }
+    }
+    return changed;
+}
+
 void UVector::removeElementAt(int32_t index) {
     void* e = orphanElementAt(index);
     if (e != 0 && deleter != 0) {
@@ -154,23 +227,22 @@ void UVector::removeAllElements(void) {
 }
 
 int32_t UVector::indexOf(void* obj, int32_t startIndex) const {
-    if (comparer != 0) {
-        UHashTok key;
-        key.pointer = obj;
-        for (int32_t i=startIndex; i<count; ++i) {
-            if ((*comparer)(key, elements[i])) {
-                return i;
-            }
-        }
-    }
-    return -1;
+    UHashTok key;
+    key.pointer = obj;
+    return indexOf(key, startIndex);
 }
 
 int32_t UVector::indexOf(int32_t obj, int32_t startIndex) const {
+    UHashTok key;
+    key.integer = obj;
+    return indexOf(key, startIndex);
+}
+
+// This only works if this object has a non-null comparer
+int32_t UVector::indexOf(UHashTok key, int32_t startIndex) const {
+    int32_t i;
     if (comparer != 0) {
-        UHashTok key;
-        key.integer = obj;
-        for (int32_t i=startIndex; i<count; ++i) {
+        for (i=startIndex; i<count; ++i) {
             if ((*comparer)(key, elements[i])) {
                 return i;
             }
@@ -274,6 +346,55 @@ void* UVector::orphanElementAt(int32_t index) {
     }
     /* else index out of range */
     return e;
+}
+
+/**
+ * Insert the given object into this vector at its sorted position
+ * as defined by 'compare'.  The current elements are assumed to
+ * be sorted already.
+ */
+void UVector::sortedInsert(void* obj, USortComparator compare, UErrorCode& ec) {
+    UHashTok tok;
+    tok.pointer = obj;
+    sortedInsert(tok, compare, ec);
+}
+
+/**
+ * Insert the given integer into this vector at its sorted position
+ * as defined by 'compare'.  The current elements are assumed to
+ * be sorted already.
+ */
+void UVector::sortedInsert(int32_t obj, USortComparator compare, UErrorCode& ec) {
+    UHashTok tok;
+    tok.integer = obj;
+    sortedInsert(tok, compare, ec);
+}
+
+// ASSUME elements[] IS CURRENTLY SORTED
+void UVector::sortedInsert(UHashTok tok, USortComparator compare, UErrorCode& ec) {
+    // Perform a binary search for the location to insert tok at.  Tok
+    // will be inserted between two elements a and b such that a <=
+    // tok && tok < b, where there is a 'virtual' elements[-1] always
+    // less than tok and a 'virtual' elements[count] always greater
+    // than tok.
+    int32_t min = 0, max = count;
+    while (min != max) {
+        int32_t probe = (min + max) / 2;
+        int8_t c = (*compare)(elements[probe], tok);
+        if (c > 0) {
+            max = probe;
+        } else {
+            // assert(c <= 0);
+            min = probe + 1;
+        }
+    }
+    if (ensureCapacity(count + 1, ec)) {
+        for (int32_t i=count; i>min; --i) {
+            elements[i] = elements[i-1];
+        }
+        elements[min] = tok;
+        ++count;
+    }
 }
 
 UStack::UStack(UErrorCode &status) :
