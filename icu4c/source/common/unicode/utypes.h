@@ -532,7 +532,7 @@ typedef enum UErrorCode {
     U_PRIMARY_TOO_LONG_ERROR  = 22,     /**< User tried to set variable top to a primary that is longer than two bytes */
     U_STATE_TOO_OLD_ERROR     = 23,     /**< ICU cannot construct a service from this state, as it is no longer supported */
     U_TOO_MANY_ALIASES_ERROR  = 24,     /**< There are too many aliases in the path to the requested resource. 
-                                           < It is very possible that a circular alias definition has occured */
+                                             It is very possible that a circular alias definition has occured */
     U_ENUM_OUT_OF_SYNC_ERROR  = 25,     /**< UEnumeration out of sync with underlying collection */
     U_INVARIANT_CONVERSION_ERROR = 26,  /**< Unable to convert a UChar* string to char* with the invariant converter. */
 
@@ -584,7 +584,7 @@ typedef enum UErrorCode {
     U_UNEXPECTED_TOKEN=0x10100,       /**< Syntax error in format pattern */
     U_FMT_PARSE_ERROR_START=0x10100,  /**< Start of format library errors */
     U_MULTIPLE_DECIMAL_SEPARATORS,    /**< More than one decimal separator in number pattern */
-    U_MULTIPLE_DECIMAL_SEPERATORS = U_MULTIPLE_DECIMAL_SEPARATORS, /* Typo: kept for backward compatibility */
+    U_MULTIPLE_DECIMAL_SEPERATORS = U_MULTIPLE_DECIMAL_SEPARATORS, /**< Typo: kept for backward compatibility. Use U_MULTIPLE_DECIMAL_SEPARATORS */
     U_MULTIPLE_EXPONENTIAL_SYMBOLS,   /**< More than one exponent symbol in number pattern */
     U_MALFORMED_EXPONENTIAL_PATTERN,  /**< Grouping symbol in exponent pattern */
     U_MULTIPLE_PERCENT_SYMBOLS,       /**< More than one percent symbol in number pattern */
