@@ -22,10 +22,10 @@
 #define ARRAY_LENGTH(array) (sizeof (array) / sizeof (*array))
 
 inline static void insert(UnicodeString& dest, 
-              UTextOffset pos, 
-              UChar ch)
+                          UTextOffset pos, 
+                          UChar ch)
 {
-  dest.replace(pos, 0, &ch, 1);
+    dest.replace(pos, 0, &ch, 1);
 }
 
 //-------------------------------------------------------------------------
@@ -33,74 +33,74 @@ inline static void insert(UnicodeString& dest,
 //-------------------------------------------------------------------------
 
 Normalizer::Normalizer(const UnicodeString& str, 
-               EMode mode)
+                       EMode mode)
 {
-  init(new StringCharacterIterator(str), mode, 0);
+    init(new StringCharacterIterator(str), mode, 0);
 }
 
 Normalizer::Normalizer(const UnicodeString& str, 
-               EMode mode, 
-               int32_t opt)
+                       EMode mode, 
+                       int32_t opt)
 {
-  init(new StringCharacterIterator(str), mode, opt);
+    init(new StringCharacterIterator(str), mode, opt);
 }
 
 Normalizer::Normalizer(const UChar* str, int32_t length, EMode mode) 
 {
-  init(new StringCharacterIterator(UnicodeString(str, length)), mode, 0);
+    init(new StringCharacterIterator(UnicodeString(str, length)), mode, 0);
 }
 
 Normalizer::Normalizer(const CharacterIterator& iter, 
-               EMode mode)
+                       EMode mode)
 {
-  init(iter.clone(), mode, 0);
+    init(iter.clone(), mode, 0);
 }
 
 Normalizer::Normalizer(const CharacterIterator& iter, 
-               EMode mode, 
-               int32_t opt)
+                       EMode mode, 
+                       int32_t opt)
 {
-  init(iter.clone(), mode, opt);
+    init(iter.clone(), mode, opt);
 }
 
 void Normalizer::init(CharacterIterator* adoptIter, 
-              EMode mode, 
-              int32_t options)
+                      EMode mode, 
+                      int32_t options)
 {
-  bufferPos = 0;
-  bufferLimit = 0;
-  fOptions = options;
-  currentChar = DONE;
-  fMode = mode;
-  text = adoptIter;
+    bufferPos = 0;
+    bufferLimit = 0;
+    fOptions = options;
+    currentChar = DONE;
+    fMode = mode;
+    text = adoptIter;
   
-  minDecomp = (fMode & COMPAT_BIT) ? 0 : DecompData::MAX_COMPAT;
+    minDecomp = (fMode & COMPAT_BIT) ? 0 : DecompData::MAX_COMPAT;
 }
 
 Normalizer::Normalizer(const Normalizer& copy)
 {
-  init(copy.text->clone(), copy.fMode, copy.fOptions);
+    init(copy.text->clone(), copy.fMode, copy.fOptions);
   
-  buffer      = copy.buffer;
-  bufferPos   = copy.bufferPos;
-  bufferLimit = copy.bufferLimit;
-  explodeBuf  = copy.explodeBuf;
-  currentChar = copy.currentChar;
+    buffer      = copy.buffer;
+    bufferPos   = copy.bufferPos;
+    bufferLimit = copy.bufferLimit;
+    explodeBuf  = copy.explodeBuf;
+    currentChar = copy.currentChar;
 }
 
 Normalizer::~Normalizer()
 {
-  delete text;
+    delete text;
 }
 
 Normalizer*    
 Normalizer::clone() const
 {
-  if(this!=0) {
-    return new Normalizer(*this);
-  } else {
-    return 0;
-  }
+    if(this!=0) {
+        return new Normalizer(*this);
+    } else {
+        return 0;
+    }
 }
 
 /**
@@ -108,17 +108,17 @@ Normalizer::clone() const
  */
 int32_t Normalizer::hashCode() const
 {
-  return text->hashCode() + fMode + fOptions + bufferPos + bufferLimit;
+    return text->hashCode() + fMode + fOptions + bufferPos + bufferLimit;
 }
     
 UBool Normalizer::operator==(const Normalizer& that) const
 {
-  return *text == *(that.text)
-  && currentChar == that.currentChar
-  && buffer == that.buffer
-  && explodeBuf == that.explodeBuf
-  && bufferPos == that.bufferPos
-  && bufferLimit == that.bufferLimit;
+    return *text == *(that.text)
+        && currentChar == that.currentChar
+        && buffer == that.buffer
+        && explodeBuf == that.explodeBuf
+        && bufferPos == that.bufferPos
+        && bufferLimit == that.bufferLimit;
 }
 
 //-------------------------------------------------------------------------
@@ -127,24 +127,24 @@ UBool Normalizer::operator==(const Normalizer& that) const
 
 void 
 Normalizer::normalize(const UnicodeString& source, 
-              EMode mode, 
-              int32_t options,
-              UnicodeString& result, 
-              UErrorCode &status)
+                      EMode mode, 
+                      int32_t options,
+                      UnicodeString& result, 
+                      UErrorCode &status)
 {
-  switch (mode) {
-  case NO_OP:
-    result = source;
-    break;
-  case COMPOSE:
-  case COMPOSE_COMPAT:
-    compose(source, mode & COMPAT_BIT, options, result, status);
-    break;
-  case DECOMP:
-  case DECOMP_COMPAT:
-    decompose(source, mode & COMPAT_BIT, options, result, status);
-    break;
-  }
+    switch (mode) {
+    case NO_OP:
+        result = source;
+        break;
+    case COMPOSE:
+    case COMPOSE_COMPAT:
+        compose(source, mode & COMPAT_BIT, options, result, status);
+        break;
+    case DECOMP:
+    case DECOMP_COMPAT:
+        decompose(source, mode & COMPAT_BIT, options, result, status);
+        break;
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -153,145 +153,145 @@ Normalizer::normalize(const UnicodeString& source,
 
 void
 Normalizer::compose(const UnicodeString& source, 
-            UBool compat,
-            int32_t,
-            UnicodeString& result, 
-            UErrorCode &status)
+                    UBool compat,
+                    int32_t,
+                    UnicodeString& result, 
+                    UErrorCode &status)
 {
-  if (U_FAILURE(status)) {
-    return;
-  }
-  result.truncate(0);
-  UnicodeString explodeBuf;
+    if (U_FAILURE(status)) {
+        return;
+    }
+    result.truncate(0);
+    UnicodeString explodeBuf;
   
-  UTextOffset  explodePos = EMPTY;         // Position in input buffer
-  UTextOffset  basePos = 0;                // Position of last base in output string
-  uint16_t    baseIndex = 0;              // Index of last base in "actions" array
-  uint32_t    classesSeen = 0;            // Combining classes seen since last base
-  uint16_t    action;
+    UTextOffset explodePos = EMPTY;         // Position in input buffer
+    UTextOffset basePos = 0;                // Position of last base in output string
+    uint16_t    baseIndex = 0;              // Index of last base in "actions" array
+    uint32_t    classesSeen = 0;            // Combining classes seen since last base
+    uint16_t    action;
     
-  // Compatibility explosions have lower indices; skip them if necessary
-  uint16_t minExplode = compat ? 0 : ComposeData::MAX_COMPAT;
-  uint16_t minDecomp = compat ? 0 : DecompData::MAX_COMPAT;
+    // Compatibility explosions have lower indices; skip them if necessary
+    uint16_t minExplode = compat ? 0 : ComposeData::MAX_COMPAT;
+    uint16_t minDecomp = compat ? 0 : DecompData::MAX_COMPAT;
   
     UTextOffset i = 0;
     while (i < source.length() || explodePos != EMPTY) {
         // Get the next char from either the buffer or the source
-      UChar ch;
-      if (explodePos == EMPTY) {
-    ch = source[i++];
-      } else {
-    ch = explodeBuf[explodePos++];
-    if (explodePos >= explodeBuf.length()) {
-      explodePos = EMPTY;
-      explodeBuf.truncate(0);
-    }
-      }
-      
-      // Get the basic info for the character
-      uint16_t charInfo = composeLookup(ch);
-      uint16_t type = charInfo & ComposeData::TYPE_MASK;
-      uint16_t index = charInfo >> ComposeData::INDEX_SHIFT;
-      
-      if (type == ComposeData::BASE) {
-    classesSeen = 0;
-    baseIndex = index;
-    basePos = result.length();
-    result += ch;
-      }
-      else if (type == ComposeData::COMBINING || type == ComposeData::NON_COMPOSING_COMBINING)
-        {
-      uint32_t cclass = ComposeData::typeMask[index];
-      
-      // We can only combine a character with the base if we haven't
-      // already seen a combining character with the same canonical class.
-      // We also only combine characters with an index from
-      // 1..COMBINING_COUNT-1.  Indices >= COMBINING_COUNT are
-      // non-combining; these formerly had an index of zero.
-      if (type == ComposeData::COMBINING && index < ComposeData::COMBINING_COUNT
-          && (classesSeen & cclass) == 0
-          && (action = composeAction(baseIndex, index)) > 0)
-            {
-          if (action > ComposeData::MAX_COMPOSED) {
-        // Pairwise explosion.  Actions above this value are really
-        // indices into an array that in turn contains indices
-        // into the exploding string table
-        // TODO: What if there are unprocessed chars in the explode buffer?
-        UChar newBase = pairExplode(explodeBuf, action);
-        explodePos = 0;
-        result[basePos] = newBase;
-        
-        baseIndex = composeLookup(newBase) >> ComposeData::INDEX_SHIFT;
-          } else {
-        // Normal pairwise combination.  Replace the base char
-        UChar newBase = (UChar) action;
-        result[basePos] = newBase;
-        
-        baseIndex = composeLookup(newBase) >> ComposeData::INDEX_SHIFT;
-          }
-          //
-          // Since there are Unicode characters that cannot be combined in arbitrary
-          // order, we have to re-process any combining marks that go with this
-          // base character.  There are only four characters in Unicode that have
-          // this problem.  If they are fixed in Unicode 3.0, this code can go away.
-          //
-          UTextOffset len = result.length();
-          if (len - basePos > 1) {
-        for (UTextOffset j = basePos+1; j < len; j++) {
-          explodeBuf += result[j];
-        }
-        result.truncate(basePos+1);
-        classesSeen = 0;
-        if (explodePos == EMPTY) explodePos = 0;
-          }
-            } else {
-          // No combination with this character
-          bubbleAppend(result, ch, cclass);
-          classesSeen |= cclass;
+        UChar ch;
+        if (explodePos == EMPTY) {
+            ch = source[i++];
+        } else {
+            ch = explodeBuf[explodePos++];
+            if (explodePos >= explodeBuf.length()) {
+                explodePos = EMPTY;
+                explodeBuf.truncate(0);
             }
         }
-      else if (index > minExplode) {
-    // Single exploding character
-    explode(explodeBuf, index);
-    explodePos = 0;
-      }
-      else if (type == ComposeData::HANGUL && minExplode == 0) {
-    // If we're in compatibility mode we need to decompose Hangul to Jamo,
-    // because some of the Jamo might have compatibility decompositions.
-    hangulToJamo(ch, explodeBuf, minDecomp);
-    explodePos = 0;
-      }
-      else if (type == ComposeData::INITIAL_JAMO) {
-    classesSeen = 0;
-    baseIndex = ComposeData::INITIAL_JAMO_INDEX;
-    basePos = result.length();
-    result += ch;
-      }
-      else if (type == ComposeData::MEDIAL_JAMO && classesSeen == 0
-           && baseIndex == ComposeData::INITIAL_JAMO_INDEX) {
-    // If the last character was an initial jamo, we can combine it with this
-    // one to create a Hangul character.
-    uint16_t l = result[basePos] - JAMO_LBASE;
-    uint16_t v = ch - JAMO_VBASE;
-    result[basePos] = (UChar)(HANGUL_BASE + (l*JAMO_VCOUNT + v) * JAMO_TCOUNT);
+      
+        // Get the basic info for the character
+        uint16_t charInfo = composeLookup(ch);
+        uint16_t type = charInfo & ComposeData::TYPE_MASK;
+        uint16_t index = charInfo >> ComposeData::INDEX_SHIFT;
+      
+        if (type == ComposeData::BASE) {
+            classesSeen = 0;
+            baseIndex = index;
+            basePos = result.length();
+            result += ch;
+        }
+        else if (type == ComposeData::COMBINING || type == ComposeData::NON_COMPOSING_COMBINING)
+        {
+            uint32_t cclass = ComposeData::typeMask[index];
+      
+            // We can only combine a character with the base if we haven't
+            // already seen a combining character with the same canonical class.
+            // We also only combine characters with an index from
+            // 1..COMBINING_COUNT-1.  Indices >= COMBINING_COUNT are
+            // non-combining; these formerly had an index of zero.
+            if (type == ComposeData::COMBINING && index < ComposeData::COMBINING_COUNT
+                && (classesSeen & cclass) == 0
+                && (action = composeAction(baseIndex, index)) > 0)
+            {
+                if (action > ComposeData::MAX_COMPOSED) {
+                    // Pairwise explosion.  Actions above this value are really
+                    // indices into an array that in turn contains indices
+                    // into the exploding string table
+                    // TODO: What if there are unprocessed chars in the explode buffer?
+                    UChar newBase = pairExplode(explodeBuf, action);
+                    explodePos = 0;
+                    result[basePos] = newBase;
+        
+                    baseIndex = composeLookup(newBase) >> ComposeData::INDEX_SHIFT;
+                } else {
+                    // Normal pairwise combination.  Replace the base char
+                    UChar newBase = (UChar) action;
+                    result[basePos] = newBase;
+        
+                    baseIndex = composeLookup(newBase) >> ComposeData::INDEX_SHIFT;
+                }
+                //
+                // Since there are Unicode characters that cannot be combined in arbitrary
+                // order, we have to re-process any combining marks that go with this
+                // base character.  There are only four characters in Unicode that have
+                // this problem.  If they are fixed in Unicode 3.0, this code can go away.
+                //
+                UTextOffset len = result.length();
+                if (len - basePos > 1) {
+                    for (UTextOffset j = basePos+1; j < len; j++) {
+                        explodeBuf += result[j];
+                    }
+                    result.truncate(basePos+1);
+                    classesSeen = 0;
+                    if (explodePos == EMPTY) explodePos = 0;
+                }
+            } else {
+                // No combination with this character
+                bubbleAppend(result, ch, cclass);
+                classesSeen |= cclass;
+            }
+        }
+        else if (index > minExplode) {
+            // Single exploding character
+            explode(explodeBuf, index);
+            explodePos = 0;
+        }
+        else if (type == ComposeData::HANGUL && minExplode == 0) {
+            // If we're in compatibility mode we need to decompose Hangul to Jamo,
+            // because some of the Jamo might have compatibility decompositions.
+            hangulToJamo(ch, explodeBuf, minDecomp);
+            explodePos = 0;
+        }
+        else if (type == ComposeData::INITIAL_JAMO) {
+            classesSeen = 0;
+            baseIndex = ComposeData::INITIAL_JAMO_INDEX;
+            basePos = result.length();
+            result += ch;
+        }
+        else if (type == ComposeData::MEDIAL_JAMO && classesSeen == 0
+                 && baseIndex == ComposeData::INITIAL_JAMO_INDEX) {
+            // If the last character was an initial jamo, we can combine it with this
+            // one to create a Hangul character.
+            uint16_t l = result[basePos] - JAMO_LBASE;
+            uint16_t v = ch - JAMO_VBASE;
+            result[basePos] = (UChar)(HANGUL_BASE + (l*JAMO_VCOUNT + v) * JAMO_TCOUNT);
     
-    baseIndex = ComposeData::MEDIAL_JAMO_INDEX;
-      }
-      else if (type == ComposeData::FINAL_JAMO && classesSeen == 0
-           && baseIndex == ComposeData::MEDIAL_JAMO_INDEX) {
-    // If the last character was a medial jamo that we turned into Hangul,
-    // we can add this character too.
-    result[basePos] = (UChar)(result[basePos] + (ch - JAMO_TBASE));
+            baseIndex = ComposeData::MEDIAL_JAMO_INDEX;
+        }
+        else if (type == ComposeData::FINAL_JAMO && classesSeen == 0
+                 && baseIndex == ComposeData::MEDIAL_JAMO_INDEX) {
+            // If the last character was a medial jamo that we turned into Hangul,
+            // we can add this character too.
+            result[basePos] = (UChar)(result[basePos] + (ch - JAMO_TBASE));
     
-    baseIndex = 0;
-    basePos = -1;
-    classesSeen = 0;
-      } else {
-    baseIndex = 0;
-    basePos = -1;
-    classesSeen = 0;
-    result += ch;
-      }
+            baseIndex = 0;
+            basePos = -1;
+            classesSeen = 0;
+        } else {
+            baseIndex = 0;
+            basePos = -1;
+            classesSeen = 0;
+            result += ch;
+        }
     }
 }
 
@@ -312,13 +312,13 @@ Normalizer::compose(const UnicodeString& source,
  */
 UChar Normalizer::nextCompose() 
 {
-    UTextOffset  explodePos = EMPTY;         // Position in input buffer
-    UTextOffset  basePos = 0;                // Position of last base in output string
-    uint16_t    baseIndex = 0;              // Index of last base in "actions" array
-    uint32_t    classesSeen = 0;            // Combining classes seen since last base
+    UTextOffset explodePos = EMPTY;  // Position in input buffer
+    UTextOffset basePos = 0;         // Position of last base in output string
+    uint16_t    baseIndex = 0;       // Index of last base in "actions" array
+    uint32_t    classesSeen = 0;     // Combining classes seen since last base
     uint16_t    action;
-    UChar        lastBase = 0;
-    UBool        chFromText = TRUE;
+    UChar       lastBase = 0;
+    UBool       chFromText = TRUE;
     
     // Compatibility explosions have lower indices; skip them if necessary
     uint16_t minExplode = (fMode & COMPAT_BIT) ? 0 : ComposeData::MAX_COMPAT;
@@ -420,7 +420,7 @@ UChar Normalizer::nextCompose()
             buffer += ch;
         }
         else if (type == ComposeData::MEDIAL_JAMO && classesSeen == 0
-                    && baseIndex == ComposeData::INITIAL_JAMO_INDEX) {
+                 && baseIndex == ComposeData::INITIAL_JAMO_INDEX) {
             // If the last character was an initial jamo, we can combine it with this
             // one to create a Hangul character.
             uint16_t l = buffer[basePos] - JAMO_LBASE;
@@ -431,7 +431,7 @@ UChar Normalizer::nextCompose()
             baseIndex = ComposeData::MEDIAL_JAMO_INDEX;
         }
         else if (type == ComposeData::FINAL_JAMO && classesSeen == 0
-                    && baseIndex == ComposeData::MEDIAL_JAMO_INDEX) {
+                 && baseIndex == ComposeData::MEDIAL_JAMO_INDEX) {
             // If the last character was a medial jamo that we turned into Hangul,
             // we can add this character too.
             UChar newCh = (UChar)(buffer[basePos] + (ch - JAMO_TBASE));
@@ -509,10 +509,10 @@ UChar Normalizer::prevCompose()
     if (buffer.length() > 0) {
         // TODO: The performance of this is awful; add a way to compose
         // a UnicodeString& in place.
-      UnicodeString composed;
-      compose(buffer, (fMode & COMPAT_BIT), fOptions, composed, status);
-      buffer.truncate(0);
-      buffer += composed;
+        UnicodeString composed;
+        compose(buffer, (fMode & COMPAT_BIT), fOptions, composed, status);
+        buffer.truncate(0);
+        buffer += composed;
         
         if (buffer.length() > 1) {
             bufferLimit = bufferPos = buffer.length() - 1;
@@ -547,26 +547,28 @@ uint32_t Normalizer::getComposeClass(UChar ch) {
     uint32_t cclass = 0;
     uint16_t charInfo = composeLookup(ch);
     uint16_t type = charInfo & ComposeData::TYPE_MASK;
-    if (type == ComposeData::COMBINING || type == ComposeData::NON_COMPOSING_COMBINING) {
+    if (type == ComposeData::COMBINING ||
+        type == ComposeData::NON_COMPOSING_COMBINING) {
         cclass = ComposeData::typeMask[charInfo >> ComposeData::INDEX_SHIFT];
     }
     return cclass;
 }
 
 uint16_t Normalizer::composeLookup(UChar ch) {
-  return ucmp16_getu(ComposeData::lookup, ch);
+    return ucmp16_getu(ComposeData::lookup, ch);
 }
 
 uint16_t Normalizer::composeAction(uint16_t baseIndex, uint16_t comIndex) 
 {
-  return ucmp16_getu(ComposeData::actions,
-             ((UChar)(baseIndex + ComposeData::MAX_BASES*comIndex)));
+    return ucmp16_getu(ComposeData::actions,
+                       ((UChar)(baseIndex + ComposeData::MAX_BASES*comIndex)));
 }
 
 void Normalizer::explode(UnicodeString& target, uint16_t index) {
     UChar ch;
-    while ((ch = ComposeData::replace[index++]) != 0)
-    target += ch;
+    while ((ch = ComposeData::replace[index++]) != 0) {
+        target += ch;
+    }
 }
 
 UChar Normalizer::pairExplode(UnicodeString& target, uint16_t action) {
@@ -581,36 +583,35 @@ UChar Normalizer::pairExplode(UnicodeString& target, uint16_t action) {
 
 void
 Normalizer::decompose(const UnicodeString& source, 
-              UBool compat,
-              int32_t options,
-              UnicodeString& result, 
-              UErrorCode &status)
+                      UBool compat,
+                      int32_t options,
+                      UnicodeString& result, 
+                      UErrorCode &status)
 {
-  if (U_FAILURE(status)) {
-    return;
-  }
-  UBool     hangul = (options & IGNORE_HANGUL) == 0;
-  uint16_t     limit  = compat ? 0 : DecompData::MAX_COMPAT;
-  
-  result.truncate(0);
-  
-  for (UTextOffset i = 0; i < source.length(); ++i) {
-    UChar ch = source[i];
-    
-    uint16_t offset = ucmp16_getu(DecompData::offsets, ch);
-    
-    
-    if (offset > limit) {
-    /* HSYS: Be sure to check this for later.  UChar may not always be
-       uint16_t*/
-      doAppend((const UChar*)(DecompData::contents), offset, result);
-    } else if (ch >= HANGUL_BASE && ch < HANGUL_LIMIT && hangul) {
-      hangulToJamo(ch, result, limit);
-    } else {
-      result += ch;
+    if (U_FAILURE(status)) {
+        return;
     }
-  }
-  fixCanonical(result);
+    UBool     hangul = (options & IGNORE_HANGUL) == 0;
+    uint16_t     limit  = compat ? 0 : DecompData::MAX_COMPAT;
+  
+    result.truncate(0);
+  
+    for (UTextOffset i = 0; i < source.length(); ++i) {
+        UChar ch = source[i];
+    
+        uint16_t offset = ucmp16_getu(DecompData::offsets, ch);
+    
+        if (offset > limit) {
+            /* HSYS: Be sure to check this for later.  UChar may not always be
+               uint16_t*/
+            doAppend((const UChar*)(DecompData::contents), offset, result);
+        } else if (ch >= HANGUL_BASE && ch < HANGUL_LIMIT && hangul) {
+            hangulToJamo(ch, result, limit);
+        } else {
+            result += ch;
+        }
+    }
+    fixCanonical(result);
 }
 
 /**
@@ -630,60 +631,61 @@ Normalizer::decompose(const UnicodeString& source,
  */
 UChar Normalizer::nextDecomp()
 {
-  UBool hangul = ((fOptions & IGNORE_HANGUL) == 0);
-  UChar ch = curForward();
+    UBool hangul = ((fOptions & IGNORE_HANGUL) == 0);
+    UChar ch = curForward();
   
-  uint16_t offset = ucmp16_getu(DecompData::offsets, ch);
+    uint16_t offset = ucmp16_getu(DecompData::offsets, ch);
   
-  if (offset > minDecomp || ucmp8_get(DecompData::canonClass, ch) != DecompData::BASE)
+    if (offset > minDecomp ||
+        ucmp8_get(DecompData::canonClass, ch) != DecompData::BASE)
     {
-      initBuffer();
+        initBuffer();
       
-      if (offset > minDecomp) {
-        /* HSYS: Be sure to check this for later.  UChar may not always be
-           uint16_t*/
-        doAppend((const UChar*)(DecompData::contents), offset, buffer);
-      } else {
-        buffer += ch;
-      }
-      UBool needToReorder = FALSE;
+        if (offset > minDecomp) {
+            /* HSYS: Be sure to check this for later.  UChar may not always be
+               uint16_t*/
+            doAppend((const UChar*)(DecompData::contents), offset, buffer);
+        } else {
+            buffer += ch;
+        }
+        UBool needToReorder = FALSE;
       
-      // Any other combining chacters that immediately follow the decomposed
-      // character must be included in the buffer too, because they're
-      // conceptually part of the same logical character.
-      //
-      // TODO: Might these need to be decomposed too?
-      // (i.e. are there non-BASE characters with decompositions?
-      //
-      while ((ch = text->next()) != DONE
-         && ucmp8_get(DecompData::canonClass, ch) != DecompData::BASE)
+        // Any other combining chacters that immediately follow the decomposed
+        // character must be included in the buffer too, because they're
+        // conceptually part of the same logical character.
+        //
+        // TODO: Might these need to be decomposed too?
+        // (i.e. are there non-BASE characters with decompositions?
+        //
+        while ((ch = text->next()) != DONE
+               && ucmp8_get(DecompData::canonClass, ch) != DecompData::BASE)
         {
-      needToReorder = TRUE;
-      buffer += ch;
+            needToReorder = TRUE;
+            buffer += ch;
         }
       
-      if (buffer.length() > 1 && needToReorder) {
-    // If there is more than one combining character in the buffer,
-    // put them into the canonical order.
-    // But we don't need to sort if only characters are the ones that
-    // resulted from decomosing the base character.
-    fixCanonical(buffer);
-      }
-      bufferLimit = buffer.length() - 1;
-      ch = buffer[0];
+        if (buffer.length() > 1 && needToReorder) {
+            // If there is more than one combining character in the buffer,
+            // put them into the canonical order.
+            // But we don't need to sort if only characters are the ones that
+            // resulted from decomosing the base character.
+            fixCanonical(buffer);
+        }
+        bufferLimit = buffer.length() - 1;
+        ch = buffer[0];
     } else {
-      // Just use this character, but first advance to the next one
-      text->next();
+        // Just use this character, but first advance to the next one
+        text->next();
       
-      // Do Hangul -> Jamo decomposition if necessary
-      if (hangul && ch >= HANGUL_BASE && ch < HANGUL_LIMIT) {
-    initBuffer();
-    hangulToJamo(ch, buffer, minDecomp);
-    bufferLimit = buffer.length() - 1;
-    ch = buffer[0];
-      }
+        // Do Hangul -> Jamo decomposition if necessary
+        if (hangul && ch >= HANGUL_BASE && ch < HANGUL_LIMIT) {
+            initBuffer();
+            hangulToJamo(ch, buffer, minDecomp);
+            bufferLimit = buffer.length() - 1;
+            ch = buffer[0];
+        }
     }
-  return ch;
+    return ch;
 }
 
 
@@ -709,12 +711,14 @@ UChar Normalizer::prevDecomp() {
 
     uint16_t offset = ucmp16_getu(DecompData::offsets, ch);
 
-    if (offset > minDecomp || ucmp8_get(DecompData::canonClass, ch) != DecompData::BASE)
+    if (offset > minDecomp ||
+        ucmp8_get(DecompData::canonClass, ch) != DecompData::BASE)
     {
         initBuffer();
 
         // Slurp up any combining characters till we get to a base char.
-        while (ch != DONE && ucmp8_get(DecompData::canonClass, ch) != DecompData::BASE) {
+        while (ch != DONE &&
+               ucmp8_get(DecompData::canonClass, ch) != DecompData::BASE) {
             insert(buffer, 0, ch);
             ch = text->previous();
         }
@@ -798,25 +802,25 @@ void Normalizer::fixCanonical(UnicodeString& result) {
  */
 UChar32 Normalizer:: current() const
 {
-  // TODO: make this method const and guarantee that currentChar is always set?
-  Normalizer *nonConst = (Normalizer*)this;
+    // TODO: make this method const and guarantee that currentChar is always set?
+    Normalizer *nonConst = (Normalizer*)this;
   
-  if (currentChar == DONE) {
-    switch (fMode) {
-    case NO_OP:
-      nonConst->currentChar = text->current();            
-      break;
-    case COMPOSE:
-    case COMPOSE_COMPAT:
-      nonConst->currentChar = nonConst->nextCompose();    
-      break;
-    case DECOMP:    
-    case DECOMP_COMPAT:
-      nonConst->currentChar = nonConst->nextDecomp();        
-      break;
+    if (currentChar == DONE) {
+        switch (fMode) {
+        case NO_OP:
+            nonConst->currentChar = text->current();            
+            break;
+        case COMPOSE:
+        case COMPOSE_COMPAT:
+            nonConst->currentChar = nonConst->nextCompose();    
+            break;
+        case DECOMP:    
+        case DECOMP_COMPAT:
+            nonConst->currentChar = nonConst->nextDecomp();        
+            break;
+        }
     }
-  }
-  return currentChar;
+    return currentChar;
 }
 
 /**
@@ -833,11 +837,11 @@ UChar32 Normalizer::first() {
  * the input text corresponding to that normalized character.
  */
 UChar32 Normalizer::last() {
-  text->setIndex(text->endIndex());
+    text->setIndex(text->endIndex());
   
-  currentChar = DONE;                     // The current char hasn't been processed
-  clearBuffer();                          // The buffer is empty too
-  return previous();
+    currentChar = DONE;                     // The current char hasn't been processed
+    clearBuffer();                          // The buffer is empty too
+    return previous();
 }
 
 /**
@@ -846,27 +850,27 @@ UChar32 Normalizer::last() {
  * of the text has already been reached, {@link #DONE} is returned.
  */
 UChar32 Normalizer::next() {
-  if (bufferPos < bufferLimit) {
-    // There are output characters left in the buffer
-    currentChar = buffer[++bufferPos];
-  }
-  else {
-    bufferLimit = bufferPos = 0;    // Buffer is now out of date
-    switch (fMode) {
-    case NO_OP:
-      currentChar = text->next();        
-      break;
-    case COMPOSE:        
-    case COMPOSE_COMPAT:
-      currentChar = nextCompose();    
-      break;
-    case DECOMP:    
-    case DECOMP_COMPAT:
-      currentChar = nextDecomp();        
-      break;
+    if (bufferPos < bufferLimit) {
+        // There are output characters left in the buffer
+        currentChar = buffer[++bufferPos];
     }
-  }
-  return currentChar;
+    else {
+        bufferLimit = bufferPos = 0;    // Buffer is now out of date
+        switch (fMode) {
+        case NO_OP:
+            currentChar = text->next();        
+            break;
+        case COMPOSE:        
+        case COMPOSE_COMPAT:
+            currentChar = nextCompose();    
+            break;
+        case DECOMP:    
+        case DECOMP_COMPAT:
+            currentChar = nextDecomp();        
+            break;
+        }
+    }
+    return currentChar;
 }
 
 /**
@@ -876,27 +880,27 @@ UChar32 Normalizer::next() {
  */
 UChar32 Normalizer::previous()
 {
-  if (bufferPos > 0) {
-    // There are output characters left in the buffer
-    currentChar = buffer[--bufferPos];
-  }
-  else {
-    bufferLimit = bufferPos = 0;    // Buffer is now out of date
-    switch (fMode) {
-    case NO_OP:        
-      currentChar = text->previous();    
-      break;
-    case COMPOSE:        
-    case COMPOSE_COMPAT:
-      currentChar = prevCompose();    
-      break;
-    case DECOMP:    
-    case DECOMP_COMPAT:
-      currentChar = prevDecomp();        
-      break;
+    if (bufferPos > 0) {
+        // There are output characters left in the buffer
+        currentChar = buffer[--bufferPos];
     }
-  }
-  return currentChar;
+    else {
+        bufferLimit = bufferPos = 0;    // Buffer is now out of date
+        switch (fMode) {
+        case NO_OP:        
+            currentChar = text->previous();    
+            break;
+        case COMPOSE:        
+        case COMPOSE_COMPAT:
+            currentChar = prevCompose();    
+            break;
+        case DECOMP:    
+        case DECOMP_COMPAT:
+            currentChar = prevDecomp();        
+            break;
+        }
+    }
+    return currentChar;
 }
 
 void Normalizer::reset() 
@@ -977,8 +981,8 @@ UTextOffset Normalizer::endIndex() const {
 void
 Normalizer::setMode(EMode newMode) 
 {
-  fMode     = newMode;
-  minDecomp     = ((fMode & COMPAT_BIT) != 0) ? 0 : DecompData::MAX_COMPAT;
+    fMode = newMode;
+    minDecomp = ((fMode & COMPAT_BIT) != 0) ? 0 : DecompData::MAX_COMPAT;
 }
 
 Normalizer::EMode 
@@ -989,13 +993,13 @@ Normalizer::getMode() const
 
 void
 Normalizer::setOption(int32_t option, 
-              UBool value) 
+                      UBool value) 
 {
-  if (value) {
-    fOptions |= option;
-  } else {
-    fOptions &= (~option);
-  }
+    if (value) {
+        fOptions |= option;
+    } else {
+        fOptions &= (~option);
+    }
 }
 
 UBool
@@ -1010,19 +1014,19 @@ Normalizer::getOption(int32_t option) const
  */
 void
 Normalizer::setText(const UnicodeString& newText, 
-            UErrorCode &status)
+                    UErrorCode &status)
 {
-  if (U_FAILURE(status)) {
-    return;
-  }
-  CharacterIterator *newIter = new StringCharacterIterator(newText);
-  if (newIter == NULL) {
-    status = U_MEMORY_ALLOCATION_ERROR;
-    return;
-  }
-  delete text;
-  text = newIter;
-  reset();
+    if (U_FAILURE(status)) {
+        return;
+    }
+    CharacterIterator *newIter = new StringCharacterIterator(newText);
+    if (newIter == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    delete text;
+    text = newIter;
+    reset();
 }
 
 /**
@@ -1031,25 +1035,25 @@ Normalizer::setText(const UnicodeString& newText,
  */
 void
 Normalizer::setText(const CharacterIterator& newText, 
-            UErrorCode &status) 
+                    UErrorCode &status) 
 {
-  if (U_FAILURE(status)) {
-    return;
-  }
-  CharacterIterator *newIter = newText.clone();
-  if (newIter == NULL) {
-    status = U_MEMORY_ALLOCATION_ERROR;
-    return;
-  }
-  delete text;
-  text = newIter;
-  reset();
+    if (U_FAILURE(status)) {
+        return;
+    }
+    CharacterIterator *newIter = newText.clone();
+    if (newIter == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    delete text;
+    text = newIter;
+    reset();
 }
 
 void
 Normalizer::setText(const UChar* newText,
                     int32_t length,
-            UErrorCode &status)
+                    UErrorCode &status)
 {
     setText(UnicodeString(newText, length), status);
 }
@@ -1136,7 +1140,7 @@ void Normalizer::hangulToJamo(UChar ch, UnicodeString& result, uint16_t decompLi
     UChar sIndex  = (UChar)(ch - HANGUL_BASE);
     UChar leading = (UChar)(JAMO_LBASE + sIndex / JAMO_NCOUNT);
     UChar vowel   = (UChar)(JAMO_VBASE +
-                          (sIndex % JAMO_NCOUNT) / JAMO_TCOUNT);
+                            (sIndex % JAMO_NCOUNT) / JAMO_TCOUNT);
     UChar trailing= (UChar)(JAMO_TBASE + (sIndex % JAMO_TCOUNT));
 
     jamoAppend(leading, decompLimit, result);
@@ -1147,7 +1151,7 @@ void Normalizer::hangulToJamo(UChar ch, UnicodeString& result, uint16_t decompLi
 }
 
 void Normalizer::jamoAppend(UChar ch, uint16_t decompLimit, UnicodeString& dest) {
-  uint16_t offset = ucmp16_getu(DecompData::offsets, ch);
+    uint16_t offset = ucmp16_getu(DecompData::offsets, ch);
     if (offset > decompLimit) {
         /* HSYS: Be sure to check this for later.  UChar may not always be
            uint16_t*/
@@ -1168,7 +1172,7 @@ void Normalizer::jamoToHangul(UnicodeString& buffer, UTextOffset start) {
         UChar ch = buffer[in];
 
         if ((l = ch - JAMO_LBASE) >= 0 && l < JAMO_LCOUNT
-                && (v = buffer[in+1] - JAMO_VBASE) >= 0 && v < JAMO_VCOUNT) {
+            && (v = buffer[in+1] - JAMO_VBASE) >= 0 && v < JAMO_VCOUNT) {
             //
             // We've found a pair of Jamo characters to compose.
             // Snarf the Jamo vowel and see if there's also a trailing char
