@@ -12,8 +12,10 @@
 
 U_NAMESPACE_BEGIN
 
+class UnicodeFunctor;
 class UnicodeString;
 class UnicodeMatcher;
+class UnicodeReplacer;
 class Hashtable;
 
 /**
@@ -56,20 +58,20 @@ public:
     Hashtable* variableNames;
 
     /**
-     * Map category variable (UChar) to set (UnicodeMatcher).
+     * Map category variable (UChar) to set (UnicodeFunctor).
      * Variables that correspond to a set of characters are mapped
      * from variable name to a stand-in character in data.variableNames.
      * The stand-in then serves as a key in this hash to lookup the
-     * actual UnicodeMatcher object.  In addition, the stand-in is
+     * actual UnicodeFunctor object.  In addition, the stand-in is
      * stored in the rule text to represent the set of characters.
      * variables[i] represents character (variablesBase + i).
      */
-    UnicodeMatcher** variables;
+    UnicodeFunctor** variables;
 
     /**
      * The character that represents variables[0].  Characters
      * variablesBase through variablesBase +
-     * variablesLength - 1 represent UnicodeMatcher objects.
+     * variablesLength - 1 represent UnicodeFunctor objects.
      */
     UChar variablesBase;
 
@@ -77,15 +79,6 @@ public:
      * The length of variables.
      */
     int32_t variablesLength;
-
-    /**
-     * The character that represents segment 1.  Characters segmentBase
-     * through segmentBase - segmentCount + 1 represent segments 1
-     * through segmentCount.  Segments work down while variables work up.
-     */
-    UChar segmentBase;
-
-    int32_t segmentCount;
 
 public:
 
@@ -99,22 +92,13 @@ public:
      * Given a stand-in character, return the UnicodeMatcher that it
      * represents, or NULL.
      */
-    UnicodeMatcher* lookup(UChar32 standIn) const;
+    UnicodeMatcher* lookupMatcher(UChar32 standIn) const;
 
     /**
-     * Return the zero-based index of the segment represented by the given
-     * character, or -1 if none.  Repeat: This is a zero-based return value,
-     * 0..n-1, even though these are notated "$1".."$n", where n is segmentCount.
+     * Given a stand-in character, return the UnicodeReplacer that it
+     * represents, or NULL.
      */
-    int32_t lookupSegmentReference(UChar32 c) const;
-
-    /**
-     * Return the character used to stand for the given segment reference.
-     * The reference must be in the range 1..segmentCount.
-     */
-    UChar getSegmentStandin(int32_t ref) const {
-        return (UChar)(segmentBase - ref + 1);
-    }
+    UnicodeReplacer* lookupReplacer(UChar32 standIn) const;
 };
 
 U_NAMESPACE_END

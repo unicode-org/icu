@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2001/11/30 05:50:35 $ 
- * $Revision: 1.26 $
+ * $Date: 2002/02/07 00:53:54 $ 
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
@@ -30,7 +30,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.26 $ $Date: 2001/11/30 05:50:35 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.27 $ $Date: 2002/02/07 00:53:54 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -124,16 +124,14 @@ public class CompoundTransliterator extends Transliterator {
     
     /**
      * Package private constructor for Transliterator from a vector of
-     * transliterators.  The vector order is FORWARD, so if dir is
-     * REVERSE then the vector order will be reversed.  The caller is
-     * responsible for fixing up the ID.
+     * transliterators.  The caller is responsible for fixing up the
+     * ID.
      */
-    CompoundTransliterator(int dir,
-                           Vector list) {
+    CompoundTransliterator(Vector list) {
         super("", null);
         trans = null;
         compoundRBTIndex = -1;
-        init(list, dir, false);
+        init(list, FORWARD, false);
         // assume caller will fixup ID
     }
 
@@ -160,13 +158,14 @@ public class CompoundTransliterator extends Transliterator {
         // assert(trans == 0);
 
         Vector list = new Vector();
-        int[] splitTransIndex = new int[1];
         UnicodeSet[] compoundFilter = new UnicodeSet[1];
         StringBuffer regenID = new StringBuffer();
-        Transliterator.parseCompoundID(id, regenID, direction,
-                                       idSplitPoint, splitTrans,
-                                       list, splitTransIndex, compoundFilter);
-        compoundRBTIndex = splitTransIndex[0];
+        if (!TransliteratorIDParser.parseCompoundID(id, direction,
+                 regenID, list, compoundFilter)) {
+            throw new IllegalArgumentException("Invalid ID " + id);
+        }
+
+        compoundRBTIndex = TransliteratorIDParser.instantiateList(list, splitTrans, idSplitPoint);
 
         init(list, direction, fixReverseID);
 

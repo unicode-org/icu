@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2001/12/04 20:09:07 $
- * $Revision: 1.18 $
+ * $Date: 2002/02/07 00:56:31 $
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -15,9 +15,8 @@ import com.ibm.text.*;
 
 public final class Utility {
 
-    // Other special characters
-    private static final char QUOTE               = '\'';
-    private static final char ESCAPE_CHAR         = '\\';
+    private static final char APOSTROPHE = '\'';
+    private static final char BACKSLASH  = '\\';
 
     /**
      * Convenience utility to compare two Object[]s.
@@ -920,6 +919,38 @@ public final class Utility {
     }
 
     /**
+     * Skip over a sequence of zero or more white space characters
+     * at pos[0], advancing it.
+     */
+    public static void skipWhitespace(String str, int[] pos) {
+        pos[0] = skipWhitespace(str, pos[0]);
+    }
+
+    /**
+     * Parse a single non-whitespace character 'ch', optionally
+     * preceded by whitespace.
+     * @param id the string to be parsed
+     * @param pos INPUT-OUTPUT parameter.  On input, pos[0] is the
+     * offset of the first character to be parsed.  On output, pos[0]
+     * is the index after the last parsed character.  If the parse
+     * fails, pos[0] will be unchanged.
+     * @param ch the non-whitespace character to be parsed.
+     * @return true if 'ch' is seen preceded by zero or more
+     * whitespace characters.
+     */
+    public static boolean parseChar(String id, int[] pos, char ch) {
+        int start = pos[0];
+        skipWhitespace(id, pos);
+        if (pos[0] == id.length() ||
+            id.charAt(pos[0]) != ch) {
+            pos[0] = start;
+            return false;
+        }
+        ++pos[0];
+        return true;
+    }
+
+    /**
      * Parse a pattern string starting at offset pos.  Keywords are
      * matched case-insensitively.  Spaces may be skipped and may be
      * optional or required.  Integer values may be parsed, and if
@@ -1029,6 +1060,46 @@ public final class Utility {
     }
 
     /**
+     * Parse a Unicode identifier from the given string at the given
+     * position.  Return the identifier, or null if there is no
+     * identifier.
+     * @param str the string to parse
+     * @param pos INPUT-OUPUT parameter.  On INPUT, pos[0] is the
+     * first character to examine.  It must be less than str.length(),
+     * and it must not point to a whitespace character.  That is, must
+     * have pos[0] < str.length() and
+     * !UCharacter.isWhitespace(UTF16.charAt(str, pos[0])).  On
+     * OUTPUT, the position after the last parsed character.
+     * @return the Unicode identifier, or null if there is no valid
+     * identifier at pos[0].
+     */
+    public static String parseUnicodeIdentifier(String str, int[] pos) {
+        // assert(pos[0] < str.length());
+        // assert(!UCharacter.isWhitespace(UTF16.charAt(str, pos[0])));
+        StringBuffer buf = new StringBuffer();
+        int p = pos[0];
+        while (p < str.length()) {
+            int ch = UTF16.charAt(str, p);
+            if (buf.length() == 0) {
+                if (UCharacter.isUnicodeIdentifierStart(ch)) {
+                    UTF16.append(buf, ch);
+                } else {
+                    return null;
+                }
+            } else {
+                if (UCharacter.isUnicodeIdentifierPart(ch)) {
+                    UTF16.append(buf, ch);
+                } else {
+                    break;
+                }
+            }
+            p += UTF16.getCharCount(ch);
+        }
+        pos[0] = p;
+        return buf.toString();
+    }
+
+    /**
      * Trim whitespace from ends of a StringBuffer.
      */
     public static StringBuffer trim(StringBuffer b) {
@@ -1101,6 +1172,49 @@ public final class Utility {
         return result;
     }
 
+    /**
+     * Parse an unsigned 31-bit integer at the given offset.  Use
+     * UCharacter.digit() to parse individual characters into digits.
+     * @param text the text to be parsed
+     * @param pos INPUT-OUTPUT parameter.  On entry, pos[0] is the
+     * offset within text at which to start parsing; it should point
+     * to a valid digit.  On exit, pos[0] is the offset after the last
+     * parsed character.  If the parse failed, it will be unchanged on
+     * exit.  Must be >= 0 on entry.
+     * @param radix the radix in which to parse; must be >= 2 and <=
+     * 36.
+     * @return a non-negative parsed number, or -1 upon parse failure.
+     * Parse fails if there are no digits, that is, if pos[0] does not
+     * point to a valid digit on entry, or if the number to be parsed
+     * does not fit into a 31-bit unsigned integer.
+     */
+    public static int parseNumber(String text, int[] pos, int radix) {
+        // assert(pos[0] >= 0);
+        // assert(radix >= 2);
+        // assert(radix <= 36);
+        int n = 0;
+        int p = pos[0];
+        while (p < text.length()) {
+            int ch = UTF16.charAt(text, p);
+            int d = UCharacter.digit(ch, radix);
+            if (d < 0) {
+                break;
+            }
+            n = radix*n + d;
+            // ASSUME that when a 32-bit integer overflows it becomes
+            // negative.  E.g., 214748364 * 10 + 8 => negative value.
+            if (n < 0) {
+                return -1;
+            }
+            ++p;
+        }
+        if (p == pos[0]) {
+            return -1;
+        }
+        pos[0] = p;
+        return n;
+    }
+
     private static final char[] HEX = {'0','1','2','3','4','5','6','7',
                                        '8','9','A','B','C','D','E','F'};
 
@@ -1160,11 +1274,11 @@ public final class Utility {
                                     String setOfChars) {
         for (int i=start; i<limit; ++i) {
             char c = text.charAt(i);
-            if (c == ESCAPE_CHAR) {
+            if (c == BACKSLASH) {
                 ++i;
-            } else if (c == QUOTE) {
+            } else if (c == APOSTROPHE) {
                 while (++i < limit
-                       && text.charAt(i) != QUOTE) {}
+                       && text.charAt(i) != APOSTROPHE) {}
             } else if (setOfChars.indexOf(c) >= 0) {
                 return i;
             }
@@ -1256,5 +1370,140 @@ public final class Utility {
             return;
         }	
         src.getChars(srcBegin, srcEnd, dst, dstBegin);
+    }
+
+    /**
+     * Append a character to a rule that is being built up.  To flush
+     * the quoteBuf to rule, make one final call with isLiteral == true.
+     * If there is no final character, pass in (int)-1 as c.
+     * @param rule the string to append the character to
+     * @param c the character to append, or (int)-1 if none.
+     * @param isLiteral if true, then the given character should not be
+     * quoted or escaped.  Usually this means it is a syntactic element
+     * such as > or $
+     * @param escapeUnprintable if true, then unprintable characters
+     * should be escaped using escapeUnprintable().  These escapes will
+     * appear outside of quotes.
+     * @param quoteBuf a buffer which is used to build up quoted
+     * substrings.  The caller should initially supply an empty buffer,
+     * and thereafter should not modify the buffer.  The buffer should be
+     * cleared out by, at the end, calling this method with a literal
+     * character (which may be -1).
+     */
+    public static void appendToRule(StringBuffer rule,
+                                    int c,
+                                    boolean isLiteral,
+                                    boolean escapeUnprintable,
+                                    StringBuffer quoteBuf) {
+        // If we are escaping unprintables, then escape them outside
+        // quotes.  \\u and \\U are not recognized within quotes.  The same
+        // logic applies to literals, but literals are never escaped.
+        if (isLiteral ||
+            (escapeUnprintable && Utility.isUnprintable(c))) {
+            if (quoteBuf.length() > 0) {
+                // We prefer backslash APOSTROPHE to double APOSTROPHE
+                // (more readable, less similar to ") so if there are
+                // double APOSTROPHEs at the ends, we pull them outside
+                // of the quote.
+
+                // If the first thing in the quoteBuf is APOSTROPHE
+                // (doubled) then pull it out.
+                while (quoteBuf.length() >= 2 &&
+                       quoteBuf.charAt(0) == APOSTROPHE &&
+                       quoteBuf.charAt(1) == APOSTROPHE) {
+                    rule.append(BACKSLASH).append(APOSTROPHE);
+                    quoteBuf.delete(0, 2);
+                }
+                // If the last thing in the quoteBuf is APOSTROPHE
+                // (doubled) then remove and count it and add it after.
+                int trailingCount = 0;
+                while (quoteBuf.length() >= 2 &&
+                       quoteBuf.charAt(quoteBuf.length()-2) == APOSTROPHE &&
+                       quoteBuf.charAt(quoteBuf.length()-1) == APOSTROPHE) {
+                    quoteBuf.setLength(quoteBuf.length()-2);
+                    ++trailingCount;
+                }
+                if (quoteBuf.length() > 0) {
+                    rule.append(APOSTROPHE);
+                    rule.append(quoteBuf);
+                    rule.append(APOSTROPHE);
+                    quoteBuf.setLength(0);
+                }
+                while (trailingCount-- > 0) {
+                    rule.append(BACKSLASH).append(APOSTROPHE);
+                }
+            }
+            if (c != -1) {
+                /* Since spaces are ignored during parsing, they are
+                 * emitted only for readability.  We emit one here
+                 * only if there isn't already one at the end of the
+                 * rule.
+                 */
+                if (c == ' ') {
+                    int len = rule.length();
+                    if (len > 0 && rule.charAt(len-1) != ' ') {
+                        rule.append(' ');
+                    }
+                } else if (!escapeUnprintable || !Utility.escapeUnprintable(rule, c)) {
+                    UTF16.append(rule, c);
+                }
+            }
+        }
+
+        // Escape ' and '\' and don't begin a quote just for them
+        else if (quoteBuf.length() == 0 &&
+                 (c == APOSTROPHE || c == BACKSLASH)) {
+            rule.append(BACKSLASH).append((char)c);
+        }
+
+        // Specials (printable ascii that isn't [0-9a-zA-Z]) and
+        // whitespace need quoting.  Also append stuff to quotes if we are
+        // building up a quoted substring already.
+        else if (quoteBuf.length() > 0 ||
+                 (c >= 0x0021 && c <= 0x007E &&
+                  !((c >= 0x0030/*'0'*/ && c <= 0x0039/*'9'*/) ||
+                    (c >= 0x0041/*'A'*/ && c <= 0x005A/*'Z'*/) ||
+                    (c >= 0x0061/*'a'*/ && c <= 0x007A/*'z'*/))) ||
+                 UCharacter.isWhitespace(c)) {
+            UTF16.append(quoteBuf, c);
+            // Double ' within a quote
+            if (c == APOSTROPHE) {
+                quoteBuf.append((char)c);
+            }
+        }
+
+        // Otherwise just append
+        else {
+            UTF16.append(rule, c);
+        }
+    }
+
+    /**
+     * Append the given string to the rule.  Calls the single-character
+     * version of appendToRule for each character.
+     */
+    public static void appendToRule(StringBuffer rule,
+                                    String text,
+                                    boolean isLiteral,
+                                    boolean escapeUnprintable,
+                                    StringBuffer quoteBuf) {
+        for (int i=0; i<text.length(); ++i) {
+            // Okay to process in 16-bit code units here
+            appendToRule(rule, text.charAt(i), isLiteral, escapeUnprintable, quoteBuf);
+        }
+    }
+
+    /**
+     * Given a matcher reference, which may be null, append its
+     * pattern as a literal to the given rule.
+     */
+    public static void appendToRule(StringBuffer rule,
+                                    UnicodeMatcher matcher,
+                                    boolean escapeUnprintable,
+                                    StringBuffer quoteBuf) {
+        if (matcher != null) {
+            appendToRule(rule, matcher.toPattern(escapeUnprintable),
+                         true, escapeUnprintable, quoteBuf);
+        }
     }
 }

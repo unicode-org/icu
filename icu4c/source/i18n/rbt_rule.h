@@ -17,6 +17,7 @@ U_NAMESPACE_BEGIN
 class Replaceable;
 class TransliterationRuleData;
 class StringMatcher;
+class UnicodeFunctor;
 
 /**
  * A transliteration rule used by
@@ -84,6 +85,12 @@ private:
     StringMatcher *postContext;
 
     /**
+     * The object that performs the replacement if the key,
+     * anteContext, and postContext are matched.  Never null.
+     */
+    UnicodeFunctor* output;
+
+    /**
      * The string that must be matched, consisting of the anteContext, key,
      * and postContext, concatenated together, in that order.  Some components
      * may be empty (zero length).
@@ -91,12 +98,6 @@ private:
      * @see keyLength
      */
     UnicodeString pattern;
-
-    /**
-     * The string that is emitted if the key, anteContext, and postContext
-     * are matched.
-     */
-    UnicodeString output;
 
     /**
      * An array of matcher objects corresponding to the input pattern
@@ -107,7 +108,7 @@ private:
      *
      * The array is owned, but the pointers within it are not.
      */
-    UnicodeMatcher** segments;
+    UnicodeFunctor** segments;
 
     /**
      * The number of elements in segments[] or zero if segments is NULL.
@@ -127,13 +128,6 @@ private:
 
      */
     int32_t keyLength;
-
-    /**
-     * The position of the cursor after emitting the output string, from 0 to
-     * output.length().  For most rules with no special cursor specification,
-     * the cursorPos is output.length().
-     */
-    int32_t cursorPos;
 
     /**
      * Miscellaneous attributes.
@@ -190,7 +184,7 @@ public:
                         int32_t anteContextPos, int32_t postContextPos,
                         const UnicodeString& outputStr,
                         int32_t cursorPosition, int32_t cursorOffset,
-                        UnicodeMatcher** segs,
+                        UnicodeFunctor** segs,
                         int32_t segsCount,
                         UBool anchorStart, UBool anchorEnd,
                         const TransliterationRuleData* data,
@@ -211,12 +205,6 @@ public:
      * internally by the TransliterationRuleData copy constructor.
      */
     inline void setData(const TransliterationRuleData* data);
-
-    /**
-     * Return the position of the cursor within the output string.
-     * @return a value from 0 to <code>getOutput().length()</code>, inclusive.
-     */
-    virtual int32_t getCursorPos(void) const;
 
     /**
      * Return the preceding context length.  This method is needed to
@@ -291,23 +279,6 @@ public:
  private:
 
     friend class StringMatcher;
-
-    static void appendToRule(UnicodeString& rule,
-                             UChar32 c,
-                             UBool isLiteral,
-                             UBool escapeUnprintable,
-                             UnicodeString& quoteBuf);
-    
-    static void appendToRule(UnicodeString& rule,
-                             const UnicodeString& text,
-                             UBool isLiteral,
-                             UBool escapeUnprintable,
-                             UnicodeString& quoteBuf);
-
-    static void appendToRule(UnicodeString& rule,
-                             const UnicodeMatcher* matcher,
-                             UBool escapeUnprintable,
-                             UnicodeString& quoteBuf);
 };
 
 inline void TransliterationRule::setData(const TransliterationRuleData* d) {

@@ -11,9 +11,9 @@
 #define SYMTABLE_H
 
 U_NAMESPACE_BEGIN
- 
 
 class ParsePosition;
+class UnicodeFunctor;
 class UnicodeSet;
 class UnicodeString;
 
@@ -47,7 +47,7 @@ public:
      * Lookup the UnicodeMatcher associated with the given character, and
      * return it.  Return <tt>null</tt> if not found.
      */
-    virtual const UnicodeMatcher* lookupMatcher(UChar32 ch) const = 0;
+    virtual const UnicodeFunctor* lookupMatcher(UChar32 ch) const = 0;
 
     /**
      * Parse a symbol reference name from the given string, starting
