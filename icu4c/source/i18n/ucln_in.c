@@ -38,6 +38,7 @@ static UBool i18n_cleanup(void)
 #endif
 
 #if !UCONFIG_NO_COLLATION
+    usearch_cleanup();
     collator_cleanup();
     ucol_cleanup();
     ucol_bld_cleanup();
