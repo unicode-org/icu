@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/07/19 21:17:55 $ 
-* $Revision: 1.19 $
+* $Date: 2000/09/22 18:49:24 $ 
+* $Revision: 1.20 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -50,26 +50,22 @@
            debug="on" deprecation="off" target="1.2"/>
   </target>
   
-  <target name="tests" depends="core">
+  <target name="tests" depends="core,miscData">
     <javac includes="com/ibm/test/**/*.java"
            excludes="**/CVS/**/*"
     	   srcdir="${src.dir}"
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
            debug="on" deprecation="off" target="1.2"/>
-    <copyfile src="${src.dir}/com/ibm/test/rbbi/english.dict"
-    	   dest="${build.dir}/com/ibm/test/rbbi/english.dict"/>
   </target>
   
-  <target name="demos" depends="core">
+  <target name="demos" depends="core,miscData">
     <javac includes="com/ibm/demo/**/*.java"
            excludes="**/CVS/**/*"
     	   srcdir="${src.dir}"
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
            debug="on" deprecation="off" target="1.2"/>
-    <copyfile src="${src.dir}/com/ibm/demo/rbbi/english.dict"
-    	   dest="${build.dir}/com/ibm/demo/rbbi/english.dict"/>
   </target>
   
   <target name="tools" depends="core">
@@ -95,6 +91,11 @@
     		  />    		  
   </target>
 
+  <target name ="miscData">
+    <copyfile src="${src.dir}/com/ibm/data/misc/english.dict"
+    	   dest="${build.dir}/com/ibm/data/misc/english.dict"/>
+  </target>
+  
   <target name="jar" depends="core">
     <jar jarfile="${jar.file}"
          includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*,com/ibm/richtext/**/*"
