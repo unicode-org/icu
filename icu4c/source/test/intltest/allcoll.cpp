@@ -14,13 +14,8 @@
 #include "unicode/sortkey.h"
 #include "allcoll.h"
 #include "sfwdchit.h"
+#include "../cintltst/calldata.h"
 
-/*
- * Include callcoll.c to get the test data.
- * This helps maintain a single copy of the data.
- */
-#define INCLUDE_CALLCOLL_C
-#include "../cintltst/callcoll.c"
 
 CollationDummyTest::CollationDummyTest()
 : myCollation(0)
