@@ -241,9 +241,9 @@ void TransliteratorErrorTest::TestHexToUniErrors() {
     status = U_ZERO_ERROR;
     t = new HexToUnicodeTransliterator("\\x", NULL, status);
     if (U_SUCCESS(status)) {
-        delete t;
         errln("FAIL: Created a HexToUnicodeTransliterator with a bad pattern.");
     }
+    delete t;
     status = U_ZERO_ERROR;
     t = new HexToUnicodeTransliterator();
     ((HexToUnicodeTransliterator*)t)->applyPattern("\\x", status);
