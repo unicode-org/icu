@@ -73,8 +73,9 @@ struct UResourceBundle {
     ResourceData fResData;
     Resource fRes;
 
+    UResourceDataEntry *fTopLevelData; /* for getting the valid locale */
     char *fRequestedLocale;
-    const UResourceBundle *fParent; /* needed to get the actual locale for a child resource */
+    const UResourceBundle *fParentRes; /* needed to get the actual locale for a child resource */
 
 };
 
@@ -130,5 +131,12 @@ U_CAPI UResourceBundle* U_EXPORT2
 ures_findSubResource(const UResourceBundle *resB, 
                      char* pathToResource, 
                      UResourceBundle *fillIn, UErrorCode *status);
+
+U_CAPI UResourceBundle* U_EXPORT2 
+ures_getByKeyWithFallback(const UResourceBundle *resB, 
+                          const char* inKey, 
+                          UResourceBundle *fillIn, 
+                          UErrorCode *status);
+
 
 #endif /*URESIMP_H*/
