@@ -662,21 +662,23 @@ void IntlTestTextBoundary::TestLineInvariants()
     doBreakInvariantTest(*e, testChars);
     doOtherInvariantTest(*e, testChars);
 
-    int errCount = 0;
+    int32_t errCount = 0, testCharsLen, noBreakLen, dashesLen;
     UTextOffset i, j, k;
 
     // in addition to the other invariants, a line-break iterator should make sure that:
     // it doesn't break around the non-breaking characters
     UnicodeString noBreak = CharsToUnicodeString("\\u00a0\\u2007\\u2011\\ufeff");
     UnicodeString work("aaa");
-    for (i = 0; i < testChars.length(); i++) {
+    testCharsLen = testChars.length();
+    noBreakLen = noBreak.length();
+    for (i = 0; i < testCharsLen; i++) {
         UChar c = testChars[i];
         if (c == '\r' || c == '\n' || c == 0x2029 || c == 0x2028 || c == 0x0003)
             continue;
         work[0] = c;
-        for (j = 0; j < noBreak.length(); j++) {
+        for (j = 0; j < noBreakLen; j++) {
             work[1] = noBreak[j];
-            for (k = 0; k < testChars.length(); k++) {
+            for (k = 0; k < testCharsLen; k++) {
                 work[2] = testChars[k];
                 e->setText(work);
                 for (int l = e->first(); l != BreakIterator::DONE; l = e->next())
@@ -694,31 +696,38 @@ void IntlTestTextBoundary::TestLineInvariants()
     // it does break after hyphens (unless they're followed by a digit, a non-spacing mark,
     // a currency symbol, a non-breaking space, or a line or paragraph separator)
     UnicodeString dashes = CharsToUnicodeString("-\\u00ad\\u2010\\u2012\\u2013\\u2014");
-    for (i = 0; i < testChars.length(); i++) {
+    dashesLen = dashes.length();
+    for (i = 0; i < testCharsLen; i++) {
         work[0] = testChars[i];
-        for (j = 0; j < dashes.length(); j++) {
+        for (j = 0; j < dashesLen; j++) {
             work[1] = dashes[j];
-            for (k = 0; k < testChars.length(); k++) {
+            for (k = 0; k < testCharsLen; k++) {
                 UChar c = testChars[k];
-                if (Unicode::getType(c) == Unicode::DECIMAL_DIGIT_NUMBER ||
-                    Unicode::getType(c) == Unicode::OTHER_NUMBER ||
-                    Unicode::getType(c) == Unicode::NON_SPACING_MARK ||
-                    Unicode::getType(c) == Unicode::ENCLOSING_MARK ||
-                    Unicode::getType(c) == Unicode::CURRENCY_SYMBOL ||
-                    Unicode::getType(c) == Unicode::SPACE_SEPARATOR ||
-                    Unicode::getType(c) == Unicode::DASH_PUNCTUATION ||
-                    Unicode::getType(c) == Unicode::CONTROL ||
-                    Unicode::getType(c) == Unicode::FORMAT ||
+                int8_t type = Unicode::getType(c);
+                if (type == Unicode::DECIMAL_DIGIT_NUMBER ||
+                    type == Unicode::OTHER_NUMBER ||
+                    type == Unicode::NON_SPACING_MARK ||
+                    type == Unicode::ENCLOSING_MARK ||
+                    type == Unicode::CURRENCY_SYMBOL ||
+                    type == Unicode::SPACE_SEPARATOR ||
+                    type == Unicode::DASH_PUNCTUATION ||
+                    type == Unicode::CONTROL ||
+                    type == Unicode::FORMAT ||
                     c == '\n' || c == '\r' || c == 0x2028 || c == 0x2029 ||
                     c == 0x0003 || c == 0x00a0 || c == 0x2007 || c == 0x2011 ||
                     c == 0xfeff)
+                {
                     continue;
+                }
                 work[2] = c;
                 e->setText(work);
                 UBool saw2 = FALSE;
-                for (int l = e->first(); l != BreakIterator::DONE; l = e->next())
-                    if (l == 2)
+                for (int l = e->first(); l != BreakIterator::DONE; l = e->next()) {
+                    if (l == 2) {
                         saw2 = TRUE;
+                        break;
+                    }
+                }
                 if (!saw2) {
                     errln("Didn't get break between U+" + UCharToUnicodeString(work[1]) + 
                         " and U+" + UCharToUnicodeString(work[2]));
@@ -733,55 +742,55 @@ void IntlTestTextBoundary::TestLineInvariants()
 }
 
 void IntlTestTextBoundary::TestThaiLineBreak() {
-        Vector* thaiLineSelection = new Vector();
-        UErrorCode status = U_ZERO_ERROR;
+    Vector* thaiLineSelection = new Vector();
+    UErrorCode status = U_ZERO_ERROR;
 
-        // \u0e2f-- the Thai paiyannoi character-- isn't a letter.  It's a symbol that
-        // represents elided letters at the end of a long word.  It should be bound to
-        // the end of the word and not treated as an independent punctuation mark.
-        
+    // \u0e2f-- the Thai paiyannoi character-- isn't a letter.  It's a symbol that
+    // represents elided letters at the end of a long word.  It should be bound to
+    // the end of the word and not treated as an independent punctuation mark.
 
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2a\\u0e16\\u0e32\\u0e19\\u0e35\\u0e2f"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e08\\u0e30"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e30\\u0e14\\u0e21"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e08\\u0e49\\u0e32"));
+
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2a\\u0e16\\u0e32\\u0e19\\u0e35\\u0e2f"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e08\\u0e30"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e30\\u0e14\\u0e21"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e08\\u0e49\\u0e32"));
 //        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2b\\u0e19\\u0e49\\u0e32"));
 //        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e17\\u0e35\\u0e48"));
-thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2b\\u0e19\\u0e49\\u0e32\\u0e17\\u0e35\\u0e48"));
-// the commented-out lines (I think) are the preferred result; this line is what our current dictionary is giving us
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2d\\u0e2d\\u0e01"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e21\\u0e32"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e23\\u0e48\\u0e07"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e30\\u0e1a\\u0e32\\u0e22"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2d\\u0e22\\u0e48\\u0e32\\u0e07"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e15\\u0e47\\u0e21"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2b\\u0e19\\u0e49\\u0e32\\u0e17\\u0e35\\u0e48"));
+    // the commented-out lines (I think) are the preferred result; this line is what our current dictionary is giving us
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2d\\u0e2d\\u0e01"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e21\\u0e32"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e23\\u0e48\\u0e07"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e30\\u0e1a\\u0e32\\u0e22"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2d\\u0e22\\u0e48\\u0e32\\u0e07"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e15\\u0e47\\u0e21"));
 
-        // the one time where the paiyannoi occurs somewhere other than at the end
-        // of a word is in the Thai abbrevation for "etc.", which both begins and
-        // ends with a paiyannoi
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2f\\u0e25\\u0e2f"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e17\\u0e35\\u0e48"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e19\\u0e31\\u0e49\\u0e19"));
+    // the one time where the paiyannoi occurs somewhere other than at the end
+    // of a word is in the Thai abbrevation for "etc.", which both begins and
+    // ends with a paiyannoi
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2f\\u0e25\\u0e2f"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e17\\u0e35\\u0e48"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e19\\u0e31\\u0e49\\u0e19"));
 
-        BreakIterator* e = BreakIterator::createLineInstance(
-                                                Locale("th"), status); 
-        if (U_FAILURE(status))
-        {
-            errln("Failed to create the BreakIterator for default locale in TestThaiLineBreak.\n");
-            return;
-        }
-
-        generalIteratorTest(*e, thaiLineSelection);
-        delete e;
-        delete thaiLineSelection;
+    BreakIterator* e = BreakIterator::createLineInstance(
+        Locale("th"), status); 
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestThaiLineBreak.\n");
+        return;
     }
+
+    generalIteratorTest(*e, thaiLineSelection);
+    delete e;
+    delete thaiLineSelection;
+}
 
 void IntlTestTextBoundary::TestMixedThaiLineBreak() 
 {
-        UErrorCode status = U_ZERO_ERROR;
-        Vector*  thaiLineSelection= new Vector();
-
-        // Arabic numerals should always be separated from surrounding Thai text
+    UErrorCode status = U_ZERO_ERROR;
+    Vector*  thaiLineSelection= new Vector();
+    
+    // Arabic numerals should always be separated from surrounding Thai text
 /*
         thaiLineSelection->addElement(CharsToUnicodeString("\\u0e04\\u0e48\\u0e32"));
         thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e07\\u0e34\\u0e19"));
@@ -818,59 +827,58 @@ thaiLineSelection->addElement(CharsToUnicodeString("(\\u0e1b\\u0e23\\u0e30\\u0e4
         thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e1b\\u0e34\\u0e14"));
         thaiLineSelection->addElement(CharsToUnicodeString("\\u0e15\\u0e31\\u0e27\""));
 */
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\""));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e38\\u0e48\\u0e19"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e43\\u0e2b\\u0e21\\u0e48"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e14\\u0e37\\u0e2d\\u0e19\\u0e21\\u0e34."));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e22."));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e19\\u0e35\\u0e49"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e32\\u0e04\\u0e32"));
-        thaiLineSelection->addElement("$200");
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e17\\u0e48\\u0e32"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e19\\u0e31\\u0e49\\u0e19 "));
-        thaiLineSelection->addElement(CharsToUnicodeString("(\"\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\")."));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\""));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e38\\u0e48\\u0e19"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e43\\u0e2b\\u0e21\\u0e48"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e14\\u0e37\\u0e2d\\u0e19\\u0e21\\u0e34."));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e22."));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e19\\u0e35\\u0e49"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e32\\u0e04\\u0e32"));
+    thaiLineSelection->addElement("$200");
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e17\\u0e48\\u0e32"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e19\\u0e31\\u0e49\\u0e19 "));
+    thaiLineSelection->addElement(CharsToUnicodeString("(\"\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\")."));
 
-        BreakIterator* e = BreakIterator::createLineInstance(
-                                                Locale("th"), status); 
-        if (U_FAILURE(status))
-        {
-            errln("Failed to create the BreakIterator for default locale in TestMixedThaiLineBreak.\n");
-            return;
-        }
+    BreakIterator* e = BreakIterator::createLineInstance(Locale("th"), status); 
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestMixedThaiLineBreak.\n");
+        return;
+    }
 
 
-        generalIteratorTest(*e, thaiLineSelection);
-        delete e;
-        delete thaiLineSelection;
+    generalIteratorTest(*e, thaiLineSelection);
+    delete e;
+    delete thaiLineSelection;
 }
 
 
 void IntlTestTextBoundary::TestMaiyamok() 
 {
-        Vector*  thaiLineSelection= new Vector();
-        UErrorCode status = U_ZERO_ERROR;
-        // the Thai maiyamok character is a shorthand symbol that means "repeat the previous
-        // word".  Instead of appearing as a word unto itself, however, it's kept together
-        // with the word before it
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e44\\u0e1b\\u0e46"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e21\\u0e32\\u0e46"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e30\\u0e2b\\u0e27\\u0e48\\u0e32\\u0e07"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e01\\u0e23\\u0e38\\u0e07\\u0e40\\u0e17\\u0e1e"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e41\\u0e25\\u0e30"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e03\\u0e35\\u0e22\\u0e07"));
-        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e43\\u0e2b\\u0e21\\u0e48"));
+    Vector*  thaiLineSelection= new Vector();
+    UErrorCode status = U_ZERO_ERROR;
+    // the Thai maiyamok character is a shorthand symbol that means "repeat the previous
+    // word".  Instead of appearing as a word unto itself, however, it's kept together
+    // with the word before it
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e44\\u0e1b\\u0e46"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e21\\u0e32\\u0e46"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e30\\u0e2b\\u0e27\\u0e48\\u0e32\\u0e07"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e01\\u0e23\\u0e38\\u0e07\\u0e40\\u0e17\\u0e1e"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e41\\u0e25\\u0e30"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e03\\u0e35\\u0e22\\u0e07"));
+    thaiLineSelection->addElement(CharsToUnicodeString("\\u0e43\\u0e2b\\u0e21\\u0e48"));
 
-        BreakIterator* e = BreakIterator::createLineInstance(
-                                                Locale("th"), status); 
+    BreakIterator* e = BreakIterator::createLineInstance(
+        Locale("th"), status); 
 
-        if (U_FAILURE(status))
-        {
-            errln("Failed to create the BreakIterator for default locale in TestMaiyamok.\n");
-            return;
-        }
-        generalIteratorTest(*e, thaiLineSelection);
-        delete e;
-        delete thaiLineSelection;
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestMaiyamok.\n");
+        return;
+    }
+    generalIteratorTest(*e, thaiLineSelection);
+    delete e;
+    delete thaiLineSelection;
 }
 
 /**
@@ -1064,31 +1072,29 @@ void IntlTestTextBoundary::runIndexedTest( int32_t index, UBool exec, const char
 {
     if (exec) logln("TestSuite TextBoundary: ");
     switch (index) {
-        case 0: name = "TestSentenceIteration"; if(exec) TestSentenceIteration(); break;
-        case 1: name = "TestWordIteration"; if(exec) TestWordIteration(); break;
-        case 2: name = "TestLineIteration"; if(exec) TestLineIteration(); break;
-        case 3: name = "TestCharacterIteration"; if(exec) TestCharacterIteration(); break;
-        case 4: name = "TestSentenceInvariants"; if(exec) TestSentenceInvariants();break;
-        case 5: name = "TestWordInvariants"; if(exec) TestWordInvariants();break;
-        case 6: name = "TestLineInvariants"; if(exec) TestLineInvariants();break;
-        case 7: name = "TestCharacterInvariants"; if(exec) TestCharacterInvariants();break;
+    case 0: name = "TestSentenceIteration"; if(exec) TestSentenceIteration(); break;
+    case 1: name = "TestWordIteration"; if(exec) TestWordIteration(); break;
+    case 2: name = "TestLineIteration"; if(exec) TestLineIteration(); break;
+    case 3: name = "TestCharacterIteration"; if(exec) TestCharacterIteration(); break;
+    case 4: name = "TestSentenceInvariants"; if(exec) TestSentenceInvariants();break;
+    case 5: name = "TestWordInvariants"; if(exec) TestWordInvariants();break;
+    case 6: name = "TestLineInvariants"; if(exec) TestLineInvariants();break;
+    case 7: name = "TestCharacterInvariants"; if(exec) TestCharacterInvariants();break;
 
-        case 8: name = "TestEmptyString"; if (exec) TestEmptyString(); break;
-        case 9: name = "TestGetAvailableLocales"; if (exec) TestGetAvailableLocales(); break;
-        case 10: name = "TestGetDisplayName"; if (exec) TestGetDisplayName(); break;
-        case 11: name = "TestPreceding"; if (exec) TestPreceding(); break;
-        case 12: name = "TestBug4153072"; if (exec) TestBug4153072(); break;
-        case 13: name = "TestEndBehaviour"; if (exec) TestEndBehaviour(); break;
+    case 8: name = "TestEmptyString"; if (exec) TestEmptyString(); break;
+    case 9: name = "TestGetAvailableLocales"; if (exec) TestGetAvailableLocales(); break;
+    case 10: name = "TestGetDisplayName"; if (exec) TestGetDisplayName(); break;
+    case 11: name = "TestPreceding"; if (exec) TestPreceding(); break;
+    case 12: name = "TestBug4153072"; if (exec) TestBug4153072(); break;
+    case 13: name = "TestEndBehaviour"; if (exec) TestEndBehaviour(); break;
 
-
-        case 14: name = "TestJapaneseLineBreak"; if (exec) TestJapaneseLineBreak(); break;
-        case 15: name = "TestThaiLineBreak"; if(exec) TestThaiLineBreak(); break;
-        case 16: name = "TestMixedThaiLineBreak"; if(exec) TestMixedThaiLineBreak(); break;
-        case 17: name = "TestMaiyamok"; if(exec) TestMaiyamok(); break;
-
+    case 14: name = "TestJapaneseLineBreak"; if (exec) TestJapaneseLineBreak(); break;
+    case 15: name = "TestThaiLineBreak"; if(exec) TestThaiLineBreak(); break;
+    case 16: name = "TestMixedThaiLineBreak"; if(exec) TestMixedThaiLineBreak(); break;
+    case 17: name = "TestMaiyamok"; if(exec) TestMaiyamok(); break;
 
 
-        default: name = ""; break; //needed to end loop
+    default: name = ""; break; //needed to end loop
     }
 }
 
@@ -1260,7 +1266,8 @@ void IntlTestTextBoundary::testFollowing(BreakIterator& bi, UnicodeString& text,
 {
     logln("testFollowing():");
     int p = 2;
-    for (int i = 0; i <= text.length(); i++) {
+    int32_t textLen = text.length();
+    for (int i = 0; i <= textLen; i++) {
         if (i == boundaries[p])
             ++p;
 
@@ -1275,7 +1282,8 @@ void IntlTestTextBoundary::testFollowing(BreakIterator& bi, UnicodeString& text,
 void IntlTestTextBoundary::testPreceding(BreakIterator& bi, UnicodeString& text, int32_t *boundaries) {
     logln("testPreceding():");
     int p = 0;
-    for (int i = 0; i <= text.length(); i++) {
+    int32_t textLen = text.length();
+    for (int i = 0; i <= textLen; i++) {
         int32_t b = bi.preceding(i);
         logln((UnicodeString)"bi.preceding(" + i + ") -> " + b);
         if (b != boundaries[p])
@@ -1291,7 +1299,8 @@ void IntlTestTextBoundary::testIsBoundary(BreakIterator& bi, UnicodeString& text
     logln("testIsBoundary():");
     int p = 1;
     UBool isB;
-    for (int i = 0; i < text.length(); i++) {
+    int32_t textLen = text.length();
+    for (int i = 0; i < textLen; i++) {
         isB = bi.isBoundary(i);
         logln((UnicodeString)"bi.isBoundary(" + i + ") -> " + isB);
 
@@ -1358,17 +1367,18 @@ void IntlTestTextBoundary::doMultipleSelectionTest(BreakIterator& iterator,
 void IntlTestTextBoundary::doBreakInvariantTest(BreakIterator& tb, UnicodeString& testChars)
 {
     UnicodeString work("aaa");
-    int errCount = 0;
+    int32_t errCount = 0, testCharsLen = testChars.length(), breaksLen;
 
     // a break should always occur after CR (unless followed by LF), LF, PS, and LS
     UnicodeString breaks = CharsToUnicodeString("\r\n\\u2029\\u2028");
     UTextOffset i, j;
 
-    for (i = 0; i < breaks.length(); i++) {
+    breaksLen = breaks.length();
+    for (i = 0; i < breaksLen; i++) {
         work[1] = breaks[i];
-        for (j = 0; j < testChars.length(); j++) {
+        for (j = 0; j < testCharsLen; j++) {
             work[0] = testChars[j];
-            for (int k = 0; k < testChars.length(); k++) {
+            for (int k = 0; k < testCharsLen; k++) {
                 UChar c = testChars[k];
 
                 // if a cr is followed by lf, ps, ls or etx, don't do the check (that's
@@ -1377,12 +1387,14 @@ void IntlTestTextBoundary::doBreakInvariantTest(BreakIterator& tb, UnicodeString
                         || c == 0x2028 || c == 0x0003))
                     continue;
 
-                work[2] = testChars[k];
+                work[2] = c;
                 tb.setText(work);
                 UBool seen2 = FALSE;
                 for (int l = tb.first(); l != BreakIterator::DONE; l = tb.next()) {
-                    if (l == 2)
+                    if (l == 2) {
                         seen2 = TRUE;
+                        break;
+                    }
                 }
                 if (!seen2) {
                     errln("No break between U+" + UCharToUnicodeString(work[1])
@@ -1399,13 +1411,14 @@ void IntlTestTextBoundary::doBreakInvariantTest(BreakIterator& tb, UnicodeString
 void IntlTestTextBoundary::doOtherInvariantTest(BreakIterator& tb, UnicodeString& testChars)
 {
     UnicodeString work("a\r\na");
-    int32_t errCount = 0;
+    int32_t errCount = 0, testCharsLen = testChars.length();
     UTextOffset i, j;
+    int8_t type;
 
     // a break should never occur between CR and LF
-    for (i = 0; i < testChars.length(); i++) {
+    for (i = 0; i < testCharsLen; i++) {
         work[0] = testChars[i];
-        for (j = 0; j < testChars.length(); j++) {
+        for (j = 0; j < testCharsLen; j++) {
             work[3] = testChars[j];
             tb.setText(work);
             for (int32_t k = tb.first(); k != BreakIterator::DONE; k = tb.next())
@@ -1423,15 +1436,16 @@ void IntlTestTextBoundary::doOtherInvariantTest(BreakIterator& tb, UnicodeString
     // character is CR, LF, PS, or LS
     work.remove();
     work += "aaaa";
-    for (i = 0; i < testChars.length(); i++) {
+    for (i = 0; i < testCharsLen; i++) {
         UChar c = testChars[i];
         if (c == '\n' || c == '\r' || c == 0x2029 || c == 0x2028 || c == 0x0003)
             continue;
         work[1] = c;
-        for (j = 0; j < testChars.length(); j++) {
+        for (j = 0; j < testCharsLen; j++) {
             c = testChars[j];
-            if ((Unicode::getType(c) != Unicode::NON_SPACING_MARK) && 
-                (Unicode::getType(c) != Unicode::ENCLOSING_MARK))
+            type = Unicode::getType(c);
+            if ((type != Unicode::NON_SPACING_MARK) && 
+                (type != Unicode::ENCLOSING_MARK))
                 continue;
             work[2] = c;
             tb.setText(work);
