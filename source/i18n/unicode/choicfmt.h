@@ -22,8 +22,10 @@
 #ifndef CHOICFMT_H
 #define CHOICFMT_H
  
-
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/unistr.h"
 #include "unicode/numfmt.h"
 #include "unicode/fieldpos.h"
@@ -783,6 +785,8 @@ ChoiceFormat::format(int32_t number,
     return NumberFormat::format(number, output);
 }
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif // _CHOICFMT
 //eof

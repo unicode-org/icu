@@ -7,6 +7,10 @@
 **********************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/usearch.h"
 #include "unicode/ustring.h"
 #include "unicode/uchar.h"
@@ -421,6 +425,7 @@ static
 inline UBool isBreakUnit(const UStringSearch *strsrch, int32_t start, 
                                int32_t    end)
 {
+#if !UCONFIG_NO_BREAK_ITERATION
     UBreakIterator *breakiterator = strsrch->search->breakIter;
     if (breakiterator) {
         int32_t startindex = ubrk_first(breakiterator);
@@ -469,6 +474,7 @@ inline UBool isBreakUnit(const UStringSearch *strsrch, int32_t start,
         }
         return result;
     }
+#endif
     return TRUE;
 }
 
@@ -2403,6 +2409,12 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_open(const UChar *pattern,
     if (U_FAILURE(*status)) {
         return NULL;
     }
+#if UCONFIG_NO_BREAK_ITERATION
+    if (breakiter != NULL) {
+        *status = U_UNSUPPORTED_ERROR;
+        return NULL;
+    }
+#endif
     if (locale) {
         // ucol_open internally checks for status
         UCollator     *collator = ucol_open(locale, status);
@@ -2438,6 +2450,12 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
     if (U_FAILURE(*status)) {
         return NULL;
     }
+#if UCONFIG_NO_BREAK_ITERATION
+    if (breakiter != NULL) {
+        *status = U_UNSUPPORTED_ERROR;
+        return NULL;
+    }
+#endif
     if (pattern == NULL || text == NULL || collator == NULL) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
     }
@@ -2494,9 +2512,11 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
         result->pattern.CE         = NULL;
         
         result->search->breakIter  = breakiter;
+#if !UCONFIG_NO_BREAK_ITERATION
         if (breakiter) {
             ubrk_setText(breakiter, text, textlength, status);
         }
+#endif
 
         result->ownCollator           = FALSE;
         result->search->matchedLength = 0;
@@ -2670,6 +2690,8 @@ U_CAPI int32_t U_EXPORT2 usearch_getMatchedLength(
     return USEARCH_DONE;
 }
 
+#if !UCONFIG_NO_BREAK_ITERATION
+
 U_CAPI void U_EXPORT2 usearch_setBreakIterator(UStringSearch  *strsrch, 
                                                UBreakIterator *breakiter,
                                                UErrorCode     *status)
@@ -2682,7 +2704,7 @@ U_CAPI void U_EXPORT2 usearch_setBreakIterator(UStringSearch  *strsrch,
         }
     }
 }
-    
+
 U_CAPI const UBreakIterator* U_EXPORT2 
 usearch_getBreakIterator(const UStringSearch *strsrch)
 {
@@ -2691,6 +2713,8 @@ usearch_getBreakIterator(const UStringSearch *strsrch)
     }
     return NULL;
 }
+    
+#endif
     
 U_CAPI void U_EXPORT2 usearch_setText(      UStringSearch *strsrch, 
                                       const UChar         *text,
@@ -2712,10 +2736,12 @@ U_CAPI void U_EXPORT2 usearch_setText(      UStringSearch *strsrch,
             strsrch->search->matchedIndex  = USEARCH_DONE;
             strsrch->search->matchedLength = 0;
             strsrch->search->reset         = TRUE;
+#if !UCONFIG_NO_BREAK_ITERATION
 			if (strsrch->search->breakIter != NULL) {
 				ubrk_setText(strsrch->search->breakIter, text, 
 							 textlength, status);
 			}
+#endif
         }
     }
 }
@@ -3500,3 +3526,4 @@ UBool usearch_handlePreviousCanonical(UStringSearch *strsrch,
     return FALSE;
 }
 
+#endif /* #if !UCONFIG_NO_COLLATION */

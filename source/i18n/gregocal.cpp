@@ -37,6 +37,10 @@
 ********************************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/gregocal.h"
 
 // *****************************************************************************
@@ -2006,5 +2010,7 @@ GregorianCalendar::internalGetEra() const {
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

@@ -21,6 +21,10 @@
 #ifndef UCOL_CNTTABLE_H
 #define UCOL_CNTTABLE_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 /*#include "ucmpe32.h"*/
 #include "utrie.h"
 #include "uhash.h"
@@ -95,5 +99,7 @@ U_CAPI UBool U_EXPORT2
 uprv_cnttab_isTailored(CntTable *table, uint32_t element, UChar *ztString, UErrorCode *status);
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

@@ -12,6 +12,9 @@
 #define _UNUM
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/umisc.h"
 #include "unicode/parseerr.h"
 /**
@@ -653,5 +656,7 @@ unum_setSymbol(UNumberFormat *fmt,
 
 #endif
 /******************** End ************************************/
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

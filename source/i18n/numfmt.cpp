@@ -22,6 +22,10 @@
 ********************************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
 #include "unicode/resbund.h"
@@ -500,5 +504,7 @@ NumberFormat::createInstance(const Locale& desiredLocale,
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

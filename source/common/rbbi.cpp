@@ -10,6 +10,9 @@
 **********************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
 
 #include "unicode/rbbi.h"
 #include "unicode/schriter.h"
@@ -1028,3 +1031,4 @@ UBool RuleBasedBreakIterator::isDictionaryChar(UChar32   c) {
 
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */

@@ -15,6 +15,10 @@
 //         Code using it is expected to directly access fields much of the time.
 //
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
 #include "unicode/uchar.h"
@@ -345,4 +349,4 @@ void RBBINode::printTree(UBool printHeading, UBool doVars) {
 
 U_NAMESPACE_END
 
-
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */

@@ -10,6 +10,10 @@
 #ifndef CPDTRANS_H
 #define CPDTRANS_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/translit.h"
 
 #ifdef ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES
@@ -314,5 +318,7 @@ inline CompoundTransliterator::CompoundTransliterator(const UnicodeString& id,
 
 U_NAMESPACE_END
 #endif /* ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES */
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 #endif

@@ -10,6 +10,10 @@
 #ifndef TOLOWTRN_H
 #define TOLOWTRN_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/translit.h"
 #include "unicode/locid.h"
 
@@ -94,5 +98,7 @@ class U_I18N_API LowercaseTransliterator : public Transliterator {
 };
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 #endif

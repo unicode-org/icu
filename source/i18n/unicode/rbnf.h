@@ -9,7 +9,8 @@
 #define RBNF_H
 
 #include "unicode/utypes.h"
-#ifdef U_INT64_T_UNAVAILABLE
+
+#if defined(U_INT64_T_UNAVAILABLE) || UCONFIG_NO_FORMATTING
 #define U_HAVE_RBNF 0
 #else
 #define U_HAVE_RBNF 1
@@ -32,6 +33,10 @@ enum URBNFRuleSetTag {
     URBNF_DURATION,
     URBNF_COUNT
 };
+
+#if UCONFIG_NO_COLLATION
+class Collator;
+#endif
 
 /**
  * \brief C++ API: RuleBasedNumberFormat
@@ -752,6 +757,7 @@ public:
                       Formattable& result,
                       UErrorCode& status) const;
 
+#if !UCONFIG_NO_COLLATION
 
   /**
    * Turns lenient parse mode on and off.
@@ -796,6 +802,8 @@ public:
    * @draft ICU 2.0
    */
   virtual inline UBool isLenient(void) const;
+
+#endif
 
   /**
    * Override the default rule set to use.  If ruleSetName is null, reset
@@ -872,10 +880,14 @@ RuleBasedNumberFormat::parse(const UnicodeString& text, Formattable& result, UEr
     NumberFormat::parse(text, result, status);
 }
 
+#if !UCONFIG_NO_COLLATION
+
 inline UBool 
 RuleBasedNumberFormat::isLenient(void) const { 
     return lenient; 
 }
+
+#endif
 
 inline NFRuleSet* 
 RuleBasedNumberFormat::getDefaultRuleSet() const { 

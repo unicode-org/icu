@@ -8,6 +8,10 @@
 **********************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 /* These APIs are becoming private */
 #define ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES 1
 #define ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES 1
@@ -1125,5 +1129,7 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
     return 0; // failed
 }
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 //eof

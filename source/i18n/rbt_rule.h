@@ -9,6 +9,9 @@
 #define RBT_RULE_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/utrans.h"
@@ -317,5 +320,7 @@ public:
 };
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 #endif

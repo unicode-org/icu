@@ -18,6 +18,10 @@
 *******************************************************************************
 */
  
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/dtfmtsym.h"
 #include "unicode/resbund.h"
 #include "unicode/smpdtfmt.h"
@@ -699,5 +703,7 @@ int32_t DateFormatSymbols::_getZoneIndex(const UnicodeString& ID) const
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

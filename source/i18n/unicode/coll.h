@@ -45,6 +45,9 @@
 #define COLL_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/uobject.h"
 #include "unicode/ucol.h"
 #include "unicode/normlzr.h"
@@ -809,5 +812,7 @@ inline Normalizer::EMode Collator::getDecomposition() const
 }
 */
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

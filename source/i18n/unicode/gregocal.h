@@ -22,6 +22,9 @@
 #ifndef GREGOCAL_H
 #define GREGOCAL_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
 
 #include "unicode/calendar.h"
 
@@ -751,6 +754,8 @@ inline uint8_t GregorianCalendar::julianDayToDayOfWeek(double julian)
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif // _GREGOCAL
 //eof

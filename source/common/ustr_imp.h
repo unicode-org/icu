@@ -109,6 +109,8 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                      const char *locale,
                      UErrorCode *pErrorCode);
 
+#if !UCONFIG_NO_BREAK_ITERATION
+
 /**
  * @internal
  */
@@ -118,6 +120,8 @@ u_internalStrToTitle(UChar *dest, int32_t destCapacity,
                      UBreakIterator *titleIter,
                      const char *locale,
                      UErrorCode *pErrorCode);
+
+#endif
 
 /**
  * Internal case folding function.

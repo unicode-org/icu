@@ -18,6 +18,10 @@
 * 
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/ustring.h"
 #include "unicode/uchar.h"
  
@@ -1566,3 +1570,4 @@ void ucol_tok_closeTokenList(UColTokenParser *src) {
   }
 }
 
+#endif /* #if !UCONFIG_NO_COLLATION */

@@ -21,6 +21,10 @@
 ********************************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/simpletz.h"
 #include "unicode/gregocal.h"
 #include "tzdat.h"
@@ -924,5 +928,7 @@ SimpleTimeZone::decodeEndRule(UErrorCode& status)
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

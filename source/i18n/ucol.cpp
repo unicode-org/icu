@@ -16,6 +16,10 @@
 * 03/16/2001  weiv      Collation framework is rewritten in C and made UCA compliant
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/uloc.h"
 #include "unicode/coll.h"
 #include "unicode/tblcoll.h"
@@ -6760,3 +6764,4 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status)
   return (USet *)tailored;
 }
 
+#endif /* #if !UCONFIG_NO_COLLATION */

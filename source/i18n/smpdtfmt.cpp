@@ -24,6 +24,10 @@
 ********************************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/smpdtfmt.h"
 #include "unicode/dtfmtsym.h"
 #include "unicode/resbund.h"
@@ -1596,5 +1600,7 @@ SimpleDateFormat::initializeSystemDefaultCentury()
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

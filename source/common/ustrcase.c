@@ -27,6 +27,8 @@
 
 /* string casing ------------------------------------------------------------ */
 
+#if !UCONFIG_NO_BREAK_ITERATION
+
 /*
  * Internal titlecasing function,
  * using u_internalStrToLower() and u_internalToTitle().
@@ -106,6 +108,8 @@ u_internalStrToTitle(UChar *dest, int32_t destCapacity,
     return destIndex;
 }
 
+#endif
+
 /*
  * Implement argument checking and buffer handling
  * for string case mapping as a common function.
@@ -180,6 +184,7 @@ u_strCaseMap(UChar *dest, int32_t destCapacity,
     } else if(toWhichCase==TO_UPPER) {
         destLength=u_internalStrToUpper(temp, destCapacity, src, srcLength,
                                         locale, pErrorCode);
+#if !UCONFIG_NO_BREAK_ITERATION
     } else if(toWhichCase==TO_TITLE) {
         if(titleIter==NULL) {
             titleIter=ubrk_open(UBRK_TITLE, locale,
@@ -191,6 +196,7 @@ u_strCaseMap(UChar *dest, int32_t destCapacity,
             destLength=u_internalStrToTitle(temp, destCapacity, src, srcLength,
                                             titleIter, locale, pErrorCode);
         }
+#endif
     } else {
         destLength=u_internalStrFoldCase(temp, destCapacity, src, srcLength,
                                          options, pErrorCode);
@@ -208,9 +214,11 @@ u_strCaseMap(UChar *dest, int32_t destCapacity,
         }
     }
 
+#if !UCONFIG_NO_BREAK_ITERATION
     if(ownTitleIter) {
         ubrk_close(titleIter);
     }
+#endif
 
     return u_terminateUChars(dest, destCapacity, destLength, pErrorCode);
 }

@@ -10,6 +10,10 @@
 *******************************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/unum.h"
 
 #include "unicode/uloc.h"
@@ -797,3 +801,4 @@ unum_applyPattern(  UNumberFormat  *format,
     ((DecimalFormat*)format)->applyPattern(pat,*parseError, *status);
 }
 
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -25,6 +25,9 @@
 #define DECIMFMT_H
  
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
 
@@ -1294,6 +1297,8 @@ DecimalFormat::format(int32_t number,
 
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif // _DECIMFMT
 //eof

@@ -5,6 +5,10 @@
 *******************************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/udat.h"
 
 #include "unicode/uloc.h"
@@ -545,4 +549,4 @@ udat_setSymbols(    UDateFormat             *format,
   delete [] array;
 }
 
-
+#endif /* #if !UCONFIG_NO_FORMATTING */

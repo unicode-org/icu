@@ -23,6 +23,10 @@
 #ifndef SIMPLETZ_H
 #define SIMPLETZ_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/timezone.h"
 
 struct StandardZone;
@@ -633,5 +637,7 @@ inline void SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, int32_
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif // _SIMPLETZ

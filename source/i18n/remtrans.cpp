@@ -7,6 +7,11 @@
 *   04/02/2001  aliu        Creation.
 **********************************************************************
 */
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "remtrans.h"
 
 static const UChar ID[] = {65, 110, 121, 45, 0x52, 0x65, 0x6D, 0x6F, 0x76, 0x65, 0x00}; /* "Any-Remove" */
@@ -54,3 +59,4 @@ void RemoveTransliterator::handleTransliterate(Replaceable& text, UTransPosition
 }
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

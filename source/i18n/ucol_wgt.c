@@ -19,6 +19,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "ucol_imp.h"
 #include "ucol_wgt.h"
 #include "cmemory.h"
@@ -561,3 +564,5 @@ main(int argc, const char *argv[]) {
 }
 
 #endif
+
+#endif /* #if !UCONFIG_NO_COLLATION */
