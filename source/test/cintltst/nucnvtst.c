@@ -575,7 +575,7 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
     
 
 
-/** Test chars #2  NOT USED YET**/
+/** Test chars #2 **/
 
     /* Sahha [health],  slashed h's */
     const UChar malteseUChars[] = { 0x0053, 0x0061, 0x0127, 0x0127, 0x0061 };
@@ -584,7 +584,7 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
     /* LMBCS */
     const UChar LMBCSUChars[]  = { 0x0027, 0x010A, 0x0000, 0x0127, 0x2666 };
     const char expectedLMBCS[] = { (char)0x27, (char)0x06, (char)0x04, (char)0x00, (char)0x01, (char)0x73, (char)0x01, (char)0x04 };
-    int32_t toLMBCSOffs[]   = { (char)0x00, (char)0x01, (char)0x01, (char)0x03, (char)0x04, (char)0x04, (char)0x06, (char)0x06 };
+    int32_t toLMBCSOffs[]   = { (char)0x00, (char)0x01, (char)0x01, (char)0x02, (char)0x03, (char)0x03, (char)0x04, (char)0x04 };
     int32_t fmLMBCSOffs[]   = { 0x0000, 0x0001, 0x0003, 0x0004, 0x0006};
     /*********************************** START OF CODE finally *************/
 
@@ -619,7 +619,13 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expectedIBM930, sizeof(expectedIBM930), "ibm-930", toIBM930Offs ))
         log_err("u-> ibm-930 did not match.\n");
+
+    if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+            expectedISO88593, sizeof(expectedISO88593), "iso-8859-3", toISO88593Offs ))
+        log_err("u-> iso-8859-3 did not match.\n");
+
     /*MBCS*/
+
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expectedIBM943, sizeof(expectedIBM943), "ibm-943", toIBM943Offs ))
         log_err("u-> ibm-943 [UCNV_MBCS] not match.\n");
@@ -665,8 +671,10 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
     if(!testConvertToU(expectedIBM943, sizeof(expectedIBM943),
                sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "ibm-943", fmIBM943Offs ))
       log_err("ibm-943 -> u  did not match");
-   
-//#endif
+
+    if(!testConvertToU(expectedUTF16LE, sizeof(expectedUTF16LE),
+               sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-16le", fmUTF16LEOffs ))
+      log_err("utf-16le -> u  did not match");
 
     if(!testConvertToU(expectedMaltese913, sizeof(expectedMaltese913),
                malteseUChars, sizeof(malteseUChars)/sizeof(malteseUChars[0]), "latin3", NULL))
@@ -676,13 +684,13 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             expectedMaltese913, sizeof(expectedMaltese913), "iso-8859-3", NULL ))
         log_err("u-> latin3[813] did not match.\n");  
 
-   /*LMBCS*//*
+   /*LMBCS*/
     if(!testConvertFromU(LMBCSUChars, sizeof(LMBCSUChars)/sizeof(LMBCSUChars[0]),
             expectedLMBCS, sizeof(expectedLMBCS), "LMBCS-1", toLMBCSOffs ))
         log_err("u-> LMBCS-1 did not match.\n");
     if(!testConvertToU(expectedLMBCS, sizeof(expectedLMBCS),
                LMBCSUChars, sizeof(LMBCSUChars)/sizeof(LMBCSUChars[0]), "LMBCS-1", fmLMBCSOffs ))
-      log_err("LMBCS-1 -> u  did not match");*/
+      log_err("LMBCS-1 -> u  did not match");
  
 }  
      
@@ -1212,7 +1220,7 @@ TestEBCDIC_STATEFUL() {
 }
 void
 TestLMBCS() {
-    /* LMBCS string */
+    /* LMBCS-1 string */
     static const uint8_t pszLMBCS[]={
         0x61,
         0x01, 0x29,
@@ -1226,8 +1234,23 @@ TestLMBCS() {
         0x10, 0x88, 0xA0,
     };
 
-    /* Unicode equivalents */
-    static const UChar32 pszUnicode[]={
+    /* Unicode UChar32 equivalents */
+    static const UChar32 pszUnicode32[]={
+        /* code point */
+        0x00000061,
+        0x00002013,
+        0x000000FC,
+        0x000000E1,
+        0x00000007,
+        0x00000091,
+        0x00000a74,
+        0x00000200,
+        0x00023456, /* code point for surrogate pair */
+        0x00005516
+    };
+
+/* Unicode UChar equivalents */
+    static const UChar pszUnicode[]={
         /* code point */
         0x0061,
         0x2013,
@@ -1237,12 +1260,13 @@ TestLMBCS() {
         0x0091,
         0x0a74,
         0x0200,
-        0x23456, /* code point for surrogate pair */
+        0xD84D, /* low surrogate */
+        0xDC56, /* high surrogate */
         0x5516
     };
 
 /* expected test results */
-    static const uint32_t offsets[]={
+    static const int offsets32[]={
         /* number of bytes read, code point */
         0, 
         1, 
@@ -1253,57 +1277,189 @@ TestLMBCS() {
         9, 
         12, 
         15, 
-        21, 
-        24, 
+        21,
+        24
     };
 
-   /* LMBCS to Unicode */
+/* expected test results */
+    static const int offsets[]={
+        /* number of bytes read, code point */
+        0, 
+        1, 
+        3, 
+        4, 
+        5, 
+        7, 
+        9, 
+        12, 
+        15, 
+        18,
+        21, 
+        24 
+    };
 
-    const char *s=(const char *)pszLMBCS, *s0, *limit=(const char *)pszLMBCS+sizeof(pszLMBCS);
-    const uint32_t *r=(const uint32_t *)pszUnicode;
-    const uint32_t *o = offsets;
 
-    UErrorCode errorCode=U_ZERO_ERROR;
-    uint32_t c;
+    UConverter *cnv; 
 
-    UConverter *cnv=ucnv_open("LMBCS-1", &errorCode);
-    if(U_FAILURE(errorCode)) {
-        log_err("Unable to open a LMBCS-1 converter: %s\n", u_errorName(errorCode));
-    }
-    else
+#define NAME_LMBCS_1 "LMBCS-1"
+#define NAME_LMBCS_2 "LMBCS-2"
+
+
+   /* Some basic open/close/property tests on some LMBCS converters */
     {
 
-      while(s<limit) {
-         s0=s;
-         c=ucnv_getNextUChar(cnv, &s, limit, &errorCode);
-         if(U_FAILURE(errorCode)) {
-               log_err("LMBCS-1 ucnv_getNextUChar() failed: %s\n", u_errorName(errorCode));
-               break;
-         } else if((uint32_t)(s-s0)!= (o[1] - o[0]) || c!=*r) {
-               log_err("LMBCS-1 ucnv_getNextUChar() result %lx from %d bytes, should have been %lx from %d bytes.\n",
-                   c, (s-s0), *r, *o);
-               break;
-         }
-         r++;
-         o++;
+      char expected_subchars[] = {0x3F};   /* ANSI Question Mark */
+      char new_subchars [] = {0x7F};       /* subst char used by SmartSuite..*/
+      char get_subchars [1];
+      const char * get_name;
+      UConverter *cnv1;
+      UConverter *cnv2;
 
-      }
+      int8_t len = sizeof(get_subchars);
 
-      ucnv_close(cnv);
-    }
-
-    { /* test locale & coptimization group operations: Unicode to LMBCS */
-    
-      UConverter *cnv16he = ucnv_open("LMBCS-16,locale=he", &errorCode);
-      UConverter *cnv01us = ucnv_open("LMBCS-1,locale=USen", &errorCode);
-      UChar uniString [] = {0x0192}; /* Latin Small letter f with hook */
-      const UChar * pUni = uniString;
-      char lmbcsString [4];
-      char * pLMBCS = lmbcsString;
       UErrorCode errorCode=U_ZERO_ERROR;
 
+      /* Open */
+      cnv1=ucnv_open(NAME_LMBCS_1, &errorCode);
+      if(U_FAILURE(errorCode)) {
+         log_err("Unable to open a LMBCS-1 converter: %s\n", u_errorName(errorCode));
+      }
+      cnv2=ucnv_open(NAME_LMBCS_2, &errorCode);
+      if(U_FAILURE(errorCode)) {
+         log_err("Unable to open a LMBCS-2 converter: %s\n", u_errorName(errorCode));
+      }
+
+      /* Name */
+      get_name = ucnv_getName (cnv1, &errorCode);
+      if (strcmp(NAME_LMBCS_1,get_name)){
+         log_err("Unexpected converter name: %s\n", get_name);
+      }
+      get_name = ucnv_getName (cnv2, &errorCode);
+      if (strcmp(NAME_LMBCS_2,get_name)){
+         log_err("Unexpected converter name: %s\n", get_name);
+      }
+
+      /* substitution chars */
+      ucnv_getSubstChars (cnv1, get_subchars, &len, &errorCode);
+      if(U_FAILURE(errorCode)) {
+         log_err("Failure on get subst chars: %s\n", u_errorName(errorCode));
+      }
+      if (len!=1){
+         log_err("Unexpected length of sub chars\n");
+      }
+      if (get_subchars[0] != expected_subchars[0]){
+           log_err("Unexpected value of sub chars\n");
+      }
+      ucnv_setSubstChars (cnv2,new_subchars, len, &errorCode);
+      if(U_FAILURE(errorCode)) {
+         log_err("Failure on set subst chars: %s\n", u_errorName(errorCode));
+      }
+      ucnv_getSubstChars (cnv2, get_subchars, &len, &errorCode);
+      if(U_FAILURE(errorCode)) {
+         log_err("Failure on get subst chars: %s\n", u_errorName(errorCode));
+      }
+      if (len!=1){
+         log_err("Unexpected length of sub chars\n");
+      }
+      if (get_subchars[0] != new_subchars[0]){
+           log_err("Unexpected value of sub chars\n");
+      }
+    }
+
+    /* LMBCS to Unicode - offsets */
+    {
+       UErrorCode errorCode=U_ZERO_ERROR;
+       
+       const char * pSource = pszLMBCS;
+       const char * sourceLimit = pszLMBCS + sizeof(pszLMBCS);
+       
+       UChar Out [sizeof(pszUnicode)];
+       UChar * pOut = Out;
+       UChar * OutLimit = Out + sizeof(Out);
+
+       int off [sizeof(offsets)];
+
+      /* last 'offset' in expected results is just the final size. 
+         (Makes other tests easier). Compensate here: */
+
+       off[(sizeof(offsets)/sizeof(offsets[0]))-1] = sizeof(pszLMBCS);
 
 
+
+      cnv=ucnv_open("lmbcs", &errorCode); /* use generic name for LMBCS-1 */
+      if(U_FAILURE(errorCode)) {
+           log_err("Unable to open a LMBCS converter: %s\n", u_errorName(errorCode));
+      }
+
+  
+
+      ucnv_toUnicode (cnv,
+		      &pOut,
+		      OutLimit,
+		      &pSource,
+		      sourceLimit, 
+		      off,
+		      TRUE,
+		      &errorCode);
+
+      
+       if (memcmp(off,offsets,sizeof(offsets)))
+       {
+         log_err("LMBCS->Uni: Calculated offsets do not match expected results\n");
+       }
+       if (memcmp(Out,pszUnicode,sizeof(pszUnicode)))
+       {
+         log_err("LMBCS->Uni: Calculated codepoints do not match expected results\n");
+       }
+       ucnv_close(cnv);
+    }
+    {
+   /* LMBCS to Unicode - getNextUChar */
+      const char * sourceStart;
+      const char *source=(const char *)pszLMBCS;
+      const char *limit=(const char *)pszLMBCS+sizeof(pszLMBCS);
+      const uint32_t *results= pszUnicode32;
+      const int *off = offsets32;
+
+      UErrorCode errorCode=U_ZERO_ERROR;
+      uint32_t uniChar;
+
+      cnv=ucnv_open("LMBCS-1", &errorCode);
+      if(U_FAILURE(errorCode)) {
+           log_err("Unable to open a LMBCS-1 converter: %s\n", u_errorName(errorCode));
+      }
+      else
+      {
+
+         while(source<limit) {
+            sourceStart=source;
+            uniChar=ucnv_getNextUChar(cnv, &source, source + (off[1] - off[0]), &errorCode);
+            if(U_FAILURE(errorCode)) {
+                  log_err("LMBCS-1 ucnv_getNextUChar() failed: %s\n", u_errorName(errorCode));
+                  break;
+            } else if(source-sourceStart != off[1] - off[0] || uniChar != *results) {
+               log_err("LMBCS-1 ucnv_getNextUChar() result %lx from %d bytes, should have been %lx from %d bytes.\n",
+                   uniChar, (source-sourceStart), *results, *off);
+               break;
+            }
+            results++;
+            off++;
+         }
+       }
+       ucnv_close(cnv);
+    }
+    { /* test locale & optimization group operations: Unicode to LMBCS */
+    
+      UErrorCode errorCode=U_ZERO_ERROR;
+      UConverter *cnv16he = ucnv_open("LMBCS-16,locale=he", &errorCode);
+      UConverter *cnv16jp = ucnv_open("LMBCS-16,locale=ja_JP", &errorCode);
+      UConverter *cnv01us = ucnv_open("LMBCS-1,locale=us_EN", &errorCode);
+      UChar uniString [] = {0x0192}; /* Latin Small letter f with hook */
+      UChar * pUni = uniString;
+      char lmbcsString [4];
+      char * pLMBCS = lmbcsString;
+
+      /* 0192 (hook) converts to both group 3 & group 1. input locale should differentiate */
       ucnv_fromUnicode (cnv16he, 
                         &pLMBCS, pLMBCS + sizeof(lmbcsString)/sizeof(lmbcsString[0]), 
                         &pUni, pUni + sizeof(uniString)/sizeof(uniString[0]), 
@@ -1311,7 +1467,7 @@ TestLMBCS() {
 
       if (lmbcsString[0] != (char)0x3 || lmbcsString[1] != (char)0x83)
       {
-         log_err("LMBCS-16,locale=he gives unexpected translation");
+         log_err("LMBCS-16,locale=he gives unexpected translation\n");
       }
 			 
 	  pLMBCS=lmbcsString;
@@ -1320,12 +1476,294 @@ TestLMBCS() {
                         &pLMBCS, lmbcsString + sizeof(lmbcsString)/sizeof(lmbcsString[0]), 
                         &pUni, pUni + sizeof(uniString)/sizeof(uniString[0]),
                         NULL, 1, &errorCode);
-
+      
       if (lmbcsString[0] != (char)0x9F)
       {
-         log_err("LMBCS-1,locale=US gives unexpected translation");
+         log_err("LMBCS-1,locale=US gives unexpected translation\n");
       }
+
+      /* single byte char from mbcs char set */
+      lmbcsString[0] = (char)0xAE;  /* 1/2 width katakana letter small Yo */
+      pLMBCS = lmbcsString;
+      pUni = uniString;
+      ucnv_toUnicode (cnv16jp, 
+                        &pUni, pUni + 1,
+                        &pLMBCS, pLMBCS + 1, 
+                        NULL, 1, &errorCode);
+      if (U_FAILURE(errorCode) || pLMBCS != lmbcsString+1 || pUni != uniString+1 || uniString[0] != 0xFF6E)
+      {
+           log_err("Unexpected results from LMBCS-16 single byte char\n");
+      }
+      /* convert to group 1: should be 3 bytes */
+      pLMBCS = lmbcsString;
+      pUni = uniString;
+      ucnv_fromUnicode (cnv01us, 
+                        &pLMBCS, pLMBCS + 3, 
+                        &pUni, pUni + 1,
+                        NULL, 1, &errorCode);
+      if (U_FAILURE(errorCode) || pLMBCS != lmbcsString+3 || pUni != uniString+1 
+         || lmbcsString[0] != 0x10 || lmbcsString[1] != 0x10 || lmbcsString[2] != (char)0xAE)
+      {
+           log_err("Unexpected results to LMBCS-1 single byte mbcs char\n");
+      }
+      pLMBCS = lmbcsString;
+      pUni = uniString;
+      ucnv_toUnicode (cnv01us, 
+                        &pUni, pUni + 1,
+                        &pLMBCS, pLMBCS + 3, 
+                        NULL, 1, &errorCode);
+      if (U_FAILURE(errorCode) || pLMBCS != lmbcsString+3 || pUni != uniString+1 || uniString[0] != 0xFF6E)
+      {
+           log_err("Unexpected results from LMBCS-1 single byte mbcs char\n");
+      }
+      pLMBCS = lmbcsString;
+      pUni = uniString;
+      ucnv_fromUnicode (cnv16jp, 
+                        &pLMBCS, pLMBCS + 1, 
+                        &pUni, pUni + 1,
+                        NULL, 1, &errorCode);
+      if (U_FAILURE(errorCode) || pLMBCS != lmbcsString+1 || pUni != uniString+1 || lmbcsString[0] != (char)0xAE)
+      {
+           log_err("Unexpected results to LMBCS-16 single byte mbcs char\n");
+      }
+      ucnv_close(cnv16he);
+      ucnv_close(cnv16jp);
+      ucnv_close(cnv01us);
     }
+    {
+       /* Small source buffer testing, LMBCS -> Unicode */
+
+       UErrorCode errorCode=U_ZERO_ERROR;
+       
+       const char * pSource = pszLMBCS;
+       const char * sourceLimit = pszLMBCS + sizeof(pszLMBCS);
+       int codepointCount = 0;
+
+       UChar Out [sizeof(pszUnicode)];
+       UChar * pOut = Out;
+       UChar * OutLimit = Out + sizeof(Out);
+
+
+      cnv = ucnv_open(NAME_LMBCS_1, &errorCode);
+      if(U_FAILURE(errorCode)) {
+         log_err("Unable to open a LMBCS-1 converter: %s\n", u_errorName(errorCode));
+      }
+
+
+       while ((pSource < sourceLimit) && U_SUCCESS (errorCode))
+       {
+                  
+         ucnv_toUnicode (cnv,
+		      &pOut,
+		      OutLimit,
+		      &pSource,
+		      pSource+1, /* claim that this is a 1- byte buffer */
+		      NULL,
+		      FALSE,    /* FALSE means there might be more chars in the next buffer */
+		      &errorCode);
+
+         if (U_SUCCESS (errorCode))
+	     {
+            if ((pSource - pszLMBCS) == offsets [codepointCount+1])
+            {
+               /* we are on to the next code point: check value */
+                           
+               if (Out[0] != pszUnicode[codepointCount]){
+                  log_err("LMBCS->Uni result %lx should have been %lx \n",
+                   Out[0], pszUnicode[codepointCount]);
+               }
+            
+               pOut = Out; /* reset for accumulating next code point */
+               codepointCount++;
+            }
+         }
+         else
+         {
+            log_err("Unexpected Error on toUnicode: %s\n", u_errorName(errorCode));
+         }
+       }
+       {
+         /* limits & surrogate error testing */
+         UErrorCode errorCode=U_ZERO_ERROR;
+       
+         char LIn [sizeof(pszLMBCS)];
+         const char * pLIn = LIn;
+                
+         char LOut [sizeof(pszLMBCS)];
+         char * pLOut = LOut;
+                
+         UChar UOut [sizeof(pszUnicode)];
+         UChar * pUOut = UOut;
+         
+         UChar UIn [sizeof(pszUnicode)];
+         const UChar * pUIn = UIn;
+         
+         int off [sizeof(offsets)];
+         UChar32 uniChar;
+
+          /* negative source request should always return U_ILLEGAL_ARGUMENT_ERROR */
+         ucnv_fromUnicode(cnv, &pLOut,pLOut+1,&pUIn,pUIn-1,off,FALSE, &errorCode);
+         if (errorCode != U_ILLEGAL_ARGUMENT_ERROR)
+         {
+            log_err("Unexpected Error on negative source request to ucnv_fromUnicode: %s\n", u_errorName(errorCode));
+         }
+         errorCode=U_ZERO_ERROR;
+         ucnv_toUnicode(cnv, &pUOut,pUOut+1,&pLIn,pLIn-1,off,FALSE, &errorCode);
+         if (errorCode != U_ILLEGAL_ARGUMENT_ERROR)
+         {
+            log_err("Unexpected Error on negative source request to ucnv_toUnicode: %s\n", u_errorName(errorCode));
+         }
+         errorCode=U_ZERO_ERROR;
+         
+         uniChar = ucnv_getNextUChar(cnv, &pLIn, pLIn-1, &errorCode);
+         if (errorCode != U_ILLEGAL_ARGUMENT_ERROR)
+         {
+            log_err("Unexpected Error on negative source request to ucnv_getNextUChar: %s\n", u_errorName(errorCode));
+         }
+         errorCode=U_ZERO_ERROR;
+
+         /* 0 byte source request - no error, no pointer movement */
+         ucnv_toUnicode(cnv, &pUOut,pUOut+1,&pLIn,pLIn,off,FALSE, &errorCode);
+         ucnv_fromUnicode(cnv, &pLOut,pLOut+1,&pUIn,pUIn,off,FALSE, &errorCode);
+         if(U_FAILURE(errorCode)) {
+            log_err("0 byte source request: unexpected error: %s\n", u_errorName(errorCode));
+         }
+         if ((pUOut != UOut) || (pUIn != UIn) || (pLOut != LOut) || (pLIn != LIn))
+         {
+              log_err("Unexpected pointer move in 0 byte source request \n");
+         }
+         /*0 byte source request - GetNextUChar : error & value == FFFD */
+         uniChar = ucnv_getNextUChar(cnv, &pLIn, pLIn, &errorCode);
+         if (errorCode != U_ILLEGAL_ARGUMENT_ERROR)
+         {
+            log_err("Unexpected Error on 0-byte source request to ucnv_getnextUChar: %s\n", u_errorName(errorCode));
+         }
+         if (uniChar != 0xFFFD) /* would like to use an exported define here */
+         {
+            log_err("Unexpected value on 0-byte source request to ucnv_getnextUChar \n");
+         }
+         errorCode = 0;
+
+         /* running out of target room : U_INDEX_OUTOFBOUNDS_ERROR*/
+
+         pUIn = pszUnicode;
+         ucnv_fromUnicode(cnv, &pLOut,pLOut+offsets[4],&pUIn,pUIn+sizeof(pszUnicode),off,FALSE, &errorCode);
+         if (errorCode != U_INDEX_OUTOFBOUNDS_ERROR || pLOut != LOut + offsets[4] || pUIn != pszUnicode+5 )
+         {
+            log_err("Unexpected results on out of target room to ucnv_fromUnicode\n");
+         }
+
+         errorCode = 0;
+
+         pLIn = pszLMBCS;
+         ucnv_toUnicode(cnv, &pUOut,pUOut+4,&pLIn,pLIn+sizeof(pszLMBCS),off,FALSE, &errorCode);
+         if (errorCode != U_INDEX_OUTOFBOUNDS_ERROR || pUOut != UOut + 4 || pLIn != pszLMBCS+offsets[4])
+         {
+            log_err("Unexpected results on out of target room to ucnv_toUnicode\n");
+         }
+         
+         /* unpaired or chopped LMBCS surrogates */
+
+         /* OK high surrogate, Low surrogate is chopped */
+         LIn [0] = 0x14; 
+         LIn [1] = (char)0xD8; 
+         LIn [2] = 0x01; 
+         LIn [3] = 0x14; 
+         LIn [4] = (char)0xDC; 
+         pLIn = LIn;
+         errorCode = 0;
+         pUOut = UOut;
+            
+         ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut),&pLIn,pLIn+5,off,TRUE, &errorCode);
+         if (UOut[0] != 0xD801 || errorCode != U_TRUNCATED_CHAR_FOUND || pUOut != UOut + 1 || pLIn != LIn + 3)
+         {
+            log_err("Unexpected results on chopped low surrogate\n");
+         }
+         
+         /* chopped at surrogate boundary */
+         LIn [0] = 0x14; 
+         LIn [1] = (char)0xD8; 
+         LIn [2] = 0x01; 
+         pLIn = LIn;
+         errorCode = 0;
+         pUOut = UOut;
+
+         ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut),&pLIn,pLIn+3,off,TRUE, &errorCode);
+         if (UOut[0] != 0xD801 || U_FAILURE(errorCode) || pUOut != UOut + 1 || pLIn != LIn + 3)
+         {
+            log_err("Unexpected results on chopped at surrogate boundary \n");
+         }
+
+         /* unpaired surrogate plus valid Unichar */
+         LIn [0] = 0x14; 
+         LIn [1] = (char)0xD8; 
+         LIn [2] = 0x01; 
+         LIn [3] = 0x14; 
+         LIn [4] = (char)0xC9; 
+         LIn [5] = (char)0xD0;
+         pLIn = LIn;
+         errorCode = 0;
+         pUOut = UOut;
+
+         ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut),&pLIn,pLIn+6,off,TRUE, &errorCode);
+         if (UOut[0] != 0xD801 || UOut[1] != 0xC9D0 || U_FAILURE(errorCode) || pUOut != UOut + 2 || pLIn != LIn + 6)
+         {
+            log_err("Unexpected results after unpaired surrogate plus valid Unichar \n");
+         }
+
+      /* unpaired surrogate plus chopped Unichar */
+         LIn [0] = 0x14; 
+         LIn [1] = (char)0xD8; 
+         LIn [2] = 0x01; 
+         LIn [3] = 0x14; 
+         LIn [4] = (char)0xC9; 
+         
+         pLIn = LIn;
+         errorCode = 0;
+         pUOut = UOut;
+
+         ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut),&pLIn,pLIn+5,off,TRUE, &errorCode);
+         if (UOut[0] != 0xD801 || errorCode != U_TRUNCATED_CHAR_FOUND || pUOut != UOut + 1 || pLIn != LIn + 3)
+         {
+            log_err("Unexpected results after unpaired surrogate plus chopped Unichar \n");
+         }
+
+         /* unpaired surrogate plus valid non-Unichar */
+         LIn [0] = 0x14; 
+         LIn [1] = (char)0xD8; 
+         LIn [2] = 0x01; 
+         LIn [3] = 0x0F; 
+         LIn [4] = 0x3B; 
+         
+         pLIn = LIn;
+         errorCode = 0;
+         pUOut = UOut;
+
+         ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut),&pLIn,pLIn+5,off,TRUE, &errorCode);
+         if (UOut[0] != 0xD801 || UOut[1] != 0x1B || U_FAILURE(errorCode) || pUOut != UOut + 2 || pLIn != LIn + 5)
+         {
+            log_err("Unexpected results after unpaired surrogate plus valid non-Unichar\n");
+         }
+
+         /* unpaired surrogate plus chopped non-Unichar */
+         LIn [0] = 0x14; 
+         LIn [1] = (char)0xD8; 
+         LIn [2] = 0x01; 
+         LIn [3] = 0x0F; 
+                  
+         pLIn = LIn;
+         errorCode = 0;
+         pUOut = UOut;
+
+         ucnv_toUnicode(cnv, &pUOut,pUOut+sizeof(UOut),&pLIn,pLIn+4,off,TRUE, &errorCode);
+
+         if (UOut[0] != 0xD801 || errorCode != U_TRUNCATED_CHAR_FOUND || pUOut != UOut + 1 || pLIn != LIn + 3)
+         {
+            log_err("Unexpected results after unpaired surrogate plus chopped non-Unichar\n");
+         }
+       }
+    }
+   ucnv_close(cnv);  /* final cleanup */
 }
 
 
