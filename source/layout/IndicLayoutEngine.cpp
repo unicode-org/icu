@@ -44,8 +44,8 @@ IndicOpenTypeLayoutEngine::~IndicOpenTypeLayoutEngine()
 
 // Input: characters, tags
 // Output: glyphs, char indices
-le_int32 IndicOpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, const LETag **featureTags,
-                LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
+le_int32 IndicOpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
+					const LETag **&featureTags, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return 0;
