@@ -393,7 +393,7 @@ u_vparseMessageWithError(const char  *locale,
                          UParseError *error,
                          UErrorCode* status);
 
-/////////// New experimental API //////////////////////////////////////////////////
+/*----------------------- New experimental API --------------------------- */
 
 typedef void* UMessageFormat;
 
