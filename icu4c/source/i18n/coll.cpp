@@ -58,6 +58,7 @@ static ICULocaleService* gService = NULL;
 /**
  * Release all static memory held by collator.
  */
+U_CDECL_BEGIN
 static UBool collator_cleanup(void) {
     if (gService) {
         delete gService;
@@ -65,6 +66,7 @@ static UBool collator_cleanup(void) {
     }
     return TRUE;
 }
+U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
