@@ -82,6 +82,15 @@ T_CString_stricmp(const char *str1, const char *str2) {
 static UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA);
 static UConverterToUCallback otherCharAction(UConverterToUCallback MIA);
 
+static UConverter *
+cnv_open(const char *name, UErrorCode *pErrorCode) {
+    if(name!=NULL && name[0]=='*') {
+        return ucnv_openPackage(loadTestData(pErrorCode), name+1, pErrorCode);
+    } else {
+        return ucnv_open(name, pErrorCode);
+    }
+}
+
 
 static void ListNames(void);
        void TestFlushCache(void);	/* defined in cctest.c */
@@ -2307,32 +2316,68 @@ static void TestLMBCSMaxChar(void) {
         int8_t maxSize;
         const char *name;
     } converter[] = {
-        { 2, "LMBCS-1"},
-        { 2, "LMBCS-2"},
-        { 2, "LMBCS-3"},
-        { 2, "LMBCS-4"},
-        { 2, "LMBCS-5"},
-        { 2, "LMBCS-6"},
-        { 2, "LMBCS-8"},
-        { 2, "LMBCS-11"},
-        { 2, "LMBCS-16"},
-        { 2, "LMBCS-17"},
-        { 2, "LMBCS-18"},
-        { 2, "LMBCS-19"}
+        /* some non-LMBCS converters - perfect test setup here */
+        { 1, "US-ASCII"},
+        { 1, "ISO-8859-1"},
+
+        { 2, "UTF-16"},
+        { 2, "UTF-16BE"},
+        { 3, "UTF-8"},
+        { 3, "CESU-8"},
+        { 3, "SCSU"},
+        { 4, "UTF-32"},
+        { 4, "UTF-7"},
+        { 4, "IMAP-mailbox-name"},
+        { 4, "BOCU-1"},
+
+        { 1, "windows-1256"},
+        { 2, "Shift-JIS"},
+        { 2, "ibm-16684"},
+        { 3, "ibm-930"},
+        { 3, "ibm-1390"},
+        { 4, "*test3"},
+        { 16,"*test4"},
+
+        { 4, "ISCII"},
+        { 4, "HZ"},
+
+        { 3, "ISO-2022"},
+        { 3, "ISO-2022-KR"},
+        { 6, "ISO-2022-JP"},
+        { 8, "ISO-2022-CN"},
+
+        /* LMBCS */
+        { 3, "LMBCS-1"},
+        { 3, "LMBCS-2"},
+        { 3, "LMBCS-3"},
+        { 3, "LMBCS-4"},
+        { 3, "LMBCS-5"},
+        { 3, "LMBCS-6"},
+        { 3, "LMBCS-8"},
+        { 3, "LMBCS-11"},
+        { 3, "LMBCS-16"},
+        { 3, "LMBCS-17"},
+        { 3, "LMBCS-18"},
+        { 3, "LMBCS-19"}
     };
     int32_t idx;
 
     for (idx = 0; idx < LENGTHOF(converter); idx++) {
         UErrorCode status = U_ZERO_ERROR;
-        UConverter *cnv = ucnv_open(converter[idx].name, &status);
+        UConverter *cnv = cnv_open(converter[idx].name, &status);
         if (U_FAILURE(status)) {
             continue;
         }
         if (converter[idx].maxSize != ucnv_getMaxCharSize(cnv)) {
-            log_data_err("error: for %s expected %d, got %d\n",
+            log_err("error: ucnv_getMaxCharSize(%s) expected %d, got %d\n",
                 converter[idx].name, converter[idx].maxSize, ucnv_getMaxCharSize(cnv));
         }
         ucnv_close(cnv);
+    }
+
+    /* mostly test that the macro compiles */
+    if(UCNV_GET_MAX_BYTES_FOR_STRING(1, 2)<10) {
+        log_err("error UCNV_GET_MAX_BYTES_FOR_STRING(1, 2)<10\n");
     }
 }
 
@@ -2576,6 +2621,3 @@ TestEBCDICSwapLFNL() {
         testSwap(tests[i].name, tests[i].swap);
     }
 }
-
-
-

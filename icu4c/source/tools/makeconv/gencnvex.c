@@ -63,6 +63,11 @@ typedef struct CnvExtData {
 
     /* for stage3 compaction of <subchar1> |2 mappings */
     uint16_t stage3Sub1Block;
+
+    /* statistics */
+    int32_t
+        maxInBytes, maxOutBytes, maxBytesPerUChar,
+        maxInUChars, maxOutUChars, maxUCharsPerByte;
 } CnvExtData;
 
 NewConverter *
@@ -199,6 +204,16 @@ CnvExtWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
 
     indexes[UCNV_EXT_SIZE]=top;
 
+    /* statistics */
+    indexes[UCNV_EXT_COUNT_BYTES]=
+        (extData->maxInBytes<<16)|
+        (extData->maxOutBytes<<8)|
+        extData->maxBytesPerUChar;
+    indexes[UCNV_EXT_COUNT_UCHARS]=
+        (extData->maxInUChars<<16)|
+        (extData->maxOutUChars<<8)|
+        extData->maxUCharsPerByte;
+
     /* write the extension data */
     udata_writeBlock(pData, indexes, sizeof(indexes));
     udata_writeBlock(pData, utm_getStart(extData->toUTable), indexes[UCNV_EXT_TO_U_LENGTH]*4);
@@ -307,11 +322,12 @@ getToUnicodeValue(CnvExtData *extData, UCMTable *table, UCMapping *m) {
     UChar32 *u32;
     UChar *u;
     uint32_t value;
-    int32_t u16Length;
+    int32_t u16Length, ratio;
     UErrorCode errorCode;
 
     /* write the Unicode result code point or string index */
     if(m->uLen==1) {
+        u16Length=U16_LENGTH(m->u);
         value=(uint32_t)(UCNV_EXT_TO_U_MIN_CODE_POINT+m->u);
     } else {
         /* the parser enforces m->uLen<=UCNV_EXT_MAX_UCHARS */
@@ -340,6 +356,20 @@ getToUnicodeValue(CnvExtData *extData, UCMTable *table, UCMapping *m) {
     if(m->f==0) {
         value|=UCNV_EXT_TO_U_ROUNDTRIP_FLAG;
     }
+
+    /* update statistics */
+    if(m->bLen>extData->maxInBytes) {
+        extData->maxInBytes=m->bLen;
+    }
+    if(u16Length>extData->maxOutUChars) {
+        extData->maxOutUChars=u16Length;
+    }
+
+    ratio=(u16Length+(m->bLen-1))/m->bLen;
+    if(ratio>extData->maxUCharsPerByte) {
+        extData->maxUCharsPerByte=ratio;
+    }
+
     return value;
 }
 
@@ -586,9 +616,18 @@ static uint32_t
 getFromUBytesValue(CnvExtData *extData, UCMTable *table, UCMapping *m) {
     uint8_t *bytes, *resultBytes;
     uint32_t value;
+    int32_t u16Length, ratio;
 
     if(m->f==2) {
-        return UCNV_EXT_FROM_U_SUBCHAR1; /* <subchar1> SUB mapping */
+        /*
+         * no mapping, <subchar1> preferred
+         *
+         * no need to count in statistics because the subchars are already
+         * counted for maxOutBytes and maxBytesPerUChar in UConverterStaticData,
+         * and this non-mapping does not count for maxInUChars which are always
+         * trivially at least two if counting unmappable supplementary code points
+         */
+        return UCNV_EXT_FROM_U_SUBCHAR1;
     }
 
     bytes=UCM_GET_BYTES(table, m);
@@ -614,6 +653,27 @@ getFromUBytesValue(CnvExtData *extData, UCMTable *table, UCMapping *m) {
     if(m->f==0) {
         value|=UCNV_EXT_FROM_U_ROUNDTRIP_FLAG;
     }
+
+    /* calculate the real UTF-16 length (see recoding in prepareFromUMappings()) */
+    if(m->uLen==1) {
+        u16Length=U16_LENGTH(m->u);
+    } else {
+        u16Length=U16_LENGTH(UCM_GET_CODE_POINTS(table, m)[0])+(m->uLen-2);
+    }
+
+    /* update statistics */
+    if(u16Length>extData->maxInUChars) {
+        extData->maxInUChars=u16Length;
+    }
+    if(m->bLen>extData->maxOutBytes) {
+        extData->maxOutBytes=m->bLen;
+    }
+
+    ratio=(m->bLen+(u16Length-1))/u16Length;
+    if(ratio>extData->maxBytesPerUChar) {
+        extData->maxBytesPerUChar=ratio;
+    }
+
     return value;
 }
 
