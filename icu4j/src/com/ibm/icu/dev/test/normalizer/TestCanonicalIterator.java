@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/TestCanonicalIterator.java,v $ 
- * $Date: 2002/03/14 15:33:25 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/03/14 22:34:40 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -24,14 +24,19 @@ import java.util.*;
 
 public class TestCanonicalIterator extends TestFmwk {
 	
+    static final boolean SHOW_NAMES = false;
+
     public static void main(String[] args) throws Exception {
         new TestCanonicalIterator().run(args);
     }
 	
-    static final String testArray[] = {
-        "Åd\u0307\u0327",
-        "\u010d\u017E",
-        "x\u0307\u0327",
+    static final String testArray[][] = {
+        {"Åd\u0307\u0327", "A\u030Ad\u0307\u0327, A\u030Ad\u0327\u0307, A\u030A\u1E0B\u0327, "
+        	+ "A\u030A\u1E11\u0307, \u00C5d\u0307\u0327, \u00C5d\u0327\u0307, "
+        	+ "\u00C5\u1E0B\u0327, \u00C5\u1E11\u0307, \u212Bd\u0307\u0327, "
+        	+ "\u212Bd\u0327\u0307, \u212B\u1E0B\u0327, \u212B\u1E11\u0307"},
+        {"\u010d\u017E", "c\u030Cz\u030C, c\u030C\u017E, \u010Dz\u030C, \u010D\u017E"},
+        {"x\u0307\u0327", "x\u0307\u0327, x\u0327\u0307, \u1E8B\u0327"},
     };
     
     public void TestExhaustive() {
@@ -69,35 +74,62 @@ public class TestCanonicalIterator extends TestFmwk {
     		}
     	}
     }
-
-    public void Test() {
-        // set up for readable display
-        Transliterator name = Transliterator.getInstance("name");
-        Transliterator hex = Transliterator.getInstance("hex");
-        
+    
+    public void TestBasic() {
         // check build
         UnicodeSet ss = CanonicalIterator.getSafeStart();
         logln("Safe Start: " + ss.toPattern(true));
-        logln("");
         ss = CanonicalIterator.getStarts('a');
-        logln("Characters with 'a' at the start of their decomposition: " + ss.toPattern(true));
+        expectEqual("Characters with 'a' at the start of their decomposition: ", "", CanonicalIterator.getStarts('a'),
+        	new UnicodeSet("[\u00E0-\u00E5\u0101\u0103\u0105\u01CE\u01DF\u01E1\u01FB"
+        	+ "\u0201\u0203\u0227\u1E01\u1EA1\u1EA3\u1EA5\u1EA7\u1EA9\u1EAB\u1EAD\u1EAF\u1EB1\u1EB3\u1EB5\u1EB7]")
+        		);
         
         // check permute
-        logln(collectionToString(CanonicalIterator.permute("ABC")));
+        expectEqual("Simple permutation ", "", collectionToString(CanonicalIterator.permute("ABC")), "ABC, ACB, BAC, BCA, CAB, CBA");
         
         // try samples
+        SortedSet set = new TreeSet();
         for (int i = 0; i < testArray.length; ++i) {
-            logln("");
-            logln("Results for: " + name.transliterate(testArray[i]));
-            CanonicalIterator it = new CanonicalIterator(testArray[i]);
+            //logln("Results for: " + name.transliterate(testArray[i]));
+            CanonicalIterator it = new CanonicalIterator(testArray[i][0]);
             int counter = 0;
+            set.clear();
             while (true) {
                 String result = it.next();
                 if (result == null) break;
-                logln(++counter + ": " + hex.transliterate(result));
-                logln(" = " + name.transliterate(result));
+                set.add(result); // sort them
+                //logln(++counter + ": " + hex.transliterate(result));
+                //logln(" = " + name.transliterate(result));
             }
+            expectEqual(i + ": ", testArray[i][0], collectionToString(set), testArray[i][1]);
+
         }
+    }
+    
+    public void expectEqual(String message, String item, Object a, Object b) {
+    	if (!a.equals(b)) {
+    		errln("FAIL: " + message + getReadable(item));
+    		errln("\t" + getReadable(a));
+    		errln("\t" + getReadable(b));
+    	} else {
+    		logln("Checked: " + message + getReadable(item));
+    		logln("\t" + getReadable(a));
+    		logln("\t" + getReadable(b));
+    	}
+    }
+    
+    Transliterator name = null;
+    Transliterator hex = null;
+        
+    public String getReadable(Object obj) {
+    	if (obj == null) return "null";
+    	String s = obj.toString();
+    	if (s.length() == 0) return "";
+        // set up for readable display
+        if (name == null) name = Transliterator.getInstance("[^\\ -\\u007F] name");
+        if (hex == null) hex = Transliterator.getInstance("[^\\ -\\u007F] hex");
+        return "[" + (SHOW_NAMES ? name.transliterate(s) + "; " : "") + hex.transliterate(s) + "]";
     }
     
     static String collectionToString(Collection col) {
