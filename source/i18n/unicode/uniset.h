@@ -26,27 +26,36 @@ class TransliteratorParser;
 /**
  * A mutable set of Unicode characters.  Objects of this class
  * represent <em>character classes</em> used in regular expressions.
- * Such classes specify a subset of the set of all Unicode characters,
- * which in this implementation is the characters from U+0000 to
- * U+FFFF, ignoring surrogates.
+ * A character specifies a subset of Unicode code points.  Legal
+ * code points are U+0000 to U+10FFFF, inclusive.
  *
- * <p>This class supports two APIs.  The first is modeled after Java 2's
- * <code>java.util.Set</code> interface, although this class does not
- * implement that interface.  All methods of <code>Set</code> are
- * supported, with the modification that they take a character range
- * or single character instead of an <code>Object</code>, and they
- * take a <code>UnicodeSet</code> instead of a <code>Collection</code>.
+ * <p><code>UnicodeSet</code> supports two APIs. The first is the
+ * <em>operand</em> API that allows the caller to modify the value of
+ * a <code>UnicodeSet</code> object. It conforms to Java 2's
+ * <code>java.util.Set</code> interface, although
+ * <code>UnicodeSet</code> does not actually implement that
+ * interface. All methods of <code>Set</code> are supported, with the
+ * modification that they take a character range or single character
+ * instead of an <code>Object</code>, and they take a
+ * <code>UnicodeSet</code> instead of a <code>Collection</code>.  The
+ * operand API may be thought of in terms of boolean logic: a boolean
+ * OR is implemented by <code>add</code>, a boolean AND is implemented
+ * by <code>retain</code>, a boolean XOR is implemented by
+ * <code>complement</code> taking an argument, and a boolean NOT is
+ * implemented by <code>complement</code> with no argument.  In terms
+ * of traditional set theory function names, <code>add</code> is a
+ * union, <code>retain</code> is an intersection, <code>remove</code>
+ * is an asymmetric difference, and <code>complement</code> with no
+ * argument is a set complement with respect to the superset range
+ * <code>MIN_VALUE-MAX_VALUE</code>
  *
  * <p>The second API is the
  * <code>applyPattern()</code>/<code>toPattern()</code> API from the
- * <code>Format</code>-derived classes.  Unlike the
+ * <code>java.text.Format</code>-derived classes.  Unlike the
  * methods that add characters, add categories, and control the logic
  * of the set, the method <code>applyPattern()</code> sets all
  * attributes of a <code>UnicodeSet</code> at once, based on a
  * string pattern.
- *
- * <p>In addition, the set complement operation is supported through
- * the <code>complement()</code> method.
  *
  * <p><b>Pattern syntax</b></p>
  *
@@ -61,7 +70,7 @@ class TransliteratorParser;
  *     <tr align="top">
  *       <td nowrap valign="top" align="right"><code>pattern :=&nbsp; </code></td>
  *       <td valign="top"><code>('[' '^'? item* ']') |
- *       ('[:' '^'? category ':]')</code></td>
+ *       property</code></td>
  *     </tr>
  *     <tr align="top">
  *       <td nowrap valign="top" align="right"><code>item :=&nbsp; </code></td>
@@ -94,16 +103,12 @@ class TransliteratorParser;
  *     <tr align="top">
  *       <td nowrap valign="top" align="right"><code>hex :=&nbsp; </code></td>
  *       <td valign="top"><em>any character for which
- *       </em><code>u_digit(c, 16)</code><em>
+ *       </em><code>Character.digit(c, 16)</code><em>
  *       returns a non-negative result</em></td>
  *     </tr>
  *     <tr>
- *       <td nowrap valign="top" align="right"><code>category :=&nbsp; </code></td>
- *       <td valign="top"><code>'M' | 'N' | 'Z' | 'C' | 'L' | 'P' |
- *       'S' | 'Mn' | 'Mc' | 'Me' | 'Nd' | 'Nl' | 'No' | 'Zs' | 'Zl' |
- *       'Zp' | 'Cc' | 'Cf' | 'Cs' | 'Co' | 'Cn' | 'Lu' | 'Ll' | 'Lt'
- *       | 'Lm' | 'Lo' | 'Pc' | 'Pd' | 'Ps' | 'Pe' | 'Po' | 'Sm' |
- *       'Sc' | 'Sk' | 'So'</code></td>
+ *       <td nowrap valign="top" align="right"><code>property :=&nbsp; </code></td>
+ *       <td valign="top"><em>a Unicode property set pattern</td>
  *     </tr>
  *   </table>
  *   <br>
@@ -145,33 +150,43 @@ class TransliteratorParser;
  * </blockquote>
  *
  * Any character may be preceded by a backslash in order to remove any special
- * meaning.  White space characters, as defined by Character.isWhitespace(), are
+ * meaning.  White space characters, as defined by UCharacter.isWhitespace(), are
  * ignored, unless they are escaped.
  *
- * Patterns specify individual characters, ranges of characters, and
- * Unicode character categories.  When elements are concatenated, they
+ * <p>Property patterns specify a set of characters having a certain
+ * property as defined by the Unicode standard.  Both the POSIX-like
+ * "[:Lu:]" and the Perl-like syntax "\p{Lu}" are recognized.  For a
+ * complete list of supported property patterns, see the User's Guide
+ * for UnicodeSet at
+ * <a href="http://oss.software.ibm.com/icu/userguide/unicodeset.html">
+ * http://oss.software.ibm.com/icu/userguide/unicodeset.html</a>.
+ * Actual determination of property data is defined by the underlying
+ * Unicode database as implemented by UCharacter.
+ *
+ * <p>Patterns specify individual characters, ranges of characters, and
+ * Unicode property sets.  When elements are concatenated, they
  * specify their union.  To complement a set, place a '^' immediately
- * after the opening '[' or '[:'.  In any other location, '^' has no
- * special meaning.
+ * after the opening '['.  Property patterns are inverted by modifying
+ * their delimiters; "[:^foo]" and "\P{foo}".  In any other location,
+ * '^' has no special meaning.
  *
  * <p>Ranges are indicated by placing two a '-' between two
  * characters, as in "a-z".  This specifies the range of all
  * characters from the left to the right, in Unicode order.  If the
- * left and right characters are the same, then the range consists of
- * just that character.  If the left character is greater than the
+ * left character is greater than or equal to the
  * right character it is a syntax error.  If a '-' occurs as the first
  * character after the opening '[' or '[^', or if it occurs as the
  * last character before the closing ']', then it is taken as a
- * literal.  Thus "[a\-b]", "[-ab]", and "[ab-]" all indicate the same
+ * literal.  Thus "[a\u005C-b]", "[-ab]", and "[ab-]" all indicate the same
  * set of three characters, 'a', 'b', and '-'.
  *
  * <p>Sets may be intersected using the '&' operator or the asymmetric
  * set difference may be taken using the '-' operator, for example,
- * "[[:L:]&[\u0000-\u0FFF]]" indicates the set of all Unicode letters
+ * "[[:L:]&[\u005Cu0000-\u005Cu0FFF]]" indicates the set of all Unicode letters
  * with values less than 4096.  Operators ('&' and '|') have equal
  * precedence and bind left-to-right.  Thus
- * "[[:L:]-[a-z]-[\u0100-\u01FF]]" is equivalent to
- * "[[[:L:]-[a-z]]-[\u0100-\u01FF]]".  This only really matters for
+ * "[[:L:]-[a-z]-[\u005Cu0100-\u005Cu01FF]]" is equivalent to
+ * "[[[:L:]-[a-z]]-[\u005Cu0100-\u005Cu01FF]]".  This only really matters for
  * difference; intersection is commutative.
  *
  * <table>
@@ -180,7 +195,7 @@ class TransliteratorParser;
  * through 'z' and all letters in between, in Unicode order
  * <tr valign=top><td nowrap><code>[^a-z]</code><td>The set containing
  * all characters but 'a' through 'z',
- * that is, U+0000 through 'a'-1 and 'z'+1 through U+FFFF
+ * that is, U+0000 through 'a'-1 and 'z'+1 through U+10FFFF
  * <tr valign=top><td nowrap><code>[[<em>pat1</em>][<em>pat2</em>]]</code>
  * <td>The union of sets specified by <em>pat1</em> and <em>pat2</em>
  * <tr valign=top><td nowrap><code>[[<em>pat1</em>]&[<em>pat2</em>]]</code>
@@ -188,32 +203,14 @@ class TransliteratorParser;
  * <tr valign=top><td nowrap><code>[[<em>pat1</em>]-[<em>pat2</em>]]</code>
  * <td>The asymmetric difference of sets specified by <em>pat1</em> and
  * <em>pat2</em>
- * <tr valign=top><td nowrap><code>[:Lu:]</code>
- * <td>The set of characters belonging to the given
- * Unicode category, as defined by <code>Character.getType()</code>; in
+ * <tr valign=top><td nowrap><code>[:Lu:] or \p{Lu}</code>
+ * <td>The set of characters having the specified
+ * Unicode property; in
  * this case, Unicode uppercase letters
- * <tr valign=top><td nowrap><code>[:L:]</code>
- * <td>The set of characters belonging to all Unicode categories
- * starting wih 'L', that is, <code>[[:Lu:][:Ll:][:Lt:][:Lm:][:Lo:]]</code>.
+ * <tr valign=top><td nowrap><code>[:^Lu:] or \P{Lu}</code>
+ * <td>The set of characters <em>not</em> having the given
+ * Unicode property
  * </table>
- *
- * <p><b>Character categories.</b>
- *
- * <p>Character properties are specified using the POSIX-like syntax
- * "[:Lu:]" or the Perl-like syntax "\p{Lu}".  The complement of a
- * category is specified as "[:^Lu:]" or "\P{Lu}".  Actual
- * determination of category data is accomplished by UCharacter using
- * the underlying Unicode database.
- *
- * <p>For details of the property syntax please see this
- * <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/unicodeset_properties.html">
- * draft document</a>.
- *
- * <p><em>Note:</em> Not all properties are currently supported.
- * Currently, only the general category, script, and numeric value
- * properties are supported.  Support for other properties will be
- * added in the future.
- *
  * @author Alan Liu
  * @stable
  */
@@ -750,10 +747,6 @@ private:
                                     UBool escapeUnprintable) const;
 
     static void _appendToPat(UnicodeString& buf, UChar32 c, UBool escapeUnprintable);
-
-    static UBool _isUnprintable(UChar32 c);
-
-    static UBool _escapeUnprintable(UnicodeString& result, UChar32 c);
 
     //----------------------------------------------------------------
     // Implementation: Fundamental operators
