@@ -139,8 +139,8 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
         /* If you modify this, remember to modify makedata.mak too. */
         T_FileStream_writeLine(makefile, "\n"
             "# Windows specific DLL version information.\n"
-            "!IF EXISTS(\".\\icudata.res\")\n"
-            "DATA_VER_INFO=\".\\icudata.res\"\n"
+            "!IF EXISTS(\"$(TEMP_DIR)\\icudata.res\")\n"
+            "DATA_VER_INFO=\"$(TEMP_DIR)\\icudata.res\"\n"
             "!ELSE\n"
             "DATA_VER_INFO=\n"
             "!ENDIF\n\n");
