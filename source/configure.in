@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.124 2001/10/17 23:11:14 emader-oss Exp $
+dnl $Id: configure.in,v 1.125 2001/10/19 22:18:43 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -458,6 +458,7 @@ else
     fi
 fi
 AC_SUBST(U_TZNAME)
+
 AC_CACHE_CHECK(for timezone,ac_cv_var_timezone,
 [AC_TRY_LINK(
 changequote(<<, >>)dnl
@@ -471,6 +472,8 @@ changequote(<<, >>)dnl
 >>,
 changequote([, ])dnl
 [timezone = 1;], ac_cv_var_timezone=yes, ac_cv_var_timezone=no)])
+dnl Give it a default value
+U_TIMEZONE=0
 if test $ac_cv_var_timezone = yes; then
   U_TIMEZONE=timezone
 else

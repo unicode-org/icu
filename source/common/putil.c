@@ -738,7 +738,7 @@ uprv_tzset()
 int32_t
 uprv_timezone()
 {
-#ifdef U_TIMEZONE
+#if U_TIMEZONE != 0
     return U_TIMEZONE;
 #else
     time_t t, t1, t2;
