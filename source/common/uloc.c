@@ -1253,9 +1253,10 @@ U_CAPI int32_t U_EXPORT2
 uloc_getDisplayName(const char *locale,
                     const char *displayLocale,
                     UChar *dest, int32_t destCapacity,
-                    UErrorCode *pErrorCode) {
+                    UErrorCode *pErrorCode)
+{
     int32_t length, length2;
-    UBool hasLanguage, hasCountry, hasVariant;
+    UBool hasLanguage, hasScript, hasCountry, hasVariant;
 
     /* argument checking */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -1286,6 +1287,36 @@ uloc_getDisplayName(const char *locale,
         ++length;
         if(length<destCapacity) {
             dest[length]=0x28;
+        }
+        ++length;
+    }
+
+    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+        /* keep preflighting */
+        *pErrorCode=U_ZERO_ERROR;
+    }
+
+    /* append the script */
+    if(length<destCapacity) {
+        length2=uloc_getDisplayScript(locale, displayLocale,
+                                       dest+length, destCapacity-length,
+                                       pErrorCode);
+    } else {
+        length2=uloc_getDisplayScript(locale, displayLocale,
+                                       NULL, 0,
+                                       pErrorCode);
+    }
+    hasScript= length2>0;
+    length+=length2;
+
+    if(hasScript) {
+        /* append ", " */
+        if(length<destCapacity) {
+            dest[length]=0x2c;
+        }
+        ++length;
+        if(length<destCapacity) {
+            dest[length]=0x20;
         }
         ++length;
     }
@@ -1338,22 +1369,19 @@ uloc_getDisplayName(const char *locale,
     hasVariant= length2>0;
     length+=length2;
 
-    if(hasCountry && !hasVariant) {
+    if ((hasScript && !hasCountry)
+        || (hasScript || hasCountry) && !hasVariant)
+    {
         /* remove ", " */
         length-=2;
     }
 
-    if(hasLanguage) {
-        if(hasCountry || hasVariant) {
-            /* append ")" */
-            if(length<destCapacity) {
-                dest[length]=0x29;
-            }
-            ++length;
-        } else {
-            /* remove " (" */
-            length-=2;
+    if (hasLanguage && (hasScript || hasCountry || hasVariant)) {
+        /* append ")" */
+        if(length<destCapacity) {
+            dest[length]=0x29;
         }
+        ++length;
     }
 
     if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
