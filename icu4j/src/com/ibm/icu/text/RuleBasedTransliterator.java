@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/04/22 01:25:10 $ 
- * $Revision: 1.26 $
+ * $Date: 2000/04/25 01:42:58 $ 
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
@@ -20,17 +20,17 @@ import com.ibm.util.Utility;
 /**
  * <strong>RuleBasedTransliterator</strong> is a transliterator
  * that reads a set of rules in order to determine how to perform
- * translations. Rules are stored in resource bundles indexed by
- * name. Rules are separated by semicolons (';'). To include a
- * literal semicolon, prefix it with a backslash ('\'). Whitespace,
- * as defined by <code>Character.isWhitespace()</code>, is ignored.
- * If the first non-blank character on a line is '#', the entire
- * line is ignored as a comment. </p>
+ * translations. Rule sets are stored in resource bundles indexed by
+ * name. Rules within a rule set are separated by semicolons (';').
+ * To include a literal semicolon, prefix it with a backslash ('\').
+ * Whitespace, as defined by <code>Character.isWhitespace()</code>,
+ * is ignored. If the first non-blank character on a line is '#',
+ * the entire line is ignored as a comment. </p>
  * 
  * <p>Each set of rules consists of two groups, one forward, and one
  * reverse. This is a convention that is not enforced; rules for one
  * direction may be omitted, with the result that translations in
- * that direction will not modify the source text. Alternatively,
+ * that direction will not modify the source text. In addition,
  * bidirectional forward-reverse rules may be specified for
  * symmetrical transformations.</p>
  * 
@@ -39,69 +39,27 @@ import com.ibm.util.Utility;
  * <p>Rule statements take one of the following forms: </p>
  * 
  * <dl>
- *     <dt><code>$alefmadda=\u0622</code></dt>
+ *     <dt><code>$alefmadda=\u0622;</code></dt>
  *     <dd><strong>Variable definition.</strong> The name on the
- *         left is assigned the character or expression on the
- *         right. Names must begin with a letter and consist only of
- *         letters, digits, and underscores. Case is significant.
- *         Duplicate names (including duplicates of simple variables
- *         or category names) cause an exception to be thrown. If
- *         the right hand side consists of one character, then the
- *         variable stands for that character. In this example,
+ *         left is assigned the text on the right. In this example,
  *         after this statement, instances of the left hand name,
  *         &quot;<code>$alefmadda</code>&quot;, will be replaced by
- *         the Unicode character U+0622. The right hand side must be
- *         exactly one character long (current limitation).</dd>
- *     <dt>&nbsp;</dt>
- *     <dt><code>$softvowel=[eiyEIY]</code></dt>
- *     <dd><strong>Category definition.</strong> The name on the
- *         left is assigned to stand for a set of characters. The
- *         same rules for names of simple variables apply. After
- *         this statement, the left hand variable will be
- *         interpreted as indicating a set of characters in
- *         appropriate contexts. The pattern syntax defining sets of
- *         characters is defined by {@link UnicodeSet}. Examples of
- *         valid patterns are:<table border="0">
- *             <tr>
- *                 <td valign="top" nowrap><code>[abc]</code></td>
- *                 <td valign="top">The set containing the
- *                 characters 'a', 'b', and 'c'.</td>
- *             </tr>
- *             <tr>
- *                 <td valign="top" nowrap><code>[^abc]</code></td>
- *                 <td valign="top">The set of all characters <em>except</em>
- *                 'a', 'b', and 'c'.</td>
- *             </tr>
- *             <tr>
- *                 <td valign="top" nowrap><code>[A-Z]</code></td>
- *                 <td valign="top">The set of all characters from
- *                 'A' to 'Z' in Unicode order.</td>
- *             </tr>
- *             <tr>
- *                 <td valign="top" nowrap><code>[:Lu:]</code></td>
- *                 <td valign="top">The set of Unicode uppercase
- *                 letters. See <a href="http://www.unicode.org">www.unicode.org</a>
- *                 for a complete list of categories and their
- *                 two-letter codes.</td>
- *             </tr>
- *             <tr>
- *                 <td valign="top" nowrap><code>[^a-z[:Lu:][:Ll:]]</code></td>
- *                 <td valign="top">The set of all characters <em>except</em>
- *                 'a' through 'z' and uppercase or lowercase
- *                 letters.</td>
- *             </tr>
- *         </table>
- *         <p>Patterns may contain variable references, such as
- *         &quot;<code>$a=[a-z];$not_a=[^$a]</code>&quot;. See
- *         {@link UnicodeSet} for more documentation and examples. </p>
- *     </dd>
- *     <dt><code>ai&gt;$alefmadda</code></dt>
+ *         the Unicode character U+0622. Variable names must begin
+ *         with a letter and consist only of letters, digits, and
+ *         underscores. Case is significant. Duplicate names cause
+ *         an exception to be thrown, that is, variables cannot be
+ *         redefined. The right hand side may contain well-formed
+ *         text of any length, including no text at all (&quot;<code>$empty=;</code>&quot;).
+ *         The right hand side may contain embedded <code>UnicodeSet</code>
+ *         patterns, for example, &quot;<code>$softvowel=[eiyEIY]</code>&quot;.</dd>
+ *     <dd>&nbsp;</dd>
+ *     <dt><code>ai&gt;$alefmadda;</code></dt>
  *     <dd><strong>Forward translation rule.</strong> This rule
  *         states that the string on the left will be changed to the
  *         string on the right when performing forward
  *         transliteration.</dd>
  *     <dt>&nbsp;</dt>
- *     <dt><code>ai&lt;$alefmadda</code></dt>
+ *     <dt><code>ai&lt;$alefmadda;</code></dt>
  *     <dd><strong>Reverse translation rule.</strong> This rule
  *         states that the string on the right will be changed to
  *         the string on the left when performing reverse
@@ -109,7 +67,7 @@ import com.ibm.util.Utility;
  * </dl>
  * 
  * <dl>
- *     <dt><code>ai&lt;&gt;$alefmadda</code></dt>
+ *     <dt><code>ai&lt;&gt;$alefmadda;</code></dt>
  *     <dd><strong>Bidirectional translation rule.</strong> This
  *         rule states that the string on the right will be changed
  *         to the string on the left when performing forward
@@ -151,9 +109,16 @@ import com.ibm.util.Utility;
  *     y and z</code></p>
  * </blockquote>
  * 
- * <p>In addition to being defined in variables, <code>UnicodeSet</code>
- * patterns may be embedded directly into rule strings. Thus, the
- * following two rules are equivalent:</p>
+ * <p><b>UnicodeSet</b></p>
+ * 
+ * <p><code>UnicodeSet</code> patterns may appear anywhere that
+ * makes sense. They may appear in variable definitions.
+ * Contrariwise, <code>UnicodeSet</code> patterns may themselves
+ * contain variable references, such as &quot;<code>$a=[a-z];$not_a=[^$a]</code>&quot;,
+ * or &quot;<code>$range=a-z;$ll=[$range]</code>&quot;.</p>
+ * 
+ * <p><code>UnicodeSet</code> patterns may also be embedded directly
+ * into rule strings. Thus, the following two rules are equivalent:</p>
  * 
  * <blockquote>
  *     <p><code>$vowel=[aeiou]; $vowel&gt;'*'; # One way to do this<br>
@@ -162,6 +127,8 @@ import com.ibm.util.Utility;
  *     Another way</code></p>
  * </blockquote>
  * 
+ * <p>See {@link UnicodeSet} for more documentation and examples.</p>
+ * 
  * <p><b>Segments</b></p>
  * 
  * <p>Segments of the input string can be matched and copied to the
@@ -169,7 +136,8 @@ import com.ibm.util.Utility;
  * general, and makes reordering possible. For example:</p>
  * 
  * <blockquote>
- *     <p><code>([a-z]) &gt; $1 $1; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+ *     <p><code>([a-z]) &gt; $1 $1;
+ *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
  *     double lowercase letters<br>
  *     ([:Lu:]) ([:Ll:]) &gt; $2 $1; # reverse order of Lu-Ll pairs</code></p>
  * </blockquote>
@@ -284,7 +252,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.26 $ $Date: 2000/04/22 01:25:10 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.27 $ $Date: 2000/04/25 01:42:58 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -455,15 +423,15 @@ public class RuleBasedTransliterator extends Transliterator {
         public TransliterationRuleSet ruleSet;
 
         /**
-         * Map variable name (String) to variable (Character).  A variable
-         * name may correspond to a single literal character, in which
-         * case the character is stored in this hash.  It may also
-         * correspond to a UnicodeSet, in which case a character is
-         * again stored in this hash, but the character is a stand-in: it
-         * is an index for a secondary lookup in data.setVariables.  The stand-in
-         * also represents the UnicodeSet in the stored rules.
+         * Map variable name (String) to variable (char[]).  A variable name
+         * corresponds to zero or more characters, stored in a char[] array in
+         * this hash.  One or more of these chars may also correspond to a
+         * UnicodeSet, in which case the character in the char[] in this hash is
+         * a stand-in: it is an index for a secondary lookup in
+         * data.setVariables.  The stand-in also represents the UnicodeSet in
+         * the stored rules.
          */
-        public Hashtable variableNames;
+        private Hashtable variableNames;
 
         /**
          * Map category variable (Character) to set (UnicodeSet).
@@ -474,30 +442,30 @@ public class RuleBasedTransliterator extends Transliterator {
          * stored in the rule text to represent the set of characters.
          * setVariables[i] represents character (setVariablesBase + i).
          */
-        public UnicodeSet[] setVariables;
+        private UnicodeSet[] setVariables;
 
         /**
          * The character that represents setVariables[0].  Characters
          * setVariablesBase through setVariablesBase +
          * setVariables.length - 1 represent UnicodeSet objects.
          */
-        public char setVariablesBase;
-
-        /**
-         * Return the UnicodeSet represented by the given character, or
-         * null if none.
-         */
-        public UnicodeSet lookup(char c) {
-            int i = c - setVariablesBase;
-            return (i >= 0 && i < setVariables.length)
-                ? setVariables[i] : null;
-        }
+        private char setVariablesBase;
 
         /**
          * The character that represents segment 1.  Characters segmentBase
          * through segmentBase + 8 represent segments 1 through 9.
          */
-        public char segmentBase;
+        private char segmentBase;
+
+        /**
+         * Return the UnicodeSet represented by the given character, or
+         * null if none.
+         */
+        public UnicodeSet lookupSet(char c) {
+            int i = c - setVariablesBase;
+            return (i >= 0 && i < setVariables.length)
+                ? setVariables[i] : null;
+        }
 
         /**
          * Return the zero-based index of the segment represented by the given
@@ -531,18 +499,23 @@ public class RuleBasedTransliterator extends Transliterator {
         private class ParseData implements SymbolTable {
             
             /**
-             * Implement SymbolTable API.  Lookup a variable, returning
-             * either a Character, a UnicodeSet, or null.
+             * Implement SymbolTable API.
              */
-            public Object lookup(String name) {
-                Character ch = (Character) data.variableNames.get(name);
-                if (ch != null) {
-                    int i = ch.charValue() - data.setVariablesBase;
-                    if (i >= 0 && i < setVariablesVector.size()) {
-                        return setVariablesVector.elementAt(i);
-                    }
+            public char[] lookup(String name) {
+                return (char[]) data.variableNames.get(name);
+            }
+
+            /**
+             * Implement SymbolTable API.
+             */
+            public UnicodeSet lookupSet(char ch) {
+                // Note that we cannot use data.lookupSet() because the
+                // set array has not been constructed yet.
+                int i = ch - data.setVariablesBase;
+                if (i >= 0 && i < setVariablesVector.size()) {
+                    return (UnicodeSet) setVariablesVector.elementAt(i);
                 }
-                return ch;
+                return null;
             }
 
             /**
@@ -869,10 +842,13 @@ public class RuleBasedTransliterator extends Transliterator {
                                 String name = parser.parseData.
                                                 parseReference(rule, pp, limit);
                                 pos = pp.getIndex();
-                                // If this is a variable definition statement, then the LHS
-                                // variable will be undefined.  In that case getVariableName()
-                                // will return the special placeholder variableLimit-1.
-                                buf.append(parser.getVariableDef(name));
+                                // If this is a variable definition statement,
+                                // then the LHS variable will be undefined.  In
+                                // that case appendVariableDef() will append the
+                                // special placeholder char variableLimit-1.
+
+                                //buf.append(parser.getVariableDef(name));
+                                parser.appendVariableDef(name, buf);
                             }
                         }
                         break;
@@ -1035,11 +1011,12 @@ public class RuleBasedTransliterator extends Transliterator {
                 if (left.text.length() != 1 || left.text.charAt(0) != variableLimit) {
                     syntaxError("Malformed LHS", rule, start);
                 }
-                if (right.text.length() != 1) {
-                    syntaxError("Malformed RHS", rule, start);
-                }
-                data.variableNames.put(undefinedVariableName,
-                                       new Character(right.text.charAt(0)));
+                // We allow anything on the right, including an empty string.
+                int n = right.text.length();
+                char[] value = new char[n];
+                right.text.getChars(0, n, value, 0);
+                data.variableNames.put(undefinedVariableName, value);
+
                 ++variableLimit;
                 return pos;
             }
@@ -1157,12 +1134,12 @@ public class RuleBasedTransliterator extends Transliterator {
         }
 
         /**
-         * Returns the single character value of the given variable name.  Defined
-         * names are recognized.
+         * Append the value of the given variable name to the given
+         * StringBuffer.
          * @exception IllegalArgumentException if the name is unknown.
          */
-        private char getVariableDef(String name) {
-            Character ch = (Character) data.variableNames.get(name);
+        private void appendVariableDef(String name, StringBuffer buf) {
+            char[] ch = (char[]) data.variableNames.get(name);
             if (ch == null) {
                 // We allow one undefined variable so that variable definition
                 // statements work.  For the first undefined variable we return
@@ -1173,12 +1150,14 @@ public class RuleBasedTransliterator extends Transliterator {
                     if (variableNext >= variableLimit) {
                         throw new RuntimeException("Private use variables exhausted");
                     }
-                    return --variableLimit;
+                    buf.append((char) --variableLimit);
+                } else {
+                    throw new IllegalArgumentException("Undefined variable $"
+                                                       + name);
                 }
-                throw new IllegalArgumentException("Undefined variable $"
-                                                   + name);
+            } else {
+                buf.append(ch);
             }
-            return ch.charValue();
         }
 
         /**
@@ -1346,6 +1325,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.27  2000/04/25 01:42:58  alan
+ * Allow arbitrary length variable values. Clean up Data API. Update javadocs.
+ *
  * Revision 1.26  2000/04/22 01:25:10  alan
  * Add support for cursor positioner '@'; update javadoc
  *

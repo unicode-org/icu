@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $ 
- * $Date: 2000/04/21 22:16:29 $ 
- * $Revision: 1.18 $
+ * $Date: 2000/04/25 01:42:58 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.18 $ $Date: 2000/04/21 22:16:29 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.19 $ $Date: 2000/04/25 01:42:58 $
  */
 public class UnicodeSet implements UnicodeFilter {
     /**
@@ -774,7 +774,13 @@ public class UnicodeSet implements UnicodeFilter {
         int start = pos.getIndex();
         int i = start;
         int limit = pattern.length();
-        for (; i<limit; ++i) {
+        /* In the case of an embedded SymbolTable variable, we look it up and
+         * then take characters from the resultant char[] array.  These chars
+         * are subjected to an extra level of lookup in the SymbolTable in case
+         * they are stand-ins for a nested UnicodeSet.  */
+        char[] varValueBuffer = null;
+        int ivarValueBuffer = 0;
+        for (; i<limit; i+=((varValueBuffer==null)?1:0)) {
             /* If the next element is a single character, c will be set to it,
              * and nestedPairs will be null.  In this case isLiteral indicates
              * whether the character should assume special meaning if it has
@@ -783,9 +789,23 @@ public class UnicodeSet implements UnicodeFilter {
              * nestedPairs will be set to the pairs list for the nested set, and
              * c's value should be ignored.
              */
-            char c = pattern.charAt(i);
             String nestedPairs = null;
             boolean isLiteral = false;
+            char c;
+            if (varValueBuffer != null) {
+                if (ivarValueBuffer < varValueBuffer.length) {
+                    c = varValueBuffer[ivarValueBuffer++];
+                    UnicodeSet set = symbols.lookupSet(c);
+                    if (set != null) {
+                        nestedPairs = set.pairs.toString();
+                    }
+                } else {
+                    varValueBuffer = null;
+                    c = pattern.charAt(i);
+                }
+            } else {
+                c = pattern.charAt(i);
+            }
 
             // Ignore whitespace.  This is not Unicode whitespace, but Java
             // whitespace, a subset of Unicode whitespace.
@@ -829,82 +849,97 @@ public class UnicodeSet implements UnicodeFilter {
             // will be 2 if we want a closing ']', or 3 if we should parse a
             // category and close with ":]".
 
-            /* Handle escapes.  If a character is escaped, then it assumes its
-             * literal value.  This is true for all characters, both special
-             * characters and characters with no special meaning.  We also
-             * interpret '\\uxxxx' Unicode escapes here (as literals).
-             */
-            if (c == '\\') {
-                ++i;
-                if (i < limit) {
-                    c = pattern.charAt(i);
-                    isLiteral = true;
-                    if (c == 'u') {
-                        if ((i+4) >= limit) {
-                            throw new IllegalArgumentException("Invalid \\u escape");
-                        }
-                        c = '\u0000';
-                        for (int j=(++i)+4; i<j; ++i) { // [sic]
-                            int digit = Character.digit(pattern.charAt(i), 16);
-                            if (digit<0) {
+            // Only process escapes, variable references, and nested sets
+            // if we are _not_ retrieving characters from the variable
+            // buffer.  Characters in the variable buffer have already
+            // benn through escape and variable reference processing.
+            if (varValueBuffer == null) {
+                /* Handle escapes.  If a character is escaped, then it assumes its
+                 * literal value.  This is true for all characters, both special
+                 * characters and characters with no special meaning.  We also
+                 * interpret '\\uxxxx' Unicode escapes here (as literals).
+                 */
+                if (c == '\\') {
+                    ++i;
+                    if (i < limit) {
+                        c = pattern.charAt(i);
+                        isLiteral = true;
+                        if (c == 'u') {
+                            if ((i+4) >= limit) {
                                 throw new IllegalArgumentException("Invalid \\u escape");
                             }
-                            c = (char) ((c << 4) | digit);
+                            c = '\u0000';
+                            for (int j=(++i)+4; i<j; ++i) { // [sic]
+                                int digit = Character.digit(pattern.charAt(i), 16);
+                                if (digit<0) {
+                                    throw new IllegalArgumentException("Invalid \\u escape");
+                                }
+                                c = (char) ((c << 4) | digit);
+                            }
+                            --i; // Move i back to last parsed character
                         }
-                        --i; // Move i back to last parsed character
+                    } else {
+                        throw new IllegalArgumentException("Trailing '\\'");
                     }
-                } else {
-                    throw new IllegalArgumentException("Trailing '\\'");
                 }
-            }
 
-            /* Parse variable references.  These are treated as literals.  If a
-             * variable refers to a UnicodeSet, nestedPairs is assigned here.
-             * Variable names are only parsed if varNameToChar is not null.
-             * Set variables are only looked up if varCharToSet is not null.
-             */
-            else if (symbols != null && !isLiteral && c == SymbolTable.SYMBOL_REF) {
-                pos.setIndex(++i);
-                String name = symbols.parseReference(pattern, pos, limit);
-                Object obj = symbols.lookup(name);
-                if (obj == null) {
-                    throw new IllegalArgumentException("Undefined variable: "
-                                                       + name);
+                /* Parse variable references.  These are treated as literals.  If a
+                 * variable refers to a UnicodeSet, nestedPairs is assigned here.
+                 * Variable names are only parsed if varNameToChar is not null.
+                 * Set variables are only looked up if varCharToSet is not null.
+                 */
+                else if (symbols != null && !isLiteral && c == SymbolTable.SYMBOL_REF) {
+                    pos.setIndex(++i);
+                    String name = symbols.parseReference(pattern, pos, limit);
+                    /*
+                    Object obj = symbols.lookup(name);
+                    if (obj == null) {
+                        throw new IllegalArgumentException("Undefined variable: "
+                                                           + name);
+                    }
+                    isLiteral = true;
+                    if (obj instanceof Character) {
+                        c = ((Character) obj).charValue();
+                    } else {
+                        nestedPairs = ((UnicodeSet) obj).pairs.toString();
+                    }
+                    */
+                    varValueBuffer = symbols.lookup(name);
+                    if (varValueBuffer == null) {
+                        throw new IllegalArgumentException("Undefined variable: "
+                                                           + name);
+                    }
+                    ivarValueBuffer = 0;
+                    i = pos.getIndex()-1; // Make i point at last char of var name
+                    continue; // Back to the top to get varValueBuffer[0]
                 }
-                isLiteral = true;
-                if (obj instanceof Character) {
-                    c = ((Character) obj).charValue();
-                } else {
-                    nestedPairs = ((UnicodeSet) obj).pairs.toString();
-                }
-                i = pos.getIndex()-1; // Make i point at last char of var name
-            }
 
-            /* An opening bracket indicates the first bracket of a nested
-             * subpattern, either a normal pattern or a category pattern.  We
-             * recognize these here and set nestedPairs accordingly.
-             */
-            else if (!isLiteral && c == '[') {
-                // Handle "[:...:]", representing a character category
-                char d = charAfter(pattern, i);
-                if (d == ':') {
-                    i += 2;
-                    int j = pattern.indexOf(":]", i);
-                    if (j < 0) {
-                        throw new IllegalArgumentException("Missing \":]\"");
+                /* An opening bracket indicates the first bracket of a nested
+                 * subpattern, either a normal pattern or a category pattern.  We
+                 * recognize these here and set nestedPairs accordingly.
+                 */
+                else if (!isLiteral && c == '[') {
+                    // Handle "[:...:]", representing a character category
+                    char d = charAfter(pattern, i);
+                    if (d == ':') {
+                        i += 2;
+                        int j = pattern.indexOf(":]", i);
+                        if (j < 0) {
+                            throw new IllegalArgumentException("Missing \":]\"");
+                        }
+                        nestedPairs = getCategoryPairs(pattern.substring(i, j));
+                        i = j+1; // Make i point to ']' in ":]"
+                        if (mode == 3) {
+                            // Entire pattern is a category; leave parse loop
+                            pairsBuf.append(nestedPairs);
+                            break;
+                        }
+                    } else {
+                        // Recurse to get the pairs for this nested set.
+                        pos.setIndex(i); // Add 2 to point AFTER op
+                        nestedPairs = parse(pattern, pos, symbols, ignoreWhitespace).toString();
+                        i = pos.getIndex() - 1; // - 1 to point at ']'
                     }
-                    nestedPairs = getCategoryPairs(pattern.substring(i, j));
-                    i = j+1; // Make i point to ']' in ":]"
-                    if (mode == 3) {
-                        // Entire pattern is a category; leave parse loop
-                        pairsBuf.append(nestedPairs);
-                        break;
-                    }
-                } else {
-                    // Recurse to get the pairs for this nested set.
-                    pos.setIndex(i); // Add 2 to point AFTER op
-                    nestedPairs = parse(pattern, pos, symbols, ignoreWhitespace).toString();
-                    i = pos.getIndex() - 1; // - 1 to point at ']'
                 }
             }
 
@@ -993,6 +1028,13 @@ public class UnicodeSet implements UnicodeFilter {
                                                pattern.substring(start) + '"');
         }
         pos.setIndex(i+1);
+
+        if (false) {
+            // Debug parser
+            System.out.println("UnicodeSet(" + 
+                               pattern.substring(start, i+1) + ") -> " +
+                               pairsBuf.toString());
+        }
 
         return pairsBuf;
     }
