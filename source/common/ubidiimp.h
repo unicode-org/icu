@@ -174,33 +174,33 @@ struct UBiDi {
 };
 
 /* helper function to (re)allocate memory if allowed */
-extern UBool
-getMemory(void **pMemory, UTextOffset *pSize, UBool mayAllocate, UTextOffset sizeNeeded);
+U_CFUNC UBool
+ubidi_getMemory(void **pMemory, UTextOffset *pSize, UBool mayAllocate, UTextOffset sizeNeeded);
 
 /* helper macros for each allocated array in UBiDi */
 #define getDirPropsMemory(pBiDi, length) \
-        getMemory((void **)&(pBiDi)->dirPropsMemory, &(pBiDi)->dirPropsSize, \
+        ubidi_getMemory((void **)&(pBiDi)->dirPropsMemory, &(pBiDi)->dirPropsSize, \
                         (pBiDi)->mayAllocateText, (length))
 
 #define getLevelsMemory(pBiDi, length) \
-        getMemory((void **)&(pBiDi)->levelsMemory, &(pBiDi)->levelsSize, \
+        ubidi_getMemory((void **)&(pBiDi)->levelsMemory, &(pBiDi)->levelsSize, \
                         (pBiDi)->mayAllocateText, (length))
 
 #define getRunsMemory(pBiDi, length) \
-        getMemory((void **)&(pBiDi)->runsMemory, &(pBiDi)->runsSize, \
+        ubidi_getMemory((void **)&(pBiDi)->runsMemory, &(pBiDi)->runsSize, \
                         (pBiDi)->mayAllocateRuns, (length)*sizeof(Run))
 
 /* additional macros used by ubidi_open() - always allow allocation */
 #define getInitialDirPropsMemory(pBiDi, length) \
-        getMemory((void **)&(pBiDi)->dirPropsMemory, &(pBiDi)->dirPropsSize, \
+        ubidi_getMemory((void **)&(pBiDi)->dirPropsMemory, &(pBiDi)->dirPropsSize, \
                         TRUE, (length))
 
 #define getInitialLevelsMemory(pBiDi, length) \
-        getMemory((void **)&(pBiDi)->levelsMemory, &(pBiDi)->levelsSize, \
+        ubidi_getMemory((void **)&(pBiDi)->levelsMemory, &(pBiDi)->levelsSize, \
                         TRUE, (length))
 
 #define getInitialRunsMemory(pBiDi, length) \
-        getMemory((void **)&(pBiDi)->runsMemory, &(pBiDi)->runsSize, \
+        ubidi_getMemory((void **)&(pBiDi)->runsMemory, &(pBiDi)->runsSize, \
                         TRUE, (length)*sizeof(Run))
 
 #endif
