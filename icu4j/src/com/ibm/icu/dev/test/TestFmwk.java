@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2001/10/02 17:43:53 $ 
- * $Revision: 1.16 $
+ * $Date: 2001/10/08 16:22:47 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -277,7 +277,7 @@ public class TestFmwk implements TestLog {
         }
 
         private static final boolean isPrintable(int c) {
-            return c >= '\u0020' && c <= '\u007e';
+            return c == '\t' || c == '\n' || (c >= '\u0020' && c <= '\u007e');
         }
 
         private final void writePrintable(int c) {
