@@ -181,6 +181,10 @@ SOURCE=.\ucln_cmn.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucmndata.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucmp16.c
 # End Source File
 # Begin Source File
@@ -258,6 +262,10 @@ SOURCE=.\udata.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\udatamem.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\uhash.c
 # End Source File
 # Begin Source File
@@ -267,6 +275,11 @@ SOURCE=.\uhash_us.cpp
 # Begin Source File
 
 SOURCE=.\uloc.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\umapfile.c
+# ADD CPP /Ze
 # End Source File
 # Begin Source File
 
@@ -784,6 +797,10 @@ SOURCE=.\ucln_cmn.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucmndata.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucmp16.h
 # End Source File
 # Begin Source File
@@ -928,6 +945,10 @@ InputPath=.\unicode\udata.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\udatamem.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\uhash.h
 # End Source File
 # Begin Source File
@@ -983,6 +1004,10 @@ InputPath=.\unicode\umachine.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\umapfile.h
 # End Source File
 # Begin Source File
 
