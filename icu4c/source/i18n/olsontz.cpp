@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2004, International Business Machines
+* Copyright (c) 2003-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -97,7 +97,7 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
         // Size 4 is like size 3, but with an alias list at the end
         // Size 5 is a hybrid zone, with historical and final elements
         // Size 6 is like size 5, but with an alias list at the end
-        int32_t size = ures_getSize((UResourceBundle*) res); // cast away const
+        int32_t size = ures_getSize(res);
         if (size < 3 || size > 6) {
             ec = U_INVALID_FORMAT_ERROR;
         }
@@ -106,23 +106,21 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
         int32_t i;
         UResourceBundle* r = ures_getByIndex(res, 0, NULL, &ec);
         transitionTimes = ures_getIntVector(r, &i, &ec);
-        ures_close(r);
         if ((i<0 || i>0x7FFF) && U_SUCCESS(ec)) {
             ec = U_INVALID_FORMAT_ERROR;
         }
         transitionCount = (int16_t) i;
         
         // Type offsets list must be of even size, with size >= 2
-        r = ures_getByIndex(res, 1, NULL, &ec);
+        r = ures_getByIndex(res, 1, r, &ec);
         typeOffsets = ures_getIntVector(r, &i, &ec);
-        ures_close(r);
         if ((i<2 || i>0x7FFE || ((i&1)!=0)) && U_SUCCESS(ec)) {
             ec = U_INVALID_FORMAT_ERROR;
         }
         typeCount = (int16_t) i >> 1;
 
         // Type data must be of the same size as the transitions list        
-        r = ures_getByIndex(res, 2, NULL, &ec);
+        r = ures_getByIndex(res, 2, r, &ec);
         int32_t len;
         typeData = ures_getBinary(r, &len, &ec);
         ures_close(r);
