@@ -2304,14 +2304,14 @@ static void TestContraction() {
         "&c = ch / h"
     };
     const static UChar testdata[][2] = {
-        {(UChar)'A', (UChar)'B'},
-        {(UChar)'A', (UChar)0x0306},
-        {(UChar)'c', (UChar)'h'}
+        {0x0041 /* 'A' */, 0x0042 /* 'B' */},
+        {0x0041 /* 'A' */, 0x0306 /* combining breve */},
+        {0x0063 /* 'c' */, 0x0068 /* 'h' */}
     };
     const static UChar testdata2[][2] = {
-        {(UChar)'c', (UChar)'g'},
-        {(UChar)'c', (UChar)'h'},
-        {(UChar)'c', (UChar)'l'}
+        {0x0063 /* 'c' */, 0x0067 /* 'g' */},
+        {0x0063 /* 'c' */, 0x0068 /* 'h' */},
+        {0x0063 /* 'c' */, 0x006C /* 'l' */}
     };
     const static char *testrules3[] = {
         "&z < xyz &xyzw << B",
@@ -2394,7 +2394,7 @@ static void TestContraction() {
                            *coll2;
         UCollationElements *iter1,
                            *iter2;
-        UChar               ch = 'B';
+        UChar               ch = 0x0042 /* 'B' */;
         uint32_t            ce;
         rlen = u_unescape(testrules3[i], rule, 32);
         coll1 = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY, &status);
@@ -2443,12 +2443,12 @@ static void TestExpansion() {
         "&J << K / B << M"
     };
     const static UChar testdata[][3] = {
-        {(UChar)'J', (UChar)'A', 0},
-        {(UChar)'M', (UChar)'A', 0},
-        {(UChar)'K', (UChar)'A', 0},
-        {(UChar)'K', (UChar)'C', 0},
-        {(UChar)'J', (UChar)'C', 0},
-        {(UChar)'M', (UChar)'C', 0}
+        {0x004A /*'J'*/, 0x0041 /*'A'*/, 0},
+        {0x004D /*'M'*/, 0x0041 /*'A'*/, 0},
+        {0x004B /*'K'*/, 0x0041 /*'A'*/, 0},
+        {0x004B /*'K'*/, 0x0043 /*'C'*/, 0},
+        {0x004A /*'J'*/, 0x0043 /*'C'*/, 0},
+        {0x004D /*'M'*/, 0x0043 /*'C'*/, 0}
     };
     
     UErrorCode  status   = U_ZERO_ERROR;
