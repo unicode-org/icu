@@ -1160,7 +1160,7 @@ inline UBool collIterFCD(collIterate *collationSource) {
 /* some more sofisticated and slower functions are invoked             */
 static
 inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status) {
-    uint32_t order;
+    uint32_t order = 0;
     if (collationSource->CEpos > collationSource->toReturn) {       /* Are there any CEs from previous expansions? */
       order = *(collationSource->toReturn++);                         /* if so, return them */
       if(collationSource->CEpos == collationSource->toReturn) {
@@ -1169,7 +1169,7 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
       return order;
     }
 
-    UChar ch;
+    UChar ch = 0;
 
     for (;;)                           /* Loop handles case when incremental normalize switches   */
     {                                  /*   to or from the side buffer / original string, and we  */
@@ -1497,7 +1497,7 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
         }
     }
     else {
-        UChar ch;
+        UChar ch = 0;
         /*
         Loop handles case when incremental normalize switches to or from the
         side buffer / original string, and we need to start again to get the
@@ -6653,7 +6653,7 @@ ucol_strcoll( const UCollator    *coll,
     }
 
     if(coll->latinOneUse) {
-      if (*source&0xff00 || *target&0xff00) { // source or target start with non-latin-1
+      if ((sourceLength > 0 && *source&0xff00) || (targetLength > 0 && *target&0xff00)) { // source or target start with non-latin-1
         return ucol_strcollRegular(coll, source, sourceLength, target, targetLength, &status);
       } else {
         return ucol_strcollUseLatin1(coll, source, sourceLength, target, targetLength, &status);    

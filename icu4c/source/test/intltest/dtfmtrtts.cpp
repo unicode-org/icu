@@ -308,7 +308,7 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
                           (j > 0 && s[j] == s[j-1]?" s==":""));
                 }
             }
-            delete d;
+            delete[] d;
             delete[] s;
         }
     /*}

@@ -424,7 +424,7 @@ ucol_tok_getNextArgument(const UChar *start, const UChar *end,
 
   ucol_uprv_tok_initData();
 
-  while(u_isWhitespace(*start) && start < end) { /* eat whitespace */
+  while(start < end && u_isWhitespace(*start)) { /* eat whitespace */
     start++;
   }
   if(start >= end) {
