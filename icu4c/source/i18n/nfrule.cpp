@@ -32,9 +32,6 @@ U_NAMESPACE_BEGIN
 extern const UChar* CSleftBracket;
 extern const UChar* CSrightBracket;
 
-const char NFRuleList::fgClassID=0;
-const char NFRule::fgClassID=0;
-
 NFRule::NFRule(const RuleBasedNumberFormat* _rbnf)
   : baseValue((int32_t)0)
   , radix(0)
