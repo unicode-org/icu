@@ -423,6 +423,10 @@ SOURCE=.\unorm.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\uobject.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\uprops.c
 # End Source File
 # Begin Source File
@@ -850,6 +854,14 @@ InputPath=.\unicode\normlzr.h
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\normlzr.h
+
+"..\..\include\unicode\normlzr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
 
 !ENDIF 
 
@@ -2316,6 +2328,53 @@ InputPath=.\unicode\unorm.h
 # Begin Source File
 
 SOURCE=.\unormimp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\uobject.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\uobject.h
+
+"..\..\include\unicode\uobject.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\uobject.h
+
+"..\..\include\unicode\uobject.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\uobject.h
+
+"..\..\include\unicode\uobject.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\uobject.h
+
+"..\..\include\unicode\uobject.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
