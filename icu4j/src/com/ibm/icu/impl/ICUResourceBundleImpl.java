@@ -449,7 +449,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             if (val > -1) {
                 return handleGet(val, table);
             }
-            throw new UResourceTypeMismatchException("");
+            throw new UResourceTypeMismatchException("Could not get the correct value for index: "+ index);
         }
         protected ICUResourceBundle handleGet(int index) {
             return handleGet(index, null);
@@ -599,11 +599,8 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
     private static final char RES_PATH_SEP_CHAR = '/';
     private static final String ICUDATA = "ICUDATA";
     private static final int getIndex(String s) {
-        if (s.length() == 1) {
-            char c = s.charAt(0);
-            if (Character.isDigit(c)) {
-                return Integer.valueOf(s).intValue();
-            }
+        if (s.length() >= 1) {
+            return Integer.valueOf(s).intValue();
         }
         return -1;
     }
