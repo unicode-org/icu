@@ -458,20 +458,6 @@ unorm_checkFCD(const UChar *src,
     uint16_t fcd16;
     int16_t prevCC, cc;
 
-    /* check arguments */
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return FALSE;
-    }
-
-    if(src==NULL || srcLength<-1) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return FALSE;
-    }
-
-    if(!_haveData(*pErrorCode)) {
-        return FALSE;
-    }
-
     /* initialize */
     prevCC=0;
 
@@ -593,7 +579,8 @@ _unorm_quickCheck(const UChar *src,
         minNoMaybe=(UChar)indexes[_NORM_INDEX_MIN_NFKD_NO_MAYBE];
         qcMask=_NORM_QC_NFKD;
         break;
-    /* ### TODO: case UNORM_FCD: return unorm_checkFCD(); */
+    case UNORM_FCD:
+        return unorm_checkFCD(src, srcLength, pErrorCode) ? UNORM_YES : UNORM_NO;
     default:
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return UNORM_MAYBE;
@@ -738,7 +725,7 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
                 /* attempt to grow the buffer */
                 (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity,
                                                 limit==NULL ?
-                                                    2*(destCapacity)+length+20 :
+                                                    2*destCapacity+length+20 :
                                                     destCapacity+length+2*(limit-src)+20,
                                                 destIndex)))
             ) {
@@ -849,7 +836,7 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
             /* attempt to grow the buffer */
             (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity,
                                             limit==NULL ?
-                                                2*(destCapacity)+length+20 :
+                                                2*destCapacity+length+20 :
                                                 destCapacity+length+2*(limit-src)+20,
                                             destIndex)))
         ) {
@@ -888,6 +875,393 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
         prevCC=trailCC;
         if(prevCC==0) {
             reorderStart=dest+destIndex;
+        }
+    }
+
+#if 1
+    /* ### TODO: this passes the tests but seems weird */
+    /* we may NUL-terminate if it fits as a convenience */
+    if(destIndex<destCapacity) {
+        dest[destIndex]=0;
+    } else if(destIndex>destCapacity) {
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    }
+#else
+    /* ### TODO: this looks slightly to much more reasonable but fails some tests, esp. /tscoll/cmsccoll/TestIncrementalNormalize */
+    if(limit==NULL) {
+        /* assume that we must NUL-terminate */
+        if(destIndex<destCapacity) {
+            /* ### TODO: this one would make sense -- dest[destIndex++]=0; -- but the following is more compatible */
+            dest[destIndex]=0;
+        } else {
+            /* ### TODO: same as above -- ++destIndex; */
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        }
+    } else {
+        /* we may NUL-terminate if it fits as a convenience */
+        if(destIndex<destCapacity) {
+            dest[destIndex]=0;
+        } else if(destIndex>destCapacity) {
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        }
+    }
+#endif
+
+    return destIndex;
+}
+
+/* make FCD ----------------------------------------------------------------- */
+
+static const UChar *
+_findSafeFCD(const UChar *src, const UChar *limit, uint16_t fcd16) {
+    UChar c, c2;
+
+    /*
+     * find the first position in [src..limit[ after some cc==0 according to FCD data
+     *
+     * at the beginning of the loop, we have fcd16 from before src
+     *
+     * stop at positions:
+     * - after trail cc==0
+     * - at the end of the source
+     * - before lead cc==0
+     */
+    for(;;) {
+        /* stop if trail cc==0 for the previous character */
+        if((fcd16&0xff)==0) {
+            break;
+        }
+
+        /* get c=*src - stop at end of string */
+        if(limit==NULL) {
+            c=*src;
+            if(c==0) {
+                break;
+            }
+        } else {
+            if(src==limit) {
+                break;
+            }
+            c=*src;
+        }
+
+        /* stop if lead cc==0 for this character */
+        if(c<_NORM_MIN_WITH_LEAD_CC || (fcd16=_getFCD16(c))==0) {
+            break;
+        }
+
+        if(!UTF_IS_FIRST_SURROGATE(c)) {
+            if(fcd16<=0xff) {
+                break;
+            }
+            ++src;
+        } else if((limit==NULL || (src+1)!=limit) && (c2=*(src+1), UTF_IS_SECOND_SURROGATE(c2))) {
+            /* c is a lead surrogate, get the real fcd16 */
+            fcd16=_getFCD16FromSurrogatePair(fcd16, c2);
+            if(fcd16<=0xff) {
+                break;
+            }
+            src+=2;
+        } else {
+            /* c is an unpaired first surrogate, lead cc==0 */
+            break;
+        }
+    }
+
+    return src;
+}
+
+static uint8_t
+_decompFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
+           UChar *dest, int32_t &destIndex, int32_t &destCapacity,
+           UBool canGrow, GrowBuffer *growBuffer, void *context,
+           UErrorCode *pErrorCode) {
+    UChar *reorderStart;
+    const UChar *p;
+    uint32_t norm32;
+    int32_t length;
+    UChar c, c2;
+    uint8_t cc, prevCC, trailCC;
+
+    /*
+     * canonically decompose [src..decompLimit[
+     *
+     * all characters in this range have some non-zero cc,
+     * directly or in decomposition,
+     * so that we do not need to check in the following for quick-check limits etc.
+     *
+     * there _are_ _no_ Hangul syllables or Jamos in here because they are FCD-safe (cc==0)!
+     *
+     * we also do not need to check for c==0 because we have an established decompLimit
+     */
+    reorderStart=dest+destIndex;
+    prevCC=0;
+
+    while(src<decompLimit) {
+        c=*src++;
+        norm32=_getNorm32(c);
+        if(norm32<_NORM_MIN_SPECIAL) {
+            c2=0;
+            length=1;
+        } else {
+            /*
+             * reminder: this function is called with [src..decompLimit[
+             * not containing any Hangul/Jamo characters,
+             * therefore the only specials are lead surrogates
+             */
+            /* c is a lead surrogate, get the real norm32 */
+            if(src!=decompLimit && (c2=*src, UTF_IS_SECOND_SURROGATE(c2))) {
+                ++src;
+                length=2;
+                norm32=_getNorm32FromSurrogatePair(norm32, c2);
+            } else {
+                c2=0;
+                length=1;
+                norm32=0;
+            }
+        }
+
+        /* get the decomposition and the lead and trail cc's */
+        if((norm32&_NORM_QC_NFD)==0) {
+            /* c does not decompose */
+            cc=trailCC=(uint8_t)(norm32>>_NORM_CC_SHIFT);
+            p=NULL;
+        } else {
+            /* c decomposes, get everything from the variable-length extra data */
+            p=(const UChar *)_getExtraData(norm32);
+            length=*p++;
+
+            if(length&0x80) {
+                /* get the lead and trail cc's */
+                UChar bothCCs=*p++;
+                cc=(uint8_t)(bothCCs>>8);
+                trailCC=(uint8_t)bothCCs;
+            } else {
+                /* lead and trail cc's are both 0 */
+                cc=trailCC=0;
+            }
+
+            length&=0x7f;
+            if(length==1) {
+                /* fastpath a single code unit from decomposition */
+                c=*p;
+                c2=0;
+                p=NULL;
+            }
+        }
+
+        /* append the decomposition to the destination buffer, assume length>0 */
+        if( (destIndex+length)<=destCapacity ||
+            /* attempt to grow the buffer */
+            (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity,
+                                            limit==NULL ?
+                                                2*destCapacity+length+20 :
+                                                destCapacity+length+2*(limit-src)+20,
+                                            destIndex)))
+        ) {
+            UChar *reorderSplit=dest+destIndex;
+            if(p==NULL) {
+                /* fastpath: single code point */
+                if(cc!=0 && cc<prevCC) {
+                    /* (c, c2) is out of order with respect to the preceding text */
+                    destIndex+=length;
+                    trailCC=_insertOrdered(reorderStart, reorderSplit, dest+destIndex, c, c2, cc);
+                } else {
+                    /* just append (c, c2) */
+                    dest[destIndex++]=c;
+                    if(c2!=0) {
+                        dest[destIndex++]=c2;
+                    }
+                }
+            } else {
+                /* general: multiple code points (ordered by themselves) from decomposition */
+                /* append the decomposition */
+                do {
+                    dest[destIndex++]=*p++;
+                } while(--length>0);
+
+                if(cc!=0 && cc<prevCC) {
+                    /* the decomposition is out of order with respect to the preceding text */
+                    trailCC=_mergeOrdered(reorderStart, reorderSplit, dest+destIndex);
+                }
+            }
+        } else {
+            /* buffer overflow */
+            /* keep incrementing the destIndex for preflighting */
+            destIndex+=length;
+        }
+
+        prevCC=trailCC;
+        if(prevCC==0) {
+            reorderStart=dest+destIndex;
+        }
+    }
+
+    return prevCC;
+}
+
+/*
+ * ### TODO:
+ * try to use the previous two functions in incremental FCD in collation
+ */
+
+static int32_t
+unorm_makeFCD(UChar *dest, int32_t destCapacity,
+              const UChar *src, int32_t srcLength,
+              GrowBuffer *growBuffer, void *context,
+              UErrorCode *pErrorCode) {
+    const UChar *limit, *prevSrc, *decompStart;
+    int32_t destIndex, length;
+    UChar c, c2;
+    uint16_t fcd16;
+    int16_t prevCC, cc;
+    UBool canGrow;
+
+    if(!_haveData(*pErrorCode)) {
+        return 0;
+    }
+
+    /* initialize */
+    decompStart=src;
+    destIndex=0;
+    prevCC=0;
+
+    /* do not attempt to grow if there is no growBuffer function or if it has failed before */
+    canGrow=(UBool)(growBuffer!=NULL);
+
+    if(srcLength>=0) {
+        /* string with length */
+        limit=src+srcLength;
+    } else /* srcLength==-1 */ {
+        /* zero-terminated string */
+        limit=NULL;
+    }
+
+    U_ALIGN_CODE(16);
+
+    for(;;) {
+        /* skip a run of code units below the minimum or with irrelevant data for the FCD check */
+        prevSrc=src;
+        if(limit==NULL) {
+            for(;;) {
+                c=*src;
+                if(c<_NORM_MIN_WITH_LEAD_CC) {
+                    if(c==0) {
+                        break;
+                    }
+                    prevCC=-(int16_t)c;
+                } else if((fcd16=_getFCD16(c))==0) {
+                    prevCC=0;
+                } else {
+                    break;
+                }
+                ++src;
+            }
+        } else {
+            for(;;) {
+                if(src==limit) {
+                    break;
+                } else if((c=*src)<_NORM_MIN_WITH_LEAD_CC) {
+                    prevCC=-(int16_t)c;
+                } else if((fcd16=_getFCD16(c))==0) {
+                    prevCC=0;
+                } else {
+                    break;
+                }
+                ++src;
+            }
+        }
+
+        /* copy these code units all at once */
+        if(src!=prevSrc) {
+            length=(int32_t)(src-prevSrc);
+            if( (destIndex+length)<=destCapacity ||
+                /* attempt to grow the buffer */
+                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity,
+                                                limit==NULL ?
+                                                    2*destCapacity+length+20 :
+                                                    destCapacity+length+2*(limit-src)+20,
+                                                destIndex)))
+            ) {
+                do {
+                    dest[destIndex++]=*prevSrc++;
+                } while(src!=prevSrc);
+            } else {
+                /* buffer overflow */
+                /* keep incrementing the destIndex for preflighting */
+                destIndex+=length;
+                prevSrc=src;
+            }
+        }
+        /* now prevSrc==src - used later to adjust destIndex before decomposition */
+
+        /* end of source reached? */
+        if(limit==NULL ? c==0 : src==limit) {
+            break;
+        }
+
+        /*
+         * prevCC has values from the following ranges:
+         * 0..0xff - the previous trail combining class
+         * <0      - the negative value of the previous code unit;
+         *           that code unit was <_NORM_MIN_WITH_LEAD_CC and its _getFCD16()
+         *           was deferred so that average text is checked faster
+         */
+
+        /* set a pointer to after the last source position where prevCC==0 */
+        if(prevCC<0) {
+            /* the previous character was <_NORM_MIN_WITH_LEAD_CC, we need to get its trail cc */
+            prevCC=(int16_t)_getFCD16((UChar)-prevCC)&0xff;
+            decompStart= prevCC==0 ? src : src-1;
+        } else if(prevCC==0) {
+            decompStart=src;
+        /* else do not change decompStart */
+        }
+
+        /* c already contains *src and fcd16 is set for it, increment src */
+        ++src;
+
+        /* check one above-minimum, relevant code unit */
+        if(UTF_IS_FIRST_SURROGATE(c)) {
+            /* c is a lead surrogate, get the real fcd16 */
+            if((limit==NULL || src!=limit) && (c2=*src, UTF_IS_SECOND_SURROGATE(c2))) {
+                ++src;
+                fcd16=_getFCD16FromSurrogatePair(fcd16, c2);
+            } else {
+                fcd16=0;
+            }
+        }
+
+        /* we are looking at the character at [prevSrc..src[ */
+
+        /* check the combining order */
+        cc=(int16_t)(fcd16>>8);
+        if(cc==0 || cc>=prevCC) {
+            /* the order is ok */
+            prevCC=(int16_t)fcd16&0xff;
+        } else {
+            /*
+             * back out the part of the source that we copied already but
+             * is now going to be decomposed;
+             * prevSrc is set to after what was copied
+             */
+            destIndex-=(int32_t)(prevSrc-decompStart);
+
+            /*
+             * find the part of the source that needs to be decomposed;
+             * to be safe and simple, decompose to before the next character with lead cc==0
+             */
+            src=_findSafeFCD(src, limit, fcd16);
+
+            /*
+             * the source text does not fulfill the conditions for FCD;
+             * decompose and reorder a limited piece of the text
+             */
+            prevCC=_decompFCD(decompStart, src, limit,
+                              dest, destIndex, destCapacity,
+                              canGrow, growBuffer, context,
+                              pErrorCode);
+            decompStart=src;
         }
     }
 
@@ -1132,7 +1506,11 @@ unorm_normalize(const UChar*            src,
                                  TRUE, ignoreHangul,
                                  NULL, NULL,
                                  pErrorCode);
-        /* ### TODO: case UNORM_FCD: return unorm_makeFCD(); */
+        case UNORM_FCD:
+            return unorm_makeFCD(dest, destCapacity,
+                                 src, srcLength,
+                                 NULL, NULL,
+                                 pErrorCode);
         default:
             *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
             return 0;
@@ -1504,7 +1882,7 @@ U_CAPI UBool
 checkFCD(const UChar* source, int32_t sourcelength, UErrorCode* status)
 {
     if(useNewImplementation) {
-        return unorm_checkFCD(source, sourcelength, status);
+        return UNORM_YES==unorm_quickCheck(source, sourcelength, UNORM_FCD, status);
     }
 
         UChar32  codepoint;
