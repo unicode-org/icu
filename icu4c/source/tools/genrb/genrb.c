@@ -18,6 +18,7 @@
 #include <stdio.h>
 
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"

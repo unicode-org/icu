@@ -15,6 +15,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "unicode/ustring.h"
 #include "cmemory.h"
 #include "cstring.h"

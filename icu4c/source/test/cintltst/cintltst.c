@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 
 #include "cintltst.h"
 
