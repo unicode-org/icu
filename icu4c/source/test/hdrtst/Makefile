@@ -25,7 +25,7 @@
 
 ifeq ($(USE_ICU_CONFIG),1)
 	include $(shell icu-config --incfile)
-	DIRS=$(shell icu-config --prefix)/include/unicode
+	DIRS=$(shell icu-config --prefix)/include/unicode $(shell icu-config --prefix)/include/layout
 else
 	include ../../config/Makefile.inc
 	DIRS=../../../common/unicode ../../../i18n/unicode ../../../extra/ustdio/unicode
@@ -58,6 +58,7 @@ hdrdir:
 	  ln -s $$dir/*.h . ; \
 	done
 	rm unicode/pwin32.h
+	@echo "COMPILE.cc = $(COMPILE.cc)"
 
 cpptest:
 	@echo "C++ test #######################################################"

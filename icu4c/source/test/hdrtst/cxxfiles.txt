@@ -58,3 +58,14 @@ usetiter.h
 loengine.h
 #the following are C++ also
 ustream.h
+symtable.h
+#layout, layoutex are C++ only
+LayoutEngine.h
+LEFontInstance.h
+LEGlyphFilter.h
+LELanguages.h
+LEScripts.h
+LESwaps.h
+LETypes.h
+ParagraphLayout.h
+RunArrays.h
