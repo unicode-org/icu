@@ -216,8 +216,40 @@ void LocaleTest::TestBasicGetters() {
         if (testLocale.getVariant()[0] != 0)
             errln("  Variant code mismatch: something versus \"\"");
     }
+    
+    /*tests for the depracted API*/
+    for (i = 0; i <= MAX_LOCALES; i++) {
+        Locale testLocale((UnicodeString)rawData[LANG][i], (UnicodeString)rawData[CTRY][i], (UnicodeString)rawData[VAR][i]);
+        logln("Testing " + (UnicodeString)testLocale.getName() + "...");
 
+        if ( testLocale.getLanguage(temp) != (UnicodeString)(dataTable[LANG][i]))
+            errln("  Language code mismatch: " + temp + " versus "
+                        + dataTable[LANG][i]);
+        if ( testLocale.getCountry(temp) != (UnicodeString)(dataTable[CTRY][i]))
+            errln("  Country code mismatch: " + temp + " versus "
+                        + dataTable[CTRY][i]);
+        if ( testLocale.getVariant(temp) != (UnicodeString)(dataTable[VAR][i]))
+            errln("  Variant code mismatch: " + temp + " versus "
+                        + dataTable[VAR][i]);
+        if ( testLocale.getName(temp) != (UnicodeString)(dataTable[NAME][i]))
+            errln("  Locale name mismatch: " + temp + " versus "
+                        + dataTable[NAME][i]);
+    }
+    logln("Same thing without variant codes...");
+    for (i = 0; i <= MAX_LOCALES; i++) {
+        Locale testLocale((UnicodeString)rawData[LANG][i], (UnicodeString)rawData[CTRY][i]);
+        logln("Testing " + (testLocale.getName(temp)) + "...");
 
+        if ( testLocale.getLanguage(temp) != (UnicodeString)(dataTable[LANG][i]))
+            errln("  Language code mismatch: " + temp + " versus "
+                        + dataTable[LANG][i]);
+        if ( testLocale.getCountry(temp) != (UnicodeString)(dataTable[CTRY][i]))
+            errln("  Country code mismatch: " + temp + " versus "
+                        + dataTable[CTRY][i]);
+        if (testLocale.getVariant(temp).length() != 0 )
+            errln("  Variant code mismatch: something versus \"\"");
+    }
+    /*----------*/
     // NOTE: There used to be a special test for locale names that had language or
     // country codes that were longer than two letters.  The new version of Locale
     // doesn't support anything that isn't an officially recognized language or
@@ -251,6 +283,33 @@ void LocaleTest::TestSimpleResourceInfo() {
       }
     err = U_ZERO_ERROR;
   }
+
+  /*tests for the deprecated API*/
+  for (i = 0; i <= MAX_LOCALES; i++) {
+    Locale testLocale((UnicodeString)rawData[LANG][i], (UnicodeString)rawData[CTRY][i], (UnicodeString)rawData[VAR][i]);
+    logln("Testing " + (testLocale.getName(temp)) + "...");
+    
+    if ( testLocale.getISO3Language(temp, err) != (UnicodeString)(dataTable[LANG3][i]))
+      errln("  ISO-3 language code mismatch: " + temp
+        + " versus " + dataTable[LANG3][i]);
+    if ( testLocale.getISO3Country(temp, err) != (UnicodeString)(dataTable[CTRY3][i]))
+      errln("  ISO-3 country code mismatch: " + temp
+        + " versus " + dataTable[CTRY3][i]);
+    
+    if(U_FAILURE(err))
+      {
+        errln((UnicodeString)"Some error on number " + i + u_errorName(err));
+      }
+    err = U_ZERO_ERROR;
+   }
+
+   Locale locale((UnicodeString)"en");
+   if(locale.getName(temp) != (UnicodeString)"en" ||
+       locale.getLanguage(temp) != (UnicodeString)"en"){
+       errln("construction of Locale(en) failed\n");
+   }
+   /*-----*/
+
 }
 
 void 
@@ -751,11 +810,11 @@ LocaleTest::TestGetLangsAndCountries()
 void 
 LocaleTest::Test4126880() 
 {
-    /*
+    
     const UnicodeString *test;
-    int32_t testCount;
+    int32_t testCount=0;
 
-    test = Locale::getISOCountries(testCount);
+    /*test = Locale::getISOCountries(testCount);
     test[0] = "SUCKER!!!";
     test = Locale::getISOCountries(testCount);
     if (test[0] == "SUCKER!!!")
@@ -766,7 +825,18 @@ LocaleTest::Test4126880()
     test = Locale::getISOLanguages(testCount);
     if (test[0] == "HAHAHAHA!!!") // Fixed typo
         errln("Changes internal language code list!");
-*/
+     */   
+    /*tests for deprecated API*/
+    test=Locale::getISOCountries(testCount);
+    if(testCount != 239){
+        errln((UnicodeString)"There is an error in getISOCountries " + testCount);
+    }
+    test=Locale::getISOLanguages(testCount);
+    if(testCount != 142){
+        errln((UnicodeString)"There is an error in getISOLanguages " + testCount);
+    }
+    /*----------*/
+        
 }
 
 /**
