@@ -67,6 +67,13 @@ static  void TestDisplayNames(void);
  /* Make sure that Country information is the same across locales, within reason. */
  static void TestConsistentCountryInfo(void);
 
+ /* Make sure we can pass "de_DE@Collation=PHONEBOOK" */
+ static void MoreVariants(void);
+ 
+ static void TestKeywordVariants(void);
+
+ static void TestKeywordVariantParsing(void);
+
 /**
  * routine to perform subtests, used by TestDisplayNames
  */
