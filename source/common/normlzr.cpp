@@ -290,7 +290,7 @@ Normalizer::decompose(const UnicodeString& source,
         result.setToBogus();
     } else {
         UChar *buffer=result.getBuffer(source.length());
-        int32_t length=unorm_compose(buffer, result.getCapacity(),
+        int32_t length=unorm_decompose(buffer, result.getCapacity(),
                                      source.getBuffer(), source.length(),
                                      compat, (options&IGNORE_HANGUL)!=0,
                                      &status);
