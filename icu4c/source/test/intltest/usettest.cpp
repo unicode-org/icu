@@ -13,6 +13,7 @@
 #include "usettest.h"
 #include "unicode/uniset.h"
 #include "unicode/unicode.h"
+#include "unicode/usetiter.h"
 
 
 UnicodeString operator+(const UnicodeString& left, const UnicodeSet& set) {
@@ -47,6 +48,8 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
         CASE(9,TestExhaustive);
         CASE(10,TestToPattern);
         CASE(11,TestIndexOf);
+        CASE(12,TestStrings);
+        CASE(13,TestStringPatterns);
         default: name = ""; break;
     }
 }
@@ -502,6 +505,87 @@ void UnicodeSetTest::TestAPI() {
     }
 }
 
+void UnicodeSetTest::TestStrings() {
+    UErrorCode ec = U_ZERO_ERROR;
+    
+    UnicodeSet* testList[] = {
+        UnicodeSet::createFromAll("abc"),
+        new UnicodeSet("[a-c]", ec),
+        
+        &(UnicodeSet::createFrom("ch")->add('a','z').add("ll")),
+        new UnicodeSet("[{ll}{ch}a-z]", ec),
+    
+        UnicodeSet::createFrom("ab}c"),
+        new UnicodeSet("[{ab\\}c}]", ec),
+
+        &((new UnicodeSet('a','z'))->add('A', 'Z').retain('M','m').complement('X')), 
+        new UnicodeSet("[[a-zA-Z]&[M-m]-[X]]", ec),
+
+        NULL
+    };
+
+    if (U_FAILURE(ec)) {
+        errln("FAIL: couldn't construct test sets");
+    }
+
+    for (int32_t i = 0; testList[i] != NULL; i+=2) {
+        if (U_SUCCESS(ec)) {
+            UnicodeString pat0, pat1;
+            testList[i]->toPattern(pat0, TRUE);
+            testList[i+1]->toPattern(pat1, TRUE);
+            if (*testList[i] == *testList[i+1]) {
+                logln((UnicodeString)"Ok: " + pat0 + " == " + pat1);
+            } else {
+                logln((UnicodeString)"FAIL: " + pat0 + " != " + pat1);
+            }
+        }
+        delete testList[i];
+        delete testList[i+1];
+    }        
+}
+
+static char* NOT = "%%%%";
+
+/**
+ * Test pattern behavior of multicharacter strings.
+ */
+void UnicodeSetTest::TestStringPatterns() {
+    UErrorCode ec = U_ZERO_ERROR;
+    UnicodeSet* s = new UnicodeSet("[a-z {aa} {ab}]", ec);
+
+    // This loop isn't a loop.  It's here to make the compiler happy.
+    // If you're curious, try removing it and changing the 'break'
+    // statements (except for the last) to goto's.
+    for (;;) {
+        if (U_FAILURE(ec)) break;
+        char* exp1[] = {"aa", "ab", NOT, "ac", NULL};
+        expectToPattern(*s, "[a-z{aa}{ab}]", exp1);
+
+        s->add("ac");
+        char* exp2[] = {"aa", "ab", "ac", NOT, "xy", NULL};
+        expectToPattern(*s, "[a-z{aa}{ab}{ac}]", exp2);
+
+        s->applyPattern("[a-z {\\{l} {r\\}}]", ec);
+        if (U_FAILURE(ec)) break;
+        char* exp3[] = {"{l", "r}", NOT, "xy", NULL};
+        expectToPattern(*s, "[a-z{\\{l}{r\\}}]", exp3);
+
+        s->add("[]");
+        char* exp4[] = {"{l", "r}", "[]", NOT, "xy", NULL};
+        expectToPattern(*s, "[a-z{\\[\\]}{r\\}}{\\{l}]", exp4);
+
+        s->applyPattern("[a-z {\\u4E01\\u4E02}{\\n\\r}]", ec);
+        if (U_FAILURE(ec)) break;
+        char* exp5[] = {"\\u4E01\\u4E02", "\n\r", NULL};
+        expectToPattern(*s, "[a-z{\\u4E01\\u4E02}{\\n\\r}]", exp5);
+
+        break;
+    }
+
+    if (U_FAILURE(ec)) errln("FAIL: pattern parse error");
+    delete s;
+}
+
 /**
  * Test the [:Latin:] syntax.
  */
@@ -581,12 +665,16 @@ void UnicodeSetTest::TestExhaustive() {
 
     int32_t limit = 128;
 
-    UnicodeSet x, y, z;
+    UnicodeSet x, y, z, aa;
 
     for (int32_t i = 0; i < limit; ++i) {
         bitsToSet(i, x);
         logln((UnicodeString)"Testing " + i + ", " + x);
         _testComplement(i, x, y);
+
+        // AS LONG AS WE ARE HERE, check roundtrip
+        checkRoundTrip(bitsToSet(i, aa));
+
         for (int32_t j = 0; j < limit; ++j) {
             _testAdd(i,j,  x,y,z);
             _testXor(i,j,  x,y,z);
@@ -695,13 +783,14 @@ void UnicodeSetTest::checkCanonicalRep(const UnicodeSet& set, const UnicodeStrin
 /**
  * Convert a bitmask to a UnicodeSet.
  */
-void UnicodeSetTest::bitsToSet(int32_t a, UnicodeSet& result) {
+UnicodeSet& UnicodeSetTest::bitsToSet(int32_t a, UnicodeSet& result) {
     result.clear();
     for (UChar32 i = 0; i < 32; ++i) {
         if ((a & (1<<i)) != 0) {
             result.add(i);
         }
     }
+    return result;
 }
 
 /**
@@ -735,6 +824,85 @@ UnicodeString UnicodeSetTest::getPairs(const UnicodeSet& set) {
         pairs.append((UChar)start).append((UChar)end);
     }
     return pairs;
+}
+
+/**
+ * Basic consistency check for a few items.
+ * That the iterator works, and that we can create a pattern and
+ * get the same thing back
+ */
+void UnicodeSetTest::checkRoundTrip(const UnicodeSet& s) {
+    UErrorCode ec = U_ZERO_ERROR;
+
+    UnicodeSet t(s);
+    checkEqual(s, t, "copy ct");
+
+    t = s;
+    checkEqual(s, t, "operator=");
+
+    copyWithIterator(t, s, FALSE);
+    checkEqual(s, t, "iterator roundtrip");
+
+    copyWithIterator(t, s, TRUE); // try range
+    checkEqual(s, t, "iterator roundtrip");
+        
+    UnicodeString pat; s.toPattern(pat, FALSE);
+    t.applyPattern(pat, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: applyPattern");
+        return;
+    } else {
+        checkEqual(s, t, "toPattern(false)");
+    }
+        
+    s.toPattern(pat, TRUE);
+    t.applyPattern(pat, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: applyPattern");
+        return;
+    } else {
+        checkEqual(s, t, "toPattern(true)");
+    }
+}
+    
+void UnicodeSetTest::copyWithIterator(UnicodeSet& t, const UnicodeSet& s, UBool withRange) {
+    t.clear();
+    UnicodeSetIterator it(s);
+    if (withRange) {
+        while (it.nextRange()) {
+            if (it.codepoint == UnicodeSetIterator::IS_STRING) {
+                t.add(*it.string);
+            } else {
+                t.add(it.codepoint, it.codepointEnd);
+            }
+        }
+    } else {
+        while (it.next()) {
+            if (it.codepoint == UnicodeSetIterator::IS_STRING) {
+                t.add(*it.string);
+            } else {
+                t.add(it.codepoint);
+            }
+        }
+    }
+}
+    
+UBool UnicodeSetTest::checkEqual(const UnicodeSet& s, const UnicodeSet& t, const char* message) {
+    UnicodeString source; s.toPattern(source, TRUE);
+    UnicodeString result; t.toPattern(result, TRUE);
+    if (s != t) {
+        errln((UnicodeString)"FAIL: " + message
+              + "; source = " + source
+              + "; result = " + result
+              );
+        return FALSE;
+    } else {
+        logln((UnicodeString)"Ok: " + message
+              + "; source = " + source
+              + "; result = " + result
+              );
+    }
+    return TRUE;
 }
 
 void
@@ -832,6 +1000,36 @@ UnicodeSetTest::expectPairs(const UnicodeSet& set, const UnicodeString& expected
         errln(UnicodeString("FAIL: Expected pair list \"") +
               escape(expectedPairs) + "\", got \"" +
               escape(getPairs(set)) + "\"");
+    }
+}
+
+void UnicodeSetTest::expectToPattern(const UnicodeSet& set,
+                                     const UnicodeString& expPat,
+                                     char** expStrings) {
+    UnicodeString pat; set.toPattern(pat, true);
+    if (pat == expPat) {
+        logln((UnicodeString)"Ok:   toPattern() => \"" + pat + "\"");
+    } else {
+        errln((UnicodeString)"FAIL: toPattern() => \"" + pat + "\", expected \"" + expPat + "\"");
+        return;
+    }
+    UBool in = TRUE;
+    for (int32_t i=0; expStrings[i] != NULL; ++i) {
+        if (expStrings[i] == NOT) { // sic; pointer comparison
+            in = FALSE;
+            continue;
+        }
+        UnicodeString s = CharsToUnicodeString(expStrings[i]);
+        UBool contained = set.contains(s);
+        if (contained == in) {
+            logln((UnicodeString)"Ok: " + expPat + 
+                  (contained ? " contains {" : " does not contain {") +
+                  escape(expStrings[i]) + "}");
+        } else {
+            errln((UnicodeString)"FAIL: " + expPat + 
+                  (contained ? " contains {" : " does not contain {") +
+                  escape(expStrings[i]) + "}");
+        }
     }
 }
 
