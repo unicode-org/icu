@@ -9,11 +9,13 @@ U_NAMESPACE_USE
 
 ContractionTableTest::ContractionTableTest() {
   status = U_ZERO_ERROR;
-  testMapping = ucmpe32_open(0, 0, 0, &status);
+  /*testMapping = ucmpe32_open(0, 0, 0, &status);*/
+  testMapping = utrie_open(NULL, NULL, 0, 0, TRUE);
 }
 
 ContractionTableTest::~ContractionTableTest() {
-  ucmpe32_close(testMapping);
+  /*ucmpe32_close(testMapping);*/
+  utrie_close(testMapping);
 }
 
 void ContractionTableTest::TestGrowTable(/* char* par */) {
