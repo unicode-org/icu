@@ -6,12 +6,14 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2001/10/23 17:08:13 $ 
-* $Revision: 1.4 $
+* $Date: 2001/11/07 00:30:02 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
 package com.ibm.text;
+
+import java.util.Locale;
 
 /**
 * Internal class to manage character names.
@@ -113,12 +115,13 @@ final class UCharacterName
         return -1;
     }
    
+    String uppercasename = UCharacter.toUpperCase(Locale.ENGLISH, name);
     // try algorithmic names first, if fails then try group names
-    int result = getAlgorithmChar(choice, name);
+    int result = getAlgorithmChar(choice, uppercasename);
     if (result >= 0) {
       return result;
     }
-    return getGroupChar(name, choice);
+    return getGroupChar(uppercasename, choice);
   }
   
   // private method =============================================
