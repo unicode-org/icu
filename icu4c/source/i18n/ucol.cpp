@@ -787,50 +787,7 @@ ucol_cleanup(void)
  * It is positioned here, since ucol_initUCA need to initialize the 
  * variables below according to the data in the fractional UCA.
  */
-
-/*
-static boolean isFixedIdeograph(int cp) {
-    return (0x3400 <= cp && cp <= 0x4DB5 
-        || 0x4E00 <= cp && cp <= 0x9FA5 
-        || 0xF900 <= cp && cp <= 0xFA2D // compat: most of these decompose anyway
-        || 0x20000 <= cp && cp <= 0x2A6D6
-        || 0x2F800 <= cp && cp <= 0x2FA1D // compat: most of these decompose anyway
-        );
-}
-*/
-
-/*
-3400;<CJK Ideograph Extension A, First>;Lo;0;L;;;;;N;;;;;
-4DB5;<CJK Ideograph Extension A, Last>;Lo;0;L;;;;;N;;;;;
-4E00;<CJK Ideograph, First>;Lo;0;L;;;;;N;;;;;
-9FA5;<CJK Ideograph, Last>;Lo;0;L;;;;;N;;;;;
-20000;<CJK Ideograph Extension B, First>;Lo;0;L;;;;;N;;;;;
-2A6D6;<CJK Ideograph Extension B, Last>;Lo;0;L;;;;;N;;;;;
-2F800;CJK COMPATIBILITY IDEOGRAPH-2F800;Lo;0;L;4E3D;;;;N;;;;;
-...
-2FA1D;CJK COMPATIBILITY IDEOGRAPH-2FA1D;Lo;0;L;2A600;;;;N;;;;;
-*/
-    
-/*
-static int remapUCA_CompatibilityIdeographToCp(int cp) {
-    switch (cp) {    
-        case 0x9FA6: return 0xFA0E; // FA0E ; [.9FA6.0020.0002.FA0E] # CJK COMPATIBILITY IDEOGRAPH-FA0E
-        case 0x9FA7: return 0xFA0F; // FA0F ; [.9FA7.0020.0002.FA0F] # CJK COMPATIBILITY IDEOGRAPH-FA0F
-        case 0x9FA8: return 0xFA11; // FA11 ; [.9FA8.0020.0002.FA11] # CJK COMPATIBILITY IDEOGRAPH-FA11
-        case 0x9FA9: return 0xFA13; // FA13 ; [.9FA9.0020.0002.FA13] # CJK COMPATIBILITY IDEOGRAPH-FA13
-        case 0x9FAA: return 0xFA14; // FA14 ; [.9FAA.0020.0002.FA14] # CJK COMPATIBILITY IDEOGRAPH-FA14
-        case 0x9FAB: return 0xFA1F; // FA1F ; [.9FAB.0020.0002.FA1F] # CJK COMPATIBILITY IDEOGRAPH-FA1F
-        case 0x9FAC: return 0xFA21; // FA21 ; [.9FAC.0020.0002.FA21] # CJK COMPATIBILITY IDEOGRAPH-FA21
-        case 0x9FAD: return 0xFA23; // FA23 ; [.9FAD.0020.0002.FA23] # CJK COMPATIBILITY IDEOGRAPH-FA23
-        case 0x9FAE: return 0xFA24; // FA24 ; [.9FAE.0020.0002.FA24] # CJK COMPATIBILITY IDEOGRAPH-FA24
-        case 0x9FAF: return 0xFA27; // FA27 ; [.9FAF.0020.0002.FA27] # CJK COMPATIBILITY IDEOGRAPH-FA27
-        case 0x9FB0: return 0xFA28; // FA28 ; [.9FB0.0020.0002.FA28] # CJK COMPATIBILITY IDEOGRAPH-FA28
-        case 0x9FB1: return 0xFA29; // FA29 ; [.9FB1.0020.0002.FA29] # CJK COMPATIBILITY IDEOGRAPH-FA29
-    }
-    return cp;
-}
-*/
-    
+   
 /**
   * Function used to: 
   * a) collapse the 2 different Han ranges from UCA into one (in the right order), and
@@ -2083,7 +2040,7 @@ uint32_t getDiscontiguous(const UCollator *coll, collIterate *source,
 
 static
 inline UBool isNonChar(UChar32 cp) {
-  if ((cp & 0xFFFE) == 0xFFFE || (0xFDD0 <= cp && cp <= 0xFDEF) || (0xD800 <= cp && cp <= 0xDC00)) {
+  if ((cp & 0xFFFE) == 0xFFFE || (0xFDD0 <= cp && cp <= 0xFDEF) || (0xD800 <= cp && cp <= 0xDFFF)) {
     return TRUE;
   }
   return FALSE;
