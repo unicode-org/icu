@@ -406,7 +406,7 @@ static uint8_t flagsOffset[256]={
 
 U_CFUNC UBool
 uprv_haveProperties() {
-    return HAVE_DATA;
+    return (UBool)HAVE_DATA;
 }
 
 /* API functions ------------------------------------------------------------ */
@@ -1014,7 +1014,7 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
     UBool canGrow;
 
     /* do not attempt to grow if there is no growBuffer function or if it has failed before */
-    canGrow= growBuffer!=NULL;
+    canGrow = (UBool)(growBuffer!=NULL);
 
     /* test early, once, if there is a data file */
     if(!HAVE_DATA) {
@@ -1024,7 +1024,7 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
          */
         if(srcLength<=destCapacity ||
             /* attempt to grow the buffer */
-            (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, srcLength, 0)))
+            (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, srcLength, 0)) != 0)
         ) {
             destIndex=srcLength;
             *pErrorCode=U_USING_DEFAULT_ERROR;
@@ -1113,7 +1113,7 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
                 /* output this case mapping result string */
                 if( (destIndex+i)<=destCapacity ||
                     /* attempt to grow the buffer */
-                    (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+i)+20, destIndex)))
+                    (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+i)+20, destIndex)) != 0)
                 ) {
                     /* copy the case mapping to the destination */
                     while(i>0) {
@@ -1145,7 +1145,7 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
         if(c<=0xffff) {
             if( destIndex<destCapacity ||
                 /* attempt to grow the buffer */
-                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+1)+20, destIndex)))
+                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+1)+20, destIndex)) != 0)
             ) {
                 dest[destIndex++]=(UChar)c;
             } else {
@@ -1156,7 +1156,7 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
         } else {
             if( (destIndex+2)<=destCapacity ||
                 /* attempt to grow the buffer */
-                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+2)+20, destIndex)))
+                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+2)+20, destIndex)) != 0)
             ) {
                 dest[destIndex++]=(UChar)(0xd7c0+(c>>10));
                 dest[destIndex++]=(UChar)(0xdc00|(c&0x3ff));
@@ -1193,7 +1193,7 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
     UBool canGrow;
 
     /* do not attempt to grow if there is no growBuffer function or if it has failed before */
-    canGrow= growBuffer!=NULL;
+    canGrow = (UBool)(growBuffer!=NULL);
 
     /* test early, once, if there is a data file */
     if(!HAVE_DATA) {
@@ -1203,7 +1203,7 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
          */
         if(srcLength<=destCapacity ||
             /* attempt to grow the buffer */
-            (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, srcLength, 0)))
+            (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, srcLength, 0)) != 0)
         ) {
             destIndex=srcLength;
             *pErrorCode=U_USING_DEFAULT_ERROR;
@@ -1301,7 +1301,7 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                 /* output this case mapping result string */
                 if( (destIndex+i)<=destCapacity ||
                     /* attempt to grow the buffer */
-                    (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+i)+20, destIndex)))
+                    (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+i)+20, destIndex)) != 0)
                 ) {
                     /* copy the case mapping to the destination */
                     while(i>0) {
@@ -1333,7 +1333,7 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
         if(c<=0xffff) {
             if( destIndex<destCapacity ||
                 /* attempt to grow the buffer */
-                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+1)+20, destIndex)))
+                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+1)+20, destIndex)) != 0)
             ) {
                 dest[destIndex++]=(UChar)c;
             } else {
@@ -1344,7 +1344,7 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
         } else {
             if( (destIndex+2)<=destCapacity ||
                 /* attempt to grow the buffer */
-                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+2)+20, destIndex)))
+                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+2)+20, destIndex)) != 0)
             ) {
                 dest[destIndex++]=(UChar)(0xd7c0+(c>>10));
                 dest[destIndex++]=(UChar)(0xdc00|(c&0x3ff));
@@ -1493,7 +1493,7 @@ u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
     UBool canGrow;
 
     /* do not attempt to grow if there is no growBuffer function or if it has failed before */
-    canGrow= growBuffer!=NULL;
+    canGrow = (UBool)(growBuffer!=NULL);
 
     /* test early, once, if there is a data file */
     if(!HAVE_DATA) {
@@ -1503,7 +1503,7 @@ u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
          */
         if(srcLength<=destCapacity ||
             /* attempt to grow the buffer */
-            (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, srcLength, 0)))
+            (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, srcLength, 0)) != 0)
         ) {
             destIndex=srcLength;
             *pErrorCode=U_USING_DEFAULT_ERROR;
@@ -1567,7 +1567,7 @@ u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
                 /* output this case mapping result string */
                 if( (destIndex+i)<=destCapacity ||
                     /* attempt to grow the buffer */
-                    (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+i)+20, destIndex)))
+                    (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+i)+20, destIndex)) != 0)
                 ) {
                     /* copy the case mapping to the destination */
                     while(i>0) {
@@ -1599,7 +1599,7 @@ u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
         if(c<=0xffff) {
             if( destIndex<destCapacity ||
                 /* attempt to grow the buffer */
-                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+1)+20, destIndex)))
+                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+1)+20, destIndex)) != 0)
             ) {
                 dest[destIndex++]=(UChar)c;
             } else {
@@ -1610,7 +1610,7 @@ u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
         } else {
             if( (destIndex+2)<=destCapacity ||
                 /* attempt to grow the buffer */
-                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+2)+20, destIndex)))
+                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity, destCapacity+2*(srcLength-srcIndex+2)+20, destIndex)) != 0)
             ) {
                 dest[destIndex++]=(UChar)(0xd7c0+(c>>10));
                 dest[destIndex++]=(UChar)(0xdc00|(c&0x3ff));
