@@ -723,13 +723,31 @@ UnicodeStringTest::TestCaseConversion()
             deseretInput=UnicodeString("\\U0001043C\\U00010414", "").unescape(),
             deseretLower=UnicodeString("\\U0001043C\\U0001043C", "").unescape(),
             deseretUpper=UnicodeString("\\U00010414\\U00010414", "").unescape();
-        t=deseretInput.toLower();
+        (t=deseretInput).toLower();
         if(t!=deseretLower) {
             errln("error lowercasing Deseret (plane 1) characters");
         }
-        t=deseretInput.toUpper();
+        (t=deseretInput).toUpper();
         if(t!=deseretUpper) {
             errln("error uppercasing Deseret (plane 1) characters");
+        }
+    }
+
+    // test some more cases that looked like problems
+    {
+        UnicodeString t;
+
+        UnicodeString
+            ljInput=UnicodeString("ab'cD \\uFB00i\\u0131I\\u0130 \\u01C7\\u01C8\\u01C9 \\U0001043C\\U00010414", "").unescape(),
+            ljLower=UnicodeString("ab'cd \\uFB00i\\u0131ii \\u01C9\\u01C9\\u01C9 \\U0001043C\\U0001043C", "").unescape(),
+            ljUpper=UnicodeString("AB'CD FFIII\\u0130 \\u01C7\\u01C7\\u01C7 \\U00010414\\U00010414", "").unescape();
+        (t=ljInput).toLower("en");
+        if(t!=ljLower) {
+            errln("error lowercasing LJ characters");
+        }
+        (t=ljInput).toUpper("en");
+        if(t!=ljUpper) {
+            errln("error uppercasing LJ characters");
         }
     }
 
