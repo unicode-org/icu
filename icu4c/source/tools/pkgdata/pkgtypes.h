@@ -64,7 +64,7 @@ CharList *pkg_appendToList(CharList *l, CharList** end, const char *str);
 /*
  * does list contain string?  Returns: t/f
  */
-bool_t  pkg_listContains(CharList *l, const char *str);
+UBool  pkg_listContains(CharList *l, const char *str);
 
 /*
  * Delete list 
@@ -102,11 +102,11 @@ typedef struct UPKGOptions_
   const char *makeFile;    /* Makefile path */
   const char *install;     /* Where to install to (NULL = don't install) */
   const char *icuroot;     /* where does ICU lives */
-  bool_t     rebuild;
-  bool_t     clean;
-  bool_t     nooutput;
-  bool_t     verbose;
-  bool_t     hadStdin;     /* Stdin was a dependency - don't make anything depend on the file list coming in. */
+  UBool      rebuild;
+  UBool      clean;
+  UBool      nooutput;
+  UBool      verbose;
+  UBool      hadStdin;     /* Stdin was a dependency - don't make anything depend on the file list coming in. */
 
   UPKGMODE  *fcn;          /* Handler function */
 } UPKGOptions;

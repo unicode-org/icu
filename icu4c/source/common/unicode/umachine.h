@@ -151,10 +151,6 @@
 /* Boolean data type                                                         */
 /*===========================================================================*/
 
-#if !HAVE_BOOL_T
-    typedef int8_t bool_t;
-#endif
-
 typedef int8_t UBool;
 
 #ifndef TRUE

@@ -225,14 +225,14 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     }
 
     pat.setDecimalSeparatorAlwaysShown(TRUE);
-    bool_t tf = pat.isDecimalSeparatorAlwaysShown();
+    UBool tf = pat.isDecimalSeparatorAlwaysShown();
     logln((UnicodeString)"DecimalSeparatorIsAlwaysShown (should be TRUE) is " + (UnicodeString) (tf ? "TRUE" : "FALSE"));
     if(tf != TRUE) {
         errln((UnicodeString)"ERROR: setDecimalSeparatorAlwaysShown() failed");
     }
     // Added by Ken Liu testing set/isExponentSignAlwaysShown
     pat.setExponentSignAlwaysShown(TRUE);
-    bool_t esas = pat.isExponentSignAlwaysShown();
+    UBool esas = pat.isExponentSignAlwaysShown();
     logln((UnicodeString)"ExponentSignAlwaysShown (should be TRUE) is " + (UnicodeString) (esas ? "TRUE" : "FALSE"));
     if(esas != TRUE) {
         errln((UnicodeString)"ERROR: ExponentSignAlwaysShown() failed");
