@@ -989,6 +989,23 @@ static void TestStringFunctions()
         if (state != NULL) {
             log_err("State should be NULL for empty string\n");
         }
+        u_uastrcpy(currTokenBuf, ", ,");
+        if (u_strtok_r(currTokenBuf, delimBuf, &state) != NULL) {
+            log_err("Didn't get NULL for a string of delimiters\n");
+        }
+        if (state != NULL) {
+            log_err("State should be NULL for a string of delimiters\n");
+        }
+        u_uastrcpy(currTokenBuf, "q, ,");
+        if (u_strtok_r(currTokenBuf, delimBuf, &state) == NULL) {
+            log_err("Got NULL for a string that does not begin with delimiters\n");
+        }
+        if (u_strtok_r(NULL, delimBuf, &state) != NULL) {
+            log_err("Didn't get NULL for a string that ends in delimiters\n");
+        }
+        if (state != NULL) {
+            log_err("State should be NULL for empty string\n");
+        }
     }
 
     /* test u_strcmpCodePointOrder() */
