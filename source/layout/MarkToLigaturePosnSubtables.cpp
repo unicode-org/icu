@@ -49,7 +49,7 @@ le_int32 MarkToLigaturePositioningSubtable::process(GlyphIterator *glyphIterator
     }
 
     // FIXME: we probably don't want to find a ligature before a previous base glyph...
-    GlyphIterator ligatureIterator(*glyphIterator, lfIgnoreMarks /*| lfIgnoreBaseGlyphs*/);
+    GlyphIterator ligatureIterator(*glyphIterator, (le_uint16) (lfIgnoreMarks /*| lfIgnoreBaseGlyphs*/));
     LEGlyphID ligatureGlyph = findLigatureGlyph(&ligatureIterator);
     le_int32 ligatureCoverage = getBaseCoverage((LEGlyphID) ligatureGlyph);
     const LigatureArray *ligatureArray = (const LigatureArray *) ((char *) this + SWAPW(baseArrayOffset));
