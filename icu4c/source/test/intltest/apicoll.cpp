@@ -1715,15 +1715,46 @@ class TestCollator: Collator
 {
 public:
     virtual Collator* clone(void) const;
+	
+	// dang, markus says we can't use 'using' in ICU.  I hate doing this for
+	// deprecated methods...
+
+	// using Collator::compare;
+
 	virtual EComparisonResult compare(const UnicodeString& source, 
-                                      const UnicodeString& target) const;
+                                      const UnicodeString& target) const
+	{
+		return Collator::compare(source, target);
+	}
+
 	virtual EComparisonResult compare(const UnicodeString& source,
                                       const UnicodeString& target,
-                                      int32_t length) const;
+                                      int32_t length) const
+	{
+		return Collator::compare(source, target, length);
+	}
+
 	virtual EComparisonResult compare(const UChar* source, 
 		                              int32_t sourceLength, 
 									  const UChar* target, 
-									  int32_t targetLength) const;
+									  int32_t targetLength) const
+	{
+		return Collator::compare(source, sourceLength, target, targetLength);
+	}
+
+
+	virtual UCollationResult compare(const UnicodeString& source, 
+                                      const UnicodeString& target,
+									  UErrorCode& status) const;
+	virtual UCollationResult compare(const UnicodeString& source,
+                                      const UnicodeString& target,
+                                      int32_t length,
+									  UErrorCode& status) const;
+	virtual UCollationResult compare(const UChar* source, 
+		                              int32_t sourceLength, 
+									  const UChar* target, 
+									  int32_t targetLength,
+									  UErrorCode& status) const;
 	virtual CollationKey& getCollationKey(const UnicodeString&  source,
                                           CollationKey& key,
                                           UErrorCode& status) const;
@@ -1772,27 +1803,30 @@ Collator* TestCollator::clone() const
 	return new TestCollator();
 }
 
-Collator::EComparisonResult TestCollator::compare(const UnicodeString& source, 
-                                        const UnicodeString& target) const
-{
-    returnEComparisonResult(source.compare(target));
-}
-
-Collator::EComparisonResult TestCollator::compare(const UnicodeString& source,
+UCollationResult TestCollator::compare(const UnicodeString& source, 
                                         const UnicodeString& target,
-                                        int32_t length) const
+										UErrorCode& status) const
 {
-	returnEComparisonResult(source.compare(0, length, target));
+    return UCollationResult(source.compare(target));
 }
 
-Collator::EComparisonResult TestCollator::compare(const UChar* source, 
+UCollationResult TestCollator::compare(const UnicodeString& source,
+                                        const UnicodeString& target,
+                                        int32_t length,
+										UErrorCode& status) const
+{
+	return UCollationResult(source.compare(0, length, target));
+}
+
+UCollationResult TestCollator::compare(const UChar* source, 
 		                                int32_t sourceLength, 
 									    const UChar* target, 
-									    int32_t targetLength) const
+									    int32_t targetLength,
+										UErrorCode& status) const
 {
 	UnicodeString s(source, sourceLength);
 	UnicodeString t(target, targetLength);
-	return compare(s, t);
+	return compare(s, t, status);
 }
 
 CollationKey& TestCollator::getCollationKey(const UnicodeString& source,
@@ -1958,7 +1992,8 @@ void CollationAPITest::TestSubclass()
 	UErrorCode status = U_ZERO_ERROR;
 	col1.getCollationKey(abc, key, status);
 	int32_t length = 0;
-    UnicodeString keyarray((const char *)key.getByteArray(length), length, NULL, status);
+	const char* bytes = (const char *)key.getByteArray(length);
+    UnicodeString keyarray(bytes, length, NULL, status);
     if (abc != keyarray) {
         errln("TestCollator collationkey API is returning wrong values");
     }

@@ -237,22 +237,51 @@ Collator::createInstance(const Locale &loc,
   return collator;
 }
 
+// implement deprecated, previously abstract method
+Collator::EComparisonResult Collator::compare(const UnicodeString& source, 
+                                    const UnicodeString& target) const
+{
+	UErrorCode ec = U_ZERO_ERROR;
+	return (Collator::EComparisonResult)compare(source, target, ec);
+}
+
+// implement deprecated, previously abstract method
+Collator::EComparisonResult Collator::compare(const UnicodeString& source,
+                                    const UnicodeString& target,
+                                    int32_t length) const
+{
+	UErrorCode ec = U_ZERO_ERROR;
+	return (Collator::EComparisonResult)compare(source, target, length, ec);
+}
+
+// implement deprecated, previously abstract method
+Collator::EComparisonResult Collator::compare(const UChar* source, int32_t sourceLength,
+                                    const UChar* target, int32_t targetLength) 
+                                    const
+{
+	UErrorCode ec = U_ZERO_ERROR;
+	return (Collator::EComparisonResult)compare(source, sourceLength, target, targetLength, ec);
+}
+
 UBool Collator::equals(const UnicodeString& source, 
                           const UnicodeString& target) const
 {
-  return (compare(source, target) == UCOL_EQUAL);
+  UErrorCode ec = U_ZERO_ERROR;
+  return (compare(source, target, ec) == UCOL_EQUAL);
 }
 
 UBool Collator::greaterOrEqual(const UnicodeString& source, 
                                   const UnicodeString& target) const
 {
-  return (compare(source, target) != UCOL_LESS);
+  UErrorCode ec = U_ZERO_ERROR;
+  return (compare(source, target, ec) != UCOL_LESS);
 }
 
 UBool Collator::greater(const UnicodeString& source, 
                            const UnicodeString& target) const
 {
-  return (compare(source, target) == UCOL_GREATER);
+  UErrorCode ec = U_ZERO_ERROR;
+  return (compare(source, target, ec) == UCOL_GREATER);
 }
 
 // this API  ignores registered collators, since it returns an
