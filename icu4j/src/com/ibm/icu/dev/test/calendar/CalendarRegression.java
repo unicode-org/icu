@@ -5,15 +5,17 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CalendarRegression.java,v $
- * $Date: 2002/08/13 21:53:38 $
- * $Revision: 1.12 $
+ * $Date: 2002/10/02 20:20:26 $
+ * $Revision: 1.13 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
 import com.ibm.icu.util.*;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Set;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 
@@ -705,6 +707,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
 
     public void Test4106136() {
         Locale saveLocale = Locale.getDefault();
+        String[] names = { "Calendar", "DateFormat", "NumberFormat" };
         try {
             Locale[] locales = { Locale.CHINESE, Locale.CHINA };
             for (int i=0; i<locales.length; ++i) {
@@ -716,7 +719,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
                 };
                 for (int j=0; j<n.length; ++j) {
                     if (n[j] == 0)
-                        errln("Fail: No locales for " + locales[i]);
+                        errln("Fail: " + names[j] + " has no locales for " + locales[i]);
                 }
             }
         }
@@ -1833,6 +1836,49 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         } finally {
             TimeZone.setDefault(zone);
         }
+    }
+
+    public void TestRegistration() {
+        Set names = Calendar.getCalendarFactoryNames();
+
+        TimeZone tz = TimeZone.getDefault();
+        Locale loc = Locale.getDefault();
+        Iterator iter = names.iterator();
+        while (iter.hasNext()) {
+            String name = (String)iter.next();
+            logln("Testing factory: " + name);
+
+            Calendar cal = Calendar.getInstance(tz, loc, name);
+            logln("Calendar class: " + cal.getClass());
+
+            DateFormat fmt = cal.getDateTimeFormat(DateFormat.LONG, DateFormat.LONG, loc);
+            
+            logln("Date: " + fmt.format(cal.getTime()));
+        }
+
+        // register new default for our locale
+        logln("\nTesting registration");
+        loc = new Locale("en", "US");
+        Object key = Calendar.register(JapaneseCalendar.factory(), loc, true);
+
+        loc = new Locale("en", "US", "TEST");
+        Calendar cal = Calendar.getInstance(loc);
+        logln("Calendar class: " + cal.getClass());
+        DateFormat fmt = cal.getDateTimeFormat(DateFormat.LONG, DateFormat.LONG, loc);
+        logln("Date: " + fmt.format(cal.getTime()));
+
+        // force to use other default anyway
+        logln("\nOverride registration");
+        cal = Calendar.getInstance(tz, loc, "Gregorian");
+        fmt = cal.getDateTimeFormat(DateFormat.LONG, DateFormat.LONG, loc);
+        logln("Date: " + fmt.format(cal.getTime()));
+
+        // unregister default
+        logln("\nUnregistration");
+        logln("Unregister returned: " + Calendar.unregister(key));
+        cal = Calendar.getInstance(tz, loc, "Gregorian");
+        fmt = cal.getDateTimeFormat(DateFormat.LONG, DateFormat.LONG, loc);
+        logln("Date: " + fmt.format(cal.getTime()));
     }
 }
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUServiceThreadTest.java,v $
- * $Date: 2002/08/13 22:10:20 $
- * $Revision: 1.4 $
+ * $Date: 2002/10/02 20:20:25 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -22,7 +22,6 @@ import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICULocaleService.LocaleKey;
-import com.ibm.icu.impl.ICULocaleService.MultipleKeyFactory;
 import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
 import java.util.Arrays;
 import java.util.ArrayList;

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/HebrewCalendar.java,v $ 
- * $Date: 2002/08/07 03:10:20 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/10/02 20:20:24 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -764,5 +764,21 @@ public class HebrewCalendar extends Calendar {
         }
 
         return (int) (day + 347997);
+    }
+
+    private static CalendarFactory factory;
+    public static CalendarFactory factory() {
+        if (factory == null) {
+            factory = new CalendarFactory() {
+                public Calendar create(TimeZone tz, Locale loc) {
+                    return new HebrewCalendar(tz, loc);
+                }
+
+                public String factoryName() {
+                    return "Hebrew";
+                }
+            };
+        }
+        return factory;
     }
 }

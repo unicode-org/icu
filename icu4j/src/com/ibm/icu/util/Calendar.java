@@ -7,6 +7,14 @@
 package com.ibm.icu.util;
 
 import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUService;
+import com.ibm.icu.impl.ICUService.Key;
+import com.ibm.icu.impl.ICUService.Factory;
+import com.ibm.icu.impl.ICULocaleService;
+import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
+import com.ibm.icu.impl.ICULocaleService.LocaleKey;
+import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
+import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -16,11 +24,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 /**
  * <code>Calendar</code> is an abstract base class for converting between
@@ -620,7 +632,7 @@ import java.util.ResourceBundle;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.30 $ $Date: 2002/08/21 18:39:56 $
+ * @version      $Revision: 1.31 $ $Date: 2002/10/02 20:20:25 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -1422,7 +1434,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public static synchronized Calendar getInstance()
     {
-        return new GregorianCalendar();
+        return getInstance(TimeZone.getDefault(), Locale.getDefault(), null);
     }
 
     /**
@@ -1432,7 +1444,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public static synchronized Calendar getInstance(TimeZone zone)
     {
-        return new GregorianCalendar(zone, Locale.getDefault());
+        return getInstance(zone, Locale.getDefault(), null);
     }
 
     /**
@@ -1442,7 +1454,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public static synchronized Calendar getInstance(Locale aLocale)
     {
-        return new GregorianCalendar(TimeZone.getDefault(), aLocale);
+        return getInstance(TimeZone.getDefault(), aLocale, null);
     }
 
     /**
@@ -1452,19 +1464,137 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @return a Calendar.
      */
     public static synchronized Calendar getInstance(TimeZone zone,
-                                                    Locale aLocale)
+                                                    Locale aLocale) {
+        return getInstance(zone, aLocale, null);
+    }
+
+    // ==== Factory Stuff ====
+
+    /**
+     * Return a calendar of for the TimeZone and locale.  If calType is
+     * not null, looks in the collection of CalendarFactories for a match
+     * and uses that factory to instantiate the calendar.  Otherwise, it
+     * uses the default factory that has been registered for that locale.
+     */
+    public static synchronized Calendar getInstance(TimeZone zone,
+                                                    Locale locale,
+                                                    String factoryName)
     {
-        return new GregorianCalendar(zone, aLocale);
+        CalendarFactory factory = null;
+        if (factoryName != null) {
+            factory = (CalendarFactory)getFactoryMap().get(factoryName);
+        }
+
+        if (factory == null && service != null) {
+            factory = (CalendarFactory)service.get(locale);
+        }
+
+        if (factory == null) {
+            return new GregorianCalendar(zone, locale);
+        } else {
+            return factory.create(zone, locale);
+        }
     }
 
     /**
      * Gets the list of locales for which Calendars are installed.
      * @return the list of locales for which Calendars are installed.
      */
-    public static synchronized Locale[] getAvailableLocales()
+    public static Locale[] getAvailableLocales()
     {
-        return DateFormat.getAvailableLocales();
+        return service == null
+            ? ICULocaleData.getAvailableLocales()
+            : service.getAvailableLocales();
     }
+
+    private static Map factoryMap;
+    private static Map getFactoryMap() {
+        if (factoryMap == null) {
+            Map m = new HashMap(5);
+            addFactory(m, BuddhistCalendar.factory());
+            addFactory(m, ChineseCalendar.factory());
+            addFactory(m, GregorianCalendar.factory());
+            addFactory(m, HebrewCalendar.factory());
+            addFactory(m, IslamicCalendar.factory());
+            addFactory(m, JapaneseCalendar.factory());
+            factoryMap = m;
+        }
+        return factoryMap;
+    }
+
+    private static void addFactory(Map m, CalendarFactory f) {
+        m.put(f.factoryName(), f);
+    }
+
+    /**
+     * Return a set of all the registered calendar factory names.
+     */
+    public static Set getCalendarFactoryNames() {
+        return Collections.unmodifiableSet(getFactoryMap().keySet());
+    }
+
+    /**
+     * Register a new CalendarFactory.  getInstance(TimeZone, Locale, String) will
+     * try to locate a registered factories matching the factoryName.  Only registered
+     * factories will be found.
+     */
+    public static void registerFactory(CalendarFactory factory) {
+        if (factory == null) {
+            throw new IllegalArgumentException("Factory must not be null");
+        }
+        getFactoryMap().put(factory.factoryName(), factory);
+    }
+
+    /**
+     * Registers a default CalendarFactory for the provided locale.
+     * If covers is true, this factory is also used for all locales
+     * that are more specific than the provided locale. The returned
+     * object is a key that can be used to unregister this
+     * CalendarFactory.  If the factory has not already been
+     * registered with registerFactory, it will be.  
+     */
+    public static Object register(CalendarFactory factory, Locale locale, boolean covers) {
+        if (factory == null) {
+            throw new IllegalArgumentException("calendar must not be null");
+        }
+        registerFactory(factory);
+        return getService().registerObject(factory, locale, covers 
+                                           ? LocaleKeyFactory.VISIBLE_COVERS 
+                                           : LocaleKeyFactory.VISIBLE);
+    }
+
+    /**
+     * Unregister the CalendarFactory associated with this key 
+     * (obtained from register).
+     */
+    public static boolean unregister(Object registryKey) {
+        return service == null 
+            ? false
+            : service.unregisterFactory((Factory)registryKey);
+    }
+
+    private static ICULocaleService service = null;
+    private static ICULocaleService getService() {
+        if (service == null) {
+            ICULocaleService newService = new ICULocaleService("Calendar");
+
+            class RBCalendarFactory extends ICUResourceBundleFactory {
+                protected Object handleCreate(Locale locale, int kind) {
+                    return GregorianCalendar.factory();
+                }
+            }
+                
+            newService.registerFactory(new RBCalendarFactory());
+            synchronized (Calendar.class) {
+                if (service == null) {
+                    service = newService;
+                }
+            }
+        }
+        return service;
+    }
+
+    // ==== End of factory Stuff ====
 
     /**
      * Gets this Calendar's current time.

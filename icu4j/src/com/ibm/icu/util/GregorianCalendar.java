@@ -902,4 +902,20 @@ public class GregorianCalendar extends Calendar {
 
         return julianDay;
     }
+
+    private static CalendarFactory factory;
+    public static CalendarFactory factory() {
+        if (factory == null) {
+            factory = new CalendarFactory() {
+                public Calendar create(TimeZone tz, Locale loc) {
+                    return new GregorianCalendar(tz, loc);
+                }
+
+                public String factoryName() {
+                    return "Gregorian";
+                }
+            };
+        }
+        return factory;
+    }
 }

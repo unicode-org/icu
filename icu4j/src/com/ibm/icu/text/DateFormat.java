@@ -574,7 +574,7 @@ public abstract class DateFormat extends Format {
      */
     public static Locale[] getAvailableLocales()
     {
-        return ICULocaleData.getAvailableLocales("DateTimePatterns");
+        return ICULocaleData.getAvailableLocales();
     }
 
     /**

@@ -4,10 +4,16 @@
 
 package com.ibm.icu.impl;
 
+import java.lang.ref.SoftReference;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Provides information about and access to resource bundles in the
@@ -23,6 +29,9 @@ public class ICULocaleData {
 
     /**
      * Returns a list of the installed locales.
+     *
+     * The following note by Rich is obsolete, see below.  -- dlf 01 Oct. 2002
+     * -----
      * @param key A resource tag.  Currently, this parameter is ignored.  The obvious
      * intent, however,  is for getAvailableLocales() to return a list of only those
      * locales that contain a resource with the specified resource tag.
@@ -35,7 +44,7 @@ public class ICULocaleData {
      * inheriting one from another locale.  Thus, if fr and fr_CA uniquely define
      * NumberFormat data, but fr_BE doesn't, the user wouldn't see "French (Belgium)" in
      * the list and would go for "French (default)" instead.  Of course, this means
-     * "English (United States)" would not be in the list, since it is the default locale.
+     * "Engish (United States)" would not be in the list, since it is the default locale.
      * This might be okay, but might be confusing to some users.
      *
      * <p>In addition, the other functions that call getAvailableLocales() don't currently
@@ -44,28 +53,97 @@ public class ICULocaleData {
      *
      * <p>We recommend that someone take some careful consideration of these issues before
      * modifying this function to pay attention to the "key" parameter.  --rtg 1/26/98
+     * -----
+     *
+     * Return a list of the locales supported by a collection of resource bundles.
+     * All ICULocaleData-based services that use a particular resource bundle support
+     * all the locales from that bundle.  If support for a particular service is spotty,
+     * a different bundle prefix should be used for that service.
+     * @param bundlePrefix the prefix of the resource bundles to use.
      */
-    public static Locale[] getAvailableLocales(String key) {
-	// ignore key, just return all locales
-	return getAvailableLocales();
+    public static Locale[] getAvailableLocales(String bundlePrefix) {
+        return (Locale[])getAvailEntry(bundlePrefix).getLocaleList().clone();
     }
-    
+
     /**
-     * Return an array of all the locales for which we have resource information.
+     * Convenience method that returns a list of all the avilable LOCALE_ELEMENTS locales.
      */
     public static Locale[] getAvailableLocales() {
-        // creating the locale list is expensive, so be careful to do it
-        // only once
-        if (localeList == null) {
-            synchronized(ICULocaleData.class) {
-                if (localeList == null) {
-                    localeList = createLocaleList();
-                }
+        return getAvailableLocales(LOCALE_ELEMENTS);
+    }
+
+    /**
+     * Return a set of the locale names supported by a collection of resource bundles.
+     * @param bundlePrefix the prefix of the resource bundles to use.
+     */
+    public static Set getAvailableLocaleNameSet(String bundlePrefix) {
+        return getAvailEntry(bundlePrefix).getLocaleNameSet();
+    }
+
+    /**
+     * Return a set of the locale names supported by a collection of resource bundles.
+     * @param bundlePrefix the prefix of the resource bundles to use.
+     */
+    public static Set getAvailableLocaleNameSet() {
+        return getAvailableLocaleNameSet(LOCALE_ELEMENTS);
+    }
+
+    /**
+     * Holds the prefix, and lazily creates the Locale[] list or the locale name Set as needed.
+     */
+    private static final class AvailEntry {
+        private String prefix;
+        private Locale[] locales;
+        private Set nameSet;
+
+        AvailEntry(String prefix) {
+            this.prefix = prefix;
+        }
+
+        Locale[] getLocaleList() {
+            if (locales == null) {
+                locales = createLocaleList(prefix);
+            }
+            return locales;
+        }
+
+        Set getLocaleNameSet() {
+            if (nameSet == null) {
+                nameSet = createLocaleNameSet(prefix);
+            }
+            return nameSet;
+        }
+    }
+
+    /**
+     * Stores the locale information in a cache accessed by key (bundle prefix).  The
+     * cached objects are AvailEntries.  The cache is held by a SoftReference 
+     * so it can be GC'd.
+     */
+    private static AvailEntry getAvailEntry(String key) {
+        AvailEntry ae = null;
+        Map lcache = null;
+        if (lcacheref != null) {
+            lcache = (Map)lcacheref.get();
+            if (lcache != null) {
+                ae = (AvailEntry)lcache.get(key);
             }
         }
 
-	return (Locale[])localeList.clone();
+        if (ae == null) {
+            ae = new AvailEntry(key);
+            if (lcache == null) {
+                lcache = new HashMap();
+                lcache.put(key, ae);
+                lcacheref = new SoftReference(lcache);
+            } else {
+                lcache.put(key, ae);
+            }
+        }
+
+        return ae;
     }
+    private static SoftReference lcacheref;
 
     /**
      * The default name for resources containing ICU locale data.
@@ -218,10 +296,33 @@ public class ICULocaleData {
 
     // ========== privates ==========
 
-
-    private static Locale[] createLocaleList() {
+    private static Set createLocaleNameSet(String bundleName) {
 	try {
-	    ResourceBundle index = getLocaleElements(LocaleUtility.getLocaleFromName("index"));
+	    ResourceBundle index = getResourceBundle(bundleName, "index");
+	    String[] localeNames = index.getStringArray("InstalledLocales");
+
+            // barf gag choke spit hack...
+            // since java's Locale 'fixes' the locale string for some locales,
+            // we have to fix our names to match, otherwise the Locale[] list
+            // won't match the locale name set.  What were they thinking?!?
+            for (int i = 0; i < localeNames.length; ++i) {
+                localeNames[i] = LocaleUtility.getLocaleFromName(localeNames[i]).toString();
+            }
+
+            HashSet set = new HashSet();
+            set.addAll(Arrays.asList(localeNames));
+            return Collections.unmodifiableSet(set);
+	}
+	catch (MissingResourceException e) {
+            System.out.println("couldn't find index for bundleName: " + bundleName);
+            Thread.dumpStack();
+	}
+        return Collections.EMPTY_SET;
+    }
+
+    private static Locale[] createLocaleList(String bundleName) {
+	try {
+	    ResourceBundle index = getResourceBundle(bundleName, "index");
 	    String[] localeNames = index.getStringArray("InstalledLocales");
 	    Locale[] locales = new Locale[localeNames.length];
 	    for (int i = 0; i < localeNames.length; ++i) {
@@ -230,8 +331,9 @@ public class ICULocaleData {
 	    return locales;
 	}
 	catch (MissingResourceException e) {
+            System.out.println("couldn't find index for bundleName: " + bundleName);
+            Thread.dumpStack();
 	}
-		
 	return new Locale[0];
     }
 }
