@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/03/27 19:12:05 $
- * $Revision: 1.101 $
+ * $Date: 2002/03/29 18:33:08 $
+ * $Revision: 1.102 $
  *
  *****************************************************************************************
  */
@@ -2469,6 +2469,20 @@ public class TransliteratorTest extends TestFmwk {
         
         expect(t, "\u0301",
                "U+0301 {COMBINING ACUTE ACCENT}");
+    }
+
+    public void TestInvalidBackRef() {
+        String rule =  ". > $1;";
+        
+        try {
+            Transliterator t = Transliterator.createFromRules("Test", rule, Transliterator.FORWARD);
+            if (t != null) {
+                errln("FAIL: createFromRules should have returned NULL");
+            }
+	        errln("FAIL: Ok: . > $1; => no error");
+        } catch (IllegalArgumentException e) {        
+          	 logln("Ok: . > $1; => " + e.getMessage());
+        }
     }
 
     //======================================================================
