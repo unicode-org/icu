@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/BreakIteratorRules_th.java,v $ 
- * $Date: 2000/03/10 04:07:26 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/07/20 17:15:06 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -58,14 +58,20 @@ public class BreakIteratorRules_th extends ListResourceBundle {
                 + "ws=[[:Zs:]\t];"
                 + "word=(({let}+({mid-word}{let}+)*){danda}?);"
                 + "number=({dgt}+({mid-num}{dgt}+)*);"
-                + "thai-etc={paiyannoi}\u0e25{paiyannoi};"
+                + "thai-etc=({paiyannoi}\u0e25{paiyannoi});"
+                
                 + ".;"
                 + "{word}?({number}{word})*({number}{post-num}?)?;"
                 + "{pre-num}({number}{word})*({number}{post-num}?)?;"
-                + "{$dictionary}+({paiyannoi}{maiyamok}?)?;"
-                + "{$dictionary}+{paiyannoi}/([^\u0e25{$ignore}]"
+
+                //+ "{$dictionary}+({paiyannoi}{maiyamok}?)?;"
+                + "{$dictionary}+({paiyannoi}?{maiyamok})?;"
+
+                + "{$dictionary}+{paiyannoi}/([^\u0e25{maiyamok}{$ignore}]"
                         + "|\u0e25[^{paiyannoi}{$ignore}]);"
+
                 + "{thai-etc};"
+        
                 + "{ws}*\r?{ls}?;"
                 + "[{kata}{cjk-diacrit}]*;"
                 + "[{hira}{cjk-diacrit}]*;"
