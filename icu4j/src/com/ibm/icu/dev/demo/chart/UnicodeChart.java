@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/chart/UnicodeChart.java,v $ 
- * $Date: 2003/11/27 02:31:48 $ 
- * $Revision: 1.2 $
+ * $Date: 2003/12/29 19:48:58 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -21,7 +21,7 @@ import com.ibm.icu.impl.*;
 public class UnicodeChart {
     public static void main(String[] args) throws IOException {
         int rowWidth = 256;
-        PrintWriter pw = BagFormatter.openUTF8Writer("", "UnicodeChart.html", BagFormatter.CONSOLE);
+        PrintWriter pw = BagFormatter.openUTF8Writer("", "UnicodeChart.html");
         pw.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
         pw.println("<script type='text/javascript' src='UnicodeChart.js'></script>");
         pw.println("<link rel='stylesheet' type='text/css' href='UnicodeChart.css'>");

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TestBagFormatter.java,v $
- * $Date: 2003/12/20 03:06:54 $
- * $Revision: 1.4 $
+ * $Date: 2003/12/29 19:48:57 $
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -62,9 +62,9 @@ public class TestBagFormatter {
             BagFormatter bf = new BagFormatter();
 
             UnicodeSet us = new UnicodeSet("[:numeric_value=2:]");   
-            System.out.println(bf.showSetNames("[:numeric_value=2:]", us));
+            bf.showSetNames(bf.CONSOLE,"[:numeric_value=2:]", us);
             us = new UnicodeSet("[:numeric_type=numeric:]");   
-            System.out.println(bf.showSetNames("[:numeric_type=numeric:]", us));
+            bf.showSetNames(bf.CONSOLE,"[:numeric_type=numeric:]", us);
             
             if (true) return;
             //showNames("Name", ".*MARK.*");
@@ -121,7 +121,7 @@ public class TestBagFormatter {
             );
         }
         //CollectionFormatter cf = new CollectionFormatter();
-        PrintWriter pw = BagFormatter.openUTF8Writer("", "countries.txt", BagFormatter.CONSOLE);
+        PrintWriter pw = BagFormatter.openUTF8Writer("", "countries.txt");
         Iterator it = s.iterator();
         while (it.hasNext()) {
             pw.println(it.next());
