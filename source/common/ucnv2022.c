@@ -414,8 +414,11 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
                     case '1':
                         myConverterData->version = 1;
                         break;
-                    default:
+                    case '2':
                         myConverterData->version = 2;
+                        break;
+                    default:
+                        myConverterData->version = 0;
                 }
             }
         }
@@ -476,7 +479,7 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
                         myConverterData->version = 1;
                         break;
                     default:
-                        myConverterData->version = 1;
+                        myConverterData->version = 0;
                 }
             }
             
@@ -2625,9 +2628,9 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
             
             mySourceChar = (UChar) args->source[mySourceIndex++];
             
-            /* I am handling surrogates in the begining itself so that I donot have to go through 8 
-            * iterations on codepages that we support. 
-            */
+            /* I am handling surrogates in the begining itself so that I donot have to go through 4
+             * iterations on codepages that we support. 
+             */
             if(args->converter->fromUSurrogateLead!=0 || UTF_IS_SURROGATE(mySourceChar)){
                 if(UTF_IS_SURROGATE_FIRST(mySourceChar)){  
                     /* no more input */
@@ -2667,76 +2670,92 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
                 continue;
             }
             else{
-                
-                switch (myConverterTypeCN[currentState]){
+                do{
+                    switch (myConverterTypeCN[currentState]){
                     
-                case SBCS:
-                    if(mySourceChar<0xff){
-                        myFromUnicodeSBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
-                        myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
+                        case SBCS:
+                            if(mySourceChar<0xff){
+                                myFromUnicodeSBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
+                                myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
                         
-                        targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
+                                targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
                         
-                        if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
-                            (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                            targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
-                        }
+                                if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
+                                    (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
+                                    targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
+                                }
                         
-                    }
-                    /* ucmp8_getU returns 0	for missing char so explicitly set it missingCharMarker*/
-                    targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
-                    break;
+                            }
+                            /* ucmp8_getU returns 0	for missing char so explicitly set it missingCharMarker*/
+                            targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
+                            break;
                     
-                case DBCS:
-                    if(mySourceChar<0xffff){
-                        myFromUnicodeDBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicode;
-                        myFromUnicodeDBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicodeFallback;
-                        targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCS,	mySourceChar);
+                        case DBCS:
+                            if(mySourceChar<0xffff){
+                                myFromUnicodeDBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicode;
+                                myFromUnicodeDBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicodeFallback;
+                                targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCS,	mySourceChar);
                         
-                        if ((targetUniChar==missingCharMarker)&&(args->converter->useFallback	== TRUE) &&
-                            (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                            targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
-                        }
+                                if ((targetUniChar==missingCharMarker)&&(args->converter->useFallback	== TRUE) &&
+                                    (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
+                                    targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
+                                }
+                            }
+                            if(( myConverterData->version) == 0 && currentState==ISO_IR_165){
+                                targetUniChar=missingCharMarker;
+                            }
+                            break;
+                    
+                        case MBCS:
+                    
+                            length= _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData,
+                                mySourceChar,&targetValue,args->converter->useFallback);
+                    
+                            targetUniChar = (UChar32) targetValue;
+                    
+                            if(length==0){
+                                targetUniChar = missingCharMarker;
+                            } 
+                            else if(length==3){
+                                uint8_t	planeVal = (uint8_t) ((targetValue)>>16);
+                                if(planeVal >0x80 && planeVal<0x89){
+                                    plane = (int)(planeVal - 0x80);
+                                    targetUniChar -= (planeVal<<16);
+                                }else 
+                                    plane =-1;
+                            }
+                            else if(length >3){
+                                reason =UCNV_ILLEGAL;
+                                *err =U_INVALID_CHAR_FOUND;
+                                goto CALLBACK;
+                            }
+                            if(myConverterData->version == 0 && plane >2){
+                                    targetUniChar = missingCharMarker;
+                            }
+                            break;
+                    
+                        case LATIN1:
+                    
+                        default:
+                            /*not expected */ 
+                            break;
                     }
-                    if(( myConverterData->version) == 0 && currentState==ISO_IR_165){
-                        targetUniChar=missingCharMarker;
+                    if(targetUniChar==missingCharMarker){
+                        iterCount = (iterCount<3)? iterCount+1 : 0;
+                        myConverterData->currentState=currentState=(StateEnum)(currentState<3)? currentState+1:0;
+                        currentState =(StateEnumCN) myConverterData->currentState;
+                        myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
+                                                        myConverterData->myConverterArray[0] :
+                                                    myConverterData->myConverterArray[(int)myConverterData->currentState];
+                        targetUniChar =missingCharMarker;
+                        isEscapeAppended = FALSE; 
+                        /* save the state */
+                        myConverterData->isEscapeAppended = isEscapeAppended;
+                        myConverterData->isShiftAppended =isShiftAppended;
+                        myConverterData->sourceIndex = mySourceIndex;
+                        myConverterData->targetIndex = myTargetIndex;
                     }
-                    break;
-                    
-                case MBCS:
-                    
-                    length= _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData,
-                        mySourceChar,&targetValue,args->converter->useFallback);
-                    
-                    targetUniChar = (UChar32) targetValue;
-                    
-                    if(length==0){
-                        targetUniChar = missingCharMarker;
-                    } 
-                    else if(length==3){
-                        uint8_t	planeVal = (uint8_t) ((targetValue)>>16);
-                        if(planeVal >0x80 && planeVal<0x89){
-                            plane = (int)(planeVal - 0x80);
-                            targetUniChar -= (planeVal<<16);
-                        }else 
-                            plane =-1;
-                    }
-                    else if(length >3){
-                        reason =UCNV_ILLEGAL;
-                        *err =U_INVALID_CHAR_FOUND;
-                        goto CALLBACK;
-                    }
-                    if(myConverterData->version == 0 && plane >2){
-                            targetUniChar = missingCharMarker;
-                    }
-                    break;
-                    
-                case LATIN1:
-                    
-                default:
-                    /*not expected */ 
-                    break;
-                }
+                }while(targetUniChar==missingCharMarker && initIterState != currentState);
             }
             
             if(targetUniChar!= missingCharMarker){
@@ -2786,29 +2805,10 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
                 
             }/* end of end if(targetUniChar==missingCharMarker)*/
             else{
-                
-                
-                iterCount = (iterCount<3)? iterCount+1 : 0;
-                myConverterData->currentState=currentState=(StateEnum)(currentState<3)? currentState+1:0;
-                
-                if((currentState!= initIterState) ){
-                    
-                    /* explicitly decrement source since it	has already been incremented */
-                    mySourceIndex--;
-                    targetUniChar =missingCharMarker;
-                    isEscapeAppended = FALSE; 
-                    /* save the state */
-                    myConverterData->isEscapeAppended = isEscapeAppended;
-                    myConverterData->isShiftAppended =isShiftAppended;
-                    
-                    myConverterData->sourceIndex = mySourceIndex;
-                    myConverterData->targetIndex = myTargetIndex;
-                    continue;
-                }
-                else{
+
                 /* if we cannot	find the character after checking all codepages 
-                * then this is	an error
-                    */
+                 * then this is	an error
+                 */
                     reason = UCNV_UNASSIGNED;
                     *err = U_INVALID_CHAR_FOUND;
                     
@@ -2842,7 +2842,6 @@ CALLBACK:
                         break;
                     }
                     args->converter->invalidUCharLength = 0;
-                }
             }
             targetUniChar = missingCharMarker;
             
