@@ -203,7 +203,7 @@ protected:
  *     for the old and the new iteration semantics.</li>
  * <li>There are new functions for setting and moving the current position
  *     without returning a character, for efficiency.</li>
- * <ol>
+ * </ol>
  *
  * See ForwardCharacterIterator for examples for using the new forward iteration
  * functions. For backward iteration, there is also a hasPrevious() function
