@@ -684,13 +684,13 @@ u_strCaseMap(UChar *dest, int32_t destCapacity,
 
     if(toWhichCase==TO_LOWER) {
         destLength=u_internalStrToLower(temp, destCapacity, src, srcLength,
-                                        locale, NULL, NULL, pErrorCode);
+                                        locale, pErrorCode);
     } else if(toWhichCase==TO_UPPER) {
         destLength=u_internalStrToUpper(temp, destCapacity, src, srcLength,
-                                        locale, NULL, NULL, pErrorCode);
+                                        locale, pErrorCode);
     } else {
         destLength=u_internalStrFoldCase(temp, destCapacity, src, srcLength,
-                                         options, NULL, NULL, pErrorCode);
+                                         options, pErrorCode);
     }
     if(temp!=dest) {
         /* copy the result string to the destination buffer */
@@ -770,7 +770,10 @@ u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options) {
                     c=UTF16_GET_PAIR_VALUE(c, uc);
                     ++s1;
                 }
-                len1=u_internalFoldCase(c, t1, options);
+                len1=u_internalFoldCase(c, t1, 32, options);
+                if(len1<0) {
+                    len1=-len1;
+                }
                 pos1=0;
             } else if(pos2>=len2 && *s2==0) {
                 return 0;
@@ -785,7 +788,10 @@ u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options) {
                     c=UTF16_GET_PAIR_VALUE(c, uc);
                     ++s2;
                 }
-                len2=u_internalFoldCase(c, t2, options);
+                len2=u_internalFoldCase(c, t2, 32, options);
+                if(len2<0) {
+                    len2=-len2;
+                }
                 pos2=0;
             } else {
                 return 1;
@@ -855,7 +861,10 @@ u_internalStrcasecmp(const UChar *s1, int32_t length1,
                 } else {
                     --length1;
                 }
-                len1=u_internalFoldCase(c, t1, options);
+                len1=u_internalFoldCase(c, t1, 32, options);
+                if(len1<0) {
+                    len1=-len1;
+                }
                 pos1=0;
             } else if(pos2>=len2 && length2<=0) {
                 return 0;
@@ -873,7 +882,10 @@ u_internalStrcasecmp(const UChar *s1, int32_t length1,
                 } else {
                     --length2;
                 }
-                len2=u_internalFoldCase(c, t2, options);
+                len2=u_internalFoldCase(c, t2, 32, options);
+                if(len2<0) {
+                    len2=-len2;
+                }
                 pos2=0;
             } else {
                 return 1;
