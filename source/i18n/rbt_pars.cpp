@@ -411,7 +411,7 @@ public:
      */
     int32_t* createSegments() const;
 
-    int syntaxError(int32_t code,
+    int syntaxError(UErrorCode code,
                     const UnicodeString& rule,
                     int32_t start) {
         return parser.syntaxError(code, rule, start);
@@ -1132,11 +1132,10 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
  * @param rule pattern string
  * @param start position of first character of current rule
  */
-int32_t TransliteratorParser::syntaxError(int32_t parseErrorCode,
+int32_t TransliteratorParser::syntaxError(UErrorCode parseErrorCode,
                                                const UnicodeString& rule,
                                                int32_t start) {
     if (parseError != 0) {
-//        parseError->code = parseErrorCode;
         parseError->line = 0; // We don't return a line #
         parseError->offset = start; // Character offset from rule start
         int32_t end = quotedIndexOf(rule, start, rule.length(), END_OF_RULE);
