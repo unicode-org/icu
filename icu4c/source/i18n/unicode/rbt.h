@@ -475,7 +475,7 @@ private:
     /**
      * Class identifier for RuleBasedTransliterator.
      */
-    static char fgClassID;
+    static const char fgClassID;
 
     void _construct(const UnicodeString& rules,
                     UTransDirection direction,

@@ -37,6 +37,8 @@
 #include "unicode/unitohex.h"
 #include "unicode/uscript.h"
 
+U_NAMESPACE_BEGIN
+
 // keep in sync with CompoundTransliterator
 static const UChar ID_SEP      = 0x002D; /*-*/
 static const UChar ID_DELIM    = 0x003B; /*;*/
@@ -49,14 +51,14 @@ static const UChar CLOSE_PAREN = 41;
  * transliterator.  The ID is appended to this to form the key.
  * The resource bundle value should be a String.
  */
-static const char* RB_DISPLAY_NAME_PREFIX = "%Translit%%";
+static const char RB_DISPLAY_NAME_PREFIX[] = "%Translit%%";
 
 /**
  * Prefix for resource bundle key for the display name for a
  * transliterator SCRIPT.  The ID is appended to this to form the key.
  * The resource bundle value should be a String.
  */
-static const char* RB_SCRIPT_DISPLAY_NAME_PREFIX = "%Translit%";
+static const char RB_SCRIPT_DISPLAY_NAME_PREFIX[] = "%Translit%";
 
 /**
  * Resource bundle key for display name pattern.
@@ -64,7 +66,7 @@ static const char* RB_SCRIPT_DISPLAY_NAME_PREFIX = "%Translit%";
  * MessageFormat pattern, e.g.:
  * "{0,choice,0#|1#{1} Transliterator|2#{1} to {2} Transliterator}".
  */
-static const char* RB_DISPLAY_NAME_PATTERN = "TransliteratorNamePattern";
+static const char RB_DISPLAY_NAME_PATTERN[] = "TransliteratorNamePattern";
 
 /**
  * Resource bundle key for the list of RuleBasedTransliterator IDs.
@@ -72,9 +74,7 @@ static const char* RB_DISPLAY_NAME_PATTERN = "TransliteratorNamePattern";
  * being a valid ID.  The ID will be appended to RB_RULE_BASED_PREFIX
  * to obtain the class name in which the RB_RULE key will be sought.
  */
-static const char* RB_RULE_BASED_IDS = "RuleBasedTransliteratorIDs";
-
-U_NAMESPACE_BEGIN
+static const char RB_RULE_BASED_IDS[] = "RuleBasedTransliteratorIDs";
 
 /**
  * The mutex controlling access to registry object.
@@ -90,7 +90,7 @@ static TransliteratorRegistry* registry = 0;
  * Class identifier for subclasses of Transliterator that do not
  * define their class (anonymous subclasses).
  */
-char Transliterator::fgClassID = 0; // Value is irrelevant
+const char Transliterator::fgClassID = 0; // Value is irrelevant
 
 /**
  * Default constructor.
@@ -1442,11 +1442,10 @@ void Transliterator::initializeRegistry(void) {
      *
      * The extra blank field on "alias" lines is to make the array square.
      */
-
-    Locale indexLoc("translit_index");
+    static const char translit_index[] = "translit_index";
 
     UResourceBundle *bundle, *transIDs, *colBund;
-    bundle = ures_openDirect(0, "translit_index", &status);
+    bundle = ures_openDirect(0, translit_index, &status);
     transIDs = ures_getByKey(bundle, RB_RULE_BASED_IDS, 0, &status);
 
     int32_t row, maxRows;

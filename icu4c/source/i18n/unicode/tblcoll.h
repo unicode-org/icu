@@ -370,7 +370,7 @@ public:
    * @param status reporting a success or an error.
    * @see Locale
    */
-	RuleBasedCollator(const UnicodeString& rules, UErrorCode& status);
+    RuleBasedCollator(const UnicodeString& rules, UErrorCode& status);
 
   /**
    * RuleBasedCollator constructor. This takes the table rules and builds a
@@ -418,14 +418,14 @@ public:
    * @param the RuleBasedCollator object to be copied
    * @see Locale
    */
-	RuleBasedCollator(const RuleBasedCollator& other);
+    RuleBasedCollator(const RuleBasedCollator& other);
 
   // destructor --------------------------------------------------------------
 
   /**
    * Destructor.
    */
-	virtual ~RuleBasedCollator();
+    virtual ~RuleBasedCollator();
 
   // public methods ----------------------------------------------------------
 
@@ -433,7 +433,7 @@ public:
    * Assignment operator.
    * @param other other RuleBasedCollator object to compare with.
    */
-	RuleBasedCollator& operator=(const RuleBasedCollator& other);
+    RuleBasedCollator& operator=(const RuleBasedCollator& other);
 
   /**
    * Returns true if argument is the same as this object.
@@ -465,7 +465,7 @@ public:
    * @return the collation element iterator of the source string using this as
    *         the based Collator.
    */
-	virtual CollationElementIterator* createCollationElementIterator(
+    virtual CollationElementIterator* createCollationElementIterator(
                                            const UnicodeString& source) const;
 
   /**
@@ -598,7 +598,7 @@ public:
    *         any expansion sequence
    * @see CollationElementIterator#getMaxExpansion
    */
-	int32_t getMaxExpansion(int32_t order) const;
+    int32_t getMaxExpansion(int32_t order) const;
 
   /**
    * Returns a unique class ID POLYMORPHICALLY. Pure virtual override. This
@@ -638,13 +638,13 @@ public:
    */
   uint8_t *cloneRuleData(int32_t &length, UErrorCode &status);
 
-	/**
-	 * Returns current rules. Delta defines whether full rules are returned or
-   * just the tailoring.
-	 * @param delta one of 	UCOL_TAILORING_ONLY, UCOL_FULL_RULES.
-	 * @return UnicodeString with rules
-	 */
-	UnicodeString getRules(UColRuleOption delta);
+    /**
+     * Returns current rules. Delta defines whether full rules are returned or
+     * just the tailoring.
+     * @param delta one of UCOL_TAILORING_ONLY, UCOL_FULL_RULES.
+     * @return UnicodeString with rules
+     */
+    UnicodeString getRules(UColRuleOption delta);
 
   /**
    * Universal attribute setter
@@ -720,7 +720,7 @@ public:
    * @return Number of bytes needed for storing the sort key
    */
   virtual int32_t getSortKey(const UnicodeString& source, uint8_t *result,
-						                 int32_t resultLength) const;
+                             int32_t resultLength) const;
 
   /**
    * Get the sort key as an array of bytes from an UChar buffer.
@@ -734,7 +734,7 @@ public:
    * @return Number of bytes needed for storing the sort key
    */
   virtual int32_t getSortKey(const UChar *source, int32_t sourceLength,
-						                 uint8_t *result, int32_t resultLength) const;
+                             uint8_t *result, int32_t resultLength) const;
 
   /**
   * Determines the minimum strength that will be use in comparison or
@@ -845,14 +845,14 @@ private:
   static const int32_t PRIMIGNORABLE;
 
   static const int16_t FILEID;
-  static const char    *kFilenameSuffix;
+  static const char    kFilenameSuffix[];
 
   // private static variables -----------------------------------------------
 
   /**
   * static class id
   */
-  static char fgClassID;
+  static const char fgClassID;
 
   // private data members ---------------------------------------------------
 

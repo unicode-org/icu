@@ -554,7 +554,7 @@ private:
      * @return the index of the list which matches the keyword s.
      */
     static int32_t findKeyword( const UnicodeString& s,
-                            const UChar **list);
+                            const UChar * const *list);
 
     /**
      * Formats the array of arguments and copies the result into the result buffer,

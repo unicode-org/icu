@@ -18,7 +18,7 @@ U_NAMESPACE_BEGIN
 /**
  * ID for this transliterator.
  */
-const char* HexToUnicodeTransliterator::_ID = "Hex-Any";
+const char HexToUnicodeTransliterator::_ID[] = "Hex-Any";
 
 /**
  * This pattern encodes the following specs for the default constructor:
@@ -29,15 +29,16 @@ const char* HexToUnicodeTransliterator::_ID = "Hex-Any";
  * The multiple backslashes resolve to a single backslash
  * in the effective prefix.
  */
-static const UChar gDEFAULT_PATTERN[] = {
+const UChar HexToUnicodeTransliterator::DEFAULT_PATTERN[] = {
     0x5C, 0x5C, 0x75, 0x30, 0x30, 0x30, 0x30, 0x3B,  /* "\\u0000;" */
     0x5C, 0x5C, 0x55, 0x30, 0x30, 0x30, 0x30, 0x3B,  /* "\\U0000;" */
     0x75, 0x2B, 0x30, 0x30, 0x30, 0x30, 0x3B,        /* "u+0000;" */
     0x55, 0x2B, 0x30, 0x30, 0x30, 0x30, 0           /* "U+0000" */
 };  /* "\\u0000;\\U0000;u+0000;U+0000" */
 
-const UChar *HexToUnicodeTransliterator::DEFAULT_PATTERN = gDEFAULT_PATTERN;
-//    UNICODE_STRING("\\\\u0000;\\\\U0000;u+0000;U+0000", 29);
+static const UChar gQuadA[] = {
+    0x41, 0x41, 0x41, 0x41, 0
+};  /* "AAAA" */
 
 /**
  * Constructs a transliterator.
@@ -206,7 +207,7 @@ void HexToUnicodeTransliterator::applyPattern(const UnicodeString& thePattern,
                 // header will not have been allocated yet.  We need
                 // allocate the header now.
                 if (start == affixes.length()) {
-                    affixes.append(UNICODE_STRING("AAAA", 4));
+                    affixes.append(gQuadA);
                 }
                 // Fill in 4-character header
                 affixes.setCharAt(start++, (UChar) prefixLen);
@@ -228,7 +229,7 @@ void HexToUnicodeTransliterator::applyPattern(const UnicodeString& thePattern,
                 // Make space for the header.  Append any four
                 // characters as place holders for the header values.
                 // We fill these in when we parse the ';'.
-                affixes.append(UNICODE_STRING("AAAA", 4));
+                affixes.append(gQuadA);
             }
             affixes.append(c);
             if (mode == 0) {
@@ -337,10 +338,9 @@ void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPo
                     
                     if (match) {
                         // This is a temporary one-character string
-                        UnicodeString str = UNICODE_STRING("A", 1);
+                        UnicodeString str(u);
 
                         // At this point, we have a match
-                        str.setCharAt(0, u);
                         text.handleReplaceBetween(cursor, curs, str);
                         limit -= curs - cursor - 1;
                         // The following break statement leaves the

@@ -15,7 +15,7 @@
 
 U_NAMESPACE_BEGIN
 
-char RuleBasedTransliterator::fgClassID = 0; // Value is irrelevant
+const char RuleBasedTransliterator::fgClassID = 0; // Value is irrelevant
 
 void RuleBasedTransliterator::_construct(const UnicodeString& rules,
                                          UTransDirection direction,

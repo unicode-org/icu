@@ -24,7 +24,7 @@ U_NAMESPACE_BEGIN
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: hextouni.h,v $ $Revision: 1.10 $ $Date: 2001/10/08 23:25:22 $
+ * @version $RCSfile: hextouni.h,v $ $Revision: 1.11 $ $Date: 2001/10/11 23:54:55 $
  * @draft
  */
 class U_I18N_API HexToUnicodeTransliterator : public Transliterator {
@@ -32,12 +32,12 @@ class U_I18N_API HexToUnicodeTransliterator : public Transliterator {
     /**
      * ID for this transliterator.
      */
-    static const char* _ID;
+    static const char _ID[];
 
     /**
      * The pattern used by the default constructor
      */
-    static const UChar *DEFAULT_PATTERN;
+    static const UChar DEFAULT_PATTERN[];
 
     // Character constants defined here to avoid ASCII dependency
     enum {

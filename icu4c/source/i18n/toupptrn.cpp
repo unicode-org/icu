@@ -12,7 +12,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char* UppercaseTransliterator::_ID = "Any-Upper";
+const char UppercaseTransliterator::_ID[] = "Any-Upper";
 
 /**
  * Constructs a transliterator.

@@ -159,33 +159,33 @@ U_STRING_DECL(option_13,    "hiraganaQ",      9);
 U_STRING_DECL(option_14,    "strength",       8);
 
 
-ucolTokSuboption alternateSub[2] = {
+static const ucolTokSuboption alternateSub[2] = {
   {suboption_00, 13, UCOL_NON_IGNORABLE},
   {suboption_01,  7, UCOL_SHIFTED}
 };
 
-ucolTokSuboption caseFirstSub[3] = {
+static const ucolTokSuboption caseFirstSub[3] = {
   {suboption_02, 5, UCOL_LOWER_FIRST},
   {suboption_03,  5, UCOL_UPPER_FIRST},
   {suboption_04,  3, UCOL_OFF},
 };
 
-ucolTokSuboption onOffSub[2] = {
+static const ucolTokSuboption onOffSub[2] = {
   {suboption_04, 3, UCOL_OFF},
   {suboption_05, 2, UCOL_ON}
 };
 
-ucolTokSuboption frenchSub[1] = {
+static const ucolTokSuboption frenchSub[1] = {
   {suboption_07, 1, UCOL_ON}
 };
 
-ucolTokSuboption beforeSub[3] = {
+static const ucolTokSuboption beforeSub[3] = {
   {suboption_06, 1, UCOL_PRIMARY},
   {suboption_07, 1, UCOL_SECONDARY},
   {suboption_08, 1, UCOL_TERTIARY}
 };
 
-ucolTokSuboption strengthSub[5] = {
+static const ucolTokSuboption strengthSub[5] = {
   {suboption_06, 1, UCOL_PRIMARY},
   {suboption_07, 1, UCOL_SECONDARY},
   {suboption_08, 1, UCOL_TERTIARY},
@@ -193,7 +193,7 @@ ucolTokSuboption strengthSub[5] = {
   {suboption_10, 1, UCOL_IDENTICAL},
 };
 
-ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
+static const ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
  {option_02,  9, alternateSub, 2, UCOL_ALTERNATE_HANDLING}, /*"alternate" */
  {option_03,  9, frenchSub, 1, UCOL_FRENCH_COLLATION}, /*"backwards"      */
  {option_07,  9, onOffSub, 2, UCOL_CASE_LEVEL},  /*"caseLevel"      */

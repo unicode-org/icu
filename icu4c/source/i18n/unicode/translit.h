@@ -18,7 +18,6 @@ class Replaceable;
 class UnicodeFilter;
 class UnicodeSet;
 class TransliterationRuleData;
-class Hashtable;
 class U_I18N_API UVector;
 class CompoundTransliterator;
 class TransliteratorParser;
@@ -908,7 +907,7 @@ private:
      * Class identifier for subclasses of Transliterator that do not
      * define their class (anonymous subclasses).
      */
-    static char fgClassID;
+    static const char fgClassID;
 
 protected:
 
