@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.134 2001/11/01 17:28:18 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.135 2001/11/07 23:48:17 emader-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -856,7 +856,7 @@ AC_OUTPUT([README icudefs.mk \
 		test/collperf/Makefile \
 		test/thaitest/Makefile \
 		test/letest/Makefile \
-		samples/Makefile samples/date/Makefile samples/cal/Makefile \
+		samples/Makefile samples/date/Makefile samples/cal/Makefile samples/layout/Makefile \
 		common/unicode/platform.h])
 
 if test $ICU_USE_THREADS = 0; then
