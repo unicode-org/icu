@@ -12,8 +12,8 @@
 *     Madhu Katragadda           creation
 *********************************************************************************
 */
-#ifndef _NUCNVTST
-#define _NUCNVTST
+#ifndef _NCCBTST
+#define _NCCBTST
 /* C API TEST FOR CALL BACK ROUTINES OF CODESET CONVERSION COMPONENT */
 #include "cintltst.h"
 #include "unicode/utypes.h"
