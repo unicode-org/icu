@@ -194,6 +194,7 @@ U_CAPI void umtx_init(UMTX *mutex)
 }
 
 U_CAPI void umtx_destroy(UMTX *mutex) {
+#if (ICU_USE_THREADS == 1)
     if (mutex == NULL) /* initialize the global mutex */
     {
         mutex = &gGlobalMutex;
@@ -216,4 +217,5 @@ U_CAPI void umtx_destroy(UMTX *mutex) {
     }
 
     *mutex = NULL;
+#endif /* ICU_USE_THREADS==1 */
 }
