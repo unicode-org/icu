@@ -2955,7 +2955,18 @@ UColAttributeValue RuleBasedCollator::getAttribute(UColAttribute attr, UErrorCod
 		status = U_UNSUPPORTED_ERROR;
 		break;
 	case UCOL_STRENGTH:         /* attribute for strength */
-		status = U_UNSUPPORTED_ERROR;
+        switch(getStrength()) {
+        case PRIMARY :
+                return UCOL_PRIMARY;
+        case SECONDARY :
+                return UCOL_SECONDARY;
+        case TERTIARY :
+                return UCOL_TERTIARY;
+        case IDENTICAL :
+                return UCOL_IDENTICAL;
+        default :
+            status = U_INTERNAL_PROGRAM_ERROR;         
+        }
 		break;
 	case UCOL_ATTRIBUTE_COUNT:
 	default:
