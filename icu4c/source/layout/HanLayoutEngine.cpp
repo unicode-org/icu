@@ -16,7 +16,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char HanOpenTypeLayoutEngine::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(HanOpenTypeLayoutEngine)
 
 HanOpenTypeLayoutEngine::HanOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                         const GlyphSubstitutionTableHeader *gsubTable)
@@ -30,13 +30,13 @@ HanOpenTypeLayoutEngine::~HanOpenTypeLayoutEngine()
     // nothing to do
 }
 
-const LETag emptyTag = 0x00000000;
+static const LETag emptyTag = 0x00000000;
 
-const LETag loclFeatureTag = LE_LOCL_FEATURE_TAG;
-const LETag smplFeatureTag = LE_SMPL_FEATURE_TAG;
-const LETag tradFeatureTag = LE_TRAD_FEATURE_TAG;
+static const LETag loclFeatureTag = LE_LOCL_FEATURE_TAG;
+static const LETag smplFeatureTag = LE_SMPL_FEATURE_TAG;
+static const LETag tradFeatureTag = LE_TRAD_FEATURE_TAG;
 
-const LETag features[] = {loclFeatureTag, emptyTag};
+static const LETag features[] = {loclFeatureTag, emptyTag};
 
 le_int32 HanOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool /*rightToLeft*/,
         LEUnicode *&/*outChars*/, LEGlyphStorage &glyphStorage, LEErrorCode &success)

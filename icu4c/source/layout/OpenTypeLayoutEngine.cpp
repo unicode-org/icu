@@ -23,18 +23,18 @@
 
 U_NAMESPACE_BEGIN
 
-const char OpenTypeLayoutEngine::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(OpenTypeLayoutEngine)
 
-const LETag emptyTag = 0x00000000;
+static const LETag emptyTag = 0x00000000;
 
-const LETag ccmpFeatureTag = LE_CCMP_FEATURE_TAG;
-const LETag ligaFeatureTag = LE_LIGA_FEATURE_TAG;
-const LETag cligFeatureTag = LE_CLIG_FEATURE_TAG;
-const LETag kernFeatureTag = LE_KERN_FEATURE_TAG;
-const LETag markFeatureTag = LE_MARK_FEATURE_TAG;
-const LETag mkmkFeatureTag = LE_MKMK_FEATURE_TAG;
+static const LETag ccmpFeatureTag = LE_CCMP_FEATURE_TAG;
+static const LETag ligaFeatureTag = LE_LIGA_FEATURE_TAG;
+static const LETag cligFeatureTag = LE_CLIG_FEATURE_TAG;
+static const LETag kernFeatureTag = LE_KERN_FEATURE_TAG;
+static const LETag markFeatureTag = LE_MARK_FEATURE_TAG;
+static const LETag mkmkFeatureTag = LE_MKMK_FEATURE_TAG;
 
-const LETag defaultFeatures[] = {ccmpFeatureTag, ligaFeatureTag, cligFeatureTag, kernFeatureTag, markFeatureTag, mkmkFeatureTag, emptyTag};
+static const LETag defaultFeatures[] = {ccmpFeatureTag, ligaFeatureTag, cligFeatureTag, kernFeatureTag, markFeatureTag, mkmkFeatureTag, emptyTag};
 
 
 OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,

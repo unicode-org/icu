@@ -16,7 +16,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char ContextualGlyphSubstitutionProcessor::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ContextualGlyphSubstitutionProcessor)
 
 ContextualGlyphSubstitutionProcessor::ContextualGlyphSubstitutionProcessor(const MorphSubtableHeader *morphSubtableHeader)
   : StateTableProcessor(morphSubtableHeader)

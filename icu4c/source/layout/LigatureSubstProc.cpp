@@ -20,7 +20,7 @@ U_NAMESPACE_BEGIN
 #define SignBit(m) ((ExtendedComplement(m) >> 1) & (le_int32)(m))
 #define SignExtend(v,m) (((v) & SignBit(m))? ((v) | ExtendedComplement(m)): (v))
 
-const char LigatureSubstitutionProcessor::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LigatureSubstitutionProcessor)
 
 LigatureSubstitutionProcessor::LigatureSubstitutionProcessor(const MorphSubtableHeader *morphSubtableHeader)
   : StateTableProcessor(morphSubtableHeader)

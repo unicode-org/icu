@@ -22,7 +22,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char IndicOpenTypeLayoutEngine::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(IndicOpenTypeLayoutEngine)
 
 IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                     const GlyphSubstitutionTableHeader *gsubTable)

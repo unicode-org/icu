@@ -18,7 +18,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char LEFontInstance::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LEFontInstance)
 
 const LEFontInstance *LEFontInstance::getSubFont(const LEUnicode chars[], le_int32 *offset, le_int32 limit,
                                                        le_int32 script, LEErrorCode &success) const

@@ -14,5 +14,5 @@
  */
 
 #ifndef U_HIDE_OBSOLETE_API
-const char ICULayoutEngine::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ICULayoutEngine)
 #endif
