@@ -351,7 +351,7 @@ static void TestNormalization()
                         "\\u0316\\u0300\\u0315", "\\u0315\\u0300\\u0316",
                         "A\\u0316\\u0300\\u0315B", "A\\u0315\\u0300\\u0316B",
                         "\\u0316\\u0315\\u0300", "A\\u0316\\u0315\\u0300B"};
-    int   srclen;
+    int32_t   srclen;
     UChar source[10];
     UCollationElements *iter;
 
@@ -374,10 +374,6 @@ static void TestNormalization()
     ucol_closeElements(iter);
     
     while (count < 12) {
-        UCollationElements *iter;
-        UChar               source[10];
-        int                 srclen = 0;
-
         srclen = u_unescape(testdata[count], source, 10);
         iter = ucol_openElements(coll, source, srclen - 1, &status);
 
@@ -945,7 +941,6 @@ static int32_t hex2num(char hex) {
 static char * getCodePoints(char *str, UChar *codepoints) {
     char *pStartCP = str;
     char *pEndCP   = str + 4;
-    int   count    = 0;
 
     *codepoints = (UChar)((hex2num(*pStartCP) << 12) | 
                           (hex2num(*(pStartCP + 1)) << 8) | 
@@ -968,7 +963,9 @@ static char * getCodePoints(char *str, UChar *codepoints) {
 /**
 * Sniplets of code from genuca
 */
-int32_t readElement(char **from, char *to, char separator, UErrorCode *status) {
+static int32_t
+readElement(char **from, char *to, char separator, UErrorCode *status)
+{
     if (U_SUCCESS(*status)) {
         char    buffer[1024];
         int32_t i = 0;
@@ -990,8 +987,10 @@ int32_t readElement(char **from, char *to, char separator, UErrorCode *status) {
 /**
 * Sniplets of code from genuca
 */
-uint32_t getSingleCEValue(char *primary, char *secondary, char *tertiary, 
-                          UErrorCode *status) {
+static uint32_t
+getSingleCEValue(char *primary, char *secondary, char *tertiary, 
+                          UErrorCode *status)
+{
     if (U_SUCCESS(*status)) {
         uint32_t  value    = 0;
         char      primsave = '\0';
@@ -1004,17 +1003,17 @@ uint32_t getSingleCEValue(char *primary, char *secondary, char *tertiary,
         uint32_t  secvalue;
         uint32_t  tervalue;
 
-        if (strlen(primary) > 4) {
+        if (uprv_strlen(primary) > 4) {
             primsave = *primend;
             *primend = '\0';
         }
         
-        if (strlen(secondary) > 2) {
+        if (uprv_strlen(secondary) > 2) {
             secsave = *secend;
             *secend = '\0';
         }
         
-        if (strlen(tertiary) > 2) {
+        if (uprv_strlen(tertiary) > 2) {
             tersave = *terend;
             *terend = '\0';
         }
@@ -1177,7 +1176,7 @@ static void TestCEs() {
             log_err("Error in opening collation elements\n");
             break;
         }     
-        while (TRUE) {
+        for (;;) {
             uint32_t ce = (uint32_t)ucol_next(iter, &status);
             if (ce == 0xFFFFFFFF) {
                 ce = 0;
@@ -1244,7 +1243,7 @@ static void TestDiscontiguos() {
           UCollationElements *iter;      
           UCollationElements *resultiter;      
     
-    coll       = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION,  
+    coll       = ucol_openRules(rule, rulelen, UCOL_NO_NORMALIZATION,  
                           UCOL_DEFAULT_STRENGTH, &status);
     iter       = ucol_openElements(coll, rule, 1, &status);
     resultiter = ucol_openElements(coll, rule, 1, &status);
@@ -1257,10 +1256,10 @@ static void TestDiscontiguos() {
     while (count < size) {
         UChar  str[20];
         UChar  tstr[20];
-        int    strlen = u_unescape(src[count], str, 20);
+        int    strLen = u_unescape(src[count], str, 20);
         UChar *s;
 
-        ucol_setText(iter, str, strlen, &status);        
+        ucol_setText(iter, str, strLen, &status);        
         if (U_FAILURE(status)) {
             log_err("Error opening collation iterator\n");
             return;
@@ -1271,7 +1270,7 @@ static void TestDiscontiguos() {
 
         log_verbose("count %d\n", count);
         
-        while (TRUE) {
+        for (;;) {
             uint32_t  ce;
             UChar    *e = u_strchr(s, ' ');
             if (e == 0) {
