@@ -134,7 +134,13 @@ static char* u_bottomNBytesOfDouble(double* d, int n);
 #   define U_POSIX_LOCALE	1
 #endif
 
-#if U_HAVE_NL_LANGINFO
+/*
+ * Only include langinfo.h if we have a way to get the codeset. If we later
+ * depend on more feature, we can test on U_HAVE_NL_LANGINFO.
+ *
+ */
+
+#if U_HAVE_NL_LANGINFO_CODESET
 #include <langinfo.h>
 #endif
 
@@ -1621,14 +1627,9 @@ const char* uprv_getDefaultCodepage()
     {
         uprv_memset(codesetName, 0, 100);
     }
-#if U_HAVE_NL_LANGINFO
+#if U_HAVE_NL_LANGINFO_CODESET
     /**/ {
-        const char *codeset;
-#if U_HAVE_CODESET
-        codeset = nl_langinfo(CODESET);
-#else
-        codeset = nl_langinfo(_NL_CTYPE_CODESET_NAME);
-#endif
+        const char *codeset = nl_langinfo(U_NL_LANGINFO_CODESET);
         if (codeset != NULL) {
             uprv_strcpy(codesetName, codeset);
         }
