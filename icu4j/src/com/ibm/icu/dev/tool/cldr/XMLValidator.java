@@ -46,8 +46,9 @@ public class XMLValidator {
             return;
         }
         for (int i = 0; i < args.length; i++) {
-            /* Document doc = */parse(args[i]);
             System.out.println("Processing file " + args[i]);
+            /* Document doc = */parse(args[i]);
+            
         }
 
     }
