@@ -610,7 +610,7 @@ NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBoun
 #ifdef RBNF_DEBUG
         {
             char ubstr[64];
-            lltoa(ub, ubstr, 64);
+            ub.lltoa(ubstr, 64);
             fprintf(stderr, "ub: %g, ll: %s(%x/%x)\n", upperBound, ubstr, ub.hi, ub.lo);
         }
 #endif
