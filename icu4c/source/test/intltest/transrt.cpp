@@ -281,14 +281,14 @@ public :
     void reset(UnicodeSet& set, UBool abb = FALSE, int32_t density = 100);
 
     /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
 private :
     UBool abbreviated;
