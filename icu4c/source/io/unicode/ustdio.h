@@ -95,6 +95,7 @@
     Maybe a flush or a rewind are good enough.
  * Make sure that a UFile opened with "rw" can be used after using
     u_fflush with a u_frewind.
+ * Test stdin and stdout with the u_f* functions
  * More testing is needed.
 */
 
@@ -796,7 +797,7 @@ u_sscanf_u(const UChar  *buffer,
  * This is identical to <TT>u_sscanf_u</TT>, except that it will
  * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
  *
- * @param buffer The UFILE from which to read.
+ * @param buffer The Unicode string from which to read.
  * @param locale The locale to use for parsing the numbers, dates and other
  * locale specific information.
  * @param patternSpecification A pattern specifying how <TT>u_sscanf</TT> will
