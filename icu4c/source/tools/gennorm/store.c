@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2002, International Business Machines
+*   Copyright (C) 1999-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -29,7 +29,6 @@
 #include "unewdata.h"
 #include "unormimp.h"
 #include "gennorm.h"
-
 #ifdef WIN32
 #   pragma warning(disable: 4100)
 #endif
@@ -43,6 +42,25 @@
  */
 
 /* file data ---------------------------------------------------------------- */
+
+#if UCONFIG_NO_NORMALIZATION
+
+/* dummy UDataInfo cf. udata.h */
+static UDataInfo dataInfo = {
+    sizeof(UDataInfo),
+    0,
+
+    U_IS_BIG_ENDIAN,
+    U_CHARSET_FAMILY,
+    U_SIZEOF_UCHAR,
+    0,
+
+    { 0, 0, 0, 0 },                 /* dummy dataFormat */
+    { 0, 0, 0, 0 },                 /* dummy formatVersion */
+    { 0, 0, 0, 0 }                  /* dummy dataVersion */
+};
+
+#else
 
 /* UDataInfo cf. udata.h */
 static UDataInfo dataInfo={
@@ -1759,13 +1777,23 @@ processData() {
     }
 }
 
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
+
 extern void
 generateData(const char *dataDir) {
     static uint8_t normTrieBlock[100000], fcdTrieBlock[100000], auxTrieBlock[100000];
 
     UNewDataMemory *pData;
     UErrorCode errorCode=U_ZERO_ERROR;
-    int32_t size, normTrieSize, fcdTrieSize, auxTrieSize, dataLength;
+    int32_t size, dataLength;
+
+#if UCONFIG_NO_NORMALIZATION
+
+    size=0;
+
+#else
+
+    int32_t normTrieSize, fcdTrieSize, auxTrieSize;
 
     normTrieSize=utrie_serialize(&norm32Trie, normTrieBlock, sizeof(normTrieBlock), getFoldedNormValue, FALSE, &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -1849,6 +1877,8 @@ generateData(const char *dataDir) {
     indexes[_NORM_INDEX_AUX_TRIE_SIZE]=auxTrieSize;
     indexes[_NORM_INDEX_CANON_SET_COUNT]=canonStartSetsTop;
 
+#endif
+
     /* write the data */
     pData=udata_create(dataDir, DATA_TYPE, U_ICUDATA_NAME "_" DATA_NAME, &dataInfo,
                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
@@ -1857,6 +1887,8 @@ generateData(const char *dataDir) {
         exit(errorCode);
     }
 
+#if !UCONFIG_NO_NORMALIZATION
+
     udata_writeBlock(pData, indexes, sizeof(indexes));
     udata_writeBlock(pData, normTrieBlock, normTrieSize);
     udata_writeBlock(pData, utm_getStart(extraMem), extraMem->index*2);
@@ -1864,6 +1896,8 @@ generateData(const char *dataDir) {
     udata_writeBlock(pData, fcdTrieBlock, fcdTrieSize);
     udata_writeBlock(pData, auxTrieBlock, auxTrieSize);
     udata_writeBlock(pData, canonStartSets, canonStartSetsTop*2);
+
+#endif
 
     /* finish up */
     dataLength=udata_finish(pData, &errorCode);
@@ -1878,6 +1912,8 @@ generateData(const char *dataDir) {
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
 }
+
+#if !UCONFIG_NO_NORMALIZATION
 
 extern void
 cleanUpData(void) {
@@ -1897,6 +1933,8 @@ cleanUpData(void) {
     utrie_close(&fcdTrie);
     utrie_close(&auxTrie);
 }
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
 
 /*
  * Hey, Emacs, please set the following:

@@ -27,6 +27,8 @@ http://www.nicemice.net/amc/
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_IDNA
+
 /**
  * u_strToPunycode() converts Unicode to Punycode.
  *
@@ -102,6 +104,8 @@ u_strFromPunycode(const UChar *src, int32_t srcLength,
                   UBool *caseFlags,
                   UErrorCode *pErrorCode);
 
+#endif /* #if !UCONFIG_NO_IDNA */
+
 #endif
 
 /*
@@ -112,4 +116,3 @@ u_strFromPunycode(const UChar *src, int32_t srcLength,
  * End:
  *
  */
-

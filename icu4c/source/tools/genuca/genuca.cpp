@@ -56,6 +56,8 @@ static UDataInfo dummyDataInfo = {
     { 0, 0, 0, 0 }                  /* dummy dataVersion */
 };
 
+static UVersionInfo UCAVersion;
+
 #else
 
 UCAElements le;
@@ -130,7 +132,6 @@ static uint32_t inverseTable[0xFFFF][3];
 static uint32_t inversePos = 0;
 static UChar stringContinue[0xFFFF];
 static uint32_t sContPos = 0;
-static UVersionInfo UCAVersion;
 
 static void addNewInverse(UCAElements *element, UErrorCode *status) {
   if(U_FAILURE(*status)) {

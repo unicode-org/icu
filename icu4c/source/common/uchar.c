@@ -1012,6 +1012,14 @@ uchar_addPropertyStarts(USet *set, UErrorCode *pErrorCode) {
  *     zero or more case-ignorable characters.
  */
 
+#if UCONFIG_NO_NORMALIZATION
+/* no normalization - no combining classes */
+static U_INLINE uint8_t
+u_getCombiningClass(UChar32 c) {
+    return 0;
+}
+#endif
+
 enum {
     LOC_ROOT,
     LOC_TURKISH,

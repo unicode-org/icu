@@ -17,6 +17,10 @@
 #ifndef STRPREP_H
 #define STRPREP_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
+
 #include "unicode/uobject.h"
 #include "unicode/uniset.h"
 #include "unicode/parseerr.h"
@@ -347,6 +351,8 @@ inline UBool StringPrep::isLDHChar(UChar32 ch){
 
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_IDNA */
+
 #endif
 
 /*
@@ -357,4 +363,3 @@ U_NAMESPACE_END
  * End:
  *
  */
-

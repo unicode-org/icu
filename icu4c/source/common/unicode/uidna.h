@@ -18,6 +18,9 @@
 #define __UIDNA_H__
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
+
 #include "unicode/parseerr.h"
   
 /**
@@ -278,5 +281,7 @@ uidna_compare(  const UChar *s1, int32_t length1,
                 const UChar *s2, int32_t length2,
                 int32_t options,
                 UErrorCode* status);
+
+#endif /* #if !UCONFIG_NO_IDNA */
 
 #endif

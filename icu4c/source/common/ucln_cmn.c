@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2001, International Business Machines                   *
+* Copyright (C) 2001-2003, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -14,10 +14,12 @@
 *   created by: George Rhoten
 */
 
+#include "unicode/utypes.h"
 #include "unicode/uclean.h"
 #include "unicode/uchar.h"
 #include "unicode/uloc.h"
 #include "unicode/uidna.h"
+#include "ustr_imp.h"
 #include "unormimp.h"
 #include "ucln_cmn.h"
 #include "umutex.h"
@@ -58,7 +60,9 @@ u_cleanup(void)
         }
 
     }
+#if !UCONFIG_NO_IDNA
     ustrprep_cleanup();
+#endif
 #if !UCONFIG_NO_BREAK_ITERATION
 	breakiterator_cleanup();
 #endif
@@ -68,7 +72,9 @@ u_cleanup(void)
     ures_cleanup();
     locale_cleanup();
     uloc_cleanup();
+#if !UCONFIG_NO_NORMALIZATION
     unorm_cleanup();
+#endif
     uset_cleanup();
     unames_cleanup();
     pname_cleanup();
@@ -123,6 +129,7 @@ u_init(UErrorCode *status) {
     uloc_countAvailable();
 
 
+#if !UCONFIG_NO_IDNA
     /* IDNA.    */
     {
         UChar  nameSrc[] = {0x41, 0x42, 0x43, 0x00};
@@ -132,6 +139,7 @@ u_init(UErrorCode *status) {
                       NULL,     /* UParseError pointer */
                       status);
     }
+#endif
 
 
     /* Char Properties */
@@ -144,8 +152,11 @@ u_init(UErrorCode *status) {
     }
 
 
+#if !UCONFIG_NO_NORMALIZATION
     /*  Normalization  */
     unorm_haveData(status);
+#endif
+
 
     /* Time Zone.  TODO:  move data loading from I18n lib to common, so we don't   */
     /*                    have a dependency?                                       */

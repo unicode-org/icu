@@ -1,11 +1,11 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2002, International Business Machines
+ *   Copyright (C) 2003, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
- *   file name:  strprep.h
+ *   file name:  sprpimpl.h
  *   encoding:   US-ASCII
  *   tab size:   8 (not used)
  *   indentation:4
@@ -16,6 +16,10 @@
 
 #ifndef SPRPIMPL_H
 #define SPRPIMPL_H
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
 
 enum{
     UIDNA_NO_VALUE          = 0x0000 ,
@@ -51,6 +55,9 @@ enum {
 #define U_IDNA_VERIFICATION_ERROR               ((UErrorCode)(U_IDNA_ERROR_START + 6))
 #define U_IDNA_LABEL_TOO_LONG_ERROR                  ((UErrorCode)(U_IDNA_ERROR_START + 8))   
 */
+
+#endif /* #if !UCONFIG_NO_IDNA */
+
 #endif
 
 /*
@@ -61,4 +68,3 @@ enum {
  * End:
  *
  */
-

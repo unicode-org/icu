@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2002, International Business Machines
+*   Copyright (C) 2001-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -64,7 +64,9 @@ static UOption options[]={
 
 extern int
 main(int argc, char* argv[]) {
+#if !UCONFIG_NO_NORMALIZATION
     char filename[300];
+#endif
     const char *srcDir=NULL, *destDir=NULL, *suffix=NULL;
     char *basename=NULL;
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -122,6 +124,16 @@ main(int argc, char* argv[]) {
         suffix=NULL;
     }
 
+#if UCONFIG_NO_NORMALIZATION
+
+    fprintf(stderr,
+        "gennorm writes a dummy " U_ICUDATA_NAME "_" DATA_NAME "." DATA_TYPE
+        " because UCONFIG_NO_NORMALIZATION is set, \n"
+        "see icu/source/common/unicode/uconfig.h\n");
+    generateData(destDir);
+
+#else
+
     setUnicodeVersion(options[6].value);
 
     /* prepare the filename beginning with the source dir */
@@ -178,8 +190,12 @@ main(int argc, char* argv[]) {
         cleanUpData();
     }
 
+#endif
+
     return errorCode;
 }
+
+#if !UCONFIG_NO_NORMALIZATION
 
 /* parser for DerivedNormalizationProperties.txt ---------------------------- */
 
@@ -404,6 +420,8 @@ parseDB(const char *filename, UErrorCode *pErrorCode) {
         exit(*pErrorCode);
     }
 }
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
 
 /*
  * Hey, Emacs, please set the following:
