@@ -51,8 +51,8 @@ CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
-$(LD_RPATH)$(LD_RPATH_PRE)$(libdir)@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/common
-LIBS = $(LIBICU-UC) @LIBS@ @LIB_M@ 
+$(LD_RPATH)$(LD_RPATH_PRE)$(libdir)@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/i18n
+LIBS = $(LIBICU-UC) $(LIBICU-I18N) @LIBS@ @LIB_M@ 
 
 OBJECTS = error.o genrb.o ustr.o parse.o read.o write.o list.o	\
 rblist.o ufile.o ustdio.o util.o
