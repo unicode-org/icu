@@ -2225,10 +2225,14 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     ures_close(&bund2);
     
     length = uprv_strlen(found);
+
     if(U_SUCCESS(*status)) {
         int32_t copyLength = uprv_min(length, resultCapacity);
         if(copyLength>0) {
             uprv_strncpy(result, found, copyLength);
+        }
+        if(length == 0) {
+          *status = U_MISSING_RESOURCE_ERROR; 
         }
     } else {
         length = 0;
@@ -2261,6 +2265,8 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
     locs = ures_openAvailableLocales(path, status);
     
     if(U_FAILURE(*status)) {
+      ures_close(&item);
+      ures_close(&subItem);
         return NULL;
     }
     
@@ -2269,7 +2275,7 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
     
     while((locale = uenum_next(locs, &locLen, status))) {
         UResourceBundle   *bund = NULL;
-        UResourceBundle    *subPtr = NULL;
+        UResourceBundle   *subPtr = NULL;
         UErrorCode subStatus = U_ZERO_ERROR; /* don't fail if a bundle is unopenable */
         bund = ures_openDirect(path, locale, &subStatus);
         
@@ -2286,8 +2292,10 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
 #if defined(URES_TREE_DEBUG)
             fprintf(stderr, "%s-%s values: Can't find in %s - skipping. (%s)\n", 
                 path?path:"<ICUDATA>", keyword, locale, u_errorName(subStatus));
-            continue;
 #endif
+            ures_close(bund);
+            bund = NULL;
+            continue;
         }
         
         while((subPtr = ures_getNextResource(&item,&subItem,&subStatus))
@@ -2324,11 +2332,13 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
                 }
             }
         }
+        ures_close(bund);
     }
     valuesBuf[valuesIndex++] = 0; /* terminate */
     
     ures_close(&item);
     ures_close(&subItem);
+    uenum_close(locs);
 #if defined(URES_TREE_DEBUG)
     fprintf(stderr, "%s:  size %d, #%d\n", u_errorName(*status), 
         valuesIndex, valuesCount);
