@@ -650,16 +650,16 @@ void RBBIAPITest::TestWordStatus() {
      UnicodeString testString1 =   //                  Ideographic    Katakana       Hiragana
              CharsToUnicodeString("plain word 123.45 \\u9160\\u9161 \\u30a1\\u30a2 \\u3041\\u3094");
                                 // 012345678901234567  8      9    0  1      2    3  4      5    6
-     int32_t bounds1[] =     {     0,   5,6, 10,11, 17,18,  19,   20,21,       23,24,       26};
+     int32_t bounds1[] =     {     0,   5,6, 10,11, 17,18,  19,   20,21,         23,24,    25,  26};
      int32_t tag_lo[]  = {UBRK_WORD_NONE,     UBRK_WORD_LETTER, UBRK_WORD_NONE,    UBRK_WORD_LETTER,
                           UBRK_WORD_NONE,     UBRK_WORD_NUMBER, UBRK_WORD_NONE,
                           UBRK_WORD_IDEO,     UBRK_WORD_IDEO,   UBRK_WORD_NONE,
-                          UBRK_WORD_KANA,     UBRK_WORD_NONE,   UBRK_WORD_KANA};
+                          UBRK_WORD_KANA,     UBRK_WORD_NONE,   UBRK_WORD_KANA,    UBRK_WORD_KANA};
 
      int32_t tag_hi[]  = {UBRK_WORD_NONE_LIMIT, UBRK_WORD_LETTER_LIMIT, UBRK_WORD_NONE_LIMIT, UBRK_WORD_LETTER_LIMIT,
                           UBRK_WORD_NONE_LIMIT, UBRK_WORD_NUMBER_LIMIT, UBRK_WORD_NONE_LIMIT,
                           UBRK_WORD_IDEO_LIMIT, UBRK_WORD_IDEO_LIMIT,   UBRK_WORD_NONE_LIMIT,
-                          UBRK_WORD_KANA_LIMIT, UBRK_WORD_NONE_LIMIT,   UBRK_WORD_KANA_LIMIT};
+                          UBRK_WORD_KANA_LIMIT, UBRK_WORD_NONE_LIMIT,   UBRK_WORD_KANA_LIMIT, UBRK_WORD_KANA_LIMIT};
 
      UErrorCode status=U_ZERO_ERROR;
      

@@ -194,15 +194,17 @@ void IntlTestTextBoundary::addTestWordData()
     wordSelectionData->addElement(" ");
     wordSelectionData->addElement("1000,233,456.000");
     wordSelectionData->addElement(" ");
-    wordSelectionData->addElement("1,23.322%");
+    wordSelectionData->addElement("1,23.322");
     wordSelectionData->addElement(" ");
     wordSelectionData->addElement("123.1222");
 
     wordSelectionData->addElement(" ");
-    wordSelectionData->addElement("$123,000.20");
+     wordSelectionData->addElement("$");
+   wordSelectionData->addElement("123,000.20");
 
     wordSelectionData->addElement(" ");
-    wordSelectionData->addElement("179.01%");
+    wordSelectionData->addElement("179.01");
+    wordSelectionData->addElement("%");
 
     wordSelectionData->addElement("Hello");
     wordSelectionData->addElement(",");
@@ -1618,7 +1620,7 @@ void IntlTestTextBoundary::doOtherInvariantTest(BreakIterator& tb, UnicodeString
     for (i = 0; i < testCharsLen; i++) {
         UChar c1 = testChars[i];
         if (c1 == '\n' || c1 == '\r' || c1 == 0x2029 || c1 == 0x2028 || c1 == 0x0003 ||
-            u_charType(c1) == U_CONTROL_CHAR) {
+            u_charType(c1) == U_CONTROL_CHAR  ||  u_charType(c1) == U_FORMAT_CHAR) {
             continue;
         }
         work[1] = c1;
