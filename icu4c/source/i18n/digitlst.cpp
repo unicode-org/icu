@@ -105,6 +105,7 @@ DigitList::clear()
     fDigits = fDecimalDigits + 1;   // skip the decimal
     fDecimalAt = 0;
     fCount = 0;
+    fIsPositive = TRUE;
 
 // This isn't needed because fCount = 0;
 //    for (int32_t i=0; i<MAX_DIGITS; ++i)
@@ -162,14 +163,20 @@ DigitList::formatBase10(int32_t number, char *outputStr, int32_t outputLen)
 double
 DigitList::getDouble() const
 {
-    if (fCount == 0)
-        return 0.0;
+    double value;
 
-    *(fDigits+fCount) = 'e';    // add an e after the digits.
-    formatBase10(fDecimalAt,
-                 fDigits + fCount + 1,  // skip the 'e'
-                 MAX_DEC_DIGITS - fCount - 2);  // skip the 'e' and '.'
-    return atof(fDecimalDigits);
+    if (fCount == 0) {
+        value = 0.0;
+    }
+    else {
+        *(fDigits+fCount) = 'e';    // add an e after the digits.
+        formatBase10(fDecimalAt,
+                     fDigits + fCount + 1,  // skip the 'e'
+                     MAX_DEC_DIGITS - fCount - 2);  // skip the 'e' and '.'
+        value = atof(fDecimalDigits);
+    }
+
+    return fIsPositive ? value : -value;
 }
 
 // -------------------------------------
@@ -180,11 +187,16 @@ DigitList::getDouble() const
 int32_t DigitList::getLong()
 {
     if (fCount == fDecimalAt) {
+        int32_t value;
+
         fDigits[fCount] = 0;    // NULL terminate
 
         // This conversion is bad on 64-bit platforms when we want to
         // be able to return a 64-bit number [grhoten]
-        return (int32_t)atol(fDigits);
+        *fDecimalDigits = fIsPositive ? '+' : '-';
+        value = (int32_t)atol(fDecimalDigits);
+        *fDecimalDigits = '.';
+        return value;
     }
     else {
         // This is 100% accurate in c++ because if we are representing
@@ -200,7 +212,7 @@ int32_t DigitList::getLong()
  * a long.
  */
 UBool
-DigitList::fitsIntoLong(UBool isPositive, UBool ignoreNegativeZero)
+DigitList::fitsIntoLong(UBool ignoreNegativeZero)
 {
     // Figure out if the result will fit in a long.  We have to
     // first look for nonzero digits after the decimal point;
@@ -216,7 +228,7 @@ DigitList::fitsIntoLong(UBool isPositive, UBool ignoreNegativeZero)
     if (fCount == 0) {
         // Positive zero fits into a long, but negative zero can only
         // be represented as a double. - bug 4162852
-        return isPositive || ignoreNegativeZero;
+        return fIsPositive || ignoreNegativeZero;
     }
     
 //    initializeLONG_MIN_REP();
@@ -251,7 +263,7 @@ DigitList::fitsIntoLong(UBool isPositive, UBool ignoreNegativeZero)
     // Now we have a representation of Long.MIN_VALUE, without the leading
     // negative sign.  If this represents a positive value, then it does
     // not fit; otherwise it fits.
-    return !isPositive;
+    return !fIsPositive;
 }
 
 // -------------------------------------
@@ -263,42 +275,17 @@ DigitList::fitsIntoLong(UBool isPositive, UBool ignoreNegativeZero)
 void
 DigitList::set(int32_t source, int32_t maximumDigits)
 {
-    // for now, simple implementation; later, do proper IEEE stuff
-    //String stringDigits = Long.toString(source);
-    char string [10 + 1];    // maximum digits for a 32-bit signed number is 10 + 1 for sign
-    sprintf(string, "%d", source);
+    fCount = fDecimalAt = formatBase10(source, fDecimalDigits, MAX_DIGITS);
 
-    char *stringDigits = string;
-    // This method does not expect a negative number. However,
-    // "source" can be a Long.MIN_VALUE (-9223372036854775808),
-    // if the number being formatted is a Long.MIN_VALUE.  In that
-    // case, it will be formatted as -Long.MIN_VALUE, a number
-    // which is outside the legal range of a long, but which can
-    // be represented by DigitList.
-    if (stringDigits[0] == '-') 
-        stringDigits++;
-
-    fCount = fDecimalAt = strlen(stringDigits);
+    fIsPositive = (*fDecimalDigits == '+');
+    *fDecimalDigits = '.';
     
     // Don't copy trailing zeros
-    while (fCount > 1 && stringDigits[fCount - 1] == '0') 
+    while (fCount > 1 && fDigits[fCount - 1] == '0') 
         --fCount;
     
-    //for (int32_t i = 0; i < fCount; ++i)
-    //    fDigits[i] = (char) stringDigits[i];
-    strncpy(fDigits, stringDigits, fCount);
-
     if(maximumDigits > 0) 
         round(maximumDigits);
-
-    // {sfb} old implementation, keep around for now
-
-    // Handle the case in which source == LONG_MIN
-/*
-    set((source >= 0 ? (double)source : -((double)source)),
-        maximumDigits > 0 ? maximumDigits : MAX_DIGITS,
-        maximumDigits == 0);
-*/
 }
 
 /**
@@ -315,57 +302,42 @@ DigitList::set(int32_t source, int32_t maximumDigits)
 void
 DigitList::set(double source, int32_t maximumDigits, UBool fixedPoint)
 {
-    if (source == 0)
-        source = 0;    /* -0? */
-
-    // Generate a representation of the form DDDDD, DDDDD.DDDDD, or
-    // DDDDDE+/-DDDDD.
-    //String rep = Double.toString(source);
+    // for now, simple implementation; later, do proper IEEE stuff
     char rep[MAX_DIGITS + 7]; // Extra space for '.', e+NNN, and '\0' (actually +7 is enough)
-    sprintf(rep, "%1.*e", MAX_DIGITS - 1, source);
-
-    fDecimalAt          = -1;
-    fCount              = 0;
     int32_t exponent    = 0;
-    // Number of zeros between decimal point and first non-zero digit after
-    // decimal point, for numbers < 1.
-    int32_t leadingZerosAfterDecimal = 0;
-    UBool nonZeroDigitSeen = FALSE;
-    for (int32_t i=0; i < MAX_DIGITS + 7; ++i) {
-        char c = rep[i];
-        if (c == '.') {
-            fDecimalAt = fCount;
+    int idx;
+    char ch;
+
+//    if (source == 0)
+//        source = 0;    /* -0? */
+
+    // Generate a representation of the form /[+-][0-9]+e[+-][0-9]+/
+    sprintf(rep, "%+1.*e", MAX_DIGITS - 1, source);
+    fDecimalAt  = 1;
+    fCount      = 0;
+    fIsPositive = !uprv_isNegative(source);    // Allow +0 and -0
+    rep[2]      = rep[1];    // remove decimal
+
+    for (idx=2; idx < MAX_DIGITS + 2; ++idx) {
+        ch = rep[idx];
+        if (fCount == 0 && ch == '0') {
+            --fDecimalAt;   // account for leading zeros
         }
-        else if (c == 'e' || c == 'E') {
-            // Parse an exponent of the form /[eE][+-]?[0-9]*/
-            //exponent = Integer.valueOf(rep.substring(i+1)).intValue();
-            i++;                 // adjust for 'e'
-            UBool negExp = rep[i] == '-';
-            if (negExp || rep[i] == '+') {
-                ++i;
-            }
-            while ((c = rep[i++]) >= '0' && c <= '9') {
-                exponent = 10*exponent + c - '0';
-            }
-            if (negExp) {
-                exponent = -exponent;
-            }
-            break;
-        }
-        else if (fCount < MAX_DIGITS) {
-            if (!nonZeroDigitSeen) {
-                nonZeroDigitSeen = (c != '0');
-                if (!nonZeroDigitSeen && fDecimalAt != -1) 
-                    ++leadingZerosAfterDecimal;
-            }
-    
-            if (nonZeroDigitSeen) 
-                fDigits[fCount++] = (char)c;
+        else {
+            fDigits[fCount++] = (char)ch;
         }
     }
-    if (fDecimalAt == -1) 
-        fDecimalAt = fCount;
-    fDecimalAt += exponent - leadingZerosAfterDecimal;
+
+    // Parse an exponent of the form /[eE][+-][0-9]+/
+    idx++;  // skip the e
+    UBool negExp = (rep[idx++] == '-');
+    while ((ch = rep[idx++]) != 0) {
+        exponent = 10*exponent + ch - '0';
+    }
+    if (negExp) {
+        exponent = -exponent;
+    }
+    fDecimalAt += exponent;
 
     if (fixedPoint)
     {
@@ -397,26 +369,12 @@ DigitList::set(double source, int32_t maximumDigits, UBool fixedPoint)
     while (fCount > 1 && fDigits[fCount - 1] == '0')
         --fCount;
 
-    /*#if (DEBUG)
-    {
-        System.out.print("Before rounding 0.");
-        for (int i=0; i<fCount; ++i) System.out.print((char)digits[i]);
-        System.out.println("x10^" + fDecimalAt);
-    }*/
-
     // Eliminate digits beyond maximum digits to be displayed.
     // Round up if appropriate.  Do NOT round in the special
     // case where maximumDigits == 0 and fixedPoint is FALSE.
     if (fixedPoint || maximumDigits > 0) {
         round(fixedPoint ? (maximumDigits + fDecimalAt) : maximumDigits);
     }
-
-    /* #if (DEBUG)
-    {
-        System.out.print("After rounding 0.");
-        for (int i=0; i<fCount; ++i) System.out.print((char)digits[i]);
-        System.out.println("x10^" + fDecimalAt);
-    }*/
 }
 
 // -------------------------------------
@@ -431,7 +389,7 @@ DigitList::round(int32_t maximumDigits)
 {
     // Eliminate digits beyond maximum digits to be displayed.
     // Round up if appropriate.
-    if (maximumDigits >= 0 && maximumDigits < fCount)
+/*    if (maximumDigits >= 0 && maximumDigits < fCount)
     {
         if (shouldRoundUp(maximumDigits)) {
             // Rounding up involved incrementing digits from LSD to MSD.
@@ -463,6 +421,37 @@ DigitList::round(int32_t maximumDigits)
         while (fCount > 1 && fDigits[fCount-1] == '0') {
             --fCount;
         }
+    }*/
+    // Eliminate digits beyond maximum digits to be displayed.
+    // Round up if appropriate.
+    if (maximumDigits >= 0 && maximumDigits < fCount)
+    {
+        if (shouldRoundUp(maximumDigits)) {
+            // Rounding up involved incrementing digits from LSD to MSD.
+            // In most cases this is simple, but in a worst case situation
+            // (9999..99) we have to adjust the decimalAt value.
+            while (--maximumDigits >= 0 && ++fDigits[maximumDigits] > '9')
+                ;
+
+            if (maximumDigits < 0)
+            {
+                // We have all 9's, so we increment to a single digit
+                // of one and adjust the exponent.
+                fDigits[0] = (char) '1';
+                ++fDecimalAt;
+                maximumDigits = 1; // Adjust the count
+            }
+            else
+            {
+                ++maximumDigits; // Increment for use as count
+            }
+        }
+        fCount = maximumDigits;
+
+        // Eliminate trailing zeros.
+        while (fCount > 1 && fDigits[fCount-1] == '0') {
+            --fCount;
+        }
     }
 }
 
@@ -480,9 +469,7 @@ DigitList::round(int32_t maximumDigits)
  */
 UBool DigitList::shouldRoundUp(int32_t maximumDigits) {
     // Implement IEEE half-even rounding
-    if (fDigits[maximumDigits] > '5') {
-        return TRUE;
-    } else if (fDigits[maximumDigits] == '5' ) {
+    if (fDigits[maximumDigits] == '5' ) {
         for (int i=maximumDigits+1; i<fCount; ++i) {
             if (fDigits[i] != '0') {
                 return TRUE;
@@ -490,7 +477,7 @@ UBool DigitList::shouldRoundUp(int32_t maximumDigits) {
         }
         return maximumDigits > 0 && (fDigits[maximumDigits-1] % 2 != 0);
     }
-    return FALSE;
+    return (fDigits[maximumDigits] > '5');
 }
 
 // -------------------------------------

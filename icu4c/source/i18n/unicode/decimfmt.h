@@ -975,12 +975,11 @@ private:
      */
     UnicodeString& subformat(UnicodeString& result,
                              FieldPosition& fieldPosition,
-                             UBool         isNegative,
+                             DigitList& digits,
                              UBool         isInteger) const;
 
     enum {
         fgStatusInfinite,
-        fgStatusPositive,
         fgStatusLength      // Leave last in list.
     } StatusFlags;
 
@@ -1028,7 +1027,7 @@ private:
      */
     //static const int8_t fgMaxDigit; // The largest digit, in this case 9
 
-    /*transient*/ DigitList* fDigitList;
+    /*transient*/ //DigitList* fDigitList;
 
     UnicodeString           fPositivePrefix;
     UnicodeString           fPositiveSuffix;
@@ -1101,7 +1100,7 @@ DecimalFormat::format(const Formattable& obj,
 inline UnicodeString&
 DecimalFormat::format(double number,
                       UnicodeString& output) const {
-    return NumberFormat::format(number, output);
+    return format(number, output, FieldPosition(0));
 }
 
 inline UnicodeString&

@@ -100,7 +100,7 @@ public:
      * Return true if the number represented by this object can fit into
      * a long.
      */
-    UBool fitsIntoLong(UBool isPositive, UBool ignoreNegativeZero);
+    UBool fitsIntoLong(UBool ignoreNegativeZero);
 
     /**
      * Utility routine to set the value of the digit list from a double
@@ -167,6 +167,7 @@ public:
      */
     int32_t     fDecimalAt;
     int32_t     fCount;
+    UBool       fIsPositive;
     char        *fDigits;
 
 private:
@@ -197,7 +198,7 @@ private:
      * @param outputStr The string to output to
      * @param outputLen The maximum number of characters to put into outputStr
      *                  (including NULL).
-     * @return the length of the new string.
+     * @return the number of digits written, not including the sign.
      */
     static int32_t formatBase10(int32_t number, char *outputStr, int32_t outputLen);
 };
