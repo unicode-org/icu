@@ -60,8 +60,24 @@ typedef enum {
     UCNV_UTF16_LittleEndian = 6,
     UCNV_EBCDIC_STATEFUL = 7,
     UCNV_ISO_2022 = 8,
+    
+    UCNV_LMBCS_1 = 9,
+    UCNV_LMBCS_2, 
+    UCNV_LMBCS_3,		
+    UCNV_LMBCS_4,
+    UCNV_LMBCS_5,
+    UCNV_LMBCS_6,
+    UCNV_LMBCS_8,
+    UCNV_LMBCS_11,
+    UCNV_LMBCS_16,
+    UCNV_LMBCS_17,
+    UCNV_LMBCS_18,
+    UCNV_LMBCS_19,
+    UCNV_LMBCS_LAST = UCNV_LMBCS_19,
+
     /* Number of converter types for which we have conversion routines. */
-    UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES = 9
+    UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES = UCNV_LMBCS_LAST+1
+   
 } UConverterType;
 
 /* ### move the following typedef and array into implementation files! */
@@ -255,6 +271,17 @@ typedef struct
     int8_t escSeq2022Length;
   }
 UConverterDataISO2022;
+
+
+typedef struct
+  {
+    UConverter *OptGrpConverter[0x20];    /* Converter per Opt. grp. */
+    uint8_t    OptGroup;                  /* default Opt. grp. for this LMBCS session */
+    uint8_t    localeConverterIndex;      /* reasonable locale match for index */
+
+  }
+UConverterDataLMBCS;
+
 
 #define CONVERTER_FILE_EXTENSION ".cnv"
 

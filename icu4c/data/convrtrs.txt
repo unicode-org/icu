@@ -47,7 +47,19 @@ UTF16_PlatformEndian    iso-10646-ucs-2 csUnicode utf16 utf-16 ibm-1200 ibm1200 
 UTF16_OppositeEndian
 LATIN_1                 iso-8859-1 iso_8859-1 ibm-819 ibm819 cp819 latin1 latin-1 ascii ascii-7 us-ascii 8859-1 csisolatin1 iso-ir-100 iso_8859-1:1978 #!!!!! There's whole lot of names for this - cp367 csASCII etc.
 ISO_2022                iso-2022 2022 cp2022 iso2022 iso_2022
-LMBCS
+LMBCS-1                 lmbcs 
+LMBCS-2
+LMBCS-3		
+LMBCS-4
+LMBCS-5
+LMBCS-6
+LMBCS-8
+LMBCS-11
+LMBCS-16
+LMBCS-17
+LMBCS-18
+LMBCS-19
+
 
 # Table-based
 
@@ -76,10 +88,13 @@ ibm-1383                euc-cn euccn ibm-eucCN                       # China EUC
 #ibm-1162               tis-620 cp874 windows-874 ms874       # Thai (w/ euro support) #what is the connection between this and the one below!!!
 ibm-874                 ibm-1161 #same as 1162 (w/o euro update) ***This is commented out in Helena's
 
+lmb-excp                # special exceptions list for LMBCS algorithm
+
 # Platform codepages
 ibm-437                 ibm437 cp437 csPC8CodePage437 437         # PC US
 # HSYS:
 ibm-850                 IBM850 cp850 850 csPC850Multilingual    # PC latin1
+ibm-851                 IBM851 cp851 851 csPC851           # PC DOS Greek (no euro)
 ibm-858                 ibm858 cp858  # PC latin1 with Euro cp850 removed
 ibm-9044                IBM852 852 csPCp852 cp852            # PC latin2 (w/ euro update) #where should the names go here or below - inconsistency!!!
 ibm-852                 # PC latin2 (w/o euro update)
