@@ -1,0 +1,55 @@
+// -*- Coding:US-ASCII-*-
+// Copyright (c) 2000 IBM, Inc. and others.
+// $Revision: 1.1 $
+//
+// Telugu Locale. Data by Ram [ram@jtcsv.com]
+
+te_IN {
+    AmPmMarkers {
+
+	"\u0c2a\u0c42\u0c30\u0c4d\u0c35\u0c3e\u0c39\u0c4d\u0c28",
+	"\u0c05\u0c2a\u0c30\u0c3e\u0c39\u0c4d\u0c28",
+
+    }
+    CurrencyElements {
+	"\u0c30\u0c42.",
+	"INR ",
+	".",
+    }
+    DateTimePatterns {
+	"hh:mm:ss a z",
+	"hh:mm:ss a z",
+	"hh:mm:ss a",
+	"hh:mm a",
+	"EEEE dd MMM yyyy",
+	"EEEE dd MMM yyyy",
+	"dd/MM/yyyy",
+	"dd/MM/yy",
+	"{1} {0}",
+
+    }
+
+    LanguageLibraryUse { "Te" }
+    Measurement { "Metric" }
+    NumberPatterns {
+	"#,#0.##;-#,#0.##",
+	"u00A4 #,#0.00;-u00A4 #,#0.00",
+	"#,#0%",
+    }
+    PaperSize {
+        Hieght { "297" }
+        Width { "210" }
+        Units { "mm" }
+    }
+	LocaleID {"44a"}
+	// /**************** Info Below is needed ****************/
+	// CollationElements{}
+	// Countries{}
+	// Eras{}
+	// Languages{}
+	// ShortLanguage { }
+	// localPatternChars{}
+	//
+}
+
+
