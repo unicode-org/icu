@@ -12,9 +12,6 @@ GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
 COMPILE.c=	$(CC) -dynamic $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
 COMPILE.cc=	$(CXX) -dynamic $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
-## Extra commands to build and link
-LIBTOOL=        /usr/bin/libtool
-
 ## Commands to link
 LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
 LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
