@@ -65,7 +65,7 @@ void writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
     parents = pkg_appendToList(parents, NULL, uprv_strdup(infiles->str));
 
     /* make up commands.. */
-    sprintf(stanza, "$(TOOL) $(GENCCODE) -n %s -d $(TEMP_DIR) $<", o->shortName);
+    sprintf(stanza, "$(INVOKE) $(GENCCODE) -n %s -d $(TEMP_DIR) $<", o->shortName);
     commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
 
     sprintf(stanza, "$(COMPILE.c) -o $@ $(TEMP_DIR)/%s", cfile);
@@ -149,7 +149,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   T_FileStream_writeLine(makefile, "# 'TOCOBJ' contains C Table of Contents objects [if any]\n");
 
   sprintf(tmp, "$(TEMP_DIR)/%s_dat.c: $(CMNLIST)\n"
-                         "\t$(TOOL) $(GENCMN) -n %s -S -d $(TEMP_DIR) 0 $(CMNLIST)\n\n", o->shortName, o->shortName);
+                         "\t$(INVOKE) $(GENCMN) -n %s -S -d $(TEMP_DIR) 0 $(CMNLIST)\n\n", o->shortName, o->shortName);
   T_FileStream_writeLine(makefile, tmp);
   sprintf(tmp, "TOCOBJ= %s_dat%s \n\n", o->shortName,OBJ_SUFFIX);
   T_FileStream_writeLine(makefile, tmp);
@@ -162,7 +162,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
 #if 0
   for(iter=suffixes; iter; iter = iter->next) {
-    sprintf(tmp, "$(TEMP_DIR)/%%_%s.c: %%.%s\n\t$(TOOL) $(GENCCODE) -d $(TEMP_DIR) $<\n\n",
+    sprintf(tmp, "$(TEMP_DIR)/%%_%s.c: %%.%s\n\t$(INVOKE) $(GENCCODE) -d $(TEMP_DIR) $<\n\n",
             iter->str,iter->str);
     T_FileStream_writeLine(makefile, tmp);
   }
