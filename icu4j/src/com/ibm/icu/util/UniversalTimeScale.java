@@ -488,6 +488,15 @@ public final class UniversalTimeScale
             new TimeScaleData(days,         599266944000000000L, -9223372036854775808L, 9223372036854775807L, -11368795L,                        9981603L)  // DB2_TIME
     };
     
+    
+    /*
+     * Prevent construction of this class.
+     */
+    private UniversalTimeScale()
+    {
+        // nothing to do
+    }
+    
     /**
      * Convert a <code>long</code> datetime from the given time scale to the universal time scale.
      *
