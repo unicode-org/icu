@@ -245,6 +245,10 @@ SOURCE=.\jahatrts.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\jamotest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\loctest.cpp
 # End Source File
 # Begin Source File
