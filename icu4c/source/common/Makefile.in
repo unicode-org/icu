@@ -50,7 +50,7 @@ subdir = common
 CLEANFILES = *~
 
 ## Target information
-TARGET = libicu-uc.$(SO)
+TARGET = $(LIBICU)uc.$(SO)
 
 DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ -I. -I$(srcdir) -DICU_DATA_DIR=\"$(pkgdatadir)/$(VERSION)/\" -DUDATA_SO_SUFFIX=\".$(SO)\" -DU_COMMON_LIBNAME=\"$(TARGET)\"
