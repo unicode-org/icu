@@ -1,16 +1,15 @@
 # Scripts-4.0.0.txt
-# Date: 2003-02-14,16:50:11 GMT [MD]
+# Date: 2003-03-14, 20:22:09 GMT [MD]
 #
 # For documentation, see UCD.html
 # Note: Unassigned and Noncharacter codepoints are omitted,
 #       except when listing Noncharacter or Cn.
 # ================================================
 
-1900..191C    ; LIMBU # Lo  [29] LIMBU VOWEL-CARRIER LETTER..LIMBU LETTER HA
-1900..191C    ; LIMBU # Lo  [29] LIMBU VOWEL-CARRIER LETTER..LIMBU LETTER HA
 
 # ================================================
 # Script
+#	The value for all code points not explicitly listed in this file is COMMON.
 # ================================================
 
 0041..005A    ; LATIN # L&  [26] LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER Z
@@ -765,4 +764,10 @@ FE20..FE23    ; INHERITED # Mn   [4] COMBINING LIGATURE LEFT HALF..COMBINING DOU
 1083F         ; CYPRIOT # Lo       CYPRIOT SYLLABLE ZO
 
 # Total code points: 55
+
+# ================================================
+
+2800..28FF    ; BRAILLE # So [256] BRAILLE PATTERN BLANK..BRAILLE PATTERN DOTS-12345678
+
+# Total code points: 256
 
