@@ -151,7 +151,7 @@ binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
 	# do a bit of cleanup
 	#
 	rm -rf debian/tmp/etc debian/tmp/usr/sbin \
-	    debian/tmp/usr/share/icu/$(version) \
+	    debian/tmp/$(iculibdir) \
 	    debian/tmp/usr/share/man
 	#
 	# continue to prepare packages

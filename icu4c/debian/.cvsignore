@@ -9,4 +9,4 @@ icu-locales
 icu-data
 icu-i18ndata
 icu.postinst
-
+icu.prerm
