@@ -46,6 +46,7 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
         CASE(8,TestClone);
         CASE(9,TestExhaustive);
         CASE(10,TestToPattern);
+        CASE(11,TestIndexOf);
         default: name = ""; break;
     }
 }
@@ -545,6 +546,33 @@ void UnicodeSetTest::TestClone() {
     UnicodeSet s("[abcxyz]", ec);
     UnicodeSet t(s);
     expectContainment(t, "abc", "def");
+}
+
+/**
+ * Test the indexOf() and charAt() methods.
+ */
+void UnicodeSetTest::TestIndexOf() {
+    UErrorCode ec = U_ZERO_ERROR;
+    UnicodeSet set("[a-cx-y3578]", ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: UnicodeSet constructor");
+        return;
+    }
+    for (int32_t i=0; i<set.size(); ++i) {
+        UChar32 c = set.charAt(i);
+        if (set.indexOf(c) != i) {
+            errln((UnicodeString)"FAIL: charAt(" + i + ") = " + c +
+                  " => indexOf() => " + set.indexOf(c));
+        }
+    }
+    UChar32 c = set.charAt(set.size());
+    if (c != -1) {
+        errln((UnicodeString)"FAIL: charAt(<out of range>) = " + c);
+    }
+    int32_t j = set.indexOf((UChar32)0x71/*'q'*/);
+    if (j != -1) {
+        errln((UnicodeString)"FAIL: indexOf('q') = " + j);
+    }
 }
 
 void UnicodeSetTest::TestExhaustive() {

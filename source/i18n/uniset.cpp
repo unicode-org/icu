@@ -627,6 +627,54 @@ UMatchDegree UnicodeSet::matches(const Replaceable& text,
 }
 
 /**
+ * Returns the index of the given character within this set, where
+ * the set is ordered by ascending code point.  If the character
+ * is not in this set, return -1.  The inverse of this method is
+ * <code>charAt()</code>.
+ * @return an index from 0..size()-1, or -1
+ */
+int32_t UnicodeSet::indexOf(UChar32 c) const {
+    if (c < MIN_VALUE || c > MAX_VALUE) {
+        return -1;
+    }
+    int32_t i = 0;
+    int32_t n = 0;
+    for (;;) {
+        UChar32 start = list[i++];
+        if (c < start) {
+            return -1;
+        }
+        UChar32 limit = list[i++];
+        if (c < limit) {
+            return n + c - start;
+        }
+        n += limit - start;
+    }
+}
+
+/**
+ * Returns the character at the given index within this set, where
+ * the set is ordered by ascending code point.  If the index is
+ * out of range, return (UChar32)-1.  The inverse of this method is
+ * <code>indexOf()</code>.
+ * @param index an index from 0..size()-1
+ * @return the character at the given index, or (UChar32)-1.
+ */
+UChar32 UnicodeSet::charAt(int32_t index) const {
+    if (index >= 0) {
+        for (int32_t i=0; i < len;) {
+            UChar32 start = list[i++];
+            int32_t count = list[i++] - start;
+            if (index < count) {
+                return (UChar32)(start + index);
+            }
+            index -= count;
+        }
+    }
+    return (UChar32)-1;
+}
+
+/**
  * Adds the specified range to this set if it is not already
  * present.  If this set already contains the specified range,
  * the call leaves this set unchanged.  If <code>end > start</code>
