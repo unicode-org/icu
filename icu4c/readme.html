@@ -1311,9 +1311,8 @@ del common/libicuuc.o
 
       <li>Run <tt>'gmake check'</tt> to build the tests.</li>
 
-      <li>If you did not specify the <tt>--disable-threads</tt> option to
-      configure before you built ICU, the "utility/MultithreadTest" test in
-      intltest may have failed. In order to make this test pass, please use
+      <li>The "utility/MultithreadTest" test in intltest may have failed during
+      <tt>'gmake check'</tt>. In order to make this test pass, please use
       <tt>'gmake check QIBM_MULTI_THREADED=Y'</tt> after you built the tests
       with <tt>'gmake check'</tt> from the previous step. You can look at the
       <a href=
