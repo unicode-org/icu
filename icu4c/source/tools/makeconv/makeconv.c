@@ -423,7 +423,7 @@ void readHeaderFromFile(UConverterSharedData* mySharedData,
                         const char* converterName,
                         UErrorCode* err)
 {
-  char storeLine[UCNV_MAX_LINE_TEXT];
+  char storeLine[200];
   char key[16];
   char value[200];
   char* line = storeLine;
@@ -435,7 +435,7 @@ void readHeaderFromFile(UConverterSharedData* mySharedData,
   UConverterStaticData *myConverter = (UConverterStaticData *)mySharedData->staticData;
 
   if (U_FAILURE(*err)) return;
-  while (T_FileStream_readLine(convFile, line, UCNV_MAX_LINE_TEXT)) 
+  while (T_FileStream_readLine(convFile, line, sizeof(storeLine))) 
     {
       removeComments(line);
       
@@ -626,7 +626,7 @@ void readHeaderFromFile(UConverterSharedData* mySharedData,
   
 UConverterTable *loadSBCSTableFromFile(FileStream* convFile, UConverterStaticData* myConverter, UErrorCode* err)
 {
-  char storageLine[UCNV_MAX_LINE_TEXT];
+  char storageLine[200];
   char* line = NULL;
   UConverterTable* myUConverterTable = NULL;
   UChar unicodeValue = 0xfffe;
@@ -669,7 +669,7 @@ UConverterTable *loadSBCSTableFromFile(FileStream* convFile, UConverterStaticDat
       myUConverterTable->sbcs.toUnicode[i] = unicodeValue;
       myUConverterTable->sbcs.toUnicodeFallback[i] = unicodeValue;
   }
-  while (T_FileStream_readLine(convFile, storageLine, UCNV_MAX_LINE_TEXT))
+  while (T_FileStream_readLine(convFile, storageLine, sizeof(storageLine)))
     {
       /*removes comments*/
       removeComments(storageLine);
@@ -739,7 +739,7 @@ UConverterTable *loadSBCSTableFromFile(FileStream* convFile, UConverterStaticDat
 
 void loadMBCSTableFromFile(FileStream* convFile, UConverterSharedData* sharedData, UErrorCode* err)
 {
-  char storageLine[UCNV_MAX_LINE_TEXT];
+  char storageLine[200];
   char* line = NULL;
   UConverterStaticData *myConverter = (UConverterStaticData *)sharedData->staticData;
   MBCSData *mbcsData = (MBCSData *)sharedData->table;
@@ -755,7 +755,7 @@ void loadMBCSTableFromFile(FileStream* convFile, UConverterSharedData* sharedDat
   /* before this, the MBCSData is allocated and initialized with the state table info */
   MBCSProcessStates(mbcsData);
 
-  while (T_FileStream_readLine(convFile, storageLine, UCNV_MAX_LINE_TEXT))
+  while (T_FileStream_readLine(convFile, storageLine, sizeof(storageLine)))
     {
       removeComments(storageLine);
       line = storageLine;
@@ -820,7 +820,7 @@ void loadMBCSTableFromFile(FileStream* convFile, UConverterSharedData* sharedDat
 
 UConverterTable *loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConverterStaticData* myConverter, UErrorCode* err)
 {
-  char storageLine[UCNV_MAX_LINE_TEXT];
+  char storageLine[200];
   char* line = NULL;
   UConverterTable* myUConverterTable = NULL;
   UChar unicodeValue = 0xfffe;
@@ -857,7 +857,7 @@ UConverterTable *loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConvert
   myToUnicodeFallback = &myUConverterTable->dbcs.toUnicodeFallback;
   ucmp16_initBogus(myToUnicodeFallback);  
 
-  while (T_FileStream_readLine(convFile, storageLine, UCNV_MAX_LINE_TEXT))
+  while (T_FileStream_readLine(convFile, storageLine, sizeof(storageLine)))
     {
       removeComments(storageLine);
       line = storageLine;
@@ -935,7 +935,7 @@ UConverterTable *loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConvert
 
 UConverterTable * loadDBCSTableFromFile(FileStream* convFile, UConverterStaticData* myConverter, UErrorCode* err)
 {
-  char storageLine[UCNV_MAX_LINE_TEXT];
+  char storageLine[200];
   char* line = NULL;
   UConverterTable* myUConverterTable = NULL;
   UChar unicodeValue = 0xfffe;
@@ -971,7 +971,7 @@ UConverterTable * loadDBCSTableFromFile(FileStream* convFile, UConverterStaticDa
   myToUnicodeFallback = &(myUConverterTable->dbcs.toUnicodeFallback);
   ucmp16_initBogus(myToUnicodeFallback);
 
-  while (T_FileStream_readLine(convFile, storageLine, UCNV_MAX_LINE_TEXT))
+  while (T_FileStream_readLine(convFile, storageLine, sizeof(storageLine)))
     {
       removeComments(storageLine);
       line = storageLine;
