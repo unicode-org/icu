@@ -941,15 +941,15 @@ TimeZoneTest::TestDisplayName()
 
     // Make sure we get the default display format for Locales
     // with no display name data.
-    Locale zh_CN = Locale::getSimplifiedChinese();
+    Locale mt_MT("mt_MT");
     name.remove();
-    name = zone->getDisplayName(zh_CN,name);
+    name = zone->getDisplayName(mt_MT,name);
     //*****************************************************************
     // THE FOLLOWING LINE MUST BE UPDATED IF THE LOCALE DATA CHANGES
     // THE FOLLOWING LINE MUST BE UPDATED IF THE LOCALE DATA CHANGES
     // THE FOLLOWING LINE MUST BE UPDATED IF THE LOCALE DATA CHANGES
     //*****************************************************************
-    logln("PST(zh_CN)->" + name);
+    logln("PST(mt_MT)->" + name);
 
     // *** REVISIT SRL how in the world do I check this? looks java specific.
     // Now be smart -- check to see if zh resource is even present.
@@ -959,15 +959,15 @@ TimeZoneTest::TestDisplayName()
     if(U_FAILURE(status))
         errln("Couldn't get ResourceBundle for en");
 
-    ResourceBundle zhRB(u_getDataDirectory(),
-                         zh_CN, status);
+    ResourceBundle mtRB(u_getDataDirectory(),
+                         mt_MT, status);
     //if(U_FAILURE(status))
-    //    errln("Couldn't get ResourceBundle for zh_CN");
+    //    errln("Couldn't get ResourceBundle for mt_MT");
 
     UBool noZH = U_FAILURE(status);
 
     if (noZH) {
-        logln("Warning: Not testing the zh_CN behavior because resource is absent");
+        logln("Warning: Not testing the mt_MT behavior because resource is absent");
         if (name != "Pacific Standard Time")
             errln("Fail: Expected Pacific Standard Time");
     }
@@ -977,7 +977,7 @@ TimeZoneTest::TestDisplayName()
              name.compare("GMT-8:00") &&
              name.compare("GMT-0800") &&
              name.compare("GMT-800")) {
-        errln("Fail: Expected GMT-08:00 or something similar");
+      errln(UnicodeString("Fail: Expected GMT-08:00 or something similar for PST in mt_MT but got ") + name );
         errln("************************************************************");
         errln("THE ABOVE FAILURE MAY JUST MEAN THE LOCALE DATA HAS CHANGED");
         errln("************************************************************");
