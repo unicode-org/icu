@@ -609,8 +609,7 @@ typedef enum UCharDirection {
  */
 enum UBlockCode {
     /** New No_Block value in Unicode 4. @draft ICU 2.6 */
-    UBLOCK_NO_BLOCK = 0,
-        /*[0001]*/ /* bogus range, No_Block is not used in Blocks.txt */
+    UBLOCK_NO_BLOCK = 0, /*[none]*/ /* Special range indicating No_Block */
 
     /** @stable ICU 2.0 */
     UBLOCK_BASIC_LATIN = 1, /*[0000]*/ /*See note !!*/
