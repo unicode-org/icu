@@ -28,19 +28,21 @@
 
     /**
      * This is a test class that simulates styled text.
-     * It associates a style number (0..65536) with each character,
+     * It associates a style number (0..65535) with each character,
      * and maintains that style in the normal fashion:
      * When setting text from raw string or characters,<br>
      * Set the styles to the style of the first character replaced.<br>
      * If no characters are replaced, use the style of the previous character.<br>
      * If at start, use the following character<br>
-     * Otherwise use defaultStyle.
+     * Otherwise use NO_STYLE.
      */
 class TestReplaceable : public Replaceable {
     UnicodeString chars;
     UnicodeString styles;
     
-    static const UChar defaultStyle;
+    static const UChar NO_STYLE;
+
+    static const UChar NO_STYLE_MARK;
 
     /**
      * The address of this static class variable serves as this class's ID
@@ -57,7 +59,11 @@ public:
             if (i < newStyles.length()) {
                 s.append(newStyles.charAt(i));
             } else {
-                s.append((UChar)(i + 0x0031));
+		if (text.charAt(i) == NO_STYLE_MARK) {
+		    s.append(NO_STYLE);
+		} else {
+		    s.append((UChar)(i + 0x0031));
+		}
             }
         }
         this->styles = s;
@@ -118,18 +124,25 @@ protected:
     
 
     void fixStyles(int32_t start, int32_t limit, int32_t newLen) {
-        UChar newStyle = defaultStyle;
-        if (start != limit) {
+        UChar newStyle = NO_STYLE;
+        if (start != limit && styles.charAt(start) != NO_STYLE) {
             newStyle = styles.charAt(start);
-        } else if (start > 0) {
+        } else if (start > 0 && getCharAt(start-1) != NO_STYLE_MARK) {
             newStyle = styles.charAt(start-1);
-        } else if (limit < styles.length() - 1) {
-            newStyle = styles.charAt(limit+1);
+        } else if (limit < styles.length()) {
+            newStyle = styles.charAt(limit);
         }
         // dumb implementation for now.
         UnicodeString s;
         for (int i = 0; i < newLen; ++i) {
-            s.append(newStyle);
+	    // this doesn't really handle an embedded NO_STYLE_MARK
+	    // in the middle of a long run of characters right -- but
+	    // that case shouldn't happen anyway
+	    if (getCharAt(start+i) == NO_STYLE_MARK) {
+		s.append(NO_STYLE);
+	    } else {
+		s.append(newStyle);
+	    }
         }
         styles.replaceBetween(start, limit, s);
     }
@@ -142,7 +155,9 @@ protected:
 
 const char TestReplaceable::fgClassID=0;
 
-const UChar TestReplaceable::defaultStyle  = 0x005F;
+const UChar TestReplaceable::NO_STYLE  = 0x005F;
+
+const UChar TestReplaceable::NO_STYLE_MARK = 0xFFFF;
 
 void
 ReplaceableTest::runIndexedTest(int32_t index, UBool exec,
@@ -155,7 +170,7 @@ ReplaceableTest::runIndexedTest(int32_t index, UBool exec,
 
 
 void ReplaceableTest::TestReplaceableClass(void) {
-    UChar rawTestArray[8][6] = {
+    UChar rawTestArray[][6] = {
         {0x0041, 0x0042, 0x0043, 0x0044, 0x0000, 0x0000}, // ABCD
         {0x0061, 0x0062, 0x0063, 0x0064, 0x00DF, 0x0000}, // abcd\u00DF
         {0x0061, 0x0042, 0x0043, 0x0044, 0x0000, 0x0000}, // aBCD
@@ -164,28 +179,33 @@ void ReplaceableTest::TestReplaceableClass(void) {
         {0x0077, 0x0078, 0x0079, 0x0000, 0x0000, 0x0000}, /* "wxy" */
         {0x0077, 0x0078, 0x0079, 0x007A, 0x0000, 0x0000}, /* "wxyz" */
         {0x0077, 0x0078, 0x0079, 0x007A, 0x0075, 0x0000}, /* "wxyzu" */
+	{0x0078, 0x0079, 0x007A, 0x0000, 0x0000, 0x0000}, /* "xyz" */
+	{0x0077, 0x0078, 0x0079, 0x0000, 0x0000, 0x0000}, /* "wxy" */
+	{0xFFFF, 0x0078, 0x0079, 0x0000, 0x0000, 0x0000}, /* "*xy" */
+	{0xFFFF, 0x0078, 0x0079, 0x0000, 0x0000, 0x0000}, /* "*xy" */
     };
-    Check("Lower", rawTestArray[0], "", "1234");
-    Check("Upper", rawTestArray[1], "", "123455"); // must map 00DF to SS
-    Check("Title", rawTestArray[2], "", "1234");
-    Check("NFC",   rawTestArray[3], "", "13");
-    Check("NFD",   rawTestArray[4], "", "1122");
-    Check("*(x) > A $1 B", rawTestArray[5], "", "11223");
-    Check("*(x)(y) > A $2 B $1 C $2 D", rawTestArray[6], "", "113322334");
-    Check("*(x)(y)(z) > A $3 B $2 C $1 D", rawTestArray[7], "", "114433225");
+    check("Lower", rawTestArray[0], "1234");
+    check("Upper", rawTestArray[1], "123455"); // must map 00DF to SS
+    check("Title", rawTestArray[2], "1234");
+    check("NFC",   rawTestArray[3], "13");
+    check("NFD",   rawTestArray[4], "1122");
+    check("*(x) > A $1 B", rawTestArray[5], "11223");
+    check("*(x)(y) > A $2 B $1 C $2 D", rawTestArray[6], "113322334");
+    check("*(x)(y)(z) > A $3 B $2 C $1 D", rawTestArray[7], "114433225");
+    // Disabled for 2.4.  TODO Revisit in 2.6 or later.
+    //check("*x > a", rawTestArray[8], "223"); // expect "123"?
+    //check("*x > a", rawTestArray[9], "113"); // expect "123"?
+    //check("*x > a", rawTestArray[10], "_33"); // expect "_23"?
+    //check("*(x) > A $1 B", rawTestArray[11], "__223");
 }
-    
-void ReplaceableTest::Check(const UnicodeString& transliteratorName, 
+
+void ReplaceableTest::check(const UnicodeString& transliteratorName, 
                             const UnicodeString& test, 
-                            const UnicodeString& styles, 
                             const UnicodeString& shouldProduceStyles) 
 {
     UErrorCode status = U_ZERO_ERROR;
-    TestReplaceable *tr = new TestReplaceable(test, styles);
+    TestReplaceable *tr = new TestReplaceable(test, "");
     UnicodeString expectedStyles = shouldProduceStyles;
-    if (expectedStyles.length() == 0) {
-        expectedStyles = styles;
-    }
     UnicodeString original = tr->toString();
 
     Transliterator* t;
