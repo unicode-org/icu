@@ -99,7 +99,7 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 
 all-local: build-local
 
-DAT_FILES=unames.dat cnvalias.dat tz.dat
+DAT_FILES=uprops.dat unames.dat cnvalias.dat tz.dat
 BRK_FILES=char.brk line.brk line_th.brk sent.brk word.brk word_th.brk
 
 DATAFILESD=$(DAT_FILES:%=$(OBJDATADIR)/%)
