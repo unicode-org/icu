@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $
- * $Date: 2003/06/09 23:56:32 $
- * $Revision: 1.32 $
+ * $Date: 2003/06/11 17:51:25 $
+ * $Revision: 1.33 $
  *
  *****************************************************************************************
  */
@@ -426,6 +426,14 @@ public class BasicTest extends TestFmwk {
                        Integer.toHexString(CPNFKC[count]));
                 return;
             }
+            // for improving coverage
+            if (Normalizer.quickCheck(String.valueOf(CPNFKC[count]),
+                                         Normalizer.NFKC) !=Normalizer.NO)
+            {
+                errln("ERROR in NFKC quick check at U+"+
+                       Integer.toHexString(CPNFKC[count]));
+                return;
+            }
         }
     }
 
@@ -475,6 +483,14 @@ public class BasicTest extends TestFmwk {
                                                        Integer.toHexString(cp));
                 return;
             }
+            // improve the coverage
+            if (Normalizer.quickCheck(String.valueOf(cp), Normalizer.NFKC)
+                                             != Normalizer.YES)
+            {
+                errln("ERROR in NFKC quick check at U+"+
+                                                       Integer.toHexString(cp));
+                return;
+            }
             cp++;
         }
 
@@ -503,6 +519,14 @@ public class BasicTest extends TestFmwk {
             }
             if (Normalizer.quickCheck(String.valueOf(CPNFKC[count]),
                                          Normalizer.NFKC,0)!=Normalizer.YES)
+            {
+                errln("ERROR in NFKC quick check at U+"+
+                        Integer.toHexString(CPNFKC[count]));
+                return;
+            }
+            // improve the coverage
+            if (Normalizer.quickCheck(String.valueOf(CPNFKC[count]),
+                                         Normalizer.NFKC)!=Normalizer.YES)
             {
                 errln("ERROR in NFKC quick check at U+"+
                         Integer.toHexString(CPNFKC[count]));
@@ -2053,11 +2077,6 @@ public class BasicTest extends TestFmwk {
 	        // if a code point is in NFD but its case folding is not, then
 	        // unorm_compare will also fail
 	        if(isNFD && Normalizer.YES!=Normalizer.quickCheck(s, Normalizer.NFD,0)) {
-	            ++count;
-	            errln("U+"+hex(c)+": case-folding may un-FCD a string (folding options 0x"+hex(foldingOptions)+")");
-	        }
-	        // for improving coverage
-	        if(isNFD && Normalizer.YES!=Normalizer.quickCheck(s, Normalizer.NFD)) {
 	            ++count;
 	            errln("U+"+hex(c)+": case-folding may un-FCD a string (folding options 0x"+hex(foldingOptions)+")");
 	        }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2003/06/03 18:49:34 $ 
- * $Revision: 1.33 $
+ * $Date: 2003/06/11 17:51:25 $ 
+ * $Revision: 1.34 $
  *
  *******************************************************************************
  */
@@ -2666,7 +2666,8 @@ public final class Normalizer implements Cloneable{
         int result;
 	
 	    if(    s1==null || s1Start<0 || s1Limit<0 || 
-               s2==null || s2Start<0 || s2Limit<0
+               s2==null || s2Start<0 || s2Limit<0 ||
+               s1Limit<s1Start || s2Limit<s2Start
           ) {
 	        
 	        throw new IllegalArgumentException();
