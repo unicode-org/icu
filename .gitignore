@@ -160,6 +160,7 @@ icu4c/source/tools/ctestfw/pkgdata
 icu4c/source/tools/ctestfw/tmp
 icu4c/source/tools/genccode/*.d
 icu4c/source/tools/genccode/*.pdb
+icu4c/source/tools/genccode/*.plg
 icu4c/source/tools/genccode/Debug
 icu4c/source/tools/genccode/Makefile
 icu4c/source/tools/genccode/Release

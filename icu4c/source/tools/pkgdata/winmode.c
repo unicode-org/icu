@@ -96,7 +96,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 
 	  sprintf(tmp2, 
 		  "LINK32 = link.exe\n"
-		  "LINK32_FLAGS = /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /DLL /NOENTRY /base:\"0x4ad00000\" /comment:\"%s\"\n",
+		  "LINK32_FLAGS = /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /DLL /NOENTRY /base:\"0x4ad00000\" /implib:\"$(TARGETDIR)\\$(ENTRYPOINT).lib\" /comment:\"%s\"\n",
 		  o->comment
 		);
       T_FileStream_writeLine(makefile, tmp2);
@@ -143,7 +143,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 				    "\t@$(LINK32) $(LINK32_FLAGS) \"$(TARGETDIR)\\$(CMNOBJTARGET)\"\n\n");
       T_FileStream_writeLine(makefile, tmp);
       sprintf(tmp, "\"$(TARGETDIR)\\$(CMNOBJTARGET)\": \"$(TARGETDIR)\\$(CMNTARGET)\"\n"
-				    "\t@\"$(GENCCODE)\" $(GENCOPTIONS) -o -d \"$(TARGETDIR)\" \"$(TARGETDIR)\\$(CMNTARGET)\"\n\n");
+				    "\t@\"$(GENCCODE)\" $(GENCOPTIONS) -e $(ENTRYPOINT) -o -d \"$(TARGETDIR)\" \"$(TARGETDIR)\\$(CMNTARGET)\"\n\n");
       T_FileStream_writeLine(makefile, tmp);
 
       sprintf(tmp2, 

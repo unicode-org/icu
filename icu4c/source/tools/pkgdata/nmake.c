@@ -37,12 +37,14 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
           "TEMP_DIR=%s\n"
           "MODE=%s\n"
           "MAKEFILE=%s\n"
+          "ENTRYPOINT=%s\n"
           "\n\n\n",
           o->shortName,
           o->targetDir,
           o->tmpDir,
           o->mode,
-          o->makeFile);
+          o->makeFile,
+          o->entryName);
   T_FileStream_writeLine(f, linebuf);
 
   sprintf(linebuf, "## List files [%d] containing data files to process (note: - means stdin)\n"

@@ -49,7 +49,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\..\lib\icutu17.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\icutu.lib"
 
 !ELSEIF  "$(CFG)" == "toolutil - Win32 Debug"
 
@@ -72,7 +72,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\..\lib\icutu17d.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\icutud.lib"
 
 !ENDIF 
 
