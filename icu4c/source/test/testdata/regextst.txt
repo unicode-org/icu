@@ -390,6 +390,17 @@
 "(.*?) *$"                        "<0><1>test</1>    </0>"
 
 #
+# Bug 4034
+#
+"\D"                              "<0>A</0>BC\u00ffDEF"
+"\d"                              "ABC\u00ffDEF"
+"\D"                              "<0>\u00ff</0>DEF"
+"\d"                              "\u00ffDEF"
+"\D"                              "123<0>\u00ff</0>DEF"
+"\D"                              "<0>\u0100</0>DEF"
+"\D"                              "123<0>\u0100</0>DEF"
+
+#
 #  Random debugging, Temporary
 #
 #"^(?:a?b?)*$"	                  "a--"	
