@@ -62,7 +62,7 @@ typedef struct {
     UChar32 code;
 } FindName;
 
-#define DO_FIND_NAME (findNameDummy)
+#define DO_FIND_NAME NULL
 
 static UDataMemory *uCharNamesData=NULL;
 static UCharNames *uCharNames=NULL;
@@ -151,11 +151,6 @@ enumAlgNames(AlgorithmicRange *range,
 
 static UChar32
 findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *otherName);
-
-static UBool
-findNameDummy(void *context,
-              UChar32 code, UCharNameChoice nameChoice,
-              const char *name, int32_t length);
 
 static uint16_t 
 getExtName(uint32_t code, char *buffer, uint16_t bufferLength);
@@ -1423,14 +1418,6 @@ findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *oth
     }
 
     return 0xffff;
-}
-
-/* this is a dummy function that is used as a "find not enumerate" flag */
-static UBool
-findNameDummy(void *context,
-              UChar32 code, UCharNameChoice nameChoice,
-              const char *name, int32_t length) {
-    return FALSE;
 }
 
 static uint8_t getCharCat(UChar32 cp) {
