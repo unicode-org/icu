@@ -439,7 +439,9 @@ u_strncpy(UChar     *dst,
 {
     UChar *anchor = dst;            /* save a pointer to start of dst */
 
-    while((*(dst++) = *(src++)) != 0 && (--n > 0)) {   /* copy string 2 over              */
+    /* copy string 2 over */
+    while(n > 0 && (*(dst++) = *(src++)) != 0) {
+        --n;
     }
 
     return anchor;
