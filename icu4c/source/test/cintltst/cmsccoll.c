@@ -1702,55 +1702,67 @@ static void TestRedundantRules() {
   int32_t i;
 
   const static char *rules[] = {
-    "& a < b < c < d& r < c",
-    "& a < b < c < d& r < c",
-    "& a < b < c < d& c < m",
-    "& a < b < c < d& a < m",
-    "& a <<< b << c < d& a < m",
+    "& a << b <<< c << d <<< e& [before 1] e <<< x",
     "& a < b < c < d& [before 1] c < m",
     "& a << b <<< c << d <<< e& [before 3] e <<< x",
     "& a << b <<< c << d <<< e& [before 2] e <<< x",
-    "& a << b <<< c << d <<< e& [before 1] e <<< x",
-    "& a << b <<< c << d <<< e <<< f < g& [before 1] e < x"
+    "& a << b <<< c << d <<< e <<< f < g& [before 1] e < x",
+    "& a <<< b << c < d& a < m",
+    "&a<b<<b\\u0301 &z<b",
+    "&z<m<<<q<<<m",
+    "&z<<<m<q<<<m",
+    "& a < b < c < d& r < c",
+    "& a < b < c < d& r < c",
+    "& a < b < c < d& c < m",
+    "& a < b < c < d& a < m"
   };
 
   const static char *expectedRules[] = {
-    "& a < b < d& r < c",
-    "& a < b < d& r < c",
-    "& a < b < c < m < d",
-    "& a < m < b < c < d",
-    "& a <<< b << c < m < d",
+    "& a <<< x << b <<< c << d <<< e",
     "& a < b < m < c < d",
     "& a << b <<< c << d <<< x <<< e",
     "& a << b <<< c <<< x << d <<< e",
-    "& a <<< x << b <<< c << d <<< e",
-    "& a << b <<< c << d <<< e <<< f < x < g"
+    "& a << b <<< c << d <<< e <<< f < x < g",
+    "& a <<< b << c < m < d",
+    "&a<b\\u0301 &z<b",
+    "&z<q<<<m",
+    "&z<q<<<m",
+    "& a < b < d& r < c",
+    "& a < b < d& r < c",
+    "& a < b < c < m < d",
+    "& a < m < b < c < d"
   };
 
   const static char *testdata[][8] = {
-    {"a", "b", "d"},
-    {"r", "c"},
-    {"a", "b", "c", "m", "d"},
-    {"a", "m", "b", "c", "d"},
-    {"a", "b", "c", "m", "d"},
+    {"a", "x", "b", "c", "d", "e"},
     {"a", "b", "m", "c", "d"},
     {"a", "b", "c", "d", "x", "e"},
     {"a", "b", "c", "x", "d", "e"},
-    {"a", "x", "b", "c", "d", "e"},
-    {"a", "b", "c", "d", "e", "f", "x", "g"}
+    {"a", "b", "c", "d", "e", "f", "x", "g"},
+    {"a", "b", "c", "m", "d"},
+    {"a", "b\\u0301", "z", "b"},
+    {"z", "q", "m"},
+    {"z", "q", "m"},
+    {"a", "b", "d"},
+    {"r", "c"},
+    {"a", "b", "c", "m", "d"},
+    {"a", "m", "b", "c", "d"}
   };
 
   const static uint32_t testdatalen[] = {
-    3,
+      6,
+      5,
+      6,
+      6,
+      8,
+      5,
+      4,
+      3,
+      3,
+      3,
       2,
       5,
-      5,
-      5,
-      5,
-      6,
-      6,
-      6,
-      8
+      5
   };
 
 
@@ -1962,7 +1974,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestJ815, "tscoll/cmsccoll/TestJ815");
     addTest(root, &TestJ831, "tscoll/cmsccoll/TestJ831");
     addTest(root, &TestBefore, "tscoll/cmsccoll/TestBefore");
-    /*addTest(root, &TestRedundantRules, "tscoll/cmsccoll/TestRedundantRules");*/
+    addTest(root, &TestRedundantRules, "tscoll/cmsccoll/TestRedundantRules");
     /*addTest(root, &TestUCAZero, "tscoll/cmsccoll/TestUCAZero");*/
     /*addTest(root, &TestUnmappedSpaces, "tscoll/cmsccoll/TestUnmappedSpaces");*/
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/
