@@ -65,7 +65,7 @@ include $(srcdir)/genrbfiles.mk
 -include $(srcdir)/reslocal.mk
 
 ## List of resource bundles to build
-TXT_SOURCE = $(GENRB_SOURCE) $(TRANSLIT_SOURCE)
+TXT_SOURCE = $(GENRB_SOURCE) $(GENRB_SOURCE_LOCAL) $(TRANSLIT_SOURCE)
 
 TXT_FILES = $(TXT_SOURCE:%=$(top_srcdir)/../data/%)
 RES_FILES = $(TXT_FILES:$(top_srcdir)/../data/%.txt=@DATABUILDDIR@/%.res)
@@ -96,16 +96,6 @@ all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
 install-local: all-local
 	$(mkinstalldirs) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
-	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/$(VERSION)
-	@list='$(notdir $(RES_FILES))'; for file in $$list; do \
-		echo $(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
-		$(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
-	done
-	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/$(VERSION)/translit
-	@list='$(notdir $(TRANSLIT_RES))'; for file in $$list; do \
-		echo $(INSTALL_DATA) @DATABUILDDIR@/translit/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/translit/$$file; \
-		$(INSTALL_DATA) @DATABUILDDIR@/translit/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/translit/$$file; \
-	done
 
 dist-local:
 
