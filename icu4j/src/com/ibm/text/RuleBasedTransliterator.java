@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/03/10 04:07:23 $ 
- * $Revision: 1.17 $
+ * $Date: 2000/04/12 20:17:45 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -209,9 +209,12 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.17 $ $Date: 2000/03/10 04:07:23 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.18 $ $Date: 2000/04/12 20:17:45 $
  *
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.18  2000/04/12 20:17:45  alan
+ * Delegate replace operation to rule object
+ *
  * Revision 1.17  2000/03/10 04:07:23  johnf
  * Copyright update
  *
@@ -375,8 +378,10 @@ public class RuleBasedTransliterator extends Transliterator {
                     ++cursor;
                 }
             } else {
-                text.replace(cursor, cursor + r.getKeyLength(), r.getOutput());
-                limit += r.getOutput().length() - r.getKeyLength();
+                // Delegate replacement to TransliterationRule object
+                limit += r.replace(text, cursor);
+                // text.replace(cursor, cursor + r.getKeyLength(), r.getOutput());
+                // limit += r.getOutput().length() - r.getKeyLength();
                 cursor += r.getCursorPos();
                 ++loopCount;
             }
