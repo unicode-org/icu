@@ -511,7 +511,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
 
 
 void writeOutData(UCATableHeader *data,
-                  uint16_t contractions[][3],
+                  UChar contractions[][3],
                   uint32_t noOfcontractions,
                   const char *outputDir,
                   const char *copyright,
@@ -531,7 +531,7 @@ void writeOutData(UCATableHeader *data,
 
 
       data->contractionUCACombos = size;
-      data->size += paddedsize((noOfcontractions*3*sizeof(uint16_t)));
+      data->size += paddedsize((noOfcontractions*3*sizeof(UChar)));
     }
 
     UNewDataMemory *pData;
@@ -553,8 +553,8 @@ void writeOutData(UCATableHeader *data,
     udata_writeBlock(pData, data, size);
 
     if(noOfcontractions != 0) {
-      udata_writeBlock(pData, contractions, noOfcontractions*3*sizeof(uint16_t));
-      udata_writePadding(pData, paddedsize((noOfcontractions*3*sizeof(uint16_t))) - noOfcontractions*3*sizeof(uint16_t));
+      udata_writeBlock(pData, contractions, noOfcontractions*3*sizeof(UChar));
+      udata_writePadding(pData, paddedsize((noOfcontractions*3*sizeof(UChar))) - noOfcontractions*3*sizeof(uint16_t));
     }
 
     /* finish up */
@@ -577,7 +577,7 @@ write_uca_table(const char *filename,
     UChar variableTopValue = 0;
     UCATableHeader *myD = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
     UColOptionSet *opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
-    uint16_t contractionCEs[256][3];
+    UChar contractionCEs[256][3];
     uint32_t noOfContractions = 0;
 
 

@@ -938,7 +938,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
       /* copy contractions from the UCA - this is felt mostly for cyrillic*/
 
       uint32_t tailoredCE = UCOL_NOT_FOUND;
-      uint16_t *conts = (uint16_t *)((uint8_t *)src->UCA->image + src->UCA->image->contractionUCACombos);
+      UChar *conts = (UChar *)((uint8_t *)src->UCA->image + src->UCA->image->contractionUCACombos);
       UCollationElements *ucaEl = ucol_openElements(src->UCA, NULL, 0, status);
       while(*conts != 0) {
         tailoredCE = ucmp32_get(t->mapping, *conts);
