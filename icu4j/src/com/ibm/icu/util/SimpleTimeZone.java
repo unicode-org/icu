@@ -385,6 +385,17 @@ public class SimpleTimeZone extends TimeZone {
             throw new IllegalArgumentException("Illegal month " + month);
         }
 	int monthLength, prevMonthLength;
+
+    // Lazy-initialize this to prevent circular static init dependency
+    if (internalCal == null) {
+        // Hack: Use the y/m/d constructor in the following line.
+        // This prevents the infinite recursion that results when
+        // the GC wants to call STZ.getOffset. - liu
+        internalCal = new GregorianCalendar(0, 0, 0);
+        // Note: No need to synchronize this; we'll use whatever
+        // instance we end up with (ref assignment is atomic).
+    }
+
 	if ((era == GregorianCalendar.AD) && internalCal.isLeapYear(year)) {
 	    monthLength = staticLeapMonthLength[month];
 	    prevMonthLength = (month > 1) ? staticLeapMonthLength[month - 1] : 31;
@@ -921,10 +932,8 @@ public class SimpleTimeZone extends TimeZone {
     private final byte monthLength[] = staticMonthLength;
     private final static byte staticMonthLength[] = {31,28,31,30,31,30,31,31,30,31,30,31};
     private final static byte staticLeapMonthLength[] = {31,29,31,30,31,30,31,31,30,31,30,31};
-    // Hack: Use the y/m/d constructor in the following line.
-    // This prevents the infinite recursion that results when
-    // the GC wants to call STZ.getOffset. - liu
-    private static GregorianCalendar internalCal = new GregorianCalendar(0, 0, 0);
+    // Lazy-initialize this to prevent circular static init dependency
+    private static GregorianCalendar internalCal = null;
 
     /**
      * Variables specifying the mode of the start rule.  Takes the following
