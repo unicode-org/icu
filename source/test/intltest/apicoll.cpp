@@ -1427,15 +1427,15 @@ void CollationAPITest::TestGetLocale() {
     }
     locale = coll->getLocale(ULOC_REQUESTED_LOCALE, status);
     if(locale != testStruct[i].requestedLocale) {
-      log("[Coll %s]: Error in requested locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].requestedLocale, locale);
+      log("[Coll %s]: Error in requested locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].requestedLocale, locale.getName());
     }
     locale = coll->getLocale(ULOC_VALID_LOCALE, status);
     if(locale != testStruct[i].validLocale) {
-      log("[Coll %s]: Error in valid locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].validLocale, locale);
+      log("[Coll %s]: Error in valid locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].validLocale, locale.getName());
     }
     locale = coll->getLocale(ULOC_ACTUAL_LOCALE, status);
     if(locale != testStruct[i].actualLocale) {
-      log("[Coll %s]: Error in actual locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].actualLocale, locale);
+      log("[Coll %s]: Error in actual locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].actualLocale, locale.getName());
     }
     delete coll;
   }
@@ -1467,15 +1467,15 @@ void CollationAPITest::TestGetLocale() {
   coll = new RuleBasedCollator(rlz, status);
   locale = coll->getLocale(ULOC_REQUESTED_LOCALE, status);
   if(!locale.isBogus()) {
-    log("For collator instantiated from rules, requested locale is not bogus\n", locale);
+    log("For collator instantiated from rules, requested locale %s is not bogus\n", locale.getName());
   }
   locale = coll->getLocale(ULOC_VALID_LOCALE, status);
   if(!locale.isBogus()) {
-    log("For collator instantiated from rules,  valid locale is not bogus\n", locale);
+    log("For collator instantiated from rules, valid locale %s is not bogus\n", locale.getName());
   }
   locale = coll->getLocale(ULOC_ACTUAL_LOCALE, status);
   if(!locale.isBogus()) {
-    log("For collator instantiated from rules, actual locale is not bogus\n", locale);
+    log("For collator instantiated from rules, actual locale %s is not bogus\n", locale.getName());
   }
   delete coll;
 }
