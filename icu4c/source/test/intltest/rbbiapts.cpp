@@ -719,6 +719,22 @@ void RBBIAPITest::TestRegistration() {
     }
   }
 
+  {
+      int32_t count;
+      UBool   foundLocale = FALSE;
+      const Locale *avail = BreakIterator::getAvailableLocales(count);
+      for (int i=0; i<count; i++) {
+          if (avail[i] == Locale::getEnglish()) {
+              foundLocale = TRUE;
+              break;
+          }
+      }
+      if (foundLocale == FALSE) {
+          errln("BreakIterator::getAvailableLocales(&count), failed to find EN.");
+      }
+  }
+
+
   // that_word was adopted by factory
   delete thai_char;
   delete root_word;
@@ -785,8 +801,8 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case  2: name = "TestHashCode"; if (exec) TestHashCode(); break;
         case  3: name = "TestGetSetAdoptText"; if (exec) TestGetSetAdoptText(); break;
         case  4: name = "TestIteration"; if (exec) TestIteration(); break;
-        case  5: name = ""; break;   /* Extra */
-        case  6: name = ""; break;   /* Extra */
+        case  5: name = "extra"; break;   /* Extra */
+        case  6: name = "extra"; break;   /* Extra */
         case  7: name = "TestBuilder"; if (exec) TestBuilder(); break;
         case  8: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
         case  9: name = "TestWordStatus"; if (exec) TestWordStatus(); break;
