@@ -166,13 +166,13 @@ main(int argc, char* argv[]) {
 
     fprintf(stderr, "modes: (-m option)\n");
     for(i=0;i<(sizeof(modes)/sizeof(modes[0]));i++) {
-      fprintf(stderr, "   %-10s ", modes[i].name);
+      fprintf(stderr, "   %-9 ", modes[i].name);
       if (modes[i].alt_name) {
-	fprintf(stderr, "/ %-10s", modes[i].alt_name);
+	fprintf(stderr, "/ %-9", modes[i].alt_name);
       } else {
         fprintf(stderr, "            ");
       }
-      fprintf(stderr, " %s\n", modes[i].desc);
+      fprintf(stderr, "  %s\n", modes[i].desc);
     }
     return 1;
   }
