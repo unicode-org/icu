@@ -443,7 +443,7 @@ static void TestDisplayNames()
     /* test that the default locale has a display name for its own language */
     errorCode=U_ZERO_ERROR;
     length=uloc_getDisplayLanguage(NULL, NULL, buffer, LENGTHOF(buffer), &errorCode);
-    if(U_FAILURE(errorCode) || length<=3) {
+    if(U_FAILURE(errorCode) || (length<=3 && buffer[0]<=0x7f)) {
         /* check <=3 to reject getting the language code as a display name */
         log_err("unable to get a display string for the language of the default locale - %s\n", u_errorName(errorCode));
     }
