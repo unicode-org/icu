@@ -651,7 +651,7 @@ openCommonData(const char *path,          /*  Path from OpenCHoice?          */
 
 
 #ifdef OS390
-#   define MAX_STUB_ENTRIES 7
+#   define MAX_STUB_ENTRIES 8
 #else
 #   define MAX_STUB_ENTRIES 0
 #endif
