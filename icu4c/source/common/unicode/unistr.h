@@ -57,14 +57,35 @@ class StringSearch;
  * @stable
  */
 #if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define UNICODE_STRING(cs, length) UnicodeString(TRUE, (UChar *)L ## cs, length)
+#   define UNICODE_STRING(cs, length) UnicodeString(TRUE, (const UChar *)L ## cs, length)
 #elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define UNICODE_STRING(cs, length) UnicodeString(TRUE, (UChar *)cs, length)
+#   define UNICODE_STRING(cs, length) UnicodeString(TRUE, (const UChar *)cs, length)
 #else
 #   define UNICODE_STRING(cs, length) UnicodeString(cs, length, "")
 #endif
 
 /**
+ * Unicode String literals in C++.
+ * Dependent on the platform properties, different UnicodeString
+ * constructors should be used to create a UnicodeString object from
+ * a string literal.
+ * The macros are defined for improved performance.
+ * They work only for strings that contain "invariant characters", i.e.,
+ * only latin letters, digits, and some punctuation.
+ * See utypes.h for details.
+ *
+ * The string parameter must be a C string literal.
+ * @stable
+ */
+#if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && U_CHARSET_FAMILY==U_ASCII_FAMILY
+#   define UNICODE_STRING_SIMPLE(cs) UnicodeString((const UChar *)L ## cs)
+#elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
+#   define UNICODE_STRING_SIMPLE(cs) UnicodeString((const UChar *)cs)
+#else
+#   define UNICODE_STRING_SIMPLE(cs) UnicodeString(cs, "")
+#endif
+
+ /**
  * UnicodeString is a string class that stores Unicode characters directly and provides
  * similar functionality as the Java String class.
  * It is a concrete implementation of the abstract class Replaceable (for transliteration).

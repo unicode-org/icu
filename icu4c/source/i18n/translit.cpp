@@ -1018,7 +1018,7 @@ UnicodeString& Transliterator::toRules(UnicodeString& rulesSource,
         rulesSource = getID();
     }
     // KEEP in sync with rbt_pars
-    rulesSource.insert(0, UnicodeString("::", ""));
+    rulesSource.insert(0, UNICODE_STRING_SIMPLE("::"));
     rulesSource.append(ID_DELIM);
     return rulesSource;
 }
