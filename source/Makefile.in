@@ -118,7 +118,7 @@ clean-recursive-with-twist:
 
 all-local: $(srcdir)/configure $(LOCAL_BUILT_FILES) $(INSTALLED_BUILT_FILES)
 
-install-local: install-icu install-doc install-manx
+install-local: install-icu install-manx
 
 install-icu: $(INSTALLED_BUILT_FILES)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(pkgdatadir)/config
