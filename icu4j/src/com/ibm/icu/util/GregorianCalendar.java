@@ -531,8 +531,8 @@ public class GregorianCalendar extends Calendar {
                 int era = get(ERA) + amount;
                 if (era < 0) {
                     era = 0;
-                } else if (era > 1) {
-                    era = 1;
+                } else if (era > getMaximum(ERA)) {
+                    era = getMaximum(ERA);
                 }
                 set(ERA, era);
             }

@@ -610,7 +610,7 @@ import java.util.Set;
  *     {@link #handleGetLimit} to return appropriate limits on
  *     {@link #YEAR}, {@link #ERA}, etc. fields. Then, if the
  *     calendar is set to not be lenient, out-of-range field values will
- *     trigger and exception.</li>
+ *     trigger an exception.</li>
  * 
  *   <li>Calendar system subclasses compute a <em>extended
  *     year</em>. This differs from the {@link #YEAR} field in that
@@ -1715,7 +1715,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         }
         return service;
     }
-    //CLOVER:ON
+    ///CLOVER:ON
     // ==== End of factory Stuff ====
 
     /**
@@ -2032,43 +2032,6 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public boolean after(Object when) {
         return compare(when) > 0;
-    }
-
-    /**
-     * Compares this Calendar with that Date or Calendar's time, using
-     * this Calendar's time zone, with the granularity of the provided
-     * field.  The return value is 0 if the time is the same, <0 if
-     * this is before that, and >0 if this is after that.  Valid
-     * values for field are ERA, YEAR, MONTH, WEEK_OF_YEAR, DAY_OF_YEAR, HOUR, MINUTE,
-     * SECOND.
-     * @prototype
-     */
-    /* public */ int compare(Calendar cal, int field) {
-        return compare(new Date(cal.getTimeInMillis()), field);
-    }
-
-    private static int[] FIELDLIST = { ERA, YEAR, MONTH, WEEK_OF_YEAR, DAY_OF_YEAR, HOUR, MINUTE, SECOND };
-
-    /* @prototype */
-    /* public */ int compare(Date when, int field) {
-        long oldms = getTimeInMillis();
-        int result = -2;
-        for (int i = 0; i < FIELDLIST.length; ++i) {
-            int f = FIELDLIST[i];
-            int diff = fieldDifference(when, f);
-            if (diff != 0) {
-                result = diff > 0 ? 1 : -1;
-                break;
-            } else if (f == field) {
-                result = 0;
-                break;
-            }
-        }
-        setTimeInMillis(oldms); // restore calendar
-        if (result == -2) {
-            throw new IllegalArgumentException("Invalid field: " + field);
-        }
-        return result;
     }
 
     /**
@@ -2407,6 +2370,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         case SECOND:
         case MILLISECOND:
         case MILLISECONDS_IN_DAY:
+        case ERA:
             // These are the standard roll instructions.  These work for all
             // simple cases, that is, cases in which the limits are fixed, such
             // as the hour, the day of the month, and the era.
@@ -2757,6 +2721,11 @@ public abstract class Calendar implements Serializable, Cloneable {
         boolean keepHourInvariant = true;
 
         switch (field) {
+        case ERA:
+            set(field, get(field) + amount);
+            pinField(ERA);
+            return;
+
         case YEAR:
         case EXTENDED_YEAR:
         case YEAR_WOY:
