@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/Attic/DemoUtility.java,v $ 
- * $Date: 2001/09/08 01:12:17 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/10/30 02:42:50 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -80,7 +80,7 @@ public class DemoUtility
     public static Panel createSpacer() {
         Panel spacer = new Panel();
         spacer.setLayout(null);
-        spacer.resize(1000, 1);
+        spacer.setSize(1000, 1);
         return spacer;
     }
 

@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: SwingMenuBuilder.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:46:22 $
+ * @(#)$RCSfile: SwingMenuBuilder.java,v $ $Revision: 1.2 $ $Date: 2001/10/30 02:42:48 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -209,7 +209,7 @@ public final class SwingMenuBuilder extends MenuBuilder {
                                                       final boolean character) {
         
         final Frame dialogParent = fDialogParent;
-        final MTextPanel textPanel = fTextPanel;
+        // variable not used final MTextPanel textPanel = fTextPanel;
             
         return new DialogFactory() {
             public Window createDialog(MTextPanel fTextPanel) {

@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/normalizer/Attic/FCDBuilder.java,v $ 
-* $Date: 2001/08/23 02:22:38 $ 
-* $Revision: 1.5 $
+* $Date: 2001/10/30 02:42:49 $ 
+* $Revision: 1.6 $
 *
 ******************************************************************************
 */
@@ -27,6 +27,7 @@ import com.ibm.text.Normalizer;
 * FCD is the set of strings such that for each string if you simply decomposed
 * any composites (including singleton composites) without canonical reordering.
 * FCD is not a normalization form, since there's no uniqueness.
+* @deprecated ICU4J 2.0, since ICU has written its own tool.
 */
 public class FCDBuilder
 {
@@ -34,6 +35,7 @@ public class FCDBuilder
   
   /**
   * constructor with default output file path
+  * @deprecated ICU4J 2.0, since ICU has written its own tool.
   */
   public FCDBuilder()
   {
@@ -43,6 +45,7 @@ public class FCDBuilder
   * Building method.
   * Each unicode character will be used to generate data, output to the default
   * file path  
+  * @deprecated ICU4J 2.0, since ICU has written its own tool.
   */
   public void build()
   {
@@ -53,6 +56,7 @@ public class FCDBuilder
   * Building method.
   * Each unicode character will be used to generate data.
   * @param output file path
+  * @deprecated ICU4J 2.0, since ICU has written its own tool.
   */
   public void build(String output)
   {
@@ -109,9 +113,8 @@ public class FCDBuilder
   {
     String cstr = UCharacter.toString(ch),
            nfd = Normalizer.decompose(cstr, false, 0);
-    int lastindex = UTF16.countCodePoint(nfd) - 1;
-    int firstch = UTF16.charAtCodePointOffset(nfd, 0);
-    int lastch = UTF16.charAtCodePointOffset(nfd, lastindex);
+    int firstch = UTF16.charAt(nfd, 0);
+    int lastch = UTF16.charAt(nfd, nfd.length() - 1);
     return (char)((UCharacter.getCombiningClass(firstch) << LEAD_CC_SHIFT_) |
                   (UCharacter.getCombiningClass(lastch) & LAST_BYTE_MASK_));
   }

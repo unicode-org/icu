@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/holiday/Attic/HolidayCalendarDemo.java,v $ 
- * $Date: 2001/09/08 01:12:40 $ 
- * $Revision: 1.6 $
+ * $Date: 2001/10/30 02:42:49 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -16,6 +16,7 @@ package com.ibm.demo.holiday;
 import com.ibm.demo.*;
 import java.applet.Applet;
 import java.awt.*;
+import java.awt.event.*;
 //import java.util.*;
 import java.net.*;
 import java.io.*;
@@ -34,7 +35,7 @@ import com.ibm.util.*;
 /**
  * CalendarDemo demonstrates how Calendar works.
  */
-public class HolidayCalendarDemo extends DemoApplet
+public class HolidayCalendarDemo extends DemoApplet 
 {
     /**
      * The main function which defines the behavior of the CalendarDemo
@@ -55,7 +56,8 @@ public class HolidayCalendarDemo extends DemoApplet
 	* is BorderLayout.  The CalendarFrame class defines the window layout of
 	* CalendarDemo.
 	*/
-	private static class CalendarFrame extends Frame
+	private static class CalendarFrame extends Frame implements ActionListener,
+                                                                ItemListener
 	{
     	private static final String creditString = "";
 
@@ -99,6 +101,7 @@ public class HolidayCalendarDemo extends DemoApplet
         	this.applet = applet;
         	init();
         	start();
+        	enableEvents(WindowEvent.WINDOW_CLOSING);
     	}
 
     	/**
@@ -171,6 +174,7 @@ public class HolidayCalendarDemo extends DemoApplet
 
         	// Make the locale popup menus
         	localeMenu= new Choice();
+        	localeMenu.addItemListener(this);
         	int selectMe = 0;
         	
         	for (int i = 0; i < calendars.length; i++) {
@@ -194,6 +198,7 @@ public class HolidayCalendarDemo extends DemoApplet
         	localeMenu.select(selectMe);
 
         	displayMenu = new Choice();
+        	displayMenu.addItemListener(this);
         	
         	selectMe = 0;
         	for (int i = 0; i < locales.length; i++) {
@@ -217,10 +222,15 @@ public class HolidayCalendarDemo extends DemoApplet
 
         	// Make all the next/previous/today buttons
         	prevYear = new Button("<<");
+        	prevYear.addActionListener(this);
         	prevMonth = new Button("<");
+        	prevMonth.addActionListener(this);
         	gotoToday = new Button("Today");
+        	gotoToday.addActionListener(this);
         	nextMonth = new Button(">");
+        	nextMonth.addActionListener(this);
         	nextYear = new Button(">>");
+        	nextYear.addActionListener(this);
 
         	// The month name and the control buttons are bunched together
         	Panel monthPanel = new Panel();
@@ -298,46 +308,6 @@ public class HolidayCalendarDemo extends DemoApplet
         	updateMonthName();
     	}
 
-    	/**
-    	* Called if an action occurs in the CalendarFrame object.
-    	*/
-    	public boolean action(Event evt, Object obj)
-    	{
-        	// *** Button events are handled here.
-        	boolean handled = false;
-
-        	if (evt.target instanceof Button) {
-            	if (evt.target == nextMonth) {
-                	calendarPanel.add(Calendar.MONTH, +1);
-                	handled = true;
-            	}
-            	else
-            	if (evt.target == prevMonth) {
-                	calendarPanel.add(Calendar.MONTH, -1);
-                	handled = true;
-            	}
-            	else
-            	if (evt.target == prevYear) {
-                	calendarPanel.add(Calendar.YEAR, -1);
-                	handled = true;
-            	}
-            	else
-            	if (evt.target == nextYear) {
-                	calendarPanel.add(Calendar.YEAR, +1);
-                	handled = true;
-            	}
-            	else
-            	if (evt.target == gotoToday) {
-                	calendarPanel.set( new Date() );
-                	handled = true;
-            	}
-            	if (handled) {
-                	updateMonthName();
-            	}
-        	}
-        	return handled || super.action(evt, obj);
-    	}
-
     	private void updateMonthName()
     	{
         	SimpleDateFormat f = new SimpleDateFormat("MMMM yyyyy",
@@ -346,40 +316,56 @@ public class HolidayCalendarDemo extends DemoApplet
         	f.setTimeZone(new SimpleTimeZone(0, "UTC"));        // JDK 1.1.2 workaround
         	monthLabel.setText( f.format( calendarPanel.firstOfMonth() ));
     	}
-
+    	
     	/**
     	* Handles the event. Returns true if the event is handled and should not
     	* be passed to the parent of this component. The default event handler
     	* calls some helper methods to make life easier on the programmer.
     	*/
-    	public boolean handleEvent(Event evt)
+    	public void actionPerformed(ActionEvent e)
     	{
-        	if (evt.id == Event.ACTION_EVENT && evt.target == localeMenu) {
+    	    Object obj = e.getSource();
+    	    
+    	    // *** Button events are handled here.
+        	if (obj instanceof Button) {
+            	if (obj == nextMonth) {
+                	calendarPanel.add(Calendar.MONTH, +1);
+            	}
+            	else
+            	if (obj == prevMonth) {
+                	calendarPanel.add(Calendar.MONTH, -1);
+            	}
+            	else
+            	if (obj == prevYear) {
+                	calendarPanel.add(Calendar.YEAR, -1);
+            	}
+            	else
+            	if (obj == nextYear) {
+                	calendarPanel.add(Calendar.YEAR, +1);
+            	}
+            	else
+            	if (obj == gotoToday) {
+                	calendarPanel.set( new Date() );
+            	}
+            	updateMonthName();
+        	}
+    	}
+    	
+    	public void itemStateChanged(ItemEvent e)
+        {
+            Object obj = e.getSource();
+            if (obj == localeMenu) {
             	calendarPanel.setCalendarLocale(calendars[localeMenu.getSelectedIndex()]);
             	updateMonthName();
-            	return true;
         	}
-        	if (evt.id == Event.ACTION_EVENT && evt.target == displayMenu) {
-            	calendarPanel.setDisplayLocale(locales[displayMenu.getSelectedIndex()]);
-            	updateMonthName();
-            	return true;
-        	}
-        	else
-        	if (evt.id == Event.WINDOW_DESTROY && evt.target == this) {
-            	this.hide();
-            	this.dispose();
-
-            	if (applet != null) {
-            	applet.demoClosed();
-            	} else {
-                	System.exit(0);
+        	else 
+        	    if (obj == displayMenu) {
+            	    calendarPanel.setDisplayLocale(locales[displayMenu.getSelectedIndex()]);
+            	    updateMonthName();
             	}
-            	return true;
-        	}
-        	return super.handleEvent(evt);
-    	}
-
-    	/**
+        }
+        
+        /**
     	* Print out the error message while debugging this program.
     	*/
     	public void errorText(String s)
@@ -389,6 +375,21 @@ public class HolidayCalendarDemo extends DemoApplet
             	System.out.println(s);
         	}
     	}
+    	
+    	protected void processWindowEvent(WindowEvent e)
+        {
+            System.out.println("event " + e);
+            if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            	this.hide();
+            	this.dispose();
+
+            	if (applet != null) {
+            	    applet.demoClosed();
+            	} else {
+                    System.exit(0);
+            	}
+        	}
+        }
 	}
 
 
@@ -570,7 +571,7 @@ public class HolidayCalendarDemo extends DemoApplet
         	}
 
         	Point cellPos = new Point(0,0);     // Temporary variable
-        	Dimension d = this.size();
+        	Dimension d = getSize();
 
         	g.setColor(DemoUtility.bgColor);
         	g.fillRect(0,0,d.width,d.height);

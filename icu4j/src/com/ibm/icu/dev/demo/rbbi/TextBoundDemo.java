@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/rbbi/TextBoundDemo.java,v $ 
- * $Date: 2001/09/08 01:13:00 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/10/30 02:42:48 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -15,6 +15,10 @@ package com.ibm.demo.rbbi;
 import com.ibm.demo.*;
 import java.applet.Applet;
 import java.awt.*;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.BorderFactory;
@@ -35,7 +39,7 @@ public class TextBoundDemo extends DemoApplet
 
 
 
-class TextBoundFrame extends Frame
+class TextBoundFrame extends Frame implements ItemListener
 {
     private static final String creditString =
         "v1.1a9, Demo";
@@ -49,6 +53,7 @@ class TextBoundFrame extends Frame
     final String left = "<--";
 
     private BreakIterator enum;
+    private boolean isctrldown_ = false;
 
 JTextArea text;
 //    TextArea text;
@@ -203,6 +208,7 @@ JTextArea text;
             bound.addItem("Line Break");
             bound.addItem("Word");
             bound.addItem("Char");
+            bound.addItemListener(this);
             if (choiceFont != null)
                 bound.setFont(choiceFont);
 
@@ -239,6 +245,10 @@ text.setWrapStyleWord(true);
 
         //layout();
         handleEnumChanged();
+        
+        enableEvents(WindowEvent.WINDOW_CLOSING);
+        enableEvents(KeyEvent.KEY_PRESSED);
+        enableEvents(KeyEvent.KEY_RELEASED);
 
         // (new Thread(this)).start();
     }
@@ -371,54 +381,52 @@ text.setWrapStyleWord(true);
         }
     }
 
-    public boolean action(Event evt, Object obj)
+    public void itemStateChanged(ItemEvent evt)
     {
-
-        if(evt.target instanceof Button && left.equals(obj))
-        {
-            handleBackward();
-            return true;
-        }
-        else if(evt.target instanceof Button && right.equals(obj))
-        {
-            handleForward();
-            return true;
-        }
-        else if(evt.target instanceof Choice)
-        {
+        if (evt.getSource() instanceof Choice) {
             handleEnumChanged();
-            return true;
         }
-        return false;
-    }
-
-    public boolean handleEvent(Event evt)
-    {
-        if (evt.id == Event.KEY_PRESS || evt.id == Event.KEY_ACTION) {
-            if (evt.key == Event.RIGHT || (evt.key == 0x0E && evt.controlDown())) {
-                handleForward();
-                return true;
-            }
-            else if (evt.key == Event.LEFT || (evt.key == 0x10 && evt.controlDown())) {
-                handleBackward();
-                return true;
-            }
-        }
-        else
-        if (evt.id == Event.WINDOW_DESTROY && evt.target == this) {
-            this.hide();
-            this.dispose();
-                if (applet != null) {
-                  applet.demoClosed();
-               } else System.exit(0);
-            return true;
-        }
-        return super.handleEvent(evt);
     }
 
     public void errorText(String s)
     {
        if (DEBUG)
            System.out.println(s);
+    }
+    
+    protected void processWindowEvent(WindowEvent evt)
+    {
+        if (evt.getID() == WindowEvent.WINDOW_CLOSING && 
+            evt.getWindow() == this) {
+            hide();
+            dispose();
+            if (applet != null) {
+                applet.demoClosed();
+            } else System.exit(0);
+        }
+    }
+    
+    protected void processKeyEvent(KeyEvent evt)
+    {
+        switch (evt.getID()) {
+            case KeyEvent.KEY_PRESSED :
+                if (evt.getKeyCode() == KeyEvent.VK_CONTROL) {
+                    isctrldown_ = true;
+                }
+                break;
+            case KeyEvent.KEY_RELEASED :
+                int key = evt.getKeyCode();
+                if (key == KeyEvent.VK_RIGHT || 
+                    (key == KeyEvent.VK_N && isctrldown_)) {
+                    handleForward();
+                }
+                else 
+                if (key == KeyEvent.VK_LEFT || 
+                    (key == KeyEvent.VK_P && isctrldown_)) {
+                    handleBackward();
+                }
+                isctrldown_ = false;
+                break;
+        }
     }
 }

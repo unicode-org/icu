@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/calendar/CalendarCalc.java,v $ 
- * $Date: 2000/10/19 00:27:16 $ 
- * $Revision: 1.8 $
+ * $Date: 2001/10/30 02:42:50 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -63,7 +63,7 @@ public class CalendarCalc extends DemoApplet
  * is BorderLayout.  The CalendarCalcFrame class defines the window layout of
  * MultiCalendarDemo.
  */
-class CalendarCalcFrame extends Frame
+class CalendarCalcFrame extends Frame implements ActionListener
 {
     private static final String     creditString = "";
 
@@ -114,6 +114,8 @@ class CalendarCalcFrame extends Frame
         // Force an update of the display
         cityChanged();
         millisFormat();
+        enableEvents(KeyEvent.KEY_RELEASED);
+        enableEvents(WindowEvent.WINDOW_CLOSING);
     }
 
     //------------------------------------------------------------
@@ -235,6 +237,8 @@ class CalendarCalcFrame extends Frame
                 down.setBackground(DemoUtility.bgColor);
                 upDown.add(up);
                 upDown.add(down);
+                up.addActionListener(this);
+                down.addActionListener(this);
             }
 
             rollAddPanel.add(dateLabel);
@@ -302,66 +306,6 @@ class CalendarCalcFrame extends Frame
             DemoUtility.creditFont);
         DemoUtility.fixGrid(copyrightPanel,1);
         add(copyrightPanel);
-    }
-
-    /**
-     * Called if an action occurs in the CalendarCalcFrame object.
-     */
-    public boolean action(Event evt, Object obj)
-    {
-        // *** Button events are handled here.
-        if (evt.target instanceof Button) {
-            if (evt.target == up) {
-                    dateFieldChanged(false);
-                    return true;
-            } else
-            if (evt.target == down) {
-                    dateFieldChanged(true);
-                    return true;
-            }
-        }
-        return super.action(evt, obj);
-    }
-
-    /**
-     * Handles the event. Returns true if the event is handled and should not
-     * be passed to the parent of this component. The default event handler
-     * calls some helper methods to make life easier on the programmer.
-     */
-    public boolean handleEvent(Event evt)
-    {
-        if (evt.id == Event.KEY_RELEASE && evt.target == patternText) {
-            patternTextChanged();
-            return true;
-        }
-        else if (evt.id == Event.KEY_RELEASE) {
-            for (int i = 0; i < calendars.length; i++) {
-                if (evt.target == calendars[i].text) {
-                    textChanged(i);
-                    return true;
-                }
-            }
-        }
-        else if (evt.id == Event.ACTION_EVENT && evt.target == up) {
-            dateFieldChanged(true);
-            return true;
-        }
-        else if (evt.id == Event.ACTION_EVENT && evt.target == down) {
-            dateFieldChanged(false);
-            return true;
-        }
-        else if (evt.id == Event.WINDOW_DESTROY && evt.target == this) {
-            this.hide();
-            this.dispose();
-
-            if (applet != null) {
-               applet.demoClosed();
-            } else System.exit(0);
-
-            return true;
-        }
-
-        return super.handleEvent(evt);
     }
 
     /**
@@ -490,6 +434,74 @@ class CalendarCalcFrame extends Frame
             System.out.println(s);
         }
     }
+    
+    /**
+     * Called if an action occurs in the CalendarCalcFrame object.
+     */
+    public void actionPerformed(ActionEvent evt)
+    {
+        // *** Button events are handled here.
+        Object obj = evt.getSource();
+        System.out.println("action " + obj);
+        if (obj instanceof Button) {
+            if (evt.getSource() == up) {
+                dateFieldChanged(false);
+            } else
+                if (evt.getSource() == down) {
+                    dateFieldChanged(true);
+            }
+        }
+    }
+    
+    /**
+     * Handles the event. Returns true if the event is handled and should not
+     * be passed to the parent of this component. The default event handler
+     * calls some helper methods to make life easier on the programmer.
+     */
+    protected void processKeyEvent(KeyEvent evt)
+    {
+        System.out.println("key " + evt);
+        if (evt.getID() == KeyEvent.KEY_RELEASED) { 
+            if (evt.getSource() == patternText) {
+                patternTextChanged();
+            }
+            else {
+                for (int i = 0; i < calendars.length; i++) {
+                    if (evt.getSource() == calendars[i].text) {
+                        textChanged(i);
+                    }
+                }
+            }
+        }
+    }
+    
+    protected void processWindowEvent(WindowEvent evt) 
+    {
+        System.out.println("window " + evt);
+        if (evt.getID() == WindowEvent.WINDOW_CLOSING && 
+            evt.getSource() == this) {
+            this.hide();
+            this.dispose();
+
+            if (applet != null) {
+               applet.demoClosed();
+            } else System.exit(0);
+        }
+    }
+    
+    /*
+    protected void processEvent(AWTEvent evt)
+    {
+        if (evt.getID() == AWTEvent. Event.ACTION_EVENT && evt.target == up) {
+            dateFieldChanged(true);
+            return true;
+        }
+        else if (evt.id == Event.ACTION_EVENT && evt.target == down) {
+            dateFieldChanged(false);
+            return true;
+        }
+    }
+    */
 
     private static final int        FIELD_COLUMNS = 35;
     private static final String     DEFAULT_FORMAT = "EEEE MMMM d, yyyy G";

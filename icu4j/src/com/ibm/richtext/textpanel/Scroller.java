@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: Scroller.java,v $ $Revision: 1.3 $ $Date: 2000/05/11 18:08:42 $
+ * @(#)$RCSfile: Scroller.java,v $ $Revision: 1.4 $ $Date: 2001/10/30 02:42:48 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -106,7 +106,7 @@ final class Scroller implements AdjustmentListener
 
     public void adjustmentValueChanged(AdjustmentEvent event) {
 
-        boolean horizontal;
+        // variable not used boolean horizontal;
         if (event.getAdjustable() == fHorizScrollBar) {
             int vertVal = fVertScrollBar == null? fVertValue :
                                         fVertScrollBar.getValue();

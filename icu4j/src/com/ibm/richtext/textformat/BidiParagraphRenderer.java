@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: BidiParagraphRenderer.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:50:03 $
+ * @(#)$RCSfile: BidiParagraphRenderer.java,v $ $Revision: 1.2 $ $Date: 2001/10/30 02:42:50 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -359,8 +359,8 @@ final class BidiParagraphRenderer extends ParagraphRenderer {
                                     final int lineIndent) {
 
         int segmentCount = 0;
-        boolean firstLine = measurer==null ||
-                            measurer.getPosition() == paragraphStart;
+        /* variable not used boolean firstLine = measurer==null ||
+                            measurer.getPosition() == paragraphStart; */
 
         if (measurer != null) {
             computeSegments(text, line, measurer, paragraphLimit, formatWidth, lineIndent);

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/components/Attic/AppletFrame.java,v $ 
- * $Date: 2001/02/05 19:24:47 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/10/30 02:42:50 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -37,7 +37,7 @@ import java.io.IOException;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: AppletFrame.java,v $ $Revision: 1.3 $ $Date: 2001/02/05 19:24:47 $
+ * @version $RCSfile: AppletFrame.java,v $ $Revision: 1.4 $ $Date: 2001/10/30 02:42:50 $
  */
 public class AppletFrame extends Frame implements AppletStub, AppletContext {
 
@@ -74,7 +74,7 @@ public class AppletFrame extends Frame implements AppletStub, AppletContext {
         this.applet = applet;
         applet.setStub(this);
 
-        resize(width, height);
+        setSize(width, height);
         add("Center", applet);
         show();
         addWindowListener(new WindowAdapter() {
@@ -92,7 +92,7 @@ public class AppletFrame extends Frame implements AppletStub, AppletContext {
     // AppletStub API
     public void appletResize(int width,
                              int height) {
-        resize(width, height);
+        setSize(width, height);
     }
 
     public AppletContext getAppletContext() {
@@ -114,7 +114,7 @@ public class AppletFrame extends Frame implements AppletStub, AppletContext {
     public boolean isActive() {
         return true;
     }
-
+    
     // AppletContext API
     public Applet getApplet(String name) {
         return applet;

@@ -452,10 +452,16 @@ public class TimeZoneTest extends TestFmwk
                   " = " + new Date(expJulyOne));
         }
 
-        _testUsingBinarySearch(zone, new Date(90, Calendar.JANUARY, 1).getTime(),
-                              new Date(90, Calendar.JUNE, 15).getTime(), marchOne);
-        _testUsingBinarySearch(zone, new Date(90, Calendar.JUNE, 1).getTime(),
-                              new Date(90, Calendar.DECEMBER, 31).getTime(), julyOne);
+        Calendar cal1 = Calendar.getInstance();
+        cal1.set(1990, Calendar.JANUARY, 1);
+        Calendar cal2 = Calendar.getInstance();
+        cal2.set(1990, Calendar.JUNE, 1);
+        _testUsingBinarySearch(zone, cal1.getTimeInMillis(),
+                               cal2.getTimeInMillis(), marchOne);
+        cal1.set(1990, Calendar.JUNE, 1);
+        cal2.set(1990, Calendar.DECEMBER, 31);
+        _testUsingBinarySearch(zone, cal1.getTimeInMillis(),
+                               cal2.getTimeInMillis(), julyOne);
 
         if (zone.inDaylightTime(new Date(marchOne - 1000)) ||
             !zone.inDaylightTime(new Date(marchOne)))
@@ -528,7 +534,9 @@ public class TimeZoneTest extends TestFmwk
     public void TestVariousAPI518()
     {
         TimeZone time_zone = TimeZone.getTimeZone("PST");
-        Date d = new Date(97, Calendar.APRIL, 30);
+        Calendar cal = Calendar.getInstance();
+        cal.set(1997, Calendar.APRIL, 30);
+        Date d = cal.getTime();
 
         logln("The timezone is " + time_zone.getID());
 

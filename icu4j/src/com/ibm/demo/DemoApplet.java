@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/Attic/DemoApplet.java,v $ 
- * $Date: 2000/03/10 03:47:42 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/10/30 02:42:50 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -55,9 +55,9 @@ public abstract class DemoApplet extends java.applet.Applet {
     public void showDemo()
     {
     	demoFrame = createDemoFrame(this);
-        demoFrame.layout();
+        demoFrame.doLayout();
         Dimension d = getDefaultFrameSize(this, demoFrame);
-        demoFrame.resize(d.width, d.height);
+        demoFrame.setSize(d.width, d.height);
         demoFrame.show();
 		demoFrameOpened();
     }

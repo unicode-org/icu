@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: SimpleCommandLog.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:51:23 $
+ * @(#)$RCSfile: SimpleCommandLog.java,v $ $Revision: 1.2 $ $Date: 2001/10/30 02:42:48 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -145,7 +145,7 @@ final class SimpleCommandLog {
         if (fCurrentCommand != null) {
             fBaseIsModified = fCurrentCommand.isModified();
         }
-        boolean changed = fCurrentCommand != null || fLastCommand != null;
+        // variable not used boolean changed = fCurrentCommand != null || fLastCommand != null;
         fCurrentCommand = null;
         fLastCommand = null;
         

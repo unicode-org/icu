@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/DecimalFormat.java,v $ 
- * $Date: 2001/10/26 06:28:00 $ 
- * $Revision: 1.12 $
+ * $Date: 2001/10/30 02:43:54 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -2085,7 +2085,7 @@ public class DecimalFormat extends NumberFormat {
             roundingDecimalPos = roundingDigits.length() - i;
         }
         for (int part=0; part<2; ++part) {
-            int partStart = result.length();
+            // variable not used int partStart = result.length();
             if (padPos == PAD_BEFORE_PREFIX) {
                 result.append(padSpec);
             }
