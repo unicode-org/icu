@@ -68,7 +68,7 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   CharList *copyFilesRightTail = NULL;
   CharList *copyFilesInstallTail = NULL;
 
-  CharList *copyCommands = NULL;
+/*  CharList *copyCommands = NULL;*/
 
   const char *baseName;
 
