@@ -9,6 +9,9 @@
 #define REGEX_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/parseerr.h"
@@ -69,9 +72,6 @@ public:
     RegexPattern  &operator =(const RegexPattern &other);
     virtual RegexPattern  *clone() const;
 
-    // TODO:  Do we really want a hashCode function on this class?
-    virtual int32_t         hashCode(void) const;
-    
     
    /**
     *     Compiles the given regular expression into a pattern 
@@ -428,10 +428,6 @@ private:
     //
     void         MatchAt(int32_t startIdx, UErrorCode &status);   
     inline  void backTrack(int32_t &inputIdx, int32_t &patIdx);
-    UBool        getCaptureText(const UnicodeString &rep,
-                                int32_t &repIdx,
-                                int32_t &textStart,
-                                int32_t &textEnd);
     UBool        isWordBoundary(int32_t pos);         // perform the \b test
 
 
@@ -448,7 +444,6 @@ private:
 
 };  
 
-
-
 U_NAMESPACE_END
+#endif  // UCONFIG_NO_REGULAR_EXPRESSIONS
 #endif

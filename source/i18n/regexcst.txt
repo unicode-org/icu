@@ -107,7 +107,8 @@ string:
 expr-quant:
     '*'                  n  quant-star                       
     '+'                  n  quant-plus                              
-    '?'                  n  quant-opt        
+    '?'                  n  quant-opt     
+    '{'                  n  interval-open
     default                 expr-cont 
     
     
@@ -136,6 +137,11 @@ open-paren-extended:
     '!'                  n  term            ^expr-cont              doOpenLookAheadNeg     #  (?!
     '<'                  n  open-paren-lookbehind
     '#'                  n  paren-comment
+    'i'                  n  paren-flag                              doMatchMode
+    'x'                  n  paren-flag                              doMatchMode
+    's'                  n  paren-flag                              doMatchMode
+    'm'                  n  paren-flag                              doMatchMode
+    '-'                  n  paren-flag                              doMatchMode
     default                 errorDeath                              doBadOpenParenType
     
 open-paren-lookbehind:
@@ -150,7 +156,21 @@ open-paren-lookbehind:
 #
 paren-comment:
     ')'                  n  term
+    eof		            errorDeath                              doMismatchedParenErr
     default              n  paren-comment
+
+#
+#  paren-flag    Scanned a (?ismx-ismx  flag setting thing
+#                TODO:  this is not fully implemented yet.
+paren-flag:
+    'i'                  n  paren-flag                              doMatchMode
+    's'                  n  paren-flag                              doMatchMode
+    'm'                  n  paren-flag                              doMatchMode
+    'x'                  n  paren-flag                              doMatchMode
+    '-'                  n  paren-flag                              doMatchMode
+    ')'                  n  term
+    ':'                  n  term              ^expr-quant           doOpenNonCaptureParen
+    default                 errorDeath
     
     
 #
@@ -189,19 +209,8 @@ quant-opt:
 #
 interval-open:
     white_space          n  interval-open
-    digit_char              interval-value                          doIntervalMinValue
-    default                 errorDeath                              doNumberExpectedError
+    default                 errorDeath                              doNotImplementedError
     
-interval-value:
-    white_space          n  interval-close
-    '}'                     interval-close
-    digit_char           n  interval-value                          doIntervalDigit
-    default                 errorDeath                              doNumberExpectedError
-    
-interval-close:
-    white_space          n  interval-close
-    '}'                  n  expr-cont                               doTagValue
-    default                 errorDeath                              doNumberExpectedError
     
     
     

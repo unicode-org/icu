@@ -1,6 +1,9 @@
 //
 //  file:  rematch.cpp    
 //
+//         Contains the implementation of class RegexMatcher,
+//         which is one of the main API classes for the ICU regular expression package.
+//
 /*
 **********************************************************************
 *   Copyright (C) 2002 International Business Machines Corporation   *
@@ -9,6 +12,8 @@
 */
 
 #include "unicode/utypes.h"
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+
 #include "unicode/regex.h"
 #include "unicode/uniset.h"
 #include "unicode/uchar.h"
@@ -443,10 +448,11 @@ int32_t RegexMatcher::start(int group, UErrorCode &err) const {
 //   isWordBoundary 
 //                     in perl, "xab..cd..", \b is true at positions 0,3,5,7
 //                     For us,
-//                       If the current char is a combining mark, \b is FALSE
-//                       Scan backwards to the first non-combining char
-//                       Pos is a boundary if the current and previous chars are
-//                            opposite in membership in \w set
+//                       If the current char is a combining mark,
+//                          \b is FALSE.
+//                       Else Scan backwards to the first non-combining char.
+//                            We are at a boundary if the this char and the original chars are
+//                               opposite in membership in \w set
 //
 //--------------------------------------------------------------------------------
 UBool RegexMatcher::isWordBoundary(int32_t pos) {
@@ -485,27 +491,6 @@ UBool RegexMatcher::isWordBoundary(int32_t pos) {
     return isBoundary;
 }
 
-
-//--------------------------------------------------------------------------------
-//
-//    getCaptureText    We have encountered a '\' that might preceed a
-//                      capture group specification. 
-//                      If a valid capture group number follows the '\', 
-//                      return the indicies to the start & end of the captured
-//                      text, and update the patIdx to the position following the
-//                      \n sequence.
-//
-//                      This function is used during find and replace operations when
-//                      processing caputure references in the replacement text.
-//
-//--------------------------------------------------------------------------------
-UBool  RegexMatcher::getCaptureText(const UnicodeString &rep,
-                                int32_t &repIdx,
-                                int32_t &textStart,
-                                int32_t &textEnd)
-{
-    return FALSE;
-}
 
 //--------------------------------------------------------------------------------
 //
@@ -915,10 +900,9 @@ breakFromLoop:
 
 
 
-
-
 const char RegexMatcher::fgClassID = 0;
 
 U_NAMESPACE_END
 
+#endif  // !UCONFIG_NO_REGULAR_EXPRESSIONS
 

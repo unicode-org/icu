@@ -1833,10 +1833,13 @@ static const char * const
 _uRegexErrorName[U_REGEX_ERROR_LIMIT - U_REGEX_ERROR_START] = {
     "U_REGEX_ERROR_START",
     "U_REGEX_INTERNAL_ERROR",
+    "U_REGEX_RULE_SYNTAX",
     "U_REGEX_INVALID_STATE",
     "U_REGEX_BAD_ESCAPE_SEQUENCE",
     "U_REGEX_PROPERTY_SYNTAX",
-    "U_REGEX_UNIMPLEMENTED"
+    "U_REGEX_UNIMPLEMENTED",
+    "U_REGEX_MISMATCHED_PAREN",
+    "U_REGEX_MATCH_MODE_ERROR"
 };
 
 U_CAPI const char * U_EXPORT2
@@ -1852,7 +1855,7 @@ u_errorName(UErrorCode code) {
     } else if (U_BRK_ERROR_START <= code  && code < U_BRK_ERROR_LIMIT){
         return _uBrkErrorName[code - U_BRK_ERROR_START];
     } else if (U_REGEX_ERROR_START <= code && code < U_REGEX_ERROR_LIMIT) {
-        return _uBrkErrorName[code - U_REGEX_ERROR_START];
+        return _uRegexErrorName[code - U_REGEX_ERROR_START];
     } else {
         return "[BOGUS UErrorCode]";
     }

@@ -4,8 +4,10 @@
 //  Copyright (C) 2002, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
-//  This file contains declarations for the class RegexCompile and for compiled
-//  regular expression data format
+//  This file contains declarations for the class RegexCompile
+//
+//  This class is internal to the regular expression implementation.
+//  For the public Regular Expression API, see the file "unicode/regex.h"
 //
 
 
@@ -13,6 +15,8 @@
 #define RBBISCAN_H
 
 #include "unicode/utypes.h"
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+
 #include "unicode/uobject.h"
 #include "unicode/uniset.h"
 #include "unicode/parseerr.h"
@@ -28,12 +32,7 @@ static const UBool REGEX_DEBUG = TRUE;
 
 //--------------------------------------------------------------------------------
 //
-//  class RegexCompile    does the lowest level, character-at-a-time
-//                        scanning of a regular expression.  
-//
-//                        The output of the scanner is a tokenized form
-//                        of the RE, plus prebuilt UnicodeSet objects for each
-//                        set of charcters that is referenced.
+//  class RegexCompile    Contains the regular expression compiler.
 //
 //--------------------------------------------------------------------------------
 static const int    kStackSize = 100;               // The size of the state stack for
@@ -161,5 +160,5 @@ private:
 };
 
 U_NAMESPACE_END
-
-#endif
+#endif   // !UCONFIG_NO_REGULAR_EXPRESSIONS
+#endif   // RBBISCAN_H

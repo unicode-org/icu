@@ -70,11 +70,13 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
                 break;
 
         case 3: name = "regex";
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
                 if (exec) {
                     logln("TestSuite Regex---"); logln();
                     RegexTest test;
                     callTest( test, par );
                 }
+#endif
                 break;
 
         case 4: name = "format";

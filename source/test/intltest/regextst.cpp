@@ -11,6 +11,8 @@
 //
 
 #include "unicode/utypes.h"
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+
 #include "unicode/uchar.h"
 #include "intltest.h"
 #include "regextst.h"
@@ -1195,8 +1197,38 @@ void RegexTest::Errors() {
     REGEX_ERR("hex format \\x{abcd} not implemented", 1, 13, U_REGEX_UNIMPLEMENTED);
 
     // Missing close parentheses
-    //REGEX_ERR("Comment (?# with no close", 1, 0, U_REGEX_INTERNAL_ERROR);
+    REGEX_ERR("Comment (?# with no close", 1, 25, U_REGEX_MISMATCHED_PAREN);
+    REGEX_ERR("Capturing Parenthesis(...", 1, 25, U_REGEX_MISMATCHED_PAREN);
+    REGEX_ERR("Grouping only parens (?: blah blah", 1, 34, U_REGEX_MISMATCHED_PAREN);
+
+    // Extra close paren
+    REGEX_ERR("Grouping only parens (?: blah)) blah", 1, 31, U_REGEX_MISMATCHED_PAREN);
+    REGEX_ERR(")))))))", 1, 1, U_REGEX_RULE_SYNTAX);
+    REGEX_ERR("(((((((", 1, 7, U_REGEX_MISMATCHED_PAREN);
+
+    // Flag settings not yet implemented
+    REGEX_ERR("(?i:stuff*)", 1, 3, U_REGEX_UNIMPLEMENTED);
+    REGEX_ERR("(?-si) stuff", 1, 3, U_REGEX_UNIMPLEMENTED);
+
+    // Look-ahead, Look-behind
+    REGEX_ERR("abc(?=xyz).*", 1, 6, U_REGEX_UNIMPLEMENTED);    // look-ahead
+    REGEX_ERR("abc(?!xyz).*", 1, 6, U_REGEX_UNIMPLEMENTED);    // negated look-ahead
+    REGEX_ERR("abc(?<=xyz).*", 1, 7, U_REGEX_UNIMPLEMENTED);   // look-behind
+    REGEX_ERR("abc(?<!xyz).*", 1, 7, U_REGEX_UNIMPLEMENTED);   // negated look-behind
+    REGEX_ERR("abc(?<@xyz).*", 1, 7, U_REGEX_RULE_SYNTAX);       // illegal construct
+
+    // Atomic Grouping
+    REGEX_ERR("abc(?>xyz)", 1, 6, U_REGEX_UNIMPLEMENTED);
+
+    // {Numeric Quantifiers}
+    REGEX_ERR("abc{4}", 1, 5, U_REGEX_UNIMPLEMENTED);
+
+
+    // Quantifiers are allowed only after something that can be quantified.
+    REGEX_ERR("+", 1, 1, U_REGEX_RULE_SYNTAX);
+    REGEX_ERR("abc\ndef(*2)", 2, 5, U_REGEX_RULE_SYNTAX);
+    REGEX_ERR("abc**", 1, 5, U_REGEX_RULE_SYNTAX);
 }
 
-
+#endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
 

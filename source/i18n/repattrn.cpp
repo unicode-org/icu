@@ -9,6 +9,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+
 #include "unicode/regex.h"
 #include "uassert.h"
 #include "uvector.h"
@@ -66,6 +69,7 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     fBadState         = other.fBadState;
     fNumCaptureGroups = other.fNumCaptureGroups;
     fMaxCaptureDigits = other.fMaxCaptureDigits;
+    fStaticSets       = other.fStaticSets;    
     if (fBadState) {
         return *this;
     }
@@ -110,6 +114,7 @@ void RegexPattern::init() {
     fBadState         = FALSE;
     fNumCaptureGroups = 0;
     fMaxCaptureDigits = 1;     // TODO:  calculate for real.
+    fStaticSets       = NULL;
     fMatcher          = NULL;
     
     UErrorCode status=U_ZERO_ERROR;
@@ -384,15 +389,6 @@ int32_t  RegexPattern::split(const UnicodeString &input,
 
 
 
-//---------------------------------------------------------------------
-//
-//   hashcode
-//
-//---------------------------------------------------------------------
-int32_t   RegexPattern::hashCode(void) const {
-    return 0;           // TODO:   Do something better here
-};
-
 
 //---------------------------------------------------------------------
 //
@@ -512,8 +508,8 @@ breakFromLoop:
     printf("\n\n");
 };
 
-
-
 const char RegexPattern::fgClassID = 0;
 
+
 U_NAMESPACE_END
+#endif  // !UCONFIG_NO_REGULAR_EXPRESSIONS

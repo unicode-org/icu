@@ -52,6 +52,7 @@
 #   endif
 #   define UCONFIG_NO_FORMATTING 1
 #   define UCONFIG_NO_TRANSLITERATION 1
+#   define UCONFIG_NO_REGULAR_EXPRESSIONS 1
 #endif
 
 /* common library switches -------------------------------------------------- */
@@ -113,6 +114,17 @@
 #ifndef UCONFIG_NO_TRANSLITERATION
 #   define UCONFIG_NO_TRANSLITERATION 0
 #endif
+
+/**
+ * \def UCONFIG_NO_REGULAR_EXPRESSIONS
+ * This switch turns off regular expressions.
+ *
+ * @draft ICU 2.6
+ */
+#ifndef UCONFIG_NO_REGULAR_EXPRESSIONS
+#   define UCONFIG_NO_REGULAR_EXPRESSIONS 0
+#endif
+
 
 
 #endif
