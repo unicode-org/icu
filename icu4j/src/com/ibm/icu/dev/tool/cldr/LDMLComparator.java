@@ -1120,6 +1120,7 @@ public class LDMLComparator {
              if(childrenAreElements(childOfSource)==false){
                  NamedNodeMap attr = childOfSource.getAttributes();
                  Node typeNode = attr.getNamedItem("type");
+                 Node altNode = attr.getNamedItem("alt");
                  String index="";
                  if(typeNode!=null){
 
@@ -1138,6 +1139,10 @@ public class LDMLComparator {
                          index = temp;
                      }
 
+                 }
+                 String alt=null;
+                 if(altNode != null){
+                     alt = altNode.getNodeValue();
                  }
                  if(m_Vetting) { // TODO: all?
                      Node keyNode = attr.getNamedItem("key");
@@ -1280,6 +1285,9 @@ public class LDMLComparator {
                          String temp = (String)deprecatedCountryCodes.get(index);
                          if(temp!=null){
                              index = temp;
+                         }
+                         if(index!=null && alt!=null){
+                             index =  index +"_"+ alt;
                          }
                      }
                      String id = "";
