@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/LocaleData.java,v $
- * $Date: 2003/11/14 19:14:46 $
- * $Revision: 1.2 $
+ * $Date: 2003/11/21 22:45:06 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
 */
@@ -133,7 +133,8 @@ public final class LocaleData {
      * Returns the size of paper used in the locale. The paper sizes returned are always in 
      * <em> milli-meters<em>.
      * @param locale The locale for which the measurement system to be retrieved. 
-     * @return
+     * @return The paper size used in the locale
+     * @draft ICU 2.8
      */
     public static final PaperSize getPaperSize(Locale locale){
         ResourceBundle bundle = ICULocaleData.getLocaleElements(locale);

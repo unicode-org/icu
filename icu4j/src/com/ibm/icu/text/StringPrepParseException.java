@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringPrepParseException.java,v $
- * $Date: 2003/08/27 21:12:04 $
- * $Revision: 1.1 $ 
+ * $Date: 2003/11/21 22:43:40 $
+ * $Revision: 1.2 $ 
  *
  *****************************************************************************************
  */
@@ -18,6 +18,7 @@ import java.text.ParseException;
  * input to StringPrep or IDNA. 
  *
  * @author Ram Viswanadha
+ * @draft ICU 2.8
  */
 public class StringPrepParseException extends ParseException {
     /**
@@ -103,6 +104,7 @@ public class StringPrepParseException extends ParseException {
      *                   it should be a positive integer. The default value of this field
      *                   is -1. It will be set to 0 if the code populating this struct is not
      *                   using line numbers.
+     * @draft ICU 2.8
      */
     public StringPrepParseException(String message, int error, String rules, int pos, int lineNumber){
         super(message, -1);
@@ -170,7 +172,7 @@ public class StringPrepParseException extends ParseException {
      */
     private StringBuffer postContext =  new StringBuffer();
     
-    public static final int PARSE_CONTEXT_LEN = 16;
+    private static final int PARSE_CONTEXT_LEN = 16;
     
 
     
