@@ -27,14 +27,13 @@
 /** A struct representing a range of text containing a specific field 
  *  @stable
  */
-struct UFieldPosition {
+typedef struct UFieldPosition {
   /** The field */
   int32_t field;
   /** The start of the text range containing field */
   int32_t beginIndex;
   /** The limit of the text range containing field */
   int32_t endIndex;
-};
-typedef struct UFieldPosition UFieldPosition;
+} UFieldPosition;
 
 #endif

@@ -123,26 +123,28 @@ protected:
      */
     CharacterIterator*  fText;
 
-    //
-    // The rule data for this BreakIterator instance
-    //
+    /**
+     * The rule data for this BreakIterator instance
+     */
     RBBIDataWrapper    *fData;
     UTrie              *fCharMappings;
 
-    // Rule {tag} value for the most recent match.
+    /** Rule {tag} value for the most recent match. */
     int32_t             fLastBreakTag;
 
-    // Rule tag value valid flag.
-    // Some iterator operations don't intrinsically set the correct tag value.
-    // This flag lets us lazily compute it if we are ever asked for the value.
+    /**
+     * Rule tag value valid flag.
+     * Some iterator operations don't intrinsically set the correct tag value.
+     * This flag lets us lazily compute it if we are ever asked for the value.
+     */
     UBool               fLastBreakTagValid;
 
-    //
-    // Counter for the number of characters encountered with the "dictionary"
-    //   flag set.  Normal RBBI iterators don't use it, although the code
-    //   for updating it is live.  Dictionary Based break iterators (a subclass
-    //   of us) access this field directly.
-    //
+    /**
+     * Counter for the number of characters encountered with the "dictionary"
+     *   flag set.  Normal RBBI iterators don't use it, although the code
+     *   for updating it is live.  Dictionary Based break iterators (a subclass
+     *   of us) access this field directly.
+     */
     uint32_t           fDictionaryCharCount;
 
     //
@@ -163,32 +165,35 @@ protected:
     // constructors
     //=======================================================================
 
-     // This constructor uses the udata interface to create a BreakIterator whose
-     // internal tables live in a memory-mapped file.  "image" is a pointer to the
-     // beginning of that file.
-     RuleBasedBreakIterator(UDataMemory* image, UErrorCode &status);
+    /**
+     * This constructor uses the udata interface to create a BreakIterator
+     * whose internal tables live in a memory-mapped file.  "image" is a pointer
+     * to the beginning of that file.
+     */
+    RuleBasedBreakIterator(UDataMemory* image, UErrorCode &status);
 
-     //
-     // Constructor from a flattened set of RBBI data in malloced memory.
-     //             RulesBasedBreakIterators built from a custom set of rules
-     //             are created via this constructor; the rules are compiled
-     //             into memory, then the break iterator is constructed here.
-     //
-     //             The break iterator adopts the memory, and will
-     //             uprv_free() it when done.
-     RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status);
+    /**
+     * Constructor from a flattened set of RBBI data in malloced memory.
+     *             RulesBasedBreakIterators built from a custom set of rules
+     *             are created via this constructor; the rules are compiled
+     *             into memory, then the break iterator is constructed here.
+     *
+     *             The break iterator adopts the memory, and will
+     *             free it when done.
+     */
+    RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status);
 
-     friend class RBBIRuleBuilder;
-     friend class BreakIterator;
+    friend class RBBIRuleBuilder;
+    friend class BreakIterator;
 
 
 
- public:
+public:
 
-     /** Default constructor.  Creates an empty shell of an iterator, with no
-      *  rules or text to iterate over.   Object can subsequently be assigned.
-      */
-     RuleBasedBreakIterator();
+    /** Default constructor.  Creates an empty shell of an iterator, with no
+     *  rules or text to iterate over.   Object can subsequently be assigned.
+     */
+    RuleBasedBreakIterator();
 
     /**
      * Copy constructor.  Will produce a break iterator with the same behavior,
@@ -198,7 +203,7 @@ protected:
     RuleBasedBreakIterator(const RuleBasedBreakIterator& that);
 
     /**
-     *   Construct a RuleBasedBreakIterator from a set of rules supplied as a string.
+     * Construct a RuleBasedBreakIterator from a set of rules supplied as a string.
      */
     RuleBasedBreakIterator( const UnicodeString    &rules,
                              UParseError             &parseError,

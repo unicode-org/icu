@@ -40,7 +40,7 @@
 
 #define UTF_IS_SURROGATE_FIRST(c) (((c)&0x400)==0)
 
-/* get the UTF-32 value directly from the surrogate pseudo-characters */
+/** Get the UTF-32 value directly from the surrogate pseudo-characters */
 #define UTF_SURROGATE_OFFSET ((0xd800<<10UL)+0xdc00-0x10000)
 
 #define UTF16_GET_PAIR_VALUE(first, second) \
@@ -80,7 +80,7 @@
 /* average number of code units compared to UTF-16 */
 #define UTF16_ARRAY_SIZE(size) (size)
 
-/*
+/**
  * Get a single code point from an offset that points to any
  * of the code units that belong to that code point.
  * Assume 0<=i<length.
@@ -137,7 +137,7 @@
 
 /* fast versions, no error-checking */
 
-/*
+/**
  * Get a single code point from an offset that points to the first
  * of the code units that belong to that code point.
  * Assume 0<=i<length.
@@ -172,7 +172,7 @@
     } \
 }
 
-/*
+/**
  * Set a random-access offset and adjust it so that
  * it points to the beginning of a Unicode character.
  * The offset that is passed in points to
@@ -253,7 +253,7 @@
 
 /* fast versions, no error-checking */
 
-/*
+/**
  * Get a single code point from an offset that points behind the last
  * of the code units that belong to that code point.
  * Assume 0<=i<length.
@@ -279,7 +279,7 @@
     } \
 }
 
-/*
+/**
  * Set a random-access offset and adjust it so that
  * it points after the end of a Unicode character.
  * The offset that is passed in points behind
