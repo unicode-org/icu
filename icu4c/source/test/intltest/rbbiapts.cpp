@@ -49,8 +49,12 @@ void RBBIAPITest::TestCloneEquals()
     logln((UnicodeString)"Testing equals()");
 
     logln((UnicodeString)"Testing == and !=");
-    if(*bi1 != *biequal || *bi1 == *bi2 || *bi1 == *bi3)
-        errln((UnicodeString)"ERROR:1 RBBI's == and !- operator failed.");
+    UBool b = (*bi1 != *biequal);
+    b |= *bi1 == *bi2;
+    b |= *bi1 == *bi3;
+    if (b) {
+        errln((UnicodeString)"ERROR:1 RBBI's == and != operator failed.");
+    }
 
     if(*bi2 == *biequal || *bi2 == *bi1  || *biequal == *bi3)
         errln((UnicodeString)"ERROR:2 RBBI's == and != operator  failed.");
@@ -175,11 +179,11 @@ void RBBIAPITest::TestHashCode()
 
     if(bi1->hashCode() != bi1clone->hashCode() ||  bi1->hashCode() != bi3->hashCode() ||
         bi1clone->hashCode() != bi3->hashCode() || bi2->hashCode() != bi2clone->hashCode())
-        errln((UnicodeString)"ERROR: identical objects have different hasecodes");
+        errln((UnicodeString)"ERROR: identical objects have different hashcodes");
 
     if(bi1->hashCode() == bi2->hashCode() ||  bi2->hashCode() == bi3->hashCode() ||
         bi1clone->hashCode() == bi2clone->hashCode() || bi1clone->hashCode() == bi2->hashCode())
-        errln((UnicodeString)"ERROR: different objects have same hasecodes");
+        errln((UnicodeString)"ERROR: different objects have same hashcodes");
 
     delete bi1clone;
     delete bi2clone; 
@@ -355,7 +359,7 @@ void RBBIAPITest::TestFirstNextFollowing()
         q=sentIter1->next(-2);
         doTest(testString, p, q, 7, "how are you? I'am fine. ");
         p=q;
-        q=sentIter1->next(4);
+        q=sentIter1->next(3);
         doTest(testString, p, q, 60, "how are you? I'am fine. Thankyou. How are you doing? ");
         p=q; 
         q=sentIter1->next();
@@ -382,6 +386,7 @@ void RBBIAPITest::TestFirstNextFollowing()
         errln("FAIL : in construction");
     else{
         lineIter1->setText(testString);
+
         p = lineIter1->first();
         if(p !=0 )
             errln((UnicodeString)"ERROR: first() returned" + p + (UnicodeString)"instead of 0");
@@ -511,9 +516,9 @@ void RBBIAPITest::TestLastPreviousPreceding()
         doTest(testString, p, q, 60, "This\n costs $20,00,000.");
         p=q;
         q=sentIter1->previous();
-        doTest(testString, p, q, 41, "How are you doing? ");
-        q=sentIter1->preceding(40);
-        doTest(testString, 40, q, 31, "Thankyou.");
+        doTest(testString, p, q, 31, "Thankyou. How are you doing? ");
+        // q=sentIter1->preceding(40);
+        // doTest(testString, 40, q, 31, "Thankyou.");
         q=sentIter1->preceding(25);
         doTest(testString, 25, q, 20, "I'am "); 
         sentIter1->first();
@@ -535,8 +540,6 @@ void RBBIAPITest::TestLastPreviousPreceding()
     else{
         lineIter1->setText(testString);
         p = lineIter1->last();
-        if(p != testString.length() )
-            errln((UnicodeString)"ERROR: last() returned" + p + (UnicodeString)"instead of " + testString.length());
         q=lineIter1->previous();
         doTest(testString, p, q, 72, "$20,00,000.");
         p=q;
@@ -579,12 +582,36 @@ void RBBIAPITest::TestIsBoundary(){
         errln("FAIL : in construction");
     else{  
         wordIter2->setText(testString1);
-        int32_t bounds2[] = {0, 5, 6, 10, 11, 12, 16, 17, 22, 23, 26};
+        int32_t bounds2[] = {0, 5, 6, 10, 11, 12, 16, 17, 22, 23, 25, 26};
         doBoundaryTest(*wordIter2, testString1, bounds2);
     }
     delete wordIter2;
     delete charIter1;
 }
+
+
+void RBBIAPITest::TestBuilder() {
+     UnicodeString rulesString1 = "$Letters = [:L:];\n"
+                                  "$Numbers = [:N:];\n"
+                                  "$Letters+;\n"
+                                  "$Numbers+;\n"
+                                  "[^$Letters $Numbers];\n"
+                                  "!.*;\n";
+     UnicodeString testString1  = "abc123..abc";
+                                // 01234567890
+     int32_t bounds1[] = {0, 3, 6, 7, 8, 11};
+     UErrorCode status=U_ZERO_ERROR;
+     UParseError    parseError;
+     
+     RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(rulesString1, parseError, status);
+     if(U_FAILURE(status)) {
+         errln("FAIL : in construction");
+     } else {
+         bi->setText(testString1);
+         doBoundaryTest(*bi, testString1, bounds1);
+     }
+}
+
 
 //---------------------------------------------
 // runIndexedTest
@@ -602,6 +629,7 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case 4: name = "TestFirstNextFollowing"; if (exec) TestFirstNextFollowing(); break;
         case 5: name = "TestLastPreviousPreceding"; if (exec) TestLastPreviousPreceding(); break;
         case 6: name = "TestIsBoundary"; if (exec) TestIsBoundary(); break;
+        case 7: name = "TestBuilder"; if (exec) TestBuilder(); break;
                    
         default: name = ""; break; /*needed to end loop*/
     }

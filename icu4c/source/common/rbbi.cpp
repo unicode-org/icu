@@ -1,44 +1,34 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2001 International Business Machines Corporation   *
+*   Copyright (C) 1999-2002 International Business Machines Corporation   *
 *   and others. All rights reserved.                                 *
-**********************************************************************
-*   Date        Name        Description
-*   11/11/99    rgillam     Complete port from Java.
 **********************************************************************
 */
 
 #include "unicode/rbbi.h"
 #include "unicode/schriter.h"
-#include "rbbi_tbl.h"
+#include "unicode/udata.h"
+#include "rbbidata.h"
+#include "rbbirb.h"
 #include "filestrm.h"
 #include "cmemory.h"
 
+#include "stdio.h"
+#include "assert.h"
+
 U_NAMESPACE_BEGIN
 
-/**
- * A token used as a character-category value to identify ignore characters
- */
-const int8_t
-RuleBasedBreakIterator::UBRK_IGNORE = -1;
 
-/**
- * The state number of the starting state
- */
-const int16_t
-RuleBasedBreakIterator::START_STATE = 1;
+static const int16_t START_STATE = 1;     // The state number of the starting state
 
-/**
- * The state-transition value indicating "stop"
- */
-const int16_t
-RuleBasedBreakIterator::STOP_STATE = 0;
+static const int16_t STOP_STATE = 0;      // The state-transition value indicating "stop"
 
 /**
  * Class ID.  (value is irrelevant; address is important)
  */
 const char
 RuleBasedBreakIterator::fgClassID = 0;
+
 
 //=======================================================================
 // constructors
@@ -48,34 +38,68 @@ RuleBasedBreakIterator::fgClassID = 0;
  * Constructs a RuleBasedBreakIterator that uses the already-created
  * tables object that is passed in as a parameter.
  */
-RuleBasedBreakIterator::RuleBasedBreakIterator(RuleBasedBreakIteratorTables* adoptTables)
-: text(NULL),
-  tables(adoptTables)
+RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status)
 {
+    init();
+    fData = new RBBIDataWrapper(data, status);
 }
 
-// This constructor uses the udata interface to create a BreakIterator whose
-// internal tables live in a memory-mapped file.  "image" is a pointer to the
-// beginning of that file.
-RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* image)
-: text(NULL),
-  tables(image != NULL ? new RuleBasedBreakIteratorTables(image) : NULL)
+//-------------------------------------------------------------------------------
+//
+//   Constructor   from a UDataMemory handle to precompiled break rules
+//                 stored in an ICU data file.
+//
+//-------------------------------------------------------------------------------
+RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &status)
 {
-    if (tables != NULL)
-        tables->addReference();
+    init();
+    fData = new RBBIDataWrapper(udm, status);
 }
 
-/**
- * Copy constructor.  Will produce a collator with the same behavior,
- * and which iterates over the same text, as the one passed in.
- */
-RuleBasedBreakIterator::RuleBasedBreakIterator(const RuleBasedBreakIterator& that)
-: BreakIterator(), // The copy constructor is private :(
-  text(that.text->clone()),
-  tables(that.tables)
+
+
+//-------------------------------------------------------------------------------
+//
+//   Constructor       from a set of rules supplied as a string.
+//
+//-------------------------------------------------------------------------------
+RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
+                                                UParseError          &parseError,
+                                                UErrorCode           &status)
 {
-    tables->addReference();
+    init();
+    RuleBasedBreakIterator *bi = (RuleBasedBreakIterator *)
+        RBBIRuleBuilder::createRuleBasedBreakIterator(rules, parseError, status);
+    if (U_SUCCESS(status)) {
+        *this = *bi;
+        delete bi;
+    }
 }
+
+
+//-------------------------------------------------------------------------------
+//
+// Default Constructor.      Create an empty shell that can be set up later.
+//                           Used when creating a RuleBasedBreakIterator from a set
+//                           of rules.
+//-------------------------------------------------------------------------------
+RuleBasedBreakIterator::RuleBasedBreakIterator() {
+    init();
+}
+
+
+//-------------------------------------------------------------------------------
+//
+//   Copy constructor.  Will produce a break iterator with the same behavior,
+//                      and which iterates over the same text, as the one passed in.
+//
+//-------------------------------------------------------------------------------
+RuleBasedBreakIterator::RuleBasedBreakIterator(const RuleBasedBreakIterator& other)
+{
+    this->init();
+    *this = other;
+}
+
 
 //=======================================================================
 // boilerplate
@@ -84,8 +108,10 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const RuleBasedBreakIterator& tha
  * Destructor
  */
 RuleBasedBreakIterator::~RuleBasedBreakIterator() {
-    delete text;
-    tables->removeReference();
+    delete fText;
+    if (fData != NULL) {
+        fData->removeReference();
+    }
 }
 
 /**
@@ -94,20 +120,62 @@ RuleBasedBreakIterator::~RuleBasedBreakIterator() {
  */
 RuleBasedBreakIterator&
 RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
-    delete text;
-    text = that.text->clone();
+    if (this == &that) {
+        return *this;
+    }
+    delete fText;
+    fText = NULL;
+    if (that.fText != NULL) {
+        fText = that.fText->clone();
+    }
 
-    tables->removeReference();
-    tables = that.tables;
-    tables->addReference();
+    if (fData != NULL) {
+        fData->removeReference();
+        fData = NULL;
+    }
+    if (that.fData != NULL) {
+        fData = that.fData->addReference();
+    }
+    fTrace = that.fTrace;
 
     return *this;
 }
 
-/**
- * Returns a newly-constructed RuleBasedBreakIterator with the same
- * behavior, and iterating over the same text, as this one.
- */
+
+
+//-----------------------------------------------------------------------------
+//
+//    init()      Shared initialization routine.   Used by all the constructors.
+//
+//-----------------------------------------------------------------------------
+UBool RuleBasedBreakIterator::fTrace = FALSE;
+void RuleBasedBreakIterator::init() {
+    static UBool debugInitDone = FALSE;
+    
+    fText                = NULL;
+    fData                = NULL;
+    fCharMappings        = NULL;
+    fLastBreakStatus     = 0;
+    fDictionaryCharCount = 0;   
+
+    if (debugInitDone == FALSE) {
+        char *debugEnv = getenv("U_RBBIDEBUG");
+        if (debugEnv && strstr(debugEnv, "trace")) {
+            fTrace = TRUE;
+        }
+        debugInitDone = TRUE;
+    }
+}
+
+
+
+//-----------------------------------------------------------------------------
+//
+//    clone - Returns a newly-constructed RuleBasedBreakIterator with the same
+//            behavior, and iterating over the same text, as this one.
+//            Virtual function: does the right thing with subclasses.
+//
+//-----------------------------------------------------------------------------
 BreakIterator*
 RuleBasedBreakIterator::clone(void) const {
     return new RuleBasedBreakIterator(*this);
@@ -124,8 +192,10 @@ RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
 
     
     const RuleBasedBreakIterator& that2 = (const RuleBasedBreakIterator&)that;
-    return (that2.text == text || *that2.text == *text)
-            && (that2.tables == tables || *that2.tables == *tables);
+    UBool r = (that2.fText == fText);
+    r |= (*that2.fText == *fText);
+    r &= (*that2.fData == *fData);
+    return r;
 }
 
 /**
@@ -134,7 +204,7 @@ RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
  */
 int32_t
 RuleBasedBreakIterator::hashCode(void) const {
-    return tables->hashCode();
+    return fData->hashCode();
 }
 
 /**
@@ -142,7 +212,7 @@ RuleBasedBreakIterator::hashCode(void) const {
  */
 const UnicodeString&
 RuleBasedBreakIterator::getRules() const {
-    return tables->getRules();
+    return fData->getRuleSourceString();
 }
 
 //=======================================================================
@@ -163,9 +233,9 @@ RuleBasedBreakIterator::getText() const {
     // The iterator is initialized pointing to no text at all, so if this
     // function is called while we're in that state, we have to fudge an
     // an iterator to return.
-    if (nonConstThis->text == NULL)
-        nonConstThis->text = new StringCharacterIterator("");
-    return *nonConstThis->text;
+    if (nonConstThis->fText == NULL)
+        nonConstThis->fText = new StringCharacterIterator("");
+    return *nonConstThis->fText;
 }
 
 /**
@@ -176,59 +246,31 @@ RuleBasedBreakIterator::getText() const {
 void
 RuleBasedBreakIterator::adoptText(CharacterIterator* newText) {
     reset();
-    delete text;
-    text = newText;
-    text->first();
+    delete fText;
+    fText = newText;
+    fText->first();
 }
 
 /**
- * Set the iterator to analyze a new piece of text.  This function resets
+ * Set the iterator to analyze a new piece of text.  This function resets 
  * the current iteration position to the beginning of the text.
  * @param newText An iterator over the text to analyze.
  */
 void
 RuleBasedBreakIterator::setText(const UnicodeString& newText) {
     reset();
-    if (text != NULL && text->getDynamicClassID()
+    if (fText != NULL && fText->getDynamicClassID()
             == StringCharacterIterator::getStaticClassID()) {
-        ((StringCharacterIterator*)text)->setText(newText);
+        ((StringCharacterIterator*)fText)->setText(newText);
     }
     else {
-        delete text;
-        text = new StringCharacterIterator(newText);
-        text->first();
+        delete fText;
+        fText = new StringCharacterIterator(newText);
+        fText->first();
     }
 }
 
-#ifdef ICU_ENABLE_DEPRECATED_BREAKITERATOR
-/**
- * Returns a newly-created CharacterIterator that the caller is to take
- * ownership of.
- * THIS FUNCTION SHOULD NOT BE HERE.  IT'S HERE BECAUSE BreakIterator DEFINES
- * IT AS PURE VIRTUAL, FORCING RBBI TO IMPLEMENT IT.  IT SHOULD BE REMOVED
- * FROM *BOTH* CLASSES.
- */
-CharacterIterator*
-RuleBasedBreakIterator::createText() const {
-    if (text == NULL)
-        return new StringCharacterIterator("");
-    else
-        return text->clone();
-}
 
-/**
- * Set the iterator to analyze a new piece of text.  This function resets
- * the current iteration position to the beginning of the text.
- * @param newText The text to analyze.
- * THIS FUNCTION SHOULD NOT BE HERE.  IT'S HERE BECAUSE BreakIterator DEFINES
- * IT AS PURE VIRTUAL, FORCING RBBI TO IMPLEMENT IT.  IT SHOULD BE REMOVED
- * FROM *BOTH* CLASSES.
- */
-void
-RuleBasedBreakIterator::setText(const UnicodeString* newText) {
-    setText(*newText);
-}
-#endif
 
 /**
  * Sets the current iteration position to the beginning of the text.
@@ -237,11 +279,11 @@ RuleBasedBreakIterator::setText(const UnicodeString* newText) {
  */
 int32_t RuleBasedBreakIterator::first(void) {
     reset();
-    if (text == NULL)
+    if (fText == NULL)
         return BreakIterator::DONE;
 
-    text->first();
-    return text->getIndex();
+    fText->first();
+    return fText->getIndex();
 }
 
 /**
@@ -251,14 +293,14 @@ int32_t RuleBasedBreakIterator::first(void) {
  */
 int32_t RuleBasedBreakIterator::last(void) {
     reset();
-    if (text == NULL)
+    if (fText == NULL)
         return BreakIterator::DONE;
     
     // I'm not sure why, but t.last() returns the offset of the last character,
     // rather than the past-the-end offset
 
-    int32_t pos = text->endIndex();
-    text->setIndex(pos);
+    int32_t pos = fText->endIndex();
+    fText->setIndex(pos);
     return pos;
 }
 
@@ -298,7 +340,7 @@ int32_t RuleBasedBreakIterator::next(void) {
  */
 int32_t RuleBasedBreakIterator::previous(void) {
     // if we're already sitting at the beginning of the text, return DONE
-    if (text == NULL || current() == text->startIndex())
+    if (fText == NULL || current() == fText->startIndex())
         return BreakIterator::DONE;
 
     // set things up.  handlePrevious() will back us up to some valid
@@ -307,7 +349,7 @@ int32_t RuleBasedBreakIterator::previous(void) {
     // the current position), but not necessarily the last one before
     // where we started
     int32_t start = current();
-    text->previous();
+    fText->previous32();
     int32_t lastResult = handlePrevious();
     int32_t result = lastResult;
     
@@ -321,7 +363,7 @@ int32_t RuleBasedBreakIterator::previous(void) {
     
     // set the current iteration position to be the last break position
     // before where we started, and then return that value
-    text->setIndex(lastResult);
+    fText->setIndex(lastResult);
     return lastResult;
 }
 
@@ -335,18 +377,18 @@ int32_t RuleBasedBreakIterator::following(int32_t offset) {
     // if the offset passed in is already past the end of the text,
     // just return DONE; if it's before the beginning, return the
     // text's starting offset
-    if (text == NULL || offset >= text->endIndex()) {
+    if (fText == NULL || offset >= fText->endIndex()) {
         return BreakIterator::DONE;
     }
-    else if (offset < text->startIndex()) {
-        return text->startIndex();
+    else if (offset < fText->startIndex()) {
+        return fText->startIndex();
     }
 
     // otherwise, set our internal iteration position (temporarily)
     // to the position passed in.  If this is the _beginning_ position,
     // then we can just use next() to get our return value
-    text->setIndex(offset);
-    if (offset == text->startIndex())
+    fText->setIndex(offset);
+    if (offset == fText->startIndex())
         return handleNext();
 
     // otherwise, we have to sync up first.  Use handlePrevious() to back
@@ -372,17 +414,17 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
     // if the offset passed in is already past the end of the text,
     // just return DONE; if it's before the beginning, return the
     // text's starting offset
-    if (text == NULL || offset > text->endIndex()) {
+    if (fText == NULL || offset > fText->endIndex()) {
         return BreakIterator::DONE;
     }
-    else if (offset < text->startIndex()) {
-        return text->startIndex();
+    else if (offset < fText->startIndex()) {
+        return fText->startIndex();
     }
     
     // if we start by updating the current iteration position to the
     // position specified by the caller, we can just use previous()
     // to carry out this operation
-    text->setIndex(offset);
+    fText->setIndex(offset);
     return previous();
 }
 
@@ -395,12 +437,12 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
  */
 UBool RuleBasedBreakIterator::isBoundary(int32_t offset) {
     // the beginning index of the iterator is always a boundary position by definition
-    if (text == NULL || offset == text->startIndex()) {
+    if (fText == NULL || offset == fText->startIndex()) {
         return TRUE;
     }
 
     // out-of-range indexes are never boundary positions
-    else if (offset < text->startIndex() || offset > text->endIndex()) {
+    else if (offset < fText->startIndex() || offset > fText->endIndex()) {
         return FALSE;
     }
         
@@ -416,153 +458,285 @@ UBool RuleBasedBreakIterator::isBoundary(int32_t offset) {
  * @return The current iteration position.
  */
 int32_t RuleBasedBreakIterator::current(void) const {
-    return (text != NULL) ? text->getIndex() : BreakIterator::DONE;
+    return (fText != NULL) ? fText->getIndex() : BreakIterator::DONE;
 }
 
 //=======================================================================
-// implementation
+// implementation 
 //=======================================================================
 
-/**
- * This method is the actual implementation of the next() method.  All iteration
- * vectors through here.  This method initializes the state machine to state 1
- * and advances through the text character by character until we reach the end
- * of the text or the state machine transitions to state 0.  We update our return
- * value every time the state machine passes through a possible end state.
- */
+
+//-----------------------------------------------------------------------------------
+//
+//  handleNext()
+//     This method is the actual implementation of the next() method.  All iteration
+//     vectors through here.  This method initializes the state machine to state 1
+//     and advances through the text character by character until we reach the end
+//     of the text or the state machine transitions to state 0.  We update our return
+//     value every time the state machine passes through a possible end state.
+//
+//-----------------------------------------------------------------------------------
 int32_t RuleBasedBreakIterator::handleNext(void) {
+    if (fTrace) {
+        printf("Handle Next   pos   char  state category  \n");
+    }
     // if we're already at the end of the text, return DONE.
-    if (text == NULL || tables == NULL || text->getIndex() == text->endIndex())
+    if (fText == NULL || fData == NULL || fText->getIndex() == fText->endIndex())
         return BreakIterator::DONE;
 
     // no matter what, we always advance at least one character forward
-    int32_t result = text->getIndex() + 1;
+    int32_t result = fText->getIndex() + 1;
     int32_t lookaheadResult = 0;
     
     // begin in state 1
-    int32_t state = START_STATE;
-    int32_t category;
-    UChar c = text->current();
-    UChar lastC = c;
-    int32_t lastCPos = 0;
+    int32_t            state    = START_STATE;
+    int16_t            category;
+    UChar32            c        = fText->current32();  
+    RBBIStateTableRow *row;
+    int32_t            lookaheadStatus = 0;
 
+    row = (RBBIStateTableRow *)
+        (fData->fForwardTable->fTableData + (fData->fForwardTable->fRowLen * state));
+    UTRIE_GET16(&fData->fTrie, c, category);
+    if ((category & 0x4000) != 0)  {
+          fDictionaryCharCount++;
+          category &= ~0x4000;
+        }
+  
+      // loop until we reach the end of the text or transition to state 0
+      for (;;) {
+        if (c == CharacterIterator::DONE ) {
+            break;
+        }
+        // look up the current character's character category, which tells us
+        // which column in the state table to look at.
+        // Note:  the 16 in UTRIE_GET16 refers to the size of the data being returned,
+        //        not the size of the character going in.
+        //
+        //  And off bit 14, which flags use of a dictionary for dictionary based
+        //    iterators, but should be ignored here.
+        UTRIE_GET16(&fData->fTrie, c, category);
 
-    // loop until we reach the end of the text or transition to state 0
-    while (c != CharacterIterator::DONE && state != STOP_STATE) {
+        // Check the dictionary bit in the character's category.
+        //    Counter is only used by dictionary based iterators.
+        //
+        if ((category & 0x4000) != 0)  {
+            fDictionaryCharCount++;
+            category &= ~0x4000;
+        }
 
-        // look up the current character's character category (which tells us
-        // which column in the state table to look at)
-        category = tables->lookupCategory(c, this);
+        if (fTrace) {
+            printf("             %4d   ", fText->getIndex());
+            if (0x20<=c && c<0x7f) {
+                printf("\"%c\"  ", c);
+            } else {
+                printf("%5x  ", c);
+            }
+            printf("%3d  %3d\n", state, category);
+        }
+
+        // look up a state transition in the state table
+        state = row->fNextState[category];
+        row = (RBBIStateTableRow *)
+            (fData->fForwardTable->fTableData + (fData->fForwardTable->fRowLen * state));
         
-        // if the character isn't an ignore character, look up a state
-        // transition in the state table
-        if (category != UBRK_IGNORE) {
-            state = tables->lookupState(state, category);
+        // Get the next character.  Doing it here positions the iterator
+        //    to the correct position for recording matches in the code that
+        //    follows.
+        c = fText->next32();
+        
+        if (row->fAccepting == 0 && row->fLookAhead == 0) {
+            // No match, nothing of interest happening, common case.
+            goto continueOn;
         }
         
-        // if the state we've just transitioned to is a lookahead state,
-        // (but not also an end state), save its position.  If it's
-        // both a lookahead state and an end state, update the break position
-        // to the last saved lookup-state position
-        if (tables->isLookaheadState(state)) {
-            if (tables->isEndState(state)) {
-                if (lookaheadResult > 0) {
-                    result = lookaheadResult;
-                }
-                else {
-                    result = text->getIndex() + 1;
-                }
+        if (row->fAccepting != 0 && row->fLookAhead == 0) {
+            // Match found, common case, no lookahead involved.
+            result = fText->getIndex();
+            lookaheadStatus = 0;     // clear out any pending look-ahead matches.
+            goto continueOn;
+        }
+        
+        if (row->fAccepting == 0 && row->fLookAhead != 0) {
+            // Lookahead match point.  Remember it, but only if no other rule has
+            //                         unconitionally matched up to this point.
+            // TODO:  handle case where there's a pending match from a different rule
+            //        where lookaheadStatus != 0  && lookaheadStatus != row->fLookAhead.
+            int32_t  r = fText->getIndex();
+            if (r > result) {
+                lookaheadResult = r;
+                lookaheadStatus = row->fLookAhead;
             }
-            else {
-                lookaheadResult = text->getIndex() + 1;
-            }
+            goto continueOn;
         }
 
-        // otherwise, if the state we've just transitioned to is an accepting state,
-        // update our return value to be the current iteration position
-        else {
-            if (tables->isEndState(state)) {
-                result = text->getIndex() + 1;
+        if (row->fAccepting != 0 && row->fLookAhead != 0) {
+            // Lookahead match is completed.  Set the result accordingly, but only
+            //   if no other rule has matched further in the mean time.
+            if (lookaheadResult > result) {
+                assert(row->fAccepting == lookaheadStatus);   // TODO:  handle this case
+                //    of overlapping lookahead matches.
+                result = lookaheadResult;
+                lookaheadStatus = 0;
             }
+            goto continueOn;
         }
-            
-        // keep track of the last "real" character we saw.  If this character isn't an
-        // ignore character, take note of it and its position in the text
-        if (category != UBRK_IGNORE && state != STOP_STATE) {
-            lastC = c;
-            lastCPos = text->getIndex();
+
+continueOn:
+        if (state == STOP_STATE) {
+            break;
         }
-        c = text->next();
+        
+        // c = fText->next32();
     }
 
     // if we've run off the end of the text, and the very last character took us into
     // a lookahead state, advance the break position to the lookahead position
     // (the theory here is that if there are no characters at all after the lookahead
     // position, that always matches the lookahead criteria)
-    if (c == CharacterIterator::DONE && lookaheadResult == text->endIndex()) {
+    if (c == CharacterIterator::DONE && lookaheadResult == fText->endIndex()) {
         result = lookaheadResult;
     }
         
-    // if the last character we saw before the one that took us into the stop state
-    // was a mandatory breaking character, then the break position goes right after it
-    // (this is here so that breaks come before, rather than after, a string of
-    // ignore characters when they follow a mandatory break character)
-    else if (lastC == 0x0a || lastC == 0x0d || lastC == 0x0c || lastC == 0x2028
-            || lastC == 0x2029) {
-        result = lastCPos + 1;
-    }
 
-    text->setIndex(result);
+    fText->setIndex(result);
+    if (fTrace) {
+        printf("result = %d\n\n", result);
+    }
     return result;
 }
 
-/**
- * This method backs the iterator back up to a "safe position" in the text.
- * This is a position that we know, without any context, must be a break position.
- * The various calling methods then iterate forward from this safe position to
- * the appropriate position to return.  (For more information, see the description
- * of buildBackwardsStateTable() in RuleBasedBreakIterator.Builder.)
- */
+//-----------------------------------------------------------------------------------
+//
+//  handlePrevious()
+//
+//      This method backs the iterator back up to a "safe position" in the text.
+//      This is a position that we know, without any context, must be a break position.
+//      The various calling methods then iterate forward from this safe position to
+//      the appropriate position to return.  (For more information, see the description
+//      of buildBackwardsStateTable() in RuleBasedBreakIterator.Builder.)
+//
+//-----------------------------------------------------------------------------------
 int32_t RuleBasedBreakIterator::handlePrevious(void) {
-    if (text == NULL || tables == NULL)
+    if (fText == NULL || fData == NULL) { 
         return 0;
+    }
+    if (fData->fReverseTable == NULL) {
+        return fText->setToStart();
+    }
+        
+    int32_t            state           = START_STATE;
+    int32_t            category;
+    int32_t            lastCategory    = 0;
+    int32_t            result          = fText->getIndex();
+    int32_t            lookaheadStatus = 0;
+    int32_t            lookaheadResult = 0;
+    UChar32            c               = fText->current32();
+    RBBIStateTableRow *row;
+
+    row = (RBBIStateTableRow *)
+        (this->fData->fReverseTable->fTableData + (state * fData->fReverseTable->fRowLen));
+    UTRIE_GET16(&fData->fTrie, c, category);
+    if ((category & 0x4000) != 0)  {
+        fDictionaryCharCount++;
+        category &= ~0x4000;
+    }
     
-    int32_t state = START_STATE;
-    int32_t category = 0;
-    int32_t lastCategory = 0;
-    UChar c = text->current();
+    if (fTrace) {
+        printf("Handle Prev   pos   char  state category  \n");
+    }
     
     // loop until we reach the beginning of the text or transition to state 0
-    while (c != CharacterIterator::DONE && state != STOP_STATE) {
+    for (;;) {
+        if (c == CharacterIterator::DONE) {
+            break;
+        }
 
         // save the last character's category and look up the current
         // character's category
         lastCategory = category;
-        category = tables->lookupCategory(c, this);
+        UTRIE_GET16(&fData->fTrie, c, category);
+
+        // Check the dictionary bit in the character's category.
+        //    Counter is only used by dictionary based iterators.
+        //
+        if ((category & 0x4000) != 0)  {
+            fDictionaryCharCount++;
+            category &= ~0x4000;
+        }
+
+        if (fTrace) {
+            printf("             %4d   ", fText->getIndex());
+            if (0x20<=c && c<0x7f) {
+                printf("\"%c\"  ", c);
+            } else {
+                printf("%5x  ", c);
+            }
+            printf("%3d  %3d\n", state, category);
+        }
+
+        // look up a state transition in the backwards state table
+        state = row->fNextState[category];
+        row = (RBBIStateTableRow *)
+            (this->fData->fReverseTable->fTableData + (state * fData->fReverseTable->fRowLen));
+
+        if (row->fAccepting == 0 && row->fLookAhead == 0) {
+            // No match, nothing of interest happening, common case.
+            goto continueOn;
+        }
         
-        // if the current character isn't an ignore character, look up a
-        // state transition in the backwards state table
-        if (category != UBRK_IGNORE)
-            state = tables->lookupBackwardState(state, category);
+        if (row->fAccepting != 0 && row->fLookAhead == 0) {
+            // Match found, common case, no lookahead involved.
+            result = fText->getIndex();
+            lookaheadStatus = 0;     // clear out any pending look-ahead matches.
+            goto continueOn;
+        }
+        
+        if (row->fAccepting == 0 && row->fLookAhead != 0) {
+            // Lookahead match point.  Remember it, but only if no other rule
+            //   has unconditinally matched to this point.
+            // TODO:  handle case where there's a pending match from a different rule
+            //        where lookaheadStatus != 0  && lookaheadStatus != row->fLookAhead.
+            int32_t  r = fText->getIndex();
+            if (r > result) {
+                lookaheadResult = r;
+                lookaheadStatus = row->fLookAhead;
+            }
+            goto continueOn;
+        }
+        
+        if (row->fAccepting != 0 && row->fLookAhead != 0) {
+            // Lookahead match is completed.  Set the result accordingly, but only
+            //   if no other rule has matched further in the mean time.
+            if (lookaheadResult > result) {
+                assert(row->fAccepting == lookaheadStatus);   // TODO:  handle this case
+                //    of overlapping lookahead matches.
+                result = lookaheadResult;
+                lookaheadStatus = 0;
+            }
+            goto continueOn;
+        }
+
+continueOn:
+        if (state == STOP_STATE) {
+            break;
+        }
             
         // then advance one character backwards
-        c = text->previous();
+        c = fText->previous32();
     }
     
-    // if we didn't march off the beginning of the text, we're either one or two
-    // positions away from the real break position.  (One because of the call to
-    // previous() at the end of the loop above, and another because the character
-    // that takes us into the stop state will always be the character BEFORE
-    // the break position.)
-    if (c != CharacterIterator::DONE) {
-        if (lastCategory != UBRK_IGNORE)
-            text->setIndex(text->getIndex() + 2);
-        else
-            text->next();
-    }
+    // Note:  the result postion isn't what is returned to the user by previous(), 
+    //        but where the implementation of previous() turns around and 
+    //        starts iterating forward again.
+    if (c == CharacterIterator::DONE) {
+        result = fText->startIndex();
+    } 
+    fText->setIndex(result);  
 
-    return text->getIndex();
+    return result;
 }
+
 
 void
 RuleBasedBreakIterator::reset()
@@ -571,103 +745,143 @@ RuleBasedBreakIterator::reset()
     // Subclasses may override with their own reset behavior.
 }
 
-// internal type for BufferClone 
-struct bufferCloneStructUChar
-{
-    uint8_t bi   [sizeof(RuleBasedBreakIterator)] ;
-    uint8_t text [sizeof(UCharCharacterIterator)] ;
-};
 
-struct bufferCloneStructString
-{
-    uint8_t bi   [sizeof(RuleBasedBreakIterator)] ;
-    uint8_t text [sizeof(StringCharacterIterator)] ;
-};
 
+//-------------------------------------------------------------------------------
+//
+//   getRuleStatus()
+//
+//-------------------------------------------------------------------------------
+int16_t  RuleBasedBreakIterator::getRuleStatus() const {
+    return fLastBreakStatus;
+}
+
+
+//-------------------------------------------------------------------------------
+//
+//   getFlattenedData      Access to the compiled form of the rules,
+//                         for use by build system tools that save the data
+//                         for standard iterator types.
+//
+//-------------------------------------------------------------------------------
+const uint8_t  *RuleBasedBreakIterator::getFlattenedData(uint32_t *length) {
+    const uint8_t  *retPtr = NULL;
+    *length = 0;
+
+    if (fData != NULL) {
+        retPtr = (const uint8_t *)fData->fHeader;
+         *length = fData->fHeader->fLength;
+    }
+    return retPtr;
+}
+
+
+
+
+//-------------------------------------------------------------------------------
+//
+//  BufferClone       TODO:  In my (Andy) opinion, this function should be deprecated.
+//                    Saving one heap allocation isn't worth the trouble.
+//                    Cloning shouldn't be done in tight loops, and
+//                    making the clone copy involves other heap operations anyway.
+//                    And the application code for correctly dealing with buffer
+//                    size problems and the eventual object destruction is ugly.
+//
+//-------------------------------------------------------------------------------
 BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
-                                   int32_t &BufferSize,
+                                   int32_t &bufferSize,
                                    UErrorCode &status)
 {
-    RuleBasedBreakIterator * localIterator;
-    int32_t bufferSizeNeeded = 0; 
-    UBool IterIsUChar = FALSE;
-    UBool IterIsString = FALSE;
-    char *stackBufferChars = (char *)stackBuffer;
-
     if (U_FAILURE(status)){
-        return 0;
+        return NULL;
     }
 
-    /* Pointers on 64-bit platforms need to be aligned
-     * on a 64-bit boundry in memory.
-     */
+    //
+    //  If user buffer size is zero this is a preflight operation to 
+    //    obtain the needed buffer size, allowing for worst case misalignment.
+    //
+    if (bufferSize == 0) {
+        bufferSize = sizeof(RuleBasedBreakIterator) + U_ALIGNMENT_OFFSET_UP(0);
+        return NULL;
+    }
+
+
+    //
+    //  Check the alignment and size of the user supplied buffer.
+    //  Allocate heap memory if the user supplied memory is insufficient.
+    //
+    char    *buf   = (char *)stackBuffer;
+    int32_t s      = bufferSize;
+
+    if (stackBuffer == NULL) {
+        s = 0;   // Ignore size, force allocation if user didn't give us a buffer.
+    }
     if (U_ALIGNMENT_OFFSET(stackBuffer) != 0) {
-        int32_t offsetUp = (int32_t)U_ALIGNMENT_OFFSET_UP(stackBufferChars);
-        BufferSize -= offsetUp;
-        stackBufferChars += offsetUp;
+        int32_t offsetUp = (int32_t)U_ALIGNMENT_OFFSET_UP(buf);
+        s   -= offsetUp;
+        buf += offsetUp;
     }
-    stackBuffer = (void *)stackBufferChars;
+    if (s < sizeof(RuleBasedBreakIterator)) {
+        buf = (char *) new RuleBasedBreakIterator;
+        if (buf == 0) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+        status = U_SAFECLONE_ALLOCATED_WARNING;
+    }
 
-    if (text == NULL)
-    {
-        bufferSizeNeeded = (int32_t) sizeof(RuleBasedBreakIterator);
+    //
+    //  Clone the object.
+    //    TODO:  using an overloaded operator new to directly initialize the
+    //           copy in the user's buffer would be better, but it doesn't seem
+    //           to get along with namespaces.  Investigate why.
+    //
+    //           The memcpy is only safe with an empty (default constructed)
+    //           break iterator.  Use on others can screw up reference counts
+    //           to data.  memcpy-ing objects is not really a good idea...
+    //
+    RuleBasedBreakIterator localIter;        // Empty break iterator, source for memcpy
+    RuleBasedBreakIterator *clone = (RuleBasedBreakIterator *)buf;
+    uprv_memcpy(clone, &localIter, sizeof(RuleBasedBreakIterator)); // clone = empty, but initialized, iterator.
+    *clone = *this;                          // clone = the real one we want.
+    if (status != U_SAFECLONE_ALLOCATED_WARNING) {
+        clone->fBufferClone = TRUE;
     }
-    else if (text->getDynamicClassID() == StringCharacterIterator::getStaticClassID()) 
-    {
-        bufferSizeNeeded = (int32_t) sizeof(struct bufferCloneStructString);
-        IterIsString = TRUE;
-    } 
-    else if (text->getDynamicClassID() == UCharCharacterIterator::getStaticClassID()) 
-    {
-        bufferSizeNeeded = (int32_t) sizeof(struct bufferCloneStructUChar);
-        IterIsUChar = TRUE;
-    }
-    else
-    {
-        // code has changed - time to make a real CharacterIterator::CreateBufferClone()
-    }
-    if (BufferSize <= 0){ /* 'preflighting' request - set needed size into *pBufferSize */
-        BufferSize = bufferSizeNeeded;
-        return 0;
-    }
-    if (BufferSize < bufferSizeNeeded || !stackBuffer)
-    {
-        /* allocate one here...*/
-        localIterator = new RuleBasedBreakIterator(*this);
-        status = U_SAFECLONE_ALLOCATED_ERROR;
-        return localIterator;
-    }
-    if (IterIsUChar) {
-        struct bufferCloneStructUChar * localClone 
-                = (struct bufferCloneStructUChar  *)stackBuffer;
-        localIterator = (RuleBasedBreakIterator *)&localClone->bi;
-        uprv_memcpy(localIterator, this, sizeof(RuleBasedBreakIterator));
-        uprv_memcpy(&localClone->text, text, sizeof(UCharCharacterIterator));
-        localIterator->text = (CharacterIterator *) &localClone->text;
-    } else if (IterIsString) {
-        struct bufferCloneStructString * localClone 
-                = (struct bufferCloneStructString  *)stackBuffer;
-        localIterator = (RuleBasedBreakIterator *)&localClone->bi;
-        uprv_memcpy(localIterator, this, sizeof(RuleBasedBreakIterator));
-        uprv_memcpy(&localClone->text, text, sizeof(StringCharacterIterator));
-        localIterator->text = (CharacterIterator *)&localClone->text;
-    } else {
-        RuleBasedBreakIterator * localClone 
-                = (RuleBasedBreakIterator *)stackBuffer;
-        localIterator = localClone;
-        uprv_memcpy(localIterator, this, sizeof(RuleBasedBreakIterator));
-    }
- 
-    localIterator->fBufferClone = TRUE;
- 
-    return localIterator;    
+
+    return clone;    
 }
 
+
+
+//-------------------------------------------------------------------------------
+//
+//   debugDumpTables     Debugging Function
+//
+//-------------------------------------------------------------------------------
 #ifdef RBBI_DEBUG
 void RuleBasedBreakIterator::debugDumpTables() const {
-    tables->debugDumpTables();
+    fData->debugDumpTables();
 }
 #endif
+
+
+
+//-------------------------------------------------------------------------------
+//
+//  isDictionaryChar      Return true if the category lookup for this char
+//                        indicates that it is in the set of dictionary lookup
+//                        chars.
+//
+//                        This function is intended for use by dictionary based
+//                        break iterators.
+//
+//-------------------------------------------------------------------------------
+UBool RuleBasedBreakIterator::isDictionaryChar(UChar32   c) {
+    uint16_t category;
+    UTRIE_GET16(&fData->fTrie, c, category);
+    return (category & 0x4000) != 0;
+}
+
 
 
 U_NAMESPACE_END

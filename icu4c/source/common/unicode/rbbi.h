@@ -13,11 +13,17 @@
 #include "unicode/utypes.h"
 #include "unicode/brkiter.h"
 #include "unicode/udata.h"
+#include "unicode/parseerr.h"
+#include "utrie.h"
+
+#include "rbbidata.h"
 
 U_NAMESPACE_BEGIN
 
 class RuleBasedBreakIteratorTables;
 class BreakIterator;
+
+
 
 /**
  * <p>A subclass of BreakIterator whose behavior is specified using a list of rules.</p>
@@ -177,72 +183,91 @@ class BreakIterator;
  *   </table>
  * </blockquote>
  *
- * <p>For a more complete explanation, see <a
- * href="http://www.ibm.com/developerworks/unicode/library/boundaries/boundaries.html">http://www.ibm.com/developerworks/unicode/library/boundaries/boundaries.html</a>.
- * &nbsp; For examples, see the resource data (which is annotated).</p>
- *
- * @author Richard Gillam
  */
+
+
+
+
 class U_COMMON_API RuleBasedBreakIterator : public BreakIterator {
-
-protected:
-    /**
-     * A token used as a character-category value to identify ignore characters
-     */
-    static const int8_t UBRK_IGNORE;
-    friend class DictionaryBasedBreakIteratorTables;
-
-private:
-    /**
-     * The state number of the starting state
-     */
-    static const int16_t START_STATE;
-
-    /**
-     * The state-transition value indicating "stop"
-     */
-    static const int16_t STOP_STATE;
 
 protected:
     /**
      * The character iterator through which this BreakIterator accesses the text
      */
-    CharacterIterator* text;
+    CharacterIterator*  fText;
 
-    /**
-     * The data tables this iterator uses to determine the break positions
-     */
-    RuleBasedBreakIteratorTables* tables;
+    //
+    // The rule data for this BreakIterator instance
+    //
+    RBBIDataWrapper    *fData;
+    UTrie              *fCharMappings;
+    int16_t             fLastBreakStatus;
+
+    //
+    // Counter for the number of characters encountered with the "dictionary"
+    //   flag set.  Normal RBBI iterators don't use it, although the code
+    //   for updating it is live.  Dictionary Based break iterators (a subclass
+    //   of us) access this field directly.
+    //
+    uint32_t           fDictionaryCharCount;
+
+    //
+    // Debugging flag.
+    //
+    static UBool        fTrace;
+    
+
 
 private:
     /**
      * Class ID
      */
     static const char fgClassID;
-/*
- * HSYS: To be revisited, once the ctor are made public.
- */
- protected:
+
+protected:
     //=======================================================================
     // constructors
     //=======================================================================
+     
+     // This constructor uses the udata interface to create a BreakIterator whose
+     // internal tables live in a memory-mapped file.  "image" is a pointer to the
+     // beginning of that file.
+     RuleBasedBreakIterator(UDataMemory* image, UErrorCode &status);
 
-// This constructor uses the udata interface to create a BreakIterator whose
-// internal tables live in a memory-mapped file.  "image" is a pointer to the
-// beginning of that file.
-RuleBasedBreakIterator(UDataMemory* image);
+     //
+     // Constructor from a flattened set of RBBI data in malloced memory.
+     //             RulesBasedBreakIterators built from a custom set of rules
+     //             are created via this constructor; the rules are compiled
+     //             into memory, then the break iterator is constructed here.
+     //
+     //             The break iterator adopts the memory, and will
+     //             uprv_free() it when done.
+     RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status);
 
+     friend class RBBIRuleBuilder;
+     friend class BreakIterator;
+
+
+     
  public:
+
+     /** Default constructor.  Creates an empty shell of an iterator, with no
+      *  rules or text to iterate over.   Object can subsequently be assigned.
+      */
+     RuleBasedBreakIterator();
+
     /**
-     * Copy constructor.  Will produce a collator with the same behavior,
+     * Copy constructor.  Will produce a break iterator with the same behavior,
      * and which iterates over the same text, as the one passed in.
      */
     RuleBasedBreakIterator(const RuleBasedBreakIterator& that);
 
-    //=======================================================================
-    // boilerplate
-    //=======================================================================
-
+    /**
+     *   Construct a RuleBasedBreakIterator from a set of rules supplied as a string.
+     */
+    RuleBasedBreakIterator( const UnicodeString    &rules,
+                             UParseError             &parseError,
+                             UErrorCode              &status);
     /**
      * Destructor
      */
@@ -269,8 +294,10 @@ RuleBasedBreakIterator(UDataMemory* image);
     /**
      * Returns a newly-constructed RuleBasedBreakIterator with the same
      * behavior, and iterating over the same text, as this one.
+     * Differs from the copy constructor in that it is polymorphic, and
+     *   will correctly clone (copy) a derived class.
      */
-    virtual BreakIterator* clone(void) const;
+    virtual BreakIterator* clone() const;
 
     /**
      * Compute a hash code for this BreakIterator
@@ -296,28 +323,6 @@ RuleBasedBreakIterator(UDataMemory* image);
      */
     virtual const CharacterIterator& getText(void) const;
 
-#ifdef ICU_ENABLE_DEPRECATED_BREAKITERATOR
-    /**
-     * Returns a newly-created CharacterIterator that the caller is to take
-     * ownership of.
-     * @deprecated This will be removed after 2000-Dec-31.
-     * THIS FUNCTION SHOULD NOT BE HERE.  IT'S HERE BECAUSE BreakIterator DEFINES
-     * IT AS PURE VIRTUAL, FORCING RBBI TO IMPLEMENT IT.  IT SHOULD BE REMOVED
-     * FROM *BOTH* CLASSES.  Use getText() instead.
-     */
-    virtual CharacterIterator* createText(void) const;
-
-    /**
-     * Set the iterator to analyze a new piece of text.  This function resets
-     * the current iteration position to the beginning of the text.
-     * @param newText The text to analyze.
-     * @deprecated
-     * THIS FUNCTION SHOULD NOT BE HERE.  IT'S HERE BECAUSE BreakIterator DEFINES
-     * IT AS PURE VIRTUAL, FORCING RBBI TO IMPLEMENT IT.  IT SHOULD BE REMOVED
-     * FROM *BOTH* CLASSES. Use the other setText() instead.
-     */
-    virtual void setText(const UnicodeString* newText);
-#endif
 
     /**
      * Set the iterator to analyze a new piece of text.  This function resets
@@ -402,6 +407,15 @@ RuleBasedBreakIterator(UDataMemory* image);
      */
     virtual int32_t current(void) const;
 
+
+    /**
+     * Return the status from the break rule that determined the most recently
+     * returned break position.  The values appear in the rule source
+     * within brackets, {123}, for example.  For rules that do not specify a
+     * status, a default value of 0 is returned.
+     */
+    virtual int16_t getRuleStatus() const;
+
     /**
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
      * This method is to implement a simple version of RTTI, since not all
@@ -429,6 +443,22 @@ RuleBasedBreakIterator(UDataMemory* image);
     virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,
                                                UErrorCode &status);
+
+
+    /**
+     * Return the flattened form of compiled break rules,
+     * which can then be used to create a new break iterator at some
+     * time in the future.  Creating a break iterator in this way
+     * is much faster than building one from the source form of the
+     * break rules.
+     *
+     * @return   A pointer to the flattened rule data.  The storage
+     *           belongs to the RulesBasedBreakIterator object, no the
+     *           caller, and must not be modified or deleted.
+     */
+    virtual const uint8_t *getFlattenedData(uint32_t *length);
+
+
 #ifdef RBBI_DEBUG
     void debugDumpTables() const;
 #endif
@@ -463,17 +493,29 @@ protected:
      */
     virtual void reset(void);
 
-private:
+    /**
+      * Return true if the category lookup for this char
+      * indicates that it is in the set of dictionary lookup chars.
+      * This function is intended for use by dictionary based break iterators.
+      */               
+    virtual UBool isDictionaryChar(UChar32);
 
     /**
-     * Constructs a RuleBasedBreakIterator that uses the already-created
-     * tables object that is passed in as a parameter.
-     */
-    RuleBasedBreakIterator(RuleBasedBreakIteratorTables* adoptTables);
-
-    friend class BreakIterator;
+      * Common initialization function, used by constructors and bufferClone.
+      *   (Also used by DictionaryBasedBreakIterator::createBufferClone().)
+      */
+    void init();
 
 };
+
+
+
+    
+//----------------------------------------------------------------------------------
+//
+//   Inline Functions Definitions ...
+//
+//----------------------------------------------------------------------------------
 
 inline UBool RuleBasedBreakIterator::operator!=(const BreakIterator& that) const {
     return !operator==(that);
@@ -486,6 +528,8 @@ inline UClassID RuleBasedBreakIterator::getDynamicClassID(void) const {
 inline UClassID RuleBasedBreakIterator::getStaticClassID(void) {
     return (UClassID)(&fgClassID);
 }
+
+
 
 U_NAMESPACE_END
 

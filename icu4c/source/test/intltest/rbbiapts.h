@@ -59,6 +59,11 @@ public:
    void TestIsBoundary(void);
 
     /**
+     * Tests creating RuleBasedBreakIterator from rules strings.
+     **/
+   void TestBuilder(void);
+
+    /**
      *Internal subroutines
      **/
     /* Internal subroutine used by TestIsBoundary() */ 

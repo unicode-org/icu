@@ -49,11 +49,6 @@ class DictionaryBasedBreakIteratorTables;
 class U_COMMON_API DictionaryBasedBreakIterator : public RuleBasedBreakIterator {
 
 private:
-    /**
-     * a temporary hiding place for the number of dictionary characters in the
-     * last range passed over by next()
-     */
-    int32_t dictionaryCharCount;
 
     /**
      * when a range of characters is divided up using the dictionary, the break
@@ -73,6 +68,8 @@ private:
      * cache the current iteration position refers to
      */
     int32_t positionInCache;
+
+    DictionaryBasedBreakIteratorTables  *fTables;
 
     /**
      * Class ID
@@ -103,6 +100,17 @@ public:
      * Destructor
      */
     virtual ~DictionaryBasedBreakIterator();
+
+    /**
+     * Default constructor.  Creates an "empty" break iterator.
+     * Such an iterator can subsequently be assigned to.
+     */
+     DictionaryBasedBreakIterator();
+
+     /**
+      * Copy constructor.
+      */
+     DictionaryBasedBreakIterator(const DictionaryBasedBreakIterator &other);
 
     /**
      * Assignment operator.  Sets this iterator to have the same behavior,
@@ -179,10 +187,15 @@ protected:
     virtual int32_t handleNext(void);
 
     /**
-     * dumps the cache of break positions (usually in response to a change in
+     * removes the cache of break positions (usually in response to a change in
      * position of some sort)
      */
     virtual void reset(void);
+
+    //
+    //  init    Initialize a dbbi.  Common routine for use by constructors.
+    //
+    void init();
 
     virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,
@@ -200,11 +213,6 @@ private:
      */
     void divideUpDictionaryRange(int32_t startPos, int32_t endPos, UErrorCode &status);
 
-    /**
-     * Used by the tables object to increment the count of dictionary characters
-     * during iteration
-     */
-    void bumpDictionaryCharCount(void);
 
     /*
      * HSYS : Please revisit with Rich, the ctors of the DBBI class is currently
@@ -222,9 +230,6 @@ inline UClassID DictionaryBasedBreakIterator::getStaticClassID(void) {
     return (UClassID)(&fgClassID);
 }
 
-inline void DictionaryBasedBreakIterator::bumpDictionaryCharCount(void) {
-    ++dictionaryCharCount;
-}
 U_NAMESPACE_END
 
 #endif

@@ -473,7 +473,23 @@ enum UErrorCode {
     U_UNSUPPORTED_ATTRIBUTE,
     U_FMT_PARSE_ERROR_LIMIT,
    
-    U_ERROR_LIMIT=U_FMT_PARSE_ERROR_LIMIT /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
+    /* 
+     * the error code range 0x10200 0x10300 are reserved for Break Iterator related error
+     */
+     U_BRK_ERROR_START=0x10200,
+     U_BRK_INTERNAL_ERROR,
+     U_BRK_HEX_DIGITS_EXPECTED,
+     U_BRK_SEMICOLON_EXPECTED,
+     U_BRK_RULE_SYNTAX,
+     U_BRK_UNCLOSED_SET,
+     U_BRK_ASSIGN_ERROR,
+     U_BRK_VARIABLE_REDFINITION,
+     U_BRK_MISMATCHED_PAREN,
+     U_BRK_NEW_LINE_IN_QUOTED_STRING,
+     U_BRK_UNDEFINED_VARIABLE,
+     U_BRK_ERROR_LIMIT,
+
+    U_ERROR_LIMIT=U_BRK_ERROR_LIMIT /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
 };
 
 #ifndef XP_CPLUSPLUS

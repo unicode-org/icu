@@ -228,6 +228,9 @@ ALL : GODATA "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" "$(TESTDATAOUT)\testdata.dat"
 	@echo building testdata...
 	nmake /nologo /f "$(TESTDATA)\testdata.mk" TESTDATA=. ICUTOOLS="$(ICUTOOLS)" PKGOPT="$(PKGOPT)" CFG=$(CFG) TESTDATAOUT="$(TESTDATAOUT)" ICUDATA="$(ICUDATA)" TESTDATABLD="$(TESTDATABLD)"
 
+#
+#  Break iterator data files.
+#
 BRK_FILES = "$(ICUBLD)\sent.brk" "$(ICUBLD)\char.brk" "$(ICUBLD)\line.brk" "$(ICUBLD)\word.brk" "$(ICUBLD)\title.brk" "$(ICUBLD)\line_th.brk" "$(ICUBLD)\word_th.brk"
 
 #invoke pkgdata for ICU common data
@@ -262,27 +265,31 @@ $(BRK_FILES:.brk" =.brk"
 
  
 
+# RBBI .brk file generation.
+#      TODO:  set up an inference rule, so these don't need to be written out one by one...
+#
 
-"$(ICUBLD)\sent.brk" : "$(ICUBRK)\sentLE.brk"
-    copy "$(ICUBRK)\sentLE.brk" "$(ICUBLD)\sent.brk"
+"$(ICUBLD)\char.brk" : "$(ICUBRK)\char.txt" "$(ICUBLD)\uprops.dat"
+	genbrk -r "$(ICUBRK)\char.txt" -o "$(ICUBLD)\char.brk"
 
-"$(ICUBLD)\char.brk" : "$(ICUBRK)\charLE.brk"
-    copy "$(ICUBRK)\charLE.brk" "$(ICUBLD)\char.brk"
+"$(ICUBLD)\word.brk" : "$(ICUBRK)\word.txt" "$(ICUBLD)\uprops.dat"
+	genbrk -r "$(ICUBRK)\word.txt" -o "$(ICUBLD)\word.brk"
 
-"$(ICUBLD)\line.brk" : "$(ICUBRK)\lineLE.brk"
-    copy "$(ICUBRK)\lineLE.brk" "$(ICUBLD)\line.brk"
+"$(ICUBLD)\line.brk" : "$(ICUBRK)\line.txt" "$(ICUBLD)\uprops.dat"
+	genbrk -r "$(ICUBRK)\line.txt" -o "$(ICUBLD)\line.brk"
 
-"$(ICUBLD)\word.brk" : "$(ICUBRK)\wordLE.brk"
-    copy "$(ICUBRK)\wordLE.brk" "$(ICUBLD)\word.brk"
+"$(ICUBLD)\sent.brk" : "$(ICUBRK)\sent.txt" "$(ICUBLD)\uprops.dat"
+	genbrk -r "$(ICUBRK)\sent.txt" -o "$(ICUBLD)\sent.brk"
 
-"$(ICUBLD)\title.brk" : "$(ICUBRK)\titleLE.brk"
-    copy "$(ICUBRK)\titleLE.brk" "$(ICUBLD)\title.brk"
+"$(ICUBLD)\title.brk" : "$(ICUBRK)\title.txt" "$(ICUBLD)\uprops.dat"
+	genbrk -r "$(ICUBRK)\title.txt" -o "$(ICUBLD)\title.brk"
 
-"$(ICUBLD)\line_th.brk" : "$(ICUBRK)\line_thLE.brk"
-    copy "$(ICUBRK)\line_thLE.brk" "$(ICUBLD)\line_th.brk"
+"$(ICUBLD)\word_th.brk" : "$(ICUBRK)\word_th.txt" "$(ICUBLD)\uprops.dat"
+	genbrk -r "$(ICUBRK)\word_th.txt" -o "$(ICUBLD)\word_th.brk"
 
-"$(ICUBLD)\word_th.brk" : "$(ICUBRK)\word_thLE.brk"
-    copy "$(ICUBRK)\word_thLE.brk" "$(ICUBLD)\word_th.brk"
+"$(ICUBLD)\line_th.brk" : "$(ICUBRK)\line_th.txt" "$(ICUBLD)\uprops.dat"
+	genbrk -r "$(ICUBRK)\line_th.txt" -o "$(ICUBLD)\line_th.brk"
+
 
 # utility target to send us to the right dir
 GODATA :

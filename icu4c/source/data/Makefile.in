@@ -248,15 +248,8 @@ $(TESTBUILDDIR)/test.dat: $(TOOLDIR)/gentest/gentest$(EXEEXT)
 thaidict.brk: $(SRCDATADIR)/thaidict.brk
 	$(RMV) $@ && ln -s $(BUILDDIR) $@
 
-# copy the right endianness
-
-ifeq (@U_IS_BIG_ENDIAN@,1)
-$(BUILDDIR)/%.brk: $(BRKSRCDIR)/%BE.brk
-	cp $< $@ 
-else
-$(BUILDDIR)/%.brk: $(BRKSRCDIR)/%LE.brk
-	cp $< $@
-endif
+$(BUILDDIR)/%.brk: $(BRKSRCDIR)/%.txt $(TOOLDIR)/genbrk/genbrk$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genbrk/genbrk -r $< -o $@
 
 ####################################################    CNV
 # CNV FILES
