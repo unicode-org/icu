@@ -257,7 +257,8 @@ ucol_open(    const    char         *loc,
  * UCOL_TERTIARY, UCOL_IDENTICAL,UCOL_DEFAULT_STRENGTH
  * @param status A pointer to an UErrorCode to receive any errors
  * @param parseError  A pointer to UParseError to recieve information about errors
- *                    occurred during parsing.
+ *                    occurred during parsing. This argument can currently be set
+ *                    to NULL, but at users own risk. Please provide a real structure.
  * @return A pointer to a UCollator, or 0 if an error occurred.
  * @see ucol_open
  * @stable
