@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $ 
-* $Date: 2002/04/23 01:59:16 $ 
-* $Revision: 1.5 $
+* $Date: 2002/04/23 22:45:41 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -23,10 +23,9 @@ import java.text.SimpleDateFormat;
 
 public class WriteCharts implements UCD_Types {
     
-    static final byte UNSUPPORTED = 120;
     static boolean HACK_KANA = false;
     
-    static public void test(UCA uca) throws IOException {
+    static public void collationChart(UCA uca) throws IOException {
     	Default.setUCD(uca.getUCDVersion());
     	HACK_KANA = true;
     	
@@ -60,8 +59,6 @@ public class WriteCharts implements UCD_Types {
         
         int counter = 0;
         
-        int lastPrimary = -1;
-        
         String lastSortKey = "\u0000";
         
         int high = uca.getSortKey("a").charAt(0);
@@ -69,12 +66,15 @@ public class WriteCharts implements UCD_Types {
         
         int columnCount = 0;
         
-        Utility.copyTextFile("index.html", true, "CollationCharts\\index.html");
-        Utility.copyTextFile("charts.css", false, "CollationCharts\\charts.css");
-        Utility.copyTextFile("help.html", true, "CollationCharts\\help.html");
+        String[] replacement = new String[] {"%%%", "Collation Charts"};
+        String folder = "charts\\uca\\";
         
-        indexFile = Utility.openPrintWriter("CollationCharts\\index_list.html", false, false);
-        Utility.appendFile("index_header.html", true, indexFile);
+        Utility.copyTextFile("index.html", true, folder + "index.html", replacement);
+        Utility.copyTextFile("charts.css", false, folder + "charts.css");
+        Utility.copyTextFile("help.html", true, folder + "help.html");
+        
+        indexFile = Utility.openPrintWriter(folder + "index_list.html", false, false);
+        Utility.appendFile("index_header.html", true, indexFile, replacement);
         
         /*
         indexFile.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
@@ -100,9 +100,9 @@ public class WriteCharts implements UCD_Types {
             int currentPrimary = getFirstPrimary(sortKey);
             int primary = currentPrimary >>> 16;
             
-            if (sortKey.length() < 4) script = -3;
-            else if (primary == 0) script = -2;
-            else if (primary < variable) script = -1;
+            if (sortKey.length() < 4) script = NULL_ORDER;
+            else if (primary == 0) script = IGNORABLE_ORDER;
+            else if (primary < variable) script = VARIABLE_ORDER;
             else if (primary < high) script = COMMON_SCRIPT;
             else if (primary >= UCA.UNSUPPORTED_BASE && primary <= UCA.UNSUPPORTED_TOP) script = UNSUPPORTED;
             
@@ -121,9 +121,9 @@ public class WriteCharts implements UCD_Types {
                 ++scriptCount[script+3];
                 if (scriptCount[script+3] > 1) {
                     System.out.println("\t\tFAIL: " + scriptCount[script+3] + ", " + 
-                        getChunkName(script) + ", " + Default.ucd.getCodeAndName(s));
+                        getChunkName(script, LONG) + ", " + Default.ucd.getCodeAndName(s));
                 }
-                output = openFile(scriptCount[script+3], "CollationCharts\\", script);
+                output = openFile(scriptCount[script+3], folder, script);
             }
             
             boolean firstPrimaryEquals = currentPrimary == getFirstPrimary(lastSortKey);
@@ -177,16 +177,260 @@ public class WriteCharts implements UCD_Types {
             ++columnCount;
         }
         
-        SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-        
         closeFile(output);
-        indexFile.println("<hr><p>Last Modified: " + df.format(new Date()));
-        indexFile.println("<br>UCA Version: " + uca.getDataVersion());
-        indexFile.println("<br>UCD Version: " + Default.ucd.getVersion());
-        indexFile.println("</p></body></html>");
-        indexFile.close();
+        closeIndexFile(indexFile, "<br>UCA: " + uca.getDataVersion(), COLLATION);
     }
     
+    static public void normalizationChart() throws IOException {
+        Default.setUCD();
+    	HACK_KANA = false;
+        
+        Set set = new TreeSet();
+        
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+        	if (!Default.ucd.isRepresented(i)) continue;
+        	byte cat = Default.ucd.getCategory(i);
+        	if (cat == Cs || cat == Co) continue;
+        	
+        	if (!Default.nfkd.normalizationDiffers(i)) continue;
+        	String decomp = Default.nfkd.normalize(i);
+        	
+        	byte script = getBestScript(decomp);
+        	
+            set.add(new Pair(new Integer(script == COMMON_SCRIPT ? cat + CAT_OFFSET : script),
+            		new Pair(decomp,
+            				 new Integer(i))));
+        }
+          
+        PrintWriter output = null;
+        
+        Iterator it = set.iterator();
+        
+        int oldScript = -127;
+        
+        int counter = 0;
+        
+        String[] replacement = new String[] {"%%%", "Normalization Charts"};
+        String folder = "charts\\normalization\\";
+
+        Utility.copyTextFile("index.html", true, folder + "index.html", replacement);
+        Utility.copyTextFile("charts.css", false, folder + "charts.css");
+        Utility.copyTextFile("norm_help.html", true, folder + "help.html");
+        
+        indexFile = Utility.openPrintWriter(folder + "index_list.html", false, false);
+        Utility.appendFile("index_header.html", true, indexFile, replacement);
+        
+        /*
+        indexFile.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+        indexFile.println("<title>UCA Default Collation Table</title>");
+        indexFile.println("<base target='main'>");
+        indexFile.println("<style><!-- p { font-size: 90% } --></style>");
+        indexFile.println("</head><body><h2 align='center'>UCA Default Collation Table</h2>");
+        indexFile.println("<p align='center'><a href = 'help.html'>Help</a>");
+        */
+        
+        while (it.hasNext()) {
+            Utility.dot(counter);
+            
+            Pair p = (Pair) it.next();
+            int script = ((Integer) p.first).intValue();
+            int cp = ((Integer)((Pair) p.second).second).intValue();
+            
+            if (script != oldScript 
+                    // && (script != COMMON_SCRIPT && script != INHERITED_SCRIPT)
+                    ) {
+                closeFile(output);
+                output = null;
+                oldScript = script;
+            }
+            
+            if (output == null) {
+                output = openFile(0, folder, script);
+                output.println("<tr><td class='z'>Code</td><td class='z'>C</td><td class='z'>D</td><td class='z'>KC</td><td class='z'>KD</td></tr>");
+
+            }
+            
+            output.println("<tr>");
+            
+            String prefix;
+            String code = UTF16.valueOf(cp);
+            String c = Default.nfc.normalize(cp);
+            String d = Default.nfd.normalize(cp);
+            String kc = Default.nfkc.normalize(cp);
+            String kd = Default.nfkd.normalize(cp);
+            
+            showCell(output, code, "<td class='z' ", "", false);
+            
+            prefix = c.equals(code) ? "<td class='g' " : "<td class='n' ";
+            showCell(output, c, prefix, "", c.equals(code));
+            
+            prefix = d.equals(c) ? "<td class='g' " : "<td class='n' ";
+            showCell(output, d, prefix, "", d.equals(c));
+            
+            prefix = kc.equals(c) ? "<td class='g' " : "<td class='n' ";
+            showCell(output, kc, prefix, "", kc.equals(c));
+            
+            prefix = (kd.equals(d) || kd.equals(kc)) ? "<td class='g' " : "<td class='n' ";
+            showCell(output, kd, prefix, "", (kd.equals(d) || kd.equals(kc)));
+            
+            output.println("</tr>");
+            
+        }
+        
+        closeFile(output);
+        closeIndexFile(indexFile, "", NORMALIZATION);
+    }
+    
+    static public void caseChart() throws IOException {
+        Default.setUCD();
+    	HACK_KANA = false;
+        
+        Set set = new TreeSet();
+        
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+        	if (!Default.ucd.isRepresented(i)) continue;
+        	byte cat = Default.ucd.getCategory(i);
+        	if (cat == Cs || cat == Co) continue;
+        	
+            String code = UTF16.valueOf(i);
+            String lower = Default.ucd.getCase(i, FULL, LOWER);
+            String title = Default.ucd.getCase(i, FULL, TITLE);
+            String upper = Default.ucd.getCase(i, FULL, UPPER);
+            String fold = Default.ucd.getCase(i, FULL, FOLD);
+            
+        	String decomp = Default.nfkd.normalize(i);
+        	int script = 0;
+            if (lower.equals(code) && upper.equals(code) && fold.equals(code) && title.equals(code)) {
+            	if (!containsCase(decomp)) continue;
+            	script = NO_CASE_MAPPING;
+        	}
+        	
+        	if (script == 0) script = getBestScript(decomp);
+        	
+            set.add(new Pair(new Integer(script == COMMON_SCRIPT ? cat + CAT_OFFSET : script),
+            		new Pair(decomp,
+            				 new Integer(i))));
+        }
+          
+        PrintWriter output = null;
+        
+        Iterator it = set.iterator();
+        
+        int oldScript = -127;
+        
+        int counter = 0;
+        String[] replacement = new String[] {"%%%", "Case Charts"};
+        String folder = "charts\\case\\";
+        
+        Utility.copyTextFile("index.html", true, folder + "index.html", replacement);
+        Utility.copyTextFile("charts.css", false, folder + "charts.css");
+        Utility.copyTextFile("case_help.html", true, folder + "help.html");
+        
+        indexFile = Utility.openPrintWriter(folder + "index_list.html", false, false);
+        Utility.appendFile("index_header.html", true, indexFile, replacement);
+        
+        /*
+        indexFile.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+        indexFile.println("<title>UCA Default Collation Table</title>");
+        indexFile.println("<base target='main'>");
+        indexFile.println("<style><!-- p { font-size: 90% } --></style>");
+        indexFile.println("</head><body><h2 align='center'>UCA Default Collation Table</h2>");
+        indexFile.println("<p align='center'><a href = 'help.html'>Help</a>");
+        */
+        
+        int columnCount = 0;
+        
+        while (it.hasNext()) {
+            Utility.dot(counter);
+            
+            Pair p = (Pair) it.next();
+            int script = ((Integer) p.first).intValue();
+            int cp = ((Integer)((Pair) p.second).second).intValue();
+            
+            if (script != oldScript 
+                    // && (script != COMMON_SCRIPT && script != INHERITED_SCRIPT)
+                    ) {
+                closeFile(output);
+                output = null;
+                oldScript = script;
+            }
+            
+            if (output == null) {
+                output = openFile(0, folder, script);
+                if (script == NO_CASE_MAPPING) output.println("<tr>");
+                else output.println("<tr><td class='z'>Code</td><td class='z'>Lower</td><td class='z'>Title</td>"
+                	+"<td class='z'>Upper</td><td class='z'>Fold</td></tr>");
+
+            }
+            
+            if (script == NO_CASE_MAPPING) {
+            	if (columnCount > 10) {
+            		output.println("</tr><tr>");
+            		columnCount = 0;
+            	}
+            	showCell(output, UTF16.valueOf(cp), "<td ", "", false);
+            	++columnCount;
+            	continue;
+            }
+            
+            output.println("<tr>");
+            
+            String prefix;
+            String code = UTF16.valueOf(cp);
+            String lower = Default.ucd.getCase(cp, FULL, LOWER);
+            String title = Default.ucd.getCase(cp, FULL, TITLE);
+            String upper = Default.ucd.getCase(cp, FULL, UPPER);
+            String fold = Default.ucd.getCase(cp, FULL, FOLD);
+            
+            showCell(output, code, "<td class='z' ", "", false);
+            
+            prefix = lower.equals(code) ? "<td class='g' " : "<td class='n' ";
+            showCell(output, lower, prefix, "", lower.equals(code));
+            
+            prefix = title.equals(upper) ? "<td class='g' " : "<td class='n' ";
+            showCell(output, title, prefix, "", title.equals(upper));
+            
+            prefix = upper.equals(code) ? "<td class='g' " : "<td class='n' ";
+            showCell(output, upper, prefix, "", upper.equals(code));
+            
+            prefix = fold.equals(lower) ? "<td class='g' " : "<td class='n' ";
+            showCell(output, fold, prefix, "", fold.equals(lower));
+            
+            output.println("</tr>");
+            
+        }
+        
+        closeFile(output);
+        closeIndexFile(indexFile, "", CASE);
+    }
+    
+    static void showCell(PrintWriter output, String s, String prefix, String extra, boolean skipName) {
+        String name = Default.ucd.getName(s);
+        String comp = Default.nfc.normalize(s);
+            
+        String outline = prefix 
+            + (skipName ? "" : " title='" + Utility.quoteXML(name) + "'")
+            + extra + ">"
+            + Utility.quoteXML(comp)
+            + "<br><tt>"
+            + Utility.hex(s)
+            //+ "<br>" + script
+            + "</tt></td>";
+            
+        output.println(outline);
+    }
+    
+    static byte getBestScript(String s) {
+    	int cp;
+    	byte result = COMMON_SCRIPT;
+    	for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+    		cp = UTF16.charAt(s, i);
+    		result = Default.ucd.getScript(cp);
+    		if (result != COMMON_SCRIPT && result != INHERITED_SCRIPT) return result;
+    	}
+    	return COMMON_SCRIPT;
+    }
+
     static int getFirstPrimary(String sortKey) {
         int result = sortKey.charAt(0);
 		if (result >= UCA.UNSUPPORTED_BASE && result <= UCA.UNSUPPORTED_TOP) {
@@ -215,15 +459,15 @@ public class WriteCharts implements UCD_Types {
     static PrintWriter indexFile;
     
     static PrintWriter openFile(int count, String directory, int script) throws IOException {
-        String scriptName = getChunkName(script);
-        if (script < 128) scriptName = Default.ucd.getCase(scriptName, FULL, TITLE);
+        String scriptName = getChunkName(script, LONG);
+        String shortScriptName = getChunkName(script, SHORT);
+        String hover = scriptName.equals(shortScriptName) ? "" : "' title='" + shortScriptName;
         
         String fileName = "chart_" + scriptName + (count > 1 ? count + "" : "") + ".html";
         PrintWriter output = Utility.openPrintWriter(directory + fileName, false, false);
         Utility.fixDot();
         System.out.println("Writing: " + scriptName);
-        
-        indexFile.println(" <a href = '" + fileName + "'>" + scriptName + "</a>");
+        indexFile.println(" <a href = '" + fileName + hover + "'>" + scriptName + "</a>");
         String title = "UCA: " + scriptName;
         output.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
         output.println("<title>" + title + "</title>");
@@ -233,15 +477,28 @@ public class WriteCharts implements UCD_Types {
         return output;
     }
     
-    static String getChunkName(int script) {
-    	if (script >= 128) return Default.ucd.getCategoryID_fromIndex((byte)(script - 128), LONG);
-        else if (script == -4) return "NoMapping";
-        else if (script == -3) return "NULL";
-        else if (script == -2) return "IGNORABLE";
-        else if (script == -1) return "VARIABLE";
-        else if (script == HIRAGANA_SCRIPT && HACK_KANA) return "KATAKANA-HIRAGANA";
-        else if (script == UNSUPPORTED) return "UNSUPPORTED";
-        else return Default.ucd.getScriptID_fromIndex((byte)script);
+    static final int 
+    	NULL_ORDER = -3,
+    	IGNORABLE_ORDER = -2,
+    	VARIABLE_ORDER = -1,
+    	// scripts in here
+    	UNSUPPORTED = 120,
+    	CAT_OFFSET = 128,
+    	// categories in here
+    	NO_CASE_MAPPING = 200;
+    
+    static String getChunkName(int script, byte length) {
+    	switch(script) {
+    		case NO_CASE_MAPPING: return "NoCaseMapping";
+        	case NULL_ORDER: return "Null";
+        	case IGNORABLE_ORDER: return "Ignorable";
+        	case VARIABLE_ORDER: return "Variable";
+        	case UNSUPPORTED: return "Unsupported";
+        	default: 
+    		if (script >= CAT_OFFSET) return Default.ucd.getCategoryID_fromIndex((byte)(script - CAT_OFFSET), length);
+        	else if (script == HIRAGANA_SCRIPT && HACK_KANA) return length == SHORT ? "Kata-Hira" : "Katakana-Hiragana";
+        	else return Default.ucd.getCase(Default.ucd.getScriptID_fromIndex((byte)script, length), FULL, TITLE);
+    	}
     }
 
     static void closeFile(PrintWriter output) {
@@ -251,258 +508,47 @@ public class WriteCharts implements UCD_Types {
     }
 
 
-    static public void normalizationChart() throws IOException {
-        Default.setUCD();
-    	HACK_KANA = false;
-        
-        Set set = new TreeSet();
-        
-        for (int i = 0; i <= 0x10FFFF; ++i) {
-        	if (!Default.ucd.isRepresented(i)) continue;
-        	byte cat = Default.ucd.getCategory(i);
-        	if (cat == Cs || cat == Co) continue;
-        	
-        	if (!Default.nfkd.normalizationDiffers(i)) continue;
-        	String decomp = Default.nfkd.normalize(i);
-        	
-        	byte script = getBestScript(decomp);
-        	
-            set.add(new Pair(new Integer(script == COMMON_SCRIPT ? cat + 128 : script),
-            		new Pair(decomp,
-            				 new Integer(i))));
-        }
-          
-        PrintWriter output = null;
-        
-        Iterator it = set.iterator();
-        
-        int oldScript = -127;
-        
-        int[] scriptCount = new int[128];
-        
-        int counter = 0;
-        
-        int lastPrimary = -1;
-        
-        String lastSortKey = "\u0000";
-        
-        Utility.copyTextFile("index.html", true, "NormalizationCharts\\index.html");
-        Utility.copyTextFile("charts.css", false, "NormalizationCharts\\charts.css");
-        Utility.copyTextFile("norm_help.html", true, "NormalizationCharts\\help.html");
-        
-        indexFile = Utility.openPrintWriter("NormalizationCharts\\index_list.html", false, false);
-        Utility.appendFile("norm_index_header.html", true, indexFile);
-        
-        /*
-        indexFile.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
-        indexFile.println("<title>UCA Default Collation Table</title>");
-        indexFile.println("<base target='main'>");
-        indexFile.println("<style><!-- p { font-size: 90% } --></style>");
-        indexFile.println("</head><body><h2 align='center'>UCA Default Collation Table</h2>");
-        indexFile.println("<p align='center'><a href = 'help.html'>Help</a>");
-        */
-        
-        while (it.hasNext()) {
-            Utility.dot(counter);
-            
-            Pair p = (Pair) it.next();
-            int script = ((Integer) p.first).intValue();
-            int cp = ((Integer)((Pair) p.second).second).intValue();
-            
-            if (script != oldScript 
-                    // && (script != COMMON_SCRIPT && script != INHERITED_SCRIPT)
-                    ) {
-                closeFile(output);
-                output = null;
-                oldScript = script;
-            }
-            
-            if (output == null) {
-                output = openFile(0, "NormalizationCharts\\", script);
-                output.println("<tr><td class='z'>Code</td><td class='z'>C</td><td class='z'>D</td><td class='z'>KC</td><td class='z'>KD</td></tr>");
-
-            }
-            
-            output.println("<tr>");
-            
-            String prefix;
-            String code = UTF16.valueOf(cp);
-            String c = Default.nfc.normalize(cp);
-            String d = Default.nfd.normalize(cp);
-            String kc = Default.nfkc.normalize(cp);
-            String kd = Default.nfkd.normalize(cp);
-            
-            showCell(output, code, "<td class='z' ", "");
-            
-            prefix = c.equals(code) ? "<td class='g' " : "<td class='n' ";
-            showCell(output, c, prefix, "");
-            
-            prefix = d.equals(c) ? "<td class='g' " : "<td class='n' ";
-            showCell(output, d, prefix, "");
-            
-            prefix = kc.equals(c) ? "<td class='g' " : "<td class='n' ";
-            showCell(output, kc, prefix, "");
-            
-            prefix = (kd.equals(d) || kd.equals(kc)) ? "<td class='g' " : "<td class='n' ";
-            showCell(output, kd, prefix, "");
-            
-            output.println("</tr>");
-            
-        }
-        
+	static final byte COLLATION = 0, NORMALIZATION = 1, CASE = 2;
+	
+    static void closeIndexFile(PrintWriter indexFile, String extra, byte choice) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("GMT"));
         
-        closeFile(output);
-        indexFile.println("<hr><p>Last Modified: " + df.format(new Date()));
-        indexFile.println("<br>UCD Version: " + Default.ucd.getVersion());
+        indexFile.println("</p><hr width='50%'><p>");
+        boolean gotOne = false;
+        if (choice != COLLATION) {
+        	indexFile.println("<a href='..\\uca\\index.html' target='_top'>Collation&nbsp;Charts</a>");
+        	gotOne = true;
+        }
+        if (choice != NORMALIZATION) {
+        	if (gotOne) indexFile.println("<br>");
+        	indexFile.println("<a href='..\\normalization\\index.html' target='_top'>Normalization&nbsp;Charts</a>");
+        	gotOne = true;
+        }
+        if (choice != CASE) {
+        	if (gotOne) indexFile.println("<br>");
+        	indexFile.println("<a href='..\\case\\index.html' target='_top'>Case&nbsp;Charts</a>");
+        	gotOne = true;
+        }
+        indexFile.println("</p><hr width='50%'><p style='font-size: 70%'>");
+        indexFile.println("UCD: " + Default.ucd.getVersion() + extra);
+        indexFile.println("<br>" + df.format(new Date()) + " <a href='http://www.macchiato.com/' target='_top'>MED</a>");
         indexFile.println("</p></body></html>");
         indexFile.close();
     }
     
-    static void showCell(PrintWriter output, String s, String prefix, String extra) {
-        String name = Default.ucd.getName(s);
-        String comp = Default.nfc.normalize(s);
-            
-        String outline = prefix 
-            + " title='" + Utility.quoteXML(name) + extra + "'>"
-            + Utility.quoteXML(comp)
-            + "<br><tt>"
-            + Utility.hex(s)
-            //+ "<br>" + script
-            + "</tt></td>";
-            
-        output.println(outline);
-    }
-    
-    static byte getBestScript(String s) {
+    static boolean containsCase(String s) {
     	int cp;
-    	byte result = COMMON_SCRIPT;
     	for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
     		cp = UTF16.charAt(s, i);
-    		result = Default.ucd.getScript(cp);
-    		if (result != COMMON_SCRIPT && result != INHERITED_SCRIPT) return result;
-    	}
-    	return COMMON_SCRIPT;
-    }
-
-    static public void caseChart() throws IOException {
-        Default.setUCD();
-    	HACK_KANA = false;
-        
-        Set set = new TreeSet();
-        
-        for (int i = 0; i <= 0x10FFFF; ++i) {
-        	if (!Default.ucd.isRepresented(i)) continue;
-        	byte cat = Default.ucd.getCategory(i);
-        	if (cat == Cs || cat == Co) continue;
-        	
-            String code = UTF16.valueOf(i);
-            String lower = Default.ucd.getCase(i, FULL, LOWER);
-            String title = Default.ucd.getCase(i, FULL, TITLE);
-            String upper = Default.ucd.getCase(i, FULL, UPPER);
-            String fold = Default.ucd.getCase(i, FULL, FOLD);
-            
-        	String decomp = Default.nfkd.normalize(i);
-        	byte script = 0;
-            if (lower.equals(code) && upper.equals(code) && fold.equals(code)) {
-            	if (decomp contains Lu, Lo, Lt, or Lowercase or Uppercase) script = -4;
-            	else continue;
-        	}
-        	
-        	
-        	if (script == 0) script = getBestScript(decomp);
-        	
-            set.add(new Pair(new Integer(script == COMMON_SCRIPT ? cat + 128 : script),
-            		new Pair(decomp,
-            				 new Integer(i))));
-        }
-          
-        PrintWriter output = null;
-        
-        Iterator it = set.iterator();
-        
-        int oldScript = -127;
-        
-        int[] scriptCount = new int[128];
-        
-        int counter = 0;
-        
-        int lastPrimary = -1;
-        
-        String lastSortKey = "\u0000";
-        
-        Utility.copyTextFile("index.html", true, "CaseCharts\\index.html");
-        Utility.copyTextFile("charts.css", false, "CaseCharts\\charts.css");
-        Utility.copyTextFile("norm_help.html", true, "CaseCharts\\help.html");
-        
-        indexFile = Utility.openPrintWriter("CaseCharts\\index_list.html", false, false);
-        Utility.appendFile("norm_index_header.html", true, indexFile);
-        
-        /*
-        indexFile.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
-        indexFile.println("<title>UCA Default Collation Table</title>");
-        indexFile.println("<base target='main'>");
-        indexFile.println("<style><!-- p { font-size: 90% } --></style>");
-        indexFile.println("</head><body><h2 align='center'>UCA Default Collation Table</h2>");
-        indexFile.println("<p align='center'><a href = 'help.html'>Help</a>");
-        */
-        
-        while (it.hasNext()) {
-            Utility.dot(counter);
-            
-            Pair p = (Pair) it.next();
-            int script = ((Integer) p.first).intValue();
-            int cp = ((Integer)((Pair) p.second).second).intValue();
-            
-            if (script != oldScript 
-                    // && (script != COMMON_SCRIPT && script != INHERITED_SCRIPT)
-                    ) {
-                closeFile(output);
-                output = null;
-                oldScript = script;
-            }
-            
-            if (output == null) {
-                output = openFile(0, "CaseCharts\\", script);
-                output.println("<tr><td class='z'>Code</td><td class='z'>Lower</td><td class='z'>Title</td><td class='z'>Upper</td><td class='z'>Fold</td></tr>");
-
-            }
-            
-            output.println("<tr>");
-            
-            String prefix;
-            String code = UTF16.valueOf(cp);
-            String lower = Default.ucd.getCase(cp, FULL, LOWER);
-            String title = Default.ucd.getCase(cp, FULL, TITLE);
-            String upper = Default.ucd.getCase(cp, FULL, UPPER);
-            String fold = Default.ucd.getCase(cp, FULL, FOLD);
-            
-            showCell(output, code, "<td class='z' ", "");
-            
-            prefix = lower.equals(code) ? "<td class='g' " : "<td class='n' ";
-            showCell(output, lower, prefix, "");
-            
-            prefix = title.equals(upper) ? "<td class='g' " : "<td class='n' ";
-            showCell(output, title, prefix, "");
-            
-            prefix = upper.equals(code) ? "<td class='g' " : "<td class='n' ";
-            showCell(output, upper, prefix, "");
-            
-            prefix = (fold.equals(lower)) ? "<td class='g' " : "<td class='n' ";
-            showCell(output, fold, prefix, "");
-            
-            output.println("</tr>");
-            
-        }
-        
-        SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-        
-        closeFile(output);
-        indexFile.println("<hr><p>Last Modified: " + df.format(new Date()));
-        indexFile.println("<br>UCD Version: " + Default.ucd.getVersion());
-        indexFile.println("</p></body></html>");
-        indexFile.close();
-    }
+			// contains Lu, Lo, Lt, or Lowercase or Uppercase 
+			byte cat = Default.ucd.getCategory(cp);
+			if (cat == Lu || cat == Ll || cat == Lt) return true;
+			if (Default.ucd.getBinaryProperty(cp, Other_Lowercase)) return true;
+			if (Default.ucd.getBinaryProperty(cp, Other_Uppercase)) return true;
+		}
+		return false;
+	}
     
 }
 
