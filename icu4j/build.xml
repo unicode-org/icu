@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/06/03 18:49:26 $
-* $Revision: 1.71 $
+* $Date: 2003/06/04 22:18:50 $
+* $Revision: 1.72 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -50,15 +50,15 @@
           properties are write-once so you can't even set a default and then
           override it, which we used to do for Ant 1.4. -->
         <condition property="version.1.4">
-        <or>
-        <equals arg1="${ant.java.version}" arg2="1.4"/>
-        </or>
+	        <or>
+	        	<equals arg1="${ant.java.version}" arg2="1.4"/>
+	        </or>
         </condition>
 
-    <condition property="doc.params"
-        value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'ICU Core' 'com.ibm.icu.lang*:com.ibm.icu.math*:com.ibm.icu.text*:com.ibm.icu.util*' -group 'ICU Tools' 'com.ibm.icu.dev*' -group 'Rich Text Editing' 'com.ibm.richtext*'">
-            <equals arg1="${version.1.4}" arg2="true"/>
-    </condition>
+	    <condition property="doc.params"
+	        value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'ICU Core' 'com.ibm.icu.lang*:com.ibm.icu.math*:com.ibm.icu.text*:com.ibm.icu.util*' -group 'ICU Tools' 'com.ibm.icu.dev*' -group 'Rich Text Editing' 'com.ibm.richtext*'">
+	            <equals arg1="${version.1.4}" arg2="true"/>
+	    </condition>
     </target>
 
     <target name="anthack2" unless="doc.params">
@@ -144,7 +144,7 @@
     </target>
 
     <target name="one4tools" depends="anthack1,anthack2" if="version.1.4">
-        <javac includes="com/ibm/icu/dev/tool/docs/*.java"
+        <javac includes="com/ibm/icu/dev/tool/xmlcomparator/*.java,com/ibm/icu/dev/localeconverter/docs/*.java,com/ibm/icu/dev/tool/docs/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
@@ -154,13 +154,13 @@
 
     <target name="tools" depends="core,one4tools">
         <javac includes="com/ibm/icu/dev/tool/**/*.java"
-            excludes="com/ibm/icu/dev/tool/docs/*,**/CVS/**/*"
+            excludes="com/ibm/icu/dev/tool/xmlcomparator/*,com/ibm/icu/dev/tool/localeconverter/*,com/ibm/icu/dev/tool/docs/*,**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
-
+    
 <!-- use excludefiles below when we move to ant 1.5 -->
 
     <target name="docs" depends="anthack1,anthack2,tools">
