@@ -116,7 +116,6 @@ U_CFUNC uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *st
 U_CFUNC void ucol_tok_closeTokenList(UColTokenParser *src);
 
 void deleteToken(void *token);
-int32_t ucol_uprv_tok_isOnorOf(const UChar* onoff);
 void ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, UColAttributeValue value);
 UBool ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, const UChar *end, UBool *variableTop, UBool *top, UErrorCode *status);
 
