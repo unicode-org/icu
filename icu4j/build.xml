@@ -528,9 +528,10 @@
             <arg value="${api.dir}/icu4j30.api.gz"/>
             <arg value="-new:"/>
             <arg value="${api.dir}/icu4j32.api.gz"/>
-            <arg value="-html"/>
+            <!-- arg value="-html"/>  -->
             <arg value="-out:"/>
-            <arg value="${api.dir}/icu4j_compare_30_32.html"/>
+            <!-- arg value="${api.dir}/icu4j_compare_30_32.html"/> -->
+	    <arg value="icu4j_compare_30_32.txt"/>
         </java>
     </target>
 
@@ -676,7 +677,7 @@
             debug="on" deprecation="off"/>
     </target>
 
-    <target name="collatorTests" depends="collator">
+    <target name="collatorTests" depends="collator" description="test collator modular build target">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/collator/**/*.java,com/ibm/icu/dev/test/search/**/*.java"
             excludes="**/CVS/**/*, com/ibm/icu/dev/test/collator/RandomCollator.java"
             srcdir="${src.dir}"
@@ -709,7 +710,7 @@
             debug="on" deprecation="off"/>
     </target>
 
-    <target name="propertiesBasicTests" depends="propertiesBasic">
+    <target name="propertiesBasicTests" depends="propertiesBasic" description="test propertiesBasic modular build target">
         <copy file="${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing.txt"
             todir="${build.dir}/com/ibm/icu/dev/data/unicode/"/>
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/lang/**/*.java"
@@ -720,7 +721,7 @@
             debug="on" deprecation="off"/>
     </target>
 
-    <target name="propertiesFullTests" depends="propertiesFull">
+    <target name="propertiesFullTests" depends="propertiesFull" description="test propertiesFull modular build target>
         <copy file="${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing.txt"
             todir="${build.dir}/com/ibm/icu/dev/data/unicode/"/>
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/lang/**/*.java"
@@ -744,7 +745,7 @@
             debug="on" deprecation="off"/>
     </target>
 
-    <target name="compressionTests" depends="compression">
+    <target name="compressionTests" depends="compression" description="test compression modular build target">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/compression/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -767,7 +768,7 @@
             debug="on" deprecation="off"/>
     </target>
 
-    <target name="calendarTests" depends="calendar">
+    <target name="calendarTests" depends="calendar" description="test calendar modular build target">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/calendar/**/*"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -794,7 +795,7 @@
         </copy>
     </target>
 
-    <target name="transliteratorTests" depends="transliterator">
+    <target name="transliteratorTests" depends="transliterator" description = "test transliterator modular build target">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/translit/**/*"
             excludes="**/CVS/**/*,com/ibm/icu/dev/test/translit/UnicodeFilterLogic*.java"
             srcdir="${src.dir}"
@@ -817,7 +818,7 @@
             debug="on" deprecation="off"/>
     </target>
 
-    <target name="formatTests" depends="format">
+    <target name="formatTests" depends="format" description="test format modular build target">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/format/**/*"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -844,7 +845,7 @@
                 todir="${build.dir}/com/ibm/icu/impl/data/"/>
     </target>
 
-    <target name="breakIteratorTests" depends="breakIterator">
+    <target name="breakIteratorTests" depends="breakIterator" description="test breakIterator modular build target">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/rbbi/**/*"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -874,7 +875,7 @@
             debug="on" deprecation="off"/>
     </target>
 
-    <target name="stringPrepTests" depends="stringPrep">
+    <target name="stringPrepTests" depends="stringPrep" description="test stringPrep modular build target">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/stringprep/**/*"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
