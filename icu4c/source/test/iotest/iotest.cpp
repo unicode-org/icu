@@ -56,7 +56,9 @@ static void TestFileFromICU(UFILE *myFile) {
     UChar uStringBuf[256];
     char myString[256] = "";
     char testBuf[256] = "";
+    U_STRING_DECL(myStringOrig, "My-String", 9);
 
+    U_STRING_INIT(myStringOrig, "My-String", 9);
     u_memset(myUString, 0x2a, sizeof(myUString)/sizeof(*myUString));
     u_memset(uStringBuf, 0x2a, sizeof(uStringBuf)/sizeof(*uStringBuf));
     memset(myString, 0x2a, sizeof(myString)/sizeof(*myString));
@@ -83,10 +85,10 @@ static void TestFileFromICU(UFILE *myFile) {
     u_fprintf(myFile, "Uppercase float %%G: %G\n", myFloat);
 //    u_fprintf(myFile, "Pointer %%p: %p\n", myFile);
     u_fprintf(myFile, "Char %%c: %c\n", 'A');
-    u_fprintf(myFile, "UChar %%C: %C\n", L'A');
+    u_fprintf(myFile, "UChar %%C: %C\n", (UChar)0x0041); /*'A'*/
     u_fprintf(myFile, "String %%s: %s\n", "My-String");
     u_fprintf(myFile, "NULL String %%s: %s\n", NULL);
-    u_fprintf(myFile, "Unicode String %%S: %S\n", L"My-String");
+    u_fprintf(myFile, "Unicode String %%S: %S\n", myStringOrig);
     u_fprintf(myFile, "NULL Unicode String %%S: %S\n", NULL);
     u_fprintf(myFile, "Percent %%P (non-ANSI): %P\n", myFloat);
     u_fprintf(myFile, "Spell Out %%V (non-ANSI): %V\n", myFloat);
@@ -196,7 +198,7 @@ static void TestFileFromICU(UFILE *myFile) {
         log_err("%%c Got: %c, Expected: A\n", *myString);
     }
     u_fscanf(myFile, "UChar %%C: %C\n", myUString);
-    if (*myUString != L'A') {
+    if (*myUString != (UChar)0x0041) { /*'A'*/
         log_err("%%C Got: %C, Expected: A\n", *myUString);
     }
     u_fscanf(myFile, "String %%s: %s\n", myString);
@@ -1037,7 +1039,9 @@ static void TestString() {
     char myString[512] = "";
     char testBuf[512] = "";
     int32_t retVal;
+    U_STRING_DECL(myStringOrig, "My-String", 9);
 
+    U_STRING_INIT(myStringOrig, "My-String", 9);
     u_memset(myUString, 0x0a, sizeof(myUString)/ sizeof(*myUString));
     u_memset(uStringBuf, 0x0a, sizeof(uStringBuf) / sizeof(*uStringBuf));
 
@@ -1128,9 +1132,9 @@ static void TestString() {
         log_err("%%c Got: %c, Expected: A\n", *myString);
     }
 
-    u_sprintf(uStringBuf, NULL, "UChar %%C: %C", L'A');
+    u_sprintf(uStringBuf, NULL, "UChar %%C: %C", (UChar)0x0041); /*'A'*/
     u_sscanf(uStringBuf, NULL, "UChar %%C: %C", myUString);
-    if (*myUString != L'A') {
+    if (*myUString != (UChar)0x0041) { /*'A'*/
         log_err("%%C Got: %C, Expected: A\n", *myUString);
     }
 
@@ -1148,7 +1152,7 @@ static void TestString() {
         log_err("%%s Got: %s, Expected: My-String\n", myString);
     }
 
-    u_sprintf(uStringBuf, NULL, "Unicode String %%S: %S", L"My-String");
+    u_sprintf(uStringBuf, NULL, "Unicode String %%S: %S", myStringOrig);
     u_sscanf(uStringBuf, NULL, "Unicode String %%S: %S", myUString);
     u_austrncpy(myString, myUString, sizeof(myString)/sizeof(*myString));
     if (strcmp(myString, "My-String")) {
