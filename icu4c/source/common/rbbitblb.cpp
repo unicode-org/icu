@@ -62,7 +62,7 @@ void  RBBITableBuilder::build() {
     // Walk through the tree, replacing any references to $variables with a copy of the
     //   parse tree for the substition expression.
     //
-    fTree->flattenVariables();
+    fTree = fTree->flattenVariables();
     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "ftree")) {
         RBBIDebugPrintf("Parse tree after flattening variable references.\n");
         fTree->printTree(TRUE);
