@@ -642,114 +642,123 @@ lowsurogate:
 }
 
 U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
-                                               UErrorCode* err)
-{
-    /*safe keeps a ptr to the beginning in case we need to step back*/
-    char const *sourceInitial = args->source;
+                                               UErrorCode *err) {
+    UChar buffer[2];
+    char const *sourceInitial;
+    UChar* myUCharPtr;
     uint16_t extraBytesToWrite;
     uint8_t myByte;
     UChar32 ch;
-    int8_t isLegalSequence = 1;
+    int8_t isLegalSequence;
 
-    /*Input boundary check*/
-    if (args->source >= args->sourceLimit) 
+    while (args->source < args->sourceLimit)
     {
-        *err = U_INDEX_OUTOFBOUNDS_ERROR;
-        return 0xffff;
-    }
+        sourceInitial = args->source;
+        myByte = (uint8_t)*(args->source++);
+        if (myByte < 0x80)
+        {
+            return (UChar32)myByte;
+        }
 
-    myByte = (uint8_t)*(args->source++);
-    if (myByte < 0x80)
-    {
-        return (UChar32)myByte;
-    }
-    extraBytesToWrite = (uint16_t)bytesFromUTF8[myByte];
-    if (extraBytesToWrite == 0) {
-        goto CALL_ERROR_FUNCTION;
-    }
+        extraBytesToWrite = (uint16_t)bytesFromUTF8[myByte];
+        if (extraBytesToWrite == 0) {
+            goto CALL_ERROR_FUNCTION;
+        }
 
-    /*The byte sequence is longer than the buffer area passed*/
+        /*The byte sequence is longer than the buffer area passed*/
+        if ((args->source + extraBytesToWrite - 1) > args->sourceLimit)
+        {
+            *err = U_TRUNCATED_CHAR_FOUND;
+            return 0xffff;
+        }
+        else
+        {
+            isLegalSequence = 1;
+            ch = myByte << 6;
+            switch(extraBytesToWrite)
+            {     
+              /* note: code falls through cases! (sic)*/ 
+            case 6:
+                ch += (myByte = (uint8_t)*(args->source++));
+                ch <<= 6;
+                if ((myByte & 0xC0) != 0x80) 
+                {
+                    isLegalSequence = 0;
+                    break;
+                }
+            case 5:
+                ch += (myByte = *(args->source++));
+                ch <<= 6;
+                if ((myByte & 0xC0) != 0x80) 
+                {
+                    isLegalSequence = 0;
+                    break;
+                }
+            case 4:
+                ch += (myByte = *(args->source++));
+                ch <<= 6;
+                if ((myByte & 0xC0) != 0x80) 
+                {
+                    isLegalSequence = 0;
+                    break;
+                }
+            case 3:
+                ch += (myByte = *(args->source++));
+                ch <<= 6;
+                if ((myByte & 0xC0) != 0x80) 
+                {
+                    isLegalSequence = 0;
+                    break;
+                }
+            case 2:
+                ch += (myByte = *(args->source++));
+                if ((myByte & 0xC0) != 0x80) 
+                {
+                    isLegalSequence = 0;
+                }
+            };
+        }
+        ch -= offsetsFromUTF8[extraBytesToWrite];
 
-    if ((args->source + extraBytesToWrite - 1) > args->sourceLimit)
-    {
-        *err = U_TRUNCATED_CHAR_FOUND;
-        return 0xffff;
-    }
-    else
-    {
-        ch = myByte << 6;
-        switch(extraBytesToWrite)
-        {     
-          /* note: code falls through cases! (sic)*/ 
-        case 6:
-            ch += (myByte = (uint8_t)*(args->source++));
-            ch <<= 6;
-            if ((myByte & 0xC0) != 0x80) 
-            {
-                isLegalSequence = 0;
-                break;
-            }
-        case 5:
-            ch += (myByte = *(args->source++));
-            ch <<= 6;
-            if ((myByte & 0xC0) != 0x80) 
-            {
-                isLegalSequence = 0;
-                break;
-            }
-        case 4:
-            ch += (myByte = *(args->source++));
-            ch <<= 6;
-            if ((myByte & 0xC0) != 0x80) 
-            {
-                isLegalSequence = 0;
-                break;
-            }
-        case 3:
-            ch += (myByte = *(args->source++));
-            ch <<= 6;
-            if ((myByte & 0xC0) != 0x80) 
-            {
-                isLegalSequence = 0;
-                break;
-            }
-        case 2:
-            ch += (myByte = *(args->source++));
-            if ((myByte & 0xC0) != 0x80) 
-            {
-                isLegalSequence = 0;
-            }
-        };
-    }
-    ch -= offsetsFromUTF8[extraBytesToWrite];
-
-    if (isLegalSequence)
-        return ch; /* return the code point */
+        if (isLegalSequence && extraBytesToWrite <= 4 && ch <= 0x10ffff) {
+            return ch; /* return the code point */
+        }
 
 CALL_ERROR_FUNCTION:
-    {
-    UChar myUChar = (UChar)0xffff; /* ### TODO: this is a hack until we prepare the callbacks for code points */
-    UChar* myUCharPtr = &myUChar;
-    
-    *err = U_ILLEGAL_CHAR_FOUND;
-    
-    /*It is very likely that the ErrorFunctor will write to the
-     *internal buffers */
-    args->target = myUCharPtr;
-    args->targetLimit = myUCharPtr + 1;
-    args->converter->fromCharErrorBehaviour(args->converter->toUContext,
-                                    args,
-                                    sourceInitial,
-                                    args->source-sourceInitial,
-                                    UCNV_ILLEGAL,
-                                    err);
+        extraBytesToWrite = args->source - sourceInitial;
+        args->converter->invalidCharLength = (uint8_t)extraBytesToWrite;
+        uprv_memcpy(args->converter->invalidCharBuffer, sourceInitial, extraBytesToWrite);
 
-    /*makes the internal caching transparent to the user*/
-    if (*err == U_BUFFER_OVERFLOW_ERROR)
-        *err = U_ZERO_ERROR;
+        myUCharPtr = buffer;
+        *err = U_ILLEGAL_CHAR_FOUND;
+        args->target = myUCharPtr;
+        args->targetLimit = buffer + 2;
+        args->converter->fromCharErrorBehaviour(args->converter->toUContext,
+                                        args,
+                                        sourceInitial,
+                                        extraBytesToWrite,
+                                        UCNV_ILLEGAL,
+                                        err);
 
-    return (UChar32)myUChar;
+        if(U_SUCCESS(*err)) {
+            extraBytesToWrite = (uint16_t)(args->target - buffer);
+            if(extraBytesToWrite > 0) {
+                return ucnv_getUChar32KeepOverflow(args->converter, buffer, extraBytesToWrite);
+            }
+            /* else (callback did not write anything) continue */
+        } else if(*err == U_BUFFER_OVERFLOW_ERROR) {
+            *err = U_ZERO_ERROR;
+            return ucnv_getUChar32KeepOverflow(args->converter, buffer, 2);
+        } else {
+            /* break on error */
+            /* ### what if a callback set an error but _also_ generated output?! */
+            return 0xffff;
+        }
     }
+
+    /* no input or only skipping callback calls */
+    *err = U_INDEX_OUTOFBOUNDS_ERROR;
+    return 0xffff;
 } 
 
 static const UConverterImpl _UTF8Impl={
@@ -1517,6 +1526,7 @@ morebytes:
             args->source = (const char *) mySource;
             args->target = myTarget;
             args->converter->invalidCharLength = (int8_t)i;
+            /* ### TODO: how does this set the offsets correctly? */
             if (T_UConverter_toUnicode_InvalidChar_Callback(args, err))
             {
                 /* Stop if the error wasn't handled */
@@ -1693,61 +1703,66 @@ UChar32 T_UConverter_getNextUChar_UTF32_BE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
 {
     /* Todo: This needs testing */
-    const unsigned char *mySource = (unsigned char *) args->source;
+    UChar myUCharBuf[2];
+    UChar *myUCharPtr;
+    const unsigned char *mySource;
     UChar32 myUChar;
+    int32_t length;
 
-    if (args->source + 4 > args->sourceLimit) 
+    while (args->source < args->sourceLimit)
     {
-        if (args->source >= args->sourceLimit)
-        {
-            /*Either caller has reached the end of the byte stream*/
-            *err = U_INDEX_OUTOFBOUNDS_ERROR;
-        }
-        else
+        if (args->source + 4 > args->sourceLimit) 
         {
             /* got a partial character */
             *err = U_TRUNCATED_CHAR_FOUND;
+            return 0xffff;
         }
 
-        return 0xffff;
-    }
+        /* Don't even try to do a direct cast because the value may be on an odd address. */
+        mySource = (unsigned char *) args->source;
+        myUChar = (mySource[0] << 24)
+                | (mySource[1] << 16)
+                | (mySource[2] << 8)
+                | (mySource[3]);
 
-    /* Don't even try to do a direct cast because the value may be on an odd address. */
-    myUChar = (mySource[0] << 24)
-            | (mySource[1] << 16)
-            | (mySource[2] << 8)
-            | (mySource[3]);
+        args->source = (const char *)(mySource + 4);
+        if (myUChar <= MAXIMUM_UTF) {
+            return myUChar;
+        }
 
-    if (myUChar <= MAXIMUM_UTF) {
-        /*updates the source*/
-        args->source += 4;  
-    }
-    else {
-        UChar myUCharBuf[2];
+        uprv_memcpy(args->converter->invalidCharBuffer, mySource, 4);
+        args->converter->invalidCharLength = 4;
+
+        myUCharPtr = myUCharBuf;
         *err = U_ILLEGAL_CHAR_FOUND;
-
-        uprv_memcpy(args->converter->invalidCharBuffer, mySource, sizeof(int32_t));
-
-        /*It is very likely that the ErrorFunctor will write to the
-         *internal buffers */
-        args->target = myUCharBuf;
-        args->targetLimit = myUCharBuf + sizeof(int32_t);
+        args->target = myUCharPtr;
+        args->targetLimit = myUCharBuf + 2;
         args->converter->fromCharErrorBehaviour(args->converter->toUContext,
                                         args,
-                                        args->source,
-                                        (int32_t)sizeof(int32_t),
+                                        (const char *)mySource,
+                                        4,
                                         UCNV_ILLEGAL,
                                         err);
 
-        UTF_GET_CHAR_SAFE(myUCharBuf, 0, 0, sizeof(myUCharBuf), myUChar, TRUE);
-
-        /*makes the internal caching transparent to the user*/
-        if (*err == U_BUFFER_OVERFLOW_ERROR)
+        if(U_SUCCESS(*err)) {
+            length = (uint16_t)(args->target - myUCharBuf);
+            if(length > 0) {
+                return ucnv_getUChar32KeepOverflow(args->converter, myUCharBuf, length);
+            }
+            /* else (callback did not write anything) continue */
+        } else if(*err == U_BUFFER_OVERFLOW_ERROR) {
             *err = U_ZERO_ERROR;
-
+            return ucnv_getUChar32KeepOverflow(args->converter, myUCharBuf, 2);
+        } else {
+            /* break on error */
+            /* ### what if a callback set an error but _also_ generated output?! */
+            return 0xffff;
+        }
     }
 
-    return myUChar;
+    /* no input or only skipping callbacks */
+    *err = U_INDEX_OUTOFBOUNDS_ERROR;
+    return 0xffff;
 }
 
 static const UConverterImpl _UTF32BEImpl = {
@@ -2164,61 +2179,66 @@ UChar32 T_UConverter_getNextUChar_UTF32_LE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
 {
     /* Todo: This needs testing */
-    const unsigned char *mySource = (unsigned char *) args->source;
+    UChar myUCharBuf[2];
+    UChar *myUCharPtr;
+    const unsigned char *mySource;
     UChar32 myUChar;
+    int32_t length;
 
-    if (args->source + 4 > args->sourceLimit) 
+    while (args->source < args->sourceLimit)
     {
-        if (args->source >= args->sourceLimit)
-        {
-            /*Either caller has reached the end of the byte stream*/
-            *err = U_INDEX_OUTOFBOUNDS_ERROR;
-        }
-        else
+        if (args->source + 4 > args->sourceLimit) 
         {
             /* got a partial character */
             *err = U_TRUNCATED_CHAR_FOUND;
+            return 0xffff;
         }
 
-        return 0xffff;
-    }
+        /* Don't even try to do a direct cast because the value may be on an odd address. */
+        mySource = (unsigned char *) args->source;
+        myUChar = (mySource[0])
+                | (mySource[1] << 8)
+                | (mySource[2] << 16)
+                | (mySource[3] << 24);
 
-    /* Don't even try to do a direct cast because the value may be on an odd address. */
-    myUChar = (mySource[0])
-            | (mySource[1] << 8)
-            | (mySource[2] << 16)
-            | (mySource[3] << 24);
+        args->source = (const char *)(mySource + 4);
+        if (myUChar <= MAXIMUM_UTF) {
+            return myUChar;
+        }
 
-    if (myUChar <= MAXIMUM_UTF) {
-        /*updates the source*/
-        args->source += 4;  
-    }
-    else {
-        UChar myUCharBuf[2];
+        uprv_memcpy(args->converter->invalidCharBuffer, mySource, 4);
+        args->converter->invalidCharLength = 4;
+
+        myUCharPtr = myUCharBuf;
         *err = U_ILLEGAL_CHAR_FOUND;
-
-        uprv_memcpy(args->converter->invalidCharBuffer, mySource, sizeof(int32_t));
-
-        /*It is very likely that the ErrorFunctor will write to the
-         *internal buffers */
-        args->target = myUCharBuf;
-        args->targetLimit = myUCharBuf + sizeof(int32_t);
+        args->target = myUCharPtr;
+        args->targetLimit = myUCharBuf + 2;
         args->converter->fromCharErrorBehaviour(args->converter->toUContext,
                                         args,
-                                        args->source,
-                                        (int32_t)sizeof(int32_t),
+                                        (const char *)mySource,
+                                        4,
                                         UCNV_ILLEGAL,
                                         err);
 
-        UTF_GET_CHAR_SAFE(myUCharBuf, 0, 0, sizeof(myUCharBuf), myUChar, TRUE);
-
-        /*makes the internal caching transparent to the user*/
-        if (*err == U_BUFFER_OVERFLOW_ERROR)
+        if(U_SUCCESS(*err)) {
+            length = (uint16_t)(args->target - myUCharBuf);
+            if(length > 0) {
+                return ucnv_getUChar32KeepOverflow(args->converter, myUCharBuf, length);
+            }
+            /* else (callback did not write anything) continue */
+        } else if(*err == U_BUFFER_OVERFLOW_ERROR) {
             *err = U_ZERO_ERROR;
-
+            return ucnv_getUChar32KeepOverflow(args->converter, myUCharBuf, 2);
+        } else {
+            /* break on error */
+            /* ### what if a callback set an error but _also_ generated output?! */
+            return 0xffff;
+        }
     }
 
-    return myUChar;
+    /* no input or only skipping callbacks */
+    *err = U_INDEX_OUTOFBOUNDS_ERROR;
+    return 0xffff;
 }
 
 static const UConverterImpl _UTF32LEImpl = {
