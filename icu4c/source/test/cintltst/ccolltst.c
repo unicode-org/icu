@@ -43,6 +43,8 @@ void addCollTest(TestNode** root)
     addAllCollTest(root);
     addMiscCollTest(root);
 
+    addDataDrivenTest(root);
+
     addSearchTest(root);
 }
 
