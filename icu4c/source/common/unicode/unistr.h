@@ -102,6 +102,8 @@ class UnicodeConverter;     // unicode/convert.h
  * similar functionality as the Java String and StringBuffer classes.
  * It is a concrete implementation of the abstract class Replaceable (for transliteration).
  *
+ * The UnicodeString class is not suitable for subclassing.
+ *
  * <p>For an overview of Unicode strings in C and C++ see the
  * <a href="http://oss.software.ibm.com/icu/userguide/strings.html">User Guide Strings chapter</a>.</p>
  *

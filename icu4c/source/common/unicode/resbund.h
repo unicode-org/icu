@@ -65,6 +65,9 @@ U_NAMESPACE_BEGIN
  * More on resource bundle concepts and syntax can be found in the 
  * <a href="http://oss.software.ibm.com/icu/userguide/Fallbackmechanism.html">users guide</a>.
  * <P>
+ *
+ * The ResourceBundle class is not suitable for subclassing.
+ *
  * @stable
  */
 class U_COMMON_API ResourceBundle : public UObject {
