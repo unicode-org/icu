@@ -692,7 +692,9 @@ U_CFUNC UBool assertSuccess(const char* msg, UErrorCode* ec) {
     return TRUE;
 }
 
-U_CFUNC UBool assertTrue(const char* msg, UBool condition) { 
+/* if 'condition' is a UBool, the compiler complains bitterly about
+   expressions like 'a > 0' which it evaluates as int */
+U_CFUNC UBool assertTrue(const char* msg, int /*not UBool*/ condition) { 
     if (!condition) {
         log_err("FAIL: assertTrue() failed: %s\n", msg);
     }
@@ -701,7 +703,7 @@ U_CFUNC UBool assertTrue(const char* msg, UBool condition) {
         log_verbose("Ok: %s\n", msg);
     }
 #endif
-    return condition;   
+    return (UBool)condition;   
 }
 
 U_CFUNC UBool assertEquals(const char* message, const char* expected,
