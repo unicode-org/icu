@@ -626,6 +626,20 @@ public:
      */
     int32_t         hashCode(void) const;
 
+    /** 
+     * Sets the bogus state
+     * @param isBogus TRUE if bogus, FALSE if normal
+     * @draft ICU 2.1
+     */
+    void setBogus(UBool isBogus);
+
+    /**
+     * Gets the bogus state. Locale object can be bogus if it doesn't exist
+     * @return FALSE if it is a real locale, TRUE if it is a bogus locale
+     * @draft ICU 2.1
+     */
+    UBool isBogus(void) const;
+
     /**
      * Returns a list of all installed locales.
      * @param count Receives the number of locales in the list.
@@ -679,6 +693,8 @@ private:
     int32_t variantBegin;
     char* fullName;
     char fullNameBuffer[ULOC_FULLNAME_CAPACITY];
+
+    UBool fIsBogus;
     
 //    static Locale *localeList;
 //    static int32_t localeListCount;
@@ -722,6 +738,17 @@ inline const char *
 Locale::getName() const
 {
     return fullName;
+}
+
+inline void 
+Locale::setBogus(UBool isBogus) {
+  fIsBogus = isBogus;
+}
+
+
+inline UBool 
+Locale::isBogus(void) const {
+  return fIsBogus;
 }
 
 #ifndef ICU_LOCID_USE_DEPRECATES

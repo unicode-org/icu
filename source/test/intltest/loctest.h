@@ -67,6 +67,8 @@ public:
     
     void Test4105828(void) ;
 
+    void TestSetIsBogus(void);
+
     static UDate date(int32_t y, int32_t m, int32_t d, int32_t hr = 0, int32_t min = 0, int32_t sec = 0);
 
 private:

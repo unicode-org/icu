@@ -382,6 +382,7 @@ Locale::operator==( const   Locale& other) const
 /*This function initializes a Locale from a C locale ID*/
 Locale& Locale::init(const char* localeID)
 {
+    fIsBogus = FALSE;
     /* Free our current storage */
     if(fullName != fullNameBuffer) {
         uprv_free(fullName);
