@@ -7,6 +7,7 @@
 **********************************************************************
 */
 package com.ibm.icu.dev.test.perf;
+import com.ibm.icu.dev.tool.UOption;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.DecimalFormat;
 import java.util.List;
@@ -100,11 +101,19 @@ public abstract class PerfTest {
      */
     private Map availableTests; // NOT static
 
-    /**
-     * A flag determining whether to call gc() once before the test
-     * passes.
-     */
-    private boolean doPriorGC;
+    // Command-line options set these:
+    protected boolean        verbose;
+    protected String         sourceDir;
+    protected String         fileName;
+    //protected String         resolvedFileName;
+    protected String         encoding;
+    protected boolean        uselen;
+    protected int            iterations;
+    protected int            passes;
+    protected int            time;
+    protected boolean        line_mode;
+    protected boolean        bulk_mode;
+    protected boolean        doPriorGC;
 
     /**
      * Subclasses of PerfTest will need to create subclasses of
@@ -112,7 +121,7 @@ public abstract class PerfTest {
      * be timed.  They then call setTestFunction() in their "Test..."
      * method to establish this as the current test functor.
      */
-    public abstract class Function {
+    public abstract static class Function {
 
         /**
          * Subclasses must implement this method to do the action to be
@@ -121,11 +130,26 @@ public abstract class PerfTest {
         public abstract void call();
 
         /**
-         * Subclasses must implement this method to return positive
+         * Subclasses may implement this method to return positive
          * integer indicating the number of operations in a single
-         * call to this object's call() method.
+         * call to this object's call() method.  If subclasses do not
+         * override this method, the default implementation returns 1.
          */
-        public abstract  long getOperationsPerIteration();
+        public long getOperationsPerIteration() {
+            return 1;
+        }
+
+        /**
+         * Subclasses may implement this method to return either positive
+         * or negative integer indicating the number of events in a single
+         * call to this object's call() method.  If subclasses do not
+         * override this method, the default implementation returns -1,
+         * indicating that events are not applicable to this test.
+         * e.g: Number of breaks / iterations for break iterator
+         */
+        public long getEventsPerIteration() {
+            return -1;
+        }
 
         /**
          * Call call() n times in a tight loop and return the elapsed
@@ -145,11 +169,22 @@ public abstract class PerfTest {
     }
 
     /**
+     * Exception indicating a usage error.
+     */
+    public static class UsageException extends Exception {
+        public UsageException(String message) {
+            super(message);
+        }
+
+        public UsageException() {
+            super();
+        }
+    }
+
+    /**
      * Constructor.
      */
     protected PerfTest() {
-        availableTests = null;
-        doPriorGC = false;
     }
 
     /**
@@ -165,6 +200,42 @@ public abstract class PerfTest {
     }
 
     /**
+     * These must be kept in sync with getOptions().
+     */
+    static final int HELP1 = 0;
+    static final int HELP2 = 1;
+    static final int VERBOSE = 2;
+    static final int SOURCEDIR = 3;
+    static final int ENCODING = 4;
+    static final int USELEN = 5;
+    static final int FILE_NAME = 6;
+    static final int PASSES = 7;
+    static final int ITERATIONS = 8;
+    static final int TIME = 9;
+    static final int LINE_MODE = 10;
+    static final int BULK_MODE = 11;
+    static final int GARBAGE_COLLECT = 11;
+
+    UOption[] getOptions() {
+        return new UOption[] {
+            UOption.HELP_H(),
+            UOption.HELP_QUESTION_MARK(),
+            UOption.VERBOSE(),
+            UOption.SOURCEDIR(),
+            UOption.ENCODING(),
+            UOption.DEF( "uselen",        'u', UOption.NO_ARG),
+            UOption.DEF( "file-name",     'f', UOption.REQUIRES_ARG),
+            UOption.DEF( "passes",        'p', UOption.REQUIRES_ARG),
+            UOption.DEF( "iterations",    'i', UOption.REQUIRES_ARG),                    
+            UOption.DEF( "time",          't', UOption.REQUIRES_ARG),
+            UOption.DEF( "line-mode",     'l', UOption.NO_ARG),
+            UOption.DEF( "bulk-mode",     'b', UOption.NO_ARG),
+
+            UOption.DEF( "gc",            'g', UOption.NO_ARG), 
+        };
+    }
+
+    /**
      * Subclasses should call this method in their main().  run() will
      * in turn call setup() with any arguments it does not parse.
      * This method parses the command line and runs the tests given on
@@ -173,54 +244,92 @@ public abstract class PerfTest {
      */
     protected final void run(String[] args) throws Exception {
         ArrayList methodList = new ArrayList();
-        ArrayList countList = new ArrayList();
         Method meth = null;
-        ArrayList iterationCounts = new ArrayList();
+
+        availableTests = null;
+        doPriorGC = false;
+        encoding = "";
+        uselen = false;
+        fileName = null;
+        sourceDir = null;
+        //lines = null;
+        line_mode = false;
+        //buffer = null;
+        //bufferLen = 0;
+        verbose = false;
+        bulk_mode = false;
+        passes = iterations = time = 0;
+
+        UOption[] options = getOptions();
+        int remainingArgc = UOption.parseArgs(args, options);
+
+        if(args.length==0 || options[HELP1].doesOccur || options[HELP2].doesOccur) {
+            throw new UsageException();
+        }
+
+        if(options[VERBOSE].doesOccur) {
+            verbose = true;
+        }
+        
+        if(options[SOURCEDIR].doesOccur) {
+            sourceDir = options[SOURCEDIR].value;
+        }
+        
+        if(options[ENCODING].doesOccur) {
+            encoding = options[ENCODING].value;
+        }
+        
+        if(options[USELEN].doesOccur) {
+            uselen = true;
+        }
+        
+        if(options[FILE_NAME].doesOccur){
+            fileName = options[FILE_NAME].value;
+        }
+        
+        if (options[TIME].doesOccur && options[ITERATIONS].doesOccur) {
+            throw new UsageException("Cannot specify both time and iterations");
+        }
+
+        if(options[PASSES].doesOccur) {
+            passes = Integer.parseInt(options[PASSES].value);
+        }
+        
+        if(options[ITERATIONS].doesOccur) {
+            iterations = Integer.parseInt(options[ITERATIONS].value);
+            time =0;
+        }
+        
+        if(options[TIME].doesOccur) {
+            time = Integer.parseInt(options[TIME].value);
+            iterations = 0;
+        }
+        
+        if (options[LINE_MODE].doesOccur && options[BULK_MODE].doesOccur) {
+            throw new UsageException("Cannot specify both line mode and bulk mode");
+        }
+
+        if(options[LINE_MODE].doesOccur) {
+            line_mode = true;
+            bulk_mode = false;
+        }
+        
+        if(options[BULK_MODE].doesOccur) {
+            bulk_mode = true;
+            line_mode = false;
+        }
+    
+        if(options[GARBAGE_COLLECT].doesOccur) {
+            doPriorGC = true;
+        }
+
         int i, j;
-        for (i=0; i<args.length; ++i) {
-            if (args[i].equals("-")) {
-                // end of our options; the rest go to setup()
-                ++i;
-                break;
-            }
-
-            if (args[i].equalsIgnoreCase("-gc")) {
-                doPriorGC = true;
-                continue;
-            }
-
-            if (args[i].equalsIgnoreCase("-nogc")) {
-                doPriorGC = false;
-                continue;
-            }
-
-            // is args[i] a number?
-            try {
-                int n = Integer.parseInt(args[i]);
-                // >0 and <0 are okay, but 0 is illegal
-                if (n == 0) {
-                    throw new RuntimeException("Iteration count(s) may not be zero");
-                }
-                if (meth == null) {
-                    throw new RuntimeException("Iteration count(s) must follow method name");
-                }
-                iterationCounts.add(new Integer(n));
-                continue;
-            } catch (NumberFormatException e) {}
+        for (i=0; i<remainingArgc; ++i) {
 
             // is args[i] a method name?
             Method m = getTestMethod(args[i]);
             if (m != null) {
-                if (meth != null) {
-                    // COPIED below
-                    if (iterationCounts.size() < 1) {
-                        throw new RuntimeException("Method name must be followed by iteration count(s)");
-                    }
-                    methodList.add(meth);
-                    countList.add(toIntArray(iterationCounts));
-                    iterationCounts.clear();
-                }
-                meth = m;
+                methodList.add(m);
                 continue;
             }
 
@@ -230,26 +339,17 @@ public abstract class PerfTest {
             break;
         }
 
-        if (meth != null) {
-            // COPIED from above
-            if (iterationCounts.size() < 1) {
-                throw new RuntimeException("Method name must be followed by iteration count(s)");
-            }
-            methodList.add(meth);
-            countList.add(toIntArray(iterationCounts));
-        }
-
         if (methodList.size() < 1) {
-            throw new RuntimeException("Must specify at least one method name and count(s)");
+            throw new UsageException("Must specify at least one method name");
         }
 
         // Pass remaining arguments, if any, through to the subclass
         // via setup() method.
-        String[] remainingArgs = new String[args.length - i];
-        for (j=0; i<args.length; ++j) {
-            remainingArgs[j] = args[i++];
+        String[] subclassArgs = new String[remainingArgc - i];
+        for (j=0; i<remainingArgc; ++j) {
+            subclassArgs[j] = args[i++];
         }
-        setup(remainingArgs);
+        setup(subclassArgs);
 
         if (doPriorGC) {
             // Put the heap in a consistent state
@@ -261,7 +361,6 @@ public abstract class PerfTest {
         // Run the tests
         for (i=0; i<methodList.size(); ++i) {
             meth = (Method) methodList.get(i);
-            int[] counts = (int[]) countList.get(i);
 
             // Call meth to set up the test
             long eventsPerCall = -1;
@@ -275,17 +374,16 @@ public abstract class PerfTest {
 
             int n;
             long t;
-            for (j=0; j<counts.length; ++j) {
-                n = counts[j];
-                if (n > 0) {
+            for (j=0; j<passes; ++j) {
+                if (iterations > 0) {
                     // Run specified number of iterations
-                    System.out.println("= " + meth.getName() + " begin " + n);
-                    t = testFunction.time(n);
-                    System.out.println("= " + meth.getName() + " end " + t + " " + testFunction.getOperationsPerIteration());
+                    System.out.println("= " + meth.getName() + " begin " + iterations + " iterations");
+                    t = testFunction.time(iterations);
+                    System.out.println("= " + meth.getName() + " end " + (t/1000.0) + " " + testFunction.getOperationsPerIteration());
                 } else {
                     // Run for specified duration in seconds
-                    System.out.println("= " + meth.getName() + " begin " + n);
-                    n = -n * 1000; // s => ms
+                    System.out.println("= " + meth.getName() + " begin " + time + " seconds");
+                    n = time * 1000; // s => ms
                     //System.out.println("# " + meth.getName() + " " + n + " sec");                            
                     int loops = 0;
                     int failsafe = 1; // last resort for very fast methods
@@ -304,7 +402,7 @@ public abstract class PerfTest {
                         //System.out.println("# " + meth.getName() + " x " + loops);
                         t = testFunction.time(loops);
                     }
-                    System.out.println("= " + meth.getName() + " end " + t + " " + testFunction.getOperationsPerIteration() +
+                    System.out.println("= " + meth.getName() + " end " + (t/1000.0) + " " + testFunction.getOperationsPerIteration() +
                                        " " + loops);
                 }
             }
