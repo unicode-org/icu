@@ -39,19 +39,19 @@ static void TestLegalAndOthers(int32_t inputsize, int32_t outputsize);
 static void TestSingleByte(int32_t inputsize, int32_t outputsize);
 static void TestEBCDIC_STATEFUL_Sub(int32_t inputsize, int32_t outputsize);
 
-UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *expect, int expectLen, 
+UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
 			    const char *codepage, UConverterFromUCallback callback, int32_t *expectOffsets,
                 const char *mySubChar, int8_t len);
 
 
-UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expect, int expectlen, 
+UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
 		       const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets,
                const char *mySubChar, int8_t len);
 
 
-static void printSeq(const char* a, int len);
+static void printSeq(const uint8_t* a, int len);
 static void printUSeq(const UChar* a, int len);
-static void printSeqErr(const char* a, int len);
+static void printSeqErr(const uint8_t* a, int len);
 static void printUSeqErr(const UChar* a, int len);
 static void setNuConvTestName(const char *codepage, const char *direction);
 
