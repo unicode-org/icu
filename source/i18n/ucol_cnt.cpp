@@ -20,6 +20,7 @@
 
 #include "ucol_cnt.h"
 #include "cmemory.h"
+#include "unicode/uchar.h"
 
 void uprv_growTable(ContractionTable *tbl, UErrorCode *status) {
     if(tbl->position == tbl->size) {
@@ -154,7 +155,20 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
     uint32_t *CEPointer = table->CEs;
     for(i = 0; i<table->size; i++) {
         int32_t size = table->elements[i]->position;
-        uprv_memcpy(cpPointer, table->elements[i]->codePoints, size*sizeof(UChar));
+        uint8_t ccMax = 0, ccMin = 255, cc = 0;
+        for(j = 1; j<size; j++) {
+          cc = u_getCombiningClass(table->elements[i]->codePoints[j]);
+          if(cc>ccMax) {
+            ccMax = cc;
+          }
+          if(cc<ccMin) {
+            ccMin = cc;
+          }
+          *(cpPointer+j) = table->elements[i]->codePoints[j];
+        }
+        *cpPointer = ((ccMin==ccMax)?1:0 << 8) | ccMax;
+
+        /*uprv_memcpy(cpPointer, table->elements[i]->codePoints, size*sizeof(UChar));*/
         uprv_memcpy(CEPointer, table->elements[i]->CEs, size*sizeof(uint32_t));
         for(j = 0; j<size; j++) {
             if(isContraction(*(CEPointer+j))) {
