@@ -1206,6 +1206,7 @@ void RegexTest::Extended() {
         regex_find(testPattern, testFlags, matchString, lineNum);
     }
 
+    delete [] testData;
 
 }
 
