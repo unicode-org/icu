@@ -64,13 +64,14 @@ struct UResourceBundle {
 /*U_CFUNC UResourceBundle* ures_openNoFallback(UResourceBundle *r, const char* path, const char* localeID, UErrorCode* status);*/
 U_CFUNC UResourceBundle* ures_openNoFallback(const char* path, const char* localeID, UErrorCode* status);
 U_CFUNC const char* ures_getRealLocale(const UResourceBundle* resourceBundle, UErrorCode* status);
+U_CAPI void ures_initStackObject( UResourceBundle* resB);
 /*U_CFUNC UChar** ures_listInstalledLocales(const char *path, int32_t* count);*/
 U_CFUNC const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char* * resTag, UResourceDataEntry* *realData, Resource *res, UErrorCode *status);
 U_CFUNC int32_t hashBundle(const void *parm);
 U_CFUNC UBool compareBundles(const void *p1, const void *p2);
 
 /* Candidates for export */
-U_CFUNC UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original);
+U_CFUNC UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original, UErrorCode *status);
 U_CFUNC void copyResbFillIn(UResourceBundle *dest, const UResourceBundle *original);
 U_CFUNC const char* ures_getName(const UResourceBundle* resB);
 U_CFUNC const char* ures_getPath(const UResourceBundle* resB);

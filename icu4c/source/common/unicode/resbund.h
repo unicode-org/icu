@@ -193,7 +193,7 @@ public:
 					const Locale& locale,
 					UErrorCode& err);
                         ResourceBundle(const ResourceBundle &original);
-                        ResourceBundle(UResourceBundle *res);
+                        ResourceBundle(UResourceBundle *res, UErrorCode &status);
 
                         ResourceBundle& operator=(const ResourceBundle& other);
                         ~ResourceBundle();

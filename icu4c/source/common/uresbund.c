@@ -441,9 +441,9 @@ UResourceBundle *init_resb_result(const ResourceData *rdata, const Resource r, c
     return resB;
 }
 
-UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original) {
+UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original, UErrorCode *status) {
     UBool isStackObject;
-    if(r == original) {
+    if(U_FAILURE(*status) || r == original) {
         return r;
     }
     if(original != NULL) {
@@ -460,7 +460,7 @@ UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original) {
         }
         return r;
     } else {
-        return NULL;
+        return r;
     }
 }
 
@@ -657,7 +657,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resB, UR
         case RES_INT:
         case RES_BINARY:
         case RES_STRING:
-            return copyResb(fillIn, resB);
+            return copyResb(fillIn, resB, status);
             break;
         case RES_TABLE:
             r = res_getTableItemByIndex(&(resB->fResData), resB->fRes, resB->fIndex, &key);
@@ -703,7 +703,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resB, i
         case RES_INT:
         case RES_BINARY:
         case RES_STRING:
-            return copyResb(NULL, resB);
+            return copyResb(fillIn, resB, status);
             break;
         case RES_TABLE:
             r = res_getTableItemByIndex(&(resB->fResData), resB->fRes, indexR, &key);
@@ -1085,6 +1085,9 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath,
     return r;
 }
 
+U_CAPI void ures_initStackObject( UResourceBundle* resB) {
+  resB->fIsStackObject = TRUE;
+}
 
 U_CAPI const UChar* ures_get(    const UResourceBundle*    resB,
                 const char*              resourceTag,
@@ -1104,6 +1107,7 @@ U_CAPI const UChar* ures_getArrayItem(const UResourceBundle*     resB,
                     UErrorCode*                status)
 {
     UResourceBundle res;
+    ures_initStackObject(&res);
         if (status==NULL || U_FAILURE(*status)) {
                 return NULL;
         }
@@ -1129,6 +1133,7 @@ U_CAPI const UChar* ures_get2dArrayItem(const UResourceBundle*   resB,
                       UErrorCode*              status)
 {
     UResourceBundle res;
+    ures_initStackObject(&res);
         if (status==NULL || U_FAILURE(*status)) {
                 return NULL;
         }
@@ -1139,6 +1144,7 @@ U_CAPI const UChar* ures_get2dArrayItem(const UResourceBundle*   resB,
     ures_getByKey(resB, resourceTag, &res, status);
     if(U_SUCCESS(*status)) {
         UResourceBundle res2;
+	ures_initStackObject(&res2);
         ures_getByIndex(&res, rowIndex, &res2, status);
         ures_close(&res);
         if(U_SUCCESS(*status)) {
@@ -1160,6 +1166,7 @@ U_CAPI const UChar* ures_getTaggedArrayItem(const UResourceBundle*   resB,
                       UErrorCode*              status)
 {
     UResourceBundle res;
+    ures_initStackObject(&res);
         if (status==NULL || U_FAILURE(*status)) {
                 return NULL;
         }
@@ -1189,6 +1196,7 @@ U_CAPI int32_t ures_countArrayItems(const UResourceBundle* resourceBundle,
     Resource res = RES_BOGUS;
 
     UResourceBundle resData;
+    ures_initStackObject(&resData);
         if (status==NULL || U_FAILURE(*status)) {
                 return 0;
         }
@@ -1199,10 +1207,13 @@ U_CAPI int32_t ures_countArrayItems(const UResourceBundle* resourceBundle,
     ures_getByKey(resourceBundle, resourceKey, &resData, status);
 
     if(resData.fResData.data != NULL) {
-        return res_countArrayItems(&resData.fResData, resData.fRes);
+      int32_t result = res_countArrayItems(&resData.fResData, resData.fRes);
+      ures_close(&resData);
+      return result;
     } else {
-        *status = U_MISSING_RESOURCE_ERROR;
-        return 0;
+      *status = U_MISSING_RESOURCE_ERROR;
+      ures_close(&resData);
+      return 0;
     }
 }
 
