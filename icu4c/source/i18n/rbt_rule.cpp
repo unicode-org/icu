@@ -68,67 +68,7 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
                                          const TransliterationRuleData& theData,
                                          UErrorCode& status) :
     data(theData) {
-    init(input, anteContextPos, postContextPos,
-         outputStr, cursorPosition, cursorOffset, adoptedSegs,
-         anchorStart, anchorEnd, status);
-}
 
-/**
- * Construct a new rule with the given input, output text, and other
- * attributes.  A cursor position may be specified for the output text.
- * @param input input string, including key and optional ante and
- * post context
- * @param anteContextPos offset into input to end of ante context, or -1 if
- * none.  Must be <= input.length() if not -1.
- * @param postContextPos offset into input to start of post context, or -1
- * if none.  Must be <= input.length() if not -1, and must be >=
- * anteContextPos.
- * @param output output string
- * @param cursorPosition offset into output at which cursor is located, or -1 if
- * none.  If less than zero, then the cursor is placed after the
- * <code>output</code>; that is, -1 is equivalent to
- * <code>output.length()</code>.  If greater than
- * <code>output.length()</code> then an exception is thrown.
- */
-TransliterationRule::TransliterationRule(const UnicodeString& input,
-                                         int32_t anteContextPos, int32_t postContextPos,
-                                         const UnicodeString& outputStr,
-                                         int32_t cursorPosition,
-                                         const TransliterationRuleData& theData,
-                                         UErrorCode& status) :
-    data(theData) {
-    init(input, anteContextPos, postContextPos,
-         outputStr, cursorPosition, 0, NULL, FALSE, FALSE, status);
-}
-
-/**
- * Copy constructor.
- */
-TransliterationRule::TransliterationRule(TransliterationRule& other) :
-    pattern(other.pattern),
-    output(other.output),
-    anteContextLength(other.anteContextLength),
-    keyLength(other.keyLength),
-    cursorPos(other.cursorPos),
-    flags(other.flags),
-    firstKeySeg(other.firstKeySeg),
-    data(other.data) {
-
-    segments = 0;
-    if (other.segments != 0) {
-        int32_t len = SEGMENTS_LEN;
-        segments = new int32_t[len];
-        uprv_memcpy(segments, other.segments, len*sizeof(segments[0]));
-    }
-}
-
-void TransliterationRule::init(const UnicodeString& input,
-                               int32_t anteContextPos, int32_t postContextPos,
-                               const UnicodeString& outputStr,
-                               int32_t cursorPosition, int32_t cursorOffset,
-                               int32_t* adoptedSegs,
-                               UBool anchorStart, UBool anchorEnd,
-                               UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
@@ -190,6 +130,27 @@ void TransliterationRule::init(const UnicodeString& input,
     }
     if (anchorEnd) {
         flags |= ANCHOR_END;
+    }
+}
+
+/**
+ * Copy constructor.
+ */
+TransliterationRule::TransliterationRule(TransliterationRule& other) :
+    pattern(other.pattern),
+    output(other.output),
+    anteContextLength(other.anteContextLength),
+    keyLength(other.keyLength),
+    cursorPos(other.cursorPos),
+    flags(other.flags),
+    firstKeySeg(other.firstKeySeg),
+    data(other.data) {
+
+    segments = 0;
+    if (other.segments != 0) {
+        int32_t len = SEGMENTS_LEN;
+        segments = new int32_t[len];
+        uprv_memcpy(segments, other.segments, len*sizeof(segments[0]));
     }
 }
 
@@ -326,6 +287,18 @@ UBool TransliterationRule::masks(const TransliterationRule& r2) const {
         0 == r2.pattern.compare(left2 - left, len, pattern);
 }
 
+inline int32_t posBefore(const Replaceable& str, int32_t pos) {
+    return (pos > 0) ?
+        pos - UTF_CHAR_LENGTH(str.char32At(pos-1)) :
+        pos - 1;
+}
+
+inline int32_t posAfter(const Replaceable& str, int32_t pos) {
+    return (pos < str.length()) ?
+        pos + UTF_CHAR_LENGTH(str.char32At(pos)) :
+        pos + 1;
+}
+
 /**
  * Attempt a match and replacement at the given position.  Return
  * the degree of match between this rule and the given text.  The
@@ -385,16 +358,13 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     // A mismatch in the ante context, or with the start anchor,
     // is an outright U_MISMATCH regardless of whether we are
     // incremental or not.
-    int32_t cursor = pos.start;
+    int32_t cursor;
     int32_t newStart = 0;
+    int32_t minCursor;
     int32_t i;
 
     // Backup cursor by one
-    if (cursor > 0) {
-        cursor -= UTF_CHAR_LENGTH(text.char32At(cursor-1));
-    } else {
-        --cursor;
-    }
+    cursor = posBefore(text, pos.start);
 
     for (i=anteContextLength-1; i>=0; --i) {
         UChar keyChar = pattern.charAt(i);
@@ -415,10 +385,6 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
                 goto exit;
             }
         }
-        if (cursorPos == (i - anteContextLength)) {
-            // Record the position of the cursor
-            newStart = cursor;
-        }
         while (nextSegPos == i) {
             segPos[iSeg] = cursor;
             if (cursor >= 0) {
@@ -430,9 +396,11 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
         }
     }
 
+    minCursor = posAfter(text, cursor);
+
     // ------------------------ Start Anchor ------------------------
 
-    if ((flags & ANCHOR_START) && cursor != (pos.contextStart-1)) {
+    if ((flags & ANCHOR_START) && cursor != posBefore(text, pos.contextStart)) {
         m = U_MISMATCH;
         goto exit;
     }
@@ -513,8 +481,18 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     if (segments == NULL) {
         text.handleReplaceBetween(pos.start, keyLimit, output);
         lenDelta = output.length() - (keyLimit - pos.start);
-        if (cursorPos >= 0) {
-            newStart = pos.start + cursorPos;
+        newStart = pos.start;
+        int32_t n = cursorPos;
+        // cursorPos counts 16-bit code units
+        while (n > 0) {
+            int32_t l = UTF_CHAR_LENGTH(text.char32At(newStart));
+            n -= l;
+            newStart += l;
+        }
+        while (n < 0) {
+            int32_t l = UTF_CHAR_LENGTH(text.char32At(newStart-1));
+            n += l;
+            newStart -= l;
         }
     } else {
         /* When there are segments to be copied, use the Replaceable.copy()
@@ -567,11 +545,23 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
         buf.remove();
         text.handleReplaceBetween(pos.start, keyLimit, buf);
         lenDelta = dest - keyLimit - (keyLimit - pos.start);
+        // Handle cursor in postContext
+        if (cursorPos > output.length()) {
+            newStart = pos.start + (dest - keyLimit);
+            int32_t n = cursorPos - output.length();
+            // cursorPos counts 16-bit code units
+            while (n > 0) {
+                int32_t l = UTF_CHAR_LENGTH(text.char32At(newStart));
+                n -= l;
+                newStart += l;
+            }
+        }
     }
     
     pos.limit += lenDelta;
     pos.contextLimit += lenDelta;
-    pos.start = newStart;
+    // Restrict new value of start to [minCursor, pos.limit].
+    pos.start = uprv_max(minCursor, uprv_min(pos.limit, newStart));
     m = U_MATCH;
     
   exit:
