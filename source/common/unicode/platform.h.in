@@ -171,8 +171,9 @@ typedef unsigned short uint16_t;
 /* Information about POSIX support                                           */
 /*===========================================================================*/
 
-#define U_HAVE_NL_LANGINFO	@U_HAVE_NL_LANGINFO@
-#define U_HAVE_CODESET		@U_HAVE_CODESET@
+#define U_HAVE_NL_LANGINFO		@U_HAVE_NL_LANGINFO@
+#define U_HAVE_NL_LANGINFO_CODESET	@U_HAVE_NL_LANGINFO_CODESET@
+#define U_NL_LANGINFO_CODESET		@U_NL_LANGINFO_CODESET@
 
 #define U_TZSET			@U_TZSET@
 #define U_TIMEZONE		@U_TIMEZONE@
