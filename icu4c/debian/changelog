@@ -1,3 +1,9 @@
+icu (2.0.2-1) unstable; urgency=low
+
+  * Minor release of ICU with fixes for threading and strTo/FromWCS
+
+ -- Yves Arrouye <yves@debian.org>  Tue,  2 Apr 2002 09:06:00 -0800
+
 icu (2.1-1) unstable; urgency=low
 
   * Update to ICU version 2.1. (This comment is generated.)
