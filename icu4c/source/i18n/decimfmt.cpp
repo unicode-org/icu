@@ -1493,7 +1493,7 @@ void DecimalFormat::setRoundingIncrement(double newValue) {
         if (fRoundingIncrement == NULL) {
             fRoundingIncrement = new DigitList();
         }
-        fRoundingIncrement->set((long)newValue);
+        fRoundingIncrement->set((int32_t)newValue);
         fRoundingDouble = newValue;
     } else {
         delete fRoundingIncrement;
