@@ -21,6 +21,7 @@
 #include "unicode/uiter.h"
 #include "unicode/unorm.h"
 #include "utrie.h"
+#include "uset.h"
 #include "ustr_imp.h"
 
 /*
@@ -247,6 +248,20 @@ U_NAMESPACE_END
  */
 U_CAPI UBool U_EXPORT2
 unorm_internalIsFullCompositionExclusion(UChar32 c);
+
+/**
+ * Internal API, used by enumeration of canonically equivalent strings
+ * @internal
+ */
+U_CAPI UBool U_EXPORT2
+unorm_isCanonSafeStart(UChar32 c);
+
+/**
+ * Internal API, used by enumeration of canonically equivalent strings
+ * @internal
+ */
+U_CAPI UBool U_EXPORT2
+unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet);
 
 /**
  * Description of the format of unorm.dat version 2.1.
