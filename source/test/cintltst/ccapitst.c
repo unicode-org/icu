@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -24,7 +24,7 @@
 #include "cmemory.h"
 #include "ustr_imp.h"
 
-#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 #define NUM_CODEPAGE 1
 #define MAX_FILE_LEN 1024*20
@@ -1537,7 +1537,7 @@ static void TestConvertSafeCloneCallback()
 
 static void TestConvertSafeClone()
 {
-#define CLONETEST_CONVERTER_COUNT 9
+#define CLONETEST_CONVERTER_COUNT 12
 
     char charBuffer [21];   /* Leave at an odd number for alignment testing */
     uint8_t buffer [CLONETEST_CONVERTER_COUNT] [U_CNV_SAFECLONE_BUFFERSIZE];
@@ -1571,6 +1571,9 @@ static void TestConvertSafeClone()
     someConverters[6] = ucnv_open("ISO_2022,locale=kr,version=1",&err);
     someConverters[7] = ucnv_open("ISO_2022,locale=jp,version=1",&err);
     someConverters[8] = ucnv_open("BOCU-1", &err);
+    someConverters[9] = ucnv_open("UTF-7", &err);
+    someConverters[10] = ucnv_open("IMAP-mailbox-name", &err);
+    someConverters[11] = ucnv_open("ibm-1047-s390", &err);
     
     if(U_FAILURE(err)) {
       log_data_err("problems creating converters to clone- check the data.\n");
@@ -1650,6 +1653,10 @@ static void TestConvertSafeClone()
     {
         bufferSize = U_CNV_SAFECLONE_BUFFERSIZE;
         someClonedConverters[index] = ucnv_safeClone(someConverters[index], buffer[index], &bufferSize, &err);
+
+        /* close the original immediately to make sure that the clone works by itself */
+        ucnv_close(someConverters[index]);
+
         pCharBuffer = charBuffer;
         pUniBuffer = uniBuffer;
 
@@ -1684,7 +1691,6 @@ static void TestConvertSafeClone()
             log_err("FAIL: Cloned converter failed to do conversion. Error: %s\n",u_errorName(err));
         }
         ucnv_close(someClonedConverters[index]);
-        ucnv_close(someConverters[index]);
     }
 }
 
