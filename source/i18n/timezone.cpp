@@ -175,11 +175,11 @@ static UBool loadZoneData() {
     const char* name = (const char*)tzh + tzh->nameTableDelta;
     int32_t length;
     for (uint32_t i=0; i<tzh->count; ++i) {
-        zone_ids[i] = UnicodeString(name, ""); // invariant converter
-        length = zone_ids[i].length();  // add a NUL but don't count it so that
-        zone_ids[i].append((UChar)0);   // getBuffer() gets a terminated string
-        zone_ids[i].truncate(length);
-        name += uprv_strlen(name) + 1;
+        length = uprv_strlen(name);
+        zone_ids[i] = UnicodeString(name, length+1, ""); // invariant converter
+        zone_ids[i].truncate(length);   // add a NUL but don't count it so that
+                                        // getBuffer() gets a terminated string
+        name += length + 1;
     }
 
     // Keep mutexed operations as short as possible by doing all
