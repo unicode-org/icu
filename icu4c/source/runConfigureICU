@@ -113,10 +113,8 @@ case $platform in
         THE_COMP=xlC
         CC=/usr/ibmcxx/bin/xlc; export CC
         CXX=/usr/ibmcxx/bin/xlC_r; export CXX
-        RELEASE_CFLAGS="-qignerrno"
-        RELEASE_CXXFLAGS="-qignerrno"
-        #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
-        #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
+        RELEASE_CFLAGS="-O"
+        RELEASE_CXXFLAGS="-O"
         ;;
     AIX4.3VA)
         THE_OS=AIX
