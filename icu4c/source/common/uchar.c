@@ -41,6 +41,7 @@ static const char DATA_NAME[] = "uprops";
 static const char DATA_TYPE[] = "icu";
 
 static UDataMemory *propsData=NULL;
+static UErrorCode dataErrorCode=U_ZERO_ERROR;
 
 static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
 static UVersionInfo dataVersion={ 3, 0, 0, 0 };
@@ -102,6 +103,7 @@ uchar_cleanup()
     ucharsTable=NULL;
     propsVectors=NULL;
     countPropsVectors=0;
+    dataErrorCode=U_ZERO_ERROR;
     havePropsData=FALSE;
     return TRUE;
 }
@@ -118,6 +120,7 @@ loadPropsData(void) {
 
         /* open the data outside the mutex block */
         data=udata_openChoice(NULL, DATA_TYPE, DATA_NAME, isAcceptable, NULL, &errorCode);
+        dataErrorCode=errorCode;
         if(U_FAILURE(errorCode)) {
             return havePropsData=-1;
         }
@@ -128,6 +131,7 @@ loadPropsData(void) {
         length=(int32_t)p[UPROPS_PROPS32_INDEX]*4;
         length=utrie_unserialize(&trie, (const uint8_t *)(p+UPROPS_INDEX_COUNT), length-64, &errorCode);
         if(U_FAILURE(errorCode)) {
+            dataErrorCode=errorCode;
             udata_close(data);
             return havePropsData=-1;
         }
@@ -231,8 +235,13 @@ static const uint8_t flagsOffset[256]={
 }
 
 U_CFUNC UBool
-uprv_haveProperties() {
-    return (UBool)HAVE_DATA;
+uprv_haveProperties(UErrorCode *pErrorCode) {
+    if(HAVE_DATA) {
+        return TRUE;
+    } else {
+        *pErrorCode=dataErrorCode;
+        return FALSE;
+    }
 }
 
 /* API functions ------------------------------------------------------------ */

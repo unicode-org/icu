@@ -3580,7 +3580,7 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
 
     // normalization/properties data loaded?
     if( ((options&_COMPARE_EQUIV)!=0 && !_haveData(*pErrorCode)) ||
-        ((options&U_COMPARE_IGNORE_CASE)!=0 && !uprv_haveProperties())
+        ((options&U_COMPARE_IGNORE_CASE)!=0 && !uprv_haveProperties(pErrorCode))
     ) {
         return 0;
     }
@@ -3914,8 +3914,7 @@ unorm_compare(const UChar *s1, int32_t length1,
     if(!_haveData(*pErrorCode)) {
         return 0;
     }
-    if(!uprv_haveProperties()) {
-        *pErrorCode=U_FILE_ACCESS_ERROR;
+    if(!uprv_haveProperties(pErrorCode)) {
         return 0;
     }
 
