@@ -678,5 +678,49 @@ U_NAMESPACE_END
 
 #endif
 
+
+/**
+ * Create a string enumerator, owned by the caller, of all locales located within 
+ * the specified resource tree.
+ * @param path path to the tree, such as (NULL) or U_ICUDATA or U_ICUDATA_COLL.  If NULL,
+ * this call is similar to uloc_getAvailable().
+ * @param status error code
+ * @internal ICU 3.0
+ */
+U_CAPI UEnumeration* U_EXPORT2
+ures_openAvailableLocales(const char *path, UErrorCode *status);
+
+/**
+ * Returns a functionally equivalent locale (keywords and all) for the specified keyword.
+ * @param result fillin for the equivalent locale
+ * @param resultCapacity capacity of the fillin buffer
+ * @param path path to the tree, or NULL for ICU data
+ * @param resName top level resource to look at
+ * @param keyword a particular keyword to consider
+ * @param locid The requested locale
+ * @param isAvailable If non-null, pointer to fillin parameter that indicates whether the 
+ * requested locale was available. The locale is defined as 'available' if it physically 
+ * exists within the specified tree.
+ * @param status error code
+ * @return  the actual buffer size needed for the full locale.  If it's greater 
+ * than resultCapacity, the returned full name will be truncated and an error code will be returned.
+ * @internal ICU 3.0
+ */
+U_CAPI int32_t U_EXPORT2
+ures_getFunctionalEquivalent(char *result, int32_t resultCapacity, 
+                             const char *path, const char *resName, const char *keyword, const char *locid,
+                             UBool *isAvailable, UErrorCode *status);
+
+/**
+ * Given a tree path and keyword, return a string enumeration of all possible values for that keyword.
+ * @param path path to the tree, or NULL for ICU data
+ * @param keyword a particular keyword to consider, must match a top level resource name 
+ * within the tree.
+ * @param status error code
+ * @internal ICU 3.0
+ */
+U_CAPI UEnumeration* U_EXPORT2
+ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status);
+
 #endif /*_URES*/
 /*eof*/
