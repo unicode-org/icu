@@ -66,6 +66,8 @@ enum {
 #define GET_SIGNED_VALUE(props) ((int32_t)(props)>>UPROPS_VALUE_SHIFT)
 #define GET_EXCEPTIONS(props) (exceptionsTable+GET_UNSIGNED_VALUE(props))
 
+#define CAT_MASK(props) U_MASK(GET_CATEGORY(props))
+
 enum {
     EXC_UPPERCASE,
     EXC_LOWERCASE,
