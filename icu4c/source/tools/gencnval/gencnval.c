@@ -55,7 +55,7 @@ static const UDataInfo dataInfo={
     0,
 
     0x43, 0x76, 0x41, 0x6c,     /* dataFormat="CvAl" */
-    1, 0, 0, 0,                 /* formatVersion */
+    2, 0, 0, 0,                 /* formatVersion */
     1, 3, 1, 0                  /* dataVersion */
 };
 
@@ -180,6 +180,8 @@ main(int argc, char *argv[]) {
     udata_write16(out, aliasCount);
     for(i=0; i<aliasCount; ++i) {
         udata_write16(out, (uint16_t)(stringOffset+(aliases[i].alias-stringStore)));
+    }
+    for(i=0; i<aliasCount; ++i) {
         udata_write16(out, aliases[i].converter);
     }
 
