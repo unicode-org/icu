@@ -1018,7 +1018,7 @@ ucm_countChars(UCMStates *states,
                 break;
             default:
                 /* reserved, must never occur */
-                fprintf(stderr, "ucm error: byte sequence reached reserved action code, entry: 0x%02lx\n", entry);
+                fprintf(stderr, "ucm error: byte sequence reached reserved action code, entry: 0x%02lx\n", (unsigned long)entry);
                 return -1;
             }
         }
