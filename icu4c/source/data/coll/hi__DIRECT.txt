@@ -1,14 +1,13 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: deprecatedList.xml
 // *
 // ***************************************************************************
-
-hi__DIRECT {
-    Version { "1.1" }
-    // This is the order ICU originaly used
-    collations {
-      default { "direct" }
+hi__DIRECT{
+    collations{
+        default{"direct"}
     }
 }

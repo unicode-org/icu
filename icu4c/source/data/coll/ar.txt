@@ -3,16 +3,38 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/26 12:54
-// * Source File: \work\locale\common\collation\\ar.xml
+// * Source File: ../../../locale/common/collation/ar.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/collation/ar.xml
+ */
 ar{
-    Version{"1.1.1"}
+    Version{"1.2"}
     collations{
         standard{
             Sequence{"&ة=ت"}
             Version{"3.0"}
+        }
+        validSubLocales{
+            ar_AE{""}
+            ar_BH{""}
+            ar_DZ{""}
+            ar_EG{""}
+            ar_IN{""}
+            ar_IQ{""}
+            ar_JO{""}
+            ar_KW{""}
+            ar_LB{""}
+            ar_LY{""}
+            ar_MA{""}
+            ar_OM{""}
+            ar_QA{""}
+            ar_SA{""}
+            ar_SD{""}
+            ar_SY{""}
+            ar_TN{""}
+            ar_YE{""}
         }
     }
 }

@@ -3,12 +3,14 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/26 12:57
-// * Source File: \work\locale\common\collation\\ko.xml
+// * Source File: ../../../locale/common/collation/ko.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/collation/ko.xml
+ */
 ko{
-    Version{"1.1.1"}
+    Version{"1.2"}
     collations{
         standard{
             Sequence{
@@ -680,6 +682,9 @@ ko{
                 "&힐<<詰<<犵<<纈<<襭<<頡<<黠"
             }
             Version{"2.1"}
+        }
+        validSubLocales{
+            ko_KR{""}
         }
     }
 }

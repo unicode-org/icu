@@ -1,13 +1,13 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: deprecatedList.xml
 // *
 // ***************************************************************************
-
-es__TRADITIONAL {
-    Version { "2.0" }
-    collations {
-      default { "traditional" }
+es__TRADITIONAL{
+    collations{
+        default{"traditional"}
     }
 }

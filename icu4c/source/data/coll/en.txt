@@ -3,11 +3,11 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/collation\en.xml
+// * Source File: ../../../locale/common/collation/en.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/collation\en.xml
+ *  ICU <specials> source: ../../../locale/icu/collation/en.xml
  */
 en{
     Version{"1.2"}
