@@ -13,6 +13,9 @@
 #include "unicode/uniset.h"
 #include "mutex.h"
 #include "ucln_in.h"
+#include "unicode/ustring.h"
+#include "ustr_imp.h"
+#include "cpputils.h"
 
 U_NAMESPACE_BEGIN
 
@@ -33,8 +36,11 @@ static UnicodeSet* SKIP = NULL;
  */
 static UnicodeSet* CASED = NULL;
 
-TitlecaseTransliterator::TitlecaseTransliterator(UnicodeFilter* adoptedFilter) :
-    Transliterator(_ID, adoptedFilter) {
+TitlecaseTransliterator::TitlecaseTransliterator(const Locale& theLoc) :
+    Transliterator(_ID, 0),
+    loc(theLoc), 
+    buffer(0) {
+    buffer = new UChar[u_getMaxCaseExpansion()];
     // Need to look back 2 characters in the case of "can't"
     setMaximumContextLength(2);
 }
@@ -42,13 +48,20 @@ TitlecaseTransliterator::TitlecaseTransliterator(UnicodeFilter* adoptedFilter) :
 /**
  * Destructor.
  */
-TitlecaseTransliterator::~TitlecaseTransliterator() {}
+TitlecaseTransliterator::~TitlecaseTransliterator() {
+    delete [] buffer;
+}
 
 /**
  * Copy constructor.
  */
 TitlecaseTransliterator::TitlecaseTransliterator(const TitlecaseTransliterator& o) :
-    Transliterator(o) {}
+    Transliterator(o),
+    loc(o.loc),
+    buffer(0) {
+    buffer = new UChar[u_getMaxCaseExpansion()];    
+    uprv_arrayCopy(o.buffer, 0, this->buffer, 0, u_getMaxCaseExpansion());
+}
 
 /**
  * Assignment operator.
@@ -56,6 +69,8 @@ TitlecaseTransliterator::TitlecaseTransliterator(const TitlecaseTransliterator& 
 TitlecaseTransliterator& TitlecaseTransliterator::operator=(
                              const TitlecaseTransliterator& o) {
     Transliterator::operator=(o);
+    loc = o.loc;
+    uprv_arrayCopy(o.buffer, 0, this->buffer, 0, u_getMaxCaseExpansion());
     return *this;
 }
 
@@ -103,22 +118,58 @@ void TitlecaseTransliterator::handleTransliterate(
     // Convert things after a CASED character toLower; things
     // after a non-CASED, non-SKIP character toTitle.  SKIP
     // characters are copied directly and do not change the mode.
-    UnicodeString str("A", "");
-    for (start=offsets.start; start<offsets.limit; ++start) {
-        UChar c = text.charAt(start);
-        if (SKIP->contains(c)) {
-            continue;
-        }
-        UChar d = (UChar) (doTitle ? u_totitle(c)
-                                   : u_tolower(c));
-        if (c != d) {
-            str.setCharAt(0, d);
-            text.handleReplaceBetween(start, start+1, str);
-        }
-        doTitle = !CASED->contains(c);
+    int32_t textPos = offsets.start;
+    if (textPos >= offsets.limit) return;
+
+    // get string for context
+    // TODO: add convenience method to do this, since we do it all over
+
+    int32_t loop = 0;
+    UnicodeString original;
+    /* UChar *original = new UChar[offsets.contextLimit - offsets.contextStart+1]; */// get whole context
+    /* Extract the characters from Replaceable */
+    for (loop = offsets.contextStart; loop < offsets.contextLimit; loop++) {
+        original.append(text.charAt(loop));
     }
-    
-    offsets.start = start;
+    // Walk through original string
+    // If there is a case change, modify corresponding position in replaceable
+
+    int32_t i = textPos - offsets.contextStart;
+    int32_t limit = offsets.limit - offsets.contextStart;
+    UChar32 cp;
+    int32_t oldLen;
+    int32_t newLen;
+
+    for (; i < limit; ) {
+        UErrorCode status = U_ZERO_ERROR;
+        int32_t s = i;
+        buffer[0] = original.charAt(s);
+
+        UTF_GET_CHAR(original.getBuffer(), 0, i, original.length(), cp);
+        oldLen = UTF_CHAR_LENGTH(cp);
+        i += oldLen;
+        if (!SKIP->contains(cp)) {
+            if (doTitle) {
+                newLen = u_internalTitleCase(cp, buffer, u_getMaxCaseExpansion(), loc.getName());
+            } else {
+                u_strToLower(buffer, u_getMaxCaseExpansion(), original.getBuffer()+s, i-s, loc.getName(), &status);
+                newLen = buffer[0] == original.charAt(s) ? -1 : u_strlen(buffer);
+            }
+            doTitle = !CASED->contains(cp);
+            if (newLen >= 0) {
+                UnicodeString temp(buffer, newLen);
+                text.handleReplaceBetween(textPos, textPos + oldLen, temp);
+                if (newLen != oldLen) {
+                    textPos += newLen;
+                    offsets.limit += newLen - oldLen;
+                    offsets.contextLimit += newLen - oldLen;
+                    continue;
+                }
+            }
+        }
+        textPos += oldLen;
+    }
+    offsets.start = offsets.limit;
 }
 
 /**

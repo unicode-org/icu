@@ -9,6 +9,9 @@
 */
 
 #include "tolowtrn.h"
+#include "unicode/ustring.h"
+#include "ustr_imp.h"
+#include "cpputils.h"
 #include "unicode/uchar.h"
 
 U_NAMESPACE_BEGIN
@@ -18,31 +21,35 @@ const char LowercaseTransliterator::_ID[] = "Any-Lower";
 /**
  * Constructs a transliterator.
  */
-LowercaseTransliterator::LowercaseTransliterator(const Locale& theLoc,
-                                                   UnicodeFilter* adoptedFilter) :
-    TransformTransliterator(_ID, adoptedFilter),
-    loc(theLoc) {
+LowercaseTransliterator::LowercaseTransliterator(const Locale& theLoc) : Transliterator(_ID, 0),
+    loc(theLoc) , buffer(0) {
+    buffer = new UChar[u_getMaxCaseExpansion()];
 }
 
 /**
  * Destructor.
  */
-LowercaseTransliterator::~LowercaseTransliterator() {}
+LowercaseTransliterator::~LowercaseTransliterator() {
+    delete [] buffer;
+}
 
 /**
  * Copy constructor.
  */
 LowercaseTransliterator::LowercaseTransliterator(const LowercaseTransliterator& o) :
-    TransformTransliterator(o),
-    loc(o.loc) {}
+    Transliterator(o),
+    loc(o.loc), buffer(0) {
+    buffer = new UChar[u_getMaxCaseExpansion()];
+}
 
 /**
  * Assignment operator.
  */
 LowercaseTransliterator& LowercaseTransliterator::operator=(
                              const LowercaseTransliterator& o) {
-    TransformTransliterator::operator=(o);
+    Transliterator::operator=(o);
     loc = o.loc;
+    uprv_arrayCopy((const UChar*)o.buffer, 0, this->buffer, 0, u_getMaxCaseExpansion());
     return *this;
 }
 
@@ -54,18 +61,58 @@ Transliterator* LowercaseTransliterator::clone(void) const {
 }
 
 /**
- * TransformTransliterator framework method.
+ * Implements {@link Transliterator#handleTransliterate}.
  */
-UBool LowercaseTransliterator::hasTransform(UChar32 c) const {
-    return c != u_tolower(c);
-}
+void LowercaseTransliterator::handleTransliterate(Replaceable& text,
+                                 UTransPosition& offsets, 
+                                 UBool isIncremental) const
+{
+    int32_t textPos = offsets.start;
+    int32_t loop;
+    if (textPos >= offsets.limit) return;
 
-/**
- * TransformTransliterator framework method.
- */
-void LowercaseTransliterator::transform(UnicodeString& s) const {
-    s.toLower(loc);
-}
+    // get string for context
+    // TODO: add convenience method to do this, since we do it all over
+    
+    UnicodeString original;
+    /*UChar *original = new UChar[offsets.contextLimit - offsets.contextStart+1];*/ // get whole context
+    /* Extract the characters from Replaceable */
+    for (loop = offsets.contextStart; loop < offsets.contextLimit; loop++) {
+        original.append(text.charAt(loop));
+    }
+    
+    // Walk through original string
+    // If there is a case change, modify corresponding position in replaceable
+    
+    int32_t i = textPos - offsets.contextStart;
+    int32_t limit = offsets.limit - offsets.contextStart;
+    UChar32 cp;
+    int32_t oldLen;
+    
+    for (; i < limit; ) { 
+        UErrorCode status = U_ZERO_ERROR;
+        int32_t s = i;
+        buffer[0] = original.charAt(s);
 
+        UTF_GET_CHAR(original.getBuffer(), 0, i, original.length(), cp);
+        oldLen = UTF_CHAR_LENGTH(cp);
+        i += oldLen;
+        u_strToLower(buffer, u_getMaxCaseExpansion(), original.getBuffer()+s, i-s, loc.getName(), &status);
+        /* Skip checking of status code here because the buffer should not have overflowed. */
+        if ( buffer[0] != original.charAt(s) ) {
+            int len = u_strlen(buffer);
+            UnicodeString temp(buffer);
+            text.handleReplaceBetween(textPos, textPos + oldLen, temp);
+            if (len != oldLen) {
+                textPos += len;
+                offsets.limit += len - oldLen;
+                offsets.contextLimit += len - oldLen;
+                continue;
+            }
+        }
+        textPos += oldLen;
+    }
+    offsets.start = offsets.limit;
+}
 U_NAMESPACE_END
 
