@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/NormalizationMonkeyTest.java,v $
- * $Date: 2003/01/28 18:55:34 $
- * $Revision: 1.2 $
+ * $Date: 2003/05/23 17:37:22 $
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -25,14 +25,13 @@ public class NormalizationMonkeyTest extends TestFmwk {
     int loopCount = 100;
     int maxCharCount = 20;
     int maxCodePoint = 0x10ffff;
-    Random random = null;
+    Random random = null; // initialized in getTestSource
     UnicodeNormalizer unicode_NFD;
     UnicodeNormalizer unicode_NFC;
     UnicodeNormalizer unicode_NFKD;
     UnicodeNormalizer unicode_NFKC;
     
     public NormalizationMonkeyTest() {
-        random = new Random();
         unicode_NFD = new UnicodeNormalizer(UnicodeNormalizer.D, true);
         unicode_NFC = new UnicodeNormalizer(UnicodeNormalizer.C, true);
         unicode_NFKD = new UnicodeNormalizer(UnicodeNormalizer.KD, true);
@@ -86,6 +85,9 @@ public class NormalizationMonkeyTest extends TestFmwk {
     }
     
     String getTestSource() {
+	if (random == null) {
+	    random = createRandom(); // use test framework's random seed
+	}
         String source = "";
         int i = 0;
         while (i < (random.nextInt(maxCharCount) + 1)) {

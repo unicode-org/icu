@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/05/16 23:37:01 $
- * $Revision: 1.44 $
+ * $Date: 2003/05/23 17:37:22 $
+ * $Revision: 1.45 $
  *
  *****************************************************************************************
  */
@@ -60,6 +60,12 @@ public class TestFmwk extends AbstractTestLog {
         TestFmwkException(String msg) {
             super(msg);
         }
+    }
+
+    // use this instead of new random so we get a consistent seed 
+    // for our tests
+    protected Random createRandom() {
+	return new Random(params.seed);
     }
 
     /**

@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestNumberFormat.java,v $ 
- * $Date: 2003/05/19 21:08:58 $ 
- * $Revision: 1.5 $
+ * $Date: 2003/05/23 17:37:22 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -136,8 +136,9 @@ public class IntlTestNumberFormat extends com.ibm.icu.dev.test.TestFmwk {
         tryIt(-100);
         tryIt(-1913860352);
     
+        Random random = createRandom(); // use test framework's random seed
         for (int j = 0; j < 10; j++) {
-            double d = Math.random()*2e10 - 1e10;
+            double d = random.nextDouble()*2e10 - 1e10;
             tryIt(d);
             
         }

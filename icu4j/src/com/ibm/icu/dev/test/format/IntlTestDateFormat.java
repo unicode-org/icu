@@ -1,7 +1,7 @@
 /***************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDateFormat.java,v $ 
- * $Date: 2003/05/14 19:03:15 $ 
- * $Revision: 1.6 $
+ * $Date: 2003/05/23 17:37:22 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -48,7 +48,8 @@ public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
     private DateFormat fFormat = DateFormat.getInstance();
     private String fTestName = new String("getInstance");
     private int fLimit = 3; // How many iterations it should take to reach convergence
-    
+    private Random random; // initialized in randDouble
+
     public IntlTestDateFormat() {
         //Constructure
     }
@@ -202,6 +203,9 @@ public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
 
     // Return a random double from 0.01 to 1, inclusive
     private double randDouble() {
+	if (random == null) {
+	    random = createRandom();
+	}
         // Assume 8-bit (or larger) rand values.  Also assume
         // that the system rand() function is very poor, which it always is.
         //        double d;
@@ -222,8 +226,7 @@ public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
         //            else if (e > -1.0) d /= pow(10.0, e+1);
         //        }
         //        return d;
-        Random rand = new Random();
-        return rand.nextDouble();
+        return random.nextDouble();
     }
 
     public void TestAvailableLocales() {

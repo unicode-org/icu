@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatRoundTripTest.java,v $ 
- * $Date: 2003/05/14 19:03:15 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/05/23 17:37:22 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -36,7 +36,7 @@ public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
     private int SPARSENESS = 18;
     private int TRIALS = 4;
     private int DEPTH = 5;
-    private Random ran = new Random();
+    private Random ran;
 
     public static void main(String[] args) throws Exception {
         new DateFormatRoundTripTest().run(args);
@@ -45,7 +45,8 @@ public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
     public void TestDateFormatRoundTrip() {
         dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS zzz yyyy G");
         getFieldCal = Calendar.getInstance();
-    
+	ran = createRandom(); // use test framework's random seed
+
         final Locale[] avail = DateFormat.getAvailableLocales();
         int locCount = avail.length;
         logln("DateFormat available locales: " + locCount);

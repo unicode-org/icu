@@ -48,4 +48,64 @@ public class CurrencyTest extends TestFmwk {
             errln("FAIL: getAvailableLocales returned null");
         }
     }
+    
+    /**
+     * Test registration.
+     */
+    public void TestRegistration() {
+        final Currency jpy = Currency.getInstance("JPY");
+        final Currency usd = Currency.getInstance(Locale.US);
+
+        Locale fu_FU = new Locale("fu", "FU", "");
+
+        Object key1 = Currency.registerInstance(jpy, Locale.US);
+        Object key2 = Currency.registerInstance(jpy, fu_FU);
+
+        Currency nus = Currency.getInstance(Locale.US);
+        if (!nus.equals(jpy)) {
+            errln("expected " + jpy + " but got: " + nus);
+        }
+
+        // converage, make sure default factory works
+        Currency nus1 = Currency.getInstance(Locale.JAPAN);
+        if (!nus1.equals(jpy)) {
+            errln("expected " + jpy + " but got: " + nus1);
+        }
+
+        Locale[] locales = Currency.getAvailableLocales();
+        boolean found = false;
+        for (int i = 0; i < locales.length; ++i) {
+            if (locales[i].equals(fu_FU)) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            errln("did not find locale" + fu_FU + " in currency locales");
+        }
+
+        if (!Currency.unregister(key1)) {
+            errln("unable to unregister currency using key1");
+        }
+        if (!Currency.unregister(key2)) {
+            errln("unable to unregister currency using key2");
+        }
+
+        Currency nus2 = Currency.getInstance(Locale.US);
+        if (!nus2.equals(usd)) {
+            errln("expected " + usd + " but got: " + nus2);
+        }
+
+        locales = Currency.getAvailableLocales();
+        found = false;
+        for (int i = 0; i < locales.length; ++i) {
+            if (locales[i].equals(fu_FU)) {
+                found = true;
+                break;
+            }
+        }
+        if (found) {
+            errln("found locale" + fu_FU + " in currency locales after unregister");
+        }
+    }
 }

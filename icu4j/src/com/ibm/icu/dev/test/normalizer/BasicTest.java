@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $
- * $Date: 2003/05/14 19:03:17 $
- * $Revision: 1.29 $
+ * $Date: 2003/05/23 17:37:22 $
+ * $Revision: 1.30 $
  *
  *****************************************************************************************
  */
@@ -1486,8 +1486,7 @@ public class BasicTest extends TestFmwk {
 
 	  /* random checks of long strings */
 	  //srand((unsigned)time( NULL ));
-      Random rand = new Random();
-
+	  Random rand = createRandom(); // use test framework's random
 
 	  for (count = 0; count < 50; count ++)
 	  {

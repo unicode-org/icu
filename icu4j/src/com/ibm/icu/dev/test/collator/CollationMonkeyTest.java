@@ -50,7 +50,7 @@ public class CollationMonkeyTest extends TestFmwk {
             return;
         }
         
-        Random rand = new Random();
+        Random rand = createRandom(); // use test framework's random seed
         int s = rand.nextInt(0x7fff) % source.length();
         int t = rand.nextInt(0x7fff) % source.length();
         int slen = Math.abs(rand.nextInt(0x7fff) % source.length() - source.length()) % source.length();
@@ -127,7 +127,7 @@ public class CollationMonkeyTest extends TestFmwk {
          * the numbers will be different every time we run.
          */
         
-        Random rand = new Random();
+        Random rand = createRandom(); // use test framework's random seed
         int s = rand.nextInt(0x7fff) % source.length();
         int t = rand.nextInt(0x7fff) % source.length();
         int slen = Math.abs(rand.nextInt(0x7fff) % source.length() - source.length()) % source.length();

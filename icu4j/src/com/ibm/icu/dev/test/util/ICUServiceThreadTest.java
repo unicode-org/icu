@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUServiceThreadTest.java,v $
- * $Date: 2003/05/14 19:03:17 $
- * $Revision: 1.8 $
+ * $Date: 2003/05/23 17:37:23 $
+ * $Revision: 1.9 $
  *
  *******************************************************************************
  */
@@ -89,7 +89,7 @@ public class ICUServiceThreadTest extends TestFmwk
         Collator col = Collator.getInstance(locale);
         return service.getDisplayNames(locale, col, null);
     }
-    private static final Random r = new Random();
+    private static final Random r = new Random(); // this is a multi thread test, can't 'unrandomize' 
 
     private static String getCLV() {
 	String c = countries[r.nextInt(countries.length)];

@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatRoundTripTest.java,v $ 
- * $Date: 2003/05/14 19:03:16 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/05/23 17:37:22 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -19,6 +19,7 @@ package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.text.*;
 import java.util.Locale;
+import java.util.Random;
 
 /** 
  * Performs round-trip tests for NumberFormat
@@ -83,8 +84,12 @@ public class NumberFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * Return a random value from -range..+range.
      */
+    private Random random;
     public double randomDouble(double range) {
-        return Math.random() * range;
+        if (random == null) {
+            random = createRandom(); // use test framework's random seed
+        }
+        return  random.nextDouble() * range;
     } 
     
     public void _test(NumberFormat fmt) {
