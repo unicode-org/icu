@@ -28,7 +28,7 @@ static const UChar DIGITS[] = {
     85,86,87,88,89,90
 };
 
-UnicodeString& Utility::appendNumber(UnicodeString& result, int32_t n,
+UnicodeString& ICU_Utility::appendNumber(UnicodeString& result, int32_t n,
                                      int32_t radix, int32_t minDigits) {
     if (radix < 2 || radix > 36) {
         // Bogus radix
@@ -66,7 +66,7 @@ static const UChar HEX[16] = {48,49,50,51,52,53,54,55,  // 0-7
 /**
  * Return true if the character is NOT printable ASCII.
  */
-UBool Utility::isUnprintable(UChar32 c) {
+UBool ICU_Utility::isUnprintable(UChar32 c) {
     return !(c == 0x0A || (c >= 0x20 && c <= 0x7E));
 }
 
@@ -76,7 +76,7 @@ UBool Utility::isUnprintable(UChar32 c) {
  * printable ASCII, then do nothing and return FALSE.  Otherwise,
  * append the escaped notation and return TRUE.
  */
-UBool Utility::escapeUnprintable(UnicodeString& result, UChar32 c) {
+UBool ICU_Utility::escapeUnprintable(UnicodeString& result, UChar32 c) {
     if (isUnprintable(c)) {
         result.append(BACKSLASH);
         if (c & ~0xFFFF) {
@@ -102,7 +102,7 @@ UBool Utility::escapeUnprintable(UnicodeString& result, UChar32 c) {
  * For example, in the string "abc'hide'h", the 'h' in "hide" will not be
  * found by a search for 'h'.
  */
-int32_t Utility::quotedIndexOf(const UnicodeString& text,
+int32_t ICU_Utility::quotedIndexOf(const UnicodeString& text,
                                int32_t start, int32_t limit,
                                UChar charToFind) {
     for (int32_t i=start; i<limit; ++i) {
@@ -124,7 +124,7 @@ int32_t Utility::quotedIndexOf(const UnicodeString& text,
  * at pos.  Return the index of the first non-white-space character
  * at or after pos, or str.length(), if there is none.
  */
-int32_t Utility::skipWhitespace(const UnicodeString& str, int32_t pos) {
+int32_t ICU_Utility::skipWhitespace(const UnicodeString& str, int32_t pos) {
     while (pos < str.length()) {
         UChar32 c = str.char32At(pos);
         if (!u_isWhitespace(c)) {
@@ -154,7 +154,7 @@ int32_t Utility::skipWhitespace(const UnicodeString& str, int32_t pos) {
  * @return the position after the last character parsed, or -1 if
  * the parse failed
  */
-int32_t Utility::parsePattern(const UnicodeString& rule, int32_t pos, int32_t limit,
+int32_t ICU_Utility::parsePattern(const UnicodeString& rule, int32_t pos, int32_t limit,
                               const UnicodeString& pattern, int32_t* parsedInts) {
     // TODO Update this to handle surrogates
     int32_t p;
@@ -208,7 +208,7 @@ static const UChar ZERO_X[] = {48, 120, 0}; // "0x"
  * character to parse.  On output, the character after the last
  * parsed character.
  */
-int32_t Utility::parseInteger(const UnicodeString& rule, int32_t& pos, int32_t limit) {
+int32_t ICU_Utility::parseInteger(const UnicodeString& rule, int32_t& pos, int32_t limit) {
     int32_t count = 0;
     int32_t value = 0;
     int32_t p = pos;

@@ -983,7 +983,7 @@ static const UChar PRAGMA_NFC_RULES[] = {0x7E,0x6E,0x66,0x63,0x20,0x72,0x75,0x6C
  */
 UBool TransliteratorParser::resemblesPragma(const UnicodeString& rule, int32_t pos, int32_t limit) {
     // Must start with /use\s/i
-    return Utility::parsePattern(rule, pos, limit, PRAGMA_USE, NULL) >= 0;
+    return ICU_Utility::parsePattern(rule, pos, limit, PRAGMA_USE, NULL) >= 0;
 }
 
 /**
@@ -1008,25 +1008,25 @@ int32_t TransliteratorParser::parsePragma(const UnicodeString& rule, int32_t pos
     // use maximum backup 16;
     // use nfd rules;
     // use nfc rules;
-    int p = Utility::parsePattern(rule, pos, limit, PRAGMA_VARIABLE_RANGE, array);
+    int p = ICU_Utility::parsePattern(rule, pos, limit, PRAGMA_VARIABLE_RANGE, array);
     if (p >= 0) {
         setVariableRange(array[0], array[1]);
         return p;
     }
     
-    p = Utility::parsePattern(rule, pos, limit, PRAGMA_MAXIMUM_BACKUP, array);
+    p = ICU_Utility::parsePattern(rule, pos, limit, PRAGMA_MAXIMUM_BACKUP, array);
     if (p >= 0) {
         pragmaMaximumBackup(array[0]);
         return p;
     }
     
-    p = Utility::parsePattern(rule, pos, limit, PRAGMA_NFD_RULES, NULL);
+    p = ICU_Utility::parsePattern(rule, pos, limit, PRAGMA_NFD_RULES, NULL);
     if (p >= 0) {
         pragmaNormalizeRules(UNORM_NFD);
         return p;
     }
     
-    p = Utility::parsePattern(rule, pos, limit, PRAGMA_NFC_RULES, NULL);
+    p = ICU_Utility::parsePattern(rule, pos, limit, PRAGMA_NFC_RULES, NULL);
     if (p >= 0) {
         pragmaNormalizeRules(UNORM_NFC);
         return p;

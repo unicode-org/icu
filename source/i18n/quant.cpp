@@ -89,10 +89,10 @@ UnicodeString& Quantifier::toPattern(UnicodeString& result,
         return result.append((UChar)43); /*+*/
     }
     result.append((UChar)123); /*{*/
-    Utility::appendNumber(result, minCount);
+    ICU_Utility::appendNumber(result, minCount);
     result.append((UChar)44); /*,*/
     if (maxCount != MAX) {
-        Utility::appendNumber(result, maxCount);
+        ICU_Utility::appendNumber(result, maxCount);
     }
     result.append((UChar)125); /*}*/
     return result;
