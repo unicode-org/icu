@@ -699,10 +699,10 @@ UBool testTag(const char* frag,
 
 			for(index=0; index <tag_count; index++){
 				UResourceBundle *tagelement=NULL;
-				char *key=NULL;
+				const char *key=NULL;
 				UChar* value=NULL;
 				tagelement=ures_getByIndex(tags, index, tagelement, &status);
-				key=(char*)ures_getKey(tagelement);
+				key=ures_getKey(tagelement);
 				value=(UChar*)ures_getNextString(tagelement, &len, &key, &status);
 				log_verbose("tag = %s, value = %s\n", key, austrdup(value));
 				if(strncmp(key, "tag", 3) == 0 && u_strncmp(value, base, u_strlen(base)) == 0){
