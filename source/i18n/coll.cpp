@@ -111,7 +111,10 @@ public:
     virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* actualID, UErrorCode& status) const {
         LocaleKey& lkey = (LocaleKey&)key;
         if (actualID) {
-            lkey.canonicalID(*actualID);
+            // Ugly Hack Alert! We return an empty actualID to signal
+            // to callers that this is a default object, not a "real"
+            // service-created object. (TODO remove in 3.0) [aliu]
+            actualID->truncate(0);
         }
         Locale loc("");
         lkey.canonicalLocale(loc);
@@ -124,7 +127,13 @@ public:
             actualReturn = &ar;
         }
         Collator* result = (Collator*)ICULocaleService::getKey(key, actualReturn, status);
-        if (result) {
+        // Ugly Hack Alert! If the actualReturn length is zero, this
+        // means we got a default object, not a "real" service-created
+        // object.  We don't call setLocales() on a default object,
+        // because that will overwrite its correct built-in locale
+        // metadata (valid & actual) with our incorrect data (all we
+        // have is the requested locale). (TODO remove in 3.0) [aliu]
+        if (result && actualReturn->length() > 0) {
             const LocaleKey& lkey = (const LocaleKey&)key;
             Locale canonicalLocale("");
             Locale currentLocale("");
@@ -221,7 +230,19 @@ Collator* Collator::createInstance(const Locale& desiredLocale,
         return 0;
     
     if (hasService()) {
-        return (Collator*)gService->get(desiredLocale, status);
+        Locale actualLoc;
+        Collator *result =
+            (Collator*)gService->get(desiredLocale, &actualLoc, status);
+        // Ugly Hack Alert! If the returned locale is empty (not root,
+        // but empty -- getName() == "") then that means the service
+        // returned a default object, not a "real" service object.  In
+        // that case, the locale metadata (valid & actual) is setup
+        // correctly already, and we don't want to overwrite it. (TODO
+        // remove in 3.0) [aliu]
+        if (*actualLoc.getName() != 0) {
+            result->setLocales(desiredLocale, actualLoc);
+        }
+        return result;
     }
     return makeInstance(desiredLocale, status);
 }
