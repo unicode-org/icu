@@ -114,7 +114,7 @@ typedef enum{
     TLG_MASK =0x04,
     MLM_MASK =0x02,
     TML_MASK =0x01,
-    ZERO     =0x00,
+    ZERO     =0x00
 }MaskEnum;
 
 static UConverterImpl _ISCIIImpl={
