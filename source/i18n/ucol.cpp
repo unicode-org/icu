@@ -1079,7 +1079,7 @@ void collIterNormalize(collIterate *collationSource)
 
     normLen = unorm_decompose(collationSource->writableBuffer, (int32_t)collationSource->writableBufSize,
                               srcP, (int32_t)(endP - srcP),
-                              FALSE, FALSE,
+                              FALSE, 0,
                               &status);
     if(status == U_BUFFER_OVERFLOW_ERROR || status == U_STRING_NOT_TERMINATED_WARNING) {
         // reallocate and terminate
@@ -1096,7 +1096,7 @@ void collIterNormalize(collIterate *collationSource)
         status = U_ZERO_ERROR;
         normLen = unorm_decompose(collationSource->writableBuffer, (int32_t)collationSource->writableBufSize,
                                   srcP, (int32_t)(endP - srcP),
-                                  FALSE, FALSE,
+                                  FALSE, 0,
                                   &status);
     }
     if (U_FAILURE(status)) {
@@ -6724,7 +6724,7 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
           if (unorm_quickCheck(sBuf, sLen, UNORM_NFD, status) != UNORM_YES) {
               sLen = unorm_decompose(sColl->writableBuffer, (int32_t)sColl->writableBufSize,
                                      sBuf, sLen,
-                                     FALSE, FALSE,
+                                     FALSE, 0,
                                      status);
               if(*status == U_BUFFER_OVERFLOW_ERROR) {
                   if(!u_growBufferFromStatic(sColl->stackWritableBuffer,
@@ -6738,7 +6738,7 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
                   *status = U_ZERO_ERROR;
                   sLen = unorm_decompose(sColl->writableBuffer, (int32_t)sColl->writableBufSize,
                                          sBuf, sLen,
-                                         FALSE, FALSE,
+                                         FALSE, 0,
                                          status);
               }
               if(freeSBuf) {
@@ -6755,7 +6755,7 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
           if (unorm_quickCheck(tBuf, tLen, UNORM_NFD, status) != UNORM_YES) {
               tLen = unorm_decompose(tColl->writableBuffer, (int32_t)tColl->writableBufSize,
                                      tBuf, tLen,
-                                     FALSE, FALSE,
+                                     FALSE, 0,
                                      status);
               if(*status == U_BUFFER_OVERFLOW_ERROR) {
                   if(!u_growBufferFromStatic(tColl->stackWritableBuffer,
@@ -6769,7 +6769,7 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
                   *status = U_ZERO_ERROR;
                   tLen = unorm_decompose(tColl->writableBuffer, (int32_t)tColl->writableBufSize,
                                          tBuf, tLen,
-                                         FALSE, FALSE,
+                                         FALSE, 0,
                                          status);
               }
               if(freeTBuf) {
