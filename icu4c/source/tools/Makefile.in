@@ -25,10 +25,9 @@ subdir = tools
 
 # OBJDATADIR must be a short path (with ..'s) to the data.
 
-#SRCDATADIR=$(shell cd $(top_srcdir)/../data && /bin/pwd)
 SRCDATADIR=$(top_srcdir)/../data
 
-OBJDATADIR=$(shell cd $(top_builddir)/data && /bin/pwd)
+OBJDATADIR=$(top_builddir)/data
 # tmpdir is INSIDE pkgdata dir. if you change TMPDATADIR then the invokation
 # of pkgdata will break...
 TMPDATADIR=tmp
@@ -36,8 +35,7 @@ TMPDATADIR=tmp
 # DATABUILDDIR must be an absolute path because of the way pkgdata is invoked
 # from the temporary directory.
 
-DATABUILDDIR=$(shell cd $(OBJDATADIR) && /bin/pwd)
-CURDIR=$(shell /bin/pwd)
+DATABUILDDIR=$(OBJDATADIR)
 
 # relative lib links from pkgdata are the same as for tmp
 top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
