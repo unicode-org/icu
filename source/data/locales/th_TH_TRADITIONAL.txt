@@ -10,5 +10,7 @@ th_TH_TRADITIONAL {
 
     // International Calendars Data.
     // NOTE (ICU 2.6) - the format of this data WILL CHANGE in future releases.  
-     DefaultCalendar { "buddhist" }
+     calendar{ 
+	default{"buddhist" }
+     }
 }

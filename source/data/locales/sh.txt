@@ -197,45 +197,7 @@ sh {
         ZM { "Zambija" }
         ZW { "Zimbabve" }
     }
-    DateTimePatterns { 
-        "HH.mm.ss z",
-        "HH.mm.ss z",
-        "HH.mm.ss",
-        "HH.mm",
-        "EEEE, dd. MMMM yyyy.",
-        "EEEE, d.MM.yyyy.",
-        "dd.MM.yyyy.",
-        "d.M.yy.",
-        "{1} {0}",
-    }
 
-    DateTimeElements:intvector {
-        2,
-        1, // "Minimal Days in First Week" is unknown. Root value used instead
-    }
-
-    DayAbbreviations { 
-        "ned",
-        "pon",
-        "uto",
-        "sre",
-        "\u010Det",
-        "pet",
-        "sub",
-    }
-    DayNames { 
-        "nedelja",
-        "ponedeljak",
-        "utorak",
-        "sreda",
-        "\u010Detvrtak",
-        "petak",
-        "subota",
-    }
-    Eras { 
-        "p. n. e.",
-        "n. e.",
-    }
     Languages { 
         af { "Afrikanerski" }
         sq { "Albanski" }
@@ -300,34 +262,6 @@ sh {
         //ji { "Jidi\u0161" }  // Use "yi" instead
         yi { "Jidi\u0161" }
     }
-    MonthAbbreviations { 
-        "jan",
-        "feb",
-        "mar",
-        "apr",
-        "maj",
-        "jun",
-        "jul",
-        "avg",
-        "sep",
-        "okt",
-        "nov",
-        "dec",
-    }
-    MonthNames { 
-        "januar",
-        "februar",
-        "mart",
-        "april",
-        "maj",
-        "juni",
-        "juli",
-        "avgust",
-        "septembar",
-        "oktobar",
-        "novembar",
-        "decembar",
-    }
     NumberElements { 
         ",",
         ".",
@@ -361,5 +295,82 @@ sh {
     // Currency display names
     Currencies {
         YUN { "Din", "YUN" }
+    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                1, // "Minimal Days in First Week" is unknown. Root value used instead
+            }
+            DateTimePatterns{
+                "HH.mm.ss z",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE, dd. MMMM yyyy.",
+                "EEEE, d.MM.yyyy.",
+                "dd.MM.yyyy.",
+                "d.M.yy.",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ned",
+                        "pon",
+                        "uto",
+                        "sre",
+                        "\u010Det",
+                        "pet",
+                        "sub",
+                    }
+                    wide{
+                        "nedelja",
+                        "ponedeljak",
+                        "utorak",
+                        "sreda",
+                        "\u010Detvrtak",
+                        "petak",
+                        "subota",
+                    }
+                }
+            }
+            eras{
+                "p. n. e.",
+                "n. e.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "avg",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
+                    }
+                    wide{
+                        "januar",
+                        "februar",
+                        "mart",
+                        "april",
+                        "maj",
+                        "juni",
+                        "juli",
+                        "avgust",
+                        "septembar",
+                        "oktobar",
+                        "novembar",
+                        "decembar",
+                    }
+                }
+            }
+        }
     }
 }

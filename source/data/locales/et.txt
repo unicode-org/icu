@@ -283,71 +283,7 @@ et {
         //zh_cn { "Hiina (lihtsustatud)" }
         //zh_tw { "Hiina (traditsiooniline)" }
     }
-    DateTimePatterns { 
-        "H:mm:ss z",
-        "H:mm:ss z",
-        "H:mm:ss",
-        "H:mm",
-        "EEEE, d, MMMM yyyy",
-        "d MMMM yyyy",
-        "dd.MM.yyyy",
-        "dd.MM.yy",
-        "{1} {0}",
-    }
-    DateTimeElements:intvector {
-        2,
-        1, // "Minimal Days in First Week" is unknown. Root value used instead
-    }
-    DayAbbreviations { 
-        "P",
-        "E",
-        "T",
-        "K",
-        "N",
-        "R",
-        "L",
-    }
-    DayNames { 
-        "p\u00FChap\u00E4ev",
-        "esmasp\u00E4ev",
-        "teisip\u00E4ev",
-        "kolmap\u00E4ev",
-        "neljap\u00E4ev",
-        "reede",
-        "laup\u00E4ev",
-    }
-    Eras { 
-        "e.m.a.",
-        "m.a.j.",
-    }
-    MonthAbbreviations { 
-        "jaan",
-        "veebr",
-        "m\u00E4rts",
-        "apr",
-        "mai",
-        "juuni",
-        "juuli",
-        "aug",
-        "sept",
-        "okt",
-        "nov",
-        "dets",
-    }
-    MonthNames { 
-        "jaanuar",
-        "veebruar",
-        "m\u00E4rts",
-        "aprill",
-        "mai",
-        "juuni",
-        "juuli",
-        "august",
-        "september",
-        "oktoober",
-        "november",
-        "detsember",
-    }
+
     NumberElements { 
         ",",
         "\u00A0",
@@ -373,5 +309,82 @@ et {
     // Currency display names
     Currencies {
         EEK { "kr", "EEK" }
+    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                1, // "Minimal Days in First Week" is unknown. Root value used instead
+            }
+            DateTimePatterns{
+                "H:mm:ss z",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE, d, MMMM yyyy",
+                "d MMMM yyyy",
+                "dd.MM.yyyy",
+                "dd.MM.yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "P",
+                        "E",
+                        "T",
+                        "K",
+                        "N",
+                        "R",
+                        "L",
+                    }
+                    wide{
+                        "p\u00FChap\u00E4ev",
+                        "esmasp\u00E4ev",
+                        "teisip\u00E4ev",
+                        "kolmap\u00E4ev",
+                        "neljap\u00E4ev",
+                        "reede",
+                        "laup\u00E4ev",
+                    }
+                }
+            }
+            eras{
+                "e.m.a.",
+                "m.a.j.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jaan",
+                        "veebr",
+                        "m\u00E4rts",
+                        "apr",
+                        "mai",
+                        "juuni",
+                        "juuli",
+                        "aug",
+                        "sept",
+                        "okt",
+                        "nov",
+                        "dets",
+                    }
+                    wide{
+                        "jaanuar",
+                        "veebruar",
+                        "m\u00E4rts",
+                        "aprill",
+                        "mai",
+                        "juuni",
+                        "juuli",
+                        "august",
+                        "september",
+                        "oktoober",
+                        "november",
+                        "detsember",
+                    }
+                }
+            }
+        }
     }
 }

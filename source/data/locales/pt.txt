@@ -435,39 +435,6 @@ pt {
         ZMK { "ZMK", "Kwacha da Z\u00E2mbia" }
         ZWD { "ZWD", "D\u00F3lar do Zimbabue" }
     }
-    DateTimePatterns { 
-        "HH'H'mm'm'ss's' z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE, d' de 'MMMM' de 'yyyy",
-        "d' de 'MMMM' de 'yyyy",
-        "d/MMM/yyyy",
-        "dd-MM-yyyy",
-        "{1} {0}",
-    }
-    DayAbbreviations { 
-        "dom",
-        "seg",
-        "ter",
-        "qua",
-        "qui",
-        "sex",
-        "s\u00E1b",
-    }
-    DayNames { 
-        "domingo",
-        "segunda-feira",
-        "ter\u00E7a-feira",
-        "quarta-feira",
-        "quinta-feira",
-        "sexta-feira",
-        "s\u00E1bado",
-    }
-    Eras { 
-        "a.C.", // antes de Cristo 
-        "d.C.", // depois de Cristo
-    }
     ExemplarCharacters { "[a-z\u00e3\u00f5\u00e7\u00e1\u00e9\u00ed\u00f3\u00fa\u00e0\u00e2\u00ea\u00f4\u00fc\u00f2]" }
     LocaleScript{
         "Latn",  // ISO 15924 Name 
@@ -553,34 +520,6 @@ pt {
         vi { "vietnamita" }
         zh { "chin\u00EAs" }
     }
-    MonthAbbreviations { 
-        "jan",
-        "fev",
-        "mar",
-        "abr",
-        "mai",
-        "jun",
-        "jul",
-        "ago",
-        "set",
-        "out",
-        "nov",
-        "dez",
-    }
-    MonthNames { 
-        "janeiro",
-        "fevereiro",
-        "mar\u00E7o",
-        "abril",
-        "maio",
-        "junho",
-        "julho",
-        "agosto",
-        "setembro",
-        "outubro",
-        "novembro",
-        "dezembro",
-    }
     NumberElements { 
         ",",
         ".",
@@ -644,4 +583,100 @@ pt {
         REVISED { "Revisado" }
     }
 
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH'H'mm'm'ss's' z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d' de 'MMMM' de 'yyyy",
+                "d' de 'MMMM' de 'yyyy",
+                "d/MMM/yyyy",
+                "dd-MM-yyyy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "dom",
+                        "seg",
+                        "ter",
+                        "qua",
+                        "qui",
+                        "sex",
+                        "s\u00E1b",
+                    }
+                    narrow{
+		                "D",
+		                "S",
+		                "T",
+		                "Q",
+		                "Q",
+		                "S",
+		                "S",
+                    }
+                    wide{
+                        "domingo",
+                        "segunda-feira",
+                        "ter\u00E7a-feira",
+                        "quarta-feira",
+                        "quinta-feira",
+                        "sexta-feira",
+                        "s\u00E1bado",
+                    }
+                }
+            }
+            eras{
+                "a.C.", // antes de Cristo 
+                "d.C.", // depois de Cristo
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "fev",
+                        "mar",
+                        "abr",
+                        "mai",
+                        "jun",
+                        "jul",
+                        "ago",
+                        "set",
+                        "out",
+                        "nov",
+                        "dez",
+                    }
+                    narrow{
+		                "J",
+		                "F",
+		                "M",
+		                "A",
+		                "M",
+		                "J",
+		                "J",
+		                "A",
+		                "S",
+		                "O",
+		                "N",
+		                "D",
+                    }
+                    wide{
+                        "janeiro",
+                        "fevereiro",
+                        "mar\u00E7o",
+                        "abril",
+                        "maio",
+                        "junho",
+                        "julho",
+                        "agosto",
+                        "setembro",
+                        "outubro",
+                        "novembro",
+                        "dezembro",
+                    }
+                }
+            }
+        }
+    }
 }

@@ -283,67 +283,6 @@ he {
         //zh_cn { "\u05E1\u05D9\u05E0\u05D9\u05EA (\u05DE\u05E4\u05D5\u05E9\u05D8\u05EA)" }
         //zh_tw { "\u05E1\u05D9\u05E0\u05D9\u05EA (\u05DE\u05E1\u05D5\u05E8\u05EA\u05D9\u05EA)" }
     }
-    DateTimePatterns { 
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE d MMMM yyyy",
-        "d MMMM yyyy",
-        "dd/MM/yyyy",
-        "dd/MM/yy",
-        "{0} {1}",
-    }
-    DayAbbreviations { 
-        "\u05D0",
-        "\u05D1",
-        "\u05D2",
-        "\u05D3",
-        "\u05D4",
-        "\u05D5",
-        "\u05E9",
-    }
-    DayNames { 
-        "\u05D9\u05D5\u05DD \u05E8\u05D0\u05E9\u05D5\u05DF",
-        "\u05D9\u05D5\u05DD \u05E9\u05E0\u05D9",
-        "\u05D9\u05D5\u05DD \u05E9\u05DC\u05D9\u05E9\u05D9",
-        "\u05D9\u05D5\u05DD \u05E8\u05D1\u05D9\u05E2\u05D9",
-        "\u05D9\u05D5\u05DD \u05D7\u05DE\u05D9\u05E9\u05D9",
-        "\u05D9\u05D5\u05DD \u05E9\u05D9\u05E9\u05D9",
-        "\u05E9\u05D1\u05EA",
-    }
-    Eras { 
-        "\u05DC\u05E4\u05E0\u05D4\"\u05E1",
-        "\u05DC\u05E1\u05D4\"\u05E0"
-    }
-    MonthAbbreviations { 
-        "\u05D9\u05E0\u05D5",
-        "\u05E4\u05D1\u05E8",
-        "\u05DE\u05E8\u05E5",
-        "\u05D0\u05E4\u05E8",
-        "\u05DE\u05D0\u05D9",
-        "\u05D9\u05D5\u05E0",
-        "\u05D9\u05D5\u05DC",
-        "\u05D0\u05D5\u05D2",
-        "\u05E1\u05E4\u05D8",
-        "\u05D0\u05D5\u05E7",
-        "\u05E0\u05D5\u05D1",
-        "\u05D3\u05E6\u05DE",
-    }
-    MonthNames { 
-        "\u05D9\u05E0\u05D5\u05D0\u05E8",
-        "\u05E4\u05D1\u05E8\u05D5\u05D0\u05E8",
-        "\u05DE\u05E8\u05E5",
-        "\u05D0\u05E4\u05E8\u05D9\u05DC",
-        "\u05DE\u05D0\u05D9",
-        "\u05D9\u05D5\u05E0\u05D9",
-        "\u05D9\u05D5\u05DC\u05D9",
-        "\u05D0\u05D5\u05D2\u05D5\u05E1\u05D8",
-        "\u05E1\u05E4\u05D8\u05DE\u05D1\u05E8",
-        "\u05D0\u05D5\u05E7\u05D8\u05D5\u05D1\u05E8",
-        "\u05E0\u05D5\u05D1\u05DE\u05D1\u05E8",
-        "\u05D3\u05E6\u05DE\u05D1\u05E8",
-    }
     localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
 
     LocaleScript:array { 
@@ -392,60 +331,135 @@ he {
     // International Calendars Data.
     // NOTE (ICU 2.6) - the format of this data WILL CHANGE in future releases.  
 
-    MonthNames_hebrew {
-        "\u05EA\u05E9\u05E8\u05D9",                 // Tishri
-        "\u05D7\u05E9\u05D5\u05DF",                 // Heshvan
-        "\u05DB\u05E1\u05DC\u05D5",                 // Kislev
-        "\u05D8\u05D1\u05EA",                       // Tevet
-        "\u05E9\u05D1\u05D8",                       // Shevat
-        "\u05D0\u05D3\u05E8 \u05E8\u05D0\u05E9\u05D5\u05DF",    // Adar I
-        "\u05D0\u05D3\u05E8 \u05E9\u05E0\u05D9",    // Adar
-        "\u05E0\u05D9\u05E1\u05DF",                 // Nisan
-        "\u05D0\u05D9\u05D9\u05E8",                 // Iyar
-        "\u05E1\u05D9\u05D5\u05DF",                 // Sivan
-        "\u05EA\u05DE\u05D5\u05D6",                 // Tamuz
-        "\u05D0\u05D1",                             // Av
-        "\u05D0\u05DC\u05D5\u05DC",                 // Elul
+    calendar{
+        islamic{
+            // Islamic calendar
+            eras:array { 
+                "\u05E9\u05E0\u05EA \u05D4\u05D9\u05D2'\u05E8\u05D4"
+            }
+            monthNames{
+                format{
+                    abbreviated:alias {  // same as MonthNames (no data)
+                        "he/calendar/islamic/monthNames/format/wide"
+                    }  
+                    wide{
+                        "\u05DE\u05D5\u05D7\u05E8\u05DD",                                               // Muharram
+                        "\u05E1\u05E4\u05E8",                                                           // Safar
+                        "\u05E8\u05D1\u05D9\u05E2 \u05D0\u05DC-\u05D0\u05D5\u05D5\u05D0\u05DC",         // Rabi' al-awwal
+                        "\u05E8\u05D1\u05D9\u05E2 \u05D0\u05DC-\u05EA\u05E0\u05D9",                     // Rabi' al-thani
+                        "\u05D2'\u05D5\u05DE\u05D3\u05D4 \u05D0\u05DC-\u05D0\u05D5\u05D5\u05D0\u05DC",  // Jumada al-awwal
+                        "\u05D2'\u05D5\u05DE\u05D3\u05D4 \u05D0\u05DC-\u05EA\u05E0\u05D9",              // Jumada al-thani
+                        "\u05E8\u05D2'\u05D0\u05D1",                                                    // Rajab
+                        "\u05E9\u05E2\u05D1\u05D0\u05DF",                                               // Sha'ban
+                        "\u05E8\u05D0\u05DE\u05D3\u05DF",                                               // Ramadan
+                        "\u05E9\u05D5\u05D5\u05D0\u05DC",                                               // Shawwal
+                        "\u05D6\u05D5 \u05D0\u05DC-QI'DAH",                                             // Dhu al-Qi'dah  (NEED TRANSLATION!!)
+                        "\u05D6\u05D5 \u05D0\u05DC-\u05D7\u05D9\u05D2'\u05D4",                          // Dhu al-Hijjah
+                    }
+                }
+            }
+        } 
+        islamic-civil:alias{
+            "he/calendar/islamic"
+        }
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM yyyy",
+                "d MMMM yyyy",
+                "dd/MM/yyyy",
+                "dd/MM/yy",
+                "{0} {1}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "\u05D0",
+                        "\u05D1",
+                        "\u05D2",
+                        "\u05D3",
+                        "\u05D4",
+                        "\u05D5",
+                        "\u05E9",
+                    }
+                    wide{
+                        "\u05D9\u05D5\u05DD \u05E8\u05D0\u05E9\u05D5\u05DF",
+                        "\u05D9\u05D5\u05DD \u05E9\u05E0\u05D9",
+                        "\u05D9\u05D5\u05DD \u05E9\u05DC\u05D9\u05E9\u05D9",
+                        "\u05D9\u05D5\u05DD \u05E8\u05D1\u05D9\u05E2\u05D9",
+                        "\u05D9\u05D5\u05DD \u05D7\u05DE\u05D9\u05E9\u05D9",
+                        "\u05D9\u05D5\u05DD \u05E9\u05D9\u05E9\u05D9",
+                        "\u05E9\u05D1\u05EA",
+                    }
+                }
+            }
+            eras{
+                "\u05DC\u05E4\u05E0\u05D4\"\u05E1",
+                "\u05DC\u05E1\u05D4\"\u05E0"
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "\u05D9\u05E0\u05D5",
+                        "\u05E4\u05D1\u05E8",
+                        "\u05DE\u05E8\u05E5",
+                        "\u05D0\u05E4\u05E8",
+                        "\u05DE\u05D0\u05D9",
+                        "\u05D9\u05D5\u05E0",
+                        "\u05D9\u05D5\u05DC",
+                        "\u05D0\u05D5\u05D2",
+                        "\u05E1\u05E4\u05D8",
+                        "\u05D0\u05D5\u05E7",
+                        "\u05E0\u05D5\u05D1",
+                        "\u05D3\u05E6\u05DE",
+                    }
+                    wide{
+                        "\u05D9\u05E0\u05D5\u05D0\u05E8",
+                        "\u05E4\u05D1\u05E8\u05D5\u05D0\u05E8",
+                        "\u05DE\u05E8\u05E5",
+                        "\u05D0\u05E4\u05E8\u05D9\u05DC",
+                        "\u05DE\u05D0\u05D9",
+                        "\u05D9\u05D5\u05E0\u05D9",
+                        "\u05D9\u05D5\u05DC\u05D9",
+                        "\u05D0\u05D5\u05D2\u05D5\u05E1\u05D8",
+                        "\u05E1\u05E4\u05D8\u05DE\u05D1\u05E8",
+                        "\u05D0\u05D5\u05E7\u05D8\u05D5\u05D1\u05E8",
+                        "\u05E0\u05D5\u05D1\u05DE\u05D1\u05E8",
+                        "\u05D3\u05E6\u05DE\u05D1\u05E8",
+                    }
+                }
+            }
+        }
+        
+        hebrew{
+            eras:array {
+                "\u05DC\u05D1\u05D4\042\u05E2"
+            }
+            monthNames{
+                format{                  
+                    wide {
+                        "\u05EA\u05E9\u05E8\u05D9",                 // Tishri
+                        "\u05D7\u05E9\u05D5\u05DF",                 // Heshvan
+                        "\u05DB\u05E1\u05DC\u05D5",                 // Kislev
+                        "\u05D8\u05D1\u05EA",                       // Tevet
+                        "\u05E9\u05D1\u05D8",                       // Shevat
+                        "\u05D0\u05D3\u05E8 \u05E8\u05D0\u05E9\u05D5\u05DF",    // Adar I
+                        "\u05D0\u05D3\u05E8 \u05E9\u05E0\u05D9",    // Adar
+                        "\u05E0\u05D9\u05E1\u05DF",                 // Nisan
+                        "\u05D0\u05D9\u05D9\u05E8",                 // Iyar
+                        "\u05E1\u05D9\u05D5\u05DF",                 // Sivan
+                        "\u05EA\u05DE\u05D5\u05D6",                 // Tamuz
+                        "\u05D0\u05D1",                             // Av
+                        "\u05D0\u05DC\u05D5\u05DC",                 // Elul
+                    }
+                    abbreviated:alias {
+                        "he/calendar/hebrew/monthNames/format/wide"
+                    }
+                }
+            }
+        }
     }
-    MonthAbbreviations_hebrew:alias {
-        "he/MonthNames_hebrew"
-    }
-    Eras_hebrew:array {
-       "\u05DC\u05D1\u05D4\042\u05E2"
-    }
-
-    // Islamic calendar
-    Eras_islamic:array { 
-        "\u05E9\u05E0\u05EA \u05D4\u05D9\u05D2'\u05E8\u05D4"
-    }
-
-    MonthNames_islamic {
-        "\u05DE\u05D5\u05D7\u05E8\u05DD",                                               // Muharram
-        "\u05E1\u05E4\u05E8",                                                           // Safar
-        "\u05E8\u05D1\u05D9\u05E2 \u05D0\u05DC-\u05D0\u05D5\u05D5\u05D0\u05DC",         // Rabi' al-awwal
-        "\u05E8\u05D1\u05D9\u05E2 \u05D0\u05DC-\u05EA\u05E0\u05D9",                     // Rabi' al-thani
-        "\u05D2'\u05D5\u05DE\u05D3\u05D4 \u05D0\u05DC-\u05D0\u05D5\u05D5\u05D0\u05DC",  // Jumada al-awwal
-        "\u05D2'\u05D5\u05DE\u05D3\u05D4 \u05D0\u05DC-\u05EA\u05E0\u05D9",              // Jumada al-thani
-        "\u05E8\u05D2'\u05D0\u05D1",                                                    // Rajab
-        "\u05E9\u05E2\u05D1\u05D0\u05DF",                                               // Sha'ban
-        "\u05E8\u05D0\u05DE\u05D3\u05DF",                                               // Ramadan
-        "\u05E9\u05D5\u05D5\u05D0\u05DC",                                               // Shawwal
-        "\u05D6\u05D5 \u05D0\u05DC-QI'DAH",                                             // Dhu al-Qi'dah  (NEED TRANSLATION!!)
-        "\u05D6\u05D5 \u05D0\u05DC-\u05D7\u05D9\u05D2'\u05D4",                          // Dhu al-Hijjah
-   }
-
-    MonthAbbreviations_islamic:alias {  // same as MonthNames (no data)
-        "he/MonthNames_islamic"
-    }   
-    // Civil is identical other than in calculations
-    Eras_islamic-civil:alias {
-        "he/Eras_islamic"
-    }
-    MonthNames_islamic-civil:alias {
-        "he/MonthNames_islamic"
-    }
-    MonthAbbreviations_islamic-civil:alias {
-        "he/MonthAbbreviations_islamic"
-    }
-
 }

@@ -390,75 +390,7 @@ hu {
         zh { "k\u00EDnai" }
         zu { "zulu" }
     }
-    AmPmMarkers { 
-        "DE",
-        "DU",
-    }
-    DateTimePatterns { 
-        "H:mm:ss z",
-        "H:mm:ss z",
-        "H:mm:ss",
-        "H:mm",
-        "yyyy. MMMM d.",
-        "yyyy. MMMM d.",
-        "yyyy.MM.dd.",
-        "yyyy.MM.dd.",
-        "{1} {0}",
-    }
-    DateTimeElements:intvector {
-        2,
-        1, // "Minimal Days in First Week" is unknown. Root value used instead
-    }
-    DayAbbreviations { 
-        "V",
-        "H",
-        "K",
-        "Sze",
-        "Cs",
-        "P",
-        "Szo",
-    }
-    DayNames { 
-        "vas\u00E1rnap",
-        "h\u00E9tf\u0151",
-        "kedd",
-        "szerda",
-        "cs\u00FCt\u00F6rt\u00F6k",
-        "p\u00E9ntek",
-        "szombat",
-    }
-    Eras { 
-        "i.e.",
-        "i.u.",
-    }
-    MonthAbbreviations { 
-        "jan.",
-        "febr.",
-        "m\u00E1rc.",
-        "\u00E1pr.",
-        "m\u00E1j.",
-        "j\u00FAn.",
-        "j\u00FAl.",
-        "aug.",
-        "szept.",
-        "okt.",
-        "nov.",
-        "dec.",
-    }
-    MonthNames { 
-        "janu\u00E1r",
-        "febru\u00E1r",
-        "m\u00E1rcius",
-        "\u00E1prilis",
-        "m\u00E1jus",
-        "j\u00FAnius",
-        "j\u00FAlius",
-        "augusztus",
-        "szeptember",
-        "okt\u00F3ber",
-        "november",
-        "december",
-    }
+
     NumberElements { 
         ",",
         "\u00A0",
@@ -488,63 +420,147 @@ hu {
     Currencies {
         HUF { "Ft", "HUF" }
     }
-
-    // (ICU 2.6) International Calendar Data.  Note, THE FORMAT OF THIS DATA WILL CHANGE IN FUTURE RELEASES.
-    Eras_buddhist:array { "BK" }
-
-    // Islamic calendar
-    Eras_islamic:array { 
-            "MF"
-
+    calendar{
+        islamic{
+            // Islamic calendar
+            eras:array { 
+                "MF"
+            }
+            monthNames{
+                format{
+                    abbreviated:alias{
+                        "hu/calendar/islamic/monthNames/format/wide"
+                    }
+                    wide{
+                        "Moharrem",                 // Muharram
+                        "Safar",                    // Safar
+                        "R\u00E9bi el avvel",       // Rabi' al-awwal
+                        "R\u00E9bi el accher",      // Rabi' al-thani
+                        "Dsem\u00E1di el avvel",    // Jumada al-awwal
+                        "Dsem\u00E1di el accher",   // Jumada al-thani
+                        "Redseb",                   // Rajab
+                        "Sab\u00E1n",               // Sha'ban
+                        "Ramad\u00E1n",             // Ramadan
+                        "Sevv\u00E1l",              // Shawwal
+                        "Ds\u00FCl kade",           // Dhu al-Qi'dah
+                        "Ds\u00FCl hedse",          // Dhu al-Hijjah
+                    }
+                }
+            }
+        }
+        
+        // Civil is identical other than in calculations
+        islamic-civil:alias{
+            "hu/calendar/islamic"
+        }
+        buddhist{
+            eras:array { "BK" }
+        }
+        gregorian{
+            AmPmMarkers{
+                "DE",
+                "DU",
+            }
+            DateTimeElements:intvector {
+                2,
+                1, // "Minimal Days in First Week" is unknown. Root value used instead
+            }
+            DateTimePatterns{
+                "H:mm:ss z",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "yyyy. MMMM d.",
+                "yyyy. MMMM d.",
+                "yyyy.MM.dd.",
+                "yyyy.MM.dd.",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "V",
+                        "H",
+                        "K",
+                        "Sze",
+                        "Cs",
+                        "P",
+                        "Szo",
+                    }
+                    wide{
+                        "vas\u00E1rnap",
+                        "h\u00E9tf\u0151",
+                        "kedd",
+                        "szerda",
+                        "cs\u00FCt\u00F6rt\u00F6k",
+                        "p\u00E9ntek",
+                        "szombat",
+                    }
+                }
+            }
+            eras{
+                "i.e.",
+                "i.u.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan.",
+                        "febr.",
+                        "m\u00E1rc.",
+                        "\u00E1pr.",
+                        "m\u00E1j.",
+                        "j\u00FAn.",
+                        "j\u00FAl.",
+                        "aug.",
+                        "szept.",
+                        "okt.",
+                        "nov.",
+                        "dec.",
+                    }
+                    wide{
+                        "janu\u00E1r",
+                        "febru\u00E1r",
+                        "m\u00E1rcius",
+                        "\u00E1prilis",
+                        "m\u00E1jus",
+                        "j\u00FAnius",
+                        "j\u00FAlius",
+                        "augusztus",
+                        "szeptember",
+                        "okt\u00F3ber",
+                        "november",
+                        "december",
+                    }
+                }
+            }
+        }
+        hebrew{      
+            eras:array {
+                "T\u00C9"
+            }
+            monthNames{
+                format{
+                    abbreviated:alias{
+                        "hu/calendar/hebrew/monthNames/format/wide"
+                    }
+                    wide{
+                        "Tisri",                        // Tishri
+                        "Hesv\u00E1n",                  // Heshvan
+                        "Kiszl\u00E9v",                 // Kislev
+                        "T\u00E9v\u00E9sz",             // Tevet
+                        "Sv\u00E1t",                    // Shevat
+                        "\u00C1d\u00E1r ris\u00F3n",    // Adar I
+                        "\u00C1d\u00E1r s\u00E9ni",     // Adar
+                        "Nisz\u00E1n",                  // Nisan
+                        "Ij\u00E1r",                    // Iyar
+                        "Sziv\u00E1n",                  // Sivan
+                        "Tamuz",                        // Tamuz
+                        "\u00C1v",                      // Av
+                        "Elul",                         // Elul
+                    }
+                }
+            }
+        }
     }
-
-    MonthNames_islamic {
-        "Moharrem",                 // Muharram
-        "Safar",                    // Safar
-        "R\u00E9bi el avvel",       // Rabi' al-awwal
-        "R\u00E9bi el accher",      // Rabi' al-thani
-        "Dsem\u00E1di el avvel",    // Jumada al-awwal
-        "Dsem\u00E1di el accher",   // Jumada al-thani
-        "Redseb",                   // Rajab
-        "Sab\u00E1n",               // Sha'ban
-        "Ramad\u00E1n",             // Ramadan
-        "Sevv\u00E1l",              // Shawwal
-        "Ds\u00FCl kade",           // Dhu al-Qi'dah
-        "Ds\u00FCl hedse",          // Dhu al-Hijjah
-    }
-    MonthAbbreviations_islamic:alias {  // same as MonthNames (no data)
-        "hu/MonthNames_islamic"
-    }   
-    // Civil is identical other than in calculations
-    Eras_islamic-civil:alias {
-        "hu/Eras_islamic"
-    }
-    MonthNames_islamic-civil:alias {
-        "hu/MonthNames_islamic"
-    }
-    MonthAbbreviations_islamic-civil:alias {
-        "hu/MonthAbbreviations_islamic"
-    }
-    MonthNames_hebrew {
-        "Tisri",                        // Tishri
-        "Hesv\u00E1n",                  // Heshvan
-        "Kiszl\u00E9v",                 // Kislev
-        "T\u00E9v\u00E9sz",             // Tevet
-        "Sv\u00E1t",                    // Shevat
-        "\u00C1d\u00E1r ris\u00F3n",    // Adar I
-        "\u00C1d\u00E1r s\u00E9ni",     // Adar
-        "Nisz\u00E1n",                  // Nisan
-        "Ij\u00E1r",                    // Iyar
-        "Sziv\u00E1n",                  // Sivan
-        "Tamuz",                        // Tamuz
-        "\u00C1v",                      // Av
-        "Elul",                         // Elul
-    }
-    MonthAbbreviations_hebrew:alias {
-       "hu/MonthNames_hebrew" // no data
-    }
-    Eras_hebrew:array {
-        "T\u00C9"
-    }
-
 }

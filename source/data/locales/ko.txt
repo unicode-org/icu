@@ -8,10 +8,6 @@
 ko {
     Version { "2.0" }
 
-    AmPmMarkers {
-        "\uC624\uC804",
-        "\uC624\uD6C4",
-    }
     Countries {
         AD { "\uC548\uB3C4\uB77C" }
         AE { "\uC544\uB78D\uC5D0\uBBF8\uB9AC\uD2B8" }
@@ -628,35 +624,6 @@ ko {
         ZWD { "Z$",  "\uC9D0\uBE44\uBE0C\uC6E8 \uB2EC\uB7EC" }
     }
 
-    DateTimePatterns {
-        "a hh'\uC2DC' mm'\uBD84' ss'\uCD08' z",
-        "a hh'\uC2DC' mm'\uBD84' ss'\uCD08'",
-        "a hh'\uC2DC' mm'\uBD84'",
-        "a hh'\uC2DC' mm'\uBD84'",
-        "yyyy'\uB144' M'\uC6D4' d'\uC77C' EEEE",
-        "yyyy'\uB144' M'\uC6D4' d'\uC77C' EE",
-        "yyyy-MM-dd",
-        "yy-MM-dd",
-        "{1} {0}",
-    }
-    DayAbbreviations {
-        "\uC77C",
-        "\uC6D4",
-        "\uD654",
-        "\uC218",
-        "\uBAA9",
-        "\uAE08",
-        "\uD1A0",
-    }
-    DayNames {
-        "\uC77C\uC694\uC77C",
-        "\uC6D4\uC694\uC77C",
-        "\uD654\uC694\uC77C",
-        "\uC218\uC694\uC77C",
-        "\uBAA9\uC694\uC77C",
-        "\uAE08\uC694\uC77C",
-        "\uD1A0\uC694\uC77C",
-    }
     Eras {
         "\uae30\uC6D0\uC804",
         "\uC11C\uAE30",
@@ -870,34 +837,6 @@ ko {
         zh  { "\uC911\uAD6D\uC5B4" }
         zu  { "\uC904\uB8E8\uC5B4" }
     }
-    MonthAbbreviations {
-        "1\uC6D4",
-        "2\uC6D4",
-        "3\uC6D4",
-        "4\uC6D4",
-        "5\uC6D4",
-        "6\uC6D4",
-        "7\uC6D4",
-        "8\uC6D4",
-        "9\uC6D4",
-        "10\uC6D4",
-        "11\uC6D4",
-        "12\uC6D4",
-    }
-    MonthNames {
-        "1\uC6D4",
-        "2\uC6D4",
-        "3\uC6D4",
-        "4\uC6D4",
-        "5\uC6D4",
-        "6\uC6D4",
-        "7\uC6D4",
-        "8\uC6D4",
-        "9\uC6D4",
-        "10\uC6D4",
-        "11\uC6D4",
-        "12\uC6D4",
-    }
     Scripts {
         Arab { "\uC544\uB78D\uC5B4" }
         Armn { "\uC544\uB974\uBA54\uB2C8\uC544\uC5B4" }
@@ -990,6 +929,79 @@ ko {
             "KST",
             "\uD55C\uAD6D\uD45C\uC900\uC2DC",
             "KST"
+        }
+    }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "\uC624\uC804",
+                "\uC624\uD6C4",
+            }
+            DateTimePatterns{
+                "a hh'\uC2DC' mm'\uBD84' ss'\uCD08' z",
+                "a hh'\uC2DC' mm'\uBD84' ss'\uCD08'",
+                "a hh'\uC2DC' mm'\uBD84'",
+                "a hh'\uC2DC' mm'\uBD84'",
+                "yyyy'\uB144' M'\uC6D4' d'\uC77C' EEEE",
+                "yyyy'\uB144' M'\uC6D4' d'\uC77C' EE",
+                "yyyy-MM-dd",
+                "yy-MM-dd",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "\uC77C",
+                        "\uC6D4",
+                        "\uD654",
+                        "\uC218",
+                        "\uBAA9",
+                        "\uAE08",
+                        "\uD1A0",
+                    }
+                    wide{
+                        "\uC77C\uC694\uC77C",
+                        "\uC6D4\uC694\uC77C",
+                        "\uD654\uC694\uC77C",
+                        "\uC218\uC694\uC77C",
+                        "\uBAA9\uC694\uC77C",
+                        "\uAE08\uC694\uC77C",
+                        "\uD1A0\uC694\uC77C",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "1\uC6D4",
+                        "2\uC6D4",
+                        "3\uC6D4",
+                        "4\uC6D4",
+                        "5\uC6D4",
+                        "6\uC6D4",
+                        "7\uC6D4",
+                        "8\uC6D4",
+                        "9\uC6D4",
+                        "10\uC6D4",
+                        "11\uC6D4",
+                        "12\uC6D4",
+                    }
+                    wide{
+                        "1\uC6D4",
+                        "2\uC6D4",
+                        "3\uC6D4",
+                        "4\uC6D4",
+                        "5\uC6D4",
+                        "6\uC6D4",
+                        "7\uC6D4",
+                        "8\uC6D4",
+                        "9\uC6D4",
+                        "10\uC6D4",
+                        "11\uC6D4",
+                        "12\uC6D4",
+                    }
+                }
+            }
         }
     }
 }

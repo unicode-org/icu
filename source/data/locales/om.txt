@@ -17,61 +17,8 @@
 
 om {
     Version{ "2.0" }
-    DayAbbreviations {
-        "Dil",
-        "Wix",
-        "Qib",
-        "Rob",
-        "Kam",
-        "Jim",
-        "San",
-    }
-    DayNames {
-        "Dilbata",
-        "Wiixata",
-        "Qibxata",
-        "Roobii",
-        "Kamiisa",
-        "Jimaata",
-        "Sanbata",
-    }
 //    LanguageLibraryUse { "orm" }
-    MonthAbbreviations {
-        "Ama",
-        "Gur",
-        "Bit",
-        "Elb",
-        "Cam",
-        "Wax",
-        "Ado",
-        "Hag",
-        "Ful",
-        "Onk",
-        "Sad",
-        "Mud",
-    }
-    MonthNames {
-        "Amajjii",
-        "Guraandhala",
-        "Bitooteessa",
-        "Elba",
-        "Caamsa",
-        "Waxabajjii",
-        "Adooleessa",
-        "Hagayya",
-        "Fuulbana",
-        "Onkololeessa",
-        "Sadaasa",
-        "Muddee",
-    }
-    Eras { 
-        "KD",  // KD = Kiristoos Dura = Before Christ
-        "KB",  // KB = Kiristoos Booda = After Christ
-    }
-    DateTimeElements:intvector { 
-        7,
-        1,
-    }
+
     Languages { 
         om { "Oromoo" }
     }
@@ -89,5 +36,71 @@ om {
     }
     ExemplarCharacters{
         "[a-z]"
+    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector { 
+                7,
+                1,
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Dil",
+                        "Wix",
+                        "Qib",
+                        "Rob",
+                        "Kam",
+                        "Jim",
+                        "San",
+                    }
+                    wide{
+                        "Dilbata",
+                        "Wiixata",
+                        "Qibxata",
+                        "Roobii",
+                        "Kamiisa",
+                        "Jimaata",
+                        "Sanbata",
+                    }
+                }
+            }
+            eras{
+                "KD",  // KD = Kiristoos Dura = Before Christ
+                "KB",  // KB = Kiristoos Booda = After Christ
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Ama",
+                        "Gur",
+                        "Bit",
+                        "Elb",
+                        "Cam",
+                        "Wax",
+                        "Ado",
+                        "Hag",
+                        "Ful",
+                        "Onk",
+                        "Sad",
+                        "Mud",
+                    }
+                    wide{
+                        "Amajjii",
+                        "Guraandhala",
+                        "Bitooteessa",
+                        "Elba",
+                        "Caamsa",
+                        "Waxabajjii",
+                        "Adooleessa",
+                        "Hagayya",
+                        "Fuulbana",
+                        "Onkololeessa",
+                        "Sadaasa",
+                        "Muddee",
+                    }
+                }
+            }
+        }
     }
 }

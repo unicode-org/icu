@@ -641,43 +641,7 @@ es {
         ZRZ { "ZRZ", "zaire zaire\u00F1o" } // 10/27/1971-11/01/1993
         ZWD { "Z$",  "d\u00F3lar de Zimbabue" } // 04/18/1980-
     }
-    DateTimeElements:intvector { 
-        2,
-        1,
-    }
-    DateTimePatterns { 
-        "HH'H'mm''ss\" z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE d' de 'MMMM' de 'yyyy",
-        "d' de 'MMMM' de 'yyyy",
-        "dd-MMM-yy",
-        "d/MM/yy",
-        "{1} {0}",
-    }
-    DayAbbreviations { 
-        "dom",
-        "lun",
-        "mar",
-        "mi\u00E9",
-        "jue",
-        "vie",
-        "s\u00E1b",
-    }
-    DayNames { 
-        "domingo",
-        "lunes",
-        "martes",
-        "mi\u00E9rcoles",
-        "jueves",
-        "viernes",
-        "s\u00E1bado",
-    }
-    Eras { 
-        "a.C.",  // Said to be a.C. for antes de Cristo
-        "d.C.",  // Said to be d.C. for despu\u00E9s de Cristo
-    }
+
     // Spanish does not capitalize the language names like English
     Languages {
         root{"ra\u00EDz" }    // The only exception to ISO-639
@@ -811,34 +775,6 @@ es {
     // u umlaut \u00fc is a rare character.
     // It can be found in words like multilig\u00fce, ag\u00fcita and Itag\u00fc\u00ed
     ExemplarCharacters { "[a-z \u00f1 \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00fc]" }
-    MonthAbbreviations { 
-        "ene",
-        "feb",
-        "mar",
-        "abr",
-        "may",
-        "jun",
-        "jul",
-        "ago",
-        "sep",
-        "oct",
-        "nov",
-        "dic",
-    }
-    MonthNames { 
-        "enero",
-        "febrero",
-        "marzo",
-        "abril",
-        "mayo",
-        "junio",
-        "julio",
-        "agosto",
-        "septiembre",
-        "octubre",
-        "noviembre",
-        "diciembre",
-    }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
         "\u00A4#,##0.00;(\u00A4#,##0.00)",
@@ -996,4 +932,104 @@ es {
         REVISED { "Revisado" }
     }
 
+    calendar{
+        gregorian{
+            DateTimeElements:intvector { 
+                2,
+                1,
+            }
+            DateTimePatterns{
+                "HH'H'mm''ss\" z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d' de 'MMMM' de 'yyyy",
+                "d' de 'MMMM' de 'yyyy",
+                "dd-MMM-yy",
+                "d/MM/yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "dom",
+                        "lun",
+                        "mar",
+                        "mi\u00E9",
+                        "jue",
+                        "vie",
+                        "s\u00E1b",
+                    }
+                    narrow{
+		                "D"
+		                "L"
+		                "M"
+		                "M"
+		                "J"
+		                "V"
+		                "S"
+                    }
+                    wide{
+                        "domingo",
+                        "lunes",
+                        "martes",
+                        "mi\u00E9rcoles",
+                        "jueves",
+                        "viernes",
+                        "s\u00E1bado",
+                    }
+                }
+            }
+            eras{
+                "a.C.",  // Said to be a.C. for antes de Cristo
+                "d.C.",  // Said to be d.C. for despu\u00E9s de Cristo
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "ene",
+                        "feb",
+                        "mar",
+                        "abr",
+                        "may",
+                        "jun",
+                        "jul",
+                        "ago",
+                        "sep",
+                        "oct",
+                        "nov",
+                        "dic",
+                    }
+                    narrow{
+		                "E",
+		                "F",
+		                "M",
+		                "A",
+		                "M",
+		                "J",
+		                "J",
+		                "A",
+		                "S",
+		                "O",
+		                "N",
+ 		                "D",
+                    }
+                    wide{
+                        "enero",
+                        "febrero",
+                        "marzo",
+                        "abril",
+                        "mayo",
+                        "junio",
+                        "julio",
+                        "agosto",
+                        "septiembre",
+                        "octubre",
+                        "noviembre",
+                        "diciembre",
+                    }
+                }
+            }
+        }
+    }
 }

@@ -255,43 +255,7 @@ nl {
         BEF { "BF", "BEF" }
         NLG { "fl", "NLG" }
     }
-    DateTimeElements:intvector { 
-        2,
-        4,
-    }
-    DateTimePatterns { 
-        "H:mm:ss' uur' z",
-        "H:mm:ss z",
-        "H:mm:ss",
-        "H:mm",
-        "EEEE d MMMM yyyy",
-        "d MMMM yyyy",
-        "d-MMM-yyyy",
-        "d-M-yy",
-        "{1} {0}",
-    }
-    DayAbbreviations { 
-        "zo",
-        "ma",
-        "di",
-        "wo",
-        "do",
-        "vr",
-        "za",
-    }
-    DayNames { 
-        "zondag",
-        "maandag",
-        "dinsdag",
-        "woensdag",
-        "donderdag",
-        "vrijdag",
-        "zaterdag",
-    }
-    Eras { 
-        "v. Chr.",  // voor Christus
-        "n. Chr.",  // na Christus
-    }
+
     ExemplarCharacters { "[a-z\u00e1\u00e9\u00ed\u00f3\u00fa\u00e4\u00eb\u00ef\u00f6\u00fc\u0133]" }
     Languages { 
         //af  { "Afrikaans" }
@@ -368,34 +332,6 @@ nl {
     LocaleScript {
         "Latn",  // ISO 15924 Name 
     }
-    MonthAbbreviations { 
-        "jan",
-        "feb",
-        "mrt",
-        "apr",
-        "mei",
-        "jun",
-        "jul",
-        "aug",
-        "sep",
-        "okt",
-        "nov",
-        "dec",
-    }
-    MonthNames { 
-        "januari",
-        "februari",
-        "maart",
-        "april",
-        "mei",
-        "juni",
-        "juli",
-        "augustus",
-        "september",
-        "oktober",
-        "november",
-        "december",
-    }
     NumberElements { 
         ",",
         ".",
@@ -412,58 +348,7 @@ nl {
         "+",
     }
 
-        // International Calendars Data.
-    // NOTE (ICU 2.6) - the format of this data WILL CHANGE in future releases.  
-    // Islamic calendar
-    Eras_islamic:array { 
-        "Sa'na Hizjria"
-    }
 
-    MonthNames_islamic:array {
-        "Moeharram",            // Muharram
-        "Safar",                // Safar
-        "Rabi'a al awal",      // Rabi' al-awwal
-        "Rabi'a al thani",      // Rabi' al-thani
-        "Joemad'al awal",       // Jumada al-awwal
-        "Joemad'al thani",      // Jumada al-thani
-        "Rajab",                // Rajab
-        "Sja'aban",             // Sha'ban
-        "Ramadan",              // Ramadan
-        "Sjawal",               // Shawwal
-        "Doe al ka'aba",        // Dhu al-Qi'dah
-        "Doe al hizja",         // Dhu al-Hijjah
-    }
-    MonthAbbreviations_islamic:alias {  // same as MonthNames (no data)
-        "nl/MonthNames_islamic"
-    }   
-    // Civil is identical other than in calculations
-    Eras_islamic-civil:alias {
-        "nl/Eras_islamic"
-    }
-    MonthNames_islamic-civil:alias {
-        "nl/MonthNames_islamic"
-    }
-    MonthAbbreviations_islamic-civil:alias {
-        "nl/MonthAbbreviations_islamic"
-    }
-    MonthNames_hebrew {
-        "Tisjrie",      // Tishri
-        "Chesjwan",     // Heshvan
-        "Kislev",       // Kislev
-        "Tevet",        // Tevet
-        "Sjevat",       // Shevat
-        "Adar",         // Adar I
-        "Adar B",       // Adar
-        "Nisan",        // Nisan
-        "Ijar",         // Iyar
-        "Sivan",        // Sivan
-        "Tammoez",      // Tamuz
-        "Av",           // Av
-        "Elloel",       // Elul
-    }
-    MonthAbbreviations_hebrew:alias {
-       "nl/MonthNames_hebrew" // no data
-    }
 
     //------------------------------------------------------------
     // Rule Based Number Format Support
@@ -503,5 +388,159 @@ nl {
     }
     Variants{
         REVISED { "Gewijzigd" }
+    }
+    calendar{
+        islamic{
+            // Islamic calendar
+            eras:array { 
+                "Sa'na Hizjria"
+            }
+            monthNames{
+                format{
+                    abrreviated:alias{
+                        "nl/calendar/islamic/monthNames/format/wide"
+                    }
+                    wide:array {
+                        "Moeharram",            // Muharram
+                        "Safar",                // Safar
+                        "Rabi'a al awal",      // Rabi' al-awwal
+                        "Rabi'a al thani",      // Rabi' al-thani
+                        "Joemad'al awal",       // Jumada al-awwal
+                        "Joemad'al thani",      // Jumada al-thani
+                        "Rajab",                // Rajab
+                        "Sja'aban",             // Sha'ban
+                        "Ramadan",              // Ramadan
+                        "Sjawal",               // Shawwal
+                        "Doe al ka'aba",        // Dhu al-Qi'dah
+                        "Doe al hizja",         // Dhu al-Hijjah
+                    }
+                }
+            }
+        }
+        islamic-civil:alias{
+            "nl/calendar/islamic"
+        }
+        gregorian{
+            DateTimeElements:intvector { 
+                2,
+                4,
+            }
+            DateTimePatterns{
+                "H:mm:ss' uur' z",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE d MMMM yyyy",
+                "d MMMM yyyy",
+                "d-MMM-yyyy",
+                "d-M-yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "zo",
+                        "ma",
+                        "di",
+                        "wo",
+                        "do",
+                        "vr",
+                        "za",
+                    }
+                    narrow{
+		                "Z",
+		                "M",
+		                "D",
+		                "W",
+		                "D",
+		                "V",
+		                "Z",
+                    }
+                    wide{
+                        "zondag",
+                        "maandag",
+                        "dinsdag",
+                        "woensdag",
+                        "donderdag",
+                        "vrijdag",
+                        "zaterdag",
+                    }
+                }
+            }
+            eras{
+                "v. Chr.",  // voor Christus
+                "n. Chr.",  // na Christus
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mrt",
+                        "apr",
+                        "mei",
+                        "jun",
+                        "jul",
+                        "aug",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
+                    }
+                    narrow{
+		                "J",
+		                "F",
+		                "M",
+		                "A",
+		                "M",
+		                "J",
+		                "J",
+		                "A",
+		                "S",
+		                "O",
+		                "N",
+		                "D",
+                    }
+                    wide{
+                        "januari",
+                        "februari",
+                        "maart",
+                        "april",
+                        "mei",
+                        "juni",
+                        "juli",
+                        "augustus",
+                        "september",
+                        "oktober",
+                        "november",
+                        "december",
+                    }
+                }
+            }
+        }
+        hebrew{
+            monthNames{
+                format{
+                    abbreviated:alias{
+                        "nl/calendar/hebrew/monthNames/format/wide"
+                    }
+                    wide{                
+                        "Tisjrie",      // Tishri
+                        "Chesjwan",     // Heshvan
+                        "Kislev",       // Kislev
+                        "Tevet",        // Tevet
+                        "Sjevat",       // Shevat
+                        "Adar",         // Adar I
+                        "Adar B",       // Adar
+                        "Nisan",        // Nisan
+                        "Ijar",         // Iyar
+                        "Sivan",        // Sivan
+                        "Tammoez",      // Tamuz
+                        "Av",           // Av
+                        "Elloel",       // Elul
+                    }
+                }
+            }
+        }
     }
 }

@@ -8,10 +8,7 @@
 af {
     Version { "4.0" }
 
-    AmPmMarkers { 
-        "vm",
-        "nm"
-    }
+
     Countries {
         //Fallback{ "en" }
         // Some of the names are the same as en.
@@ -173,28 +170,6 @@ af {
     Currencies {
         ZAR { "R", "Rand" }
     }
-    DayAbbreviations { 
-        "So",
-        "Ma",
-        "Di",
-        "Wo",
-        "Do",
-        "Vr",
-        "Sa",
-    }
-    DayNames { 
-        "Sondag",
-        "Maandag",
-        "Dinsdag",
-        "Woensdag",
-        "Donderdag",
-        "Vrydag",
-        "Saterdag",
-    }
-    Eras { 
-        "v.C.",
-        "n.C."
-    }
     Languages {
         //af { "Afrikaanse" } // adjective form
         af { "Afrikaans" }
@@ -203,33 +178,68 @@ af {
     LocaleScript{ 
         "Latn",  // ISO 15924 Name 
     }
-    MonthAbbreviations { 
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "Mei",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Okt",
-        "Nov",
-        "Des",
-    }
-    MonthNames { 
-        "Januarie",
-        "Februarie",
-        "Maart",
-        "April",
-        "Mei",
-        "Junie",
-        "Julie",
-        "Augustus",
-        "September",
-        "Oktober",
-        "November",
-        "Desember",
+    
+    calendar{
+        gregorian{
+            eras {
+                "v.C.",
+                "n.C."
+            }
+            dayNames{
+                format{        
+                    abbreviated { 
+                        "So",
+                        "Ma",
+                        "Di",
+                        "Wo",
+                        "Do",
+                        "Vr",
+                        "Sa",
+                    }
+                    wide { 
+                        "Sondag",
+                        "Maandag",
+                        "Dinsdag",
+                        "Woensdag",
+                        "Donderdag",
+                        "Vrydag",
+                        "Saterdag",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated { 
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "Mei",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sep",
+                        "Okt",
+                        "Nov",
+                        "Des",
+                    }
+                    wide { 
+                        "Januarie",
+                        "Februarie",
+                        "Maart",
+                        "April",
+                        "Mei",
+                        "Junie",
+                        "Julie",
+                        "Augustus",
+                        "September",
+                        "Oktober",
+                        "November",
+                        "Desember",
+                    }
+                }
+            }
+        }
     }
     NumberElements { 
         ",",

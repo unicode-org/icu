@@ -13,10 +13,6 @@
 
 so_KE {
     Version{ "2.0" }
-    AmPmMarkers {
-        "sn",
-        "gn",
-    }
     // Measurement { "Metric" }
 //    NumberElements {
 //        ".",
@@ -42,4 +38,4 @@ so_KE {
     //    Width { "210" }
     //    Units { "mm" }
     // }
- }
+}

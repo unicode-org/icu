@@ -43,4 +43,4 @@ so_ET {
     Currencies {
         ETB { "$", "ETB" }
     }
- }
+}

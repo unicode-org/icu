@@ -87,21 +87,7 @@ pt_PT {
         YU { "Jugosl\u00E1via" }
         //ZW { "Zimbabwe" }
     }
-    DateTimeElements:intvector { 
-        2,
-        1,
-    }
-    DateTimePatterns {
-        "HH'H'mm'm'ss's' z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE, d' de 'MMMM' de 'yyyy",
-        "d' de 'MMMM' de 'yyyy",
-        "yyyy/MM/dd",
-        "yy/MM/dd",
-        "{1} {0}",
-    }
+
     Languages {
         ar { "\u00E1rabe" }
         cs { "checo" }
@@ -132,4 +118,23 @@ pt_PT {
 //        ",",
 //        "+",
 //    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector { 
+                2,
+                1,
+            }
+            DateTimePatterns{
+                "HH'H'mm'm'ss's' z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d' de 'MMMM' de 'yyyy",
+                "d' de 'MMMM' de 'yyyy",
+                "yyyy/MM/dd",
+                "yy/MM/dd",
+                "{1} {0}",
+            }
+        }
+    }
 }

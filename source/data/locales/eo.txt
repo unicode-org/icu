@@ -265,47 +265,7 @@ eo {
         ZM { "Zambio" }
         ZW { "Zimbabvo" }
     }
-    DateTimePatterns { 
-        "H'-a horo kaj 'm z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE, d'-a de 'MMMM yyyy",
-        "yyyy-MMMM-dd",
-        "yyyy-MMM-dd",
-        "yy-MM-dd",
-        "{1} {0}",
-    }
-    DateTimeElements:intvector { 
-        2,
-        4,
-    }
-    AmPmMarkers { 
-        "atm",
-        "ptm",
-    }
-    DayAbbreviations { 
-        "di",
-        "lu",
-        "ma",
-        "me",
-        "\u0135a",
-        "ve",
-        "sa",
-    }
-    DayNames { 
-        "diman\u0109o",
-        "lundo",
-        "mardo",
-        "merkredo",
-        "\u0135a\u016ddo",
-        "vendredo",
-        "sabato",
-    }
-    Eras { 
-        "aK",
-        "pK",
-    }
+
     // Data comes from http://www.bertilow.com/lanlin/iso.php
     Languages {
         aa { "afara" }
@@ -447,34 +407,6 @@ eo {
         zh { "\u0109ina" }
         zu { "zulua" }
     }
-    MonthAbbreviations { 
-        "jan",
-        "feb",
-        "mar",
-        "apr",
-        "maj",
-        "jun",
-        "jul",
-        "a\u016dg",
-        "sep",
-        "okt",
-        "nov",
-        "dec",
-    }
-    MonthNames { 
-        "januaro",
-        "februaro",
-        "marto",
-        "aprilo",
-        "majo",
-        "junio",
-        "julio",
-        "a\u016dgusto",
-        "septembro",
-        "oktobro",
-        "novembro",
-        "decembro",
-    }
     NumberElements { 
         ",",
         "\u00A0",
@@ -520,5 +452,86 @@ eo {
         "1,000,000,000,000: biliono[ >>];\n"
         "2,000,000,000,000: << bilionoj[ >>];\n"
         "1,000,000,000,000,000: =#,##0=;\n"
+    }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "atm",
+                "ptm",
+            }
+            DateTimeElements:intvector { 
+                2,
+                4,
+            }
+            DateTimePatterns{
+                "H'-a horo kaj 'm z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d'-a de 'MMMM yyyy",
+                "yyyy-MMMM-dd",
+                "yyyy-MMM-dd",
+                "yy-MM-dd",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "di",
+                        "lu",
+                        "ma",
+                        "me",
+                        "\u0135a",
+                        "ve",
+                        "sa",
+                    }
+                    wide{
+                        "diman\u0109o",
+                        "lundo",
+                        "mardo",
+                        "merkredo",
+                        "\u0135a\u016ddo",
+                        "vendredo",
+                        "sabato",
+                    }
+                }
+            }
+            eras{
+                "aK",
+                "pK",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "a\u016dg",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
+                    }
+                    wide{
+                        "januaro",
+                        "februaro",
+                        "marto",
+                        "aprilo",
+                        "majo",
+                        "junio",
+                        "julio",
+                        "a\u016dgusto",
+                        "septembro",
+                        "oktobro",
+                        "novembro",
+                        "decembro",
+                    }
+                }
+            }
+        }
     }
 }

@@ -117,62 +117,8 @@ sw {
         //ZM { "Zambia" }
         //ZW { "Zimbabwe" }
     }
-    DateTimeElements:intvector {
-        7,
-        1,
-    }
-    DayAbbreviations {  // The DayNames are correct, but DayAbbreviations are only guesses.
-        "Jpi",
-        "Jtt",
-        "Jnn",
-        "Jtn",
-        "Alh",
-        "Iju",
-        "Jmo",
-    }
-    DayNames {
-        "Jumapili",
-        "Jumatatu",
-        "Jumanne",
-        "Jumatano",
-        "Alhamisi",
-        "Ijumaa",
-        "Jumamosi",
-    }
-    Eras {
-        "KK",
-        "BK",
-    }
     Languages {
         sw  { "Kiswahili" }
-    }
-    MonthAbbreviations {
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "Mei",
-        "Jun",
-        "Jul",
-        "Ago",
-        "Sep",
-        "Okt",
-        "Nov",
-        "Des",
-    }
-    MonthNames {
-        "Januari",
-        "Februari",
-        "Machi",
-        "Aprili",
-        "Mei",
-        "Juni",
-        "Julai",
-        "Agosti",
-        "Septemba",
-        "Oktoba",
-        "Novemba",
-        "Desemba",
     }
     zoneStrings {
         {
@@ -200,5 +146,71 @@ sw {
     Currencies {
         KES { "KSh", "KES" }
         TZS { "TSh", "TZS" }
+    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                7,
+                1,
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Jpi",
+                        "Jtt",
+                        "Jnn",
+                        "Jtn",
+                        "Alh",
+                        "Iju",
+                        "Jmo",
+                    }
+                    wide{
+                        "Jumapili",
+                        "Jumatatu",
+                        "Jumanne",
+                        "Jumatano",
+                        "Alhamisi",
+                        "Ijumaa",
+                        "Jumamosi",
+                    }
+                }
+            }
+            eras{
+                "KK",
+                "BK",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "Mei",
+                        "Jun",
+                        "Jul",
+                        "Ago",
+                        "Sep",
+                        "Okt",
+                        "Nov",
+                        "Des",
+                    }
+                    wide{
+                        "Januari",
+                        "Februari",
+                        "Machi",
+                        "Aprili",
+                        "Mei",
+                        "Juni",
+                        "Julai",
+                        "Agosti",
+                        "Septemba",
+                        "Oktoba",
+                        "Novemba",
+                        "Desemba",
+                    }
+                }
+            }
+        }
     }
 }

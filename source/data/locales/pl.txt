@@ -249,43 +249,7 @@ pl {
         //ZM { "Zambia" }
         //ZW { "Zimbabwe" }
     }
-    DateTimeElements:intvector { 
-        2,
-        1,
-    }
-    DateTimePatterns { 
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE, d MMMM yyyy",
-        "d MMMM yyyy",
-        "yyyy-MM-dd",
-        "yy-MM-dd",
-        "{1} {0}",
-    }
-    DayAbbreviations { 
-        "N",
-        "Pn",
-        "Wt",
-        "\u015Ar",
-        "Cz",
-        "Pt",
-        "So",
-    }
-    DayNames { 
-        "niedziela",
-        "poniedzia\u0142ek",
-        "wtorek",
-        "\u015Broda",
-        "czwartek",
-        "pi\u0105tek",
-        "sobota",
-    }
-    Eras { 
-        "p.n.e.",
-        "n.e.",
-    }
+
     Languages { 
         ar { "arabski" }
         bg { "bu\u0142garski" }
@@ -319,34 +283,6 @@ pl {
         zh { "chi\u0144ski" }
         //zh_cn { "chi\u0144ski (uproszczony)" }
         //zh_tw { "chi\u0144ski (tradycyjny)" }
-    }
-    MonthAbbreviations { 
-        "sty",
-        "lut",
-        "mar",
-        "kwi",
-        "maj",
-        "cze",
-        "lip",
-        "sie",
-        "wrz",
-        "pa\u017A",
-        "lis",
-        "gru",
-    }
-    MonthNames { 
-        "stycze\u0144",
-        "luty",
-        "marzec",
-        "kwiecie\u0144",
-        "maj",
-        "czerwiec",
-        "lipiec",
-        "sierpie\u0144",
-        "wrzesie\u0144",
-        "pa\u017Adziernik",
-        "listopad",
-        "grudzie\u0144",
     }
     NumberElements { 
         ",",
@@ -405,5 +341,82 @@ pl {
     // Currency display names
     Currencies {
         PLN { "z\u0142", "PLN" }
+    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector { 
+                2,
+                1,
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM yyyy",
+                "d MMMM yyyy",
+                "yyyy-MM-dd",
+                "yy-MM-dd",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "N",
+                        "Pn",
+                        "Wt",
+                        "\u015Ar",
+                        "Cz",
+                        "Pt",
+                        "So",
+                    }
+                    wide{
+                        "niedziela",
+                        "poniedzia\u0142ek",
+                        "wtorek",
+                        "\u015Broda",
+                        "czwartek",
+                        "pi\u0105tek",
+                        "sobota",
+                    }
+                }
+            }
+            eras{
+                "p.n.e.",
+                "n.e.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "sty",
+                        "lut",
+                        "mar",
+                        "kwi",
+                        "maj",
+                        "cze",
+                        "lip",
+                        "sie",
+                        "wrz",
+                        "pa\u017A",
+                        "lis",
+                        "gru",
+                    }
+                    wide{
+                        "stycze\u0144",
+                        "luty",
+                        "marzec",
+                        "kwiecie\u0144",
+                        "maj",
+                        "czerwiec",
+                        "lipiec",
+                        "sierpie\u0144",
+                        "wrzesie\u0144",
+                        "pa\u017Adziernik",
+                        "listopad",
+                        "grudzie\u0144",
+                    }
+                }
+            }
+        }
     }
 }
