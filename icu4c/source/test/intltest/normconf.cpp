@@ -151,8 +151,8 @@ void NormalizerConformanceTest::TestConformance(void) {
         } else {
             ++failCount;
         }
-        if ((count % 1000) == 0) {
-            logln((UnicodeString)"Line " + count);
+        if ((c % 0x1000) == 0) {
+            logln("Code point U+%04lx", c);
         }
     }
 
