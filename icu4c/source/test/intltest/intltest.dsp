@@ -189,6 +189,10 @@ SOURCE=.\hxuntrts.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\indictrn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\intltest.cpp
 # End Source File
 # Begin Source File
@@ -510,6 +514,10 @@ SOURCE=.\g7coll.h
 # Begin Source File
 
 SOURCE=.\hxuntrts.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\indictrn.h
 # End Source File
 # Begin Source File
 
