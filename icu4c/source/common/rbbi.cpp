@@ -1026,10 +1026,21 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
     // loop until we reach the beginning of the text or transition to state 0
     for (;;) {
         if (hasPassedStartText) {
-            // end of input is hardwired by rule builder as category #1.
+            // Ran off the beginning of text.
+            if (*(int32_t *)fData->fHeader->fFormatVersion == 1) {
+                // This is the old (ICU 3.2 and earlier) format data.
+                //   No explicit support for matching {eof}.  Did have hack, though...
+                if (row->fLookAhead != 0 && lookaheadResult == 0) {
+                    result = 0;
+                }
+                break;
+            }
+            // Newer data format, with support for {eof}.
+            //    end of input is hardwired by rule builder as category/column  1.
             category = 1;
         } else {
-            //  look up the current character's category
+            // Not at {eof}.
+            //  look up the current character's category (the table column)
             UTRIE_GET16(&fData->fTrie, c, category);
         }
 
