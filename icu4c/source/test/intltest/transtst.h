@@ -246,6 +246,8 @@ private:
     /* Test Compound Indic-Latin transliterators*/
     void TestCompoundLatinRT(void);
 
+    /* Test bindi and tippi for Gurmukhi */
+    void TestGurmukhiDevanagari(void);
     /**
      * Test instantiation from a locale.
      */

@@ -23,6 +23,7 @@
 #include "unicode/unitohex.h"
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
+#include "unicode/usetiter.h"
 
 /***********************************************************************
 
@@ -160,7 +161,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(70,TestUserFunction);
         TESTCASE(71,TestAnyX);
         TESTCASE(72,TestSourceTargetSet);
-
+        TESTCASE(73,TestGurmukhiDevanagari);
         default: name = ""; break;
     }
 }
@@ -2613,6 +2614,40 @@ void TransliteratorTest::TestCompoundLatinRT(){
     delete(latinToTelToLatin);
 }
 
+/**
+ * Test Gurmukhi-Devanagari Tippi and Bindi
+ */
+void TransliteratorTest::TestGurmukhiDevanagari(){
+    // the rule says:
+    // (\u0902) (when preceded by vowel)      --->  (\u0A02)
+    // (\u0902) (when preceded by consonant)  --->  (\u0A70)
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeSet vowel(UnicodeString("[\\u0905-\\u090A \\u090F\\u0910\\u0913\\u0914 \\u093e-\\u0942\\u0947\\u0948\\u094B\\u094C\\u094D]").unescape(), status);
+    UnicodeSet non_vowel(UnicodeString("[\\u0915-\\u0928\\u092A-\\u0930]").unescape(), status);
+    UParseError parseError;
+
+    UnicodeSetIterator vIter(vowel);
+    UnicodeSetIterator nvIter(non_vowel);
+    Transliterator* trans = Transliterator::createInstance("Devanagari-Gurmukhi",UTRANS_FORWARD, parseError, status);
+    UnicodeString src (" \\u0902");
+    UnicodeString expected(" \\u0A02");
+    src = src.unescape();
+    expected= expected.unescape();
+
+    while(vIter.next()){
+        src.setCharAt(0,(UChar) vIter.getCodepoint());
+        expected.setCharAt(0,(UChar) (vIter.getCodepoint()+0x0100));
+        expect(*trans,src,expected);
+    }
+    
+    expected.setCharAt(1,0x0A70);
+    while(nvIter.next()){
+        //src.setCharAt(0,(char) nvIter.codepoint);
+        src.setCharAt(0,(UChar)nvIter.getCodepoint());
+        expected.setCharAt(0,(UChar) (nvIter.getCodepoint()+0x0100));
+        expect(*trans,src,expected);
+    }
+}
 /**
  * Test instantiation from a locale.
  */
