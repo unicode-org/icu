@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/02/11 00:49:17 $ 
-* $Revision: 1.63 $
+* $Date: 2003/02/11 01:18:45 $ 
+* $Revision: 1.64 $
 *
 *******************************************************************************
 */
@@ -31,7 +31,7 @@ import com.ibm.icu.impl.UPropertyAliases;
  * The UCharacter class provides extensions to the 
  * <a href=http://java.sun.com/j2se/1.3/docs/api/java/lang/Character.html>
  * java.lang.Character</a> class. These extensions provide support for 
- * Unicode 3.2 properties and together with the <a href=UTF16.html>UTF16</a> 
+ * Unicode 3.2 properties and together with the <a href=../text/UTF16.html>UTF16</a> 
  * class, provide support for supplementary characters (those with code 
  * points above U+FFFF).
  * </p>

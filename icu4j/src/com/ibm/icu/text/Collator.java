@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/01/28 18:55:41 $
-* $Revision: 1.20 $
+* $Date: 2003/02/11 01:19:02 $
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -52,7 +52,7 @@ import com.ibm.icu.impl.ICUService.Factory;
 *     difference between large and small Kana. A tertiary difference is ignored
 *     when there is a primary or secondary difference anywhere in the strings.
 * <li>QUATERNARY strength: When punctuation is ignored
-*     <a href=http://www-124.ibm.com/icu/userguide/Collate_Concepts.html#Ignoring_Punctuation>
+*     <a href=http://oss.software.ibm.com/icu/userguide/Collate_Concepts.html#Ignoring_Punctuation>
 *     (see Ignoring Punctuations in the user guide)</a> at PRIMARY to TERTIARY
 *     strength, an additional strength level can
 *     be used to distinguish words with and without punctuation (for example,
@@ -161,7 +161,7 @@ public abstract class Collator implements Comparator, Cloneable
     /**
      * Fourth level collator strength value.
      * When punctuation is ignored
-     * <a href="http://www-124.ibm.com/icu/userguide/Collate_Concepts.html#Ignoring_Punctuation">
+     * <a href="http://oss.software.ibm.com/icu/userguide/Collate_Concepts.html#Ignoring_Punctuation">
      * (see Ignoring Punctuations in the user guide)</a> at PRIMARY to TERTIARY
      * strength, an additional strength level can
      * be used to distinguish words with and without punctuation.

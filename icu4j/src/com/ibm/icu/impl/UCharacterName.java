@@ -6,8 +6,8 @@
 *
 * $Source:
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $
-* $Date: 2003/01/28 18:55:38 $
-* $Revision: 1.3 $
+* $Date: 2003/02/11 01:17:52 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -24,7 +24,7 @@ import com.ibm.icu.lang.UCharacterCategory;
 
 /**
 * Internal class to manage character names.
-* Since data in <a href=UCharacterNameDB.html>UCharacterNameDB</a> is stored
+* Since data for names are stored
 * in an array of char, by default indexes used in this class is refering to
 * a 2 byte count, unless otherwise stated. Cases where the index is refering
 * to a byte count, the index is halved and depending on whether the index is
@@ -32,11 +32,8 @@ import com.ibm.icu.lang.UCharacterCategory;
 * returned. For indexes to an array of int, the index is multiplied by 2,
 * result char at the multiplied index and its following char is returned as an
 * int.
-* <a href=UCharacter.html>UCharacter</a> acts as a public facade for this class
+* <a href=../lang/UCharacter.html>UCharacter</a> acts as a public facade for this class
 * Note : 0 - 0x1F are control characters without names in Unicode 3.0
-* Information on parsing of the binary data is located at
-* <a href=oss.software.ibm.com/icu4j/icu4jhtml/com/ibm/icu/text/readme.html>
-* ReadMe</a>
 * @author Syn Wee Quek
 * @since nov0700
 */
