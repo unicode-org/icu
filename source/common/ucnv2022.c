@@ -795,7 +795,32 @@ CONCAT_ESCAPE_EX(UConverterFromUnicodeArgs* args,
                                int32_t** offsets, 
                                const char* strToAppend,
                                int len, 
-                               UErrorCode* err){
+                               UErrorCode* err);
+
+U_INLINE  void 
+MBCS_FROM_UCHAR32_ISO2022(UConverterSharedData* sharedData,
+                                         UChar32 c,  
+                                         uint32_t* value, 
+                                         UBool useFallback, 
+                                         int* length, 
+                                         int outputType);
+
+U_INLINE void 
+MBCS_SINGLE_FROM_UCHAR32(UConverterSharedData* sharedData,
+                                       UChar32 c, 
+                                       uint32_t* retval, 
+                                       UBool useFallback);
+
+U_INLINE void 
+CONCAT_ESCAPE_EX(UConverterFromUnicodeArgs* args, 
+                               const UChar* source, 
+                               unsigned char** target, 
+                               const unsigned char* targetLimit,
+                               int32_t** offsets, 
+                               const char* strToAppend,
+                               int len, 
+                               UErrorCode* err)
+{
 
     unsigned char* myTarget = *target;
     int32_t* myOffsets = *offsets;
@@ -825,7 +850,8 @@ MBCS_FROM_UCHAR32_ISO2022(UConverterSharedData* sharedData,
                                          uint32_t* value, 
                                          UBool useFallback, 
                                          int* length, 
-                                         int outputType) {
+                                         int outputType)
+{
 
     const uint16_t *table=sharedData->table->mbcs.fromUnicodeTable;
     uint32_t stage2Entry;
@@ -880,7 +906,8 @@ U_INLINE void
 MBCS_SINGLE_FROM_UCHAR32(UConverterSharedData* sharedData,
                                        UChar32 c, 
                                        uint32_t* retval, 
-                                       UBool useFallback) { 
+                                       UBool useFallback)
+{
     const uint16_t *table; 
     int32_t value;
     /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
@@ -2674,7 +2701,7 @@ getTrail:
                     CONCAT_ESCAPE_EX(args,source, &target, targetLimit, &offsets, escSeq,len,err);
                     *plane=lPlane;
                     *isEscapeAppended=TRUE;
-					*isShiftAppended=FALSE;
+                    *isShiftAppended=FALSE;
                 }
 
                 /* Append Shift Sequences */
@@ -2686,14 +2713,14 @@ getTrail:
                         *isShiftAppended=TRUE;
                     }
                 }else if(*currentState!=ASCII1){
-					int temp =*currentState+*plane-1;
-					if(*plane ==1 && *isShiftAppended){
-						temp=0;
-					}
+                    int temp =*currentState+*plane-1;
+                    if(*plane ==1 && *isShiftAppended){
+                        temp=0;
+                    }
                     len =shiftSeqCharsLenCN[temp];
                     escSeq = shiftSeqCharsCN[temp];
                     CONCAT_ESCAPE_EX(args,source, &target, targetLimit, &offsets, escSeq,len,err);
-					*isShiftAppended=TRUE;
+                    *isShiftAppended=TRUE;
                 }
 
                 initIterState = *currentState;
@@ -3122,13 +3149,13 @@ UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
             else if(targetUniChar > missingCharMarker){
                 /* disassemble the surrogate pair and write to output*/
                 targetUniChar-=0x0010000;
-				*(myTarget++) = (UChar)(0xd800+(UChar)(targetUniChar>>10));
-				if(args->offsets){
+                *(myTarget++) = (UChar)(0xd800+(UChar)(targetUniChar>>10));
+                if(args->offsets){
                     args->offsets[myTarget - args->target]= mySource - args->source - 2 
                                                             +(myData->currentType==ASCII);
                 }
                 if(myTarget< args->targetLimit){ 
-					*(myTarget)++ = (UChar)(0xdc00+(UChar)(targetUniChar&0x3ff));
+                    *(myTarget)++ = (UChar)(0xdc00+(UChar)(targetUniChar&0x3ff));
                     if(args->offsets){
                         args->offsets[myTarget - args->target]= mySource - args->source - 2 
                                                             +(myData->currentType==ASCII);

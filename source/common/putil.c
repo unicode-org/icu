@@ -1758,6 +1758,9 @@ _localeToDefaultCharmapTable [] =
 #endif
 
 U_CAPI const char *
+uprv_defaultCodePageForLocale(const char *locale);
+
+U_CAPI const char *
 uprv_defaultCodePageForLocale(const char *locale)
 {
     int32_t i;
@@ -2146,7 +2149,7 @@ const char* uprv_getDefaultCodepage()
 /*
  * These maps for ASCII to/from EBCDIC are from
  * "UTF-EBCDIC - EBCDIC-Friendly Unicode (or UCS) Transformation Format"
- * at http:/*www.unicode.org/unicode/reports/tr16/
+ * at http://www.unicode.org/unicode/reports/tr16/
  * (which should reflect codepage 1047)
  * but modified to explicitly exclude the variant
  * control and graphical characters that are in ASCII-based

@@ -68,12 +68,12 @@ static const char* scriptAbbr[]= {
         "Cans",       /* U_UCAS       */
         "Cher",       /* U_CHEROKEE   */
         "Cyrl",       /* U_CYRILLIC   */
-       /* "Cyrs",       /* U_CYRILLIC   */
+       /* "Cyrs",       */ /* U_CYRILLIC   */
         "Deva",       /* U_DEVANAGARI */
         "Dsrt",       /* U_DESERET    */
         "Ethi",       /* U_ETHIOPIC   */
-       /* "Geoa",       /* U_GEORGIAN   */
-       /* "Geon",       /* U_GEORGIAN   */
+       /* "Geoa",       */ /* U_GEORGIAN   */
+       /* "Geon",       */ /* U_GEORGIAN   */
         "Geor",       /* U_GEORGIAN   */
         "Goth",       /* U_GOTHIC     */
         "Grek",       /* U_GREEK      */
@@ -88,9 +88,9 @@ static const char* scriptAbbr[]= {
         "Khmr",       /* U_KHMER      */
         "Knda",       /* U_KANNADA    */
         "Lao",        /* U_LAO        */
-        /*"Laoo",       /* U_LAO        */
-        /*"Latf",       /* U_LATIN      */
-        /*"Latg",       /* U_LATIN      */
+        /*"Laoo",       */ /* U_LAO        */
+        /*"Latf",       */ /* U_LATIN      */
+        /*"Latg",       */ /* U_LATIN      */
         "Latn",       /* U_LATIN      */
         "Mlym",       /* U_MALAYALAM  */
         "Mong",       /* U_MONGOLIAN  */
@@ -102,9 +102,9 @@ static const char* scriptAbbr[]= {
         "Runr",       /* U_RUNIC      */
         "Sinh",       /* U_SINHALA    */
         "Syrc",       /* U_SYRIAC     */
-       /* "Syre",       /* U_SYRIAC     */
-       /* "Syrj",       /* U_SYRIAC     */
-       /* "Syrn",       /* U_SYRIAC     */
+       /* "Syre",       */ /* U_SYRIAC     */
+       /* "Syrj",       */ /* U_SYRIAC     */
+       /* "Syrn",       */ /* U_SYRIAC     */
         "Taml",       /* U_TAMIL      */
         "Telu",       /* U_TELUGU     */
         "Thaa",       /* U_THANA      */
@@ -313,23 +313,23 @@ findCodeIndex(const UScriptCode unsorted[], const UScriptCode target, int size){
 U_CAPI UScriptCode 
 uchar_getScriptCode(const char* nameOrAbbrOrLocale, UErrorCode* err){
     UScriptCode code = U_INVALID_SCRIPT_CODE;
-    int index=0;
+    int strIndex=0;
 
     /* check arguments */
     if(U_FAILURE(*err)){
         return code;
     }
     /* try the Names array first */
-    index = findStringIndex(scriptNames, nameOrAbbrOrLocale, U_SCRIPT_NAMES_ARRAY_SIZE);
+    strIndex = findStringIndex(scriptNames, nameOrAbbrOrLocale, U_SCRIPT_NAMES_ARRAY_SIZE);
     
-    if(index>=0 && index < U_SCRIPT_NAMES_ARRAY_SIZE){ 
-        code = (UScriptCode) scriptNameCodes[index];
+    if(strIndex>=0 && strIndex < U_SCRIPT_NAMES_ARRAY_SIZE){ 
+        code = (UScriptCode) scriptNameCodes[strIndex];
     }
     /* we did not find in names array so try abbr array*/
     if(code ==U_INVALID_SCRIPT_CODE){
-        index = findStringIndex(scriptAbbr, nameOrAbbrOrLocale, U_SCRIPT_ABBR_ARRAY_SIZE);
-        if(index>=0 && index < U_SCRIPT_NAMES_ARRAY_SIZE){ 
-            code = (UScriptCode) scriptAbbrCodes[index];
+        strIndex = findStringIndex(scriptAbbr, nameOrAbbrOrLocale, U_SCRIPT_ABBR_ARRAY_SIZE);
+        if(strIndex>=0 && strIndex < U_SCRIPT_NAMES_ARRAY_SIZE){ 
+            code = (UScriptCode) scriptAbbrCodes[strIndex];
         }
     }
     /* we still haven't found it try locale */
