@@ -153,6 +153,7 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
     fCharNum        = 0;
     fQuoteMode      = FALSE;
     fFreeForm       = FALSE;
+    fCaseI          = FALSE;
 
     fMatchOpenParen  = -1;
     fMatchCloseParen = -1;
@@ -1223,8 +1224,7 @@ void RegexCompile::literalChar()  {
     if (fStringOpStart == -1) {
         // First char of a string in the pattern.
         // Emit a OneChar op into the compiled pattern.
-        op = URX_BUILD(URX_ONECHAR, fC.fChar);
-        fRXPat->fCompiledPat->addElement(op, *fStatus);
+        emitONE_CHAR(fC.fChar);
 
         // Also add it to the string pool, in case we get a second adjacent literal
         //   and want to change form ONE_CHAR to STRING
@@ -1239,9 +1239,13 @@ void RegexCompile::literalChar()  {
     // If the most recently emitted op is a URX_ONECHAR, change it to a string op.
     op     = fRXPat->fCompiledPat->lastElementi();
     opType = URX_TYPE(op);
-    U_ASSERT(opType == URX_ONECHAR || opType == URX_STRING_LEN);
-    if (opType == URX_ONECHAR) {
-        op         = URX_BUILD(URX_STRING, fStringOpStart);
+    U_ASSERT(opType == URX_ONECHAR || opType == URX_ONECHAR_I || opType == URX_STRING_LEN);
+    if (opType == URX_ONECHAR || opType == URX_ONECHAR_I) {
+        if (fCaseI) {
+            op     = URX_BUILD(URX_STRING_I, fStringOpStart);
+        } else {
+            op     = URX_BUILD(URX_STRING, fStringOpStart);
+        }
         patternLoc = fRXPat->fCompiledPat->size() - 1;
         fRXPat->fCompiledPat->setElementAt(op, patternLoc);
         op         = URX_BUILD(URX_STRING_LEN, 0);
@@ -1260,6 +1264,29 @@ void RegexCompile::literalChar()  {
 
 //------------------------------------------------------------------------------
 //
+//    emitONE_CHAR         emit a ONE_CHAR op into the generated code.
+//                         Choose cased or uncased version, depending on the
+//                         match mode and whether the character itself is cased.
+//
+//------------------------------------------------------------------------------
+void RegexCompile::emitONE_CHAR(UChar32  c) {
+    int32_t op;
+    if (fCaseI && (u_tolower(c) != u_toupper(c))) {
+        // We have a cased character, and are in case insensitive matching mode.
+        // TODO: replace with a better test.  See Alan L.'s mail of 2/6
+        c  = u_foldCase(c, U_FOLD_CASE_DEFAULT);
+        op = URX_BUILD(URX_ONECHAR_I, c);
+    } else {
+        // Uncased char, or case sensitive match mode.
+        //  Either way, just generate a literal compare of the char.
+        op = URX_BUILD(URX_ONECHAR, c);
+    }
+    fRXPat->fCompiledPat->addElement(op, *fStatus);
+}
+
+
+//------------------------------------------------------------------------------
+//
 //    fixLiterals           When compiling something that can follow a literal
 //                          string in a pattern, we need to "fix" any preceding
 //                          string, which will cause any subsequent literals to
@@ -1269,7 +1296,7 @@ void RegexCompile::literalChar()  {
 //                          Optionally, split the last char of the string off into
 //                          a single "ONE_CHAR" operation, so that quantifiers can
 //                          apply to that char alone.  Example:   abc*
-//                          The * needs to apply to the 'c' only.
+//                          The * must apply to the 'c' only.
 //
 //------------------------------------------------------------------------------
 void    RegexCompile::fixLiterals(UBool split) {
@@ -1321,16 +1348,14 @@ void    RegexCompile::fixLiterals(UBool split) {
         stringLen -= (fRXPat->fLiteralText.length() - stringLastCharIdx);
         op = URX_BUILD(URX_STRING_LEN, stringLen);
         fRXPat->fCompiledPat->setElementAt(op, fRXPat->fCompiledPat->size() -1);
-        op = URX_BUILD(URX_ONECHAR, lastChar);
-        fRXPat->fCompiledPat->addElement(op, *fStatus);
+        emitONE_CHAR(lastChar);
     } else {
         // The original string consisted of exactly two characters.  Replace
         // the existing compiled URX_STRING/URX_STRING_LEN ops with a pair
         // of URX_ONECHARs.
-        op = URX_BUILD(URX_ONECHAR, nextToLastChar);
-        fRXPat->fCompiledPat->setElementAt(op, fRXPat->fCompiledPat->size() -2);
-        op = URX_BUILD(URX_ONECHAR, lastChar);
-        fRXPat->fCompiledPat->setElementAt(op, fRXPat->fCompiledPat->size() -1);
+        fRXPat->fCompiledPat->setSize(fRXPat->fCompiledPat->size() -2);
+        emitONE_CHAR(nextToLastChar);
+        emitONE_CHAR(lastChar);
     }
 }
 

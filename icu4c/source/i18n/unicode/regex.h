@@ -290,14 +290,14 @@ public:
      *
      * @draft ICU 2.4
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual inline UClassID getDynamicClassID() const; 
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.4
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID(); 
 
 private:
     //
@@ -668,24 +668,25 @@ public:
 
    /**
      *   setTrace   Debug function, enable/disable tracing of the matching engine.
+     *              For internal ICU development use only.  DO NO USE!!!!
      *   @internal
      */
     void setTrace(UBool state);
 
 
     /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
     * ICU "poor man's RTTI", returns a UClassID for this class.
     *
     * @draft ICU 2.2
     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID();
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const;
 
 private:
     // Constructors and other object boilerplate are private.
@@ -736,6 +737,13 @@ private:
 
 
 };
+
+inline UClassID RegexPattern::getStaticClassID() { return (UClassID)&fgClassID; }
+inline UClassID RegexPattern::getDynamicClassID() const { return getStaticClassID(); }
+
+inline UClassID RegexMatcher::getStaticClassID() { return (UClassID)&fgClassID; }
+inline UClassID RegexMatcher::getDynamicClassID() const { return getStaticClassID(); }
+
 
 U_NAMESPACE_END
 #endif  // UCONFIG_NO_REGULAR_EXPRESSIONS

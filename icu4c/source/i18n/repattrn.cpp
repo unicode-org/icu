@@ -206,6 +206,15 @@ RegexPattern  *RegexPattern::compile(
     if (U_FAILURE(status)) {
         return NULL;
     }
+
+    const uint32_t allFlags = UREGEX_CANON_EQ | UREGEX_CASE_INSENSITIVE | UREGEX_COMMENTS |
+                              UREGEX_DOTALL   | UREGEX_MULTILINE;
+
+    if ((flags & ~allFlags) != 0) {
+        status = U_REGEX_INVALID_FLAG;
+        return NULL;
+    }
+
     if (flags != 0) {
         status = U_REGEX_UNIMPLEMENTED;
         return NULL;
@@ -474,16 +483,19 @@ void   RegexPattern::dumpOp(int32_t index) const {
     case URX_BACKREF:
     case URX_STO_INP_LOC:
     case URX_JMPX:
-
+    case URX_LA_START:
+    case URX_LA_END:
         // types with an integer operand field.
         REGEX_DUMP_DEBUG_PRINTF("%d", val);
         break;
         
     case URX_ONECHAR:
+    case URX_ONECHAR_I:
         REGEX_DUMP_DEBUG_PRINTF("%c", val<256?val:'?');
         break;
         
     case URX_STRING:
+    case URX_STRING_I:
         {
             int32_t lengthOp       = fCompiledPat->elementAti(index+1);
             U_ASSERT(URX_TYPE(lengthOp) == URX_STRING_LEN);
