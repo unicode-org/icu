@@ -111,9 +111,9 @@
  * UStringSearch *search = usearch_open(pattern, -1, target, -1, "en_US", 
  *                                  &status);
  * if (U_SUCCESS(status)) {
- *     for (int pos = usearch_first(search); 
+ *     for (int pos = usearch_first(search, &status); 
  *                                      pos != USEARCH_DONE; 
- *                                      pos = usearch_next(search)) {
+ *                                      pos = usearch_next(search, &status)) {
  *         printf("Found match at %d pos, length is %d\n", pos, 
  *                                        usearch_getMatchLength(search));
  *     }
