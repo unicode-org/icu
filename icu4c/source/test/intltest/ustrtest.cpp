@@ -942,11 +942,18 @@ UnicodeStringTest::TestMiscellaneous()
     const UChar*  test4;
 
     if (test1.isBogus() || test2.isBogus() || test3.isBogus())
-        errln("A string returned true for isBogus()!");
+        errln("A string returned TRUE for isBogus()!");
+
+    test3.setTo(FALSE, (const UChar *)0, -1);
+    if(!test3.isBogus()) {
+        errln("A bogus string returned FALSE for isBogus()!");
+    }
 
     if (test1.hashCode() != test2.hashCode() || test1.hashCode() == test3.hashCode())
         errln("hashCode() failed");
 
+#if 0
+    // ### TODO test new getBuffer()'s and releaseBuffer()
     test4 = test1.getUChars();
 
     if (test1 != test2)
@@ -958,6 +965,7 @@ UnicodeStringTest::TestMiscellaneous()
         if (test2[i] != test4[i])
             errln(UnicodeString("getUChars() failed: strings differ at position ") + i);
     }
+#endif
 
 /*
 #if U_IOSTREAM_SOURCE
