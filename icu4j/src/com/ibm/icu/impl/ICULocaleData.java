@@ -95,6 +95,9 @@ public class ICULocaleData {
 	 * Get a resource bundle from the lookup chain.
 	 */
     public static ResourceBundle getResourceBundle(String bundleName, Locale locale) {
+		if (locale == null) {
+			locale = Locale.getDefault();
+		}
 		ResourceBundle rb = null;
 		for (int i = 0; i < packageNames.length && rb == null; ++i) {
 			try {

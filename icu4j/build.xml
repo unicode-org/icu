@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2002/03/10 19:40:11 $ 
-* $Revision: 1.47 $
+* $Date: 2002/03/16 07:11:30 $ 
+* $Revision: 1.48 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -33,15 +33,31 @@
         <property name="richedit.doc.dir" value="${richedit.archive.dir}/doc"/>
         <property name="richedit.zip.file" value="${richedit.dist.dir}/richedit.zip"/>
         <property name="richedit.manifest" value="${richedit.dist.dir}/manifest.stub"/>
-      </target>
+
+		<uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar">
+		    <!-- note must not have '/' before 'com' in srcfiles includes arg! -->
+			<srcfiles dir="${build.dir}" includes="com/ibm/icu/impl/data/LocaleElements_index.class"/>
+		</uptodate>
+    </target>
 
     <target name="all" depends="core,tests,tools,richtext,demos,jar,docs"/>
-      
-    <target name="core" depends="init,coreData">
+
+	<target name="resources" depends="init">
+    	<!-- use this target to force resources to be rebuilt -->
+		<unjar src="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar" dest="${build.dir}"/>
+ 		<touch file="${build.dir}/com/ibm/icu/impl/data/LocaleElements_index.class"/>
+	</target>
+
+	<target name="_resources" depends="init" if="icu4j.resources">
+    	<!-- use this target to conditionally build resources only if icu4j.resources is set -->
+		<unjar src="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar" dest="${build.dir}"/>
+ 		<touch file="${build.dir}/com/ibm/icu/impl/data/LocaleElements_index.class"/>
+	</target>
+
+    <target name="core" depends="init,coreData,_resources">
         <mkdir dir="${build.dir}"/>
         <copy file="${src.dir}/com/ibm/icu/impl/data/thai_dict"
             todir="${build.dir}/com/ibm/icu/impl/data/"/>
-		<unjar src="${src.dir}/com/ibm/icu/dev/data/ICULocaleData.jar" dest="${build.dir}"/>
         <javac includes="com/ibm/icu/dev/tool/**/*.java,com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
