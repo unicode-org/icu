@@ -4,22 +4,22 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Any_Accents.txt
-// Date: Mon Dec  3 11:44:29 2001
+// Date: Mon Jan 21 10:41:16 2002
 //--------------------------------------------------------------------
 
 // Any_Accents
 
-translit_Any_Accents {
+Any_Accents {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/source/data/translit/Attic/t_Any_Accents.txt,v $
-// $Date: 2001/12/03 20:51:18 $
-// $Revision: 1.4 $
+// $Date: 2002/01/24 17:24:32 $
+// $Revision: 1.5 $
 //--------------------------------------------------------------------
 
 ":: NFD (NFC) ;"
