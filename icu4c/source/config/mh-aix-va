@@ -2,8 +2,6 @@
 ## Aix-specific setup (for Visual Age 5+)
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
-##
-## $Id: mh-aix-va,v 1.33 2004/03/26 22:33:12 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)

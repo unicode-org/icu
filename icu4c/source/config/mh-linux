@@ -2,8 +2,6 @@
 ## Linux-specific setup
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
-##
-## $Id: mh-linux,v 1.34 2004/03/26 08:04:52 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=  $(CC) -E -MM $(DEFS) $(CPPFLAGS)

@@ -2,8 +2,6 @@
 ## OS400-specific setup (for cross build)
 ## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
-##
-## $Id: mh-os400,v 1.26 2004/04/01 00:21:57 grhoten-oss Exp $
 
 GEN_DEPS.c=	$(CC1) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX1) -E -M $(DEFS) $(CPPFLAGS)
