@@ -42,6 +42,8 @@ static Hashtable* SPECIAL_INVERSES = NULL;
  */
 static UMTX LOCK = 0;
 
+const char TransliteratorIDParser::Specs::fgClassID=0;
+
 TransliteratorIDParser::Specs::Specs(const UnicodeString& s, const UnicodeString& t,
                                      const UnicodeString& v, UBool sawS,
                                      const UnicodeString& f) {
@@ -51,6 +53,8 @@ TransliteratorIDParser::Specs::Specs(const UnicodeString& s, const UnicodeString
     sawSource = sawS;
     filter = f;
 }
+
+const char TransliteratorIDParser::SingleID::fgClassID=0;
 
 TransliteratorIDParser::SingleID::SingleID(const UnicodeString& c, const UnicodeString& b,
                                            const UnicodeString& f) {

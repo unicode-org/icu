@@ -53,6 +53,20 @@ class NFRuleSet : public UObject {
 
   void appendRules(UnicodeString& result) const; // toString
 
+  /**
+   * ICU "poor man's RTTI", returns a UClassID for the actual class.
+   *
+   * @draft ICU 2.2
+   */
+  virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+  /**
+   * ICU "poor man's RTTI", returns a UClassID for this class.
+   *
+   * @draft ICU 2.2
+   */
+  static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
  private:
   NFRule * findNormalRule(int64_t number) const;
   NFRule * findDoubleRule(double number) const;
@@ -65,6 +79,12 @@ class NFRuleSet : public UObject {
   NFRule *fractionRules[3];
   UBool fIsFractionRuleSet;
   UBool fIsPublic;
+
+  /**
+   * The address of this static class variable serves as this class's ID
+   * for ICU "poor man's RTTI".
+   */
+  static const char fgClassID;
 };
 
 // utilities from old llong.h

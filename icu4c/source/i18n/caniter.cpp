@@ -70,7 +70,11 @@ static const UnicodeString &Tr(const UnicodeString &source) {
 #endif
 // public
 
+U_NAMESPACE_BEGIN
+
 // TODO: add boilerplate methods.
+
+const char CanonicalIterator::fgClassID=0;
 
 /**
  *@param source string to get results for
@@ -529,4 +533,4 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
     return getEquivalents2(buff, bufLen, status);
 }
 
-
+U_NAMESPACE_END

@@ -114,6 +114,8 @@ U_CFUNC UBool dateFormatSymbols_cleanup() {
 
 U_NAMESPACE_BEGIN
 
+const char DateFormatSymbols::fgClassID=0;
+
 /**
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale.

@@ -51,6 +51,20 @@ public:
      */
     virtual ~GXLayoutEngine();
 
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
 protected:
 
     /**
@@ -96,6 +110,14 @@ protected:
      */
     virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[],
         le_int32 glyphCount, float positions[], LEErrorCode &success);
+
+private:
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
 
 U_NAMESPACE_END

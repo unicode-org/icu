@@ -15,6 +15,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char SegmentSingleProcessor::fgClassID=0;
+
 SegmentSingleProcessor::SegmentSingleProcessor()
 {
 }

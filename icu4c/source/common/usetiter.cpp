@@ -4,8 +4,8 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/common/usetiter.cpp,v $ 
-* $Date: 2002/06/01 06:36:02 $ 
-* $Revision: 1.2 $
+* $Date: 2002/06/28 23:53:51 $ 
+* $Revision: 1.3 $
 **********************************************************************
 */
 #include "unicode/usetiter.h"
@@ -14,6 +14,8 @@
 #include "uvector.h"
 
 U_NAMESPACE_BEGIN
+
+const char UnicodeSetIterator::fgClassID=0;
 
 /**
  * Create an iterator

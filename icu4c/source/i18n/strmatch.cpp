@@ -15,6 +15,8 @@ U_NAMESPACE_BEGIN
 
 const UChar EMPTY[] = { 0 }; // empty string: ""
 
+const char StringMatcher::fgClassID=0;
+
 StringMatcher::StringMatcher(const UnicodeString& theString,
                              int32_t start,
                              int32_t limit,

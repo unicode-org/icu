@@ -164,6 +164,19 @@ SOURCE=.\brkiter.cpp
 # Begin Source File
 
 SOURCE=.\chariter.cpp
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# ADD CPP /W3
+
+!ELSEIF  "$(CFG)" == "common - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -637,6 +650,10 @@ InputPath=.\unicode\chariter.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\charstr.h
 # End Source File
 # Begin Source File
 

@@ -14,6 +14,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char TransliterationRuleData::fgClassID=0;
+
 TransliterationRuleData::TransliterationRuleData(UErrorCode& status)
  : ruleSet(status),
     variableNames(0), variables(0)

@@ -243,6 +243,20 @@ public:
      */
     void sortedInsert(int32_t obj, USortComparator compare, UErrorCode& ec);
 
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
 private:
     void _init(int32_t initialCapacity, UErrorCode &status);
 
@@ -255,6 +269,12 @@ private:
 
     // Disallow
     UVector& operator=(const UVector&);
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
 
 
@@ -303,12 +323,32 @@ public:
 
     int32_t search(void* obj) const;
 
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
 private:
     // Disallow
     UStack(const UStack&);
 
     // Disallow
     UStack& operator=(const UStack&);
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
 
 

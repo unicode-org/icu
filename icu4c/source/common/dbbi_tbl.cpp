@@ -15,6 +15,7 @@
 
 U_NAMESPACE_BEGIN
 
+const char DictionaryBasedBreakIteratorTables::fgClassID=0;
 
 //=======================================================================
 // constructor

@@ -27,6 +27,8 @@
  
 U_NAMESPACE_BEGIN
 
+const char DecimalFormatSymbols::fgClassID=0;
+
 const char DecimalFormatSymbols::fgNumberElements[] = "NumberElements";
 const char DecimalFormatSymbols::fgCurrencyElements[] = "CurrencyElements";
 

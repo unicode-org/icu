@@ -14,4 +14,4 @@
  * exported by the build...
  */
 
-
+const char ICULayoutEngine::fgClassID=0;

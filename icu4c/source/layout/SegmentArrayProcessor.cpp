@@ -15,6 +15,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char SegmentArrayProcessor::fgClassID=0;
+
 SegmentArrayProcessor::SegmentArrayProcessor()
 {
 }

@@ -141,6 +141,20 @@ public:
     // This code is unused.
     //UBool isLONG_MIN(void) const;
 
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
 public:
     /**
      * These data members are intentionally public and can be set directly.
@@ -186,6 +200,12 @@ private:
     /*static void initializeLONG_MIN_REP(void);*/
 
     UBool shouldRoundUp(int32_t maximumDigits);
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
  
 // -------------------------------------

@@ -32,6 +32,8 @@ U_NAMESPACE_BEGIN
 typedef ContextualSubstitutionSubtable ContextualPositioningSubtable;
 typedef ChainingContextualSubstitutionSubtable ChainingContextualPositioningSubtable;
 
+const char GlyphPositioningLookupProcessor::fgClassID=0;
+
 GlyphPositioningLookupProcessor::GlyphPositioningLookupProcessor(
         const GlyphPositioningTableHeader *glyphPositioningTableHeader,
         LETag scriptTag, LETag languageTag, const LETag *featureOrder)

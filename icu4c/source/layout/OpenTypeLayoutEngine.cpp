@@ -19,6 +19,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char OpenTypeLayoutEngine::fgClassID=0;
+
 OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                         const GlyphSubstitutionTableHeader *gsubTable)
     : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fGSUBTable(gsubTable),

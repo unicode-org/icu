@@ -40,6 +40,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char Locale::fgClassID=0;
+
 static Locale*  availableLocaleList = NULL;
 static int32_t  availableLocaleListCount;
 typedef enum ELocalePos {

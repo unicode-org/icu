@@ -22,14 +22,35 @@
 
 U_NAMESPACE_BEGIN
 
-class CharString : public UObject {
+class U_COMMON_API CharString : public UObject {
  public:
     inline CharString(const UnicodeString& str);
     inline ~CharString();
     inline operator const char*() { return ptr; }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
  private:
     char buf[128];
     char* ptr;
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
 
 inline CharString::CharString(const UnicodeString& str) {

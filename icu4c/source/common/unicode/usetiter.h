@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/common/unicode/usetiter.h,v $ 
-* $Revision: 1.2 $
+* $Revision: 1.3 $
 **********************************************************************
 */
 #ifndef USETITER_H
@@ -190,6 +190,20 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      */
     void reset();
     
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
     // ======================= PRIVATES ===========================
     
  protected:
@@ -211,6 +225,14 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
     UnicodeSetIterator& operator=(const UnicodeSetIterator&); // disallow
 
     virtual void loadRange(int32_t range);
+
+private:
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
 
 inline UBool UnicodeSetIterator::isString() const {

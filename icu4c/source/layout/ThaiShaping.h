@@ -32,7 +32,7 @@ public:
     virtual le_bool filter(LEGlyphID glyph);
 };
 
-class ThaiShaping : public UObject {
+class ThaiShaping /* not : public UObject because all methods are static */ {
 public:
 
     enum {
@@ -83,6 +83,8 @@ public:
         LEUnicode errorChar, LEUnicode *output, le_int32 *charIndicies);
 
 private:
+    // forbid instantiation
+    ThaiShaping();
 
     static const le_uint8 classTable[];
     static const StateTransition thaiStateTable[][classCount];

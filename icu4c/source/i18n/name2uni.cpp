@@ -17,6 +17,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char NameUnicodeTransliterator::fgClassID=0;
+
 const char NameUnicodeTransliterator::_ID[] = "Name-Any";
 
 /**

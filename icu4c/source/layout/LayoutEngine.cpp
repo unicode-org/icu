@@ -79,6 +79,8 @@ LEUnicode32 DefaultCharMapper::mapChar(LEUnicode32 ch) const
     return ch;
 }
 
+const char LayoutEngine::fgClassID=0;
+
 LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
     : fGlyphCount(0), fGlyphs(NULL), fCharIndices(NULL), fPositions(NULL),
       fFontInstance(fontInstance), fScriptCode(scriptCode), fLanguageCode(languageCode)

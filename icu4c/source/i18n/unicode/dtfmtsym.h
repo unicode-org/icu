@@ -250,6 +250,20 @@ public:
      */
     void setLocalPatternChars(const UnicodeString& newLocalPatternChars);
 
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
 private:
     /**
      * Resource bundle file suffix and tag names used by this class.
@@ -313,6 +327,12 @@ private:
      * Localized date-time pattern characters. For example: use 'u' as 'y'.
      */
     UnicodeString   fLocalPatternChars;
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 
 private:
 

@@ -45,6 +45,8 @@ le_bool CharSubstitutionFilter::accept(LEGlyphID glyph) const
     return fFontInstance->canDisplay((LEUnicode) glyph);
 }
 
+const char ArabicOpenTypeLayoutEngine::fgClassID=0;
+
 ArabicOpenTypeLayoutEngine::ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                         const GlyphSubstitutionTableHeader *gsubTable)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable)

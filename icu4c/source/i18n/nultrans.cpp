@@ -11,6 +11,7 @@
 
 U_NAMESPACE_BEGIN
 
+const char NullTransliterator::fgClassID=0;
 
 // "Any-Null"
 const UChar NullTransliterator::ID[] = {65,110,121,45,0x4E, 0x75, 0x6C, 0x6C, 0x00};

@@ -23,7 +23,7 @@ U_NAMESPACE_BEGIN
 
 class UnicodeMatcher;
 
-class U_COMMON_API ICU_Utility : public UObject {
+class U_COMMON_API ICU_Utility /* not : public UObject because all methods are static */ {
  public:
 
     /**
@@ -183,6 +183,10 @@ class U_COMMON_API ICU_Utility : public UObject {
                              const UnicodeMatcher* matcher,
                              UBool escapeUnprintable,
                              UnicodeString& quoteBuf);
+
+private:
+    // do not instantiate
+    ICU_Utility();
 };
 
 U_NAMESPACE_END

@@ -127,7 +127,31 @@ public:
      * character (non standin).
      */
     UBool isReplacer(UChar32 ch);
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+private:
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
+
+const char ParseData::fgClassID=0;
 
 ParseData::ParseData(const TransliterationRuleData* d,
                      const UVector* sets) :
@@ -289,11 +313,33 @@ public:
         return parser.syntaxError(code, rule, start);
     }
 
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
 private:
     // Disallowed methods; no impl.
     RuleHalf(const RuleHalf&);
     RuleHalf& operator=(const RuleHalf&);
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
+
+const char RuleHalf::fgClassID=0;
 
 RuleHalf::RuleHalf(TransliteratorParser& p) :
     ec(U_ZERO_ERROR),
@@ -765,6 +811,8 @@ UBool RuleHalf::isValidInput(TransliteratorParser& transParser) {
 //----------------------------------------------------------------------
 // PUBLIC API
 //----------------------------------------------------------------------
+
+const char TransliteratorParser::fgClassID=0;
 
 /**
  * Constructor.

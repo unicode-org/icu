@@ -673,6 +673,20 @@ public:
      */
     static const char* const*  getISOLanguages();
 
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
 protected: /* only protected for testing purposes. DO NOT USE. */
     /** set it from a single string. */
     void setFromPOSIXID(const char *posixID);
@@ -698,6 +712,12 @@ private:
     char fullNameBuffer[ULOC_FULLNAME_CAPACITY];
 
     UBool fIsBogus;
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
     
 //    static Locale *localeList;
 //    static int32_t localeListCount;

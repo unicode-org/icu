@@ -43,6 +43,9 @@ UBool UnicodeConverter_cleanup()
 }
 
 U_NAMESPACE_BEGIN
+
+const char UnicodeConverter::fgClassID=0;
+
 UnicodeConverter::UnicodeConverter()
 {
     UErrorCode err = U_ZERO_ERROR;
