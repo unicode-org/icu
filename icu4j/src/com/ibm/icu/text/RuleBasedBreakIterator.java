@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $
- * $Date: 2002/08/01 20:27:21 $
- * $Revision: 1.20 $
+ * $Date: 2002/08/10 00:32:30 $
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -229,7 +229,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.20 $ $Date: 2002/08/01 20:27:21 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.21 $ $Date: 2002/08/10 00:32:30 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -386,6 +386,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
 //   Dump out a more-or-less human readable form of the
 //   complete state table and character class definitions
 //
+    ///CLOVER:OFF
 public void debugDumpTables() {
     System.out.println("Character Classes:");
     int currentCharClass = 257;
@@ -451,8 +452,9 @@ public void debugDumpTables() {
     }
     System.out.println();
 }
+    ///CLOVER:ON
 
-
+    ///CLOVER:OFF
 // DELETE ME BEFORE RELEASE!!!
 public void writeTablesToFile(FileOutputStream file, boolean littleEndian) throws IOException {
     // NOTE: The format being written here is designed to be compatible with
@@ -613,6 +615,7 @@ throws IOException {
         out.write((byte)(x & 0xff));
     }
 }
+    ///CLOVER:ON
 
     //=======================================================================
     // BreakIterator overrides
@@ -2977,7 +2980,7 @@ System.out.println();
                     Utility.escape(context.substring(position)));
         }
 
-
+	///CLOVER:OFF
         protected void debugPrintVector(String label, Vector v) {
             System.out.print(label);
             for (int i = 0; i < v.size(); i++)
@@ -3013,6 +3016,7 @@ System.out.println();
         }
 
     }
+    ///CLOVER:ON
 
     /*
      * This class exists to work around a bug in HotJava's implementation
@@ -3023,6 +3027,8 @@ System.out.println();
      * One caveat:  if the base iterator's begin and end indices change
      * the change will not be reflected by this wrapper.  Does that matter?
      */
+    ///CLOVER:OFF
+    // Only used for HotJava, so clover won't encounter it
     private static final class SafeCharIterator implements CharacterIterator,
                                                            Cloneable {
 
@@ -3115,8 +3121,9 @@ System.out.println();
             return copy;
         }
     }
+    ///CLOVER:ON
 
-
+    ///CLOVER:OFF
     public static void debugPrintln(String s) {
         final String zeros = "0000";
         String temp;
@@ -3135,6 +3142,6 @@ System.out.println();
         }
         System.out.println(out);
     }
-
+    ///CLOVER:ON
 }
 
