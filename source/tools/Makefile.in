@@ -231,7 +231,7 @@ hpux_junk_obj.o: hpux_junk_obj.cpp
 # HPUX_JUNK_OBJ is usually unset except by mh-hpux-cc
 
 $(OBJDATADIR)/icudata_dat.c: $(DATAFILES) gencmn/mkmap.tmp
-	@(cd gencmn ; gencmn -S -d ../$(OBJDATADIR) 1000000 mkmap.tmp )
+	@(cd gencmn ; ./gencmn -S -d ../$(OBJDATADIR) 1000000 mkmap.tmp )
 
 $(COMMONDLL): $(OBJDATAFILES) $(HPUX_JUNK_OBJ)
 	$(SHLIB.c) -o $@ $^
