@@ -734,13 +734,11 @@ int32_t uloc_getDisplayLanguage(const char* locale,
             err = U_ZERO_ERROR;
             
             /*Iterates down the Locale ID*/
-            
             uloc_getParent(inLocale, inLocaleBuffer, TEMPBUFSIZE, &err);
+
             inLocale = inLocaleBuffer;
-            
         } while ((result == NULL) && !done);
     }
-    
     
     if (result)
     {
@@ -754,7 +752,8 @@ int32_t uloc_getDisplayLanguage(const char* locale,
                 language[languageCapacity-1] = (UChar)0x0000;
             }
         }
-        else {
+        else
+        {
             u_strcpy(language, result);
         }
     }
@@ -768,13 +767,16 @@ int32_t uloc_getDisplayLanguage(const char* locale,
             
             if (languageCapacity >= 1) 
             {
-                
+                u_charsToUChars(inLanguageBuffer, language, languageCapacity-1);
                 language[languageCapacity-1] = (UChar)0x0000;
-                u_uastrncpy(language, inLanguageBuffer, languageCapacity-1);
             }
         }
-        else u_uastrcpy(language, inLanguageBuffer);
+        else
+        {
+            u_charsToUChars(inLanguageBuffer, language, resultLen);
+        }
     }
+
     return resultLen;
 }
 
@@ -883,11 +885,14 @@ int32_t uloc_getDisplayCountry(const char* locale,
             
             if (countryCapacity >= 1)
             {
-                country[countryCapacity-1] = (UChar)0x0000;
                 u_strncpy(country, result, countryCapacity-1);
+                country[countryCapacity-1] = (UChar)0x0000;
             }
         }
-        else u_strcpy(country, result);
+        else
+        {
+            u_strcpy(country, result);
+        }
     }
     else 
     {
@@ -899,11 +904,14 @@ int32_t uloc_getDisplayCountry(const char* locale,
             
             if (countryCapacity >= 1) 
             {
-                u_uastrncpy(country, inCountryBuffer, countryCapacity-1);
+                u_charsToUChars(inCountryBuffer, country, countryCapacity-1);
                 country[countryCapacity-1] = (UChar)0x0000;
             }
         }
-        else u_uastrcpy(country, inCountryBuffer);
+        else
+        {
+            u_charsToUChars(inCountryBuffer, country, resultLen);
+        }
     }
     
     return resultLen;
@@ -1017,7 +1025,6 @@ int32_t uloc_getDisplayVariant(const char* locale,
         } while ((result == NULL) && !done);
     }
     
-    
     if (result)
     {
         if (resultLen > variantCapacity)
@@ -1026,8 +1033,8 @@ int32_t uloc_getDisplayVariant(const char* locale,
             
             if (variantCapacity >= 1) 
             {
-                variant[variantCapacity-1] = (UChar)0x0000;
                 u_strncpy(variant, result, variantCapacity-1);
+                variant[variantCapacity-1] = (UChar)0x0000;
             }
         }
         else
