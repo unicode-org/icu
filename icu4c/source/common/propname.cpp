@@ -305,11 +305,18 @@ struct NameAndIndex {
     Offset name, index;
 };
 
+typedef int32_t U_CALLCONV PropNameCompareFn(const char *name1, const char *name2);
+
+struct CompareContext {
+    const char *chars;
+    PropNameCompareFn *propCompare;
+};
+
 static int32_t
 upname_compareRows(const void *context, const void *left, const void *right) {
-    const char *chars=(const char *)context;
-    return (int32_t)uprv_strcmp(chars+((const NameAndIndex *)left)->name,
-                                chars+((const NameAndIndex *)right)->name);
+    CompareContext *cmp=(CompareContext *)context;
+    return cmp->propCompare(cmp->chars+((const NameAndIndex *)left)->name,
+                            cmp->chars+((const NameAndIndex *)right)->name);
 }
 
 int32_t
@@ -327,6 +334,7 @@ NameToEnum::swap(const UDataSwapper *ds,
     Offset *outNameArray;
 
     NameAndIndex *sortArray;
+    CompareContext cmp;
 
     int32_t i, size, oldIndex;
 
@@ -389,8 +397,13 @@ NameToEnum::swap(const UDataSwapper *ds,
          * use a stable sort to avoid shuffling of equal strings,
          * which makes testing harder
          */
+        cmp.chars=(const char *)outBytes;
+        cmp.propCompare=
+            ds->outCharset==U_ASCII_FAMILY ?
+                uprv_compareASCIIPropertyNames :
+                uprv_compareEBCDICPropertyNames;
         uprv_sortArray(sortArray, tempMap->count, sizeof(NameAndIndex),
-                       upname_compareRows, outBytes,
+                       upname_compareRows, &cmp,
                        TRUE, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             udata_printError(ds, "upname_swap(NameToEnum).uprv_sortArray(%d items) failed - %s\n",

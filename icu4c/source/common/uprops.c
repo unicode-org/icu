@@ -29,51 +29,115 @@
 #ifdef DEBUG
 #include <stdio.h>
 #endif
+
+/**
+ * Get the next non-ignorable ASCII character from a property name
+ * and lowercases it.
+ * @return ((advance count for the name)<<8)|character
+ */
+static U_INLINE int32_t
+getASCIIPropertyNameChar(const char *name) {
+    int32_t i;
+    char c;
+
+    /* Ignore delimiters '-', '_', and ASCII White_Space */
+    for(i=0;
+        (c=name[i++])==0x2d || c==0x5f ||
+        c==0x20 || (0x09<=c && c<=0x0d);
+    ) {}
+
+    if(c!=0) {
+        return (i<<8)|(uint8_t)uprv_asciitolower((char)c);
+    } else {
+        return i<<8;
+    }
+}
+
+/**
+ * Get the next non-ignorable EBCDIC character from a property name
+ * and lowercases it.
+ * @return ((advance count for the name)<<8)|character
+ */
+static U_INLINE int32_t
+getEBCDICPropertyNameChar(const char *name) {
+    int32_t i;
+    char c;
+
+    /* Ignore delimiters '-', '_', and EBCDIC White_Space */
+    for(i=0;
+        (c=name[i++])==0x60 || c==0x6d ||
+        c==0x40 || c==0x05 || c==0x15 || c==0x25 || c==0x0b || c==0x0c || c==0x0d;
+    ) {}
+
+    if(c!=0) {
+        return (i<<8)|(uint8_t)uprv_ebcdictolower((char)c);
+    } else {
+        return i<<8;
+    }
+}
+
 /**
  * Unicode property names and property value names are compared
  * "loosely". Property[Value]Aliases.txt say:
  *   "With loose matching of property names, the case distinctions, whitespace,
  *    and '_' are ignored."
  *
- * This function does just that, for ASCII (char *) name strings.
+ * This function does just that, for (char *) name strings.
  * It is almost identical to ucnv_compareNames() but also ignores
- * ASCII White_Space characters (U+0009..U+000d).
+ * C0 White_Space characters (U+0009..U+000d, and U+0085 on EBCDIC).
  *
  * @internal
  */
+
 U_CAPI int32_t U_EXPORT2
-uprv_comparePropertyNames(const char *name1, const char *name2) {
-    int32_t rc;
-    unsigned char c1, c2;
+uprv_compareASCIIPropertyNames(const char *name1, const char *name2) {
+    int32_t rc, r1, r2;
 
     for(;;) {
-        /* Ignore delimiters '-', '_', and ASCII White_Space */
-        while((c1=(unsigned char)*name1)=='-' || c1=='_' ||
-              c1==' ' || c1=='\t' || c1=='\n' || c1=='\v' || c1=='\f' || c1=='\r'
-        ) {
-            ++name1;
-        }
-        while((c2=(unsigned char)*name2)=='-' || c2=='_' ||
-              c2==' ' || c2=='\t' || c2=='\n' || c2=='\v' || c2=='\f' || c2=='\r'
-        ) {
-            ++name2;
-        }
+        r1=getASCIIPropertyNameChar(name1);
+        r2=getASCIIPropertyNameChar(name2);
 
         /* If we reach the ends of both strings then they match */
-        if((c1|c2)==0) {
+        if(((r1|r2)&0xff)==0) {
             return 0;
         }
         
-        /* Case-insensitive comparison */
-        if(c1!=c2) {
-            rc=(int32_t)(unsigned char)uprv_tolower(c1)-(int32_t)(unsigned char)uprv_tolower(c2);
+        /* Compare the lowercased characters */
+        if(r1!=r2) {
+            rc=(r1&0xff)-(r2&0xff);
             if(rc!=0) {
                 return rc;
             }
         }
 
-        ++name1;
-        ++name2;
+        name1+=r1>>8;
+        name2+=r2>>8;
+    }
+}
+
+U_CAPI int32_t U_EXPORT2
+uprv_compareEBCDICPropertyNames(const char *name1, const char *name2) {
+    int32_t rc, r1, r2;
+
+    for(;;) {
+        r1=getEBCDICPropertyNameChar(name1);
+        r2=getEBCDICPropertyNameChar(name2);
+
+        /* If we reach the ends of both strings then they match */
+        if(((r1|r2)&0xff)==0) {
+            return 0;
+        }
+        
+        /* Compare the lowercased characters */
+        if(r1!=r2) {
+            rc=(r1&0xff)-(r2&0xff);
+            if(rc!=0) {
+                return rc;
+            }
+        }
+
+        name1+=r1>>8;
+        name2+=r2>>8;
     }
 }
 

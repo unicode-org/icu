@@ -827,7 +827,6 @@
 #define uprv_cnttab_setContraction uprv_cnttab_setContraction_2_8
 #define uprv_compareInvAscii uprv_compareInvAscii_2_8
 #define uprv_compareInvEbcdic uprv_compareInvEbcdic_2_8
-#define uprv_comparePropertyNames uprv_comparePropertyNames_2_8
 #define uprv_convertToLCID uprv_convertToLCID_2_8
 #define uprv_convertToPosix uprv_convertToPosix_2_8
 #define uprv_copyAscii uprv_copyAscii_2_8
