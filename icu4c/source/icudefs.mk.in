@@ -99,7 +99,7 @@ CFLAGS = @CFLAGS@
 # CXXFLAGS is for C++ only flags
 CXXFLAGS = @CXXFLAGS@
 # CPPFLAGS is for C Pre-Processor flags
-CPPFLAGS = -I. @CPPFLAGS@
+CPPFLAGS = @CPPFLAGS@
 # DEFAULT_LIBS are the default libraries to link against
 DEFAULT_LIBS = @LIBS@
 # LIB_M is for linking against the math library
