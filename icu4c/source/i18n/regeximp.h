@@ -300,7 +300,7 @@ enum StartOfMatch {
 //
 //  8 bit set, to fast-path latin-1 set membership tests.
 //
-struct Regex8BitSet {
+struct Regex8BitSet : public UMemory {
     inline Regex8BitSet();
     inline void operator = (const Regex8BitSet &s);
     inline void init(const UnicodeSet *src);
