@@ -1636,6 +1636,16 @@ LocaleTest::TestKeywordVariants(void) {
                         }
                     }
                 }
+                keywords->reset(status); // Make sure that reset works.
+                for(j = 0;;) {
+                    if((keyword = keywords->next(&keywordLen, status)) == NULL) {
+                        break;
+                    }
+                    if(strcmp(keyword, testCases[i].expectedKeywords[j]) != 0) {
+                        err("Expected to get keyword value %s, got %s\n", testCases[i].expectedKeywords[j], keyword);
+                    }
+                    j++;
+                }
             }
             delete keywords;
         }
