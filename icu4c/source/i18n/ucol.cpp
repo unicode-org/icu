@@ -1033,7 +1033,7 @@ ucol_cleanup(void)
 // CONSTANTS
 static const uint32_t
     NON_CJK_OFFSET = 0x110000,
-    MAX_INPUT = 0x220001; // 2 * Unicode range + 2
+    UCOL_MAX_INPUT = 0x220001; // 2 * Unicode range + 2
 
 /**
  * Precomputed by constructor
@@ -1092,7 +1092,7 @@ static UChar32 swapCJK(UChar32 i) {
 U_CAPI uint32_t U_EXPORT2
 uprv_uca_getImplicitFromRaw(UChar32 cp) {
     /*
-    if (cp < 0 || cp > MAX_INPUT) {
+    if (cp < 0 || cp > UCOL_MAX_INPUT) {
         throw new IllegalArgumentException("Code point out of range " + Utility.hex(cp));
     }
     */
@@ -1192,7 +1192,7 @@ uprv_uca_getRawFromImplicit(uint32_t implicit) {
         result = (((b0 * medialCount) + b1) * medialCount + b2) * final4Count + b3 + min4Boundary;
     }
     // final check
-    if (result < 0 || result > MAX_INPUT) return -1;
+    if (result < 0 || result > UCOL_MAX_INPUT) return -1;
     return result;
 }
 
@@ -1262,7 +1262,7 @@ static void initImplicitConstants(int minPrimary, int maxPrimary,
     min4Boundary = min3ByteCoverage;
     // Now expand out the multiplier for the 4 bytes, and redo.
 
-    int32_t totalNeeded = MAX_INPUT - min4Boundary;
+    int32_t totalNeeded = UCOL_MAX_INPUT - min4Boundary;
     int32_t neededPerPrimaryByte = divideAndRoundUp(totalNeeded, primaries4count);
     //if (DEBUG) System.out.println("neededPerPrimaryByte: " + neededPerPrimaryByte);
     int32_t neededPerFinalByte = divideAndRoundUp(neededPerPrimaryByte, medialCount * medialCount);
