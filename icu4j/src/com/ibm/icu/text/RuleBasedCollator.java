@@ -15,6 +15,7 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.ImplicitCEGenerator;
 import com.ibm.icu.impl.IntTrie;
 import com.ibm.icu.impl.Trie;
 import com.ibm.icu.impl.BOCU;

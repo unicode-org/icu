@@ -1,26 +1,31 @@
  /*
  *******************************************************************************
- * Copyright (C) 2002-2003, International Business Machines Corporation and         *
+ * Copyright (C) 2002-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- ***x**************************************************************************************
  */
 
 /** 
  * Port From:   ICU4C v2.1 : cintltest
  * Source File: $ICU4CRoot/source/test/cintltest/cmsccoll.c
- **/
+ */
  
 package com.ibm.icu.dev.test.collator;
 
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.*;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.ImplicitCEGenerator;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.CollationElementIterator;
+import com.ibm.icu.text.CollationKey;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.RuleBasedCollator;
+import com.ibm.icu.text.UTF16;
 import java.util.Locale;
 
-public class CollationMiscTest extends TestFmwk{
+public class CollationMiscTest extends TestFmwk {
 
     public static void main(String[] args) throws Exception {
         new CollationMiscTest().run(args);
@@ -40,11 +45,11 @@ public class CollationMiscTest extends TestFmwk{
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locale);
         if (rb != null) {
             try {
-                 String collkey = rb.getStringWithFallback("collations/default"); 
-                 ICUResourceBundle elements = rb.getWithFallback("collations/" + collkey);
-                 if (elements != null) {
-                     return true;
-                 }
+                String collkey = rb.getStringWithFallback("collations/default"); 
+                ICUResourceBundle elements = rb.getWithFallback("collations/" + collkey);
+                if (elements != null) {
+                    return true;
+                }
             } catch (Exception e) {
             }
         }
@@ -118,9 +123,9 @@ public class CollationMiscTest extends TestFmwk{
     }
     
     public void TestRuleOptions() {
-       // values here are hardcoded and are correct for the current UCA when 
-       // the UCA changes, one might be forced to change these values. 
-       // (\\u02d0, \\U00010FFFC etc...) 
+        // values here are hardcoded and are correct for the current UCA when 
+        // the UCA changes, one might be forced to change these values. 
+        // (\\u02d0, \\U00010FFFC etc...) 
         String[] rules = {
             // cannot test this anymore, as [last primary ignorable] doesn't 
             // have a  code point associated to it anymore  
@@ -142,22 +147,22 @@ public class CollationMiscTest extends TestFmwk{
             "&[before 1][first implicit]<b &[first implicit]<a",
             "&[before 1][last implicit]<b &[last implicit]<a", 
             "&[last variable]<z&[last primary ignorable]<x&[last secondary ignorable]<<y&[last tertiary ignorable]<<<w&[top]<u",
-          };
+        };
         String[][] data = {
-                // {"k", "\u20e3"},
-                {"\\u0000", "a"}, // you cannot go before first tertiary ignorable 
-                {"\\u0000", "a"}, // you cannot go before last tertiary ignorable 
-                {"\\u0000", "a"}, // you cannot go before first secondary ignorable
-                {"\\u0000", "a"}, // you cannot go before first secondary ignorable
-                {"c", "b", "\\u0332", "a"},
-                {"\\u0332", "\\u20e3", "c", "b", "a"},
-                {"c", "b", "\\u0009", "a", "\\u000a"},
-                {"c", "b", "\\uD800\\uDD33", "a", "\\u02d0"},
-                {"b", "\\u02d0", "a", "\\u02d1"},
-                {"b", "\\ud800\\udf9d", "a", "\\u4e00"},
-                {"b", "\\u4e00", "a", "\\u4e01"},
-                {"b", "\\U0010FFFD", "a"},
-                {"\ufffb",  "w", "y", "\u20e3", "x", "\u137c", "z", "u"},
+            // {"k", "\u20e3"},
+            {"\\u0000", "a"}, // you cannot go before first tertiary ignorable 
+            {"\\u0000", "a"}, // you cannot go before last tertiary ignorable 
+            {"\\u0000", "a"}, // you cannot go before first secondary ignorable
+            {"\\u0000", "a"}, // you cannot go before first secondary ignorable
+            {"c", "b", "\\u0332", "a"},
+            {"\\u0332", "\\u20e3", "c", "b", "a"},
+            {"c", "b", "\\u0009", "a", "\\u000a"},
+            {"c", "b", "\\uD800\\uDD33", "a", "\\u02d0"},
+            {"b", "\\u02d0", "a", "\\u02d1"},
+            {"b", "\\ud800\\udf9d", "a", "\\u4e00"},
+            {"b", "\\u4e00", "a", "\\u4e01"},
+            {"b", "\\U0010FFFD", "a"},
+            {"\ufffb",  "w", "y", "\u20e3", "x", "\u137c", "z", "u"},
         };
         
         for (int i = 0; i< rules.length; i++) {
@@ -196,12 +201,8 @@ public class CollationMiscTest extends TestFmwk{
         }
     }
 
-    
-    
-    
-    
     void reportCResult(String source, String target, CollationKey sourceKey, CollationKey targetKey,
-                              int compareResult, int keyResult, int incResult, int expectedResult ) {
+                       int compareResult, int keyResult, int incResult, int expectedResult ) {
         if (expectedResult < -1 || expectedResult > 1) {
             errln("***** invalid call to reportCResult ****");
             return;
@@ -511,7 +512,7 @@ public class CollationMiscTest extends TestFmwk{
             } 
             else if (attrs[i].equals("AlternateHandling")) {
                 coll.setAlternateHandlingShifted(((Boolean)values[i]
-                                                            ).booleanValue());
+                                                  ).booleanValue());
             }
             else if (attrs[i].equals("NumericCollation")) {
                 coll.setNumericCollation(((Boolean)values[i]).booleanValue());
@@ -573,8 +574,8 @@ public class CollationMiscTest extends TestFmwk{
     }
 
     /**
-    * Tests surrogate support.
-    */
+     * Tests surrogate support.
+     */
     public void TestSurrogates() {
         String test[] = {"z","\ud900\udc25", "\ud805\udc50", "\ud800\udc00y",  
                          "\ud800\udc00r", "\ud800\udc00f", "\ud800\udc00", 
@@ -582,9 +583,9 @@ public class CollationMiscTest extends TestFmwk{
                          "\ud800\udc00fb", "\ud800\udc00a", "c", "b"};
 
         String rule = "&z < \ud900\udc25 < \ud805\udc50 < \ud800\udc00y "
-                      + "< \ud800\udc00r < \ud800\udc00f << \ud800\udc00 "
-                      + "< \ud800\udc00fa << \ud800\udc00fb < \ud800\udc00a " 
-                      + "< c < b";
+            + "< \ud800\udc00r < \ud800\udc00f << \ud800\udc00 "
+            + "< \ud800\udc00fa << \ud800\udc00fb < \ud800\udc00a " 
+            + "< c < b";
         genericRulesStarter(rule, test);
     }
     
@@ -612,7 +613,7 @@ public class CollationMiscTest extends TestFmwk{
     }
 
     public void TestSuppressContractions() {
-            String testNoCont2[] = {
+        String testNoCont2[] = {
             "\u0410\u0302a",
             "\u0410\u0306b",
             "\u0410c"            
@@ -633,10 +634,10 @@ public class CollationMiscTest extends TestFmwk{
             "1a", "1A", "\u2460a", "\u2460A"
         };
         int[][] caseTestResults = {
-                { -1, -1, -1, 0, -1, -1, 0, 0, -1 },
-                { 1, -1, -1, 0, -1, -1, 0, 0, 1 },
-                { -1, -1, -1, 0, 1, -1, 0, 0, -1 },
-                { 1, -1, 1, 0, -1, -1, 0, 0, 1 }
+            { -1, -1, -1, 0, -1, -1, 0, 0, -1 },
+            { 1, -1, -1, 0, -1, -1, 0, 0, 1 },
+            { -1, -1, -1, 0, 1, -1, 0, 0, -1 },
+            { 1, -1, 1, 0, -1, -1, 0, 0, 1 }
     
         };
         boolean[][] caseTestAttributes = {
@@ -667,15 +668,15 @@ public class CollationMiscTest extends TestFmwk{
                 ((RuleBasedCollator)myCollation).setLowerCaseFirst(true);   
             }
             ((RuleBasedCollator)myCollation).setCaseLevel(
-                                                caseTestAttributes[k][1]);
+                                                          caseTestAttributes[k][1]);
           
             // logln("Case first = " + caseTestAttributes[k][0] + ", Case level = " + caseTestAttributes[k][1]);
             for (i = 0; i < 3 ; i++) {
                 for(j = i+1; j<4; j++) {
                     CollationTest.doTest(this, 
-                                        (RuleBasedCollator)myCollation, 
-                                        testCase[i], testCase[j], 
-                                        caseTestResults[k][3*i+j-1]);
+                                         (RuleBasedCollator)myCollation, 
+                                         testCase[i], testCase[j], 
+                                         caseTestResults[k][3*i+j-1]);
                 }
             }
         }
@@ -689,14 +690,14 @@ public class CollationMiscTest extends TestFmwk{
         myCollation.setStrength(Collator.TERTIARY);
     
         for(k = 0; k<4; k++) {
-        	if (caseTestAttributes[k][0] == true) {
+            if (caseTestAttributes[k][0] == true) {
                 ((RuleBasedCollator)myCollation).setUpperCaseFirst(true);
-        	}
-        	else {
-        		((RuleBasedCollator)myCollation).setUpperCaseFirst(false);
-        	}
+            }
+            else {
+                ((RuleBasedCollator)myCollation).setUpperCaseFirst(false);
+            }
             ((RuleBasedCollator)myCollation).setCaseLevel(
-                                                  caseTestAttributes[k][1]);
+                                                          caseTestAttributes[k][1]);
             for (i = 0; i < 3 ; i++) {
                 for(j = i+1; j<4; j++) {
                     CollationTest.doTest(this, 
@@ -919,11 +920,11 @@ public class CollationMiscTest extends TestFmwk{
         myCollation.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
         myCollation.setStrength(Collator.TERTIARY);
         for (int i = 0; i < 4 ; i++)
-        {
-            CollationTest.doTest(this, (RuleBasedCollator)myCollation, 
-                                 testSourceCases[i], testTargetCases[i], 
-                                 results[i]);
-        }
+            {
+                CollationTest.doTest(this, (RuleBasedCollator)myCollation, 
+                                     testSourceCases[i], testTargetCases[i], 
+                                     results[i]);
+            }
     }
     
     public void TestChMove() {
@@ -964,24 +965,24 @@ public class CollationMiscTest extends TestFmwk{
     }
     
     public void TestImplicitTailoring() {
-    	String rules[] = { "&[before 1]\u4e00 < b < c &[before 1]\u4e00 < d < e",
-    			"&\u4e00 < a <<< A < b <<< B",
-				"&[before 1]\u4e00 < \u4e01 < \u4e02",
-				"&[before 1]\u4e01 < \u4e02 < \u4e03",
-    	};
-    	String cases[][] = {
-    			{ "d", "e", "b", "c", "\u4e00"}, 
-				{ "\u4e00", "a", "A", "b", "B", "\u4e01"},
-				{ "\u4e01", "\u4e02", "\u4e00"},
-				{ "\u4e02", "\u4e03", "\u4e01"},
-    	};
-    	
-    	int i = 0;
-    	
-    	for(i = 0; i < rules.length; i++) {
-    		genericRulesStarter(rules[i], cases[i]);
-    	}
-    	
+        String rules[] = { "&[before 1]\u4e00 < b < c &[before 1]\u4e00 < d < e",
+                           "&\u4e00 < a <<< A < b <<< B",
+                           "&[before 1]\u4e00 < \u4e01 < \u4e02",
+                           "&[before 1]\u4e01 < \u4e02 < \u4e03",
+        };
+        String cases[][] = {
+            { "d", "e", "b", "c", "\u4e00"}, 
+            { "\u4e00", "a", "A", "b", "B", "\u4e01"},
+            { "\u4e01", "\u4e02", "\u4e00"},
+            { "\u4e02", "\u4e03", "\u4e01"},
+        };
+        
+        int i = 0;
+        
+        for(i = 0; i < rules.length; i++) {
+            genericRulesStarter(rules[i], cases[i]);
+        }
+        
     }
 
     public void TestFCDProblem() {
@@ -1063,7 +1064,7 @@ public class CollationMiscTest extends TestFmwk{
             int ce1 = CollationElementIterator.IGNORABLE;
             int ce2 = CollationElementIterator.IGNORABLE;
             while (ce1 != CollationElementIterator.NULLORDER
-                 && ce2 != CollationElementIterator.NULLORDER) {
+                   && ce2 != CollationElementIterator.NULLORDER) {
                 ce1 = iter1.next();
                 ce2 = iter2.next();
                 if (ce1 != ce2) {
@@ -1095,19 +1096,19 @@ public class CollationMiscTest extends TestFmwk{
             "\u01d6", "\u01d8", "\u01da", "\u01dc", "\u00fc"
         };
         genericRulesStarter(
-        "&[before 1]a<\u0101<\u00e1<\u01ce<\u00e0"
-        + "&[before 1]e<\u0113<\u00e9<\u011b<\u00e8"
-        + "&[before 1]i<\u012b<\u00ed<\u01d0<\u00ec"
-        + "&[before 1]o<\u014d<\u00f3<\u01d2<\u00f2"
-        + "&[before 1]u<\u016b<\u00fa<\u01d4<\u00f9"
-        + "&u<\u01d6<\u01d8<\u01da<\u01dc<\u00fc", data);
+                            "&[before 1]a<\u0101<\u00e1<\u01ce<\u00e0"
+                            + "&[before 1]e<\u0113<\u00e9<\u011b<\u00e8"
+                            + "&[before 1]i<\u012b<\u00ed<\u01d0<\u00ec"
+                            + "&[before 1]o<\u014d<\u00f3<\u01d2<\u00f2"
+                            + "&[before 1]u<\u016b<\u00fa<\u01d4<\u00f9"
+                            + "&u<\u01d6<\u01d8<\u01da<\u01dc<\u00fc", data);
     }
 
     public void TestRedundantRules() {
         String[] rules = {
-        	//"& a <<< b <<< c << d <<< e& [before 1] e <<< x",
-        	"& b <<< c <<< d << e <<< f& [before 1] f <<< x",
-        	"& a < b <<< c << d <<< e& [before 1] e <<< x",
+            //"& a <<< b <<< c << d <<< e& [before 1] e <<< x",
+            "& b <<< c <<< d << e <<< f& [before 1] f <<< x",
+            "& a < b <<< c << d <<< e& [before 1] e <<< x",
             "& a < b < c < d& [before 1] c < m",
             "& a < b <<< c << d <<< e& [before 3] e <<< x",
             "& a < b <<< c << d <<< e& [before 2] e <<< x",
@@ -1125,7 +1126,7 @@ public class CollationMiscTest extends TestFmwk{
         String[] expectedRules = {
             //"&\u2089<<<x",
             "&\u0252<<<x",
-			"& a <<< x < b <<< c << d <<< e",
+            "& a <<< x < b <<< c << d <<< e",
             "& a < b < m < c < d",
             "& a < b <<< c << d <<< x <<< e",
             "& a < b <<< c <<< x << d <<< e",
@@ -1141,9 +1142,9 @@ public class CollationMiscTest extends TestFmwk{
         };
         
         String[][] testdata = {
-//            {"\u2089", "x"},
+            //            {"\u2089", "x"},
             {"\u0252", "x"},
-        	{"a", "x", "b", "c", "d", "e"},
+            {"a", "x", "b", "c", "d", "e"},
             {"a", "b", "m", "c", "d"},
             {"a", "b", "c", "d", "x", "e"},
             {"a", "b", "c", "x", "d", "e"},
@@ -1317,93 +1318,93 @@ public class CollationMiscTest extends TestFmwk{
         // logln("Test 4 ....");
         /*
          * not a valid test since string are null-terminated in java{
-            char strA[] = {0x41, 0x00, 0x42};
-            char strB[] = {0x41, 0x00, 0x00};
+         char strA[] = {0x41, 0x00, 0x42};
+         char strB[] = {0x41, 0x00, 0x00};
             
-            int result = coll.compare(new String(strA), new String(strB));
-            if (result != 1) {
-                errln("ERROR 1 in test 4\n");
-            }
+         int result = coll.compare(new String(strA), new String(strB));
+         if (result != 1) {
+         errln("ERROR 1 in test 4\n");
+         }
             
-            result = coll.compare(new String(strA, 0, 1), new String(strB, 0, 1));
-            if (result != 0) {
-                errln("ERROR 1 in test 4\n");
-            }
+         result = coll.compare(new String(strA, 0, 1), new String(strB, 0, 1));
+         if (result != 0) {
+         errln("ERROR 1 in test 4\n");
+         }
             
-            CollationKey sortKeyA = coll.getCollationKey(new String(strA));
-            CollationKey sortKeyB = coll.getCollationKey(new String(strB));
+         CollationKey sortKeyA = coll.getCollationKey(new String(strA));
+         CollationKey sortKeyB = coll.getCollationKey(new String(strB));
             
-            int r = sortKeyA.compareTo(sortKeyB);
-            if (r <= 0) {
-                errln("Error 4 in test 4\n");
-            }
+         int r = sortKeyA.compareTo(sortKeyB);
+         if (r <= 0) {
+         errln("Error 4 in test 4\n");
+         }
     
-            coll.setStrength(Collator.IDENTICAL);
-            sortKeyA = coll.getCollationKey(new String(strA));
-            sortKeyB = coll.getCollationKey(new String(strB));
+         coll.setStrength(Collator.IDENTICAL);
+         sortKeyA = coll.getCollationKey(new String(strA));
+         sortKeyB = coll.getCollationKey(new String(strB));
     
-            r = sortKeyA.compareTo(sortKeyB);
-            if (r <= 0) {
-                errln("Error 7 in test 4\n");
-            }
+         r = sortKeyA.compareTo(sortKeyB);
+         if (r <= 0) {
+         errln("Error 7 in test 4\n");
+         }
             
-            coll.setStrength(Collator.TERTIARY);
-        }
+         coll.setStrength(Collator.TERTIARY);
+         }
         */
         /*  Test 5:  Null characters in non-normal source strings.*/
         // logln("Test 5 ....");
         /*
          * not a valid test since string are null-terminated in java{
-        {
-            char strA[] = {0x41, 0x41, 0x300, 0x316, 0x00, 0x42,};
-            char strB[] = {0x41, 0x41, 0x300, 0x316, 0x00, 0x00,};
+         {
+         char strA[] = {0x41, 0x41, 0x300, 0x316, 0x00, 0x42,};
+         char strB[] = {0x41, 0x41, 0x300, 0x316, 0x00, 0x00,};
            
     
-            int result = coll.compare(new String(strA, 0, 6), new String(strB, 0, 6));
-            if (result < 0) {
-                errln("ERROR 1 in test 5\n");
-            }
-            result = coll.compare(new String(strA, 0, 4), new String(strB, 0, 4));
-            if (result != 0) {
-                errln("ERROR 2 in test 5\n");
-            }
+         int result = coll.compare(new String(strA, 0, 6), new String(strB, 0, 6));
+         if (result < 0) {
+         errln("ERROR 1 in test 5\n");
+         }
+         result = coll.compare(new String(strA, 0, 4), new String(strB, 0, 4));
+         if (result != 0) {
+         errln("ERROR 2 in test 5\n");
+         }
     
-            CollationKey sortKeyA = coll.getCollationKey(new String(strA));
-            CollationKey sortKeyB = coll.getCollationKey(new String(strB));
-            int r = sortKeyA.compareTo(sortKeyB);
-            if (r <= 0) {
-                errln("Error 4 in test 5\n");
-            }
+         CollationKey sortKeyA = coll.getCollationKey(new String(strA));
+         CollationKey sortKeyB = coll.getCollationKey(new String(strB));
+         int r = sortKeyA.compareTo(sortKeyB);
+         if (r <= 0) {
+         errln("Error 4 in test 5\n");
+         }
     
-            coll.setStrength(Collator.IDENTICAL);
+         coll.setStrength(Collator.IDENTICAL);
             
-            sortKeyA = coll.getCollationKey(new String(strA));
-            sortKeyB = coll.getCollationKey(new String(strB));
-            r = sortKeyA.compareTo(sortKeyB);
-            if (r <= 0) {
-                errln("Error 7 in test 5\n");
-            }
+         sortKeyA = coll.getCollationKey(new String(strA));
+         sortKeyB = coll.getCollationKey(new String(strB));
+         r = sortKeyA.compareTo(sortKeyB);
+         if (r <= 0) {
+         errln("Error 7 in test 5\n");
+         }
             
-            coll.setStrength(Collator.TERTIARY);
-        }
+         coll.setStrength(Collator.TERTIARY);
+         }
         */
         /*  Test 6:  Null character as base of a non-normal combining sequence.*/
         // logln("Test 6 ....");
         /*
          * not a valid test since string are null-terminated in java{
-        {
-            char strA[] = {0x41, 0x0, 0x300, 0x316, 0x41, 0x302,};
-            char strB[] = {0x41, 0x0, 0x302, 0x316, 0x41, 0x300,};
+         {
+         char strA[] = {0x41, 0x0, 0x300, 0x316, 0x41, 0x302,};
+         char strB[] = {0x41, 0x0, 0x302, 0x316, 0x41, 0x300,};
     
-            int result = coll.compare(new String(strA, 0, 5), new String(strB, 0, 5));
-            if (result != -1) {
-                errln("Error 1 in test 6\n");
-            }
-            result = coll.compare(new String(strA, 0, 1), new String(strB, 0, 1));
-            if (result != 0) {
-                errln("Error 2 in test 6\n");
-            }
-        }
+         int result = coll.compare(new String(strA, 0, 5), new String(strB, 0, 5));
+         if (result != -1) {
+         errln("Error 1 in test 6\n");
+         }
+         result = coll.compare(new String(strA, 0, 1), new String(strB, 0, 1));
+         if (result != 0) {
+         errln("Error 2 in test 6\n");
+         }
+         }
         */
     }
     
@@ -1575,7 +1576,7 @@ public class CollationMiscTest extends TestFmwk{
         CollationTest.doTest(this, (RuleBasedCollator)coll, src, tgt, 1);
     }
     
-     public void TestLocaleRuleBasedCollators() {
+    public void TestLocaleRuleBasedCollators() {
         if (getInclusion() < 5) {
             // not serious enough to run this
             return;
@@ -1593,19 +1594,19 @@ public class CollationMiscTest extends TestFmwk{
                 }
                 String rule = null;
                 /*
-                Object[][] colldata = (Object[][])elements;
-                // %%CollationBin
-                if (colldata[0][1] instanceof byte[]){
-                    rule = (String)colldata[1][1];
-                }
-                else {
-                    rule = (String)colldata[0][1];
-                }
+                  Object[][] colldata = (Object[][])elements;
+                  // %%CollationBin
+                  if (colldata[0][1] instanceof byte[]){
+                  rule = (String)colldata[1][1];
+                  }
+                  else {
+                  rule = (String)colldata[0][1];
+                  }
                 */
                 rule = elements.getString("Sequence");   
 
                 RuleBasedCollator col1 = 
-                                  (RuleBasedCollator)Collator.getInstance(l);
+                    (RuleBasedCollator)Collator.getInstance(l);
                 if (!rule.equals(col1.getRules())) {
                     errln("Rules should be the same in the RuleBasedCollator and Locale");
                 }
@@ -1625,29 +1626,29 @@ public class CollationMiscTest extends TestFmwk{
     }
     
     public void TestOptimize() {
-      /* this is not really a test - just trying out 
-       * whether copying of UCA contents will fail 
-       * Cannot really test, since the functionality 
-       * remains the same.
-       */
-       String rules[] = {
-        "[optimize [\\uAC00-\\uD7FF]]"
-       };
-       String data[][] = {
-         { "a", "b"}
-       };
-       int i = 0;
+        /* this is not really a test - just trying out 
+         * whether copying of UCA contents will fail 
+         * Cannot really test, since the functionality 
+         * remains the same.
+         */
+        String rules[] = {
+            "[optimize [\\uAC00-\\uD7FF]]"
+        };
+        String data[][] = {
+            { "a", "b"}
+        };
+        int i = 0;
     
-      for(i = 0; i<rules.length; i++) {
-        genericRulesStarter(rules[i], data[i]);
-      }
+        for(i = 0; i<rules.length; i++) {
+            genericRulesStarter(rules[i], data[i]);
+        }
     }    
     
     public void TestIdenticalCompare() 
     {    
         try {
             RuleBasedCollator coll 
-                    = new RuleBasedCollator("& \uD800\uDC00 = \uD800\uDC01");
+                = new RuleBasedCollator("& \uD800\uDC00 = \uD800\uDC01");
             String strA = "AA\u0300\u0316\uD800\uDC01";
             String strB = "A\u00c0\u0316\uD800\uDC00";
             coll.setStrength(Collator.IDENTICAL);
@@ -1739,7 +1740,7 @@ public class CollationMiscTest extends TestFmwk{
                     }
                 } catch (Exception e) {
                     CollationElementIterator iter 
-                                 = coll.getCollationElementIterator(tokens[i]);
+                        = coll.getCollationElementIterator(tokens[i]);
                     /*int ce =*/ iter.next();
                     int ce2 = iter.next();
                     if (ce2 == CollationElementIterator.NULLORDER) {
@@ -1774,7 +1775,7 @@ public class CollationMiscTest extends TestFmwk{
     
     public void TestUCARules() 
     {
-       try {
+        try {
             // only root locale can have empty tailorings .. not English!
             RuleBasedCollator coll 
                 = (RuleBasedCollator)Collator.getInstance(new Locale("","",""));
@@ -1831,7 +1832,7 @@ public class CollationMiscTest extends TestFmwk{
                                         "\uD835\uDFD0\uD835\uDFCE", // 20 
                                         "\uD835\uDFD0\uD835\uDFCF", // 21 
                                         "\uD835\uDFD0\uD835\uDFD0" // 22 
-                                       };
+        };
     
         String foreignDigits[] = {"\u0661",
                                   "\u0662",
@@ -1845,11 +1846,11 @@ public class CollationMiscTest extends TestFmwk{
                                   "\u0663\u0660",
                                   "\u0663\u0662",
                                   "\u0663\u0663"
-                                 };
+        };
     
         // Open our collator.
         RuleBasedCollator coll 
-                    = (RuleBasedCollator)Collator.getInstance(Locale.ENGLISH);
+            = (RuleBasedCollator)Collator.getInstance(Locale.ENGLISH);
         String att[] = {"NumericCollation"};
         Boolean val[] = {new Boolean(true)};
         genericLocaleStarterWithOptions(Locale.ENGLISH, basicTestStrings, att,
@@ -1914,9 +1915,9 @@ public class CollationMiscTest extends TestFmwk{
     }
     
     public void TestPinyinProblem()
-	{
-    	String test[] = { "\u4E56\u4E56\u7761", "\u4E56\u5B69\u5B50" };
-    	genericLocaleStarter(new Locale("zh", "", "PINYIN"), test);   	
+    {
+        String test[] = { "\u4E56\u4E56\u7761", "\u4E56\u5B69\u5B50" };
+        genericLocaleStarter(new Locale("zh", "", "PINYIN"), test);     
     }
     
     static final long topByte = 0xFF000000L;
@@ -1926,105 +1927,104 @@ public class CollationMiscTest extends TestFmwk{
     static final int MAX_INPUT = 0x220001; // 2 * Unicode range + 2
     
     private void show(int i, ImplicitCEGenerator imp) {
-    	if (i >= 0 && i <= MAX_INPUT) {
-    		logln(Utility.hex(i) + "\t" + Utility.hex(imp.getImplicitFromRaw(i) & fourBytes));
-    	} 
+        if (i >= 0 && i <= MAX_INPUT) {
+            logln(Utility.hex(i) + "\t" + Utility.hex(imp.getImplicitFromRaw(i) & fourBytes));
+        } 
     }
 
     private void throwError(String title, int cp, ImplicitCEGenerator imp) {
-    	throw new IllegalArgumentException(title + "\t" + Utility.hex(cp, 6) + "\t" + Utility.hex(imp.getImplicitFromRaw(cp) & fourBytes));
+        throw new IllegalArgumentException(title + "\t" + Utility.hex(cp, 6) + "\t" + Utility.hex(imp.getImplicitFromRaw(cp) & fourBytes));
     }
     
     private void throwError(String title, long ce) {
-    	errln(title + "\t" + Utility.hex(ce & fourBytes));
+        errln(title + "\t" + Utility.hex(ce & fourBytes));
     }
     
     public void TestImplicitGeneration()
-	{
-    	logln("Start");
-    	try {
-    		ImplicitCEGenerator foo = new ImplicitCEGenerator(0xE0, 0xE4);
-    		
-    		//int x = foo.getRawImplicit(0xF810);
-    		foo.getRawFromImplicit(0xE20303E7);
+    {
+        logln("Start");
+        try {
+            ImplicitCEGenerator foo = new ImplicitCEGenerator(0xE0, 0xE4);
+                
+            //int x = foo.getRawImplicit(0xF810);
+            foo.getRawFromImplicit(0xE20303E7);
 
-    		int gap4 = foo.getGap4();
-    		logln("Gap4: " + gap4); 
-    		int gap3 = foo.getGap3();
-    		int minTrail = foo.getMinTrail();
-    		int maxTrail = foo.getMaxTrail();
-    		long last = 0;
-    		long current;
-    		for (int i = 0; i <= MAX_INPUT; ++i) {
-    			current = foo.getImplicitFromRaw(i) & fourBytes;
-    			
-    			// check that it round-trips AND that all intervening ones are illegal
-    			int roundtrip = foo.getRawFromImplicit((int)current);
-    			if (roundtrip != i) {
-    				throwError("No roundtrip", i, foo); 
-    			}
-    			if (last != 0) {
-    				for (long j = last + 1; j < current; ++j) {
-    					roundtrip = foo.getRawFromImplicit((int)j);
-    					// raise an error if it *doesn't* find an error
-    					if (roundtrip != -1) {
-    						throwError("Fails to recognize illegal", j);
-    					}
-    				}
-    			}
-    			// now do other consistency checks
-    			long lastBottom = last & bottomByte;
-    			long currentBottom = current & bottomByte;
-    			long lastTop = last & topByte;
-    			long currentTop = current & topByte;
-    			
-    			// do some consistency checks
-    			/*
-    			 long gap = current - last;               
-    			 if (currentBottom != 0) { // if we are a 4-byte
-    			 // gap has to be at least gap4
-    			 // and gap from minTrail, maxTrail has to be at least gap4
-    			 if (gap <= gap4) foo.throwError("Failed gap4 between", i);
-    			 if (currentBottom < minTrail + gap4) foo.throwError("Failed gap4 before", i);
-    			 if (currentBottom > maxTrail - gap4) foo.throwError("Failed gap4 after", i);
-    			 } else { // we are a three-byte
-    			 gap = gap >> 8; // move gap down for comparison.
-    			 long current3Bottom = (current >> 8) & bottomByte;
-    			 if (gap <= gap3) foo.throwError("Failed gap3 between ", i);
-    			 if (current3Bottom < minTrail + gap3) foo.throwError("Failed gap3 before", i);
-    			 if (current3Bottom > maxTrail - gap3) foo.throwError("Failed gap3 after", i);
-    			 }
-    			 */
-    			// print out some values for spot-checking
-    			if (lastTop != currentTop || i == 0x10000 || i == 0x110000) {
-    				show(i-3, foo);
-    				show(i-2, foo);
-    				show(i-1, foo);
-    				if (i == 0) {
-    					// do nothing
-    				} else if (lastBottom == 0 && currentBottom != 0) {
-    					logln("+ primary boundary, 4-byte CE's below");
-    				} else if (lastTop != currentTop) {
-    					logln("+ primary boundary");
-    				}
-    				show(i, foo);
-    				show(i+1, foo);
-    				show(i+2, foo);
-    				logln("...");
-    			}
-    			last = current;
-    			if(foo.getCodePointFromRaw(foo.getRawFromCodePoint(i)) != i) {
-    				errln("No raw <-> code point roundtrip for "+Utility.hex(i));
-    			}    			
-    		}
-    		show(MAX_INPUT-2, foo);
-    		show(MAX_INPUT-1, foo);
-    		show(MAX_INPUT, foo);
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	} finally {
-    		logln("End");
-    	}
-    	
+            int gap4 = foo.getGap4();
+            logln("Gap4: " + gap4); 
+            int gap3 = foo.getGap3();
+            int minTrail = foo.getMinTrail();
+            int maxTrail = foo.getMaxTrail();
+            long last = 0;
+            long current;
+            for (int i = 0; i <= MAX_INPUT; ++i) {
+                current = foo.getImplicitFromRaw(i) & fourBytes;
+                        
+                // check that it round-trips AND that all intervening ones are illegal
+                int roundtrip = foo.getRawFromImplicit((int)current);
+                if (roundtrip != i) {
+                    throwError("No roundtrip", i, foo); 
+                }
+                if (last != 0) {
+                    for (long j = last + 1; j < current; ++j) {
+                        roundtrip = foo.getRawFromImplicit((int)j);
+                        // raise an error if it *doesn't* find an error
+                        if (roundtrip != -1) {
+                            throwError("Fails to recognize illegal", j);
+                        }
+                    }
+                }
+                // now do other consistency checks
+                long lastBottom = last & bottomByte;
+                long currentBottom = current & bottomByte;
+                long lastTop = last & topByte;
+                long currentTop = current & topByte;
+                        
+                // do some consistency checks
+                /*
+                  long gap = current - last;               
+                  if (currentBottom != 0) { // if we are a 4-byte
+                  // gap has to be at least gap4
+                  // and gap from minTrail, maxTrail has to be at least gap4
+                  if (gap <= gap4) foo.throwError("Failed gap4 between", i);
+                  if (currentBottom < minTrail + gap4) foo.throwError("Failed gap4 before", i);
+                  if (currentBottom > maxTrail - gap4) foo.throwError("Failed gap4 after", i);
+                  } else { // we are a three-byte
+                  gap = gap >> 8; // move gap down for comparison.
+                  long current3Bottom = (current >> 8) & bottomByte;
+                  if (gap <= gap3) foo.throwError("Failed gap3 between ", i);
+                  if (current3Bottom < minTrail + gap3) foo.throwError("Failed gap3 before", i);
+                  if (current3Bottom > maxTrail - gap3) foo.throwError("Failed gap3 after", i);
+                  }
+                */
+                // print out some values for spot-checking
+                if (lastTop != currentTop || i == 0x10000 || i == 0x110000) {
+                    show(i-3, foo);
+                    show(i-2, foo);
+                    show(i-1, foo);
+                    if (i == 0) {
+                        // do nothing
+                    } else if (lastBottom == 0 && currentBottom != 0) {
+                        logln("+ primary boundary, 4-byte CE's below");
+                    } else if (lastTop != currentTop) {
+                        logln("+ primary boundary");
+                    }
+                    show(i, foo);
+                    show(i+1, foo);
+                    show(i+2, foo);
+                    logln("...");
+                }
+                last = current;
+                if(foo.getCodePointFromRaw(foo.getRawFromCodePoint(i)) != i) {
+                    errln("No raw <-> code point roundtrip for "+Utility.hex(i));
+                }                       
+            }
+            show(MAX_INPUT-2, foo);
+            show(MAX_INPUT-1, foo);
+            show(MAX_INPUT, foo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            logln("End");
+        }
     }
 }
