@@ -185,6 +185,33 @@ HAVE_INTTYPES_H=1
 fi
 AC_SUBST(HAVE_INTTYPES_H)
 
+if test x$U_IOSTREAM_SOURCE = x
+then
+    AC_LANG_SAVE
+    AC_LANG_CPLUSPLUS
+    AC_CHECK_HEADER(iostream)
+    if test $ac_cv_header_iostream = yes
+    then
+        U_IOSTREAM_SOURCE=199711
+    else
+        AC_CHECK_HEADER(iostream.h)
+        if test $ac_cv_header_iostream_h = yes; then
+            AC_MSG_CHECKING([whether ostream is really defined])
+            AC_CACHE_VAL(ac_cv_iostream_ok,
+                AC_TRY_LINK([#include <iostream.h>],[ostream &testout = cout; testout << "test" << endl;],ac_cv_iostream_ok=yes,ac_cv_iostream_ok=no))
+            AC_MSG_RESULT($ac_cv_iostream_ok)
+            if test $ac_cv_iostream_ok = yes
+            then
+                U_IOSTREAM_SOURCE=198506
+            else
+                U_IOSTREAM_SOURCE=0
+            fi
+        fi
+    fi
+fi
+AC_SUBST(U_IOSTREAM_SOURCE)
+AC_LANG_RESTORE
+
 dnl Check for endianness
 AC_C_BIGENDIAN(unknown)
 if test $ac_cv_c_bigendian = no; then
