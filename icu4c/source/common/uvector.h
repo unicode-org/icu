@@ -102,18 +102,18 @@ private:
 
     UHashTok* elements;
 
-    UObjectDeleter deleter;
+    UObjectDeleter *deleter;
 
-    UKeyComparator comparer;
+    UKeyComparator *comparer;
 
 public:
     UVector(UErrorCode &status);
 
     UVector(int32_t initialCapacity, UErrorCode &status);
 
-    UVector(UObjectDeleter d, UKeyComparator c, UErrorCode &status);
+    UVector(UObjectDeleter *d, UKeyComparator *c, UErrorCode &status);
 
-    UVector(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity, UErrorCode &status);
+    UVector(UObjectDeleter *d, UKeyComparator *c, int32_t initialCapacity, UErrorCode &status);
 
     ~UVector();
 
@@ -204,9 +204,9 @@ public:
     // New API
     //------------------------------------------------------------
 
-    UObjectDeleter setDeleter(UObjectDeleter d);
+    UObjectDeleter *setDeleter(UObjectDeleter *d);
 
-    UKeyComparator setComparer(UKeyComparator c);
+    UKeyComparator *setComparer(UKeyComparator *c);
 
     void* operator[](int32_t index) const;
 
@@ -300,9 +300,9 @@ public:
 
     UStack(int32_t initialCapacity, UErrorCode &status);
 
-    UStack(UObjectDeleter d, UKeyComparator c, UErrorCode &status);
+    UStack(UObjectDeleter *d, UKeyComparator *c, UErrorCode &status);
 
-    UStack(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity, UErrorCode &status);
+    UStack(UObjectDeleter *d, UKeyComparator *c, int32_t initialCapacity, UErrorCode &status);
 
     // It's okay not to have a virtual destructor (in UVector)
     // because UStack has no special cleanup to do.

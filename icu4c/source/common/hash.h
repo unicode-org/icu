@@ -48,7 +48,7 @@ public:
      */
     ~Hashtable();
 
-    UObjectDeleter setValueDeleter(UObjectDeleter fn);
+    UObjectDeleter *setValueDeleter(UObjectDeleter *fn);
 
     int32_t count() const;
 
@@ -131,7 +131,7 @@ inline Hashtable::~Hashtable() {
     }
 }
 
-inline UObjectDeleter Hashtable::setValueDeleter(UObjectDeleter fn) {
+inline UObjectDeleter *Hashtable::setValueDeleter(UObjectDeleter *fn) {
     return uhash_setValueDeleter(hash, fn);
 }
 

@@ -37,7 +37,7 @@ UVector::UVector(int32_t initialCapacity, UErrorCode &status) :
     _init(initialCapacity, status);
 }
 
-UVector::UVector(UObjectDeleter d, UKeyComparator c, UErrorCode &status) :
+UVector::UVector(UObjectDeleter *d, UKeyComparator *c, UErrorCode &status) :
     count(0),
     capacity(0),
     elements(0),
@@ -47,7 +47,7 @@ UVector::UVector(UObjectDeleter d, UKeyComparator c, UErrorCode &status) :
     _init(DEFUALT_CAPACITY, status);
 }
 
-UVector::UVector(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity, UErrorCode &status) :
+UVector::UVector(UObjectDeleter *d, UKeyComparator *c, int32_t initialCapacity, UErrorCode &status) :
     count(0),
     capacity(0),
     elements(0),
@@ -352,14 +352,14 @@ void** UVector::toArray(void** result) const {
     return result;
 }
 
-UObjectDeleter UVector::setDeleter(UObjectDeleter d) {
-    UObjectDeleter old = deleter;
+UObjectDeleter *UVector::setDeleter(UObjectDeleter *d) {
+    UObjectDeleter *old = deleter;
     deleter = d;
     return old;
 }
 
-UKeyComparator UVector::setComparer(UKeyComparator d) {
-    UKeyComparator old = comparer;
+UKeyComparator *UVector::setComparer(UKeyComparator *d) {
+    UKeyComparator *old = comparer;
     comparer = d;
     return old;
 }
@@ -447,12 +447,12 @@ UStack::UStack(int32_t initialCapacity, UErrorCode &status) :
 {
 }
 
-UStack::UStack(UObjectDeleter d, UKeyComparator c, UErrorCode &status) :
+UStack::UStack(UObjectDeleter *d, UKeyComparator *c, UErrorCode &status) :
     UVector(d, c, status)
 {
 }
 
-UStack::UStack(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity, UErrorCode &status) :
+UStack::UStack(UObjectDeleter *d, UKeyComparator *c, int32_t initialCapacity, UErrorCode &status) :
     UVector(d, c, initialCapacity, status)
 {
 }
