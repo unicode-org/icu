@@ -306,6 +306,24 @@ CompactShortArray* ucmp16_initAlias(CompactShortArray *this_obj,
   return this_obj;
 }
 
+CompactShortArray* ucmp16_initAliasWithBlockShift(CompactShortArray *this_obj,
+                          uint16_t *indexArray,
+                          int16_t *newValues,
+                          int32_t count,
+                          int16_t defaultValue,
+                          int32_t blockShift)
+{
+  ucmp16_initAlias(this_obj, indexArray, newValues, count, defaultValue);
+
+  if (this_obj) {
+    this_obj->kBlockShift  = blockShift;
+    this_obj->kBlockMask = (uint32_t) (((uint32_t)1 << (uint32_t)blockShift) - (uint32_t)1);
+  }
+  
+  return this_obj;
+}
+
+
 /*=======================================================*/
 
 void ucmp16_close(CompactShortArray* this_obj)
