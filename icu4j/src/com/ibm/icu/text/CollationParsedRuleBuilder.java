@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2002/09/10 22:19:31 $ 
-* $Revision: 1.6 $
+* $Date: 2002/09/17 21:31:58 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -49,6 +49,7 @@ final class CollationParsedRuleBuilder
     CollationParsedRuleBuilder(String rules) throws ParseException
     {
         m_parser_ = new CollationRuleParser(rules);
+        m_parser_.assembleTokenList();
         m_utilColEIter_ = RuleBasedCollator.UCA_.getCollationElementIterator(
                                                                            "");
     }

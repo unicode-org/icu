@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/09/11 00:12:39 $ 
-* $Revision: 1.20 $
+* $Date: 2002/09/17 21:31:58 $ 
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -544,6 +544,22 @@ public final class RuleBasedCollator extends Collator
     {
     	return m_rules_;
     }
+
+    /**
+     * Get an UnicodeSet that contains all the characters and sequences 
+     * tailored in this collator.
+     * @return a pointer to a UnicodeSet object containing all the 
+     *         code points and sequences that may sort differently than
+     *         in the UCA. 
+     * @exception ParseException thrown when argument rules have an 
+     *            invalid syntax. IOException 
+     * @draft ICU 2.4
+     */
+  	public UnicodeSet getTailoredSet() throws Exception
+  	{
+	  CollationRuleParser src = new CollationRuleParser(getRules());
+	  return src.getTailoredSet();
+  	}
 
 	/**
      * <p>
