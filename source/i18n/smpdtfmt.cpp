@@ -34,6 +34,7 @@
 #include "unicode/decimfmt.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/unicode.h"
+#include "unicode/ustring.h"
 #include "mutex.h"
 #include <float.h>
 
@@ -504,18 +505,21 @@ SimpleDateFormat::subFormat(UnicodeString& result,
     // this function gets called by format() to produce the appropriate substitution
     // text for an individual pattern symbol (e.g., "HH" or "yyyy")
 
-    EField patternCharIndex = (EField) -1;
+    UChar *patternCharPtr = u_strchr(DateFormatSymbols::getPatternUChars(), ch);
+    EField patternCharIndex;
     int32_t maxIntCount = 10;
     UnicodeString str; // Scratch
+
     result.remove();
 
     // if the pattern character is unrecognized, signal an error and dump out
-    if ((patternCharIndex = (EField)DateFormatSymbols::getPatternChars().indexOf(ch)) == (EField)-1)
+    if (patternCharPtr == NULL)
     {
         status = U_INVALID_FORMAT_ERROR;
         return result;
     }
 
+    patternCharIndex = (EField)(patternCharPtr - DateFormatSymbols::getPatternUChars());
     Calendar::EDateFields field = fgPatternIndexToCalendarField[patternCharIndex];
     int32_t value = fCalendar->get(field, status);
     if (U_FAILURE(status)) return result;
@@ -1067,11 +1071,14 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     int32_t value = 0;
     int32_t i;
     ParsePosition pos(0);
-    int32_t patternCharIndex = -1;
-    
-    if ((patternCharIndex = DateFormatSymbols::getPatternChars().indexOf(ch)) == -1) 
+    int32_t patternCharIndex;
+    UChar *patternCharPtr = u_strchr(DateFormatSymbols::getPatternUChars(), ch);
+
+    if (patternCharPtr == NULL) {
         return -start;
-    
+    }
+
+    patternCharIndex = (EField)(patternCharPtr - DateFormatSymbols::getPatternUChars());
     pos.setIndex(start);
 
     Calendar::EDateFields field = fgPatternIndexToCalendarField[patternCharIndex];
@@ -1461,7 +1468,7 @@ UnicodeString&
 SimpleDateFormat::toLocalizedPattern(UnicodeString& result,
                                      UErrorCode& status) const
 {
-    translatePattern(fPattern, result, DateFormatSymbols::getPatternChars(), fSymbols->fLocalPatternChars, status);
+    translatePattern(fPattern, result, DateFormatSymbols::getPatternUChars(), fSymbols->fLocalPatternChars, status);
     return result;
 }
 
@@ -1479,7 +1486,7 @@ void
 SimpleDateFormat::applyLocalizedPattern(const UnicodeString& pattern,
                                         UErrorCode &status)
 {
-    translatePattern(pattern, fPattern, fSymbols->fLocalPatternChars, DateFormatSymbols::getPatternChars(), status);
+    translatePattern(pattern, fPattern, fSymbols->fLocalPatternChars, DateFormatSymbols::getPatternUChars(), status);
 }
 
 //----------------------------------------------------------------------

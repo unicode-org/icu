@@ -130,8 +130,6 @@ void IntlTestDateFormatSymbols::testSymbols(/* char *par */)
         }
     }
 
-    const UnicodeString pattern = DateFormatSymbols::getPatternChars();
-    
     UnicodeString localPattern, pat1, pat2;
     localPattern = en.getLocalPatternChars(localPattern);
     fr.setLocalPatternChars(localPattern);
