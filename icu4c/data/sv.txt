@@ -105,11 +105,12 @@ sv {
     localPatternChars { "GyMdkHmsSEDFwWahKz" }
     zoneStrings { 
         {
-                "Africa/Casablanca",
-                "GMT",
-                "GMT",
-                "GMT",
-                "GMT",
+                "Europe/Stockholm",
+                "Central European Time",
+                "CET",
+                "Central European Time (DST)",
+                "CET",
+             	"Stockholm",
         }
     }
 }
