@@ -79,9 +79,11 @@ struct UColToken {
   UChar *rulesToParse;
 };
 
-// This is a token that has been parsed
-// but not yet processed. Used to reduce
-// the number of arguments in the parser
+/* 
+ * This is a token that has been parsed
+ * but not yet processed. Used to reduce
+ * the number of arguments in the parser
+ */
 typedef struct {
   uint32_t strength;
   uint32_t charsOffset;
