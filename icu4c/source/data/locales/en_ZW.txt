@@ -15,14 +15,14 @@ en_ZW {
             ".",
     }
     DateTimePatterns { 
+            "HH:mm:ss",
+            "HH:mm:ss",
+            "HH:mm:ss",
             "HH:mm:ss ",
-            "HH:mm:ss ",
-            "HH:mm:ss ",
-            "HH:mm:ss ",
-            "EEE DD MMM yyyy z",
-            "EEE DD MMM yyyy z",
-            "DD/MM/yy",
-            "DD/MM/yy",
+            "EEE dd MMM yyyy z",
+            "EEE dd MMM yyyy z",
+            "dd/MM/yy",
+            "dd/MM/yy",
             "{1} {0}",
     }
     NumberPatterns { 
@@ -30,6 +30,6 @@ en_ZW {
             "¤#,##0.00;-¤#,##0.00",
             "#,##0%",
     }
-            LocaleID{ "0x03009"}
+    LocaleID{ "3009"}
 
 }

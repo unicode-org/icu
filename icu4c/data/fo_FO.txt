@@ -16,14 +16,14 @@ fo_FO {
             ",",
     }
     DateTimePatterns { 
+            "HH:mm:ss",
+            "HH:mm:ss",
+            "HH:mm:ss",
             "HH:mm:ss ",
-            "HH:mm:ss ",
-            "HH:mm:ss ",
-            "HH:mm:ss ",
-            "EEE DD MMM yyyy z",
-            "EEE DD MMM yyyy z",
-            "DD/MM/yy",
-            "DD/MM/yy",
+            "EEE dd MMM yyyy z",
+            "EEE dd MMM yyyy z",
+            "dd/MM/yy",
+            "dd/MM/yy",
             "{1} {0}",
     }
 
@@ -32,6 +32,5 @@ fo_FO {
             "¤#,##0.00;¤ -#,##0.00",
             "#,##0%",
     }
-
-            LocaleID{ "0x0438"}
+    LocaleID{ "0438"}
 }

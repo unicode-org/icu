@@ -23,10 +23,10 @@ fa_IR {
             "ss:mm:HH",
             "ss:mm:HH",
             "ss:mm:HH",
-            "DD⁄MM⁄yyyy",
-            "DD⁄MM⁄yyyy",
-            "DD⁄MM⁄yyyy",
-            "DD⁄MM⁄yyyy",
+            "dd⁄MM⁄yyyy",
+            "dd⁄MM⁄yyyy",
+            "dd⁄MM⁄yyyy",
+            "dd⁄MM⁄yyyy",
             "{1} {0}",
     }
     NumberPatterns { 
@@ -34,5 +34,5 @@ fa_IR {
             "#,##0.#¤;#,##0.#- ¤",
             "#,##0%",
     }
-            LocaleID{ "0x0429"}
+            LocaleID{ "0429"}
 }
