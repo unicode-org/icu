@@ -639,7 +639,7 @@ ibm-878_P100-1996 { UTR22* }    ibm-878 { IBM* } KOI8-R { IANA* MIME* WINDOWS JA
 ibm-901_P100-1999 { UTR22* }    ibm-901 { IBM* } # PC Baltic (w/ euro update), update of ibm-921
 ibm-902_P100-1999 { UTR22* }    ibm-902 { IBM* } # PC Estonian (w/ euro update), update of ibm-922
 ibm-922_P100-1999 { UTR22* }    ibm-922 { IBM* JAVA } cp922 { MIME* JAVA* } 922 { JAVA } # PC Estonian (w/o euro update)
-ibm-1168_P100-2002 { UTR22* }   ibm-1168 { IBM* } KOI8-U { IANA* WINDOWS } windows-21866 { WINDOWS* } koi8-ru { WINDOWS }   # Ukrainian KOI8
+ibm-1168_P100-2002 { UTR22* }   ibm-1168 { IBM* } KOI8-U { IANA* WINDOWS } windows-21866 { WINDOWS* } koi8-ru { WINDOWS }   # Ukrainian KOI8. koi8-ru is an unusual alias, but Microsoft states that it is an alias.
 ibm-4909_P100-1999 { UTR22* }   ibm-4909 { IBM* } # ISO Greek (w/ euro update), update of ibm-813
 
 # The cp aliases in this section aren't really windows aliases, but it was used by ICU for Windows.
