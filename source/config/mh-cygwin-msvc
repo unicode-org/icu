@@ -3,11 +3,13 @@
 ## Copyright (c) 2001-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin-msvc,v 1.15 2003/09/26 00:14:25 grhoten-oss Exp $
+## $Id: mh-cygwin-msvc,v 1.16 2003/10/17 07:22:14 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
 GEN_DEPS.cc=	:
+#GEN_DEPS.c=	$(COMPILE.c) /E
+#GEN_DEPS.cc=	$(COMPILE.cc) /E
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = 
@@ -86,26 +88,30 @@ LIBUSTDIO=	$(top_builddir)/extra/ustdio/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VE
 
 
 ## Dependency rules
-#%.d: $(srcdir)/%.c
-#	@echo "generating dependency information for $<"
-#	$(SHELL) -ec '$(GEN_DEPS.c) $< \
-#		| sed '\''s%\($*\)\.o[ :]*%\1.o $@ : %g'\'' > $@; \
-#		[ -s $@ ] || rm -f $@'
-#
-#%.d: $(srcdir)/%.cpp
-#	@echo "generating dependency information for $<"
-#	$(SHELL) -ec '$(GEN_DEPS.cc) $< \
-#		| sed '\''s%\($*\)\.o[ :]*%\1.o $@ : %g'\'' > $@; \
-#		[ -s $@ ] || rm -f $@'
-
-## Dependency rules
+## This is a start to how depdendencies could work
+# The commented out rules may not properly delete the file when ^C is pressed
+#   or the compiler fails.
+# make currently doesn't like rules with C:\\PROGRA~1\\.. in the depedency.
+#   So system headers are ignored by ignoring \\
 %.d : $(srcdir)/%.c
 	@echo "generating dependency information for $<"
 	@$(GEN_DEPS.c) $< > $@
+#	@echo -n "generating dependency information for "
+#	@echo -n "$@ $(basename $<).o : " > $@
+#	@$(SHELL) -ec '$(GEN_DEPS.c) $< \
+#		| grep "#line 1 " | grep -v \\\\ | cut -d " " -f 3 \
+#		| /usr/bin/sort -u | sed s/\"$$/\\\\/ | sed s/^\"/\	/ >> $@ \
+#		|| (rm -f $@ && echo $@ && false)'
 
 %.d : $(srcdir)/%.cpp
 	@echo "generating dependency information for $<"
 	@$(GEN_DEPS.cc) $< > $@
+#	@echo -n "generating dependency information for "
+#	@echo -n "$@ $(basename $<).o : " > $@
+#	@$(SHELL) -ec '$(GEN_DEPS.cc) $< \
+#		| grep "#line 1 " | grep -v \\\\ | cut -d " " -f 3 \
+#		| /usr/bin/sort -u | sed s/\"$$/\\\\/ | sed s/^\"/\	/ >> $@ \
+#		|| (rm -f $@ && echo $@ && false)'
 
 ## Compile a Windows resource file
 %.res : $(srcdir)/%.rc
