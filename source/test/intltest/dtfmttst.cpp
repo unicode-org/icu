@@ -16,7 +16,7 @@
 #include "unicode/simpletz.h"
 #include "unicode/strenum.h"
 #include "cmemory.h"
-
+#include "caltest.h"  // for fieldName
 // *****************************************************************************
 // class DateFormatTest
 // *****************************************************************************
@@ -217,13 +217,6 @@ DateFormatTest::escape(UnicodeString& s)
     return (s = buf);
 }
  
-const char* DateFormatTest::fieldNames[] = {
-        "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH", "DAY_OF_MONTH", 
-        "DAY_OF_YEAR", "DAY_OF_WEEK", "DAY_OF_WEEK_IN_MONTH", "AM_PM", "HOUR", 
-        "HOUR_OF_DAY", "MINUTE", "SECOND", "MILLISECOND", "ZONE_OFFSET", //"DST_OFFSET", 
-        "YEAR_WOY", "DOW_LOCAL"
-};
- 
 // -------------------------------------
 
 // Map Calendar field number to to DateFormat field number
@@ -247,6 +240,9 @@ DateFormatTest::fgCalendarToDateFormatField[] = {
     DateFormat::kTimezoneField, 
     DateFormat::kYearWOYField,
     DateFormat::kDOWLocalField,
+    DateFormat::kExtendedYearField,
+    DateFormat::kJulianDayField,
+    DateFormat::kMillisecondsInDayField,
     (DateFormat::EField) -1
 };
 
@@ -270,20 +266,24 @@ DateFormatTest::TestFieldPosition(void)
     /* field values, in Calendar order */
 
     const char* expected[] = {
+    /* 0: US */
         "", "1997", "August", "", "", "13", "", "Wednesday", "", "PM", "2", "", 
         "34", "12", "", "PDT", "", 
-        /* Following two added by weiv for two new fields */ "", "", 
+        /* Following two added by weiv for two new fields */ "", "", "","","",
+    /* 1: France */
         "", "1997", "#",/* # is a marker for "ao\xfbt" == "aou^t" */  "", "", "13", "", "mercredi", 
         "", "", "", "14", "34", "", "", "GMT-07:00", "", 
-        /* Following two added by weiv for two new fields */ "", "", 
+        /* Following two added by weiv for two new fields */ "", "", "","","",
+    /* 2: (short fields) */
         "AD", "97", "8", "33", "3", "13", "225", "Wed", "2", "PM", "2", 
         "14", "34", "12", "5", "PDT", 
-        /* Following two added by weiv for two new fields */ "97", "4", "",
+        /* Following two added by weiv for two new fields */ "97", "4", "", "","","",
+    /* 3: (long fields) */
         "AD", "1997", "August", "0033", 
         "0003", "0013", "0225", "Wednesday", "0002", "PM", "0002", "0014", 
         "0034", "0012", "513", "Pacific Daylight Time", 
-        /* Following two added by weiv for two new fields */ "1997", "0004",
-        ""
+        /* Following two added by weiv for two new fields */ "1997", "0004", "","","", "",
+        NULL
 
     };
 
@@ -304,6 +304,12 @@ DateFormatTest::TestFieldPosition(void)
             UnicodeString field;
             getFieldText(df, i, someDate, field);
             UnicodeString expStr;
+
+            if(expected[exp] == NULL) {
+              errln("FAIL: ran out of 'expected' strings (pattern %d, field %d - item %d) .. perhaps number of calendar fields has changed?\n", j, i, exp);
+              return; /* leak? This is a Fatal err */
+            }
+
             if(expected[exp][0]!='#') {
                 expStr=UnicodeString(expected[exp]);
             } else {
@@ -311,8 +317,8 @@ DateFormatTest::TestFieldPosition(void)
                 expStr.append((UChar)0x61).append((UChar)0x6f).append((UChar32)0xfb).append((UChar)0x74);
             }
             
-            if (!(field == expStr)) errln(UnicodeString("FAIL: field #") + i + " " +
-                fieldNames[i] + " = \"" + escape(field) + "\", expected \"" + escape(expStr) + "\"");
+            if (!(field == expStr)) errln(UnicodeString("FAIL: pattern #") + j + ", field #" + i + " " + 
+                                          CalendarTest::fieldName((UCalendarDateFields)i) + " = \"" + escape(field) + "\", expected \"" + escape(expStr) + "\"");
             ++exp;
         }
     }
