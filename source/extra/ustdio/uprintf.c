@@ -1271,7 +1271,8 @@ u_printf_scidbl_handler(UFILE                 *stream,
     ((u_printf_spec_info*)info)->fPrecision = 1;
 
   /* determine whether to use 'e' or 'f' */
-  useE = (num < 0.0001 || (info->fPrecision != -1 && num > pow(10.0, info->fPrecision)));
+  useE = (UBool)(num < 0.0001
+       || (info->fPrecision != -1 && num > pow(10.0, info->fPrecision)));
   
   /* use 'e' */
   if(useE) {
@@ -1566,16 +1567,16 @@ u_vfprintf_u(    UFILE        *f,
         const UChar    *patternSpecification,
         va_list        ap)
 {
-  u_printf_spec         spec;
-  const UChar         *alias;
+  u_printf_spec   spec;
+  const UChar     *alias;
   int32_t         count, written;
 
   int32_t         num_args_wanted;
   int32_t         ufmt_types     [U_PRINTF_MAX_ARGS];
-  ufmt_args     args[U_PRINTF_MAX_ARGS];  
+  ufmt_args       args[U_PRINTF_MAX_ARGS];  
         
-  u_printf_info        info;
-  u_printf_handler    handler;
+  u_printf_info    info;
+  u_printf_handler handler;
 
   int32_t         cur_arg;
 
@@ -1596,7 +1597,7 @@ u_vfprintf_u(    UFILE        *f,
     /* find the next '%' */
     count = 0;
     while(*alias != UP_PERCENT && *alias != 0x0000) {
-      *alias++;
+      alias++;
       ++count;
     }
 
@@ -1615,34 +1616,34 @@ u_vfprintf_u(    UFILE        *f,
 
     /* width specified out of line */
     if(spec.fInfo.fWidth == -2) {
-      if(spec.fWidthPos != -1) {
-    /* handle positional parameter */
+      if(spec.fWidthPos == -1) {
+        /* read the width from the argument list */
+        spec.fInfo.fWidth = va_arg(ap, int);
       }
       else {
-    /* read the width from the argument list */
-    spec.fInfo.fWidth = va_arg(ap, int);
+        /* handle positional parameter */
       }
     
       /* if it's negative, take the absolute value and set left alignment */
       if(spec.fInfo.fWidth < 0) {
-    spec.fInfo.fWidth     *= -1;
-    spec.fInfo.fLeft     = TRUE;
+        spec.fInfo.fWidth     *= -1;
+        spec.fInfo.fLeft     = TRUE;
       }
     }
 
     /* precision specified out of line */
     if(spec.fInfo.fPrecision == -2) {
-      if(spec.fPrecisionPos != -1) {
-    /* handle positional parameter */
+      if(spec.fPrecisionPos == -1) {
+        /* read the precision from the argument list */
+        spec.fInfo.fPrecision = va_arg(ap, int);
       }
       else {
-    /* read the precision from the argument list */
-    spec.fInfo.fPrecision = va_arg(ap, int);
+        /* handle positional parameter */
       }
       
       /* if it's negative, set it to zero */
       if(spec.fInfo.fPrecision < 0)
-    spec.fInfo.fPrecision = 0;
+        spec.fInfo.fPrecision = 0;
     }
     
     /* query the info function for argument information */
@@ -1663,54 +1664,54 @@ u_vfprintf_u(    UFILE        *f,
       switch(ufmt_types[cur_arg]) {
 
       case ufmt_count:
-    args[cur_arg].intValue = va_arg(ap, int);
-    /* set the spec's width to the # of chars written */
-    spec.fInfo.fWidth = written;
-    break;
+        args[cur_arg].intValue = va_arg(ap, int);
+        /* set the spec's width to the # of chars written */
+        spec.fInfo.fWidth = written;
+        break;
 
       case ufmt_int:
-    args[cur_arg].intValue = va_arg(ap, int);
-    break;
-    
+        args[cur_arg].intValue = va_arg(ap, int);
+        break;
+
       case ufmt_char:
-    args[cur_arg].intValue = va_arg(ap, int);
-    break;
+        args[cur_arg].intValue = va_arg(ap, int);
+        break;
     
       case ufmt_wchar:
-    args[cur_arg].wcharValue = va_arg(ap, wchar_t);
-    break;
-    
+        args[cur_arg].wcharValue = va_arg(ap, wchar_t);
+        break;
+
       case ufmt_string:
-    args[cur_arg].ptrValue = va_arg(ap, char*);
-    break;
+        args[cur_arg].ptrValue = va_arg(ap, char*);
+        break;
     
       case ufmt_wstring:
-    args[cur_arg].ptrValue = va_arg(ap, wchar_t*);
-    break;
+        args[cur_arg].ptrValue = va_arg(ap, wchar_t*);
+        break;
     
       case ufmt_pointer:
-    args[cur_arg].ptrValue = va_arg(ap, void*);
-    break;
+        args[cur_arg].ptrValue = va_arg(ap, void*);
+        break;
     
       case ufmt_float:
-    args[cur_arg].floatValue = va_arg(ap, float);
-    break;
+        args[cur_arg].floatValue = va_arg(ap, float);
+        break;
     
       case ufmt_double:
-    args[cur_arg].doubleValue = va_arg(ap, double);
-    break;
+        args[cur_arg].doubleValue = va_arg(ap, double);
+        break;
 
       case ufmt_date:
-    args[cur_arg].dateValue = va_arg(ap, UDate);
-    break;
+        args[cur_arg].dateValue = va_arg(ap, UDate);
+        break;
 
       case ufmt_ustring:
-    args[cur_arg].ptrValue = va_arg(ap, UChar*);
-    break;
+        args[cur_arg].ptrValue = va_arg(ap, UChar*);
+        break;
 
       case ufmt_uchar:
-    args[cur_arg].intValue = va_arg(ap, int);
-    break;
+        args[cur_arg].intValue = va_arg(ap, int);
+        break;
       }
     }
     
