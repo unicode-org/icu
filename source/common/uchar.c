@@ -547,12 +547,6 @@ u_charDigitValue(UChar32 c) {
     uint32_t props, numericType;
     GET_PROPS(c, props);
     numericType=GET_NUMERIC_TYPE(props);
-#if 0
-    /* ### TODO: new numericType==4 for Han numbers?! */
-    if(numericType==0) {
-        return -1;
-    }
-#endif
 
     if(numericType==1) {
         if(!PROPS_VALUE_IS_EXCEPTION(props)) {
@@ -569,23 +563,7 @@ u_charDigitValue(UChar32 c) {
         }
     }
 
-    /* ### TODO: new numericType==4 for Han numbers?! */
-
-    /* if there is no value in the properties table, then check for some special characters */
-    /* see Unihan.txt kPrimaryNumeric values 0..9 ### TODO get from (new) UCD file */
-    switch(c) {
-    case 0x3007:    return 0; /* Han Zero*/
-    case 0x4e00:    return 1; /* Han One*/
-    case 0x4e8c:    return 2; /* Han Two*/
-    case 0x4e09:    return 3; /* Han Three*/
-    case 0x56db:    return 4; /* Han Four*/
-    case 0x4e94:    return 5; /* Han Five*/
-    case 0x516d:    return 6; /* Han Six*/
-    case 0x4e03:    return 7; /* Han Seven*/
-    case 0x516b:    return 8; /* Han Eight*/
-    case 0x4e5d:    return 9; /* Han Nine*/
-    default:        return -1; /* no value */
-    }
+    return -1;
 }
 
 U_CAPI double U_EXPORT2
