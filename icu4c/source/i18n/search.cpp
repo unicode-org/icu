@@ -18,18 +18,16 @@ U_NAMESPACE_BEGIN
 
 SearchIterator::SearchIterator(const SearchIterator &other)
 {   
-    if (other != *this) {
-        m_breakiterator_            = other.m_breakiterator_;
-        m_text_                     = other.m_text_;
-        m_search_                   = (USearch *)uprv_malloc(sizeof(USearch));   
-        m_search_->breakIter        = other.m_search_->breakIter;
-        m_search_->isCanonicalMatch = other.m_search_->isCanonicalMatch;
-        m_search_->isOverlap        = other.m_search_->isOverlap;
-        m_search_->matchedIndex     = other.m_search_->matchedIndex;
-        m_search_->matchedLength    = other.m_search_->matchedLength;
-        m_search_->text             = other.m_search_->text;
-        m_search_->textLength       = other.m_search_->textLength;
-    }
+    m_breakiterator_            = other.m_breakiterator_;
+    m_text_                     = other.m_text_;
+    m_search_                   = (USearch *)uprv_malloc(sizeof(USearch));   
+    m_search_->breakIter        = other.m_search_->breakIter;
+    m_search_->isCanonicalMatch = other.m_search_->isCanonicalMatch;
+    m_search_->isOverlap        = other.m_search_->isOverlap;
+    m_search_->matchedIndex     = other.m_search_->matchedIndex;
+    m_search_->matchedLength    = other.m_search_->matchedLength;
+    m_search_->text             = other.m_search_->text;
+    m_search_->textLength       = other.m_search_->textLength;
 }
 
 SearchIterator::~SearchIterator()
