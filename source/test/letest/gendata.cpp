@@ -14,6 +14,7 @@
 #include <stdio.h>
 
 #include "unicode/utypes.h"
+#include "unicode/uscript.h"
 #include "unicode/unicode.h"
 #include "unicode/locid.h"
 #include "unicode/loengine.h"
@@ -27,7 +28,7 @@ struct TestInput
 	char *fontName;
 	UChar *text;
 	int32_t textLength;
-	Unicode::EUnicodeScript scriptCode;
+	UScriptCode scriptCode;
 	UBool rightToLeft;
 };
 
@@ -52,100 +53,54 @@ char *header =
 	" */\n"
 	"\n"
 	"#include \"unicode/utypes.h\"\n"
-	"#include \"unicode/unicode.h\"\n"
+	"#include \"unicode/uscript.h\"\n"
 	"#include \"letest.h\"\n"
 	"\n";
 
 char *scriptNames[] =
 {
-    "NOT-A-SCRIPT!",
-    "kBasicLatin",
-    "kLatin1Supplement",
-    "kLatinExtendedA",
-    "kLatinExtendedB",
-    "kIPAExtension",
-    "kSpacingModifier",
-    "kCombiningDiacritical",
-    "kGreek",
-    "kCyrillic",
-    "kArmenian",
-    "kHebrew",
-    "kArabic",
-    "kSyriac",
-    "kThaana",
-    "kDevanagari",
-    "kBengali",
-    "kGurmukhi",
-    "kGujarati",
-    "kOriya",
-    "kTamil",
-    "kTelugu",
-    "kKannada",
-    "kMalayalam",
-    "kSinhala",
-    "kThai",
-    "kLao",
-    "kTibetan",
-    "kMyanmar",
-    "kGeorgian",
-    "kHangulJamo",
-    "kEthiopic",
-    "kCherokee",
-    "kUnifiedCanadianAboriginalSyllabics",
-    "kogham",
-    "kRunic",
-    "kKhmer",
-    "kMongolian",
-    "kLatinExtendedAdditional",
-    "kGreekExtended",
-    "kGeneralPunctuation",
-    "kSuperSubScript",
-    "kCurrencySymbolScript",
-    "kSymbolCombiningMark",
-    "kLetterlikeSymbol",
-    "kNumberForm",
-    "kArrow",
-    "kMathOperator",
-    "kMiscTechnical",
-    "kControlPicture",
-    "kOpticalCharacter",
-    "kEnclosedAlphanumeric",
-    "kBoxDrawing",
-    "kBlockElement",
-    "kGeometricShape",
-    "kMiscSymbol",
-    "kDingbat",
-    "kBraillePatterns",
-    "kCJKRadicalsSupplement",
-    "kKangxiRadicals",
-    "kIdeographicDescriptionCharacters",
-    "kCJKSymbolPunctuation",
-    "kHiragana",
-    "kKatakana",
-    "kBopomofo",
-    "kHangulCompatibilityJamo",
-    "kKanbun",
-    "kBopomofoExtended",
-    "kEnclosedCJKLetterMonth",
-    "kCJKCompatibility",
-    "kCJKUnifiedIdeographExtensionA",
-    "kCJKUnifiedIdeograph",
-    "kYiSyllables",
-    "kYiRadicals",
-    "kHangulSyllable",
-    "kHighSurrogate",
-    "kHighPrivateUseSurrogate",
-    "kLowSurrogate",
-    "kPrivateUse",
-    "kCJKCompatibilityIdeograph",
-    "kAlphabeticPresentation",
-    "kArabicPresentationA",
-    "kCombiningHalfMark",
-    "kCJKCompatibilityForm",
-    "kSmallFormVariant",
-    "kArabicPresentationB",
-    "kNoScript",
-    "kHalfwidthFullwidthForm"
+      "USCRIPT_COMMON",      /* Zyyy */
+      "USCRIPT_INHERITED",   /* Qaai */
+      "USCRIPT_ARABIC",      /* Arab */
+      "USCRIPT_ARMENIAN",    /* Armn */
+      "USCRIPT_BENGALI",     /* Beng */
+      "USCRIPT_BOPOMOFO",    /* Bopo */
+      "USCRIPT_CHEROKEE",    /* Cher */
+      "USCRIPT_COPTIC",      /* Qaac */
+      "USCRIPT_CYRILLIC",    /* Cyrl (Cyrs) */
+      "USCRIPT_DESERET",     /* Dsrt */
+      "USCRIPT_DEVANAGARI",  /* Deva */
+      "USCRIPT_ETHIOPIC",    /* Ethi */
+      "USCRIPT_GEORGIAN",    /* Geor (Geon, Geoa) */
+      "USCRIPT_GOTHIC",      /* Goth */
+      "USCRIPT_GREEK",       /* Grek */
+      "USCRIPT_GUJARATI",    /* Gujr */
+      "USCRIPT_GURMUKHI",    /* Guru */
+      "USCRIPT_HAN",         /* Hani */
+      "USCRIPT_HANGUL",      /* Hang */
+      "USCRIPT_HEBREW",      /* Hebr */
+      "USCRIPT_HIRAGANA",    /* Hira */
+      "USCRIPT_KANNADA",     /* Knda */
+      "USCRIPT_KATAKANA",    /* Kata */
+      "USCRIPT_KHMER",       /* Khmr */
+      "USCRIPT_LAO",         /* Laoo */
+      "USCRIPT_LATIN",       /* Latn (Latf, Latg) */
+      "USCRIPT_MALAYALAM",   /* Mlym */
+      "USCRIPT_MONGOLIAN",   /* Mong */
+      "USCRIPT_MYANMAR",     /* Mymr */
+      "USCRIPT_OGHAM",       /* Ogam */
+      "USCRIPT_OLD_ITALIC",  /* Ital */
+      "USCRIPT_ORIYA",       /* Orya */
+      "USCRIPT_RUNIC",       /* Runr */
+      "USCRIPT_SINHALA",     /* Sinh */
+      "USCRIPT_SYRIAC",      /* Syrc (Syrj, Syrn, Syre) */
+      "USCRIPT_TAMIL",       /* Taml */
+      "USCRIPT_TELUGU",      /* Telu */
+      "USCRIPT_THAANA",      /* Thaa */
+      "USCRIPT_THAI",        /* Thai */
+      "USCRIPT_TIBETAN",     /* Tibt */
+      "USCRIPT_UCAS",        /* Cans */
+      "USCRIPT_YI",          /* Yiii */
 };
 
 UChar devaText[] =
@@ -291,10 +246,10 @@ UChar thaiSample[] =
 int32_t thaiSampleLength = ARRAY_LENGTH(thaiSample);
 
 TestInput testInputs[] = {
-	{"Devamt.ttf", devaText, devaTextLength, Unicode::kDevanagari, false},
-	{"Times.TTF", arabText, arabTextLength, Unicode::kArabic, true},
-	{"LucidaSansRegular.ttf", arabText, arabTextLength, Unicode::kArabic, true},
-	{"Thonburi.ttf", thaiSample, thaiSampleLength, Unicode::kThai, false}
+	{"Devamt.ttf",            devaText,   devaTextLength,   USCRIPT_DEVANAGARI, false},
+	{"Times.TTF",             arabText,   arabTextLength,   USCRIPT_ARABIC,     true},
+	{"LucidaSansRegular.ttf", arabText,   arabTextLength,   USCRIPT_ARABIC,     true},
+	{"Thonburi.ttf",          thaiSample, thaiSampleLength, USCRIPT_THAI,       false}
 };
 
 #define TEST_COUNT ARRAY_LENGTH(testInputs)
@@ -395,11 +350,7 @@ int main(int argc, char *argv[])
 		float *positions;
 
         if (LE_FAILURE(success)) {
-            // would be nice to print the script name here, but
-            // don't know if it's worth the trouble to maintian
-            // the table; better to wait for that fuctionality
-            // to appear in ICU...
-            printf("ERROR: test case %d, could not create a LayoutEngine.\n", test);
+            printf("ERROR: test case %d, could not create a LayoutEngine for script %s.\n", test, scriptNames[testInputs[test].scriptCode]);
             continue;
         }
 
@@ -434,7 +385,7 @@ int main(int argc, char *argv[])
 	fprintf(outputFile, "TestInput testInputs[] = \n{\n");
 
 	for (test = 0; test < testCount; test += 1) {
-		fprintf(outputFile, "    {\"%s\", inputText%d, %d, Unicode::%s, %s},\n",
+		fprintf(outputFile, "    {\"%s\", inputText%d, %d, %s, %s},\n",
 			testInputs[test].fontName, test, testInputs[test].textLength, scriptNames[testInputs[test].scriptCode],
 			testInputs[test].rightToLeft? "true" : "false");
 	}
