@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $ 
- * $Date: 2001/03/30 23:33:06 $ 
- * $Revision: 1.29 $
+ * $Date: 2001/03/31 01:31:13 $ 
+ * $Revision: 1.30 $
  *
  *****************************************************************************************
  */
@@ -240,7 +240,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.29 $ $Date: 2001/03/30 23:33:06 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.30 $ $Date: 2001/03/31 01:31:13 $
  */
 public abstract class Transliterator {
     /**
@@ -776,33 +776,38 @@ public abstract class Transliterator {
         }
 
         for (;;) {
+            // ID and id are identical, unless there is a filter pattern,
+            // in which case id is the substring of ID preceding the
+            // filter pattern.
+            String id = ID;
             UnicodeFilter filter = null;
-            int i = ID.indexOf('[');
-            if (i >= 0) {
-                ParsePosition pos = new ParsePosition(i);
+            int bracket = ID.indexOf('[');
+            if (bracket >= 0) {
+                ParsePosition pos = new ParsePosition(bracket);
                 filter = new UnicodeSet(ID, pos, null);
                 if (pos.getIndex() != ID.length()) {
                     break; // unparsed junk after ']'
                 }
-                ID = ID.substring(0, i);
+                id = ID.substring(0, bracket);
             }
 
             if (direction == REVERSE) {
-                i = ID.indexOf('-');
+                int i = id.indexOf('-');
                 if (i < 0) {
-                    if (!ID.equals(NullTransliterator._ID)) {
+                    if (!id.equals(NullTransliterator._ID)) {
                         throw new IllegalArgumentException("No inverse for: "
-                                                           + ID);
+                                                           + id);
                     }
                 } else {
-                    ID = ID.substring(i+1) + '-' + ID.substring(0, i);
+                    id = id.substring(i+1) + '-' + id.substring(0, i);
                 }
             }
 
-            Transliterator t = internalGetInstance(ID);
+            Transliterator t = internalGetInstance(id);
             if (t != null) {
                 if (filter != null) {
                     t.setFilter(filter);
+                    t.ID += ID.substring(bracket);
                 }
                 return t;
             }
