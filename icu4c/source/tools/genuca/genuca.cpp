@@ -633,7 +633,6 @@ struct {
 
     for(i = 0; i<sizeof(ranges)/sizeof(ranges[0]); i++) {
       ucmpe32_setRange32(t->mapping, ranges[i].start, ranges[i].end, ranges[i].value); 
-      test_uca_ranges(t->mapping, ranges[i].start, ranges[i].end, ranges[i].value); 
     }
 
 
