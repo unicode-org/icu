@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.cpp,v $ 
- * $Date: 2002/03/12 23:21:52 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/03/13 18:29:24 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -353,7 +353,7 @@ Hashtable *CanonicalIterator::getEquivalents2(UnicodeString segment, UErrorCode 
         }
         // if so, see which decompositions match 
         for(cp = limit; cp < limit || uset_getSerializedRange(&starts, j++, &cp, &limit); ++cp) {
-            const Hashtable *remainder = extract(cp, segment, i, workingBuffer, status);
+            Hashtable *remainder = extract(cp, segment, i, workingBuffer, status);
             if (remainder == NULL) continue;
             
             // there were some matches, so add all the possibilities to the set.
@@ -389,7 +389,7 @@ Hashtable *CanonicalIterator::getEquivalents2(UnicodeString segment, UErrorCode 
  * (with canonical rearrangment!)
  * If so, take the remainder, and return the equivalents 
  */
-const Hashtable *CanonicalIterator::extract(UChar32 comp, UnicodeString segment, int32_t segmentPos, UnicodeString buffer, UErrorCode status) {
+Hashtable *CanonicalIterator::extract(UChar32 comp, UnicodeString segment, int32_t segmentPos, UnicodeString buffer, UErrorCode status) {
     //if (PROGRESS) printf(" extract: %s, ", UToS(Tr(UnicodeString(comp))));
     //if (PROGRESS) printf("%s, %i\n", UToS(Tr(segment)), segmentPos);
 
