@@ -236,7 +236,7 @@ protected:
  * @internal
  */
 #define UOBJECT_DEFINE_RTTI_IMPLEMENTATION(myClass) \
-    UClassID myClass::getStaticClassID() { \
+    UClassID U_EXPORT2 myClass::getStaticClassID() { \
         static const char classID = 0; \
         return (UClassID)&classID; \
     } \
@@ -253,7 +253,7 @@ protected:
  * @internal
  */
 #define UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(myClass) \
-    UClassID myClass::getStaticClassID() { \
+    UClassID U_EXPORT2 myClass::getStaticClassID() { \
         static const char classID = 0; \
         return (UClassID)&classID; \
     }

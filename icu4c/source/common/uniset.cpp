@@ -1474,7 +1474,7 @@ UnicodeSet& UnicodeSet::removeAll(const UnicodeString& s) {
  * @param the source string
  * @return a newly created set containing the given string
  */
-UnicodeSet* UnicodeSet::createFrom(const UnicodeString& s) {
+UnicodeSet* U_EXPORT2 UnicodeSet::createFrom(const UnicodeString& s) {
     UnicodeSet *set = new UnicodeSet();
     set->add(s);
     return set;
@@ -1486,7 +1486,7 @@ UnicodeSet* UnicodeSet::createFrom(const UnicodeString& s) {
  * @param the source string
  * @return a newly created set containing the given characters
  */
-UnicodeSet* UnicodeSet::createFromAll(const UnicodeString& s) {
+UnicodeSet* U_EXPORT2 UnicodeSet::createFromAll(const UnicodeString& s) {
     UnicodeSet *set = new UnicodeSet();
     set->addAll(s);
     return set;

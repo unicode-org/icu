@@ -309,7 +309,7 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
  * @param source the string to find permutations for
  * @return the results in a set.
  */
-void CanonicalIterator::permute(UnicodeString &source, UBool skipZeros, Hashtable *result, UErrorCode &status) {
+void U_EXPORT2 CanonicalIterator::permute(UnicodeString &source, UBool skipZeros, Hashtable *result, UErrorCode &status) {
     if(U_FAILURE(status)) {
       return;
     }

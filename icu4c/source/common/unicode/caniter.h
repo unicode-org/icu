@@ -70,7 +70,7 @@ public:
      * @param status    Fill-in parameter which receives the status of this operation.
      * @stable ICU 2.4
      */
-    CanonicalIterator(const UnicodeString &source, UErrorCode &status);    
+    CanonicalIterator(const UnicodeString &source, UErrorCode &status);
 
     /** Destructor
      *  Cleans pieces
@@ -83,13 +83,13 @@ public:
      * @return gets the source: NOTE: it is the NFD form of source
      * @stable ICU 2.4
      */
-    UnicodeString getSource();    
+    UnicodeString getSource();
 
     /**
      * Resets the iterator so that one can start again from the beginning.
      * @stable ICU 2.4
      */
-    void reset();    
+    void reset();
 
     /**
      * Get the next canonically equivalent string.
@@ -98,7 +98,7 @@ public:
      * the iteration is done.
      * @stable ICU 2.4
      */
-    UnicodeString next();    
+    UnicodeString next();
 
     /**
      * Set a new source for this iterator. Allows object reuse.
@@ -107,25 +107,25 @@ public:
      * @param status        Fill-in parameter which receives the status of this operation.
      * @stable ICU 2.4
      */
-    void setSource(const UnicodeString &newSource, UErrorCode &status);    
+    void setSource(const UnicodeString &newSource, UErrorCode &status);
 
     /**
-     * Dumb recursive implementation of permutation. 
+     * Dumb recursive implementation of permutation.
      * TODO: optimize
      * @param source     the string to find permutations for
      * @param skipZeros  determine if skip zeros
      * @param result     the results in a set.
      * @param status       Fill-in parameter which receives the status of this operation.
-     * @internal 
+     * @internal
      */
-    static void permute(UnicodeString &source, UBool skipZeros, Hashtable *result, UErrorCode &status);     
-    
+    static void U_EXPORT2 permute(UnicodeString &source, UBool skipZeros, Hashtable *result, UErrorCode &status);
+
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @stable ICU 2.2
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -137,8 +137,8 @@ public:
 private:
     // ===================== PRIVATES ==============================
     // private default constructor
-    CanonicalIterator(); 
-       
+    CanonicalIterator();
+
 
     /**
      * Copy constructor. Private for now.
@@ -165,21 +165,21 @@ private:
     // current is used in iterating to combine pieces
     int32_t *current;
     int32_t current_length;
-    
+
     // transient fields
     UnicodeString buffer;
-    
+
     // we have a segment, in NFD. Find all the strings that are canonically equivalent to it.
     UnicodeString *getEquivalents(const UnicodeString &segment, int32_t &result_len, UErrorCode &status); //private String[] getEquivalents(String segment)
-    
+
     //Set getEquivalents2(String segment);
     Hashtable *getEquivalents2(const UChar *segment, int32_t segLen, UErrorCode &status);
     //Hashtable *getEquivalents2(const UnicodeString &segment, int32_t segLen, UErrorCode &status);
-    
+
     /**
-     * See if the decomposition of cp2 is at segment starting at segmentPos 
+     * See if the decomposition of cp2 is at segment starting at segmentPos
      * (with canonical rearrangment!)
-     * If so, take the remainder, and return the equivalents 
+     * If so, take the remainder, and return the equivalents
      */
     //Set extract(int comp, String segment, int segmentPos, StringBuffer buffer);
     Hashtable *extract(UChar32 comp, const UChar *segment, int32_t segLen, int32_t segmentPos, UErrorCode &status);

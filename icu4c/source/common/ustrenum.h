@@ -39,7 +39,7 @@ uenum_openCharStringsEnumeration(const char** strings, int32_t count,
  */
 class U_COMMON_API UStringEnumeration : public StringEnumeration {
 
- public:
+public:
     /**
      * Constructor.  This constructor adopts its UEnumeration
      * argument.
@@ -55,7 +55,7 @@ class U_COMMON_API UStringEnumeration : public StringEnumeration {
      * constructor.
      */
     virtual ~UStringEnumeration();
-    
+
     /**
      * Return the number of elements that the iterator traverses.
      * @param status the error code.
@@ -85,80 +85,12 @@ class U_COMMON_API UStringEnumeration : public StringEnumeration {
     /**
      * ICU4C "poor man's RTTI", returns a UClassID for this ICU class.
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
- private:
+private:
     UEnumeration *uenum; // owned
 };
 
-//----------------------------------------------------------------------
 
-// The following has not been tested and is not used yet. [alan]
-// 
-// /**
-//  * A StringEnumeration over a fixed array of const UChar* strings.
-//  */
-// class U_COMMON_API StringArrayEnumeration : public StringEnumeration {
-// 
-//  public:
-//     /**
-//      * Constructor.
-//      * @param strings pointer to array of const UChar*.  If 'count' ==
-//      * 0, then this pointer is ignored.  May be NULL if 'count' == 0.
-//      * @param count number of elements of strings, or 0.  If 0, then
-//      * 'strings' is ignored.
-//      */
-//     StringArrayEnumeration(const UChar** strings, int32_t count,
-//                            UErrorCode& status);
-// 
-//     /**
-//      * Destructor.
-//      */
-//     virtual ~StringArrayEnumeration();
-// 
-//     /**
-//      * Clone this object.
-//      * @return a clone of this object
-//      */
-//     virtual StringEnumeration *clone() const;
-//     
-//     /**
-//      * Return the number of elements that the iterator traverses.
-//      * @param status the error code.
-//      * @return number of elements in the iterator.
-//      */
-//     virtual int32_t count(UErrorCode& status) const;
-// 
-//     /**
-//      * Returns the next element a UnicodeString*.  If there are no
-//      * more elements, returns NULL.
-//      * @param status the error code.
-//      * @return a pointer to the string, or NULL.
-//      */
-//     virtual const UnicodeString* snext(UErrorCode& status);
-// 
-//     /**
-//      * Resets the iterator.
-//      * @param status the error code.
-//      */
-//     virtual void reset(UErrorCode& status);
-// 
-//     /**
-//      * ICU4C "poor man's RTTI", returns a UClassID for the actual ICU class.
-//      */
-//     virtual UClassID getDynamicClassID() const;
-// 
-//     /**
-//      * ICU4C "poor man's RTTI", returns a UClassID for this ICU class.
-//      */
-//     static UClassID getStaticClassID();
-// 
-//  private:
-//     const UChar** strings;
-//     int32_t stringCount;
-//     int32_t pos;
-// };
-
-/* _USTRENUM_H_ */
 #endif
-/*eof*/
+

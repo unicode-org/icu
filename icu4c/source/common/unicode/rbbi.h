@@ -44,7 +44,7 @@ struct RBBIStateTable;
  * <p>See the ICU User Guide for information on Break Iterator Rules.</p>
  *
  * <p>This class is not intended to be subclassed.  (Class DictionaryBasedBreakIterator
- *    is a subclass, but that relationship is effectively internal to the ICU 
+ *    is a subclass, but that relationship is effectively internal to the ICU
  *    implementation.  The subclassing interface to RulesBasedBreakIterator is
  *    not part of the ICU API, and may not remain stable.</p>
  *
@@ -64,7 +64,7 @@ protected:
      */
     RBBIDataWrapper    *fData;
 
-    /** Index of the Rule {tag} values for the most recent match. 
+    /** Index of the Rule {tag} values for the most recent match.
      *  @internal
     */
     int32_t             fLastRuleStatusIndex;
@@ -146,7 +146,7 @@ public:
 
     /**
      * This constructor uses the udata interface to create a BreakIterator
-     * whose internal tables live in a memory-mapped file.  "image" is an 
+     * whose internal tables live in a memory-mapped file.  "image" is an
      * ICU UDataMemory handle for the pre-compiled break iterator tables.
      * @param image handle to the memory image for the break iterator data.
      *        Ownership of the UDataMemory handle passes to the Break Iterator,
@@ -344,7 +344,7 @@ public:
      * and soft (potential) break positions.
      * <p>
      * <code>getRuleStatus()</code> can be called after obtaining a boundary
-     * position from <code>next()</code>, <code>previous()</code>, or 
+     * position from <code>next()</code>, <code>previous()</code>, or
      * any other break iterator functions that returns a boundary position.
      * <p>
      * When creating custom break rules, one is free to define whatever
@@ -363,8 +363,8 @@ public:
     virtual int32_t getRuleStatus() const;
 
    /**
-    * Get the status (tag) values from the break rule(s) that determined the most 
-    * recently returned break position.  
+    * Get the status (tag) values from the break rule(s) that determined the most
+    * recently returned break position.
     * <p>
     * The returned status value(s) are stored into an array provided by the caller.
     * The values are stored in sorted (ascending) order.
@@ -372,12 +372,12 @@ public:
     *  the output will be truncated to the available length, and a
     *  U_BUFFER_OVERFLOW_ERROR will be signaled.
     *
-    * @param fillInVec an array to be filled in with the status values.  
+    * @param fillInVec an array to be filled in with the status values.
     * @param capacity  the length of the supplied vector.  A length of zero causes
     *                  the function to return the number of status values, in the
     *                  normal way, without attemtping to store any values.
-    * @param status    receives error codes.  
-    * @return          The number of rule status values from rules that determined 
+    * @param status    receives error codes.
+    * @return          The number of rule status values from rules that determined
     *                  the most recent boundary returned by the break iterator.
     *                  In the event of a U_BUFFER_OVERFLOW_ERROR, the return value
     *                  is the total number of status values that were available,
@@ -411,7 +411,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID(void);
 
     /*
      * Create a clone (copy) of this break iterator in memory provided

@@ -50,8 +50,8 @@ public:
    * Create an iterator over the UnicodeString referred to by "textStr".
    * The iteration range is the whole string, and the starting
    * position is specified by "textPos".  If "textPos" is outside the valid
-   * iteration range, the behavior of this object is undefined.  
-   * @param textStr The unicode string used to create an iterator 
+   * iteration range, the behavior of this object is undefined.
+   * @param textStr The unicode string used to create an iterator
    * @param textPos The starting position of the iteration
    * @stable ICU 2.0
    */
@@ -67,7 +67,7 @@ public:
    * "textBegin" and "textEnd" don't form a valid range on "text" (i.e.,
    * textBegin >= textEnd or either is negative or greater than text.size()),
    * or "textPos" is outside the range defined by "textBegin" and "textEnd",
-   * the behavior of this iterator is undefined.  
+   * the behavior of this iterator is undefined.
    * @param textStr    The unicode string used to create the StringCharacterIterator
    * @param textBegin  The begin position of the iteration range
    * @param textEnd    The end position of the iteration range
@@ -82,7 +82,7 @@ public:
   /**
    * Copy constructor.  The new iterator iterates over the same range
    * of the same string as "that", and its initial position is the
-   * same as "that"'s current position.  
+   * same as "that"'s current position.
    * The UnicodeString object in "that" is copied.
    * @param that The StringCharacterIterator to be copied
    * @stable ICU 2.0
@@ -90,7 +90,7 @@ public:
   StringCharacterIterator(const StringCharacterIterator&  that);
 
   /**
-   * Destructor.  
+   * Destructor.
    * @stable ICU 2.0
    */
   virtual ~StringCharacterIterator();
@@ -100,7 +100,7 @@ public:
    * range of the same string as "that", and refers to the same
    * character within that string as "that" does.
    * @param that The object to be copied.
-   * @return the newly created object.  
+   * @return the newly created object.
    * @stable ICU 2.0
    */
   StringCharacterIterator&
@@ -108,10 +108,10 @@ public:
 
   /**
    * Returns true if the iterators iterate over the same range of the
-   * same string and are pointing at the same character.  
+   * same string and are pointing at the same character.
    * @param that The ForwardCharacterIterator to be compared for equality
    * @return true if the iterators iterate over the same range of the
-   * same string and are pointing at the same character.  
+   * same string and are pointing at the same character.
    * @stable ICU 2.0
    */
   virtual UBool          operator==(const ForwardCharacterIterator& that) const;
@@ -119,12 +119,12 @@ public:
   /**
    * Returns a new StringCharacterIterator referring to the same
    * character in the same range of the same string as this one.  The
-   * caller must delete the new iterator. 
-   * @return the newly cloned object. 
+   * caller must delete the new iterator.
+   * @return the newly cloned object.
    * @stable ICU 2.0
    */
   virtual CharacterIterator* clone(void) const;
-                                
+
   /**
    * Sets the iterator to iterate over the provided string.
    * @param newText The string to be iterated over
@@ -136,24 +136,24 @@ public:
    * Copies the UnicodeString under iteration into the UnicodeString
    * referred to by "result".  Even if this iterator iterates across
    * only a part of this string, the whole string is copied.
-   * @param result Receives a copy of the text under iteration.  
+   * @param result Receives a copy of the text under iteration.
    * @stable ICU 2.0
    */
   virtual void            getText(UnicodeString& result);
 
   /**
-   * Return a class ID for this object (not really public) 
+   * Return a class ID for this object (not really public)
    * @return a class ID for this object.
    * @stable ICU 2.0
    */
   virtual UClassID         getDynamicClassID(void) const;
 
   /**
-   * Return a class ID for this class (not really public) 
+   * Return a class ID for this class (not really public)
    * @return a class ID for this class
    * @stable ICU 2.0
    */
-  static UClassID   getStaticClassID(void);
+  static UClassID   U_EXPORT2 getStaticClassID(void);
 
 protected:
   /**
