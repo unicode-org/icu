@@ -7,7 +7,7 @@
 * File DCFMTSYM.H
 *
 * Modification History:
-*
+* 
 *   Date        Name        Description
 *   02/19/97    aliu        Converted from java.
 *   03/18/97    clhuang     Updated per C++ implementation.
@@ -72,6 +72,7 @@ public:
      * @param locale    The locale to get symbols for.
      * @param status    Input/output parameter, set to success or
      *                  failure code upon return.
+     * @stable
      */
     DecimalFormatSymbols(const Locale& locale, UErrorCode& status);
 
@@ -83,128 +84,215 @@ public:
      *
      * @param status    Input/output parameter, set to success or
      *                  failure code upon return.
+     * @stable
      */
     DecimalFormatSymbols( UErrorCode& status);
 
     /**
      * Copy constructor.
+     * @stable
      */
     DecimalFormatSymbols(const DecimalFormatSymbols&);
 
     /**
      * Assignment operator.
+     * @stable
      */
     DecimalFormatSymbols& operator=(const DecimalFormatSymbols&);
 
     /**
      * Destructor.
+     * @stable
      */
     ~DecimalFormatSymbols();
 
     /**
      * Return true if another object is semantically equal to this one.
+     * @stable
      */
     bool_t operator==(const DecimalFormatSymbols& other) const;
 
     /**
      * Return true if another object is semantically unequal to this one.
+     * @stable
      */
     bool_t operator!=(const DecimalFormatSymbols& other) const { return !operator==(other); }
 
     /**
      * character used for zero. Different for Arabic, etc.
+     * @draft
      */
     UChar getZeroDigit(void) const;
+    /**
+     * character used for zero. Different for Arabic, etc.
+     * @draft
+     */
     void setZeroDigit(UChar zeroDigit);
 
     /**
      * character used for thousands separator. Different for French, etc.
+     * @draft
      */
     UChar getGroupingSeparator(void) const;
+    /**
+     * character used for thousands separator. Different for French, etc.
+     * @draft
+     */
     void setGroupingSeparator(UChar groupingSeparator);
 
     /**
      * character used for decimal sign. Different for French, etc.
+     * @draft
      */
     UChar getDecimalSeparator(void) const;
+    /**
+     * character used for decimal sign. Different for French, etc.
+     * @draft
+     */
     void setDecimalSeparator(UChar decimalSeparator);
 
     /**
      * character used for per mill sign. Different for Arabic, etc.
+     * @draft
      */
     UChar getPerMill(void) const;
+    /**
+     * character used for per mill sign. Different for Arabic, etc.
+     * @draft
+     */
     void setPerMill(UChar perMill);
 
     /**
      * character used for percent sign. Different for Arabic, etc.
+     * @draft
      */
     UChar getPercent(void) const;
+    /**
+     * character used for percent sign. Different for Arabic, etc.
+     * @draft
+     */
     void setPercent(UChar percent);
 
     /**
      * character used for a digit in a pattern.
+     * @draft
      */
     UChar getDigit(void) const;
+    /**
+     * character used for a digit in a pattern.
+     * @draft
+     */
     void setDigit(UChar digit);
 
     /**
      * character used to separate positive and negative subpatterns
      * in a pattern.
+     * @draft
      */
     UChar getPatternSeparator(void) const;
+    /**
+     * character used to separate positive and negative subpatterns
+     * in a pattern.
+     * @draft
+     */
     void setPatternSeparator(UChar patternSeparator);
 
     /**
      * character used to represent infinity. Almost always left
      * unchanged.
+     * @stable
      */
     UnicodeString& getInfinity(UnicodeString& result) const;
+    /**
+     * character used to represent infinity. Almost always left
+     * unchanged.
+     * @stable
+     */
     void setInfinity(const UnicodeString& infinity);
 
     /**
      * character used to represent NaN. Almost always left
      * unchanged.
+     * @stable
      */
     UnicodeString& getNaN(UnicodeString& result) const;
+    /**
+     * character used to represent NaN. Almost always left
+     * unchanged.
+     * @stable
+     */
     void setNaN(const UnicodeString& NaN);
 
     /**
      * character used to represent plus sign
+     * @draft
      */
     UChar getPlusSign(void) const;
+    /**
+     * character used to represent plus sign
+     * @draft
+     */
     void setPlusSign(UChar minusSign);
 
     /**
      * character used to represent minus sign. If no explicit
      * negative format is specified, one is formed by prefixing
      * minusSign to the positive format.
+     * @draft
      */
     UChar getMinusSign(void) const;
+    /**
+     * character used to represent minus sign. If no explicit
+     * negative format is specified, one is formed by prefixing
+     * minusSign to the positive format.
+     * @draft
+     */
     void setMinusSign(UChar minusSign);
  
     /**
      * character used to represent exponential. Almost always left
      * unchanged.
+     * @draft
      */
     UChar getExponentialSymbol(void) const;
+    /**
+     * character used to represent exponential. Almost always left
+     * unchanged.
+     * @draft
+     */
     void setExponentialSymbol(UChar exponential);
 
     /**
-     * Return the string denoting the local currency.
+     * The string denoting the local currency.
+     * @stable
      */
     UnicodeString& getCurrencySymbol(UnicodeString& result) const;
+    /**
+     * The string denoting the local currency.
+     * @stable
+     */
     void setCurrencySymbol(const UnicodeString& currency);
 
     /**
-     * Return the international string denoting the local currency.
+     * The international string denoting the local currency.
+     * @stable
      */
     UnicodeString& getInternationalCurrencySymbol(UnicodeString& result) const;
+    /**
+     * The international string denoting the local currency.
+     * @stable
+     */
     void setInternationalCurrencySymbol(const UnicodeString& currency);
 
     /**
-     * Return the monetary decimal separator.
+     * The monetary decimal separator.
+     * @draft
      */
     UChar getMonetaryDecimalSeparator(void) const;
+    /**
+     * The monetary decimal separator.
+     * @draft
+     */
     void setMonetaryDecimalSeparator(UChar sep);
 
     /**
@@ -217,6 +305,7 @@ public:
      * @see DecimalFormat#getFormatWidth
      * @see DecimalFormat#getPadPosition
      * @see DecimalFormat#getPadCharacter
+     * @draft
      */
     UChar getPadEscape(void) const;
 
@@ -229,6 +318,7 @@ public:
      * @see DecimalFormat#setFormatWidth
      * @see DecimalFormat#setPadPosition
      * @see DecimalFormat#setPadCharacter
+     * @draft
      */
     void setPadEscape(UChar c);
 

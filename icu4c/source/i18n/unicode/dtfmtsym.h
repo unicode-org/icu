@@ -67,6 +67,7 @@ public:
      * @param status    Output param set to success of failure.  Failure
      *                  results if the resources for the default cannot be
      *                  found or cannot be loaded
+     * @stable
      */
     DateFormatSymbols(UErrorCode& status);
 
@@ -78,39 +79,46 @@ public:
      * @param status    Output param set to success of failure.  Failure
      *                  results if the resources for the locale cannot be
      *                  found or cannot be loaded
+     * @stable
      */
     DateFormatSymbols(const Locale& locale,
                       UErrorCode& status);
 
     /**
      * Copy constructor.
+     * @stable
      */
     DateFormatSymbols(const DateFormatSymbols&);
 
     /**
      * Assignment operator.
+     * @stable
      */
     DateFormatSymbols& operator=(const DateFormatSymbols&);
 
     /**
      * Destructor. This is nonvirtual because this class is not designed to be
      * subclassed.
+     * @stable
      */
     ~DateFormatSymbols();
 
     /**
      * Return true if another object is semantically equal to this one.
+     * @stable
      */
     bool_t operator==(const DateFormatSymbols& other) const;
 
     /**
      * Return true if another object is semantically unequal to this one.
+     * @stable
      */
     bool_t operator!=(const DateFormatSymbols& other) const { return !operator==(other); }
 
     /**
      * Gets era strings. For example: "AD" and "BC".
      * @return the era strings.
+     * @stable
      */
     const UnicodeString* getEras(int32_t& count) const;
 
@@ -118,6 +126,7 @@ public:
      * Sets era strings. For example: "AD" and "BC".
      * @param eras  Array of era strings (DateFormatSymbols retains ownership.)
      * @param count Filled in with length of the array.
+     * @stable
      */
     void setEras(const UnicodeString* eras, int32_t count);
 
@@ -125,60 +134,70 @@ public:
      * Gets month strings. For example: "January", "February", etc.
      * @param count Filled in with length of the array.
      * @return the month strings. (DateFormatSymbols retains ownership.)
+     * @stable
      */
     const UnicodeString* getMonths(int32_t& count) const;
 
     /**
      * Sets month strings. For example: "January", "February", etc.
      * @param newMonths the new month strings. (not adopted; caller retains ownership)
+     * @stable
      */
     void setMonths(const UnicodeString* months, int32_t count);
 
     /**
      * Gets short month strings. For example: "Jan", "Feb", etc.
      * @return the short month strings. (DateFormatSymbols retains ownership.)
+     * @stable
      */
     const UnicodeString* getShortMonths(int32_t& count) const;
 
     /**
      * Sets short month strings. For example: "Jan", "Feb", etc.
      * @param newShortMonths the new short month strings. (not adopted; caller retains ownership)
+     * @stable
      */
     void setShortMonths(const UnicodeString* shortMonths, int32_t count);
 
     /**
      * Gets weekday strings. For example: "Sunday", "Monday", etc.
      * @return the weekday strings. (DateFormatSymbols retains ownership.)
+     * @stable
      */
     const UnicodeString* getWeekdays(int32_t& count) const;
 
     /**
      * Sets weekday strings. For example: "Sunday", "Monday", etc.
      * @param newWeekdays the new weekday strings. (not adopted; caller retains ownership)
+     * @stable
      */
     void setWeekdays(const UnicodeString* weekdays, int32_t count);
 
     /**
      * Gets short weekday strings. For example: "Sun", "Mon", etc.
      * @return the short weekday strings. (DateFormatSymbols retains ownership.)
+     * @stable
      */
     const UnicodeString* getShortWeekdays(int32_t& count) const;
 
     /**
      * Sets short weekday strings. For example: "Sun", "Mon", etc.
      * @param newShortWeekdays the new short weekday strings. (not adopted; caller retains ownership)
+     * @stable
      */
     void setShortWeekdays(const UnicodeString* shortWeekdays, int32_t count);
 
     /**
      * Gets AM/PM strings. For example: "AM" and "PM".
      * @return the weekday strings. (DateFormatSymbols retains ownership.)
+     * @stable
      */
     const UnicodeString* getAmPmStrings(int32_t& count) const;
 
     /**
      * Sets ampm strings. For example: "AM" and "PM".
      * @param newAmpms the new ampm strings. (not adopted; caller retains ownership)
+     * @stable
      */
     void setAmPmStrings(const UnicodeString* ampms, int32_t count);
 
@@ -187,6 +206,7 @@ public:
      * @param rowCount      Output param to receive number of rows.
      * @param columnCount   Output param to receive number of columns.
      * @return              The timezone strings as a 2-d array. (DateFormatSymbols retains ownership.)
+     * @stable
      */
     const UnicodeString** getZoneStrings(int32_t& rowCount, int32_t& columnCount) const;
 
@@ -195,17 +215,20 @@ public:
      * @param strings       The timezone strings as a 2-d array to be copied. (not adopted; caller retains ownership)
      * @param rowCount      The number of rows (count of first index).
      * @param columnCount   The number of columns (count of second index).
+     * @stable
      */
     void setZoneStrings(const UnicodeString* const* strings, int32_t rowCount, int32_t columnCount);
 
     /**
      * Get the non-localized date-time pattern characters.
+     * @stable
      */
     static const UnicodeString& getPatternChars(void) { return fgPatternChars; }
 
     /**
      * Gets localized date-time pattern characters. For example: 'u', 't', etc.
      * @return the localized date-time pattern characters.
+     * @stable
      */
     UnicodeString& getLocalPatternChars(UnicodeString& result) const;
 
@@ -213,6 +236,7 @@ public:
      * Sets localized date-time pattern characters. For example: 'u', 't', etc.
      * @param newLocalPatternChars the new localized date-time
      * pattern characters.
+     * @stable
      */
     void setLocalPatternChars(const UnicodeString& newLocalPatternChars);
 

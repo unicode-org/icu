@@ -244,6 +244,7 @@ class TransliterationRule;
  * </pre>
  *
  * @author Alan Liu
+ * @draft
  */
 class U_I18N_API UnicodeSet : public UnicodeFilter {
 
@@ -318,6 +319,7 @@ public:
 
     /**
      * Constructs an empty set.
+     * @draft
      */
     UnicodeSet();
 
@@ -327,6 +329,7 @@ public:
      * @param pattern a string specifying what characters are in the set
      * @exception <code>IllegalArgumentException</code> if the pattern
      * contains a syntax error.
+     * @draft
      */
     UnicodeSet(const UnicodeString& pattern,
                UErrorCode& status);
@@ -337,21 +340,25 @@ public:
      * returned by <code>Character.getType()</code>.
      * @exception <code>IllegalArgumentException</code> if the given
      * category is invalid.
+     * @draft
      */
     UnicodeSet(int8_t category, UErrorCode& status);
 
     /**
      * Constructs a set that is identical to the given UnicodeSet.
+     * @draft
      */
     UnicodeSet(const UnicodeSet& o);
 
     /**
      * Destructs the set.
+     * @draft
      */
     virtual ~UnicodeSet();
 
     /**
      * Assigns this object to be a copy of another.
+     * @draft
      */
     UnicodeSet& operator=(const UnicodeSet& o);
 
@@ -364,12 +371,14 @@ public:
      *
      * @param o set to be compared for equality with this set.
      * @return <tt>true</tt> if the specified set is equal to this set.
+     * @draft
      */
     virtual bool_t operator==(const UnicodeSet& o) const;
 
     /**
      * Compares the specified object with this set for equality.  Returns
      * <tt>true</tt> if the specified set is not equal to this set.
+     * @draft
      */
     bool_t operator!=(const UnicodeSet& o) const;
 
@@ -377,6 +386,7 @@ public:
      * Returns a copy of this object.  All UnicodeFilter objects have
      * to support cloning in order to allow classes using
      * UnicodeFilters, such as Transliterator, to implement cloning.
+     * @draft
      */
     virtual UnicodeFilter* clone() const;
 
@@ -385,6 +395,7 @@ public:
      *
      * @return the hash code value for this set.
      * @see Object#hashCode()
+     * @draft
      */
     virtual int32_t hashCode(void) const;
 
@@ -399,6 +410,7 @@ public:
      * @param pattern a string specifying what characters are in the set
      * @exception <code>IllegalArgumentException</code> if the pattern
      * contains a syntax error.
+     * @draft
      */
     virtual void applyPattern(const UnicodeString& pattern,
                               UErrorCode& status);
@@ -407,6 +419,7 @@ public:
      * Returns a string representation of this set.  If the result of
      * calling this function is passed to a UnicodeSet constructor, it
      * will produce another set that is equal to this one.
+     * @draft
      */
     virtual UnicodeString& toPattern(UnicodeString& result) const;
 
@@ -415,6 +428,7 @@ public:
      * <em>n</em>, where <code>0 <= </code><em>n</em><code> <= 65536</code>.
      *
      * @return the number of elements in this set (its cardinality).
+     * @draft
      */
     virtual int32_t size(void) const;
 
@@ -422,6 +436,7 @@ public:
      * Returns <tt>true</tt> if this set contains no elements.
      *
      * @return <tt>true</tt> if this set contains no elements.
+     * @draft
      */
     virtual bool_t isEmpty(void) const;
 
@@ -431,6 +446,7 @@ public:
      *
      * @return <tt>true</tt> if this set contains the specified range
      * of chars.
+     * @draft
      */
     virtual bool_t contains(UChar first, UChar last) const;
 
@@ -438,6 +454,7 @@ public:
      * Returns <tt>true</tt> if this set contains the specified char.
      *
      * @return <tt>true</tt> if this set contains the specified char.
+     * @draft
      */
     virtual bool_t contains(UChar c) const;
 
@@ -451,6 +468,7 @@ public:
      * to this set.
      * @param last last character, inclusive, of range to be added
      * to this set.
+     * @draft
      */
     virtual void add(UChar first, UChar last);
 
@@ -458,6 +476,7 @@ public:
      * Adds the specified character to this set if it is not already
      * present.  If this set already contains the specified character,
      * the call leaves this set unchanged.
+     * @draft
      */
     virtual void add(UChar c);
 
@@ -471,6 +490,7 @@ public:
      * from this set.
      * @param last last character, inclusive, of range to be removed
      * from this set.
+     * @draft
      */
     virtual void remove(UChar first, UChar last);
 
@@ -478,6 +498,7 @@ public:
      * Removes the specified character from this set if it is present.
      * The set will not contain the specified range once the call
      * returns.
+     * @draft
      */
     virtual void remove(UChar c);
 
@@ -488,6 +509,7 @@ public:
      * @param c set to be checked for containment in this set.
      * @return <tt>true</tt> if this set contains all of the elements of the
      * 	       specified set.
+     * @draft
      */
     virtual bool_t containsAll(const UnicodeSet& c) const;
 
@@ -500,6 +522,7 @@ public:
      *
      * @param c set whose elements are to be added to this set.
      * @see #add(char, char)
+     * @draft
      */
     virtual void addAll(const UnicodeSet& c);
 
@@ -511,6 +534,7 @@ public:
      * the <i>intersection</i> of the two sets.
      *
      * @param c set that defines which elements this set will retain.
+     * @draft
      */
     virtual void retainAll(const UnicodeSet& c);
 
@@ -522,6 +546,7 @@ public:
      *
      * @param c set that defines which elements will be removed from
      *          this set.
+     * @draft
      */
     virtual void removeAll(const UnicodeSet& c);
 
@@ -529,12 +554,14 @@ public:
      * Inverts this set.  This operation modifies this set so that
      * its value is its complement.  This is equivalent to the pseudo code:
      * <code>this = new CharSet("[\u0000-\uFFFF]").removeAll(this)</code>.
+     * @draft
      */
     virtual void complement(void);
 
     /**
      * Removes all of the elements from this set.  This set will be
      * empty after this call returns.
+     * @draft
      */
     virtual void clear(void);
 

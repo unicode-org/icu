@@ -91,6 +91,7 @@ public:
      * NULL if none.  Adopted by this transliterator.
      * @param status Error code indicating success or failure
      * to parse pattern.
+     * @stable
      */
     UnicodeToHexTransliterator(const UnicodeString& pattern,
                                bool_t isUppercase,
@@ -110,26 +111,31 @@ public:
     /**
      * Constructs a transliterator with the default prefix "\u"
      * that outputs uppercase hex digits.
+     * @stable
      */
     UnicodeToHexTransliterator(UnicodeFilter* adoptedFilter = 0);
 
     /**
      * Destructor.
+     * @stable
      */
     virtual ~UnicodeToHexTransliterator();
 
     /**
      * Copy constructor.
+     * @stable
      */
     UnicodeToHexTransliterator(const UnicodeToHexTransliterator&);
 
     /**
      * Assignment operator.
+     * @stable
      */
     UnicodeToHexTransliterator& operator=(const UnicodeToHexTransliterator&);
 
     /**
      * Transliterator API.
+     * @stable
      */
     virtual Transliterator* clone(void) const;
 
@@ -158,26 +164,31 @@ public:
      * <p>Limitations: There is no way to set the uppercase attribute
      * in the pattern.  (applyPattern() does not alter the uppercase
      * attribute.)
+     * @stable
      */
     void applyPattern(const UnicodeString& thePattern, UErrorCode& status);
 
     /**
      * Return this transliterator's pattern.
+     * @stable
      */
     const UnicodeString& toPattern(void) const;
 
     /**
      * Returns true if this transliterator outputs uppercase hex digits.
+     * @stable
      */
     virtual bool_t isUppercase(void) const;
 
     /**
      * Sets if this transliterator outputs uppercase hex digits.
+     * @stable
      */
     virtual void setUppercase(bool_t outputUppercase);
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
+     * @draft
      */
     virtual void handleTransliterate(Replaceable& text, Position& offsets,
                                      bool_t isIncremental) const;

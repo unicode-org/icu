@@ -111,6 +111,9 @@ struct OffsetIndex;
  */
 class U_I18N_API TimeZone {
 public:
+    /**
+     * @stable
+     */
     virtual ~TimeZone();
 
     /**
@@ -128,6 +131,7 @@ public:
      * cannot be understood.  Return result guaranteed to be non-null.  If you
      * require that the specific zone asked for be returned, check the ID of the
      * return result.
+     * @stable
      */
     static TimeZone* createTimeZone(const UnicodeString& ID);
 
@@ -150,6 +154,7 @@ public:
      *                   a time zone ID for a time zone with the given GMT offset.  If
      *                   there is no timezone that matches the GMT offset
      *                   specified, NULL is returned.
+     * @stable
      */
     static const UnicodeString** const createAvailableIDs(int32_t rawOffset, int32_t& numIDs);
 
@@ -162,6 +167,7 @@ public:
      * @param numIDs  Receives the number of zone IDs returned.
      * @return        An array of UnicodeString pointers, where each is a time zone ID
      *                supported by the TimeZone class.
+     * @stable
      */
     static const UnicodeString** const createAvailableIDs(int32_t& numIDs);
 
@@ -175,6 +181,7 @@ public:
      *
      * @return   A default TimeZone. Clients are responsible for deleting the time zone
      *           object returned.
+     * @stable
      */
     static TimeZone* createDefault(void);
 
@@ -185,6 +192,7 @@ public:
      * passed in; the clent is no longer responsible for deleting it.
      *
      * @param zone  A pointer to the new TimeZone object to use as the default.
+     * @stable
      */
     static void adoptDefault(TimeZone* zone);
 
@@ -193,6 +201,7 @@ public:
      * the caller remains responsible for deleting it.
      *
      * @param zone  The given timezone.
+     * @system
      */
     static void setDefault(const TimeZone& zone);
 
@@ -203,6 +212,7 @@ public:
      * @param that  The TimeZone object to be compared with.
      * @return      True if the given TimeZone is equal to this TimeZone; false
      *              otherwise.
+     * @stable
      */
     virtual bool_t operator==(const TimeZone& that) const;
 
@@ -213,6 +223,7 @@ public:
      * @param that  The TimeZone object to be compared with.
      * @return      True if the given TimeZone is not equal to this TimeZone; false
      *              otherwise.
+     * @stable
      */
     bool_t operator!=(const TimeZone& that) const {return !operator==(that);}
 
@@ -233,11 +244,13 @@ public:
      * @param dayOfWeek  The reference date's day-of-week (1-based; 1 is Sunday)
      * @param millis     The reference date's milliseconds in day, UTT (NOT local time).
      * @return           The offset in milliseconds to add to GMT to get local time.
+     * @stable
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t millis, UErrorCode& status) const = 0;
-
-    // deprecated version
+    /**
+     * @deprecated 
+     */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t millis) const = 0;
 
@@ -253,6 +266,7 @@ public:
      * @param milliseconds the millis in day in <em>standard</em> local time.
      * @param monthLength the length of the given month in days.
      * @return the offset to add *to* GMT to get local time.
+     * @stable
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                            uint8_t dayOfWeek, int32_t milliseconds, 
@@ -263,6 +277,7 @@ public:
      * to GMT to get local time, before taking daylight savings time into account).
      *
      * @param offsetMillis  The new raw GMT offset for this time zone.
+     * @stable
      */
     virtual void setRawOffset(int32_t offsetMillis) = 0;
 
@@ -271,6 +286,7 @@ public:
      * to GMT to get local time, before taking daylight savings time into account).
      *
      * @return   The TimeZone's raw GMT offset.
+     * @stable
      */
     virtual int32_t getRawOffset(void) const = 0;
 
@@ -279,6 +295,7 @@ public:
      *
      * @param ID  Receives this TimeZone's ID.
      * @return    "ID"
+     * @stable
      */
     UnicodeString& getID(UnicodeString& ID) const;
 
@@ -293,6 +310,7 @@ public:
      * Los Angeles.  They're still those for New York.  Only the ID has changed.)
      *
      * @param ID  The new timezone ID.
+     * @stable
      */
     void setID(const UnicodeString& ID);
 
@@ -313,6 +331,7 @@ public:
      * then this method returns a string in the format
      * <code>GMT[+-]hh:mm</code>.
      * @return the human-readable name of this time zone in the default locale.
+     * @stable
      */
     UnicodeString& getDisplayName(UnicodeString& result) const;
 
@@ -326,6 +345,7 @@ public:
      * @param locale the locale in which to supply the display name.
      * @return the human-readable name of this time zone in the given locale
      * or in the default locale if the given locale is not recognized.
+     * @stable
      */
     UnicodeString& getDisplayName(const Locale& locale, UnicodeString& result) const;
 
@@ -338,6 +358,7 @@ public:
      * @param daylight if true, return the daylight savings name.
      * @param style either <code>LONG</code> or <code>SHORT</code>
      * @return the human-readable name of this time zone in the default locale.
+     * @stable
      */
     UnicodeString& getDisplayName(bool_t daylight, EDisplayType style, UnicodeString& result) const;
 
@@ -352,6 +373,7 @@ public:
      * @param locale the locale in which to supply the display name.
      * @return the human-readable name of this time zone in the given locale
      * or in the default locale if the given locale is not recognized.
+     * @stable
      */
     UnicodeString& getDisplayName(bool_t daylight, EDisplayType style, const Locale& locale, UnicodeString& result) const;
 
@@ -359,6 +381,7 @@ public:
      * Queries if this time zone uses daylight savings time.
      * @return true if this time zone uses daylight savings time,
      * false, otherwise.
+     * @stable
      */
     virtual bool_t useDaylightTime(void) const = 0;
 
@@ -368,6 +391,7 @@ public:
      * @param date the given UDate.
      * @return true if the given date is in daylight savings time,
      * false, otherwise.
+     * @deprecated
      */
     virtual bool_t inDaylightTime(UDate date, UErrorCode& status) const = 0;
 
@@ -377,6 +401,7 @@ public:
      * @param other the <code>TimeZone</code> object to be compared with
      * @return true if the given zone is the same as this one,
      * with the possible exception of the ID
+     * @stable
      */
     virtual bool_t hasSameRules(const TimeZone& other) const;
 
@@ -385,6 +410,7 @@ public:
      * the TimeZone object cloned.
      *
      * @return   A new copy of this TimeZone object.
+     * @stable
      */
     virtual TimeZone* clone(void) const = 0;
 
@@ -397,6 +423,7 @@ public:
      * .       Derived::getStaticClassID()) ...
      * </pre>
      * @return The class ID for all objects of this class.
+     * @stable
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
@@ -413,6 +440,7 @@ public:
      * </pre>
      * @return   The class ID for this object. All objects of a given class have the
      *           same class ID. Objects of other classes have different class IDs.
+     * @stable
      */
     virtual UClassID getDynamicClassID(void) const = 0;
 
@@ -420,16 +448,19 @@ protected:
 
     /**
      * Default constructor.  ID is initialized to the empty string.
+     * @stable
      */
     TimeZone();
 
     /**
      * Copy constructor.
+     * @stable
      */
     TimeZone(const TimeZone& source);
 
     /**
      * Default assignment operator.
+     * @stable
      */
     TimeZone& operator=(const TimeZone& right);
 

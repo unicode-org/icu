@@ -327,6 +327,7 @@ public:
    * description for more details on the collation rule syntax.
    * @see Locale
    * @param rules the collation rules to build the collation table from.
+   * @stable
    */
 	RuleBasedCollator(const UnicodeString& rules,
 			UErrorCode& status);
@@ -345,32 +346,38 @@ public:
               UErrorCode&      status);
 
   /** Destructor.
+   * @stable
    */
 	virtual ~RuleBasedCollator();
 
 
   /** Copy constructor.
+   * @stable
    */
 	RuleBasedCollator(const RuleBasedCollator& other);
 
   /**
    * Assignment operator.
+   * @stable
    */
 	RuleBasedCollator& operator=(const RuleBasedCollator& other);
     
   /**
    * Returns true if "other" is the same as "this".
+   * @stable
    */
   virtual bool_t                  operator==(const Collator& other) const;
 
   /**
    * Returns true if "other" is not the same as "this".
+   * @stable
    */
   virtual bool_t                  operator!=(const Collator& other) const;
 
   /**
    * Makes a deep copy of the object.  The caller owns the returned object.
    * @return the cloned object.
+   * @stable
    */
   virtual Collator*               clone(void) const;
 
@@ -381,6 +388,7 @@ public:
    * @param source the string over which the CollationElementIterator will iterate.
    * @return the collation element iterator of the source string using this as
    * the based collator.
+   * @stable 
    */
 	virtual CollationElementIterator* createCollationElementIterator(const UnicodeString& source) const;
 
@@ -392,6 +400,7 @@ public:
    * CollationElementItgerator will iterate.
    * @return the collation element iterator of the source using this as
    * the based collator.
+   * @stable
    */
   virtual CollationElementIterator*       createCollationElementIterator(const CharacterIterator& source) const;
 
@@ -406,6 +415,7 @@ public:
    * @return the comparison result.  GREATER if the source string is greater
    * than the target string, LESS if the source is less than the target.  Otherwise,
    * returns EQUAL.
+   * @stable
    */
   virtual     EComparisonResult   compare(    const   UnicodeString&  source, 
                           const   UnicodeString&  target) const;
@@ -423,6 +433,7 @@ public:
    * @return the comparison result.  GREATER if the source string is greater
    * than the target string, LESS if the source is less than the target.  Otherwise,
    * returns EQUAL.
+   * @draft
    */ 
   virtual     EComparisonResult   compare(    const   UnicodeString&  source, 
                           const   UnicodeString&  target,
@@ -455,6 +466,7 @@ public:
    * @return Returns a byte value. GREATER if source is greater
    * than target; EQUAL if source is equal to target; LESS if source is less
    * than target
+   * @stable
    **/
   virtual EComparisonResult   compare(    const   UChar* source, 
                       int32_t sourceLength,
@@ -470,20 +482,32 @@ public:
      * @param status the error code status.
      * @return the transformed key.
      * @see CollationKey
+     * @draft
      */
   virtual     CollationKey&       getCollationKey(    const   UnicodeString&  source,
                               CollationKey&   key,
                               UErrorCode&  status) const;
 
+  /** Transforms a specified region of the string into a series of characters
+     * that can be compared with CollationKey.compare. Use a CollationKey when
+     * you need to do repeated comparisions on the same string. For a single comparison
+     * the compare method will be faster.
+     * @param source the source string.
+     * @param key the transformed key of the source string.
+     * @param status the error code status.
+     * @return the transformed key.
+     * @see CollationKey
+     * @draft
+     */
   virtual CollationKey&       getCollationKey(const UChar *source,
 					      int32_t sourceLength,
 					      CollationKey&       key,
 					      UErrorCode&      status) const;
 
-
   /**
    * Generates the hash code for the rule-based collation object.
    * @return the hash code.
+   * @stable
    */
   virtual     int32_t             hashCode(void) const;
 
@@ -491,6 +515,7 @@ public:
    * Gets the table-based rules for the collation object.
    * @return returns the collation rules that the table collation object
    * was created from.
+   * @stable
    */
   const       UnicodeString&      getRules(void) const;
 
@@ -503,6 +528,7 @@ public:
    *          with the specified order.
    * 
    *  @see CollationElementIterator#getMaxExpansion
+   * @draft ? pending CollationElementIterator::getMaxExpansion
    */
 	int32_t getMaxExpansion(int32_t order) const;
 

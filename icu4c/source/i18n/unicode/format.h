@@ -87,18 +87,21 @@ public:
     /**
      * Return true if the given Format objects are semantically equal.
      * Objects of different subclasses are considered unequal.
+     * @stable
      */
     virtual bool_t operator==(const Format& other) const = 0;
 
     /**
      * Return true if the given Format objects are not semantically
      * equal.
+     * @stable
      */
     bool_t operator!=(const Format& other) const { return !operator==(other); }
 
     /**
      * Clone this object polymorphically.  The caller is responsible
      * for deleting the result when done.
+     * @stable
      */
     virtual Format* clone() const = 0;
 
@@ -110,6 +113,7 @@ public:
      *                  formatted string.
      * @param status    Output parameter filled in with success or failure status.
      * @return          Reference to 'result' parameter.
+     * @stable
      */
     UnicodeString& format(const Formattable& obj,
                           UnicodeString& result,
@@ -129,6 +133,7 @@ public:
      * @param status        Output param filled with success/failure status.
      * @return              The value passed in as toAppendTo (this allows chaining,
      *                      as with UnicodeString::append())
+     * @stable
      */
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& toAppendTo,
@@ -172,6 +177,7 @@ public:
      *                  last character successfully parsed. If the
      *                  source is not parsed successfully, this param
      *                  will remain unchanged.
+     * @stable
      */
     virtual void parseObject(const UnicodeString& source,
                              Formattable& result,
@@ -187,6 +193,7 @@ public:
      *                  If parse fails, return contents are undefined.
      * @param status    Output param to be filled with success/failure
      *                  result code.
+     * @stable
      */
     void parseObject(const UnicodeString& source,
                      Formattable& result,
@@ -207,17 +214,25 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
+     * @stable
      */
     virtual UClassID getDynamicClassID() const = 0;
 
 protected:
     /**
      * Default constructor for subclass use only.  Does nothing.
+     * @stable
      */
     Format();
 
+    /**
+     * @stable
+     */
     Format(const Format&); // Does nothing; for subclasses only
 
+    /**
+     * @stable
+     */
     Format& operator=(const Format&); // Does nothing; for subclasses
 };
 

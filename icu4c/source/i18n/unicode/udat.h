@@ -114,23 +114,24 @@ enum UDateFormatStyle {
 };
 typedef enum UDateFormatStyle UDateFormatStyle;
 
-/**
-* Open a new UDateFormat for formatting and parsing dates and times.
-* A UDateFormat may be used to format dates in calls to \Ref{udat_format},
-* and to parse dates in calls to \Ref{udat_parse}.
-* @param timeStyle The style used to format times; one of UDAT_FULL_STYLE, UDAT_LONG_STYLE, 
-* UDAT_MEDIUM_STYLE, UDAT_SHORT_STYLE, or UDAT_DEFAULT_STYLE
-* @param dateStyle The style used to format dates; one of UDAT_FULL_STYLE, UDAT_LONG_STYLE, 
-* UDAT_MEDIUM_STYLE, UDAT_SHORT_STYLE, or UDAT_DEFAULT_STYLE
-* @param locale The locale specifying the formatting conventions
-* @param tzID A timezone ID specifying the timezone to use.  If 0, use
-* the default timezone.
-* @param tzIDLength The length of tzID, or -1 if null-terminated.
-* @param status A pointer to an UErrorCode to receive any errors
-* @return A pointer to a UDateFormat to use for formatting dates and times, or 0 if
-* an error occurred.
-* @see udat_openPattern
-*/
+    /**
+     * Open a new UDateFormat for formatting and parsing dates and times.
+     * A UDateFormat may be used to format dates in calls to \Ref{udat_format},
+     * and to parse dates in calls to \Ref{udat_parse}.
+     * @param timeStyle The style used to format times; one of UDAT_FULL_STYLE, UDAT_LONG_STYLE, 
+     * UDAT_MEDIUM_STYLE, UDAT_SHORT_STYLE, or UDAT_DEFAULT_STYLE
+     * @param dateStyle The style used to format dates; one of UDAT_FULL_STYLE, UDAT_LONG_STYLE, 
+     * UDAT_MEDIUM_STYLE, UDAT_SHORT_STYLE, or UDAT_DEFAULT_STYLE
+     * @param locale The locale specifying the formatting conventions
+     * @param tzID A timezone ID specifying the timezone to use.  If 0, use
+     * the default timezone.
+     * @param tzIDLength The length of tzID, or -1 if null-terminated.
+     * @param status A pointer to an UErrorCode to receive any errors
+     * @return A pointer to a UDateFormat to use for formatting dates and times, or 0 if
+     * an error occurred.
+     * @see udat_openPattern
+     * @draft
+     */
 U_CAPI UDateFormat*
 udat_open(UDateFormatStyle  timeStyle, 
           UDateFormatStyle  dateStyle,
@@ -150,6 +151,7 @@ udat_open(UDateFormatStyle  timeStyle,
 * @return A pointer to a UDateFormat to use for formatting dates and times, or 0 if
 * an error occurred.
 * @see udat_open
+* @draft
 */
 U_CAPI UDateFormat*
 udat_openPattern(    const   UChar           *pattern, 
@@ -161,6 +163,7 @@ udat_openPattern(    const   UChar           *pattern,
 * Close a UDateFormat.
 * Once closed, a UDateFormat may no longer be used.
 * @param fmt The formatter to close.
+* @stable
 */
 U_CAPI void
 udat_close(UDateFormat* format);
@@ -171,6 +174,7 @@ udat_close(UDateFormat* format);
  * @param fmt The format to copy
  * @param status A pointer to an UErrorCode to receive any errors.
  * @return A pointer to a UDateFormat identical to fmt.
+ * @stable
  */
 U_CAPI UDateFormat*
 udat_clone(const UDateFormat *fmt,
@@ -188,6 +192,7 @@ udat_clone(const UDateFormat *fmt,
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see udat_parse
+* @draft
 */
 U_CAPI int32_t
 udat_format(    const    UDateFormat*    format,
@@ -209,6 +214,7 @@ udat_format(    const    UDateFormat*    format,
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The value of the parsed date/time
 * @see udat_format
+* @draft
 */
 U_CAPI UDate
 udat_parse(    const    UDateFormat*    format,
@@ -224,6 +230,7 @@ udat_parse(    const    UDateFormat*    format,
 * @param fmt The formatter to query
 * @return TRUE if fmt is set to perform lenient parsing, FALSE otherwise.
 * @see udat_setLenient
+* @stable
 */
 U_CAPI bool_t
 udat_isLenient(const UDateFormat* fmt);
@@ -235,6 +242,7 @@ udat_isLenient(const UDateFormat* fmt);
 * @param fmt The formatter to set
 * @param isLenient TRUE if fmt should perform lenient parsing, FALSE otherwise.
 * @see dat_isLenient
+* @stable
 */
 U_CAPI void
 udat_setLenient(    UDateFormat*    fmt,
@@ -247,6 +255,7 @@ udat_setLenient(    UDateFormat*    fmt,
 * @param fmt The formatter to query.
 * @return A pointer to the UCalendar used by fmt.
 * @see udat_setCalendar
+* @stable
 */
 U_CAPI const UCalendar*
 udat_getCalendar(const UDateFormat* fmt);
@@ -258,6 +267,7 @@ udat_getCalendar(const UDateFormat* fmt);
 * @param fmt The formatter to set.
 * @param calendarToSet A pointer to an UCalendar to be used by fmt.
 * @see udat_setCalendar
+* @stable
 */
 U_CAPI void
 udat_setCalendar(            UDateFormat*    fmt,
@@ -270,6 +280,7 @@ udat_setCalendar(            UDateFormat*    fmt,
 * @param fmt The formatter to query.
 * @return A pointer to the UNumberFormat used by fmt to format numbers.
 * @see udat_setNumberFormat
+* @stable
 */
 U_CAPI const UNumberFormat*
 udat_getNumberFormat(const UDateFormat* fmt);
@@ -281,6 +292,7 @@ udat_getNumberFormat(const UDateFormat* fmt);
 * @param fmt The formatter to set.
 * @param numberFormatToSet A pointer to the UNumberFormat to be used by fmt to format numbers.
 * @see udat_getNumberFormat
+* @stable
 */
 U_CAPI void
 udat_setNumberFormat(            UDateFormat*    fmt,
@@ -293,6 +305,7 @@ udat_setNumberFormat(            UDateFormat*    fmt,
 * @param index The index of the desired locale.
 * @return A locale for which date/time formatting patterns are available, or 0 if none.
 * @see udat_countAvailable
+* @stable
 */
 U_CAPI const char*
 udat_getAvailable(int32_t index);
@@ -303,6 +316,7 @@ udat_getAvailable(int32_t index);
 * calls to \Ref{udat_getAvailable}.
 * @return The number of locales for which date/time formatting patterns are available.
 * @see udat_getAvailable
+* @stable
 */
 U_CAPI int32_t
 udat_countAvailable(void);
@@ -315,6 +329,7 @@ udat_countAvailable(void);
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The year relative to which all 2-digit years are interpreted.
 * @see udat_Set2DigitYearStart
+* @stable
 */
 U_CAPI UDate
 udat_get2DigitYearStart(    const   UDateFormat     *fmt,
@@ -328,6 +343,7 @@ udat_get2DigitYearStart(    const   UDateFormat     *fmt,
 * @param d The year relative to which all 2-digit years will be interpreted.
 * @param status A pointer to an UErrorCode to receive any errors
 * @see udat_Set2DigitYearStart
+* @stable
 */
 U_CAPI void
 udat_set2DigitYearStart(    UDateFormat     *fmt,
@@ -344,6 +360,7 @@ udat_set2DigitYearStart(    UDateFormat     *fmt,
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see udat_applyPattern
+* @draft
 */
 U_CAPI int32_t
 udat_toPattern(    const   UDateFormat     *fmt,
@@ -360,6 +377,7 @@ udat_toPattern(    const   UDateFormat     *fmt,
 * @param pattern The new pattern
 * @param patternLength The length of pattern, or -1 if null-terminated.
 * @see udat_toPattern
+* @draft
 */
 U_CAPI void
 udat_applyPattern(            UDateFormat     *format,
@@ -406,6 +424,7 @@ typedef struct UDateFormatSymbols UDateFormatSymbols;
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see udat_countSymbols
 * @see udat_setSymbols
+* @draft
 */
 U_CAPI int32_t
 udat_getSymbols(const   UDateFormat             *fmt,
@@ -425,6 +444,7 @@ udat_getSymbols(const   UDateFormat             *fmt,
 * @return The number of symbols of type type.
 * @see udat_getSymbols
 * @see udat_setSymbols
+* @stable
 */
 U_CAPI int32_t
 udat_countSymbols(    const    UDateFormat                *fmt,
@@ -444,6 +464,7 @@ udat_countSymbols(    const    UDateFormat                *fmt,
 * @return A pointer to result.
 * @see udat_getSymbols
 * @see udat_countSymbols
+* @draft
 */
 U_CAPI void
 udat_setSymbols(    UDateFormat             *format,

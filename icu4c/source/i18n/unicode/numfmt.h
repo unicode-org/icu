@@ -110,6 +110,7 @@ class Locale;
  * widthToAlignmentPoint) before drawing the text.  It also works
  * where there is no decimal, but possibly additional characters at
  * the end, e.g. with parentheses in negative numbers: "(12)" for -12.
+ * @stable
  */
 class U_I18N_API NumberFormat : public Format {
 public:
@@ -120,6 +121,7 @@ public:
      * a formatted number should be returned.
      *
      * @see FieldPosition
+     * @stable
      */
     enum EAlignmentFields {
         kIntegerField,
@@ -129,6 +131,7 @@ public:
     /**
      * These constants are provided for backwards compatibility only,
      * and are deprecated.  Please use the C++ style constants defined above.
+     * @stable
      */       
         INTEGER_FIELD        = kIntegerField,
         FRACTION_FIELD        = kFractionField
@@ -139,6 +142,7 @@ public:
     /**
      * Return true if the given Format objects are semantically equal.
      * Objects of different subclasses are considered unequal.
+     * @stable
      */
     virtual bool_t operator==(const Format& other) const;
 
@@ -155,6 +159,7 @@ public:
      * @param status        Output param filled with success/failure status.
      * @return              The value passed in as toAppendTo (this allows chaining,
      *                      as with UnicodeString::append())
+     * @stable
      */
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& toAppendTo,
@@ -187,6 +192,7 @@ public:
      * @return          A newly created Formattable* object, or NULL
      *                  on failure.  The caller owns this and should
      *                  delete it when done.
+     * @stable
      */
     virtual void parseObject(const UnicodeString& source,
                              Formattable& result,
@@ -199,6 +205,7 @@ public:
      * @param number    The value to be formatted.
      * @param output    Output param with the formatted string.
      * @return          A reference to 'output' param.
+     * @stable
      */
     UnicodeString& format(  double number,
                             UnicodeString& output) const;
@@ -216,6 +223,7 @@ public:
     * @param pos        On input: an alignment field, if desired.
     *                   On output: the offsets of the alignment field.
     * @return           A reference to 'toAppendTo'.
+     * @stable
     */
     virtual UnicodeString& format(double number,
                                   UnicodeString& toAppendTo,
@@ -226,6 +234,7 @@ public:
 
     /**
      * Redeclared Format method.
+     * @stable
      */
     UnicodeString& format(const Formattable& obj,
                           UnicodeString& result,
@@ -250,6 +259,7 @@ public:
     *                       parse character. On parse failure, does not change.
     * @return               A Formattable object of numeric type.  The caller
     *                       owns this an must delete it.  NULL on failure.
+    * @stable
     */
     virtual void parse(const UnicodeString& text,
                        Formattable& result,
@@ -267,6 +277,7 @@ public:
      * @return              A Formattable object of numeric type.  The caller
      *                      owns this an must delete it.  NULL on failure.
      * @see                 NumberFormat::isParseIntegerOnly
+     * @stable
      */
     virtual void parse( const UnicodeString& text,
                         Formattable& result,
@@ -279,12 +290,14 @@ public:
      * 1234 and parsing would stop at the "." character.  Of course,
      * the exact format accepted by the parse operation is locale
      * dependant and determined by sub-classes of NumberFormat.
+     * @stable
      */
     bool_t isParseIntegerOnly(void) const;
 
     /**
      * Sets whether or not numbers should be parsed as integers only.
      * @see isParseIntegerOnly
+     * @stable
      */
     virtual void setParseIntegerOnly(bool_t value);
 
@@ -294,6 +307,7 @@ public:
      * the other factory methods: getNumberInstance,
      * getCurrencyInstance or getPercentInstance.  Exactly which one
      * is locale dependant.
+     * @stable
      */
     static NumberFormat* createInstance(UErrorCode&);
 
@@ -302,45 +316,53 @@ public:
      * The default format is one of the styles provided by the other
      * factory methods: getNumberInstance, getCurrencyInstance or
      * getPercentInstance.  Exactly which one is locale dependant.
+     * @stable
      */
     static NumberFormat* createInstance(const Locale& inLocale,
                                         UErrorCode&);
 
     /**
      * Returns a currency format for the current default locale.
+     * @stable
      */
     static NumberFormat* createCurrencyInstance(UErrorCode&);
 
     /**
      * Returns a currency format for the specified locale.
+     * @stable
      */
     static NumberFormat* createCurrencyInstance(const Locale& inLocale,
                                                 UErrorCode&);
 
     /**
      * Returns a percentage format for the current default locale.
+     * @stable
      */
     static NumberFormat* createPercentInstance(UErrorCode&);
 
     /**
      * Returns a percentage format for the specified locale.
+     * @stable
      */
     static NumberFormat* createPercentInstance(const Locale& inLocale,
                                                UErrorCode&);
 
     /**
      * Returns a scientific format for the current default locale.
+     * @stable
      */
     static NumberFormat* createScientificInstance(UErrorCode&);
 
     /**
      * Returns a scientific format for the specified locale.
+     * @stable
      */
     static NumberFormat* createScientificInstance(const Locale& inLocale,
                                                 UErrorCode&);
 
     /**
      * Get the set of Locales for which NumberFormats are installed.
+     * @stable
      */
     static const Locale* getAvailableLocales(int32_t& count);
 
@@ -351,12 +373,14 @@ public:
      * well as the size of each group is locale dependant and is
      * determined by sub-classes of NumberFormat.
      * @see setGroupingUsed
+     * @stable
      */
     bool_t isGroupingUsed(void) const;
 
     /**
      * Set whether or not grouping will be used in this format.
      * @see getGroupingUsed
+     * @stable
      */
     virtual void setGroupingUsed(bool_t newValue);
 
@@ -364,6 +388,7 @@ public:
      * Returns the maximum number of digits allowed in the integer portion of a
      * number.
      * @see setMaximumIntegerDigits
+     * @stable
      */
     int32_t getMaximumIntegerDigits(void) const;
 
@@ -375,6 +400,7 @@ public:
      * the new value.
      *
      * @see getMaximumIntegerDigits
+     * @stable
      */
     virtual void setMaximumIntegerDigits(int32_t newValue);
 
@@ -382,6 +408,7 @@ public:
      * Returns the minimum number of digits allowed in the integer portion of a
      * number.
      * @see setMinimumIntegerDigits
+     * @stable
      */
     int32_t getMinimumIntegerDigits(void) const;
 
@@ -392,6 +419,7 @@ public:
      * of maximumIntegerDigits, then maximumIntegerDigits will also be set to
      * the new value.
      * @see getMinimumIntegerDigits
+     * @stable
      */
     virtual void setMinimumIntegerDigits(int32_t newValue);
 
@@ -399,6 +427,7 @@ public:
      * Returns the maximum number of digits allowed in the fraction portion of a
      * number.
      * @see setMaximumFractionDigits
+     * @stable
      */
     int32_t getMaximumFractionDigits(void) const;
 
@@ -409,6 +438,7 @@ public:
      * of minimumFractionDigits, then minimumFractionDigits will also be set to
      * the new value.
      * @see getMaximumFractionDigits
+     * @stable
      */
     virtual void setMaximumFractionDigits(int32_t newValue);
 
@@ -416,6 +446,7 @@ public:
      * Returns the minimum number of digits allowed in the fraction portion of a
      * number.
      * @see setMinimumFractionDigits
+     * @stable
      */
     int32_t getMinimumFractionDigits(void) const;
 
@@ -426,6 +457,7 @@ public:
      * of maximumFractionDigits, then maximumIntegerDigits will also be set to
      * the new value
      * @see getMinimumFractionDigits
+     * @stable
      */
     virtual void setMinimumFractionDigits(int32_t newValue);
 
@@ -440,6 +472,7 @@ public:
      * .       Derived::getStaticClassID()) ...
      * </pre>
      * @return The class ID for all objects of this class.
+     * @stable
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
@@ -453,6 +486,7 @@ public:
      * @return The class ID for this object. All objects of a
      * given class have the same class ID.  Objects of
      * other classes have different class IDs.
+     * @stable
      */
     virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
 
@@ -460,16 +494,19 @@ protected:
 
     /**
      * Default constructor for subclass use only.
+     * @stable
      */
     NumberFormat();
 
     /**
      * Copy constructor.
+     * @stable
      */
     NumberFormat(const NumberFormat&);
 
     /**
      * Assignment operator.
+     * @stable
      */
     NumberFormat& operator=(const NumberFormat&);
 

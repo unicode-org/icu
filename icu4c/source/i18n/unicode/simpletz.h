@@ -66,16 +66,19 @@ public:
 
     /**
      * Copy constructor
+     * @stable
      */
     SimpleTimeZone(const SimpleTimeZone& source);
 
     /**
      * Default assignment operator
+     * @stable
      */
     SimpleTimeZone& operator=(const SimpleTimeZone& right);
 
     /**
      * Destructor
+     * @stable
      */
     virtual ~SimpleTimeZone();
 
@@ -86,6 +89,7 @@ public:
      * @param that  The SimpleTimeZone object to be compared with.
      * @return      True if the given time zone is equal to this time zone; false
      *              otherwise.
+     * @stable
      */
     virtual bool_t operator==(const TimeZone& that) const;
 
@@ -98,6 +102,7 @@ public:
      * @param rawOffset  The given base time zone offset to GMT.
      * @param ID         The timezone ID which is obtained from
      *                   TimeZone.getAvailableIDs.
+     * @stable
      */
     SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID);
 
@@ -140,6 +145,7 @@ public:
      * @param dstSavings      The number of milliseconds added to standard time
      *                        to get DST time. Default is one hour.
      * @param status          An UErrorCode to receive the status.
+     * @stable
      */
     SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
         int8_t startMonth, int8_t startDayOfWeekInMonth,
@@ -168,6 +174,7 @@ public:
      * not to observe daylight savings time prior to that year; SimpleTimeZone doesn't
      * support historical daylight-savings-time rules.
      * @param year the daylight savings starting year.
+     * @stable
      */
     void setStartYear(int32_t year);
 
@@ -211,6 +218,7 @@ public:
      * @param mode whether the time is local wall time, local standard time,
      * or UTC time. Default is local wall time.
      * @param status An UErrorCode
+     * @stable
      */
     void setStartRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
                       int32_t time, UErrorCode& status);
@@ -229,6 +237,7 @@ public:
      * @param mode whether the time is local wall time, local standard time,
      * or UTC time. Default is local wall time.
      * @param status An UErrorCode
+     * @stable
      */
     void setStartRule(int32_t month, int32_t dayOfMonth, int32_t time, 
                       UErrorCode& status);
@@ -252,6 +261,7 @@ public:
      *                      or after dayOfMonth.  If false, this rule selects
      *                      the last dayOfWeek on or before dayOfMonth.
      * @param status An UErrorCode
+     * @stable
      */
     void setStartRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
                       int32_t time, bool_t after, UErrorCode& status);
@@ -281,6 +291,7 @@ public:
      * @param mode whether the time is local wall time, local standard time,
      * or UTC time. Default is local wall time.
      * @param status An UErrorCode
+     * @stable
      */
     void setEndRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
                     int32_t time, UErrorCode& status);
@@ -299,6 +310,7 @@ public:
      * @param mode whether the time is local wall time, local standard time,
      * or UTC time. Default is local wall time.
      * @param status An UErrorCode
+     * @stable
      */
     void setEndRule(int32_t month, int32_t dayOfMonth, int32_t time, UErrorCode& status);
 
@@ -321,6 +333,7 @@ public:
      *                      or after dayOfMonth.  If false, this rule selects
      *                      the last dayOfWeek on or before dayOfMonth.
      * @param status An UErrorCode
+     * @stable
      */
     void setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
                     int32_t time, bool_t after, UErrorCode& status);
@@ -345,6 +358,7 @@ public:
      * @param dayOfWeek  The reference date's day-of-week (1-based; 1 is Sunday)
      * @param millis     The reference date's milliseconds in day, UTT (NOT local time).
      * @return           The offset in milliseconds to add to GMT to get local time.
+     * @stable
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t millis, UErrorCode& status) const;
@@ -365,6 +379,7 @@ public:
      * @param monthLength the length of the given month in days.
      * @param prevMonthLength length of the previous month in days.
      * @return the offset to add *to* GMT to get local time.
+     * @stable
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                            uint8_t dayOfWeek, int32_t milliseconds, 
@@ -380,6 +395,7 @@ public:
      * to GMT to get local time, before taking daylight savings time into account).
      *
      * @return   The TimeZone's raw GMT offset.
+     * @stable
      */
     virtual int32_t getRawOffset(void) const;
 
@@ -388,6 +404,7 @@ public:
      * to GMT to get local time, before taking daylight savings time into account).
      *
      * @param offsetMillis  The new raw GMT offset for this time zone.
+     * @stable
      */
     virtual void setRawOffset(int32_t offsetMillis);
 
@@ -396,10 +413,13 @@ public:
      * @param millisSavedDuringDST the number of milliseconds the time is
      * advanced with respect to standard time when the daylight savings rules
      * are in effect. A positive number, typically one hour (3600000).
+     * @stable
      */
     void setDSTSavings(int32_t millisSavedDuringDST, UErrorCode& status);
 
-    // deprecated
+    /**
+     * @deprecated
+     */
     void setDSTSavings(int32_t millisSavedDuringDST);
 
     /**
@@ -414,6 +434,7 @@ public:
      * Queries if this TimeZone uses Daylight Savings Time.
      *
      * @return   True if this TimeZone uses Daylight Savings Time; false otherwise.
+     * @stable
      */
     virtual bool_t useDaylightTime(void) const;
 
@@ -424,6 +445,7 @@ public:
      * @param date The date to test.
      * @return true if the given date is in Daylight Savings Time;
      * false otherwise.
+     * @stable
      */
     virtual bool_t inDaylightTime(UDate date, UErrorCode& status) const;
 
@@ -431,6 +453,7 @@ public:
      * Return true if this zone has the same rules and offset as another zone.
      * @param other the TimeZone object to be compared with
      * @return true if the given zone has the same rules and offset as this one
+     * @stable
      */
     bool_t hasSameRules(const TimeZone& other) const;
 
@@ -439,6 +462,7 @@ public:
      * the TimeZone object cloned.
      *
      * @return   A new copy of this TimeZone object.
+     * @stable
      */
     virtual TimeZone* clone(void) const;
 
@@ -452,6 +476,7 @@ public:
      *
      * @return   The class ID for this object. All objects of a given class have the
      *           same class ID. Objects of other classes have different class IDs.
+     * @stable
      */
     virtual UClassID getDynamicClassID(void) const { return (UClassID)&fgClassID; }
 
@@ -464,6 +489,7 @@ public:
      * .       Derived::getStaticClassID()) ...
      * </pre>
      * @return   The class ID for all objects of this class.
+     * @stable
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
