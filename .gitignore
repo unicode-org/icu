@@ -121,11 +121,10 @@ icu4c/source/i18n/libicu*.*
 icu4c/source/icudefs.mk
 icu4c/source/layout/*.d
 icu4c/source/layout/*.pdb
-icu4c/source/layout/.#*
 icu4c/source/layout/Debug
 icu4c/source/layout/Makefile
 icu4c/source/layout/Release
-icu4c/source/layout/libicule.so.20.0
+icu4c/source/layout/libicule.*
 icu4c/source/layout/tmp
 icu4c/source/layoutex/*.d
 icu4c/source/layoutex/*.pdb
