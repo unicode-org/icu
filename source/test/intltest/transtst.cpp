@@ -131,6 +131,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(49,TestTeluguLatinRT);
         TESTCASE(50,TestCompoundLatinRT);
         TESTCASE(51,TestSanskritLatinRT);
+        TESTCASE(52,TestLocaleInstantiation);
         default: name = ""; break;
     }
 }
@@ -2527,6 +2528,29 @@ void TransliteratorTest::TestCompoundLatinRT(){
     delete(latinToTelToLatin);
 }
 
+/**
+ * Test instantiation from a locale.
+ */
+void TransliteratorTest::TestLocaleInstantiation(void) {
+    UParseError pe;
+    UErrorCode ec = U_ZERO_ERROR;
+    Transliterator *t = Transliterator::createInstance("ru_RU-Latin", UTRANS_FORWARD, pe, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: createInstance(ru_RU-Latin)");
+        delete t;
+        return;
+    }
+    expect(*t, CharsToUnicodeString("\\u0430"), "a");
+    
+    t = Transliterator::createInstance("en-el", UTRANS_FORWARD, pe, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: createInstance(en-el)");
+        delete t;
+        return;
+    }
+    expect(*t, "a", CharsToUnicodeString("\\u1F00"));
+}
+        
 //======================================================================
 // icu4c ONLY
 // These tests are not mirrored (yet) in icu4j at
