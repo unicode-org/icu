@@ -23,6 +23,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/uclean.h"
 #include "unicode/timezone.h"
+#include "unicode/curramt.h"
 
 #include "intltest.h"
 #include "caltztst.h"
@@ -115,17 +116,10 @@ operator+(const UnicodeString& left,
 #if !UCONFIG_NO_FORMATTING
 
 /**
- * Originally coded this as operator+, but that makes the expression
- * + char* ambiguous. - liu
+ * Return a string display for for this, without surrounding braces.
  */
-UnicodeString toString(const Formattable& f) {
+UnicodeString _toString(const Formattable& f) {
     UnicodeString s;
-    UnicodeString close;
-    const UChar* currency = f.getCurrency();
-    if (currency != NULL) {
-        close.append((UChar)0x2f/*/*/).append(currency);
-    }
-    close.append((UChar)0x5d/*]*/);
     switch (f.getType()) {
     case Formattable::kDate:
         {
@@ -134,45 +128,65 @@ UnicodeString toString(const Formattable& f) {
             if (U_SUCCESS(status)) {
                 FieldPosition pos;
                 fmt.format(f.getDate(), s, pos);
-                s.insert(0, "[Date:");
-                s.append(close);
+                s.insert(0, "Date:");
             } else {
-                s = UnicodeString("[Error creating date format]");
+                s = UnicodeString("Error creating date format]");
             }
         }
         break;
     case Formattable::kDouble:
-        s = UnicodeString("[double:") + f.getDouble() + close;
+        s = UnicodeString("double:") + f.getDouble();
         break;
     case Formattable::kLong:
-        s = UnicodeString("[long:") + f.getLong() + close;
+        s = UnicodeString("long:") + f.getLong();
         break;
 
     case Formattable::kInt64:
-        s = UnicodeString("[int64:") + Int64ToUnicodeString(f.getInt64()) + close;
+        s = UnicodeString("int64:") + Int64ToUnicodeString(f.getInt64());
         break;
 
     case Formattable::kString:
         f.getString(s);
-        s.insert(0, "[String:");
-        s.append(close);
+        s.insert(0, "String:");
         break;
     case Formattable::kArray:
         {
             int32_t i, n;
             const Formattable* array = f.getArray(n);
-            s.insert(0, UnicodeString("[Array:"));
+            s.insert(0, UnicodeString("Array:"));
             UnicodeString delim(", ");
             for (i=0; i<n; ++i) {
                 if (i > 0) {
                     s.append(delim);
                 }
-                s = s + toString(array[i]);
+                s = s + _toString(array[i]);
             }
-            s.append(close);
         }
         break;
+    case Formattable::kObject:
+        if (f.getObject()->getDynamicClassID() ==
+            CurrencyAmount::getStaticClassID()) {
+            const CurrencyAmount& c = (const CurrencyAmount&) *f.getObject();
+            s = _toString(c.getNumber()) + " " + UnicodeString(c.getISOCurrency());
+        } else {
+            s = UnicodeString("Unknown UObject");
+        }
+        break;
+    default:
+        s = UnicodeString("Unknown Formattable type=") + (int32_t)f.getType();
+        break;
     }
+    return s;
+}
+
+/**
+ * Originally coded this as operator+, but that makes the expression
+ * + char* ambiguous. - liu
+ */
+UnicodeString toString(const Formattable& f) {
+    UnicodeString s((UChar)91/*[*/);
+    s.append(_toString(f));
+    s.append((UChar)0x5d/*]*/);
     return s;
 }
 

@@ -33,6 +33,7 @@
 #include "unicode/decimfmt.h"
 #include "unicode/ustring.h"
 #include "unicode/ucurr.h"
+#include "unicode/curramt.h"
 #include "uhash.h"
 #include "iculserv.h"
 #include "ucln_in.h"
@@ -222,29 +223,34 @@ NumberFormat::format(const Formattable& obj,
     if (U_FAILURE(status)) return appendTo;
 
     NumberFormat* nonconst = (NumberFormat*) this;
+    const Formattable* n = &obj;
 
     UChar save[4];
     UBool setCurr = FALSE;
-    const UChar *curr = obj.getCurrency(); // most commonly curr==NULL
-    if (curr != NULL) {
-        // getCurrency() returns a pointer to internal storage, so we
+    const UObject* o = obj.getObject(); // most commonly o==NULL
+    if (o != NULL &&
+        o->getDynamicClassID() == CurrencyAmount::getStaticClassID()) {
+        // getISOCurrency() returns a pointer to internal storage, so we
         // copy it to retain it across the call to setCurrency().
+        const CurrencyAmount* amt = (const CurrencyAmount*) o;
+        const UChar* curr = amt->getISOCurrency();
         u_strcpy(save, getCurrency());
         setCurr = (u_strcmp(curr, save) != 0);
         if (setCurr) {
             nonconst->setCurrency(curr, status);
         }
+        n = &amt->getNumber();
     }
 
-    switch (obj.getType()) {
+    switch (n->getType()) {
     case Formattable::kDouble:
-        format(obj.getDouble(), appendTo, pos);
+        format(n->getDouble(), appendTo, pos);
         break;
     case Formattable::kLong:
-        format(obj.getLong(), appendTo, pos);
+        format(n->getLong(), appendTo, pos);
         break;
     case Formattable::kInt64:
-        format(obj.getInt64(), appendTo, pos);
+        format(n->getInt64(), appendTo, pos);
         break;
     default:
         status = U_INVALID_FORMAT_ERROR;
@@ -342,7 +348,11 @@ Formattable& NumberFormat::parseCurrency(const UnicodeString& text,
         UErrorCode ec = U_ZERO_ERROR;
         getEffectiveCurrency(curr, ec);
         if (U_SUCCESS(ec)) {
-            result.setCurrency(curr);
+            Formattable n(result);
+            result.adoptObject(new CurrencyAmount(n, curr, ec));
+            if (U_FAILURE(ec)) {
+                pos.setIndex(start); // indicate failure
+            }
         }
     }
     return result;
