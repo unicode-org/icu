@@ -1648,8 +1648,9 @@ UBool checkNextCanonicalContractionMatch(UStringSearch *strsrch,
     const UChar              *text       = strsrch->search->text;
     // This part checks if either ends of the match contains potential 
     // contraction. If so we'll have to iterate through them
-    if ((*end < textlength && ucol_unsafeCP(text[*end], collator)) || 
-        (*start < textlength && ucol_unsafeCP(text[*start + 1], collator))) {
+	if ((*end < textlength && ucol_unsafeCP(text[*end], collator)) || 
+        (*start + 1 < textlength 
+         && ucol_unsafeCP(text[*start + 1], collator))) {
         int32_t expansion  = getExpansionPrefix(coleiter);
         UBool   expandflag = expansion > 0;
         setColEIterOffset(coleiter, *start);
@@ -2276,10 +2277,12 @@ UBool checkPreviousCanonicalContractionMatch(UStringSearch *strsrch,
           int32_t         temp       = *end;
     const UCollator          *collator   = strsrch->collator;
     const UChar              *text       = strsrch->search->text;
-    // This part checks if either ends of the match contains potential 
+	// This part checks if either if the start of the match contains potential 
     // contraction. If so we'll have to iterate through them
-    if ((*end < textlength && ucol_unsafeCP(text[*end], collator)) || 
-        (*start < textlength && ucol_unsafeCP(text[*start + 1], collator))) {
+	// Since we used ucol_next while previously looking for the potential 
+	// match, this guarantees that our end will not be a partial contraction,
+	// or a partial supplementary character.
+    if (*start < textlength && ucol_unsafeCP(text[*start], collator)) {
         int32_t expansion  = getExpansionSuffix(coleiter);
         UBool   expandflag = expansion > 0;
         setColEIterOffset(coleiter, *end);
