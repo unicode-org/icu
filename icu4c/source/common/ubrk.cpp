@@ -270,7 +270,7 @@ ubrk_getLocaleByType(const UBreakIterator *bi,
                      ULocDataLocaleType type, 
                      UErrorCode* status)
 {
-  return (((BreakIterator *)bi)->getLocale(type, *status)).getName();
+  return ((BreakIterator *)bi)->getLocaleInternal(type, *status);
 }
 
 
