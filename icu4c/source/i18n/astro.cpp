@@ -197,7 +197,7 @@ const double CalendarAstronomer::RAD_DEG  = 180 / CalendarAstronomer::PI;       
  * @deprecated ICU 2.4. This class may be removed or modified.
  */
 CalendarAstronomer::CalendarAstronomer():
-  fTime(Calendar::getNow()), moonPosition(NULL) {
+  fTime(Calendar::getNow()), moonPosition(0,0), moonPositionSet(FALSE) {
 }
     
 /**
@@ -206,7 +206,7 @@ CalendarAstronomer::CalendarAstronomer():
  * @internal
  * @deprecated ICU 2.4. This class may be removed or modified.
  */
-CalendarAstronomer::CalendarAstronomer(UDate d): fTime(d),moonPosition(NULL) {
+CalendarAstronomer::CalendarAstronomer(UDate d): fTime(d),moonPosition(0,0), moonPositionSet(FALSE) {
 }
 
 /**
@@ -225,7 +225,7 @@ CalendarAstronomer::CalendarAstronomer(UDate d): fTime(d),moonPosition(NULL) {
  * @deprecated ICU 2.4. This class may be removed or modified.
  */
 CalendarAstronomer::CalendarAstronomer(double longitude, double latitude) :
-  fTime(Calendar::getNow()), moonPosition(NULL) {
+  fTime(Calendar::getNow()), moonPosition(0,0), moonPositionSet(FALSE) {
   fLongitude = normPI(longitude * DEG_RAD);
   fLatitude  = normPI(latitude  * DEG_RAD);
   fGmtOffset = (double)(fLongitude * 24 * HOUR_MS / CalendarAstronomer::PI2);
@@ -233,7 +233,6 @@ CalendarAstronomer::CalendarAstronomer(double longitude, double latitude) :
     
 CalendarAstronomer::~CalendarAstronomer()
 {
-  delete moonPosition;
 }
     
 //-------------------------------------------------------------------------
@@ -396,9 +395,9 @@ double CalendarAstronomer::lstToUT(double lst) {
      * @internal
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
-CalendarAstronomer::Equatorial* CalendarAstronomer::eclipticToEquatorial(CalendarAstronomer::Ecliptic& ecliptic)
+CalendarAstronomer::Equatorial& CalendarAstronomer::eclipticToEquatorial(CalendarAstronomer::Equatorial& result, const CalendarAstronomer::Ecliptic& ecliptic) 
 {
-  return eclipticToEquatorial(ecliptic.longitude, ecliptic.latitude);
+  return eclipticToEquatorial(result, ecliptic.longitude, ecliptic.latitude);
 }
 
 /**
@@ -411,7 +410,7 @@ CalendarAstronomer::Equatorial* CalendarAstronomer::eclipticToEquatorial(Calenda
      * @internal
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
-CalendarAstronomer::Equatorial* CalendarAstronomer::eclipticToEquatorial(double eclipLong, double eclipLat)
+CalendarAstronomer::Equatorial& CalendarAstronomer::eclipticToEquatorial(CalendarAstronomer::Equatorial& result, double eclipLong, double eclipLat) 
 {
   // See page 42 of "Practial Astronomy with your Calculator",
   // by Peter Duffet-Smith, for details on the algorithm.
@@ -427,8 +426,9 @@ CalendarAstronomer::Equatorial* CalendarAstronomer::eclipticToEquatorial(double 
   double cosB = cos(eclipLat);
   double tanB = tan(eclipLat);
         
-  return new Equatorial(atan2(sinL*cosE - tanB*sinE, cosL),
-                        asin(sinB*cosE + cosB*sinE*sinL) );
+  result.set(atan2(sinL*cosE - tanB*sinE, cosL),
+              asin(sinB*cosE + cosB*sinE*sinL) );
+  return result;
 }
 
 /**
@@ -440,33 +440,34 @@ CalendarAstronomer::Equatorial* CalendarAstronomer::eclipticToEquatorial(double 
      * @internal
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
-CalendarAstronomer::Equatorial* CalendarAstronomer::eclipticToEquatorial(double eclipLong)
+CalendarAstronomer::Equatorial& CalendarAstronomer::eclipticToEquatorial(CalendarAstronomer::Equatorial& result, double eclipLong) 
 {
-  return eclipticToEquatorial(eclipLong, 0);  // TODO: optimize
+  return eclipticToEquatorial(result, eclipLong, 0);  // TODO: optimize
 }
 
 /**
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
-CalendarAstronomer::Horizon* CalendarAstronomer::eclipticToHorizon(double eclipLong)
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
+CalendarAstronomer::Horizon& CalendarAstronomer::eclipticToHorizon(CalendarAstronomer::Horizon& result, double eclipLong)
 {
-  Equatorial* equatorial = eclipticToEquatorial(eclipLong);
+  Equatorial equatorial;
+  eclipticToEquatorial(equatorial, eclipLong);
         
-  double H = getLocalSidereal()*CalendarAstronomer::PI/12 - equatorial->ascension;     // Hour-angle
+  double H = getLocalSidereal()*CalendarAstronomer::PI/12 - equatorial.ascension;     // Hour-angle
         
   double sinH = ::sin(H);
   double cosH = cos(H);
-  double sinD = ::sin(equatorial->declination);
-  double cosD = cos(equatorial->declination);
+  double sinD = ::sin(equatorial.declination);
+  double cosD = cos(equatorial.declination);
   double sinL = ::sin(fLatitude);
   double cosL = cos(fLatitude);
         
   double altitude = asin(sinD*sinL + cosD*cosL*cosH);
   double azimuth  = atan2(-cosD*cosL*sinH, sinD - sinL * ::sin(altitude));
 
-  delete equatorial;
-  return new Horizon(azimuth, altitude);
+  result.set(azimuth, altitude);
+  return result;
 }
 
     
@@ -486,14 +487,14 @@ const double CalendarAstronomer::SUN_E      =   0.016713;          // Eccentrici
 //double sunR0     =   1.495585e8;        // Semi-major axis in KM
 //double sunTheta0 =   0.533128 * CalendarAstronomer::PI/180; // Angular diameter at R0
 
-    // The following three methods, which compute the sun parameters
-    // given above for an arbitrary epoch (whatever time the object is
-    // set to), make only a small difference as compared to using the
-    // above constants.  E.g., Sunset times might differ by ~12
-    // seconds.  Furthermore, the eta-g computation is befuddled by
-    // Duffet-Smith's incorrect coefficients (p.86).  I've corrected
-    // the first-order coefficient but the others may be off too - no
-    // way of knowing without consulting another source.
+// The following three methods, which compute the sun parameters
+// given above for an arbitrary epoch (whatever time the object is
+// set to), make only a small difference as compared to using the
+// above constants.  E.g., Sunset times might differ by ~12
+// seconds.  Furthermore, the eta-g computation is befuddled by
+// Duffet-Smith's incorrect coefficients (p.86).  I've corrected
+// the first-order coefficient but the others may be off too - no
+// way of knowing without consulting another source.
 
 //  /**
 //   * Return the sun's ecliptic longitude at perigee for the current time.
@@ -585,18 +586,18 @@ double CalendarAstronomer::getSunLongitude()
      * @internal
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
-CalendarAstronomer::Equatorial* CalendarAstronomer::getSunPosition() {
-  return eclipticToEquatorial(getSunLongitude(), 0);
+CalendarAstronomer::Equatorial& CalendarAstronomer::getSunPosition(CalendarAstronomer::Equatorial& result) {
+  return eclipticToEquatorial(result, getSunLongitude(), 0);
 }
 
     
 /**
-     * Constant representing the vernal equinox.
-     * For use with {@link #getSunTime getSunTime}. 
-     * Note: In this case, "vernal" refers to the northern hemisphere's seasons.
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * Constant representing the vernal equinox.
+ * For use with {@link #getSunTime getSunTime}. 
+ * Note: In this case, "vernal" refers to the northern hemisphere's seasons.
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 const CalendarAstronomer::SolarLongitude CalendarAstronomer::VERNAL_EQUINOX  =  CalendarAstronomer::SolarLongitude(0);
     
 /**
@@ -659,7 +660,7 @@ UDate CalendarAstronomer::getSunTime(const SolarLongitude& desired, UBool next) 
 
 class RiseSetCoordFunc : public CalendarAstronomer::CoordFunc {
 public:
-  virtual CalendarAstronomer::Equatorial* eval(CalendarAstronomer&a) { return a.getSunPosition(); }
+  virtual void eval(CalendarAstronomer::Equatorial& result, CalendarAstronomer&a) {  a.getSunPosition(result); }
 };
 
 UDate CalendarAstronomer::getSunRiseSet(UBool rise)
@@ -972,18 +973,18 @@ const double CalendarAstronomer::moonT0 =   0.5181 * CalendarAstronomer::PI/180;
 const double CalendarAstronomer::moonPi =   0.9507 * CalendarAstronomer::PI/180;     // Parallax at distance A
     
 /**
-     * The position of the moon at the time set on this
-     * object, in equatorial coordinates.
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
-CalendarAstronomer::Equatorial* CalendarAstronomer::getMoonPosition()
+ * The position of the moon at the time set on this
+ * object, in equatorial coordinates.
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
+const CalendarAstronomer::Equatorial& CalendarAstronomer::getMoonPosition()
 {
   //
   // See page 142 of "Practial Astronomy with your Calculator",
   // by Peter Duffet-Smith, for details on the algorithm.
   //
-  if (moonPosition == NULL) {
+  if (moonPositionSet == FALSE) {
     // Calculate the solar longitude.  Has the side effect of
     // filling in "meanAnomalySun" as well.
     double sunLongitude = getSunLongitude();
@@ -1051,7 +1052,8 @@ CalendarAstronomer::Equatorial* CalendarAstronomer::getMoonPosition()
     moonEclipLong = ::atan2(y*cos(moonI), x) + nodeLongitude;
     double moonEclipLat = ::asin(y * ::sin(moonI));
 
-    moonPosition = eclipticToEquatorial(moonEclipLong, moonEclipLat);
+    eclipticToEquatorial(moonPosition, moonEclipLong, moonEclipLat);
+    moonPositionSet = TRUE;
   }
   return moonPosition;
 }
@@ -1167,13 +1169,13 @@ UDate CalendarAstronomer::getMoonTime(double desired, UBool next)
  * @internal
  * @deprecated ICU 2.4. This class may be removed or modified.
  */
-UDate CalendarAstronomer::getMoonTime(CalendarAstronomer::MoonAge desired, UBool next) {
+UDate CalendarAstronomer::getMoonTime(const CalendarAstronomer::MoonAge& desired, UBool next) {
   return getMoonTime(desired.value, next);
 }
    
 class MoonRiseSetCoordFunc : public CalendarAstronomer::CoordFunc {
 public:
-  virtual CalendarAstronomer::Equatorial* eval(CalendarAstronomer&a) { return a.getMoonPosition(); }
+  virtual void eval(CalendarAstronomer::Equatorial& result, CalendarAstronomer&a) { result = a.getMoonPosition(); }
 };
  
 /**
@@ -1268,7 +1270,7 @@ UDate CalendarAstronomer::riseOrSet(CoordFunc& func, UBool rise,
                                     double diameter, double refraction, 
                                     double epsilon)
 {        
-  Equatorial*  pos = NULL;
+  Equatorial pos;
   double      tanL   = ::tan(fLatitude);
   double     deltaT = 0;
   int32_t         count = 0;
@@ -1282,9 +1284,9 @@ UDate CalendarAstronomer::riseOrSet(CoordFunc& func, UBool rise,
                      rise?"T":"F", diameter, refraction, epsilon));
   do {
     // See "Practical Astronomy With Your Calculator, section 33.
-    pos = func.eval(*this);
-    double angle = ::acos(-tanL * ::tan(pos->declination));
-    double lst = ((rise ? CalendarAstronomer::PI2-angle : angle) + pos->ascension ) * 24 / CalendarAstronomer::PI2;
+    func.eval(pos, *this);
+    double angle = ::acos(-tanL * ::tan(pos.declination));
+    double lst = ((rise ? CalendarAstronomer::PI2-angle : angle) + pos.ascension ) * 24 / CalendarAstronomer::PI2;
                          
     // Convert from LST to Universal Time.
     UDate newTime = lstToUT( lst );
@@ -1297,7 +1299,7 @@ UDate CalendarAstronomer::riseOrSet(CoordFunc& func, UBool rise,
   while (++ count < 5 && uprv_fabs(deltaT) > epsilon);
 
   // Calculate the correction due to refraction and the object's angular diameter
-  double cosD  = ::cos(pos->declination);
+  double cosD  = ::cos(pos.declination);
   double psi   = ::acos(sin(fLatitude) / cosD);
   double x     = diameter / 2 + refraction;
   double y     = ::asin(sin(x) / ::sin(psi));
@@ -1376,8 +1378,7 @@ void CalendarAstronomer::clearCache() {
   eclipObliquity  = INVALID;
   siderealTime    = INVALID;
   siderealT0      = INVALID;
-  delete moonPosition;
-  moonPosition    = NULL;
+  moonPositionSet = FALSE;
 }
     
 //private static void out(String s) {
