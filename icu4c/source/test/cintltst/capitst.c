@@ -17,19 +17,21 @@
 
 #if !UCONFIG_NO_COLLATION
 
-#include "ucol_imp.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "unicode/uloc.h"
-#include "cintltst.h"
-#include "capitst.h"
 #include "unicode/ustring.h"
 #include "unicode/ures.h"
 #include "unicode/ucoleitr.h"
-#include "cmemory.h"
-#include "cstring.h"
+
+#include "cintltst.h"
+#include "capitst.h"
 #include "ccolltst.h"
-#include <stdio.h>
+#include "ucol_imp.h"
 
 static void TestAttribute(void);
+        int TestBufferSize();	/* defined in "capitst_1.c" */
 
 void addCollAPITest(TestNode** root)
 {
@@ -204,8 +206,9 @@ void TestProperty()
       ICU 2.0 currVersionArray = {0x18, 0xC0, 0x02, 0x02};
       ICU 2.1 currVersionArray = {0x19, 0x00, 0x03, 0x03};
       ICU 2.2 currVersionArray = {0x21, 0x40, 0x04, 0x04};
+      ICU 2.4 currVersionArray = {0x21, 0x40, 0x04, 0x04};
     */
-    UVersionInfo currVersionArray = {0x21, 0x40, 0x04, 0x04};
+    UVersionInfo currVersionArray = {0x21, 0x40, 0x03, 0x03};
     UVersionInfo versionArray;
     
     log_verbose("The property tests begin : \n");
@@ -219,7 +222,7 @@ void TestProperty()
     ucol_getVersion(col, versionArray);
     for (i=0; i<4; ++i) {
       if (versionArray[i] != currVersionArray[i]) {
-        log_err("Testing ucol_getVersion() - unexpected result: %d.%d.%d.%d\n", 
+        log_err("Testing ucol_getVersion() - unexpected result: %hu.%hu.%hu.%hu\n", 
             versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
         break;
       }
@@ -589,7 +592,7 @@ void TestSafeClone() {
     int32_t bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
     int index;
 
-    if (U_COL_SAFECLONE_BUFFERSIZE < sizeof(UCollator)) {
+    if (TestBufferSize()) {
         log_err("U_COL_SAFECLONE_BUFFERSIZE should be larger than sizeof(UCollator)\n");
         return;
     }
@@ -978,9 +981,9 @@ void TestElemIter()
     
     doAssert((order1 == order2), "The second iterator advance failed should be the same as first one");
     
-    doAssert( ((order1 & UCOL_PRIMARYMASK) == (order3 & UCOL_PRIMARYMASK)), "The primary orders should be identical");
-    doAssert( ((order1 & UCOL_SECONDARYMASK) == (order3 & UCOL_SECONDARYMASK)), "The secondary orders should be identical");
-    doAssert( ((order1 & UCOL_TERTIARYMASK) == (order3 & UCOL_TERTIARYMASK)), "The tertiary orders should be identical");
+    doAssert( (ucol_primaryOrder(order1) == ucol_primaryOrder(order3)), "The primary orders should be identical");
+    doAssert( (ucol_secondaryOrder(order1) == ucol_secondaryOrder(order3)), "The secondary orders should be identical");
+    doAssert( (ucol_tertiaryOrder(order1) == ucol_tertiaryOrder(order3)), "The tertiary orders should be identical");
     
     order1=ucol_next(iterator1, &status);
     if (U_FAILURE(status)) {
@@ -992,8 +995,8 @@ void TestElemIter()
         log_err("Somehow ran out of memory stepping through the iterator2.: %s\n", myErrorName(status));
         return;
     }
-    doAssert( ((order1 & UCOL_PRIMARYMASK) == (order3 & UCOL_PRIMARYMASK)), "The primary orders should be identical");
-    doAssert( ((order1 & UCOL_TERTIARYMASK) != (order3 & UCOL_TERTIARYMASK)), "The tertiary orders should be different");
+    doAssert( (ucol_primaryOrder(order1) == ucol_primaryOrder(order3)), "The primary orders should be identical");
+    doAssert( (ucol_tertiaryOrder(order1) != ucol_tertiaryOrder(order3)), "The tertiary orders should be different");
     
     order1=ucol_next(iterator1, &status);
     if (U_FAILURE(status)) {
@@ -1301,7 +1304,7 @@ static void doOverrunTest(UCollator *coll, const UChar *uString, int32_t strLen)
   skLen = ucol_getSortKey(coll, uString, strLen, NULL, 0);
 
   for(i = 0; i < skLen; i++) {
-    uprv_memset(sortKey, filler, 256);
+    memset(sortKey, filler, 256);
     skLen2 = ucol_getSortKey(coll, uString, strLen, sortKey, i);
     if(skLen != skLen2) {
       log_err("For buffer size %i, got different sortkey length. Expected %i got %i\n", i, skLen, skLen2);
