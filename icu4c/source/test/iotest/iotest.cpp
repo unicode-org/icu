@@ -723,7 +723,8 @@ static void U_CALLCONV TestStream(void)
     outTestStream << "\x42\x65\x67\x69\x6E\x6E\x69\x6E\x67\x20\x6F\x66\x20\x74\x65\x73\x74\x20";
     outTestStream << str1 << "\x20\x20" << str2 << str3 << "\x31\x20" << UTF8_NEW_LINE << str4 << ends;
 #if U_IOSTREAM_SOURCE >= 199711
-    const char *testStreamBuf = outTestStream.str().c_str();
+    string tempStr = outTestStream.str();
+    const char *testStreamBuf = tempStr.c_str();
 #endif
     if (strcmp(testStreamBuf, testStr) != 0) {
         log_err("Got: \"%s\", Expected: \"%s\"\n", testStreamBuf, testStr);
