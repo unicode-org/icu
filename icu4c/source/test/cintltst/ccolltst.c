@@ -48,15 +48,15 @@ void addCollTest(TestNode** root)
 
 /*Internal functions used*/
 static char* dumpSk(uint8_t *sourceKey, char *sk) {
-  uint32_t kLen = strlen(sourceKey);
-  uint32_t i = 0;
-
-  *sk = 0;
-
-  for(i = 0; i<kLen; i++) {
-    sprintf(sk+2*i, "%02X", sourceKey[i]);
-  }
-  return sk;
+    uint32_t kLen = (uint32_t)strlen((const char *)sourceKey);
+    uint32_t i = 0;
+    
+    *sk = 0;
+    
+    for(i = 0; i<kLen; i++) {
+        sprintf(sk+2*i, "%02X", sourceKey[i]);
+    }
+    return sk;
 }
 
 void reportCResult( const UChar source[], const UChar target[], 
