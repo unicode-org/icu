@@ -96,7 +96,7 @@ public class RoundTripTest extends TestFmwk {
 
     public void TestCyrillic() throws IOException, ParseException {
         new Test("Latin-Cyrillic")
-          .test("[a-zA-Z]", "[\u0400-\u045F]", null, this, new Legal());
+          .test("[a-zA-Z\u0110\u0111]", "[\u0400-\u045F]", null, this, new Legal());
     }
     
     //----------------------------------
