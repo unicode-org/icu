@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Trie.java,v $
-* $Date: 2003/02/11 00:48:59 $
-* $Revision: 1.9 $
+* $Date: 2003/02/11 01:11:22 $
+* $Revision: 1.10 $
 *
 ******************************************************************************
 */
@@ -160,6 +160,12 @@ public abstract class Trie
 
     // protected data members ------------------------------------------
 
+    /**
+    * Lead surrogate code points' index displacement in the index array.
+    * 0x10000-0xd800=0x2800
+    * 0x2800 >> INDEX_STAGE_1_SHIFT_
+    */
+    protected static final int LEAD_INDEX_OFFSET_ = 0x2800 >> 5;
     /**
     * Shift size for shifting right the input index. 1..9
     * @draft 2.1
@@ -358,12 +364,6 @@ public abstract class Trie
 
     // private data members --------------------------------------------
 
-    /**
-    * Lead surrogate code points' index displacement in the index array.
-    * 0x10000-0xd800=0x2800
-    * 0x2800 >> INDEX_STAGE_1_SHIFT_
-    */
-    private static final int LEAD_INDEX_OFFSET_ = 0x2800 >> 5;
     /**
     * Signature index
     */
