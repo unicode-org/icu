@@ -215,7 +215,7 @@ Because of the extensive use of other character sets, the LMBCS converter
 keeps a mapping between optimization groups and IBM character sets, so that
 ICU converters can be created and used as needed. */
 
-static const char * OptGroupByteToCPName[ULMBCS_CTRLOFFSET] = {
+static const char * const OptGroupByteToCPName[ULMBCS_CTRLOFFSET] = {
    /* 0x0000 */ "lmb-excp", /* internal home for the LOTUS exceptions list */
    /* 0x0001 */ "ibm-850",
    /* 0x0002 */ "ibm-851",
@@ -284,10 +284,10 @@ ambiguous mappings: */
 
 struct _UniLMBCSGrpMap  
 {
-   UChar uniStartRange;
-   UChar uniEndRange;
-   ulmbcs_byte_t  GrpType;
-} UniLMBCSGrpMap[]
+   const UChar uniStartRange;
+   const UChar uniEndRange;
+   const ulmbcs_byte_t  GrpType;
+} const UniLMBCSGrpMap[]
 =
 {
 
@@ -375,7 +375,7 @@ struct _UniLMBCSGrpMap
 static ulmbcs_byte_t 
 FindLMBCSUniRange(UChar uniChar)
 {
-   struct _UniLMBCSGrpMap * pTable = UniLMBCSGrpMap;
+   const struct _UniLMBCSGrpMap * pTable = UniLMBCSGrpMap;
 
    while (uniChar > pTable->uniEndRange) 
    {
@@ -414,8 +414,8 @@ do the lookup: */
 struct _LocaleLMBCSGrpMap
 {
    const char    *LocaleID;
-   ulmbcs_byte_t OptGroup;
-}  LocaleLMBCSGrpMap[] =
+   const ulmbcs_byte_t OptGroup;
+} const LocaleLMBCSGrpMap[] =
 {
     {"ar", ULMBCS_GRP_AR},
     {"be", ULMBCS_GRP_RU},
@@ -465,7 +465,7 @@ struct _LocaleLMBCSGrpMap
 static ulmbcs_byte_t 
 FindLMBCSLocale(const char *LocaleID)
 {
-   struct _LocaleLMBCSGrpMap *pTable = LocaleLMBCSGrpMap;
+   const struct _LocaleLMBCSGrpMap *pTable = LocaleLMBCSGrpMap;
 
    if ((!LocaleID) || (!*LocaleID)) 
    {
@@ -1017,7 +1017,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                          UErrorCode*   err,
                          UBool         returnUTF32)
 {
-     UChar32 uniChar;    /* an output UNICODE char */
+     UChar32 uniChar = 0;    /* an output UNICODE char */
      ulmbcs_byte_t   CurByte; /* A byte from the input stream */
      const char * saveSource;
 
@@ -1235,7 +1235,7 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
                      UErrorCode*    err)
 {
    UChar uniChar;    /* one output UNICODE char */
-   const char * saveSource;
+   const char * saveSource = args->source; /* beginning of current code point */
    const char * pStartLMBCS = args->source;  /* beginning of whole string */
 
    if (args->targetLimit == args->target)         /* error check may belong in common code */
