@@ -220,10 +220,11 @@ CntTable *uprv_cnttab_clone(CntTable *t) {
   r->mapping = t->mapping;
 
   r->elements = (ContractionTable **)uprv_malloc(t->capacity*sizeof(ContractionTable *));
+  //uprv_memcpy(r->elements, t->elements, t->capacity*sizeof(ContractionTable *));
 
   for(i = 0; i<t->size; i++) {
     r->elements[i] = uprv_cnttab_cloneContraction(t->elements[i]);
-    r->elements[i]->reversed = uprv_cnttab_cloneContraction(t->elements[i]);
+    r->elements[i]->reversed = uprv_cnttab_cloneContraction(t->elements[i]->reversed);
   }
 
   if(t->CEs != NULL) {
