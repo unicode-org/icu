@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/04/05 01:38:15 $ 
-* $Revision: 1.39 $
+* $Date: 2002/06/05 20:31:11 $ 
+* $Revision: 1.40 $
 *
 *******************************************************************************
 */
@@ -280,7 +280,7 @@ public final class UCharacter
     public static boolean isISOControl(int ch)
     {
         return ch >= 0 && ch <= APPLICATION_PROGRAM_COMMAND_ && 
-            ((ch <= UNIT_SEPERATOR_) || (ch >= DELETE_));
+            ((ch <= UNIT_SEPARATOR_) || (ch >= DELETE_));
     }
                                     
     /**
@@ -1721,9 +1721,9 @@ public final class UCharacter
     private static final int APPLICATION_PROGRAM_COMMAND_ = 0x009F;
       
     /**
-    * Unit seperator code point
+    * Unit separator code point
     */
-    private static final int UNIT_SEPERATOR_ = 0x001F;
+    private static final int UNIT_SEPARATOR_ = 0x001F;
       
     /**
     * Delete code point
