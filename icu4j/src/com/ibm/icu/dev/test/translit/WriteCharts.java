@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/WriteCharts.java,v $
- * $Date: 2001/11/03 05:44:32 $
- * $Revision: 1.4 $
+ * $Date: 2001/11/13 00:30:14 $
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -21,6 +21,7 @@ import java.io.*;
 
 public class WriteCharts {
     public static void main(String[] args) throws IOException {
+        testSet();
         String testSet = "";
         if (args.length == 0) args = all;
         for (int i = 0; i < args.length; ++i) {
@@ -31,6 +32,16 @@ public class WriteCharts {
                 print(testSet, args[i]);
                 testSet = "";
             }
+        }
+    }
+    
+    public static void testSet() {
+        UnicodeSet s = new UnicodeSet("[[\u0020-\u007E \u30A1-\u30FC \uFF61-\uFF9F\u3001\u3002][:Katakana:][:Mark:]]");
+        int count = s.getRangeCount();
+        for (int i = 0; i < count; ++i) {
+            int start = s.getRangeStart(i);
+            int end = s.getRangeEnd(i);
+            System.out.println(Integer.toString(start,16) + ".." + Integer.toString(end,16));
         }
     }
     
@@ -88,6 +99,12 @@ public class WriteCharts {
         UnicodeSet privateUse = new UnicodeSet("[:private use:]");
             
         Map map = new TreeMap();
+        
+        UnicodeSet targetSetPlusAnyways = new UnicodeSet(targetSet);
+        targetSetPlusAnyways.addAll(okAnyway);
+        
+        UnicodeSet sourceSetPlusAnyways = new UnicodeSet(sourceSet);
+        sourceSetPlusAnyways.addAll(okAnyway);
                 
         int count = sourceSet.getRangeCount();
         for (int i = 0; i < count; ++i) {
@@ -97,14 +114,14 @@ public class WriteCharts {
                 String ss = UTF16.valueOf(j);
                 String ts = t.transliterate(ss);
                 char group = 0;
-                if (!isIn(ts, targetSet)) {
+                if (!containsAll(targetSetPlusAnyways, ts)) {
                     group |= 1;
                 }
                 if (UTF16.countCodePoint(ts) == 1) {
                     leftOverSet.remove(UTF16.charAt(ts,0));
                 }
                 String rt = inverse.transliterate(ts);
-                if (!isIn(rt, sourceSet)) {
+                if (!containsAll(sourceSetPlusAnyways, rt)) {
                     group |= 2;
                 } else if (!ss.equals(rt)) {
                     group |= 4;
@@ -114,10 +131,11 @@ public class WriteCharts {
                     group |= 16;
                 }
                     
-                map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ss, Normalizer.DECOMP_COMPAT, 0)) + ss, 
+                map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ss, Normalizer.DECOMP_COMPAT, 0))
+                        + "\u0000" + ss, 
                     "<tr><td>" + ss + "<br><tt>" + hex.transliterate(ss) + "</tt></td><td>"
-                    + ts + "<br><tt>" + hex.transliterate(ts) + "</tt></td><td>"
-                    + rt + "<br><tt>" + hex.transliterate(rt) + "</tt></td></tr>" );
+                        + ts + "<br><tt>" + hex.transliterate(ts) + "</tt></td><td>"
+                        + rt + "<br><tt>" + hex.transliterate(rt) + "</tt></td></tr>" );
             }
         }
         
@@ -128,14 +146,14 @@ public class WriteCharts {
             int end = leftOverSet.getRangeEnd(i);
             for (int j = leftOverSet.getRangeStart(i); j <= end; ++j) {
                 String ts = UTF16.valueOf(j);
-                String decomp = Normalizer.normalize(ts, Normalizer.DECOMP_COMPAT, 0);
-                if (!decomp.equals(ts)) continue;
+                // String decomp = Normalizer.normalize(ts, Normalizer.DECOMP_COMPAT, 0);
+                // if (!decomp.equals(ts)) continue;
                 
                 String rt = inverse.transliterate(ts);
                 String flag = "";
                 char group = 0x80;
                     
-                if (!isIn(rt, sourceSet)) {
+                if (!containsAll(sourceSetPlusAnyways, rt)) {
                     group |= 8;
                 }
                 if (containsSome(privateUse, rt)) {
@@ -204,6 +222,7 @@ public class WriteCharts {
     
     static final UnicodeSet okAnyway = new UnicodeSet("[^[:Letter:]]");
     
+    /*
     // tests whether a string is in a set. Also checks for Common and Inherited
     public static boolean isIn(String s, UnicodeSet set) {
         int cp;
@@ -215,8 +234,9 @@ public class WriteCharts {
         }
         return true;
     }
+    */
     
-    // tests whether a string is in a set. Also checks for Common and Inherited
+    // tests whether a string is in a set.
     public static boolean containsSome(UnicodeSet set, String s) {
         int cp;
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(i)) {
@@ -224,6 +244,16 @@ public class WriteCharts {
             if (set.contains(cp)) return true;
         }
         return false;
+    }
+    
+    // tests whether a string is in a set.
+    public static boolean containsAll(UnicodeSet set, String s) {
+        int cp;
+        for (int i = 0; i < s.length(); i += UTF16.getCharCount(i)) {
+            cp = UTF16.charAt(s, i);
+            if (!set.contains(cp)) return false;
+        }
+        return true;
     }
     
     
