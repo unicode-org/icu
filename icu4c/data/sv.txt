@@ -97,6 +97,10 @@ sv {
             "\u221E",
             "\uFFFD",
     }
+    Eras { 
+            "f.Kr.",
+            "e.Kr.",
+    }
     ShortLanguage { "swe" }
     localPatternChars { "GyMdkHmsSEDFwWahKz" }
     zoneStrings { 
