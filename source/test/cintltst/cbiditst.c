@@ -733,12 +733,12 @@ static void TestMultipleParagraphs(void) {
     static const int32_t paraCount=11;
     static const int32_t paraBounds[]={0, 6, 12, 18, 20, 23, 24, 28, 30, 31, 32, 35};
     static const UBiDiLevel paraLevels[]={UBIDI_LTR, UBIDI_RTL, UBIDI_DEFAULT_LTR, UBIDI_DEFAULT_RTL, 22, 23};
-    static const UBiDiLevel multiLevels[6][11] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                                  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                                                  0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                                  0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0,
-                                                  22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22,
-                                                  23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23};
+    static const UBiDiLevel multiLevels[6][11] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                  {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                                                  {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                  {0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0},
+                                                  {22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22},
+                                                  {23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23}};
     static const char* const text2 = "\\u05d0 1-2\\u001c\\u0630 1-2\\u001c1-2";
     static const UBiDiLevel levels2[] = {1,1,2,2,2,0, 1,1,2,1,2,0, 2,2,2};
     UBiDiLevel gotLevel;
