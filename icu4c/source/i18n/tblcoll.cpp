@@ -396,7 +396,7 @@ UCollationResult RuleBasedCollator::compare(
 * character in the source string, convert them to an ASCII representation, and
 * put them into the collation key.  But it's trickier than that. Each
 * collation element in a string has three components: primary ('A' vs 'B'),
-* secondary ('u' vs '&#x00FC;'), and tertiary ('A' vs 'a'), and a primary difference
+* secondary ('u' vs '\u00FC'), and tertiary ('A' vs 'a'), and a primary difference
 * at the end of a string takes precedence over a secondary or tertiary
 * difference earlier in the string.
 *
@@ -408,7 +408,7 @@ UCollationResult RuleBasedCollator::compare(
 * Here's a hypothetical example, with the collation element represented as a
 * three-digit number, one digit for primary, one for secondary, etc.
 *
-* String:              A     a     B    &#x00C9;
+* String:              A     a     B    \u00C9
 * Collation Elements: 101   100   201  511
 * Collation Key:      1125<null>0001<null>1011<null>
 *
