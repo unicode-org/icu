@@ -509,7 +509,9 @@ ucol_getSortKey(const    UCollator    *coll,
  *  to preserve state array between calls and to provide
  *  the same type of UCharIterator set with the same string.
  *  The destination buffer provided must be big enough to store
- *  the number of requested bytes. 
+ *  the number of requested bytes. Generated sortkey is not 
+ *  compatible with sortkeys generated using ucol_getSortKey
+ *  API, since we don't do any compression.
  *  @param coll The UCollator containing the collation rules.
  *  @param iter UCharIterator containing the string we need 
  *              the sort key to be calculated for.
