@@ -283,8 +283,14 @@ static char *getInvariantString(uint32_t *line, UErrorCode *status)
         return NULL;
     }
 
-    count  = u_strlen(tokenValue->fChars) + 1;
-    result = uprv_malloc(count);
+    count = u_strlen(tokenValue->fChars);
+    if(!uprv_isInvariantUString(tokenValue->fChars, count)) {
+        *status = U_INVALID_FORMAT_ERROR;
+        error(*line, "invariant characters required for table keys, binary data, etc.");
+        return NULL;
+    }
+
+    result = uprv_malloc(count+1);
 
     if (result == NULL)
     {
@@ -292,7 +298,7 @@ static char *getInvariantString(uint32_t *line, UErrorCode *status)
         return NULL;
     }
 
-    u_UCharsToChars(tokenValue->fChars, result, count);
+    u_UCharsToChars(tokenValue->fChars, result, count+1);
     return result;
 }
 
@@ -768,13 +774,20 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
             }
             else
             {
-                error(line, "enexpected token %s", tokenNames[token]);
+                error(line, "unexpected token %s", tokenNames[token]);
             }
 
             return NULL;
         }
 
-        u_UCharsToChars(tokenValue->fChars, subtag, u_strlen(tokenValue->fChars) + 1);
+        if(uprv_isInvariantUString(tokenValue->fChars, -1)) {
+            u_UCharsToChars(tokenValue->fChars, subtag, u_strlen(tokenValue->fChars) + 1);
+        } else {
+            *status = U_INVALID_FORMAT_ERROR;
+            error(line, "invariant characters required for table keys");
+            table_close(table, status);
+            return NULL;
+        }
 
         if (U_FAILURE(*status))
         {
