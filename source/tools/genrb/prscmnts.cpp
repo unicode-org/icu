@@ -21,6 +21,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#if UCONFIG_NO_REGULAR_EXPRESSIONS==0 /* donot compile when RegularExpressions not available */
+
 #define MAX_SPLIT_STRINGS 20
 
 const char *patternStrings[UPC_LIMIT]={
@@ -226,4 +228,6 @@ getNote(const UChar* source, int32_t srcLen,
     return trim(*dest, destLen, status);
 
 }
+
+#endif /* UCONFIG_NO_REGULAR_EXPRESSIONS */
 
