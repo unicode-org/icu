@@ -270,13 +270,13 @@ private:
     friend class BreakIterator;
 };
 
-inline UClassID DictionaryBasedBreakIterator::getDynamicClassID(void) const {
-    return DictionaryBasedBreakIterator::getStaticClassID();
-}
+inline UClassID
+DictionaryBasedBreakIterator::getStaticClassID(void)
+{ return (UClassID)(&fgClassID); }
 
-inline UClassID DictionaryBasedBreakIterator::getStaticClassID(void) {
-    return (UClassID)(&fgClassID);
-}
+inline UClassID
+DictionaryBasedBreakIterator::getDynamicClassID(void) const
+{ return DictionaryBasedBreakIterator::getStaticClassID(); }
 
 U_NAMESPACE_END
 

@@ -446,7 +446,7 @@ public:
      *           same class ID. Objects of other classes have different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const { return (UClassID)&fgClassID; }
+    virtual UClassID getDynamicClassID(void) const;
 
     /**
      * Return the class ID for this class. This is useful only for comparing to a return
@@ -459,7 +459,7 @@ public:
      * @return   The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID(void);
 
 protected:
 
@@ -742,6 +742,13 @@ private:
 
 };
 
+inline UClassID
+GregorianCalendar::getStaticClassID(void)
+{ return (UClassID)&fgClassID; }
+
+inline UClassID
+GregorianCalendar::getDynamicClassID(void) const
+{ return GregorianCalendar::getStaticClassID(); }
 
 inline uint8_t GregorianCalendar::julianDayToDayOfWeek(double julian)
 {

@@ -635,7 +635,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID(void);
 
 #ifdef ICU_NEXTDOUBLE_USE_DEPRECATES
     /**
@@ -753,6 +753,12 @@ private:
     int32_t         fCount;
 };
  
+inline UClassID
+ChoiceFormat::getStaticClassID(void)
+{
+    return (UClassID)&fgClassID;
+}
+
 inline UClassID 
 ChoiceFormat::getDynamicClassID() const
 { 
