@@ -60,13 +60,13 @@ le_bool ScriptCompositeFontInstance::getGlyphPoint(LEGlyphID glyph, le_int32 poi
     return false;
 }
 
-const LEFontInstance *ScriptCompositeFontInstance::getSubFont(const LEUnicode chars[], le_int32 *start, le_int32 limit, le_int32 script, LEErrorCode &success) const
+const LEFontInstance *ScriptCompositeFontInstance::getSubFont(const LEUnicode chars[], le_int32 *offset, le_int32 limit, le_int32 script, LEErrorCode &success) const
 {
     if (LE_FAILURE(success)) {
         return NULL;
     }
 
-    if (chars == NULL || *start < 0 || limit < 0 || *start >= limit || script < 0 || script >= scriptCodeCount) {
+    if (chars == NULL || *offset < 0 || limit < 0 || *offset >= limit || script < 0 || script >= scriptCodeCount) {
         success = LE_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
@@ -77,7 +77,7 @@ const LEFontInstance *ScriptCompositeFontInstance::getSubFont(const LEUnicode ch
         return NULL;
     }
 
-    *start = limit;
+    *offset = limit;
     return result;
 }
 
