@@ -53,27 +53,12 @@ import com.ibm.text.SimpleDateFormat;
  * for information about the <code>Date</code> class.)
  *
  * <p><b>Note:</b>  This class is similar, but not identical, to the class
- * <code>java.util.Calendar</code>.  Changes in this class include:
- *
- * <ul>
- *  <li>Static methods for retrieving {@link DateFormat} and
- *      {@link DateFormatSymbols} objects that match a particular
- *      subclass of <code>Calendar</code>.
- *
- *  <li>Methods that make <code>Calendar</code> easier to subclass.  This includes
- *      default implementations for methods declared abstract on Calendar,
- *      so that subclasses are not forced to implement them.  In addition,
- *      there are several new utility methods that make it easier for
- *      subclassers to implement methods such as roll, add, computeTime,
- *      and computeFields.
- *  </ul>
+ * <code>java.util.Calendar</code>.  Changes are detailed below.
  *
  * <p>
  * Subclasses of <code>Calendar</code> interpret a <code>Date</code>
- * according to the rules of a specific calendar system. The platform
- * provides one concrete subclass of <code>Calendar</code>:
- * <code>GregorianCalendar</code>. Future subclasses could represent
- * the various types of lunar calendars in use in many parts of the world.
+ * according to the rules of a specific calendar system.  ICU4J contains
+ * several subclasses implementing different international calendar systems.
  *
  * <p>
  * Like other locale-sensitive classes, <code>Calendar</code> provides a
@@ -305,57 +290,6 @@ import com.ibm.text.SimpleDateFormat;
  * fields should be affected, the user interface can behave as most users
  * will intuitively expect.</p>
  *
- * <p><b>SUBCLASSING</b>
- *
- * <p><b>NOTE: This section needs to be rewritten to reflect the new
- * subclassing API.  Information contained here is out-of-date and
- * incorrect.</b>
- * 
- * <p>While ICU4J supports a number of calendar systems, it does not
- * support all of them.  In order to support a new calendar system,
- * <code>Calendar</code> must be subclassed.
- * Subclassing <code>Calendar</code> is not trivial.  This class has
- * been modified from the original <code>java.util.Calendar</code>
- * to improve subclassing support, but there are still several things
- * to look out for.  To create a subclass of <code>Calendar</code>,
- * begin by doing the following:
- *  <ul>
- *  <li>Override {@link #getMinimum getMinimum},
- *      {@link #getGreatestMinimum getGreatestMinimum},
- *      {@link #getMaximum getMaximum}, and 
- *      {@link #getLeastMaximum getLeastMaximum} to return
- *      appropriate values for the new calendar system.
- *
- *  <li>If there are any fields whose minimum or maximum value can vary
- *      depending on the actual date set in the calendar (e.g. the number
- *      of days in a month
- *      varies depending on the month and/or year), you must override
- *      {@link #getActualMaximum getActualMaximum} and/or
- *      {@link #getActualMinimum getActualMinimum}
- *      to take this into account.
- *
- *  <li>Override {@link #computeTime computeTime} and {@link #computeFields computeFields}
- *      to perform the conversion from field values to milliseconds and
- *      vice-versa.  These two methods are the real heart of any subclass
- *      and are typically the ones that require the most work.  The protected
- *      utility method {@link #weekNumber weekNumber} is often helpful when implementing
- *      these two methods.
- *
- *  <li>If there are any fields whose ranges are not always continuous, you
- *      must override {@link #roll roll} and {@link #add add} to take this
- *      into account.  For example, in the Hebrew calendar the month "Adar I"
- *      only occurs in leap years; in other years the calendar jumps from
- *      Shevat (month #4) to Adar (month #6).  The
- *      {@link HebrewCalendar#add HebrewCalendar.add} and
- *      {@link HebrewCalendar#roll HebrewCalendar.roll}
- *      methods take this into account, so that adding
- *      1 month to Shevat gives the proper result (Adar) in a non-leap year.
- *      The protected utility method {@link #pinField pinField} is often useful
- *      when implementing these two methods.
- *  </ul>
- *  See the individual descriptions of the above methods for more information
- *  on their implications for subclassing.
- *
  * <p><b>Note:</b> You should always use {@link #roll roll} and {@link #add add} rather
  * than attempting to perform arithmetic operations directly on the fields
  * of a <tt>Calendar</tt>.  It is quite possible for <tt>Calendar</tt> subclasses
@@ -364,11 +298,350 @@ import com.ibm.text.SimpleDateFormat;
  * methods will take this into account, while simple arithmetic manipulations
  * may give invalid results.
  *
+ * <p><big><big><b>Calendar Architecture in ICU4J</b></big></big></p>
+ * 
+ * <p>Recently the implementation of <code>Calendar</code> has changed
+ * significantly in order to better support subclassing. The original
+ * <code>Calendar</code> class was designed to support subclassing, but
+ * it had only one implemented subclass, <code>GregorianCalendar</code>.
+ * With the implementation of several new calendar subclasses, including
+ * the <code>BuddhistCalendar</code>, <code>ChineseCalendar</code>,
+ * <code>HebrewCalendar</code>, <code>IslamicCalendar</code>, and
+ * <code>JapaneseCalendar</code>, the subclassing API has been reworked
+ * thoroughly. This section details the new subclassing API and other
+ * ways in which <code>com.ibm.util.Calendar</code> differs from
+ * <code>java.util.Calendar</code>.
+ * </p>
+ * 
+ * <p><big><b>Changes</b></big></p>
+ * 
+ * <p>Overview of changes between the classic <code>Calendar</code>
+ * architecture and the new architecture.
+ * 
+ * <ul>
+ * 
+ *   <li>The <code>fields[]</code> array is <code>private</code> now
+ *     instead of <code>protected</code>.  Subclasses must access it
+ *     using the methods <code>internalSet()</code> and
+ *     <code>internalGet()</code>.  <b>Motivation:</b> Subclasses should
+ *     not directly access data members.</li>
+ * 
+ *   <li>The <code>time</code> long word is <code>private</code> now
+ *     instead of <code>protected</code>.  Subclasses may access it using
+ *     the method <code>internalGetTimeInMillis()</code>, which does not
+ *     provoke an update. <b>Motivation:</b> Subclasses should not
+ *     directly access data members.</li>
+ * 
+ *   <li>The scope of responsibility of subclasses has been drastically
+ *     reduced. As much functionality as possible is implemented in the
+ *     <code>Calendar</code> base class. As a result, it is much easier
+ *     to subclass <code>Calendar</code>. <b>Motivation:</b> Subclasses
+ *     should not have to reimplement common code. Certain behaviors are
+ *     common across calendar systems: The definition and behavior of
+ *     week-related fields and time fields, the arithmetic
+ *     (<code>add()</code> and <code>roll()</code>) behavior of many
+ *     fields, and the field validation system.</li>
+ * 
+ *   <li>The subclassing API has been completely redesigned.</li>
+ * 
+ *   <li>The <code>Calendar</code> base class contains some Gregorian
+ *     calendar algorithmic support that subclasses can use (specifically
+ *     in <code>handleComputeFields()</code>).  Subclasses can use the
+ *     methods <code>getGregorianXxx()</code> to obtain precomputed
+ *     values. <b>Motivation:</b> This is required by all
+ *     <code>Calendar</code> subclasses in order to implement consistent
+ *     time zone behavior, and Gregorian-derived systems can use the
+ *     already computed data.</li>
+ * 
+ *   <li>The <code>FIELD_COUNT</code> constant has been removed. Use
+ *     <code>getFieldCount()</code>.  In addition, framework API has been
+ *     added to allow subclasses to define additional fields.
+ *     <b>Motivation: </b>The number of fields is not constant across
+ *     calendar systems.</li>
+ * 
+ *   <li>The range of handled dates has been narrowed from +/-
+ *     ~300,000,000 years to +/- ~5,000,000 years. In practical terms
+ *     this should not affect clients. However, it does mean that client
+ *     code cannot be guaranteed well-behaved results with dates such as
+ *     <code>Date(Long.MIN_VALUE)</code> or
+ *     <code>Date(Long.MAX_VALUE)</code>. Instead, the
+ *     <code>Calendar</code> constants <code>MIN_DATE</code>,
+ *     <code>MAX_DATE</code>, <code>MIN_MILLIS</code>,
+ *     <code>MAX_MILLIS</code>, <code>MIN_JULIAN</code>, and
+ *     <code>MAX_JULIAN</code> should be used. <b>Motivation:</b> With
+ *     the addition of the <code>JULIAN_DAY</code> field, Julian day
+ *     numbers must be restricted to a 32-bit <code>int</code>.  This
+ *     restricts the overall supported range. Furthermore, restricting
+ *     the supported range simplifies the computations by removing
+ *     special case code that was used to accomodate arithmetic overflow
+ *     at millis near <code>Long.MIN_VALUE</code> and
+ *     <code>Long.MAX_VALUE</code>.</li>
+ * 
+ *   <li>New fields are implemented: <code>JULIAN_DAY</code> defines
+ *     single-field specification of the
+ *     date. <code>MILLISECONDS_IN_DAY</code> defines a single-field
+ *     specification of the wall time. <code>DOW_LOCAL</code> and
+ *     <code>YEAR_DOW</code> implement localized day-of-week and
+ *     week-of-year behavior.</li>
+ * 
+ *   <li>Subclasses can access millisecond constants
+ *     <code>ONE_SECOND</code>, <code>ONE_MINUTE</code>,
+ *     <code>ONE_HOUR</code>, <code>ONE_DAY</code>, and
+ *     <code>ONE_WEEK</code> defined in <code>Calendar</code>.</li>
+ * 
+ *   <li>New API has been added to suport calendar-specific subclasses
+ *     of <code>DateFormat</code>.</li>
+ * 
+ *   <li>Several subclasses have been implemented, representing
+ *     various international calendar systems.</li>
+ * 
+ * </ul>
+ * 
+ * <p><big><b>Subclass API</b></big></p>
+ * 
+ * <p>The original <code>Calendar</code> API was based on the experience
+ * of implementing a only a single subclass,
+ * <code>GregorianCalendar</code>. As a result, all of the subclassing
+ * kinks had not been worked out. The new subclassing API has been
+ * refined based on several implemented subclasses. This includes methods
+ * that must be overridden and methods for subclasses to call. Subclasses
+ * no longer have direct access to <code>fields</code> and
+ * <code>stamp</code>. Instead, they have new API to access
+ * these. Subclasses are able to allocate the <code>fields</code> array
+ * through a protected framework method; this allows subclasses to
+ * specify additional fields. </p>
+ * 
+ * <p>More functionality has been moved into the base class. The base
+ * class now contains much of the computational machinery to support the
+ * Gregorian calendar. This is based on two things: (1) Many calendars
+ * are based on the Gregorian calendar (such as the Buddhist and Japanese
+ * imperial calendars). (2) <em>All</em> calendars require basic
+ * Gregorian support in order to handle timezone computations. </p>
+ * 
+ * <p>Common computations have been moved into
+ * <code>Calendar</code>. Subclasses no longer compute the week related
+ * fields and the time related fields. These are commonly handled for all
+ * calendars by the base class. </p>
+ * 
+ * <p><b>Subclass computation of time <tt>=&gt;</tt> fields</b>
+ * 
+ * <p>The <code>ERA</code>, <code>YEAR</code>,
+ * <code>EXTENDED_YEAR</code>, <code>MONTH</code>,
+ * <code>DAY_OF_MONTH</code>, and <code>DAY_OF_YEAR</code> fields are
+ * computed by the subclass, based on the Julian day. All other fields
+ * are computed by <code>Calendar</code>.
+ * 
+ * <ul>
+ * 
+ *   <li>Subclasses should implement <code>handleComputeFields()</code>
+ *     to compute the <code>ERA</code>, <code>YEAR</code>,
+ *     <code>EXTENDED_YEAR</code>, <code>MONTH</code>,
+ *     <code>DAY_OF_MONTH</code>, and <code>DAY_OF_YEAR</code> fields,
+ *     based on the value of the <code>JULIAN_DAY</code> field. If there
+ *     are calendar-specific fields not defined by <code>Calendar</code>,
+ *     they must also be computed. These are the only fields that the
+ *     subclass should compute. All other fields are computed by the base
+ *     class, so time and week fields behave in a consistent way across
+ *     all calendars. The default version of this method in
+ *     <code>Calendar</code> implements a proleptic Gregorian
+ *     calendar. Within this method, subclasses may call
+ *     <code>getGregorianXxx()</code> to obtain the Gregorian calendar
+ *     month, day of month, and extended year for the given date.</li>
+ * 
+ * </ul>
+ * 
+ * <p><b>Subclass computation of fields <tt>=&gt;</tt> time</b>
+ * 
+ * <p>The interpretation of most field values is handled entirely by
+ * <code>Calendar</code>. <code>Calendar</code> determines which fields
+ * are set, which are not, which are set more recently, and so on. In
+ * addition, <code>Calendar</code> handles the computation of the time
+ * from the time fields and handles the week-related fields. The only
+ * thing the subclass must do is determine the extended year, based on
+ * the year fields, and then, given an extended year and a month, it must
+ * return a Julian day number.
+ * 
+ * <ul>
+ * 
+ *   <li>Subclasses should implement <code>handleGetExtendedYear()</code>
+ *     to return the extended year for this calendar system, based on the
+ *     <code>YEAR</code>, <code>EXTENDED_YEAR</code>, and any fields that
+ *     the calendar system uses that are larger than a year, such as
+ *     <code>ERA</code>.</li>
+ * 
+ *   <li>Subclasses should implement <code>handleComputeMonthStart(int
+ *     extendedYear, int month)</code> to return the Julian day number
+ *     associated with a month and extended year. This is the Julian day
+ *     number of the day before the first day of the month. The month
+ *     number is zero-based. This computation should not depend on any
+ *     field values.</li>
+ * 
+ * </ul>
+ * 
+ * <p><b>Other methods</b>
+ * 
+ * <ul>
+ * 
+ *   <li>Subclasses should implement <code>handleGetMonthLength(int
+ *     extendedYear, int month)</code> to return the number of days in a
+ *     given month of a given extended year. The month number, as always,
+ *     is zero-based.</li>
+ * 
+ *   <li>Subclasses should implement <code>handleGetYearLength(int
+ *     extendedYear)</code> to return the number of days in the given
+ *     extended year. This method is used by
+ *     <code>computeWeekFields()</code> to compute the
+ *     <code>WEEK_OF_YEAR</code> and <code>YEAR_WOY</code> fields.</li>
+ * 
+ *   <li>Subclasses should implement <code>handleGetLimit(int field, int
+ *     limitType)</code> to return the <code>MINIMUM</code>,
+ *     <code>GREATEST_MINIMUM</code>, <code>LEAST_MAXIMUM</code>, or
+ *     <code>MAXIMUM</code> of a field, depending on the value of
+ *     <code>limitType</code>. This method only needs to handle the
+ *     fields <code>ERA</code>, <code>YEAR</code>, <code>MONTH</code>,
+ *     <code>WEEK_OF_YEAR</code>, <code>WEEK_OF_MONTH</code>,
+ *     <code>DAY_OF_MONTH</code>, <code>DAY_OF_YEAR</code>,
+ *     <code>DAY_OF_WEEK_IN_MONTH</code>, <code>YEAR_WOY</code>, and
+ *     <code>EXTENDED_YEAR</code>.  Other fields are invariant (with
+ *     respect to calendar system) and are handled by the base
+ *     class.</li>
+ * 
+ *   <li>Optionally, subclasses may override <code>validateField(int
+ *     field)</code> to check any subclass-specific fields. If the
+ *     field's value is out of range, the method should throw an
+ *     <code>IllegalArgumentException</code>. The method may call
+ *     <code>super.validateField(field)</code> to handle fields in a
+ *     generic way, that is, to compare them to the range
+ *     <code>getMinimum(field)</code>..<code>getMaximum(field)</code>.</li>
+ * 
+ *   <li>Optionally, subclasses may override
+ *     <code>handleCreateFields()</code> to create an <code>int[]</code>
+ *     array large enough to hold the calendar's fields. This is only
+ *     necessary if the calendar defines additional fields beyond those
+ *     defined by <code>Calendar</code>. The length of the result must be
+ *     at least <code>BASE_FIELD_COUNT</code> and no more than
+ *     <code>MAX_FIELD_COUNT</code>.</li>
+ * 
+ *   <li>Optionally, subclasses may override
+ *     <code>handleGetDateFormat()</code> to create a
+ *     <code>DateFormat</code> appropriate to this calendar. This is only
+ *     required if a calendar subclass redefines the use of a field (for
+ *     example, changes the <code>ERA</code> field from a symbolic field
+ *     to a numeric one) or defines an additional field.</li>
+ * 
+ *   <li>Optionally, subclasses may override {@link #roll roll} and
+ *     {@link #add add} to handle fields that are discontinuous. For
+ *     example, in the Hebrew calendar the month &quot;Adar I&quot; only
+ *     occurs in leap years; in other years the calendar jumps from
+ *     Shevat (month #4) to Adar (month #6). The {@link
+ *     HebrewCalendar#add HebrewCalendar.add} and {@link
+ *     HebrewCalendar#roll HebrewCalendar.roll} methods take this into
+ *     account, so that adding 1 month to Shevat gives the proper result
+ *     (Adar) in a non-leap year. The protected utility method {@link
+ *     #pinField pinField} is often useful when implementing these two
+ *     methods. </li>
+ * 
+ * </ul>
+ * 
+ * <p><big><b>Normalized behavior</b></big>
+ * 
+ * <p>The behavior of certain fields has been made consistent across all
+ * calendar systems and implemented in <code>Calendar</code>.
+ * 
+ * <ul>
+ * 
+ *   <li>Time is normalized. Even though some calendar systems transition
+ *     between days at sunset or at other times, all ICU4J calendars
+ *     transition between days at <em>local zone midnight</em>.  This
+ *     allows ICU4J to centralize the time computations in
+ *     <code>Calendar</code> and to maintain basic correpsondences
+ *     between calendar systems. Affected fields: <code>AM_PM</code>,
+ *     <code>HOUR</code>, <code>HOUR_OF_DAY</code>, <code>MINUTE</code>,
+ *     <code>SECOND</code>, <code>MILLISECOND</code>,
+ *     <code>ZONE_OFFSET</code>, and <code>DST_OFFSET</code>.</li>
+ * 
+ *   <li>DST behavior is normalized. Daylight savings time behavior is
+ *     computed the same for all calendar systems, and depends on the
+ *     value of several <code>GregorianCalendar</code> fields: the
+ *     <code>YEAR</code>, <code>MONTH</code>, and
+ *     <code>DAY_OF_MONTH</code>. As a result, <code>Calendar</code>
+ *     always computes these fields, even for non-Gregorian calendar
+ *     systems. These fields are available to subclasses.</li>
+ * 
+ *   <li>Weeks are normalized. Although locales define the week
+ *     differently, in terms of the day on which it starts, and the
+ *     designation of week number one of a month or year, they all use a
+ *     common mechanism. Furthermore, the day of the week has a simple
+ *     and consistent definition throughout history. For example,
+ *     although the Gregorian calendar introduced a discontinuity when
+ *     first instituted, the day of week was not disrupted. For this
+ *     reason, the fields <code>DAY_OF_WEEK</code>, <code>WEEK_OF_YEAR,
+ *     WEEK_OF_MONTH</code>, <code>DAY_OF_WEEK_IN_MONTH</code>,
+ *     <code>DOW_LOCAL</code>, <code>YEAR_WOY</code> are all computed in
+ *     a consistent way in the base class, based on the
+ *     <code>EXTENDED_YEAR</code>, <code>DAY_OF_YEAR</code>,
+ *     <code>MONTH</code>, and <code>DAY_OF_MONTH</code>, which are
+ *     computed by the subclass.</li>
+ * 
+ * </ul>
+ * 
+ * <p><big><b>Supported range</b></big>
+ * 
+ * <p>The allowable range of <code>Calendar</code> has been
+ * narrowed. <code>GregorianCalendar</code> used to attempt to support
+ * the range of dates with millisecond values from
+ * <code>Long.MIN_VALUE</code> to <code>Long.MAX_VALUE</code>. This
+ * introduced awkward constructions (hacks) which slowed down
+ * performance. It also introduced non-uniform behavior at the
+ * boundaries. The new <code>Calendar</code> protocol specifies the
+ * maximum range of supportable dates as those having Julian day numbers
+ * of <code>-0x7F000000</code> to <code>+0x7F000000</code>. This
+ * corresponds to years from ~5,000,000 BCE to ~5,000,000 CE. Programmers
+ * should use the constants <code>MIN_DATE</code> (or
+ * <code>MIN_MILLIS</code> or <code>MIN_JULIAN</code>) and
+ * <code>MAX_DATE</code> (or <code>MAX_MILLIS</code> or
+ * <code>MAX_JULIAN</code>) in <code>Calendar</code> to specify an
+ * extremely early or extremely late date.</p>
+ * 
+ * <p><big><b>General notes</b></big>
+ * 
+ * <ul>
+ * 
+ *   <li>Calendars implementations are <em>proleptic</em>. For example,
+ *     even though the Gregorian calendar was not instituted until the
+ *     16th century, the <code>GregorianCalendar</code> class supports
+ *     dates before the historical onset of the calendar by extending the
+ *     calendar system backward in time. Similarly, the
+ *     <code>HebrewCalendar</code> extends backward before the start of
+ *     its epoch into zero and negative years. Subclasses do not throw
+ *     exceptions because a date precedes the historical start of a
+ *     calendar system. Instead, they implement
+ *     <code>handleGetLimit()</code> to return appropriate limits on
+ *     <code>YEAR</code>, <code>ERA</code>, etc. fields. Then, if the
+ *     calendar is set to not be lenient, out-of-range field values will
+ *     trigger and exception.</li>
+ * 
+ *   <li>Calendar system subclasses compute a <em>extended
+ *     year</em>. This differs from the <code>YEAR</code> field in that
+ *     it ranges over all integer values, including zero and negative
+ *     values, and it encapsulates the information of the
+ *     <code>YEAR</code> field and all larger fields.  Thus, for the
+ *     Gregorian calendar, the <code>EXTENDED_YEAR</code> is computed as
+ *     <code>ERA==AD ? YEAR : 1-YEAR</code>. Another example is the Mayan
+ *     long count, which has years (<code>KUN</code>) and nested cycles
+ *     of years (<code>KATUN</code> and <code>BAKTUN</code>). The Mayan
+ *     <code>EXTENDED_YEAR</code> is computed as <code>TUN + 20 * (KATUN
+ *     + 20 * BAKTUN)</code>. The <code>Calendar</code> base class uses
+ *     the <code>EXTENDED_YEAR</code> field to compute the week-related
+ *     fields.</li>
+ * 
+ * </ul>
+ *
  * @see          Date
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.12 $ $Date: 2000/11/21 06:55:09 $
+ * @version      $Revision: 1.13 $ $Date: 2000/11/21 20:17:39 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -2178,7 +2451,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     /**
      * Framework method to create a calendar-specific DateFormat object
      * using the the given pattern.  This method is responsible for
-     * creating the calendar- specific DateFormat and DateFormatSymbols
+     * creating the calendar-specific DateFormat and DateFormatSymbols
      * objects as needed.
      */
     protected DateFormat handleGetDateFormat(String pattern, Locale locale) {
@@ -2203,7 +2476,7 @@ public abstract class Calendar implements Serializable, Cloneable {
                 String pattern = null;
                 if ((timeStyle >= 0) && (dateStyle >= 0)) {
                     Object[] dateTimeArgs = { patterns[timeStyle],
-                                             patterns[dateStyle + 4] };
+                                              patterns[dateStyle + 4] };
                     pattern = MessageFormat.format(patterns[8], dateTimeArgs);
                 }
                 else if (timeStyle >= 0) {
@@ -2218,24 +2491,12 @@ public abstract class Calendar implements Serializable, Cloneable {
                 result = cal.handleGetDateFormat(pattern, loc);
             } catch (MissingResourceException e) {
                 // No custom patterns
-                if (dateStyle == -1) {
-	                result = SimpleDateFormat.getTimeInstance(timeStyle, loc);
-	            } else if (timeStyle == -1) {
-	                result = SimpleDateFormat.getDateInstance(dateStyle, loc);
-	            } else {
-	                result = SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
-	            }
+                result = DateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
                 DateFormatSymbols symbols = new DateFormatSymbols(cal, loc);
-                ((SimpleDateFormat)result).setDateFormatSymbols(symbols); // aliu
+                ((SimpleDateFormat) result).setDateFormatSymbols(symbols); // aliu
             }
         } else {
-            if (dateStyle == -1) {
-	            result = SimpleDateFormat.getTimeInstance(timeStyle, loc);
-	        } else if (timeStyle == -1) {
-	            result = SimpleDateFormat.getDateInstance(dateStyle, loc);
-	        } else {
-	            result = SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
-	        }
+            result = SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
         }
         result.setCalendar(cal);
         return result;
@@ -3096,7 +3357,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * method to perform a Gregorian calendar millis->fields computation.
      * To perform a Gregorian calendar fields->millis computation, call
      * computeGregorianMonthStart().
-     * @see computeGregorianMonthStart
+     * @see #computeGregorianMonthStart
      */
     protected final void computeGregorianFields(int julianDay) {
         int year, month, dayOfMonth, dayOfYear;
@@ -3689,9 +3950,9 @@ public abstract class Calendar implements Serializable, Cloneable {
      * millis->fields computation, call computeGregorianFields().
      * @param year extended Gregorian year
      * @param month zero-based Gregorian month
-     * @see computeGregorianFields
      * @return the Julian day number of the day before the first
      * day of the given month in the given extended year
+     * @see #computeGregorianFields
      */
     protected int computeGregorianMonthStart(int year, int month) {
 

@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/ChineseCalendar.java,v $
- * $Date: 2000/11/21 06:55:09 $
- * $Revision: 1.4 $
+ * $Date: 2000/11/21 20:17:39 $
+ * $Revision: 1.5 $
  */
 package com.ibm.util;
 import com.ibm.text.*;
@@ -47,6 +47,12 @@ import java.util.Locale;
  * of Huang Di, rather than the 61st.  This gives continuous year numbers
  * 60 years greater and cycle numbers one greater than what this class
  * implements.
+ *
+ * <p>Because <code>ChineseCalendar</code> defines an additional field and
+ * redefines the way the <code>ERA</code> field is used, it requires a new
+ * format class, <code>ChineseDateFormat</code>.  As always, use the
+ * methods <code>DateFormat.getXxxInstance(Calendar cal,...)</code> to
+ * obtain a formatter for this calendar.
  *
  * <p>References:<ul>
  * 
