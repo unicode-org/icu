@@ -18,7 +18,7 @@ da {
         Fallback{"en"}
     }
     Keys{
-       Fallback{"en"}
+        Fallback{"en"}
     }
 
     Countries {
@@ -276,20 +276,20 @@ da {
         "HH:mm:ss z",
         "HH:mm:ss",
         "HH:mm",
-        "d. MMMM yyyy",
-        "d. MMMM yyyy",
+        "EEEE dd MMMM yyyy",
+        "d. MMM yyyy",
         "dd-MM-yyyy",
         "dd-MM-yy",
         "{1} {0}",
     }
     DayAbbreviations { 
-        "s\u00F8",
-        "ma",
-        "ti",
-        "on",
-        "to",
-        "fr",
-        "l\u00F8",
+        "s\u00F8n",
+        "man",
+        "tir",
+        "ons",
+        "tor",
+        "fre",
+        "l\u00F8r",
     }
     DayNames { 
         "s\u00F8ndag",
@@ -308,7 +308,11 @@ da {
     Languages {
         Fallback{ "en"}
         ar { "Arabisk" }
+        az { "Aserbajdsjan" }
+        ba { "Baskisk" }
         bg { "Bulgarsk" }
+        bn { "Bengalsk" }
+        ca { "Katalansk" }
         cs { "Tjekkisk" }
         da { "Dansk" }
         //da { "dansk" } // Old value
@@ -322,11 +326,16 @@ da {
         he { "Hebraisk" }
         hr { "Kroatisk" }
         hu { "Ungarsk" }
+        in { "Indonesisk" }
         it { "Italiensk" }
         ja { "Japansk" }
+        ka { "Georgisk" }
+        kk { "Kasakhisk" }
         ko { "Koreansk" }
+        ku { "Kurdisk" }
         lt { "Litauisk" }
         lv { "Lettisk" }
+        mk { "Makedonsk" }
         nl { "Hollandsk" }
         no { "Norsk" }
         pl { "Polsk" }
@@ -335,8 +344,11 @@ da {
         ru { "Russisk" }
         sk { "Slovakisk" }
         sl { "Slovensk" }
+        sq { "Albansk" }
+        sr { "Serbisk" }
         sv { "Svensk" }
         tr { "Tyrkisk" }
+        uk { "Ukrainsk" }
         zh { "Kinesisk" }
         //zh_cn { "Kinesisk (Forkortet)" }
         //zh_tw { "Kinesisk (Uforkortet)" }
