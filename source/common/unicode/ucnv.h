@@ -803,78 +803,69 @@ ucnv_toUnicode (UConverter * converter,
 
 
 /**
- * Converts the source Unicode string into the target codepage with the 
- * specified Unicode converter.  If any problems during conversion
- * are encountered, the currently installed fromUnicode callback will be used.
- * This function is a more convenient but less efficient version of \Ref{ucnv_fromUnicode}.
- * targetLength may be 0 if you only want to know the exact number of 
- * target bytes required.
- * The maximum target buffer size required (barring callbacks) will be
- * sourceLength*ucnv_getMaxCharSize()
- * @param converter the Unicode converter
- * @param target the <TT>target</TT> buffer (<STRONG>not zero-terminated</STRONG>
- *   because the structure of codepages varies. There is
- *   not a reliable way to produce a terminator.)
- * @param targetCapacity the number of bytes available in the <TT>target</TT> buffer
- * @param source the <TT>source</TT> Unicode string
- * @param sourceLength the length of the source string. If -1 is passed in as the 
- *  value, the source buffer is a zero terminated string and whole source buffer
- *  will be converted.
- * @param err the error status code.
- * <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> is returned if the converter is <TT>NULL</TT>
- * or the source or target string is empty.
- * <code>U_BUFFER_OVERFLOW_ERROR</code> will be set if the target is full and
- *  there is still input left in the source.
- * @return number of bytes needed in target, regardless of <TT>targetCapacity</TT>
+ * Convert the Unicode string into a codepage string using an existing UConverter.
+ * The output string is NUL-terminated if possible.
+ *
+ * This function is a more convenient but less powerful version of ucnv_fromUnicode().
+ * It is only useful for whole strings, not for streaming conversion.
+ *
+ * The maximum output buffer capacity required (barring output from callbacks) will be
+ * srcLength*ucnv_getMaxCharSize(cnv).
+ *
+ * @param cnv the converter object to be used (ucnv_resetFromUnicode() will be called)
+ * @param src the input Unicode string
+ * @param srcLength the input string length, or -1 if NUL-terminated
+ * @param dest destination string buffer, can be NULL if destCapacity==0
+ * @param destCapacity the number of chars available at dest
+ * @param errorCode normal ICU error code;
+ *                  common error codes that may be set by this function include
+ *                  U_BUFFER_OVERFLOW_ERROR, U_STRING_NOT_TERMINATED_WARNING,
+ *                  U_ILLEGAL_ARGUMENT_ERROR, and conversion errors
+ * @return the length of the output string, not counting the terminating NUL;
+ *         if the length is greater than destCapacity, then the string will not fit
+ *         and a buffer of the indicated length would need to be passed in
  * @see ucnv_fromUnicode
  * @see ucnv_convert
- * @draft backslash versus Yen sign in shift-JIS
+ * @draft ICU 2.0 (new NUL-termination semantics)
  */
 U_CAPI int32_t U_EXPORT2
-ucnv_fromUChars (const UConverter * converter,
-                 char *target,
-                 int32_t targetCapacity,
-                 const UChar * source,
-                 int32_t sourceLength,
-                 UErrorCode * err);
+ucnv_fromUChars(UConverter *cnv,
+                char *dest, int32_t destCapacity,
+                const UChar *src, int32_t srcLength,
+                UErrorCode *pErrorCode);
+
 
 /**
- * Converts the source string in codepage encoding into the target string in
- * Unicode encoding.  For example, if a JIS converter is used, the source 
- * string in JIS encoding will be converted into Unicode and placed into
- * the provided target buffer. If any problems during conversion
- * are encountered, the currently installed fromUnicode callback will be used.
- * Barring callbacks which may write longer sequences, the target buffer should
- * be of size 1+(2*(sourceLen / ucnv_getMinCharSize())) because the worst case 
- * is that each source sequence is the minimum size, and that sequence produces
- * a surrogate pair. (plus the zero termination).
- * A zero-terminator will be placed at the end of the target buffer.
- * This function is a more convenient but less efficient version of \Ref{ucnv_toUnicode}.
- * @param converter the Unicode converter
- * @param source the source string in codepage encoding
- * @param target the target string in Unicode encoding
- * @param targetCapacity capacity of the target buffer
- * @param sourceSize : Number of bytes in <TT>source</TT> to be transcoded
- * @param err the error status code
- * <TT>U_MEMORY_ALLOCATION_ERROR</TT> will be returned if the
- * the internal process buffer cannot be allocated for transcoding.
- * <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> is returned if the converter is <TT>NULL</TT> or
- * if the source or target string is empty.
- * <code>U_BUFFER_OVERFLOW_ERROR</code> will be set if the target is full and there is still input left in the source.
- * @return the number of UChar needed in target (including the zero terminator)
- * @see ucnv_getNextUChar
+ * Convert the codepage string into a Unicode string using an existing UConverter.
+ * The output string is NUL-terminated if possible.
+ *
+ * This function is a more convenient but less powerful version of ucnv_toUnicode().
+ * It is only useful for whole strings, not for streaming conversion.
+ *
+ * The maximum output buffer capacity required (barring output from callbacks) will be
+ * 2*srcLength (each char may be converted into a surrogate pair).
+ *
+ * @param cnv the converter object to be used (ucnv_resetToUnicode() will be called)
+ * @param src the input codepage string
+ * @param srcLength the input string length, or -1 if NUL-terminated
+ * @param dest destination string buffer, can be NULL if destCapacity==0
+ * @param destCapacity the number of UChars available at dest
+ * @param errorCode normal ICU error code;
+ *                  common error codes that may be set by this function include
+ *                  U_BUFFER_OVERFLOW_ERROR, U_STRING_NOT_TERMINATED_WARNING,
+ *                  U_ILLEGAL_ARGUMENT_ERROR, and conversion errors
+ * @return the length of the output string, not counting the terminating NUL;
+ *         if the length is greater than destCapacity, then the string will not fit
+ *         and a buffer of the indicated length would need to be passed in
  * @see ucnv_toUnicode
  * @see ucnv_convert
- * @stable
+ * @draft ICU 2.0 (new NUL-termination semantics)
  */
 U_CAPI int32_t U_EXPORT2
-ucnv_toUChars (const UConverter * converter,
-               UChar * target,
-               int32_t targetCapacity,
-               const char *source,
-               int32_t sourceSize,
-               UErrorCode * err);
-
+ucnv_toUChars(UConverter *cnv,
+              UChar *dest, int32_t destCapacity,
+              const char *src, int32_t srcLength,
+              UErrorCode *pErrorCode);
 
 /********************************
  * Will convert a codepage buffer into unicode one character at a time.

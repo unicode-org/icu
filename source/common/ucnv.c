@@ -18,18 +18,21 @@
 *   05/09/00    helena      Added implementation to handle fallback mappings.
 *   06/20/2000  helena      OS/400 port changes; mostly typecast.
 */
-#include "umutex.h"
-#include "unicode/ures.h"
-#include "uhash.h"
-#include "ucnv_io.h"
-#include "unicode/ucnv_err.h"
-#include "ucnv_cnv.h"
-#include "ucnv_imp.h"
-#include "unicode/ucnv.h"
-#include "cmemory.h"
-#include "cstring.h"
+
+#include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/uloc.h"
+#include "unicode/ures.h"
+#include "unicode/ucnv.h"
+#include "unicode/ucnv_err.h"
+#include "cmemory.h"
+#include "cstring.h"
+#include "umutex.h"
+#include "uhash.h"
+#include "ustr_imp.h"
+#include "ucnv_imp.h"
+#include "ucnv_io.h"
+#include "ucnv_cnv.h"
 #include "ucnv_bld.h"
 
 #if 0
@@ -386,76 +389,46 @@ void   ucnv_setSubstChars (UConverter * converter,
   return;
 }
 
+int32_t
+ucnv_getDisplayName(const UConverter *cnv,
+                    const char *displayLocale,
+                    UChar *displayName, int32_t displayNameCapacity,
+                    UErrorCode *pErrorCode) {
+    UResourceBundle *rb;
+    const UChar *name;
+    int32_t length;
 
-
-
-int32_t  ucnv_getDisplayName (const UConverter * converter,
-                              const char *displayLocale,
-                              UChar * displayName,
-                              int32_t displayNameCapacity,
-                              UErrorCode * err)
-{
-  UChar stringToWriteBuffer[UCNV_MAX_CONVERTER_NAME_LENGTH];
-  UChar const *stringToWrite;
-  int32_t stringToWriteLength;
-  UResourceBundle *rb = NULL;
-
-  if (U_FAILURE (*err))
-    return 0;
-
-  /*create an RB, init the fill-in string, gets it from the RB */
-  rb = ures_open (NULL, displayLocale, err);
-
-  stringToWrite = ures_getStringByKey(rb,
-                converter->sharedData->staticData->name,
-                &stringToWriteLength,
-                err);
-  if (rb)
-    ures_close (rb);
-
-  if(U_FAILURE(*err))
-    {
-      /*Error While creating or getting resource from the resource bundle
-       *use the internal name instead
-       *
-       *sets stringToWriteLength (which accounts for a NULL terminator)
-       *and stringToWrite
-       */
-      stringToWriteLength = uprv_strlen (converter->sharedData->staticData->name) + 1;
-      stringToWrite = u_uastrcpy (stringToWriteBuffer, converter->sharedData->staticData->name);
-
-      /*Hides the fallback to the internal name from the user */
-      if (*err == U_MISSING_RESOURCE_ERROR)
-        *err = U_ZERO_ERROR;
+    /* check arguments */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
     }
 
-  /*At this point we have a displayName and its length
-   *we want to see if it fits in the user provided params
-   */
-
-  if (stringToWriteLength <= displayNameCapacity)
-    {
-      /*it fits */
-      u_strcpy (displayName, stringToWrite);
-    }
-  else
-    {
-      /*it doesn't fit */
-      *err = U_BUFFER_OVERFLOW_ERROR;
-
-      u_strncpy (displayName, stringToWrite, displayNameCapacity);
-      /*Zero terminates the string */
-      if (displayNameCapacity > 0)
-        displayName[displayNameCapacity - 1] = 0x0000;
+    if(cnv==NULL || displayNameCapacity<0 || (displayNameCapacity>0 && displayName==NULL)) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
     }
 
-  /*if the user provided us with a with an outputLength
-   *buffer we'll store in it the theoretical size of the
-   *displayString
-   */
-  return stringToWriteLength;
+    /* open the resource bundle and get the display name string */
+    rb=ures_open(NULL, displayLocale, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    /* use the internal name as the key */
+    name=ures_getStringByKey(rb, cnv->sharedData->staticData->name, &length, pErrorCode);
+    ures_close(rb);
+
+    if(U_SUCCESS(*pErrorCode)) {
+        /* copy the string */
+        u_memcpy(displayName, name, uprv_min(length, displayNameCapacity)*U_SIZEOF_UCHAR);
+    } else {
+        /* convert the internal name into a Unicode string */
+        *pErrorCode=U_ZERO_ERROR;
+        length=uprv_strlen(cnv->sharedData->staticData->name);
+        u_charsToUChars(cnv->sharedData->staticData->name, displayName, uprv_min(length, displayNameCapacity));
+    }
+    return u_terminateUChars(displayName, displayNameCapacity, length, pErrorCode);
 }
-
 
 /*resets the internal states of a converter
  *goal : have the same behaviour than a freshly created converter
@@ -800,239 +773,124 @@ void   ucnv_toUnicode (UConverter * _this,
   return;
 }
 
-int32_t   ucnv_fromUChars (const UConverter * converter,
-                           char *target,
-                           int32_t targetSize,
-                           const UChar * source,
-                           int32_t sourceSize,
-                           UErrorCode * err)
-{
-  const UChar *mySource_limit;
-  int32_t mySourceLength = sourceSize;
-  UConverter myConverter;
-  char *myTarget_limit;
-  int32_t targetCapacity = 0;
-  UConverterFromUnicodeArgs args;
+int32_t
+ucnv_fromUChars(UConverter *cnv,
+                char *dest, int32_t destCapacity,
+                const UChar *src, int32_t srcLength,
+                UErrorCode *pErrorCode) {
+    const UChar *srcLimit;
+    char *originalDest, *destLimit;
+    int32_t destLength;
 
-  if (U_FAILURE (*err))
-    return 0;
-
-  if ((converter == NULL) || (targetSize < 0))
-    {
-      *err = U_ILLEGAL_ARGUMENT_ERROR;
-      return 0;
-    }
-
-  /*makes a local copy of the UConverter */
-  myConverter = *converter;
-
-
-  /*Removes all state info on the UConverter */
-  ucnv_reset (&myConverter);
-
-  /*if the source is empty we return immediately */
-  if (sourceSize == -1) {
-    mySourceLength = u_strlen (source);
-  } 
-  if (mySourceLength == 0)
-    {
-      /*for consistency we still need to
-       *store 0 in the targetCapacity
-       *if the user requires it
-       */
-      return 0;
-    }
-
-  mySource_limit = source + mySourceLength;
-  myTarget_limit = target + targetSize;
-
-  /* Pin the limit to U_MAX_PTR.  NULL check is for AS/400. */
-  if((myTarget_limit < target) || ( (myTarget_limit == NULL) &&
-                                    (target != NULL))) {
-    myTarget_limit = (char *)U_MAX_PTR(target);
-  }
-
-  args.converter = &myConverter;
-  args.flush = TRUE;
-  args.offsets = NULL;
-  args.source = source;
-  args.sourceLimit = mySource_limit;
-  args.target = target;
-  args.targetLimit = myTarget_limit;
-  args.size = sizeof(args);
-  if (targetSize > 0)
-    {
-       /*
-        * ISO-2022 converters contain state information
-        * as soon as they are opened so we need to 
-        * deal with the stored carry over data
-        */
-       if (args.converter->charErrorBufferLength > 0)
-       {
-         int32_t myTargetIndex = 0;
-
-         flushInternalCharBuffer (args.converter, 
-                               args.target,
-                               &myTargetIndex,
-                               targetSize,
-                               NULL,
-                               err);
-         args.target+=myTargetIndex;
-       }
-      /*calls the specific conversion routines */
-      args.converter->sharedData->impl->fromUnicode(&args, err); 
-  
-      targetCapacity = args.target - target;
-    }
-
-  /*Updates targetCapacity to contain the number of bytes written to target */
-
-  /* If the output buffer is exhausted, we need to stop writing
-   * to it but continue the conversion in order to store in targetSize
-   * the number of bytes that was required*/
-  if (*err == U_BUFFER_OVERFLOW_ERROR || targetSize == 0)
-    {
-      char target2[CHUNK_SIZE];
-      const char *target2_limit = target2 + CHUNK_SIZE;
-
-      /*We use a stack allocated buffer around which we loop
-       *(in case the output is greater than CHUNK_SIZE)
-       */
-      do
-        {
-          *err = U_ZERO_ERROR;
-          args.target = target2;
-          args.targetLimit = target2_limit;
-          args.converter->sharedData->impl->fromUnicode(&args, err); 
-          /*updates the output parameter to contain the number of char required */
-          targetCapacity += (args.target - target2);
-        } while (*err == U_BUFFER_OVERFLOW_ERROR);
-      /*We will set the error code to U_BUFFER_OVERFLOW_ERROR only if
-       *nothing graver happened in the previous loop*/
-      if (U_SUCCESS (*err))
-        *err = U_BUFFER_OVERFLOW_ERROR;
-    }
-
-  return targetCapacity;
-}
-
-int32_t ucnv_toUChars (const UConverter * converter,
-                       UChar * target,
-                       int32_t targetSize,
-                       const char *source,
-                       int32_t sourceSize,
-                       UErrorCode * err)
-{
-  const char *mySource_limit = source + sourceSize;
-  UConverter myConverter;
-  UChar *myTarget_limit;
-  int32_t targetCapacity;
-  UConverterToUnicodeArgs args;
-
-  if (U_FAILURE (*err))
-    return 0;
-
-  if ((converter == NULL) || (targetSize < 0) || (sourceSize < 0))
-    {
-      *err = U_ILLEGAL_ARGUMENT_ERROR;
-      return 0;
-    }
-  /*Means there is no work to be done */
-  if (sourceSize == 0)
-    {
-      /*for consistency we still need to
-       *store 0 in the targetCapacity
-       *if the user requires it
-       */
-      if (targetSize >= 1)
-        {
-          target[0] = 0x0000;
-          return 1;
-        }
-      else
+    /* check arguments */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     }
 
-  /*makes a local copy of the UConverter */
-  myConverter = *converter;
-
-  /*Removes all state info on the UConverter */
-  ucnv_reset (&myConverter);
-
-  args.converter = &myConverter;
-  args.flush = TRUE;
-  args.offsets = NULL;
-  args.source = source;
-  args.sourceLimit = mySource_limit;
-  args.target = target;
-  args.size = sizeof(args);
-  if (targetSize > 0)
-  {
-      myTarget_limit = target + targetSize;
-
-      /* Pin the limit to U_MAX_PTR.  NULL check is for AS/400. */
-      if ((myTarget_limit == NULL) || (myTarget_limit < target)) {
-          myTarget_limit = ((UChar*)U_MAX_PTR(target));
-      }
-
-      /*Not in pure pre-flight mode */
-
-      args.targetLimit = myTarget_limit;
-     /*
-      * Some converters have state immidiately after
-      * an open call so we need to deal with that
-      */
-      if (args.converter->UCharErrorBufferLength > 0)
-      {
-        int32_t myTargetIndex = 0;
-
-        flushInternalUnicodeBuffer (args.converter, 
-                                  args.target,
-                                  &myTargetIndex,
-                                  targetSize,
-                                  NULL,
-                                  err);
-        args.target += myTargetIndex;
-      }
-      args.converter->sharedData->impl->toUnicode(&args, err); 
-
-      /*Null terminates the string */
-      *(args.target) = 0x0000;
+    if( cnv==NULL ||
+        destCapacity<0 || (destCapacity>0 && dest==NULL) ||
+        srcLength<-1 || (srcLength!=0 && src==NULL)
+    ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
     }
 
+    /* initialize */
+    ucnv_resetFromUnicode(cnv);
+    originalDest=dest;
+    if(srcLength==-1) {
+        srcLength=u_strlen(src);
+    }
+    if(srcLength>0) {
+        srcLimit=src+srcLength;
+        destLimit=dest+destCapacity;
 
-  /*Rigs targetCapacity to have at least one cell for zero termination */
-  /*Updates targetCapacity to contain the number of bytes written to target */
-  targetCapacity = 1;
-  targetCapacity += args.target - target;
+        /* pin the destination limit to U_MAX_PTR; NULL check is for OS/400 */
+        if(destLimit<dest || (destLimit==NULL && dest!=NULL)) {
+            destLimit=(char *)U_MAX_PTR(dest);
+        }
 
-  /* If the output buffer is exhausted, we need to stop writing
-   * to it but if the input buffer is not exhausted,
-   * we need to continue the conversion in order to store in targetSize
-   * the number of bytes that was required
-   */
-  if (*err == U_BUFFER_OVERFLOW_ERROR || targetSize == 0)
-    {
-      UChar target2[CHUNK_SIZE];
-      const UChar *target2_limit = target2 + CHUNK_SIZE;
+        /* perform the conversion */
+        ucnv_fromUnicode(cnv, &dest, destLimit, &src, srcLimit, 0, TRUE, pErrorCode);
+        destLength=(int32_t)(dest-originalDest);
 
-      /*We use a stack allocated buffer around which we loop
-         (in case the output is greater than CHUNK_SIZE) */
-      do
-        {
-          *err = U_ZERO_ERROR;
-          args.target = target2;
-          args.targetLimit = target2_limit;
-          args.converter->sharedData->impl->toUnicode(&args, err); 
-          /*updates the output parameter to contain the number of char required */
-          targetCapacity += args.target - target2;
-        } while (*err == U_BUFFER_OVERFLOW_ERROR);
+        /* if an overflow occurs, then get the preflighting length */
+        if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+            char buffer[1024];
 
-      if (U_SUCCESS (*err))
-        *err = U_BUFFER_OVERFLOW_ERROR;
+            destLimit=buffer+sizeof(buffer);
+            do {
+                dest=buffer;
+                *pErrorCode=U_ZERO_ERROR;
+                ucnv_fromUnicode(cnv, &dest, destLimit, &src, srcLimit, 0, TRUE, pErrorCode);
+                destLength+=(int32_t)(dest-buffer);
+            } while(*pErrorCode==U_BUFFER_OVERFLOW_ERROR);
+        }
+    } else {
+        destLength=0;
     }
 
-  return targetCapacity;
+    return u_terminateChars(originalDest, destCapacity, destLength, pErrorCode);
+}
+
+int32_t
+ucnv_toUChars(UConverter *cnv,
+              UChar *dest, int32_t destCapacity,
+              const char *src, int32_t srcLength,
+              UErrorCode *pErrorCode) {
+    const char *srcLimit;
+    UChar *originalDest, *destLimit;
+    int32_t destLength;
+
+    /* check arguments */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    if( cnv==NULL ||
+        destCapacity<0 || (destCapacity>0 && dest==NULL) ||
+        srcLength<-1 || (srcLength!=0 && src==NULL)
+    ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /* initialize */
+    ucnv_resetToUnicode(cnv);
+    originalDest=dest;
+    if(srcLength==-1) {
+        srcLength=uprv_strlen(src);
+    }
+    if(srcLength>0) {
+        srcLimit=src+srcLength;
+        destLimit=dest+destCapacity;
+
+        /* pin the destination limit to U_MAX_PTR; NULL check is for OS/400 */
+        if(destLimit<dest || (destLimit==NULL && dest!=NULL)) {
+            destLimit=(UChar *)U_MAX_PTR(dest);
+        }
+
+        /* perform the conversion */
+        ucnv_toUnicode(cnv, &dest, destLimit, &src, srcLimit, 0, TRUE, pErrorCode);
+        destLength=(int32_t)(dest-originalDest);
+
+        /* if an overflow occurs, then get the preflighting length */
+        if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+            UChar buffer[1024];
+
+            destLimit=buffer+sizeof(buffer)/U_SIZEOF_UCHAR;
+            do {
+                dest=buffer;
+                *pErrorCode=U_ZERO_ERROR;
+                ucnv_toUnicode(cnv, &dest, destLimit, &src, srcLimit, 0, TRUE, pErrorCode);
+                destLength+=(int32_t)(dest-buffer);
+            } while(*pErrorCode==U_BUFFER_OVERFLOW_ERROR);
+        }
+    } else {
+        destLength=0;
+    }
+
+    return u_terminateUChars(originalDest, destCapacity, destLength, pErrorCode);
 }
 
 UChar32 ucnv_getNextUChar(UConverter * converter,
