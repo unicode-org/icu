@@ -66,7 +66,10 @@ StringReplacer::StringReplacer(const UnicodeString& theOutput,
 /**
  * Copy constructor.
  */
-StringReplacer::StringReplacer(const StringReplacer& other) {
+StringReplacer::StringReplacer(const StringReplacer& other) :
+    UnicodeFunctor(other),
+    UnicodeReplacer(other)
+{
     output = other.output;
     cursorPos = other.cursorPos;
     hasCursor = other.hasCursor;
