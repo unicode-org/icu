@@ -1,2 +1,6 @@
 Makefile
 *.res
+*.c
+*.dat
+*.lst
+*.mak
