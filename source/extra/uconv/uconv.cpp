@@ -463,12 +463,12 @@ static UBool convertFile(const char *pname,
         flush = rd!=readsize;
         ucnv_toUnicode(convfrom, &uniiter, uniiter + buffsize, &cbuffiter, cbuffiter + rd, fromoffsets, flush, &err);
           
-        foffset += cbuffiter - buff - 1;
+        foffset += cbuffiter - buff;
 
         if (U_FAILURE(err))
         {
             char pos[32];
-            sprintf(pos, "%u", foffset);
+            sprintf(pos, "%u", foffset - 1);
             UnicodeString str(pos, strlen(pos) + 1);
             initMsg(pname);
             u_wmsg("problemCvtToU", str.getBuffer(), u_wmsg_errorName(err));
