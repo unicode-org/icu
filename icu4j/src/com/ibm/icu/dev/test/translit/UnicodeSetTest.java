@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2002/10/08 18:29:16 $ 
- * $Revision: 1.34 $
+ * $Date: 2002/11/08 01:20:24 $ 
+ * $Revision: 1.35 $
  *
  *****************************************************************************************
  */
@@ -734,10 +734,26 @@ public class UnicodeSetTest extends TestFmwk {
             "[\\N{ latin small letter  a  }[:name= latin small letter z:]]",
             "az",
             "qrs",
+
+            // JB#2015
+            "[:any:]",
+            "a\\U0010FFFF",
+            "",
+            
+            "[:nv=0.5:]",
+            "\u00BD\u0F2A",
+            "\u00BC",
         };
 
         for (int i=0; i<DATA.length; i+=3) {
-            UnicodeSet set = new UnicodeSet(DATA[i]);
+            UnicodeSet set;
+            try {
+                set = new UnicodeSet(DATA[i]);
+            } catch (IllegalArgumentException e) {
+                errln("FAIL: Couldn't create UnicodeSet from pattern \"" +
+                      DATA[i] + '"');
+                continue;
+            }
             expectContainment(set, DATA[i+1], DATA[i+2]);
         }
     }
