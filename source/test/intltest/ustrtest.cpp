@@ -951,8 +951,10 @@ UnicodeStringTest::TestMiscellaneous()
     UnicodeString   test2("This is a test");
     UnicodeString   test3("Me too!");
 
-    if (test1.isBogus() || test2.isBogus() || test3.isBogus())
+    // test isBogus() and setToBogus()
+    if (test1.isBogus() || test2.isBogus() || test3.isBogus()) {
         errln("A string returned TRUE for isBogus()!");
+    }
 
     test3.setTo(FALSE, (const UChar *)0, -1);
     if(!test3.isBogus()) {
@@ -961,6 +963,18 @@ UnicodeStringTest::TestMiscellaneous()
 
     if (test1.hashCode() != test2.hashCode() || test1.hashCode() == test3.hashCode())
         errln("hashCode() failed");
+
+    if(test3.getBuffer()!=0) {
+        errln("bogus.getBuffer()!=0");
+    }
+    test3.append((UChar)0x61);
+    if(test3.isBogus() || test3.getBuffer()==0) {
+        errln("Unable to revive a bogus string");
+    }
+    test3.setToBogus();
+    if(!test3.isBogus() || test3.getBuffer()!=0) {
+        errln("setToBogus() failed to make a string bogus");
+    }
 
     // test getBuffer(minCapacity) and releaseBuffer()
     test1=UnicodeString(); // make sure that it starts with its stackBuffer

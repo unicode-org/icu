@@ -1424,6 +1424,7 @@ public:
   /**
    * Determine if this string is still valid.
    * @return TRUE if the string is valid, FALSE otherwise
+   * @see setToBogus()
    * @draft
    */
   inline UBool isBogus(void) const;
@@ -1564,6 +1565,29 @@ public:
   UnicodeString &setTo(UChar *buffer,
                        int32_t buffLength,
                        int32_t buffCapacity);
+
+  /**
+   * Make this UnicodeString object invalid.
+   * The string will test TRUE with isBogus().
+   *
+   * This is used to indicate that an operation failed, and that
+   * the result string is "bogus" - which can be tested with isBogus().
+   * This utility function is used throughout the UnicodeString
+   * implementation, and may be used in other functions,
+   * especially but not exclusively when such functions do not
+   * take a UErrorCode for simplicity.
+   *
+   * A "bogus" string is essentially empty, and getBuffer() const
+   * will return 0.
+   *
+   * The string object can be "revived" by assigning (operator=)
+   * another string, or by using one of the other setToXYZ functions,
+   * or simply by modifying it (which will work like with an empty string).
+   *
+   * @see isBogus()
+   * @draft ICU 2.0 was private in earlier releases
+   */
+  void setToBogus();
 
   /**
    * Set the character at the specified offset to the specified character.
@@ -2602,9 +2626,6 @@ private:
 
   // release the array if owned
   inline void releaseArray();
-
-  // utility method to get around lack of exception handling
-  void setToBogus(void);
 
   // Pin start and limit to acceptable values.
   inline void pinIndices(UTextOffset& start,
