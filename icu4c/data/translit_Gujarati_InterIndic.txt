@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Gujarati_InterIndic.txt
-// Date: Thu Oct 25 22:17:21 2001
+// Date: Sat Nov 10 17:25:41 2001
 //--------------------------------------------------------------------
 
 // Gujarati_InterIndic
@@ -41,10 +41,10 @@ translit_Gujarati_InterIndic {
 "\u0a89>\ue009;" // LETTER U
 "\u0a8a>\ue00a;" // LETTER UU
 "\u0a8b>\ue00b;" // LETTER VOCALIC R
-// \u0a8d>; # UNMAPPED Gujarati-InterIndic: VOWEL CANDRA E
+"\u0a8d>\ue00d;" // UNMAPPED Gujarati-InterIndic: VOWEL CANDRA E
 "\u0a8f>\ue00f;" // LETTER E
 "\u0a90>\ue010;" // LETTER AI
-// \u0a91>; # UNMAPPED Gujarati-InterIndic: VOWEL CANDRA O
+"\u0a91>\ue011;" // UNMAPPED Gujarati-InterIndic: VOWEL CANDRA O
 "\u0a93>\ue013;" // LETTER O
 "\u0a94>\ue014;" // LETTER AU
 "\u0a95>\ue015;" // LETTER KA

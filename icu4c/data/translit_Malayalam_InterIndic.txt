@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Malayalam_InterIndic.txt
-// Date: Thu Oct 25 22:17:22 2001
+// Date: Sat Nov 10 17:25:42 2001
 //--------------------------------------------------------------------
 
 // Malayalam_InterIndic

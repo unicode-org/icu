@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Gujarati.txt
-// Date: Thu Oct 25 22:17:21 2001
+// Date: Sat Nov 10 17:25:41 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Gujarati
@@ -42,9 +42,13 @@ translit_InterIndic_Gujarati {
 "\ue00a>\u0a8a;" // LETTER UU
 "\ue00b>\u0a8b;" // LETTER VOCALIC R
 "\ue00c>\u0ab2\u0ac3;" // REMAP (indicExceptions.txt): \u0a8c>\u0ab2\u0ac3 = LETTER VOCALIC L>LETTER LA.VOWEL SIGN VOCALIC R
-// \ue00f>; # UNMAPPED InterIndic-Gujarati: LETTER EE (\u0a8f = LETTER E)
+"\ue00d>\u0a8d;" // GUJARATI VOWEL CANDRA E
+"\ue00e>\u0a8f;" // FALLBACK
+"\ue00f>\u0a8f;" //  InterIndic-Gujarati: LETTER EE (\u0a8f = LETTER E)
 "\ue010>\u0a90;" // LETTER AI
-// \ue013>; # UNMAPPED InterIndic-Gujarati: LETTER OO (\u0a93 = LETTER O)
+"\ue011>\u0a91;" // FALLBACK
+"\ue012>\u0a93;" // FALLBACK
+"\ue013>\u0a93;" // UNMAPPED InterIndic-Gujarati: LETTER OO (\u0a93 = LETTER O)
 "\ue014>\u0a94;" // LETTER AU
 "\ue015>\u0a95;" // LETTER KA
 "\ue016>\u0a96;" // LETTER KHA
@@ -66,7 +70,7 @@ translit_InterIndic_Gujarati {
 "\ue026>\u0aa6;" // LETTER DA
 "\ue027>\u0aa7;" // LETTER DHA
 "\ue028>\u0aa8;" // LETTER NA
-"\ue029>\u0aa8;" // REMAP (indicExceptions.txt): \u0aa9>\u0aa8 = LETTER NNNA>LETTER NA
+"\ue029>\u0aa8\u0abc;" // FALLBACK to NA+NUKTA
 "\ue02a>\u0aaa;" // LETTER PA
 "\ue02b>\u0aab;" // LETTER PHA
 "\ue02c>\u0aac;" // LETTER BA
@@ -74,9 +78,10 @@ translit_InterIndic_Gujarati {
 "\ue02e>\u0aae;" // LETTER MA
 "\ue02f>\u0aaf;" // LETTER YA
 "\ue030>\u0ab0;" // LETTER RA
+"\ue031>\u0ab0\u0abc;" // FALLBACK
 "\ue032>\u0ab2;" // LETTER LA
 "\ue033>\u0ab3;" // LETTER LLA
-"\ue034>\u0ab3;" // REMAP (indicExceptions.txt): \u0ab4>\u0ab3 = LETTER LLLA>LETTER LLA
+"\ue034>\u0ab3\u0abc;" //  LETTER LLLA>LETTER LLA+NUKTA
 "\ue035>\u0ab5;" // LETTER VA
 "\ue036>\u0ab6;" // LETTER SHA
 "\ue037>\u0ab7;" // LETTER SSA
@@ -92,19 +97,23 @@ translit_InterIndic_Gujarati {
 "\ue043>\u0ac3;" // VOWEL SIGN VOCALIC R
 "\ue044>\u0ac4;" // VOWEL SIGN VOCALIC RR
 "\ue045>\u0ac5;" // VOWEL SIGN CANDRA E
-// \ue047>; # UNMAPPED InterIndic-Gujarati: VOWEL SIGN EE (\u0ac7 = VOWEL SIGN E)
+"\ue046>\u0ac7;" // FALLBACK
+"\ue047>\u0ac7;" //  InterIndic-Gujarati: VOWEL SIGN EE (\u0ac7 = VOWEL SIGN E)
 "\ue048>\u0ac8;" // VOWEL SIGN AI
 "\ue049>\u0ac9;" // VOWEL SIGN CANDRA O
-// \ue04b>; # UNMAPPED InterIndic-Gujarati: VOWEL SIGN OO (\u0acb = VOWEL SIGN O)
+"\ue04a>\u0acb;" // FALLBACK
+"\ue04b>\u0acb;" // UNMAPPED InterIndic-Gujarati: VOWEL SIGN OO (\u0acb = VOWEL SIGN O)
 "\ue04c>\u0acc;" // VOWEL SIGN AU
 "\ue04d>\u0acd;" // SIGN VIRAMA
 "\ue050>\u0ad0;" // OM
-// \ue055>; # UNMAPPED InterIndic-Gujarati: LENGTH MARK
+//\ue055>; # UNMAPPED InterIndic-Gujarati: LENGTH MARK
 "\ue056>\u0ac8;" // REMAP (indicExceptions.txt): \u0ad6>\u0ac8 = AI LENGTH MARK>VOWEL SIGN AI
 "\ue057>\u0acc;" // REMAP (indicExceptions.txt): \u0ad7>\u0acc = AU LENGTH MARK>VOWEL SIGN AU
+"\ue058>\u0a95\u0abc;" // FALLBACK
 "\ue059>\u0a96\u0abc;" // REMAP (indicExceptions.txt): \u0ad9>\u0a96\u0abc = LETTER KHHA>LETTER KHA.SIGN NUKTA
 "\ue05a>\u0a97\u0abc;" // REMAP (indicExceptions.txt): \u0ada>\u0a97\u0abc = LETTER GHHA>LETTER GA.SIGN NUKTA
 "\ue05b>\u0a9c\u0abc;" // REMAP (indicExceptions.txt): \u0adb>\u0a9c\u0abc = LETTER ZA>LETTER JA.SIGN NUKTA
+"\ue05c>\u0aa1\u0abc;" // FALLBACK
 "\ue05d>\u0aa2\u0abc;" // REMAP (indicExceptions.txt): \u0add>\u0aa2\u0abc = LETTER RHA>LETTER DDHA.SIGN NUKTA
 "\ue05e>\u0aab\u0abc;" // REMAP (indicExceptions.txt): \u0ade>\u0aab\u0abc = LETTER FA>LETTER PHA.SIGN NUKTA
 "\ue05f>\u0aaf\u0abc;" // REMAP (indicExceptions.txt): \u0adf>\u0aaf\u0abc = LETTER YYA>LETTER YA.SIGN NUKTA
@@ -122,12 +131,7 @@ translit_InterIndic_Gujarati {
 "\ue06d>\u0aed;" // DIGIT SEVEN
 "\ue06e>\u0aee;" // DIGIT EIGHT
 "\ue06f>\u0aef;" // DIGIT NINE
-// \ue080>; # UNMAPPED InterIndic-Gujarati: ISSHAR
-"\ue00f>\u0a8f;" // LETTER E
-"\ue013>\u0a93;" // LETTER O
-// \ue083>; # UNMAPPED InterIndic-Gujarati: LETTER RRA (\u0a83 = SIGN VISARGA)
-"\ue047>\u0ac7;" // VOWEL SIGN E
-"\ue04b>\u0acb;" // VOWEL SIGN O
+//\ue080>; # UNMAPPED InterIndic-Gujarati: ISSHAR
 //    :: NFC (NFD) ;
 // eof
   }
