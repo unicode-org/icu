@@ -47,7 +47,7 @@
 // static initialization
 const char                 TimeZone::fgClassID = 0; // Value is irrelevant
 
-TimeZone*                  DEFAULT_ZONE = NULL;
+static TimeZone*           DEFAULT_ZONE = NULL;
 
 static const UChar         GMT_ID[] = {0x47, 0x4D, 0x54, 0x00}; /* "GMT" */
 static const int32_t       GMT_ID_LENGTH = 3;
