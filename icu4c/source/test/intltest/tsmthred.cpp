@@ -12,6 +12,12 @@
 
 #include <unicode/umachine.h>
 
+// Just turn off threads on cygwin, so that we can test
+// the other stuff. This needs to be investigated further.
+#if defined(U_CYGWIN)
+#define ICU_USE_THREADS 0
+#endif
+
 #if !defined(WIN32) && !defined(XP_MAC) && !defined(U_RHAPSODY)
 #define POSIX 1
 #endif

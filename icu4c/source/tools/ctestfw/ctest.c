@@ -34,6 +34,10 @@ static const struct TestNode* currentTest;
 typedef enum { RUNTESTS, SHOWTESTS } TestMode;
 #define TEST_SEPARATOR '/'
 
+#ifndef C_TEST_IMPL
+#define C_TEST_IMPL
+#endif
+
 #include "unicode/ctest.h"
 
 static char ERROR_LOG[MAX_TEST_LOG][MAXTESTNAME];

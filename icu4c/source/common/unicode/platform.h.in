@@ -232,13 +232,12 @@ typedef unsigned short uint16_t;
 #define U_EXPORT
 /* U_CALLCONV is releated to U_EXPORT2 */
 #define U_EXPORT2
-#define U_IMPORT 
 
 /* cygwin needs to export/import data */
 #ifdef U_CYGWIN
-#define U_DATA_IMPORT __declspec(dllimport)
+#define U_IMPORT __declspec(dllimport)
 #else
-#define U_DATA_IMPORT 
+#define U_IMPORT 
 #endif
 
 /*===========================================================================*/
