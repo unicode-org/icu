@@ -69,8 +69,12 @@
 #define HAVE_UINT32_T @HAVE_UINT32_T@
 #endif
 
-#ifndef HAVE_BOOL_T
-#define HAVE_BOOL_T @HAVE_BOOL_T@
+#ifndef HAVE_INT64_T
+#define HAVE_INT64_T @HAVE_INT64_T@
+#endif
+
+#ifndef HAVE_UINT64_T
+#define HAVE_UINT64_T @HAVE_UINT64_T@
 #endif
 
 
