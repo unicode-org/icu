@@ -78,10 +78,11 @@ public class TimeScaleMonkeyTest extends TestFmwk
     public void TestRoundTrip()
     {
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
-            UniversalTimeScale.TimeScaleData data = UniversalTimeScale.getTimeScaleData(scale);
+            long fromMin = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MIN_VALUE);
+            long fromMax = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MAX_VALUE);
             int i = 0;
             
-            initRandom(data.fromMin, data.fromMax);
+            initRandom(fromMin, fromMax);
             
             while (i < LOOP_COUNT) {
                 long value = randomInRange();

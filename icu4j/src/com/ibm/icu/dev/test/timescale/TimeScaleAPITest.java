@@ -115,9 +115,8 @@ public class TimeScaleAPITest extends TestFmwk
         }
         
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
-            UniversalTimeScale.TimeScaleData data = UniversalTimeScale.getTimeScaleData(scale);
-            double fromMin = (double) data.fromMin;
-            double fromMax = (double) data.fromMax;
+            double fromMin = (double) UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MIN_VALUE);
+            double fromMax = (double) UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MAX_VALUE);
             
             try {
                 result = UniversalTimeScale.from(0.0, scale);
@@ -134,7 +133,7 @@ public class TimeScaleAPITest extends TestFmwk
             // Only do this test if we can exactly represent fromMin - 1 
             if (fromMin - 1 > fromMin) {
                 try {
-                    result = UniversalTimeScale.from(data.fromMin - 1, scale);
+                    result = UniversalTimeScale.from(fromMin - 1, scale);
                     errln("from(fromMin - 1, " + scale + ") did not throw IllegalArgumentException.");
                 } catch (IllegalArgumentException iae) {
                 }
@@ -147,9 +146,9 @@ public class TimeScaleAPITest extends TestFmwk
             }
             
             // Only do this test if we can exactly represent fromMax + 1
-            if (data.fromMax < fromMax + 1) {
+            if (fromMax < fromMax + 1) {
                 try {
-                    result = UniversalTimeScale.from(data.fromMax + 1, scale);
+                    result = UniversalTimeScale.from(fromMax + 1, scale);
                     errln("from(fromMax + 1, " + scale + ") did not throw IllegalArgumentException.");
                } catch (IllegalArgumentException iae) {
                }
@@ -174,7 +173,8 @@ public class TimeScaleAPITest extends TestFmwk
         }
         
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
-            UniversalTimeScale.TimeScaleData data = UniversalTimeScale.getTimeScaleData(scale);
+            long fromMin = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MIN_VALUE);
+            long fromMax = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MAX_VALUE);
             
             try {
                 result = UniversalTimeScale.from(0L, scale);
@@ -183,28 +183,28 @@ public class TimeScaleAPITest extends TestFmwk
             }
             
             try {
-                result = UniversalTimeScale.from(data.fromMin, scale);
+                result = UniversalTimeScale.from(fromMin, scale);
             } catch (IllegalArgumentException iae) {
                 errln("from(fromMin, " + scale + ") threw IllegalArgumentException.");
             }
              
-            if (data.fromMin > Long.MIN_VALUE) {
+            if (fromMin > Long.MIN_VALUE) {
                 try {
-                    result = UniversalTimeScale.from(data.fromMin - 1, scale);
+                    result = UniversalTimeScale.from(fromMin - 1, scale);
                     errln("from(fromMin - 1, " + scale + ") did not throw IllegalArgumentException.");
                 } catch (IllegalArgumentException iae) {
                 }
             }
              
             try {
-                result = UniversalTimeScale.from(data.fromMax, scale);
+                result = UniversalTimeScale.from(fromMax, scale);
             } catch (IllegalArgumentException iae) {
                 errln("from(fromMax, " + scale + ") threw IllegalArgumentException.");
             }
               
-            if (data.fromMax < Long.MAX_VALUE) {
+            if (fromMax < Long.MAX_VALUE) {
                 try {
-                    result = UniversalTimeScale.from(data.fromMax + 1, scale);
+                    result = UniversalTimeScale.from(fromMax + 1, scale);
                     errln("from(fromMax + 1, " + scale + ") did not throw IllegalArgumentException.");
                } catch (IllegalArgumentException iae) {
                }
@@ -220,25 +220,37 @@ public class TimeScaleAPITest extends TestFmwk
     
     public void TestGetTimeScale()
     {
-        UniversalTimeScale.TimeScaleData data;
+        long value;
         
         try {
-            data = UniversalTimeScale.getTimeScaleData(-1);
-            errln("getTimeScaleData(-1) did not throw IllegalArgumentException.");
+            value = UniversalTimeScale.getTimeScaleValue(-1, 0);
+            errln("getTimeScaleValue(-1, 0) did not throw IllegalArgumentException.");
+        } catch (IllegalArgumentException iae) {
+        }
+        
+        try {
+            value = UniversalTimeScale.getTimeScaleValue(0, -1);
+            errln("getTimeScaleValue(0, -1) did not throw IllegalArgumentException.");
         } catch (IllegalArgumentException iae) {
         }
         
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
             try {
-                data = UniversalTimeScale.getTimeScaleData(scale);
+                value = UniversalTimeScale.getTimeScaleValue(scale, 0);
             } catch (IllegalArgumentException iae) {
-                errln("getTimeScaleData(" + scale + ") threw IllegalArgumentException.");
+                errln("getTimeScaleValue(" + scale + ", 0) threw IllegalArgumentException.");
             }
         }
         
         try {
-            data = UniversalTimeScale.getTimeScaleData(UniversalTimeScale.MAX_SCALE);
-            errln("getTimeScaleData(" + UniversalTimeScale.MAX_SCALE + ") did not throw IllegalArgumentException");
+            value = UniversalTimeScale.getTimeScaleValue(UniversalTimeScale.MAX_SCALE, 0);
+            errln("getTimeScaleValue(MAX_SCALE, 0) did not throw IllegalArgumentException");
+        } catch (IllegalArgumentException iae) {
+        }
+        
+        try {
+            value = UniversalTimeScale.getTimeScaleValue(0, UniversalTimeScale.MAX_SCALE_VALUE);
+            errln("getTimeScaleValue(0, MAX_SCALE_VALUE) did not throw IllegalArgumentException");
         } catch (IllegalArgumentException iae) {
         }
     }
@@ -305,7 +317,8 @@ public class TimeScaleAPITest extends TestFmwk
         }
         
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
-            UniversalTimeScale.TimeScaleData data = UniversalTimeScale.getTimeScaleData(scale);
+            long toMin = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.TO_MIN_VALUE);
+            long toMax = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.TO_MAX_VALUE);
             
             try {
                 result = UniversalTimeScale.toDouble(0L, scale);
@@ -314,28 +327,28 @@ public class TimeScaleAPITest extends TestFmwk
             }
             
             try {
-                result = UniversalTimeScale.toDouble(data.toMin, scale);
+                result = UniversalTimeScale.toDouble(toMin, scale);
             } catch (IllegalArgumentException iae) {
                 errln("toDouble(toMin, " + scale + ") threw IllegalArgumentException.");
             }
              
-            if (data.toMin > Long.MIN_VALUE) {
+            if (toMin > Long.MIN_VALUE) {
                 try {
-                    result = UniversalTimeScale.toDouble(data.toMin - 1, scale);
+                    result = UniversalTimeScale.toDouble(toMin - 1, scale);
                     errln("toDouble(toMin - 1, " + scale + ") did not throw IllegalArgumentException.");
                 } catch (IllegalArgumentException iae) {
                 }
             }
              
             try {
-                result = UniversalTimeScale.toDouble(data.toMax, scale);
+                result = UniversalTimeScale.toDouble(toMax, scale);
             } catch (IllegalArgumentException iae) {
                 errln("toDouble(toMax, " + scale + ") threw IllegalArgumentException.");
             }
               
-            if (data.toMax < Long.MAX_VALUE) {
+            if (toMax < Long.MAX_VALUE) {
                 try {
-                    result = UniversalTimeScale.toDouble(data.toMax + 1, scale);
+                    result = UniversalTimeScale.toDouble(toMax + 1, scale);
                     errln("toDouble(toMax + 1, " + scale + ") did not throw IllegalArgumentException.");
                } catch (IllegalArgumentException iae) {
                }
@@ -360,7 +373,8 @@ public class TimeScaleAPITest extends TestFmwk
         }
         
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
-            UniversalTimeScale.TimeScaleData data = UniversalTimeScale.getTimeScaleData(scale);
+            long toMin = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.TO_MIN_VALUE);
+            long toMax = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.TO_MAX_VALUE);
             
             try {
                 result = UniversalTimeScale.toLong(0L, scale);
@@ -369,28 +383,28 @@ public class TimeScaleAPITest extends TestFmwk
             }
             
             try {
-                result = UniversalTimeScale.toLong(data.toMin, scale);
+                result = UniversalTimeScale.toLong(toMin, scale);
             } catch (IllegalArgumentException iae) {
                 errln("toLong(toMin, " + scale + ") threw IllegalArgumentException.");
             }
              
-            if (data.toMin > Long.MIN_VALUE) {
+            if (toMin > Long.MIN_VALUE) {
                 try {
-                    result = UniversalTimeScale.toLong(data.toMin - 1, scale);
+                    result = UniversalTimeScale.toLong(toMin - 1, scale);
                     errln("toLong(toMin - 1, " + scale + ") did not throw IllegalArgumentException.");
                 } catch (IllegalArgumentException iae) {
                 }
             }
              
             try {
-                result = UniversalTimeScale.toLong(data.toMax, scale);
+                result = UniversalTimeScale.toLong(toMax, scale);
             } catch (IllegalArgumentException iae) {
                 errln("toLong(toMax, " + scale + ") threw IllegalArgumentException.");
             }
               
-            if (data.toMax < Long.MAX_VALUE) {
+            if (toMax < Long.MAX_VALUE) {
                 try {
-                    result = UniversalTimeScale.toLong(data.toMax + 1, scale);
+                    result = UniversalTimeScale.toLong(toMax + 1, scale);
                     errln("toLong(toMax + 1, " + scale + ") did not throw IllegalArgumentException.");
                } catch (IllegalArgumentException iae) {
                }
