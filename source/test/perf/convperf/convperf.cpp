@@ -39,73 +39,76 @@ ConverterPerformanceTest::~ConverterPerformanceTest(){
 
 UPerfFunction* ConverterPerformanceTest::runIndexedTest(int32_t index, UBool exec,const char* &name, char* par) {
     switch (index) {
-        TESTCASE(0,TestICU_UTF8_ToUnicode);
-        TESTCASE(1,TestICU_UTF8_FromUnicode);
-        TESTCASE(2,TestWinANSI_UTF8_ToUnicode);
-        TESTCASE(3,TestWinANSI_UTF8_FromUnicode);
-        TESTCASE(4,TestWinIML2_UTF8_ToUnicode);
-        TESTCASE(5,TestWinIML2_UTF8_FromUnicode);
-        
-        TESTCASE(6,TestICU_Latin1_ToUnicode);
-        TESTCASE(7,TestICU_Latin1_FromUnicode);
-        TESTCASE(8,TestWinIML2_Latin1_ToUnicode);
-        TESTCASE(9,TestWinIML2_Latin1_FromUnicode);
-        
-        TESTCASE(10,TestICU_Latin8_ToUnicode);
-        TESTCASE(11,TestICU_Latin8_FromUnicode);
-        TESTCASE(12,TestWinIML2_Latin8_ToUnicode);
-        TESTCASE(13,TestWinIML2_Latin8_FromUnicode);
+        TESTCASE(0,TestICU_CleanOpenAllConverters);// This calls u_cleanup()
+        TESTCASE(1,TestICU_OpenAllConverters);// This doesn't call u_cleanup()
 
-        TESTCASE(14,TestICU_EBCDIC_Arabic_ToUnicode);
-        TESTCASE(15,TestICU_EBCDIC_Arabic_FromUnicode);
-        TESTCASE(16,TestWinIML2_EBCDIC_Arabic_ToUnicode);
-        TESTCASE(17,TestWinIML2_EBCDIC_Arabic_FromUnicode);
-
-        TESTCASE(18,TestICU_SJIS_ToUnicode);
-        TESTCASE(19,TestICU_SJIS_FromUnicode);
-        TESTCASE(20,TestWinIML2_SJIS_ToUnicode);
-        TESTCASE(21,TestWinIML2_SJIS_FromUnicode);
-
-        TESTCASE(22,TestICU_EUCJP_ToUnicode);
-        TESTCASE(23,TestICU_EUCJP_FromUnicode);
-        TESTCASE(24,TestWinIML2_EUCJP_ToUnicode);
-        TESTCASE(25,TestWinIML2_EUCJP_FromUnicode);
-
-        TESTCASE(26,TestICU_GB2312_FromUnicode);
-        TESTCASE(27,TestICU_GB2312_ToUnicode);
-        TESTCASE(28,TestWinIML2_GB2312_ToUnicode);
-        TESTCASE(29,TestWinIML2_GB2312_FromUnicode);
-
-        TESTCASE(30,TestICU_ISO2022KR_ToUnicode);
-        TESTCASE(31,TestICU_ISO2022KR_FromUnicode);
-        TESTCASE(32,TestWinIML2_ISO2022KR_ToUnicode);
-        TESTCASE(33,TestWinIML2_ISO2022KR_FromUnicode);
-
-        TESTCASE(34,TestICU_ISO2022JP_ToUnicode);
-        TESTCASE(35,TestICU_ISO2022JP_FromUnicode);
-        TESTCASE(36,TestWinIML2_ISO2022JP_ToUnicode);
-        TESTCASE(37,TestWinIML2_ISO2022JP_FromUnicode);
-
-        TESTCASE(38,TestWinANSI_Latin1_ToUnicode);
-        TESTCASE(39,TestWinANSI_Latin1_FromUnicode);        
+        TESTCASE(2,TestICU_UTF8_ToUnicode);
+        TESTCASE(3,TestICU_UTF8_FromUnicode);
+        TESTCASE(4,TestWinANSI_UTF8_ToUnicode);
+        TESTCASE(5,TestWinANSI_UTF8_FromUnicode);
+        TESTCASE(6,TestWinIML2_UTF8_ToUnicode);
+        TESTCASE(7,TestWinIML2_UTF8_FromUnicode);
         
-        TESTCASE(40,TestWinANSI_Latin8_ToUnicode);
-        TESTCASE(41,TestWinANSI_Latin8_FromUnicode);
+        TESTCASE(8,TestICU_Latin1_ToUnicode);
+        TESTCASE(9,TestICU_Latin1_FromUnicode);
+        TESTCASE(10,TestWinIML2_Latin1_ToUnicode);
+        TESTCASE(11,TestWinIML2_Latin1_FromUnicode);
         
-        TESTCASE(42,TestWinANSI_SJIS_ToUnicode);
-        TESTCASE(43,TestWinANSI_SJIS_FromUnicode);
+        TESTCASE(12,TestICU_Latin8_ToUnicode);
+        TESTCASE(13,TestICU_Latin8_FromUnicode);
+        TESTCASE(14,TestWinIML2_Latin8_ToUnicode);
+        TESTCASE(15,TestWinIML2_Latin8_FromUnicode);
+
+        TESTCASE(16,TestICU_EBCDIC_Arabic_ToUnicode);
+        TESTCASE(17,TestICU_EBCDIC_Arabic_FromUnicode);
+        TESTCASE(18,TestWinIML2_EBCDIC_Arabic_ToUnicode);
+        TESTCASE(19,TestWinIML2_EBCDIC_Arabic_FromUnicode);
+
+        TESTCASE(20,TestICU_SJIS_ToUnicode);
+        TESTCASE(21,TestICU_SJIS_FromUnicode);
+        TESTCASE(22,TestWinIML2_SJIS_ToUnicode);
+        TESTCASE(23,TestWinIML2_SJIS_FromUnicode);
+
+        TESTCASE(24,TestICU_EUCJP_ToUnicode);
+        TESTCASE(25,TestICU_EUCJP_FromUnicode);
+        TESTCASE(26,TestWinIML2_EUCJP_ToUnicode);
+        TESTCASE(27,TestWinIML2_EUCJP_FromUnicode);
+
+        TESTCASE(28,TestICU_GB2312_FromUnicode);
+        TESTCASE(29,TestICU_GB2312_ToUnicode);
+        TESTCASE(30,TestWinIML2_GB2312_ToUnicode);
+        TESTCASE(31,TestWinIML2_GB2312_FromUnicode);
+
+        TESTCASE(32,TestICU_ISO2022KR_ToUnicode);
+        TESTCASE(33,TestICU_ISO2022KR_FromUnicode);
+        TESTCASE(34,TestWinIML2_ISO2022KR_ToUnicode);
+        TESTCASE(35,TestWinIML2_ISO2022KR_FromUnicode);
+
+        TESTCASE(36,TestICU_ISO2022JP_ToUnicode);
+        TESTCASE(37,TestICU_ISO2022JP_FromUnicode);
+        TESTCASE(38,TestWinIML2_ISO2022JP_ToUnicode);
+        TESTCASE(39,TestWinIML2_ISO2022JP_FromUnicode);
+
+        TESTCASE(40,TestWinANSI_Latin1_ToUnicode);
+        TESTCASE(41,TestWinANSI_Latin1_FromUnicode);        
         
-        TESTCASE(44,TestWinANSI_EUCJP_ToUnicode);
-        TESTCASE(45,TestWinANSI_EUCJP_FromUnicode);
+        TESTCASE(42,TestWinANSI_Latin8_ToUnicode);
+        TESTCASE(43,TestWinANSI_Latin8_FromUnicode);
         
-        TESTCASE(46,TestWinANSI_GB2312_ToUnicode);
-        TESTCASE(47,TestWinANSI_GB2312_FromUnicode);
+        TESTCASE(44,TestWinANSI_SJIS_ToUnicode);
+        TESTCASE(45,TestWinANSI_SJIS_FromUnicode);
         
-        TESTCASE(48,TestWinANSI_ISO2022KR_ToUnicode);
-        TESTCASE(49,TestWinANSI_ISO2022KR_FromUnicode);        
+        TESTCASE(46,TestWinANSI_EUCJP_ToUnicode);
+        TESTCASE(47,TestWinANSI_EUCJP_FromUnicode);
         
-        TESTCASE(50,TestWinANSI_ISO2022JP_ToUnicode);
-        TESTCASE(51,TestWinANSI_ISO2022JP_FromUnicode);
+        TESTCASE(48,TestWinANSI_GB2312_ToUnicode);
+        TESTCASE(49,TestWinANSI_GB2312_FromUnicode);
+        
+        TESTCASE(50,TestWinANSI_ISO2022KR_ToUnicode);
+        TESTCASE(51,TestWinANSI_ISO2022KR_FromUnicode);        
+        
+        TESTCASE(52,TestWinANSI_ISO2022JP_ToUnicode);
+        TESTCASE(53,TestWinANSI_ISO2022JP_FromUnicode);
 
         default: 
             name = ""; 
@@ -113,6 +116,24 @@ UPerfFunction* ConverterPerformanceTest::runIndexedTest(int32_t index, UBool exe
     }
     return NULL;
 
+}
+
+UPerfFunction* ConverterPerformanceTest::TestICU_CleanOpenAllConverters() {
+    UErrorCode status = U_ZERO_ERROR;
+    UPerfFunction* pf = new ICUOpenAllConvertersFunction(TRUE, status);
+    if(U_FAILURE(status)){
+        return NULL;
+    }
+    return pf;
+}
+
+UPerfFunction* ConverterPerformanceTest::TestICU_OpenAllConverters() {
+    UErrorCode status = U_ZERO_ERROR;
+    UPerfFunction* pf = new ICUOpenAllConvertersFunction(FALSE, status);
+    if(U_FAILURE(status)){
+        return NULL;
+    }
+    return pf;
 }
 
 UPerfFunction* ConverterPerformanceTest::TestICU_UTF8_FromUnicode(){
