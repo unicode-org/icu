@@ -29,7 +29,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 3.2
     ReadMe</h1>
 
-    <p>Version: 2004-Nov-02<br>
+    <p>Version: 2004-Nov-15<br>
      Copyright &copy; 1997-2004 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -634,15 +634,6 @@
       </tr>
 
       <tr>
-        <td>HP-UX 11.01</td>
-
-        <td>aCC A.03.13<br>
-         cc A.11.01.00</td>
-
-        <td>Regularly tested</td>
-      </tr>
-
-      <tr>
         <td>AIX 5.1.0 L</td>
 
         <td>Visual Age C++ 5.0</td>
@@ -659,19 +650,27 @@
       </tr>
 
       <tr>
-        <td>z/OS 1.2</td>
+        <td>z/OS 1.3</td>
 
-        <td>cxx 1.2</td>
+        <td>cxx 1.3</td>
 
         <td>Regularly tested</td>
       </tr>
 
       <tr>
-        <td>OS/400 (iSeries) V5R1</td>
+        <td>OS/400 (iSeries) V5R3</td>
 
         <td>iCC</td>
 
         <td>Regularly tested</td>
+      </tr>
+
+      <tr>
+        <td>Cygwin</td>
+
+        <td>gcc 2.95.3</td>
+
+        <td>Rarely tested</td>
       </tr>
 
       <tr>
@@ -708,17 +707,10 @@
       </tr>
 
       <tr>
-        <td>Cygwin</td>
+        <td>HP-UX 11.01</td>
 
-        <td>gcc 2.95.3</td>
-
-        <td>Rarely tested</td>
-      </tr>
-
-      <tr>
-        <td>Windows NT</td>
-
-        <td>Microsoft Visual C++ 6.0</td>
+        <td>aCC A.03.13<br>
+         cc A.11.01.00</td>
 
         <td>Rarely tested</td>
       </tr>
@@ -750,7 +742,7 @@
       <tr>
         <td>SGI/IRIX</td>
 
-        <td>&nbsp;</td>
+        <td>MIPSpro CC</td>
 
         <td>Rarely tested</td>
       </tr>
@@ -1031,11 +1023,6 @@
     but manually editing the files is not recommended.</p>
 
     <ul>
-      <li><tt>--enable-static</tt> (Partially works)</li>
-
-      <li><tt>--disable-debug</tt> (Partially works. Assertion statements are
-      enabled, but built without debugging information)</li>
-
       <li><tt>--disable-renaming</tt></li>
 
       <li><tt>--disable-threading</tt></li>
@@ -1048,9 +1035,12 @@
 
       <li><tt>--with-iostream</tt></li>
 
+      <li><tt>--enable-static</tt> (Requires that U_STATIC_IMPLEMENTATION be
+      defined in user code that links against ICU's static libraries.)</li>
+
       <li><tt>--with-data-packaging=files</tt> (The pkgdata tool currently does
       not work in this mode. Manual packaging is required to use this
-      mode)</li>
+      mode.)</li>
     </ul>
 
     <h3><a name="HowToBuildUNIX" href="#HowToBuildUNIX" id="HowToBuildUNIX">How
@@ -1580,16 +1570,32 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     "ImportantNotesSolaris">Using ICU in a Multithreaded Environment on
     Solaris</a></h4>
 
-    <h5>Solaris Deadlock Issues in Solaris 2.8, and Earlier</h5>
+    <h5>ICU's tests may hang on Solaris 8 and Earlier</h5>
 
-    <p>Solaris 2.8, and earlier, has outstanding thread deadlocking issues that
-    MAY be problematic for applications using either native, or POSIX,
-    threading on these platforms. Sun states that Solaris 2.9 DOES NOT have the
-    deadlock problems. Deadlocks MAY occur either during initialization of the
+    <p>ICU's tests use <code>usleep()</code>, which is multithread unsafe on
+    versions of Solaris before version 9. This does not mean that ICU is not
+    thread safe because only ICU's test code uses <code>usleep()</code>. The
+    <code>sleep()</code> and <code>nanosleep()</code> functions could be used
+    in ICU's multithreaded tests, but <code>sleep()</code> and
+    <code>nanosleep()</code> are not a stable API between versions of Solaris.
+    Solaris 9 fixes usleep so that it is multithread safe.</p>
+
+    <p>This hanging behavior tends to appear on multi-CPU machines. Single CPU
+    Solaris 8 machines do not seem to show this behavior.</p>
+
+    <p>In a future version of ICU, we hope to find a portable solution to this
+    problem that will work between the modern versions of Solaris.</p>
+
+    <h5>Solaris Deadlock Issues in Solaris 8 (2.8) and Earlier</h5>
+
+    <p>Solaris 8, and earlier, has outstanding thread deadlocking issues that
+    <strong>may</strong> be problematic for applications using either native, or POSIX,
+    threading on these platforms. Sun states that Solaris 9 <strong>does not</strong> have the
+    deadlock problems. Deadlocks <strong>may</strong> occur either during initialization of the
     Solaris threading library, or at any other time.</p>
 
     <p>Sun Microsystems has provided a Sun Alert Notification regarding the
-    issue. Users SHOULD consider applying the latest OS patches to their
+    issue. Users <strong>should</strong> consider applying the latest OS patches to their
     Solaris installations in order to help avoid deadlock. Further information
     regarding the issue, and links to applicable patches, may be found at:</p>
 
@@ -1599,20 +1605,20 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     "http://sunsolve.sun.com/pub-cgi/retrieve.pl?doc=fsalert%2F46867&amp;zone_32=4663077">
     http://sunsolve.sun.com/pub-cgi/retrieve.pl?doc=fsalert%2F46867&amp;zone_32=4663077</a></p>
 
-    <p>Sun is NOT providing patches for Solaris 2.6, or earlier.</p>
+    <p>Sun is <strong>not</strong> providing patches for Solaris 6 (2.6), or earlier.</p>
 
     <p>Sun states that by applying the patch users will avoid the deadlock
-    issues. However, with all applicable patches applied, deadlock MAY still be
+    issues. However, with all applicable patches applied, deadlock <strong>may</strong> still be
     seen, as demonstrated by the ICU Mutex unit tests. The unit test will hang
     indefinitely. No bug exists in ICU. However, a latent bug still exists in
     Solaris, which Sun Microsystems has yet to resolve. In order to avoid this,
-    users are SUGGESTED to modify their LD_LIBRARY_PATH according to the
+    users are <strong>suggested</strong> to modify their LD_LIBRARY_PATH according to the
     guidelines specified by Sun Microsystems in the Sun Alert Notification.</p>
 
     <h5>Linking on Solaris</h5>
 
     <p>In order to avoid synchronization and threading issues, developers are
-    SUGGESTED to strictly follow the compiling and linking guidelines for
+    <strong>suggested</strong> to strictly follow the compiling and linking guidelines for
     multithreaded applications, specified in the following document from Sun
     Microsystems. Most notably, pay strict attention to the following
     statements from Sun:</p>
@@ -1793,14 +1799,12 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
         <ul>
           <li>XP_CPLUSPLUS for C++ only.</li>
 
-          <li>TRUE and FALSE, UBool, int8_t, int16_t etc.</li>
+          <li>Generic types like UBool, int8_t, int16_t, int32_t, int64_t, uint64_t etc.</li>
 
           <li>U_EXPORT and U_IMPORT for specifying dynamic library import and
           export</li>
 
-          <li>int64_t and uint64_t. If the platform does not support 64 bit
-          values, the macro <tt>U_INT64_T_UNAVAILABLE</tt> must be defined. For
-          example, this will disable Rule-based number formatting.</li>
+          <li>&lt;iostream&gt; usability</li>
         </ul>
         <br>
       </li>
@@ -1840,8 +1844,8 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
          
 
         <ul>
-          <li>We supply sample implementations for WinNT, Win95, Win98,
-          Sun/Solaris, RedHat/Linux, HP-UX and for AIX on an RS/6000.</li>
+          <li>We supply sample implementations for Windows, Sun Solaris, Linux,
+          AIX, HP-UX, BSD, Mac OS X, z/OS and many others.</li>
         </ul>
         <br>
       </li>
@@ -1880,6 +1884,8 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 
       <li>genprops</li>
 
+      <li>gencase</li>
+
       <li>gennames</li>
 
       <li>genpname</li>
@@ -1909,7 +1915,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
       <li>ctestfw, intltest, iotest and cintltst, if you want to run the test
       suite.</li>
 
-      <li>uconv, icuswap and icuio (ustdio) can also be optionally built.</li>
+      <li>uconv, icuswap, derb and icuio can also be optionally built.</li>
     </ol>
     <hr>
 
