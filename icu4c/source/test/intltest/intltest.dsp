@@ -402,26 +402,6 @@ SOURCE=.\tsputil.cpp
 SOURCE=.\tsputil.h
 # End Source File
 # End Group
-# Begin Group "conversion"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\cppcnvt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\cppcnvt.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\itconv.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\itconv.h
-# End Source File
-# End Group
 # Begin Group "data & memory"
 
 # PROP Default_Filter ""
@@ -797,6 +777,14 @@ SOURCE=.\tstnorm.h
 # Begin Group "properties & sets"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\ucdtest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucdtest.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\usettest.cpp

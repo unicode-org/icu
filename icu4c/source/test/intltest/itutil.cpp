@@ -15,6 +15,7 @@
 #include "loctest.h"
 #include "citrtest.h"
 #include "ustrtest.h"
+#include "ucdtest.h"
 #include "restest.h"
 #include "restsnew.h"
 #include "tsmutex.h"
@@ -86,6 +87,15 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             break;
 
         case 6:
+            name = "UnicodeTest"; 
+            if (exec) {
+                logln("UnicodeTest---"); logln("");
+                UnicodeTest test;
+                callTest( test, par );
+            }
+            break;
+
+        case 7:
             name = "ResourceBundleTest"; 
             if (exec) {
                 logln("ResourceBundleTest---"); logln("");
@@ -93,7 +103,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
                 callTest( test, par );
             }
             break;
-        case 7:
+        case 8:
             name = "NewResourceBundleTest"; 
             if (exec) {
                 logln("NewResourceBundleTest---"); logln("");
@@ -102,7 +112,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
             break;
 
-        case 8:
+        case 9:
             name = "PUtilTest"; 
             if (exec) {
                 logln("PUtilTest---"); logln("");
@@ -111,7 +121,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
             break;
             
-    case 9:
+    case 10:
       name = "UObjectTest";
       if(exec) {
         logln ("UObjectTest---"); logln("");

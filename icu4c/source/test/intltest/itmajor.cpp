@@ -20,7 +20,7 @@
 #include "itutil.h"
 #include "tscoll.h"
 #include "itformat.h"
-#include "itconv.h"
+//%#include "itconv.h"
 #include "ittrans.h"
 #include "itrbbi.h"
 #include "itrbnf.h"
@@ -127,18 +127,19 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
 #endif
                 break;
 
-        case 9: name = "convert";
-/* Only the C API exists */
-#ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
-                if (exec) {
-                    logln("TestSuite Convert---"); logln();
-                    IntlTestConvert test;
-                    callTest( test, par );
-                }
-#endif /* ICU_UNICODECONVERTER_USE_DEPRECATES */
-                break;
+//%        case 9: name = "convert";
+//%/* Only the C API exists */
+//%#ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
+//%                if (exec) {
+//%                    logln("TestSuite Convert---"); logln();
+//%                    IntlTestConvert test;
+//%                    callTest( test, par );
+//%                }
+//%#endif /* ICU_UNICODECONVERTER_USE_DEPRECATES */
+//%                break;
 
-        case 10: name = "icuserv";
+//%        case 10: name = "icuserv";
+        case 9: name = "icuserv";
 #if !UCONFIG_NO_SERVICE
                 if (exec) {
                     logln("TestSuite ICUService---"); logln();
