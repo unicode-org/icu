@@ -55,7 +55,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 icuuc.lib /nologo /base:"0x4a900000" /dll /debug /machine:I386 /out:"..\..\bin\icuin22.dll" /implib:"..\..\lib\icuin.lib" /libpath:"..\..\lib"
+# ADD LINK32 icuuc.lib /nologo /base:"0x4a900000" /dll /debug /machine:I386 /out:"..\..\bin\icuin24.dll" /implib:"..\..\lib\icuin.lib" /libpath:"..\..\lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
@@ -82,7 +82,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 icuucd.lib /nologo /base:"0x4a900000" /dll /debug /machine:I386 /out:"..\..\bin\icuin22d.dll" /implib:"..\..\lib\icuind.lib" /pdbtype:sept /libpath:"..\..\lib"
+# ADD LINK32 icuucd.lib /nologo /base:"0x4a900000" /dll /debug /machine:I386 /out:"..\..\bin\icuin24d.dll" /implib:"..\..\lib\icuind.lib" /pdbtype:sept /libpath:"..\..\lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "i18n - Win64 Release"
@@ -109,7 +109,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:IX86 /machine:IA64
-# ADD LINK32 icuuc.lib /nologo /base:"0x4a900000" /dll /machine:IX86 /out:"..\..\bin\icuin22.dll" /implib:"..\..\lib\icuin.lib" /libpath:"..\..\lib" /machine:IA64
+# ADD LINK32 icuuc.lib /nologo /base:"0x4a900000" /dll /machine:IX86 /out:"..\..\bin\icuin24.dll" /implib:"..\..\lib\icuin.lib" /libpath:"..\..\lib" /machine:IA64
 # SUBTRACT LINK32 /debug
 
 !ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
@@ -136,7 +136,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:IX86 /pdbtype:sept /machine:IA64
-# ADD LINK32 icuucd.lib /nologo /base:"0x4a900000" /dll /incremental:no /debug /machine:IX86 /out:"..\..\bin\icuin22d.dll" /implib:"..\..\lib\icuind.lib" /pdbtype:sept /libpath:"..\..\lib" /machine:IA64
+# ADD LINK32 icuucd.lib /nologo /base:"0x4a900000" /dll /incremental:no /debug /machine:IX86 /out:"..\..\bin\icuin24d.dll" /implib:"..\..\lib\icuind.lib" /pdbtype:sept /libpath:"..\..\lib" /machine:IA64
 
 !ENDIF 
 
