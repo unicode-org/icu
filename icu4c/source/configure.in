@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.150 2002/01/31 01:02:35 yves-oss Exp $
+dnl $Id: configure.in,v 1.151 2002/01/31 04:24:35 yves-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -689,16 +689,16 @@ thelibdir=`test "x$exec_prefix" = xNONE && exec_prefix="$prefix"; eval echo $lib
 AC_SUBST(thelibdir)
 case $datapackaging in
     common)
-	icudatadir=$datadir
-	theicudatadir=$thedatadir
+	pkgicudatadir=$datadir
+	thepkgicudatadir=$thedatadir
 	;;
     *)
-	icudatadir=$libdir
-	theicudatadir=$thelibdir
+	pkgicudatadir=$libdir
+	thepkgicudatadir=$thelibdir
 	;;
 esac
-AC_SUBST(icudatadir)
-AC_SUBST(theicudatadir)
+AC_SUBST(pkgicudatadir)
+AC_SUBST(thepkgicudatadir)
 
 dnl Shouldn't need the AC_SUBST
 dnl Deprecated support for --enable-mapped

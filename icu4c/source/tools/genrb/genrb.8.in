@@ -112,7 +112,7 @@ This is the set which is guaranteed to be available regardless of code page.
 .TP 10
 .B ICU_DATA
 Specifies the directory containing ICU data. Defaults to
-.BR @theicudatadir@/icu/@VERSION@/ .
+.BR @thepkgicudatadir@/@PACKAGE@/@VERSION@/ .
 Some tools in ICU depend on the presence of the trailing slash. It is thus
 important to make sure that it is present if
 .B ICU_DATA
