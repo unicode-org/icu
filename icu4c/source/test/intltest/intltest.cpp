@@ -379,7 +379,7 @@ void IntlTest::setICU_DATA() {
 
 #if defined (U_TOPBUILDDIR)
     {
-        static char env_string[] = U_TOPBUILDDIR "/data/out/";
+        static char env_string[] = U_TOPBUILDDIR U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "out" U_FILE_SEP_STRING;
         u_setDataDirectory(env_string);
         return;
     }
@@ -410,7 +410,7 @@ void IntlTest::setICU_DATA() {
             /* We found and truncated three names from the path.
              *  Now append "source\data" and set the environment
              */
-            strcpy(pBackSlash, U_FILE_SEP_STRING "data" U_FILE_SEP_STRING);
+            strcpy(pBackSlash, U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "out" U_FILE_SEP_STRING);
             u_setDataDirectory(p);     /*  p is "ICU_DATA=wherever\icu\source\data"    */
             return;
         }
