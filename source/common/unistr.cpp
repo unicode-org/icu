@@ -205,7 +205,8 @@ UnicodeString::UnicodeString(const char *codepageData,
 }
 
 UnicodeString::UnicodeString(const UnicodeString& that)
-  : fArray(fStackBuffer),
+  : Replaceable(),
+    fArray(fStackBuffer),
     fLength(0),
     fCapacity(US_STACKBUF_SIZE),
     fHashCode(kEmptyHashCode),
@@ -1147,10 +1148,7 @@ UnicodeString::extract(UTextOffset start,
   // pin the indices to legal values
   pinIndices(start, length);
 
-  int32_t convertedLen = 0;
-
   // set up the conversion parameters
-  int32_t sourceLen        = length;
   const UChar *mySource    = getArrayStart() + start;
   const UChar *mySourceEnd = mySource + length;
   char *myTarget           = dst;
@@ -1456,7 +1454,9 @@ void
 UnicodeString::releaseDefaultConverter(UConverter *converter)
 {
   if(fgDefaultConverter == 0) {
-    ucnv_reset(converter);
+    if (converter != 0) {
+      ucnv_reset(converter);
+    }
 
     Mutex lock;
 
