@@ -22,12 +22,15 @@
 #if !UCONFIG_NO_IDNA
 
 #include "unicode/parseerr.h"
-
+/**
+ * The StringPrep profile
+ * @draft ICU 2.8
+ */
 typedef struct UStringPrepProfile UStringPrepProfile;
 
 
 /** 
- * Option to prohibit processing of unassigned codepoints in the input
+ * Option to prohibit processing of unassigned code points in the input
  * 
  * @see  usprep_prepare
  * @draft ICU 2.8
@@ -35,7 +38,7 @@ typedef struct UStringPrepProfile UStringPrepProfile;
 #define USPREP_NONE 0x0000
 
 /** 
- * Option to allow processing of unassigned codepoints in the input
+ * Option to allow processing of unassigned code points in the input
  * 
  * @see  usprep_prepare
  * @draft ICU 2.8
@@ -48,8 +51,8 @@ typedef struct UStringPrepProfile UStringPrepProfile;
  * Creates a StringPrep profile from the data file.
  *
  * @param path      string containing the full path pointing to the directory
- *                  where the resources reside followed by the package name
- *                  e.g. "/usr/resource/my_app/resources/guimessages" on a Unix system.
+ *                  where the profile reside followed by the package name
+ *                  e.g. "/usr/resource/my_app/profiles/mydata" on a Unix system.
  *                  if NULL, ICU default data files will be used.
  * @param fileName  name of the profile file to be opened
  * @param status    ICU error code in/out parameter. Must not be NULL.
@@ -75,25 +78,22 @@ usprep_close(UStringPrepProfile* profile);
 
 
 /**
- * Prepare the input stream for use. This operation maps, normalizes(NFKC),
+ * Prepare the input buffer for use in applications with the given profile. This operation maps, normalizes(NFKC),
  * checks for prohited and BiDi characters in the order defined by RFC 3454
- * depending on the options specified
+ * depending on the options specified in the profile.
  *
  * @param prep          The profile to use 
  * @param src           Pointer to UChar buffer containing the string to prepare
  * @param srcLength     Number of characters in the source string
  * @param dest          Pointer to the destination buffer to receive the output
  * @param destCapacity  The capacity of destination array
- * @paran options       A bit set of options:
+ * @param options       A bit set of options:
  *
- *  - USPREP_NONE               Use default options, i.e., do not process unassigned code points
- *                              and do not use STD3 ASCII rules
- *                              If unassigned code points are found the operation fails with 
- *                              U_UNASSIGNED_ERROR error code.
+ *  - USPREP_NONE               Prohibit processing of unassigned code points in the input
  *
- *  - USPREP_ALLOW_UNASSIGNED   Unassigned values can be converted to ASCII for query operations
- *                              If this option is set, the unassigned code points are in the input 
- *                              are treated as normal Unicode code points.
+ *  - USPREP_ALLOW_UNASSIGNED   Treat the unassigned code points are in the input 
+ *                              as normal Unicode code points.
+ *
  * @param parseError        Pointer to UParseError struct to receive information on position 
  *                          of error if an error is encountered. Can be NULL.
  * @param status            ICU in/out error code parameter.
@@ -102,7 +102,6 @@ usprep_close(UStringPrepProfile* profile);
  *                          U_INDEX_OUTOFBOUNDS_ERROR if src contains
  *                          too many code points.
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
- * @return                  Number of ASCII characters converted.
  * @return The number of UChars in the destination buffer
  * @draft ICU 2.8
  */
