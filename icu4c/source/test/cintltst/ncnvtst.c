@@ -73,7 +73,7 @@ void addExtraTests(TestNode** root)
 {
      addTest(root, &TestSurrogateBehaviour, "tsconv/ncnvtst/TestSurrogateBehaviour");
      addTest(root, &TestErrorBehaviour, "tsconv/ncnvtst/TestErrorBehaviour");
-     addTest(root, &TestToUnicodeErrorBehaviour, "tsconv/ncnvtst/TestErrorBehaviour");
+     addTest(root, &TestToUnicodeErrorBehaviour, "tsconv/ncnvtst/ToUnicodeErrorBehaviour");
      addTest(root, &TestGetNextErrorBehaviour, "tsconv/ncnvtst/TestGetNextErrorBehaviour");
 
 }
@@ -164,6 +164,8 @@ void TestErrorBehaviour(){
     {
         UChar    sampleText[] =   { 0x0031, 0xd801};
         UChar    sampleText2[] =   { 0x0031, 0xd801, 0x0032};
+        const char expectedFlushTrue[] = 
+            {  (char)0x31, (char)0x1a,};
         const char expected[] = 
             {  (char)0x31, };
         const char expected2[] = 
@@ -172,7 +174,7 @@ void TestErrorBehaviour(){
         
         /*SBCS*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-920", 0, TRUE, U_TRUNCATED_CHAR_FOUND))
+                expectedFlushTrue, sizeof(expectedFlushTrue), "ibm-920", 0, TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-920 [UCNV_SBCS] \n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "ibm-920", 0, FALSE, U_INVALID_CHAR_FOUND))
@@ -184,7 +186,7 @@ void TestErrorBehaviour(){
         
         /*LATIN_1*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "LATIN_1", 0, TRUE, U_TRUNCATED_CHAR_FOUND))
+                expectedFlushTrue, sizeof(expectedFlushTrue), "LATIN_1", 0, TRUE, U_ZERO_ERROR))
             log_err("u-> LATIN_1 is supposed to fail\n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "LATIN_1", 0, FALSE, U_INVALID_CHAR_FOUND))
@@ -200,14 +202,19 @@ void TestErrorBehaviour(){
     {
         UChar    sampleText[] =   { 0x00a1, 0xd801};
         UChar    sampleText2[] =   { 0x00a1, 0xd801, 0x00a4};
+        const char expectedFlushTrue[]=
+        {  (char)0xa2, (char)0xae, (char)0xa1, (char)0xe0};
         const char expected[] = 
             {  (char)0xa2, (char)0xae};
+       
         const char expected2[] = 
              {  (char)0xa2, (char)0xae, (char)0xa1, (char)0xe0, (char)0xa2, (char)0xb4};
+
+        int32_t offsets[]={(char)0x00, (char)0x01, (char)0x02};
       
         /*DBCS*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-1362", 0, TRUE, U_TRUNCATED_CHAR_FOUND))
+                expectedFlushTrue, sizeof(expectedFlushTrue), "ibm-1362", 0, TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-1362 [UCNV_DBCS] is supposed to fail\n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "ibm-1362", 0, FALSE, U_INVALID_CHAR_FOUND))
@@ -216,11 +223,14 @@ void TestErrorBehaviour(){
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
                 expected2, sizeof(expected2), "ibm-1362", 0, TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-1362 [UCNV_DBCS] did not match \n");
+        if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
+                expected2, sizeof(expected2), "ibm-1362", offsets, TRUE, U_ZERO_ERROR))
+            log_err("u-> ibm-1362 [UCNV_DBCS] did not match \n");
        
         
         /*MBCS*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-1363", 0, TRUE, U_TRUNCATED_CHAR_FOUND))
+                expectedFlushTrue, sizeof(expectedFlushTrue), "ibm-1363", 0, TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_MBCS] \n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "ibm-1363", 0, FALSE, U_INVALID_CHAR_FOUND))
@@ -231,6 +241,9 @@ void TestErrorBehaviour(){
             log_err("u-> ibm-1363 [UCNV_DBCS] did not match\n");
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
                 expected2, sizeof(expected2), "ibm-1363", 0, FALSE, U_ZERO_ERROR))
+            log_err("u-> ibm-1363 [UCNV_DBCS] did not match\n");
+        if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
+                expected2, sizeof(expected2), "ibm-1363", offsets, FALSE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_DBCS] did not match\n");
     
     }
