@@ -1677,7 +1677,6 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
       *status = U_MEMORY_ALLOCATION_ERROR;
       return;
   }
-  uprv_memset(src->opts, 0, sizeof(UColOptionSet));
 
   uprv_memcpy(src->opts, UCA->options, sizeof(UColOptionSet));
 
