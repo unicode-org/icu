@@ -15,11 +15,12 @@
 U_NAMESPACE_BEGIN
 
 class TransliterationRuleData;
-class UnicodeMatcher;
+class UnicodeFunctor;
 class ParseData;
 class RuleHalf;
 class ParsePosition;
 class UVector;
+class StringMatcher;
 
 class TransliteratorParser {
 
@@ -84,6 +85,21 @@ class TransliteratorParser {
      * element 0 corresponds to character data.variablesBase.
      */
     UVector* variablesVector;
+
+    /**
+     * String of standins for segments.  Used during the parsing of a single
+     * rule.  segmentStandins.charAt(0) is the standin for "$1" and corresponds
+     * to StringMatcher object segmentObjects.elementAt(0), etc.
+     */
+    UnicodeString segmentStandins;
+
+    /**
+     * Vector of StringMatcher objects for segments.  Used during the
+     * parsing of a single rule.  
+     * segmentStandins.charAt(0) is the standin for "$1" and corresponds
+     * to StringMatcher object segmentObjects.elementAt(0), etc.
+     */
+    UVector* segmentObjects;
 
     /**
      * The next available stand-in for variables.  This starts at some point in
@@ -218,12 +234,6 @@ private:
     int32_t parsePragma(const UnicodeString& rule, int32_t pos, int32_t limit);
 
     /**
-     * Return true if the given string looks like valid output, that is,
-     * does not contain quantifiers or other special input-only elements.
-     */
-    UBool isValidOutput(const UnicodeString& output) const;
-
-    /**
      * Called by main parser upon syntax error.  Search the rule string
      * for the probable end of the rule.  Of course, if the error is that
      * the end of rule marker is missing, then the rule end will not be found.
@@ -242,10 +252,20 @@ private:
                    ParsePosition& pos);
 
     /**
-     * Generate and return a stand-in for a new UnicodeMatcher.  Store
+     * Generate and return a stand-in for a new UnicodeFunctor.  Store
      * the matcher (adopt it).
      */
-    UChar generateStandInFor(UnicodeMatcher* adopted);
+    UChar generateStandInFor(UnicodeFunctor* adopted);
+
+    /**
+     * Return the standin for segment seg (1-based).
+     */
+    UChar getSegmentStandin(int32_t seg);
+
+    /**
+     * Set the object for segment seg (1-based).
+     */
+    void setSegmentObject(int32_t seg, StringMatcher* adopted);
 
     /**
      * Return the stand-in for the dot set.  It is allocated the first
@@ -261,11 +281,10 @@ private:
                            UnicodeString& buf);
 
     /**
-     * Return a stand-in character that refers to the given segments.
-     * @param r a reference number >= 1
-     * @return a stand-in for the given segment reference
+     * Glue method to get around access restrictions in C++.
      */
-    UChar getSegmentStandin(int32_t r);
+    static Transliterator* createBasicInstance(const UnicodeString& id,
+                                               const UnicodeString* canonID);
 
     friend class RuleHalf;
 

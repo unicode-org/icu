@@ -324,12 +324,12 @@ public:
     UBool operator!=(const UnicodeSet& o) const;
 
     /**
-     * Returns a copy of this object.  All UnicodeMatcher objects have
+     * Returns a copy of this object.  All UnicodeFunctor objects have
      * to support cloning in order to allow classes using
-     * UnicodeMatchers, such as Transliterator, to implement cloning.
+     * UnicodeFunctors, such as Transliterator, to implement cloning.
      * @draft ICU 2.0
      */
-    virtual UnicodeMatcher* clone() const;
+    virtual UnicodeFunctor* clone() const;
 
     /**
      * Returns the hash code value for this set.
@@ -667,7 +667,7 @@ public:
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
     /**
-     * Implement UnicodeMatcher API.
+     * Implement UnicodeFunctor API.
      *
      * @return The class ID for this object. All objects of a given
      * class have the same class ID.  Objects of other classes have
@@ -687,6 +687,7 @@ private:
 
     friend class Transliterator;
     friend class TransliteratorParser;
+    friend class TransliteratorIDParser;
     friend class TransliterationRule;
 
     /**
@@ -709,6 +710,14 @@ private:
      */
     UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
                const SymbolTable& symbols,
+               UErrorCode& status);
+
+    /**
+     * Constructs a set from the given pattern.  Identical to the
+     * 4-parameter ParsePosition contstructor, but does not take a
+     * SymbolTable, and does not recognize embedded variables.
+     */
+    UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
                UErrorCode& status);
 
     /**

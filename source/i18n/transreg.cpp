@@ -10,6 +10,7 @@
 #include "transreg.h"
 #include "rbt_data.h"
 #include "rbt_pars.h"
+#include "tridpars.h"
 #include "unicode/cpdtrans.h"
 #include "unicode/nultrans.h"
 #include "unicode/parseerr.h"
@@ -382,7 +383,8 @@ void TransliteratorRegistry::put(const UnicodeString& ID,
 
 void TransliteratorRegistry::remove(const UnicodeString& ID) {
     UnicodeString source, target, variant;
-    IDtoSTV(ID, source, target, variant);
+    UBool sawSource;
+    TransliteratorIDParser::IDtoSTV(ID, source, target, variant, sawSource);
     // Only need to do this if ID.indexOf('-') < 0
     UnicodeString id;
     STVtoID(source, target, variant, id);
@@ -506,32 +508,6 @@ UnicodeString& TransliteratorRegistry::getAvailableVariant(int32_t index,
 //----------------------------------------------------------------------
 
 /**
- * Given an ID, parse it into source, target, and variant strings.
- * The variant may be empty.  If the source is empty it will be set to
- * "Any".
- */
-void TransliteratorRegistry::IDtoSTV(const UnicodeString& id,
-                                     UnicodeString& source,
-                                     UnicodeString& target,
-                                     UnicodeString& variant) {
-    int32_t dash = id.indexOf(ID_SEP);
-    int32_t stroke = id.indexOf(VARIANT_SEP);
-    int32_t start = 0;
-    int32_t limit = id.length();
-    if (dash < 0) {
-        source = ANY;
-    } else {
-        id.extractBetween(0, dash, source);
-        start = dash + 1;
-    }
-    if (stroke >= 0) {
-        id.extractBetween(stroke + 1, id.length(), variant);
-        limit = stroke;
-    }
-    id.extractBetween(start, limit, target);
-}
-
-/**
  * Given source, target, and variant strings, concatenate them into a
  * full ID.  If the source is empty, then "Any" will be used for the
  * source, so the ID will always be of the form s-t/v or s-t.
@@ -574,7 +550,8 @@ void TransliteratorRegistry::registerEntry(const UnicodeString& ID,
                                            Entry* adopted,
                                            UBool visible) {
     UnicodeString source, target, variant;
-    IDtoSTV(ID, source, target, variant);
+    UBool sawSource;
+    TransliteratorIDParser::IDtoSTV(ID, source, target, variant, sawSource);
     // Only need to do this if ID.indexOf('-') < 0
     UnicodeString id;
     STVtoID(source, target, variant, id);
@@ -818,7 +795,8 @@ Entry* TransliteratorRegistry::findInBundle(const Spec& specToOpen,
  */
 Entry* TransliteratorRegistry::find(const UnicodeString& ID) {
     UnicodeString source, target, variant;
-    IDtoSTV(ID, source, target, variant);
+    UBool sawSource;
+    TransliteratorIDParser::IDtoSTV(ID, source, target, variant, sawSource);
     return find(source, target, variant);
 }
 

@@ -96,11 +96,6 @@ const UChar32 UnicodeSet::MIN_VALUE = UNICODESET_LOW;
  */
 const UChar32 UnicodeSet::MAX_VALUE = UNICODESET_HIGH - 1;
 
-// HEY WHAT'S THIS DOING HERE?
-// This is here until we have sufficient reason to add an entire
-// separate unimatch.cpp source file just for one line.
-const char UnicodeMatcher::fgClassID = 0;
-
 const char UnicodeSet::fgClassID = 0;
 
 //----------------------------------------------------------------
@@ -205,6 +200,17 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
     _dbgct(this);
 }
 
+// For internal use by TransliteratorIDParser
+UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
+                       UErrorCode& status) :
+    len(0), capacity(START_EXTRA), bufferCapacity(0),
+    buffer(0)
+{
+    list = new UChar32[capacity];
+    applyPattern(pattern, pos, NULL, status);
+    _dbgct(this);
+}
+
 /**
  * DEPRECATED Constructs a set from the given Unicode character category.
  * @param category an integer indicating the character category as
@@ -287,7 +293,7 @@ UBool UnicodeSet::operator==(const UnicodeSet& o) const {
  * to support cloning in order to allow classes using
  * UnicodeMatchers, such as Transliterator, to implement cloning.
  */
-UnicodeMatcher* UnicodeSet::clone() const {
+UnicodeFunctor* UnicodeSet::clone() const {
     return new UnicodeSet(*this);
 }
 
@@ -1048,7 +1054,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             if (ivarValueBuffer < varValueBuffer->length()) {
                 c = varValueBuffer->char32At(ivarValueBuffer);
                 ivarValueBuffer += UTF_CHAR_LENGTH(c);
-                const UnicodeMatcher *m = symbols->lookupMatcher(c); // may be NULL
+                const UnicodeFunctor *m = symbols->lookupMatcher(c); // may be NULL
                 if (m != NULL && m->getDynamicClassID() != UnicodeSet::getStaticClassID()) {
                     status = U_ILLEGAL_ARGUMENT_ERROR;
                     return;

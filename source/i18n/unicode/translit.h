@@ -22,6 +22,7 @@ class U_I18N_API UVector;
 class CompoundTransliterator;
 class TransliteratorParser;
 class NormalizationTransliterator;
+class TransliteratorIDParser;
 
 /**
  * <code>Transliterator</code> is an abstract class that
@@ -311,66 +312,20 @@ protected:
                                           UErrorCode& status);
     
     /**
-     * Internal parsing method.
+     * Create a transliterator from a basic ID.  This is an ID
+     * containing only the forward direction source, target, and
+     * variant.
+     * @param id a basic ID of the form S-T or S-T/V.
+     * @param canon canonical ID to assign to the object, or
+     * NULL to leave the ID unchanged
+     * @return a newly created Transliterator or null if the ID is
+     * invalid.
      */
-    static void parseCompoundID(const UnicodeString& ID,
-                                UnicodeString& regenID,
-                                UTransDirection dir,
-                                int32_t idSplitPoint,
-                                Transliterator *adoptedSplitTrans,
-                                UVector& result,
-                                int32_t& splitTransIndex,
-                                UnicodeSet*& compoundFilter,
-                                UParseError& parseError,
-                                UErrorCode& status);
-
-    /**
-     * Parse an ID into pieces.  Take IDs of the form T, T/V, S-T,
-     * S-T/V, or S/V-T.  If the source is missing, return a source of
-     * ANY.
-     * @param id the id string, in any of several forms
-     * @param source fill-in for the source; if the source is not
-     * present, ANY will be given as the source, and FALSE will be
-     * returned.  Otherwise TRUE will be returned
-     * @param target fill-in for the target, which may be empty if the
-     * id is not well-formed.
-     * @param variant fill-in for the variant, which may be empty; if
-     * it is not, it will contain a leading '/'
-     * @return TRUE if the source was present
-     */
-    static UBool IDtoSTV(const UnicodeString& id,
-                         UnicodeString& source, UnicodeString& target,
-                         UnicodeString& variant);
-
-    /**
-     * Internal parsing method for subclasses.
-     */
-    static Transliterator* parseID(const UnicodeString& ID,
-                                   UnicodeString& regenID,
-                                   int32_t& pos,
-                                   UBool& sawDelimiter,
-                                   UnicodeSet*& compoundFilter,
-                                   UTransDirection dir,
-                                   UParseError& parseError,
-                                   UBool create,
-                                   UErrorCode& status);
-
-    /**
-     * Internal parsing method for parseID.
-     */
-    static UBool parseIDBounds(const UnicodeString& ID,
-                               int32_t pos,
-                               UBool withinParens,
-                               int32_t& limit,
-                               int32_t& setStart,
-                               int32_t& setLimit,
-                               int32_t& revStart,
-                               UnicodeSet*& filter);
-
-    static void skipSpaces(const UnicodeString& str,
-                           int32_t& pos);
+    static Transliterator* createBasicInstance(const UnicodeString& id,
+                                               const UnicodeString* canon);
 
     friend class TransliteratorParser; // for parseID()
+    friend class TransliteratorIDParser; // for createBasicInstance()
 
 public:
 
