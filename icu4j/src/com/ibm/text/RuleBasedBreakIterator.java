@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedBreakIterator.java,v $ 
- * $Date: 2000/03/10 04:07:22 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/05/09 22:50:42 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -240,7 +240,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.5 $ $Date: 2000/03/10 04:07:22 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.6 $ $Date: 2000/05/09 22:50:42 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -829,7 +829,12 @@ throws IOException {
             // to the last saved lookup-state position
             if (lookaheadStates[state]) {
                 if (endStates[state]) {
-                    result = lookaheadResult;
+                    if (lookaheadResult > 0) {
+                        result = lookaheadResult;
+                    }
+                    else {
+                        result = text.getIndex() + 1;
+                    }
                 }
                 else {
                     lookaheadResult = text.getIndex() + 1;
