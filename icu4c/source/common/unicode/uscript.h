@@ -77,9 +77,9 @@ typedef enum UScriptCode {
       USCRIPT_CYPRIOT      = 46,  /* Cprt */
       USCRIPT_LIMBU        = 47,  /* Limb */
       USCRIPT_LINEAR_B     = 48,  /* Linb */
-      USCRIPT_OSMANYA      = 49,  /* OSMANYA */
-      USCRIPT_SHAVIAN      = 50,  /* SHAVIAN */
-      USCRIPT_TAI_LE       = 51,  /* TAI_LE */
+      USCRIPT_OSMANYA      = 49,  /* Osma */
+      USCRIPT_SHAVIAN      = 50,  /* Shaw */
+      USCRIPT_TAI_LE       = 51,  /* Tale */
       USCRIPT_UGARITIC     = 52,  /* Ugar */
 
       USCRIPT_CODE_LIMIT
