@@ -1174,8 +1174,12 @@ U_CAPI const InverseUCATableHeader * U_EXPORT2
 ucol_initInverseUCA(UErrorCode *status)
 {
     if(U_FAILURE(*status)) return NULL;
+
+    umtx_lock(NULL);
+    UBool f = (invUCA == NULL);
+    umtx_unlock(NULL);
     
-    if(invUCA == NULL) {
+    if(f) {
         InverseUCATableHeader *newInvUCA = NULL;
         UDataMemory *result = udata_openChoice(NULL, INVC_DATA_TYPE, INVC_DATA_NAME, isAcceptableInvUCA, NULL, status);
         
