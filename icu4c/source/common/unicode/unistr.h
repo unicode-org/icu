@@ -692,20 +692,31 @@ public:
   /* Character access */
 
   /**
-   * Return the character at offset <tt>offset</tt>.
+   * Return the code unit at offset <tt>offset</tt>.
    * @param offset a valid offset into the text
-   * @returns the character at offset <tt>offset</tt>
+   * @returns the code unit at offset <tt>offset</tt>
    * @draft
    */
   inline UChar charAt(UTextOffset offset) const;
 
   /**
-   * Return the character at offset <tt>offset</tt>.
+   * Return the code unit at offset <tt>offset</tt>.
    * @param offset a valid offset into the text
-   * @returns the character at offset <tt>offset</tt>
+   * @returns the code unit at offset <tt>offset</tt>
    * @draft
    */
   inline UChar operator [] (UTextOffset offset) const;
+
+  /**
+   * Return the code point that contains the code unit
+   * at offset <tt>offset</tt>.
+   * @param offset a valid offset into the text
+   * that indicates the text offset of any of the code units
+   * that will be assembled into a code point (21-bit value) and returned
+   * @returns the code point of text at <tt>offset</tt>
+   * @draft
+   */
+  inline UChar32 char32At(UTextOffset offset) const;
 
 
   /* Substring extraction */
@@ -1361,8 +1372,8 @@ public:
    * @return TRUE if the text was padded, FALSE otherwise.
    * @draft
    */
-  inline bool_t padLeading(int32_t targetLength,
-            UChar padChar = 0x0020);
+  bool_t padLeading(int32_t targetLength,
+                    UChar padChar = 0x0020);
 
   /**
    * Pad the end of this UnicodeString with the character <TT>padChar</TT>.  
@@ -1375,8 +1386,8 @@ public:
    * @return TRUE if the text was padded, FALSE otherwise.
    * @draft
    */
-  inline bool_t padTrailing(int32_t targetLength,
-             UChar padChar = 0x0020);
+  bool_t padTrailing(int32_t targetLength,
+                     UChar padChar = 0x0020);
 
   /**
    * Truncate this UnicodeString to the <TT>targetLength</TT>.
@@ -1391,7 +1402,7 @@ public:
    * @return a reference to this
    * @stable
    */
-  inline UnicodeString& trim(void);
+  UnicodeString& trim(void);
 
 
   /* Miscellaneous operations */
@@ -1453,6 +1464,13 @@ public:
   // Constructors
   //========================================
 
+  /**
+   * Dummy enumeration for the disambiguation of function signatures.
+   */
+  enum ESignature {
+    kCodePoint
+  };
+
   /** Construct an empty UnicodeString.  
    * @stable
    */
@@ -1468,11 +1486,28 @@ public:
   UnicodeString(int32_t capacity);
 
   /**
-   * Single UChar constructor.
+   * Single UChar (code unit) constructor.
    * @param ch the character to place in the UnicodeString
    * @draft
    */
   UnicodeString(UChar ch);
+
+  /**
+   * Single UChar32 (code point) constructor.
+   * @param ch the character to place in the UnicodeString
+   * @param sig is a dummy parameter that guarantees that this
+   *        constructor can be distinguished from
+   *        <code>UnicodeString(int32_t capacity)</code>
+   *        on all platforms
+   * @draft
+   *
+   * Usage example:
+   * <pre>
+   * UChar32 c=0x104321;
+   * UnicodeString us(c, UnicodeString::kCodePoint);
+   * </pre>
+   */
+  UnicodeString(UChar32 ch, ESignature sig);
 
   /**
    * UChar* constructor.
@@ -1685,8 +1720,8 @@ private:
   void setToBogus(void);
 
   // Pin start and limit to acceptable values.
-  void pinIndices(UTextOffset& start,
-          int32_t& length) const;
+  inline void pinIndices(UTextOffset& start,
+                         int32_t& length) const;
 
   /*
    * Real constructor for converting from codepage data.
@@ -2191,10 +2226,11 @@ UnicodeString::extractBetween(UTextOffset start,
 inline UChar
 UnicodeString::doCharAt(UTextOffset offset) const
 {
-  if(offset < 0 || offset >= fLength) {
+  if((uint32_t)offset < (uint32_t)fLength) {
+    return fArray[offset];
+  } else {
     return kInvalidUChar;
   }
-  return fArray[ offset ];
 }
 
 inline UChar
@@ -2204,6 +2240,18 @@ UnicodeString::charAt(UTextOffset offset) const
 inline UChar
 UnicodeString::operator[] (UTextOffset offset) const
 { return doCharAt(offset); }
+
+inline UChar32
+UnicodeString::char32At(UTextOffset offset) const
+{
+  if((uint32_t)offset < (uint32_t)fLength) {
+    UChar32 c;
+    UTF_GET_CHAR(fArray, offset, fLength, c);
+    return c;
+  } else {
+    return kInvalidUChar;
+  }
+}
 
 inline bool_t
 UnicodeString::empty() const
@@ -2237,14 +2285,6 @@ UnicodeString::setTo(const UnicodeString& srcText,
 inline UnicodeString& 
 UnicodeString::setTo(const UnicodeString& srcText)
 { return doReplace(0, fLength, srcText, 0, srcText.fLength); }
-
-#if 0
-inline UnicodeString& 
-UnicodeString::setTo(const UChar *srcChars, 
-             UTextOffset srcStart, 
-             int32_t srcLength)
-{ return doReplace(0, fLength, srcChars, srcStart, srcLength); }
-#endif
 
 inline UnicodeString& 
 UnicodeString::setTo(const UChar *srcChars,
@@ -2334,70 +2374,14 @@ UnicodeString::removeBetween(UTextOffset start,
 { return doReplace(start, limit - start, 0, 0, 0); }
 
 inline bool_t 
-UnicodeString::padLeading(int32_t targetLength,
-              UChar padChar)
-{
-  if(fLength >= targetLength)
-    return FALSE;
-  else {
-    int32_t len = fLength;
-    for(int32_t i = 0; i < targetLength - len; ++i)
-      doReplace(0, 0, &padChar, 0, 1);
-    return TRUE;
-  }
-}
-
-inline bool_t 
-UnicodeString::padTrailing(int32_t targetLength,
-               UChar padChar)
-{
-  if(fLength >= targetLength)
-    return FALSE;
-  else {
-    int32_t len = fLength;
-    for(int32_t i = 0; i < targetLength - len; ++i)
-      doReplace(fLength, 0, &padChar, 0, 1);
-    return TRUE;
-  }
-}
-
-inline bool_t 
 UnicodeString::truncate(int32_t targetLength)
 {
-  if(fLength < targetLength)
-    return FALSE;
-  else {
-    doReplace(targetLength, fLength - targetLength, 0, 0, 0);
+  if((uint32_t)targetLength < (uint32_t)fLength) {
+    fLength = targetLength;
     return TRUE;
+  } else {
+    return FALSE;
   }
-}
-
-inline UnicodeString& 
-UnicodeString::trim()
-{
-  int32_t wsStart = 0;
-  int32_t wsEnd = 0;
-  UTextOffset start = 0;
-  UTextOffset limit = fLength;
-  UChar c = doCharAt(start);
-
-  while(start < limit && 
-    (c == 0x0020 || Unicode::getType(c) == Unicode::SPACE_SEPARATOR)) {
-    ++wsStart;
-    c = doCharAt(++start);
-  }
-
-  c = charAt(--limit);
-  while(limit > start && 
-    (c == 0x0020 || Unicode::getType(c) == Unicode::SPACE_SEPARATOR)) {
-    ++wsEnd;
-    c = doCharAt(--limit);
-  }
-
-  doReplace(0, wsStart, 0, 0, 0);
-  doReplace(fLength - wsEnd, wsEnd, 0, 0, 0);
-
-  return *this;
 }
 
 inline UnicodeString& 
@@ -2421,6 +2405,23 @@ UnicodeString::isBogus() const
 //========================================
 // Privates
 //========================================
+
+inline void
+UnicodeString::pinIndices(UTextOffset& start,
+                          int32_t& length) const
+{
+  // pin indices
+  if(start < 0) {
+    start = 0;
+  } else if(start > fLength) {
+    start = fLength;
+  }
+  if(length < 0) {
+    length = 0;
+  } else if(length > (fLength - start)) {
+    length = (fLength - start);
+  }
+}
 
 inline UChar* 
 UnicodeString::getArrayStart()
