@@ -120,11 +120,11 @@ enum E_Where
 typedef enum E_Where E_Where;
 /*****************************************************************************/
 
-#define CONFIRM_EQ(actual,expected) if (u_strcmp(expected,actual)==0){ record_pass(); } else { record_fail(); log_err("%s  returned  %s  instead of %s\n", action, austrdup(actual), austrdup(expected)); pass=FALSE; }
-#define CONFIRM_INT_EQ(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); log_err("%s returned %d instead of %d\n",  action, actual, expected); pass=FALSE; }
-#define CONFIRM_INT_GE(actual,expected) if ((actual)>=(expected)) { record_pass(); } else { record_fail(); log_err("%s returned %d instead of x >= %d\n",  action, actual, expected); pass=FALSE; }
-#define CONFIRM_INT_NE(actual,expected) if ((expected)!=(actual)) { record_pass(); } else { record_fail(); log_err("%s returned %d instead of x != %d\n",  action, actual, expected); pass=FALSE; }
-#define CONFIRM_ErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail();  log_err("%s returned  %s  instead of %s\n", action, myErrorName(actual), myErrorName(expected)); pass=FALSE; }
+#define CONFIRM_EQ(actual,expected) if (u_strcmp(expected,actual)==0){ record_pass(); } else { record_fail(); log_err("%s  returned  %s  instead of %s\n", action, austrdup(actual), austrdup(expected)); }
+#define CONFIRM_INT_EQ(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); log_err("%s returned %d instead of %d\n",  action, actual, expected); }
+#define CONFIRM_INT_GE(actual,expected) if ((actual)>=(expected)) { record_pass(); } else { record_fail(); log_err("%s returned %d instead of x >= %d\n",  action, actual, expected); }
+#define CONFIRM_INT_NE(actual,expected) if ((expected)!=(actual)) { record_pass(); } else { record_fail(); log_err("%s returned %d instead of x != %d\n",  action, actual, expected); }
+#define CONFIRM_ErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail();  log_err("%s returned  %s  instead of %s\n", action, myErrorName(actual), myErrorName(expected)); }
 
 
 /* Array of our test objects */
@@ -156,7 +156,7 @@ static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
 
 static void printUChars(UChar*);
 
-static void TestGetVersion();
+static void TestGetVersion(void);
 /***************************************************************************************/
 
 /* Array of our test objects */
@@ -167,7 +167,7 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestConstruction2,   "tsutil/creststn/TestConstruction2");
     addTest(root, &TestResourceBundles, "tsutil/creststn/TestResourceBundle");
     addTest(root, &TestFallback,        "tsutil/creststn/TestFallback");
-    addTest(root, &TestGetVersion,        "tsutil/creststn/TestGetVersion");
+    addTest(root, &TestGetVersion,      "tsutil/creststn/TestGetVersion");
     addTest(root, &TestAliasConflict,   "tsutil/creststn/TestAlias");
     addTest(root, &TestNewTypes,        "tsutil/creststn/TestNewTypes");
     addTest(root, &TestBinaryCollationData, "tsutil/creststn/TestBinaryCollationData");
@@ -279,7 +279,7 @@ static void TestBinaryCollationData(){
     UResourceBundle *binColl = NULL;
     uint8_t *binResult = NULL;
     int32_t len=0;
-    char* action="testing the binary collaton data";
+    const char* action="testing the binary collaton data";
 
     directory= u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
@@ -791,7 +791,7 @@ static UBool testTag(const char* frag,
            UBool in_te,
            UBool in_te_IN)
 {
-    UBool pass=TRUE;
+    int32_t failNum = fail;
 
     /* Make array from input params */
 
@@ -1202,7 +1202,7 @@ static UBool testTag(const char* frag,
     ures_close(tags);
     ures_close(arrayItem1);
     free(base);
-    return pass;
+    return (UBool)(failNum == fail);
 }
 
 static void record_pass()
