@@ -1457,8 +1457,8 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
                 }
             }
             if (strings != NULL && strings->size() > 0) {
-#if !UCONFIG_NO_BREAK_ITERATION
                 Locale root("");
+#if !UCONFIG_NO_BREAK_ITERATION
                 BreakIterator *bi = BreakIterator::createWordInstance(root, status);
 #endif
                 if (U_SUCCESS(status)) {
