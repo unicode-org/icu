@@ -5,14 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2002/07/25 22:30:37 $
- * $Revision: 1.29 $
+ * $Date: 2002/07/26 21:17:42 $
+ * $Revision: 1.30 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.impl;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
+import com.ibm.icu.impl.UCharacterProperty;
 
 public final class Utility {
 
@@ -930,7 +931,7 @@ public final class Utility {
     public static int skipWhitespace(String str, int pos) {
         while (pos < str.length()) {
             int c = UTF16.charAt(str, pos);
-            if (!UCharacter.isWhitespace(c)) {
+            if (!UCharacterProperty.isRuleWhiteSpace(c)) {
                 break;
             }
             pos += UTF16.getCharCount(c);
@@ -1003,7 +1004,7 @@ public final class Utility {
                     return -1;
                 }
                 c = rule.charAt(pos++);
-                if (!UCharacter.isWhitespace(c)) {
+                if (!UCharacterProperty.isRuleWhiteSpace(c)) {
                     return -1;
                 }
                 // FALL THROUGH to skipWhitespace
@@ -1088,14 +1089,14 @@ public final class Utility {
      * first character to examine.  It must be less than str.length(),
      * and it must not point to a whitespace character.  That is, must
      * have pos[0] < str.length() and
-     * !UCharacter.isWhitespace(UTF16.charAt(str, pos[0])).  On
+     * !UCharacterProperty.isRuleWhiteSpace(UTF16.charAt(str, pos[0])).  On
      * OUTPUT, the position after the last parsed character.
      * @return the Unicode identifier, or null if there is no valid
      * identifier at pos[0].
      */
     public static String parseUnicodeIdentifier(String str, int[] pos) {
         // assert(pos[0] < str.length());
-        // assert(!UCharacter.isWhitespace(UTF16.charAt(str, pos[0])));
+        // assert(!UCharacterProperty.isRuleWhiteSpace(UTF16.charAt(str, pos[0])));
         StringBuffer buf = new StringBuffer();
         int p = pos[0];
         while (p < str.length()) {
@@ -1489,7 +1490,7 @@ public final class Utility {
                   !((c >= 0x0030/*'0'*/ && c <= 0x0039/*'9'*/) ||
                     (c >= 0x0041/*'A'*/ && c <= 0x005A/*'Z'*/) ||
                     (c >= 0x0061/*'a'*/ && c <= 0x007A/*'z'*/))) ||
-                 UCharacter.isWhitespace(c)) {
+                 UCharacterProperty.isRuleWhiteSpace(c)) {
             UTF16.append(quoteBuf, c);
             // Double ' within a quote
             if (c == APOSTROPHE) {
