@@ -43,7 +43,7 @@ addUStringPrepTest(TestNode** root)
    addTest(root, &Test_nfs4_cs_prep_data,    "spreptst/Test_nfs4_cs_prep_data");
    addTest(root, &Test_nfs4_cis_prep_data,   "spreptst/Test_nfs4_cis_prep_data");
    addTest(root, &Test_nfs4_mixed_prep_data, "spreptst/Test_nfs4_mixed_prep_data");
-   /*addTest(root, &Test_nfs4_cs_prep,         "spreptst/Test_nfs4_cs_prep");*/
+   addTest(root, &Test_nfs4_cs_prep,         "spreptst/Test_nfs4_cs_prep");
    addTest(root, &Test_nfs4_cis_prep,        "spreptst/Test_nfs4_cis_prep");
    addTest(root, &Test_nfs4_mixed_prep,      "spreptst/Test_nfs4_mixed_prep");
 }
@@ -437,6 +437,91 @@ Test_nfs4_mixed_prep(void){
     }
 
 
+}
+
+static void 
+Test_nfs4_cs_prep(void){
+    {
+        /* BiDi checking is turned off */
+        const char *source = "\\uC138\\uACC4\\uC758\\uBAA8\\uB4E0\\uC0AC\\uB78C\\uB4E4\\uC774\\u0644\\u064A\\u0647\\uD55C\\uAD6D\\uC5B4\\uB97C\\uC774\\uD574\\uD55C\\uB2E4\\uBA74";
+        UErrorCode status = U_ZERO_ERROR;
+        char src[MAX_BUFFER_SIZE]={'\0'};
+        UParseError parseError;
+        int32_t srcLen = unescapeData(source, strlen(source), src, MAX_BUFFER_SIZE, &status);
+        if(U_SUCCESS(status)){
+            char dest[MAX_BUFFER_SIZE] = {'\0'};
+            int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, FALSE, &parseError, &status);
+            if(U_FAILURE(status)){
+                log_err("StringPrep failed with error: %s\n", u_errorName(status));
+            }
+            if(strcmp(dest,src)!=0){
+                log_err("Did not get the expected output!");
+            }
+        }else{
+            log_err("Conversion failed with error: %s\n", u_errorName(status));
+        }
+    }
+    {
+        /* Normalization turned off */
+        const char *source = "www.\\u00E0\\u00B3\\u00AF.com";
+        UErrorCode status = U_ZERO_ERROR;
+        char src[MAX_BUFFER_SIZE]={'\0'};
+        UParseError parseError;
+        int32_t srcLen = unescapeData(source, strlen(source), src, MAX_BUFFER_SIZE, &status);
+        if(U_SUCCESS(status)){
+            char dest[MAX_BUFFER_SIZE] = {'\0'};
+            int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, FALSE, &parseError, &status);
+            if(U_FAILURE(status)){
+                log_err("StringPrep failed with error: %s\n", u_errorName(status));
+            }
+            if(strcmp(dest,src)!=0){
+                log_err("Did not get the expected output!");
+            }
+        }else{
+            log_err("Conversion failed with error: %s\n", u_errorName(status));
+        }
+    }
+    {
+        /* case mapping turned off */
+        const char *source = "THISISATEST";
+        UErrorCode status = U_ZERO_ERROR;
+        char src[MAX_BUFFER_SIZE]={'\0'};
+        UParseError parseError;
+        int32_t srcLen = unescapeData(source, strlen(source), src, MAX_BUFFER_SIZE, &status);
+        if(U_SUCCESS(status)){
+            char dest[MAX_BUFFER_SIZE] = {'\0'};
+            int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, TRUE, &parseError, &status);
+            if(U_FAILURE(status)){
+                log_err("StringPrep failed with error: %s\n", u_errorName(status));
+            }
+            if(strcmp(dest,src)!=0){
+                log_err("Did not get the expected output!");
+            }
+        }else{
+            log_err("Conversion failed with error: %s\n", u_errorName(status));
+        }
+    }
+    {
+        /* case mapping turned on */
+        const char *source = "THISISATEST";
+        const char *expected = "thisisatest";
+        UErrorCode status = U_ZERO_ERROR;
+        char src[MAX_BUFFER_SIZE]={'\0'};
+        UParseError parseError;
+        int32_t srcLen = unescapeData(source, strlen(source), src, MAX_BUFFER_SIZE, &status);
+        if(U_SUCCESS(status)){
+            char dest[MAX_BUFFER_SIZE] = {'\0'};
+            int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, FALSE, &parseError, &status);
+            if(U_FAILURE(status)){
+                log_err("StringPrep failed with error: %s\n", u_errorName(status));
+            }
+            if(strcmp(expected, dest)!=0){
+                log_err("Did not get the expected output!");
+            }
+        }else{
+            log_err("Conversion failed with error: %s\n", u_errorName(status));
+        }
+    }
 }
 
 #endif

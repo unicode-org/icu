@@ -685,25 +685,27 @@ usprep_prepare(   const UStringPrepProfile* profile,
     // normalize
     if(doNFKC == TRUE){
         b2Len = usprep_normalize(b1,b1Len, b2,b2Capacity,status);
+        
+        if(*status == U_BUFFER_OVERFLOW_ERROR){
+            // redo processing of string
+            /* we do not have enough room so grow the buffer*/
+            b2 = (UChar*) uprv_malloc(b2Len * U_SIZEOF_UCHAR);
+            if(b2==NULL){
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                goto CLEANUP;
+            }
+
+            *status = U_ZERO_ERROR; // reset error
+        
+            b2Len = usprep_normalize(b1,b1Len, b2,b2Len,status);
+        
+        }
+
     }else{
         b2 = b1;
         b2Len = b1Len;
     }
     
-    if(*status == U_BUFFER_OVERFLOW_ERROR){
-        // redo processing of string
-        /* we do not have enough room so grow the buffer*/
-        b2 = (UChar*) uprv_malloc(b2Len * U_SIZEOF_UCHAR);
-        if(b2==NULL){
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            goto CLEANUP;
-        }
-
-        *status = U_ZERO_ERROR; // reset error
-        
-        b2Len = usprep_normalize(b2,b2Len, b2,b2Len,status);
-        
-    }
 
     if(U_FAILURE(*status)){
         goto CLEANUP;
