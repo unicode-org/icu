@@ -285,6 +285,10 @@ SOURCE=.\ucnvhz.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucnviscii.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucnvlat1.c
 # ADD CPP /Za
 # End Source File
@@ -1210,6 +1214,21 @@ SOURCE=.\uresimp.h
 # Begin Source File
 
 SOURCE=.\unicode\uscript.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\uscript.h
+
+"..\..\include\unicode\script.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
