@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2002/12/05 02:37:27 $ 
-* $Revision: 1.27 $
+* $Date: 2002/12/11 02:09:05 $ 
+* $Revision: 1.28 $
 *
 *******************************************************************************
 */
@@ -158,14 +158,15 @@ public final class UTF16
     public static final int SURROGATE_MAX_VALUE = TRAIL_SURROGATE_MAX_VALUE; 
                               
     // constructor --------------------------------------------------------
-      
+
+    ///CLOVER:OFF
     /**
      * Prevent instance from being created.
      */
     private UTF16() 
     {
     }
-
+    ///CLOVER:ON
     // public method ------------------------------------------------------
       
     /**

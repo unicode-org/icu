@@ -615,6 +615,52 @@ public class SearchTest extends TestFmwk {
         return true;
     }
     
+    public void TestConstructor()
+    {
+        String pattern = "pattern";
+        String text = "text";
+        StringCharacterIterator textiter = new StringCharacterIterator(text);
+        Collator defaultcollator = Collator.getInstance();
+        BreakIterator breaker = BreakIterator.getCharacterInstance();
+        breaker.setText(text);
+        StringSearch search = new StringSearch(pattern, text);
+        if (!search.getPattern().equals(pattern)
+            || !search.getTarget().equals(textiter) 
+            || !search.getCollator().equals(defaultcollator)
+            || !search.getBreakIterator().equals(breaker)) {
+            errln("StringSearch(String, String) error");
+        }
+        search = new StringSearch(pattern, textiter, m_fr_fr_);
+        if (!search.getPattern().equals(pattern)
+            || !search.getTarget().equals(textiter) 
+            || !search.getCollator().equals(m_fr_fr_)
+            || !search.getBreakIterator().equals(breaker)) {
+            errln("StringSearch(String, StringCharacterIterator, "
+                  + "RuleBasedCollator) error");
+        }
+        Locale de = new Locale("de", "DE");
+        breaker = BreakIterator.getCharacterInstance(de);
+        breaker.setText(text);
+        search = new StringSearch(pattern, textiter, de);
+        if (!search.getPattern().equals(pattern)
+            || !search.getTarget().equals(textiter) 
+            || !search.getCollator().equals(Collator.getInstance(de))
+            || !search.getBreakIterator().equals(breaker)) {
+            errln("StringSearch(String, StringCharacterIterator, Locale) "
+                  + "error");
+        }
+        
+        search = new StringSearch(pattern, textiter, m_fr_fr_, 
+                                  m_en_wordbreaker_);
+        if (!search.getPattern().equals(pattern)
+            || !search.getTarget().equals(textiter) 
+            || !search.getCollator().equals(m_fr_fr_)
+            || !search.getBreakIterator().equals(m_en_wordbreaker_)) {
+            errln("StringSearch(String, StringCharacterIterator, Locale) "
+                  + "error");
+        }
+    }
+    
     public void TestBasic() {
         int count = 0;
         while (BASIC[count].text != null) {

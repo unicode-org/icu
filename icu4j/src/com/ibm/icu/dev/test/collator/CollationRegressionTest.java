@@ -817,7 +817,7 @@ public class CollationRegressionTest extends TestFmwk {
         // try to instantiate one for every locale available on the system
         // in order to prevent this sort of bug from cropping up in the future
         //
-        Locale locales[] = Locale.getAvailableLocales();
+        Locale locales[] = Collator.getAvailableLocales();
         
         for (int i = 0; i < locales.length; i += 1)
         {
