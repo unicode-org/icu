@@ -238,13 +238,12 @@ ChoiceFormat::releaseNumberFormat(NumberFormat *adopt)
 
  */
 double
-ChoiceFormat::stod(const UnicodeString& string,
-                   UErrorCode& status)
+ChoiceFormat::stod(const UnicodeString& string)
 {
-    
-    char source[256] = { '\0' };
+    char source[256];
     char* end;
-    string.extract(0,string.length(),source,256,""/*default codepage*/);
+
+    string.extract(0, string.length(), source, 256, "");    /* invariant codepage */
     return uprv_strtod(source,&end);
 }
 
@@ -256,11 +255,11 @@ ChoiceFormat::stod(const UnicodeString& string,
  */
 UnicodeString&
 ChoiceFormat::dtos(double value,
-                   UnicodeString& string,
-                   UErrorCode& status)
+                   UnicodeString& string)
 {
-    char temp[256] = {'\0'};
-    uprv_dtostr(value,temp,3,TRUE);
+    char temp[256];
+
+    uprv_dtostr(value, temp, 3, TRUE);
     string = UnicodeString(temp);
     return string;
 }
@@ -417,7 +416,7 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
                            UErrorCode& status)
 {
     UParseError parseError;
-    applyPattern(pattern,parseError,status);
+    applyPattern(pattern, parseError, status);
 }
 
 // -------------------------------------
@@ -501,10 +500,7 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
             } else if (!buf.compare(fgNegativeInfinity, NEGATIVE_INF_STRLEN)) {
                 limit = -uprv_getInfinity();
             } else {
-                limit = stod(buf, status);
-                if (U_FAILURE(status)) {
-                    goto error;
-                }
+                limit = stod(buf);
             }
 
             if (k == count) {
@@ -580,7 +576,6 @@ ChoiceFormat::toPattern(UnicodeString& result) const
         if (i != 0) {
             result += VERTICAL_BAR;
         }
-        UErrorCode status = U_ZERO_ERROR;
         UnicodeString buf;
         if (uprv_isPositiveInfinity(fChoiceLimits[i])) {
             result += INFINITY;
@@ -588,7 +583,7 @@ ChoiceFormat::toPattern(UnicodeString& result) const
             result += MINUS;
             result += INFINITY;
         } else {
-            result += dtos(fChoiceLimits[i], buf, status);
+            result += dtos(fChoiceLimits[i], buf);
         }
         if (fClosures[i]) {
             result += LESS_THAN;
