@@ -1166,7 +1166,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
         break;
 
     case doBackslashA:
-        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_A, 0), *fStatus);
+        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_CARET, 0), *fStatus);
         break;
 
     case doBackslashB:
@@ -2070,6 +2070,268 @@ UBool  RegexCompile::possibleNullMatch(int32_t start, int32_t end) {
 
 //----------------------------------------------------------------------------------------
 //
+//   matchStartType    Determine how a match can start.
+//                     Used to optimize find() operations.
+//
+//----------------------------------------------------------------------------------------
+int32_t   RegexCompile::matchStartType() {
+    if (U_FAILURE(*fStatus)) {
+        return 0;
+    }
+
+
+    int32_t    loc;
+    int32_t    op;
+    int32_t    opType;
+    int32_t    currentLen = 0;
+
+    UnicodeSet   startingChars;
+    int32_t      startStringIndex;
+    int32_t      startStringChars;
+
+    UBool        atStart = TRUE;     // True if no part of the pattern yet encountered
+                                     //   could have advanced the position in a match.
+
+    // forwardedLength is a vector holding minimum-match-length values that
+    //   are propagated forward in the pattern by JMP or STATE_SAVE operations.
+    //   It must be one longer than the pattern being checked because some  ops
+    //   will jmp to a end-of-block+1 location from within a block, and we must
+    //   count those when checking the block.
+    int32_t end = fRXPat->fCompiledPat->size();
+    UVector32  forwardedLength(end+1, *fStatus);
+    forwardedLength.setSize(end+1);
+    for (loc=3; loc<end; loc++) {
+        forwardedLength.setElementAt(INT32_MAX, loc);
+    }
+
+    for (loc = 3; loc<end; loc++) {
+        op = fRXPat->fCompiledPat->elementAti(loc);
+        opType = URX_TYPE(op);
+
+        // The loop is advancing linearly through the pattern.
+        // If the op we are now at was the destination of a branch in the pattern,
+        // and that path has a shorter minimum length than the current accumulated value,
+        // replace the current accumulated value.
+        if (forwardedLength.elementAti(loc) < currentLen) {
+            currentLen = forwardedLength.elementAti(loc);
+        }
+
+        switch (opType) {
+            // Ops that don't change the total length matched
+        case URX_RESERVED_OP:
+        case URX_END:
+        case URX_STRING_LEN:
+        case URX_NOP:
+        case URX_START_CAPTURE:
+        case URX_END_CAPTURE:
+        case URX_BACKSLASH_B:
+        case URX_BACKSLASH_G:
+        case URX_BACKSLASH_Z:
+        case URX_DOLLAR:
+        case URX_RELOC_OPRND:
+        case URX_STO_INP_LOC:
+        case URX_DOLLAR_M:
+        case URX_BACKTRACK:
+        case URX_BACKREF:         // BackRef.  Must assume that it might be a zero length match
+        case URX_BACKREF_I:
+
+        case URX_STO_SP:          // Setup for atomic or possessive blocks.  Doesn't change what can match.
+        case URX_LD_SP:
+            break;
+            
+        case URX_CARET:
+            if (atStart) {
+                fRXPat->fStartType = START_START;
+            }
+            break;
+
+        case URX_CARET_M:
+            if (atStart) {
+                fRXPat->fStartType = START_LINE;
+            }
+            break;
+                
+        case URX_ONECHAR:
+            if (currentLen == 0) {
+                // This character could appear at the start of a match.
+                //   Add it to the set of possible starting characters.
+                startingChars.add(URX_VAL(op));
+            }
+            currentLen++;
+            atStart = FALSE;
+            break;
+            
+
+        case URX_SETREF:               // TODO:  Sense of op, invert the set
+            if (currentLen == 0) {
+                int32_t  sn = URX_VAL(op);
+                U_ASSERT(sn > 0 && sn < fRXPat->fSets->size());
+                const UnicodeSet *s = (UnicodeSet *)fRXPat->fSets->elementAt(sn);
+                startingChars.addAll(*s);
+            }
+            currentLen++;
+            atStart = FALSE;
+            break;
+
+        case URX_STATIC_SETREF:         // TODO:  sense of op, invert the set.
+            if (currentLen == 0) {
+                int32_t  sn = URX_VAL(op);
+                const UnicodeSet *s = fRXPat->fStaticSets[sn];
+                startingChars.addAll(*s);
+            }
+            currentLen++;
+            atStart = FALSE;
+            break;
+
+
+
+        case URX_BACKSLASH_D:
+             if (currentLen == 0) {
+                 UnicodeSet s;   // TODO:  sense of op, invert the set.
+                 s.applyIntPropertyValue(UCHAR_GENERAL_CATEGORY_MASK, U_GC_ND_MASK, *fStatus);
+                 startingChars.addAll(s);
+            }
+            currentLen++;
+            atStart = FALSE;
+            break;
+
+
+       case URX_ONECHAR_I:
+        case URX_BACKSLASH_W:
+        case URX_BACKSLASH_X:   // Grahpeme Cluster.  Minimum is 1, max unbounded.
+        case URX_DOTANY_ALL:    // . matches one or two.
+        case URX_DOTANY:
+            currentLen++;
+            atStart = FALSE;
+            break;
+
+
+        case URX_JMP:
+        case URX_JMPX:
+            {
+                int32_t  jmpDest = URX_VAL(op);
+                if (jmpDest < loc) {
+                    // Loop of some kind.  Can safely ignore, the worst that will happen
+                    //  is that we understate the true minimum length
+                    currentLen = forwardedLength.elementAti(loc+1);
+                   
+                } else {
+                    // Forward jump.  Propagate the current min length to the target loc of the jump.
+                    U_ASSERT(jmpDest <= end+1);
+                    if (forwardedLength.elementAti(jmpDest) > currentLen) {
+                        forwardedLength.setElementAt(currentLen, jmpDest);
+                    }
+                }
+            }
+            break;
+
+        case URX_FAIL:
+            // Fails are kind of like a branch, except that the min length was
+            //   propagated already, by the state save.
+            currentLen = forwardedLength.elementAti(loc+1);
+            break;
+
+
+        case URX_STATE_SAVE:
+            {
+                // State Save, for forward jumps, propagate the current minimum.
+                //             of the state save.
+                int32_t  jmpDest = URX_VAL(op);
+                if (jmpDest > loc) {
+                    if (currentLen < forwardedLength.elementAti(jmpDest)) {
+                        forwardedLength.setElementAt(currentLen, jmpDest);
+                    }
+                } 
+            }
+            break;
+            
+
+
+
+        case URX_STRING:
+        case URX_STRING_I:
+            {
+                loc++;
+                int32_t stringLenOp = fRXPat->fCompiledPat->elementAti(loc);
+                currentLen += URX_VAL(stringLenOp);
+            }
+            break;
+
+
+        case URX_CTR_INIT:
+        case URX_CTR_INIT_NG:
+        case URX_CTR_INIT_P:
+            {
+                // Loop Init Ops.  These don't change the min length, but they are 4 word ops
+                //   so location must be updated accordingly.
+                loc+=3;
+            }
+            break;
+
+
+        case URX_CTR_LOOP:
+        case URX_CTR_LOOP_NG:
+        case URX_CTR_LOOP_P:
+            // Loop ops. 
+            //  The jump is conditional, backwards only.
+            break;
+            
+            
+
+        case URX_LA_START:
+        case URX_LB_START:
+            {
+                // Look-around.  Scan forward until the matching look-ahead end,
+                //   without processing the look-around block.  This is overly pessimistic.
+                //   TODO:  Positive lookahead could recursively do the block, then continue
+                //          with the longer of the block or the value coming in.
+                int32_t  depth = 0;
+                for (;;) {
+                    loc++;
+                    op = fRXPat->fCompiledPat->elementAti(loc);
+                    if (URX_TYPE(op) == URX_LA_START || URX_TYPE(op) == URX_LB_START) {
+                        depth++;
+                    }
+                    if (URX_TYPE(op) == URX_LA_END || URX_TYPE(op)==URX_LBN_END) {
+                        if (depth == 0) {
+                            break;
+                        }
+                        depth--;
+                    }
+                    U_ASSERT(loc <= end);  
+                }
+            }
+            break;
+            
+        case URX_LA_END:
+        case URX_LB_CONT:
+        case URX_LB_END:
+        case URX_LBN_CONT:
+        case URX_LBN_END:
+            // Only come here if the matching URX_LA_START or URX_LB_START was not in the
+            //   range being sized, which happens when measuring size of look-behind blocks.
+            break;
+            
+        default:
+            U_ASSERT(FALSE);
+            }
+            
+        }
+
+
+    // We have finished walking through the ops.  Check whether some forward jump
+    //   propagated a shorter length to location end+1.
+    if (forwardedLength.elementAti(end+1) < currentLen) {
+        currentLen = forwardedLength.elementAti(end+1);
+    }
+            
+    return currentLen;
+}
+
+
+
+//----------------------------------------------------------------------------------------
+//
 //   minMatchLength    Calculate the length of the shortest string that could
 //                     match the specified pattern.   
 //                     Length is in 16 bit code units, not code points.
@@ -2128,7 +2390,6 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
         case URX_NOP:
         case URX_START_CAPTURE:
         case URX_END_CAPTURE:
-        case URX_BACKSLASH_A:
         case URX_BACKSLASH_B:
         case URX_BACKSLASH_G:
         case URX_BACKSLASH_Z:
@@ -2335,7 +2596,6 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
         case URX_NOP:
         case URX_START_CAPTURE:
         case URX_END_CAPTURE:
-        case URX_BACKSLASH_A:
         case URX_BACKSLASH_B:
         case URX_BACKSLASH_G:
         case URX_BACKSLASH_Z:

@@ -68,7 +68,7 @@ enum {
                                                     //   the pattern.
      URX_FAIL          = 14,   // Stop match operation,  No match.
 
-     URX_BACKSLASH_A   = 15,   
+     URX_UNUSED        = 15,   
      URX_BACKSLASH_B   = 16,   // Value field:  0:  \b    1:  \B
      URX_BACKSLASH_G   = 17, 
      URX_BACKSLASH_W   = 18,   // Value field:  0:  \w    1:  \W
@@ -166,7 +166,7 @@ enum {
         "DOTANY",              \
         "JMP",                 \
         "FAIL",                \
-        "URX_BACKSLASH_A",     \
+        "URX_UNUSED",          \
         "URX_BACKSLASH_B",     \
         "URX_BACKSLASH_G",     \
         "URX_BACKSLASH_W",     \
@@ -246,6 +246,19 @@ struct REStackFrame {
                                          //   Locations assigned at pattern compile time.
 };
 
+//
+//  Start-Of-Match type.  Used by find() to quickly scan to positions where a
+//                        match might start before firing up the full match engine.
+//
+enum StartOfMatch {
+    START_NO_INFO,             // No hint available.
+    START_CHAR,                // Match starts with a literal code point.
+    START_SET,                 // Match starts with something matching a set.
+    START_START,               // Match starts at start of buffer only (^ or \A)
+    START_LINE,                // Match starts with ^ in multi-line mode.
+    START_STRING               // Match starts with a literal string.
+};
+    
 U_NAMESPACE_END
 #endif
 

@@ -350,6 +350,9 @@ private:
     UnicodeSet     **fStaticSets;  // Ptr to static (shared) sets for predefined
                                    //   regex character classes, e.g. Word.
 
+    int32_t         fStartType;    // Info on how a match must start.
+    int32_t         fStartInfo;    //   Data, interpretation depends on start type.
+
     /**
      * The address of this static class variable serves as this class's ID
      * for ICU "poor man's RTTI".
