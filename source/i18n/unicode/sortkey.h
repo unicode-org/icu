@@ -1,23 +1,21 @@
 /*
-* Copyright (C) {1996-2003}, International Business Machines Corporation and others. All Rights Reserved.
-*****************************************************************************************
-*/
-//===============================================================================
-//
-// File sortkey.h
-//
-//
-//
-// Created by: Helena Shih
-//
-// Modification History:
-//
-//  Date         Name          Description
-//
-//  6/20/97     helena      Java class name change.
-//  8/18/97     helena      Added internal API documentation.
-//  6/26/98     erm         Changed to use byte arrays and memcmp.
-//===============================================================================
+ * Copyright (C) 1996-2004, International Business Machines Corporation and others.
+ * All Rights Reserved.
+ *****************************************************************************************
+ *
+ * File sortkey.h
+ *
+ * Created by: Helena Shih
+ *
+ * Modification History:
+ *
+ *  Date         Name          Description
+ *
+ *  6/20/97     helena      Java class name change.
+ *  8/18/97     helena      Added internal API documentation.
+ *  6/26/98     erm         Changed to use byte arrays and memcmp.
+ *****************************************************************************************
+ */
 
 #ifndef SORTKEY_H
 #define SORTKEY_H

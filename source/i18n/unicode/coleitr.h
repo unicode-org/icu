@@ -1,9 +1,9 @@
 /*
-******************************************************************************
-*   Copyright (C) 1997-2003, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-******************************************************************************
-*/
+ ******************************************************************************
+ *   Copyright (C) 1997-2004, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ ******************************************************************************
+ */
 
 /**
 * File coleitr.h

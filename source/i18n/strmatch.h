@@ -1,10 +1,11 @@
 /*
-* Copyright (C) 2001-2003, International Business Machines Corporation and others. All Rights Reserved.
-**********************************************************************
-*   Date        Name        Description
-*   07/23/01    aliu        Creation.
-**********************************************************************
-*/
+ * Copyright (C) 2001-2004, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ **********************************************************************
+ *   Date        Name        Description
+ *   07/23/01    aliu        Creation.
+ **********************************************************************
+ */
 #ifndef STRMATCH_H
 #define STRMATCH_H
 

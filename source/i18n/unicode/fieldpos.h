@@ -1,19 +1,20 @@
 /*
-********************************************************************************
-*   Copyright (C) 1997-2003, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-********************************************************************************
-*
-* File FIELDPOS.H
-*
-* Modification History:
-*
-*   Date        Name        Description
-*   02/25/97    aliu        Converted from java.
-*   03/17/97    clhuang     Updated per Format implementation.
-*    07/17/98    stephen        Added default/copy ctors, and operators =, ==, !=
-********************************************************************************
-*/
+ ********************************************************************************
+ *   Copyright (C) 1997-2004, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ ********************************************************************************
+ *
+ * File FIELDPOS.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   02/25/97    aliu        Converted from java.
+ *   03/17/97    clhuang     Updated per Format implementation.
+ *    07/17/98    stephen        Added default/copy ctors, and operators =, ==, !=
+ ********************************************************************************
+ */
+
 // *****************************************************************************
 // This file was generated from the java source file FieldPosition.java
 // *****************************************************************************

@@ -1,15 +1,16 @@
 /*
-* Copyright (C) 2003, International Business Machines Corporation and others. All Rights Reserved.
-********************************************************************************
-*
-* File BUDDHCAL.H
-*
-* Modification History:
-*
-*   Date        Name        Description
-*   05/13/2003  srl          copied from gregocal.h
-********************************************************************************
-*/
+ * Copyright (C) 2003-2004, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ ********************************************************************************
+ *
+ * File BUDDHCAL.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   05/13/2003  srl          copied from gregocal.h
+ ********************************************************************************
+ */
 
 #ifndef BUDDHCAL_H
 #define BUDDHCAL_H
