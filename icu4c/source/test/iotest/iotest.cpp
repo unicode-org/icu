@@ -450,7 +450,6 @@ static void TestfgetsLineCount() {
     int32_t repetitions;
     int32_t nlRepetitions;
 
-    u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
     u_memset(expectedBuffer, 0, sizeof(expectedBuffer)/sizeof(expectedBuffer[0]));
 
     for (repetitions = 0; repetitions < 16; repetitions++) {
@@ -467,6 +466,7 @@ static void TestfgetsLineCount() {
     u_uastrncpy(buffer, charBuffer, expectedSize+1);
 
     for (;;) {
+        u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
         char *returnedCharBuffer = fgets(charBuffer, sizeof(charBuffer)/sizeof(charBuffer[0]), stdFile);
         UChar *returnedUCharBuffer = u_fgets(myFile, sizeof(buffer)/sizeof(buffer[0]), buffer);
 
@@ -485,6 +485,9 @@ static void TestfgetsLineCount() {
         }
         if (u_strcmp(buffer, expectedBuffer) != 0) {
             log_err("buffers are different\n");
+        }
+        if (buffer[u_strlen(buffer)+1] != 0xDEAD) {
+            log_err("u_fgets wrote too much\n");
         }
     }
     fclose(stdFile);
