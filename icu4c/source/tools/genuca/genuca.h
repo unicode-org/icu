@@ -29,7 +29,6 @@
 #include "unicode/unicode.h"
 #include "ucol_imp.h"
 #include "ucmp32.h"
-#include "compitr.h"
 #include "uhash.h"
 #include "umemstrm.h"
 #include "unewdata.h"
