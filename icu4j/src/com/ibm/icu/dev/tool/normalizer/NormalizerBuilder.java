@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/NormalizerBuilder.java,v $ 
- * $Date: 2000/03/10 04:17:56 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/07/12 16:41:26 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -52,6 +52,7 @@ public final class NormalizerBuilder
     private boolean fPrompt = false;
     private boolean fJava = true;
     private boolean fCPP = false;
+    private String fOutDir = null; // output directory for either Java or C++
 
     /**
      * The highest Unicode character that has a canonical decomposition.
@@ -87,16 +88,24 @@ public final class NormalizerBuilder
                 fCPP = true;
                 fJava = false;
             }
+            else if (args[i].equals("-outdir")) {
+                fOutDir = args[++i];
+            }
         }
         if (uinfo == null) {
-            uinfo = new UInfo("../src/data/unicode/UnicodeData.txt");
+            uinfo = new UInfo();
         }
+        if (fOutDir == null) {
+            fOutDir = fJava ? "src/com/ibm/text/"
+                            : "./";
+        }
+        if (!fOutDir.endsWith("/")) { fOutDir += '/'; }
 
         boolean canonicalOnly = true;
 
         createDecompositions();
 
-        out("\nGenerating permuted compositions...");
+        outv("\nGenerating permuted compositions...");
 
         // Form the list of all the permuted sequences that are canonically
         // equivalent to the canonical decompositions.
@@ -143,10 +152,10 @@ public final class NormalizerBuilder
             }
         }
 
-        out("\nLargest composed char: " + uinfo.hex(largestChar));
+        outv("\nLargest composed char: " + uinfo.hex(largestChar));
 
         // Form the binary compositions
-        out("\nGenerating pairwise compositions...");
+        outv("\nGenerating pairwise compositions...");
 
         Iterator list = permutedCompositions.keySet().iterator();
         while (list.hasNext()) {
@@ -204,7 +213,7 @@ public final class NormalizerBuilder
         // transforms into a different pair of characters, usually because the
         // canonical combining classes are reversed.
 
-        out("\nGenerating exploding pairs....");
+        outv("\nGenerating exploding pairs....");
 
         List binaryValues = new ArrayList(binaryCompositions.values());
         Collections.sort(binaryValues);
@@ -235,7 +244,7 @@ public final class NormalizerBuilder
 
         buildDecompData();
         buildComposeData();
-        out("Success!");
+        outv("Success!");
 
         if (fPrompt) {
             System.out.println("\nHit any key to continue...");
@@ -346,7 +355,7 @@ public final class NormalizerBuilder
      */
     private void createDecompositions()
     {
-        out("\nGenerating Full decompositions...");
+        outv("\nGenerating Full decompositions...");
         StringBuffer temp = new StringBuffer();
 
         short compatCount=0, canonCount=0;
@@ -414,7 +423,7 @@ public final class NormalizerBuilder
      */
     void buildDecompData() throws IOException {
 
-        out("\nGenerating DecompData.java....");
+        outv("\nGenerating DecompData.java....");
         //
         // For each Unicode character that has a decomposition, we put its
         // fully-decomposed form at the end of the "contents" string, followed
@@ -448,8 +457,8 @@ public final class NormalizerBuilder
             if (uinfo.hasCanonicalDecomposition(ch)) {
 
                 if (ch == 0x0f77) {
-                    out("0F77: decomps.get() = " + uinfo.hex(decomps.get(ch)));
-                    out("0F77: fullDecomp = " + uinfo.hex(uinfo.getFullDecomposition(ch,false)));
+                    outv("0F77: decomps.get() = " + uinfo.hex(decomps.get(ch)));
+                    outv("0F77: fullDecomp = " + uinfo.hex(uinfo.getFullDecomposition(ch,false)));
                 }
 
                 canonIndex = putLength(replace, decomps.get(ch), compatIndex);
@@ -484,28 +493,33 @@ public final class NormalizerBuilder
         // Finally, write the data out to a compilable Java source file
 
         if (fJava) {
-            writeDecompData(new JavaWriter("../src/com/ibm/text/DecompData"),
+            String f = fOutDir + "DecompData";
+            out("Writing " + f);
+            writeDecompData(new JavaWriter(f),
                         canonIndex, compatIndex, BASE, offsets, replace, canonClasses);
+            
         }
 
         if (fCPP) {
-            writeDecompData(new CPPWriter("/intlwork/source/collate/CPP/dcmpdata", "DecompData"),
+            String f = fOutDir + "dcmpdata";
+            out("Writing " + f + ".(cpp|h)");
+            writeDecompData(new CPPWriter(f, "DecompData"),
                         canonIndex, compatIndex, BASE, offsets, replace, canonClasses);
         }
 
-        out("Decomp data: MAX_CANONICAL = " + canonIndex + ", MAX_DECOMP = " + compatIndex);
+        outv("Decomp data: MAX_CANONICAL = " + canonIndex + ", MAX_DECOMP = " + compatIndex);
 
         if (fShowSizes) {
             int offsetSize = offsets.getIndexArray().length * 2 + offsets.getValueArray().length * 2;
             int canonSize = canonClasses.getIndexArray().length * 2 + canonClasses.getValueArray().length;
             int replaceLength = replace.length();
 
-            out("Total runtime size of decomp data is "
+            outv("Total runtime size of decomp data is "
                 + (offsetSize + canonSize + replaceLength));
 
-            out("  offsets:      " + offsetSize);
-            out("  canonClasses: " + canonSize);
-            out("  replace:      " + replaceLength);
+            outv("  offsets:      " + offsetSize);
+            outv("  canonClasses: " + canonSize);
+            outv("  replace:      " + replaceLength);
         }
     }
 
@@ -515,6 +529,7 @@ public final class NormalizerBuilder
     {
         out.write("MAX_CANONICAL",  maxCanon        );
         out.write("MAX_COMPAT",     maxCompat       );
+        // No longer used [liu]:
         out.write("DECOMP_MASK",    DECOMP_MASK     );
         out.write("DECOMP_RECURSE", DECOMP_RECURSE  );
         out.write("BASE",           BASE            );
@@ -582,7 +597,7 @@ public final class NormalizerBuilder
      */
     void buildComposeData() throws IOException
     {
-       out("\nGenerating ComposeData.java....");
+       outv("\nGenerating ComposeData.java....");
 
         BitSet usedIndices = new BitSet();
         CharSet explodingBases = new CharSet();
@@ -600,7 +615,7 @@ public final class NormalizerBuilder
                 //
                 int index = put(replace, explodeCompat.get(ch), 0);
 
-                out(uinfo.hex(ch) + " is base and has compat explosion "
+                outv(uinfo.hex(ch) + " is base and has compat explosion "
                                   + uinfo.hex(explodeCompat.get(ch)) );
 
                 addChar(lookup, ch, EXPLODING_BASE, index);
@@ -695,9 +710,9 @@ public final class NormalizerBuilder
         if (maskShift > 32) {
             err(Integer.toString(maskShift) + "combining classes; max is 32");
         }
-        out("# of combining classes is " + maskShift);
+        outv("# of combining classes is " + maskShift);
 
-        out("baseCount=" + baseCount + ", combineCount=" + combineCount
+        outv("baseCount=" + baseCount + ", combineCount=" + combineCount
                             + ", nccCount=" + nccCount);
 
         if (baseCount > MAX_BASES) {
@@ -765,10 +780,14 @@ public final class NormalizerBuilder
         }
 
         if (fJava) {
-            writeComposeData(new JavaWriter("../src/com/ibm/text/ComposeData"));
+            String f = fOutDir + "ComposeData";
+            out("Writing " + f);
+            writeComposeData(new JavaWriter(f));
         }
         if (fCPP) {
-           writeComposeData(new CPPWriter("/intlwork/source/collate/CPP/compdata", "ComposeData"));
+            String f = fOutDir + "compdata";
+            out("Writing " + f + ".(cpp|h)");
+            writeComposeData(new CPPWriter(f, "ComposeData"));
         }
 
         if (fShowSizes) {
@@ -778,14 +797,14 @@ public final class NormalizerBuilder
             int replaceSize = replace.length();
             int typeMaskSize = typeMask.length * 2;
 
-            out("Total runtime size of compose data is "
+            outv("Total runtime size of compose data is "
                 + (lookupSize + actionSize + actIndexSize + replaceSize + typeMaskSize));
 
-            out("  lookup:       " + lookupSize);
-            out("  actions:      " + actionSize);
-            out("  actionIndex:  " + actIndexSize);
-            out("  typeMask:     " + typeMaskSize);
-            out("  replace:      " + replaceSize);
+            outv("  lookup:       " + lookupSize);
+            outv("  actions:      " + actionSize);
+            outv("  actionIndex:  " + actIndexSize);
+            outv("  typeMask:     " + typeMaskSize);
+            outv("  replace:      " + replaceSize);
         }
     }
 
@@ -793,7 +812,7 @@ public final class NormalizerBuilder
         out.write("BASE_COUNT",         baseCount);
         out.write("COMBINING_COUNT",    combineCount);
         out.write("MAX_COMPAT",         maxCompat);
-        out.write("MAX_CANON",          maxCanon);
+        out.write("MAX_CANONICAL",      maxCanon);
 
         out.writeHex("MAX_COMPOSED",    largestChar);
 
@@ -811,7 +830,7 @@ public final class NormalizerBuilder
         // The character types
         out.write("IGNORE",             (int)IGNORE);
         out.write("BASE",               (int)BASE);
-        out.write("EXPLODING_BASE",     (int)EXPLODING_BASE);
+        out.write("NON_COMPOSING_COMBINING", (int)EXPLODING_BASE);
         out.write("COMBINING",          (int)COMBINING);
         out.write("INITIAL_JAMO",       (int)INITIAL_JAMO);
         out.write("MEDIAL_JAMO",        (int)MEDIAL_JAMO);
@@ -934,6 +953,9 @@ public final class NormalizerBuilder
         +"\n";
 
     void out(String str) {
+        System.out.println(str);
+    }
+    void outv(String str) {
         if (fVerbose) System.out.println(str);
     }
     void warn(String str) {

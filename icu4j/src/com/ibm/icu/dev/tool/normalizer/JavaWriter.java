@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/JavaWriter.java,v $ 
- * $Date: 2000/03/10 04:17:56 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/07/12 16:41:26 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -22,16 +22,16 @@ import java.io.*;
  * JavaWriter knows how to write data structures out to a Java source file
  */
 class JavaWriter extends SourceWriter {
-    PrintStream out;
+    PrintWriter out;
 
     public JavaWriter(String name) throws FileNotFoundException {
         // Find the class name
         int cIndex = name.lastIndexOf('/');
         String cName = (cIndex >= 0) ? name.substring(cIndex+1) : name;
 
-        out = new PrintStream(new FileOutputStream(name + ".java"));
+        out = new PrintWriter(new FileOutputStream(name + ".java"));
 
-        out.println(kHeader);
+        writeHeader(out);
         out.println("class " + cName + " {");
     }
 
@@ -98,23 +98,12 @@ class JavaWriter extends SourceWriter {
         out.println("    );");
     }
 
-    static final String kHeader =
-         "/*\n"
-        +" * (C) Copyright IBM Corp. 1997-1998 - All Rights Reserved\n"
-        +" *\n"
-        +" * The program is provided 'as is' without any warranty express or\n"
-        +" * implied, including the warranty of non-infringement and the implied\n"
-        +" * warranties of merchantibility and fitness for a particular purpose.\n"
-        +" * IBM will not be liable for any damages suffered by you as a result\n"
-        +" * of using the Program. In no event will IBM be liable for any\n"
-        +" * special, indirect or consequential damages or lost profits even if\n"
-        +" * IBM has been advised of the possibility of their occurrence. IBM\n"
-        +" * will not be liable for any third party claims against you.\n"
-        +" */\n"
-        +"\n"
-        +"package com.ibm.text;\n"
-        +"import com.ibm.util.*;\n"
-        + "// This class is MACHINE GENERATED.  Run NormalizerBuilder to regenerate.\n"
-        +"\n";
+    void writeHeader(PrintWriter out) {
+        super.writeHeader(out);
+        out.println("");
+        out.println("package com.ibm.text;");
+        out.println("import com.ibm.util.*;");
+        out.println("");
+    }
 }
 
