@@ -10,4 +10,8 @@
  * validSubLocale of "fo"
  */
 fo_FO{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

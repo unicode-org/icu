@@ -10,4 +10,8 @@
  * validSubLocale of "da"
  */
 da_DK{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

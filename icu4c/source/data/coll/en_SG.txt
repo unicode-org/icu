@@ -10,4 +10,8 @@
  * validSubLocale of "en"
  */
 en_SG{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

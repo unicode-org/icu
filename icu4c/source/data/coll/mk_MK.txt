@@ -10,4 +10,8 @@
  * validSubLocale of "mk"
  */
 mk_MK{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

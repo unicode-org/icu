@@ -10,4 +10,8 @@
  * validSubLocale of "it"
  */
 it_CH{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

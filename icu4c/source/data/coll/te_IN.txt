@@ -10,4 +10,8 @@
  * validSubLocale of "te"
  */
 te_IN{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

@@ -10,4 +10,8 @@
  * validSubLocale of "ar"
  */
 ar_QA{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

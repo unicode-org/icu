@@ -10,4 +10,8 @@
  * validSubLocale of "hi"
  */
 hi_IN{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }
