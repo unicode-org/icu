@@ -366,6 +366,7 @@ releaseDefaultConverter(UConverter *converter)
 
 /* u_unescape & support fns ------------------------------------------------- */
 
+/* This map must be in ASCENDING ORDER OF THE ESCAPE CODE */
 static const UChar UNESCAPE_MAP[] = {
     /*"   0x22, 0x22 */
     /*'   0x27, 0x27 */
@@ -474,7 +475,7 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
     for (i=0; i<UNESCAPE_MAP_LENGTH; i+=2) {
         if (c == UNESCAPE_MAP[i]) {
             return UNESCAPE_MAP[i+1];
-        } else if (c > UNESCAPE_MAP[i]) {
+        } else if (c < UNESCAPE_MAP[i]) {
             break;
         }
     }
