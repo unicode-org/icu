@@ -387,4 +387,16 @@ ubrk_getAvailable(int32_t index);
 U_CAPI int32_t U_EXPORT2 
 ubrk_countAvailable(void);
 
+
+/**
+* Returns true if the specfied position is a boundary position.  As a side
+* effect, leaves the iterator pointing to the first boundary position at
+* or after "offset".
+* @param bi The break iterator to use.
+* @param offset the offset to check.
+* @return True if "offset" is a boundary position.
+*/
+U_CAPI  UBool U_EXPORT2 
+ubrk_isBoundary(UBreakIterator *bi, int32_t offset);
+
 #endif
