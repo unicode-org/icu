@@ -12,6 +12,13 @@ ja {
         "\u5348\u5F8C",
     }
 
+    "%%PREEURO" { "\u65e7\u901a\u8ca8" }
+    "%%EURO"  { "\u30e6\u30fc\u30ed" }
+
+    "%%TRADITIONAL" { "\u5E74\u53F7" }
+    
+    "%%REVISED" { "\u6539\u8a02\u7248" }
+
     CollationElements {
         Version { "4.0" }
         Sequence {
@@ -1622,7 +1629,8 @@ ja {
         az { "\u30a2\u30bc\u30eb\u30d0\u30a4\u30b8\u30e3\u30f3\u8a9e" }
 
         ba { "\u30d0\u30b7\u30ad\u30fc\u30eb\u8a9e" }
-        be { "\u767d\u30ed\u30b7\u30a2\u8a9e" }
+        be { "\u30d9\u30e9\u30eb\u30fc\u30b7\u8a9e" }
+        //be { "\u767d\u30ed\u30b7\u30a2\u8a9e" } // Old value
         bg { "\u30d6\u30eb\u30ac\u30ea\u30a2\u8a9e" }
         bh { "\u30d3\u30cf\u2015\u30eb\u8a9e" }
         bi { "\u30d3\u30b9\u30e9\u30de\u8a9e" }
@@ -1659,8 +1667,10 @@ ja {
         gl { "\u30ac\u30ea\u30b7\u30a2\u8a9e" }
         gn { "\u30b0\u30ef\u30e9\u30cb\u8a9e" }
         gu { "\u30b0\u30b8\u30e3\u30e9\u30fc\u30c8\u8a9e" }
+        gv { "\u30de\u30f3\u5cf6\u8a9e" }
 
         ha { "\u30cf\u30a6\u30b5\u8a9e" }
+        haw { "\u30cf\u30ef\u30a4\u8a9e" }
         he { "\u30d8\u30d6\u30e9\u30a4\u8a9e" }
         hi { "\u30d2\u30f3\u30c7\u30a3\u30fc\u8a9e" }
         hr { "\u30af\u30ed\u30a2\u30c1\u30a2\u8a9e" }
@@ -1687,6 +1697,7 @@ ja {
         ko { "\u97d3\u56fd\u8a9e" }
         ks { "\u30ab\u30b7\u30df\u30fc\u30eb\u8a9e" }
         ku { "\u30af\u30eb\u30c9\u8a9e" }
+        kw { "\u30b3\u30fc\u30f3\u30a6\u30a9\u30fc\u30eb\u8a9e" }
         ky { "\u30ad\u30eb\u30ae\u30b9\u8a9e" }
 
         la { "\u30e9\u30c6\u30f3\u8a9e" }
@@ -1708,8 +1719,10 @@ ja {
         my { "\u30d3\u30eb\u30de\u8a9e" }
 
         na { "\u30ca\u30a6\u30eb\u8a9e" }
+        nb { "\u30ce\u30eb\u30a6\u30a7\u30fc\u8a9e (\u30dc\u30af\u30e2\u30fc\u30eb)" }
         ne { "\u30cd\u30d1\u30fc\u30eb\u8a9e" }
         nl { "\u30aa\u30e9\u30f3\u30c0\u8a9e" }
+        nn { "\u30ce\u30eb\u30a6\u30a7\u30fc\u8a9e (\u30cb\u30e5\u30fc\u30ce\u30eb\u30b9\u30af)" }
         no { "\u30ce\u30eb\u30a6\u30a7\u30fc\u8a9e" }
 
         oc { "\u30d7\u30ed\u30d0\u30f3\u30b9\u8a9e" }
