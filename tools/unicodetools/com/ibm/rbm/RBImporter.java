@@ -162,7 +162,8 @@ public class RBImporter extends JDialog {
             }
         }
         // If all group identification efforts fail, we fail
-        if (group == null) return;
+        if (group == null)
+        	return;
         item.setParentGroup(group);
         // Check for and resolve conflicts
         if (bundle.allItems.containsKey(item.getKey())) {
@@ -179,13 +180,15 @@ public class RBImporter extends JDialog {
      */
 	
     protected void resolveResource(Bundle bundle, BundleItem item) {
-        if (this.getResourceConflictOption() == RESOURCE_OPTION_IGNORE) return;
+        if (this.getResourceConflictOption() == RESOURCE_OPTION_IGNORE)
+        	return;
         else if (this.getResourceConflictOption() == RESOURCE_OPTION_OVERWRITE) {
             bundle.removeItem(item.getKey());
             bundle.addBundleItem(item);
         } else if (this.getResourceConflictOption() == RESOURCE_OPTION_PROMPT) {
             BundleItem original = (BundleItem)bundle.allItems.get(item.getKey());
-            if (original == null) return;
+            if (original == null)
+            	return;
             String trans = original.getTranslation();
             String options[] = { Resources.getTranslation("import_resource_conflict_overwrite"),
                                  Resources.getTranslation("import_resource_conflict_ignore")};
@@ -195,11 +198,13 @@ public class RBImporter extends JDialog {
                 "\n" + Resources.getTranslation("import_resource_conflict_choose_target", trans),
                 Resources.getTranslation("import_file_conflicts"), JOptionPane.QUESTION_MESSAGE,
                 null, options, options[0]);
-            if (result == null) return;
+            if (result == null)
+            	return;
             if (result.equals(Resources.getTranslation("import_resource_conflict_overwrite"))) {
                 bundle.removeItem(item.getKey());
                 bundle.addBundleItem(item);
-            } else if (result.equals(Resources.getTranslation("import_resource_conflict_ignore"))) return;
+            } else if (result.equals(Resources.getTranslation("import_resource_conflict_ignore")))
+            	return;
         }
     }
 	
@@ -362,10 +367,13 @@ public class RBImporter extends JDialog {
             public void actionPerformed(ActionEvent ev) {
                 try {
                     beginImport();
+                    gui.updateProjectTree();
+                    gui.updateDisplayTree();
                     thisWindowClosing();
                 } catch (IOException ioe) {
+                	ioe.printStackTrace(System.err);
                     JOptionPane.showMessageDialog(null,
-                        Resources.getTranslation("error") + "\n" + Resources.getTranslation("error"),
+                        Resources.getTranslation("error") + "\n" + ioe.getLocalizedMessage(),
                         Resources.getTranslation("error"), JOptionPane.ERROR_MESSAGE);	
                 }
             }
@@ -378,7 +386,18 @@ public class RBImporter extends JDialog {
         });
 		
         // Setup combo box
-        groupComboBox = new JComboBox(((Bundle)rbm.getBundles().elementAt(0)).getGroupsAsVector());
+        Bundle baseBundle = ((Bundle)rbm.getBundles().elementAt(0));
+        BundleGroup ungroupedGroup = baseBundle.getUngroupedGroup();
+        groupComboBox = new JComboBox(baseBundle.getGroupsAsVector());
+        int groupComboBoxCount = groupComboBox.getItemCount();
+        for (int selectedIndex = 0; selectedIndex < groupComboBoxCount; selectedIndex++) {
+        	BundleGroup bundGroup = ((BundleGroup)groupComboBox.getItemAt(selectedIndex));
+        	if (bundGroup.getName().equals(ungroupedGroup.getName())) {
+        		// By default, use the ungrouped group. Probably named 'Ungrouped Items'.
+        		groupComboBox.setSelectedIndex(selectedIndex);
+        		break;
+        	}
+        }
 		
         // Arange components
         groupBox.add(Box.createHorizontalGlue());

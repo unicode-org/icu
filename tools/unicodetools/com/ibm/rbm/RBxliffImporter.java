@@ -22,8 +22,10 @@ import org.xml.sax.*;
 
 /**
  * This imports XLIFF files into RBManager.
+ * For more information see <a href="http://www.oasis-open.org/committees/xliff/documents/xliff-specification.htm">
+ * http://www.oasis-open.org/committees/xliff/documents/xliff-specification.htm</a>
  * 
- * @author grhoten
+ * @author George Rhoten
  * @see com.ibm.rbm.RBManager
  */
 public class RBxliffImporter extends RBImporter {
@@ -72,17 +74,33 @@ public class RBxliffImporter extends RBImporter {
         if (xlf_xml == null)
             return;
         String language = null;
+        String bundleNote = null;
         ElementImpl root = (ElementImpl)xlf_xml.getDocumentElement();
         Node fileNode = root.getFirstChild();
+        Node header = null;
         Node node = null;
         while (fileNode != null && !(fileNode.getNodeType() == Node.ELEMENT_NODE && fileNode.getNodeName().equalsIgnoreCase("file"))) {
             fileNode = fileNode.getNextSibling();
         }
-        node = fileNode.getFirstChild();
-/*        while (node != null && !(node.getNodeType() == Node.ELEMENT_NODE && node.getNodeName().equalsIgnoreCase("header"))) {
-            node = node.getNextSibling();
+        header = fileNode.getFirstChild();
+        while (header != null
+        		&& !(header.getNodeType() == Node.ELEMENT_NODE
+        		&& (header.getNodeName().equalsIgnoreCase("header")
+				|| header.getNodeName().equalsIgnoreCase("body")))) {
+        	header = header.getNextSibling();
         }
-        node = root.getFirstChild();*/
+        if (header.getNodeName().equalsIgnoreCase("header")) {
+        	// Get the notes if from the header if they exist.
+            NodeList header_not_list = ((ElementImpl)header).getElementsByTagName("note");
+            if (header_not_list.getLength() > 0) {
+	            TextImpl text_elem = (TextImpl)header_not_list.item(0);
+	            String value = text_elem.getNodeValue();
+	            if (value != null && value.length() > 0) {
+	            	bundleNote = value;
+	            }
+            }
+        }
+        node = header.getNextSibling();
         while (node != null && !(node.getNodeType() == Node.ELEMENT_NODE && node.getNodeName().equalsIgnoreCase("body"))) {
             node = node.getNextSibling();
         }
@@ -155,6 +173,16 @@ public class RBxliffImporter extends RBImporter {
             String group = null;
             if (tu_elem.getNodeName().equalsIgnoreCase("group")) {
                 group = name;
+                String groupComment = "";
+                NodeList notes_list = tu_elem.getElementsByTagName("note");
+                if (notes_list.getLength() > 0) {
+    	            TextImpl text_elem = (TextImpl)notes_list.item(0);
+    	            String value = text_elem.getNodeValue();
+    	            if (value != null && value.length() > 0) {
+    	            	groupComment = value;
+    	            }
+                }
+                rbm.createGroup(group, groupComment);
                 //NodeList group_list = tu_elem.getElementsByTagName("group");
             }
             
@@ -255,7 +283,7 @@ public class RBxliffImporter extends RBImporter {
 //            item.setLookups(lookups);
         importResource(item, language, group);
     }
-    private Vector getEncodingsVector(ElementImpl body) {
+/*    private Vector getEncodingsVector(ElementImpl body) {
         String empty = "";
         if (body == null) return null;
         Hashtable hash = new Hashtable();
@@ -279,5 +307,5 @@ public class RBxliffImporter extends RBImporter {
         Enumeration enum = hash.keys();
         while (enum.hasMoreElements()) { v.addElement(enum.nextElement()); }
         return v;
-    }
+    }*/
 }

@@ -85,7 +85,8 @@ public class Bundle {
             public boolean equals(Object o) { return false; }
             
             public int compare(Object o1, Object o2) {
-                if (!(o1 instanceof BundleGroup) || !(o2 instanceof BundleGroup)) return 0;
+                if (!(o1 instanceof BundleGroup) || !(o2 instanceof BundleGroup))
+                	return 0;
                 BundleGroup g1 = (BundleGroup)o1;
                 BundleGroup g2 = (BundleGroup)o2;
                 return g1.getName().compareTo(g2.getName());
@@ -141,10 +142,12 @@ public class Bundle {
      */
 		
     public String getVariantEncoding() {
-        if (encoding == null || encoding.indexOf("_") < 0) return null;
+        if (encoding == null || encoding.indexOf("_") < 0)
+        	return null;
         // Strip off the language
         String workStr = encoding.substring(encoding.indexOf("_")+1,encoding.length());
-        if (workStr == null || workStr.length() < 1 || workStr.indexOf("_") < 0) return null;
+        if (workStr == null || workStr.length() < 1 || workStr.indexOf("_") < 0)
+        	return null;
         // Strip off the country
         workStr = workStr.substring(encoding.indexOf("_")+1, workStr.length());
         return workStr.trim();
@@ -157,7 +160,8 @@ public class Bundle {
     public Vector getUntranslatedItemsAsVector() {
         Iterator iter = untranslatedItems.iterator();
         Vector v = new Vector();
-        while (iter.hasNext()) v.addElement(iter.next());
+        while (iter.hasNext())
+        	v.addElement(iter.next());
         return v;
     }
 		
@@ -205,7 +209,8 @@ public class Bundle {
         Iterator iter = groups.iterator();
         while (iter.hasNext()) {
             BundleGroup group = (BundleGroup)iter.next();
-            if (group.getName().equals(groupName)) return true;
+            if (group.getName().equals(groupName))
+            	return true;
         }
         return false;
     }
@@ -274,18 +279,13 @@ public class Bundle {
      */
 		
     public void addUntranslatedItem(BundleItem item) {
-        if (item.getParentGroup().getParentBundle() != this) return;
-        // First check to see if it is all ready there
-        boolean found = false;
-        Iterator iter = untranslatedItems.iterator();
-        while (iter.hasNext()) {
-            BundleItem oldItem = (BundleItem)iter.next();
-            if (oldItem == item) {
-                found = true;
-                break;
-            }
+        if (item.getParentGroup().getParentBundle() != this)
+        	return;
+        // Remove it if it exists.
+        if (untranslatedItems.contains(item)) {
+        	untranslatedItems.remove(item);
         }
-        if (!found) untranslatedItems.add(item);
+    	untranslatedItems.add(item);
     }
 		
     /**
@@ -301,9 +301,11 @@ public class Bundle {
      */
 		
     public BundleItem getUntranslatedItem(int index) {
-        if (index >= untranslatedItems.size()) return null;
+        if (index >= untranslatedItems.size())
+        	return null;
         Iterator iter = untranslatedItems.iterator();
-        for (int i=0; i < index; i++) iter.next();
+        for (int i=0; i < index; i++)
+        	iter.next();
         return (BundleItem)iter.next();
     }
     
@@ -334,9 +336,11 @@ public class Bundle {
      */
     
     public BundleGroup getBundleGroup(int index) {
-        if (index >= getGroupCount()) return null;
+        if (index >= getGroupCount())
+        	return null;
         Iterator iter = groups.iterator();
-        for (int i=0; i < index; i++) iter.next();
+        for (int i=0; i < index; i++)
+        	iter.next();
         return (BundleGroup)iter.next();
     }
 
@@ -349,7 +353,8 @@ public class Bundle {
         Iterator iter = groups.iterator();
         while(iter.hasNext()) {
             BundleGroup group = (BundleGroup)iter.next();
-            if (group.getName().equals(groupName)) return group;
+            if (group.getName().equals(groupName))
+            	return group;
         }
         return null;
     }
@@ -390,10 +395,12 @@ public class Bundle {
         if (allItems.containsKey(item.getKey())) {
             duplicates.addElement(item);
         } else {
-            if (!(groups.contains(item.getParentGroup()))) addBundleGroup(item.getParentGroup());
+            if (!(groups.contains(item.getParentGroup())))
+            	addBundleGroup(item.getParentGroup());
             item.getParentGroup().addBundleItem(item);
             allItems.put(item.getKey(), item);
-            if (!item.isTranslated()) addUntranslatedItem(item);
+            if (!item.isTranslated())
+            	addUntranslatedItem(item);
         }
     }
     
