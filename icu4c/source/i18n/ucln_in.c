@@ -19,10 +19,11 @@
 
 static UBool i18n_cleanup(void)
 {
-    ucol_bld_cleanup();
-    ucol_cleanup();
-    timeZone_cleanup();
     transliterator_cleanup();
+    unicodeset_cleanup();
+    timeZone_cleanup();
+    ucol_cleanup();
+    ucol_bld_cleanup();
     return TRUE;
 }
 

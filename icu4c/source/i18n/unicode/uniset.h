@@ -265,13 +265,6 @@ class U_I18N_API UnicodeSet : public UnicodeFilter {
      */
     UnicodeString pat;
 
-    /**
-     * A cache mapping character category integers, as returned by
-     * Unicode::getType(), to pairs strings.  Entries are initially
-     * zero length and are filled in on demand.
-     */
-    static UnicodeSet* CATEGORY_CACHE;
-
 public:
 
     /**
