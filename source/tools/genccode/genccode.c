@@ -68,6 +68,9 @@ static uint32_t column=MAX_COLUMN;
 static void
 writeCCode(const char *filename, const char *destdir);
 
+static void
+writeAssemblyCode(const char *filename, const char *destdir);
+
 #ifdef CAN_GENERATE_OBJECTS
 static void
 writeObjectCode(const char *filename, const char *destdir);
@@ -78,6 +81,9 @@ getOutFilename(const char *inFilename, const char *destdir, char *outFilename, c
 
 static void
 write8(FileStream *out, uint8_t byte);
+
+static void
+write32(FileStream *out, uint32_t byte);
 
 #ifdef OS400
 static void
@@ -94,26 +100,50 @@ enum {
 #ifdef CAN_GENERATE_OBJECTS
   kOptObject,
 #endif
-  kOptFilename
+  kOptFilename,
+  kOptAssembly
 };
+
+static const struct AssemblyType {
+    const char *compiler;
+    const char *header;
+    const char *beginLine;
+} assemblyHeader[] = {
+    {"gcc",
+
+    ".file\t\"%s.s\"\n"
+    "\t.section   .rodata\n"
+    ".globl _%s\n"
+    "\t.text\n"
+    "\t.align 32\n"
+    "_%s:\n\n",
+
+    ".long "
+    },
+    {"xlc",
+    "",
+    ""}
+};
+
+static int32_t assemblyHeaderIndex = -1;
 
 static UOption options[]={
 /*0*/UOPTION_HELP_H,
      UOPTION_HELP_QUESTION_MARK,
      UOPTION_DESTDIR,
      UOPTION_DEF("name", 'n', UOPT_REQUIRES_ARG),
-     UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
+     UOPTION_DEF("entrypoint", 'e', UOPT_REQUIRES_ARG),
 #ifdef CAN_GENERATE_OBJECTS
 /*5*/UOPTION_DEF("object", 'o', UOPT_NO_ARG),
 #endif
-     UOPTION_DEF("filename", 'f', UOPT_REQUIRES_ARG)
+     UOPTION_DEF("filename", 'f', UOPT_REQUIRES_ARG),
+     UOPTION_DEF("assembly", 'a', UOPT_REQUIRES_ARG)
 };
-
-char symPrefix[100];
 
 extern int
 main(int argc, char* argv[]) {
     UBool verbose = TRUE;
+    int32_t idx;
 
     U_MAIN_INIT_ARGS(argc, argv);
 
@@ -122,8 +152,6 @@ main(int argc, char* argv[]) {
     /* read command line options */
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
     
-    symPrefix[0] = 0;
-
     /* error handling, printing usage message */
     if(argc<0) {
         fprintf(stderr,
@@ -146,15 +174,41 @@ main(int argc, char* argv[]) {
 #endif
             "\t-f or --filename    Specify an alternate base filename. (default: symbolname_typ)\n"
             , argv[0]);
+        fprintf(stderr,
+            "\t-a or --assembly    Create assembly file. (possible values are: ");
+
+        fprintf(stderr, "%s", assemblyHeader[0].compiler);
+        for (idx = 1; idx < (int32_t)(sizeof(assemblyHeader)/sizeof(assemblyHeader[0])); idx++) {
+            fprintf(stderr, ", %s", assemblyHeader[idx].compiler);
+        }
+        fprintf(stderr,
+            ")\n");
     } else {
         const char *message, *filename;
         void (*writeCode)(const char *, const char *);
+
+        if(options[kOptAssembly].doesOccur) {
+            message="generating assembly code for %s\n";
+            writeCode=&writeAssemblyCode;
+            for (idx = 0; idx < (int32_t)(sizeof(assemblyHeader)/sizeof(assemblyHeader[0])); idx++) {
+                if (uprv_strcmp(options[kOptAssembly].value, assemblyHeader[idx].compiler) == 0) {
+                    assemblyHeaderIndex = idx;
+                    break;
+                }
+            }
+            if (assemblyHeaderIndex < 0) {
+                fprintf(stderr,
+                    "Assembly type \"%s\" is unknown.\n", options[kOptAssembly].value);
+                return -1;
+            }
+        }
 #ifdef CAN_GENERATE_OBJECTS
-        if(options[kOptObject].doesOccur) {
+        else if(options[kOptObject].doesOccur) {
             message="generating object code for %s\n";
             writeCode=&writeObjectCode;
-        } else
+        }
 #endif
+        else
         {
             message="generating C code for %s\n";
             writeCode=&writeCCode;
@@ -173,8 +227,80 @@ main(int argc, char* argv[]) {
 }
 
 static void
+writeAssemblyCode(const char *filename, const char *destdir) {
+    char entry[64];
+    uint32_t buffer[1024];
+    char *bufferStr = (char *)buffer;
+    FileStream *in, *out;
+    size_t i, length;
+
+    in=T_FileStream_open(filename, "rb");
+    if(in==NULL) {
+        fprintf(stderr, "genccode: unable to open input file %s\n", filename);
+        exit(U_FILE_ACCESS_ERROR);
+    }
+
+    getOutFilename(filename, destdir, bufferStr, entry, ".s");
+    out=T_FileStream_open(bufferStr, "w");
+    if(out==NULL) {
+        fprintf(stderr, "genccode: unable to open output file %s\n", bufferStr);
+        exit(U_FILE_ACCESS_ERROR);
+    }
+
+    if(options[kOptEntryPoint].doesOccur) {
+        uprv_strcpy(entry, options[kOptEntryPoint].value);
+        uprv_strcat(entry, "_dat");
+    }
+
+    /* turn dashes or dots in the entry name into underscores */
+    length=uprv_strlen(entry);
+    for(i=0; i<length; ++i) {
+        if(entry[i]=='-' || entry[i]=='.') {
+            entry[i]='_';
+        }
+    }
+
+    sprintf(bufferStr, assemblyHeader[assemblyHeaderIndex].header,
+        entry, entry, entry, entry,
+        entry, entry, entry, entry);
+    T_FileStream_writeLine(out, bufferStr);
+    T_FileStream_writeLine(out, assemblyHeader[assemblyHeaderIndex].beginLine);
+
+    for(;;) {
+        length=T_FileStream_read(in, buffer, sizeof(buffer));
+        if(length==0) {
+            break;
+        }
+        if (length != sizeof(buffer)) {
+            /* pad with extra 0's when at the end of the file */
+            for(i=0; i < (length % sizeof(uint32_t)); ++i) {
+                buffer[length+i] = 0;
+            }
+        }
+        for(i=0; i<(length/sizeof(buffer[0])); i++) {
+            write32(out, buffer[i]);
+        }
+    }
+
+    T_FileStream_writeLine(out, "\n");
+
+    if(T_FileStream_error(in)) {
+        fprintf(stderr, "genccode: file read error while generating from file %s\n", filename);
+        exit(U_FILE_ACCESS_ERROR);
+    }
+
+    if(T_FileStream_error(out)) {
+        fprintf(stderr, "genccode: file write error while generating from file %s\n", filename);
+        exit(U_FILE_ACCESS_ERROR);
+    }
+
+    T_FileStream_close(out);
+    T_FileStream_close(in);
+}
+
+static void
 writeCCode(const char *filename, const char *destdir) {
-    char buffer[4096], entry[40];
+    char buffer[4096], entry[64];
     FileStream *in, *out;
     size_t i, length;
 
@@ -219,8 +345,8 @@ writeCCode(const char *filename, const char *destdir) {
         "const struct {\n"
         "    double bogus;\n"
         "    const char *bytes; \n"
-        "} %s%s={ 0.0, \n",
-        symPrefix, entry);
+        "} %s={ 0.0, \n",
+        entry);
     T_FileStream_writeLine(out, buffer);
 
     for(;;) {
@@ -243,8 +369,8 @@ writeCCode(const char *filename, const char *destdir) {
         "const struct {\n"
         "    double bogus;\n"
         "    uint8_t bytes[%ld]; \n"
-        "} %s%s={ 0.0, {\n",
-        (long)T_FileStream_size(in), symPrefix, entry);
+        "} %s={ 0.0, {\n",
+        (long)T_FileStream_size(in), entry);
     T_FileStream_writeLine(out, buffer);
 
     for(;;) {
@@ -453,13 +579,70 @@ getOutFilename(const char *inFilename, const char *destdir, char *outFilename, c
         *entryName=0;
 
         if(options[kOptFilename].doesOccur) {
-          uprv_strcpy(saveOutFilename, options[kOptFilename].value);
-          uprv_strcat(saveOutFilename, newSuffix); 
+            uprv_strcpy(saveOutFilename, options[kOptFilename].value);
+            uprv_strcat(saveOutFilename, newSuffix); 
         } else {
-          /* add ".c" */
-          uprv_strcpy(outFilename, newSuffix);
+            /* add ".c" */
+            uprv_strcpy(outFilename, newSuffix);
         }
     }
+}
+
+static void
+write32(FileStream *out, uint32_t bitField) {
+    int32_t i;
+    char bitFieldStr[64]; /* This is more bits than needed for a 32-bit number */
+    char *s = bitFieldStr;
+    uint8_t *ptrIdx = (uint8_t *)&bitField;
+    static const char hexToStr[16] = {
+        '0','1','2','3',
+        '4','5','6','7',
+        '8','9','A','B',
+        'C','D','E','F'
+    };
+
+    /* write the value, possibly with comma and newline */
+    if(column==MAX_COLUMN) {
+        /* first byte */
+        column=1;
+    } else if(column<32) {
+        *(s++)=',';
+        ++column;
+    } else {
+        *(s++)='\n';
+        uprv_strcpy(s, assemblyHeader[assemblyHeaderIndex].beginLine);
+        s+=uprv_strlen(s);
+        column=1;
+    }
+
+    if (bitField < 10) {
+        /* It's a small number. Don't waste the space for 0x */
+        *(s++)=hexToStr[bitField];
+    }
+    else {
+        int seenNonZero = 0; /* This is used to remove leading zeros */
+
+        *(s++)='0';
+        *(s++)='x';
+
+        /* This creates a 32-bit field */
+#if U_IS_BIG_ENDIAN
+        for (i = 0; i < sizeof(uint32_t); i++)
+#else
+        for (i = sizeof(uint32_t)-1; i >= 0 ; i--)
+#endif
+        {
+            uint8_t value = ptrIdx[i];
+            if (value || seenNonZero) {
+                *(s++)=hexToStr[value>>4];
+                *(s++)=hexToStr[value&0xF];
+                seenNonZero = 1;
+            }
+        }
+    }
+
+    *(s++)=0;
+    T_FileStream_writeLine(out, bitFieldStr);
 }
 
 static void
