@@ -341,7 +341,7 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
         /* search for tree.. */
         const char *tchar;
         char tree[1024];
-        if(tchar=uprv_strchr(baseName, '/')) {
+        if((tchar=uprv_strchr(baseName, '/'))) {
           tree[0]='_';
           strncpy(tree+1,baseName,tchar-baseName);
           tree[tchar-baseName+1]=0;
