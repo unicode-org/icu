@@ -78,6 +78,7 @@ struct collIterate {
   UBool isWritable; /* is the source buffer writable? */
   UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
   UChar *writableBuffer;
+  const UCollator *coll;
 };
 
 struct UCollationElements
@@ -119,6 +120,7 @@ struct incrementalContext {
     uint32_t *CEpos; /* This is the position to which we have stored processed CEs */
     uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
     UBool panic; /* can't handle it any more - we have to call the cavalry */
+    const UCollator *coll;
 };
 
 /* from coleiterator */
@@ -212,13 +214,14 @@ struct incrementalContext {
 
 /* initializes collIterate structure */
 /* made as macro to speed up things */
-#define init_collIterate(sourceString, sourceLen, s, isSourceWritable) { \
+#define init_collIterate(collator, sourceString, sourceLen, s, isSourceWritable) { \
     (s)->string = (s)->pos = (UChar *)(sourceString); \
     (s)->len = (UChar *)(sourceString)+(sourceLen); \
     (s)->CEpos = (s)->toReturn = (s)->CEs; \
 	(s)->isThai = TRUE; \
 	(s)->isWritable = (isSourceWritable); \
 	(s)->writableBuffer = (s)->stackWritableBuffer; \
+    (s)->coll = (collator); \
 }
 
 /* a macro that gets a simple CE */
@@ -239,8 +242,7 @@ struct incrementalContext {
       if((order) >= UCOL_NOT_FOUND) {                                                 \
         (order) = getSpecialCE((coll), (order), &(collationSource), (status));        \
         if((order) == UCOL_NOT_FOUND) {                                               \
-          (order) = ucol_getNextUCA(ch, &(collationSource),                           \
-                                (coll)->image->jamoSpecial, (status));                \
+          (order) = ucol_getNextUCA(ch, &(collationSource), (status));                \
         }                                                                             \
       }                                                                               \
     } else {                                                                          \
@@ -282,8 +284,7 @@ struct incrementalContext {
         (order) = getSpecialPrevCE((coll), (order), &(data), (length),       \
                                                              (status));      \
         if ((order) == UCOL_NOT_FOUND) {                                     \
-          (order) = ucol_getPrevUCA(ch, &(data), (length),                   \
-                               (coll)->image->jamoSpecial, (status));        \
+          (order) = ucol_getPrevUCA(ch, &(data), (length), (status));        \
         }                                                                    \
       }                                                                      \
     }                                                                        \
@@ -335,9 +336,9 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
                           collIterate *source, uint32_t length, 
                           UErrorCode *status);
 U_CFUNC uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
-uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UBool jamoSpecial, UErrorCode *status);
+uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
 uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource, 
-                         uint32_t length, UBool jamoSpecial, UErrorCode *status);
+                         uint32_t length, UErrorCode *status);
 
 void incctx_cleanUpContext(incrementalContext *ctx);
 UChar incctx_appendChar(incrementalContext *ctx, UChar c);
@@ -467,18 +468,6 @@ typedef enum {
 
 
 typedef struct {
-  uint32_t firstHigh; uint32_t lastHigh; uint32_t highCount; uint32_t highByteCount;
-  uint32_t firstMid; uint32_t lastMid;   uint32_t midCount; uint32_t midByteCount;
-  uint32_t firstLow; uint32_t lastLow;   uint32_t lowCount; uint32_t lowByteCount;
-  uint32_t byteSize; uint32_t start; uint32_t limit;
-  int32_t maxCount;
-  int32_t count;
-  uint32_t current;
-  uint32_t fLow; /*forbidden Low */
-  uint32_t fHigh; /*forbidden High */
-} ucolCEGenerator;
-
-typedef struct {
       int32_t size;
       /* all the offsets are in bytes */
       /* to get the address add to the header address and cast properly */
@@ -567,7 +556,7 @@ struct UCollator {
 };
 
 /* various internal functions */
-void init_incrementalContext(UCharForwardIterator *source, void *sourceContext, incrementalContext *s);
+void init_incrementalContext(UCollator *coll, UCharForwardIterator *source, void *sourceContext, incrementalContext *s);
 int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UErrorCode *status);
 void incctx_cleanUpContext(incrementalContext *ctx);
 UChar incctx_appendChar(incrementalContext *ctx, UChar c);
@@ -578,9 +567,10 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
 void ucol_setOptionsFromHeader(UCollator* result, const UCATableHeader * image, UErrorCode *status);
 void ucol_putOptionsToHeader(UCollator* result, UCATableHeader * image, UErrorCode *status);
 
-uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, UBool jamoSpecial, UErrorCode *status);
+uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, UErrorCode *status);
 int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, uint32_t CE, incrementalContext *ctx, UErrorCode *status);
 void ucol_updateInternalState(UCollator *coll);
+uint32_t ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status);
 
 #endif
 
