@@ -199,6 +199,12 @@ uset_containsAll(const USet* set1, const USet* set2) {
 }
 
 U_CAPI UBool U_EXPORT2
+uset_containsNone(const USet* set1, const USet* set2) {
+    return ((const UnicodeSet*) set1)->containsNone(* (const UnicodeSet*) set2);
+}
+
+
+U_CAPI UBool U_EXPORT2
 uset_equals(const USet* set1, const USet* set2) {
     return *(const UnicodeSet*)set1 == *(const UnicodeSet*)set2;
 }
