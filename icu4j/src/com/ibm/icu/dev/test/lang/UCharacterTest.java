@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/07/26 22:05:06 $ 
-* $Revision: 1.40 $
+* $Date: 2002/08/08 22:44:52 $ 
+* $Revision: 1.41 $
 *
 *******************************************************************************
 */
@@ -1014,13 +1014,12 @@ public final class UCharacterTest extends TestFmwk
              * http://www.unicode.org/reports/tr9/
              */
             if (result.value == UCharacterCategory.UNASSIGNED 
-                && result.value == UCharacterCategory.PRIVATE_USE) {
+                || result.value == UCharacterCategory.PRIVATE_USE) {
                 int c = result.start;
                 for (int i = 0; i < defaultBidi.length && c < result.limit; 
                      ++ i) {
                     if (c < defaultBidi[i][0]) {
                         while (c < result.limit && c < defaultBidi[i][0]) {
-                            System.out.println(UCharacter.getDirection(c));
                             if (UCharacter.getDirection(c) 
                                 != defaultBidi[i][1] 
                                 /* synwee this is not ported yet ||
