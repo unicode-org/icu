@@ -348,6 +348,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     data = parse(ucbuf, inputDir, status);
 
     if (data == NULL || U_FAILURE(*status)) {
+        fprintf(stderr, "couldn't parse the file %s. Error:%s\n", filename,u_errorName(*status));
         goto finish;
     }
 
@@ -385,6 +386,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
         
     }
     if(U_FAILURE(*status)) {
+        fprintf(stderr, "couldn't make the res fileName for  bundle %s. Error:%s\n", filename,u_errorName(*status));
         goto finish;
     }
     if(write_java== TRUE){

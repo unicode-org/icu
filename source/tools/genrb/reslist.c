@@ -340,7 +340,7 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, const char *out
     }
 
     mem = udata_create(outputDir, "res", dataName, &dataInfo, (gIncludeCopyright==TRUE)? U_COPYRIGHT_STRING:NULL, status);
-    if(U_FAILURE(status)){
+    if(U_FAILURE(*status)){
         return;
     }
     pad = calcPadding(bundle->fKeyPoint);
