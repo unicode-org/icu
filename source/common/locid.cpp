@@ -93,7 +93,8 @@ locale_cleanup(void)
     return TRUE;
 }
 
-void U_NAMESPACE_QUALIFIER locale_set_default_internal(const char *id)
+U_NAMESPACE_BEGIN
+void locale_set_default_internal(const char *id)
 {
     U_NAMESPACE_USE
 
@@ -110,6 +111,7 @@ if (gLocaleCache == NULL) {
     }
 #endif
 }
+U_NAMESPACE_END
 
 /* sfb 07/21/99 */
 U_CFUNC void
