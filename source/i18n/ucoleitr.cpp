@@ -205,10 +205,10 @@ ucol_getOffset(const UCollationElements *elems)
       if (ci->fcdPosition == NULL) {
         return 0;
       }
-      return ci->fcdPosition - ci->string;
+      return (int32_t)(ci->fcdPosition - ci->string);
   }
   else {
-      return ci->pos - ci->string;
+      return (int32_t)(ci->pos - ci->string);
   }
 }
 
