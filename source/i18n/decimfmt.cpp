@@ -99,54 +99,19 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DecimalFormat)
  * CURRENCY_SIGN is seen in a pattern, then the decimal separator is
  * replaced with the monetary decimal separator.
  */
-#define kCurrencySign               ((UChar)0x00A4)
+#define kCurrencySign                ((UChar)0x00A4)
+#define kDefaultPad                  ((UChar)0x0020) /* */
 
 const int32_t DecimalFormat::kDoubleIntegerDigits  = 309;
 const int32_t DecimalFormat::kDoubleFractionDigits = 340;
 
 const int32_t DecimalFormat::kMaxScientificIntegerDigits = 8;
-#if 0
-class Test {
-private:
-	int32_t f;
-public:
-// 	void a(int arg);
-	void a(int32_t arg);
- 	void a(int64_t arg);
-	void a(double arg);
-};
-
-//void Test::a(int arg) { f = (int32_t)arg; }
-void Test::a(int32_t arg) { f = arg; }
-void Test::a(int64_t arg) { f = (int32_t)arg; }
-void Test::a(double arg)  { f = (int32_t)arg; }
-
-static void test(uint64_t num) {
-	Test t;
-	int32_t zero32 = 0;
-	int64_t zero64 = 0;
-	double  zeroDbl = 0;
-
-	t.a((int32_t)0);
-	t.a((int64_t)0);
-	t.a((double)0);
-	t.a(0);
-	t.a(0.0);
-	t.a(0.0f);
-//	t.a(zero32);
-//	t.a(zero64);
-//	t.a(zeroDbl);
-//	t.a(num);
-}
-#endif
 
 /**
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale.
  */
 const char DecimalFormat::fgNumberPatterns[]="NumberPatterns";
-
-#define kDefaultPad ((UChar)0x0020) /* */
 
 //------------------------------------------------------------------------------
 // Constructs a DecimalFormat instance in the default locale.
@@ -341,7 +306,7 @@ DecimalFormat::construct(UErrorCode&             status,
             setCurrencyForSymbols();
         }
     } else {
-        setCurrency(NULL);
+        setCurrency(NULL, status);
     }
 
     applyPattern(*pattern, FALSE /*not localized*/,parseErr, status);
@@ -359,7 +324,7 @@ void DecimalFormat::setCurrencyForLocale(const char* locale, UErrorCode& ec) {
         UChar c[4];
         ucurr_forLocale(locale, c, 4, &ec2);
     }
-    setCurrency(c);
+    setCurrency(c, ec);
 }
 
 //------------------------------------------------------------------------------
@@ -473,9 +438,7 @@ DecimalFormat::operator==(const Format& that) const
     if (this == &that)
         return TRUE;
 
-    if (getDynamicClassID() != that.getDynamicClassID())
-        return FALSE;
-
+    // NumberFormat::operator== guarantees this cast is safe
     const DecimalFormat* other = (DecimalFormat*)&that;
 
 #ifdef FMT_DEBUG
@@ -1864,7 +1827,8 @@ DecimalFormat::setCurrencyForSymbols() {
         // map, then don't fail and set the currency to "".
         c = intlCurrencySymbol;
     }
-    setCurrency(c);
+    ec = U_ZERO_ERROR; // reset local error code!
+    setCurrency(c, ec);
 }
 
 
@@ -3484,33 +3448,35 @@ void DecimalFormat::setMinimumFractionDigits(int32_t newValue) {
     NumberFormat::setMinimumFractionDigits(uprv_min(newValue, kDoubleFractionDigits));
 }
 
-/**
- * Sets the <tt>Currency</tt> object used to display currency
- * amounts.  This takes effect immediately, if this format is a
- * currency format.  If this format is not a currency format, then
- * the currency object is used if and when this object becomes a
- * currency format through the application of a new pattern.
- * @param theCurrency new currency object to use.  Must not be
- * null.
- * @since ICU 2.2
- */
-void DecimalFormat::setCurrency(const UChar* theCurrency) {
+void DecimalFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
     // If we are a currency format, then modify our affixes to
     // encode the currency symbol for the given currency in our
     // locale, and adjust the decimal digits and rounding for the
     // given currency.
 
-    NumberFormat::setCurrency(theCurrency);
+    // Note: The code is ordered so that this object is *not changed*
+    // until we are sure we are going to succeed.
+    
+    // NULL or empty currency is *legal* and indicates no currency.
+    UBool isCurr = (theCurrency && *theCurrency);
+
+    double rounding = 0.0;
+    int32_t frac = 0;
+    if (fIsCurrencyFormat && isCurr) {
+        rounding = ucurr_getRoundingIncrement(theCurrency, &ec);
+        frac = ucurr_getDefaultFractionDigits(theCurrency, &ec);
+    }
+     
+    NumberFormat::setCurrency(theCurrency, ec);
+    if (U_FAILURE(ec)) return;
 
     if (fIsCurrencyFormat) {
-        if (theCurrency && *theCurrency) {
-            setRoundingIncrement(ucurr_getRoundingIncrement(theCurrency));
-            
-            int32_t d = ucurr_getDefaultFractionDigits(theCurrency);
-            setMinimumFractionDigits(d);
-            setMaximumFractionDigits(d);
+        // NULL or empty currency is *legal* and indicates no currency.
+        if (isCurr) {
+            setRoundingIncrement(rounding);
+            setMinimumFractionDigits(frac);
+            setMaximumFractionDigits(frac);
         }
-
         expandAffixes();
     }
 }
