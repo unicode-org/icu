@@ -96,6 +96,7 @@ typedef struct UCollationElements UCollationElements;
  * @param textLength The number of characters in text, or -1 if null-terminated
  * @param status A pointer to an UErrorCode to receive any errors.
  * @return a struct containing collation element information
+ * @stable
  */
 U_CAPI UCollationElements*
 ucol_openElements(const UCollator  *coll,
@@ -105,7 +106,7 @@ ucol_openElements(const UCollator  *coll,
 
 /**
  * get a hash code for a key... Not very useful!
- * @deprecated
+ * @stable
  */
 U_CAPI int32_t
 ucol_keyHashCode(const uint8_t* key, int32_t length);
@@ -114,6 +115,7 @@ ucol_keyHashCode(const uint8_t* key, int32_t length);
  * Close a UCollationElements.
  * Once closed, a UCollationElements may no longer be used.
  * @param elems The UCollationElements to close.
+ * @stable
  */
 U_CAPI void
 ucol_closeElements(UCollationElements *elems);
@@ -125,6 +127,7 @@ ucol_closeElements(UCollationElements *elems);
  * @param elems The UCollationElements to reset.
  * @see ucol_next
  * @see ucol_previous
+ * @stable
  */
 U_CAPI void
 ucol_reset(UCollationElements *elems);
@@ -136,6 +139,7 @@ ucol_reset(UCollationElements *elems);
  * @param status A pointer to an UErrorCode to receive any errors.
  * @return The next collation elements ordering, otherwise returns NULLORDER 
  *         if an error has occured or if the end of string has been reached
+ * @stable
  */
 U_CAPI int32_t
 ucol_next(UCollationElements *elems, UErrorCode *status);
@@ -154,6 +158,7 @@ ucol_next(UCollationElements *elems, UErrorCode *status);
  * @return The previous collation elements ordering, otherwise returns 
  *         NULLORDER if an error has occured or if the start of string has 
  *         been reached.
+ * @stable
  */
 U_CAPI int32_t
 ucol_previous(UCollationElements *elems, UErrorCode *status);
@@ -167,6 +172,7 @@ ucol_previous(UCollationElements *elems, UErrorCode *status);
  * @return maximum size of the expansion sequences ending with the collation 
  *         element or 1 if collation element does not occur at the end of any 
  *         expansion sequence
+ * @stable
  */
 U_CAPI int32_t
 ucol_getMaxExpansion(const UCollationElements *elems, int32_t order);
@@ -181,6 +187,7 @@ ucol_getMaxExpansion(const UCollationElements *elems, int32_t order);
  * @param textLength The length of text, or -1 if null-terminated.
  * @param status A pointer to an UErrorCode to receive any errors.
  * @see ucol_getText
+ * @stable
  */
 U_CAPI void
 ucol_setText(      UCollationElements *elems, 
@@ -195,6 +202,7 @@ ucol_setText(      UCollationElements *elems,
  * @param elems The UCollationElements to query.
  * @return The offset of the current source character.
  * @see ucol_setOffset
+ * @stable
  */
 U_CAPI UTextOffset
 ucol_getOffset(const UCollationElements *elems);
@@ -209,6 +217,7 @@ ucol_getOffset(const UCollationElements *elems);
  * @param offset The desired character offset.
  * @param status A pointer to an UErrorCode to receive any errors.
  * @see ucol_getOffset
+ * @stable
  */
 U_CAPI void
 ucol_setOffset(UCollationElements *elems,
