@@ -22,7 +22,7 @@ if (U_FAILURE(status)) {
       puts("Couldn't create GregorianCalendar");
       return;
       }
-      // set up the date
+      /* set up the date */
       ucal_set(cal, UCAL_YEAR, 2000);
       ucal_set(cal, UCAL_MONTH, UCAL_FEBRUARY);   /* FEBRUARY */
       ucal_set(cal, UCAL_DATE, 26);
@@ -30,10 +30,10 @@ if (U_FAILURE(status)) {
       ucal_set(cal, UCAL_MINUTE, 0);
       ucal_set(cal, UCAL_SECOND, 0);
       ucal_set(cal, UCAL_MILLISECOND, 0);
-      // Iterate through the days and print it out.
+      /* Iterate through the days and print it out. */
       for (i = 0; i < 30; i++) {
-          // print out the date.
-          // You should use the udat_* API to properly format it
+          /* print out the date. */
+          /* You should use the udat_* API to properly format it */
           printf("year: %d, month: %d (%d in the implementation), day: %d\n",
               ucal_get(cal, UCAL_YEAR, &status),
               ucal_get(cal, UCAL_MONTH, &status) + 1,
@@ -43,7 +43,7 @@ if (U_FAILURE(status)) {
           puts("Calendar::get failed");
           return;
           }
-          // Add a day to the date
+          /* Add a day to the date */
           ucal_add(cal, UCAL_DATE, 1, &status);
           if (U_FAILURE(status))
           {
