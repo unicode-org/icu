@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
+<!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.1/ldmlICU.dtd"> 
+%icu;
+]
+>
 <ldml>
 	<identity>
-		<version number="1.1"/>
-		<generation date="2004-05-27" />
+		<version number="3.0"/>
+		<generation date="2004-06-01" />
 		<language type="it" /> 
 	</identity>
 	<localeDisplayNames>
@@ -797,6 +802,11 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-zéóàèìòíúùï]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
 	</characters>
 	<dates>
 		<calendars>
@@ -2809,4 +2819,82 @@
 			</currency>
 		</currencies>
 	</numbers>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+%main:
+-x: meno &gt;&gt;;
+x.x: &lt;&lt; virgola &gt;&gt;;
+zero; uno; due; tre; quattro; cinque; sei; sette; otto; nove;
+dieci; undici; dodici; tredici; quattordici; quindici; sedici;
+    diciasette; diciotto; diciannove;
+20: venti; vent&gt;%%with-i&gt;;
+30: trenta; trent&gt;%%with-i&gt;;
+40: quaranta; quarant&gt;%%with-a&gt;;
+50: cinquanta; cinquant&gt;%%with-a&gt;;
+60: sessanta; sessant&gt;%%with-a&gt;;
+70: settanta; settant&gt;%%with-a&gt;;
+80: ottanta; ottant&gt;%%with-a&gt;;
+90: novanta; novant&gt;%%with-a&gt;;
+100: cento; cent[&gt;%%with-o&gt;];
+200: &lt;&lt;cento; &lt;&lt;cent[&gt;%%with-o&gt;];
+1000: mille; mill[&gt;%%with-i&gt;];
+2000: &lt;&lt;mila; &lt;&lt;mil[&gt;%%with-a&gt;];
+100,000&gt;&gt;: &lt;&lt;mila[ &gt;&gt;];
+1,000,000: =#,##0= (incomplete data);
+%%with-a:
+azero; uno; adue; atre; aquattro; acinque; asei; asette; otto; anove;
+adieci; undici; adodici; atredici; aquattordici; aquindici; asedici;
+    adiciasette; adiciotto; adiciannove;
+20: aventi; avent&gt;%%with-i&gt;;
+30: atrenta; atrent&gt;%%with-i&gt;;
+40: aquaranta; aquarant&gt;%%with-a&gt;;
+50: acinquanta; acinquant&gt;%%with-a&gt;;
+60: asessanta; asessant&gt;%%with-a&gt;;
+70: asettanta; asettant&gt;%%with-a&gt;;
+80: ottanta; ottant&gt;%%with-a&gt;;
+90: anovanta; anovant&gt;%%with-a&gt;;
+100: acento; acent[&gt;%%with-o&gt;];
+200: &lt;%%with-a&lt;cento; &lt;%%with-a&lt;cent[&gt;%%with-o&gt;];
+1000: amille; amill[&gt;%%with-i&gt;];
+2000: &lt;%%with-a&lt;mila; &lt;%%with-a&lt;mil[&gt;%%with-a&gt;];
+100,000: =%main=;
+%%with-i:
+izero; uno; idue; itre; iquattro; icinque; isei; isette; otto; inove;
+idieci; undici; idodici; itredici; iquattordici; iquindici; isedici;
+    idiciasette; idiciotto; idiciannove;
+20: iventi; ivent&gt;%%with-i&gt;;
+30: itrenta; itrent&gt;%%with-i&gt;;
+40: iquaranta; iquarant&gt;%%with-a&gt;;
+50: icinquanta; icinquant&gt;%%with-a&gt;;
+60: isessanta; isessant&gt;%%with-a&gt;;
+70: isettanta; isettant&gt;%%with-a&gt;;
+80: ottanta; ottant&gt;%%with-a&gt;;
+90: inovanta; inovant&gt;%%with-a&gt;;
+100: icento; icent[&gt;%%with-o&gt;];
+200: &lt;%%with-i&lt;cento; &lt;%%with-i&lt;cent[&gt;%%with-o&gt;];
+1000: imille; imill[&gt;%%with-i&gt;];
+2000: &lt;%%with-i&lt;mila; &lt;%%with-i&lt;mil[&gt;%%with-a&gt;];
+100,000: =%main=;
+%%with-o:
+ozero; uno; odue; otre; oquattro; ocinque; osei; osette; otto; onove;
+odieci; undici; ododici; otredici; oquattordici; oquindici; osedici;
+    odiciasette; odiciotto; odiciannove;
+20: oventi; ovent&gt;%%with-i&gt;;
+30: otrenta; otrent&gt;%%with-i&gt;;
+40: oquaranta; oquarant&gt;%%with-a&gt;;
+50: ocinquanta; ocinquant&gt;%%with-a&gt;;
+60: osessanta; osessant&gt;%%with-a&gt;;
+70: osettanta; osettant&gt;%%with-a&gt;;
+80: ottanta; ottant&gt;%%with-a&gt;;
+90: onovanta; onovant&gt;%%with-a&gt;;
+100: ocento; ocent[&gt;%%with-o&gt;];
+200: &lt;%%with-o&lt;cento; &lt;%%with-o&lt;cent[&gt;%%with-o&gt;];
+1000: omille; omill[&gt;%%with-i&gt;];
+2000: &lt;%%with-o&lt;mila; &lt;%%with-o&lt;mil[&gt;%%with-a&gt;];
+100,000: =%main=;
+
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
+<!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.1/ldmlICU.dtd"> 
+%icu;
+]
+>
 <ldml>
 	<identity>
-		<version number="1.1"/>
-		<generation date="2004-05-27" />
+		<version number="3.0"/>
+		<generation date="2004-06-01" />
 		<language type="uk" /> 
 	</identity>
 	<localeDisplayNames>
@@ -391,6 +396,11 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[а-щюьяєіїґ]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Cyrl</icu:script>
+			</icu:scripts>
+		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
@@ -596,4 +606,38 @@
 			</currency>
 		</currencies>
 	</numbers>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+нуль; один; два; три; чотири; пʼять; шість; сім; вісім; девʼять;
+10: десять; одинадцять;
+дванадцять; тринадцять; чотирнадцять;
+15: пʼятнадцять; шістнадцять; сімнадцять; вісімнадцять; девʼятнадцять;
+20: двадцять[ &gt;&gt;];
+30: тридцять[ &gt;&gt;];
+40: сорок[ &gt;&gt;];
+50: пʼятдесят[ &gt;&gt;];
+60: шістдесят[ &gt;&gt;];
+70: сімдесят[ &gt;&gt;];
+80: вісімдесят[ &gt;&gt;];
+90: девʼяносто[ &gt;&gt;];
+100: сто[ &gt;&gt;];
+200: двісті[ &gt;&gt;];
+300: триста[ &gt;&gt;];
+400: чотириста[ &gt;&gt;];
+500: пʼятсот[ &gt;&gt;];
+600: шістсот[ &gt;&gt;];
+700: сімсот[ &gt;&gt;];
+800: вісімсот[ &gt;&gt;];
+900: девʼятсот[ &gt;&gt;];
+1000: тисяча[ &gt;&gt;];
+2000: &lt;&lt; тисячі[ &gt;&gt;];
+5000: &lt;&lt; тисяч[ &gt;&gt;];
+1,000,000: мільйон[ &gt;&gt;];
+2,000,000: &lt;&lt; мільйони[ &gt;&gt;];
+5,000,000: &lt;&lt; мільйонів[ &gt;&gt;];
+1,000,000,000: &lt;&lt; мільярд[ &gt;&gt;];
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>
