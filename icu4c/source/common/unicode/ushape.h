@@ -212,7 +212,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  */
 #define U_SHAPE_DIGITS_ALEN2AN_INIT_AL          0x80
 
-/** Not a valid option value. May be replaced by a new option. */
+/** Not a valid option value. May be replaced by a new option. @stable ICU 2.0 */
 #define U_SHAPE_DIGITS_RESERVED                 0xa0
 
 /** Bit mask for digit shaping options. @stable ICU 2.0 */
@@ -225,7 +225,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 /** Digit type option: Use Eastern (Extended) Arabic-Indic digits (U+06f0...U+06f9). @stable ICU 2.0 */
 #define U_SHAPE_DIGIT_TYPE_AN_EXTENDED          0x100
 
-/** Not a valid option value. May be replaced by a new option. */
+/** Not a valid option value. May be replaced by a new option. @stable ICU 2.0 */
 #define U_SHAPE_DIGIT_TYPE_RESERVED             0x200
 
 /** Bit mask for digit type options. @stable ICU 2.0 */

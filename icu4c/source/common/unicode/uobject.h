@@ -33,6 +33,8 @@ U_NAMESPACE_BEGIN
  *         memory allocation. On Windows, this allows the ICU DLL to be used by
  *         applications that statically link the C Runtime library, meaning that
  *         the app and ICU will be using different heaps.
+ *
+ * @draft ICU 2.2
  */                              
 #ifndef U_OVERRIDE_CXX_ALLOCATION
 #define U_OVERRIDE_CXX_ALLOCATION 1
