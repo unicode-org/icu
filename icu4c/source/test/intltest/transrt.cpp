@@ -1031,11 +1031,20 @@ void TransliteratorRoundTripTest::TestGreek() {
     }
     RTTest test("Latin-Greek");
     LegalGreek *legal = new LegalGreek(TRUE);
+#if (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM==6)
     test.test(UnicodeString("[a-zA-Z]", ""), 
               UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
                             ""),
               "[\\u00B5\\u037A\\u03D0-\\u03F5]", /* exclusions */
               this, quick, legal, 50);
+#else
+    test.test(UnicodeString("[a-zA-Z]", ""), 
+              UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", 
+                            ""),
+              "[\\u00B5\\u037A\\u03D0-\\u03F5]", /* exclusions */
+              this, quick, legal, 50);
+#endif
+
     delete legal;
 }
 
@@ -1051,11 +1060,20 @@ void TransliteratorRoundTripTest::TestGreekUNGEGN() {
     }
     RTTest test("Latin-Greek/UNGEGN");
     LegalGreek *legal = new LegalGreek(FALSE);
+#if (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM==6)
     test.test(UnicodeString("[a-zA-Z]", ""), 
               UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
                             ""), 
               "[\\u00B5\\u037A\\u03D0-\\uFFFF {\\u039C\\u03C0}]", /* roundtrip exclusions */
               this, quick, legal);
+#else
+    test.test(UnicodeString("[a-zA-Z]", ""), 
+              UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", 
+                            ""), 
+              "[\\u00B5\\u037A\\u03D0-\\uFFFF {\\u039C\\u03C0}]", /* roundtrip exclusions */
+              this, quick, legal);
+#endif
+
     delete legal;
 }
 
@@ -1070,20 +1088,37 @@ void TransliteratorRoundTripTest::Testel() {
     }
     RTTest test("Latin-el");
     LegalGreek *legal = new LegalGreek(FALSE);
+#if (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM==6)
     test.test(UnicodeString("[a-zA-Z]", ""), 
               UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
                             ""), 
               "[\\u00B5\\u037A\\u03D0-\\uFFFF {\\u039C\\u03C0}]", /* exclusions */
               this, quick, legal);
+#else
+    test.test(UnicodeString("[a-zA-Z]", ""), 
+              UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", 
+                            ""), 
+              "[\\u00B5\\u037A\\u03D0-\\uFFFF {\\u039C\\u03C0}]", /* exclusions */
+              this, quick, legal);
+#endif
+
     delete legal;
 }
 
 void TransliteratorRoundTripTest::TestCyrillic() {
     RTTest test("Latin-Cyrillic");
     Legal *legal = new Legal();
+
+#if (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM==6)
+    test.test(UnicodeString("[a-zA-Z\\u0110\\u0111]", ""), 
+              UnicodeString("[[\\u0400-\\u045F] & [:Age=3.2:]]", ""), NULL, this, quick, 
+              legal);
+#else
     test.test(UnicodeString("[a-zA-Z\\u0110\\u0111]", ""), 
               UnicodeString("[\\u0400-\\u045F]", ""), NULL, this, quick, 
               legal);
+#endif
+
     delete legal;
 }
 
@@ -1173,9 +1208,16 @@ void TransliteratorRoundTripTest::TestDevanagariLatin() {
     }
     RTTest test("Latin-Devanagari");
     Legal *legal = new LegalIndic();
+
+#if (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM==6)
+    test.test(UnicodeString(latinForIndic, ""), 
+              UnicodeString("[[:Devanagari:]&[:Age=3.2:]]", ""), NULL, this, quick, 
+              legal, 50);
+#else
     test.test(UnicodeString(latinForIndic, ""), 
               UnicodeString("[:Devanagari:]", ""), NULL, this, quick, 
               legal, 50);
+#endif
     delete legal;
 }
 
@@ -1441,9 +1483,20 @@ void TransliteratorRoundTripTest::TestInterIndic() {
     }
     for(int i = 0; i < num;i++){
         RTTest test(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 0]);
-       Legal *legal = new LegalIndic();
-        test.test(UnicodeString(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 1], ""), 
-                  UnicodeString(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 2], ""), 
+        Legal *legal = new LegalIndic();
+#if (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM==6)
+        UnicodeString temp1 = "[";
+        temp1.append(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 1]);
+        temp1.append("& [:Age=3.2:]]");
+        UnicodeString temp2 = "[";
+        temp2.append(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 2]);
+        temp2.append("& [:Age=3.2:]]");
+#else
+        UnicodeString temp1 = interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 1];
+        UnicodeString temp2 = interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 2];
+#endif
+        test.test(temp1, 
+                  temp2, 
                   interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 3], // roundtrip exclusions 
                   this, quick, legal, 50);
        delete legal;
