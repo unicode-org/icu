@@ -21,6 +21,9 @@
 void TestAPI();
 void TestSimpleRules();
 void TestFilter();
+void TestOpenInverse();
+void TestClone();
+void TestRegisterUnregister();
 
 static void _expectRules(const char*, const char*, const char*);
 static void _expect(const UTransliterator* trans, const char* cfrom, const char* cto);
@@ -30,6 +33,9 @@ addUTransTest(TestNode** root) {
     TEST(TestAPI);
     TEST(TestSimpleRules);
     TEST(TestFilter);
+    TEST(TestOpenInverse);
+    TEST(TestClone);
+    TEST(TestRegisterUnregister);
 }
 
 void TestAPI() {
@@ -70,6 +76,154 @@ void TestAPI() {
                 buf, buf2);
     }
     utrans_close(trans);
+}
+
+void TestOpenInverse(){
+    UErrorCode status=U_ZERO_ERROR;
+    UTransliterator* t1=NULL;
+    UTransliterator* inverse1=NULL;
+    enum { BUF_CAP = 128 };
+    char buf1[BUF_CAP];
+    int32_t i=0;
+
+    const char TransID[][25]={
+           "Halfwidth-Fullwidth",
+           "Fullwidth-Halfwidth",
+           "Greek-Latin" ,
+           "Latin-Greek", 
+           "Arabic-Latin",
+           "Latin-Arabic",
+           "Kana-Latin",
+           "Latin-Kana",
+           "Hebrew-Latin",
+           "Latin-Hebrew",
+           "Cyrillic-Latin", 
+           "Latin-Cyrillic", 
+           "Devanagari-Latin", 
+           "Latin-Devanagari", 
+           "Unicode-Hex",
+           "Hex-Unicode"
+         };
+     
+    for(i=0; i<sizeof(TransID)/sizeof(TransID[0]); i=i+2){
+		t1=utrans_open(TransID[i], UTRANS_FORWARD, &status);
+		if(t1 == NULL || U_FAILURE(status)){
+            log_err("FAIL: in instantiation for id=%s\n", TransID[i]);
+			continue;
+		}
+        inverse1=utrans_openInverse(t1, &status);
+        if(U_FAILURE(status)){
+            log_err("FAIL: utrans_openInverse() failed for id=%s. Error=%s\n", TransID[i], myErrorName(status));
+            continue;
+        }
+        utrans_getID(inverse1, buf1, BUF_CAP);
+        if(uprv_strcmp(buf1, TransID[i+1]) != 0){
+            log_err("FAIL :openInverse() for %s returned %s instead of %s\n", TransID[i], buf1, TransID[i+1]);
+        }
+        utrans_close(t1);
+		utrans_close(inverse1);
+   }
+}
+
+void TestClone(){
+    UErrorCode status=U_ZERO_ERROR;
+    UTransliterator* t1=NULL;
+    UTransliterator* t2=NULL;
+    UTransliterator* t3=NULL;
+    UTransliterator* t4=NULL;
+    enum { BUF_CAP = 128 };
+    char buf1[BUF_CAP], buf2[BUF_CAP], buf3[BUF_CAP];
+   
+	t1=utrans_open("Latin-Devanagari", UTRANS_FORWARD, &status);
+    if(U_FAILURE(status)){
+        log_err("FAIL: construction\n");
+        return;
+    }
+	t2=utrans_open("Latin-Hebrew", UTRANS_FORWARD, &status);
+	if(U_FAILURE(status)){
+        log_err("FAIL: construction\n");
+        utrans_close(t1);
+        return;
+    }
+
+	t3=utrans_clone(t1, &status);
+	t4=utrans_clone(t2, &status);
+
+    utrans_getID(t1, buf1, BUF_CAP);
+    utrans_getID(t2, buf2, BUF_CAP);
+    utrans_getID(t3, buf3, BUF_CAP);
+
+    if(uprv_strcmp(buf1, buf3) != 0 ||
+        uprv_strcmp(buf1, buf2) == 0) {
+        log_err("FAIL: utrans_clone() failed\n");
+    }
+
+    utrans_getID(t4, buf3, BUF_CAP);
+
+    if(uprv_strcmp(buf2, buf3) != 0 ||
+        uprv_strcmp(buf1, buf3) == 0) {
+        log_err("FAIL: utrans_clone() failed\n");
+    }
+
+    utrans_close(t1);
+    utrans_close(t2);
+
+}
+
+void TestRegisterUnregister(){
+    UErrorCode status=U_ZERO_ERROR;
+    UTransliterator* t1=NULL;
+    UTransliterator* rules=NULL;
+    UTransliterator* inverse1=NULL;
+    UChar rule[]={ 0x0061, 0x003c, 0x003e, 0x0063}; /*a<>b*/
+
+    /* Make sure it doesn't exist */
+    t1=utrans_open("TestA-TestB", UTRANS_FORWARD, &status);
+    if(t1 != NULL || U_SUCCESS(status)) {
+        log_err("FAIL: TestA-TestB already registered\n");
+        return;
+    }
+    status=U_ZERO_ERROR;
+    /* Check inverse too */
+    inverse1=utrans_open("TestA-TestB", UTRANS_REVERSE, &status);
+    if(inverse1 != NULL || U_SUCCESS(status)) {
+        log_err("FAIL: TestA-TestB already registered\n");
+        return;
+    }
+    status=U_ZERO_ERROR;
+    /* Create it */
+    rules=utrans_openRules("TestA-TestB", rule, 4, UTRANS_FORWARD, NULL, &status);
+    if(U_FAILURE(status)){
+        log_err("FAIL: utrans_openRules(a<>B) failed with error=%s\n", myErrorName(status));
+        return;
+    }
+    status=U_ZERO_ERROR;
+    /* Register it */
+    utrans_register(rules, &status);
+    if(U_FAILURE(status)){
+        log_err("FAIL: utrans_register failed with error=%s\n", myErrorName(status));
+        return;
+    }
+    status=U_ZERO_ERROR;
+    /* Now check again -- should exist now*/
+    t1= utrans_open("TestA-TestB", UTRANS_FORWARD, &status);
+    if(U_FAILURE(status) || t1 == NULL){
+        log_err("FAIL: TestA-TestB not registered\n");
+        return;
+    }
+    utrans_close(t1);
+   
+    /*unregister the instance*/
+    status=U_ZERO_ERROR;
+    utrans_unregister("TestA-TestB");
+    /* now Make sure it doesn't exist */
+    t1=utrans_open("TestA-TestB", UTRANS_FORWARD, &status);
+    if(U_SUCCESS(status) || t1 != NULL) {
+        log_err("FAIL: TestA-TestB isn't unregistered\n");
+        return;
+    }
+    
+    /*utrans_close(rules);*/
 }
 
 void TestSimpleRules() {
