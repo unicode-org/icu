@@ -28,7 +28,7 @@
     <h1>International Components for Unicode<br>
      ReadMe</h1>
 
-    <p>Version: May 30, 2000<br>
+    <p>Version: Oct 13, 2000<br>
      Copyright &copy; 1997-2000 International Business Machines Corporation
     and others. All Rights Reserved.</p>
     <hr>
@@ -73,6 +73,8 @@
     <h2><a name="#news">Late Breaking News And What Is New?</a></h2>
 
     <ul>
+      <li><a href="#win32LibNames">Library names are changed and moved on Win32</a></li>
+    
       <li><a href="#sharedLibNote">Using Shared Data Libraries</a></li>
 
       <li><a href="#ErrcodeChanges">Important Change Of Error Codes From
@@ -645,6 +647,52 @@
 
     <h3><a name="ImportantNotesWin32">Win32 Platform</a></h3>
 
+    <hr>
+    <h3><a name="win32LibNames">BREAKING NEWS: Library names are changed and libraries are moved on Win32</a></h3>
+    
+    <p>As it was previously mentioned and proposed on <a href="http://oss.software.ibm.com/icu/archives/icu/icu.0009/msg00138.html">ICU list</a>, 
+    ICU libraries on Win32 are now renamed and relocated. The following changes took place:</p>
+
+	<ol>
+	<li>in icu\lib:</li>
+		<ul>
+			<li>Debug\icuuc.lib -> icuuc17d.lib</li>
+			<li>Release\icuuc.lib -> icuuc17.lib</li>
+			<li>Debug\icui18n.lib -> icuin17d.lib</li>
+			<li>Release\icui18n.lib -> icuin17.lib</li>
+			<li>Debug\ustdio.lib -> icuio17d.lib</li>
+			<li>Release\ustdio.lib -> icuio17.lib</li>
+		</ul>
+	
+	<li>in icu\bin:</li>
+		<ul>
+			<li>Debug\icuuc.dll -> icuuc17d.dll</li>
+			<li>Release\icuuc.dll -> icuuc17.dll</li>
+			<li>Debug\icui18n.dll -> icuin17d.dll</li>
+			<li>Release\icui18n.dll -> icuin17.dll</li>
+			<li>Debug\ustdio.dll -> icuio17d.dll</li>
+			<li>Release\ustdio.dll -> icuio17.dll</li>
+		</ul>
+	</ol>
+
+        <p>Also, ctestfw and ex toolutil (now icutu17) libraries appeared in icu\bin
+        and icu\lib dirs, but this shouldn't concern regular users of icu.</p>
+
+<h4>What to do, how to cope?</h4>
+
+        <p>When you first try to compile your programs with new version of icu,
+        compilation will fail. The following steps are required:</p>
+        
+        <ol>
+                <li>change your path from ...\icu\bin\debug or ...\icu\bin\release to just ...\icu\bin</li>
+                <li>make the same change for MSVC executable directory setting (tools->options->directories)</li>
+                <li>In all your .dsp files (project settings), on linker tab change input libraries according to the above scheme. You want to do it for both debug and release versions.</li>
+        </ol>
+
+        <p>When a new, binary incompatible version appears after 1.7, the libraries will change the version number, so you will have to rename libraries in your projects again. However, this way you can have several versions of icu on the same machine and change the libraries for different programs without having to change path settings on your machine.</p>
+
+    <hr>
+    
     <p>If you are building on the Win32 platform, it is important that you
     understand a few build details:</p>
 
