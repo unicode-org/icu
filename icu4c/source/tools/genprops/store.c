@@ -291,7 +291,7 @@ static UDataInfo dataInfo={
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
     { 3, 2, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
-    { 4, 0, 0, 0 }                              /* dataVersion */
+    { 4, 0, 1, 0 }                              /* dataVersion */
 };
 
 /* definitions of expected data size limits */
