@@ -71,17 +71,17 @@ const char *SimpleDateFormat::fgDateTimePatternsTag="DateTimePatterns";
 const char *SimpleDateFormat::fgZoneStringsTag="zoneStrings";
 const char *SimpleDateFormat::fgLocalPatternCharsTag="localPatternChars";
 
-char                    SimpleDateFormat::fgClassID = 0; // Value is irrelevant
+char            SimpleDateFormat::fgClassID = 0; // Value is irrelevant
 
 /**
  * This value of defaultCenturyStart indicates that the system default is to be
  * used.
  */
-const UDate              SimpleDateFormat::fgSystemDefaultCentury        = DBL_MIN;
-const int32_t            SimpleDateFormat::fgSystemDefaultCenturyYear    = -1;
+const UDate     SimpleDateFormat::fgSystemDefaultCentury        = DBL_MIN;
+const int32_t   SimpleDateFormat::fgSystemDefaultCenturyYear    = -1;
 
-UDate                    SimpleDateFormat::fgSystemDefaultCenturyStart        = SimpleDateFormat::fgSystemDefaultCentury;
-int32_t                 SimpleDateFormat::fgSystemDefaultCenturyStartYear    = SimpleDateFormat::fgSystemDefaultCenturyYear;
+UDate           SimpleDateFormat::fgSystemDefaultCenturyStart       = DBL_MIN;
+int32_t         SimpleDateFormat::fgSystemDefaultCenturyStartYear   = -1;
 
 //----------------------------------------------------------------------
 
