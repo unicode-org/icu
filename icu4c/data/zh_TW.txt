@@ -1102,8 +1102,8 @@ zh_TW {
 	}
     Countries { 
         CN { "\u4E2D\u83EF\u4EBA\u6C11\u5171\u548C\u570B" }
-        TW { "\u4E2D\u83EF\u6C11\u570B" }
-        HK { "\u9999\u6E2F" }
+        //TW { "\u4E2D\u83EF\u6C11\u570B" }
+        //HK { "\u9999\u6E2F" }
     }
     CurrencyElements { 
             "NT$",
@@ -1129,7 +1129,7 @@ zh_TW {
     LocaleString { "zh_TW" }
     NumberPatterns { 
             "#,##0.###;-#,##0.###",
-            "\u00A4#,##0.00;-\u00A4#,##0.00",
+            "\u81FA\u5E63\u00A4#,##0.00\u5143;-\u81FA\u5E63\u00A4#,##0.00\u5143",
             "#,##0%",
     }
     ShortCountry { "TWN" }

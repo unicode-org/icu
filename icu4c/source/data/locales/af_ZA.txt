@@ -32,4 +32,5 @@ af_ZA {
     }
     LocaleID {"0436"}
     LocaleString { "af_ZA" }
+    ShortCountry{ "ZAK" }
 }
