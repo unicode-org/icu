@@ -2815,6 +2815,9 @@ _uloc_strtod(const char *start, char **end) {
 typedef struct { 
     double q;
     char *locale;
+#if defined(ULOC_DEBUG_PURIFY)
+    int32_t dummy;  /* to avoid uninitialized memory copy from qsort */
+#endif
 } _acceptLangItem;
 
 static int32_t U_CALLCONV
@@ -2905,6 +2908,9 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
             j[n].q = 1.0;
             paramEnd = itemEnd;
         }
+#if defined(ULOC_DEBUG_PURIFY)
+        j[n].dummy=0xDECAFBAD;
+#endif
         /* eat spaces prior to semi */
         for(t=(paramEnd-1);(paramEnd>s)&&isspace(*t);t--)
             ;
@@ -3067,8 +3073,10 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
                 uenum_reset(availableLocales, status);    
 
                 if(uloc_getParent(fallbackList[i], tmp, sizeof(tmp)/sizeof(tmp[0]), status)!=0) {
+                    uprv_free(fallbackList[i]);
                     fallbackList[i] = uprv_strdup(tmp);
                 } else {
+                    uprv_free(fallbackList[i]);
                     fallbackList[i]=0;
                 }
             }
