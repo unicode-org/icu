@@ -362,7 +362,7 @@ public final class UScript {
         //    return null;
         //}
         //non existent locale check
-        if(rb.getLoadingStatus()==ICUResourceBundle.FROM_DEFAULT){
+        if(rb.getLoadingStatus()==ICUResourceBundle.FROM_DEFAULT && !locale.equals(ULocale.getDefault())){
             return null;
         }
         ICUResourceBundle sub = rb.get("LocaleScript");
