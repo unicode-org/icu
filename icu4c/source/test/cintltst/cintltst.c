@@ -23,7 +23,7 @@
 #include "unicode/ucnv.h"
 
 static char* _testDirectory=NULL;
-int main ( int argc, char **argv )
+int main ( int argc, const char **argv )
 {
     TestNode *root;
 
