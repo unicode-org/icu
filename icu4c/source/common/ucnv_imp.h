@@ -40,7 +40,7 @@ UConverterSharedData *ucnv_getSharedConverterData (const char *name);
  * returns TRUE,
  * otherwise returns FALSE
  */
-UBool deleteSharedConverterData (UConverterSharedData * sharedConverterData);
+UBool ucnv_deleteSharedConverterData (UConverterSharedData * sharedConverterData);
 
 /* returns true if "name" is in algorithmicConverterNames
  */
