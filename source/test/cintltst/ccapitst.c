@@ -49,23 +49,17 @@ void TestConvert()
 {
     char                myptr[4];
     char                save[4];
-    char                subchar [4]         =   {(char)0xBE, (char)0xEF};
     int32_t             testLong1           =   0;
     int16_t             rest                =   0;
-    FILE*               f                   =   NULL;
-    FILE*               f2                  =   NULL;
-    int32_t             uniLen              =   0;
     int32_t             len                 =   0;
     int32_t             x                   =   0;
     FILE*               ucs_file_in         =   NULL;
     UChar                BOM                 =   0x0000;
     UChar                myUChar           =   0x0000;
-    char                myChar              =   0x00;
     char                mytarget[MAX_FILE_LEN];
     char*               mytarget_1=mytarget;
     char*               mytarget_use        = mytarget;
     UChar*                consumedUni         =   NULL;
-    char*               consumedChar        =   NULL;
     char*               consumed            =   NULL;
     char                output_cp_buffer    [MAX_FILE_LEN];
     UChar                ucs_file_buffer     [MAX_FILE_LEN];
@@ -74,9 +68,7 @@ void TestConvert()
     UChar*                my_ucs_file_buffer_1=my_ucs_file_buffer;
     int32_t             i                   =   0;
     int8_t                ii                  =   0;
-    uint16_t            ij                  =   0;
     int32_t             j                   =   0;
-    int32_t             k                   =   0;
     uint16_t            codepage_index      =   0;
     uint16_t            count;
     int32_t             cp                  =   0;
@@ -86,8 +78,6 @@ void TestConvert()
     UConverterFromUCallback          MIA1, MIA1_2;
     UConverterToUCallback              MIA2, MIA2_2;
     void                *MIA1Context, *MIA1Context2, *MIA2Context, *MIA2Context2;
-    UChar                myUnitarget[MAX_FILE_LEN];
-    UChar                *myUnitarget_1 = myUnitarget;
     UConverter*            someConverters[5];
     UConverter*         myConverter = 0;
     UChar*                displayname = 0;
@@ -125,7 +115,7 @@ void TestConvert()
     };
     
 
-    const int32_t        CodePagesAsciiControls[NUM_CODEPAGE]    =
+/*    const int32_t        CodePagesAsciiControls[NUM_CODEPAGE]    =
     { 
         0xFFFFFFFF
             
@@ -135,7 +125,7 @@ void TestConvert()
     const int32_t        CodePagesOtherControls[NUM_CODEPAGE]    =
     {
          0x00000005
-    };
+    };*/
 
 
     const int8_t     CodePagesMinChars[NUM_CODEPAGE] =
@@ -168,7 +158,7 @@ void TestConvert()
     
     };
 
-    const UConverterToUCallback CodePagesMissingCharAction[NUM_CODEPAGE] =
+/*    const UConverterToUCallback CodePagesMissingCharAction[NUM_CODEPAGE] =
     {
       UCNV_TO_U_CALLBACK_SUBSTITUTE
     };
@@ -176,16 +166,26 @@ void TestConvert()
     const UConverterFromUCallback CodePagesMissingUnicodeAction[NUM_CODEPAGE] =
     {
       UCNV_FROM_U_CALLBACK_SUBSTITUTE
-    };
+    };*/
 
     const char* CodePagesLocale[NUM_CODEPAGE] =
     {
         "ko_KR"
     };
 
-    UChar CodePagesFlakySequence[NUM_CODEPAGE][20] =
+ /*   UChar CodePagesFlakySequence[NUM_CODEPAGE][20] =
     {
-        {(UChar)0xAC10,(UChar)0xAC11, (UChar)0xAC12, (UChar)0xAC13 , (UChar)0xAC14, (UChar)0xAC15, (UChar)0xAC16, (UChar)0xAC17, (UChar)0xd7a4 /*Offensive Codepoint*/, (UChar)0xAC14, (UChar)0xAC15}
+        {(UChar)0xAC10,
+         (UChar)0xAC11,
+         (UChar)0xAC12,
+         (UChar)0xAC13,
+         (UChar)0xAC14,
+         (UChar)0xAC15,
+         (UChar)0xAC16,
+         (UChar)0xAC17,
+         (UChar)0xd7a4, /*Offensive Codepoint*/
+/*         (UChar)0xAC14,
+         (UChar)0xAC15}
     };
     
     char CodePagesFlakyCharSequence[NUM_CODEPAGE][20] =
@@ -195,10 +195,10 @@ void TestConvert()
             (char)0xB0, (char)0xAA,
             (char)0xB0, (char)0xAB,
             (char)0xb0, (char)0xff,/*Offensive Codepoint*/
-            (char)0xB0, (char)0xAC,
+/*            (char)0xB0, (char)0xAC,
             (char)0xB0, (char)0xAD
         }
-    };
+    };*/
 
     UConverterFromUCallback oldFromUAction = NULL;
     UConverterToUCallback oldToUAction = NULL;
@@ -335,7 +335,7 @@ void TestConvert()
         targetLimit=0;
             
         targetCapacity=ucnv_convert("ibm-1364", "ibm-1363", NULL, targetLimit , source, sourceLimit, &err);
-        if(err = U_BUFFER_OVERFLOW_ERROR){
+        if(err == U_BUFFER_OVERFLOW_ERROR){
             err=U_ZERO_ERROR;
             targetLimit=targetCapacity+1;
             target=(char*)malloc(sizeof(char) * targetLimit);
@@ -551,7 +551,7 @@ void TestConvert()
     ucnv_getSubstChars(myConverter, myptr, &ii, &err);
     
     for(x=0;x<ii;x++) 
-        rest = ((unsigned char)rest << 8) + (unsigned char)myptr[x];
+        rest = (int16_t)(((unsigned char)rest << 8) + (unsigned char)myptr[x]);
     if (rest==CodePagesSubstitutionChars[codepage_index])  
         log_verbose("Substitution character ok\n");
     else 
@@ -776,11 +776,11 @@ void TestConvert()
         {
             myUChar = ucs_file_buffer[i-1];
             
-            ucs_file_buffer[i-1] = (BOM==0xFEFF)?myUChar:((myUChar >> 8) | (myUChar << 8)); /*adjust if BIG_ENDIAN*/
+            ucs_file_buffer[i-1] = (UChar)((BOM==0xFEFF)?myUChar:((myUChar >> 8) | (myUChar << 8))); /*adjust if BIG_ENDIAN*/
         }
 
       myUChar = ucs_file_buffer[i-1];
-      ucs_file_buffer[i-1] = (BOM==0xFEFF)?myUChar:((myUChar >> 8) | (myUChar << 8)); /*adjust if BIG_ENDIAN Corner Case*/
+      ucs_file_buffer[i-1] = (UChar)((BOM==0xFEFF)?myUChar:((myUChar >> 8) | (myUChar << 8))); /*adjust if BIG_ENDIAN Corner Case*/
 
 
      /*testing ucnv_fromUChars() and ucnv_toUChars() */

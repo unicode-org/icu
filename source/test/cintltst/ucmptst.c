@@ -29,7 +29,7 @@ static void TestUCMP32API();
 
 
 
-void 
+void
 addCompactArrayTest(TestNode** root)
 {
   addTest(root, &TestUCMP16API,  "ucmptst/TestUCMP16API");
@@ -64,7 +64,6 @@ void TestUCMP16API(){
     CompactShortArray* ucmp16Array=NULL;
     CompactShortArray* ucmp16Array1=NULL;
     CompactShortArray* ucmp16Array2=NULL;
-    UErrorCode status=U_ZERO_ERROR;
     int32_t count=0, i=0;
     int16_t const TEST_DEFAULT_VALUE = 0xff;
 
@@ -131,7 +130,7 @@ void TestUCMP16API(){
    
     /* ucmp16_set*/
     ucmp16_set(ucmp16Array, 0,  TEST_DEFAULT_VALUE);
-    values=(int16_t*)ucmp16_getArray(ucmp16Array);
+    values=(uint16_t*)ucmp16_getArray(ucmp16Array);
     if(values[0] != TEST_DEFAULT_VALUE){
         log_err("ERROR: ucmp16_set() failed\n");
     }
@@ -141,7 +140,7 @@ void TestUCMP16API(){
     /*ucmp16_set where the value != defaultValue*/
     ucmp16_compact(ucmp16Array);
     ucmp16_set(ucmp16Array, 0,  0xfe);
-    values=(int16_t*)ucmp16_getArray(ucmp16Array);
+    values=(uint16_t*)ucmp16_getArray(ucmp16Array);
     if(values[0] != 0xfe){
         log_err("ERROR: ucmp16_set() failed\n");
     }
@@ -149,7 +148,7 @@ void TestUCMP16API(){
     /*ucmp16_setRange*/
     ucmp16_compact(ucmp16Array);
     ucmp16_setRange(ucmp16Array, 0,  10, 0xff);
-    values=(int16_t*)ucmp16_getArray(ucmp16Array);
+    values=(uint16_t*)ucmp16_getArray(ucmp16Array);
     for(i=0; i<10; i++){
         if(values[0] != 0xff){
             log_err("ERROR: ucmp16_set() failed\n");
@@ -159,7 +158,7 @@ void TestUCMP16API(){
     /*ucmp16_setRange where the value != defaultValue*/
     ucmp16_compact(ucmp16Array);
     ucmp16_setRange(ucmp16Array, 0,  10, 0xfe);
-    values=(int16_t*)ucmp16_getArray(ucmp16Array);
+    values=(uint16_t*)ucmp16_getArray(ucmp16Array);
     for(i=0; i<10; i++){
         if(values[0] != 0xfe){
             log_err("ERROR: ucmp16_set() failed\n");
@@ -188,11 +187,10 @@ void TestUCMP8API(){
     CompactByteArray* ucmp8Array=NULL;
     CompactByteArray* ucmp8Array1=NULL;
     CompactByteArray* ucmp8Array2=NULL;
-    UErrorCode status=U_ZERO_ERROR;
     int32_t i=0;
     int8_t *values;
     int8_t *valuesSet;
-    int8_t const TEST_DEFAULT_VALUE = (char)0xFF;
+    int8_t const TEST_DEFAULT_VALUE = (int8_t)0xFF;
     
 
     /*ucmp8_open*/
@@ -246,7 +244,7 @@ void TestUCMP8API(){
     /*ucmp8_set*/
     ucmp8_set(ucmp8Array1, 0,  (char)0xFE);
     valuesSet=(int8_t*)ucmp8_getArray(ucmp8Array1);
-    if(valuesSet[0] != (char)0xFE ){
+    if(valuesSet[0] != (int8_t)0xFE ){
         log_err("ERROR: ucmp8_set() failed\n");
     }
     if(ucmp8Array1->fCompact == TRUE){
@@ -257,7 +255,7 @@ void TestUCMP8API(){
     ucmp8_compact(ucmp8Array1, 1);
     ucmp8_set(ucmp8Array1, 0,  (char)0xFD);
     valuesSet=(int8_t*)ucmp8_getArray(ucmp8Array1);
-    if(valuesSet[0] != (char)0xFD ){
+    if(valuesSet[0] != (int8_t)0xFD ){
         log_err("ERROR: ucmp8_set() failed\n");
     }
     if(ucmp8Array1->fCompact == TRUE){
@@ -268,7 +266,7 @@ void TestUCMP8API(){
     ucmp8_setRange(ucmp8Array1, 0,  10, (char)0xFD);
     valuesSet=(int8_t*)ucmp8_getArray(ucmp8Array1);
     for(i =0 ; i< 10; i++ ){
-        if(valuesSet[0] != (char)0xFD ){
+        if(valuesSet[0] != (int8_t)0xFD ){
              log_err("ERROR: ucmp8_set() failed\n");
              break;
         }
@@ -282,7 +280,6 @@ void TestUCMP8API(){
 void TestUCMP32API(){
     CompactIntArray* ucmp32Array=NULL;
    
-    UErrorCode status=U_ZERO_ERROR;
     int32_t i=0;
     int32_t *values;
     int32_t const TEST_DEFAULT_VALUE = 0xFFFF;

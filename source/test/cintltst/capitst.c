@@ -47,17 +47,15 @@ static void doAssert(int condition, const char *message)
     }
 }
 void TestGetDefaultRules(){
-    int32_t size=0;
+    uint32_t size=0;
     UErrorCode status=U_ZERO_ERROR;
     UCollator *coll=NULL;
-    UCollator *coll2=NULL;
     int32_t len1 = 0, len2=0;
-	uint8_t *binColData = NULL;
+    uint8_t *binColData = NULL;
 
     UResourceBundle *res = NULL;
-	UResourceBundle *binColl = NULL;
-	uint8_t *binResult = NULL;
-    UChar *rules=NULL;
+    UResourceBundle *binColl = NULL;
+    uint8_t *binResult = NULL;
     
     
     
@@ -65,28 +63,28 @@ void TestGetDefaultRules(){
     log_verbose("Test the function ucol_getDefaultRulesArray()\n");
 
     coll = ucol_openRules(defaultRulesArray, size, UCOL_DECOMP_CAN, 0, &status);
-	ucol_setNormalization(coll, UCOL_DEFAULT_NORMALIZATION);
-	if(U_SUCCESS(status) && coll !=NULL) {
-		binColData = (uint8_t*)ucol_cloneRuleData(coll, &len1, &status);
+    ucol_setNormalization(coll, UCOL_DEFAULT_NORMALIZATION);
+    if(U_SUCCESS(status) && coll !=NULL) {
+        binColData = (uint8_t*)ucol_cloneRuleData(coll, &len1, &status);
         
     }
 
      
     status=U_ZERO_ERROR;
     res=ures_open(NULL, "root", &status);
-	if(U_FAILURE(status)){
-		log_err("ERROR: Failed to get resource for \"root Locale\" with %s", myErrorName(status));
-		return;
-	}
+    if(U_FAILURE(status)){
+        log_err("ERROR: Failed to get resource for \"root Locale\" with %s", myErrorName(status));
+        return;
+    }
     binColl=ures_getByKey(res, "%%Collation", binColl, &status);  
     if(U_SUCCESS(status)){
-		binResult=(uint8_t*)ures_getBinary(binColl,  &len2, &status);
+        binResult=(uint8_t*)ures_getBinary(binColl,  &len2, &status);
         if(U_FAILURE(status)){
             log_err("ERROR: ures_getBinary() failed\n");
         }
     }else{
-		log_err("ERROR: ures_getByKey(locale(default), %%Collation) failed");
-	}
+        log_err("ERROR: ures_getByKey(locale(default), %%Collation) failed");
+    }
 
 
     if(len1 != len2){
@@ -193,14 +191,14 @@ void TestProperty()
         status=U_ZERO_ERROR;
         disName=(UChar*)malloc(sizeof(UChar) * (len+1));
         ucol_getDisplayName("en_US", "de_DE", disName, len+1,  &status);
+        log_verbose("the display name for default collation in german: %s\n", austrdup(disName) );
+        free(disName);
     }
     if(U_FAILURE(status)){
         log_err("ERROR: in getDisplayName: %s\n", myErrorName(status));
         return;
     }
-    log_verbose("the display name for default collation in german: %s\n", austrdup(disName) );
     log_verbose("Default collation getDisplayName ended.\n");
-    free(disName);
 
     log_verbose("ucol_getRules() testing ...\n");
     ucol_getRules(col, &tempLength);
@@ -233,14 +231,14 @@ void TestProperty()
         status=U_ZERO_ERROR;
         disName=(UChar*)malloc(sizeof(UChar) * (len+1));
         ucol_getDisplayName("fr_FR", "en_US", disName, len+1,  &status);
+        log_verbose("the display name for french collation in english: %s\n", austrdup(disName) );
+        free(disName);
     }
     if(U_FAILURE(status)){
         log_err("ERROR: in getDisplayName: %s\n", myErrorName(status));
         return;
     }
-    log_verbose("the display name for french collation in german: %s\n", austrdup(disName) );
     log_verbose("Default collation getDisplayName ended.\n");
-    free(disName);
     
 
        

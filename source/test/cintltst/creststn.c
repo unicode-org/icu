@@ -39,8 +39,8 @@
 static uint32_t
 randul()
 {
-	uint32_t l;
-	int32_t i;
+    uint32_t l;
+    int32_t i;
     static UBool initialized = FALSE;
     if (!initialized)
     {
@@ -87,7 +87,7 @@ itoa1(int32_t i, char* buf)
   /* Output digits in reverse order */
   p = buf;
   do {
-    *p++ = '0' + (i % 10);
+    *p++ = (char)('0' + (i % 10));
     i /= 10;
   }
   while(i);
@@ -197,7 +197,7 @@ void TestNewTypes() {
   char action[256];
   char testdatapath[256];
   const char*    directory =  ctest_getTestDirectory();
-  UErrorCode status = U_ZERO_ERROR,expected_resource_status = U_ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   UResourceBundle* res = NULL;
   uint8_t *binResult = NULL;
   int32_t len = 0;
@@ -319,7 +319,6 @@ void TestAPI(){
     UErrorCode status=U_ZERO_ERROR;
     const char*        directory=NULL;
     int32_t len=0;
-    uint32_t intValue=0;
     const char* key=NULL;
     const UChar* value=NULL;
     char testdatapath[256];
