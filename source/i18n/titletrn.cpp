@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2003, International Business Machines
+*   Copyright (C) 2001-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -28,7 +28,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TitlecaseTransliterator)
 /**
  * ID for this transliterator.
  */
-const char CURR_ID[] = "Any-Title";
+static const char CURR_ID[] = "Any-Title";
 
 /**
  * The set of characters we skip.  These are neither cased nor

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2003, International Business Machines
+*   Copyright (C) 2001-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -24,7 +24,7 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(NameUnicodeTransliterator)
 
-const char CURR_ID[] = "Name-Any";
+static const char CURR_ID[] = "Name-Any";
 
 static const UChar OPEN[] = {92,78,126,123,126,0}; // "\N~{~"
 static const UChar OPEN_DELIM  = 92;  // '\\' first char of OPEN
