@@ -718,6 +718,9 @@ u_charScript(UChar32    ch);
  * in Unicode version 1.0.
  * The name contains only "invariant" characters
  * like A-Z, 0-9, space, and '-'.
+ * Unicode 1.0 names are only retrieved if they are different from the modern
+ * names and if the data file contains the data for them. gennames may or may
+ * not be called with a command line option to include 1.0 names in unames.dat.
  *
  * @param code The character (code point) for which to get the name.
  *             It must be <code>0&lt;=code&lt;0x10ffff</code>.
@@ -732,7 +735,7 @@ u_charScript(UChar32    ch);
  * @draft
  */
 U_CAPI UTextOffset U_EXPORT2
-u_charName(uint32_t code, UCharNameChoice nameChoice,
+u_charName(UChar32 code, UCharNameChoice nameChoice,
            char *buffer, UTextOffset bufferLength,
            UErrorCode *pErrorCode);
 
@@ -757,7 +760,7 @@ U_CDECL_BEGIN
 typedef UBool UEnumCharNamesFn(void *context,
                                UChar32 code,
                                UCharNameChoice nameChoice,
-                               char *name,
+                               const char *name,
                                UTextOffset length);
 
 U_CDECL_END

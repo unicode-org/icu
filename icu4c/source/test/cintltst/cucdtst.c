@@ -780,7 +780,7 @@ void TestStringFunctions()
 
 /* test u_charName() -------------------------------------------------------- */
 
-static struct {
+static const struct {
     uint32_t code;
     const char *name, *oldName;
 } names[]={
@@ -793,6 +793,37 @@ static struct {
     0xff08, "FULLWIDTH LEFT PARENTHESIS", "FULLWIDTH OPENING PARENTHESIS",
     0xffe5, "FULLWIDTH YEN SIGN", ""
 };
+
+static UBool
+enumCharNamesFn(void *context,
+                UChar32 code, UCharNameChoice nameChoice,
+                const char *name, UTextOffset length) {
+    UTextOffset *pCount=(UTextOffset *)context;
+    int i;
+
+    if(length<=0 || length!=(UTextOffset)uprv_strlen(name)) {
+        /* should not be called with an empty string or invalid length */
+        log_err("u_enumCharName(0x%lx)=%s but length=%ld\n", name, length);
+        return TRUE;
+    }
+
+    ++*pCount;
+    for(i=0; i<sizeof(names)/sizeof(names[0]); ++i) {
+        if(code==names[i].code) {
+            if(nameChoice==U_UNICODE_CHAR_NAME) {
+                if(0!=uprv_strcmp(name, names[i].name)) {
+                    log_err("u_enumCharName(0x%lx)=%s instead of %s\n", code, name, names[i].name);
+                }
+            } else {
+                if(names[i].oldName[0]==0 || 0!=uprv_strcmp(name, names[i].oldName)) {
+                    log_err("u_enumCharName(0x%lx - 1.0)=%s instead of %s\n", code, name, names[i].oldName);
+                }
+            }
+            break;
+        }
+    }
+    return TRUE;
+}
 
 static void
 TestCharNames() {
@@ -822,6 +853,14 @@ TestCharNames() {
         if(length<0 || length>0 && 0!=uprv_strcmp(name, names[i].oldName)) {
             log_err("u_charName(0x%lx - 1.0) gets %s instead of nothing or %s\n", names[i].code, name, names[i].oldName);
         }
+    }
+
+    /* test u_enumCharNames() */
+    length=0;
+    errorCode=U_ZERO_ERROR;
+    u_enumCharNames(0, 0x110000, enumCharNamesFn, &length, U_UNICODE_CHAR_NAME, &errorCode);
+    if(U_FAILURE(errorCode) || length<10000) {
+        log_err("u_enumCharNames(0..0x1100000) error %s names count=%ld\n", u_errorName(errorCode), length);
     }
 }
 
