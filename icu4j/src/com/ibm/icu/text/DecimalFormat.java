@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/05/19 21:09:14 $ 
- * $Revision: 1.31 $
+ * $Date: 2003/05/29 17:51:20 $ 
+ * $Revision: 1.32 $
  *
  *****************************************************************************************
  */
@@ -536,8 +536,11 @@ public class DecimalFormat extends NumberFormat {
     
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Round a double value to the nearest integer according to the
-     * given mode.
+     * Round a double value to the nearest multiple of the given
+     * rounding increment, according to the given mode.  This is
+     * equivalent to rounding value/roundingInc to the nearest
+     * integer, according to the given mode, and returning that
+     * integer * roundingInc.
      * Note this is changed from the version in 2.4, since division of doubles
      * have inaccuracies. jitterbug 1871.
      * @param number the absolute value of the number to be rounded
@@ -560,47 +563,33 @@ public class DecimalFormat extends NumberFormat {
             return (Math.floor(div)) * roundingInc;
         case java.math.BigDecimal.ROUND_UP:
             return (Math.ceil(div)) * roundingInc;
-        case java.math.BigDecimal.ROUND_HALF_EVEN:
-            // We should be able to just return Math.rint(a), but this
-            // doesn't work in some VMs.
-            {   double ceildiff = (Math.ceil(div) * roundingInc) - number;
-                double floor = Math.floor(div);
-                double floordiff = number - (floor * roundingInc);
-                if (ceildiff != floordiff) {
-                    return (Math.rint(div)) * roundingInc;
-                }
-                floor /= 2.0;
-                return (floor == Math.floor(floor) ? Math.floor(div) 
-                                                  : (Math.floor(div) + 1.0)) 
-                                                  * roundingInc;
-            }
-        case java.math.BigDecimal.ROUND_HALF_DOWN:
-            {
-                double ceil = Math.ceil(div);
-                double ceildiff = (ceil * roundingInc) - number;
-                double floor = Math.floor(div);
-                double floordiff = number - (floor * roundingInc);
-                if (ceildiff < floordiff) {
-                    return ceil * roundingInc;
-                }
-                return floor * roundingInc;
-            }
-        case java.math.BigDecimal.ROUND_HALF_UP:
-            {
-                double ceil = Math.ceil(div);
-                double ceildiff = (ceil * roundingInc) - number;
-                double floor = Math.floor(div);
-                double floordiff = number - (floor * roundingInc);
-                if (ceildiff <= floordiff) {
-                    return ceil * roundingInc;
-                }
-                return floor * roundingInc;
-            }
         case java.math.BigDecimal.ROUND_UNNECESSARY:
             if (div != Math.floor(div)) {
                 throw new ArithmeticException("Rounding necessary");
             }
             return number;
+        }
+
+        // Handle complex cases
+        double ceil = Math.ceil(div);
+        double ceildiff = (ceil * roundingInc) - number;
+        double floor = Math.floor(div);
+        double floordiff = number - (floor * roundingInc);
+        switch (mode) {
+        case java.math.BigDecimal.ROUND_HALF_EVEN:
+            // We should be able to just return Math.rint(a), but this
+            // doesn't work in some VMs.
+            if (ceildiff != floordiff) {
+                return (Math.rint(div)) * roundingInc;
+            }
+            floor /= 2.0;
+            return (floor == Math.floor(floor) ? Math.floor(div) 
+                                              : (Math.floor(div) + 1.0)) 
+                                              * roundingInc;
+        case java.math.BigDecimal.ROUND_HALF_DOWN:
+            return ((floordiff <= ceildiff) ? floor : ceil) * roundingInc;
+        case java.math.BigDecimal.ROUND_HALF_UP:
+            return ((ceildiff <= floordiff) ? ceil : floor) * roundingInc;
         default:
             throw new IllegalArgumentException("Invalid rounding mode: " + mode);
         }
