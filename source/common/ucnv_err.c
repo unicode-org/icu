@@ -57,25 +57,22 @@ static  int32_t itou (UChar * buffer, uint32_t i, uint32_t radix, int32_t pad)
       i=i/radix;
   }while(i);
 
-  while (length < pad)   
+  while (length < pad){   
       buffer[length++] = (UChar) 0x0030;/*zero padding */
-
+  }
+  /* null terminate the buffer */
   if(length<MAX_DIGITS){
-       buffer[length--] = (UChar) 0x0000;
+       buffer[length] = (UChar) 0x0000;
   }
   num= (pad>=length) ? pad :length;
   
-  /*Reverses the string */
-  for (j = 0; j < (num / 2); j++)
-    {
-      temp = buffer[length - j];
-      buffer[length - j] = buffer[j];
+  /* Reverses the string */
+  for (j = 0; j < (num / 2); j++){
+      temp = buffer[(length-1) - j];
+      buffer[(length-1) - j] = buffer[j];
       buffer[j] = temp;
     }
-
-  /* truncates the padding */
-  
-  return length+1;
+  return length;
 }
 
 /*Function Pointer STOPS at the ILLEGAL_SEQUENCE */
