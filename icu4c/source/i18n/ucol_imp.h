@@ -427,11 +427,21 @@ typedef enum {
     CE_TAGS_COUNT
 } UColCETags;
 
+typedef struct {
+      UChar32 variableTopValue;
+      UColAttributeValue frenchCollation;
+      UColAttributeValue alternateHandling; /* attribute for handling variable elements*/
+      UColAttributeValue caseFirst;         /* who goes first, lower case or uppercase */
+      UColAttributeValue caseLevel;         /* do we have an extra case level */
+      UColAttributeValue normalizationMode; /* attribute for normalization */
+      UColAttributeValue strength;          /* attribute for strength */
+} UColOptionSet;
 
 typedef struct {
       int32_t size;
       /* all the offsets are in bytes */
       /* to get the address add to the header address and cast properly */
+      uint32_t options; /* these are the default options for the collator */
       uint32_t CEindex;          /* uint16_t *CEindex;              */
       uint32_t CEvalues;         /* int32_t *CEvalues;              */
       uint32_t mappingPosition;  /* const uint8_t *mappingPosition; */
@@ -451,16 +461,9 @@ typedef struct {
       uint32_t unsafeCP;
 
       int32_t CEcount;
-      UChar32 variableTopValue;
-      UVersionInfo version;
-      UColAttributeValue frenchCollation;
-      UColAttributeValue alternateHandling; /* attribute for handling variable elements*/
-      UColAttributeValue caseFirst;         /* who goes first, lower case or uppercase */
-      UColAttributeValue caseLevel;         /* do we have an extra case level */
-      UColAttributeValue normalizationMode; /* attribute for normalization */
-      UColAttributeValue strength;          /* attribute for strength */
       UBool jamoSpecial;                    /* is jamoSpecial */
       uint8_t padding[3];                   /* for guaranteed alignment */
+      UVersionInfo version;
       char charsetName[32];                 /* for charset CEs */
       uint8_t reserved[64];                 /* for future use */
 } UCATableHeader;
@@ -483,6 +486,8 @@ SortKeyGenerator(const    UCollator    *coll,
         UErrorCode *status);
 
 struct UCollator {
+    UBool freeOptionsOnClose;
+    UColOptionSet *options;
     SortKeyGenerator *sortKeyGen;
     UBool freeOnClose;
     UResourceBundle *rb;
@@ -539,8 +544,8 @@ UCollationResult alternateIncrementalProcessing(const UCollator *coll, increment
 void ucol_initUCA(UErrorCode *status);
 
 UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status);
-void ucol_setOptionsFromHeader(UCollator* result, const UCATableHeader * image, UErrorCode *status);
-void ucol_putOptionsToHeader(UCollator* result, UCATableHeader * image, UErrorCode *status);
+void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status);
+void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status);
 
 uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, UErrorCode *status);
 int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, uint32_t CE, incrementalContext *ctx, UErrorCode *status);

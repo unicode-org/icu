@@ -100,12 +100,12 @@ ucol_open(    const    char         *loc,
   } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
     int32_t len = 0;
     const uint8_t *inData = ures_getBinary(binary, &len, status);
-    if((uint32_t)len > sizeof(UCATableHeader)) {
+    if((uint32_t)len > (paddedsize(sizeof(UCATableHeader)) + paddedsize(sizeof(UColOptionSet)))) {
       result = ucol_initCollator((const UCATableHeader *)inData, result, status); 
       result->hasRealData = TRUE;
     } else {
       result = ucol_initCollator(UCA->image, result, status); 
-      ucol_setOptionsFromHeader(result, (const UCATableHeader *)inData, status);
+      ucol_setOptionsFromHeader(result, (UColOptionSet *)(inData+((const UCATableHeader *)inData)->options), status);
       result->hasRealData = FALSE;
     }
   } else { /* There is another error, and we're just gonna clean up */
@@ -147,6 +147,11 @@ ucol_close(UCollator *coll)
   if(coll->freeOnClose == FALSE){
     return; /* for safeClone, if freeOnClose is FALSE, 
             don't free the other instance data */
+  }
+  if(coll->freeOptionsOnClose != FALSE) {
+    if(coll->options != NULL) {
+      uprv_free(coll->options);
+    }
   }
   if(coll->mapping != NULL) {
       ucmp32_close(coll->mapping);
@@ -211,10 +216,9 @@ ucol_openRules(    const    UChar                  *rules,
   src.resultLen = 0;
   src.lh = 0;
 
-  src.image = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
+  src.opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
 
-
-  uprv_memcpy(src.image, UCA->image, sizeof(UCATableHeader));
+  uprv_memcpy(src.opts, UCA->options, sizeof(UColOptionSet));
 
   listLen = ucol_tok_assembleTokenList(&src, status);
   if(U_FAILURE(*status)) { 
@@ -228,7 +232,7 @@ ucol_openRules(    const    UChar                  *rules,
       fprintf(stderr, "invalid rule just before offset %i\n", src.current-src.source);
     }
 #endif
-    uprv_free(src.image);
+    uprv_free(src.opts);
     ucol_tok_closeTokenList(&src);
     return NULL;
   }
@@ -242,7 +246,8 @@ ucol_openRules(    const    UChar                  *rules,
   } else { /* no rules, but no error either */
     /* must be only options */
     result = ucol_initCollator(UCA->image,0,status);
-    ucol_setOptionsFromHeader(result, src.image, status);
+    ucol_setOptionsFromHeader(result, src.opts, status);
+    result->freeOptionsOnClose = TRUE;
     result->hasRealData = FALSE;
   }
   if(U_SUCCESS(*status)) {
@@ -256,12 +261,11 @@ ucol_openRules(    const    UChar                  *rules,
       uprv_free(table);
       ucol_close(result);
     }
-    uprv_free(src.image);
+    uprv_free(src.opts);
     ucol_tok_closeTokenList(&src);
     return NULL;
   }
 
-  uprv_free(src.image);
   ucol_tok_closeTokenList(&src);
 
   ucol_setAttribute(result, UCOL_STRENGTH, strength, status);
@@ -280,25 +284,26 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
     result = (uint8_t *)uprv_malloc(*length);
     uprv_memcpy(result, coll->image, *length);
   } else {
-    *length = sizeof(UCATableHeader);
-    result = (uint8_t *)uprv_malloc(sizeof(UCATableHeader));
+    *length = paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet));
+    result = (uint8_t *)uprv_malloc(*length);
     UCATableHeader *head = (UCATableHeader *)result;
-    ucol_putOptionsToHeader(coll, head, status);   
+    uprv_memcpy(result, UCA->image, sizeof(UCATableHeader));
+    uprv_memcpy(result+paddedsize(sizeof(UCATableHeader)), coll->options, sizeof(UColOptionSet));
   }
   return result;
 }
 
-void ucol_setOptionsFromHeader(UCollator* result, const UCATableHeader * image, UErrorCode *status) {
+void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status) {
   if(U_FAILURE(*status)) {
     return;
   }
-    result->caseFirst = image->caseFirst;
-    result->caseLevel = image->caseLevel;
-    result->frenchCollation = image->frenchCollation;
-    result->normalizationMode = image->normalizationMode;
-    result->strength = image->strength;
-    result->variableTopValue = image->variableTopValue;
-    result->alternateHandling = image->alternateHandling;
+    result->caseFirst = opts->caseFirst;
+    result->caseLevel = opts->caseLevel;
+    result->frenchCollation = opts->frenchCollation;
+    result->normalizationMode = opts->normalizationMode;
+    result->strength = opts->strength;
+    result->variableTopValue = opts->variableTopValue;
+    result->alternateHandling = opts->alternateHandling;
 
     result->caseFirstisDefault = TRUE;
     result->caseLevelisDefault = TRUE;
@@ -308,19 +313,21 @@ void ucol_setOptionsFromHeader(UCollator* result, const UCATableHeader * image, 
     result->variableTopValueisDefault = TRUE;
 
     ucol_updateInternalState(result);
+
+    result->options = opts;
 }
 
-void ucol_putOptionsToHeader(UCollator* result, UCATableHeader * image, UErrorCode *status) {
+void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status) {
   if(U_FAILURE(*status)) {
     return;
   }
-    image->caseFirst = result->caseFirst;
-    image->caseLevel = result->caseLevel;
-    image->frenchCollation = result->frenchCollation;
-    image->normalizationMode = result->normalizationMode;
-    image->strength = result->strength;
-    image->variableTopValue = result->variableTopValue; 
-    image->alternateHandling = result->alternateHandling;
+    opts->caseFirst = result->caseFirst;
+    opts->caseLevel = result->caseLevel;
+    opts->frenchCollation = result->frenchCollation;
+    opts->normalizationMode = result->normalizationMode;
+    opts->strength = result->strength;
+    opts->variableTopValue = result->variableTopValue; 
+    opts->alternateHandling = result->alternateHandling;
 }
 
 
@@ -359,14 +366,18 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     result->contractionCEs = (uint32_t*)((uint8_t*)result->image+result->image->contractionCEs);
     result->contractionIndex = (UChar*)((uint8_t*)result->image+result->image->contractionIndex);
     result->expansion = (uint32_t*)((uint8_t*)result->image+result->image->expansion);
+
+    result->options = (UColOptionSet*)((uint8_t*)result->image+result->image->options);
+    result->freeOptionsOnClose = FALSE;
+
     /* set attributes */
-    result->caseFirst = result->image->caseFirst;
-    result->caseLevel = result->image->caseLevel;
-    result->frenchCollation = result->image->frenchCollation;
-    result->normalizationMode = result->image->normalizationMode;
-    result->strength = result->image->strength;
-    result->variableTopValue = result->image->variableTopValue;
-    result->alternateHandling = result->image->alternateHandling;
+    result->caseFirst = result->options->caseFirst;
+    result->caseLevel = result->options->caseLevel;
+    result->frenchCollation = result->options->frenchCollation;
+    result->normalizationMode = result->options->normalizationMode;
+    result->strength = result->options->strength;
+    result->variableTopValue = result->options->variableTopValue;
+    result->alternateHandling = result->options->alternateHandling;
 
     result->caseFirstisDefault = TRUE;
     result->caseLevelisDefault = TRUE;
@@ -2392,7 +2403,7 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
             coll->frenchCollationisDefault = FALSE;
         } else if (value == UCOL_DEFAULT) {
             coll->frenchCollationisDefault = TRUE;
-            coll->frenchCollation = coll->image->frenchCollation;
+            coll->frenchCollation = coll->options->frenchCollation;
         } else {
             *status = U_ILLEGAL_ARGUMENT_ERROR  ;
         }
@@ -2406,7 +2417,7 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
             coll->alternateHandlingisDefault = FALSE;
         } else if (value == UCOL_DEFAULT) {
             coll->alternateHandlingisDefault = TRUE;
-            coll->alternateHandling = coll->image->alternateHandling ;
+            coll->alternateHandling = coll->options->alternateHandling ;
         } else {
             *status = U_ILLEGAL_ARGUMENT_ERROR  ;
         }
@@ -2422,7 +2433,7 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
           coll->caseFirst = UCOL_OFF;
           coll->caseFirstisDefault = FALSE;
         } else if (value == UCOL_DEFAULT) {
-            coll->caseFirst = coll->image->caseFirst;
+            coll->caseFirst = coll->options->caseFirst;
             coll->caseFirstisDefault = TRUE;
         } else {
             *status = U_ILLEGAL_ARGUMENT_ERROR  ;
@@ -2436,7 +2447,7 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
             coll->caseLevel = UCOL_OFF;
             coll->caseLevelisDefault = FALSE;
         } else if (value == UCOL_DEFAULT) {
-            coll->caseLevel = coll->image->caseLevel;
+            coll->caseLevel = coll->options->caseLevel;
             coll->caseLevelisDefault = TRUE;
         } else {
             *status = U_ILLEGAL_ARGUMENT_ERROR  ;
@@ -2454,7 +2465,7 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
             coll->normalizationModeisDefault = FALSE;
         } else if (value == UCOL_DEFAULT) {
             coll->normalizationModeisDefault = TRUE;
-            coll->normalizationMode = coll->image->normalizationMode;
+            coll->normalizationMode = coll->options->normalizationMode;
         } else {
             *status = U_ILLEGAL_ARGUMENT_ERROR  ;
         }
@@ -2462,7 +2473,7 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
     case UCOL_STRENGTH:         /* attribute for strength */
         if (value == UCOL_DEFAULT) {
             coll->strengthisDefault = TRUE;
-            coll->strength = coll->image->strength;
+            coll->strength = coll->options->strength;
         } else if (value <= UCOL_IDENTICAL) {
             coll->strengthisDefault = FALSE;
             coll->strength = value;

@@ -627,6 +627,7 @@ write_uca_table(const char *filename,
     UChar variableTopValue = 0;
     UBool foundVariableTop = FALSE;
     UCATableHeader *myD = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
+    UColOptionSet *opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
 
 
     if(data == NULL) {
@@ -642,20 +643,20 @@ write_uca_table(const char *filename,
     memset(sizeBreakDown, 0, 35*35*35*sizeof(int32_t));
     memset(inverseTable, 0xDA, sizeof(int32_t)*3*0xFFFF);
 
-    myD->variableTopValue = variableTopValue;
-    myD->strength = UCOL_TERTIARY;
-    myD->frenchCollation = UCOL_OFF;
-    myD->alternateHandling = UCOL_NON_IGNORABLE; /* attribute for handling variable elements*/
-    myD->caseFirst = UCOL_OFF;         /* who goes first, lower case or uppercase */
-    myD->caseLevel = UCOL_OFF;         /* do we have an extra case level */
-    myD->normalizationMode = UCOL_OFF; /*UCOL_ON*/ /* attribute for normalization */
+    opts->variableTopValue = variableTopValue;
+    opts->strength = UCOL_TERTIARY;
+    opts->frenchCollation = UCOL_OFF;
+    opts->alternateHandling = UCOL_NON_IGNORABLE; /* attribute for handling variable elements*/
+    opts->caseFirst = UCOL_OFF;         /* who goes first, lower case or uppercase */
+    opts->caseLevel = UCOL_OFF;         /* do we have an extra case level */
+    opts->normalizationMode = UCOL_OFF; /*UCOL_ON*/ /* attribute for normalization */
     /* populate the version info struct with version info*/
     myD->version[0] = UCOL_BUILDER_VERSION;
     /*TODO:The fractional rules version should be taken from FractionalUCA.txt*/
     myD->version[1] = UCA_TAILORING_RULES_VERSION;
     myD->jamoSpecial = FALSE;
 
-    tempUCATable *t = uprv_uca_initTempTable(myD, NULL, status);
+    tempUCATable *t = uprv_uca_initTempTable(myD, opts, NULL, status);
 
     /*
     elements = uhash_open(uhash_hashLong, uhash_compareLong, &status);
@@ -697,7 +698,7 @@ write_uca_table(const char *filename,
             }
 
             if(variableTopValue == 0 && foundVariableTop == TRUE) {
-                t->image->variableTopValue = element->cPoints[0];
+                t->options->variableTopValue = element->cPoints[0];
                 foundVariableTop = FALSE;
             }
 
@@ -774,6 +775,7 @@ write_uca_table(const char *filename,
 
     uprv_uca_closeTempTable(t);    
     uprv_free(myD);
+    uprv_free(opts);
 
     //printOutTable(myData, &status);
     //uhash_close(elements);

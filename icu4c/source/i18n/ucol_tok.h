@@ -87,7 +87,7 @@ typedef struct {
   UChar *extraEnd;
   const InverseTableHeader *invUCA;
   const UCollator *UCA;
-  UCATableHeader *image;
+  UColOptionSet *opts;
   uint32_t resultLen;
   UColTokListHeader *lh;
 } UColTokenParser;
@@ -118,8 +118,8 @@ U_CFUNC void ucol_tok_closeTokenList(UColTokenParser *src);
 
 void deleteToken(void *token);
 int32_t ucol_uprv_tok_isOnorOf(const UChar* onoff);
-void ucol_uprv_tok_setOptionInImage(UCATableHeader *image, UColAttribute attrib, UColAttributeValue value);
-UBool ucol_uprv_tok_readAndSetOption(UCATableHeader *image, const UChar* start, const UChar *end, UBool *variableTop, UBool *top, UErrorCode *status);
+void ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, UColAttributeValue value);
+UBool ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, const UChar *end, UBool *variableTop, UBool *top, UErrorCode *status);
 
 int32_t uhash_hashTokens(const void *k);
 UBool uhash_compareTokens(const void *key1, const void *key2);
