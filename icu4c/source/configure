@@ -3621,12 +3621,12 @@ thelibdir=`test "x$exec_prefix" = xNONE && exec_prefix="$prefix"; eval echo $lib
 
 case $datapackaging in
     common)
-	icudatadir=$datadir
-	theicudatadir=$thedatadir
+	pkgicudatadir=$datadir
+	thepkgicudatadir=$thedatadir
 	;;
     *)
-	icudatadir=$libdir
-	theicudatadir=$thelibdir
+	pkgicudatadir=$libdir
+	thepkgicudatadir=$thelibdir
 	;;
 esac
 
@@ -4053,8 +4053,8 @@ s%@LAYOUT_FALSE@%$LAYOUT_FALSE%g
 s%@thesysconfdir@%$thesysconfdir%g
 s%@thedatadir@%$thedatadir%g
 s%@thelibdir@%$thelibdir%g
-s%@icudatadir@%$icudatadir%g
-s%@theicudatadir@%$theicudatadir%g
+s%@pkgicudatadir@%$pkgicudatadir%g
+s%@thepkgicudatadir@%$thepkgicudatadir%g
 s%@DATA_PACKAGING_CPPFLAGS@%$DATA_PACKAGING_CPPFLAGS%g
 s%@DATA_PACKAGING_MODE@%$DATA_PACKAGING_MODE%g
 s%@ICULIBSUFFIX@%$ICULIBSUFFIX%g
