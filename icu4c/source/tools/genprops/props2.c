@@ -102,6 +102,11 @@ numericLineFn(void *context,
               char *fields[][2], int32_t fieldCount,
               UErrorCode *pErrorCode);
 
+static void U_CALLCONV
+bidiClassLineFn(void *context,
+                char *fields[][2], int32_t fieldCount,
+                UErrorCode *pErrorCode);
+
 /* parse files with single enumerated properties ---------------------------- */
 
 struct SingleEnum {
@@ -396,6 +401,9 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     /* add Han numeric types & values */
     parseMultiFieldFile(filename, basename, "DerivedNumericValues", suffix, 3, numericLineFn, pErrorCode);
 
+    /* set proper bidi class for unassigned code points (Cn) */
+    parseTwoFieldFile(filename, basename, "DerivedBidiClass", suffix, bidiClassLineFn, pErrorCode);
+
     parseTwoFieldFile(filename, basename, "DerivedAge", suffix, ageLineFn, pErrorCode);
 
     /*
@@ -599,8 +607,19 @@ numericLineFn(void *context,
             exit(U_PARSE_ERROR);
         }
 
-        if(GET_UNSIGNED_VALUE(oldProps32)!=0) {
-            /* the code below is not prepared to maintain values and exceptions */
+        /*
+         * Do not set a numeric value for code points that have other
+         * values or exceptions because the code below is not prepared
+         * to maintain such values and exceptions.
+         *
+         * Check store.c (e.g., file format description and makeProps())
+         * for details of what code points get their value field interpreted.
+         * For example, case mappings for Ll/Lt/Lu and mirror mappings for mirrored characters.
+         *
+         * For simplicity, and because we only expect to set numeric values for Han characters,
+         * for now we only allow to set these values for Lo characters.
+         */
+        if(GET_UNSIGNED_VALUE(oldProps32)!=0 || PROPS_VALUE_IS_EXCEPTION(oldProps32) || GET_CATEGORY(oldProps32)!=U_OTHER_LETTER) {
             fprintf(stderr, "genprops error: new numeric value for a character with some other value in DerivedNumericValues.txt at %s\n", fields[0][0]);
             exit(U_PARSE_ERROR);
         }
@@ -618,11 +637,67 @@ numericLineFn(void *context,
         uprv_memset(&newProps, 0, sizeof(newProps));
         newProps.code=start;
         newProps.generalCategory=(uint8_t)GET_CATEGORY(oldProps32);
-        newProps.bidi=(uint8_t)((oldProps32>>UPROPS_BIDI_SHIFT)&0x1f);
+        newProps.bidi=(uint8_t)GET_BIDI_CLASS(oldProps32);
         newProps.isMirrored=(uint8_t)(oldProps32&(1UL<<UPROPS_MIRROR_SHIFT) ? TRUE : FALSE);
         newProps.numericType=(uint8_t)type;     /* newly parsed numeric type */
         newProps.numericValue=(int32_t)value;   /* newly parsed numeric value */
         addProps(start, makeProps(&newProps));
+    }
+}
+
+/* DerivedBidiClass.txt ----------------------------------------------------- */
+
+static void U_CALLCONV
+bidiClassLineFn(void *context,
+                char *fields[][2], int32_t fieldCount,
+                UErrorCode *pErrorCode) {
+    char *s;
+    uint32_t oldStart, start, limit, value, props32;
+    UBool didSet;
+
+    /* get the code point range */
+    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "genprops: syntax error in DerivedBidiClass.txt field 0 at %s\n", fields[0][0]);
+        exit(*pErrorCode);
+    }
+    ++limit;
+
+    /* parse bidi class */
+    s=trimTerminateField(fields[1][0], fields[1][1]);
+    value=u_getPropertyValueEnum(UCHAR_BIDI_CLASS, s);
+    if(value<0) {
+        fprintf(stderr, "genprops error: unknown bidi class in DerivedBidiClass.txt field 1 at %s\n", s);
+        exit(U_PARSE_ERROR);
+    }
+
+    didSet=FALSE;
+    oldStart=start;
+    for(; start<limit; ++start) {
+        props32=getProps(start);
+
+        /* ignore old bidi class, set only for unassigned code points (Cn) */
+        if(GET_CATEGORY(props32)!=0) {
+            if(value!=GET_BIDI_CLASS(props32)) {
+                fprintf(stderr, "genprops error: different bidi class in DerivedBidiClass.txt field 1 at %s\n", s);
+                exit(U_PARSE_ERROR);
+            }
+            continue;
+        }
+
+        /* remove whatever bidi class was set before */
+        props32&=~(0x1f<<UPROPS_BIDI_SHIFT);
+
+        /* set bidi class for Cn according to DerivedBidiClass.txt */
+        props32|=value<<UPROPS_BIDI_SHIFT;
+
+        /* set the modified properties */
+        addProps(start, props32);
+        didSet=TRUE;
+    }
+
+    if(didSet && beVerbose) {
+        printf("setting U+%04x..U+%04x bidi class %d\n", oldStart, limit-1, value);
     }
 }
 

@@ -64,6 +64,7 @@ enum {
 
 #define PROPS_VALUE_IS_EXCEPTION(props) ((props)&UPROPS_EXCEPTION_BIT)
 #define GET_CATEGORY(props) ((props)&0x1f)
+#define GET_BIDI_CLASS(props) ((props>>UPROPS_BIDI_SHIFT)&0x1f)
 #define GET_NUMERIC_TYPE(props) (((props)>>UPROPS_NUMERIC_TYPE_SHIFT)&7)
 #define GET_UNSIGNED_VALUE(props) ((props)>>UPROPS_VALUE_SHIFT)
 #define GET_SIGNED_VALUE(props) ((int32_t)(props)>>UPROPS_VALUE_SHIFT)
