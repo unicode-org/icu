@@ -4,7 +4,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.12 $
+// $Revision: 1.13 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -656,6 +656,8 @@ T_convertToPosix(uint32_t hostid, UErrorCode* status)
 uint32_t
 IGlobalLocales::convertToLCID(const char* posixID, UErrorCode* status)
 {
+    initializeMapRegions();
+
     uint32_t   low    = 0;
     uint32_t   mid;
     uint32_t   high   = LocaleCount - 1;
@@ -666,7 +668,6 @@ IGlobalLocales::convertToLCID(const char* posixID, UErrorCode* status)
     if (!posixID || uprv_strlen(posixID) < 2)
         return 0;
 
-    initializeMapRegions();
     uloc_getLanguage(posixID, langID, sizeof(langID), status);
     if (U_FAILURE(*status)) {
         return 0;
