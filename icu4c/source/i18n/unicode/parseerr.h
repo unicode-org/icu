@@ -16,6 +16,7 @@
 
 /**
  * The capacity of the context strings in UParseError.
+ * @draft ICU 2.0
  */ 
 enum { U_PARSE_CONTEXT_LEN = 16 };
 
@@ -33,6 +34,8 @@ enum { U_PARSE_CONTEXT_LEN = 16 };
  *
  * <p>Examples of engines which use UParseError (or may use it in the
  * future) are RuleBasedTransliterator and RuleBasedBreakIterator.
+ * 
+ * @draft ICU 2.0
  */
 typedef struct _UParseError {
 
