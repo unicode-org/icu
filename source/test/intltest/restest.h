@@ -27,6 +27,12 @@ public:
 
 private:
     /**
+     * The assignment operator have no real implementation.
+     * It is provided to make the compiler happy. Do not call.
+     */
+    ResourceBundleTest& operator=(const ResourceBundleTest&) { return *this; }
+
+    /**
      * extensive subtests called by TestResourceBundles
      **/
     UBool testTag(const char* frag, UBool in_Root, UBool in_te, UBool in_te_IN);
