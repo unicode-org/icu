@@ -371,7 +371,7 @@ static void TinyString_append(TinyString *This, const char *what) {
         } 
     }
     if (newLen < This->fCapacity) { 
-        uprv_strcat(This->s, what);
+        uprv_strcat(This->s+This->length, what);
         This->length = newLen;
     } 
 }
@@ -392,7 +392,7 @@ static void TinyString_appendn(TinyString *This, const char *what, int32_t n) {
         } 
     }
     if (newLen < This->fCapacity) { 
-        uprv_strncat(This->s, what, n);
+        uprv_strncat(This->s+This->length, what, n);
         This->length = newLen;
     } 
 }
@@ -1058,7 +1058,6 @@ doOpenChoice(const char *path, const char *type, const char *name,
 {
     UDataMemory         *retVal = NULL;
 
-    UDataPathIterator   iter;
     const char         *pathBuffer;
 
     TinyString          tocEntryName; /* entry name in tree format. ex:  'icudt28b/coll/ar.res' */
@@ -1254,100 +1253,103 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
     dataPath = u_getDataDirectory();
 
-    /* #1a look in ind. files: package\nam.typ  ========================= */
-    /* init path iterator for individual files */
-    udata_pathiter_init(&iter, dataPath, pkgName.s, path, tocEntryPathSuffix, FALSE);
-    
-    while((pathBuffer = udata_pathiter_next(&iter, NULL)))
-    {
-#ifdef UDATA_DEBUG
-        fprintf(stderr, "UDATA: trying individual file %s\n", pathBuffer);
-#endif
-        if( uprv_mapFile(&dataMemory, pathBuffer) ||
-            (inBasename!=pathBuffer && uprv_mapFile(&dataMemory, inBasename)))
-        {
-            pEntryData = checkDataItem(dataMemory.pHeader, isAcceptable, context, type, name, &errorCode, pErrorCode);
-            if (pEntryData != NULL) {
-                /* Data is good.
-                 *  Hand off ownership of the backing memory to the user's UDataMemory.
-                 *  and return it.   */
-                pEntryData->mapAddr = dataMemory.mapAddr;
-                pEntryData->map     = dataMemory.map;
-                
-#ifdef UDATA_DEBUG
-                fprintf(stderr, "** Mapped file: %s\n", pathBuffer);
-#endif
-                udata_pathiter_dt(&iter);
-                retVal = pEntryData;
-                goto commonReturn;
-            }
-            
-            /* the data is not acceptable, or some error occured.  Either way, unmap the memory */
-            udata_close(&dataMemory);
-            
-            /* If we had a nasty error, bail out completely.  */
-            if (U_FAILURE(*pErrorCode)) {
-                udata_pathiter_dt(&iter);
-                retVal = NULL;
-                goto commonReturn;
-            }
-            
-            /* Otherwise remember that we found data but didn't like it for some reason  */
-            errorCode=U_INVALID_FORMAT_ERROR;
-        }
-#ifdef UDATA_DEBUG
-        fprintf(stderr, "%s\n", UDataMemory_isLoaded(&dataMemory)?"LOADED":"not loaded");
-#endif
-    }
-    udata_pathiter_dt(&iter);
+    /* Check to make sure that there is a dataPath to iterate over */
+    if (dataPath && *dataPath) {
+        UDataPathIterator   iter;
+        /* #1a look in ind. files: package\nam.typ  ========================= */
+        /* init path iterator for individual files */
+        udata_pathiter_init(&iter, dataPath, pkgName.s, path, tocEntryPathSuffix, FALSE);
 
-    /* #1b look in ind. files - with old naming  (package_nam.typ  not package\nam.typ) ==================== */
-    /* init path iterator for individual files */
-    udata_pathiter_init(&iter, dataPath, "", path, oldIndFileName.s, FALSE);
-    
-    while((pathBuffer = udata_pathiter_next(&iter, NULL)))
-    {
-#ifdef UDATA_DEBUG
-        fprintf(stderr, "UDATA: trying individual file %s\n", pathBuffer);
-#endif
-        if( uprv_mapFile(&dataMemory, pathBuffer) ||
-            (inBasename!=pathBuffer && uprv_mapFile(&dataMemory, inBasename)))
+        while((pathBuffer = udata_pathiter_next(&iter, NULL)))
         {
-            pEntryData = checkDataItem(dataMemory.pHeader, isAcceptable, context, type, name, &errorCode, pErrorCode);
-            if (pEntryData != NULL) {
-                /* Data is good.
-                 *  Hand off ownership of the backing memory to the user's UDataMemory.
-                 *  and return it.   */
-                pEntryData->mapAddr = dataMemory.mapAddr;
-                pEntryData->map     = dataMemory.map;
-                
 #ifdef UDATA_DEBUG
-                fprintf(stderr, "** Mapped file: %s\n", pathBuffer);
+            fprintf(stderr, "UDATA: trying individual file %s\n", pathBuffer);
 #endif
-                udata_pathiter_dt(&iter);
-                retVal = pEntryData;
-                goto commonReturn;
-            }
-            
-            /* the data is not acceptable, or some error occured.  Either way, unmap the memory */
-            udata_close(&dataMemory);
-            
-            /* If we had a nasty error, bail out completely.  */
-            if (U_FAILURE(*pErrorCode)) {
-                udata_pathiter_dt(&iter);
-                retVal = NULL;
-                goto commonReturn;
-            }
-            
-            /* Otherwise remember that we found data but didn't like it for some reason  */
-            errorCode=U_INVALID_FORMAT_ERROR;
-        }
-#ifdef UDATA_DEBUG
-        fprintf(stderr, "%s\n", UDataMemory_isLoaded(&dataMemory)?"LOADED":"not loaded");
-#endif
-    }
-    udata_pathiter_dt(&iter);
+            if( uprv_mapFile(&dataMemory, pathBuffer) ||
+                (inBasename!=pathBuffer && uprv_mapFile(&dataMemory, inBasename)))
+            {
+                pEntryData = checkDataItem(dataMemory.pHeader, isAcceptable, context, type, name, &errorCode, pErrorCode);
+                if (pEntryData != NULL) {
+                    /* Data is good.
+                    *  Hand off ownership of the backing memory to the user's UDataMemory.
+                    *  and return it.   */
+                    pEntryData->mapAddr = dataMemory.mapAddr;
+                    pEntryData->map     = dataMemory.map;
 
+#ifdef UDATA_DEBUG
+                    fprintf(stderr, "** Mapped file: %s\n", pathBuffer);
+#endif
+                    udata_pathiter_dt(&iter);
+                    retVal = pEntryData;
+                    goto commonReturn;
+                }
+
+                /* the data is not acceptable, or some error occured.  Either way, unmap the memory */
+                udata_close(&dataMemory);
+
+                /* If we had a nasty error, bail out completely.  */
+                if (U_FAILURE(*pErrorCode)) {
+                    udata_pathiter_dt(&iter);
+                    retVal = NULL;
+                    goto commonReturn;
+                }
+
+                /* Otherwise remember that we found data but didn't like it for some reason  */
+                errorCode=U_INVALID_FORMAT_ERROR;
+            }
+#ifdef UDATA_DEBUG
+            fprintf(stderr, "%s\n", UDataMemory_isLoaded(&dataMemory)?"LOADED":"not loaded");
+#endif
+        }
+        udata_pathiter_dt(&iter);
+
+        /* #1b look in ind. files - with old naming  (package_nam.typ  not package\nam.typ) ==================== */
+        /* init path iterator for individual files */
+        udata_pathiter_init(&iter, dataPath, "", path, oldIndFileName.s, FALSE);
+
+        while((pathBuffer = udata_pathiter_next(&iter, NULL)))
+        {
+#ifdef UDATA_DEBUG
+            fprintf(stderr, "UDATA: trying individual file %s\n", pathBuffer);
+#endif
+            if( uprv_mapFile(&dataMemory, pathBuffer) ||
+                (inBasename!=pathBuffer && uprv_mapFile(&dataMemory, inBasename)))
+            {
+                pEntryData = checkDataItem(dataMemory.pHeader, isAcceptable, context, type, name, &errorCode, pErrorCode);
+                if (pEntryData != NULL) {
+                    /* Data is good.
+                    *  Hand off ownership of the backing memory to the user's UDataMemory.
+                    *  and return it.   */
+                    pEntryData->mapAddr = dataMemory.mapAddr;
+                    pEntryData->map     = dataMemory.map;
+
+#ifdef UDATA_DEBUG
+                    fprintf(stderr, "** Mapped file: %s\n", pathBuffer);
+#endif
+                    udata_pathiter_dt(&iter);
+                    retVal = pEntryData;
+                    goto commonReturn;
+                }
+
+                /* the data is not acceptable, or some error occured.  Either way, unmap the memory */
+                udata_close(&dataMemory);
+
+                /* If we had a nasty error, bail out completely.  */
+                if (U_FAILURE(*pErrorCode)) {
+                    udata_pathiter_dt(&iter);
+                    retVal = NULL;
+                    goto commonReturn;
+                }
+
+                /* Otherwise remember that we found data but didn't like it for some reason  */
+                errorCode=U_INVALID_FORMAT_ERROR;
+            }
+#ifdef UDATA_DEBUG
+            fprintf(stderr, "%s\n", UDataMemory_isLoaded(&dataMemory)?"LOADED":"not loaded");
+#endif
+        }
+        udata_pathiter_dt(&iter);
+    }
 
     /* #2 */
 
@@ -1372,17 +1374,17 @@ doOpenChoice(const char *path, const char *type, const char *name,
             fprintf(stderr, "%s: pHeader=%p - %s\n", tocEntryName.s, pHeader, u_errorName(errorCode));
 #endif
             if((pHeader == NULL) && !U_FAILURE(errorCode)) {
-              pHeader=pCommonData->vFuncs->Lookup(pCommonData, oldIndFileName.s, /* oldIndFileName is preceded by a slash */
+                pHeader=pCommonData->vFuncs->Lookup(pCommonData, oldIndFileName.s, /* oldIndFileName is preceded by a slash */
                     &length, &errorCode);
 #ifdef UDATA_DEBUG
-              fprintf(stderr, "[OLD name] %s: pHeader=%p - %s\n", oldIndFileName.s, pHeader, u_errorName(errorCode));
+                fprintf(stderr, "[OLD name] %s: pHeader=%p - %s\n", oldIndFileName.s, pHeader, u_errorName(errorCode));
 #endif
             }
 
             if(pHeader!=NULL) {
                 pEntryData = checkDataItem(pHeader, isAcceptable, context, type, name, &errorCode, pErrorCode);
 #ifdef UDATA_DEBUG
-            fprintf(stderr, "pEntryData=%p\n", pEntryData);
+                fprintf(stderr, "pEntryData=%p\n", pEntryData);
 #endif
                 if (U_FAILURE(*pErrorCode)) {
                     retVal = NULL;
