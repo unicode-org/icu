@@ -265,23 +265,25 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo);
  * the data that has been loaded from a dll by the operating system,
  * as shown in this code:
  *
- *       extern  const void * U_IMPORT   ENTRY_POINT_NAME; 
- *                          // ENTRY_POINT_NAME is same as entry point specified to pkgdata tool
+ *       extern const  char U_IMPORT U_ICUDATA_ENTRY_POINT []; 
+ *        // U_ICUDATA_ENTRY_POINT is same as entry point specified to pkgdata tool
  *       UErrorCode  status = U_ZERO_ERROR;
  *
  *       udata_setCommonData(&U_ICUDATA_ENTRY_POINT, &status);
  *
- *
  * Warning: ICU must NOT have even attempted to access its data yet
- * when this call is made, or U_USING_DEFAULT_ERROR [non-failing] will
+ * when this call is made, or U_USING_DEFAULT_WARNING code will
  * be returned. Be careful of UnicodeStrings in static initialization which
  * may attempt to load a converter (use the UNICODE_STRING(x) macro instead).
+ *
+ * Also note that it is important that the declaration be as above. The entry point
+ * must not be declared as an extern void*.
  *
  * This function has no effect on application (non ICU) data.  See udata_setAppData()
  * for similar functionality for application data.
  *
  * @param data pointer to ICU common data
- * @param err outgoing error status <code>U_USING_DEFAULT_ERROR, U_UNSUPPORTED_ERROR</code>
+ * @param err outgoing error status <code>U_USING_DEFAULT_WARNING, U_UNSUPPORTED_ERROR</code>
  * @stable ICU 2.0
  */
 
@@ -310,6 +312,7 @@ udata_setCommonData(const void *data, UErrorCode *err);
  *             to (open) this data
  * @param data pointer to the data
  * @param err outgoing error status <code>U_USING_DEFAULT_WARNING, U_UNSUPPORTED_ERROR</code>
+ * @see udata_setCommonData
  * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
