@@ -199,8 +199,8 @@ static UDataInfo dataInfo={
     0,
 
     0x63, 0x6e, 0x76, 0x74,     /* dataFormat="cnvt" */
-    5, 0, 0, 0,                 /* formatVersion */
-    1, 6, 0, 0                  /* dataVersion */
+    6, 0, 0, 0,                 /* formatVersion */
+    0, 0, 0, 0                  /* dataVersion (calculated at runtime) */
 };
 
 
@@ -261,10 +261,15 @@ int main(int argc, char* argv[])
     size_t destdirlen;
     char* dot = NULL, *outBasename;
     char cnvName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
+    UVersionInfo icuVersion;
 
 #ifdef XP_MAC_CONSOLE
     argc = ccommand((char***)&argv);
 #endif
+
+    /* Set up the ICU version number */
+    u_getVersion(icuVersion);
+    uprv_memcpy(&dataInfo.dataVersion, &icuVersion, sizeof(UVersionInfo));
 
     /* preset then read command line options */
     options[4].value=u_getDataDirectory();
@@ -1198,7 +1203,6 @@ static void WriteConverterSharedData(UNewDataMemory *pData, const UConverterShar
     /* all read only, clean, platform independent data.  Mmmm. :)  */
     udata_writeBlock(pData, data->staticData, sizeof(UConverterStaticData));
     size += sizeof(UConverterStaticData); /* Is 4-aligned  - by size */
-    
     /* Now, write the table .. Please note, the size of this table is
      * */
     switch (data->staticData->conversionType)
@@ -1228,7 +1232,7 @@ static void WriteConverterSharedData(UNewDataMemory *pData, const UConverterShar
         }
       }
     break;
-    
+ 
     case UCNV_DBCS:
     case UCNV_EBCDIC_STATEFUL:
       {

@@ -464,8 +464,8 @@ const UConverterStaticData _ISO2022StaticData={
   sizeof(UConverterStaticData),
   "ISO_2022",
     2022, UCNV_IBM, UCNV_ISO_2022, 1, 4,
-    1, { 0x1a, 0, 0, 0 }, FALSE, FALSE,
-  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} /* reserved */
+    { 0x1a, 0, 0, 0 },1, FALSE, FALSE,
+  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} /* reserved */
 };
 
 
@@ -3507,11 +3507,3 @@ UConverter_getNextUChar_ISO_2022_CN(UConverterToUnicodeArgs *pArgs,
     *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
     return 0xffff;
 }
-          
-            
-            
-
-                            
-
-          
-    
