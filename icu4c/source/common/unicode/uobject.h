@@ -26,15 +26,18 @@ U_NAMESPACE_BEGIN
  * \brief C++ API: Common ICU base class UObject.
  */
 
- /*  U_OVERRIDE_CXX_ALLOCATION - Define this to override operator new and
-  *                              delete in UObject.  Enabled by default for ICU.
-  *
-  *         Enabling forces all allocation of ICU object types to use ICU's
-  *         memory allocation.  On Windows, this allows the ICU DLL to be used by
-  *         applications that statically link the C Runtime library, meaning that
-  *         the app and ICU sill be using different heaps.
-  */                              
+/**  U_OVERRIDE_CXX_ALLOCATION - Define this to override operator new and
+ *                              delete in UObject.  Enabled by default for ICU.
+ *
+ *         Enabling forces all allocation of ICU object types to use ICU's
+ *         memory allocation.  On Windows, this allows the ICU DLL to be used by
+ *         applications that statically link the C Runtime library, meaning that
+ *         the app and ICU sill be using different heaps.
+ */                              
+#ifndef U_OVERRIDE_CXX_ALLOCATION
 #define U_OVERRIDE_CXX_ALLOCATION 1
+#endif
+
 /**
  * UObject is the common ICU base class.
  * All other ICU C++ classes are derived from UObject (starting with ICU 2.2).
@@ -67,7 +70,7 @@ public:
     virtual inline ~UObject() {}
 
 
-#ifdef U_OVERRIDE_CXX_ALLOCATION
+#if U_OVERRIDE_CXX_ALLOCATION
     /**
      * Overrides for ICU4C C++ memory management.
      * simple, non-class types are allocated using the macros in common/cmemory.h
@@ -77,6 +80,8 @@ public:
      * @draft ICU 2.2
      */
     void *operator new(size_t size);
+    void *operator new[](size_t size);
+
     /**
      * Overrides for ICU4C C++ memory management.
      * simple, non-class types are allocated using the macros in common/cmemory.h
@@ -86,13 +91,7 @@ public:
      * @draft ICU 2.2
      */
     void operator delete(void *p);
-#if U_CXX_MEMORY_TEST
-    /* Sun Forte really dislikes these functions. */
-    void *operator new[](size_t size);
     void operator delete[](void *p);
-    void operator delete(void *p, size_t size);
-    void operator delete[](void *p, size_t size);
-#endif
 #endif
 
     /**

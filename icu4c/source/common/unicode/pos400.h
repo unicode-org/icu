@@ -62,6 +62,12 @@
 /* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
 #define ICU_USE_THREADS 1
 
+/* Determine whether to disable renaming or not. This overrides the
+   setting in umachine.h which is for all platforms. */
+#ifndef U_OVERRIDE_CXX_ALLOCATION
+#define U_OVERRIDE_CXX_ALLOCATION 1
+#endif
+
 /*===========================================================================*/
 /* Generic data types                                                        */
 /*===========================================================================*/

@@ -58,6 +58,12 @@
 /* Determines the endianness of the platform */
 #define U_IS_BIG_ENDIAN 0
 
+/* Determine whether to disable renaming or not. This overrides the
+   setting in umachine.h which is for all platforms. */
+#ifndef U_OVERRIDE_CXX_ALLOCATION
+#define U_OVERRIDE_CXX_ALLOCATION 1
+#endif
+
 /*===========================================================================*/
 /* Generic data types                                                        */
 /*===========================================================================*/

@@ -63,7 +63,6 @@ void UObject::operator delete(void *p) {
     }
 }
 
-#if U_CXX_MEMORY_TEST
 void *UObject::operator new[](size_t size) {
     return uprv_malloc(size);
 }
@@ -73,19 +72,6 @@ void UObject::operator delete[](void *p) {
         uprv_free(p);
     }
 }
-
-void UObject::operator delete(void *p, size_t /* size */) {
-    if(p!=NULL) {
-        uprv_free(p);
-    }
-}
-
-void UObject::operator delete[](void *p, size_t /* size */) {
-    if(p!=NULL) {
-        uprv_free(p);
-    }
-}
-#endif
 
 U_NAMESPACE_END
 

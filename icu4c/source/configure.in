@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.171 2002/06/25 17:23:02 aheninger-oss Exp $
+dnl $Id: configure.in,v 1.172 2002/07/30 20:54:40 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -383,7 +383,6 @@ AC_SUBST(U_NL_LANGINFO_CODESET)
 
 dnl Namespace support checks
 AC_LANG_CPLUSPLUS
-U_HAVE_NAMESPACE=0
 AC_MSG_CHECKING([for namespace support])
 AC_CACHE_VAL(ac_cv_namespace_ok,
     [AC_TRY_LINK(
@@ -401,6 +400,28 @@ then
     U_HAVE_NAMESPACE=0
 fi
 AC_SUBST(U_HAVE_NAMESPACE)
+
+AC_MSG_CHECKING([for properly overriding new and delete])
+AC_CACHE_VAL(ac_cv_override_cxx_allocation_ok,
+    [AC_TRY_LINK(
+    changequote(<<, >>)dnl
+    <<#include <stdlib.h>
+    class UObject {
+    void *operator new(size_t size) {return malloc(size);}
+    void *operator new[](size_t size) {return malloc(size);}
+    void operator delete(void *p) {delete(p);}
+    void operator delete[](void *p) {delete(p);}
+    };
+    >>,
+    changequote([, ])dnl
+    [], ac_cv_override_cxx_allocation_ok=yes, ac_cv_override_cxx_allocation_ok=no)] )
+AC_MSG_RESULT($ac_cv_override_cxx_allocation_ok)
+U_OVERRIDE_CXX_ALLOCATION=1
+if test $ac_cv_override_cxx_allocation_ok = no
+then
+    U_OVERRIDE_CXX_ALLOCATION=0
+fi
+AC_SUBST(U_OVERRIDE_CXX_ALLOCATION)
 
 AC_LANG_C
 AC_CHECK_FUNC(popen)
