@@ -8,6 +8,9 @@
 div {
     Version{ "x0.2" }
     LocaleID:int { 0x65 }
+    Languages {
+        div { "\u078B\u07A8\u0788\u07AC\u0780\u07A8\u0784\u07A6\u0790\u07B0" }
+    }
     AmPmMarkers{
         "\u0789\u0786",
         "\u0789\u078A"
