@@ -381,7 +381,7 @@ void IntlTest::setICU_DATA() {
     //              may not be the same as the source directory, depending on
     //              the configure options used.  At any rate,
     //              set the data path to the built data from this directory.
-    //              The value is complete with quotes, so it can be used 
+    //              The value is complete with quotes, so it can be used
     //              as-is as a string constant.
 
 #if defined (U_TOPBUILDDIR)
@@ -968,26 +968,25 @@ main(int argc, char* argv[])
     UBool warnOnMissingData = FALSE;
     UErrorCode errorCode = U_ZERO_ERROR;
     UConverter *cnv = NULL;
-    const char *warnOrErr = "Failure"; 
+    const char *warnOrErr = "Failure";
 
 #ifdef XP_MAC_CONSOLE
     argc = ccommand( &argv );
 #endif
 
     /* Initialize ICU */
+	IntlTest::setICU_DATA();   // Must set data directory before u_init() is called.
     u_init(&errorCode);
     if (U_FAILURE(errorCode)) {
         fprintf(stderr,
-                "#### WARNING! u_init() failed."
-                "Trying again with a synthesized ICU_DATA setting.\n");
-        IntlTest::setICU_DATA();
-        errorCode = U_ZERO_ERROR;
+                "#### %s: u_init() failed, error is \"%s\".\n"
+				"#### Most commonly indicates that the ICU data is not accesible.\n"
+                "#### Check setting of ICU_DATA, or check that ICU data library is available\n"
+				"#### Aborting %s\n", argv[0], u_errorName(errorCode));
+		u_cleanup();
+	    return 1;
     }
 
-    // If user didn't set ICU_DATA, attempt to generate one.
-    // Do this whether or not the u_init(), above, succeeded because we need the
-    //   data path to find some of the test data.
-    IntlTest::setICU_DATA();
 
     for (int i = 1; i < argc; ++i) {
         if (argv[i][0] == '-') {
@@ -1359,4 +1358,3 @@ float IntlTest::random() {
  * End:
  *
  */
-
