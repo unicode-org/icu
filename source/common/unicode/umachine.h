@@ -23,6 +23,8 @@
 #ifndef __UMACHINE_H__
 #define __UMACHINE_H__
 
+#include "unicode/urename.h"
+
 /**
  * \file
  * \brief Basic types and constants for UTF 
