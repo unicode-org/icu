@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -122,7 +122,7 @@ main(int argc, char *argv[]) {
     U_MAIN_INIT_ARGS(argc, argv);
 
     pname = uprv_strchr(*argv, U_FILE_SEP_CHAR);
-#ifdef WIN32
+#ifdef U_WINDOWS
     if (!pname) {
         pname = uprv_strchr(*argv, '/');
     }

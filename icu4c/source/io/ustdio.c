@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -40,7 +40,7 @@
 static const char copyright[] = U_COPYRIGHT_STRING;
 
 /* TODO: is this correct for all codepages? Should we just use \n and let the converter handle it? */
-#ifdef WIN32
+#ifdef U_WINDOWS
 static const UChar DELIMITERS [] = { DELIM_CR, DELIM_LF, 0x0000 };
 static const uint32_t DELIMITERS_LEN = 2;
 /* TODO: Default newline writing should be detected based upon the converter being used. */

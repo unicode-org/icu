@@ -16,7 +16,14 @@
 *   This file contains utility functions for ICU tools like genccode.
 */
 
-#ifdef WIN32
+#include <stdio.h>
+#include "unicode/utypes.h"
+#include "unicode/putil.h"
+#include "cmemory.h"
+#include "cstring.h"
+#include "toolutil.h"
+
+#ifdef U_WINDOWS
 #   define VC_EXTRALEAN
 #   define WIN32_LEAN_AND_MEAN
 #   define NOUSER
@@ -25,16 +32,10 @@
 #   define NOMCX
 #   include <windows.h>
 #endif
-#include <stdio.h>
-#include "unicode/utypes.h"
-#include "unicode/putil.h"
-#include "cmemory.h"
-#include "cstring.h"
-#include "toolutil.h"
 
 U_CAPI const char * U_EXPORT2
 getLongPathname(const char *pathname) {
-#ifdef WIN32
+#ifdef U_WINDOWS
     /* anticipate problems with "short" pathnames */
     static WIN32_FIND_DATA info;
     HANDLE file=FindFirstFile(pathname, &info);

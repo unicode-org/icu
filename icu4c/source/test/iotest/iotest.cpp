@@ -44,7 +44,7 @@ using namespace std;
 #include <stdlib.h>
 
 U_CDECL_BEGIN
-#ifdef WIN32
+#ifdef U_WINDOWS
 const UChar NEW_LINE[] = {0x0d,0x0a,0};
 const char C_NEW_LINE[] = {0x0d,0x0a,0};
 #define UTF8_NEW_LINE "\x0d\x0a"

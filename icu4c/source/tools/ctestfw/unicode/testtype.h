@@ -1,7 +1,7 @@
 /*
 *****************************************************************************************
 *
-*   Copyright (C) 2004-2004, International Business Machines
+*   Copyright (C) 2004-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *****************************************************************************************
@@ -10,7 +10,7 @@
 #include "unicode/utypes.h"
 
 /*Deals with imports and exports of the dynamic library*/
-#if !defined(U_STATIC_IMPLEMENTATION) && (defined(_WIN32) || defined(U_CYGWIN))
+#if !defined(U_STATIC_IMPLEMENTATION) && (defined(U_WINDOWS) || defined(U_CYGWIN))
     #define T_CTEST_EXPORT __declspec(dllexport)
     #define T_CTEST_IMPORT __declspec(dllimport)
 #else
@@ -18,7 +18,7 @@
     #define T_CTEST_IMPORT
 #endif
 
-#if defined(_WIN32)
+#if defined(U_WINDOWS)
 #define T_CTEST_EXPORT2 __cdecl
 #else
 #define T_CTEST_EXPORT2

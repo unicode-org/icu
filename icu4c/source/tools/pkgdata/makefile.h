@@ -1,6 +1,6 @@
 /**************************************************************************
 *
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ***************************************************************************
@@ -58,7 +58,7 @@ extern void pkg_mode_dll(UPKGOptions* o, FileStream *stream, UErrorCode *status)
 extern void pkg_mode_static(UPKGOptions* o, FileStream *stream, UErrorCode *status);
 #endif /*#ifdef UDATA_SO_SUFFIX*/
 extern void pkg_mode_common(UPKGOptions* o, FileStream *stream, UErrorCode *status);
-#endif /*#ifdef WIN32*/
+#endif /*#ifdef U_MAKE_IS_NMAKE*/
 
 extern void pkg_mode_files(UPKGOptions* o, FileStream *stream, UErrorCode *status);
 
