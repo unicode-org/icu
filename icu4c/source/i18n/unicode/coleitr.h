@@ -143,7 +143,7 @@ public:
     * Destructor
     * @stable ICU 2.0
     */
-    ~CollationElementIterator();
+    virtual ~CollationElementIterator();
 
     // CollationElementIterator public methods ----------------------------------
 

@@ -267,11 +267,11 @@ public:
         const UnicodeString& description,
         UErrorCode& status);
     
-    int64_t transformNumber(int64_t number) const { return number; }
-    double transformNumber(double number) const { return number; }
-    double composeRuleValue(double newRuleValue, double /*oldRuleValue*/) const { return newRuleValue; }
-    double calcUpperBound(double oldUpperBound) const { return oldUpperBound; }
-    UChar tokenChar() const { return (UChar)0x003d; } // '='
+    virtual int64_t transformNumber(int64_t number) const { return number; }
+    virtual double transformNumber(double number) const { return number; }
+    virtual double composeRuleValue(double newRuleValue, double /*oldRuleValue*/) const { return newRuleValue; }
+    virtual double calcUpperBound(double oldUpperBound) const { return oldUpperBound; }
+    virtual UChar tokenChar() const { return (UChar)0x003d; } // '='
 private:
     static const char fgClassID;
     
@@ -299,7 +299,7 @@ public:
         }
     }
     
-    void setDivisor(int32_t radix, int32_t exponent, UErrorCode& status) { 
+    virtual void setDivisor(int32_t radix, int32_t exponent, UErrorCode& status) { 
         divisor = uprv_pow(radix, exponent);
         ldivisor = util64_fromDouble(divisor);
 
@@ -308,23 +308,23 @@ public:
         }
     }
     
-    UBool operator==(const NFSubstitution& rhs) const;
+    virtual UBool operator==(const NFSubstitution& rhs) const;
     
-    int64_t transformNumber(int64_t number) const {
+    virtual int64_t transformNumber(int64_t number) const {
         return number / ldivisor;
     }
     
-    double transformNumber(double number) const {
+    virtual double transformNumber(double number) const {
         return uprv_floor(number / divisor);
     }
     
-    double composeRuleValue(double newRuleValue, double /*oldRuleValue*/) const {
+    virtual double composeRuleValue(double newRuleValue, double /*oldRuleValue*/) const {
         return newRuleValue * divisor;
     }
     
-    double calcUpperBound(double /*oldUpperBound*/) const { return divisor; }
+    virtual double calcUpperBound(double /*oldUpperBound*/) const { return divisor; }
     
-    UChar tokenChar() const { return (UChar)0x003c; } // '<'
+    virtual UChar tokenChar() const { return (UChar)0x003c; } // '<'
 private:
     static const char fgClassID;
     
@@ -346,7 +346,7 @@ public:
         const UnicodeString& description,
         UErrorCode& status);
     
-    void setDivisor(int32_t radix, int32_t exponent, UErrorCode& status) { 
+    virtual void setDivisor(int32_t radix, int32_t exponent, UErrorCode& status) { 
         divisor = uprv_pow(radix, exponent);
         ldivisor = util64_fromDouble(divisor);
 
@@ -355,30 +355,30 @@ public:
         }
     }
     
-    UBool operator==(const NFSubstitution& rhs) const;
+    virtual UBool operator==(const NFSubstitution& rhs) const;
     
-    void doSubstitution(int64_t number, UnicodeString& toInsertInto, int32_t pos) const;
-    void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
+    virtual void doSubstitution(int64_t number, UnicodeString& toInsertInto, int32_t pos) const;
+    virtual void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
     
-    int64_t transformNumber(int64_t number) const { return number % ldivisor; }
-    double transformNumber(double number) const { return uprv_fmod(number, divisor); }
+    virtual int64_t transformNumber(int64_t number) const { return number % ldivisor; }
+    virtual double transformNumber(double number) const { return uprv_fmod(number, divisor); }
     
-    UBool doParse(const UnicodeString& text, 
+    virtual UBool doParse(const UnicodeString& text, 
         ParsePosition& parsePosition,
         double baseValue,
         double upperBound,
         UBool lenientParse,
         Formattable& result) const;
     
-    double composeRuleValue(double newRuleValue, double oldRuleValue) const {
+    virtual double composeRuleValue(double newRuleValue, double oldRuleValue) const {
         return oldRuleValue - uprv_fmod(oldRuleValue, divisor) + newRuleValue;
     }
     
-    double calcUpperBound(double /*oldUpperBound*/) const { return divisor; }
+    virtual double calcUpperBound(double /*oldUpperBound*/) const { return divisor; }
     
-    UBool isModulusSubstitution() const { return TRUE; }
+    virtual UBool isModulusSubstitution() const { return TRUE; }
     
-    UChar tokenChar() const { return (UChar)0x003e; } // '>'
+    virtual UChar tokenChar() const { return (UChar)0x003e; } // '>'
 private:
     static const char fgClassID;
     
@@ -396,11 +396,11 @@ public:
         UErrorCode& status)
         : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
     
-    int64_t transformNumber(int64_t number) const { return number; }
-    double transformNumber(double number) const { return uprv_floor(number); }
-    double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue + oldRuleValue; }
-    double calcUpperBound(double /*oldUpperBound*/) const { return DBL_MAX; }
-    UChar tokenChar() const { return (UChar)0x003c; } // '<'
+    virtual int64_t transformNumber(int64_t number) const { return number; }
+    virtual double transformNumber(double number) const { return uprv_floor(number); }
+    virtual double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue + oldRuleValue; }
+    virtual double calcUpperBound(double /*oldUpperBound*/) const { return DBL_MAX; }
+    virtual UChar tokenChar() const { return (UChar)0x003c; } // '<'
 private:
     static const char fgClassID;
     
@@ -420,23 +420,23 @@ public:
         const UnicodeString& description,
         UErrorCode& status);
     
-    UBool operator==(const NFSubstitution& rhs) const;
+    virtual UBool operator==(const NFSubstitution& rhs) const;
     
-    void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
-    void doSubstitution(int64_t /*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
-    int64_t transformNumber(int64_t /*number*/) const { return 0; }
-    double transformNumber(double number) const { return number - uprv_floor(number); }
+    virtual void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
+    virtual void doSubstitution(int64_t /*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
+    virtual int64_t transformNumber(int64_t /*number*/) const { return 0; }
+    virtual double transformNumber(double number) const { return number - uprv_floor(number); }
     
-    UBool doParse(const UnicodeString& text,
+    virtual UBool doParse(const UnicodeString& text,
         ParsePosition& parsePosition,
         double baseValue,
         double upperBound,
         UBool lenientParse,
         Formattable& result) const;
     
-    double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue + oldRuleValue; }
-    double calcUpperBound(double /*oldUpperBound*/) const { return 0.0; }
-    UChar tokenChar() const { return (UChar)0x003e; } // '>'
+    virtual double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue + oldRuleValue; }
+    virtual double calcUpperBound(double /*oldUpperBound*/) const { return 0.0; }
+    virtual UChar tokenChar() const { return (UChar)0x003e; } // '>'
 private:
     static const char fgClassID;
     
@@ -454,11 +454,11 @@ public:
         UErrorCode& status)
         : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
     
-    int64_t transformNumber(int64_t number) const { return number >= 0 ? number : -number; }
-    double transformNumber(double number) const { return uprv_fabs(number); }
-    double composeRuleValue(double newRuleValue, double /*oldRuleValue*/) const { return -newRuleValue; }
-    double calcUpperBound(double /*oldUpperBound*/) const { return DBL_MAX; }
-    UChar tokenChar() const { return (UChar)0x003e; } // '>'
+    virtual int64_t transformNumber(int64_t number) const { return number >= 0 ? number : -number; }
+    virtual double transformNumber(double number) const { return uprv_fabs(number); }
+    virtual double composeRuleValue(double newRuleValue, double /*oldRuleValue*/) const { return -newRuleValue; }
+    virtual double calcUpperBound(double /*oldUpperBound*/) const { return DBL_MAX; }
+    virtual UChar tokenChar() const { return (UChar)0x003e; } // '>'
 private:
     static const char fgClassID;
     
@@ -482,12 +482,12 @@ public:
         ldenominator = util64_fromDouble(denominator);
     }
     
-    UBool operator==(const NFSubstitution& rhs) const;
+    virtual UBool operator==(const NFSubstitution& rhs) const;
     
-    int64_t transformNumber(int64_t number) const { return number * ldenominator; }
-    double transformNumber(double number) const { return uprv_round(number * denominator); }
+    virtual int64_t transformNumber(int64_t number) const { return number * ldenominator; }
+    virtual double transformNumber(double number) const { return uprv_round(number * denominator); }
     
-    UBool doParse(const UnicodeString& text, 
+    virtual UBool doParse(const UnicodeString& text, 
         ParsePosition& parsePosition,
         double baseValue,
         double upperBound,
@@ -499,9 +499,9 @@ public:
         // it SERIOUSLY messes up the algorithm
         return NFSubstitution::doParse(text, parsePosition, baseValue, upperBound, FALSE, result);
     }
-    double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue / oldRuleValue; }
-    double calcUpperBound(double /*oldUpperBound*/) const { return denominator; }
-    UChar tokenChar() const { return (UChar)0x003c; } // '<'
+    virtual double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue / oldRuleValue; }
+    virtual double calcUpperBound(double /*oldUpperBound*/) const { return denominator; }
+    virtual UChar tokenChar() const { return (UChar)0x003c; } // '<'
 private:
     static const char fgClassID;
     
@@ -519,22 +519,22 @@ public:
         UErrorCode& status)
         : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
     
-    void toString(UnicodeString& /*result*/) const {}
-    void doSubstitution(double /*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
-    void doSubstitution(int64_t /*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
-    int64_t transformNumber(int64_t /*number*/) const { return 0; }
-    double transformNumber(double /*number*/) const { return 0; }
-    UBool doParse(const UnicodeString& /*text*/,
+    virtual void toString(UnicodeString& /*result*/) const {}
+    virtual void doSubstitution(double /*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
+    virtual void doSubstitution(int64_t /*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
+    virtual int64_t transformNumber(int64_t /*number*/) const { return 0; }
+    virtual double transformNumber(double /*number*/) const { return 0; }
+    virtual UBool doParse(const UnicodeString& /*text*/,
                 ParsePosition& /*parsePosition*/, 
                 double baseValue,
                 double /*upperBound*/,
                 UBool /*lenientParse*/,
                 Formattable& result) const
             { result.setDouble(baseValue); return TRUE; }
-    double composeRuleValue(double /*newRuleValue*/, double /*oldRuleValue*/) const { return 0.0; } // never called
-    double calcUpperBound(double /*oldUpperBound*/) const { return 0; } // never called
-    UBool isNullSubstitution() const { return TRUE; }
-    UChar tokenChar() const { return (UChar)0x0020; } // ' ' never called
+    virtual double composeRuleValue(double /*newRuleValue*/, double /*oldRuleValue*/) const { return 0.0; } // never called
+    virtual double calcUpperBound(double /*oldUpperBound*/) const { return 0; } // never called
+    virtual UBool isNullSubstitution() const { return TRUE; }
+    virtual UChar tokenChar() const { return (UChar)0x0020; } // ' ' never called
 private:
     static const char fgClassID;
     

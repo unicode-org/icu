@@ -23,7 +23,6 @@
 #if !UCONFIG_NO_CONVERSION
 
 #include "unicode/ucnv.h"
-#include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 #include "cmemory.h"

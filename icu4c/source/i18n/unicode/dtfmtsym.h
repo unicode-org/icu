@@ -150,7 +150,7 @@ public:
      * subclassed.
      * @stable ICU 2.0
      */
-    ~DateFormatSymbols();
+    virtual ~DateFormatSymbols();
 
     /**
      * Return true if another object is semantically equal to this one.
