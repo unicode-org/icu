@@ -15,6 +15,8 @@
 *********************************************************************************/
 /*tests for u_normalization*/
 #include "unicode/utypes.h"
+#include "unicode/unorm.h"
+#include "unormimp.h"
 #include "cintltst.h"
 
 #if UCONFIG_NO_NORMALIZATION
@@ -53,6 +55,9 @@ TestFCNFKCClosure(void);
 
 static void
 TestQuickCheckPerCP(void);
+
+static void
+TestComposition(void);
 
 const static char* canonTests[][3] = {
     /* Input*/                    /*Decomposed*/                /*Composed*/
@@ -131,6 +136,7 @@ void addNormTest(TestNode** root)
     addTest(root, &TestConcatenate, "tscoll/cnormtst/TestConcatenate");
     addTest(root, &TestNextPrevious, "tscoll/cnormtst/TestNextPrevious");
     addTest(root, &TestFCNFKCClosure, "tscoll/cnormtst/TestFCNFKCClosure");
+    addTest(root, &TestComposition, "tscoll/cnormtst/TestComposition");
 }
 
 void TestDecomp() 
@@ -1458,6 +1464,52 @@ TestQuickCheckPerCP() {
 
         /* skip some code points */
         c=(20*c)/19+1;
+    }
+}
+
+static void
+TestComposition(void) {
+    static const struct {
+        UNormalizationMode mode;
+        uint32_t options;
+        UChar input[12];
+        UChar expect[12];
+    } cases[]={
+        /*
+         * special cases for UAX #15 bug
+         * see Unicode Public Review Issue #29
+         * at http://www.unicode.org/review/resolved-pri.html#pri29
+         */
+        { UNORM_NFC, 0, { 0x1100, 0x0300, 0x1161, 0x0327 },         { 0x1100, 0x0300, 0x1161, 0x0327 } },
+        { UNORM_NFC, 0, { 0x1100, 0x0300, 0x1161, 0x0327, 0x11a8 }, { 0x1100, 0x0300, 0x1161, 0x0327, 0x11a8 } },
+        { UNORM_NFC, 0, { 0xac00, 0x0300, 0x0327, 0x11a8 },         { 0xac00, 0x0327, 0x0300, 0x11a8 } },
+        { UNORM_NFC, 0, { 0x0b47, 0x0300, 0x0b3e },                 { 0x0b47, 0x0300, 0x0b3e } },
+
+        { UNORM_NFC, UNORM_BEFORE_PRI_29, { 0x1100, 0x0300, 0x1161, 0x0327 },           { 0xac00, 0x0300, 0x0327 } },
+        { UNORM_NFC, UNORM_BEFORE_PRI_29, { 0x1100, 0x0300, 0x1161, 0x0327, 0x11a8 },   { 0xac01, 0x0300, 0x0327 } },
+        { UNORM_NFC, UNORM_BEFORE_PRI_29, { 0xac00, 0x0300, 0x0327, 0x11a8 },           { 0xac01, 0x0327, 0x0300 } },
+        { UNORM_NFC, UNORM_BEFORE_PRI_29, { 0x0b47, 0x0300, 0x0b3e },                   { 0x0b4b, 0x0300 } }
+
+        /* TODO: add test cases for UNORM_FCC here (j2151) */
+    };
+
+    UChar output[16];
+    UErrorCode errorCode;
+    int32_t i, length;
+
+    for(i=0; i<LENGTHOF(cases); ++i) {
+        errorCode=U_ZERO_ERROR;
+        length=unorm_normalize(
+                    cases[i].input, -1,
+                    cases[i].mode, cases[i].options,
+                    output, LENGTHOF(output),
+                    &errorCode);
+        if( U_FAILURE(errorCode) ||
+            length!=u_strlen(cases[i].expect) ||
+            0!=u_memcmp(output, cases[i].expect, length)
+        ) {
+            log_err("unexpected result for case %d\n", i);
+        }
     }
 }
 
