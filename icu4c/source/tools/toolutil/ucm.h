@@ -22,6 +22,7 @@
 #include "unicode/utypes.h"
 #include "ucnvmbcs.h"
 #include "ucnv_ext.h"
+#include "filestrm.h"
 #include <stdio.h>
 
 U_CDECL_BEGIN
@@ -46,7 +47,7 @@ typedef struct UCMapping {
         uint32_t index;
         uint8_t bytes[4];
     } b;
-    int8_t uLen, bLen, f;
+    int8_t uLen, bLen, f, moveFlag;
 } UCMapping;
 
 enum {
@@ -71,6 +72,7 @@ typedef struct UCMTable {
 
     uint8_t unicodeMask;
     int8_t flagsType; /* UCM_FLAGS_INITIAL etc. */
+    UBool isSorted;
 } UCMTable;
 
 enum {
@@ -141,7 +143,19 @@ U_CAPI void U_EXPORT2
 ucm_closeTable(UCMTable *table);
 
 U_CAPI void U_EXPORT2
+ucm_resetTable(UCMTable *table);
+
+U_CAPI void U_EXPORT2
 ucm_sortTable(UCMTable *t);
+
+/**
+ * Read a table from a .ucm file, from after the CHARMAP line to
+ * including the END CHARMAP line.
+ */
+U_CAPI void U_EXPORT2
+ucm_readTable(UCMFile *ucm, FileStream* convFile,
+              UBool forBase, UCMStates *baseStates,
+              UErrorCode *pErrorCode);
 
 /**
  * Check the validity of mappings against a base table's states;
@@ -152,9 +166,22 @@ ucm_checkValidity(UCMTable *ext, UCMStates *baseStates);
 
 /**
  * Check a base table against an extension table.
- * Set moveToExt=TRUE for where base and extension tables are parsed
- * from a single file,
- * and moveToExt=FALSE for where the extension table is in a separate file.
+ * Set the moveTarget!=NULL if it is possible to move mappings from the base.
+ * This is the case where base and extension tables are parsed from a single file
+ * (moveTarget==ext)
+ * or when delta file mappings are subtracted from a base table.
+ *
+ * When a base table cannot be modified because a delta file is parsed in makeconv,
+ * then set moveTarget=NULL.
+ *
+ * if(intersectBase) then mappings that exist in the base table but not in
+ * the extension table are moved to moveTarget instead of showing an error.
+ *
+ * Special mode: If the base table is an SISO table (indicated in the baseStates)
+ * and intersectBase==2 for a DBCS extension table, then SBCS mappings are
+ * not moved out of the base unless their Unicode input requires it.
+ * This helps ucmkbase generate base tables for where the dbcsonly converter
+ * option will be employed.
  *
  * For both tables in the same file, the extension table is automatically
  * built.
@@ -164,6 +191,12 @@ ucm_checkValidity(UCMTable *ext, UCMStates *baseStates);
  *
  * Sort both tables, and then for each mapping direction:
  *
+ * If intersectBase is TRUE and the base table contains a mapping
+ * that does not exist in the extension table, then this mapping is moved
+ * to moveTarget.
+ *
+ * - otherwise -
+ *
  * If the base table contains a mapping for which the input sequence is
  * the same as the extension input, then
  * - if the output is the same: remove the extension mapping
@@ -171,13 +204,14 @@ ucm_checkValidity(UCMTable *ext, UCMStates *baseStates);
  *
  * If the base table contains a mapping for which the input sequence is
  * a prefix of the extension input, then
- * - if moveToExt: move the base mapping to the extension table
+ * - if moveTarget!=NULL: move the base mapping to the moveTarget table
  * - else: error
  *
  * @return FALSE in case of an irreparable error
  */
 U_CAPI UBool U_EXPORT2
-ucm_checkBaseExt(UCMStates *baseStates, UCMTable *base, UCMTable *ext, UBool moveToExt);
+ucm_checkBaseExt(UCMStates *baseStates, UCMTable *base, UCMTable *ext,
+                 UCMTable *moveTarget, UBool intersectBase);
 
 U_CAPI void U_EXPORT2
 ucm_printTable(UCMTable *table, FILE *f, UBool byUnicode);
