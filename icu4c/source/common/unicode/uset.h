@@ -184,10 +184,15 @@ U_CAPI void U_EXPORT2
 uset_add(USet* set, UChar32 c);
 
 /**
- * Adds each of the characters in this string to the set. Thus "ch" => {"c", "h"}
- * If this set already any particular character, it has no effect on that character.
- * @param s the source string
- * @draft ICU 2.4
+ * Adds all of the elements in the specified set to this set if
+ * they're not already present.  This operation effectively
+ * modifies this set so that its value is the <i>union</i> of the two
+ * sets.  The behavior of this operation is unspecified if the specified
+ * collection is modified while the operation is in progress.
+ *
+ * @param set the object to which to add the set
+ * @param additionalSet the source set whose elements are to be added to this set.
+ * @draft ICU 2.6
  */
 U_CAPI void U_EXPORT2
 uset_addAll(USet* set, const USet *additionalSet);
