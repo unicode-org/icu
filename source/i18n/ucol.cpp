@@ -1446,7 +1446,6 @@ ucol_calcSortKey(const    UCollator    *coll,
         primaries = *result = prim;
         resultLength = UCOL_PRIMARY_MAX_BUFFER;
     }
-    uint8_t *primarySafeEnd = primaries + resultLength - 2;
 
     uint32_t secSize = UCOL_SECONDARY_MAX_BUFFER, terSize = UCOL_TERTIARY_MAX_BUFFER, 
       caseSize = UCOL_CASE_MAX_BUFFER, quadSize = UCOL_QUAD_MAX_BUFFER;
@@ -1519,9 +1518,10 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     len = s.len-s.pos;
 
-    if(resultLength == 0) {
+    if(resultLength == 0 || primaries == NULL) {
         return ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
     }
+    uint8_t *primarySafeEnd = primaries + resultLength - 2;
 
     uint32_t minBufferSize = UCOL_MAX_BUFFER;
 
@@ -1984,7 +1984,6 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         primaries = *result = prim;
         resultLength = UCOL_PRIMARY_MAX_BUFFER;
     }
-    uint8_t *primarySafeEnd = primaries + resultLength - 2;
 
     uint32_t secSize = UCOL_SECONDARY_MAX_BUFFER, terSize = UCOL_TERTIARY_MAX_BUFFER;
 
@@ -2023,9 +2022,10 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
     len = s.len-s.pos;
 
-    if(resultLength == 0) {
+    if(resultLength == 0 || primaries == NULL) {
         return ucol_getSortKeySize(coll, &s, sortKeySize, coll->strength, len);
     }
+    uint8_t *primarySafeEnd = primaries + resultLength - 2;
 
     uint32_t minBufferSize = UCOL_MAX_BUFFER;
 
