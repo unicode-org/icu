@@ -47,6 +47,9 @@
 #include "apicoll.h"
 #endif
 
+#include "unicode/chariter.h"
+#include "unicode/schriter.h"
+
 void
 CollationAPITest::doAssert(UBool condition, const char *message)
 {
@@ -120,11 +123,15 @@ CollationAPITest::TestProperty( char* par )
     UnicodeString name;
 
     logln("Get display name for the US English collation in German : ");
-    logln(Collator::getDisplayName(Locale::US, Locale::GERMAN, name));  
+    logln(Collator::getDisplayName(Locale::US, Locale::GERMAN, name));
     doAssert((name == UnicodeString("Englisch (Vereinigte Staaten)")), "getDisplayName failed");
 
     logln("Get display name for the US English collation in English : ");
     logln(Collator::getDisplayName(Locale::US, Locale::ENGLISH, name)); 
+    doAssert((name == UnicodeString("English (United States)")), "getDisplayName failed");
+
+    logln("Get display name for the US English in default locale language : ");
+    logln(Collator::getDisplayName(Locale::US, name)); 
     doAssert((name == UnicodeString("English (United States)")), "getDisplayName failed");
 
     logln("Default collation property test ended.");
@@ -243,7 +250,7 @@ CollationAPITest::TestCollationKey( char* par )
 {       
     logln("testing CollationKey begins...");
     Collator *col = 0;
-    UErrorCode success = U_ZERO_ERROR;
+    UErrorCode success=U_ZERO_ERROR;
     col = Collator::createInstance(success);
     if (U_FAILURE(success))
     {
@@ -334,25 +341,33 @@ CollationAPITest::TestElemIter( char* par )
         errln("Default collation creation failed.");
         return;
     }
-
+       
     UnicodeString testString1("XFILE What subset of all possible test cases has the highest probability of detecting the most errors?");
     UnicodeString testString2("Xf ile What subset of all possible test cases has the lowest probability of detecting the least errors?");
     logln("Constructors and comparison testing....");
     CollationElementIterator *iterator1 = ((RuleBasedCollator*)col)->createCollationElementIterator(testString1);
-
+    
+    CharacterIterator *chariter=new StringCharacterIterator(testString1);
+    CollationElementIterator *coliter=((RuleBasedCollator*)col)->createCollationElementIterator(*chariter);
+    
     // copy ctor
     CollationElementIterator *iterator2 = new CollationElementIterator(*iterator1);
     CollationElementIterator *iterator3 = ((RuleBasedCollator*)col)->createCollationElementIterator(testString2);
     int32_t order1, order2, order3;
     doAssert((*iterator1 == *iterator2), "The two iterators should be the same"); 
     doAssert((*iterator1 != *iterator3), "The two iterators should be different");
+    
+    doAssert((*coliter == *iterator1), "The two iterators should be the same");
+    doAssert((*coliter == *iterator2), "The two iterators should be the same");
+    doAssert((*coliter != *iterator3), "The two iterators should be different");
+
     order1 = iterator1->next(success);
     if (U_FAILURE(success))
     {
         errln("Somehow ran out of memory stepping through the iterator.");
         return;
     }
-
+    
     doAssert((*iterator1 != *iterator2), "The first iterator advance failed");
     order2 = iterator2->next(success);
     if (U_FAILURE(success))
@@ -452,10 +467,53 @@ CollationAPITest::TestElemIter( char* par )
     doAssert((order1 != CollationElementIterator::NULLORDER), "Unexpected end of iterator reached");
     doAssert((*iterator2 != *iterator3), "The iterators should be different");
 
+    
+    //test error values
+    success=U_UNSUPPORTED_ERROR;
+    Collator *colerror=NULL;
+    colerror=Collator::createInstance(success);
+    if (colerror != 0 || success == U_ZERO_ERROR){
+        errln("Error: createInstance(UErrorCode != U_ZERO_ERROR) should just return and not create an instance\n");
+    }
+    int32_t position=coliter->previous(success);
+    if(position != CollationElementIterator::NULLORDER){
+        errln((UnicodeString)"Expected NULLORDER got" + position);
+    }
+    coliter->reset();
+    coliter->setText(*chariter, success);
+    if(!U_FAILURE(success)){
+        errln("Expeceted error");
+    }
+    iterator1->setText((UnicodeString)"hello there", success);
+    if(!U_FAILURE(success)){
+        errln("Expeceted error");
+    }
+    UnicodeString ruleset1("< a, A < b, B < c, C < d, D, e, E");
+    RuleBasedCollator *colerror1 = new RuleBasedCollator(ruleset1, success);
+    if (U_SUCCESS(success)) {
+        errln("RuleBasedCollator is expected to failed.");
+    }
+    colerror1 = new RuleBasedCollator(ruleset1, Collator::PRIMARY, success);
+    if (U_SUCCESS(success)) {
+        errln("RuleBasedCollator is expected to failed.");
+    }
+    colerror1 = new RuleBasedCollator(ruleset1, Normalizer::NO_OP, success);
+    if (U_SUCCESS(success)) {
+        errln("RuleBasedCollator is expected to failed.");
+    }
+    colerror1 = new RuleBasedCollator(ruleset1, Collator::SECONDARY, Normalizer::NO_OP, success);
+    if (U_SUCCESS(success)) {
+        errln("RuleBasedCollator is expected to failed.");
+    }
+    
+    delete chariter;
+    delete coliter;
     delete iterator1;
     delete iterator2;
     delete iterator3;
     delete col;
+
+    
 
     logln("testing CollationElementIterator ends...");
 }
@@ -506,6 +564,30 @@ CollationAPITest::TestOperators( char* par )
     }
     doAssert((((RuleBasedCollator*)col3)->getRules() == col6->getRules()), "Default collator getRules failed");
 
+    success = U_ZERO_ERROR;
+    RuleBasedCollator *col7 = new RuleBasedCollator(ruleset2, Collator::TERTIARY, success);
+    if (U_FAILURE(success)) {
+        errln("The RuleBasedCollator constructor failed when building with the 2nd rule set with tertiary strength.");
+        return;
+    }
+    success = U_ZERO_ERROR;
+    RuleBasedCollator *col8 = new RuleBasedCollator(ruleset2, Normalizer::NO_OP, success);
+    if (U_FAILURE(success)) {
+        errln("The RuleBasedCollator constructor failed when building with the 2nd rule set with Normalizer::NO_OP.");
+        return;
+    }
+    success = U_ZERO_ERROR;
+    RuleBasedCollator *col9 = new RuleBasedCollator(ruleset2, Collator::PRIMARY, Normalizer::DECOMP_COMPAT, success);
+    if (U_FAILURE(success)) {
+        errln("The RuleBasedCollator constructor failed when building with the 2nd rule set with tertiary strength and Normalizer::NO_OP.");
+        return;
+    }
+  //  doAssert((*col7 == *col8), "The two equal table collations compared different");
+    doAssert((*col7 != *col9), "The two different table collations compared equal");
+    doAssert((*col8 != *col9), "The two different table collations compared equal");
+
+
+
     logln("operator tests ended.");
     delete col1;
     delete col2;
@@ -513,6 +595,9 @@ CollationAPITest::TestOperators( char* par )
     delete col4;
     delete col5;
     delete col6;
+    delete col7;
+    delete col8;
+    delete col9;
 }
 
 // test clone and copy
