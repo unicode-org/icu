@@ -125,6 +125,37 @@ Format::operator==(const Format& /*that*/) const
 }
 //---------------------------------------
 
+/**
+ * Simple function for initializing a UParseError from a UnicodeString.
+ *
+ * @param pattern The pattern to copy into the parseError
+ * @param pos The position in pattern where the error occured
+ * @param parseError The UParseError object to fill in
+ * @draft ICU 2.4
+ */
+void Format::syntaxError(const UnicodeString& pattern,
+                         int32_t pos,
+                         UParseError& parseError) {
+    parseError.offset = pos;
+    parseError.line=0;  // we are not using line number
+    
+    // for pre-context
+    int32_t start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1
+                                                             /* subtract 1 so that we have room for null*/));
+    int32_t stop  = pos;
+    pattern.extract(start,stop-start,parseError.preContext,0);
+    //null terminate the buffer
+    parseError.preContext[stop-start] = 0;
+    
+    //for post-context
+    start = pos+1;
+    stop  = ((pos+U_PARSE_CONTEXT_LEN)<=pattern.length()) ? (pos+(U_PARSE_CONTEXT_LEN-1)) : 
+        pattern.length();
+    pattern.extract(start,stop-start,parseError.postContext,0);
+    //null terminate the buffer
+    parseError.postContext[stop-start]= 0;
+}
+
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
