@@ -4,7 +4,6 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
-// $Revision: 1.12 $
 //
 // Telugu Locale. Data by Ram [ram@jtcsv.com]
 
