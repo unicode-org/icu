@@ -29,6 +29,11 @@ public class UnicodeSetTest extends IntlTest {
         expectPairs(set, exp);
     }
 
+    public void TestCategories() {
+        UnicodeSet set = new UnicodeSet("[:Lu:]");
+        expectContainment(set, "ABC", "abc");
+    }
+
     public void TestAddRemove() {
         UnicodeSet set = new UnicodeSet();
         set.add('a', 'z');
@@ -66,6 +71,39 @@ public class UnicodeSetTest extends IntlTest {
         expectPattern(set2, "[jackiemclean]", "aacceein");
         set.addAll(set2);
         expectPairs(set, "aacehort");
+    }
+
+    void expectContainment(UnicodeSet set, String charsIn, String charsOut) {
+        StringBuffer bad = new StringBuffer();
+        if (charsIn != null) {
+            for (int i=0; i<charsIn.length(); ++i) {
+                char c = charsIn.charAt(i);
+                if (!set.contains(c)) {
+                    bad.append(c);
+                }
+            }
+            if (bad.length() > 0) {
+                logln("Fail: set " + set + " does not contain " + bad +
+                      ", expected containment of " + charsIn);
+            } else {
+                logln("Ok: set " + set + " contains " + charsIn);
+            }
+        }
+        if (charsOut != null) {
+            bad.setLength(0);
+            for (int i=0; i<charsOut.length(); ++i) {
+                char c = charsOut.charAt(i);
+                if (set.contains(c)) {
+                    bad.append(c);
+                }
+            }
+            if (bad.length() > 0) {
+                logln("Fail: set " + set + " contains " + bad +
+                      ", expected non-containment of " + charsOut);
+            } else {
+                logln("Ok: set " + set + " does not contain " + charsOut);
+            }
+        }
     }
 
     void expectPattern(UnicodeSet set,
