@@ -43,6 +43,7 @@ root {
           japanese    { "JAPANESE"  }
           buddhist    { "BUDDHIST"  }
           islamic     { "ISLAMIC"   }
+          islamic-civil { "ISLAMIC-CIVIL" }
           hebrew      { "HEBREW"    }
           chinese     { "CHINESE"   }
           gregorian   { "GREGORIAN" }
@@ -1621,7 +1622,7 @@ root {
         "Dhu'l-Qi'dah",
         "Dhu'l-Hijjah"
     }   
-    MonthAbbreviations_islamic {  // same as MonthNames (no data)
+    MonthAbbreviations_islamic:alias {  // same as MonthNames (no data)
         "root/MonthNames_islamic"
     }   
     // Civil is identical other than in calculations

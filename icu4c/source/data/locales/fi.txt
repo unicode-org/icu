@@ -352,7 +352,7 @@ fi {
     //Eras_islamic {
     //    "AH"   // Anno Hid\u017Era (in root)
     //}
-    MonthAbbreviations_islamic {  // same as MonthNames (no data)
+    MonthAbbreviations_islamic:alias {  // same as MonthNames (no data)
         "fi/MonthNames_islamic"
     }   
     // Civil is identical other than in calculations
