@@ -1022,9 +1022,6 @@
 </special>
 <collations>
 	<collation  >
-		<rules>
-		<p></p>
-		</rules>
 		<special owner="http://oss.software.ibm.com/icu/" version="x0.0" />
 	</collation  >
 </collations>
