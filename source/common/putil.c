@@ -1304,7 +1304,7 @@ u_setDataDirectory(const char *directory) {
         shared library is used, and this is a way to make sure that NULL
         is never returned.
         */
-        directory = "";
+        newDataDir = "";
     }
     else {
         length=(int32_t)uprv_strlen(directory);
