@@ -4,7 +4,7 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
-// $Revision: 1.7 $
+// $Revision: 1.8 $
 //
 // Telugu Locale. Data by Ram [ram@jtcsv.com]
 
@@ -33,11 +33,12 @@ te_IN {
 
     // LanguageLibraryUse { "Te" }
     // Measurement { "Metric" }
-//    NumberPatterns {
-//        "#,#0.##;-#,#0.##",
-//        "\u00A4 #,#0.00;-\u00A4 #,#0.00",
-//        "#,#0%",
-//    }
+    NumberPatterns {
+        "#,##,##0.###;-#,##,##0.###",
+        "\u00A4#,##,##0.00;-\u00A4#,##,##0.00",
+        "#,##,##0%",
+        "#E0",
+    }
 //    ShortLanguage { "tel" }
     //PaperSize {
     //    Hieght { "297" }
@@ -45,12 +46,5 @@ te_IN {
     //    Units { "mm" }
     //}
     LocaleID {"44a"}
-    // /**************** Info Below is needed ****************/
-    // CollationElements{}
-    // Countries{}
-    // Eras{}
-    // Languages{}
-    // localPatternChars{}
-    //
 }
 

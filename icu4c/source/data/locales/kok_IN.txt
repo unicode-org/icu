@@ -16,6 +16,12 @@ kok_IN {
         "INR",  // Rs. ? No.
         "."
     }
+    NumberPatterns {
+        "#,##,##0.###;-#,##,##0.###",
+        "\u00A4#,##,##0.00;-\u00A4#,##,##0.00",
+        "#,##,##0%",
+        "#E0",
+    }
     DateTimePatterns {
         "hh:mm:ss a z",
         "hh:mm:ss a z",
