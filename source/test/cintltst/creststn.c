@@ -1637,7 +1637,7 @@ static void TestFallback()
     junk = ures_getStringByKey(fr_FR, "%%PREEURO", &resultLen, &status);
     if(status != U_USING_DEFAULT_ERROR)
     {
-        log_err("Expected U_USING_DEFAULT_ERROR when trying to get %%EURO from fr_FR, got %s\n", 
+        log_err("Expected U_USING_DEFAULT_ERROR when trying to get %%PREEURO from fr_FR, got %s\n", 
             u_errorName(status));
     }
 
