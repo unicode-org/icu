@@ -45,6 +45,31 @@ U_CFUNC const char *
 ucnv_io_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode);
 
 /**
+ * Return the number of all standard names.
+ */
+U_CFUNC uint16_t
+ucnv_io_countStandards(UErrorCode *pErrorCode);
+
+/**
+ * Return the (n)th standard name in mixed case, or NULL
+ * if there is none (typically, if the data cannot be loaded).
+ * 0 <= index < ucnv_io_countStandards().
+ */
+U_CFUNC const char *
+ucnv_io_getStandard(uint16_t n, UErrorCode *pErrorCode);
+
+/**
+ * Map a converter alias name to a canonical converter name according to
+ * a given standard.
+ * The alias and standard are searched for case-insensitively, the converter
+ * name is returned in mixed-case.
+ * Returns NULL if the alias is not found, the standard does not exist, or
+ * the standard does not specify a name for the alias.
+ */
+U_CFUNC const char *
+ucnv_io_getStandardName(const char *alias, const char *standard, UErrorCode *pErrorCode);
+
+/**
  * Return the number of all converter names.
  */
 U_CFUNC uint16_t
@@ -107,3 +132,12 @@ U_CFUNC int
 charsetNameCmp(const char *name1, const char *name2);
 
 #endif /* _UCNV_IO */
+
+/*
+ * Hey, Emacs, please set the following:
+ *
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ *
+ */
