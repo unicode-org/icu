@@ -18,6 +18,7 @@
 #include "unicode/ucurr.h"
 #include "unicode/ustring.h"
 #include <float.h>
+#include <string.h>
 #include "digitlst.h"
 
 static const UChar EUR[] = {69,85,82,0}; // "EUR"
@@ -59,6 +60,8 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(18,TestComplexCurrency);
 
         CASE(19,TestRegCurrency);
+
+        CASE(20,TestSymbolsWithBadLocale);
         default: name = ""; break;
     }
 }
@@ -1207,6 +1210,36 @@ void NumberFormatTest::TestRegCurrency(void) {
     errln("FAIL: didn't return NULL for en_US_EURO after unregister of en_US_EURO");
   }
   status = U_ZERO_ERROR; // reset
+}
+
+void NumberFormatTest::TestSymbolsWithBadLocale(void) {
+    Locale locDefault;
+    Locale locBad("x-crazy_ZZ_MY_SPECIAL_ADMINISTRATION_REGION_NEEDS_A_SPECIAL_VARIANT_WITH_A_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_REALLY_LONG_NAME");
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString intlCurrencySymbol((UChar)0xa4);
+
+    intlCurrencySymbol.append((UChar)0xa4);
+
+    logln("Current locale is %s", Locale::getDefault().getName());
+    Locale::setDefault(locBad, status);
+    logln("Current locale is %s", Locale::getDefault().getName());
+    DecimalFormatSymbols mySymbols(status);
+    if (status != U_USING_FALLBACK_WARNING) {
+        errln("DecimalFormatSymbols should returned U_USING_FALLBACK_WARNING.");
+    }
+    if (strcmp(mySymbols.getLocale().getName(), locBad.getName()) != 0) {
+        errln("DecimalFormatSymbols does not have the right locale.");
+    }
+    DecimalFormatSymbols::ENumberFormatSymbol symbolEnum;
+    int *symbolEnumPtr = (int*)(&symbolEnum);
+    for (symbolEnum = DecimalFormatSymbols::kDecimalSeparatorSymbol; symbolEnum < DecimalFormatSymbols::kFormatSymbolCount; (*symbolEnumPtr)++) {
+        if (mySymbols.getSymbol(symbolEnum).length() == 0 && symbolEnum != DecimalFormatSymbols::kGroupingSeparatorSymbol) {
+            errln("DecimalFormatSymbols has an empty string at index %d.", symbolEnum);
+        }
+    }
+    status = U_ZERO_ERROR;
+    Locale::setDefault(locDefault, status);
+    logln("Current locale is %s", Locale::getDefault().getName());
 }
 
 //----------------------------------------------------------------------
