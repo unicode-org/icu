@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliteratorParser.java,v $
-* $Date: 2001/10/17 20:09:17 $
-* $Revision: 1.5 $
+* $Date: 2001/10/23 23:28:13 $
+* $Revision: 1.6 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -846,115 +846,6 @@ class TransliteratorParser {
     }
 
     //----------------------------------------------------------------------
-    // class Range
-    //----------------------------------------------------------------------
-
-    /**
-     * A range of Unicode characters.  Support the operations of testing for
-     * inclusion (does this range contain this character?) and splitting.
-     * Splitting involves breaking a range into two smaller ranges around a
-     * character inside the original range.  The split character is not included
-     * in either range.  If the split character is at either extreme end of the
-     * range, one of the split products is an empty range.
-     *
-     * This class is used internally to determine the largest available private
-     * use character range for variable stand-ins.
-     */
-    private static class Range implements Cloneable {
-        char start;
-        int length;
-
-        Range(char start, int length) {
-            this.start = start;
-            this.length = length;
-        }
-
-        public Object clone() {
-            return new Range(start, length);
-        }
-
-        boolean contains(char c) {
-            return c >= start && (c - start) < length;
-        }
-
-        /**
-         * Assume that contains(c) is true.  Split this range into two new
-         * ranges around the character c.  Make this range one of the new ranges
-         * (modify it in place) and return the other new range.  The character
-         * itself is not included in either range.  If the split results in an
-         * empty range (that is, if c == start or c == start + length - 1) then
-         * return null.
-         */
-        Range split(char c) {
-            if (c == start) {
-                ++start;
-                --length;
-                return null;
-            } else if (c - start == length - 1) {
-                --length;
-                return null;
-            } else {
-                ++c;
-                Range r = new Range(c, start + length - c);
-                length = --c - start;
-                return r;
-            }
-        }
-
-        /**
-         * Finds the largest unused subrange by the given string.  A
-         * subrange is unused by a string if the string contains no
-         * characters in that range.  If the given string contains no
-         * characters in this range, then this range itself is
-         * returned.
-         */
-        Range largestUnusedSubrange(RuleBody strings) {
-            Vector v = new Vector(1);
-            v.addElement(clone());
-
-            strings.reset();
-            for (;;) {
-                String str = strings.nextLine();
-                if (str == null) {
-                    break;
-                }
-                // TODO This is getting too expensive -- not only
-                // do we need to create all these line strings twice,
-                // now we need to unescape them as well.  Stop doing
-                // scans; instead, use a 'use' pragma like this:
-                //   use variable range E400 EFFF;
-                str = Utility.unescapeLeniently(str);
-                int n = str.length();
-                for (int i=0; i<n; ++i) {
-                    char c = str.charAt(i);
-                    if (contains(c)) {
-                        for (int j=0; j<v.size(); ++j) {
-                            Range r = (Range) v.elementAt(j);
-                            if (r.contains(c)) {
-                                r = r.split(c);
-                                if (r != null) {
-                                    v.addElement(r);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            Range bestRange = null;
-            for (int j=0; j<v.size(); ++j) {
-                Range r = (Range) v.elementAt(j);
-                if (bestRange == null || r.length > bestRange.length) {
-                    bestRange = r;
-                }
-            }
-
-            return bestRange;
-        }
-    }
-
-    //----------------------------------------------------------------------
     // PUBLIC methods
     //----------------------------------------------------------------------
 
@@ -1003,7 +894,12 @@ class TransliteratorParser {
         ruleCount = 0;
         compoundFilter = null;
 
-        determineVariableRange(ruleArray);
+        // By default, rules use part of the private use area
+        // E000..F8FF for variables and other stand-ins.  Currently
+        // the range F000..F8FF is typically sufficient.  The 'use
+        // variable range' pragma allows rule sets to modify this.
+        setVariableRange(0xF000, 0xF8FF);
+
         variablesVector = new Vector();
         parseData = new ParseData();
 
@@ -1088,13 +984,13 @@ class TransliteratorParser {
                             if (mode == 1) {
                                 mode = 2;
                                 idSplitPoint = idBlockResult.length();
+                        }
+                        if (cpdFilter[0] != null) {
+                            if (compoundFilter != null) {
+                                // Multiple compound filters
+                                throw new IllegalArgumentException("Multiple compound filters");
                             }
-                            if (cpdFilter[0] != null) {
-                                if (compoundFilter != null) {
-                                    // Multiple compound filters
-                                    throw new IllegalArgumentException("Multiple compound filters");
-                                }
-                                compoundFilter = cpdFilter[0];
+                            compoundFilter = cpdFilter[0];
                                 if (idBlockResult.length() == 0) {
                                     compoundFilterOffset = 0;
                                 }
@@ -1103,12 +999,18 @@ class TransliteratorParser {
                             idBlockResult.append(str);
                             if (!sawDelim[0]) {
                                 idBlockResult.append(';');
-                            }
+                        }
                             if (cpdFilter[0] != null && compoundFilterOffset < 0) {
                                 compoundFilterOffset = idBlockResult.length();
                             }
-                            pos = p[0];
+                        pos = p[0];
+                    } else if (resemblesPragma(rule, pos, limit)) {
+                        int ppp = parsePragma(rule, pos, limit);
+                        if (ppp < 0) {
+                            throw new IllegalArgumentException("Unrecognized pragma: " +
+                                                               rule.substring(pos));
                         }
+                        pos = ppp;
                     } else {
                         // Parse a rule
                         pos = parseRule(rule, pos, limit);
@@ -1336,6 +1238,98 @@ class TransliteratorParser {
     }
 
     /**
+     * Set the variable range to [start, end] (inclusive).
+     */
+    private void setVariableRange(int start, int end) {
+        if (start > end || start < 0 || end > 0xFFFF) {
+            throw new IllegalArgumentException("Invalid variable range " + start + ", " + end);
+        }
+        
+        // Segment references work down; variables work up.  We don't
+        // know how many of each we will need.
+        data.segmentBase = (char) end;
+        data.segmentCount = 0;
+        data.variablesBase = variableNext = (char) start; // first private use
+        variableLimit = (char) (end + 1);
+    }
+
+    /**
+     * Set the maximum backup to 'backup', in response to a pragma
+     * statement.
+     */
+    private void pragmaMaximumBackup(int backup) {
+        //TODO Finish
+    }
+
+    /**
+     * Begin normalizing all rules using the given mode, in response
+     * to a pragma statement.
+     */
+    private void pragmaNormalizeRules(Normalizer.Mode mode) {
+        //TODO Finish
+    }
+
+    /**
+     * Return true if the given rule looks like a pragma.
+     * @param pos offset to the first non-whitespace character
+     * of the rule.
+     * @param limit pointer past the last character of the rule.
+     */
+    static boolean resemblesPragma(String rule, int pos, int limit) {
+        // Must start with /use\s/i
+        return Utility.parsePattern(rule, pos, limit, "use ", null) >= 0;
+    }
+
+    /**
+     * Parse a pragma.  This method assumes resemblesPragma() has
+     * already returned true.
+     * @param pos offset to the first non-whitespace character
+     * of the rule.
+     * @param limit pointer past the last character of the rule.
+     * @return the position index after the final ';' of the pragma,
+     * or -1 on failure.
+     */
+    private int parsePragma(String rule, int pos, int limit) {
+        int[] array = new int[2];
+
+        // resemblesPragma() has already returned true, so we
+        // know that pos points to /use\s/i; we can skip 4 characters
+        // immediately
+        pos += 4;
+        
+        // Here are the pragmas we recognize:
+        // use variable range 0xE000 0xEFFF;
+        // use maximum backup 16;
+        // use nfd rules;
+        int p = Utility.parsePattern(rule, pos, limit, "~variable range # #~;", array);
+        if (p >= 0) {
+            setVariableRange(array[0], array[1]);
+            return p;
+        }
+
+        p = Utility.parsePattern(rule, pos, limit, "~maximum backup #~;", array);
+        if (p >= 0) {
+            pragmaMaximumBackup(array[0]);
+            return p;
+        }
+
+        p = Utility.parsePattern(rule, pos, limit, "~nfd rules~;", null);
+        if (p >= 0) {
+            pragmaNormalizeRules(Normalizer.DECOMP);
+            return p;
+        }
+
+        p = Utility.parsePattern(rule, pos, limit, "~nfc rules~;", null);
+        if (p >= 0) {
+            pragmaNormalizeRules(Normalizer.COMPOSE);
+            return p;
+        }
+
+        // Syntax error: unable to parse pragma
+        return -1;
+    }
+
+    /**
      * Throw an exception indicating a syntax error.  Search the rule string
      * for the probable end of the rule.  Of course, if the error is that
      * the end of rule marker is missing, then the rule end will not be found.
@@ -1432,40 +1426,6 @@ class TransliteratorParser {
             }
         }
         return data.getSegmentStandin(r);
-    }
-
-    /**
-     * Determines what part of the private use region of Unicode we can use for
-     * variable stand-ins.  The correct way to do this is as follows: Parse each
-     * rule, and for forward and reverse rules, take the FROM expression, and
-     * make a hash of all characters used.  The TO expression should be ignored.
-     * When done, everything not in the hash is available for use.  In practice,
-     * this method may employ some other algorithm for improved speed.
-     */
-    private final void determineVariableRange(RuleBody ruleArray) {
-        // As an initial implementation, we just run through all the
-        // characters, ignoring any quoting.  This works since the quote
-        // mechanisms are outside the private use area.
-
-        Range r = new Range('\uE000', 0x1900); // Private use area
-        r = r.largestUnusedSubrange(ruleArray);
-
-        if (r == null) {
-            throw new RuntimeException(
-                "No private use characters available for variables");
-        }
-
-        // Segment references work down; variables work up.  We don't
-        // know how many of each we will need.
-        data.segmentBase = (char) (r.start + r.length - 1);
-        data.segmentCount = 0;
-        data.variablesBase = variableNext = (char) r.start;
-        variableLimit = (char) (r.start + r.length);
-
-        if (variableNext >= variableLimit) {
-            throw new RuntimeException(
-                    "Too few private use characters available for variables");
-        }
     }
 
     /**
