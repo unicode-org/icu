@@ -11,25 +11,11 @@
 *                         TestSecondary
 ***********************************************************************/
 
-#ifndef _COLL
 #include "unicode/coll.h"
-#endif
-
-#ifndef _TBLCOLL
 #include "unicode/tblcoll.h"
-#endif
-
-#ifndef _UNISTR
 #include "unicode/unistr.h"
-#endif
-
-#ifndef _SORTKEY
 #include "unicode/sortkey.h"
-#endif
-
-#ifndef _FRCOLL
 #include "frcoll.h"
-#endif
 
 #include "sfwdchit.h"
 
@@ -39,12 +25,11 @@ CollationFrenchTest::CollationFrenchTest()
     UErrorCode status = U_ZERO_ERROR;
     myCollation = Collator::createInstance(Locale::FRANCE, status);
     if(!myCollation || U_FAILURE(status)) {
-      errln(__FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
-	/* if it wasn't already: */
-	delete myCollation;
-	myCollation = NULL;
+        errln(__FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
+        /* if it wasn't already: */
+        delete myCollation;
+        myCollation = NULL;
     }
-
 }
 
 CollationFrenchTest::~CollationFrenchTest()
@@ -172,13 +157,16 @@ void CollationFrenchTest::TestTertiary(/* char* par */)
     myCollation->setStrength(Collator::TERTIARY);
     myCollation->setAttribute(UCOL_FRENCH_COLLATION, UCOL_ON, status);
     myCollation->setAttribute(UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, status);
-    if (U_FAILURE(status))
-      errln("Error setting attribute in French collator");
+    if (U_FAILURE(status)) {
+        errln("Error setting attribute in French collator");
+    }
     else
-      for (i = 0; i < 12 ; i++)
-      {
-          doTest(testSourceCases[i], testTargetCases[i], results[i]);
-      }
+    {
+        for (i = 0; i < 12 ; i++)
+        {
+            doTest(testSourceCases[i], testTargetCases[i], results[i]);
+        }
+    }
 }
 
 void CollationFrenchTest::TestSecondary(/* char* par */)
@@ -191,23 +179,23 @@ void CollationFrenchTest::TestSecondary(/* char* par */)
     //myCollation->setAttribute(UCOL_FRENCH_COLLATION, UCOL_ON, status);
     myCollation->setStrength(Collator::SECONDARY);
     if (U_FAILURE(status))
-      errln("Error setting attribute in French collator");
+        errln("Error setting attribute in French collator");
     else
     {
-      const int32_t testAcuteSize = sizeof(testAcute) / sizeof(testAcute[0]);
-      for (i = 0; i < testAcuteSize; i++)
-      {
-          for (j = 0; j < testAcuteSize; j++)
-          {
-              if (i <  j)
-                  expected = Collator::LESS;
-              else if (i == j)
-                  expected = Collator::EQUAL;
-              else // (i >  j)
-                  expected = Collator::GREATER;
-              doTest(testAcute[i], testAcute[j], expected );
-          }
-      }
+        const int32_t testAcuteSize = (int32_t)(sizeof(testAcute) / sizeof(testAcute[0]));
+        for (i = 0; i < testAcuteSize; i++)
+        {
+            for (j = 0; j < testAcuteSize; j++)
+            {
+                if (i <  j)
+                    expected = Collator::LESS;
+                else if (i == j)
+                    expected = Collator::EQUAL;
+                else // (i >  j)
+                    expected = Collator::GREATER;
+                doTest(testAcute[i], testAcute[j], expected );
+            }
+        }
     }
 }
 
@@ -229,9 +217,9 @@ void CollationFrenchTest::runIndexedTest( int32_t index, UBool exec, const char*
     if (exec) logln("TestSuite CollationFrenchTest: ");
 
     if((!myCollation) && exec) {
-      errln(__FILE__ " cannot test - failed to create collator.");
-      name = "";
-      return;
+        errln(__FILE__ " cannot test - failed to create collator.");
+        name = "";
+        return;
     }
 
     switch (index) {
@@ -241,5 +229,4 @@ void CollationFrenchTest::runIndexedTest( int32_t index, UBool exec, const char*
         default: name = ""; break;
     }
 }
-
 
