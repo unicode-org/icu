@@ -1,3 +1,9 @@
+#******************************************************************************
+#
+#   Copyright (C) 1999, International Business Machines
+#   Corporation and others.  All Rights Reserved.
+#
+#******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
 
