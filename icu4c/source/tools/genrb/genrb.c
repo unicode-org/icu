@@ -29,6 +29,8 @@
 #include "write.h"
 #include "util.h"
 
+#include "ucol.h"
+#include "uloc.h"
 
 /* Protos */
 static void usage();
@@ -36,6 +38,7 @@ static void version();
 static void processFile(const char *filename, const char* cp, UErrorCode *status);
 static char* make_res_filename(const char *filename, UErrorCode *status);
 static char* make_col_filename(const char *filename, UErrorCode *status);
+static void make_col(const char *filename, UErrorCode *status);
 int main(int argc, char **argv);
 
 /* File suffixes */
@@ -120,6 +123,7 @@ main(int argc,
   for(i = optind; i < argc; ++i) {
     status = U_ZERO_ERROR;
     processFile(argv[i], encoding, &status);
+    make_col(argv[i], &status);
     if(U_FAILURE(status)) {
       printf("genrb: %s processing file \"%s\"\n", u_errorName(status), argv[i]);
       if(getErrorText() != 0)
@@ -300,4 +304,25 @@ make_col_filename(const char *filename,
   icu_free(dirname);
 
   return colName;
+}
+
+static void make_col(const char *filename, UErrorCode *status)
+{
+    char *basename;
+    UCollator *coll;
+
+    basename = (char*) icu_malloc(sizeof(char) * (icu_strlen(filename) + 1));
+    if(basename == 0) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    get_basename(basename, filename);
+    
+    coll = ucol_open(basename, status);
+    if(U_FAILURE(*status)) {
+      printf("gencol: %s for locale \"%s\"", u_errorName(*status), basename);
+    }
+    else {
+      ucol_close(coll);
+    }
 }
