@@ -6,7 +6,7 @@
 *
 *****************************************************************************************
 */
-// $Revision: 1.7 $
+// $Revision: 1.8 $
 //===============================================================================
 //
 // File locmap.hpp      : Locale Mapping Classes
@@ -40,8 +40,8 @@ class IGlobalLocales {
                 static uint16_t              languageLCID(uint32_t hostID);
     protected:
                 IGlobalLocales() { }
-                IGlobalLocales(const IGlobalLocales& that) { }
-                IGlobalLocales& operator=(const IGlobalLocales& that) { return *this;}
+                IGlobalLocales(const IGlobalLocales&/* that*/) { }
+                IGlobalLocales& operator=(const IGlobalLocales&/* that*/) { return *this;}
 private:
 
                 static int32_t                  fgLocaleCount;
