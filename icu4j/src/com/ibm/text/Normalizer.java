@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Normalizer.java,v $ 
- * $Date: 2000/07/18 18:18:18 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/07/19 15:16:34 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -443,7 +443,10 @@ public final class Normalizer {
 
                 // We can only combine a character with the base if we haven't
                 // already seen a combining character with the same canonical class.
-                if (type == ComposeData.COMBINING && (classesSeen & cclass) == 0
+                // We also only combine characters with an index from
+                // 1..COMBINING_COUNT-1.  Indices >= COMBINING_COUNT are
+                // non-combining; these formerly had an index of zero.
+                if (index < ComposeData.COMBINING_COUNT && (classesSeen & cclass) == 0
                     && (action = composeAction(baseIndex, index)) > 0)
                 {
                     if (action > ComposeData.MAX_COMPOSED) {
