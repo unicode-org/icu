@@ -38,16 +38,18 @@
  * Here are the special characters used in the parts of the
  * subpattern, with notes on their usage.
  * <pre>
- * .       Symbol   Meaning
- * .         0      a digit
- * .         #      a digit, zero shows as absent
- * .         .      placeholder for decimal separator
- * .         ,      placeholder for grouping separator.
- * .         ;      separates formats.
- * .         -      default negative prefix.
- * .         %      divide by 100 and show as percentage
- * .         X      any other characters can be used in the prefix or suffix
- * .         '      used to quote special characters in a prefix or suffix.
+ * \code
+ *        Symbol   Meaning
+ *          0      a digit
+ *          #      a digit, zero shows as absent
+ *          .      placeholder for decimal separator
+ *          ,      placeholder for grouping separator.
+ *          ;      separates formats.
+ *          -      default negative prefix.
+ *          %      divide by 100 and show as percentage
+ *          X      any other characters can be used in the prefix or suffix
+ *          '      used to quote special characters in a prefix or suffix.
+ * \endcode
  *  </pre>
  * [Notes]
  * <P>

@@ -40,40 +40,48 @@ class Locale;
  * To format a number for the current Locale, use one of the static
  * factory methods:
  * <pre>
- * .   double myNumber = 7.0;
- * .   UnicodeString myString;
- * .   UErrorCode success = U_ZERO_ERROR;
- * .   NumberFormat* nf = NumberFormat::createInstance(success)
- * .   nf->format(myNumber, myString);
- * .   cout &lt;&lt; " Example 1: " &lt;&lt; myString &lt;&lt; endl;
+ * \code
+ *    double myNumber = 7.0;
+ *    UnicodeString myString;
+ *    UErrorCode success = U_ZERO_ERROR;
+ *    NumberFormat* nf = NumberFormat::createInstance(success)
+ *    nf->format(myNumber, myString);
+ *    cout &lt;&lt; " Example 1: " &lt;&lt; myString &lt;&lt; endl;
+ * \endcode
  * </pre>
  * If you are formatting multiple numbers, it is more efficient to get
  * the format and use it multiple times so that the system doesn't
  * have to fetch the information about the local language and country
  * conventions multiple times.
  * <pre>
- * .    UnicodeString myString;
- * .    UErrorCode success = U_ZERO_ERROR;
- * .    nf = NumberFormat::createInstance( success );
- * .    int32_t a[] = { 123, 3333, -1234567 };
- * .    const int32_t a_len = sizeof(a) / sizeof(a[0]);
- * .    myString.remove();
- * .    for (int32_t i = 0; i < a_len; i++) {
- * .        nf->format(a[i], myString);
- * .        myString += " ; ";
- * .    }
- * .    cout &lt;&lt; " Example 2: " &lt;&lt; myString &lt;&lt; endl;
+ * \code 
+ *     UnicodeString myString;
+ *     UErrorCode success = U_ZERO_ERROR;
+ *     nf = NumberFormat::createInstance( success );
+ *     int32_t a[] = { 123, 3333, -1234567 };
+ *     const int32_t a_len = sizeof(a) / sizeof(a[0]);
+ *     myString.remove();
+ *     for (int32_t i = 0; i < a_len; i++) {
+ *         nf->format(a[i], myString);
+ *         myString += " ; ";
+ *     }
+ *     cout &lt;&lt; " Example 2: " &lt;&lt; myString &lt;&lt; endl;
+ * \endcide
  * </pre>
  * To format a number for a different Locale, specify it in the
  * call to createInstance().
  * <pre>
- * .    nf = NumberFormat::createInstance( Locale::FRENCH, success );
+ * \code
+ *     nf = NumberFormat::createInstance( Locale::FRENCH, success );
+ * \endcode
  * </pre>
  * You can use a NumberFormat to parse also.
  * <pre>
- * .   UErrorCode success;
- * .   Formattable result(-999);  // initialized with error code
- * .   nf->parse(myString, result, success);
+ * \code
+ *    UErrorCode success;
+ *    Formattable result(-999);  // initialized with error code
+ *    nf->parse(myString, result, success);
+ * \endcode
  * </pre>
  * Use createInstance to get the normal number format for that country.
  * There are other static factory methods available.  Use getCurrency

@@ -92,9 +92,11 @@ typedef void *  UCollator;
  * <p>The collation table is composed of a list of collation rules, where each
  * rule is of three forms:
  * <pre>
- * .    &lt; modifier >
- * .    &lt; relation > &lt; text-argument >
- * .    &lt; reset > &lt; text-argument >
+ * \code
+ *     <modifier >
+ *     <relation > &lt; text-argument >
+ *     <reset > &lt; text-argument >
+ * \endcode
  * </pre>
  * The following demonstrates how to create your own collation rules:
  * <UL Type=round>
@@ -120,20 +122,25 @@ typedef void *  UCollator;
  *        can also be used to add a modification at the end of a set of rules.
  *        <p>'&' : Indicates that the next rule follows the position to where
  *            the reset text-argument would be sorted.
+ * </UL>
  *
  * <p>
  * This sounds more complicated than it is in practice. For example, the
  * following are equivalent ways of expressing the same thing:
  * <pre>
- * .    a &lt; b &lt; c
- * .    a &lt; b & b &lt; c
- * .    a &lt; c & a &lt; b
+ * \code
+ *     a < b < c
+ *     a < b & b  < c
+ *     a < c & a  < b
+ * \endcode
  * </pre>
  * Notice that the order is important, as the subsequent item goes immediately
  * after the text-argument. The following are not equivalent:
  * <pre>
- * .    a &lt; b & a &lt; c
- * .    a &lt; c & a &lt; b
+ * \code
+ *     a <  b & a  < c
+ *     a <  c & a  < b
+ * \endcode
  * </pre>
  * Either the text-argument must already be present in the sequence, or some
  * initial substring of the text-argument must be present. (e.g. "a &lt; b & ae &lt;
@@ -172,142 +179,167 @@ typedef void *  UCollator;
  *         (e.g. "a &lt; b & e &lt; f")
  * </UL>
  * <pre>
- * .    Examples:
- * .    Simple:     "&lt; a &lt; b &lt; c &lt; d"
- * .    Norwegian:  "&lt; a,A&lt; b,B&lt; c,C&lt; d,D&lt; e,E&lt; f,F&lt; g,G&lt; h,H&lt; i,I&lt; j,J
- * .                 &lt; k,K&lt; l,L&lt; m,M&lt; n,N&lt; o,O&lt; p,P&lt; q,Q&lt; r,R&lt; s,S&lt; t,T
- * .                 &lt; u,U&lt; v,V&lt; w,W&lt; x,X&lt; y,Y&lt; z,Z
- * .                 &lt; å=a°,Å=A°
- * .                 ;aa,AA&lt; æ,Æ&lt; ø,Ø"
+ * \code
+ *     Examples:
+ *     Simple:     "< a < b < c < d"
+ *     Norwegian:  "< a,A< b,B< c,C< d,D< e,E< f,F< g,G< h,H< i,I< j,J
+ *                  < k,K< l,L< m,M< n,N< o,O< p,P< q,Q< r,R< s,S< t,T
+ *                  < u,U< v,V< w,W< x,X< y,Y< z,Z
+ *                  < å=a°,Å=A°
+ *                  ;aa,AA< æ,Æ< ø,Ø"
+ * \endcode
  * </pre>
  * <p>To create a table-based collation object, simply supply the collation
  * rules to the RuleBasedCollator contructor.  For example:
  * <pre>
- * .    UErrorCode status = U_ZERO_ERROR;
- * .    RuleBasedCollator *mySimple = new RuleBasedCollator(Simple, status);
+ * \code
+ *     UErrorCode status = U_ZERO_ERROR;
+ *     RuleBasedCollator *mySimple = new RuleBasedCollator(Simple, status);
+ * \endcode
  * </pre>
  * <p>Another example:
  * <pre>
- * .    UErrorCode status = U_ZERO_ERROR;
- * .    RuleBasedCollator *myNorwegian = new RuleBasedCollator(Norwegian, status);
+ * \code
+ *     UErrorCode status = U_ZERO_ERROR;
+ *     RuleBasedCollator *myNorwegian = new RuleBasedCollator(Norwegian, status);
+ * \endcode
  * </pre>
  * To add rules on top of an existing table, simply supply the orginal rules
  * and modifications to RuleBasedCollator constructor.  For example,
  * <pre>
- * .     Traditional Spanish (fragment): ... & C &lt; ch , cH , Ch , CH ...
- * .     German (fragment) : ...&lt; y , Y &lt; z , Z
- * .                         & AE, Ä & AE, ä 
- * .                         & OE , Ö & OE, ö 
- * .                         & UE , Ü & UE, ü 
- * .     Symbols (fragment): ...&lt; y, Y &lt; z , Z
- * .                         & Question-mark ; '?'
- * .                         & Ampersand ; '&'
- * .                         & Dollar-sign ; '$'
+ * \code
+ *      Traditional Spanish (fragment): ... & C < ch , cH , Ch , CH ...
+ *      German (fragment) : ...< y , Y < z , Z
+ *                          & AE, Ä & AE, ä
+ *                          & OE , Ö & OE, ö
+ *                          & UE , Ü & UE, ü
+ *      Symbols (fragment): ...< y, Y < z , Z
+ *                          & Question-mark ; '?'
+ *                          & Ampersand ; '&'
+ *                          & Dollar-sign ; '$'
+ * \endcode
+ * </pre>
  * <p>To create a collation object for traditional Spanish, the user can take
  * the English collation rules and add the additional rules to the table.
  * For example:
  * <pre>
- * .     UErrorCode status = U_ZERO_ERROR;
- * .     UnicodeString rules(DEFAULTRULES);
- * .     rules += "& C &lt; ch, cH, Ch, CH";
- * .     RuleBasedCollator *mySpanish = new RuleBasedCollator(rules, status);
+ * \code
+ *      UErrorCode status = U_ZERO_ERROR;
+ *      UnicodeString rules(DEFAULTRULES);
+ *      rules += "& C &lt; ch, cH, Ch, CH";
+ *      RuleBasedCollator *mySpanish = new RuleBasedCollator(rules, status);
+ * \endcode
  * </pre>
  * <p>In order to sort symbols in the similiar order of sorting their
  * alphabetic equivalents, you can do the following,
  * <pre>
- * .     UErrorCode status = U_ZERO_ERROR;
- * .     UnicodeString rules(DEFAULTRULES);
- * .     rules += "& Question-mark ; '?' & Ampersand ; '&' & Dollar-sign ; '$' ";
- * .     RuleBasedCollator *myTable = new RuleBasedCollator(rules, status);
+ * \code
+ *      UErrorCode status = U_ZERO_ERROR;
+ *      UnicodeString rules(DEFAULTRULES);
+ *      rules += "& Question-mark ; '?' & Ampersand ; '&' & Dollar-sign ; '$' ";
+ *      RuleBasedCollator *myTable = new RuleBasedCollator(rules, status);
+ * \endcode
  * </pre>
  * <p>Another way of creating the table-based collation object, mySimple,
  * is:
  * <pre>
- * .     UErrorCode status = U_ZERO_ERROR;
- * .     RuleBasedCollator *mySimple = new
- * .           RuleBasedCollator(" &lt; a &lt; b & b &lt; c & c &lt; d", status);
+ * \code
+ *      UErrorCode status = U_ZERO_ERROR;
+ *      RuleBasedCollator *mySimple = new
+ *            RuleBasedCollator(" &lt; a &lt; b & b &lt; c & c &lt; d", status);
+ * \endcode
  * </pre>
  * Or,
  * <pre>
- * .     UErrorCode status = U_ZERO_ERROR;
- * .     RuleBasedCollator *mySimple = new
- * .           RuleBasedCollator(" &lt; a &lt; b &lt; d & b &lt; c", status);
+ * \code
+ *      UErrorCode status = U_ZERO_ERROR;
+ *      RuleBasedCollator *mySimple = new
+ *            RuleBasedCollator(" &lt; a &lt; b &lt; d & b &lt; c", status);
+ * \endcode
  * </pre>
  * Because " &lt; a &lt; b &lt; c &lt; d" is the same as "a &lt; b &lt; d & b &lt; c" or
  * "&lt; a &lt; b & b &lt; c & c &lt; d".
  *
  * <p>To combine collations from two locales, (without error handling for clarity)
  * <pre>
- * .    // Create an en_US Collator object
- * .    Locale locale_en_US("en", "US", "");
- * .    RuleBasedCollator* en_USCollator = (RuleBasedCollator*)
- * .        Collator::createInstance( locale_en_US, success );
- * .
- * .    // Create a da_DK Collator object
- * .    Locale locale_da_DK("da", "DK", "");
- * .    RuleBasedCollator* da_DKCollator = (RuleBasedCollator*)
- * .        Collator::createInstance( locale_da_DK, success );
- * .
- * .    // Combine the two
- * .    // First, get the collation rules from en_USCollator
- * .    UnicodeString rules = en_USCollator->getRules();
- * .    // Second, get the collation rules from da_DKCollator
- * .    rules += da_DKCollator->getRules();
- * .    RuleBasedCollator* newCollator = new RuleBasedCollator( rules, success );
- * .    // newCollator has the combined rules
+ * \code
+ *     // Create an en_US Collator object
+ *     Locale locale_en_US("en", "US", "");
+ *     RuleBasedCollator* en_USCollator = (RuleBasedCollator*)
+ *         Collator::createInstance( locale_en_US, success );
+ * 
+ *     // Create a da_DK Collator object
+ *     Locale locale_da_DK("da", "DK", "");
+ *     RuleBasedCollator* da_DKCollator = (RuleBasedCollator*)
+ *         Collator::createInstance( locale_da_DK, success );
+ * 
+ *     // Combine the two
+ *     // First, get the collation rules from en_USCollator
+ *     UnicodeString rules = en_USCollator->getRules();
+ *     // Second, get the collation rules from da_DKCollator
+ *     rules += da_DKCollator->getRules();
+ *     RuleBasedCollator* newCollator = new RuleBasedCollator( rules, success );
+ *     // newCollator has the combined rules
+ * \endcode
  * </pre>
  * <p>Another more interesting example would be to make changes on an existing
  * table to create a new collation object.  For example, add
  * "& C &lt; ch, cH, Ch, CH" to the en_USCollation object to create your own
  * English collation object,
  * <pre>
- * .    // Create a new Collator object with additional rules
- * .    rules = en_USCollator->getRules();
- * .    rules += "& C < ch, cH, Ch, CH";
- * .    RuleBasedCollator* myCollator = new RuleBasedCollator( rules, success );
- * .    // myCollator contains the new rules
+ * \code
+ *     // Create a new Collator object with additional rules
+ *     rules = en_USCollator->getRules();
+ *     rules += "& C < ch, cH, Ch, CH";
+ *     RuleBasedCollator* myCollator = new RuleBasedCollator( rules, success );
+ *     // myCollator contains the new rules
+ * \endcode
  * </pre>
  *
  * <p>The following example demonstrates how to change the order of
  * non-spacing accents,
  * <pre>
- * .     UChar contents[] = {
- * .         '=', 0x0301, ';', 0x0300, ';', 0x0302,
- * .         ';', 0x0308, ';', 0x0327, ',', 0x0303,    // main accents
- * .         ';', 0x0304, ';', 0x0305, ';', 0x0306,    // main accents
- * .         ';', 0x0307, ';', 0x0309, ';', 0x030A,    // main accents
- * .         ';', 0x030B, ';', 0x030C, ';', 0x030D,    // main accents
- * .         ';', 0x030E, ';', 0x030F, ';', 0x0310,    // main accents
- * .         ';', 0x0311, ';', 0x0312,                 // main accents
- * .         '&lt;', 'a', ',', 'A', ';', 'a', 'e', ',', 'A', 'E',
- * .         ';', 0x00e6, ',', 0x00c6, '&lt;', 'b', ',', 'B',
- * .         '&lt;', 'c', ',', 'C', '&lt;', 'e', ',', 'E', '&', 
- * .         'C', '&lt;', 'd', ',', 'D', 0 };
- * .     UnicodeString oldRules(contents);
- * .     UErrorCode status = U_ZERO_ERROR;
- * .     // change the order of accent characters
- * .     UChar addOn[] = { '&', ',', 0x0300, ';', 0x0308, ';', 0x0302, 0 };
- * .     oldRules += addOn;
- * .     RuleBasedCollator *myCollation = new RuleBasedCollator(oldRules, status);
+ * \code
+ *      UChar contents[] = {
+ *          '=', 0x0301, ';', 0x0300, ';', 0x0302,
+ *          ';', 0x0308, ';', 0x0327, ',', 0x0303,    // main accents
+ *          ';', 0x0304, ';', 0x0305, ';', 0x0306,    // main accents
+ *          ';', 0x0307, ';', 0x0309, ';', 0x030A,    // main accents
+ *          ';', 0x030B, ';', 0x030C, ';', 0x030D,    // main accents
+ *          ';', 0x030E, ';', 0x030F, ';', 0x0310,    // main accents
+ *          ';', 0x0311, ';', 0x0312,                 // main accents
+ *          '<', 'a', ',', 'A', ';', 'a', 'e', ',', 'A', 'E',
+ *          ';', 0x00e6, ',', 0x00c6, '<', 'b', ',', 'B',
+ *          '<', 'c', ',', 'C', '<', 'e', ',', 'E', '&', 
+ *          'C', '<', 'd', ',', 'D', 0 };
+ *      UnicodeString oldRules(contents);
+ *      UErrorCode status = U_ZERO_ERROR;
+ *      // change the order of accent characters
+ *      UChar addOn[] = { '&', ',', 0x0300, ';', 0x0308, ';', 0x0302, 0 };
+ *      oldRules += addOn;
+ *      RuleBasedCollator *myCollation = new RuleBasedCollator(oldRules, status);
+ *  \endcode
  * </pre>
  *
  * <p> The last example shows how to put new primary ordering in before the
  * default setting. For example, in Japanese collation, you can either sort
  * English characters before or after Japanese characters,
  * <pre>
- * .     UErrorCode status = U_ZERO_ERROR;
- * .     // get en_US collation rules
- * .     RuleBasedCollator* en_USCollation = 
- * .         (RuleBasedCollator*) Collator::createInstance(Locale::US, status);
- * .     // Always check the error code after each call.
- * .     if (U_FAILURE(status)) return;
- * .     // add a few Japanese character to sort before English characters
- * .     // suppose the last character before the first base letter 'a' in
- * .     // the English collation rule is 0x2212
- * .     UChar jaString[] = { '&', 0x2212, '&lt;', 0x3041, ',', 0x3042, '&lt;', 0x3043, ',', 0x3044, 0 };
- * .     UnicodeString rules( en_USCollation->getRules() );
- * .     rules += jaString;
- * .     RuleBasedCollator *myJapaneseCollation = new RuleBasedCollator(rules, status);
+ * \code
+ *      UErrorCode status = U_ZERO_ERROR;
+ *      // get en_US collation rules
+ *      RuleBasedCollator* en_USCollation = 
+ *          (RuleBasedCollator*) Collator::createInstance(Locale::US, status);
+ *      // Always check the error code after each call.
+ *      if (U_FAILURE(status)) return;
+ *      // add a few Japanese character to sort before English characters
+ *      // suppose the last character before the first base letter 'a' in
+ *      // the English collation rule is 0x2212
+ *      UChar jaString[] = { '&', 0x2212, '&lt;', 0x3041, ',', 0x3042, '&lt;', 0x3043, ',', 0x3044, 0 };
+ *      UnicodeString rules( en_USCollation->getRules() );
+ *      rules += jaString;
+ *      RuleBasedCollator *myJapaneseCollation = new RuleBasedCollator(rules, status);
+ * \endcode
  * </pre>
  * <p><strong>NOTE</strong>: Typically, a collation object is created with
  * Collator::createInstance().

@@ -36,68 +36,76 @@
  * The choice is specified with an ascending list of doubles, where each item
  * specifies a half-open interval up to the next item:
  * <pre>
- * .    X matches j if and only if limit[j] &lt;= X &lt; limit[j+1]
+ * \code
+ *     X matches j if and only if limit[j] &lt;= X &lt; limit[j+1]
+ * \endcode
  * </pre>
  * If there is no match, then either the first or last index is used, depending
  * on whether the number is too low or too high.  The length of the array of
  * formats must be the same as the length of the array of limits.
  * For example,
  * <pre>
- * .     {1,2,3,4,5,6,7},
- * .          {"Sun","Mon","Tue","Wed","Thur","Fri","Sat"}
- * .     {0, 1, ChoiceFormat::nextDouble(1)},
- * .          {"no files", "one file", "many files"}
+ * \code
+ *      {1,2,3,4,5,6,7},
+ *           {"Sun","Mon","Tue","Wed","Thur","Fri","Sat"}
+ *      {0, 1, ChoiceFormat::nextDouble(1)},
+ *           {"no files", "one file", "many files"}
+ *  \endcode
  * </pre>
  * (nextDouble can be used to get the next higher double, to make the half-open
  * interval.)
  * <P>
  * Here is a simple example that shows formatting and parsing:
  * <pre>
- * .  void SimpleChoiceExample( void )
- * .  {
- * .      double limits[] = {1,2,3,4,5,6,7};
- * .      UnicodeString monthNames[] = {"Sun","Mon","Tue","Wed","Thur","Fri","Sat"};
- * .      ChoiceFormat* form = new ChoiceFormat(limits, monthNames, 7 );
- * .      ParsePosition* status = new ParsePosition(0);
- * .      UnicodeString str;
- * .      FieldPosition f1(0), f2(0);
- * .      for (double i = 0.0; i &lt;= 8.0; ++i) {
- * .          status->setIndex(0);
- * .          Formattable parseResult;
- * .          str.remove();
- * .          cout &lt;&lt; i &lt;&lt; " -> " &lt;&lt; form->format(i,str, f1) 
- * .                    &lt;&lt; " -> " &lt;&lt; parseResult &lt;&lt; endl;
- * .      }
- * .      delete form;
- * .      delete status;
- * .      cout &lt;&lt; endl;
- * .  }
+ * \code
+ *   void SimpleChoiceExample( void )
+ *   {
+ *       double limits[] = {1,2,3,4,5,6,7};
+ *       UnicodeString monthNames[] = {"Sun","Mon","Tue","Wed","Thur","Fri","Sat"};
+ *       ChoiceFormat* form = new ChoiceFormat(limits, monthNames, 7 );
+ *       ParsePosition* status = new ParsePosition(0);
+ *       UnicodeString str;
+ *       FieldPosition f1(0), f2(0);
+ *       for (double i = 0.0; i &lt;= 8.0; ++i) {
+ *           status->setIndex(0);
+ *           Formattable parseResult;
+ *           str.remove();
+ *           cout &lt;&lt; i &lt;&lt; " -> " &lt;&lt; form->format(i,str, f1) 
+ *                     &lt;&lt; " -> " &lt;&lt; parseResult &lt;&lt; endl;
+ *       }
+ *       delete form;
+ *       delete status;
+ *       cout &lt;&lt; endl;
+ *   }
+ * \endcode
  * </pre>
  * Here is a more complex example, with a pattern format.
  * <pre>
- * .  void ComplexChoiceExample( void )
- * .  {
- * .      double filelimits[] = {0,1,2};
- * .      UnicodeString filepart[] = {"are no files","is one file","are {2} files"};
- * .      ChoiceFormat* fileform = new ChoiceFormat(filelimits, filepart, 3 );
- * .      UErrorCode success = U_ZERO_ERROR;
- * .      const Format* testFormats[] = { fileform, NULL, NumberFormat::createInstance(success) };
- * .      MessageFormat* pattform = new MessageFormat("There {0} on {1}", success );
- * .      pattform->setFormats( testFormats, 3 );
- * .      Formattable testArgs[] = {0L, "Disk_A", 0L};
- * .      FieldPosition fp(0);
- * .      UnicodeString str;
- * .      for (int32_t i = 0; i &lt; 4; ++i) {
- * .          Formattable fInt(i);
- * .          testArgs[0] = fInt;
- * .          testArgs[2] = testArgs[0];
- * .          str.remove();
- * .          pattform->format(testArgs, 3, str, fp, success );
- * .          cout &lt;&lt; "Output for i=" &lt;&lt; i &lt;&lt; " : " &lt;&lt; str &lt;&lt; endl;
- * .      }
- * .      delete pattform;
- * .      cout &lt;&lt; endl;
- * .  }
+ * \code
+ *   void ComplexChoiceExample( void )
+ *   {
+ *       double filelimits[] = {0,1,2};
+ *       UnicodeString filepart[] = {"are no files","is one file","are {2} files"};
+ *       ChoiceFormat* fileform = new ChoiceFormat(filelimits, filepart, 3 );
+ *       UErrorCode success = U_ZERO_ERROR;
+ *       const Format* testFormats[] = { fileform, NULL, NumberFormat::createInstance(success) };
+ *       MessageFormat* pattform = new MessageFormat("There {0} on {1}", success );
+ *       pattform->setFormats( testFormats, 3 );
+ *       Formattable testArgs[] = {0L, "Disk_A", 0L};
+ *       FieldPosition fp(0);
+ *       UnicodeString str;
+ *       for (int32_t i = 0; i &lt; 4; ++i) {
+ *           Formattable fInt(i);
+ *           testArgs[0] = fInt;
+ *           testArgs[2] = testArgs[0];
+ *           str.remove();
+ *           pattform->format(testArgs, 3, str, fp, success );
+ *           cout &lt;&lt; "Output for i=" &lt;&lt; i &lt;&lt; " : " &lt;&lt; str &lt;&lt; endl;
+ *       }
+ *       delete pattform;
+ *       cout &lt;&lt; endl;
+ *   }
+ * \endcode
  * </pre>
  * ChoiceFormat objects may be converted to and from patterns.  The
  * syntax of these patterns is [TODO fill in this section with detail].
@@ -106,13 +114,17 @@
  * You can either do this programmatically, as in the above example,
  * or by using a pattern (see ChoiceFormat for more information) as in:
  * <pre>
- * .       "0#are no files|1#is one file|1&lt;are many files"
+ * \code
+ *        "0#are no files|1#is one file|1&lt;are many files"
+ * \endcode
  * </pre>
  * Here the notation is:
  * <pre>
- * .       &lt;number> "#"  Specifies a limit value.
- * .       &lt;number> "&lt;"  Specifies a limit of nextDouble(&lt;number>).
- * .       &lt;number> ">"  Specifies a limit of previousDouble(&lt;number>).
+ *  \code
+ *        <number> "#"  Specifies a limit value.
+ *        <number> "&lt;"  Specifies a limit of nextDouble(&lt;number>).
+ *        <number> ">"  Specifies a limit of previousDouble(&lt;number>).
+ *  \endcode
  * </pre>
  * Each limit value is followed by a string, which is terminated by
  * a vertical bar character ("|"), except for the last string, which

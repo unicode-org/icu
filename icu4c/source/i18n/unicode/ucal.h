@@ -8,7 +8,10 @@
 
 #include "unicode/utypes.h"
 /**
- * @name Calendar C API
+ * \file
+ * \brief Description of Calendar C API
+ *
+ * <h2>Calendar C API</h2>
  *
  * UCalendar C API is used  for converting between a <code>UDate</code> object
  * and a set of integer fields such as <code>UCAL_YEAR</code>, <code>UCAL_MONTH</code>, 
@@ -31,12 +34,14 @@
  * calendar to be opened and the  timezoneId. 
  * <blockquote>
  * <pre>
+ * \code
  * UCalendar *caldef;
  * UChar *tzId;
  * UErrorCode status;
  * tzId=(UChar*)malloc(sizeof(UChar) * (strlen("PST") +1) );
  * u_uastrcpy(tzId, "PST");
  * caldef=ucal_open(tzID, u_strlen(tzID), NULL, UCAL_TRADITIONAL, &status);
+ * \endcode
  * </pre>
  * </blockquote>
  *
@@ -67,11 +72,13 @@
  *
  * <blockquote>
  * <pre>
+ * \code
  * UCAL_MONTH + UCAL_DAY_OF_MONTH
  * UCAL_MONTH + UCAL_WEEK_OF_MONTH + UCAL_DAY_OF_WEEK
  * UCAL_MONTH + UCAL_DAY_OF_WEEK_IN_MONTH + UCAL_DAY_OF_WEEK
  * UCAL_DAY_OF_YEAR
  * UCAL_DAY_OF_WEEK + UCAL_WEEK_OF_YEAR
+ * \endcode
  * </pre>
  * </blockquote>
  *
@@ -79,8 +86,10 @@
  *
  * <blockquote>
  * <pre>
+ * \code
  * UCAL_HOUR_OF_DAY
  * UCAL_AM_PM + UCAL_HOUR
+ * \endcode
  * </pre>
  * </blockquote>
  *
