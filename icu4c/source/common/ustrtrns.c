@@ -32,7 +32,7 @@
 #include "ustr_imp.h"
 
 
-static UBool 
+U_INLINE static UBool 
 u_growAnyBufferFromStatic(void *context,
                        void **pBuffer, int32_t *pCapacity, int32_t reqCapacity,
                        int32_t length, int32_t size) {
@@ -153,7 +153,6 @@ u_strToUTF32(UChar32 *dest,
     const UChar* pSrcLimit;
     int32_t reqLength=0;
     uint32_t ch=0;
-    int32_t index=0;
     uint32_t *pDest = (uint32_t *)dest;
     uint32_t *pDestLimit = pDest + destCapacity;
     UChar ch2=0;
@@ -289,7 +288,7 @@ u_strFromUTF8(UChar *dest,
     return dest;
 }
 
-U_INLINE uint8_t *
+U_INLINE static uint8_t *
 _appendUTF8(uint8_t *pDest, UChar32 c) {
     /* c<=0x7f is handled by the caller, here it is 0x80<=c<=0x10ffff */
     if((c)<=0x7ff) {
@@ -428,7 +427,7 @@ _strToWCS(wchar_t *dest,
     
     const UChar *pSrcLimit =NULL;
     const UChar *pSrc = src;
-    pSrcLimit = pSrc + srcLength;
+
     conv = u_getDefaultConverter(pErrorCode);
     
     if(U_FAILURE(*pErrorCode)){
@@ -438,6 +437,8 @@ _strToWCS(wchar_t *dest,
     if(srcLength == -1){
         srcLength = u_strlen(pSrc);
     }
+    
+    pSrcLimit = pSrc + srcLength;
 
     for(;;) {
         /* reset the error state */
@@ -496,7 +497,6 @@ _strToWCS(wchar_t *dest,
         int32_t nulLen = 0;
         int32_t remaining = intTargetCapacity;
         wchar_t* pIntTarget=intTarget;
-        wchar_t* pIntTargetLimit = intTarget+intTargetCapacity;
         tempBuf = saveBuf;
         
         /* now convert the mbs to wcs */
