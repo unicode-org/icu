@@ -636,6 +636,7 @@ public:
      * @return the number of milliseconds the time is
      * advanced with respect to standard time when the daylight savings rules
      * are in effect. A positive number, typically one hour (3600000).
+     * @stable ICU 2.0
      */
     int32_t getDSTSavings(void) const;
 

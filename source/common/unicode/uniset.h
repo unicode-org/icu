@@ -801,6 +801,7 @@ public:
      * If this set already any particular character, it has no effect on that character.
      * @param s the source string
      * @return this object, for chaining
+     * @draft ICU 2.4
      */
     UnicodeSet& removeAll(const UnicodeString& s);
 
@@ -915,6 +916,7 @@ public:
      * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
      * @param s the string to complement
      * @return this object, for chaining
+     * @draft ICU 2.4
      */
     UnicodeSet& complement(const UnicodeString& s);
 
