@@ -7,10 +7,6 @@
 
 zh {
     Version{ "2.0" }
-    Types{	
-        PINYIN { "\u62FC\u97F3\u987a\u5e8f" }
-        STROKE { "\u7b14\u5212\u987a\u5e8f" }   // Simplified Chinese name.
-    }
     AmPmMarkers { 
         "\u4E0A\u5348",
         "\u4E0B\u5348",
@@ -1016,14 +1012,24 @@ zh {
         ZM { "\u8D5E\u6BD4\u4E9A" }
         ZW { "\u6D25\u5DF4\u5E03\u97E6" }
     }
+    // Currency display names
+    Currencies {
+        CNY { "\uFFE5", "CNY" }
+        HKD { "HK$", "HKD" }
+        JPY { "JPY", "JPY" }
+        KRW { "\uFFE6", "KRW" }
+        MOP { "P",   "MOP" }
+        SGD { "S$",  "SGD" }
+        TWD { "NT$", "TWD" }
+    }
     DayAbbreviations { 
-        "\u661F\u671F\u65E5",
-        "\u661F\u671F\u4E00",
-        "\u661F\u671F\u4E8C",
-        "\u661F\u671F\u4E09",
-        "\u661F\u671F\u56DB",
-        "\u661F\u671F\u4E94",
-        "\u661F\u671F\u516D",
+        "\u65E5",
+        "\u4E00",
+        "\u4E8C",
+        "\u4E09",
+        "\u56DB",
+        "\u4E94",
+        "\u516D",
     }
     DayNames { 
         "\u661F\u671F\u65E5",
@@ -1079,7 +1085,9 @@ zh {
         gl { "\u52A0\u5229\u897F\u4E9A\u6587" }
         gn { "\u74DC\u62C9\u5C3C\u6587" }
         gu { "\u53E4\u52A0\u62C9\u63D0\u6587" }
+		gv { "\u9a6c\u6069\u5c9b\u6587" }
         ha { "\u8C6A\u6492\u6587" }
+		haw { "\u590f\u5a01\u5937\u6587" }
         he { "\u5E0C\u4F2F\u6765\u6587" }
         hi { "\u5370\u5730\u6587" }
         hr { "\u514B\u7F57\u5730\u4E9A\u6587" }
@@ -1103,6 +1111,7 @@ zh {
         ko { "\u97e9\u6587" }
         ks { "\u514B\u4EC0\u7C73\u5C14\u6587" }
         ku { "\u5E93\u5C14\u5FB7\u6587" }
+		kw { "\u51ef\u5c14\u7279\u6587" }
         ky { "\u5409\u5C14\u5409\u65AF\u6587" }
         la { "\u62C9\u4E01\u6587" }
         ln { "\u6797\u52A0\u62C9\u6587" }
@@ -1120,9 +1129,11 @@ zh {
         mt { "\u9A6C\u8033\u4ED6\u6587" }
         my { "\u7F05\u7538\u6587" }
         na { "\u7459\u9C81\u6587" }
+		nb { "\u632a\u5a01\u535a\u514b\u9a6c\u5c14\u6587" }
         ne { "\u5C3C\u6CCA\u5C14\u6587" }
         nl { "\u8377\u5170\u6587" }
         no { "\u632A\u5A01\u6587" }
+		nn { "\u632a\u5a01\u5c3c\u8bfa\u65af\u514b\u6587" }
         oc { "\u5965\u897F\u5766\u6587" }
         om { "\u963F\u66FC\u6587" }
         or { "\u6B27\u91CC\u4E9A\u6587" }
@@ -1180,6 +1191,7 @@ zh {
         zh { "\u4E2D\u6587" }
         zu { "\u7956\u9C81\u6587" }
     }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     MonthAbbreviations { 
         "\u4E00\u6708",
         "\u4E8C\u6708",
@@ -1207,16 +1219,6 @@ zh {
         "\u5341\u6708",
         "\u5341\u4E00\u6708",
         "\u5341\u4E8C\u6708",
-    }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
     }
     LocaleScript:array { "Hani" }
     ExemplarCharacters{
@@ -1815,15 +1817,23 @@ zh {
         "\u9F39\u9F3B\u9F3D-\u9F3E\u9F44\u9F50-\u9F51\u9F7F-\u9F80"
         "\u9F83-\u9F8C\u9F99-\u9F9B\u9F9F-\u9FA0]"
     }
-
-    // Currency display names
-    Currencies {
-        CNY { "\uFFE5", "CNY" }
-        HKD { "HK$", "HKD" }
-        JPY { "JPY", "JPY" }
-        KRW { "\uFFE6", "KRW" }
-        MOP { "P",   "MOP" }
-        SGD { "S$",  "SGD" }
-        TWD { "NT$", "TWD" }
+    Types{
+        PINYIN { "\u62FC\u97F3\u987a\u5e8f" }
+        STROKE { "\u7b14\u5212\u987a\u5e8f" }   // Simplified Chinese name.
+        TRADITIONAL { "\u4f20\u7edf\u5386\u6cd5" }  // Spanish traditional sorting
+    }
+    Variants{
+        EURO    { "\u6b27\u5143" }
+        PREEURO { "\u65e7\u5e01" }
+        REVISED { "\u5df2\u4fee\u8ba2" }
+    }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
     }
 }
