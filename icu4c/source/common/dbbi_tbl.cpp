@@ -63,7 +63,7 @@ DictionaryBasedBreakIteratorTables::lookupCategory(UChar c,
     // categories represented in the dictionary.  If it is, bump the dictionary-
     // character count.
     int32_t result = RuleBasedBreakIteratorTables::lookupCategory(c, bi);
-    if (result != RuleBasedBreakIterator::RBBI_IGNORE && categoryFlags[result]) {
+    if (result != RuleBasedBreakIterator::UBRK_IGNORE && categoryFlags[result]) {
         ((DictionaryBasedBreakIterator*)bi)->bumpDictionaryCharCount();
     }
     return result;

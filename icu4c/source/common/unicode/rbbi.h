@@ -189,7 +189,7 @@ protected:
     /**
      * A token used as a character-category value to identify ignore characters
      */
-    static const int8_t RBBI_IGNORE;
+    static const int8_t UBRK_IGNORE;
     friend class DictionaryBasedBreakIteratorTables;
 
 private:

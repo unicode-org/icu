@@ -368,7 +368,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     text->setIndex(startPos);
     UChar c = text->current();
     int category = dictionaryTables->lookupCategory(c, this);
-    while (category == RBBI_IGNORE || !dictionaryTables->categoryFlags[category]) {
+    while (category == UBRK_IGNORE || !dictionaryTables->categoryFlags[category]) {
         c = text->next();
         category = dictionaryTables->lookupCategory(c, this);
     }
