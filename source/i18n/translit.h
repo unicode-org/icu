@@ -9,13 +9,12 @@
 #define TRANSLIT_H
 
 #include "unistr.h"
-#include "umutex.h"
-#include "uvector.h"
 
 class Replaceable;
 class UnicodeFilter;
 class TransliterationRuleData;
 struct UHashtable;
+class UVector;
 
 /**
  * <code>Transliterator</code> is an abstract class that

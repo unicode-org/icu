@@ -8,6 +8,8 @@
 #ifndef UNIFILT_H
 #define UNIFILT_H
 
+#include "utypes.h"
+
 /**
  * <code>UnicodeFilter</code> defines a protocol for selecting a
  * subset of the full range (U+0000 to U+FFFF) of Unicode characters.
