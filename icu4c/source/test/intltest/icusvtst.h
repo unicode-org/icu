@@ -22,7 +22,7 @@ class ICUServiceTest : public IntlTest
 {    
  public:
   ICUServiceTest();
-  ~ICUServiceTest();
+  virtual ~ICUServiceTest();
 
   void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL);
 
