@@ -634,7 +634,7 @@ generateData(const char *dataDir) {
     long dataLength;
     int16_t token;
 
-    pData=udata_create(DATA_TYPE, DATA_NAME, dataDir, &dataInfo,
+    pData=udata_create(dataDir, DATA_TYPE, DATA_NAME, &dataInfo,
                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gennames: unable to create data memory, error %d\n", errorCode);

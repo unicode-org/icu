@@ -40,6 +40,9 @@ typedef struct UNewDataMemory UNewDataMemory;
  *
  * See udata.h .
  *
+ * @param dir A string that specifies the directory where the data will be
+ *            written. If <code>NULL</code>, then
+ *            <code>u_getDataDirectory</code> is used.
  * @param type A string that specifies the type of data to be written.
  *             For example, resource bundles are written with type "res",
  *             conversion tables with type "cnv".
@@ -54,7 +57,7 @@ typedef struct UNewDataMemory UNewDataMemory;
  * @param pErrorCode An ICU UErrorCode parameter. It must not be <code>NULL</code>.
  */
 U_CAPI UNewDataMemory * U_EXPORT2
-udata_create(const char *type, const char *name, const char *dir,
+udata_create(const char *dir, const char *type, const char *name,
              const UDataInfo *pInfo,
              const char *comment,
              UErrorCode *pErrorCode);

@@ -149,7 +149,7 @@ main(int argc, char *argv[]) {
     }
 
     /* create the output file */
-    out=udata_create(DATA_TYPE, COMMON_DATA_NAME, destdir, &dataInfo, U_COPYRIGHT_STRING, &errorCode);
+    out=udata_create(destdir, DATA_TYPE, COMMON_DATA_NAME, &dataInfo, U_COPYRIGHT_STRING, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gencmn: unable to open output file - error %s\n", u_errorName(errorCode));
         exit(errorCode);

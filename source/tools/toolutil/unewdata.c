@@ -29,7 +29,7 @@ struct UNewDataMemory {
 };
 
 U_CAPI UNewDataMemory * U_EXPORT2
-udata_create(const char *type, const char *name, const char *dir,
+udata_create(const char *dir, const char *type, const char *name,
              const UDataInfo *pInfo,
              const char *comment,
              UErrorCode *pErrorCode) {
