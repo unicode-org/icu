@@ -94,7 +94,7 @@ public:
      * Constructs a transliterator.
      * @param pattern The pattern for this transliterator.  See
      * applyPattern() for pattern syntax.
-     * @param uppercase if true, the four hex digits will be
+     * @param isUppercase if true, the four hex digits will be
      * converted to uppercase; otherwise they will be lowercase.
      * @param adoptedFilter the filter for this transliterator, or
      * NULL if none.  Adopted by this transliterator.

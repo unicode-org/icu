@@ -26,6 +26,7 @@ class U_I18N_API LowercaseTransliterator : public Transliterator {
 
     /**
      * Constructs a transliterator.
+     * @param loc the given locale.
      */
     LowercaseTransliterator(const Locale& loc = Locale::getDefault());
 
@@ -46,6 +47,7 @@ class U_I18N_API LowercaseTransliterator : public Transliterator {
 
     /**
      * Transliterator API.
+     * @return a copy of the object.
      */
     Transliterator* clone(void) const;
 
@@ -67,6 +69,12 @@ class U_I18N_API LowercaseTransliterator : public Transliterator {
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
+     * @param text        the buffer holding transliterated and
+     *                    untransliterated text
+     * @param offset      the start and limit of the text, the position
+     *                    of the cursor, and the start and limit of transliteration.
+     * @param incremental if true, assume more text may be coming after
+     *                    pos.contextLimit.  Otherwise, assume the text is complete.
      */
     virtual void handleTransliterate(Replaceable& text,
                                      UTransPosition& offsets, 

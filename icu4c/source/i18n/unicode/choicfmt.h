@@ -292,12 +292,16 @@ public:
 
     /**
      * Copy constructor.
+     *
+     * @param   ChoiceFormat object to be copied from
      * @stable
      */
     ChoiceFormat(const ChoiceFormat&);
 
     /**
      * Assignment operator.
+     *
+     * @param   ChoiceFormat object to be copied
      * @stable
      */
     const ChoiceFormat& operator=(const ChoiceFormat&);
@@ -311,6 +315,8 @@ public:
     /**
      * Clone this Format object polymorphically. The caller owns the
      * result and should delete it when done.
+     *
+     * @return a copy of this object
      * @stable
      */
     virtual Format* clone(void) const;
@@ -318,6 +324,9 @@ public:
     /**
      * Return true if the given Format objects are semantically equal.
      * Objects of different subclasses are considered unequal.
+     *
+     * @param other    ChoiceFormat object to be compared 
+     * @return         true if other is the same as this. 
      * @stable
      */
     virtual UBool operator==(const Format& other) const;
@@ -348,6 +357,9 @@ public:
                              UErrorCode& status);
     /**
      * Gets the pattern.
+     * 
+     * @param pattern    Output param which will recieve the pattern
+     * @return    A reference to 'pattern'
      * @stable
      */
     virtual UnicodeString& toPattern(UnicodeString &pattern) const;
@@ -415,6 +427,8 @@ public:
 
     /**
      * Get the limits passed in the constructor.
+     *
+     * @param count    The size of the limits arrays
      * @return the limits.
      * @stable
      */
@@ -423,12 +437,16 @@ public:
     /**
      * Get the limit booleans passed in the constructor.  The caller
      * must not delete the result.
+     *
+     * @param count   The size of the arrays
      * @return the closures
      */
     virtual const UBool* getClosures(int32_t& count) const;
 
     /**
      * Get the formats passed in the constructor.
+     *
+     * @param count   The size of the arrays
      * @return the formats.
      * @stable
      */
@@ -451,6 +469,12 @@ public:
    /**
     * Format a int_32t number using this object's choices.
     *
+    * @param number     The value to be formatted.
+    * @param toAppendTo The string to append the formatted string to.
+    *                   This is an output parameter.
+    * @param pos        On input: an alignment field, if desired.
+    *                   On output: the offsets of the alignment field.
+    * @return           A reference to 'toAppendTo'.
     * @stable
     */
     virtual UnicodeString& format(int32_t number,
@@ -459,6 +483,15 @@ public:
    /**
     * Format an array of objects using this object's choices.
     *
+    * @param objs       The array of objects to be formatted.
+    * @param cnt        The size of objs.
+    * @param toAppendTo The string to append the formatted string to.
+    *                   This is an output parameter.
+    * @param pos        On input: an alignment field, if desired.
+    *                   On output: the offsets of the alignment field.
+    * @param success    Output param set to success/failure code on
+    *                   exit. 
+    * @return           A reference to 'toAppendTo'.
     * @stable
     */
     virtual UnicodeString& format(const Formattable* objs,
@@ -469,6 +502,15 @@ public:
    /**
     * Format an object using this object's choices.
     *
+    *
+    * @param obj        The object to be formatted.
+    * @param toAppendTo The string to append the formatted string to.
+    *                   This is an output parameter.
+    * @param pos        On input: an alignment field, if desired.
+    *                   On output: the offsets of the alignment field.
+    * @param status     Output param set to success/failure code on
+    *                   exit. 
+    * @return           A reference to 'toAppendTo'.
     * @stable
     */
     virtual UnicodeString& format(const Formattable& obj,
@@ -478,6 +520,12 @@ public:
 
     /**
      * Redeclared NumberFormat method.
+     *
+     * @param obj        The object to be formatted.
+     * @param result     Output param which will receive the formatted object.
+     * @param status     Output param set to success/failure code on
+     *                   exit. 
+     * @return           A reference to 'result'.
      * @stable
      */
     UnicodeString& format(const Formattable& obj,
@@ -486,6 +534,12 @@ public:
 
     /**
      * Redeclared NumberFormat method.
+     * Format a double number. These methods call the NumberFormat
+     * pure virtual format() methods with the default FieldPosition.
+     *
+     * @param number    The value to be formatted.
+     * @param output    Output param with the formatted string.
+     * @return          A reference to 'output' param.
      * @stable
      */
     UnicodeString& format(  double number,
@@ -493,6 +547,12 @@ public:
 
     /**
      * Redeclared NumberFormat method.
+     * Format a long number. These methods call the NumberFormat
+     * pure virtual format() methods with the default FieldPosition.
+     *
+     * @param number    The value to be formatted.
+     * @param output    Output param with the formatted string.
+     * @return          A reference to 'output' param.
      * @stable
      */
     UnicodeString& format(  int32_t number,
@@ -513,14 +573,29 @@ public:
     * @param parsePosition  The position to start parsing at on input.
     *                       On output, moved to after the last successfully
     *                       parse character. On parse failure, does not change.
-    * @return               A Formattable object of numeric type.  The caller
-    *                       owns this an must delete it.  NULL on failure.
     * @see                  NumberFormat::isParseIntegerOnly
     * @stable
     */
     virtual void parse(const UnicodeString& text,
                        Formattable& result,
                        ParsePosition& parsePosition) const;
+    
+    /**
+    * Return a long if possible (e.g. within range LONG_MAX,
+    * LONG_MAX], and with no decimals), otherwise a double.  If
+    * IntegerOnly is set, will stop at a decimal point (or equivalent;
+    * e.g. for rational numbers "1 2/3", will stop after the 1).
+    * <P>
+    * If no object can be parsed, parsePosition is unchanged, and NULL is
+    * returned.
+    *
+    * @param text           The text to be parsed.
+    * @param result         Formattable to be set to the parse result.
+    *                       If parse fails, return contents are undefined.
+    * @param status         Output param with the formatted string.
+    * @see                  NumberFormat::isParseIntegerOnly
+    * @stable
+    */
     virtual void parse(const UnicodeString& text,
                        Formattable& result,
                        UErrorCode& status) const;
@@ -589,7 +664,6 @@ private:
      * Converts a string to a double value using a default NumberFormat object
      * which is static (shared by all ChoiceFormat instances).
      * @param string the string to be converted with.
-     * @param status error code.
      * @return the converted double number.
      */
     static double stod(const UnicodeString& string);
@@ -597,10 +671,9 @@ private:
     /**
      * Converts a double value to a string using a default NumberFormat object
      * which is static (shared by all ChoiceFormat instances).
-     * @@param value the double number to be converted with.
-     * @@param string the result string.
-     * @@param status error code.
-     * @@return the converted string.
+     * @param value the double number to be converted with.
+     * @param string the result string.
+     * @return the converted string.
      */
     static UnicodeString& dtos(double value, UnicodeString& string);
 
@@ -614,9 +687,11 @@ private:
      * Construct a new ChoiceFormat with the limits and the corresponding formats
      * based on the pattern.
      *
-     * @param pattern   Pattern used to construct object.
-     * @param status    Output param to receive success code.  If the
-     *                  pattern cannot be parsed, set to failure code.
+     * @param newPattern   Pattern used to construct object.
+     * @param parseError   Struct to recieve information on position 
+     *                     of error if an error is encountered.
+     * @param status       Output param to receive success code.  If the
+     *                     pattern cannot be parsed, set to failure code.
      * @stable
      */
     ChoiceFormat(const UnicodeString& newPattern,

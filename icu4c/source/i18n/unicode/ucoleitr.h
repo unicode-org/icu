@@ -109,6 +109,9 @@ ucol_openElements(const UCollator  *coll,
 
 /**
  * get a hash code for a key... Not very useful!
+ * @param key    the given key.
+ * @param length the size of the key array.
+ * @return       the hash code.
  * @stable
  */
 U_CAPI int32_t U_EXPORT2 

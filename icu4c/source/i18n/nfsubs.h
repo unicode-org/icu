@@ -41,7 +41,16 @@ protected:
         const UnicodeString& description,
         UErrorCode& status);
     
+    /**
+     * Get the Ruleset of the object.
+     * @return the Ruleset of the object.
+     */
     const NFRuleSet* getRuleSet() const { return ruleSet; }
+
+    /**
+     * get the NumberFormat of this object.
+     * @return the numberformat of this object.
+     */
     const DecimalFormat* getNumberFormat() const { return numberFormat; }
     
 public:
@@ -53,9 +62,25 @@ public:
         const UnicodeString& description,
         UErrorCode& status);
     
+    /**
+     * Destructor.
+     */
     virtual ~NFSubstitution();
     
+    /**
+     * Return true if the given Format objects are semantically equal.
+     * Objects of different subclasses are considered unequal.
+     * @param rhs    the object to be compared with.
+     * @return       true if the given Format objects are semantically equal.
+     */
     virtual UBool operator==(const NFSubstitution& rhs) const;
+
+    /**
+     * Return true if the given Format objects are semantically unequal.
+     * Objects of different subclasses are considered unequal.
+     * @param rhs    the object to be compared with.
+     * @return       true if the given Format objects are semantically unequal.
+     */
     UBool operator!=(const NFSubstitution& rhs) const { return !operator==(rhs); }
     
     /**
@@ -69,6 +94,7 @@ public:
     
     /**
      * Replaces result with the string describing the substitution.
+     * @param result    Output param which will receive the string.
      */
     virtual void toString(UnicodeString& result) const;
     
@@ -87,6 +113,17 @@ public:
      * position to determine exactly where to insert the new text)
      */
     virtual void doSubstitution(int64_t number, UnicodeString& toInsertInto, int32_t pos) const;
+
+    /**
+     * Performs a mathematical operation on the number, formats it using
+     * either ruleSet or decimalFormat, and inserts the result into
+     * toInsertInto.
+     * @param number The number being formatted.
+     * @param toInsertInto The string we insert the result into
+     * @param pos The position in toInsertInto where the owning rule's
+     * rule text begins (this value is added to this substitution's
+     * position to determine exactly where to insert the new text)
+     */
     virtual void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
     
 protected:
@@ -100,6 +137,16 @@ protected:
      * @return The result of performing the opreration on the number
      */
     virtual int64_t transformNumber(int64_t number) const = 0;
+
+    /**
+     * Subclasses override this function to perform some kind of
+     * mathematical operation on the number.  The result of this operation
+     * is formatted using the rule set or DecimalFormat that this
+     * substitution refers to, and the result is inserted into the result
+     * string.
+     * @param The number being formatted
+     * @return The result of performing the opreration on the number
+     */
     virtual double transformNumber(double number) const = 0;
     
 public:
@@ -161,8 +208,10 @@ public:
      * Calculates an upper bound when searching for a rule that matches
      * this substitution.  Rules with base values greater than or equal
      * to upperBound are not considered.
-     * @param oldUpperBound The current upper-bound setting.  The new
-     * upper bound can't be any higher.
+     * @param oldUpperBound    The current upper-bound setting.  The new
+     *                         upper bound can't be any higher.
+     * @return                 the upper bound when searching for a rule that matches
+     *                         this substitution.
      */
     virtual double calcUpperBound(double oldUpperBound) const = 0;
     

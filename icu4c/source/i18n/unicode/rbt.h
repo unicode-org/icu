@@ -351,6 +351,9 @@ public:
      friend class TransliteratorRegistry; // to access TransliterationRuleData convenience ctor
     /**
      * Covenience constructor.
+     * @param id            the id for the transliterator.
+     * @param theData       the rule data for the transliterator.
+     * @param adoptedFilter the filter for the transliterator
      */
     RuleBasedTransliterator(const UnicodeString& id,
                             const TransliterationRuleData* theData,
@@ -361,6 +364,9 @@ public:
 
     /**
      * Internal constructor.
+     * @param id            the id for the transliterator.
+     * @param theData       the rule data for the transliterator.
+     * @param isDataAdopted determine who will own the 'data' object. True, the caller should not delete 'data'.
      */
     RuleBasedTransliterator(const UnicodeString& id,
                             TransliterationRuleData* data,
@@ -470,8 +476,13 @@ private:
 
 /**
  * Constructs a new transliterator from the given rules.
- * @param rules rules, separated by ';'
- * @param direction either FORWARD or REVERSE.
+ * @param id            the id for the transliterator.
+ * @param rules         rules, separated by ';'
+ * @param direction     either FORWARD or REVERSE.
+ * @param adoptedFilter the filter for this transliterator.
+ * @param parseError    Struct to recieve information on position 
+ *                      of error if an error is encountered
+ * @param status        Output param set to success/failure code.
  * @exception IllegalArgumentException if rules are malformed
  * or direction is invalid.
  */
@@ -488,8 +499,11 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
 
 /**
  * Constructs a new transliterator from the given rules.
- * @param rules rules, separated by ';'
- * @param direction either FORWARD or REVERSE.
+ * @param id            the id for the transliterator.
+ * @param rules         rules, separated by ';'
+ * @param direction     either FORWARD or REVERSE.
+ * @param adoptedFilter the filter for this transliterator.
+ * @param status        Output param set to success/failure code.
  * @exception IllegalArgumentException if rules are malformed
  * or direction is invalid.
  */

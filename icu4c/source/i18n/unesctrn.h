@@ -52,6 +52,8 @@ class U_I18N_API UnescapeTransliterator : public Transliterator {
 
     /**
      * Constructor.  Takes the encoded spec array (does not adopt it).
+     * @param ID   the string identifier for this transliterator
+     * @param spec the encoded spec array
      */
     UnescapeTransliterator(const UnicodeString& ID,
                            const UChar *spec);
@@ -89,6 +91,12 @@ class U_I18N_API UnescapeTransliterator : public Transliterator {
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
+     * @param text        the buffer holding transliterated and
+     *                    untransliterated text
+     * @param offset      the start and limit of the text, the position
+     *                    of the cursor, and the start and limit of transliteration.
+     * @param incremental if true, assume more text may be coming after
+     *                    pos.contextLimit.  Otherwise, assume the text is complete.
      */
     void handleTransliterate(Replaceable& text, UTransPosition& offset,
                              UBool isIncremental) const;

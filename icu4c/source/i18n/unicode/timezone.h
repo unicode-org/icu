@@ -124,6 +124,7 @@ public:
     /**
      * The GMT time zone has a raw offset of zero and does not use daylight
      * savings time. This is a commonly used time zone.
+     * @return the GMT time zone.
      */
     static const TimeZone* getGMT(void);
 
@@ -307,6 +308,7 @@ public:
      * @param day        The reference date's day-in-month (1-based)
      * @param dayOfWeek  The reference date's day-of-week (1-based; 1 is Sunday)
      * @param millis     The reference date's milliseconds in day, UTT (NOT local time).
+     * @param status     Output param to filled in with a success or an error.
      * @return           The offset in milliseconds to add to GMT to get local time.
      * @stable
      */
@@ -329,6 +331,7 @@ public:
      * @param dayOfWeek the day-of-week of the given date.
      * @param milliseconds the millis in day in <em>standard</em> local time.
      * @param monthLength the length of the given month in days.
+     * @param status     Output param to filled in with a success or an error.
      * @return the offset to add *to* GMT to get local time.
      * @stable
      */
@@ -358,7 +361,7 @@ public:
      * Fills in "ID" with the TimeZone's ID.
      *
      * @param ID  Receives this TimeZone's ID.
-     * @return    "ID"
+     * @return    A reference to 'ID'
      * @stable
      */
     UnicodeString& getID(UnicodeString& ID) const;
@@ -394,7 +397,8 @@ public:
      * If the display name is not available for the locale,
      * then this method returns a string in the format
      * <code>GMT[+-]hh:mm</code>.
-     * @return the human-readable name of this time zone in the default locale.
+     * @param result the human-readable name of this time zone in the default locale.
+     * @return       A reference to 'result'.
      * @stable
      */
     UnicodeString& getDisplayName(UnicodeString& result) const;
@@ -407,8 +411,9 @@ public:
      * then this method returns a string in the format
      * <code>GMT[+-]hh:mm</code>.
      * @param locale the locale in which to supply the display name.
-     * @return the human-readable name of this time zone in the given locale
-     * or in the default locale if the given locale is not recognized.
+     * @param result the human-readable name of this time zone in the given locale
+     *               or in the default locale if the given locale is not recognized.
+     * @return       A reference to 'result'.
      * @stable
      */
     UnicodeString& getDisplayName(const Locale& locale, UnicodeString& result) const;
@@ -421,7 +426,8 @@ public:
      * <code>GMT[+-]hh:mm</code>.
      * @param daylight if true, return the daylight savings name.
      * @param style either <code>LONG</code> or <code>SHORT</code>
-     * @return the human-readable name of this time zone in the default locale.
+     * @param result the human-readable name of this time zone in the default locale.
+     * @return       A reference to 'result'.
      * @stable
      */
     UnicodeString& getDisplayName(UBool daylight, EDisplayType style, UnicodeString& result) const;
@@ -435,8 +441,9 @@ public:
      * @param daylight if true, return the daylight savings name.
      * @param style either <code>LONG</code> or <code>SHORT</code>
      * @param locale the locale in which to supply the display name.
-     * @return the human-readable name of this time zone in the given locale
-     * or in the default locale if the given locale is not recognized.
+     * @param result the human-readable name of this time zone in the given locale
+     *               or in the default locale if the given locale is not recognized.
+     * @return       A refence to 'result'.
      * @stable
      */
     UnicodeString& getDisplayName(UBool daylight, EDisplayType style, const Locale& locale, UnicodeString& result) const;
@@ -453,6 +460,7 @@ public:
      * Queries if the given date is in daylight savings time in
      * this time zone.
      * @param date the given UDate.
+     * @param status Output param filled in with success/error code.
      * @return true if the given date is in daylight savings time,
      * false, otherwise.
      * @deprecated Remove after 2000-dec-31. Use useDaylightTime() instead.
@@ -518,18 +526,21 @@ protected:
 
     /**
      * Construct a timezone with a given ID.
+     * @param id a system time zone ID
      * @stable
      */
     TimeZone(const UnicodeString &id);
 
     /**
      * Copy constructor.
+     * @param source the object to be copied.
      * @stable
      */
     TimeZone(const TimeZone& source);
 
     /**
      * Default assignment operator.
+     * @param rigth the object to be copied.
      * @stable
      */
     TimeZone& operator=(const TimeZone& right);
@@ -547,6 +558,13 @@ private:
     static void             initDefault(void);
 
     // See source file for documentation
+    /**
+     * Lookup the given name in our system zone table.  If found,
+     * instantiate a new zone of that name and return it.  If not
+     * found, return 0.
+     * @param name tthe given name of a system time zone.
+     * @return the timezone indicated by the 'name'.
+     */
     static TimeZone*        createSystemTimeZone(const UnicodeString& name);
 
     UnicodeString           fID;    // this time zone's ID

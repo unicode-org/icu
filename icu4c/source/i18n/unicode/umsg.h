@@ -421,7 +421,7 @@ umsg_open(  const UChar     *pattern,
 /**
  * Close a UMessageFormat.
  * Once closed, a UMessageFormat may no longer be used.
- * @param fmt The formatter to close.
+ * @param format The formatter to close.
  * @stable
  */
 U_CAPI void U_EXPORT2 
@@ -452,7 +452,8 @@ umsg_setLocale(UMessageFormat *fmt,
 /**
  * Gets the locale. This locale is used for fetching default number or date
  * format information.
- * @param The formatter to querry
+ * @param fmt The formatter to querry
+ * @return the locale.
  * @stable
  */
 U_CAPI const char*  U_EXPORT2 
@@ -484,7 +485,8 @@ umsg_applyPattern( UMessageFormat *fmt,
  * @param resultLength The maximum size of result.
  * @param status       Output param set to success/failure code on
  *                     exit. If the pattern is invalid, this will be
- *                     set to a failure result.   
+ *                     set to a failure result.  
+ * @return the pattern of the format
  * @draft
  */
 U_CAPI int32_t  U_EXPORT2 

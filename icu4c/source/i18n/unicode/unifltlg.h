@@ -59,8 +59,8 @@ public:
      * circuit AND of the result of the two given filters.  That is,
      * if <tt>f.contains()</tt> is <tt>false</tt>, then <tt>g.contains()</tt>
      * is not called, and <tt>contains()</tt> returns <tt>false</tt>.
-     * @param f may be NULL; this argument is adopted
-     * @param g may be NULL; this argument is adopted
+     * @param adoptedF may be NULL; this argument is adopted
+     * @param adoptedG may be NULL; this argument is adopted
      * @result will be NULL if and only if f == g == NULL
      */
     static UnicodeFilter* createAdoptingAnd(UnicodeFilter* adoptedF,

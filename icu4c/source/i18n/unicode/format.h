@@ -92,6 +92,9 @@ public:
     /**
      * Return true if the given Format objects are semantically equal.
      * Objects of different subclasses are considered unequal.
+     * @param other    the object to be compared with.
+     * @return         Return true if the given Format objects are semantically equal.
+     *                 Objects of different subclasses are considered unequal.
      * @stable
      */
     virtual UBool operator==(const Format& other) const = 0;
@@ -99,6 +102,8 @@ public:
     /**
      * Return true if the given Format objects are not semantically
      * equal.
+     * @param other    the object to be compared with.
+     * @return         Return true if the given Format objects are not semantically.
      * @stable
      */
     UBool operator!=(const Format& other) const { return !operator==(other); }
@@ -106,6 +111,7 @@ public:
     /**
      * Clone this object polymorphically.  The caller is responsible
      * for deleting the result when done.
+     * @return    A copy of the object
      * @stable
      */
     virtual Format* clone() const = 0;

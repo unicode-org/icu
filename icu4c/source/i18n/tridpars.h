@@ -241,6 +241,7 @@ class TransliteratorIDParser /* not : public UObject because all methods are sta
      * @param insert Transliterator to insert, or null if none.
      * @param insertIndex index from 0..list.size()-1, at which
      * to place 'insert', or -1 if none.
+     * @param ec Output param to receive a success or an error code.
      * @return new value of insertIndex.  The index will shift if
      * there are empty items, like "(Lower)", with indices less than
      * insertIndex.
@@ -255,6 +256,12 @@ class TransliteratorIDParser /* not : public UObject because all methods are sta
      * S-T/V, or S/V-T.  If the source is missing, return a source of
      * ANY.
      * @param id the id string, in any of several forms
+     * @param source          the given source.
+     * @param target          the given target.
+     * @param variant         the given variant
+     * @param isSourcePresent If TRUE then the source is present. 
+     *                        If the source is not present, ANY will be
+     *                        given as the source, and isSourcePresent will be null
      * @return an array of 4 strings: source, target, variant, and
      * isSourcePresent.  If the source is not present, ANY will be
      * given as the source, and isSourcePresent will be null.  Otherwise
@@ -349,9 +356,11 @@ class TransliteratorIDParser /* not : public UObject because all methods are sta
                                 UBool allowFilter);
 
     /**
-     * Givens a Spec object, convert it to a SingleID object.  The
+     * Givens a Specs object, convert it to a SingleID object.  The
      * Spec object is a more unprocessed parse result.  The SingleID
      * object contains information about canonical and basic IDs.
+     * @param specs the given Specs object.
+     * @param dir   either FORWARD or REVERSE.
      * @return a SingleID; never returns null.  Returned object always
      * has 'filter' field of null.
      */
@@ -361,6 +370,7 @@ class TransliteratorIDParser /* not : public UObject because all methods are sta
      * Given a Specs object, return a SingleID representing the
      * special inverse of that ID.  If there is no special inverse
      * then return null.
+     * @param specs the given Specs.
      * @return a SingleID or null.  Returned object always has
      * 'filter' field of null.
      */
@@ -368,6 +378,8 @@ class TransliteratorIDParser /* not : public UObject because all methods are sta
 
     /**
      * Glue method to get around access problems in C++.
+     * @param id the id string for the transliterator, in any of several forms
+     * @param canonID the given canonical ID
      */
     static Transliterator* createBasicInstance(const UnicodeString& id,
                                                const UnicodeString* canonID);

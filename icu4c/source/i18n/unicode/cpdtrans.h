@@ -59,7 +59,7 @@ public:
      * objects
      * @param transliteratorCount The number of
      * <code>Transliterator</code> objects in transliterators.
-     * @param filter the filter.  Any character for which
+     * @param adoptedFilter the filter.  Any character for which
      * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.

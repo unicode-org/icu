@@ -39,11 +39,18 @@ public:
 
     /**
      * Transliterator API.
+     * @return A copy of the object.
      */
     Transliterator* clone(void) const;
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
+     * @param text          the buffer holding transliterated and
+     *                      untransliterated text
+     * @param offset        the start and limit of the text, the position
+     *                      of the cursor, and the start and limit of transliteration.
+     * @param incremental   if true, assume more text may be coming after
+     *                      pos.contextLimit. Otherwise, assume the text is complete.
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;

@@ -84,15 +84,27 @@ public:
 
 public:
 
+    /**
+     * Constructor
+     * @param status Output param set to success/failure code on exit.
+     */
     TransliterationRuleData(UErrorCode& status);
 
+    /**
+     * Copy Constructor
+     */
     TransliterationRuleData(const TransliterationRuleData&);
 
+    /**
+     * destructor
+     */
     ~TransliterationRuleData();
 
     /**
      * Given a stand-in character, return the UnicodeFunctor that it
      * represents, or NULL if it doesn't represent anything.
+     * @param standIn    the given stand-in character.
+     * @return           the UnicodeFunctor that 'standIn' represents
      */
     UnicodeFunctor* lookup(UChar32 standIn) const;
 
@@ -100,6 +112,8 @@ public:
      * Given a stand-in character, return the UnicodeMatcher that it
      * represents, or NULL if it doesn't represent anything or if it
      * represents something that is not a matcher.
+     * @param standIn    the given stand-in character.
+     * @return           return the UnicodeMatcher that 'standIn' represents
      */
     UnicodeMatcher* lookupMatcher(UChar32 standIn) const;
 
@@ -107,6 +121,8 @@ public:
      * Given a stand-in character, return the UnicodeReplacer that it
      * represents, or NULL if it doesn't represent anything or if it
      * represents something that is not a replacer.
+     * @param standIn    the given stand-in character.
+     * @return           return the UnicodeReplacer that 'standIn' represents
      */
     UnicodeReplacer* lookupReplacer(UChar32 standIn) const;
 
