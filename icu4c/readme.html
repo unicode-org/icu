@@ -31,7 +31,7 @@
     <h1>International Components for Unicode<br>
      ICU 2.1 ReadMe</h1>
 
-    <p>Version: 2002-Apr-04<br>
+    <p>Version: 2002-Apr-07<br>
      Copyright &copy; 1997-2002 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -100,7 +100,7 @@
 
       <li>Character set conversions, with support for over 200 codepages</li>
 
-      <li>Locale data for more than 160 locales</li>
+      <li>Locale data for more than 220 locales</li>
 
       <li>Text collation (sorting) based on the Unicode Collation Algorithm
       (=ISO 14651), customizable and tailored for national standards</li>
@@ -187,7 +187,7 @@
       </tr>
 
       <tr>
-        <td>Contacts &amp; Bug Reports/Feature Requests</td>
+        <td>Contacts and Bug Reports/Feature Requests</td>
 
         <td><a href=
         "http://oss.software.ibm.com/icu/archives/">http://oss.software.ibm.com/icu/archives/</a></td>
@@ -202,7 +202,7 @@
     <p>The following list concentrates on changes that affect existing
     applications migrating from previous ICU releases. For more news about this
     release, see the <a href=
-    "http://oss.software.ibm.com/icu/download/2.0/">ICU 2.0 download
+    "http://oss.software.ibm.com/icu/download/2.1/">ICU 2.1 download
     page</a>.</p>
 
     <h3>Support for Unicode 3.1.1</h3>
@@ -218,54 +218,9 @@
     pairs). Especially, normalization is revamped for support of supplementary
     characters and higher performance.</p>
 
-    <h3>Euro transition</h3>
-
-    <p>Locale data for countries that are switching their national currencies
-    to the Euro is updated to use the Euro symbol and appropriate currency
-    formatting. The old data is available in _PREEURO locale variants. The
-    _EURO variant selector can still be used to unambiguously get Euro currency
-    symbol formatting. For some time around the transition, software should
-    explicitly specify _PREEURO and _EURO variants to make sure to get the
-    intended currency format.</p>
-
-    <p>For more on this topic see the <a href=
-    "http://www.ibm.com/developerworks/unicode/library/u-euro/">developerWorks
-    article "Are you really ready for the Euro?"</a>.</p>
-
-    <h3>API changes</h3>
-
-    <p>Functions that take C-style string input arguments with const UChar *src
-    and int32_t srcLength now consistently treat srcLength==-1 to mean that the
-    input string is NUL-terminated and get srcLength=u_strlen(src).</p>
-
-    <p>Functions that take C-style string output arguments with UChar *dest and
-    int32_t destCapacity now handle NUL-termination of the output string
-    consistently. If the output length is equal to destCapacity, then dest is
-    filled with the output string and a warning code is set. For details about
-    string handling see the <a href=
-    "http://oss.software.ibm.com/icu/userguide/strings.html">User's Guide
-    Strings chapter</a>.</p>
-
-    <p>Some APIs have been <i>deprecated</i> for a long time (more than a year)
-    and have been removed now.<br>
-     Some other APIs have been marked as <i>deprecated</i> because they are
-    replaced by improved APIs; the newly deprecated APIs will be available for
-    another year. In particular, the C++ classes UnicodeConverter, Unicode, and
-    BiDi are deprecated in favor of the equally powerful C APIs.<br>
-     A few <i>draft</i> APIs have changed, especially for transliteration.</p>
-
-    <p>APIs that take a rules or pattern string (for collation,
-    transliteration, message formats, etc.) now also take a
-    <code>UParseError</code> structure that is filled with useful debugging
-    information when a rule syntax error is detected. This makes it easier in
-    large rules to find problems. As a result, the signatures of some functions
-    have changed. The old signatures will be available for about a year by
-    #defining a constant. See affected header files for details.</p>
-
-    <p>The C++ Normalizer class had a partially broken model for iterative
-    normalization; this is redone in a more consistent way. See the <a href=
-    "http://oss.software.ibm.com/icu/apiref/class_Normalizer.html">Normalizer
-    API documentation</a> for details.</p>
+    <p>ICU 2.1 also includes <a
+    href="http://www.unicode.org/versions/corrigendum3.html">Corrigendum #3:
+    U+F951 Normalization</a>.
 
     <h3>Memory and resource cleanup</h3>
 
@@ -281,24 +236,6 @@
     <code>u_cleanup()</code> will then release all of ICU's internal memory.
     The ICU libraries can then even be unloaded cleanly without shutting down
     the process.</p>
-
-    <h3>ICU versioning - C++ namespaces</h3>
-
-    <p>Beginning with ICU 2.0, multiple releases of ICU can be used in the same
-    process. Together with an arbitrary number of post-2.0 releases, one
-    pre-2.0 release can be loaded and active.</p>
-
-    <p>This is achieved by renaming all library exports to include a release
-    number suffix. Each global function and each class is renamed in this way
-    using a header file with #defines. For C++, if the compiler supports
-    namespaces, all ICU C++ classes are defined in the "icu" namespace. If the
-    compiler does not support namespaces, then the classes are renamed instead.
-    This change also reduces the chance of naming collisions with other
-    libraries.</p>
-
-    <p>For details see the <a href=
-    "http://oss.software.ibm.com/icu/userguide/design.html">User's Guide Design
-    Chapter</a>.</p>
 
     <h3>Data loading changed</h3>
 
@@ -323,248 +260,37 @@
     "http://oss.software.ibm.com/icu/userguide/icudata.html">User's Guide ICU
     Data Chapter</a>.</p>
 
-    <h3>Collation improvements</h3>
+    <h3>Library linking changed</h3>
 
-    <p>The performance of Japanese Katakana collation is improved, and the
-    Japanese collation is changed for conformance with the JIS X 4061 standard.
-    The improvement is in the handling of the length and iteration marks,
-    making the processing of regular letters faster.</p>
-
-    <p>The JIS X 4061 standard specifies a 5-level sorting algorithm. Sorting
-    with all five levels according to JIS is achieved in ICU 2.0 with the
-    "identical" strength. The fifth level distinguishes regular character codes
-    from compatibility variants.</p>
-
-    <p>There is special code to handle the fourth (quarternary) level of the
-    JIS standard, which distinguishes between Hiragana and Katakana letters. In
-    ICU 2.0 string comparisons (like ucol_strcoll), when using the "shifted"
-    option, this is slow because it generates complete sort keys for both
-    strings. This is not an issue if the "shifted" option is not used, or if
-    the string comparison is done with fewer levels.</p>
-
-    <p>Quarternary strength, without the "shifted" option, is the default for
-    Japanese collation in ICU 2.0.</p>
-
-    <p>Three-level sorting (tertiary strength) and lower &mdash; if sufficient
-    &mdash; is faster even with "shifted" on (for string comparisons:
-    <em>much</em> faster in this case).</p>
-
-    <h3>License Change (for ICU 1.8.1 and up)</h3>
-
-    <p>The ICU projects (ICU4C and ICU4J) have changed their licenses from the
-    IPL (IBM Public License) to the X license. The X license is a non-viral and
-    recommended free software license that is compatible with the GNU GPL
-    license. This is effective starting with release 1.8.1 of ICU4C and release
-    1.3.1 of ICU4J. All previous ICU releases will continue to utilize the IPL.
-    New ICU releases will adopt the X license. The users of previous releases
-    of ICU will need to accept the terms and conditions of the X license in
-    order to adopt the new ICU releases.</p>
-
-    <p>The main effect of the change is to provide GPL compatibility. The X
-    license is listed as GPL compatible, see the gnu page at <a href=
-    "http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses">http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses</a>.</p>
-
-    <p>The text of the X license is available at <a href=
-    "http://www.x.org/terms.htm">http://www.x.org/terms.htm</a>. The IBM
-    version contains the essential text of the license, omitting the X-specific
-    trademarks and copyright notices.</p>
-
-    <p>For more details please see the <a href=
-    "http://oss.software.ibm.com/icu/press.html">press announcement</a> and the
-    <a href="http://oss.software.ibm.com/icu/project_faq.html#license">Project
-    FAQ</a>.</p>
-
-    <h3>Transliterator improvements</h3>
-
-    <p>The transliterator service has undergone an extensive overhaul, in both
-    the rule-based engine and the built-in system rules. For a complete
-    description see the <a href=
-    "http://oss.software.ibm.com/icu/userguide/Transliteration.html">User's
-    Guide chapter on transliteration</a>.</p>
-
-    <ul>
-      <li><b>New or rewritten rules:</b> <tt>Any-Accents</tt>,
-      <tt>Any-Publishing</tt>, <tt>Cyrillic-Latin</tt>*, <tt>Greek-Latin</tt>*,
-      <tt>Greek-Latin/UNGEGN</tt> (aka <tt>el-Latin</tt>),
-      <tt>Hiragana-Latin</tt>*, and <tt>Latin-Katakana</tt>*. New algorithmic
-      rules include <tt>Any-Name</tt>*, the normalization rules
-      <tt>Any-NFC</tt>, <tt>Any-NFKC</tt>, <tt>Any-NFD</tt>, and
-      <tt>Any-NFKD</tt>, casing rules <tt>Any-Upper</tt>, <tt>Any-Lower</tt>,
-      and <tt>Any-Title</tt>. <tt>Unicode-Hex</tt>* has been renamed
-      <tt>Any-Hex</tt>*. <tt>Any-Remove</tt> deletes its input. [*<em>applies
-      to reverse rule as well</em>]</li>
-
-      <li><b>Indic script rules:</b> Transliterators between Indic scripts and
-      from each script to and from Latin have been completely revised. Scripts
-      included are Bengali, Devanagari, Gujarati, Gurmukhi, Kannada, Malayalam,
-      Oriya, Tamil, and Telugu. Taking Bengali as an example, transliterators
-      <tt>Bengali-X</tt> and <tt>X-Bengali</tt> exist, where X is any of the
-      other listed Indic scripts, or Latin.</li>
-
-      <li><b>Deleted rules:</b> <tt>UnicodeName-UnicodeChar</tt> has been
-      replaced by <tt>Any-Name</tt>*. <tt>Latin-Arabic</tt>* and
-      <tt>Latin-Hebrew</tt>* have been removed until they can be rewritten.
-      <tt>KeyboardEscape-Latin1</tt> has been replaced by <tt>Any-Accents</tt>
-      and <tt>Any-Publishing</tt>. <tt>Latin-Kana</tt>* has been replaced by
-      <tt>Latin-Katakana</tt>* and <tt>Latin-Hiragana</tt>*. [*<em>applies to
-      reverse rule as well</em>]</li>
-
-      <li><b>ID syntax changes:</b> Transliterator IDs ignore case and
-      whitespace now. They now have the standard form
-      <em>[filter]source-target/variant</em>. The "<em>[filter]</em>" element
-      is optional; if present, it limits the characters that the transliterator
-      operates on. The "<em>source-</em>" element is optional; if omitted, it
-      is taken to be <tt>Any</tt>. The "<em>/variant</em>" element is also
-      optional; if present, it selects between different flavors of a related
-      set of transliterators, for example, <tt>Greek-Latin</tt> and
-      <tt>Greek-Latin/UNGEGN</tt>. The source, target, and variant specifiers
-      are case-insensitive strings of the form
-      <tt>/[_[:L:]][_[:L:][:N:]]*/</tt>.</li>
-
-      <li>
-        <b>Locale support:</b> The source, target, or both may be locales. In
-        this case the transliterator rules will be looked up in the system
-        locale resource bundles. Rules are sought under three tags, listed
-        below. The text after the underscore in each tag is always
-        canonicalized to uppercase before lookup. <em>Note: The underscore is
-        currently omitted from ICU4C tags, but will be restored when
-        possible.</em> 
-
+      <ul>
+        <li><b>Linkage improvement for HP/UX</b>
         <ul>
-          <li><tt>TransliterateTo_<em>SCRIPT</em></tt>: Unidirectional rules
-          from the enclosing locale to another script or specifier.</li>
-
-          <li><tt>TransliterateFrom_<em>SCRIPT</em></tt>: Unidirectional rules
-          from another script or specifier to the enclosing locale.</li>
-
-          <li><tt>Transliterate_<em>SCRIPT</em></tt>: Bidirectional rules, with
-          the forward direction being To and the reverse direction being
-          From.</li>
+            <li>The current directory (.) is now searched for libraries.</li>
+            <li>Where available, $ORIGIN is set in the embedded path so that if one ICU 
+                library is found, the system will be able to locate the others.</li>
         </ul>
-        Lookup proceeds in the following order: 
+    </li>
+    <li><b>Library Versioning for AIX (xlC and VisualAge)</b>
+          <ul>
+            <li>AIX does not have facilities to enable library versioning. With this patch, 
+            libraries will now be named for instance <tt>libicuuc<b>20.1.so</b></tt>
+            , however symlinks will allow applications to still link using <tt>-licuuc</tt>
+            (without the benefit of versioning).  To benefit from versioning, on AIX
+            link against the major and minor versions by using <tt>-licuuc20</tt>. 
+            </li>
+          </ul>
+          </li>
+        <li><b>Data Library Versioning for all platforms</b>
+      <ul><li>The versioned name for the data library will be linked against by the ICU libraries,
+         that is, libicudt20b.so instead of libicudata.so</li></ul>
+     </li>
+      </ul>
 
-        <ul>
-          <li>In the dynamic registry: <em>source-target</em></li>
+    <h3>Multithreaded usage is safer</h3>
 
-          <li>In the <em>source</em> locale:
-          <tt>TransliterateTo_<em>TARGET</em></tt> then
-          <tt>Transliterate_<em>TARGET</em></tt> (forward direction)</li>
+    <p>It was discovered that some parts of ICU were not initialized in a
+    thread safe manner. This has been fixed.</p>
 
-          <li>In the <em>target</em> locale:
-          <tt>TransliterateFrom_<em>SOURCE</em></tt> then
-          <tt>Transliterate_<em>SOURCE</em></tt> (reverse direction)</li>
-        </ul>
-        If either the source or target specifier is not a locale then the
-        corresponding locale lookup is skipped. If either is a locale, then
-        locale fallback from <tt>aa_BB_CCC</tt> to <tt>aa_BB</tt> to
-        <tt>aa</tt> is performed (where <tt>aa</tt>, <tt>BB</tt>, and
-        <tt>CCC</tt> are the locale language, country, and variant). The final
-        fallback is from the specifier, whether it is a locale or not (e.g.,
-        script abbreviation), to the long script name associated with that
-        specifier. If a tag lookup succeeds, the attached element should be a
-        string array of <i>2n</i> items where <i>n</i> &gt;= 1. Each pair of
-        strings is a variant name and rule string. The variants are matched
-        against the requested variant. If no variant is specified then the
-        first variant is considered to match.
-      </li>
-
-      <li><b>Filters on compounds IDs:</b> A filter on a compound
-      transliterator can now be specified by giving a leading entry that
-      contains a filter and no transliterator ID. For example, "<tt>[abc];
-      Latin-Katakana; Katakana-Hiragana</tt>" submits only the characters
-      contained in the UnicodeSet <tt>[abc]</tt> to the compound transliterator
-      <tt>Latin-Katakana; Katakana-Hiragana</tt>.</li>
-
-      <li><b>Explicit reverse IDs:</b> Typically if a transliterator
-      <tt>A-B</tt> is formed, and its inverse is requested, the system tries to
-      create <tt>B-A</tt>. That is, the source and target are exchanged. In
-      some cases, the user may wish a different transliterator to be considered
-      the reverse. In order to do this, the reverse ID is specified in
-      parentheses immediately following the ID. For example, "<tt>A-B
-      (B-C)</tt>" is a transliterator <tt>A-B</tt> whose inverse is
-      <tt>B-C</tt>. If the ID of the inverse is requested, "<tt>B-C (A-B)</tt>"
-      is returned. The forward or reverse component may be empty, so
-      "<tt>(B-C)</tt>" and "<tt>A-B()</tt>" are legal IDs with <tt>Null</tt>
-      transliterator for the forward and reverse direction, respectively. This
-      is most useful in compounds where one element has no inverse or where a
-      different inverse from the standard inverse is desired. For example,
-      "<tt>Any-Lower(); Latin-Cyrillic</tt>".</li>
-
-      <li><b>Quantifiers:</b> Transliterator rules may now contain quantifiers
-      '<tt>*</tt>', '<tt>+</tt>', and '<tt>?</tt>'. These indicate zero or
-      more, one or more, and zero or one matches, respectively. Quantifiers
-      apply to the last element, be it a single character, a UnicodeSet, a
-      segment definition, or a quote; the entire preceding element is repeated.
-      Quantifiers are implemented as greedy, non-backtracking matchers, unlike
-      their typical implementation in regular expressions. As a result,
-      expressions that match in a traditional regular expression engine (e.g.,
-      Perl) will not match in transliterator. E.g., "[a-z]+ q &gt; x;" will
-      <em>not</em> match "abcq", since the '<tt>+</tt>' quantifier consumes all
-      four characters.</li>
-
-      <li><b>Dot character:</b> A new special character is recognized in rules,
-      '<tt>.</tt>' (U+0020). This character matches any characters in the set
-      <tt>[^[:Zp:][:Zl:]\r\n$]</tt>. Note the trailing '<tt>$</tt>' in the set
-      pattern, which indicates that the ETHER character is <em>not</em> matched
-      by '<tt>.</tt>'.</li>
-
-      <li><b>::ID blocks in rules:</b> Transliterator IDs may now be included
-      in rule sets. These may occur in two locations: as one contiguous block
-      before any other rules, and as one contiguous block after all rules. The
-      effect of placing <tt>::ID</tt>s into a rule set is to enclose the
-      rule-based transliterator within a compound transliterator containing the
-      indicated IDs. The <tt>::ID</tt> syntax is exactly the same as the
-      standard ID syntax, with the difference that each ID element is preceded
-      by the special token "<tt>::</tt>".</li>
-
-      <li><b>Segment definitions more flexible:</b> Segment definitions may be
-      nested and are now unlimited in number. Prior to 2.0, segments could not
-      be nested and were limited to nine ($1 to $9).</li>
-
-      <li><b>Variable range pragma:</b> A new pragma is supported. This follows
-      the syntax:<code>use variable range 0xE800 0xEFFF;</code> (Any two code
-      points may be specified.) The code points are specified as decimal
-      constants, octal constants with a leading '0', or hexadecimal constants
-      with a leading "0x". The given range is used internally for stand-in
-      characters during processing. The default range is <b>0xF000..0xF8FF</b>.
-      If a rule set explicitly uses characters in the default variable range, a
-      new range, not containing any characters in use in the rule set, must be
-      specified. <em>Note:</em> This is the first of several planned
-      pragmas.</li>
-
-      <li><b>Factory method registration:</b> Factory methods (function
-      pointers in ICU4C; functor objects in ICU4J) may be registered against
-      transliterator IDs. This is generally more efficient than the
-      registration of singleton prototypes, since no actual transliterator
-      object need be created until the user requires one. See the
-      <tt>registerFactory()</tt> method in <tt>Transliterator</tt>.</li>
-
-      <li><b>Filtering semantics changed for subclasses:</b> Subclasses now
-      need not concern themselves with filters. Instead, they may assume that
-      all characters received by <tt>handleTransliterate()</tt> have already
-      passed through the filter. This simplifies subclass code greatly.</li>
-    </ul>
-
-    <h3><a name="NewsUnicodeSet">UnicodeSet Improvements</a></h3>
-
-    <ul>
-      <li><b><tt>[:Any:]</tt> set:</b> The set <tt>[:Any:]</tt> matches all
-      Unicode code points, that is, U+0000..U+10FFFF.</li>
-
-      <li><b><tt>\p{}</tt> syntax:</b> UnicodeSet now recognizes a Perlish
-      syntax for character properties. Any property designated as
-      <tt>[:Foo:]</tt> may equivalently be designated <tt>\p{Foo}</tt>.</li>
-
-      <li><b>Short, medium, and long property names:</b> In addition to the
-      short property names, such as <tt>[:Ll:]</tt>, equivalent medium (e.g.,
-      <tt>[:gc=Ll:]</tt>) and long (e.g.,
-      <tt>[:GeneralCategory=LowercaseLetter:]</tt>) forms are recognized. See
-      the <a href=
-      "http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/unicodeset_properties.html">
-      UnicodeSet Properties design document</a> for details. As of this
-      release, general categories, numeric value, and script are
-      supported.</li>
-    </ul>
     <hr>
 
     <h2><a name="Download" href="#Download">How to Download the Source
@@ -605,7 +331,7 @@
     distribution archives) in your file system. You can also view the <a href=
     "http://oss.software.ibm.com/icu/userguide/design.html">User's Guide</a> to
     see which libraries you need for your software product. You need at least
-    the data (icudt) and the common (icuuc) libraries in order to use ICU.</p>
+    the data (<code>[lib]icudt</code>) and the common (<code>[lib]icuuc</code>) libraries in order to use ICU.</p>
 
     <table border="1" cellpadding="0" width="100%" summary="">
       <caption>
