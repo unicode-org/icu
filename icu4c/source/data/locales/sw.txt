@@ -37,6 +37,10 @@ sw {
             "Ijumaa",
             "Jumamosi",
     }
+    Eras { 
+            "KK",
+            "BK",
+    }
     Languages { 
         sw  { "Kiswahili" }
     }
@@ -85,7 +89,6 @@ sw {
 
 // /**************** Info Below is needed ****************/
 // DayAbbreviations {}
-// Eras{}
 // NumberElements{}
 // AmPmMarkers{}
 // localPatternChars{}
