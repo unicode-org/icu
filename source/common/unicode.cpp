@@ -4,8 +4,6 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
-//  Copyright (C) 1994-1995 Taligent, Inc. All rights reserved.
-//
 //  FILE NAME : unicode.cpp
 //
 //  CREATED
@@ -32,6 +30,7 @@
 //      Madhu Katragadda
 //   5/20/99     Madhu		Added the function u_getVersion()
 //  07/09/99     stephen        Added definition for {MIN,MAX}_VALUE
+//  11/22/99     aliu       Added MIN_RADIX, MAX_RADIX, digit, forDigit
 //********************************************************************************************
 
 #include "unicode.h"
@@ -41,7 +40,8 @@
 
 const UChar Unicode::MIN_VALUE = 0x0000;
 const UChar Unicode::MAX_VALUE = 0xFFFF;
-
+const int8_t Unicode::MIN_RADIX = 2;
+const int8_t Unicode::MAX_RADIX = 36;
 
 Unicode::Unicode() 
 {
@@ -229,6 +229,32 @@ int32_t
 Unicode::digitValue(UChar ch)
 {
     return (u_charDigitValue(ch) );
+}
+
+int8_t 
+Unicode::digit(UChar ch, int8_t radix) {
+    int8_t value = -1;
+    if (radix >= MIN_RADIX && radix <= MAX_RADIX) {
+        value = (int8_t) u_charDigitValue(ch);
+        if (value < 0) {
+            if (ch >= (UChar)'A' && ch <= (UChar)'Z') {
+                value = ch - ((UChar)'A' - 10);
+            } else if (ch >= (UChar)'a' && ch <= (UChar)'z') {
+                value = ch - ((UChar)'a' - 10);
+            }
+        }
+    }
+    return (value < radix) ? value : -1;
+}
+
+UChar
+Unicode::forDigit(int32_t digit, int8_t radix) {
+    if ((radix < MIN_RADIX) || (radix > MAX_RADIX) ||
+        (digit < 0) || (digit >= radix)) {
+        return (UChar)0;
+    }
+    return (UChar)(((digit < 10) ? (UChar)'0' : ((UChar)'a' - 10))
+                   + digit);
 }
 
 const char*
