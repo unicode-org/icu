@@ -2085,6 +2085,76 @@ TestGetNextUChar2022(UConverter* cnv, const char* source, const char* limit,
     }
 }
 
+static int TestJitterbug930(char* enc){
+   UErrorCode err = U_ZERO_ERROR;
+   UConverter*converter;
+   char out[80];
+   char*target = out;
+   UChar in[4];
+   const UChar*source = in;
+   int32_t off[80];
+   int32_t* offsets = off;
+   int numOffWritten=0;
+   UBool flush = 0;
+   converter = ucnv_open(enc, &err); // "",&err);
+
+   in[0] = 0x41;     // 0x4E00;
+   in[1] = 0x4E01;
+   in[2] = 0x4E02;
+   in[3] = 0x4E03;
+
+   memset(off, '*', sizeof(off));
+
+   ucnv_fromUnicode (converter,
+                     &target,
+                     target+2,
+                     &source,
+                     source+3,
+                     offsets,
+                     flush,
+                     &err);
+
+   /* writes three bytes into the output buffer: 41 1B 24
+    * but offsets contains 0 1 1 
+    */
+   while(*offsets< off[10]){
+       numOffWritten++;
+       offsets++;
+   }
+   log_verbose("Testing Jitterbug 930 for encoding %s",enc);
+   if(numOffWritten!= (int)(target-out)){
+       log_err("Jitterbug 930 test for enc: %s failed. Expected: %i Got: %i",enc, (int)(target-out),numOffWritten);
+   }
+
+   err = U_ZERO_ERROR;
+
+   memset(off,'*' , sizeof(off));
+
+   flush = 1;
+   offsets=off;
+   ucnv_fromUnicode (converter,
+                     &target,
+                     target+4,
+                     &source,
+                     source,
+                     offsets,
+                     flush,
+                     &err);
+   numOffWritten=0;
+   while(*offsets< off[10]){
+       numOffWritten++;
+       if(*offsets!= -1){
+           log_err("Jitterbug 930 test for enc: %s failed. Expected: %i Got: %i",enc,-1,*offsets) ;
+       }
+       offsets++;
+   }
+   
+   /* writes 42 43 7A into output buffer, 
+    * offsets contains -1 -1 -1
+    */
+	return 0;
+}
+
 static void
 TestHZ() {
     /* test input */
@@ -2158,6 +2228,7 @@ TestHZ() {
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+    TestJitterbug930("csISO2022JP");
     ucnv_close(cnv);
     free(offsets);
     free(uBuf);
@@ -2235,7 +2306,7 @@ TestISO_2022_JP() {
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     TestGetNextUChar2022(cnv, cBuf, cTarget, in, "ISO-2022-JP encoding");   
     TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
-
+    TestJitterbug930("csISO2022JP");
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
@@ -2629,11 +2700,13 @@ TestISO_2022_KR() {
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+        TestJitterbug930("csISO2022KR");
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
     free(offsets);
 }
+
 static void
 TestISO_2022_KR_1() {
     /* test input */
@@ -3054,6 +3127,7 @@ TestISO_2022_CN() {
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv); 
     TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv);
+    TestJitterbug930("csISO2022CN");
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
