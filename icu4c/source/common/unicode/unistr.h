@@ -1578,10 +1578,11 @@ public:
   inline int32_t hashCode(void) const;
 
   /**
-   * Determine if this string is still valid.
-   * A bogus string has a non-value that is different from an empty string.
-   * It behaves much like a null reference in Java, a NULL pointer in C,
-   * or a NULL value in SQL.
+   * Determine if this object contains a valid string.
+   * A bogus string has no value. It is different from an empty string.
+   * It can be used to indicate that no string value is available.
+   * getBuffer() and getTerminatedBuffer() return NULL, and
+   * length() returns 0.
    *
    * @return TRUE if the string is valid, FALSE otherwise
    * @see setToBogus()
@@ -1768,18 +1769,16 @@ public:
    * Make this UnicodeString object invalid.
    * The string will test TRUE with isBogus().
    *
-   * This can be used to indicate that a UnicodeString operation failed, and that
-   * the result string is "bogus" - which can be tested with isBogus().
+   * A bogus string has no value. It is different from an empty string.
+   * It can be used to indicate that no string value is available.
+   * getBuffer() and getTerminatedBuffer() return NULL, and
+   * length() returns 0.
+   *
    * This utility function is used throughout the UnicodeString
-   * implementation, and may be used in other functions,
+   * implementation to indicate that a UnicodeString operation failed,
+   * and may be used in other functions,
    * especially but not exclusively when such functions do not
    * take a UErrorCode for simplicity.
-   *
-   * More generally, a bogus string has a non-value that is different from an empty string.
-   * It behaves much (but of course not entirely) like a null reference in Java, a NULL pointer in C,
-   * or a NULL value in SQL.
-   * A "bogus" string does not contain a string value, and getBuffer()
-   * and similar will return NULL.
    *
    * The following methods, and no others, will clear a string object's bogus flag:
    * - remove()
