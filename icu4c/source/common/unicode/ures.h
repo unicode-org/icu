@@ -308,7 +308,10 @@ ures_getVersion(const UResourceBundle* resB,
                 UVersionInfo versionInfo);
 
 /**
- * Return the name of the Locale associated with this ResourceBundle.
+ * Return the name of the Locale associated with this ResourceBundle. 
+ * If opening of a sub resource in a particular bundle results in 
+ * U_USING_FALLBACK_WARNING status, then the locale of the parent bundle is returned.
+ * If the opening results in U_USING_DEFAULT_WARING then locale of the root bundle is returned.
  * @param resourceBundle: resource bundle in question
  * @param status: just for catching illegal arguments
  * @return  A Locale name
@@ -592,6 +595,7 @@ ures_getByKey(const UResourceBundle *resourceBundle,
  * @param len               fill in length of the string
  * @param status            fills in the outgoing error code
  * @return                  a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
+ *                          Can return NULL.
  * @stable
  */
 U_CAPI const UChar* U_EXPORT2 
