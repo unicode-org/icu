@@ -663,6 +663,10 @@ static void TestStream(void) {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *defConv;
 
+    /* initialize testStreamBuf */
+    memset(testStreamBuf, '*', sizeof(testStreamBuf));
+    testStreamBuf[sizeof(testStreamBuf)-1] = 0;
+
     str4.append((UChar32)0x03BC);   /* mu */
     str4.append((UChar32)0x10001);
     str4.append((UChar32)0x10002);
