@@ -1,0 +1,32 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+div_MV{
+    Version { "x0.1" }
+    LocaleID { "0465" }
+    ShortCountry { MDV }
+    CurrencyElements{
+  	"\u0783.",
+  	"MVR",
+  	"."
+    }
+    DateTimePatterns {
+        "hh:mm:ss a z",
+        "hh:mm:ss a z",
+        "hh:mm:ss a",
+        "hh:mm a",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "dd-mm-yyyy",
+        "d-m-yy",
+        "{1} {0}"
+    }
+    DateTimeElements {
+        "6",
+        "1"
+    }
+}

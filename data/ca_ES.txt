@@ -1,0 +1,22 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+ca_ES {
+    CurrencyElements { 
+            "\u20AC",
+            "EUR",
+            ",",
+    }
+    NumberPatterns { 
+            "#,##0.###;#,##0.###",
+            "\u00A4 #,##0.00;-\u00A4 #,##0.00",
+            "#,##0%",
+    }
+    LocaleString { "ca_ES" }
+    ShortCountry { "ESP" }
+    LocaleID { "0403" }
+}

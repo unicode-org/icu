@@ -1,0 +1,34 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+en_BZ{
+ Version{ "x0.1" }
+ LocaleID{ "2809"}
+
+ CurrencyElements{
+  "BZ$",
+  "BZD",
+  "."
+ }
+
+ DateTimeElements { 
+      "2",
+      "1",
+ }
+ DateTimePatterns { 
+    "HH:mm:ss 'o''clock' z",
+    "HH:mm:ss z",
+    "HH:mm:ss",
+    "HH:mm",
+    "dd MMMM yyyy",
+    "dd MMMM yyyy",
+    "dd-MMM-yy",
+    "dd/MM/yy",
+    "{1} {0}",
+ }
+
+}
