@@ -1145,7 +1145,7 @@ static void TestConvertSafeClone()
 	UConverter * cnv;
     UErrorCode err = U_ZERO_ERROR;
 	uint8_t buffer [CLONETEST_CONVERTER_COUNT] [U_CNV_SAFECLONE_BUFFERSIZE];
-	uint32_t bufferSize = U_CNV_SAFECLONE_BUFFERSIZE;
+	int32_t bufferSize = U_CNV_SAFECLONE_BUFFERSIZE;
 
 	/* one 'regular' & all the 'private stateful' converters */
 	someConverters[0] = ucnv_open("ibm-1047", &err);
