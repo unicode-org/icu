@@ -76,6 +76,10 @@ void TransliteratorErrorTest::TestTransliteratorErrors() {
         errln("FAIL: construction of Latin-Greek");
         return;
     }
+    pos.contextLimit = 0;
+    pos.contextStart = 0;
+    pos.limit = 0;
+    pos.start = 0;
     len = testString.length();
     stoppedAt = t->transliterate(testString, 0, 100);
     if (stoppedAt != -1) {
