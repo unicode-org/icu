@@ -21,4 +21,8 @@ de_LU {
     }
 //    ShortCountry { "LUX" }
     LocaleID { "1007" }
+    DateTimeElements {
+        "2",
+        "1",
+    }
 }

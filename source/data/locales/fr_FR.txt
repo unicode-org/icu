@@ -12,6 +12,10 @@ fr_FR {
         "EUR",
         ",",
     }
+    DateTimeElements {
+        "2",
+        "1",
+    }
 //    LocaleString { "fr_FR" }
 //    ShortCountry { "FRA" }
     LocaleID { "040c" }

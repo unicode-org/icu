@@ -288,10 +288,6 @@ fr {
         zu { "zoulou" }
     }
 
-    DateTimeElements {
-        "2",
-        "1",
-    }
     DateTimePatterns { 
         "HH' h 'mm z",
         "HH:mm:ss z",
