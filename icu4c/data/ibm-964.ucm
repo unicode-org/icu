@@ -19,12 +19,18 @@
 <uconv_class>                 "MBCS"
 <subchar>                     \xFD\xFE
 #<subchar1>                   \x1A
-<icu:state>                   0-8d, 8e:2, 90-9f, a1-fe:1
+
+# this state table is manually optimized with the help of the verbose mode of makeconv
+
+<icu:state>                   0-8d, 8e:2, 90-9f, a1-fe:1, aa-c1:5, c3:5, fe:5
 <icu:state>                   a1-fe
-<icu:state>                   a1-b0:3, a1:4, a3-ab:4, ae-b0:4
+<icu:state>                   a1-b0:3, a1:4, a2:8, a3-ab:4, ac:7, ad:6, ae-b0:4
 <icu:state>                   a1-fe:1
 <icu:state>                   a1-fe:5
 <icu:state>                   a1-fe.u
+<icu:state>                   a1-a4:1, a5-fe:5
+<icu:state>                   a1-e2:1, e3-fe:5
+<icu:state>                   a1-f2:1, f3-fe:5
 #
 CHARMAP
 #
