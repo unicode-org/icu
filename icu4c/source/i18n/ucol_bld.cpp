@@ -26,7 +26,7 @@
 #include "ucol_bld.h" 
 #include "ucln_in.h" 
 #include "umutex.h"
-
+#include "unicode/uniset.h"
 
 static const InverseTableHeader* invUCA = NULL;
 static UDataMemory* invUCA_DATA_MEM = NULL;
@@ -907,6 +907,70 @@ _processUCACompleteIgnorables(const void *context, UChar32 start, UChar32 limit,
 }
 U_CDECL_END
 
+static void 
+ucol_uprv_bld_copyRangeFromUCA(UColTokenParser *src, tempUCATable *t,
+                               UChar32 start, UChar32 end, 
+                               UErrorCode *status) {
+  //UChar decomp[256];
+  uint32_t CE = UCOL_NOT_FOUND;
+  uint32_t tag = UCOL_NOT_FOUND;
+  UChar32 u = 0;
+  UCAElements el;
+  el.isThai = FALSE;
+  el.prefixSize = 0;
+  el.prefixChars[0] = 0;
+  collIterate colIt;
+
+  if(U_SUCCESS(*status)) {
+    for(u = start; u<=end; u++) {
+      if((CE = utrie_get32(t->mapping, u, NULL)) == UCOL_NOT_FOUND 
+        /* this test is for contractions that are missing the starting element. */
+         || ((isCntTableElement(CE)) &&
+        (uprv_cnttab_getCE(t->contractions, CE, 0, status) == UCOL_NOT_FOUND))
+        ) {
+        el.cSize = 0;
+        U16_APPEND_UNSAFE(el.uchars, el.cSize, u); 
+        //decomp[0] = (UChar)u;
+        //el.uchars[0] = (UChar)u;
+        el.cPoints = el.uchars;
+        //el.cSize = 1;
+        el.noOfCEs = 0;
+        el.prefix = el.prefixChars;
+        el.prefixSize = 0;
+        //uprv_init_collIterate(src->UCA, decomp, 1, &colIt);
+        // We actually want to check whether this element is a special
+        // If it is an implicit element (hangul, CJK - we want to copy the
+        // special, not the resolved CEs) - for hangul, copying resolved
+        // would just make things the same (there is an expansion and it
+        // takes approximately the same amount of time to resolve as 
+        // falling back to the UCA).
+        /*
+        UTRIE_GET32(src->UCA->mapping, u, CE);
+        tag = getCETag(CE);
+        if(tag == HANGUL_SYLLABLE_TAG || tag == CJK_IMPLICIT_TAG 
+          || tag == IMPLICIT_TAG || tag == TRAIL_SURROGATE_TAG
+          || tag == LEAD_SURROGATE_TAG) {
+          el.CEs[el.noOfCEs++] = CE;
+        } else {
+        */
+        // It turns out that it does not make sense to keep implicits
+        // unresolved. The cost of resolving them is big enough so that
+        // it doesn't make any difference whether we have to go to the UCA
+        // or not.
+        {
+          uprv_init_collIterate(src->UCA, el.uchars, el.cSize, &colIt);
+          while(CE != UCOL_NO_MORE_CES) {
+            CE = ucol_getNextCE(src->UCA, &colIt, status);
+            if(CE != UCOL_NO_MORE_CES) {
+              el.CEs[el.noOfCEs++] = CE;
+            }
+          }
+        }
+        uprv_uca_addAnElement(t, &el, status);
+      }
+    }
+  }
+}
 
 UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status) {
   uint32_t i = 0;
@@ -1006,41 +1070,22 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     }
   }
 
-  UChar decomp[256];
   uint32_t CE = UCOL_NOT_FOUND;
   UChar u = 0;
   UCAElements el;
   el.isThai = FALSE;
   el.prefixSize = 0;
   el.prefixChars[0] = 0;
-  collIterate colIt;
 
   /* add latin-1 stuff */
-  if(U_SUCCESS(*status)) {
-    for(u = 0; u<0x100; u++) {
-      /*if((CE = ucmpe32_get(t->mapping, u)) == UCOL_NOT_FOUND */
-      if((CE = utrie_get32(t->mapping, u, NULL)) == UCOL_NOT_FOUND 
-        /* this test is for contractions that are missing the starting element. Looks like latin-1 should be done before assembling */
-        /* the table, even if it results in more false closure elements */
-         || ((isCntTableElement(CE)/*isContraction(CE)*/) &&
-        (uprv_cnttab_getCE(t->contractions, CE, 0, status) == UCOL_NOT_FOUND))
-        ) {
-        decomp[0] = (UChar)u;
-        el.uchars[0] = (UChar)u;
-        el.cPoints = el.uchars;
-        el.cSize = 1;
-        el.noOfCEs = 0;
-        el.prefix = el.prefixChars;
-        el.prefixSize = 0;
-        uprv_init_collIterate(src->UCA, decomp, 1, &colIt);
-        while(CE != UCOL_NO_MORE_CES) {
-          CE = ucol_getNextCE(src->UCA, &colIt, status);
-          if(CE != UCOL_NO_MORE_CES) {
-            el.CEs[el.noOfCEs++] = CE;
-          }
-        }
-        uprv_uca_addAnElement(t, &el, status);
-      }
+  ucol_uprv_bld_copyRangeFromUCA(src, t, 0, 0xFF, status);
+
+  /* add stuff for copying */
+  if(src->copySet != NULL) {
+    int32_t i = 0;
+    UnicodeSet *set = (UnicodeSet *)src->copySet;
+    for(i = 0; i < set->getRangeCount(); i++) {
+      ucol_uprv_bld_copyRangeFromUCA(src, t, set->getRangeStart(i), set->getRangeEnd(i), status);
     }
   }
 
@@ -1060,6 +1105,9 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
           if(uprv_cnttab_isTailored(t->contractions, tailoredCE, conts+1, status) == TRUE) {
             needToAdd = FALSE;
           }
+        }
+        if(src->removeSet != NULL && uset_contains(src->removeSet, *conts)) {
+          needToAdd = FALSE;
         }
 
         if(needToAdd == TRUE) { // we need to add if this contraction is not tailored.
@@ -1082,6 +1130,8 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
           uprv_uca_addAnElement(t, &el, status);
         }
 
+      } else if(src->removeSet != NULL && uset_contains(src->removeSet, *conts)) {
+        ucol_uprv_bld_copyRangeFromUCA(src, t, *conts, *conts, status);
       }
       conts+=3;
     }
