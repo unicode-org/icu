@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberRegression.java,v $ 
- * $Date: 2002/03/10 19:40:14 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/05/08 23:57:32 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  **/
@@ -281,9 +281,9 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
      * null pointer thrown when accessing a deserialized DecimalFormat
      * object.
      */
-    public void Test4069754()
+    public void Test4069754() throws Exception
     {
-        try {
+        //try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(baos);
             myformat it = new myformat();
@@ -302,9 +302,9 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
                 throw new Exception("The saved and loaded object are not equals!");
             }
             logln("Compare OK!");
-        } catch (Exception foo) {
-            errln("Test for bug 4069754 or 4057878 failed => Exception: " + foo.getMessage());
-        }
+        //} catch (Exception foo) {
+            //errln("Test for bug 4069754 or 4057878 failed => Exception: " + foo.getMessage());
+        //}
     }
 
     /**
