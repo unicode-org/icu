@@ -2083,83 +2083,86 @@ uloc_getKeywordValue(const char* localeID,
     char localeKeywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
     int32_t i = 0;
     int32_t result = 0;
+
+    if(status && U_SUCCESS(*status) && localeID) {
     
-    const char* startSearchHere = uprv_strchr(localeID, ULOC_KEYWORD_SEPARATOR);
-    if(startSearchHere == NULL) {
-        /* no keywords, return at once */
-        return 0;
-    }
+      const char* startSearchHere = uprv_strchr(localeID, ULOC_KEYWORD_SEPARATOR);
+      if(startSearchHere == NULL) {
+          /* no keywords, return at once */
+          return 0;
+      }
     
-    if(keywordNameLen >= ULOC_KEYWORD_BUFFER_LEN) {
-        /* keyword name too long for internal buffer */
-        *status = U_INTERNAL_PROGRAM_ERROR;
-        return 0;
-    }
+      if(keywordNameLen >= ULOC_KEYWORD_BUFFER_LEN) {
+          /* keyword name too long for internal buffer */
+          *status = U_INTERNAL_PROGRAM_ERROR;
+          return 0;
+      }
     
-    /* normalize the keyword name */
-    for(i = 0; i < keywordNameLen; i++) {
-        keywordNameBuffer[i] = uprv_tolower(keywordName[i]);
-    }
-    keywordNameBuffer[i] = 0;
+      /* normalize the keyword name */
+      for(i = 0; i < keywordNameLen; i++) {
+          keywordNameBuffer[i] = uprv_tolower(keywordName[i]);
+      }
+      keywordNameBuffer[i] = 0;
     
-    /* find the first keyword */
-    while(startSearchHere) {
-        startSearchHere++;
-        /* skip leading spaces (allowed?) */
-        while(*startSearchHere == ' ') {
-            startSearchHere++;
-        }
-        nextSeparator = uprv_strchr(startSearchHere, ULOC_KEYWORD_ASSIGN);
-        /* need to normalize both keyword and keyword name */
-        if(!nextSeparator) {
-            break;
-        }
-        if(nextSeparator - startSearchHere >= ULOC_KEYWORD_BUFFER_LEN) {
-            /* keyword name too long for internal buffer */
-            *status = U_INTERNAL_PROGRAM_ERROR;
-            return 0;
-        }
-        for(i = 0; i < nextSeparator - startSearchHere; i++) {
-            localeKeywordNameBuffer[i] = uprv_tolower(startSearchHere[i]);
-        }
-        /* trim trailing spaces */
-        while(startSearchHere[i-1] == ' ') {
-            i--;
-        }
-        localeKeywordNameBuffer[i] = 0;
+      /* find the first keyword */
+      while(startSearchHere) {
+          startSearchHere++;
+          /* skip leading spaces (allowed?) */
+          while(*startSearchHere == ' ') {
+              startSearchHere++;
+          }
+          nextSeparator = uprv_strchr(startSearchHere, ULOC_KEYWORD_ASSIGN);
+          /* need to normalize both keyword and keyword name */
+          if(!nextSeparator) {
+              break;
+          }
+          if(nextSeparator - startSearchHere >= ULOC_KEYWORD_BUFFER_LEN) {
+              /* keyword name too long for internal buffer */
+              *status = U_INTERNAL_PROGRAM_ERROR;
+              return 0;
+          }
+          for(i = 0; i < nextSeparator - startSearchHere; i++) {
+              localeKeywordNameBuffer[i] = uprv_tolower(startSearchHere[i]);
+          }
+          /* trim trailing spaces */
+          while(startSearchHere[i-1] == ' ') {
+              i--;
+          }
+          localeKeywordNameBuffer[i] = 0;
         
-        startSearchHere = strchr(nextSeparator, ULOC_KEYWORD_ITEM_SEPARATOR);
+          startSearchHere = strchr(nextSeparator, ULOC_KEYWORD_ITEM_SEPARATOR);
         
-        if(uprv_strcmp(keywordNameBuffer, localeKeywordNameBuffer) == 0) {
-            nextSeparator++;
-            while(*nextSeparator == ' ') {
-                nextSeparator++;
-            }
-            /* we actually found the keyword. Copy the value */
-            if(startSearchHere && startSearchHere - nextSeparator < bufferCapacity) {
-                while(*(startSearchHere-1) == ' ') {
-                    startSearchHere--;
-                }
-                uprv_strncpy(buffer, nextSeparator, startSearchHere - nextSeparator);
-                result = u_terminateChars(buffer, bufferCapacity, startSearchHere - nextSeparator, status);
-            } else if(!startSearchHere && (int32_t)uprv_strlen(nextSeparator) < bufferCapacity) { /* last item in string */
-                i = uprv_strlen(nextSeparator);
-                while(nextSeparator[i - 1] == ' ') {
-                    i--;
-                }
-                uprv_strncpy(buffer, nextSeparator, i);
-                result = u_terminateChars(buffer, bufferCapacity, i, status);
-            } else {
-                /* give a bigger buffer, please */
-                *status = U_BUFFER_OVERFLOW_ERROR;
-                if(startSearchHere) {
-                    result = startSearchHere - nextSeparator;
-                } else {
-                    result = uprv_strlen(nextSeparator); 
-                }
-            }
-            return result;
-        }
+          if(uprv_strcmp(keywordNameBuffer, localeKeywordNameBuffer) == 0) {
+              nextSeparator++;
+              while(*nextSeparator == ' ') {
+                  nextSeparator++;
+              }
+              /* we actually found the keyword. Copy the value */
+              if(startSearchHere && startSearchHere - nextSeparator < bufferCapacity) {
+                  while(*(startSearchHere-1) == ' ') {
+                      startSearchHere--;
+                  }
+                  uprv_strncpy(buffer, nextSeparator, startSearchHere - nextSeparator);
+                  result = u_terminateChars(buffer, bufferCapacity, startSearchHere - nextSeparator, status);
+              } else if(!startSearchHere && (int32_t)uprv_strlen(nextSeparator) < bufferCapacity) { /* last item in string */
+                  i = uprv_strlen(nextSeparator);
+                  while(nextSeparator[i - 1] == ' ') {
+                      i--;
+                  }
+                  uprv_strncpy(buffer, nextSeparator, i);
+                  result = u_terminateChars(buffer, bufferCapacity, i, status);
+              } else {
+                  /* give a bigger buffer, please */
+                  *status = U_BUFFER_OVERFLOW_ERROR;
+                  if(startSearchHere) {
+                      result = startSearchHere - nextSeparator;
+                  } else {
+                      result = uprv_strlen(nextSeparator); 
+                  }
+              }
+              return result;
+          }
+      }
     }
     return 0;
 }
