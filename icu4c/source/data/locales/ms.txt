@@ -1,14 +1,92 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2003, International Business Machines
+// *   Copyright (C) 2001-2004, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
-// *   Generated from Universal Locales for Linux Project
+// *   Original source - Universal Locales for Linux Project
 // ***************************************************************************
 
 ms{
     Version{ "1.1" }
     Countries {
         Fallback{ "en" }
+        // Most of the Country names are the same as en. They fallback to en to save space.
+
+        AE { "Emiriah Arab Bersatu" }
+        AG { "Antigua dan Barbuda" }
+
+        BA { "Bosnia dan Herzegovina" }
+
+        CA { "Kanada" }
+        CF { "Republik Afrika Tengah" }
+        CI { "Pantai Gading" }
+        CL { "Cile" }
+        CM { "Kamerun" }
+        CN { "Cina" }
+        CR { "Kosta Rika" }
+        CY { "Kibris" }
+        CZ { "Republik Czech" }
+
+        DE { "Jerman" }
+        DJ { "Jibouti" }
+        DO { "Republik Dominican" }
+        DZ { "Aljazair" }
+
+        EG { "Mesir" }
+        EH { "Sahara Barat" }
+        ES { "Sepanyol" }
+
+        FR { "Perancis" }
+
+        GR { "Yunani" }
+        GW { "Guinea Bissau" }
+
+        HU { "Hungari" }
+
+        IN { "Hindia" }
+        IT { "Itali" }
+
+        JM { "Jamaika" }
+        JP { "Jepun" }
+
+        KH { "Kemboja" }
+        KN { "Saint Kitts dan Nevis" }
+        KP { "Utara Korea" }
+        KR { "Selatan Korea" }
+
+        LB { "Lubnan" }
+        LU { "Luksembourg" }
+
+        MA { "Maghribi" }
+        MG { "Madagaskar" }
+        MH { "Kepulauan Marshall" }
+        MV { "Maldiv" }
+        MX { "Meksiko" }
+        MZ { "Mozambik" }
+
+        NL { "Belanda" }
+
+        PH { "Filipina" }
+        PT { "Feringgi" }
+
+        SA { "Arab Saudi" }
+        SB { "Kepulauan Solomon" }
+        SG { "Singapura" }
+        SL { "Siera Leon" }
+        SR { "Surinam" }
+        ST { "Sao Tome dan Principe" }
+
+        TD { "Cad" }
+        TJ { "Tadjikistan" }
+        TR { "Turki" }
+        TT { "Trinidad dan Tobago" }
+
+        US { "Amerika Syarikat" }
+
+        VC { "Saint Vincent dan Grenadines" }
+
+        YE { "Yaman" }
+
+        ZA { "Afrika Selatan" }
     }
     Currencies {
         MYR { "RM", "Ringgit Malaysia" }
@@ -50,7 +128,7 @@ ms{
         "Sep",
         "Okt",
         "Nov",
-        "Dis",
+        "Dis"
     }
     MonthNames { 
         "Januari",
@@ -64,6 +142,6 @@ ms{
         "September",
         "Oktober",
         "November",
-        "Disember",
+        "Disember"
     }
 }
