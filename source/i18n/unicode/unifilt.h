@@ -17,6 +17,21 @@
  * Transliterator} to only process selected characters through a
  * transformation.
  *
+ * <p>Note: UnicodeFilter currently stubs out two pure virtual methods
+ * of its base class, UnicodeMatcher.  These methods are toPattern()
+ * and matchesIndexValue().  This is done so that filter classes that
+ * are not actually used as matchers -- specifically, those in the
+ * UnicodeFilterLogic component, and those in tests -- can continue to
+ * work without defining these methods.  As long as a filter is not
+ * used in an RBT during real transliteration, these methods will not
+ * be called.  However, this breaks the UnicodeMatcher base class
+ * protocol, and it is not a correct solution.
+ *
+ * <p>In the future we may revisit the UnicodeMatcher / UnicodeFilter
+ * hierarchy and either redesign it, or simply remove the stubs in
+ * UnicodeFilter and force subclasses to implement the full
+ * UnicodeMatcher protocol.
+ *
  * @see UnicodeFilterLogic
  * @draft
  */
