@@ -84,7 +84,7 @@ static void initMsg(const char *pname) {
 #ifdef UCONVMSG_LINK
             fprintf(stderr,
                     "%s: setAppData was called, internal data %s failed to load\n",
-                        UCONVMSG);
+                        pname, UCONVMSG);
 #endif
  
             err = U_ZERO_ERROR;
