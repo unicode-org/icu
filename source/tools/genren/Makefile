@@ -9,12 +9,12 @@ ICUDIR=ICUunrenamed
 TOP=../..
 SO=so
 
-COM=$(ICUDIR)/common/libicuuc.$(SO)
-I18=$(ICUDIR)/i18n/libicui18n.$(SO)
-LAY=$(ICUDIR)/layout/libicule.$(SO)
-LEX=$(ICUDIR)/layoutex/libiculx.$(SO)
+COM=$(ICUDIR)/lib/libicuuc.$(SO)
+I18=$(ICUDIR)/lib/libicui18n.$(SO)
+LAY=$(ICUDIR)/lib/libicule.$(SO)
+LEX=$(ICUDIR)/lib/libiculx.$(SO)
 DAT=$(ICUDIR)/stubdata/libicudata.$(SO)
-UIO=$(ICUDIR)/extra/ustdio/libicuio.$(SO)
+UIO=$(ICUDIR)/lib/libicuio.$(SO)
 
 LIBS=$(COM) $(I18) $(LAY) $(LEX) $(UIO)
 
