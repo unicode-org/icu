@@ -2753,7 +2753,9 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
             v = u_getPropertyValueEnum(p, vname);
             if (v == UCHAR_INVALID_CODE) {
                 // Handle numeric CCC
-                if (p == UCHAR_CANONICAL_COMBINING_CLASS) {
+                if (p == UCHAR_CANONICAL_COMBINING_CLASS ||
+                    p == UCHAR_TRAIL_CANONICAL_COMBINING_CLASS ||
+                    p == UCHAR_LEAD_CANONICAL_COMBINING_CLASS) {
                     char* end;
                     double value = uprv_strtod(vname, &end);
                     v = (int32_t) value;
