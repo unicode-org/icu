@@ -60,8 +60,12 @@
 [
 .BI "\-b\fP, \fB\-\-block\-size" " size"
 ]
+[
 .BI "\-f\fP, \fB\-\-from\-code" " encoding"
+]
+[
 .BI "\-t\fP, \fB\-\-to\-code" " encoding"
+]
 [
 .IR file .\|.\|.
 ]
@@ -76,9 +80,13 @@ converts, or transcodes, each given
 .I file
 is specified) from one
 .I encoding
-to another. The transcoding is done using Unicode as a pivot encoding
+to another. 
+The transcoding is done using Unicode as a pivot encoding
 (i.e. the data are first transcoded from their original encoding to
 Unicode, and then from Unicode to the destination encoding).
+If an
+.I encoding
+is not specified, the default encoding is used.
 .PP
 When calling
 .BR uconv ,
