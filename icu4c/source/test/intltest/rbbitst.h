@@ -19,6 +19,7 @@
 
 class Vector;
 class Enumeration;
+class BITestData;
 
 /**
  * Test the RuleBasedBreakIterator class giving different rules
@@ -103,40 +104,32 @@ private:
      * previous() and isBoundary().
      * It makes use of internal functions to achieve this.
      **/
-    void generalIteratorTest(RuleBasedBreakIterator& bi, Vector* expectedResult);
+    void generalIteratorTest(RuleBasedBreakIterator& bi, BITestData  &td);
     /**
      * Internal method to perform iteration and test the first() and next() functions
      **/
-    Vector* testFirstAndNext(RuleBasedBreakIterator& bi, UnicodeString& text);
+    void testFirstAndNext(RuleBasedBreakIterator& bi, BITestData &td);
     /**
      * Internal method to perform iteration and test the last() and previous() functions
      **/
-    Vector* testLastAndPrevious(RuleBasedBreakIterator& bi, UnicodeString& text);
+    void testLastAndPrevious(RuleBasedBreakIterator& bi, BITestData &td);
     /**
      * Internal method to perform iteration and test the following() function
      **/
-    void testFollowing(RuleBasedBreakIterator& bi, UnicodeString& text, int32_t *boundaries);
+    void testFollowing(RuleBasedBreakIterator& bi, BITestData &td);
     /**
      * Internal method to perform iteration and test the preceding() function
      **/
-    void testPreceding(RuleBasedBreakIterator& bi, UnicodeString& text, int32_t *boundaries);
+    void testPreceding(RuleBasedBreakIterator& bi, BITestData &td);
     /**
      * Internal method to perform iteration and test the isBoundary() function
      **/
-    void testIsBoundary(RuleBasedBreakIterator& bi, UnicodeString& text, int32_t *boundaries);
-    /** 
-     * Internal method which does the comparision of expected and got results.
-     **/
-    void compareFragmentLists(UnicodeString& f1Name, UnicodeString& f2Name, Vector* f1, Vector* f2);
+    void testIsBoundary(RuleBasedBreakIterator& bi, BITestData &td);
     /**
      * Internal method to perform tests of BreakIterator multiple selection functionality 
      * on different kinds of iterators (word, sentence, line and character)
      **/
-    void doMultipleSelectionTest(RuleBasedBreakIterator& iterator, UnicodeString& testText);
-    /**
-     * Internal method to create test data string from an enumerator
-     **/
-    UnicodeString createTestData(Enumeration* e);
+    void doMultipleSelectionTest(RuleBasedBreakIterator& iterator, BITestData &td);
 
 };
 
