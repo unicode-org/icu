@@ -45,28 +45,36 @@ static void maskingError(const TransliterationRule& rule1,
  * Construct a new empty rule set.
  */
 TransliterationRuleSet::TransliterationRuleSet(UErrorCode& status) {
-    maxContextLength = 0;
-    ruleVector = new UVector(status);
-    ruleVector->setDeleter(&_deleteRule);
+    ruleVector = new UVector(&_deleteRule, NULL, status);
     rules = NULL;
+    maxContextLength = 0;
     if (ruleVector == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
 }
 
 /**
- * Copy constructor.  We assume that the ruleset being copied
- * has already been frozen.
+ * Copy constructor.
  */
 TransliterationRuleSet::TransliterationRuleSet(const TransliterationRuleSet& other) :
     ruleVector(0),
+    rules(0),
     maxContextLength(other.maxContextLength) {
 
+    int32_t i, len;
     uprv_memcpy(index, other.index, sizeof(index));
-    int32_t len = index[256]; // see freeze()
-    rules = new TransliterationRule*[len];
-    for (int32_t i=0; i<len; ++i) {
-        rules[i] = new TransliterationRule(*other.rules[i]);
+    UErrorCode status = U_ZERO_ERROR;
+    ruleVector = new UVector(&_deleteRule, NULL, status);
+    if (other.ruleVector != 0 && ruleVector != 0 && U_SUCCESS(status)) {
+        len = other.ruleVector->size();
+        for (i=0; i<len && U_SUCCESS(status); ++i) {
+            ruleVector->addElement(new TransliterationRule(
+              *(TransliterationRule*)other.ruleVector->elementAt(i)), status);
+        }
+    }
+    if (other.rules != 0) {
+        UParseError p;
+        freeze(p, status);
     }
 }
 
@@ -74,7 +82,7 @@ TransliterationRuleSet::TransliterationRuleSet(const TransliterationRuleSet& oth
  * Destructor.
  */
 TransliterationRuleSet::~TransliterationRuleSet() {
-    delete ruleVector;
+    delete ruleVector; // This deletes the contained rules
     delete[] rules;
 }
 
@@ -101,6 +109,9 @@ int32_t TransliterationRuleSet::getMaximumContextLength(void) const {
  * significant.  The last call to this method must be followed by
  * a call to <code>freeze()</code> before the rule set is used.
  *
+ * <p>If freeze() has already been called, calling addRule()
+ * unfreezes the rules, and freeze() must be called again.
+ *
  * @param adoptedRule the rule to add
  */
 void TransliterationRuleSet::addRule(TransliterationRule* adoptedRule,
@@ -116,7 +127,7 @@ void TransliterationRuleSet::addRule(TransliterationRule* adoptedRule,
         maxContextLength = len;
     }
 
-    delete[] rules; // Contains alias pointers
+    delete rules;
     rules = 0;
 }
 
