@@ -22,6 +22,7 @@
  * Test functions to set and get data fields
  **/
 static void TestBasicGetters(void);
+static void TestPrefixes(void);
 /**
  * Use Locale to access Resource file data and compare against expected values
  **/
