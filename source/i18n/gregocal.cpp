@@ -1521,9 +1521,9 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
      * containing the Gregorian cutover point.  Do shared computations
      * for these fields here.  [j81 - aliu] */
     UBool inCutoverMonth = FALSE;
-    int32_t cMonthLen; // 'c' for cutover; in days
-    int32_t cDayOfMonth; // no discontinuity: [0, cMonthLen)
-    double cMonthStart; // in ms
+    int32_t cMonthLen=0; // 'c' for cutover; in days
+    int32_t cDayOfMonth=0; // no discontinuity: [0, cMonthLen)
+    double cMonthStart=0.0; // in ms
     switch (field) {
     case DAY_OF_MONTH:
     case WEEK_OF_MONTH:

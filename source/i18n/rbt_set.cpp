@@ -217,7 +217,7 @@ TransliterationRuleSet::findMatch(const Replaceable& text,
     /* We only need to check our indexed bin of the rule table,
      * based on the low byte of the first key character.
      */
-    int16_t x = text.charAt(pos.start) & 0xFF;
+    int16_t x = (int16_t) (text.charAt(pos.start) & 0xFF);
     for (int32_t i=index[x]; i<index[x+1]; ++i) {
         if (rules[i]->matches(text, pos, data, filter)) {
             return rules[i];
@@ -264,7 +264,7 @@ TransliterationRuleSet::findIncrementalMatch(const Replaceable& text,
      * based on the low byte of the first key character.
      */
     isPartial = FALSE;
-    int16_t x = text.charAt(pos.start) & 0xFF;
+    int16_t x = (int16_t) (text.charAt(pos.start) & 0xFF);
     for (int32_t i=index[x]; i<index[x+1]; ++i) {
         int32_t match = rules[i]->getMatchDegree(text, pos, data, filter);
         switch (match) {

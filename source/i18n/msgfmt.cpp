@@ -256,7 +256,7 @@ MessageFormat::applyPattern(const UnicodeString& newPattern,
             case 0x007D /*'}'*/:
                 if (braceStack == 0) {
                     part = 0;
-                    makeFormat(i, formatNumber, segments, success);
+                    makeFormat(/*i,*/ formatNumber, segments, success);
                     if(U_FAILURE(success))
                         return;
                     formatNumber++;
@@ -930,7 +930,7 @@ MessageFormat::itos(int32_t i,
 // Checks which format instance we are really using based on the segments.
  
 void
-MessageFormat::makeFormat(int32_t position, 
+MessageFormat::makeFormat(/*int32_t position, */
                           int32_t offsetNumber, 
                           UnicodeString* segments,
                           UErrorCode& success)

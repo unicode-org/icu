@@ -41,7 +41,7 @@ Format::~Format()
 // -------------------------------------
 // copy constructor
 
-Format::Format(const Format& that)
+Format::Format(const Format& /*that*/)
 {
 }
 
@@ -49,7 +49,7 @@ Format::Format(const Format& that)
 // assignment operator
 
 Format&
-Format::operator=(const Format& that)
+Format::operator=(const Format& /*that*/)
 {
     return *this;
 }
@@ -93,7 +93,7 @@ Format::parseObject(const UnicodeString& source,
 // -------------------------------------
 
 UBool
-Format::operator==(const Format& that) const
+Format::operator==(const Format& /*that*/) const
 {
     // Add this implementation to make linker happy.
     return TRUE;

@@ -25,7 +25,7 @@ const UDate CalendarRegressionTest::LATEST_SUPPORTED_MILLIS    =   4503599627370
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
 
 void 
-CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     // if (exec) logln((UnicodeString)"TestSuite NumberFormatRegressionTest");
     switch (index) {
@@ -742,7 +742,7 @@ CalendarRegressionTest::test4031502()
         GregorianCalendar *cal = (GregorianCalendar*)Calendar::createInstance(status);
         cal->set(Calendar::YEAR, 1997);
         cal->set(Calendar::DAY_OF_YEAR, 1);
-        UDate d = cal->getTime(status);             // Should be Jan 1
+        //UDate d = cal->getTime(status);             // Should be Jan 1
         //logln(d.toString());
         if (cal->get(Calendar::DAY_OF_YEAR, status) != 1)
             errln("Fail: DAY_OF_YEAR not set");

@@ -21,7 +21,7 @@ public:
     NullFilter(UBool r) { result = r; }
     NullFilter(const NullFilter& f) { result = f.result; }
     virtual ~NullFilter() {}
-    virtual UBool contains(UChar c) const { return result; }
+    virtual UBool contains(UChar /*c*/) const { return result; }
     virtual UnicodeFilter* clone() const { return new NullFilter(*this); }
 };
 
