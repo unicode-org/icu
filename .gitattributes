@@ -146,7 +146,6 @@ icu4j/src/com/ibm/data/misc/english.dict -text svneol=native#application/octet-s
 icu4j/src/com/ibm/demo/calendar/package.html svneol=native#text/html
 icu4j/src/com/ibm/demo/holiday/package.html svneol=native#text/html
 icu4j/src/com/ibm/demo/package.html svneol=native#text/html
-icu4j/src/com/ibm/demo/rbbi/english.dict -text
 icu4j/src/com/ibm/demo/rbbi/package.html svneol=native#text/html
 icu4j/src/com/ibm/demo/rbnf/package.html svneol=native#text/html
 icu4j/src/com/ibm/demo/translit/demo.html svneol=native#text/html
@@ -187,7 +186,6 @@ icu4j/src/com/ibm/test/calendar/package.html svneol=native#text/html
 icu4j/src/com/ibm/test/compression/package.html svneol=native#text/html
 icu4j/src/com/ibm/test/normalizer/package.html svneol=native#text/html
 icu4j/src/com/ibm/test/package.html svneol=native#text/html
-icu4j/src/com/ibm/test/rbbi/english.dict -text
 icu4j/src/com/ibm/test/rbbi/package.html svneol=native#text/html
 icu4j/src/com/ibm/test/rbnf/package.html svneol=native#text/html
 icu4j/src/com/ibm/test/search/package.html svneol=native#text/html
