@@ -49,7 +49,7 @@ public class LDML2ICUConverter {
         UOption.SOURCEDIR(),
         UOption.DESTDIR(),
         UOption.create("specialsdir", 'p', UOption.REQUIRES_ARG),
-        UOption.create("write-deprecated", 'w', UOption.NO_ARG),
+        UOption.create("write-deprecated", 'w', UOption.REQUIRES_ARG),
         UOption.create("write-draft", 'f', UOption.NO_ARG),
         UOption.create("supplemental", 'l', UOption.NO_ARG),
     };
@@ -66,6 +66,7 @@ public class LDML2ICUConverter {
     private static final String BOM       = "\uFEFF";
     private static final String CHARSET   = "UTF-8";
     private static final String COLON     = ":";
+    private static final String DEPRECATED_LIST =  "deprecatedList.xml";
     
     private Document fullyResolvedDoc = null;
     private Document specialsDoc      = null;
@@ -79,16 +80,16 @@ public class LDML2ICUConverter {
     }
     
     private void usage() {
-        System.out.println("\nUsage: LDML2ICUConverter [OPTIONS] [FILES]\n\n"+
+        System.out.println("\nUsage: LDML2ICUConverter [OPTIONS] [FILES]\nLDML2ICUConverter [OPTIONS] -w [DIRECTORY] \n"+
             "This program is used to convert LDML files to ICU ResourceBundle TXT files.\n"+
             "Please refer to the following options. Options are not case sensitive.\n"+
             "Options:\n"+
             "-s or --sourcedir          source directory for files followed by path, default is current directory.\n" +
             "-d or --destdir            destination directory, followed by the path, default is current directory.\n" +
             "-p or --specialsdir        source directory for files containing special data followed by the path. None if not spcified\n"+
-            "-w or --write-deprecated   write data for deprecated locales.\n"+
             "-f or --write-draft        write data for LDML nodes marked draft.\n"+
             "-l or --supplemental       read supplementalData.xml file from the given directory and write appropriate files to destination directory\n"+
+            "-w [dir] or --write-deprecated [dir]   write data for deprecated locales. 'dir' is a directory of source xml files.\n"+
             "-h or -? or --help         this usage text.\n"+
             "example: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter -s xxx -d yyy en.xml");
         System.exit(-1);
@@ -118,6 +119,13 @@ public class LDML2ICUConverter {
         }
         if(options[WRITE_DEPRECATED].doesOccur) {
             writeDeprecated = true;
+            if(remainingArgc>0) {
+                System.err.println("-w takes one argument, the directory, and no other XML files.\n");
+                usage();
+                return; // NOTREACHED
+            }
+            writeDeprecated();
+            System.exit(0);
         }
         if(options[WRITE_DRAFT].doesOccur) {
             writeDraft = true;
@@ -262,7 +270,7 @@ public class LDML2ICUConverter {
                  writeResource(res, xmlfileName);
              }
              
-             writeAliasedResource();
+           //  writeAliasedResource();
           }
          catch (Throwable se) {
              System.err.println(xmlfileName + ": ERROR: (parsing and writing) " + se.toString());
@@ -273,8 +281,9 @@ public class LDML2ICUConverter {
     private void writeAliasedResource(){
         if(locName==null || writeDeprecated==false){
             return;
-        }  
-        String lang = (String) deprecatedMap.get(ULocale.getLanguage(locName));
+        } 
+        String lang = null; // REMOVE 
+        //String lang = (String) deprecatedMap.get(ULocale.getLanguage(locName));
         //System.out.println("In aliased resource");
         if(lang!=null){
             ICUResourceWriter.ResourceTable table = new ICUResourceWriter.ResourceTable();
@@ -305,7 +314,6 @@ public class LDML2ICUConverter {
     public static final String DTE              = "DateTimeElements";
     
     private static final HashMap keyNameMap = new HashMap();
-    private static final HashMap deprecatedMap = new HashMap();
     static{
         keyNameMap.put("days", "dayNames");
         keyNameMap.put("months", "monthNames");
@@ -323,12 +331,6 @@ public class LDML2ICUConverter {
         keyNameMap.put("paperSize", "PaperSize");
         keyNameMap.put("measurementSystem", "MeasurementSystem");
         keyNameMap.put("fractions", "CurrencyData");
-        deprecatedMap.put("he", "iw");
-        deprecatedMap.put("id", "in");
-        deprecatedMap.put("jv", "jw");
-        deprecatedMap.put("nn", "no_NO_NY");
-        //deprecatedMap.put("sr_Latn", "sh");// not sure how to handle this!
-        deprecatedMap.put("yi", "ji");
         
         //TODO: "FX",  "RO",  "TP",  "ZR",   /* obsolete country codes */      
     }
@@ -2941,5 +2943,183 @@ public class LDML2ICUConverter {
             System.err.println(e);
             System.exit(1);
         }
+    }
+    
+    private void writeDeprecated(){
+        File f = new File(specialsDir + File.separator + "..", DEPRECATED_LIST);
+        File depF = new File(options[WRITE_DEPRECATED].value);
+        if(!depF.isDirectory()) {
+            System.err.println("Error:  " + options[WRITE_DEPRECATED].value + " isn't a directory.");
+            usage();
+            return; // NOTREACHED
+        }
+        String myTreeName = depF.getName();
+        //   System.out.println("myTreeName = " + myTreeName);
+        //   System.out.println("deprecated file " + f.toString());
+        try {
+            Document doc = LDMLUtilities.parse(f.getPath(), true);
+            // System.out.println("parsed");
+            // StringBuffer xpath = new StringBuffer();
+            // xpath.append("//ldml");
+            // int savedLength = xpath.length();
+            // System.out.println("doc: " + doc.toString() + ", n= " + doc.getNodeName());
+            for(Node root = doc.getFirstChild();root != null; root=root.getNextSibling())
+            {
+                // System.out.println("root: n= " + root.getNodeName());
+                if(root.getNodeType()!=Node.ELEMENT_NODE){
+                    // System.out.println(" - not ELEMENT");
+                    continue;
+                }
+                for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
+                    // System.out.println("n: " + node.toString());
+                    if(node.getNodeType()!=Node.ELEMENT_NODE){
+                        // System.out.println(" - not ELEMENT");
+                        continue;
+                    }
+                    String name = node.getNodeName();
+                    String type;
+                    // System.out.println("Node: " + name.toString());
+                    
+                    String treeName  = LDMLUtilities.getAttributeValue(node, "type");
+                    // System.out.println("TreeName = " + treeName);
+                    
+                    if(treeName.equals(myTreeName)) {
+                        // System.out.println("Match!");
+                        
+                        HashMap fromToMap = new HashMap();
+                        HashMap fromXpathMap = new HashMap();
+                        HashMap fromFiles = new HashMap();
+                        
+                        
+                        // 1. get the list of input XML files
+                        FileFilter myFilter = new FileFilter() { 
+                            public boolean accept(File f) { 
+                                String n = f.getName();
+                                return(!f.isDirectory()
+                                       &&n.endsWith(".xml")
+                                       &&!n.startsWith("supplementalData") // not a locale
+                                       &&!n.startsWith("root")); // root is implied, will be included elsewhere.
+                            }
+                        };
+                        File inFiles[] = depF.listFiles(myFilter);
+                        
+                        int nrInFiles = inFiles.length;
+                        String inFileText = "";
+                        for(int i=0;i<nrInFiles;i++) {
+                            // System.out.println("FN put " + inFiles[i].getName());
+                            fromFiles.put(inFiles[i].getName(),inFiles[i]); // add to hash
+                            if((i%5)==4) {
+                                inFileText = inFileText + "\\\n";
+                            }
+                            inFileText = inFileText +(i==0?" ":" ") +  (inFiles[i].getName()).substring(0,inFiles[i].getName().indexOf('.'))+".txt";
+                        }
+                        // System.out.println("In Files: " + inFileText);
+                        String aliasFilesList = "";
+                        
+                        for(Node alias=node.getFirstChild();alias!=null;alias=alias.getNextSibling()){
+                            if(alias.getNodeType()!=Node.ELEMENT_NODE){
+                                continue;
+                            }
+                            try {
+                                String from = LDMLUtilities.getAttributeValue(alias,"from");
+                                String to = LDMLUtilities.getAttributeValue(alias,"to");
+                                String xpath = null;
+                                if(to.indexOf('@')!=-1) {
+                                    xpath = LDMLUtilities.getAttributeValue(alias,"xpath");
+                                    if(xpath==null) {
+                                        System.err.println("Malformed alias - '@' but no xpath: " + alias.toString());
+                                        System.exit(-1);
+                                        return; //NOTREACHED
+                                    }
+                                }
+                                if((from==null)||(to==null)) {
+                                    System.err.println("Malformed alias - no 'from' or no 'to': " + alias.toString());
+                                    System.exit(-1);
+                                    return; //NOTREACHED
+                                }
+                                String toFileName = to;
+                                if(xpath!=null) {
+                                    toFileName=to.substring(0,to.indexOf('@'));
+                                }
+                                if(!fromFiles.containsKey(toFileName+".xml")) {
+                                    System.out.println("WARNING: Alias but no input file - skipping: " + from + " -> " + toFileName + ".xml" );
+                                } else {
+                                    // System.out.println("Had file " + toFileName + ".xml");
+                                    aliasFilesList = aliasFilesList + " " + from + ".txt"; 
+                                    ULocale fromLocale = new ULocale(from);
+                                    fromToMap.put(fromLocale,new ULocale(to));
+                                    if(xpath!=null) {
+                                        fromXpathMap.put(fromLocale,xpath);
+                                    }
+                                    
+                                    // write an individual file
+                                    writeDeprecatedLocale(from+".txt", fromLocale, new ULocale(to), xpath);
+                                } 
+                                // DEBUGGING LINE
+                                //  System.out.println("FROM: " + from + ", TO: " + to + ((xpath!=null)?(", XPATH: " + xpath):("")));
+                            } catch(Exception e) {
+                                System.err.println("While parsing an alias: " + e.toString() + " - " + alias.toString());
+                                e.printStackTrace();
+                                System.exit(1);
+                            }
+                        }
+                        
+                        // Now- write the actual items
+                        
+                        /// Write resfiles.mk
+                        String resfiles_mk_name = destDir + File.separator + "resfiles.mk";
+                        try {
+                            System.out.println(" Writing ICU build file: " + resfiles_mk_name);
+                            PrintStream resfiles_mk = new PrintStream(new  FileOutputStream(resfiles_mk_name)); 
+                            resfiles_mk.println("# generated.");
+                            resfiles_mk.println("GENRB_ALIAS_SOURCE = " + aliasFilesList);
+                            resfiles_mk.println("");
+                            resfiles_mk.println("");
+                            resfiles_mk.print("GENRB_SOURCE = " + inFileText);
+                            resfiles_mk.println("");
+                            resfiles_mk.println("");
+                            
+                            resfiles_mk.close();
+                        }catch( IOException e) {
+                            System.err.println("While writing " + resfiles_mk_name);
+                            e.printStackTrace();
+                            System.exit(1);
+                        }
+                        
+                        
+                        System.exit(0);
+                        return;
+                    }
+                    
+                }
+            }
+        } catch(Exception e) {
+            System.err.println(e);
+            e.printStackTrace();
+            System.exit(1);
+        }
+        System.out.println("done.");
+        System.err.println("Error: did not find tree " + myTreeName + " in the deprecated alias table.");
+        System.exit(0);
+    }
+    
+    private void writeDeprecatedLocale(String fileName, ULocale fromLocale, ULocale toLocale, String xpath)
+    {
+        String fullName = destDir + File.separator + fileName;
+        try {
+            System.out.println(" Writing deprecated locale: " + fullName);
+            PrintStream ourFile = new PrintStream(new  FileOutputStream(fullName)); 
+            ourFile.println("// generated.");
+                ourFile.println("sorry not real {} yet.");
+                
+                
+                ourFile.close();
+                
+        }catch( IOException e) {
+            System.err.println("While writing " + fileName);
+            e.printStackTrace();
+            System.exit(1);
+        }
+        
     }
 }
