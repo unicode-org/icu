@@ -196,6 +196,10 @@ SOURCE=.\cloctst.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\cmsccoll.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\cmsgtst.c
 # End Source File
 # Begin Source File
