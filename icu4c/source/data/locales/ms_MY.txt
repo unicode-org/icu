@@ -9,7 +9,7 @@ ms_MY {
    Version{ "x1.0" }
     CurrencyElements { 
             "R",
-            "MYR ",
+            "MYR",
             ".",
     }
     DateTimePatterns { 
