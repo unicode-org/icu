@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2004/03/16 15:44:57 $ 
- * $Revision: 1.22 $
+ * $Date: 2004/03/23 21:33:58 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -475,12 +475,12 @@ import java.util.ResourceBundle;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.22 $ $Date: 2004/03/16 15:44:57 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.23 $ $Date: 2004/03/23 21:33:58 $
  * @see NumberFormat
  * @see DecimalFormat
  * @stable ICU 2.0
  */
-public final class RuleBasedNumberFormat extends NumberFormat {
+public class RuleBasedNumberFormat extends NumberFormat {
 
     //-----------------------------------------------------------------------
     // constants
@@ -1306,7 +1306,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * @param ruleSet The rule set to use to format the number
      * @return The text that resulted from formatting the number
      */
-    String format(double number, NFRuleSet ruleSet) {
+    protected String format(double number, NFRuleSet ruleSet) {
         // all API format() routines that take a double vector through
         // here.  Create an empty string buffer where the result will
         // be built, and pass it to the rule set (along with an insertion
@@ -1325,7 +1325,8 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * @param ruleSet The rule set to use to format the number
      * @return The text that resulted from formatting the number
      */
-    String format(long number, NFRuleSet ruleSet) {
+    // temporary for development only
+    protected String format(long number, NFRuleSet ruleSet) {
         // all API format() routines that take a double vector through
         // here.  We have these two identical functions-- one taking a
         // double and one taking a long-- the couple digits of precision

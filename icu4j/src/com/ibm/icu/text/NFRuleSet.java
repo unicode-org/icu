@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFRuleSet.java,v $ 
- * $Date: 2004/03/12 20:15:13 $ 
- * $Revision: 1.8 $
+ * $Date: 2004/03/23 21:33:58 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -24,9 +24,10 @@ import java.util.Vector;
  * appropriate rule for formatting a particular number and dispatch
  * control to it, and to arbitrate between different rules when parsing
  * a number.
- * $RCSfile: NFRuleSet.java,v $ $Revision: 1.8 $ $Date: 2004/03/12 20:15:13 $
+ * $RCSfile: NFRuleSet.java,v $ $Revision: 1.9 $ $Date: 2004/03/23 21:33:58 $
  */
-final class NFRuleSet {
+// temporary testing only
+public final class NFRuleSet {
     //-----------------------------------------------------------------------
     // constants
     //-----------------------------------------------------------------------
@@ -243,7 +244,8 @@ final class NFRuleSet {
                 // the default base value for the next rule
                 default:
                     if (rule.getBaseValue() < defaultBaseValue) {
-                        throw new IllegalArgumentException("Rules are not in order");
+                        throw new IllegalArgumentException("Rules are not in order, base: " + 
+							   rule.getBaseValue() + " < " + defaultBaseValue);
                     }
                     defaultBaseValue = rule.getBaseValue();
                     if (!isFractionRuleSet) {
