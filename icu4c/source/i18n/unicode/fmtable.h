@@ -28,25 +28,15 @@ U_NAMESPACE_BEGIN
  * class which interconverts between the primitive numeric types
  * (double, long, etc.) as well as UDate and UnicodeString.
  *
- * <p>Formattable objects may also contain a currency in the form of a
- * 3-letter ISO 4217 code.  Any Formattable object may have an
- * associated currency, although this is intended for use with numeric
- * objects.  A numeric Formattable object with a currency is a
- * "currency amount", and is handled specially by NumberFormat.
- * During formatting, the currency of the object is used to determine
- * the currency display name or symbol, the rounding, and the fraction
- * digit counts.  During parsing, if a valid currency is parsed, it is
- * stored in the Formattable result.
- * 
- * <p>Note that this is fundamentally different from the Java behavior, since
- * in this case the various formattable objects do not occupy a hierarchy,
- * but are all wrapped within this one class.  Formattable encapsulates all
- * the polymorphism in itself.
- * 
- * <p>It would be easy to change this so that Formattable was an abstract base
- * class of a genuine hierarchy, and that would clean up the code that
- * currently must explicitly check for type, but that seems like overkill at
- * this point.
+ * <p>Internally, a Formattable object is a union of primitive types.
+ * As such, it can only store one flavor of data at a time.  To
+ * determine what flavor of data it contains, use the getType method.
+ *
+ * <p>As of ICU 3.0, Formattable may also wrap a UObject pointer,
+ * which it owns.  This allows an instance of any ICU class to be
+ * encapsulated in a Formattable.  For legacy reasons and for
+ * efficiency, primitive numeric types are still stored directly
+ * within a Formattable.
  *
  * <p>The Formattable class is not suitable for subclassing.
  */
@@ -609,4 +599,4 @@ U_NAMESPACE_END
 
 #endif //_FMTABLE
 //eof
-     
+
