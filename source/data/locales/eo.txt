@@ -7,10 +7,20 @@
 // * restricted by GSA ADP Schedule Contract with IBM Corp.                  *
 // *                                                                         *
 // ***************************************************************************
-// Feedback to : schererm@us.ibm.com
+// Feedback to: markus.scherer@us.ibm.com
+//              or better http://www.jtcsv.com/cgibin/icu-bugs
 
 eo {
-    Version { "2.0" } 
+    Version { "2.1" } 
+
+    // collation: accented characters have primary (base character) differences
+    // see Jitterbug 1440 http://www.jtcsv.com/cgibin/icu-bugs?findid=1440
+    CollationElements { 
+        Version { "1.0" }
+        Sequence { "&c<\u0109 &C<\u0108 &g<\u011d &G<\u011c &h<\u0125 &H<\u0124"
+                   "&j<\u0135 &J<\u0134 &s<\u015d &S<\u015c &u<\u016d &U<\u016c" }
+    }
+
     Countries { 
         AT { "A\u016dstrujo" }
         BE { "Belgujo" }
