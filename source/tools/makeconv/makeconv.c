@@ -763,13 +763,11 @@ createConverter(ConvData *data, const char *converterName, UErrorCode *pErrorCod
                     uprv_memcpy(staticData->subChar, baseData.staticData.subChar, 4);
                     staticData->subCharLen=baseData.staticData.subCharLen;
                 }
-                if(states->minCharLength==1 && states->maxCharLength>=2) {
-                    if(staticData->subChar1==0) {
-                        staticData->subChar1=baseData.staticData.subChar1;
-                    }
-                } else {
-                    staticData->subChar1=0;
-                }
+                /*
+                 * do not copy subChar1 -
+                 * only use what is explicitly specified
+                 * because it cannot be unset in the extension file header
+                 */
 
                 /* get the fallback flags */
                 fallbackFlags=0;
