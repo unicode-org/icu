@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/TestAll.java,v $
- * $Date: 2003/06/03 18:49:29 $
- * $Revision: 1.4 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
 

@@ -3,12 +3,6 @@
  * Copyright (C) 2002-2003, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/Tokenizer.java,v $
- * $Date: 2004/02/07 00:59:25 $
- * $Revision: 1.4 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 

@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/HebrewTest.java,v $ 
- * $Date: 2003/10/02 20:50:58 $ 
- * $Revision: 1.11 $
- *
- *****************************************************************************************
  */
 
 package com.ibm.icu.dev.test.calendar;

@@ -4,12 +4,6 @@
  * Copyright (C) 2002-2003, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/UnicodePropertySource.java,v $
- * $Date: 2003/12/29 19:48:57 $
- * $Revision: 1.5 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 

@@ -3,12 +3,6 @@
  * Copyright (C) 2002-2003, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TestBNF.java,v $
- * $Date: 2003/12/20 03:06:53 $
- * $Revision: 1.3 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 

@@ -3,12 +3,6 @@
 * Copyright (C) 2002-2003, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/docs/CheckTags.java,v $ 
-* $Date: 2003/12/01 22:10:36 $ 
-* $Revision: 1.18 $
-*
-*******************************************************************************
 */
 /**
  * This is a tool to check the tags on ICU4J files.  In particular, we're looking for:

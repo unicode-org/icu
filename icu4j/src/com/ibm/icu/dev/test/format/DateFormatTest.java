@@ -3,11 +3,6 @@
  * Copyright (C) 2001-2003, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2004/03/11 07:04:29 $ 
- * $Revision: 1.25 $
- *
- *****************************************************************************************
  */
 
 /** 

@@ -3,12 +3,6 @@
 * Copyright (C) 2004, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterSurrogateTest.java,v $
-* $Date: 2004/03/13 04:07:22 $
-* $Revision: 1.2 $
-*
-*******************************************************************************
 */
 
 package com.ibm.icu.dev.test.lang;

@@ -3,12 +3,6 @@
  * Copyright (C) 2003, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/Attic/IDNA_rules.java,v $
- * $Date: 2003/08/21 23:42:22 $
- * $Revision: 1.1 $
- *
- *******************************************************************************
 */
 package com.ibm.icu.dev.test.stringprep;
 

@@ -3,12 +3,6 @@
  * Copyright (C) 2003, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/LocaleDataTest.java,v $
- * $Date: 2003/12/31 21:22:16 $
- * $Revision: 1.3 $
- *
- *******************************************************************************
 */
 package com.ibm.icu.dev.test.util;
 

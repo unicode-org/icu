@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/SimpleBITest.java,v $
- * $Date: 2004/02/06 21:53:59 $
- * $Revision: 1.9 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.dev.test.rbbi;
 

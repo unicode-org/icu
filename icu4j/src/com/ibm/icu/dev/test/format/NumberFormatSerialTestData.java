@@ -3,11 +3,6 @@
  * Copyright (C) 2001, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatSerialTestData.java,v $
- * $Date: 2002/02/19 17:59:03 $
- * $Revision: 1.4 $
- *
- *****************************************************************************************
  */
 
 package com.ibm.icu.dev.test.format;

@@ -3,12 +3,6 @@
 * Copyright (C) 1996-2002, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/StringTokenizerTest.java,v $ 
-* $Date: 2002/10/28 21:59:22 $ 
-* $Revision: 1.1 $
-*
-*******************************************************************************
 */
 
 package com.ibm.icu.dev.test.util;
