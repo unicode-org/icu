@@ -121,7 +121,7 @@ void reportCResult( const UChar source[], const UChar target[],
 
     if(keyResult != expectedResult || keyResult != compareResult)
     {
-      char sk[256];
+      char sk[10000];
       log_verbose("SortKey1: %s\n", dumpSk(sourceKey, sk));
       log_verbose("SortKey2: %s\n", dumpSk(targetKey, sk));
     }
