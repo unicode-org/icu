@@ -4,13 +4,13 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UCharacterDB.java,v $ 
-* $Date: 2001/02/27 21:30:12 $ 
-* $Revision: 1.2 $
+* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UCharacterDB.java,v $ 
+* $Date: 2001/02/28 20:59:44 $ 
+* $Revision: 1.1 $
 *
 *******************************************************************************
 */
-package com.ibm.icu.text;
+package com.ibm.text;
 
 /**
 * Internal base class for all character databases.
@@ -25,8 +25,8 @@ package com.ibm.icu.text;
 * Data populated by <a href=UGenReader.html>UGenReader</a>
 * @author Syn Wee Quek
 * @since oct3100 HALLOWEEN!!
-* @see com.ibm.icu.text.UCharacterPropertyDB
-* @see com.ibm.icu.text.UCharacterNameDB
+* @see com.ibm.text.UCharacterPropertyDB
+* @see com.ibm.text.UCharacterNameDB
 */
 
 class UCharacterDB

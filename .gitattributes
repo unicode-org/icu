@@ -70,8 +70,6 @@ icu4j/src/com/ibm/icu/impl/data/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/impl/data/thai_dict -text
 icu4j/src/com/ibm/icu/math/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/text/package.html svneol=native#text/html
-icu4j/src/com/ibm/icu/text/unames.dat -text
-icu4j/src/com/ibm/icu/text/uprops.dat -text
 icu4j/src/com/ibm/icu/util/package.html svneol=native#text/html
 icu4j/src/com/ibm/math/package.html svneol=native#text/html
 icu4j/src/com/ibm/richtext/awtui/package.html svneol=native#text/html
@@ -125,6 +123,8 @@ icu4j/src/com/ibm/text/resources/Transliterator_Telugu_InterIndic.utf8.txt -text
 icu4j/src/com/ibm/text/resources/Transliterator_UnicodeName_UnicodeChar.utf8.txt -text svneol=unset#application/octet-stream
 icu4j/src/com/ibm/text/resources/package.html svneol=native#text/html
 icu4j/src/com/ibm/text/resources/thai_dict -text
+icu4j/src/com/ibm/text/unames.dat -text
+icu4j/src/com/ibm/text/uprops.dat -text
 icu4j/src/com/ibm/tools/compression/package.html svneol=native#text/html
 icu4j/src/com/ibm/tools/normalizer/package.html svneol=native#text/html
 icu4j/src/com/ibm/util/package.html svneol=native#text/html

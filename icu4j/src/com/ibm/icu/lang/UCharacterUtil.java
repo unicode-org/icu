@@ -4,13 +4,13 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UCharacterUtil.java,v $ 
-* $Date: 2000/12/26 20:00:56 $ 
+* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/Attic/UCharacterUtil.java,v $ 
+* $Date: 2001/02/28 20:59:44 $ 
 * $Revision: 1.1 $
 *
 *******************************************************************************
 */
-package com.ibm.icu.text;
+package com.ibm.text;
 
 /**
 * Internal character utility class for simple data type conversion and String 

@@ -4,13 +4,13 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UGenPropReader.java,v $ 
-* $Date: 2001/02/26 23:45:37 $ 
-* $Revision: 1.2 $
+* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UGenPropReader.java,v $ 
+* $Date: 2001/02/28 20:59:44 $ 
+* $Revision: 1.1 $
 *
 *******************************************************************************
 */
-package com.ibm.icu.text;
+package com.ibm.text;
 
 import java.io.DataInputStream;
 import java.util.Arrays;

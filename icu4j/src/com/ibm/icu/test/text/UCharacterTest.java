@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/text/Attic/UCharacterTest.java,v $ 
-* $Date: 2001/02/26 23:51:59 $ 
-* $Revision: 1.4 $
+* $Date: 2001/02/28 21:00:03 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -18,10 +18,10 @@ import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.util.Locale;
 import com.ibm.test.TestFmwk;
-import com.ibm.icu.text.UCharacter;
-import com.ibm.icu.text.UCharacterCategory;
-import com.ibm.icu.text.UCharacterDirection;
-import com.ibm.icu.text.UTF16;
+import com.ibm.text.UCharacter;
+import com.ibm.text.UCharacterCategory;
+import com.ibm.text.UCharacterDirection;
+import com.ibm.text.UTF16;
 
 /**
 * Testing class for UCharacter
@@ -423,7 +423,7 @@ public final class UCharacterTest extends TestFmwk
       "L   R   EN  ES  ET  AN  CS  B   S   WS  ON  LRE LRO AL  RLE RLO PDF NSM BN  ";
       
     // default unicode data file name
-    final String UNICODE_DATA_FILE = "data//unicode//UnicodeData.txt";
+    final String UNICODE_DATA_FILE = "src//data//unicode//UnicodeData.txt";
     
     // unicode data file path system name
     final String UNICODE_DATA_SYSTEM_NAME = "UnicodeData";

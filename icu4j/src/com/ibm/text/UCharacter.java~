@@ -4,15 +4,15 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UCharacter.java,v $ 
-* $Date: 2001/02/27 21:30:12 $ 
-* $Revision: 1.4 $
+* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UCharacter.java~,v $ 
+* $Date: 2001/02/28 20:59:44 $ 
+* $Revision: 1.1 $
 *
 *******************************************************************************
 */
 
 
-package com.ibm.icu.text;
+package com.ibm.text;
 
 import java.util.Locale;
 
@@ -86,8 +86,8 @@ import java.util.Locale;
 *        com.ibm.icu.test.text.UCharacterTest</a>
 * @author Syn Wee Quek
 * @since oct 06 2000
-* @see com.ibm.icu.text.UCharacterCategory
-* @see com.ibm.icu.text.UCharacterDirection
+* @see com.ibm.text.UCharacterCategory
+* @see com.ibm.text.UCharacterDirection
 * @see com.ibm.icu.test.text.UCharacterCompare
 * @see com.ibm.icu.test.text.UCharacterTest
 */
