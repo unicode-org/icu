@@ -310,6 +310,10 @@ res_countArrayItems(const ResourceData *pResData, const Resource res) {
     if(res!=RES_BOGUS) {
         switch(RES_GET_TYPE(res)) {
         case URES_STRING:
+        case URES_BINARY:
+        case URES_ALIAS:
+        case URES_INT:
+        case URES_INT_VECTOR:
             return 1;
         case URES_ARRAY:
         case URES_TABLE32: {
