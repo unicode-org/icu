@@ -3003,7 +3003,7 @@ TestSCSU() {
         0xdfff, 0x000d, 0x000a, 0x0041, 0x00df, 0x0401, 0x015f, 0x00df,
         0x01df, 0xf000, 0xdbff, 0xdfff
     };
-//
+
     /* see comment at japaneseSCSU: the same kind of different choice yields a slightly shorter
      * result here (34B vs. 35B)
      */
