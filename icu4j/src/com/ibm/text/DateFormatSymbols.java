@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/DateFormatSymbols.java,v $
- * $Date: 2000/11/21 06:54:53 $
- * $Revision: 1.7 $
+ * $Date: 2001/01/09 22:48:51 $
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -23,6 +23,7 @@ import java.text.resources.DateFormatZoneData;
 import com.ibm.util.Utility;
 import com.ibm.util.Calendar;
 import com.ibm.util.GregorianCalendar;
+import com.ibm.util.TimeZone;
 import java.util.MissingResourceException;
 
 /**
@@ -547,7 +548,33 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * the given time zone ID can't be located in the DateFormatSymbols object.
      * @see com.ibm.util.SimpleTimeZone
      */
-    final int getZoneIndex (String ID)
+    final int getZoneIndex(String ID) {
+        int result = _getZoneIndex(ID);
+        if (result >= 0) {
+            return result;
+        }
+        
+        // Do a search through the equivalency group for the given ID
+        int n = TimeZone.countEquivalentIDs(ID);
+        if (n > 1) {
+            for (int i=0; i<n; ++i) {
+                String equivID = TimeZone.getEquivalentID(ID, i);
+                if (!equivID.equals(ID)) {
+                    int equivResult = _getZoneIndex(equivID);
+                    if (equivResult >= 0) {
+                        return equivResult;
+                    }
+                }
+            }
+        }
+        
+        return -1;
+    }
+    
+    /**
+     * Lookup the given ID.  Do NOT do an equivalency search.
+     */
+    private int _getZoneIndex(String ID)
     {
         for (int index=0; index<zoneStrings.length; index++)
         {
