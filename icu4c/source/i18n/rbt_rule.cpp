@@ -27,11 +27,16 @@ static const UChar BACKSLASH  = 0x005C; // '\'
 
 // Macros for accessing the array of integers encoding the position of
 // the segments.  See rbt_pars.cpp::Segments for more details.
+// SEGMENTS_COUNT number of segments, n (half the number of parens)
+// SEGMENTS_LEN   length of the segments array (number of elements)
+// SEGMENTS_POS   position of parenthesis i, where i=0..2n-1
+// SEGMENTS_NUM   index into segments to access POS of $1.open,
+//                $1.close, $2.open, $2.close,.., $n.open, $n.close
 #define FIRST_SEG_POS_INDEX 2
-#define SEGMENTS_COUNT segments[0]
-#define SEGMENTS_LEN (SEGMENTS_COUNT*2+4)
-#define SEGMENTS_POS(i) segments[FIRST_SEG_POS_INDEX+i]
-#define SEGMENTS_NUM(i) segments[segments[1]+i]
+#define SEGMENTS_COUNT(x) x[0]
+#define SEGMENTS_LEN(x) (SEGMENTS_COUNT(x)*4+4)
+#define SEGMENTS_POS(x,i) x[FIRST_SEG_POS_INDEX+i]
+#define SEGMENTS_NUM(x,i) x[x[1]+i]
 
 /**
  * Construct a new rule with the given input, output text, and other
@@ -150,7 +155,7 @@ TransliterationRule::TransliterationRule(TransliterationRule& other) :
 
     segments = 0;
     if (other.segments != 0) {
-        int32_t len = SEGMENTS_LEN;
+        int32_t len = SEGMENTS_LEN(other.segments);
         segments = new int32_t[len];
         uprv_memcpy(segments, other.segments, len*sizeof(segments[0]));
     }
@@ -333,21 +338,13 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
 
     // ============================ MATCH ===========================
 
-    // Record the positions of segments.  We assume the following:
-    // - The maximum number of segments is 9.
-    // - The segment indices occur in ascending order.  That is,
-    //   segment 1 start <= segment 1 limit <= sement 2 start...
-    // - The segments have been validated such that there are no
-    //   references to nonexistent segments.
-    // - The end of the segment array is marked by a start of -1.
-    // Currently, the parser enforces all of these constraints.
-    // In the future, the first two constraints may be lifted,
-    // in which case this method will have to be modified.
+    // Record the actual positions, in the text, of the segments.
+	// These are recorded in the order that they occur in the pattern.
 
     int32_t _segPos[2*MAX_STATIC_SEGS];
     int32_t *segPos = _segPos;
-    if (segments != 0 && SEGMENTS_COUNT > MAX_STATIC_SEGS) {
-        segPos = new int32_t[2*SEGMENTS_COUNT];
+    if (segments != 0 && SEGMENTS_COUNT(segments) > MAX_STATIC_SEGS) {
+        segPos = new int32_t[2*SEGMENTS_COUNT(segments)];
     }
     int32_t iSeg = firstKeySeg - 1;
     int32_t nextSegPos = (iSeg >= 0) ? segments[iSeg] : -1;
@@ -530,8 +527,8 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
                 }
                 // Copy segment with out-of-band data
                 b *= 2;
-                int32_t start = segPos[SEGMENTS_NUM(b)];
-                int32_t limit = segPos[SEGMENTS_NUM(b+1)];
+                int32_t start = segPos[SEGMENTS_NUM(segments,b)];
+                int32_t limit = segPos[SEGMENTS_NUM(segments,b+1)];
                 text.copy(start, limit, dest);
                 dest += limit - start;
             }
@@ -700,12 +697,12 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
     UBool _isOpen[2*MAX_STATIC_SEGS];
     UBool *isOpen = _isOpen;
     if (segments != 0) {
-        if (SEGMENTS_COUNT > MAX_STATIC_SEGS) {
-            isOpen = new UBool[2*SEGMENTS_COUNT];
+        if (SEGMENTS_COUNT(segments) > MAX_STATIC_SEGS) {
+            isOpen = new UBool[2*SEGMENTS_COUNT(segments)];
         }
-        for (i=0; i<2*SEGMENTS_COUNT; i+=2) {
-            isOpen[SEGMENTS_NUM(i)  -FIRST_SEG_POS_INDEX] = TRUE;
-            isOpen[SEGMENTS_NUM(i+1)-FIRST_SEG_POS_INDEX] = FALSE;
+        for (i=0; i<2*SEGMENTS_COUNT(segments); i+=2) {
+            isOpen[SEGMENTS_NUM(segments,i)  -FIRST_SEG_POS_INDEX] = TRUE;
+            isOpen[SEGMENTS_NUM(segments,i+1)-FIRST_SEG_POS_INDEX] = FALSE;
         }
         nextSeg = segments[++iseg];
     }
