@@ -64,7 +64,7 @@ Transliterator* HangulJamoTransliterator::clone(void) const {
  */
 void HangulJamoTransliterator::handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                                    UBool isIncremental) const {
-    int32_t cursor = offsets.cursor;
+    int32_t cursor = offsets.start;
     int32_t limit = offsets.limit;
 
     UnicodeString replacement;
@@ -72,15 +72,17 @@ void HangulJamoTransliterator::handleTransliterate(Replaceable& text, UTransPosi
         UChar c = filteredCharAt(text, cursor);
         if (decomposeHangul(c, replacement)) {
             text.handleReplaceBetween(cursor, cursor+1, replacement);
-            cursor += replacement.length(); // skip over replacement
-            limit += replacement.length() - 1; // fix up limit
+            int32_t len = replacement.length();
+            cursor += len; // skip over replacement
+            limit += len - 1; // fix up limit
+            offsets.contextLimit += len - 1; // fix up limit
         } else {
             ++cursor;
         }
     }
 
     offsets.limit = limit;
-    offsets.cursor = cursor;
+    offsets.start = cursor;
 }
 
 UBool HangulJamoTransliterator::decomposeHangul(UChar s, UnicodeString& result) {

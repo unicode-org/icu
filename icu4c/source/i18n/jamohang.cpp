@@ -56,7 +56,7 @@ void JamoHangulTransliterator::handleTransliterate(Replaceable& text, UTransPosi
     /**
      * Performs transliteration changing Jamo to Hangul 
      */
-    int32_t cursor = offsets.cursor;
+    int32_t cursor = offsets.start;
     int32_t limit = offsets.limit;
     if (cursor >= limit) return;
 
@@ -81,8 +81,10 @@ void JamoHangulTransliterator::handleTransliterate(Replaceable& text, UTransPosi
         }
     }
 
-    offsets.limit = limit + 1;
-    offsets.cursor = cursor;
+    ++limit;
+    offsets.contextLimit += limit - offsets.limit;
+    offsets.limit = limit;
+    offsets.start = cursor;
 }
 
 // These constants are from the Unicode book's algorithm.

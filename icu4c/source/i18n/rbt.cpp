@@ -88,9 +88,9 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
      * exzd|    done
      */
 
-    int32_t start = index.start;
+    int32_t contextStart = index.contextStart;
     int32_t limit = index.limit;
-    int32_t cursor = index.cursor;
+    int32_t cursor = index.start;
 
     /* A rule like
      *   a>b|a
@@ -113,10 +113,10 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
 
     while (cursor < limit && loopCount <= loopLimit) {
         TransliterationRule* r = isIncremental ?
-            data->ruleSet.findIncrementalMatch(text, start, limit, cursor,
+            data->ruleSet.findIncrementalMatch(text, contextStart, limit, cursor,
                                                *data, isPartial,
                                                getFilter()) :
-            data->ruleSet.findMatch(text, start, limit,
+            data->ruleSet.findMatch(text, contextStart, limit,
                                     cursor, *data,
                                     getFilter());
 
@@ -142,6 +142,7 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
         }
     }
 
+    index.contextLimit += limit - index.limit;
     index.limit = limit;
-    index.cursor = cursor;
+    index.start = cursor;
 }

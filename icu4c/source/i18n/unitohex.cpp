@@ -226,7 +226,7 @@ void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text, UTransPo
      * Unicode hexadecimal escapes.  For example, '@' -> "U+0040",
      * assuming the prefix is "U+". 
      */
-    int32_t cursor = offsets.cursor;
+    int32_t cursor = offsets.start;
     int32_t limit = offsets.limit;
 
     const UnicodeFilter* filter = getFilter();
@@ -257,6 +257,7 @@ void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text, UTransPo
         limit += len;
     }
 
+    offsets.contextLimit += limit - offsets.limit;
     offsets.limit = limit;
-    offsets.cursor = cursor;
+    offsets.start = cursor;
 }
