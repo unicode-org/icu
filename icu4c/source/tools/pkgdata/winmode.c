@@ -253,8 +253,10 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
         T_FileStream_writeLine(makefile, tmp2);
     }
 
-    sprintf(tmp2, "rebuild: clean all\n\n");
-    T_FileStream_writeLine(makefile, tmp2);
+    T_FileStream_writeLine(makefile, "install: \"$(TARGETDIR)\\$(DLLTARGET)\"\n"
+                                     "\tcopy \"$(TARGETDIR)\\$(DLLTARGET)\" \"$(INSTALLTO)\\$(DLLTARGET)\"\n\n");
+
+    T_FileStream_writeLine(makefile, "rebuild: clean all\n\n");
 
     /* Write compile rules */
     writeCmnRules(o, makefile);
