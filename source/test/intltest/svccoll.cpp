@@ -347,7 +347,7 @@ void CollationServiceTest::TestRegisterFactory(void)
     
     fuFUNames->put(fu_FU.getName(), new UnicodeString("ze leetle bunny Fu-Fu"), status);
     fuFUNames->put(fu_FU_FOO.getName(), new UnicodeString("zee leetel bunny Foo-Foo"), status);
-    fuFUNames->put(Locale::getUS().getName(), new UnicodeString("little bunny Foo Foo"), status);
+    fuFUNames->put(Locale::getDefault().getName(), new UnicodeString("little bunny Foo Foo"), status);
     
     Collator* frcol = Collator::createInstance(Locale::getFrance(), status);
     Collator* gecol = Collator::createInstance(Locale::getGermany(), status);
