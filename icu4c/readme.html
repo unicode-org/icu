@@ -308,7 +308,7 @@
     section lists obsolete identifiers and their modern equivalents.</p>
 
     <p>As of ICU 3.0 there are 136 obsolete Olson names (modern names given in
-    parentheses): <font size="-1">America/Atka (America/Adak), America/Ensenada
+    parentheses): <small>America/Atka (America/Adak), America/Ensenada
     (America/Tijuana), America/Fort_Wayne (America/Indianapolis),
     America/Indiana/Indianapolis (America/Indianapolis),
     America/Kentucky/Louisville (America/Louisville), America/Knox_IN
@@ -370,19 +370,18 @@
     (America/Detroit), US/Mountain (America/Denver), US/Pacific
     (America/Los_Angeles), US/Pacific-New (America/Los_Angeles), US/Samoa
     (Pacific/Pago_Pago), UTC (Etc/UTC), Universal (Etc/Universal), W-SU
-    (Europe/Moscow), Zulu (Etc/Zulu).</font></p>
+    (Europe/Moscow), Zulu (Etc/Zulu).</small></p>
 
     <p>As of ICU 3.0 there are 25 legacy JDK identifiers (modern names given in
-    parentheses): <font size="-1">ACT (Australia/Darwin), AET
-    (Australia/Sydney), AGT (America/Buenos_Aires), ART (Africa/Cairo), AST
-    (America/Anchorage), BET (America/Sao_Paulo), BST (Asia/Dhaka), CAT
-    (Africa/Harare), CNT (America/St_Johns), CST (America/Chicago), CTT
-    (Asia/Shanghai), EAT (Africa/Addis_Ababa), ECT (Europe/Paris), IET
-    (America/Indianapolis), IST (Asia/Calcutta), JST (Asia/Tokyo), MIT
-    (Pacific/Apia), NET (Asia/Yerevan), NST (Pacific/Auckland), PLT
-    (Asia/Karachi), PNT (America/Phoenix), PRT (America/Puerto_Rico), PST
-    (America/Los_Angeles), SST (Pacific/Guadalcanal), VST
-    (Asia/Saigon).</font></p>
+    parentheses): <small>ACT (Australia/Darwin), AET (Australia/Sydney), AGT
+    (America/Buenos_Aires), ART (Africa/Cairo), AST (America/Anchorage), BET
+    (America/Sao_Paulo), BST (Asia/Dhaka), CAT (Africa/Harare), CNT
+    (America/St_Johns), CST (America/Chicago), CTT (Asia/Shanghai), EAT
+    (Africa/Addis_Ababa), ECT (Europe/Paris), IET (America/Indianapolis), IST
+    (Asia/Calcutta), JST (Asia/Tokyo), MIT (Pacific/Apia), NET (Asia/Yerevan),
+    NST (Pacific/Auckland), PLT (Asia/Karachi), PNT (America/Phoenix), PRT
+    (America/Puerto_Rico), PST (America/Los_Angeles), SST
+    (Pacific/Guadalcanal), VST (Asia/Saigon).</small></p>
     <hr>
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
@@ -1352,8 +1351,15 @@
         for XPLINK.</p>
 
         <p>Note: XPLINK, which is enabled for z/OS 1.2 and later, requires the
-        PTF PQ69418 to build XPLINK-enabled binaries.</p>
+        PTF PQ69418 to build XPLINK enabled binaries.</p>
       </li>
+
+      <li>Currently in ICU 3.0, there is an issue with building on z/OS without
+      XPLINK and with the C++ iostream. By default, the iostream library on
+      z/OS is XPLINK enabled. If you are not building an XPLINK enabled version
+      of ICU, you should use the <code>--with-iostream=old</code> configure
+      option when using runConfigureICU. This will prevent applications that
+      use the icuio library from crashing.</li>
 
       <li>
         <p>When you build ICU on a system such as z/OS 1.2, the binaries that
