@@ -333,16 +333,18 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
 
 void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
 {
-  doTestVariant(myCollation, source, target, result);
-  if(result == UCOL_LESS) {
-    doTestVariant(myCollation, target, source, UCOL_GREATER);
-  } else if(result == UCOL_GREATER) {
-    doTestVariant(myCollation, target, source, UCOL_LESS);
+  if(myCollation) {
+    doTestVariant(myCollation, source, target, result);
+    if(result == UCOL_LESS) {
+      doTestVariant(myCollation, target, source, UCOL_GREATER);
+    } else if(result == UCOL_GREATER) {
+      doTestVariant(myCollation, target, source, UCOL_LESS);
+    } else {
+      doTestVariant(myCollation, target, source, UCOL_EQUAL);
+    }
   } else {
-    doTestVariant(myCollation, target, source, UCOL_EQUAL);
+    log_data_err("No collator! Any data around?\n");
   }
-
-
 }
 
 static void TestTertiary()
