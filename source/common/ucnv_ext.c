@@ -793,6 +793,9 @@ ucnv_extInitialMatchFromU(UConverter *cnv, const int32_t *cx,
     }
 }
 
+#if 0
+/* ### TODO */
+
 U_CFUNC int32_t
 ucnv_extSimpleMatchFromU(const int32_t *cx,
                          UChar32 cp, uint32_t *pValue,
@@ -839,6 +842,8 @@ ucnv_extSimpleMatchFromU(const int32_t *cx,
      */
     return 0;
 }
+
+#endif
 
 /*
  * continue partial match with new input, requires cnv->preFromUFirstCP>=0
