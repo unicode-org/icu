@@ -42,7 +42,7 @@ GEN_DEPS.cc=	makedep
 
 ## Commands to compile
 COMPILE.c=	_CXX_CXXSUFFIX="cpp" _CXX_STEPS="-1" $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(CFLAGS390) $(DEFS390) -c
-COMPILE.cc=	_CXX_CXXSUFFIX="cpp" _CXX_STEPS="-1" $(CXX) $(DEFS) $(CPPFLAGS) $(CPPFLAGS) $(CFLAGS390) $(DEFS390) -c
+COMPILE.cc=	_CXX_CXXSUFFIX="cpp" _CXX_STEPS="-1" $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(CFLAGS390) $(DEFS390) -c
 
 ## Commands to link
 LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
