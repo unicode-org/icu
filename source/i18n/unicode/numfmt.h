@@ -283,6 +283,8 @@ public:
      * @param obj       The object to be formatted.
      * @param appendTo  Output parameter to receive result.
      *                  Result is appended to existing contents.
+     * @param status    Output parameter set to a failure error code
+     *                  when a failure occurs.
      * @return          Reference to 'appendTo' parameter.
      * @stable ICU 2.0
      */
@@ -323,7 +325,8 @@ public:
      * @param text          The text to be parsed.
      * @param result        Formattable to be set to the parse result.
      *                      If parse fails, return contents are undefined.
-     * @param status        Success or failure output parameter.
+     * @param status        Output parameter set to a failure error code
+     *                      when a failure occurs.
      * @return              A Formattable object of numeric type.  The caller
      *                      owns this an must delete it.  NULL on failure.
      * @see                 NumberFormat::isParseIntegerOnly

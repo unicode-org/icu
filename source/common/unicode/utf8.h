@@ -302,7 +302,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  *
  * @param s const UChar * string buffer
  * @param i string offset, i<length
- * @param capacity size of the string buffer
+ * @param length size of the string buffer
  * @param c code point to append
  * @param isError output UBool set to TRUE if an error occurs, otherwise not modified
  * @see U8_APPEND_UNSAFE
@@ -492,7 +492,6 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @param s const UChar * string
  * @param start starting string offset (usually 0)
  * @param i string offset, start<=i
- * @param length string length
  * @param c output UChar32 variable, set to <0 in case of an error
  * @see U8_PREV_UNSAFE
  * @draft ICU 2.4
@@ -570,8 +569,8 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * "Safe" macro, checks for illegal sequences and for string boundaries.
  *
  * @param s const UChar * string
+ * @param start index of the start of the string
  * @param i string offset, i<length
- * @param length string length
  * @param n number of code points to skip
  * @see U8_BACK_N_UNSAFE
  * @draft ICU 2.4
