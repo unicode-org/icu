@@ -33,6 +33,7 @@ public:
     void TestZeroIndex(void);
     void TestVerisign(void);
     void TestPreviousNext(void);
+    void TestNormalizerAPI(void);
 
 private:
     UnicodeString canonTests[24][3];
