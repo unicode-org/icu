@@ -2,10 +2,11 @@ package com.ibm.icu.dev.demo.translit;
 import com.ibm.icu.dev.demo.impl.*;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
+import java.util.*;
 
 public class AnyTransliterator extends Transliterator {
 	
-	static final boolean DEBUG = true;
+	static final boolean DEBUG = false;
 	private String targetName;
 	private RunIterator it;
 	private Position run;
@@ -105,13 +106,26 @@ public class AnyTransliterator extends Transliterator {
     	public boolean atEnd();
     }
     
+    /**
+     * Returns a series of ranges corresponding to scripts. They will be of the form:
+     * ccccSScSSccccTTcTcccc	- where c is common, S is the first script and T is the second
+     *|            |			- first run
+     *         |            |	- second run
+     * That is, the runs will overlap. The reason for this is so that a transliterator can
+     * consider common characters both before and after the scripts.
+     * The only time that contextStart != start is for the first run 
+     *	(the context is the start context of the entire expanse)
+     * The only time that contextLimit != limit is for the last run 
+     *	(the context is the end context of the entire expanse)
+     */
     public static class ScriptRunIterator implements RunIterator {
-    	Replaceable text;
-    	Position expanse = new Position();
-    	Position current = new Position();
-    	int script;
-    	boolean done = true;
+    	private Replaceable text;
+    	private Position expanse = new Position();
+    	private Position current = new Position();
+    	private int script;
+    	private boolean done = true;
     	
+
     	public void reset(Replaceable text, Position expanse) {
     		set(this.expanse, expanse);
     		this.text = text;
@@ -124,19 +138,7 @@ public class AnyTransliterator extends Transliterator {
     		script = UScript.INVALID_CODE;
     		// set up first range to be empty, at beginning
     		current.contextStart = expanse.contextStart;
-    		current.start = current.limit = expanse.start;
-    		
-    		// find the COMMON stuff at the start of the expanse
-    		int i, cp;
-    		int limit = expanse.limit;
-    		for (i = current.limit; i < limit; i += UTF16.getCharCount(cp)) {
-    			cp = text.char32At(i);
-    			int script = UScript.getScript(cp);
-    			if (script != UScript.COMMON && script != UScript.INHERITED) break;
-    		}
-    		if (i == limit) done = true;
-    		else current.contextLimit = i;
-    		
+    		current.start = current.limit = current.contextLimit = expanse.start;    		
     	}
     		
     	public boolean next(Position run) {
@@ -148,15 +150,24 @@ public class AnyTransliterator extends Transliterator {
     				+ ", cl: " + current.contextLimit);
     		}
     		// reset start context run to the last end
-    		current.contextStart = current.limit;
-    		current.start = current.contextLimit;
+    		current.start = current.limit;
     		
-    		// set up variables and loop
-    		int limit = expanse.limit; 
+    		// Phase 1. Backup the START value through COMMON until we get to expanse.start or a real script.
+    		int i, cp;
+    		int limit = expanse.start;
+    		for (i = current.start; i > limit; i -= UTF16.getCharCount(cp)) {
+    			cp = text.char32At(i);
+    			int script = UScript.getScript(cp);
+    			if (script != UScript.COMMON && script != UScript.INHERITED) break;
+    		}
+    		current.start = i;
+    		current.contextStart = (i == limit) ? expanse.contextStart : i; // extend at start
+    		
+    		// PHASE 2. Move up the LIMIT value through COMMON or single script until we get to expanse.limit
     		int lastScript = UScript.COMMON;
     		int veryLastScript = UScript.COMMON;
-    		int i, cp;
-    		for (i = current.start; i < limit; i += UTF16.getCharCount(cp)) {
+    		limit = expanse.limit; 
+    		for (i = current.limit; i < limit; i += UTF16.getCharCount(cp)) {
     			cp = text.char32At(i);
     			int script = UScript.getScript(cp);
     			if (script == UScript.INHERITED) script = UScript.COMMON;
@@ -166,25 +177,13 @@ public class AnyTransliterator extends Transliterator {
     				//   otherwise set our script
     				if (lastScript == UScript.COMMON) lastScript = script;
     				else if (lastScript != script) break;
-    			} else if (veryLastScript != UScript.COMMON) {
-    				// if we found COMMON -- and -- the last character was not, reset
-    				current.limit = i;
     			}
-    			veryLastScript = script;
     		}
-    		// fix end
-    		if (veryLastScript != UScript.COMMON) {
-    			// if we found COMMON -- and -- the last character was not, reset
-    			current.limit = i;
-    		}
-    		// if we are at the very end of the expanse, then expand it.
-    		if (i == limit) {
-    			current.contextLimit = expanse.contextLimit;
-    			done = true;
-    		} else {
-    			current.contextLimit = i;
-    		}
+    		current.limit = i;
+    		current.contextLimit = (i == limit) ? expanse.contextLimit : i; // extend at end
+    		done = (i == limit);
     		script = lastScript;
+    		
     		if (DEBUG) {
     			System.out.println("-cs: " + current.contextStart
     				+ ", s: " + current.start
@@ -230,6 +229,66 @@ public class AnyTransliterator extends Transliterator {
     		expanse.limit += delta;
     		expanse.contextLimit += delta;
     	}
+    	
+    	// register Any-Script for every script.
+    	
+    	private static Set scriptList = new HashSet();
+    	
+    	public static void registerAnyToScript() {
+    		synchronized (scriptList) {
+        		Enumeration sources = Transliterator.getAvailableSources();
+        		while(sources.hasMoreElements()) {
+            		String source = (String) sources.nextElement();
+            		if (source.equals("Any")) continue; // to keep from looping
+	            	
+            		Enumeration targets = Transliterator.getAvailableTargets(source);
+            		while(targets.hasMoreElements()) {
+                		String target = (String) targets.nextElement();
+            			if (UScript.getCode(target) == null) continue; // SKIP unless we have a script (or locale)
+            			if (scriptList.contains(target)) continue; // already encountered
+            			scriptList.add(target); // otherwise add for later testing
+	            		
+                		Set variantSet = add(new TreeSet(), Transliterator.getAvailableVariants(source, target));
+                		if (variantSet.size() < 2) {
+    						AnyTransliterator at = new AnyTransliterator(target, null);
+    						DummyFactory.add(at.getID(), at);
+                		} else {
+                    		Iterator variants = variantSet.iterator();
+                    		while(variants.hasNext()) {
+                        		String variant = (String) variants.next();
+    							AnyTransliterator at = new AnyTransliterator(
+    								(variant.length() > 0) ? target + "/" + variant : target, null);
+    							DummyFactory.add(at.getID(), at);
+                    		}
+                		}
+            		}
+        		}
+        	}
+    	}
+    	
+    	static class DummyFactory implements Transliterator.Factory {
+        	static DummyFactory singleton = new DummyFactory();
+        	static HashMap m = new HashMap();
+
+        	// Since Transliterators are immutable, we don't have to clone on set & get
+        	static void add(String ID, Transliterator t) {
+            	m.put(ID, t);
+            	System.out.println("Registering: " + ID + ", " + t.toRules(true));
+            	Transliterator.registerFactory(ID, singleton);
+        	}
+        	public Transliterator getInstance(String ID) {
+            	return (Transliterator) m.get(ID);
+        	}
+    	}
+    	
+    	// Nice little Utility for converting Enumeration to collection
+    	static Set add(Set s, Enumeration enum) {
+        	while(enum.hasMoreElements()) {
+            	s.add(enum.nextElement());
+        	}
+        	return s;
+    	}
+    	
     	
     }
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2002/05/25 15:20:10 $ 
- * $Revision: 1.15 $
+ * $Date: 2002/05/29 00:43:43 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -28,12 +28,12 @@ import com.ibm.icu.text.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.15 $ $Date: 2002/05/25 15:20:10 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.16 $ $Date: 2002/05/29 00:43:43 $
  */
 public class Demo extends Frame {
 
     static final boolean DEBUG = false;
-    static final String START_TEXT = "(cut,\u03BA\u03C5\u03C4,\u05D0,\u3042,\u4E80,\u091A\u0941\u0924\u094D)";
+    static final String START_TEXT = "(cut,\u03BA\u03C5\u03C4,\u05D0,\u30AF\u30C8,\u4E80,\u091A\u0941\u0924\u094D)";
 
     Transliterator translit = null;
     String fontName = "Arial Unicode MS";
@@ -406,6 +406,10 @@ public class Demo extends Frame {
     }
     
     static {
+    	
+    	AnyTransliterator.ScriptRunIterator.registerAnyToScript();
+    	
+    	if (false) {
     	AnyTransliterator at = new AnyTransliterator("Greek", null);
     	at.transliterate("(cat,\u03b1,\u0915)");
     	DummyFactory.add(at.getID(), at);
@@ -418,7 +422,6 @@ public class Demo extends Frame {
     	at.transliterate("(cat,\u03b1,\u0915)");
     	DummyFactory.add(at.getID(), at);
     	
-    	if (false) {
         DummyFactory.add("Any-gif", Transliterator.createFromRules("gif", "'\\'u(..)(..) > '<img src=\"http://www.unicode.org/gifs/24/' $1 '/U' $1$2 '.gif\">';", Transliterator.FORWARD));    	
         DummyFactory.add("gif-Any", Transliterator.getInstance("Any-Null"));    	
 
