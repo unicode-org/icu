@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/ReplaceableString.java,v $ 
- * $Date: 2000/03/10 04:07:22 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/04/25 17:17:37 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -24,7 +24,7 @@ package com.ibm.text;
  *
  * @see Replaceable
  * @author Alan Liu
- * @version $RCSfile: ReplaceableString.java,v $ $Revision: 1.2 $ $Date: 2000/03/10 04:07:22 $
+ * @version $RCSfile: ReplaceableString.java,v $ $Revision: 1.3 $ $Date: 2000/04/25 17:17:37 $
  */
 public class ReplaceableString implements Replaceable {
     private StringBuffer buf;
@@ -65,16 +65,6 @@ public class ReplaceableString implements Replaceable {
      */
     public String toString() {
         return buf.toString();
-    }
-
-    /**
-     * Return the internal storage of this object.  <em>Note!  Any
-     * changes made to the returned object affect this object's
-     * contents, and vice versa.</em>
-     * @return internal buffer used by this object
-     */
-    public StringBuffer getStringBuffer() {
-        return buf;
     }
 
     /**
@@ -167,5 +157,25 @@ public class ReplaceableString implements Replaceable {
         if (tail != null) {
             buf.append(tail);
         }
+    }
+
+    /**
+     * Copy a substring of this object, retaining attribute (out-of-band)
+     * information.  This method is used to duplicate or reorder substrings.
+     * The destination index must not overlap the source range.
+     * 
+     * @param start the beginning index, inclusive; <code>0 <= start <=
+     * limit</code>.
+     * @param limit the ending index, exclusive; <code>start <= limit <=
+     * length()</code>.
+     * @param dest the destination index.  The characters from
+     * <code>start..limit-1</code> will be copied to <code>dest</code>.
+     * Implementations of this method may assume that <code>dest <= start ||
+     * dest >= limit</code>.
+     */
+    public void copy(int start, int limit, int dest) {
+        char[] text = new char[limit - start];
+        getChars(start, limit, text, 0);
+        replace(dest, dest, text, 0, limit - start);
     }
 }

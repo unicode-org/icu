@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Replaceable.java,v $ 
- * $Date: 2000/03/10 04:07:22 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/04/25 17:17:37 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -23,7 +23,7 @@ package com.ibm.text;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Replaceable.java,v $ $Revision: 1.2 $ $Date: 2000/03/10 04:07:22 $
+ * @version $RCSfile: Replaceable.java,v $ $Revision: 1.3 $ $Date: 2000/04/25 17:17:37 $
  */
 public interface Replaceable {
     /**
@@ -86,4 +86,26 @@ public interface Replaceable {
                  int charsStart, int charsLen);
     // Note: We use length rather than limit to conform to StringBuffer
     // and System.arraycopy.
+
+    /**
+     * Copy a substring of this object, retaining attribute (out-of-band)
+     * information.  This method is used to duplicate or reorder substrings.
+     * The destination index must not overlap the source range.
+     * Implementations that do not care about maintaining out-of-band
+     * information during copying may use the naive implementation:
+     *
+     * <pre> char[] text = new char[limit - start];
+     * getChars(start, limit, text, 0);
+     * replace(dest, dest, text, 0, limit - start);</pre>
+     * 
+     * @param start the beginning index, inclusive; <code>0 <= start <=
+     * limit</code>.
+     * @param limit the ending index, exclusive; <code>start <= limit <=
+     * length()</code>.
+     * @param dest the destination index.  The characters from
+     * <code>start..limit-1</code> will be copied to <code>dest</code>.
+     * Implementations of this method may assume that <code>dest <= start ||
+     * dest >= limit</code>.
+     */
+    void copy(int start, int limit, int dest);
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRule.java,v $ 
- * $Date: 2000/04/25 01:42:58 $ 
- * $Revision: 1.19 $
+ * $Date: 2000/04/25 17:17:37 $ 
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
@@ -44,7 +44,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.19 $ $Date: 2000/04/25 01:42:58 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.20 $ $Date: 2000/04/25 17:17:37 $
  */
 class TransliterationRule {
     /**
@@ -259,28 +259,52 @@ class TransliterationRule {
      */
     public int replace(Replaceable text, int offset,
                        RuleBasedTransliterator.Data data) {
-        String out;
         if (segments == null) {
-            out = output;
+            text.replace(offset, offset + keyLength, output);
+            return output.length() - keyLength;
         } else {
+            /* When there are segments to be copied, use the Replaceable.copy()
+             * API in order to retain out-of-band data.  Copy everything to the
+             * point after the key, then delete the key.  That is, copy things
+             * into offset + keyLength, then replace offset .. offset +
+             * keyLength with the empty string.
+             *
+             * Minimize the number of calls to Replaceable.replace() and
+             * Replaceable.copy().
+             */
             int textStart = offset - anteContextLength;
+            int dest = offset + keyLength; // copy new text to here
             StringBuffer buf = new StringBuffer();
             for (int i=0; i<output.length(); ++i) {
                 char c = output.charAt(i);
                 int b = data.lookupSegmentReference(c);
                 if (b < 0) {
+                    // Accumulate straight (non-segment) text.
                     buf.append(c);
                 } else {
-                    for (int j=textStart + segments[2*b];
-                         j<textStart + segments[2*b+1]; ++j) {
-                        buf.append(text.charAt(j));
+                    // Insert any accumulated straight text.
+                    if (buf.length() > 0) {
+                        text.replace(dest, dest, buf.toString());
+                        dest += buf.length();
+                        buf.setLength(0);
                     }
+                    // Copy segment with out-of-band data
+                    b *= 2;
+                    text.copy(textStart + segments[b],
+                              textStart + segments[b+1], dest);
+                    dest += segments[b+1] - segments[b];
                 }
+                
             }
-            out = buf.toString();
+            // Insert any accumulated straight text.
+            if (buf.length() > 0) {
+                text.replace(dest, dest, buf.toString());
+                dest += buf.length();
+            }
+            // Delete the key
+            text.replace(offset, offset + keyLength, "");
+            return dest - (offset + keyLength) - keyLength;
         }
-        text.replace(offset, offset + keyLength, out);
-        return out.length() - keyLength;
     }
 
     /**
@@ -493,6 +517,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.20  2000/04/25 17:17:37  alan
+ * Add Replaceable.copy to retain out-of-band info during reordering.
+ *
  * Revision 1.19  2000/04/25 01:42:58  alan
  * Allow arbitrary length variable values. Clean up Data API. Update javadocs.
  *
