@@ -125,8 +125,14 @@ ALL_RES = $(RB_FILES) $(TRANSLIT_FILES)
 RB_SOURCE_DIR = $(GENRB_SOURCE:$=$)
 
 # This target should build all the data files
-ALL : GODATA  test.dat  "$(DLL_OUTPUT)\testdata.dll" "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" $(DLL_OUTPUT)\test1.cnv $(DLL_OUTPUT)\test3.cnv $(DLL_OUTPUT)\test4.cnv GOBACK #$(U_ICUDATA_NAME).dat
+ALL : GODATA  testdata "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" $(DLL_OUTPUT)\test1.cnv $(DLL_OUTPUT)\test3.cnv $(DLL_OUTPUT)\test4.cnv GOBACK #$(U_ICUDATA_NAME).dat
 	@echo All targets are up to date
+
+testdata: ucadata.dat $(RB_FILES) {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
+	@cd "$(TESTDATA)"
+	nmake /f $(TESTDATA)\testdata.mk TESTDATA=$(TESTDATA) ICUTOOLS=$(ICUTOOLS) PKGOPT=$(PKGOPT) CFG=$(CFG) DLL_OUTPUT=$(DLL_OUTPUT) TESTDATAOUT=$(TESTDATAOUT)
+	@cd "$(ICUDBLD)"
+
 
 BRK_FILES = "$(ICUDBLD)\sent.brk" "$(ICUDBLD)\char.brk" "$(ICUDBLD)\line.brk" "$(ICUDBLD)\word.brk" "$(ICUDBLD)\line_th.brk" "$(ICUDBLD)\word_th.brk"
 
@@ -151,22 +157,6 @@ $(BRK_FILES:.brk" =.brk"
 )
 <<KEEP
 
-"$(DLL_OUTPUT)\testdata.dll" :  "$(TESTDATA)\root.res" "$(TESTDATA)\te.res" "$(TESTDATA)\te_IN.res" "$(TESTDATA)\testtypes.res" test.dat
-	@echo Building test data
-	@copy test.dat $(TESTDATAOUT)
- 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p testdata -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -T "$(TESTDATAOUT)" -s "$(TESTDATA)" <<
-root.res
-te.res
-te_IN.res
-testtypes.res
-test.dat
-<<
-
-# Targets for test.dat
-test.dat :
-	@echo Creating data file for test: $(ICUDATA) $(ICUP)
-	@set ICU_DATA=$(ICUDBLD)
-	@"$(ICUTOOLS)\gentest\$(CFG)\gentest"
 
 "$(ICUDBLD)\sent.brk" : "$(ICUDATA)\sentLE.brk"
     copy "$(ICUDATA)\sentLE.brk" "$(ICUDBLD)\sent.brk"
@@ -222,24 +212,6 @@ CLEAN :
 	-@erase "*.res"
 	@cd "$(ICUTOOLS)"
 
-$(TESTDATA)\root.res:$(TESTDATA)\root.txt
-        @echo Making Special Test Resource Bundle files
-        @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATA) $(?F)
-$(TESTDATA)\te.res:$(TESTDATA)\te.txt
-        @echo Making Special Test Resource Bundle files
-        @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATA) $(?F)
-$(TESTDATA)\te_IN.res:$(TESTDATA)\te_IN.txt
-        @echo Making Special Test Resource Bundle files
-        @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATA) $(?F)
-$(TESTDATA)\testtypes.res:$(TESTDATA)\testtypes.txt
-        @echo Making Special Test Resource Bundle files
-        @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATA) $(?F)
-
-
-# Inference rule for creating resource bundles
-#{$(TESTDATA)}.txt{$(TESTDATA)}.res:
-#        @echo Making Test Resource Bundle files
-#        @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATA) $(?F)
 
 {$(ICUDATA)}.txt.res:
 	@echo Making Resource Bundle files
@@ -301,7 +273,7 @@ ucadata.dat: "$(ICUDATA)\unidata\FractionalUCA.txt" "$(ICUTOOLS)\genuca\$(CFG)\g
 
 invuca.dat: ucadata.dat
 
-genrb.exe : ucadata.dat
+{"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe : ucadata.dat
 
 ucadata.dat : uprops.dat
 
@@ -313,9 +285,6 @@ tz.txt : {"$(ICUTOOLS)\gentz\$(CFG)"}gentz.exe
 uprops.dat unames.dat cnvalias.dat tz.dat ucadata.dat invuca.dat: {"$(ICUTOOLS)\genccode\$(CFG)"}genccode.exe
 
 
-$(TRANSLIT_SOURCE) $(GENRB_SOURCE) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
+$(TRANSLIT_SOURCE) $(GENRB_SOURCE) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe ucadata.dat
 
 $(UCM_SOURCE) : {"$(ICUTOOLS)\makeconv\$(CFG)"}makeconv.exe {"$(ICUTOOLS)\genccode\$(CFG)"}genccode.exe
-
-test.dat : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
-
