@@ -120,8 +120,12 @@ ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
     int32_t lenRelPath ;   
 
 #if defined(_WIN32) || defined(WIN32) || defined(__OS2__) || defined(OS2)
-        mainDir = getenv("ICU_DATA");
-        if(mainDir!=NULL) {
+	   /* This should always be u_getDataDirectory().
+	    *  getenv should not be used 
+	    */
+       /*mainDir = getenv("ICU_DATA");*/
+        mainDir= u_getDataDirectory();
+		if(mainDir!=NULL) {
             strcpy(mainDirBuffer, mainDir);
             strcat(mainDirBuffer, "..\\..");
         } else {
