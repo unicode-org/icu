@@ -44,6 +44,7 @@ public:
     void   getCurrGlyphPositionAdjustment(GlyphPositionAdjustment &adjustment) const;
 
     le_int32  getMarkComponent(le_int32 markPosition) const;
+    le_bool   findMark2Glyph();
 
     void getCursiveLastExitPoint(LEPoint &exitPoint) const;
     LEGlyphID getCursiveLastGlyphID() const;

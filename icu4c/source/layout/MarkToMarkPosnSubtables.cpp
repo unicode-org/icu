@@ -20,7 +20,7 @@ U_NAMESPACE_BEGIN
 
 LEGlyphID MarkToMarkPositioningSubtable::findMark2Glyph(GlyphIterator *glyphIterator) const
 {
-    if (glyphIterator->prev()) {
+    if (glyphIterator->findMark2Glyph()) {
         return glyphIterator->getCurrGlyphID();
     }
 

@@ -489,23 +489,50 @@ le_bool GlyphIterator::prev(le_uint32 delta)
     return prevInternal(delta) && hasFeatureTag();
 }
 
+// FIXME: Why in the world did I write the code that's #if 0'd out?
 le_int32 GlyphIterator::getMarkComponent(le_int32 markPosition) const
 {
     le_int32 component = 0;
+#if 0
     le_int32 posn, start = position, end = markPosition;
 
     if (markPosition < position) {
         start = markPosition;
         end = position;
-        }
+    }
 
     for (posn = start; posn <= end; posn += 1) {
         if (glyphs[posn] == 0xFFFE) {
             component += 1;
 		}
     }
+#else
+    le_int32 posn;
+
+    for (posn = position; posn != markPosition; posn += direction) {
+        if (glyphs[posn] == 0xFFFE) {
+            component += 1;
+        }
+    }
+#endif
 
     return component;
+}
+
+// This is basically prevInternal except that it
+// doesn't take a delta argument, and it doesn't
+// filter out 0xFFFE glyphs.
+le_bool GlyphIterator::findMark2Glyph()
+{
+    le_int32 newPosition = position;
+
+    do {
+        newPosition -= direction;
+    } while (newPosition != prevLimit && glyphs[newPosition] != 0xFFFE && filterGlyph(newPosition));
+
+    position = newPosition;
+
+    return position != prevLimit;
 }
 
 U_NAMESPACE_END
