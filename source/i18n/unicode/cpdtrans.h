@@ -32,7 +32,7 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.1 $ $Date: 1999/12/28 23:54:20 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.2 $ $Date: 2000/01/14 21:15:13 $
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
 
@@ -54,12 +54,12 @@ public:
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
-    CompoundTransliterator(const UnicodeString& ID,
-                           Transliterator* const transliterators[],
+    CompoundTransliterator(Transliterator* const transliterators[],
                            int32_t count,
                            UnicodeFilter* adoptedFilter = 0);
 
     CompoundTransliterator(const UnicodeString& ID,
+                           Direction dir = FORWARD,
                            UnicodeFilter* adoptedFilter = 0);
 
     /**
@@ -127,6 +127,21 @@ public:
     virtual int32_t getMaximumContextLength(void) const;
 
 private:
+
+    /**
+     * Return the IDs of the given list of transliterators, concatenated
+     * with ';' delimiting them.  Equivalent to the perlish expression
+     * join(';', map($_.getID(), transliterators).
+     */
+    UnicodeString joinIDs(Transliterator* const transliterators[],
+                          int32_t count);
+
+    /**
+     * Splits a string, as in JavaScript
+     */
+    UnicodeString* split(const UnicodeString& s,
+                         UChar divider,
+                         int32_t& count);
 
     void freeTransliterators(void);
 };

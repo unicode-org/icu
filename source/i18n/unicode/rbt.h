@@ -222,24 +222,6 @@ class U_I18N_API RuleBasedTransliterator : public Transliterator {
 public:
 
     /**
-     * Direction constant passed to constructor to specify whether forward
-     * or reverse rules are parsed.  The other rules are ignored.
-     */
-    enum Direction {
-        /**
-         * Direction constant passed to constructor to create a transliterator
-         * using the forward rules.
-         */
-        FORWARD,
-
-        /**
-         * Direction constant passed to constructor to create a transliterator
-         * using the reverse rules.
-         */
-        REVERSE
-    };
-
-    /**
      * Constructs a new transliterator from the given rules.
      * @param rules rules, separated by ';'
      * @param direction either FORWARD or REVERSE.

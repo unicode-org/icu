@@ -23,6 +23,7 @@
 #include "unicode/unitohex.h"
 #include "unicode/nultrans.h"
 #include "unicode/putil.h"
+#include "unicode/cpdtrans.h"
 
 /**
  * Dictionary of known transliterators.  Keys are <code>String</code>
@@ -522,15 +523,7 @@ void Transliterator::adoptFilter(UnicodeFilter* filterToAdopt) {
  * @see #registerInstance
  */
 Transliterator* Transliterator::createInverse(void) const {
-    int32_t i = ID.indexOf((UChar)'-');
-    if (i >= 0) {
-        UnicodeString inverseID, right;
-        ID.extractBetween(i+1, ID.length(), inverseID);
-        ID.extractBetween(0, i, right);
-        inverseID.append((UChar)'-').append(right);
-        return _createInstance(inverseID);
-    }
-    return 0;
+    return Transliterator::createInstance(ID, REVERSE);
 }
 
 /**
@@ -545,8 +538,24 @@ Transliterator* Transliterator::createInverse(void) const {
  * @see #getAvailableIDs
  * @see #getID
  */
-Transliterator* Transliterator::createInstance(const UnicodeString& ID) {
-    Transliterator* t = _createInstance(ID);
+Transliterator* Transliterator::createInstance(const UnicodeString& ID,
+                                               Transliterator::Direction dir) {
+    if (ID.indexOf(';') >= 0) {
+        return new CompoundTransliterator(ID, dir, 0);
+    }
+    Transliterator* t = 0;
+    if (dir == REVERSE) {
+        int32_t i = ID.indexOf((UChar)'-');
+        if (i >= 0) {
+            UnicodeString inverseID, right;
+            ID.extractBetween(i+1, ID.length(), inverseID);
+            ID.extractBetween(0, i, right);
+            inverseID.append((UChar)'-').append(right);
+            t = _createInstance(inverseID);
+        }
+    } else {
+        t = _createInstance(ID);
+    }
     return t;
 }
 
