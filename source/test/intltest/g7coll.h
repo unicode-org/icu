@@ -49,7 +49,7 @@ public:
     enum ETotal_Test { TOTALTESTSET = 30 };
 
     G7CollationTest() {}
-    virtual ~G7CollationTest() {}
+    virtual ~G7CollationTest();
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
 

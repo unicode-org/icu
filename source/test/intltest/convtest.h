@@ -52,7 +52,7 @@ struct ConversionCase {
 class ConversionTest : public IntlTest {
 public:
     ConversionTest() {}
-    virtual ~ConversionTest() {}
+    virtual ~ConversionTest();
     
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
 

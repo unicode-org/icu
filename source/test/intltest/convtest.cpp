@@ -36,9 +36,11 @@ enum {
     ESC_CB='&'
 };
 
+ConversionTest::~ConversionTest() {}
+
 void
 ConversionTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
-    if (exec) logln("TestSuite StringCaseTest: ");
+    if (exec) logln("TestSuite ConversionTest: ");
     switch (index) {
         case 0: name="TestToUnicode"; if (exec) TestToUnicode(); break;
         case 1: name="TestFromUnicode"; if (exec) TestFromUnicode(); break;

@@ -75,6 +75,7 @@ const int32_t G7CollationTest::results[G7CollationTest::TESTLOCALES][G7Collation
     { 19, 22, 21, 24, 23, 25, 12, 13, 9, 0, 17, 16, 28, 26, 27, 15, 18, 14, 1, 11, 2, 3, 4, 5, 20, 6, 8, 10, 7, 29 }
 };
 
+G7CollationTest::~G7CollationTest() {}
 
 void G7CollationTest::TestG7Locales(/* char* par */)
 {
