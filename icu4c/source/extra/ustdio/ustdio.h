@@ -28,7 +28,7 @@
 #include <stdarg.h>
 
 #include "unicode/utypes.h"
-#include <ucnv.h>
+#include <unicode/ucnv.h>
 
 
 /** Forward declaration of a Unicode-aware file */
