@@ -93,10 +93,10 @@ in which case transliteration will happen as an intermediate step,
 after the data have been transcoded to Unicode.
 .SH OPTIONS
 .TP
-.BR \-h\fP, \fB\-?\fP, \fB\-\-help
+.BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
 Print help about usage and exit.
 .TP
-.BR \-V\fP, \fB\-\-version
+.BR "\-V\fP, \fB\-\-version"
 Print the version of
 .B uconv
 and exit.
