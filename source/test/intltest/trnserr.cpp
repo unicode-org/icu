@@ -234,10 +234,10 @@ void TransliteratorErrorTest::TestRBTErrors() {
 void TransliteratorErrorTest::TestHexToUniErrors() {
     UErrorCode status = U_ZERO_ERROR;
     Transliterator *t = new HexToUnicodeTransliterator("", NULL, status);
-    if (U_SUCCESS(status)) {
-        delete t;
-        errln("FAIL: Created a HexToUnicodeTransliterator with an empty pattern.");
+    if (U_FAILURE(status)) {
+        errln("FAIL: Could not create a HexToUnicodeTransliterator with an empty pattern.");
     }
+    delete t;
     status = U_ZERO_ERROR;
     t = new HexToUnicodeTransliterator("\\x", NULL, status);
     if (U_SUCCESS(status)) {
