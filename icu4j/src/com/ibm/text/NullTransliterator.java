@@ -21,7 +21,7 @@ public class NullTransliterator extends Transliterator {
     }
 
     /**
-     * Implements {@link Transliterator#handleKeyboardTransliterate}.
+     * Implements {@link Transliterator#handleTransliterate}.
      */
     protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean incremental) {
