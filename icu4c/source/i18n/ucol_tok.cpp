@@ -64,7 +64,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   src->resultLen = 0;
 }
 
-U_INLINE void 
+inline void 
 syntaxError(   const UChar* rules, 
                int32_t pos,
                int32_t rulesLen,
