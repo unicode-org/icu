@@ -34,7 +34,6 @@ u_finit(FILE        *f,
         const char    *codepage)
 {
     UErrorCode status     = U_ZERO_ERROR;
-    UBool     useSysCP    = (UBool)(locale == NULL && codepage == NULL);
     UFILE     *result     = (UFILE*) uprv_malloc(sizeof(UFILE));
     if(result == NULL || f == NULL) {
         return 0;
@@ -43,10 +42,20 @@ u_finit(FILE        *f,
     uprv_memset(result, 0, sizeof(UFILE));
 
 #ifdef WIN32
-    result->fFile = &_iob[_fileno(f)];
+    {
+        int filenum = _fileno(f);
+        if (0 <= filenum && filenum <= 2) {
+            /* stdin, stdout and stderr need to be special cased for Windows 98 */
+            result->fFile = &_iob[_fileno(f)];
+        }
+        else {
+            result->fFile = f;
+        }
+    }
 #else
     result->fFile = f;
 #endif
+
     result->str.fBuffer = result->fUCBuffer;
     result->str.fPos    = result->fUCBuffer;
     result->str.fLimit  = result->fUCBuffer;
@@ -68,6 +77,7 @@ u_finit(FILE        *f,
     if(codepage == NULL || *codepage != '\0') {
         result->fConverter = ucnv_open(codepage, &status);
     }
+    /* else result->fConverter is already memset'd to NULL. */
 
     if(U_FAILURE(status)) {
 #if !UCONFIG_NO_FORMATTING
