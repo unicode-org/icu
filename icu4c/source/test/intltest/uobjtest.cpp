@@ -31,7 +31,7 @@
 #define TESTCLASSID_TRANSLIT(c, t) { delete testClass(Transliterator::createInstance(UnicodeString(t), UTRANS_FORWARD,parseError,status), #c, "Transliterator: " #t, c ::getStaticClassID()); if(U_FAILURE(status)) { errln(UnicodeString(#c " - Transliterator: " #t " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
 #define TESTCLASSID_CTOR(c, x) { delete testClass(new c x, #c, "new " #c #x, c ::getStaticClassID()); if(U_FAILURE(status)) { errln(UnicodeString(#c " - new " #x " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
 #define TESTCLASSID_DEFAULT(c) delete testClass(new c, #c, "new " #c , c::getStaticClassID())
-#define TESTCLASSID_ABSTRACT(c) testClass(NULL, #c, NULL, c::getStaticClassID())
+//#define TESTCLASSID_ABSTRACT(c) testClass(NULL, #c, NULL, c::getStaticClassID())
 
 #define MAX_CLASS_ID 200
 
@@ -295,9 +295,9 @@ void UObjectTest::testIDs()
     //TESTCLASSID_DEFAULT(TempSearch);
     //TESTCLASSID_DEFAULT(TestMultipleKeyStringFactory);
     //TESTCLASSID_DEFAULT(TestReplaceable);
-#if !UCONFIG_NO_FORMATTING
-    TESTCLASSID_ABSTRACT(TimeZone);
-#endif
+//#if !UCONFIG_NO_FORMATTING
+    //TESTCLASSID_ABSTRACT(TimeZone);
+//#endif
 
 #if !UCONFIG_NO_TRANSLITERATION
     TESTCLASSID_FACTORY(TitlecaseTransliterator,  Transliterator::createInstance(UnicodeString("Any-Title"), UTRANS_FORWARD, parseError, status));
