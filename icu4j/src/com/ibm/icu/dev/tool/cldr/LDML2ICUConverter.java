@@ -678,7 +678,7 @@ public class LDML2ICUConverter {
             System.out.println();
         }
         // now fetch the specials and append to the real bundle
-        if(specialsDir!=null && ULocale.getCountry(locName).equals("")){
+        if(specialsDir!=null ){
             if(specialsDoc == null) {
                printWarning(specialsDir + "/" + locName + ".xml","Writing ICU res bundle without specials, missing ");
             } else {
