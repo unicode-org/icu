@@ -46,15 +46,15 @@
 #define UCOL_EXPAND_CE_BUFFER_SIZE 64
 
 struct collIterate {
-  UChar *string; // Original string
-  UChar *len;   // Original string length
-  UChar *pos; // This is position in the string
-  uint32_t *toReturn; // This is the CE from CEs buffer that should be returned
-  uint32_t *CEpos; // This is the position to which we have stored processed CEs
-  uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; // This is where we store CEs
-  UBool isThai; // Have we already encountered a Thai prevowel
-  UBool isWritable; // is the source buffer writable?
-  UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; // A writable buffer.
+  UChar *string; /* Original string */
+  UChar *len;   /* Original string length */
+  UChar *pos; /* This is position in the string */
+  uint32_t *toReturn; /* This is the CE from CEs buffer that should be returned */
+  uint32_t *CEpos; /* This is the position to which we have stored processed CEs */
+  uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
+  UBool isThai; /* Have we already encountered a Thai prevowel */
+  UBool isWritable; /* is the source buffer writable? */
+  UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
   UChar *writableBuffer;
 };
 
@@ -63,14 +63,14 @@ struct incrementalContext {
     void *sourceContext;
     UChar currentChar;
     UChar lastChar;
-    UChar stackString[UCOL_MAX_BUFFER]; // Original string
-    UChar *stringP; // This is position in the string
-    UChar *len;   // Original string length
-    UChar *capacity; // This is capacity
-    uint32_t *toReturn; // This is the CE from CEs buffer that should be returned
-    uint32_t *CEpos; // This is the position to which we have stored processed CEs
-    uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; // This is where we store CEs
-    UBool panic; // can't handle it any more - we have to call the cavalry
+    UChar stackString[UCOL_MAX_BUFFER]; /* Original string */
+    UChar *stringP; /* This is position in the string */
+    UChar *len;   /* Original string length */
+    UChar *capacity; /* This is capacity */
+    uint32_t *toReturn; /* This is the CE from CEs buffer that should be returned */
+    uint32_t *CEpos; /* This is the position to which we have stored processed CEs */
+    uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
+    UBool panic; /* can't handle it any more - we have to call the cavalry */
 };
 
 /* Fixup table a la Markus */
@@ -82,34 +82,58 @@ static uint8_t utf16fixup[32] = {
     0, 0, 0, 0x20, 0xf8, 0xf8, 0xf8, 0xf8
 };
 
-#define UCOL_UNMAPPEDCHARVALUE 0x7fff0000     // from coleiterator
+/* from coleiterator */
+#define UCOL_UNMAPPEDCHARVALUE 0x7fff0000     
 
 #define UCOL_LEVELTERMINATOR 1
-#define UCOL_CHARINDEX 0x70000000             // need look up in .commit()
-#define UCOL_EXPANDCHARINDEX 0x7E000000       // Expand index follows
-#define UCOL_CONTRACTCHARINDEX 0x7F000000     // contract indexes follows
-#define UCOL_UNMAPPED 0xFFFFFFFF              // unmapped character values
-#define UCOL_PRIMARYORDERINCREMENT 0x00010000 // primary strength increment
-#define UCOL_SECONDARYORDERINCREMENT 0x00000100 // secondary strength increment
-#define UCOL_TERTIARYORDERINCREMENT 0x00000001 // tertiary strength increment
-#define UCOL_MAXIGNORABLE 0x00010000          // maximum ignorable char order value
-#define UCOL_PRIMARYORDERMASK 0xffff0000      // mask off anything but primary order
-#define UCOL_SECONDARYORDERMASK 0x0000ff00    // mask off anything but secondary order
-#define UCOL_TERTIARYORDERMASK 0x000000ff     // mask off anything but tertiary order
-#define UCOL_SECONDARYRESETMASK 0x0000ffff    // mask off secondary and tertiary order
-#define UCOL_IGNORABLEMASK 0x0000ffff         // mask off ignorable char order
-#define UCOL_PRIMARYDIFFERENCEONLY 0xffff0000 // use only the primary difference
-#define UCOL_SECONDARYDIFFERENCEONLY 0xffffff00  // use only the primary and secondary difference
-#define UCOL_PRIMARYORDERSHIFT 16             // primary order shift
-#define UCOL_SECONDARYORDERSHIFT 8            // secondary order shift
-#define UCOL_SORTKEYOFFSET 2                  // minimum sort key offset
-#define UCOL_CONTRACTCHAROVERFLOW 0x7FFFFFFF  // Indicates the char is a contract char
+/* need look up in .commit() */
+#define UCOL_CHARINDEX 0x70000000             
+/* Expand index follows */
+#define UCOL_EXPANDCHARINDEX 0x7E000000       
+/* contract indexes follows */
+#define UCOL_CONTRACTCHARINDEX 0x7F000000     
+/* unmapped character values */
+#define UCOL_UNMAPPED 0xFFFFFFFF              
+/* primary strength increment */
+#define UCOL_PRIMARYORDERINCREMENT 0x00010000 
+/* secondary strength increment */
+#define UCOL_SECONDARYORDERINCREMENT 0x00000100 
+/* tertiary strength increment */
+#define UCOL_TERTIARYORDERINCREMENT 0x00000001 
+/* maximum ignorable char order value */
+#define UCOL_MAXIGNORABLE 0x00010000          
+/* mask off anything but primary order */
+#define UCOL_PRIMARYORDERMASK 0xffff0000      
+/* mask off anything but secondary order */
+#define UCOL_SECONDARYORDERMASK 0x0000ff00    
+/* mask off anything but tertiary order */
+#define UCOL_TERTIARYORDERMASK 0x000000ff     
+/* mask off secondary and tertiary order */
+#define UCOL_SECONDARYRESETMASK 0x0000ffff    
+/* mask off ignorable char order */
+#define UCOL_IGNORABLEMASK 0x0000ffff         
+/* use only the primary difference */
+#define UCOL_PRIMARYDIFFERENCEONLY 0xffff0000 
+/* use only the primary and secondary difference */
+#define UCOL_SECONDARYDIFFERENCEONLY 0xffffff00  
+/* primary order shift */
+#define UCOL_PRIMARYORDERSHIFT 16             
+/* secondary order shift */
+#define UCOL_SECONDARYORDERSHIFT 8            
+/* minimum sort key offset */
+#define UCOL_SORTKEYOFFSET 2                  
+/* Indicates the char is a contract char */
+#define UCOL_CONTRACTCHAROVERFLOW 0x7FFFFFFF  
 
 
-#define UCOL_COLELEMENTSTART 0x02020202       // starting value for collation elements
-#define UCOL_PRIMARYLOWZEROMASK 0x00FF0000    // testing mask for primary low element
-#define UCOL_RESETSECONDARYTERTIARY 0x00000202// reseting value for secondaries and tertiaries
-#define UCOL_RESETTERTIARY 0x00000002         // reseting value for tertiaries
+/* starting value for collation elements */
+#define UCOL_COLELEMENTSTART 0x02020202       
+/* testing mask for primary low element */
+#define UCOL_PRIMARYLOWZEROMASK 0x00FF0000    
+/* reseting value for secondaries and tertiaries */
+#define UCOL_RESETSECONDARYTERTIARY 0x00000202
+/* reseting value for tertiaries */
+#define UCOL_RESETTERTIARY 0x00000002         
 
 #define UCOL_IGNORABLE 0x02020202
 #define UCOL_PRIMIGNORABLE 0x0202
