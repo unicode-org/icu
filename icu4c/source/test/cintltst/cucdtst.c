@@ -226,10 +226,10 @@ void TestMisc()
                                          FULL_WIDTH, 
                                          NEUTRAL};
     int i;
-    char icuVersion[U_MAX_VERSION_STRING], temp[U_MAX_VERSION_LEN];
+    char icuVersion[U_MAX_VERSION_STRING_LENGTH], temp[U_MAX_VERSION_LENGTH];
     UVersionInfo realVersion;
 
-    memset(icuVersion, 0, U_MAX_VERSION_STRING);
+    memset(icuVersion, 0, U_MAX_VERSION_STRING_LENGTH);
     for (i = 0; i < 5; i++) {
       log_verbose("Testing for isspace and nonspaces\n");
         if (!(u_isspace(sampleSpaces[i])) ||
@@ -271,13 +271,13 @@ void TestMisc()
     }
     /* Tests the ICU version #*/
     u_getVersion(realVersion);
-    for (i = 0; i < U_MAX_VERSION_LEN; i++ )
+    for (i = 0; i < U_MAX_VERSION_LENGTH; i++ )
     {
         int len = 0;
         itoa(realVersion[i], temp, 10);
         strcat(icuVersion, temp);
         len = strlen(icuVersion);
-        if (i != U_MAX_VERSION_LEN-1) 
+        if (i != U_MAX_VERSION_LENGTH-1) 
         {
             icuVersion[len] = U_VERSION_DELIMITER;
             icuVersion[len + 1] = 0;
@@ -366,8 +366,10 @@ void TestUnicodeData()
     char*   bufferPtr = 0, *dirPtr = 0;
     int32_t unicode;
     char newPath[256];
-    const char *expectVersion = "3.0.0";  /* NOTE: this purposely breaks to force the tests to stay in sync with the unicodedata */
-    uint8_t expectVersionArray[] = {0x03, 0x00, 0x00, 0x00};
+    const char *expectVersion = U_UNICODE_VERSION;  /* NOTE: this purposely breaks to force the tests to stay in sync with the unicodedata */
+    /* expectVersionArray must be filled from u_versionFromString(expectVersionArray, U_UNICODE_VERSION)
+       once this function is public. */
+    UVersionInfo expectVersionArray = {0x03, 0x00, 0x00, 0x00};
     UVersionInfo versionArray;
     char expectString[256];
 
@@ -380,7 +382,7 @@ void TestUnicodeData()
     strcat(expectString, expectVersion);
     u_getUnicodeVersion(versionArray);
 
-    if(memcmp(versionArray, expectVersionArray, U_MAX_VERSION_LEN) != 0)
+    if(memcmp(versionArray, expectVersionArray, U_MAX_VERSION_LENGTH) != 0)
       {
 	log_err("Testing u_getUnicodeVersion() - expected %s got %d.%d.%d.%d\n", expectString, 
         versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
