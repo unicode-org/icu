@@ -520,6 +520,15 @@ public class ICULocaleService extends ICUService {
          * handleCreate(ULocale,...) will be called to instantiate objects.
          * Otherwise handleCreate(Locale,...) will be called.  By default,
          * subclasses do NOT support ULocale.
+         *
+         * SUBCLASSES should either:
+         *
+         * [1] implement handleCreate(Locale,...)
+         *
+         * or (preferably)
+         *
+         * [2] implement handleCreate(ULocale,...) and override
+         *     supportsULocale() to return true
          */
         protected boolean supportsULocale() {
             return false;   
@@ -527,8 +536,9 @@ public class ICULocaleService extends ICUService {
     
         ///CLOVER:OFF
         /**
-         * Utility method used by create(Key, ICUService).  Subclasses can implement
-         * this instead of create.
+         * Utility method used by create(Key, ICUService).  Subclasses can
+         * implement this instead of create.  Subclasses should implement
+         * either this method or handleCreate(ULocale,...), but NOT BOTH.
          */
         protected Object handleCreate(Locale loc, int kind, ICUService service) {
             return null;
@@ -538,7 +548,10 @@ public class ICULocaleService extends ICUService {
         ///CLOVER:OFF
         /**
          * Utility method used by create(Key, ICUService).  Subclasses can
-         * implement this instead of create.
+         * implement this instead of create.  Subclasses should implement
+         * either this method or handleCreate(Locale,...), but NOT BOTH.
+         * If a subclass implements this method, it should also override
+         * supportULocale() to return true.
          */
         protected Object handleCreate(ULocale loc, int kind, ICUService service) {
             return null;
