@@ -89,6 +89,7 @@ public:
     void Test4161100(void);
     void Test4243011(void);
     void Test4243108(void);
+    void TestJ691(void);
 
 protected:
     UBool failure(UErrorCode status, const UnicodeString& msg);
