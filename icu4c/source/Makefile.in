@@ -127,8 +127,10 @@ clean-local:
 distclean-local: clean-local
 	rm -f Makefile config.cache config.log config.status config/Makefile
 	rm -f common/unicode/platform.h common/icucfg.h
-	rm -f *.goo *.txt *.uni
+ifeq ($(patsubst %..%,,@RELATIVEDATADIR@),@RELATIVEDATADIR@)
+	rm -f @DATABUILDDIR@/../source/test/testdata/*.goo @DATABUILDDIR@/../source/test/testdata/*.txt @DATABUILDDIR@/../source/test/testdata/*.uni
 	rm -f @DATABUILDDIR@/UnicodeData-$(UNICODE_VERSION).txt @DATABUILDDIR@/thaidict.brk
+endif
 
 check-local:
 
@@ -152,5 +154,4 @@ builddata: @DATABUILDDIR@/UnicodeData-$(UNICODE_VERSION).txt @DATABUILDDIR@/thai
 
 @DATABUILDDIR@/../source/test/testdata/default.goo: $(srcdir)/test/testdata/default.goo
 	ln -s `pwd`/$(srcdir)/test/testdata/*.goo `pwd`/$(srcdir)/test/testdata/*.txt `pwd`/$(srcdir)/test/testdata/*.uni  @DATABUILDDIR@/../source/test/testdata/
-
 
