@@ -16,6 +16,7 @@
 
 #include "cintltst.h"
 
+void addSetup(TestNode** root);
 void addUtility(TestNode** root);
 void addBreakIter(TestNode** root);
 void addStandardNamesTest(TestNode **root);
@@ -34,20 +35,21 @@ void addUCharTransformTest(TestNode** root);
 
 void addAllTests(TestNode** root)
 {
-    addStandardNamesTest(root);
+    addSetup(root);  /* Leave this test first! */
+    addUDataTest(root);
+    addPUtilTest(root);
     addUTF16Test(root);
     addUTF8Test(root);
     addUtility(root);
-    addBreakIter(root);
-    addFormatTest(root);
     addConvert(root);
+    addUCharTransformTest(root);
+    addCompactArrayTest(root);
+    addFormatTest(root);
+    addStandardNamesTest(root);
+    addBreakIter(root);
     addCollTest(root);
     addComplexTest(root);
-    addUDataTest(root);
     addUTransTest(root);
-    addPUtilTest(root);
-    addCompactArrayTest(root);
     addTestDeprecatedAPI(root);
-    addUCharTransformTest(root);
 }
 
