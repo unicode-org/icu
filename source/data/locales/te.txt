@@ -4,7 +4,7 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
-// $Revision: 1.9 $
+// $Revision: 1.10 $
 //
 // Telugu Locale. Data by Ram [ram@jtcsv.com]
 
@@ -78,4 +78,10 @@ te {
     LocaleScript{ 
         "Telu",  // ISO 15924 Name 
     }
+    // /**************** Info Below is needed ****************/
+    // Countries{}
+    // Eras{}
+    // Languages{}
+    // localPatternChars{}
+    //
 }
