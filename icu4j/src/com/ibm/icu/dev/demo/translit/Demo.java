@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2002/03/19 00:17:01 $ 
- * $Revision: 1.14 $
+ * $Date: 2002/05/25 15:20:10 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -28,11 +28,12 @@ import com.ibm.icu.text.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.14 $ $Date: 2002/03/19 00:17:01 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.15 $ $Date: 2002/05/25 15:20:10 $
  */
 public class Demo extends Frame {
 
     static final boolean DEBUG = false;
+    static final String START_TEXT = "(cut,\u03BA\u03C5\u03C4,\u05D0,\u3042,\u4E80,\u091A\u0941\u0924\u094D)";
 
     Transliterator translit = null;
     String fontName = "Arial Unicode MS";
@@ -84,11 +85,11 @@ public class Demo extends Frame {
         text.setFont(font);
         text.setSize(width, height);
         text.setVisible(true);
-        text.setText("\u03B1\u05D0\u3042\u4E80");
+        text.setText(START_TEXT);
         add(text);
 
         setSize(width, height);
-        setTransliterator("Latin-Greek", false);
+        setTransliterator("Latin-Greek", null);
     }
 
     private void initMenus() {
@@ -207,8 +208,13 @@ public class Demo extends Frame {
             new MenuShortcut(KeyEvent.VK_S)));
         swapSelectionItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Transliterator inv = translit.getInverse();
-                setTransliterator(inv.getID(), false);
+            	Transliterator inv;
+            	try {
+                	inv = translit.getInverse();
+                } catch (Exception x) {
+                	inv = new NullTransliterator();
+                }
+            	setTransliterator(inv.getID(), null);
             }
         });
         
@@ -248,7 +254,7 @@ public class Demo extends Frame {
         });   
         
         hexDialog = new InfoDialog(this, "Hex Entry", "Use U+..., \\u..., \\x{...}, or &#x...;",
-           "\u00E1"
+           "\\u00E1"
         );
         Button button = new Button("Insert");
         button.addActionListener(new ActionListener() {
@@ -278,7 +284,7 @@ public class Demo extends Frame {
                 String compound = "";
                 try {
                     compound = compoundDialog.getArea().getText();
-                    setTransliterator(compound, false);
+                    setTransliterator(compound, null);
                 } catch (RuntimeException ex) {
                     compoundDialog.getArea().setText(compound + "\n" + ex.getMessage());
                 }
@@ -307,13 +313,19 @@ public class Demo extends Frame {
                 String compound = "";
                 try {
                     compound = rulesDialog.getArea().getText();
-                    setTransliterator(compound, true);
+                    String id = ruleId.getText();
+                    setTransliterator(compound, id);
                 } catch (RuntimeException ex) {
                     rulesDialog.getArea().setText(compound + "\n" + ex.getMessage());
                 }
             }
         });
         rulesDialog.getBottom().add(button);
+        ruleId = new TextField("test1", 20);
+        Label temp = new Label(" Name:");
+        rulesDialog.getBottom().add(temp);
+        rulesDialog.getBottom().add(ruleId);
+        
         
         translitMenu.add(mitem = new MenuItem("From Rules...", 
             new MenuShortcut(KeyEvent.VK_R)));
@@ -363,6 +375,7 @@ public class Demo extends Frame {
     InfoDialog hexDialog;
     InfoDialog compoundDialog;
     InfoDialog rulesDialog;
+    TextField ruleId;
     MenuItem convertSelectionItem = null;
     MenuItem swapSelectionItem = null;
     MenuItem convertTypingItem = null;
@@ -384,7 +397,7 @@ public class Demo extends Frame {
         // Since Transliterators are immutable, we don't have to clone on set & get
         static void add(String ID, Transliterator t) {
             m.put(ID, t);
-            //System.out.println("Registering: " + ID + ", " + t.toRules(true));
+            System.out.println("Registering: " + ID + ", " + t.toRules(true));
             Transliterator.registerFactory(ID, singleton);
         }
         public Transliterator getInstance(String ID) {
@@ -392,21 +405,63 @@ public class Demo extends Frame {
         }
     }
     
+    static {
+    	AnyTransliterator at = new AnyTransliterator("Greek", null);
+    	at.transliterate("(cat,\u03b1,\u0915)");
+    	DummyFactory.add(at.getID(), at);
+    	
+    	at = new AnyTransliterator("Devanagari", null);
+    	at.transliterate("(cat,\u03b1,\u0915)");
+    	DummyFactory.add(at.getID(), at);
+    	
+    	at = new AnyTransliterator("Latin", null);
+    	at.transliterate("(cat,\u03b1,\u0915)");
+    	DummyFactory.add(at.getID(), at);
+    	
+    	if (false) {
+        DummyFactory.add("Any-gif", Transliterator.createFromRules("gif", "'\\'u(..)(..) > '<img src=\"http://www.unicode.org/gifs/24/' $1 '/U' $1$2 '.gif\">';", Transliterator.FORWARD));    	
+        DummyFactory.add("gif-Any", Transliterator.getInstance("Any-Null"));    	
+
+        DummyFactory.add("Any-RemoveCurly", Transliterator.createFromRules("RemoveCurly", "[\\{\\}] > ;", Transliterator.FORWARD));    	
+        DummyFactory.add("RemoveCurly-Any", Transliterator.getInstance("Any-Null"));
+        
+        System.out.println("Trying &hex");
+        Transliterator t = Transliterator.createFromRules("hex2", "(.) > &hex($1);", Transliterator.FORWARD);
+        System.out.println("Registering");
+        DummyFactory.add("Any-hex2", t);    	
+        
+        System.out.println("Trying &gif");
+        t = Transliterator.createFromRules("gif2", "(.) > &any-gif($1);", Transliterator.FORWARD);
+        System.out.println("Registering");
+        DummyFactory.add("Any-gif2", t);    
+        }
+    }
     
-    void setTransliterator(String name, boolean rules) {
+    
+    void setTransliterator(String name, String id) {
         if (DEBUG) System.out.println("Got: " + name);
-        if (!rules) {
+        if (id == null) {
         	translit = Transliterator.getInstance(name);
         } else {
-        	translit = Transliterator.createFromRules("Any-Test", name, Transliterator.FORWARD);
+            int pos = id.indexOf('-');
+            String reverseId = "";
+            if (pos < 0) {
+            	reverseId = id + "-Any";
+            	id = "Any-" + id;
+            } else {
+            	reverseId = id.substring(pos+1) + "-" + id.substring(0,pos);
+            }
+            
+        	
+        	translit = Transliterator.createFromRules(id, name, Transliterator.FORWARD);
         	if (DEBUG) System.out.println("***Forward Rules");
         	if (DEBUG) System.out.println(((RuleBasedTransliterator)translit).toRules(true));
-            DummyFactory.add("Any-Test", translit);
-        	
-        	Transliterator translit2 = Transliterator.createFromRules("Test-Any", name, Transliterator.REVERSE);
+            DummyFactory.add(id, translit);
+            
+        	Transliterator translit2 = Transliterator.createFromRules(reverseId, name, Transliterator.REVERSE);
         	if (DEBUG) System.out.println("***Backward Rules");
         	if (DEBUG) System.out.println(((RuleBasedTransliterator)translit2).toRules(true));
-            DummyFactory.add("Test-Any", translit2);
+            DummyFactory.add(reverseId, translit2);
             
             Transliterator rev = translit.getInverse();
         	if (DEBUG) System.out.println("***Inverse Rules");
@@ -419,7 +474,12 @@ public class Demo extends Frame {
         
         addHistory(translit);
         
-        Transliterator inv = translit.getInverse();
+        Transliterator inv;
+        try {
+        	inv = translit.getInverse();
+        } catch (Exception ex) {
+        	inv = null;
+        }
         if (inv != null) {
             addHistory(inv);
             swapSelectionItem.setEnabled(true);
@@ -450,13 +510,13 @@ public class Demo extends Frame {
             this.name = name;
         }
         public void actionPerformed(ActionEvent e) {
-            setTransliterator(name, false);
+            setTransliterator(name, null);
         }
         public void itemStateChanged(ItemEvent e) {
             if (e.getStateChange() == e.SELECTED) {
-                setTransliterator(name, false);
+                setTransliterator(name, null);
             } else {
-                setTransliterator("Any-Null", false);
+                setTransliterator("Any-Null", null);
             }
         }
     }
@@ -595,6 +655,7 @@ public class Demo extends Frame {
         dispose();
     }
     
+    /*
     class InfoDialog extends Dialog {
         protected Button button;
         protected TextArea area;
@@ -638,4 +699,5 @@ public class Demo extends Frame {
             });
         }
     }
+    */
 }
