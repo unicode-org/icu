@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/format/Attic/DateFormatRegressionTest.java,v $ 
- * $Date: 2001/10/19 11:51:46 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/10/23 13:08:50 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -81,7 +81,10 @@ public class DateFormatRegressionTest extends com.ibm.test.TestFmwk {
     public void Test4052408() {
     
         DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US); 
-        Date dt = new Date(97, Calendar.MAY, 3, 8, 55);
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(97 + 1900, Calendar.MAY, 3, 8, 55);
+        Date dt = cal.getTime();
         String str = fmt.format(dt);
         logln(str);
         
@@ -158,15 +161,27 @@ public class DateFormatRegressionTest extends com.ibm.test.TestFmwk {
     
         try {
             SimpleDateFormat fmt = new SimpleDateFormat("yyMMdd", Locale.US);
-            Date start = new Date(1809-1900, Calendar.DECEMBER, 25);
+            Calendar cal = Calendar.getInstance();
+            cal.clear();
+            cal.set(1809, Calendar.DECEMBER, 25);
+            Date start = cal.getTime();
             fmt.set2DigitYearStart(start);
             if ((fmt.get2DigitYearStart() != start))
                 errln("get2DigitYearStart broken");
-            Date dates[] = {
-                    new Date(1809 - 1900, Calendar.DECEMBER, 25), 
-                    new Date(1909 - 1900, Calendar.DECEMBER, 24), 
-                    new Date(1809 - 1900, Calendar.DECEMBER, 26), 
-                    new Date(1861 - 1900, Calendar.DECEMBER, 25), }; 
+            cal.clear();
+            cal.set(1809, Calendar.DECEMBER, 25);
+            Date d1 = cal.getTime();
+            cal.clear();
+            cal.set(1909, Calendar.DECEMBER, 24);
+            Date d2 = cal.getTime();
+            cal.clear();
+            cal.set(1809, Calendar.DECEMBER, 26);
+            Date d3 = cal.getTime();
+            cal.clear();
+            cal.set(1861, Calendar.DECEMBER, 25);
+            Date d4 = cal.getTime();
+            
+            Date dates[] = {d1, d2, d3, d4};
     
             String strings[] = {"091225", "091224", "091226", "611225"};            
     
@@ -283,7 +298,10 @@ public class DateFormatRegressionTest extends com.ibm.test.TestFmwk {
             // {sfb} adoptDefault instead of setDefault
             //TimeZone.setDefault(TimeZone.createTimeZone("EST"));
             TimeZone.setDefault(TimeZone.getTimeZone("EST"));
-            curDate = new Date(98, 0, 1);
+            Calendar cal = Calendar.getInstance();
+            cal.clear();
+            cal.set(98 + 1900, 0, 1);
+            curDate = cal.getTime();
             shortdate = DateFormat.getDateInstance(DateFormat.SHORT);
             fulldate = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
             strShortDate = "The current date (short form) is ";
@@ -300,8 +318,8 @@ public class DateFormatRegressionTest extends com.ibm.test.TestFmwk {
             // {sfb} What to do with resource bundle stuff?????
     
             // Check to see if the resource is present; if not, we can't test
-            ResourceBundle bundle = 
-                ResourceBundle.getBundle("java.text.resources.DateFormatZoneData", curLocale); 
+            //ResourceBundle bundle = //The variable is never used
+            //    ResourceBundle.getBundle("java.text.resources.DateFormatZoneData", curLocale); 
     
             // {sfb} API change to ResourceBundle -- add getLocale()
             /*if (bundle.getLocale().getLanguage().equals("de")) {
@@ -313,7 +331,7 @@ public class DateFormatRegressionTest extends com.ibm.test.TestFmwk {
                 logln("*** FOR LOCALE de OR de_DE IS MISSING ***");
             }*/
         } catch (Exception e) {
-            
+            logln(e.getMessage());
         } finally {
             Locale.setDefault(saveLocale);
             TimeZone.setDefault(saveZone);
@@ -340,17 +358,16 @@ public class DateFormatRegressionTest extends com.ibm.test.TestFmwk {
         // {sfb} Is it OK to cast away const here?
         Calendar calA = fmtA.getCalendar();
         Calendar calB = fmtB.getCalendar();
-        Date epoch = new Date(0, 0, 0);
-        Date xmas = new Date(61, Calendar.DECEMBER, 25);
-    
-        calA.setTime(epoch);
-        calB.setTime(epoch);
-    
+        calA.clear();
+        calA.set(1900, 0 ,0);
+        calB.clear();
+        calB.set(1900, 0, 0);
         if (!calA.equals(calB))
             errln("Fail: Can't complete test; Calendar instances unequal");
         if (!fmtA.equals(fmtB))
             errln("Fail: DateFormat unequal when Calendars equal");
-        calB.setTime(xmas);
+        calB.clear();
+        calB.set(1961, Calendar.DECEMBER, 25);
         if (calA.equals(calB))
             errln("Fail: Can't complete test; Calendar instances equal");
         if (!fmtA.equals(fmtB))
@@ -483,8 +500,11 @@ public class DateFormatRegressionTest extends com.ibm.test.TestFmwk {
     public void Test4103340() {
     
         // choose a date that is the FIRST of some month 
-        // and some arbitrary time 
-        Date d = new Date(97, 3, 1, 1, 1, 1); 
+        // and some arbitrary time
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(1997, 3, 1, 1, 1, 1);
+        Date d = cal.getTime(); 
         SimpleDateFormat df = new SimpleDateFormat("MMMM", Locale.US);
         String s = d.toString();
         StringBuffer s2 = new StringBuffer("");
@@ -524,7 +544,10 @@ public class DateFormatRegressionTest extends com.ibm.test.TestFmwk {
         logln("pattern: \"" + pattern + "\"");
         String strings[] = {"time 10:30", "time 10:x", "time 10x"};
         ParsePosition ppos[] = {new ParsePosition(10), new ParsePosition(0), new ParsePosition(0)};
-        Date dates[] = {new Date(70, Calendar.JANUARY, 1, 10, 30), new Date(-1), new Date(-1)};
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(1970, Calendar.JANUARY, 1, 10, 30);
+        Date dates[] = {cal.getTime(), new Date(-1), new Date(-1)};
         for (int i = 0; i < 3; i++) {
             String text = strings[i];
             ParsePosition finish = ppos[i];
@@ -685,11 +708,14 @@ public class DateFormatRegressionTest extends com.ibm.test.TestFmwk {
     public void Test4151706() {
         String dateString = "Thursday, 31-Dec-98 23:00:00 GMT";
         SimpleDateFormat fmt = new SimpleDateFormat("EEEE, dd-MMM-yy HH:mm:ss z", Locale.US);
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.US);
+        cal.clear();
+        cal.set(1998, Calendar.DECEMBER, 31, 23, 0, 0);
         Date d = new Date();
         try {
             d = fmt.parse(dateString);
             // {sfb} what about next two lines?
-            if (d.getTime() != Date.UTC(1998 - 1900, Calendar.DECEMBER, 31, 23, 0, 0))
+            if (d.getTime() != cal.getTime().getTime())
                 errln("Incorrect value: " + d);
         } catch (Exception e) {
             errln("Fail: " + e);
@@ -724,7 +750,6 @@ public class DateFormatRegressionTest extends com.ibm.test.TestFmwk {
     public void Test4182066() {
         SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yy", Locale.US);
         SimpleDateFormat dispFmt = new SimpleDateFormat("MMM dd yyyy HH:mm:ss GG", Locale.US);
-        TimeZone defaultTZ = TimeZone.getDefault();
         /* We expect 2-digit year formats to put 2-digit years in the right
          * window.  Out of range years, that is, anything less than "00" or
          * greater than "99", are treated as literal years.  So "1/2/3456"
@@ -813,7 +838,10 @@ public class DateFormatRegressionTest extends com.ibm.test.TestFmwk {
     
         Calendar calx = (Calendar) fmt.getCalendar(); // cast away const!
         calx.setLenient(false);
-        Date d = new Date(); //(2000-1900, Calendar.FEBRUARY, 29);
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+        calendar.set(2000, Calendar.FEBRUARY, 29);
+        Date d = calendar.getTime();
         String s = fmt.format(d);
         logln(disp.format(d) + " f> " + pattern + " => \"" + s + "\"");
         ParsePosition pos = new ParsePosition(0);

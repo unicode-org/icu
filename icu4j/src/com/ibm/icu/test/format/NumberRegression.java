@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/format/Attic/NumberRegression.java,v $ 
- * $Date: 2001/10/19 12:17:39 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/10/23 13:16:20 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  **/
@@ -165,7 +165,7 @@ public class NumberRegression extends com.ibm.test.TestFmwk {
      * NumberFormat.getCurrencyInstance is wrong.
      */
     public void Test4066646 () {
-        float returnfloat = 0.0f;
+        //float returnfloat = 0.0f; //The variable is never used
         assignFloatValue(2.04f);
         assignFloatValue(2.03f);
         assignFloatValue(2.02f);
@@ -447,7 +447,7 @@ public class NumberRegression extends com.ibm.test.TestFmwk {
 	df.setDecimalFormatSymbols(sym);
         char decSep = sym.getDecimalSeparator();
         char monSep = sym.getMonetaryDecimalSeparator();
-        char zero = sym.getZeroDigit();
+        //char zero = sym.getZeroDigit(); //The variable is never used
         if (decSep == monSep) {
             errln("ERROR in test: want decimal sep != monetary sep");
         } else {
@@ -710,6 +710,7 @@ public class NumberRegression extends com.ibm.test.TestFmwk {
     {
         try {
             DecimalFormat fmt = new DecimalFormat("#,#00.00;-#.#");
+            logln("format 3456.78: " + fmt.format(3456.78)); //fix "The variable 'fmt' is never used"
             logln("Inconsistent negative pattern is fine.");
             DecimalFormat newFmt = new DecimalFormat("#,#00.00 p''ieces;-#,#00.00 p''ieces");
             String tempString = newFmt.format(3456.78);
@@ -742,12 +743,14 @@ public class NumberRegression extends com.ibm.test.TestFmwk {
     {
         try {
             DecimalFormat fmt = new DecimalFormat("000.0#0");
+            logln("format 3456.78: " + fmt.format(3456.78)); //fix "The variable 'fmt' is never used"
             errln("Bug 4099404 failed applying illegal pattern \"000.0#0\"");
         } catch (Exception foo) {
             logln("Bug 4099404 pattern \"000.0#0\" passed");
         }
         try {
             DecimalFormat fmt = new DecimalFormat("0#0.000");
+            logln("format 3456.78: " + fmt.format(3456.78)); //fix "The variable 'fmt' is never used"
             errln("Bug 4099404 failed applying illegal pattern \"0#0.000\"");
         } catch (Exception foo) {
             logln("Bug 4099404 pattern \"0#0.000\" passed");
@@ -984,7 +987,7 @@ public class NumberRegression extends com.ibm.test.TestFmwk {
             // Now substitute in the locale's currency symbol and create another
             // pattern.  Replace the decimal separator with the monetary separator.
             //
-            char decSep = symbols.getDecimalSeparator();
+            //char decSep = symbols.getDecimalSeparator(); //The variable is never used
             char monSep = symbols.getMonetaryDecimalSeparator();
             StringBuffer buf = new StringBuffer(pattern);
             for (int j = 0; j < buf.length(); j++) {
@@ -1401,6 +1404,7 @@ public class NumberRegression extends com.ibm.test.TestFmwk {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
             try {
                 NumberFormat format = (NumberFormat) ois.readObject();
+                logln("format: " + format.format(1234.56)); //fix "The variable is never used"
                 errln("FAIL: Deserialized bogus NumberFormat");
             } catch (InvalidObjectException e) {
                 logln("Ok: " + e.getMessage());
@@ -1421,6 +1425,7 @@ public class NumberRegression extends com.ibm.test.TestFmwk {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
             try {
                 NumberFormat format = (NumberFormat) ois.readObject();
+                logln("format: " + format.format(1234.56)); //fix "The variable is never used"
                 errln("FAIL: Deserialized bogus NumberFormat");
             } catch (InvalidObjectException e) {
                 logln("Ok: " + e.getMessage());

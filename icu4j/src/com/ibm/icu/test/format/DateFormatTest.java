@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/format/Attic/DateFormatTest.java,v $ 
- * $Date: 2001/10/19 11:43:37 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/10/23 13:10:53 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -36,7 +36,7 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
         /*
          * Instantiate a TimeZone so we can get the ids.
          */
-        TimeZone tz = new SimpleTimeZone(7, "");
+        //TimeZone tz = new SimpleTimeZone(7, ""); //The variable is never used
         /*
          * Computational variables.
          */
@@ -66,7 +66,6 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
          */
         Date today = new Date();
         Calendar cal = Calendar.getInstance();
-        int errs = 0;
         for (int i = 0; i < ids_length; i++) {
             logln(i + " " + ids[i]);
             TimeZone ttz = TimeZone.getTimeZone(ids[i]);
@@ -153,15 +152,17 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
         hour = (hour < 0) ? hour + 24 : hour;
         try {
             Date d = fmt.parse(s);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(d);
             //DSTOffset
             hour += defaultTZ.inDaylightTime(d) ? 1 : 0;
-            long l = d.getTime();
+            
             logln(s + " P> " + ((DateFormat) fullFmt).format(d));
-            int hr = d.getHours();
+            int hr = cal.get(Calendar.HOUR_OF_DAY);
             if (hr != hour)
                 errln("FAIL: Should parse to hour " + hour);
         } catch (ParseException e) {
-    
+            errln("Parse Error:" + e.getMessage());
         }
     
     }
@@ -172,7 +173,6 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
     public void TestFieldPosition() {
         DateFormat[] dateFormats = new DateFormat[4];
         int dateFormats_length = dateFormats.length;
-        Calendar cal = Calendar.getInstance();
         String fieldNames[] = {
                 "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH", "DAY_OF_MONTH",   "DAY_OF_YEAR",
                 "DAY_OF_WEEK",   "DAY_OF_WEEK_IN_MONTH", "AM_PM", "HOUR","HOUR_OF_DAY","MINUTE",
@@ -210,7 +210,6 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
             TimeZone tz = TimeZone.getTimeZone("PST");
             ((SimpleTimeZone)tz).setDSTSavings(3600000);
             df.setTimeZone(tz);
-            String ss = df.getTimeZone().getID();
             logln(" Pattern = " + ((SimpleDateFormat) df).toPattern());
             str = "";
             try {
@@ -269,8 +268,11 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
     public void TestPartialParse994() {
     
         SimpleDateFormat f = new SimpleDateFormat();
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(1997, 1 - 1, 17, 10, 11, 42);
         Date date = null;
-        tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/17 10:11:42", new Date(97, 1 - 1, 17, 10, 11, 42));
+        tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/17 10:11:42", cal.getTime());
         tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/17 10:", date);
         tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/17 10", date);
         tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/17 ", date);
@@ -333,10 +335,15 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
         String myDate;
         fmt = new SimpleDateFormat("yyyy/MM/dd");
         myDate = "1997/02/03";
-        _testIt917(fmt, myDate, new Date(97, 2 - 1, 3));
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(1997, 2 - 1, 3);
+        _testIt917(fmt, myDate, cal.getTime());
         fmt = new SimpleDateFormat("yyyyMMdd");
         myDate = "19970304";
-        _testIt917(fmt, myDate, new Date(97, 3 - 1, 4));
+        cal.clear();
+        cal.set(1997, 3 - 1, 4);
+        _testIt917(fmt, myDate, cal.getTime());
     
     }
     
@@ -360,10 +367,14 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
      */
     public void TestCzechMonths459() {
         DateFormat fmt = DateFormat.getDateInstance(DateFormat.FULL, new Locale("cs", "", "")); 
-        String pattern;
         logln("Pattern " + ((SimpleDateFormat) fmt).toPattern());
-        Date june = new Date(97, Calendar.JUNE, 15);
-        Date july = new Date(97, Calendar.JULY, 15);
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(1997, Calendar.JUNE, 15);
+        Date june = cal.getTime();
+        cal.clear();
+        cal.set(1997, Calendar.JULY, 15);
+        Date july = cal.getTime();
         String juneStr = fmt.format(june);
         String julyStr = fmt.format(july);
         try {
@@ -371,24 +382,26 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
             Date d = fmt.parse(juneStr);
             String s = fmt.format(d);
             int month, yr, day, hr, min, sec;
-            yr = d.getYear();
-            month = d.getMonth();
-            day = d.getDay();
-            hr = d.getHours();
-            min = d.getMinutes();
-            sec = d.getSeconds();
+            cal.setTime(d);
+            yr = cal.get(Calendar.YEAR) - 1900;
+            month = cal.get(Calendar.MONTH);
+            day = cal.get(Calendar.DAY_OF_WEEK);
+            hr = cal.get(Calendar.HOUR_OF_DAY);
+            min = cal.get(Calendar.MINUTE);
+            sec = cal.get(Calendar.SECOND);
             logln("  . parse . " + s + " (month = " + month + ")");
             if (month != Calendar.JUNE)
                 errln("FAIL: Month should be June");
             logln("format(July 15 1997) = " + julyStr);
             d = fmt.parse(julyStr);
             s = fmt.format(d);
-            yr = d.getYear();
-            month = d.getMonth();
-            day = d.getDay();
-            hr = d.getHours();
-            min = d.getMinutes();
-            sec = d.getSeconds();
+            cal.setTime(d);
+            yr = cal.get(Calendar.YEAR) - 1900;
+            month = cal.get(Calendar.MONTH);
+            day = cal.get(Calendar.DAY_OF_WEEK);
+            hr = cal.get(Calendar.HOUR_OF_DAY);
+            min = cal.get(Calendar.MINUTE);
+            sec = cal.get(Calendar.SECOND);
             logln("  . parse . " + s + " (month = " + month + ")");
             if (month != Calendar.JULY)
                 errln("FAIL: Month should be July");
@@ -404,7 +417,10 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
         String dateString = "1995-040.05:01:29";
         String bigD = "yyyy-DDD.hh:mm:ss";
         String littleD = "yyyy-ddd.hh:mm:ss";
-        Date expLittleD = new Date(95, 0, 1, 5, 1, 29);
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(1995, 0, 1, 5, 1, 29);
+        Date expLittleD = cal.getTime();
         Date expBigD = new Date((long) (expLittleD.getTime() + 39 * 24 * 3600000.0));
         expLittleD = expBigD; // Expect the same, with default lenient parsing
         logln("dateString= " + dateString);
@@ -427,12 +443,14 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
      */
     public void TestDayOfYearPattern195() {
         Calendar cal = Calendar.getInstance();
-        Date today = new Date();
+        Date today = cal.getTime();
         int year,month,day; 
-        year = today.getYear();
-        month = today.getMonth();
-        day = today.getDate();
-        Date expected = new Date(year, month, day);
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH);
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        cal.clear();
+        cal.set(year, month, day);
+        Date expected = cal.getTime();
         logln("Test Date: " + today);
         SimpleDateFormat sdf = (SimpleDateFormat)DateFormat.getDateInstance();
         tryPattern(sdf, today, null, expected);
@@ -464,9 +482,11 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
      * Test the handling of single quotes in patterns.
      */
     public void TestQuotePattern161() {
-    
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss a zzz", Locale.US); 
-        Date currentTime_1 = new Date(97, Calendar.AUGUST, 13, 10, 42, 28);
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(1997, Calendar.AUGUST, 13, 10, 42, 28);
+        Date currentTime_1 = cal.getTime();
         String dateString = ((DateFormat) formatter).format(currentTime_1);
         String exp = "08/13/1997 at 10:42:28 AM ";
         logln("format(" + currentTime_1 + ") = " + dateString);
@@ -507,7 +527,7 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
                                 errln("FAIL: Expected " + expected);
                         }
                     } catch(java.text.ParseException e) {
-                        //errln(e.getMessage());
+                        logln(e.getMessage());
                     }
                 }
             }
@@ -551,7 +571,7 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
         try {
             date = dateParse.parse(ss);
         } catch (Exception ex) {
-            //errln("FAIL:" + ex);
+            logln("FAIL:" + ex);
         }
         for (int i = 0; i < INPUT_LENGTH; i += (PF_LENGTH + 1)) {
             ParsePosition parsePosition = new ParsePosition(0);
@@ -586,7 +606,7 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
                                     + "\" with \"" + dateParse.toPattern()+ "\"");
                         }
                 } catch (Exception ex) {
-                    //errln("FAIL:" + ex);
+                    logln("FAIL:" + ex);
                 }
             }
         }
@@ -598,8 +618,13 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
      */
     public void TestTwoDigitYear() {
         DateFormat fmt = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
-        parse2DigitYear(fmt, "6/5/17", new Date(117, Calendar.JUNE, 5));
-        parse2DigitYear(fmt, "6/4/34", new Date(34, Calendar.JUNE, 4));
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(117 + 1900, Calendar.JUNE, 5);
+        parse2DigitYear(fmt, "6/5/17", cal.getTime());
+        cal.clear();
+        cal.set(34 + 1900, Calendar.JUNE, 4);
+        parse2DigitYear(fmt, "6/4/34", cal.getTime());
     }
     
     // internal test subroutine, used by TestTwoDigitYear

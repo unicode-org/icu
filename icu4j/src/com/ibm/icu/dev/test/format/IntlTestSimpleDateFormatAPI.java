@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestSimpleDateFormatAPI.java,v $ 
- * $Date: 2001/10/19 11:43:37 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/10/23 13:14:20 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  **/
@@ -122,7 +122,9 @@ public class IntlTestSimpleDateFormatAPI extends com.ibm.test.TestFmwk
             errln("ERROR: set DateFormatSymbols() failed");
         }
 
-        Date startDate = null;
+        /*
+        DateFormatSymbols has not the method getTwoDigitStartDate();
+        //Date startDate = null; //The variable is never used
         try {
 //            startDate = pat.getTwoDigitStartDate();
         }
@@ -135,7 +137,7 @@ public class IntlTestSimpleDateFormatAPI extends com.ibm.test.TestFmwk
         }
         catch (Exception e) {
             errln("ERROR: setTwoDigitStartDate() failed");
-        }
+        }*/
 
         // ======= Test applyPattern()
 

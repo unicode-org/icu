@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/format/Attic/IntlTestDecimalFormatSymbols.java,v $ 
- * $Date: 2001/10/19 12:11:07 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/10/23 13:12:49 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  **/
@@ -121,7 +121,7 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.test.TestFmwk
 //            errln("ERROR: get/set Exponential failed");
 //        }
 
-        DecimalFormatSymbols foo = new DecimalFormatSymbols();
+        //DecimalFormatSymbols foo = new DecimalFormatSymbols(); //The variable is never used
 
         en = (DecimalFormatSymbols) fr.clone();
 

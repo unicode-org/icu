@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2001/10/19 12:15:50 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/10/23 13:14:40 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -74,13 +74,13 @@ public class NumberFormatTest extends com.ibm.test.TestFmwk {
             "12.34E-003", "123.4568E006", "1.23E300", "-314.1593E-273",
             // 0.###E0;[0.###E0]
             "1.234E-2", "1.235E8", "1.23E300", "[3.142E-271]" };
-        double valParse[] =
+        /*double valParse[] =
             {
                 0.01234, 123460000, 1.23E300, -3.1416E-271,
                 0.01234, 123460000, 1.23E300, -3.1416E-271,
                 0.01234, 123456800, 1.23E300, -3.141593E-271,
                 0.01234, 123500000, 1.23E300, -3.142E-271,
-            };
+            };*/ //The variable is never used
     
         int lval[] = { 0, -1, 1, 123456789 };
         int lval_length = lval.length;
@@ -103,7 +103,6 @@ public class NumberFormatTest extends com.ibm.test.TestFmwk {
         int ival = 0, ilval = 0;
         for (int p = 0; p < pat_length; ++p) {
             DecimalFormat fmt = new DecimalFormat(pat[p], sym);
-            String pattern;
             logln("Pattern \"" + pat[p] + "\" -toPattern-> \"" + fmt.toPattern() + "\"");
             int v;
             for (v = 0; v < val_length; ++v) {
@@ -341,7 +340,7 @@ public class NumberFormatTest extends com.ibm.test.TestFmwk {
         try {
         num = (Long)fmt.parse(str);
         } catch (java.text.ParseException e) {
-            
+            logln(e.getMessage());
         }
         String pat = ((DecimalFormat)fmt).toPattern();
         if (num.longValue() == n) {
