@@ -34,7 +34,7 @@ class TransliteratorRoundTripTest : public IntlTest {
     void TestDevanagariLatin(void);
     void TestInterIndic(void);
     void TestDebug(const char* name,const char fromSet[],
-                                            const char* toSet,const char* exclusions,UBool quick);
+                   const char* toSet,const char* exclusions);
 };
 
 #endif
