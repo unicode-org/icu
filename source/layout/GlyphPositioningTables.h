@@ -24,7 +24,7 @@ struct GlyphPositioningTableHeader
     Offset  featureListOffset;
     Offset  lookupListOffset;
 
-    void    process(LEUnicode *glyphs, GlyphPositionAdjustment *glyphPositionAdjustments,
+    void    process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphPositionAdjustments,
                 const LETag **glyphTags, le_int32 glyphCount,
                 le_bool rightToLeft, LETag scriptTag, LETag languageTag,
                 const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
