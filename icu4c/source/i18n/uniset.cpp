@@ -52,7 +52,7 @@ UnicodeSet* UnicodeSet::CATEGORY_CACHE = _CATEGORY_CACHE;
  * Delimiter string used in patterns to close a category reference:
  * ":]".  Example: "[:Lu:]".
  */
-const UnicodeString UnicodeSet::CATEGORY_CLOSE = UNICODE_STRING(":]", 2);
+const UChar UnicodeSet::CATEGORY_CLOSE[] = {0x003A, 0x005D, 0x0000}; /* :] */
 
 // Define UChar constants using hex for EBCDIC compatibility
 const UChar UnicodeSet::SET_OPEN     = 0x005B; /*[*/
