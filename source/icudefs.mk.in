@@ -40,7 +40,7 @@ SO_TARGET_VERSION_MAJOR = @LIB_VERSION_MAJOR@
 # to change the build this way). When building in common mode, the data
 # name is the versioned platform-dependent one. 
 
-ICUDATA_DIR = @icudatadir@
+ICUDATA_DIR = @pkgicudatadir@/$(PACKAGE)/$(VERSION)
 
 ICUDATA_BASENAME_VERSION = icudt@LIB_VERSION_MAJOR@
 ICUDATA_PLATFORM_NAME = $(ICUDATA_BASENAME_VERSION)@ICUDATA_CHAR@
