@@ -113,7 +113,7 @@ static void _HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_
     cnv->toUnicodeStatus = 0;
     cnv->fromUnicodeStatus= 0;
     cnv->mode=0;
-    cnv->fromUSurrogateLead;
+    cnv->fromUSurrogateLead=0x0000;
     cnv->extraInfo = uprv_malloc (sizeof (UConverterDataHZ));
     if(cnv->extraInfo != NULL){
         ((UConverterDataHZ*)cnv->extraInfo)->gbConverter = ucnv_open("ibm-1386",errorCode);
@@ -137,7 +137,7 @@ static void _HZReset(UConverter *cnv){
     cnv->toUnicodeStatus = 0;
     cnv->fromUnicodeStatus= 0;
     cnv->mode=0;
-    cnv->fromUSurrogateLead; 
+    cnv->fromUSurrogateLead=0x0000; 
     if(cnv->extraInfo != NULL){
         ((UConverterDataHZ*)cnv->extraInfo)->isStateDBCS = FALSE;
         ((UConverterDataHZ*)cnv->extraInfo)->isEscapeAppended = FALSE;
