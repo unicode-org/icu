@@ -399,10 +399,10 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 
 /* These constants can be changed - sortkey size is affected by them */
 #define UCOL_PROPORTION2 0.5
-#define UCOL_PROPORTION3 0.666
+#define UCOL_PROPORTION3 0.667
 
 /* These values come from the UCA */
-#define UCOL_COMMON_TOP2 0x7F
+#define UCOL_COMMON_TOP2 0x86
 #define UCOL_COMMON_BOT2 0x05
 #define UCOL_TOTAL2 (UCOL_COMMON_TOP2-UCOL_COMMON_BOT2-1) 
 
@@ -433,6 +433,43 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define UCOL_CASE_BIT_MASK    0x40
 
 #define UCOL_TERT_CASE_MASK   0x7F
+
+/* Constants for Markus's LSCU */
+/* If a change is needed for SLOPE_MIN constant, other magic numbers need to be changed */
+/* Do not use byte values 0, 1, 2; use 0x20 lead bytes in each direction for double-byte sequences. */
+#define SLOPE_MIN           3
+#define SLOPE_MIDDLE        0x81
+#define SLOPE_LEAD_2        0x20
+
+#define SLOPE_TAIL_COUNT    (256-SLOPE_MIN)
+
+/* We could calculate this: the maximum number of single bytes in each direction. */
+#define SLOPE_REACH_POS_1   0x4c
+#define SLOPE_REACH_NEG_1   (-SLOPE_REACH_POS_1)
+
+/* The difference value range for double-byters. */
+#define SLOPE_REACH_POS_2   (SLOPE_LEAD_2*SLOPE_TAIL_COUNT+(SLOPE_LEAD_2-1))
+#define SLOPE_REACH_NEG_2   (-SLOPE_REACH_POS_2-1)
+
+/* The lead byte start values. */
+#define SLOPE_START_POS_2   (SLOPE_MIDDLE+SLOPE_REACH_POS_1+1)
+#define SLOPE_START_POS_3   (SLOPE_START_POS_2+SLOPE_LEAD_2)
+#define SLOPE_START_NEG_2   (SLOPE_MIDDLE+SLOPE_REACH_NEG_1)
+#define SLOPE_START_NEG_3   (SLOPE_START_NEG_2-SLOPE_LEAD_2)
+
+/*
+ * Integer division and modulo with negative numerators
+ * yields negative modulo results and quotients that are one more than
+ * what we need here.
+ */
+#define NEGDIVMOD(n, d, m) { \
+    (m)=(n)%(d); \
+    (n)/=(d); \
+    if((m)<0) { \
+        --(n); \
+        (m)+=(d); \
+    } \
+}
 
 typedef enum {
     NOT_FOUND_TAG = 0,
