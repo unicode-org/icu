@@ -252,6 +252,50 @@ CollationKey::compareTo(const CollationKey& target) const
     */
 }
 
+// Bitwise comparison for the collation keys.
+UCollationResult
+CollationKey::compareTo(const CollationKey& target, UErrorCode &status) const
+{
+    uint8_t *src = this->fBytes;
+    uint8_t *tgt = target.fBytes;
+
+    // are we comparing the same string
+    if (src == tgt)
+        return  UCOL_EQUAL;
+
+    int                         minLength;
+    UCollationResult result;
+
+    // are we comparing different lengths?
+    if (this->fCount != target.fCount) {
+        if (this->fCount < target.fCount) {
+            minLength = this->fCount;
+            result    =  UCOL_LESS;
+        }
+        else {
+            minLength = target.fCount;
+            result    =  UCOL_GREATER;
+        }
+    }
+    else {
+        minLength = target.fCount;
+        result    =  UCOL_EQUAL;
+    }
+
+    if (minLength > 0) {
+        int diff = uprv_memcmp(src, tgt, minLength);
+        if (diff > 0) {
+            return UCOL_GREATER;
+        }
+        else
+            if (diff < 0) {
+                return UCOL_LESS;
+            }
+    }
+
+    return result;
+}
+
 CollationKey&
 CollationKey::ensureCapacity(int32_t newSize)
 {
