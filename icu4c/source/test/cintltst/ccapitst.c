@@ -30,8 +30,6 @@
 #define MAX_FILE_LEN 1024*20
 #define UCS_FILE_NAME_SIZE 100
 
-/*writes and entire UChar* (string) along with a BOM to a file*/
-static void WriteToFile(const UChar *a, FILE *myfile); 
 /*Case insensitive compare*/
 static int32_t strCaseIcmp(const char* a1,const char * a2); 
 /*returns an action other than the one provided*/
@@ -43,6 +41,35 @@ void addTestConvert(TestNode** root)
 {
     addTest(root, &TestConvert, "tsconv/ccapitst/TestConvert");
     addTest(root, &TestAlias,   "tsconv/ccapitst/TestAlias"); 
+}
+
+#if 0
+/*writes an entire UChar* (string) along with a BOM to a file*/
+static void WriteToFile(const UChar *a, FILE *myfile)
+{
+    uint32_t  size    = u_strlen(a);
+    uint16_t  i       = 0;
+    UChar     b       = 0xFEFF;
+
+    /*Writes the BOM*/
+    fwrite(&b, sizeof(UChar), 1, myfile);
+    for (i=0; i< size; i++)
+    {
+        b = a[i];
+        fwrite(&b, sizeof(UChar), 1, myfile);
+    }
+}
+#endif
+
+static int32_t strCaseIcmp(const char* a1, const char * a2)
+{
+    int32_t i=0, ret=0;
+    while(a1[i]&&a2[i]) 
+    {
+        ret += tolower(a1[i])-tolower(a2[i]); 
+        i++;
+    }
+    return ret;
 }
 
 static void TestConvert() 
@@ -970,34 +997,6 @@ static void TestConvert()
     free((void*)output_cp_buffer);
     free((void*)ucs_file_buffer);
     free((void*)my_ucs_file_buffer);
-}
-
-#if 0
-static void WriteToFile(const UChar *a, FILE *myfile)
-{
-    uint32_t  size    = u_strlen(a);
-    uint16_t  i       = 0;
-    UChar     b       = 0xFEFF;
-
-    /*Writes the BOM*/
-    fwrite(&b, sizeof(UChar), 1, myfile);
-    for (i=0; i< size; i++)
-    {
-        b = a[i];
-        fwrite(&b, sizeof(UChar), 1, myfile);
-    }
-}
-#endif
-
-static int32_t strCaseIcmp(const char* a1, const char * a2)
-{
-    int32_t i=0, ret=0;
-    while(a1[i]&&a2[i]) 
-    {
-        ret += tolower(a1[i])-tolower(a2[i]); 
-        i++;
-    }
-    return ret;
 }
 
 static UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA)
