@@ -203,7 +203,7 @@ install-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/icupkg.inc
 	(cd tmp; $(PKGDATA) -p icudata ./icudata.lst -I $(DESTDIR)$(pkgdatadir)/$(VERSION) )
 
 
-clean-pkgdata:  $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/icupkg.inc
+clean-pkgdata:
 	@$(mkinstalldirs) $(TMPDATADIR)
 	-@(cd tmp; $(PKGDATA) -p icudata ./icudata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
 	-$(RMV) $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/icupkg.inc 
