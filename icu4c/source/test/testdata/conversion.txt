@@ -43,6 +43,16 @@ conversion {
     toUnicode {
       Headers { "charset", "bytes", "unicode", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidChars" }
       Cases {
+        // extensions
+        {
+          "*test3",
+          :bin{ 00050601020b0701020a01020c },
+          "\u20ac\x05\x06\x0b\U00101234\U00023456\ufffd",
+          :intvector{ 0, 1, 2, 3, 6, 6, 7, 7, 10 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
+
+        // normal conversions
         {
           "UTF-16LE",
           :bin{ 310000d801dc00d902dc320000d8330001dc3400 },
@@ -110,6 +120,24 @@ conversion {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // extensions
+        {
+          "*test3",
+          "\xc4\xc4\xc4\U00101234\xc4\xc4\U00101234\x05",
+          :bin{ ffffff070501020c },
+          :intvector{ 0, 1, 2, 3, 5, 5, 5, 5 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+
+        {
+          "*test3",
+          "\U00101234\U00101234\U00050005\U00101234\U00050005\U00060006",
+          :bin{ 07070001020e05070001020f09 },
+          :intvector{ 0, 2, 2, 2, 2, 2, 2, 6, 6, 6, 6, 6, 6 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+
+        // normal conversions
         {
           "UTF-16LE",
           "1\U00010001\U000500022\ud8003\udc014",

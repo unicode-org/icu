@@ -26,6 +26,7 @@
 #include "unicode/udata.h"
 #include "utrie.h"
 #include "unicode/uset.h"
+#include "toolutil.h"
 #include "unewdata.h"
 #include "unormimp.h"
 #include "gennorm.h"
@@ -85,87 +86,6 @@ setUnicodeVersion(const char *v) {
 }
 
 static int32_t indexes[_NORM_INDEX_TOP]={ 0 };
-
-/* tool memory helper ------------------------------------------------------- */
-
-/*
- * UToolMemory is used for generic, custom memory management.
- * It is allocated with enough space for count*size bytes starting
- * at array.
- * The array is declared with a union of large data types so
- * that its base address is aligned for any types.
- * If size is a multiple of a data type size, then such items
- * can be safely allocated inside the array, at offsets that
- * are themselves multiples of size.
- */
-typedef struct UToolMemory {
-    char name[64];
-    uint32_t count, size, index;
-    union {
-        uint32_t u;
-        double d;
-        void *p;
-    } array[1];
-} UToolMemory;
-
-static UToolMemory *
-utm_open(const char *name, uint32_t count, uint32_t size) {
-    UToolMemory *mem=(UToolMemory *)uprv_malloc(sizeof(UToolMemory)+count*size);
-    if(mem==NULL) {
-        fprintf(stderr, "error: %s - out of memory\n", name);
-        exit(U_MEMORY_ALLOCATION_ERROR);
-    }
-    uprv_strcpy(mem->name, name);
-    mem->count=count;
-    mem->size=size;
-    mem->index=0;
-    return mem;
-}
-
-static void
-utm_close(UToolMemory *mem) {
-    if(mem!=NULL) {
-        uprv_free(mem);
-    }
-}
-
-
-
-static void *
-utm_getStart(UToolMemory *mem) {
-    return (char *)mem->array;
-}
-
-static int32_t
-utm_countItems(UToolMemory *mem) {
-    return mem->index;
-}
-
-static void *
-utm_alloc(UToolMemory *mem) {
-    char *p=(char *)mem->array+mem->index*mem->size;
-    if(++mem->index<=mem->count) {
-        uprv_memset(p, 0, mem->size);
-        return p;
-    } else {
-        fprintf(stderr, "error: %s - trying to use more than %ld preallocated units\n",
-                mem->name, (long)mem->count);
-        exit(U_MEMORY_ALLOCATION_ERROR);
-    }
-}
-
-static void *
-utm_allocN(UToolMemory *mem, int32_t n) {
-    char *p=(char *)mem->array+mem->index*mem->size;
-    if((mem->index+=(uint32_t)n)<=mem->count) {
-        uprv_memset(p, 0, n*mem->size);
-        return p;
-    } else {
-        fprintf(stderr, "error: %s - trying to use more than %ld preallocated units\n",
-                mem->name, (long)mem->count);
-        exit(U_MEMORY_ALLOCATION_ERROR);
-    }
-}
 
 /* builder data ------------------------------------------------------------- */
 
@@ -244,23 +164,23 @@ init() {
     }
 
     /* allocate Norm structures and reset the first one */
-    normMem=utm_open("gennorm normalization structs", 20000, sizeof(Norm));
+    normMem=utm_open("gennorm normalization structs", 20000, 20000, sizeof(Norm));
     norms=utm_alloc(normMem);
 
     /* allocate UTF-32 string memory */
-    utf32Mem=utm_open("gennorm UTF-32 strings", 30000, 4);
+    utf32Mem=utm_open("gennorm UTF-32 strings", 30000, 30000, 4);
 
     /* reset all "have seen" flags */
     uprv_memset(haveSeenFlags, 0, sizeof(haveSeenFlags));
 
     /* allocate extra data memory for UTF-16 decomposition strings and other values */
-    extraMem=utm_open("gennorm extra 16-bit memory", _NORM_EXTRA_INDEX_TOP, 2);
+    extraMem=utm_open("gennorm extra 16-bit memory", _NORM_EXTRA_INDEX_TOP, _NORM_EXTRA_INDEX_TOP, 2);
     /* initialize the extraMem counter for the top of FNC strings */
     p16=(uint16_t *)utm_alloc(extraMem);
     *p16=1;
 
     /* allocate temporary memory for combining triples */
-    combiningTriplesMem=utm_open("gennorm combining triples", 0x4000, sizeof(CombiningTriple));
+    combiningTriplesMem=utm_open("gennorm combining triples", 0x4000, 0x4000, sizeof(CombiningTriple));
 
     /* set the minimum code points for no/maybe quick check values to the end of the BMP */
     indexes[_NORM_INDEX_MIN_NFC_NO_MAYBE]=0xffff;
@@ -508,7 +428,7 @@ processCombining() {
     triples=utm_getStart(combiningTriplesMem);
 
     /* add lead and trail indexes to the triples for sorting */
-    count=(uint16_t)combiningTriplesMem->index;
+    count=(uint16_t)utm_countItems(combiningTriplesMem);
     for(i=0; i<count; ++i) {
         /* findCombiningCP() must always find the code point */
         triples[i].leadIndex=findCombiningCP(triples[i].lead, TRUE);
@@ -1265,7 +1185,7 @@ makeAll32() {
     uint32_t n;
     int32_t i, normLength, count;
 
-    count=(int32_t)normMem->index;
+    count=(int32_t)utm_countItems(normMem);
     for(i=0; i<count; ++i) {
         norms[i].value32=make32BitNorm(norms+i);
     }
@@ -1292,7 +1212,7 @@ makeFCD() {
     int32_t i, count, fcdLength;
     uint16_t bothCCs;
 
-    count=(int32_t)normMem->index;
+    count=utm_countItems(normMem);
     for(i=0; i<count; ++i) {
         bothCCs=norms[i].canonBothCCs;
         if(bothCCs==0) {
@@ -1400,7 +1320,7 @@ combine(uint32_t lead, uint32_t trail) {
 
     /* search for all triples with c as lead code point */
     triples=utm_getStart(combiningTriplesMem);
-    count=combiningTriplesMem->index;
+    count=utm_countItems(combiningTriplesMem);
 
     /* triples are not sorted by code point but for each lead CP there is one contiguous block */
     for(i=0; i<count && lead!=triples[i].lead; ++i) {}
@@ -1512,7 +1432,7 @@ canChangeWithFollowing(const uint32_t *s, int32_t length, uint8_t trailCC) {
 
         /* search for all triples with c as lead code point */
         triples=utm_getStart(combiningTriplesMem);
-        count=combiningTriplesMem->index;
+        count=utm_countItems(combiningTriplesMem);
         c=s[0];
 
         /* triples are not sorted by code point but for each lead CP there is one contiguous block */
@@ -1838,7 +1758,7 @@ generateData(const char *dataDir) {
     canonStartSetsTop+=canonStartSets[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH];
 
     /* make sure that the FCD trie is 4-aligned */
-    if((extraMem->index+combiningTableTop)&1) {
+    if((utm_countItems(extraMem)+combiningTableTop)&1) {
         combiningTable[combiningTableTop++]=0x1234; /* add one 16-bit word for an even number */
     }
 
@@ -1850,7 +1770,7 @@ generateData(const char *dataDir) {
     size=
         _NORM_INDEX_TOP*4+
         normTrieSize+
-        extraMem->index*2+
+        utm_countItems(extraMem)*2+
         combiningTableTop*2+
         fcdTrieSize+
         auxTrieSize+
@@ -1858,7 +1778,7 @@ generateData(const char *dataDir) {
 
     if(beVerbose) {
         printf("size of normalization trie              %5u bytes\n", normTrieSize);
-        printf("size of 16-bit extra memory             %5u UChars/uint16_t\n", extraMem->index);
+        printf("size of 16-bit extra memory             %5u UChars/uint16_t\n", utm_countItems(extraMem));
         printf("  of that: FC_NFKC_Closure size         %5u UChars/uint16_t\n", ((uint16_t *)utm_getStart(extraMem))[0]);
         printf("size of combining table                 %5u uint16_t\n", combiningTableTop);
         printf("size of FCD trie                        %5u bytes\n", fcdTrieSize);
@@ -1873,7 +1793,7 @@ generateData(const char *dataDir) {
     }
 
     indexes[_NORM_INDEX_TRIE_SIZE]=normTrieSize;
-    indexes[_NORM_INDEX_UCHAR_COUNT]=(uint16_t)extraMem->index;
+    indexes[_NORM_INDEX_UCHAR_COUNT]=(uint16_t)utm_countItems(extraMem);
 
     indexes[_NORM_INDEX_COMBINE_DATA_COUNT]=combiningTableTop;
     indexes[_NORM_INDEX_COMBINE_FWD_COUNT]=combineFwdTop;
@@ -1900,7 +1820,7 @@ generateData(const char *dataDir) {
 
     udata_writeBlock(pData, indexes, sizeof(indexes));
     udata_writeBlock(pData, normTrieBlock, normTrieSize);
-    udata_writeBlock(pData, utm_getStart(extraMem), extraMem->index*2);
+    udata_writeBlock(pData, utm_getStart(extraMem), utm_countItems(extraMem)*2);
     udata_writeBlock(pData, combiningTable, combiningTableTop*2);
     udata_writeBlock(pData, fcdTrieBlock, fcdTrieSize);
     udata_writeBlock(pData, auxTrieBlock, auxTrieSize);
@@ -1928,7 +1848,7 @@ extern void
 cleanUpData(void) {
     int32_t i, count;
 
-    count=(int32_t)normMem->index;
+    count=utm_countItems(normMem);
     for(i=0; i<count; ++i) {
         uset_close(norms[i].canonStart);
     }

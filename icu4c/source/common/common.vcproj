@@ -731,6 +731,12 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\ucnv_ext.c">
+			</File>
+			<File
+				RelativePath=".\ucnv_ext.h">
+			</File>
+			<File
 				RelativePath=".\ucnv_imp.h">
 			</File>
 			<File
