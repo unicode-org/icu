@@ -17,7 +17,8 @@ testtypes
     importtest:import { "importtest.bin" }
     integerarray:intvector { 1, 2, 3, -3, 4, 5, 6, 7 } // an array of 32-bit integers
     minusone:int {-1}  // number -1
-    
+	plusone:int {1} // number 1
+	    
     // Empties
     emptyexplicitstring:string { "" }
     emptystring { "" }

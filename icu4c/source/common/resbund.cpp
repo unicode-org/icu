@@ -294,6 +294,14 @@ const int32_t *ResourceBundle::getIntVector(int32_t& len, UErrorCode& status) co
     return ures_getIntVector(resource, &len, &status);
 }
 
+uint32_t ResourceBundle::getUInt(UErrorCode& status) const {
+  return ures_getUInt(resource, &status);
+}
+
+int32_t ResourceBundle::getInt(UErrorCode& status) const {
+  return ures_getInt(resource, &status);
+}
+
 const char *ResourceBundle::getName(void) {
     return ures_getName(resource);
 }
