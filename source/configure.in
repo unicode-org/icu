@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.154 2002/02/14 19:18:11 yves-oss Exp $
+dnl $Id: configure.in,v 1.155 2002/02/14 19:51:22 yves-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -773,7 +773,10 @@ fi
 AC_MSG_RESULT($msg)
 AC_SUBST(ICULIBSUFFIX)
 changequote(<<, >>)dnl
-ICULIBSUFFIXCNAME=`echo _$ICULIBSUFFIX | sed 's/[^A-Za-z0-9_]/_/g'`
+if test "$ICULIBSUFFIX" != ""
+then
+    ICULIBSUFFIXCNAME=`echo _$ICULIBSUFFIX | sed 's/[^A-Za-z0-9_]/_/g'`
+fi
 changequote([, ])dnl
 AC_SUBST(ICULIBSUFFIXCNAME)
 
