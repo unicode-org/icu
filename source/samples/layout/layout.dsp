@@ -113,6 +113,10 @@ SOURCE=.\layout.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\LayoutSample.rc
+# End Source File
+# Begin Source File
+
 SOURCE=.\paragraph.cpp
 # End Source File
 # Begin Source File
@@ -162,6 +166,10 @@ SOURCE=.\paragraph.h
 # Begin Source File
 
 SOURCE=.\RenderingFontInstance.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\resource.h
 # End Source File
 # Begin Source File
 
