@@ -227,7 +227,8 @@ srcs: $(SRCDATAFILES)
 
 
 ## Files to remove for 'make clean'
-CLEANFILES = *~ $(BRK_FILES) $(OBJDATAFILES) $(HPUX_JUNK_OBJ)
+CLEANFILES = *~ $(BRK_FILES) $(OBJDATAFILES) $(HPUX_JUNK_OBJ) $(OBJTESTFILE) \
+    $(COMMONDLL) $(TESTDATADLL) $(BASEDATADLL) $(BASETESTDATADLL)
 
 
 ### use the "--enable-mapped=" option to configure, to get mapped file behavior.
@@ -261,7 +262,7 @@ clean-local:
 	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-local:
-	rm -f Makefile $(SRCDATAFILES) $(DATFILES)
+	rm -f Makefile $(SRCDATAFILES) $(DATFILES) $(TESTDATAFILE) $(BASETESTDATA)
 
 check-local:
 

@@ -68,7 +68,7 @@ CNV_FILES = $(ALL_UCM:%.ucm=@DATABUILDDIR@/%.cnv)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
-distclean distclean-local target-clean-local dist dist-local check	\
+distclean distclean-local dist dist-local check	\
 check-local
 
 ## Clear suffix list
@@ -100,12 +100,9 @@ rebuild: $(TARGET)
 	-rm -f $(CNV_FILES)
 	$(MAKE) all-local
 
-target-clean-local:
-	rm -f $(TARGET)
-
-clean-local: target-clean-local
+clean-local:
 	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
-	rm -f $(OBJECTS)
+	rm -f $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
 	rm -f Makefile $(DEPS) $(CNV_FILES)
