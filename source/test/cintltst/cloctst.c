@@ -20,7 +20,9 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "locmap.h"
+#include "uresimp.h"
 #include "uassert.h"
+
 #include "unicode/putil.h"
 #include "unicode/ubrk.h"
 #include "unicode/uchar.h"
@@ -1854,14 +1856,28 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
     UResourceBundle *fromArray, *toArray;
     UResourceBundle *fromLocaleBund = ures_open(NULL, fromLocale, &errorCode);
     UResourceBundle *toLocaleBund = ures_open(NULL, toLocale, &errorCode);
+    UResourceBundle *toCalendar, *fromCalendar, *toGregorian, *fromGregorian;
 
     if(U_FAILURE(errorCode)) {
         log_err("Can't open resource bundle %s or %s - %s\n", fromLocale, toLocale, u_errorName(errorCode));
         return;
     }
+    fromCalendar = ures_getByKey(fromLocaleBund, "calendar", NULL, &errorCode);
+    fromGregorian = ures_getByKeyWithFallback(fromCalendar, "gregorian", NULL, &errorCode);
+    fromDateTimeElements = ures_getByKeyWithFallback(fromGregorian, "DateTimeElements", NULL, &errorCode);
 
-    fromDateTimeElements = ures_getByKey(fromLocaleBund, "DateTimeElements", NULL, &errorCode);
-    toDateTimeElements = ures_getByKey(toLocaleBund, "DateTimeElements", NULL, &errorCode);
+    toCalendar = ures_getByKey(toLocaleBund, "calendar", NULL, &errorCode);
+    toGregorian = ures_getByKeyWithFallback(toCalendar, "gregorian", NULL, &errorCode);
+    toDateTimeElements = ures_getByKeyWithFallback(toGregorian, "DateTimeElements", NULL, &errorCode);
+
+    if(U_FAILURE(errorCode)){
+        log_err("Did not get DateTimeElements from the bundle %s or %s\n", fromLocale, toLocale);
+        return;
+    }
+    ures_close(fromCalendar);
+    ures_close(toCalendar);
+    ures_close(fromGregorian);
+    ures_close(toGregorian);
     if (strcmp(fromLocale, "ar_IN") != 0)
     {
         int32_t fromSize;
