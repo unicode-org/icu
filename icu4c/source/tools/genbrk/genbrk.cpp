@@ -28,17 +28,6 @@
 
 #include <stdio.h>
 #include "unicode/utypes.h"
-
-#if UCONFIG_NO_BREAK_ITERATION
-
-extern int
-main(int argc, const char *argv[]) {
-    fprintf(stderr, "genbrk performs no-op because of UCONFIG_NO_BREAK_ITERATION, see uconfig.h\n");
-    return 0;
-}
-
-#else
-
 #include "unicode/ucnv.h"
 #include "unicode/unistr.h"
 #include "unicode/rbbi.h"
@@ -46,10 +35,14 @@ main(int argc, const char *argv[]) {
 #include "unicode/udata.h"
 
 #include "uoptions.h"
+#include "unewdata.h"
 #include "ucmndata.h"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+#define DATA_TYPE "brk"
 
 static char *progName;
 static UOption options[]={
@@ -65,6 +58,49 @@ void usageAndDie(int retCode) {
         printf("Usage: %s [-v] -r rule-file -o output-file\n", progName);
         exit (retCode);
 }
+
+
+#if UCONFIG_NO_BREAK_ITERATION
+
+/* dummy UDataInfo cf. udata.h */
+static UDataInfo dummyDataInfo = {
+    sizeof(UDataInfo),
+    0,
+
+    U_IS_BIG_ENDIAN,
+    U_CHARSET_FAMILY,
+    U_SIZEOF_UCHAR,
+    0,
+
+    { 0, 0, 0, 0 },                 /* dummy dataFormat */
+    { 0, 0, 0, 0 },                 /* dummy formatVersion */
+    { 0, 0, 0, 0 }                  /* dummy dataVersion */
+};
+
+#else
+
+//
+//  Set up the ICU data header, defined in ucmndata.h
+//
+DataHeader dh ={
+    {sizeof(DataHeader),           // Struct MappedData
+        0xda,
+        0x27},
+
+    {                               // struct UDataInfo
+        sizeof(UDataInfo),          //     size
+        0,                          //     reserved
+        U_IS_BIG_ENDIAN,
+        U_CHARSET_FAMILY,
+        U_SIZEOF_UCHAR,
+        0,                          //     reserved
+
+    { 0x42, 0x72, 0x6b, 0x20 },     //     dataFormat="Brk "
+    { 2, 1, 0, 0 },                 //     formatVersion
+        { 3, 1, 0, 0 }                //   dataVersion (Unicode version)
+    }};
+
+#endif
 
 //----------------------------------------------------------------------------
 //
@@ -104,6 +140,44 @@ int  main(int argc, char **argv) {
     if (options[5].doesOccur) {
         u_setDataDirectory(options[5].value);
     }
+
+#if UCONFIG_NO_BREAK_ITERATION
+
+    UNewDataMemory *pData;
+    char msg[2048], folder[2048], name[32];
+    char *basename;
+    int length;
+
+    /* split the outFileName into folder + name + type */
+    strcpy(folder, outFileName);
+    basename = strrchr(folder, U_FILE_SEP_CHAR);
+    if(basename == NULL) {
+        basename = folder;
+    } else {
+        ++basename;
+    }
+
+    /* copy the data name and remove it from the folder */
+    strcpy(name, basename);
+    *basename = 0;
+
+    /* write message with just the name */
+    sprintf(msg, "genbrk writes dummy %s because of UCONFIG_NO_BREAK_ITERATION, see uconfig.h", name);
+    fprintf(stderr, "%s\n", msg);
+
+    /* remove the type suffix (hardcode to DATA_TYPE) */
+    length = strlen(name);
+    if(length > 4 && name[length - 4] == '.') {
+        name[length - 4] = 0;
+    }
+
+    /* write the dummy data file */
+    pData = udata_create(folder, DATA_TYPE, name, &dummyDataInfo, NULL, &status);
+    udata_writeBlock(pData, msg, strlen(msg));
+    udata_finish(pData, &status);
+    return (int)status;
+
+#else
 
     //
     //  Read in the rule source file
@@ -224,27 +298,6 @@ int  main(int argc, char **argv) {
         exit(-1);
     }
 
-
-    //
-    //  Set up the ICU data header, defined in ucmndata.h
-    //
-    DataHeader dh ={
-        {sizeof(DataHeader),           // Struct MappedData
-            0xda,
-            0x27},
-
-        {                               // struct UDataInfo
-            sizeof(UDataInfo),          //     size
-            0,                          //     reserved
-            U_IS_BIG_ENDIAN,
-            U_CHARSET_FAMILY,
-            U_SIZEOF_UCHAR,
-            0,                          //     reserved
-
-        { 0x42, 0x72, 0x6b, 0x20 },     //     dataFormat="Brk "
-        { 2, 1, 0, 0 },                 //     formatVersion
-            { 3, 1, 0, 0 }                //   dataVersion (Unicode version)
-        }};
     bytesWritten = fwrite(&dh, 1, sizeof(DataHeader), file);
 
     //
@@ -265,6 +318,6 @@ int  main(int argc, char **argv) {
 
     printf("genbrk: tool completed successfully.\n");
     return 0;
-}
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+}

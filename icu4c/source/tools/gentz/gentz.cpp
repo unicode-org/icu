@@ -28,17 +28,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "unicode/utypes.h"
-
-#if UCONFIG_NO_FORMATTING
-
-extern int
-main(int argc, const char *argv[]) {
-    fprintf(stderr, "gentz performs no-op because of UCONFIG_NO_FORMATTING, see uconfig.h\n");
-    return 0;
-}
-
-#else
-
 #include "unicode/putil.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -49,6 +38,25 @@ main(int argc, const char *argv[]) {
 
 #define INPUT_FILE "tz.txt"
 #define OUTPUT_FILE "tz.icu"
+
+#if UCONFIG_NO_FORMATTING
+
+/* dummy UDataInfo cf. udata.h */
+static UDataInfo dummyDataInfo = {
+    sizeof(UDataInfo),
+    0,
+
+    U_IS_BIG_ENDIAN,
+    U_CHARSET_FAMILY,
+    U_SIZEOF_UCHAR,
+    0,
+
+    { 0, 0, 0, 0 },                 /* dummy dataFormat */
+    { 0, 0, 0, 0 },                 /* dummy formatVersion */
+    { 0, 0, 0, 0 }                  /* dummy dataVersion */
+};
+
+#else
 
 /* UDataInfo cf. udata.h */
 static UDataInfo dataInfo = {
@@ -65,6 +73,7 @@ static UDataInfo dataInfo = {
     {0, 0, 0, 0} /* dataVersion - will be filled in with year.suffix */
 };
 
+#endif
 
 class gentz {
     // These must match SimpleTimeZone!!!
@@ -94,6 +103,7 @@ class gentz {
 
     static const char* END_KEYWORD;
 
+#if! UCONFIG_NO_FORMATTING
     enum { BUFLEN = 1024 };
     char buffer[BUFLEN];
     int32_t lineNumber;
@@ -115,6 +125,7 @@ class gentz {
     uint32_t maxPerOffset; // Maximum number of zones per offset
     uint32_t maxPerEquiv; // Maximum number of zones per equivalency group
     uint32_t equivCount; // Number of equivalency groups
+#endif
 
     UBool useCopyright;
     UBool verbose;
@@ -122,6 +133,8 @@ class gentz {
 
 public:
     int      MMain(int argc, char *argv[]);
+
+#if! UCONFIG_NO_FORMATTING
 private:
     int32_t  writeTzDatFile(const char *destdir);
     void     parseTzTextFile(FileStream* in);
@@ -150,6 +163,7 @@ private:
 
     // Error handling
     void    die(const char* msg);
+#endif
 };
 
 int main(int argc, char *argv[]) {
@@ -212,6 +226,20 @@ int gentz::MMain(int argc, char* argv[]) {
     useCopyright=options[2].doesOccur;
     verbose = options[4].doesOccur;
 
+#if UCONFIG_NO_FORMATTING
+
+    UNewDataMemory *pData;
+    const char *msg = "gentz writes dummy " U_ICUDATA_NAME "_" TZ_DATA_NAME "." TZ_DATA_TYPE " because of UCONFIG_NO_FORMATTING, see uconfig.h";
+    UErrorCode status = U_ZERO_ERROR;
+
+    fprintf(stderr, "%s\n", msg);
+    pData = udata_create(options[3].value, TZ_DATA_TYPE, U_ICUDATA_NAME "_" TZ_DATA_NAME, &dummyDataInfo,
+                         NULL, &status);
+    udata_writeBlock(pData, msg, strlen(msg));
+    udata_finish(pData, &status);
+    return (int)status;
+
+#else
 
     ////////////////////////////////////////////////////////////
     // Read the input file
@@ -239,7 +267,11 @@ int gentz::MMain(int argc, char* argv[]) {
     }
 
     return 0; // success
+
+#endif
 }
+
+#if !UCONFIG_NO_FORMATTING
 
 int32_t gentz::writeTzDatFile(const char *destdir) {
     UNewDataMemory *pdata;
