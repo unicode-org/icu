@@ -580,28 +580,6 @@ U_CAPI UCollator * ucol_safeClone(
 
 #define U_COL_SAFECLONE_BUFFERSIZE 384
 
-/* declaration for forward iterating function */
-U_CDECL_BEGIN
-typedef UChar UCharForwardIterator(void *context);
-U_CDECL_END
-
-/**
- * String compare that uses user supplied character iteration.
- * The idea is to prevent users from having to convert the whole string into UChar's before comparing
- * since sometimes strings differ on first couple of characters.
- * @param coll collator to be used for comparing
- * @param source pointer to function for iterating over the first string
- * @param sourceContext data to be passed to the first iterating function.
- * @param target pointer to function for iterating over the second string
- * @param targetContext data to be passed to the second iterating function.
- * @return The result of comparing the strings; one of UCOL_EQUAL,
- * UCOL_GREATER, UCOL_LESS
- * @deprecated will be removed in ICU 2.0. Do not use, not synchronized with the rest of the framework.
- */
-U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll, 
-								 UCharForwardIterator *source, void *sourceContext,
-								 UCharForwardIterator *target, void *targetContext);
-
 /**
  * Returns current rules. Delta defines whether full rules are returned or just the tailoring. 
  * Returns number of UChars needed to store rules. If buffer is NULL or bufferLen is not enough 
