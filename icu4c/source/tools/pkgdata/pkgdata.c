@@ -27,6 +27,10 @@
 #include "unewdata.h"
 #include "uoptions.h"
 
+#ifndef WIN32
+#include <unistd.h> /* for popen */
+#endif
+
 U_CDECL_BEGIN
 #include "pkgtypes.h"
 #include "makefile.h"
@@ -34,6 +38,8 @@ U_CDECL_END
 
 static int executeMakefile(const UPKGOptions *o);
 static void loadLists(UPKGOptions *o, UErrorCode *status);
+
+static void fillInMakefileFromICUConfig(UOption *option);
 
 /* This sets the modes that are available */
 static struct
@@ -83,7 +89,7 @@ const char options_help[][160]={
 #ifdef WIN32
     "R:icupath for release version or D:icupath for debug version, where icupath is the directory where ICU is located",
 #else
-    "Specify options for the builder",
+    "Specify options for the builder. (Autdetected if icu-config is available)",
 #endif
     "Specify the mode of building (see below; default: common)",
     "This usage text",
@@ -103,12 +109,13 @@ const char options_help[][160]={
     "Pass the next argument to make(1)"
 };
 
+const char  *progname = "PKGDATA";
+
 int
 main(int argc, char* argv[]) {
     FileStream  *out;
     UPKGOptions  o;
     CharList    *tail;
-    const char  *progname;
     UBool        needsHelp = FALSE;
     UErrorCode   status = U_ZERO_ERROR;
     char         tmp[1024];
@@ -140,10 +147,23 @@ main(int argc, char* argv[]) {
             fprintf(stderr, "Run '%s --help' for help.\n", progname);
             return 1;
         }
-        if(! (options[0].doesOccur && options[1].doesOccur) ) {
-            fprintf(stderr, " required parameters are missing: -p and -O are required \n");
-            fprintf(stderr, "Run '%s --help' for help.\n", progname);
-            return 1;
+
+        if(!options[1].doesOccur) {
+          /* Try to fill in from icu-config or equivalent */
+          fillInMakefileFromICUConfig(&options[1]);
+        }
+        
+        if(!options[1].doesOccur) {
+          fprintf(stderr, " required parameter is missing: -O is required \n");
+          fprintf(stderr, "Run '%s --help' for help.\n", progname);
+          return 1;
+        }
+
+        if(!options[0].doesOccur) /* -O we already have - don't report it. */
+        {
+          fprintf(stderr, " required parameter -p is missing \n");
+          fprintf(stderr, "Run '%s --help' for help.\n", progname);
+          return 1;
         }
 
         if(argc == 1) {
@@ -467,3 +487,56 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
 }
 
 
+#ifndef WIN32
+/* Try calling icu-config directly to get information */
+void fillInMakefileFromICUConfig(UOption *option)
+{
+  FILE *p;
+  size_t n;
+  static char buf[512] = "";
+  static const char cmd[] = "icu-config --incfile";
+
+  if(options[5].doesOccur)
+  {
+    /* informational */
+    fprintf(stderr, "%s: No -O option found, trying '%s'.\n", progname, cmd);
+  }
+
+  p = popen(cmd, "r");
+
+  if(p == NULL)
+  {
+    fprintf(stderr, "%s: icu-config: No icu-config found. (fix PATH or use -O option)\n");
+    return;
+  }
+  
+  n = fread(buf, 1, 511, p);
+
+  pclose(p);
+
+  if(n<=0)
+  {
+    fprintf(stderr,"%s: icu-config: Could not read from icu-config. (fix PATH or use -O option)\n", progname);
+    return;
+  }
+
+  if(buf[strlen(buf)-1]=='\n')
+  {
+    buf[strlen(buf)-1]=0;
+  }
+  
+  if(buf[0] == 0)
+  {
+    fprintf(stderr, "%s: icu-config: invalid response from icu-config (fix PATH or use -O option)\n", progname);
+    return;
+  }
+
+  if(options[5].doesOccur)
+  {
+    /* informational */
+    fprintf(stderr, "%s: icu-config: using '-O %s'\n", progname, buf);
+  }
+  option->value = buf;
+  option->doesOccur = TRUE;
+}
+#endif

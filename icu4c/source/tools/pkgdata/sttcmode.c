@@ -142,10 +142,10 @@ writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
         sprintf(stanza, "$(INVOKE) $(GENCCODE) -n $(ENTRYPOINT) -d $(TEMP_DIR) $<");
         commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
 
-        sprintf(stanza, "$(COMPILE.c) -o $@ $(TEMP_DIR)/%s", cfile);
+        sprintf(stanza, "$(COMPILE.c) -o $@ $(TEMP_PATH)%s", cfile);
         commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
 
-        sprintf(stanza, "$(TEMP_DIR)/%s", tmp);
+        sprintf(stanza, "$(TEMP_PATH)%s", tmp);
         pkg_mak_writeStanza(makefile, o, stanza, parents, commands);
 
         pkg_deleteList(parents);
@@ -208,7 +208,7 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     T_FileStream_writeLine(makefile, "LIB_TARGET=$(TARGET)\n");
 
 
-    uprv_strcpy(tmp, "all: $(TARGETDIR)/$(LIB_TARGET)");
+    uprv_strcpy(tmp, "all: $(TARG_PATH)$(LIB_TARGET)");
     uprv_strcat(tmp, "\n\n");
     T_FileStream_writeLine(makefile, tmp);
 
@@ -233,16 +233,16 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
             "\tdone;\n\n");
     }
 
-    sprintf(tmp,"$(TEMP_DIR)/$(NAME)_dat.$(STATIC_O) : $(TEMP_DIR)/$(NAME)_dat.c\n"
+    sprintf(tmp,"$(TEMP_PATH)$(NAME)_dat.$(STATIC_O) : $(TEMP_PATH)$(NAME)_dat.c\n"
         "\t$(COMPILE.c) -o $@ $<\n\n");
     T_FileStream_writeLine(makefile, tmp);
 
     T_FileStream_writeLine(makefile, "# 'TOCOBJ' contains C Table of Contents objects [if any]\n");
 
-    sprintf(tmp, "$(TEMP_DIR)/$(NAME)_dat.c: $(CMNLIST)\n"
+    sprintf(tmp, "$(TEMP_PATH)$(NAME)_dat.c: $(CMNLIST)\n"
             "\t$(INVOKE) $(GENCMN) -e $(ENTRYPOINT) -n $(NAME) -S -d $(TEMP_DIR) 0 $(CMNLIST)\n\n");
-
     T_FileStream_writeLine(makefile, tmp);
+
     sprintf(tmp, "TOCOBJ= $(NAME)_dat%s \n\n", OBJ_SUFFIX);
     T_FileStream_writeLine(makefile, tmp);
     sprintf(tmp, "TOCSYM= $(ENTRYPOINT)_dat \n\n"); /* entrypoint not always shortname! */
@@ -252,21 +252,21 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
     pkg_writeCharListWrap(makefile, objects, " ", " \\\n",0);
     T_FileStream_writeLine(makefile, "\n\n");
-    T_FileStream_writeLine(makefile, "OBJECTS=$(BASE_OBJECTS:%=$(TEMP_DIR)/%)\n\n");
+    T_FileStream_writeLine(makefile, "OBJECTS=$(BASE_OBJECTS:%=$(TEMP_PATH)%)\n\n");
 
-    T_FileStream_writeLine(makefile,"$(TEMP_DIR)/%.$(STATIC_O): $(TEMP_DIR)/%.c\n\t  $(COMPILE.c) -o $@ $<\n\n");
+    T_FileStream_writeLine(makefile,"$(TEMP_PATH)%.$(STATIC_O): $(TEMP_PATH)%.c\n\t  $(COMPILE.c) -o $@ $<\n\n");
 
-    T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(LIB_TARGET):$(TARGETDIR)/$(LIB_TARGET)($(OBJECTS)) $(LISTFILES)\n"
+    T_FileStream_writeLine(makefile, "$(TARG_PATH)$(LIB_TARGET):$(TARG_PATH)$(LIB_TARGET)($(OBJECTS)) $(LISTFILES)\n"
                             "\t$(RANLIB) $@\n\n");
 
 
-    T_FileStream_writeLine(makefile, "CLEANFILES= $(CMNLIST) $(OBJECTS) $(TARGETDIR)/$(LIB_TARGET) $(TARGETDIR)/$(MIDDLE_STATIC_LIB_TARGET) $(TARGETDIR)/$(TARGET)\n\nclean:\n\t-$(RMV) $(CLEANFILES) $(MAKEFILE)");
+    T_FileStream_writeLine(makefile, "CLEANFILES= $(CMNLIST) $(OBJECTS) $(TARG_PATH)$(LIB_TARGET) $(TARG_PATH)$(MIDDLE_STATIC_LIB_TARGET) $(TARG_PATH)$(TARGET)\n\nclean:\n\t-$(RMV) $(CLEANFILES) $(MAKEFILE)");
     T_FileStream_writeLine(makefile, "\n\n");
 
     T_FileStream_writeLine(makefile, "# static mode shouldn't need to be installed, but we will install the header and static library for them.\n");
 
-    T_FileStream_writeLine(makefile, "install: $(TARGETDIR)/$(LIB_TARGET)\n"
-                "\t$(INSTALL-L) $(TARGETDIR)/$(LIB_TARGET) $(INSTALLTO)/$(LIB_TARGET)\n");
+    T_FileStream_writeLine(makefile, "install: $(TARG_PATH)$(LIB_TARGET)\n"
+                "\t$(INSTALL-L) $(TARG_PATH)$(LIB_TARGET) $(INSTALLTO)/$(LIB_TARGET)\n");
     if (o->version) {
         T_FileStream_writeLine(makefile, "\tcd $(INSTALLTO) && $(RM) $(MIDDLE_STATIC_LIB_TARGET) && ln -s $(LIB_TARGET) $(MIDDLE_STATIC_LIB_TARGET)\n\tcd $(INSTALLTO) && $(RM) $(STATIC_LIB_TARGET) && ln -s $(LIB_TARGET) $(STATIC_LIB_TARGET)\n");
     }
