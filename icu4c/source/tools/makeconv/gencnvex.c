@@ -214,6 +214,8 @@ CnvExtWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
         (extData->maxOutUChars<<8)|
         extData->maxUCharsPerByte;
 
+    indexes[UCNV_EXT_FLAGS]=extData->ucm->ext->unicodeMask;
+
     /* write the extension data */
     udata_writeBlock(pData, indexes, sizeof(indexes));
     udata_writeBlock(pData, utm_getStart(extData->toUTable), indexes[UCNV_EXT_TO_U_LENGTH]*4);
@@ -1035,8 +1037,7 @@ static UBool
 CnvExtAddTable(NewConverter *cnvData, UCMTable *table, UConverterStaticData *staticData) {
     CnvExtData *extData;
 
-    staticData->unicodeMask=table->unicodeMask;
-    if(staticData->unicodeMask&UCNV_HAS_SURROGATES) {
+    if(table->unicodeMask&UCNV_HAS_SURROGATES) {
         fprintf(stderr, "error: contains mappings for surrogate code points\n");
         return FALSE;
     }

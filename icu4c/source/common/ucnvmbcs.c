@@ -1108,7 +1108,16 @@ _MBCSLoad(UConverterSharedData *sharedData,
                 mbcsTable->outputType=MBCS_OUTPUT_DBCS_ONLY;
             }
         }
+
+        /*
+         * unlike below for files with base tables, do not get the unicodeMask
+         * from the sharedData; instead, use the base table's unicodeMask,
+         * which we copied in the memcpy above;
+         * this is necessary because the static data unicodeMask, especially
+         * the UCNV_HAS_SUPPLEMENTARY flag, is part of the base table data
+         */
     } else {
+        /* conversion file with a base table; an additional extension table is optional */
         /* make sure that the output type is known */
         switch(mbcsTable->outputType) {
         case MBCS_OUTPUT_1:
@@ -1134,20 +1143,20 @@ _MBCSLoad(UConverterSharedData *sharedData,
         mbcsTable->fromUnicodeTable=(const uint16_t *)(raw+header->offsetFromUTable);
         mbcsTable->fromUnicodeBytes=(const uint8_t *)(raw+header->offsetFromUBytes);
         mbcsTable->fromUBytesLength=header->fromUBytesLength;
-    }
 
-    /*
-     * converter versions 6.1 and up contain a unicodeMask that is
-     * used here to select the most efficient function implementations
-     */
-    info.size=sizeof(UDataInfo);
-    udata_getInfo((UDataMemory *)sharedData->dataMemory, &info);
-    if(info.formatVersion[0]>6 || (info.formatVersion[0]==6 && info.formatVersion[1]>=1)) {
-        /* mask off possible future extensions to be safe */
-        mbcsTable->unicodeMask=(uint8_t)(sharedData->staticData->unicodeMask&3);
-    } else {
-        /* for older versions, assume worst case: contains anything possible (prevent over-optimizations) */
-        mbcsTable->unicodeMask=UCNV_HAS_SUPPLEMENTARY|UCNV_HAS_SURROGATES;
+        /*
+         * converter versions 6.1 and up contain a unicodeMask that is
+         * used here to select the most efficient function implementations
+         */
+        info.size=sizeof(UDataInfo);
+        udata_getInfo((UDataMemory *)sharedData->dataMemory, &info);
+        if(info.formatVersion[0]>6 || (info.formatVersion[0]==6 && info.formatVersion[1]>=1)) {
+            /* mask off possible future extensions to be safe */
+            mbcsTable->unicodeMask=(uint8_t)(sharedData->staticData->unicodeMask&3);
+        } else {
+            /* for older versions, assume worst case: contains anything possible (prevent over-optimizations) */
+            mbcsTable->unicodeMask=UCNV_HAS_SUPPLEMENTARY|UCNV_HAS_SURROGATES;
+        }
     }
 }
 
@@ -3701,134 +3710,133 @@ U_CFUNC int32_t
 _MBCSFromUChar32(UConverterSharedData *sharedData,
                  UChar32 c, uint32_t *pValue,
                  UBool useFallback) {
-    const uint16_t *table=sharedData->mbcs.fromUnicodeTable;
+    const int32_t *cx;
+    const uint16_t *table;
     const uint8_t *p;
     uint32_t stage2Entry;
     uint32_t value;
     int32_t length;
 
     /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
-    if(c>=0x10000 && !(sharedData->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
-        return 0;
+    if(c<=0xffff || (sharedData->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
+        table=sharedData->mbcs.fromUnicodeTable;
+
+        /* convert the Unicode code point in c into codepage bytes (same as in _MBCSFromUnicodeWithOffsets) */
+        if(sharedData->mbcs.outputType==MBCS_OUTPUT_1) {
+            value=MBCS_SINGLE_RESULT_FROM_U(table, (uint16_t *)sharedData->mbcs.fromUnicodeBytes, c);
+            /* is this code point assigned, or do we use fallbacks? */
+            if(useFallback ? value>=0x800 : value>=0xc00) {
+                *pValue=value&0xff;
+                return 1;
+            }
+        } else /* outputType!=MBCS_OUTPUT_1 */ {
+            stage2Entry=MBCS_STAGE_2_FROM_U(table, c);
+
+            /* get the bytes and the length for the output */
+            switch(sharedData->mbcs.outputType) {
+            case MBCS_OUTPUT_2:
+                value=MBCS_VALUE_2_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
+                if(value<=0xff) {
+                    length=1;
+                } else {
+                    length=2;
+                }
+                break;
+            case MBCS_OUTPUT_DBCS_ONLY:
+                /* table with single-byte results, but only DBCS mappings used */
+                value=MBCS_VALUE_2_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
+                if(value<=0xff) {
+                    /* no mapping or SBCS result, not taken for DBCS-only */
+                    value=stage2Entry=0; /* stage2Entry=0 to reset roundtrip flags */
+                    length=0;
+                } else {
+                    length=2;
+                }
+                break;
+            case MBCS_OUTPUT_3:
+                p=MBCS_POINTER_3_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
+                value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
+                if(value<=0xff) {
+                    length=1;
+                } else if(value<=0xffff) {
+                    length=2;
+                } else {
+                    length=3;
+                }
+                break;
+            case MBCS_OUTPUT_4:
+                value=MBCS_VALUE_4_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
+                if(value<=0xff) {
+                    length=1;
+                } else if(value<=0xffff) {
+                    length=2;
+                } else if(value<=0xffffff) {
+                    length=3;
+                } else {
+                    length=4;
+                }
+                break;
+            case MBCS_OUTPUT_3_EUC:
+                value=MBCS_VALUE_2_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
+                /* EUC 16-bit fixed-length representation */
+                if(value<=0xff) {
+                    length=1;
+                } else if((value&0x8000)==0) {
+                    value|=0x8e8000;
+                    length=3;
+                } else if((value&0x80)==0) {
+                    value|=0x8f0080;
+                    length=3;
+                } else {
+                    length=2;
+                }
+                break;
+            case MBCS_OUTPUT_4_EUC:
+                p=MBCS_POINTER_3_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
+                value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
+                /* EUC 16-bit fixed-length representation applied to the first two bytes */
+                if(value<=0xff) {
+                    length=1;
+                } else if(value<=0xffff) {
+                    length=2;
+                } else if((value&0x800000)==0) {
+                    value|=0x8e800000;
+                    length=4;
+                } else if((value&0x8000)==0) {
+                    value|=0x8f008000;
+                    length=4;
+                } else {
+                    length=3;
+                }
+                break;
+            default:
+                /* must not occur */
+                return -1;
+            }
+
+            /* is this code point assigned, or do we use fallbacks? */
+            if( MBCS_FROM_U_IS_ROUNDTRIP(stage2Entry, c) ||
+                (FROM_U_USE_FALLBACK(useFallback, c) && value!=0)
+            ) {
+                /*
+                 * We allow a 0 byte output if the "assigned" bit is set for this entry.
+                 * There is no way with this data structure for fallback output
+                 * to be a zero byte.
+                 */
+                /* assigned */
+                *pValue=value;
+                return length;
+            }
+        }
     }
 
-    /* convert the Unicode code point in c into codepage bytes (same as in _MBCSFromUnicodeWithOffsets) */
-    if(sharedData->mbcs.outputType==MBCS_OUTPUT_1) {
-        value=MBCS_SINGLE_RESULT_FROM_U(table, (uint16_t *)sharedData->mbcs.fromUnicodeBytes, c);
-        /* is this code point assigned, or do we use fallbacks? */
-        if(useFallback ? value>=0x800 : value>=0xc00) {
-            *pValue=value&0xff;
-            return 1;
-        } else {
-            return 0;
-        }
+    cx=sharedData->mbcs.extIndexes;
+    if(cx!=NULL) {
+        return ucnv_extSimpleMatchFromU(cx, c, pValue, useFallback);
     }
 
-    stage2Entry=MBCS_STAGE_2_FROM_U(table, c);
-
-    /* get the bytes and the length for the output */
-    switch(sharedData->mbcs.outputType) {
-    case MBCS_OUTPUT_2:
-        value=MBCS_VALUE_2_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
-        if(value<=0xff) {
-            length=1;
-        } else {
-            length=2;
-        }
-        break;
-    case MBCS_OUTPUT_DBCS_ONLY:
-        /* table with single-byte results, but only DBCS mappings used */
-        value=MBCS_VALUE_2_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
-        if(value<=0xff) {
-            /* no mapping or SBCS result, not taken for DBCS-only */
-            value=stage2Entry=0; /* stage2Entry=0 to reset roundtrip flags */
-            length=0;
-        } else {
-            length=2;
-        }
-        break;
-    case MBCS_OUTPUT_3:
-        p=MBCS_POINTER_3_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
-        value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
-        if(value<=0xff) {
-            length=1;
-        } else if(value<=0xffff) {
-            length=2;
-        } else {
-            length=3;
-        }
-        break;
-    case MBCS_OUTPUT_4:
-        value=MBCS_VALUE_4_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
-        if(value<=0xff) {
-            length=1;
-        } else if(value<=0xffff) {
-            length=2;
-        } else if(value<=0xffffff) {
-            length=3;
-        } else {
-            length=4;
-        }
-        break;
-    case MBCS_OUTPUT_3_EUC:
-        value=MBCS_VALUE_2_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
-        /* EUC 16-bit fixed-length representation */
-        if(value<=0xff) {
-            length=1;
-        } else if((value&0x8000)==0) {
-            value|=0x8e8000;
-            length=3;
-        } else if((value&0x80)==0) {
-            value|=0x8f0080;
-            length=3;
-        } else {
-            length=2;
-        }
-        break;
-    case MBCS_OUTPUT_4_EUC:
-        p=MBCS_POINTER_3_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
-        value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
-        /* EUC 16-bit fixed-length representation applied to the first two bytes */
-        if(value<=0xff) {
-            length=1;
-        } else if(value<=0xffff) {
-            length=2;
-        } else if((value&0x800000)==0) {
-            value|=0x8e800000;
-            length=4;
-        } else if((value&0x8000)==0) {
-            value|=0x8f008000;
-            length=4;
-        } else {
-            length=3;
-        }
-        break;
-    default:
-        /* must not occur */
-        return -1;
-    }
-
-    /* is this code point assigned, or do we use fallbacks? */
-    if( MBCS_FROM_U_IS_ROUNDTRIP(stage2Entry, c) ||
-        (FROM_U_USE_FALLBACK(useFallback, c) && value!=0)
-    ) {
-        /*
-         * We allow a 0 byte output if the "assigned" bit is set for this entry.
-         * There is no way with this data structure for fallback output
-         * to be a zero byte.
-         */
-        /* assigned */
-        *pValue=value;
-        return length;
-    } else {
-        const int32_t *cx=sharedData->mbcs.extIndexes;
-        if(cx!=NULL) {
-            return ucnv_extSimpleMatchFromU(cx, c, pValue, useFallback);
-        }
-
-        /* unassigned */
-        return 0;
-    }
+    /* unassigned */
+    return 0;
 }
 
 

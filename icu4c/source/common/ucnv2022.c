@@ -960,13 +960,14 @@ MBCS_FROM_UCHAR32_ISO2022(UConverterSharedData* sharedData,
                                          int32_t *length, 
                                          int outputType)
 {
-
-    const uint16_t *table=sharedData->mbcs.fromUnicodeTable;
+    const int32_t *cx;
+    const uint16_t *table;
     uint32_t stage2Entry;
-    uint32_t myValue=0;
+    uint32_t myValue;
     const uint8_t *p;
     /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
     if(c<0x10000 || (sharedData->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
+        table=sharedData->mbcs.fromUnicodeTable;
         stage2Entry=MBCS_STAGE_2_FROM_U(table, c);
         /* get the bytes and the length for the output */
         if(outputType==MBCS_OUTPUT_2){
@@ -976,7 +977,7 @@ MBCS_FROM_UCHAR32_ISO2022(UConverterSharedData* sharedData,
             } else {
                 *length=2;
             }
-        }else if(outputType==MBCS_OUTPUT_3){
+        } else /* outputType==MBCS_OUTPUT_3 */ {
             p=MBCS_POINTER_3_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
             myValue=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
             if(myValue<=0xff) {
@@ -998,18 +999,18 @@ MBCS_FROM_UCHAR32_ISO2022(UConverterSharedData* sharedData,
              */
             /* assigned */
             *value=myValue;
-        } else {
-            const int32_t *cx=sharedData->mbcs.extIndexes;
-            if(cx!=NULL) {
-                *length=ucnv_extSimpleMatchFromU(cx, c, value, useFallback);
-            } else {
-                /* unassigned */
-                *length=0;
-            }
+            return;
         }
-    }else{
-        *length=0;
     }
+
+    cx=sharedData->mbcs.extIndexes;
+    if(cx!=NULL) {
+        *length=ucnv_extSimpleMatchFromU(cx, c, value, useFallback);
+        return;
+    }
+
+    /* unassigned */
+    *length=0;
 }
 
 /* This inline function replicates code in _MBCSSingleFromUChar32() function in ucnvmbcs.c
