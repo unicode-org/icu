@@ -883,7 +883,7 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expe
                   offs,
                   doFlush, /* flush if we're at the end of the input data */
                   &status);
-      } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (U_SUCCESS(status) && sourceLimit < realSourceEnd) );
+      } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (U_SUCCESS(status) && sourceLimit < realSourceEnd) );
 
     if(U_FAILURE(status)) {
         log_err("Problem doing fromUnicode to %s, errcode %s %s\n", codepage, myErrorName(status), gNuConvTestName);
@@ -1052,7 +1052,7 @@ UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect,
 
         /*        offs += (targ-oldTarg); */
 
-      } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (U_SUCCESS(status) && (srcLimit < realSourceEnd)) ); /* while we just need another buffer */
+      } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (U_SUCCESS(status) && (srcLimit < realSourceEnd)) ); /* while we just need another buffer */
 
     if(U_FAILURE(status))
     {
