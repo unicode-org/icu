@@ -309,6 +309,10 @@ SOURCE=.\sdtfmtts.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\sfwdchit.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\strtest.cpp
 # End Source File
 # Begin Source File
@@ -630,6 +634,10 @@ SOURCE=.\restsnew.h
 # Begin Source File
 
 SOURCE=.\sdtfmtts.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sfwdchit.h
 # End Source File
 # Begin Source File
 

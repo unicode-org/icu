@@ -24,6 +24,7 @@
 #include "mnkytst.h"
 #endif
 
+#include "sfwdchit.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -263,6 +264,7 @@ void CollationMonkeyTest::TestRules(/* char* par */){
 void CollationMonkeyTest::doTest(RuleBasedCollator *myCollation, UnicodeString mysource, UnicodeString target, Collator::EComparisonResult result)
 {
     Collator::EComparisonResult compareResult = myCollation->compare(source, target);
+    Collator::EComparisonResult incResult = myCollation->compare(SimpleFwdCharIterator(source), SimpleFwdCharIterator(target));
     CollationKey sortKey1, sortKey2;
     UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
     myCollation->getCollationKey(source, /*nos*/ sortKey1, key1status );
@@ -274,7 +276,7 @@ void CollationMonkeyTest::doTest(RuleBasedCollator *myCollation, UnicodeString m
     }
 
     Collator::EComparisonResult keyResult = sortKey1.compareTo(sortKey2);
-    reportCResult( mysource, target, sortKey1, sortKey2, compareResult, keyResult, result );
+    reportCResult( mysource, target, sortKey1, sortKey2, compareResult, keyResult, incResult, result );
 }
 
 void CollationMonkeyTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
