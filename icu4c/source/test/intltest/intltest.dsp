@@ -199,6 +199,10 @@ SOURCE=.\itmajor.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\itrbbi.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ittxtbd.cpp
 # End Source File
 # Begin Source File
@@ -244,6 +248,14 @@ SOURCE=.\numrgts.cpp
 # Begin Source File
 
 SOURCE=.\pptest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbiapts.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbitst.cpp
 # End Source File
 # Begin Source File
 
@@ -508,6 +520,14 @@ SOURCE=.\numrgts.h
 # Begin Source File
 
 SOURCE=.\pptest.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbiapts.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbitst.h
 # End Source File
 # Begin Source File
 
