@@ -21,6 +21,7 @@ const char BreakDictionary::fgClassID=0;
 //=================================================================================
 
 BreakDictionary::BreakDictionary(const char* /*dictionaryFilename*/, UErrorCode& status)
+  : rowIndex(NULL), table(NULL), columnMap(NULL), rowIndexFlags(NULL), rowIndexFlagsIndex(NULL), rowIndexShifts(NULL)
 {
     if (U_FAILURE(status)) return;
     
