@@ -561,6 +561,7 @@ ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa) {
             closure=(const UChar *)pe+1; /* behind this slot, unless there are full case mappings */
         } else {
             closureLength=0;
+            closure=NULL;
         }
 
         /* add the full case folding */
