@@ -7,9 +7,14 @@
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
 
+## Flags for position independent code
+ifneq (@ENABLE_SHARED@,)
+PIC = -fPIC -DPIC
+endif
+
 ## Commands to compile
-COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
-COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+COMPILE.c=	$(CC) $(PIC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) $(PIC) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
 ## Commands to link
 LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
