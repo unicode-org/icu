@@ -549,15 +549,15 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
             0xf4, 0x87, 0xa4, 0x4a, 0xf4, 0x88, 0xa4, 0x4b,
                 0xf9, 0x92, 0xdc, 0xb0, };
         UChar expectedUnicodeText[]= { 0x5165, 0x5165, 0x516b, 0x516b, 0x9ef9, 0x9ef9};
-        int32_t fromIBM1370offs []  =   {  0, 2, 4, 6, 8, 10};
+        int32_t fromIBM1370inputOffs []  =   {  0, 2, 4, 6, 8, 10};
         /* for testing reverse fallback behavior */
         UChar expectedFallbackFalse[]= { 0x5165, 0x5165, 0x516b, 0x516b, 0x9ef9, 0x9ef9};
 
         if(!testConvertToUnicode(IBM1370input, sizeof(IBM1370input), 
-                expectedUnicodeText, sizeof(expectedUnicodeText)/sizeof(expectedUnicodeText[0]),"ibm-1370", TRUE, fromIBM1370offs ))
+                expectedUnicodeText, sizeof(expectedUnicodeText)/sizeof(expectedUnicodeText[0]),"ibm-1370", TRUE, fromIBM1370inputOffs ))
             log_err("ibm-1370->u(MBCS) with Fallback did not match.\n");
         if(!testConvertToUnicode(IBM1370input, sizeof(IBM1370input), 
-                expectedFallbackFalse, sizeof(expectedFallbackFalse)/sizeof(expectedFallbackFalse[0]),"ibm-1370", FALSE, fromIBM1370offs ))
+                expectedFallbackFalse, sizeof(expectedFallbackFalse)/sizeof(expectedFallbackFalse[0]),"ibm-1370", FALSE, fromIBM1370inputOffs ))
             log_err("ibm-1370->u(MBCS) with Fallback  did not match.\n");
 
     }
