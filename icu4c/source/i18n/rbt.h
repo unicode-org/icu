@@ -11,7 +11,6 @@
 #define RBT_H
 
 #include "translit.h"
-#include "uhash.h"
 #include "utypes.h"
 
 class TransliterationRuleData;
