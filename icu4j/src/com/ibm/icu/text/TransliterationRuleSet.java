@@ -15,9 +15,12 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.3 $ $Date: 1999/12/22 01:05:54 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.4 $ $Date: 1999/12/22 01:40:54 $
  *
  * $Log: TransliterationRuleSet.java,v $
+ * Revision 1.4  1999/12/22 01:40:54  Alan
+ * Consolidate rule pattern anteContext, key, and postContext into one string.
+ *
  * Revision 1.3  1999/12/22 01:05:54  Alan
  * Improve masking checking; turn it off by default, for better performance
  *
@@ -72,8 +75,6 @@ class TransliterationRuleSet {
     /**
      * Add a rule to this set.  Rules are added in order, and order is
      * significant.
-     *
-     * <p>Once freeze() is called, this method must not be called.
      * @param rule the rule to add
      */
     public void addRule(TransliterationRule rule) {
@@ -90,16 +91,6 @@ class TransliterationRuleSet {
 
     public final TransliterationRule elementAt(int i) {
         return (TransliterationRule) rules.elementAt(i);
-    }
-
-    /**
-     * Free up space.  Once this method is called, the maskKey is
-     * invalid.
-     */
-    public void freeze() {
-        for (int i=0; i<rules.size(); ++i) {
-            ((TransliterationRule) rules.elementAt(i)).freeze();
-        }
     }
 
     /**
