@@ -43,20 +43,12 @@ CLEANFILES = *~ $(DEPS) $(ALL_MAN_FILES)
 ## Target information
 TARGET = uconv
 
-DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
-CFLAGS = @CFLAGS@
-CXXFLAGS = @CXXFLAGS@
-ENABLE_RPATH = @ENABLE_RPATH@
-ifeq ($(ENABLE_RPATH),YES)
-RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
-endif
-LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = $(LIBICUI18N) $(LIBICUUC) @LIBS@ @LIB_M@
+DEFS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
+LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 ifeq ($(UCONVMSG_STATIC),YES)
 LIBS += -L$(MSGNAME) -l$(MSGNAME)
-CPPFLAGS += -DUCONVMSG_STATIC=$(MSGNAME)
+DEFS += -DUCONVMSG_STATIC=$(MSGNAME)
 UCONVMSG_LIB = $(RESDIR)/lib$(MSGNAME).a
 
 PKGMODE = static

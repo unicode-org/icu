@@ -31,7 +31,7 @@ CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) $(MAN_FILES)
 ## Target information
 TARGET = gentz
 
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
+DEFS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = gentz.o

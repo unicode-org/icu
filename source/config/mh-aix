@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix,v 1.28 2002/03/21 01:26:39 grhoten-oss Exp $
+## $Id: mh-aix,v 1.29 2002/05/01 23:48:08 grhoten-oss Exp $
 ##
 ## Please note: AIX does NOT have library versioning per se (there is no 'SONAME' capability). 
 ## So, we are using 'windows' style library names, that is, libicuuc20.1.so instead of libicuuc.so.20.1
@@ -13,18 +13,20 @@ GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
 
 ## Commands to compile
-COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -qroconst -c
-COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -qroconst -c
+COMPILE.c=	$(CC) -qroconst $(CPPFLAGS) $(CFLAGS) $(DEFS) -c
+COMPILE.cc=	$(CXX) -qroconst $(CPPFLAGS) $(CXXFLAGS) $(DEFS) -c
+
+LDFLAGS += -brtl
 
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
 ##  our libraries contain C++ code (C++ static init not called)
-LINK.c=		$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.c=		$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	$(AIX_SHLIB) -p 5000 -brtl $(LDFLAGS)
-SHLIB.cc=	$(AIX_SHLIB) -p 5000 -brtl $(LDFLAGS)
+SHLIB.c=	$(AIX_SHLIB) -p 5000 $(LDFLAGS)
+SHLIB.cc=	$(AIX_SHLIB) -p 5000 $(LDFLAGS)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I

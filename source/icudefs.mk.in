@@ -92,7 +92,7 @@ RANLIB = @RANLIB@
 
 # Various flags for the tools
 
-DEFS = @DEFS@
+DEFS = -I. @DEFS@
 CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
 CXXFLAGS = @CXXFLAGS@
@@ -115,16 +115,16 @@ ECHO_N = @ECHO_N@
 ECHO_C = @ECHO_C@
 
 # Commands to compile
-COMPILE.c=    $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
-COMPILE.cc=   $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+COMPILE.c=    $(CC) $(CPPFLAGS) $(CFLAGS) $(DEFS) -c
+COMPILE.cc=   $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(DEFS) -c
 
 # Commands to link
-LINK.c=       $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-LINK.cc=      $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.c=       $(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.cc=      $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 # Commands to make a shared library
-SHLIB.c=      $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared
-SHLIB.cc=     $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
+SHLIB.c=      $(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared
+SHLIB.cc=     $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
 
 # Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
