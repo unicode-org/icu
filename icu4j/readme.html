@@ -11,8 +11,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/readme.html,v $
-* $Date: 2002/08/15 19:12:20 $
-* $Revision: 1.34 $
+* $Date: 2002/08/15 19:30:28 $
+* $Revision: 1.35 $
 *
 *******************************************************************************
 -->
@@ -95,7 +95,7 @@ The main effect of the change is to provide GPL compatibility.&nbsp; The X licen
 http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses</a>.  This means that GPL projects can now use ICU code, it does <b>not</b> mean that projects using ICU become subject to GPL.
 </p>
 <p>
-The text of the X license is available at <a href=http://www.x.org/terms.htm>http://www.x.org/terms.htm</a>. The IBM version contains the essential text of the license, omitting the X-specific trademarks and copyright notices.  The full copy of the <a href=license.html>license</a> is included in the download package.
+The text of the X license is available at <a href=http://www.x.org/terms.htm>http://www.x.org/terms.htm</a>. The IBM version contains the essential text of the license, omitting the X-specific trademarks and copyright notices.  The full copy of <a href=license.html>ICU's license</a> is included in the download package.
 </p>
 <p>
 For more details please see the <a href=http://oss.software.ibm.com/icu/press.html>press announcement</a> and the <a href=http://oss.software.ibm.com/icu/project_faq.html#license>Project FAQ</a>.
@@ -231,32 +231,32 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
   </tr>
 </table>
 
-<p><b>The source directories mirror the package structure of the code.</b><br><font color="blue">Core</font> packages become part of the ICU4J jar file.<br><font color="blue">API</font> packages contain classes with supported API.</p>
+<p><b>The source directories mirror the package structure of the code.</b><br><font color="red">Core</font> packages become part of the ICU4J jar file.<br><font color="red">API</font> packages contain classes with supported API.</p>
 
 <table BORDER="1" CELLPADDING="3" WIDTH="623">
   <tr>
-    <td>$Root/src/com/ibm/icu/dev<br><font color="blue">Non-Core, Non-API</font></td>
+    <td>$Root/src/com/ibm/icu/dev<br><font color="red">Non-Core, Non-API</font></td>
     <td>Packages used for internal development:
     <ul>
     <li>Data: data used by tests and in building ICU</li>
     <li>Demos: Calendar, Holiday, Break Iterator, Rule-based Number Format, Transformations<br>(See <a href="#tryingout">below</a> for more information about the demos.)</li>
     <li>Tests: API and coverage tests of all functionality.<br>For information about running the tests, see $Root/src/com/ibm/icu/dev/test/TestAll.java.</li>
-    <li>Tools: tools used to build data tables, etc.</td>
+    <li>Tools: tools used to build data tables, etc.</li></ul></td>
   </tr>
   <tr>
-    <td>$Root/src/com/ibm/icu/impl<br><font color="blue">Core, Non-API</font></td>
+    <td>$Root/src/com/ibm/icu/impl<br><font color="red">Core, Non-API</font></td>
     <td>These are utility classes used from different ICU4J core packages.</td>
   </tr>
   <tr>
-    <td>$Root/src/com/ibm/icu/lang<br><font color="blue">Core, API</font></td>
+    <td>$Root/src/com/ibm/icu/lang<br><font color="red">Core, API</font></td>
     <td>Character properties package.</td>
   </tr>
   <tr>
-    <td>$Root/src/com/ibm/icu/math<br><font color="blue">Core, API</font></td>
+    <td>$Root/src/com/ibm/icu/math<br><font color="red">Core, API</font></td>
     <td>Additional math classes.</td>
   </tr>
   <tr>
-    <td>$Root/src/com/ibm/icu/text<br><font color="blue">Core, API</font></td>
+    <td>$Root/src/com/ibm/icu/text<br><font color="red">Core, API</font></td>
     <td>Additional text classes.  These add to, and in some cases replace, related core Java classes:
       <ul>
       <li>Arabic shaping
@@ -274,7 +274,7 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
     </td>
   </tr>
   <tr>
-    <td>$Root/src/com/ibm/icu/util<br><font color="blue">Core, API</font></td>
+    <td>$Root/src/com/ibm/icu/util<br><font color="red">Core, API</font></td>
     <td>Additional utility classes:
     <ul>
     <li>Calendars - Gregorian, Buddhist, Hebrew, Islamic, Japanese
@@ -322,7 +322,9 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
 
 <h3><u><a name="API"></a>Where to get Documentation</u></h3>
 
-<p>The complete API documentation is available on the ICU4J web site: 
+<p>The <a href="http://oss.software.ibm.com/icu/userguide/">ICU user's guide</a> contains lots of general information about ICU, in its C, C++, and Java incarnations.</p>
+
+<p>The complete API documentation for ICU4J (javadoc) is available on the ICU4J web site, and can be built from the sources: 
 
 <ul>
   <li><a href="http://oss.software.ibm.com/icu4j/doc/index.html">Index to all ICU4J API</a></li>
