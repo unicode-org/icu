@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormatServiceShim.java,v $ 
- * $Date: 2003/05/14 19:03:30 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/05/15 20:35:18 $ 
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -27,7 +27,7 @@ import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.NumberFormatFactory;
 
 class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
-    
+
     Locale[] getAvailableLocales() {
         if (service.isDefault()) {
             return ICULocaleData.getAvailableLocales();
@@ -93,5 +93,5 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
             markDefault();
         }
     }
-    private ICULocaleService service = new NFService();
+    private static ICULocaleService service = new NFService();
 }
