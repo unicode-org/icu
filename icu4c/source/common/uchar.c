@@ -423,6 +423,39 @@ u_charType(UChar32 c) {
     return (int8_t)GET_CATEGORY(props);
 }
 
+/* Enumerate all code points with their general categories. */
+struct _EnumTypeCallback {
+    UCharEnumTypeRange *enumRange;
+    const void *context;
+};
+
+static uint32_t U_CALLCONV
+_enumTypeValue(const void *context, uint32_t value) {
+    /* access the general category from the 32-bit properties, and those from the 16-bit trie value */
+    return GET_CATEGORY(props32Table[value]);
+}
+
+static UBool U_CALLCONV
+_enumTypeRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
+    /* just cast the value to UCharCategory */
+    return ((struct _EnumTypeCallback *)context)->
+        enumRange(((struct _EnumTypeCallback *)context)->context,
+                  start, limit, (UCharCategory)value);
+}
+
+U_CAPI void U_EXPORT2
+u_enumCharTypes(UCharEnumTypeRange *enumRange, const void *context) {
+    struct _EnumTypeCallback callback;
+
+    if(enumRange==NULL || !HAVE_DATA) {
+        return;
+    }
+
+    callback.enumRange=enumRange;
+    callback.context=context;
+    utrie_enum(&propsTrie, _enumTypeValue, _enumTypeRange, &callback);
+}
+
 /* Checks if ch is a lower case letter.*/
 U_CAPI UBool U_EXPORT2
 u_islower(UChar32 c) {
