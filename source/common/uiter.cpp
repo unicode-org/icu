@@ -68,12 +68,16 @@ static const UCharIterator noopIterator={
 static int32_t U_CALLCONV
 stringIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
     switch(origin) {
+    case UITER_ZERO:
+        return 0;
     case UITER_START:
         return iter->start;
     case UITER_CURRENT:
         return iter->index;
     case UITER_LIMIT:
         return iter->limit;
+    case UITER_LENGTH:
+        return iter->length;
     default:
         /* not a valid origin */
         /* Should never get here! */
@@ -86,6 +90,9 @@ stringIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origi
     int32_t pos;
 
     switch(origin) {
+    case UITER_ZERO:
+        pos=delta;
+        break;
     case UITER_START:
         pos=iter->start+delta;
         break;
@@ -94,6 +101,9 @@ stringIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origi
         break;
     case UITER_LIMIT:
         pos=iter->limit+delta;
+        break;
+    case UITER_LENGTH:
+        pos=iter->length+delta;
         break;
     default:
         /* not a valid origin, no move */
@@ -190,12 +200,16 @@ uiter_setString(UCharIterator *iter, const UChar *s, int32_t length) {
 static int32_t U_CALLCONV
 characterIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
     switch(origin) {
+    case UITER_ZERO:
+        return 0;
     case UITER_START:
         return ((CharacterIterator *)(iter->context))->startIndex();
     case UITER_CURRENT:
         return ((CharacterIterator *)(iter->context))->getIndex();
     case UITER_LIMIT:
         return ((CharacterIterator *)(iter->context))->endIndex();
+    case UITER_LENGTH:
+        return ((CharacterIterator *)(iter->context))->getLength();
     default:
         /* not a valid origin */
         /* Should never get here! */
@@ -205,7 +219,22 @@ characterIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
 
 static int32_t U_CALLCONV
 characterIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin) {
-    return ((CharacterIterator *)(iter->context))->move(delta, (CharacterIterator::EOrigin)origin);
+    switch(origin) {
+    case UITER_ZERO:
+        ((CharacterIterator *)(iter->context))->setIndex(delta);
+        return ((CharacterIterator *)(iter->context))->getIndex();
+    case UITER_START:
+    case UITER_CURRENT:
+    case UITER_LIMIT:
+        return ((CharacterIterator *)(iter->context))->move(delta, (CharacterIterator::EOrigin)origin);
+    case UITER_LENGTH:
+        ((CharacterIterator *)(iter->context))->setIndex(((CharacterIterator *)(iter->context))->getLength()+delta);
+        return ((CharacterIterator *)(iter->context))->getIndex();
+    default:
+        /* not a valid origin */
+        /* Should never get here! */
+        return 0;
+    }
 }
 
 static UBool U_CALLCONV
