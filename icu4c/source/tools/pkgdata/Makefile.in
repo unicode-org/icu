@@ -43,7 +43,7 @@ top_builddir = ../..
 subdir = tools/pkgdata
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ mkmap.tmp
+CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) icupkg.inc mkmap.tmp
 
 ## Target information
 TARGET = pkgdata
@@ -90,7 +90,7 @@ clean-local:
 	$(RMV) $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
-	$(RMV) Makefile $(DEPS) $(RES_FILES) $(TEST_FILES) icupkg.inc
+	$(RMV) Makefile
 
 check-local: all-local
 

@@ -48,7 +48,7 @@ top_builddir = ../..
 subdir = tools/gentest
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~
+CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES)
 
 ## Target information
 TARGET = gentest
@@ -65,6 +65,7 @@ OBJECTS = gentest.o
 
 DEPS = $(OBJECTS:.o=.d)
 
+TEST_FILES = $(ICUDATADIR)/test.dat
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
@@ -88,7 +89,7 @@ install-local: all-local build-data
 	$(mkinstalldirs) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
-build-data: $(ICUDATADIR)/test.dat
+build-data: $(TESTFILES)
 
 # we set the ICU_DATA directory here so that test.dat ends up in 
 # icu/data rather than PREFIX/share/icu/VERSION/
@@ -102,7 +103,7 @@ clean-local:
 	$(RMV) $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
-	$(RMV) Makefile $(DEPS) $(RES_FILES) $(TEST_FILES)
+	$(RMV) Makefile
 
 check-local: all-local
 

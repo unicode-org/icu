@@ -42,7 +42,7 @@ top_builddir = ../..
 subdir = samples/date
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~
+CLEANFILES = *~ $(DEPS)
 
 ## Target information
 TARGET = date
@@ -93,7 +93,7 @@ clean-local:
 	$(RMV) $(OBJECTS) $(TARGET)
 
 distclean-local: clean-local
-	$(RMV) Makefile $(DEPS)
+	$(RMV) Makefile
 
 check-local:
 

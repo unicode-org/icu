@@ -41,7 +41,7 @@ top_builddir = ../..
 subdir = tools/rbdump
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~
+CLEANFILES = *~ $(DEPS) $(CNV_FILES)
 
 ## Target information
 TARGET = rbdump
@@ -86,7 +86,7 @@ clean-local:
 	$(RMV) $(OBJECTS) $(TARGET)
 
 distclean-local: clean-local
-	$(RMV) Makefile $(DEPS) $(CNV_FILES)
+	$(RMV) Makefile
 
 check-local: all-local
 

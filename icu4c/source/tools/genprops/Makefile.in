@@ -48,7 +48,7 @@ top_builddir = ../..
 subdir = tools/genprops
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~
+CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES)
 
 ## Target information
 TARGET = genprops
@@ -99,7 +99,7 @@ clean-local:
 	$(RMV) $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
-	$(RMV) Makefile $(DEPS) $(RES_FILES) $(TEST_FILES)
+	$(RMV) Makefile
 
 check-local: all-local
 
