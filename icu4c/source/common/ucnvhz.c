@@ -427,7 +427,7 @@ U_CFUNC void UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs 
     }
     /*writing the char to the output stream */
     while (mySourceIndex < mySourceLength){
-        
+        targetUniChar = missingCharMarker;
         if (myTargetIndex < targetLength){
             
             c=mySourceChar = (UChar) args->source[mySourceIndex++];
@@ -449,9 +449,8 @@ U_CFUNC void UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs 
             /* only DBCS or SBCS characters are expected*/
             /* DB haracters with high bit set to 1 are expected */
             if(length > 2 || length==0 ||(((targetUniChar & 0x8080) != 0x8080)&& length==2)){
-                reason =UCNV_ILLEGAL;
+                reason =UCNV_UNASSIGNED;
                 *err =U_INVALID_CHAR_FOUND;
-                goto CALLBACK;
             }
  
             if (targetUniChar != missingCharMarker){
@@ -508,7 +507,6 @@ U_CFUNC void UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs 
             }
             else{
                 
-CALLBACK:
                 /*Handle surrogates */
                 /*check if the char is a First surrogate*/
                 if(UTF_IS_SURROGATE(mySourceChar)) {
@@ -521,7 +519,7 @@ getTrail:
                             UChar trail=(UChar) args->source[mySourceIndex];
                             if(UTF_IS_SECOND_SURROGATE(trail)) {
                                 ++mySourceIndex;
-                                mySourceChar=UTF16_GET_PAIR_VALUE(mySourceChar, trail);
+                                mySourceChar=UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead, trail);
                                 args->converter->fromUSurrogateLead=0x00;
                                 /* convert this surrogate code point */
                                 /* exit this condition tree */
@@ -550,9 +548,14 @@ getTrail:
                     char * saveTarget = args->target;
                     const UChar* saveSource = args->source;
                     int32_t *saveOffsets = args->offsets;
-                    *err = U_INVALID_CHAR_FOUND;
-                    args->converter->invalidUCharBuffer[0] = (UChar) mySourceChar;
-                    args->converter->invalidUCharLength = 1;
+
+                    if(mySourceChar>0xffff){
+                        args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++] =(uint16_t)(((mySourceChar)>>10)+0xd7c0);
+                        args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++] =(uint16_t)(((mySourceChar)&0x3ff)|0xdc00);
+                    }
+                    else{
+                        args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++] =(UChar)mySourceChar;
+                    }
                 
                     myConverterData->isTargetUCharDBCS = (UBool)isTargetUCharDBCS;
                     args->target += myTargetIndex;
@@ -563,14 +566,13 @@ getTrail:
                     saveIndex = myTargetIndex; 
                     /*copies current values for the ErrorFunctor to update */ 
                     /*Calls the ErrorFunctor */ 
-                    args->converter->fromUCharErrorBehaviour ( 
-                                                 args->converter->fromUContext, 
-                                                 args, 
-                                                 args->converter->invalidUCharBuffer, 
-                                                 1, 
-                                                 (UChar32)mySourceChar, 
-                                                 UCNV_UNASSIGNED, 
-                                                 err); 
+                    args->converter->fromUCharErrorBehaviour ( args->converter->fromUContext, 
+                                  args, 
+                                  args->converter->invalidUCharBuffer, 
+                                  args->converter->invalidUCharLength, 
+                                 (UChar32) (mySourceChar), 
+                                  reason, 
+                                  err);
                     /*Update the local Indexes so that the conversion 
                     *can restart at the right points 
                     */ 
