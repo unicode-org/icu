@@ -1,5 +1,4 @@
 * text=auto !eol
-icu4c/as_is/codewarrior/mac/icu.mcp.zip -text
 icu4c/license.html svneol=native#text/html
 icu4c/readme.html svneol=native#text/html
 icu4c/source/data/brkitr/charBE.brk -text
