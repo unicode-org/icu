@@ -1167,7 +1167,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
             digit = ch - zero;
             if (digit < 0 || digit > 9)
             {
-                digit = Unicode::digitValue(ch);
+                digit = u_charDigitValue(ch);
             }
 
             if (digit > 0 && digit <= 9)
@@ -1242,7 +1242,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
                     digit = ch - zero;
 
                     if (digit < 0 || digit > 9) {
-                        digit = Unicode::digitValue(ch);
+                        digit = u_charDigitValue(ch);
                     }
                     if (0 <= digit && digit <= 9) {
                         ++pos;
