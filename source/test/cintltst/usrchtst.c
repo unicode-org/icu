@@ -292,6 +292,7 @@ static void TestInitialization(void)
           UErrorCode      status = U_ZERO_ERROR;
           UChar           pattern[512];
     const UChar           text[] = {0x61, 0x62, 0x63, 0x64, 0x65, 0x66};
+    int32_t i = 0;
     UStringSearch  *result;
 
     /* simple test on the pattern ce construction */
@@ -306,7 +307,10 @@ static void TestInitialization(void)
     usearch_close(result);
 
     /* testing if an extremely large pattern will fail the initialization */
-    uprv_memset(pattern, 0x41, 512);
+    for(i = 0; i < 512; i++) {
+      pattern[i] = 0x41;
+    }
+    /*uprv_memset(pattern, 0x41, 512);*/
     result = usearch_openFromCollator(pattern, 512, text, 3, EN_US_, NULL, 
                                       &status);
     if (U_FAILURE(status)) {
@@ -1026,6 +1030,8 @@ static void TestGetSetOffset(void)
     UChar          text[128];
     UErrorCode     status  = U_ZERO_ERROR;
     UStringSearch *strsrch;
+    memset(pattern, 0, 32*sizeof(UChar));
+    memset(text, 0, 128*sizeof(UChar));
 
     open();
     if (usearch_getOffset(NULL) != USEARCH_DONE) {

@@ -342,7 +342,7 @@ static void TestNewFormatAndParseAPI(void)
     UDate d1,d;
     UDateFormat *def1;
     UErrorCode status = U_ZERO_ERROR;
-    double value;
+    double value = 0.0;
     UChar ret[30];
     UParseError parseError;
     UMessageFormat* fmt = NULL;
@@ -437,13 +437,14 @@ static void TestSampleFormatAndParseWithError(void)
 
     UChar *result, *tzID, *str;
     UChar pattern[100];
+
     UChar expected[100];
     int32_t resultLengthOut, resultlength;
     UCalendar *cal;
     UDate d1,d;
     UDateFormat *def1;
     UErrorCode status = U_ZERO_ERROR;
-    double value;
+    double value = 0.0;
     UChar ret[30];
     UParseError parseError;
 
@@ -534,7 +535,7 @@ static void TestSampleFormatAndParse()
     UDate d1,d;
     UDateFormat *def1;
     UErrorCode status = U_ZERO_ERROR;
-    double value;
+    double value = 0.0;
     UChar ret[30];
     log_verbose("Testing format and parse\n");
 
