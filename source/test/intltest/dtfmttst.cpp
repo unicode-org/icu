@@ -682,7 +682,8 @@ DateFormatTest::TestBadInput135a()
   SimpleDateFormat* dateParse = new SimpleDateFormat(status);
   const char* s;
   UDate date;
-  const uint32_t PFLENGTH = sizeof(parseFormats)/sizeof(parseFormats[0]);
+  const uint32_t PF_LENGTH = sizeof(parseFormats)/sizeof(parseFormats[0]);
+  const uint32_t INPUT_LENGTH = sizeof(inputStrings)/sizeof(inputStrings[0]);
 
   dateParse->applyPattern("d MMMM, yyyy");
   dateParse->adoptTimeZone(TimeZone::createDefault());
@@ -699,10 +700,10 @@ DateFormatTest::TestBadInput135a()
     logln((UnicodeString)"Exception during parse: " + (int32_t)status);
   status = U_ZERO_ERROR;
   //}
-  for (uint32_t i = 0; i < sizeof(inputStrings)/sizeof(inputStrings[0]); i += (PFLENGTH + 1)) {
+  for (uint32_t i = 0; i < INPUT_LENGTH; i += (PF_LENGTH + 1)) {
     ParsePosition parsePosition(0);
     UnicodeString s( inputStrings[i]);
-    for (int32_t index = 0; index < PFLENGTH;++index) {
+    for (uint32_t index = 0; index < PF_LENGTH;++index) {
       const char* expected = inputStrings[i + 1 + index];
       dateParse->applyPattern(parseFormats[index]);
       dateParse->adoptTimeZone(TimeZone::createDefault());
