@@ -278,7 +278,8 @@ void SimpleDateFormat::construct(EStyle timeStyle,
     initializeCalendar(NULL, locale, status);
 
     CalendarData calData(locale, fCalendar?fCalendar->getType():NULL, status);
-    ResourceBundle dateTimePatterns = calData.getBundleByKey(gDateTimePatternsTag, status);
+    UResourceBundle *dtp = calData.getByKey(gDateTimePatternsTag, status);
+    ResourceBundle dateTimePatterns(dtp, status);
     if (U_FAILURE(status)) return;
 
     if (dateTimePatterns.getSize() <= kDateTime)
