@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/07/30 09:56:41 $
-* $Revision: 1.23 $
+* $Date: 2002/08/04 21:38:44 $
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
@@ -17,9 +17,10 @@ import java.util.*;
 import java.text.*;
 import java.io.*;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UTF16;
 import com.ibm.text.UCD.*;
 
-public final class Utility {    // COMMON UTILITIES
+public final class Utility implements UCD_Types {    // COMMON UTILITIES
 
     static final boolean UTF8 = true; // TODO -- make argument
     
@@ -470,7 +471,22 @@ public final class Utility {    // COMMON UTILITIES
     	return quoteXML(source, false);
     }
     
-
+    private static UnicodeProperty defaultIgnorable = null;
+    
+    public static String getDisplay(int cp) {
+        String result = UTF16.valueOf(cp);
+        byte cat = Default.ucd.getCategory(cp);
+        if (cat == Mn || cat == Me) {
+            result = String.valueOf(DOTTED_CIRCLE) + result;
+        } else if (cat == Cf || cat == Cc || cp == 0x034F || cp == 0x00AD || cp == 0x1806) {
+            result = "\u25A1";
+        } else {
+            if (defaultIgnorable == null) defaultIgnorable = DerivedProperty.make(DefaultIgnorable);
+            if (defaultIgnorable.hasValue(cp)) result = "\u25A1";
+        }
+        return result;
+    }
+    
     public static int compare(char[] a, int aStart, int aEnd, char[] b, int bStart, int bEnd) {
         while (aStart < aEnd && bStart < bEnd) {
             int diff = a[aStart++] - b[bStart++];

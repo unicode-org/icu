@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateHanTransliterator.java,v $
-* $Date: 2002/07/30 09:56:41 $
-* $Revision: 1.8 $
+* $Date: 2002/08/04 21:38:45 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -276,6 +276,11 @@ public final class GenerateHanTransliterator implements UCD_Types {
             log.print('\uFEFF');
             
             log.println();
+            log.println("@*Override Data");
+            log.println();
+            readOverrides(type);
+
+            log.println();
             log.println("@*DICT Data");
             log.println();
             readCDICTDefinitions(type);
@@ -426,7 +431,27 @@ public final class GenerateHanTransliterator implements UCD_Types {
             System.out.println("Defined Count: " + count);
             
             log.println();
-            log.println("@Duplicates");
+            log.println("@Duplicates (Frequency Order");
+            log.println();
+            it = rankList.iterator();
+            while (it.hasNext()) {
+                String word = (String) it.next();
+                Collection dups = (Collection) duplicates.get(word);
+                if (dups == null) continue;
+                log.print(hex.transliterate(word) + "\t" + word + "\t");
+                Iterator it2 = dups.iterator();
+                boolean gotFirst = false;
+                while (it2.hasNext()) {
+                    if (!gotFirst) gotFirst = true;
+                    else log.print(", ");
+                    log.print(it2.next());
+                }
+                if (overrideSet.contains(word)) log.print(" *override*");
+                log.println();
+            }
+            
+            log.println();
+            log.println("@Duplicates (Character Order)");
             log.println();
             it = duplicates.keySet().iterator();
             while (it.hasNext()) {
@@ -440,6 +465,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
                     else log.print(", ");
                     log.print(it2.next());
                 }
+                if (overrideSet.contains(word)) log.print(" *override*");
                 log.println();
             }
             
@@ -536,13 +562,19 @@ public final class GenerateHanTransliterator implements UCD_Types {
             int overallRank = 0;
             it = combinedRank.iterator();
             
-            log.println();
-            log.println("@Frequency data: Rank of Character");
-            log.println();
+            boolean showFrequency = false;
+            
+            if (showFrequency) {
+                log.println();
+                log.println("@Frequency data: Rank of Character");
+                log.println();
+            }
+            
+            // make up rankMap, rankList
             
             while(it.hasNext()) {
                 Pair p = (Pair) it.next();
-                log.println(p.first + ", " + p.second);
+                if (showFrequency) log.println(p.first + ", " + p.second);
                 Object rank = rankMap.get(p.second);
                 if (rank == null) {
                     rankMap.put(p.second, new Integer(++overallRank));
@@ -550,16 +582,18 @@ public final class GenerateHanTransliterator implements UCD_Types {
                 }
             }
 
-            log.println();
-            log.println("@Frequency data: Character to Rank");
-            log.println();
-            
-            // get full order
-            it = rankList.iterator();
-            while (it.hasNext()) {
-                Comparable key = (Comparable) it.next();
-                Comparable val = (Comparable) rankMap.get(key);
-                log.println(key + ", " + val);
+            if (showFrequency) {
+                log.println();
+                log.println("@Frequency data: Character to Rank");
+                log.println();
+                
+                // get full order
+                it = rankList.iterator();
+                while (it.hasNext()) {
+                    Comparable key = (Comparable) it.next();
+                    Comparable val = (Comparable) rankMap.get(key);
+                    log.println(key + ", " + val);
+                }
             }
             
         } catch (Exception e) {
@@ -711,6 +745,38 @@ public final class GenerateHanTransliterator implements UCD_Types {
             throw new ChainException("{0} Failed at {1}" , new Object []{new Integer(counter), line}, e);
         }
     }
+    
+    static void readOverrides(int type) throws IOException {
+        if (type != CHINESE) return;
+        String fname = "Chinese_override.txt";
+        
+        System.out.println("Reading " + fname);
+        BufferedReader br = Utility.openReadFile(BASE_DIR + "dict\\" + fname, true);
+        int counter = 0;
+        String[] pieces = new String[50];
+        String line = "";
+        try {
+            while (true) {
+                line = Utility.readDataLine(br);
+                if (line == null) break;
+                if (line.length() == 0) continue;
+                Utility.dot(counter++);
+                
+                // skip code
+                int wordStart = line.indexOf('\t') + 1;
+                int wordEnd = line.indexOf('\t', wordStart);
+                String word = line.substring(wordStart, wordEnd);
+                String definition = line.substring(wordEnd+1);
+                addCheck(word, definition, line);
+                overrideSet.add(word);
+            }
+            br.close();
+        } catch (Exception e) {
+            throw new ChainException("{0} Failed at {1}" , new Object []{new Integer(counter), line}, e);
+        }
+    }    
+    
+    static Set overrideSet = new HashSet();
     
     static void processEdict(String word, String definition, String line) {
         // We have a situation where we have words of the form CCCHHHKKKCCHHCCH > HHHHHHKKKHHHHHHHH

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2002/07/30 09:56:40 $
-* $Revision: 1.14 $
+* $Date: 2002/08/04 21:38:45 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -21,6 +21,8 @@ public interface UCD_Types {
     public static final String UCD_DIR = BASE_DIR + "UCD\\";
     public static final String BIN_DIR = BASE_DIR + "BIN\\";
     public static final String GEN_DIR = BASE_DIR + "GEN\\";
+    
+    public static final char DOTTED_CIRCLE = '\u25CC';
     
     public static final int 
     	CJK_BASE = 0x4E00,
@@ -166,7 +168,10 @@ public interface UCD_Types {
         CONTROL_MASK = (1<<Cc) | (1<<Cf) | (1<<Cs) | (1<<Co),
         PUNCTUATION_MASK = (1<<Pc) | (1<<Pd) | (1<<Ps) | (1<<Pe) | (1<<Po) | (1<<Pi) | (1<<Pf),
         SYMBOL_MASK = (1<<Sm) | (1<<Sc) | (1<<Sk) | (1<<So),
-        UNASSIGNED_MASK = (1<<Cn);
+        UNASSIGNED_MASK = (1<<Cn),
+        BASE_MASK = LETTER_MASK | NUMBER_MASK | PUNCTUATION_MASK | SYMBOL_MASK | (1<<Mc),
+        NONSPACING_MARK_MASK = (1<<Mn) | (1<<Me);
+        
 
 	// Binary Properties
 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2002/06/22 21:02:16 $
-* $Revision: 1.16 $
+* $Date: 2002/08/04 21:38:45 $
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -110,7 +110,7 @@ public final class DerivedProperty implements UCD_Types {
                 + "\r\n#   WARNING: Normalization of STRINGS must use the algorithm in UAX #15 because characters may interact."
                 + "\r\n#            The length of a normalized string is not necessarily the sum of the lengths of the normalized characters!";
         }
-        boolean hasValue(int cp) {
+        public boolean hasValue(int cp) {
             if (ucdData.getDecompositionType(cp) == NONE) return false;
             String norm = nfx.normalize(cp);
             if (UTF16.countCodePoint(norm) != 1) return true;
@@ -133,7 +133,7 @@ public final class DerivedProperty implements UCD_Types {
                 + "\r\n#   Characters that are cc==0, BUT which may interact with previous characters."
                 ;
         }
-        boolean hasValue(int cp) {
+        public boolean hasValue(int cp) {
             if (ucdData.getCombiningClass(cp) != 0) return false;
             String norm = nfx.normalize(cp);
             int first = UTF16.charAt(norm, 0);
@@ -172,7 +172,7 @@ public final class DerivedProperty implements UCD_Types {
                 + "\r\n#   WARNING: Normalization of STRINGS must use the algorithm in UAX #15 because characters may interact."
                 + "\r\n#            The length of a normalized string is not necessarily the sum of the lengths of the normalized characters!";
         }
-        boolean hasValue(int cp) {
+        public boolean hasValue(int cp) {
             boolean result = bitset.get(cp);
             if (result && filter) {
                 result = (ucdData.getCombiningClass(cp) != 0) == keepNonZero;
@@ -243,7 +243,7 @@ public final class DerivedProperty implements UCD_Types {
             //if (cp >= 0xAC00 && cp <= 0xD7A3) return true;
             //System.out.println(Utility.hex(cps) + " => " + Utility.hex(nf[i-4].normalize(cps)));
         } // default
-        boolean hasValue(int cp) { return getValue(cp).length() != 0; }
+        public boolean hasValue(int cp) { return getValue(cp).length() != 0; }
     };
     
     class CaseDProp extends UnicodeProperty {
@@ -256,7 +256,7 @@ public final class DerivedProperty implements UCD_Types {
             header = "# Derived Property: " + name
             + "\r\n#  Generated from: NFKD has >0 " + CaseNames[i-Missing_Uppercase] + ", no other cases";
         }
-        boolean hasValue(int cp) {
+        public boolean hasValue(int cp) {
             byte cat = ucdData.getCategory(cp);
             if (cat == val
             || val != Lt && ucdData.getBinaryProperty(cp, Other_Uppercase)) return false;
@@ -294,7 +294,7 @@ public final class DerivedProperty implements UCD_Types {
     		return getValue(cp, LONG);
     	}
         
-        boolean hasValue(int cp) { return getValue(cp).length() != 0; }
+        public boolean hasValue(int cp) { return getValue(cp).length() != 0; }
     };
 
     {
@@ -323,7 +323,7 @@ public final class DerivedProperty implements UCD_Types {
                     + "\r\n#  Characters that can start an identifier."
                     + "\r\n#  Generated from Lu+Ll+Lt+Lm+Lo+Nl";
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
                 return ucdData.isIdentifierStart(cp, false);
             }
         };
@@ -338,7 +338,7 @@ public final class DerivedProperty implements UCD_Types {
                     + "\r\n#  Generated from: ID_Start + Mn+Mc+Nd+Pc"
                     + "\r\n#  NOTE: Cf characters should be filtered out.";
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
                 return ucdData.isIdentifierContinue_NO_Cf(cp, false);
             }
         };
@@ -354,7 +354,7 @@ public final class DerivedProperty implements UCD_Types {
                     + "\r\n#  NOTE: Does NOT remove the non-NFKx characters."
                     + "\r\n#        Merely ensures that if isIdentifer(string) then isIdentifier(NFKx(string))";
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
                 return ucdData.isIdentifierStart(cp, true);
             }
         };
@@ -371,7 +371,7 @@ public final class DerivedProperty implements UCD_Types {
                     + "\r\n#  NOTE: Does NOT remove the non-NFKx characters."
                     + "\r\n#        Merely ensures that if isIdentifer(string) then isIdentifier(NFKx(string))";
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
                 return ucdData.isIdentifierContinue_NO_Cf(cp, true);
             }
         };
@@ -384,7 +384,7 @@ public final class DerivedProperty implements UCD_Types {
                 header = "# Derived Property: " + name
                     + "\r\n#  Generated from: Sm + Other_Math";
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
                 byte cat = ucdData.getCategory(cp);
                 if (cat == Sm
                 || ucdData.getBinaryProperty(cp,Math_Property)) return true;
@@ -400,7 +400,7 @@ public final class DerivedProperty implements UCD_Types {
                 header = "# Derived Property: " + name
                     + "\r\n#  Generated from: Lu+Ll+Lt+Lm+Lo+Nl + Other_Alphabetic";
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
                 byte cat = ucdData.getCategory(cp);
                 if (cat == Lu || cat == Ll || cat == Lt || cat == Lm || cat == Lo || cat == Nl
                 || ucdData.getBinaryProperty(cp, Alphabetic)) return true;
@@ -416,7 +416,7 @@ public final class DerivedProperty implements UCD_Types {
                 header = "# Derived Property: " + name
                     + "\r\n#  Generated from: Ll + Other_Lowercase";
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
                 byte cat = ucdData.getCategory(cp);
                 if (cat == Ll
                 || ucdData.getBinaryProperty(cp, Other_Lowercase)) return true;
@@ -432,7 +432,7 @@ public final class DerivedProperty implements UCD_Types {
                 header = "# Derived Property: " + name
                     + "\r\n#  Generated from: Lu + Other_Uppercase";
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
                 byte cat = ucdData.getCategory(cp);
                 if (cat == Lu
                 || ucdData.getBinaryProperty(cp, Other_Uppercase)) return true;
@@ -461,7 +461,7 @@ of characters, the first of which has a non-zero combining class.
                     + ": Full Composition Exclusion"
                     + "\r\n#  Generated from: Composition Exclusions + Singletons + Non-Starter Decompositions";
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
                 if (!ucdData.isRepresented(cp)) return false;
                 byte dtype = ucdData.getDecompositionType(cp);
                 if (dtype != CANONICAL) return false;
@@ -488,7 +488,7 @@ of characters, the first of which has a non-zero combining class.
                     + ": Full Composition Inclusion"
                     + "\r\n#  characters with Canonical Decompositions MINUS Full Composition Exclusion";
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
                 if (!ucdData.isRepresented(cp)) return false;
                 byte dtype = ucdData.getDecompositionType(cp);
                 if (dtype != CANONICAL) return false;
@@ -516,7 +516,7 @@ of characters, the first of which has a non-zero combining class.
                 if (c.equals(b)) return "";
                 return "FNC; " + Utility.hex(c);
             } // default
-            boolean hasValue(int cp) { return getValue(cp).length() != 0; }
+            public boolean hasValue(int cp) { return getValue(cp).length() != 0; }
         };
         
         dprops[FC_NFC_Closure] = new UnicodeProperty() {
@@ -538,7 +538,7 @@ of characters, the first of which has a non-zero combining class.
                 if (c.equals(b)) return "";
                 return "FN; " + Utility.hex(c);
             } // default
-            boolean hasValue(int cp) { return getValue(cp).length() != 0; }
+            public boolean hasValue(int cp) { return getValue(cp).length() != 0; }
         };
         
         for (int i = QuickNFD; i <= QuickNFKC; ++i) {
@@ -555,7 +555,7 @@ of characters, the first of which has a non-zero combining class.
                     + "\r\n#  Generated from <2060..206F, FFF0..FFFB, E0000..E0FFF>"
                     + "\r\n#    + Other_Default_Ignorable_Code_Point + (Cf + Cc + Cs - White_Space)";
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
             	if (0x2060 <= cp && cp <= 0x206F || 0xFFF0 <= cp && cp <= 0xFFFB || 0xE0000 <= cp && cp <= 0xE0FFF) return true;
                 if (ucdData.getBinaryProperty(cp,Other_Default_Ignorable_Code_Point)) return true;
                 if (ucdData.getBinaryProperty(cp, White_space)) return false;
@@ -573,7 +573,7 @@ of characters, the first of which has a non-zero combining class.
                 
                 header = header = "# Binary Property";
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
                 switch(cp) {
                     case 0x27: case 0x2019: case 0xAD: return true;
                     //  case 0x2d: case 0x2010: case 0x2011: 
@@ -600,7 +600,7 @@ of characters, the first of which has a non-zero combining class.
                     + "\r\n# - has no combining marks with zero canonical combining class"
                 ;
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
                 if (hasSoftDot(cp)) return true;
                 if (Default.nfkd.isNormalized(cp)) return false;
                 String decomp = Default.nfd.normalize(cp);
@@ -629,7 +629,7 @@ of characters, the first of which has a non-zero combining class.
                 header = header = "# Derived Property: " + name
                     + "\r\n#  Generated from: Other_Case_Ignorable + Lm + Mn + Me + Cf";
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
                 byte cat = ucdData.getCategory(cp);
                 if (cat == Lm || cat == Cf || cat == Mn || cat == Me) return true;
                 if (dprops[Other_Case_Ignorable].hasValue(cp)) return true;
@@ -654,7 +654,7 @@ of characters, the first of which has a non-zero combining class.
                     + "\r\n#  (CGJ = U+034F)";
                      
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
             	if (cp == 0x034F) return false;
                 if (ucdData.getBinaryProperty(cp, GraphemeLink)) return false;
                 byte cat = ucdData.getCategory(cp);
@@ -674,7 +674,7 @@ of characters, the first of which has a non-zero combining class.
                     + "\r\n#  Generated from: [0..10FFFF] - Cc - Cf - Cs - Co - Cn - Zl - Zp"
                     + "\r\n#    - Grapheme_Extend - Grapheme_Link - CGJ";
             }
-            boolean hasValue(int cp) {
+            public boolean hasValue(int cp) {
             	if (cp == 0x034F) return false;
                 byte cat = ucdData.getCategory(cp);
                 if (cat == Cc || cat == Cf || cat == Cs || cat == Co || cat == Cn || cat == Zl || cat == Zp
