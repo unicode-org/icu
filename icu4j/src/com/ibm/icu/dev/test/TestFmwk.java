@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/02/05 16:50:13 $
- * $Revision: 1.37 $
+ * $Date: 2003/02/05 22:14:56 $
+ * $Revision: 1.38 $
  *
  *****************************************************************************************
  */
@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
@@ -323,12 +324,34 @@ public class TestFmwk extends AbstractTestLog {
             }
 
             params.indentLevel++;
-            Target target = getTargets(targetName);
+            Target target = randomize(getTargets(targetName));
             while (target != null) {
                 target.run();
                 target = target.next;
             }
             params.indentLevel--;
+        }
+
+        private Target randomize(Target t) {
+            if (params.random != null && t != null && t.getNext() != null) {
+                Random r = params.random;
+                ArrayList list = new ArrayList();
+                while (t != null) {
+                    list.add(t);
+                    t = t.getNext();
+                }
+
+                Target[] arr = (Target[])list.toArray(new Target[list.size()]);
+
+                for (int i = arr.length; --i >= 1;) {
+                    int x = r.nextInt(i+1);
+                    t = arr[x].setNext(t);
+                    arr[x] = arr[i];
+                }
+                t = arr[0].setNext(t);
+            }
+
+            return t;
         }
     }
 
@@ -359,6 +382,8 @@ public class TestFmwk extends AbstractTestLog {
         int exitCode = 0;
         boolean usageError = false;
 
+        params.seed = System.currentTimeMillis(); // same as Random uses
+
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
             if (arg.charAt(0) == '-') {
@@ -385,6 +410,16 @@ public class TestFmwk extends AbstractTestLog {
                     params.nothrow = true;
                 } else if (arg.equals("-describe") || arg.equals("-d")) {
                     params.describe = true;
+                } else if (arg.startsWith("-s")) {
+                    int n = arg.indexOf(':');
+                    if (n == -1) {
+                        System.out.println("*** Error: unrecognized argument: " + arg);
+                        exitCode = 1;
+                        usageError = true;
+                    } else {
+                        arg = arg.substring(n+1);
+                        params.seed = Long.parseLong(arg);
+                    }
                 } else if (arg.startsWith("-e")) {
                     // see above
                     params.inclusion = (arg.length() == 2) ? 5 : Integer.parseInt(arg.substring(2));
@@ -411,9 +446,9 @@ public class TestFmwk extends AbstractTestLog {
             System.exit(exitCode);
         } 
 
-        this.params = params; // we'll pass implicitly from here on out
-
+        try {
         if (targets == null) {
+            params.init();
             resolveTarget(params).run();
         } else {
             for (int i = 0; i < targets.size(); ++i) {
@@ -422,9 +457,17 @@ public class TestFmwk extends AbstractTestLog {
                 }
 
                 String target = (String)targets.get(i);
+                params.init();
                 resolveTarget(params, (String)targets.get(i)).run();
             }
         }
+        }
+        catch (Exception e) {
+            System.out.println("encountered exception, exiting");
+        }
+
+        System.out.println("-seed:"+params.seed);
+        System.out.flush();
 
         if (prompt) {
             System.out.println("Hit RETURN to exit...");
@@ -651,6 +694,7 @@ public class TestFmwk extends AbstractTestLog {
         System.out.println(" -n[othrow] Message on test failure rather than exception");
         System.out.println(" -prompt Prompt before exiting");
         System.out.println(" -q[uiet] Do not show warnings");
+        System.out.println(" -s[eed]:<n> Force random seed, if n is 0, uses execution order.");
         System.out.println(" -v[erbose] Show log messages");
         System.out.println(" -w[arning] Report warnings (default treats them like errors)");
         System.out.println();
@@ -756,6 +800,7 @@ public class TestFmwk extends AbstractTestLog {
         public boolean   warnings = false;
         public int       inclusion = 0;
         public String    filter = null;
+        public long        seed = 0;
 
         public PrintWriter log = new ASCIIWriter(System.out, true);
         public int         indentLevel = 0;
@@ -764,6 +809,17 @@ public class TestFmwk extends AbstractTestLog {
         public int         errorCount = 0;
         public int         warnCount = 0;
         public int         invalidCount = 0;
+        public Random      random = null;
+
+        public void init() {
+            indentLevel = 0;
+            needLineFeed = false;
+            suppressIndent = false;
+            errorCount = 0;
+            warnCount = 0;
+            invalidCount = 0;
+            random = seed == 0 ? null : new Random(seed);
+        }
 
         public boolean inDocMode() {
             return describe || listlevel != 0;
