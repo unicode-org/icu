@@ -481,7 +481,7 @@ MBCSAddToUnicode(MBCSData *mbcsData,
                 fprintf(stderr, "error: byte sequence too short, ends in non-final state %hu: %lx (U+%lx)\n", state, b, c);
                 return FALSE;
             }
-            state=(uint8_t)entry&0x7f;
+            state=(uint8_t)(entry&0x7f);
             offset+=entry>>7;
         } else {
             if(i<length) {
@@ -748,12 +748,12 @@ MBCSTransformEUC(MBCSData *mbcsData) {
             *q++=*p++;
         } else if(b==0x8e) {
             /* code set 2 */
-            *q++=*p++&0x7f;
+            *q++=(uint8_t)(*p++&0x7f);
             *q++=*p++;
         } else /* b==0x8f */ {
             /* code set 3 */
             *q++=*p++;
-            *q++=*p++&0x7f;
+            *q++=(uint8_t)(*p++&0x7f);
         }
         if(oldLength==4) {
             *q++=*p++;
