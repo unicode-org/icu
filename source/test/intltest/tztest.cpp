@@ -1192,7 +1192,7 @@ void TimeZoneTest::TestCountries() {
 void TimeZoneTest::TestHistorical() {
     const int32_t H = U_MILLIS_PER_HOUR;
     struct {
-        char* id;
+        const char* id;
         int32_t time; // epoch seconds
         int32_t offset; // total offset (millis)
     } DATA[] = {
@@ -1214,7 +1214,7 @@ void TimeZoneTest::TestHistorical() {
     };
     
     for (int32_t i=0; DATA[i].id!=0; ++i) {
-        char* id = DATA[i].id;
+        const char* id = DATA[i].id;
         TimeZone *tz = TimeZone::createTimeZone(id);
         UnicodeString s;
         if (tz == 0) {
