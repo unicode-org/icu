@@ -109,7 +109,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestSafeClone, "tscoll/capitst/TestSafeClone");
     addTest(root, &TestGetSetAttr, "tscoll/capitst/TestGetSetAttr");
     addTest(root, &TestBounds, "tscoll/capitst/TestBounds");
-    
+    addTest(root, &TestGetLocale, "tscoll/capitst/TestGetLocale");    
 }
 
 static void doAssert(int condition, const char *message)
@@ -961,6 +961,44 @@ void TestElemIter()
     
     log_verbose("testing CollationElementIterator ends...\n");
 }
+
+void TestGetLocale() {
+  UErrorCode status = U_ZERO_ERROR;
+  const char *rules = "&a<x<y<z";
+  UChar rlz[256] = {0};
+  uint32_t rlzLen = u_unescape(rules, rlz, 256);
+
+  /* opening from a nonexistent locale should get root */
+  UCollator *coll = ucol_open("blahehe", &status);
+  const char *locale = ucol_getLocale(coll, &status);
+  doAssert((strcmp(locale, "root") == 0), "Bad locale\n");
+  ucol_close(coll);
+
+  /* opening from down the tree should get a first locale with data */
+  coll = ucol_open("sr_YU", &status);
+  locale = ucol_getLocale(coll, &status);
+  doAssert((strcmp(locale, "root") == 0), "Bad locale\n");
+  ucol_close(coll);
+
+  /* opening from down the tree should get a first locale with data */
+  coll = ucol_open("ar_KW", &status);
+  locale = ucol_getLocale(coll, &status);
+  doAssert((strcmp(locale, "ar") == 0), "Bad locale\n");
+  ucol_close(coll);
+
+  /* opening from down the tree should get a first locale with data */
+  coll = ucol_open("fr_FR_nonexistent", &status);
+  locale = ucol_getLocale(coll, &status);
+  doAssert((strcmp(locale, "fr") == 0), "Bad locale\n");
+  ucol_close(coll);
+
+  /* opening from rules should get us NULL locale */
+  coll = ucol_openRules(rlz, rlzLen, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
+  locale = ucol_getLocale(coll, &status);
+  doAssert((locale == NULL), "Bad locale\n");
+  ucol_close(coll);
+}
+
 
 void TestGetAll()
 {
