@@ -17,7 +17,7 @@
 #define USTRING_H
 #include "unicode/utypes.h"
 
-/** 
+/**
  * Determine the length of an array of UChar.
  *
  * @param s The array of UChars, NULL (U+0000) terminated.
@@ -31,6 +31,7 @@ u_strlen(const UChar *s);
  * Concatenate two ustrings.  Appends a copy of <TT>src</TT>,
  * including the null terminator, to <TT>dst</TT>. The initial copied
  * character from <TT>src</TT> overwrites the null terminator in <TT>dst</TT>.
+ *
  * @param dst The destination string.
  * @param src The source string.
  * @return A pointer to <TT>dst</TT>.
@@ -45,6 +46,7 @@ u_strcat(UChar     *dst,
  * Concatenate two ustrings.  
  * Appends at most <TT>n</TT> characters from <TT>src</TT> to <TT>dst</TT>.
  * Adds a null terminator.
+ *
  * @param dst The destination string.
  * @param src The source string.
  * @param n The maximum number of characters to compare.
@@ -98,6 +100,7 @@ u_strchr32(const UChar *s, UChar32 c);
  * Locates the first occurrence in the string str of any of the characters
  * in the string accept.
  * Works just like C's strpbrk but with Unicode.
+ *
  * @return A pointer to the  character in str that matches one of the
  *         characters in accept, or NULL if no such character is found.
  * @draft
@@ -109,6 +112,7 @@ u_strpbrk(const UChar *string, const UChar *matchSet);
  * Returns the number of consecutive characters in string1,
  * beginning with the first, that do not occur somewhere in string2.
  * Works just like C's strcspn but with Unicode.
+ *
  * @see u_strspn
  * @draft
  */
@@ -119,6 +123,7 @@ u_strcspn(const UChar *string, const UChar *matchSet);
  * Returns the number of consecutive characters in string1,
  * beginning with the first, that occur somewhere in string2.
  * Works just like C's strspn but with Unicode.
+ *
  * @see u_strcspn
  * @draft
  */
@@ -168,10 +173,11 @@ u_strcmp(const UChar     *s1,
  * Compare two Unicode strings in code point order.
  * This is different in UTF-16 from u_strcmp() if supplementary characters are present:
  * In UTF-16, supplementary characters (with code points U+10000 and above) are
- * stored with pairs of surrogate code units. These have values from 0xd800 to 0xdfff,
- * which means that they compare as less than some other BMP characters like U+feff.
- * This function compares Unicode strings in code point order.
- * If eihter of the UTF-16 strings is malformed (i.e., it contains unpaired surrogates), then the result is not defined.
+ * stored with pairs of surrogate code units. These have values from 0xd800 to
+ * 0xdfff, which means that they compare as less than some other BMP characters
+ * like U+feff. This function compares Unicode strings in code point order.
+ * If eihter of the UTF-16 strings is malformed (i.e., it contains unpaired
+ * surrogates), then the result is not defined.
  *
  * @param s1 A string to compare.
  * @param s2 A string to compare.
@@ -186,6 +192,7 @@ u_strcmpCodePointOrder(const UChar *s1, const UChar *s2);
 /**
  * Compare two ustrings for bitwise equality. 
  * Compares at most <TT>n</TT> characters.
+ *
  * @param s1 A string to compare.
  * @param s2 A string to compare.
  * @param n The maximum number of characters to compare.
@@ -214,7 +221,8 @@ u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options);
 
 /**
  * Compare two strings case-insensitively using full case folding.
- * This is equivalent to u_strcmp(u_strFoldCase(s1, at most n, options), u_strFoldCase(s2, at most n, options)).
+ * This is equivalent to u_strcmp(u_strFoldCase(s1, at most n, options),
+ * u_strFoldCase(s2, at most n, options)).
  *
  * @param s1 A string to compare.
  * @param s2 A string to compare.
@@ -228,7 +236,8 @@ u_strncasecmp(const UChar *s1, const UChar *s2, int32_t n, uint32_t options);
 
 /**
  * Compare two strings case-insensitively using full case folding.
- * This is equivalent to u_strcmp(u_strFoldCase(s1, n, options), u_strFoldCase(s2, n, options)).
+ * This is equivalent to u_strcmp(u_strFoldCase(s1, n, options),
+ * u_strFoldCase(s2, n, options)).
  *
  * @param s1 A string to compare.
  * @param s2 A string to compare.
@@ -241,8 +250,8 @@ U_CAPI int32_t U_EXPORT2
 u_memcasecmp(const UChar *s1, const UChar *s2, int32_t length, uint32_t options);
 
 /**
- * Copy a ustring.
- * Adds a null terminator.
+ * Copy a ustring. Adds a null terminator.
+ *
  * @param dst The destination string.
  * @param src The source string.
  * @return A pointer to <TT>dst</TT>.
@@ -256,6 +265,7 @@ u_strcpy(UChar     *dst,
  * Copy a ustring.
  * Copies at most <TT>n</TT> characters.  The result will be null terminated
  * if the length of <TT>src</TT> is less than <TT>n</TT>.
+ *
  * @param dst The destination string.
  * @param src The source string.
  * @param n The maximum number of characters to copy.
@@ -330,13 +340,15 @@ U_CAPI char* U_EXPORT2 u_austrncpy(char *dst,
  * Synonym for uprv_memcpy(), but with UChars only.
  * @draft
  */
-UChar *u_memcpy(UChar *dest, const UChar *src, int32_t count);
+U_CAPI UChar* U_EXPORT2
+u_memcpy(UChar *dest, const UChar *src, int32_t count);
 
 /**
  * Synonym for uprv_memmove(), but with UChars only.
  * @draft
  */
-UChar *u_memmove(UChar *dest, const UChar *src, int32_t count);
+U_CAPI UChar* U_EXPORT2
+u_memmove(UChar *dest, const UChar *src, int32_t count);
 
 /**
  * Initialize <TT>count</TT> characters of <TT>dest</TT> to <TT>c</TT>.
@@ -347,7 +359,8 @@ UChar *u_memmove(UChar *dest, const UChar *src, int32_t count);
  * @return A pointer to <TT>dest</TT>.
  * @draft
  */
-UChar *u_memset(UChar *dest, UChar c, int32_t count);
+U_CAPI UChar* U_EXPORT2
+u_memset(UChar *dest, UChar c, int32_t count);
 
 /**
  * Compare the first <TT>count</TT> UChars of each buffer.
@@ -360,7 +373,8 @@ UChar *u_memset(UChar *dest, UChar c, int32_t count);
  *      When buf1 > buf2, a positive number is returned.
  * @draft
  */
-int32_t u_memcmp(UChar *buf1, UChar *buf2, int32_t count);
+U_CAPI int32_t U_EXPORT2
+u_memcmp(UChar *buf1, UChar *buf2, int32_t count);
 
 /**
  * Search for a UChar within a Unicode string until <TT>count</TT>
@@ -374,7 +388,8 @@ int32_t u_memcmp(UChar *buf1, UChar *buf2, int32_t count);
  *      was not found.
  * @draft
  */
-UChar *u_memchr(UChar *src, UChar ch, int32_t count);
+U_CAPI UChar* U_EXPORT2
+u_memchr(UChar *src, UChar ch, int32_t count);
 
 /**
  * Search for a UChar32 within a Unicode string until <TT>count</TT>
@@ -388,7 +403,8 @@ UChar *u_memchr(UChar *src, UChar ch, int32_t count);
  *      was not found.
  * @draft
  */
-UChar *u_memchr32(UChar *src, UChar32 ch, int32_t count);
+U_CAPI UChar* U_EXPORT2
+u_memchr32(UChar *src, UChar32 ch, int32_t count);
 
 /**
  * Unicode String literals in C.
@@ -414,7 +430,7 @@ UChar *u_memchr32(UChar *src, UChar32 ch, int32_t count);
  * &#32;   U_STRING_DECL(ustringVar1, "Quick-Fox 2", 11);
  * &#32;   U_STRING_DECL(ustringVar2, "jumps 5%", 8);
  * &#32;   static UBool didInit=FALSE;
- * &#32;   
+ * &#32;
  * &#32;   int32_t function() {
  * &#32;       if(!didInit) {
  * &#32;           U_STRING_INIT(ustringVar1, "Quick-Fox 2", 11);
@@ -489,6 +505,7 @@ u_unescape(const char *src,
  * Callback function for u_unescapeAt() that returns a character of
  * the source text given an offset and a context pointer.  The context
  * pointer will be whatever is passed into u_unescapeAt().
+ *
  * @see u_unescapeAt
  */
 U_CDECL_BEGIN
