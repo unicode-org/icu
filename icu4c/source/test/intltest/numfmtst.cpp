@@ -798,7 +798,11 @@ void NumberFormatTest::TestPad(void) {
            10252045600.37,"10,252,045,600.37", status);
 
 // Use jitterbug 760 for checking in these fixes.
-if (strcmp(U_ICU_VERSION, "1.7") == 0) {
+    // Also consider deleting the extra decimal format variables
+    // or at least not newing the DecimalFormat
+    UnicodeString icuVersionCurr(U_ICU_VERSION);
+    UnicodeString icuVersion("1.7");
+if (icuVersionCurr == icuVersion) {
     logln("Not testing TestPad() at this time, fix in a later release");
 }
 else {
