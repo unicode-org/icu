@@ -133,16 +133,19 @@ typedef struct UPKGOptions_
 #  define UDATA_SO_SUFFIX ".DLL"
 # endif
 # define LIB_PREFIX ""
+# define LIB_STATIC_PREFIX ""
 # define OBJ_SUFFIX ".obj"
 # define UDATA_LIB_SUFFIX ".LIB"
 
 #elif defined(U_CYGWIN)
 # define LIB_PREFIX "cyg"
+# define LIB_STATIC_PREFIX "lib"
 # define OBJ_SUFFIX ".o"
 # define UDATA_LIB_SUFFIX ".a"
 
 #else  /* POSIX? */
 # define LIB_PREFIX "lib"
+# define LIB_STATIC_PREFIX "lib"
 # define OBJ_SUFFIX ".o"
 # define UDATA_LIB_SUFFIX ".a"
 #endif 
