@@ -280,47 +280,48 @@ static void TestUDataOpen(){
      *   overflow handling code.
      */
     {
-#if 1
-        /* TODO:  fix doOpenChoice().  Bug 3121. */
         char longTestPath[1024];    /* Implementation goes to heap at length of 128.  */
         char longName[1024];
 
-        /* long test path starts with a long, nonexistent directory, then
-         * has a second entry that is the normal test path */
+        /* Try a very long nonexistent directory path.  
+         * udata_open should still succeed.  Opening with the path will fail,
+         * then fall back to skipping the directory portion of the path.
+         */
         log_verbose("Testing udata_open() with really long names\n");
-        strcpy(longTestPath, "bogus_directory_name");
+        longTestPath[0] = 0;
+        strcat(longTestPath, "bogus_directory_name");
         while (strlen(longTestPath) < 500) {
             strcat(longTestPath, dirSepString);
             strcat(longTestPath, "bogus_directory_name");
         }
         strcat(longTestPath, pathSepString);
         strcat(longTestPath, testPath);
-
-        /* Make up an item name to open that includes a long, bogus path.
-         * udata_open will try with the path first, then strip it off and try with
-         * the paths from the path parameter.
-         */
-        strcpy(longName, "bogusItemPath");
-        while (strlen(longName) < 500) {
-            strcat(longName, dirSepString);
-            strcat(longName, "bogusItemPath");
-        }
-        strcat(longName, dirSepString);
-        strcat(longName, name);
-
-
-        result=udata_open(longTestPath, type, longName, &status);
+        result=udata_open(longTestPath, type, name, &status);
         if(U_FAILURE(status)){
-            log_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n",
-                longTestPath, longName, type, myErrorName(status));
+            log_err("FAIL: udata_open() failed for path = %s\n name=%s, type=%s, \n errorcode=%s\n",
+                longTestPath, name, type, myErrorName(status));
         } else {
             log_verbose("PASS: udata_open worked\n");
             udata_close(result);
         }
-#endif
+
+        /* Try a very long name.  Won't open, but shouldn't blow up.
+         */
+        longName[0] = 0;
+        while (strlen(longName) < 500) {
+            strcat(longName, name);
+            strcat(longName, "_");
+        }
+        strcat(longName, dirSepString);
+        strcat(longName, name);
+
+        result=udata_open(longTestPath, type, longName, &status);
+        if (status != U_FILE_ACCESS_ERROR) {
+            log_err("FAIL: udata_open() failed for path = %s\n name=%s, type=%s, \n errorcode=%s\n",
+                longTestPath, longName, type, myErrorName(status));
+        }
+        udata_close(result);
     }
-
-
 
     free(path);
 }
