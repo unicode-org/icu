@@ -36,39 +36,39 @@
 class U_COMMON_API StringCharacterIterator : public UCharCharacterIterator {
 public:
   /**
-   * Create an iterator over the UnicodeString referred to by "text".
+   * Create an iterator over the UnicodeString referred to by "textStr".
    * The UnicodeString object is copied.
    * The iteration range is the whole string, and the starting position is 0.
    * @stable
    */
-  StringCharacterIterator(const UnicodeString& text);
+  StringCharacterIterator(const UnicodeString& textStr);
 
   /**
-   * Create an iterator over the UnicodeString referred to by "text".
+   * Create an iterator over the UnicodeString referred to by "textStr".
    * The iteration range is the whole string, and the starting
-   * position is specified by "pos".  If "pos" is outside the valid
+   * position is specified by "textPos".  If "textPos" is outside the valid
    * iteration range, the behavior of this object is undefined.  
    * @stable
    */
-  StringCharacterIterator(const UnicodeString&    text,
-              UTextOffset              pos);
+  StringCharacterIterator(const UnicodeString&    textStr,
+              UTextOffset              textPos);
 
   /**
-   * Create an iterator over the UnicodeString referred to by "text".
+   * Create an iterator over the UnicodeString referred to by "textStr".
    * The UnicodeString object is copied.
    * The iteration range begins with the code unit specified by
-   * "begin" and ends with the code unit BEFORE the code unit specfied
-   * by "end".  The starting position is specified by "pos".  If
-   * "begin" and "end" don't form a valid range on "text" (i.e., begin
-   * >= end or either is negative or greater than text.size()), or
-   * "pos" is outside the range defined by "begin" and "end", the
-   * behavior of this iterator is undefined.  
+   * "textBegin" and ends with the code unit BEFORE the code unit specfied
+   * by "textEnd".  The starting position is specified by "textPos".  If
+   * "textBegin" and "textEnd" don't form a valid range on "text" (i.e.,
+   * textBegin >= textEnd or either is negative or greater than text.size()),
+   * or "textPos" is outside the range defined by "textBegin" and "textEnd",
+   * the behavior of this iterator is undefined.  
    * @stable
    */
-  StringCharacterIterator(const UnicodeString&    text,
-              UTextOffset              begin,
-              UTextOffset              end,
-              UTextOffset              pos);
+  StringCharacterIterator(const UnicodeString&    textStr,
+              UTextOffset              textBegin,
+              UTextOffset              textEnd,
+              UTextOffset              textPos);
 
   /**
    * Copy constructor.  The new iterator iterates over the same range
