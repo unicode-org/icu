@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "unicode/utypes.h"
-#include "unicode/unicode.h"
+#include "unicode/uchar.h"
 #include "ucol_imp.h"
 #include "uhash.h"
 #include "umemstrm.h"
