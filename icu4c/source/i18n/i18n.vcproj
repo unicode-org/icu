@@ -1055,12 +1055,6 @@
 				RelativePath=".\funcrepl.h">
 			</File>
 			<File
-				RelativePath=".\hextouni.cpp">
-			</File>
-			<File
-				RelativePath=".\hextouni.h">
-			</File>
-			<File
 				RelativePath=".\name2uni.cpp">
 			</File>
 			<File
@@ -1191,28 +1185,6 @@
 				RelativePath=".\uni2name.h">
 			</File>
 			<File
-				RelativePath=".\unifltlg.cpp">
-			</File>
-			<File
-				RelativePath=".\unicode\unifltlg.h">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
-"
-						Outputs="..\..\include\unicode\$(InputFileName)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
-"
-						Outputs="..\..\include\unicode\$(InputFileName)"/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\unicode\unirepl.h">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1230,12 +1202,6 @@
 "
 						Outputs="..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\unitohex.cpp">
-			</File>
-			<File
-				RelativePath=".\unitohex.h">
 			</File>
 			<File
 				RelativePath=".\utrans.cpp">
