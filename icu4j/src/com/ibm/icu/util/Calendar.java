@@ -632,12 +632,20 @@ public abstract class Calendar implements Serializable, Cloneable {
     /**
      * Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
      * weekday.
+     * @see #WEEKEND
+     * @see #WEEKEND_ONSET
+     * @see #WEEKEND_CEASE
+     * @see #getDayOfWeekType
      */
     public static final int WEEKDAY = 0;
 
     /**
      * Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
      * weekend day.
+     * @see #WEEKDAY
+     * @see #WEEKEND_ONSET
+     * @see #WEEKEND_CEASE
+     * @see #getDayOfWeekType
      */
     public static final int WEEKEND = 1;
 
@@ -645,6 +653,10 @@ public abstract class Calendar implements Serializable, Cloneable {
      * Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
      * day that starts as a weekday and transitions to the weekend.
      * Call getWeekendTransition() to get the point of transition.
+     * @see #WEEKDAY
+     * @see #WEEKEND
+     * @see #WEEKEND_CEASE
+     * @see #getDayOfWeekType
      */
     public static final int WEEKEND_ONSET = 2;
 
@@ -652,6 +664,10 @@ public abstract class Calendar implements Serializable, Cloneable {
      * Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
      * day that starts as the weekend and transitions to a weekday.
      * Call getWeekendTransition() to get the point of transition.
+     * @see #WEEKDAY
+     * @see #WEEKEND
+     * @see #WEEKEND_ONSET
+     * @see #getDayOfWeekType
      */
     public static final int WEEKEND_CEASE = 3;
 
@@ -1502,6 +1518,13 @@ public abstract class Calendar implements Serializable, Cloneable {
      * WEEKEND_CEASE
      * @exception IllegalArgumentException if dayOfWeek is not
      * between SUNDAY and SATURDAY, inclusive
+     * @see #WEEKDAY
+     * @see #WEEKEND
+     * @see #WEEKEND_ONSET
+     * @see #WEEKEND_CEASE
+     * @see #getWeekendTransition
+     * @see #isWeekend(Date)
+     * @see #isWeekend()
      */
     public int getDayOfWeekType(int dayOfWeek) {
         if (dayOfWeek < SUNDAY || dayOfWeek > SATURDAY) {
@@ -1538,6 +1561,9 @@ public abstract class Calendar implements Serializable, Cloneable {
      * weekend begins or ends
      * @exception IllegalArgumentException if dayOfWeek is not
      * WEEKEND_ONSET or WEEKEND_CEASE
+     * @see #getDayOfWeekType
+     * @see #isWeekend(Date)
+     * @see #isWeekend()
      */
     public int getWeekendTransition(int dayOfWeek) {
         if (dayOfWeek == weekendOnset) {
@@ -1556,6 +1582,9 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @param date the date and time
      * @return true if the given date and time is part of the
      * weekend
+     * @see #getDayOfWeekType
+     * @see #getWeekendTransition
+     * @see #isWeekend()
      */
     public boolean isWeekend(Date date) {
         setTime(date);
@@ -1567,6 +1596,9 @@ public abstract class Calendar implements Serializable, Cloneable {
      * weekend in this calendar system.
      * @return true if the given date and time is part of the
      * weekend
+     * @see #getDayOfWeekType
+     * @see #getWeekendTransition
+     * @see #isWeekend(Date)
      */
     public boolean isWeekend() {
         int dow =  get(DAY_OF_WEEK);
