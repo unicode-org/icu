@@ -4,14 +4,9 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-/*
- * IntlTest in java is Copyright (c) 1997 Sun Microsystems, Inc. All
- * Rights Reserved.  */
 
 /**
- * IntlTest is a base class for tests.  It is modelled according to,
- * but not exactly similar to, JavaSoft's test class with the same
- * name.  */
+ * IntlTest is a base class for tests.  */
 
 #ifndef _INTLTEST
 #define _INTLTEST
