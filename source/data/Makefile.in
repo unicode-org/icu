@@ -142,4 +142,5 @@ package390: build/icudata390.lst build/icudata.lst $(top_builddir)/tools/pkgdata
 	@$(MKINSTALLDIRS) tmp3901
 ####	( cd build ; $(INVOKE) $(PKGDATA) -s . -T ../tmp390A -p IXMICUDA icudata.lst )
 ####	( cd build ; $(INVOKE) $(PKGDATA) -s . -T ../tmp3901 -p IXMICUD1 icudata390.lst )
-	( cd build ; $(INVOKE) $(PKGDATA) -s . -T ../tmp3901 -p $(ICUDATA_NAME)_390 icudata390.lst ) 
+	( cd build ; $(INVOKE) $(PKGDATA) -s . -T ../tmp3901 -p $(ICUDATA_NAME)_390 icudata390.lst -m dll)
+
