@@ -340,6 +340,13 @@ private:
     static const char* RB_DISPLAY_NAME_PREFIX;
 
     /**
+     * Prefix for resource bundle key for the display name for a
+     * transliterator SCRIPT.  The ID is appended to this to form the key.
+     * The resource bundle value should be a String.
+     */
+    static const char* RB_SCRIPT_DISPLAY_NAME_PREFIX;
+
+    /**
      * Resource bundle key for display name pattern.
      * The resource bundle value should be a String forming a
      * MessageFormat pattern, e.g.:
@@ -651,7 +658,8 @@ public:
      * display to the user in the default locale.  See {@link
      * #getDisplayName(Locale)} for details.
      */
-    virtual UnicodeString& getDisplayName(UnicodeString& result) const;
+    static UnicodeString& getDisplayName(const UnicodeString& ID,
+                                         UnicodeString& result);
 
     /**
      * Returns a name for this transliterator that is appropriate for
@@ -671,8 +679,9 @@ public:
      * localized.
      * @see java.text.MessageFormat
      */
-    virtual UnicodeString& getDisplayName(const Locale& inLocale,
-                                          UnicodeString& result) const;
+    static UnicodeString& getDisplayName(const UnicodeString& ID,
+                                         const Locale& inLocale,
+                                         UnicodeString& result);
 
     /**
      * Returns the filter used by this transliterator, or <tt>null</tt>
