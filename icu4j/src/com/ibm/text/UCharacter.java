@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UCharacter.java,v $ 
-* $Date: 2001/08/22 22:38:30 $ 
-* $Revision: 1.11 $
+* $Date: 2001/10/05 18:42:33 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -57,8 +57,11 @@ import java.util.Locale;
 *      does it include the Java-specific character information, such as 
 *      boolean isJavaIdentifierPart(char ch).
 * <li> Character maps characters 'A' - 'Z' and 'a' - 'z' to the numeric 
-*      values '10' - '35'. UCharacter does not treat the above code points 
-*      as having numeric values
+*      values '10' - '35'. UCharacter also does this in digit and
+*      getNumericValue, to adhere to the java semantics of these
+*      methods.  New methods unicodeDigit, and
+*      getUnicodeNumericValue do not treat the above code points 
+*      as having numeric values.  This is a semantic change from ICU4J 1.3.1.
 * <li> For consistency with ICU4C's data, control code points below have their 
 *      Unicode general category reset to the types below.
 *      <ul>
@@ -349,19 +352,25 @@ public final class UCharacter
     // public methods ===================================================
       
     /**
-    * Retrieves the decimal numeric value of a digit code point.<br>
-    * A code point is a valid digit if the following is true: 
+    * Retrieves the numeric value of a decimal digit code point.
+    * <br>This method observes the semantics of
+    * <code>java.lang.Character.digit()</code>.  Note that this
+    * will return positive values for code points for which isDigit
+    * returns false, just like java.lang.Character.
+    * <br><em>Semantic Change:</em> In release 1.3.1 and
+    * prior, this did not treat the European letters as having a
+    * digit value, and also treated numeric letters and other numbers as digits.  
+    * This has been changed to conform to the java semantics.
+    * <br>A code point is a valid digit if and only if:
     * <ul>
-    * <li> The method isDigit(ch) is true and the Unicode decimal digit value of 
-    *      ch is less than the specified radix. 
+    *   <li>ch is a decimal digit or one of the european letters, and
+    *   <li>the value of ch is less than the specified radix.
     * </ul>
-    * Note this method, unlike java.lang.Character.digit() does not regard the 
-    * ascii characters 'A' - 'Z' and 'a' - 'z' as digits. 
-    * @param ch the code point whose numeric value is to be determined
-    * @param radix the radix which the digit is to be converted to
-    * @return the numeric value of the code point ch in the argument radix,
-    *         this method returns -1 if ch is not a valid digit code point or 
-    *         if its digit value exceeds the radix.
+    * @param ch the code point to query
+    * @param radix the radix
+    * @return the numeric value represented by the code point in the
+    * specified radix, or -1 if the code point is not a decimal digit
+    * or if its value is too large for the radix
     */
     public static int digit(int ch, int radix)
     {
@@ -375,6 +384,7 @@ public final class UCharacter
                 result = UCharacterPropertyDB.getSignedValue(props);
             }
         }
+ /*
         else {
             // contained in exception data
             int index = UCharacterPropertyDB.getExceptionIndex(props);
@@ -398,39 +408,95 @@ public final class UCharacter
         if (result < 0) {
             result = getHanDigit(ch);
         }
+ */
+
+        if (result < 0 && radix > 10) {
+            result = getEuropeanDigit(ch);
+        }
         
         if (result < 0 || result >= radix) {
             return -1;
         }
         return result;
     }
-      
+    
+    private static boolean isEuropeanDigit(int ch) {
+        return (ch <= 0x7a && ((ch >= 0x41 && ch <= 0x5a) || ch >= 0x61)) ||
+            (ch >= 0xff21 && (ch <= 0xff3a || (ch >= 0xff41 && ch <= 0xff5a)));
+    }
+
+    private static int getEuropeanDigit(int ch) {
+        if (ch <= 0x7a) {
+            if (ch >= 0x41 && ch <= 0x5a) {
+                return ch + 10 - 0x41;
+            } else if (ch >= 0x61) {
+                return ch + 10 - 0x61;
+            }
+        } else if (ch >= 0xff21) {
+            if (ch <= 0xff3a) {
+                return ch + 10 - 0xff21;
+            } else if (ch >= 0xff41 && ch <= 0xff5a) {
+                return ch + 10 - 0xff41;
+            }
+        }
+        return -1;
+    }
+
     /**
-    * Retrieves the decimal numeric value of a digit code point in radix 10<br>
-    * Note this method, unlike java.lang.Character.digit() does not regard the 
-    * ascii characters 'A' - 'Z' and 'a' - 'z' as digits. 
-    * @param ch the code point whose numeric value is to be determined
-    * @return the numeric value of the code point ch, this method returns -1 if 
-    *         ch is not a valid digit code point
-    */
+    * Retrieves the numeric value of a decimal digit code point.
+    * <br>This is a convenience overload of <code>digit(int, int)</code> 
+    * that provides a decimal radix.
+    * <br><em>Semantic Change:</em> In release 1.3.1 and prior, this
+    * treated numeric letters and other numbers as digits.  This has
+    * been changed to conform to the java semantics.
+    * @param ch the code point to query
+    * @return the numeric value represented by the code point,
+    * or -1 if the code point is not a decimal digit or if its
+    * value is too large for a decimal radix */
     public static int digit(int ch)
     {
         return digit(ch, DECIMAL_RADIX_);
     }
-                              
-    /**
+
+   /**
     * Returns the Unicode numeric value of the code point as a nonnegative 
-    * integer. <br>
-    * If the code point does not have a numeric value, then -1 is returned. <br>
+    * integer.
+    * <br>If the code point does not have a numeric value, then -1 is returned. <br>
     * If the code point has a numeric value that cannot be represented as a 
     * nonnegative integer (for example, a fractional value), then -2 is returned.
-    * <br>
-    * Note this method, unlike java.lang.Character.digit() does not regard the 
-    * ascii characters 'A' - 'Z' and 'a' - 'z' as numbers. 
-    * @param ch Unicode code point
-    * @return numeric value of the code point as a nonnegative integer
+    * <br><em>Semantic Change:</em> In release 1.3.1 and
+    * prior, this returned -1 for ASCII letters and their
+    * fullwidth counterparts.  This has been changed to
+    * conform to the java semantics.
+    * @param ch the code point to query
+    * @return the numeric value of the code point, or -1 if it has no numeric value,
+    * or -2 if it has a numeric value that cannot be represented as a nonnegative 
+    * integer
     */
     public static int getNumericValue(int ch)
+    {
+        return getNumericValueInternal(ch, true);
+    }
+
+   /**
+    * Returns the Unicode numeric value of the code point as a nonnegative 
+    * integer.
+    * <br>If the code point does not have a numeric value, then -1 is returned. <br>
+    * If the code point has a numeric value that cannot be represented as a 
+    * nonnegative integer (for example, a fractional value), then -2 is returned.
+    * This returns values other than -1 for all and only those code points whose
+    * type is a numeric type.
+    * @param ch the code point to query
+    * @return the numeric value of the code point, or -1 if it has no numeric value,
+    * or -2 if it has a numeric value that cannot be represented as a nonnegative 
+    * integer
+    */
+    public static int getUnicodeNumericValue(int ch)
+    {
+        return getNumericValueInternal(ch, false);
+    }
+
+    private static int getNumericValueInternal(int ch, boolean useEuropean)
     {
         int props = getProps(ch);
         int type = UCharacterPropertyDB.getPropType(props);
@@ -439,7 +505,8 @@ public final class UCharacter
         if (type != UCharacterCategory.DECIMAL_DIGIT_NUMBER &&
             type != UCharacterCategory.LETTER_NUMBER &&
             type != UCharacterCategory.OTHER_NUMBER) {
-            return -1;
+
+            return useEuropean ? getEuropeanDigit(ch) : -1;
         }
           
         int result = -1;
@@ -453,7 +520,8 @@ public final class UCharacter
             if (PROPERTY_DB_.hasExceptionValue(index, 
                                        UCharacterPropertyDB.EXC_DIGIT_VALUE_)) {
                 result  = PROPERTY_DB_.getException(index, 
-                                        UCharacterPropertyDB.EXC_DIGIT_VALUE_); 
+                                        UCharacterPropertyDB.EXC_DIGIT_VALUE_) &
+                    LAST_CHAR_MASK_; 
             }
             else {
                 if (!PROPERTY_DB_.hasExceptionValue(index, 
@@ -464,10 +532,6 @@ public final class UCharacter
                                       UCharacterPropertyDB.EXC_NUMERIC_VALUE_); 
                 }
             }
-        }
-        
-        if (result < 0) {
-          result = getHanDigit(ch);
         }
         
         if (result < 0) {
@@ -505,22 +569,21 @@ public final class UCharacter
         return getProps(ch) != 0;
     }
                                     
-    /**
-    * Determines if a code point is a digit.<br>
-    * Note this method, unlike java.lang.Character.isDigit() does not regard the 
-    * ascii characters 'A' - 'Z' and 'a' - 'z' as digits.<br>
-    * @param ch code point to determine if it is a digit
-    * @return true if this code point is a digit
-    */
+   /**
+    * Determines if a code point is a Java digit.
+    * <br>This method observes the semantics of
+    * <code>java.lang.Character.isDigit()</code>.  It returns true for
+    * decimal digits only.
+    * <br><em>Semantic Change:</em> In release 1.3.1 and prior, this
+    * treated numeric letters and other numbers as digits.  This has
+    * been changed to conform to the java semantics.
+    * @param ch code point to query
+    * @return true if this code point is a digit */
     public static boolean isDigit(int ch)
     {
-        int cat = getType(ch);
-        // if props == 0, it will just fall through and return false
-        return cat == UCharacterCategory.DECIMAL_DIGIT_NUMBER || 
-            cat == UCharacterCategory.OTHER_NUMBER ||
-            cat == UCharacterCategory.LETTER_NUMBER;
+        return getType(ch) == UCharacterCategory.DECIMAL_DIGIT_NUMBER;
     }
-                                    
+
     /**
     * Determines if the specified code point is an ISO control character.<br>
     * A code point is considered to be an ISO control character if it is in the 
@@ -1527,37 +1590,219 @@ public final class UCharacter
     }
       
     /**
-    * Getting Han character digit values
-    * @param ch code point to test if it is a Han character
-    * @return Han digit value if ch is a Han digit character
+    * Return numeric value of Han code points.
+    * <br> This returns the value of Han 'numeric' code points,
+    * including those for zero, ten, hundred, thousand, ten thousand,
+    * and hundred million.  Unicode does not consider these to be
+    * numeric. This includes both the standard and 'checkwriting'
+    * characters, the 'big circle' zero character, and the standard
+    * zero character.
+    * @param ch code point to query
+    * @return value if it is a Han 'numeric character,' otherwise return -1.  
     */
-    private static int getHanDigit(int ch)
+    public static int getHanNumericValue(int ch)
     {
         switch(ch)
         {
         case IDEOGRAPHIC_NUMBER_ZERO_ :
+        case CJK_IDEOGRAPH_COMPLEX_ZERO:
             return 0; // Han Zero
         case CJK_IDEOGRAPH_FIRST_ :
+        case CJK_IDEOGRAPH_COMPLEX_ONE:
             return 1; // Han One
         case CJK_IDEOGRAPH_SECOND_ :
+        case CJK_IDEOGRAPH_COMPLEX_TWO:
             return 2; // Han Two
         case CJK_IDEOGRAPH_THIRD_ :
+        case CJK_IDEOGRAPH_COMPLEX_THREE:
             return 3; // Han Three
         case CJK_IDEOGRAPH_FOURTH_ :
+        case CJK_IDEOGRAPH_COMPLEX_FOUR:
             return 4; // Han Four
         case CJK_IDEOGRAPH_FIFTH_ :
+        case CJK_IDEOGRAPH_COMPLEX_FIVE:
             return 5; // Han Five
         case CJK_IDEOGRAPH_SIXTH_ :
+        case CJK_IDEOGRAPH_COMPLEX_SIX:
             return 6; // Han Six
         case CJK_IDEOGRAPH_SEVENTH_ :
+        case CJK_IDEOGRAPH_COMPLEX_SEVEN:
             return 7; // Han Seven
         case CJK_IDEOGRAPH_EIGHTH_ : 
+        case CJK_IDEOGRAPH_COMPLEX_EIGHT:
             return 8; // Han Eight
         case CJK_IDEOGRAPH_NINETH_ :
+        case CJK_IDEOGRAPH_COMPLEX_NINE:
             return 9; // Han Nine
+        case CJK_IDEOGRAPH_TEN:
+        case CJK_IDEOGRAPH_COMPLEX_TEN:
+            return 10;
+        case CJK_IDEOGRAPH_HUNDRED:
+        case CJK_IDEOGRAPH_COMPLEX_HUNDRED:
+            return 100;
+        case CJK_IDEOGRAPH_THOUSAND:
+        case CJK_IDEOGRAPH_COMPLEX_THOUSAND:
+            return 1000;
+        case CJK_IDEOGRAPH_TEN_THOUSAND:
+            return 10000;
+        case CJK_IDEOGRAPH_HUNDRED_MILLION:
+            return 100000000;
         }
         return -1; // no value
     }
+
+    /*
+     * Return a decimal code point in the given range for the provided value.
+     * The range is defined by a DIGIT_RANGE selector, see below.  Most ranges
+     * only accept values between 0 and 9, some ranges (EUROPEAN_EX) accept
+     * values between 0 and 35.
+     * <br>
+     * @param value a decimal value, from 0 to 9 for most standard ranges, and
+     * from 0 to 35 for the EUROPEAN_EX ranges.
+     * @param digitRange one of the DIGIT_RANGE selectors.
+     * @returns the code point, or -1 if no valid code point exists for that decimal.
+     */
+    public int getCodePointForDigit(int digit, int digitRange) {
+        if (digitRange < 0 || digitRange > DIGIT_RANGE_LIMIT) {
+            throw new IllegalArgumentException("invalid digit range selector: " + digitRange);
+        }
+        if (digit < 0 || digit > ((digitRange < 1 || digitRange > 4) ? 9 : 35)) {
+            return -1;
+        }
+
+        if (digit < 10) {
+            if (digitRange < DIGIT_RANGE_HAN) {
+                if (digit == 0 && digitRange == DIGIT_RANGE_TAMIL) {
+                    return -1;
+                }
+                return bases[digitRange] + digit;
+            } else if (digitRange == DIGIT_RANGE_HAN) {
+                return hanmap[digit];
+            } else {
+                return exhanmap[digit];
+            }
+        } else {
+            return exbases[digitRange] + digit;
+        }
+    }
+
+    private static int[] bases = {
+        0x0030, 0x0030, 0x0030, 0x0030, 0x0030, 
+        0x0660, 0x06f0, 0x0966, 0x09e6, 0x0a66,
+        0x0ae6, 0x0b66, 0x0be6, 0x0c66, 0x0ce6,
+        0x0d66, 0x0e50, 0x0ed0, 0x0f20, 0x1040,
+        0x1369, 0x17e0, 0x1810
+    };
+
+    private static int[] exbases = {
+        0x0000, 0x0040, 0x0060, 0xff21, 0xff41
+    };
+
+    /* uses 'big circle' ling, includes shi, bai, qian, wan, yi */
+    private static int[] hanmap = {
+        0x3007, 0x4e00, 0x48ec, 0x4e09, 0x56d8, 0x4e94, 0x516d, 0x4e03, 0x516b, 0x4e5d
+    };
+
+    /* uses lingsuide ling, includes shi, bai, qian, wan, yi */
+    private static int[] exhanmap = {
+        0x96f6, 0x58f9, 0x8cb3, 0x53c3, 0x8086, 0x4f0d, 0x9678, 0x67d2, 0x634c, 0x7396
+    };
+
+    private static final int CJK_IDEOGRAPH_COMPLEX_ZERO = 0x96f6;
+    private static final int CJK_IDEOGRAPH_COMPLEX_ONE  = 0x58f9;
+    private static final int CJK_IDEOGRAPH_COMPLEX_TWO = 0x8cb3;
+    private static final int CJK_IDEOGRAPH_COMPLEX_THREE = 0x53c3;
+    private static final int CJK_IDEOGRAPH_COMPLEX_FOUR = 0x8086;
+    private static final int CJK_IDEOGRAPH_COMPLEX_FIVE = 0x4f0d;
+    private static final int CJK_IDEOGRAPH_COMPLEX_SIX = 0x9678;
+    private static final int CJK_IDEOGRAPH_COMPLEX_SEVEN = 0x67d2;
+    private static final int CJK_IDEOGRAPH_COMPLEX_EIGHT = 0x634c;
+    private static final int CJK_IDEOGRAPH_COMPLEX_NINE = 0x7396;
+    private static final int CJK_IDEOGRAPH_TEN = 0x5341;
+    private static final int CJK_IDEOGRAPH_COMPLEX_TEN = 0x62fe;
+    private static final int CJK_IDEOGRAPH_HUNDRED = 0x767e;
+    private static final int CJK_IDEOGRAPH_COMPLEX_HUNDRED = 0x4f70;
+    private static final int CJK_IDEOGRAPH_THOUSAND = 0x5343;
+    private static final int CJK_IDEOGRAPH_COMPLEX_THOUSAND = 0x4edf;
+    private static final int CJK_IDEOGRAPH_TEN_THOUSAND = 0x824c;
+    private static final int CJK_IDEOGRAPH_HUNDRED_MILLION = 0x5104;
+
+    /** European (ASCII) digits for values 0-9 */
+    public static final int DIGIT_RANGE_EUROPEAN = 0;
+
+    /** European (ASCII) digits for values 0-9 and upper case letters for values 10-35 */
+    public static final int DIGIT_RANGE_EUROPEAN_EX_UC = 1;
+
+    /** European (ASCII) digits for values 0-9 and lower case letters for values 10-35 */
+    public static final int DIGIT_RANGE_EUROPEAN_EX_LC = 2;
+
+    /** European (FullWidth) digits for values 0-9 and fullwidth upper case letters for values 10-35 */
+    public static final int DIGIT_RANGE_EUROPEAN_EX_FW_UC = 3;
+
+    /** European (FullWidth) digits for values 0-9 and fullwidth lower case letters for values 10-35 */
+    public static final int DIGIT_RANGE_EUROPEAN_EX_FW_LC = 4;
+
+    /** Arabic digits for values 0-9 */
+    public static final int DIGIT_RANGE_ARABIC = 5;
+
+    /** Eastern Arabic (Persian) digits for values 0-9 */
+    public static final int DIGIT_RANGE_EASTERN_ARABIC = 6;
+
+    /** Devanagari digits for values 0-9 */
+    public static final int DIGIT_RANGE_DEVANAGARI = 7;
+
+    /** Bengali digits for values 0-9 */
+    public static final int DIGIT_RANGE_BENGALI = 8;
+
+    /** Gurmukhi digits for values 0-9 */
+    public static final int DIGIT_RANGE_GURMUKHI = 9;
+
+    /** Gurjarati digits for values 0-9 */
+    public static final int DIGIT_RANGE_GUJARATI = 10;
+
+    /** Oriya digits for values 0-9 */
+    public static final int DIGIT_RANGE_ORIYA = 11;
+
+    /** Tamil digits for values 1-9, Tamil has no digit for zero. */
+    public static final int DIGIT_RANGE_TAMIL = 12;
+
+    /** Telugu digits for values 0-9 */
+    public static final int DIGIT_RANGE_TELUGU = 13;
+
+    /** Kannada digits for values 0-9 */
+    public static final int DIGIT_RANGE_KANNADA = 14;
+
+    /** Malayam digits for values 0-9 */
+    public static final int DIGIT_RANGE_MALAYAM = 15;
+
+    /** Thai digits for values 0-9 */
+    public static final int DIGIT_RANGE_THAI = 16;
+
+    /** Lao digits for values 0-9 */
+    public static final int DIGIT_RANGE_LAO = 17;
+
+    /** Tibetan digits for values 0-9 */
+    public static final int DIGIT_RANGE_TIBETAN = 18;
+
+    /** Myanmar digits for values 0-9 */
+    public static final int DIGIT_RANGE_MYANMAR = 19;
+
+    /** Ethiopic digits for values 0-9 */
+    public static final int DIGIT_RANGE_ETHIOPIC = 20;
+
+    /** Khmer digits for values 0-9 */
+    public static final int DIGIT_RANGE_KHMER = 21;
+
+    /** Montolian digits for values 0-9 */
+    public static final int DIGIT_RANGE_MONGOLIAN = 22;
+
+    /** Han digits for values 0-9 */
+    public static final int DIGIT_RANGE_HAN = 23;
+
+    /** Han ("checkwriting") digits for values 0-9 */
+    public static final int DIGIT_RANGE_HAN_CW = 24;
+
+    private static final int DIGIT_RANGE_LIMIT = 25;
       
     /**
     * Special casing uppercase management
