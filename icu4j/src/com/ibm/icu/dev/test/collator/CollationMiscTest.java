@@ -494,13 +494,20 @@ public class CollationMiscTest extends TestFmwk{
             "\u30d1\u30d1", // K\u309cK\u309c
         };
         
-        String[] att = { "AlternateHandling", };
-        Object[] valShifted = { new Boolean(true), };
+        String[] att = { "strength", };
+        Object[] val = { new Integer(Collator.QUATERNARY), };
         
-        genericLocaleStarter(new Locale("ja", ""), test1);
-        genericLocaleStarter(new Locale("ja", ""), test2);
-        genericLocaleStarterWithOptions(new Locale("ja", ""), test1, att, valShifted);
-        genericLocaleStarterWithOptions(new Locale("ja", ""), test2, att, valShifted);
+        String[] attShifted = { "strength", "AlternateHandling"};
+        Object valShifted[] = { new Integer(Collator.QUATERNARY), 
+                                new Boolean(true) };
+       
+        genericLocaleStarterWithOptions(Locale.JAPANESE, test1, att, val);
+        genericLocaleStarterWithOptions(Locale.JAPANESE, test2, att, val);
+        
+        genericLocaleStarterWithOptions(Locale.JAPANESE, test1, attShifted,
+                                        valShifted);
+        genericLocaleStarterWithOptions(Locale.JAPANESE, test2, attShifted,
+                                        valShifted);
     }
     
     void genericLocaleStarter(Locale locale, String s[]) {
@@ -528,11 +535,11 @@ public class CollationMiscTest extends TestFmwk{
         // logln("Setting attributes");
         
         for(int i = 0; i < attrs.length; i++) {
-            if (attrs.equals("strength")) {
+            if (attrs[i].equals("strength")) {
                 coll.setStrength(((Integer)values[i]).intValue());
-            } else if (attrs.equals("decomp")) {
+            } else if (attrs[i].equals("decomp")) {
                 coll.setDecomposition(((Integer)values[i]).intValue());
-            } else if (attrs.equals("AlternateHandling")) {
+            } else if (attrs[i].equals("AlternateHandling")) {
                 coll.setAlternateHandlingShifted(((Boolean)values[i]
                                                             ).booleanValue());
             }
