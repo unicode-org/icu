@@ -12,12 +12,9 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
-/* These APIs are becoming private */
-#define ICU_UNICODETOHEXTRANSLITERATOR_USE_DEPRECATES 1
-
-#include "unicode/unitohex.h"
 #include "unicode/rep.h"
 #include "unicode/unifilt.h"
+#include "unitohex.h"
 
 U_NAMESPACE_BEGIN
 

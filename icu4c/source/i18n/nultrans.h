@@ -16,7 +16,6 @@
 
 #include "unicode/translit.h"
 
-#ifdef ICU_NULLTRANSLITERATOR_USE_DEPRECATES
 U_NAMESPACE_BEGIN
 
 /**
@@ -101,7 +100,6 @@ NullTransliterator::getDynamicClassID() const
 { return NullTransliterator::getStaticClassID(); }
 
 U_NAMESPACE_END
-#endif /* ICU_NULLTRANSLITERATOR_USE_DEPRECATES */
 
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */
 

@@ -12,32 +12,25 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
-/* These APIs are becoming private */
-#define ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES 1
-#define ICU_NULLTRANSLITERATOR_USE_DEPRECATES 1
-#define ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES 1
-#define ICU_HEXTOUNICODETRANSLITERATOR_USE_DEPRECATES 1
-#define ICU_UNICODETOHEXTRANSLITERATOR_USE_DEPRECATES 1
-
 #include "transtst.h"
 #include "unicode/locid.h"
-#include "unicode/cpdtrans.h"
 #include "unicode/dtfmtsym.h"
-#include "unicode/hextouni.h"
 #include "unicode/normlzr.h"
-#include "unicode/nultrans.h"
-#include "unicode/rbt.h"
 #include "unicode/translit.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
 #include "unicode/uchar.h"
 #include "unicode/unifilt.h"
 #include "unicode/uniset.h"
-#include "unicode/unitohex.h"
+#include "unitohex.h"
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/usetiter.h"
 #include "unicode/uscript.h"
+#include "hextouni.h"
+#include "cpdtrans.h"
+#include "nultrans.h"
+#include "rbt.h"
 #include "anytrans.h"
 #include "esctrn.h"
 #include "name2uni.h"

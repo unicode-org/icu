@@ -13,9 +13,9 @@
 #if !UCONFIG_NO_TRANSLITERATION
 
 #include "unicode/uobject.h"
-#include "unicode/rbt.h"
 #include "unicode/parseerr.h"
 #include "unicode/unorm.h"
+#include "rbt.h"
 
 U_NAMESPACE_BEGIN
 

@@ -13,8 +13,8 @@
 #if !UCONFIG_NO_TRANSLITERATION
 
 #include "unicode/uobject.h"
-#include "unicode/nultrans.h"
 #include "unicode/uscript.h"
+#include "nultrans.h"
 #include "anytrans.h"
 #include "uvector.h"
 #include "tridpars.h"

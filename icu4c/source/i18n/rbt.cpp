@@ -12,15 +12,12 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
-/* These APIs are becoming private */
-#define ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES 1
-
-#include "unicode/rbt.h"
 #include "unicode/rep.h"
 #include "unicode/uniset.h"
 #include "rbt_pars.h"
 #include "rbt_data.h"
 #include "rbt_rule.h"
+#include "rbt.h"
 
 U_NAMESPACE_BEGIN
 

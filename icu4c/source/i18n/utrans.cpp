@@ -12,18 +12,15 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
-/* These APIs are becoming private */
-#define ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES 1
-
 #include "unicode/utrans.h"
 #include "unicode/putil.h"
-#include "unicode/rbt.h"
 #include "unicode/rep.h"
 #include "unicode/translit.h"
 #include "unicode/unifilt.h"
 #include "unicode/uniset.h"
 #include "unicode/ustring.h"
 #include "cpputils.h"
+#include "rbt.h"
 
 // Following macro is to be followed by <return value>';' or just ';'
 #define utrans_ENTRY(s) if ((s)==NULL || U_FAILURE(*(s))) return

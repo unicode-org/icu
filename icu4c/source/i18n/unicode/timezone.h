@@ -116,15 +116,6 @@ public:
      */
     virtual ~TimeZone();
 
-#ifdef ICU_TIMEZONE_USE_DEPRECATES
-    /**
-     * The GMT zone has a raw offset of zero and does not use daylight
-     * savings time.
-     * @obsolete ICU 2.6. Use getGMT() instead since this variable will be removed in that release.
-     */
-    static const TimeZone* GMT;
-#endif
-
     /**
      * The GMT time zone has a raw offset of zero and does not use daylight
      * savings time. This is a commonly used time zone.
@@ -366,14 +357,6 @@ public:
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t millis, UErrorCode& status) const = 0;
-
-#ifdef ICU_TIMEZONE_USE_DEPRECATES
-    /**
-     * @obsolete ICU 1.8. Use the other getOffset() since this API will be removed in that release.
-     */
-    virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
-                              uint8_t dayOfWeek, int32_t millis) const = 0;
-#endif /* ICU_TIMEZONE_USE_DEPRECATES */
 
     /**
      * Gets the time zone offset, for current date, modified in case of
