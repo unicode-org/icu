@@ -25,6 +25,9 @@
 #include "unicode/utypes.h"
 
 /* forward declaration */
+
+U_CDECL_BEGIN
+
 struct UDataSwapper;
 typedef struct UDataSwapper UDataSwapper;
 
@@ -187,6 +190,8 @@ struct UDataSwapper {
     /** Context pointer for printError. @draft ICU 2.8 */
     void *printErrorContext;
 };
+
+U_CDECL_END
 
 U_CAPI UDataSwapper * U_EXPORT2
 udata_openSwapper(UBool inIsBigEndian, uint8_t inCharset,
