@@ -129,7 +129,7 @@ package390: $(BUILDDIR)/icudata390.lst $(BUILDDIR)/icudata.lst ./icupkg.inc
 ##### Define all the data files. the build rule that depends on them is below.
 
 ## DAT files - Misc. data files.
-DAT_FILES=$(BUILDDIR)/uprops.dat $(BUILDDIR)/unames.dat $(BUILDDIR)/unorm.dat $(BUILDDIR)/cnvalias.dat $(BUILDDIR)/tz.dat $(BUILDDIR)/ucadata.dat $(BUILDDIR)/invuca.dat 
+DAT_FILES=$(BUILDDIR)/uprops.dat $(BUILDDIR)/unames.dat $(BUILDDIR)/unorm.dat $(BUILDDIR)/cnvalias.icu $(BUILDDIR)/tz.dat $(BUILDDIR)/ucadata.dat $(BUILDDIR)/invuca.dat 
 TEST_DAT_FILES=$(TESTBUILDDIR)/test.dat
 
 ## BRK files
@@ -230,8 +230,8 @@ $(BUILDDIR)/ucadata.dat: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLDIR)/genuca/g
 $(BUILDDIR)/unames.dat: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLDIR)/gennames/gennames$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gennames/gennames -1 -d $(BUILDDIR) $(UNICODEDATADIR)/UnicodeData.txt -u $(UNICODE_VERSION)
 
-# cnvalias.dat
-$(BUILDDIR)/cnvalias.dat: $(UCMSRCDIR)/convrtrs.txt $(TOOLDIR)/gencnval/gencnval$(EXEEXT)
+# cnvalias.icu
+$(BUILDDIR)/cnvalias.icu: $(UCMSRCDIR)/convrtrs.txt $(TOOLDIR)/gencnval/gencnval$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gencnval/gencnval -d $(BUILDDIR) $(UCMSRCDIR)/convrtrs.txt
 
 # tz.dat
@@ -308,7 +308,7 @@ icupkg.inc: $(srcdir)/icupkg.inc.in  $(top_builddir)/config.status
 ###########
 ########### 390 (z/OS) support
 UCMFILES390=ebcdic-xml-us.ucm ibm-37-s390.ucm ibm-1047-s390.ucm ibm-4909.ucm
-ALLFILES390=uprops.dat unorm.dat cnvalias.dat $(UCMFILES390:.ucm=.cnv)
+ALLFILES390=uprops.dat unorm.dat cnvalias.icu $(UCMFILES390:.ucm=.cnv)
 
 $(BUILDDIR)/icudata390.lst:  $(SRCLISTDEPS)
 	@echo "generating $@ (list of 390 data files)"
