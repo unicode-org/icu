@@ -246,7 +246,12 @@ UResourceDataEntry *init_entry(const char *localeID, const char *path, UErrorCod
             if(alias != NULL && aliasLen > 0) { /* if there is actual alias - unload and load new data */
                 u_UCharsToChars(alias, aliasName, u_strlen(alias)+1);
                 res_unload(&(r->fData));
-                res_load(&(r->fData), r->fPath, aliasName, status);
+                result = res_load(&(r->fData), r->fPath, aliasName, status);
+                if (result == FALSE || U_FAILURE(*status)) { 
+                    /* we couldn't load aliased data - so we have no data */
+                    *status = U_USING_FALLBACK_ERROR;
+                    r->fBogus = U_USING_FALLBACK_ERROR;
+                }
             }
         }
 
