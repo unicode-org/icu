@@ -620,7 +620,7 @@ int32_t uprv_ucol_decompose (UChar curChar, UChar *result) {
                                   /*hangul ? Normalizer::IGNORE_HANGUL : 0,*/
                                   Normalizer::IGNORE_HANGUL,
                                   res, status);
-            T_fillOutputParams(&res, result, 356, &resSize, &status);
+            resSize = uprv_fillOutputString(res, result, 356, &status);
 
         } else {
           const UChar *source = (const UChar*)&(DecompData::contents);

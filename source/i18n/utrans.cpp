@@ -351,7 +351,10 @@ utrans_transUChars(const UTransliterator* trans,
 
     // Copy the string buffer back to text (only if necessary)
     // and fill in *neededCapacity (if neededCapacity != NULL).
-    T_fillOutputParams(&str, text, textCapacity, textLength, status);
+    textLen = uprv_fillOutputString(str, text, textCapacity, status);
+    if(textLength != NULL) {
+        *textLength = textLen;
+    }
 }
 
 U_CAPI void
@@ -378,5 +381,8 @@ utrans_transIncrementalUChars(const UTransliterator* trans,
 
     // Copy the string buffer back to text (only if necessary)
     // and fill in *neededCapacity (if neededCapacity != NULL).
-    T_fillOutputParams(&str, text, textCapacity, textLength, status);
+    textLen = uprv_fillOutputString(str, text, textCapacity, status);
+    if(textLength != NULL) {
+        *textLength = textLen;
+    }
 }
