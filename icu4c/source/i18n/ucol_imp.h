@@ -72,14 +72,14 @@
 
 /* flags bits for collIterate.flags       */
 /*                                        */
-                              // NORM - set for incremental normalize of source string
+/*  NORM - set for incremental normalize of source string */
 #define UCOL_ITER_NORM  1
 
 #define UCOL_ITER_HASLEN 2
 
-                              // UCOL_ITER_INNORMBUF - set if the "pos" is in
-                              //               the writable side buffer, handling
-                              //               incrementally normalized characters.
+/* UCOL_ITER_INNORMBUF - set if the "pos" is in       */
+/*               the writable side buffer, handling   */
+/*               incrementally normalized characters. */
 #define UCOL_ITER_INNORMBUF 4
 
 #define NFC_ZERO_CC_BLOCK_LIMIT_  0x300
