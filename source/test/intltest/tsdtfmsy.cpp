@@ -85,9 +85,14 @@ void IntlTestDateFormatSymbols::testSymbols(/* char *par */)
 
     int32_t count = 0;
     const UnicodeString *eras = en.getEras(count);
+    if(count == 0) {
+      errln("ERROR: 0 english eras.. exitting..\n");
+      return;
+    }
+
     fr.setEras(eras, count);
     if( *en.getEras(count) != *fr.getEras(count)) {
-        errln("ERROR: setEras() failed");
+      errln("ERROR: setEras() failed");
     }
 
     const UnicodeString *months = en.getMonths(count);
