@@ -187,11 +187,13 @@ U_CAPI UChar32 U_EXPORT2
 u_charFromName(UCharNameChoice nameChoice,
                const char *name,
                UErrorCode *pErrorCode) {
+    char upper[120];
     FindName findName;
     AlgorithmicRange *algRange;
     uint32_t *p;
     uint32_t i;
     UChar32 c;
+    char c0;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0xffff;
@@ -205,6 +207,21 @@ u_charFromName(UCharNameChoice nameChoice,
     if(!isDataLoaded(pErrorCode)) {
         return 0xffff;
     }
+
+    /* uppercase the name first */
+    for(i=0; i<sizeof(upper); ++i) {
+        if((c0=*name++)!=0) {
+            upper[i]=uprv_toupper(c0);
+        } else {
+            upper[i]=0;
+            break;
+        }
+    }
+    if(i==sizeof(upper)) {
+        /* name too long, there is no such character */
+        return 0xffff;
+    }
+    name=upper;
 
     /* try algorithmic names first */
     p=(uint32_t *)((uint8_t *)uCharNames+uCharNames->algNamesOffset);

@@ -1432,6 +1432,11 @@ TestCharNames() {
         log_err("u_enumCharNames(0..0x1100000) error %s names count=%ld\n", u_errorName(errorCode), length);
     }
 
+    /* test that u_charFromName() uppercases the input name, i.e., works with mixed-case names (new in 2.0) */
+    if(0x61!=u_charFromName(U_UNICODE_CHAR_NAME, "LATin smALl letTER A", &errorCode)) {
+        log_err("u_charFromName(U_UNICODE_CHAR_NAME, \"LATin smALl letTER A\") did not find U+0061 (%s)\n", u_errorName(errorCode));
+    }
+
     /* ### TODO: test error cases and other interesting things */
 }
 
