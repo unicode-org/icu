@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/NFS4StringPrep.java,v $
- * $Date: 2003/08/27 21:19:01 $
- * $Revision: 1.5 $
+ * $Date: 2003/08/28 23:03:06 $
+ * $Revision: 1.6 $
  *
  *******************************************************************************
 */
@@ -29,13 +29,7 @@ import com.ibm.icu.text.UCharacterIterator;
  * for testing.
  */
 public final class NFS4StringPrep {
-    private static final String[] NFS4DataFileNames ={
-        "nfscss.spp",
-        "nfscsi.spp",
-        "nfscis.spp",
-        "nfsmxp.spp",
-        "nfsmxs.spp"
-    };
+
     private StringPrep nfscss = null;
     private StringPrep nfscsi = null;
     private StringPrep nfscis = null;
@@ -47,25 +41,24 @@ public final class NFS4StringPrep {
 
     private  NFS4StringPrep (){
       try{
-      
-          InputStream  nfscssFile = TestUtil.getDataStream(NFS4DataFileNames[0]);
-          nfscss = StringPrep.getInstance(nfscssFile);
+          InputStream  nfscsiFile = TestUtil.getDataStream("nfscsi.spp");
+          nfscsi = new StringPrep(nfscsiFile);
+          nfscsiFile.close();
+          
+          InputStream  nfscssFile = TestUtil.getDataStream("nfscss.spp");
+          nfscss = new StringPrep(nfscssFile);
           nfscssFile.close();
           
-          InputStream  nfscsiFile = TestUtil.getDataStream(NFS4DataFileNames[1]);
-          nfscsi = StringPrep.getInstance(nfscsiFile);
-          nfscsiFile.close();
+          InputStream  nfscisFile = TestUtil.getDataStream("nfscis.spp");
+          nfscis = new StringPrep(nfscisFile);
+          nfscisFile.close();
           
-          InputStream  nfscisFile = TestUtil.getDataStream(NFS4DataFileNames[2]);
-          nfscis = StringPrep.getInstance(nfscisFile);
-          nfscsiFile.close();
+          InputStream  nfsmxpFile = TestUtil.getDataStream("nfsmxp.spp");
+          nfsmxp = new StringPrep(nfsmxpFile);
+          nfsmxpFile.close();
           
-          InputStream  nfsmxpFile = TestUtil.getDataStream(NFS4DataFileNames[3]);
-          nfsmxp = StringPrep.getInstance(nfsmxpFile);
-          nfscsiFile.close();
-          
-          InputStream  nfsmxsFile = TestUtil.getDataStream(NFS4DataFileNames[4]);
-          nfsmxs = StringPrep.getInstance(nfsmxsFile);
+          InputStream  nfsmxsFile = TestUtil.getDataStream("nfsmxs.spp");
+          nfsmxs = new StringPrep(nfsmxsFile);
           nfsmxsFile.close();
       }catch(IOException e){
           throw new RuntimeException(e.toString());
@@ -83,12 +76,12 @@ public final class NFS4StringPrep {
         return out.toString().getBytes("UTF-8");
     }
     
-    public static byte[] cs_prepare(byte[] src, boolean caseInsensitive)
+    public static byte[] cs_prepare(byte[] src, boolean isCaseSensitive)
                          throws StringPrepParseException, UnsupportedEncodingException{
-        if(caseInsensitive){
-            return prepare(src, prep.nfscsi);
-        }else{
+        if(isCaseSensitive == true ){
             return prepare(src, prep.nfscss);
+        }else{
+            return prepare(src, prep.nfscsi);
         }
     }
     

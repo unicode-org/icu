@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/TestStringPrep.java,v $
- * $Date: 2003/08/27 03:08:29 $
- * $Revision: 1.2 $
+ * $Date: 2003/08/28 23:03:06 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
 */
@@ -177,9 +177,21 @@ public class TestStringPrep extends TestFmwk {
         // test case insensitive string
         try{
             src = "THISISATEST";
-            byte[] dest = NFS4StringPrep.cs_prepare(src.getBytes("UTF-8"), true);
+            byte[] dest = NFS4StringPrep.cs_prepare(src.getBytes("UTF-8"), false);
             String destStr = new String(dest, "UTF-8");
             if(!src.toLowerCase().equals(destStr)){
+                errln("Did not get expected output. Expected: "+ prettify(src)+
+                      " Got: " + prettify(destStr));
+            }
+        }catch(Exception e){
+            errln("Got unexpected exception: " + e.toString());
+        }
+        // test case sensitive string
+        try{
+            src = "THISISATEST";
+            byte[] dest = NFS4StringPrep.cs_prepare(src.getBytes("UTF-8"), true);
+            String destStr = new String(dest, "UTF-8");
+            if(!src.equals(destStr)){
                 errln("Did not get expected output. Expected: "+ prettify(src)+
                       " Got: " + prettify(destStr));
             }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/TestIDNA.java,v $
- * $Date: 2003/08/27 21:19:00 $
- * $Revision: 1.3 $
+ * $Date: 2003/08/28 23:03:06 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
 */
@@ -295,7 +295,7 @@ public class TestIDNA extends TestFmwk {
     }
     public void TestNamePrepConformance() throws Exception{
         InputStream stream = LocaleUtility.getImplDataResourceAsStream("uidna.spp");
-        StringPrep namePrep = StringPrep.getInstance(stream);
+        StringPrep namePrep = new StringPrep(stream);
         for(int i=0; i<TestData.conformanceTestCases.length;i++){
             TestData.ConformanceTestCase testCase = TestData.conformanceTestCases[i];
             UCharacterIterator iter = UCharacterIterator.getInstance(testCase.input);
