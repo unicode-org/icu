@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RbnfTest.java,v $ 
- * $Date: 2002/02/16 03:05:16 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/02/22 03:43:32 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
-package com.ibm.icu.dev.test.rbnf;
+package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.dev.test.TestFmwk;

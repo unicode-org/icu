@@ -5,13 +5,13 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/02/19 04:21:46 $ 
-* $Revision: 1.25 $
+* $Date: 2002/02/22 03:43:32 $ 
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
 
-package com.ibm.icu.dev.test.ucharacter;
+package com.ibm.icu.dev.test.lang;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/BigNumberFormatTest.java,v $ 
- * $Date: 2002/02/16 03:05:04 $ 
- * $Revision: 1.12 $
+ * $Date: 2002/02/22 03:43:32 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
-package com.ibm.icu.dev.test.bnf;
+package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.lang.*;

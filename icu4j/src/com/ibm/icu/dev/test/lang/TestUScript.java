@@ -5,9 +5,9 @@
 *******************************************************************************
 */
 
-package com.ibm.icu.dev.test.text;
+package com.ibm.icu.dev.test.lang;
 
-import com.ibm.icu.text.UScript;
+import com.ibm.icu.lang.UScript;
 import com.ibm.icu.dev.test.TestFmwk;
 import java.util.Locale;
 

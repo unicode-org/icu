@@ -5,7 +5,7 @@
 *******************************************************************************
 */
 
-package com.ibm.icu.dev.test.text;
+package com.ibm.icu.dev.test.shaping;
 
 import com.ibm.icu.text.ArabicShaping;
 import com.ibm.icu.text.ArabicShapingException;
