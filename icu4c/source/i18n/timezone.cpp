@@ -149,6 +149,31 @@ static UBool getOlsonMeta() {
     return (OLSON_ZONE_START >= 0);
 }
 
+/**
+ * Given an ID, open the appropriate resource for the given time zone.
+ * Dereference aliases if necessary.
+ * @param id zone id
+ * @param res resource, which must be ready for use (initialized but not open)
+ * @param ec input-output error code
+ * @return top-level resource bundle
+ */
+static UResourceBundle* openOlsonResource(const UnicodeString& id,
+                                          UResourceBundle& res,
+                                          UErrorCode& ec) {
+    char buf[128];
+    id.extract(0, sizeof(buf)-1, buf, sizeof(buf), "");
+    UResourceBundle *top = ures_openDirect(0, ZONEINFO, &ec);
+    ures_getByKey(top, buf, &res, &ec);
+    // Dereference if this is an alias.  Docs say result should be 1
+    // but it is 0 in 2.8 (?).
+    if (ures_getSize(&res) <= 1 && getOlsonMeta(top)) {
+        int32_t deref = ures_getInt(&res, &ec) + OLSON_ZONE_START;
+        ures_close(&res);
+        ures_getByIndex(top, deref, &res, &ec);
+    }
+    return top;
+}
+
 // TODO: #ifdef out this code after 8-Nov-2003
 // #ifdef ICU_TIMEZONE_USE_DEPRECATES
 
@@ -299,30 +324,6 @@ TimeZone::createTimeZone(const UnicodeString& ID)
 }
 
 /**
- * Given an ID, open the appropriate resource for the given time zone.
- * Dereference aliases if necessary.
- * @param id zone id
- * @param res resource, which must be ready for use (initialized but not open)
- * @param ec input-output error code
- * @return top-level resource bundle
- */
-static UResourceBundle* openOlsonResource(const UnicodeString& id,
-                                          UResourceBundle& res,
-                                          UErrorCode& ec) {
-    char buf[128];
-    id.extract(0, sizeof(buf)-1, buf, sizeof(buf), "");
-    UResourceBundle *top = ures_openDirect(0, ZONEINFO, &ec);
-    ures_getByKey(top, buf, &res, &ec);
-    // Dereference if this is an alias
-    if (ures_getSize(&res) == 1) {
-        int32_t deref = ures_getInt(&res, &ec);
-        ures_close(&res);
-        ures_getByIndex(top, deref, &res, &ec);
-    }
-    return top;
-}
-
-/**
  * Lookup the given name in our system zone table.  If found,
  * instantiate a new zone of that name and return it.  If not
  * found, return 0.
@@ -336,6 +337,7 @@ TimeZone::createSystemTimeZone(const UnicodeString& id) {
     UResourceBundle *top = openOlsonResource(id, res, ec);
     if (U_SUCCESS(ec)) {
         z = new OlsonTimeZone(top, &res, ec);
+        if (z) z->setID(id);      // Hmm. cleanup? TODO
     }
     ures_close(&res);
     ures_close(top);
@@ -981,7 +983,8 @@ TimeZone::countEquivalentIDs(const UnicodeString& id) {
             UResourceBundle r;
             ures_initStackObject(&r);
             ures_getByIndex(&res, size-1, &r, &ec);
-            result = ures_getSize(&r);
+            // result = ures_getSize(&r); // doesn't work
+            ures_getIntVector(&r, &result, &ec);
             ures_close(&r);
         }
     }
@@ -1007,8 +1010,8 @@ TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
             ures_initStackObject(&r);
             ures_getByIndex(&res, size-1, &r, &ec);
             const int32_t* v = ures_getIntVector(&r, &size, &ec);
-            if (index >= 0 && index < size) {
-                zone = v[index];
+            if (index >= 0 && index < size && getOlsonMeta()) {
+                zone = v[index] + OLSON_ZONE_START;
             }
             ures_close(&r);
         }
