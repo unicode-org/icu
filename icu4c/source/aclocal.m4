@@ -24,7 +24,7 @@ case "${host}" in
 	fi ;;
 *-*-mips*)	icu_cv_host_frag=$srcdir/config/mh-irix ;;
 *-*-linux*) 	icu_cv_host_frag=$srcdir/config/mh-linux ;;
-*-*-freebsd*) 	icu_cv_host_frag=$srcdir/config/mh-freebsd ;;
+*-*-freebsd*|*-*-netbsd*) 	icu_cv_host_frag=$srcdir/config/mh-freebsd ;;
 *-*-aix*) 	
 	case "$CXX" in
 	*vacpp*)icu_cv_host_frag=$srcdir/config/mh-aix-va ;;
