@@ -12,7 +12,7 @@
 #include "unicode/parsepos.h"
 #include "unicode/uchar.h"
 #include "unicode/uscript.h"
-#include "symtable.h" // TODO => unicode/symtable.h
+#include "unicode/symtable.h"
 #include "ruleiter.h"
 #include "cmemory.h"
 #include "uhash.h"
@@ -325,7 +325,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
             status = U_MEMORY_ALLOCATION_ERROR;  
         }else{
             allocateStrings();
-            applyPattern(pattern, USET_IGNORE_SPACE, status);
+            applyPattern(pattern, USET_IGNORE_SPACE, NULL, status);
         }
     }
     _dbgct(this);
@@ -341,6 +341,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
  */
 UnicodeSet::UnicodeSet(const UnicodeString& pattern,
                        uint32_t options,
+                       const SymbolTable* symbols,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), bufferCapacity(0),
     list(0), buffer(0), strings(0)
@@ -352,15 +353,15 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
             status = U_MEMORY_ALLOCATION_ERROR;  
         }else{
             allocateStrings();
-            applyPattern(pattern, options, status);
+            applyPattern(pattern, options, symbols, status);
         }
     }
     _dbgct(this);
 }
 
-// For internal use by RuleBasedTransliterator
 UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
-                       const SymbolTable& symbols,
+                       uint32_t options,
+                       const SymbolTable* symbols,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), bufferCapacity(0),
     list(0), buffer(0), strings(0)
@@ -372,26 +373,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
             status = U_MEMORY_ALLOCATION_ERROR;   
         }else{
             allocateStrings();
-            applyPattern(pattern, pos, USET_IGNORE_SPACE, &symbols, status);
-        }
-    }
-    _dbgct(this);
-}
-
-// For internal use by TransliteratorIDParser
-UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
-                       uint32_t options, UErrorCode& status) :
-    len(0), capacity(START_EXTRA), bufferCapacity(0),
-    list(0), buffer(0), strings(0)
-{
-    if(U_SUCCESS(status)){
-        list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
-        /* test for NULL */
-        if(list == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR; 
-        }else{
-            allocateStrings();
-            applyPattern(pattern, pos, options, NULL, status);
+            applyPattern(pattern, pos, options, symbols, status);
         }
     }
     _dbgct(this);
@@ -549,8 +531,9 @@ UnicodeSet& UnicodeSet::set(UChar32 start, UChar32 end) {
  */
 UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
                                      UErrorCode& status) {
-    return applyPattern(pattern, USET_IGNORE_SPACE, status);
+    return applyPattern(pattern, USET_IGNORE_SPACE, NULL, status);
 }
+
 
 /**
  * Modifies this set to represent the set specified by the given
@@ -562,28 +545,49 @@ UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
  */
 UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
                                      uint32_t options,
+                                     const SymbolTable* symbols,
                                      UErrorCode& status) {
     if (U_FAILURE(status)) {
         return *this;
     }
 
     ParsePosition pos(0);
-    applyPattern(pattern, pos, options, NULL, status);
+    applyPattern(pattern, pos, options, symbols, status);
     if (U_FAILURE(status)) return *this;
 
     int32_t i = pos.getIndex();
-    int32_t n = pattern.length();
 
     if (options & USET_IGNORE_SPACE) {
         // Skip over trailing whitespace
-        while (i<n && uprv_isRuleWhiteSpace(pattern.charAt(i))) {
-            ++i;
-        }
+        ICU_Utility::skipWhitespace(pattern, i, TRUE);
     }
 
-    if (i != n) {
+    if (i != pattern.length()) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
+    return *this;
+}
+
+UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
+                              ParsePosition& pos,
+                              uint32_t options,
+                              const SymbolTable* symbols,
+                              UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return *this;
+    }
+    // Need to build the pattern in a temporary string because
+    // _applyPattern calls add() etc., which set pat to empty.
+    UnicodeString rebuiltPat;
+    RuleCharacterIterator chars(pattern, symbols, pos);
+    applyPattern(chars, symbols, rebuiltPat, options, status);
+    if (U_FAILURE(status)) return *this;
+    if (chars.inVariable()) {
+        // syntaxError(chars, "Extra chars in variable value");
+        status = U_MALFORMED_SET;
+        return *this;
+    }
+    pat = rebuiltPat;
     return *this;
 }
 
@@ -1849,52 +1853,6 @@ int32_t UnicodeSet::serialize(uint16_t *dest, int32_t destCapacity, UErrorCode& 
 //----------------------------------------------------------------
 
 /**
- * Parses the given pattern, starting at the given position.  The
- * character at pattern.charAt(pos.getIndex()) must be '[', or the
- * parse fails.  Parsing continues until the corresponding closing
- * ']'.  If a syntax error is encountered between the opening and
- * closing brace, the parse fails.  Upon return from a successful
- * parse, the ParsePosition is updated to point to the character
- * following the closing ']', and a StringBuffer containing a
- * pairs list for the parsed pattern is returned.  This method calls
- * itself recursively to parse embedded subpatterns.
- *
- * @param pattern the string containing the pattern to be parsed.
- * The portion of the string from pos.getIndex(), which must be a
- * '[', to the corresponding closing ']', is parsed.
- * @param pos upon entry, the position at which to being parsing.
- * The character at pattern.charAt(pos.getIndex()) must be a '['.
- * Upon return from a U_SUCCESSful parse, pos.getIndex() is either
- * the character after the closing ']' of the parsed pattern, or
- * pattern.length() if the closing ']' is the last character of
- * the pattern string.
- * @return a StringBuffer containing a pairs list for the parsed
- * substring of <code>pattern</code>
- * @exception IllegalArgumentException if the parse fails.
- */
-void UnicodeSet::applyPattern(const UnicodeString& pattern,
-                              ParsePosition& pos,
-                              uint32_t options,
-                              const SymbolTable* symbols,
-                              UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    // Need to build the pattern in a temporary string because
-    // _applyPattern calls add() etc., which set pat to empty.
-    UnicodeString rebuiltPat;
-    RuleCharacterIterator chars(pattern, symbols, pos);
-    applyPattern(chars, symbols, rebuiltPat, options, status);
-    if (U_FAILURE(status)) return;
-    if (chars.inVariable()) {
-        // syntaxError(chars, "Extra chars in variable value");
-        status = U_MALFORMED_SET;
-        return;
-    }
-    pat = rebuiltPat;
-}
-
-/**
  * A small all-inline class to manage a UnicodeSet pointer.  Add
  * operator->() etc. as needed.
  */
@@ -1929,7 +1887,7 @@ public:
 void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                               const SymbolTable* symbols,
                               UnicodeString& rebuiltPat,
-                              int32_t options,
+                              uint32_t options,
                               UErrorCode& ec) {
     if (U_FAILURE(ec)) return;
 

@@ -16,7 +16,7 @@
 #include "unicode/usetiter.h"
 #include "unicode/ustring.h"
 #include "unicode/parsepos.h"
-#include "symtable.h" // TODO move this to unicode/symtable.h
+#include "unicode/symtable.h"
 #include "hash.h"
 
 UnicodeString operator+(const UnicodeString& left, const UnicodeSet& set) {
@@ -953,13 +953,13 @@ void UnicodeSetTest::TestCloseOver() {
     }
 
     // Test the pattern API
-    s.applyPattern("[abc]", USET_CASE_INSENSITIVE, ec);
+    s.applyPattern("[abc]", USET_CASE_INSENSITIVE, NULL, ec);
     if (U_FAILURE(ec)) {
         errln("FAIL: applyPattern failed");
     } else {
         expectContainment(s, "abcABC", "defDEF");
     }
-    UnicodeSet v("[^abc]", USET_CASE_INSENSITIVE, ec);
+    UnicodeSet v("[^abc]", USET_CASE_INSENSITIVE, NULL, ec);
     if (U_FAILURE(ec)) {
         errln("FAIL: constructor failed");
     } else {
@@ -1246,7 +1246,7 @@ void UnicodeSetTest::TestSymbolTable() {
         i += 2;
 
         ParsePosition pos(0);
-        UnicodeSet us(inpat, pos, sym, ec);
+        UnicodeSet us(inpat, pos, USET_IGNORE_SPACE, &sym, ec);
         if (U_FAILURE(ec)) {
             errln("FAIL: couldn't construct UnicodeSet");
             continue;
