@@ -102,6 +102,10 @@ UBool TextFile::readLine(UnicodeString& line, UErrorCode& ec) {
     }
     if (!setBuffer(n++, 0, ec)) return FALSE;
     line = UnicodeString(buffer, encoding);
+    if (line[0] == 0xFEFF) {
+        /* Remove any UTF BOMs */
+        line.replaceBetween(0,1,"");
+    }
     ++lineNo;
     return TRUE;
 }
