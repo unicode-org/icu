@@ -13,7 +13,7 @@
 *********************************************************************************
 */
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include "unicode/uloc.h"
