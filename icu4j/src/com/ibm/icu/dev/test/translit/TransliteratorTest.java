@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2001/07/03 23:28:33 $ 
- * $Revision: 1.40 $
+ * $Date: 2001/07/05 23:35:52 $ 
+ * $Revision: 1.41 $
  *
  *****************************************************************************************
  */
@@ -728,13 +728,13 @@ public class TransliteratorTest extends TestFmwk {
      */
     public void TestFilterIDs() {
         String[] DATA = {
-            "Unicode-Hex[aeiou]",
-            "Hex-Unicode[aeiou]",
+            "Unicode[aeiou]-Hex",
+            "Hex[aeiou]-Unicode",
             "quizzical",
             "q\\u0075\\u0069zz\\u0069c\\u0061l",
             
-            "Unicode-Hex[aeiou];Hex-Unicode[^5]",
-            "Unicode-Hex[^5];Hex-Unicode[aeiou]",
+            "Unicode[aeiou]-Hex;Hex[^5]-Unicode",
+            "Unicode[^5]-Hex;Hex[aeiou]-Unicode",
             "quizzical",
             "q\\u0075izzical",
             
@@ -895,6 +895,41 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
     
+    /**
+     * Test liberalized ID syntax.  1006c
+     */
+    public void TestLiberalizedID() {
+        // Some test cases have an expected getID() value of NULL.  This
+        // means I have disabled the test case for now.  This stuff is
+        // still under development, and I haven't decided whether to make
+        // getID() return canonical case yet.  It will all get rewritten
+        // with the move to Source-Target/Variant IDs anyway. [aliu]
+        String DATA[] = {
+            "latin-arabic", null /*"Latin-Arabic"*/, "case insensitivity",
+            "  Null  ", "Null", "whitespace",
+            " Latin[a-z]-Arabic  ", "Latin[a-z]-Arabic", "inline filter",
+            "  null  ; latin-arabic  ", null /*"Null;Latin-Arabic"*/, "compound whitespace",
+        };
+
+        for (int i=0; i<DATA.length; i+=3) {
+            try {
+                Transliterator t = Transliterator.getInstance(DATA[i]);
+                if (DATA[i+1] == null || DATA[i+1].equals(t.getID())) {
+                    logln("Ok: " + DATA[i+2] +
+                          " create ID \"" + DATA[i] + "\" => \"" +
+                          t.getID() + "\"");
+                } else {
+                    errln("FAIL: " + DATA[i+2] +
+                          " create ID \"" + DATA[i] + "\" => \"" +
+                          t.getID() + "\", exp \"" + DATA[i+1] + "\"");
+                }   
+            } catch (IllegalArgumentException e) {
+                errln("FAIL: " + DATA[i+2] +
+                      " create ID \"" + DATA[i] + "\"");
+            }
+        }
+    }
+
     //======================================================================
     // Support methods
     //======================================================================
