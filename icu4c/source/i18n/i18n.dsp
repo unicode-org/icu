@@ -167,8 +167,6 @@ SOURCE=.\coll.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
 
-# ADD CPP /O2
-
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
 # ADD CPP /Ze
@@ -309,7 +307,15 @@ SOURCE=.\format.cpp
 # Begin Source File
 
 SOURCE=.\gregocal.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
 # ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -603,8 +609,6 @@ SOURCE=.\translit.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
 
-# SUBTRACT CPP /O<none>
-
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
 # ADD CPP /Ze
@@ -643,8 +647,6 @@ SOURCE=.\ucal.cpp
 SOURCE=.\ucol.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
-
-# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
@@ -744,8 +746,6 @@ SOURCE=.\unum.cpp
 SOURCE=.\utrans.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
-
-# SUBTRACT CPP /O<none>
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
