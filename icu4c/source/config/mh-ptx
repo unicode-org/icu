@@ -1,0 +1,56 @@
+## -*-makefile-*-
+## PTX-specific setup
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
+
+## Commands to generate dependency files
+GEN_DEPS.c=	$(CC) -Kthread -KPIC -c $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -M $(DEFS) $(CPPFLAGS)
+
+## Commands to compile
+COMPILE.c=	$(CC) -Kthread -KPIC $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) -Kthread -KPIC $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+
+## Commands to link
+#LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.c=		$(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -lm -lgen
+LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -lm -lgen
+
+## Commands to make a shared library
+SHLIB.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -DPTX -G
+SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -DPTX -G
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-R	
+LD_RPATH_PRE=
+
+## Shared object suffix
+SO=		so
+
+## Link commands to link to ICU libs
+LIBICU-UC= 	-L$(top_builddir)/common -licu-uc
+LIBICU-I18N= 	-L$(top_builddir)/i18n -licu-i18n
+LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
+LIBICU-TOOLUTIL=-L$(top_builddir)/tools/toolutil -licu-toolutil
+
+## Compilation rules
+%.o : $(srcdir)/%.c
+	$(COMPILE.c) -o $@ $<
+
+%.o : $(srcdir)/%.cpp
+	$(COMPILE.cc) -o $@ $<
+
+## Dependency rules
+%.d : $(srcdir)/%.c
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.c) $< \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+%.d : $(srcdir)/%.cpp
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.cc) -o $@ $< \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+## End Ptx-specific setup
