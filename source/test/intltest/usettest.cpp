@@ -14,6 +14,7 @@
 #include "unicode/uniset.h"
 #include "unicode/unicode.h"
 
+
 UnicodeString operator+(const UnicodeString& left, const UnicodeSet& set) {
     UnicodeString pat;
     set.toPattern(pat);
@@ -73,22 +74,31 @@ void UnicodeSetTest::TestToPattern() {
     
     for (UChar32 i = 0; i <= 0x10FFFF; ++i) {
         if ((i <= 0xFF && !u_isalpha(i)) || u_isspace(i)) {
+
             // check various combinations to make sure they all work.
-            if (i != 0 && !toPatternAux(i, i)) continue;
-            if (!toPatternAux(0, i)) continue;
-            if (!toPatternAux(i, 0xFFFF)) continue;
+            if (i != 0 && !toPatternAux(i, i)){
+                continue;
+            }
+            if (!toPatternAux(0, i)){
+                continue;
+            }
+            if (!toPatternAux(i, 0xFFFF)){
+                continue;
+            }
         }
     }
 }
     
 UBool UnicodeSetTest::toPatternAux(UChar32 start, UChar32 end) {
+
     // use Integer.toString because Utility.hex doesn't handle ints
     UnicodeString pat = "";
     // TODO do these in hex
     //String source = "0x" + Integer.toString(start,16).toUpperCase();
     //if (start != end) source += "..0x" + Integer.toString(end,16).toUpperCase();
-    UnicodeString source = source + (int32_t)start;
-    if (start != end) source = source + ".." + (int32_t)end;
+    UnicodeString source((uint32_t)start);
+    if (start != end) 
+        source = source + ".." + (uint32_t)end;
     UnicodeSet testSet;
     testSet.add(start, end);
     return checkPat(source, testSet);
@@ -99,17 +109,21 @@ UBool UnicodeSetTest::checkPat(const UnicodeString& source,
     // What we want to make sure of is that a pattern generated
     // by toPattern(), with or without escaped unprintables, can
     // be passed back into the UnicodeSet constructor.
-    UnicodeString pat0; testSet.toPattern(pat0, TRUE);
+    UnicodeString pat0;
+
+    testSet.toPattern(pat0, TRUE);
+    
     if (!checkPat(source + " (escaped)", testSet, pat0)) return FALSE;
     
     //String pat1 = unescapeLeniently(pat0);
     //if (!checkPat(source + " (in code)", testSet, pat1)) return false;
     
-    UnicodeString pat2; testSet.toPattern(pat2, FALSE);
+    UnicodeString pat2; 
+    testSet.toPattern(pat2, FALSE);
     if (!checkPat(source, testSet, pat2)) return FALSE;
     
     //String pat3 = unescapeLeniently(pat2);
-    //if (!checkPat(source + " (in code)", testSet, pat3)) return false;
+    // if (!checkPat(source + " (in code)", testSet, pat3)) return false;
     
     //logln(source + " => " + pat0 + ", " + pat1 + ", " + pat2 + ", " + pat3);
     logln((UnicodeString)source + " => " + pat0 + ", " + pat2);
