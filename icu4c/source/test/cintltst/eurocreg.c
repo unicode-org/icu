@@ -78,26 +78,26 @@ char convertersToCheck[][15] = {
 
   "ibm-858", /* was "cp850" changed 2000nov28 */
   /* duplicate "cp850" removed 2000nov28 */
-  "cp857",
+  "ibm-9049", /* was "cp857" changed 2002nov25 */
   "ibm-12712", /* was "cp424" changed 2000nov28 */
   "ibm-4899", /* was "cp803" changed 2000nov28 */
-  "cp862",
+  "ibm-867", /* was "cp862" changed 2002nov25 */
   "cp1258",
   "cp950",
   "cp1253",
   /*  "cp819",
       "cp13488",*/
   "cpibm4971",
-  "cp869",
+  "ibm-9061", /* was "cp869" changed 2002nov25 */
   /* "cp813",*/
-  "cp852",
-  "cp855",
-  "cp866",
+  "ibm-9044", /* was "cp852" changed 2002nov25 */
+  "ibm-872", /* was "cp855" changed 2002nov25 */
+  "ibm-808", /* was "cp866" changed 2002nov25 */
   "cp1131",
   "cp1125",
   "cp922",
   "cp921",
-  "cp864",
+  "ibm-17248", /* was "cp864" changed 2002nov25 */
   "cp1008",
   "cp1046",
   /*  "cp9066",
