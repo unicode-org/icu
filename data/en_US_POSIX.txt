@@ -5,6 +5,8 @@
 // *
 // *******************************************************************************
 
+// This is an invariant locale.
+// This has been also known as the C locale on Unix or the invariant locale in Windows.
 en_US_POSIX {
     CollationElements { 
         Version { "1.0" }
@@ -42,4 +44,5 @@ en_US_POSIX {
             "\uFFFD",
     }
     LocaleString { "en_US_POSIX" }
+    LocaleID { "7F" }
 }
