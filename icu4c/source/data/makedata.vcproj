@@ -20,9 +20,9 @@
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="NMAKE /f makedata.mak icumake=$(ProjectDir)  cfg=release"
-				ReBuildCommandLine="NMAKE /f makedata.mak icumake=$(ProjectDir)  cfg=release clean all"
-				CleanCommandLine="NMAKE /f makedata.mak icumake=$(ProjectDir)  cfg=release clean"/>
+				BuildCommandLine="NMAKE /f makedata.mak ICUMAKE="$(ProjectDir)\" CFG=release"
+				ReBuildCommandLine="NMAKE /f makedata.mak ICUMAKE="$(ProjectDir)\" CFG=release clean all"
+				CleanCommandLine="NMAKE /f makedata.mak ICUMAKE="$(ProjectDir)\" CFG=release clean"/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
@@ -33,9 +33,9 @@
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="NMAKE /f makedata.mak icumake=$(ProjectDir) cfg=debug"
-				ReBuildCommandLine="NMAKE /f makedata.mak icumake=$(ProjectDir) cfg=debug clean all"
-				CleanCommandLine="NMAKE /f makedata.mak icumake=$(ProjectDir) cfg=debug clean"/>
+				BuildCommandLine="NMAKE /f makedata.mak ICUMAKE="$(ProjectDir)\" CFG=debug"
+				ReBuildCommandLine="NMAKE /f makedata.mak ICUMAKE="$(ProjectDir)\" CFG=debug clean all"
+				CleanCommandLine="NMAKE /f makedata.mak ICUMAKE="$(ProjectDir)\" CFG=debug clean"/>
 		</Configuration>
 	</Configurations>
 	<Files>
