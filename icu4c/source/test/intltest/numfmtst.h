@@ -57,6 +57,8 @@ public:
     virtual void TestExponent(void);
     virtual void TestScientific(void);
 
+    virtual void TestSurrogateSupport(void);
+
     /**
      * Test the functioning of the secondary grouping value.
      */
