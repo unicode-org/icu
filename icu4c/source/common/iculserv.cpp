@@ -139,7 +139,7 @@ const int32_t LocaleKey::KIND_ANY = -1;
 LocaleKey* 
 LocaleKey::createWithCanonicalFallback(const UnicodeString* primaryID, 
                                        const UnicodeString* canonicalFallbackID,
-									   UErrorCode& status) 
+                                       UErrorCode& status) 
 {
   return LocaleKey::createWithCanonicalFallback(primaryID, canonicalFallbackID, KIND_ANY, status);
 }
@@ -148,7 +148,7 @@ LocaleKey*
 LocaleKey::createWithCanonicalFallback(const UnicodeString* primaryID, 
                                        const UnicodeString* canonicalFallbackID, 
                                        int32_t kind,
-									   UErrorCode& status) 
+                                       UErrorCode& status) 
 {
   if (primaryID == NULL || U_FAILURE(status)) {
     return NULL;
