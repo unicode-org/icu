@@ -560,7 +560,7 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
     }
     offsetIndexSize = (int8_t*)index - (int8_t*)result;
     if (offsetIndexSize > maxPossibleSize) {
-        die("Yikes! Interal error while constructing offset index table");
+        die("Yikes! Internal error while constructing offset index table");
     }
     readEndMarker(in);
     if (verbose) {
@@ -577,6 +577,9 @@ CountryIndex* gentz::parseCountryIndexTable(FileStream* in) {
     // int, and each country adds 3 ints (one for the intcode, one for
     // next entry offset, one for the zone count).  Each int is 16
     // bits.
+    //
+    // This assumes each zone belongs to exactly one country and each
+    // country lists 1 or more zones.
     //
     // Everything is 16-bits, so we don't 4-align the entries.
     // However, we do pad at the end of the table to make the whole
@@ -602,6 +605,7 @@ CountryIndex* gentz::parseCountryIndexTable(FileStream* in) {
         uint16_t* zoneNumberArray = &(index->zoneNumber);
         if ((int8_t*)(&index->zoneNumber + index->count - 1) >= limit) {
             // Oops -- out of space
+            fprintf(stderr, "ERROR, out of space parsing country %d\n", i);
             break;
         }
         for (uint16_t j=0; j<index->count; ++j) {
@@ -615,14 +619,21 @@ CountryIndex* gentz::parseCountryIndexTable(FileStream* in) {
     }
     readEndMarker(in);
 
-    // Make sure size matches expected value, and pad the total size
+    // Add padding
     countryIndexSize = (int8_t*)index - (int8_t*)result + pad;
-    if (i != n || countryIndexSize != expectedSize) {
-        die("Yikes! Interal error while constructing offset index table");
-    }
     if (pad != 0) {
-        countryIndexSize += pad;
+        expectedSize += pad;
         *(uint16_t*)index = 0; // Clear pad bits
+    }
+
+    // Make sure size matches expected value
+    if (i != n) {
+        die("Yikes! Failed to parse all country index table entries");
+    }
+    if (countryIndexSize != expectedSize) {
+        fprintf(stderr, "ERROR, country index size 0x%0X, expected 0x%0X\n",
+                countryIndexSize, expectedSize);
+        die("Yikes! Internal error while constructing country index table");
     }
     if (verbose) {
         fprintf(stdout, " Read %lu country index table entries, in-memory size %ld bytes\n", (unsigned long)n, (long)countryIndexSize);
