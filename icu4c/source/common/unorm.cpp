@@ -41,6 +41,7 @@
 #include "umutex.h"
 #include "utrie.h"
 #include "unicode/uset.h"
+#include "udataswp.h"
 
 /*
  * Status of tailored normalization
