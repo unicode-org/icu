@@ -99,7 +99,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS" /FD /c
-# ADD CPP /nologo /MD /Za /W3 /GX /Zi /O2 /I "..\..\..\include" /I "..\..\common" /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS" /D "U_USTDIO_IMPLEMENTATION" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /GF /QIA64_fmaopt /Wp64 /Zm600 /c
+# ADD CPP /nologo /MD /Za /W3 /GX /Zi /O2 /I "..\..\..\include" /I "..\..\common" /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS" /D "U_USTDIO_IMPLEMENTATION" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /GF /QIA64_fmaopt /Zm600 /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win64
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win64
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -108,8 +108,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:IX86 /machine:IA64
-# ADD LINK32 icuuc.lib icuin.lib /nologo /dll /machine:IX86 /out:"..\..\..\bin\icuio22.dll" /implib:"..\..\..\lib/icuio.lib" /libpath:"..\..\..\lib\\" /machine:IA64
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:IA64
+# ADD LINK32 icuuc.lib icuin.lib /nologo /dll /machine:IA64 /out:"..\..\..\bin\icuio22.dll" /implib:"..\..\..\lib/icuio.lib" /libpath:"..\..\..\lib\\"
 
 !ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
 
@@ -125,7 +125,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN64" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS" /FD /GZ /c
-# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /Zi /Od /I "..\..\..\include" /I "..\..\common" /D "WIN64" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS" /D "U_USTDIO_IMPLEMENTATION" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FR /FD /GF /GZ /QIA64_fmaopt /Wp64 /Zm600 /c
+# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /Zi /Od /I "..\..\..\include" /I "..\..\common" /D "WIN64" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS" /D "U_USTDIO_IMPLEMENTATION" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FR /FD /GF /GZ /QIA64_fmaopt /Zm600 /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win64
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win64
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -134,8 +134,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:IX86 /pdbtype:sept /machine:IA64
-# ADD LINK32 icuucd.lib icuind.lib /nologo /dll /incremental:no /debug /machine:IX86 /out:"..\..\..\bin\icuio22d.dll" /implib:"..\..\..\lib\icuiod.lib" /pdbtype:sept /libpath:"debug" /libpath:"..\..\..\lib\\" /machine:IA64
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:IA64 /pdbtype:sept
+# ADD LINK32 icuucd.lib icuind.lib /nologo /dll /incremental:no /debug /machine:IA64 /out:"..\..\..\bin\icuio22d.dll" /implib:"..\..\..\lib\icuiod.lib" /pdbtype:sept /libpath:"debug" /libpath:"..\..\..\lib\\"
 
 !ENDIF 
 
@@ -151,263 +151,63 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=.\locbund.c
-
-!IF  "$(CFG)" == "ustdio - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
-
-# ADD CPP /G6
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\loccache.c
-
-!IF  "$(CFG)" == "ustdio - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
-
-# ADD CPP /G6
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\sprintf.c
-
-!IF  "$(CFG)" == "ustdio - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
-
-# ADD CPP /G6
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\sprntf_p.c
-
-!IF  "$(CFG)" == "ustdio - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
-
-# ADD CPP /G6
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\sscanf.c
-
-!IF  "$(CFG)" == "ustdio - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
-
-# ADD CPP /G6
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\sscanf_p.c
-
-!IF  "$(CFG)" == "ustdio - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
-
-# ADD CPP /G6
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\ufile.c
-
-!IF  "$(CFG)" == "ustdio - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
-
-# ADD CPP /G6
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\ufmt_cmn.c
-
-!IF  "$(CFG)" == "ustdio - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
-
-# ADD CPP /G6
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\uprintf.c
-
-!IF  "$(CFG)" == "ustdio - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
-
-# ADD CPP /G6
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\uprntf_p.c
-
-!IF  "$(CFG)" == "ustdio - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
-
-# ADD CPP /G6
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\uscanf.c
-
-!IF  "$(CFG)" == "ustdio - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
-
-# ADD CPP /G6
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\uscanf_p.c
-
-!IF  "$(CFG)" == "ustdio - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
-
-# ADD CPP /G6
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\uscanset.c
-
-!IF  "$(CFG)" == "ustdio - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
-
-# ADD CPP /G6
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\ustdio.c
-
-!IF  "$(CFG)" == "ustdio - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
-
-# ADD CPP /G6
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\ustream.cpp
-
-!IF  "$(CFG)" == "ustdio - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
-
-# ADD CPP /G6 /Ze
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
-
-# ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -475,7 +275,7 @@ SOURCE=.\unicode\ustdio.h
 InputPath=.\unicode\ustdio.h
 
 "..\..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\..\include\unicode
+    copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -485,7 +285,7 @@ InputPath=.\unicode\ustdio.h
 InputPath=.\unicode\ustdio.h
 
 "..\..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\..\include\unicode
+    copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -495,7 +295,7 @@ InputPath=.\unicode\ustdio.h
 InputPath=.\unicode\ustdio.h
 
 "..\..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\..\include\unicode
+    copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -505,7 +305,7 @@ InputPath=.\unicode\ustdio.h
 InputPath=.\unicode\ustdio.h
 
 "..\..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\..\include\unicode
+    copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -522,7 +322,7 @@ SOURCE=.\unicode\ustream.h
 InputPath=.\unicode\ustream.h
 
 "..\..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\..\include\unicode
+    copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -532,7 +332,7 @@ InputPath=.\unicode\ustream.h
 InputPath=.\unicode\ustream.h
 
 "..\..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\..\include\unicode
+    copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -542,7 +342,7 @@ InputPath=.\unicode\ustream.h
 InputPath=.\unicode\ustream.h
 
 "..\..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\..\include\unicode
+    copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -552,7 +352,7 @@ InputPath=.\unicode\ustream.h
 InputPath=.\unicode\ustream.h
 
 "..\..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\..\include\unicode
+    copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
