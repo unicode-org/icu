@@ -526,7 +526,8 @@ public class MakeUnicodeFiles {
         TreeSet sortedSet = new TreeSet(CASELESS_COMPARATOR);
         BagFormatter bf = new BagFormatter();
         Tabber.MonoTabber mt = new Tabber.MonoTabber()
-        .add(10,Tabber.LEFT);
+        .add(10,Tabber.LEFT)
+        .add(30,Tabber.LEFT);
         int count = 0;
         
         for (int i = UnicodeProperty.LIMIT_TYPE - 1; i >= UnicodeProperty.BINARY; --i) {
@@ -604,7 +605,7 @@ public class MakeUnicodeFiles {
         "gc\t;\tLC\t;\tCased_Letter\t# Ll | Lt | Lu",
         "gc\t;\tM\t;\tMark\t# Mc | Me | Mn",
         "gc\t;\tN\t;\tNumber\t# Nd | Nl | No",
-        "gc\t;\tP\t;\tPunctuation\t# Pc | Pd | Pe | Pf | Pi | Po | Ps",
+        "gc\t;\tP\t;\tPunctuation\t;\tpunct\t# Pc | Pd | Pe | Pf | Pi | Po | Ps",
         "gc\t;\tS\t;\tSymbol\t# Sc | Sk | Sm | So",
         "gc\t;\tZ\t;\tSeparator\t# Zl | Zp | Zs"};
         
