@@ -160,9 +160,23 @@ static const struct AssemblyType {
 
     ".long "
     },
+    {"sun",
+
+    "\t.section \".rodata\"\n"
+    "\t.align   16\n"
+    ".globl     %s\n"
+    "%s:\n",
+
+    ".word "
+    },
     {"xlc",
-    "",
-    ""}
+
+    ".globl %s{RO}\n"
+    "\t.toc\n"
+    "%s:\n"
+    "\t.csect %s{RO}, 4\n",
+
+    ".long"}
 };
 
 static int32_t assemblyHeaderIndex = -1;
