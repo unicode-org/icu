@@ -104,6 +104,7 @@ int main(int argc, const char* const argv[])
     int nerrors = 0;
     int warnOnMissingData = 0;
     int i, j;
+    UBool   defaultDataFound;
     TestNode *root;
     const char *warnOrErr = "Failure"; 
     const char** argv2;
@@ -169,10 +170,12 @@ int main(int argc, const char* const argv[])
          *  Whether or not this test succeeds, we want to cleanup and reinitialize
          *  with a data path so that data loading from individual files can be tested.
          */
+        defaultDataFound = TRUE;
         u_init(&errorCode);
         if (U_FAILURE(errorCode)) {
             fprintf(stderr,
                 "#### Note:  ICU Init without build-specific setDataDirectory() failed.\n");
+            defaultDataFound = FALSE;
         }
         u_cleanup();
         errorCode = U_ZERO_ERROR;
@@ -180,7 +183,9 @@ int main(int argc, const char* const argv[])
         utrace_setLevel(ICU_TRACE);
 
         /* Initialize ICU */
-        ctest_setICU_DATA();    /* u_setDataDirectory() must happen Before u_init() */
+        if (!defaultDataFound) {
+            ctest_setICU_DATA();    /* u_setDataDirectory() must happen Before u_init() */
+        }
         u_init(&errorCode);
         if (U_FAILURE(errorCode)) {
             fprintf(stderr,
