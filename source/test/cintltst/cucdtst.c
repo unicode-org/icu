@@ -1623,8 +1623,9 @@ TestCharNames() {
         uprv_getCharNameCharacters(set);
 
         /* build set the dumb (but sure-fire) way */
-        for (i=0; i<256; ++i)
+        for (i=0; i<256; ++i) {
             map[i] = FALSE;
+        }
 
         maxLength=0;
         for (cp=0; cp<0x110000; ++cp) {
@@ -1646,6 +1647,15 @@ TestCharNames() {
                     map[(uint8_t) buf[i]] = TRUE;
                 }
             }
+
+            /* test for leading/trailing whitespace */
+            if(buf[0]==' ' || buf[0]=='\t' || buf[len-1]==' ' || buf[len-1]=='\t') {
+                log_err("u_charName(U+%04x) returns a name with leading or trailing whitespace\n", cp);
+            }
+        }
+
+        if(map[(uint8_t)'\t']) {
+            log_err("u_charName() returned a name with a TAB for some code point\n", cp);
         }
 
         length=uprv_getMaxCharNameLength();
