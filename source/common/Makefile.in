@@ -22,7 +22,7 @@ include @platform_make_fragment@
 subdir = common
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS)
+CLEANFILES = *~ $(DEPS) icucfg.h unicode/platform.h
 
 ## Target information
 
