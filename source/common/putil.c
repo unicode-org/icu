@@ -87,7 +87,7 @@
 #   include <IntlResources.h>
 #   include <Script.h>
 #   include <Folders.h>
-#   include <Errors.h>
+#   include <MacTypes.h>
 #   include <TextUtils.h>
 #elif defined(AIX)
 #   include <sys/ldr.h>
