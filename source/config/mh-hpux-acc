@@ -59,6 +59,9 @@ LDLIBRARYPATH_ENVVAR = SHLIB_PATH
 ## Compiler switch to embed a library name
 LD_SONAME = -Wl,+h,$(notdir $(MIDDLE_SO_TARGET))
 
+## The type of assembly needed when pkgdata is used for generating shared libraries.
+GENCCODE_ASSEMBLY=-a aCC
+
 ## Shared object suffix
 SO=		sl
 ## Non-shared intermediate object suffix
