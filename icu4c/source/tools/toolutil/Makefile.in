@@ -53,7 +53,7 @@ CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@  $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
 LIBS = $(LIBICU-UC) @LIBS@ 
 
-OBJECTS = toolutil.o unewdata.o ucmpwrit.o
+OBJECTS = toolutil.o unewdata.o ucmpwrit.o uoptions.o
 
 DEPS = $(OBJECTS:.o=.d)
 
