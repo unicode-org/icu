@@ -1,16 +1,14 @@
 #--------------------------------------------------------------------
 # Copyright (c) 1999-2001, International Business Machines
-# Corporation and others.  All Rights Reserved.
+# Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
-# Bengali_InterIndic
+# $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Bengali_InterIndic.txt,v $
+# $Date: 2002/03/02 00:27:26 $
+# $Revision: 1.8 $
 #--------------------------------------------------------------------
-# Copyright (c) 1999-2001, International Business Machines
-# Corporation and others.  All Rights Reserved.
-#--------------------------------------------------------------------
-# Date: Tue Jan 23 12:41:57 2001
-#--------------------------------------------------------------------
+
 # Bengali-InterIndic
-#:: NFD (NFC) ;
+
 \u09C7\u09BE>\uE04B; # VOWEL SIGN O
 \u09C7\u09D7>\uE04C; # VOWEL SIGN AU
 \u0981>\uE001; # SIGN CANDRABINDU
