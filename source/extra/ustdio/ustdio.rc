@@ -51,7 +51,7 @@ BEGIN
             VALUE "CompanyName", "IBM Inc.\0"
             VALUE "FileDescription", "IBM ICU ustdio DLL\0"
             VALUE "FileVersion",  CommaVersionString(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, 0)
-            VALUE "LegalCopyright", "Copyright (C) 2001 IBM Inc. \0"
+            VALUE "LegalCopyright", U_COPYRIGHT_STRING "\0"
 #ifdef _DEBUG
             VALUE "OriginalFilename", "icuio" U_ICU_VERSION_SHORT "d.dll")
 #else
