@@ -148,6 +148,11 @@ import com.ibm.icu.util.UResourceBundle;
 
     static MapComparator elementOrdering = new MapComparator();
     static MapComparator attributeOrdering = new MapComparator();
+    {
+        // hack the ordering of these two
+        attributeOrdering.add("alt");
+        attributeOrdering.add("draft");
+    }
     static MapComparator valueOrdering = new MapComparator();
         
     OrderedMap data = new OrderedMap();
