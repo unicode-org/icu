@@ -328,6 +328,15 @@
 "ab([0-9]+|[A-Z]+)yz"            "---<0>ab<1>AB</1>yz</0>+++"
 "ab([0-9]+|[A-Z]+)yz"            "---<0>ab<1>ABCDE</1>yz</0>+++"
 
+#
+#  Hex format \x escaping
+#
+"ab\x63"                         "<0>abc</0>"
+"ab\x09w"                        "<0>ab\u0009w</0>"
+"ab\xabcdc"                      "<0>ab\u00abcdc</0>"
+"ab\x{abcd}c"                    "<0>ab\uabcdc</0>"
+"ab\x{101234}c"                    "<0>ab\U00101234c</0>"
+"abα"                            "<0>abα</0>"
 
 #
 #  Random debugging, Temporary

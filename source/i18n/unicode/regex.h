@@ -768,7 +768,7 @@ public:
      *                field delimiters, is placed in the last destination string.
      * @param status  A reference to a UErrorCode to receive any errors.
      * @return        The number of fields into which the input string was split.
-     * @draft ICU 2.4
+     * @draft ICU 2.6
      */
     virtual int32_t  split(const UnicodeString &input,
         UnicodeString    dest[],
