@@ -5,6 +5,7 @@
  ********************************************************************/
 
 #include "uobjtest.h"
+#include "cmemory.h" // UAlignedMemory
 #include <string.h>
 #include <stdio.h>
 
@@ -343,6 +344,59 @@ void UObjectTest::testIDs()
 #endif
 }
 
+void UObjectTest::testUMemory() {
+    // additional tests for code coverage
+#if U_OVERRIDE_CXX_ALLOCATION && U_HAVE_PLACEMENT_NEW
+    UAlignedMemory stackMemory[sizeof(UnicodeString)/sizeof(UAlignedMemory)+1];
+    UnicodeString *p;
+    enum { len=20 };
+
+    p=new(stackMemory) UnicodeString(len, (UChar32)0x20ac, len);
+    if((void *)p!=(void *)stackMemory) {
+        errln("placement new did not place the object at the expected address");
+    }
+    if(p->length()!=len || p->charAt(0)!=0x20ac || p->charAt(len-1)!=0x20ac) {
+        errln("constructor used with placement new did not work right");
+    }
+
+    /*
+     * It is not possible to simply say
+     *     delete(p, stackMemory);
+     * which results in a call to the normal, non-placement delete operator.
+     *
+     * Via a search on google.com for "c++ placement delete" I found
+     * http://cpptips.hyperformix.com/cpptips/placement_del3
+     * which says:
+     *
+     * TITLE: using placement delete
+     *
+     * (Newsgroups: comp.std.c++, 27 Aug 97)
+     *
+     * ISJ: isj@image.dk
+     *
+     * > I do not completely understand how placement works on operator delete.
+     * > ...
+     * There is no delete-expression which will invoke a placement
+     * form of operator delete. You can still call the function
+     * explicitly. Example:
+     * ...
+     *     // destroy object and delete space manually
+     *     p->~T();
+     *     operator delete(p, 12);
+     *
+     * ... so that's what I am doing here.
+     * markus 20031216
+     */
+    // destroy object and delete space manually
+    p->~UnicodeString(); 
+    UnicodeString::operator delete(p, stackMemory); 
+#endif
+
+    // try to call the compiler-generated UMemory::operator=(class UMemory const &)
+    UMemory m, n;
+    m=n;
+}
+
 /* --------------- */
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
@@ -353,6 +407,7 @@ void UObjectTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     switch (index) {
 
     CASE(0, testIDs);
+    CASE(1, testUMemory);
 
     default: name = ""; break; //needed to end loop
     }
