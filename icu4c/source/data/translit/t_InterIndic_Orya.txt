@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Oriya.txt
-// Date: Fri Nov 30 13:01:42 2001
+// Date: Fri Nov 30 19:39:31 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Oriya
@@ -125,6 +125,8 @@ translit_InterIndic_Oriya {
 "\ue061>\u0b61;" // LETTER VOCALIC LL
 "\ue062>\u0b56\u0b3c;" // REMAP (indicExceptions.txt): \u0b62>\u0b56\u0b3c = VOWEL SIGN VOCALIC L>AI LENGTH MARK.SIGN NUKTA
 "\ue063>\u0b57\u0b3c;" // REMAP (indicExceptions.txt): \u0b63>\u0b57\u0b3c = VOWEL SIGN VOCALIC LL>AU LENGTH MARK.SIGN NUKTA
+"\uE064>\u0964;"          // DANDA
+"\uE065>\u0965;"          // DOUBLE DANDA
 "\ue066>\u0b66;" // DIGIT ZERO
 "\ue067>\u0b67;" // DIGIT ONE
 "\ue068>\u0b68;" // DIGIT TWO

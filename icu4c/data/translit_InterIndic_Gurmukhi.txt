@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Gurmukhi.txt
-// Date: Fri Nov 30 13:01:41 2001
+// Date: Fri Nov 30 19:39:31 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Gurmukhi
@@ -125,6 +125,8 @@ translit_InterIndic_Gurmukhi {
 "\ue061>\u0a33\u0a3c;" // 
 "\ue062>\u0a3f\u0a3c;" // REMAP (indicExceptions.txt): \u0a62>\u0a3f\u0a3c = VOWEL SIGN VOCALIC L>VOWEL SIGN I.SIGN NUKTA
 "\ue063>\u0a40\u0a3c;" // REMAP (indicExceptions.txt): \u0a63>\u0a40\u0a3c = VOWEL SIGN VOCALIC LL>VOWEL SIGN II.SIGN NUKTA
+"\uE064>\u0964;"          // DANDA
+"\uE065>\u0965;"          // DOUBLE DANDA
 "\ue066>\u0a66;" // DIGIT ZERO
 "\ue067>\u0a67;" // DIGIT ONE
 "\ue068>\u0a68;" // DIGIT TWO

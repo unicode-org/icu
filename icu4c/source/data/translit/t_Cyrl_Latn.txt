@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Cyrillic_Latin.txt
-// Date: Fri Nov 30 13:01:41 2001
+// Date: Fri Nov 30 19:39:30 2001
 //--------------------------------------------------------------------
 
 // Cyrillic_Latin
@@ -18,8 +18,8 @@ translit_Cyrillic_Latin {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/source/data/translit/Attic/t_Cyrl_Latn.txt,v $
-// $Date: 2001/11/30 21:24:15 $
-// $Revision: 1.5 $
+// $Date: 2001/12/01 04:30:28 $
+// $Revision: 1.6 $
 //--------------------------------------------------------------------
 // TODO: add remaining characters
 // Should add variants for Russian-English, Russian-German
@@ -27,8 +27,9 @@ translit_Cyrillic_Latin {
 // like a $hat to ya or ja.
 
 // :: [\\u0000-\u007E \u02B9 \u02BA [:Cyrillic:] [:Latin:] [:nonspacing mark:]] ;
+//## WARNING, \u0308 must be added to the generated filters, in both directions ###
 // MINIMAL FILTER
-":: [\u0400-\u045F\u0490-\u0495\u0498-\u0499\u04C1-\u04C2\u04D0-\u04DF\u04E2-\u04E7\u04EC-\u04F5\u04F8-\u04F9] ;"
+":: [\u0308\u0102-\u0103\u0114-\u0115\u011E-\u011F\u012C-\u012D\u014E-\u014F\u016C-\u016D\u0306\u0400-\u045F\u0490-\u0495\u0498-\u0499\u04C1-\u04C2\u04D0-\u04DF\u04E2-\u04E7\u04EC-\u04F5\u04F8-\u04F9\u1E1C-\u1E1D\u1EAE-\u1EB7\u1FB0\u1FB8\u1FD0\u1FD8\u1FE0\u1FE8] ;"
 ":: NFD (NFC) ;"
 
 "$modprime = \u02B9;"
@@ -321,6 +322,6 @@ translit_Cyrillic_Latin {
 // note: a global filter is more efficient, but MUST include all source chars!!
 // :: ([\\u0000-\u007E \u02B9 \u02BA [:Cyrillic:] [:Latin:] [:nonspacing mark:]]);
 // MINIMAL FILTER: Latin-Cyrillic
-":: ( [A-Za-z\u00C0-\u00CF\u00D1-\u00D6\u00D9-\u00DD\u00E0-\u00EF\u00F1-\u00F6\u00F9-\u00FD\u00FF-\u0125\u0128-\u0130\u0134-\u0137\u0139-\u013E\u0143-\u0148\u014C-\u0151\u0154-\u0165\u0168-\u017E\u018F\u01A0-\u01A1\u01AF-\u01B0\u01CD-\u01DC\u01DE-\u01E3\u01E6-\u01ED\u01F0\u01F4-\u01F5\u01F8-\u01FD\u0200-\u021B\u021E-\u021F\u0226-\u0233\u0259\u02B9-\u02BA\u0374\u1E00-\u1E99\u1EA0-\u1EF9\u212A-\u212B] ) ;"
+":: ( [\u0308A-Za-z\u00C0-\u00CF\u00D1-\u00D6\u00D9-\u00DD\u00E0-\u00EF\u00F1-\u00F6\u00F9-\u00FD\u00FF-\u0125\u0128-\u0130\u0134-\u0137\u0139-\u013E\u0143-\u0148\u014C-\u0151\u0154-\u0165\u0168-\u017E\u018F\u01A0-\u01A1\u01AF-\u01B0\u01CD-\u01DC\u01DE-\u01E3\u01E6-\u01F0\u01F4-\u01F5\u01F8-\u021B\u021E-\u021F\u0226-\u0233\u0259\u02B9-\u02BA\u0300-\u0302\u0306-\u0307\u030C\u0326\u0331\u0340-\u0341\u0344\u0374\u0385-\u0386\u0388-\u038A\u038C\u038E-\u0390\u03AC-\u03B0\u03CC-\u03CE\u03D3\u0400\u0403\u040C-\u040E\u0419\u0439\u0450\u0453\u045C-\u045E\u04C1-\u04C2\u04D0-\u04D1\u04D6-\u04D7\u1E00-\u1E99\u1E9B\u1EA0-\u1EF9\u1F02-\u1F05\u1F0A-\u1F0D\u1F12-\u1F15\u1F1A-\u1F1D\u1F22-\u1F25\u1F2A-\u1F2D\u1F32-\u1F35\u1F3A-\u1F3D\u1F42-\u1F45\u1F4A-\u1F4D\u1F52-\u1F55\u1F5B\u1F5D\u1F62-\u1F65\u1F6A-\u1F6D\u1F70-\u1F7D\u1F82-\u1F85\u1F8A-\u1F8D\u1F92-\u1F95\u1F9A-\u1F9D\u1FA2-\u1FA5\u1FAA-\u1FAD\u1FB0\u1FB2\u1FB4\u1FB8\u1FBA-\u1FBB\u1FC2\u1FC4\u1FC8-\u1FCB\u1FCD-\u1FCE\u1FD0\u1FD2-\u1FD3\u1FD8\u1FDA-\u1FDB\u1FDD-\u1FDE\u1FE0\u1FE2-\u1FE3\u1FE8\u1FEA-\u1FEB\u1FED-\u1FEE\u1FF2\u1FF4\u1FF8-\u1FFB\u212A-\u212B] ) ;"
   }
 }

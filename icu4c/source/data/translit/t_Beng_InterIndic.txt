@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Bengali_InterIndic.txt
-// Date: Fri Nov 30 13:01:41 2001
+// Date: Fri Nov 30 19:39:30 2001
 //--------------------------------------------------------------------
 
 // Bengali_InterIndic
@@ -116,6 +116,8 @@ translit_Bengali_InterIndic {
 "\u09F8>;"       // UNMAPPED Bengali-InterIndic: CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
 "\u09F9>;"       // UNMAPPED Bengali-InterIndic: CURRENCY DENOMINATOR SIXTEEN
 "\u09FA>\uE070;" // ISSHAR
+"\u0964>\ue064;"        // DANDA
+"\u0965>\ue065;"        // DOUBLE DANDA
 //    :: NFC (NFD) ;
 // eof
   }
