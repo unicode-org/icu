@@ -49,6 +49,16 @@ HAVE_INTTYPES_H=1
 fi
 AC_SUBST(HAVE_INTTYPES_H)
 
+dnl Check for endianness
+AC_C_BIGENDIAN(unknown)
+if test $ac_cv_c_bigendian = no; then
+U_IS_BIG_ENDIAN=0
+else
+U_IS_BIG_ENDIAN=1
+fi
+AC_SUBST(U_IS_BIG_ENDIAN)
+
+
 dnl Checks for typedefs
 AC_CHECK_TYPE(int8_t,signed char)
 AC_CHECK_TYPE(uint8_t,unsigned char)
