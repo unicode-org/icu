@@ -40,6 +40,15 @@
 #include "cstring.h"
 
 /*
+ * _MBCSHeader versions 1 & 2
+ * (Note that the _MBCSHeader version is in addition to the converter formatVersion.)
+ *
+ * The differences between versions 1 and 2 are small; version 2 adds:
+ * - toUnicode: unassigned and illegal action codes have U+fffe and U+ffff
+ *              instead of unused bits; this is useful for _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP()
+ * - fromUnicode: the converter checks for known output types, which allows
+ *                adding new ones without crashing an unaware converter
+ *
  * Converting stateless codepage data
  * (or codepage data with simple states) to Unicode.
  *
@@ -110,24 +119,30 @@
  * Bit 31 set, terminal entry:
  * 30..27 action code:
  *        0  illegal byte sequence
- *           26..7  not used, 0
+ *           26..23 not used, 0
+ *           22..7  16-bit Unicode BMP code point U+ffff (new with version 2)
  *        1  state change only
  *           26..7  not used, 0
  *           useful for state changes in simple stateful encodings,
  *           at Shift-In/Shift-Out codes
  *        2  unassigned byte sequence
- *           26..7  not used, 0
+ *           26..23 not used, 0
+ *           22..7  16-bit Unicode BMP code point U+ffff (new with version 2)
  *                  this does not contain a final offset delta because the main
  *                  purpose of this action code is to save scalar offset values;
  *                  therefore, fallback values cannot be assigned to byte
  *                  sequences that result in this action code - use codes 5 or 6
+ *
+ *        action codes 3 and 4 result in fallback (unidirectional-mapping) Unicode code points
  *        3  valid byte sequence (fallback)
+ *           26..23 not used, 0
  *           22..7  16-bit Unicode BMP code point as fallback result
  *        4  valid byte sequence (fallback)
  *           26..7  20-bit Unicode surrogate code point as fallback result
  *
  *        action codes 5, 6, 7, and 8 result in precise-mapping Unicode code points
  *        5  valid byte sequence
+ *           26..23 not used, 0
  *           22..7  16-bit Unicode BMP code point
  *                  never U+fffe or U+ffff (use action codes 0, 2, 3 or 4 for that)
  *        6  valid byte sequence
@@ -151,6 +166,7 @@
  *                  which may be U+fffe (unassigned) or U+ffff (illegal)
  *           (the final offset deltas are at most 255 * 2,
  *            times 2 because of storing code unit pairs)
+ *
  *        9..15 reserved for future use
  *           current implementations will only perform a state change
  *           and ignore bits 26..7
@@ -251,7 +267,7 @@ _MBCSLoad(UConverterSharedData *sharedData,
     UConverterMBCSTable *mbcsTable=&sharedData->table->mbcs;
     _MBCSHeader *header=(_MBCSHeader *)raw;
 
-    if(header->version[0]!=1) {
+    if(header->version[0]>2) {
         *pErrorCode=U_INVALID_TABLE_FORMAT;
         return;
     }
@@ -265,6 +281,22 @@ _MBCSLoad(UConverterSharedData *sharedData,
     mbcsTable->fromUnicodeTable=(const uint16_t *)(raw+header->offsetFromUTable);
     mbcsTable->fromUnicodeBytes=(const uint8_t *)(raw+header->offsetFromUBytes);
     mbcsTable->outputType=(uint8_t)header->flags;
+
+    /* make sure that the output type is known */
+    switch(mbcsTable->outputType) {
+    case MBCS_OUTPUT_1:
+    case MBCS_OUTPUT_2:
+    case MBCS_OUTPUT_3:
+    case MBCS_OUTPUT_4:
+    case MBCS_OUTPUT_3_EUC:
+    case MBCS_OUTPUT_4_EUC:
+    case MBCS_OUTPUT_2_SISO:
+        /* OK */
+        break;
+    default:
+        *pErrorCode=U_INVALID_TABLE_FORMAT;
+        return;
+    }
 
     /*
      * converter versions 6.1 and up contain a unicodeMask that is
@@ -284,12 +316,13 @@ _MBCSLoad(UConverterSharedData *sharedData,
 U_CFUNC void
 _MBCSReset(UConverter *cnv) {
     /* toUnicode */
-    cnv->toUnicodeStatus=0;
-    cnv->mode=0;
-    cnv->toULength=0;
+    cnv->toUnicodeStatus=0;     /* offset */
+    cnv->mode=0;                /* state */
+    cnv->toULength=0;           /* byteIndex */
 
     /* fromUnicode */
     cnv->fromUSurrogateLead=0;
+    cnv->fromUnicodeStatus=1;   /* prevLength */
 }
 
 U_CFUNC void
@@ -1712,7 +1745,7 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     UConverterCallbackReason reason;
     uint32_t i;
     uint32_t value;
-    int32_t length;
+    int32_t length, prevLength;
 
     /* use optimized function if possible */
     cnv=pArgs->converter;
@@ -1738,6 +1771,7 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     /* get the converter state from UConverter */
     c=cnv->fromUSurrogateLead;
+    prevLength=cnv->fromUnicodeStatus;
 
     /* sourceIndex=-1 if the current character began in the previous buffer */
     sourceIndex= c==0 ? 0 : -1;
@@ -1875,6 +1909,37 @@ getTrail:
                         length=1;
                     } else {
                         length=2;
+                    }
+                    break;
+                case MBCS_OUTPUT_2_SISO:
+                    /* 1/2-byte stateful with Shift-In/Shift-Out */
+                    p+=(16*(uint32_t)table[i]+(c&0xf))*2;
+#                   if U_IS_BIG_ENDIAN
+                        value=*(uint16_t *)p;
+#                   else
+                        value=((uint32_t)*p<<8)|p[1];
+#                   endif
+                    if(value==0 && c!=0) {
+                        /* unassigned (do not allow 0 result for assigned here), do not change state */
+                        length=0;
+                    } else if(value<=0xff) {
+                        if(prevLength==1) {
+                            length=1;
+                        } else {
+                            /* change from double-byte mode to single-byte */
+                            value|=(uint32_t)UCNV_SI<<8;
+                            length=2;
+                            prevLength=1;
+                        }
+                    } else {
+                        if(prevLength==2) {
+                            length=2;
+                        } else {
+                            /* change from single-byte mode to double-byte */
+                            value|=(uint32_t)UCNV_SO<<16;
+                            length=3;
+                            prevLength=2;
+                        }
                     }
                     break;
                 case MBCS_OUTPUT_3:
@@ -2091,6 +2156,7 @@ callback:
 
             /* set the converter state in UConverter to deal with the next character */
             cnv->fromUSurrogateLead=0;
+            cnv->fromUnicodeStatus=prevLength;
 
             /* write the code point as code units */
             i=0;
@@ -2102,6 +2168,7 @@ callback:
 
             /* get the converter state from UConverter */
             c=cnv->fromUSurrogateLead;
+            prevLength=cnv->fromUnicodeStatus;
 
             /* update target and deal with offsets if necessary */
             offsets=ucnv_updateCallbackOffsets(offsets, ((uint8_t *)pArgs->target)-target, sourceIndex);
@@ -2147,9 +2214,11 @@ callback:
             *pErrorCode=U_TRUNCATED_CHAR_FOUND;
         }
         cnv->fromUSurrogateLead=0;
+        cnv->fromUnicodeStatus=1;
     } else {
         /* set the converter state back into UConverter */
         cnv->fromUSurrogateLead=(UChar)c;
+        cnv->fromUnicodeStatus=prevLength;
     }
 
     /* write back the updated pointers */
