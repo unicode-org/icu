@@ -322,6 +322,8 @@ private:
 
     void TestInvalidBackRef(void);
 
+    void TestMulticharStringSet(void);
+
     void TestUserFunction(void);
 
     //======================================================================
