@@ -264,6 +264,8 @@ public:
    * is less than, greater than or equal to another string array.
    * <p>Example of use:
    * <pre>
+   * .       UChar ABC[] = {0x41, 0x42, 0x43, 0};  // = "ABC"
+   * .       UChar abc[] = {0x61, 0x62, 0x63, 0};  // = "abc"
    * .       UErrorCode status = U_ZERO_ERROR;
    * .       Collator *myCollation =
    * .                         Collator::createInstance(Locale::US, status);
@@ -271,13 +273,12 @@ public:
    * .       myCollation->setStrength(Collator::PRIMARY);
    * .       // result would be Collator::EQUAL ("abc" == "ABC")
    * .       // (no primary difference between "abc" and "ABC")
-   * .       Collator::UCollationResult result =
-   * .                              myCollation->compare(L"abc", 3, L"ABC", 3);
+   * .       Collator::EComparisonResult result =
+   * .                             myCollation->compare(abc, 3, ABC, 3);
    * .       myCollation->setStrength(Collator::TERTIARY);
-   * .       // result would be Collator::LESS (abc" &lt;&lt;&lt; "ABC")
+   * .       // result would be Collator::LESS ("abc" &lt;&lt;&lt; "ABC")
    * .       // (with tertiary difference between "abc" and "ABC")
-   * .       Collator::UCollationResult result =
-   * .                              myCollation->compare(L"abc", 3, L"ABC", 3);
+   * .       result =  myCollation->compare(abc, 3, ABC, 3);
    * </pre>
    * @param source the source string array to be compared with.
    * @param sourceLength the length of the source string array. If this value
