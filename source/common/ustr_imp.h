@@ -218,4 +218,20 @@ u_terminateWChars(wchar_t *dest, int32_t destCapacity, int32_t length, UErrorCod
 
 #define u_getMaxCaseExpansion() 10
 
+/**
+ * Find a single (unmatched) surrogate code point in the string s[0..length[ .
+ * Find the first such surrogate.
+ * @internal
+ */
+U_CFUNC const UChar *
+uprv_strFindSurrogate(const UChar *s, int32_t length, UChar surrogate);
+
+/**
+ * Find a single (unmatched) surrogate code point in the string s[0..length[ .
+ * Find the last such surrogate.
+ * @internal
+ */
+U_CFUNC const UChar *
+uprv_strFindLastSurrogate(const UChar *s, int32_t length, UChar surrogate);
+
 #endif
