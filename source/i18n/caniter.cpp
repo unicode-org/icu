@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.cpp,v $ 
- * $Date: 2002/03/20 05:08:57 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/03/20 18:23:40 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -204,8 +204,6 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
         if (unorm_isCanonSafeStart(cp)) {
             source.extract(start, i-start, list[list_length++]); // add up to i
             start = i;
-        } else {
-          cp++; /* ### TODO remove, this is just a breakpoint place */
         }
     }
     source.extract(start, i-start, list[list_length++]); // add last one
@@ -433,8 +431,12 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
     const int32_t decompSize = 64;
     int32_t inputLen = 0;
     UChar decomp[decompSize];
+
     UTF_APPEND_CHAR(temp, inputLen, bufSize, comp);
-    int32_t decompLen = unorm_decompose(decomp, decompSize, temp, inputLen, FALSE, FALSE, &status);
+    int32_t decompLen = unorm_getDecomposition(comp, FALSE, decomp, decompSize);
+    if(decompLen < 0) {
+        decompLen = -decompLen;
+    }
 
     UChar *buff = temp+inputLen;
 
