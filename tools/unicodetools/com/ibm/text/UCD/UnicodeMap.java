@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Attic/UnicodeMap.java,v $
-* $Date: 2003/04/01 02:53:07 $
-* $Revision: 1.1 $
+* $Date: 2003/04/02 05:16:44 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -91,4 +91,19 @@ public class UnicodeMap {
     public int size() {
         return count;
     }
+    
+    public int setLabel(int index, String label) {
+        labels[index] = label;
+        return index;
+    }
+
+    public int put(int codepoint, int index) {
+        if (sets[index] == null) {
+            sets[index] = new UnicodeSet();
+            if (index >= count) count = index + 1;
+        }
+        sets[index].add(codepoint);
+        return index;
+    }
+
 }
