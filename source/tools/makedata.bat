@@ -37,6 +37,11 @@ echo unames_dat.obj>>mkdll.tmp
 type mkdll.lk>>mkdll.tmp
 link @mkdll.tmp
 
+echo create the common, memory-mappable file
+del "%ICU_DATA%icudata.dat"
+echo %ICU_DATA%unames.dat>mkmap.tmp
+gencmn\%toolversion%\gencmn 1000000 mkmap.tmp
+
 goto :end
 
 :error
