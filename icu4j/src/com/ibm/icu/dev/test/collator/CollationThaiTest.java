@@ -26,7 +26,7 @@ import java.io.*;
 
 public class CollationThaiTest extends TestFmwk {
     
-    final int MAX_FAILURES_TO_SHOW = 8;
+    final int MAX_FAILURES_TO_SHOW = -1;
     
     public static void main(String[] args) throws Exception {
         new CollationThaiTest().run(args);
@@ -117,7 +117,7 @@ public class CollationThaiTest extends TestFmwk {
      * preceding the following line.
      */
     public void TestDictionary() {
-        Collator coll = null;
+        RuleBasedCollator coll = null;
         try {
             coll = getThaiCollator();
         } catch (Exception e) {
@@ -126,21 +126,22 @@ public class CollationThaiTest extends TestFmwk {
         }
      
         // Read in a dictionary of Thai words
-        DataInputStream in = null;
-        String fileName = "th18057.txt";
+        BufferedReader in = null;
+        String fileName = "riwords.txt";
         try {
-            in = new DataInputStream(new FileInputStream(TestUtil.getDataFile(
-                                                                   fileName)));
+            in = new BufferedReader(
+                    new InputStreamReader(
+                        new FileInputStream(TestUtil.getDataFile(fileName)),
+                                            "UTF-8"));
         } catch (Exception e) {
             try {
                 in.close();
             } catch (IOException ioe) {}
-            errln("Error: could not open test file: " + fileName);
+            errln("Error: could not open test file: " + fileName 
+                  + ". Aborting test.");
             return;        
         }
     
-        stripBOM(in);
-        
         //
         // Loop through each word in the dictionary and compare it to the previous
         // word.  They should be in sorted order.
@@ -149,13 +150,14 @@ public class CollationThaiTest extends TestFmwk {
         int line = 0;
         int failed = 0;
         int wordCount = 0;
-        String word = readLine(in);
+        try {
+        String word = in.readLine();
         while (word != null) {
             line++;
-    
+             
             // Skip comments and blank lines
             if (word.length() == 0 || word.charAt(0) == 0x23) {
-                word = readLine(in);
+                word = in.readLine();
                 continue;
             }
     
@@ -166,20 +168,8 @@ public class CollationThaiTest extends TestFmwk {
             }
     
             if (lastWord.length() > 0) {
-                int result = 0;
-                try {
-                    CollationTest.backAndForth(this, 
-                        ((RuleBasedCollator)coll).getCollationElementIterator(
-                                                                    lastWord));
-                    CollationTest.backAndForth(this, 
-                        ((RuleBasedCollator)coll).getCollationElementIterator(
-                                                                        word));
-                    result = coll.compare(lastWord, word);
-                } catch (Exception e) {
-                    logln("line" + line + ":" + word);
-                    logln("lastWord = " + lastWord);
-                    logln(e.getMessage());
-                }
+                CollationTest.doTest(this, coll, lastWord, word, -1);
+                int result = coll.compare(lastWord, word); 
         
                 if (result >= 0) {
                     failed++;
@@ -204,7 +194,10 @@ public class CollationThaiTest extends TestFmwk {
                 }
             }
             lastWord = word;
-            word = readLine(in);
+            word = in.readLine();
+        }
+        } catch (IOException e) {
+            errln("IOException " + e.getMessage());
         }
     
         if (failed != 0) {
@@ -260,7 +253,7 @@ public class CollationThaiTest extends TestFmwk {
     {
         String tests[] = {
             "\u0E41c\u0301",      "=", "\u0E41\u0107", // composition
-            "\u0E41\uD834\uDC00", "<", "\u0E41\uD834\uDC01", // supplementaries
+            "\u0E41\uD835\uDFCE", "<", "\u0E41\uD835\uDFCF", // supplementaries
             "\u0E41\uD834\uDD5F", "=", "\u0E41\uD834\uDD58\uD834\uDD65", // supplementary composition decomps to supplementary
             "\u0E41\uD87E\uDC02", "=", "\u0E41\u4E41", // supplementary composition decomps to BMP
             "\u0E41\u0301",       "=", "\u0E41\u0301", // unsafe (just checking backwards iteration)
@@ -308,84 +301,15 @@ public class CollationThaiTest extends TestFmwk {
         compareArray(collator, testcontraction);
     }
     
-    private static final byte BOM[] = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
     
-    private byte savedBytes[]= new byte[BOM.length];
-    private int  savedByteCount = 0;
-    private int  savedByte = 0;
     
-    void stripBOM(DataInputStream in) {
-        try {
-            savedByteCount = in.read(savedBytes, 0, BOM.length);
-            
-            for (int i = 0; i < BOM.length; i += 1) {
-                if (savedBytes[i] != BOM[i]) {
-                    return;
-                }
-            }
-            
-            savedByteCount = 0;
-            savedByte = 0;
-        } catch (EOFException ee) {
-            // nothing
-        } catch (IOException e) {
-            // nothing
-        }
-    }
     
-    String readLine(DataInputStream in) {
-        byte[] bytes = new byte[128];
-        int i = 0;
-        byte c = 0;
-        
-        while (i < 128) {
-            if (savedByte < savedByteCount) {
-                c = savedBytes[savedByte++];
-            } else {
-                try {
-                    c = in.readByte();
-                } catch (EOFException ee) {
-                    return null;
-                } catch (IOException e) {
-                    errln("Cannot read line from the file");
-                    return null;
-                }
-            }
-            
-            if (c == 0xD) {
-                try {
-                    c = in.readByte();
-                    
-                    if (c != 0xA) {
-                        savedBytes[0] = c;
-                        savedByte = 0;
-                        savedByteCount = 1;
-                    }
-                } catch (EOFException ee) {
-                    break;
-                } catch (IOException e) {
-                    errln("Cannot read line from the file");
-                    return null;
-                }
-                
-                break;
-            } else if (c == 0xA) {
-                break;
-            }
-            
-            bytes[i++] = c;
-        }
-        
-        String line = null;
-        
-        try {
-            line = new String(bytes, 0, i, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            System.out.println(e);
-        }
-        
-        return line;
-    }
+    
+    
+    
+    
+    
+
     
     String prettify(CollationKey sourceKey) {
         int i;
