@@ -328,7 +328,10 @@ void NormalizationTransliterator::initStatics() {
             SKIPPABLES = new UnicodeSet[4];
             UErrorCode ec = U_ZERO_ERROR;
            
-            SKIPPABLES[D].applyPattern(
+            // (Technically, the invariant converter is not guaranteed to
+            // convert the backslash correctly, but in practice it does.)
+
+            SKIPPABLES[D].applyPattern(UnicodeString(
 	        "[^\\u00C0-\\u00C5\\u00C7-\\u00CF\\u00D1-\\u00D6\\u00D9-\\u00DD\\u00E0-"
 	        "\\u00E5\\u00E7-\\u00EF\\u00F1-\\u00F6\\u00F9-\\u00FD\\u00FF-\\u010F\\u0112"
 	        "-\\u0125\\u0128-\\u0130\\u0134-\\u0137\\u0139-\\u013E\\u0143-\\u0148"
@@ -370,9 +373,9 @@ void NormalizationTransliterator::initStatics() {
 	        "\\uFB1F\\uFB2A-\\uFB36\\uFB38-\\uFB3C\\uFB3E\\uFB40-\\uFB41\\uFB43-\\uFB44"
 	        "\\uFB46-\\uFB4E\\uFE20-\\uFE23\\U0001D15E-\\U0001D169\\U0001D16D-\\U0001"
 	        "D172\\U0001D17B-\\U0001D182\\U0001D185-\\U0001D18B\\U0001D1AA-\\U0001D"
-	        "1AD\\U0001D1BB-\\U0001D1C0\\U0002F800-\\U0002FA1D]", ec);
+	        "1AD\\U0001D1BB-\\U0001D1C0\\U0002F800-\\U0002FA1D]", ""), ec);
 
-            SKIPPABLES[C].applyPattern(
+            SKIPPABLES[C].applyPattern(UnicodeString(
 	        "[^<->A-PR-Za-pr-z\\u00A8\\u00C0-\\u00CF\\u00D1-\\u00D6\\u00D8-\\u00DD"
 	        "\\u00E0-\\u00EF\\u00F1-\\u00F6\\u00F8-\\u00FD\\u00FF-\\u0103\\u0106-"
 	        "\\u010F\\u0112-\\u0117\\u011A-\\u0121\\u0124-\\u0125\\u0128-\\u012D\\u0130"
@@ -463,9 +466,9 @@ void NormalizationTransliterator::initStatics() {
 	        "-\\uFB3C\\uFB3E\\uFB40-\\uFB41\\uFB43-\\uFB44\\uFB46-\\uFB4E\\uFE20-"
 	        "\\uFE23\\U0001D15E-\\U0001D169\\U0001D16D-\\U0001D172\\U0001D17B-"
 	        "\\U0001D182\\U0001D185-\\U0001D18B\\U0001D1AA-\\U0001D1AD\\U0001D1BB-"
-	        "\\U0001D1C0\\U0002F800-\\U0002FA1D]", ec);
+	        "\\U0001D1C0\\U0002F800-\\U0002FA1D]", ""), ec);
 
-            SKIPPABLES[KD].applyPattern(
+            SKIPPABLES[KD].applyPattern(UnicodeString(
 	        "[^\\u00A0\\u00A8\\u00AA\\u00AF\\u00B2-\\u00B5\\u00B8-\\u00BA\\u00BC-"
 	        "\\u00BE\\u00C0-\\u00C5\\u00C7-\\u00CF\\u00D1-\\u00D6\\u00D9-\\u00DD\\u00E0"
 	        "-\\u00E5\\u00E7-\\u00EF\\u00F1-\\u00F6\\u00F9-\\u00FD\\u00FF-\\u010F"
@@ -528,9 +531,9 @@ void NormalizationTransliterator::initStatics() {
 	        "\\U0001D50D-\\U0001D514\\U0001D516-\\U0001D51C\\U0001D51E-\\U0001D539"
 	        "\\U0001D53B-\\U0001D53E\\U0001D540-\\U0001D544\\U0001D546\\U0001D54A-"
 	        "\\U0001D550\\U0001D552-\\U0001D6A3\\U0001D6A8-\\U0001D7C9\\U0001D7CE-"
-	        "\\U0001D7FF\\U0002F800-\\U0002FA1D]", ec);
+	        "\\U0001D7FF\\U0002F800-\\U0002FA1D]", ""), ec);
 
-            SKIPPABLES[KC].applyPattern(
+            SKIPPABLES[KC].applyPattern(UnicodeString(
 	        "[^<->A-PR-Za-pr-z\\u00A0\\u00A8\\u00AA\\u00AF\\u00B2-\\u00B5\\u00B8-"
 	        "\\u00BA\\u00BC-\\u00BE\\u00C0-\\u00CF\\u00D1-\\u00D6\\u00D8-\\u00DD\\u00E0"
 	        "-\\u00EF\\u00F1-\\u00F6\\u00F8-\\u00FD\\u00FF-\\u0103\\u0106-\\u010F"
@@ -642,7 +645,7 @@ void NormalizationTransliterator::initStatics() {
 	        "\\U0001D50A\\U0001D50D-\\U0001D514\\U0001D516-\\U0001D51C\\U0001D51E-"
 	        "\\U0001D539\\U0001D53B-\\U0001D53E\\U0001D540-\\U0001D544\\U0001D546"
 	        "\\U0001D54A-\\U0001D550\\U0001D552-\\U0001D6A3\\U0001D6A8-\\U0001D7C9"
-	        "\\U0001D7CE-\\U0001D7FF\\U0002F800-\\U0002FA1D]", ec);
+	        "\\U0001D7CE-\\U0001D7FF\\U0002F800-\\U0002FA1D]", ""), ec);
 
             ucln_i18n_registerCleanup();
         }
