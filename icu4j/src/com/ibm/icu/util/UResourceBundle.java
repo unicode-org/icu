@@ -67,6 +67,8 @@ public abstract class UResourceBundle extends ResourceBundle{
     public static final String INSTALLED_LOCALES = "InstalledLocales";
     
 
+    protected String  localeID;
+    protected String baseName;
     protected boolean hasFallback;
     
     /**

@@ -64,6 +64,7 @@ icu4j/src/com/ibm/icu/dev/data/nfscss.spp -text
 icu4j/src/com/ibm/icu/dev/data/nfsmxp.spp -text
 icu4j/src/com/ibm/icu/dev/data/nfsmxs.spp -text
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text
+icu4j/src/com/ibm/icu/dev/data/testdata.jar -text
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Asian.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Chinese.txt -text
@@ -78,6 +79,7 @@ icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_SerbianSR.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Simplified_Chinese.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Thai.txt -text
 icu4j/src/com/ibm/icu/impl/data/ICULocaleData.jar -text
+icu4j/src/com/ibm/icu/impl/data/icudata.jar -text
 icu4j/src/com/ibm/icu/impl/data/icudt28b_char.brk -text
 icu4j/src/com/ibm/icu/impl/data/icudt28b_line.brk -text
 icu4j/src/com/ibm/icu/impl/data/icudt28b_sent.brk -text

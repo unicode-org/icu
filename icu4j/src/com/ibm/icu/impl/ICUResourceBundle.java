@@ -10,7 +10,6 @@ import java.util.Vector;
 import com.ibm.icu.util.StringTokenizer;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.util.UResourceBundleIterator;
 import com.ibm.icu.util.UResourceTypeMismatchException;
 import com.ibm.icu.util.VersionInfo;
 
@@ -228,8 +227,8 @@ public class ICUResourceBundle extends UResourceBundle{
      * resource bundle
      * @draft ICU 3.0
      */
-    public UResourceBundleIterator getIterator(){
-        return new UResourceBundleIterator(this);   
+    public ICUResourceBundleIterator getIterator(){
+        return new ICUResourceBundleIterator(this);   
     }
 
     
@@ -345,7 +344,7 @@ public class ICUResourceBundle extends UResourceBundle{
         int length = bundle.getSize();
         int i = 0;
         ULocale[] locales = new ULocale[length];
-        UResourceBundleIterator iter = bundle.getIterator();
+        ICUResourceBundleIterator iter = bundle.getIterator();
         iter.reset();
         while(iter.hasNext()){
             locales[i++] = new ULocale(iter.nextString());   
@@ -394,8 +393,6 @@ public class ICUResourceBundle extends UResourceBundle{
         return null;
     }
 
-    protected String  localeID;
-    protected String baseName;
     protected int type = NONE;
     protected String key;
     protected int size = NONE;
