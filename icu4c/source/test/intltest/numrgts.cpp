@@ -667,7 +667,7 @@ void NumberFormatRegressionTest::Test4092480 (void)
  * interpreted as monetary separator if currency symbol is seen!
  */
 void NumberFormatRegressionTest::Test4087244 (void) {
-    Locale *de = new Locale("pt","PT");
+    Locale *de = new Locale("pt","PT_PREEURO");
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createCurrencyInstance(*de, status);
     if (nf->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
@@ -871,7 +871,7 @@ void NumberFormatRegressionTest::Test4071014 (void)
     }
     delete formatter;
 
-    formatter = NumberFormat::createCurrencyInstance(Locale::GERMANY, status);
+    formatter = NumberFormat::createCurrencyInstance(Locale("de_DE_PREEURO"), status);
     failure(status, "NumberFormat::createCurrencyInstance");
     tempString.remove();
     tempString = formatter->format( 5789.9876, tempString );
