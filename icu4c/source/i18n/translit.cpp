@@ -39,11 +39,16 @@
 // keep in sync with CompoundTransliterator
 static const UChar ID_SEP      = 0x002D; /*-*/
 static const UChar ID_DELIM    = 0x003B; /*;*/
+static const UChar VARIANT_SEP = 0x002F; // '/'
 static const UChar OPEN_PAREN  = 40;
 static const UChar CLOSE_PAREN = 41;
 
 static Hashtable _cache(TRUE); // TRUE = keys are case insensitive
 static Hashtable _internalCache(TRUE); // TRUE = keys are case insensitive
+
+// Map of source name to (Hashtable mapping target to (UVector of
+// target names).
+static Hashtable sourceMap(TRUE);
 
 /**
  * Cache of public system transliterators.  Keys are UnicodeString
@@ -1350,7 +1355,7 @@ void Transliterator::_registerFactory(const UnicodeString& id,
 
     CacheEntry* entry = (CacheEntry*) cache->get(id);
     if (entry == 0) {
-        cacheIDs.addElement((void*) new UnicodeString(id));
+        _registerID(id);
         entry = new CacheEntry();
     }
     entry->setFactory(factory);
@@ -1396,7 +1401,7 @@ void Transliterator::_registerInstance(Transliterator* adoptedPrototype,
 
     CacheEntry* entry = (CacheEntry*) cache->get(id);
     if (entry == 0) {
-        cacheIDs.addElement((void*) new UnicodeString(id));
+        _registerID(id);
         entry = new CacheEntry();
     }
 
@@ -1464,6 +1469,114 @@ const UnicodeString& Transliterator::getAvailableID(int32_t index) {
     return *(const UnicodeString*) cacheIDs[index];
 }
 
+int32_t Transliterator::countAvailableSources(void) {
+    if (!cacheInitialized) {
+        initializeCache();
+    }
+    Mutex lock(&cacheMutex);
+    return sourceMap.count();
+}
+
+UnicodeString& Transliterator::getAvailableSource(int32_t index,
+                                                  UnicodeString& result) {
+    if (!cacheInitialized) {
+        initializeCache();
+    }
+    Mutex lock(&cacheMutex);
+    int32_t pos = -1;
+    const UHashElement *e = 0;
+    while (index-- >= 0) {
+        e = sourceMap.nextElement(pos);
+        if (e == 0) {
+            break;
+        }
+    }
+    if (e == 0) {
+        result.truncate(0);
+    } else {
+        result = *(UnicodeString*) e->key.pointer;
+    }
+    return result;
+}
+
+int32_t Transliterator::countAvailableTargets(const UnicodeString& source) {
+    if (!cacheInitialized) {
+        initializeCache();
+    }
+    Mutex lock(&cacheMutex);
+    Hashtable *targets = (Hashtable*) sourceMap.get(source);
+    return (targets == 0) ? 0 : targets->count();
+}
+
+UnicodeString& Transliterator::getAvailableTarget(int32_t index,
+                                                  const UnicodeString& source,
+                                                  UnicodeString& result) {
+    if (!cacheInitialized) {
+        initializeCache();
+    }
+    Mutex lock(&cacheMutex);
+    Hashtable *targets = (Hashtable*) sourceMap.get(source);
+    if (targets == 0) {
+        result.truncate(0); // invalid source
+        return result;
+    }
+    int32_t pos = -1;
+    const UHashElement *e = 0;
+    while (index-- >= 0) {
+        e = targets->nextElement(pos);
+        if (e == 0) {
+            break;
+        }
+    }
+    if (e == 0) {
+        result.truncate(0); // invalid index
+    } else {
+        result = *(UnicodeString*) e->key.pointer;
+    }
+    return result;
+}
+
+int32_t Transliterator::countAvailableVariants(const UnicodeString& source,
+                                               const UnicodeString& target) {
+    if (!cacheInitialized) {
+        initializeCache();
+    }
+    Mutex lock(&cacheMutex);
+    Hashtable *targets = (Hashtable*) sourceMap.get(source);
+    if (targets == 0) {
+        return 0;
+    }
+    UVector *variants = (UVector*) targets->get(target);
+    return (variants == 0) ? 0 : variants->size();
+}
+
+UnicodeString& Transliterator::getAvailableVariant(int32_t index,
+                                                   const UnicodeString& source,
+                                                   const UnicodeString& target,
+                                                   UnicodeString& result) {
+    if (!cacheInitialized) {
+        initializeCache();
+    }
+    Mutex lock(&cacheMutex);
+    Hashtable *targets = (Hashtable*) sourceMap.get(source);
+    if (targets == 0) {
+        result.truncate(0); // invalid source
+        return result;
+    }
+    UVector *variants = (UVector*) targets->get(target);
+    if (variants == 0) {
+        result.truncate(0); // invalid target
+        return result;
+    }
+    UnicodeString *v = (UnicodeString*) variants->elementAt(index);
+    if (v == 0) {
+        result.truncate(0); // invalid index
+    } else {
+        result = *v;
+    }
+    return result;
+}
+
 /**
  * Method for subclasses to use to obtain a character in the given
  * string, with filtering.
@@ -1475,6 +1588,68 @@ UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
     const UnicodeFilter* localFilter = getFilter();
     return (localFilter == 0) ? text.charAt(i) :
         (localFilter->contains(c = text.charAt(i)) ? c : (UChar)0xFFFE);
+}
+
+/**
+ * Register an ID (with no whitespace in it, no inline filter, and
+ * not compound) in the Source-Target/Variant record.
+ */
+void Transliterator::_registerID(const UnicodeString& id) {
+    // cacheMutex must already be held (by caller)
+    cacheIDs.addElement((void*) new UnicodeString(id));
+
+    UnicodeString source, target, variant;
+    int32_t dash = id.indexOf(ID_SEP);
+    int32_t stroke = id.indexOf(VARIANT_SEP);
+    int32_t start = 0;
+    int32_t limit = id.length();
+    if (dash < 0) {
+        source = UnicodeString("Any", "");
+    } else {
+        id.extractBetween(0, dash, source);
+        start = dash + 1;
+    }
+    if (stroke >= 0) {
+        id.extractBetween(stroke + 1, id.length(), variant);
+        limit = stroke;
+    }
+    id.extractBetween(start, limit, target);
+    _registerSTV(source, target, variant);
+}
+
+/**
+ * Register a source-target/variant in the Source-Target/Variant record.
+ * Variant may be empty, but source and target must not be.
+ */
+void Transliterator::_registerSTV(const UnicodeString& source,
+                                  const UnicodeString& target,
+                                  const UnicodeString& variant) {
+    // cacheMutex must already be held (by caller)
+    // assert(source.length() > 0);
+    // assert(target.length() > 0);
+    UErrorCode status = U_ZERO_ERROR;
+    Hashtable *targets = (Hashtable*) sourceMap.get(source);
+    if (targets == 0) {
+        targets = new Hashtable(TRUE);
+        if (targets == 0) {
+            return;
+        }
+        targets->setValueDeleter(uhash_deleteUVector);
+        sourceMap.put(source, targets, status);
+    }
+    UVector *variants = (UVector*) targets->get(target);
+    if (variants == 0) {
+        variants = new UVector(uhash_deleteUnicodeString,
+                               uhash_compareCaselessUnicodeString);
+        if (variants == 0) {
+            return;
+        }
+        targets->put(target, variants, status);
+    }
+    if (variant.length() > 0 &&
+        !variants->contains((void*) &variant)) {
+        variants->addElement(new UnicodeString(variant));
+    }
 }
 
 void Transliterator::initializeCache(void) {
@@ -1491,6 +1666,8 @@ void Transliterator::initializeCache(void) {
     // have a valid cache object.
     cacheIDs.setDeleter(uhash_deleteUnicodeString);
     cacheIDs.setComparer(uhash_compareCaselessUnicodeString);
+
+    sourceMap.setValueDeleter(uhash_deleteHashtable);
 
     /* The following code parses the index table located in
      * icu/data/translit_index.txt.  The index is an n x 4 table
@@ -1555,9 +1732,8 @@ void Transliterator::initializeCache(void) {
                     Hashtable* c = isInternal ? internalCache : cache;
                     c->put(id, entry, status);
 
-                    // cacheIDs owns & should delete the following string
                     if (!isInternal) {
-                        cacheIDs.addElement((void*) new UnicodeString(id));
+                        _registerID(id);
                     }
                 }
             }

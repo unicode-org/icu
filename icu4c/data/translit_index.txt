@@ -97,7 +97,9 @@ translit_index {
 // Java only: { "Kanji-English", "file", "-", "FORWARD" },
 // Java only: { "Kanji-OnRomaji", "file", "-", "FORWARD" },
 { "KeyboardEscape-Latin1", "file", "kbdescl1", "FORWARD" },
-{ "UnicodeName-UnicodeChar", "file", "ucname", "FORWARD" },
+
+// Replaced by algorithmic transliterator:
+// { "UnicodeName-UnicodeChar", "file", "ucname", "FORWARD" },
 
 // Compound rules
 

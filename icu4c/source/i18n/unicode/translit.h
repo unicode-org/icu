@@ -858,6 +858,12 @@ private:
 
     friend class NormalizationTransliterator;
 
+    static void _registerID(const UnicodeString& id);
+
+    static void _registerSTV(const UnicodeString& source,
+                             const UnicodeString& target,
+                             const UnicodeString& variant);
+
 public:
 
     /**
@@ -917,6 +923,66 @@ public:
      * @draft
      */
     static const UnicodeString& getAvailableID(int32_t index);
+
+    /**
+     * Return the number of registered source specifiers.
+     */
+    static int32_t countAvailableSources(void);
+    
+    /**
+     * Return a registered source specifier.
+     * @param index which specifier to return, from 0 to n-1, where
+     * n = countAvailableSources()
+     * @param result fill-in paramter to receive the source specifier.
+     * If index is out of range, result will be empty.
+     * @return reference to result
+     */
+    static UnicodeString& getAvailableSource(int32_t index,
+                                             UnicodeString& result);
+    
+    /**
+     * Return the number of registered target specifiers for a given
+     * source specifier.
+     */
+    static int32_t countAvailableTargets(const UnicodeString& source);
+    
+    /**
+     * Return a registered target specifier for a given source.
+     * @param index which specifier to return, from 0 to n-1, where
+     * n = countAvailableTargets(source)
+     * @param source the source specifier
+     * @param result fill-in paramter to receive the target specifier.
+     * If source is invalid or if index is out of range, result will
+     * be empty.
+     * @return reference to result
+     */
+    static UnicodeString& getAvailableTarget(int32_t index,
+                                             const UnicodeString& source,
+                                             UnicodeString& result);
+    
+    /**
+     * Return the number of registered variant specifiers for a given
+     * source-target pair.
+     */
+    static int32_t countAvailableVariants(const UnicodeString& source,
+                                          const UnicodeString& target);
+    
+    /**
+     * Return a registered variant specifier for a given source-target
+     * pair.
+     * @param index which specifier to return, from 0 to n-1, where
+     * n = countAvailableVariants(source, target)
+     * @param source the source specifier
+     * @param target the target specifier
+     * @param result fill-in paramter to receive the variant
+     * specifier.  If source is invalid or if target is invalid or if
+     * index is out of range, result will be empty.
+     * @return reference to result
+     */
+    static UnicodeString& getAvailableVariant(int32_t index,
+                                              const UnicodeString& source,
+                                              const UnicodeString& target,
+                                              UnicodeString& result);
 
     /**
      * Return the class ID for this class.  This is useful only for
