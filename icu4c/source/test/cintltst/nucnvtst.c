@@ -45,6 +45,7 @@ static void TestISO_2022_JP(void);
 static void TestISO_2022_JP_1(void);
 static void TestISO_2022_JP_2(void);
 static void TestISO_2022_KR(void);
+static void TestISO_2022_KR_1(void);
 static void TestISO_2022_CN(void);
 static void TestISO_2022_CN_EXT(void);
 static void TestJIS(void);
@@ -190,6 +191,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestISO_2022_JP_1, "tsconv/nucnvtst/TestISO_2022_JP_1");
    addTest(root, &TestISO_2022_JP_2, "tsconv/nucnvtst/TestISO_2022_JP_2");
    addTest(root, &TestISO_2022_KR, "tsconv/nucnvtst/TestISO_2022_KR");
+   addTest(root, &TestISO_2022_KR_1, "tsconv/nucnvtst/TestISO_2022_KR_1");
    addTest(root, &TestISO_2022_CN, "tsconv/nucnvtst/TestISO_2022_CN");
    addTest(root, &TestISO_2022_CN_EXT, "tsconv/nucnvtst/TestISO_2022_CN_EXT");
    addTest(root, &TestHZ, "tsconv/nucnvtst/TestHZ");
@@ -2402,6 +2404,78 @@ TestISO_2022_KR() {
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=kr");
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=kr");
     TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=kr");
+    ucnv_close(cnv);
+    free(uBuf);
+    free(cBuf);
+    free(offsets);
+}
+static void
+TestISO_2022_KR_1() {
+    /* test input */
+    static const uint16_t in[]={
+                    0x9F4B,0x9F4E,0x9F52,0x9F5F,0x9F61,0x9F67,0x9F6A,0x000A,0x000D
+                   ,0x9F6C,0x9F77,0x9F8D,0x9F90,0x9F95,0x9F9C,0xAC00,0xAC01,0xAC04
+                   ,0xAC07,0xAC08,0xAC09,0x0025,0x0026,0x0027,0x000A,0x000D,0x0028,0x0029
+                   ,0x002A,0x002B,0x002C,0x002D,0x002E,0x53C3,0x53C8,0x53C9,0x53CA,0x53CB
+                   ,0x53CD,0x53D4,0x53D6,0x53D7,0x53DB,0x000A,0x000D,0x53E1,0x53E2
+                   ,0x53E3,0x53E4,0x000A,0x000D};
+    const UChar* uSource;
+    const UChar* uSourceLimit;
+    const char* cSource;
+    const char* cSourceLimit;
+    UChar *uTargetLimit =NULL;
+    UChar *uTarget;
+    char *cTarget;
+    const char *cTargetLimit;
+    char *cBuf; 
+    UChar *uBuf,*test;
+    int32_t uBufSize = 120;
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UConverter *cnv;
+    int32_t* offsets = (int32_t*) malloc(uBufSize * sizeof(int32_t) * 5);
+    int32_t* myOff= offsets;
+    cnv=ucnv_open("ibm-25546", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
+    cBuf =(char*)malloc(uBufSize * sizeof(char) * 5);
+    uSource = (const UChar*)&in[0];
+    uSourceLimit=(const UChar*)&in[sizeof(in)/2];
+    cTarget = cBuf;
+    cTargetLimit = cBuf +uBufSize*5;
+    uTarget = uBuf;
+    uTargetLimit = uBuf+ uBufSize*5;
+    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
+    if(U_FAILURE(errorCode)){
+        log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
+        return;
+    }
+    cSource = cBuf;
+    cSourceLimit =cTarget;
+    test =uBuf;
+    myOff=offsets;
+    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
+    if(U_FAILURE(errorCode)){
+        log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+        return;
+    }
+    uSource = (const UChar*)&in[0];
+    while(uSource<uSourceLimit){
+        if(*test!=*uSource){
+            log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,*test) ;
+        }
+        uSource++;
+        test++;
+    }
+    ucnv_reset(cnv);
+    TestGetNextUChar2022(cnv, cBuf, cTarget, in, "ISO-2022-KR encoding");
+    TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=kr,version=1");
+    TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=kr,version=1");
+    ucnv_reset(cnv);
+    TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=kr,version=1");
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
