@@ -166,15 +166,15 @@ u_strncpy(UChar     *dst,
 int32_t  
 u_strlen(const UChar *s) 
 {
-  if(U_SIZEOF_WCHAR_T == sizeof(UChar)) {
-    return uprv_wcslen((const wchar_t *) s);
-  } else {
+# if U_SIZEOF_WCHAR_T == U_SIZEOF_UCHAR
+    return uprv_wcslen(s);
+# else
     const UChar *t = s;
     while(*t != 0) {
       ++t;
     }
     return t - s;
-  }
+#endif
 }
 
 /* conversions between char* and UChar* ------------------------------------- */

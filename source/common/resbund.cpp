@@ -45,9 +45,10 @@
 *******************************************************************************
 */
 
-#include "rbcache.h"
-
+#include "unicode/utypes.h"
 #include "unicode/resbund.h"
+
+#include "rbcache.h"
 #include "mutex.h"
 
 #include "unistrm.h"
@@ -60,7 +61,6 @@
 
 #include <iostream.h>
 #include <string.h>
-#include <wchar.h>
 
 /*-----------------------------------------------------------------------------
  * Implementation Notes
