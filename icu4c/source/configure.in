@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2003, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.205 2004/03/02 00:36:00 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.206 2004/03/09 02:20:05 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -296,9 +296,9 @@ AC_SUBST(HAVE_MMAP)
 
 dnl Check to see if genccode can generate simple assembly.
 GENCCODE_ASSEMBLY=
-if test "$ac_cv_prog_gcc" = yes; then
+if test "$GCC" = yes; then
     dnl We're using gcc, and the simple -a gcc command line works for genccode
-    GENCCODE_ASSEMBLY=-a gcc
+    GENCCODE_ASSEMBLY="-a gcc"
 fi
 AC_SUBST(GENCCODE_ASSEMBLY)
 
@@ -918,16 +918,6 @@ then
     CPPFLAGS="$CPPFLAGS \$(THREADSCPPFLAGS)"
     CFLAGS="$CFLAGS \$(THREADSCFLAGS)"
     CXXFLAGS="$CXXFLAGS \$(THREADSCXXFLAGS)"
-fi
-
-if test "$ac_cv_lib_dld_shl_load" = "yes"; then
-	CPPFLAGS="${CPPFLAGS} -DICU_USE_SHL_LOAD"
-fi
-
-dnl added for s/390 DLL loading detection
-
-if test "$ac_cv_func_dllload" = "yes"; then
-    CPPFLAGS="${CPPFLAGS} -DICU_USE_SHL_LOAD"
 fi
 
 dnl output the Makefiles

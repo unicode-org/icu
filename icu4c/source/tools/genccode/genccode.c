@@ -104,6 +104,36 @@ enum {
   kOptAssembly
 };
 
+/*
+Creating Template Files for New Platforms
+
+Let the cc compiler help you get started.
+Compile this program
+    const unsigned int x[5] = {1, 2, 0xdeadbeef, 0xffffffff, 16};
+with the -S option to produce assembly output
+
+This will produce a .s file, something like
+
+    .file   "foo.c"
+    .version        "01.01"
+gcc2_compiled.:
+    .globl x
+    .section        .rodata
+    .align 4
+    .type    x,@object
+    .size    x,20
+x:
+    .long   1
+    .long   2
+    .long   -559038737
+    .long   -1
+    .long   16
+    .ident  "GCC: (GNU) 2.96 20000731 (Red Hat Linux 7.1 2.96-85)"
+
+which gives a starting point that will compile, and can be transformed
+to become the  template, generally with some consulting of as docs and
+some experimentation.
+*/
 static const struct AssemblyType {
     const char *compiler;
     const char *header;
@@ -111,27 +141,27 @@ static const struct AssemblyType {
 } assemblyHeader[] = {
     {"gcc",
 
-    ".file\t\"%s.s\"\n"
-    "\t.section   .rodata\n"
     ".globl _%s\n"
-    "\t.text\n"
-    "\t.align 32\n"
+    /*"\t.section .rodata\n"*/ /* Not a portable named section */
+    "\t.text\n" /* program and const arrays are put here. .data is writable */
+    "\t.align 8\n" /* Either align 8 bytes or 2^8 (256) bytes. 8 bytes is needed. */
     "_%s:\n\n",
 
     ".long "
     },
+#if 0
     {"gcc-darwin",
 
-    ".file\t\"%s.s\"\n"
-    "\t.section __TEXT,__text,regular,pure_instructions\n"
-    "\t.section __TEXT,__picsymbolstub1,symbol_stubs,pure_instructions,32\n"
+    /*"\t.section __TEXT,__text,regular,pure_instructions\n"
+    "\t.section __TEXT,__picsymbolstub1,symbol_stubs,pure_instructions,32\n"*/
     ".globl _%s\n"
     "\t.text\n"
-     "\t.align 5\n"  /* 1<<5 = 32 */
+    "\t.align 4\n"  /* 1<<4 = 16 */
     "_%s:\n\n",
 
     ".long "
     },
+#endif
     {"xlc",
     "",
     ""}
