@@ -1,0 +1,44 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+//
+// Telugu Locale. Data by Ram [ram@jtcsv.com]
+
+te_IN {
+    Version{ "1.2" }
+    AmPmMarkers {
+        "\u0c2a\u0c42\u0c30\u0c4d\u0c35\u0c3e\u0c39\u0c4d\u0c28",
+        "\u0c05\u0c2a\u0c30\u0c3e\u0c39\u0c4d\u0c28",
+    }
+    DateTimePatterns {
+        "h:mm:ss a z",
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "dd-MM-yyyy",
+        "dd-MM-yy",
+        "{1} {0}",
+    }
+
+    // LanguageLibraryUse { "Te" }
+    // Measurement { "Metric" }
+    NumberPatterns {
+        "##,##,##0.###;-##,##,##0.###",
+        "\u00A4##,##,##0.00;-\u00A4##,##,##0.00",
+        "##,##,##0%",
+        "#E0",
+    }
+//    ShortLanguage { "tel" }
+    //PaperSize {
+    //    Height { "297" }
+    //    Width { "210" }
+    //    Units { "mm" }
+    //}
+    LocaleID:int { 0x44a }
+}
+

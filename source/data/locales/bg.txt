@@ -1,0 +1,124 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+bg {
+    // We use UCA collation table optimized for Cyrillic
+    // as defined in the Russian locale
+    CollationElements:alias { "ru" }
+
+    Version{ "1.0" }
+    Countries { 
+        BG { "\u0411\u044A\u043B\u0433\u0430\u0440\u0438\u044F" }
+    }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "dd MMMM yyyy, EEEE",
+        "dd MMMM yyyy",
+        "dd.MM.yy",
+        "dd.MM.yy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "\u043D\u0434",
+        "\u043F\u043D",
+        "\u0432\u0442",
+        "\u0441\u0440",
+        "\u0447\u0442",
+        "\u043F\u0442",
+        "\u0441\u0431",
+    }
+    DateTimeElements:intvector { 
+        2,
+        1,
+    }
+    DayNames { 
+        "\u043D\u0435\u0434\u0435\u043B\u044F",
+        "\u043F\u043E\u043D\u0435\u0434\u0435\u043B\u043D\u0438\u043A",
+        "\u0432\u0442\u043E\u0440\u043D\u0438\u043A",
+        "\u0441\u0440\u044F\u0434\u0430",
+        "\u0447\u0435\u0442\u0432\u044A\u0440\u0442\u044A\u043A",
+        "\u043F\u0435\u0442\u044A\u043A",
+        "\u0441\u044A\u0431\u043E\u0442\u0430",
+    }
+    Eras { 
+        "\u043F\u0440.\u043D.\u0435.",
+        "\u043D.\u0435.",
+    }
+    Languages { 
+        bg { "\u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438" }
+    }
+    LocaleID:int { 0x02 }
+//    LocaleString { "bg" }
+    MonthAbbreviations { 
+        "\u044f\u043d.",
+        "\u0444\u0435\u0432.",
+        "\u043c\u0430\u0440\u0442.",
+        "\u0430\u043f\u0440.",
+        "\u043c\u0430\u0439.",
+        "\u044e\u043d\u0438.",
+        "\u044e\u043b\u0438.",
+        "\u0430\u0432\u0433.",
+        "\u0441\u0435\u043f.",
+        "\u043e\u043a\u0442.",
+        "\u043d\u043e\u0435\u043c.",
+        "\u0434\u0435\u043a.",
+    }
+    MonthNames { 
+        "\u042F\u043D\u0443\u0430\u0440\u0438",
+        "\u0424\u0435\u0432\u0440\u0443\u0430\u0440\u0438",
+        "\u041C\u0430\u0440\u0442",
+        "\u0410\u043F\u0440\u0438\u043B",
+        "\u041C\u0430\u0439",
+        "\u042E\u043D\u0438",
+        "\u042E\u043B\u0438",
+        "\u0410\u0432\u0433\u0443\u0441\u0442",
+        "\u0421\u0435\u043F\u0442\u0435\u043C\u0432\u0440\u0438",
+        "\u041E\u043A\u0442\u043E\u043C\u0432\u0440\u0438",
+        "\u041D\u043E\u0435\u043C\u0432\u0440\u0438",
+        "\u0414\u0435\u043A\u0435\u043C\u0432\u0440\u0438",
+    }
+    NumberElements { 
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+    }
+//    ShortLanguage { "bul" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+//        {
+//            "Europe/Sofia",
+//        }
+    }
+    LocaleScript{
+        "Cyrl",     // Abbreviation 
+    }
+    ExemplarCharacters { "[\u0430-\u044c \u044e\u044f\u0463\u046b]" }
+
+    // Currency display names
+    Currencies {
+        BGL { "\u043B\u0432", "BGL" }
+    }
+}

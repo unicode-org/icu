@@ -1,0 +1,253 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+el {
+    Version { "1.1" }
+    AmPmMarkers { 
+        "\u03C0\u03BC",
+        "\u03BC\u03BC",
+    }
+    CollationElements { 
+        Version { "2.0" }
+        Sequence { "[normalization on]" }
+    }
+    Countries { 
+        AL { "\u0391\u03bb\u03b2\u03b1\u03bd\u03af\u03b1" }
+        AS { "\u0391\u03c3\u03af\u03b1 (\u0391\u03b3\u03b3\u03bb\u03b9\u03ba\u03ac)" }
+        AT { "\u0391\u03c5\u03c3\u03c4\u03c1\u03af\u03b1" }
+        AU { "\u0391\u03c5\u03c3\u03c4\u03c1\u03b1\u03bb\u03af\u03b1 (\u0391\u03b3\u03b3\u03bb\u03b9\u03ba\u03ac)" }
+        BA { "\u0392\u03bf\u03c3\u03bd\u03af\u03b1" }
+        BE { "\u0392\u03ad\u03bb\u03b3\u03b9\u03bf" }
+        BG { "\u0392\u03bf\u03c5\u03bb\u03b3\u03b1\u03c1\u03af\u03b1" }
+        BR { "\u0392\u03c1\u03b1\u03b6\u03b9\u03bb\u03af\u03b1" }
+        CA { "\u039a\u03b1\u03bd\u03b1\u03b4\u03ac\u03c2" }
+        CH { "\u0395\u03bb\u03b2\u03b5\u03c4\u03af\u03b1" }
+        CN { "\u039a\u03af\u03bd\u03b1 (\u039b.\u0394.\u039a.)" }
+        CZ { "\u03a4\u03c3\u03b5\u03c7\u03af\u03b1" }
+        DE { "\u0393\u03b5\u03c1\u03bc\u03b1\u03bd\u03af\u03b1" }
+        DK { "\u0394\u03b1\u03bd\u03af\u03b1" }
+        EE { "\u0395\u03c3\u03b8\u03bf\u03bd\u03af\u03b1" }
+        ES { "\u0399\u03c3\u03c0\u03b1\u03bd\u03af\u03b1" }
+        FI { "\u03a6\u03b9\u03bd\u03bb\u03b1\u03bd\u03b4\u03af\u03b1" }
+        FR { "\u0393\u03b1\u03bb\u03bb\u03af\u03b1" }
+        GB { "\u0397\u03bd\u03c9\u03bc\u03ad\u03bd\u03bf \u0392\u03b1\u03c3\u03af\u03bb\u03b5\u03b9\u03bf" }
+        GR { "\u0395\u03bb\u03bb\u03ac\u03b4\u03b1" }
+        HR { "\u039a\u03c1\u03bf\u03b1\u03c4\u03af\u03b1" }
+        HU { "\u039f\u03c5\u03b3\u03b3\u03b1\u03c1\u03af\u03b1" }
+        IE { "\u0399\u03c1\u03bb\u03b1\u03bd\u03b4\u03af\u03b1" }
+        IL { "\u0399\u03c3\u03c1\u03b1\u03ae\u03bb" }
+        IS { "\u0399\u03c3\u03bb\u03b1\u03bd\u03b4\u03af\u03b1" }
+        IT { "\u0399\u03c4\u03b1\u03bb\u03af\u03b1" }
+        JP { "\u0399\u03b1\u03c0\u03c9\u03bd\u03af\u03b1" }
+        KR { "\u039a\u03bf\u03c1\u03ad\u03b1" }
+        LA { "\u039b\u03b1\u03c4\u03b9\u03bd\u03b9\u03ba\u03ae \u0391\u03bc\u03b5\u03c1\u03b9\u03ba\u03ae" }
+        LT { "\u039b\u03b9\u03b8\u03bf\u03c5\u03b1\u03bd\u03af\u03b1" }
+        LV { "\u039b\u03b5\u03c4\u03bf\u03bd\u03af\u03b1" }
+        MK { "\u03a0\u0393\u0394 \u039c\u03b1\u03ba\u03b5\u03b4\u03bf\u03bd\u03af\u03b1\u03c2" }
+        NL { "\u039f\u03bb\u03bb\u03b1\u03bd\u03b4\u03af\u03b1" }
+        NO { "\u039d\u03bf\u03c1\u03b2\u03b7\u03b3\u03af\u03b1" }
+        NZ { "\u039d\u03ad\u03b1 \u0396\u03b7\u03bb\u03b1\u03bd\u03b4\u03af\u03b1" }
+        PL { "\u03a0\u03bf\u03bb\u03c9\u03bd\u03af\u03b1" }
+        PT { "\u03a0\u03bf\u03c1\u03c4\u03bf\u03b3\u03b1\u03bb\u03af\u03b1" }
+        RO { "\u03a1\u03bf\u03c5\u03bc\u03b1\u03bd\u03af\u03b1" }
+        RU { "\u03a1\u03c9\u03c3\u03af\u03b1" }
+        SE { "\u03a3\u03bf\u03c5\u03b7\u03b4\u03af\u03b1" }
+        SI { "\u03a3\u03bb\u03bf\u03b2\u03b5\u03bd\u03af\u03b1" }
+        SK { "\u03a3\u03bb\u03bf\u03b2\u03b1\u03ba\u03af\u03b1" }
+        SP { "\u03a3\u03b5\u03c1\u03b2\u03af\u03b1" }
+        TH { "\u03a4\u03b1\u03ca\u03bb\u03ac\u03bd\u03b4\u03b7" }
+        TR { "\u03a4\u03bf\u03c5\u03c1\u03ba\u03af\u03b1" }
+        TW { "\u03a4\u03b1\u03ca\u03b2\u03ac\u03bd (\u0394.\u039a.)" }
+        US { "\u0397\u03bd\u03c9\u03bc\u03ad\u03bd\u03b5\u03c2 \u03a0\u03bf\u03bb\u03b9\u03c4\u03b5\u03af\u03b5\u03c2 \u0391\u03bc\u03b5\u03c1\u03b9\u03ba\u03ae\u03c2" }
+        ZA { "\u039d\u03cc\u03c4\u03b9\u03bf\u03c2 \u0391\u03c6\u03c1\u03b9\u03ba\u03ae" }
+    }
+    DateTimeElements:intvector { 
+        2,
+        1,
+    }
+    DateTimePatterns { 
+        "h:mm:ss a z",
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE, d MMMM yyyy",
+        "d MMMM yyyy",
+        "d MMM yyyy",
+        "d/M/yyyy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "\u039A\u03C5\u03C1",
+        "\u0394\u03B5\u03C5",
+        "\u03A4\u03C1\u03B9",
+        "\u03A4\u03B5\u03C4",
+        "\u03A0\u03B5\u03BC",
+        "\u03A0\u03B1\u03C1",
+        "\u03A3\u03B1\u03B2",
+    }
+    DayNames { 
+        "\u039A\u03C5\u03C1\u03B9\u03B1\u03BA\u03AE",
+        "\u0394\u03B5\u03C5\u03C4\u03AD\u03C1\u03B1",
+        "\u03A4\u03C1\u03AF\u03C4\u03B7",
+        "\u03A4\u03B5\u03C4\u03AC\u03C1\u03C4\u03B7",
+        "\u03A0\u03AD\u03BC\u03C0\u03C4\u03B7",
+        "\u03A0\u03B1\u03C1\u03B1\u03C3\u03BA\u03B5\u03C5\u03AE",
+        "\u03A3\u03AC\u03B2\u03B2\u03B1\u03C4\u03BF",
+    }
+    /* These languages should be all lower case, but it doesn't seem to be lowercase */
+    Languages { 
+        ar { "\u0391\u03c1\u03b1\u03b2\u03b9\u03ba\u03ac" }
+        bg { "\u0392\u03bf\u03c5\u03bb\u03b3\u03b1\u03c1\u03b9\u03ba\u03ac" }
+        ca { "\u039a\u03b1\u03c4\u03b1\u03bb\u03b1\u03bd\u03b9\u03ba\u03ac" }
+        cs { "\u03a4\u03c3\u03ad\u03c7\u03b9\u03ba\u03b1" }
+        da { "\u0394\u03b1\u03bd\u03ad\u03b6\u03b9\u03ba\u03b1" }
+        de { "\u0393\u03b5\u03c1\u03bc\u03b1\u03bd\u03b9\u03ba\u03ac" }
+        el { "\u03b5\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac" }
+        en { "\u0391\u03b3\u03b3\u03bb\u03b9\u03ba\u03ac" }
+        es { "\u0399\u03c3\u03c0\u03b1\u03bd\u03b9\u03ba\u03ac" }
+        fi { "\u03a6\u03b9\u03bd\u03bb\u03b1\u03bd\u03b4\u03b9\u03ba\u03ac" }
+        fr { "\u0393\u03b1\u03bb\u03bb\u03b9\u03ba\u03ac" }
+        he { "\u0395\u03b2\u03c1\u03b1\u03ca\u03ba\u03ac" }
+        hr { "\u039a\u03c1\u03bf\u03b1\u03c4\u03b9\u03ba\u03ac" }
+        hu { "\u039f\u03c5\u03b3\u03b3\u03c1\u03b9\u03ba\u03ac" }
+        it { "\u0399\u03c4\u03b1\u03bb\u03b9\u03ba\u03ac" }
+        mk { "\u03a3\u03bb\u03b1\u03b2\u03bf\u03bc\u03b1\u03ba\u03b5\u03b4\u03bf\u03bd\u03b9\u03ba\u03ac" }
+        nl { "\u039f\u03bb\u03bb\u03b1\u03bd\u03b4\u03b9\u03ba\u03ac" }
+        no { "\u039d\u03bf\u03c1\u03b2\u03b7\u03b3\u03b9\u03ba\u03ac" }
+        pl { "\u03a0\u03bf\u03bb\u03c9\u03bd\u03b9\u03ba\u03ac" }
+        pt { "\u03a0\u03bf\u03c1\u03c4\u03bf\u03b3\u03b1\u03bb\u03b9\u03ba\u03ac" }
+        ro { "\u03a1\u03bf\u03c5\u03bc\u03b1\u03bd\u03b9\u03ba\u03ac" }
+        ru { "\u03a1\u03c9\u03c3\u03b9\u03ba\u03ac" }
+        sk { "\u03a3\u03bb\u03bf\u03b2\u03b1\u03ba\u03b9\u03ba\u03ac" }
+        sl { "\u03a3\u03bb\u03bf\u03b2\u03b5\u03bd\u03b9\u03ba\u03ac" }
+        sq { "\u0391\u03bb\u03b2\u03b1\u03bd\u03b9\u03ba\u03ac" }
+        sr { "\u03a3\u03b5\u03c1\u03b2\u03b9\u03ba\u03ac" }
+        sv { "\u03a3\u03bf\u03c5\u03b7\u03b4\u03b9\u03ba\u03ac" }
+    }
+    LocaleID:int { 0x08 }
+//    LocaleString { "el" }
+    MonthAbbreviations { 
+        "\u0399\u03B1\u03BD",
+        "\u03A6\u03B5\u03B2",
+        "\u039C\u03B1\u03C1",
+        "\u0391\u03C0\u03C1",
+        "\u039C\u03B1\u03CA",
+        "\u0399\u03BF\u03C5\u03BD",
+        "\u0399\u03BF\u03C5\u03BB",
+        "\u0391\u03C5\u03B3",
+        "\u03A3\u03B5\u03C0",
+        "\u039F\u03BA\u03C4",
+        "\u039D\u03BF\u03B5",
+        "\u0394\u03B5\u03BA",
+    }
+    MonthNames { 
+        "\u0399\u03B1\u03BD\u03BF\u03C5\u03AC\u03C1\u03B9\u03BF\u03C2",
+        "\u03A6\u03B5\u03B2\u03C1\u03BF\u03C5\u03AC\u03C1\u03B9\u03BF\u03C2",
+        "\u039C\u03AC\u03C1\u03C4\u03B9\u03BF\u03C2",
+        "\u0391\u03C0\u03C1\u03AF\u03BB\u03B9\u03BF\u03C2",
+        "\u039C\u03AC\u03CA\u03BF\u03C2",
+        "\u0399\u03BF\u03CD\u03BD\u03B9\u03BF\u03C2",
+        "\u0399\u03BF\u03CD\u03BB\u03B9\u03BF\u03C2",
+        "\u0391\u03CD\u03B3\u03BF\u03C5\u03C3\u03C4\u03BF\u03C2",
+        "\u03A3\u03B5\u03C0\u03C4\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2",
+        "\u039F\u03BA\u03C4\u03CE\u03B2\u03C1\u03B9\u03BF\u03C2",
+        "\u039D\u03BF\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2",
+        "\u0394\u03B5\u03BA\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2",
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+    }
+//    ShortLanguage { "ell" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+    LocaleScript:array { 
+        "Grek"  // ISO 15924 Name 
+    }
+    ExemplarCharacters{"[\u03ac-\u03ce]"}
+
+    //------------------------------------------------------------
+    // Rule Based Number Format Support
+    //------------------------------------------------------------
+
+/*
+ * omit rules for Greek until we have complete and valid data.
+
+//         * Spellout rules for Greek.  Again in Greek we have to supply the words
+//         * for the multiples of 100 because they can't be derived algorithmically.
+//         * Also, the tens digit changes form when followed by a ones digit: an
+//         * accent mark disappears from the tens digit and moves to the ones digit.
+//         * Therefore, instead of using the [] notation, we actually have to use
+//         * two separate rules for each multiple of 10 to show the two forms of
+//         * the word.
+
+    // Can someone supply me with information on negatives and decimals?
+    // I'm also missing the word for zero.  Can someone clue me in?
+
+    SpelloutRules {
+        "zero (incomplete data); \u03ad\u03bd\u03b1; \u03b4\u03cd\u03bf; \u03b4\u03c1\u03af\u03b1; "
+        "\u03c4\u03ad\u03c3\u03c3\u03b5\u03c1\u03b1; \u03c0\u03ad\u03bd\u03c4\u03b5; "
+        "\u03ad\u03be\u03b9; \u03b5\u03c0\u03c4\u03ac; \u03bf\u03ba\u03c4\u03ce; "
+        "\u03b5\u03bd\u03bd\u03ad\u03b1;\n"
+        "10: \u03b4\u03ad\u03ba\u03b1; "
+        "\u03ad\u03bd\u03b4\u03b5\u03ba\u03b1; \u03b4\u03ce\u03b4\u03b5\u03ba\u03b1; "
+        "\u03b4\u03b5\u03ba\u03b1>>;\n"
+        "20: \u03b5\u03af\u03ba\u03bf\u03c3\u03b9; \u03b5\u03b9\u03ba\u03bf\u03c3\u03b9>>;\n"
+        "30: \u03c4\u03c1\u03b9\u03ac\u03bd\u03c4\u03b1; \u03c4\u03c1\u03b9\u03b1\u03bd\u03c4\u03b1>>;\n"
+        "40: \u03c3\u03b1\u03c1\u03ac\u03bd\u03c4\u03b1; \u03c3\u03b1\u03c1\u03b1\u03bd\u03c4\u03b1>>;\n"
+        "50: \u03c0\u03b5\u03bd\u03ae\u03bd\u03c4\u03b1; \u03c0\u03b5\u03bd\u03b7\u03bd\u03c4\u03b1>>;\n"
+        "60: \u03b5\u03be\u03ae\u03bd\u03c4\u03b1; \u03b5\u03be\u03b7\u03bd\u03c4\u03b1>>;\n"
+        "70: \u03b5\u03b2\u03b4\u03bf\u03bc\u03ae\u03bd\u03c4\u03b1; "
+        "\u03b5\u03b2\u03b4\u03bf\u03bc\u03b7\u03bd\u03c4\u03b1>>;\n"
+        "80: \u03bf\u03b3\u03b4\u03cc\u03bd\u03c4\u03b1; \u03bf\u03b3\u03b4\u03bf\u03bd\u03c4\u03b1>>;\n"
+        "90: \u03b5\u03bd\u03bd\u03b5\u03bd\u03ae\u03bd\u03c4\u03b1; "
+        "\u03b5\u03bd\u03bd\u03b5\u03bd\u03b7\u03bd\u03c4\u03b1>>;\n"
+        "100: \u03b5\u03ba\u03b1\u03c4\u03cc[\u03bd >>];\n"
+        "200: \u03b4\u03b9\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "300: \u03c4\u03c1\u03b9\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "400: \u03c4\u03b5\u03c4\u03c1\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "500: \u03c0\u03b5\u03bd\u03c4\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "600: \u03b5\u03be\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "700: \u03b5\u03c0\u03c4\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "800: \u03bf\u03ba\u03c4\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "900: \u03b5\u03bd\u03bd\u03b9\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "1000: \u03c7\u03af\u03bb\u03b9\u03b1[ >>];\n"
+        "2000: << \u03c7\u03af\u03bb\u03b9\u03b1[ >>];\n"
+        "1,000,000: << \u03b5\u03ba\u03b1\u03c4\u03bf\u03bc\u03bc\u03b9\u03cc\u03c1\u03b9\u03bf[ >>];\n"
+        "1,000,000,000: << \u03b4\u03b9\u03c3\u03b5\u03ba\u03b1\u03c4\u03bf\u03bc\u03bc\u03b9\u03cc\u03c1\u03b9\u03bf[ >>];\n"
+        "1,000,000,000,000: =#,##0="
+     }
+*/
+
+    TransliterateLATIN {
+        "UNGEGN",
+        "::Greek-Latin/UNGEGN;"
+    }
+
+    // Currency display names
+    Currencies {
+        GRD { "\u0394\u03C1\u03C7", "GRD" }
+    }
+}

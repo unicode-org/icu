@@ -1,0 +1,29 @@
+# Copyright (c) 2002, International Business Machines Corporation and
+# others. All Rights Reserved.
+#
+#  Title Casing Break Rules
+#
+
+$CaseIgnorable   = [[:Mn:][:Me:][:Cf:][:Lm:][:Sk:] \u0027 \u00AD \u2019];
+$OtherUpperCase  = [\u2160-\u216f  \u24b6-\u24cf];
+$OtherLowerCase  = [\u02b0-\u02b8  \u02c0-\u02c1  \u02e0-\u02e4  \u0345\u037a  \u2170-\u217f  \u24d0-\u24e9];
+$Cased           = [[:Lu:][:Lt:][:Ll:] $OtherUpperCase  $OtherLowerCase - $CaseIgnorable];
+$NotCased        = [^ $Cased $CaseIgnorable];
+
+#
+#  If the iterator was not stopped on a cased character, advance it to the first cased char
+#
+($NotCased | $CaseIgnorable)*;
+
+#
+#  If the iterator starts on a cased item, advance through all adjacent cased items plus
+#    any non-cased stuff, to reach the start of the next word.
+#
+$Cased ($Cased | $CaseIgnorable)* $NotCased*;
+
+
+#
+#  Reverse Rules
+#
+!$NotCased* ($Cased | $CaseIgnorable)* $NotCased*;
+
