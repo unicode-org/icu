@@ -429,13 +429,12 @@ import java.io.ObjectInputStream;
  * <ul>
  * <li>In order to enable significant digits formatting, use a pattern
  * containing the <code>'@'</code> pattern character.  Alternatively,
- * call either {@link #setMinimumSignificantDigits} or {@link
- * #setMaximumSignificantDigits}.
+ * call {@link #setSignificantDigits setSignificantDigits(true)}.
  *
  * <li>In order to disable significant digits formatting, use a
  * pattern containing the <code>'0'</code> pattern
- * character. Alternatively, call either {@link
- * #setMinimumIntegerDigits} or {@link #setMaximumIntegerDigits}.
+ * character. Alternatively, call {@link #setSignificantDigits
+ * setSignificantDigits(false)}.
  *
  * <li>If a pattern uses significant digits, it may not contain
  * the <code>'0'</code> character, nor may it include a fraction
@@ -468,16 +467,8 @@ import java.io.ObjectInputStream;
  * count of <code>getMaximumSignificantDigits() - 1</code>. For example, the
  * pattern <code>"@@###E0"</code> is equivalent to <code>"0.0###E0"</code>.
  *
- * <li>Significant digit counts are stored as negative values in the
- * integer digit count fields. Thus, if significant digits are used,
- * then {@link #getMinimumIntegerDigits} and {@link
- * #getMaximumIntegerDigits} will return negative numbers. The
- * converse is also true. If significant digits are not being used,
- * then {@link #getMinimumSignificantDigits} and {@link
- * #getMaximumSignificantDigits} will return non-positive numbers.
- *
- * <li>If signficant digits are in use, then the fraction digit counts
- * are ignored.
+ * <li>If signficant digits are in use, then the integer and fraction
+ * digit counts are ignored.
  *
  * </ul>
  * 
@@ -713,7 +704,7 @@ public class DecimalFormat extends NumberFormat {
         // number.
         synchronized(digitList) {
             digitList.set(number, precision(false),
-                          !useExponentialNotation && !useSignificantDigits());
+                          !useExponentialNotation && !isSignificantDigits());
             return subformat(result, fieldPosition, isNegative, false);
         }
     }
@@ -870,7 +861,7 @@ public class DecimalFormat extends NumberFormat {
 
         synchronized(digitList) {
             digitList.set(number, precision(false),
-                          !useExponentialNotation && !useSignificantDigits());
+                          !useExponentialNotation && !isSignificantDigits());
             return subformat(result, fieldPosition, number.signum() < 0, false);
         }        
     }
@@ -900,7 +891,7 @@ public class DecimalFormat extends NumberFormat {
 
         synchronized(digitList) {
             digitList.set(number, precision(false),
-                          !useExponentialNotation && !useSignificantDigits());
+                          !useExponentialNotation && !isSignificantDigits());
             return subformat(result, fieldPosition, number.signum() < 0, false);
         }        
     }
@@ -933,7 +924,7 @@ public class DecimalFormat extends NumberFormat {
      * formats.
      */
     private int precision(boolean isIntegral) {
-        if (useSignificantDigits()) {
+        if (isSignificantDigits()) {
             return getMaximumSignificantDigits();
         } else if (useExponentialNotation) {
             return getMinimumIntegerDigits() + getMaximumFractionDigits();
@@ -970,7 +961,7 @@ public class DecimalFormat extends NumberFormat {
         char decimal = isCurrencyFormat ?
             symbols.getMonetaryDecimalSeparator() :
             symbols.getDecimalSeparator();
-        boolean useSigDig = useSignificantDigits();
+        boolean useSigDig = isSignificantDigits();
         int maxIntDig = getMaximumIntegerDigits();
         int minIntDig = getMinimumIntegerDigits();
 
@@ -1133,6 +1124,7 @@ public class DecimalFormat extends NumberFormat {
             int minSigDig = getMinimumSignificantDigits();
             int maxSigDig = getMaximumSignificantDigits();
             if (!useSigDig) {
+                minSigDig = 0;
                 maxSigDig = Integer.MAX_VALUE;
             }
 
@@ -2855,7 +2847,7 @@ public class DecimalFormat extends NumberFormat {
         char zero = localized ? symbols.getZeroDigit() : PATTERN_ZERO_DIGIT;
         char digit = localized ? symbols.getDigit() : PATTERN_DIGIT;
         char sigDigit = 0;
-        boolean useSigDig = useSignificantDigits();
+        boolean useSigDig = isSignificantDigits();
         if (useSigDig) {
             sigDigit = localized ? symbols.getSignificantDigit() : PATTERN_SIGNIFICANT_DIGIT;
         }
@@ -3458,7 +3450,9 @@ public class DecimalFormat extends NumberFormat {
                 // decimalPos<0, then digitTotalCount == digitLeftCount +
                 // zeroDigitCount.
                 int effectiveDecimalPos = decimalPos >= 0 ? decimalPos : digitTotalCount;
-                if (sigDigitCount > 0) {
+                boolean useSigDig = (sigDigitCount > 0);
+                setSignificantDigits(useSigDig);
+                if (useSigDig) {
                     setMinimumSignificantDigits(sigDigitCount);
                     setMaximumSignificantDigits(sigDigitCount + digitRightCount);
                 } else {
@@ -3584,34 +3578,32 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Returns the minimum number of significant digits that will be
-     * displayed.
-     * @return the fewest significant digits that will be shown, or a
-     * non-positive value if significant digits are not in use
+     * displayed. This value has no effect unless isSignificantDigits()
+     * returns true.
+     * @return the fewest significant digits that will be shown
      * @draft ICU 3.0
      */
     public int getMinimumSignificantDigits() {
-        return -getMinimumIntegerDigits();
+        return minSignificantDigits;
     }
 
     /**
      * Returns the maximum number of significant digits that will be
-     * displayed.
-     * @return the most significant digits that will be shown, or a
-     * non-positive value if significant digits are not in use
+     * displayed. This value has no effect unless isSignificantDigits()
+     * returns true.
+     * @return the most significant digits that will be shown
      * @draft ICU 3.0
      */
     public int getMaximumSignificantDigits() {
-        return -getMaximumIntegerDigits();
+        return maxSignificantDigits;
     }
 
     /**
      * Sets the minimum number of significant digits that will be
      * displayed.  If <code>min</code> is less than one then it is set
      * to one.  If the maximum significant digits count is less than
-     * <code>min</code>, then it is set to <code>min</code>.  If
-     * significant digits were not in use before this call, then the
-     * maximum significant digits count will be set to
-     * <code>min</code>.
+     * <code>min</code>, then it is set to <code>min</code>. This
+     * value has no effect unless isSignificantDigits() returns true.
      * @param min the fewest significant digits to be shown 
      * @draft ICU 3.0
      */
@@ -3619,19 +3611,18 @@ public class DecimalFormat extends NumberFormat {
         if (min < 1) {
             min = 1;   
         }
-        // pin max sig dig to >= min; if unset, use min
-        int max = Math.max(getMaximumSignificantDigits(), min);
-        internalSetMinimumIntegerDigits(-min);
-        internalSetMaximumIntegerDigits(-max);
+        // pin max sig dig to >= min
+        int max = Math.max(maxSignificantDigits, min);
+        minSignificantDigits = min;
+        maxSignificantDigits = max;
     }
 
     /**
      * Sets the maximum number of significant digits that will be
      * displayed.  If <code>max</code> is less than one then it is set
      * to one.  If the minimum significant digits count is greater
-     * than <code>max</code>, then it is set to <code>max</code>.  If
-     * significant digits were not in use before this call, then the
-     * minimum significant digits count will be set to one.
+     * than <code>max</code>, then it is set to <code>max</code>. This
+     * value has no effect unless isSignificantDigits() returns true.
      * @param min the most significant digits to be shown 
      * @draft ICU 3.0
      */
@@ -3639,17 +3630,31 @@ public class DecimalFormat extends NumberFormat {
         if (max < 1) {
             max = 1;
         }
-        // pin min sig dig to 1..max; if unset, use 1
-        int min = Math.min(Math.max(getMinimumSignificantDigits(), 1), max);
-        internalSetMinimumIntegerDigits(-min);
-        internalSetMaximumIntegerDigits(-max);
+        // pin min sig dig to 1..max
+        int min = Math.min(minSignificantDigits, max);
+        minSignificantDigits = min;
+        maxSignificantDigits = max;
     }
 
     /**
-     * Returns true if significant digits are in use.
+     * Returns true if significant digits are in use or false if
+     * integer and fraction digit counts are in use.
+     * @return true if significant digits are in use
+     * @draft ICU 3.0
      */
-    private final boolean useSignificantDigits() {
-        return getMinimumIntegerDigits() < 0;
+    public boolean isSignificantDigits() {
+        return useSignificantDigits;
+    }
+
+    /**
+     * Sets whether significant digits are in use, or integer and
+     * fraction digit counts are in use.
+     * @param useSignficantDigits true to use significant digits, or
+     * false to use integer and fraction digit counts
+     * @draft ICU 3.0
+     */
+    public void setSignificantDigits(boolean useSignificantDigits) {
+        this.useSignificantDigits = useSignificantDigits;
     }
 
     /**
@@ -3908,6 +3913,32 @@ public class DecimalFormat extends NumberFormat {
      * @see DecimalFormatSymbols
      */
     private DecimalFormatSymbols symbols = null; // LIU new DecimalFormatSymbols();
+
+    /**
+     * True to use significant digits rather than integer and fraction
+     * digit counts.
+     * @serial
+     * @since ICU 3.0
+     */
+    private boolean useSignificantDigits = false;
+
+    /**
+     * The minimum number of significant digits to show.  Must be >= 1
+     * and <= maxSignificantDigits.  Ignored unless
+     * useSignificantDigits == true.
+     * @serial
+     * @since ICU 3.0
+     */
+    private int minSignificantDigits = 1;
+
+    /**
+     * The maximum number of significant digits to show.  Must be >=
+     * minSignficantDigits.  Ignored unless useSignificantDigits ==
+     * true.
+     * @serial
+     * @since ICU 3.0
+     */
+    private int maxSignificantDigits = 6;
 
     /**
      * True to force the use of exponential (i.e. scientific) notation when formatting
