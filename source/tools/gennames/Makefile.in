@@ -64,7 +64,7 @@ all-local: $(TARGET)
 
 install-local: all-local build-data
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+	$(SHELL) $(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
 
 dist-local:

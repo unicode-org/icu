@@ -91,10 +91,10 @@ install-local: all-local install-headers install-library
 install-library: all-local
 	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)
 ifneq ($(ENABLE_STATIC),)
-	$(INSTALL-L) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
+	$(SHELL) $(INSTALL-L) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
 endif
 ifneq ($(ENABLE_SHARED),)
-	$(INSTALL-L) $(FINAL_SO_TARGET) $(DESTDIR)$(libdir)/$(FINAL_SO_TARGET)
+	$(SHELL) $(INSTALL-L) $(FINAL_SO_TARGET) $(DESTDIR)$(libdir)/$(FINAL_SO_TARGET)
 ifneq ($(FINAL_SO_TARGET),$(SO_TARGET))
 	cd $(DESTDIR)$(libdir) && $(RM) $(MIDDLE_SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(MIDDLE_SO_TARGET)
 	cd $(DESTDIR)$(libdir) && $(RM) $(SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(SO_TARGET)
@@ -104,8 +104,8 @@ endif
 install-headers:
 	$(MKINSTALLDIRS) $(DESTDIR)$(includedir)/unicode
 	@for file in $(HEADERS); do \
-	 echo " $(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/unicode"; \
-	 $(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/unicode || exit; \
+	 echo "$(SHELL) $(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/unicode"; \
+	 $(SHELL) $(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/unicode || exit; \
 	done
 
 
