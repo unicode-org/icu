@@ -104,6 +104,11 @@ u_fopen(const char    *filename,
     if (result) {
         result->fOwnFile = TRUE;
     }
+    else {
+        /* Something bad happened.
+           Maybe the converter couldn't be opened. */
+        fclose(systemFile);
+    }
 
     return result;
 }

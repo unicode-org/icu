@@ -20,7 +20,7 @@
 
 #include <string.h>
 
-static char STANDARD_TEST_FILE[] = "iotest-c.txt";
+const char STANDARD_TEST_FILE[] = "iotest-c.txt";
 
 
 static void TestFileFromICU(UFILE *myFile) {

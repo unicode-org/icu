@@ -26,6 +26,7 @@ addFileTest(TestNode** root);
 
 U_CDECL_BEGIN
 extern const UChar NEW_LINE[];
+extern const char STANDARD_TEST_FILE[];
 U_CDECL_END
 
 #define STANDARD_TEST_NUM_RANGE 1000
