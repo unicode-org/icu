@@ -45,6 +45,11 @@
 #include "uenumimp.h"
 #include "uassert.h"
 
+
+#if defined(ULOC_DEBUG)
+#   include <stdio.h>
+#endif
+
 /* ### Declarations **************************************************/
 
 /* Locale stuff from locid.cpp */
@@ -2770,24 +2775,236 @@ uloc_getISOCountries()
     return COUNTRIES;
 }
 
+typedef struct { 
+  float q;
+  char *locale;
+} _acceptLangItem;
+
+static int uloc_acceptLanguageCompare(const void *a, const void *b)
+{
+  const _acceptLangItem *aa = (const _acceptLangItem*)a;
+  const _acceptLangItem *bb = (const _acceptLangItem*)b;
+
+  int rc = 0;
+  if(bb->q < aa->q) {
+    rc = -1;  /* A > B */
+  } else if(bb->q > aa->q) {
+    rc = 1;   /* A < B */
+  } else {
+    rc = 0;   /* A = B */
+  }
+
+  if(rc==0) {
+    rc = strcasecmp(aa->locale, bb->locale);
+  }
+  
+#if defined(ULOC_DEBUG)
+  /*  fprintf(stderr, "a:[%s:%g], b:[%s:%g] -> %d\n", 
+          aa->locale, aa->q, 
+          bb->locale, bb->q,
+          rc);*/
+#endif
+
+  return rc;
+}
+
+/* 
+mt-mt, ja;q=0.76, en-us;q=0.95, en;q=0.92, en-gb;q=0.89, fr;q=0.87, iu-ca;q=0.84, iu;q=0.82, ja-jp;q=0.79, mt;q=0.97, de-de;q=0.74, de;q=0.71, es;q=0.68, it-it;q=0.66, it;q=0.63, vi-vn;q=0.61, vi;q=0.58, nl-nl;q=0.55, nl;q=0.53
+*/
+
 U_CAPI int32_t U_EXPORT2
-uloc_acceptLanguageFromHTTP(char *result, int32_t *resultAvailable, UAcceptResult *outResult,
+uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult *outResult,
 			const char *httpAcceptLanguage,
                           UEnumeration* availableLocales,
                           UErrorCode *status)
 {
-  *status = U_INTERNAL_PROGRAM_ERROR;
-  return -1;
+  _acceptLangItem j[200];
+  const char **strs;
+  char tmp[ULOC_FULLNAME_CAPACITY +1];
+  int32_t n = 0;
+  const char *itemEnd;
+  const char *paramEnd;
+  const char *s;
+  const char *t;
+  int32_t res;
+  int32_t i;
+  int32_t l = uprv_strlen(httpAcceptLanguage);
+
+  if(U_FAILURE(*status)) {
+    return -1;
+  }
+
+  for(s=httpAcceptLanguage;s&&*s;) {
+    while(isspace(*s)) /* eat space at the beginning */
+      s++;
+    itemEnd=uprv_strchr(s,',');
+    paramEnd=uprv_strchr(s,';');
+    if(!itemEnd) {
+      itemEnd = httpAcceptLanguage+l; /* end of string */
+    }
+    if(paramEnd && paramEnd<itemEnd) { 
+      /* semicolon (;) is closer than end (,) */
+      double q;
+      t = paramEnd+1;
+      if(*t=='q') {
+        t++;
+      }
+      while(isspace(*t)) {
+        t++;
+      }
+      if(*t=='=') {
+        t++;
+      }
+      while(isspace(*t)) {
+        t++;
+      }
+      q = atof(t);
+      j[n].q = q;
+    } else {
+      /* no semicolon - it's 1.0 */
+      j[n].q = 1.0;
+      paramEnd = itemEnd;
+    }
+    /* eat spaces prior to semi */
+    for(t=(paramEnd-1);(paramEnd>s)&&isspace(*t);t--)
+      ;
+    j[n].locale = uprv_strndup(s,(t+1)-s);
+    uloc_canonicalize(j[n].locale,tmp,sizeof(tmp)/sizeof(tmp[0]),status);
+    if(strcmp(j[n].locale,tmp)) {
+      uprv_free(j[n].locale);
+      j[n].locale=uprv_strdup(tmp);
+    }
+#if defined(ULOC_DEBUG)
+    /*fprintf(stderr,"%d: s <%s> q <%g>\n", n, j[n].locale, j[n].q);*/
+#endif
+    n++;
+    s = itemEnd;
+    while(*s==',') { /* eat duplicate commas */
+      s++;
+    }
+    if(n>=(sizeof(j)/sizeof(j[0]))) { /* overflowed */
+      *status = U_INTERNAL_PROGRAM_ERROR;
+      return;
+    }
+  }
+  qsort(j, n, sizeof(j[0]), uloc_acceptLanguageCompare);
+  strs = uprv_malloc(sizeof(strs[0])*n);
+  for(i=0;i<n;i++) {
+#if defined(ULOC_DEBUG)
+    /*fprintf(stderr,"%d: s <%s> q <%g>\n", i, j[i].locale, j[i].q);*/
+#endif
+    strs[i]=j[i].locale;
+  }
+  res =  uloc_acceptLanguage(result, resultAvailable, outResult, 
+                             strs, n, availableLocales, status);
+  for(i=0;i<n;i++) {
+    uprv_free((char*)strs[i]);
+  }
+  uprv_free(strs);
+  return res;
 }
 
 U_CAPI int32_t U_EXPORT2
 uloc_acceptLanguage(char *result, int32_t resultAvailable, 
                     UAcceptResult *outResult, const char *acceptList[],
+                    int32_t acceptListCount,
                     UEnumeration* availableLocales,
                     UErrorCode *status) {
-  *status = U_INTERNAL_PROGRAM_ERROR;
+  int32_t i;
+  int32_t len;
+  int32_t maxLen=0;
+  char tmp[ULOC_FULLNAME_CAPACITY+1];
+  const char *l;
+  char **fallbackList;
+  if(U_FAILURE(*status)) {
+    return -1;
+  }
+  fallbackList = uprv_malloc(sizeof(fallbackList[0])*acceptListCount);
+  for(i=0;i<acceptListCount;i++) {
+#if defined(ULOC_DEBUG)
+    fprintf(stderr,"%02d: %s\n", i, acceptList[i]);
+#endif
+    while(l=uenum_next(availableLocales, NULL, status)) {
+#if defined(ULOC_DEBUG)
+      fprintf(stderr,"  %s\n", l);
+#endif
+      len = uprv_strlen(l);
+      if(!uprv_strcmp(acceptList[i], l)) {
+        if(outResult) { 
+          *outResult = ULOC_ACCEPT_VALID;
+        }
+#if defined(ULOC_DEBUG)
+        fprintf(stderr, "MATCH! %s\n", l);
+#endif
+        if(len>0) {
+          uprv_strncpy(result, l, uprv_min(len, resultAvailable));
+        }
+        for(i=0;i<acceptListCount;i++) {
+          uprv_free(fallbackList[i]);
+        }
+        uprv_free(fallbackList);
+        return u_terminateChars(result, resultAvailable, len, status);   
+      }
+      if(len>maxLen) {
+        maxLen = len;
+      }
+    }
+    uenum_reset(availableLocales, status);    
+    /* save off parent info */
+    if(uloc_getParent(acceptList[i], tmp, sizeof(tmp)/sizeof(tmp[0]), status)!=0) {
+      fallbackList[i] = uprv_strdup(tmp);
+    } else {
+      fallbackList[i]=0;
+    }
+  }
+
+  for(maxLen--;maxLen>0;maxLen--) {
+    for(i=0;i<acceptListCount;i++) {
+      if(fallbackList[i] && (uprv_strlen(fallbackList[i])==maxLen)) {
+#if defined(ULOC_DEBUG)
+        fprintf(stderr,"Try: [%s]", fallbackList[i]);
+#endif
+        while(l=uenum_next(availableLocales, NULL, status)) {
+#if defined(ULOC_DEBUG)
+          fprintf(stderr,"  %s\n", l);
+#endif
+          len = uprv_strlen(l);
+          if(!uprv_strcmp(fallbackList[i], l)) {
+            if(outResult) { 
+              *outResult = ULOC_ACCEPT_FALLBACK;
+            }
+#if defined(ULOC_DEBUG)
+            fprintf(stderr, "fallback MATCH! %s\n", l);
+#endif
+            if(len>0) {
+              uprv_strncpy(result, l, uprv_min(len, resultAvailable));
+            }
+            for(i=0;i<acceptListCount;i++) {
+              uprv_free(fallbackList[i]);
+            }
+            uprv_free(fallbackList);
+            return u_terminateChars(result, resultAvailable, len, status);   
+          }
+        }
+        uenum_reset(availableLocales, status);    
+
+        if(uloc_getParent(fallbackList[i], tmp, sizeof(tmp)/sizeof(tmp[0]), status)!=0) {
+          fallbackList[i] = uprv_strdup(tmp);
+        } else {
+          fallbackList[i]=0;
+        }
+      }
+    }
+    if(outResult) { 
+      *outResult = ULOC_ACCEPT_FAILED;
+    }
+  }
+  /* *status = not found? */
+  for(i=0;i<acceptListCount;i++) {
+    uprv_free(fallbackList[i]);
+  }
+  uprv_free(fallbackList);
   return -1;
 }
-
 
 /*eof*/
