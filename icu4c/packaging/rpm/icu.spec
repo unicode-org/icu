@@ -12,7 +12,7 @@ Release: 1
 Requires: libicu22 >= 2.2
 Summary: International Components for Unicode
 Packager: Ian Holsman (CNET Networks) <ianh@cnet.com>
-Copyright: IBM Public License
+Copyright: X License
 Group: System Environment/Libraries
 Source: icu-2.2.tar.gz
 BuildRoot: /var/tmp/%{name}
@@ -53,26 +53,26 @@ also contains break data for various languages, and transliteration data.
 
 icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
 cd /usr/lib/icu
-rm -f current
+rm -f /usr/lib/icu/current
 if test x"$icucurrent" != x
 then
     ln -s "$icucurrent" current
 fi
 
-ICU_DATA=/usr/share/icu/2.2
+ICU_DATA=/usr/lib/icu/2.2
 export ICU_DATA
 if test ! -f $ICU_DATA/cnvalias.dat -o /etc/icu/convrtrs.txt -nt $ICU_DATA/cnvalias.dat
 then
     echo Compiling converters and aliases list from /etc/icu/convrtrs.txt
-    /usr/sbin/gencnval /etc/icu/convrtrs.txt
+    /usr/bin/gencnval /etc/icu/convrtrs.txt
 fi
 
 %preun
 # Adjust the current ICU link in /usr/lib/icu
 
-icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n -e '/\/2.2\//d -e 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
+icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n -e '/\/2.2\//d' -e 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
 cd /usr/lib/icu
-rm -f current
+rm -f /usr/lib/icu/current
 if test x"$icucurrent" != x
 then
     ln -s "$icucurrent" current
@@ -85,7 +85,7 @@ ldconfig
 
 icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
 cd /usr/lib/icu
-rm -f current
+rm -f /usr/lib/icu/current
 if test x"$icucurrent" != x
 then
     ln -s "$icucurrent" current
@@ -94,9 +94,9 @@ fi
 %preun -n libicu22
 # Adjust the current ICU link in /usr/lib/icu
 
-icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n -e '/\/2.2\//d -e 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
+icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n -e '/\/2.2\//d' -e 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
 cd /usr/lib/icu
-rm -f current
+rm -f /usr/lib/icu/current
 if test x"$icucurrent" != x
 then
     ln -s "$icucurrent" current
@@ -108,7 +108,7 @@ fi
 %build
 cd source
 chmod a+x ./configure
-CFLAGS="-O2" CXXFLAGS="-O2" ./configure --prefix=/usr --sysconfdir=/etc --with-data-packaging=files --disable-rpath --enable-shared --enable-static --disable-samples
+CFLAGS="-O2" CXXFLAGS="-O2" ./configure --prefix=/usr --sysconfdir=/etc --with-data-packaging=files  --enable-shared --enable-static --disable-samples
 make RPM_OPT_FLAGS="$RPM_OPT_FLAGS"
 
 %install
@@ -170,6 +170,8 @@ make install DESTDIR=$RPM_BUILD_ROOT
 /usr/lib/libicutoolutil.so.22.0
 /usr/lib/libicuuc.so.22
 /usr/lib/libicuuc.so.22.0
+/usr/lib/libicudata.so.22
+/usr/lib/libicudata.so.22.0
 /usr/lib/libustdio.so.22
 /usr/lib/libustdio.so.22.0
 
@@ -189,6 +191,8 @@ make install DESTDIR=$RPM_BUILD_ROOT
 /usr/lib/libicutoolutil.a
 /usr/lib/libustdio.so
 /usr/lib/libustdio.a
+/usr/lib/libicudata.so
+/usr/lib/libicudata.a
 /usr/include/unicode/*.h
 /usr/lib/icu/2.2/Makefile.inc
 /usr/lib/icu/Makefile.inc
@@ -197,5 +201,8 @@ make install DESTDIR=$RPM_BUILD_ROOT
 /usr/share/doc/icu/*
 
 %changelog
+* Fri Sep 27 2002 Steven Loomis <srl@jtcsv.com>
+- minor updates to 2.2 spec. Rpath is off by default, don't pass it as an option.
 * Mon Sep 16 2002 Ian Holsman <ian@holsman.net> 
 - update to icu 2.2
+
