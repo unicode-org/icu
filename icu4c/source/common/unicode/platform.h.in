@@ -184,7 +184,7 @@ typedef unsigned short uint16_t;
 /*===========================================================================*/
 
 #define U_INLINE
-#define U_ALIGN_CODE
+#define U_ALIGN_CODE(n) 
 
 /*===========================================================================*/
 /* Programs used by ICU code                                                 */

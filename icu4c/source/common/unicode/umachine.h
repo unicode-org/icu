@@ -164,4 +164,20 @@ typedef int8_t UBool;
 #   define FALSE 0
 #endif
 
+
+/*===========================================================================*/
+/* U_INLINE and U_ALIGN_CODE   Set default vaues if these are not already    */
+/*                             defined.  Definitions normally are in         */
+/*                             platform.h or the corresponding file for      */
+/*                             the OS in use.                                */
+/*===========================================================================*/
+#ifndef U_ALIGN_CODE
+#   define U_ALIGN_CODE(n)
+#endif
+
+#ifndef U_INLINE
+#   define U_INLINE
+#endif
+
+
 #endif
