@@ -57,6 +57,10 @@ filename, e.g.
 for Japanese (Japan) data, or
 .B root.txt
 for the root bundle.
+In any case,
+.B genrb
+will produce a file whose base name is the name of the locale found
+in the resource file, not the base name of the resource file itself.
 .PP
 The binary files can be read directly by ICU, or used by
 .BR pkgdata (8)
