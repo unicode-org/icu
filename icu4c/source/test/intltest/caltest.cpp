@@ -1168,7 +1168,7 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
     SimpleDateFormat *sdf=new SimpleDateFormat("YYYY'-W'ww-ee", Locale::GERMANY, status);
     if (U_FAILURE(status)) { errln("Couldn't create SimpleDateFormat"); return; }
-    sdf->applyLocalizedPattern(UnicodeString("JJJJ'-W'ww-dd"), status);
+    sdf->applyLocalizedPattern(UnicodeString("JJJJ'-W'ww-ee"), status);
     if (U_FAILURE(status)) { errln("Couldn't apply localized pattern"); return; }
     cal->clear();
     cal->set(1997, Calendar::DECEMBER, 25);
