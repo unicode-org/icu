@@ -334,7 +334,6 @@ MessageFormat::toPattern(UnicodeString& result) const
       delete integerTemplate;
     } 
     else if (fFormats[i]->getDynamicClassID() == SimpleDateFormat::getStaticClassID()) {
-      UErrorCode success = U_ZERO_ERROR;
       DateFormat& formatAlias = *(DateFormat*)fFormats[i];
       DateFormat *defaultDateTemplate = DateFormat::createDateInstance(DateFormat::kDefault, fLocale);
       DateFormat *shortDateTemplate = DateFormat::createDateInstance(DateFormat::kShort, fLocale);

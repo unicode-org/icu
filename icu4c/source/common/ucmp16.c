@@ -213,7 +213,7 @@ CompactShortArray* ucmp16_openAdopt(uint16_t *indexArray,
   this_obj->fBogus = FALSE;
   this_obj->fArray = newValues;
   this_obj->fIndex = indexArray;
-  this_obj->fCompact = count < UCMP16_kUnicodeCount;
+  this_obj->fCompact = (UBool)(count < UCMP16_kUnicodeCount);
   this_obj->fStructSize = sizeof(CompactShortArray);
   this_obj->kBlockShift = UCMP16_kBlockShift;
   this_obj->kBlockMask = UCMP16_kBlockMask;
@@ -256,7 +256,7 @@ CompactShortArray* ucmp16_openAlias(uint16_t *indexArray,
   this_obj->fBogus = FALSE;
   this_obj->fArray = newValues;
   this_obj->fIndex = indexArray;
-  this_obj->fCompact = count < UCMP16_kUnicodeCount;
+  this_obj->fCompact = (UBool)(count < UCMP16_kUnicodeCount);
   this_obj->fStructSize = sizeof(CompactShortArray);
   this_obj->kBlockShift = UCMP16_kBlockShift;
   this_obj->kBlockMask = UCMP16_kBlockMask;
@@ -495,7 +495,7 @@ void touchBlock(CompactShortArray* this_obj,
 
 UBool blockTouched(const CompactShortArray* this_obj, int32_t i)
 {
-  return (this_obj->fHashes[i] != 0);
+  return (UBool)(this_obj->fHashes[i] != 0);
 }
 
 uint32_t ucmp16_getCount(const CompactShortArray* this_obj)

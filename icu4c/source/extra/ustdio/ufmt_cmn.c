@@ -165,7 +165,6 @@ ufmt_unicodeToDefaultCP(const UChar *s,
 {
   int32_t size;
   char *target, *alias;
-  const UChar *consumed = 0;
   UConverter *defConverter;
   UErrorCode status = U_ZERO_ERROR;
 

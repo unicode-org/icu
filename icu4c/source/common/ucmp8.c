@@ -32,7 +32,7 @@ int32_t ucmp8_getkBlockCount() { return UCMP8_kBlockCount;}
 void  ucmp8_initBogus(CompactByteArray* array)
 {
   CompactByteArray* this_obj = array;
-  
+
   if (this_obj == NULL) return;
 
   this_obj->fStructSize = sizeof(CompactByteArray);
@@ -187,7 +187,7 @@ CompactByteArray* ucmp8_openAdopt(uint16_t *indexArray,
   
   this_obj->fArray = newValues;
   this_obj->fIndex = indexArray;
-  this_obj->fCompact = (count < UCMP8_kUnicodeCount) ? TRUE : FALSE;
+  this_obj->fCompact = (UBool)((count < UCMP8_kUnicodeCount) ? TRUE : FALSE);
   this_obj->fAlias = FALSE;
   this_obj->fIAmOwned = FALSE;
 
@@ -209,7 +209,7 @@ CompactByteArray* ucmp8_openAlias(uint16_t *indexArray,
   
   this_obj->fArray = newValues;
   this_obj->fIndex = indexArray;
-  this_obj->fCompact = (count < UCMP8_kUnicodeCount) ? TRUE : FALSE;
+  this_obj->fCompact = (UBool)((count < UCMP8_kUnicodeCount) ? TRUE : FALSE);
   this_obj->fAlias = TRUE;
   this_obj->fIAmOwned = FALSE;
 
@@ -325,7 +325,7 @@ findOverlappingPosition(CompactByteArray* this_obj,
 UBool
 ucmp8_isBogus(const CompactByteArray* this_obj)
 {
-  return this_obj == NULL || this_obj->fBogus;
+  return (UBool)(this_obj == NULL || this_obj->fBogus);
 }
 
 const int8_t*

@@ -26,7 +26,7 @@ static int32_t ucmp32_findOverlappingPosition(CompactIntArray* this_obj, uint32_
                                 const UChar *tempIndex, 
                                 int32_t tempIndexCount, 
                                 uint32_t cycle);
-      
+
 static  UBool debugSmall = FALSE;
 static  uint32_t debugSmallLimit = 30000;
 
@@ -82,7 +82,7 @@ char c;
         }
         /* char instead of int8_t for Mac compilation*/
         T_FileStream_read(is, (char*)&c, sizeof(c));
-        this_obj->fCompact = (c != 0);
+        this_obj->fCompact = (UBool)(c != 0);
     }
 }
 
@@ -113,7 +113,7 @@ if (!T_FileStream_error(os))
             T_FileStream_write(os, &len, sizeof(len));
             T_FileStream_write(os, this_obj->fIndex, sizeof(*(this_obj->fIndex)) * UCMP32_kIndexCount);
         }
-        c = this_obj->fCompact ? 1 : 0;  /* char instead of int8_t for Mac compilation*/
+        c = (char)(this_obj->fCompact ? 1 : 0);  /* char instead of int8_t for Mac compilation*/
         T_FileStream_write(os, (const char*)&c, sizeof(c));
     }
 }
@@ -163,7 +163,7 @@ char c;
         }
         /* char instead of int8_t for Mac compilation*/
         uprv_mstrm_read(is, (char*)&c, sizeof(c));
-        this_obj->fCompact = (c != 0);
+        this_obj->fCompact = (UBool)(c != 0);
     }
 }
 
@@ -194,7 +194,7 @@ if (!uprv_mstrm_error(os))
             uprv_mstrm_write(os, (uint8_t *)&len, sizeof(len));
             uprv_mstrm_write(os, (uint8_t *)this_obj->fIndex, sizeof(*(this_obj->fIndex)) * UCMP32_kIndexCount);
         }
-        c = this_obj->fCompact ? 1 : 0;  /* char instead of int8_t for Mac compilation*/
+        c = (char)(this_obj->fCompact ? 1 : 0);  /* char instead of int8_t for Mac compilation*/
         uprv_mstrm_write(os, (uint8_t *)&c, sizeof(c));
     }
 }
@@ -269,7 +269,7 @@ CompactIntArray* ucmp32_openAdopt(uint16_t *indexArray, int32_t *newValues, int3
   this_obj->fBogus = FALSE;
   this_obj->fArray = newValues;
   this_obj->fIndex = indexArray;
-  this_obj->fCompact = (count < UCMP32_kUnicodeCount) ? TRUE : FALSE;
+  this_obj->fCompact = (UBool)((count < UCMP32_kUnicodeCount) ? TRUE : FALSE);
   return this_obj;
 }
 
@@ -290,7 +290,7 @@ void ucmp32_close(    CompactIntArray* this_obj)
 
 UBool ucmp32_isBogus(const CompactIntArray* this_obj)
 {
-    return this_obj == NULL || this_obj->fBogus;
+    return (UBool)(this_obj == NULL || this_obj->fBogus);
 }
 
 void ucmp32_expand(CompactIntArray* this_obj) {

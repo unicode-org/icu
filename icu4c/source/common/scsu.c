@@ -1311,7 +1311,7 @@ scsu_inDynamicWindow(const UnicodeCompressor *comp,
 		     int32_t c, 
 		     int32_t whichWindow)
 {
-  return (c >= comp->fOffsets[whichWindow] 
+  return (UBool)(c >= comp->fOffsets[whichWindow] 
 	  && c < (comp->fOffsets[whichWindow] + 0x80));
 }
 
@@ -1326,7 +1326,7 @@ static UBool
 scsu_inStaticWindow(int32_t c, 
 		    int32_t whichWindow)
 {
-  return (c >= sOffsets[whichWindow] && c < (sOffsets[whichWindow] + 0x80));
+  return (UBool)(c >= sOffsets[whichWindow] && c < (sOffsets[whichWindow] + 0x80));
 }
 
 /**
@@ -1337,7 +1337,7 @@ scsu_inStaticWindow(int32_t c,
 static UBool 
 scsu_isCompressible(int32_t c)
 {
-  return (c < 0x3400 || c >= 0xE000);
+  return (UBool)(c < 0x3400 || c >= 0xE000);
 }
 
 /**
