@@ -785,8 +785,8 @@ static const UConverterImpl _UTF8Impl={
 
 /* Todo: verify that UTF-8 == (ccsid (ibm-codepage) 1208) for unicode version 2.0 and 3.0 */
 const UConverterStaticData _UTF8StaticData={
-  sizeof(UConverterStaticData),
-"UTF8",
+    sizeof(UConverterStaticData),
+    "UTF8",
     1208, UCNV_IBM, UCNV_UTF8, 1, 4,
     { 0xef, 0xbf, 0xbd, 0 },3,FALSE,FALSE,
     0,
@@ -1317,7 +1317,7 @@ const UConverterStaticData _UTF16LEStaticData={
     sizeof(UConverterStaticData),
     "UTF16_LittleEndian",
     1200, UCNV_IBM, UCNV_UTF16_LittleEndian, 2, 2,
-    { 0xfd, 0xff, 0, 0 },2,0,0,
+    { 0xfd, 0xff, 0, 0 },2,FALSE,FALSE,
     0,
     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
@@ -1521,15 +1521,14 @@ morebytes:
                     break;
                 }
             }
-            offsetNum += i;
         }
         else
         {
             args->source = (const char *) mySource;
             args->target = myTarget;
             args->converter->invalidCharLength = (int8_t)i;
-            /* ### TODO: how does this set the offsets correctly? */
-            if (T_UConverter_toUnicode_InvalidChar_Callback(args, err))
+            args->offsets = myOffsets;
+            if (T_UConverter_toUnicode_InvalidChar_OffsetCallback(args, offsetNum, err))
             {
                 /* Stop if the error wasn't handled */
                 break;
@@ -1537,7 +1536,9 @@ morebytes:
             args->converter->invalidCharLength = 0;
             mySource = (unsigned char *) args->source;
             myTarget = args->target;
+            myOffsets = args->offsets;
         }
+        offsetNum += i;
     }
 
 donefornow:
@@ -1596,10 +1597,9 @@ lowsurogate:
         }
 
         /* We cannot get any larger than 10FFFF because we are coming from UTF-16 */
-        /* Todo: Can the & part be left off implicitly? Does it really save time? */
         temp[1] = (uint8_t) (ch >> 16 & 0x1F);
-        temp[2] = (uint8_t) (ch >> 8 & 0xFF);
-        temp[3] = (uint8_t) (ch & 0xFF);
+        temp[2] = (uint8_t) (ch >> 8);  /* unsigned cast implicitly does (ch & FF) */
+        temp[3] = (uint8_t) (ch);       /* unsigned cast implicitly does (ch & FF) */
 
         for (indexToWrite = 0; indexToWrite <= sizeof(uint32_t) - 1; indexToWrite++)
         {
@@ -1610,7 +1610,7 @@ lowsurogate:
             else
             {
                 args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = temp[indexToWrite];
-                *err = U_BUFFER_OVERFLOW_ERROR; /* Todo: is this needed because of ending if */
+                *err = U_BUFFER_OVERFLOW_ERROR;
             }
         }
     }
@@ -1671,10 +1671,9 @@ lowsurogate:
         }
 
         /* We cannot get any larger than 10FFFF because we are coming from UTF-16 */
-        /* Todo: Can the & part be left off implicitly? Does it really save time? */
         temp[1] = (uint8_t) (ch >> 16 & 0x1F);
-        temp[2] = (uint8_t) (ch >> 8 & 0xFF);
-        temp[3] = (uint8_t) (ch & 0xFF);
+        temp[2] = (uint8_t) (ch >> 8);  /* unsigned cast implicitly does (ch & FF) */
+        temp[3] = (uint8_t) (ch);       /* unsigned cast implicitly does (ch & FF) */
 
         for (indexToWrite = 0; indexToWrite <= sizeof(uint32_t) - 1; indexToWrite++)
         {
@@ -1686,7 +1685,7 @@ lowsurogate:
             else
             {
                 args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = temp[indexToWrite];
-                *err = U_BUFFER_OVERFLOW_ERROR; /* Todo: is this needed because of ending if */
+                *err = U_BUFFER_OVERFLOW_ERROR;
             }
         }
         offsetNum++;
@@ -1704,7 +1703,6 @@ lowsurogate:
 UChar32 T_UConverter_getNextUChar_UTF32_BE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
 {
-    /* Todo: This needs testing */
     UChar myUCharBuf[2];
     UChar *myUCharPtr;
     const unsigned char *mySource;
@@ -1787,11 +1785,10 @@ static const UConverterImpl _UTF32BEImpl = {
     NULL
 };
 
-/** Todo: These numbers are probably in correct. */
 const UConverterStaticData _UTF32BEStaticData = {
     sizeof(UConverterStaticData),
     "UTF32_BigEndian",
-    0,  /* Should be the UTF-32 CCSID */
+    0,  /* TODO: Change this number to the UTF-32 CCSID which currently does not exist */
     UCNV_IBM, UCNV_UTF32_BigEndian, 4, 4,
     { 0, 0, 0xff, 0xfd }, 4, FALSE, FALSE,
     0,
@@ -1998,14 +1995,14 @@ morebytes:
                     break;
                 }
             }
-            offsetNum += i;
         }
         else
         {
             args->source = (const char *) mySource;
             args->target = myTarget;
             args->converter->invalidCharLength = (int8_t)i;
-            if (T_UConverter_toUnicode_InvalidChar_Callback(args, err))
+            args->offsets = myOffsets;
+            if (T_UConverter_toUnicode_InvalidChar_OffsetCallback(args, offsetNum, err))
             {
                 /* Stop if the error wasn't handled */
                 break;
@@ -2013,7 +2010,9 @@ morebytes:
             args->converter->invalidCharLength = 0;
             mySource = (unsigned char *) args->source;
             myTarget = args->target;
+            myOffsets = args->offsets;
         }
+        offsetNum += i;
     }
 
 donefornow:
@@ -2072,10 +2071,9 @@ lowsurogate:
         }
 
         /* We cannot get any larger than 10FFFF because we are coming from UTF-16 */
-        /* Todo: Can the & part be left off implicitly? Does it really save time? */
         temp[2] = (uint8_t) (ch >> 16 & 0x1F);
-        temp[1] = (uint8_t) (ch >> 8 & 0xFF);
-        temp[0] = (uint8_t) (ch & 0xFF);
+        temp[1] = (uint8_t) (ch >> 8);  /* unsigned cast implicitly does (ch & FF) */
+        temp[0] = (uint8_t) (ch);       /* unsigned cast implicitly does (ch & FF) */
 
         for (indexToWrite = 0; indexToWrite <= sizeof(uint32_t) - 1; indexToWrite++)
         {
@@ -2086,7 +2084,7 @@ lowsurogate:
             else
             {
                 args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = temp[indexToWrite];
-                *err = U_BUFFER_OVERFLOW_ERROR; /* Todo: is this needed because of ending if */
+                *err = U_BUFFER_OVERFLOW_ERROR;
             }
         }
     }
@@ -2147,10 +2145,9 @@ lowsurogate:
         }
 
         /* We cannot get any larger than 10FFFF because we are coming from UTF-16 */
-        /* Todo: Can the & part be left off implicitly? Does it really save time? */
         temp[2] = (uint8_t) (ch >> 16 & 0x1F);
-        temp[1] = (uint8_t) (ch >> 8 & 0xFF);
-        temp[0] = (uint8_t) (ch & 0xFF);
+        temp[1] = (uint8_t) (ch >> 8);  /* unsigned cast implicitly does (ch & FF) */
+        temp[0] = (uint8_t) (ch);       /* unsigned cast implicitly does (ch & FF) */
 
         for (indexToWrite = 0; indexToWrite <= sizeof(uint32_t) - 1; indexToWrite++)
         {
@@ -2162,7 +2159,7 @@ lowsurogate:
             else
             {
                 args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = temp[indexToWrite];
-                *err = U_BUFFER_OVERFLOW_ERROR; /* Todo: is this needed because of ending if */
+                *err = U_BUFFER_OVERFLOW_ERROR;
             }
         }
         offsetNum++;
@@ -2180,7 +2177,6 @@ lowsurogate:
 UChar32 T_UConverter_getNextUChar_UTF32_LE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
 {
-    /* Todo: This needs testing */
     UChar myUCharBuf[2];
     UChar *myUCharPtr;
     const unsigned char *mySource;
@@ -2263,11 +2259,10 @@ static const UConverterImpl _UTF32LEImpl = {
     NULL
 };
 
-/** Todo: These numbers are probably in correct. */
 const UConverterStaticData _UTF32LEStaticData = {
     sizeof(UConverterStaticData),
     "UTF32_LittleEndian",
-    0,  /* Should be the UTF-32 CCSID */
+    0,    /* TODO: Change this number to the UTF-32 CCSID which currently does not exist */
     UCNV_IBM, UCNV_UTF32_BigEndian, 4, 4,
     { 0xfd, 0xff, 0, 0 }, 4, FALSE, FALSE,
     0,
