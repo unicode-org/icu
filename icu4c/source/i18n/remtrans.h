@@ -23,11 +23,6 @@ class U_I18N_API RemoveTransliterator : public Transliterator {
 public:
 
     /**
-     * ID for this transliterator.
-     */
-    static const UChar ID[]; // public for Transliterator
-
-    /**
      * Constructs a transliterator.
      */
     RemoveTransliterator();
@@ -36,6 +31,11 @@ public:
      * Destructor.
      */
     virtual ~RemoveTransliterator();
+
+    /**
+     * System registration hook.
+     */
+    static void registerIDs();
 
     /**
      * Transliterator API.
@@ -47,11 +47,14 @@ public:
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;
+
+ private:
+
+    /**
+     * Factory method
+     */
+    static Transliterator* _create(const UnicodeString& ID, Token context);
 };
-
-inline RemoveTransliterator::RemoveTransliterator() : Transliterator(ID, 0) {}
-
-inline RemoveTransliterator::~RemoveTransliterator() {}
 
 U_NAMESPACE_END
 

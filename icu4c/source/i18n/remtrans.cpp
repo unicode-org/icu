@@ -9,9 +9,32 @@
 */
 #include "remtrans.h"
 
+static const UChar ID[] = {65, 110, 121, 45, 0x52, 0x65, 0x6D, 0x6F, 0x76, 0x65, 0x00}; /* "Any-Remove" */
+
 U_NAMESPACE_BEGIN
 
-const UChar RemoveTransliterator::ID[] = {65, 110, 121, 45, 0x52, 0x65, 0x6D, 0x6F, 0x76, 0x65, 0x00}; /* "Any-Remove" */
+/**
+ * System registration hook.
+ */
+void RemoveTransliterator::registerIDs() {
+
+    Transliterator::_registerFactory(::ID, _create, integerToken(0));
+
+    Transliterator::_registerSpecialInverse(UnicodeString("Remove", ""),
+                                            UnicodeString("Null", ""), FALSE);
+}
+
+/**
+ * Factory method
+ */
+Transliterator* RemoveTransliterator::_create(const UnicodeString& ID,
+                                              Token /*context*/) {
+    return new RemoveTransliterator();
+}
+
+RemoveTransliterator::RemoveTransliterator() : Transliterator(::ID, 0) {}
+
+RemoveTransliterator::~RemoveTransliterator() {}
 
 Transliterator* RemoveTransliterator::clone(void) const {
     return new RemoveTransliterator();
