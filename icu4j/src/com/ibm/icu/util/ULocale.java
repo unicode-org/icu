@@ -45,6 +45,6 @@ public class ULocale {
 		locale = loc;
 	}
 	public ULocale(String locName) {
-		locale = new Locale(locName);
+		locale = new Locale(locName, "");
 	}
 }
