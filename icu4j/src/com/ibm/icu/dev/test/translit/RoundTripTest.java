@@ -187,340 +187,284 @@ public class RoundTripTest extends TestFmwk {
                   this, new Legal());
     }
     public void TestBengaliGurmukhi() throws IOException, ParseException {
-        new Test("GURMUKHI-BENGALI", 
-          TestUtility.GURMUKHI_SCRIPT, TestUtility.BENGALI_SCRIPT)
+        new Test("GURMUKHI-BENGALI")
           .test("[:GURMUKHI:]", "[:BENGALI:]",  
                 "[\u098B\u098C\u09B7\u09E0\u09E1\u09F0\u09F1]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("BENGALI-GURMUKHI", 
-            TestUtility.BENGALI_SCRIPT, TestUtility.GURMUKHI_SCRIPT )
+        new Test("BENGALI-GURMUKHI")
           .test( "[:BENGALI:]", "[:GURMUKHI:]",
                   "[\u0A33\u0A35\u0A59\u0A5A\u0A5B\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
                   this, new Legal());
     } 
     public void TestBengaliGujarati() throws IOException, ParseException {
-        new Test("GUJARATI-BENGALI", 
-          TestUtility.GUJARATI_SCRIPT, TestUtility.BENGALI_SCRIPT)
+        new Test("GUJARATI-BENGALI")
           .test("[:GUJARATI:]", "[:BENGALI:]", 
                 "[\u098c\u09e1\u09f0\u09f1]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("BENGALI-GUJARATI", 
-            TestUtility.BENGALI_SCRIPT, TestUtility.GUJARATI_SCRIPT )
+        new Test("BENGALI-GUJARATI" )
           .test( "[:BENGALI:]", "[:GUJARATI:]",
                   "[\u0A8D\u0A91\u0AB3\u0AB5\u0ABD\u0AD0]", /*roundtrip exclusions*/
                   this, new Legal());
    }
    public void TestBengaliOriya() throws IOException, ParseException {
-        new Test("ORIYA-BENGALI", 
-          TestUtility.ORIYA_SCRIPT, TestUtility.BENGALI_SCRIPT)
+        new Test("ORIYA-BENGALI")
           .test("[:ORIYA:]", "[:BENGALI:]", 
                 "[\u09f0\u09f1]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("BENGALI-ORIYA", 
-            TestUtility.BENGALI_SCRIPT, TestUtility.ORIYA_SCRIPT )
+        new Test("BENGALI-ORIYA")
           .test( "[:BENGALI:]", "[:ORIYA:]",
                   "[\u0b33\u0b3d]", /*roundtrip exclusions*/
                   this, new Legal());
    }
    public void TestBengaliTamil() throws IOException, ParseException {
-        new Test("Tamil-BENGALI", 
-          TestUtility.TAMIL_SCRIPT, TestUtility.BENGALI_SCRIPT)
+        new Test("Tamil-BENGALI")
           .test("[:tamil:]", "[:BENGALI:]", 
                   "[\u09f0\u09f1\u098B\u098C\u0996\u0997\u0998\u099B\u099D\u09A0\u09A1\u09A2\u09A5\u09A6\u09A7\u09AB\u09AC\u09AD\u09B6\u09DC\u09DD\u09DF\u09E0\u09E1]", /*roundtrip exclusions*/
                   this, new Legal());
-        new Test("BENGALI-Tamil", 
-            TestUtility.BENGALI_SCRIPT, TestUtility.TAMIL_SCRIPT )
+        new Test("BENGALI-Tamil")
           .test( "[:BENGALI:]", "[:tamil:]",
                   "[\u0B8E\u0B92\u0BA9\u0BB1\u0BB3\u0BB4\u0BB5]", /*roundtrip exclusions*/
                   this, new Legal());
    }
    public void TestBengaliTelugu() throws IOException, ParseException {
-        new Test("Telugu-BENGALI", 
-          TestUtility.TELUGU_SCRIPT, TestUtility.BENGALI_SCRIPT)
+        new Test("Telugu-BENGALI")
           .test("[:telugu:]", "[:BENGALI:]", 
                 "[\u09f0\u09f1\u09dc\u09dd\u09df]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("BENGALI-TELUGU", 
-            TestUtility.BENGALI_SCRIPT, TestUtility.TELUGU_SCRIPT )
+        new Test("BENGALI-TELUGU")
           .test( "[:BENGALI:]", "[:TELUGU:]",
                   "[\u0C0E\u0C12\u0C31\u0C33\u0C35]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestBengaliKannada() throws IOException, ParseException {
-        new Test("KANNADA-BENGALI", 
-          TestUtility.KANNADA_SCRIPT, TestUtility.BENGALI_SCRIPT)
+        new Test("KANNADA-BENGALI")
           .test("[:KANNADA:]", "[:BENGALI:]", 
                 "[\u09f0\u09f1\u09dc\u09dd\u09df]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("BENGALI-KANNADA", 
-            TestUtility.BENGALI_SCRIPT, TestUtility.KANNADA_SCRIPT )
+        new Test("BENGALI-KANNADA")
           .test( "[:BENGALI:]", "[:KANNADA:]",
                   "[\u0C8E\u0C92\u0CB1\u0cb3\u0cb5\u0cde]", /*roundtrip exclusions*/ 
                   this, new Legal());
     }
     public void TestBengaliMalayalam() throws IOException, ParseException {
-        new Test("MALAYALAM-BENGALI", 
-          TestUtility.MALAYALAM_SCRIPT, TestUtility.BENGALI_SCRIPT)
+        new Test("MALAYALAM-BENGALI")
           .test("[:MALAYALAM:]", "[:BENGALI:]", 
                 "[\u09f0\u09f1\u09dc\u09dd\u09df]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("BENGALI-MALAYALAM", 
-            TestUtility.BENGALI_SCRIPT, TestUtility.MALAYALAM_SCRIPT )
+        new Test("BENGALI-MALAYALAM")
           .test( "[:BENGALI:]", "[:MALAYALAM:]",
                   "[\u0d31-\u0d35\u0d0e\u0d12]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestGurmukhiGujarati() throws IOException, ParseException {
-        new Test("GUJARATI-GURMUKHI", 
-          TestUtility.GUJARATI_SCRIPT, TestUtility.GURMUKHI_SCRIPT)
+        new Test("GUJARATI-GURMUKHI")
           .test("[:GUJARATI:]", "[:GURMUKHI:]", 
                 "[\u0a5c\u0a72\u0a73\u0a74\u0a8b\u0a8d\u0a91\u0abd]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("GURMUKHI-GUJARATI", 
-            TestUtility.GURMUKHI_SCRIPT, TestUtility.GUJARATI_SCRIPT )
+        new Test("GURMUKHI-GUJARATI")
           .test( "[:GURMUKHI:]", "[:GUJARATI:]",
                   "[\u0a5c\u0a72\u0a73\u0a74\u0a8b\u0a8d\u0a91\u0ab7\u0abd\u0ad0\u0ae0]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestGurmukhiOriya() throws IOException, ParseException {
-        new Test("ORIYA-GURMUKHI", 
-          TestUtility.ORIYA_SCRIPT, TestUtility.GURMUKHI_SCRIPT)
+        new Test("ORIYA-GURMUKHI")
           .test("[:ORIYA:]", "[:GURMUKHI:]", 
                 "[\u0B0B\u0B0C\u0B37\u0B3D\u0B5F\u0B60\u0B61\u0a35\u0a72\u0a73\u0a74]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("GURMUKHI-ORIYA", 
-            TestUtility.GURMUKHI_SCRIPT, TestUtility.ORIYA_SCRIPT )
+        new Test("GURMUKHI-ORIYA")
           .test( "[:GURMUKHI:]", "[:ORIYA:]",
                   "[\u0B0B\u0B0C\u0B37\u0B3D\u0B5F\u0B60\u0B61]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestGurmukhiTamil() throws IOException, ParseException {
-        new Test("TAMIL-GURMUKHI", 
-          TestUtility.TAMIL_SCRIPT, TestUtility.GURMUKHI_SCRIPT)
+        new Test("TAMIL-GURMUKHI")
           .test("[:TAMIL:]", "[:GURMUKHI:]", 
                 "[\u0A16\u0A17\u0A18\u0A1B\u0A1D\u0A20\u0A21\u0A22\u0A25\u0A26\u0A27\u0A2B\u0A2C\u0A2D\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("GURMUKHI-TAMIL", 
-            TestUtility.GURMUKHI_SCRIPT, TestUtility.TAMIL_SCRIPT )
+        new Test("GURMUKHI-TAMIL")
           .test( "[:GURMUKHI:]", "[:TAMIL:]",
                   "[\u0B8E\u0B92\u0BA9\u0BB1\u0BB4]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestGurmukhiTelugu() throws IOException, ParseException {
-        new Test("TELUGU-GURMUKHI", 
-          TestUtility.TELUGU_SCRIPT, TestUtility.GURMUKHI_SCRIPT)
+        new Test("TELUGU-GURMUKHI")
           .test("[:TELUGU:]", "[:GURMUKHI:]", 
                 "[\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("GURMUKHI-TELUGU", 
-            TestUtility.GURMUKHI_SCRIPT, TestUtility.TELUGU_SCRIPT )
+        new Test("GURMUKHI-TELUGU")
           .test( "[:GURMUKHI:]", "[:TELUGU:]",
                   "[\u0C0B\u0C0C\u0C0E\u0C12\u0C31\u0C37\u0C60\u0C61]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestGurmukhiKannada() throws IOException, ParseException {
-        new Test("KANNADA-GURMUKHI", 
-          TestUtility.KANNADA_SCRIPT, TestUtility.GURMUKHI_SCRIPT)
+        new Test("KANNADA-GURMUKHI")
           .test("[:KANNADA:]", "[:GURMUKHI:]", 
                 "[\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("GURMUKHI-KANNADA", 
-            TestUtility.GURMUKHI_SCRIPT, TestUtility.KANNADA_SCRIPT )
+        new Test("GURMUKHI-KANNADA")
           .test( "[:GURMUKHI:]", "[:KANNADA:]",
                   "[\u0C8B\u0C8C\u0C8E\u0C92\u0CB1\u0CB7\u0CE0\u0CE1]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestGurmukhiMalayalam() throws IOException, ParseException {
-        new Test("MALAYALAM-GURMUKHI", 
-          TestUtility.MALAYALAM_SCRIPT, TestUtility.GURMUKHI_SCRIPT)
+        new Test("MALAYALAM-GURMUKHI")
           .test("[:MALAYALAM:]", "[:GURMUKHI:]", 
                 "[\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("GURMUKHI-MALAYALAM", 
-            TestUtility.GURMUKHI_SCRIPT, TestUtility.MALAYALAM_SCRIPT )
+        new Test("GURMUKHI-MALAYALAM")
           .test( "[:GURMUKHI:]", "[:MALAYALAM:]",
                   "[\u0D0B\u0D0C\u0D0E\u0D12\u0D31\u0D34\u0D37\u0D60\u0D61]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     
      public void TestGujaratiOriya() throws IOException, ParseException {
-        new Test("GUJARATI-ORIYA", 
-          TestUtility.GUJARATI_SCRIPT, TestUtility.ORIYA_SCRIPT)
+        new Test("GUJARATI-ORIYA")
           .test("[:GUJARATI:]", "[:ORIYA:]", 
                 "[\u0B0C\u0B5F\u0B61]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("ORIYA-GUJARATI", 
-            TestUtility.ORIYA_SCRIPT, TestUtility.GUJARATI_SCRIPT )
+        new Test("ORIYA-GUJARATI")
           .test( "[:ORIYA:]", "[:GUJARATI:]",
                   "[\u0A8D\u0A91\u0AB5\u0Ad0]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestGujaratiTamil() throws IOException, ParseException {
-        new Test("TAMIL-GUJARATI", 
-          TestUtility.TAMIL_SCRIPT, TestUtility.GUJARATI_SCRIPT)
+        new Test("TAMIL-GUJARATI")
           .test("[:TAMIL:]", "[:GUJARATI:]", 
                 "[\u0A8B\u0A8D\u0A91\u0A96\u0A97\u0A98\u0A9B\u0A9D\u0AA0\u0AA1\u0AA2\u0AA5\u0AA6\u0AA7\u0AAB\u0AAC\u0AAD\u0AB6\u0ABD\u0AD0\u0AE0]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("GUJARATI-TAMIL", 
-            TestUtility.GUJARATI_SCRIPT, TestUtility.TAMIL_SCRIPT )
+        new Test("GUJARATI-TAMIL")
           .test( "[:GUJARATI:]", "[:TAMIL:]",
                   "[\u0B8E\u0B92\u0BA9\u0BB1\u0BB4]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestGujaratiTelugu() throws IOException, ParseException {
-        new Test("TELUGU-GUJARATI", 
-          TestUtility.TELUGU_SCRIPT, TestUtility.GUJARATI_SCRIPT)
+        new Test("TELUGU-GUJARATI")
           .test("[:TELUGU:]", "[:GUJARATI:]", 
                 "[\u0A8D\u0A91\u0ABD\u0Ad0]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("GUJARATI-TELUGU", 
-            TestUtility.GUJARATI_SCRIPT, TestUtility.TELUGU_SCRIPT )
+        new Test("GUJARATI-TELUGU")
           .test( "[:GUJARATI:]", "[:TELUGU:]",
                   "[\u0C0C\u0C0E\u0C12\u0C31\u0C61]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestGujaratiKannada() throws IOException, ParseException {
-        new Test("KANNADA-GUJARATI", 
-          TestUtility.KANNADA_SCRIPT, TestUtility.GUJARATI_SCRIPT)
+        new Test("KANNADA-GUJARATI")
           .test("[:KANNADA:]", "[:GUJARATI:]", 
                 "[\u0A8D\u0A91\u0ABD\u0Ad0]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("GUJARATI-KANNADA", 
-            TestUtility.GUJARATI_SCRIPT, TestUtility.KANNADA_SCRIPT )
+        new Test("GUJARATI-KANNADA")
           .test( "[:GUJARATI:]", "[:KANNADA:]",
                   "[\u0C8C\u0C8E\u0C92\u0CB1\u0CDE\u0CE1]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestGujaratiMalayalam() throws IOException, ParseException {
-        new Test("MALAYALAM-GUJARATI", 
-          TestUtility.MALAYALAM_SCRIPT, TestUtility.GUJARATI_SCRIPT)
+        new Test("MALAYALAM-GUJARATI")
           .test("[:MALAYALAM:]", "[:GUJARATI:]", 
                 "[\u0A8D\u0A91\u0ABD\u0Ad0]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("GUJARATI-MALAYALAM", 
-            TestUtility.GUJARATI_SCRIPT, TestUtility.MALAYALAM_SCRIPT )
+        new Test("GUJARATI-MALAYALAM")
           .test( "[:GUJARATI:]", "[:MALAYALAM:]",
                   "[\u0D0C\u0D0E\u0D12\u0D31\u0D34\u0D61]", /*roundtrip exclusions*/
                   this, new Legal());
     }
   public void TestOriyaTamil() throws IOException, ParseException {
-        new Test("TAMIL-ORIYA", 
-          TestUtility.TAMIL_SCRIPT, TestUtility.ORIYA_SCRIPT)
+        new Test("TAMIL-ORIYA")
           .test("[:TAMIL:]", "[:ORIYA:]", 
                 "[\u0B0B\u0B0C\u0B16\u0B17\u0B18\u0B1B\u0B1D\u0B20\u0B21\u0B22\u0B25\u0B26\u0B27\u0B2B\u0B2C\u0B2D\u0B36\u0B3D\u0B5C\u0B5D\u0B5F\u0B60\u0B61]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("ORIYA-TAMIL", 
-            TestUtility.ORIYA_SCRIPT, TestUtility.TAMIL_SCRIPT )
+        new Test("ORIYA-TAMIL")
           .test( "[:ORIYA:]", "[:TAMIL:]",
                   "[\u0B8E\u0B92\u0BA9\u0BB1\u0BB4\u0BB5]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestOriyaTelugu() throws IOException, ParseException {
-        new Test("TELUGU-ORIYA", 
-          TestUtility.TELUGU_SCRIPT, TestUtility.ORIYA_SCRIPT)
+        new Test("TELUGU-ORIYA")
           .test("[:TELUGU:]", "[:ORIYA:]", 
                 "[\u0B3D\u0B5C\u0B5D\u0B5F]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("ORIYA-TELUGU", 
-            TestUtility.ORIYA_SCRIPT, TestUtility.TELUGU_SCRIPT )
+        new Test("ORIYA-TELUGU")
           .test( "[:ORIYA:]", "[:TELUGU:]",
                   "[\u0C0E\u0C12\u0C31\u0C35]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestOriyaKannada() throws IOException, ParseException {
-        new Test("KANNADA-ORIYA", 
-          TestUtility.KANNADA_SCRIPT, TestUtility.ORIYA_SCRIPT)
+        new Test("KANNADA-ORIYA")
           .test("[:KANNADA:]", "[:ORIYA:]", 
                 "[\u0B3D\u0B5C\u0B5D\u0B5F]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("ORIYA-KANNADA", 
-            TestUtility.ORIYA_SCRIPT, TestUtility.KANNADA_SCRIPT )
+        new Test("ORIYA-KANNADA")
           .test( "[:ORIYA:]", "[:KANNADA:]",
                   "[\u0C8E\u0C92\u0CB1\u0CB5\u0CDE]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestOriyaMalayalam() throws IOException, ParseException {
-        new Test("MALAYALAM-ORIYA", 
-          TestUtility.MALAYALAM_SCRIPT, TestUtility.ORIYA_SCRIPT)
+        new Test("MALAYALAM-ORIYA")
           .test("[:MALAYALAM:]", "[:ORIYA:]", 
                 "[\u0B3D\u0B5C\u0B5D\u0B5F]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("ORIYA-MALAYALAM", 
-            TestUtility.ORIYA_SCRIPT, TestUtility.MALAYALAM_SCRIPT )
+        new Test("ORIYA-MALAYALAM" )
           .test( "[:ORIYA:]", "[:MALAYALAM:]",
                   "[\u0D0E\u0D12\u0D31\u0D34\u0D35]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     
     public void TestTamilTelugu() throws IOException, ParseException {
-        new Test("TELUGU-TAMIL", 
-          TestUtility.TELUGU_SCRIPT, TestUtility.TAMIL_SCRIPT)
+        new Test("TELUGU-TAMIL")
           .test("[:TELUGU:]", "[:TAMIL:]", 
                 "[\u0ba9\u0bb4]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("TAMIL-TELUGU", 
-            TestUtility.TAMIL_SCRIPT, TestUtility.TELUGU_SCRIPT )
+        new Test("TAMIL-TELUGU" )
           .test( "[:TAMIL:]", "[:TELUGU:]",
                   "[\u0C0B\u0C0C\u0C16\u0C17\u0C18\u0C1B\u0C1D\u0C20\u0C21\u0C22\u0C25\u0C26\u0C27\u0C2B\u0C2C\u0C2D\u0C36\u0C60\u0C61]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestTamilKannada() throws IOException, ParseException {
-        new Test("KANNADA-TAMIL", 
-          TestUtility.KANNADA_SCRIPT, TestUtility.TAMIL_SCRIPT)
+        new Test("KANNADA-TAMIL")
           .test("[:KANNADA:]", "[:TAMIL:]", 
                 "[\u0ba9\u0bb4]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("TAMIL-KANNADA", 
-            TestUtility.TAMIL_SCRIPT, TestUtility.KANNADA_SCRIPT )
+        new Test("TAMIL-KANNADA" )
           .test( "[:TAMIL:]", "[:KANNADA:]",
                   "[\u0C8B\u0C8C\u0C96\u0C97\u0C98\u0C9B\u0C9D\u0CA0\u0CA1\u0CA2\u0CA5\u0CA6\u0CA7\u0CAB\u0CAC\u0CAD\u0CB6\u0CDE\u0CE0\u0CE1]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestTamilMalayalam() throws IOException, ParseException {
-        new Test("MALAYALAM-TAMIL", 
-          TestUtility.MALAYALAM_SCRIPT, TestUtility.TAMIL_SCRIPT)
+        new Test("MALAYALAM-TAMIL")
           .test("[:MALAYALAM:]", "[:TAMIL:]", 
                 "[\u0ba9]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("TAMIL-MALAYALAM", 
-            TestUtility.TAMIL_SCRIPT, TestUtility.MALAYALAM_SCRIPT )
+        new Test("TAMIL-MALAYALAM")
           .test( "[:TAMIL:]", "[:MALAYALAM:]",
                   "[\u0D0B\u0D0C\u0D16\u0D17\u0D18\u0D1B\u0D1D\u0D20\u0D21\u0D22\u0D25\u0D26\u0D27\u0D2B\u0D2C\u0D2D\u0D36\u0D60\u0D61]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestTeluguKannada() throws IOException, ParseException {
-        new Test("KANNADA-TELUGU", 
-          TestUtility.KANNADA_SCRIPT, TestUtility.TELUGU_SCRIPT)
+        new Test("KANNADA-TELUGU")
           .test("[:KANNADA:]", "[:TELUGU:]", 
                 "[]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("TELUGU-KANNADA", 
-            TestUtility.TELUGU_SCRIPT, TestUtility.KANNADA_SCRIPT )
+        new Test("TELUGU-KANNADA")
           .test( "[:TELUGU:]", "[:KANNADA:]",
                   "[\u0CDE]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestTeluguMalayalam() throws IOException, ParseException {
-        new Test("MALAYALAM-TELUGU", 
-          TestUtility.MALAYALAM_SCRIPT, TestUtility.TELUGU_SCRIPT)
+        new Test("MALAYALAM-TELUGU")
           .test("[:MALAYALAM:]", "[:TELUGU:]", 
                 "[]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("TELUGU-MALAYALAM", 
-            TestUtility.TELUGU_SCRIPT, TestUtility.MALAYALAM_SCRIPT )
+        new Test("TELUGU-MALAYALAM" )
           .test( "[:TELUGU:]", "[:MALAYALAM:]",
                   "[\u0D34]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     
     public void TestKannadaMalayalam() throws IOException, ParseException {
-        new Test("MALAYALAM-KANNADA", 
-          TestUtility.MALAYALAM_SCRIPT, TestUtility.KANNADA_SCRIPT)
+        new Test("MALAYALAM-KANNADA")
           .test("[:MALAYALAM:]", "[:KANNADA:]", 
                 "[\u0cDe]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("KANNADA-MALAYALAM", 
-            TestUtility.KANNADA_SCRIPT, TestUtility.MALAYALAM_SCRIPT )
+        new Test("KANNADA-MALAYALAM")
           .test( "[:KANNADA:]", "[:MALAYALAM:]",
                   "[\u0D34]", /*roundtrip exclusions*/
                   this, new Legal());
