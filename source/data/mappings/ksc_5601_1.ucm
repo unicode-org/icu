@@ -5,22 +5,19 @@
 # *
 # *******************************************************************************
 #
-#    Name:	   Unified Hangeul(KSC5601-1992) to	Unicode table
-#    Unicode version: 2.0
-#    Table version: 1.0
-#    Table format:  Format A
-#    Date:	    07/24/95
-#    Authors:	    Lori Hoerth	<lorih@microsoft.com>
-#		    K.D.Chang	<a-kchang@microsoft.com>
-#    General notes: none
+#    Name:		    Unified	Hangeul(KSC5601-1992) to Unicode table
+#    Unicode version:	    2.0
+#    Table version:	    1.0
+#    Table format:	    Format A
+#    Date:		    8/30/2000
+#    Author:	    Raghuram Viswandha
 #
-#    Format: Three tab-separated columns
-#	 Column	#1 is the Unified Hangeul code (in hex)
-#	 Column	#2 is the Unicode (in hex as 0xXXXX)
-#	 Column	#3 is the Unicode name (follows a comment sign,	'#')
-#
-#    The entries are in Unified Hangeul order
-#
+#    General notes:
+#		    Created	from Unified Hangeul(KSC5601-1992) to
+#		    Unicode	table.
+#		    Original Authors:
+#			  Lori Hoerth  <lorih@microsoft.com>
+#			  K.D.Chang	   <a-kchang@microsoft.com>
 <code_set_name>	      "KSC_5601_1"
 <char_name_mask>      "AXXXX"
 <mb_cur_max>	      2
