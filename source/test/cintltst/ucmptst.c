@@ -142,7 +142,7 @@ static void TestUCMP8API(){
             log_err("Unable to flatten!\n");
         } else {
             log_verbose("Testing ucmp8_initFromData()\n");
-            ucmp8_initFromData(&ucmp8Clone, &buffLocation, &status);
+            ucmp8_initFromData(&ucmp8Clone, (const uint8_t **)&buffLocation, &status);
             if(U_FAILURE(status) || ucmp8_isBogus(&ucmp8Clone) == TRUE || (buffLocation-buff) != len){
                 log_err("ERROR: ucmp8_initFromData() failed\n");
                 status = U_ZERO_ERROR;
