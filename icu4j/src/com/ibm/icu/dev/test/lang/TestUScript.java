@@ -94,7 +94,7 @@ public class TestUScript extends TestFmwk{
             "oriya",     "runic",     "sinhala", "syriac","tamil",     
             "telugu",    "thaana",    "thai",    "tibetan", 
             /* test the bounds*/
-            "ucas", "arabic",
+            "ucas", "arabic","Yi","Zyyy"
         };
         final int[] expected ={
             /* locales should return */
@@ -115,7 +115,7 @@ public class TestUScript extends TestFmwk{
             UScript.ORIYA, UScript.RUNIC, UScript.SINHALA, UScript.SYRIAC, UScript.TAMIL,
             UScript.TELUGU, UScript.THAANA, UScript.THAI, UScript.TIBETAN,
             /* bounds */
-            UScript.UCAS, UScript.ARABIC,
+            UScript.UCAS, UScript.ARABIC, UScript.YI, UScript.COMMON	
         };
         int i =0;
         int numErrors =0;
@@ -241,7 +241,7 @@ public class TestUScript extends TestFmwk{
                 UScript.INHERITED,
                 UScript.HAN ,
                 UScript.MALAYALAM,
-                UScript.INVALID_CODE,
+                UScript.COMMON,
                 UScript.COMMON,
                 UScript.INHERITED ,
                 UScript.INHERITED ,
@@ -256,7 +256,7 @@ public class TestUScript extends TestFmwk{
             code = UScript.getScript(codepoints[i]);
 
             if(code != expected[i]){
-                logln("UScript.getScript for codepoint 0x"+ hex(codepoints[i])+" failed\n");
+                logln("UScript.getScript for codepoint 0x"+ hex(codepoints[i])+" failed");
                 passed = false;
             }
 
@@ -266,4 +266,15 @@ public class TestUScript extends TestFmwk{
            errln("UScript.getScript failed.");
         }      
     }
+    public void TestAllCodepoints(){
+    	int code;
+    	for( int i =0; i <= 0x10ffff; i++){
+    		code =UScript.INVALID_CODE;
+    		code = UScript.getScript(i);
+    		if(code==UScript.INVALID_CODE){
+    			errln("UScript.getScript for codepoint 0x"+ hex(i)+" failed");
+    		}
+    	}
+    }
+    	
  }
