@@ -1205,7 +1205,7 @@ MessageFormat::makeFormat(int32_t formatNumber,
             fmt = NumberFormat::createPercentInstance(fLocale, ec);
             break;
         case 3: // integer
-            argType = Formattable::kInt64;
+            argType = Formattable::kLong;
             fmt = createIntegerFormat(fLocale, ec);
             break;
         default: // pattern
