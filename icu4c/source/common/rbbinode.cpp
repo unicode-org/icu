@@ -263,26 +263,27 @@ void   RBBINode::findNodes(UVector *dest, RBBINode::NodeType kind, UErrorCode &s
 //    print.         Print out a single node, for debugging.
 //
 //-------------------------------------------------------------------------
-static const char * const nodeTypeNames[] = {
-            "setRef",
-            "uset",
-            "varRef",
-            "leafChar",
-            "lookAhead",
-            "tag",
-            "endMark",
-            "opStart",
-            "opCat",
-            "opOr",
-            "opStar",
-            "opPlus",
-            "opQuestion",
-            "opBreak",
-            "opReverse",
-            "opLParen"
-};
-
 void RBBINode::print() {
+#ifdef RBBI_DEBUG
+    static const char * const nodeTypeNames[] = {
+                "setRef",
+                "uset",
+                "varRef",
+                "leafChar",
+                "lookAhead",
+                "tag",
+                "endMark",
+                "opStart",
+                "opCat",
+                "opOr",
+                "opStar",
+                "opPlus",
+                "opQuestion",
+                "opBreak",
+                "opReverse",
+                "opLParen"
+    };
+
     RBBIDebugPrintf("%10p  %12s  %10p  %10p  %10p      %4d     %6d   %d ",
         (void *)this, nodeTypeNames[fType], (void *)fParent, (void *)fLeftChild, (void *)fRightChild,
         fSerialNum, fFirstPos, fVal);
@@ -290,9 +291,13 @@ void RBBINode::print() {
         printUnicodeString(fText);
     }
     RBBIDebugPrintf("\n");
+#endif
 }
 
 
+#ifdef RBBI_DEBUG
+void RBBINode::printUnicodeString(const UnicodeString &, int) {}
+#else
 void RBBINode::printUnicodeString(const UnicodeString &s, int minWidth)
 {
     int i;
@@ -304,6 +309,7 @@ void RBBINode::printUnicodeString(const UnicodeString &s, int minWidth)
         RBBIDebugPrintf(" ");
     }
 }
+#endif
 
 
 //-------------------------------------------------------------------------
@@ -311,6 +317,9 @@ void RBBINode::printUnicodeString(const UnicodeString &s, int minWidth)
 //    print.         Print out the tree of nodes rooted at "this"
 //
 //-------------------------------------------------------------------------
+#ifdef RBBI_DEBUG
+void RBBINode::printTree(UBool, UBool) {}
+#else
 void RBBINode::printTree(UBool printHeading, UBool doVars) {
     if (printHeading) {
         RBBIDebugPrintf( "-------------------------------------------------------------------\n"
@@ -330,6 +339,7 @@ void RBBINode::printTree(UBool printHeading, UBool doVars) {
         }
     }
 }
+#endif
 
 
 
