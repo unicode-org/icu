@@ -21,3 +21,5 @@ line_th.brk
 sent.brk
 word.brk
 word_th.brk
+*.c
+*.o
