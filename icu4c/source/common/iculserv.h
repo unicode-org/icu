@@ -64,7 +64,7 @@ class ServiceListener;
  * is in upper case, with no trailing underscores.</p> 
  */
 
-class U_COMMON_API LocaleKey : public Key {
+class U_COMMON_API LocaleKey : public ICUServiceKey {
   private: 
     int32_t _kind;
     UnicodeString _primaryID;
@@ -168,9 +168,11 @@ class U_COMMON_API LocaleKey : public Key {
         return (UClassID)&fgClassID;
     }
 
+#ifdef SERVICE_DEBUG
  public:
     virtual UnicodeString& debug(UnicodeString& result) const;
     virtual UnicodeString& debugClass(UnicodeString& result) const;
+#endif
 
  private:
     static const char fgClassID;
@@ -181,7 +183,7 @@ class U_COMMON_API LocaleKey : public Key {
  */
 
 /**
- * A subclass of Factory that uses LocaleKeys, and is able to
+ * A subclass of ICUServiceFactory that uses LocaleKeys, and is able to
  * 'cover' more specific locales with more general locales that it
  * supports.  
  *
@@ -194,7 +196,7 @@ class U_COMMON_API LocaleKey : public Key {
  * <p>Localization of visible ids is handled
  * by the handling factory, regardless of kind.
  */
-class U_COMMON_API LocaleKeyFactory : public Factory {
+class U_COMMON_API LocaleKeyFactory : public ICUServiceFactory {
 protected:
     const UnicodeString _name;
     const int32_t _coverage;
@@ -238,10 +240,10 @@ protected:
      * kind off to handleCreate (which subclasses must implement).
      */
 public:
-    virtual UObject* create(const Key& key, const ICUService* service, UErrorCode& status) const;
+    virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const;
 
 protected:
-    virtual UBool handlesKey(const Key& key, UErrorCode& status) const;
+    virtual UBool handlesKey(const ICUServiceKey& key, UErrorCode& status) const;
 
 public:
     /**
@@ -257,7 +259,7 @@ public:
 
 protected:
     /**
-     * Utility method used by create(Key, ICUService).  Subclasses can implement
+     * Utility method used by create(ICUServiceKey, ICUService).  Subclasses can implement
      * this instead of create.  The default returns NULL.
      */
     virtual UObject* handleCreate(const Locale& loc, int32_t kind, const ICUService* service, UErrorCode& status) const;
@@ -318,7 +320,7 @@ class U_COMMON_API SimpleLocaleKeyFactory : public LocaleKeyFactory {
     /**
      * Override of superclass method.  Returns the service object if kind/locale match.  Service is not used.
      */
-    UObject* create(const Key& key, const ICUService* service, UErrorCode& status) const;
+    UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const;
 
     /**
      * Override of superclass method.  This adjusts the result based
@@ -476,20 +478,20 @@ class U_COMMON_API ICULocaleService : public ICUService
    * registerObject(Object, Locale, int32_t kind, int coverage)
    * passing KIND_ANY for the kind, and VISIBLE for the coverage.
    */
-  const Factory* registerObject(UObject* objToAdopt, const Locale& locale, UErrorCode& status);
+  URegistryKey registerInstance(UObject* objToAdopt, const Locale& locale, UErrorCode& status);
 
   /**
    * Convenience function for callers using locales.  This calls
    * registerObject(Object, Locale, int kind, int coverage)
    * passing VISIBLE for the coverage.
    */
-  const Factory* registerObject(UObject* objToAdopt, const Locale& locale, int32_t kind, UErrorCode& status);
+  URegistryKey registerInstance(UObject* objToAdopt, const Locale& locale, int32_t kind, UErrorCode& status);
 
   /**
    * Convenience function for callers using locales.  This  instantiates
    * a SimpleLocaleKeyFactory, and registers the factory.
    */
-  virtual const Factory* registerObject(UObject* objToAdopt, const Locale& locale, int32_t kind, int32_t coverage, UErrorCode& status);
+  virtual URegistryKey registerInstance(UObject* objToAdopt, const Locale& locale, int32_t kind, int32_t coverage, UErrorCode& status);
 
   /**
    * Convenience method for callers using locales.  This returns the standard
@@ -508,12 +510,12 @@ class U_COMMON_API ICULocaleService : public ICUService
   /**
    * Override superclass createKey method.
    */
-  virtual Key* createKey(const UnicodeString* id, UErrorCode& status) const;
+  virtual ICUServiceKey* createKey(const UnicodeString* id, UErrorCode& status) const;
 
   /**
    * Additional createKey that takes a kind.
    */
-  virtual Key* createKey(const UnicodeString* id, int32_t kind, UErrorCode& status) const;
+  virtual ICUServiceKey* createKey(const UnicodeString* id, int32_t kind, UErrorCode& status) const;
 
   friend class ServiceEnumeration;
 };

@@ -162,7 +162,7 @@ LocaleKey::LocaleKey(const UnicodeString& primaryID,
                      const UnicodeString& canonicalPrimaryID, 
                      const UnicodeString* canonicalFallbackID, 
                      int32_t kind) 
-  : Key(primaryID)
+  : ICUServiceKey(primaryID)
   , _kind(kind)
   , _primaryID(canonicalPrimaryID)
   , _fallbackID()
@@ -262,10 +262,11 @@ LocaleKey::isFallbackOf(const UnicodeString& id) const {
      temp.charAt(_primaryID.length()) == UNDERSCORE_CHAR);
 }
 
+#ifdef SERVICE_DEBUG
 UnicodeString& 
 LocaleKey::debug(UnicodeString& result) const 
 {
-    Key::debug(result);
+    ICUServiceKey::debug(result);
     result.append(" kind: ");
     result.append(_kind);
     result.append(" primaryID: ");
@@ -282,6 +283,7 @@ LocaleKey::debugClass(UnicodeString& result) const
 {
     return result.append("LocaleKey ");
 }
+#endif
 
 const char LocaleKey::fgClassID = 0;
 
@@ -305,7 +307,7 @@ LocaleKeyFactory::~LocaleKeyFactory() {
 }
 
 UObject* 
-LocaleKeyFactory::create(const Key& key, const ICUService* service, UErrorCode& status) const {
+LocaleKeyFactory::create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const {
   if (handlesKey(key, status)) {
     const LocaleKey& lkey = (const LocaleKey&)key;
     int32_t kind = lkey.kind();
@@ -318,7 +320,7 @@ LocaleKeyFactory::create(const Key& key, const ICUService* service, UErrorCode& 
 }
 
 UBool 
-LocaleKeyFactory::handlesKey(const Key& key, UErrorCode& status) const {
+LocaleKeyFactory::handlesKey(const ICUServiceKey& key, UErrorCode& status) const {
   const Hashtable* supported = getSupportedIDs(status);
   if (supported) {
     UnicodeString id;
@@ -414,7 +416,7 @@ SimpleLocaleKeyFactory::SimpleLocaleKeyFactory(UObject* objToAdopt,
 }
 
 UObject* 
-SimpleLocaleKeyFactory::create(const Key& key, const ICUService* service, UErrorCode& status) const 
+SimpleLocaleKeyFactory::create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const 
 {
   if (U_SUCCESS(status)) {
     const LocaleKey& lkey = (const LocaleKey&)key;
@@ -562,7 +564,7 @@ ICULocaleService::get(const Locale& locale, int32_t kind, Locale* actualReturn, 
   if (locName.isBogus()) {
     status = U_MEMORY_ALLOCATION_ERROR;
   } else {
-    Key* key = createKey(&locName, kind, status);
+    ICUServiceKey* key = createKey(&locName, kind, status);
     if (key) {
       if (actualReturn == NULL) {
         result = getKey(*key, status);
@@ -581,22 +583,22 @@ ICULocaleService::get(const Locale& locale, int32_t kind, Locale* actualReturn, 
   return result;
 }
 
-const Factory* 
-ICULocaleService::registerObject(UObject* objToAdopt, const Locale& locale, UErrorCode& status) 
+URegistryKey 
+ICULocaleService::registerInstance(UObject* objToAdopt, const Locale& locale, UErrorCode& status) 
 {
-  return registerObject(objToAdopt, locale, LocaleKey::KIND_ANY, LocaleKeyFactory::VISIBLE, status);
+  return registerInstance(objToAdopt, locale, LocaleKey::KIND_ANY, LocaleKeyFactory::VISIBLE, status);
 }
 
-const Factory* 
-ICULocaleService::registerObject(UObject* objToAdopt, const Locale& locale, int32_t kind, UErrorCode& status) 
+URegistryKey 
+ICULocaleService::registerInstance(UObject* objToAdopt, const Locale& locale, int32_t kind, UErrorCode& status) 
 {
-  return registerObject(objToAdopt, locale, kind, LocaleKeyFactory::VISIBLE, status);
+  return registerInstance(objToAdopt, locale, kind, LocaleKeyFactory::VISIBLE, status);
 }
 
-const Factory* 
-ICULocaleService::registerObject(UObject* objToAdopt, const Locale& locale, int32_t kind, int32_t coverage, UErrorCode& status) 
+URegistryKey 
+ICULocaleService::registerInstance(UObject* objToAdopt, const Locale& locale, int32_t kind, int32_t coverage, UErrorCode& status) 
 {
-  Factory * factory = new SimpleLocaleKeyFactory(objToAdopt, locale, kind, coverage);
+  ICUServiceFactory * factory = new SimpleLocaleKeyFactory(objToAdopt, locale, kind, coverage);
   if (factory != NULL) {
     return registerFactory(factory, status);
   }
@@ -738,13 +740,13 @@ ICULocaleService::validateFallbackLocale() const
   return fallbackLocaleName;
 }
 
-Key* 
+ICUServiceKey* 
 ICULocaleService::createKey(const UnicodeString* id, UErrorCode& status) const 
 {
   return LocaleKey::createWithCanonicalFallback(id, &validateFallbackLocale(), status);
 }
 
-Key* 
+ICUServiceKey* 
 ICULocaleService::createKey(const UnicodeString* id, int32_t kind, UErrorCode& status) const 
 {
   return LocaleKey::createWithCanonicalFallback(id, &validateFallbackLocale(), kind, status);
