@@ -1349,36 +1349,36 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
         if (handlerNum < UPRINTF_NUM_FMT_HANDLERS) {
             /* query the info function for argument information */
             argType = g_u_printf_infos[ handlerNum ].info;
-            if(argType > ufmt_simple_percent) {
-                switch(argType) {
-                case ufmt_count:
-                    /* set the spec's width to the # of chars written */
-                    info->fWidth = *written;
-                    /* fall through to set the pointer */
-                case ufmt_string:
-                case ufmt_ustring:
-                case ufmt_pointer:
-                    args.ptrValue = va_arg(ap, void*);
-                    break;
-                case ufmt_char:
-                case ufmt_uchar:
-                case ufmt_int:
-                    if (info->fIsLongLong) {
-                        args.int64Value = va_arg(ap, int64_t);
-                    }
-                    else {
-                        args.int64Value = va_arg(ap, int32_t);
-                    }
-                    break;
-                case ufmt_float:
-                    args.floatValue = (float) va_arg(ap, double);
-                    break;
-                case ufmt_double:
-                    args.doubleValue = va_arg(ap, double);
-                    break;
-                default:
-                    break;  /* Should never get here */
+            switch(argType) {
+            case ufmt_count:
+                /* set the spec's width to the # of chars written */
+                info->fWidth = *written;
+                /* fall through to set the pointer */
+            case ufmt_string:
+            case ufmt_ustring:
+            case ufmt_pointer:
+                args.ptrValue = va_arg(ap, void*);
+                break;
+            case ufmt_char:
+            case ufmt_uchar:
+            case ufmt_int:
+                if (info->fIsLongLong) {
+                    args.int64Value = va_arg(ap, int64_t);
                 }
+                else {
+                    args.int64Value = va_arg(ap, int32_t);
+                }
+                break;
+            case ufmt_float:
+                args.floatValue = (float) va_arg(ap, double);
+                break;
+            case ufmt_double:
+                args.doubleValue = va_arg(ap, double);
+                break;
+            default:
+                /* else args is ignored */
+                args.ptrValue = NULL;
+                break;
             }
 
             /* call the handler function */
