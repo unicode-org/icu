@@ -81,6 +81,8 @@ public:
 
     void TestHistorical(void);
 
+    void TestEquivalentIDs(void);
+
     static const UDate INTERVAL;
 
 private:

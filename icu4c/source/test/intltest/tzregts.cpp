@@ -944,7 +944,7 @@ void TimeZoneRegressionTest::TestJ449() {
     // specify two zones in the same equivalency group.  One must have
     // locale data in 'loc'; the other must not.
     const char* idWithLocaleData = "America/Los_Angeles";
-    const char* idWithoutLocaleData = "America/Vancouver";
+    const char* idWithoutLocaleData = "US/Pacific";
     const Locale loc("en", "", "");
 
     TimeZone *zoneWith = TimeZone::createTimeZone(idWithLocaleData);
