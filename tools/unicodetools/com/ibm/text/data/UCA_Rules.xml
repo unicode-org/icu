@@ -1,10 +1,13 @@
 <collation>
 <!--
+UCA Rules
+This file contains the UCA tables for the given version, but transformed into rule syntax.
+Generated:   2002-06-27,15:51:32 GMT [MD]
 NOTE: Since UCA handles canonical equivalents, no composites are necessary
 (except in extensions).
 For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_Intro.html
 -->
-<base uca='3.1.1d2/3.2.0'/>
+<base uca='3.1.1d3/3.2.0'/>
 <rules>
 <reset/><position at="last tertiary ignorable"/>
   <eq/><codepoint hex="1"/>
@@ -4569,6 +4572,8 @@ p<variableTop/>
   <p/>s
   <t/>ｓ
   <s/>ſ
+  <s/>ẛ
+<x/>̇
   <s/>ß
 <x/>s
   <eq/>ﬆ
@@ -5745,9 +5750,13 @@ p<variableTop/>
   <p/>י
   <t/>ײ
 <x/>י
+  <t/>ײַ
+<x/>יַ
   <p/>כ
   <t/>ﬤ
   <t/>ך
+  <t/>ךּ
+<x/>ּ
   <p/>ל
   <t/>ﬥ
   <p/>מ
@@ -5760,6 +5769,8 @@ p<variableTop/>
   <t/>ﬠ
   <p/>פ
   <t/>ף
+  <t/>ףּ
+<x/>ּ
   <p/>צ
   <t/>ץ
   <p/>ק
@@ -5870,13 +5881,15 @@ p<variableTop/>
   <t/>ٵ
 <x/>ٴ
   <t/>ﺎ
+  <t/>ﴼ
+<x/>ً
   <t/>ﺍ
+  <t/>ﴽ
+<x/>ً
   <t/>ﷳ
 <x/>كبر
   <eq/>ﷲ
 <x/>لله
-  <s/>ﴼ
-  <t/>ﴽ
   <p/>ب
   <t/>ﺑ
   <t/>ﲜ
@@ -6965,8 +6978,10 @@ p<variableTop/>
   <t/>ﮦ
   <p/>ۃ
   <p/>ە
-  <s/>ﮥ
+  <t/>ﮥ
+<x/>ٔ
   <t/>ﮤ
+<x/>ٔ
   <p/>و
   <eq/>ۥ
   <t/>ٶ
@@ -7080,9 +7095,11 @@ p<variableTop/>
   <p/>ۑ
   <p/>ے
   <t/>ﮯ
+  <t/>ﮱ
+<x/>ٔ
   <t/>ﮮ
-  <s/>ﮱ
   <t/>ﮰ
+<x/>ٔ
   <p/>ܐ
   <p/>ܒ
   <p/>ܓ
@@ -7972,8 +7989,8 @@ p<variableTop/>
   <p/>ೈ
   <p/>ೊ
   <eq/>ೊ
-  <t/>ೋ
-<x/>ೕ
+  <p/>ೋ
+  <eq/>ೋ
   <p/>ೌ
   <p/>್
   <p/>ೕ
@@ -8117,8 +8134,8 @@ p<variableTop/>
   <p/>ෛ
   <p/>ො
   <eq/>ො
-  <t/>ෝ
-<x/>්
+  <p/>ෝ
+  <eq/>ෝ
   <p/>ෞ
   <p/>ෟ
   <p/>ෲ
@@ -11440,19 +11457,19 @@ p<variableTop/>
 <reset/>甲<!-- U+7532 CJK UNIFIED IDEOGRAPH-7532-->
   <t/>㆙
 <reset/>大<!-- U+5927 CJK UNIFIED IDEOGRAPH-5927-->
-  <s/>㍽
+  <t/>㍽
 <x/>正
 <reset/>平<!-- U+5E73 CJK UNIFIED IDEOGRAPH-5E73-->
-  <s/>㍻
+  <t/>㍻
 <x/>成
 <reset/>明<!-- U+660E CJK UNIFIED IDEOGRAPH-660E-->
-  <s/>㍾
+  <t/>㍾
 <x/>治
 <reset/>昭<!-- U+662D CJK UNIFIED IDEOGRAPH-662D-->
-  <s/>㍼
+  <t/>㍼
 <x/>和
 <reset/>株<!-- U+682A CJK UNIFIED IDEOGRAPH-682A-->
-  <s/>㍿
+  <t/>㍿
 <x/>式会社
 <reset/>耂<!-- U+8002 CJK UNIFIED IDEOGRAPH-8002-->
   <eq/>⺹
