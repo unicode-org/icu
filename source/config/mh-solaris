@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-solaris,v 1.29 2002/05/13 23:50:13 grhoten-oss Exp $
+## $Id: mh-solaris,v 1.30 2002/07/30 02:46:10 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -KPIC
@@ -13,6 +13,9 @@ SHAREDLIBCPPFLAGS = -DPIC
 ## Commands to generate dependency files
 GEN_DEPS.c=  $(CC) -xM $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc= $(CXX) -xM $(DEFS) $(CPPFLAGS)
+
+# -libmil means use the intrinsic library functions like strlen
+CPPFLAGS += -libmil
 
 # -mt means 'compiles and links a multithreaded program'
 CFLAGS += -mt
