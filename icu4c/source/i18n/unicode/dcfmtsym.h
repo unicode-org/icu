@@ -503,6 +503,7 @@ DecimalFormatSymbols::getSymbol(ENumberFormatSymbol symbol) const {
 
 // -------------------------------------
 
+/* TODO: This should use "const UnicodeString &value" */
 inline void
 DecimalFormatSymbols::setSymbol(ENumberFormatSymbol symbol, UnicodeString value) {
     if(symbol<kFormatSymbolCount) {
