@@ -4,7 +4,7 @@
 # Similarly, some of the BMP mappings are marked as unassigned for the same reason.
 
 # Mostly assigned sequences, with branches in the lead bytes
-<icu:state> 0-80, 81:7, 82:8, 83:9, 84:a, 85-fe:4
+<icu:state> 0-7f, 81:7, 82:8, 83:9, 84:a, 85-fe:4
 <icu:state> 30-39:2, 40-7e, 80-fe
 <icu:state> 81-fe:3
 <icu:state> 30-39
@@ -15,7 +15,9 @@
 <icu:state> 30-39.u
 
 # Some unassigned 4-byte sequences, one state for each of the lead bytes 81-84
+# Each of these states branch on the second of four bytes; for the third and fourth bytes,
+# unassigned sequences continue with state 5, assigned ones with state 2
 <icu:state> 30:2, 31-35:5, 36-39:2, 40-7e, 80-fe
 <icu:state> 30-35:2, 36-39:5, 40-7e, 80-fe
-<icu:state> 30-37:5, 38:2, 39:5, 40-7e, 80-fe
-<icu:state> 30:5, 31-32:2, 33-39:5, 40-7e, 80-fe
+<icu:state> 30-35:5, 36:2, 37-39:5, 40-7e, 80-fe
+<icu:state> 30-31:2, 32-39:5, 40-7e, 80-fe
