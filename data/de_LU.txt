@@ -1,0 +1,22 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+de_LU {
+    CurrencyElements { 
+            "F",
+            "LUF",
+            ",",
+    }
+    LocaleString { "de_LU" }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+            "#,##0%",
+    }
+    ShortCountry { "LUX" }
+    LocaleID { "1007" }
+}

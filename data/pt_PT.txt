@@ -1,0 +1,22 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+pt_PT {
+    CurrencyElements { 
+            "Esc.",
+            "PTE",
+            "$",
+    }
+    LocaleString { "pt_PT" }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+            "#,##0%",
+    }
+    ShortCountry { "PRT" }
+    LocaleID { "0816" }
+}

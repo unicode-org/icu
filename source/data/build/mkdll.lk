@@ -1,0 +1,4 @@
+/DLL
+/NOENTRY
+/base:"0x4ad00000"
+/comment:" Copyright (C) 1999 International Business Machines Corporation and others.  All Rights Reserved. "

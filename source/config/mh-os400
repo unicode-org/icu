@@ -1,0 +1,107 @@
+## -*-makefile-*-
+## OS400-specific setup (for cross build)
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
+##
+## $Id: mh-os400,v 1.11 2001/02/20 00:45:39 grhoten Exp $
+
+GEN_DEPS.c=	$(CC1) -E -M $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX1) -E -M $(DEFS) $(CPPFLAGS)
+
+## Commands to compile
+COMPILE.c=	$(CC) $(DEFS) -DOS400 -D_MULTI_THREADED $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) $(DEFS) -DOS400 -D_MULTI_THREADED $(CPPFLAGS) $(CXXFLAGS) -c
+
+## Commands to link
+## We need to use the C++ linker, even when linking C programs, since
+##  our libraries contain C++ code (C++ static init not called)
+LINK.c=		$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -qOPTION='*DUPPROC *DUPVAR'
+LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -qOPTION='*DUPPROC *DUPVAR'
+
+## Commands to make a shared library
+SHLIB.c=   ld -v -qOPTION='*DUPPROC *DUPVAR'
+SHLIB.cc=	 ld -v -qOPTION='*DUPPROC *DUPVAR'
+AR = qar
+ARFLAGS = -cuv
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-I
+LD_RPATH_PRE=	-I
+
+## Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
+
+## Versioned target for a shared library.
+FINAL_SO_TARGET = $(SO_TARGET)
+MIDDLE_SO_TARGET = 
+
+###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
+## Prefix for the ICU library names
+ICUPREFIX = icu
+LIBICU = lib$(ICUPREFIX)
+##  object suffix
+TO=		o
+
+## Shared object suffix
+SO=		o
+## Non-shared intermediate object suffix
+STATIC_O = o
+
+## Platform command to remove or move executable target
+RMV = del
+## Platform commands to remove or move executable and library targets
+INSTALL-S =  cp -fph
+INSTALL-L = $(INSTALL-S)
+
+## Link commands to link to ICU service programs
+LIBICUUC = $(top_builddir)/common/libicuuc.o
+LIBICUI18N = $(top_builddir)/i18n/libicui18n.o
+LIBCTESTFW = $(top_builddir)/tools/ctestfw/libctestfw.o
+LIBICUTOOLUTIL = $(top_builddir)/tools/toolutil/libicutoolutil.o
+LIBUSTDIO=      $(top_builddir)/extra/ustdio/libustdio.o
+
+## Special OS400 rules
+
+## Build archive from shared object
+%.a : %.o
+	$(AR) $(ARFLAGS) $@ $<
+
+## Build import list from export list
+%.e : %.exp
+	@echo "Building an import list for $<"
+	@$(SHELL) -ec "echo '#! $*.a($*.so)' | cat - $< > $@"
+
+## Compilation rules
+%.$(STATIC_O): $(srcdir)/%.c
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+%.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+%.$(STATIC_O): $(srcdir)/%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
+%.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
+
+%.qwobj : $(srcdir)/%.c
+	$(COMPILE.c) -o $@ $<
+
+%.qwobj : $(srcdir)/%.cpp
+	$(COMPILE.cc) -o $@ $<
+
+## Dependency rules
+%.d : %.u
+#	@$(SHELL) -ec 'cat $<  \
+#		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+#		[ -s $@ ] || rm -f $@ ; rm -f $<'
+
+%.u : $(srcdir)/%.c
+	@echo "Generating dependency information for $<"
+#	@$(SHELL) -ec 'touch            $*.u  > /dev/null 2>&1'
+#	@$(SHELL) -ec '$(GEN_DEPS.c) -f $*.u $< > /dev/null 2>&1'
+
+%.u : $(srcdir)/%.cpp
+	@echo "Generating dependency information for $<"
+#	@$(SHELL) -ec 'touch              $*.u  > /dev/null 2>&1'
+#	@$(SHELL) -ec '$(GEN_DEPS.cc)  -f $*.u $< > /dev/null 2>&1'
+
+## End OS400-specific setup

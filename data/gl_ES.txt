@@ -1,0 +1,35 @@
+﻿
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+gl_ES {
+   Version { "x0.0" }
+
+    CurrencyElements { 
+            "Pta",
+            "ESP ",
+            ",",
+    }
+    DateTimePatterns { 
+            "h:mm:ss a",
+            "h:mm:ss a",
+            "h:mm:ss a",
+            "h:mm a",
+            "EEEE dd MMMM yyyy",
+            "dd MMMM yyyy",
+            "MMM dd,yy",
+            "dd/MM/yy",
+            "{1} {0}",
+
+    }
+    NumberPatterns { 
+            "#,#0.##;-#,#0.##",
+            "¤ #,##0.#;-¤ #,##0.#",
+            "#,#0%",
+    }
+
+}

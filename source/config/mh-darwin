@@ -1,0 +1,90 @@
+## -*-makefile-*-
+## Darwin-specific setup (Darwin is the Mac OS X developer preview, successor
+## to Rhapsody, aka Mac OS X Server)
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
+##
+## $Id: mh-darwin,v 1.16 2000/11/02 22:49:10 yves Exp $
+
+## Flags for position independent code
+SHAREDLIBCFLAGS = -dynamic
+SHAREDLIBCXXFLAGS = -dynamic
+SHAREDLIBCPPFLAGS =
+
+## Commands to generate dependency files
+GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
+
+## Commands to compile
+COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -fno-common -c
+COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -fno-common -c
+
+## Commands to link
+LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+
+## Commands to make a shared library
+SHLIB.c=	$(CC) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -install_name $(DESTDIR)$(libdir)/$(TARGET)
+SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -install_name $(DESTDIR)$(libdir)/$(TARGET)
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-L
+LD_RPATH_PRE=	
+
+## Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
+
+## Versioned target for a shared library.
+FINAL_SO_TARGET = $(SO_TARGET)
+MIDDLE_SO_TARGET = 
+
+###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
+## Prefix for the ICU library names
+ICUPREFIX = icu
+LIBICU = lib$(ICUPREFIX)
+## Shared object suffix
+SO=		dylib
+## Non-shared intermediate object suffix
+STATIC_O = ao
+
+## Force removal [for make clean]
+RMV = rm -rf
+## Platform commands to remove or move executable and library targets
+INSTALL-S = $(INSTALL_PROGRAM)
+INSTALL-L = $(INSTALL_DATA)
+
+## Link commands to link to ICU libs
+LIBICUUC= 	-L$(top_builddir)/common -l$(ICUPREFIX)uc
+LIBICUI18N= 	-L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
+LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
+LIBICUTOOLUTIL=-L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
+LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
+
+## Compilation rules
+%.$(STATIC_O): $(srcdir)/%.c
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+%.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+%.$(STATIC_O): $(srcdir)/%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
+%.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
+
+../data/%.o: ../data/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+## Dependency rules
+%.d : $(srcdir)/%.c
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.c) $< \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+%.d : $(srcdir)/%.cpp
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.cc) $< \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+## End Darwin-specific setup

@@ -1,0 +1,22 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+mk_MK {
+    CurrencyElements { 
+            "Den",
+            "MKD",
+            ",",
+    }
+    LocaleString { "mk_MK" }
+    NumberPatterns { 
+            "#,##0.###;(#,##0.###)",
+            "\u00A4 #,##0.##;-\u00A4 #,##0.##",
+            "#,##0%",
+    }
+    ShortCountry { "MKD" }
+    LocaleID { "042f" }
+}

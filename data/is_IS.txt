@@ -1,0 +1,22 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+is_IS {
+    CurrencyElements { 
+            "kr.",
+            "ISK",
+            ",",
+    }
+    LocaleString { "is_IS" }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "#,##0.## \u00A4;-#,##0.## \u00A4",
+            "#,##0%",
+    }
+    ShortCountry { "ISL" }
+    LocaleID { "040f" }
+}

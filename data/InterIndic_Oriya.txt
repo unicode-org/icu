@@ -1,0 +1,125 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: \icu4j\src\com\ibm\text\resources/Transliterator_InterIndic_Oriya.utf8.txt
+// Date: Thu Mar  1 20:03:55 2001
+//--------------------------------------------------------------------
+
+// InterIndic_Oriya
+
+InterIndic_Oriya {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Date: Tue Jan 23 12:42:01 2001
+//--------------------------------------------------------------------
+
+// InterIndic-Oriya
+
+"\uE001>ଁ;" // SIGN CANDRABINDU
+"\uE002>ଂ;" // SIGN ANUSVARA
+"\uE003>ଃ;" // SIGN VISARGA
+"\uE005>ଅ;" // LETTER A
+"\uE006>ଆ;" // LETTER AA
+"\uE007>ଇ;" // LETTER I
+"\uE008>ଈ;" // LETTER II
+"\uE009>ଉ;" // LETTER U
+"\uE00A>ଊ;" // LETTER UU
+"\uE00B>ଋ;" // LETTER VOCALIC R
+"\uE00C>ଌ;" // LETTER VOCALIC L
+// \uE00F>; // UNMAPPED InterIndic-Oriya: LETTER EE (ଏ = LETTER E)
+"\uE010>ଐ;" // LETTER AI
+// \uE013>; // UNMAPPED InterIndic-Oriya: LETTER OO (ଓ = LETTER O)
+"\uE014>ଔ;" // LETTER AU
+"\uE015>କ;" // LETTER KA
+"\uE016>ଖ;" // LETTER KHA
+"\uE017>ଗ;" // LETTER GA
+"\uE018>ଘ;" // LETTER GHA
+"\uE019>ଙ;" // LETTER NGA
+"\uE01A>ଚ;" // LETTER CA
+"\uE01B>ଛ;" // LETTER CHA
+"\uE01C>ଜ;" // LETTER JA
+"\uE01D>ଝ;" // LETTER JHA
+"\uE01E>ଞ;" // LETTER NYA
+"\uE01F>ଟ;" // LETTER TTA
+"\uE020>ଠ;" // LETTER TTHA
+"\uE021>ଡ;" // LETTER DDA
+"\uE022>ଢ;" // LETTER DDHA
+"\uE023>ଣ;" // LETTER NNA
+"\uE024>ତ;" // LETTER TA
+"\uE025>ଥ;" // LETTER THA
+"\uE026>ଦ;" // LETTER DA
+"\uE027>ଧ;" // LETTER DHA
+"\uE028>ନ;" // LETTER NA
+"\uE029>ନ;" // REMAP (indicExceptions.txt): ଩>ନ = LETTER NNNA>LETTER NA
+"\uE02A>ପ;" // LETTER PA
+"\uE02B>ଫ;" // LETTER PHA
+"\uE02C>ବ;" // LETTER BA
+"\uE02D>ଭ;" // LETTER BHA
+"\uE02E>ମ;" // LETTER MA
+"\uE02F>ଯ;" // LETTER YA
+"\uE030>ର;" // LETTER RA
+"\uE032>ଲ;" // LETTER LA
+"\uE033>ଳ;" // LETTER LLA
+"\uE034>ଳ;" // REMAP (indicExceptions.txt): ଴>ଳ = LETTER LLLA>LETTER LLA
+"\uE035>ବ;" // REMAP (indicExceptions.txt): ଵ>ବ = LETTER VA>LETTER BA
+"\uE036>ଶ;" // LETTER SHA
+"\uE037>ଷ;" // LETTER SSA
+"\uE038>ସ;" // LETTER SA
+"\uE039>ହ;" // LETTER HA
+"\uE03C>଼;" // SIGN NUKTA
+"\uE03D>ଽ;" // SIGN AVAGRAHA
+"\uE03E>ା;" // VOWEL SIGN AA
+"\uE03F>ି;" // VOWEL SIGN I
+"\uE040>ୀ;" // VOWEL SIGN II
+"\uE041>ୁ;" // VOWEL SIGN U
+"\uE042>ୂ;" // VOWEL SIGN UU
+"\uE043>ୃ;" // VOWEL SIGN VOCALIC R
+"\uE044>ୃ଼;" // REMAP (indicExceptions.txt): ୄ>ୃ଼ = VOWEL SIGN VOCALIC RR>VOWEL SIGN VOCALIC R.SIGN NUKTA
+"\uE045>େ;" // REMAP (indicExceptions.txt): ୅>େ = VOWEL SIGN CANDRA E>VOWEL SIGN E
+// \uE047>; // UNMAPPED InterIndic-Oriya: VOWEL SIGN EE (େ = VOWEL SIGN E)
+"\uE048>ୈ;" // VOWEL SIGN AI
+"\uE049>ୋ;" // REMAP (indicExceptions.txt): ୉>ୋ = VOWEL SIGN CANDRA O>VOWEL SIGN O
+// \uE04B>; // UNMAPPED InterIndic-Oriya: VOWEL SIGN OO (ୋ = VOWEL SIGN O)
+"\uE04C>ୌ;" // VOWEL SIGN AU
+"\uE04D>୍;" // SIGN VIRAMA
+"\uE050>ଓଁ;" // REMAP (indicExceptions.txt): ୐>ଓଁ = OM>LETTER O.SIGN CANDRABINDU
+// \uE055>; // UNMAPPED InterIndic-Oriya: LENGTH MARK
+"\uE056>ୖ;" // AI LENGTH MARK
+"\uE057>ୗ;" // AU LENGTH MARK
+"\uE059>ଖ଼;" // REMAP (indicExceptions.txt): ୙>ଖ଼ = LETTER KHHA>LETTER KHA.SIGN NUKTA
+"\uE05A>ଗ଼;" // REMAP (indicExceptions.txt): ୚>ଗ଼ = LETTER GHHA>LETTER GA.SIGN NUKTA
+"\uE05B>ଜ଼;" // REMAP (indicExceptions.txt): ୛>ଜ଼ = LETTER ZA>LETTER JA.SIGN NUKTA
+"\uE05D>ଢ଼;" // LETTER RHA
+"\uE05E>ଫ଼;" // REMAP (indicExceptions.txt): ୞>ଫ଼ = LETTER FA>LETTER PHA.SIGN NUKTA
+"\uE05F>ୟ;" // LETTER YYA
+"\uE060>ୠ;" // LETTER VOCALIC RR
+"\uE061>ୡ;" // LETTER VOCALIC LL
+"\uE062>ୖ଼;" // REMAP (indicExceptions.txt): ୢ>ୖ଼ = VOWEL SIGN VOCALIC L>AI LENGTH MARK.SIGN NUKTA
+"\uE063>ୗ଼;" // REMAP (indicExceptions.txt): ୣ>ୗ଼ = VOWEL SIGN VOCALIC LL>AU LENGTH MARK.SIGN NUKTA
+"\uE066>୦;" // DIGIT ZERO
+"\uE067>୧;" // DIGIT ONE
+"\uE068>୨;" // DIGIT TWO
+"\uE069>୩;" // DIGIT THREE
+"\uE06A>୪;" // DIGIT FOUR
+"\uE06B>୫;" // DIGIT FIVE
+"\uE06C>୬;" // DIGIT SIX
+"\uE06D>୭;" // DIGIT SEVEN
+"\uE06E>୮;" // DIGIT EIGHT
+"\uE06F>୯;" // DIGIT NINE
+"\uE080>୰;" // ISSHAR
+"\uE081>ଏ;" // LETTER E
+"\uE082>ଓ;" // LETTER O
+"\uE083>ଡ଼;" // LETTER RRA
+"\uE084>େ;" // VOWEL SIGN E
+"\uE085>ୋ;" // VOWEL SIGN O
+
+// eof
+  }
+}

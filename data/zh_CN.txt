@@ -1,0 +1,28 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+zh_CN {
+    CurrencyElements { 
+            "\uFFE5",
+            "CNY",
+            ".",
+    }
+    LocaleString { "zh_CN" }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "\u00A4#,##0.00;-\u00A4#,##0.00",
+            "#,##0%",
+    }
+    ShortCountry { "CHN" }
+    Countries {
+        CN { "\u4E2D\u534E\u4EBA\u6C11\u5171\u548C\u56FD" }
+        TW { "\u53F0\u6E7E" }
+        HK { "\u9999\u6E2F" }
+    }
+    LocaleID { "0804" }
+}
+

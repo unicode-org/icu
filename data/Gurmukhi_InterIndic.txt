@@ -1,0 +1,103 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: \icu4j\src\com\ibm\text\resources/Transliterator_Gurmukhi_InterIndic.utf8.txt
+// Date: Thu Mar  1 20:03:54 2001
+//--------------------------------------------------------------------
+
+// Gurmukhi_InterIndic
+
+Gurmukhi_InterIndic {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Date: Tue Jan 23 12:41:58 2001
+//--------------------------------------------------------------------
+
+// Gurmukhi-InterIndic
+
+"ਂ>\uE001;" // REMAP (indicExceptions.txt): ਁ>ਂ = SIGN CANDRABINDU>SIGN BINDI
+"ਅ>\uE005;" // LETTER A
+"ਆ>\uE006;" // LETTER AA
+"ਇ>\uE007;" // LETTER I
+"ਈ>\uE008;" // LETTER II
+"ਉ>\uE009;" // LETTER U
+"ਊ>\uE00A;" // LETTER UU
+"ਏ>\uE00F;" // LETTER EE
+"ਐ>\uE010;" // LETTER AI
+"ਓ>\uE013;" // LETTER OO
+"ਔ>\uE014;" // LETTER AU
+"ਕ>\uE015;" // LETTER KA
+"ਖ>\uE016;" // LETTER KHA
+"ਗ>\uE017;" // LETTER GA
+"ਘ>\uE018;" // LETTER GHA
+"ਙ>\uE019;" // LETTER NGA
+"ਚ>\uE01A;" // LETTER CA
+"ਛ>\uE01B;" // LETTER CHA
+"ਜ>\uE01C;" // LETTER JA
+"ਝ>\uE01D;" // LETTER JHA
+"ਞ>\uE01E;" // LETTER NYA
+"ਟ>\uE01F;" // LETTER TTA
+"ਠ>\uE020;" // LETTER TTHA
+"ਡ>\uE021;" // LETTER DDA
+"ਢ>\uE022;" // LETTER DDHA
+"ਣ>\uE023;" // LETTER NNA
+"ਤ>\uE024;" // LETTER TA
+"ਥ>\uE025;" // LETTER THA
+"ਦ>\uE026;" // LETTER DA
+"ਧ>\uE027;" // LETTER DHA
+"ਨ>\uE028;" // LETTER NA
+"ਪ>\uE02A;" // LETTER PA
+"ਫ>\uE02B;" // LETTER PHA
+"ਬ>\uE02C;" // LETTER BA
+"ਭ>\uE02D;" // LETTER BHA
+"ਮ>\uE02E;" // LETTER MA
+"ਯ>\uE02F;" // LETTER YA
+"ਰ>\uE030;" // LETTER RA
+"ਲ>\uE032;" // LETTER LA
+"ਲ਼>\uE033;" // LETTER LLA
+"ਵ>\uE035;" // LETTER VA
+"ਸ਼>\uE036;" // LETTER SHA
+"ਸ>\uE038;" // LETTER SA
+"ਹ>\uE039;" // LETTER HA
+"਼>\uE03C;" // SIGN NUKTA
+"ਾ>\uE03E;" // VOWEL SIGN AA
+"ਿ>\uE03F;" // VOWEL SIGN I
+"ੀ>\uE040;" // VOWEL SIGN II
+"ੁ>\uE041;" // VOWEL SIGN U
+"ੂ>\uE042;" // VOWEL SIGN UU
+"ੇ>\uE047;" // VOWEL SIGN EE
+"ੈ>\uE048;" // VOWEL SIGN AI
+"ੋ>\uE04B;" // VOWEL SIGN OO
+"ੌ>\uE04C;" // VOWEL SIGN AU
+"੍>\uE04D;" // SIGN VIRAMA
+"ਖ਼>\uE059;" // LETTER KHHA
+"ਗ਼>\uE05A;" // LETTER GHHA
+"ਜ਼>\uE05B;" // LETTER ZA
+"ੜ>\uE083;" // LETTER RRA
+"ਫ਼>\uE05E;" // LETTER FA
+"੦>\uE066;" // DIGIT ZERO
+"੧>\uE067;" // DIGIT ONE
+"੨>\uE068;" // DIGIT TWO
+"੩>\uE069;" // DIGIT THREE
+"੪>\uE06A;" // DIGIT FOUR
+"੫>\uE06B;" // DIGIT FIVE
+"੬>\uE06C;" // DIGIT SIX
+"੭>\uE06D;" // DIGIT SEVEN
+"੮>\uE06E;" // DIGIT EIGHT
+"੯>\uE06F;" // DIGIT NINE
+// ੰ>; // UNMAPPED Gurmukhi-InterIndic: TIPPI
+// ੱ>; // UNMAPPED Gurmukhi-InterIndic: ADDAK
+// ੲ>; // UNMAPPED Gurmukhi-InterIndic: IRI
+// ੳ>; // UNMAPPED Gurmukhi-InterIndic: URA
+// ੴ>; // UNMAPPED Gurmukhi-InterIndic: EK ONKAR
+
+// eof
+  }
+}

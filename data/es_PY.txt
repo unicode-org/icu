@@ -1,0 +1,28 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+es_PY {
+    CurrencyElements { 
+            "G",
+            "PYG",
+            ",",
+    }
+    DateTimePatterns { 
+            "hh:mm:ss a z",
+            "hh:mm:ss a z",
+            "hh:mm:ss a",
+            "hh:mm a",
+            "EEEE d' de 'MMMM' de 'yyyy",
+            "d' de 'MMMM' de 'yyyy",
+            "dd/MM/yyyy",
+            "dd/MM/yy",
+            "{1} {0}",
+    }
+    LocaleID { "3c0a" }
+    LocaleString { "es_PY" }
+    ShortCountry { "PRY" }
+}
