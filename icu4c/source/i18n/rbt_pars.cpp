@@ -40,6 +40,11 @@
 #define SET_CLOSE          ((UChar)0x005D) /*]*/
 #define CURSOR_POS         ((UChar)0x007C) /*|*/
 #define CURSOR_OFFSET      ((UChar)0x0040) /*@*/
+#define ANCHOR_START       ((UChar)0x005E) /*^*/
+
+// By definition, the ANCHOR_END special character is a
+// trailing SymbolTable.SYMBOL_REF character.
+// private static final char ANCHOR_END       = '$';
 
 const UnicodeString TransliterationRuleParser::gOPERATORS = OPERATORS;
 
@@ -116,12 +121,6 @@ UnicodeString ParseData::parseReference(const UnicodeString& text,
     }
     if (i == start) { // No valid name chars
         return result; // Indicate failure with empty string
-        //if (start > 0) {
-        //    --start;
-        //}
-        //limit = ruleEnd(text, start, limit);
-        //throw new IllegalArgumentException("Illegal variable reference " +
-        //                                   text.substring(start, limit));
     }
     pos.setIndex(i);
     text.extractBetween(start, i, result);
@@ -162,6 +161,9 @@ public:
     // the ante- or postcontext text.  Placeholders are only valid in
     // output text.
     int32_t cursorOffset; // only nonzero on output side
+
+    UBool anchorStart;
+    UBool anchorEnd;
 
     TransliterationRuleParser& parser;
 
@@ -212,6 +214,7 @@ RuleHalf::RuleHalf(TransliterationRuleParser& p) : parser(p) {
     segments = NULL;
     maxRef = -1;
     cursorOffset = 0;
+    anchorStart = anchorEnd = FALSE;
 }
 
 RuleHalf::~RuleHalf() {
@@ -239,6 +242,14 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit,
             // spaces, but Java spaces -- a subset, representing
             // whitespace likely to be seen in code.
             continue;
+        }
+        if (gOperators.indexOf(c) >= 0) {
+            --pos; // Backup to point to operator
+            break;
+        }
+        if (anchorEnd) {
+            // Text after a presumed end anchor is a syntax err
+            return syntaxError(RuleBasedTransliterator::MALFORMED_VARIABLE_REFERENCE, rule, start);
         }
         // Handle escapes
         if (c == ESCAPE) {
@@ -284,11 +295,15 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit,
             }
             continue;
         }
-        if (gOperators.indexOf(c) >= 0) {
-            --pos; // Backup to point to operator
-            break;
-        }
         switch (c) {
+        case ANCHOR_START:
+            if (buf.length() == 0 && !anchorStart) {
+                anchorStart = TRUE;
+            } else {
+              return syntaxError(RuleBasedTransliterator::MISPLACED_ANCHOR_START,
+                                 rule, start);
+            }
+          break;
         case SEGMENT_OPEN:
         case SEGMENT_CLOSE:
             // Handle segment definitions "(" and ")"
@@ -315,7 +330,10 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit,
                 // Unicode identifier part characters, or by a digit
                 // 1..9 if it is a segment reference.
                 if (pos == limit) {
-                    return syntaxError(RuleBasedTransliterator::MALFORMED_SYMBOL_REFERENCE, rule, start);
+                    // A variable ref character at the end acts as
+                    // an anchor to the context limit, as in perl.
+                    anchorEnd = TRUE;
+                    break;
                 }
                 // Parse "$1" "$2" .. "$9"
                 c = rule.charAt(pos);
@@ -331,8 +349,13 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit,
                     UnicodeString name = parser.parseData->
                                     parseReference(rule, pp, limit);
                     if (name.length() == 0) {
-                        return syntaxError(RuleBasedTransliterator::MALFORMED_VARIABLE_REFERENCE,
-                                           rule, start);
+                        // This means the '$' was not followed by a
+                        // valid name.  Try to interpret it as an
+                        // end anchor then.  If this also doesn't work
+                        // (if we see a following character) then signal
+                        // an error.
+                        anchorEnd = TRUE;
+                        break;
                     }
                     pos = pp.getIndex();
                     // If this is a variable definition statement,
@@ -340,7 +363,6 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit,
                     // that case appendVariableDef() will append the
                     // special placeholder char variableLimit-1.
 
-                    //buf.append(parser.getVariableDef(name));
                     parser.appendVariableDef(name, buf);
                 }
             }
@@ -429,6 +451,7 @@ void RuleHalf::removeContext() {
         text.removeBetween(0, ante);
     }
     ante = post = -1;
+    anchorStart = anchorEnd = FALSE;
 }
 
 /**
@@ -622,6 +645,10 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
             // "Malformed LHS"
             return syntaxError(RuleBasedTransliterator::MALFORMED_VARIABLE_DEFINITION, rule, start);
         }
+        if (left->anchorStart || left->anchorEnd ||
+            right->anchorStart || right->anchorEnd) {
+            return syntaxError(RuleBasedTransliterator::MALFORMED_VARIABLE_DEFINITION, rule, start);
+        } 
         // We allow anything on the right, including an empty string.
         UnicodeString* value = new UnicodeString(right->text);
         data->variableNames->put(undefinedVariableName, value, status);
@@ -676,11 +703,14 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
     // on the left, and references on the right.  Cursor offset
     // cannot appear without an explicit cursor.  Cursor offset
     // cannot place the cursor outside the limits of the context.
+    // Anchors are only allowed on the input side.
     if (right->ante >= 0 || right->post >= 0 || left->cursor >= 0 ||
         right->segments != NULL || left->maxRef >= 0 ||
         (right->cursorOffset != 0 && right->cursor < 0) ||
         (right->cursorOffset > (left->text.length() - left->post)) ||
-        (-right->cursorOffset > left->ante)) {
+        (-right->cursorOffset > left->ante) ||
+        right->anchorStart || right->anchorEnd) {
+
         return syntaxError(RuleBasedTransliterator::MALFORMED_RULE, rule, start);
     }
 
@@ -701,7 +731,9 @@ int32_t TransliterationRuleParser::parseRule(int32_t pos, int32_t limit) {
     data->ruleSet.addRule(new TransliterationRule(
                                  left->text, left->ante, left->post,
                                  right->text, right->cursor, right->cursorOffset,
-                                 left->createSegments(), status), status);
+                                 left->createSegments(),
+                                 left->anchorStart, left->anchorEnd,
+                                 status), status);
 
     return pos;
 }

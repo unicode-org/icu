@@ -49,14 +49,13 @@ public:
     /**
      * Parse a symbol reference name from the given string, starting
      * at the given position.  If no valid symbol reference name is
-     * found, throw an exception.
+     * found, return an empty string.
      * @param text the text to parse for the name
      * @param pos on entry, the index of the first character to parse.
      * This is the character following the SYMBOL_REF character.  On
      * exit, the index after the last parsed character.
      * @param limit the index after the last character to be parsed.
-     * @return the parsed name.
-     * @exception IllegalArgumentException if no valid name is found.
+     * @return the parsed name or an empty string.
      */
     virtual UnicodeString parseReference(const UnicodeString& text,
                                          ParsePosition& pos, int32_t limit) const = 0;

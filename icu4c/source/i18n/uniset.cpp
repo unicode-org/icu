@@ -12,6 +12,7 @@
 #include "unicode/parsepos.h"
 #include "symtable.h"
 #include "cmemory.h"
+#include "rbt_rule.h"
 
 #ifndef HPUX
 const UChar32 UnicodeSet::HIGH= 0x0110000; // HIGH_VALUE > all valid values. 110000 for codepoints
@@ -735,6 +736,7 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
      * they are stand-ins for a nested UnicodeSet.  */
     const UnicodeString* varValueBuffer = NULL;
     int32_t ivarValueBuffer = 0;
+    int32_t anchor = 0;
     for (; i<limit; i+=((varValueBuffer==NULL)?1:0)) {
         /* If the next element is a single character, c will be set to it,
          * and nestedSet will be null.  In this case isLiteral indicates
@@ -763,6 +765,11 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
         // whitespace, a subset of Unicode whitespace.
         if (Unicode::isWhitespace(c)) {
             continue;
+        }
+
+        // Keep track of the count of characters after an alleged anchor
+        if (anchor > 0) {
+            ++anchor;
         }
 
         // Parse the opening '[' and optional following '^'
@@ -834,19 +841,22 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
             else if (symbols != NULL && !isLiteral && c == SymbolTable::SYMBOL_REF) {
                 pos.setIndex(++i);
                 UnicodeString name = symbols->parseReference(pattern, pos, limit);
-                if (name.length() == 0) {
-                    status = U_ILLEGAL_ARGUMENT_ERROR;
-                    return;
+                if (name.length() != 0) {
+                    varValueBuffer = symbols->lookup(name);
+                    if (varValueBuffer == NULL) {
+                        //throw new IllegalArgumentException("Undefined variable: "
+                        //                                   + name);
+                        status = U_ILLEGAL_ARGUMENT_ERROR;
+                        return;
+                    }
+                    ivarValueBuffer = 0;
+                    i = pos.getIndex(); // Make i point PAST last char of var name
+                } else {
+                    // Got a null; this means we have an isolated $.
+                    // Tentatively assume this is an anchor.
+                    anchor = 1;
+                    --i; // Back up so loop increment works properly
                 }
-                varValueBuffer = symbols->lookup(name);
-                if (varValueBuffer == NULL) {
-                    //throw new IllegalArgumentException("Undefined variable: "
-                    //                                   + name);
-                    status = U_ILLEGAL_ARGUMENT_ERROR;
-                    return;
-                }
-                ivarValueBuffer = 0;
-                i = pos.getIndex(); // Make i point PAST last char of var name
                 continue; // Back to the top to get varValueBuffer[0]
             }
 
@@ -924,6 +934,14 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
         } else if (!isLiteral && c == SET_CLOSE) {
             // Final closing delimiter.  This is the only way we leave this
             // loop if the pattern is well-formed.
+            if (anchor > 2 || anchor == 1) {
+                //throw new IllegalArgumentException("Syntax error near $" + pattern);
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+            if (anchor == 2) {
+                add(TransliterationRule::ETHER);
+            }
             break;
         } else if (lastOp == 0 && !isLiteral && (c == HYPHEN || c == INTERSECTION)) {
             lastOp = c;

@@ -61,6 +61,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         CASE(18,TestPositionHandling);
         CASE(19,TestHiraganaKatakana);
         CASE(20,TestCopyJ476);
+        CASE(21,TestAnchors);
         default: name = ""; break;
     }
 }
@@ -471,6 +472,29 @@ void TransliteratorTest::TestFiltering(void) {
         logln(UnicodeString("FAIL: \"") + s + "\", wanted \"" + exp + "\"");
     }
     delete hex;
+}
+
+/**
+ * Test anchors
+ */
+void TransliteratorTest::TestAnchors(void) { 
+    expect(UnicodeString("^ab  > 01 ;"
+           " ab  > |8 ;"
+           "  b  > k ;"
+           " 8x$ > 45 ;"
+           " 8x  > 77 ;", ""),
+
+           "ababbabxabx",
+           "018k7745");  
+    expect(UnicodeString("$s = [z$] ;"
+           "$s{ab    > 01 ;"
+           "   ab    > |8 ;"
+           "    b    > k ;"
+           "   8x}$s > 45 ;"
+           "   8x    > 77 ;", ""),
+
+           "abzababbabxzabxabx",
+           "01z018k45z01x45");
 }
 
 /**

@@ -70,6 +70,14 @@ public:
         FULL_MATCH
     };
 
+    /**
+     * The character at index i, where i < contextStart || i >= contextLimit,
+     * is ETHER.  This allows explicit matching by rules and UnicodeSets
+     * of text outside the context.  In traditional terms, this allows anchoring
+     * at the start and/or end.
+     */
+    static const UChar ETHER;
+
 private:
 
     /**
@@ -146,12 +154,17 @@ public:
      * refer to these segments if they are in a special range determined by the
      * associated RuleBasedTransliterator.Data object.  May be null if there are
      * no segments.
+     * @param anchorStart TRUE if the the rule is anchored on the left to
+     * the context start
+     * @param anchorEnd TRUE if the rule is anchored on the right to the
+     * context limit
      */
     TransliterationRule(const UnicodeString& input,
                         int32_t anteContextPos, int32_t postContextPos,
                         const UnicodeString& output,
                         int32_t cursorPos, int32_t cursorOffset,
                         int32_t* adoptedSegs,
+                        UBool anchorStart, UBool anchorEnd,
                         UErrorCode& status);
 
     /**
@@ -308,7 +321,6 @@ public:
      * @param cursor position at which to translate next, representing offset
      * into text.  This value must be between <code>start</code> and
      * <code>limit</code>.
-     * @param templ the text to match against.  All characters must match.
      * @param data a dictionary of variables mapping <code>Character</code>
      * to <code>UnicodeSet</code>
      * @param filter the filter.  Any character for which
@@ -321,7 +333,6 @@ public:
      */
     virtual int32_t getRegionMatchLength(const Replaceable& text,
                                          const UTransPosition& pos,
-                                         const UnicodeString& templ,
                                          const TransliterationRuleData& data,
                                          const UnicodeFilter* filter) const;
     
@@ -339,9 +350,29 @@ public:
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
-    virtual UBool charMatches(UChar keyChar, UChar textChar,
-                               const TransliterationRuleData& data,
-                               const UnicodeFilter* filter) const;
+    virtual UBool charMatches(UChar keyChar, const Replaceable& textChar,
+                              int32_t index,
+                              const UTransPosition& pos,
+                              const TransliterationRuleData& data,
+                              const UnicodeFilter* filter) const;
+
+    /**
+     * Return true if the given key matches the given text.  This method
+     * accounts for the fact that the key character may represent a character
+     * set.  Note that the key and text characters may not be interchanged
+     * without altering the results.
+     * @param keyChar a character in the match key
+     * @param textChar a character in the text being transliterated
+     * @param data a dictionary of variables mapping <code>Character</code>
+     * to <code>UnicodeSet</code>
+     * @param filter the filter.  Any character for which
+     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * altered by this transliterator.  If <tt>filter</tt> is
+     * <tt>null</tt> then no filtering is applied.
+     */
+//[ANCHOR]    virtual UBool charMatches(UChar keyChar, UChar textChar,
+//[ANCHOR]                               const TransliterationRuleData& data,
+//[ANCHOR]                               const UnicodeFilter* filter) const;
 
 private:
 
@@ -350,6 +381,7 @@ private:
               const UnicodeString& output,
               int32_t cursorPos, int32_t cursorOffset,
               int32_t* adoptedSegs,
+              UBool anchorStart, UBool anchorEnd,
               UErrorCode& status);
 
 };

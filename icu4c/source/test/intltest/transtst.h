@@ -30,6 +30,8 @@ class TransliteratorTest : public IntlTest {
 
     void TestInlineSet(void);
 
+    void TestAnchors(void);
+
     void TestPatternQuoting(void);
 
     /**
