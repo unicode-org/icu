@@ -22,6 +22,9 @@
 #   include <stdio.h>
 #endif
 
+/* we are using qsort() */
+#include <stdlib.h>
+
 #include "unicode/utypes.h"
 #include "cmemory.h"
 #include "ucol_wgt.h"
@@ -434,8 +437,10 @@ ucol_allocWeights(uint32_t lowerLimit, uint32_t upperLimit, uint32_t n, WeightRa
         }
     }
 
-    /* sort the ranges by weight values */
-    qsort(ranges, rangeCount, sizeof(WeightRange), compareRanges);
+    if(rangeCount>1) {
+        /* sort the ranges by weight values */
+        qsort(ranges, rangeCount, sizeof(WeightRange), compareRanges);
+    }
 
 #ifdef UCOL_DEBUG
     puts("final ranges:");
