@@ -240,6 +240,7 @@ public:
      * @see Unicode#isUpperCase
      * @see Unicode#isTitleCase
      * @see Unicode#toLowerCase
+     * @draft
      */
     static  bool_t          isLowerCase(UChar     ch);
 
@@ -252,6 +253,7 @@ public:
      * @see Unicode#isLowerCase
      * @see Unicode#isTitleCase
      * @see Unicode#toUpperCase
+     * @draft
      */
     static  bool_t          isUpperCase(UChar ch);
 
@@ -264,6 +266,7 @@ public:
      * @see Unicode#isUpperCase
      * @see Unicode#isLowerCase
      * @see Unicode#toTitleCase
+     * @draft
      */
     static  bool_t          isTitleCase(UChar ch);
 
@@ -276,6 +279,7 @@ public:
      * @see     Unicode#digit
      * @see     Unicode#forDigit
      * @see     Unicode#digitValue
+     * @draft
      */
     static  bool_t          isDigit(UChar ch);
 
@@ -292,6 +296,7 @@ public:
      * @see Unicode#isUpperCase
      * @see Unicode#isLowerCase
      * @see Unicode#isTitleCase
+     * @draft
      */
     static  bool_t          isDefined(UChar       ch);
 
@@ -303,6 +308,7 @@ public:
      * @return  true if the Unicode character is a control character; false otherwise.
      *
      * @see Unicode#isPrintable
+     * @draft
      */
     static  bool_t          isControl(UChar ch);
 
@@ -314,6 +320,7 @@ public:
      * @return  true if the Unicode character is a printable character; false otherwise.
      *
      * @see Unicode#isControl
+     * @draft
      */
     static  bool_t          isPrintable(UChar ch);
 
@@ -326,6 +333,7 @@ public:
      *
      * @see Unicode#isLetter
      * @see Unicode#isDigit
+     * @draft
      */
 
      static  bool_t          isBaseForm(UChar ch);
@@ -342,6 +350,7 @@ public:
      * @see Unicode#isUpperCase
      * @see Unicode#isLowerCase
      * @see Unicode#isTitleCase
+     * @draft
      */
     static  bool_t          isLetter(UChar        ch);
 
@@ -363,6 +372,7 @@ public:
      * @see     isJavaIdentifierPart
      * @see     isLetter
      * @see     isUnicodeIdentifierStart
+     * @draft
      */
     static bool_t isJavaIdentifierStart(UChar ch);
 
@@ -392,6 +402,7 @@ public:
      * @see     isLetter
      * @see     isDigit
      * @see     isUnicodeIdentifierPart
+     * @draft
      */
     static bool_t isJavaIdentifierPart(UChar ch);
 
@@ -407,6 +418,7 @@ public:
      * @see     isJavaIdentifierStart
      * @see     isLetter
      * @see     isUnicodeIdentifierPart
+     * @draft
      */
     static bool_t isUnicodeIdentifierStart(UChar ch);
 
@@ -434,6 +446,7 @@ public:
      * @see     isJavaIdentifierPart
      * @see     isLetterOrDigit
      * @see     isUnicodeIdentifierStart
+     * @draft
      */
     static bool_t isUnicodeIdentifierPart(UChar ch);
 
@@ -460,6 +473,7 @@ public:
      *          FALSE otherwise.
      * @see     isJavaIdentifierPart
      * @see     isUnicodeIdentifierPart
+     * @draft
      */
     static bool_t isIdentifierIgnorable(UChar ch);
 
@@ -485,6 +499,7 @@ public:
      * @see Unicode#isUpperCase
      * @see Unicode#toUpperCase
      * @see Unicode#toTitleCase
+     * @draft
      */
    static   UChar         toLowerCase(UChar     ch); 
 
@@ -507,6 +522,7 @@ public:
      * @see Unicode#isLowerCase
      * @see Unicode#toLowerCase
      * @see Unicode#toTitleCase
+     * @draft
      */
     static  UChar         toUpperCase(UChar     ch);
 
@@ -525,6 +541,7 @@ public:
      * @see Unicode#isTitleCase
      * @see Unicode#toUpperCase
      * @see Unicode#toLowerCase
+     * @draft
      */
     static  UChar             toTitleCase(UChar     ch);
 
@@ -534,6 +551,7 @@ public:
      *
      * @param ch    the character to be tested
      * @return  true if the character is a space character; false otherwise.
+     * @draft
      */
     static  bool_t              isSpaceChar(UChar     ch);
 
@@ -599,6 +617,7 @@ public:
      * @see Unicode#CURRENCY_SYMBOL
      * @see Unicode#MODIFIER_SYMBOL
      * @see Unicode#OTHER_SYMBOL
+     * @draft
      */
     static  int8_t          getType(UChar     ch);
 
@@ -609,12 +628,14 @@ public:
      * For example, 0x0041 (letter A) has the LEFT_TO_RIGHT directional 
      * property.
      * @see #EDirectionProperty
+     * @draft
      */
     static EDirectionProperty characterDirection(UChar ch);
 
     /**
      * Returns the script associated with a character.
      * @see #EUnicodeScript
+     * @draft
      */
     static EUnicodeScript    getScript(UChar    ch);
 
@@ -667,6 +688,7 @@ public:
      * choseong filler character at the beginning of syllables that don't have an initial
      * consonant.  The results may be slightly off with Korean text following different
      * conventions.
+     * @draft
      */
     static uint16_t         getCellWidth(UChar    ch);
 
@@ -695,6 +717,7 @@ public:
      * &#32;   // use invariant-character conversion to Unicode
      * &#32;   UnicodeString name(buffer, length, "");
      * </pre>
+     * @draft
      */
     static inline UTextOffset
     getCharName(uint32_t code,
@@ -709,6 +732,7 @@ public:
      * @see     Unicode#digit
      * @see     Unicode#forDigit
      * @see     Unicode#isDigit
+     * @deprecated HSYS: use Unicode::digit instead.
      */
     static int32_t            digitValue(UChar ch);     
 
@@ -747,6 +771,7 @@ public:
      * @see     Unicode#forDigit
      * @see     Unicode#digitValue
      * @see     Unicode#isDigit
+     * @draft
      */
     static int8_t digit(UChar ch, int8_t radix);
 	
@@ -775,13 +800,15 @@ public:
      * @see     Unicode#digit
      * @see     Unicode#digitValue
      * @see     Unicode#isDigit
+     * @draft
      */
     static UChar forDigit(int32_t digit, int8_t radix);
 
-	/**
-	 * Retrieves the Unicode Standard Version number that is used
+    /**
+     * Retrieves the Unicode Standard Version number that is used
      * @param info the version # information, the result will be filled in
-	 */
+     * @draft
+     */
 	static void   getUnicodeVersion(UVersionInfo info);
 
 protected:
