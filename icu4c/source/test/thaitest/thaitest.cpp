@@ -15,6 +15,7 @@
 #include "unicode/uchriter.h"
 #include "unicode/brkiter.h"
 #include "unicode/locid.h"
+#include "unicode/unistr.h"
 
 /*
  * This program takes a Unicode text file containing Thai text with
@@ -269,13 +270,13 @@ UBool ThaiWordbreakTest::compareWordBreaks(const UChar *spaces, int32_t spaceCou
  */
 void ThaiWordbreakTest::breakNotFound(int32_t br)
 {
-        if (fVerbose) {
-            printf("%d   ****\n", br);
-        } else {
-            fprintf(stderr, "break not found: %d\n", br);
-        }
-        
-        fBreaksNotFound += 1;
+    if (fVerbose) {
+        printf("%d   ****\n", br);
+    } else {
+        fprintf(stderr, "break not found: %d\n", br);
+    }
+    
+    fBreaksNotFound += 1;
 }
 
 /*
@@ -284,13 +285,13 @@ void ThaiWordbreakTest::breakNotFound(int32_t br)
  */
 void ThaiWordbreakTest::foundInvalidBreak(int32_t br)
 {
-        if (fVerbose) {
-            printf("****   %d\n", br);
-        } else {
-            fprintf(stderr, "found invalid break: %d\n", br);
-        }
-        
-        fInvalidBreaks += 1;
+    if (fVerbose) {
+        printf("****   %d\n", br);
+    } else {
+        fprintf(stderr, "found invalid break: %d\n", br);
+    }
+    
+    fInvalidBreaks += 1;
 }
 
 /*
@@ -299,71 +300,54 @@ void ThaiWordbreakTest::foundInvalidBreak(int32_t br)
  */
 const UChar *ThaiWordbreakTest::readFile(char *fileName, int32_t &charCount)
 {
-  FILE *f;
-  size_t bytesRead;
-  int32_t fileSize;
-
-  UChar *buffer;
-  UChar bom;
-
-  f = fopen(fileName, "rb");
-
-  if( f == NULL ) {
-    fprintf(stderr,"Couldn't open %s reason: %s \n", fileName, strerror(errno));
-    return 0;
-  }
-
-  fseek(f, 0, SEEK_END);
-  fileSize = ftell(f) - 2; // - 2 for BOM...
-  
-  // FIXME: should check for odd file size...
-  charCount = fileSize / 2;
-
-  fseek(f, 0, SEEK_SET);
-  buffer = new UChar[charCount];
-
-  if(buffer == 0) {
-    fprintf(stderr,"Couldn't get memory for reading %s reason: %s \n", fileName, strerror(errno));
-	fclose(f);
-    return 0;
-  }
-
-  // read the BOM...
-  fread(&bom, 1, 2, f);
-
-  bytesRead = 0;
-
-  while (bytesRead < fileSize && ! feof(f)) {
-	  bytesRead += fread(buffer + bytesRead, 1, fileSize - bytesRead, f);
-
-	  if( ferror(f) ) {
-		fprintf(stderr,"Couldn't read %s reason: %s \n", fileName, strerror(errno));
-		fclose(f);
-        delete[] buffer;
-		return 0;
-	  }
-  }
-
-  fclose(f);
-
-  // Swap bytes if the BOM is byte-swapped
-  if (bom == 0xFFFE) {
-      char *byteBuffer = (char *) buffer;
-      int32_t i;
-
-      for (i = 0; i < fileSize; i += 2) {
-          char temp = byteBuffer[i];
-
-          byteBuffer[i] = byteBuffer[i + 1];
-          byteBuffer[i + 1] = temp;
-      }
-  } else if (bom != 0xFEFF) {
-      fprintf(stderr, "File %s does not start with a Byte Order Mark: 0x%4.4X\n", fileName, bom);
-      delete[] buffer;
-      return 0;
-  }
-
-  return buffer;
+    FILE *f;
+    int32_t fileSize;
+    
+    UChar *buffer;
+    char *bufferChars;
+    
+    f = fopen(fileName, "rb");
+    
+    if( f == NULL ) {
+        fprintf(stderr,"Couldn't open %s reason: %s \n", fileName, strerror(errno));
+        return 0;
+    }
+    
+    fseek(f, 0, SEEK_END);
+    fileSize = ftell(f);
+    
+    fseek(f, 0, SEEK_SET);
+    bufferChars = new char[fileSize];
+    
+    if(bufferChars == 0) {
+        fprintf(stderr,"Couldn't get memory for reading %s reason: %s \n", fileName, strerror(errno));
+        fclose(f);
+        return 0;
+    }
+    
+    fread(bufferChars, sizeof(char), fileSize, f);
+    if( ferror(f) ) {
+        fprintf(stderr,"Couldn't read %s reason: %s \n", fileName, strerror(errno));
+        fclose(f);
+        delete[] bufferChars;
+        return 0;
+    }
+    fclose(f);
+    
+    UnicodeString myText(bufferChars, fileSize, "UTF-8");
+    
+    charCount = myText.length();
+    buffer = new UChar[charCount];
+    if(buffer == 0) {
+        fprintf(stderr,"Couldn't get memory for reading %s reason: %s \n", fileName, strerror(errno));
+        return 0;
+    }
+    
+    myText.extract(1, myText.length(), buffer);
+    charCount--;  // skip the BOM
+    buffer[charCount] = 0;    // NULL terminate for easier reading in the debugger
+    
+    return buffer;
 }
 
 /*
