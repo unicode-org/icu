@@ -709,9 +709,6 @@ public:
      * <code>getInstance("B-A")</code>, or <code>null</code> if that
      * call fails.
      *
-     * <p>This method does not take filtering into account.  The
-     * returned transliterator will have no filter.
-     *
      * <p>Subclasses with knowledge of their inverse may wish to
      * override this method.
      *
