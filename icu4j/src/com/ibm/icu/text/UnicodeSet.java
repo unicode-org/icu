@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $ 
- * $Date: 2000/04/25 01:42:58 $ 
- * $Revision: 1.19 $
+ * $Date: 2000/05/18 19:03:36 $ 
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
@@ -241,25 +241,32 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.19 $ $Date: 2000/04/25 01:42:58 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.20 $ $Date: 2000/05/18 19:03:36 $
  */
 public class UnicodeSet implements UnicodeFilter {
+    
+    private static final int LOW = 0x000000;            // LOW <= all valid values. ZERO for codepoints
+    private static final int HIGH = 0x110000;           // HIGH > all valid values. 110000 for codepoints
+
     /**
-     * The internal representation is a StringBuffer of even length.
-     * Each pair of characters represents a range that is included in
-     * the set.  A single character c is represented as cc.  Thus, the
-     * ranges in the set are (a,b), a and b inclusive, where a =
-     * pairs.charAt(i) and b = pairs.charAt(i+1) for all even i, 0 <=
-     * i <= pairs.length()-2.  Pairs are always stored in ascending
-     * Unicode order.  Pairs are always stored in shortest form.  For
-     * example, if the pair "hh", representing the single character
-     * 'h', is added to the pairs list "agik", representing the ranges
-     * 'a'-'g' and 'i'-'k', the result is "ak", not "aghhik".
-     *
-     * This representation format was originally used in Richard
-     * Gillam's CharSet class.
+     * Minimum value that can be stored in a UnicodeSet.
      */
-    private StringBuffer pairs;
+    public static final int MIN_VALUE = LOW;
+    
+    /**
+     * Maximum value that can be stored in a UnicodeSet.
+     */
+    public static final int MAX_VALUE = HIGH - 1;
+
+    private int len;                            // length used. Array may be longer to prevent multiple reallocs
+    private int[] list;                        // The list MUST be terminated with HIGH
+    private int[] smallList = new int[] {0,0,HIGH};    // internal buffer
+    private int[] buffer = new int[START_EXTRA];       // internal buffer, used to avoid reallocations
+    // since we are not going to have a huge number of these floating around, keeping a double buffer
+    // saves on allocations.
+
+    private static final int START_EXTRA = 16;          // initial storage. Must be >= 0
+    private static final int GROW_EXTRA = START_EXTRA;  // extra amount for growth. Must be >= 0
 
     private static final String CATEGORY_NAMES =
         //                    1 1 1 1 1 1 1   1 1 2 2 2 2 2 2 2 2 2
@@ -272,24 +279,11 @@ public class UnicodeSet implements UnicodeFilter {
 
     /**
      * A cache mapping character category integers, as returned by
-     * Character.getType(), to pairs strings.  Entries are initially
+     * Character.getType(), to inversion lists.  Entries are initially
      * null and are created on demand.
      */
-    private static final String[] CATEGORY_PAIRS_CACHE =
-        new String[CATEGORY_COUNT];
-
-    //----------------------------------------------------------------
-    // Debugging and testing
-    //----------------------------------------------------------------
-
-    /**
-     * Return the representation of this set as a list of character
-     * ranges.  Ranges are listed in ascending Unicode order.  For
-     * example, the set [a-zA-M3] is represented as "33AMaz".
-     */
-    public String getPairs() {
-        return pairs.toString();
-    }
+    private static final UnicodeSet[] CATEGORY_CACHE =
+        new UnicodeSet[CATEGORY_COUNT];
 
     //----------------------------------------------------------------
     // Public API
@@ -299,14 +293,20 @@ public class UnicodeSet implements UnicodeFilter {
      * Constructs an empty set.
      */
     public UnicodeSet() {
-        pairs = new StringBuffer();
+        list = new int[1 + START_EXTRA];
+        list[len++] = HIGH;
     }
 
     /**
      * Constructs a copy of an existing set.
      */
     public UnicodeSet(UnicodeSet other) {
-        pairs = new StringBuffer(other.pairs.toString());
+        set(other);
+    }
+
+    public UnicodeSet(int start, int end) {
+        this();
+        xor(start, end);
     }
 
     /**
@@ -366,7 +366,19 @@ public class UnicodeSet implements UnicodeFilter {
             category == UNSUPPORTED_CATEGORY) {
             throw new IllegalArgumentException("Invalid category");
         }
-        pairs = new StringBuffer(getCategoryPairs(category));
+        set(getCategorySet(category));
+    }
+
+    public UnicodeSet set(int start, int end) {
+        clear();
+        xor(start, end);
+        return this;
+    }
+
+    public UnicodeSet set(UnicodeSet other) {
+        list = (int[]) other.list.clone();
+        len = other.len;
+        return this;
     }
 
     /**
@@ -392,7 +404,7 @@ public class UnicodeSet implements UnicodeFilter {
      */
     public void applyPattern(String pattern, boolean ignoreWhitespace) {
         ParsePosition pos = new ParsePosition(0);
-        pairs = parse(pattern, pos, null, ignoreWhitespace);
+        set(parse(pattern, pos, null, ignoreWhitespace));
 
         int i = pos.getIndex();
         int n = pattern.length();
@@ -427,7 +439,7 @@ public class UnicodeSet implements UnicodeFilter {
      * contains a syntax error.
      */
     private void applyPattern(String pattern, ParsePosition pos, SymbolTable symbols) {
-        pairs = parse(pattern, pos, symbols, true);
+        set(parse(pattern, pos, symbols, true));
     }
 
     /**
@@ -449,7 +461,24 @@ public class UnicodeSet implements UnicodeFilter {
     private void applyPattern(String pattern,
                               ParsePosition pos, SymbolTable symbols,
                               boolean ignoreWhitespace) {
-        pairs = parse(pattern, pos, symbols, ignoreWhitespace);
+        set(parse(pattern, pos, symbols, ignoreWhitespace));
+    }
+
+    private static void _toPat(StringBuffer buf, int c) {
+        if (c > 0xFFFF ||
+            c == '[' ||
+            c == ']' ||
+            c == '-' ||
+            c == '\\') {
+            buf.append('\\').append('u');
+            for (int x = 0x1000; x >= 0x0010; x >>= 4) {
+                if (c >= x) break;
+                buf.append('0');
+            }
+            buf.append(Integer.toString(c,16).toUpperCase());
+        } else {
+            buf.append((char) c);
+        }
     }
 
     /**
@@ -461,17 +490,17 @@ public class UnicodeSet implements UnicodeFilter {
         StringBuffer result = new StringBuffer();
         result.append('[');
         
-        // iterate through the ranges in the UnicodeSet
-        for (int i=0; i<pairs.length(); i+=2) {
-            // for a range with the same beginning and ending point,
-            // output that character, otherwise, output the start and
-            // end points of the range separated by a dash
-            result.append(pairs.charAt(i));
-            if (pairs.charAt(i) != pairs.charAt(i+1)) {
-                result.append('-').append(pairs.charAt(i+1));
+        int count = getRangeCount();
+        for (int i = 0; i < count; ++i) {
+            int start = getRangeStart(i);
+            int end = getRangeEnd(i);
+            _toPat(result, start);
+            if (start != end) {
+                result.append("-");
+                _toPat(result, end);
             }
         }
-        
+
         return result.append(']').toString();        
     }
 
@@ -483,8 +512,9 @@ public class UnicodeSet implements UnicodeFilter {
      */
     public int size() {
         int n = 0;
-        for (int i=0; i<pairs.length(); i+=2) {
-            n += pairs.charAt(i+1) - pairs.charAt(i) + 1;
+        int count = getRangeCount();
+        for (int i = 0; i < count; ++i) {
+            n += getRangeEnd(i) - getRangeStart(i) + 1;
         }
         return n;
     }
@@ -495,7 +525,7 @@ public class UnicodeSet implements UnicodeFilter {
      * @return <tt>true</tt> if this set contains no elements.
      */
     public boolean isEmpty() {
-        return pairs.length() == 0;
+        return len == 1;
     }
 
     /**
@@ -505,12 +535,12 @@ public class UnicodeSet implements UnicodeFilter {
      * @return <tt>true</tt> if this set contains the specified range
      * of chars.
      */
-    public boolean contains(char first, char last) {
-        // Set i to the end of the smallest range such that its end
-        // point >= last, or pairs.length() if no such range exists.
-        int i = 1;
-        while (i<pairs.length() && last>pairs.charAt(i)) i+=2;
-        return i<pairs.length() && first>=pairs.charAt(i-1);
+    public boolean contains(int first, int last) {
+        int i = -1;
+        while (true) {
+            if (first < list[++i]) break;
+        }
+        return ((i & 1) != 0 && last < list[i]);
     }
 
     /**
@@ -518,8 +548,23 @@ public class UnicodeSet implements UnicodeFilter {
      *
      * @return <tt>true</tt> if this set contains the specified char.
      */
-    public boolean contains(char c) {
-        return contains(c, c);
+    public boolean contains(int c) {
+        // catch degenerate cases
+        if (c == HIGH) {   // catch final, so we don't do it in loop!
+            return (len & 1) == 0;  // even length includes everything
+        }
+        // Set i to the index of the first item greater than ch
+        // We know we will terminate without length test!
+        // LATER: for large sets, add binary search
+        int i = -1;
+        while (true) {
+            if (c < list[++i]) break;
+        }
+        return ((i & 1) != 0); // return true if odd
+    }
+
+    public final boolean contains(char c) {
+        return contains((int) c);
     }
 
     /**
@@ -529,17 +574,18 @@ public class UnicodeSet implements UnicodeFilter {
      */
     public boolean containsIndexValue(int v) {
         /* The index value v, in the range [0,255], is contained in this set if
-         * it is contained in any pair of this set.  Pairs either have the high
+         * it is contained in any range of this set.  Ranges either have the high
          * bytes equal, or unequal.  If the high bytes are equal, then we have
          * aaxx..aayy, where aa is the high byte.  Then v is contained if xx <=
          * v <= yy.  If the high bytes are unequal we have aaxx..bbyy, bb>aa.
          * Then v is contained if xx <= v || v <= yy.  (This is identical to the
          * time zone month containment logic.)
          */
-        for (int i=0; i<pairs.length(); i+=2) {
-            char low = pairs.charAt(i);
-            char high = pairs.charAt(i+1);
-            if ((low & 0xFF00) == (high & 0xFF00)) {
+
+        for (int i=0; i<getRangeCount(); ++i) {
+            int low = getRangeStart(i);
+            int high = getRangeEnd(i);
+            if ((low & ~0xFF) == (high & ~0xFF)) {
                 if ((low & 0xFF) <= v && v <= (high & 0xFF)) {
                     return true;
                 }
@@ -561,10 +607,17 @@ public class UnicodeSet implements UnicodeFilter {
      * @param last last character, inclusive, of range to be added
      * to this set.
      */
-    public void add(char first, char last) {
+    public void add(int first, int last) {
         if (first <= last) {
-            addPair(pairs, first, last);
+            add(setSmallList(first, last), 2, 0);
         }
+    }
+
+    /**
+     * For binary compatibility.
+     */
+    public final void add(char first, char last) {
+        add((int) first, (int) last);
     }
 
     /**
@@ -573,7 +626,7 @@ public class UnicodeSet implements UnicodeFilter {
      * the call leaves this set unchanged.
      */
     public final void add(char c) {
-        add(c, c);
+        add((int) c, (int) c);
     }
 
     /**
@@ -589,7 +642,7 @@ public class UnicodeSet implements UnicodeFilter {
      */
     public void remove(char first, char last) {
         if (first <= last) {
-            removePair(pairs, first, last);
+            retain(setSmallList(first, last), 2, 2);
         }
     }
 
@@ -611,16 +664,12 @@ public class UnicodeSet implements UnicodeFilter {
      * 	       specified set.
      */
     public boolean containsAll(UnicodeSet c) {
-        // The specified set is a subset if all of its pairs are contained
-        // in this set.
-        int i = 1;
-        for (int j=0; j<c.pairs.length(); j+=2) {
-            char last = c.pairs.charAt(j+1);
-            // Set i to the end of the smallest range such that its
-            // end point >= last, or pairs.length() if no such range
-            // exists.
-            while (i<pairs.length() && last>pairs.charAt(i)) i+=2;
-            if (i>pairs.length() || c.pairs.charAt(j) < pairs.charAt(i-1)) {
+        // The specified set is a subset if all of its pairs are contained in
+        // this set.  It's possible to code this more efficiently in terms of
+        // direct manipulation of the inversion lists if the need arises.
+        int n = c.getRangeCount();
+        for (int i=0; i<n; ++i) {
+            if (!contains(c.getRangeStart(i), c.getRangeEnd(i))) {
                 return false;
             }
         }
@@ -638,7 +687,7 @@ public class UnicodeSet implements UnicodeFilter {
      * @see #add(char, char)
      */
     public void addAll(UnicodeSet c) {
-        doUnion(pairs, c.pairs.toString());
+        add(c.list, c.len, 0);
     }
 
     /**
@@ -651,7 +700,7 @@ public class UnicodeSet implements UnicodeFilter {
      * @param c set that defines which elements this set will retain.
      */
     public void retainAll(UnicodeSet c) {
-        doIntersection(pairs, c.pairs.toString());
+        retain(c.list, c.len, 0);
     }
 
     /**
@@ -664,16 +713,33 @@ public class UnicodeSet implements UnicodeFilter {
      *          this set.
      */
     public void removeAll(UnicodeSet c) {
-        doDifference(pairs, c.pairs.toString());
+        retain(c.list, c.len, 2);
     }
 
+    public UnicodeSet xor(int start, int end) {
+        return xor(setSmallList(start, end), 2, 0);
+    }
+    
+    public UnicodeSet xorAll(UnicodeSet other) {
+        xor(other.list, other.len, 0);
+        return this;
+    }
+    
     /**
      * Inverts this set.  This operation modifies this set so that
      * its value is its complement.  This is equivalent to the pseudo code:
      * <code>this = new UnicodeSet("[\u0000-\uFFFF]").removeAll(this)</code>.
      */
     public void complement() {
-        doComplement(pairs);
+        if (list[0] == LOW) {
+            System.arraycopy(list, 1, list, 0, len-1);
+            --len;
+        } else {
+            ensureCapacity(len+1);
+            System.arraycopy(list, 0, list, 1, len);
+            list[0] = LOW;
+            ++len;
+        }
     }
 
     /**
@@ -681,7 +747,35 @@ public class UnicodeSet implements UnicodeFilter {
      * empty after this call returns.
      */
     public void clear() {
-        pairs.setLength(0);
+        list[0] = HIGH;
+        len = 1;
+    }
+
+    public void compact() {
+        if (len == list.length) return;
+        int[] temp = new int[len];
+        System.arraycopy(list, 0, temp, 0, len);
+        list = temp;
+    }
+
+    public int getRangeCount() {
+        return len/2;
+    }
+    
+    public int getRangeStart(int index) {
+        try {
+            return list[index*2];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return HIGH;
+        }
+    }
+    
+    public int getRangeEnd(int index) {
+        try {
+            return list[index*2 + 1] - 1;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return LOW;
+        }
     }
 
     /**
@@ -695,8 +789,16 @@ public class UnicodeSet implements UnicodeFilter {
      * @return <tt>true</tt> if the specified Object is equal to this set.
      */
     public boolean equals(Object o) {
-        return o instanceof UnicodeSet &&
-            pairs.toString().equals(((UnicodeSet)o).pairs.toString());
+        try {
+            UnicodeSet that = (UnicodeSet) o;
+            if (len != that.len) return false;
+            for (int i = 0; i < len; ++i) {
+                if (list[i] != that.list[i]) return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -706,7 +808,12 @@ public class UnicodeSet implements UnicodeFilter {
      * @see Object#hashCode()
      */
     public int hashCode() {
-        return pairs.hashCode();
+        int result = len;
+        for (int i = 0; i < len; ++i) {
+            result *= 1000003;
+            result += list[i];
+        }
+        return result;
     }
 
     /**
@@ -726,8 +833,8 @@ public class UnicodeSet implements UnicodeFilter {
      * Parsing continues until the corresponding closing ']'.  If a syntax error
      * is encountered between the opening and closing brace, the parse fails.
      * Upon return from a successful parse, the ParsePosition is updated to
-     * point to the character following the closing ']', and a StringBuffer
-     * containing a pairs list for the parsed pattern is returned.  This method
+     * point to the character following the closing ']', and an inversion
+     * list for the parsed pattern is returned.  This method
      * calls itself recursively to parse embedded subpatterns.
      *
      * @param pattern the string containing the pattern to be parsed.  The
@@ -738,14 +845,14 @@ public class UnicodeSet implements UnicodeFilter {
      * from a successful parse, pos.getIndex() is either the character after the
      * closing ']' of the parsed pattern, or pattern.length() if the closing ']'
      * is the last character of the pattern string.
-     * @return a StringBuffer containing a pairs list for the parsed substring
+     * @return an inversion list for the parsed substring
      * of <code>pattern</code>
      * @exception java.lang.IllegalArgumentException if the parse fails.
      */
-    private static StringBuffer parse(String pattern, ParsePosition pos,
-                                      SymbolTable symbols, boolean ignoreWhitespace) {
+    private static UnicodeSet parse(String pattern, ParsePosition pos,
+                                       SymbolTable symbols, boolean ignoreWhitespace) {
 
-        StringBuffer pairsBuf = new StringBuffer();
+        UnicodeSet set = new UnicodeSet();
         boolean invert = false;
 
         int lastChar = -1; // This is either a char (0..FFFF) or -1
@@ -782,22 +889,22 @@ public class UnicodeSet implements UnicodeFilter {
         int ivarValueBuffer = 0;
         for (; i<limit; i+=((varValueBuffer==null)?1:0)) {
             /* If the next element is a single character, c will be set to it,
-             * and nestedPairs will be null.  In this case isLiteral indicates
+             * and nestedSet will be null.  In this case isLiteral indicates
              * whether the character should assume special meaning if it has
              * one.  If the next element is a nested set, either via a variable
              * reference, or via an embedded "[..]"  or "[:..:]" pattern, then
-             * nestedPairs will be set to the pairs list for the nested set, and
+             * nestedSet will be set to the i-list for the nested set, and
              * c's value should be ignored.
              */
-            String nestedPairs = null;
+            UnicodeSet nestedSet = null;
             boolean isLiteral = false;
             char c;
             if (varValueBuffer != null) {
                 if (ivarValueBuffer < varValueBuffer.length) {
                     c = varValueBuffer[ivarValueBuffer++];
-                    UnicodeSet set = symbols.lookupSet(c);
-                    if (set != null) {
-                        nestedPairs = set.pairs.toString();
+                    UnicodeSet s = symbols.lookupSet(c);
+                    if (s != null) {
+                        nestedSet = s;
                     }
                 } else {
                     varValueBuffer = null;
@@ -884,26 +991,14 @@ public class UnicodeSet implements UnicodeFilter {
                 }
 
                 /* Parse variable references.  These are treated as literals.  If a
-                 * variable refers to a UnicodeSet, nestedPairs is assigned here.
+                 * variable refers to a UnicodeSet, its stand in character is
+                 * returned in the char[] buffer.
                  * Variable names are only parsed if varNameToChar is not null.
                  * Set variables are only looked up if varCharToSet is not null.
                  */
                 else if (symbols != null && !isLiteral && c == SymbolTable.SYMBOL_REF) {
                     pos.setIndex(++i);
                     String name = symbols.parseReference(pattern, pos, limit);
-                    /*
-                    Object obj = symbols.lookup(name);
-                    if (obj == null) {
-                        throw new IllegalArgumentException("Undefined variable: "
-                                                           + name);
-                    }
-                    isLiteral = true;
-                    if (obj instanceof Character) {
-                        c = ((Character) obj).charValue();
-                    } else {
-                        nestedPairs = ((UnicodeSet) obj).pairs.toString();
-                    }
-                    */
                     varValueBuffer = symbols.lookup(name);
                     if (varValueBuffer == null) {
                         throw new IllegalArgumentException("Undefined variable: "
@@ -916,7 +1011,7 @@ public class UnicodeSet implements UnicodeFilter {
 
                 /* An opening bracket indicates the first bracket of a nested
                  * subpattern, either a normal pattern or a category pattern.  We
-                 * recognize these here and set nestedPairs accordingly.
+                 * recognize these here and set nestedSet accordingly.
                  */
                 else if (!isLiteral && c == '[') {
                     // Handle "[:...:]", representing a character category
@@ -927,17 +1022,17 @@ public class UnicodeSet implements UnicodeFilter {
                         if (j < 0) {
                             throw new IllegalArgumentException("Missing \":]\"");
                         }
-                        nestedPairs = getCategoryPairs(pattern.substring(i, j));
+                        nestedSet = getCategorySet(pattern.substring(i, j));
                         i = j+1; // Make i point to ']' in ":]"
                         if (mode == 3) {
                             // Entire pattern is a category; leave parse loop
-                            pairsBuf.append(nestedPairs);
+                            set = nestedSet;
                             break;
                         }
                     } else {
-                        // Recurse to get the pairs for this nested set.
+                        // Recurse to get the i-list for this nested set.
                         pos.setIndex(i); // Add 2 to point AFTER op
-                        nestedPairs = parse(pattern, pos, symbols, ignoreWhitespace).toString();
+                        nestedSet = parse(pattern, pos, symbols, ignoreWhitespace);
                         i = pos.getIndex() - 1; // - 1 to point at ']'
                     }
                 }
@@ -945,29 +1040,29 @@ public class UnicodeSet implements UnicodeFilter {
 
             /* At this point we have either a character c, or a nested set.  If
              * we have encountered a nested set, either embedded in the pattern,
-             * or as a variable, we have a non-null nestedPairs, and c should be
+             * or as a variable, we have a non-null nestedSet, and c should be
              * ignored.  Otherwise c is the current character, and isLiteral
              * indicates whether it is an escaped literal (or variable) or a
              * normal unescaped character.  Unescaped characters '-', '&', and
              * ']' have special meanings.
              */
-            if (nestedPairs != null) {
+            if (nestedSet != null) {
                 if (lastChar >= 0) {
                     if (lastOp != 0) {
                         throw new IllegalArgumentException("Illegal rhs for " + lastChar + lastOp);
                     }
-                    addPair(pairsBuf, (char)lastChar, (char)lastChar);
+                    set.add(lastChar, lastChar);
                     lastChar = -1;
                 }
                 switch (lastOp) {
                 case '-':
-                    doDifference(pairsBuf, nestedPairs);
+                    set.removeAll(nestedSet);
                     break;
                 case '&':
-                    doIntersection(pairsBuf, nestedPairs);
+                    set.retainAll(nestedSet);
                     break;
                 case 0:
-                    doUnion(pairsBuf, nestedPairs);
+                    set.addAll(nestedSet);
                     break;
                 }
                 lastOp = 0;
@@ -978,7 +1073,7 @@ public class UnicodeSet implements UnicodeFilter {
             } else if (lastOp == 0 && !isLiteral && (c == '-' || c == '&')) {
                 lastOp = c;
             } else if (lastOp == '-') {
-                addPair(pairsBuf, (char)lastChar, c);
+                set.add(lastChar, c);
                 lastOp = 0;
                 lastChar = -1;
             } else if (lastOp != 0) {
@@ -987,7 +1082,7 @@ public class UnicodeSet implements UnicodeFilter {
             } else {
                 if (lastChar >= 0) {
                     // We have <char><char>
-                    addPair(pairsBuf, (char)lastChar, (char)lastChar);
+                    set.add(lastChar, lastChar);
                 }
                 lastChar = c;
             }
@@ -1001,12 +1096,12 @@ public class UnicodeSet implements UnicodeFilter {
         // Handle unprocessed stuff preceding the closing ']'
         if (lastOp == '-') {
             // Trailing '-' is treated as literal
-            addPair(pairsBuf, lastOp, lastOp);
+            set.add(lastOp, lastOp);
         } else if (lastOp == '&') {
             throw new IllegalArgumentException("Unquoted trailing " + lastOp);
         }
         if (lastChar >= 0) {
-            addPair(pairsBuf, (char)lastChar, (char)lastChar);                    
+            set.add(lastChar, lastChar);
         }
 
         /**
@@ -1014,7 +1109,7 @@ public class UnicodeSet implements UnicodeFilter {
          * the complement.  (Inversion after '[:' is handled elsewhere.)
          */
         if (invert) {
-            doComplement(pairsBuf);
+            set.complement();
         }
 
         /**
@@ -1033,329 +1128,18 @@ public class UnicodeSet implements UnicodeFilter {
             // Debug parser
             System.out.println("UnicodeSet(" + 
                                pattern.substring(start, i+1) + ") -> " +
-                               pairsBuf.toString());
+                               set.toString());
         }
 
-        return pairsBuf;
+        return set;
     }
 
     //----------------------------------------------------------------
-    // Implementation: Efficient in-place union & difference
-    //----------------------------------------------------------------
-
-    /**
-     * Performs a union operation: adds the range 'c'-'d' to the given
-     * pairs list.  The pairs list is modified in place.  The result
-     * is normalized (in order and as short as possible).  For
-     * example, addPair("am", 'l', 'q') => "aq".  addPair("ampz", 'n',
-     * 'o') => "az".
-     */
-    private static void addPair(StringBuffer pairs, char c, char d) {
-        char a = 0;
-        char b = 0;
-        for (int i=0; i<pairs.length(); i+=2) {
-            char e = pairs.charAt(i);
-            char f = pairs.charAt(i+1);
-            if (e <= (d+1) && c <= (f+1)) {
-                // Merge with this range
-                f = (char) Math.max(d, f);
-
-                // Check to see if we need to merge with the
-                // subsequent range also.  This happens if we have
-                // "abdf" and are merging in "cc".  We only need to
-                // check on the right side -- never on the left.
-                if ((i+2) < pairs.length() &&
-                    pairs.charAt(i+2) == (f+1)) {
-                    f = pairs.charAt(i+3);
-                    stringBufferDelete(pairs, i+2, i+4);
-                }
-                pairs.setCharAt(i, (char) Math.min(c, e));
-                pairs.setCharAt(i+1, f);
-                return;
-            } else if ((b+1) < c && (d+1) < e) {
-                // Insert before this range
-                pairs.insert(i, new char[] { c, d });
-                return;
-            }
-            a = e;
-            b = f;
-        }
-        // If nothing else, fall through and append this new range to
-        // the end.
-        pairs.append(c).append(d);
-    }
-
-    /**
-     * Performs an asymmetric difference: removes the range 'c'-'d'
-     * from the pairs list.  The pairs list is modified in place.  The
-     * result is normalized (in order and as short as possible).  For
-     * example, removePair("am", 'l', 'q') => "ak".
-     * removePair("ampz", 'l', 'q') => "akrz".
-     */
-    private static void removePair(StringBuffer pairs, char c, char d) {
-        // Iterate over pairs until we find a pair that overlaps
-        // with the given range.
-        for (int i=0; i<pairs.length(); i+=2) {
-            char b = pairs.charAt(i+1);
-            if (b < c) {
-                // Range at i is entirely before the given range,
-                // since we have a-b < c-d.  No overlap yet...keep
-                // iterating.
-                continue;
-            }
-            char a = pairs.charAt(i);
-            if (d < a) {
-                // Range at i is entirely after the given range; c-d <
-                // a-b.  Since ranges are in order, nothing else will
-                // overlap.
-                break;
-            }
-            // Once we get here, we know c <= b and d >= a.
-            // rangeEdited is set to true if we have modified the
-            // range a-b (the range at i) in place.
-            boolean rangeEdited = false;
-            if (c > a) {
-                // If c is after a and before b, then we have overlap
-                // of this sort: a--c==b--d or a--c==d--b, where a-b
-                // and c-d are the ranges of interest.  We need to
-                // add the range a,c-1.
-                pairs.setCharAt(i+1, (char)(c-1));
-                // i is already a
-                rangeEdited = true;
-            }
-            if (d < b) {
-                // If d is after a and before b, we overlap like this:
-                // c--a==d--b or a--c==d--b, where a-b is the range at
-                // i and c-d is the range being removed.  We need to
-                // add the range d+1,b.
-                if (rangeEdited) {
-                    pairs.insert(i+2, new char[] { (char)(d+1), b });
-                    i += 2;
-                } else {
-                    pairs.setCharAt(i, (char)(d+1));
-                    // i+1 is already b
-                    rangeEdited = true;
-                }
-            }
-            if (!rangeEdited) {
-                // If we didn't add any ranges, that means the entire
-                // range a-b must be deleted, since we have
-                // c--a==b--d.
-                stringBufferDelete(pairs, i, i+2);
-                i -= 2;
-            }
-        }
-    }
-
-    //----------------------------------------------------------------
-    // Implementation: Fundamental operators
-    //----------------------------------------------------------------
-
-    /**
-     * Changes the pairs list to represent the complement of the set it
-     * currently represents.  The pairs list will be normalized (in
-     * order and in shortest possible form) if the original pairs list
-     * was normalized.
-     */
-    private static void doComplement(StringBuffer pairs) {
-        if (pairs.length() == 0) {
-            pairs.append('\u0000').append('\uffff');
-            return;
-        }
-
-        // Change each end to a start and each start to an end of the
-        // gaps between the ranges.  That is, 3-7 9-12 becomes x-2 8-8
-        // 13-x, where 'x' represents a range that must now be fixed
-        // up.
-        for (int i=0; i<pairs.length(); i+=2) {
-            pairs.setCharAt(i,   (char) (pairs.charAt(i)   - 1));
-            pairs.setCharAt(i+1, (char) (pairs.charAt(i+1) + 1));
-        }
-
-        // Fix up the initial range, either by adding a start point of
-        // U+0000, or by deleting the range altogether, if the
-        // original range was U+0000 - x.
-        if (pairs.charAt(0) == '\uFFFF') {
-            stringBufferDelete(pairs, 0, 1);
-        } else {
-            pairs.insert(0, '\u0000');
-        }
-
-        // Fix up the final range, either by adding an end point of
-        // U+FFFF, or by deleting the range altogether, if the
-        // original range was x - U+FFFF.
-        if (pairs.charAt(pairs.length() - 1) == '\u0000') {
-            pairs.setLength(pairs.length() - 1);
-        } else {
-            pairs.append('\uFFFF');
-        }
-    }
-
-    /**
-     * Given two pairs lists, changes the first in place to represent
-     * the union of the two sets.
-     *
-     * This implementation format was stolen from Richard Gillam's
-     * CharSet class.
-     */
-    private static void doUnion(StringBuffer pairs, String c2) {
-        StringBuffer result = new StringBuffer();
-        String c1 = pairs.toString();
-
-        int i = 0;
-        int j = 0;
-
-        // consider all the characters in both strings
-        while (i < c1.length() && j < c2.length()) {
-            char ub;
-            
-            // the first character in the result is the lower of the
-            // starting characters of the two strings, and "ub" gets
-            // set to the upper bound of that range
-            if (c1.charAt(i) < c2.charAt(j)) {
-                result.append(c1.charAt(i));
-                ub = c1.charAt(++i);
-            }
-            else {
-                result.append(c2.charAt(j));
-                ub = c2.charAt(++j);
-            }
-            
-            // for as long as one of our two pointers is pointing to a range's
-            // end point, or i is pointing to a character that is less than
-            // "ub" plus one (the "plus one" stitches touching ranges together)...
-            while (i % 2 == 1 || j % 2 == 1 || (i < c1.length() && c1.charAt(i)
-                            <= ub + 1)) {
-                // advance i to the first character that is greater than
-                // "ub" plus one
-                while (i < c1.length() && c1.charAt(i) <= ub + 1)
-                    ++i;
-                    
-                // if i points to the endpoint of a range, update "ub"
-                // to that character, or if i points to the start of
-                // a range and the endpoint of the preceding range is
-                // greater than "ub", update "up" to _that_ character
-                if (i % 2 == 1)
-                    ub = c1.charAt(i);
-                else if (i > 0 && c1.charAt(i - 1) > ub)
-                    ub = c1.charAt(i - 1);
-
-                // now advance j to the first character that is greater
-                // that "ub" plus one
-                while (j < c2.length() && c2.charAt(j) <= ub + 1)
-                    ++j;
-                    
-                // if j points to the endpoint of a range, update "ub"
-                // to that character, or if j points to the start of
-                // a range and the endpoint of the preceding range is
-                // greater than "ub", update "up" to _that_ character
-                if (j % 2 == 1)
-                    ub = c2.charAt(j);
-                else if (j > 0 && c2.charAt(j - 1) > ub)
-                    ub = c2.charAt(j - 1);
-            }
-            // when we finally fall out of this loop, we will have stitched
-            // together a series of ranges that overlap or touch, i and j
-            // will both point to starting points of ranges, and "ub" will
-            // be the endpoint of the range we're working on.  Write "ub"
-            // to the result
-            result.append(ub);
-            
-        // loop back around to create the next range in the result
-        }
-        
-        // we fall out to here when we've exhausted all the characters in
-        // one of the operands.  We can append all of the remaining characters
-        // in the other operand without doing any extra work.
-        if (i < c1.length())
-            result.append(c1.substring(i));
-        if (j < c2.length())
-            result.append(c2.substring(j));
-
-        pairs.setLength(0);
-        pairs.append(result.toString());
-    }
-
-    /**
-     * Given two pairs lists, changes the first in place to represent
-     * the asymmetric difference of the two sets.
-     */
-    private static void doDifference(StringBuffer pairs, String pairs2) {
-        StringBuffer p2 = new StringBuffer(pairs2);
-        doComplement(p2);
-        doIntersection(pairs, p2.toString());
-    }
-
-    /**
-     * Given two pairs lists, changes the first in place to represent
-     * the intersection of the two sets.
-     *
-     * This implementation format was stolen from Richard Gillam's
-     * CharSet class.
-     */
-    private static void doIntersection(StringBuffer pairs, String c2) {
-        StringBuffer result = new StringBuffer();
-        String c1 = pairs.toString();
-
-        int i = 0;
-        int j = 0;
-        int oldI;
-        int oldJ;
-
-        // iterate until we've exhausted one of the operands
-        while (i < c1.length() && j < c2.length()) {
-            
-            // advance j until it points to a character that is larger than
-            // the one i points to.  If this is the beginning of a one-
-            // character range, advance j to point to the end
-            if (i < c1.length() && i % 2 == 0) {
-                while (j < c2.length() && c2.charAt(j) < c1.charAt(i))
-                    ++j;
-                if (j < c2.length() && j % 2 == 0 && c2.charAt(j) == c1.charAt(i))
-                    ++j;
-            }
-
-            // if j points to the endpoint of a range, save the current
-            // value of i, then advance i until it reaches a character
-            // which is larger than the character pointed at
-            // by j.  All of the characters we've advanced over (except
-            // the one currently pointed to by i) are added to the result
-            oldI = i;
-            while (j % 2 == 1 && i < c1.length() && c1.charAt(i) <= c2.charAt(j))
-                ++i;
-            result.append(c1.substring(oldI, i));
-
-            // if i points to the endpoint of a range, save the current
-            // value of j, then advance j until it reaches a character
-            // which is larger than the character pointed at
-            // by i.  All of the characters we've advanced over (except
-            // the one currently pointed to by i) are added to the result
-            oldJ = j;
-            while (i % 2 == 1 && j < c2.length() && c2.charAt(j) <= c1.charAt(i))
-                ++j;
-            result.append(c2.substring(oldJ, j));
-
-            // advance i until it points to a character larger than j
-            // If it points at the beginning of a one-character range,
-            // advance it to the end of that range
-            if (j < c2.length() && j % 2 == 0) {
-                while (i < c1.length() && c1.charAt(i) < c2.charAt(j))
-                    ++i;
-                if (i < c1.length() && i % 2 == 0 && c2.charAt(j) == c1.charAt(i))
-                    ++i;
-            }
-        }
-
-        pairs.setLength(0);
-        pairs.append(result.toString());
-    }
-
-    //----------------------------------------------------------------
-    // Implementation: Generation of pairs for Unicode categories
+    // Implementation: Generation of Unicode categories
     //----------------------------------------------------------------
     
     /**
-     * Returns a pairs string for the given category, given its name.
+     * Returns an inversion list string for the given category, given its name.
      * The category name must be either a two-letter name, such as
      * "Lu", or a one letter name, such as "L".  One-letter names
      * indicate the logical union of all two-letter names that start
@@ -1368,14 +1152,17 @@ public class UnicodeSet implements UnicodeFilter {
      * complements such as "^Lu" or "^L".  It would be easy to cache
      * these as well in a hashtable should the need arise.
      */
-    private static String getCategoryPairs(String catName) {
+    private static UnicodeSet getCategorySet(String catName) {
         boolean invert = (catName.length() > 1 &&
                           catName.charAt(0) == '^');
         if (invert) {
             catName = catName.substring(1);
         }
 
-        StringBuffer cat = null;
+        UnicodeSet cat = null;
+
+        // BE CAREFUL not to modify the return value from
+        // getCategorySet(int).
         
         // if we have two characters, search the category map for that
         // code and either construct and return a UnicodeSet from the
@@ -1385,11 +1172,11 @@ public class UnicodeSet implements UnicodeFilter {
             if (i>=0 && i%2==0) {
                 i /= 2;
                 if (i != UNSUPPORTED_CATEGORY) {
-                    String pairs = getCategoryPairs(i);
-                    if (!invert) {
-                        return pairs;
-                    }
-                    cat = new StringBuffer(pairs);
+                    cat = getCategorySet(i);
+                    // Fast path for non-inverted simple category
+                    if (!invert) return cat;
+                    // Otherwise, need to clone so cache is unmodified
+                    cat = new UnicodeSet(cat);
                 }
             }
         } else if (catName.length() == 1) {
@@ -1400,11 +1187,11 @@ public class UnicodeSet implements UnicodeFilter {
             for (int i=0; i<CATEGORY_COUNT; ++i) {
                 if (i != UNSUPPORTED_CATEGORY &&
                     CATEGORY_NAMES.charAt(2*i) == catName.charAt(0)) {
-                    String pairs = getCategoryPairs(i);
+                    UnicodeSet list = getCategorySet(i);
                     if (cat == null) {
-                        cat = new StringBuffer(pairs);
+                        cat = new UnicodeSet(list);
                     } else {
-                        doUnion(cat, pairs);
+                        cat.addAll(list);
                     }
                 }
             }
@@ -1415,24 +1202,24 @@ public class UnicodeSet implements UnicodeFilter {
         }
 
         if (invert) {
-            doComplement(cat);
+            cat.complement();
         }
-        return cat.toString();
+        return cat;
     }
 
     /**
-     * Returns a pairs string for the given category.  This string is
+     * Returns an inversion list for the given category.  This list is
      * cached and returned again if this method is called again with
      * the same parameter.
+     *
+     * Callers MUST NOT MODIFY the returned set.
      */
-    private static String getCategoryPairs(int cat) {
-        if (CATEGORY_PAIRS_CACHE[cat] == null) {
+    private static UnicodeSet getCategorySet(int cat) {
+        if (CATEGORY_CACHE[cat] == null) {
             // Walk through all Unicode characters, noting the start
             // and end of each range for which Character.getType(c)
-            // returns the given category integer.  Since we are
-            // iterating in order, we can simply append the resulting
-            // ranges to the pairs string.
-            StringBuffer pairs = new StringBuffer();
+            // returns the given category integer.
+            UnicodeSet set = new UnicodeSet();
             int first = -1;
             int last = -2;
             for (int i=0; i<=0xFFFF; ++i) {
@@ -1441,18 +1228,18 @@ public class UnicodeSet implements UnicodeFilter {
                         last = i;
                     } else {
                         if (first >= 0) {
-                            pairs.append((char)first).append((char)last);
+                            set.add(first, last);
                         }
                         first = last = i;
                     }
                 }
             }
             if (first >= 0) {
-                pairs.append((char)first).append((char)last);
+                set.add(first, last);
             }
-            CATEGORY_PAIRS_CACHE[cat] = pairs.toString();
+            CATEGORY_CACHE[cat] = set;
         }
-        return CATEGORY_PAIRS_CACHE[cat];
+        return CATEGORY_CACHE[cat];
     }
 
     //----------------------------------------------------------------
@@ -1466,26 +1253,255 @@ public class UnicodeSet implements UnicodeFilter {
     private static final char charAfter(String str, int i) {
         return ((++i) < str.length()) ? str.charAt(i) : '\uFFFF';
     }
+
+    private void ensureCapacity(int newLen) {
+        if (newLen <= list.length) return;
+        int[] temp = new int[newLen + GROW_EXTRA];
+        System.arraycopy(list, 0, temp, 0, len);
+        list = temp;
+    }        
     
-    /**
-     * Deletes a range of character from a StringBuffer, from start to
-     * limit-1.  This is not part of JDK 1.1 StringBuffer, but is
-     * present in Java 2.
-     * @param start inclusive start of range
-     * @param limit exclusive end of range
-     */
-    private static void stringBufferDelete(StringBuffer buf,
-                                           int start, int limit) {
-        // In Java 2 just use:
-        //   buf.delete(start, limit);
-        char[] chars = null;
-        if (buf.length() > limit) {
-            chars = new char[buf.length() - limit];
-            buf.getChars(limit, buf.length(), chars, 0);
+    private void ensureBufferCapacity(int newLen) {
+        if (newLen <= buffer.length) return;
+        buffer = new int[newLen + GROW_EXTRA];
+    }        
+    
+    private int[] setSmallList(int start, int end) {
+        smallList[0] = start;
+        smallList[1] = end+1;
+        if (start > end) {
+            smallList[0] = end;
+            smallList[1] = start+1;
         }
-        buf.setLength(start);
-        if (chars != null) {
-            buf.append(chars);
+        return smallList;
+    }
+    
+    //----------------------------------------------------------------
+    // Implementation: Fundamental operations
+    //----------------------------------------------------------------
+
+    // polarity = 0, 3 is normal: x xor y
+    // polarity = 1, 2: x xor ~y == x === y
+
+    private UnicodeSet xor(int[] other, int otherLen, int polarity) {
+        ensureBufferCapacity(len + otherLen);
+        int i = 0, j = 0, k = 0;
+        int a = list[i++];
+        int b;
+        if (polarity == 1 || polarity == 2) {
+            b = LOW;
+            if (other[j] == LOW) { // skip base if already LOW
+                ++j;
+                b = other[j];
+            }
+        } else {
+            b = other[j++];
         }
+        // simplest of all the routines
+        // sort the values, discarding identicals!
+        while (true) {
+            if (a < b) {
+                buffer[k++] = a;
+                a = list[i++];
+            } else if (b < a) {
+                buffer[k++] = b;
+                b = other[j++];
+            } else if (a != HIGH) { // at this point, a == b
+                // discard both values!
+                a = list[i++];
+                b = other[j++];
+            } else { // DONE!
+                buffer[k++] = HIGH;
+                len = k;
+                break;
+            }
+        }
+        // swap list and buffer
+        int[] temp = list;
+        list = buffer;
+        buffer = temp;
+        return this;
+    }
+
+    // polarity = 0 is normal: x union y
+    // polarity = 2: x union ~y
+    // polarity = 1: ~x union y
+    // polarity = 3: ~x union ~y
+    
+    private UnicodeSet add(int[] other, int otherLen, int polarity) {
+        ensureBufferCapacity(len + otherLen);
+        int i = 0, j = 0, k = 0;
+        int a = list[i++];
+        int b = other[j++];
+        // change from xor is that we have to check overlapping pairs
+        // polarity bit 1 means a is second, bit 2 means b is.
+        main:
+        while (true) {
+            switch (polarity) {
+              case 0: // both first; take lower if unequal
+                if (a < b) { // take a
+                    // Back up over overlapping ranges in buffer[]
+                    if (k > 0 && a <= buffer[k-1]) {
+                        --k;
+                        a = list[i];
+                        // Pick the latter end value between
+                        // buffer[] and list[]
+                        if (buffer[k] > a) {
+                            a = buffer[k];
+                        }
+                    } else {
+                        // No overlap
+                        buffer[k++] = a;
+                        a = list[i];
+                    }
+                    i++; // Common if/else code factored out
+                    polarity ^= 1;
+                } else if (b < a) { // take b
+                    if (k > 0 && b <= buffer[k-1]) {
+                        --k;
+                        b = other[j];
+                        if (buffer[k] > b) {
+                            b = buffer[k];
+                        }
+                    } else {
+                        buffer[k++] = b;
+                        b = other[j];
+                    }
+                    j++;
+                    polarity ^= 2;
+                } else { // a == b, take a, drop b
+                    if (a == HIGH) break main;
+                    // This is symmetrical; it doesn't matter if
+                    // we backtrack with a or b. - liu
+                    if (k > 0 && a <= buffer[k-1]) {
+                        --k;
+                        a = list[i];
+                        // Pick the latter end value between
+                        // buffer[] and list[]
+                        if (buffer[k] > a) {
+                            a = buffer[k];
+                        }
+                    } else {
+                        // No overlap
+                        buffer[k++] = a;
+                        a = list[i];
+                    }
+                    i++;
+                    polarity ^= 1;
+                    b = other[j++]; polarity ^= 2;
+                }
+                break;
+              case 3: // both second; take higher if unequal, and drop other
+                if (b <= a) { // take a
+                    if (a == HIGH) break main;
+                    buffer[k++] = a;
+                } else { // take b
+                    if (b == HIGH) break main;
+                    buffer[k++] = b;
+                }
+                a = list[i++]; polarity ^= 1;   // factored common code
+                b = other[j++]; polarity ^= 2;
+                break;
+              case 1: // a second, b first; if b < a, overlap
+                if (a < b) { // no overlap, take a
+                    buffer[k++] = a; a = list[i++]; polarity ^= 1;
+                } else if (b < a) { // OVERLAP, drop b
+                    b = other[j++]; polarity ^= 2;
+                } else { // a == b, drop both!
+                    if (a == HIGH) break main;
+                    a = list[i++]; polarity ^= 1;
+                    b = other[j++]; polarity ^= 2;
+                }
+                break;
+              case 2: // a first, b second; if a < b, overlap
+                if (b < a) { // no overlap, take b
+                    buffer[k++] = b; b = other[j++]; polarity ^= 2;
+                } else  if (a < b) { // OVERLAP, drop a
+                    a = list[i++]; polarity ^= 1;
+                } else { // a == b, drop both!
+                    if (a == HIGH) break main;
+                    a = list[i++]; polarity ^= 1;
+                    b = other[j++]; polarity ^= 2;
+                }
+                break;
+            }
+        }
+        buffer[k++] = HIGH;    // terminate
+        len = k;
+        // swap list and buffer
+        int[] temp = list;
+        list = buffer;
+        buffer = temp;
+        return this;
+    }
+    
+    // polarity = 0 is normal: x intersect y
+    // polarity = 2: x intersect ~y == set-minus
+    // polarity = 1: ~x intersect y
+    // polarity = 3: ~x intersect ~y
+
+    private UnicodeSet retain(int[] other, int otherLen, int polarity) {
+        ensureBufferCapacity(len + otherLen);
+        int i = 0, j = 0, k = 0;
+        int a = list[i++];
+        int b = other[j++];
+        // change from xor is that we have to check overlapping pairs
+        // polarity bit 1 means a is second, bit 2 means b is.
+        main:
+        while (true) {
+            switch (polarity) {
+              case 0: // both first; drop the smaller
+                if (a < b) { // drop a
+                    a = list[i++]; polarity ^= 1;
+                } else if (b < a) { // drop b
+                    b = other[j++]; polarity ^= 2;
+                } else { // a == b, take one, drop other
+                    if (a == HIGH) break main;
+                    buffer[k++] = a; a = list[i++]; polarity ^= 1;
+                    b = other[j++]; polarity ^= 2;
+                }
+                break;
+              case 3: // both second; take lower if unequal
+                if (a < b) { // take a
+                    buffer[k++] = a; a = list[i++]; polarity ^= 1;
+                } else if (b < a) { // take b
+                    buffer[k++] = b; b = other[j++]; polarity ^= 2;
+                } else { // a == b, take one, drop other
+                    if (a == HIGH) break main;
+                    buffer[k++] = a; a = list[i++]; polarity ^= 1;
+                    b = other[j++]; polarity ^= 2;
+                }
+                break;
+              case 1: // a second, b first;
+                if (a < b) { // NO OVERLAP, drop a
+                    a = list[i++]; polarity ^= 1;
+                } else if (b < a) { // OVERLAP, take b
+                    buffer[k++] = b; b = other[j++]; polarity ^= 2;
+                } else { // a == b, drop both!
+                    if (a == HIGH) break main;
+                    a = list[i++]; polarity ^= 1;
+                    b = other[j++]; polarity ^= 2;
+                }
+                break;
+              case 2: // a first, b second; if a < b, overlap
+                if (b < a) { // no overlap, drop b
+                    b = other[j++]; polarity ^= 2;
+                } else  if (a < b) { // OVERLAP, take a
+                    buffer[k++] = a; a = list[i++]; polarity ^= 1;
+                } else { // a == b, drop both!
+                    if (a == HIGH) break main;
+                    a = list[i++]; polarity ^= 1;
+                    b = other[j++]; polarity ^= 2;
+                }
+                break;
+            }
+        }
+        buffer[k++] = HIGH;    // terminate
+        len = k;
+        // swap list and buffer
+        int[] temp = list;
+        list = buffer;
+        buffer = temp;
+        return this;
     }
 }
