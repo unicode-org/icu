@@ -356,6 +356,11 @@ void TransliteratorAPITest::TestTransliterate2(){
     status = U_ZERO_ERROR;
     logln("\n   Try calling transliterate with illegal start and limit values");
     t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
+    if(U_FAILURE(status)) {
+      errln("Error creating transliterator %s", u_errorName(status));
+      delete t;
+      return;
+    }
     gotResBuf = temp = "try start greater than limit";
     t->transliterate(gotResBuf, 10, 5);
     if(gotResBuf == temp)
@@ -379,6 +384,12 @@ void TransliteratorAPITest::TestTransliterate3(){
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator *t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
+    if(U_FAILURE(status)) {
+      errln("Error creating transliterator %s", u_errorName(status));
+      delete t;
+      return;
+    }
+
     if(t == 0)
         errln("FAIL : construction");
     for(uint32_t i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+3){
@@ -453,6 +464,11 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
+    if(U_FAILURE(status)) {
+      errln("Error creating transliterator %s", u_errorName(status));
+      delete t;
+      return;
+    }
     //keyboardAux(t, Data);
     UTransPosition index={0, 0, 0, 0};
     UnicodeString s;
@@ -562,6 +578,11 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
     UTransPosition index={0, 0, 0, 0};
     logln("Testing transliterate(Replaceable, int32_t, UErrorCode)");
     Transliterator *t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
+    if(U_FAILURE(status)) {
+      errln("Error creating transliterator %s", u_errorName(status));
+      delete t;
+      return;
+    }
     if(t == 0)
         errln("FAIL : construction");
     for(uint32_t i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+4){
@@ -740,6 +761,11 @@ void TransliteratorAPITest::TestGetAdoptFilter(){
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseError;
     Transliterator *t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
+    if(U_FAILURE(status)) {
+      errln("Error creating transliterator %s", u_errorName(status));
+      delete t;
+      return;
+    }
     if(t == 0)
         errln("FAIL : construction");
     const UnicodeFilter *u=t->getFilter();

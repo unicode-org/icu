@@ -148,7 +148,8 @@ void IntlTestDateFormatAPI::testAPI(/* char* par */)
     status = U_ZERO_ERROR;
     result2 = def->parse(text, status);
     if(U_FAILURE(status)) {
-        errln("ERROR: parse() failed");
+        errln("ERROR: parse() failed, stopping testing");
+        return;
     }
     logln(text + " parsed into " + result2);
 
@@ -285,16 +286,20 @@ IntlTestDateFormatAPI::TestNameHiding(void) {
         logln("DecimalFormat");
         status = U_ZERO_ERROR;
         DecimalFormat fmt(status);
-        // Format API
-        fmt.format(numObj, str, status);
-        fmt.format(numObj, str, fpos, status);
-        // NumberFormat API
-        fmt.format(2.71828, str);
-        fmt.format((int32_t)1234567, str);
-        fmt.format(1.41421, str, fpos);
-        fmt.format((int32_t)9876543, str, fpos);
-        fmt.parse(str, obj, ppos);
-        fmt.parse(str, obj, status);
+        if(U_SUCCESS(status)) {
+          // Format API
+          fmt.format(numObj, str, status);
+          fmt.format(numObj, str, fpos, status);
+          // NumberFormat API
+          fmt.format(2.71828, str);
+          fmt.format((int32_t)1234567, str);
+          fmt.format(1.41421, str, fpos);
+          fmt.format((int32_t)9876543, str, fpos);
+          fmt.parse(str, obj, ppos);
+          fmt.parse(str, obj, status);
+        } else {
+          errln("FAIL: Couldn't instantiate DecimalFormat, error %s. Quitting test", u_errorName(status));
+        }
     }
 
     // ChoiceFormat calling Format & NumberFormat API

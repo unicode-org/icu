@@ -58,7 +58,8 @@ class NormalizerConformanceTest : public IntlTest {
      */
     UBool checkConformance(const UnicodeString* field,
                            const char *line,
-                           int32_t options);
+                           int32_t options,
+                           UErrorCode &status);
 
     void iterativeNorm(const UnicodeString& str,
                        UNormalizationMode mode, int32_t options,

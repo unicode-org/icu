@@ -180,14 +180,19 @@ void CollationKanaTest::TestChooonKigoo(void)
 void CollationKanaTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationKanaTest: ");
-    switch (index) {
-        case 0: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
-        case 1: name = "TestBase";  if (exec)   TestBase(/* par */); break;
-        case 2: name = "TestSmallLarge";  if (exec)   TestSmallLarge(/* par */); break;
-        case 3: name = "TestTestPlainDakutenHandakuten";  if (exec)   TestPlainDakutenHandakuten(/* par */); break;
-        case 4: name = "TestKatakanaHiragana";  if (exec)   TestKatakanaHiragana(/* par */); break;
-        case 5: name = "TestChooonKigoo";  if (exec)   TestChooonKigoo(/* par */); break;
-        default: name = ""; break;
+    if(myCollation) {
+      switch (index) {
+          case 0: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
+          case 1: name = "TestBase";  if (exec)   TestBase(/* par */); break;
+          case 2: name = "TestSmallLarge";  if (exec)   TestSmallLarge(/* par */); break;
+          case 3: name = "TestTestPlainDakutenHandakuten";  if (exec)   TestPlainDakutenHandakuten(/* par */); break;
+          case 4: name = "TestKatakanaHiragana";  if (exec)   TestKatakanaHiragana(/* par */); break;
+          case 5: name = "TestChooonKigoo";  if (exec)   TestChooonKigoo(/* par */); break;
+          default: name = ""; break;
+      }
+    } else {
+      errln("Collator couldn't be instantiated!");
+      name = "";
     }
 }
 

@@ -1188,8 +1188,13 @@ void RegexTest::Extended() {
 	    return;
     }
     UnicodeString tdd(testDataDirectory);
-    tdd = RegexMatcher("([/\\\\])out[/\\\\]testdata", tdd, 0, status).
-        replaceFirst("$1regextst.txt", status);
+    RegexMatcher m("([/\\\\])out[/\\\\]testdata", tdd, 0, status);
+    if(U_SUCCESS(status)) {
+      tdd = m.replaceFirst("$1regextst.txt", status);
+    } else {
+      errln("Couldn't set up tests. Error %s", u_errorName(status));
+      return;
+    }
 
     int    len;
     UChar *testData = ReadAndConvertFile((const char *)CharString(tdd), len, status);
@@ -1509,8 +1514,13 @@ void RegexTest::PerlTests() {
 	    return;
     }
     UnicodeString tdd(testDataDirectory);
-    tdd = RegexMatcher("([/\\\\])out[/\\\\]testdata", tdd, 0, status).
-        replaceFirst("$1re_tests.txt", status);
+    RegexMatcher m("([/\\\\])out[/\\\\]testdata", tdd, 0, status);
+    if(U_SUCCESS(status)) {
+      tdd = m.replaceFirst("$1re_tests.txt", status);
+    } else {
+      errln("Couldn't set up tests. Error %s", u_errorName(status));
+      return;
+    }
 
     int    len;
     UChar *testData = ReadAndConvertFile((const char *)CharString(tdd), len, status);

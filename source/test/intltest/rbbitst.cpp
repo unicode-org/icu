@@ -1426,6 +1426,7 @@ void RBBITest::TestExtended() {
             }
 
             errln("line %d: Tag expected in test file.", lineNum);
+            goto end_test;
             parseState = PARSE_COMMENT;
             savedState = PARSE_DATA;
             }
@@ -1603,6 +1604,7 @@ void RBBITest::TestExtended() {
 
             errln("Syntax Error in test file at line %d, col %d",
                 lineNum, column);
+            goto end_test;
             parseState = PARSE_COMMENT;
             break;
         }
@@ -1611,11 +1613,13 @@ void RBBITest::TestExtended() {
         if (U_FAILURE(status)) {
             errln("ICU Error %s while parsing test file at line %d.",
                 u_errorName(status), lineNum);
+            goto end_test;
             status = U_ZERO_ERROR;
         }
 
     }
 
+end_test:
     delete tp.bi;
     delete tp.expectedBreaks;
     delete tp.srcLine;
@@ -2131,7 +2135,12 @@ private:
 };
 
 
-RBBIWordMonkey::RBBIWordMonkey() {
+RBBIWordMonkey::RBBIWordMonkey() : fMungedText(0),
+                                   fMungedPositions(0),
+                                   fOrigPositions(0),
+                                   fGCFMatcher(0),
+                                   fGCMatcher(0)
+{
     UErrorCode  status = U_ZERO_ERROR;
 
     fSets          = new UVector(status);
@@ -2149,8 +2158,12 @@ RBBIWordMonkey::RBBIWordMonkey() {
     fNumericSet    = new UnicodeSet("[\\p{Line_Break=Numeric}]", status);
     fFormatSet     = new UnicodeSet("[\\p{Format}]", status);
     fExtendSet     = new UnicodeSet("[\\p{Grapheme_Extend}]", status);
-
     fOtherSet      = new UnicodeSet();
+    if(U_FAILURE(status)) {
+      deferredStatus = status;
+      return;
+    }
+
     fOtherSet->complement();
     fOtherSet->removeAll(*fKatakanaSet);
     fOtherSet->removeAll(*fALetterSet);

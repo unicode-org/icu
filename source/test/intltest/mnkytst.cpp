@@ -253,11 +253,16 @@ void CollationMonkeyTest::TestRules(/* char* par */){
 void CollationMonkeyTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationMonkeyTest: ");
-    switch (index) {
-        case 0: name = "TestCompare";   if (exec)   TestCompare(/* par */); break;
-        case 1: name = "TestCollationKey"; if (exec)    TestCollationKey(/* par */); break;
-        case 2: name = "TestRules"; if (exec) TestRules(/* par */); break;
-        default: name = ""; break;
+    if(myCollator) {
+      switch (index) {
+          case 0: name = "TestCompare";   if (exec)   TestCompare(/* par */); break;
+          case 1: name = "TestCollationKey"; if (exec)    TestCollationKey(/* par */); break;
+          case 2: name = "TestRules"; if (exec) TestRules(/* par */); break;
+          default: name = ""; break;
+      }
+    } else {
+      errln("Class collator not instantiated");
+      name = "";
     }
 }
 

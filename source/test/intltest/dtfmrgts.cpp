@@ -368,6 +368,11 @@ void DateFormatRegressionTest::Test4061287(void)
     UErrorCode status = U_ZERO_ERROR;
     
     SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("dd/MM/yyyy"), status);
+    if(U_FAILURE(status)) {
+      errln("Couldn't create SimpleDateFormat, error: %s", u_errorName(status));
+      delete df;
+      return;
+    }
     failure(status, "new SimpleDateFormat");
     //try {
     logln(UnicodeString("") + df->parse("35/01/1971", status));  
@@ -477,6 +482,12 @@ void DateFormatRegressionTest::Test4071441(void)
     // {sfb} Is it OK to cast away const here?
     Calendar *calA = (Calendar*) fmtA->getCalendar();
     Calendar *calB = (Calendar*) fmtB->getCalendar();
+    if(!calA || !calB) {
+      errln("Couldn't get proper calendars, exiting");
+      delete fmtA;
+      delete fmtB;
+      return;
+    }
     UDate epoch = date(0, 0, 0);
     UDate xmas = date(61, UCAL_DECEMBER, 25);
 
@@ -559,6 +570,13 @@ void DateFormatRegressionTest::Test4089106(void)
         TimeZone::setDefault(*z);
         UErrorCode status = U_ZERO_ERROR;
         SimpleDateFormat *f = new SimpleDateFormat(status);
+        if(U_FAILURE(status)) {
+          errln("Couldn't create SimpleDateFormat, error %s", u_errorName(status));
+          delete f;
+          delete def;
+          delete z;
+          return;
+        }
         failure(status, "new SimpleDateFormat");
         if (f->getTimeZone()!= *z)
             errln("Fail: SimpleTimeZone should use TimeZone.getDefault()");
@@ -714,6 +732,11 @@ void DateFormatRegressionTest::Test4103341(void)
     TimeZone::adoptDefault(TimeZone::createTimeZone("CST"));
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *simple = new SimpleDateFormat(UnicodeString("MM/dd/yyyy HH:mm"), status);
+    if(U_FAILURE(status)) {
+      errln("Couldn't create SimpleDateFormat, error %s", u_errorName(status));
+      delete simple;
+      return;
+    }
     failure(status, "new SimpleDateFormat");
     TimeZone *temp = TimeZone::createDefault();
     if(simple->getTimeZone() != *temp)
@@ -734,6 +757,11 @@ void DateFormatRegressionTest::Test4104136(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *sdf = new SimpleDateFormat(status); 
+    if(U_FAILURE(status)) {
+      errln("Couldn't create SimpleDateFormat, error %s", u_errorName(status));
+      delete sdf;
+      return;
+    }
     failure(status, "new SimpleDateFormat");
     UnicodeString pattern = "'time' hh:mm"; 
     sdf->applyPattern(pattern); 
@@ -794,6 +822,11 @@ void DateFormatRegressionTest::Test4104522(void)
     UErrorCode status = U_ZERO_ERROR;
     
     SimpleDateFormat *sdf = new SimpleDateFormat(status);
+    if(U_FAILURE(status)) {
+      errln("Couldn't create SimpleDateFormat, error %s", u_errorName(status));
+      delete sdf;
+      return;
+    }
     failure(status, "new SimpleDateFormat");
     UnicodeString pattern = "'time' hh:mm";
     sdf->applyPattern(pattern);
@@ -832,6 +865,16 @@ void DateFormatRegressionTest::Test4106807(void)
         new SimpleDateFormat(UnicodeString("yyyyMMddHHmmss'a''a'"), status),
         new SimpleDateFormat(UnicodeString("yyyyMMddHHmmss %"), status)
     };
+    if(U_FAILURE(status)) {
+      errln("Couldn't create SimpleDateFormat, error %s", u_errorName(status));
+      delete sdfs[0];
+      delete sdfs[1];
+      delete sdfs[2];
+      delete sdfs[3];
+      delete sdfs[4];
+      return;
+    }
+
     failure(status, "new SimpleDateFormat");
     
     UnicodeString strings [] = {

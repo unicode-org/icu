@@ -148,6 +148,10 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
     logln("Testing getters and setters");
 
     const DateFormatSymbols *syms = pat.getDateFormatSymbols();
+    if(!syms) {
+      errln("Couldn't obtain DateFormatSymbols. Quitting test!");
+      return;
+    }
     DateFormatSymbols *newSyms = new DateFormatSymbols(*syms);
     def.adoptDateFormatSymbols(newSyms);    
     pat_fr.setDateFormatSymbols(*newSyms);

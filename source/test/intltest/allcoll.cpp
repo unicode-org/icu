@@ -36,6 +36,8 @@ CollationDummyTest::CollationDummyTest()
     myCollation = new RuleBasedCollator(ruleset, status);
     if(U_FAILURE(status)){
         errln("ERROR: in creation of rule based collator from ruleset");
+        delete myCollation;
+        myCollation = 0;
     }
 }
 
@@ -191,14 +193,19 @@ void CollationDummyTest::TestJB581(void)
 void CollationDummyTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationDummyTest: ");
-    switch (index) {
-        case 0: name = "TestPrimary";   if (exec)   TestPrimary(/* par */); break;
-        case 1: name = "TestSecondary"; if (exec)   TestSecondary(/* par */); break;
-        case 2: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
-        case 3: name = "TestExtra";     if (exec)   TestExtra(/* par */); break;
-        case 4: name = "TestIdentical"; if (exec)   TestIdentical(/* par */); break;
-        case 5: name = "TestJB581";     if (exec)   TestJB581(/* par */); break;
-        default: name = ""; break;
+    if(myCollation) {
+      switch (index) {
+          case 0: name = "TestPrimary";   if (exec)   TestPrimary(/* par */); break;
+          case 1: name = "TestSecondary"; if (exec)   TestSecondary(/* par */); break;
+          case 2: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
+          case 3: name = "TestExtra";     if (exec)   TestExtra(/* par */); break;
+          case 4: name = "TestIdentical"; if (exec)   TestIdentical(/* par */); break;
+          case 5: name = "TestJB581";     if (exec)   TestJB581(/* par */); break;
+          default: name = ""; break;
+      }
+    } else {
+      errln("Collator couldn't be instantiated!");
+      name = "";
     }
 }
 

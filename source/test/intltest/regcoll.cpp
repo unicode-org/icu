@@ -22,6 +22,12 @@ CollationRegressionTest::CollationRegressionTest()
     UErrorCode status = U_ZERO_ERROR;
 
     en_us = (RuleBasedCollator *)Collator::createInstance(Locale::getUS(), status);
+    if(U_FAILURE(status)) {
+      delete en_us;
+      en_us = 0;
+      errln("Collator creation failed with %s", u_errorName(status));
+      return;
+    }
 }
 
 CollationRegressionTest::~CollationRegressionTest()
@@ -1164,40 +1170,45 @@ void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, const ch
         logln("Collation Regression Tests: ");
     }
 
-    switch (index)
-    {
-        case  0: name = "Test4048446"; if (exec) Test4048446(/* par */); break;
-        case  1: name = "Test4051866"; if (exec) Test4051866(/* par */); break;
-        case  2: name = "Test4053636"; if (exec) Test4053636(/* par */); break;
-        case  3: name = "Test4054238"; if (exec) Test4054238(/* par */); break;
-        case  4: name = "Test4054734"; if (exec) Test4054734(/* par */); break;
-        case  5: name = "Test4054736"; if (exec) Test4054736(/* par */); break;
-        case  6: name = "Test4058613"; if (exec) Test4058613(/* par */); break;
-        case  7: name = "Test4059820"; if (exec) Test4059820(/* par */); break;
-        case  8: name = "Test4060154"; if (exec) Test4060154(/* par */); break;
-        case  9: name = "Test4062418"; if (exec) Test4062418(/* par */); break;
-        case 10: name = "Test4065540"; if (exec) Test4065540(/* par */); break;
-        case 11: name = "Test4066189"; if (exec) Test4066189(/* par */); break;
-        case 12: name = "Test4066696"; if (exec) Test4066696(/* par */); break;
-        case 13: name = "Test4076676"; if (exec) Test4076676(/* par */); break;
-        case 14: name = "Test4078588"; if (exec) Test4078588(/* par */); break;
-        case 15: name = "Test4079231"; if (exec) Test4079231(/* par */); break;
-        case 16: name = "Test4081866"; if (exec) Test4081866(/* par */); break;
-        case 17: name = "Test4087241"; if (exec) Test4087241(/* par */); break;
-        case 18: name = "Test4087243"; if (exec) Test4087243(/* par */); break;
-        case 19: name = "Test4092260"; if (exec) Test4092260(/* par */); break;
-        case 20: name = "Test4095316"; if (exec) Test4095316(/* par */); break;
-        case 21: name = "Test4101940"; if (exec) Test4101940(/* par */); break;
-        case 22: name = "Test4103436"; if (exec) Test4103436(/* par */); break;
-        case 23: name = "Test4114076"; if (exec) Test4114076(/* par */); break;
-        case 24: name = "Test4114077"; if (exec) Test4114077(/* par */); break;
-        case 25: name = "Test4124632"; if (exec) Test4124632(/* par */); break;
-        case 26: name = "Test4132736"; if (exec) Test4132736(/* par */); break;
-        case 27: name = "Test4133509"; if (exec) Test4133509(/* par */); break;
-        case 28: name = "Test4139572"; if (exec) Test4139572(/* par */); break;
-        case 29: name = "Test4141640"; if (exec) Test4141640(/* par */); break;
-        case 30: name = "Test4146160"; if (exec) Test4146160(/* par */); break;
-        default: name = ""; break;
+    if(en_us) {
+      switch (index)
+      {
+          case  0: name = "Test4048446"; if (exec) Test4048446(/* par */); break;
+          case  1: name = "Test4051866"; if (exec) Test4051866(/* par */); break;
+          case  2: name = "Test4053636"; if (exec) Test4053636(/* par */); break;
+          case  3: name = "Test4054238"; if (exec) Test4054238(/* par */); break;
+          case  4: name = "Test4054734"; if (exec) Test4054734(/* par */); break;
+          case  5: name = "Test4054736"; if (exec) Test4054736(/* par */); break;
+          case  6: name = "Test4058613"; if (exec) Test4058613(/* par */); break;
+          case  7: name = "Test4059820"; if (exec) Test4059820(/* par */); break;
+          case  8: name = "Test4060154"; if (exec) Test4060154(/* par */); break;
+          case  9: name = "Test4062418"; if (exec) Test4062418(/* par */); break;
+          case 10: name = "Test4065540"; if (exec) Test4065540(/* par */); break;
+          case 11: name = "Test4066189"; if (exec) Test4066189(/* par */); break;
+          case 12: name = "Test4066696"; if (exec) Test4066696(/* par */); break;
+          case 13: name = "Test4076676"; if (exec) Test4076676(/* par */); break;
+          case 14: name = "Test4078588"; if (exec) Test4078588(/* par */); break;
+          case 15: name = "Test4079231"; if (exec) Test4079231(/* par */); break;
+          case 16: name = "Test4081866"; if (exec) Test4081866(/* par */); break;
+          case 17: name = "Test4087241"; if (exec) Test4087241(/* par */); break;
+          case 18: name = "Test4087243"; if (exec) Test4087243(/* par */); break;
+          case 19: name = "Test4092260"; if (exec) Test4092260(/* par */); break;
+          case 20: name = "Test4095316"; if (exec) Test4095316(/* par */); break;
+          case 21: name = "Test4101940"; if (exec) Test4101940(/* par */); break;
+          case 22: name = "Test4103436"; if (exec) Test4103436(/* par */); break;
+          case 23: name = "Test4114076"; if (exec) Test4114076(/* par */); break;
+          case 24: name = "Test4114077"; if (exec) Test4114077(/* par */); break;
+          case 25: name = "Test4124632"; if (exec) Test4124632(/* par */); break;
+          case 26: name = "Test4132736"; if (exec) Test4132736(/* par */); break;
+          case 27: name = "Test4133509"; if (exec) Test4133509(/* par */); break;
+          case 28: name = "Test4139572"; if (exec) Test4139572(/* par */); break;
+          case 29: name = "Test4141640"; if (exec) Test4141640(/* par */); break;
+          case 30: name = "Test4146160"; if (exec) Test4146160(/* par */); break;
+          default: name = ""; break;
+      }
+    } else {
+      errln("Class collator not instantiated");
+      name = "";
     }
 }
 

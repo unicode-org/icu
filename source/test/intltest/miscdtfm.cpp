@@ -315,6 +315,11 @@ DateFormatMiscTests::test4117335()
     
     UErrorCode status = U_ZERO_ERROR;
     DateFormatSymbols *symbols = new DateFormatSymbols(Locale::getJapan(), status);
+    if(U_FAILURE(status)) {
+      errln("Failure creating DateFormatSymbols, %s", u_errorName(status));
+      delete symbols;
+      return;
+    }
     failure(status, "new DateFormatSymbols");
     int32_t eraCount = 0;
     const UnicodeString *eras = symbols->getEras(eraCount);
