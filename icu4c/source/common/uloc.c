@@ -1042,13 +1042,47 @@ uloc_getKeywords(const char* localeID,
     /*return u_terminateChars(keywords, keywordsCapacity, i, status);*/
 }
 
+static keywordConv variantsToKeywords[] = {
+  { "ca_ES_PREEURO", "ca_ES@currency=ESP" },
+  { "de_AT_PREEURO", "de_AT@currency=ATS" },
+  { "de_DE_PREEURO", "de_DE@currency=DEM" },
+  { "de_LU_PREEURO", "de_LU@currency=EUR" },
+  { "el_GR_PREEURO", "el_GR@currency=GRD" },
+  { "en_BE_PREEURO", "en_BE@currency=BEF" },
+  { "en_IE_PREEURO", "en_IE@currency=IEP" },
+  { "es_ES_PREEURO", "es_ES@currency=ESP" },
+  { "eu_ES_PREEURO", "eu_ES@currency=ESP" },
+  { "fi_FI_PREEURO", "fi_FI@currency=FIM" },
+  { "fr_BE_PREEURO", "fr_BE@currency=BEF" },
+  { "fr_FR_PREEURO", "fr_FR@currency=FRF" },
+  { "fr_LU_PREEURO", "fr_LU@currency=LUF" },
+  { "ga_IE_PREEURO", "ga_IE@currency=IEP" },
+  { "gl_ES_PREEURO", "gl_ES@currency=ESP" },
+  { "it_IT_PREEURO", "it_IT@currency=ITL" },
+  { "nl_BE_PREEURO", "nl_BE@currency=BEF" },
+  { "nl_NL_PREEURO", "nl_NL@currency=NLG" },
+  { "pt_PT_PREEURO", "pt_PT@currency=PTE" },
+  { "de__PHONEBOOK", "de@collation=phonebook" },
+  { "en_GB_EURO", "en_GB@currency=EUR" },
+  { "es__TRADITIONAL", "es@collation=traditional" },
+  { "hi__DIRECT", "hi@collation=direct" },
+  { "ja_JP_TRADITIONAL", "ja_JP@calendar=japanese" },
+  { "th_TH_TRADITIONAL", "th_TH@calendar=buddhist" },
+  { "zh_TW_STROKE", "zh_TW@collation=stroke" },
+  { "zh__PINYIN", "zh@collation=pinyin" }
+};
+
+
 U_CAPI int32_t  U_EXPORT2
-uloc_getName(const char* localeID,
+uloc_getNameInternal(const char* localeID,
              char* name,
              int32_t nameCapacity,
+             UBool stripKeywords,
+             UBool canonizeICU,
              UErrorCode* err)  
 {
-    int32_t i, fieldCount;
+    int32_t i, j, fieldCount;
+    UBool alreadyAddedAKeyword = FALSE;
 
     if(err==NULL || U_FAILURE(*err)) {
         return 0;
@@ -1095,33 +1129,76 @@ uloc_getName(const char* localeID,
                 }
                 ++i;
                 i+=_getVariant(localeID+1, *localeID, name+i, nameCapacity-i);
+                if(canonizeICU) {
+                  /* there is a variant. Maybe it's a variant that should be expressed as a keyword */
+                  for(j = 0; j < sizeof(variantsToKeywords)/sizeof(variantsToKeywords[0]); j++) {
+                    if(nameCapacity > i && uprv_strncmp(name, variantsToKeywords[j].variant, i) == 0) {
+                      int32_t nameLen = 0;
+                      if(stripKeywords) {
+                        nameLen = uprv_strchr(variantsToKeywords[j].name, '@') - variantsToKeywords[j].name;
+                      } else {
+                        nameLen = uprv_strlen(variantsToKeywords[j].name);
+                      }
+                      if(nameCapacity > nameLen) {
+                        uprv_strncpy(name, variantsToKeywords[j].name, nameLen);
+                        name[nameLen] = 0;
+                      }
+                      i = nameLen;
+                      alreadyAddedAKeyword = TRUE;
+                    }
+                  }
+                }
             }
         }
     }
 
-    /* if we do not have a variant tag yet then try a POSIX variant after '@' */
-    if((localeID=uprv_strrchr(localeID, '@'))!=NULL) {
-      const char *keywordIndicator = uprv_strchr(localeID, ULOC_KEYWORD_ASSIGN);
-      const char *separatorIndicator = uprv_strchr(localeID, ULOC_KEYWORD_ITEM_SEPARATOR);
-      if(keywordIndicator && (!separatorIndicator || separatorIndicator > keywordIndicator)) {
-        if(i<nameCapacity) {
-            name[i]='@';
-        }
-        ++i;
-        ++fieldCount;
-        i += locale_getKeywords(localeID+1, '@', name+i, nameCapacity-i, NULL, 0, NULL, TRUE, err);
-      } else if(fieldCount < 2) {
-        do {
-            if(i<nameCapacity) {
-                name[i]='_';
+    if(!stripKeywords) {
+      /* if we do not have a variant tag yet then try a POSIX variant after '@' */
+      if((localeID=uprv_strrchr(localeID, '@'))!=NULL) {
+        const char *keywordIndicator = uprv_strchr(localeID, ULOC_KEYWORD_ASSIGN);
+        const char *separatorIndicator = uprv_strchr(localeID, ULOC_KEYWORD_ITEM_SEPARATOR);
+        if(keywordIndicator && (!separatorIndicator || separatorIndicator > keywordIndicator)) {
+          if(i<nameCapacity) {
+            if(alreadyAddedAKeyword) {
+              name[i]=';';
+            } else {
+              name[i]='@';
             }
-            ++i;
-            ++fieldCount;
-        } while(fieldCount<2);
-        i+=_getVariant(localeID+1, '@', name+i, nameCapacity-i);
+          }
+          ++i;
+          ++fieldCount;
+          i += locale_getKeywords(localeID+1, '@', name+i, nameCapacity-i, NULL, 0, NULL, TRUE, err);
+        } else if(fieldCount < 2) {
+          do {
+              if(i<nameCapacity) {
+                  name[i]='_';
+              }
+              ++i;
+              ++fieldCount;
+          } while(fieldCount<2);
+          i+=_getVariant(localeID+1, '@', name+i, nameCapacity-i);
+        }
       }
     }
     return u_terminateChars(name, nameCapacity, i, err);
+}
+
+U_CAPI int32_t  U_EXPORT2
+uloc_getName(const char* localeID,
+             char* name,
+             int32_t nameCapacity,
+             UErrorCode* err)  
+{
+  return uloc_getNameInternal(localeID, name, nameCapacity, FALSE, FALSE, err);
+}
+
+U_CAPI int32_t  U_EXPORT2
+uloc_getNameNoKeywords(const char* localeID,
+             char* name,
+             int32_t nameCapacity,
+             UErrorCode* err)  
+{
+  return uloc_getNameInternal(localeID, name, nameCapacity, TRUE, FALSE, err);
 }
        
 U_CAPI const char*  U_EXPORT2

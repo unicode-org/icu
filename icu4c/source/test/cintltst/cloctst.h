@@ -81,6 +81,8 @@ static  void TestDisplayNames(void);
  */
  static void doTestDisplayNames(const char* inLocale, int32_t compareIndex);
 
+static void TestVariantCanonization(void);
+
 /**
  * additional intialization for datatables storing expected values
  */
