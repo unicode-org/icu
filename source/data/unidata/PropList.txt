@@ -1,5 +1,5 @@
 # PropList-4.0.0.txt
-# Date: 2003-02-20,17:14:28 GMT [MD]
+# Date: 2003-03-14, 23:37:56 GMT [MD]
 #
 # Unicode Character Database: Extended Properties
 # For documentation, see UCD.html
@@ -572,11 +572,10 @@ FFFFE..FFFFF  ; Noncharacter_Code_Point # Cn   [2]
 0D57          ; Other_Grapheme_Extend # Mc       MALAYALAM AU LENGTH MARK
 0DCF          ; Other_Grapheme_Extend # Mc       SINHALA VOWEL SIGN AELA-PILLA
 0DDF          ; Other_Grapheme_Extend # Mc       SINHALA VOWEL SIGN GAYANUKITTA
-FF9E..FF9F    ; Other_Grapheme_Extend # Lm   [2] HALFWIDTH KATAKANA VOICED SOUND MARK..HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK
 1D165         ; Other_Grapheme_Extend # Mc       MUSICAL SYMBOL COMBINING STEM
 1D16E..1D16F  ; Other_Grapheme_Extend # Mc   [2] MUSICAL SYMBOL COMBINING FLAG-1..MUSICAL SYMBOL COMBINING FLAG-2
 
-# Total code points: 18
+# Total code points: 16
 
 # ================================================
 
@@ -635,28 +634,22 @@ FA27..FA29    ; Unified_Ideograph # Lo   [3] CJK COMPATIBILITY IDEOGRAPH-FA27..C
 
 # ================================================
 
-00AD          ; Other_Default_Ignorable_Code_Point # Cf       SOFT HYPHEN
 034F          ; Other_Default_Ignorable_Code_Point # Mn       COMBINING GRAPHEME JOINER
 115F..1160    ; Other_Default_Ignorable_Code_Point # Lo   [2] HANGUL CHOSEONG FILLER..HANGUL JUNGSEONG FILLER
 180B..180D    ; Other_Default_Ignorable_Code_Point # Mn   [3] MONGOLIAN FREE VARIATION SELECTOR ONE..MONGOLIAN FREE VARIATION SELECTOR THREE
 200B          ; Other_Default_Ignorable_Code_Point # Zs       ZERO WIDTH SPACE
-2060..2063    ; Other_Default_Ignorable_Code_Point # Cf   [4] WORD JOINER..INVISIBLE SEPARATOR
 2064..2069    ; Other_Default_Ignorable_Code_Point # Cn   [6] 
-206A..206F    ; Other_Default_Ignorable_Code_Point # Cf   [6] INHIBIT SYMMETRIC SWAPPING..NOMINAL DIGIT SHAPES
 3164          ; Other_Default_Ignorable_Code_Point # Lo       HANGUL FILLER
 FE00..FE0F    ; Other_Default_Ignorable_Code_Point # Mn  [16] VARIATION SELECTOR-1..VARIATION SELECTOR-16
 FFA0          ; Other_Default_Ignorable_Code_Point # Lo       HALFWIDTH HANGUL FILLER
 FFF0..FFF8    ; Other_Default_Ignorable_Code_Point # Cn   [9] 
-FFF9..FFFB    ; Other_Default_Ignorable_Code_Point # Cf   [3] INTERLINEAR ANNOTATION ANCHOR..INTERLINEAR ANNOTATION TERMINATOR
 E0000         ; Other_Default_Ignorable_Code_Point # Cn       
-E0001         ; Other_Default_Ignorable_Code_Point # Cf       LANGUAGE TAG
 E0002..E001F  ; Other_Default_Ignorable_Code_Point # Cn  [30] 
-E0020..E007F  ; Other_Default_Ignorable_Code_Point # Cf  [96] TAG SPACE..CANCEL TAG
 E0080..E00FF  ; Other_Default_Ignorable_Code_Point # Cn [128] 
 E0100..E01EF  ; Other_Default_Ignorable_Code_Point # Mn [240] VARIATION SELECTOR-17..VARIATION SELECTOR-256
 E01F0..E0FFF  ; Other_Default_Ignorable_Code_Point # Cn [3600] 
 
-# Total code points: 4150
+# Total code points: 4039
 
 # ================================================
 
@@ -690,9 +683,9 @@ E01F0..E0FFF  ; Other_Default_Ignorable_Code_Point # Cn [3600]
 
 # ================================================
 
-2118          ; ID_Start_Exceptions # So       SCRIPT CAPITAL P
-212E          ; ID_Start_Exceptions # So       ESTIMATED SYMBOL
-309B..309C    ; ID_Start_Exceptions # Sk   [2] KATAKANA-HIRAGANA VOICED SOUND MARK..KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
+2118          ; Other_ID_Start # So       SCRIPT CAPITAL P
+212E          ; Other_ID_Start # So       ESTIMATED SYMBOL
+309B..309C    ; Other_ID_Start # Sk   [2] KATAKANA-HIRAGANA VOICED SOUND MARK..KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
 
 # Total code points: 4
 

@@ -1,5 +1,5 @@
 # PropertyValueAliases-4.0.0.txt
-# Date: 2003-03-03, 23:54:40 GMT [MD]
+# Date: 2003-03-12, 23:46:08 GMT [MD]
 #
 # This file contains aliases for property values used in the UCD.
 # These names can be used for XML formats of UCD data, for regular-expression
@@ -397,6 +397,7 @@ sc ; Arab      ; Arabic
 sc ; Armn      ; Armenian
 sc ; Beng      ; Bengali
 sc ; Bopo      ; Bopomofo
+sc ; Brai      ; Braille
 sc ; Buhd      ; Buhid
 sc ; Cans      ; Canadian_Aboriginal
 sc ; Cher      ; Cherokee

@@ -1,5 +1,5 @@
 # PropertyAliases-4.0.0.txt
-# Date: 2003-02-28,18:56:44 GMT [MD]
+# Date: 2003-03-12, 23:46:08 GMT [MD]
 #
 # This file contains aliases for properties used in the UCD.
 # These names can be used for XML formats of UCD data, for regular-expression
@@ -103,7 +103,6 @@ Ideo      ; Ideographic
 IDS       ; ID_Start
 IDSB      ; IDS_Binary_Operator
 IDST      ; IDS_Trinary_Operator
-IDSX      ; ID_Start_Exceptions
 Join_C    ; Join_Control
 LOE       ; Logical_Order_Exception
 Lower     ; Lowercase
@@ -112,6 +111,7 @@ NChar     ; Noncharacter_Code_Point
 OAlpha    ; Other_Alphabetic
 ODI       ; Other_Default_Ignorable_Code_Point
 OGr_Ext   ; Other_Grapheme_Extend
+OIDS      ; Other_ID_Start
 OLower    ; Other_Lowercase
 OMath     ; Other_Math
 OUpper    ; Other_Uppercase
