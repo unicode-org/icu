@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodePropertySet.java,v $
-* $Date: 2001/11/07 19:27:09 $
-* $Revision: 1.5 $
+* $Date: 2001/11/14 02:49:15 $
+* $Revision: 1.6 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -52,7 +52,7 @@ import com.ibm.util.Utility;
  * '+' indicates a supported property.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.5 $ $Date: 2001/11/07 19:27:09 $
+ * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.6 $ $Date: 2001/11/14 02:49:15 $
  */
 class UnicodePropertySet {
 
@@ -303,7 +303,7 @@ class UnicodePropertySet {
      */
     private static UnicodeSet createScriptSet(String valueName) {
         int[] script = UScript.getCode(valueName);
-        if (script[0] == UScript.INVALID_CODE) {
+        if (script == null) {
             // Syntax error; unknown short name
             return null;
         }
