@@ -32,7 +32,7 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.10 $ $Date: 2000/06/27 19:00:38 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.11 $ $Date: 2000/09/25 22:03:05 $
  * @draft
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
@@ -73,7 +73,7 @@ public:
      * <tt>null</tt> then no filtering is applied.
      * @draft
      */
-    CompoundTransliterator(const UnicodeString& ID,
+    CompoundTransliterator(const UnicodeString& id,
                            UTransDirection dir,
                            UnicodeFilter* adoptedFilter,
                            UErrorCode& status);
@@ -83,7 +83,7 @@ public:
      * direction with a NULL filter.
      * @draft
      */
-    CompoundTransliterator(const UnicodeString& ID,
+    CompoundTransliterator(const UnicodeString& id,
                            UErrorCode& status);
 
     /**
@@ -154,7 +154,7 @@ public:
 
 private:
 
-    void init(const UnicodeString& ID,
+    void init(const UnicodeString& id,
               UTransDirection dir,
               UnicodeFilter* adoptedFilter,
               UErrorCode& status);
@@ -165,14 +165,14 @@ private:
      * join(';', map($_.getID(), transliterators).
      */
     UnicodeString joinIDs(Transliterator* const transliterators[],
-                          int32_t count);
+                          int32_t transCount);
 
     /**
      * Splits a string, as in JavaScript
      */
     UnicodeString* split(const UnicodeString& s,
                          UChar divider,
-                         int32_t& count);
+                         int32_t* count);
 
     void freeTransliterators(void);
 
