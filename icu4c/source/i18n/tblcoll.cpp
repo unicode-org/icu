@@ -541,7 +541,9 @@ UColAttributeValue RuleBasedCollator::getAttribute(UColAttribute attr,
 Collator* RuleBasedCollator::safeClone(void)
 {
   UErrorCode intStatus = U_ZERO_ERROR;
-  UCollator *ucol = ucol_safeClone(ucollator, NULL, 0, &intStatus);
+  int32_t buffersize = U_COL_SAFECLONE_BUFFERSIZE;
+  UCollator *ucol = ucol_safeClone(ucollator, NULL, &buffersize, 
+                                   &intStatus);
   if (U_FAILURE(intStatus))
     return NULL;
   int32_t length = 0;
