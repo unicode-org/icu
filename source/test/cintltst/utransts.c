@@ -515,6 +515,7 @@ static void _expect(const UTransliterator* trans,
     if (U_FAILURE(status)) {
         log_err("FAIL: utrans_trans() failed, error=%s\n",
                 u_errorName(status));
+        FreeXReplaceable(&xrep);
         return;
     }
 
@@ -538,6 +539,7 @@ static void _expect(const UTransliterator* trans,
     if (U_FAILURE(status)) {
         log_err("FAIL: utrans_transIncremental() failed, error=%s\n",
                 u_errorName(status));
+        FreeXReplaceable(&xrep);
         return;
     }
 
