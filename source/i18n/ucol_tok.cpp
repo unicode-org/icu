@@ -920,7 +920,10 @@ ucol_tok_parseNextToken(UColTokenParser *src,
 
             wasInQuote = TRUE;
 
-            ch = *(++(src->current)); 
+            do {
+              ch = *(++(src->current)); 
+              // skip whitespace between '|' and the character
+            } while (uprv_isRuleWhiteSpace(ch));
             break;
           
             //charsOffset = 0;
