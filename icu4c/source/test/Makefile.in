@@ -13,10 +13,12 @@ include $(top_builddir)/icudefs.mk
 ## Build directory information
 subdir = test
 
+@ICUIO_TRUE@IOTEST = iotest
+
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
-SUBDIRS = testdata intltest cintltst
+SUBDIRS = testdata intltest $(IOTEST) cintltst
 
 ## List of phony targets
 .PHONY : everything all all-local all-recursive install install-local		\
