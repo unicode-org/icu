@@ -20,6 +20,7 @@
 #include "ucol_bld.h" 
 #include "ucln_in.h" 
 #include "unicode/uchar.h"
+#include "umutex.h"
 
 
 static const InverseTableHeader* invUCA = NULL;

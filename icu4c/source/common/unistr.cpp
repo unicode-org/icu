@@ -24,7 +24,6 @@
 #include "cstring.h"
 #include "cmemory.h"
 #include "unicode/ustring.h"
-#include "mutex.h"
 #include "unicode/unistr.h"
 #include "unicode/unicode.h"
 #include "unicode/ucnv.h"
