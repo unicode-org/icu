@@ -76,21 +76,38 @@
  * change the now shared levels for (L1).
  */
 
-/* prototypes --------------------------------------------------------------- */
+/* handle trailing WS (L1) -------------------------------------------------- */
 
+/*
+ * setTrailingWSStart() sets the start index for a trailing
+ * run of WS in the line. This is necessary because we do not modify
+ * the paragraph's levels array that we just point into.
+ * Using trailingWSStart is another form of performing (L1).
+ *
+ * To make subsequent operations easier, we also include the run
+ * before the WS if it is at the paraLevel - we merge the two here.
+ */
 static void
-setTrailingWSStart(UBiDi *pBiDi);
+setTrailingWSStart(UBiDi *pBiDi) {
+    /* pBiDi->direction!=UBIDI_MIXED */
 
-static void
-getSingleRun(UBiDi *pBiDi, UBiDiLevel level);
+    const DirProp *dirProps=pBiDi->dirProps;
+    UBiDiLevel *levels=pBiDi->levels;
+    int32_t start=pBiDi->length;
+    UBiDiLevel paraLevel=pBiDi->paraLevel;
 
-static void
-reorderLine(UBiDi *pBiDi, UBiDiLevel minLevel, UBiDiLevel maxLevel);
+    /* go backwards across all WS, BN, explicit codes */
+    while(start>0 && DIRPROP_FLAG(dirProps[start-1])&MASK_WS) {
+        --start;
+    }
 
-static UBool
-prepareReorder(const UBiDiLevel *levels, int32_t length,
-               int32_t *indexMap,
-               UBiDiLevel *pMinLevel, UBiDiLevel *pMaxLevel);
+    /* if the WS run can be merged with the previous run then do so here */
+    while(start>0 && levels[start-1]==paraLevel) {
+        --start;
+    }
+
+    pBiDi->trailingWSStart=start;
+}
 
 /* ubidi_setLine ------------------------------------------------------------ */
 
@@ -295,39 +312,6 @@ ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
     }
 }
 
-/* handle trailing WS (L1) -------------------------------------------------- */
-
-/*
- * setTrailingWSStart() sets the start index for a trailing
- * run of WS in the line. This is necessary because we do not modify
- * the paragraph's levels array that we just point into.
- * Using trailingWSStart is another form of performing (L1).
- *
- * To make subsequent operations easier, we also include the run
- * before the WS if it is at the paraLevel - we merge the two here.
- */
-static void
-setTrailingWSStart(UBiDi *pBiDi) {
-    /* pBiDi->direction!=UBIDI_MIXED */
-
-    const DirProp *dirProps=pBiDi->dirProps;
-    UBiDiLevel *levels=pBiDi->levels;
-    int32_t start=pBiDi->length;
-    UBiDiLevel paraLevel=pBiDi->paraLevel;
-
-    /* go backwards across all WS, BN, explicit codes */
-    while(start>0 && DIRPROP_FLAG(dirProps[start-1])&MASK_WS) {
-        --start;
-    }
-
-    /* if the WS run can be merged with the previous run then do so here */
-    while(start>0 && levels[start-1]==paraLevel) {
-        --start;
-    }
-
-    pBiDi->trailingWSStart=start;
-}
-
 /* runs API functions ------------------------------------------------------- */
 
 U_CAPI int32_t U_EXPORT2
@@ -364,6 +348,144 @@ ubidi_getVisualRun(UBiDi *pBiDi, int32_t runIndex,
             }
         }
         return (UBiDiDirection)GET_ODD_BIT(start);
+    }
+}
+
+/* in trivial cases there is only one trivial run; called by ubidi_getRuns() */
+static void
+getSingleRun(UBiDi *pBiDi, UBiDiLevel level) {
+    /* simple, single-run case */
+    pBiDi->runs=pBiDi->simpleRuns;
+    pBiDi->runCount=1;
+
+    /* fill and reorder the single run */
+    pBiDi->runs[0].logicalStart=MAKE_INDEX_ODD_PAIR(0, level);
+    pBiDi->runs[0].visualLimit=pBiDi->length;
+}
+
+/* reorder the runs array (L2) ---------------------------------------------- */
+
+/*
+ * Reorder the same-level runs in the runs array.
+ * Here, runCount>1 and maxLevel>=minLevel>=paraLevel.
+ * All the visualStart fields=logical start before reordering.
+ * The "odd" bits are not set yet.
+ *
+ * Reordering with this data structure lends itself to some handy shortcuts:
+ *
+ * Since each run is moved but not modified, and since at the initial maxLevel
+ * each sequence of same-level runs consists of only one run each, we
+ * don't need to do anything there and can predecrement maxLevel.
+ * In many simple cases, the reordering is thus done entirely in the
+ * index mapping.
+ * Also, reordering occurs only down to the lowest odd level that occurs,
+ * which is minLevel|1. However, if the lowest level itself is odd, then
+ * in the last reordering the sequence of the runs at this level or higher
+ * will be all runs, and we don't need the elaborate loop to search for them.
+ * This is covered by ++minLevel instead of minLevel|=1 followed
+ * by an extra reorder-all after the reorder-some loop.
+ * About a trailing WS run:
+ * Such a run would need special treatment because its level is not
+ * reflected in levels[] if this is not a paragraph object.
+ * Instead, all characters from trailingWSStart on are implicitly at
+ * paraLevel.
+ * However, for all maxLevel>paraLevel, this run will never be reordered
+ * and does not need to be taken into account. maxLevel==paraLevel is only reordered
+ * if minLevel==paraLevel is odd, which is done in the extra segment.
+ * This means that for the main reordering loop we don't need to consider
+ * this run and can --runCount. If it is later part of the all-runs
+ * reordering, then runCount is adjusted accordingly.
+ */
+static void
+reorderLine(UBiDi *pBiDi, UBiDiLevel minLevel, UBiDiLevel maxLevel) {
+    Run *runs;
+    UBiDiLevel *levels;
+    int32_t firstRun, endRun, limitRun, runCount,
+    temp;
+
+    /* nothing to do? */
+    if(maxLevel<=(minLevel|1)) {
+        return;
+    }
+
+    /*
+     * Reorder only down to the lowest odd level
+     * and reorder at an odd minLevel in a separate, simpler loop.
+     * See comments above for why minLevel is always incremented.
+     */
+    ++minLevel;
+
+    runs=pBiDi->runs;
+    levels=pBiDi->levels;
+    runCount=pBiDi->runCount;
+
+    /* do not include the WS run at paraLevel<=old minLevel except in the simple loop */
+    if(pBiDi->trailingWSStart<pBiDi->length) {
+        --runCount;
+    }
+
+    while(--maxLevel>=minLevel) {
+        firstRun=0;
+
+        /* loop for all sequences of runs */
+        for(;;) {
+            /* look for a sequence of runs that are all at >=maxLevel */
+            /* look for the first run of such a sequence */
+            while(firstRun<runCount && levels[runs[firstRun].logicalStart]<maxLevel) {
+                ++firstRun;
+            }
+            if(firstRun>=runCount) {
+                break;  /* no more such runs */
+            }
+
+            /* look for the limit run of such a sequence (the run behind it) */
+            for(limitRun=firstRun; ++limitRun<runCount && levels[runs[limitRun].logicalStart]>=maxLevel;) {}
+
+            /* Swap the entire sequence of runs from firstRun to limitRun-1. */
+            endRun=limitRun-1;
+            while(firstRun<endRun) {
+                temp=runs[firstRun].logicalStart;
+                runs[firstRun].logicalStart=runs[endRun].logicalStart;
+                runs[endRun].logicalStart=temp;
+
+                temp=runs[firstRun].visualLimit;
+                runs[firstRun].visualLimit=runs[endRun].visualLimit;
+                runs[endRun].visualLimit=temp;
+
+                ++firstRun;
+                --endRun;
+            }
+
+            if(limitRun==runCount) {
+                break;  /* no more such runs */
+            } else {
+                firstRun=limitRun+1;
+            }
+        }
+    }
+
+    /* now do maxLevel==old minLevel (==odd!), see above */
+    if(!(minLevel&1)) {
+        firstRun=0;
+
+        /* include the trailing WS run in this complete reordering */
+        if(pBiDi->trailingWSStart==pBiDi->length) {
+            --runCount;
+        }
+
+        /* Swap the entire sequence of all runs. (endRun==runCount) */
+        while(firstRun<runCount) {
+            temp=runs[firstRun].logicalStart;
+            runs[firstRun].logicalStart=runs[runCount].logicalStart;
+            runs[runCount].logicalStart=temp;
+
+            temp=runs[firstRun].visualLimit;
+            runs[firstRun].visualLimit=runs[runCount].visualLimit;
+            runs[runCount].visualLimit=temp;
+
+            ++firstRun;
+            --runCount;
+        }
     }
 }
 
@@ -505,142 +627,42 @@ ubidi_getRuns(UBiDi *pBiDi) {
     return TRUE;
 }
 
-/* in trivial cases there is only one trivial run; called by ubidi_getRuns() */
-static void
-getSingleRun(UBiDi *pBiDi, UBiDiLevel level) {
-    /* simple, single-run case */
-    pBiDi->runs=pBiDi->simpleRuns;
-    pBiDi->runCount=1;
+static UBool
+prepareReorder(const UBiDiLevel *levels, int32_t length,
+               int32_t *indexMap,
+               UBiDiLevel *pMinLevel, UBiDiLevel *pMaxLevel) {
+    int32_t start;
+    UBiDiLevel level, minLevel, maxLevel;
 
-    /* fill and reorder the single run */
-    pBiDi->runs[0].logicalStart=MAKE_INDEX_ODD_PAIR(0, level);
-    pBiDi->runs[0].visualLimit=pBiDi->length;
-}
-
-/* reorder the runs array (L2) ---------------------------------------------- */
-
-/*
- * Reorder the same-level runs in the runs array.
- * Here, runCount>1 and maxLevel>=minLevel>=paraLevel.
- * All the visualStart fields=logical start before reordering.
- * The "odd" bits are not set yet.
- *
- * Reordering with this data structure lends itself to some handy shortcuts:
- *
- * Since each run is moved but not modified, and since at the initial maxLevel
- * each sequence of same-level runs consists of only one run each, we
- * don't need to do anything there and can predecrement maxLevel.
- * In many simple cases, the reordering is thus done entirely in the
- * index mapping.
- * Also, reordering occurs only down to the lowest odd level that occurs,
- * which is minLevel|1. However, if the lowest level itself is odd, then
- * in the last reordering the sequence of the runs at this level or higher
- * will be all runs, and we don't need the elaborate loop to search for them.
- * This is covered by ++minLevel instead of minLevel|=1 followed
- * by an extra reorder-all after the reorder-some loop.
- * About a trailing WS run:
- * Such a run would need special treatment because its level is not
- * reflected in levels[] if this is not a paragraph object.
- * Instead, all characters from trailingWSStart on are implicitly at
- * paraLevel.
- * However, for all maxLevel>paraLevel, this run will never be reordered
- * and does not need to be taken into account. maxLevel==paraLevel is only reordered
- * if minLevel==paraLevel is odd, which is done in the extra segment.
- * This means that for the main reordering loop we don't need to consider
- * this run and can --runCount. If it is later part of the all-runs
- * reordering, then runCount is adjusted accordingly.
- */
-static void
-reorderLine(UBiDi *pBiDi, UBiDiLevel minLevel, UBiDiLevel maxLevel) {
-    Run *runs;
-    UBiDiLevel *levels;
-    int32_t firstRun, endRun, limitRun, runCount,
-    temp;
-
-    /* nothing to do? */
-    if(maxLevel<=(minLevel|1)) {
-        return;
+    if(levels==NULL || length<=0) {
+        return FALSE;
     }
 
-    /*
-     * Reorder only down to the lowest odd level
-     * and reorder at an odd minLevel in a separate, simpler loop.
-     * See comments above for why minLevel is always incremented.
-     */
-    ++minLevel;
-
-    runs=pBiDi->runs;
-    levels=pBiDi->levels;
-    runCount=pBiDi->runCount;
-
-    /* do not include the WS run at paraLevel<=old minLevel except in the simple loop */
-    if(pBiDi->trailingWSStart<pBiDi->length) {
-        --runCount;
-    }
-
-    while(--maxLevel>=minLevel) {
-        firstRun=0;
-
-        /* loop for all sequences of runs */
-        for(;;) {
-            /* look for a sequence of runs that are all at >=maxLevel */
-            /* look for the first run of such a sequence */
-            while(firstRun<runCount && levels[runs[firstRun].logicalStart]<maxLevel) {
-                ++firstRun;
-            }
-            if(firstRun>=runCount) {
-                break;  /* no more such runs */
-            }
-
-            /* look for the limit run of such a sequence (the run behind it) */
-            for(limitRun=firstRun; ++limitRun<runCount && levels[runs[limitRun].logicalStart]>=maxLevel;) {}
-
-            /* Swap the entire sequence of runs from firstRun to limitRun-1. */
-            endRun=limitRun-1;
-            while(firstRun<endRun) {
-                temp=runs[firstRun].logicalStart;
-                runs[firstRun].logicalStart=runs[endRun].logicalStart;
-                runs[endRun].logicalStart=temp;
-
-                temp=runs[firstRun].visualLimit;
-                runs[firstRun].visualLimit=runs[endRun].visualLimit;
-                runs[endRun].visualLimit=temp;
-
-                ++firstRun;
-                --endRun;
-            }
-
-            if(limitRun==runCount) {
-                break;  /* no more such runs */
-            } else {
-                firstRun=limitRun+1;
-            }
+    /* determine minLevel and maxLevel */
+    minLevel=UBIDI_MAX_EXPLICIT_LEVEL+1;
+    maxLevel=0;
+    for(start=length; start>0;) {
+        level=levels[--start];
+        if(level>UBIDI_MAX_EXPLICIT_LEVEL+1) {
+            return FALSE;
+        }
+        if(level<minLevel) {
+            minLevel=level;
+        }
+        if(level>maxLevel) {
+            maxLevel=level;
         }
     }
+    *pMinLevel=minLevel;
+    *pMaxLevel=maxLevel;
 
-    /* now do maxLevel==old minLevel (==odd!), see above */
-    if(!(minLevel&1)) {
-        firstRun=0;
-
-        /* include the trailing WS run in this complete reordering */
-        if(pBiDi->trailingWSStart==pBiDi->length) {
-            --runCount;
-        }
-
-        /* Swap the entire sequence of all runs. (endRun==runCount) */
-        while(firstRun<runCount) {
-            temp=runs[firstRun].logicalStart;
-            runs[firstRun].logicalStart=runs[runCount].logicalStart;
-            runs[runCount].logicalStart=temp;
-
-            temp=runs[firstRun].visualLimit;
-            runs[firstRun].visualLimit=runs[runCount].visualLimit;
-            runs[runCount].visualLimit=temp;
-
-            ++firstRun;
-            --runCount;
-        }
+    /* initialize the index map */
+    for(start=length; start>0;) {
+        --start;
+        indexMap[start]=start;
     }
+
+    return TRUE;
 }
 
 /* reorder a line based on a levels array (L2) ------------------------------ */
@@ -766,44 +788,6 @@ ubidi_reorderVisual(const UBiDiLevel *levels, int32_t length, int32_t *indexMap)
             }
         }
     } while(--maxLevel>=minLevel);
-}
-
-static UBool
-prepareReorder(const UBiDiLevel *levels, int32_t length,
-               int32_t *indexMap,
-               UBiDiLevel *pMinLevel, UBiDiLevel *pMaxLevel) {
-    int32_t start;
-    UBiDiLevel level, minLevel, maxLevel;
-
-    if(levels==NULL || length<=0) {
-        return FALSE;
-    }
-
-    /* determine minLevel and maxLevel */
-    minLevel=UBIDI_MAX_EXPLICIT_LEVEL+1;
-    maxLevel=0;
-    for(start=length; start>0;) {
-        level=levels[--start];
-        if(level>UBIDI_MAX_EXPLICIT_LEVEL+1) {
-            return FALSE;
-        }
-        if(level<minLevel) {
-            minLevel=level;
-        }
-        if(level>maxLevel) {
-            maxLevel=level;
-        }
-    }
-    *pMinLevel=minLevel;
-    *pMaxLevel=maxLevel;
-
-    /* initialize the index map */
-    for(start=length; start>0;) {
-        --start;
-        indexMap[start]=start;
-    }
-
-    return TRUE;
 }
 
 /* API functions for logical<->visual mapping ------------------------------- */
