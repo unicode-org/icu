@@ -131,10 +131,10 @@ void
 TestChoiceFormat::TestComplexExample( void )
 {
     UErrorCode status = U_ZERO_ERROR;
-    const double filelimits[] = {0,1,2};
-    const UnicodeString filepart[] = {"are no files","is one file","are {2} files"};
+    const double filelimits[] = {-1, 0,1,2};
+    const UnicodeString filepart[] = {"are corrupted files", "are no files","is one file","are {2} files"};
 
-    ChoiceFormat* fileform = new ChoiceFormat( filelimits, filepart, 3);
+    ChoiceFormat* fileform = new ChoiceFormat( filelimits, filepart, 4);
 
     if (!fileform) { 
         it_errln("***  test_complex_example fileform"); 
@@ -181,7 +181,7 @@ TestChoiceFormat::TestComplexExample( void )
     it_out << "MessageFormat toPattern: " << res1 << endl;
     fileform->toPattern( res1 );
     it_out << "ChoiceFormat toPattern: " << res1 << endl;
-    if (res1 == "0.0#are no files|1.0#is one file|2.0#are {2} files") {
+    if (res1 == "-1.0#are corrupted files|0.0#are no files|1.0#is one file|2.0#are {2} files") {
         it_out << "toPattern tested!" << endl;
     }else{
         it_errln("***  ChoiceFormat to Pattern result!");
@@ -190,6 +190,7 @@ TestChoiceFormat::TestComplexExample( void )
     FieldPosition fpos(0);
 
     UnicodeString checkstr[] = { 
+        "There are corrupted files on Disk_A",
         "There are no files on Disk_A",
         "There is one file on Disk_A",
         "There are 2 files on Disk_A",
@@ -207,7 +208,8 @@ TestChoiceFormat::TestComplexExample( void )
 
 
     int32_t i;
-    for (i = 0; i < 4; ++i) {
+    int32_t start = -1;
+    for (i = start; i < 4; ++i) {
         str = "";
         status = U_ZERO_ERROR;
         testArgs[0] = Formattable((int32_t)i);
@@ -220,7 +222,7 @@ TestChoiceFormat::TestComplexExample( void )
             return;
         }
         it_out << i << " -> " << res2 << endl;
-        if (res2 != checkstr[i]) {
+        if (res2 != checkstr[i - start]) {
             it_errln("***  test_complex_example res string");
             it_out << "*** " << i << " -> '" << res2 << "' unlike '" << checkstr[i] << "' ! " << endl;
         }
@@ -231,20 +233,22 @@ TestChoiceFormat::TestComplexExample( void )
     //
     int32_t retCount;
     const double* retLimits = fileform->getLimits( retCount );
-    if ((retCount == 3) && (retLimits)
-    && (retLimits[0] == 0.0)
-    && (retLimits[1] == 1.0)
-    && (retLimits[2] == 2.0)) {
+    if ((retCount == 4) && (retLimits)
+    && (retLimits[0] == -1.0)
+    && (retLimits[1] == 0.0)
+    && (retLimits[2] == 1.0)
+    && (retLimits[3] == 2.0)) {
         it_out << "getLimits tested!" << endl;
     }else{
         it_errln("***  getLimits unexpected result!");
     }
 
     const UnicodeString* retFormats = fileform->getFormats( retCount );
-    if ((retCount == 3) && (retFormats)
-    && (retFormats[0] == "are no files") 
-    && (retFormats[1] == "is one file")
-    && (retFormats[2] == "are {2} files")) {
+    if ((retCount == 4) && (retFormats)
+    && (retFormats[0] == "are corrupted files") 
+    && (retFormats[1] == "are no files") 
+    && (retFormats[2] == "is one file")
+    && (retFormats[3] == "are {2} files")) {
         it_out << "getFormats tested!" << endl;
     }else{
         it_errln("***  getFormats unexpected result!");
