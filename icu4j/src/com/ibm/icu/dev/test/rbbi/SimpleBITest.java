@@ -107,19 +107,19 @@ public class SimpleBITest extends TestFmwk{
     public void testWordBreak() throws Exception {
         BreakIterator wordBreak = BreakIterator.getWordInstance(new Locale("en", "US", "TEST"));
         int breaks = doTest(wordBreak);
-        errln(String.valueOf(breaks));
+        logln(String.valueOf(breaks));
 	}
 
     public void testLineBreak() throws Exception {
         BreakIterator lineBreak = BreakIterator.getLineInstance(new Locale("en", "US", "TEST"));
         int breaks = doTest(lineBreak);
-        errln(String.valueOf(breaks));
+        logln(String.valueOf(breaks));
 	}
 
     public void testSentenceBreak() throws Exception {
         BreakIterator sentenceBreak = BreakIterator.getSentenceInstance(new Locale("en", "US", "TEST"));
         int breaks = doTest(sentenceBreak);
-        errln(String.valueOf(breaks));
+        logln(String.valueOf(breaks));
     }
 
     private int doTest(BreakIterator bi) {
