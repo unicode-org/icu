@@ -105,8 +105,7 @@ case $platform in
                 $configure "$@"  ;;
 
         SOLARISX86)
-                echo Running configure "$@" for SOLARISX86 using native CC
-compiler
+                echo Running configure "$@" for SOLARISX86 using native CC compiler
                 CC=cc; export CC
                 CXX=CC; export CXX
                 CXX_FLAGS="-w -O";export CXX_FLAGS
