@@ -23,11 +23,7 @@
 #include "pkgtypes.h"
 
 
-#ifdef WIN32
 const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim, const char *brk, int32_t quote)
-#else
-const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim, const char *brk)
-#endif
 {
   int32_t ln = 0;
   char buffer[1024];
@@ -36,8 +32,8 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
       if(l->str)
       {
 		uprv_strcpy(buffer, l->str);
-#ifdef WIN32
-		if(quote < 0) { /* remove quotes */
+
+        if(quote < 0) { /* remove quotes */
 			if(buffer[uprv_strlen(buffer)-1] == '"') {
 				buffer[uprv_strlen(buffer)-1] = '\0';
 			}
@@ -53,7 +49,6 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
 				uprv_strcat(buffer, "\"");
 			}
 		}
-#endif
         T_FileStream_write(s, buffer, uprv_strlen(buffer));
       }
 
@@ -74,11 +69,7 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
 }
 
 
-#ifdef WIN32
 const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim, int32_t quote)
-#else
-const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim)
-#endif
 {
 	char buffer[1024];
   while(l != NULL)
@@ -86,7 +77,6 @@ const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim)
       if(l->str)
       {
 		uprv_strcpy(buffer, l->str);
-#ifdef WIN32
 		if(quote < 0) { /* remove quotes */
 			if(buffer[uprv_strlen(buffer)-1] == '"') {
 				buffer[uprv_strlen(buffer)-1] = '\0';
@@ -103,7 +93,6 @@ const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim)
 				uprv_strcat(buffer, "\"");
 			}
 		}
-#endif
         T_FileStream_write(s, buffer, uprv_strlen(buffer));
       }
 
