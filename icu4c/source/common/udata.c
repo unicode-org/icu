@@ -344,8 +344,8 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
     umtx_unlock(NULL);
 
     if (*pErr == U_USING_DEFAULT_WARNING || U_FAILURE(*pErr)) {
-        /*  TODO  - get rid of newElement->item too. */
         uprv_free(newElement->name);
+        uprv_free(newElement->item);
         uprv_free(newElement);
         return oldValue;
     }
