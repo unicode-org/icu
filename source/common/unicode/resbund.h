@@ -49,8 +49,6 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
-#include <wchar.h>
-
 
 class RBHashtable;
 class ResourceBundleData;
