@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/POSIXLocaleReader.java,v $ 
- * $Date: 2002/02/16 03:05:30 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/08/01 00:08:57 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -292,7 +292,7 @@ public class POSIXLocaleReader {
                     t.put(label, values.elementAt(0));
                 }
                 if (input.getState() != EOL_TOKEN) {
-                    System.out.println(label);
+                    System.out.println("Extraneous text after label: " +label);
                     throw new IOException();
                 }
                 input.nextToken();
