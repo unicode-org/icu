@@ -5,16 +5,17 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/USerializedSet.java,v $ 
- * $Date: 2002/06/20 01:18:09 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/06/09 23:31:09 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
 */
 
 package com.ibm.icu.impl;
 /**
- * @version 	1.0
+ * @version 	1.1
  * @author     Markus W. Scherer
+ * Ram: Add documentation, remove unwanted methods, improve coverage.
  */
 
 /**
@@ -24,7 +25,13 @@ package com.ibm.icu.impl;
  * @internal
  */
 public final class USerializedSet {
-	
+    /**
+     * Fill in the given serialized set object.
+     * @param src pointer to start of array
+     * @param srcLength length of array
+     * @return true if the given array is valid, otherwise false
+     * @draft ICU 2.4
+     */
     public final boolean getSet(char src[], int srcStart) {
         // leave most argument checking up to Java exceptions
         array=null;
@@ -54,72 +61,13 @@ public final class USerializedSet {
         //arrayOffset=srcStart;
         return true;
     }
-
-    public final  boolean  contains(int c) {
-        if(c<0 || 0x10ffff<c) {
-            return false;
-        }
-
-        if(c<=0xffff) {
-            /* find c in the BMP part */
-            int i, bmpLimit=arrayOffset+bmpLength;
-            for(i=arrayOffset; i<bmpLimit && c>=array[i]; ++i) {}
-            return (((i-arrayOffset)&1)>0);
-        } else {
-            /* find c in the supplementary part */
-            int i, limit=arrayOffset+length;
-            char high=(char)(c>>16), low=(char)c;
-            for(i=arrayOffset+bmpLength;
-                i<limit && (high>array[i] || (high==array[i] && low>=array[i+1]));
-                i+=2) {}
-
-            /* count pairs of 16-bit units even per BMP and check if the number of pairs is odd */
-            return ((i+bmpLength-arrayOffset)&2)!=0;
-        }
-    }
-
-    public final  boolean countRanges() {
-        return ((bmpLength+(length-bmpLength)/2+1)/2)>0;
-    }
-
-    public final  boolean getRange(int rangeIndex, int range[]) {
-        if(rangeIndex<0) {
-            return false;
-        }
-
-		range=new int[2];
-		
-        rangeIndex*=2; /* address start/limit pairs */
-        if(rangeIndex<bmpLength) {
-            range[0]=array[arrayOffset+rangeIndex++];
-            if(rangeIndex<bmpLength) {
-                range[1]=array[arrayOffset+rangeIndex];
-            } else if(rangeIndex<length) {
-                range[1]=(((int)array[arrayOffset+rangeIndex])<<16)|array[arrayOffset+rangeIndex+1];
-            } else {
-                range[1]=0x110000;
-            }
-            return true;
-        } else {
-            rangeIndex-=bmpLength;
-            rangeIndex*=2; /* address pairs of pairs of units */
-            int suppLength=length-bmpLength;
-            if(rangeIndex<suppLength) {
-                int offset=arrayOffset+bmpLength;
-                range[0]=(((int)array[offset+rangeIndex])<<16)|array[offset+rangeIndex+1];
-                rangeIndex+=2;
-                if(rangeIndex<suppLength) {
-                range[1]=(((int)array[offset+rangeIndex])<<16)|array[offset+rangeIndex+1];
-                } else {
-                    range[1]=0x110000;
-                }
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-	public final void setSerializedToOne(int c) {
+    
+    /**
+     * Set the USerializedSet to contain the given character (and nothing
+     * else).
+     * @draft ICU 2.4
+     */
+	public final void setToOne(int c) {
 	    if( 0x10ffff<c) {
 	        return;
 	    }
@@ -150,8 +98,20 @@ public final class USerializedSet {
 	    }
 	}
 	
-	
-	public final boolean getSerializedRange( int rangeIndex,int[] range) {
+    /**
+     * Returns a range of characters contained in the given serialized
+     * set.
+     * @param set the serialized set
+     * @param rangeIndex a non-negative integer in the range 0..
+     * uset_getSerializedRangeCount(set)-1
+     * @param pStart pointer to variable to receive first character
+     * in range, inclusive
+     * @param pEnd pointer to variable to receive last character in range,
+     * inclusive
+     * @return true if rangeIndex is valid, otherwise false
+     * @draft ICU 2.4
+     */
+	public final boolean getRange( int rangeIndex,int[] range) {
 	    if( rangeIndex<0) {
 	        return false;
 	    }
@@ -193,7 +153,15 @@ public final class USerializedSet {
 	        }
 	    }
 	}
-	public final boolean serializedContains(int c) {
+    
+    /**
+     * Returns true if the given USerializedSet contains the given
+     * character.
+     * @param set the serialized set
+     * @return true if set contains c
+     * @draft ICU 2.4
+     */
+	public final boolean contains(int c) {
 	
 	    if(c>0x10ffff) {
 	        return false;
@@ -216,11 +184,19 @@ public final class USerializedSet {
 	        return (boolean)(((i+bmpLength)&2)!=0);
 	    }
 	}
-	
-	public final int countSerializedRanges() {
+    /**
+     * Returns the number of disjoint ranges of characters contained in
+     * the given serialized set.  Ignores any strings contained in the
+     * set.
+     * @param set the serialized set
+     * @return a non-negative integer counting the character ranges
+     * contained in set
+     * @draft ICU 2.4
+     */
+	public final int countRanges() {
 	    return (bmpLength+(length-bmpLength)/2+1)/2;
 	}
-
+    
     private char array[] = new char[8];
     private int arrayOffset, bmpLength, length;
 }

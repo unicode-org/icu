@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CanonicalIterator.java,v $
- * $Date: 2003/06/03 18:49:33 $
- * $Revision: 1.15 $
+ * $Date: 2003/06/09 23:31:10 $
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -303,7 +303,7 @@ public final class CanonicalIterator {
             }
             int j=0;
             // if so, see which decompositions match
-            for(j = 0, cp = end+1; cp <= end ||starts.getSerializedRange(j++, range); ++cp) {
+            for(j = 0, cp = end+1; cp <= end ||starts.getRange(j++, range); ++cp) {
                 if(cp>end){
                     cp=range[0];
                     end=range[1];

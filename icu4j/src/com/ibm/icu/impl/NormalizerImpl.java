@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2003/06/03 18:49:32 $
- * $Revision: 1.21 $
+ * $Date: 2003/06/09 23:31:09 $
+ * $Revision: 1.22 $
  *******************************************************************************
  */
  
@@ -378,9 +378,11 @@ public final class NormalizerImpl {
 	 * Given isNorm32HangulOrJamo(),
 	 * is this a Hangul syllable or a Jamo?
 	 */
+     ///CLOVER:OFF
 	private static  boolean isHangulJamoNorm32HangulOrJamoL(long norm32) {
 	    return norm32<MIN_JAMO_V;
 	}
+    ///CLOVER:ON
 	
 	/*
 	 * Given norm32 for Jamo V or T,
@@ -405,6 +407,7 @@ public final class NormalizerImpl {
 	    return ((UNSIGNED_INT_MASK) & 
                     NormTrieImpl.normTrie.getTrailValue((int)norm32, c2));
 	}
+    ///CLOVER:OFF
 	private static long getNorm32(int c){
         return (UNSIGNED_INT_MASK&(NormTrieImpl.normTrie.getCodePointValue(c)));
     }
@@ -417,6 +420,8 @@ public final class NormalizerImpl {
         }
         return norm32; 
     }
+    ///CLOVER:ON
+    
 	
     /*
 	 * get a norm32 from text with complete code points
@@ -1902,11 +1907,11 @@ public final class NormalizerImpl {
 	    }
 	    return false;
 	}
-    
+    /*
     public static int compose(char[] src, char[] dest,boolean compat, UnicodeSet nx){
         return compose(src,0,src.length,dest,0,dest.length,compat, nx);
     }
-    
+    */
     
     public static int compose(char[] src, int srcIndex, int srcLimit,
                               char[] dest,int destIndex,int destLimit,
@@ -2594,7 +2599,7 @@ public final class NormalizerImpl {
 	                } else {
 	                    /* other result values are BMP code points for 
                          * single-code point sets */
-	                    fillSet.setSerializedToOne(i);
+	                    fillSet.setToOne(i);
 	                    return true;
 	                }
 	            }
@@ -2657,7 +2662,7 @@ public final class NormalizerImpl {
 	                    //i|=((int)h & 0x1f00)<<8; /* add high bits from high(c) */
                         int temp = ((int)h & 0x1f00)<<8;
                         i|=temp; /* add high bits from high(c) */
-	                    fillSet.setSerializedToOne((int)i);
+	                    fillSet.setToOne((int)i);
 	                    return true;
 	                }
 	            }
@@ -2799,9 +2804,11 @@ public final class NormalizerImpl {
      * data.
 	 * @internal
 	 */
+    ///CLOVER:OFF
 	public CharTrie getFCDTrie(){
 		return FCDTrieImpl.fcdTrie;
 	}
+    ///CLOVER:ON
 
 
     
@@ -2965,7 +2972,8 @@ public final class NormalizerImpl {
         return (c==UTF16.charAt(foldedStr,0)) ? -destStart : destStart;
     }
     
-    private static int foldCase(char[] src,int srcStart,int srcLimit,
+    /*
+     private static int foldCase(char[] src,int srcStart,int srcLimit,
                                 char[] dest, int destStart, int destLimit,
                                 int options){
         String source =new String(src,srcStart,(srcLimit-srcStart));
@@ -2982,7 +2990,7 @@ public final class NormalizerImpl {
         }
         return destStart;
     }
-    
+    */
     public static int cmpEquivFold(String s1, String s2,int options){
         return cmpEquivFold(s1.toCharArray(),0,s1.length(),
                             s2.toCharArray(),0,s2.length(),
@@ -3535,7 +3543,6 @@ public final class NormalizerImpl {
 	 * By specifying one or several sets of code points,
 	 * those code points become inert for normalization.
 	 */
-	
 	private static final synchronized UnicodeSet internalGetNXHangul() {
 	    /* internal function, does not check for incoming U_FAILURE */
 	
@@ -3544,7 +3551,7 @@ public final class NormalizerImpl {
 	    }
 	    return nxCache[NX_HANGUL];
 	}
-	
+    
 	private static final synchronized UnicodeSet internalGetNXCJKCompat() {
 	    /* internal function, does not check for incoming U_FAILURE */
 	
