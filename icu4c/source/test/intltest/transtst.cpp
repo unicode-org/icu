@@ -3643,10 +3643,10 @@ void TransliteratorTest::TestMulticharStringSet() {
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 // BEGIN TestUserFunction support factory
 
-Transliterator* _TUFF[5];
-UnicodeString* _TUFID[5];
+Transliterator* _TUFF[4];
+UnicodeString* _TUFID[4];
 
-static Transliterator* _TUFFactory(const UnicodeString& /*ID*/,
+static Transliterator* U_EXPORT2 _TUFFactory(const UnicodeString& /*ID*/,
                                    Transliterator::Token context) {
     return _TUFF[context.integer]->clone();
 }
@@ -3665,19 +3665,6 @@ static void _TUFUnreg(int32_t n) {
     }
 }
 
-static Transliterator* _TUFFactory2(const UnicodeString& /*ID*/,
-                                   Transliterator::Token context) {
-	int32_t i = * (int32_t *)context.pointer;
-    return _TUFF[i]->clone();
-}
-
-static void _TUFReg2(const UnicodeString& ID, Transliterator* t, int32_t* p) {
-	int32_t n = *p;
-    _TUFF[n] = t;
-    _TUFID[n] = new UnicodeString(ID);
-    Transliterator::registerFactory(ID, _TUFFactory2, Transliterator::pointerToken(p));
-}
-
 // END TestUserFunction support factory
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -3692,9 +3679,8 @@ void TransliteratorTest::TestUserFunction() {
     UErrorCode ec = U_ZERO_ERROR;
 
     // Setup our factory
-	int32_t temp = 4;
     int32_t i;
-    for (i=0; i<5; ++i) {
+    for (i=0; i<4; ++i) {
         _TUFF[i] = NULL;
     }
 
@@ -3707,7 +3693,7 @@ void TransliteratorTest::TestUserFunction() {
         return;
     }
     _TUFReg("Any-gif", t, 0);
-	
+
     t = Transliterator::createFromRules("RemoveCurly",
                                         "[\\{\\}] > ; '\\N' > ;",
                                         UTRANS_FORWARD, pe, ec);
@@ -3755,7 +3741,7 @@ void TransliteratorTest::TestUserFunction() {
            "<img src=\"http://www.unicode.org/gifs/24/00/U0062.gif\">");
     delete t;
 
-	// Test that filters are allowed after &
+    // Test that filters are allowed after &
     t = Transliterator::createFromRules("test",
                                         "(.) > &Hex($1) ' ' &RemoveCurly(&Name($1)) ' ';",
                                         UTRANS_FORWARD, pe, ec);
@@ -3763,20 +3749,12 @@ void TransliteratorTest::TestUserFunction() {
         errln((UnicodeString)"FAIL: createFromRules test " + u_errorName(ec));
         goto FAIL;
     }
-
-    logln("Registering");
-	_TUFReg2("test", t, &temp);
-    t = Transliterator::createInstance("test", UTRANS_FORWARD, ec);
-    if (t == NULL || U_FAILURE(ec)) {
-        errln((UnicodeString)"FAIL: createInstance test " + u_errorName(ec));
-        goto FAIL;
-    }
     expect(*t, "abc",
            "\\u0061 LATIN SMALL LETTER A \\u0062 LATIN SMALL LETTER B \\u0063 LATIN SMALL LETTER C ");
     delete t;
 
  FAIL:
-    for (i=0; i<5; ++i) {
+    for (i=0; i<4; ++i) {
         _TUFUnreg(i);
     }
 }

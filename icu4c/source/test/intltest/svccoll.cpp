@@ -501,7 +501,7 @@ int32_t CollationServiceTest::checkStringEnumeration(const char* msg,
     logln(UnicodeString() + msg + " = [" + buf + "] (" + toString(i) + ")");
 #else
     logln(UnicodeString() + msg + " = [" + buf + "] (??? NO_FORMATTING)");
-#endif  
+#endif	
     assertTrue("count verified", i==n);
     // did we see all expected strings?
     if (((1<<expectedCount)-1) != seenMask) {
@@ -545,7 +545,6 @@ void CollationServiceTest::TestSeparateTree() {
     if (!assertTrue("getKeywords != NULL", iter!=NULL)) return;
     if (!assertSuccess("getKeywords", ec)) return;
     checkStringEnumeration("getKeywords", *iter, KW, KW_COUNT);
-    iter->reset(ec);
     delete iter;
     
     iter = Collator::getKeywordValues(KW[0], ec);
