@@ -2,8 +2,8 @@
  * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/IndicReordering.h,v $
- * $Date: 2003/01/13 23:15:10 $
- * $Revision: 1.7 $
+ * $Date: 2003/05/22 21:56:35 $
+ * $Revision: 1.8 $
  *
  */
 
@@ -166,91 +166,6 @@ inline const SplitMatra *IndicClassTable::getSplitMatra(CharClass charClass) con
     return &splitMatraTable[index - 1];
 }
 
-inline le_bool IndicClassTable::isVMabove(LEUnicode ch) const
-{
-    return isVMabove(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isVMpost(LEUnicode ch) const
-{
-    return isVMpost(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isConsonant(LEUnicode ch) const
-{
-    return isConsonant(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isReph(LEUnicode ch) const
-{
-    return isReph(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isVirama(LEUnicode ch) const
-{
-    return isVirama(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isNukta(LEUnicode ch) const
-{
-    return isNukta(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isVattu(LEUnicode ch) const
-{
-    return isVattu(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isMatra(LEUnicode ch) const
-{
-    return isMatra(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isSplitMatra(LEUnicode ch) const
-{
-    return isSplitMatra(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isMpre(LEUnicode ch) const
-{
-    return isMpre(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isMbelow(LEUnicode ch) const
-{
-    return isMbelow(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isMabove(LEUnicode ch) const
-{
-    return isMabove(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isMpost(LEUnicode ch) const
-{
-    return isMpost(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::isLengthMark(LEUnicode ch) const
-{
-    return isLengthMark(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::hasPostOrBelowBaseForm(LEUnicode ch) const
-{
-    return hasPostOrBelowBaseForm(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::hasPostBaseForm(LEUnicode ch) const
-{
-    return hasPostBaseForm(getCharClass(ch));
-}
-
-inline le_bool IndicClassTable::hasBelowBaseForm(LEUnicode ch) const
-{
-    return hasBelowBaseForm(getCharClass(ch));
-}
-
 inline le_bool IndicClassTable::isVMabove(CharClass charClass)
 {
     return (charClass & CF_CLASS_MASK) == CC_MODIFYING_MARK_ABOVE;
@@ -334,6 +249,91 @@ inline le_bool IndicClassTable::hasPostBaseForm(CharClass charClass)
 inline le_bool IndicClassTable::hasBelowBaseForm(CharClass charClass)
 {
     return (charClass & CF_BELOW_BASE) != 0;
+}
+
+inline le_bool IndicClassTable::isVMabove(LEUnicode ch) const
+{
+    return isVMabove(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::isVMpost(LEUnicode ch) const
+{
+    return isVMpost(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::isConsonant(LEUnicode ch) const
+{
+    return isConsonant(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::isReph(LEUnicode ch) const
+{
+    return isReph(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::isVirama(LEUnicode ch) const
+{
+    return isVirama(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::isNukta(LEUnicode ch) const
+{
+    return isNukta(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::isVattu(LEUnicode ch) const
+{
+    return isVattu(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::isMatra(LEUnicode ch) const
+{
+    return isMatra(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::isSplitMatra(LEUnicode ch) const
+{
+    return isSplitMatra(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::isMpre(LEUnicode ch) const
+{
+    return isMpre(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::isMbelow(LEUnicode ch) const
+{
+    return isMbelow(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::isMabove(LEUnicode ch) const
+{
+    return isMabove(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::isMpost(LEUnicode ch) const
+{
+    return isMpost(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::isLengthMark(LEUnicode ch) const
+{
+    return isLengthMark(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::hasPostOrBelowBaseForm(LEUnicode ch) const
+{
+    return hasPostOrBelowBaseForm(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::hasPostBaseForm(LEUnicode ch) const
+{
+    return hasPostBaseForm(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::hasBelowBaseForm(LEUnicode ch) const
+{
+    return hasBelowBaseForm(getCharClass(ch));
 }
 
 U_NAMESPACE_END

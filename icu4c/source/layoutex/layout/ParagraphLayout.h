@@ -9,6 +9,12 @@
 
 #define __PARAGRAPHLAYOUT_H
 
+/*
+ * ParagraphLayout doesn't make much sense without
+ * BreakIterator...
+ */
+#if ! UCONFIG_NO_BREAK_ITERATION
+
 #include "unicode/uscript.h"
 
 #include "layout/LETypes.h"
@@ -149,7 +155,7 @@ public:
 
         Line();
 		Line(const Line &other);
-		Line &operator=(const Line &other) { return *this; };
+		Line &operator=(const Line & /*other*/) { return *this; };
 
         void computeMetrics();
 
@@ -506,8 +512,8 @@ private:
     };
 
     ParagraphLayout() {};
-	ParagraphLayout(const ParagraphLayout &other) {};
-	ParagraphLayout &operator=(const ParagraphLayout &other) { return *this; };
+    ParagraphLayout(const ParagraphLayout & /*other*/) : UObject( ){};
+    ParagraphLayout &operator=(const ParagraphLayout & /*other*/) { return *this; };
 
     void computeLevels(UBiDiLevel paragraphLevel);
 
@@ -589,13 +595,13 @@ inline void ParagraphLayout::reflow()
 }
 
 inline ParagraphLayout::Line::Line()
-    : fAscent(0), fDescent(0), fLeading(0), fRunCount(0), fRunCapacity(0), fRuns(NULL)
+    : UObject(), fAscent(0), fDescent(0), fLeading(0), fRunCount(0), fRunCapacity(0), fRuns(NULL)
 {
     // nothing else to do
 }
 
-inline ParagraphLayout::Line::Line(const Line &other)
-    : fAscent(0), fDescent(0), fLeading(0), fRunCount(0), fRunCapacity(0), fRuns(NULL)
+inline ParagraphLayout::Line::Line(const Line & /*other*/)
+    : UObject(), fAscent(0), fDescent(0), fLeading(0), fRunCount(0), fRunCapacity(0), fRuns(NULL)
 {
     // nothing else to do
 }
@@ -651,13 +657,13 @@ inline le_int32 ParagraphLayout::VisualRun::getLeading() const
 }
 
 inline ParagraphLayout::VisualRun::VisualRun()
-    : fFont(NULL), fDirection(UBIDI_LTR), fGlyphCount(0), fGlyphs(NULL), fPositions(NULL), fGlyphToCharMap(NULL)
+    : UObject(), fFont(NULL), fDirection(UBIDI_LTR), fGlyphCount(0), fGlyphs(NULL), fPositions(NULL), fGlyphToCharMap(NULL)
 {
     // nothing
 }
 
 inline ParagraphLayout::VisualRun::VisualRun(const VisualRun &other)
-    : fFont(NULL), fDirection(UBIDI_LTR), fGlyphCount(0), fGlyphs(NULL), fPositions(NULL), fGlyphToCharMap(NULL)
+    : UObject(), fFont(NULL), fDirection(UBIDI_LTR), fGlyphCount(0), fGlyphs(NULL), fPositions(NULL), fGlyphToCharMap(NULL)
 {
     // nothing
 }
@@ -679,5 +685,4 @@ inline ParagraphLayout::VisualRun::~VisualRun()
 
 U_NAMESPACE_END
 #endif
-
-
+#endif
