@@ -1,4 +1,4 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
 // *   Copyright (C) 1997-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
@@ -9,11 +9,17 @@ is {
     Version{ "2.0" }
     collations {
       standard { 
-        Version { "1.0" }
-        Sequence { "@&A<a\u0301<<<A\u0301&D<\u00F0<<<\u00D0&E<e\u0301"
-        "<<<E\u0301&I<i\u0301<<<I\u0301&O<o\u0301<<<O\u0301&U<u\u0301<<<U\u0301 "
-        "&Y<y\u0301<<<Y\u0301&Z<\u00fe<<<\u00DE<\u00E6<<<\u00C6<o\u0308<<<O\u0308"
-        "<<\u00F8<<<\u00D8" }
+        Version { "2.0" }
+        Sequence { 
+            "&[before 1]b<á<<<Á"
+            "&[before 1]d<<đ<<<Đ<ð<<<Ð"
+            "&[before 1]f<é<<<É"
+            "&[before 1]j<í<<<Í"
+            "&[before 1]p<ó<<<Ó"
+            "&[before 1]v<ú<<<Ú "
+            "&[before 1]z<ý<<<Ý"
+            "&[before 1]ʒ<þ<<<Þ<æ<<<Æ<<ä<<<Ä<ö<<<Ö<<ø<<<Ø<å<<<Å"
+           }
       }
     }
     Countries { 

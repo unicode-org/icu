@@ -1,4 +1,4 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
 // *   Copyright (C) 1997-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
@@ -9,12 +9,55 @@ hu {
     Version{ "2.0" }
     collations {
       standard { 
-        Version { "1.0" }
-        Sequence { "& C < cs <<< cS <<< Cs <<< CS & D < \u0111<<< \u0110 "
-        "& G < gy<<< gY<<< Gy<<< GY & L < ly<<< lY<<< Ly<<< LY"
-        "& O < o\u0308 <<< O\u0308 < o\u030B <<< O\u030B"
-        "& S < sz <<< sZ <<< Sz <<< SZ & U < u\u0308 <<< U\u0308 < u\u030B <<< U\u030B"
-        "& Z < zs <<< zS <<< Zs <<< ZS" }
+        Version { "2.0" }
+        Sequence { 
+            "& C < cs <<< Cs <<< CS"
+            "& D < dz <<< Dz <<< DZ"
+            "& DZ < dzs <<< Dzs <<< DZS"
+            "& G < gy <<< Gy <<< GY"
+            "& L < ly <<< Ly <<< LY"
+            "& N < ny <<< Ny <<< NY"
+            "& S < sz <<< Sz <<< SZ"
+            "& T < ty <<< Ty <<< TY"
+            "& Z < zs <<< Zs <<< ZS"
+            
+            // vowels
+            "& O < ö <<< Ö << ő <<< Ő"
+            "& U < ü <<< Ü << ű <<< Ű"
+            
+            // special contraction/expansions for doubled letters
+            "& cs <<< ccs / cs"
+            "& Cs <<< Ccs / cs"
+            "& CS <<< CCS / CS"
+            "& dz <<< ddz / dz"
+            "& Dz <<< Ddz / dz"
+            "& DZ <<< DDZ / DZ"
+            "& dzs <<< ddzs / dzs"
+            "& Dzs <<< Ddzs / dzs"
+            "& DZS <<< DDZS / DZS"
+            "& gy <<< ggy / gy"
+            "& Gy <<< Ggy / gy"
+            "& GY <<< GGY / GY"
+            "& ly <<< lly / ly"
+            "& Ly <<< Lly / ly"
+            "& LY <<< LLY / LY"
+            "& ny <<< nny / ny"
+            "& Ny <<< Nny / ny"
+            "& NY <<< NNY / NY"
+            "& sz <<< ssz / sz"
+            "& Sz <<< Ssz / sz"
+            "& SZ <<< SSZ / SZ"
+            "& ty <<< tty / ty"
+            "& Ty <<< Tty / ty"
+            "& TY <<< TTY / TY"
+            "& zs <<< zzs / zs"
+            "& Zs <<< Zzs / zs"
+            "& ZS <<< ZZS / ZS"
+            
+            // Note: bércsík may be ranked before or after bérczerge depending on its morphology: 
+            // bér+csík (after bérczerge) or bérc+sík (before bérczerge).
+            // A SHY can be used to make the difference        
+        }
       }
     }
     Countries { 
@@ -260,38 +303,148 @@ hu {
         //ZW { "Zimbabwe" }
     }
     Languages { 
+        ab { "abh\u00E1z" }
+        aa { "afar" }
+        af { "afrikai" }
+        sq { "alb\u00E1n" }
+        am { "amhara" }
         ar { "arab" }
+        hy { "\u00F6rm\u00E9ny" }
+        as { "assz\u00E1mi" }
+        ay { "ajmara" }
+        az { "azerbajdzs\u00E1ni" }
+        ba { "bask\u00EDr" }
+        eu { "baszk" }
+        bn { "beng\u00E1li" }
+        dz { "but\u00E1ni" }
+        bh { "bihari" }
+        bi { "bislama" }
+        br { "breton" }
         bg { "bolg\u00E1r" }
+        my { "burmai" }
+        be { "belorusz" }
+        km { "kambodzsai" }
+        ca { "katal\u00E1n" }
+        zh { "k\u00EDnai" }
+        co { "korzikai" }
+        hr { "horv\u00E1t" }
         cs { "cseh" }
         da { "d\u00E1n" }
-        de { "n\u00E9met" }
-        el { "g\u00F6r\u00F6g" }
+        nl { "holland" }
         en { "angol" }
-        es { "spanyol" }
+        eo { "eszperant\u00F3" }
         et { "\u00E9szt" }
+        fo { "fer\u00F6eri" }
+        fj { "fidzsi" }
         fi { "finn" }
         fr { "francia" }
+        fy { "fr\u00EDz" }
+        gl { "gal\u00EDciai" }
+        ka { "gr\u00FAz" }
+        de { "n\u00E9met" }
+        el { "g\u00F6r\u00F6g" }
+        kl { "gr\u00F6nlandi" }
+        gn { "guarani" }
+        gu { "gudzsar\u00E1ti" }
+        ha { "hausza" }
         he { "h\u00E9ber" }
-        hr { "horv\u00E1t" }
+        iw { "h\u00E9ber" }
+        hi { "hindi" }
         hu { "magyar" }
+        is { "izlandi" }
+        id { "indon\u00E9z" }
+        in { "indon\u00E9z" }
+        ia { "interlingua" }
+        ie { "interlingue" }
+        iu { "inuktitut" }
+        ik { "inupiak" }
+        ga { "\u00EDr" }
         it { "olasz" }
         ja { "jap\u00E1n" }
+        jw { "j\u00E1vai" }
+        kn { "kannada" }
+        ks { "kasm\u00EDri" }
+        kk { "kazah" }
+        rw { "kiruanda" }
+        ky { "kirgiz" }
+        rn { "kirundi" }
         ko { "koreai" }
-        lt { "litv\u00E1n" }
+        ku { "kurd" }
+        lo { "laoszi" }
+        la { "latin" }
         lv { "lett" }
-        nl { "holland" }
+        ln { "lingala" }
+        lt { "litv\u00E1n" }
+        mk { "maced\u00F3n" }
+        mg { "madagaszk\u00E1ri" }
+        ms { "mal\u00E1j" }
+        ml { "malajalam" }
+        mt { "m\u00E1ltai" }
+        mi { "maori" }
+        mr { "marati" }
+        mo { "moldvai" }
+        mn { "mongol" }
+        na { "naurui" }
+        ne { "nep\u00E1li" }
         no { "norv\u00E9g" }
+        oc { "okszit\u00E1n" }
+        or { "orija" }
+        om { "orom\u00F3i" }
+        ps { "pastu (afg\u00E1n)" }
+        fa { "perzsa" }
         pl { "lengyel" }
         pt { "portug\u00E1l" }
+        pa { "pandzs\u00E1bi" }
+        qu { "kecsua" }
+        rm { "r\u00E9torom\u00E1n" }
         ro { "rom\u00E1n" }
         ru { "orosz" }
+        sm { "szamoai" }
+        sg { "sango" }
+        sa { "szanszkrit" }
+        gd { "sk\u00F3t (gael)" }
+        sr { "szerb" }
+        sh { "szerb-horv\u00E1t" }
+        st { "szeszot\u00F3" }
+        tn { "szecsu\u00E1ni" }
+        sn { "sona" }
+        sd { "szindi" }
+        si { "szingal\u00E9z" }
+        ss { "sziszuati" }
         sk { "szlov\u00E1k" }
         sl { "szlov\u00E9n" }
+        so { "szom\u00E1li" }
+        es { "spanyol" }
+        su { "szundan\u00E9z" }
+        sw { "szuah\u00E9li" }
         sv { "sv\u00E9d" }
+        tl { "tagalog" }
+        tg { "tadzsik" }
+        ta { "tamil" }
+        tt { "tat\u00E1r" }
+        te { "telugu" }
+        th { "thai" }
+        bo { "tibeti" }
+        ti { "tigrinya" }
+        to { "tonga" }
+        ts { "conga" }
         tr { "t\u00F6r\u00F6k" }
-        zh { "k\u00EDnai" }
-        //zh_cn { "k\u00EDnai (egyszer\u0161)" }
-        //zh_tw { "k\u00EDnai (hagyom\u00E1nyos)" }
+        tk { "t\u00FCrkm\u00E9n" }
+        tw { "tui" }
+        ug { "ujgur" }
+        uk { "ukr\u00E1n" }
+        ur { "urdu" }
+        uz { "\u00FCzb\u00E9g" }
+        vi { "vietn\u00E1mi" }
+        vo { "volap\u00FCk" }
+        cy { "walesi" }
+        wo { "volof" }
+        xh { "hosza" }
+        ji { "zsid\u00F3" }
+        yi { "zsid\u00F3" }
+        yo { "joruba" }
+        za { "zsuang" }
+        zu { "zulu" }
     }
     AmPmMarkers { 
         "DE",
@@ -382,6 +535,7 @@ hu {
     LocaleScript{
         "Latn",  // ISO 15924 Name 
     }
+
     ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00f6 \u00fc \u0151 \u0171 {cs}{dz}{dzs}{gy}{ly}{ny}{sz}{ty}{zs}{ccs}{ddz}{ddzs}{ggy}{lly}{nny}{ssz}{tty}{zzs}]" }
 
     // Currency display names

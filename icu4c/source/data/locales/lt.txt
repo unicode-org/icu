@@ -1,4 +1,4 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
 // *   Copyright (C) 1997-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
@@ -9,10 +9,22 @@ lt {
     Version{ "2.0" }
     collations {
       standard { 
-        Version { "1.0" }
-        Sequence { "[backwards 2]& C < c\u030C <<< C\u030C & I << y = \u0131 <<< Y = \u0130 "
-        "& S < s\u030C <<< S\u030C & X < y\u0301<<< Y\u0301 < y\u0302 <<< Y\u0302 < y\u0308<<< Y"
-        "\u0308 & Z < z\u030C <<< Z\u030C" }
+        Version { "2.0" }
+        Sequence { 
+            "&\u0328 << \u0307" // put dot-above after ogonek
+            "&[before 1]D<č<<<Č"
+            "&[before 1]H<y<<<Y"
+            "&[before 1]T<š<<<Š"
+            "&[before 1]Ʒ<ž<<<Ž"
+            // sources differ on the following, and the strengths thereof
+            // so keep in file but leave commented out
+            // "&C<<ch<<<Ch<<<CH"
+            // "&H<ch<<<Ch<<<CH"
+            // "&[before 1]B<ą<<<Ą"
+            // "&[before 1]F<ę<<<Ę<ė<<<Ė"
+            // "&[before 1]I<į<<<Į"
+            // "&[before 1]V<ų<<<Ų<ū<<<Ū"
+        }
       }
     }
     Countries { 
@@ -273,22 +285,22 @@ lt {
         4, // "Minimal Days in First Week"   Lithuania follows ISO 8601 
     }
     DayAbbreviations { 
-        "sk",
-        "pr",
-        "an",
-        "tr",
-        "kt",
-        "pn",
-        "\u0161t",
+        "Sk",
+        "Pr",
+        "An",
+        "Tr",
+        "Kt",
+        "Pn",
+        "\u0160t",
     }
     DayNames { 
-        "sekmadienis",
-        "pirmadienis",
-        "antradienis",
-        "tre\u010Diadienis",
-        "ketvirtadienis",
-        "penktadienis",
-        "\u0161e\u0161tadienis",
+        "Sekmadienis",
+        "Pirmadienis",
+        "Antradienis",
+        "Tre\u010Diadienis",
+        "Ketvirtadienis",
+        "Penktadienis",
+        "\u0160e\u0161tadienis",
     }
     Eras { 
         "pr.Kr.",
@@ -329,32 +341,32 @@ lt {
         //zh_tw { "Kin\u0173 (tadicin\u0117)" }
     }
     MonthAbbreviations { 
-        "sau",
-        "vas",
-        "kov",
-        "bal",
-        "geg",
-        "bir",
-        "lie",
-        "rgp",
-        "rgs",
-        "spa",
-        "lap",
-        "grd",
+        "Sau",
+        "Vas",
+        "Kov",
+        "Bal",
+        "Geg",
+        "Bir",
+        "Lie",
+        "Rgp",
+        "Rgs",
+        "Spa",
+        "Lap",
+        "Grd",
     }
     MonthNames { 
-        "sausio",
-        "vasario",
-        "kovo",
-        "baland\u017Eio",
-        "gegu\u017E\u0117s",
-        "bir\u017Eelio",
-        "liepos",
-        "rugpj\u016B\u010Dio",
-        "rugs\u0117jo",
-        "spalio",
-        "lapkri\u010Dio",
-        "gruod\u017Eio",
+        "Sausio",
+        "Vasario",
+        "Kovo",
+        "Baland\u017Eio",
+        "Gegu\u017E\u0117s",
+        "Bir\u017Eelio",
+        "Liepos",
+        "Rugpj\u016B\u010Dio",
+        "Rugs\u0117jo",
+        "Spalio",
+        "Lapkri\u010Dio",
+        "Gruod\u017Eio",
     }
     NumberElements { 
         ",",
