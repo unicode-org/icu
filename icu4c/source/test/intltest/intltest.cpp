@@ -24,6 +24,7 @@
 #include "unicode/uclean.h"
 #include "unicode/timezone.h"
 #include "unicode/curramt.h"
+#include "unicode/putil.h"
 
 #include "intltest.h"
 #include "caltztst.h"
