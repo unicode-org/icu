@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/TestStringPrep.java,v $
- * $Date: 2003/08/21 23:42:21 $
- * $Revision: 1.1 $
+ * $Date: 2003/08/27 03:08:29 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
 */
@@ -17,8 +17,6 @@ import com.ibm.icu.dev.test.TestFmwk;
 /**
  * @author ram
  *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
  */
 public class TestStringPrep extends TestFmwk {
     public static void main(String[] args) throws Exception {
@@ -152,11 +150,7 @@ public class TestStringPrep extends TestFmwk {
 
         }
     }
-    private static String[] cs_prep_data = {
-        //BIDI checking is turned off .. so 
-        "\uC138\uACC4\uC758\uBAA8\uB4E0\uC0AC\uB78C\uB4E4\uC774\u0644\u064A\u0647\uD55C\uAD6D\uC5B4\uB97C\uC774\uD574\uD55C\uB2E4\uBA74",
 
-    };
     public void TestCSPrep(){
         
         // Checking for bidi is turned off

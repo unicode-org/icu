@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/stringprep/Attic/Punycode.java,v $ 
- * $Date: 2003/08/21 23:40:39 $ 
- * $Revision: 1.1 $
+ * $Date: 2003/08/27 03:09:08 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -16,13 +16,10 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 
 /**
+ * Ported code from ICU punycode.c 
  * @author ram
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
  */
+
 /* Package Private class */
 final class Punycode {
 
@@ -131,7 +128,16 @@ final class Punycode {
             return (char)((ZERO-26)+digit);
         }
     }
-    
+    /**
+     * Converts Unicode to Punycode.
+     * The input string must not contain single, unpaired surrogates.
+     * The output will be represented as an array of ASCII code points.
+     * 
+     * @param src
+     * @param caseFlags
+     * @return
+     * @throws ParseException
+     */
     public static StringBuffer encode(StringBuffer src, boolean[] caseFlags) throws ParseException{
 		
         int[] cpBuffer = new int[MAX_CP_COUNT];
@@ -283,6 +289,15 @@ final class Punycode {
     private static boolean isSurrogate(int ch){
         return (((ch)&0xfffff800)==0xd800);
     }
+    /**
+     * Converts Punycode to Unicode.
+     * The Unicode string will be at most as long as the Punycode string.
+     * 
+     * @param src
+     * @param caseFlags
+     * @return
+     * @throws ParseException
+     */
     public static StringBuffer decode(StringBuffer src, boolean[] caseFlags) 
                                throws ParseException{
         int srcLength = src.length();
