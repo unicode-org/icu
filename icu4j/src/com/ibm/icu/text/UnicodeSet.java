@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/12/11 19:41:03 $
- * $Revision: 1.83 $
+ * $Date: 2003/01/21 21:12:35 $
+ * $Revision: 1.84 $
  *
  *****************************************************************************************
  */
@@ -18,6 +18,7 @@ import com.ibm.icu.lang.*;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.UPropertyAliases;
 import com.ibm.icu.impl.SortedSetRelation;
+import com.ibm.icu.util.VersionInfo;
 import java.util.TreeSet;
 import java.util.Iterator;
 
@@ -2648,6 +2649,14 @@ public class UnicodeSet extends UnicodeFilter {
         }
     }
 
+    private static class VersionFilter implements Filter {
+        VersionInfo version;
+        VersionFilter(VersionInfo version) { this.version = version; }
+        public boolean contains(int ch) {
+            return UCharacter.getAge(ch) == version;
+        }
+    }
+
     /**
      * Generic filter-based scanning code for UCD property UnicodeSets.
      */
@@ -2845,6 +2854,15 @@ public class UnicodeSet extends UnicodeFilter {
                         }
                         clear();
                         add(ch);
+                        return this;
+                    }
+                case UProperty.AGE:
+                    {
+                        // Must munge name, since
+                        // VersionInfo.getInstance() does not do
+                        // 'loose' matching.
+                        VersionInfo version = VersionInfo.getInstance(mungeCharName(valueAlias));
+                        applyFilter(new VersionFilter(version));
                         return this;
                     }
                 }
