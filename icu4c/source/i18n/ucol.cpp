@@ -2737,7 +2737,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             source->flags            |= UCOL_ITER_INNORMBUF;
             source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN | UCOL_USE_ITERATOR);
 
-            CE = UCOL_IGNORABLE;
+            CE = ucol_IGetNextCE(coll, source, status); // UCOL_IGNORABLE;
           } else { // stuff is already normalized... what to do here???
             int32_t decompLen = unorm_getDecomposition(cp, FALSE, &buffer[1], UCOL_MAX_BUFFER-1);
             if(decompLen < 0) {
@@ -2894,6 +2894,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
       uint32_t firstCE = UCOL_NOT_FOUND;
       const UChar *UCharOffset;
       UChar schar, tchar;
+      UBool wasIgnorable = FALSE;
 
       for (;;) {
         /* This loop will run once per source string character, for as long as we     */
@@ -2911,7 +2912,15 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
                 CE = firstCE;  
                 loadState(source, &state, TRUE);
                 if(source->origFlags & UCOL_USE_ITERATOR) {
-                  source->flags = source->origFlags;
+                    source->flags = source->origFlags;
+                }
+            }
+            else if (wasIgnorable) {
+                // move back to last non-ignorable position
+                // this is to synch with the reverse direction
+                loadState(source, &state, TRUE);
+                if(source->origFlags & UCOL_USE_ITERATOR) {
+                    source->flags = source->origFlags;
                 }
             }
             break;
@@ -2930,22 +2939,24 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             //  Pick up the corresponding CE from the table.
             CE = *(coll->contractionCEs +
                 (UCharOffset - coll->contractionIndex));
+            wasIgnorable = FALSE;
         }
         else
         {
             // if there is a completely ignorable code point in the middle of 
             // contraction, we need to act as if it's not there
-            uint32_t isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, schar);
+            uint32_t nextCE = UTRIE_GET32_FROM_LEAD(coll->mapping, schar);
             // it's easy for BMP code points
-            if(isZeroCE == 0) {
-              continue;
+            if(nextCE == 0) {
+                wasIgnorable = TRUE;
+                continue;
             } else if(UTF_IS_LEAD(schar)) {
               if(!collIter_eos(source)) {
                 backupState(source, &state);
                 UChar trail = getNextNormalizedChar(source);
                 if(UTF_IS_TRAIL(trail)) { // do stuff with trail
-                  if(getCETag(isZeroCE) == SURROGATE_TAG) {
-                    uint32_t finalCE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, isZeroCE&0xFFFFFF, trail);
+                  if(getCETag(nextCE) == SURROGATE_TAG) {
+                    uint32_t finalCE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, nextCE&0xFFFFFF, trail);
                     if(finalCE == 0) {
                       continue;
                     }
@@ -3014,6 +3025,11 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             //   out of loop, this CE will end up being returned.  This is the normal
             //   way out of contraction handling when the source actually contained
             //   the contraction.
+            if (wasIgnorable) {
+                // move back to last non-ignorable position
+                // this is to synch with the reverse direction
+                loadState(source, &state, TRUE);
+            }
             break;
         }
         
@@ -3398,7 +3414,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
           source->flags            |= UCOL_ITER_INNORMBUF;
           source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
 
-          return(UCOL_IGNORABLE);
+          return ucol_IGetNextCE(coll, source, status); // *** (UCOL_IGNORABLE); 
         }
       }
     case CHARSET_TAG:
@@ -3529,8 +3545,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
           source->flags            |= UCOL_ITER_INNORMBUF;
           source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
 
-          //CE = UCOL_IGNORABLE;
-          return(UCOL_IGNORABLE);
+          return ucol_IGetPrevCE(coll, source, status); // return UCOL_IGNORABLE;
       }
       break;
     case SPEC_PROC_TAG:
@@ -4067,7 +4082,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
           source->flags            |= UCOL_ITER_INNORMBUF;
           source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
 
-          return(UCOL_IGNORABLE);
+          return ucol_IGetPrevCE(coll, source, status);;
         }
       }
     case LEAD_SURROGATE_TAG:  /* D800-DBFF*/
