@@ -16,8 +16,6 @@
 
 U_NAMESPACE_BEGIN
 
-const char GlyphPositionAdjustment::fgClassID=0;
-
 void GlyphPositioningTableHeader::process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphPositionAdjustments,
                                           const LETag **glyphTags, le_int32 glyphCount, le_bool rightToLeft,
                                           LETag scriptTag, LETag languageTag,

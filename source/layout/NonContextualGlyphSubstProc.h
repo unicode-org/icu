@@ -27,6 +27,10 @@ protected:
     NonContextualGlyphSubstitutionProcessor(const MorphSubtableHeader *morphSubtableHeader);
 
     virtual ~NonContextualGlyphSubstitutionProcessor();
+
+private:
+    NonContextualGlyphSubstitutionProcessor(const NonContextualGlyphSubstitutionProcessor &other); // forbid copying of this class
+    NonContextualGlyphSubstitutionProcessor &operator=(const NonContextualGlyphSubstitutionProcessor &other); // forbid copying of this class
 };
 
 U_NAMESPACE_END

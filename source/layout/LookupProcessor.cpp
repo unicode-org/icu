@@ -19,8 +19,6 @@
 
 U_NAMESPACE_BEGIN
 
-const char LookupProcessor::fgClassID=0;
-
 const LETag LookupProcessor::notSelected    = 0x00000000;
 const LETag LookupProcessor::defaultFeature = 0xFFFFFFFF;
 
