@@ -310,6 +310,7 @@ processTest(UResourceBundle *test, UErrorCode *status) {
       }
     }
   }
+  *status = U_ZERO_ERROR;
   ures_close(type);
 }
 
