@@ -524,47 +524,6 @@ void NumberFormatTest::TestCurrencyObject() {
     delete fmt;
 }
     
-void NumberFormatTest::expectCurrency(NumberFormat& nf, const Locale& locale,
-                                      double value, const UnicodeString& string) {
-    UErrorCode ec = U_ZERO_ERROR;
-    DecimalFormat& fmt = * (DecimalFormat*) &nf;
-    const UChar DEFAULT_CURR[] = {45/*-*/,0};
-    const UChar* curr = DEFAULT_CURR;
-    if (*locale.getLanguage() != 0) {
-        curr = ucurr_forLocale(locale.getName(), &ec);
-        if (U_FAILURE(ec)) {
-            errln("FAIL: UCurrency::forLocale");
-            return;
-        }
-        fmt.setCurrency(curr);
-    }
-    UnicodeString s;
-    fmt.format(value, s);
-    s.findAndReplace((UChar32)0x00A0, (UChar32)0x0020);
-
-    // Default display of the number yields "1234.5599999999999"
-    // instead of "1234.56".  Use a formatter to fix this.
-    NumberFormat* f = 
-        NumberFormat::createInstance(Locale::getUS(), ec);
-    UnicodeString v;
-    if (U_FAILURE(ec)) {
-        // Oops; bad formatter.  Use default op+= display.
-        v = (UnicodeString)"" + value;
-    } else {
-        f->setMaximumFractionDigits(4);
-        f->setGroupingUsed(FALSE);
-        f->format(value, v);
-    }
-    delete f;
-
-    if (s == string) {
-        logln((UnicodeString)"Ok: " + v + " x " + curr + " => " + prettify(s));
-    } else {
-        errln((UnicodeString)"FAIL: " + v + " x " + curr + " => " + prettify(s) +
-              ", expected " + prettify(string));
-    }
-}
-
 // -------------------------------------
 
 /**
@@ -621,13 +580,13 @@ void NumberFormatTest::TestSecondaryGrouping(void) {
     DecimalFormat f("#,##,###", US, status);
     CHECK(status, "DecimalFormat ct");
 
-    expect(f, (int32_t)123456789L, "12,34,56,789");
+    expect2(f, (int32_t)123456789L, "12,34,56,789");
     expectPat(f, "#,##,###");
     f.applyPattern("#,###", status);
     CHECK(status, "applyPattern");
 
     f.setSecondaryGroupingSize(4);
-    expect(f, (int32_t)123456789L, "12,3456,789");
+    expect2(f, (int32_t)123456789L, "12,3456,789");
     expectPat(f, "#,####,###");
     NumberFormat *g = NumberFormat::createInstance(Locale("hi", "IN"), status);
     CHECK(status, "createInstance(hi_IN)");
@@ -699,59 +658,6 @@ NumberFormatTest::roundingTest(NumberFormat& nf, double x, int32_t maxFractionDi
 /**
  * Upgrade to alphaWorks
  */
-void NumberFormatTest::expect(NumberFormat& fmt, const UnicodeString& str, int32_t n) {
-    UErrorCode status = U_ZERO_ERROR;
-    Formattable num;
-    fmt.parse(str, num, status);
-    CHECK(status, "NumberFormat.parse");
-    UnicodeString pat;
-    ((DecimalFormat*) &fmt)->toPattern(pat);
-    if (num.getType() == Formattable::kLong &&
-        num.getLong() == n) {
-        logln(UnicodeString("Ok   \"") + str + "\" x " +
-              pat + " = " +
-              toString(num));
-    } else {
-        errln(UnicodeString("FAIL \"") + str + "\" x " +
-              pat + " = " +
-              toString(num) + ", expected " + n + "L");
-    }
-}
-
-/**
- * Upgrade to alphaWorks
- */
-void NumberFormatTest::expect(NumberFormat& fmt, const Formattable& n,
-                              const UnicodeString& exp) {
-    UnicodeString saw;
-    FieldPosition pos;
-    UErrorCode status = U_ZERO_ERROR;
-    fmt.format(n, saw, pos, status);
-    CHECK(status, "format");
-    UnicodeString pat;
-    ((DecimalFormat*) &fmt)->toPattern(pat);
-    if (saw == exp) {
-        logln(UnicodeString("Ok   ") + toString(n) + " x " +
-              escape(pat) + " = \"" +
-              escape(saw) + "\"");
-    } else {
-        errln(UnicodeString("FAIL ") + toString(n) + " x " +
-              escape(pat) + " = \"" +
-              escape(saw) + "\", expected \"" + exp + "\"");
-    }
-}
-
-void NumberFormatTest::expect(NumberFormat* fmt, const Formattable& n,
-                              const UnicodeString& exp,
-                              UErrorCode status) {
-    CHECK(status, "construct format");
-    expect(*fmt, n, exp);
-    delete fmt;
-}
-
-/**
- * Upgrade to alphaWorks
- */
 void NumberFormatTest::TestExponent(void) {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols US(Locale::getUS(), status);
@@ -761,12 +667,9 @@ void NumberFormatTest::TestExponent(void) {
     DecimalFormat fmt2(UnicodeString("0.###E+0"), US, status);
     CHECK(status, "DecimalFormat(0.###E+0)");
     int32_t n = 1234;
-    expect(fmt1, n, "1.234E3");
-    expect(fmt2, n, "1.234E+3");
-    expect(fmt1, "1.234E3", n);
+    expect2(fmt1, n, "1.234E3");
+    expect2(fmt2, n, "1.234E+3");
     expect(fmt1, "1.234E+3", n); // Either format should parse "E+3"
-    expect(fmt2, "1.234E+3", n);
-    expect(fmt2, "1.234e+3", n);
 }
 
 /**
@@ -829,18 +732,18 @@ void NumberFormatTest::TestScientific(void) {
     // scientific format.
     Locale def = Locale::getDefault();
     Locale::setDefault(Locale::getUS(), status);
-    expect(NumberFormat::createScientificInstance(status),
+    expect2(NumberFormat::createScientificInstance(status),
            12345.678901,
            "1.2345678901E4", status);
     Locale::setDefault(def, status);
 
-    expect(new DecimalFormat("#E0", US, status),
+    expect2(new DecimalFormat("#E0", US, status),
            12345.0,
            "1.2345E4", status);
     expect(new DecimalFormat("0E0", US, status),
            12345.0,
            "1E4", status);
-    expect(NumberFormat::createScientificInstance(Locale::getUS(), status),
+    expect2(NumberFormat::createScientificInstance(Locale::getUS(), status),
            12345.678901,
            "1.2345678901E4", status);
     expect(new DecimalFormat("##0.###E0", US, status),
@@ -849,22 +752,22 @@ void NumberFormatTest::TestScientific(void) {
     expect(new DecimalFormat("##0.###E0", US, status),
            12345.00001,
            "12.35E3", status);
-    expect(new DecimalFormat("##0.####E0", US, status),
+    expect2(new DecimalFormat("##0.####E0", US, status),
            (int32_t) 12345,
            "12.345E3", status);
-    expect(NumberFormat::createScientificInstance(Locale::getFrance(), status),
+    expect2(NumberFormat::createScientificInstance(Locale::getFrance(), status),
            12345.678901,
            "1,2345678901E4", status);
     expect(new DecimalFormat("##0.####E0", US, status),
            789.12345e-9,
            "789.12E-9", status);
-    expect(new DecimalFormat("##0.####E0", US, status),
+    expect2(new DecimalFormat("##0.####E0", US, status),
            780.e-9,
            "780E-9", status);
     expect(new DecimalFormat(".###E0", US, status),
            45678.0,
            ".457E5", status);
-    expect(new DecimalFormat(".###E0", US, status),
+    expect2(new DecimalFormat(".###E0", US, status),
            (int32_t) 0,
            ".0E0", status);
     /*
@@ -888,11 +791,11 @@ void NumberFormatTest::TestScientific(void) {
     ! Unroll this test into individual tests below...
     !
     */
-    expect(new DecimalFormat("#E0", US, status),
+    expect2(new DecimalFormat("#E0", US, status),
            (int32_t) 45678000, "4.5678E7", status);
-    expect(new DecimalFormat("##E0", US, status),
+    expect2(new DecimalFormat("##E0", US, status),
            (int32_t) 45678000, "45.678E6", status);
-    expect(new DecimalFormat("####E0", US, status),
+    expect2(new DecimalFormat("####E0", US, status),
            (int32_t) 45678000, "4567.8E4", status);
     expect(new DecimalFormat("0E0", US, status),
            (int32_t) 45678000, "5E7", status);
@@ -916,23 +819,23 @@ void NumberFormatTest::TestScientific(void) {
     ! Unroll this test into individual tests below...
     !
     */
-    expect(new DecimalFormat("###E0", US, status),
+    expect2(new DecimalFormat("###E0", US, status),
            0.0000123, "12.3E-6", status);
-    expect(new DecimalFormat("###E0", US, status),
+    expect2(new DecimalFormat("###E0", US, status),
            0.000123, "123E-6", status);
-    expect(new DecimalFormat("###E0", US, status),
+    expect2(new DecimalFormat("###E0", US, status),
            0.00123, "1.23E-3", status);
-    expect(new DecimalFormat("###E0", US, status),
+    expect2(new DecimalFormat("###E0", US, status),
            0.0123, "12.3E-3", status);
-    expect(new DecimalFormat("###E0", US, status),
+    expect2(new DecimalFormat("###E0", US, status),
            0.123, "123E-3", status);
-    expect(new DecimalFormat("###E0", US, status),
+    expect2(new DecimalFormat("###E0", US, status),
            1.23, "1.23E0", status);
-    expect(new DecimalFormat("###E0", US, status),
+    expect2(new DecimalFormat("###E0", US, status),
            12.3, "12.3E0", status);
-    expect(new DecimalFormat("###E0", US, status),
+    expect2(new DecimalFormat("###E0", US, status),
            123.0, "123E0", status);
-    expect(new DecimalFormat("###E0", US, status),
+    expect2(new DecimalFormat("###E0", US, status),
            1230.0, "1.23E3", status);
     /*
     expect(new DecimalFormat("0.#E+00", US, status),
@@ -943,9 +846,9 @@ void NumberFormatTest::TestScientific(void) {
     ! Unroll this test into individual tests below...
     !
     */
-    expect(new DecimalFormat("0.#E+00", US, status),
+    expect2(new DecimalFormat("0.#E+00", US, status),
            0.00012, "1.2E-04", status);
-    expect(new DecimalFormat("0.#E+00", US, status),
+    expect2(new DecimalFormat("0.#E+00", US, status),
            (int32_t) 12000, "1.2E+04", status);
 }
 
@@ -957,90 +860,90 @@ void NumberFormatTest::TestPad(void) {
     DecimalFormatSymbols US(Locale::getUS(), status);
     CHECK(status, "DecimalFormatSymbols constructor");
 
-    expect(new DecimalFormat("*^##.##", US, status),
+    expect2(new DecimalFormat("*^##.##", US, status),
            int32_t(0), "^^^^0", status);
-    expect(new DecimalFormat("*^##.##", US, status),
+    expect2(new DecimalFormat("*^##.##", US, status),
            -1.3, "^-1.3", status);
-    expect(new DecimalFormat("##0.0####E0*_ g-m/s^2", US, status),
+    expect2(new DecimalFormat("##0.0####E0*_ g-m/s^2", US, status),
            int32_t(0), "0.0E0______ g-m/s^2", status);
     expect(new DecimalFormat("##0.0####E0*_ g-m/s^2", US, status),
            1.0/3, "333.333E-3_ g-m/s^2", status);
-    expect(new DecimalFormat("##0.0####*_ g-m/s^2", US, status),
+    expect2(new DecimalFormat("##0.0####*_ g-m/s^2", US, status),
            int32_t(0), "0.0______ g-m/s^2", status);
     expect(new DecimalFormat("##0.0####*_ g-m/s^2", US, status),
            1.0/3, "0.33333__ g-m/s^2", status);
 
     // Test padding before a sign
     const char *formatStr = "*x#,###,###,##0.0#;*x(###,###,##0.0#)";
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            int32_t(-10),  "xxxxxxxxxx(10.0)", status);
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            int32_t(-1000),"xxxxxxx(1,000.0)", status);
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            int32_t(-1000000),"xxx(1,000,000.0)", status);
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            -100.37,       "xxxxxxxx(100.37)", status);
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            -10456.37,     "xxxxx(10,456.37)", status);
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            -1120456.37,   "xx(1,120,456.37)", status);
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            -112045600.37, "(112,045,600.37)", status);
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            -1252045600.37,"(1,252,045,600.37)", status);
 
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            int32_t(10),  "xxxxxxxxxxxx10.0", status);
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            int32_t(1000),"xxxxxxxxx1,000.0", status);
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            int32_t(1000000),"xxxxx1,000,000.0", status);
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            100.37,       "xxxxxxxxxx100.37", status);
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            10456.37,     "xxxxxxx10,456.37", status);
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            1120456.37,   "xxxx1,120,456.37", status);
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            112045600.37, "xx112,045,600.37", status);
-    expect(new DecimalFormat(formatStr, US, status),
+    expect2(new DecimalFormat(formatStr, US, status),
            10252045600.37,"10,252,045,600.37", status);
 
 
     // Test padding between a sign and a number
     const char *formatStr2 = "#,###,###,##0.0#*x;(###,###,##0.0#*x)";
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            int32_t(-10),  "(10.0xxxxxxxxxx)", status);
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            int32_t(-1000),"(1,000.0xxxxxxx)", status);
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            int32_t(-1000000),"(1,000,000.0xxx)", status);
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            -100.37,       "(100.37xxxxxxxx)", status);
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            -10456.37,     "(10,456.37xxxxx)", status);
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            -1120456.37,   "(1,120,456.37xx)", status);
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            -112045600.37, "(112,045,600.37)", status);
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            -1252045600.37,"(1,252,045,600.37)", status);
 
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            int32_t(10),  "10.0xxxxxxxxxxxx", status);
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            int32_t(1000),"1,000.0xxxxxxxxx", status);
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            int32_t(1000000),"1,000,000.0xxxxx", status);
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            100.37,       "100.37xxxxxxxxxx", status);
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            10456.37,     "10,456.37xxxxxxx", status);
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            1120456.37,   "1,120,456.37xxxx", status);
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            112045600.37, "112,045,600.37xx", status);
-    expect(new DecimalFormat(formatStr2, US, status),
+    expect2(new DecimalFormat(formatStr2, US, status),
            10252045600.37,"10,252,045,600.37", status);
 
     //testing the setPadCharacter(UnicodeString) and getPadCharacterString()
@@ -1129,50 +1032,6 @@ void NumberFormatTest::TestPatterns2(void) {
     expectPat(fmt, "AA*^#,###,##0.00ZZ");
 }
 
-void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
-                                 int32_t pos) {
-    expectPad(fmt, pat, pos, 0, (UnicodeString)"");
-}
-void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
-                                 int32_t pos, int32_t width, UChar pad) {
-    expectPad(fmt, pat, pos, width, UnicodeString(pad));
-}
-void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
-                                 int32_t pos, int32_t width, const UnicodeString& pad) {
-    int32_t apos = 0, awidth = 0;
-    UnicodeString apadStr;
-    UErrorCode status = U_ZERO_ERROR;
-    fmt.applyPattern(pat, status);
-    if (U_SUCCESS(status)) {
-        apos = fmt.getPadPosition();
-        awidth = fmt.getFormatWidth();
-        apadStr=fmt.getPadCharacterString();
-    } else {
-        apos = -1;
-        awidth = width;
-        apadStr = pad;
-    }
-    if (apos == pos && awidth == width && apadStr == pad) {
-        logln(UnicodeString("Ok   \"") + pat + "\" pos=" + apos +
-              ((pos == ILLEGAL) ? UnicodeString() :
-               (UnicodeString(" width=") + awidth + " pad=" + apadStr)));
-    } else {
-        errln(UnicodeString("FAIL \"") + pat + "\" pos=" + apos +
-              " width=" + awidth + " pad=" + apadStr +
-              ", expected " + pos + " " + width + " " + pad);
-    }
-}
-
-void NumberFormatTest::expectPat(DecimalFormat& fmt, const UnicodeString& exp) {
-    UnicodeString pat;
-    fmt.toPattern(pat);
-    if (pat == exp) {
-        logln(UnicodeString("Ok   \"") + pat + "\"");
-    } else {
-        errln(UnicodeString("FAIL \"") + pat + "\", expected \"" + exp + "\"");
-    }
-}
-
 void NumberFormatTest::TestSurrogateSupport(void) {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols custom(Locale::getUS(), status);
@@ -1187,23 +1046,23 @@ void NumberFormatTest::TestSurrogateSupport(void) {
     patternStr = patternStr.unescape();
     UnicodeString expStr("\\U00010000\\U00010000\\U00010000\\U000100000", "");
     expStr = expStr.unescape();
-    expect(new DecimalFormat(patternStr, custom, status),
+    expect2(new DecimalFormat(patternStr, custom, status),
            int32_t(0), expStr, status);
 
     status = U_ZERO_ERROR;
-    expect(new DecimalFormat("*^##.##", custom, status),
+    expect2(new DecimalFormat("*^##.##", custom, status),
            int32_t(0), "^^^^0", status);
     status = U_ZERO_ERROR;
-    expect(new DecimalFormat("##.##", custom, status),
+    expect2(new DecimalFormat("##.##", custom, status),
            -1.3, " minus 1decimal3", status);
     status = U_ZERO_ERROR;
-    expect(new DecimalFormat("##0.0####E0 g'-'m/s^2", custom, status),
+    expect2(new DecimalFormat("##0.0####E0 g'-'m/s^2", custom, status),
            int32_t(0), "0decimal0exponent0 g-m/s^2", status);
     status = U_ZERO_ERROR;
     expect(new DecimalFormat("##0.0####E0 g'-'m/s^2", custom, status),
            1.0/3, "333decimal333exponent minus 3 g-m/s^2", status);
     status = U_ZERO_ERROR;
-    expect(new DecimalFormat("##0.0#### g'-'m/s^2", custom, status),
+    expect2(new DecimalFormat("##0.0#### g'-'m/s^2", custom, status),
            int32_t(0), "0decimal0 g-m/s^2", status);
     status = U_ZERO_ERROR;
     expect(new DecimalFormat("##0.0#### g'-'m/s^2", custom, status),
@@ -1214,7 +1073,7 @@ void NumberFormatTest::TestSurrogateSupport(void) {
     expStr = UnicodeString("\\U00010001decimal\\U00010002\\U00010005\\U00010000", "");
     expStr = expStr.unescape();
     status = U_ZERO_ERROR;
-    expect(new DecimalFormat("##0.000", custom, status),
+    expect2(new DecimalFormat("##0.000", custom, status),
            1.25, expStr, status);
 
     custom.setSymbol(DecimalFormatSymbols::kZeroDigitSymbol, (UChar)0x30);
@@ -1224,7 +1083,7 @@ void NumberFormatTest::TestSurrogateSupport(void) {
     patternStr = patternStr.unescape();
     expStr = UnicodeString(" minus 20money separator00 units of money in your bank account", "");
     status = U_ZERO_ERROR;
-    expect(new DecimalFormat(patternStr, custom, status),
+    expect2(new DecimalFormat(patternStr, custom, status),
            int32_t(-20), expStr, status);
 
     custom.setSymbol(DecimalFormatSymbols::kPercentSymbol, "percent");
@@ -1232,7 +1091,7 @@ void NumberFormatTest::TestSurrogateSupport(void) {
     patternStr = patternStr.unescape();
     expStr = UnicodeString(" minus You've lost   minus 2000decimal00 percent of your money today", "");
     status = U_ZERO_ERROR;
-    expect(new DecimalFormat(patternStr, custom, status),
+    expect2(new DecimalFormat(patternStr, custom, status),
            int32_t(-20), expStr, status);
 }
 
@@ -1275,6 +1134,199 @@ void NumberFormatTest::TestCurrencyPatterns(void) {
             }
         }
         delete nf;
+    }
+}
+
+//----------------------------------------------------------------------
+// Support methods
+//----------------------------------------------------------------------
+
+UBool NumberFormatTest::equalValue(const Formattable& a, const Formattable& b) {
+    if (a.getType() == Formattable::kLong) {
+        if (b.getType() == Formattable::kLong) {
+            return a.getLong() == b.getLong();
+        } else if (b.getType() == Formattable::kDouble) {
+            return (double) a.getLong() == b.getDouble();
+        }
+    } else if (a.getType() == Formattable::kDouble) {
+        if (b.getType() == Formattable::kLong) {
+            return a.getDouble() == (double) b.getLong();
+        } else if (b.getType() == Formattable::kDouble) {
+            return a.getDouble() == b.getDouble();
+        }
+    }
+    return FALSE;
+}
+
+void NumberFormatTest::expect2(NumberFormat& fmt, const Formattable& n, const UnicodeString& str) {
+    // Don't round-trip format test, since we explicitly do it
+    expect(fmt, n, str, FALSE);
+    expect(fmt, str, n);
+}
+
+void NumberFormatTest::expect2(NumberFormat* fmt, const Formattable& n,
+                               const UnicodeString& exp,
+                               UErrorCode status) {
+    if (U_FAILURE(status)) {
+        errln("FAIL: NumberFormat constructor");
+    } else {
+        expect2(*fmt, n, exp);
+    }
+    delete fmt;
+}
+
+void NumberFormatTest::expect(NumberFormat& fmt, const UnicodeString& str, const Formattable& n) {
+    UErrorCode status = U_ZERO_ERROR;
+    Formattable num;
+    fmt.parse(str, num, status);
+    if (U_FAILURE(status)) {
+        errln(UnicodeString("FAIL: Parse failed for \"") + str + "\"");
+        return;
+    }
+    UnicodeString pat;
+    ((DecimalFormat*) &fmt)->toPattern(pat);
+    if (equalValue(num, n)) {
+        logln(UnicodeString("Ok   \"") + str + "\" x " +
+              pat + " = " +
+              toString(num));
+    } else {
+        errln(UnicodeString("FAIL \"") + str + "\" x " +
+              pat + " = " +
+              toString(num) + ", expected " + toString(n));
+    }
+}
+
+void NumberFormatTest::expect(NumberFormat& fmt, const Formattable& n,
+                              const UnicodeString& exp, UBool rt) {
+    UnicodeString saw;
+    FieldPosition pos;
+    UErrorCode status = U_ZERO_ERROR;
+    fmt.format(n, saw, pos, status);
+    CHECK(status, "NumberFormat::format");
+    UnicodeString pat;
+    ((DecimalFormat*) &fmt)->toPattern(pat);
+    if (saw == exp) {
+        logln(UnicodeString("Ok   ") + toString(n) + " x " +
+              escape(pat) + " = \"" +
+              escape(saw) + "\"");
+        // We should be able to round-trip the formatted string =>
+        // number => string (but not the other way around: number
+        // => string => number2, might have number2 != number):
+        if (rt) {
+            Formattable n2;
+            fmt.parse(exp, n2, status);
+            if (U_FAILURE(status)) {
+                errln(UnicodeString("FAIL: Parse failed for \"") + exp + "\"");
+                return;
+            }
+            UnicodeString saw2;
+            fmt.format(n2, saw2, pos, status);
+            CHECK(status, "NumberFormat::format");
+            if (saw2 != exp) {
+                errln((UnicodeString)"FAIL \"" + exp + "\" => " + toString(n2) +
+                      " => \"" + saw2 + "\"");
+            }
+        }
+    } else {
+        errln(UnicodeString("FAIL ") + toString(n) + " x " +
+              escape(pat) + " = \"" +
+              escape(saw) + "\", expected \"" + exp + "\"");
+    }
+}
+
+void NumberFormatTest::expect(NumberFormat* fmt, const Formattable& n,
+                              const UnicodeString& exp,
+                              UErrorCode status) {
+    if (U_FAILURE(status)) {
+        errln("FAIL: NumberFormat constructor");
+    } else {
+        expect(*fmt, n, exp);
+    }
+    delete fmt;
+}
+
+void NumberFormatTest::expectCurrency(NumberFormat& nf, const Locale& locale,
+                                      double value, const UnicodeString& string) {
+    UErrorCode ec = U_ZERO_ERROR;
+    DecimalFormat& fmt = * (DecimalFormat*) &nf;
+    const UChar DEFAULT_CURR[] = {45/*-*/,0};
+    const UChar* curr = DEFAULT_CURR;
+    if (*locale.getLanguage() != 0) {
+        curr = ucurr_forLocale(locale.getName(), &ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: UCurrency::forLocale");
+            return;
+        }
+        fmt.setCurrency(curr);
+    }
+    UnicodeString s;
+    fmt.format(value, s);
+    s.findAndReplace((UChar32)0x00A0, (UChar32)0x0020);
+
+    // Default display of the number yields "1234.5599999999999"
+    // instead of "1234.56".  Use a formatter to fix this.
+    NumberFormat* f = 
+        NumberFormat::createInstance(Locale::getUS(), ec);
+    UnicodeString v;
+    if (U_FAILURE(ec)) {
+        // Oops; bad formatter.  Use default op+= display.
+        v = (UnicodeString)"" + value;
+    } else {
+        f->setMaximumFractionDigits(4);
+        f->setGroupingUsed(FALSE);
+        f->format(value, v);
+    }
+    delete f;
+
+    if (s == string) {
+        logln((UnicodeString)"Ok: " + v + " x " + curr + " => " + prettify(s));
+    } else {
+        errln((UnicodeString)"FAIL: " + v + " x " + curr + " => " + prettify(s) +
+              ", expected " + prettify(string));
+    }
+}
+
+void NumberFormatTest::expectPat(DecimalFormat& fmt, const UnicodeString& exp) {
+    UnicodeString pat;
+    fmt.toPattern(pat);
+    if (pat == exp) {
+        logln(UnicodeString("Ok   \"") + pat + "\"");
+    } else {
+        errln(UnicodeString("FAIL \"") + pat + "\", expected \"" + exp + "\"");
+    }
+}
+
+void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
+                                 int32_t pos) {
+    expectPad(fmt, pat, pos, 0, (UnicodeString)"");
+}
+void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
+                                 int32_t pos, int32_t width, UChar pad) {
+    expectPad(fmt, pat, pos, width, UnicodeString(pad));
+}
+void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
+                                 int32_t pos, int32_t width, const UnicodeString& pad) {
+    int32_t apos = 0, awidth = 0;
+    UnicodeString apadStr;
+    UErrorCode status = U_ZERO_ERROR;
+    fmt.applyPattern(pat, status);
+    if (U_SUCCESS(status)) {
+        apos = fmt.getPadPosition();
+        awidth = fmt.getFormatWidth();
+        apadStr=fmt.getPadCharacterString();
+    } else {
+        apos = -1;
+        awidth = width;
+        apadStr = pad;
+    }
+    if (apos == pos && awidth == width && apadStr == pad) {
+        logln(UnicodeString("Ok   \"") + pat + "\" pos=" + apos +
+              ((pos == ILLEGAL) ? UnicodeString() :
+               (UnicodeString(" width=") + awidth + " pad=" + apadStr)));
+    } else {
+        errln(UnicodeString("FAIL \"") + pat + "\" pos=" + apos +
+              " width=" + awidth + " pad=" + apadStr +
+              ", expected " + pos + " " + width + " " + pad);
     }
 }
 
