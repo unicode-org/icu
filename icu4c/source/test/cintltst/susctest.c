@@ -831,7 +831,7 @@ TestSCSU()
 }
 
 void
-addSUSCTest(TestNode** root)
+addSCSUTest(TestNode** root)
 {
   addTest(root, &TestSCSU, "scsutest/TestSCSU");
 }

@@ -27,7 +27,6 @@ void addBreakIter(TestNode** root);
 void addFormatTest(TestNode** root);
 void addConvert(TestNode** root);
 void addCollTest(TestNode** root);
-void addSUSCTest(TestNode** root);
 void addComplexTest(TestNode** root);
 
 void addAllTests(TestNode** root)
@@ -37,6 +36,5 @@ void addAllTests(TestNode** root)
     addFormatTest(root);
     addConvert(root);
     addCollTest(root);
-    addSUSCTest(root);
     addComplexTest(root);
 }

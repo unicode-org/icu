@@ -23,14 +23,14 @@
 void addLocaleTest(TestNode**);
 void addUnicodeTest(TestNode**);
 void addResourceBundleTest(TestNode**);
-void addSUSCTest(TestNode** root);
+void addSCSUTest(TestNode** root);
 
 void addUtility(TestNode** root)
 {
     addLocaleTest(root);
     addUnicodeTest(root);
     addResourceBundleTest(root);
-    addSUSCTest(root);
+    addSCSUTest(root);
 
 }
 
