@@ -1055,14 +1055,6 @@ InputPath=.\unicode\umachine.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\umemstrm.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\umemstrm.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\umutex.c
 # ADD CPP /Ze
 # End Source File

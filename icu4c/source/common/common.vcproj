@@ -624,12 +624,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\umemstrm.c">
-			</File>
-			<File
-				RelativePath=".\umemstrm.h">
-			</File>
-			<File
 				RelativePath=".\umutex.c">
 				<FileConfiguration
 					Name="Release|Win32">
