@@ -98,7 +98,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const RuleBasedNumberFormat& rhs)
   , lenient(FALSE)
   , lenientParseRules(NULL)
 {
-  this->operator==(rhs);
+  this->operator=(rhs);
 }
 
 RuleBasedNumberFormat& 
