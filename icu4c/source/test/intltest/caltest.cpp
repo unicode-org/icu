@@ -151,6 +151,33 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
 
 // ---------------------------------------------------------------------------------
 
+static UnicodeString fieldName(Calendar::EDateFields f) {
+    switch (f) {
+    case Calendar::ERA:           return "ERA";
+    case Calendar::YEAR:          return "YEAR";
+    case Calendar::MONTH:         return "MONTH";
+    case Calendar::WEEK_OF_YEAR:  return "WEEK_OF_YEAR";
+    case Calendar::WEEK_OF_MONTH: return "WEEK_OF_MONTH";
+    case Calendar::DAY_OF_MONTH:  return "DAY_OF_MONTH"; // DATE is synonym for DAY_OF_MONTH
+    case Calendar::DAY_OF_YEAR:   return "DAY_OF_YEAR";
+    case Calendar::DAY_OF_WEEK:   return "DAY_OF_WEEK";
+    case Calendar::DAY_OF_WEEK_IN_MONTH: return "DAY_OF_WEEK_IN_MONTH";
+    case Calendar::AM_PM:         return "AM_PM";
+    case Calendar::HOUR:          return "HOUR";
+    case Calendar::HOUR_OF_DAY:   return "HOUR_OF_DAY";
+    case Calendar::MINUTE:        return "MINUTE";
+    case Calendar::SECOND:        return "SECOND";
+    case Calendar::MILLISECOND:   return "MILLISECOND";
+    case Calendar::ZONE_OFFSET:   return "ZONE_OFFSET";
+    case Calendar::DST_OFFSET:    return "DST_OFFSET";
+    case Calendar::YEAR_WOY:      return "YEAR_WOY";
+    case Calendar::DOW_LOCAL:     return "DOW_LOCAL";
+    case Calendar::FIELD_COUNT:   return "FIELD_COUNT";
+    default:
+        return UnicodeString("") + ((int32_t)f);
+    }
+}
+
 /**
  * Test various API methods for API completeness.
  */
@@ -1261,17 +1288,6 @@ void CalendarTest::yearAddTest(Calendar& cal, UErrorCode& status) {
 }
 
 // -------------------------------------
-
-static UnicodeString fieldName(Calendar::EDateFields f) {
-    switch (f) {
-    case 1:
-        return "YEAR";
-    case 17:
-        return "YEAR_WOY";
-    default:
-        return UnicodeString("") + f;
-    }
-}
 
 void CalendarTest::loop_addroll(Calendar *cal, /*SimpleDateFormat *sdf,*/ int times, Calendar::EDateFields field, Calendar::EDateFields field2, UErrorCode& errorCode) {
     Calendar *calclone;
