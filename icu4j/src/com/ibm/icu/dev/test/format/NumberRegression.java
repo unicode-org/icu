@@ -36,7 +36,6 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
 

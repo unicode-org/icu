@@ -7,7 +7,6 @@
 package com.ibm.icu.text;
 
 import java.util.Locale;
-//import java.util.ResourceBundle;
 import java.util.Arrays;
 import java.nio.ByteBuffer;
 import java.text.CharacterIterator;
@@ -18,12 +17,10 @@ import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.IntTrie;
 import com.ibm.icu.impl.Trie;
-//import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.BOCU;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.StringUCharacterIterator;
-import com.ibm.icu.impl.ICUListResourceBundle;
 
 /**
  * <p>RuleBasedCollator is a concrete subclass of Collator. It allows
