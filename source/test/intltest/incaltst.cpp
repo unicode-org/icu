@@ -60,7 +60,7 @@ static UnicodeString calToStr(const Calendar & cal)
 {
 
   UnicodeString out;
-  UErrorCode status;
+  UErrorCode status = U_ZERO_ERROR;
   int i;
   for(i = 0;i<UCAL_FIELD_COUNT;i++) {
     out += (UnicodeString("+") + fieldName((UCalendarDateFields)i) + "=" +  cal.get((UCalendarDateFields)i, status) + UnicodeString(", "));
