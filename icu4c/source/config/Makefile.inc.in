@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999-2002, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.30 $
+# $Revision: 1.31 $
 #******************************************************************************
 # This Makefile.inc is designed to be included into projects which make use
 # of the ICU.
@@ -90,6 +90,7 @@ ICULIBS_I18N   = -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
 ICULIBS_TOOLUTIL = -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
 ICULIBS_CTESTFW = -l$(ICUPREFIX)ctestfw$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
 ICULIBS_USTDIO = -lustdio$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
+ICULIBS_OBSOLETE = -l$(ICUPREFIX)obsolete$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
 ICULIBS_LAYOUT = -l$(ICUPREFIX)le$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
 ICULIBS_BASE = $(LIBS) -L$(libdir)
 
