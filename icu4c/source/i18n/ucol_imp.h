@@ -397,13 +397,31 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define INVC_DATA_TYPE "dat"
 #define INVC_DATA_NAME "invuca"
 
+/* This is an enum that lists magic special byte values from the fractional UCA */
+/* TODO: all the #defines that refer to special byte values from the UCA should be changed to point here */
+
+enum {
+    UCOL_BYTE_ZERO = 0x00,
+    UCOL_BYTE_LEVEL_SEPARATOR = 0x01,
+    UCOL_BYTE_SORTKEY_GLUE = 0x02,
+    UCOL_BYTE_SHIFT_PREFIX = 0x03,
+    UCOL_BYTE_UNSHIFTED_MIN = UCOL_BYTE_SHIFT_PREFIX,
+    UCOL_BYTE_FIRST_TAILORED = 0x04,
+    UCOL_BYTE_COMMON = 0x05,
+    UCOL_BYTE_FIRST_UCA = UCOL_BYTE_COMMON,
+    UCOL_BYTE_UNSHIFTED_MAX = 0xFF
+}; 
+
+#define UCOL_RESET_TOP_VALUE 0x9F000303
+#define UCOL_NEXT_TOP_VALUE  0xEC960303
+
 /* These constants can be changed - sortkey size is affected by them */
 #define UCOL_PROPORTION2 0.5
 #define UCOL_PROPORTION3 0.667
 
 /* These values come from the UCA */
 #define UCOL_COMMON_TOP2 0x86
-#define UCOL_COMMON_BOT2 0x05
+#define UCOL_COMMON_BOT2 UCOL_BYTE_COMMON
 #define UCOL_TOTAL2 (UCOL_COMMON_TOP2-UCOL_COMMON_BOT2-1) 
 
 /* These values come from the UCA */
