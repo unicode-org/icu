@@ -23,7 +23,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 #include "unicode/udata.h"
-#include "unicode/utf.h"
+#include "unicode/uset.h"
 #include "ustr_imp.h"
 #include "umutex.h"
 #include "cmemory.h"
@@ -31,8 +31,9 @@
 #include "ucln_cmn.h"
 #include "uprops.h"
 
-
 /* prototypes ------------------------------------------------------------- */
+
+#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
 static const char DATA_NAME[] = "unames";
 static const char DATA_TYPE[] = "icu";
@@ -65,6 +66,20 @@ typedef struct {
 
 static UDataMemory *uCharNamesData=NULL;
 static UCharNames *uCharNames=NULL;
+static UErrorCode gLoadErrorCode=U_ZERO_ERROR;
+
+/*
+ * Maximum length of character names (regular & 1.0).
+ * Maximum length of ISO comments.
+ */
+static int32_t gMaxNameLength=0, gMaxISOCommentLength=0;
+
+/*
+ * Set of chars used in character names (regular & 1.0).
+ * Set of chars used in ISO comments.
+ * Chars are platform-dependent (can be EBCDIC).
+ */
+static uint32_t gNameSet[8]={ 0 }, gISOCommentSet[8]={ 0 };
 
 static UBool
 isDataLoaded(UErrorCode *pErrorCode);
@@ -309,7 +324,7 @@ u_charFromName(UCharNameChoice nameChoice,
                        We could use a binary search, or a trie, if
                        we really wanted to. */
 
-                    for (lower[i] = 0, cIdx = 0; cIdx < sizeof(charCatNames) / sizeof(*charCatNames); ++cIdx) {
+                    for (lower[i] = 0, cIdx = 0; cIdx < LENGTHOF(charCatNames); ++cIdx) {
 
                         if (!uprv_strcmp(lower + 1, charCatNames[cIdx])) {
                             if (getCharCat(cp) == cIdx) {
@@ -428,6 +443,7 @@ unames_cleanup()
     if(uCharNames) {
         uCharNames = NULL;
     }
+    gMaxNameLength=0;
     return TRUE;
 }
 
@@ -438,9 +454,16 @@ isDataLoaded(UErrorCode *pErrorCode) {
         UCharNames *names;
         UDataMemory *data;
 
+        /* check error code from previous attempt */
+        if(U_FAILURE(gLoadErrorCode)) {
+            *pErrorCode=gLoadErrorCode;
+            return FALSE;
+        }
+
         /* open the data outside the mutex block */
         data=udata_openChoice(NULL, DATA_TYPE, DATA_NAME, isAcceptable, NULL, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
+            gLoadErrorCode=*pErrorCode;
             return FALSE;
         }
 
@@ -612,6 +635,14 @@ expandGroupName(UCharNames *names, Group *group,
 /*
  * Important: expandName() and compareName() are almost the same -
  * apply fixes to both.
+ *
+ * UnicodeData.txt uses ';' as a field separator, so no
+ * field can contain ';' as part of its contents.
+ * In unames.dat, it is marked as token[';']==-1 only if the
+ * semicolon is used in the data file - which is iff we
+ * have Unicode 1.0 names or ISO comments.
+ * So, it will be token[';']==-1 if we store U1.0 names/ISO comments
+ * although we know that it will never be part of a name.
  */
 static uint16_t
 expandName(UCharNames *names,
@@ -1458,7 +1489,7 @@ static const char *getCharCatName(UChar32 cp) {
     /* Return unknown if the table of names above is not up to
        date. */
 
-    if (cat >= sizeof(charCatNames) / sizeof(*charCatNames)) {
+    if (cat >= LENGTHOF(charCatNames)) {
         return "unknown";
     } else {
         return charCatNames[cat];
@@ -1492,71 +1523,334 @@ static uint16_t getExtName(uint32_t code, char *buffer, uint16_t bufferLength) {
     return length;
 }
 
-/**
- * This can be made more efficient by moving it into putil.c and having
- * it directly access the ebcdic translation tables.
- * TODO: Consider moving this into putil.c
- */
-UChar
-u_charToUChar(char c) {
-    UChar uc;
-    u_charsToUChars(&c, &uc, 1);
-    return uc;
+/* sets of name characters, maximum name lengths ---------------------------- */
+
+#define SET_ADD(set, c) ((set)[(uint8_t)c>>5]|=((uint32_t)1<<((uint8_t)c&0x1f)))
+#define SET_CONTAINS(set, c) (((set)[(uint8_t)c>>5]&((uint32_t)1<<((uint8_t)c&0x1f)))!=0)
+
+static int32_t
+calcStringSetLength(uint32_t set[8], const char *s) {
+    int32_t length=0;
+    char c;
+
+    while((c=*s++)!=0) {
+        SET_ADD(set, c);
+        ++length;
+    }
+    return length;
 }
 
-/**
- * Fills us with characters that are used in Unicode character names.
- * @param us USet to receive characters.  Existing contents are deleted.
- */
-U_CAPI void U_EXPORT2
-uprv_getCharNameCharacters(USet* us) {
-    int16_t* tokens;
-    int16_t tokenCount;
-    UErrorCode ec = U_ZERO_ERROR;
-    int32_t i, count;
+static int32_t
+calcAlgNameSetsLengths(int32_t maxNameLength) {
+    AlgorithmicRange *range;
+    uint32_t *p;
+    uint32_t rangeCount;
+    int32_t length;
 
-    uset_clear(us);
-
-    if(!isDataLoaded(&ec)) {
-        return;
-    }
-
-    tokens=(int16_t *)uCharNames+8;
-    tokenCount=*tokens++;
-
-    count=tokenCount;
-    if (count>256) {
-        count=256;
-    }
-
-    for(i=0; i<count; ++i) {
-        switch (i) {
-        case (int32_t)(uint8_t)';':
-        case (int32_t)(uint8_t)'*':
-        case (int32_t)(uint8_t)',':
-            /* UnicodeData.txt uses ';' as a field separator, so no
-               field can contain ';' as part of its contents.  In
-               unames.dat, it is marked as token[';']==-1 only if the
-               semicolon is used in the data file - which is iff we
-               have Unicode 1.0 names or ISO comments.  So, it will be
-               token[';']==-1 if we store U1.0 names/ISO comments
-               although we know that it will never be part of a
-               name. [markus] */
-            /* Skip '*' and ',', which I determined by testing the
-               actual names to not be present. [alan] TODO - determine
-               why these are showing up here; they shouldn't be. */
+    /* enumerate algorithmic ranges */
+    p=(uint32_t *)((uint8_t *)uCharNames+uCharNames->algNamesOffset);
+    rangeCount=*p;
+    range=(AlgorithmicRange *)(p+1);
+    while(rangeCount>0) {
+        switch(range->type) {
+        case 0:
+            /* name = prefix + (range->variant times) hex-digits */
+            /* prefix */
+            length=calcStringSetLength(gNameSet, (const char *)(range+1))+range->variant;
+            if(length>maxNameLength) {
+                maxNameLength=length;
+            }
             break;
-        default:
-            if (tokens[i]==-1) {
-                uset_add(us, (UChar32)u_charToUChar((char)i));
+        case 1: {
+            /* name = prefix factorized-elements */
+            const uint16_t *factors=(const uint16_t *)(range+1);
+            const char *s;
+            int32_t i, count=range->variant, factor, factorLength, maxFactorLength;
+
+            /* prefix length */
+            s=(const char *)(factors+count);
+            length=calcStringSetLength(gNameSet, s);
+            s+=length+1; /* start of factor suffixes */
+
+            /* get the set and maximum factor suffix length for each factor */
+            for(i=0; i<count; ++i) {
+                maxFactorLength=0;
+                for(factor=factors[i]; factor>0; --factor) {
+                    factorLength=calcStringSetLength(gNameSet, s);
+                    s+=factorLength+1;
+                    if(factorLength>maxFactorLength) {
+                        maxFactorLength=factorLength;
+                    }
+                }
+                length+=maxFactorLength;
+            }
+
+            if(length>maxNameLength) {
+                maxNameLength=length;
             }
             break;
         }
+        default:
+            /* unknown type */
+            break;
+        }
+
+        range=(AlgorithmicRange *)((uint8_t *)range+range->size);
+        --rangeCount;
+    }
+    return maxNameLength;
+}
+
+static int32_t
+calcExtNameSetsLengths(int32_t maxNameLength) {
+    int32_t i, length;
+
+    for(i=0; i<LENGTHOF(charCatNames); ++i) {
+        /*
+         * for each category, count the length of the category name
+         * plus 9=
+         * 2 for <>
+         * 1 for -
+         * 6 for most hex digits per code point
+         */
+        length=9+calcStringSetLength(gNameSet, charCatNames[i]);
+        if(length>maxNameLength) {
+            maxNameLength=length;
+        }
+    }
+    return maxNameLength;
+}
+
+static int32_t
+calcNameSetLength(const uint16_t *tokens, uint16_t tokenCount, const uint8_t *tokenStrings, int8_t *tokenLengths,
+                  uint32_t set[8],
+                  const uint8_t **pLine, const uint8_t *lineLimit) {
+    const uint8_t *line=*pLine;
+    int32_t length=0, tokenLength;
+    uint16_t c, token;
+
+    while(line!=lineLimit && (c=*line++)!=(uint8_t)';') {
+        if(c>=tokenCount) {
+            /* implicit letter */
+            SET_ADD(set, c);
+            ++length;
+        } else {
+            token=tokens[c];
+            if(token==(uint16_t)(-2)) {
+                /* this is a lead byte for a double-byte token */
+                c=c<<8|*line++;
+                token=tokens[c];
+            }
+            if(token==(uint16_t)(-1)) {
+                /* explicit letter */
+                SET_ADD(set, c);
+                ++length;
+            } else {
+                /* count token word */
+                if(tokenLengths!=NULL) {
+                    /* use cached token length */
+                    tokenLength=tokenLengths[c];
+                    if(tokenLength==0) {
+                        tokenLength=calcStringSetLength(set, (const char *)tokenStrings+token);
+                        tokenLengths[c]=(int8_t)tokenLength;
+                    }
+                } else {
+                    tokenLength=calcStringSetLength(set, (const char *)tokenStrings+token);
+                }
+                length+=tokenLength;
+            }
+        }
     }
 
-    /* Fix up the results.  Add '<' and '>' for extended names. */
-    uset_add(us, (UChar32)u_charToUChar('<'));
-    uset_add(us, (UChar32)u_charToUChar('>'));
+    *pLine=line;
+    return length;
+}
+
+static void
+calcGroupNameSetsLengths(int32_t maxNameLength) {
+    uint16_t offsets[LINES_PER_GROUP+2], lengths[LINES_PER_GROUP+2];
+
+    uint16_t *tokens=(uint16_t *)uCharNames+8;
+    uint16_t tokenCount=*tokens++;
+    uint8_t *tokenStrings=(uint8_t *)uCharNames+uCharNames->tokenStringOffset;
+
+    int8_t *tokenLengths;
+
+    uint16_t *groups;
+    Group *group;
+    const uint8_t *s, *line, *lineLimit;
+
+    int32_t maxISOCommentLength=0;
+    int32_t groupCount, lineNumber, length;
+
+    tokenLengths=(int8_t *)uprv_malloc(tokenCount);
+    if(tokenLengths!=NULL) {
+        uprv_memset(tokenLengths, 0, tokenCount);
+    }
+
+    groups=(uint16_t *)((char *)uCharNames+uCharNames->groupsOffset);
+    groupCount=*groups++;
+    group=(Group *)groups;
+
+    /* enumerate all groups */
+    while(groupCount>0) {
+        s=(uint8_t *)uCharNames+uCharNames->groupStringOffset+
+                                    ((int32_t)group->offsetHigh<<16|group->offsetLow);
+        s=expandGroupLengths(s, offsets, lengths);
+
+        /* enumerate all lines in each group */
+        for(lineNumber=0; lineNumber<LINES_PER_GROUP; ++lineNumber) {
+            line=s+offsets[lineNumber];
+            length=lengths[lineNumber];
+            if(length==0) {
+                continue;
+            }
+
+            lineLimit=line+length;
+
+            /* read regular name */
+            length=calcNameSetLength(tokens, tokenCount, tokenStrings, tokenLengths, gNameSet, &line, lineLimit);
+            if(length>maxNameLength) {
+                maxNameLength=length;
+            }
+            if(line==lineLimit) {
+                continue;
+            }
+
+            /* read Unicode 1.0 name */
+            length=calcNameSetLength(tokens, tokenCount, tokenStrings, tokenLengths, gNameSet, &line, lineLimit);
+            if(length>maxNameLength) {
+                maxNameLength=length;
+            }
+            if(line==lineLimit) {
+                continue;
+            }
+
+            /* read ISO comment */
+            length=calcNameSetLength(tokens, tokenCount, tokenStrings, tokenLengths, gISOCommentSet, &line, lineLimit);
+            if(length>maxISOCommentLength) {
+                maxISOCommentLength=length;
+            }
+        }
+
+        ++group;
+        --groupCount;
+    }
+
+    if(tokenLengths!=NULL) {
+        uprv_free(tokenLengths);
+    }
+
+    /* set gMax... - name length last for threading */
+    gMaxISOCommentLength=maxISOCommentLength;
+    gMaxNameLength=maxNameLength;
+}
+
+static UBool
+calcNameSetsLengths(UErrorCode *pErrorCode) {
+    static const char extChars[]="0123456789ABCDEF<>-";
+    int32_t i, maxNameLength;
+
+    if(gMaxNameLength!=0) {
+        return TRUE;
+    }
+
+    if(!isDataLoaded(pErrorCode)) {
+        return FALSE;
+    }
+
+    /* set hex digits, used in various names, and <>-, used in extended names */
+    for(i=0; i<sizeof(extChars)-1; ++i) {
+        SET_ADD(gNameSet, extChars[i]);
+    }
+
+    /* set sets and lengths from algorithmic names */
+    maxNameLength=calcAlgNameSetsLengths(0);
+
+    /* set sets and lengths from extended names */
+    maxNameLength=calcExtNameSetsLengths(maxNameLength);
+
+    /* set sets and lengths from group names, set global maximum values */
+    calcGroupNameSetsLengths(maxNameLength);
+
+    return TRUE;
+}
+
+U_CAPI int32_t U_EXPORT2
+uprv_getMaxCharNameLength() {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    if(calcNameSetsLengths(&errorCode)) {
+        return gMaxNameLength;
+    } else {
+        return 0;
+    }
+}
+
+U_CAPI int32_t U_EXPORT2
+uprv_getMaxISOCommentLength() {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    if(calcNameSetsLengths(&errorCode)) {
+        return gMaxISOCommentLength;
+    } else {
+        return 0;
+    }
+}
+
+/**
+ * Converts the char set cset into a Unicode set uset.
+ * @param cset Set of 256 bit flags corresponding to a set of chars.
+ * @param uset USet to receive characters. Existing contents are deleted.
+ */
+static void
+charSetToUSet(uint32_t cset[8], USet* uset) {
+    UChar us[256];
+    char cs[256];
+
+    int32_t i, length;
+    UErrorCode errorCode;
+
+    errorCode=U_ZERO_ERROR;
+    uset_clear(uset);
+
+    if(!calcNameSetsLengths(&errorCode)) {
+        return;
+    }
+
+    /* build a char string with all chars that are used in character names */
+    length=0;
+    for(i=0; i<256; ++i) {
+        if(SET_CONTAINS(gNameSet, i)) {
+            cs[length++]=(char)i;
+        }
+    }
+
+    /* convert the char string to a UChar string */
+    u_charsToUChars(cs, us, length);
+
+    /* add each UChar to the USet */
+    for(i=0; i<length; ++i) {
+        if(us[i]!=0 || cs[i]==0) { /* non-invariant chars become (UChar)0 */
+            uset_add(uset, us[i]);
+        }
+    }
+}
+
+/**
+ * Fills set with characters that are used in Unicode character names.
+ * @param set USet to receive characters. Existing contents are deleted.
+ */
+U_CAPI void U_EXPORT2
+uprv_getCharNameCharacters(USet* set) {
+    charSetToUSet(gNameSet, set);
+}
+
+/**
+ * Fills set with characters that are used in Unicode character names.
+ * @param set USet to receive characters. Existing contents are deleted.
+ */
+U_CAPI void U_EXPORT2
+uprv_getISOCommentCharacters(USet* set) {
+    charSetToUSet(gISOCommentSet, set);
 }
 
 /*
