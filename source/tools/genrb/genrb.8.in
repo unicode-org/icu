@@ -28,6 +28,9 @@
 [
 .BI "\-d\fP, \fB\-\-destdir" " destination"
 ]
+[
+.BI "\-i\fP, \fB\-\-icudatadir" " ICU data directory"
+]
 .IR bundle " \.\.\."
 .SH DESCRIPTION
 .B genrb
@@ -83,6 +86,13 @@ The default source directory is specified by the environment variable
 Set the destination directory to
 .IR destination .
 The default destination directory is specified by the environment variable
+.BR ICU_DATA .
+.TP
+.BI "\-i\fP, \fB\-\-icudatadir" " ICU data directory"
+Set the directory used to locate any necessary ICU data files to
+.IR icudatadir .
+For example, when processing collation overrides, ucadata.dat must be located.
+The default ICU data directory is specified by the environment variable
 .BR ICU_DATA .
 .SH INVARIANT CHARACTERS
 The

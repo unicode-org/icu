@@ -60,7 +60,8 @@ enum {
     VERSION,
     SOURCEDIR,
     DESTDIR,
-    ENCODING
+    ENCODING,
+    ICUDATADIR
 };
 
 UOption options[]={
@@ -70,7 +71,8 @@ UOption options[]={
     UOPTION_VERSION,
     UOPTION_SOURCEDIR,
     UOPTION_DESTDIR,
-    UOPTION_ENCODING
+    UOPTION_ENCODING,
+    UOPTION_ICUDATADIR
 };
 
 
@@ -115,8 +117,10 @@ main(int argc,
       "\t\t-v or --verbose      be verbose\n"
       "\t\t-e or --encoding     encoding of source files, leave empty for system default encoding\n"
       "\t\t                     NOTE: ICU must be completely built to use this option\n"
-      "\t\t-s or --sourcedir    source directory for files followed by path, defaults to %s\n",
-      argv[0], u_getDataDirectory(), u_getDataDirectory());
+      "\t\t-s or --sourcedir    source directory for files followed by path, defaults to %s\n"
+      "\t\t-i or --icudatadir   directory for locating any needed intermediate data files,\n"
+      "\t\t                     followed by path, defaults to %s\n",
+      argv[0], u_getDataDirectory(), u_getDataDirectory(),u_getDataDirectory());
       return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
   }
 
@@ -144,7 +148,11 @@ main(int argc,
       encoding = options[ENCODING].value;
   }
 
-  /* generate the binary files */
+  if(options[ICUDATADIR].doesOccur) {
+      u_setDataDirectory(options[ICUDATADIR].value);
+  }
+
+    /* generate the binary files */
   for(i = 1; i < argc; ++i) {
     status = U_ZERO_ERROR;
     arg = getLongPathname(argv[i]);
@@ -161,6 +169,7 @@ main(int argc,
     }
 */
     printf("genrb: processing file \"%s\"\n", arg);
+    
     processFile(arg, encoding, inputDir, outputDir, &status);
     /*make_col(arg, &status);*/
     if(U_FAILURE(status)) {
