@@ -35,7 +35,6 @@ extern void pkg_mode_common(UPKGOptions* o, FileStream *stream, UErrorCode *stat
 
 static void loadLists(UPKGOptions *o, UErrorCode *status);
 
-
 /* This sets the modes that are available */
 static struct
 {
@@ -277,7 +276,7 @@ main(int argc, const char *argv[]) {
     make = getenv("MAKE");
 
     if(!make || !make[0]) {
-      make = "gmake";
+      make = U_MAKE;
     }
 
     getcwd(pwd, 1024);

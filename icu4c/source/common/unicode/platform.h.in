@@ -172,3 +172,10 @@ typedef unsigned short uint16_t;
 #define U_EXPORT
 #define U_EXPORT2
 #define U_IMPORT
+
+/*===========================================================================*/
+/* Programs used by ICU code                                                 */
+/*===========================================================================*/
+
+#define U_MAKE	"@U_MAKE@"
+
