@@ -206,7 +206,7 @@ static void TestUnicodeIDs() {
             break;
         }
 
-        if(++count==5) {
+        if(++count>10) {
             /* try to actually open only a few transliterators */
             continue;
         }
