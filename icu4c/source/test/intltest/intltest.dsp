@@ -330,6 +330,14 @@ SOURCE=.\srchtest.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\svccoll.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\svccoll.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\thcoll.cpp
 # End Source File
 # Begin Source File
