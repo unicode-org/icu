@@ -122,9 +122,12 @@ main(int argc, char* argv[]) {
         fprintf(stderr,
             "\t-d or --destdir     destination directory, followed by the path\n"
             "\t-s or --sourcedir   source directory, followed by the path\n"
+            "\t-i or --icudatadir  directory for locating any needed intermediate data files,\n"
+            "\t                    followed by path, defaults to <%s>\n"
             "\tsuffix              suffix that is to be appended with a '-'\n"
             "\t                    to the source file basenames before opening;\n"
-            "\t                    'gennorm new' will read UnicodeData-new.txt etc.\n");
+            "\t                    'gennorm new' will read UnicodeData-new.txt etc.\n",
+            u_getDataDirectory());
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
