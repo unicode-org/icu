@@ -268,6 +268,13 @@ void IntlCalendarTest::TestBuddhist() {
                      -540,        // G. year
                      UCAL_FEBRUARY,   // month
                      12,           // day
+
+                     0,           // test month calculation:  4795 BE = 4252 AD is a leap year, but 4795 AD is not.
+                     4795,        // BE
+                     4252,        // AD
+                     UCAL_FEBRUARY,
+                     29,
+
                      -1,-1,-1,-1,-1,-1,-1,-1,-1,-1 };
   Calendar *cal;
   UErrorCode status = U_ZERO_ERROR;
