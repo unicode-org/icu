@@ -521,6 +521,14 @@ TestOpenDirect(void) {
         log_err("ures_openDirect(\"translit_index_WronG\") succeeded, should fail!\n");
     }
     ures_close(translit_index);
+
+    errorCode = U_USING_FALLBACK_WARNING;;
+    translit_index=ures_openDirect(NULL, "translit_index", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ures_openDirect(\"translit_index\") failed when U_USING_FALLBACK_WARNING was set prior to call: %s\n", u_errorName(errorCode));
+        return;
+    }
+    ures_close(translit_index);
 }
 
 static int32_t
