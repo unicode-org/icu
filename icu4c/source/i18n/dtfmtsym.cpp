@@ -690,6 +690,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         // fastCopyFrom() - see assignArray comments
         fWeekdays[i+1].fastCopyFrom(weekdaysData.getStringEx(i, status));
     }
+    fWeekdaysCount++;
 
     ResourceBundle lsweekdaysData(getData(resource, gDayAbbreviationsTag, type, status));
     fShortWeekdaysCount = lsweekdaysData.getSize();
@@ -704,9 +705,8 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         // fastCopyFrom() - see assignArray comments
         fShortWeekdays[i+1].fastCopyFrom(lsweekdaysData.getStringEx(i, status));
     }
+    fShortWeekdaysCount++;
 
-    fWeekdaysCount = fShortWeekdaysCount = 8;
-    
     // If the locale data does not include new pattern chars, use the defaults
     if (fLocalPatternChars.length() < PATTERN_CHARS_LEN) {
         fLocalPatternChars.append(&gPatternChars[fLocalPatternChars.length()]);
