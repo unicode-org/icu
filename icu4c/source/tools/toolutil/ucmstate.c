@@ -276,7 +276,7 @@ ucm_parseHeaderLine(UCMFile *ucm,
         c=**pValue;
         if('1'<=c && c<='4' && (*pValue)[1]==0) {
             states->maxCharLength=(int8_t)(c-'0');
-            states->outputType=states->maxCharLength-1;
+            states->outputType=(int8_t)(states->maxCharLength-1);
         } else {
             fprintf(stderr, "ucm error: illegal <mb_cur_max> %s\n", *pValue);
             exit(U_INVALID_TABLE_FORMAT);
