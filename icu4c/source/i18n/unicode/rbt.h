@@ -356,7 +356,7 @@ public:
 
  private:
 
-    friend Transliterator; // to access following ct
+    friend class Transliterator; // to access following ct
 
     /**
      * Internal constructor.
