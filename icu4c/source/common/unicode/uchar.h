@@ -83,6 +83,16 @@ U_CDECL_BEGIN
  * <strong>Important</strong>:
  * The behavior of the ICU C/POSIX-style character classification
  * functions is subject to change according to discussion of the above summary.
+ *
+ * Note: There are several ICU whitespace functions.
+ * Comparison:
+ * - u_isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
+ *       most of general categories "Z" (separators) + most whitespace ISO controls
+ *       (including no-break spaces, but excluding IS1..IS4 and ZWSP)
+ * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
+ * - u_isJavaSpaceChar: Java isSpaceChar; just Z (including no-break spaces)
+ * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
+ * - u_isblank: "horizontal spaces" = TAB + Zs - ZWSP
  */
 
 /**
@@ -1331,14 +1341,8 @@ u_isUUppercase(UChar32 c);
  * Same as u_hasBinaryProperty(c, UCHAR_WHITE_SPACE).
  * This is different from both u_isspace and u_isWhitespace!
  *
- * Comparison:
- * - u_isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
- *       most of general categories "Z" (separators) + most whitespace ISO controls
- *       (including no-break spaces, but excluding IS1..IS4 and ZWSP)
- * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
- * - u_isJavaSpaceChar: Java isSpaceChar; just Z (including no-break spaces)
- * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
- * - u_isblank: "horizontal spaces" = TAB + Zs - ZWSP
+ * Note: There are several ICU whitespace functions; please see the uchar.h
+ * file documentation for a detailed comparison.
  *
  * @param c Code point to test
  * @return true if the code point has the White_Space Unicode property, false otherwise.
@@ -1673,7 +1677,7 @@ u_isgraph(UChar32 c);
  * The following are equivalent definitions:
  *
  * TRUE for Unicode White_Space characters except for "vertical space controls"
- * where "vertical space controls" contains
+ * where "vertical space controls" are the following characters:
  * U+000A (LF) U+000B (VT) U+000C (FF) U+000D (CR) U+0085 (NEL) U+2028 (LS) U+2029 (PS)
  *
  * same as
@@ -1681,14 +1685,8 @@ u_isgraph(UChar32 c);
  * TRUE for U+0009 (TAB) and characters with general category "Zs" (space separators)
  * except Zero Width Space (ZWSP, U+200B).
  *
- * Comparison:
- * - u_isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
- *       most of general categories "Z" (separators) + most whitespace ISO controls
- *       (including no-break spaces, but excluding IS1..IS4 and ZWSP)
- * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
- * - u_isJavaSpaceChar: Java isSpaceChar; just Z (including no-break spaces)
- * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
- * - u_isblank: "horizontal spaces" = TAB + Zs - ZWSP
+ * Note: There are several ICU whitespace functions; please see the uchar.h
+ * file documentation for a detailed comparison.
  *
  * This is a C/POSIX migration function.
  * See the comments about C/POSIX character classification functions in the
@@ -1730,14 +1728,8 @@ u_isdefined(UChar32 c);
 /**
  * Determines if the specified character is a space character or not.
  *
- * Comparison:
- * - u_isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
- *       most of general categories "Z" (separators) + most whitespace ISO controls
- *       (including no-break spaces, but excluding IS1..IS4 and ZWSP)
- * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
- * - u_isJavaSpaceChar: Java isSpaceChar; just Z (including no-break spaces)
- * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
- * - u_isblank: "horizontal spaces" = TAB + Zs - ZWSP
+ * Note: There are several ICU whitespace functions; please see the uchar.h
+ * file documentation for a detailed comparison.
  *
  * This is a C/POSIX migration function.
  * See the comments about C/POSIX character classification functions in the
@@ -1761,14 +1753,8 @@ u_isspace(UChar32 c);
  *
  * Same as java.lang.Character.isSpaceChar().
  *
- * Comparison:
- * - u_isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
- *       most of general categories "Z" (separators) + most whitespace ISO controls
- *       (including no-break spaces, but excluding IS1..IS4 and ZWSP)
- * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
- * - u_isJavaSpaceChar: Java isSpaceChar; just Z (including no-break spaces)
- * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
- * - u_isblank: "horizontal spaces" = TAB + Zs - ZWSP
+ * Note: There are several ICU whitespace functions; please see the uchar.h
+ * file documentation for a detailed comparison.
  *
  * @param c the code point to be tested
  * @return TRUE if the code point is a space character according to Character.isSpaceChar()
@@ -1801,14 +1787,8 @@ u_isJavaSpaceChar(UChar32 c);
  *
  * Same as java.lang.Character.isWhitespace() except that Java omits U+0085.
  *
- * Comparison:
- * - u_isUWhiteSpace=UCHAR_WHITE_SPACE: Unicode White_Space property;
- *       most of general categories "Z" (separators) + most whitespace ISO controls
- *       (including no-break spaces, but excluding IS1..IS4 and ZWSP)
- * - u_isWhitespace: Java isWhitespace; Z + whitespace ISO controls but excluding no-break spaces
- * - u_isJavaSpaceChar: Java isSpaceChar; just Z (including no-break spaces)
- * - u_isspace: Z + whitespace ISO controls (including no-break spaces)
- * - u_isblank: "horizontal spaces" = TAB + Zs - ZWSP
+ * Note: There are several ICU whitespace functions; please see the uchar.h
+ * file documentation for a detailed comparison.
  *
  * @param c the code point to be tested
  * @return TRUE if the code point is a whitespace character according to Java/ICU
