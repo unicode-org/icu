@@ -17,8 +17,6 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
 import java.awt.event.InputMethodEvent;
 import java.awt.event.KeyEvent;
@@ -31,11 +29,9 @@ import java.awt.im.spi.InputMethodContext;
 import java.text.AttributedString;
 import java.util.Comparator;
 import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.TreeSet;
 
 import javax.swing.JComboBox;
@@ -43,11 +39,11 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import com.ibm.icu.text.Transliterator;
-import com.ibm.icu.text.ReplaceableString;
-import com.ibm.icu.text.Collator;
-import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.ReplaceableString;
+import com.ibm.icu.text.Transliterator;
 
 public class TransliteratorInputMethod implements InputMethod {
 
