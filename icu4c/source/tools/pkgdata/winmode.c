@@ -40,17 +40,19 @@ void writeCmnRules(UPKGOptions *o,  FileStream *makefile)
     char tmp[1024];
     CharList *infiles;
 
-    if(o->compatMode) {
+    if(!o->embed) {
       infiles = o->files; 
     } else {
       infiles = o->filePaths;
     }
     sprintf(tmp, "\"$(TARGETDIR)\\$(CMNTARGET)\" : $(DATAFILEPATHS)\n"
-        "\t@\"$(GENCMN)\" %s%s%s-d \"$(TARGETDIR)\" %s -n \"$(NAME)\" 0 <<\n",
+        "\t%s\"$(GENCMN)\" %s%s%s-d \"$(TARGETDIR)\" %s %s -n \"$(NAME)\" 0 <<\n",
+        (o->verbose ? "" : "@"),
         (o->comment ? "-C \"" : ""),
         (o->comment ? o->comment : ""),
         (o->comment ? "\" " : ""),
-		(o->embed ? "-E" : ""));
+        (o->embed ? "-E" : ""),
+         o->embed ? "" : "-s \"$(SRCDIR)\"");
     T_FileStream_writeLine(makefile, tmp);
 
     pkg_writeCharList(makefile, infiles, "\n", -1);

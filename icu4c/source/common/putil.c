@@ -1285,6 +1285,9 @@ UBool putil_cleanup(void)
 U_CAPI void U_EXPORT2
 u_setDataDirectory(const char *directory) {
     char *newDataDir;
+#if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
+    char *p;
+#endif
     int32_t length;
 
     if(directory==NULL) {
@@ -1293,6 +1296,12 @@ u_setDataDirectory(const char *directory) {
     length=(int32_t)uprv_strlen(directory);
     newDataDir = (char *)uprv_malloc(length + 2);
     uprv_strcpy(newDataDir, directory);
+
+#if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
+    while(p = uprv_strchr(newDataDir, U_FILE_ALT_SEP_CHAR)) {
+       *p = U_FILE_SEP_CHAR;
+    }
+#endif
 
     umtx_lock(NULL);
     if (gDataDirectory) {
@@ -1312,11 +1321,14 @@ uprv_pathIsAbsolute(const char *path)
   if(*path == U_FILE_SEP_CHAR) {
     return TRUE;
   }
-#if defined(WIN32)
-  if(*path == '/') {
+
+#if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
+  if(*path == U_FILE_ALT_SEP_CHAR) {
     return TRUE;
   }
+#endif
 
+#if defined(WIN32)
   if( (((path[0] >= 'A') && (path[0] <= 'Z')) ||
        ((path[0] >= 'a') && (path[0] <= 'z'))) &&
       path[1] == ':' ) {

@@ -33,6 +33,12 @@ char linebuf[2048];
 void
 pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
 {
+    const char *appendVersion = NULL;
+    if(o->version && !uprv_strstr(o->shortName,o->version)) { /* do not append version if 
+                                                                 already contained in the name */
+      appendVersion = o->version;
+    }
+
     sprintf(linebuf, "## Makefile for %s (%s) created by pkgdata\n"
                     "## from ICU Version %s\n"
                     "\n",
@@ -52,7 +58,7 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
                     "TARGET_VERSION=%s\n"
                     "\n\n\n",
                     o->shortName,
-                    (o->version ? o->version : ""),
+                    (appendVersion ? appendVersion : ""),
                     o->cShortName,
                     o->srcDir,
                     o->targetDir,
@@ -60,7 +66,7 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
                     o->mode,
                     o->makeFile,
                     o->entryName,
-                    (o->version ? o->version : ""));
+                    (appendVersion ? appendVersion : ""));
     T_FileStream_writeLine(f, linebuf);
     
     sprintf(linebuf, "## List files [%d] containing data files to process (note: - means stdin)\n"
