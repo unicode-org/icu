@@ -258,7 +258,7 @@ utrans_setFilter(UTransliterator* trans,
 
     utrans_ENTRY(status);
     UnicodeFilter* filter = NULL;
-    if (filterPattern != NULL && *filterPattern == 0) {
+    if (filterPattern != NULL && *filterPattern != 0) {
         // Create read only alias of filterPattern:
         UnicodeString pat(filterPatternLen < 0, filterPattern, filterPatternLen);
         filter = new UnicodeSet(pat, *status);
