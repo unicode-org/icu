@@ -966,6 +966,52 @@ public:
                                               const UnicodeString& target,
                                               UnicodeString& result);
 
+ protected:
+
+    /**
+     * Non-mutexed internal method
+     * @internal
+     */
+    static int32_t _countAvailableSources(void);
+    
+    /**
+     * Non-mutexed internal method
+     * @internal
+     */
+    static UnicodeString& _getAvailableSource(int32_t index,
+					      UnicodeString& result);
+    
+    /**
+     * Non-mutexed internal method
+     * @internal
+     */
+    static int32_t _countAvailableTargets(const UnicodeString& source);
+    
+    /**
+     * Non-mutexed internal method
+     * @internal
+     */
+    static UnicodeString& _getAvailableTarget(int32_t index,
+					      const UnicodeString& source,
+					      UnicodeString& result);
+    
+    /**
+     * Non-mutexed internal method
+     * @internal
+     */
+    static int32_t _countAvailableVariants(const UnicodeString& source,
+					   const UnicodeString& target);
+    
+    /**
+     * Non-mutexed internal method
+     * @internal
+     */
+    static UnicodeString& _getAvailableVariant(int32_t index,
+					       const UnicodeString& source,
+					       const UnicodeString& target,
+					       UnicodeString& result);
+ public:
+
     /**
      * Return the class ID for this class.  This is useful only for
      * comparing to a return value from getDynamicClassID().  For example:

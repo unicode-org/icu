@@ -1156,7 +1156,7 @@ int32_t Transliterator::countAvailableSources(void) {
         initializeRegistry();
     }
     Mutex lock(&registryMutex);
-    return registry->countAvailableSources();
+    return _countAvailableSources();
 }
 
 UnicodeString& Transliterator::getAvailableSource(int32_t index,
@@ -1165,7 +1165,7 @@ UnicodeString& Transliterator::getAvailableSource(int32_t index,
         initializeRegistry();
     }
     Mutex lock(&registryMutex);
-    return registry->getAvailableSource(index, result);
+    return _getAvailableSource(index, result);
 }
 
 int32_t Transliterator::countAvailableTargets(const UnicodeString& source) {
@@ -1173,7 +1173,7 @@ int32_t Transliterator::countAvailableTargets(const UnicodeString& source) {
         initializeRegistry();
     }
     Mutex lock(&registryMutex);
-    return registry->countAvailableTargets(source);
+    return _countAvailableTargets(source);
 }
 
 UnicodeString& Transliterator::getAvailableTarget(int32_t index,
@@ -1183,7 +1183,7 @@ UnicodeString& Transliterator::getAvailableTarget(int32_t index,
         initializeRegistry();
     }
     Mutex lock(&registryMutex);
-    return registry->getAvailableTarget(index, source, result);
+    return _getAvailableTarget(index, source, result);
 }
 
 int32_t Transliterator::countAvailableVariants(const UnicodeString& source,
@@ -1192,7 +1192,7 @@ int32_t Transliterator::countAvailableVariants(const UnicodeString& source,
         initializeRegistry();
     }
     Mutex lock(&registryMutex);
-    return registry->countAvailableVariants(source, target);
+    return _countAvailableVariants(source, target);
 }
 
 UnicodeString& Transliterator::getAvailableVariant(int32_t index,
@@ -1203,6 +1203,37 @@ UnicodeString& Transliterator::getAvailableVariant(int32_t index,
         initializeRegistry();
     }
     Mutex lock(&registryMutex);
+    return _getAvailableVariant(index, source, target, result);
+}
+
+int32_t Transliterator::_countAvailableSources(void) {
+    return registry->countAvailableSources();
+}
+
+UnicodeString& Transliterator::_getAvailableSource(int32_t index,
+                                                  UnicodeString& result) {
+    return registry->getAvailableSource(index, result);
+}
+
+int32_t Transliterator::_countAvailableTargets(const UnicodeString& source) {
+    return registry->countAvailableTargets(source);
+}
+
+UnicodeString& Transliterator::_getAvailableTarget(int32_t index,
+                                                  const UnicodeString& source,
+                                                  UnicodeString& result) {
+    return registry->getAvailableTarget(index, source, result);
+}
+
+int32_t Transliterator::_countAvailableVariants(const UnicodeString& source,
+                                               const UnicodeString& target) {
+    return registry->countAvailableVariants(source, target);
+}
+
+UnicodeString& Transliterator::_getAvailableVariant(int32_t index,
+                                                   const UnicodeString& source,
+                                                   const UnicodeString& target,
+                                                   UnicodeString& result) {
     return registry->getAvailableVariant(index, source, target, result);
 }
 
