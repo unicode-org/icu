@@ -37,8 +37,8 @@ private:
      **/
     UBool testTag(const char* frag, UBool in_Root, UBool in_te, UBool in_te_IN);
 
-    void record_pass(void);
-    void record_fail(void);
+    void record_pass(UnicodeString passMessage);
+    void record_fail(UnicodeString errMessage);
 
     int32_t pass;
     int32_t fail;
