@@ -70,7 +70,7 @@ u_cleanup(void)
     ures_cleanup();
     udata_cleanup();
     putil_cleanup();
-
+    ustrprep_cleanup();
     /*
      * WARNING! Destroying the global mutex can cause synchronization
      * problems.  ICU must be reinitialized from a single thread
