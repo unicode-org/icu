@@ -649,7 +649,7 @@ static void udata_pathiter_dt(UDataPathIterator *iter) {
  *      our common data.                                                *
  *                                                                      *
  *----------------------------------------------------------------------*/
-extern  const DataHeader U_IMPORT U_ICUDATA_ENTRY_POINT;
+extern  const DataHeader U_DATA_API U_ICUDATA_ENTRY_POINT;
 
 
 /*----------------------------------------------------------------------*
