@@ -198,7 +198,10 @@ u_strCaseMap(UChar *dest, int32_t destCapacity,
     if(temp!=dest) {
         /* copy the result string to the destination buffer */
         if(destLength>0) {
-            uprv_memmove(dest, temp, destLength*U_SIZEOF_UCHAR);
+            int32_t copyLength= destLength<=destCapacity ? destLength : destCapacity;
+            if(copyLength>0) {
+                uprv_memmove(dest, temp, copyLength*U_SIZEOF_UCHAR);
+            }
         }
         if(temp!=buffer) {
             uprv_free(temp);
