@@ -8,10 +8,12 @@
 *******************************************************************************
 */
 
-#ifndef UREP_H
-#define UREP_H
+#ifndef __UREP_H
+#define __UREP_H
 
 #include "unicode/utypes.h"
+
+U_CDECL_BEGIN
 
 /********************************************************************
  * General Notes
@@ -103,5 +105,7 @@ typedef struct _UReplaceableCallbacks {
                     int32_t dest);    
 
 } UReplaceableCallbacks;
+
+U_CDECL_END
 
 #endif
