@@ -18,8 +18,8 @@
 #include "ucln_cmn.h"
 
 /* list of converter and alias names */
-const char **availableConverterNames=NULL;
-int32_t availableConverterNamesCount=0;
+static const char **availableConverterNames=NULL;
+static int32_t availableConverterNamesCount=0;
 
 UBool UnicodeConverter_cleanup()
 {
