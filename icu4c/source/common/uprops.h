@@ -271,4 +271,14 @@ uprv_getCharNameCharacters(USet* set);
 U_CAPI void U_EXPORT2
 uprv_getISOCommentCharacters(USet* set);
 
+/**
+ * Return a set of all characters _except_ the second through last
+ * characters of certain ranges.  These ranges are ranges of
+ * characters whose properties are all exactly alike, e.g. CJK
+ * Ideographs from U+4E00 to U+9FA5.
+ * @param set USet to receive result.  Existing contents are lost.
+ */
+U_CAPI void U_EXPORT2
+uprv_getInclusions(USet* set);
+
 #endif

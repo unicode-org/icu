@@ -398,3 +398,132 @@ u_getIntPropertyMaxValue(UProperty which) {
         return 0; /* undefined */
     }
 }
+
+/*----------------------------------------------------------------
+ * Inclusions list
+ *----------------------------------------------------------------/
+
+/* >From UnicodeData:
+ * 3400;<CJK Ideograph Extension A, First>;Lo;0;L;;;;;N;;;;;
+ * 4DB5;<CJK Ideograph Extension A, Last>;Lo;0;L;;;;;N;;;;;
+ * 4E00;<CJK Ideograph, First>;Lo;0;L;;;;;N;;;;;
+ * 9FA5;<CJK Ideograph, Last>;Lo;0;L;;;;;N;;;;;
+ * AC00;<Hangul Syllable, First>;Lo;0;L;;;;;N;;;;;
+ * D7A3;<Hangul Syllable, Last>;Lo;0;L;;;;;N;;;;;
+ * D800;<Non Private Use High Surrogate, First>;Cs;0;L;;;;;N;;;;;
+ * DB7F;<Non Private Use High Surrogate, Last>;Cs;0;L;;;;;N;;;;;
+ * DB80;<Private Use High Surrogate, First>;Cs;0;L;;;;;N;;;;;
+ * DBFF;<Private Use High Surrogate, Last>;Cs;0;L;;;;;N;;;;;
+ * DC00;<Low Surrogate, First>;Cs;0;L;;;;;N;;;;;
+ * DFFF;<Low Surrogate, Last>;Cs;0;L;;;;;N;;;;;
+ * E000;<Private Use, First>;Co;0;L;;;;;N;;;;;
+ * F8FF;<Private Use, Last>;Co;0;L;;;;;N;;;;;
+ * 20000;<CJK Ideograph Extension B, First>;Lo;0;L;;;;;N;;;;;
+ * 2A6D6;<CJK Ideograph Extension B, Last>;Lo;0;L;;;;;N;;;;;
+ * F0000;<Plane 15 Private Use, First>;Co;0;L;;;;;N;;;;;
+ * FFFFD;<Plane 15 Private Use, Last>;Co;0;L;;;;;N;;;;;
+ * 100000;<Plane 16 Private Use, First>;Co;0;L;;;;;N;;;;;
+ * 10FFFD;<Plane 16 Private Use, Last>;Co;0;L;;;;;N;;;;;
+ *
+ * >Large Blocks of Unassigned: (from DerivedGeneralCategory)
+ * 1044E..1CFFF  ; Cn # [52146]
+ * 1D800..1FFFF  ; Cn # [10240]
+ * 2A6D7..2F7FF  ; Cn # [20777]
+ * 2FA1E..E0000  ; Cn # [722403]
+ * E0080..EFFFF  ; Cn # [65408]
+ *
+ * ---
+ *
+ * TODO: The Inclusion List should be generated from the UCD for each
+ * version.  Currently it is static.
+ *
+ * ---
+ *
+ * ### TODO ICU 2.4 markus Ideas for getting properties-unique code point ranges:
+ *
+ * To enumerate properties efficiently, one needs to know ranges of
+ * repetitive values, so that the value of only each start code point
+ * can be applied to the whole range.
+ * This information is in principle available in the uprops.icu data.
+ *
+ * There are two obstacles:
+ *
+ * 1. Some properties are computed from multiple data structures,
+ *    making it necessary to get repetitive ranges by intersecting
+ *    ranges from multiple tries.
+ *
+ * 2. It is not economical to write code for getting repetitive ranges
+ *    that are precise for each of some 50 properties.
+ *
+ * Compromise ideas:
+ *
+ * - Get ranges per trie, not per individual property.
+ *   Each range contains the same values for a whole group of properties.
+ *   This would generate currently five range sets, two for uprops.icu tries
+ *   and three for unorm.icu tries.
+ *
+ * - Combine sets of ranges for multiple tries to get sufficient sets
+ *   for properties, e.g., the uprops.icu main and auxiliary tries
+ *   for all non-normalization properties.
+ *
+ * Ideas for representing ranges and combining them:
+ *
+ * - A UnicodeSet could hold just the start code points of ranges.
+ *   Multiple sets are easily combined by or-ing them together.
+ *
+ * - Alternatively, a UnicodeSet could hold each even-numbered range.
+ *   All ranges could be enumerated by using each start code point
+ *   (for the even-numbered ranges) as well as each limit (end+1) code point
+ *   (for the odd-numbered ranges).
+ *   It should be possible to combine two such sets by xor-ing them,
+ *   but no more than two.
+ *
+ * The second way to represent ranges may(?!) yield smaller UnicodeSet arrays,
+ * but the first one is certainly simpler and applicable for combining more than
+ * two range sets.
+ *
+ * It is possible to combine all range sets for all uprops/unorm tries into one
+ * set that can be used for all properties.
+ * As an optimization, there could be less-combined range sets for certain
+ * groups of properties.
+ * The relationship of which less-combined range set to use for which property
+ * depends on the implementation of the properties and must be hardcoded
+ * - somewhat error-prone and higher maintenance but can be tested easily
+ * by building property sets "the simple way" in test code.
+ *
+ * ---
+ *
+ * Do not use a UnicodeSet pattern because that causes infinite recursion;
+ * UnicodeSet depends on the inclusions set.
+ */
+
+U_CAPI void U_EXPORT2
+uprv_getInclusions(USet* set) {
+    /* Build a UnicodeSet for all of Unicode,
+     * then remove known ranges with all-same properties.
+     */
+    uset_addRange(set, 0, 0x10FFFF);
+
+    /* Effectively, build a UnicodeSet according to the following pattern:
+     * "[^\\u3401-\\u4DB5 \\u4E01-\\u9FA5 \\uAC01-\\uD7A3 \\uD801-\\uDB7F
+     *    \\uDB81-\\uDBFF \\uDC01-\\uDFFF \\uE001-\\uF8FF \\U0001044F-\\U0001CFFF
+     *    \\U0001D801-\\U0001FFFF \\U00020001-\\U0002A6D6 \\U0002A6D8-\\U0002F7FF
+     *    \\U0002FA1F-\\U000E0000 \\U000E0081-\\U000EFFFF \\U000F0001-\\U000FFFFD
+     *    \\U00100001-\\U0010FFFD]"
+     */
+    uset_removeRange(set, 0x3401, 0x4DB5);
+    uset_removeRange(set, 0x4E01, 0x9FA5);
+    uset_removeRange(set, 0xAC01, 0xD7A3);
+    uset_removeRange(set, 0xD801, 0xDB7F);
+    uset_removeRange(set, 0xDB81, 0xDBFF);
+    uset_removeRange(set, 0xDC01, 0xDFFF);
+    uset_removeRange(set, 0xE001, 0xF8FF);
+    uset_removeRange(set, 0x1044F, 0x1CFFF);
+    uset_removeRange(set, 0x1D801, 0x1FFFF);
+    uset_removeRange(set, 0x20001, 0x2A6D6);
+    uset_removeRange(set, 0x2A6D8, 0x2F7FF);
+    uset_removeRange(set, 0x2FA1F, 0xE0000);
+    uset_removeRange(set, 0xE0081, 0xEFFFF);
+    uset_removeRange(set, 0xF0001, 0xFFFFD);
+    uset_removeRange(set, 0x100001, 0x10FFFD);
+}
