@@ -185,6 +185,7 @@ endif
 	    usr/bin \
 	    usr/sbin \
 	    $(icudatadir)/README \
+	    $(icudatadir)/license.html \
 	    $(iculibdir)/*.inc \
 	    $(icufildir)/*.cnv \
 	    $(icufildir)/*.dat \
