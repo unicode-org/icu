@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/Attic/currency.h,v $ 
-* $Revision: 1.1 $
+* $Revision: 1.2 $
 **********************************************************************
 */
 #ifndef UCURRENCY_H
@@ -16,7 +16,25 @@ U_NAMESPACE_BEGIN
 
 class Locale;
 
+/**
+ * A class encapsulating information about a currency, as defined by
+ * ISO 4217.  A currency is represented by a 3-character string
+ * containing its ISO 4217 code.  This class can return various data
+ * necessary the proper display of a currency:
+ *
+ * <ul><li>A display symbol, for a specific locale
+ * <li>The number of fraction digits to display
+ * <li>A rounding increment
+ * </ul>
+ *
+ * The <tt>DecimalFormat</tt> class uses these data to display
+ * currencies.
+ * @author Alan Liu
+ * @since ICU 2.2
+ */
 class U_I18N_API UCurrency {
+
+    // TODO:? Make the string a char* instead of a UnicodeString ?
 
  public:
 
