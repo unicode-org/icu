@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 az{
-    Version{ "x0.1" }
+    Version{ "x0.2" }
     LocaleID:int { 0x2c }
 //    ShortLanguage{
 //        "AZE"
@@ -66,7 +66,7 @@ az{
         "\u00A0",
         ";",
         "%",
-        ";",
+        "0",
         "#",
         "-",
         "E",
@@ -75,7 +75,7 @@ az{
         "\ufffd",
     }
 
-    CollationElements {	    
+    CollationElements {     
         Version { "1.0" }
         Sequence { 
              "[normalization on]"
