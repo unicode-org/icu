@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/04/21 00:19:24 $ 
-* $Revision: 1.13 $
+* $Date: 2000/04/24 17:14:39 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -31,6 +31,7 @@
     <property name="richedit.cont.dir" value="richedit"/>
     <property name="richedit.archive.dir" value="${richedit.dist.dir}/${richedit.cont.dir}"/>
     <property name="richedit.jar.file" value="${richedit.archive.dir}/richedit.jar"/>
+    <property name="richedit.doc.dir" value="${richedit.archive.dir}/doc"/>
     <property name="richedit.zip.file" value="${richedit.dist.dir}/richedit.zip"/>
     <property name="richedit.manifest" value="${richedit.dist.dir}/manifest.stub"/>
   </target>
@@ -105,7 +106,25 @@
          manifest="${richedit.manifest}"/>
   </target>
 
-  <target name="richeditZip" depends="richeditJar">
+    <!-- 
+        Note:  I used to use -linkoffline http://java.sun.com/products/jdk/1.2/docs/api/ C:\jdk1.2.2\docs\api
+        This links to core docs on Sun's site - a very nice feature.  But it requires the 1.2 docs to be
+        on the build machine at a known location.
+    -->
+  <target name="richeditDocs" depends="core">
+    <mkdir dir="${richedit.doc.dir}"/>
+    <javadoc  packagenames="com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.textlayout.attributes,com.ibm.richtext.print"
+              sourcepath="${src.dir}"
+    		  destdir="${richedit.doc.dir}"
+    		  nodeprecatedlist="true"
+			  windowtitle="RichEdit Control"
+			  doctitle="RichEdit Control"
+			  encoding="iso-8859-1"
+			  docencoding="iso-8859-1"
+			  bottom="&lt;font size=-1>Copyright (c) 1998-2000 IBM Corporation and others.&lt;/font>"
+    		  />    		  
+  </target>
+  <target name="richeditZip" depends="richeditJar,richeditDocs">
     <!--Create a zip archive of the richedit jar and readme -->
     <zip zipfile="${richedit.zip.file}"
          basedir="${richedit.dist.dir}"
