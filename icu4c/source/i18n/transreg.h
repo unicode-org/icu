@@ -307,11 +307,6 @@ class TransliteratorRegistry {
                                      UParseError& parseError,
                                      UErrorCode& status);
 
-    static void STVtoID(const UnicodeString& source,
-                        const UnicodeString& target,
-                        const UnicodeString& variant,
-                        UnicodeString& id);
-
  private:
 
     /**
