@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/09/13 00:38:49 $
- * $Revision: 1.49 $
+ * $Date: 2003/10/01 21:33:22 $
+ * $Revision: 1.50 $
  *
  *****************************************************************************************
  */
@@ -288,6 +288,10 @@ public class TestFmwk extends AbstractTestLog {
             if (!validate()) {
                 params.writeTestInvalid(name);
             } else {
+                if (params.listlevel > 0 && !flag) {
+                    params.writeTestName(name);
+                    flag = true;
+                }
                 execute();
             }
         }
@@ -312,6 +316,8 @@ public class TestFmwk extends AbstractTestLog {
         }
 
         public void run() {
+            params.writeTestName(name);
+            params.writeTestResult(params.errorCount, params.invalidCount);
         }
     }
 
