@@ -1,7 +1,7 @@
 /**
  * Builds the normalization tables. This is a separate class so that it
  * can be unloaded once not needed.<br>
- * Copyright (C) 1998-2003 International Business Machines Corporation and
+ * Copyright (C) 1998-2004 International Business Machines Corporation and
  * Unicode, Inc. All Rights Reserved.<br>
  * The Unicode Consortium makes no expressed or implied warranty of any
  * kind, and assumes no liability for errors or omissions.

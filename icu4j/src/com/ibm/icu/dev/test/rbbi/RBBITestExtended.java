@@ -1,5 +1,8 @@
 /*
  * Created on May 5, 2004
+ * 
+ * Copyright (C) 2004 International Business Machines Corporation and others.
+ * All Rights Reserved.
  *
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Generation - Code and Comments

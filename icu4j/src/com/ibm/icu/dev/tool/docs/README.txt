@@ -1,3 +1,6 @@
+Copyright (C) 1996-2004, International Business Machines Corporation and
+others. All Rights Reserved.
+
 -------------------------------------------
 Using the GatherAPIData and ReportAPI tools
 -------------------------------------------

@@ -1,3 +1,9 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.impl.Utility;
