@@ -12,6 +12,7 @@
  */
 
 #include <stdio.h>
+#include <ctype.h>
 
 #include "LETypes.h"
 #include "LEScripts.h"
