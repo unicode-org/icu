@@ -429,7 +429,12 @@ u_fgets(UFILE        *f,
         alias = f->fUCPos;
         count = 0;
         while( ! IS_STRING_DELIMITER(*alias) && count < n) {
-            ++count;
+            count++;
+            alias++;
+        }
+        /* Preserve the newline */
+        if (IS_STRING_DELIMITER(*alias) && count < n) {
+            count++;
             alias++;
         }
 
@@ -465,6 +470,11 @@ u_fgets(UFILE        *f,
         count = 0;
         while( ! IS_STRING_DELIMITER(*alias) && alias < f->fUCLimit && count < n) {
             ++count;
+            alias++;
+        }
+        /* Preserve the newline */
+        if (IS_STRING_DELIMITER(*alias) && count < n) {
+            count++;
             alias++;
         }
 
