@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/rbnf/RbnfDemo.java,v $ 
- * $Date: 2002/02/16 03:04:59 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/19 04:10:24 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -20,7 +20,7 @@ import java.text.DecimalFormat;
 import java.text.BreakIterator;
 import java.text.ParsePosition;
 import java.util.Locale;
-
+import com.ibm.icu.dev.demo.impl.*;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 
 public class RbnfDemo extends DemoApplet {

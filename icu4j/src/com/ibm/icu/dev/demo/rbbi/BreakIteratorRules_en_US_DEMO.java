@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/rbbi/BreakIteratorRules_en_US_DEMO.java,v $ 
- * $Date: 2002/02/16 03:04:57 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/02/19 04:10:23 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
-package com.ibm.icu.impl.data;
+package com.ibm.icu.dev.demo.rbbi;
 
 import java.util.ListResourceBundle;
 import java.net.URL;

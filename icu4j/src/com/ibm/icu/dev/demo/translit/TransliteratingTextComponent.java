@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/TransliteratingTextComponent.java,v $ 
- * $Date: 2002/02/16 03:05:00 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/19 04:10:24 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
-package com.ibm.icu.dev.demo.impl;
+package com.ibm.icu.dev.demo.translit;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -18,6 +18,7 @@ import java.text.*;
 import java.awt.datatransfer.*;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
+import com.ibm.icu.dev.demo.impl.*;
 
 /**
  * A subclass of {@link DumbTextComponent} that passes key events through
@@ -26,7 +27,7 @@ import com.ibm.icu.text.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:05:00 $
+ * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.4 $ $Date: 2002/02/19 04:10:24 $
  */
 public class TransliteratingTextComponent extends DumbTextComponent {
 

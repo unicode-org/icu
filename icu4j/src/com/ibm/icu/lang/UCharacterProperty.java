@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/02/16 03:05:58 $ 
-* $Revision: 1.2 $
+* $Date: 2002/02/19 04:10:25 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -368,7 +368,7 @@ final class UCharacterProperty implements Trie.DataManipulate
     /**
     * Default name of the datafile
     */
-    private static final String DATA_FILE_NAME_ = "resources/uprops.dat";
+    private static final String DATA_FILE_NAME_ = "../impl/data/uprops.dat";
       
     /**
     * Default buffer size of datafile

@@ -5,13 +5,13 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/02/16 03:05:24 $ 
-* $Revision: 1.23 $
+* $Date: 2002/02/19 04:10:24 $ 
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
 
-package com.ibm.icu.dev.test.text;
+package com.ibm.icu.dev.test.ucharacter;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -802,14 +802,14 @@ public final class UCharacterTest extends TestFmwk
   public void TestSpecialCasing()
   {
     // default unicode data file name
-    final String SPECIALCASING_FILE = "src//data//unicode//SpecialCasing.txt";
+    final String SPECIALCASING_FILE = "src//com//ibm//icu//dev//data//unicode//SpecialCasing.txt";
     
     // unicode data file path system name
     final String UNICODE_DATA_SYSTEM_NAME = "UnicodeData";
     String s = System.getProperty(UNICODE_DATA_SYSTEM_NAME);
     if (s == null) {
     // assuming runtime directory is on the same level as the source
-      s = System.getProperty("user.dir") + "//..//" + SPECIALCASING_FILE;
+      s = System.getProperty("user.dir") + "//" + SPECIALCASING_FILE;
     }
     else {
       StringBuffer tempfilename = new StringBuffer(s);
@@ -932,8 +932,8 @@ public final class UCharacterTest extends TestFmwk
     }
     catch (FileNotFoundException e)
     {
-      errln("FAIL SpecialCasing.txt not found\n" +
-            "Configure the system setting UnicodeData to the right path\n" +
+      errln("FAIL SpecialCasing.txt not found in \n" + s +
+            ". Configure the system setting UnicodeData to the right path\n" +
             "e.g. java -DUnicodeData=\"data_dir_path\" " +
             "com.ibm.icu.dev.test.text.UCharacterTest");
     }
@@ -1049,8 +1049,8 @@ public final class UCharacterTest extends TestFmwk
     try
     {
       UCharacterTest test = new UCharacterTest();
-      test.TestNames();
-      //test.run(arg);
+      //test.TestNames();
+      test.run(arg);
     }
     catch (Exception e)
     {

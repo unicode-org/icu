@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2002/02/16 03:05:01 $ 
- * $Revision: 1.20 $
+ * $Date: 2002/02/19 04:10:24 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -105,8 +105,8 @@ public class TestAll extends TestFmwk {
 
     public void TestCharacter() throws Exception {
         run(new TestFmwk[] {
-            new com.ibm.icu.dev.test.text.UCharacterTest(),
-            new com.ibm.icu.dev.test.text.UTF16Test()
+            new com.ibm.icu.dev.test.ucharacter.UCharacterTest(),
+            new com.ibm.icu.dev.test.ucharacter.UTF16Test()
                 });
     }
     
