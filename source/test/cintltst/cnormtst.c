@@ -32,7 +32,7 @@ static void
 TestAPI(void);
 
 static void
-TestNormCoverage();
+TestNormCoverage(void);
 
 const static char* canonTests[][3] = {
     /* Input*/                    /*Decomposed*/                /*Composed*/
