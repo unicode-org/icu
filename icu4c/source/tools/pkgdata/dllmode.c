@@ -109,6 +109,13 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     T_FileStream_writeLine(makefile, "DYNAMICCXXFLAGS=$(SHAREDLIBCXXFLAGS)\n");
     T_FileStream_writeLine(makefile, "\n");
     
+#ifdef OS400
+    sprintf(tmp, "# Force override for iSeries compilation since data does not need to be\n"
+                 "# nor can excessively large files be compiled for debug\n"
+                 "override COMPILE.c= $(CC) $(DEFS) $(CPPFLAGS) -O4 -c -qTERASPACE=*YES -qSTGMDL=*INHERIT -qPFROPT=*STRDONLY\n\n");
+    T_FileStream_writeLine(makefile, tmp);
+#endif
+
     uprv_strcpy(tmp, "all: $(TARGETDIR)/$(FINAL_SO_TARGET) $(BATCH_TARGET)");
     if (o->version) {
         uprv_strcat(tmp, " $(TARGETDIR)/$(MIDDLE_SO_TARGET) $(TARGETDIR)/$(SO_TARGET)");
@@ -116,6 +123,13 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     uprv_strcat(tmp, "\n\n");
     T_FileStream_writeLine(makefile, tmp);
     
+#ifdef OS400
+    /* New for iSeries: All packaged data in one .c */
+    sprintf(tmp, "# Create a file which contains all .c data files/structures\n"
+                 "$(TEMP_DIR)/$(NAME)all.c: $(CMNLIST)\n\n");
+    T_FileStream_writeLine(makefile, tmp);
+#endif
+
     /* Write compile rules */
     pkg_mak_writeObjRules(o, makefile, &objects, OBJ_SUFFIX);
     
@@ -156,12 +170,28 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     T_FileStream_writeLine(makefile, tmp);
     sprintf(tmp, "TOCOBJ= $(NAME)_dat%s \n\n", OBJ_SUFFIX);
     T_FileStream_writeLine(makefile, tmp);
+
+#ifdef OS400
+    /* New for iSeries: All packaged data in one .c */
+    sprintf(tmp, "$(TEMP_DIR)/$(NAME)all.o : $(TEMP_DIR)/$(NAME)all.c\n"
+                 "\t$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<\n\n");
+    T_FileStream_writeLine(makefile, tmp);
+
+    T_FileStream_writeLine(makefile, "# 'ALLDATAOBJ' contains all .c data structures\n");
+
+    sprintf(tmp, "ALLDATAOBJ= $(NAME)all%s \n\n", OBJ_SUFFIX);
+    T_FileStream_writeLine(makefile, tmp);
+#endif
+
     sprintf(tmp, "TOCSYM= %s_dat \n\n", o->entryName); /* entrypoint not always shortname! */
     T_FileStream_writeLine(makefile, tmp);
     
     T_FileStream_writeLine(makefile, "BASE_OBJECTS= $(TOCOBJ) ");
-    
+#ifdef OS400
+    T_FileStream_writeLine(makefile, "$(ALLDATAOBJ) ");
+#else
     pkg_writeCharListWrap(makefile, objects, " ", " \\\n",0);
+#endif
     pkg_mak_writeAssemblyFooter(makefile, o);
 
     T_FileStream_writeLine(makefile, "\n\n");
