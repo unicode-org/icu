@@ -379,8 +379,6 @@ void executeTest(TestParams t) {
         //  and this one.
         for (i=prevBP+1; i<bp; i++) {
             if (t.expectedBreaks[i] != 0) {
-                int expected[] = {0, i};
-                printStringBreaks(t.dataToBreak, expected, 2);
                 errln("Forward Iteration, break expected, but not found.  Pos=" + i + 
                     "  File line,col= " + t.srcLine[i] + ", " + t.srcCol[i]);
             }
@@ -388,8 +386,6 @@ void executeTest(TestParams t) {
 
         // Check that the break we did find was expected
         if (t.expectedBreaks[bp] == 0) {
-            int expected[] = {0, bp};
-            printStringBreaks(t.dataToBreak, expected, 2);
             errln("Forward Iteration, break found, but not expected.  Pos=" + bp + 
                     "  File line,col= " + t.srcLine[bp] + ", " + t.srcCol[bp]);
         } else {
@@ -472,35 +468,6 @@ void executeTest(TestParams t) {
 }
 
 
-void printStringBreaks(StringBuffer ustr, int expected[],
-		int expectedcount)
-{
-	String name;
-	System.out.println("code    alpha extend alphanum type line name");
-	int j;
-	for (j = 0; j < ustr.length(); j ++) {
-		if (expectedcount > 0) {
-			int k;
-			for (k = 0; k < expectedcount; k ++) {
-				if (j == expected[k]) {
-					System.out.println("------------------------------------------------ " + j);
-				}
-			}
-		}
-		int c = UTF16.charAt(ustr, j);
-		if (c > 0xffff) {
-			j ++;
-		}
-        name = UCharacter.getName(c);
-        System.out.println(  UCharacter.isUAlphabetic(c) + "  " +
-                             UCharacter.hasBinaryProperty(c, UProperty.GRAPHEME_EXTEND) + "  " +
-                             UCharacter.isLetterOrDigit(c) + "  " +
-                             UCharacter.getPropertyValueName(UProperty.LINE_BREAK, 
-                                    UCharacter.getIntPropertyValue(c, UProperty.LINE_BREAK), 
-                                            UProperty.NameChoice.SHORT)
-                             );
-	}
-}
 
 
 }
