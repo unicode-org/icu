@@ -17,6 +17,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
+#include "unicode/uiter.h"
 
 /**
  * Are the Unicode properties loaded?
@@ -59,7 +60,6 @@ U_CFUNC int32_t
 u_internalStrToLower(UChar *dest, int32_t destCapacity,
                      const UChar *src, int32_t srcLength,
                      const char *locale,
-                     UGrowBuffer *growBuffer, void *context,
                      UErrorCode *pErrorCode);
 
 /**
@@ -69,7 +69,6 @@ U_CFUNC int32_t
 u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                      const UChar *src, int32_t srcLength,
                      const char *locale,
-                     UGrowBuffer *growBuffer, void *context,
                      UErrorCode *pErrorCode);
 
 /**
@@ -80,24 +79,59 @@ U_CFUNC int32_t
 u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
                       const UChar *src, int32_t srcLength,
                       uint32_t options,
-                      UGrowBuffer *growBuffer, void *context,
                       UErrorCode *pErrorCode);
 
 /**
- * Get the full title case mapping for c (does not check context!).
+ * Get the full lowercase mapping for c.
+ * @param iter Character iterator to check for context for SpecialCasing.
+ *             The current index must be on the character after c.
+ *             This function may or may not change the iterator index.
+ *             If iter==NULL then a context-independent result is returned.
  * @return the length of the output, negative if same as c
  * @internal
  */
 U_CAPI int32_t U_EXPORT2
-u_internalTitleCase(UChar32 c, UChar *dest, int32_t destCapacity, const char *locale);
+u_internalToLower(UChar32 c, UCharIterator *iter,
+                  UChar *dest, int32_t destCapacity,
+                  const char *locale);
 
 /**
- * Return the full case folding mapping for c.
- * Must be used only if uprv_haveProperties() is true.
+ * Get the full uppercase mapping for c.
+ * @param iter Character iterator to check for context for SpecialCasing.
+ *             The current index must be on the character after c.
+ *             This function may or may not change the iterator index.
+ *             If iter==NULL then a context-independent result is returned.
+ * @return the length of the output, negative if same as c
  * @internal
  */
-U_CFUNC int32_t
-u_internalFoldCase(UChar32 c, UChar dest[32], uint32_t options);
+U_CAPI int32_t U_EXPORT2
+u_internalToUpper(UChar32 c, UCharIterator *iter,
+                  UChar *dest, int32_t destCapacity,
+                  const char *locale);
+
+/**
+ * Get the full titlecase mapping for c.
+ * @param iter Character iterator to check for context for SpecialCasing.
+ *             The current index must be on the character after c.
+ *             This function may or may not change the iterator index.
+ *             If iter==NULL then a context-independent result is returned.
+ * @return the length of the output, negative if same as c
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+u_internalToTitle(UChar32 c, UCharIterator *iter,
+                  UChar *dest, int32_t destCapacity,
+                  const char *locale);
+
+/**
+ * Get the full case folding mapping for c.
+ * @return the length of the output, negative if same as c
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+u_internalFoldCase(UChar32 c,
+                   UChar *dest, int32_t destCapacity,
+                   uint32_t options);
 
 /**
  * Internal case-insensitive string compare function.
