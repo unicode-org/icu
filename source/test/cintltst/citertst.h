@@ -61,12 +61,6 @@
     static void backAndForth(UCollationElements* iter);
     
     /**
-     * Verify that getMaxExpansion works on a given set of collation rules
-     */
-    static void verifyExpansion(UChar* rules, const UChar tests[], int32_t testCount);
-      
-      
-    /**
      * Return an integer array containing all of the collation orders
      * returned by calls to next on the specified iterator
      */
