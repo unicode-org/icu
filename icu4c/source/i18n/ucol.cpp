@@ -867,7 +867,7 @@ int32_t uprv_ucol_decompose (UChar curChar, UChar *result) {
             T_fillOutputParams(&res, result, 356, &resSize, &status);
 
         } else {
-          const UChar *source = DecompData::contents;
+          const UChar *source = (const UChar*)&(DecompData::contents);
             uint16_t ind = (int16_t)(index >> STR_INDEX_SHIFT);
             uint16_t length = (int16_t)(index & STR_LENGTH_MASK);
 
