@@ -647,6 +647,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\fmtable_cnv.cpp">
+			</File>
+			<File
 				RelativePath=".\format.cpp">
 			</File>
 			<File
