@@ -22,9 +22,12 @@
 
 #include "unicode/ustdio.h"
 #include "unicode/ustring.h"
+#include "uscanf.h"
+#include "ufile.h"
 #include "ufmt_cmn.h"
 
-#include "ustr_imp.h"
+#include "cmemory.h"
+#include "cstring.h"
 
 
 U_CAPI int32_t U_EXPORT2
@@ -65,7 +68,7 @@ u_vfscanf(UFILE        *f,
     int32_t converted;
     UChar *pattern;
     UChar patBuffer[UFMT_DEFAULT_BUFFER_SIZE];
-    int32_t size = (int32_t)strlen(patternSpecification) + 1;
+    int32_t size = (int32_t)uprv_strlen(patternSpecification) + 1;
 
     /* convert from the default codepage to Unicode */
     if (size >= MAX_UCHAR_BUFFER_SIZE(patBuffer)) {

@@ -93,6 +93,8 @@
     better testing. This prevents writing to bad memory.
  * Figure out what is suppose to happen when a codepage is changed midstream.
     Maybe a flush or a rewind are good enough.
+ * Make sure that a UFile opened with "rw" can be used after using
+    u_fflush with a u_frewind.
  * More testing is needed.
 */
 
