@@ -19,9 +19,6 @@
 
 
 
-static void addUnicodeTests(TestNode**);
-
-
 static void TestUpperLower(void);
 static void TestLetterNumber(void);
 static void TestMisc(void);
