@@ -1308,7 +1308,7 @@ UDate CalendarAstronomer::riseOrSet(CoordFunc& func, UBool rise,
     deltaT = newTime - fTime;
     setTime(newTime);
     U_DEBUG_ASTRO_MSG(("%d] dT=%.3lf, angle=%.3lf, lst=%.3lf,   A=%.3lf/D=%.3lf\n",
-                       count, deltaT, angle, lst, pos->ascension, pos->declination));
+                       count, deltaT, angle, lst, pos.ascension, pos.declination));
   }
   while (++ count < 5 && uprv_fabs(deltaT) > epsilon);
 
@@ -1493,7 +1493,8 @@ int32_t CalendarCache::get(CalendarCache** cache, int32_t key, UErrorCode &statu
     }
   }
 
-  res = uhash_geti((*cache)->fTable, (void*)key);
+  res = uhash_igeti((*cache)->fTable, key);
+  U_DEBUG_ASTRO_MSG(("%p: GET: [%d] == %d\n", (*cache)->fTable, key, res));
 
   umtx_unlock(&ccLock);
   return res;
@@ -1514,17 +1515,20 @@ void CalendarCache::put(CalendarCache** cache, int32_t key, int32_t value, UErro
     }
   }
 
-  uhash_puti((*cache)->fTable, (void*)key, value, &status);
+  uhash_iputi((*cache)->fTable, key, value, &status);
+  U_DEBUG_ASTRO_MSG(("%p: PUT: [%d] := %d\n", (*cache)->fTable, key, value));
 
   umtx_unlock(&ccLock);
 }
 
 CalendarCache::CalendarCache(int32_t size, UErrorCode &status) {
   fTable = uhash_openSize(uhash_hashLong, uhash_compareLong, 32, &status);
+  U_DEBUG_ASTRO_MSG(("%p: Opening.\n", fTable));
 }
 
 CalendarCache::~CalendarCache() {
   if(fTable != NULL) {
+    U_DEBUG_ASTRO_MSG(("%p: Closing.\n", fTable));
     uhash_close(fTable);
   }
 }
