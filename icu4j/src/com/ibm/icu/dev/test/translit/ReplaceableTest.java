@@ -88,6 +88,10 @@ public class ReplaceableTest extends TestFmwk {
             return chars.charAt(offset);
         }
 
+        public int char32At(int offset) {
+            return chars.char32At(offset);
+        }
+
         public void getChars(int srcStart, int srcLimit, char dst[], int dstStart) {
             chars.getChars(srcStart, srcLimit, dst, dstStart);
         }
