@@ -1534,7 +1534,7 @@ TestLMBCS() {
       pUniIn = uniString;
       ucnv_toUnicode (cnv16jp, 
                         &pUniIn, pUniIn + 1,
-                        (char **)&pLMBCSOut, (const char *)(pLMBCSOut + 1), 
+                        (const char **)&pLMBCSOut, (const char *)(pLMBCSOut + 1), 
                         NULL, 1, &errorCode);
       if (U_FAILURE(errorCode) || pLMBCSOut != lmbcsString+1 || pUniIn != uniString+1 || uniString[0] != 0xFF6E)
       {
@@ -1556,7 +1556,7 @@ TestLMBCS() {
       pUniIn = uniString;
       ucnv_toUnicode (cnv01us, 
                         &pUniIn, pUniIn + 1,
-                        (char **)&pLMBCSOut, (const char *)(pLMBCSOut + 3), 
+                        (const char **)&pLMBCSOut, (const char *)(pLMBCSOut + 3), 
                         NULL, 1, &errorCode);
       if (U_FAILURE(errorCode) || pLMBCSOut != lmbcsString+3 || pUniIn != uniString+1 || uniString[0] != 0xFF6E)
       {
