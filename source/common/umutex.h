@@ -20,9 +20,11 @@
 
 #include "unicode/utypes.h"
 
-#ifndef XP_CPLUSPLUS
-typedef void * Mutex;
-#endif
+/**
+ * Mutex data type.
+ * @internal
+ */
+typedef void *UMTX;
 
 /* APP_NO_THREADS is an old symbol. We'll honour it if present. */
 #ifdef APP_NO_THREADS
