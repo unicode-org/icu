@@ -343,9 +343,11 @@ umtx_init(UMTX *mutex)
         }
         umtx_unlock(NULL);
 
+#if (ICU_USE_THREADS == 1)
         /* No more mutexes were available from our pre-allocated pool.  */
         /*   TODO:  how best to deal with this?                    */
         U_ASSERT(*mutex != NULL);
+#endif
     }
 }
 
