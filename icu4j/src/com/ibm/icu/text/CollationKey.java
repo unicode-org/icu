@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationKey.java,v $ 
-* $Date: 2003/06/11 19:55:18 $ 
-* $Revision: 1.17 $
+* $Date: 2003/09/22 06:24:19 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -597,6 +597,33 @@ public final class CollationKey implements Comparable
     
         // trust that neither sort key contained illegally embedded zero bytes
         return new CollationKey(null, result);
+    }
+    
+    // package private constructor ------------------------------------------
+    
+    /**
+     * CollationKey constructor.
+     * @param source string this CollationKey is to represent
+     * @param key RawCollationKey object that represents the collation order of 
+     *            argument source
+     * @see Collator
+     * @see RawCollationKey
+     */
+    CollationKey(String source, RawCollationKey key)
+    {
+        m_source_ = source;
+        m_key_ = new byte[key.size];
+        byte src[] = key.bytes;
+        if (key.size < 64) { // arraycopy slower for elements size < 64
+            for (int i = key.size - 1; i >= 0; i --) {
+                m_key_[i] = src[i];
+            }
+        } 
+        else {
+            System.arraycopy(src, 0, m_key_, 0, key.size);
+        }
+        m_hashCode_ = 0;
+        m_length_ = -1;
     }
 
     // private data members -------------------------------------------------

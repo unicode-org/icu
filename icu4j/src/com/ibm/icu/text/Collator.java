@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/06/09 23:31:10 $
-* $Revision: 1.33 $
+* $Date: 2003/09/22 06:24:18 $
+* $Revision: 1.34 $
 *
 *******************************************************************************
 */
@@ -658,10 +658,29 @@ public abstract class Collator implements Comparator, Cloneable
      *         CollationKey is returned.
      * @see CollationKey
      * @see #compare(String, String)
+     * @see #getRawCollationKey
      * @draft ICU 2.2
      */
     public abstract CollationKey getCollationKey(String source);
     
+    /**
+     * Gets the simpler form of a CollationKey for the String source following
+     * the rules of this Collator and stores the result into the user provided 
+     * argument key. 
+     * If key has a internal byte array of length that's too small for the 
+     * result, the internal byte array will be grown to the exact required 
+     * size.
+     * @param source the text String to be transformed into a RawCollationKey  
+     * @return If key is null, a new instance of RawCollationKey will be 
+     *         created and returned, otherwise the user provided key will be 
+     *         returned.
+     * @see #compare(String, String)
+     * @see #getCollationKey 
+     * @see RawCollationKey
+     */
+    public abstract RawCollationKey getRawCollationKey(String source, 
+                                                       RawCollationKey key);
+
       /** 
      * <p>
      * Variable top is a two byte primary value which causes all the codepoints 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/CollationTest.java,v $
- * $Date: 2003/07/29 23:08:06 $
- * $Revision: 1.13 $
+ * $Date: 2003/09/22 06:24:25 $
+ * $Revision: 1.14 $
  *
  *******************************************************************************
  */
@@ -17,6 +17,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.CollationKey;
+import com.ibm.icu.text.RawCollationKey;
 import com.ibm.icu.text.CollationElementIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.lang.UCharacter;
@@ -438,7 +439,22 @@ public class CollationTest extends ModuleTest
         if (compareResult != result) {
             printInfo = true;
             if(!test.isModularBuild()){
-                test.errln("Comparing sortkeys of \"" + Utility.hex(source) 
+                test.errln("Comparing CollationKeys of \"" + Utility.hex(source) 
+                           + "\" with \"" + Utility.hex(target) 
+                           + "\" expected " + result + " but got " 
+                           + compareResult);
+           }
+        }
+        RawCollationKey srsk = new RawCollationKey();
+        myCollation.getRawCollationKey(source, srsk);
+        RawCollationKey trsk = new RawCollationKey();
+        myCollation.getRawCollationKey(target, trsk);
+        compareResult = ssk.compareTo(tsk);
+        if (compareResult != result) {
+            printInfo = true;
+            if(!test.isModularBuild()){
+                test.errln("Comparing RawCollationKeys of \"" 
+                           + Utility.hex(source) 
                            + "\" with \"" + Utility.hex(target) 
                            + "\" expected " + result + " but got " 
                            + compareResult);
