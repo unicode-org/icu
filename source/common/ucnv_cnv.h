@@ -105,6 +105,14 @@ U_CDECL_BEGIN
                   for (;My_i < myTargetIndex;My_i++) {offsets[My_i] += currentOffset  ;   } \
                 }
 
+typedef void (*UConverterLoad) (UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode);
+typedef void (*UConverterUnload) (UConverterSharedData *sharedData);
+
+typedef void (*UConverterOpen) (UConverter *cnv, const char *name, const char *locale, UErrorCode *pErrorCode);
+typedef void (*UConverterClose) (UConverter *cnv);
+
+typedef void (*UConverterReset) (UConverter *cnv);
+
 typedef void (*T_ToUnicodeFunction) (UConverter *,
 				     UChar **,
 				     const UChar *,
@@ -146,6 +154,13 @@ void flushInternalCharBuffer (UConverter * _this,
 
 struct UConverterImpl {
     UConverterType type;
+
+    UConverterLoad load;
+    UConverterUnload unload;
+
+    UConverterOpen open;
+    UConverterClose close;
+    UConverterReset reset;
 
     T_ToUnicodeFunction toUnicode;
     T_ToUnicodeFunction toUnicodeWithOffsets;

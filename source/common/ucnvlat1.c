@@ -144,6 +144,13 @@ UChar T_UConverter_getNextUChar_LATIN_1(UConverter* converter,
 static UConverterImpl _Latin1Impl={
     UCNV_LATIN_1,
 
+    NULL,
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+
     T_UConverter_toUnicode_LATIN_1,
     NULL,
     T_UConverter_fromUnicode_LATIN_1,
