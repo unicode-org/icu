@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: JTextPanel.java,v $ $Revision: 1.3 $ $Date: 2001/03/07 02:39:01 $
+ * @(#)$RCSfile: JTextPanel.java,v $ $Revision: 1.4 $ $Date: 2002/02/16 03:06:47 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -26,7 +26,7 @@ import javax.swing.SwingUtilities;
 
 import java.awt.datatransfer.Clipboard;
 
-import com.ibm.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
 
 import com.ibm.richtext.styledtext.StyleModifier;
 import com.ibm.richtext.styledtext.MConstText;

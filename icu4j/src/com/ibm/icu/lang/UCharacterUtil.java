@@ -5,12 +5,12 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/Attic/UCharacterUtil.java,v $ 
-* $Date: 2001/03/23 19:51:38 $ 
-* $Revision: 1.3 $
+* $Date: 2002/02/16 03:05:58 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
-package com.ibm.text;
+package com.ibm.icu.lang;
 
 /**
 * Internal character utility class for simple data type conversion and String 

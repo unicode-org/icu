@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarAstronomer.java,v $ 
- * $Date: 2000/11/28 22:17:06 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/02/16 03:06:25 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
-package com.ibm.util;
+package com.ibm.icu.util;
 
 import java.util.*;
 import java.text.*;

@@ -7,8 +7,9 @@
 *   11/29/2001  aliu        Creation.
 **********************************************************************
 */
-package com.ibm.tools.translit;
-import com.ibm.text.*;
+package com.ibm.icu.dev.tool.translit;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 import java.util.*;
 import java.io.*;
 
@@ -18,7 +19,7 @@ import java.io.*;
  *
  * Usage: ID [ NFD|NFKD [lower] ]
  *
- *   java -classpath classes com.ibm.tools.translit.genIndexFilters
+ *   java -classpath classes com.ibm.icu.dev.tool.translit.genIndexFilters
  *                              Latin-Greek NFD lower
  *
  * The 'NFD'|'NFKD' and 'lower' args are optional, but 'lower' can

@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SymbolTable.java,v $ 
- * $Date: 2001/11/09 00:51:53 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/02/16 03:06:16 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 import java.text.ParsePosition;
 
 /**

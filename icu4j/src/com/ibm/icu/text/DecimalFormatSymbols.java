@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormatSymbols.java,v $ 
- * $Date: 2001/10/19 12:31:15 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/16 03:06:07 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

@@ -5,41 +5,41 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/calendar/CalendarFrame.java,v $ 
- * $Date: 2000/10/19 00:27:16 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/02/16 03:04:54 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.demo.calendar;
+package com.ibm.icu.dev.demo.calendar;
 
-import com.ibm.demo.*;
-import com.ibm.util.Calendar;
-import com.ibm.util.HebrewCalendar;
-import com.ibm.util.BuddhistCalendar;
-import com.ibm.util.JapaneseCalendar;
-import com.ibm.util.IslamicCalendar;
-import com.ibm.text.SimpleDateFormat;
+import com.ibm.icu.dev.demo.*;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.HebrewCalendar;
+import com.ibm.icu.util.BuddhistCalendar;
+import com.ibm.icu.util.JapaneseCalendar;
+import com.ibm.icu.util.IslamicCalendar;
+import com.ibm.icu.text.SimpleDateFormat;
 //import java.util.SimpleTimeZone;
-import com.ibm.util.SimpleTimeZone;
+import com.ibm.icu.util.SimpleTimeZone;
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
 import java.io.*;
 //import java.text.DateFormat;
-import com.ibm.text.DateFormat;
+import com.ibm.icu.text.DateFormat;
 import java.text.MessageFormat;
 //import java.util.Calendar;
-import com.ibm.util.Calendar;
+import com.ibm.icu.util.Calendar;
 import java.util.Date;
 //import java.util.GregorianCalendar;
-import com.ibm.util.GregorianCalendar;
+import com.ibm.icu.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 //import java.util.TimeZone;
-import com.ibm.util.TimeZone;
+import com.ibm.icu.util.TimeZone;
 
 /**
  * A Frame is a top-level window with a title. The default layout for a frame
@@ -248,8 +248,8 @@ class CalendarFrame extends Frame
                         DateFormat f = DateFormat.getDateTimeInstance(
                                                 calendars[i], DateFormat.MEDIUM, -1,
                                                 locales[displayMenu.getSelectedIndex()]);
-                        if (f instanceof com.ibm.text.SimpleDateFormat) {
-                            com.ibm.text.SimpleDateFormat f1 = (com.ibm.text.SimpleDateFormat) f;
+                        if (f instanceof com.ibm.icu.text.SimpleDateFormat) {
+                            com.ibm.icu.text.SimpleDateFormat f1 = (com.ibm.icu.text.SimpleDateFormat) f;
                             f1.applyPattern("MMMM, yyyy G");
                             f1.setTimeZone(new SimpleTimeZone(0, "UTC"));
 //hey {al} -

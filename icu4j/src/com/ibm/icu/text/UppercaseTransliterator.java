@@ -5,13 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UppercaseTransliterator.java,v $ 
- * $Date: 2001/11/25 23:12:23 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/02/16 03:06:23 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 import java.util.*;
+import com.ibm.icu.lang.*;
 
 /**
  * A transliterator that performs locale-sensitive toUpper()

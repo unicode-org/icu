@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/LocaleElements.java,v $ 
- * $Date: 2001/03/01 22:46:33 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/02/16 03:05:50 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
-package com.ibm.text.resources;
+package com.ibm.icu.impl.data;
 
 import java.util.ListResourceBundle;
 

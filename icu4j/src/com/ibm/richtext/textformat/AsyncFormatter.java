@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: AsyncFormatter.java,v $ $Revision: 1.2 $ $Date: 2001/10/30 02:42:50 $
+ * @(#)$RCSfile: AsyncFormatter.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:42 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -27,12 +27,12 @@ import java.text.CharacterIterator;
 
 import java.util.Hashtable;
 
-import com.ibm.textlayout.attributes.AttributeMap;
-import com.ibm.textlayout.attributes.TextAttribute;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.TextAttribute;
 
 import com.ibm.richtext.styledtext.MConstText;
 
-import com.ibm.textlayout.Graphics2DConversion;
+import com.ibm.richtext.textlayout.Graphics2DConversion;
 
 ///*JDK12IMPORTS
 import java.awt.Graphics2D;
@@ -41,9 +41,9 @@ import java.awt.font.FontRenderContext;
 //JDK12IMPORTS*/
 
 /*JDK11IMPORTS
-import com.ibm.textlayout.Graphics2D;
-import com.ibm.textlayout.LineBreakMeasurer;
-import com.ibm.textlayout.FontRenderContext;
+import com.ibm.richtext.textlayout.Graphics2D;
+import com.ibm.richtext.textlayout.LineBreakMeasurer;
+import com.ibm.richtext.textlayout.FontRenderContext;
 JDK11IMPORTS*/
 
 /*

@@ -2,19 +2,19 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/SimpleTimeZoneAdapter.java,v $ 
- * $Date: 2000/05/12 23:20:11 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:06:30 $ 
+ * $Revision: 1.2 $
  */
-package com.ibm.util;
+package com.ibm.icu.util;
 import java.util.Date;
 
 /**
  * <code>SimpleTimeZoneAdapter</code> wraps a
- * com.ibm.util.SimpleTimeZone and inherits from java.util.TimeZone.
+ * com.ibm.icu.util.SimpleTimeZone and inherits from java.util.TimeZone.
  * Without this class, we would need to 'port' java.util.Date to
- * com.ibm.util as well, so that Date could interoperate properly with
- * the com.ibm.util TimeZone and Calendar classes.  With this class,
- * we can (mostly) use java.util.Date together with com.ibm.util
+ * com.ibm.icu.util as well, so that Date could interoperate properly with
+ * the com.ibm.icu.util TimeZone and Calendar classes.  With this class,
+ * we can (mostly) use java.util.Date together with com.ibm.icu.util
  * classes.
  *
  * <p>This solution is imperfect because of the faulty design of
@@ -22,21 +22,21 @@ import java.util.Date;
  * method, getOffset(), that should really be public.  Because it is
  * package private, it cannot be overridden from where we are, and we
  * cannot properly delegate its operation to our contained
- * com.ibm.util.STZ object.
+ * com.ibm.icu.util.STZ object.
  *
  * <p>For the moment we live with this problem.  It appear not to
  * cause too much trouble since most real computations happen using
- * the com.ibm.util classes.  However, if this becomes a problem in
+ * the com.ibm.icu.util classes.  However, if this becomes a problem in
  * the future, we will have to stop using this adapter, and 'port'
- * java.util.Date into com.ibm.util.
+ * java.util.Date into com.ibm.icu.util.
  *
- * @see com.ibm.util.TimeZone#setDefault
+ * @see com.ibm.icu.util.TimeZone#setDefault
  * @author Alan Liu
  */
 public class SimpleTimeZoneAdapter extends java.util.TimeZone {
 
     /**
-     * The contained com.ibm.util.SimpleTimeZone object.
+     * The contained com.ibm.icu.util.SimpleTimeZone object.
      * We delegate all methods to this object.
      */
     private SimpleTimeZone zone;

@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestSimpleDateFormatAPI.java,v $ 
- * $Date: 2001/10/23 13:14:20 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:05:11 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  **/
@@ -27,10 +27,11 @@ attribution to Taligent may not be removed.
   Taligent is a registered trademark of Taligent, Inc.
 */
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
-import com.ibm.util.*;
-import com.ibm.text.*;
+import com.ibm.icu.util.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 import java.util.Locale;
 import java.util.Date;
 import java.text.ParsePosition;
@@ -38,7 +39,7 @@ import java.text.Format;
 import java.text.FieldPosition;
 import java.text.ParseException;
 
-public class IntlTestSimpleDateFormatAPI extends com.ibm.test.TestFmwk
+public class IntlTestSimpleDateFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 {
     public static void main(String[] args) throws Exception {
         new IntlTestSimpleDateFormatAPI().run(args);

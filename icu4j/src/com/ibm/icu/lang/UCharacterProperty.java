@@ -6,21 +6,22 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/02/08 01:12:10 $ 
-* $Revision: 1.1 $
+* $Date: 2002/02/16 03:05:58 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
 
-package com.ibm.text;
+package com.ibm.icu.lang;
 
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import com.ibm.icu.internal.util.Trie;
-import com.ibm.icu.util.CharTrie;
+import com.ibm.icu.impl.Trie;
+import com.ibm.icu.impl.CharTrie;
+import com.ibm.icu.text.UTF16;
 
 /**
 * <p>Internal class used for Unicode character property database.</p>

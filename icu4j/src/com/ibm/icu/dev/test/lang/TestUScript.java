@@ -5,10 +5,10 @@
 *******************************************************************************
 */
 
-package com.ibm.icu.test.text;
+package com.ibm.icu.dev.test.text;
 
-import com.ibm.text.UScript;
-import com.ibm.test.TestFmwk;
+import com.ibm.icu.text.UScript;
+import com.ibm.icu.dev.test.TestFmwk;
 import java.util.Locale;
 
 public class TestUScript extends TestFmwk{

@@ -1,7 +1,8 @@
-package com.ibm.test.translit;
-import com.ibm.text.*;
-import com.ibm.test.*;
-import com.ibm.util.Utility;
+package com.ibm.icu.dev.test.translit;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.dev.test.*;
+import com.ibm.icu.util.Utility;
 import java.text.*;
 import java.util.*;
 

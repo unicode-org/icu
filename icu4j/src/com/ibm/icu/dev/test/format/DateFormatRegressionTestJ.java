@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatRegressionTestJ.java,v $ 
- * $Date: 2001/10/23 13:10:05 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/16 03:05:08 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -14,17 +14,18 @@
  * New added, 2001-10-17 [Jing/GCL]
  */
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
-import com.ibm.text.*;
-import com.ibm.util.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.*;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Locale;
 import java.text.FieldPosition;
 
-public class DateFormatRegressionTestJ extends com.ibm.test.TestFmwk {
+public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
     
     static final String TIME_STRING = "2000/11/17 08:01:00";
     static final long UTC_LONG = 974476860000L;

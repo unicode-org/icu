@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDecimalFormatSymbolsC.java,v $ 
- * $Date: 2001/10/23 13:13:25 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:05:11 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -15,17 +15,18 @@
  * Source File: $ICU4CRoot/source/test/intltest/tsdcfmsy.cpp
  **/
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
 import java.text.FieldPosition;
-import com.ibm.util.*;
+import com.ibm.icu.util.*;
 import java.util.Locale;
-import com.ibm.text.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 
 /**
  * Tests for DecimalFormatSymbols
  **/
-public class IntlTestDecimalFormatSymbolsC extends com.ibm.test.TestFmwk {
+public class IntlTestDecimalFormatSymbolsC extends com.ibm.icu.dev.test.TestFmwk {
     
     public static void main(String[] args) throws Exception {
         new IntlTestDecimalFormatSymbolsC().run(args);

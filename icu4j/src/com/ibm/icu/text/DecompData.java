@@ -6,12 +6,12 @@
 * > THIS FILE WAS MACHINE GENERATED <
 * >       DO NOT EDIT BY HAND       <
 * >      RUN TOOL TO REGENERATE     <
-* Tool: com.ibm.text.Normalizer
+* Tool: com.ibm.icu.text.Normalizer
 * Creation date: Tue Jul 18 11:05:28 PDT 2000
 */
 
-package com.ibm.text;
-import com.ibm.util.*;
+package com.ibm.icu.text;
+import com.ibm.icu.util.*;
 
 class DecompData {
     static final int MAX_CANONICAL = 21754;

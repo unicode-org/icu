@@ -5,13 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2001/11/12 20:02:00 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/02/16 03:06:13 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.text;
+package com.ibm.icu.text;
 
 import java.math.BigInteger;
 import java.text.*;
@@ -468,7 +468,7 @@ import java.util.ResourceBundle;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.4 $ $Date: 2001/11/12 20:02:00 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.5 $ $Date: 2002/02/16 03:06:13 $
  * @see NumberFormat
  * @see DecimalFormat
  */
@@ -595,7 +595,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
         // load up the resource bundle containing the description
         // from the specified locale
         ResourceBundle bundle = ResourceBundle.getBundle(
-                        "com.ibm.text.resources.NumberFormatRules",
+                        "com.ibm.icu.impl.data.NumberFormatRules",
                         locale);
         String description = "";
 
@@ -831,32 +831,32 @@ public final class RuleBasedNumberFormat extends NumberFormat {
 
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Implement com.ibm.text.NumberFormat:
+     * Implement com.ibm.icu.text.NumberFormat:
      * Format a BigInteger.
      */
     public StringBuffer format(BigInteger number,
                                StringBuffer toAppendTo,
                                FieldPosition pos) {
-        return format(new com.ibm.math.BigDecimal(number), toAppendTo, pos);
+        return format(new com.ibm.icu.math.BigDecimal(number), toAppendTo, pos);
     }
     
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Implement com.ibm.text.NumberFormat:
+     * Implement com.ibm.icu.text.NumberFormat:
      * Format a BigDecimal.
      */
     public StringBuffer format(java.math.BigDecimal number,
                                StringBuffer toAppendTo,
                                FieldPosition pos) {
-        return format(new com.ibm.math.BigDecimal(number), toAppendTo, pos);
+        return format(new com.ibm.icu.math.BigDecimal(number), toAppendTo, pos);
     }
 
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Implement com.ibm.text.NumberFormat:
+     * Implement com.ibm.icu.text.NumberFormat:
      * Format a BigDecimal.
      */
-    public StringBuffer format(com.ibm.math.BigDecimal number,
+    public StringBuffer format(com.ibm.icu.math.BigDecimal number,
                                StringBuffer toAppendTo,
                                FieldPosition pos) {
         // TEMPORARY:

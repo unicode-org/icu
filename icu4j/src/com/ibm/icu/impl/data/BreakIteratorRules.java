@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/BreakIteratorRules.java,v $
- * $Date: 2001/10/19 23:06:38 $
- * $Revision: 1.8 $
+ * $Date: 2002/02/16 03:05:38 $
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
-package com.ibm.text.resources;
+package com.ibm.icu.impl.data;
 
 import java.util.ListResourceBundle;
 

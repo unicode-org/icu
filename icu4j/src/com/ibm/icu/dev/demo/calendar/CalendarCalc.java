@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/calendar/CalendarCalc.java,v $ 
- * $Date: 2001/10/30 02:42:50 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/02/16 03:04:54 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.demo.calendar;
+package com.ibm.icu.dev.demo.calendar;
 
-import com.ibm.demo.*;
+import com.ibm.icu.dev.demo.*;
 
 import java.applet.Applet;
 import java.util.Date;
@@ -21,19 +21,20 @@ import java.awt.*;
 import java.awt.event.*;
 
 //import java.text.DateFormat;
-import com.ibm.text.DateFormat;
+import com.ibm.icu.text.DateFormat;
 import java.text.ParsePosition;
 
 //import java.util.Calendar;
-import com.ibm.util.Calendar;
+import com.ibm.icu.util.Calendar;
 //import java.util.GregorianCalendar;
-import com.ibm.util.GregorianCalendar;
+import com.ibm.icu.util.GregorianCalendar;
 //import java.util.TimeZone;
-import com.ibm.util.TimeZone;
+import com.ibm.icu.util.TimeZone;
 import java.util.Locale;
 
-import com.ibm.util.*;
-import com.ibm.text.*;
+import com.ibm.icu.util.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 
 import javax.swing.*;
 

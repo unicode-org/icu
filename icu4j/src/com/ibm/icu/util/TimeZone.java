@@ -21,13 +21,13 @@
  *
  */
 
-package com.ibm.util;
+package com.ibm.icu.util;
 import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import com.ibm.text.SimpleDateFormat;
-import com.ibm.text.NumberFormat;
+import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.text.NumberFormat;
 import java.text.ParsePosition;
 import sun.security.action.GetPropertyAction;
 import java.util.Date;
@@ -506,7 +506,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
             if (defaultZone == null) {
                 defaultZone = getTimeZone(zoneID);
             }
-            if (false) System.out.println("com.ibm.util.TZ.default " + defaultZone);
+            if (false) System.out.println("com.ibm.icu.util.TZ.default " + defaultZone);
         }
         return (TimeZone)defaultZone.clone();
     }
@@ -522,7 +522,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
     {
         defaultZone = zone;
         // [icu4j Keep java.util.TimeZone default in sync so java.util.Date
-        //        can interoperate with com.ibm.util classes.  This solution
+        //        can interoperate with com.ibm.icu.util classes.  This solution
         //        is _imperfect_; see SimpleTimeZoneAdapter. - liu]
         try {
             java.util.TimeZone.setDefault(

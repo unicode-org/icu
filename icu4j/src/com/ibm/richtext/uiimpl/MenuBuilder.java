@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MenuBuilder.java,v $ $Revision: 1.2 $ $Date: 2001/11/21 19:25:58 $
+ * @(#)$RCSfile: MenuBuilder.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:50 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -22,8 +22,8 @@ import java.text.NumberFormat;
 
 import com.ibm.richtext.styledtext.MConstText;
 
-import com.ibm.textlayout.attributes.AttributeMap;
-import com.ibm.textlayout.attributes.TextAttribute;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.TextAttribute;
 import com.ibm.richtext.textpanel.MTextPanel;
 import com.ibm.richtext.textpanel.KeyRemap;
 

@@ -5,13 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateFormatSymbols.java,v $
- * $Date: 2001/01/09 22:48:51 $
- * $Revision: 1.8 $
+ * $Date: 2002/02/16 03:06:06 $
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.text;
+package com.ibm.icu.text;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.io.Serializable;
@@ -20,10 +20,10 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.Enumeration;
 import java.text.resources.DateFormatZoneData;
-import com.ibm.util.Utility;
-import com.ibm.util.Calendar;
-import com.ibm.util.GregorianCalendar;
-import com.ibm.util.TimeZone;
+import com.ibm.icu.util.Utility;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
 import java.util.MissingResourceException;
 
 /**
@@ -68,7 +68,7 @@ import java.util.MissingResourceException;
 
  * @see          DateFormat
  * @see          SimpleDateFormat
- * @see          com.ibm.util.SimpleTimeZone
+ * @see          com.ibm.icu.util.SimpleTimeZone
  * @version      1.31 09/21/99
  * @author       Chen-Lieh Huang
  */
@@ -173,7 +173,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * are localized names.  If a zone does not implement daylight savings
      * time, the daylight savings time names are ignored.
      * @see java.text.resources.DateFormatZoneData
-     * @see com.ibm.util.TimeZone
+     * @see com.ibm.icu.util.TimeZone
      * @serial
      */
     String zoneStrings[][] = null;
@@ -546,7 +546,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param ID the given time zone ID.
      * @return the index of the given time zone ID.  Returns -1 if
      * the given time zone ID can't be located in the DateFormatSymbols object.
-     * @see com.ibm.util.SimpleTimeZone
+     * @see com.ibm.icu.util.SimpleTimeZone
      */
     final int getZoneIndex(String ID) {
         int result = _getZoneIndex(ID);
@@ -644,8 +644,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * The resource bundle name is based on the calendar's fully-specified
      * class name, with ".resources" inserted at the end of the package name
      * (just before the class name) and "Symbols" appended to the end.
-     * For example, the bundle corresponding to "com.ibm.util.HebrewCalendar"
-     * is "com.ibm.util.resources.HebrewCalendarSymbols".
+     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
+     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
      * <p>
      * Within the ResourceBundle, this method searches for five keys:
      * <ul>
@@ -791,8 +791,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * The resource bundle name is based on the calendar's fully-specified
      * class name, with ".resources" inserted at the end of the package name
      * (just before the class name) and "Symbols" appended to the end.
-     * For example, the bundle corresponding to "com.ibm.util.HebrewCalendar"
-     * is "com.ibm.util.resources.HebrewCalendarSymbols".
+     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
+     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
      */
     static public ResourceBundle getDateFormatBundle(Class calendarClass, Locale locale)
                                   throws MissingResourceException {

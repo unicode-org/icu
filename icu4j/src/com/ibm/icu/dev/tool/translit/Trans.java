@@ -1,5 +1,6 @@
-package com.ibm.tools.translit;
-import com.ibm.text.*;
+package com.ibm.icu.dev.tool.translit;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 import java.io.*;
 
 /**
@@ -84,7 +85,7 @@ public class Trans {
      * Emit usage and die.
      */
     static void usage() {
-        System.out.println("Usage: java com.ibm.tools.translit.Trans [-html] <trans> <infile> <outfile>");
+        System.out.println("Usage: java com.ibm.icu.dev.tool.translit.Trans [-html] <trans> <infile> <outfile>");
         System.out.println("<trans>   Name of transliterator");
         System.out.println("<infile>  Name of input file");
         System.out.println("<outfile> Name of output file");

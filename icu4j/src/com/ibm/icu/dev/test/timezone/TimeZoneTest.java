@@ -5,10 +5,11 @@
  * @build TimeZoneTest
  */
 
-package com.ibm.test.timezone;
-import com.ibm.text.*;
-import com.ibm.util.*;
-import com.ibm.test.*;
+package com.ibm.icu.dev.test.timezone;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.*;
+import com.ibm.icu.dev.test.*;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Hashtable;

@@ -1,5 +1,5 @@
 /*
- * $RCSfile: SyntaxColorer.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:43:09 $
+ * $RCSfile: SyntaxColorer.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:33 $
  *
  * (C) Copyright IBM Corp. 1999.  All Rights Reserved.
  *
@@ -25,8 +25,8 @@ import com.ibm.richtext.styledtext.MText;
 import com.ibm.richtext.styledtext.StyledText;
 import com.ibm.richtext.styledtext.StyleModifier;
 
-import com.ibm.textlayout.attributes.AttributeMap;
-import com.ibm.textlayout.attributes.TextAttribute;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.TextAttribute;
 
 import java.awt.Color;
 

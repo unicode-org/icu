@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/NumberFormatRules.java,v $ 
- * $Date: 2001/11/07 00:30:31 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/16 03:05:52 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
-package com.ibm.text.resources;
+package com.ibm.icu.impl.data;
 
 import java.util.ListResourceBundle;
 
@@ -21,7 +21,7 @@ import java.util.ListResourceBundle;
  * U.S. English data.
  *
  * @author Richard Gillam
- * @version $Version$ $Date: 2001/11/07 00:30:31 $
+ * @version $Version$ $Date: 2002/02/16 03:05:52 $
  */
 public class NumberFormatRules extends ListResourceBundle {
     /**

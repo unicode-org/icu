@@ -5,13 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/LowercaseTransliterator.java,v $ 
- * $Date: 2001/11/25 23:12:22 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/02/16 03:06:08 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 import java.util.*;
+import com.ibm.icu.lang.*;
 
 /**
  * A transliterator that performs locale-sensitive toLower()

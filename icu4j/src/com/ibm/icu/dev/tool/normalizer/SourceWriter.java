@@ -5,16 +5,17 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/SourceWriter.java,v $ 
- * $Date: 2000/07/12 16:41:26 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/16 03:05:34 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
-package com.ibm.tools.normalizer;
+package com.ibm.icu.dev.tool.normalizer;
 
-import com.ibm.text.*;
-import com.ibm.util.CompactCharArray;
-import com.ibm.util.CompactByteArray;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.CompactCharArray;
+import com.ibm.icu.util.CompactByteArray;
 import java.io.PrintWriter;
 import java.util.Date;
 

@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MStyleBuffer.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:45:10 $
+ * @(#)$RCSfile: MStyleBuffer.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:35 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -13,7 +13,7 @@
  * will not be liable for any third party claims against you.
  */
 package com.ibm.richtext.styledtext;
-import com.ibm.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
 
 /*
     8/1/96

@@ -5,13 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/NumberFormatRules_nl.java,v $ 
- * $Date: 2000/03/10 04:07:29 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:05:54 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.text.resources;
+package com.ibm.icu.impl.data;
 
 import java.util.ListResourceBundle;
 
@@ -19,7 +19,7 @@ import java.util.ListResourceBundle;
  * RuleBasedNumberFormat data for Dutch
  *
  * @author Richard Gillam
- * @version $Version$ $Date: 2000/03/10 04:07:29 $
+ * @version $Version$ $Date: 2002/02/16 03:05:54 $
  */
 class NumberFormatRules_nl extends ListResourceBundle {
     /**

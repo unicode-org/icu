@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RbnfRoundTripTest.java,v $ 
- * $Date: 2000/03/10 03:47:47 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:05:16 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
-package com.ibm.test.rbnf;
+package com.ibm.icu.dev.test.rbnf;
 
-import com.ibm.text.RuleBasedNumberFormat;
-import com.ibm.test.TestFmwk;
+import com.ibm.icu.text.RuleBasedNumberFormat;
+import com.ibm.icu.dev.test.TestFmwk;
 
 import java.util.Locale;
 import java.text.NumberFormat;

@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFSubstitution.java,v $ 
- * $Date: 2001/10/02 17:42:40 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/02/16 03:06:09 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
 import java.text.*;
 
@@ -23,7 +23,7 @@ import java.text.*;
  * is a section of a rule that inserts text into the rule's rule text
  * based on some part of the number being formatted.
  * @author Richard Gillam
- * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.5 $ $Date: 2001/10/02 17:42:40 $
+ * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.6 $ $Date: 2002/02/16 03:06:09 $
  */
 abstract class NFSubstitution {
     //-----------------------------------------------------------------------

@@ -5,15 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/rbbi/Attic/WriteTablesToFiles.java,v $ 
- * $Date: 2000/09/22 18:57:44 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:05:35 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
-package com.ibm.tools.rbbi;
+package com.ibm.icu.dev.tool.rbbi;
 
 import java.io.*;
-import com.ibm.text.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 
 public class WriteTablesToFiles {
     public static void main(String[] args) throws IOException {

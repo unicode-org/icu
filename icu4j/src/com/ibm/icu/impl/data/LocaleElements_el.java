@@ -3,12 +3,12 @@
  * others. All Rights Reserved.
  **************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/LocaleElements_el.java,v $ 
- * $Date: 2001/12/01 03:02:34 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/02/16 03:05:50 $ 
+ * $Revision: 1.10 $
  **************************************************************************
  */
 
-package com.ibm.text.resources;
+package com.ibm.icu.impl.data;
 
 import java.util.ListResourceBundle;
 

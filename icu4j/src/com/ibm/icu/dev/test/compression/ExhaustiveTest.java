@@ -5,17 +5,17 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/compression/ExhaustiveTest.java,v $ 
- * $Date: 2001/09/08 01:16:25 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/02/16 03:05:07 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
-package com.ibm.test.compression;
+package com.ibm.icu.dev.test.compression;
 
-import com.ibm.text.UnicodeCompressor;
-import com.ibm.text.UnicodeDecompressor;
+import com.ibm.icu.text.UnicodeCompressor;
+import com.ibm.icu.text.UnicodeDecompressor;
 import java.util.Random;
-import com.ibm.test.TestFmwk;
+import com.ibm.icu.dev.test.TestFmwk;
 
 public class ExhaustiveTest extends TestFmwk {
 	public static void main(String args[]) throws Exception {

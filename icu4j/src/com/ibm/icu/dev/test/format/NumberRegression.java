@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberRegression.java,v $ 
- * $Date: 2001/10/25 06:37:15 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/16 03:05:12 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  **/
@@ -35,10 +35,11 @@ attribution to Taligent may not be removed.
   Taligent is a registered trademark of Taligent, Inc.
 */
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
-import com.ibm.text.*;
-import com.ibm.util.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.*;
 import java.math.BigDecimal;
 import java.io.*;
 import java.math.BigInteger;
@@ -49,7 +50,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.ResourceBundle;
 
-public class NumberRegression extends com.ibm.test.TestFmwk {
+public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
 
     public static void main(String[] args) throws Exception {
         new NumberRegression().run(args);
@@ -1742,7 +1743,7 @@ class MyNumberFormatTest extends NumberFormat {
     public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
         return new StringBuffer("");
     }
-    public StringBuffer format(com.ibm.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
+    public StringBuffer format(com.ibm.icu.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
         return new StringBuffer("");
     }
 }

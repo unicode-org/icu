@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TextPanelSettings.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:51:23 $
+ * @(#)$RCSfile: TextPanelSettings.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:48 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -18,8 +18,8 @@ import java.awt.Color;
 import java.io.Serializable;
 import java.util.Hashtable;
 
-import com.ibm.textlayout.attributes.AttributeMap;
-import com.ibm.textlayout.attributes.TextAttribute;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.TextAttribute;
 import com.ibm.richtext.styledtext.StandardTabRuler;
 
 /**

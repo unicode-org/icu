@@ -28,7 +28,7 @@
  *
  */
 
-package com.ibm.util;
+package com.ibm.icu.util;
 import java.util.Date;
 import java.util.Locale;
 

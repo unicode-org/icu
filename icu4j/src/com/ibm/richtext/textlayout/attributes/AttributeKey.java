@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: AttributeKey.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:33:07 $
+ * @(#)$RCSfile: AttributeKey.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:45 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -12,7 +12,7 @@
  * IBM has been advised of the possibility of their occurrence. IBM
  * will not be liable for any third party claims against you.
  */
-package com.ibm.textlayout.attributes;
+package com.ibm.richtext.textlayout.attributes;
 
 import java.io.Serializable;
 

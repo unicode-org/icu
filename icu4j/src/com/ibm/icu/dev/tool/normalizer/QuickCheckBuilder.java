@@ -5,13 +5,13 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/QuickCheckBuilder.java,v $ 
-* $Date: 2001/10/30 02:42:49 $ 
-* $Revision: 1.6 $
+* $Date: 2002/02/16 03:05:34 $ 
+* $Revision: 1.7 $
 *
 ******************************************************************************
 */
 
-package com.ibm.tools.normalizer;
+package com.ibm.icu.dev.tool.normalizer;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -22,9 +22,9 @@ import java.io.Reader;
 import java.io.EOFException;
 import java.util.StringTokenizer;
 
-import com.ibm.util.ByteTrie;
-import com.ibm.text.UCharacter;
-import com.ibm.text.UTF16;
+import com.ibm.icu.impl.ByteTrie;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.UTF16;
 
 /**
 * Class to generate modified quickcheck data for collation.

@@ -5,19 +5,20 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/BigNumberFormatTest.java,v $ 
- * $Date: 2001/10/19 12:47:42 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/02/16 03:05:04 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
-package com.ibm.test.bnf;
+package com.ibm.icu.dev.test.bnf;
 
-import com.ibm.test.*;
-import com.ibm.text.*;
+import com.ibm.icu.dev.test.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 import java.text.ParseException;
 import java.util.*;
 import java.math.BigInteger;
-import com.ibm.util.Utility;
+import com.ibm.icu.util.Utility;
 
 /**
  * @test
@@ -164,17 +165,17 @@ public class BigNumberFormatTest extends TestFmwk {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         /*For ICU compatibility [Richard/GCL]*/
         expect(NumberFormat.getScientificInstance(Locale.US),
-               new Number[] { new com.ibm.math.BigDecimal("12345.678901"),
+               new Number[] { new com.ibm.icu.math.BigDecimal("12345.678901"),
                            },
                "1.2345678901E4");
         expect(new DecimalFormat("##0.####E0", US),
-               new Number[] { new com.ibm.math.BigDecimal("12345.4999"),
-                              new com.ibm.math.BigDecimal("12344.5001"),
+               new Number[] { new com.ibm.icu.math.BigDecimal("12345.4999"),
+                              new com.ibm.icu.math.BigDecimal("12344.5001"),
                             },
                "12.345E3");
         expect(new DecimalFormat("##0.####E0", US),
-               new Number[] { new com.ibm.math.BigDecimal("12345.5000"),
-                              new com.ibm.math.BigDecimal("12346.5000"),
+               new Number[] { new com.ibm.icu.math.BigDecimal("12345.5000"),
+                              new com.ibm.icu.math.BigDecimal("12346.5000"),
                             },
                "12.346E3");
     }
@@ -328,7 +329,7 @@ public class BigNumberFormatTest extends TestFmwk {
 
     private static String showNumber(Number n) {
         String cls = n.getClass().getName();
-        if (!(n instanceof com.ibm.math.BigDecimal
+        if (!(n instanceof com.ibm.icu.math.BigDecimal
               || n instanceof java.math.BigDecimal)) {
             int i = cls.lastIndexOf('.');
             cls = cls.substring(i+1);
@@ -413,7 +414,7 @@ public class BigNumberFormatTest extends TestFmwk {
         for (int i=0; i<DATA.length; i+=2) {
             String input = DATA[i];
             String exp = DATA[i+1];
-            com.ibm.math.BigDecimal bd = new com.ibm.math.BigDecimal(input);
+            com.ibm.icu.math.BigDecimal bd = new com.ibm.icu.math.BigDecimal(input);
             String output = fmt.format(bd);
             if (output.equals(exp)) {
                 logln("input=" + input + " num=" + bd + " output=" + output);

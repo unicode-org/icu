@@ -5,13 +5,13 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/TrieBuilder.java,v $ 
-* $Date: 2001/03/28 00:01:51 $ 
-* $Revision: 1.2 $
+* $Date: 2002/02/16 03:05:37 $ 
+* $Revision: 1.3 $
 *
 ******************************************************************************
 */
 
-package com.ibm.util;
+package com.ibm.icu.impl;
 
 /**
 * Builder lass to manipulate and generate a trie.
@@ -41,7 +41,7 @@ package com.ibm.util;
 *   int thirdindex = index2[secondindex] + ch & LAST_SET_OF_BITS_MASK;<br>    
 *   f(ch) = value[thirdindex];<br>
 * </p>
-* @version            $Revision: 1.2 $
+* @version            $Revision: 1.3 $
 * @author             Syn Wee Quek
 */
 final class TrieBuilder

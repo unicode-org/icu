@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/impl/DumbTextComponent.java,v $ 
- * $Date: 2001/11/29 17:28:37 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/02/16 03:04:57 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
-package com.ibm.icu.demo.components;
+package com.ibm.icu.dev.demo.impl;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.*;

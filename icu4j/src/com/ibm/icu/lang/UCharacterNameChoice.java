@@ -6,13 +6,13 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterNameChoiceEnum.java $ 
-* $Date: 2002/02/15 02:53:35 $ 
-* $Revision: 1.3 $
+* $Date: 2002/02/16 03:05:57 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
 
-package com.ibm.text;
+package com.ibm.icu.lang;
 
 /**
 * Internal class containing selector constants for the unicode character names.

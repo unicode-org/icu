@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDecimalFormatAPIC.java,v $ 
- * $Date: 2001/10/19 12:10:26 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:05:10 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -15,19 +15,20 @@
  * Source File: $ICU4CRoot/source/test/intltest/dcfmapts.cpp
  **/
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
-import com.ibm.util.*;
+import com.ibm.icu.util.*;
 import java.util.Locale;
 import java.text.ParsePosition;
 import java.text.Format;
-import com.ibm.text.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 import java.text.FieldPosition;
 
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
 // try to test the full functionality.  It just calls each function in the class and
 // verifies that it works on a basic level.
-public class IntlTestDecimalFormatAPIC extends com.ibm.test.TestFmwk {
+public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
     
     public static void main(String[] args)  throws Exception {
         new IntlTestDecimalFormatAPIC().run(args);

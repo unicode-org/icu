@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatMiscTests.java,v $ 
- * $Date: 2001/10/29 12:49:02 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/02/16 03:05:08 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -15,10 +15,11 @@
  * Source File: $ICU4CRoot/source/test/intltest/miscdtfm.cpp
  **/
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
-import com.ibm.text.*;
-import com.ibm.util.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.*;
 import java.text.FieldPosition;
 import java.text.ParseException;
 import java.util.Locale;
@@ -27,7 +28,7 @@ import java.util.Date;
 /** 
  * Performs miscellaneous tests for DateFormat, SimpleDateFormat, DateFormatSymbols
  **/
-public class DateFormatMiscTests extends com.ibm.test.TestFmwk {
+public class DateFormatMiscTests extends com.ibm.icu.dev.test.TestFmwk {
 
     public static void main(String[] args) throws Exception{
         new DateFormatMiscTests().run(args);

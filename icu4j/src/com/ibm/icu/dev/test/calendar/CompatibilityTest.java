@@ -4,14 +4,14 @@
  * @summary test for Calendar
  */
 
-package com.ibm.test.calendar;
-import com.ibm.util.*;
+package com.ibm.icu.dev.test.calendar;
+import com.ibm.icu.util.*;
 import java.util.Date;
 import java.util.Locale;
 import java.text.*;
 import java.io.*;
 
-public class CompatibilityTest extends com.ibm.test.TestFmwk {
+public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
 
     public static void main(String argv[]) throws Exception {
         new CompatibilityTest().run(argv);
@@ -83,8 +83,8 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
                 new GregorianCalendar(TimeZone.getTimeZone("UTC"));
             final int EPOCH_JULIAN = 2440588;
             final long ONE_DAY = 24*60*60*1000L;
-            com.ibm.text.SimpleDateFormat fmt =
-                new com.ibm.text.SimpleDateFormat("EEE MMM dd yyyy G");
+            com.ibm.icu.text.SimpleDateFormat fmt =
+                new com.ibm.icu.text.SimpleDateFormat("EEE MMM dd yyyy G");
                 /*HH:mm:ss.SSS z*/
 
             for (int type=0; type<2; ++type) {

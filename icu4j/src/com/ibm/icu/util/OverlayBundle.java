@@ -1,4 +1,4 @@
-package com.ibm.util;
+package com.ibm.icu.util;
 import java.util.*;
 
 /**

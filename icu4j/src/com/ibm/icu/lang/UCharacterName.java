@@ -6,19 +6,21 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2002/02/15 02:53:34 $ 
-* $Revision: 1.7 $
+* $Date: 2002/02/16 03:05:57 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
-package com.ibm.text;
+package com.ibm.icu.lang;
 
 import java.util.Locale;
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import com.ibm.util.Utility;
+import com.ibm.icu.util.*;
+import com.ibm.icu.text.UTF16;
+
 
 /**
 * Internal class to manage character names.

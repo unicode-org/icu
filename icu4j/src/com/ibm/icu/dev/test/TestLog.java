@@ -1,4 +1,4 @@
-package com.ibm.test;
+package com.ibm.icu.dev.test;
 
 public interface TestLog {
 

@@ -28,7 +28,7 @@
  *
  */
 
-package com.ibm.text;
+package com.ibm.icu.text;
 import java.text.Format;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
@@ -36,9 +36,9 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
-import com.ibm.util.TimeZone;
-import com.ibm.util.Calendar;
-import com.ibm.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
 import java.util.Date;
 import java.text.resources.*;
 
@@ -123,9 +123,9 @@ import java.text.resources.*;
  * @see          Format
  * @see          NumberFormat
  * @see          SimpleDateFormat
- * @see          com.ibm.util.Calendar
- * @see          com.ibm.util.GregorianCalendar
- * @see          com.ibm.util.TimeZone
+ * @see          com.ibm.icu.util.Calendar
+ * @see          com.ibm.icu.util.GregorianCalendar
+ * @see          com.ibm.icu.util.TimeZone
  * @version      1.37 11/02/99
  * @author       Mark Davis, Chen-Lieh Huang, Alan Liu
  */
@@ -591,7 +591,7 @@ public abstract class DateFormat extends Format {
      * do not precisely match this object's format.  With strict parsing,
      * inputs must match this object's format.
      * @param lenient when true, parsing is lenient
-     * @see com.ibm.util.Calendar#setLenient
+     * @see com.ibm.icu.util.Calendar#setLenient
      */
     public void setLenient(boolean lenient)
     {

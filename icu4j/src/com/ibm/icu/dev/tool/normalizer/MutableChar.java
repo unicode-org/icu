@@ -5,16 +5,17 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/MutableChar.java,v $ 
- * $Date: 2000/03/10 04:17:56 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:05:33 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
 // MutableChar.java
 
-package com.ibm.tools.normalizer;
+package com.ibm.icu.dev.tool.normalizer;
 
-import com.ibm.text.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 import java.lang.Comparable;
 import java.io.Serializable;
 

@@ -5,15 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/02/07 00:56:13 $
- * $Revision: 1.95 $
+ * $Date: 2002/02/16 03:05:21 $
+ * $Revision: 1.96 $
  *
  *****************************************************************************************
  */
-package com.ibm.test.translit;
-import com.ibm.text.*;
-import com.ibm.test.*;
-import com.ibm.util.Utility;
+package com.ibm.icu.dev.test.translit;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.dev.test.*;
+import com.ibm.icu.util.Utility;
 import java.text.*;
 import java.util.*;
 
@@ -35,7 +36,7 @@ import java.util.*;
 3. The tests in this file exactly match those in a sister file on the
    other side.  The two files are:
 
-   icu4j:  src/com/ibm/test/translit/TransliteratorTest.java
+   icu4j:  src/com.ibm.icu.dev.test/translit/TransliteratorTest.java
    icu4c:  source/test/intltest/transtst.cpp
 
                   ==> THIS IS THE IMPORTANT PART <==
@@ -869,7 +870,7 @@ public class TransliteratorTest extends TestFmwk {
      * Test the normalization transliterator.
      */
     public void TestNormalizationTransliterator() {
-        // THE FOLLOWING TWO TABLES ARE COPIED FROM com.ibm.test.normalizer.BasicTest
+        // THE FOLLOWING TWO TABLES ARE COPIED FROM com.ibm.icu.dev.test.normalizer.BasicTest
         // PLEASE KEEP THEM IN SYNC WITH BasicTest.
         String[][] CANON = {
             // Input               Decomposed            Composed
@@ -2307,10 +2308,10 @@ public class TransliteratorTest extends TestFmwk {
             // Automatic generation of targets, to make it simpler to add test cases (and more fail-safe)
             
             if (testCases[i].length > 2)    target = testCases[i][2];
-            else if (id.equalsIgnoreCase("NFD"))    target = com.ibm.text.Normalizer.normalize(source, com.ibm.text.Normalizer.DECOMP,0);
-            else if (id.equalsIgnoreCase("NFC"))    target = com.ibm.text.Normalizer.normalize(source, com.ibm.text.Normalizer.COMPOSE,0);
-            else if (id.equalsIgnoreCase("NFKD"))   target = com.ibm.text.Normalizer.normalize(source, com.ibm.text.Normalizer.DECOMP_COMPAT,0);
-            else if (id.equalsIgnoreCase("NFKC"))   target = com.ibm.text.Normalizer.normalize(source, com.ibm.text.Normalizer.COMPOSE_COMPAT,0);
+            else if (id.equalsIgnoreCase("NFD"))    target = com.ibm.icu.text.Normalizer.normalize(source, com.ibm.icu.text.Normalizer.DECOMP,0);
+            else if (id.equalsIgnoreCase("NFC"))    target = com.ibm.icu.text.Normalizer.normalize(source, com.ibm.icu.text.Normalizer.COMPOSE,0);
+            else if (id.equalsIgnoreCase("NFKD"))   target = com.ibm.icu.text.Normalizer.normalize(source, com.ibm.icu.text.Normalizer.DECOMP_COMPAT,0);
+            else if (id.equalsIgnoreCase("NFKC"))   target = com.ibm.icu.text.Normalizer.normalize(source, com.ibm.icu.text.Normalizer.COMPOSE_COMPAT,0);
             else if (id.equalsIgnoreCase("Lower"))  target = UCharacter.toLowerCase(Locale.US, source);
             else if (id.equalsIgnoreCase("Upper"))  target = UCharacter.toUpperCase(Locale.US, source);
 

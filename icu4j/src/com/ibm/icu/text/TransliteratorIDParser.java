@@ -8,10 +8,10 @@
 **********************************************************************
 */
 
-package com.ibm.text;
+package com.ibm.icu.text;
 
-import com.ibm.util.CaseInsensitiveString;
-import com.ibm.util.Utility;
+import com.ibm.icu.util.CaseInsensitiveString;
+import com.ibm.icu.util.Utility;
 import java.text.ParsePosition;
 import java.util.Hashtable;
 import java.util.Vector;

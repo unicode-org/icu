@@ -5,13 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/DateRule.java,v $ 
- * $Date: 2000/03/10 04:17:58 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:06:27 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.util;
+package com.ibm.icu.util;
 
 import java.util.Date;
 

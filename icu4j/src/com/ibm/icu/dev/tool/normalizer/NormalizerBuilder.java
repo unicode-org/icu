@@ -5,21 +5,22 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/NormalizerBuilder.java,v $ 
- * $Date: 2001/09/08 01:18:03 $ 
- * $Revision: 1.13 $
+ * $Date: 2002/02/16 03:05:34 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.tools.normalizer;
+package com.ibm.icu.dev.tool.normalizer;
 
 import java.io.*;
 import java.util.*;
-import com.ibm.text.*;
-import com.ibm.util.CompactByteArray;
-import com.ibm.util.CompactCharArray;
-import com.ibm.util.Utility;
-import com.ibm.icu.internal.UInfo;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.CompactByteArray;
+import com.ibm.icu.util.CompactCharArray;
+import com.ibm.icu.util.Utility;
+import com.ibm.icu.impl.UInfo;
 
 public final class NormalizerBuilder
 {
@@ -130,7 +131,7 @@ public final class NormalizerBuilder
             uinfo = new UInfo();
         }
         if (fOutDir == null) {
-            fOutDir = fJava ? "src/com/ibm/text/"
+            fOutDir = fJava ? "src/com.ibm.icu.text/"
                             : "./";
         }
         if (!fOutDir.endsWith("/")) { fOutDir += '/'; }

@@ -5,18 +5,18 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/CharTrie.java,v $
-* $Date: 2002/02/08 01:08:38 $
-* $Revision: 1.1 $
+* $Date: 2002/02/16 03:05:36 $
+* $Revision: 1.2 $
 *
 ******************************************************************************
 */
 
-package com.ibm.icu.util;
+package com.ibm.icu.impl;
 
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import com.ibm.icu.internal.util.Trie;
+import com.ibm.icu.impl.Trie;
 
 /**
  * Trie implementation which stores data in char, 16 bits.

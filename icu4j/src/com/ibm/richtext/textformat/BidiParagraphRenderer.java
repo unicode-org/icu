@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: BidiParagraphRenderer.java,v $ $Revision: 1.2 $ $Date: 2001/10/30 02:42:50 $
+ * @(#)$RCSfile: BidiParagraphRenderer.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:42 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -26,10 +26,10 @@ import com.ibm.richtext.styledtext.MConstText;
 import com.ibm.richtext.styledtext.MTabRuler;
 import com.ibm.richtext.styledtext.TabStop;
 
-import com.ibm.textlayout.attributes.AttributeMap;
-import com.ibm.textlayout.attributes.TextAttribute;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.TextAttribute;
 
-import com.ibm.textlayout.Graphics2DConversion;
+import com.ibm.richtext.textlayout.Graphics2DConversion;
 
 ///*JDK12IMPORTS
 import java.awt.Graphics2D;
@@ -44,16 +44,16 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 //JDK12IMPORTS*/
 /*JDK11IMPORTS
-import com.ibm.textlayout.Graphics2D;
+import com.ibm.richtext.textlayout.Graphics2D;
 
-import com.ibm.textlayout.FontRenderContext;
-import com.ibm.textlayout.TextLayout;
-import com.ibm.textlayout.LineBreakMeasurer;
-import com.ibm.textlayout.TextHitInfo;
+import com.ibm.richtext.textlayout.FontRenderContext;
+import com.ibm.richtext.textlayout.TextLayout;
+import com.ibm.richtext.textlayout.LineBreakMeasurer;
+import com.ibm.richtext.textlayout.TextHitInfo;
 
-import com.ibm.textlayout.AffineTransform;
-import com.ibm.textlayout.GeneralPath;
-import com.ibm.textlayout.Rectangle2D;
+import com.ibm.richtext.textlayout.AffineTransform;
+import com.ibm.richtext.textlayout.GeneralPath;
+import com.ibm.richtext.textlayout.Rectangle2D;
 JDK11IMPORTS*/
 
 final class BidiParagraphRenderer extends ParagraphRenderer {

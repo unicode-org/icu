@@ -5,18 +5,18 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/EasterHoliday.java,v $ 
- * $Date: 2000/05/12 23:20:10 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/02/16 03:06:27 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.util;
+package com.ibm.icu.util;
 
 import java.util.Date;
-import com.ibm.util.GregorianCalendar;
-import com.ibm.util.Calendar;
-import com.ibm.util.SimpleTimeZone;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.SimpleTimeZone;
 
 /**
  * A Holiday subclass which represents holidays that occur

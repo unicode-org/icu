@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/SortedVector.java,v $ 
- * $Date: 2002/01/31 01:22:25 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:05:31 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
-package com.ibm.tools.localeconverter;
+package com.ibm.icu.dev.tool.localeconverter;
 
 import java.util.Vector;
 import java.util.Enumeration;

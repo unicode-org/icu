@@ -5,15 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2001/12/03 18:32:24 $ 
- * $Revision: 1.20 $
+ * $Date: 2002/02/16 03:05:22 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
-package com.ibm.test.translit;
-import com.ibm.text.*;
-import com.ibm.test.*;
-import com.ibm.util.Utility;
+package com.ibm.icu.dev.test.translit;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.dev.test.*;
+import com.ibm.icu.util.Utility;
 import java.text.*;
 import java.util.*;
 

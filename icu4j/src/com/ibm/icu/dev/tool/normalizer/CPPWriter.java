@@ -5,18 +5,19 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/CPPWriter.java,v $ 
- * $Date: 2000/09/21 22:37:55 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/02/16 03:05:33 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
-package com.ibm.tools.normalizer;
+package com.ibm.icu.dev.tool.normalizer;
 
-import com.ibm.text.*;
-import com.ibm.util.*;
-import com.ibm.util.CompactByteArray;
-import com.ibm.util.CompactCharArray;
-import com.ibm.util.Utility;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.*;
+import com.ibm.icu.util.CompactByteArray;
+import com.ibm.icu.util.CompactCharArray;
+import com.ibm.icu.util.Utility;
 import java.io.*;
 
 /**

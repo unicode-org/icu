@@ -5,16 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/compression/DecompressionTest.java,v $ 
- * $Date: 2000/03/10 03:47:45 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:05:07 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
-package com.ibm.test.compression;
+package com.ibm.icu.dev.test.compression;
 
-import com.ibm.text.UnicodeCompressor;
-import com.ibm.text.UnicodeDecompressor;
-import com.ibm.test.TestFmwk;
+import com.ibm.icu.text.UnicodeCompressor;
+import com.ibm.icu.text.UnicodeDecompressor;
+import com.ibm.icu.dev.test.TestFmwk;
 
 public class DecompressionTest extends TestFmwk {
 	public static void main(String[] args) throws Exception {

@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUBinary.java,v $
- * $Date: 2002/02/08 23:22:40 $
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:05:37 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
-package com.ibm.icu.internal;
+package com.ibm.icu.impl;
 
 import java.io.InputStream;
 import java.io.DataInputStream;

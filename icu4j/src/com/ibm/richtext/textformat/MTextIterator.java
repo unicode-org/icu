@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MTextIterator.java,v $ $Revision: 1.3 $ $Date: 2001/11/29 21:32:28 $
+ * @(#)$RCSfile: MTextIterator.java,v $ $Revision: 1.4 $ $Date: 2002/02/16 03:06:43 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -18,7 +18,7 @@ package com.ibm.richtext.textformat;
 import com.ibm.richtext.styledtext.MConstText;
 import java.text.CharacterIterator;
 
-import com.ibm.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
 
 ///*JDK12IMPORTS
 import java.text.AttributedCharacterIterator;
@@ -28,9 +28,9 @@ import java.util.Set;
 //JDK12IMPORTS*/
 
 /*JDK11IMPORTS
-import com.ibm.textlayout.attributes.AttributedCharacterIterator;
-import com.ibm.textlayout.attributes.AttributedCharacterIterator.Attribute;
-import com.ibm.textlayout.attributes.Map;
+import com.ibm.richtext.textlayout.attributes.AttributedCharacterIterator;
+import com.ibm.richtext.textlayout.attributes.AttributedCharacterIterator.Attribute;
+import com.ibm.richtext.textlayout.attributes.Map;
 JDK11IMPORTS*/
 
 public final class MTextIterator implements AttributedCharacterIterator,

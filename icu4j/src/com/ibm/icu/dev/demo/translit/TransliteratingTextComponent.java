@@ -5,27 +5,28 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/TransliteratingTextComponent.java,v $ 
- * $Date: 2001/11/28 22:24:29 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:05:00 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
-package com.ibm.icu.demo.components;
+package com.ibm.icu.dev.demo.impl;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.text.*;
 import java.awt.datatransfer.*;
-import com.ibm.text.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 
 /**
  * A subclass of {@link DumbTextComponent} that passes key events through
- * a {@link com.ibm.text.Transliterator}.
+ * a {@link com.ibm.icu.text.Transliterator}.
  *
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.2 $ $Date: 2001/11/28 22:24:29 $
+ * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:05:00 $
  */
 public class TransliteratingTextComponent extends DumbTextComponent {
 
@@ -199,9 +200,9 @@ public class TransliteratingTextComponent extends DumbTextComponent {
     }
     
     /**
-     * Set the {@link com.ibm.text.Transliterator} and direction to
+     * Set the {@link com.ibm.icu.text.Transliterator} and direction to
      * use to process incoming <code>KeyEvent</code>s.
-     * @param t the {@link com.ibm.text.Transliterator} to use
+     * @param t the {@link com.ibm.icu.text.Transliterator} to use
      */
     public void setTransliterator(Transliterator t) {
         /*
@@ -219,7 +220,7 @@ public class TransliteratingTextComponent extends DumbTextComponent {
     /**
      * Reset the start point at which transliteration begins.  This
      * needs to be done when the user moves the cursor or when the
-     * current {@link com.ibm.text.Transliterator} is changed. 
+     * current {@link com.ibm.icu.text.Transliterator} is changed. 
      */
      /*
     private void resetTransliterationStart() {

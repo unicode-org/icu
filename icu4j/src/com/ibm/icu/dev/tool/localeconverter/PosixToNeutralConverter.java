@@ -5,13 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/PosixToNeutralConverter.java,v $ 
- * $Date: 2002/01/31 02:47:28 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:05:31 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
-package com.ibm.tools.localeconverter;
-import com.ibm.text.*;
+package com.ibm.icu.dev.tool.localeconverter;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 import java.io.*;
 import java.util.*;
 
@@ -1221,7 +1222,7 @@ public class PosixToNeutralConverter extends LocaleConverter {
     }
     
     private ResourceBundle getParentBundle() {
-        return ResourceBundle.getBundle("com.ibm.tools.localeconverter.myLocaleElements", parentLocale);
+        return ResourceBundle.getBundle("com.ibm.icu.dev.tool.localeconverter.myLocaleElements", parentLocale);
     }
     
     private String replace(String source, String target, String replacement) {

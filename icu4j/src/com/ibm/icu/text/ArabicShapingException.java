@@ -5,7 +5,7 @@
 *******************************************************************************
 */
 
-package com.ibm.text;
+package com.ibm.icu.text;
 
 /**
  * Thrown by ArabicShaping when there is a shaping error.

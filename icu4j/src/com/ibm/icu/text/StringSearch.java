@@ -5,13 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2001/09/12 00:22:19 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/16 03:06:15 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.text;
+package com.ibm.icu.text;
 
 import java.text.BreakIterator;
 import java.text.CharacterIterator;

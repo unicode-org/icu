@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: EditDemo.java,v $ $Revision: 1.2 $ $Date: 2000/04/22 03:30:52 $
+ * @(#)$RCSfile: EditDemo.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:33 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -23,7 +23,7 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.StreamCorruptedException;
 
-import com.ibm.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
 import com.ibm.richtext.textpanel.MTextPanel;
 import com.ibm.richtext.textpanel.TextPanel;
 import com.ibm.richtext.textpanel.TextPanelSettings;

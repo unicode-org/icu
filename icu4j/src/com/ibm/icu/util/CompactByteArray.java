@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/CompactByteArray.java,v $ 
- * $Date: 2000/03/10 04:17:57 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/02/16 03:06:26 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
-package com.ibm.util;
+package com.ibm.icu.util;
 
 
 /**
@@ -31,7 +31,7 @@ package com.ibm.util;
  * array contains the indicies of Unicode characters to the value array.
  *
  * @see                CompactCharArray
- * @version            $Revision: 1.5 $
+ * @version            $Revision: 1.6 $
  * @author             Helena Shih
  */
 public final class CompactByteArray implements Cloneable {

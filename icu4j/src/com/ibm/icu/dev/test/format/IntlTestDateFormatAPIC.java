@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDateFormatAPIC.java,v $ 
- * $Date: 2001/10/19 11:43:37 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:05:10 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -15,10 +15,11 @@
  * Source File: $ICU4CRoot/source/test/intltest/dtfmapts.cpp
  **/
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
-import com.ibm.text.*;
-import com.ibm.util.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.*;
 import java.util.Date;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
@@ -28,7 +29,7 @@ import java.text.ParsePosition;
  * try to test the full functionality.  It just calls each function in the class and
  * verifies that it works on a basic level.
  */
-public class IntlTestDateFormatAPIC extends com.ibm.test.TestFmwk {
+public class IntlTestDateFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
     
     public static void main(String[] args)  throws Exception {
         new IntlTestDateFormatAPIC().run(args);

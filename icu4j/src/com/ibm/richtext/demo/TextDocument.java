@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TextDocument.java,v $ $Revision: 1.2 $ $Date: 2001/09/08 01:14:31 $
+ * @(#)$RCSfile: TextDocument.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:34 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -20,7 +20,7 @@ import com.ibm.richtext.styledtext.MConstText;
 import com.ibm.richtext.styledtext.MText;
 import com.ibm.richtext.styledtext.StyledText;
 import com.ibm.richtext.textpanel.MTextPanel;
-import com.ibm.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
 
 /**
  * A TextDocument handles the association between a file on disk

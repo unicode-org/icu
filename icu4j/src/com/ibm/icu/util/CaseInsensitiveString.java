@@ -1,5 +1,5 @@
-package com.ibm.util;
-import com.ibm.text.UCharacter;
+package com.ibm.icu.util;
+import com.ibm.icu.lang.UCharacter;
 
 /**
  * A string used as a key in java.util.Hashtable and other

@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2001/12/07 17:32:27 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/02/16 03:05:09 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -15,17 +15,18 @@
  * Source File: $ICU4CRoot/source/test/intltest/dtfmttst.cpp
  **/
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
-import com.ibm.text.*;
-import com.ibm.util.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.*;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Locale;
 import java.text.FieldPosition;
 
-public class DateFormatTest extends com.ibm.test.TestFmwk {
+public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     
     public static void main(String[] args) throws Exception {
         new DateFormatTest().run(args);

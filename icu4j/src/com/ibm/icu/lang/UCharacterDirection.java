@@ -6,13 +6,16 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterDirection.java $ 
-* $Date: 2001/03/23 19:51:38 $ 
-* $Revision: 1.2 $
+* $Date: 2002/02/16 03:05:57 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
 
-package com.ibm.text;
+package com.ibm.icu.lang;
+
+
+import com.ibm.icu.util.*;
 
 /**
 * Enumerated Unicode character linguistic direction constants.

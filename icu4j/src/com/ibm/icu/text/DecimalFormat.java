@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2001/10/30 02:43:54 $ 
- * $Revision: 1.13 $
+ * $Date: 2002/02/16 03:06:06 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
 import java.text.Format;
 import java.text.ParsePosition;
@@ -663,12 +663,12 @@ public class DecimalFormat extends NumberFormat {
         }        
     }
 
-    //This has been removed pending addition of com.ibm.math package to ICU4J
+    //This has been removed pending addition of com.ibm.icu.math package to ICU4J
     /*
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal number.
      */
-    public StringBuffer format(com.ibm.math.BigDecimal number, StringBuffer result,
+    public StringBuffer format(com.ibm.icu.math.BigDecimal number, StringBuffer result,
                                FieldPosition fieldPosition) {
         /* This method is just a copy of the corresponding java.math.BigDecimal
          * method for now.  It isn't very efficient since it must create a
@@ -677,11 +677,11 @@ public class DecimalFormat extends NumberFormat {
          * to just one flavor of BigDecimal.
          */
         if (multiplier != 1) {
-            number = number.multiply(com.ibm.math.BigDecimal.valueOf(multiplier));
+            number = number.multiply(com.ibm.icu.math.BigDecimal.valueOf(multiplier));
         }
 
         if (roundingIncrement != null) {
-            com.ibm.math.BigDecimal ri = new com.ibm.math.BigDecimal(roundingIncrement);
+            com.ibm.icu.math.BigDecimal ri = new com.ibm.icu.math.BigDecimal(roundingIncrement);
             number = number.divide(ri, 0, roundingMode)
                     .multiply(ri);
         }

@@ -5,19 +5,19 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TrieTest.java,v $ 
-* $Date: 2002/02/08 01:31:18 $ 
-* $Revision: 1.1 $
+* $Date: 2002/02/16 03:05:25 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
 
-package com.ibm.icu.test.util;
+package com.ibm.icu.dev.test.util;
 
-import com.ibm.test.TestFmwk;
-import com.ibm.icu.internal.util.Trie;
-import com.ibm.icu.util.IntTrie;
-import com.ibm.text.UTF16;
-import com.ibm.text.UCharacter;
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.Trie;
+import com.ibm.icu.impl.IntTrie;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.lang.UCharacter;
 import java.io.ByteArrayInputStream;
 
 /**

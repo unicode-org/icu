@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: SubtractStyleMenuItem.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:52:32 $
+ * @(#)$RCSfile: SubtractStyleMenuItem.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:50 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -16,8 +16,8 @@ package com.ibm.richtext.uiimpl;
 
 import java.util.EventObject;
 
-import com.ibm.textlayout.attributes.AttributeMap;
-import com.ibm.textlayout.attributes.AttributeSet;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.AttributeSet;
 import com.ibm.richtext.styledtext.StyleModifier;
 
 import com.ibm.richtext.textpanel.MTextPanel;

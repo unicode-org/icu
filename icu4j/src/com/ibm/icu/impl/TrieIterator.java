@@ -5,16 +5,16 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/TrieIterator.java,v $
-* $Date: 2002/02/08 23:44:22 $
-* $Revision: 1.2 $
+* $Date: 2002/02/16 03:05:37 $
+* $Revision: 1.3 $
 *
 ******************************************************************************
 */
 
-package com.ibm.icu.internal.util;
+package com.ibm.icu.impl;
 
-import com.ibm.text.UCharacter;
-import com.ibm.text.UTF16;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.RangeValueIterator;
 
 /**

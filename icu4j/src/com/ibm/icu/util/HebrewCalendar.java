@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/HebrewCalendar.java,v $ 
- * $Date: 2000/11/28 00:50:13 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/02/16 03:06:28 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
-package com.ibm.util;
+package com.ibm.icu.util;
 
 import java.util.Date;
 import java.util.Locale;
@@ -61,7 +61,7 @@ import java.util.Locale;
  *      http://www.pip.dknet.dk/~pip10160/calendar.html</a>
  * </ul>
  * <p>
- * @see com.ibm.util.GregorianCalendar
+ * @see com.ibm.icu.util.GregorianCalendar
  *
  * @author Laura Werner
  * @author Alan Liu

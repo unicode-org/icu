@@ -5,13 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/HebrewHoliday.java,v $ 
- * $Date: 2001/02/26 22:21:15 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/16 03:06:28 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.util;
+package com.ibm.icu.util;
 
 public class HebrewHoliday extends Holiday
 {

@@ -3,11 +3,11 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/ChineseDateFormatSymbols.java,v $
- * $Date: 2000/11/21 20:19:08 $
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:06:04 $
+ * $Revision: 1.2 $
  */
-package com.ibm.text;
-import com.ibm.util.*;
+package com.ibm.icu.text;
+import com.ibm.icu.util.*;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
@@ -18,7 +18,7 @@ import java.util.MissingResourceException;
  * <code>ChineseCalendar.IS_LEAP_MONTH</code> field.
  *
  * @see ChineseDateFormat
- * @see com.ibm.util.ChineseCalendar
+ * @see com.ibm.icu.util.ChineseCalendar
  * @author Alan Liu
  */
 public class ChineseDateFormatSymbols extends DateFormatSymbols {

@@ -3,11 +3,12 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TitlecaseTransliterator.java,v $ 
- * $Date: 2002/02/09 01:01:47 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/02/16 03:06:16 $ 
+ * $Revision: 1.12 $
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 import java.util.*;
+import com.ibm.icu.lang.*;
 
 /**
  * A transliterator that converts all letters (as defined by

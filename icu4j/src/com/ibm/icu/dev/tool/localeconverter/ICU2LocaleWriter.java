@@ -5,13 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ICU2LocaleWriter.java,v $ 
- * $Date: 2002/01/31 01:21:32 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:05:28 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
  
-package com.ibm.tools.localeconverter;
+package com.ibm.icu.dev.tool.localeconverter;
 
 import java.io.*;
 import java.util.*;
