@@ -102,6 +102,8 @@
 #   include <Folders.h>
 #   include <MacTypes.h>
 #   include <TextUtils.h>
+#elif defined(OS390)
+#include "unicode/ucnv.h"   /* Needed for UCNV_SWAP_LFNL_OPTION_STRING */
 #elif defined(AIX)
 /*
 #   include <sys/ldr.h>
