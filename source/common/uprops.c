@@ -79,6 +79,33 @@ getCaseProps() {
     return gCsp;
 }
 
+/*
+ * In ICU 3.0, most Unicode properties were loaded from uprops.icu.
+ * ICU 3.2 adds ucase.icu for case mapping properties.
+ * ICU 3.4 adds ubidi.icu for bidi/shaping properties and
+ * removes case/bidi/shaping properties from uprops.icu.
+ *
+ * Loading of uprops.icu was never mutex-protected and required u_init()
+ * for thread safety.
+ * In order to maintain performance for all such properties,
+ * ucase.icu and ubidi.icu are loaded lazily, without mutexing.
+ * u_init() will try to load them for thread safety,
+ * but u_init() will not fail if they are missing.
+ *
+ * uchar.c maintains a tri-state flag for (not loaded/loaded/failed to load)
+ * and an error code for load failure.
+ * Instead, here we try to load at most once.
+ * If it works, we use the resulting singleton object.
+ * If it fails, then we get a dummy object, which always works unless
+ * we are seriously out of memory.
+ * After the first try, we have a never-changing pointer to either the
+ * real singleton or the dummy.
+ *
+ * This method is used in Unicode properties APIs (uchar.h) that
+ * do not have a service object and also do not have an error code parameter.
+ * Other API implementations get the singleton themselves
+ * (with mutexing), store it in the service object, and report errors.
+ */
 #define GET_CASE_PROPS() (gCsp!=NULL ? gCsp : getCaseProps())
 
 /* public API (see uchar.h) */
@@ -152,6 +179,7 @@ getBiDiProps() {
     return gBdp;
 }
 
+/* see comment for GET_CASE_PROPS() */
 #define GET_BIDI_PROPS() (gBdp!=NULL ? gBdp : getBiDiProps())
 
 /* general properties API functions ----------------------------------------- */
