@@ -30,7 +30,6 @@ class QuickCheckPerfFunction : public UPerfFunction{
 private:
     ULine* lines;
     int32_t numLines;
-    UErrorCode status;
     QuickCheckFn fn;
     UNormalizationMode mode;
     int32_t retVal;
@@ -39,26 +38,23 @@ private:
     int32_t srcLen;
     UBool line_mode;
 public:
-    virtual void call(){
+    virtual void call(UErrorCode* status){
         if(line_mode==TRUE){
             if(uselen){
                 for(int32_t i = 0; i< numLines; i++){
-                    retVal =  (*fn)(lines[i].name,lines[i].len,mode,&status);
+                    retVal =  (*fn)(lines[i].name,lines[i].len,mode,status);
                 }
             }else{
                 for(int32_t i = 0; i< numLines; i++){
-                    retVal =  (*fn)(lines[i].name,-1,mode,&status);
+                    retVal =  (*fn)(lines[i].name,-1,mode,status);
                 }
             }
         }else{
             if(uselen){
-                for(int32_t i = 0; i< numLines; i++){
-                    retVal =  (*fn)(src,srcLen,mode,&status);
-                }
+
+                retVal =  (*fn)(src,srcLen,mode,status);
             }else{
-                for(int32_t i = 0; i< numLines; i++){
-                    retVal =  (*fn)(src,-1,mode,&status);
-                }
+                retVal =  (*fn)(src,-1,mode,status);
             }
         }
 
@@ -74,19 +70,12 @@ public:
             return srcLen;
         }
     }
-    virtual long getEventsPerIteration(){
-        return -1;
-    }
-    virtual UErrorCode getStatus(){
-        return status;
-    }
     QuickCheckPerfFunction(QuickCheckFn func, ULine* srcLines,int32_t srcNumLines, UNormalizationMode _mode, UBool _uselen){
         fn = func;
         lines = srcLines;
         numLines = srcNumLines;
         uselen = _uselen;
         mode = _mode;
-        status = U_ZERO_ERROR;
         src = NULL;
         srcLen = 0;
         line_mode = TRUE;
@@ -97,7 +86,6 @@ public:
         numLines = 0;
         uselen = _uselen;
         mode = _mode;
-        status = U_ZERO_ERROR;
         src = source;
         srcLen = sourceLen;
         line_mode = FALSE;
@@ -112,7 +100,6 @@ private:
     UChar dest[DEST_BUFFER_CAPACITY];
 	UChar* pDest;
     int32_t destLen;
-    UErrorCode status;
     NormFn fn;
     int32_t retVal;
     UBool uselen;
@@ -121,22 +108,22 @@ private:
     UBool line_mode;
 
 public:
-    virtual void call(){
+    virtual void call(UErrorCode* status){
         if(line_mode==TRUE){
             if(uselen){
                 for(int32_t i = 0; i< numLines; i++){
-                    retVal =  (*fn)(lines[i].name,lines[i].len,pDest,destLen,&status);
+                    retVal =  (*fn)(lines[i].name,lines[i].len,pDest,destLen,status);
                 }
             }else{
                 for(int32_t i = 0; i< numLines; i++){
-                    retVal =  (*fn)(lines[i].name,-1,pDest,destLen,&status);
+                    retVal =  (*fn)(lines[i].name,-1,pDest,destLen,status);
                 }
             }
         }else{
             if(uselen){
-                retVal =  (*fn)(src,srcLen,pDest,destLen,&status);
+                retVal =  (*fn)(src,srcLen,pDest,destLen,status);
             }else{
-                retVal =  (*fn)(src,-1,pDest,destLen,&status);
+                retVal =  (*fn)(src,-1,pDest,destLen,status);
             }
         }
     }
@@ -151,12 +138,6 @@ public:
             return srcLen;
         }
     }
-    virtual long getEventsPerIteration(){
-        return -1;
-    }
-    virtual UErrorCode getStatus(){
-        return status;
-    }
     NormPerfFunction(NormFn func,ULine* srcLines,int32_t srcNumLines,UBool _uselen){
         fn = func;
         lines = srcLines;
@@ -164,7 +145,6 @@ public:
         uselen = _uselen;
         destLen = DEST_BUFFER_CAPACITY;
 		pDest = dest;
-        status = U_ZERO_ERROR;
         src = NULL;
         srcLen = 0;
         line_mode = TRUE;
@@ -176,7 +156,6 @@ public:
         uselen = _uselen;
         destLen = sourceLen*3;
 		pDest = (UChar*) malloc(destLen * U_SIZEOF_UCHAR);
-        status = U_ZERO_ERROR;
         src = source;
         srcLen = sourceLen;
         line_mode = FALSE;
@@ -196,6 +175,8 @@ private:
     ULine* NFCFileLines;
     UChar* NFDBuffer;
     UChar* NFCBuffer;
+    UChar* origBuffer;
+    int32_t origBufferLen;
     int32_t NFDBufferLen;
     int32_t NFCBufferLen;
 

@@ -20,7 +20,7 @@ typedef void (*StdLibCharPerfFn)(wchar_t ch);
 class CharPerfFunction : public UPerfFunction
 {
 public:
-	virtual void call()
+	virtual void call(UErrorCode* status)
 	{
 		for (UChar32 i = MIN_; i < MAX_; i ++) {
 			(*m_fn_)(i);
@@ -31,17 +31,6 @@ public:
 	{
 		return MAX_ - MIN_;
 	}
-
-	virtual long getEventsPerIteration()
-	{
-		return -1;
-	}
-
-	virtual UErrorCode getStatus()
-	{
-		return U_ZERO_ERROR;
-	}
-
 	CharPerfFunction(CharPerfFn func, UChar32 min, UChar32 max)
 	{
 		m_fn_ = func;
@@ -58,7 +47,7 @@ private:
 class StdLibCharPerfFunction : public UPerfFunction
 {
 public:
-	virtual void call()
+	virtual void call(UErrorCode* status)
 	{
 		// note wchar_t is unsigned, it will revert to 0 once it reaches 
 		// 65535
@@ -70,16 +59,6 @@ public:
 	virtual long getOperationsPerIteration()
 	{
 		return MAX_ - MIN_;
-	}
-
-	virtual long getEventsPerIteration()
-	{
-		return -1;
-	}
-
-	virtual UErrorCode getStatus()
-	{
-		return U_ZERO_ERROR;
 	}
 
 	StdLibCharPerfFunction(StdLibCharPerfFn func, wchar_t min, wchar_t max)

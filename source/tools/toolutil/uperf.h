@@ -10,6 +10,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
+#include "unicode/ustring.h"
 #include "utimer.h"
 #include "uoptions.h"
 #include "ucbuf.h"
@@ -51,7 +52,7 @@ public:
      * Subclasses must implement this method to do the action to be
      * measured.
      */
-    virtual void call()=0;
+    virtual void call(UErrorCode* status)=0;
 
     /**
      * Subclasses must implement this method to return positive
@@ -60,12 +61,14 @@ public:
      */
     virtual long getOperationsPerIteration()=0;
     /**
-     * Subclasses must implement this method to return either positive
+     * Subclasses should override this method to return either positive
      * or negative integer indicating the number of events in a single
-     * call to this object's call() method. 
+     * call to this object's call() method, if applicable
      * e.g: Number of breaks / iterations for break iterator
      */
-    virtual long getEventsPerIteration()=0;
+    virtual long getEventsPerIteration(){
+        return -1;
+    }
 
     /**
      * Call call() n times in a tight loop and return the elapsed
@@ -73,21 +76,15 @@ public:
      * result may be zero.  Small return values have limited
      * meaningfulness, depending on the underlying CPU and OS.
      */
-     double time(double n) {
+     double time(int32_t n, UErrorCode* status) {
         UTimer start, stop;
         utimer_getTime(&start); 
         while (n-- > 0) {
-            call();
+            call(status);
         }
         utimer_getTime(&stop);
         return utimer_getDeltaSeconds(&start,&stop); // ms
     }
-	/**
-	 * Subclasses must implement this method to return any
-	 * errors that may have occured during performing an
-	 * operation
-	 */
-	virtual UErrorCode getStatus()=0;
 
 };
 
@@ -135,7 +132,7 @@ protected:
     UCHARBUF*    ucharBuf;
     UBool        line_mode;
     UBool        bulk_mode;
-    const UChar* buffer;
+    UChar* buffer;
     int32_t      bufferLen;
 private:
     UPerfTest*   caller;
