@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2002/05/15 17:14:04 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/07/13 01:36:45 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -471,7 +471,7 @@ import java.util.Vector;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.7 $ $Date: 2002/05/15 17:14:04 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.8 $ $Date: 2002/07/13 01:36:45 $
  * @see NumberFormat
  * @see DecimalFormat
  */
@@ -597,7 +597,8 @@ public final class RuleBasedNumberFormat extends NumberFormat {
 
         // load up the resource bundle containing the description
         // from the specified locale
-        ResourceBundle bundle = ICULocaleData.getResourceBundle("NumberFormatRules", locale);
+	//        ResourceBundle bundle = ICULocaleData.getResourceBundle("NumberFormatRules", locale);
+        ResourceBundle bundle = ICULocaleData.getResourceBundle("LocaleElements", locale);
         String description = "";
 
         // pick a description from the resource bundle based on the
@@ -1115,6 +1116,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
                 // copy out the lenient-parse rules and delete them
                 // from the description
                 lenientParseRules = description.substring(lpStart, lpEnd);
+
                 StringBuffer temp = new StringBuffer(description.substring(0, lp));
                 if (lpEnd + 1 < description.length()) {
                     temp.append(description.substring(lpEnd + 1));
