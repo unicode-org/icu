@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliteratorParser.java,v $
-* $Date: 2001/11/27 21:33:29 $
-* $Revision: 1.13 $
+* $Date: 2001/11/27 21:36:24 $
+* $Revision: 1.14 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -398,6 +398,8 @@ class TransliteratorParser {
 
         main:
             while (pos < limit) {
+                // Since all syntax characters are in the BMP, fetching
+                // 16-bit code units suffices here.
                 char c = rule.charAt(pos++);
                 if (Character.isWhitespace(c)) {
                     // Ignore whitespace.  Note that this is not Unicode
