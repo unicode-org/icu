@@ -540,7 +540,7 @@ fi
 
 PACKAGE="icu"
 
-VERSION="1.4.2"
+VERSION="1.5"
 
 UNICODE_VERSION="3.0.0"
 
