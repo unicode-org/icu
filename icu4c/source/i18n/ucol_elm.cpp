@@ -207,7 +207,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
   }
 
   if(t->contractions != NULL) {
-    r->contractions = uprv_cnttab_clone(t->contractions);
+    r->contractions = uprv_cnttab_clone(t->contractions, status);
     r->contractions->mapping = r->mapping;
   }
 
@@ -1128,7 +1128,7 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
                                     paddedsize(expansions->position*sizeof(uint32_t))+
                                     paddedsize(mappingSize)+
                                     paddedsize(contractionsSize*(sizeof(UChar)+sizeof(uint32_t)))+
-                                    paddedsize(0x100*sizeof(uint32_t))  
+                                    //paddedsize(0x100*sizeof(uint32_t))  /* Latin1 is now included in the trie */
                                      /* maxexpansion array */
                                      + paddedsize(maxexpansion->position * sizeof(uint32_t)) +
                                      /* maxexpansion size array */
@@ -1196,15 +1196,17 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     utrie_serialize(mapping, dataStart+tableOffset, toAllocate-tableOffset, getFoldedValue, FALSE, status);
     tableOffset += paddedsize(mappingSize);
 
+    int32_t i = 0;
+#if 0
     /* construct the fast tracker for latin one*/
     myData->latinOneMapping = tableOffset;
     uint32_t *store = (uint32_t*)(dataStart+tableOffset);
-    int32_t i = 0;
     for(i = 0; i<=0xFF; i++) {
         /**(store++) = ucmpe32_get(mapping,i);*/
         *(store++) = utrie_get32(mapping, i, NULL);
         tableOffset+=(uint32_t)(sizeof(uint32_t));
     }
+#endif
 
     /* copy max expansion table */
     myData->endExpansionCE      = tableOffset;
