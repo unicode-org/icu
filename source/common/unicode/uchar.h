@@ -55,6 +55,11 @@ U_CDECL_BEGIN
  * as well as semantic information such as whether a character is a digit or 
  * uppercase, lowercase, or uncased.
  * <P>
+ *
+ * Many functions are designed to match java.lang.Character functions.
+ * See the individual function documentation,
+ * and see the JDK 1.4.1 java.lang.Character documentation
+ * at http://java.sun.com/j2se/1.4.1/docs/api/java/lang/Character.html
  */
 
 /**
@@ -1445,6 +1450,7 @@ u_isUUppercase(UChar32 c);
  * @see UCHAR_WHITE_SPACE
  * @see u_isWhitespace
  * @see u_isspace
+ * @see u_isJavaSpaceChar
  * @see u_hasBinaryProperty
  * @draft ICU 2.1
  */
@@ -1618,21 +1624,30 @@ U_CAPI UBool U_EXPORT2
 u_istitle(UChar32 c);
 
 /**
- * Determines whether the specified character is a digit according to UnicodeData.txt.
+ * Determines whether the specified code point is a digit character according to Java.
+ * True for characters with general category "Nd" (decimal digit numbers).
  *
- * @param c    the character to be tested
- * @return  true if the character is a digit; false otherwise.
+ * Same as java.lang.Character.isDigit().
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is a digit character according to Character.isDigit()
+ *
  * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isdigit(UChar32 c);
 
 /**
- * Determines whether the specified character is an alphanumeric character
- * (letter or digit)according to UnicodeData.txt.
+ * Determines whether the specified code point is an alphanumeric character
+ * (letter or digit) according to Java.
+ * True for characters with general categories
+ * "L" (letters) and "Nd" (decimal digit numbers).
  *
- * @param c    the character to be tested
- * @return  true if the character is a letter or a digit; false otherwise.
+ * Same as java.lang.Character.isLetterOrDigit().
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is an alphanumeric character according to Character.isLetterOrDigit()
+ *
  * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
@@ -1672,40 +1687,63 @@ u_isalpha(UChar32 c);
 
 /**
  * Determines if the specified character is a space character or not.
+ * ### same as u_isJavaSpaceChar except... (ISO control codes)
  *
  * @param c    the character to be tested
  * @return  true if the character is a space character; false otherwise.
+ *
+ * @see u_isJavaSpaceChar
+ * @see u_isWhitespace
+ * @see u_isUWhiteSpace
  * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isspace(UChar32 c);
 
 /**
- * Determines if the specified character is white space according to ICU.
- * A character is considered to be an ICU whitespace character if and only
- * if it satisfies one of the following criteria:
- * <ul>
- * <li> It is a Unicode space separator (category "Zs"), but is not
- *      a no-break space (&#92;u00A0 or &#92;uFEFF).
- * <li> It is a Unicode line separator (category "Zl").
- * <li> It is a Unicode paragraph separator (category "Zp").
- * <li> It is &#92;u0009, HORIZONTAL TABULATION.
- * <li> It is &#92;u000A, LINE FEED.
- * <li> It is &#92;u000B, VERTICAL TABULATION.
- * <li> It is &#92;u000C, FORM FEED.
- * <li> It is &#92;u000D, CARRIAGE RETURN.
- * <li> It is &#92;u001C, FILE SEPARATOR.
- * <li> It is &#92;u001D, GROUP SEPARATOR.
- * <li> It is &#92;u001E, RECORD SEPARATOR.
- * <li> It is &#92;u001F, UNIT SEPARATOR.
- * </ul>
- * Note: This method corresponds to the Java method
- * <tt>java.lang.Character.isWhitespace()</tt>.
+ * Determine if the specified code point is a space character according to Java.
+ * True for characters with general categories "Z" (separators),
+ * which does not include control codes (e.g., TAB or Line Feed).
  *
- * @param   ch  the character to be tested.
- * @return  true if the character is an ICU whitespace character;
- *          false otherwise.
- * @see     #u_isspace
+ * Same as java.lang.Character.isSpaceChar().
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is a space character according to Character.isSpaceChar()
+ *
+ * @see u_isspace
+ * @see u_isWhitespace
+ * @see u_isUWhiteSpace
+ * @draft ICU 2.6
+ */
+U_CAPI UBool U_EXPORT2
+u_isJavaSpaceChar(UChar32 c);
+
+/**
+ * Determines if the specified code point is a whitespace character according to Java/ICU.
+ * A character is considered to be a Java whitespace character if and only
+ * if it satisfies one of the following criteria:
+ *
+ * - It is a Unicode separator (categories "Z"), but is not
+ *      a no-break space (U+00A0 NBSP or U+2007 Figure Space or U+202F Narrow NBSP).
+ * - It is U+0009 HORIZONTAL TABULATION.
+ * - It is U+000A LINE FEED.
+ * - It is U+000B VERTICAL TABULATION.
+ * - It is U+000C FORM FEED.
+ * - It is U+000D CARRIAGE RETURN.
+ * - It is U+001C FILE SEPARATOR.
+ * - It is U+001D GROUP SEPARATOR.
+ * - It is U+001E RECORD SEPARATOR.
+ * - It is U+001F UNIT SEPARATOR.
+ * - It is U+0085 NEXT LINE.
+ *
+ * Same as java.lang.Character.isWhitespace() except that Java omits U+0085.
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is a whitespace character according to Java/ICU
+ *
+ * @see u_isspace
+ * @see u_isJavaSpaceChar
+ * @see u_isUWhiteSpace
  * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
@@ -1729,6 +1767,20 @@ u_isWhitespace(UChar32 c);
 U_CAPI UBool U_EXPORT2
 u_iscntrl(UChar32 c);
 
+/**
+ * Determines whether the specified code point is an ISO control code.
+ * True for U+0000..U+001f and U+007f..U+009f.
+ *
+ * Same as java.lang.Character.isISOControl().
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is an ISO control code
+ *
+ * @see u_iscntrl
+ * @draft ICU 2.6
+ */
+U_CAPI UBool U_EXPORT2
+u_isISOControl(UChar32 c);
 
 /**
  * Determines whether the specified character is a printable character according 
@@ -2248,20 +2300,19 @@ U_CAPI int32_t U_EXPORT2
 u_getPropertyValueEnum(UProperty property,
                        const char* alias);
 
-/** 
- * The following functions are java specific.
- */
 /**
- * A convenience method for determining if a Unicode character 
- * is allowed to start in a Unicode identifier.
- * A character may start a Unicode identifier if and only if
- * it is a letter.
+ * Determines if the specified character is permissible as the
+ * first character in a Unicode identifier according to Java.
+ * ### according to Unicode as well?!
+ * True for characters with general categories "L" (letters) and "Nl" (letter numbers).
  *
- * @param   c  the Unicode character.
- * @return  TRUE if the character may start a Unicode identifier;
- *          FALSE otherwise.
- * @see     u_isalpha
- * @see     u_isIDPart
+ * Same as java.lang.Character.isUnicodeIdentifierStart().
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point may start an identifier according to Java
+ *
+ * @see u_isalpha
+ * @see u_isIDPart
  * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
@@ -2287,35 +2338,32 @@ u_isIDStart(UChar32 c);
  * @param   c  the Unicode character.
  * @return  TRUE if the character may be part of a Unicode identifier;
  *          FALSE otherwise.
- * @see     u_isIDIgnorable
+ *
  * @see     u_isIDStart
+ * @see     u_isIDIgnorable
  * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isIDPart(UChar32 c);
 
 /**
- * A convenience method for determining if a Unicode character 
- * should be regarded as an ignorable character 
- * in a Unicode identifier.
- * <P>
- * The following Unicode characters are ignorable in a 
- * Unicode identifier:
- * <table>
- * <tr><td>0x0000 through 0x0008,</td>
- *                                 <td>ISO control characters that</td></tr>
- * <tr><td>0x000E through 0x001B,</td> <td>are not whitespace</td></tr>
- * <tr><td>and 0x007F through 0x009F</td></tr>
- * <tr><td>0x200C through 0x200F</td>  <td>join controls</td></tr>
- * <tr><td>0x200A through 0x200E</td>  <td>bidirectional controls</td></tr>
- * <tr><td>0x206A through 0x206F</td>  <td>format controls</td></tr>
- * <tr><td>0xFEFF</td>               <td>zero-width no-break space</td></tr>
- * </table>
- * 
- * @param   c  the Unicode character.
- * @return  TRUE if the character may be part of a Unicode identifier;
- *          FALSE otherwise.
- * @see     u_isIDPart
+ * Determines if the specified character should be regarded
+ * as an ignorable character in an identifier,
+ * according to Java.
+ * True for characters with general category "Cf" (format controls) as well as
+ * non-whitespace ISO controls
+ * (U+0000..U+0008, U+000E..U+001B, U+007F..U+0084, U+0086..U+009F).
+ *
+ * Same as java.lang.Character.isIdentifierIgnorable()
+ * except that Java also returns TRUE for U+0085 Next Line
+ * (it omits U+0085 from whitespace ISO controls).
+ *
+ * @param c the code point to be tested
+ * @return TRUE if the code point is ignorable in identifiers according to Java
+ *
+ * @see UCHAR_DEFAULT_IGNORABLE_CODE_POINT
+ * @see u_isIDStart
+ * @see u_isIDPart
  * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2

@@ -316,10 +316,7 @@ U_CAPI UBool U_EXPORT2
 u_isdigit(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)(((1UL<<GET_CATEGORY(props))&
-            (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER)
-           )!=0);
-    /* ### TODO: should this not check only U_DECIMAL_DIGIT_NUMBER?! */
+    return (UBool)(GET_CATEGORY(props)==U_DECIMAL_DIGIT_NUMBER);
 }
 
 /* Checks if the Unicode character is a letter.*/
@@ -327,9 +324,7 @@ U_CAPI UBool U_EXPORT2
 u_isalpha(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)(((1UL<<GET_CATEGORY(props))&
-            (1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER)
-           )!=0);
+    return (UBool)((U_MASK(GET_CATEGORY(props))&U_GC_L_MASK)!=0);
 }
 
 /* Checks if ch is a letter or a decimal digit */
@@ -337,10 +332,7 @@ U_CAPI UBool U_EXPORT2
 u_isalnum(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)(((1UL<<GET_CATEGORY(props))&
-            (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER|
-             1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER)
-           )!=0);
+    return (UBool)((U_MASK(GET_CATEGORY(props))&(U_GC_L_MASK|U_GC_ND_MASK))!=0);
 }
 
 /* Checks if ch is a unicode character with assigned character type.*/
@@ -374,6 +366,11 @@ u_iscntrl(UChar32 c) {
            )!=0);
 }
 
+U_CAPI UBool U_EXPORT2
+u_isISOControl(UChar32 c) {
+    return (uint32_t)c<=0x9f && (c<=0x1f || c>=0x7f);
+}
+
 /* Some control characters that are used as space. */
 #define IS_THAT_CONTROL_SPACE(c) \
     ((c>=TAB && c<=CR) || (c>=0x1c && c <=0x1f) || c==NL)
@@ -388,16 +385,23 @@ u_isspace(UChar32 c) {
            )!=0) || IS_THAT_CONTROL_SPACE(c));
 }
 
+U_CAPI UBool U_EXPORT2
+u_isJavaSpaceChar(UChar32 c) {
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)((U_MASK(GET_CATEGORY(props))&U_GC_Z_MASK)!=0);
+}
+
 /* Checks if the Unicode character is a whitespace character.*/
 U_CAPI UBool U_EXPORT2
 u_isWhitespace(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)((((1UL<<GET_CATEGORY(props))&
-            (1UL<<U_SPACE_SEPARATOR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
-           )!=0 &&
-           c!=NBSP && c!=NNBSP && c!=ZWNBSP) || /* exclude no-break spaces */
-           IS_THAT_CONTROL_SPACE(c));
+    return (UBool)(
+                ((U_MASK(GET_CATEGORY(props))&U_GC_Z_MASK)!=0 &&
+                    c!=NBSP && c!=FIGURESP && c!=NNBSP) || /* exclude no-break spaces */
+                IS_THAT_CONTROL_SPACE(c)
+           );
 }
 
 /* Checks if the Unicode character is printable.*/
@@ -419,9 +423,7 @@ u_isIDStart(UChar32 c) {
     /* same as u_isalpha() */
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)(((1UL<<GET_CATEGORY(props))&
-            (1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER)
-           )!=0);
+    return (UBool)((U_MASK(GET_CATEGORY(props))&(U_GC_L_MASK|U_GC_NL_MASK))!=0);
 }
 
 /* Checks if the Unicode character can be a Unicode identifier part other than starting the
@@ -442,12 +444,13 @@ u_isIDPart(UChar32 c) {
 /*Checks if the Unicode character can be ignorable in a Java or Unicode identifier.*/
 U_CAPI UBool U_EXPORT2
 u_isIDIgnorable(UChar32 c) {
-    return (UBool)((uint32_t)c<=8 ||
-           (uint32_t)(c-0xe)<=(0x1b-0xe) ||
-           (uint32_t)(c-0x7f)<=(0x9f-0x7f) ||
-           (uint32_t)(c-0x200a)<=(0x200f-0x200a) ||
-           (uint32_t)(c-0x206a)<=(0x206f-0x206a) ||
-           c==0xfeff);
+    if(c<=0x9f) {
+        return u_isISOControl(c) && !IS_THAT_CONTROL_SPACE(c);
+    } else {
+        uint32_t props;
+        GET_PROPS(c, props);
+        return (UBool)(GET_CATEGORY(props)==U_FORMAT_CHAR);
+    }
 }
 
 /*Checks if the Unicode character can start a Java identifier.*/
@@ -916,6 +919,7 @@ uchar_addPropertyStarts(USet *set) {
 
     /* add no-break spaces for u_isWhitespace() what was not added above */
     USET_ADD_CP_AND_NEXT(set, NBSP);
+    USET_ADD_CP_AND_NEXT(set, FIGURESP);
     USET_ADD_CP_AND_NEXT(set, NNBSP);
 
     /* add for u_charDigitValue() */
