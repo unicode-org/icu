@@ -88,7 +88,7 @@ UConverter* ucnv_open (const char *name,
         return NULL;
     }
 
-    return createConverter (name, err);
+    return ucnv_createConverter (name, err);
 }
 
 /*Extracts the UChar* to a char* and calls through createConverter */
@@ -121,13 +121,13 @@ UConverter*  ucnv_openCCSID (int32_t codepage,
     if (U_FAILURE (*err))
         return NULL;
 
-    copyPlatformString (myName, platform);
+    ucnv_copyPlatformString (myName, platform);
     myNameLen = uprv_strlen(myName);
     myName[myNameLen++] = '-';
     myName[myNameLen] = 0;
     T_CString_integerToString (myName + myNameLen, codepage, 10);
 
-    return createConverter (myName, err);
+    return ucnv_createConverter (myName, err);
 }
 
 /* Creating a temporary stack-based object that can be used in one thread, 
@@ -175,7 +175,7 @@ UConverter *ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pB
     if (*pBufferSize < bufferSizeNeeded || stackBuffer == NULL)
     {
         /* allocate one here...*/
-        localConverter = createConverter (ucnv_getName (cnv, status), status);
+        localConverter = ucnv_createConverter (ucnv_getName (cnv, status), status);
         if (U_SUCCESS(*status))
         {
             *status = U_SAFECLONE_ALLOCATED_ERROR;
@@ -202,92 +202,54 @@ UConverter *ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pB
 
 void ucnv_close (UConverter * converter)
 {
-  /* first, notify the callback functions that the converter is closed */
-  UConverterToUnicodeArgs toUArgs = {
-    sizeof(UConverterToUnicodeArgs),
-    TRUE,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-  };
-  UConverterFromUnicodeArgs fromUArgs = {
-    sizeof(UConverterFromUnicodeArgs),
-    TRUE,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-  };
-  UErrorCode errorCode;
+    /* first, notify the callback functions that the converter is closed */
+    UConverterToUnicodeArgs toUArgs = {
+        sizeof(UConverterToUnicodeArgs),
+            TRUE,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL
+    };
+    UConverterFromUnicodeArgs fromUArgs = {
+        sizeof(UConverterFromUnicodeArgs),
+            TRUE,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL
+    };
+    UErrorCode errorCode;
 
-  if (converter == NULL)
-  {
-    return;
-  }
-
-  toUArgs.converter = fromUArgs.converter = converter;
-  errorCode = U_ZERO_ERROR;
-  converter->fromCharErrorBehaviour(converter->toUContext, &toUArgs, NULL, 0, UCNV_CLOSE, &errorCode);
-  errorCode = U_ZERO_ERROR;
-  converter->fromUCharErrorBehaviour(converter->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_CLOSE, &errorCode);
-
-  if (converter->sharedData->impl->close != NULL) {
-    converter->sharedData->impl->close(converter);
-  }
-  if(!converter->isCopyLocal){
-      if (converter->sharedData->referenceCounter != ~0) {
-        umtx_lock (NULL);
-        if (converter->sharedData->referenceCounter != 0) {
-          converter->sharedData->referenceCounter--;
-        }
-        umtx_unlock (NULL);
-      }
-      uprv_free (converter);
-  }
-  return;
-}
-
-/*Frees all shared immutable objects that aren't referred to (reference count = 0)
- */
-int32_t  ucnv_flushCache ()
-{
-  UConverterSharedData *mySharedData = NULL;
-  int32_t pos = -1;
-  int32_t tableDeletedNum = 0;
-  const UHashElement *e;
-
-  /*if shared data hasn't even been lazy evaluated yet
-   * return 0
-   */
-  if (SHARED_DATA_HASHTABLE == NULL)
-    return 0;
-
-  /*creates an enumeration to iterate through every element in the
-   *table
-   */
-  umtx_lock (NULL);
-  while ((e = uhash_nextElement (SHARED_DATA_HASHTABLE, &pos)) != NULL)
+    if (converter == NULL)
     {
-      mySharedData = (UConverterSharedData *) e->value;
-      /*deletes only if reference counter == 0 */
-      if (mySharedData->referenceCounter == 0)
-        {
-          tableDeletedNum++;
-
-          UCNV_DEBUG_LOG("del",mySharedData->staticData->name,mySharedData);
-
-          uhash_removeElement(SHARED_DATA_HASHTABLE, e);
-          deleteSharedConverterData (mySharedData);
-        }
+        return;
     }
-  umtx_unlock (NULL);
 
-  return tableDeletedNum;
+    toUArgs.converter = fromUArgs.converter = converter;
+    errorCode = U_ZERO_ERROR;
+    converter->fromCharErrorBehaviour(converter->toUContext, &toUArgs, NULL, 0, UCNV_CLOSE, &errorCode);
+    errorCode = U_ZERO_ERROR;
+    converter->fromUCharErrorBehaviour(converter->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_CLOSE, &errorCode);
+
+    if (converter->sharedData->impl->close != NULL) {
+        converter->sharedData->impl->close(converter);
+    }
+    if(!converter->isCopyLocal){
+        if (converter->sharedData->referenceCounter != ~0) {
+            umtx_lock (NULL);
+            if (converter->sharedData->referenceCounter != 0) {
+                converter->sharedData->referenceCounter--;
+            }
+            umtx_unlock (NULL);
+        }
+        uprv_free (converter);
+    }
+    return;
 }
 
 /*returns a single Name from the list, will return NULL if out of bounds
@@ -306,24 +268,27 @@ const char*  ucnv_getAvailableName (int32_t n)
 
 int32_t  ucnv_countAvailable ()
 {
-  UErrorCode err = U_ZERO_ERROR;
-  return ucnv_io_countAvailableConverters(&err);
+    UErrorCode err = U_ZERO_ERROR;
+    return ucnv_io_countAvailableConverters(&err);
 }
 
 U_CAPI uint16_t
-ucnv_countAliases(const char *alias, UErrorCode *pErrorCode) {
+ucnv_countAliases(const char *alias, UErrorCode *pErrorCode)
+{
     const char *p;
     return ucnv_io_getAliases(alias, &p, pErrorCode);
 }
 
 
 U_CAPI const char *
-ucnv_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode) {
+ucnv_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode)
+{
     return ucnv_io_getAlias(alias, n, pErrorCode);
 }
 
 U_CAPI void
-ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode) {
+ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
+{
     const char *p;
     uint16_t count=ucnv_io_getAliases(alias, &p, pErrorCode);
     while(count>0) {
@@ -335,7 +300,8 @@ ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
 }
 
 U_CAPI uint16_t
-ucnv_countStandards(void) {
+ucnv_countStandards(void)
+{
     UErrorCode err = U_ZERO_ERROR;
     return ucnv_io_countStandards(&err);
 }
@@ -345,19 +311,17 @@ void   ucnv_getSubstChars (const UConverter * converter,
                            int8_t * len,
                            UErrorCode * err)
 {
-  if (U_FAILURE (*err))
-    return;
+    if (U_FAILURE (*err))
+        return;
 
-  if (*len < converter->subCharLen) /*not enough space in subChars */
+    if (*len < converter->subCharLen) /*not enough space in subChars */
     {
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
-      return;
+        *err = U_INDEX_OUTOFBOUNDS_ERROR;
+        return;
     }
 
-  uprv_memcpy (mySubChar, converter->subChar, converter->subCharLen);   /*fills in the subchars */
-  *len = converter->subCharLen; /*store # of bytes copied to buffer */
-
-  return;
+    uprv_memcpy (mySubChar, converter->subChar, converter->subCharLen);   /*fills in the subchars */
+    *len = converter->subCharLen; /*store # of bytes copied to buffer */
 }
 
 void   ucnv_setSubstChars (UConverter * converter,
@@ -365,28 +329,28 @@ void   ucnv_setSubstChars (UConverter * converter,
                            int8_t len,
                            UErrorCode * err)
 {
-  if (U_FAILURE (*err))
-    return;
-
-  /*Makes sure that the subChar is within the codepages char length boundaries */
-  if ((len > converter->sharedData->staticData->maxBytesPerChar)
-      || (len < converter->sharedData->staticData->minBytesPerChar))
+    if (U_FAILURE (*err))
+        return;
+    
+    /*Makes sure that the subChar is within the codepages char length boundaries */
+    if ((len > converter->sharedData->staticData->maxBytesPerChar)
+     || (len < converter->sharedData->staticData->minBytesPerChar))
     {
-      *err = U_ILLEGAL_ARGUMENT_ERROR;
-      return;
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
     }
+    
+    uprv_memcpy (converter->subChar, mySubChar, len); /*copies the subchars */
+    converter->subCharLen = len;  /*sets the new len */
 
-  uprv_memcpy (converter->subChar, mySubChar, len); /*copies the subchars */
-  converter->subCharLen = len;  /*sets the new len */
-
-  /*
-   * There is currently (2001Feb) no separate API to set/get subChar1.
-   * In order to always have subChar written after it is explicitly set,
-   * we set subChar1 to 0.
-   */
-  converter->subChar1 = 0;
-
-  return;
+    /*
+    * There is currently (2001Feb) no separate API to set/get subChar1.
+    * In order to always have subChar written after it is explicitly set,
+    * we set subChar1 to 0.
+    */
+    converter->subChar1 = 0;
+    
+    return;
 }
 
 int32_t
@@ -434,114 +398,117 @@ ucnv_getDisplayName(const UConverter *cnv,
  *goal : have the same behaviour than a freshly created converter
  */
 static void _reset(UConverter *converter, UConverterResetChoice choice) {
-  /* first, notify the callback functions that the converter is reset */
-  UConverterToUnicodeArgs toUArgs = {
-    sizeof(UConverterToUnicodeArgs),
-    TRUE,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-  };
-  UConverterFromUnicodeArgs fromUArgs = {
-    sizeof(UConverterFromUnicodeArgs),
-    TRUE,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-  };
-  UErrorCode errorCode;
+    /* first, notify the callback functions that the converter is reset */
+    UConverterToUnicodeArgs toUArgs = {
+        sizeof(UConverterToUnicodeArgs),
+            TRUE,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL
+    };
+    UConverterFromUnicodeArgs fromUArgs = {
+        sizeof(UConverterFromUnicodeArgs),
+            TRUE,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            NULL
+    };
+    UErrorCode errorCode;
 
-  if(converter == NULL) {
-    return;
-  }
+    if(converter == NULL) {
+        return;
+    }
 
-  toUArgs.converter = fromUArgs.converter = converter;
-  if(choice<=UCNV_RESET_TO_UNICODE) {
-    errorCode = U_ZERO_ERROR;
-    converter->fromCharErrorBehaviour(converter->toUContext, &toUArgs, NULL, 0, UCNV_RESET, &errorCode);
-  }
-  if(choice!=UCNV_RESET_TO_UNICODE) {
-    errorCode = U_ZERO_ERROR;
-    converter->fromUCharErrorBehaviour(converter->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_RESET, &errorCode);
-  }
+    toUArgs.converter = fromUArgs.converter = converter;
+    if(choice<=UCNV_RESET_TO_UNICODE) {
+        errorCode = U_ZERO_ERROR;
+        converter->fromCharErrorBehaviour(converter->toUContext, &toUArgs, NULL, 0, UCNV_RESET, &errorCode);
+    }
+    if(choice!=UCNV_RESET_TO_UNICODE) {
+        errorCode = U_ZERO_ERROR;
+        converter->fromUCharErrorBehaviour(converter->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_RESET, &errorCode);
+    }
 
-  /* now reset the converter itself */
-  if(choice<=UCNV_RESET_TO_UNICODE) {
-    converter->toUnicodeStatus = converter->sharedData->toUnicodeStatus;
-    converter->UCharErrorBufferLength = 0;
-  }
-  if(choice!=UCNV_RESET_TO_UNICODE) {
-    converter->fromUnicodeStatus = 0;
-    converter->charErrorBufferLength = 0;
-  }
+    /* now reset the converter itself */
+    if(choice<=UCNV_RESET_TO_UNICODE) {
+        converter->toUnicodeStatus = converter->sharedData->toUnicodeStatus;
+        converter->UCharErrorBufferLength = 0;
+    }
+    if(choice!=UCNV_RESET_TO_UNICODE) {
+        converter->fromUnicodeStatus = 0;
+        converter->charErrorBufferLength = 0;
+    }
 
-  if (converter->sharedData->impl->reset != NULL) {
-    /* call the custom reset function */
-    converter->sharedData->impl->reset(converter, choice);
-  } else if(choice<=UCNV_RESET_TO_UNICODE) {
-    converter->mode = UCNV_SI;
-  }
+    if (converter->sharedData->impl->reset != NULL) {
+        /* call the custom reset function */
+        converter->sharedData->impl->reset(converter, choice);
+    } else if(choice<=UCNV_RESET_TO_UNICODE) {
+        converter->mode = UCNV_SI;
+    }
 }
 
-void ucnv_reset(UConverter *converter) {
-  _reset(converter, UCNV_RESET_BOTH);
+void ucnv_reset(UConverter *converter)
+{
+    _reset(converter, UCNV_RESET_BOTH);
 }
 
-void ucnv_resetToUnicode(UConverter *converter) {
-  _reset(converter, UCNV_RESET_TO_UNICODE);
+void ucnv_resetToUnicode(UConverter *converter)
+{
+    _reset(converter, UCNV_RESET_TO_UNICODE);
 }
 
-void ucnv_resetFromUnicode(UConverter *converter) {
-  _reset(converter, UCNV_RESET_FROM_UNICODE);
+void ucnv_resetFromUnicode(UConverter *converter)
+{
+    _reset(converter, UCNV_RESET_FROM_UNICODE);
 }
 
 int8_t  ucnv_getMaxCharSize (const UConverter * converter)
 {
-  return converter->sharedData->staticData->maxBytesPerChar;
+    return converter->sharedData->staticData->maxBytesPerChar;
 }
 
 
 int8_t  ucnv_getMinCharSize (const UConverter * converter)
 {
-  return converter->sharedData->staticData->minBytesPerChar;
+    return converter->sharedData->staticData->minBytesPerChar;
 }
 
 const char*  ucnv_getName (const UConverter * converter, UErrorCode * err)
      
 {
-  if (U_FAILURE (*err))
-    return NULL;
-  if(converter->sharedData->impl->getName){
-      const char* temp= converter->sharedData->impl->getName(converter);
-      if(temp)
-          return temp;
-  }
-  return converter->sharedData->staticData->name;
+    if (U_FAILURE (*err))
+        return NULL;
+    if(converter->sharedData->impl->getName){
+        const char* temp= converter->sharedData->impl->getName(converter);
+        if(temp)
+            return temp;
+    }
+    return converter->sharedData->staticData->name;
 }
 
 int32_t  ucnv_getCCSID (const UConverter * converter,
                         UErrorCode * err)
 {
-  if (U_FAILURE (*err))
-    return -1;
+    if (U_FAILURE (*err))
+        return -1;
 
-  return converter->sharedData->staticData->codepage;
+    return converter->sharedData->staticData->codepage;
 }
 
 
 UConverterPlatform  ucnv_getPlatform (const UConverter * converter,
                                       UErrorCode * err)
 {
-  if (U_FAILURE (*err))
-    return UCNV_UNKNOWN;
-  
-  return (UConverterPlatform)converter->sharedData->staticData->platform;
+    if (U_FAILURE (*err))
+        return UCNV_UNKNOWN;
+
+    return (UConverterPlatform)converter->sharedData->staticData->platform;
 }
 
 U_CAPI void U_EXPORT2
@@ -549,8 +516,8 @@ U_CAPI void U_EXPORT2
                          UConverterToUCallback *action,
                          const void **context)
 {
-  *action = converter->fromCharErrorBehaviour;
-  *context = converter->toUContext;
+    *action = converter->fromCharErrorBehaviour;
+    *context = converter->toUContext;
 }
 
 U_CAPI void U_EXPORT2
@@ -558,8 +525,8 @@ U_CAPI void U_EXPORT2
                            UConverterFromUCallback *action,
                            const void **context)
 {
-  *action = converter->fromUCharErrorBehaviour;
-  *context = converter->fromUContext;
+    *action = converter->fromUCharErrorBehaviour;
+    *context = converter->fromUContext;
 }
 
 void   ucnv_setToUCallBack (UConverter * converter,
@@ -569,12 +536,12 @@ void   ucnv_setToUCallBack (UConverter * converter,
                             const void** oldContext,
                             UErrorCode * err)
 {
-  if (U_FAILURE (*err))
-    return;
-  *oldAction = converter->fromCharErrorBehaviour;
-  converter->fromCharErrorBehaviour = newAction;
-  *oldContext = converter->toUContext;
-  converter->toUContext = newContext;
+    if (U_FAILURE (*err))
+        return;
+    *oldAction = converter->fromCharErrorBehaviour;
+    converter->fromCharErrorBehaviour = newAction;
+    *oldContext = converter->toUContext;
+    converter->toUContext = newContext;
 }
 
 void ucnv_setFromUCallBack (UConverter * converter,
@@ -584,13 +551,12 @@ void ucnv_setFromUCallBack (UConverter * converter,
                             const void** oldContext,
                             UErrorCode * err)
 {
-  
-  if (U_FAILURE (*err))
-    return;
-  *oldAction = converter->fromUCharErrorBehaviour;
-  converter->fromUCharErrorBehaviour = newAction;
-  *oldContext = converter->fromUContext;
-  converter->fromUContext = newContext;
+    if (U_FAILURE (*err))
+        return;
+    *oldAction = converter->fromUCharErrorBehaviour;
+    converter->fromUCharErrorBehaviour = newAction;
+    *oldContext = converter->fromUContext;
+    converter->fromUContext = newContext;
 }
 
 void ucnv_fromUnicode (UConverter * _this,
@@ -602,83 +568,88 @@ void ucnv_fromUnicode (UConverter * _this,
                        UBool flush,
                        UErrorCode * err)
 {
-  UConverterFromUnicodeArgs args;
-  const char *t;
+    UConverterFromUnicodeArgs args;
+    const char *t;
 
-  /*
-   * Check parameters in for all conversions
-   */
-  if (err == NULL || U_FAILURE (*err)) {
-    return;
-  }
+    /*
+    * Check parameters in for all conversions
+    */
+    if (err == NULL || U_FAILURE (*err)) {
+        return;
+    }
 
-  if (_this == NULL || target == NULL || source == NULL) {
-    *err = U_ILLEGAL_ARGUMENT_ERROR;
-    return;
-  }
+    if (_this == NULL || target == NULL || source == NULL) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
 
-  t = *target;
-  if (targetLimit < t || sourceLimit < *source) {
-    *err = U_ILLEGAL_ARGUMENT_ERROR;
-    return;
-  }
-
-  /*
-   * Make sure that the target buffer size does not exceed the number range for int32_t
-   * because some functions use the size rather than comparing pointers.
-   * size_t is guaranteed to be unsigned.
-   */
-  if((size_t)(targetLimit - t) > (size_t)0x7fffffff && targetLimit > t) {
-    targetLimit = t + 0x7fffffff;
-  }
-
-  /*
-   * Deal with stored carry over data.  This is done in the common location
-   * to avoid doing it for each conversion.
-   */
-  if (_this->charErrorBufferLength > 0)
+    t = *target;
+    if (targetLimit < t || sourceLimit < *source)
     {
-      int32_t myTargetIndex = 0;
-
-      flushInternalCharBuffer (_this, 
-                               (char *)t,
-                               &myTargetIndex,
-                               targetLimit - *target,
-                               offsets?&offsets:NULL,
-                               err);
-      *target += myTargetIndex;
-      if (U_FAILURE (*err)) return;
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
     }
 
-  args.converter = _this;
-  args.flush = flush;
-  args.offsets = offsets;
-  args.source = *source;
-  args.sourceLimit = sourceLimit;
-  args.target = *target;
-  args.targetLimit = targetLimit;
-  args.size = sizeof(args);
-  if (offsets) {
-    if (_this->sharedData->impl->fromUnicodeWithOffsets != NULL) {
-       _this->sharedData->impl->fromUnicodeWithOffsets(&args, err);
-       *source = args.source;
-       *target = args.target;
-       return;
-    } else {
-      /* there is no implementation that sets offsets, set them all to -1 */
-      int32_t i, targetSize = targetLimit - *target;
-
-      for (i=0; i<targetSize; i++) {
-        offsets[i] = -1;
-      }
+    /*
+    * Make sure that the target buffer size does not exceed the number range for int32_t
+    * because some functions use the size rather than comparing pointers.
+    * size_t is guaranteed to be unsigned.
+    */
+    if((size_t)(targetLimit - t) > (size_t)0x7fffffff && targetLimit > t)
+    {
+        targetLimit = t + 0x7fffffff;
     }
-  }
-
-  /*calls the specific conversion routines */
-  _this->sharedData->impl->fromUnicode(&args, err);
-  *source = args.source;
-  *target = args.target;
-  return;
+    
+    /*
+    * Deal with stored carry over data.  This is done in the common location
+    * to avoid doing it for each conversion.
+    */
+    if (_this->charErrorBufferLength > 0)
+    {
+        int32_t myTargetIndex = 0;
+        
+        ucnv_flushInternalCharBuffer (_this, 
+                (char *)t,
+                &myTargetIndex,
+                targetLimit - *target,
+                offsets?&offsets:NULL,
+                err);
+        *target += myTargetIndex;
+        if (U_FAILURE (*err))
+            return;
+    }
+    
+    args.converter = _this;
+    args.flush = flush;
+    args.offsets = offsets;
+    args.source = *source;
+    args.sourceLimit = sourceLimit;
+    args.target = *target;
+    args.targetLimit = targetLimit;
+    args.size = sizeof(args);
+    if (offsets)
+    {
+        if (_this->sharedData->impl->fromUnicodeWithOffsets != NULL)
+        {
+            _this->sharedData->impl->fromUnicodeWithOffsets(&args, err);
+            *source = args.source;
+            *target = args.target;
+            return;
+        }
+        else {
+            /* there is no implementation that sets offsets, set them all to -1 */
+            int32_t i, targetSize = targetLimit - *target;
+            
+            for (i=0; i<targetSize; i++) {
+                offsets[i] = -1;
+            }
+        }
+    }
+    
+    /*calls the specific conversion routines */
+    _this->sharedData->impl->fromUnicode(&args, err);
+    *source = args.source;
+    *target = args.target;
 }
 
 
@@ -692,85 +663,85 @@ void   ucnv_toUnicode (UConverter * _this,
                        UBool flush,
                        UErrorCode * err)
 {
-  UConverterToUnicodeArgs args;
-  const UChar *t;
+    UConverterToUnicodeArgs args;
+    const UChar *t;
 
-  /*
-   * Check parameters in for all conversions
-   */
-  if (err == NULL || U_FAILURE (*err)) {
-    return;
-  }
-
-  if (_this == NULL || target == NULL || source == NULL) {
-    *err = U_ILLEGAL_ARGUMENT_ERROR;
-    return;
-  }
-
-  t = *target;
-  if (targetLimit < t || sourceLimit < *source) {
-    *err = U_ILLEGAL_ARGUMENT_ERROR;
-    return;
-  }
-
-  /*
-   * Make sure that the target buffer size does not exceed the number range for int32_t
-   * because some functions use the size rather than comparing pointers.
-   * size_t is guaranteed to be unsigned.
-   */
-  if((size_t)(targetLimit - t) > (size_t)0x3fffffff && targetLimit > t) {
-    targetLimit = t + 0x3fffffff;
-  }
-
-  /*
-   * Deal with stored carry over data.  This is done in the common location
-   * to avoid doing it for each conversion.
-   */
-  if (_this->UCharErrorBufferLength > 0)
-    {
-      int32_t myTargetIndex = 0;
-
-      flushInternalUnicodeBuffer (_this, 
-                                  (UChar *)t,
-                                  &myTargetIndex,
-                                  targetLimit - *target,
-                                  offsets?&offsets:NULL,
-                                  err);
-      *target += myTargetIndex;
-      if (U_FAILURE (*err))
+    /*
+    * Check parameters in for all conversions
+    */
+    if (err == NULL || U_FAILURE (*err)) {
         return;
     }
 
-  args.converter = _this;
-  args.flush = flush;
-  args.offsets = offsets;
-  args.source = (char *) *source;
-  args.sourceLimit = sourceLimit;
-  args.target =  *target;
-  args.targetLimit = targetLimit;
-  args.size = sizeof(args);
-  if (offsets) {
-    if (_this->sharedData->impl->toUnicodeWithOffsets != NULL) {
-      _this->sharedData->impl->toUnicodeWithOffsets(&args, err);
-      *source = args.source;
-      *target = args.target;
-      return;
-    } else {
-      /* there is no implementation that sets offsets, set them all to -1 */
-      int32_t i, targetSize = targetLimit - *target;
-
-      for (i=0; i<targetSize; i++) {
-        offsets[i] = -1;
-      }
+    if (_this == NULL || target == NULL || source == NULL) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
     }
-  }
 
-  /*calls the specific conversion routines */
-  _this->sharedData->impl->toUnicode(&args, err); 
+    t = *target;
+    if (targetLimit < t || sourceLimit < *source) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
 
-  *source = args.source;
-  *target = args.target;
-  return;
+    /*
+    * Make sure that the target buffer size does not exceed the number range for int32_t
+    * because some functions use the size rather than comparing pointers.
+    * size_t is guaranteed to be unsigned.
+    */
+    if((size_t)(targetLimit - t) > (size_t)0x3fffffff && targetLimit > t) {
+        targetLimit = t + 0x3fffffff;
+    }
+
+    /*
+    * Deal with stored carry over data.  This is done in the common location
+    * to avoid doing it for each conversion.
+    */
+    if (_this->UCharErrorBufferLength > 0)
+    {
+        int32_t myTargetIndex = 0;
+
+        ucnv_flushInternalUnicodeBuffer (_this, 
+                (UChar *)t,
+                &myTargetIndex,
+                targetLimit - *target,
+                offsets?&offsets:NULL,
+                err);
+        *target += myTargetIndex;
+        if (U_FAILURE (*err))
+            return;
+    }
+
+    args.converter = _this;
+    args.flush = flush;
+    args.offsets = offsets;
+    args.source = (char *) *source;
+    args.sourceLimit = sourceLimit;
+    args.target =  *target;
+    args.targetLimit = targetLimit;
+    args.size = sizeof(args);
+    if (offsets) {
+        if (_this->sharedData->impl->toUnicodeWithOffsets != NULL) {
+            _this->sharedData->impl->toUnicodeWithOffsets(&args, err);
+            *source = args.source;
+            *target = args.target;
+            return;
+        } else {
+            /* there is no implementation that sets offsets, set them all to -1 */
+            int32_t i, targetSize = targetLimit - *target;
+            
+            for (i=0; i<targetSize; i++) {
+                offsets[i] = -1;
+            }
+        }
+    }
+
+    /*calls the specific conversion routines */
+    _this->sharedData->impl->toUnicode(&args, err); 
+
+    *source = args.source;
+    *target = args.target;
+    return;
 }
 
 int32_t
@@ -849,8 +820,8 @@ ucnv_toUChars(UConverter *cnv,
 
     if( cnv==NULL ||
         destCapacity<0 || (destCapacity>0 && dest==NULL) ||
-        srcLength<-1 || (srcLength!=0 && src==NULL)
-    ) {
+        srcLength<-1 || (srcLength!=0 && src==NULL))
+    {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -875,7 +846,8 @@ ucnv_toUChars(UConverter *cnv,
         destLength=(int32_t)(dest-originalDest);
 
         /* if an overflow occurs, then get the preflighting length */
-        if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+        if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR)
+        {
             UChar buffer[1024];
 
             destLimit=buffer+sizeof(buffer)/U_SIZEOF_UCHAR;
@@ -884,7 +856,8 @@ ucnv_toUChars(UConverter *cnv,
                 *pErrorCode=U_ZERO_ERROR;
                 ucnv_toUnicode(cnv, &dest, destLimit, &src, srcLimit, 0, TRUE, pErrorCode);
                 destLength+=(int32_t)(dest-buffer);
-            } while(*pErrorCode==U_BUFFER_OVERFLOW_ERROR);
+            }
+            while(*pErrorCode==U_BUFFER_OVERFLOW_ERROR);
         }
     } else {
         destLength=0;
@@ -898,57 +871,57 @@ UChar32 ucnv_getNextUChar(UConverter * converter,
                           const char *sourceLimit,
                           UErrorCode * err)
 {
-  UConverterToUnicodeArgs args;
-  UChar32 ch;
+    UConverterToUnicodeArgs args;
+    UChar32 ch;
 
-  if(err == NULL || U_FAILURE(*err)) {
-      return 0xffff;
-  }
-
-  if(converter == NULL || source == NULL || sourceLimit < *source) {
-    *err = U_ILLEGAL_ARGUMENT_ERROR;
-    return 0xffff;
-  }
-
-  /* In case internal data had been stored
-   * we return the first UChar32 in the internal buffer,
-   * and update the internal state accordingly
-   */
-  if (converter->UCharErrorBufferLength > 0)
-    {
-      UTextOffset i = 0;
-      UChar32 myUChar;
-      UTF_NEXT_CHAR(converter->UCharErrorBuffer, i, sizeof(converter->UCharErrorBuffer), myUChar);
-      /*In this memmove we update the internal buffer by
-       *popping the first character.
-       *Note that in the call itself we decrement
-       *UCharErrorBufferLength
-       */
-      uprv_memmove (converter->UCharErrorBuffer,
-                   converter->UCharErrorBuffer + i,
-                   (converter->UCharErrorBufferLength - i) * sizeof (UChar));
-      converter->UCharErrorBufferLength -= (int8_t)i;
-      return myUChar;
+    if(err == NULL || U_FAILURE(*err)) {
+        return 0xffff;
     }
-  /*calls the specific conversion routines */
-  /*as dictated in a code review, avoids a switch statement */
-  args.converter = converter;
-  args.flush = TRUE;
-  args.offsets = NULL;
-  args.source = *source;
-  args.sourceLimit = sourceLimit;
-  args.target = NULL;
-  args.targetLimit = NULL;
-  args.size = sizeof(args);
-  if (converter->sharedData->impl->getNextUChar != NULL)
-  {
-    ch = converter->sharedData->impl->getNextUChar(&args, err);
-  } else {
-    /* default implementation */
-    ch = ucnv_getNextUCharFromToUImpl(&args, converter->sharedData->impl->toUnicode, FALSE, err);
-  }
-  *source = args.source;
-  return ch;
+
+    if(converter == NULL || source == NULL || sourceLimit < *source) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0xffff;
+    }
+
+    /* In case internal data had been stored
+    * we return the first UChar32 in the internal buffer,
+    * and update the internal state accordingly
+    */
+    if (converter->UCharErrorBufferLength > 0)
+    {
+        UTextOffset i = 0;
+        UChar32 myUChar;
+        UTF_NEXT_CHAR(converter->UCharErrorBuffer, i, sizeof(converter->UCharErrorBuffer), myUChar);
+        /*In this memmove we update the internal buffer by
+        *popping the first character.
+        *Note that in the call itself we decrement
+        *UCharErrorBufferLength
+        */
+        uprv_memmove (converter->UCharErrorBuffer,
+            converter->UCharErrorBuffer + i,
+            (converter->UCharErrorBufferLength - i) * sizeof (UChar));
+        converter->UCharErrorBufferLength -= (int8_t)i;
+        return myUChar;
+    }
+    /*calls the specific conversion routines */
+    /*as dictated in a code review, avoids a switch statement */
+    args.converter = converter;
+    args.flush = TRUE;
+    args.offsets = NULL;
+    args.source = *source;
+    args.sourceLimit = sourceLimit;
+    args.target = NULL;
+    args.targetLimit = NULL;
+    args.size = sizeof(args);
+    if (converter->sharedData->impl->getNextUChar != NULL)
+    {
+        ch = converter->sharedData->impl->getNextUChar(&args, err);
+    } else {
+        /* default implementation */
+        ch = ucnv_getNextUCharFromToUImpl(&args, converter->sharedData->impl->toUnicode, FALSE, err);
+    }
+    *source = args.source;
+    return ch;
 }
 
 int32_t
@@ -1043,7 +1016,8 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
      * to it but continue the conversion in order to store in targetSize
      * the number of bytes that was required.
      */
-    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR || targetSize==0) {
+    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR || targetSize==0)
+    {
         char targetBuffer[CHUNK_SIZE];
 
         targetLimit=targetBuffer+CHUNK_SIZE;
@@ -1087,7 +1061,8 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
                            NULL,
                            TRUE,
                            pErrorCode);
-        } while(U_SUCCESS(*pErrorCode) || *pErrorCode==U_BUFFER_OVERFLOW_ERROR);
+        }
+        while(U_SUCCESS(*pErrorCode) || *pErrorCode==U_BUFFER_OVERFLOW_ERROR);
     }
 
     ucnv_close (inConverter);
@@ -1120,7 +1095,8 @@ void ucnv_getStarters(const UConverter* converter,
     }
 }
 
-static const UAmbiguousConverter *ucnv_getAmbiguous(const UConverter *cnv) {
+static const UAmbiguousConverter *ucnv_getAmbiguous(const UConverter *cnv)
+{
     UErrorCode errorCode;
     const char *name;
     int32_t i;
@@ -1135,8 +1111,10 @@ static const UAmbiguousConverter *ucnv_getAmbiguous(const UConverter *cnv) {
         return NULL;
     }
 
-    for(i=0; i<(int32_t)(sizeof(ambiguousConverters)/sizeof(UAmbiguousConverter)); ++i) {
-        if(0==uprv_strcmp(name, ambiguousConverters[i].name)) {
+    for(i=0; i<(int32_t)(sizeof(ambiguousConverters)/sizeof(UAmbiguousConverter)); ++i)
+    {
+        if(0==uprv_strcmp(name, ambiguousConverters[i].name))
+        {
             return ambiguousConverters+i;
         }
     }
@@ -1151,7 +1129,8 @@ void ucnv_fixFileSeparator(const UConverter *cnv,
     int32_t i;
     UChar variant5c;
 
-    if(cnv==NULL || source==NULL || sourceLength<=0 || (a=ucnv_getAmbiguous(cnv))==NULL) {
+    if(cnv==NULL || source==NULL || sourceLength<=0 || (a=ucnv_getAmbiguous(cnv))==NULL)
+    {
         return;
     }
 

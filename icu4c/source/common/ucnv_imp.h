@@ -23,27 +23,17 @@
 #include "unicode/utypes.h"
 #include "ucnv_bld.h"
 
-#ifndef UHASH_H
-typedef struct _UHashtable UHashtable;
-#endif
-
-/*Hashtable used to store UConverterSharedData objects supporting
- *the Caching mechanism
- */
-extern UHashtable *SHARED_DATA_HASHTABLE;
-
-
 /* figures out if we need to go to file to read in the data tables.
  */
-UConverter *createConverter (const char *converterName, UErrorCode * err);
+UConverter *ucnv_createConverter (const char *converterName, UErrorCode * err);
 
 /* Stores the shared data in the SHARED_DATA_HASHTABLE
  */
-void shareConverterData (UConverterSharedData * data);
+void ucnv_shareConverterData (UConverterSharedData * data);
 
 /* gets the shared data from the SHARED_DATA_HASHTABLE (might return NULL if it isn't there)
  */
-UConverterSharedData *getSharedConverterData (const char *name);
+UConverterSharedData *ucnv_getSharedConverterData (const char *name);
 
 /* Deletes (frees) the Shared data it's passed. first it checks the referenceCounter to
  * see if anyone is using it, if not it frees all the memory stemming from sharedConverterData and
@@ -54,9 +44,9 @@ UBool deleteSharedConverterData (UConverterSharedData * sharedConverterData);
 
 /* returns true if "name" is in algorithmicConverterNames
  */
-UBool isDataBasedConverter (const char *name);
+UBool ucnv_isDataBasedConverter (const char *name);
 
-void copyPlatformString (char *platformString, UConverterPlatform pltfrm);
+void ucnv_copyPlatformString (char *platformString, UConverterPlatform pltfrm);
 
 
 #endif /* _UCNV_IMP */
