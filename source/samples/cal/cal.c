@@ -20,7 +20,6 @@
 #include "unicode/uloc.h"
 #include "unicode/udat.h"
 #include "unicode/ucal.h"
-#include "unicode/ures.h"
 #include "unicode/ustring.h"
 #include "unicode/uclean.h"
 
