@@ -311,6 +311,14 @@ ucnv_io_countAvailableAliases(UErrorCode *pErrorCode) {
     return 0;
 }
 
+#if 0
+/*
+ * We are not currently using these functions, so I am commenting them out
+ * to reduce the binary file size and improve the code coverage;
+ * I do not currently want to remove this entirely because it may be useful
+ * in the future and also serves to some degree as another piece of
+ * documentation of the data structure.
+ */
 U_CFUNC const char *
 ucnv_io_getAvailableAlias(uint16_t n, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && n<*aliasTable) {
@@ -331,6 +339,7 @@ ucnv_io_fillAvailableAliases(const char **aliases, UErrorCode *pErrorCode) {
         }
     }
 }
+#endif
 
 /* default converter name --------------------------------------------------- */
 
