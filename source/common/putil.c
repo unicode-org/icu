@@ -86,7 +86,7 @@
 #   include <Script.h>
 #elif defined(AIX)
 #   include <sys/ldr.h>
-#elif defined(SOLARIS) || defined(LINUX)
+#elif defined(U_SOLARIS) || defined(U_LINUX)
 #   include <dlfcn.h>
 #   include <link.h>
 #elif defined(HPUX)
@@ -848,7 +848,7 @@ getLibraryPath(char *path, int size) {
 #   elif defined(OS390)
 #   elif defined(OS400)
 #   elif defined(XP_MAC)
-#   elif defined(SOLARIS)
+#   elif defined(U_SOLARIS)
         void *handle=dlopen(U_COMMON_LIBNAME, RTLD_LAZY); /* "libicu-uc.so" */
         if(handle!=NULL) {
             Link_map *p=NULL;
@@ -880,7 +880,7 @@ getLibraryPath(char *path, int size) {
             dlclose(handle);
             return length;
         }
-#   elif defined(LINUX)
+#   elif defined(U_LINUX)
 #   elif defined(AIX)
         void *handle=(void*)load(U_COMMON_LIBNAME, L_LIBPATH_EXEC, "."); /* "libicu-uc.a" */
         if(handle!=NULL) {
@@ -977,8 +977,8 @@ findLibraryPath(char *path, int size) {
 #       define LIB_FILENAME "libicuuc.a"
 #   elif defined(OS400)
 #   elif defined(XP_MAC)
-#   elif defined(SOLARIS)
-#   elif defined(LINUX)
+#   elif defined(U_SOLARIS)
+#   elif defined(U_LINUX)
 #       define LIB_PATH_VAR "LD_LIBRARY_PATH"
 #       define LIB_FILENAME "libicuuc.so"
 #   elif defined(AIX)
@@ -1480,7 +1480,7 @@ const char* uprv_getDefaultCodepage()
     {
         uprv_memset(codesetName, 0, 100);
     }
-#ifdef LINUX
+#ifdef U_LINUX
     if (nl_langinfo(_NL_CTYPE_CODESET_NAME) != NULL)
         uprv_strcpy(codesetName, nl_langinfo(_NL_CTYPE_CODESET_NAME));     
 #else

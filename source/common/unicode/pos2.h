@@ -22,7 +22,7 @@
 #endif
 
 /* Define whether inttypes.h is available */
-#define HAVE_INTTYPES_H 0
+#define U_HAVE_INTTYPES_H 0
 
 /*
  * Define what support for C++ streams is available.
@@ -58,7 +58,7 @@
 
 /* If your platform does not have the <inttypes.h> header, you may
    need to edit the typedefs below. */
-#if HAVE_INTTYPES_H
+#if U_HAVE_INTTYPES_H
 #include <inttypes.h>
 #else
 

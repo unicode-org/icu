@@ -376,7 +376,7 @@ IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPat
             mainDirBuffer[0]='\0';
         }
         mainDir=mainDirBuffer;
-    #elif defined(_AIX) || defined(SOLARIS) || defined(LINUX) || defined(HPUX) || defined(POSIX) || defined(OS390)
+    #elif defined(_AIX) || defined(U_SOLARIS) || defined(U_LINUX) || defined(HPUX) || defined(POSIX) || defined(OS390)
         char mainDirBuffer[200];
         strcpy(mainDirBuffer, u_getDataDirectory());
         strcat(mainDirBuffer, "/../");
@@ -402,7 +402,7 @@ IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPat
         }
         mainDir=mainDirBuffer;
         sepChar = '\\';
-    #elif defined(_AIX) || defined(SOLARIS) || defined(LINUX) || defined(HPUX) || defined(OS390)
+    #elif defined(_AIX) || defined(SOLARIS) || defined(U_LINUX) || defined(HPUX) || defined(OS390)
         mainDir = getenv("HOME");
         sepChar = '/';
     #elif defined(XP_MAC)
@@ -443,7 +443,7 @@ IntlTest::getTestDirectory()
 {
        if (_testDirectory == NULL) 
     {
-#if defined(_AIX) || defined(SOLARIS) || defined(LINUX) || defined(HPUX) || defined(POSIX) || defined(OS390)
+#if defined(_AIX) || defined(SOLARIS) || defined(U_LINUX) || defined(HPUX) || defined(POSIX) || defined(OS390)
       setTestDirectory("source|test|testdata|");
 #else
       setTestDirectory("icu|source|test|testdata|");
