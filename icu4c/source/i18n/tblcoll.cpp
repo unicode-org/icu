@@ -636,7 +636,7 @@ Normalizer::EMode RuleBasedCollator::getDecomposition(void) const
 
 // RuleBaseCollatorNew private constructor ----------------------------------
 
-RuleBasedCollator::RuleBasedCollator() : dataIsOwned(FALSE)
+RuleBasedCollator::RuleBasedCollator() : dataIsOwned(FALSE), ucollator(0)
 {
 }
 
