@@ -232,6 +232,7 @@ DataDrivenCollatorTest::processTest(TestData *testData, UErrorCode &status) {
   UErrorCode intStatus = U_ZERO_ERROR;
   UnicodeString testSetting;
   while(testData->nextSettings(settings, status)) {
+    intStatus = U_ZERO_ERROR;
     // try to get a locale
     testSetting = settings->getString("TestLocale", intStatus);
     if(U_SUCCESS(intStatus)) {
@@ -250,6 +251,7 @@ DataDrivenCollatorTest::processTest(TestData *testData, UErrorCode &status) {
       testSetting = settings->getString("Rules", intStatus);
       if(U_SUCCESS(intStatus)) {
         col = new RuleBasedCollator(testSetting, status);
+        UCollator *ucol = ucol_openRules(testSetting.getBuffer(), testSetting.length(), UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
         if(U_SUCCESS(status)) {
           logln("Testing collator for rules "+testSetting);
         } else {
@@ -272,6 +274,8 @@ DataDrivenCollatorTest::processTest(TestData *testData, UErrorCode &status) {
           errln("Couldn't process arguments");
           break;
         }
+      } else {
+        intStatus = U_ZERO_ERROR;
       }
       // Start the processing
       while(testData->nextCase(currentCase, status)) {
@@ -284,6 +288,7 @@ DataDrivenCollatorTest::processTest(TestData *testData, UErrorCode &status) {
       errln("Couldn't instantiate a collator!");
     }
     delete col;
+    col = NULL;
   }
 }
 
