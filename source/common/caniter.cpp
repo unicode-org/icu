@@ -332,7 +332,7 @@ void U_EXPORT2 CanonicalIterator::permute(UnicodeString &source, UBool skipZeros
 
     // otherwise iterate through the string, and recursively permute all the other characters
     UChar32 cp;
-    Hashtable *subpermute = new Hashtable(FALSE, status);
+    Hashtable *subpermute = new Hashtable(status);
     /* test for NULL */
     if (subpermute == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -396,7 +396,7 @@ void U_EXPORT2 CanonicalIterator::permute(UnicodeString &source, UBool skipZeros
 UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, int32_t &result_len, UErrorCode &status) {
     //private String[] getEquivalents(String segment)
 
-    Hashtable *result = new Hashtable(FALSE, status);
+    Hashtable *result = new Hashtable(status);
     /* test for NULL */
     if (result == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -414,7 +414,7 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
     // add only the ones that are canonically equivalent
     // TODO: optimize by not permuting any class zero.
 
-    Hashtable *permutations = new Hashtable(FALSE, status);
+    Hashtable *permutations = new Hashtable(status);
     /* test for NULL */
     if (permutations == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -509,7 +509,7 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
 Hashtable *CanonicalIterator::getEquivalents2(const UChar *segment, int32_t segLen, UErrorCode &status) {
 //Hashtable *CanonicalIterator::getEquivalents2(const UnicodeString &segment, int32_t segLen, UErrorCode &status) {
 
-    Hashtable *result = new Hashtable(FALSE, status);
+    Hashtable *result = new Hashtable(status);
     /* test for NULL */
     if (result == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -674,7 +674,7 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
     //if (PROGRESS) printf("Matches\n");
 
     if (bufLen == 0) {
-      Hashtable *result = new Hashtable(FALSE, status);
+      Hashtable *result = new Hashtable(status);
       /* test for NULL */
       if (result == 0) {
           status = U_MEMORY_ALLOCATION_ERROR;

@@ -191,14 +191,15 @@ LocaleUtility::getAvailableLocaleNames(const UnicodeString& bundleID)
     // from ures_openAvailableLocales.  The second-level values are
     // garbage ((void*)1 or other random pointer).
 
+    UErrorCode status = U_ZERO_ERROR;
     Hashtable* cache;
     umtx_lock(NULL);
     cache = LocaleUtility_cache;
     umtx_unlock(NULL);
 
     if (cache == NULL) {
-        cache = new Hashtable();
-        if (cache == NULL) {
+        cache = new Hashtable(status);
+        if (cache == NULL || U_FAILURE(status)) {
             return NULL; // catastrophic failure; e.g. out of memory
         }
         cache->setValueDeleter(uhash_deleteHashtable);
@@ -223,9 +224,8 @@ LocaleUtility::getAvailableLocaleNames(const UnicodeString& bundleID)
     umtx_unlock(NULL);
 
     if (htp == NULL) {
-        htp = new Hashtable();
-        if (htp) {
-            UErrorCode status = U_ZERO_ERROR;
+        htp = new Hashtable(status);
+        if (htp && U_SUCCESS(status)) {
             CharString cbundleID(bundleID);
             const char* path = (const char*) cbundleID;
             if (*path == 0) path = NULL; // empty string => NULL

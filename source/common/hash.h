@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2001, International Business Machines
+*   Copyright (C) 1997-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -27,6 +27,8 @@ U_NAMESPACE_BEGIN
 class U_COMMON_API Hashtable : public UMemory {
     UHashtable* hash;
 
+    inline void init(UHashFunction *keyHash, UKeyComparator *keyComp, UErrorCode& status);
+
 public:
     /**
      * Construct a hashtable
@@ -36,11 +38,18 @@ public:
     Hashtable(UBool ignoreKeyCase, UErrorCode& status);
 
     /**
+     * Construct a hashtable
+     * @param ignoreKeyCase If true, keys are case insensitive.
+     * @param status Error code
+    */
+    Hashtable(UErrorCode& status);
+
+    /**
      * Construct a hashtable, _disregarding any error_.  Use this constructor
      * with caution.
      * @param ignoreKeyCase if TRUE, keys are case insensitive
      */
-    Hashtable(UBool ignoreKeyCase = FALSE);
+    Hashtable();
 
     /**
      * Non-virtual destructor; make this virtual if Hashtable is subclassed
@@ -79,31 +88,37 @@ private:
  * Implementation
  ********************************************************************/
 
-inline Hashtable::Hashtable(UBool ignoreKeyCase, UErrorCode& status) :
-    hash(0) {
+inline void Hashtable::init(UHashFunction *keyHash, UKeyComparator *keyComp, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
-    hash = uhash_open(ignoreKeyCase ? uhash_hashCaselessUnicodeString
-                                    : uhash_hashUnicodeString,
-                      ignoreKeyCase ? uhash_compareCaselessUnicodeString
-                                    : uhash_compareUnicodeString,
-                      &status);
+    hash = uhash_open(keyHash, keyComp, &status);
     if (U_SUCCESS(status)) {
         uhash_setKeyDeleter(hash, uhash_deleteUnicodeString);
     }
 }
 
-inline Hashtable::Hashtable(UBool ignoreKeyCase) : hash(0) {
+inline Hashtable::Hashtable(UBool ignoreKeyCase, UErrorCode& status)
+ : hash(0)
+{
+    init(ignoreKeyCase ? uhash_hashCaselessUnicodeString
+                        : uhash_hashUnicodeString,
+            ignoreKeyCase ? uhash_compareCaselessUnicodeString
+                        : uhash_compareUnicodeString,
+            status);
+}
+
+inline Hashtable::Hashtable(UErrorCode& status)
+ : hash(0)
+{
+    init(uhash_hashUnicodeString, uhash_compareUnicodeString, status);
+}
+
+inline Hashtable::Hashtable()
+ : hash(0)
+{
     UErrorCode status = U_ZERO_ERROR;
-    hash = uhash_open(ignoreKeyCase ? uhash_hashCaselessUnicodeString
-                                    : uhash_hashUnicodeString,
-                      ignoreKeyCase ? uhash_compareCaselessUnicodeString
-                                    : uhash_compareUnicodeString,
-                      &status);
-    if (U_SUCCESS(status)) {
-        uhash_setKeyDeleter(hash, uhash_deleteUnicodeString);
-    }
+    init(uhash_hashUnicodeString, uhash_compareUnicodeString, status);
 }
 
 inline Hashtable::~Hashtable() {

@@ -319,8 +319,8 @@ UScriptCode AnyTransliterator::scriptNameToCode(const UnicodeString& name) {
  */
 void AnyTransliterator::registerIDs() {
 
-    UErrorCode ec;
-    Hashtable seen(TRUE);
+    UErrorCode ec = U_ZERO_ERROR;
+    Hashtable seen(TRUE, ec);
 
     int32_t sourceCount = Transliterator::_countAvailableSources();
     for (int32_t s=0; s<sourceCount; ++s) {
