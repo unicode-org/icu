@@ -106,7 +106,7 @@
 #include <stddef.h>
 /* include the utfXX.h after the following definitions */
 
-/*!
+/**
  * \def U_HAVE_WCHAR_H
  * Indicates whether <wchar.h> is available (1) or not (0). Set to 1 by default.
  *
@@ -116,7 +116,7 @@
 #   define U_HAVE_WCHAR_H 1
 #endif
 
-/*!
+/**
  * \def U_SIZEOF_WCHAR_T
  * U_SIZEOF_WCHAR_T==sizeof(wchar_t) (0 means it is not defined or autoconf could not set it)
  *
@@ -127,13 +127,13 @@
 #   define U_SIZEOF_WCHAR_T 4
 #endif
 
-/*!
+/**
  * \def U_WCHAR_IS_UTF16
  * Defined if wchar_t uses UTF-16.
  *
  * @stable ICU 2.0
  */
-/*!
+/**
  * \def U_WCHAR_IS_UTF32
  * Defined if wchar_t uses UTF-32.
  *
@@ -164,7 +164,7 @@
 /** Number of bytes in a UChar. @stable ICU 2.0 */
 #define U_SIZEOF_UCHAR 2
 
-/*!
+/**
  * \var UChar
  * Define UChar to be wchar_t if that is 16 bits wide; always assumed to be unsigned.
  * If wchar_t is not 16 bits wide, then define UChar to be uint16_t.
