@@ -179,6 +179,49 @@ UnicodeStringTest::TestBasicManipulation()
             errln("operator+(UniStr, UniStr) failed");
         }
     }
+
+    {
+        // tests for Jitterbug 2360
+        // verify that APIs with source pointer + length accept length == -1
+        // mostly test only where modified, only few functions did not already do this
+        if(UnicodeString("abc", -1, "")!=UnicodeString("abc", "")) {
+            errln("UnicodeString(codepageData, dataLength, codepage) does not work with dataLength==-1");
+        }
+
+        UChar buffer[10]={ 0x61, 0x62, 0x20ac, 0xd900, 0xdc05, 0,   0x62, 0xffff, 0xdbff, 0xdfff };
+        UnicodeString s, t(buffer, -1, LENGTHOF(buffer));
+
+        if(s.setTo(buffer, -1, LENGTHOF(buffer)).length()!=u_strlen(buffer)) {
+            errln("UnicodeString.setTo(buffer, length, capacity) does not work with length==-1");
+        }
+        if(t.length()!=u_strlen(buffer)) {
+            errln("UnicodeString(buffer, length, capacity) does not work with length==-1");
+        }
+
+        if(0!=s.caseCompare(buffer, -1, U_FOLD_CASE_DEFAULT)) {
+            errln("UnicodeString.caseCompare(const UChar *, length, options) does not work with length==-1");
+        }
+
+        buffer[u_strlen(buffer)]=0xe4;
+        UnicodeString u(buffer, -1, LENGTHOF(buffer));
+        if(s.setTo(buffer, -1, LENGTHOF(buffer)).length()!=LENGTHOF(buffer)) {
+            errln("UnicodeString.setTo(buffer without NUL, length, capacity) does not work with length==-1");
+        }
+        if(u.length()!=LENGTHOF(buffer)) {
+            errln("UnicodeString(buffer without NUL, length, capacity) does not work with length==-1");
+        }
+
+        static const char cs[]={ 0x61, (char)0xe4, (char)0x85, 0 };
+        UConverter *cnv;
+        UErrorCode errorCode=U_ZERO_ERROR;
+
+        cnv=ucnv_open("ISO-8859-1", &errorCode);
+        UnicodeString v(cs, -1, cnv, errorCode);
+        ucnv_close(cnv);
+        if(v!=UnicodeString("a\\xe4\\x85").unescape()) {
+            errln("UnicodeString(const char *, length, cnv, errorCode) does not work with length==-1");
+        }
+    }
 }
 
 void
