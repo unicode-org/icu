@@ -44,6 +44,7 @@ The following names can be supplied as the argument for platform:
     LinuxRedHat             Use the GNU C++ compiler on Linux
     LINUX/ECC               Use the Intel ECC compiler on Linux
     LINUX/ICC               Use the Intel ICC compiler on Linux
+    LINUX/VA                Use IBM's Visual Age compiler on Power
     MacOSX                  Use the GNU C++ compiler on MacOS X (Darwin)
     QNX                     Use QNX's QCC compiler on QNX/Neutrino
     SOLARISCC               Use Sun's CC compiler on Solaris
@@ -251,6 +252,14 @@ case $platform in
         CXX=icpc; export CXX
         RELEASE_CFLAGS='-O0'
         RELEASE_CXXFLAGS='-O0'
+        ;;
+    LINUX/VA)
+        THE_OS="Linux"
+        THE_COMP="IBM Visual Age C++ Compiler"
+        CC=`which xlc_r`; export CC
+        CXX=`which xlC_r`; export CXX
+        RELEASE_CFLAGS="-O2 -qmaxmem=-1"
+        RELEASE_CXXFLAGS="-O2 -qmaxmem=-1"
         ;;
     Cygwin)
         THE_OS="Cygwin"
