@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/03/15 19:06:34 $
- * $Revision: 1.63 $
+ * $Date: 2002/03/15 19:45:43 $
+ * $Revision: 1.64 $
  *
  *****************************************************************************************
  */
@@ -209,7 +209,7 @@ import java.util.Iterator;
  * </table>
  * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.63 $ $Date: 2002/03/15 19:06:34 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.64 $ $Date: 2002/03/15 19:45:43 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -669,10 +669,11 @@ public class UnicodeSet extends UnicodeFilter {
             Iterator it = strings.iterator();
             while (it.hasNext()) {
                 String s = (String) it.next();
-                if (s.length() == 0) {
-                    // Empty strings match everything
-                    return true;
-                }
+                //if (s.length() == 0) {
+                //    // Empty strings match everything
+                //    return true;
+                //}
+                // assert(s.length() != 0); // We enforce this elsewhere
                 int c = UTF16.charAt(s, 0);
                 if ((c & 0xFF) == v) {
                     return true;
@@ -711,36 +712,39 @@ public class UnicodeSet extends UnicodeFilter {
             
                 Iterator it = strings.iterator();
                 boolean forward = offset[0] < limit;
+
+                // firstChar is the leftmost char to match in the
+                // forward direction or the rightmost char to match in
+                // the reverse direction.
                 char firstChar = text.charAt(offset[0]);
-                
+
+// For the forward direction (ONLY) we can use a high-water mark to
+// bail out early.  TODO revisit this.
 //                int highWaterLength = 0;
 
                 while (it.hasNext()) {
                     String trial = (String) it.next();
-                    if (trial.length() == 0) {
-                        return U_MATCH; // null-string always matches
-                    }
+
+                    //if (trial.length() == 0) {
+                    //    return U_MATCH; // null-string always matches
+                    //}
+                    // assert(trial.length() != 0); // We ensure this elsewhere
+
                     char c = trial.charAt(forward ? 0 : trial.length() - 1);
-                    
-                    // We had some more efficient scanning here, but
-                    // it only worked in the case of forward==true.
-                    // TODO implement more efficient scanning through the strings
                     
                     if (c != firstChar) continue;
                         
-                    // Now check the strings with that first character
-                    // do it in an inside loop, with a break-test further down
-                    // so we get the first string too
-                    
                     int len = matchRest(text, offset[0], limit, trial);
 
                     if (len == trial.length()) {
+                        // We have successfully matched the whole string.
                         offset[0] += forward ? len : -len;
                         return U_MATCH;
                     }
 
                     int maxLen = forward ? limit - offset[0] : offset[0] - limit;
                     if (len == maxLen && incremental) {
+                        // We have successfully matched but only up to limit.
                         return U_PARTIAL_MATCH;
                     }
 
@@ -751,37 +755,47 @@ public class UnicodeSet extends UnicodeFilter {
 //                        break;
 //                    }
                 }
-
-                // All matches, both partial and complete, are detected above
-//                if (highWaterLength > 0) { // got a match
-//                    offset[0] += forward ? highWaterLength : -highWaterLength;
-//                }
-
             }
             return super.matches(text, offset, limit, incremental);
         }
     }
     
     /**
-     * Returns the longest match for s in text.
-     * if limit < start, go backwards
-     * If s matches up to the end, return |limit - start|
-     * If there is a mismatch between some character of s and text, return 0
-     * We know the first character matches before this method is called, so skip it
+     * Returns the longest match for s in text at the given position.
+     * If limit > start then match forward from start+1 to limit
+     * matching all characters except s.charAt(0).  If limit < start,
+     * go backward starting from start-1 matching all characters
+     * except s.charAt(s.length()-1).  This method assumes that the
+     * first character, text.charAt(start), matches s, so it does not
+     * check it.
+     * @param text the text to match
+     * @param start the first character to match.  In the forward
+     * direction, text.charAt(start) is matched against s.charAt(0).
+     * In the reverse direction, it is matched against
+     * s.charAt(s.length()-1).
+     * @param limit the limit offset for matching, either last+1 in
+     * the forward direction, or last-1 in the reverse direction,
+     * where last is the index of the last character to match.
+     * @return If part of s matches up to the limit, return |limit -
+     * start|.  If all of s matches before reaching the limit, return
+     * s.length().  If there is a mismatch between s and text, return
+     * 0
      */
     private static int matchRest (Replaceable text, int start, int limit, String s) {
         int maxLen;
+        int slen = s.length();
         if (start < limit) {
             maxLen = limit - start;
-            if (maxLen > s.length()) maxLen = s.length();
+            if (maxLen > slen) maxLen = slen;
             for (int i = 1; i < maxLen; ++i) {
                 if (text.charAt(start + i) != s.charAt(i)) return 0;
             }
         } else {
             maxLen = start - limit;
-            if (maxLen > s.length()) maxLen = s.length();
+            if (maxLen > slen) maxLen = slen;
+            --slen; // <=> slen = s.length() - 1;
             for (int i = 1; i < maxLen; ++i) {
-                if (text.charAt(start - i) != s.charAt(s.length() - i)) return 0;
+                if (text.charAt(start - i) != s.charAt(slen - i)) return 0;
             }
         }
         return maxLen;
