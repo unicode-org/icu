@@ -287,6 +287,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestToRulesMark();
 
+    /**
+     * Test Escape and Unescape transliterators.
+     */
+    void TestEscape();
+
     //======================================================================
     // Support methods
     //======================================================================
