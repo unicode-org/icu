@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationKey.java,v $ 
-* $Date: 2002/07/12 21:59:22 $ 
-* $Revision: 1.8 $
+* $Date: 2002/08/02 19:40:19 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -187,26 +187,36 @@ public final class CollationKey implements Comparable
     {
     	int i = 0;
     	while (m_key_[i] != 0 && target.m_key_[i] != 0) {
-    	    int key = m_key_[i] & 0xFF;
-    	    int targetkey = target.m_key_[i] & 0xFF;
-    	    if (key < targetkey) {
-    		  return -1;
-    	    } 
-    	    if (targetkey < key) {
-    		  return 1;
-    	    }
-    	    i ++;
+            byte key = m_key_[i];
+            byte targetkey = target.m_key_[i];
+            if (key == targetkey) {
+                i ++;
+                continue;
+            }
+            if (key >= 0) {
+                if (targetkey < 0 || key < targetkey) {
+                    return -1;
+                }
+                // target key has to be positive and less than key
+                return 1;
+            }
+            else {
+                // key is negative
+                if (targetkey >= 0 || key > targetkey) {
+                    return 1;
+                }
+                return -1;
+            }
     	}
     	// last comparison if we encounter a 0
-    	int key = m_key_[i] & 0xFF;
-    	int targetkey = target.m_key_[i] & 0xFF;
-        if (key < targetkey) {
-	       return -1;
-    	}
-    	if (targetkey < key) {
-	       return 1;
-    	}
-        return 0;
+        if (m_key_[i] == target.m_key_[i]) {
+            return 0;
+        }
+        if (m_key_[i] == 0) {
+            return -1;
+        }
+        // target is 0
+        return 1;
     }
 
     /**
