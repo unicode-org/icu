@@ -1477,85 +1477,6 @@ void CollationAPITest::TestGetLocale() {
   delete coll;
 }
 
-#include "caniter.h"
-#include "unicode/translit.h"
-#include "unicode/uniset.h"
-#include "hash.h"
-
-void CollationAPITest::TestCanonicalIterator() {
-    const char* testCharArray[] = {
-      "\\ud800\\udc00af",
-        "Åd\\u0307\\u0327",
-        "\\u010d\\u017E",
-        "x\\u0307\\u0327",
-    };
-
-    UnicodeString testArray[] = {
-      CharsToUnicodeString(""),
-      CharsToUnicodeString("\\ud800\\udc00af"),
-      CharsToUnicodeString("Åd\\u0307\\u0327"),
-      CharsToUnicodeString("\\u010d\\u017E"),
-      CharsToUnicodeString("x\\u0307\\u0327"),
-    };
-
-    UErrorCode status = U_ZERO_ERROR;
-
-    // set up for readable display
-    Transliterator *name = Transliterator::createInstance("name", UTRANS_FORWARD, status);
-    Transliterator *hex = Transliterator::createInstance("hex", UTRANS_FORWARD, status);
-    
-    // check build
-/*
-    UnicodeSet *ss = CanonicalIterator::getSafeStart(status);
-    ss->toPattern(pattern, TRUE);
-    logln("Safe Start: " + pattern);
-    logln();
-
-    UnicodeSet *ss = CanonicalIterator::getStarts('d', status);
-    UnicodeString pattern;
-    ss->toPattern(pattern, TRUE);
-    logln("Characters with 'a' at the start of their decomposition: " + pattern);
-*/
-    /*
-    // check permute
-    Hashtable *permutations = CanonicalIterator::permute(CharsToUnicodeString("\\ud800\\udc00af"), status);
-    const UHashElement *ne = NULL;
-    int32_t el = -1;
-    UnicodeString permutation;
-
-    ne = permutations->nextElement(el);
-    while (ne != NULL) {
-        permutation += *((UnicodeString *)(ne->value.pointer));
-        permutation += " ";
-        //if (PROGRESS) System.out.println("  Piece: " + piece);
-        ne = permutations->nextElement(el);
-    }
-
-    logln(permutation);
-    */
-    // try samples
-    for (int i = 0; i < sizeof(testArray)/sizeof(testArray[0]); ++i) {
-        logln();
-        UnicodeString testName = testArray[i];
-        name->transliterate(testName);
-        logln("Results for: " + testName);
-        CanonicalIterator it(testArray[i], status);
-        int32_t counter = 0;
-        while (TRUE) {
-            UnicodeString result = it.next();
-            if (result == "") break;
-            testName = result;
-            hex->transliterate(testName);
-            logln(/*++counter + */": " + testName);
-            name->transliterate(result);
-            logln(" = " + result);
-        }
-    }
-    delete name;
-    delete hex;
-}
-
-
 void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
 {
     if (exec) logln("TestSuite CollationAPITest: ");
@@ -1579,7 +1500,6 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
         case 15: name = "TestVariableTopSetting"; if (exec) TestVariableTopSetting(); break;
         case 16: name = "TestRules"; if (exec) TestRules(); break;
         case 17: name = "TestGetLocale"; if (exec) TestGetLocale(); break;
-          //case 18: name = "TestCanonicalIterator"; if (exec) TestCanonicalIterator(); break;
         default: name = ""; break;
     }
 }
