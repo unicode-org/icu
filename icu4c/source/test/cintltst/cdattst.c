@@ -370,7 +370,7 @@ void TestSymbols()
     VerifygetSymbols(def, UDAT_AM_PMS, 1, "PM");
     VerifygetSymbols(fr, UDAT_SHORT_MONTHS, 0, "janv.");
     VerifygetSymbols(def, UDAT_SHORT_MONTHS, 11, "Dec");
-    VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKz");
+    VerifygetSymbols(def,UDAT_LOCALIZED_CHARS, 0, "GyMdkHmsSEDFwWahKzYe");
 
 
 free(result);
