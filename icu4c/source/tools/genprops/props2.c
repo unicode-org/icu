@@ -72,11 +72,6 @@ parseTwoFieldFile(char *filename, char *basename,
     }
 }
 
-static void
-parseArabicShaping(char *filename, char *basename,
-                   const char *suffix,
-                   UErrorCode *pErrorCode);
-
 static void U_CALLCONV
 ageLineFn(void *context,
           char *fields[][2], int32_t fieldCount,
@@ -119,6 +114,18 @@ static const SingleEnum eawSingleEnum={
     "EastAsianWidth", "east asian width",
     UCHAR_EAST_ASIAN_WIDTH,
     0, UPROPS_EA_SHIFT, UPROPS_EA_MASK
+};
+
+static const SingleEnum jtSingleEnum={
+    "DerivedJoiningType", "joining type",
+    UCHAR_JOINING_TYPE,
+    2, UPROPS_JT_SHIFT, UPROPS_JT_MASK
+};
+
+static const SingleEnum jgSingleEnum={
+    "DerivedJoiningGroup", "joining group",
+    UCHAR_JOINING_GROUP,
+    2, UPROPS_JG_SHIFT, UPROPS_JG_MASK
 };
 
 static void U_CALLCONV
@@ -166,7 +173,7 @@ singleEnumLineFn(void *context,
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
 
-    if(!upvec_setValue(pv, start, limit, sen->vecWord, (uint32_t)value, sen->vecMask, pErrorCode)) {
+    if(!upvec_setValue(pv, start, limit, sen->vecWord, uv, sen->vecMask, pErrorCode)) {
         fprintf(stderr, "genprops error: unable to set %s code: %s\n",
                         sen->propName, u_errorName(*pErrorCode));
         exit(*pErrorCode);
@@ -215,27 +222,20 @@ propListNames[]={
     { "Hyphen",                             1, UPROPS_HYPHEN },
     { "Quotation_Mark",                     1, UPROPS_QUOTATION_MARK },
     { "Terminal_Punctuation",               1, UPROPS_TERMINAL_PUNCTUATION },
-    { "Other_Math",                         1, UPROPS_OTHER_MATH },
     { "Hex_Digit",                          1, UPROPS_HEX_DIGIT },
     { "ASCII_Hex_Digit",                    1, UPROPS_ASCII_HEX_DIGIT },
-    { "Other_Alphabetic",                   1, UPROPS_OTHER_ALPHABETIC },
     { "Ideographic",                        1, UPROPS_IDEOGRAPHIC },
     { "Diacritic",                          1, UPROPS_DIACRITIC },
     { "Extender",                           1, UPROPS_EXTENDER },
-    { "Other_Lowercase",                    1, UPROPS_OTHER_LOWERCASE },
-    { "Other_Uppercase",                    1, UPROPS_OTHER_UPPERCASE },
     { "Noncharacter_Code_Point",            1, UPROPS_NONCHARACTER_CODE_POINT },
-    { "Other_Grapheme_Extend",              1, UPROPS_OTHER_GRAPHEME_EXTEND },
     { "Grapheme_Link",                      1, UPROPS_GRAPHEME_LINK },
     { "IDS_Binary_Operator",                1, UPROPS_IDS_BINARY_OPERATOR },
     { "IDS_Trinary_Operator",               1, UPROPS_IDS_TRINARY_OPERATOR },
     { "Radical",                            1, UPROPS_RADICAL },
     { "Unified_Ideograph",                  1, UPROPS_UNIFIED_IDEOGRAPH },
-    { "Other_Default_Ignorable_Code_Point", 1, UPROPS_OTHER_DEFAULT_IGNORABLE_CODE_POINT },
     { "Deprecated",                         1, UPROPS_DEPRECATED },
     { "Soft_Dotted",                        1, UPROPS_SOFT_DOTTED },
-    { "Logical_Order_Exception",            1, UPROPS_LOGICAL_ORDER_EXCEPTION },
-    { "ID_Start_Exceptions",                1, UPROPS_ID_START_EXCEPTIONS }
+    { "Logical_Order_Exception",            1, UPROPS_LOGICAL_ORDER_EXCEPTION }
 };
 
 static const Binaries
@@ -246,7 +246,20 @@ propListBinaries={
 static const Binary
 derCorePropsNames[]={
     { "XID_Start",                          1, UPROPS_XID_START },
-    { "XID_Continue",                       1, UPROPS_XID_CONTINUE }
+    { "XID_Continue",                       1, UPROPS_XID_CONTINUE },
+
+    /* before Unicode 4/ICU 2.6/format version 3.2, these used to be Other_XYZ from PropList.txt */
+    { "Math",                               1, UPROPS_MATH },
+    { "Alphabetic",                         1, UPROPS_ALPHABETIC },
+    { "Lowercase",                          1, UPROPS_LOWERCASE },
+    { "Uppercase",                          1, UPROPS_UPPERCASE },
+    { "Grapheme_Extend",                    1, UPROPS_GRAPHEME_EXTEND },
+    { "Default_Ignorable_Code_Point",       1, UPROPS_DEFAULT_IGNORABLE_CODE_POINT },
+
+    /* new properties bits in ICU 2.6/format version 3.2 */
+    { "ID_Start",                           1, UPROPS_ID_START },
+    { "ID_Continue",                        1, UPROPS_ID_CONTINUE },
+    { "Grapheme_Base",                      1, UPROPS_GRAPHEME_BASE }
 };
 
 static const Binaries
@@ -367,12 +380,9 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
      *   "The value COMMON is the default value,
      *    given to all code points that are not
      *    explicitly mentioned in the data file."
+     *
+     * COMMON==USCRIPT_COMMON==0 - nothing to do
      */
-    if(!upvec_setValue(pv, 0, 0x110000, 0, (uint32_t)USCRIPT_COMMON, UPROPS_SCRIPT_MASK, pErrorCode)) {
-        fprintf(stderr, "genprops error: unable to set script code: %s\n", u_errorName(*pErrorCode));
-        exit(*pErrorCode);
-    }
-
     parseSingleEnumFile(filename, basename, suffix, &scriptSingleEnum, pErrorCode);
 
     parseSingleEnumFile(filename, basename, suffix, &blockSingleEnum, pErrorCode);
@@ -381,19 +391,37 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
 
     parseBinariesFile(filename, basename, suffix, &derCorePropsBinaries, pErrorCode);
 
+    /*
+     * LineBreak-4.0.0.txt:
+     *  - All code points, assigned and unassigned, that are not listed 
+     *         explicitly are given the value "XX".
+     *
+     * XX==U_LB_UNKNOWN==0 - nothing to do
+     */
     parseSingleEnumFile(filename, basename, suffix, &lineBreakSingleEnum, pErrorCode);
 
-    parseArabicShaping(filename, basename, suffix, pErrorCode);
+    parseSingleEnumFile(filename, basename, suffix, &jtSingleEnum, pErrorCode);
+
+    parseSingleEnumFile(filename, basename, suffix, &jgSingleEnum, pErrorCode);
 
     /*
      * Preset East Asian Width defaults:
-     * N for all
+     *
+     * http://www.unicode.org/reports/tr11/#Unassigned
+     * 7.1 Unassigned and Private Use characters
+     *
+     * All unassigned characters are by default classified as non-East Asian neutral,
+     * except for the range U+20000 to U+2FFFD,
+     * since all code positions from U+20000 to U+2FFFD are intended for CJK ideographs (W).
+     * All Private use characters are by default classified as ambiguous,
+     * since their definition depends on context.
+     *
+     * N for all ==0 - nothing to do
      * A for Private Use
      * W for plane 2
      */
     *pErrorCode=U_ZERO_ERROR;
-    if( !upvec_setValue(pv, 0, 0x110000, 0, (uint32_t)(U_EA_NEUTRAL<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode) ||
-        !upvec_setValue(pv, 0xe000, 0xf900, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode) ||
+    if( !upvec_setValue(pv, 0xe000, 0xf900, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode) ||
         !upvec_setValue(pv, 0xf0000, 0xffffe, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode) ||
         !upvec_setValue(pv, 0x100000, 0x10fffe, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode) ||
         !upvec_setValue(pv, 0x20000, 0x2fffe, 0, (uint32_t)(U_EA_WIDE<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode)
@@ -405,7 +433,7 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     /* parse EastAsianWidth.txt */
     parseSingleEnumFile(filename, basename, suffix, &eawSingleEnum, pErrorCode);
 
-    trie=utrie_open(NULL, NULL, 50000, 0, FALSE);
+    trie=utrie_open(NULL, NULL, 50000, 0, TRUE);
     if(trie==NULL) {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         upvec_close(pv);
@@ -463,69 +491,6 @@ ageLineFn(void *context,
     }
 }
 
-/* ArabicShaping.txt -------------------------------------------------------- */
-
-static void U_CALLCONV
-arabicShapingLineFn(void *context,
-                    char *fields[][2], int32_t fieldCount,
-                    UErrorCode *pErrorCode) {
-    char *s;
-    uint32_t start, limit;
-    int32_t jt, jg;
-
-    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops: syntax error in ArabicShaping.txt field 0 at %s\n", fields[0][0]);
-        exit(*pErrorCode);
-    }
-    ++limit;
-
-    /* parse joining type */
-    jt=u_getPropertyValueEnum(UCHAR_JOINING_TYPE, trimTerminateField(fields[2][0], fields[2][1]));
-    if(jt<0) {
-        fprintf(stderr, "genprops error: unknown joining type in \"%s\" in ArabicShaping.txt\n", fields[2][0]);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    /* parse joining group */
-    s=trimTerminateField(fields[3][0], fields[3][1]);
-    jg=u_getPropertyValueEnum(UCHAR_JOINING_GROUP, s);
-    if(jg<0) {
-        if(isToken("<no shaping>", s)) {
-            jg=0;
-        }
-    }
-    if(jg<0) {
-        fprintf(stderr, "genprops error: unknown joining group in \"%s\" in ArabicShaping.txt\n", s);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    if(!upvec_setValue(pv, start, limit, 2, ((uint32_t)jt<<UPROPS_JT_SHIFT)|((uint32_t)jg<<UPROPS_JG_SHIFT), UPROPS_JT_MASK|UPROPS_JG_MASK, pErrorCode)) {
-        fprintf(stderr, "genprops error: unable to set joining type/group code: %s\n", u_errorName(*pErrorCode));
-        exit(*pErrorCode);
-    }
-}
-
-static void
-parseArabicShaping(char *filename, char *basename,
-                   const char *suffix,
-                   UErrorCode *pErrorCode) {
-    char *fields[4][2];
-
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
-    writeUCDFilename(basename, "ArabicShaping", suffix);
-
-    u_parseDelimitedFile(filename, ';', fields, 4, arabicShapingLineFn, NULL, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "error parsing ArabicShaping.txt: %s\n", u_errorName(*pErrorCode));
-    }
-}
-
 /* data serialization ------------------------------------------------------- */
 
 U_CFUNC int32_t
@@ -554,8 +519,14 @@ writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_C
             indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]+pvCount;
 
         indexes[UPROPS_MAX_VALUES_INDEX]=
+            (((int32_t)U_LB_COUNT-1)<<UPROPS_LB_SHIFT)|
+            (((int32_t)U_EA_COUNT-1)<<UPROPS_EA_SHIFT)|
             (((int32_t)UBLOCK_COUNT-1)<<UPROPS_BLOCK_SHIFT)|
             ((int32_t)USCRIPT_CODE_LIMIT-1);
+        indexes[UPROPS_MAX_VALUES_2_INDEX]=
+            (((int32_t)U_JT_COUNT-1)<<UPROPS_JT_SHIFT)|
+            (((int32_t)U_JG_COUNT-1)<<UPROPS_JG_SHIFT)|
+            ((int32_t)U_DT_COUNT-1);
     }
 
     if(p!=NULL && (pvCount*4)<=capacity) {

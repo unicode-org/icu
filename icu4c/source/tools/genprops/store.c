@@ -74,8 +74,9 @@ Formally, the file contains the following structures:
     i6 reservedItemIndex; -- 32-bit unit index to the top of the properties vectors table
     i7..i9 reservedIndexes; -- reserved values; 0 for now
 
-    i10 maxValues; -- maximum block and script code values, see uprops.h (format version 3.1)
-    i11..i15 reservedIndexes; -- reserved values; 0 for now
+    i10 maxValues; -- maximum code values for vector word 0, see uprops.h (format version 3.1+)
+    i11 maxValues2; -- maximum code values for vector word 2, see uprops.h (format version 3.2)
+    i12..i15 reservedIndexes; -- reserved values; 0 for now
 
     PT serialized properties trie, see utrie.h (byte size: 4*(i0-16))
 
@@ -260,6 +261,22 @@ with the formatVersion, it is stored in i5.
 
 Current properties: see icu/source/common/uprops.h
 
+--- Changes in format version 3.1 ---
+
+See i10 maxValues above, contains only UBLOCK_COUNT and USCRIPT_CODE_LIMIT.
+
+--- Changes in format version 3.2 ---
+
+- The tries use linear Latin-1 ranges.
+- The additional properties bits store full properties XYZ instead
+  of partial Other_XYZ, so that changes in the derivation formulas
+  need not be tracked in runtime library code.
+- Joining Type and Line Break are also stored completely, so that uprops.c
+  needs no runtime formulas for enumerated properties either.
+- Store the case-sensitive flag in the main properties word.
+- i10 also contains U_LB_COUNT and U_EA_COUNT.
+- i11 contains maxValues2 for vector word 2.
+
 ----------------------------------------------------------------------------- */
 
 /* UDataInfo cf. udata.h */
@@ -273,8 +290,8 @@ static UDataInfo dataInfo={
     0,
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
-    { 3, 1, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
-    { 3, 2, 0, 0 }                              /* dataVersion */
+    { 3, 2, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
+    { 4, 0, 0, 0 }                              /* dataVersion */
 };
 
 /* definitions of expected data size limits */
@@ -324,7 +341,7 @@ setUnicodeVersion(const char *v) {
 
 extern void
 initStore() {
-    pTrie=utrie_open(NULL, NULL, MAX_PROPS_COUNT, 0, FALSE);
+    pTrie=utrie_open(NULL, NULL, MAX_PROPS_COUNT, 0, TRUE);
     if(pTrie==NULL) {
         fprintf(stderr, "error: unable to create a UNewTrie\n");
         exit(U_MEMORY_ALLOCATION_ERROR);
