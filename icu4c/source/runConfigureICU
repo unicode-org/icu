@@ -236,8 +236,8 @@ case $platform in
         CXX=g++; export CXX
         ;;
     zOS/cxx)
-        THE_OS="z/OS"
-        THE_COMP="r10 cxx"
+        THE_OS="z/OS (OS/390)"
+        THE_COMP="z/OS 1.2 (through OS/390 v2r10) C/C++"
         CC=cc; export CC
         CXX=cxx; export CXX
         export IEEE390=1
