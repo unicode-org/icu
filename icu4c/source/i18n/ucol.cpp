@@ -2731,21 +2731,21 @@ ucol_strcoll(    const    UCollator    *coll,
     const UChar    *pSrcEnd = source + sourceLength;
     const UChar    *pTargEnd = target + targetLength;
     
-    int32_t        equalLength = 0;
+    int32_t        equalLength;
     
     // Scan while the strings are bitwise ==, or until one is exhausted.
     for (;;) {
         if (pSrc == pSrcEnd || pTarg == pTargEnd)
             break;
-        if (*pSrc != *pTarg)
-            break;
         if (*pSrc == 0 && (sourceLength == -1 || targetLength == -1))
             break;
-        equalLength++;
+         if (*pSrc != *pTarg)
+            break;
         pSrc++;
         pTarg++;
     }
-    
+    equalLength = pSrc - source;
+
     // If we made it all the way through both strings, we are done.  They are ==
     if ((pSrc ==pSrcEnd  || (pSrcEnd <pSrc  && *pSrc==0))  &&   /* At end of src string, however it was specified. */
         (pTarg==pTargEnd || (pTargEnd<pTarg && *pTarg==0)))     /* and also at end of dest string                  */
