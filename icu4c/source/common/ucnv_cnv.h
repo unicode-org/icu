@@ -66,8 +66,6 @@ U_CDECL_BEGIN
  */
 
 #define FromU_CALLBACK_MACRO(context, args, codeUnits, length, codePoint, reason, err) \
-              if (args->converter->fromUCharErrorBehaviour == (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP) break;\
-              else \
                 { \
                   /*copies current values for the ErrorFunctor to update */ \
                   /*Calls the ErrorFunctor */ \
@@ -84,8 +82,6 @@ U_CDECL_BEGIN
 /*
 */
 #define ToU_CALLBACK_MACRO(context, args, codePoints, length, reason, err) \
-              if (args->converter->fromCharErrorBehaviour == (UConverterToUCallback) UCNV_TO_U_CALLBACK_STOP) break; \
-              else \
                 { \
                   /*Calls the ErrorFunctor */ \
                   args->converter->fromCharErrorBehaviour ( \
@@ -101,8 +97,6 @@ U_CDECL_BEGIN
 /*
 */
 #define FromU_CALLBACK_OFFSETS_LOGIC_MACRO(context, args, codeUnits, length, codePoint, reason, err) \
-              if (args->converter->fromUCharErrorBehaviour == (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP) break;\
-              else \
                 { \
                  int32_t My_i = myTargetIndex; \
                   /*copies current values for the ErrorFunctor to update */ \
@@ -119,13 +113,11 @@ U_CDECL_BEGIN
                  myTargetIndex = args->target - (char*)myTarget; \
                  mySourceIndex = args->source - mySource; \
                  args->offsets = saveOffsets; \
-                  for (;My_i < myTargetIndex;My_i++) args->offsets[My_i] += currentOffset  ;    \
+                  for (;My_i < myTargetIndex;My_i++) args->offsets[My_i] += currentOffset; \
                 }
 /*
 */
 #define ToU_CALLBACK_OFFSETS_LOGIC_MACRO(context, args, codePoints, length, reason, err) \
-              if (args->converter->fromCharErrorBehaviour == (UConverterToUCallback) UCNV_TO_U_CALLBACK_STOP) break; \
-              else \
                 { \
                       args->converter->fromCharErrorBehaviour ( \
                                                  context, \
@@ -138,7 +130,7 @@ U_CDECL_BEGIN
                  myTargetIndex = args->target - myTarget; \
                  mySourceIndex = args->source - (const char*)mySource; \
                  args->offsets = saveOffsets; \
-                  for (;My_i < myTargetIndex;My_i++) {args->offsets[My_i] += currentOffset  ;   } \
+                  for (;My_i < myTargetIndex;My_i++) {args->offsets[My_i] += currentOffset;} \
                 }
 
 
@@ -157,24 +149,24 @@ typedef void (*T_FromUnicodeFunction) (UConverterFromUnicodeArgs *, UErrorCode *
 typedef UChar32 (*T_GetNextUCharFunction) (UConverterToUnicodeArgs *, UErrorCode *);
 
 typedef void (*UConverterGetStarters)(const UConverter* converter,
-				     UBool starters[256],
-				     UErrorCode *pErrorCode);
+                                      UBool starters[256],
+                                      UErrorCode *pErrorCode);
 
 UBool CONVERSION_U_SUCCESS (UErrorCode err);
 
 void flushInternalUnicodeBuffer (UConverter * _this,
-				 UChar * myTarget,
-				 int32_t * myTargetIndex,
-				 int32_t targetLength,
-				 int32_t** offsets,
-				 UErrorCode * err);
+                                 UChar * myTarget,
+                                 int32_t * myTargetIndex,
+                                 int32_t targetLength,
+                                 int32_t** offsets,
+                                 UErrorCode * err);
 
 void flushInternalCharBuffer (UConverter * _this,
-			      char *myTarget,
-			      int32_t * myTargetIndex,
-			      int32_t targetLength,
-			      int32_t** offsets,
-			      UErrorCode * err);
+                              char *myTarget,
+                              int32_t * myTargetIndex,
+                              int32_t targetLength,
+                              int32_t** offsets,
+                              UErrorCode * err);
 
 /**
  * UConverterImpl contains all the data and functions for a converter type.
