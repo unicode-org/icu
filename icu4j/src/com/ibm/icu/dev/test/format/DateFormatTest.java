@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2001/11/27 17:53:32 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/12/07 17:32:27 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -110,9 +110,9 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
              */
     
             boolean ok = fmtDstOffset == null || fmtDstOffset.equals(dstOffset);
-            //fix the jdk resources differences between jdk 1.2 and jdk 1.3
+            //fix the jdk resources differences between jdk 1.2/1.3.0 and jdk 1.3.1
             String javaVersion = System.getProperty("java.version");
-            ok = ok || (javaVersion.startsWith("1.2") && (fmtDstOffset != null) && fmtDstOffset.equals(""));
+            ok = ok || ((javaVersion.startsWith("1.2") || javaVersion.startsWith("1.3.0")) && (fmtDstOffset != null) && fmtDstOffset.equals(""));
             if (ok) {
                 logln(i + " " + ids[i] + " " + dstOffset + " "
                       + fmtOffset + (fmtDstOffset != null ? " ok" : " ?")); 
