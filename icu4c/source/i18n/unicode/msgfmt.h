@@ -606,10 +606,9 @@ private:
      * which is static (shared by all MessageFormat instances).  This replaces
      * a call to wtoi().
      * @param string the source string to convert with
-     * @param status the error code.
      * @return the converted number.
      */
-    static int32_t stoi(const UnicodeString& string, UErrorCode& status);
+    static int32_t stoi(const UnicodeString& string);
 
     /**
      * Converts an integer value to a string using a default NumberFormat object
