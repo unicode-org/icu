@@ -289,6 +289,13 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action)
 
             // Make a symbol table entry for the $variableRef node.
             fSymbolTable->addEntry(varRefNode->fText, varRefNode, *fRB->fStatus);
+			if (U_FAILURE(*fRB->fStatus)) { 
+				// This is a round-about way to get the parse position set
+				//  so that duplicate symbols error messages include a line number.
+				UErrorCode t = *fRB->fStatus;
+				*fRB->fStatus = U_ZERO_ERROR;
+				error(t);  
+			}
 
             // Clean up the stack.
             delete startExprNode;
