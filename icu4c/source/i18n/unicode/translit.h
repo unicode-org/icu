@@ -269,10 +269,14 @@ private:
      */
     static UBool cacheInitialized;
 
+ public:
+
     /**
      * A function that creates and returns a Transliterator.
      */
     typedef Transliterator* (*TransliteratorFactory)(void);
+
+ private:
 
     /**
      * In Java, the cache stores objects of different types and
