@@ -464,7 +464,7 @@ echo > confdefs.h
 
 # A filename unique to this package, relative to the directory that
 # configure is in, which we can look for to find out if srcdir is correct.
-ac_unique_file=common/unicode/utypes.h
+ac_unique_file=common/utypes.h
 
 # Find the source files, if location was not specified.
 if test -z "$srcdir"; then
@@ -2541,6 +2541,7 @@ case "${host}" in
 	*-*-hpux*) 	platform=HPUX ;;
 	*-*-irix*)      platform=IRIX ;;
 	*-*-os390*)	platform=OS390 ;;
+	*-*-os400*)	platform=OS400 ;;
 	*) 		platform=UNKNOWN ;;
 esac
 
@@ -2555,6 +2556,7 @@ case "${host}" in
 	*-*-hpux*) 	ld_rpath_suf=":" ;;
 	*-*-irix*)      ld_rpath_suf=" " ;;
 	*-*-os390*)	ld_rpath_suf="" ;;
+	*-*-os400*)	ld_rpath_suf=" " ;;
 	*) 		ld_rpath_suf="" ;;
 esac
 
@@ -2566,7 +2568,7 @@ case "${host}" in
 		  tools/makeconv/makeconv tools/genrb/genrb \
 		  tools/rbdump/read tools/genccode/genccode \
 		  tools/gencmn/gencmn tools/gencnval/gencnval \
-		  tools/gennames/gennames tools/gentest/gentest
+		  tools/gennames/gennames
 		do
 		  if test -f $file.c; then
 		    mv $file.c $file.cpp
@@ -2590,19 +2592,7 @@ fi
 if test "$ac_cv_lib_dld_shl_load" = "yes"; then
 	CPPFLAGS="${CPPFLAGS} -DICU_USE_SHL_LOAD"
 fi
-
-if test -f ./configure.in
-then
-        # they are normal. Build is in .. (note this is mostly for the top level script)
-        DATABUILDDIR=`pwd`/../data/
-        RELATIVEDATADIR=../data/
-else
-        DATABUILDDIR=`pwd`/data/
-        RELATIVEDATADIR=data/
-fi
-
-
-
+	
 
 trap '' 1 2 15
 cat > confcache <<\EOF
@@ -2711,7 +2701,7 @@ trap 'rm -fr `echo "Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile tools/gencol/Makefile \
 		tools/rbdump/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile \
-	        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile \
+	        tools/gennames/Makefile tools/toolutil/Makefile \
 		test/Makefile test/intltest/Makefile test/cintltst/Makefile \
 		test/ieeetest/Makefile \
 		samples/Makefile samples/date/Makefile samples/cal/Makefile \
@@ -2791,8 +2781,6 @@ s%@platform@%$platform%g
 /@host_frag@/r $host_frag
 s%@host_frag@%%g
 s%@ld_rpath_suf@%$ld_rpath_suf%g
-s%@DATABUILDDIR@%$DATABUILDDIR%g
-s%@RELATIVEDATADIR@%$RELATIVEDATADIR%g
 
 CEOF
 EOF
@@ -2840,7 +2828,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile tools/gencol/Makefile \
 		tools/rbdump/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile \
-	        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile \
+	        tools/gennames/Makefile tools/toolutil/Makefile \
 		test/Makefile test/intltest/Makefile test/cintltst/Makefile \
 		test/ieeetest/Makefile \
 		samples/Makefile samples/date/Makefile samples/cal/Makefile \
@@ -3023,31 +3011,7 @@ rm -fr confdefs* $ac_clean_files
 test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
 
 
-
-if test -d $DATABUILDDIR
-then
-    :
-else
-    echo creating $DATABUILDDIR
-    mkdir -p $DATABUILDDIR
-fi
-
-if test -d $DATABUILDDIR/translit
-then
-    :
-else
-    echo creating $DATABUILDDIR/translit
-    mkdir $DATABUILDDIR/translit
-fi
-
-if test -d $DATABUILDDIR/../source/test/testdata
-then
-    :
-else
-    echo creating $DATABUILDDIR/../source/test/testdata
-    mkdir -p $DATABUILDDIR/../source/test/testdata
-fi
-
 if test $ICU_USE_THREADS = 0; then
   echo  " *** Note: configuring the ICU without pthread support or testing. If this isn't what you want, then run configure with --enable-threads=yes or check the messages above to see why we couldn't find pthread_create()" 1>&6
 fi
+
