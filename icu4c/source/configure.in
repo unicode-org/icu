@@ -947,7 +947,8 @@ AC_OUTPUT([icudefs.mk \
 		common/Makefile config/Makefile.inc i18n/Makefile \
 		layout/Makefile \
 		layoutex/Makefile \
-		extra/Makefile extra/ustdio/Makefile \
+		io/Makefile \
+		extra/Makefile \
 		extra/uconv/Makefile extra/scrptrun/Makefile
 		stubdata/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \

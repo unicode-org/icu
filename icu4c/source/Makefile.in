@@ -25,8 +25,9 @@ subdir = .
 #AUTOCONF = @AUTOCONF@
 
 ## Optional directory setup
-@EXTRAS_TRUE@EXTRA = extra
 @LAYOUT_TRUE@LAYOUT = layout layoutex
+@ICUIO_TRUE@ICUIO = io
+@EXTRAS_TRUE@EXTRA = extra
 @TESTS_TRUE@TEST = test
 @SAMPLES_TRUE@SAMPLE = samples
 
@@ -42,7 +43,7 @@ INSTALLED_BUILT_FILES = $(top_builddir)/config/Makefile.inc $(top_builddir)/conf
 LOCAL_BUILT_FILES = icudefs.mk
 
 DOCDIRS = common i18n
-SUBDIRS =  stubdata common i18n $(LAYOUT) tools data $(EXTRA) $(SAMPLE) $(TEST)
+SUBDIRS =  stubdata common i18n $(LAYOUT) tools data $(ICUIO) $(EXTRA) $(SAMPLE) $(TEST)
 
 SECTION = 1
 
@@ -79,7 +80,7 @@ doc:
 else
 doc: doc/html/index.html
 
-doc/html/index.html: Doxyfile $(wildcard ./common/unicode/platform.h $(srcdir)/common/unicode/*.h $(srcdir)/i18n/unicode/*.h $(srcdir)/layout/unicode/*.h)
+doc/html/index.html: Doxyfile $(wildcard ./common/unicode/platform.h $(srcdir)/common/unicode/*.h $(srcdir)/i18n/unicode/*.h $(srcdir)/layout/unicode/*.h $(srcdir)/io/unicode/*.h)
 	$(DOXYGEN)
 
 Doxyfile: $(srcdir)/Doxyfile.in

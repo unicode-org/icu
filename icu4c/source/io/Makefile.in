@@ -4,20 +4,20 @@
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
-## Makefile.in for ICU - extra/ustdio/libustdio.so
+## Makefile.in for ICU - io/libustdio.so
 ## Stephen F. Booth
 
 ## Source directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 
-top_builddir = ../..
+top_builddir = ..
 
 ## All the flags and other definitions are included here.
 include $(top_builddir)/icudefs.mk
 
 ## Build directory information
-subdir = extra/ustdio
+subdir = io
 
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~ $(DEPS) $(IMPORT_LIB) $(MIDDLE_IMPORT_LIB) $(FINAL_IMPORT_LIB)
@@ -35,7 +35,7 @@ SO_TARGET = $(LIBDIR)/$(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).$(SO)
 ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET)
 
 ifeq ($(ENABLE_SO_VERSION_DATA),1)
-SO_VERSION_DATA = ustdio.res
+SO_VERSION_DATA = io.res
 endif
 
 ifeq ($(OS390BATCH),1)
@@ -52,7 +52,7 @@ DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n $(LIBCPPFLAGS)
-DEFS += -DU_USTDIO_IMPLEMENTATION
+DEFS += -DU_IO_IMPLEMENTATION
 LIBS = $(LIBICUUC) $(LIBICUI18N) $(DEFAULT_LIBS)
 
 OBJECTS = locbund.o ufile.o ufmt_cmn.o uprintf.o uprntf_p.o \

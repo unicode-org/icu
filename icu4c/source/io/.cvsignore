@@ -1,5 +1,4 @@
 *.d
-libicuio.*
 Debug
 Release
 Makefile

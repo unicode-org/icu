@@ -84,7 +84,7 @@ Package=<4>
     Project_Dep_Name uconv
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name ustdio
+    Project_Dep_Name io
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name genbrk
@@ -489,7 +489,7 @@ Package=<4>
     Project_Dep_Name i18n
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name ustdio
+    Project_Dep_Name io
     End Project Dependency
 }}}
 
@@ -684,7 +684,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "ustdio"=..\extra\ustdio\ustdio.dsp - Package Owner=<4>
+Project: "io"=..\io\io.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
