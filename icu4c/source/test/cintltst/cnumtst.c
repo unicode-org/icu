@@ -141,7 +141,7 @@ static void TestNumberFormat()
 
     log_verbose("\nTesting unum_open(spellout, NULL, status)");
     style=UNUM_SPELLOUT;
-    spellout_def=unum_open(style, NULL, 0, NULL, NULL, &status);
+    spellout_def=unum_open(style, NULL, 0, "en_US", NULL, &status);
     if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat using unum_open(spellout, NULL, &status): %s\n", myErrorName(status));
 
