@@ -10,6 +10,8 @@
 
 #include "unicode/uchar.h"
 #include "unicode/titletrn.h"
+#include "unicode/uniset.h"
+#include "mutex.h"
 
 U_NAMESPACE_BEGIN
 
@@ -17,6 +19,18 @@ U_NAMESPACE_BEGIN
  * ID for this transliterator.
  */
 const char TitlecaseTransliterator::_ID[] = "Any-Title";
+
+/**
+ * The set of characters we skip.  These are neither cased nor
+ * non-cased, to us; we copy them verbatim.
+ */
+static const UnicodeSet* SKIP = NULL;
+
+/**
+ * The set of characters that cause the next non-SKIP character
+ * to be lowercased.
+ */
+static const UnicodeSet* CASED = NULL;
 
 TitlecaseTransliterator::TitlecaseTransliterator(UnicodeFilter* adoptedFilter) :
     Transliterator(_ID, adoptedFilter) {
@@ -57,84 +71,52 @@ Transliterator* TitlecaseTransliterator::clone(void) const {
 void TitlecaseTransliterator::handleTransliterate(
                                   Replaceable& text, UTransPosition& offsets,
                                   UBool isIncremental) const {
-
-    // NOTE: This method contains some special case code to handle
-    // apostrophes between alpha characters.  We want to have
-    // "can't" => "Can't" (not "Can'T").  This may be incorrect
-    // for some locales, e.g., "l'arbre" => "L'Arbre" (?).
-    // TODO: Revisit this.
-
-    // Determine if there is a preceding letter character in the
-    // left context (if there is any left context).
-    UBool wasLastCharALetter = FALSE;
-    if (offsets.start > offsets.contextStart) {
-        UChar c = text.charAt(offsets.start - 1);
-        // Handle the case "Can'|t", where the | marks the context
-        // boundary.  We only handle a single apostrophe.
-        if (c == 0x0027 /*'*/ && (offsets.start-2) >= offsets.contextStart) {
-            c = text.charAt(offsets.start - 2);
-        }
-        wasLastCharALetter = u_isalpha(c);
-    }
-
-    // The buffer used to batch up changes to be made
-    UnicodeString buffer;
-    int32_t bufStart = 0;
-    int32_t bufLimit = -1;
-
-    int32_t start;
-    for (start = offsets.start; start < offsets.limit; ++start) {
-        // For each character, if the preceding character was a
-        // non-letter, and this character is a letter, then apply
-        // the titlecase transformation.  Otherwise apply the
-        // lowercase transformation.
-        UChar32 c = text.charAt(start);
-        if (u_isalpha(c)) {
-            UChar32 newChar;
-            if (wasLastCharALetter) {
-                newChar = u_tolower(c);
-            } else {
-                newChar = u_totitle(c);
-            }
-            if (c != newChar) {
-                // This is the simple way of doing this:
-                //text.replace(start, start+1,
-                //             String.valueOf((char) newChar));
-
-                // Instead, we do something more complicated that
-                // minimizes the number of calls to
-                // Replaceable.replace().  We batch up the changes
-                // we want to make in a buffer, recording
-                // our position and dumping the buffer out when a
-                // non-contiguous change arrives.
-                if (bufLimit == start) {
-                    ++bufLimit;
-                    // Fall through and append newChar below
-                } else {
-                    if (buffer.length() > 0) {
-                        text.handleReplaceBetween(bufStart, bufLimit, buffer);
-                        buffer.truncate(0);
-                    }
-                    bufStart = start;
-                    bufLimit = start+1;
-                    // Fall through and append newChar below
-                }
-                buffer.append(newChar);
-            }
-            wasLastCharALetter = TRUE;
-        } else if (c == 0x0027 /*'*/ && wasLastCharALetter) {
-            // Ignore a single embedded apostrophe, so that "can't" =>
-            // "Can't", not "Can'T".
-        } else {
-            wasLastCharALetter = FALSE;
+    if (SKIP == NULL) {
+        Mutex lock;
+        if (SKIP == NULL) {
+            UErrorCode ec = U_ZERO_ERROR;
+            SKIP = new UnicodeSet(UnicodeString("[\\u00AD \\u2019 \\' [:Mn:] [:Me:] [:Cf:]]", ""), ec);
+            CASED = new UnicodeSet(UnicodeString("[[:Lu:] [:Ll:] [:Lt:]]", ""), ec);
         }
     }
-    // assert(start == offsets.limit);
+
+    // Our mode; we are either converting letter toTitle or
+    // toLower.
+    UBool doTitle = TRUE;
+    
+    // Determine if there is a preceding context of CASED SKIP*,
+    // in which case we want to start in toLower mode.  If the
+    // prior context is anything else (including empty) then start
+    // in toTitle mode.
+    int32_t start = offsets.start;
+    while (start > offsets.contextStart) {
+        UChar c = text.charAt(--start);
+        if (SKIP->contains(c)) {
+            continue;
+        }
+        doTitle = !CASED->contains(c);
+        break;
+    }
+    
+    // Convert things after a CASED character toLower; things
+    // after a non-CASED, non-SKIP character toTitle.  SKIP
+    // characters are copied directly and do not change the mode.
+    UnicodeString str("A", "");
+    for (start=offsets.start; start<offsets.limit; ++start) {
+        UChar c = text.charAt(start);
+        if (SKIP->contains(c)) {
+            continue;
+        }
+        UChar d = (UChar) (doTitle ? u_totitle(c)
+                                   : u_tolower(c));
+        if (c != d) {
+            str.setCharAt(0, d);
+            text.handleReplaceBetween(start, start+1, str);
+        }
+        doTitle = !CASED->contains(c);
+    }
+    
     offsets.start = start;
-
-    if (buffer.length() > 0) {
-        text.handleReplaceBetween(bufStart, bufLimit, buffer);
-    }
 }
 
 U_NAMESPACE_END
