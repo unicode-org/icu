@@ -34,7 +34,7 @@ Paragraph::Paragraph(const LEUnicode chars[], int32_t charCount, const FontRuns 
     fChars = LE_NEW_ARRAY(LEUnicode, charCount);
     LE_ARRAY_COPY(fChars, chars, charCount);
 
-    fParagraphLayout = new ParagraphLayout(fChars, charCount, fontRuns, NULL, NULL, NULL, UBIDI_LTR, false);
+    fParagraphLayout = new ParagraphLayout(fChars, charCount, fontRuns, NULL, NULL, NULL, UBIDI_DEFAULT_LTR, false);
 
     le_int32 ascent  = fParagraphLayout->getAscent();
     le_int32 descent = fParagraphLayout->getDescent();
@@ -101,6 +101,16 @@ void Paragraph::draw(RenderingSurface *surface, le_int32 firstLine, le_int32 las
         const ParagraphLayout::Line *line = fLines[li];
         le_int32 runCount = line->countRuns();
         le_int32 run;
+
+		if (fParagraphLayout->getParagraphLevel() == UBIDI_RTL) {
+			const ParagraphLayout::VisualRun *lastRun = line->getVisualRun(runCount - 1);
+			le_int32 glyphCount = lastRun->getGlyphCount();
+			const float *positions = lastRun->getPositions();
+			le_int32 lastX = (le_int32) positions[glyphCount * 2];
+
+			x = (fWidth - lastX - MARGIN);
+		}
+
 
         for (run = 0; run < runCount; run += 1) {
             const ParagraphLayout::VisualRun *visualRun = line->getVisualRun(run);
