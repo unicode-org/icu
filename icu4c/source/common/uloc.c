@@ -1231,20 +1231,26 @@ UBool uloc_cleanup(void) {
     int32_t localeCount;
     int32_t i;
 
-    umtx_lock(NULL);
+    if (_installedLocales) {
+        temp = _installedLocales;
+        _installedLocales = NULL;
 
-    temp = _installedLocales;
-    _installedLocales = NULL;
+        localeCount = _installedLocalesCount;
+        _installedLocalesCount = 0;
 
-    localeCount = _installedLocalesCount;
-    _installedLocalesCount = 0;
-
-    umtx_unlock(NULL);
-
-    for (i = 0; i < localeCount; i++) {
-        uprv_free(temp[i]);
+        for (i = 0; i < localeCount; i++) {
+            uprv_free(temp[i]);
+        }
+        uprv_free(temp);
     }
-    uprv_free(temp);
+    if (_isoCountries) {
+        uprv_free(_isoCountries);
+        _isoCountries = NULL;
+    }
+    if (_isoLanguages) {
+        uprv_free(_isoLanguages);
+        _isoLanguages = NULL;
+    }
     return TRUE;
 }
 

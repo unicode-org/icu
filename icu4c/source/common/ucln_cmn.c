@@ -46,11 +46,15 @@ void u_cleanup(void)
         }
 
     }
+    /*unorm_cleanup();*/
+    unames_cleanup();
+    uchar_cleanup();
     uloc_cleanup();
     ustring_cleanup();
     ucnv_cleanup();
     ucnv_io_cleanup();
     ures_cleanup();
     udata_cleanup();
+    putil_cleanup();
 }
 

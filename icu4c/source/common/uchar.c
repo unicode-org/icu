@@ -27,6 +27,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "ustr_imp.h"
+#include "ucln_cmn.h"
 
 /*
  * Since genprops overrides the general category for some control codes,
@@ -264,6 +265,19 @@ isAcceptable(void *context,
     } else {
         return FALSE;
     }
+}
+
+UBool
+uchar_cleanup()
+{
+    if (propsData) {
+        udata_close(propsData);
+        propsData = NULL;
+    }
+    propsTable = NULL;
+    ucharsTable = NULL;
+    havePropsData = FALSE;
+    return TRUE;
 }
 
 static int8_t
