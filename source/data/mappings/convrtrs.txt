@@ -54,7 +54,7 @@
 # not be changed to mean encodings different from what this
 # list shows.
 # Currently, the IANA list is at
-# http://www.isi.edu/in-notes/iana/assignments/character-sets
+# http://www.iana.org/assignments/character-sets
 
 # Name matching is case-insensitive. Also, dashes '-', underscores '_'
 # and spaces ' ' are ignored in names (thus cs-iso-latin-1 and csisolatin1
