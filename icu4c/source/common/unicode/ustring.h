@@ -932,7 +932,7 @@ u_unescape(const char *src,
  * pointer will be whatever is passed into u_unescapeAt().
  *
  * @param offset pointer to the offset that will be passed to u_unescapeAt().
- * @context an opaque pointer passed directly into u_unescapeAt()
+ * @param context an opaque pointer passed directly into u_unescapeAt()
  * @return the character represented by the escape sequence at
  * offset
  * @see u_unescapeAt

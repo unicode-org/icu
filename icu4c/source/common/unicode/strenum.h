@@ -17,9 +17,9 @@ U_NAMESPACE_BEGIN
 class UnicodeString;
 
 /**
- * <p>Base class for 'pure' C++ implementations of uenum api.  Adds a
+ * Base class for 'pure' C++ implementations of uenum api.  Adds a
  * method that returns the next UnicodeString since in C++ this can
- * be a common storage format for strings.</p>
+ * be a common storage format for strings.
  *
  * <p>The model is that the enumeration is over strings maintained by
  * a 'service.'  At any point, the service might change, invalidating

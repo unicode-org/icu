@@ -151,5 +151,20 @@
  *     <td>ushape.h</td>
  *     <td>ushape.h C API</td>
  *   </tr>
+ *   <tr>
+ *     <td>Number Spellout/Rule based number format</td>
+ *     <td>unum.h using UNUM_SPELLOUT</td>
+ *     <td>RuleBasedNumberFormat</td>
+ *   </tr>
+ *   <tr>
+ *     <td>Unicode set</td>
+ *     <td>uset.h</td>
+ *     <td>UnicodeSet</td>
+ *   </tr>
+ *   <tr>
+ *     <td>Regular Expressions</td>
+ *     <td>N/A</td>
+ *     <td>RegexPattern, RegexMatcher</td>
+ *   </tr>
  * </table>
  */
