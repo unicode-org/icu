@@ -36,9 +36,8 @@ log_err("Test Failure at file %s, line %d\n", __FILE__, __LINE__);}}
 
 #define TEST_ASSERT_STRING(expected, actual, nulTerm) { \
      char     buf_inside_macro[120];  \
-     int32_t  len;  \
+     int32_t  len = (int32_t)strlen(expected); \
      UBool    success; \
-     len   = strlen(expected);  \
      if (nulTerm) { \
          u_austrncpy(buf_inside_macro, (actual), len+1); \
          success = (strcmp((expected), buf_inside_macro) == 0); \
@@ -911,8 +910,6 @@ static void TestRegexCAPI(void) {
 
         uregex_close(re);
     }
-
-
 
 }
 
