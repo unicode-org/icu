@@ -102,11 +102,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i18n", "..\i18n\i18n.vcproj
 		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ieeetest", "..\test\ieeetest\ieeetest.vcproj", "{10F01D38-993E-407A-89BD-5C1C63F3A08D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "intltest", "..\test\intltest\intltest.vcproj", "{73632960-B3A6-464D-83A3-4B43365F19B8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0178B127-6269-407D-B112-93877BB62776} = {0178B127-6269-407D-B112-93877BB62776}
@@ -198,6 +193,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "icuswap", "..\tools\icuswap
 		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iotest", "..\test\iotest\iotest.vcproj", "{E4993E82-D68A-46CA-BAE0-9D35E172E46F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C2B04507-2521-4801-BF0D-5FD79D6D518C} = {C2B04507-2521-4801-BF0D-5FD79D6D518C}
+		{ECA6B435-B4FA-4F9F-BF95-F451D078FC47} = {ECA6B435-B4FA-4F9F-BF95-F451D078FC47}
+		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -272,10 +274,6 @@ Global
 		{0178B127-6269-407D-B112-93877BB62776}.Debug.Build.0 = Debug|Win32
 		{0178B127-6269-407D-B112-93877BB62776}.Release.ActiveCfg = Release|Win32
 		{0178B127-6269-407D-B112-93877BB62776}.Release.Build.0 = Release|Win32
-		{10F01D38-993E-407A-89BD-5C1C63F3A08D}.Debug.ActiveCfg = Debug|Win32
-		{10F01D38-993E-407A-89BD-5C1C63F3A08D}.Debug.Build.0 = Debug|Win32
-		{10F01D38-993E-407A-89BD-5C1C63F3A08D}.Release.ActiveCfg = Release|Win32
-		{10F01D38-993E-407A-89BD-5C1C63F3A08D}.Release.Build.0 = Release|Win32
 		{73632960-B3A6-464D-83A3-4B43365F19B8}.Debug.ActiveCfg = Debug|Win32
 		{73632960-B3A6-464D-83A3-4B43365F19B8}.Debug.Build.0 = Debug|Win32
 		{73632960-B3A6-464D-83A3-4B43365F19B8}.Release.ActiveCfg = Release|Win32
@@ -324,6 +322,10 @@ Global
 		{6FC24387-370C-4561-9582-7A819749E2C5}.Debug.Build.0 = Debug|Win32
 		{6FC24387-370C-4561-9582-7A819749E2C5}.Release.ActiveCfg = Release|Win32
 		{6FC24387-370C-4561-9582-7A819749E2C5}.Release.Build.0 = Release|Win32
+		{E4993E82-D68A-46CA-BAE0-9D35E172E46F}.Debug.ActiveCfg = Debug|Win32
+		{E4993E82-D68A-46CA-BAE0-9D35E172E46F}.Debug.Build.0 = Debug|Win32
+		{E4993E82-D68A-46CA-BAE0-9D35E172E46F}.Release.ActiveCfg = Release|Win32
+		{E4993E82-D68A-46CA-BAE0-9D35E172E46F}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
