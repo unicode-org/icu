@@ -97,7 +97,7 @@ static void TestFileFromICU(UFILE *myFile) {
     u_fprintf(myFile, "Spell Out %%V (non-ANSI): %V\n", myFloat);
 
     *n = 1;
-    u_fprintf(myFile, "Pointer to integer (Count) %%n: n=%d %n n=%d\n", *n, n, *n);
+    u_fprintf(myFile, "\t\nPointer to integer (Count) %%n: n=%d %n n=%d\n", *n, n, *n);
     u_fprintf(myFile, "Pointer to integer Value: %d\n", *n);
     *n = 1;
     fprintf(u_fgetfile(myFile), "\tNormal fprintf count: n=%d %n n=%d\n", *n ,n, *n);
@@ -237,15 +237,21 @@ static void TestFileFromICU(UFILE *myFile) {
         log_err("%%P Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
     }
 
-    u_fgets(myFile, sizeof(myUString)/sizeof(*myUString), myUString);
+    u_fgets(myFile, 4, myUString);
     u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
-    if (myString == NULL || strcmp(myString, "Pointer to integer (Count) %n: n=1  n=1" C_NEW_LINE) != 0) {
+    if (myString == NULL || strcmp(myString, "\t\n") != 0) {
         log_err("u_fgets got \"%s\"\n", myString);
     }
 
     u_fgets(myFile, sizeof(myUString)/sizeof(*myUString), myUString);
     u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
-    if (myString == NULL || strcmp(myString, "Pointer to integer Value: 35" C_NEW_LINE) != 0) {
+    if (myString == NULL || strcmp(myString, "Pointer to integer (Count) %n: n=1  n=1\n") != 0) {
+        log_err("u_fgets got \"%s\"\n", myString);
+    }
+
+    u_fgets(myFile, sizeof(myUString)/sizeof(*myUString), myUString);
+    u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
+    if (myString == NULL || strcmp(myString, "Pointer to integer Value: 37\n") != 0) {
         log_err("u_fgets got \"%s\"\n", myString);
     }
 /*
