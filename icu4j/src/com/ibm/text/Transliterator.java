@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $ 
- * $Date: 2000/06/28 20:49:54 $ 
- * $Revision: 1.19 $
+ * $Date: 2000/07/12 16:32:17 $ 
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
@@ -210,7 +210,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.19 $ $Date: 2000/06/28 20:49:54 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.20 $ $Date: 2000/07/12 16:32:17 $
  */
 public abstract class Transliterator {
     /**
@@ -338,6 +338,8 @@ public abstract class Transliterator {
      * </ul>
      */
     private static Hashtable cache;
+
+    private static Hashtable composedCache;
 
     private static Hashtable displayNameCache;
 
@@ -859,56 +861,118 @@ public abstract class Transliterator {
         Object obj = cache.get(ID);
         RuleBasedTransliterator.Data data = null;
 
-        if (obj instanceof RuleBasedTransliterator.Data) {
-            data = (RuleBasedTransliterator.Data) obj;
-            // Fall through to construct transliterator from cached Data object.
-        } else if (obj instanceof Class) {
-            try {
-                return (Transliterator) ((Class) obj).newInstance();
-            } catch (InstantiationException e) {
-            } catch (IllegalAccessException e2) {}
-        } else {
-            synchronized (cache) {
-                boolean isReverse = (obj == REVERSE_RULE_BASED_PLACEHOLDER);
-                String resourceName = RB_RULE_BASED_PREFIX;
-                int i = ID.indexOf('-');
-                if (i < 0) {
-                    resourceName += ID;
-                } else {
-                    String IDLeft  = ID.substring(0, i);
-                    String IDRight = ID.substring(i+1);
-                    resourceName += isReverse ? (IDRight + RB_RULE_BASED_SEPARATOR + IDLeft)
-                                              : (IDLeft + RB_RULE_BASED_SEPARATOR + IDRight);
-                }
+        if (obj != null) {
+            if (obj instanceof RuleBasedTransliterator.Data) {
+                data = (RuleBasedTransliterator.Data) obj;
+                // Fall through to construct transliterator from cached Data object.
+            } else if (obj instanceof Class) {
                 try {
-                    ResourceBundle resource = ResourceBundle.getBundle(resourceName);
-
-                    // We allow the resource bundle to contain either an array
-                    // of rules, or a single rule string.
-                    String[] ruleArray;
-                    try {
-                        ruleArray = resource.getStringArray(RB_RULE);
-                    } catch (Exception e) {
-                        // This is a ClassCastException under JDK 1.1.8
-                        ruleArray = new String[] { resource.getString(RB_RULE) };
+                    return (Transliterator) ((Class) obj).newInstance();
+                } catch (InstantiationException e) {
+                } catch (IllegalAccessException e2) {}
+            } else {
+                synchronized (cache) {
+                    boolean isReverse = (obj == REVERSE_RULE_BASED_PLACEHOLDER);
+                    String resourceName = RB_RULE_BASED_PREFIX;
+                    int i = ID.indexOf('-');
+                    if (i < 0) {
+                        resourceName += ID;
+                    } else {
+                        String IDLeft  = ID.substring(0, i);
+                        String IDRight = ID.substring(i+1);
+                        resourceName += isReverse ? (IDRight + RB_RULE_BASED_SEPARATOR + IDLeft)
+                                                  : (IDLeft + RB_RULE_BASED_SEPARATOR + IDRight);
                     }
+                    try {
+                        ResourceBundle resource = ResourceBundle.getBundle(resourceName);
 
-                    data = RuleBasedTransliterator.parse(ruleArray,
-                                                         isReverse
-                                                         ? RuleBasedTransliterator.REVERSE
-                                                         : RuleBasedTransliterator.FORWARD);
+                        // We allow the resource bundle to contain either an array
+                        // of rules, or a single rule string.
+                        String[] ruleArray;
+                        try {
+                            ruleArray = resource.getStringArray(RB_RULE);
+                        } catch (Exception e) {
+                            // This is a ClassCastException under JDK 1.1.8
+                            ruleArray = new String[] { resource.getString(RB_RULE) };
+                        }
 
-                    cache.put(ID, data);
-                    // Fall through to construct transliterator from Data object.
-                } catch (MissingResourceException e) {}
+                        data = RuleBasedTransliterator.parse(ruleArray,
+                                                             isReverse
+                                                             ? RuleBasedTransliterator.REVERSE
+                                                             : RuleBasedTransliterator.FORWARD);
+
+                        cache.put(ID, data);
+                        // Fall through to construct transliterator from Data object.
+                    } catch (MissingResourceException e) {}
+                }
             }
-        }
 
-        if (data != null) {
-            return new RuleBasedTransliterator(ID, data, null);
+            if (data != null) {
+                return new RuleBasedTransliterator(ID, data, null);
+            }
+
+        } else {
+            // If we didn't find anything in the main cache, then look
+            // for a composed transliterator.
+
+            int i = ID.indexOf('-');
+            if (i > 0) {
+                String left  = ID.substring(0, i);
+                String right = ID.substring(i+1);
+                Vector path = new Vector();
+                if (findComposedPath(left, right, path, composedCache)) {
+                    Transliterator[] components = new Transliterator[path.size()];
+                    for (int j=0; j<path.size(); ++j) {
+                        String id = left + "-" + (String) path.elementAt(j);
+                        left = (String) path.elementAt(j);
+                        components[j] = internalGetInstance(id);
+                        if (components[j] == null) {
+                            return null;
+                        }
+                    }
+                    return new CompoundTransliterator(components);
+                }
+            }            
         }
 
         return null;
+    }
+
+    /**
+     * Find a path through a graph.  This will not necessarily be the
+     * only path, or the shortest path.  This is a simple recursive
+     * algorithm.
+     * @param start the starting node
+     * @param end the ending node
+     * @param path the result vector.  Upon success, it will contain
+     * successive nodes on the path from start to end.  It will not
+     * include start, but will include the end node.  If false is
+     * returned, then the contents of path are undefined.
+     * @param map the links table.  map.get(x) should return
+     * a String[] array, each of which is a node that x is connected
+     * to.
+     * @return true if successful
+     */
+    private static boolean findComposedPath(String start, String end,
+                                            Vector path, Hashtable map) {
+        // map contains a list of all the links emanating from each node
+        String[] links = (String[]) map.get(start);
+        if (links == null) {
+            return false;
+        }
+        for (int i=0; i<links.length; ++i) {
+            if (links[i].equals(end)) {
+                path.addElement(end);
+                return true;
+            }
+        }
+        for (int i=0; i<links.length; ++i) {
+            if (findComposedPath(links[i], end, path, map)) {
+                path.insertElementAt(links[i], 0);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -978,16 +1042,36 @@ public abstract class Transliterator {
             String[] ruleBasedIDs = bundle.getStringArray(RB_RULE_BASED_IDS);
             
             cache = new Hashtable();
+            composedCache = new Hashtable();
             displayNameCache = new Hashtable();
             
             for (int i=0; i<ruleBasedIDs.length; ++i) {
                 String ID = ruleBasedIDs[i];
-                boolean isReverse = (ID.charAt(0) == '*');
-                if (isReverse) {
-                    ID = ID.substring(1);
+                int composedMark = ID.indexOf('~');
+                if (composedMark > 0) {
+                    String left = ID.substring(0, composedMark);
+                    String right = ID.substring(composedMark+1);
+                    String[] links = (String[]) composedCache.get(left);
+                    if (links == null) {
+                        links = new String[] { right };
+                    } else {
+                        // We assume that most links are 1-1.  When
+                        // this assumption becomes false we need a
+                        // more efficient build procedure.
+                        String[] s = new String[links.length + 1];
+                        System.arraycopy(links, 0, s, 0, links.length);
+                        s[links.length] = right;
+                        links = s;
+                    }
+                    composedCache.put(left, links);
+                } else {
+                    boolean isReverse = (ID.charAt(0) == '*');
+                    if (isReverse) {
+                        ID = ID.substring(1);
+                    }
+                    cache.put(ID, isReverse ? REVERSE_RULE_BASED_PLACEHOLDER
+                                            : RULE_BASED_PLACEHOLDER);
                 }
-                cache.put(ID, isReverse ? REVERSE_RULE_BASED_PLACEHOLDER
-                                        : RULE_BASED_PLACEHOLDER);
             }
         } catch (MissingResourceException e) {}
 
