@@ -629,7 +629,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
 /*  uint32_t rExpsLen = 0; */
   uint32_t firstLen = 0;
   UBool varT = FALSE; UBool top_ = TRUE;
-  uint8_t specs = 0;
+  uint16_t specs = 0;
   UBool startOfRules = TRUE;
   UBool lastReset = FALSE;
   UBool before = FALSE;
@@ -667,6 +667,9 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
       startOfRules = FALSE;
       varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
       top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
+      if(top_) { /* if reset is on top, we should just continue */
+        continue;
+      }
       u_strncpy(second,rulesCopy+chOffset, chLen);
       second[chLen] = 0;
 
@@ -988,7 +991,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
 /*  uint32_t rExpsLen = 0; */
   uint32_t firstLen = 0, secondLen = 0;
   UBool varT = FALSE; UBool top_ = TRUE;
-  uint8_t specs = 0;
+  uint16_t specs = 0;
   UBool startOfRules = TRUE;
   UColTokenParser src;
   UColOptionSet opts;
@@ -1084,7 +1087,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
 
   /* uint32_t rExpsLen = 0; */
   /* uint32_t firstLen = 0; */
-  uint8_t specs = 0;
+  uint16_t specs = 0;
   UBool varT = FALSE; UBool top_ = TRUE;
   UBool startOfRules = TRUE;
   UColTokenParser src;
@@ -2786,7 +2789,7 @@ static void TestVariableTopSetting() {
   UCollator *coll = ucol_open("", &status);
 
   uint32_t strength = 0;
-  uint8_t specs = 0;
+  uint16_t specs = 0;
   uint32_t chOffset = 0;
   uint32_t chLen = 0;
   uint32_t exOffset = 0;
@@ -3446,9 +3449,39 @@ static void TestMergeSortKeys() {
   /* need to finish this up */
 }
 
+/*
+[last variable] last variable value 
+[last primary ignorable] largest CE for primary ignorable 
+[last secondary ignorable] largest CE for secondary ignorable 
+[last tertiary ignorable] largest CE for tertiary ignorable 
+[top] guaranteed to be above all implicit CEs, for now and in the future (in 1.8) 
+*/
+
+void TestRuleOptions() {
+  static struct {
+    const char *rules;
+    const char *data[50];
+    const uint32_t len;
+  } tests[] = {  
+    { "&[last variable]<z"
+"&[last primary ignorable]<x"
+"&[last secondary ignorable]<<y"
+"&[last tertiary ignorable]<<<w"
+"&[top]<u",
+      {"\\ufffb",  "w", "y", "\\u20e3", "x", "\\u137c", "z", "u"}, 7 },
+  };
+  uint32_t i;
+
+
+  for(i = 0; i<(sizeof(tests)/sizeof(tests[0])); i++) {
+    genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
+  }
+}
+
 void addMiscCollTest(TestNode** root)
 {
 
+    addTest(root, &TestRuleOptions, "tscoll/cmsccoll/TestRuleOptions");
     addTest(root, &TestBeforePrefixFailure, "tscoll/cmsccoll/TestBeforePrefixFailure");
     addTest(root, &TestContractionClosure, "tscoll/cmsccoll/TestContractionClosure");
     addTest(root, &TestMergeSortKeys, "tscoll/cmsccoll/TestMergeSortKeys");
