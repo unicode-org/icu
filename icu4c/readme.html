@@ -13,7 +13,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
     <title>ReadMe for ICU</title>
-<style type="text/css">
+    <style type="text/css">
       h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
       h2 {margin-top: 3em; text-decoration: underline; page-break-before: always}
       h2.TOC {page-break-before: auto}
@@ -31,7 +31,7 @@
     <h1>International Components for Unicode<br>
      ICU 2.2 ReadMe</h1>
 
-    <p>Version: 2002-Aug-08<br>
+    <p>Version: 2002-Aug-15<br>
      Copyright &copy; 1997-2002 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -202,111 +202,98 @@
 
     <h2><a name="News" href="#News">What is new in this release?</a></h2>
 
-    <p>The following list concentrates on changes that affect existing
-    applications migrating from previous ICU releases. For more news about this
+    <p>The following list concentrates on <em> changes that affect existing
+    applications migrating from previous ICU releases</em>. For more news about this
     release, see the <a href=
     "http://oss.software.ibm.com/icu/download/2.2/">ICU 2.2 download
     page</a>.</p>
 
-    <h3>Support for Unicode 3.1.1</h3>
+    <h3>Support for Unicode 3.2</h3>
 
-    <p>ICU 2.0 has been upgraded to support <a href=
-    "http://www.unicode.org/unicode/standard/versions/Unicode3.1.1.html">Unicode
-    3.1.1</a>, which includes the addition of 44,946 new encoded characters.
-    These characters cover several historic scripts, several sets of symbols,
-    and a very large collection of additional CJK ideographs.</p>
+    <p>Unicode properties and algorithms have been upgraded to <a href="http://www.unicode.org/unicode/standard/versions/enumeratedversions.html#Unicode_3_2_0">Unicode
+    3.2</a>, which includes the addition of more than 1000 new encoded
+    characters. The UCA (<a href="http://www.unicode.org/reports/tr10/">Unicode Collation Algorithm</a>)
+            table is updated to the current version 3.1.1, with Unicode 3.2-based canonical closure.
+       All Unicode properties (except for those in Unihan.txt) are now <a href=
+      "http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/ucd_icu.html">
+      available via direct APIs, and most via UnicodeSet</a>.</p>
 
-    <p>As part of this upgrade, a number of ICU services have been reviewed and
-    improved with regards to handling supplementary characters (surrogate
-    pairs). Especially, normalization is revamped for support of supplementary
-    characters and higher performance.</p>
-
-    <p>ICU 2.1 also includes <a href=
-    "http://www.unicode.org/versions/corrigendum3.html">Corrigendum #3: U+F951
-    Normalization</a>.</p>
-
-    <h3>Memory and resource cleanup</h3>
-
-    <p>ICU is carefully tested for memory leaks. Some memory is held in
-    internal caches that do not normally get released during normal operation.
-    These are not leaks because ICU continues to use them as necessary.</p>
-
-    <p>For testing purposes (for memory leaks) and for a small number of
-    applications it can be useful to close all the memory that is allocated for
-    a library. ICU 2.0 supports this with a new function <code><a href=
-    "http://oss.software.ibm.com/icu/apiref/uclean_h.html">u_cleanup()</a></code>
-    that may be called after an application has released all ICU objects.
-    <code>u_cleanup()</code> will then release all of ICU's internal memory.
-    The ICU libraries can then even be unloaded cleanly without shutting down
-    the process.</p>
-
-    <h3>Data loading changed</h3>
-
-    <p>ICU data loading is simplified for most users. By default, the ICU build
-    creates a DLL/shared library that is linked directly with the common
-    library (<code>[lib]icuuc</code>). By placing all ICU libraries including
-    the data library into the same folder, ICU should start up and find its
-    data immediately. Dynamic loading of data from DLLs/shared libraries is not
-    supported any more.</p>
-
-    <p>Before ICU 2.0, ICU did not itself link directly with its data library,
-    but some ICU applications did (like the Xerces XML parser) and called
-    <code>udata_setCommonData()</code>. This is not necessary any more in the
-    default case.<br>
-     On the other hand, this same technique can now be used to efficiently load
-    application data (e.g., for its own localization). An application can build
-    a data DLL/library of its own, link it, and call the new API
-    <code>udata_setAppData()</code>.</p>
-
-    <p>For details on finding and loading ICU data and on options for portable,
-    common data files etc. see the <a href=
-    "http://oss.software.ibm.com/icu/userguide/icudata.html">User's Guide ICU
-    Data Chapter</a>.</p>
-
-    <h3>Library linking changed</h3>
-
-    <ul>
-      <li>
-        <b>Linkage improvement for HP/UX</b> 
+    <h3>
+        <b>Additional and modified converters</b></h3>
+    <p>
+         New converter implementations are added for:</p>
 
         <ul>
-          <li>The current directory (.) is now searched for libraries.</li>
+          <li>UTF-16 and UTF-32 (detect/emit BOM according to IANA
+          registration)<br>
+           These and related names used to be aliases for UTF16_PlatformEndian
+          and UTF32_PlatformEndian but are now separate, IANA-registration-compliant converters that detect and emit the
+          respective Byte Order Mark. The "platform endian&quot; converters
+            (without automatic BOM handling) are now
+          only available via their specific names.</li>
 
-          <li>Where available, $ORIGIN is set in the embedded path so that if
-          one ICU library is found, the system will be able to locate the
-          others.</li>
+          <li><a href="http://www.unicode.org/reports/tr26/">CESU-8</a> (while
+          the <a href=
+          "http://www.unicode.org/reports/tr28/#3_1_conformance">UTF-8 code is
+          tightened according to Unicode 3.2</a>)</li>
+
+          <li><a href=
+          "http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/conversion/bocu1/bocu1.html">
+          BOCU-1</a> (MIME-compatible compression of Unicode text that preserves binary order)</li>
         </ul>
-      </li>
-
-      <li>
-        <b>Library Versioning for AIX (xlC and VisualAge)</b> 
-
+    <h3><b>Flexible data loading</b></h3>
+    <p>
+       ICU 2.2 has an extended search path functionality, more flexible data
+      override capabilities, and removes lesser-known heuristics for
+      determining the data path.</p>
         <ul>
-          <li>AIX does not have facilities to enable library versioning. With
-          this patch, libraries will now be named for instance
-          <tt>libicuuc<b>20.1.so</b></tt> , however symlinks will allow
-          applications to still link using <tt>-licuuc</tt> (without the
-          benefit of versioning). To benefit from versioning, on AIX link
-          against the major and minor versions by using
-          <tt>-licuuc20</tt>.</li>
+          <li>Performance: ICU will only load data from packages, not from single files, when the
+            search path is empty. This eliminates all file system accesses after the packages (ICU
+            data + application data) are loaded.<br>
+            If this is important, then an application should set the search path to the empty path
+            during initialization.</li>
+          <li>Customizability: If the search path is not empty, then ICU searches for single files
+            before looking in packages, allowing to override/update packaged data.</li>
+          <li>User data: The new function ucnv_openPackage allows an application to load an ICU
+            character mapping table from its own data. This enables applications to support more
+            codepages than the ICU installation that it uses.</li>
+          <li>Separation between ICU data and user data: Single data files must now always have a
+            package name as prefix, which results in different file names between ICU and all
+            application packages even for the same locale IDs etc.</li>
+          <li>Multi-path: The search path can now contain multiple folders and can list packages
+            directly instead of just a single
+            folder.</li>
+          <li>Predictability: The search path can be set via the ICU_DATA environment variable or via the
+            u_setDataDirectory() function.<br>
+            ICU does not perform any other heuristics any more.</li>
         </ul>
-      </li>
 
-      <li>
-        <b>Data Library Versioning for all platforms</b> 
+    <h3><b>Customizable memory management</b></h3>
 
-        <ul>
-          <li>The versioned name for the data library will be linked against by
-          the ICU libraries, that is, libicudt20b.so instead of
-          libicudata.so</li>
-        </ul>
-      </li>
-    </ul>
+    <p>
+       ICU 2.2 libraries do not use the global operators new and delete.
+      Instead, all C++ classes are derived from a common base class UObject
+        which implements new and delete operators for all of ICU's C++ classes.
+      Users can customize the ICU memory allocation by changing the functions in
+    source/common/cmemory.c that
+      are used for non-class types and in UObject's new and delete operators.<br>
+        This also means that ICU libraries may safely use a different heap than
+        the application because all memory is consistently allocated and
+        released from within the libraries. On Windows it is now possible to
+        link the application with, for example, the static C runtime library
+        even though ICU libraries use the DLL-based runtime.</p>
 
-    <h3>Multithreaded usage is safer</h3>
+    <h3>Experimental locales moved to new repository</h3>
 
-    <p>It was discovered that some parts of ICU were not initialized in a
-    thread safe manner. This has been fixed.</p>
+    <p>Experimental locales are ones for which we have incomplete data. Data for
+    such locales used to be included in the default ICU download, but have been
+    moved to a new <a href="http://oss.software.ibm.com/cvs/icu/locale/icu/experimental/">locale
+    data repository</a>, stored as another <a href="http://oss.software.ibm.com/icu/develop/cvs.html">ICU
+    CVS module</a>. This data can be added back into a customized ICU build, see
+    the <a href="http://oss.software.ibm.com/icu/userguide/icudata.html">User
+    Guide Data chapter</a>. It can also still be viewed with the <a href="http://oss.software.ibm.com/icu/demo/">LocaleExplorer
+    demo</a>.</p>
+
     <hr>
 
     <h2><a name="Download" href="#Download">How To Download the Source
@@ -1328,24 +1315,24 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 #  define U_USE_DEPRECATED_FORMAT_API 1
 #endif
 
-#include "unicode/udat.h"
+#include &quot;unicode/udat.h&quot;
 
 int main(){
     UDateFormat *def, *fr, *fr_pat ;
     UErrorCode status = U_ZERO_ERROR;
     UChar temp[30];
 
-    fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL,0, &amp;status);
+    fr = udat_open(UDAT_FULL, UDAT_DEFAULT, &quot;fr_FR&quot;, NULL,0, &amp;status);
     if(U_FAILURE(status)){
-        printf("Error creating the french dateformat using full time style\n %s\n",
+        printf(&quot;Error creating the french dateformat using full time style\n %s\n&quot;,
             myErrorName(status) );
     }
     /* This is supposed to open default date format,
-       but later on it treats it like it is "en_US".
+       but later on it treats it like it is &quot;en_US&quot;.
        This is very bad when you try to run the tests
-       on a machine where the default locale is NOT "en_US"
+       on a machine where the default locale is NOT &quot;en_US&quot;
     */
-    def = udat_open(UDAT_SHORT, UDAT_SHORT, "en_US", NULL, 0, &amp;status);
+    def = udat_open(UDAT_SHORT, UDAT_SHORT, &quot;en_US&quot;, NULL, 0, &amp;status);
     if(U_FAILURE(status)){
         .... /* handle the error */
     }
