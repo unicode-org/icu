@@ -977,8 +977,8 @@ void TransliteratorTest::TestCaseMap(void) {
            "THE QUICK BROWN FOx JUMPED OVER THE LAzy DOGS.");
     expect(*toLower, "The quIck brown fOX jUMPED OVER THE LAzY dogs.",
            "the quick brown foX jumped over the lazY dogs.");
-    expect(*toTitle, "the quick brown foX jumped over the laZy dogs.",
-           "The Quick Brown FoX Jumped Over The LaZy Dogs.");
+    expect(*toTitle, "the quick brown foX can't jump over the laZy dogs.",
+           "The Quick Brown FoX Can't Jump Over The LaZy Dogs.");
 
     delete toUpper;
     delete toLower;
