@@ -314,44 +314,51 @@ void UnicodeTest::TestUnicodeData()
         return;
     }
 
-        int32_t unicode;
-        for(;;) {
-            bufferPtr = fgets(buffer, 999, input);
-            if (bufferPtr == NULL) break;
-            if (bufferPtr[0] == '#' || bufferPtr[0] == '\n' || bufferPtr[0] == 0) continue;
-            sscanf(bufferPtr, "%X", &unicode);
-            assert(0 <= unicode && unicode < 65536);
-            if (unicode == LAST_CHAR_CODE_IN_FILE)
-                break;
-            bufferPtr = strchr(bufferPtr, ';');
-            assert(bufferPtr != NULL);
-            bufferPtr = strchr(bufferPtr + 1, ';'); // go to start of third field
-            assert(bufferPtr != NULL);
-            dirPtr = bufferPtr;
-            dirPtr = strchr(dirPtr + 1, ';');
-            assert(dirPtr != NULL);
-            dirPtr = strchr(dirPtr + 1, ';');
-            assert(dirPtr != NULL);
-            bufferPtr++;
-            bufferPtr[2] = 0;
-//          logln((UnicodeString)"testing " + (int32_t)unicode + "...");
-            if (Unicode::getType((UChar)unicode) != tagValues[MakeProp(bufferPtr)])
-                errln("Unicode character type failed at " + unicode);
-            // test title case
-            if ((Unicode::toTitleCase((UChar)unicode) != Unicode::toUpperCase((UChar)unicode)) &&
-                !(Unicode::isTitleCase(Unicode::toTitleCase((UChar)unicode))))
-                errln("Title case test failed at " + unicode);
-            bufferPtr = strchr(dirPtr + 1, ';');
-            dirPtr++;
-            bufferPtr[0] = 0;
-            if (Unicode::characterDirection((UChar)unicode) != MakeDir(dirPtr))
-                errln("Unicode character directionality failed at\n " + unicode);
+    int32_t unicode;
+    for(;;) {
+        bufferPtr = fgets(buffer, 999, input);
+        if (bufferPtr == NULL) break;
+        if (bufferPtr[0] == '#' || bufferPtr[0] == '\n' || bufferPtr[0] == 0) continue;
+        sscanf(bufferPtr, "%X", &unicode);
+        assert(0 <= unicode && unicode < 65536);
+        if (unicode == LAST_CHAR_CODE_IN_FILE)
+            break;
+        bufferPtr = strchr(bufferPtr, ';');
+        assert(bufferPtr != NULL);
+        bufferPtr = strchr(bufferPtr + 1, ';'); // go to start of third field
+        assert(bufferPtr != NULL);
+        dirPtr = bufferPtr;
+        dirPtr = strchr(dirPtr + 1, ';');
+        assert(dirPtr != NULL);
+        dirPtr = strchr(dirPtr + 1, ';');
+        assert(dirPtr != NULL);
+        bufferPtr++;
+        bufferPtr[2] = 0;
+//      logln((UnicodeString)"testing " + (int32_t)unicode + "...");
+        if (Unicode::getType((UChar)unicode) != tagValues[MakeProp(bufferPtr)])
+            errln("Unicode character type failed at " + unicode);
+        // test title case
+        if ((Unicode::toTitleCase((UChar)unicode) != Unicode::toUpperCase((UChar)unicode)) &&
+            !(Unicode::isTitleCase(Unicode::toTitleCase((UChar)unicode))))
+            errln("Title case test failed at " + unicode);
+        bufferPtr = strchr(dirPtr + 1, ';');
+        dirPtr++;
+        bufferPtr[0] = 0;
+        if (Unicode::characterDirection((UChar)unicode) != MakeDir(dirPtr))
+            errln("Unicode character directionality failed at\n " + unicode);
+    }
 
+    if (input) fclose(input);
 
-        }
+    // test Unicode::getCharName()
+    // a more thorough test of u_charName() is in cintltst/cucdtst.c
+    UTextOffset length=Unicode::getCharName(0x284, buffer, sizeof(buffer));
 
-        if (input) fclose(input);
-
+    // use invariant-character conversion to Unicode
+    UnicodeString name(buffer, length, "");
+    if(name!=UNICODE_STRING("LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK", 49)) {
+        errln("Unicode character name lookup failed\n");
+    }
 }
 
 int32_t UnicodeTest::MakeProp(char* str) 
