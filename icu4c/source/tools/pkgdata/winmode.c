@@ -93,6 +93,9 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
     if(isDll) {
         uprv_strcpy(tmp, LIB_PREFIX);
         uprv_strcat(tmp, o->cShortName);
+        if (o->version) {
+            uprv_strcat(tmp, "$(TARGET_VERSION)");
+        }
         uprv_strcat(tmp, UDATA_SO_SUFFIX);
 
         if(o->nooutput || o->verbose) {
@@ -199,6 +202,9 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
     }
     uprv_strcpy(tmp, UDATA_CMN_PREFIX);
     uprv_strcat(tmp, o->cShortName);
+    if (o->version) {
+        uprv_strcat(tmp, "$(TARGET_VERSION)");
+    }
     uprv_strcat(tmp, UDATA_CMN_SUFFIX);
 
     if(o->nooutput || o->verbose) {

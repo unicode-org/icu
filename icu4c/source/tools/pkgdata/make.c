@@ -40,21 +40,24 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
                     U_ICU_VERSION);
     T_FileStream_writeLine(f, linebuf);
     
-    sprintf(linebuf, "NAME=%s\n"
+    sprintf(linebuf, "NAME=%s%s\n"
                     "CNAME=%s\n"
                     "TARGETDIR=%s\n"
                     "TEMP_DIR=%s\n"
                     "MODE=%s\n"
                     "MAKEFILE=%s\n"
                     "ENTRYPOINT=%s\n"
+                    "TARGET_VERSION=%s\n"
                     "\n\n\n",
                     o->shortName,
+                    (o->version ? o->version : ""),
                     o->cShortName,
                     o->targetDir,
                     o->tmpDir,
                     o->mode,
                     o->makeFile,
-                    o->entryName);
+                    o->entryName,
+                    (o->version ? o->version : ""));
     T_FileStream_writeLine(f, linebuf);
     
     sprintf(linebuf, "## List files [%d] containing data files to process (note: - means stdin)\n"
