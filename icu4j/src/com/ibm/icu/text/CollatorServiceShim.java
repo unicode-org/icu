@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorServiceShim.java,v $
-* $Date: 2003/09/18 21:01:45 $
-* $Revision: 1.6 $
+* $Date: 2004/01/12 22:50:16 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -23,6 +23,7 @@ import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.Collator.CollatorFactory;
+import com.ibm.icu.util.ULocale;
 
 final class CollatorServiceShim extends Collator.ServiceShim {
 
@@ -32,7 +33,12 @@ final class CollatorServiceShim extends Collator.ServiceShim {
         }
 
         try {
-            return (Collator)((Collator)service.get(locale)).clone();
+            Locale[] actualLoc = new Locale[1];
+            Collator coll = (Collator)service.get(locale, actualLoc);
+            ULocale uloc = new ULocale(actualLoc[0]);
+            coll = (Collator) coll.clone();
+            coll.setLocale(uloc, uloc); // services make no distinction between actual & valid
+            return coll;
         }
         catch (CloneNotSupportedException e) {
 	    ///CLOVER:OFF

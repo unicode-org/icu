@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/CurrencyServiceShim.java,v $
- * $Date: 2003/06/03 18:49:35 $
- * $Revision: 1.4 $
+ * $Date: 2004/01/12 22:50:16 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -39,7 +39,11 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
         if (service.isDefault()) {
             return Currency.createCurrency(loc);
         }
-        return (Currency)service.get(loc);
+        Locale[] actualLoc = new Locale[1];
+        Currency curr = (Currency)service.get(loc, actualLoc);
+        ULocale uloc = new ULocale(actualLoc[0]);
+        curr.setLocale(uloc, uloc); // services make no distinction between actual & valid
+        return curr;
     }
 
     Object registerInstance(Currency currency, Locale locale) {
