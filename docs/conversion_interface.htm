@@ -1,56 +1,197 @@
-<html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
 
 <head>
+<meta http-equiv=Content-Type content="text/html; charset=us-ascii">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 9">
+<meta name=Originator content="Microsoft Word 9">
+<link rel=File-List href="./conversion_interface_files/filelist.xml">
 <title>Conversion interface</title>
-<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Helena Shih</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>Helena Shih</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:Created>2000-01-15T02:20:00Z</o:Created>
+  <o:LastSaved>2000-01-15T02:21:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>169</o:Words>
+  <o:Characters>966</o:Characters>
+  <o:Company>IBM</o:Company>
+  <o:Lines>8</o:Lines>
+  <o:Paragraphs>1</o:Paragraphs>
+  <o:CharactersWithSpaces>1186</o:CharactersWithSpaces>
+  <o:Version>9.2720</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:2;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:0 268435456 0 0 -2147483648 0;}
+ /* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+p
+	{font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+@list l0
+	{mso-list-id:508057803;
+	mso-list-type:hybrid;
+	mso-list-template-ids:2013952896 -2120824896 -1989765832 -331434388 -893097586 -899496586 -1026627550 -236158954 1344439948 1046351454;}
+@list l0:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1
+	{mso-list-id:1888225651;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1535307306 2093508258 -1219722734 1904651422 -1785855112 1617491920 -2032922136 1890468180 -1133320672 -638944668;}
+@list l1:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l2
+	{mso-list-id:1957365439;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-305621314 1597925178 -2128297382 -1599458768 -354782888 -1606405048 932717220 1523747100 1559919332 292043900;}
+@list l2:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l3
+	{mso-list-id:1995528626;
+	mso-list-type:hybrid;
+	mso-list-template-ids:2049974270 -1304366260 977200074 1550586790 278543166 1296195578 1710292722 1463949522 1976190972 423399706;}
+@list l3:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
 </head>
 
-<body>
+<body lang=EN-US style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<h1>International Collectanea for Unicode</h1>
 
 <h1>Conversion interface</h1>
 
-<p>Conversion interface is a set of C functions used to convert to and from Unicode and
-various character sets/codepages. </p>
+<p>Conversion interface is a set of C functions used to convert to and from
+Unicode and various character sets/codepages. </p>
 
 <h2>Important files:</h2>
 
-<p>icu/source/common
+<p>icu/source/common </p>
 
-<ul>
-  <li>ucnv_io.{c,h} : Low level implementation of the aliasing and other file access services.</li>
-  <li>ucnv_bld.{c,h} : Implementation of the data structure.</li>
-  <li>ucnv_cnv.{c,h} : Implementation of the conversion loop.</li>
-  <li>ucnv.{c,h} : API implementation.</li>
-  <li>ucnv_imp.h : internal functions.</li>
-  <li>ucnv_err.{h,c} : sample implementation of error Callback Routines.</li>
-  <li>convert.cpp : C++ wrapers of the conversion routines.</li>
+<ul type=disc>
+ <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo1;tab-stops:list .5in'>ucnv_io.{c,h} : Low level
+     implementation of the aliasing and other file access services.</li>
+ <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo1;tab-stops:list .5in'>ucnv_bld.{c,h} :
+     Implementation of the data structure.</li>
+ <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo1;tab-stops:list .5in'>ucnv_cnv.{c,h} :
+     Implementation of the conversion loop.</li>
+ <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo1;tab-stops:list .5in'>ucnv.{c,h} : API
+     implementation.</li>
+ <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo1;tab-stops:list .5in'>ucnv_imp.h : internal
+     functions.</li>
+ <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo1;tab-stops:list .5in'>ucnv_err.{h,c} : sample
+     implementation of error Callback Routines.</li>
+ <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo1;tab-stops:list .5in'>convert.cpp : C++ wrapers of
+     the conversion routines.</li>
 </ul>
 
-<p>Data files: icu/data
+<p>Data files: icu/data </p>
 
-<ul>
-  <li>convrtrs.txt : Alias table used by the icu conversion routines for conversion data
-    files.</li>
-  <li>*.ucm : mapping tables.</li>
+<ul type=disc>
+ <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l2 level1 lfo2;tab-stops:list .5in'>convrtrs.txt : Alias table
+     used by the icu conversion routines for conversion data files.</li>
+ <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l2 level1 lfo2;tab-stops:list .5in'>*.ucm : mapping tables.</li>
 </ul>
 
-<p>Tools : icu/source/tools/makeconv
+<p>Tools : icu/source/tools/makeconv </p>
 
-<ul>
-  <li>makeconv.c : Tool that compiles the .ucm files in a format that ICU understands (.cnv
-    files)</li>
+<ul type=disc>
+ <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l3 level1 lfo3;tab-stops:list .5in'>makeconv.c : Tool that
+     compiles the .ucm files in a format that ICU understands (.cnv files)</li>
 </ul>
 
-<p>Files that are used but not part of conversion per se (i.e. used by other parts of the
-ICU): icu/source/common
+<p>Files that are used but not part of conversion per se (i.e. used by other
+parts of the ICU): icu/source/common </p>
 
-<ul>
-  <li>ucmp8.{c,h} : compact array (array with compressed array for 8 bits char).</li>
-  <li>ucmp16.{c,h} : compact array (array with compressed array for 16 bits char).</li>
-  <li>uhash.{c,h} : hashtable implementation.</li>
+<ul type=disc>
+ <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l0 level1 lfo4;tab-stops:list .5in'>ucmp8.{c,h} : compact array
+     (array with compressed array for 8 bits char).</li>
+ <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l0 level1 lfo4;tab-stops:list .5in'>ucmp16.{c,h} : compact array
+     (array with compressed array for 16 bits char).</li>
+ <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l0 level1 lfo4;tab-stops:list .5in'>uhash.{c,h} : hashtable
+     implementation.</li>
 </ul>
-<font FACE="Helv" SIZE="2" COLOR="#000000">
 
-<p></font>&nbsp;</p>
+<p>&nbsp;</p>
+
+</div>
+
 </body>
+
 </html>

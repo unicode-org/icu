@@ -1,4 +1,8 @@
-/*Bertrand A. DAMIBA -> damiba@us.ibm.com*/
+/********************************************************************
+ * COPYRIGHT: 
+ * Copyright (c) 1999, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>

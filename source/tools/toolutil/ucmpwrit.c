@@ -1,3 +1,7 @@
+/**********************************************************************
+* Copyright (C) 1998-2000, International Business Machines Corporation 
+* and others.  All Rights Reserved.
+**********************************************************************/
 #include "ucmpwrit.h"
 #include <stdio.h>
 

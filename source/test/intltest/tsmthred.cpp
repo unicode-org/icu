@@ -1,3 +1,9 @@
+/********************************************************************
+ * COPYRIGHT: 
+ * Copyright (c) 1999, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************/
+
 #include "unicode/utypes.h"
 
 /* APP_NO_THREADS is an old symbol. We'll honour it if present. */

@@ -1,7 +1,7 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2000, International Business Machines
-*   Corporation and others.  All Rights Reserved.
+* Copyright (C) 1998-2000, International Business Machines Corporation 
+* and others.  All Rights Reserved.
 **********************************************************************
 *
 * File date.c
