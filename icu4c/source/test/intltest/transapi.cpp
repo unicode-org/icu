@@ -540,7 +540,11 @@ void TransliteratorAPITest::TestNullTransliterator(){
     doTest((UnicodeString)"nulTrans->transliterate", replaceable, s);
     replaceable.remove();
     replaceable.append(s);
-    UTransPosition index={start, limit, 0, limit};
+    UTransPosition index;
+    index.contextStart =start;
+    index.contextLimit = limit;
+    index.start = 0;
+    index.limit = limit;
     nullTrans->handleTransliterate(replaceable, index, TRUE);
     if(index.start != limit){
         errln("ERROR: NullTransliterator->handleTransliterate() failed");
