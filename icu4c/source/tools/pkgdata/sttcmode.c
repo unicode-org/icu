@@ -109,60 +109,6 @@ void pkg_sttc_writeReadme(struct UPKGOptions_ *o, const char *libName, UErrorCod
 
 #include "makefile.h"
 
-static void
-writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
-{
-    const char *p, *baseName;
-    char tmp[1024];
-    char stanza[1024];
-    char cfile[1024];
-    CharList *oTail = NULL;
-    CharList *infiles;
-    CharList *parents = NULL, *commands = NULL;
-
-    infiles = o->filePaths;
-
-    for(;infiles;infiles = infiles->next) {
-        baseName = findBasename(infiles->str);
-        p = uprv_strrchr(baseName, '.');
-        if( (p == NULL) || (*p == '\0' ) ) {
-            continue;
-        }
-
-        uprv_strncpy(tmp, baseName, p-baseName);
-        p++;
-
-        uprv_strcpy(tmp+(p-1-baseName), "_"); /* to append */
-        uprv_strcat(tmp, p);
-        uprv_strcat(tmp, ".$(STATIC_O)");
-
-        *objects = pkg_appendToList(*objects, &oTail, uprv_strdup(tmp));
-
-        /* write source list */
-        strcpy(cfile,tmp);
-        strcpy(cfile+strlen(cfile)-strlen(".$(STATIC_O)"), ".c" );
-
-
-        /* Make up parents.. */
-        parents = pkg_appendToList(parents, NULL, uprv_strdup(infiles->str));
-
-        /* make up commands.. */
-        sprintf(stanza, "$(INVOKE) $(GENCCODE) -n $(ENTRYPOINT) -d $(TEMP_DIR) $<");
-        commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
-
-        sprintf(stanza, "$(COMPILE.c) -o $@ $(TEMP_PATH)%s", cfile);
-        commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
-
-        sprintf(stanza, "$(TEMP_PATH)%s", tmp);
-        pkg_mak_writeStanza(makefile, o, stanza, parents, commands);
-
-        pkg_deleteList(parents);
-        pkg_deleteList(commands);
-        parents = NULL;
-        commands = NULL;
-    }
-
-}
 
 void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 {
@@ -220,7 +166,7 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     T_FileStream_writeLine(makefile, tmp);
 
     /* Write compile rules */
-    writeObjRules(o, makefile, &objects);
+    pkg_mak_writeObjRules(o, makefile, &objects, ".$(STATIC_O)"); /* use special .o suffix */
 
     sprintf(tmp, "# List file for gencmn:\n"
         "CMNLIST=%s%s$(NAME)_static.lst\n\n",

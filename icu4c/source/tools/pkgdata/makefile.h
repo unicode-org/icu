@@ -44,6 +44,15 @@ pkg_mak_writeFooter(FileStream *f, const UPKGOptions *o);
 #ifdef WIN32
 extern void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status);
 #else /*#ifdef WIN32*/
+/**
+ * Write stanzas for generating .o (and .c) files for each data file in 'o->filePaths'.
+ * @param o Package options struct
+ * @param makefile Current makefile being written
+ * @param objects On output, list of object files
+ * @param objSuffix Suffix of object files including dot, typically OBJ_SUFFIX or ".o" or ".obj"
+ */
+extern void
+pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects, const char* objSuffix);
 #ifdef UDATA_SO_SUFFIX
 extern void pkg_mode_dll(UPKGOptions* o, FileStream *stream, UErrorCode *status);
 extern void pkg_mode_static(UPKGOptions* o, FileStream *stream, UErrorCode *status);
