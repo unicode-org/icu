@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $ 
- * $Date: 2001/07/02 20:55:29 $ 
- * $Revision: 1.36 $
+ * $Date: 2001/07/05 23:35:30 $ 
+ * $Revision: 1.37 $
  *
  *****************************************************************************************
  */
@@ -17,6 +17,7 @@ import java.text.MessageFormat;
 import java.text.ParsePosition;
 import java.io.UnsupportedEncodingException;
 import com.ibm.text.resources.ResourceReader;
+import com.ibm.util.CaseInsensitiveString;
 
 /**
  * <code>Transliterator</code> is an abstract class that
@@ -240,7 +241,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.36 $ $Date: 2001/07/02 20:55:29 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.37 $ $Date: 2001/07/05 23:35:30 $
  */
 public abstract class Transliterator {
     /**
@@ -774,46 +775,64 @@ public abstract class Transliterator {
         if (ID.indexOf(';') >= 0) {
             return new CompoundTransliterator(ID, direction, null);
         }
-
-        for (;;) {
-            // ID and id are identical, unless there is a filter pattern,
-            // in which case id is the substring of ID preceding the
-            // filter pattern.
-            String id = ID;
-            UnicodeFilter filter = null;
-            int bracket = ID.indexOf('[');
-            if (bracket >= 0) {
-                ParsePosition pos = new ParsePosition(bracket);
-                filter = new UnicodeSet(ID, pos, null);
-                if (pos.getIndex() != ID.length()) {
-                    break; // unparsed junk after ']'
-                }
-                id = ID.substring(0, bracket);
-            }
-
-            if (direction == REVERSE) {
-                int i = id.indexOf('-');
-                if (i < 0) {
-                    if (!id.equals(NullTransliterator._ID)) {
-                        throw new IllegalArgumentException("No inverse for: "
-                                                           + id);
-                    }
-                } else {
-                    id = id.substring(i+1) + '-' + id.substring(0, i);
-                }
-            }
-
-            Transliterator t = internalGetInstance(id);
-            if (t != null) {
-                if (filter != null) {
-                    t.setFilter(filter);
-                    t.ID += ID.substring(bracket);
-                }
-                return t;
-            }
         
-            break;
+        // 'id' is the ID with the filter pattern removed and with
+        // whitespace deleted.
+        StringBuffer id = new StringBuffer(ID);
+        
+        // Look for embedded filter pattern
+        UnicodeSet filter = null;
+        int setStart = ID.indexOf('[');
+        int setLimit = 0;
+        if (setStart >= 0) {
+            ParsePosition pos = new ParsePosition(setStart);
+            filter = new UnicodeSet(ID, pos, null);
+            setLimit = pos.getIndex();
+            id.delete(setStart, setLimit);
         }
+        
+        // Delete whitespace
+        int i;
+        for (i=0; i<id.length(); ++i) {
+            if (UCharacter.isWhitespace(id.charAt(i))) {
+                id.deleteCharAt(i);
+                --i;
+            }
+        }
+
+        // Fix the id, if necessary, by reversing it (A-B => B-A).
+        // Record the position of the separator.  Detect the special
+        // case of Null, whose inverse is itself.  Given an ID with no
+        // separator "Foo", an abbreviation for "Any-Foo", consider
+        // the inverse to be "Foo-Any".
+        String str = id.toString();
+        int sep = str.indexOf('-');
+        if (str.equalsIgnoreCase(NullTransliterator._ID)) {
+            sep = id.length();
+        } else if (direction == REVERSE) {
+            String left;
+            if (sep >= 0) {
+                left = id.substring(0, sep);
+                id.delete(0, sep+1);
+            } else {
+                left = "Any";
+            }
+            sep = id.length();
+            id.append('-').append(left);
+        } else if (sep < 0) {
+            sep = id.length();
+        }
+
+        Transliterator t = internalGetInstance(id.toString());
+        if (t != null) {
+            if (filter != null) {
+                t.setFilter(filter);
+                id.insert(sep, ID.substring(setStart, setLimit));
+            }
+            t.ID = id.toString();
+            return t;
+        }
+        
         throw new IllegalArgumentException("Unsupported transliterator: "
                                            + ID);
     }
@@ -853,9 +872,10 @@ public abstract class Transliterator {
     private static Transliterator internalGetInstance(String ID) {
         RuleBasedTransliterator.Data data = null;
         Hashtable sourceCache = cache;
-        Object obj = cache.get(ID);
+        CaseInsensitiveString ciID = new CaseInsensitiveString(ID);
+        Object obj = cache.get(ciID);
         if (obj == null) {
-            obj = internalCache.get(ID);
+            obj = internalCache.get(ciID);
             sourceCache = internalCache;
         }
         
@@ -895,7 +915,7 @@ public abstract class Transliterator {
                         
                         if (r != null) {
                             data = RuleBasedTransliterator.parse(r, dir);
-                            sourceCache.put(ID, data);
+                            sourceCache.put(ciID, data);
                             // Fall through to construct transliterator from Data object.
                         }
                     }
@@ -968,9 +988,9 @@ public abstract class Transliterator {
      * @see #unregister
      */
     public static void registerClass(String ID, Class transClass, String displayName) {
-        cache.put(ID, transClass);
+        cache.put(new CaseInsensitiveString(ID), transClass);
         if (displayName != null) {
-            displayNameCache.put(ID, displayName);
+            displayNameCache.put(new CaseInsensitiveString(ID), displayName);
         }
     }
 
@@ -981,7 +1001,7 @@ public abstract class Transliterator {
      * @param factory the factory object
      */
     public static void registerFactory(String ID, Factory factory) {
-        cache.put(ID, factory);
+        cache.put(new CaseInsensitiveString(ID), factory);
     }
 
     /**
@@ -994,9 +1014,30 @@ public abstract class Transliterator {
      * @see #registerClass
      */
     public static Object unregister(String ID) {
-        displayNameCache.remove(ID);
-        return cache.remove(ID);
+        CaseInsensitiveString ciID = new CaseInsensitiveString(ID);
+        displayNameCache.remove(ciID);
+        return cache.remove(ciID);
     }
+
+    /**
+     * An internal class that adapts an enumeration over
+     * CaseInsensitiveStrings to an enumeration over Strings.
+     */
+    private static class IDEnumeration implements Enumeration {
+        Enumeration enum;
+
+        public IDEnumeration(Enumeration e) {
+            enum = e;
+        }
+
+        public boolean hasMoreElements() {
+            return enum.hasMoreElements();
+        }
+
+        public Object nextElement() {
+            return ((CaseInsensitiveString) enum.nextElement()).getString();
+        }
+    };
 
     /**
      * Returns an enumeration over the programmatic names of registered
@@ -1010,7 +1051,9 @@ public abstract class Transliterator {
      * @see #registerClass
      */
     public static final Enumeration getAvailableIDs() {
-        return cache.keys();
+        // Since the cache contains CaseInsensitiveString objects, but
+        // the caller expects Strings, we have to use an intermediary.
+        return new IDEnumeration(cache.keys());
     }
 
     /**
@@ -1065,6 +1108,7 @@ public abstract class Transliterator {
             String type = line.substring(pos, colon);
             pos = colon+1;
 
+            CaseInsensitiveString ciID = new CaseInsensitiveString(ID);
             if (type.equals("file") || type.equals("internal")) {
                 // Rest of line is <resource>:<encoding>:<direction>
                 colon = line.indexOf(':', pos);
@@ -1073,10 +1117,10 @@ public abstract class Transliterator {
                 pos = colon+1;
                 boolean isForward = line.substring(pos).equals("FORWARD");
                 Hashtable h = type.equals("internal") ? internalCache:cache;
-                h.put(ID, (isForward ? "f" : "r") + fileNameAndEncoding);
+                h.put(ciID, (isForward ? "f" : "r") + fileNameAndEncoding);
             } else if (type.equals("alias")) {
                 // Rest of line is the <getInstanceArg>
-                cache.put(ID, "a" + line.substring(pos));
+                cache.put(ciID, "a" + line.substring(pos));
             } else {
                 // Unknown type
                 throw new RuntimeException("Can't parse line: " + line);
