@@ -1959,7 +1959,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
     int32_t padPos = (fFormatWidth > 0) ? fPadPosition : -1;
     UnicodeString padSpec;
     if(fFormatWidth > 0) {
-      padSpec.append(localized ? fSymbols->getPadEscape() : kPatternPadEscape).
+      padSpec.append((UChar)(localized ? fSymbols->getPadEscape() : kPatternPadEscape)).
 	append(fPad);
     }
     if(fRoundingIncrement != NULL) {
@@ -1998,29 +1998,29 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
 	    continue;
 	  }
 	}
-	result.append(i<=getMinimumIntegerDigits() ? zero : digit);
+	result.append((UChar)(i<=getMinimumIntegerDigits() ? zero : digit));
       }
       if (getMaximumFractionDigits() > 0 || fDecimalSeparatorAlwaysShown) {
-	result.append(localized ? fSymbols->getDecimalSeparator() :
-		      kPatternDecimalSeparator);
+	result.append((UChar)(localized ? fSymbols->getDecimalSeparator() :
+		      kPatternDecimalSeparator));
       }
       int32_t pos = roundingDecimalPos;
       for (i = 0; i < getMaximumFractionDigits(); ++i) {
 	if (! roundingDigits.empty() &&
 	    pos < roundingDigits.length()) {
-	  result.append(pos < 0 ? zero :
-			(UChar) (roundingDigits.charAt(pos) - kPatternZeroDigit + zero));
+	  result.append((UChar)(pos < 0 ? zero :
+			(UChar) (roundingDigits.charAt(pos) - kPatternZeroDigit + zero)));
 	  ++pos;
 	  continue;
             }
-            result.append(i<getMinimumFractionDigits() ? zero : digit);
+            result.append((UChar)(i<getMinimumFractionDigits() ? zero : digit));
         }
         if (fUseExponentialNotation) {
-            result.append(localized ? fSymbols->getExponentialSymbol() :
-                          kPatternExponent);
+            result.append((UChar)(localized ? fSymbols->getExponentialSymbol() :
+                          kPatternExponent));
             if (fExponentSignAlwaysShown) {
-                result.append(localized ? fSymbols->getPlusSign() :
-                              kPatternPlus);
+                result.append((UChar)(localized ? fSymbols->getPlusSign() :
+                              kPatternPlus));
             }
             for (i=0; i<fMinExponentDigits; ++i) {
                 result.append(zero);
@@ -2073,8 +2073,8 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
             if (isDefault) {
                 break; // Don't output default negative subpattern
             } else {
-                result.append(localized ? fSymbols->getPatternSeparator() :
-                              kPatternSeparator);
+                result.append((UChar)(localized ? fSymbols->getPatternSeparator() :
+                              kPatternSeparator));
             }
         } else {
             appendAffix(result, fNegSuffixPattern, fNegativeSuffix, localized);
