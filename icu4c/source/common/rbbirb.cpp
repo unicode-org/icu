@@ -112,6 +112,9 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
         return NULL;
     }
 
+    // Remove comments and whitespace from the rules to make it smaller.
+    UnicodeString strippedRules(RBBIRuleScanner::stripRules(fRules));
+
     // Calculate the size of each section in the data.
     //   Sizes here are padded up to a multiple of 8 for better memory alignment.
     //   Sections sizes actually stored in the header are for the actual data
@@ -121,7 +124,7 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
     int32_t forwardTableSize  = align8(fForwardTables->getTableSize());
     int32_t reverseTableSize  = align8(fReverseTables->getTableSize());
     int32_t trieSize          = align8(fSetBuilder->getTrieSize());
-    int32_t rulesSize         = align8((fRules.length()+1) * sizeof(UChar));
+    int32_t rulesSize         = align8((strippedRules.length()+1) * sizeof(UChar));
 
     int32_t         totalSize = headerSize + forwardTableSize + reverseTableSize
                                 + trieSize + rulesSize;
@@ -145,14 +148,14 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
     data->fTrie          = data->fRTable + reverseTableSize;
     data->fTrieLen       = fSetBuilder->getTrieSize();
     data->fRuleSource    = data->fTrie   + trieSize;
-    data->fRuleSourceLen = fRules.length() * sizeof(UChar);
+    data->fRuleSourceLen = strippedRules.length() * sizeof(UChar);
 
     uprv_memset(data->fReserved, 0, sizeof(data->fReserved));
 
     fForwardTables->exportTable((uint8_t *)data + data->fFTable);
     fReverseTables->exportTable((uint8_t *)data + data->fRTable);
     fSetBuilder->serializeTrie ((uint8_t *)data + data->fTrie);
-    fRules.extract((UChar *)((uint8_t *)data+data->fRuleSource), rulesSize/2+1, *fStatus);
+    strippedRules.extract((UChar *)((uint8_t *)data+data->fRuleSource), rulesSize/2+1, *fStatus);
 
     return data;
 }

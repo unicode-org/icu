@@ -73,6 +73,12 @@ public:
                                                     //   trees, one each for the forward and
                                                     //   reverse rules,
                                                     //   and a list of UnicodeSets encountered.
+
+    /**
+     * Return a rules string without unnecessary
+     * characters.
+     */
+    static UnicodeString stripRules(const UnicodeString &rules);
 private:
 
     UBool       doParseActions(EParseAction a);
