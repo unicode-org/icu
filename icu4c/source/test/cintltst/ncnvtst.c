@@ -1932,7 +1932,7 @@ TestUnicodeSet() {
                     name, u_errorName(errorCode));
         } else if(
             !uset_containsRange(set, nameRanges[i].start, nameRanges[i].end) ||
-            nameRanges[i].start2>=0 && !uset_containsRange(set, nameRanges[i].start2, nameRanges[i].end2)
+            (nameRanges[i].start2>=0 && !uset_containsRange(set, nameRanges[i].start2, nameRanges[i].end2))
         ) {
             log_err("error: ucnv_getUnicodeSet(%s) does not contain the expected ranges\n", name);
         } else if(nameRanges[i].notStart>=0) {

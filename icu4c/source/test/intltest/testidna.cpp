@@ -533,7 +533,8 @@ static struct ConformanceTestCases
      {
        "Bidi: RandALCat character U+FB38 and LCat characters",
        "\x66\x6F\x6F\xEF\xB9\xB6\x62\x61\x72", "\x66\x6F\x6F \xd9\x8e\x62\x61\x72",
-       UIDNA_DEFAULT, U_ZERO_ERROR
+       "Nameprep", UIDNA_DEFAULT,
+       U_ZERO_ERROR
      },
      { "Bidi: RandALCat without trailing RandALCat U+0627 U+0031",
        "\xD8\xA7\x31", NULL, 
@@ -543,7 +544,8 @@ static struct ConformanceTestCases
      {
        "Bidi: RandALCat character U+0627 U+0031 U+0628",
        "\xD8\xA7\x31\xD8\xA8", "\xD8\xA7\x31\xD8\xA8",
-       UIDNA_DEFAULT, U_ZERO_ERROR
+       "Nameprep", UIDNA_DEFAULT,
+       U_ZERO_ERROR
      },
      {
        "Unassigned code point U+E0002",
@@ -585,7 +587,7 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
 
     UErrorCode status = U_ZERO_ERROR;
     UChar destStack[MAX_DEST_SIZE];
-    int32_t destLen = 0, destCapacity = MAX_DEST_SIZE;
+    int32_t destLen = 0;
     UChar* dest = NULL;
     int32_t expectedLen = u_strlen(expected);
     int32_t options = (useSTD3ASCIIRules == TRUE) ? UIDNA_USE_STD3_RULES : UIDNA_DEFAULT;

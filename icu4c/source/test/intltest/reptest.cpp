@@ -197,7 +197,7 @@ public:
         /* do nothing */
     }
 
-    virtual void copy(int32_t start, int32_t limit, int32_t dest) {
+    virtual void copy(int32_t /*start*/, int32_t /*limit*/, int32_t /*dest*/) {
         /* do nothing */
     }
 

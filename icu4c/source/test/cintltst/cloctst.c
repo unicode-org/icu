@@ -546,7 +546,6 @@ static void doTestDisplayNames(const char* displayLocale, int32_t compareIndex)
     UChar*  expectedCtry = 0;
     UChar*  expectedVar = 0;
     UChar*  expectedName = 0;
-    const char* defaultDefaultLocale=" ";
 
 setUpDataTable();
 

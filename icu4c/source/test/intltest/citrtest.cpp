@@ -46,7 +46,7 @@ public:
     static UClassID getStaticClassID(void){ 
         return (UClassID)(&fgClassID); 
     }
-    virtual UBool operator==(const ForwardCharacterIterator& that) const{
+    virtual UBool operator==(const ForwardCharacterIterator& /*that*/) const{
         return TRUE;
     }
 
@@ -63,8 +63,8 @@ public:
     virtual UChar32 first32(){return DONE;};
     virtual UChar last(){return DONE;};
     virtual UChar32 last32(){return DONE;};
-    virtual UChar setIndex(int32_t pos){return DONE;};
-    virtual UChar32 setIndex32(int32_t pos){return DONE;};
+    virtual UChar setIndex(int32_t /*pos*/){return DONE;};
+    virtual UChar32 setIndex32(int32_t /*pos*/){return DONE;};
     virtual UChar current() const{return DONE;};
     virtual UChar32 current32() const{return DONE;};
     virtual UChar next(){return DONE;};
@@ -135,7 +135,7 @@ private:
 };
 const char SCharacterIterator::fgClassID=0;
 
-#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+#define LENGTHOF(array) ((int32_t)(sizeof(array)/sizeof((array)[0])))
 
 CharIterTest::CharIterTest()
 {
@@ -1092,11 +1092,11 @@ public:
         return 0;
     }
 
-    virtual int32_t move(int32_t delta, EOrigin origin) {
+    virtual int32_t move(int32_t /*delta*/, EOrigin /*origin*/) {
         return 0;
     }
 
-    virtual int32_t move32(int32_t delta, EOrigin origin) {
+    virtual int32_t move32(int32_t /*delta*/, EOrigin /*origin*/) {
         return 0;
     }
 

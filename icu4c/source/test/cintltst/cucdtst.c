@@ -2392,7 +2392,7 @@ TestNumericProperties(void) {
  */
 static void
 TestPropertyNames(void) {
-    int32_t p, v, choice, rev;
+    int32_t p, v, choice=0, rev;
     UBool atLeastSomething = FALSE;
 
     for (p=0; ; ++p) {

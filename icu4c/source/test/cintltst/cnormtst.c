@@ -110,6 +110,8 @@ const static char* compatTests[][3] = {
     
 };
 
+void addNormTest(TestNode** root);
+
 void addNormTest(TestNode** root)
 {
     addTest(root, &TestAPI, "tscoll/cnormtst/TestAPI");
