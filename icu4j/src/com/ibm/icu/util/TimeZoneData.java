@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/TimeZoneData.java,v $
- * $Date: 2001/01/09 20:06:43 $
- * $Revision: 1.1 $
+ * $Date: 2001/01/09 22:48:25 $
+ * $Revision: 1.2 $
  */
 package com.ibm.util;
 import java.util.Hashtable;
@@ -47,6 +47,7 @@ class TimeZoneData {
      * These IDs (and only these IDs) may be passed to
      * <code>get()</code> to construct the corresponding TimeZone
      * object.
+     * @return an array of all system TimeZone IDs
      */
     public static String[] getAvailableIDs() {
         String[] result = new String[IDS.length];
@@ -60,6 +61,8 @@ class TimeZoneData {
      * <code>get()</code> to construct the corresponding TimeZone
      * object.
      * @param rawOffset the offset in milliseconds from GMT
+     * @return an array of IDs for system TimeZones with the given
+     * raw offset.  If there are none, return a zero-length array.
      */
     public static String[] getAvailableIDs(int rawOffset) {
         // Do a linear search; there are < 200 entries
@@ -89,9 +92,9 @@ class TimeZoneData {
      * includes the given ID.  An equivalency group contains zones
      * that have the same GMT offset and rules.
      *
-     * <p>The returned count includes the given ID; it is always >= 1.
-     * The given ID must be a system time zone.  If it is not, returns
-     * zero.
+     * <p>The returned count includes the given ID; it is always >= 1
+     * for valid IDs.  The given ID must be a system time zone.  If it
+     * is not, returns zero.
      * @param ID a system time zone ID
      * @return the number of zones in the equivalency group containing
      * 'ID', or zero if 'ID' is not a valid system ID
@@ -126,7 +129,7 @@ class TimeZoneData {
             return "";
         }
         int j = i + ((DATA[i+1]==0)?2:13);
-        return (i<DATA[j]) ? IDS[DATA[j+index+1]] : "";
+        return (index<DATA[j]) ? IDS[DATA[j+index+1]] : "";
     }
 
     /**
