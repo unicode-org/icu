@@ -1,11 +1,11 @@
 #________________________________________________________________________
 #
-# (C) COPYRIGHT International Business Machines Corp. 1995
+# (C) COPYRIGHT International Business Machines Corp. 1998
 #     All Rights Reserved
 #
 #________________________________________________________________________
 #
-# File created on Wed Dec 13 10:17:32 1995
+# File created on Wed Jul 15 16:57:32 1998
 #
 # File created by dtcocm version 3.00
 # from source files IBM-424.RPMAP100 and IBM-424.TPMAP100
@@ -333,9 +333,18 @@ CHARMAP
 <U05E8>         \x68                # HR010000
 <U05E9>         \x69                # HS210000
 <U05EA>         \x71                # HT010000
+<U200E>         \xFD                # SP5500Z0
+<U200F>         \xFE                # SP5600Z0
 <U2017>         \x78                # SM100000
 <U2022>         \xB3                # SM570000
+<U202A>         \xFB                # SP5700Z0
+<U202B>         \xFC                # SP5800Z0
+<U202C>         \xDD                # SP5900Z0
+<U202D>         \xDB                # SP6000Z0
+<U202E>         \xDC                # SP6100Z0
 <U203E>         \xBC                # SM150000
+<U20AA>         \x9E                # SC170000
+<U20AC>         \x9C                # SC200000
 #
 END CHARMAP
 #

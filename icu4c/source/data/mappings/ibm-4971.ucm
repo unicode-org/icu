@@ -1,18 +1,18 @@
 #________________________________________________________________________
 #
-# (C) COPYRIGHT International Business Machines Corp. 1998
+# (C) COPYRIGHT International Business Machines Corp. 1999
 #     All Rights Reserved
 #
 #________________________________________________________________________
 #
-# File created on Wed Jul 15 16:57:32 1998
+# File created on Thu Mar 18 15:01:53 1999
 #
 # File created by dtcocm version 3.00
-# from source files IBM-424.RPMAP100 and IBM-424.TPMAP100
+# from source files ibm-4971.rpmap100 and ibm-4971.tpmap100
 #
 # Table Version : 1.00
 #
-<code_set_name>               "IBM-424"
+<code_set_name>               "IBM-4971"
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  1
 <mb_cur_min>                  1
@@ -22,7 +22,7 @@
 CHARMAP
 #
 #
-#ISO 10646      IBM-424
+#ISO 10646      IBM-4971
 #_________      _________
 <U0000>         \x00
 <U0001>         \x01
@@ -57,8 +57,8 @@ CHARMAP
 <U001E>         \x1E
 <U001F>         \x1F
 <U0020>         \x40                # SP010000
-<UFF01>         \x5A                # SP020000
-<U0021>         \x5A                # SP020000
+<UFF01>         \x4F                # SP020000
+<U0021>         \x4F                # SP020000
 <UFF02>         \x7F                # SP040000
 <U0022>         \x7F                # SP040000
 <UFF03>         \x7B                # SM010000
@@ -173,14 +173,14 @@ CHARMAP
 <U0059>         \xE8                # LY020000
 <UFF3A>         \xE9                # LZ020000
 <U005A>         \xE9                # LZ020000
-<UFF3B>         \xBA                # SM060000
-<U005B>         \xBA                # SM060000
+<UFF3B>         \x4A                # SM060000
+<U005B>         \x4A                # SM060000
 <UFF3C>         \xE0                # SM070000
 <U005C>         \xE0                # SM070000
-<UFF3D>         \xBB                # SM080000
-<U005D>         \xBB                # SM080000
-<UFF3E>         \xB0                # SD150000
-<U005E>         \xB0                # SD150000
+<UFF3D>         \x5A                # SM080000
+<U005D>         \x5A                # SM080000
+<UFF3E>         \x5F                # SD150000
+<U005E>         \x5F                # SD150000
 <UFF3F>         \x6D                # SP090000
 <U005F>         \x6D                # SP090000
 <UFF40>         \x79                # SD130000
@@ -239,8 +239,8 @@ CHARMAP
 <U007A>         \xA9                # LZ010000
 <UFF5B>         \xC0                # SM110000
 <U007B>         \xC0                # SM110000
-<UFF5C>         \x4F                # SM130000
-<U007C>         \x4F                # SM130000
+<UFF5C>         \x6A                # SM130000
+<U007C>         \x6A                # SM130000
 <UFF5D>         \xD0                # SM140000
 <U007D>         \xD0                # SM140000
 <UFF5E>         \xA1                # SD190000
@@ -279,72 +279,98 @@ CHARMAP
 <U009E>         \x3E
 <U009F>         \xFF
 <U00A0>         \x74                # SP300000
-<U00A2>         \x4A                # SC040000
-<U00A3>         \xB1                # SC020000
-<U00A4>         \x9F                # SC010000
-<U00A5>         \xB2                # SC050000
-<U00A6>         \x6A                # SM650000
-<U00A7>         \xB5                # SM240000
-<U00A8>         \xBD                # SD170000
-<U00A9>         \xB4                # SM520000
-<U00AB>         \x8A                # SP170000
-<U00AC>         \x5F                # SM660000
+<U00A3>         \xB0                # SC020000
+<U00A6>         \xDF                # SM650000
+<U00A7>         \xEB                # SM240000
+<U00A8>         \x70                # SD170000
+<U00A9>         \xFB                # SM520000
+<U00AB>         \xEE                # SP170000
+<U00AC>         \xEF                # SM660000
 <U00AD>         \xCA                # SP320000
-<U00AE>         \xAF                # SM530000
 <U00B0>         \x90                # SM190000
-<U00B1>         \x8F                # SA020000
+<U00B1>         \xDA                # SA020000
 <U00B2>         \xEA                # ND021000
 <U00B3>         \xFA                # ND031000
-<U00B4>         \xBE                # SD110000
-<U00B5>         \xA0                # SM170000
-<U00B6>         \xB6                # SM250000
-<U00B8>         \x9D                # SD410000
-<U00B9>         \xDA                # ND011000
-<U00BB>         \x8B                # SP180000
-<U00BC>         \xB7                # NF040000
-<U00BD>         \xB8                # NF010000
-<U00BE>         \xB9                # NF050000
-<U00D7>         \xBF                # SA070000
-<U00F7>         \xE1                # SA060000
-<U05D0>         \x41                # HX330000
-<U05D1>         \x42                # HB010000
-<U05D2>         \x43                # HG010000
-<U05D3>         \x44                # HD010000
-<U05D4>         \x45                # HH010000
-<U05D5>         \x46                # HW010000
-<U05D6>         \x47                # HZ010000
-<U05D7>         \x48                # HH450000
-<U05D8>         \x49                # HT450000
-<U05D9>         \x51                # HY010000
-<U05DA>         \x52                # HK610000
-<U05DB>         \x53                # HK010000
-<U05DC>         \x54                # HL010000
-<U05DD>         \x55                # HM610000
-<U05DE>         \x56                # HM010000
-<U05DF>         \x57                # HN610000
-<U05E0>         \x58                # HN010000
-<U05E1>         \x59                # HS010000
-<U05E2>         \x62                # HX350000
-<U05E3>         \x63                # HP610000
-<U05E4>         \x64                # HP010000
-<U05E5>         \x65                # HS610000
-<U05E6>         \x66                # HS450000
-<U05E7>         \x67                # HQ010000
-<U05E8>         \x68                # HR010000
-<U05E9>         \x69                # HS210000
-<U05EA>         \x71                # HT010000
-<U200E>         \xFD                # SP5500Z0
-<U200F>         \xFE                # SP5600Z0
-<U2017>         \x78                # SM100000
-<U2022>         \xB3                # SM570000
-<U202A>         \xFB                # SP5700Z0
-<U202B>         \xFC                # SP5800Z0
-<U202C>         \xDD                # SP5900Z0
-<U202D>         \xDB                # SP6000Z0
-<U202E>         \xDC                # SP6100Z0
-<U203E>         \xBC                # SM150000
-<U20AA>         \x9E                # SC170000
-<U20AC>         \x9C                # SC200000
+<U00B4>         \xA0                # SD110000
+<U00B7>         \xDD                # SD630000
+<U0387>         \xDD                # SD630000
+<U00BB>         \xFE                # SP180000
+<U00BD>         \xDB                # NF010000
+<U0385>         \x80                # SD730000
+<U0386>         \x71                # GA120000
+<U0388>         \x72                # GE120000
+<U0389>         \x73                # GE720000
+<U038A>         \x75                # GI120000
+<U038C>         \x76                # GO120000
+<U038E>         \x77                # GU120000
+<U038F>         \x78                # GO720000
+<U0390>         \xCC                # GI730000
+<U0391>         \x41                # GA020000
+<U0392>         \x42                # GB020000
+<U0393>         \x43                # GG020000
+<U0394>         \x44                # GD020000
+<U0395>         \x45                # GE020000
+<U0396>         \x46                # GZ020000
+<U0397>         \x47                # GE320000
+<U0398>         \x48                # GT620000
+<U0399>         \x49                # GI020000
+<U039A>         \x51                # GK020000
+<U039B>         \x52                # GL020000
+<U039C>         \x53                # GM020000
+<U039D>         \x54                # GN020000
+<U039E>         \x55                # GX020000
+<U039F>         \x56                # GO020000
+<U03A0>         \x57                # GP020000
+<U03A1>         \x58                # GR020000
+<U03A3>         \x59                # GS020000
+<U03A4>         \x62                # GT020000
+<U03A5>         \x63                # GU020000
+<U03A6>         \x64                # GF020000
+<U03A7>         \x65                # GH020000
+<U03A8>         \x66                # GP620000
+<U03A9>         \x67                # GO320000
+<U03AA>         \x68                # GI180000
+<U03AB>         \x69                # GU180000
+<U03AC>         \xB1                # GA110000
+<U03AD>         \xB2                # GE110000
+<U03AE>         \xB3                # GE710000
+<U03AF>         \xB5                # GI110000
+<U03B0>         \xCD                # GU730000
+<U03B1>         \x8A                # GA010000
+<U03B2>         \x8B                # GB010000
+<U03B3>         \x8C                # GG010000
+<U03B4>         \x8D                # GD010000
+<U03B5>         \x8E                # GE010000
+<U03B6>         \x8F                # GZ010000
+<U03B7>         \x9A                # GE310000
+<U03B8>         \x9B                # GT610000
+<U03B9>         \x9C                # GI010000
+<U03BA>         \x9D                # GK010000
+<U03BB>         \x9E                # GL010000
+<U03BC>         \x9F                # GM010000
+<U03BD>         \xAA                # GN010000
+<U03BE>         \xAB                # GX010000
+<U03BF>         \xAC                # GO010000
+<U03C0>         \xAD                # GP010000
+<U03C1>         \xAE                # GR010000
+<U03C2>         \xBA                # GS610000
+<U03C3>         \xAF                # GS010000
+<U03C4>         \xBB                # GT010000
+<U03C5>         \xBC                # GU010000
+<U03D5>         \xBD                # GF010000
+<U03C6>         \xBD                # GF010000
+<U03C7>         \xBE                # GH010000
+<U03C8>         \xBF                # GP610000
+<U03C9>         \xCB                # GO310000
+<U03CA>         \xB4                # GI170000
+<U03CB>         \xB8                # GU170000
+<U03CC>         \xB6                # GO110000
+<U03CD>         \xB7                # GU110000
+<U03CE>         \xB9                # GO710000
+<U2015>         \xCF                # SM120000
+<U2018>         \xCE                # SP190000
+<U2019>         \xDE                # SP200000
+<U20AC>         \xFC                # SC200000
 #
 END CHARMAP
 #

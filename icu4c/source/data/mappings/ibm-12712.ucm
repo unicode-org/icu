@@ -12,7 +12,7 @@
 #
 # Table Version : 1.00
 #
-<code_set_name>               "IBM-424"
+<code_set_name>               "IBM-12712"
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  1
 <mb_cur_min>                  1
