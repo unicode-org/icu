@@ -55,12 +55,6 @@ static void
 parseNormalizationCorrections(const char *filename, UErrorCode *pErrorCode);
 
 
-static void 
-printMapping(UChar32 cp,UChar32* mapping, int32_t mappingLength);
-
-static const char *UNIDATA_DIR = "unidata";
-static const char *MISC_DIR    = "misc";
-
 /* -------------------------------------------------------------------------- */
 
 static UOption options[]={
@@ -112,7 +106,8 @@ static int printHelp(int argc, char* argv[]){
         "\t-d or --destdir          destination directory, followed by the path\n"
         "\t-s or --sourcedir        source directory of ICU data, followed by the path\n"
         "\t-b or --bundle-name      generate the ouput data file with the name specified\n"
-        "\t-p or --package-name     prepend the output data file name with the package name specified\n"
+        "\t-p or --package-name     prepend the output data file name with the package name specified\n");
+    fprintf(stderr,
         "\t-n or --normalize        turn on the option for normalization and include mappings\n"
         "\t                         from NormalizationCorrections.txt from the given path,\n"
         "\t                         e.g: /test/icu/source/data/unidata\n"
@@ -387,7 +382,7 @@ strprepProfileLineFn(void *context,
     }
     
     if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "gensprep error parsing  %s line %s at %s\n",filename,
+        fprintf(stderr, "gensprep error parsing  %s line %s at %s. Error: %s\n",filename,
                fields[0][0],fields[2][0],u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
