@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2004 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  08/13/2001   synwee      Creation.
