@@ -1169,7 +1169,7 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
                                  right->text, right->cursor, right->cursorOffset,
                                  left->createSegments(status),
                                  left->anchorStart, left->anchorEnd,
-                                 *data,
+                                 data,
                                  status), status);
 
     return pos;

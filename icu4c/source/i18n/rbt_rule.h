@@ -111,10 +111,10 @@ private:
     };
 
     /**
-     * A reference to the data for this rule.  The data provides
+     * An alias pointer to the data for this rule.  The data provides
      * lookup services for matchers and segments.
      */
-    const TransliterationRuleData& data;
+    const TransliterationRuleData* data;
 
 public:
 
@@ -155,7 +155,7 @@ public:
                         int32_t cursorPosition, int32_t cursorOffset,
                         int32_t* adoptedSegs,
                         UBool anchorStart, UBool anchorEnd,
-                        const TransliterationRuleData& data,
+                        const TransliterationRuleData* data,
                         UErrorCode& status);
 
     /**
@@ -167,6 +167,12 @@ public:
      * Destructor.
      */
     virtual ~TransliterationRule();
+
+    /**
+     * Change the data object that this rule belongs to.  Used
+     * internally by the TransliterationRuleData copy constructor.
+     */
+    inline void setData(const TransliterationRuleData* data);
 
     /**
      * Return the position of the cursor within the output string.
@@ -260,5 +266,9 @@ public:
                              UBool escapeUnprintable,
                              UnicodeString& quoteBuf);
 };
+
+inline void TransliterationRule::setData(const TransliterationRuleData* d) {
+    data = d;
+}
 
 #endif
