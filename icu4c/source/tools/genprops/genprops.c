@@ -114,7 +114,7 @@ main(int argc, const char *argv[]) {
     uprv_strcpy(filename, srcDir);
     basename=filename+uprv_strlen(filename);
     if(basename>filename && *(basename-1)!=U_FILE_SEP_CHAR) {
-        *basename=U_FILE_SEP_CHAR;
+        *basename++=U_FILE_SEP_CHAR;
     }
 
     /* initialize */
