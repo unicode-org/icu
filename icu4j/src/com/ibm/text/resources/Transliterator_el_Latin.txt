@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/Transliterator_el_Latin.txt,v $
-# $Date: 2001/11/01 00:39:31 $
-# $Revision: 1.1 $
+# $Date: 2001/11/02 19:07:06 $
+# $Revision: 1.2 $
 #--------------------------------------------------------------------
 
 # Rules are predicated on running NFD first, and NFC afterwards
@@ -40,6 +40,12 @@ $iotasub = ͅ ;
 $softener = [βΒγΓδΔζΖλΛμΜνΝρΡ$gvowel] ;
 
 $under = \u0331;
+
+$caron = \u030C;
+
+$afterLetter = [:^L:] [\'[:M:]]* ;
+$beforeLetter = [\'[:M:]]* [:^L:] ;
+
 
 # Fix punctuation
 
@@ -143,11 +149,23 @@ $vowel { Υ <> U $under ;
 ρ <> r ; 
 Ρ <> R ; 
 
-[Pp] {ς > \'s ; 
-[Pp] {σ > \'s ; 
-σ < [:^L:] [:M:]* { s } [:^L:] ;
-ς <> s } [:^L:] ;
-σ <> s ; 
+[Pp] { } ς > \' ; 
+[Pp] { } σ > \' ;
+
+# Caron means exception
+
+# before a letter, initial
+ς } $beforeLetter <> s $caron } $beforeLetter;
+σ } $beforeLetter <> s } $beforeLetter;
+
+# otherwise, after a letter = final 
+$afterLetter { σ <> $afterLetter { s $caron;
+$afterLetter { ς <> $afterLetter { s ;
+
+# otherwise (isolated) = initial
+ς <> s $caron;
+σ <> s ;
+
 [Pp] { Σ <> \'S ; 
 Σ <> S ; 
 
