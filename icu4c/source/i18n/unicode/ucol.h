@@ -1138,6 +1138,45 @@ ucol_getUnsafeSet( const UCollator *coll,
                   USet *unsafe,
                   UErrorCode *status);
 
+/** Creates a binary image of a collator. This binary image can be stored and 
+ *  later used to instantiate a collator using ucol_openBinary.
+ *  This API supports preflighting.
+ *  @param coll Collator
+ *  @param buffer a fill-in buffer to receive the binary image
+ *  @param capacity capacity of the destination buffer
+ *  @param status for catching errors
+ *  @return size of the image
+ *  @see ucol_openBinary
+ *  @draft ICU 3.2
+ */
+U_DRAFT int32_t U_EXPORT2
+ucol_cloneBinary(const UCollator *coll,
+                 uint8_t *buffer, int32_t capacity,
+                 UErrorCode *status);
+
+/** Opens a collator from a collator binary image created using
+ *  ucol_cloneBinary. Binary image used in instantiation of the 
+ *  collator remains owned by the user and should stay around for 
+ *  the lifetime of the collator. The API also takes a base collator
+ *  which usualy should be UCA.
+ *  @param bin binary image owned by the user and required through the
+ *             lifetime of the collator
+ *  @param length size of the image. If negative, the API will try to
+ *                figure out the length of the image
+ *  @param base fallback collator, usually UCA. Base is required to be
+ *              present through the lifetime of the collator. Currently 
+ *              it cannot be NULL.
+ *  @param status for catching errors
+ *  @return newly created collator
+ *  @see ucol_cloneBinary
+ *  @draft ICU 3.2
+ */
+U_DRAFT UCollator* U_EXPORT2
+ucol_openBinary(const uint8_t *bin, int32_t length, 
+                const UCollator *base, 
+                UErrorCode *status);
+
+
 #endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif
