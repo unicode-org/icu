@@ -1551,7 +1551,7 @@ void TestIDNA::TestIDNAMonkeyTest(){
     UErrorCode status = U_ZERO_ERROR;
 
     getInstance(status);    // Init prep
-    /*
+    
     for(int i=0; i<loopCount; i++){
         source.truncate(0);
         getTestSource(source);
@@ -1559,7 +1559,7 @@ void TestIDNA::TestIDNAMonkeyTest(){
         testCompareReferenceImpl(source.getBuffer(),source.length()-1);
         source.releaseBuffer();
     }
-    */
+    
     /* for debugging */ 
     source.append( "\\u2109\\u3E1B\\U000E65CA\\U0001CAC5" );
                    
