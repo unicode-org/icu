@@ -40,6 +40,7 @@ static void cleanUpDataTable(void);
 static void TestUpperLower(void);
 static void TestLetterNumber(void);
 static void TestMisc(void);
+static void TestPOSIX(void);
 static void TestControlPrint(void);
 static void TestIdentifier(void);
 static void TestUnicodeData(void);
@@ -133,6 +134,7 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestUpperLower, "tsutil/cucdtst/TestUpperLower");
     addTest(root, &TestLetterNumber, "tsutil/cucdtst/TestLetterNumber");
     addTest(root, &TestMisc, "tsutil/cucdtst/TestMisc");
+    addTest(root, &TestPOSIX, "tsutil/cucdtst/TestPOSIX");
     addTest(root, &TestControlPrint, "tsutil/cucdtst/TestControlPrint");
     addTest(root, &TestIdentifier, "tsutil/cucdtst/TestIdentifier");
     addTest(root, &TestCharNames, "tsutil/cucdtst/TestCharNames");
@@ -637,6 +639,157 @@ static void TestMisc()
 			}
 		}
 	}
+
+    /* test u_digit() */
+    {
+        static const struct {
+            UChar32 c;
+            int8_t radix, value;
+        } data[]={
+            /* base 16 */
+            { 0x0031, 16, 1 },
+            { 0x0038, 16, 8 },
+            { 0x0043, 16, 12 },
+            { 0x0066, 16, 15 },
+            { 0x00e4, 16, -1 },
+            { 0x0662, 16, 2 },
+            { 0x06f5, 16, 5 },
+            { 0xff13, 16, 3 },
+            { 0xff41, 16, 10 },
+
+            /* base 8 */
+            { 0x0031, 8, 1 },
+            { 0x0038, 8, -1 },
+            { 0x0043, 8, -1 },
+            { 0x0066, 8, -1 },
+            { 0x00e4, 8, -1 },
+            { 0x0662, 8, 2 },
+            { 0x06f5, 8, 5 },
+            { 0xff13, 8, 3 },
+            { 0xff41, 8, -1 },
+
+            /* base 36 */
+            { 0x5a, 36, 35 },
+            { 0x7a, 36, 35 },
+            { 0xff3a, 36, 35 },
+            { 0xff5a, 36, 35 },
+
+            /* wrong radix values */
+            { 0x0031, 1, -1 },
+            { 0xff3a, 37, -1 }
+        };
+
+        int32_t i;
+
+        for(i=0; i<LENGTHOF(data); ++i) {
+            if(u_digit(data[i].c, data[i].radix)!=data[i].value) {
+                log_err("u_digit(U+%04x, %d)=%d expected %d\n",
+                        data[i].c,
+                        data[i].radix,
+                        u_digit(data[i].c, data[i].radix),
+                        data[i].value);
+            }
+        }
+    }
+}
+
+/* test C/POSIX-style functions --------------------------------------------- */
+
+/* bit flags */
+#define ISAL     1
+#define ISLO     2
+#define ISUP     4
+
+#define ISDI     8
+#define ISXD  0x10
+
+#define ISAN  0x20
+
+#define ISPU  0x40
+#define ISGR  0x80
+#define ISPR 0x100
+
+#define ISSP 0x200
+#define ISBL 0x400
+#define ISCN 0x800
+
+/* C/POSIX-style functions, in the same order as the bit flags */
+typedef UBool IsPOSIXClass(UChar32 c);
+
+static const struct {
+    IsPOSIXClass *fn;
+    const char *name;
+} posixClasses[]={
+    { u_isalpha, "isalpha" },
+    { u_islower, "islower" },
+    { u_isupper, "isupper" },
+    { u_isdigit, "isdigit" },
+    { u_isxdigit, "isxdigit" },
+    { u_isalnum, "isalnum" },
+    { u_ispunct, "ispunct" },
+    { u_isgraph, "isgraph" },
+    { u_isprint, "isprint" },
+    { u_isspace, "isspace" },
+    { u_isblank, "isblank" },
+    { u_iscntrl, "iscntrl" }
+};
+
+static const struct {
+    UChar32 c;
+    uint32_t posixResults;
+} posixData[]={
+    { 0x0008,                                                        ISCN },    /* backspace */
+    { 0x0009,                                              ISSP|ISBL|ISCN },    /* TAB */
+    { 0x000a,                                              ISSP|     ISCN },    /* LF */
+    { 0x000c,                                              ISSP|     ISCN },    /* FF */
+    { 0x000d,                                              ISSP|     ISCN },    /* CR */
+    { 0x0020,                                         ISPR|ISSP|ISBL      },    /* space */
+    { 0x0021,                               ISPU|ISGR|ISPR                },    /* ! */
+    { 0x0033,                ISDI|ISXD|ISAN|     ISGR|ISPR                },    /* 3 */
+    { 0x0040,                               ISPU|ISGR|ISPR                },    /* @ */
+    { 0x0041, ISAL|     ISUP|     ISXD|ISAN|     ISGR|ISPR                },    /* A */
+    { 0x007a, ISAL|ISLO|               ISAN|     ISGR|ISPR                },    /* z */
+    { 0x007b,                               ISPU|ISGR|ISPR                },    /* { */
+    { 0x0085,                                              ISSP|     ISCN },    /* NEL */
+    { 0x00a0,                                         ISPR|ISSP|ISBL      },    /* NBSP */
+    { 0x00a4,                                    ISGR|ISPR                },    /* currency sign */
+    { 0x00e4, ISAL|ISLO|               ISAN|     ISGR|ISPR                },    /* a-umlaut */
+    { 0x0300,                                    ISGR|ISPR                },    /* combining grave */
+    { 0x0600,                                                        ISCN },    /* arabic number sign */
+    { 0x0627, ISAL|                    ISAN|     ISGR|ISPR                },    /* alef */
+    { 0x0663,                ISDI|ISXD|ISAN|     ISGR|ISPR                },    /* arabic 3 */
+    { 0x2002,                                         ISPR|ISSP|ISBL      },    /* en space */
+    { 0x2007,                                         ISPR|ISSP|ISBL      },    /* figure space */
+    { 0x2009,                                         ISPR|ISSP|ISBL      },    /* thin space */
+    { 0x200b,                                         ISPR|ISSP           },    /* ZWSP */
+    { 0x200e,                                                        ISCN },    /* LRM */
+    { 0x2028,                                         ISPR|ISSP|     ISCN },    /* LS */
+    { 0x2029,                                         ISPR|ISSP|     ISCN },    /* PS */
+    { 0x20ac,                                    ISGR|ISPR                },    /* Euro */
+    { 0xff15,                ISDI|ISXD|ISAN|     ISGR|ISPR                },    /* fullwidth 5 */
+    { 0xff25, ISAL|     ISUP|     ISXD|ISAN|     ISGR|ISPR                },    /* fullwidth E */
+    { 0xff35, ISAL|     ISUP|          ISAN|     ISGR|ISPR                },    /* fullwidth U */
+    { 0xff45, ISAL|ISLO|          ISXD|ISAN|     ISGR|ISPR                },    /* fullwidth e */
+    { 0xff55, ISAL|ISLO|               ISAN|     ISGR|ISPR                }     /* fullwidth u */
+};
+
+static void
+TestPOSIX() {
+    uint32_t mask;
+    int32_t cl, i;
+    UBool expect;
+
+    mask=1;
+    for(cl=0; cl<12; ++cl) {
+        for(i=0; i<LENGTHOF(posixData); ++i) {
+            expect=(UBool)((posixData[i].posixResults&mask)!=0);
+            if(posixClasses[cl].fn(posixData[i].c)!=expect) {
+                log_err("u_%s(U+%04x)=%s is wrong\n",
+                    posixClasses[cl].name, posixData[i].c, expect ? "FALSE" : "TRUE");
+            }
+        }
+        mask<<=1;
+    }
 }
 
 /* Tests for isControl(u_iscntrl()) and isPrintable(u_isprint()) */
