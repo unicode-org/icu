@@ -51,6 +51,7 @@
 #define OPEN_BRACE      ((UChar)123)    /*{*/
 #define CLOSE_BRACE     ((UChar)125)    /*}*/
 #define UPPER_P         ((UChar)0x0050) /*P*/
+#define LOWER_P         ((UChar)0x0070) /*p*/
 #define UPPER_N         ((UChar)78)     /*N*/
 #define EQUALS          ((UChar)0x003D) /*=*/
 
@@ -159,6 +160,39 @@ static UnicodeSet* INCLUSIONS = NULL; // cached uprv_getInclusions()
 static Hashtable* CASE_EQUIV_HASH = NULL; // for closeOver(USET_CASE)
 
 static CompactByteArray* CASE_EQUIV_CBA = NULL; // for closeOver(USET_CASE)
+
+// helper functions for matching of pattern syntax pieces ------------------ ***
+// these functions are parallel to the PERL_OPEN etc. strings above
+
+// using these functions is not only faster than UnicodeString::compare() and
+// caseCompare(), but they also make UnicodeSet work for simple patterns when
+// no Unicode properties data is available - when caseCompare() fails
+
+static inline UBool
+isPerlOpen(const UnicodeString &pattern, int32_t pos) {
+    UChar c;
+    return pattern.charAt(pos)==BACKSLASH && ((c=pattern.charAt(pos+1))==LOWER_P || c==UPPER_P);
+}
+
+static inline UBool
+isPerlClose(const UnicodeString &pattern, int32_t pos) {
+    return pattern.charAt(pos)==CLOSE_BRACE;
+}
+
+static inline UBool
+isNameOpen(const UnicodeString &pattern, int32_t pos) {
+    return pattern.charAt(pos)==BACKSLASH && pattern.charAt(pos+1)==UPPER_N;
+}
+
+static inline UBool
+isPOSIXOpen(const UnicodeString &pattern, int32_t pos) {
+    return pattern.charAt(pos)==SET_OPEN && pattern.charAt(pos+1)==COLON;
+}
+
+static inline UBool
+isPOSIXClose(const UnicodeString &pattern, int32_t pos) {
+    return pattern.charAt(pos)==COLON && pattern.charAt(pos+1)==SET_CLOSE;
+}
 
 /**
  * Modify the given UChar32 variable so that it is in range, by
@@ -2932,9 +2966,7 @@ UBool UnicodeSet::resemblesPropertyPattern(const UnicodeString& pattern,
     }
 
     // Look for an opening [:, [:^, \p, or \P
-    return (0 == pattern.compare(pos, 2, POSIX_OPEN)) ||
-        (0 == pattern.caseCompare(pos, 2, PERL_OPEN, U_FOLD_CASE_DEFAULT)) ||
-        (0 == pattern.compare(pos, 2, NAME_OPEN));
+    return isPOSIXOpen(pattern, pos) || isPerlOpen(pattern, pos) || isNameOpen(pattern, pos);
 }
 
 /**
@@ -2958,7 +2990,7 @@ UnicodeSet& UnicodeSet::applyPropertyPattern(const UnicodeString& pattern,
 
     // On entry, ppos should point to one of the following locations:
     // Look for an opening [:, [:^, \p, or \P
-    if (0 == pattern.compare(pos, 2, POSIX_OPEN)) {
+    if (isPOSIXOpen(pattern, pos)) {
         posix = TRUE;
         pos += 2;
         pos = ICU_Utility::skipWhitespace(pattern, pos);
@@ -2966,8 +2998,7 @@ UnicodeSet& UnicodeSet::applyPropertyPattern(const UnicodeString& pattern,
             ++pos;
             invert = TRUE;
         }
-    } else if (0 == pattern.caseCompare(pos, 2, PERL_OPEN, U_FOLD_CASE_DEFAULT) ||
-               0 == pattern.compare(pos, 2, NAME_OPEN)) {
+    } else if (isPerlOpen(pattern, pos) || isNameOpen(pattern, pos)) {
         UChar c = pattern.charAt(pos+1);
         invert = (c == UPPER_P);
         isName = (c == UPPER_N);
