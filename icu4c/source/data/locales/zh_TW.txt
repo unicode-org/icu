@@ -8,7 +8,7 @@
 zh_TW {
     Version{ "2.0" }
     collations { 
-      default { "traditional" }
+        default { "traditional" }
     }
     Countries { 
         AD { "\u5B89\u9053\u723E" }
@@ -560,9 +560,6 @@ zh_TW {
     Types{
         collation{
             stroke      { "\u7B46\u5283\u987a\u5e8f" }   // Traditional Chinese.
-            traditional { "\u50B3\u7D71\u66C6\u6CD5" }
-        }
-        calendar{
             traditional { "\u50B3\u7D71\u66C6\u6CD5" }
         }
     }

@@ -473,18 +473,15 @@ it {
         "+",
     }
     Keys{
-         collation { "Collazione" }
-         calendar  { "Calendario" }
-	 currency  { "valutario" }
+        collation { "Collazione" }
+        calendar  { "Calendario" }
+        currency  { "valutario" }
     }
     Types{
         collation {
             traditional { "Tradizionale Collazione" }
-            stroke      {"Pennellata Ordine" }
+            stroke      { "Pennellata Ordine" }
             phonebook   { "Elenco Telefonico Ordine" }
-        }
-        calendar {
-            traditional { "Tradizionale Calendario" }
         }
     }
     Variants{

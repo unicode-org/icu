@@ -630,16 +630,13 @@ pt {
         "1,000,000,000,000: =#,##0=;" 
     }
     Keys {
-       collation { "Sorte" }
-       calendar  { "Caled\u00E1rio" }
-       currency  { "Moeda Corrente"}
+        collation { "Sorte" }
+        calendar  { "Caled\u00E1rio" }
+        currency  { "Moeda Corrente"}
     }
     Types{
         collation{
             traditional{ "Tradicional Sorte" }
-        }
-        calendar{
-            traditional{ "Tradicional Caled\u00E1rio" }
         }
     }
     Variants{
