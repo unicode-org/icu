@@ -433,7 +433,7 @@ int32_t getComplicatedCE(const UCollator *coll, collIterate *source, UErrorCode 
 					i = 0;
 					while(i<list->size() && !foundSmaller) {
 						pair = list->at(i);
-						if ((pair != NULL) && (pair->fwd == TRUE /*fwd*/) && (pair->entryName == UnicodeString(key, posKey))) {
+						if ((pair != NULL) && (pair->fwd == TRUE /*fwd*/) && (pair->equalTo(key, posKey))) {
 							order = pair->value;
 							foundSmaller = TRUE;
 						}
@@ -509,6 +509,7 @@ ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *target,
         int32_t            targetLength)
 {
+	Collator *cppColl = (Collator*)coll;
 
     // check if source and target are valid strings
     if (((source == 0) && (target == 0)) ||
@@ -525,11 +526,11 @@ ucol_strcoll(    const    UCollator    *coll,
 
     collIterate sColl, tColl;
 
-    UNormalizationMode normMode = ucol_getNormalization(coll);
-    if(normMode == UCOL_NO_NORMALIZATION) {
+    if(cppColl->getDecomposition() == Normalizer::NO_OP) {
         init_collIterate(source, sourceLength, &sColl, FALSE);
         init_collIterate(target, targetLength, &tColl, FALSE);
     } else {
+	    UNormalizationMode normMode = ucol_getNormalization(coll);
         normSourceLength = u_normalize(source, sourceLength, normMode, 0, normSource, normSourceLength, &status);
         normTargetLength = u_normalize(target, targetLength, normMode, 0, normTarget, normTargetLength, &status);
         init_collIterate(normSource, normSourceLength, &sColl, TRUE);
@@ -544,11 +545,11 @@ ucol_strcoll(    const    UCollator    *coll,
     int32_t sOrder, tOrder;
     uint32_t pSOrder, pTOrder;
     UBool gets = TRUE, gett = TRUE;
-    UBool initialCheckSecTer = ucol_getStrength(coll) >= UCOL_SECONDARY;
+    UBool initialCheckSecTer = cppColl->getStrength() >= UCOL_SECONDARY;
     UBool checkSecTer = initialCheckSecTer;
-    UBool checkTertiary = ucol_getStrength(coll) >= UCOL_TERTIARY;
-    UBool checkQuad = ucol_getStrength(coll) >= UCOL_QUATERNARY;
-    UBool isFrenchSec = (ucol_getAttribute(coll, UCOL_FRENCH_COLLATION, &status) == UCOL_ON) && checkSecTer;
+    UBool checkTertiary = cppColl->getStrength() >= UCOL_TERTIARY;
+    UBool checkQuad = cppColl->getStrength() >= UCOL_QUATERNARY;
+    UBool isFrenchSec = (cppColl->getAttribute(UCOL_FRENCH_COLLATION, status) == UCOL_ON) && checkSecTer;
 
     if(!isFrenchSec) {
         for(;;)
@@ -947,7 +948,7 @@ ucol_strcoll(    const    UCollator    *coll,
     // as a tiebreaker if all else is equal
     // NOTE: The java code compares result with 0, and 
     // puts the result of the string comparison directly into result
-    if (result == UCOL_EQUAL && ucol_getStrength(coll) == UCOL_IDENTICAL)
+    if (result == UCOL_EQUAL && cppColl->getStrength() == UCOL_IDENTICAL)
     {
         UnicodeString sourceDecomp, targetDecomp;
 

@@ -62,7 +62,7 @@ void EntryPair::streamOut(FileStream* os) const
 {
     if (!T_FileStream_error(os))
     {
-        UnicodeStringStreamer::streamOut(&entryName, os);
+        UnicodeStringStreamer::streamOut(&UnicodeString(nameChars, nameLen), os);
         T_FileStream_write(os, &value, sizeof(value));
         T_FileStream_write(os, &fwd, sizeof(fwd));
     }
@@ -70,19 +70,26 @@ void EntryPair::streamOut(FileStream* os) const
 
 void EntryPair::streamIn(FileStream* is)
 {
+	if(storage != NULL) {
+		delete storage;
+		storage = NULL;
+	}
+	storage = new UnicodeString();
     if (!T_FileStream_error(is))
     {
-        UnicodeStringStreamer::streamIn(&entryName, is);
+        UnicodeStringStreamer::streamIn(storage, is);
         T_FileStream_read(is, &value, sizeof(value));
         T_FileStream_read(is, &fwd, sizeof(fwd));
     }
+	nameChars = storage->getUChars();
+	nameLen = storage->size();
 }
 
 void EntryPair::streamOut(UMemoryStream* os) const
 {
     if (!uprv_mstrm_error(os))
     {
-        UnicodeStringStreamer::streamOut(&entryName, os);
+        UnicodeStringStreamer::streamOut(&UnicodeString(nameChars, nameLen), os);
         uprv_mstrm_write(os, (uint8_t *)&value, sizeof(value));
         uprv_mstrm_write(os, (uint8_t *)&fwd, sizeof(fwd));
     }
@@ -90,12 +97,20 @@ void EntryPair::streamOut(UMemoryStream* os) const
 
 void EntryPair::streamIn(UMemoryStream* is)
 {
+	if(storage != NULL) {
+		delete storage;
+		storage = NULL;
+	}
+	storage = new UnicodeString();
+
     if (!uprv_mstrm_error(is))
     {
-        UnicodeStringStreamer::streamIn(&entryName, is);
+        UnicodeStringStreamer::streamIn(storage, is);
         uprv_mstrm_read(is, &value, sizeof(value));
         uprv_mstrm_read(is, &fwd, sizeof(fwd));
     }
+	nameChars = storage->getUChars();
+	nameLen = storage->size();
 }
 
 //=======================================================================================

@@ -35,7 +35,7 @@
 #include "filestrm.h"
 #include "umemstrm.h"
 #include "unicode/unistr.h"
-
+#include "unicode/ustring.h"
 
 /**
  * EntryPair is used for contracting characters.  Each entry pair contains the contracting 
@@ -48,9 +48,12 @@ public:
      * Constructor
      */
     EntryPair();
-    EntryPair(const UnicodeString &name, int32_t aValue, UBool aFwd = TRUE);
+    EntryPair(const UChar *name, int32_t nameLen, int32_t aValue, UBool aFwd = TRUE);
+    ~EntryPair();
+    
+    inline UBool equalTo(const UChar *aName, int32_t aLen);
+	inline const UnicodeString& getEntryName();
 
-    UnicodeString entryName;        // Contracting characters
     int32_t value;                  // Collation order
     UBool fwd;                        // true if this pair is for the forward direction
 
@@ -66,6 +69,15 @@ public:
 
     void streamOut(UMemoryStream* os) const;
     void streamIn(UMemoryStream* is);
+
+    /**
+     * Deprecated
+     */ 
+    EntryPair(const UnicodeString& str, int32_t aValue, UBool aFwd = TRUE);
+private:
+    UnicodeString *storage;
+    const UChar *nameChars;        // Contracting characters
+    int32_t nameLen;
 };
 
 
@@ -1021,17 +1033,48 @@ class VectorOfPointersToPatternEntry {
 };
 
 inline
+EntryPair::EntryPair(const UnicodeString& str, int32_t aValue, UBool aFwd)
+: value(aValue), fwd(aFwd), storage(new UnicodeString(str))
+{
+    nameChars = storage->getUChars();
+    nameLen = storage->size();
+}
+
+inline
 EntryPair::EntryPair()
-  : entryName(), value(0xffffffff), fwd(TRUE)
+  : nameChars(NULL), nameLen(0), value(0xffffffff), fwd(TRUE), storage(NULL)
 {
 }
 
 inline
-EntryPair::EntryPair(const UnicodeString &name, int32_t aValue, UBool aFwd)
-  : entryName(name), value(aValue), fwd(aFwd)
+EntryPair::EntryPair(const UChar *name, int32_t nameLen, int32_t aValue, UBool aFwd)
+  : nameChars(name), nameLen(nameLen), value(aValue), fwd(aFwd), storage(NULL)
 {
 }
 
+inline
+EntryPair::~EntryPair()
+{
+    if(storage) {
+        delete(storage);
+		storage = NULL;
+    }
+}
+
+inline UBool EntryPair::equalTo(const UChar *aName, int32_t aLen)   
+{
+        return( (aLen==nameLen)?!(u_strncmp(aName,nameChars,aLen)):0 );
+}
+
+inline const UnicodeString& 
+EntryPair::getEntryName()
+{
+	if(storage != NULL) {
+		return *storage;
+	} else {
+		return *(storage = new UnicodeString(nameChars, nameLen));
+	}
+}
 //=======================================================================================
 // METHODS ON VectorOfInt
 //=======================================================================================
