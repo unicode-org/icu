@@ -1912,7 +1912,7 @@ public class GregorianCalendar extends Calendar {
      * January), the day value will be ignored.
      */
     private final int prevMonthLength(int month) {
-        return (month > 1) ? monthLength(month - 1) : 31;
+        return (month > 0) ? monthLength(month - 1) : 31;
     }
 
     private final int yearLength(int year) {
