@@ -151,7 +151,7 @@ CharTypeBuilder::writeByteArrays()
 /**
  * The main function builds the CharType data array and prints it to System.out
  */
-void main(int argc, char** argv)
+int main(int argc, char** argv)
 {
     if (argc != 2) {
         printf("Usage : chartype filename\n\n");
@@ -164,5 +164,6 @@ void main(int argc, char** argv)
     }
 	CompactByteArray* arrays = CharTypeBuilder::getByteArray(input);
 	CharTypeBuilder::writeByteArrays();
+    return 0;
 }
 

@@ -69,7 +69,7 @@ public :
 	MODIFIER_SYMBOL			= 26,
 	OTHER_SYMBOL			= 27,
 	INITIAL_PUNCTUATION		= 28,
-	FINAL_PUNCTUATION		= 29,
+	FINAL_PUNCTUATION		= 29
 	};
 
 	static CompactByteArray* getByteArray(FILE*);
