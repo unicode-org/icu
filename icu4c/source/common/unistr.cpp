@@ -814,42 +814,21 @@ UnicodeString::indexOf(const UChar *srcChars,
     return -1;
   }
 
-  // get the srcLength if necessary
-  if(srcLength < 0) {
-    srcLength = u_strlen(srcChars + srcStart);
-    if(srcLength == 0) {
-      return -1;
-    }
+  // UnicodeString does not find empty substrings
+  if(srcLength < 0 && srcChars[srcStart] == 0) {
+    return -1;
   }
-
-  // now we will only work with srcLength-1
-  --srcLength;
 
   // get the indices within bounds
   pinIndices(start, length);
 
-  // set length for the last possible match start position
-  // note the --srcLength above
-  length -= srcLength;
-
-  if(length <= 0) {
+  // find the first occurrence of the substring
+  const UChar *match = u_strFindFirst(fArray + start, length, srcChars + srcStart, srcLength);
+  if(match == NULL) {
     return -1;
+  } else {
+    return match - fArray;
   }
-
-  const UChar *array = getArrayStart();
-  int32_t limit = start + length;
-
-  // search for the first char, then compare the rest of the string
-  // increment srcStart here for that, matching the --srcLength above
-  UChar ch = srcChars[srcStart++];
-
-  do {
-    if(array[start] == ch && (srcLength == 0 || compare(start + 1, srcLength, srcChars, srcStart, srcLength) == 0)) {
-      return start;
-    }
-  } while(++start < limit);
-
-  return -1;
 }
 
 int32_t
@@ -859,21 +838,14 @@ UnicodeString::doIndexOf(UChar c,
 {
   // pin indices
   pinIndices(start, length);
-  if(length == 0) {
-    return -1;
-  }
 
   // find the first occurrence of c
-  const UChar *begin = getArrayStart() + start;
-  const UChar *limit = begin + length;
-
-  do {
-    if(*begin == c) {
-      return (int32_t)(begin - getArrayStart());
-    }
-  } while(++begin < limit);
-
-  return -1;
+  const UChar *match = u_memchr(fArray + start, c, length);
+  if(match == NULL) {
+    return -1;
+  } else {
+    return match - fArray;
+  }
 }
 
 int32_t
@@ -882,26 +854,13 @@ UnicodeString::doIndexOf(UChar32 c,
                          int32_t length) const {
   // pin indices
   pinIndices(start, length);
-  if(length == 0) {
-    return -1;
-  }
 
-  // c<0xd800 handled by inline function indexOf(UChar32 c, start, length)
-  if(c<=0xdfff) {
-    // surrogate code point
-    const UChar *t = uprv_strFindSurrogate(fArray + start, length, (UChar)c);
-    if(t != 0) {
-      return (int32_t)(t - fArray);
-    } else {
-      return -1;
-    }
-  } else if(c<=0xffff) {
-    // non-surrogate BMP code point
-    return doIndexOf((UChar)c, start, length);
+  // find the first occurrence of c
+  const UChar *match = u_memchr32(fArray + start, c, length);
+  if(match == NULL) {
+    return -1;
   } else {
-    // supplementary code point, search for string
-    UChar buffer[2] = { UTF16_LEAD(c), UTF16_TRAIL(c) };
-    return indexOf(buffer, 2, start, length);
+    return match - fArray;
   }
 }
 
@@ -916,43 +875,21 @@ UnicodeString::lastIndexOf(const UChar *srcChars,
     return -1;
   }
 
-  // get the srcLength if necessary
-  if(srcLength < 0) {
-    srcLength = u_strlen(srcChars + srcStart);
-    if(srcLength == 0) {
-      return -1;
-    }
+  // UnicodeString does not find empty substrings
+  if(srcLength < 0 && srcChars[srcStart] == 0) {
+    return -1;
   }
-
-  // now we will only work with srcLength-1
-  --srcLength;
 
   // get the indices within bounds
   pinIndices(start, length);
 
-  // set length for the last possible match start position
-  // note the --srcLength above
-  length -= srcLength;
-
-  if(length <= 0) {
+  // find the last occurrence of the substring
+  const UChar *match = u_strFindLast(fArray + start, length, srcChars + srcStart, srcLength);
+  if(match == NULL) {
     return -1;
+  } else {
+    return match - fArray;
   }
-
-  const UChar *array = getArrayStart();
-  int32_t pos;
-
-  // search for the first char, then compare the rest of the string
-  // increment srcStart here for that, matching the --srcLength above
-  UChar ch = srcChars[srcStart++];
-
-  pos = start + length;
-  do {
-    if(array[--pos] == ch && (srcLength == 0 || compare(pos + 1, srcLength, srcChars, srcStart, srcLength) == 0)) {
-      return pos;
-    }
-  } while(pos > start);
-
-  return -1;
 }
 
 int32_t
@@ -966,20 +903,14 @@ UnicodeString::doLastIndexOf(UChar c,
 
   // pin indices
   pinIndices(start, length);
-  if(length == 0) {
+
+  // find the last occurrence of c
+  const UChar *match = u_memrchr(fArray + start, c, length);
+  if(match == NULL) {
     return -1;
+  } else {
+    return match - fArray;
   }
-
-  const UChar *begin = getArrayStart() + start;
-  const UChar *limit = begin + length;
-
-  do {
-    if(*--limit == c) {
-      return (int32_t)(limit - getArrayStart());
-    }
-  } while(limit > begin);
-
-  return -1;
 }
 
 int32_t
@@ -988,26 +919,13 @@ UnicodeString::doLastIndexOf(UChar32 c,
                              int32_t length) const {
   // pin indices
   pinIndices(start, length);
-  if(length == 0) {
-    return -1;
-  }
 
-  // c<0xd800 handled by inline function lastIndexOf(UChar32 c, start, length)
-  if(c<=0xdfff) {
-    // surrogate code point
-    const UChar *t = uprv_strFindLastSurrogate(fArray + start, length, (UChar)c);
-    if(t != 0) {
-      return (int32_t)(t - fArray);
-    } else {
-      return -1;
-    }
-  } else if(c<=0xffff) {
-    // non-surrogate BMP code point
-    return doLastIndexOf((UChar)c, start, length);
+  // find the last occurrence of c
+  const UChar *match = u_memrchr32(fArray + start, c, length);
+  if(match == NULL) {
+    return -1;
   } else {
-    // supplementary code point, search for string
-    UChar buffer[2] = { UTF16_LEAD(c), UTF16_TRAIL(c) };
-    return lastIndexOf(buffer, 2, start, length);
+    return match - fArray;
   }
 }
 
