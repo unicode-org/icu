@@ -26,9 +26,6 @@
 //
 //--------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "unicode/ucnv.h"
 #include "unicode/unistr.h"
 #include "unicode/rbbi.h"
@@ -37,6 +34,9 @@
 
 #include "uoptions.h"
 #include "ucmndata.h"
+
+#include <stdio.h>
+#include <stdlib.h>
 
 static char *progName;
 static UOption options[]={
@@ -66,8 +66,8 @@ int  main(int argc, char **argv) {
     // Pick up and check the command line arguments,
     //    using the standard ICU tool utils option handling.
     //
-    progName = argv[0];
     U_MAIN_INIT_ARGS(argc, argv);
+    progName = argv[0];
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
     if(argc<0) {
         // Unrecognized option
