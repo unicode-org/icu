@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UInfo.java,v $ 
- * $Date: 2000/07/13 21:24:42 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/07/18 18:16:36 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -267,6 +267,10 @@ public final class UInfo {
         return getFullDecomposition(ch, canonical, new StringBuffer()).toString();
     }
 
+    /**
+     * Given a decomposed string of characters, put it in canonical
+     * order by finding and processing all exchangeable pairs.
+     */
     public StringBuffer fixCanonical(StringBuffer target) {
         for (int i = 1; i < target.length(); ++i) {
             char ch = target.charAt(i);
