@@ -277,7 +277,7 @@ public:
    * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
    *
    * @see isNormalized
-   * @draft ICU 2.6
+   * @stable ICU 2.6
    */
   static inline UNormalizationCheckResult
   quickCheck(const UnicodeString &source, UNormalizationMode mode, int32_t options, UErrorCode &status);
@@ -318,7 +318,7 @@ public:
    *         "mode" normalization form.
    *
    * @see quickCheck
-   * @draft ICU 2.6
+   * @stable ICU 2.6
    */
   static inline UBool
   isNormalized(const UnicodeString &src, UNormalizationMode mode, int32_t options, UErrorCode &errorCode);

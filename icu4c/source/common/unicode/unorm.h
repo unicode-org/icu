@@ -144,21 +144,19 @@ typedef enum {
   UNORM_MODE_COUNT
 } UNormalizationMode;
 
-#ifndef U_HIDE_DRAFT_API
-
 /**
  * Constants for options flags for normalization.
  * Use 0 for default options,
  * including normalization according to the Unicode version
  * that is currently supported by ICU (see u_getUnicodeVersion).
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 enum {
     /**
      * Options bit set value to select Unicode 3.2 normalization
      * (except NormalizationCorrections).
      * At most one Unicode version can be selected at a time.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     UNORM_UNICODE_3_2=0x20
 };
@@ -176,11 +174,9 @@ enum {
  * internal normalization functions.)
  *
  * @see unorm_compare
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 #define UNORM_COMPARE_NORM_OPTIONS_SHIFT 20
-
-#endif /*U_HIDE_DRAFT_API*/
 
 /**
  * Normalize a string.
@@ -266,9 +262,9 @@ unorm_quickCheck(const UChar *source, int32_t sourcelength,
  *
  * @see unorm_quickCheck
  * @see unorm_isNormalized
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT UNormalizationCheckResult U_EXPORT2
+U_STABLE UNormalizationCheckResult U_EXPORT2
 unorm_quickCheckWithOptions(const UChar *src, int32_t srcLength, 
                             UNormalizationMode mode, int32_t options,
                             UErrorCode *pErrorCode);
@@ -314,9 +310,9 @@ unorm_isNormalized(const UChar *src, int32_t srcLength,
  *
  * @see unorm_quickCheck
  * @see unorm_isNormalized
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 unorm_isNormalizedWithOptions(const UChar *src, int32_t srcLength,
                               UNormalizationMode mode, int32_t options,
                               UErrorCode *pErrorCode);

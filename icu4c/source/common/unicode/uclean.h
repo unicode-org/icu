@@ -46,9 +46,9 @@
  *    The function returns immediately if the input error code indicates a
  *    failure, as usual.
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */  
-U_DRAFT void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 u_init(UErrorCode *status);
 
 /**

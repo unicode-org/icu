@@ -54,21 +54,21 @@
  * do not check if the input conforms to STD-3 ASCII rules.
  * 
  * @see  uidna_toASCII uidna_toUnicode
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 #define UIDNA_DEFAULT          0x0000
 /** 
  * Option to allow processing of unassigned codepoints in the input
  * 
  * @see  uidna_toASCII uidna_toUnicode
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 #define UIDNA_ALLOW_UNASSIGNED 0x0001
 /** 
  * Option to check if input conforms to STD-3 ASCII rules
  * 
  * @see  uidna_toASCII uidna_toUnicode
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 #define UIDNA_USE_STD3_RULES   0x0002
 
@@ -110,9 +110,9 @@
  *                          too many code points.
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
  * @return                  Number of ASCII characters converted.
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_toASCII(const UChar* src, int32_t srcLength, 
               UChar* dest, int32_t destCapacity,
               int32_t options,
@@ -160,9 +160,9 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
  *                          too many code points.
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
  * @return                  Number of Unicode characters converted.
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_toUnicode(const UChar* src, int32_t srcLength,
                 UChar* dest, int32_t destCapacity,
                 int32_t options,
@@ -210,9 +210,9 @@ uidna_toUnicode(const UChar* src, int32_t srcLength,
  *                          too many code points.
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
  * @return                  Number of ASCII characters converted.
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
                    UChar* dest, int32_t destCapacity,
                    int32_t options,
@@ -256,9 +256,9 @@ uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
  *                          too many code points.
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
  * @return                  Number of ASCII characters converted.
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
                      UChar* dest, int32_t destCapacity,
                      int32_t options,
@@ -297,9 +297,9 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
  * @param status            ICU error code in/out parameter.
  *                          Must fulfill U_SUCCESS before the function call.
  * @return <0 or 0 or >0 as usual for string comparisons
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_compare(  const UChar *s1, int32_t length1,
                 const UChar *s2, int32_t length2,
                 int32_t options,

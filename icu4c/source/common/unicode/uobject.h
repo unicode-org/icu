@@ -43,7 +43,7 @@ U_NAMESPACE_BEGIN
 /**  U_HAVE_PLACEMENT_NEW - Define this to define the placement new and
  *                          delete in UMemory for STL.
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */                              
 #ifndef U_HAVE_PLACEMENT_NEW
 #define U_HAVE_PLACEMENT_NEW 1
@@ -106,14 +106,14 @@ public:
     /**
      * Override for ICU4C C++ memory management for STL.
      * See new().
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     static inline void * U_EXPORT2 operator new(size_t, void *ptr) { return ptr; }
 
     /**
      * Override for ICU4C C++ memory management for STL.
      * See delete().
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     static inline void U_EXPORT2 operator delete(void *, void *) {}
 #endif /* U_HAVE_PLACEMENT_NEW */

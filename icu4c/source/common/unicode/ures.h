@@ -61,16 +61,16 @@ typedef struct UResourceBundle UResourceBundle;
  * @stable ICU 2.0
  */
 typedef enum {
-    /** Resource type constant for "no resource". @draft ICU 2.6 */
+    /** Resource type constant for "no resource". @stable ICU 2.6 */
     URES_NONE=-1,
 
-    /** Resource type constant for 16-bit Unicode strings. @draft ICU 2.6 */
+    /** Resource type constant for 16-bit Unicode strings. @stable ICU 2.6 */
     URES_STRING=0,
 
-    /** Resource type constant for binary data. @draft ICU 2.6 */
+    /** Resource type constant for binary data. @stable ICU 2.6 */
     URES_BINARY=1,
 
-    /** Resource type constant for tables of key-value pairs. @draft ICU 2.6 */
+    /** Resource type constant for tables of key-value pairs. @stable ICU 2.6 */
     URES_TABLE=2,
 
     /**
@@ -78,7 +78,7 @@ typedef enum {
      * internally stores a string which identifies the actual resource
      * storing the data (can be in a different resource bundle).
      * Resolved internally before delivering the actual resource through the API.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     URES_ALIAS=3,
 
@@ -95,17 +95,17 @@ typedef enum {
      * signed or unsigned by the ures_getInt() or ures_getUInt() function.
      * @see ures_getInt
      * @see ures_getUInt
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     URES_INT=7,
 
-    /** Resource type constant for arrays of resources. @draft ICU 2.6 */
+    /** Resource type constant for arrays of resources. @stable ICU 2.6 */
     URES_ARRAY=8,
 
     /**
      * Resource type constant for vectors of 32-bit integers.
      * @see ures_getIntVector
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     URES_INT_VECTOR=14,
 
