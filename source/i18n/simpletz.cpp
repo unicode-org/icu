@@ -23,7 +23,7 @@
 
 #include "simpletz.h"
 #include "gregocal.h"
-
+#include "tzdat.h"
 
 char SimpleTimeZone::fgClassID = 0; // Value is irrelevant
 
@@ -105,6 +105,36 @@ SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
               endMonth, endDay, endDayOfWeek,
               endTime, endTimeMode,
               dstSavings, status);
+}
+
+/**
+ * Construct from memory-mapped data.  For private use by TimeZone.
+ */
+SimpleTimeZone::SimpleTimeZone(const StandardZone& stdZone,
+                               const UnicodeString& id) {
+    UErrorCode status = U_ZERO_ERROR;
+    construct(stdZone.gmtOffset, id,
+              0, 0, 0, 0, WALL_TIME,
+              0, 0, 0, 0, WALL_TIME,
+              0, status);
+}
+
+/**
+ * Construct from memory-mapped data.  For private use by TimeZone.
+ */
+SimpleTimeZone::SimpleTimeZone(const DSTZone& dstZone,
+                               const UnicodeString& id) {
+    UErrorCode status = U_ZERO_ERROR;
+    construct(dstZone.gmtOffset, id,
+              dstZone.onsetRule.month, dstZone.onsetRule.dowim,
+              dstZone.onsetRule.dow,
+              dstZone.onsetRule.time * (int32_t)60000,
+              (TimeMode)dstZone.onsetRule.mode,
+              dstZone.ceaseRule.month, dstZone.ceaseRule.dowim,
+              dstZone.ceaseRule.dow,
+              dstZone.ceaseRule.time * (int32_t)60000,
+              (TimeMode)dstZone.ceaseRule.mode,
+              dstZone.dstSavings * (int32_t)60000, status);
 }
 
 /**
