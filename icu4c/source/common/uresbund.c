@@ -12,7 +12,7 @@
 *   04/01/97    aliu        Creation.
 *   06/14/99    stephen     Removed functions taking a filename suffix.
 *   07/20/99    stephen     Changed for UResourceBundle typedef'd to void*
-*   11/09/99	weiv		Added ures_getLocale()
+*   11/09/99    weiv            Added ures_getLocale()
 *   March 2000  weiv        Total overhaul - using data in DLLs
 *******************************************************************************
 */
@@ -63,21 +63,21 @@ UBool chopLocale(char *name) {
 
 void entryIncrease(UResourceDataEntry *entry) {
         umtx_lock(&resbMutex);
-	entry->fCountExisting++;
-	while(entry->fParent != NULL) {
-	  entry = entry->fParent;
-	  entry->fCountExisting++;
-	}
+        entry->fCountExisting++;
+        while(entry->fParent != NULL) {
+          entry = entry->fParent;
+          entry->fCountExisting++;
+        }
         umtx_unlock(&resbMutex);
 }
 
 void entryDecrease(UResourceDataEntry *entry) {
         umtx_lock(&resbMutex);
-	entry->fCountExisting++;
-	while(entry->fParent != NULL) {
-	  entry = entry->fParent;
-	  entry->fCountExisting++;
-	}
+        entry->fCountExisting++;
+        while(entry->fParent != NULL) {
+          entry = entry->fParent;
+          entry->fCountExisting++;
+        }
         umtx_unlock(&resbMutex);
 }
 
@@ -114,7 +114,7 @@ const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char
                     *status = U_USING_FALLBACK_ERROR;
                 }
             }
-	    *realData = resB;
+            *realData = resB;
             return (&(resB->fData));
         } else { /* If resource is not found, we need to give an error */
             *status = U_MISSING_RESOURCE_ERROR;
@@ -130,10 +130,10 @@ const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char
 void initCache(UErrorCode *status) {
     if(isMutexInited == FALSE) {
         umtx_lock(NULL);
-	if(isMutexInited == FALSE) {
-	  umtx_init(&resbMutex);
-	  isMutexInited = TRUE;
-	}
+        if(isMutexInited == FALSE) {
+          umtx_init(&resbMutex);
+          isMutexInited = TRUE;
+        }
         umtx_unlock(NULL);
     }
     if(cache == NULL) {
@@ -251,7 +251,7 @@ UResourceDataEntry *init_entry(const char *localeID, const char *path, UErrorCod
             char aliasName[100];
             int32_t aliasLen;
             UErrorCode internal = U_ZERO_ERROR;
-	    /* We'll try to get alias string from the bundle */
+            /* We'll try to get alias string from the bundle */
             Resource aliasres = res_getResource(&(r->fData), "%%ALIAS");
             const UChar *alias = res_getString(&(r->fData), aliasres, &aliasLen);
             if(alias != NULL && aliasLen > 0) { /* if there is actual alias - unload and load new data */
@@ -264,11 +264,11 @@ UResourceDataEntry *init_entry(const char *localeID, const char *path, UErrorCod
         {
             UResourceDataEntry *oldR = NULL;
             if((oldR = (UResourceDataEntry *)uhash_get(cache, r)) == NULL) { /* if the data is not cached */
-	      /* just insert it in the cache */
+              /* just insert it in the cache */
                 uhash_put(cache, (void *)r, r, status);
             } else {
-	      /* somebody have already inserted it while we were working, discard newly opened data */
-	      /* this part is probably obsolete since we check cache in locked state */
+              /* somebody have already inserted it while we were working, discard newly opened data */
+              /* this part is probably obsolete since we check cache in locked state */
                 uprv_free(r->fName);
                 if(r->fPath != NULL) {
                     uprv_free(r->fPath);
@@ -288,7 +288,7 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
     UResourceDataEntry *t1 = NULL;
     UResourceDataEntry *t2 = NULL;
     UBool isDefault = FALSE;
-	UBool isRoot = FALSE;
+        UBool isRoot = FALSE;
     UBool hasRealData = FALSE;
     UBool hasChopped = FALSE;
     char name[96];
@@ -343,9 +343,9 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
     if(!isRoot && uprv_strcmp(t1->fName, kRootLocaleName) != 0 && t1->fParent == NULL) {
         /* insert root locale */
         t2 = init_entry(kRootLocaleName, r->fPath, status);
-	if(!hasRealData) {
-	  r->fBogus = U_USING_DEFAULT_ERROR;
-	}
+        if(!hasRealData) {
+          r->fBogus = U_USING_DEFAULT_ERROR;
+        }
         hasRealData = (t2->fBogus == U_ZERO_ERROR) | hasRealData;
         t1->fParent = t2;
         t1 = t2;
@@ -453,7 +453,7 @@ UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original) {
         uprv_memcpy(r, original, sizeof(UResourceBundle));
         r->fIsStackObject = isStackObject;
         if(r->fData != NULL) {
-	  entryIncrease(r->fData);
+          entryIncrease(r->fData);
         }
         return r;
     } else {
@@ -478,47 +478,15 @@ void copyResbFillIn(UResourceBundle *r, const UResourceBundle *original) {
  * Functions to retrieve data from resource bundles.
  */
 
-/**
- *  INTERNAL: returns an array of installed locale names, according
- *  to the 'Index' resource bundle. The array is later deleted by 
- *  the caller. 
- *  This will probably be replaced by a call to new api. Also, there is a 
- *  leak here - Resource data is malloced and loaded, but never freed and
- *  unloaded - REDO!
- */
-/*
-U_CFUNC UChar** ures_listInstalledLocales(const char* path, int32_t* count) {
-    UChar **result;
-    UErrorCode status;
-    UBool opres = FALSE;
-    ResourceData *res = (ResourceData *)uprv_malloc(sizeof(ResourceData));
-    opres = res_load(res, path, kIndexLocaleName, &status);
-
-    if(opres == TRUE) {
-        int32_t i = 0;
-        int32_t len = 0;
-        Resource r = res_getStringArray(res, kIndexTag, count);
-        result = (UChar **)malloc(*count*sizeof(UChar *));
-        for(i=0; i<*count; i++) {
-            *(result+i) = (UChar *)res_getStringArrayItem(res, r, i, &len);
-        }
-        return result;
-    } else {   
-        count = 0;
-        return NULL;
-    }
-}
-*/
-
 U_CAPI const UChar* U_EXPORT2 ures_getString(const UResourceBundle* resB, int32_t* len, UErrorCode* status) {
 
-	if (status==NULL || U_FAILURE(*status)) {
-		return NULL;
-	}
-	if(resB == NULL) {
-		*status = U_ILLEGAL_ARGUMENT_ERROR;
-		return NULL;
-	}
+        if (status==NULL || U_FAILURE(*status)) {
+                return NULL;
+        }
+        if(resB == NULL) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return NULL;
+        }
 
     switch(RES_GET_TYPE(resB->fRes)) {
         case RES_STRING:
@@ -537,138 +505,138 @@ U_CAPI const UChar* U_EXPORT2 ures_getString(const UResourceBundle* resB, int32_
 }
 
 U_CAPI const uint8_t* U_EXPORT2 ures_getBinary(const UResourceBundle* resB, int32_t* len, 
-											   UErrorCode*               status) {
-
-	if (status==NULL || U_FAILURE(*status)) {
-		return NULL;
-	}
-	if(resB == NULL) {
-		*status = U_ILLEGAL_ARGUMENT_ERROR;
-		return NULL;
-	}
-    switch(RES_GET_TYPE(resB->fRes)) {
-        case RES_BINARY:
-            return res_getBinary(&(resB->fResData), resB->fRes, len);
-            break;
-        case RES_INT:
-        case RES_STRING:
-        case RES_INT_VECTOR:
-        case RES_ARRAY:
-        case RES_TABLE:
-        default:
-            *status = U_RESOURCE_TYPE_MISMATCH;
-            return NULL;
-            break;
-    }
+                                               UErrorCode*               status) {
+  
+  if (status==NULL || U_FAILURE(*status)) {
+    return NULL;
+  }
+  if(resB == NULL) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return NULL;
+  }
+  switch(RES_GET_TYPE(resB->fRes)) {
+  case RES_BINARY:
+    return res_getBinary(&(resB->fResData), resB->fRes, len);
+    break;
+  case RES_INT:
+  case RES_STRING:
+  case RES_INT_VECTOR:
+  case RES_ARRAY:
+  case RES_TABLE:
+  default:
+    *status = U_RESOURCE_TYPE_MISMATCH;
+    return NULL;
+    break;
+  }
 
 }
 
 U_CAPI uint32_t U_EXPORT2 ures_getInt(const UResourceBundle* resB, UErrorCode *status) {
-
-	if (status==NULL || U_FAILURE(*status)) {
-		return 0xffffffff;
-	}
-	if(resB == NULL) {
-		*status = U_ILLEGAL_ARGUMENT_ERROR;
-		return 0xffffffff;
-	}
-	return RES_GET_UINT(resB->fRes);
+  
+  if (status==NULL || U_FAILURE(*status)) {
+    return 0xffffffff;
+  }
+  if(resB == NULL) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0xffffffff;
+  }
+  return RES_GET_UINT(resB->fRes);
 }
 
 
 U_CAPI UResType U_EXPORT2 ures_getType(UResourceBundle *resB) {
-	if(resB == NULL) {
-		return RES_BOGUS;
-	}
-    return(RES_GET_TYPE(resB->fRes));
+  if(resB == NULL) {
+    return RES_BOGUS;
+  }
+  return(RES_GET_TYPE(resB->fRes));
 }
 
 U_CAPI const char * U_EXPORT2 ures_getKey(UResourceBundle *resB) {
-	if(resB == NULL) {
-		return NULL;
-	}
-
-    return(resB->fKey);
+  if(resB == NULL) {
+    return NULL;
+  }
+  
+  return(resB->fKey);
 }
 
 U_CAPI int32_t U_EXPORT2 ures_getSize(UResourceBundle *resB) {
-	if(resB == NULL) {
-		return 0;
-	}
-
-    return resB->fSize;
+  if(resB == NULL) {
+    return 0;
+  }
+  
+  return resB->fSize;
 }
 
 U_CAPI void U_EXPORT2 ures_resetIterator(UResourceBundle *resB){
-	if(resB == NULL) {
-		return;
-	}
-    resB->fIndex = -1;
+  if(resB == NULL) {
+    return;
+  }
+  resB->fIndex = -1;
 }
 
 U_CAPI UBool U_EXPORT2 ures_hasNext(UResourceBundle *resB) {
-	if(resB == NULL) {
-		return FALSE;
-	}
-    return(resB->fIndex < resB->fSize-1);
+  if(resB == NULL) {
+    return FALSE;
+  }
+  return(resB->fIndex < resB->fSize-1);
 }
 
 U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resB, int32_t* len, const char ** key, UErrorCode *status) {
-    Resource r = RES_BOGUS;
-
-	if (status==NULL || U_FAILURE(*status)) {
-		return NULL;
-	}
-	if(resB == NULL) {
-		*status = U_ILLEGAL_ARGUMENT_ERROR;
-		return NULL;
-	}
-
-    if(resB->fIndex == resB->fSize-1) {
-      *status = U_INDEX_OUTOFBOUNDS_ERROR;
+  Resource r = RES_BOGUS;
+  
+  if (status==NULL || U_FAILURE(*status)) {
+    return NULL;
+  }
+  if(resB == NULL) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return NULL;
+  }
+  
+  if(resB->fIndex == resB->fSize-1) {
+    *status = U_INDEX_OUTOFBOUNDS_ERROR;
         return NULL;
-    } else {
-        resB->fIndex++;
-        switch(RES_GET_TYPE(resB->fRes)) {
-        case RES_INT:
-        case RES_BINARY:
-        case RES_STRING:
-            return res_getString(&(resB->fResData), resB->fRes, len); 
-            break;
-        case RES_TABLE:
-            r = res_getTableItemByIndex(&(resB->fResData), resB->fRes, resB->fIndex, key);
-            if(r == RES_BOGUS && resB->fHasFallback) {
-                /* TODO: do the fallback */
-            }
-            return res_getString(&(resB->fResData), r, len); 
-            break;
+  } else {
+    resB->fIndex++;
+    switch(RES_GET_TYPE(resB->fRes)) {
+    case RES_INT:
+    case RES_BINARY:
+    case RES_STRING:
+      return res_getString(&(resB->fResData), resB->fRes, len); 
+      break;
+    case RES_TABLE:
+      r = res_getTableItemByIndex(&(resB->fResData), resB->fRes, resB->fIndex, key);
+      if(r == RES_BOGUS && resB->fHasFallback) {
+        /* TODO: do the fallback */
+      }
+      return res_getString(&(resB->fResData), r, len); 
+      break;
         case RES_ARRAY:
-            r = res_getArrayItem(&(resB->fResData), resB->fRes, resB->fIndex);
-            if(r == RES_BOGUS && resB->fHasFallback) {
-                /* TODO: do the fallback */
-            }
-            return res_getString(&(resB->fResData), r, len);
-            break;
-        case RES_INT_VECTOR:
-        default:
-            return NULL;
-            break;
-        }
+          r = res_getArrayItem(&(resB->fResData), resB->fRes, resB->fIndex);
+          if(r == RES_BOGUS && resB->fHasFallback) {
+            /* TODO: do the fallback */
+          }
+          return res_getString(&(resB->fResData), r, len);
+          break;
+    case RES_INT_VECTOR:
+    default:
+      return NULL;
+      break;
     }
-    /*return NULL;*/
+  }
+  /*return NULL;*/
 }
 
 U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resB, UResourceBundle *fillIn, UErrorCode *status) {
     const char *key = NULL;
     Resource r = RES_BOGUS;
 
-	if (status==NULL || U_FAILURE(*status)) {
-		return NULL;
-	}
-	if(resB == NULL) {
-		*status = U_ILLEGAL_ARGUMENT_ERROR;
-		return NULL;
-	}
+        if (status==NULL || U_FAILURE(*status)) {
+                return NULL;
+        }
+        if(resB == NULL) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return NULL;
+        }
 
     if(resB->fIndex == resB->fSize-1) {
       *status = U_INDEX_OUTOFBOUNDS_ERROR;
@@ -707,13 +675,13 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resB, i
     const char* key = NULL;
     Resource r = RES_BOGUS;
 
-	if (status==NULL || U_FAILURE(*status)) {
-		return NULL;
-	}
-	if(resB == NULL) {
-		*status = U_ILLEGAL_ARGUMENT_ERROR;
-		return NULL;
-	}
+        if (status==NULL || U_FAILURE(*status)) {
+                return NULL;
+        }
+        if(resB == NULL) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return NULL;
+        }
 
     if(indexR >= 0 && resB->fSize > indexR) {
         switch(RES_GET_TYPE(resB->fRes)) {
@@ -751,13 +719,13 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
     const char* key = NULL;
     Resource r = RES_BOGUS;
 
-	if (status==NULL || U_FAILURE(*status)) {
-		return NULL;
-	}
-	if(resB == NULL) {
-		*status = U_ILLEGAL_ARGUMENT_ERROR;
-		return NULL;
-	}
+        if (status==NULL || U_FAILURE(*status)) {
+                return NULL;
+        }
+        if(resB == NULL) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return NULL;
+        }
 
     if(indexS >= 0 && resB->fSize > indexS) {
         switch(RES_GET_TYPE(resB->fRes)) {
@@ -796,19 +764,19 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
     UResourceDataEntry *realData = NULL;
     const char *key = inKey;
 
-	if (status==NULL || U_FAILURE(*status)) {
-		return NULL;
-	}
-	if(resB == NULL) {
-		*status = U_ILLEGAL_ARGUMENT_ERROR;
-		return NULL;
-	}
+        if (status==NULL || U_FAILURE(*status)) {
+                return NULL;
+        }
+        if(resB == NULL) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return NULL;
+        }
 
     if(RES_GET_TYPE(resB->fRes) == RES_TABLE) {
         int32_t t;
         res = res_getTableItemByKey(&(resB->fResData), resB->fRes, &t, &key);
         if(res == RES_BOGUS) {
-	  key = inKey;
+          key = inKey;
                 if(resB->fHasFallback == TRUE) {
                     const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
                     if(U_FAILURE(*status)) {
@@ -842,19 +810,19 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
     UResourceDataEntry *realData = NULL;
     const char* key = inKey;
 
-	if (status==NULL || U_FAILURE(*status)) {
-		return NULL;
-	}
-	if(resB == NULL) {
-		*status = U_ILLEGAL_ARGUMENT_ERROR;
-		return NULL;
-	}
+        if (status==NULL || U_FAILURE(*status)) {
+                return NULL;
+        }
+        if(resB == NULL) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return NULL;
+        }
 
     if(RES_GET_TYPE(resB->fRes) == RES_TABLE) {
         int32_t t=0;
         res = res_getTableItemByKey(&(resB->fResData), resB->fRes, &t, &key);
         if(res == RES_BOGUS) {
-	  key = inKey;
+          key = inKey;
                 if(resB->fHasFallback == TRUE) {
                     const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
                     if(U_FAILURE(*status)) {
@@ -895,9 +863,9 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
 U_CFUNC const char* ures_getRealLocale(const UResourceBundle* resourceBundle, UErrorCode* status)
 {
     const UResourceDataEntry *resB = resourceBundle->fData;
-	if (status==NULL || U_FAILURE(*status)) {
-		return NULL;
-	}
+        if (status==NULL || U_FAILURE(*status)) {
+                return NULL;
+        }
     if (!resourceBundle) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
@@ -921,6 +889,9 @@ static void entryCloseInt(UResourceDataEntry *resB) {
         resB->fCountExisting--;
 
         if(resB->fCountExisting <= 0) {
+
+          /* Entries are left in the cache. TODO: add ures_cacheFlush() to force a flush
+             of the cache. */
 /*
             uhash_remove(cache, resB);
             if(resB->fBogus == U_ZERO_ERROR) {
@@ -1067,10 +1038,10 @@ U_CAPI const UChar* ures_get(    const UResourceBundle*    resB,
                 UErrorCode*               status) 
 {
     int32_t len = 0;
-	if(resB == NULL || U_FAILURE(*status)) {
-		*status = U_ILLEGAL_ARGUMENT_ERROR;
-		return NULL;
-	}
+        if(resB == NULL || U_FAILURE(*status)) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return NULL;
+        }
     return ures_getStringByKey(resB, resourceTag, &len, status);
 }
 
@@ -1080,13 +1051,13 @@ U_CAPI const UChar* ures_getArrayItem(const UResourceBundle*     resB,
                     UErrorCode*                status)
 {
     UResourceBundle res;
-	if (status==NULL || U_FAILURE(*status)) {
-		return NULL;
-	}
-	if(resB == NULL) {
-		*status = U_ILLEGAL_ARGUMENT_ERROR;
-		return NULL;
-	}
+        if (status==NULL || U_FAILURE(*status)) {
+                return NULL;
+        }
+        if(resB == NULL) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return NULL;
+        }
     ures_getByKey(resB, resourceTag, &res, status);
     if(U_SUCCESS(*status)) {
         int32_t len = 0;
@@ -1105,13 +1076,13 @@ U_CAPI const UChar* ures_get2dArrayItem(const UResourceBundle*   resB,
                       UErrorCode*              status)
 {
     UResourceBundle res;
-	if (status==NULL || U_FAILURE(*status)) {
-		return NULL;
-	}
-	if(resB == NULL) {
-		*status = U_ILLEGAL_ARGUMENT_ERROR;
-		return NULL;
-	}
+        if (status==NULL || U_FAILURE(*status)) {
+                return NULL;
+        }
+        if(resB == NULL) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return NULL;
+        }
     ures_getByKey(resB, resourceTag, &res, status);
     if(U_SUCCESS(*status)) {
         UResourceBundle res2;
@@ -1136,13 +1107,13 @@ U_CAPI const UChar* ures_getTaggedArrayItem(const UResourceBundle*   resB,
                       UErrorCode*              status)
 {
     UResourceBundle res;
-	if (status==NULL || U_FAILURE(*status)) {
-		return NULL;
-	}
-	if(resB == NULL) {
-		*status = U_ILLEGAL_ARGUMENT_ERROR;
-		return NULL;
-	}
+        if (status==NULL || U_FAILURE(*status)) {
+                return NULL;
+        }
+        if(resB == NULL) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return NULL;
+        }
     ures_getByKey(resB, resourceTag, &res, status);
     if(U_SUCCESS(*status)) {
         int32_t len = 0;
@@ -1165,13 +1136,13 @@ U_CAPI int32_t ures_countArrayItems(const UResourceBundle* resourceBundle,
     Resource res = RES_BOGUS;
 
     UResourceBundle resData;
-	if (status==NULL || U_FAILURE(*status)) {
-		return 0;
-	}
-	if(resourceBundle == NULL) {
-		*status = U_ILLEGAL_ARGUMENT_ERROR;
-		return 0;
-	}
+        if (status==NULL || U_FAILURE(*status)) {
+                return 0;
+        }
+        if(resourceBundle == NULL) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return 0;
+        }
     ures_getByKey(resourceBundle, resourceKey, &resData, status);
 
     if(resData.fResData.data != NULL) {
@@ -1188,11 +1159,11 @@ U_CAPI void ures_close(UResourceBundle*    resB)
         if(resB->fData != NULL) {
             entryClose(resB->fData);
         }
-	/*
+        /*
         if(resB->fKey != NULL) {
             uprv_free(resB->fKey);
         }
-	*/
+        */
         if(resB->fVersion != NULL) {
             uprv_free(resB->fVersion);
         }
@@ -1259,9 +1230,9 @@ U_CAPI const char* ures_getVersionNumber(const UResourceBundle*   resourceBundle
  */
 U_CAPI const char* ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status)
 {
-	if (status==NULL || U_FAILURE(*status)) {
-		return NULL;
-	}
+        if (status==NULL || U_FAILURE(*status)) {
+                return NULL;
+        }
   if (!resourceBundle)
     {
       *status = U_ILLEGAL_ARGUMENT_ERROR;
