@@ -8,6 +8,7 @@
 package com.ibm.icu.dev.test.lang;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 
@@ -155,6 +156,181 @@ public final class UCharacterSurrogateTest extends TestFmwk {
 	}
     }
 
-    
+    public void TestCodePointCount() {
+	class Test {
+	    String str(String s, int start, int limit) {
+		return "codePointCount('" + Utility.escape(s) + "' " + start + ", " + limit + ")";
+	    }
+
+	    void test(String s, int start, int limit, int expected) {
+		int val1 = UCharacter.codePointCount(s.toCharArray(), start, limit);
+		int val2 = UCharacter.codePointCount(s, start, limit);
+		if (val1 != expected) {
+		    errln("char[] " + str(s, start, limit) + "(" + val1 + ") != " + expected);
+		} else if (val2 != expected) {
+		    errln("String " + str(s, start, limit) + "(" + val2 + ") != " + expected);
+		} else if (isVerbose()) {
+		    logln(str(s, start, limit) + " == " + expected);
+		}
+	    }
+
+	    void fail(String s, int start, int limit, Class exc) {
+		try {
+		    UCharacter.codePointCount(s, start, limit);
+		    errln("unexpected success " + str(s, start, limit));
+		} 
+		catch (Throwable e) {
+		    if (!exc.isInstance(e)) {
+			errln("bad exception " + str(s, start, limit) + e.getClass().getName());
+		    }
+		}
+	    }
+	}
+
+	Test test = new Test();
+	test.fail(null, 0, 1, NullPointerException.class);
+	test.fail("a", -1, 0, IndexOutOfBoundsException.class);
+	test.fail("a", 1, 2, IndexOutOfBoundsException.class);
+	test.fail("a", 1, 0, IndexOutOfBoundsException.class);
+	test.test("", 0, 0, 0);
+	test.test("\ud800", 0, 1, 1);
+	test.test("\udc00", 0, 1, 1);
+	test.test("\ud800\udc00", 0, 1, 1);
+	test.test("\ud800\udc00", 1, 2, 1);
+	test.test("\ud800\udc00", 0, 2, 1);
+	test.test("\udc00\ud800", 0, 1, 1);
+	test.test("\udc00\ud800", 1, 2, 1);
+	test.test("\udc00\ud800", 0, 2, 2);
+	test.test("\ud800\ud800\udc00", 0, 2, 2);
+	test.test("\ud800\ud800\udc00", 1, 3, 1);
+	test.test("\ud800\ud800\udc00", 0, 3, 2);
+	test.test("\ud800\udc00\udc00", 0, 2, 1);
+	test.test("\ud800\udc00\udc00", 1, 3, 2);
+	test.test("\ud800\udc00\udc00", 0, 3, 2);
+    }
+
+    public void TestOffsetByCodePoints() {
+	class Test {
+	    String str(String s, int start, int count, int index, int offset) {
+		return "offsetByCodePoints('" + Utility.escape(s) + "' " + start + ", " + count + 
+		    ", " + index + ", " + offset + ")";
+	    }
+
+	    void test(String s, int start, int count, int index, int offset, int expected, boolean flip) {
+		char[] chars = s.toCharArray();
+		String string = s.substring(start, start + count);
+		int val1 = UCharacter.offsetByCodePoints(chars, start, count, index, offset);
+		int val2 = UCharacter.offsetByCodePoints(string, index-start, offset) + start;
+	        
+		if (val1 != expected) {
+		    errln("char[] " + str(s, start, count, index, offset) + "(" + val1 + ") != " + expected);
+		} else if (val2 != expected) {
+		    errln("String " + str(s, start, count, index, offset) + "(" + val2 + ") != " + expected);
+		} else if (isVerbose()) {
+		    logln(str(s, start, count, index, offset) + " == " + expected);
+		}
+
+		if (flip) {
+		    val1 = UCharacter.offsetByCodePoints(chars, start, count, expected, -offset);
+		    val2 = UCharacter.offsetByCodePoints(string, expected-start, -offset) + start;
+		    if (val1 != index) {
+			errln("char[] " + str(s, start, count, expected, -offset) + "(" + val1 + ") != " + index);
+		    } else if (val2 != index) {
+			errln("String " + str(s, start, count, expected, -offset) + "(" + val2 + ") != " + index);
+		    } else if (isVerbose()) {
+			logln(str(s, start, count, expected, -offset) + " == " + index);
+		    }
+		}
+	    }
+
+	    void fail(char[] text, int start, int count, int index, int offset, Class exc) {
+		try {
+		    UCharacter.offsetByCodePoints(text, start, count, index, offset);
+		    errln("unexpected success " + str(new String(text), start, count, index, offset));
+		} 
+		catch (Throwable e) {
+		    if (!exc.isInstance(e)) {
+			errln("bad exception " + str(new String(text), start, count, index, offset) + e.getClass().getName());
+		    }
+		}
+	    }
+
+	    void fail(String text, int index, int offset, Class exc) {
+		try {
+		    UCharacter.offsetByCodePoints(text, index, offset);
+		    errln("unexpected success " + str(text, index, offset, 0, text.length()));
+		} 
+		catch (Throwable e) {
+		    if (!exc.isInstance(e)) {
+			errln("bad exception " + str(text, 0, text.length(), index, offset) + e.getClass().getName());
+		    }
+		}
+	    }
+	}
+
+	Test test = new Test();
+
+	test.test("\ud800\ud800\udc00", 0, 2, 0, 1, 1, true);
+
+	test.fail((char[])null, 0, 1, 0, 1, NullPointerException.class);
+	test.fail((String)null, 0, 1, NullPointerException.class);
+	test.fail("abc", -1, 0, IndexOutOfBoundsException.class);
+	test.fail("abc", 4, 0, IndexOutOfBoundsException.class);
+	test.fail("abc", 1, -2, IndexOutOfBoundsException.class);
+	test.fail("abc", 2, 2, IndexOutOfBoundsException.class);
+	char[] abc = "abc".toCharArray();
+	test.fail(abc, -1, 2, 0, 0, IndexOutOfBoundsException.class);
+	test.fail(abc, 2, 2, 3, 0, IndexOutOfBoundsException.class);
+	test.fail(abc, 1, -1, 0, 0, IndexOutOfBoundsException.class);
+	test.fail(abc, 1, 1, 2, -2, IndexOutOfBoundsException.class);
+	test.fail(abc, 1, 1, 1, 2, IndexOutOfBoundsException.class);
+	test.fail(abc, 1, 2, 1, 3, IndexOutOfBoundsException.class);
+	test.fail(abc, 0, 2, 2, -3, IndexOutOfBoundsException.class);
+	test.test("", 0, 0, 0, 0, 0, false);
+	test.test("\ud800", 0, 1, 0, 1, 1, true);
+	test.test("\udc00", 0, 1, 0, 1, 1, true);
+
+	String s = "\ud800\udc00"; 
+	test.test(s, 0, 1, 0, 1, 1, true);
+	test.test(s, 0, 2, 0, 1, 2, true);
+	test.test(s, 0, 2, 1, 1, 2, false);
+	test.test(s, 1, 1, 1, 1, 2, true);
+
+	s = "\udc00\ud800";
+	test.test(s, 0, 1, 0, 1, 1, true);
+	test.test(s, 0, 2, 0, 1, 1, true);
+	test.test(s, 0, 2, 0, 2, 2, true);
+	test.test(s, 0, 2, 1, 1, 2, true);
+	test.test(s, 1, 1, 1, 1, 2, true);
+
+	s = "\ud800\ud800\udc00";
+	test.test(s, 0, 1, 0, 1, 1, true);
+	test.test(s, 0, 2, 0, 1, 1, true);
+	test.test(s, 0, 2, 0, 2, 2, true);
+	test.test(s, 0, 2, 1, 1, 2, true);
+	test.test(s, 0, 3, 0, 1, 1, true);
+	test.test(s, 0, 3, 0, 2, 3, true);
+	test.test(s, 0, 3, 1, 1, 3, true);
+	test.test(s, 0, 3, 2, 1, 3, false);
+	test.test(s, 1, 1, 1, 1, 2, true);
+	test.test(s, 1, 2, 1, 1, 3, true);
+	test.test(s, 1, 2, 2, 1, 3, false);
+	test.test(s, 2, 1, 2, 1, 3, true);
+
+	s = "\ud800\udc00\udc00";
+	test.test(s, 0, 1, 0, 1, 1, true);
+	test.test(s, 0, 2, 0, 1, 2, true);
+	test.test(s, 0, 2, 1, 1, 2, false);
+	test.test(s, 0, 3, 0, 1, 2, true);
+	test.test(s, 0, 3, 0, 2, 3, true);
+	test.test(s, 0, 3, 1, 1, 2, false);
+	test.test(s, 0, 3, 1, 2, 3, false);
+	test.test(s, 0, 3, 2, 1, 3, true);
+	test.test(s, 1, 1, 1, 1, 2, true);
+	test.test(s, 1, 2, 1, 1, 2, true);
+	test.test(s, 1, 2, 1, 2, 3, true);
+	test.test(s, 1, 2, 2, 1, 3, true);
+	test.test(s, 2, 1, 2, 1, 3, true);
+    }
 }
 
