@@ -226,6 +226,7 @@ static const char *domainNames[] = {
     //"\\u00CE\\u00B2\\u00C3\\u009Fss.com",
     //"\\u00E2\\u0098\\u00BA.com",
     "\\u00C3\\u00BC.com",
+
 };
 
 typedef struct ErrorCases ErrorCases;
@@ -344,60 +345,69 @@ static struct ConformanceTestCases
   
      {
        "Case folding ASCII U+0043 U+0041 U+0046 U+0045",
-       "CAFE", "cafe", "Nameprep",
-       UIDNA_DEFAULT, U_ZERO_ERROR
+       "\x43\x41\x46\x45", "\x63\x61\x66\x65",
+       "Nameprep", UIDNA_DEFAULT, 
+       U_ZERO_ERROR
 
      },
      {
        "Case folding 8bit U+00DF (german sharp s)",
-       "\xC3\x9F", "ss", "Nameprep",
-       UIDNA_DEFAULT, U_ZERO_ERROR  //wrong UTF-8 sequence
+       "\xC3\x9F", "\x73\x73", 
+       "Nameprep", UIDNA_DEFAULT, 
+       U_ZERO_ERROR  
      },
      {
        "Non-ASCII multibyte space character U+1680",
-       "\xE1\x9A\x80", NULL, "Nameprep",
-       UIDNA_DEFAULT,
+       "\xE1\x9A\x80", NULL, 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
      },
      {
        "Non-ASCII 8bit control character U+0085",
-       "\xC2\x85", NULL, "Nameprep", UIDNA_DEFAULT,
+       "\xC2\x85", NULL, 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
      },
      {
        "Non-ASCII multibyte control character U+180E",
-       "\xE1\xA0\x8E", NULL, "Nameprep", UIDNA_DEFAULT,
+       "\xE1\xA0\x8E", NULL, 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
      },
      {
        "Non-ASCII control character U+1D175",
-       "\xF0\x9D\x85\xB5", NULL, "Nameprep", UIDNA_DEFAULT,
+       "\xF0\x9D\x85\xB5", NULL, 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
      },
      {
        "Plane 0 private use character U+F123",
-
-       "\xEF\x84\xA3", NULL, "Nameprep", UIDNA_DEFAULT,
+       "\xEF\x84\xA3", NULL, 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
      },
      {
        "Plane 15 private use character U+F1234",
-       "\xF3\xB1\x88\xB4", NULL, "Nameprep", UIDNA_DEFAULT,
+       "\xF3\xB1\x88\xB4", NULL, 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
      },
      {
        "Plane 16 private use character U+10F234",
-       "\xF4\x8F\x88\xB4", NULL, "Nameprep", UIDNA_DEFAULT,
+       "\xF4\x8F\x88\xB4", NULL, 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
      },
      {
        "Non-character code point U+8FFFE",
-       "\xF2\x8F\xBF\xBE", NULL, "Nameprep", UIDNA_DEFAULT,
+       "\xF2\x8F\xBF\xBE", NULL, 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
      },
      {
        "Non-character code point U+10FFFF",
-       "\xF4\x8F\xBF\xBF", NULL, "Nameprep", UIDNA_DEFAULT,
+       "\xF4\x8F\xBF\xBF", NULL,
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR 
      },
  /* 
@@ -409,59 +419,68 @@ static struct ConformanceTestCases
 */
      {
        "Non-plain text character U+FFFD",
-       "\xEF\xBF\xBD", NULL, "Nameprep", UIDNA_DEFAULT,
+       "\xEF\xBF\xBD", NULL, 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
      },
      {
        "Ideographic description character U+2FF5",
-       "\xE2\xBF\xB5", NULL, "Nameprep", UIDNA_DEFAULT,
+       "\xE2\xBF\xB5", NULL, 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
      },
      {
        "Display property character U+0341",
-       "\xCD\x81", "\xCD\x81", "Nameprep",
-       UIDNA_DEFAULT, U_ZERO_ERROR
+       "\xCD\x81", "\xCD\x81",
+       "Nameprep", UIDNA_DEFAULT, U_ZERO_ERROR
 
      },
 
      {
        "Left-to-right mark U+200E",
-       "\xE2\x80\x8E", "\xCC\x81", "Nameprep", UIDNA_DEFAULT,
+       "\xE2\x80\x8E", "\xCC\x81", 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
      },
      {
 
        "Deprecated U+202A",
-       "\xE2\x80\xAA", "\xCC\x81", "Nameprep", UIDNA_DEFAULT,
+       "\xE2\x80\xAA", "\xCC\x81", 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
      },
      {
        "Language tagging character U+E0001",
-       "\xF3\xA0\x80\x81", "\xCC\x81", "Nameprep", UIDNA_DEFAULT,
+       "\xF3\xA0\x80\x81", "\xCC\x81", 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
      },
      {
        "Language tagging character U+E0042",
-       "\xF3\xA0\x81\x82", NULL, "Nameprep", UIDNA_DEFAULT,
+       "\xF3\xA0\x81\x82", NULL, 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
      },
      {
        "Bidi: RandALCat character U+05BE and LCat characters",
-       "foo\xD6\xBE""bar", NULL, "Nameprep", UIDNA_DEFAULT,
+       "\x66\x6F\x6F\xD6\xBE\x62\x61\x72", NULL, 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_CHECK_BIDI_ERROR
      },
      {
        "Bidi: RandALCat character U+FD50 and LCat characters",
-       "foo\xEF\xB5\x90""bar", NULL, "Nameprep",UIDNA_DEFAULT ,
+       "\x66\x6F\x6F\xEF\xB5\x90\x62\x61\x72", NULL,
+       "Nameprep",UIDNA_DEFAULT ,
        U_IDNA_CHECK_BIDI_ERROR
      },
      {
        "Bidi: RandALCat character U+FB38 and LCat characters",
-       "foo\xEF\xB9\xB6""bar", "foo \xd9\x8e""bar",
+       "\x66\x6F\x6F\xEF\xB9\xB6\x62\x61\x72", "\x66\x6F\x6F \xd9\x8e\x62\x61\x72",
        UIDNA_DEFAULT, U_ZERO_ERROR
      },
      { "Bidi: RandALCat without trailing RandALCat U+0627 U+0031",
-       "\xD8\xA7\x31", NULL, "Nameprep", UIDNA_DEFAULT,
+       "\xD8\xA7\x31", NULL, 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_CHECK_BIDI_ERROR
      },
      {
@@ -471,10 +490,12 @@ static struct ConformanceTestCases
      },
      {
        "Unassigned code point U+E0002",
-       "\xF3\xA0\x80\x82", NULL, "Nameprep", UIDNA_DEFAULT,
+       "\xF3\xA0\x80\x82", NULL, 
+       "Nameprep", UIDNA_DEFAULT,
        U_IDNA_UNASSIGNED_CODEPOINT_FOUND_ERROR
      },
-/*
+
+/*  // Invalid UTF-8
      {
        "Larger test (shrinking)",
        "X\xC2\xAD\xC3\xDF\xC4\xB0\xE2\x84\xA1\x6a\xcc\x8c\xc2\xa0\xc2"
@@ -482,7 +503,7 @@ static struct ConformanceTestCases
        "Nameprep",
        UIDNA_DEFAULT, U_ZERO_ERROR
      },
-     {
+    {
 
        "Larger test (expanding)",
        "X\xC3\xDF\xe3\x8c\x96\xC4\xB0\xE2\x84\xA1\xE2\x92\x9F\xE3\x8c\x80",
@@ -492,7 +513,7 @@ static struct ConformanceTestCases
        "Nameprep",
        UIDNA_DEFAULT, U_ZERO_ERROR
      },
-*/
+  */
 };
 
 

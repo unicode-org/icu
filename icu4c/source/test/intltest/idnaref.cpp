@@ -128,6 +128,20 @@ static UErrorCode getError(enum punycode_status status){
     }
 }
 
+static inline int32_t convertASCIIToUChars(const char* src,UChar* dest, int32_t length){
+    int i;
+    for(i=0;i<length;i++){
+        dest[i] = src[i];
+    }
+    return i;
+}
+static inline int32_t convertUCharsToASCII(const UChar* src,char* dest, int32_t length){
+    int i;
+    for(i=0;i<length;i++){
+        dest[i] = (char)src[i];
+    }
+    return i;
+}
 // wrapper around the reference Punycode implementation 
 static int32_t convertToPuny(const UChar* src, int32_t srcLength, 
 							 UChar* dest, int32_t destCapacity,
@@ -182,7 +196,7 @@ static int32_t convertToPuny(const UChar* src, int32_t srcLength,
     }
     
     if(b2Len < destCapacity){
-        u_charsToUChars(b2,dest,b2Len);
+          convertASCIIToUChars(b2,dest,b2Len);
     }else{
         status =U_BUFFER_OVERFLOW_ERROR;
     }
@@ -198,6 +212,7 @@ CLEANUP:
 
     return b2Len;
 }
+
 static int32_t convertFromPuny(  const UChar* src, int32_t srcLength,
 								 UChar* dest, int32_t destCapacity,
                                  UErrorCode& status){
@@ -206,7 +221,7 @@ static int32_t convertFromPuny(  const UChar* src, int32_t srcLength,
     int32_t b1Len = 0, b1Capacity = MAX_LABEL_BUFFER_SIZE;
     int32_t destLen =0;
 
-    u_UCharsToChars(src, b1,srcLength);
+    convertUCharsToASCII(src, b1,srcLength);
 
     uint32_t b2Stack[MAX_LABEL_BUFFER_SIZE];
     uint32_t* b2 = b2Stack;
@@ -476,7 +491,7 @@ idnaref_toUnicode(const UChar* src, int32_t srcLength,
             uprv_memmove(b1,src, srcLength * U_SIZEOF_UCHAR);
         }else{
             /* we do not have enough room so grow the buffer*/
-            b1 = (UChar*) uprv_malloc(b1Len * U_SIZEOF_UCHAR);
+            b1 = (UChar*) uprv_malloc(srcLength * U_SIZEOF_UCHAR);
             if(b1==NULL){
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 goto CLEANUP;
