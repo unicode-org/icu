@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/02/25 22:43:57 $ 
-* $Revision: 1.28 $
+* $Date: 2002/02/28 23:55:47 $ 
+* $Revision: 1.29 $
 *
 *******************************************************************************
 */
@@ -424,7 +424,7 @@ public final class UCharacterTest extends TestFmwk
   * path is provided relative to the src path, however the user could 
   * set a system property to change the directory path.<br>
   * e.g. java -DUnicodeData="data_directory_path" 
-  * com.ibm.icu.dev.test.text.UCharacterTest
+  * com.ibm.icu.dev.test.lang.UCharacterTest
   */
   public void TestUnicodeData()
   {
@@ -484,24 +484,11 @@ public final class UCharacterTest extends TestFmwk
         
         // testing the category
         // we override the general category of some control characters
-        if (ch == 9 || ch == 0xb || ch == 0x1f)
-          type = UCharacterCategory.SPACE_SEPARATOR;
-        else
-          if (ch == 0xc)
-            type = UCharacterCategory.LINE_SEPARATOR;
-          else
-            if (ch == 0xa || ch == 0xd || ch == 0x1c || ch == 0x1d || 
-                ch == 0x1e || ch == 0x85)
-               type = UCharacterCategory.PARAGRAPH_SEPARATOR;
-            else
-            {
-              type = TYPE.indexOf(t);
-              if (type < 0)
-                type = 0;
-              else 
-                type = (type >> 1) + 1;  
-            }
-            
+        type = TYPE.indexOf(t);
+        if (type < 0)
+            type = 0;
+        else 
+            type = (type >> 1) + 1;  
         if (UCharacter.getType(ch) != type)
         {
           errln("FAIL \\u" + hex(ch) + " expected type " + 
@@ -536,7 +523,7 @@ public final class UCharacterTest extends TestFmwk
       errln("FAIL UnicodeData.txt not found. File name with path: " + s +
             "\nConfigure the system setting UnicodeData to the right path\n" +
             "e.g. java -DUnicodeData=\"data_dir_path\" " +
-            "com.ibm.icu.dev.test.text.UCharacterTest");
+            "com.ibm.icu.dev.test.lang.UCharacterTest");
     }
     catch (Exception e)
     {
@@ -797,7 +784,7 @@ public final class UCharacterTest extends TestFmwk
   * This method reads in SpecialCasing.txt file for testing purposes. 
   * A default path is provided relative to the src path, however the user 
   * could set a system property to change the directory path.<br>
-  * e.g. java -DUnicodeData="data_dir_path" com.ibm.icu.dev.test.text.UCharacterTest
+  * e.g. java -DUnicodeData="data_dir_path" com.ibm.dev.test.lang.UCharacterTest
   */
   public void TestSpecialCasing()
   {
@@ -935,7 +922,7 @@ public final class UCharacterTest extends TestFmwk
       errln("FAIL SpecialCasing.txt not found in \n" + s +
             ". Configure the system setting UnicodeData to the right path\n" +
             "e.g. java -DUnicodeData=\"data_dir_path\" " +
-            "com.ibm.icu.dev.test.text.UCharacterTest");
+            "com.ibm.icu.dev.test.lang.UCharacterTest");
     }
     catch (Exception e)
     {
@@ -946,12 +933,20 @@ public final class UCharacterTest extends TestFmwk
                      UTF16.valueOf(0x1043C) + UTF16.valueOf(0x10414);
     String specialUpper = "AB'CD FFIII\u0130 \u01C7\u01C7\u01C7 " +
                           UTF16.valueOf(0x10414) + UTF16.valueOf(0x10414);
+    String specialTitle = "Ab'cd FFi\u0131I\u0130 \u01C7\u01C8\u01C9 " +
+                          UTF16.valueOf(0x10414) + UTF16.valueOf(0x1043C);
     String specialLower = "ab'cd \uFB00i\u0131ii \u01C9\u01C9\u01C9 " + 
                           UTF16.valueOf(0x1043C) + UTF16.valueOf(0x1043C);
     String result = UCharacter.toUpperCase(special);
     if (!result.equals(specialUpper)) {
         errln("Error getting uppercase in special string");
     }
+    /*
+    result = UCharacter.toTitleCase(special);
+    if (!result.equals(specialLower)) {
+        errln("Error getting lowercase in special string");
+    }
+    */
     result = UCharacter.toLowerCase(special);
     if (!result.equals(specialLower)) {
         errln("Error getting lowercase in special string");
@@ -1049,8 +1044,8 @@ public final class UCharacterTest extends TestFmwk
     try
     {
       UCharacterTest test = new UCharacterTest();
-      //test.TestNames();
-      test.run(arg);
+      test.TestCaseMapping();
+      //test.run(arg);
     }
     catch (Exception e)
     {
