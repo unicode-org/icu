@@ -9125,7 +9125,7 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status)
   // 3. USet is internally really UnicodeSet, C is just a wrapper
   UnicodeSet *tailored = new UnicodeSet();
   UnicodeString pattern;
-  CanonicalIterator it("", *status);
+  CanonicalIterator it(UnicodeString(), *status);
 
 
   // The idea is to tokenize the rule set. For each non-reset token,
