@@ -39,7 +39,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable ICU 2.0
  */
-#define U_UNICODE_VERSION "4"
+#define U_UNICODE_VERSION "4.0.1"
 
 /**
  * \file
@@ -965,13 +965,15 @@ enum UBlockCode {
 
     /* New blocks in Unicode 3.2 */
 
-    /** @stable ICU 2.2 */
-    UBLOCK_CYRILLIC_SUPPLEMENTARY = 97, /*[0500]*/
     /**
      * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
      * @draft ICU 3.0
      */
-    UBLOCK_CYRILLIC_SUPPLEMENT = 97, /*[0500]*/
+    UBLOCK_CYRILLIC_SUPPLEMENTARY = 97, 
+    /** @stable ICU 2.2
+     * Vladimir moved below to try to fool the perl script
+     */
+    UBLOCK_CYRILLIC_SUPPLEMENT = UBLOCK_CYRILLIC_SUPPLEMENTARY, /*[0500]*/
     /** @stable ICU 2.2 */
     UBLOCK_TAGALOG = 98, /*[1700]*/
     /** @stable ICU 2.2 */
@@ -1230,7 +1232,7 @@ typedef enum ULineBreak {
     U_LB_GLUE,              /*[GL]*/
     U_LB_HYPHEN,            /*[HY]*/
     U_LB_IDEOGRAPHIC,       /*[ID]*/
-    U_LB_INSEPERABLE,       /*[IN]*/
+    U_LB_INSEPERABLE,
     /** Renamed from the misspelled "inseperable" in Unicode 4.0.1/ICU 3.0 @draft ICU 3.0 */
     U_LB_INSEPARABLE=U_LB_INSEPERABLE,/*[IN]*/
     U_LB_INFIX_NUMERIC,     /*[IS]*/
