@@ -207,22 +207,25 @@ toUCallback(UConverter *cnv,
  * GB four-byte sequences are contiguous and are handled algorithmically by
  * the special callback functions below.
  * The values are start & end of Unicode & GB codes.
+ *
+ * Note that single surrogates are not mapped by GB 18030
+ * as of the re-released mapping tables from 2000-nov-30.
  */
 static const uint32_t
 gb18030Ranges[13][4]={
-    0x10000, 0x10ffff, LINEAR(0x90308130), LINEAR(0xe3329a35),
-    0x9fa6, 0xdfff, LINEAR(0x82358f34), LINEAR(0x83389837),
-    0x0452, 0x200f, LINEAR(0x8130d239), LINEAR(0x8136a530),
-    0xe865, 0xf92b, LINEAR(0x83389838), LINEAR(0x8431cc32),
-    0x2643, 0x2e80, LINEAR(0x8137a838), LINEAR(0x8138fd37),
-    0xfa2a, 0xfe2f, LINEAR(0x8431e336), LINEAR(0x8432cc35),
-    0x3ce1, 0x4055, LINEAR(0x8231d439), LINEAR(0x8232af33),
-    0x361b, 0x3917, LINEAR(0x8230a634), LINEAR(0x8230f238),
-    0x49b8, 0x4c76, LINEAR(0x8234a132), LINEAR(0x8234e734),
-    0x4160, 0x4336, LINEAR(0x8232c938), LINEAR(0x8232f838),
-    0x478e, 0x4946, LINEAR(0x8233e839), LINEAR(0x82349639),
-    0x44d7, 0x464b, LINEAR(0x8233a430), LINEAR(0x8233c932),
-    0xffe6, 0xffff, LINEAR(0x8432e932), LINEAR(0x8432eb37)
+    0x10000, 0x10FFFF, LINEAR(0x90308130), LINEAR(0xE3329A35),
+    0x9FA6, 0xD7FF, LINEAR(0x82358F33), LINEAR(0x8336C738),
+    0x0452, 0x200F, LINEAR(0x8130D330), LINEAR(0x8136A531),
+    0xE865, 0xF92B, LINEAR(0x8336D030), LINEAR(0x84308534),
+    0x2643, 0x2E80, LINEAR(0x8137A839), LINEAR(0x8138FD38),
+    0xFA2A, 0xFE2F, LINEAR(0x84309C38), LINEAR(0x84318537),
+    0x3CE1, 0x4055, LINEAR(0x8231D438), LINEAR(0x8232AF32),
+    0x361B, 0x3917, LINEAR(0x8230A633), LINEAR(0x8230F237),
+    0x49B8, 0x4C76, LINEAR(0x8234A131), LINEAR(0x8234E733),
+    0x4160, 0x4336, LINEAR(0x8232C937), LINEAR(0x8232F837),
+    0x478E, 0x4946, LINEAR(0x8233E838), LINEAR(0x82349638),
+    0x44D7, 0x464B, LINEAR(0x8233A339), LINEAR(0x8233C931),
+    0xFFE6, 0xFFFF, LINEAR(0x8431A234), LINEAR(0x8431A439)
 };
 
 /* MBCS setup functions ----------------------------------------------------- */
@@ -2069,7 +2072,7 @@ fromUCallback(UConverter *cnv,
               void *context, UConverterFromUnicodeArgs *pArgs,
               const UChar *codeUnits, int32_t length, UChar32 codePoint,
               UConverterCallbackReason reason, UErrorCode *pErrorCode) {
-    if(cnv->extraInfo==gb18030Ranges && (reason==UCNV_UNASSIGNED || reason==UCNV_ILLEGAL)) {
+    if(cnv->extraInfo==gb18030Ranges && reason==UCNV_UNASSIGNED) {
         const uint32_t *range;
         int i;
 
