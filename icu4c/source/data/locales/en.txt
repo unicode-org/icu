@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 23:1
-// * Source File: \work\locale\common\main\\en.xml
+// * Source File: ../../../locale/common/main\en.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\en.xml
+ */
 en{
     Countries{
         AD{"Andorra"}
@@ -2268,6 +2270,7 @@ en{
         Buhd{"Buhid"}
         Cans{"Unified Canadian Aboriginal Symbols"}
         Cher{"Cherokee"}
+        Copt{"Coptic"}
         Cprt{"Cypriot"}
         Cyrl{"Cyrillic"}
         Deva{"Devanagari"}
@@ -2300,7 +2303,6 @@ en{
         Ogam{"Ogham"}
         Orya{"Oriya"}
         Osma{"Osmanya"}
-        Qaac{"Coptic"}
         Qaai{"Inherited"}
         Runr{"Runic"}
         Shaw{"Shavian"}
@@ -2341,7 +2343,6 @@ en{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             DateTimePatterns{
                 "h:mm:ss a z",
@@ -2364,6 +2365,15 @@ en{
                         "Thu",
                         "Fri",
                         "Sat",
+                    }
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "W",
+                        "T",
+                        "F",
+                        "S",
                     }
                     wide{
                         "Sunday",
@@ -2397,6 +2407,20 @@ en{
                         "Oct",
                         "Nov",
                         "Dec",
+                    }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
                     }
                     wide{
                         "January",

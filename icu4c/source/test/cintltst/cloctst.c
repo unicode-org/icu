@@ -100,7 +100,7 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* display name (Catalan) */
     {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)", 
     "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)", "xin\\u00E9s (Hans, Xina)", 
-    "alemany (Alemanya, COLLATION=PHONEBOOK)", "espanyol (COLLATION=TRADITIONAL)", "japon\\u00E8s (Jap\\u00F3, CALENDAR=JAPANESE)" },
+    "alemany (Alemanya, collation=phonebook)", "espanyol (collation=traditional)", "japon\\u00E8s (Jap\\u00F3, calendar=japanese)" },
 
     /* display language (Greek) */
     {
@@ -138,9 +138,9 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
         "\\u0395\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac (\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1)",
         "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac (\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1, NY)",
         "\\u039A\\u03B9\\u03BD\\u03B5\\u03B6\\u03B9\\u03BA\\u03AC (Hans, \\u039A\\u03AF\\u03BD\\u03B1)", 
-        "\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03AF\\u03B1, COLLATION=PHONEBOOK)", 
-        "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (COLLATION=TRADITIONAL)", 
-        "\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03B9\\u03BA\\u03AC (\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03AF\\u03B1, CALENDAR=JAPANESE)"
+        "\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03AF\\u03B1, collation=phonebook)", 
+        "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (collation=traditional)", 
+        "\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03B9\\u03BA\\u03AC (\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03AF\\u03B1, calendar=japanese)"
     }
 };
 
@@ -573,8 +573,8 @@ static void TestDisplayNames()
             "el_GR" };
         const char *expect[] = { "Spanish (Calendar=Japanese Calendar, Collation=Traditional)", /* note sorted order of keywords */
             "espagnol (Calendrier=Calendrier japonais, Ordonnancement=Ordre traditionnel)",
-            "espanyol (CALENDAR=JAPANESE, COLLATION=TRADITIONAL)",
-            "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (CALENDAR=JAPANESE, COLLATION=TRADITIONAL)" };
+            "espanyol (calendar=japanese, collation=traditional)",
+            "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (calendar=japanese, collation=traditional)" };
         UChar *expectBuffer;
 
         for(i=0;i<LENGTHOF(testL);i++) {
@@ -851,10 +851,11 @@ static void TestISOFunctions()
     /*str=uloc_getISOLanguages(); */
     log_verbose("Testing ISO Languages: \n");
 
-    res = ures_open(NULL, "root", &status);
+    /* use structLocale - this data is no longer in root */
+    res = ures_openDirect(loadTestData(&status), "structLocale", &status);
     ures_getByKey(res, "Languages", res, &status);
     if (U_FAILURE(status)) {
-        log_err("There is an error in root's ures_getByKey(\"Languages\"), status=%s\n", u_errorName(status));
+        log_err("There is an error in structLocale's ures_getByKey(\"Languages\"), status=%s\n", u_errorName(status));
         status = U_ZERO_ERROR;
     }
 
@@ -899,7 +900,7 @@ static void TestISOFunctions()
     ures_close(res);
 
     if(count!=expect) {
-        log_err("There is an error in getISOLanguages, got %d, expected %d\n", count, expect);
+        log_err("There is an error in getISOLanguages, got %d, expected %d (as per structLocale)\n", count, expect);
     }
 
     log_verbose("Testing ISO Countries");

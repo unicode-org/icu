@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/20 0:10
-// * Source File: \work\locale\common\main\\mr.xml
+// * Source File: ../../../locale/common/main\mr.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\mr.xml
+ */
 mr{
     Countries{
         IN{"भारत"}
@@ -166,7 +168,6 @@ mr{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             AmPmMarkers{
                 "म.पू.",

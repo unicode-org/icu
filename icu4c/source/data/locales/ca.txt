@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 22:49
-// * Source File: \work\locale\common\main\\ca.xml
+// * Source File: ../../../locale/common/main\ca.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\ca.xml
+ */
 ca{
     Countries{
         AD{"Andorra"}
@@ -379,7 +381,6 @@ ca{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             DateTimePatterns{
                 "HH:mm:ss z",

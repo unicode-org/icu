@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 22:49
-// * Source File: \work\locale\common\main\\bn.xml
+// * Source File: ../../../locale/common/main\bn.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\bn.xml
+ */
 bn{
     Countries{
         AF{"আফগানিস্তান"}
@@ -136,7 +138,6 @@ bn{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             AmPmMarkers{
                 "পূর্বাহ্ণ",

@@ -3,8 +3,7 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 22:44
-// * Source File: \work\locale\common\main\\ar_IN.xml
+// * Source File: ../../../locale/common/main\ar_IN.xml
 // *
 // ***************************************************************************
 ar_IN{
@@ -16,7 +15,6 @@ ar_IN{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             DateTimePatterns{
                 "h:mm:ss a z",

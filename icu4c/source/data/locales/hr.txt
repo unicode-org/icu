@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 23:52
-// * Source File: \work\locale\common\main\\hr.xml
+// * Source File: ../../../locale/common/main\hr.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\hr.xml
+ */
 hr{
     Countries{
         AD{"Andora"}
@@ -250,12 +252,6 @@ hr{
         ZM{"Zambija"}
         ZW{"Zimbabve"}
     }
-    Currencies{
-        HRK{
-            "Kn",
-            "HRK",
-        }
-    }
     ExemplarCharacters{"[a-p r-v z đ ć č ž š {lj} {nj} {dž}]"}
     Languages{
         ar{"arapski"}
@@ -308,7 +304,6 @@ hr{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             DateTimeElements:intvector{
                 2,
@@ -335,6 +330,15 @@ hr{
                         "čet",
                         "pet",
                         "sub",
+                    }
+                    narrow{
+                        "n",
+                        "p",
+                        "u",
+                        "s",
+                        "č",
+                        "p",
+                        "s",
                     }
                     wide{
                         "nedjelja",

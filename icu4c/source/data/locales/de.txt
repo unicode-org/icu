@@ -3,10 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/19 22:55
-// * Source File: \work\locale\common\main\\de.xml
+// * Source File: ../../../locale/common/main\de.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\de.xml
+ */
 de{
     Countries{
         AD{"Andorra"}
@@ -1841,6 +1843,7 @@ de{
         Bopo{"Bopomofo"}
         Brai{"Blindenschrift"}
         Cher{"Cherokee"}
+        Copt{"Koptisch"}
         Cprt{"Zypriotisch"}
         Cyrl{"Kyrillisch"}
         Deva{"Devanagari"}
@@ -1870,7 +1873,6 @@ de{
         Ogam{"Ogham"}
         Orya{"Oriya"}
         Osma{"Osmanisch"}
-        Qaac{"Koptisch"}
         Qaai{"Geerbter Schriftwert"}
         Runr{"Runenschrift"}
         Sinh{"Singhalesisch"}
@@ -1907,7 +1909,6 @@ de{
     }
     Version{"1.2"}
     calendar{
-        
         gregorian{
             AmPmMarkers{
                 "vorm.",
