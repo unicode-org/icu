@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UTF16Test.java,v $ 
-* $Date: 2002/04/03 22:48:09 $ 
-* $Revision: 1.17 $
+* $Date: 2002/07/11 21:25:23 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -1173,6 +1173,95 @@ public final class UTF16Test extends TestFmwk
         }
     }
   
+    public void TestCaseCompare() 
+    {
+        String mixed = "\u0061\u0042\u0131\u03a3\u00df\ufb03\ud93f\udfff";
+        String otherDefault = "\u0041\u0062\u0131\u03c3\u0073\u0053\u0046\u0066\u0049\ud93f\udfff";
+        String otherExcludeSpecialI = "\u0041\u0062\u0131\u03c3\u0053\u0073\u0066\u0046\u0069\ud93f\udfff";
+        String different = "\u0041\u0062\u0131\u03c3\u0073\u0053\u0046\u0066\u0049\ud93f\udffd";
+    
+        /*
+         * UVersionInfo unicodeVersion={ 0, 0, 17, 89 }, unicode_3_1={ 3, 1, 0, 0 };
+    
+        int32_t result, lenMixed, lenOtherDefault, lenOtherExcludeSpecialI, lenDifferent;
+        UErrorCode errorCode;
+        UBool isUnicode_3_1;
+    
+        errorCode=U_ZERO_ERROR;
+    
+        lenMixed=u_strlen(mixed);
+        lenOtherDefault=u_strlen(otherDefault);
+        lenOtherExcludeSpecialI=u_strlen(otherExcludeSpecialI);
+        lenDifferent=u_strlen(different);
+    
+        // if unicodeVersion()>=3.1 then test exclude-special-i cases as well
+        u_getUnicodeVersion(unicodeVersion);
+        isUnicode_3_1= uprv_memcmp(unicodeVersion, unicode_3_1, 4)>=0;
+    
+        // test u_strcasecmp()
+        result=u_strcasecmp(mixed, otherDefault, U_FOLD_CASE_DEFAULT);
+        if(result!=0) {
+            log_err("error: u_strcasecmp(mixed, other, default)=%ld instead of 0\n", result);
+        }
+        result=u_strCaseCompare(mixed, -1, otherDefault, -1, U_FOLD_CASE_DEFAULT, &errorCode);
+        if(result!=0) {
+            log_err("error: u_strCaseCompare(mixed, other, default)=%ld instead of 0\n", result);
+        }
+    
+        // test u_strcasecmp() - exclude special i 
+        result=u_strcasecmp(mixed, otherExcludeSpecialI, U_FOLD_CASE_EXCLUDE_SPECIAL_I);
+        if(result!=0) {
+            log_err("error: u_strcasecmp(mixed, other, exclude special i)=%ld instead of 0\n", result);
+        }
+        result=u_strCaseCompare(mixed, lenMixed, otherExcludeSpecialI, lenOtherExcludeSpecialI, U_FOLD_CASE_EXCLUDE_SPECIAL_I, &errorCode);
+        if(result!=0) {
+            log_err("error: u_strCaseCompare(mixed, other, exclude special i)=%ld instead of 0\n", result);
+        }
+    
+        // test u_strcasecmp()
+        result=u_strcasecmp(mixed, different, U_FOLD_CASE_DEFAULT);
+        if(result<=0) {
+            log_err("error: u_strcasecmp(mixed, different, default)=%ld instead of positive\n", result);
+        }
+        result=u_strCaseCompare(mixed, -1, different, lenDifferent, U_FOLD_CASE_DEFAULT, &errorCode);
+        if(result<=0) {
+            log_err("error: u_strCaseCompare(mixed, different, default)=%ld instead of positive\n", result);
+        }
+    
+        // test u_strncasecmp() - stop before the sharp s (U+00df)
+        result=u_strncasecmp(mixed, different, 4, U_FOLD_CASE_DEFAULT);
+        if(result!=0) {
+            log_err("error: u_strncasecmp(mixed, different, 4, default)=%ld instead of 0\n", result);
+        }
+        result=u_strCaseCompare(mixed, 4, different, 4, U_FOLD_CASE_DEFAULT, &errorCode);
+        if(result!=0) {
+            log_err("error: u_strCaseCompare(mixed, 4, different, 4, default)=%ld instead of 0\n", result);
+        }
+    
+        // test u_strncasecmp() - stop in the middle of the sharp s (U+00df) 
+        result=u_strncasecmp(mixed, different, 5, U_FOLD_CASE_DEFAULT);
+        if(result<=0) {
+            log_err("error: u_strncasecmp(mixed, different, 5, default)=%ld instead of positive\n", result);
+        }
+        result=u_strCaseCompare(mixed, 5, different, 5, U_FOLD_CASE_DEFAULT, &errorCode);
+        if(result<=0) {
+            log_err("error: u_strCaseCompare(mixed, 5, different, 5, default)=%ld instead of positive\n", result);
+        }
+    
+        // test u_memcasecmp() - stop before the sharp s (U+00df) 
+        result=u_memcasecmp(mixed, different, 4, U_FOLD_CASE_DEFAULT);
+        if(result!=0) {
+            log_err("error: u_memcasecmp(mixed, different, 4, default)=%ld instead of 0\n", result);
+        }
+    
+        // test u_memcasecmp() - stop in the middle of the sharp s (U+00df) 
+        result=u_memcasecmp(mixed, different, 5, U_FOLD_CASE_DEFAULT);
+        if(result<=0) {
+            log_err("error: u_memcasecmp(mixed, different, 5, default)=%ld instead of positive\n", result);
+        }
+        */
+    }
+
     public static void main(String[] arg)
     {
     	try

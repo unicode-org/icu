@@ -6,16 +6,14 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2002/03/15 22:48:07 $ 
-* $Revision: 1.15 $
+* $Date: 2002/07/11 21:25:24 $ 
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
 package com.ibm.icu.lang;
 
-import java.util.Locale;
 import java.io.InputStream;
-import java.io.DataInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import com.ibm.icu.impl.Utility;
