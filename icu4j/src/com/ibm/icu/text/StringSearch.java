@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2003/06/18 00:58:21 $ 
- * $Revision: 1.23 $
+ * $Date: 2003/07/03 23:18:37 $ 
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -576,7 +576,16 @@ public final class StringSearch extends SearchIterator
                 // see SearchIterator next(), it checks the bounds and returns
                 // if it exceeds the range. It does not allow setting of
                 // m_matchedIndex
-                m_matchedIndex_ = DONE;
+                if (start == m_textBeginOffset_) {
+                    m_matchedIndex_ = DONE;
+                }
+                else {
+                    // for boundary check purposes. this will ensure that the
+                    // next match will not preceed the current offset
+                    // note search->matchedIndex will always be set to something
+                    // in the code
+                    m_matchedIndex_ = start - 1;
+                }
             }
     
 	        // status checked below
@@ -1456,10 +1465,11 @@ public final class StringSearch extends SearchIterator
 	    int lastmatchend = m_matchedIndex_ + matchLength - 1; 
 	    if (!isOverlapping()) {
             return (start >= m_matchedIndex_ && start <= lastmatchend) 
-                    || (end >= m_matchedIndex_ && end <= lastmatchend);
+                    || (end >= m_matchedIndex_ && end <= lastmatchend)
+                    || (start <= m_matchedIndex_ && end >= lastmatchend);
                       
 	    }
-	    return start == m_matchedIndex_;
+	    return start <= m_matchedIndex_ && end >= lastmatchend;
 	}
 	
 	/**
@@ -1758,7 +1768,7 @@ public final class StringSearch extends SearchIterator
 	        
 	    int accentsindex[] = new int[INITIAL_ARRAY_SIZE_];      
 	    int accentsize = getUnblockedAccentIndex(accents, accentsindex);
-	    int count = (2 << (accentsize - 1)) - 2;  
+	    int count = (2 << (accentsize - 1)) - 1;  
 	    while (count > 0) {
 	    	// copy the base characters
 	    	m_canonicalPrefixAccents_.delete(0, 
@@ -1978,8 +1988,8 @@ public final class StringSearch extends SearchIterator
 	    int accentsindex[] = new int[INITIAL_ARRAY_SIZE_];
 	    int size = getUnblockedAccentIndex(accents, accentsindex);
 	
-	    // 2 power n - 1 minus the full set of accents
-	    int  count = (2 << (size - 1)) - 2;  
+	    // 2 power n - 1 plus the full set of accents
+	    int  count = (2 << (size - 1)) - 1;  
 	    while (count > 0) {
             m_canonicalSuffixAccents_.delete(0, 
                                            m_canonicalSuffixAccents_.length());
@@ -2369,7 +2379,7 @@ public final class StringSearch extends SearchIterator
 	        
 	    int accentsindex[] = new int[INITIAL_ARRAY_SIZE_];      
 	    int accentsize = getUnblockedAccentIndex(accents, accentsindex);
-	    int count = (2 << (accentsize - 1)) - 2;  
+	    int count = (2 << (accentsize - 1)) - 1;  
 	    while (count > 0) {
             m_canonicalSuffixAccents_.delete(0, 
                                            m_canonicalSuffixAccents_.length());
@@ -2562,8 +2572,8 @@ public final class StringSearch extends SearchIterator
 	    int accentsindex[] = new int[INITIAL_ARRAY_SIZE_];
 	    int size = getUnblockedAccentIndex(accents, accentsindex);
 	
-	    // 2 power n - 1 minus the full set of accents
-	    int count = (2 << (size - 1)) - 2;  
+	    // 2 power n - 1 plus the full set of accents
+	    int count = (2 << (size - 1)) - 1;  
 	    while (count > 0) {
 	    	m_canonicalPrefixAccents_.delete(0, 
 	    								m_canonicalPrefixAccents_.length());
@@ -2745,7 +2755,7 @@ public final class StringSearch extends SearchIterator
 	 */
 	private void handleNextExact(int start)
 	{
-	   	int textoffset = shiftForward(start, 
+        int textoffset = shiftForward(start, 
 	   								  CollationElementIterator.NULLORDER,
 	   								  m_pattern_.m_CELength_);
 		int targetce = CollationElementIterator.IGNORABLE;
