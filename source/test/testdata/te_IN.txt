@@ -29,11 +29,11 @@ te_IN
         tag3 { TE_IN3 } 
     }
 
-    string_in_Default_te_te_IN { TE_IN }
+    string_in_Root_te_te_IN { TE_IN }
 
-    array_in_Default_te_te_IN { TE_IN0, TE_IN1, TE_IN2, TE_IN3, TE_IN4 }
+    array_in_Root_te_te_IN { TE_IN0, TE_IN1, TE_IN2, TE_IN3, TE_IN4 }
 
-    array_2d_in_Default_te_te_IN
+    array_2d_in_Root_te_te_IN
     {
         { TE_IN00, TE_IN01, TE_IN02 }
         { TE_IN10, TE_IN11, TE_IN12 }
@@ -41,7 +41,7 @@ te_IN
         { TE_IN30, TE_IN31, TE_IN32 }
     }
 
-    tagged_array_in_Default_te_te_IN
+    tagged_array_in_Root_te_te_IN
     {
         tag2 { TE_IN2 } 
         tag9 { TE_IN9 } 
@@ -68,18 +68,18 @@ te_IN
         tag17 { TE_IN17 } 
     }
 
-    string_in_Default_te_IN { TE_IN }
+    string_in_Root_te_IN { TE_IN }
 
-    array_in_Default_te_IN { TE_IN0, TE_IN1, TE_IN2 }
+    array_in_Root_te_IN { TE_IN0, TE_IN1, TE_IN2 }
 
-    array_2d_in_Default_te_IN
+    array_2d_in_Root_te_IN
     {
         { TE_IN00, TE_IN01, TE_IN02, TE_IN03 }
         { TE_IN10, TE_IN11, TE_IN12, TE_IN13 }
         { TE_IN20, TE_IN21, TE_IN22, TE_IN23 }
     }
 
-    tagged_array_in_Default_te_IN
+    tagged_array_in_Root_te_IN
     {
         tag1 { TE_IN1 } 
         tag5 { TE_IN5 } 
