@@ -1,0 +1,117 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+cs {
+    Version{ "1.1" }
+    AmPmMarkers { 
+        "dop.",
+        "odp.",
+    }
+    CollationElements { 
+        Version { "1.0" }
+        Sequence { "& C < c\u030C , C\u030C& H < "
+        "ch , cH , Ch , CH & R < r\u030C , R\u030C& S < s\u030C , S\u030C& Z < z\u030C ,"
+        " Z\u030C" }
+    }
+    Countries { 
+        CZ { "\u010Cesk\u00E1 republika" }
+    }
+    DateTimePatterns { 
+        "H:mm:ss z",
+        "H:mm:ss z",
+        "H:mm:ss",
+        "H:mm",
+        "EEEE, d. MMMM yyyy",
+        "d. MMMM yyyy",
+        "d.M.yyyy",
+        "d.M.yy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "ne",
+        "po",
+        "\u00FAt",
+        "st",
+        "\u010dt",
+        "p\u00E1",
+        "so",
+    }
+    DayNames { 
+        "ned\u011Ble",
+        "pond\u011Bl\u00ED",
+        "\u00FAter\u00FD",
+        "st\u0159eda",
+        "\u010dtvrtek",
+        "p\u00E1tek",
+        "sobota",
+    }
+    Eras { 
+        "p\u0159.Kr.",
+        "po Kr.",
+    }
+    Languages { 
+        cs { "\u010De\u0161tina" }
+    }
+    LocaleID:int { 0x05 }
+//    LocaleString { "cs" }
+    MonthAbbreviations { 
+        "I",
+        "II",
+        "III",
+        "IV",
+        "V",
+        "VI",
+        "VII",
+        "VIII",
+        "IX",
+        "X",
+        "XI",
+        "XII",
+    }
+    MonthNames { 
+        "leden",
+        "\u00FAnor",
+        "b\u0159ezen",
+        "duben",
+        "kv\u011Bten",
+        "\u010Derven",
+        "\u010Dervenec",
+        "srpen",
+        "z\u00E1\u0159\u00ED",
+        "\u0159\u00EDjen",
+        "listopad",
+        "prosinec",
+    }
+    NumberElements { 
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "ces" }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u00fd \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u011b \u016f \u010d \u010f \u0148 \u0159 \u0161 \u0165 \u017e]" }
+}

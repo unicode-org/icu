@@ -1,0 +1,48 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+nl_BE {
+    Version{ "1.1" }
+    CurrencyElements { 
+        "\u20AC",
+        "EUR",
+        ",",
+    }
+    DateTimeElements:intvector {
+        2,
+        1,
+    }
+    DateTimePatterns { 
+        "HH.mm' u. 'z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "d-MMM-yy",
+        "d/MM/yy",
+        "{1} {0}",
+    }
+    LocaleID:int { 0x0813 }
+//    LocaleString { "nl_BE" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "BEL" }
+//    zoneStrings { 
+//        {
+//            "Africa/Casablanca",
+//            "GMT",
+//            "GMT",
+//            "GMT",
+//            "GMT",
+//        }
+//    }
+}

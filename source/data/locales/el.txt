@@ -1,0 +1,474 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+el {
+    Version { "1.1" }
+    AmPmMarkers { 
+        "\u03C0\u03BC",
+        "\u03BC\u03BC",
+    }
+    CollationElements { 
+        Version { "2.0" }
+        Sequence { "[normalization on]" }
+    }
+    Countries { 
+        AL { "\u0391\u03bb\u03b2\u03b1\u03bd\u03af\u03b1" }
+        AS { "\u0391\u03c3\u03af\u03b1 (\u0391\u03b3\u03b3\u03bb\u03b9\u03ba\u03ac)" }
+        AT { "\u0391\u03c5\u03c3\u03c4\u03c1\u03af\u03b1" }
+        AU { "\u0391\u03c5\u03c3\u03c4\u03c1\u03b1\u03bb\u03af\u03b1 (\u0391\u03b3\u03b3\u03bb\u03b9\u03ba\u03ac)" }
+        BA { "\u0392\u03bf\u03c3\u03bd\u03af\u03b1" }
+        BE { "\u0392\u03ad\u03bb\u03b3\u03b9\u03bf" }
+        BG { "\u0392\u03bf\u03c5\u03bb\u03b3\u03b1\u03c1\u03af\u03b1" }
+        BR { "\u0392\u03c1\u03b1\u03b6\u03b9\u03bb\u03af\u03b1" }
+        CA { "\u039a\u03b1\u03bd\u03b1\u03b4\u03ac\u03c2" }
+        CH { "\u0395\u03bb\u03b2\u03b5\u03c4\u03af\u03b1" }
+        CN { "\u039a\u03af\u03bd\u03b1 (\u039b.\u0394.\u039a.)" }
+        CZ { "\u03a4\u03c3\u03b5\u03c7\u03af\u03b1" }
+        DE { "\u0393\u03b5\u03c1\u03bc\u03b1\u03bd\u03af\u03b1" }
+        DK { "\u0394\u03b1\u03bd\u03af\u03b1" }
+        EE { "\u0395\u03c3\u03b8\u03bf\u03bd\u03af\u03b1" }
+        ES { "\u0399\u03c3\u03c0\u03b1\u03bd\u03af\u03b1" }
+        FI { "\u03a6\u03b9\u03bd\u03bb\u03b1\u03bd\u03b4\u03af\u03b1" }
+        FR { "\u0393\u03b1\u03bb\u03bb\u03af\u03b1" }
+        GB { "\u0397\u03bd\u03c9\u03bc\u03ad\u03bd\u03bf \u0392\u03b1\u03c3\u03af\u03bb\u03b5\u03b9\u03bf" }
+        GR { "\u0395\u03bb\u03bb\u03ac\u03b4\u03b1" }
+        HR { "\u039a\u03c1\u03bf\u03b1\u03c4\u03af\u03b1" }
+        HU { "\u039f\u03c5\u03b3\u03b3\u03b1\u03c1\u03af\u03b1" }
+        IE { "\u0399\u03c1\u03bb\u03b1\u03bd\u03b4\u03af\u03b1" }
+        IL { "\u0399\u03c3\u03c1\u03b1\u03ae\u03bb" }
+        IS { "\u0399\u03c3\u03bb\u03b1\u03bd\u03b4\u03af\u03b1" }
+        IT { "\u0399\u03c4\u03b1\u03bb\u03af\u03b1" }
+        JP { "\u0399\u03b1\u03c0\u03c9\u03bd\u03af\u03b1" }
+        KR { "\u039a\u03bf\u03c1\u03ad\u03b1" }
+        LA { "\u039b\u03b1\u03c4\u03b9\u03bd\u03b9\u03ba\u03ae \u0391\u03bc\u03b5\u03c1\u03b9\u03ba\u03ae" }
+        LT { "\u039b\u03b9\u03b8\u03bf\u03c5\u03b1\u03bd\u03af\u03b1" }
+        LV { "\u039b\u03b5\u03c4\u03bf\u03bd\u03af\u03b1" }
+        MK { "\u03a0\u0393\u0394 \u039c\u03b1\u03ba\u03b5\u03b4\u03bf\u03bd\u03af\u03b1\u03c2" }
+        NL { "\u039f\u03bb\u03bb\u03b1\u03bd\u03b4\u03af\u03b1" }
+        NO { "\u039d\u03bf\u03c1\u03b2\u03b7\u03b3\u03af\u03b1" }
+        NZ { "\u039d\u03ad\u03b1 \u0396\u03b7\u03bb\u03b1\u03bd\u03b4\u03af\u03b1" }
+        PL { "\u03a0\u03bf\u03bb\u03c9\u03bd\u03af\u03b1" }
+        PT { "\u03a0\u03bf\u03c1\u03c4\u03bf\u03b3\u03b1\u03bb\u03af\u03b1" }
+        RO { "\u03a1\u03bf\u03c5\u03bc\u03b1\u03bd\u03af\u03b1" }
+        RU { "\u03a1\u03c9\u03c3\u03af\u03b1" }
+        SE { "\u03a3\u03bf\u03c5\u03b7\u03b4\u03af\u03b1" }
+        SI { "\u03a3\u03bb\u03bf\u03b2\u03b5\u03bd\u03af\u03b1" }
+        SK { "\u03a3\u03bb\u03bf\u03b2\u03b1\u03ba\u03af\u03b1" }
+        SP { "\u03a3\u03b5\u03c1\u03b2\u03af\u03b1" }
+        TH { "\u03a4\u03b1\u03ca\u03bb\u03ac\u03bd\u03b4\u03b7" }
+        TR { "\u03a4\u03bf\u03c5\u03c1\u03ba\u03af\u03b1" }
+        TW { "\u03a4\u03b1\u03ca\u03b2\u03ac\u03bd (\u0394.\u039a.)" }
+        US { "\u0397\u03bd\u03c9\u03bc\u03ad\u03bd\u03b5\u03c2 \u03a0\u03bf\u03bb\u03b9\u03c4\u03b5\u03af\u03b5\u03c2 \u0391\u03bc\u03b5\u03c1\u03b9\u03ba\u03ae\u03c2" }
+        ZA { "\u039d\u03cc\u03c4\u03b9\u03bf\u03c2 \u0391\u03c6\u03c1\u03b9\u03ba\u03ae" }
+    }
+    DateTimeElements:intvector { 
+        2,
+        1,
+    }
+    DateTimePatterns { 
+        "h:mm:ss a z",
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE, d MMMM yyyy",
+        "d MMMM yyyy",
+        "d MMM yyyy",
+        "d/M/yyyy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "\u039A\u03C5\u03C1",
+        "\u0394\u03B5\u03C5",
+        "\u03A4\u03C1\u03B9",
+        "\u03A4\u03B5\u03C4",
+        "\u03A0\u03B5\u03BC",
+        "\u03A0\u03B1\u03C1",
+        "\u03A3\u03B1\u03B2",
+    }
+    DayNames { 
+        "\u039A\u03C5\u03C1\u03B9\u03B1\u03BA\u03AE",
+        "\u0394\u03B5\u03C5\u03C4\u03AD\u03C1\u03B1",
+        "\u03A4\u03C1\u03AF\u03C4\u03B7",
+        "\u03A4\u03B5\u03C4\u03AC\u03C1\u03C4\u03B7",
+        "\u03A0\u03AD\u03BC\u03C0\u03C4\u03B7",
+        "\u03A0\u03B1\u03C1\u03B1\u03C3\u03BA\u03B5\u03C5\u03AE",
+        "\u03A3\u03AC\u03B2\u03B2\u03B1\u03C4\u03BF",
+    }
+    /* These languages should be all lower case, but it doesn't seem to be lowercase */
+    Languages { 
+        ar { "\u0391\u03c1\u03b1\u03b2\u03b9\u03ba\u03ac" }
+        bg { "\u0392\u03bf\u03c5\u03bb\u03b3\u03b1\u03c1\u03b9\u03ba\u03ac" }
+        ca { "\u039a\u03b1\u03c4\u03b1\u03bb\u03b1\u03bd\u03b9\u03ba\u03ac" }
+        cs { "\u03a4\u03c3\u03ad\u03c7\u03b9\u03ba\u03b1" }
+        da { "\u0394\u03b1\u03bd\u03ad\u03b6\u03b9\u03ba\u03b1" }
+        de { "\u0393\u03b5\u03c1\u03bc\u03b1\u03bd\u03b9\u03ba\u03ac" }
+        el { "\u03b5\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac" }
+        en { "\u0391\u03b3\u03b3\u03bb\u03b9\u03ba\u03ac" }
+        es { "\u0399\u03c3\u03c0\u03b1\u03bd\u03b9\u03ba\u03ac" }
+        fi { "\u03a6\u03b9\u03bd\u03bb\u03b1\u03bd\u03b4\u03b9\u03ba\u03ac" }
+        fr { "\u0393\u03b1\u03bb\u03bb\u03b9\u03ba\u03ac" }
+        he { "\u0395\u03b2\u03c1\u03b1\u03ca\u03ba\u03ac" }
+        hr { "\u039a\u03c1\u03bf\u03b1\u03c4\u03b9\u03ba\u03ac" }
+        hu { "\u039f\u03c5\u03b3\u03b3\u03c1\u03b9\u03ba\u03ac" }
+        it { "\u0399\u03c4\u03b1\u03bb\u03b9\u03ba\u03ac" }
+        mk { "\u03a3\u03bb\u03b1\u03b2\u03bf\u03bc\u03b1\u03ba\u03b5\u03b4\u03bf\u03bd\u03b9\u03ba\u03ac" }
+        nl { "\u039f\u03bb\u03bb\u03b1\u03bd\u03b4\u03b9\u03ba\u03ac" }
+        no { "\u039d\u03bf\u03c1\u03b2\u03b7\u03b3\u03b9\u03ba\u03ac" }
+        pl { "\u03a0\u03bf\u03bb\u03c9\u03bd\u03b9\u03ba\u03ac" }
+        pt { "\u03a0\u03bf\u03c1\u03c4\u03bf\u03b3\u03b1\u03bb\u03b9\u03ba\u03ac" }
+        ro { "\u03a1\u03bf\u03c5\u03bc\u03b1\u03bd\u03b9\u03ba\u03ac" }
+        ru { "\u03a1\u03c9\u03c3\u03b9\u03ba\u03ac" }
+        sk { "\u03a3\u03bb\u03bf\u03b2\u03b1\u03ba\u03b9\u03ba\u03ac" }
+        sl { "\u03a3\u03bb\u03bf\u03b2\u03b5\u03bd\u03b9\u03ba\u03ac" }
+        sq { "\u0391\u03bb\u03b2\u03b1\u03bd\u03b9\u03ba\u03ac" }
+        sr { "\u03a3\u03b5\u03c1\u03b2\u03b9\u03ba\u03ac" }
+        sv { "\u03a3\u03bf\u03c5\u03b7\u03b4\u03b9\u03ba\u03ac" }
+    }
+    LocaleID:int { 0x08 }
+//    LocaleString { "el" }
+    MonthAbbreviations { 
+        "\u0399\u03B1\u03BD",
+        "\u03A6\u03B5\u03B2",
+        "\u039C\u03B1\u03C1",
+        "\u0391\u03C0\u03C1",
+        "\u039C\u03B1\u03CA",
+        "\u0399\u03BF\u03C5\u03BD",
+        "\u0399\u03BF\u03C5\u03BB",
+        "\u0391\u03C5\u03B3",
+        "\u03A3\u03B5\u03C0",
+        "\u039F\u03BA\u03C4",
+        "\u039D\u03BF\u03B5",
+        "\u0394\u03B5\u03BA",
+    }
+    MonthNames { 
+        "\u0399\u03B1\u03BD\u03BF\u03C5\u03AC\u03C1\u03B9\u03BF\u03C2",
+        "\u03A6\u03B5\u03B2\u03C1\u03BF\u03C5\u03AC\u03C1\u03B9\u03BF\u03C2",
+        "\u039C\u03AC\u03C1\u03C4\u03B9\u03BF\u03C2",
+        "\u0391\u03C0\u03C1\u03AF\u03BB\u03B9\u03BF\u03C2",
+        "\u039C\u03AC\u03CA\u03BF\u03C2",
+        "\u0399\u03BF\u03CD\u03BD\u03B9\u03BF\u03C2",
+        "\u0399\u03BF\u03CD\u03BB\u03B9\u03BF\u03C2",
+        "\u0391\u03CD\u03B3\u03BF\u03C5\u03C3\u03C4\u03BF\u03C2",
+        "\u03A3\u03B5\u03C0\u03C4\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2",
+        "\u039F\u03BA\u03C4\u03CE\u03B2\u03C1\u03B9\u03BF\u03C2",
+        "\u039D\u03BF\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2",
+        "\u0394\u03B5\u03BA\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2",
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "ell" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+    LocaleScript:array { 
+        "Grek"  // ISO 15924 Name 
+    }
+    ExemplarCharacters{"[\u03ac-\u03ce]"}
+
+    //------------------------------------------------------------
+    // Rule Based Number Format Support
+    //------------------------------------------------------------
+
+/*
+ * omit rules for Greek until we have complete and valid data.
+
+//         * Spellout rules for Greek.  Again in Greek we have to supply the words
+//         * for the multiples of 100 because they can't be derived algorithmically.
+//         * Also, the tens digit changes form when followed by a ones digit: an
+//         * accent mark disappears from the tens digit and moves to the ones digit.
+//         * Therefore, instead of using the [] notation, we actually have to use
+//         * two separate rules for each multiple of 10 to show the two forms of
+//         * the word.
+
+    // Can someone supply me with information on negatives and decimals?
+    // I'm also missing the word for zero.  Can someone clue me in?
+
+    SpelloutRules {
+        "zero (incomplete data); \u03ad\u03bd\u03b1; \u03b4\u03cd\u03bf; \u03b4\u03c1\u03af\u03b1; "
+        "\u03c4\u03ad\u03c3\u03c3\u03b5\u03c1\u03b1; \u03c0\u03ad\u03bd\u03c4\u03b5; "
+        "\u03ad\u03be\u03b9; \u03b5\u03c0\u03c4\u03ac; \u03bf\u03ba\u03c4\u03ce; "
+        "\u03b5\u03bd\u03bd\u03ad\u03b1;\n"
+        "10: \u03b4\u03ad\u03ba\u03b1; "
+        "\u03ad\u03bd\u03b4\u03b5\u03ba\u03b1; \u03b4\u03ce\u03b4\u03b5\u03ba\u03b1; "
+        "\u03b4\u03b5\u03ba\u03b1>>;\n"
+        "20: \u03b5\u03af\u03ba\u03bf\u03c3\u03b9; \u03b5\u03b9\u03ba\u03bf\u03c3\u03b9>>;\n"
+        "30: \u03c4\u03c1\u03b9\u03ac\u03bd\u03c4\u03b1; \u03c4\u03c1\u03b9\u03b1\u03bd\u03c4\u03b1>>;\n"
+        "40: \u03c3\u03b1\u03c1\u03ac\u03bd\u03c4\u03b1; \u03c3\u03b1\u03c1\u03b1\u03bd\u03c4\u03b1>>;\n"
+        "50: \u03c0\u03b5\u03bd\u03ae\u03bd\u03c4\u03b1; \u03c0\u03b5\u03bd\u03b7\u03bd\u03c4\u03b1>>;\n"
+        "60: \u03b5\u03be\u03ae\u03bd\u03c4\u03b1; \u03b5\u03be\u03b7\u03bd\u03c4\u03b1>>;\n"
+        "70: \u03b5\u03b2\u03b4\u03bf\u03bc\u03ae\u03bd\u03c4\u03b1; "
+        "\u03b5\u03b2\u03b4\u03bf\u03bc\u03b7\u03bd\u03c4\u03b1>>;\n"
+        "80: \u03bf\u03b3\u03b4\u03cc\u03bd\u03c4\u03b1; \u03bf\u03b3\u03b4\u03bf\u03bd\u03c4\u03b1>>;\n"
+        "90: \u03b5\u03bd\u03bd\u03b5\u03bd\u03ae\u03bd\u03c4\u03b1; "
+        "\u03b5\u03bd\u03bd\u03b5\u03bd\u03b7\u03bd\u03c4\u03b1>>;\n"
+        "100: \u03b5\u03ba\u03b1\u03c4\u03cc[\u03bd >>];\n"
+        "200: \u03b4\u03b9\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "300: \u03c4\u03c1\u03b9\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "400: \u03c4\u03b5\u03c4\u03c1\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "500: \u03c0\u03b5\u03bd\u03c4\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "600: \u03b5\u03be\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "700: \u03b5\u03c0\u03c4\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "800: \u03bf\u03ba\u03c4\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "900: \u03b5\u03bd\u03bd\u03b9\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
+        "1000: \u03c7\u03af\u03bb\u03b9\u03b1[ >>];\n"
+        "2000: << \u03c7\u03af\u03bb\u03b9\u03b1[ >>];\n"
+        "1,000,000: << \u03b5\u03ba\u03b1\u03c4\u03bf\u03bc\u03bc\u03b9\u03cc\u03c1\u03b9\u03bf[ >>];\n"
+        "1,000,000,000: << \u03b4\u03b9\u03c3\u03b5\u03ba\u03b1\u03c4\u03bf\u03bc\u03bc\u03b9\u03cc\u03c1\u03b9\u03bf[ >>];\n"
+        "1,000,000,000,000: =#,##0="
+     }
+*/
+
+    TransliterateLATIN {
+        "UNGEGN",
+
+        // Rules are predicated on running NFD first, and NFC afterwards
+        // MINIMAL FILTER GENERATED FOR: Greek-Latin/UNGEGN
+        // WARNING: need to add accents to both filters ###
+        ":: [\u0301\u0304\u0306\u0308;\u00B5\u00B7\u00C0\u00C2\u00C8\u00CA\u00CC\u00CE\u00D2\u00D4\u00D9\u00DB\u00E0\u00E2\u00E8\u00EA\u00EC\u00EE\u00F2\u00F4\u00F9\u00FB\u0108-\u0109\u011C-\u011D\u0124-\u0125\u0134-\u0135\u015C-\u015D\u0174-\u0177\u01DB-\u01DC\u01F8-\u01F9\u0300\u0302\u0313-\u0314\u0340\u0342-\u0343\u0345\u037A\u037E\u0386-\u038A\u038C\u038E-\u03A1\u03A3-\u03CE\u03D0-\u03D6\u03F0-\u03F5\u0400\u040D\u0450\u045D\u1E14-\u1E15\u1E50-\u1E51\u1E80-\u1E81\u1E90-\u1E91\u1EA4-\u1EAD\u1EB0-\u1EB1\u1EBE-\u1EC7\u1ED0-\u1ED9\u1EDC-\u1EDD\u1EEA-\u1EEB\u1EF2-\u1EF3\u1F00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC1-\u1FC4\u1FC6-\u1FCD\u1FCF-\u1FD3\u1FD6-\u1FDB\u1FDD\u1FDF-\u1FED\u1FF2-\u1FF4\u1FF6-\u1FFC\u2126] ;"
+
+        // ":: [\\u0000-\\u007F \\u00B7 [:Greek:] [:nonspacing mark:]] ;"
+        "::NFD (NFC) ; "
+
+        // For modern Greek.
+
+        // Useful variables
+
+        "$lower = [[:latin:][:greek:] & [:Ll:]] ; "
+        "$upper = [[:latin:][:greek:] & [:Lu:]] ; "
+        "$accent = [:M:] ; "
+
+        "$macron = \u0304 ;"
+        "$ddot = \u0308 ;"
+
+        "$lcgvowel = [\u03b1\u03b5\u03b7\u03b9\u03bf\u03c5\u03c9] ; "
+        "$ucgvowel = [\u0391\u0395\u0397\u0399\u039f\u03a5\u03a9] ; "
+        "$gvowel = [$lcgvowel $ucgvowel] ; "
+        "$lcgvowelC = [$lcgvowel $accent] ; "
+
+        "$evowel = [aeiouyAEIOUY];"
+        "$vowel = [ $evowel $gvowel] ; "
+
+        "$beforeLower = $accent * $lower ; "
+
+        "$gammaLike = [\u0393\u039a\u039e\u03a7\u03b3\u03ba\u03be\u03c7\u03f0] ; "
+        "$egammaLike = [GKXCgkxc] ; "
+        "$smooth = \u0313 ; "
+        "$rough = \u0314 ; "
+        "$iotasub = \u0345 ; "
+
+        "$softener = [\u03b2\u0392\u03b3\u0393\u03b4\u0394\u03b6\u0396\u03bb\u039b\u03bc\u039c\u03bd\u039d\u03c1\u03a1$gvowel] ;"
+
+        "$under = \u0331;"
+
+        "$caron = \u030C;"
+
+        "$afterLetter = [:L:] [\\'[:M:]]* ;"
+        "$beforeLetter = [\\'[:M:]]* [:L:] ;"
+
+
+        // Fix punctuation
+
+        "\\; <> \\? ;"
+        "\u00b7 <> \\: ;"
+
+        // Fix any ancient characters that creep in
+
+        "\u0342 > \u0301 ;"
+        "\u0302 > \u0301 ;"
+        "\u0300 > \u0301 ;"
+        "$smooth > ;"
+        "$rough > ;"
+        "$iotasub > ;"
+        "\u037A > ;"
+
+        // need to have these up here so the rules don't mask
+
+        "\u03b7 <> i $under ;"
+        "\u0397 <> I $under ;"
+
+        "\u03a8 } $beforeLower <> Ps ; "
+        "\u03a8 <> PS ; "
+        "\u03c8 <> ps ; "
+
+        "\u03c9 <> o $under ;"
+        "\u03a9 <>  O $under;"
+
+        // at begining or end of word, convert mp to b
+
+        "[^[:L:][:M:]] { \u03bc\u03c0 > b ; "
+        "\u03bc\u03c0 } [^[:L:][:M:]] > b ; "
+        "[^[:L:][:M:]] { [\u039c\u03bc][\u03a0\u03c0] > B ; "
+        "[\u039c\u03bc][\u03a0\u03c0] } [^[:L:][:M:]] > B ;"
+
+        "\u03bc\u03c0 < b ; "
+        "\u039c\u03c0 < B } $beforeLower ; "
+        "\u039c\u03a0 < B ; "
+
+        // handle diphthongs ending with upsilon
+
+        "$vowel { \u03c5 } $softener <> v $under ; "
+        "$vowel { \u03c5 } <> f $under; "
+        "\u03c5 <> y ; "
+        "$vowel { \u03a5 } $softener <> V $under ; "
+        "$vowel { \u03a5 <> U $under ; "
+        "\u03a5 <> Y ; "
+
+        // NORMAL
+
+        "\u03b1 <> a ; "
+        "\u0391 <> A ; "
+
+        "\u03b2 <> v ; "
+        "\u0392 <> V ; "
+
+        "\u03b3 } $gammaLike <> n } $egammaLike ; "
+        "\u03b3 <> g ; "
+        "\u0393 } $gammaLike <> N } $egammaLike ; "
+        "\u0393 <> G ; "
+
+        "\u03b4 <> d ; "
+        "\u0394 <> D ; "
+
+        "\u03b5 <> e ; "
+        "\u0395 <> E ; "
+
+        "\u03b6 <> z ; "
+        "\u0396 <> Z ; "
+
+        "\u03b8 <> th ; "
+        "\u0398 } $beforeLower <> Th ; "
+        "\u0398 <> TH ; "
+
+        "\u03b9 <> i ; "
+        "\u0399 <> I ; "
+
+        "\u03ba <> k ;"
+        "\u039a <> K ; "
+
+        "\u03bb <> l ; "
+        "\u039b <> L ; "
+
+        "\u03bc <> m ; "
+        "\u039c <> M ; "
+
+        "\u03bd } $gammaLike > n\\' ; "
+        "\u03bd <> n ; "
+        "\u039d } $gammaLike <> N\\' ; "
+        "\u039d <> N ; "
+
+        "\u03be <> x ; "
+        "\u039e <> X ; "
+
+        "\u03bf <> o ; "
+        "\u039f <> O ; "
+
+        "\u03c0 <> p ; "
+        "\u03a0 <> P ; "
+
+        "\u03c1 <> r ; "
+        "\u03a1 <> R ; "
+
+        "[Pp] { } \u03c2 > \\' ; "
+        "[Pp] { } \u03c3 > \\' ;"
+
+        // Caron means exception
+
+        // before a letter, initial
+        "\u03c2 } $beforeLetter <> s $under } $beforeLetter;"
+        "\u03c3 } $beforeLetter <> s } $beforeLetter;"
+
+        // otherwise, after a letter = final
+        "$afterLetter { \u03c3 <> $afterLetter { s $under;"
+        "$afterLetter { \u03c2 <> $afterLetter { s ;"
+
+        // otherwise (isolated) = initial
+        "\u03c2 <> s $under;"
+        "\u03c3 <> s ;"
+
+        "[Pp] { \u03a3 <> \\'S ; "
+        "\u03a3 <> S ; "
+
+        "\u03c4 <> t ; "
+        "\u03a4 <> T ; "
+
+        "\u03c6 <> f ; "
+        "\u03a6 <> F ;"
+
+        "\u03c7 <> ch ; "
+        "\u03a7 } $beforeLower <> Ch ; "
+        "\u03a7 <> CH ; "
+
+        // Completeness for ASCII
+
+        // "$ignore = [[:Mark:]''] * ;"
+
+        "| ch < h ;"
+        "| k  < c ;"
+        "| i  < j ;"
+        "| k < q ;"
+        "| b < u } $vowel ;"
+        "| b < w } $vowel ;"
+        "| y < u ;"
+        "| y < w ;"
+
+        "| Ch < H ;"
+        "| K < C ;"
+        "| I < J ;"
+        "| K < Q ;"
+        "| B < W } $vowel ;"
+        "| B < U } $vowel ;"
+        "| Y < W ;"
+        "| Y < U ;"
+
+        // Completeness for Greek
+
+        "\u03d0 > | \u03b2 ;"
+        "\u03d1 > | \u03b8 ;"
+        "\u03d2 > | \u03a5 ;"
+        "\u03d5 > | \u03c6 ;"
+        "\u03d6 > | \u03c0 ;"
+
+        "\u03f0 > | \u03ba ;"
+        "\u03f1 > | \u03c1 ;"
+        "\u03f2 > | \u03c3 ;"
+        "\u03f3 > j ;"
+        "\u03f4 > | \u0398 ;"
+        "\u03f5 > | \u03b5 ;"
+        "\u00B5 > | \u03BC ; "
+
+        // delete any trailing ' marks used for roundtripping
+
+        " < [\u03a0\u03c0] { \\' } [Ss] ;"
+        " < [\u039d\u03bd] { \\' } $egammaLike ;"
+
+        "::NFC (NFD) ; "
+
+        // MINIMAL FILTER GENERATED FOR: Latin-Greek/UNGEGN BACKWARD
+        ":: ( [\u0301\u0304\u0306\u0308':?A-Za-z\u00C0-\u00C5\u00C7-\u00CF\u00D1-\u00D6\u00D9-\u00DD\u00E0-\u00E5\u00E7-\u00EF\u00F1-\u00F6\u00F9-\u00FD\u00FF-\u010F\u0112-\u0125\u0128-\u0130\u0134-\u0137\u0139-\u013E\u0143-\u0148\u014C-\u0151\u0154-\u0165\u0168-\u017E\u01A0-\u01A1\u01AF-\u01B0\u01CD-\u01DC\u01DE-\u01E1\u01E6-\u01ED\u01F0\u01F4-\u01F5\u01F8-\u01FB\u0200-\u021B\u021E-\u021F\u0226-\u0233\u0331\u1E00-\u1E99\u1EA0-\u1EF9\u212A-\u212B] ) ;"
+
+        // ":: ([\\u0000-\\u007F [:Latin:] [:nonspacing mark:]]) ;"
+
+     }
+}

@@ -1,0 +1,185 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+en_CA {
+    Version { "1.0" }
+//    Duplicated in parent
+//    Countries { 
+//        US { "United States" }
+//        GB { "United Kingdom" }
+//        CA { "Canada" }
+//        IE { "Ireland" }
+//        AU { "Australia" }
+//        NZ { "New Zealand" }
+//    }
+    CurrencyElements {
+        "$",
+        "CAD",
+        ".",
+    }
+    DateTimePatterns { 
+        "h:mm:ss a z",
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE, MMMM d, yyyy",
+        "MMMM d, yyyy",
+        "d-MMM-yy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+//    Duplicated in parent
+//    Languages { 
+//        en { "English" }
+//    }
+    LocaleID:int { 0x1009 }
+//    LocaleString { "en_CA" }
+//    ShortCountry { "CAN" }
+
+// This is horrible data, just try to use the en locale data
+/*    zoneStrings {
+        {
+            "PST",
+            "Pacific Standard Time",
+            "PST",
+            "Pacific Daylight Time",
+            "PDT",
+        }
+        {
+            "MST",
+            "Mountain Standard Time",
+            "MST",
+            "Mountain Daylight Time",
+            "MDT",
+        }
+        {
+            "PNT",
+            "Mountain Standard Time",
+            "MST",
+            "Mountain Standard Time",
+            "MST",
+        }
+        {
+            "CST",
+            "Central Standard Time",
+            "CST",
+            "Central Daylight Time",
+            "CDT",
+        }
+        {
+            "EST",
+            "Eastern Standard Time",
+            "EST",
+            "Eastern Daylight Time",
+            "EDT",
+        }
+        {
+            "IET",
+            "Eastern Standard Time",
+            "EST",
+            "Eastern Standard Time",
+            "EST",
+        }
+        {
+            "HST",
+            "Hawaii Standard Time",
+            "HST",
+            "Hawaii Standard Time",
+            "HST",
+        }
+        {
+            "AST",
+            "Alaska Standard Time",
+            "AKST",
+            "Alaska Daylight Time",
+            "AKDT",
+        }
+        {
+            "CNT",
+            "Newfoundland Standard Time",
+            "NST",
+            "Newfoundland Daylight Time",
+            "NDT",
+        }
+        {
+            "America/Los_Angeles",
+            "Pacific Standard Time",
+            "PST",
+            "Pacific Daylight Time",
+            "PDT",
+        }
+        {
+            "America/Denver",
+            "Mountain Standard Time",
+            "MST",
+            "Mountain Daylight Time",
+            "MDT",
+        }
+        {
+            "America/Phoenix",
+            "Mountain Standard Time",
+            "MST",
+            "Mountain Standard Time",
+            "MST",
+        }
+        {
+            "America/Chicago",
+            "Central Standard Time",
+            "CST",
+            "Central Daylight Time",
+            "CDT",
+        }
+        {
+            "America/New_York",
+            "Eastern Standard Time",
+            "EST",
+            "Eastern Daylight Time",
+            "EDT",
+        }
+        {
+            "America/Indianapolis",
+            "Eastern Standard Time",
+            "EST",
+            "Eastern Standard Time",
+            "EST",
+        }
+        {
+            "Pacific/Honolulu",
+            "Hawaii Standard Time",
+            "HST",
+            "Hawaii Standard Time",
+            "HST",
+        }
+        {
+            "America/Anchorage",
+            "Alaska Standard Time",
+            "AKST",
+            "Alaska Daylight Time",
+            "AKDT",
+        }
+        {
+            "America/Halifax",
+            "Atlantic Standard Time",
+            "AST",
+            "Atlantic Daylight Time",
+            "ADT",
+        }
+        {
+            "America/St_Johns",
+            "Newfoundland Standard Time",
+            "NST",
+            "Newfoundland Daylight Time",
+            "NDT",
+        }
+    }*/
+}

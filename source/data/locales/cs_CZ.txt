@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+cs_CZ {
+    Version{ "1.0" }
+    CurrencyElements { 
+        "K\u010D",
+        "CZK",
+        ",",
+    }
+//    LocaleString { "cs_CZ" }
+    NumberPatterns { 
+        "#,##0.##;-#,##0.##",
+        "#,##0.## \u00A4;-#,##0.## \u00A4",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "CZE" }
+    LocaleID:int { 0x0405 }
+}

@@ -1,0 +1,52 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// * Somali language locale for Kenya.
+// * Contributed by :
+// *    Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
+// *    Mohamed Diriye Abdullahi <diriyeam@magellan.umontreal.ca>
+// *    Department of Linguistics and Translation, Universite de Montreal, Montreal
+
+
+so_KE {
+    Version{ "x0.2" }
+    AmPmMarkers {
+        "sn",
+        "gn",
+    }
+    // CountryISBNNumber { "404" }
+    // CountryNumber { "404" }
+    CurrencyElements {
+        "Ksh",
+        "KES",
+        ".",
+    }
+    // Measurement { "Metric" }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221E",
+//        "\uFFFD",
+//    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    // PaperSize {
+    //    Height { "297" }
+    //    Width { "210" }
+    //    Units { "mm" }
+    // }
+ }

@@ -1,0 +1,165 @@
+// ***************************************************************************
+// *                                                                         *
+// * COPYRIGHT:                                                              *
+// *   Copyright (C) 1997-2002, International Business Machines              *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.      *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                  *
+// *                                                                         *
+// ***************************************************************************
+// Feedback to : schererm@us.ibm.com
+
+eo {
+    Version { "2.0" } 
+    Countries { 
+        AT { "A\u016dstrujo" }
+        BE { "Belgujo" }
+        CA { "Kanado" }
+        CH { "Svisujo" }
+        DE { "Germanujo" }
+        DK { "Danujo" }
+        ES { "Hispanujo" }
+        FI { "Finnlando" }
+        GR { "Grekujo" }
+        IT { "Italujo" }
+        JP { "Japanujo" }
+        NL { "Nederlando" }
+        NO { "Norvego" }
+        PT { "Portugalujo" }
+        SE { "Svedujo" }
+        TR { "Turkujo" }
+        US { "Usono" }
+    }
+    DateTimePatterns { 
+        "H'-a horo kaj 'm z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE, d'-a de 'MMMM yyyy",
+        "yyyy-MMMM-dd",
+        "yyyy-MMM-dd",
+        "yy-MM-dd",
+        "{1} {0}",
+    }
+    DateTimeElements:intvector { 
+        2,
+        4,
+    }
+    AmPmMarkers { 
+        "atm",
+        "ptm",
+    }
+    DayAbbreviations { 
+        "di",
+        "lu",
+        "ma",
+        "me",
+        "\u0135a",
+        "ve",
+        "sa",
+    }
+    DayNames { 
+        "diman\u0109o",
+        "lundo",
+        "mardo",
+        "merkredo",
+        "\u0135a\u016ddo",
+        "vendredo",
+        "sabato",
+    }
+    Eras { 
+        "aK",
+        "pK",
+    }
+    Languages { 
+        da { "dana" }
+        de { "germana" }
+        el { "greka" }
+        en { "angla" }
+        eo { "esperanto" }
+        es { "hispana" }
+        fi { "finna" }
+        it { "itala" }
+        ja { "japana" }
+        nl { "nederlanda" }
+        no { "norvega" }
+        pt { "portugala" }
+        sv { "sveda" }
+        tr { "turka" }
+    }
+    //LocaleID { "07e0" }
+//    LocaleString { "eo" }
+    MonthAbbreviations { 
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "maj",
+        "jun",
+        "jul",
+        "a\u016dg",
+        "sep",
+        "okt",
+        "nov",
+        "dec",
+    }
+    MonthNames { 
+        "januaro",
+        "februaro",
+        "marto",
+        "aprilo",
+        "majo",
+        "junio",
+        "julio",
+        "a\u016dgusto",
+        "septembro",
+        "oktobro",
+        "novembro",
+        "decembro",
+    }
+    NumberElements { 
+        ",",
+        "\u00a0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "epo" }
+    localPatternChars { "GjMtkHmslTDUSnahKzJd" }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u016d \u0109 \u011d \u0125 \u0135 \u015d]" }
+    //------------------------------------------------------------
+    // Rule Based Number Format Support
+    //------------------------------------------------------------
+
+// data from 'Esperanto-programita 1' courtesy of Markus Scherer
+
+    SpelloutRules {
+        "-x: minus >>;\n"
+        "x.x: << komo >>;\n"
+        "nulo; unu; du; tri; kvar; kvin; ses; sep; ok; na\u016d;\n"
+        "10: dek[ >>];\n"
+        "20: <<dek[ >>];\n"
+        "100: cent[ >>];\n"
+        "200: <<cent[ >>];\n"
+        "1000: mil[ >>];\n"
+        "2000: <<mil[ >>];\n"
+        "10000: dekmil[ >>];\n"
+        "11000>: << mil[ >>];\n"
+        "1,000,000: miliono[ >>];\n"
+        "2,000,000: << milionoj[ >>];\n"
+        "1,000,000,000: miliardo[ >>];\n"
+        "2,000,000,000: << miliardoj[ >>];\n"
+        "1,000,000,000,000: biliono[ >>];\n"
+        "2,000,000,000,000: << bilionoj[ >>];\n"
+        "1,000,000,000,000,000: =#,##0=;\n"
+    }
+}

@@ -1,0 +1,15 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+nl_NL_PREEURO {
+    Version { "1.0" }
+    CurrencyElements { 
+        "fl",
+        "NLG",
+        ",",
+    }
+}

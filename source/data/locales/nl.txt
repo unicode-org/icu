@@ -1,0 +1,136 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+nl {
+    Version { "1.0" }
+    Countries { 
+        NL { "Nederland" }
+        BE { "Belgi\u00EB" }
+    }
+    DateTimeElements:intvector { 
+        2,
+        4,
+    }
+    DateTimePatterns { 
+        "H:mm:ss' uur' z",
+        "H:mm:ss z",
+        "H:mm:ss",
+        "H:mm",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "d-MMM-yy",
+        "d-M-yy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "zo",
+        "ma",
+        "di",
+        "wo",
+        "do",
+        "vr",
+        "za",
+    }
+    DayNames { 
+        "zondag",
+        "maandag",
+        "dinsdag",
+        "woensdag",
+        "donderdag",
+        "vrijdag",
+        "zaterdag",
+    }
+    Languages { 
+        nl { "Nederlands" }
+    }
+    LocaleID:int { 0x13 }
+//    LocaleString { "nl" }
+    MonthAbbreviations { 
+        "jan",
+        "feb",
+        "mrt",
+        "apr",
+        "mei",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "dec",
+    }
+    MonthNames { 
+        "januari",
+        "februari",
+        "maart",
+        "april",
+        "mei",
+        "juni",
+        "juli",
+        "augustus",
+        "september",
+        "oktober",
+        "november",
+        "december",
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "nld" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00e4 \u00eb \u00ef \u00f6 \u00fc \u0133]" }
+
+    //------------------------------------------------------------
+    // Rule Based Number Format Support
+    //------------------------------------------------------------
+
+//     * Spellout rules for Dutch
+
+    // can someone supply me with information on negatives and decimals?
+
+    SpelloutRules {
+        "-x: min >>;\n"
+        "x.x: << komma >>;\n"
+        "(zero?); een; twee; drie; vier; vijf; zes; zeven; acht; negen;\n"
+        "tien; elf; twaalf; dertien; veertien; vijftien; zestien;\n"
+        "zeventien; achtien; negentien;\n"
+        "20: [>> en ]twintig;\n"
+        "30: [>> en ]dertig;\n"
+        "40: [>> en ]veertig;\n"
+        "50: [>> en ]vijftig;\n"
+        "60: [>> en ]zestig;\n"
+        "70: [>> en ]zeventig;\n"
+        "80: [>> en ]tachtig;\n"
+        "90: [>> en ]negentig;\n"
+        "100: << honderd[ >>];\n"
+        "1000: << duizend[ >>];\n"
+        "1,000,000: << miljoen[ >>];\n"
+        "1,000,000,000: << biljoen[ >>];\n"
+        "1,000,000,000,000: =#,##0="
+    }
+}

@@ -1,0 +1,113 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+lv {
+    Version{ "1.1"}
+    CollationElements { 
+        Version { "1.0" }
+        Sequence { "[casefirst upper][backwards 2] &C < c\u030C , C\u030C & G < g\u0327 , G\u0327 & I < "
+        "y, Y& K < k\u0327 , K\u0327 & L < l\u0327 , L\u0327 & N < n\u0327 , N\u0327 & S"
+        " < s\u030C , S\u030C & Z < z\u030C , Z\u030C" }
+    }
+    Countries { 
+        LV { "Latvija" }
+    }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE, yyyy, d MMMM",
+        "EEEE, yyyy, d MMMM",
+        "yyyy.d.M",
+        "yy.d.M",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "Sv",
+        "P",
+        "O",
+        "T",
+        "C",
+        "Pk",
+        "S",
+    }
+    DayNames { 
+        "sv\u0113tdiena",
+        "pirmdiena",
+        "otrdiena",
+        "tre\u0161diena",
+        "ceturtdiena",
+        "piektdiena",
+        "sestdiena",
+    }
+    Eras { 
+        "pm\u0113",
+        "m\u0113",
+    }
+    Languages { 
+        lv { "Latvie\u0161u" }
+    }
+    LocaleID:int { 0x26 }
+//    LocaleString { "lv" }
+    MonthAbbreviations { 
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Maijs",
+        "J\u016Bn",
+        "J\u016Bl",
+        "Aug",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Dec",
+    }
+    MonthNames { 
+        "janv\u0101ris",
+        "febru\u0101ris",
+        "marts",
+        "apr\u012Blis",
+        "maijs",
+        "j\u016Bnijs",
+        "j\u016Blijs",
+        "augusts",
+        "septembris",
+        "oktobris",
+        "novembris",
+        "decembris",
+    }
+    NumberElements { 
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "lav" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+    ExemplarCharacters { "[a-z \u0101 \u0113 \u012b \u014d \u016b \u0123 \u0137 \u013c \u0146 \u0157 \u010d \u0161 \u017e]" }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+}

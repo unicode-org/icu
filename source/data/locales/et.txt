@@ -1,0 +1,114 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+et {
+    Version{ "1.0" }
+    CollationElements { 
+        Version { "1.0" }
+        Sequence { "@& S < s\u030C, S\u030C < z , Z < z\u030C , Z\u030C & V"
+            " ; w , W < o\u0303 , O\u0303< a\u0308 , A\u0308 < o\u0308 , O\u0308 ; w\u0302 ,"
+            " W\u0302< u\u0308 , U\u0308& Y < \u01B6 , \u01B5"
+        }
+    }
+    Countries { 
+        EE { "Eesti" }
+    }
+    DateTimePatterns { 
+        "H:mm:ss z",
+        "H:mm:ss z",
+        "H:mm:ss",
+        "H:mm",
+        "EEEE, d, MMMM yyyy",
+        "EEEE, d, MMMM yyyy",
+        "dd.MM.yyyy",
+        "dd.MM.yy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "P",
+        "E",
+        "T",
+        "K",
+        "N",
+        "R",
+        "L",
+    }
+    DayNames { 
+        "p\u00FChap\u00E4ev",
+        "esmasp\u00E4ev",
+        "teisip\u00E4ev",
+        "kolmap\u00E4ev",
+        "neljap\u00E4ev",
+        "reede",
+        "laup\u00E4ev",
+    }
+    Eras { 
+        "e.m.a.",
+        "m.a.j.",
+    }
+    Languages { 
+        et { "Eesti" }
+    }
+    LocaleID:int { 0x25 }
+//    LocaleString { "et" }
+    MonthAbbreviations { 
+        "jaan",
+        "veebr",
+        "m\u00E4rts",
+        "apr",
+        "mai",
+        "juuni",
+        "juuli",
+        "aug",
+        "sept",
+        "okt",
+        "nov",
+        "dets",
+    }
+    MonthNames { 
+        "jaanuar",
+        "veebruar",
+        "m\u00E4rts",
+        "aprill",
+        "mai",
+        "juuni",
+        "juuli",
+        "august",
+        "september",
+        "oktoober",
+        "november",
+        "detsember",
+    }
+    NumberElements { 
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "est" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u00f5 \u00e4 \u00f6 \u00fc \u0161 \u017e]" }
+}

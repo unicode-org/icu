@@ -1,0 +1,78 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// * Oromo language locale.
+// * Contributed by Daniel Yacob <yacob@geez.org>
+// *
+// * Oromo terms are provided by Mahdi Hamid Muudee of Sagalee Oromoo
+// * Publishing Co. Inc and formatted in Posix format locale by Daniel Yacob of
+// * the Ge'ez Frontier Foundation.  The Oromo language terms used here
+// * are those considered to be canonical in the Oromo language under
+// * contemporary and progressive usage adopted by government bureaus
+// * across the Oromo region.  Regional synonyms naturally exist for many
+// * of the month and day names.
+
+om{
+    Version{ "x0.2" }
+    DayAbbreviations {
+        "Dil",
+        "Wix",
+        "Qib",
+        "Rob",
+        "Kam",
+        "Jim",
+        "San",
+    }
+    DayNames {
+        "Dilbata",
+        "Wiixata",
+        "Qibxata",
+        "Roobii",
+        "Kamiisa",
+        "Jimaata",
+        "Sanbata",
+    }
+//    LanguageLibraryUse { "orm" }
+    MonthAbbreviations {
+        "Ama",
+        "Gur",
+        "Bit",
+        "Elb",
+        "Cam",
+        "Wax",
+        "Ado",
+        "Hag",
+        "Ful",
+        "Onk",
+        "Sad",
+        "Mud",
+    }
+    MonthNames {
+        "Amajjii",
+        "Guraandhala",
+        "Bitooteessa",
+        "Elba",
+        "Caamsa",
+        "Waxabajjii",
+        "Adooleessa",
+        "Hagayya",
+        "Fuulbana",
+        "Onkololeessa",
+        "Sadaasa",
+        "Muddee",
+    }
+    Eras { 
+        "KD",  // KD = Kiristoos Dura = Before Christ
+        "KB",  // KB = Kiristoos Booda = After Christ
+    }
+    Languages { 
+        om { "Oromoo" }
+    }
+    Countries { 
+        ET { "Itoophiyaa" }
+        KE { "Keeniyaa" }
+    }
+}

@@ -1,0 +1,30 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ms_BN{
+    Version{ "x0.2" }
+    LocaleID:int { 0x083e }
+    CurrencyElements{
+        "$",
+        "BND",
+        ","
+    }
+// ShortCountry{
+//  "BRN"
+// }
+    DateTimePatterns{
+        "h:mm:ss aa",
+        "H:mm:ss",
+        "H:mm:ss",
+        "H:mm:ss",
+        "dd MMMM yyyy",
+        "dd MMMM yyyy",
+        "dd/MM/yyyy",
+        "dd/MM/yyyy",
+        "{1} {0}",
+    }
+}

@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+nn_NO {
+    Version{ "2.0"}
+
+    CurrencyElements {
+        "kr",
+        "NOK",
+        ",",
+    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4 #,##0.00;\u00A4 -#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "NOR" }
+    LocaleID:int { 0x0814 }
+}

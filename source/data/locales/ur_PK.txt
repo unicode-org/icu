@@ -1,0 +1,31 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ur_PK{
+    Version{ "x0.1" }
+    LocaleID:int { 0x0420 }
+//    ShortCountry{
+//        "PAK"
+//    }
+    CurrencyElements{
+        "Rs",
+        "PKR",
+        "."
+    }
+
+    DateTimePatterns{
+        "h:mm:ss aa",
+        "H:mm:ss",
+        "h:mm:ss a",
+        "H:mm:ss",
+        "dd MMMM yyyy",
+        "dd MMMM yyyy",
+        "dd/MM/yyyy",
+        "dd/MM/yyyy",
+        "{1} {0}",
+    }
+}

@@ -1,0 +1,1323 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+//  Date        Name        Description
+//  11/17/99    aliu        Added support for transliterators.
+//  01/15/2002  grhoten     Synchronized the language and contry codes with ISO standards
+
+
+root {
+    Version { "3.2" }
+
+    // each variant name that occurs in locales should be listed with %% and a display string
+    "%%PREEURO" { "Pre-Euro" }   // PREEURO variant display name
+    "%%EURO"  { "Euro" }   // PREEURO variant display name
+    "%%B"     { "Bokm\u00e5l" }  // Norwegian variant display name
+    "%%NY"    { "Nynorsk" }      // Norwegian variant display name
+    "%%AL"    { "\u00C5land" }   // Aland variant display name
+
+    "%%POSIX" { "POSIX" }
+
+    // variants for collation (traditional may also be used for traditional chinese)
+    "%%PHONEBOOK" { "Phonebook Order" }
+    "%%PINYIN" { "Pinyin Order" }
+    "%%TRADITIONAL" { "Traditional" }
+    "%%STROKE" { "Stroke Order" }
+    "%%DIRECT" { "Direct Order" }
+
+    // this is a special tag that makes genrb include UCARules.txt for collation
+    "%%UCARULES" { "UCARules.txt"} // UCARules
+
+    // Here are empty collation rules just for the consistency. UCA is used instead... 01/16/2001 by weiv
+    CollationElements { 
+        Version { "x0.0" }
+        Sequence { "" }
+    }
+    // Formats for the display name of a locale, for a list of
+    // items, and for composing two items in a list into one item.
+    // The list patterns are used in the variant name and in the
+    // full display name.
+    //
+    // This is the language-neutral form of this resource.
+    //
+//    LocaleNamePatterns {
+//         {
+//            "{0,choice,0#|1#{1}|2#{1} ({2})}", // Display name
+//            "{0,choice,0#|1#{1}|2#{1},{2}|3#{1},{2},{3}}", // List
+//            "{0},{1}" // List composition
+//         }
+//    }
+
+    //------------------------------------------------------------
+    // BEGIN Transliterator support
+    //------------------------------------------------------------
+
+    // See also icu/source/data/translit/index.txt
+
+    TransliteratorNamePattern {
+        // Format for the display name of a Transliterator.
+        // This is the language-neutral form of this resource.
+        "{0,choice,0#|1#{1}|2#{1}-{2}}" // Display name
+    }
+
+    // Transliterator display names
+    // This is the English form of this resource.
+    "%Translit%Hex"         { "Hex Escape" }
+    "%Translit%UnicodeName" { "Unicode Name" }
+    "%Translit%UnicodeChar" { "Unicode Character" }
+
+    //------------------------------------------------------------
+    // END Transliterator support
+    //------------------------------------------------------------
+
+    //------------------------------------------------------------
+    // BEGIN BreakIterator support
+    //------------------------------------------------------------
+
+    CharacterBreakRules {
+        // ignore non-spacing marks and enclosing marks (since we never
+        // put a break before ignore characters, this keeps combining
+        // accents with the base characters they modify)
+        "$ignore=[[:Mn:][:Me:]];"
+
+        // other category definitions
+        "choseong=[\u1100-\u115f];"
+        "jungseong=[\u1160-\u11a7];"
+        "jongseong=[\u11a8-\u11ff];"
+        "surr-hi=[\ud800-\udbff];"
+        "surr-lo=[\udc00-\udfff];"
+
+        // break after every character, except as follows:
+        ".;"
+
+        // keep CRLF sequences together
+        "\r\n;"
+
+        // keep surrogate pairs together
+        "{surr-hi}{surr-lo};"
+
+        // keep Hangul syllables spelled out using conjoining jamo together
+        "{choseong}*{jungseong}*{jongseong}*;"
+
+        // various additions for Hindi support
+        "nukta=[\u093c];"
+        "danda=[\u0964\u0965];"
+        "virama=[\u094d];"
+        "devVowelSign=[\u093e-\u094c\u0962\u0963];"
+        "devConsonant=[\u0915-\u0939];"
+        "devNuktaConsonant=[\u0958-\u095f];"
+        "devCharEnd=[\u0902\u0903\u0951-\u0954];"
+        "zwj=[\u200d];"
+
+        "devCAMN=({devConsonant}{nukta}?);"
+        "devConsonant1=({devNuktaConsonant}|{devCAMN});"
+        "devConjunct=(({devConsonant1}{virama}{zwj}?)?{devConsonant1});"
+
+        "{devConjunct}{devVowelSign}?{devCharEnd}?;"
+        "{danda}{nukta};"
+    }
+
+    // default rules for finding word boundaries
+    WordBreakRules {
+        // ignore non-spacing marks, enclosing marks, and format characters,
+        // all of which should not influence the algorithm
+        "$ignore=[[:Mn:][:Me:][:Cf:]];"
+
+        // Hindi phrase separator, kanji, katakana, hiragana, CJK diacriticals,
+        // other letters, and digits
+        "danda=[\u0964\u0965];"
+        "kanji=[\u3005\u4e00-\u9fa5\uf900-\ufa2d];"
+        "kata=[\u3099-\u309c\u30a1-\u30fe];"
+        "hira=[\u3041-\u309e\u30fc];"
+        "let=[[[:L:][:Mc:]]-[{kanji}{kata}{hira}]];"
+        "dgt=[:N:];"
+
+        // punctuation that can occur in the middle of a word: currently
+        // dashes, apostrophes, quotation marks, and periods
+        "mid-word=[[:Pd:]\u00ad\u2027\\\"\\\'\\.];"
+
+        // punctuation that can occur in the middle of a number: currently
+        // apostrophes, qoutation marks, periods, commas, and the Arabic
+        // decimal point
+        "mid-num=[\\\"\\\'\\,\u066b\\.];"
+
+        // punctuation that can occur at the beginning of a number: currently
+        // the period, the number sign, and all currency symbols except the cents sign
+        "pre-num=[[[:Sc:]-[\u00a2]]\\#\\.];"
+
+        // punctuation that can occur at the end of a number: currently
+        // the percent, per-thousand, per-ten-thousand, and Arabic percent
+        // signs, the cents sign, and the ampersand
+        "post-num=[\\%\\&\u00a2\u066a\u2030\u2031];"
+
+        // line separators: currently LF, FF, PS, and LS
+        "ls=[\n\u000c\u2028\u2029];"
+
+        // whitespace: all space separators and the tab character
+        "ws=[[:Zs:]\t];"
+
+        // a word is a sequence of letters that may contain internal
+        // punctuation, as long as it begins and ends with a letter and
+        // never contains two punctuation marks in a row
+        "word=({let}+({mid-word}{let}+)*{danda}?);"
+
+        // a number is a sequence of digits that may contain internal
+        // punctuation, as long as it begins and ends with a digit and
+        // never contains two punctuation marks in a row.
+        "number=({dgt}+({mid-num}{dgt}+)*);"
+
+        // break after every character, with the following exceptions
+        // (this will cause punctuation marks that aren't considered
+        // part of words or numbers to be treated as words unto themselves)
+        ".;"
+
+        // keep together any sequence of contiguous words and numbers
+        // (including just one of either), plus an optional trailing
+        // number-suffix character
+        "{word}?({number}{word})*({number}{post-num}?)?;"
+
+        // keep together and sequence of contiguous words and numbers
+        // that starts with a number-prefix character and a number,
+        // and may end with a number-suffix character
+        "{pre-num}({number}{word})*({number}{post-num}?)?;"
+
+        // keep together runs of whitespace (optionally with a single trailing
+        // line separator or CRLF sequence)
+        "{ws}*\r?{ls}?;"
+
+        // keep together runs of Katakana
+        "{kata}*;"
+
+        // keep together runs of Hiragana
+        "{hira}*;"
+
+        // keep together runs of Kanji
+        "{kanji}*;"
+    }
+
+    // default rules for determining legal line-breaking positions
+    LineBreakRules {
+        // ignore non-spacing marks, enclosing marks, and format characters
+        "$ignore=[[:Mn:][:Me:][:Cf:]];"
+
+        // Hindi phrase separators
+        "danda=[\u0964\u0965];"
+
+        // characters that always cause a break: ETX, tab, LF, FF, LS, and PS
+        "break=[\u0003\t\n\f\u2028\u2029];"
+
+        // characters that always prevent a break: the non-breaking space
+        // and similar characters
+        "nbsp=[\u00a0\u2007\u2011\ufeff];"
+
+        // whitespace: space separators and control characters, except for
+        // CR and the other characters mentioned above
+        "space=[[[:Zs:][:Cc:]]-[{nbsp}{break}\r]];"
+
+        // dashes: dash punctuation and the discretionary hyphen, except for
+        // non-breaking hyphens
+        "dash=[[[:Pd:]\u00ad]-[{nbsp}]];"
+
+        // characters that stick to a word if they precede it: currency symbols
+        // (except the cents sign) and starting punctuation
+        "pre-word=[[[:Sc:]-[\u00a2]][:Ps:]\\\"\\\'];"
+
+        // characters that stick to a word if they follow it: ending punctuation,
+        // other punctuation that usually occurs at the end of a sentence,
+        // small Kana characters, some CJK diacritics, etc.
+        "post-word=[[:Pe:]\\!\\\"\\\'\\%\\.\\,\\:\\;\\?\u00a2\u00b0\u066a\u2030-\u2034"
+                "\u2103\u2105\u2109\u3001\u3002\u3005\u3041\u3043\u3045\u3047\u3049\u3063"
+                "\u3083\u3085\u3087\u308e\u3099-\u309e\u30a1\u30a3\u30a5\u30a7\u30a9"
+                "\u30c3\u30e3\u30e5\u30e7\u30ee\u30f5\u30f6\u30fc-\u30fe\uff01\uff0c"
+                "\uff0e\uff1f];"
+
+        // Kanji: actually includes both Kanji and Kana, except for small Kana and
+        // CJK diacritics
+        "kanji=[[\u4e00-\u9fa5\uf900-\ufa2d\u3041-\u3094\u30a1-\u30fa]-[{post-word}{$ignore}]];"
+
+        // digits
+        "digit=[[:Nd:][:No:]];"
+
+        // punctuation that can occur in the middle of a number: periods and commas
+        "mid-num=[\\.\\,];"
+
+        // everything not mentioned above, plus the quote marks (which are both
+        // <pre-word>, <post-word>, and <char>)
+        "char=[^{break}{space}{dash}{kanji}{nbsp}{$ignore}{pre-word}{post-word}{mid-num}{danda}\r\\\"\\\'];"
+
+        // a "number" is a run of prefix characters and dashes, followed by one or
+        // more digits with isolated number-punctuation characters interspersed
+        "number=([{pre-word}{dash}]*{digit}+({mid-num}{digit}+)*);"
+
+        // the basic core of a word can be either a "number" as defined above, a single
+        // "Kanji" character, or a run of any number of not-explicitly-mentioned
+        // characters (this includes Latin letters)
+        "word-core=([{pre-word}{char}]*|{kanji}|{number});"
+
+        // a word may end with an optional suffix that be either a run of one or
+        // more dashes or a run of word-suffix characters, followed by an optional
+        // run of whitespace
+        "word-suffix=(({dash}+|{post-word}*){space}*);"
+
+        // a word, thus, is an optional run of word-prefix characters, followed by
+        // a word core and a word suffix (the syntax of <word-core> and <word-suffix>
+        // actually allows either of them to match the empty string, putting a break
+        // between things like ")(" or "aaa(aaa"
+        "word=({pre-word}*{word-core}{word-suffix});"
+
+        // finally, the rule that does the work: Keep together any run of words that
+        // are joined by runs of one of more non-spacing mark.  Also keep a trailing
+        // line-break character or CRLF combination with the word.  (line separators
+        // "win" over nbsp's)
+        "{word}({nbsp}+{word})*\r?{break}?;"
+    }
+
+    // default rules for finding sentence boundaries
+    SentenceBreakRules {
+        // ignore non-spacing marks, enclosing marks, and format characters
+        "$ignore=[[:Mn:][:Me:][:Cf:]];"
+
+        // lowercase letters
+        "lc=[:Ll:];"
+
+        // uppercase Latin letters
+        "ucLatin=[A-Z];"
+
+        // whitespace (line separators are treated as whitespace)
+        "space=[\t\r\f\n\u2028[:Zs:]];"
+
+        // punctuation which may occur at the beginning of a sentence: "starting
+        // punctuation" and quotation marks
+        "start=[[:Ps:]\\\"\\\'];"
+
+        // punctuation with may occur at the end of a sentence: "ending punctuation"
+        // and quotation marks
+        "end=[[:Pe:]\\\"\\\'];"
+
+        // digits
+        "digit=[:N:];"
+
+        // characters that unambiguously signal the end of a sentence
+        "term=[\\!\\?\u3002\uff01\uff1f];"
+
+        // periods, which MAY signal the end of a sentence
+        "period=[\\.\uff0e];"
+
+        // characters that may occur at the beginning of a sentence: basically anything
+        // not mentioned above (lowercase letters and digits are specifically excluded)
+        "sent-start=[^{lc}{ucLatin}{space}{start}{end}{digit}{term}{period}\u2029{$ignore}];"
+
+        // Hindi phrase separator
+        "danda=[\u0964\u0965];"
+
+        // always break sentences after paragraph separators
+        ".*?\u2029?;"
+
+        // always break after a danda, if it's followed by whitespace
+        ".*?{danda}{space}*;"
+
+        // if you see a period, skip over additional periods and ending punctuation
+        // and if the next character is a paragraph separator, break after the
+        // paragraph separator
+        ".*?{period}[{period}{end}]*{space}*\u2029;"
+
+        // if you see a period, skip over additional periods and ending punctuation,
+        // followed by optional whitespace, followed by optional starting punctuation,
+        // and if the next character is something that can start a sentence
+        // (basically, a capital letter), then put the sentence break between the
+        // whitespace and the opening punctuation
+        ".*?{period}[{period}{end}]*{space}*/({start}*{sent-start}|{start}+{ucLatin});"
+
+        // same as above, except that there's a sentence break before a Latin capital
+        // letter only if there's at least one space after the period
+        ".*?{period}[{period}{end}]*{space}+/{ucLatin};"
+
+        // if you see a sentence-terminating character, skip over any additional
+        // terminators, periods, or ending punctuation, followed by any whitespace,
+        // followed by a SINGLE optional paragraph separator, and put the break there
+        ".*?{term}[{term}{period}{end}]*{space}*\u2029?;"
+
+        // The following rules are here to aid in backwards iteration.  The automatically
+        // generated backwards state table will rewind to the beginning of the
+        // paragraph all the time (or all the way to the beginning of the document
+        // if the document doesn't use the Unicode PS character) because the only
+        // unambiguous character pairs are those involving paragraph separators.
+        // These specify a few more unambiguous breaking situations.
+
+        // if you see a sentence-starting character, followed by starting punctuation
+        // (remember, we're iterating backwards), followed by an optional run of
+        // whitespace, followed by an optional run of ending punctuation, followed
+        // by a period, this is a safe place to turn around
+        "![{sent-start}{ucLatin}]{start}*{space}+{end}*{period};"
+
+        // if you see a letter or a digit, followed by an optional run of
+        // starting punctuation, followed by an optional run of whitespace,
+        // followed by an optional run of ending punctuation, followed by
+        // a sentence terminator, this is a safe place to turn around
+        "![{sent-start}{lc}{digit}]{start}*{space}*{end}*{term};"
+    }
+
+    //------------------------------------------------------------
+    // END BreakIterator support
+    //------------------------------------------------------------
+
+    AmPmMarkers { 
+        "AM",
+        "PM",
+    }
+    // The official list list of ISO-3166 country codes are located at:
+    // http://www.din.de/gremien/nas/nabd/iso3166ma/codlstp1/en_listp1.html
+    Countries {
+        //AA {} // Not in ISO-3166 standard
+        AD { "Andorra" }
+        AE { "United Arab Emirates" }
+        AF { "Afghanistan" }
+        AG { "Antigua and Barbuda" }
+        AI { "Anguilla" }
+        AL { "Albania" }
+        AM { "Armenia" }
+        AN { "Netherlands Antilles" }
+        AO { "Angola" }
+        AQ { "Antarctica" }
+        AR { "Argentina" }
+        AS { "American Samoa" }
+        AT { "Austria" }
+        AU { "Australia" }
+        AW { "Aruba" }
+        AZ { "Azerbaijan" }
+
+        BA { "Bosnia and Herzegovina" }
+        BB { "Barbados" }
+        BD { "Bangladesh" }
+        BE { "Belgium" }
+        BF { "Burkina Faso" }
+        BG { "Bulgaria" }
+        BH { "Bahrain" }
+        BI { "Burundi" }
+        BJ { "Benin" }
+        BM { "Bermuda" }
+        BN { "Brunei" }
+        BO { "Bolivia" }
+        BR { "Brazil" }
+        BS { "Bahamas" }
+        BT { "Bhutan" }
+        BV { "Bouvet Island" }
+        BW { "Botswana" }
+        BY { "Belarus" }
+        BZ { "Belize" }
+
+        CA { "Canada" }
+        CC { "Cocos Islands"}
+        CD { "Democratic Republic of the Congo" }
+        CF { "Central African Republic" }
+        CG { "Congo" }
+        CH { "Switzerland" }
+        CI { "C\u00F4te d'Ivoire" }
+        CK { "Cook Islands" }
+        CL { "Chile" }
+        CM { "Cameroon" }
+        CN { "China" }
+        CO { "Colombia" }
+        CR { "Costa Rica" }
+        CU { "Cuba" }
+        CV { "Cape Verde" }
+        CX { "Christmas Island" }
+        CY { "Cyprus" }
+        CZ { "Czech Republic" }
+
+        DE { "Germany" }
+        DJ { "Djibouti" }
+        DK { "Denmark" }
+        DM { "Dominica" }
+        DO { "Dominican Republic" }
+        DZ { "Algeria" }
+
+        EC { "Ecuador" }
+        EE { "Estonia" }
+        EG { "Egypt" }
+        EH { "Western Sahara" }
+        ER { "Eritrea" }
+        ES { "Spain" }
+        ET { "Ethiopia" }
+
+        FI { "Finland" }
+        FJ { "Fiji" }
+        FK { "Falkland Islands" }
+        FM { "Micronesia" }
+        FO { "Faroe Islands" }
+        FR { "France" }
+
+        GA { "Gabon" }
+        GB { "United Kingdom" }
+        GD { "Grenada" }
+        GE { "Georgia" }
+        GF { "French Guiana" }
+        GH { "Ghana" }
+        GI { "Gibraltar" }
+        GL { "Greenland" }
+        GM { "Gambia" }
+        GN { "Guinea" }
+        GP { "Guadeloupe" }
+        GQ { "Equatorial Guinea" }
+        GR { "Greece" }
+        GS { "South Georgia and South Sandwich Islands" }
+        GT { "Guatemala" }
+        GU { "Guam" }
+        GW { "Guinea-Bissau" }
+        GY { "Guyana" }
+
+        HK { "Hong Kong S.A.R., China" }
+        HM { "Heard Island and McDonald Islands" }
+        HN { "Honduras" }
+        HR { "Croatia" }
+        HT { "Haiti" }
+        HU { "Hungary" }
+
+        ID { "Indonesia" }
+        IE { "Ireland" }
+        IL { "Israel" }
+        IN { "India" }
+        IO { "British Indian Ocean Territory" }
+        IQ { "Iraq" }
+        IR { "Iran" }
+        IS { "Iceland" }
+        IT { "Italy" }
+
+        JM { "Jamaica" }
+        JO { "Jordan" }
+        JP { "Japan" }
+
+        KE { "Kenya" }
+        KG { "Kyrgyzstan" }
+        KH { "Cambodia" }
+        KI { "Kiribati" }
+        KM { "Comoros" }
+        KN { "Saint Kitts and Nevis" }
+        KP { "North Korea" }
+        KR { "South Korea" }
+        KW { "Kuwait" }
+        KY { "Cayman Islands" }
+        KZ { "Kazakhstan" }
+
+        LA { "Laos" }
+        LB { "Lebanon" }
+        LC { "Saint Lucia" }
+        LI { "Liechtenstein" }
+        LK { "Sri Lanka" }
+        LR { "Liberia" }
+        LS { "Lesotho" }
+        LT { "Lithuania" }
+        LU { "Luxembourg" }
+        LV { "Latvia" }
+        LY { "Libya" }
+
+        MA { "Morocco" }
+        MC { "Monaco" }
+        MD { "Moldova" }
+        MG { "Madagascar" }
+        MH { "Marshall Islands"}
+        MK { "Macedonia" }
+        ML { "Mali" }
+        MM { "Myanmar" }
+        MN { "Mongolia" }
+        MO { "Macau" }
+        MP { "Northern Mariana Islands"}
+        MQ { "Martinique" }
+        MR { "Mauritania" }
+        MS { "Montserrat" }
+        MT { "Malta" }
+        MU { "Mauritius" }
+        MV { "Maldives" }
+        MW { "Malawi" }
+        MX { "Mexico" }
+        MY { "Malaysia" }
+        MZ { "Mozambique" }
+
+        NA { "Namibia" }
+        NC { "New Caledonia" }
+        NE { "Niger" }
+        NF { "Norfolk Island" }
+        NG { "Nigeria" }
+        NI { "Nicaragua" }
+        NL { "Netherlands" }
+        NO { "Norway" }
+        NP { "Nepal" }
+        NR { "Nauru" }
+        NU { "Niue" }
+        NZ { "New Zealand" }
+
+        OM { "Oman" }
+
+        PA { "Panama" }
+        PE { "Peru" }
+        PF { "French Polynesia" }
+        PG { "Papua New Guinea" }
+        PH { "Philippines" }
+        PK { "Pakistan" }
+        PL { "Poland" }
+        PM { "Saint Pierre and Miquelon" }
+        PN { "Pitcairn" }
+        PR { "Puerto Rico" }
+        PT { "Portugal" }
+        PW { "Palau" }
+        PY { "Paraguay" }
+
+        QA { "Qatar" }
+
+        RE { "R\u00E9union" }
+        RO { "Romania" }
+        RU { "Russia" }
+        RW { "Rwanda" }
+
+        SA { "Saudi Arabia" }
+        SB { "Solomon Islands" }
+        SC { "Seychelles" }
+        SD { "Sudan" }
+        SE { "Sweden" }
+        SG { "Singapore" }
+        SH { "Saint Helena" }
+        SI { "Slovenia" }
+        SJ { "Svalbard and Jan Mayen" }
+        SK { "Slovakia" }
+        SL { "Sierra Leone" }
+        SM { "San Marino" }
+        SN { "Senegal" }
+        SO { "Somalia" }
+        SP { "Serbia" }
+        SR { "Suriname" }
+        ST { "Sao Tome and Principe" }
+        SV { "El Salvador" }
+        SY { "Syria" }
+        SZ { "Swaziland" }
+
+        TC { "Turks and Caicos Islands" }
+        TD { "Chad" }
+        TF { "French Southern Territories" }
+        TG { "Togo" }
+        TH { "Thailand" }
+        TJ { "Tajikistan" }
+        TK { "Tokelau" }
+        TM { "Turkmenistan" }
+        TN { "Tunisia" }
+        TO { "Tonga" }
+        TP { "East Timor" }
+        TR { "Turkey" }
+        TT { "Trinidad and Tobago" }
+        TV { "Tuvalu" }
+        TW { "Taiwan" }
+        TZ { "Tanzania" }
+
+        UA { "Ukraine" }
+        UG { "Uganda" }
+        UM { "United States Minor Outlying Islands" }
+        US { "United States" }
+        UY { "Uruguay" }
+        UZ { "Uzbekistan" }
+
+        VA { "Vatican" }
+        VC { "Saint Vincent and the Grenadines" }
+        VE { "Venezuela" }
+        VG { "British Virgin Islands" }
+        VI { "U.S. Virgin Islands" }
+        VN { "Vietnam" }
+        VU { "Vanuatu" }
+
+        WF { "Wallis and Futuna" }
+        WS { "Samoa" }
+
+        YE { "Yemen" }
+        YT { "Mayotte" }
+        YU { "Yugoslavia" }
+
+        ZA { "South Africa" }
+        ZR { "Zaire" }
+        ZM { "Zambia" }
+        ZW { "Zimbabwe" }
+    }
+    CurrencyElements { 
+        "\u00A4",
+        "XXX",
+        "",
+    }
+    DateTimeElements:intvector { 
+        1,
+        1,
+    }
+    DateTimePatterns { 
+        "h:mm:ss a z",
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE, MMMM d, yyyy",
+        "MMMM d, yyyy",
+        "MMM d, yyyy",
+        "M/d/yy", // Changing this will break binary compatibility.
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "Sun",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+    }
+    DayNames { 
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+    }
+    Eras { 
+        "BC",
+        "AD",
+    }
+    // If there is a two letter abbreviation (ISO-639-1) for a three letter
+    // abbreviation (ISO-639-2), the two letter abbreviation must be used.
+    // Source: http://lcweb.loc.gov/standards/iso639-2/englangn.html 
+    Languages {
+        root{"Root"}    // The only exception to ISO-639
+
+        aa  { "Afar" }
+        ab  { "Abkhazian" }
+        ace { "Achinese" }
+        ach { "Acoli" }
+        ada { "Adangme" }
+        ae  { "Avestan" }
+        af  { "Afrikaans" }
+        afa { "Afro-Asiatic (Other)" }
+        afh { "Afrihili" }
+        aka { "Akan" }
+        akk { "Akkadien" }
+        ale { "Aleut" }
+        alg { "Algonquian Languages" }
+        am  { "Amharic" }
+        ang { "English, Old (ca.450-1100)" }
+        apa { "Apache Languages"}
+        ar  { "Arabic" }
+        arc { "Aramaic" }
+        arn { "Araucanian" }
+        arp { "Arapaho" }
+        art { "Artificial (Other)" }
+        arw { "Arawak" }
+        as  { "Assamese" }
+        ath { "Athapaskan Languages" }
+        aus { "Australian Languages" }
+        ava { "Avaric" }
+        awa { "Awadhi" }
+        ay  { "Aymara" }
+        az  { "Azerbaijani" }
+        ba  { "Bashkir" }
+        bad { "Banda" }
+        bai { "Bamileke Languages" }
+        bal { "Baluuchi" }
+        bam { "Bambara" }
+        ban { "Balinese" }
+        bas { "Basa" }
+        bat { "Baltic (Other)" }
+        be  { "Belarusian" }
+        bej { "Beja" }
+        bem { "Bemba" }
+        ber { "Beber" }
+        bg  { "Bulgarian" }
+        bh  { "Bihari" }
+        bho { "Bhojpuri" }
+        bi  { "Bislama" }
+        bik { "Bikol" }
+        bin { "Bini" }
+        bla { "Siksika" }
+        bn  { "Bengali" }
+        bnt { "Bantu" }
+        bo  { "Tibetan" }
+        br  { "Brenton" }
+        bra { "Braj" }
+        bs  { "Bosnian"}
+        btk { "Batak" }
+        bua { "Buriat" }
+        bug { "Buginese" }
+        ca  { "Catalan" }
+        cad { "Caddo" }
+        cai { "Central American Indian (Other)" }
+        car { "Carib" }
+        cau { "Caucasian (Other)" }
+        ce  { "Chechen" }
+        ceb { "Cebuano" }
+        cel { "Celtic (Other)" }
+        ch  { "Chamorro" }
+        chb { "Chibcha" }
+        chg { "Chagatai" }
+        chk { "Chuukese" }
+        chm { "Mari" }
+        chn { "Chinook Jargon" }
+        cho { "Choctaw" }
+        chp { "Chipewyan" }
+        chr { "Cherokee" }
+        chy { "Cheyenne" }
+        cmc { "Chamic Languages" }
+        co  { "Corsican" }
+        cop { "Coptic" }
+        cpe { "Creoles and Pidgins, English-based (Other)" }
+        cpf { "Creoles and Pidgins, French-based (Other)" }
+        cre { "Cree" }
+        crp { "Creoles and Pidgins (Other)" }
+        cs  { "Czech" }
+        cu  { "Church Slavic" }
+        cus { "Cushitic (Other)" }
+        cv  { "Chuvash" }
+        cy  { "Welsh" }
+        da  { "Danish" }
+        dak { "Dakota" }
+        day { "Dayak" }
+        de  { "German" }
+        del { "Delaware" }
+        den { "Slave" }
+        dgr { "Dogrib" }
+        din { "Dinka" }
+        div { "Divehi" }
+        doi { "Dogri" }
+        dra { "Dravidian (Other)" }
+        dua { "Duala" }
+        dum { "Dutch, Middle (ca. 1050-1350)" }
+        dyu { "Dyula" }
+        dz  { "Bhutani" }
+        dzo { "Dzongkha" }
+        efi { "Efik" }
+        egy { "Egyptian (Ancient)" }
+        eka { "Ekajuk" }
+        el  { "Greek" } //  Modern (1453-)
+        elx { "Elamite" }
+        en  { "English" }
+        enm { "English, Middle( 1100 -1500)" }
+        eo  { "Esperanto" }
+        es  { "Spanish" }
+        et  { "Estonian" }
+        eu  { "Basque" }
+        ewe { "Ewe" }
+        ewo { "Ewondo" }
+        fa  { "Persian" }
+        fan { "Fang" }
+        fat { "Fanti" }
+        fi  { "Finnish" }
+        fiu { "Finno - Ugrian" }
+        fj  { "Fiji" }
+        fo  { "Faeroese" }
+        fon { "Fon" }
+        fr  { "French" }
+        frm { "French, Middle (ca.1400-1600)" }
+        fro { "French, Old (842-ca.1400)" }
+        ful { "Fulah" }
+        fur { "Friulian" }
+        fy  { "Frisian" }
+        ga  { "Irish" }
+        gaa { "Ga" }
+        gay { "Gayo" }
+        gba { "Gbaya" }
+        gd  { "Scots Gaelic" }
+        gem { "Germanic (Other)" }
+        gil { "Gilbertese" }
+        gl  { "Gallegan" }
+        gla { "Gaelic (Scots)" }
+        gmh { "German, Middle High (ca.1050-1500)" }
+        gn  { "Guarani" }
+        goh { "German, Old High (ca.750-1050)" }
+        gon { "Gondi" }
+        gor { "Gorontalo" }
+        got { "Gothic" }
+        grb { "Gerbo" }
+        grc { "Greek, Ancient (to 1453)" }
+        gu  { "Gujarati" }
+        gv  { "Manx" }
+        gwi { "Gwich'in" }
+        hai { "Haida" }
+        ha  { "Hausa" }
+        haw { "Hawaiian" }
+        he  { "Hebrew" }
+        hi  { "Hindi" }
+        him { "Himachali" }
+        hit { "Hittite" }
+        hmn { "Hmong" }
+        ho  { "Hiri Motu" }
+        hr  { "Croatian" }
+        hu  { "Hungarian" }
+        hup { "Hupa" }
+        hy  { "Armenian" }
+        hz  { "Herero" }
+        ia  { "Interlingua" }
+        iba { "Iban" }
+        ibo { "Igbo" }
+        id  { "Indonesian" }
+        ie  { "Interlingue" }
+        ijo { "Ijo" }
+        ik  { "Inupiak" }
+        ilo { "Iloko" }
+        //in  { "Indonesian" }  // Use id instead
+        inc { "Indic (Other)" }
+        ine { "Indo-European" }
+        ira { "Iranian " }
+        iro { "Iroguoian  Languages" }
+        is  { "Icelandic" }
+        it  { "Italian" }
+        iu  { "Inukitut" }
+        iw  { "Hebrew" }  // Use he instead
+        ja  { "Japanese" }
+        //ji  { "Yiddish" } // Use yi instead
+        jpr { "Judeo-Persian" }
+        jrb { "Judeo-Arabic" }
+        jw  { "Javanese" }
+        ka  { "Georgian" }
+        kaa { "Kara-Kalpak" }
+        kab { "Kabyle" }
+        kac { "Kachin" }
+        kam { "Kamba" }
+        kar { "Karen" }
+        kau { "Kanuri" }
+        kaw { "Kawi" }
+        kha { "Khasi" }
+        khi { "Khoisan" }
+        kho { "Khotanese" }
+        ki  { "Kikuyu" }
+        kk  { "Kazakh" }
+        kl  { "Kalaallisut" }
+        km  { "Khmer" }
+        kmb { "Kimbundu" }
+        kn  { "Kannada" }
+        ko  { "Korean" }
+        kok { "Konkani" }
+        kon { "Kongo" }
+        kos { "Kosrean" }
+        kpe { "Kpelle" }
+        kro { "Kru" }
+        kru { "Kuruckh" }
+        ks  { "Kashmiri" }
+        ku  { "Kurdish" }
+        kum { "Kumyk" }
+        kut { "Kutenai" }
+        kv  { "Komi" }
+        kw  { "Cornish" }
+        ky  { "Kirghiz" }
+        la  { "Latin" }
+        lad { "Ladino" }
+        lah { "Lahnda" }
+        lam { "Lamba" }
+        lb  { "Letzeburgesch" }
+        lez { "Lezghian" }
+        lin { "Lingala" }
+        lit { "Lithuanian" }
+        ln  { "Lingala" }
+        lo  { "Lao" }
+        lol { "Mongo" }
+        loz { "Lozi" }
+        lt  { "Lithuanian" }
+        lua { "Luba-Lulua" }
+        lub { "Luba-Katanga" }
+        lug { "Ganda" }
+        lui { "Luiseeno" }
+        lun { "Lunda" }
+        luo { "Lua" }
+        lus { "Lushai" }
+        lv  { "Latvian (Lettish)" }
+        mad { "Madurese" }
+        mag { "Magahi" }
+        mai { "Maithili" }
+        mak { "Makasar" }
+        man { "Mandingue" }
+        map { "Austronesian" }
+        mas { "Masai" }
+        mdr { "Mandar" }
+        men { "Mende" }
+        mg  { "Malagasy" }
+        mga { "Irish, Middle (900-1200)" }
+        mh  { "Marshall"}
+        mi  { "Maori" }
+        mic { "Mic-Mac" }
+        min { "Minangkabau" }
+        mis { "Miscellaneous Languages" }
+        mk  { "Macedonian" }
+        mkh { "Mon-Khmer (Ohter)" }
+        ml  { "Malayalam" }
+        mn  { "Mongolian" }
+        mnc { "Manchu" }
+        mni { "Manipuri" }
+        mno { "Manobo Languages" }
+        mo  { "Moldavian" }
+        moh { "Mohawk" }
+        mos { "Mossi" }
+        mr  { "Marathi" }
+        ms  { "Malay" }
+        mt  { "Maltese" }
+        mul { "Multiple Languages" }
+        mun { "Munda Languages" }
+        mus { "Creek" }
+        mwr { "Marwari" }
+        my  { "Burmese" }
+        myn { "Mayan" }
+        na  { "Nauru" }
+        nah { "Nahuatl" }
+        nai { "North American Indian (Ohter)" }
+        nb  { "Norwegian Bokm\u00e5l" }
+        nd  { "Ndebele, North" }
+        nds { "Low German; Low Saxon" }
+        ne  { "Nepali" }
+        new { "Newari" }
+        ng  { "Ndonga" }
+        nia { "Nias" }
+        nic { "Niger - Kordofanian" }
+        niu { "Niuean" }
+        nl  { "Dutch" }
+        nn  { "Norwegian Nynorsk" }
+        no  { "Norwegian" }
+        non { "Norse, Old" }
+        nr  { "Ndebele, South" }
+        nso { "Sotho, Northern" }
+        nub { "Nubian Languages" }
+        nv  { "Navajo"}
+        ny  { "Chichewa; Nyanja" }
+        nym { "Nyamwezi" }
+        nyo { "Nyoro" }
+        nzi { "Nzima" }
+        oc  { "Proven\u00E7al; Occitan (post 1500)"}
+        oji { "Ojibwa" }
+        om  { "Oromo (Afan)" }
+        or  { "Oriya" }
+        os  { "Ossetic" }
+        osa { "Osage" }
+        ota { "Turkish (Ottoman Empire)" }
+        oto { "Otomian Languages" }
+        pa  { "Punjabi" }
+        paa { "Papuan (Ohter)" }
+        pag { "Pangasinan" }
+        pal { "Pahlavi" }
+        pam { "pampamga" }
+        pap { "Papiamento" }
+        pau { "Palauan" }
+        peo { "Persian Old (ca.600-400 B.C.)" }
+        phi { "Philippine (Other)" }
+        phn { "Phoenician" }
+        pi  { "Pali" }
+        pl  { "Polish" }
+        pon { "Pohnpeian" }
+        pra { "Prakrit Languages" }
+        pro { "Proven\u00E7al, Old (to 1500)" }
+        ps  { "Pashto (Pushto)" }
+        pt  { "Portuguese" }
+        qu  { "Quechua" }
+        raj { "Rajastani" }
+        rap { "Rapanui" }
+        rar { "Rarotongan" }
+        rm  { "Rhaeto-Romance" }
+        rn  { "Rundi" }
+        ro  { "Romanian" }
+        roa { "Romance (Other)" }
+        rom { "Romany" }
+        ru  { "Russian" }
+        rw  { "Kinyarwanda" }
+        sa  { "Sanskrit" }
+        sad { "Sandawe" }
+        sah { "Yakut" }
+        sai { "South American Indian (Other)" }
+        sal { "Salishan" }
+        sam { "Samritan" }
+        sas { "Saska" }
+        sat { "Santali" }
+        sc  { "Sardinian" }
+        sco { "Scots" }
+        sd  { "Sindhi" }
+        se  { "Northern Sami" }
+        sel { "Selkup" }
+        sem { "Semitic" }
+        sg  { "Sango" }
+        sga { "Irish, Old (to 900)" }
+        sgn { "Sign Languages" }
+        sh  { "Serbo-Croatian" }
+        shn { "Shan" }
+        si  { "Sinhalese" }
+        sid { "Sidamo" }
+        sio { "Siouan Languages" }
+        sit { "Sino-Tibetan (Other)" }
+        sk  { "Slovak" }
+        sl  { "Slovenian" }
+        sm  { "Samoan" }
+        sn  { "Shona" }
+        snk { "Soninke" }
+        so  { "Somali" }
+        sog { "Sogdien" }
+        son { "Songhai" }
+        sq  { "Albanian" }
+        sr  { "Serbian" }
+        srr { "Serer" }
+        ss  { "Swati" }
+        ssa { "Nilo-Saharam" }
+        st  { "Sotho, Southern" }
+        su  { "Sundanese" }
+        suk { "Sukuma" }
+        sus { "Susu" }
+        sux { "Sumerian"}
+        sv  { "Swedish" }
+        sw  { "Swahili" }
+        syr { "Syriac" }
+        ta  { "Tamil" }
+        tai { "Tai (Other)" }
+        te  { "Telugu" }
+        tem { "Timne" }
+        ter { "Tereno" }
+        tet { "Tetum" }
+        tg  { "Tajik" }
+        th  { "Thai" }
+        tig { "Tigre" }
+        ti  { "Tigrinya" }
+        tiv { "Tiv" }
+        tk  { "Turkmen" }
+        tl  { "Tagalog" }
+        tli { "Tlingit" }
+        tmh { "Tamashek" }
+        tn  { "Tswana" }
+        tog { "Tonga (Nyasa)" }
+        to  { "Tongan (Tonga Islands)" }
+        tr  { "Turkish" }
+        ts  { "Tsonga" }
+        tsi { "Tsimshian" }
+        tt  { "Tatar" }
+        tum { "Tumbuka" }
+        tur { "Turkish" }
+        tut { "Altaic (Other)" }
+        tvl { "Tuvalu" }
+        tw  { "Twi" }
+        ty  { "Tahitian" }
+        tyv { "Tuvinian" }
+        ug  { "Uighur" }
+        uga { "Ugaritic" }
+        uk  { "Ukrainian" }
+        umb { "Umbundu" }
+        und { "Undetermined" }
+        ur  { "Urdu" }
+        uz  { "Uzbek" }
+        vai { "Vai" }
+        ven { "Venda" }
+        vi  { "Vietnamese" }
+        vo  { "Volapuk" }
+        vot { "Votic" }
+        wak { "Wakashan Languages" }
+        wal { "Walamo" }
+        war { "Waray" }
+        was { "Washo" }
+        wen { "Sorbian Languages" }
+        wo  { "Wolof" }
+        xh  { "Xhosa" }
+        yao { "Yao" }
+        yap { "Yapese" }
+        yi  { "Yiddish" }
+        yo  { "Yoruba" }
+        ypk { "Yupik Languages" }
+        za  { "Zhuang" }
+        zap { "Zapotec" }
+        zen { "Zenaga" }
+        zh  { "Chinese" }
+        znd { "Zande" }
+        zu  { "Zulu" }
+        zun { "Zuni" }
+    }
+    LocaleID:int { 0x0000 }
+//    LocaleString { "en" }
+    MonthAbbreviations { 
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    }
+    MonthNames { 
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    }
+    NumberElements { 
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4 #,##0.00;-\u00A4 #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "" }
+//    ShortLanguage { "eng" }
+    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
+    zoneStrings { 
+        {
+            "PST",
+            "Pacific Standard Time",
+            "PST",
+            "Pacific Daylight Time",
+            "PDT",
+            "Los Angeles",
+        }
+        {
+            "MST",
+            "Mountain Standard Time",
+            "MST",
+            "Mountain Daylight Time",
+            "MDT",
+            "Denver",
+        }
+        {
+            "PNT",
+            "Mountain Standard Time",
+            "MST",
+            "Mountain Standard Time",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "CST",
+            "Central Standard Time",
+            "CST",
+            "Central Daylight Time",
+            "CDT",
+            "Chicago",
+        }
+        {
+            "EST",
+            "Eastern Standard Time",
+            "EST",
+            "Eastern Daylight Time",
+            "EDT",
+            "New York",
+        }
+        {
+            "IET",
+            "Eastern Standard Time",
+            "EST",
+            "Eastern Standard Time",
+            "EST",
+            "Indianapolis",
+        }
+        {
+            "PRT",
+            "Atlantic Standard Time",
+            "PRT",
+            "Atlantic Standard Time",
+            "PRT",
+            "Puerto Rico",
+        }
+        {
+            "HST",
+            "Hawaii Standard Time",
+            "HST",
+            "Hawaii Standard Time",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "AST",
+            "Alaska Standard Time",
+            "AST",
+            "Alaska Daylight Time",
+            "ADT",
+            "Anchorage",
+        }
+    }
+
+
+    LocaleScript:array {
+        "Latn"
+    }
+
+    //------------------------------------------------------------
+    // Rule Based Number Format Support
+    //------------------------------------------------------------
+
+    /*
+     * Default used to be English (US) rules, but now default just formats
+     * like DecimalFormat.  The former default rules are now the _en rules.
+     */
+    SpelloutRules {
+        "=#,##0.######=;\n"
+    }
+
+    OrdinalRules {
+        "=#,##0=;\n"
+    }
+
+    DurationRules {
+        "=#,##0=;\n"
+    }
+    ExemplarCharacters{"[a-z]"}
+    Scripts { 
+        ARAB { "Arabic" }
+        ARMN { "Armenian" }
+        BENG { "Bengali" }
+        BOPO { "Bopomofo" }
+        CANS { "Unified Canadian Aboriginal Symbols" }
+        CHER { "Cherokee" }
+        CYRL { "Cyrillic" }
+        DEVA { "Devanagari" }
+        DSRT { "Deseret" }
+        ETHI { "Ethiopic" }
+        GEOR { "Georgian" }
+        GOTH { "Gothic" }
+        GREK { "Greek" }
+        GUJR { "Gujarati" }
+        GURU { "Gurmukhi" }
+        HANG { "Hangul" }
+        HANI { "Han" }
+        HEBR { "Hebrew" }
+        HIRA { "Hiragana" }
+        ITAL { "Old_italic" }
+        KANA { "Katakana" }
+        KHMR { "Khmer" }
+        KNDA { "Kannada" }
+        LAO  { "Lao" }
+        LATN { "Latin" }
+        MLYM { "Malayalam" }
+        MONG { "Mongolian" }
+        MYMR { "Myanmar" }
+        OGAM { "Ogham" }
+        ORYA { "Oriya" }
+        QAAC { "Coptic" }
+        QAAI { "Inherited" }
+        RUNR { "Runic" }
+        SINH { "Sinhala" }
+        SYRC { "Syriac" }
+        TAML { "Tamil" }
+        TELU { "Telugu" }
+        THAA { "Thana" }
+        THAI { "Thai" }
+        TIBT { "Tibetan" }
+        YIII { "Yi" }
+        ZYYY { "Common" }
+   }
+}
+

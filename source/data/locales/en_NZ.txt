@@ -1,0 +1,42 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+en_NZ {
+    Version { "1.0" }
+//    Duplicated in parent
+//    Countries { 
+//        US { "United States" }
+//        GB { "United Kingdom" }
+//        CA { "Canada" }
+//        IE { "Ireland" }
+//        AU { "Australia" }
+//        NZ { "New Zealand" }
+//    }
+    CurrencyElements { 
+        "$",
+        "NZD",
+        ".",
+    }
+    DateTimePatterns { 
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE, d MMMM yyyy",
+        "d MMMM yyyy",
+        "d/MM/yyyy",
+        "d/MM/yy",
+        "{1} {0}",
+    }
+//    Duplicated in parent
+//    Languages { 
+//        en { "English" }
+//    }
+    LocaleID:int { 0x1409 }
+//    LocaleString { "en_NZ" }
+//    ShortCountry { "NZL" }
+}

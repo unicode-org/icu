@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ja_JP {
+    Version{ "1.0" }
+    CurrencyElements { 
+        "\uFFE5",
+        "JPY",
+        ".",
+    }
+//    LocaleString { "ja_JP" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0;-\u00A4#,##0",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "JPN" }
+    LocaleID:int { 0x0411 }
+}

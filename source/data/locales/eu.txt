@@ -1,0 +1,83 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+eu {
+    Version { "1.0" }
+    DayAbbreviations {
+        "ig",
+        "al",
+        "as",
+        "az",
+        "og",
+        "or",
+        "lr",
+    }
+    DayNames {
+        "igandea",
+        "astelehena",
+        "asteartea",
+        "asteazkena",
+        "osteguna",
+        "ostirala",
+        "larunbata",
+    }
+    MonthAbbreviations {
+        "urt",
+        "ots",
+        "mar",
+        "api",
+        "mai",
+        "eka",
+        "uzt",
+        "abu",
+        "ira",
+        "urr",
+        "aza",
+        "abe",
+    }
+    MonthNames {
+        "urtarrila",
+        "otsaila",
+        "martxoa",
+        "apirila",
+        "maiatza",
+        "ekaina",
+        "uztaila",
+        "abuztua",
+        "iraila",
+        "urria",
+        "azaroa",
+        "abendua",
+    }
+    NumberElements {
+        ",",
+        ".", // even if not used
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221e",
+        "\ufffd",
+    }
+    LocaleID:int { 0x2D }
+//    LocaleScript{  
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u00f1 \u00e7]" }
+
+    // /**************** Info Below is needed ****************/
+    // CollationElements{}
+    // Countries{}
+    // Eras{}
+    // Languages{}
+    // ShortLanguage { }
+    // localPatternChars{}
+    //
+}

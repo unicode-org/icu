@@ -1,0 +1,67 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+// Country names in de, de_AT, and de_CH are short names from the
+// list of names maintained by the German
+// Federal Permanent Committee for Geographic Names,
+// Sta"ndiger Ausschuss fu"r Geographische Namen (StAGN),
+// as published at its web site at
+// http://www.ifag.de/kartographie/Stagn/Staatennamen.htm
+// Date there: 1999-apr-19
+
+de_CH {
+    Version { "1.0" }
+    Countries {
+        BD { "Bangladesh" }
+        BW { "Botswana" }
+        BN { "Brunei" }
+        DJ { "Djibouti" }
+        CV { "Kapverden" }
+        MH { "Marshall-Inseln" }
+        RW { "Rwanda" }
+        SB { "Salomon-Inseln" }
+        ST { "Sao Tom\u00e9 und Principe" }
+        ZW { "Zimbabwe" }
+        GB { "Grossbritannien" }
+    }
+    CurrencyElements { 
+        "SFr.",
+        "CHF",
+        ".",
+    }
+    LocaleID:int { 0x0807 }
+//    LocaleString { "de_CH" }
+    NumberElements { 
+        ".",
+        "'",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4 #,##0.00;\u00A4-#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "CHE" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+}

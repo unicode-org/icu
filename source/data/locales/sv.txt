@@ -1,0 +1,298 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+sv {
+    Version{ "1.0" }
+    CollationElements {
+        Version { "1.0" }
+        Sequence { "& Z < \u00E6 , \u00C6 < a\u030A , A\u030A , aa , aA , A"
+        "a , AA< a\u0308 , A\u0308 < o\u0308 , O\u0308 ; u\u030B , U\u030B < o\u030B , O"
+        "\u030B ; \u00F8 , \u00D8 & V ; w , W& Y, u\u0308 , U\u0308" }
+    }
+    Countries { 
+        AE { "F\u00f6renade Arabemiraten" }
+        AL { "Albanien" }
+        AS { "Asien" }
+        AT { "\u00d6sterrike" }
+        AU { "Australien" }
+        BA { "Bosnien" }
+        BE { "Belgien" }
+        BG { "Bulgarien" }
+        BR { "Brasilien" }
+        BY { "Vitryssland" }
+        CA { "Kanada" }
+        CH { "Schweiz" }
+        CN { "Kina (folkrepubliken)" }
+        CZ { "Tjeckien" }
+        DE { "Tyskland" }
+        DK { "Danmark" }
+        DO { "Dominikanska republiken" }
+        DZ { "Algeriet" }
+        EE { "Estland" }
+        EG { "Egypten" }
+        ES { "Spanien" }
+        FR { "Frankrike" }
+        GB { "Storbritannien" }
+        GR { "Grekland" }
+        HR { "Kroatien" }
+        HU { "Ungern" }
+        ID { "Indonesien" }
+        IE { "Irland" }
+        IN { "Indien" }
+        IS { "Island" }
+        IT { "Italien" }
+        JO { "Jordanien" }
+        KR { "Korea" }
+        LA { "LatinAmerika" }
+        LB { "Libanon" }
+        LI { "Lichtenstein" }
+        LT { "Litauen" }
+        LU { "Luxemburg" }
+        LV { "Lettland" }
+        MA { "Marocko" }
+        MK { "Makedonien" }
+        MX { "Mexiko" }
+        NL { "Nederl\u00e4nderna" }
+        NO { "Norge" }
+        NZ { "Nya Zeeland" }
+        PL { "Polen" }
+        RO { "Rum\u00e4nien" }
+        RU { "Ryssland" }
+        SA { "Saudiarabien" }
+        SE { "Sverige" }
+        SI { "Slovenien" }
+        SK { "Slovakien" }
+        SP { "Serbien" }
+        SY { "Syrien" }
+        TN { "Tunisien" }
+        TR { "Turkiet" }
+        UA { "Ukraina" }
+//        US { "USA" }
+        YE { "Jemen" }
+        ZA { "Sydafrika" }
+    }
+    DateTimeElements:intvector { 
+        2,
+        4,
+    }
+    DateTimePatterns { 
+        "'kl 'H:mm z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "'den 'd MMMM yyyy",
+        "'den 'd MMMM yyyy",
+        "yyyy-MMM-dd",
+        "yyyy-MM-dd",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "s\u00F6",
+        "m\u00E5",
+        "ti",
+        "on",
+        "to",
+        "fr",
+        "l\u00F6",
+    }
+    DayNames { 
+        "s\u00F6ndag",
+        "m\u00E5ndag",
+        "tisdag",
+        "onsdag",
+        "torsdag",
+        "fredag",
+        "l\u00F6rdag",
+    }
+    Languages { 
+        ar { "arabiska" }
+        ba { "baskiska" }
+        be { "vitryska" }
+        bg { "bulgariska" }
+        ca { "katalanska" }
+        cs { "tjeckiska" }
+        da { "danska" }
+        de { "tyska" }
+        el { "grekiska" }
+        en { "engelska" }
+        es { "spanska" }
+        et { "estniska" }
+        fi { "finska" }
+        fr { "franska" }
+        he { "hebreiska" }
+        hr { "kroatiska" }
+        hu { "ungerska" }
+        it { "italienska" }
+        ja { "apanska" }
+        ko { "koreanska" }
+        lt { "litauiska" }
+        lv { "lettiska" }
+        mk { "makedonskt" }
+        nl { "nederl\u00e4ndskt" }
+        no { "norska" }
+        pl { "polska" }
+        pt { "portugisiskt" }
+        ro { "rum\u00e4nskt" }
+        ru { "ryska" }
+        sk { "slovakiska" }
+        sl { "slovenskt" }
+        sq { "albanska" }
+        sr { "serbiska" }
+        sv { "svenska" }
+        th { "thail\u00e4ndska" }
+        tr { "turkiska" }
+        uk { "ukrainska" }
+        zh { "kinesiska" }
+    }
+    LocaleID:int { 0x1d }
+//    LocaleString { "sv" }
+    MonthAbbreviations { 
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "maj",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "dec",
+    }
+    MonthNames { 
+        "januari",
+        "februari",
+        "mars",
+        "april",
+        "maj",
+        "juni",
+        "juli",
+        "augusti",
+        "september",
+        "oktober",
+        "november",
+        "december",
+    }
+    NumberElements { 
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+    Eras { 
+        "f.Kr.",
+        "e.Kr.",
+    }
+//    ShortLanguage { "swe" }
+    zoneStrings { 
+        {
+            "Europe/Stockholm",
+            "Central European Time",
+            "MET",
+            "Central European Time (DST)",
+            "MET",
+            "Stockholm",
+        }
+    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u00e4 \u00f6 \u00e5 \u00e1 \u00e9 \u00eb \u00fc]" }
+    
+    //------------------------------------------------------------
+    // Rule Based Number Format Support
+    //------------------------------------------------------------
+
+    // Spellout rules for Swedish.
+    // Thanks to Kent Karlsson for cleaning up these rules.
+    // (rapport inskickad till ICU 2001-11-03; ny version inskickad till Doug Felt 2001-11-07)
+
+    SpelloutRules {
+      "%year:\n"
+          "=%neutrum=;\n"
+          "1000>: <%neutrum<hundra[\u00ad>>];\n"
+          "10,000: =%neutrum=;\n"
+          // the same as default except we change the one's digit, wish there were a better way
+      "%neutrum:\n"
+            "-x: minus >>;\n"
+            "x.x: << komma >>;\n"
+            "noll; ett; tv\u00e5; tre; fyra; fem; sex; sju; \u00e5tta; nio;\n"
+            "tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;\n"
+            "20: tjugo[>>];\n"
+            "30: trettio[>>];\n"
+            "40: fyrtio[>>];\n"
+            "50: femtio[>>];\n"
+            "60: sextio[>>];\n"
+            "70: sjuttio[>>];\n"
+            "80: \u00e5ttio[>>];\n"
+            "90: nittio[>>];\n"
+            "100: <<hundra[\u00ad>>];\n"
+            "1000: ettusen[ >>];\n"
+            "2000: <%default<\u00adtusen[ >>];\n"
+            "1,000,000: en miljon[ >>];\n"
+            "2,000,000: <%default< miljoner[ >>];\n"
+            "1,000,000,000: en miljard[ >>];\n"
+            "2,000,000,000: <%default< miljarder[ >>];\n"
+            "1,000,000,000,000: en biljon[ >>];\n"
+            "2,000,000,000,000: <%default< biljoner[ >>];\n"
+            "1,000,000,000,000,000: en triljon[ >>];\n"
+            "2,000,000,000,000,000: <%default< triljoner[ >>];\n"
+            "1,000,000,000,000,000,000: =#,##0=;\n"
+      "%default:\n"
+            " -x: minus >>;\n"
+            "x.x: << komma >>;\n"
+            "noll; en; tv\u00e5; tre; fyra; fem; sex; sju; \u00e5tta; nio;\n"
+            "tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;\n"
+            "20: tjugo[>>];\n"
+            "30: trettio[>>];\n"
+            "40: fyrtio[>>];\n"
+            "50: femtio[>>];\n"
+            "60: sextio[>>];\n"
+            "70: sjuttio[>>];\n"
+            "80: \u00e5ttio[>>];\n"
+            "90: nittio[>>];\n"
+            "100: etthundra[\u00ad>>];\n"
+            "200: <<hundra[\u00ad>>];\n"
+            "1000: ettusen[ >>];\n"
+            "2000: <<\u00adtusen[ >>];\n"
+            "1,000,000: en miljon[ >>];\n"
+            "2,000,000: << miljoner[ >>];\n"
+            "1,000,000,000: en miljard[ >>];\n"
+            "2,000,000,000: << miljarder[ >>];\n"
+            "1,000,000,000,000: en biljon[ >>];\n"
+            "2,000,000,000,000: << biljoner[ >>];\n"
+            "1,000,000,000,000,000: en triljon[ >>];\n"
+            "2,000,000,000,000,000: << triljoner[ >>];\n"
+            "1,000,000,000,000,000,000: en triljard[ >>];\n"
+            "2,000,000,000,000,000,000: << triljarder[ >>];\n"
+            "1,000,000,000,000,000,000,000: =#,##0=;\n" 
+/* 
+ * Current implementation can't handle these magnitudes)
+            "1,000,000,000,000,000,000,000: en kvartiljon[ >>];\n"
+            "2,000,000,000,000,000,000,000: << kvartiljoner[ >>];\n"
+            "1,000,000,000,000,000,000,000,000: en kvartiljard[ >>];\n"
+            "2,000,000,000,000,000,000,000,000: << kvartiljarder[ >>];\n"
+            "1,000,000,000,000,000,000,000,000,000: en kvintiljon[ >>];\n"
+            "2,000,000,000,000,000,000,000,000,000: << kvintiljoner[ >>];\n"
+            "1,000,000,000,000,000,000,000,000,000,000: en kvintiljard[ >>];\n"
+            "2,000,000,000,000,000,000,000,000,000,000: << kvintiljarder[ >>];\n"
+            "1,000,000,000,000,000,000,000,000,000,000,000: en sextiljon[ >>];\n"
+            "2,000,000,000,000,000,000,000,000,000,000,000: << sextiljoner[ >>];\n"
+            "1,000,000,000,000,000,000,000,000,000,000,000,000: en sextiljard[ >>];\n"
+            "2,000,000,000,000,000,000,000,000,000,000,000,000: << sextiljarder[ >>];\n"
+            "1,000,000,000,000,000,000,000,000,000,000,000,000,000: =#,##0="
+*/
+    }
+}

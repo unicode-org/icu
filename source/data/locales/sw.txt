@@ -1,0 +1,96 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+//  Date        Name        Description
+//  10/23/2000  grhoten     Initial version (source http://www.yale.edu/swahili/)
+
+
+sw {
+    Version { "1.0" }
+
+//    Countries {   // This does not need to be overridden
+//        KE { "Kenya" }
+//        TZ { "Tanzania" }
+//    }
+    DateTimeElements:intvector { 
+        2,
+        1,
+    }
+    DayAbbreviations {  // The DayNames are correct, but DayAbbreviations are only guesses.
+        "Jpi",
+        "Jtt",
+        "Jnn",
+        "Jtn",
+        "Alh",
+        "Iju",
+        "Jmo",
+    }
+    DayNames { 
+        "Jumapili",
+        "Jumatatu",
+        "Jumanne",
+        "Jumatano",
+        "Alhamisi",
+        "Ijumaa",
+        "Jumamosi",
+    }
+    Eras { 
+        "KK",
+        "BK",
+    }
+    Languages { 
+        sw  { "Kiswahili" }
+    }
+    LocaleID:int { 0x0041 }
+//    LocaleString { "sw" }
+    MonthAbbreviations { 
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Mei",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Des",
+    }
+    MonthNames { 
+        "Januari",
+        "Februari",
+        "Machi",
+        "Aprili",
+        "Mei",
+        "Juni",
+        "Julai",
+        "Agosti",
+        "Septemba",
+        "Oktoba",
+        "Novemba",
+        "Desemba",
+    }
+//    ShortLanguage { "swa" }
+    zoneStrings { 
+        {
+            "Africa/Nairobi",
+            "Saa za Africa Mashariki",  // East African Time
+            "EAT",
+            "Saa za Africa Mashariki",
+            "EAT",
+            "Nairobi",
+        }
+    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+
+// /**************** Info Below is needed ****************/
+// NumberElements{}
+// AmPmMarkers{}
+// localPatternChars{}
+}
