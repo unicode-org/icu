@@ -120,7 +120,7 @@ UBool CollationElementIterator::operator==(
 
     result = result && (uprv_memcmp(this->m_data_->iteratordata_.string, 
                          that.m_data_->iteratordata_.string, 
-                         thislength * sizeof(UChar)) == 0);
+                         thislength * U_SIZEOF_UCHAR) == 0);
     result = result && (this->getOffset() == that.getOffset());
   
     return result;
@@ -168,11 +168,11 @@ void CollationElementIterator::setText(const UnicodeString& source,
   }
   m_data_->isWritable = TRUE;
   if (length > 0) {
-    string = (UChar *)uprv_malloc(sizeof(UChar) * length);
-    source.extract(0, length, string);
+    string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
+    u_memcpy(string, source.getBuffer(), length);
   }
   else {
-    string = (UChar *)uprv_malloc(sizeof(UChar));
+    string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
     *string = 0;
   }
   init_collIterate(m_data_->iteratordata_.coll, string, length, 
@@ -192,18 +192,18 @@ void CollationElementIterator::setText(CharacterIterator& source,
   UChar *buffer = NULL;
 
   if (length == 0) {
-    buffer = (UChar *)uprv_malloc(sizeof(UChar));
+    buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
     *buffer = 0;
   }
   else {
-      buffer = (UChar *)uprv_malloc(sizeof(UChar) * length);
+      buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
       /* 
       Using this constructor will prevent buffer from being removed when
       string gets removed
       */
       UnicodeString string;
       source.getText(string);
-      string.extract(0, length, buffer);
+      u_memcpy(buffer, string.getBuffer(), length);
   }
   
   if (m_data_->isWritable && m_data_->iteratordata_.string != NULL)
@@ -246,15 +246,15 @@ CollationElementIterator::CollationElementIterator(
   UChar *string = NULL;
   
   if (length > 0) {
-      string = (UChar *)uprv_malloc(sizeof(UChar) * length);
+      string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
       /* 
       Using this constructor will prevent buffer from being removed when
       string gets removed
       */
-      sourceText.extract(0, length, string);
+      u_memcpy(string, sourceText.getBuffer(), length);
   }
   else {
-      string = (UChar *)uprv_malloc(sizeof(UChar));
+      string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
       *string = 0;
   }
   m_data_ = ucol_openElements(order->ucollator, string, length, &status);
@@ -296,17 +296,18 @@ CollationElementIterator::CollationElementIterator(
   int32_t length = sourceText.getLength();
   UChar *buffer;
   if (length > 0) {
-      buffer = (UChar *)uprv_malloc(sizeof(UChar) * length);
+      buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
       /* 
       Using this constructor will prevent buffer from being removed when
       string gets removed
       */
       UnicodeString string(buffer, length, length);
       ((CharacterIterator &)sourceText).getText(string);
-      string.extract(0, length, buffer);
+      const UChar *temp = string.getBuffer();
+      u_memcpy(buffer, temp, length);
   }
   else {
-      buffer = (UChar *)uprv_malloc(sizeof(UChar));
+      buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
       *buffer = 0;
   }
   m_data_ = ucol_openElements(order->ucollator, buffer, length, &status);
@@ -345,9 +346,9 @@ const CollationElementIterator& CollationElementIterator::operator=(
     
       /* create a duplicate of string */
       if (length > 0) {
-          coliter->string = (UChar *)uprv_malloc(length * sizeof(UChar));
+          coliter->string = (UChar *)uprv_malloc(length * U_SIZEOF_UCHAR);
           uprv_memcpy(coliter->string, othercoliter->string,
-                      length * sizeof(UChar));
+                      length * U_SIZEOF_UCHAR);
       }
       else {
           coliter->string = NULL;
@@ -363,17 +364,17 @@ const CollationElementIterator& CollationElementIterator::operator=(
           if (wlength < coliter->writableBufSize) {
               uprv_memcpy(coliter->stackWritableBuffer, 
                         othercoliter->stackWritableBuffer, 
-                        othercoliter->writableBufSize * sizeof(UChar));
+                        othercoliter->writableBufSize * U_SIZEOF_UCHAR);
           }
           else {
               if (coliter->writableBuffer != coliter->stackWritableBuffer) {
                   delete coliter->writableBuffer;
               }
               coliter->writableBuffer = (UChar *)uprv_malloc(
-                                         wlength * sizeof(UChar));
+                                         wlength * U_SIZEOF_UCHAR);
               uprv_memcpy(coliter->writableBuffer, 
                           othercoliter->writableBuffer,
-                          wlength * sizeof(UChar));
+                          wlength * U_SIZEOF_UCHAR);
               coliter->writableBufSize = wlength;
           }
       }
