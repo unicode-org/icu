@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2003/02/05 20:47:48 $
- * $Revision: 1.120 $
+ * $Date: 2003/02/19 00:18:46 $
+ * $Revision: 1.121 $
  *
  *****************************************************************************************
  */
@@ -1461,6 +1461,8 @@ public class TransliteratorTest extends TestFmwk {
 
         // Test registration
         String[] IDS = { "Fieruwer", "Seoridf-Sweorie", "Oewoir-Oweri/Vsie" };
+        String[] FULL_IDS = { "Any-Fieruwer", "Seoridf-Sweorie", "Oewoir-Oweri/Vsie" };
+        String[] SOURCES = { null, "Seoridf", "Oewoir" };
         for (int i=0; i<3; ++i) {
             Transliterator.registerFactory(IDS[i], new TestFact(IDS[i]));
             try {
@@ -1484,6 +1486,36 @@ public class TransliteratorTest extends TestFmwk {
             } catch (IllegalArgumentException e) {
                 errln("FAIL: Registration/creation failed for ID " +
                       IDS[i]);
+            } finally {
+                Transliterator.unregister(IDS[i]);
+            }
+        }
+
+        // Make sure getAvailable API reflects removal
+        for (Enumeration e = Transliterator.getAvailableIDs();
+             e.hasMoreElements(); ) {
+            String id = (String) e.nextElement();
+            for (int i=0; i<3; ++i) {
+                if (id.equals(FULL_IDS[i])) {
+                    errln("FAIL: unregister(" + id + ") failed");
+                }
+            }
+        }
+        for (Enumeration e = Transliterator.getAvailableTargets("Any");
+             e.hasMoreElements(); ) {
+            String t = (String) e.nextElement();
+            if (t.equals(IDS[0])) {
+                errln("FAIL: unregister(Any-" + t + ") failed");
+            }
+        }
+        for (Enumeration e = Transliterator.getAvailableSources();
+             e.hasMoreElements(); ) {
+            String s = (String) e.nextElement();
+            for (int i=0; i<3; ++i) {
+                if (SOURCES[i] == null) continue;
+                if (s.equals(SOURCES[i])) {
+                    errln("FAIL: unregister(" + s + "-*) failed");
+                }
             }
         }
     }
@@ -2452,6 +2484,9 @@ public class TransliteratorTest extends TestFmwk {
             else if (id.equalsIgnoreCase("Upper"))  target = UCharacter.toUpperCase(Locale.US, source);
 
             expect(t, source, target);
+        }
+        for (int i = 0; i < registerRules.length; ++i) {
+            Transliterator.unregister(registerRules[i][0]);
         }
     }
 
