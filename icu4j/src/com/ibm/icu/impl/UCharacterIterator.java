@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/UCharacterIterator.java,v $ 
- * $Date: 2002/02/28 23:55:47 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/03/13 22:49:17 $ 
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -167,8 +167,9 @@ public final class UCharacterIterator implements CharacterIterator
     public char next()
     {
         if (m_index_ < m_length_ - 1) {
+        	char result = m_replaceable_.charAt(m_index_);
             m_index_ ++;
-            return m_replaceable_.charAt(m_index_);
+            return result;
         }
         return DONE;
     }
@@ -189,8 +190,8 @@ public final class UCharacterIterator implements CharacterIterator
 	public int nextCodepoint()
 	{
 		if (m_index_ < m_length_ - 1) {
+			int ch = m_replaceable_.charAt(m_index_);
 			m_index_ ++;
-			int ch = m_replaceable_.charAt(m_index_ - 1);
 			if (ch >= UnicodeProperty.LEAD_SURROGATE_MIN_VALUE &&
 			    ch <= UnicodeProperty.LEAD_SURROGATE_MAX_VALUE) {
 			    ch = m_replaceable_.charAt(m_index_);
@@ -237,7 +238,7 @@ public final class UCharacterIterator implements CharacterIterator
     {
         if (m_index_ > 0) {
             m_index_ --;
-            int ch = m_replaceable_.charAt(m_index_ + 1);
+            int ch = m_replaceable_.charAt(m_index_);
 			if (ch >= UnicodeProperty.TRAIL_SURROGATE_MIN_VALUE &&
 			    ch <= UnicodeProperty.TRAIL_SURROGATE_MAX_VALUE) {
 			    ch = m_replaceable_.charAt(m_index_);
