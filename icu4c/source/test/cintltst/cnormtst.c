@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -32,7 +32,7 @@ void addNormTest(TestNode** root) {
 #include "unicode/unorm.h"
 #include "cnormtst.h"
 
-#define ARRAY_LENGTH(array) (sizeof (array) / sizeof (*array))
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof ((array)[0]))
 
 static void
 TestAPI(void);
@@ -50,6 +50,9 @@ static void TestIsNormalized(void);
 
 static void
 TestFCNFKCClosure(void);
+
+static void
+TestQuickCheckPerCP(void);
 
 const static char* canonTests[][3] = {
     /* Input*/                    /*Decomposed*/                /*Composed*/
@@ -121,6 +124,7 @@ void addNormTest(TestNode** root)
     addTest(root, &TestCompatDecompCompose, "tscoll/cnormtst/CompatDecompCompose");
     addTest(root, &TestNull, "tscoll/cnormtst/TestNull");
     addTest(root, &TestQuickCheck, "tscoll/cnormtst/TestQuickCheck");
+    addTest(root, &TestQuickCheckPerCP, "tscoll/cnormtst/TestQuickCheckPerCP");
     addTest(root, &TestIsNormalized, "tscoll/cnormtst/TestIsNormalized");
     addTest(root, &TestCheckFCD, "tscoll/cnormtst/TestCheckFCD");
     addTest(root, &TestNormCoverage, "tscoll/cnormtst/TestNormCoverage");
@@ -137,7 +141,7 @@ void TestDecomp()
     status = U_ZERO_ERROR;
     resLen=0;
     log_verbose("Testing unorm_normalize with  Decomp canonical\n");
-    for(x=0; x < ARRAY_LENGTH(canonTests); x++)
+    for(x=0; x < LENGTHOF(canonTests); x++)
     {
         source=CharsToUChars(canonTests[x][0]);
         neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFD, 0, NULL, 0, &status); 
@@ -166,7 +170,7 @@ void TestCompatDecomp()
     status = U_ZERO_ERROR;
     resLen=0;
     log_verbose("Testing unorm_normalize with  Decomp compat\n");
-    for(x=0; x < ARRAY_LENGTH(compatTests); x++)
+    for(x=0; x < LENGTHOF(compatTests); x++)
     {
         source=CharsToUChars(compatTests[x][0]);
         neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFKD, 0, NULL, 0, &status); 
@@ -195,7 +199,7 @@ void TestCanonDecompCompose()
     status = U_ZERO_ERROR;
     resLen=0;
     log_verbose("Testing unorm_normalize with Decomp can compose compat\n");
-    for(x=0; x < ARRAY_LENGTH(canonTests); x++)
+    for(x=0; x < LENGTHOF(canonTests); x++)
     {
         source=CharsToUChars(canonTests[x][0]);
         neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFC, 0, NULL, 0, &status); 
@@ -224,7 +228,7 @@ void TestCompatDecompCompose()
     status = U_ZERO_ERROR;
     resLen=0;
     log_verbose("Testing unorm_normalize with compat decomp compose can\n");
-    for(x=0; x < ARRAY_LENGTH(compatTests); x++)
+    for(x=0; x < LENGTHOF(compatTests); x++)
     {
         source=CharsToUChars(compatTests[x][0]);
         neededLen= unorm_normalize(source, u_strlen(source), UNORM_NFKC, 0, NULL, 0, &status); 
@@ -503,7 +507,7 @@ static void TestQuickCheckStringResult()
   UChar *c = NULL;
   UErrorCode error = U_ZERO_ERROR;
 
-  for (count = 0; count < ARRAY_LENGTH(canonTests); count ++)
+  for (count = 0; count < LENGTHOF(canonTests); count ++)
   {
     d = CharsToUChars(canonTests[count][1]);
     c = CharsToUChars(canonTests[count][2]);
@@ -525,7 +529,7 @@ static void TestQuickCheckStringResult()
     free(c);
   }
 
-  for (count = 0; count < ARRAY_LENGTH(compatTests); count ++)
+  for (count = 0; count < LENGTHOF(compatTests); count ++)
   {
     d = CharsToUChars(compatTests[count][1]);
     c = CharsToUChars(compatTests[count][2]);
@@ -607,7 +611,7 @@ static void TestIsNormalized(void) {
     }
 
     /* specific cases */
-    for(i=0; i<ARRAY_LENGTH(notNFC); ++i) {
+    for(i=0; i<LENGTHOF(notNFC); ++i) {
         errorCode=U_ZERO_ERROR;
         if(unorm_isNormalized(notNFC[i], -1, UNORM_NFC, &errorCode) || U_FAILURE(errorCode)) {
             log_err("error: isNormalized(notNFC[%d], NFC) is wrong (%s)\n", i, u_errorName(errorCode));
@@ -617,7 +621,7 @@ static void TestIsNormalized(void) {
             log_err("error: isNormalized(notNFC[%d], NFKC) is wrong (%s)\n", i, u_errorName(errorCode));
         }
     }
-    for(i=0; i<ARRAY_LENGTH(notNFKC); ++i) {
+    for(i=0; i<LENGTHOF(notNFKC); ++i) {
         errorCode=U_ZERO_ERROR;
         if(unorm_isNormalized(notNFKC[i], -1, UNORM_NFKC, &errorCode) || U_FAILURE(errorCode)) {
             log_err("error: isNormalized(notNFKC[%d], NFKC) is wrong (%s)\n", i, u_errorName(errorCode));
@@ -1360,9 +1364,9 @@ TestFCNFKCClosure(void) {
     UErrorCode errorCode;
     int32_t i, length;
 
-    for(i=0; i<ARRAY_LENGTH(tests); ++i) {
+    for(i=0; i<LENGTHOF(tests); ++i) {
         errorCode=U_ZERO_ERROR;
-        length=u_getFC_NFKC_Closure(tests[i].c, buffer, ARRAY_LENGTH(buffer), &errorCode);
+        length=u_getFC_NFKC_Closure(tests[i].c, buffer, LENGTHOF(buffer), &errorCode);
         if(U_FAILURE(errorCode) || length!=u_strlen(buffer) || 0!=u_strcmp(tests[i].s, buffer)) {
             log_err("u_getFC_NFKC_Closure(U+%04lx) is wrong (%s)\n", tests[i].c, u_errorName(errorCode));
         }
@@ -1370,14 +1374,70 @@ TestFCNFKCClosure(void) {
 
     /* error handling */
     errorCode=U_ZERO_ERROR;
-    length=u_getFC_NFKC_Closure(0x5c, NULL, ARRAY_LENGTH(buffer), &errorCode);
+    length=u_getFC_NFKC_Closure(0x5c, NULL, LENGTHOF(buffer), &errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("u_getFC_NFKC_Closure(dest=NULL) is wrong (%s)\n", u_errorName(errorCode));
     }
 
-    length=u_getFC_NFKC_Closure(0x5c, buffer, ARRAY_LENGTH(buffer), &errorCode);
+    length=u_getFC_NFKC_Closure(0x5c, buffer, LENGTHOF(buffer), &errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("u_getFC_NFKC_Closure(U_FAILURE) is wrong (%s)\n", u_errorName(errorCode));
+    }
+}
+
+static void
+TestQuickCheckPerCP() {
+    UErrorCode errorCode;
+    UChar32 c;
+    UChar s[U16_MAX_LENGTH];
+    int32_t length;
+    UNormalizationCheckResult qc1, qc2;
+
+    if(
+        u_getIntPropertyMaxValue(UCHAR_NFD_QUICK_CHECK)!=(int32_t)UNORM_YES ||
+        u_getIntPropertyMaxValue(UCHAR_NFKD_QUICK_CHECK)!=(int32_t)UNORM_YES ||
+        u_getIntPropertyMaxValue(UCHAR_NFC_QUICK_CHECK)!=(int32_t)UNORM_MAYBE ||
+        u_getIntPropertyMaxValue(UCHAR_NFKC_QUICK_CHECK)!=(int32_t)UNORM_MAYBE
+    ) {
+        log_err("wrong result from one of the u_getIntPropertyMaxValue(UCHAR_NF*_QUICK_CHECK)\n");
+    }
+
+    /*
+     * compare the quick check property values for some code points
+     * to the quick check results for checking same-code point strings
+     */
+    errorCode=U_ZERO_ERROR;
+    c=0;
+    while(c<0x110000) {
+        length=0;
+        U16_APPEND_UNSAFE(s, length, c);
+
+        qc1=u_getIntPropertyValue(c, UCHAR_NFC_QUICK_CHECK);
+        qc2=unorm_quickCheck(s, length, UNORM_NFC, &errorCode);
+        if(qc1!=qc2) {
+            log_err("u_getIntPropertyValue(NFC)=%d != %d=unorm_quickCheck(NFC) for U+%04x\n", qc1, qc2, c);
+        }
+
+        qc1=u_getIntPropertyValue(c, UCHAR_NFD_QUICK_CHECK);
+        qc2=unorm_quickCheck(s, length, UNORM_NFD, &errorCode);
+        if(qc1!=qc2) {
+            log_err("u_getIntPropertyValue(NFD)=%d != %d=unorm_quickCheck(NFD) for U+%04x\n", qc1, qc2, c);
+        }
+
+        qc1=u_getIntPropertyValue(c, UCHAR_NFKC_QUICK_CHECK);
+        qc2=unorm_quickCheck(s, length, UNORM_NFKC, &errorCode);
+        if(qc1!=qc2) {
+            log_err("u_getIntPropertyValue(NFKC)=%d != %d=unorm_quickCheck(NFKC) for U+%04x\n", qc1, qc2, c);
+        }
+
+        qc1=u_getIntPropertyValue(c, UCHAR_NFKD_QUICK_CHECK);
+        qc2=unorm_quickCheck(s, length, UNORM_NFKD, &errorCode);
+        if(qc1!=qc2) {
+            log_err("u_getIntPropertyValue(NFKD)=%d != %d=unorm_quickCheck(NFKD) for U+%04x\n", qc1, qc2, c);
+        }
+
+        /* skip some code points */
+        c=(20*c)/19+1;
     }
 }
 

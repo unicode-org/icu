@@ -339,6 +339,18 @@ typedef enum UProperty {
     /** Enumerated property Hangul_Syllable_Type, new in Unicode 4.
         Returns UHangulSyllableType values. @draft ICU 2.6 */
     UCHAR_HANGUL_SYLLABLE_TYPE,
+    /** Enumerated property NFD_Quick_Check.
+        Returns UNormalizationCheckResult values. @draft ICU 3.0 */
+    UCHAR_NFD_QUICK_CHECK,
+    /** Enumerated property NFKD_Quick_Check.
+        Returns UNormalizationCheckResult values. @draft ICU 3.0 */
+    UCHAR_NFKD_QUICK_CHECK,
+    /** Enumerated property NFC_Quick_Check.
+        Returns UNormalizationCheckResult values. @draft ICU 3.0 */
+    UCHAR_NFC_QUICK_CHECK,
+    /** Enumerated property NFKC_Quick_Check.
+        Returns UNormalizationCheckResult values. @draft ICU 3.0 */
+    UCHAR_NFKC_QUICK_CHECK,
     /** One more than the last constant for enumerated/integer Unicode properties. @stable ICU 2.2 */
     UCHAR_INT_LIMIT,
 

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2003, International Business Machines
+*   Copyright (C) 2001-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -388,6 +388,13 @@ U_CAPI int32_t U_EXPORT2
 unorm_swap(const UDataSwapper *ds,
            const void *inData, int32_t length, void *outData,
            UErrorCode *pErrorCode);
+
+/**
+ * Get the NF*_QC property for a code point, for u_getIntPropertyValue().
+ * @internal
+ */
+U_CAPI UNormalizationCheckResult U_EXPORT2
+unorm_getQuickCheck(UChar32 c, UNormalizationMode mode);
 
 /**
  * Description of the format of unorm.dat version 2.2.
