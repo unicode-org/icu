@@ -77,7 +77,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.13 $ 8/25/98
+ * @version            $Revision: 1.14 $ 8/25/98
  * @author             Helena Shih
  */
 /*====================================*/
@@ -124,6 +124,9 @@ U_CAPI CompactIntArray* U_EXPORT2 ucmp32_openAdopt(uint16_t *indexArray,
                           int32_t *newValues,
                           int32_t count);
 
+U_CAPI CompactIntArray* U_EXPORT2 ucmp32_openAlias(uint16_t *indexArray,
+                          int32_t *newValues,
+                          int32_t count);
  /**
   * Initialize a CompactIntArray from a pre-computed index and values array. The values
   * will be adopted by the CompactIntArray. No memory is allocated. Note: for speed,
@@ -136,6 +139,11 @@ U_CAPI CompactIntArray* U_EXPORT2 ucmp32_openAdopt(uint16_t *indexArray,
   * @see compact
   */
 U_CAPI CompactIntArray* U_EXPORT2 ucmp32_initAdopt(CompactIntArray *this_obj,
+                          uint16_t *indexArray,
+                          int32_t *newValues,
+                          int32_t count);
+
+U_CAPI CompactIntArray* U_EXPORT2 ucmp32_initAlias(CompactIntArray *this_obj,
                           uint16_t *indexArray,
                           int32_t *newValues,
                           int32_t count);

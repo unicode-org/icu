@@ -271,7 +271,20 @@ CompactIntArray* ucmp32_openAdopt(uint16_t *indexArray,
 {
   CompactIntArray* this_obj = (CompactIntArray*) uprv_malloc(sizeof(CompactIntArray));
 
-  return ucmp32_initAdopt(this_obj, indexArray, newValues, count);
+  ucmp32_initAdopt(this_obj, indexArray, newValues, count);
+  this_obj->fIAmOwned = FALSE;
+  return this_obj;
+}
+
+CompactIntArray* ucmp32_openAlias(uint16_t *indexArray,
+                  int32_t *newValues,
+                  int32_t count)
+{
+  CompactIntArray* this_obj = (CompactIntArray*) uprv_malloc(sizeof(CompactIntArray));
+
+  ucmp32_initAlias(this_obj, indexArray, newValues, count);
+  this_obj->fIAmOwned = FALSE;
+  return this_obj;
 }
 
 /*=======================================================*/
@@ -290,12 +303,31 @@ CompactIntArray* ucmp32_initAdopt(CompactIntArray* this_obj,
     this_obj->fIndex = indexArray;
     this_obj->fCompact = (UBool)((count < UCMP32_kUnicodeCount) ? TRUE : FALSE);
     this_obj->fAlias = FALSE;
-    this_obj->fIAmOwned = FALSE;
+    this_obj->fIAmOwned = TRUE;
   }
 
   return this_obj;
 }
 
+CompactIntArray* ucmp32_initAlias(CompactIntArray* this_obj,
+                                  uint16_t *indexArray,
+                                  int32_t *newValues,
+                                  int32_t  count)
+{
+  if (this_obj) {
+    this_obj->fCount = count; 
+    this_obj->fBogus = FALSE;
+    this_obj->fStructSize = sizeof(CompactIntArray);
+
+    this_obj->fArray = newValues;
+    this_obj->fIndex = indexArray;
+    this_obj->fCompact = (UBool)((count < UCMP32_kUnicodeCount) ? TRUE : FALSE);
+    this_obj->fAlias = TRUE;
+    this_obj->fIAmOwned = TRUE;
+  }
+
+  return this_obj;
+}
 /*=======================================================*/
 
 void ucmp32_close(CompactIntArray* this_obj) 
