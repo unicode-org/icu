@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2003/05/15 20:54:40 $ 
- * $Revision: 1.26 $
+ * $Date: 2003/05/23 19:06:28 $ 
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
@@ -511,10 +511,34 @@ public abstract class NumberFormat extends Format{
      * @draft ICU 2.6
      */
     public static abstract class NumberFormatFactory {
+        /**
+         * Value passed to format requesting a default number format.
+         * @draft ICU 2.6
+         */
         public static final int FORMAT_NUMBER = NUMBERSTYLE;
+
+        /**
+         * Value passed to format requesting a currency format.
+         * @draft ICU 2.6
+         */
         public static final int FORMAT_CURRENCY = CURRENCYSTYLE;
+
+        /**
+         * Value passed to format requesting a percent format.
+         * @draft ICU 2.6
+         */
         public static final int FORMAT_PERCENT = PERCENTSTYLE;
+
+        /**
+         * Value passed to format requesting a scientific format.
+         * @draft ICU 2.6
+         */
         public static final int FORMAT_SCIENTIFIC = SCIENTIFICSTYLE;
+
+        /**
+         * Value passed to format requesting an integer format.
+         * @draft ICU 2.6
+         */
         public static final int FORMAT_INTEGER = INTEGERSTYLE;
 
         /**
@@ -548,6 +572,12 @@ public abstract class NumberFormat extends Format{
          * @draft ICU 2.6
          */
         public abstract NumberFormat createFormat(Locale loc, int formatType);
+
+        /**
+         * @draft ICU 2.6
+         */
+        protected NumberFormatFactory() {
+        }
     }
 
     /**
@@ -558,19 +588,31 @@ public abstract class NumberFormat extends Format{
         final Set localeNames;
         final boolean visible;
 
+        /**
+         * @draft ICU 2.6
+         */
         public SimpleNumberFormatFactory(Locale locale) {
             this(locale, true);
         }
         
+        /**
+         * @draft ICU 2.6
+         */
         public SimpleNumberFormatFactory(Locale locale, boolean visible) {
             localeNames = Collections.singleton(LocaleUtility.canonicalLocaleString(locale));
             this.visible = visible;
         }
 
+        /**
+         * @draft ICU 2.6
+         */
         public final boolean visible() {
             return visible;
         }
 
+        /**
+         * @draft ICU 2.6
+         */
         public final Set getSupportedLocaleNames() {
             return localeNames;
         }
@@ -1176,4 +1218,11 @@ public abstract class NumberFormat extends Format{
     // Removed "implements Cloneable" clause.  Needs to update serialization
     // ID for backward compatibility.
     static final long serialVersionUID = -2308460125733713944L;
+
+    /**
+     * Empty constructor.
+     * @draft ICU 2.6
+     */
+    protected NumberFormat() {
+    }
 }

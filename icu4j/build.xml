@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/05/16 19:44:21 $
-* $Revision: 1.68 $
+* $Date: 2003/05/23 19:05:59 $
+* $Revision: 1.69 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -17,7 +17,7 @@
 <project name="ICU4J" default="core" basedir=".">
 
     <!-- ### begin clover setup ### -->
-    <property name="icu4j.tempdir" value="tmp"/>
+    <property name="icu4j.tempdir" value="c:/tmp"/>
     <property name="clover.initstring" value="${icu4j.tempdir}/icu4j.db"/>
     <path id="clover.classpath">
     <!-- ***** you will need to change the paths below to point
@@ -306,7 +306,7 @@
                  classpath="${build.dir}">
             <doclet name="com.ibm.icu.dev.tool.docs.CheckTags"
                     path="${build.dir}">
-                <param name="-brief"/>
+<!--                <param name="-brief"/> -->
             </doclet>
         </javadoc>
     </target>

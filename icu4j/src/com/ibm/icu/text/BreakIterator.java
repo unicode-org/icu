@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $
- * $Date: 2003/05/15 20:54:40 $
- * $Revision: 1.19 $
+ * $Date: 2003/05/23 19:06:28 $
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
@@ -602,6 +602,7 @@ public abstract class BreakIterator implements Cloneable
      * Returns a list of locales for which BreakIterators can be used.
      * @return An array of Locales.  All of the locales in the array can
      * be used when creating a BreakIterator.
+     * @draft ICU 2.6
      */
     public static synchronized Locale[] getAvailableLocales()
     {
