@@ -46,4 +46,9 @@
      **/
     static void InitStrings( void );
 
+    /**
+     * Regression test for ICU4C Jitterbug 904
+     */
+    static void TestJ904(void);
+
 #endif
