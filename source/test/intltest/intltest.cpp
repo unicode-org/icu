@@ -32,6 +32,9 @@
 #include "Files.h"
 #endif
 
+/* ### TODO: remove when the new normalization implementation is finished */
+#include "unormimp.h"
+
 static char* _testDirectory=NULL;
 
 // Static list of errors found
@@ -915,6 +918,13 @@ main(int argc, char* argv[])
     UBool quick = TRUE;
     UBool name = FALSE;
     UBool leaks = FALSE;
+
+    /* ### TODO: remove when the new normalization implementation is finished */
+    if(argc>1 && argv[1][0]=='N') {
+        unorm_setNewImplementation((UBool)(argv[1][1]=='+'));
+        ++argv;
+        --argc;
+    }
 
     for (int i = 1; i < argc; ++i) {
         if (argv[i][0] == '-') {
