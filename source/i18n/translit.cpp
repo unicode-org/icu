@@ -768,6 +768,7 @@ void Transliterator::registerFactory(const UnicodeString& id,
     if (!cacheInitialized) {
         initializeCache();
     }
+    Mutex lock(&cacheMutex);
     _registerFactory(id, factory, status);
 }
 
@@ -780,7 +781,6 @@ void Transliterator::_registerFactory(const UnicodeString& id,
         return;
     }
 
-    Mutex lock(&cacheMutex);
     CacheEntry* entry = (CacheEntry*) cache->get(id);
     if (entry == 0) {
         cacheIDs.addElement((void*) new UnicodeString(id));
