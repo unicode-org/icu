@@ -4,7 +4,7 @@
 * and others.  All Rights Reserved.
 *****************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/anytrans.cpp,v $ 
-* $Revision: 1.4 $
+* $Revision: 1.5 $
 *****************************************************************
 * Date        Name        Description
 * 06/06/2002  aliu        Creation.
@@ -32,7 +32,7 @@ U_CDECL_BEGIN
 /**
  * Deleter function for Transliterator*.
  */
-static void
+static void U_CALLCONV
 _deleteTransliterator(void *obj) {
     delete (Transliterator*) obj;    
 }
