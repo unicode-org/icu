@@ -16,9 +16,11 @@
 // -L            Display all available transliterators
 // If no file is given, uconv tries to read from stdin
 // 
-// To compile: c++ -o uconv -I${ICUHOME}/include -Wall -g uconv.cpp -L${ICUHOME}/lib -licu-uc -licu-i18n
+// To compile: c++ -o uconv -I${ICUHOME}/include -Wall -g uconv.cpp -L${ICUHOME}/lib -licuuc -licui18n
 //
 // Original contributor was Jonas Utterström <jonas.utterstrom@vittran.norrnod.se> in 1999
+// Converted to the C conversion API by Yves Arrouye <yves@realnames.com>. 
+//
 // Permission is granted to use, copy, modify, and distribute this software
 //
 
@@ -29,8 +31,8 @@
 
 #include "cmemory.h"
 
-// This is the UnicodeConverter headerfile
-#include "unicode/convert.h"
+// This is the UConverter headerfile
+#include "unicode/ucnv.h"
 
 // This is the UnicodeString headerfile
 #include "unicode/unistr.h"
@@ -198,8 +200,8 @@ static UBool convertFile(const char* fromcpage,
                  FILE* outfile)
 {
   UBool ret = TRUE;
-    UnicodeConverter* convfrom = 0;
-    UnicodeConverter* convto = 0;
+    UConverter* convfrom = 0;
+    UConverter* convto = 0;
     UErrorCode err = U_ZERO_ERROR;
     UBool  flush;
     const char* cbuffiter;
@@ -228,7 +230,7 @@ static UBool convertFile(const char* fromcpage,
 
     // Create codepage converter. If the codepage or its aliases weren't
     // available, it returns NULL and a failure code
-    convfrom = new UnicodeConverter(fromcpage, err);
+    convfrom = ucnv_open(fromcpage, &err);
     if (U_FAILURE(err))
     {
       UnicodeString str(fromcpage,"");
@@ -237,7 +239,7 @@ static UBool convertFile(const char* fromcpage,
       goto error_exit;
     }
 
-    convto = new UnicodeConverter(tocpage, err);
+    convto = ucnv_open(tocpage, &err);
 
     if (U_FAILURE(err))
     {
@@ -250,7 +252,7 @@ static UBool convertFile(const char* fromcpage,
     // To ensure that the buffer always is of enough size, we
     // must take the worst case scenario, that is the character in the codepage
     // that uses the most bytes and multiply it against the buffsize
-    totbuffsize = buffsize*convto->getMaxBytesPerChar();
+    totbuffsize = buffsize * ucnv_getMaxCharSize(convto);
     buff = new char[totbuffsize];
     unibuff = new UChar[buffsize];
         
@@ -275,9 +277,8 @@ static UBool convertFile(const char* fromcpage,
         // on hold also will be written
         uniiter = unibuff;
         cbuffiter = buff;
-        flush = rd!=readsize;        
-        convfrom->toUnicode(uniiter, uniiter+buffsize, cbuffiter, cbuffiter+rd, 
-                            NULL, flush, err);
+        flush = rd!=readsize;
+        ucnv_toUnicode(convfrom, &uniiter, uniiter + buffsize, &cbuffiter, cbuffiter + rd, 0, flush, &err);
             
         if (U_FAILURE(err))
         {
@@ -313,9 +314,7 @@ static UBool convertFile(const char* fromcpage,
           }
 #endif
 
-        convto->fromUnicode(buffiter, buffiter+totbuffsize, 
-                           cuniiter, cuniiter+(size_t)(uniiter-unibuff),
-                           NULL, flush, err);
+        ucnv_fromUnicode(convto, &buffiter, buffiter + totbuffsize, &cuniiter, cuniiter + (size_t) (uniiter - unibuff), 0, flush, &err);
             
         if (U_FAILURE(err))
         {
@@ -346,8 +345,8 @@ static UBool convertFile(const char* fromcpage,
   error_exit:
     ret = TRUE;
   normal_exit:
-    if (convfrom) delete convfrom;
-    if (convto) delete convto;
+    if (convfrom) ucnv_close(convfrom);
+    if (convto) ucnv_close(convto);
 
 #ifdef USE_TRANSLIT
     if ( t ) delete t;
