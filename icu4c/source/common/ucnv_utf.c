@@ -792,7 +792,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
         }
 
 CALL_ERROR_FUNCTION:
-        extraBytesToWrite = args->source - sourceInitial;
+        extraBytesToWrite = (uint16_t)(args->source - sourceInitial);
         args->converter->invalidCharLength = (uint8_t)extraBytesToWrite;
         uprv_memcpy(args->converter->invalidCharBuffer, sourceInitial, extraBytesToWrite);
 
@@ -2656,33 +2656,33 @@ unicodeMode:
                     case 3:
                     case 4:
                     case 6:
-                        bits=(bits<<6)|base64Value;
+                        bits=(uint16_t)((bits<<6)|base64Value);
                         ++base64Counter;
                         break;
                     case 2:
-                        *target++=(bits<<4)|(base64Value>>2);
+                        *target++=(UChar)((bits<<4)|(base64Value>>2));
                         if(offsets!=NULL) {
                             *offsets++=sourceIndex;
                             sourceIndex=nextSourceIndex-1;
                         }
                         bytes[0]=b; /* keep this byte in case an error occurs */
                         byteIndex=1;
-                        bits=base64Value&3;
+                        bits=(uint16_t)(base64Value&3);
                         base64Counter=3;
                         break;
                     case 5:
-                        *target++=(bits<<2)|(base64Value>>4);
+                        *target++=(UChar)((bits<<2)|(base64Value>>4));
                         if(offsets!=NULL) {
                             *offsets++=sourceIndex;
                             sourceIndex=nextSourceIndex-1;
                         }
                         bytes[0]=b; /* keep this byte in case an error occurs */
                         byteIndex=1;
-                        bits=base64Value&15;
+                        bits=(uint16_t)(base64Value&15);
                         base64Counter=6;
                         break;
                     case 7:
-                        *target++=(bits<<6)|base64Value;
+                        *target++=(UChar)((bits<<6)|base64Value);
                         if(offsets!=NULL) {
                             *offsets++=sourceIndex;
                             sourceIndex=nextSourceIndex;
