@@ -783,64 +783,6 @@ GregorianCalendar::getEpochDay(UErrorCode& status)
 }
 
 // -------------------------------------
-void GregorianCalendar::calculateFromYear_Woy(void) {
-    UErrorCode errorCode=U_ZERO_ERROR;
-
-    // We need to get January 1st of year in question
-    Calendar *calt = new GregorianCalendar(errorCode);
-    calt->set(internalGet(Calendar::YEAR_WOY), Calendar::JANUARY, 1);
-    int32_t day1Jan = calt->get(Calendar::DAY_OF_WEEK, errorCode);
-    delete (calt);
-
-    // Get data for calculation
-    int32_t dow = internalGet(Calendar::DOW_LOCAL);
-    int32_t woy = internalGet(Calendar::WEEK_OF_YEAR);
-    int32_t year = internalGet(Calendar::YEAR_WOY);
-
-    // This is calculated day of year
-    int32_t doy = ((woy-1)*7+dow-day1Jan+getFirstDayOfWeek());
-
-/*
-    // Unsuccesful attempt to solve cutover year
-    if (year==fGregorianCutoverYear) {
-        if (doy>=355) {
-            year++;
-            doy -= 355+7;
-        } else if (doy>=298) {
-                doy +=20;
-        }
-    }
-*/
-
-    if (day1Jan-getFirstDayOfWeek()<getMinimalDaysInFirstWeek()) {
-        // There is a possibility that we're in the last year
-        if(dow<day1Jan-1 && woy == 1 && doy<=0) {
-            // we're still in the last year
-            doy += yearLength(year-1);
-            // substract a year to get real year!
-            year--;
-            set(DAY_OF_YEAR,doy);
-            set(YEAR, year);
-            return;
-        } else {
-        }
-    } else {
-        doy += 7;
-    }
-
-    // This is taking us to the next year!
-    if(doy>yearLength(year)) {
-        doy -= yearLength(year);
-        year ++;
-        // add a year to get real year!
-    } 
-
-    // set calculated values
-    set(DAY_OF_YEAR,doy);
-    set(YEAR, year);
-    return;
-}
-// -------------------------------------
 
 void
 GregorianCalendar::computeTime(UErrorCode& status)
@@ -853,18 +795,16 @@ GregorianCalendar::computeTime(UErrorCode& status)
         return;
     }
 
-    // If the only available stuff is localized day of week, week of year and adjusted year
-    // we'll calculate the rest from there
-    if (fStamp[YEAR] == kUnset && fStamp[YEAR_WOY] != kUnset) {
-        calculateFromYear_Woy();
-    }
-
     // This function takes advantage of the fact that unset fields in
     // the time field list have a value of zero.
 
-    // The year defaults to the epoch start.
-    int32_t year = (fStamp[YEAR] != kUnset) ? internalGet(YEAR) : kEpochYear;
-
+    // The year defaults to the calculated year_woy or the epoch start.
+    int32_t year = year = (fStamp[YEAR] > fStamp[YEAR_WOY]) ? internalGet(YEAR) : 
+        ((fStamp[YEAR_WOY] != kUnset) ? internalGet(YEAR_WOY) : kEpochYear);
+/*
+    int32_t year = year = (fStamp[YEAR] != kUnset) ? internalGet(YEAR) : 
+        ((fStamp[YEAR_WOY] != kUnset) ? internalGet(YEAR_WOY) : kEpochYear);
+*/
     int32_t era = AD;
     if (fStamp[ERA] != kUnset) {
         era = internalGet(ERA);
@@ -1036,7 +976,8 @@ GregorianCalendar::computeJulianDay(bool_t isGregorian, int32_t year)
     //   MONTH* + WEEK_OF_MONTH* + DAY_OF_WEEK
     //   MONTH* + DAY_OF_WEEK_IN_MONTH* + DAY_OF_WEEK
     //   DAY_OF_YEAR*
-    //   WEEK_OF_YEAR* + DAY_OF_WEEK
+    //   WEEK_OF_YEAR* + DAY_OF_WEEK*
+    //   WEEK_OF_YEAR* + DOW_LOCAL
     // We look for the most recent of the fields marked thus*.  If other
     // fields are missing, we use their default values, which are those of
     // the epoch start, or in the case of DAY_OF_WEEK, the first day in
@@ -1185,9 +1126,17 @@ GregorianCalendar::computeJulianDay(bool_t isGregorian, int32_t year)
             // of the first day of the year.
 
             // First ignore the minimal days in first week.
+            if(fStamp[DOW_LOCAL]>fStamp[DAY_OF_WEEK]) {
+                date = internalGet(DOW_LOCAL) - fdy ; 
+            } else {
+                date = 1 - fdy + ((fStamp[DAY_OF_WEEK] != kUnset) ?
+                                  (internalGet(DAY_OF_WEEK) - getFirstDayOfWeek()) : 0);
+            }
+
+/*
             date = 1 - fdy + ((fStamp[DAY_OF_WEEK] != kUnset) ?
                               (internalGet(DAY_OF_WEEK) - getFirstDayOfWeek()) : 0);
-
+*/
             // Adjust for minimal days in first week.
             if ((7 - fdy) < getMinimalDaysInFirstWeek()) 
                 date += 7;
@@ -1295,19 +1244,7 @@ GregorianCalendar::add(EDateFields field, int32_t amount, UErrorCode& status)
     if (amount == 0) 
         return;   // Do nothing!
     complete(status);
-
-    if (field == YEAR_WOY) {
-        computeTime(status);
-        add(YEAR, amount, status);
-        return;
-    }
-
-    if (field == DOW_LOCAL) {
-        computeTime(status);
-        add(DAY_OF_WEEK, amount, status);
-        return;
-    }
-
+/*
     if (field == YEAR) {
         int32_t year = internalGet(YEAR);
         if (internalGetEra() == AD) {
@@ -1326,6 +1263,29 @@ GregorianCalendar::add(EDateFields field, int32_t amount, UErrorCode& status)
                 set(YEAR, year);
             else { // year <= 0
                 set(YEAR, 1 - year);
+                // if year == 0, you get 1 AD
+                set(ERA, AD);
+            }
+        }
+*/
+    if (field == YEAR || field == YEAR_WOY) {
+        int32_t year = internalGet(field);
+        if (internalGetEra() == AD) {
+            year += amount;
+            if (year > 0)
+                set(field, year);
+            else { // year <= 0
+                set(field, 1 - year);
+                // if year == 0, you get 1 BC
+                set(ERA, BC);
+            }
+        }
+        else { // era == BC
+            year -= amount;
+            if (year > 0)
+                set(field, year);
+            else { // year <= 0
+                set(field, 1 - year);
                 // if year == 0, you get 1 AD
                 set(ERA, AD);
             }
@@ -1392,6 +1352,7 @@ GregorianCalendar::add(EDateFields field, int32_t amount, UErrorCode& status)
         case DATE: // synonym of DAY_OF_MONTH
         case DAY_OF_YEAR:
         case DAY_OF_WEEK:
+        case DOW_LOCAL:
             delta *= 24 * 60 * 60 * 1000; // 1 day
             break;
 
@@ -1454,17 +1415,6 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
     if (amount == 0) 
         return; // Nothing to do
 
-    if(field == YEAR_WOY) {
-        computeTime(status);
-        roll(YEAR, amount, status);
-        return;
-    }
-
-    if(field == DOW_LOCAL) {
-        computeTime(status);
-        roll(DAY_OF_WEEK, amount, status);
-        return;
-    }
 
     int32_t min = 0, max = 0, gap;
     if (field >= 0 && field < FIELD_COUNT) {
@@ -1472,7 +1422,17 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
         min = getMinimum(field);
         max = getMaximum(field);
     }
+/*
+    if(field == YEAR_WOY) {
+        roll(YEAR, amount, status);
+        return;
+    }
 
+    if(field == DOW_LOCAL) {
+        roll(DAY_OF_WEEK, amount, status);
+        return;
+    }
+*/
     /* Some of the fields require special handling to work in the month
      * containing the Gregorian cutover point.  Do shared computations
      * for these fields here.  [j81 - aliu] */
@@ -1504,6 +1464,7 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
     switch (field) {
     case ERA:
     case YEAR:
+    case YEAR_WOY:
     case AM_PM:
     case MINUTE:
     case SECOND:
@@ -1739,6 +1700,7 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
             setTimeInMillis(internalGetTime() + min2, status);
             return;
         }
+
     case DAY_OF_WEEK:
         {
             // Roll the day of week using millis.  Compute the millis for
@@ -1748,6 +1710,25 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
             // Compute the number of days before the current day in this
             // week.  This will be a value 0..6.
             int32_t leadDays = internalGet(DAY_OF_WEEK) - getFirstDayOfWeek();
+            if (leadDays < 0) 
+                leadDays += 7;
+            double min2 = internalGetTime() - leadDays * kOneDay;
+            internalSetTime(uprv_fmod((internalGetTime() + delta - min2), kOneWeek));
+            if (internalGetTime() < 0) 
+                internalSetTime(internalGetTime() + kOneWeek);
+            setTimeInMillis(internalGetTime() + min2, status);
+            return;
+        }
+
+    case DOW_LOCAL:
+        {
+            // Roll the day of week using millis.  Compute the millis for
+            // the start of the week, using the first day of week setting.
+            // Restrict the millis to [start, start+7days).
+            double delta = amount * kOneDay; // Scale up from days to millis
+            // Compute the number of days before the current day in this
+            // week.  This will be a value 0..6.
+            int32_t leadDays = internalGet(DOW_LOCAL) - 1;
             if (leadDays < 0) 
                 leadDays += 7;
             double min2 = internalGetTime() - leadDays * kOneDay;
@@ -1882,6 +1863,7 @@ GregorianCalendar::getActualMaximum(EDateFields field) const
         return Calendar::getActualMaximum(field, status);
 
     case YEAR:
+    case YEAR_WOY:
         /* The year computation is no different, in principle, from the
          * others, however, the range of possible maxima is large.  In
          * addition, the way we know we've exceeded the range is different.
