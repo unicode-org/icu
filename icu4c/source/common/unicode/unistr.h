@@ -1397,14 +1397,14 @@ public:
 
   /**
    * Copy the characters in the range [<tt>start</tt>, <tt>limit</tt>) 
-   * into the UnicodeString <tt>target</tt>.
+   * into the UnicodeString <tt>target</tt>.  Replaceable API.
    * @param start offset of first character which will be copied
    * @param limit offset immediately following the last character to be copied
    * @param target UnicodeString into which to copy characters.
    * @return A reference to <TT>target</TT>
    * @stable
    */
-  inline void extractBetween(UTextOffset start,
+  virtual void extractBetween(UTextOffset start,
               UTextOffset limit,
               UnicodeString& target) const;
 
@@ -3527,12 +3527,6 @@ UnicodeString::extractBetween(UTextOffset start,
                   UChar *dst, 
                   UTextOffset dstStart) const
 { doExtract(start, limit - start, dst, dstStart); }
-
-inline void 
-UnicodeString::extractBetween(UTextOffset start,
-                  UTextOffset limit,
-                  UnicodeString& target) const
-{ doExtract(start, limit - start, target); }
 
 inline UChar
 UnicodeString::doCharAt(UTextOffset offset) const

@@ -93,6 +93,22 @@ typedef struct _UReplaceableCallbacks {
                        int32_t textLength);
     
     /**
+     * Function pointer that copies the characters in the range
+     * [<tt>start</tt>, <tt>limit</tt>) into the array <tt>dst</tt>.
+     * @param start offset of first character which will be copied
+     * into the array
+     * @param limit offset immediately following the last character to
+     * be copied
+     * @param dst array in which to copy characters.  The length of
+     * <tt>dst</tt> must be at least <tt>(limit - start)</tt>.
+     * @draft ICU 2.1
+     */
+    void    (*extract)(UReplaceable* rep,
+                       int32_t start,
+                       int32_t limit,
+                       UChar* dst);
+
+    /**
      * Function pointer that copies text between start and limit in
      * this text to another index in the text.  Attributes (out of
      * band info) should be retained.  After this call, there will be

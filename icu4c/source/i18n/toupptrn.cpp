@@ -71,18 +71,12 @@ void UppercaseTransliterator::handleTransliterate(Replaceable& text,
                                  UTransPosition& offsets, 
                                  UBool isIncremental) const {
     int32_t textPos = offsets.start;
-    int32_t loop = 0;
     if (textPos >= offsets.limit) return;
 
     // get string for context
-    // TODO: add convenience method to do this, since we do it all over
     
     UnicodeString original;
-    /* UChar *original = new UChar[offsets.contextLimit - offsets.contextStart+1]; */// get whole context
-    /* Extract the characters from Replaceable */
-    for (loop = offsets.contextStart; loop < offsets.contextLimit; loop++) {
-        original.append(text.charAt(loop));
-    }
+    text.extractBetween(offsets.contextStart, offsets.contextLimit, original);
             
     // Walk through original string
     // If there is a case change, modify corresponding position in replaceable
