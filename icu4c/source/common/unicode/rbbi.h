@@ -428,6 +428,9 @@ RuleBasedBreakIterator(UDataMemory* image);
     virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,
                                                UErrorCode &status);
+#ifdef RBBI_DEBUG
+    void debugDumpTables() const;
+#endif
 
 
 protected:

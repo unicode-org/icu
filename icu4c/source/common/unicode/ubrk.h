@@ -41,6 +41,11 @@
  * stored as a base character and a diacritical mark. What users
  * consider to be a character can differ between languages.
  * <P>
+ * Title boundary analysis locates all positions,
+ * typically starts of words, that should be set to Title Case
+ * when title casing the text.
+ * <P>
+ * 
  * This is the interface for all text boundaries.
  * <P>
  * Examples:
@@ -177,7 +182,9 @@ enum UBreakIteratorType {
   /** Line breaks */
   UBRK_LINE,
   /** Sentence breaks */
-  UBRK_SENTENCE
+  UBRK_SENTENCE,
+  /** Title Case breaks */
+  UBRK_TITLE
 };
 typedef enum UBreakIteratorType UBreakIteratorType;
 

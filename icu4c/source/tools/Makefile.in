@@ -99,7 +99,7 @@ all-local: build-local
 
 DAT_FILES=uprops.dat unames.dat cnvalias.dat tz.dat
 # ALL of these files can be deleted (the following BRK files) - they are copied
-BRK_FILES=char.brk line.brk line_th.brk sent.brk word.brk word_th.brk
+BRK_FILES=char.brk line.brk line_th.brk sent.brk word.brk title.brk word_th.brk
 # don't include thaidict.brk - it goes into a resource bundle - plus it isn't deleted
 
 DATAFILESD=$(DAT_FILES:%=$(OBJDATADIR)/%)

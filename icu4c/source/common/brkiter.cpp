@@ -152,6 +152,28 @@ BreakIterator::createSentenceInstance(const Locale& key, UErrorCode& status)
 
 // -------------------------------------
 
+// Creates a simple text boundary for title casing breaks.
+BreakIterator*
+BreakIterator::createTitleInstance(const Locale& key, UErrorCode& status)
+{
+    // WARNING: This routine is currently written specifically to handle only the
+    // default rules files.  This function will have to be made fully general 
+    // at some time in the future!
+    BreakIterator* result = NULL;
+    static const char filename[] = "title";
+
+    if (U_FAILURE(status))
+        return NULL;
+    UDataMemory* file = udata_open(NULL, "brk", filename, &status);
+
+    if (!U_FAILURE(status)) {
+        result = new RuleBasedBreakIterator(file);
+    }
+
+    return result;
+}
+// -------------------------------------
+
 // Gets all the available locales that has localized text boundary data.
 const Locale*
 BreakIterator::getAvailableLocales(int32_t& count)

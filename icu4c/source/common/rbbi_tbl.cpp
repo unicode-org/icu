@@ -10,6 +10,10 @@
 #include "ucmp8.h"
 #include "cmemory.h"
 #include "rbbi_tbl.h"
+#include "unicode/unistr.h"
+#ifdef RBBI_DEBUG
+#include <stdio.h>
+#endif
 
 U_NAMESPACE_BEGIN
 
@@ -146,5 +150,97 @@ UBool
 RuleBasedBreakIteratorTables::isLookaheadState(int32_t state) const {
     return lookaheadStates[state];
 }
+
+
+#ifdef RBBI_DEBUG
+//
+//   debugDumpTables
+//
+void RuleBasedBreakIteratorTables::debugDumpTables() const {
+    printf("Character Classes:\n");
+    int currentCharClass = 257;
+    int startCurrentRange = 0;
+    int initialStringLength = 0;
+    char  buf[80];
+
+    UnicodeString *charClassRanges = new UnicodeString[numCategories];
+
+    for (int i = 0; i < 0xffff; i++) {
+        if ( ucmp8_get(charCategoryTable, i) != currentCharClass) {
+            if (currentCharClass != 257) {
+                // Complete the output of the previous range.
+                if (i != startCurrentRange+1) {
+                    sprintf(buf, "-%x", i-1);
+                    charClassRanges[currentCharClass].append(buf);
+                }
+                if (charClassRanges[currentCharClass].length() % 72 < initialStringLength % 72) {
+                    charClassRanges[currentCharClass].append("\n     ");
+                }
+            }
+
+            // Output the start of the new range.
+            currentCharClass = ucmp8_get(charCategoryTable, i);
+            startCurrentRange = i;
+            initialStringLength = charClassRanges[currentCharClass].length();
+            if (charClassRanges[currentCharClass].length() > 0)
+                charClassRanges[currentCharClass].append(", ");
+            sprintf(buf, "%x", i);
+            charClassRanges[currentCharClass].append(buf);
+        }
+    }
+
+    for (int i=0; i<numCategories; i++) {
+        printf("%d:   ", i);
+        // Write out the chars in the UnicodeStrings.
+        //    We know we didn't put anything into them except for plain ascii chars.
+        for (int j=0; j<charClassRanges[i].length(); j++) {
+            putchar(charClassRanges[i].charAt(j));
+        }
+        putchar('\n');
+    }
+
+    delete [] charClassRanges;
+
+
+    // State table length might be too big by one, because the only indication
+    //   we have is the  pointer to the start of the next item in the memory
+    //   image, the backwardsStateTable, which is 4 byte aligned.
+    //
+    int   stateTableLength = backwardsStateTable - stateTable;
+    if ((stateTableLength % numCategories) == 1) {
+        stateTableLength -= 1;
+    }
+
+    printf("\n\nState Table.   *: end state     %%: look ahead state\n");
+    printf("C:\t");
+    for (int i = 0; i < numCategories; i++) {
+        printf("%d\t", i);
+    }
+    printf("\n=================================================");
+ 
+    for (int i = 0; i < stateTableLength; i++) {
+        if (i % numCategories == 0) {
+            putchar('\n');
+            if (endStates[i / numCategories])
+                putchar('*');
+            else
+                putchar(' ');
+            if (lookaheadStates[i / numCategories]) {
+                putchar('%');
+            }
+            else
+                putchar(' ');
+            printf("%d:\t", i / numCategories);
+        }
+        if (stateTable[i] == 0) {
+            printf(".\t");
+        } else {
+            printf("%d\t", stateTable[i]);
+        }
+    }
+    printf("\n\n\n");
+}
+#endif // RBBI_DEBUG
+
 U_NAMESPACE_END
 
