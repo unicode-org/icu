@@ -567,8 +567,8 @@ ICUService::ICUService()
 {
 }
 
-ICUService::ICUService(const UnicodeString& name) 
-  : name(name)
+ICUService::ICUService(const UnicodeString& newName) 
+  : name(newName)
   , lock(0)
   , timestamp(0)
   , factories(NULL)
@@ -962,12 +962,12 @@ ICUService::getDisplayNames(UVector& result,
         while (entry = m->nextElement(pos)) {
           const UnicodeString* id = (const UnicodeString*)entry->key.pointer;
           ICUServiceFactory* f = (ICUServiceFactory*)entry->value.pointer;
-          UnicodeString name;
-          f->getDisplayName(*id, locale, name);
-          if (name.isBogus()) {
+          UnicodeString dname;
+          f->getDisplayName(*id, locale, dname);
+          if (dname.isBogus()) {
             status = U_MEMORY_ALLOCATION_ERROR;
           } else {
-            dnCache->cache.put(name, (void*)id, status); // share pointer with visibleIDMap
+            dnCache->cache.put(dname, (void*)id, status); // share pointer with visibleIDMap
             if (U_SUCCESS(status)) {
               continue;
             }

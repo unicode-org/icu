@@ -218,6 +218,11 @@ public:
         INVISIBLE = 1
     };
 
+    /**
+     * Destructor.
+     */
+    virtual ~LocaleKeyFactory();
+
 protected:
     /**
      * Constructor used by subclasses.
@@ -228,11 +233,6 @@ protected:
      * Constructor used by subclasses.
      */
     LocaleKeyFactory(int32_t coverage, const UnicodeString& name);
-
-    /**
-     * Destructor.
-     */
-    virtual ~LocaleKeyFactory();
 
     /**
      * Implement superclass abstract method.  This checks the currentID of
@@ -437,6 +437,8 @@ class U_COMMON_API ICULocaleService : public ICUService
 
 #if 0
   // redeclare because of overload resolution rules?
+  // no, causes ambiguities since both UnicodeString and Locale have constructors that take a const char*
+  // need some compiler flag to remove warnings 
   UObject* get(const UnicodeString& descriptor, UErrorCode& status) const {
     return ICUService::get(descriptor, status);
   }

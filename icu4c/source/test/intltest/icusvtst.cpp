@@ -35,17 +35,20 @@ class ICUNSubclass : public ICUNotifier {
 };
 
 class LKFSubclass : public LocaleKeyFactory {
+	Hashtable table;
+
     public:
     LKFSubclass(UBool visible) 
-        : LocaleKeyFactory(visible ? VISIBLE : INVISIBLE)
+        : LocaleKeyFactory(visible ? VISIBLE : INVISIBLE, "LKFSubclass")
     {
+		UErrorCode status = U_ZERO_ERROR;
+		table.put("en_US", this, status);
     }
 
     protected:
-    virtual const Hashtable* getSupportedIDs(UErrorCode& status) const {
-        //    return Collections.EMPTY_SET;
-        return NULL;
-    }
+	virtual const Hashtable* getSupportedIDs(UErrorCode &status) const {
+		return &table;
+	}
 };
 
 class Integer : public UObject {
@@ -1164,12 +1167,17 @@ void ICUServiceTest::testLocale() {
 
 class WrapFactory : public ICUServiceFactory {
     public:
-    static const UnicodeString& greetingID;
+    static const UnicodeString& getGreetingID() {
+      if (greetingID == NULL) {
+	greetingID = new UnicodeString("greeting");
+      }
+      return *greetingID;
+    }
 
     UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const {
         if (U_SUCCESS(status)) {
             UnicodeString temp;
-            if (key.currentID(temp).compare(greetingID) == 0) {
+            if (key.currentID(temp).compare(getGreetingID()) == 0) {
                 UnicodeString* previous = (UnicodeString*)service->getKey((ICUServiceKey&)key, NULL, this, status);
                 if (previous) {
                     previous->insert(0, "A different greeting: \"");
@@ -1207,9 +1215,10 @@ class WrapFactory : public ICUServiceFactory {
 
     private:
     static const char fgClassID;
+    static UnicodeString* greetingID;
 };
 
-const UnicodeString& WrapFactory::greetingID = UnicodeString("greeting");
+UnicodeString* WrapFactory::greetingID = NULL;
 const char WrapFactory::fgClassID = '\0';
 
 void 
@@ -1243,172 +1252,151 @@ ICUServiceTest::testWrapFactory()
   // misc coverage tests
 void ICUServiceTest::testCoverage() 
 {
-#if 0
-    // ICUServiceKey
-    ICUServiceKey key = new ICUServiceKey("foobar");
-    logln("ID: " + key.id());
-    logln("canonicalID: " + key.canonicalID());
-    logln("currentID: " + key.currentID());
-    logln("has fallback: " + key.fallback());
+  // ICUServiceKey
+  {
+    UnicodeString temp;
+    ICUServiceKey key("foobar");
+    logln("ID: " + key.getID());
+    logln("canonicalID: " + key.canonicalID(temp));
+    logln("currentID: " + key.currentID(temp.remove()));
+    logln("has fallback: " + UnicodeString(key.fallback() ? "true" : "false"));
 
-    // SimpleFactory
-    Object obj = new Object();
-    SimpleFactory sf = new SimpleFactory(obj, "object");
-    try {
-        sf = new SimpleFactory(null, null);
-        errln("didn't throw exception");
+    if (key.getDynamicClassID() != ICUServiceKey::getStaticClassID()) {
+      errln("service key rtt failed.");
     }
-    catch (IllegalArgumentException e) {
-        logln("OK: " + e.getMessage());
+  }
+
+  // SimpleFactory
+  {
+    UErrorCode status = U_ZERO_ERROR;
+
+    UnicodeString* obj = new UnicodeString("An Object");
+    SimpleFactory* sf = new SimpleFactory(obj, "object");
+
+    UnicodeString temp;
+    logln(sf->getDisplayName("object", Locale::getDefault(), temp));
+
+    if (sf->getDynamicClassID() != SimpleFactory::getStaticClassID()) {
+      errln("simple factory rtti failed.");
     }
-    catch (Exception e) {
-        errln("threw wrong exception" + e);
-    }
-    logln(sf.getDisplayName("object", null));
 
     // ICUService
-    ICUService service = new ICUService();
-    service.registerFactory(sf);
+    TestStringService service;
+    service.registerFactory(sf, status);
 
-    try {
-        service.get(null, null);
-        errln("didn't throw exception");
-    }
-    catch (NullPointerException e) {
-        logln("OK: " + e.getMessage());
-    }
-    /*
-      catch (Exception e) {
-      errln("threw wrong exception" + e);
+    {
+      UnicodeString* result = (UnicodeString*)service.get("object", status);
+      if (result) {
+	logln("object is: " + *result);
+	delete result;
+      } else {
+	errln("could not get object");
       }
-    */
-    try {
-        service.registerFactory(null);
-        errln("didn't throw exception");
     }
-    catch (NullPointerException e) {
-        logln("OK: " + e.getMessage());
-    }
-    catch (Exception e) {
-        errln("threw wrong exception" + e);
-    }
+  }
 
-    try {
-        service.unregister(null);
-        errln("didn't throw exception");
-    }
-    catch (NullPointerException e) {
-        logln("OK: " + e.getMessage());
-    }
-    catch (Exception e) {
-        errln("threw wrong exception" + e);
+  // ICULocaleService
+
+  // LocaleKey
+  {
+    UnicodeString primary("en_US");
+    UnicodeString fallback("ja_JP");
+    UErrorCode status = U_ZERO_ERROR;
+    LocaleKey* key = LocaleKey::createWithCanonicalFallback(&primary, &fallback, status);
+
+    if (key->getDynamicClassID() != LocaleKey::getStaticClassID()) {
+      errln("localekey rtti error");
     }
 
-    logln("object is: " + service.get("object"));
-
-    logln("stats: " + service.stats());
-
-    // ICURWLock
-
-    ICURWLock rwlock = new ICURWLock();
-    rwlock.acquireRead();
-    rwlock.releaseRead();
-
-    rwlock.acquireWrite();
-    rwlock.releaseWrite();
-    logln("stats: " + rwlock.getStats());
-    logln("stats: " + rwlock.clearStats());
-    rwlock.acquireRead();
-    rwlock.releaseRead();
-    rwlock.acquireWrite();
-    rwlock.releaseWrite();
-    logln("stats: " + rwlock.getStats());
-
-    try {
-        rwlock.releaseRead();
-        errln("no error thrown");
+    if (!key->isFallbackOf("en_US_FOOBAR")) {
+      errln("localekey should be fallback for en_US_FOOBAR");
     }
-    catch (InternalError e) {
-        logln("OK: " + e.getMessage());
+    if (!key->isFallbackOf("en_US")) {
+      errln("localekey should be fallback for en_US");
+    }
+    if (key->isFallbackOf("en")) {
+      errln("localekey should not be fallback for en");
     }
 
-    try {
-        rwlock.releaseWrite();
-        errln("no error thrown");
-    }
-    catch (InternalError e) {
-        logln("OK: " + e.getMessage());
-    }
-
-    // ICULocaleService
-
-    // LocaleKey
-        
-    // LocaleKey lkey = LocaleKey.create("en_US", "ja_JP");
-    // lkey = LocaleKey.create(null, null);
-    LocaleKey lkey = LocaleKey.createWithCanonicalFallback("en_US", "ja_JP");
-    logln("lkey: " + lkey);
-
-    lkey = LocaleKey.createWithCanonicalFallback(null, null);
-    logln("lkey from null,null: " + lkey);
+    do {
+      Locale loc;
+      logln(UnicodeString("current locale: ") + key->currentLocale(loc).getName());
+      logln(UnicodeString("canonical locale: ") + key->canonicalLocale(loc).getName());
+      logln(UnicodeString("is fallback of en: ") + (key->isFallbackOf("en") ? "true" : " false"));
+    } while (key->fallback());
+    delete key;
 
     // LocaleKeyFactory 
-    LocaleKeyFactory lkf = new LKFSubclass(false);
-    logln("lkf: " + lkf);
-    logln("obj: " + lkf.create(lkey, null));
-    logln(lkf.getDisplayName("foo", null));
-    logln(lkf.getDisplayName("bar", null));
-    lkf.updateVisibleIDs(new HashMap());
+    key = LocaleKey::createWithCanonicalFallback(&primary, &fallback, status);
 
-    LocaleKeyFactory invisibleLKF = new LKFSubclass(false);
-    logln("obj: " + invisibleLKF.create(lkey, null));
-    logln(invisibleLKF.getDisplayName("foo", null));
-    logln(invisibleLKF.getDisplayName("bar", null));
-    invisibleLKF.updateVisibleIDs(new HashMap());
+    UnicodeString result;
+    LKFSubclass lkf(true); // empty
+    Hashtable table;
 
-    // ResourceBundleFactory
-    ICUResourceBundleFactory rbf = new ICUResourceBundleFactory();
-    logln("RB: " + rbf.create(lkey, null));
-
-    // ICUNotifier
-    ICUNotifier nf = new ICUNSubclass();
-    try {
-        nf.addListener(null);
-        errln("added null listener");
-    }
-    catch (NullPointerException e) {
-        logln(e.getMessage());
-    }
-    catch (Exception e) {
-        errln("got wrong exception");
+    UObject *obj = lkf.create(*key, NULL, status);
+    logln("obj: " + UnicodeString(obj ? "obj" : "null"));
+    logln(lkf.getDisplayName("en_US", Locale::getDefault(), result));
+    lkf.updateVisibleIDs(table, status);
+    delete obj;
+    if (table.count() != 1) {
+      errln("visible IDs does not contain en_US");
     }
 
-    try {
-        nf.addListener(new WrongListener());
-        errln("added wrong listener");
+    LKFSubclass invisibleLKF(false);
+    obj = lkf.create(*key, NULL, status);
+    logln("obj: " + UnicodeString(obj ? "obj" : "null"));
+    logln(invisibleLKF.getDisplayName("en_US", Locale::getDefault(), result.remove()));
+    invisibleLKF.updateVisibleIDs(table, status);
+    if (table.count() != 0) {
+      errln("visible IDs contains en_US");
     }
-    catch (InternalError e) {
-        logln(e.getMessage());
-    }
-    catch (Exception e) {
-        errln("got wrong exception");
-    }
+    delete obj;
+  }
 
-    try {
-        nf.removeListener(null);
-        errln("removed null listener");
-    }
-    catch (NullPointerException e) {
-        logln(e.getMessage());
-    }
-    catch (Exception e) {
-        errln("got wrong exception");
-    }
+#if 0
+  // ResourceBundleFactory
+  ICUResourceBundleFactory rbf = new ICUResourceBundleFactory();
+  logln("RB: " + rbf.create(lkey, null));
 
-    nf.removeListener(new MyListener());
-    nf.notifyChanged();
-    nf.addListener(new MyListener());
-    nf.removeListener(new MyListener());
+  // ICUNotifier
+  ICUNotifier nf = new ICUNSubclass();
+  try {
+    nf.addListener(null);
+    errln("added null listener");
+  }
+  catch (NullPointerException e) {
+    logln(e.getMessage());
+  }
+  catch (Exception e) {
+    errln("got wrong exception");
+  }
+
+  try {
+    nf.addListener(new WrongListener());
+    errln("added wrong listener");
+  }
+  catch (InternalError e) {
+    logln(e.getMessage());
+  }
+  catch (Exception e) {
+    errln("got wrong exception");
+  }
+
+  try {
+    nf.removeListener(null);
+    errln("removed null listener");
+  }
+  catch (NullPointerException e) {
+    logln(e.getMessage());
+  }
+  catch (Exception e) {
+    errln("got wrong exception");
+  }
+
+  nf.removeListener(new MyListener());
+  nf.notifyChanged();
+  nf.addListener(new MyListener());
+  nf.removeListener(new MyListener());
 #endif
 }
 
