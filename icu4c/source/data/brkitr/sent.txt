@@ -2,13 +2,13 @@
 #   Copyright (C) 2002-2003, International Business Machines Corporation and others.
 #       All Rights Reserved.
 #
-#   file:  sent.txt   
+#   file:  sent.txt
 #
 #   ICU Sentence Break Rules
 #      See Unicode Standard Annex #29.
 #      These rules are based on TR 29 version 4.0.0
 #
-    
+
 
 #
 # Character categories as defined in TR 29
@@ -21,21 +21,21 @@ $Upper   = [[:TitleCase_Letter:] [:Uppercase:]];
 $OLetter = [[:Alphabetic:] [:name = HEBREW PUNCTUATION GERESH:] - [$Lower $Upper]];
 $Numeric = [:LineBreak = Numeric:];
 
-$ATerm = [.];  
+$ATerm = [.];
 
 $Term  = [\u0021 \u003F \u0589 \u061F \u06D4 \u0700 \u0701 \u0702 \u0964 \u1362
           \u1367 \u1368 \u104a \u104b \u166e \u1803 \u1809 \u203C \u203D \u2047 
           \u2048 \u2049 \u3002 \uFE52 \uFE57 \uFF01 \uFF0E \uFF1F \uFF61];
-          
+
 $Close   = [[:Open_Punctuation:] [:Close_Punctuation:] [:Linebreak = Quotation:] -
            [[:name = HEBREW PUNCTUATION GERESH:] $ATerm $Term]];
-           
-           
+
+
 
 # Define extended forms of the character classes,
 #   incorporate grapheme cluster + format chars.
 
-$Extend     = [[:Grapheme_Extend = TRUE:]]; 
+$Extend     = [[:Grapheme_Extend = TRUE:]];
 $ATermEx    = $ATerm   $Extend* $Format*;
 $NumericEx  = $Numeric $Extend* $Format*;
 $UpperEx    = $Upper   $Extend* $Format*;
@@ -70,14 +70,14 @@ $LowerWordFollows  = $InteriorChars* $ATermEx $Close* $Sp* [^$OLetter $Upper $Lo
 $TermEndSequence   = $InteriorChars* ($TermEx | $ATermEx) $Close* $Sp* $SepSeq?;
 $EndSequence       = $InteriorChars* $SepSeq?;
 
-# Put them all together.  
+# Put them all together.
 ($NumberFollows | $UppersSurround |  $LowerWordFollows)*  $TermEndSequence{0};   # status = UBRK_SENTENCE_TERM
 ($NumberFollows | $UppersSurround |  $LowerWordFollows)*  $EndSequence{100};     # status = UBRK_SENTENCE_SEP
-    
+
 ## -------------------------------------------------
 
 !!reverse;
- 
+
 # rule 6
 
 $RULE6 = $Numeric $Format* $Extend* $ATerm;
@@ -124,7 +124,7 @@ $End? $Join $Close / [^$Term $ATerm $Close];
 
 # rule 4
 $Extend+ [^$Extend];
- 
+
 # rule 7
 $Extend* $ATerm $Format* $Extend* $Upper;
 

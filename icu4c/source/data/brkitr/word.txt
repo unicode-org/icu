@@ -1,9 +1,9 @@
 #
-# Copyright (C) 2002-2003, 
+# Copyright (C) 2002-2003,
 # International Business Machines Corporation and others.
 # All Rights Reserved.
 #
-# file:  word.txt   
+# file:  word.txt
 #
 # ICU Word Break Rules
 #      See Unicode Standard Annex #29.
@@ -19,28 +19,28 @@
 !!chain;
 !!LBCMNoChain;
 
-$Katakana  = [[:Script = KATAKANA:] 
-              [:name = KATAKANA-HIRAGANA PROLONGED SOUND MARK:] 
-              [:name = HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK:]
-              [:name = HALFWIDTH KATAKANA VOICED SOUND MARK:]
-              [:name = HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK:]];
+$Katakana  = [[:Script = KATAKANA:]
+			  [:name = KATAKANA-HIRAGANA PROLONGED SOUND MARK:]
+			  [:name = HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK:]
+			  [:name = HALFWIDTH KATAKANA VOICED SOUND MARK:]
+			  [:name = HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK:]];
 
 
-$ALetter   = [[:Alphabetic:] [:name= HEBREW PUNCTUATION GERESH:] 
-                           - [:Ideographic:]
-                           - $Katakana
-                           - [:Script = Thai:]
-                           - [:Script = Lao:]
-                           - [:Script = Hiragana:]];
+$ALetter   = [[:Alphabetic:] [:name= HEBREW PUNCTUATION GERESH:]
+						   - [:Ideographic:]
+						   - $Katakana
+						   - [:Script = Thai:]
+						   - [:Script = Lao:]
+						   - [:Script = Hiragana:]];
 
 $ABaseLetter = [$ALetter - [:Grapheme_Extend = TRUE:]];
 $ACMLetter   = [$ALetter & [:Grapheme_Extend = TRUE:]];
-                           
-$MidLetter = [[:name = APOSTROPHE:] [:name = MIDDLE DOT:]  
-              [:name = HEBREW PUNCTUATION GERSHAYIM:]
-              [:name = RIGHT SINGLE QUOTATION MARK:] 
-			  [:name = HYPHENATION POINT:]];  
-              
+
+$MidLetter = [[:name = APOSTROPHE:] [:name = MIDDLE DOT:]
+			  [:name = HEBREW PUNCTUATION GERSHAYIM:]
+			  [:name = RIGHT SINGLE QUOTATION MARK:]
+			  [:name = HYPHENATION POINT:]];
+
 $MidNumLet = [[:name = FULL STOP:] [:name = COLON:]];
 
 $MidNum    = [[:LineBreak = Infix_Numeric:] - $MidNumLet];
@@ -54,8 +54,8 @@ $Numeric   = [:LineBreak = Numeric:];
 $CR      = \u000d;
 $LF      = \u000a;
 $Control = [[:Zl:] [:Zp:] [:Cc:] [:Cf:]];
-$Extend  = [[:Grapheme_Extend = TRUE:]]; 
-$Format  = [[:Cf:]];  
+$Extend  = [[:Grapheme_Extend = TRUE:]];
+$Format  = [[:Cf:]];
 $Hiragana = [:Hiragana:];
 $Ideographic = [:IDEOGRAPHIC:];
 
@@ -67,9 +67,9 @@ $CR $LF;
 
 # rule 3 and 4
 
-$ALetterEx     = $ALetter     $Extend*; 
-$ABaseLetterEx = $ABaseLetter $Extend*; 
-$ACMLetterEx   = $ACMLetter   $Extend*; 
+$ALetterEx     = $ALetter     $Extend*;
+$ABaseLetterEx = $ABaseLetter $Extend*;
+$ACMLetterEx   = $ACMLetter   $Extend*;
 $NumericEx     = $Numeric     $Extend*;
 $MidNumEx      = $MidNum      $Extend*;
 $MidNumLetEx   = $MidNumLet   $Extend*;
@@ -78,7 +78,7 @@ $KatakanaEx    = $Katakana    $Extend*;
 
 # see character breaks
 
-[^$Control] $Extend*; 
+[^$Control] $Extend*;
 
 # rule 5
 
@@ -114,12 +114,12 @@ $NumericEx ($Format* $MidALetterSeq)+ ($Format* $NumericEx)* {200};
 
 # rule 11 and 12 
 
-$NumericEx ($Format* ($MidNumEx | $MidNumLetEx) $Format* $NumericEx)+ {100}; 
+$NumericEx ($Format* ($MidNumEx | $MidNumLetEx) $Format* $NumericEx)+ {100};
 
 # rule 13
 
 $KatakanaEx ($Format* $KatakanaEx)* {300};
-$Hiragana $Extend* {300}; 
+$Hiragana $Extend* {300};
 $Ideographic $Extend* {400};
 
 ## -------------------------------------------------
@@ -164,7 +164,7 @@ $BackMidALetterEx;
 
 # rule 8
 
-$BackNumericEx $Format* $BackNumericEx; 
+$BackNumericEx $Format* $BackNumericEx;
 
 # rule 10
 

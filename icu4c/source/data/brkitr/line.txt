@@ -12,7 +12,7 @@
 #  Character Classes defined by TR 14.
 #
 
-!!chain; 
+!!chain;
 !!LBCMNoChain;
 !!lookAheadHardBreak;
 
@@ -121,13 +121,13 @@ $WJ $CM+;
 
 !!forward;
 
-#  
+#
 #  Rule LB 3
 $LB3Breaks = [$BK $CR $LF $NL];
-$LB3NonBreaks = [^$BK $CR $LF $NL];               
+$LB3NonBreaks = [^$BK $CR $LF $NL];
 $LB5NonBreaks = [[$LB3NonBreaks] - [$ZW]];
 
-$LB3NonBreaks?     $LB3Breaks {100};   
+$LB3NonBreaks?     $LB3Breaks {100};
 $LB5NonBreaks $CM* $LB3Breaks {100};
 $CR $LF {100};
 
@@ -152,14 +152,14 @@ $LB5Breaks = [$LB3Breaks $ZW];
 #                                   $CM not covered by the above needs to behave like $AL
 $LB5NonBreaks $CM+;    #  Stick together any combining sequences that don't match other rules.
 
-# LB 8     
+# LB 8
 $LB5NonBreaks $CM* $CL;
 $LB5NonBreaks $CM* $EX;
 $LB5NonBreaks $CM* $IS;
 $LB5NonBreaks $CM* $SY;
 
 # LB 9
-$OPcm $SP* .?;         
+$OPcm $SP* .?;
 $OPcm $SP* $LB5NonBreaks $CM*;
 
 # LB 10
@@ -186,15 +186,15 @@ $SP $CM+            $QUcm+ $LB5NonBreaks $CM*;
 
 $QUcm $LB3NonBreaks?;
 $QUcm $LB5NonBreaks $CM*;    # Don't let a combining mark go onto $CR, $BK, etc.
- 
+
 # LB 14a
 $LB14NonBreaks = [$LB12NonBreaks - $CB];
 $LB14CanBreakAfter = $LB14NonBreaks $CM* | $SP $CM+;
 
 # LB 15
-$LB14CanBreakAfter ($BAcm | $HYcm | $NScm);   
+$LB14CanBreakAfter ($BAcm | $HYcm | $NScm);
 $BBcm [^$CB];
-$BBcm [^$CB $CR $LF $BK $NL $ZW] $CM*;  
+$BBcm [^$CB $CR $LF $BK $NL $ZW] $CM*;
 
 # LB 16
 $ALcm    $INcm;
@@ -251,7 +251,7 @@ $CM+ $WJ;
 
 # LB 3
 
-$LB3Breaks $LB3NonBreaks;   
+$LB3Breaks $LB3NonBreaks;
 $LB3Breaks $CM* $LB5NonBreaks;
 $LF $CR;
 
@@ -267,14 +267,14 @@ $LF $CR;
 $BackHangulSyllable = $L+ | ($T* ($V+$LV? | $LV | $LVT) $L*) | $T+;
 $CM* $BackHangulSyllable;
 
-# LB 7 Combining marks. 
+# LB 7 Combining marks.
 #    $SP $CM needs to behave like $ID.
 #    X   $CM needs to behave like X, where X is not $SP.
 #    $CM not covered by the above needs to behave like $AL
 # Stick together any combining sequences that don't match other rules.
-$CM+ $LB5NonBreaks;    
+$CM+ $LB5NonBreaks;
 
-# LB 8     
+# LB 8
 $CL $CM* $LB5NonBreaks;
 $EX $CM* $LB5NonBreaks;
 $IS $CM* $LB5NonBreaks;
@@ -303,22 +303,22 @@ $CM* $LB5NonBreaks $CM* ($GL | $WJ);
 $CM* $QU $CM* $LB12NonBreaks;
 $CM* $QU $CM+ $SP;
 $CM* $LB5NonBreaks $CM* $QU;
- 
+
 # LB 14a
 $BackLB14CanBreakAfter = ($CM* [$LB14NonBreaks - $CM]) | ($CM+ $SP);
 
 # LB 15
-$CM* ($BA | $HY | $NS) $BackLB14CanBreakAfter;   
-($CM* ($BA | $HY | $NS))+ $CM+ / $LB5Breaks;   
+$CM* ($BA | $HY | $NS) $BackLB14CanBreakAfter;
+($CM* ($BA | $HY | $NS))+ $CM+ / $LB5Breaks;
 [$CR $LF $BK $NL $ZW] $CM* $BB;
-$CM* [^$CB $CR $LF $BK $NL $ZW] $CM* $BB;    
+$CM* [^$CB $CR $LF $BK $NL $ZW] $CM* $BB;
 
 # LB 16
 $CM* $IN $CM* $ALPlus;
 # by rule 7c, any otherwise unattached CM behaves as AL
-$CM* $IN $CM+ / $LB5Breaks; 
+$CM* $IN $CM+ / $LB5Breaks;
 
-$CM* $IN $CM* ($ID | $CM $SP); 
+$CM* $IN $CM* ($ID | $CM $SP);
 $CM* $IN $CM* $IN;
 $CM* $IN $CM* $NU;
 
@@ -335,7 +335,7 @@ $CM* $ALPlus $CM* $NU;
 # LB 19
 $CM* $ALPlus $CM* $ALPlus;
 # The $CM* is from rule 7C, and unattached CM is treated as AL
-$CM* $ALPlus $CM+ / $LB5Breaks;  
+$CM* $ALPlus $CM+ / $LB5Breaks;
 
 ## problem state table can't handle lookahead when it is at the
 ## start of the string, currently handled in the rbbi code
@@ -386,5 +386,5 @@ $QU $CM* $SP+;
 $CL $CM* $SP+;
 
 # LB 18
-$HY $CM* $NU; 
+$HY $CM* $NU;
 $IS $CM* $CL;
