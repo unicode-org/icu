@@ -53,7 +53,7 @@ struct UResourceDataEntry {
     int32_t fHashKey; /* for faster access in the hashtable */
 };
 
-#define RES_BUFSIZE 256
+#define RES_BUFSIZE 64
 #define RES_PATH_SEPARATOR   '/'
 #define RES_PATH_SEPARATOR_S   "/"
 
@@ -73,11 +73,9 @@ struct UResourceBundle {
     ResourceData fResData;
     Resource fRes;
 
-    /* parent of this resource - 
-     * lives in the same data entry 
-     */
-    /* This cannot be done right now - need support in genrb */
-    /*Resource fParent; */
+    char *fRequestedLocale;
+    const UResourceBundle *fParent; /* needed to get the actual locale for a child resource */
+
 };
 
 U_CAPI void U_EXPORT2 ures_initStackObject(UResourceBundle* resB);
@@ -90,6 +88,7 @@ U_CFUNC const char* ures_getPath(const UResourceBundle* resB);
 U_CFUNC void ures_appendResPath(UResourceBundle *resB, const char* toAdd, int32_t lenToAdd);
 /*U_CFUNC void ures_setResPath(UResourceBundle *resB, const char* toAdd);*/
 U_CFUNC void ures_freeResPath(UResourceBundle *resB);
+U_CFUNC void ures_freeRequestedLocale(UResourceBundle *resB);
 
 /* Candidates for export */
 U_CFUNC UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *original, UErrorCode *status);
