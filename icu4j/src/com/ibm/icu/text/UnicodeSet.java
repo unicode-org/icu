@@ -411,7 +411,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Valid options are IGNORE_SPACE and CASE.
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
-     * @stable ICU 2.0
+     * @draft ICU 3.2
      */
     public UnicodeSet(String pattern, ParsePosition pos, SymbolTable symbols, int options) {
         this();
@@ -2856,7 +2856,7 @@ public class UnicodeSet extends UnicodeFilter {
         if (symbols != null 
                 && (symbols instanceof XSymbolTable)
                 && ((XSymbolTable)symbols).applyPropertyAlias(propertyAlias, valueAlias, this)) {
-        	return this;
+                return this;
         }
 
         if (valueAlias.length() > 0) {
@@ -3548,15 +3548,16 @@ public class UnicodeSet extends UnicodeFilter {
      */
     abstract static class XSymbolTable implements SymbolTable {
         public UnicodeMatcher lookupMatcher(int i) {
-			return null;}
+	    return null;
+	}
         public boolean applyPropertyAlias(String propertyName, String propertyValue, UnicodeSet result) {
-        	return false;   
+	    return false;   
         }
-		public char[] lookup(String s) {
-			return null;
-		}
-		public String parseReference(String text, ParsePosition pos, int limit) {
-			return null;
-		} 
+	public char[] lookup(String s) {
+	    return null;
+	}
+	public String parseReference(String text, ParsePosition pos, int limit) {
+	    return null;
+	} 
     }
 }

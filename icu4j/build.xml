@@ -506,7 +506,7 @@
         </javadoc>
     </target>
 
-    <target name="checktags" depends="anthack1,anthack2,_requires14,_checktags"/>
+    <target name="checktags" depends="anthack1,anthack2,_requires14,_checktags" description="check API tags before release"/>
 
     <target name="gatherapi" depends="tools" if="version.1.4" description="run API database generator tool">
         <javadoc classpath="${build.dir}"
@@ -530,7 +530,7 @@
             <arg value="${api.dir}/icu4j32.api.gz"/>
             <arg value="-html"/>
             <arg value="-out:"/>
-            <arg value="${api.dir}/icu4j_compare_28_30.html"/>
+            <arg value="${api.dir}/icu4j_compare_30_32.html"/>
         </java>
     </target>
 

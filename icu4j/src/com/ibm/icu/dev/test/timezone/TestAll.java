@@ -20,11 +20,10 @@ public class TestAll extends TestGroup {
         super(new String[] {
             "TimeZoneTest",
             "TimeZoneRegression",
-            "TimeZoneBoundaryTest"
+            "TimeZoneBoundaryTest",
+//             "TimeZoneAliasTest",
         });
     }
 
     public static final String CLASS_TARGET_NAME = "TimeZone";
 }
-
-

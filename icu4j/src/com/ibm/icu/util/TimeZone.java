@@ -399,7 +399,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @param locale the ulocale in which to supply the display name.
      * @return the human-readable name of this time zone in the given locale
      * or in the default ulocale if the given ulocale is not recognized.
-     * @stable ICU 2.0
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final String getDisplayName(ULocale locale) {
         return getDisplayName(false, LONG, locale);

@@ -319,6 +319,11 @@ public abstract class Collator implements Comparator, Cloneable
      * A factory used with registerFactory to register multiple collators and provide
      * display names for them.  If standard locale display names are sufficient, 
      * Collator instances may be registered instead.
+     * <p><b>Note:</b> as of ICU4J 3.2, the default API for CollatorFactory uses
+     * ULocale instead of Locale.  Instead of overriding createCollator(Locale),
+     * new implementations should override createCollator(ULocale).  Note that
+     * one of these two methods <b>MUST</b> be overridden or else an infinite
+     * loop will occur.
      * @stable ICU 2.6
      */
     public static abstract class CollatorFactory {
@@ -337,11 +342,30 @@ public abstract class Collator implements Comparator, Cloneable
         /**
          * Return an instance of the appropriate collator.  If the locale
          * is not supported, return null.
+         * <b>Note:</b> as of ICU4J 3.2, implementations should override
+         * this method instead of createCollator(Locale).
+         * @param loc the locale for which this collator is to be created.
+         * @return the newly created collator.
+         * @draft ICU 3.2
+         */
+        public Collator createCollator(ULocale loc) {
+            return createCollator(loc.toLocale());
+        }
+
+        /**
+         * Return an instance of the appropriate collator.  If the locale
+         * is not supported, return null.
+         * <p><b>Note:</b> as of ICU4J 3.2, implementations should override
+         * createCollator(ULocale) instead of this method, and inherit this
+         * method's implementation.  This method is no longer abstract
+         * and instead delegates to createCollator(ULocale).
          * @param loc the locale for which this collator is to be created.
          * @return the newly created collator.
          * @stable ICU 2.6
          */
-        public abstract Collator createCollator(ULocale loc);
+        public Collator createCollator(Locale loc) {
+            return createCollator(ULocale.forLocale(loc));
+        }
 
         /**
          * Return the name of the collator for the objectLocale, localized for the displayLocale.
@@ -350,6 +374,18 @@ public abstract class Collator implements Comparator, Cloneable
          * @param displayLocale the locale for which the display name of the collator should be localized
          * @return the display name
          * @stable ICU 2.6
+         */
+        public String getDisplayName(Locale objectLocale, Locale displayLocale) {
+            return getDisplayName(ULocale.forLocale(objectLocale), ULocale.forLocale(displayLocale));
+        }
+
+        /**
+         * Return the name of the collator for the objectLocale, localized for the displayLocale.
+         * If objectLocale is not visible or not defined by the factory, return null.
+         * @param objectLocale the locale identifying the collator
+         * @param displayLocale the locale for which the display name of the collator should be localized
+         * @return the display name
+         * @draft ICU 3.2
          */
         public String getDisplayName(ULocale objectLocale, ULocale displayLocale) {
             if (visible()) {
@@ -626,7 +662,7 @@ public abstract class Collator implements Comparator, Cloneable
      */
     static public String getDisplayName(Locale objectLocale, Locale displayLocale) {
         return getShim().getDisplayName(ULocale.forLocale(objectLocale), 
-					ULocale.forLocale(displayLocale));
+                                        ULocale.forLocale(displayLocale));
     }
 
     /**

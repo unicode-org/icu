@@ -213,7 +213,7 @@ public abstract class ICUTaglet implements Taglet {
     }
 
     private ICUIgnoreTaglet() {
-        super("bug", MASK_DEFAULT);
+         super(".ignore", MASK_DEFAULT);
     }
 
     public String toString(Tag tag) {

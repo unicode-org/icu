@@ -1516,7 +1516,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * Constructs a calendar with the specified time zone and locale.
      * @param zone the time zone to use
      * @param locale the ulocale for the week data
-     * @stable ICU 2.0
+     * @draft ICU 3.2
      */
     protected Calendar(TimeZone zone, ULocale locale)
     {
@@ -1670,7 +1670,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     /**
      * Gets the list of locales for which Calendars are installed.
      * @return the list of locales for which Calendars are installed.
-     * @stable ICU 2.0
+     * @draft ICU 3.2
      */
     public static ULocale[] getAvailableULocales()
     {
