@@ -152,6 +152,25 @@ CalendarTimeZoneTest::dateToString(UDate d, UnicodeString& str)
     return str;
 }
 
+UnicodeString&
+CalendarTimeZoneTest::dateToString(UDate d, UnicodeString& str,
+                                   const TimeZone& tz)
+{
+    str.remove();
+    DateFormat* format = getDateFormat();
+    if (format == 0)
+    {
+        str += "DATE_FORMAT_FAILURE";
+        return str;
+    }
+    TimeZone* save = format->getTimeZone().clone();
+    format->setTimeZone(tz);
+    format->format(d, str);
+    format->adoptTimeZone(save);
+    releaseDateFormat(format);
+    return str;
+}
+
 // Utility methods to create a date.  This is useful for converting Java constructs
 // which create a Date object.
 UDate
