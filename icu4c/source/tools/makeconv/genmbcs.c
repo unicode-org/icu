@@ -1315,7 +1315,7 @@ compactToUnicodeHelper(MBCSData *mbcsData) {
 
 static UBool
 transformEUC(MBCSData *mbcsData) {
-    uint8_t *p, *q;
+    uint8_t *p8;
     uint32_t i, value, oldLength=mbcsData->maxCharLength, old3Top=mbcsData->stage3Top, new3Top;
     uint8_t b;
 
@@ -1326,19 +1326,23 @@ transformEUC(MBCSData *mbcsData) {
     /* careful: 2-byte and 4-byte codes are stored in platform endianness! */
 
     /* test if all first bytes are in {0, 0x8e, 0x8f} */
-    p=mbcsData->fromUBytes;
-    if(!U_IS_BIG_ENDIAN && oldLength==4) {
-        p+=3;
+    p8=mbcsData->fromUBytes;
+
+#if !U_IS_BIG_ENDIAN
+    if(oldLength==4) {
+        p8+=3;
     }
+#endif
+
     for(i=0; i<old3Top; i+=oldLength) {
-        b=p[i];
+        b=p8[i];
         if(b!=0 && b!=0x8e && b!=0x8f) {
             /* some first byte does not fit the EUC pattern, nothing to be done */
             return FALSE;
         }
     }
     /* restore p if it was modified above */
-    p=mbcsData->fromUBytes;
+    p8=mbcsData->fromUBytes;
 
     /* modify outputType and adjust stage3Top */
     mbcsData->header.flags=MBCS_OUTPUT_3_EUC+oldLength-3;
@@ -1352,42 +1356,43 @@ transformEUC(MBCSData *mbcsData) {
      * This also must reverse the byte order if the platform is little-endian!
      */
     if(oldLength==3) {
-        q=p;
+        uint16_t *q=(uint16_t *)p8;
         for(i=0; i<old3Top; i+=oldLength) {
-            b=*p;
+            b=*p8;
             if(b==0) {
                 /* short sequences are stored directly */
                 /* code set 0 or 1 */
-                *((uint16_t *)q)++=((uint16_t)p[1]<<8)|p[2];
+                (*q++)=(uint16_t)((p8[1]<<8)|p8[2]);
             } else if(b==0x8e) {
                 /* code set 2 */
-                *((uint16_t *)q)++=((uint16_t)(p[1]&0x7f)<<8)|p[2];
+                (*q++)=(uint16_t)(((p8[1]&0x7f)<<8)|p8[2]);
             } else /* b==0x8f */ {
                 /* code set 3 */
-                *((uint16_t *)q)++=((uint16_t)p[1]<<8)|(p[2]&0x7f);
+                (*q++)=(uint16_t)((p8[1]<<8)|(p8[2]&0x7f));
             }
-            p+=3;
+            p8+=3;
         }
     } else /* oldLength==4 */ {
-        q=p;
+        uint8_t *q=p8;
+        uint32_t *p32=(uint32_t *)p8;
         for(i=0; i<old3Top; i+=4) {
-            value=*((uint32_t *)p)++;
+            value=(*p32++);
             if(value<=0xffffff) {
                 /* short sequences are stored directly */
                 /* code set 0 or 1 */
-                *q++=(uint8_t)(value>>16);
-                *q++=(uint8_t)(value>>8);
-                *q++=(uint8_t)value;
+                (*q++)=(uint8_t)(value>>16);
+                (*q++)=(uint8_t)(value>>8);
+                (*q++)=(uint8_t)value;
             } else if(value<=0x8effffff) {
                 /* code set 2 */
-                *q++=(uint8_t)((value>>16)&0x7f);
-                *q++=(uint8_t)(value>>8);
-                *q++=(uint8_t)value;
+                (*q++)=(uint8_t)((value>>16)&0x7f);
+                (*q++)=(uint8_t)(value>>8);
+                (*q++)=(uint8_t)value;
             } else /* first byte is 0x8f */ {
                 /* code set 3 */
-                *q++=(uint8_t)(value>>16);
-                *q++=(uint8_t)((value>>8)&0x7f);
-                *q++=(uint8_t)value;
+                (*q++)=(uint8_t)(value>>16);
+                (*q++)=(uint8_t)((value>>8)&0x7f);
+                (*q++)=(uint8_t)value;
             }
         }
     }
