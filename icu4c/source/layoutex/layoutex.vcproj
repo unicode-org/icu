@@ -20,10 +20,9 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				InlineFunctionExpansion="2"
 				ImproveFloatingPointConsistency="TRUE"
-				AdditionalIncludeDirectories="..\..\include,..\common"
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;U_LAYOUTEX_IMPLEMENTATION"
+				AdditionalIncludeDirectories="..\..\include;..\common"
+				PreprocessorDefinitions="WIN32;NDEBUG;U_LAYOUTEX_IMPLEMENTATION"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -83,10 +82,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\include,..\common"
-				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;U_LAYOUTEX_IMPLEMENTATION"
+				ImproveFloatingPointConsistency="TRUE"
+				AdditionalIncludeDirectories="..\..\include;..\common"
+				PreprocessorDefinitions="WIN32;_DEBUG;U_LAYOUTEX_IMPLEMENTATION"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				BufferSecurityCheck="TRUE"
 				PrecompiledHeaderFile=".\Debug/layoutex.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"

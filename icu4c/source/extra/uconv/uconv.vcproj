@@ -20,10 +20,9 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				InlineFunctionExpansion="2"
 				ImproveFloatingPointConsistency="TRUE"
-				AdditionalIncludeDirectories="..\..\..\include,..\..\common"
-				PreprocessorDefinitions="WIN32,NDEBUG,_CONSOLE,UCONVMSG_LINK"
+				AdditionalIncludeDirectories="..\..\..\include;..\..\common"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;UCONVMSG_LINK"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -83,11 +82,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..\..\include,..\..\common"
-				PreprocessorDefinitions="WIN32,_DEBUG,_CONSOLE,UCONVMSG_LINK"
+				ImproveFloatingPointConsistency="TRUE"
+				AdditionalIncludeDirectories="..\..\..\include;..\..\common"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;UCONVMSG_LINK"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				BufferSecurityCheck="TRUE"
 				PrecompiledHeaderFile=".\Debug/uconv.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"

@@ -20,10 +20,9 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				InlineFunctionExpansion="2"
 				ImproveFloatingPointConsistency="TRUE"
-				AdditionalIncludeDirectories="..\..\include,..\common"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;U_I18N_IMPLEMENTATION"
+				AdditionalIncludeDirectories="..\..\include;..\common"
+				PreprocessorDefinitions="WIN32;NDEBUG;U_I18N_IMPLEMENTATION"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -35,7 +34,6 @@
 				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="3"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -88,11 +86,11 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
-				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..\include,..\common"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;U_I18N_IMPLEMENTATION"
+				AdditionalIncludeDirectories="..\..\include;..\common"
+				PreprocessorDefinitions="WIN32;_DEBUG;U_I18N_IMPLEMENTATION"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				BufferSecurityCheck="TRUE"
 				DisableLanguageExtensions="TRUE"
 				PrecompiledHeaderFile=".\Debug/i18n.pch"
 				AssemblerListingLocation=".\Debug/"

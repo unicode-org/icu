@@ -20,10 +20,9 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				InlineFunctionExpansion="2"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="..\..\common"
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS"
+				PreprocessorDefinitions="WIN32;NDEBUG"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -85,11 +84,12 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				OptimizeForProcessor="2"
+				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="..\..\common"
-				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS"
+				PreprocessorDefinitions="WIN32;_DEBUG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				BufferSecurityCheck="TRUE"
 				PrecompiledHeaderFile=".\Debug/toolutil.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
