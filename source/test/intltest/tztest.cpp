@@ -82,16 +82,17 @@ TimeZoneTest::TestGenericAPI()
     if (!(copy == *zoneclone)) errln("FAIL: assignment operator or operator== failed");
 
     TimeZone* saveDefault = TimeZone::createDefault();
-        TimeZone* pstZone = TimeZone::createTimeZone("PST");
+    TimeZone* pstZone = TimeZone::createTimeZone("PST");
 
     logln("call u_t_timezone() which uses the host");
-        logln("to get the difference in seconds between coordinated universal");
-        logln("time and local time. E.g., -28,800 for PST (GMT-8hrs)");
+    logln("to get the difference in seconds between coordinated universal");
+    logln("time and local time. E.g., -28,800 for PST (GMT-8hrs)");
 
     int32_t tzoffset = uprv_timezone();
     logln(UnicodeString("Value returned from t_timezone = ") + tzoffset);
     // Invert sign because UNIX semantics are backwards
-    if (tzoffset < 0) tzoffset = -tzoffset;
+    if (tzoffset < 0)
+        tzoffset = -tzoffset;
     // --- The following test would fail outside PST now that
     // --- PST is generally set to be default timezone in format tests
     //if ((*saveDefault == *pstZone) && (tzoffset != 28800)) {
@@ -102,7 +103,7 @@ TimeZoneTest::TestGenericAPI()
         logln("***** WARNING: If testing in the PST timezone, t_timezone should return 28800! *****");
     }
     if ((tzoffset % 1800 != 0)) {
-      errln("FAIL: t_timezone may be incorrect. It is not a multiple of 30min.");
+      errln("FAIL: t_timezone may be incorrect. It is not a multiple of 30min. It is %d", tzoffset);
     }
 
     TimeZone::adoptDefault(zone);
