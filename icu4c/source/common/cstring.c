@@ -95,7 +95,10 @@ uprv_asciitolower(char c) {
 
 U_CAPI char U_EXPORT2
 uprv_ebcdictolower(char c) {
-    if((0xc1<=c && c<=0xc9) || (0xd1<=c && c<=0xd9) || (0xe2<=c && c<=0xe9)) {
+    if( (0xc1<=(uint8_t)c && (uint8_t)c<=0xc9) ||
+        (0xd1<=(uint8_t)c && (uint8_t)c<=0xd9) ||
+        (0xe2<=(uint8_t)c && (uint8_t)c<=0xe9)
+    ) {
         c=(char)(c-0x40);
     }
     return c;
