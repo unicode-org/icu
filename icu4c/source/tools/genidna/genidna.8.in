@@ -1,23 +1,20 @@
 .\" Hey, Emacs! This is -*-nroff-*- you know...
 .\"
-.\" gennorm.8: manual page for the gennorm utility
+.\" genidna.8: manual page for the genidna utility
 .\"
-.\" Copyright (C) 2000-2001 IBM, Inc. and others.
+.\" Copyright (C) 2003 IBM, Inc. and others.
 .\"
-.TH GENNORM 8 "16 January 2001" "ICU MANPAGE" "ICU 2.6 Manual"
+.TH GENIDNA 8 "18 March 2003" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
-.B gennorm
+.B genidna
 \- compile normalization data from the Unicode Character Database
 .SH SYNOPSIS
-.B gennorm
+.B genidna
 [
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
 ]
 [
 .BR "\-v\fP, \fB\-\-verbose"
-]
-[
-.BI "\-u\fP, \fB\-\-unicode" " version"
 ]
 [
 .BI "\-c\fP, \fB\-\-copyright"
@@ -45,7 +42,15 @@ The files read by
 .B genidna
 are described in the
 .B FILES
-section. 
+section. If
+.I suffix
+is passed on the command line, the names of these files will actually
+be changed to include a dash followed by
+.I suffix
+in their basename. For example, the file
+.B UnicodeData.txt
+would be looked for under the name
+.BR UnicodeData\-\fIsuffix\fP.txt .
 .SH OPTIONS
 .TP
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
@@ -72,7 +77,7 @@ The default destination directory is specified by the environment variable
 .TP 10
 .B ICU_DATA
 Specifies the directory containing ICU data. Defaults to
-.BR NONE/lib/icu/2.6/ .
+.BR @thepkgicudatadir@/@PACKAGE@/@VERSION@/ .
 Some tools in ICU depend on the presence of the trailing slash. It is thus
 important to make sure that it is present if
 .B ICU_DATA
@@ -93,8 +98,10 @@ Contains the list of code points that are commonly mapped to nothing.\|.\|..
 Contains the list of mappings for casefolding of  code points when Normalization form NFKC is specified.\|.\|..
 .B rfc3454_C_X.txt
 Contains the list of code points that are prohibited for IDNA.
+.B NormalizationCorrections.txt
+Contains the list of code points whose normalization has changed since Unicode Version 3.2.0. 
 .SH VERSION
-2.6
+@VERSION@
 .SH COPYRIGHT
 Copyright (C) 2000-2002 IBM, Inc. and others.
 .SH SEE ALSO
