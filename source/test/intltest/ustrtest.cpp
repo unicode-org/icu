@@ -187,6 +187,30 @@ UnicodeStringTest::TestCompare()
     if (test1.compareBetween(10, 14, test2, 0, 4) >= 0 || test1.compareBetween(10, 14, test3, 22, 31) <= 0
                     || test1.compareBetween(10, 14, test4, 22, 26) != 0)
         errln("compareBetween failed");
+
+    /* test compareCodePointOrder() */
+    {
+        /* these strings are in ascending order */
+        static const UChar strings[5][3]={
+            { 0x61, 0 },            /* U+0061 */
+            { 0x20ac, 0 },          /* U+20ac */
+            { 0xff61, 0 },          /* U+ff61 */
+            { 0xd800, 0xdc02, 0 },  /* U+10002 */
+            { 0xd84d, 0xdc56, 0 }   /* U+23456 */
+        };
+        UnicodeString u[5];
+        int i;
+
+        for(i=0; i<5; ++i) {
+            u[i]=UnicodeString(TRUE, strings[i], -1);
+        }
+
+        for(i=0; i<4; ++i) {
+            if(u[i].compareCodePointOrder(u[i+1])>=0) {
+                errln("error: UnicodeString::compareCodePointOrder() fails for string %d and the following one\n", i);
+            }
+        }
+    }
 }
 
 void
