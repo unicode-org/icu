@@ -9,6 +9,9 @@
 **********************************************************************
 */
 #include "gregoimp.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/ucal.h"
 
 int32_t Math::floorDivide(int32_t numerator, int32_t denominator) {
@@ -84,4 +87,5 @@ void Grego::dayToFields(double day, int32_t& year, int32_t& month,
     doy++; // one-based doy
 }
 
+#endif
 //eof
