@@ -48,7 +48,7 @@ DEPS = $(OBJECTS:.o=.d)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local \
-distclean distclean-local dist dist-local check check-local resfiles resinst
+distclean distclean-local dist dist-local check check-local resfiles package-resfiles install-resfiles
 
 ## Clear suffix list
 .SUFFIXES :
@@ -63,7 +63,7 @@ check: check-local
 
 all-local: $(TARGET) resfiles
 
-install-local: all-local install-target
+install-local: all-local install-target install-resfiles
 
 install-target: all-local
 	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
@@ -72,11 +72,12 @@ install-target: all-local
 dist-local:
 
 clean-local:
-	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES) $(RESFILES)
-	rm -f $(OBJECTS) $(TARGET)
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES) $(RESFILES)
+	$(RMV) $(OBJECTS) $(TARGET)
+	$(RMV) $(RESDIR)
 
 distclean-local: clean-local
-	rm -f Makefile $(DEPS) $(RESDIR)
+	$(RMV) Makefile $(DEPS)
 
 check-local:
 
@@ -87,7 +88,10 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 $(TARGET) : $(OBJECTS)
 	$(LINK.c) -o $@ $^ $(LIBS)
 
-resfiles: $(RESFILES) resinst
+resfiles: $(RESFILES) package-resfiles
+
+package-resfiles: $(RESDIR)/$(RESDIR).lst
+	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O $(top_builddir)/tools/pkgdata/icupkg.inc -m common -d uconvmsg -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 
 $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
 	@$(MKINSTALLDIRS) $(RESDIR)
@@ -96,9 +100,9 @@ $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
 	  echo `pwd`/$$file >> $@; \
 	done;
 
-resinst: $(RESFILES) $(RESDIR)/$(RESDIR).lst
+install-resfiles: $(RESFILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)/$(PACKAGE)/$(VERSION)
-	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O $(top_builddir)/tools/pkgdata/icupkg.inc -m common -v -c -d $(DESTDIR)$(libdir)/$(PACKAGE)/$(VERSION) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O $(top_builddir)/tools/pkgdata/icupkg.inc -m common -d uconvmsg -I $(DESTDIR)$(libdir)/$(PACKAGE)/$(VERSION) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 
 $(RESDIR)/%.res: $(srcdir)/%.txt
 	@$(MKINSTALLDIRS) $(RESDIR)
