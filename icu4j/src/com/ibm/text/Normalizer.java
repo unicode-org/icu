@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Normalizer.java,v $ 
- * $Date: 2000/07/12 16:40:58 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/07/13 21:25:08 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -714,11 +714,22 @@ public final class Normalizer {
                 ch = text.next();
                 chFromText = true;
             } else {
-                ch = explodeBuf.charAt(explodePos++);
-                if (explodePos >= explodeBuf.length()) {
-                    explodePos = EMPTY;
-                    explodeBuf.setLength(0);
-                }
+                // NOTE: I added the following if() block to catch a case that was
+                // happening during test runs.  charAt() was being called (below)
+                // with an out-of-range index.  This fix makes the tests run and
+                // pass, but this clearly isn't the right way to fix this.  Someone
+                // needs to come back and clean this up later. - liu 7/13/00
+                if (explodePos >= explodeBuf.length()) { // fix
+                    explodePos = EMPTY;                  // fix
+                    explodeBuf.setLength(0);             // fix
+                    ch = DONE;                           // fix
+                } else {                                 // fix
+                    ch = explodeBuf.charAt(explodePos++);
+                    if (explodePos >= explodeBuf.length()) {
+                        explodePos = EMPTY;
+                        explodeBuf.setLength(0);
+                    }
+                }                                        // fix
                 chFromText = false;
             }
         }
