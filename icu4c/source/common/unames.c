@@ -249,7 +249,7 @@ u_charFromName(UCharNameChoice nameChoice,
     }
     if(i==sizeof(upper)) {
         /* name too long, there is no such character */
-        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        *pErrorCode = U_ILLEGAL_CHAR_FOUND;
         return error;
     }
 
@@ -271,7 +271,7 @@ u_charFromName(UCharNameChoice nameChoice,
                         } else if (lower[i] >= 'a' && lower[i] <= 'f') {
                             cp = (cp << 4) + lower[i] - 'a' + 10;
                         } else {
-                            *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+                            *pErrorCode = U_ILLEGAL_CHAR_FOUND;
                             return error;
                         }
                     }
@@ -293,7 +293,7 @@ u_charFromName(UCharNameChoice nameChoice,
             }
         }
 
-         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+         *pErrorCode = U_ILLEGAL_CHAR_FOUND;
         return error;
     }
 
@@ -325,7 +325,7 @@ u_charFromName(UCharNameChoice nameChoice,
     }
 
     if (findName.code == error) {
-         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+         *pErrorCode = U_ILLEGAL_CHAR_FOUND;
     }
     return findName.code;
 }
