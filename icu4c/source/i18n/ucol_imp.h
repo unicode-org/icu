@@ -185,8 +185,6 @@ struct incrementalContext {
 #define UCOL_CASE_SHIFT_START 7
 
 #define UCOL_IGNORABLE 0
-#define UCOL_IMPLICIT_SURROGATE_LAST_CE_MASK     0x80200080
-#define UCOL_IMPLICIT_MISCELLANEOUS_LAST_CE_MASK 0x04000083
 
 /* get weights from a CE */
 #define UCOL_PRIMARYORDER(order) (((order) & UCOL_PRIMARYORDERMASK)>> UCOL_PRIMARYORDERSHIFT)
@@ -266,7 +264,7 @@ struct incrementalContext {
 * @param result size of the longest expansion with argument collation element
 *        as the last element
 */
-#define UCOL_GETMAXEXPANSION(coll, order, result) {                  \
+#define UCOL_GETMAXEXPANSION(coll, order, result) {                          \
   const uint32_t *start;                                                     \
   const uint32_t *limit;                                                     \
   const uint32_t *mid;                                                       \
@@ -287,7 +285,7 @@ struct incrementalContext {
   else if (*limit == order) {                                                \
          result = *(coll->expansionCESize + (limit - coll->endExpansionCE)); \
        }                                                                     \
-       else if ((order & 0xFFFF) == 0x00C0) {     \
+       else if ((order & 0xFFFF) == 0x00C0) {                                \
               result = 2;                                                    \
             }                                                                \
             else {                                                           \
