@@ -1828,8 +1828,9 @@ The leftmost codepage (.xxx) wins.
 
 }
 
-U_CAPI const char*  U_EXPORT2
-uprv_getDefaultCodepage()
+
+static const char*  
+int_getDefaultCodepage()
 {
 #if defined(OS400)
     uint32_t ccsid = 37; /* Default to ibm-37 */
@@ -1944,6 +1945,21 @@ uprv_getDefaultCodepage()
     return "US-ASCII";
 #endif
 }
+
+
+U_CAPI const char*  U_EXPORT2
+uprv_getDefaultCodepage()
+{
+    static char const  *name = NULL;
+    umtx_lock(NULL);
+    if (name == NULL) {
+        name = int_getDefaultCodepage();
+    }
+    umtx_unlock(NULL);
+    return name;
+}
+
+
 
 /* invariant-character handling --------------------------------------------- */
 

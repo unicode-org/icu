@@ -1009,9 +1009,7 @@ ucnv_io_getDefaultConverterName() {
         UConverter *cnv = NULL;
         int32_t length = 0;
 
-        umtx_lock(NULL);
         name = uprv_getDefaultCodepage();
-        umtx_unlock(NULL);
 
         /* if the name is there, test it out and get the canonical name with options */
         if(name != NULL) {
@@ -1055,6 +1053,7 @@ ucnv_io_getDefaultConverterName() {
 
 U_CFUNC void
 ucnv_io_setDefaultConverterName(const char *converterName) {
+    umtx_lock(NULL);
     if(converterName==NULL) {
         /* reset to the default codepage */
         gDefaultConverterName=NULL;
@@ -1062,7 +1061,6 @@ ucnv_io_setDefaultConverterName(const char *converterName) {
         UErrorCode errorCode=U_ZERO_ERROR;
         const char *name=ucnv_io_getConverterName(converterName, &errorCode);
 
-        umtx_lock(NULL);
 
         if(U_SUCCESS(errorCode) && name!=NULL) {
             gDefaultConverterName=name;
@@ -1077,8 +1075,8 @@ ucnv_io_setDefaultConverterName(const char *converterName) {
             }
         }
 
-        umtx_unlock(NULL);
     }
+    umtx_unlock(NULL);
 }
 
 /* alias table swapping ----------------------------------------------------- */
