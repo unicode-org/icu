@@ -929,10 +929,7 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
         // just using the locale mechanism to map through to a file
         // name; this in no way represents an actual locale.
         CharString ch(entry->stringArg);
-        // TODO call internal ures_openXYZ() that guarantees to not canonicalize
-        // (uloc_getName()) the ch resource bundle name, and that also
-        // will not try fallbacks
-        UResourceBundle *bundle = ures_open(0, ch, &status);
+        UResourceBundle *bundle = ures_openDirect(0, ch, &status);
         UnicodeString rules = ures_getUnicodeStringByKey(bundle, RB_RULE, &status);
         ures_close(bundle);
 
