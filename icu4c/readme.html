@@ -12,18 +12,14 @@
 
 <h2>ReadMe: IBM's International Classes For Unicode</h2>
 
-<p>Version: 07/22/1999 <br>
+<p>Version: 11/22/1999 <br>
 </p>
 
 <hr>
 
 <p>COPYRIGHT: <br>
-© Copyright Taligent, Inc., 1997 <br>
-© Copyright International Business Machines Corporation, 1997 - 1999 <br>
-Licensed Material - Program-Property of IBM - All Rights Reserved. <br>
-US Government Users Restricted Rights - Use, duplication, or disclosure restricted by GSA
-ADP Schedule Contract with IBM Corp. <br>
-</p>
+Copyright © 1997-1999 International Business Machines Corporation an others. All Rights
+Reserved.</p>
 
 <hr>
 
@@ -69,8 +65,10 @@ independent applications:
   <li>Changing simple data files rather than modifying program code easily localizes
     applications written using these tools</li>
   <li>Over 150 locales supported. Visit <a
-    href="http://www10.software.ibm.com/developerworks/opensource/icu/localeexplorer">LocaleExplorer</a>
-    site for a demonstration and a full list of supported locales</li>
+    href="http://www10.software.ibm.com/developerworks/opensource/icu/localeexplorer">LocaleExplore
+    (http://www10.software.ibm.com/developerworks/opensource/icu/localeexplorer)</a> site for
+    a demonstration and a full list of supported locales or <a href="docs/supp_loc.html">click
+    here for a table of supported locales</a>.</li>
 </ul>
 
 <p>It is possible to support additional locales by adding more locale data files, with no
@@ -355,15 +353,9 @@ this, you will seemingly get memory errors when you run the executable. <br>
     click the button named &quot;Rebuild All&quot;.</li>
   <li>Repeat steps 7-9 for makeconv (set active project to &quot;makeconv&quot;), genrb
     (&quot;genrb&quot;) and gencol (&quot;gencol&quot;) tools.</li>
-  <li>Run the mkcnvfle.bat script to create the converter data files in binary format. The
-    script requires two arguments, where first is either &quot;Release&quot; or
-    &quot;Debug&quot; reflecting the type of build and the second is path to the icu
-    directory.</li>
-  <li>Run the genrb.bat script to create the locale data files in binary format. The script
-    requires two arguments, where first is either &quot;Release&quot; or &quot;Debug&quot;
-    reflecting the type of build and the second is path to the icu directory</li>
-  <li>Run the gencol.exe program to pre-load the collation data and create the collation data
-    in binary format.</li>
+  <li>From the icu\tools directory Run the makedata.bat script to data files in binary format.
+    The script requires two arguments, where first is path to the icu directory and the second
+    is either &quot;Release&quot; or &quot;Debug&quot; reflecting the type of build.</li>
   <li>Save the value of the <strong>TZ</strong> environment variable and then set it to <strong>PST8PDT</strong>.&nbsp;
   </li>
   <li>Reopen the &quot;allinone&quot; project file and run the &quot;intltest&quot; test.
@@ -422,6 +414,8 @@ version of GNU make (3.7+). </p>
   <li>Change directory to the &quot;icu/source&quot;.</li>
   <li>If it is not already set, please set the executable flag for the following files (by
     executing 'chmod +x' command): configure, install.sh and config.*, </li>
+  <li>You also need to set other environment variables for different build systems. Use this <a
+    href="docs/build_env.htm">table</a> or provided <a href="source/runConfigureICU">script</a>.</li>
   <li>Type &quot;./configure&quot; or type &quot;./configure --help&quot; to print the
     avialable options.</li>
   <li>Type &quot;make&quot; to compile the libraries and all the data files.</li>
@@ -486,15 +480,17 @@ and <a href="docs/cintltst.html">docs/cintltst.html</a> </p>
 
 <p>Adding resource bundle data to your application is quite simple: </p>
 
-<blockquote>
-  <p>Create resource bundle files with the right format and names in a directory for
-  resource bundles you create in your application directory tree.(for more information of
-  that format of these files see <a
-  href="http://www.ibm.com/java/education/international-unicode/unicodec.html">resource
-  bundle format)</a> <br>
-  Use that same directory name (absolute path) when instantiating a resource bundle at run
-  time.</p>
-</blockquote>
+<p>Create resource bundle files with the right format and names in a directory for
+resource bundles you create in your application directory tree.(for more information of
+that format of these files see <a href="../icuhtml/ResourceBundle.html#DOC.DOCU">resource
+bundle documentation</a> or&nbsp; <a
+href="http://www.ibm.com/java/education/international-unicode/unicodec.html">resource
+bundle format)</a>. <br>
+Please note that resource bundle tag names should contain only invariant 7-bit ASCII
+characters (e.g. ones from the following set: A-Z, a-z, 0-9, &lt;SP&gt;, &quot;, %, &amp;,
+`, (, ), *, +, ,, -, ., /, :, ;, &lt;, =, &gt;, ?, _).<br>
+Use that same directory name (absolute path) when instantiating a resource bundle at run
+time.</p>
 
 <p><a NAME="WhereCollation"></a></p>
 
@@ -545,95 +541,13 @@ document can be ordered through Mechanicsberg and it comes with 2 CD ROMs which 
 machine readable conversion tables on them. The license agreement is included in IBM's
 International Classes for Unicode agreement. </p>
 
+<p>Click <a href="data/convrtrs.txt">here</a> to view converters implemented in ICU. To
+see converters in action, please visit <a
+href="http://www10.software.ibm.com/developerworks/opensource/icu/localeexplorer/?converter&amp;"><font
+COLOR="#000000" size="3">http://www10.software.ibm.com/developerworks/opensource/icu/localeexplorer/?converter&amp;</font></a></p>
+
 <p>To order the document in the US you can call 1-800-879-2755 and request document number
 SC09-2190-00. The cost of this publication is $75.00 US not including tax. </p>
-
-<p>Currently, the support code pages are: </p>
-
-<p><font face="Courier New">ibm-1004: PC Data Latin-1<br>
-ibm-1008: Arabic 8bit ISO/ASCII<br>
-ibm-1038: Adobe Symbol Set<br>
-ibm-1089: ISO-8859-6<br>
-ibm-1112: MS Windows Baltic Rim<br>
-ibm-1116: PC Data Estonia<br>
-ibm-1117: PC Data Latvia<br>
-ibm-1118: PC Data Lithuania<br>
-ibm-1119: PC Data Russian<br>
-ibm-1123: Cyrillic Ukraine EBCDIC<br>
-ibm-1140: </font><font COLOR="#000000" size="3" face="Courier New">EBCDIC USA, Canada,
-Netherlands, Portugal, Brazil, Australia, New Zealand - EBCDIC: Italy</font><font
-face="Courier New"><br>
-ibm-1141: EBCDIC Germany, Austria<br>
-ibm-1142: EBCDIC Denmark etc.<br>
-ibm-1143: EBCDIC Sweden<br>
-ibm-1144: EBCDIC Italy<br>
-ibm-1145: EBCDIC Spain<br>
-ibm-1146: EBCDIC UK Irland<br>
-ibm-1147: EBCDIC France<br>
-ibm-1148: EBCDIC International Latin-1<br>
-ibm-1250: MS-Windows Latin-2<br>
-ibm-1251: MS-Windows Cyrillic<br>
-ibm-1252: MS-Windows Latin-1<br>
-ibm-1253: MS-Windows Greek<br>
-ibm-1254: MS-Windows Turkey<br>
-ibm-1255: MS-Windows Hebrew<br>
-ibm-1256: MS-Windows Arabic<br>
-ibm-1257: MS-Windows Baltic Rim<br>
-ibm-1258: MS-Windows Vietnamese<br>
-ibm-1275: Apple Latin-1<br>
-ibm-1276: Adobe (Postscript) Standard Encoding<br>
-ibm-1277: Adobe (Postscript) Latin-1<br>
-ibm-1280: Apple Greek<br>
-ibm-1281: Apple Turkey<br>
-ibm-1282: Apple Central European<br>
-ibm-1283: Apple Cyrillic<br>
-ibm-1361: Korean EUC Windows cp949<br>
-ibm-1383: Simplified Chinese EUC<br>
-ibm-1386: Simplified Chinese GBK<br>
-ibm-290: Japanese Katakana SBCS<br>
-ibm-37 : </font><font COLOR="#000000" size="3" face="Courier New">CECP: USA, Canada
-(ESA*), Netherlands, Portugal, Brazil, Australia, New Zealand - MS Windows, Hebrew</font><font
-face="Courier New"><br>
-ibm-420: Arabic (with presentation forms)<br>
-ibm-424: Hebrew<br>
-ibm-437: PC Data PC Base USA<br>
-ibm-813: ISO-8859-7<br>
-ibm-833: Korean Host Extended SBCS<br>
-ibm-852: PC Data Latin-2 Multilingual<br>
-ibm-855: PC Data Cyrillic<br>
-ibm-856: PC Data Hebrew<br>
-ibm-857: PC Data Turkey<br>
-ibm-858: PC Data with EURO<br>
-ibm-859: PC Latin-9<br>
-ibm-860: PC Data Portugal<br>
-ibm-861: PC Data Iceland<br>
-ibm-863: PC Data Canada<br>
-ibm-864: PC Data Arabic<br>
-ibm-865: PC Data Denmark<br>
-ibm-866: PC Data Russian<br>
-ibm-867: PC Data Hebrew<br>
-ibm-868: PC Data Urdu<br>
-ibm-869: PC Data Greek<br>
-ibm-874: PC Data Thai<br>
-ibm-878: Russian Internet koi8-r<br>
-ibm-912: ISO-8859-2<br>
-ibm-913: ISO-8859-3<br>
-ibm-914: ISO-8859-4<br>
-ibm-915: ISO-8859-5<br>
-ibm-916: ISO-8859-8<br>
-ibm-920: ISO-8859-9<br>
-ibm-921: Baltic 8bit<br>
-ibm-922: Estonia 8bit<br>
-ibm-923: ISO-8859-15<br>
-ibm-930: Japanese Katakana-Kanji Host<br>
-ibm-933: Korean Host Mixed<br>
-ibm-935: Simplified Chinese Host Mixed<br>
-ibm-937: Traditional Chinese Host Mixed<br>
-ibm-942: Japanese PC Data Mixed<br>
-ibm-943: Japanese PC Data for Open Environment<br>
-ibm-949: KS Code PC Data Mixed<br>
-ibm-950: BIG-5<br>
-ibm-970: Korean EUC</font></p>
 
 <h3><a NAME="ProgrammingNotes"></a><u>Programming Notes</u></h3>
 
@@ -853,8 +767,8 @@ Internet email to <a href="mailto:icu4c@us.ibm.com">icu4c@us.ibm.com.</a> <br>
 
 <hr>
 
-<p>© Copyright 1997 Taligent, Inc. <br>
-© Copyright 1997-1999 IBM Corporation <br>
+<p>Copyright © 1997-1999 International Business Machines Corporation an others. All
+Rights Reserved.<br>
 IBM Center for Java Technology Silicon Valley, <br>
 10275 N De Anza Blvd., Cupertino, CA 95014 <br>
 All rights reserved. </p>
