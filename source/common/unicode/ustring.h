@@ -407,24 +407,25 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
  * Uppercase the characters in a string.
  * Casing is locale-dependent and context-sensitive.
  * The result may be longer or shorter than the original.
+ * The source string and the destination buffer are allowed to overlap.
  *
- * @param src       The original string
- * @param srcLength The length of the original string. If -1, then src must be zero-terminated.
  * @param dest      A buffer for the result string. The result will be zero-terminated if
  *                  the buffer is large enough.
  * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
  *                  dest may be NULL and the function will only return the length of the result
  *                  without writing any of the result string.
- * @param locale    The locale to consider, or NULL for none.
+ * @param src       The original string
+ * @param srcLength The length of the original string. If -1, then src must be zero-terminated.
+ * @param locale    The locale to consider, or "" for the root locale or NULL for the default locale.
  * @param pErrorCode Must be a valid pointer to an error code value,
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string. It may be greater than destCapacity. In that case,
  *         only some of the result was written to the destination buffer.
- * @unimplemented
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_strToUpper(const UChar *src, int32_t srcLength,
-             UChar *dest, int32_t destCapacity,
+u_strToUpper(UChar *dest, int32_t destCapacity,
+             const UChar *src, int32_t srcLength,
              const char *locale,
              UErrorCode *pErrorCode);
 
@@ -432,24 +433,25 @@ u_strToUpper(const UChar *src, int32_t srcLength,
  * Lowercase the characters in a string.
  * Casing is locale-dependent and context-sensitive.
  * The result may be longer or shorter than the original.
+ * The source string and the destination buffer are allowed to overlap.
  *
- * @param src       The original string
- * @param srcLength The length of the original string. If -1, then src must be zero-terminated.
  * @param dest      A buffer for the result string. The result will be zero-terminated if
  *                  the buffer is large enough.
  * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
  *                  dest may be NULL and the function will only return the length of the result
  *                  without writing any of the result string.
- * @param locale    The locale to consider, or NULL for none.
+ * @param src       The original string
+ * @param srcLength The length of the original string. If -1, then src must be zero-terminated.
+ * @param locale    The locale to consider, or "" for the root locale or NULL for the default locale.
  * @param pErrorCode Must be a valid pointer to an error code value,
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string. It may be greater than destCapacity. In that case,
  *         only some of the result was written to the destination buffer.
- * @unimplemented
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_strToLower(const UChar *src, int32_t srcLength,
-             UChar *dest, int32_t destCapacity,
+u_strToLower(UChar *dest, int32_t destCapacity,
+             const UChar *src, int32_t srcLength,
              const char *locale,
              UErrorCode *pErrorCode);
 

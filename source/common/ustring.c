@@ -18,9 +18,11 @@
 #include "unicode/ustring.h"
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
-#include "cstring.h"
-#include "umutex.h"
 #include "unicode/ucnv.h"
+#include "cstring.h"
+#include "cmemory.h"
+#include "umutex.h"
+#include "ustr_imp.h"
 
 /* forward declaractions of definitions for the shared default converter */
 
@@ -425,6 +427,103 @@ u_strlen(const UChar *s)
     }
     return t - s;
 #endif
+}
+
+/* string casing ------------------------------------------------------------ */
+
+/*
+ * Implement argument checking and buffer handling
+ * for string case mapping as a common function.
+ */
+enum {
+    TO_LOWER,
+    TO_UPPER
+};
+
+static int32_t
+u_strCaseMap(UChar *dest, int32_t destCapacity,
+             const UChar *src, int32_t srcLength,
+             const char *locale,
+             int32_t toWhichCase,
+             UErrorCode *pErrorCode) {
+    UChar buffer[300];
+    UChar *temp;
+    int32_t destLength;
+
+    /* check argument values */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if( destCapacity<0 ||
+        (dest==NULL && destCapacity>0) ||
+        src==NULL ||
+        srcLength<-1
+    ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /* get the string length */
+    if(srcLength==-1) {
+        srcLength=u_strlen(src);
+    }
+
+    /* check for overlapping source and destination */
+    if( (src>=dest && src<(dest+destCapacity)) ||
+        (dest>=src && dest<(src+srcLength))
+    ) {
+        /* overlap: provide a temporary destination buffer and later copy the result */
+        if(destCapacity<=(sizeof(buffer)/U_SIZEOF_UCHAR)) {
+            /* the stack buffer is large enough */
+            temp=buffer;
+        } else {
+            /* allocate a buffer */
+            temp=uprv_malloc(destCapacity*U_SIZEOF_UCHAR);
+            if(temp==NULL) {
+                *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                return 0;
+            }
+        }
+    } else {
+        temp=dest;
+    }
+
+    if(toWhichCase==TO_LOWER) {
+        destLength=u_internalStrToLower(temp, destCapacity, src, srcLength,
+                                        locale, NULL, NULL, pErrorCode);
+    } else {
+        destLength=u_internalStrToUpper(temp, destCapacity, src, srcLength,
+                                        locale, NULL, NULL, pErrorCode);
+    }
+    if(temp!=dest) {
+        /* copy the result string to the destination buffer */
+        uprv_memcpy(dest, temp, destLength*U_SIZEOF_UCHAR);
+        if(temp!=buffer) {
+            uprv_free(temp);
+        }
+    }
+
+    /* zero-terminate if possible */
+    if(destLength<destCapacity) {
+        dest[destLength]=0;
+    }
+    return destLength;
+}
+
+U_CAPI int32_t U_EXPORT2
+u_strToLower(UChar *dest, int32_t destCapacity,
+             const UChar *src, int32_t srcLength,
+             const char *locale,
+             UErrorCode *pErrorCode) {
+    return u_strCaseMap(dest, destCapacity, src, srcLength, locale, TO_LOWER, pErrorCode);
+}
+
+U_CAPI int32_t U_EXPORT2
+u_strToUpper(UChar *dest, int32_t destCapacity,
+             const UChar *src, int32_t srcLength,
+             const char *locale,
+             UErrorCode *pErrorCode) {
+    return u_strCaseMap(dest, destCapacity, src, srcLength, locale, TO_UPPER, pErrorCode);
 }
 
 /* conversions between char* and UChar* ------------------------------------- */
