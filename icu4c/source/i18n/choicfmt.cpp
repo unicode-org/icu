@@ -244,7 +244,7 @@ ChoiceFormat::stod(const UnicodeString& string,
     
     char source[256] = { '\0' };
     char* end;
-    u_UCharsToChars(string.getUChars(),source,string.length());
+    string.extract(0,string.length(),source,256,""/*default codepage*/);
     return uprv_strtod(source,&end);
 }
 

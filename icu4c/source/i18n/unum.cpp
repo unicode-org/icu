@@ -603,12 +603,14 @@ unum_getSymbols(const UNumberFormat* fmt,
   
   dfs->getCurrencySymbol(temp);
   len = uprv_min(temp.length(), UNFSYMBOLSMAXSIZE);
-  u_strncpy(syms->currency, temp.getUChars(), len);
+  //u_strncpy(syms->currency, temp.getUChars(), len);
+  temp.extract(0,len,syms->currency);
   syms->currency[len > 0 ? len : 0] = 0x0000;
 
   dfs->getInternationalCurrencySymbol(temp);
   len = uprv_min(temp.length(), UNFSYMBOLSMAXSIZE);
-  u_strncpy(syms->intlCurrency, temp.getUChars(), len);
+  //u_strncpy(syms->intlCurrency, temp.getUChars(), len);
+  temp.extract(0,len,syms->intlCurrency);
   syms->intlCurrency[len > 0 ? len : 0] = 0x0000;
   
   syms->monetarySeparator    = dfs->getMonetaryDecimalSeparator();
@@ -618,12 +620,14 @@ unum_getSymbols(const UNumberFormat* fmt,
 
   dfs->getInfinity(temp);
   len = uprv_min(temp.length(), UNFSYMBOLSMAXSIZE);
-  u_strncpy(syms->infinity, temp.getUChars(), len);
+  //u_strncpy(syms->infinity, temp.getUChars(), len);
+  temp.extract(0,len,syms->infinity);
   syms->infinity[len > 0 ? len : 0] = 0x0000;
 
   dfs->getNaN(temp);
   len = uprv_min(temp.length(), UNFSYMBOLSMAXSIZE);
-  u_strncpy(syms->naN, temp.getUChars(), len);
+  //u_strncpy(syms->naN, temp.getUChars(), len);
+  temp.extract(0,len,syms->naN);
   syms->naN[len > 0 ? len : 0] = 0x0000;
 }
 
