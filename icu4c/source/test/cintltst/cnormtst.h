@@ -11,6 +11,7 @@
 *        Name                     Description            
 *     Madhu Katragadda            Converted to C
 *     synwee                      added test for quick check
+*     synwee                      added test for checkFCD
 *********************************************************************************
 */
 #ifndef _NORMTST
@@ -20,8 +21,6 @@
  */
 
 #include "cintltst.h"
-
-
     
     void TestDecomp(void);
     void TestCompatDecomp(void);
@@ -29,6 +28,7 @@
     void TestCompatDecompCompose(void);
     void TestNull(void);
     void TestQuickCheck(void);
+    void TestCheckFCD(void);
 
     /*internal functions*/
     

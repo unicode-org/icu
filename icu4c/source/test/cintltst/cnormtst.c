@@ -11,6 +11,7 @@
 *        Name                     Description            
 *     Madhu Katragadda            Ported for C API
 *     synwee                      added test for quick check
+*     synwee                      added test for checkFCD
 *********************************************************************************/
 /*tests for u_normalization*/
 #include <stdlib.h>
@@ -24,9 +25,10 @@
 
 #define ARRAY_LENGTH(array) (sizeof (array) / sizeof (*array))
 
-
+extern UBool checkFCD(const UChar *, int32_t, UErrorCode *);
 
 static UCollator *myCollation;
+
 const static char* canonTests[][3] = {
     /* Input*/                    /*Decomposed*/                /*Composed*/
     { "cat",                    "cat",                        "cat"                    },
@@ -86,7 +88,6 @@ const static char* compatTests[][3] = {
     
 };
 
-
 void addNormTest(TestNode** root)
 {
     
@@ -96,6 +97,7 @@ void addNormTest(TestNode** root)
     addTest(root, &TestCompatDecompCompose, "tscoll/cnormtst/CompatDecompCompose");
     addTest(root, &TestNull, "tscoll/cnormtst/TestNull");
     addTest(root, &TestQuickCheck, "tscoll/cnormtst/TestQuickCheck");
+    addTest(root, &TestCheckFCD, "tscoll/cnormtst/TestCheckFCD");
 }
 
 void TestDecomp() 
@@ -352,30 +354,32 @@ void TestQuickCheckResultNO()
   int count = 0;
   UErrorCode error = U_ZERO_ERROR;
 
+  // u_getCombiningClass(0x00c5);
+
   for (; count < SIZE; count ++)
   {
     if (unorm_quickCheck(&(CPNFD[count]), 1, UCOL_DECOMP_CAN, &error) != 
                                                               UNORM_NO)
     {
-      log_err("ERROR in NFD quick check at code point %d", CPNFD[count]);
+      log_err("ERROR in NFD quick check at code point %d\n", CPNFD[count]);
       return;
     }
     if (unorm_quickCheck(&(CPNFC[count]), 1, UCOL_DECOMP_CAN_COMP_COMPAT, &error) != 
                                                               UNORM_NO)
     {
-      log_err("ERROR in NFC quick check at code point %d", CPNFC[count]);
+      log_err("ERROR in NFC quick check at code point %d\n", CPNFC[count]);
       return;
     }
     if (unorm_quickCheck(&(CPNFKD[count]), 1, UCOL_DECOMP_COMPAT, &error) != 
                                                               UNORM_NO)
     {
-      log_err("ERROR in NFKD quick check at code point %d", CPNFKD[count]);
+      log_err("ERROR in NFKD quick check at code point %d\n", CPNFKD[count]);
       return;
     }
     if (unorm_quickCheck(&(CPNFKC[count]), 1, UCOL_DECOMP_COMPAT_COMP_CAN, &error) != 
                                                               UNORM_NO)
     {
-      log_err("ERROR in NFKC quick check at code point %d", CPNFKC[count]);
+      log_err("ERROR in NFKC quick check at code point %d\n", CPNFKC[count]);
       return;
     }
   }
@@ -402,24 +406,24 @@ void TestQuickCheckResultYES()
   {
     if (unorm_quickCheck(&cp, 1, UCOL_DECOMP_CAN, &error) != UNORM_YES)
     {
-      log_err("ERROR in NFD quick check at code point %d", cp);
+      log_err("ERROR in NFD quick check at code point %d\n", cp);
       return;
     }
     if (unorm_quickCheck(&cp, 1, UCOL_DECOMP_CAN_COMP_COMPAT, &error) != 
                                                              UNORM_YES)
     {
-      log_err("ERROR in NFC quick check at code point %d", cp);
+      log_err("ERROR in NFC quick check at code point %d\n", cp);
       return;
     }
     if (unorm_quickCheck(&cp, 1, UCOL_DECOMP_COMPAT, &error) != UNORM_YES)
     {
-      log_err("ERROR in NFKD quick check at code point %d", cp);
+      log_err("ERROR in NFKD quick check at code point %d\n", cp);
       return;
     }
     if (unorm_quickCheck(&cp, 1, UCOL_DECOMP_COMPAT_COMP_CAN, &error) != 
                                                              UNORM_YES)
     {
-      log_err("ERROR in NFKC quick check at code point %d", cp);
+      log_err("ERROR in NFKC quick check at code point %d\n", cp);
       return;
     }
     cp ++;
@@ -430,25 +434,25 @@ void TestQuickCheckResultYES()
     if (unorm_quickCheck(&(CPNFD[count]), 1, UCOL_DECOMP_CAN, &error) != 
                                                              UNORM_YES)
     {
-      log_err("ERROR in NFD quick check at code point %d", CPNFD[count]);
+      log_err("ERROR in NFD quick check at code point %d\n", CPNFD[count]);
       return;
     }
     if (unorm_quickCheck(&(CPNFC[count]), 1, UCOL_DECOMP_CAN_COMP_COMPAT, &error) 
                                                           != UNORM_YES)
     {
-      log_err("ERROR in NFC quick check at code point %d", CPNFC[count]);
+      log_err("ERROR in NFC quick check at code point %d\n", CPNFC[count]);
       return;
     }
     if (unorm_quickCheck(&(CPNFKD[count]), 1, UCOL_DECOMP_COMPAT, &error) != 
                                                              UNORM_YES)
     {
-      log_err("ERROR in NFKD quick check at code point %d", CPNFKD[count]);
+      log_err("ERROR in NFKD quick check at code point %d\n", CPNFKD[count]);
       return;
     }
     if (unorm_quickCheck(&(CPNFKC[count]), 1, UCOL_DECOMP_COMPAT_COMP_CAN, &error) != 
                                                              UNORM_YES)
     {
-      log_err("ERROR in NFKC quick check at code point %d", CPNFKC[count]);
+      log_err("ERROR in NFKC quick check at code point %d\n", CPNFKC[count]);
       return;
     }
   }
@@ -456,14 +460,10 @@ void TestQuickCheckResultYES()
 
 void TestQuickCheckResultMAYBE() 
 {
-  const UChar CPNFD[] = {0x0220, 0x03F4, 0x0530, 0x0DE3, 0x1FFF, 
-                         0x23AA, 0x3130, 0x9FA7, 0xD7A6, 0xFF00};
-  const UChar CPNFC[] = {0x0306, 0x05B4, 0x0BBE, 0x102E, 0x1FFF, 
-                         0x1175, 0x23AA, 0x3099, 0xD7A6, 0xFF00};
-  const UChar CPNFKD[] = {0x0220, 0x03F4, 0x0530, 0x0DE3, 0x1FFF, 
-                          0x23AA, 0x3130, 0x9FA7, 0xD7A6, 0xFF00};
-  const UChar CPNFKC[] = {0x0300, 0x05B4, 0x0655, 0x09D7, 0x1FFF, 
-                          0x23AA, 0x3099, 0x9FA7, 0xD7A6, 0xFF00};
+  const UChar CPNFC[] = {0x0306, 0x05B4, 0x0BBE, 0x102E, 0x1161, 
+                         0x116A, 0x1173, 0x1175, 0x3099, 0x309A};
+  const UChar CPNFKC[] = {0x0300, 0x05B4, 0x0655, 0x09D7, 0x0B3E, 
+                          0x0DCF, 0xDDF, 0x102E, 0x11A8, 0x3099};
 
 
   const int SIZE = 10;
@@ -471,30 +471,19 @@ void TestQuickCheckResultMAYBE()
   int count = 0;
   UErrorCode error = U_ZERO_ERROR;
 
+  /* NFD and NFKD does not have any MAYBE codepoints */
   for (; count < SIZE; count ++)
   {
-    if (unorm_quickCheck(&(CPNFD[count]), 1, UCOL_DECOMP_CAN, &error) != 
-                                                           UNORM_MAYBE)
-    {
-      log_err("ERROR in NFD quick check at code point %d", CPNFD[count]);
-      return;
-    }
     if (unorm_quickCheck(&(CPNFC[count]), 1, UCOL_DECOMP_CAN_COMP_COMPAT, &error) != 
                                                            UNORM_MAYBE)
     {
-      log_err("ERROR in NFC quick check at code point %d", CPNFC[count]);
-      return;
-    }
-    if (unorm_quickCheck(&(CPNFKD[count]), 1, UCOL_DECOMP_COMPAT, &error) != 
-                                                           UNORM_MAYBE)
-    {
-      log_err("ERROR in NFKD quick check at code point %d", CPNFKD[count]);
+      log_err("ERROR in NFC quick check at code point %d\n", CPNFC[count]);
       return;
     }
     if (unorm_quickCheck(&(CPNFKC[count]), 1, UCOL_DECOMP_COMPAT_COMP_CAN, &error) != 
                                                            UNORM_MAYBE)
     {
-      log_err("ERROR in NFKC quick check at code point %d", CPNFKC[count]);
+      log_err("ERROR in NFKC quick check at code point %d\n", CPNFKC[count]);
       return;
     }
   }
@@ -514,14 +503,14 @@ void TestQuickCheckStringResult()
     if (unorm_quickCheck(d, u_strlen(d), UCOL_DECOMP_CAN, &error) != 
                                                             UNORM_YES)
     {
-      log_err("ERROR in NFD quick check for string at count %d", count);
+      log_err("ERROR in NFD quick check for string at count %d\n", count);
       return;
     }
 
     if (unorm_quickCheck(c, u_strlen(c), UCOL_DECOMP_CAN_COMP_COMPAT, &error) == 
                                                             UNORM_NO)
     {
-      log_err("ERROR in NFC quick check for string at count %d", count);
+      log_err("ERROR in NFC quick check for string at count %d\n", count);
       return;
     }
 
@@ -536,14 +525,14 @@ void TestQuickCheckStringResult()
     if (unorm_quickCheck(d, u_strlen(d), UCOL_DECOMP_COMPAT, &error) != 
                                                             UNORM_YES)
     {
-      log_err("ERROR in NFKD quick check for string at count %d", count);
+      log_err("ERROR in NFKD quick check for string at count %d\n", count);
       return;
     }
 
     if (unorm_quickCheck(c, u_strlen(c), UCOL_DECOMP_COMPAT_COMP_CAN, &error) != 
                                                             UNORM_YES)
     {
-      log_err("ERROR in NFKC quick check for string at count %d", count);
+      log_err("ERROR in NFKC quick check for string at count %d\n", count);
       return;
     }
 
@@ -558,5 +547,25 @@ void TestQuickCheck()
   TestQuickCheckResultYES();
   TestQuickCheckResultMAYBE();
   TestQuickCheckStringResult(); 
+}
+
+void TestCheckFCD() 
+{
+  UErrorCode status = U_ZERO_ERROR;
+  const UChar FAST_[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 
+                         0x0A}; 
+  const UChar FALSE_[] = {0x0001, 0x0002, 0x02EA, 0x03EB, 0x0300, 0x0301, 
+                          0x02B9, 0x0314, 0x0315, 0x0316};
+  const UChar TRUE_[] = {0x0030, 0x0040, 0x0440, 0x056D, 0x064F, 0x06E7, 
+                         0x0050, 0x0730, 0x09EE, 0x1E10};
+  if (checkFCD(FAST_, 10, &status) != TRUE)
+    log_err("checkFCD failed: expected value for fast checkFCD is TRUE\n");
+  if (checkFCD(FALSE_, 10, &status) != FALSE)
+    log_err("checkFCD failed: expected value for error checkFCD is FALSE\n");
+  if (checkFCD(TRUE_, 10, &status) != TRUE)
+    log_err("checkFCD failed: expected value for correct checkFCD is TRUE\n");
+
+  if (U_FAILURE(status))
+    log_err("checkFCD failed: %s\n", u_errorName(status));
 }
 
