@@ -19,7 +19,7 @@
 #define READ_H 1
 
 #include "unicode/utypes.h"
-#include "ufile.h"
+#include "unicode/ustdio.h"
 #include "ustr.h"
 
 /* The types of tokens which may be returned by getNextToken. */
