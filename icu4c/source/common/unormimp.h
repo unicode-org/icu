@@ -65,6 +65,8 @@ enum {
     _NORM_QC_MAYBE=0x10,
     _NORM_QC_ANY_MAYBE=0x30,
 
+    _NORM_QC_MASK=0x3f,
+
     _NORM_COMBINES_FWD=0x40,
     _NORM_COMBINES_BACK=0x80,
     _NORM_COMBINES_ANY=0xc0,
@@ -253,9 +255,9 @@ unorm_getFCD16FromSurrogatePair(const uint16_t *fcdTrieIndex, uint16_t fcd16, UC
  * @internal
  */
 U_CFUNC int32_t
-unorm_nextDecompose(UChar *dest, int32_t destCapacity,
+unorm_nextNormalize(UChar *dest, int32_t destCapacity,
                     CharacterIterator &src,
-                    UBool compat, UBool ignoreHangul,
+                    UNormalizationMode mode, UBool ignoreHangul,
                     UGrowBuffer *growBuffer, void *context,
                     UErrorCode *pErrorCode);
 
@@ -264,53 +266,11 @@ unorm_nextDecompose(UChar *dest, int32_t destCapacity,
  * @internal
  */
 U_CFUNC int32_t
-unorm_prevDecompose(UChar *dest, int32_t destCapacity,
-                    CharacterIterator &src,
-                    UBool compat, UBool ignoreHangul,
-                    UGrowBuffer *growBuffer, void *context,
-                    UErrorCode *pErrorCode);
-
-/**
- * Internal API for iterative normalizing - see Normalizer.
- * @internal
- */
-U_CFUNC int32_t
-unorm_nextFCD(UChar *dest, int32_t destCapacity,
-              CharacterIterator &src,
-              UGrowBuffer *growBuffer, void *context,
-              UErrorCode *pErrorCode);
-
-/**
- * Internal API for iterative normalizing - see Normalizer.
- * @internal
- */
-U_CFUNC int32_t
-unorm_prevFCD(UChar *dest, int32_t destCapacity,
-              CharacterIterator &src,
-              UGrowBuffer *growBuffer, void *context,
-              UErrorCode *pErrorCode);
-
-/**
- * Internal API for iterative normalizing - see Normalizer.
- * @internal
- */
-U_CFUNC int32_t
-unorm_nextCompose(UChar *dest, int32_t destCapacity,
-                  CharacterIterator &src,
-                  UBool compat, UBool ignoreHangul,
-                  UGrowBuffer *growBuffer, void *context,
-                  UErrorCode *pErrorCode);
-
-/**
- * Internal API for iterative normalizing - see Normalizer.
- * @internal
- */
-U_CFUNC int32_t
-unorm_prevCompose(UChar *dest, int32_t destCapacity,
-                  CharacterIterator &src,
-                  UBool compat, UBool ignoreHangul,
-                  UGrowBuffer *growBuffer, void *context,
-                  UErrorCode *pErrorCode);
+unorm_previousNormalize(UChar *dest, int32_t destCapacity,
+                        CharacterIterator &src,
+                        UNormalizationMode mode, UBool ignoreHangul,
+                        UGrowBuffer *growBuffer, void *context,
+                        UErrorCode *pErrorCode);
 
 #endif
 

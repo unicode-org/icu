@@ -253,6 +253,20 @@ _getNorm32FromSurrogatePair(uint32_t norm32, UChar c2) {
         ];
 }
 
+/*
+ * get a norm32 from text with complete code points
+ * (like from decompositions)
+ */
+inline uint32_t
+_getNorm32(const UChar *p, uint32_t mask) {
+    uint32_t norm32=_getNorm32(*p);
+    if((norm32&mask) && isNorm32LeadSurrogate(norm32)) {
+        /* *p is a lead surrogate, get the real norm32 */
+        norm32=_getNorm32FromSurrogatePair(norm32, *(p+1));
+    }
+    return norm32;
+}
+
 inline uint16_t
 _getFCD16(UChar c) {
     return
@@ -365,36 +379,85 @@ _getNextCC(const UChar *&p, const UChar *limit, UChar &c, UChar &c2) {
 }
 
 /*
+ * read backwards and get norm32
+ * return 0 if the character is <minC
+ * if c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first surrogate but read second!)
+ */
+inline uint32_t
+_getPrevNorm32(const UChar *start, const UChar *&src,
+               uint32_t minC, uint32_t mask,
+               UChar &c, UChar &c2) {
+    uint32_t norm32;
+
+    c=*--src;
+    c2=0;
+
+    /* check for a surrogate before getting norm32 to see if we need to predecrement further */
+    if(c<minC) {
+        return 0;
+    } else if(!UTF_IS_SURROGATE(c)) {
+        return _getNorm32(c);
+    } else if(UTF_IS_SURROGATE_FIRST(c)) {
+        /* unpaired first surrogate */
+        return 0;
+    } else if(src!=start && UTF_IS_FIRST_SURROGATE(c2=*(src-1))) {
+        --src;
+        norm32=_getNorm32(c2);
+
+        if((norm32&mask)==0) {
+            /* all surrogate pairs with this lead surrogate have only irrelevant data */
+            return 0;
+        } else {
+            /* norm32 must be a surrogate special */
+            return _getNorm32FromSurrogatePair(norm32, c);
+        }
+    } else {
+        /* unpaired second surrogate */
+        c2=0;
+        return 0;
+    }
+}
+
+/*
  * get the combining class of (c, c2)=*--p
  * before: start<p  after: start<=p
  */
 inline uint8_t
 _getPrevCC(const UChar *start, const UChar *&p) {
-    uint32_t norm32;
     UChar c, c2;
 
-    c=*--p;
+    return (uint8_t)(_getPrevNorm32(start, p, _NORM_MIN_WITH_LEAD_CC, _NORM_CC_MASK, c, c2)>>_NORM_CC_SHIFT);
+}
 
-    /* check for a surrogate before getting norm32 to see if we need to predecrement further */
-    if(!UTF_IS_SURROGATE(c)) {
-        return (uint8_t)(_getNorm32(c)>>_NORM_CC_SHIFT);
-    } else if(UTF_IS_SURROGATE_FIRST(c)) {
-        /* unpaired first surrogate */
-        return 0;
-    } else if(p!=start && UTF_IS_FIRST_SURROGATE(c2=*(p-1))) {
-        --p;
-        norm32=_getNorm32(c2);
-        if((norm32&_NORM_CC_MASK)==0) {
-            /* all surrogate pairs with this lead surrogate have cc==0 */
-            return 0;
-        } else {
-            /* norm32 must be a surrogate special */
-            return (uint8_t)(_getNorm32FromSurrogatePair(norm32, c)>>_NORM_CC_SHIFT);
-        }
-    } else {
-        /* unpaired second surrogate */
-        return 0;
+/*
+ * is this (or does its decomposition begin with) a "true starter"?
+ * (cc==0 and NF*C_YES)
+ */
+inline UBool
+_isTrueStarter(uint32_t norm32, uint32_t ccOrQCMask, uint32_t decompQCMask) {
+    if((norm32&ccOrQCMask)==0) {
+        return TRUE; /* this is a true starter (could be Hangul or Jamo L) */
     }
+
+    /* inspect its decomposition - not a Hangul or a surrogate here */
+    if((norm32&decompQCMask)!=0) {
+        const UChar *p;
+        int32_t length;
+        uint8_t cc, trailCC;
+
+        /* decomposes, get everything from the variable-length extra data */
+        p=_decompose(norm32, decompQCMask, length, cc, trailCC);
+        if(cc==0) {
+            uint32_t qcMask=ccOrQCMask&_NORM_QC_MASK;
+
+            /* does it begin with NFC_YES? */
+            if((_getNorm32(p, qcMask)&qcMask)==0) {
+                /* yes, the decomposition begins with a true starter */
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
 }
 
 /* reorder UTF-16 in-place -------------------------------------------------- */
@@ -1708,20 +1771,6 @@ _recompose(UChar *p, UChar *&limit) {
 }
 
 /*
- * get a norm32 from text with complete code points
- * (like from decompositions)
- */
-inline uint32_t
-_getNorm32(const UChar *p, uint32_t mask) {
-    uint32_t norm32=_getNorm32(*p);
-    if((norm32&mask) && isNorm32LeadSurrogate(norm32)) {
-        /* *p is a lead surrogate, get the real norm32 */
-        norm32=_getNorm32FromSurrogatePair(norm32, *(p+1));
-    }
-    return norm32;
-}
-
-/*
  * read and decompose the following character
  * return NULL if it is (or its decomposition starts with) a starter (cc==0)
  * that has NF*C "yes"
@@ -1821,48 +1870,20 @@ _decomposeBackFindStarter(const UChar *start, const UChar *&src,
     UChar c, c2;
     uint8_t cc, trailCC;
 
-    c=*--src;
-    length=1;
+    norm32=_getPrevNorm32(start, src, minNoMaybe, _NORM_CC_MASK|qcMask|decompQCMask, c, c2);
+    length= c2==0 ? 1 : 2;
     starterIndex=0; /* many characters are themselves starters */
 
-    /* check for a surrogate before getting norm32 to see if we need to predecrement further */
-    if(c<minNoMaybe) {
-        return src;
-    } else if(!UTF_IS_SURROGATE(c)) {
-        norm32=_getNorm32(c);
-        if(isNorm32HangulOrJamo(norm32)) {
-            /* Hangul decomposes but is all starters, Jamo L are starters */
-#if 0
-            /*
-             * this is commented out because
-             * we should never get Jamo V/T here because
-             * we go back through quick check "yes" text
-             * and Jamo V/T have NFC_MAYBE
-             */
-            if(!isHangulJamoNorm32HangulOrJamoL(norm32)) {
-                /* Jamo V/T are not starters */
-                starterIndex=-1;
-            }
-#endif
-            return src;
-        }
-    } else if(UTF_IS_SURROGATE_FIRST(c)) {
-        /* unpaired first surrogate */
-        return src;
-    } else if(src!=start && UTF_IS_FIRST_SURROGATE(c2=*(src-1))) {
-        --src;
-        length=2;
-        norm32=_getNorm32(c2);
-
-        if((norm32&(_NORM_CC_MASK|decompQCMask))==0) {
-            /* all surrogate pairs with this lead surrogate have cc==0 and no decomposition */
-            return src;
-        } else {
-            /* norm32 must be a surrogate special */
-            norm32=_getNorm32FromSurrogatePair(norm32, c);
-        }
-    } else {
-        /* unpaired second surrogate */
+    if( (norm32&(_NORM_CC_MASK|qcMask|decompQCMask))==0 ||
+        isNorm32HangulOrJamo(norm32)
+    ) {
+        /* found a true starter */
+        /*
+         * Hangul decomposes but is all starters, Jamo L are starters.
+         * We never get Jamo V/T here because
+         * we go back through quick check "yes" text
+         * and Jamo V/T have NFC_MAYBE.
+         */
         return src;
     }
 
@@ -2118,6 +2139,14 @@ unorm_compose(UChar *dest, int32_t destCapacity,
     /*
      * prevStarter points to the last character before the current one
      * that is a "true" starter with cc==0 and quick check "yes".
+     *
+     * prevStarter will be used instead of looking for a true starter
+     * while incrementally decomposing [prevStarter..prevSrc[
+     * in _composePart(). Having a good prevStarter allows to just decompose
+     * the entire [prevStarter..prevSrc[.
+     *
+     * This relies on the assumption that the decomposition of a true starter
+     * also begins with a true starter. gennorm/store.c checks for this.
      */
     prevStarter=src;
 
@@ -2507,12 +2536,15 @@ unorm_normalize(const UChar *src, int32_t srcLength,
  * filled again.
  */
 
+/* backward iteration ------------------------------------------------------- */
+
 /*
- * Read backwards and check if the combining class is 0.
- * If c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first surrogate but read second!).
+ * read backwards and get norm32
+ * return 0 if the character is <minC
+ * if c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first surrogate but read second!)
  */
-inline UBool
-_isPrevCCZero(CharacterIterator &src, UChar &c, UChar &c2) {
+inline uint32_t
+_getPrevNorm32(CharacterIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar &c2) {
     uint32_t norm32;
 
     /* need src.hasPrevious() */
@@ -2520,132 +2552,75 @@ _isPrevCCZero(CharacterIterator &src, UChar &c, UChar &c2) {
     c2=0;
 
     /* check for a surrogate before getting norm32 to see if we need to predecrement further */
-    if(!UTF_IS_SURROGATE(c)) {
-        return (_getNorm32(c)&_NORM_CC_MASK)==0;
+    if(c<minC) {
+        return 0;
+    } else if(!UTF_IS_SURROGATE(c)) {
+        return _getNorm32(c);
     } else if(UTF_IS_SURROGATE_FIRST(c) || !src.hasPrevious()) {
         /* unpaired surrogate */
-        return TRUE;
+        return 0;
     } else if(UTF_IS_FIRST_SURROGATE(c2=src.previous())) {
         norm32=_getNorm32(c2);
-        if((norm32&_NORM_CC_MASK)==0) {
-            /* all surrogate pairs with this lead surrogate have cc==0 */
-            return TRUE;
+        if((norm32&mask)==0) {
+            /* all surrogate pairs with this lead surrogate have irrelevant data */
+            return 0;
         } else {
             /* norm32 must be a surrogate special */
-            return (_getNorm32FromSurrogatePair(norm32, c)&_NORM_CC_MASK)==0;
+            return _getNorm32FromSurrogatePair(norm32, c);
         }
     } else {
         /* unpaired second surrogate, undo the c2=src.previous() movement */
         src.move(1, CharacterIterator::kCurrent);
-        return TRUE;
+        return 0;
     }
 }
 
 /*
- * Helper functions:
- * Read from the CharacterIterator until a normalization boundary is reached.
+ * read backwards and check if the character is a previous-iteration boundary
+ * if c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first surrogate but read second!)
  */
+typedef UBool
+IsPrevBoundaryFn(CharacterIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar &c2);
 
-static int32_t
-_findNextDecomposeBoundary(CharacterIterator &src,
-                           UChar *&buffer, int32_t bufferCapacity,
-                           UErrorCode *pErrorCode) {
-    UChar *stackBuffer;
-    uint32_t norm32;
-    int32_t bufferIndex;
-    UChar c, c2;
+/*
+ * read backwards and check if the combining class is 0
+ * if c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first surrogate but read second!)
+ */
+static UBool
+_isPrevCCZero(CharacterIterator &src, uint32_t minC, uint32_t ccMask, UChar &c, UChar &c2) {
+    return (_getPrevNorm32(src, minC, ccMask, c, c2)&ccMask)==0;
+}
 
-    if(!src.hasNext()) {
-        return 0;
-    }
-
-    /* initialize */
-    stackBuffer=buffer;
-
-    /* get one character, ignore its cc, and keep c filled with a one-UChar look-ahead */
-    buffer[0]=c=src.current();
-    bufferIndex=1;
-    c2=src.next();
-    if(UTF_IS_FIRST_SURROGATE(c) && UTF_IS_SECOND_SURROGATE(c2)) {
-        buffer[bufferIndex++]=c2;
-        c=src.next();
-    } else {
-        c=c2;
-    }
-
-    /* get all following characters with non-zero combining class */
-    /* checking hasNext() instead of c!=DONE on the off-chance that U+ffff is part of the string */
-    while(src.hasNext()) {
-        /* get the cc of the next character, src.getIndex() is at c */
-        norm32=_getNorm32(c);
-        if((norm32&_NORM_CC_MASK)==0) {
-            break;
-        }
-
-        if(!isNorm32LeadSurrogate(norm32)) {
-            /* BMP character with cc!=0, write c into the buffer */
-            if( bufferIndex<bufferCapacity ||
-                /* attempt to grow the buffer */
-                u_growBufferFromStatic(stackBuffer, &buffer, &bufferCapacity,
-                                       2*bufferCapacity,
-                                       bufferIndex)
-            ) {
-                buffer[bufferIndex++]=c;
-            } else {
-                *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                return 0;
-            }
-        } else {
-            /* c is a lead surrogate, get the real norm32 */
-            if(UTF_IS_SECOND_SURROGATE(c2=src.next())) {
-                norm32=_getNorm32FromSurrogatePair(norm32, c2);
-            } else {
-                norm32=0;
-            }
-            if((norm32&_NORM_CC_MASK)==0) {
-                /* cc(supplementary)==0, back out the c2=src.next() movement to stop at the first surrogate */
-                src.move(-1, CharacterIterator::kCurrent);
-                break;
-            }
-
-            /* supplementary character with cc!=0, write (c, c2) into the buffer */
-            if( (bufferIndex+2)<=bufferCapacity ||
-                /* attempt to grow the buffer */
-                u_growBufferFromStatic(stackBuffer, &buffer, &bufferCapacity,
-                                       2*bufferCapacity,
-                                       bufferIndex)
-            ) {
-                buffer[bufferIndex++]=c;
-                buffer[bufferIndex++]=c2;
-            } else {
-                *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                return 0;
-            }
-        }
-
-        /* get the next character (pre-increment) */
-        c=src.next();
-    }
-
-    /* return the length of the buffer contents */
-    return bufferIndex;
+/*
+ * read backwards and check if the character is (or its decomposition begins with)
+ * a "true starter" (cc==0 and NF*C_YES)
+ * if c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first surrogate but read second!)
+ */
+static UBool
+_isPrevTrueStarter(CharacterIterator &src, uint32_t minC, uint32_t ccOrQCMask, UChar &c, UChar &c2) {
+    uint32_t norm32, decompQCMask;
+    
+    decompQCMask=(ccOrQCMask<<2)&0xf; /* decomposition quick check mask */
+    norm32=_getPrevNorm32(src, minC, ccOrQCMask|decompQCMask, c, c2);
+    return _isTrueStarter(norm32, ccOrQCMask, decompQCMask);
 }
 
 static int32_t
-_findPreviousDecomposeBoundary(CharacterIterator &src,
+_findPreviousIterationBoundary(CharacterIterator &src,
+                               IsPrevBoundaryFn *isPrevBoundary, uint32_t minC, uint32_t mask,
                                UChar *&buffer, int32_t bufferCapacity,
                                int32_t &startIndex,
                                UErrorCode *pErrorCode) {
     UChar *stackBuffer;
     UChar c, c2;
-    UBool isZero;
+    UBool isBoundary;
 
     /* initialize */
     stackBuffer=buffer;
     startIndex=bufferCapacity; /* fill the buffer from the end backwards */
 
     while(src.hasPrevious()) {
-        isZero=_isPrevCCZero(src, c, c2);
+        isBoundary=isPrevBoundary(src, minC, mask, c, c2);
 
         /* always write this character to the front of the buffer */
         /* make sure there is enough space in the buffer */
@@ -2654,6 +2629,7 @@ _findPreviousDecomposeBoundary(CharacterIterator &src,
 
             if(!u_growBufferFromStatic(stackBuffer, &buffer, &bufferCapacity, 2*bufferCapacity, bufferLength)) {
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                src.setToStart();
                 return 0;
             }
 
@@ -2667,8 +2643,8 @@ _findPreviousDecomposeBoundary(CharacterIterator &src,
             buffer[--startIndex]=c2;
         }
 
-        /* stop if this just-copied character has cc==0 */
-        if(isZero) {
+        /* stop if this just-copied character is a boundary */
+        if(isBoundary) {
             break;
         }
     }
@@ -2677,32 +2653,250 @@ _findPreviousDecomposeBoundary(CharacterIterator &src,
     return bufferCapacity-startIndex;
 }
 
+U_CFUNC int32_t
+unorm_previousNormalize(UChar *dest, int32_t destCapacity,
+                        CharacterIterator &src,
+                        UNormalizationMode mode, UBool ignoreHangul,
+                        UGrowBuffer *growBuffer, void *context,
+                        UErrorCode *pErrorCode) {
+    UChar stackBuffer[40];
+    UChar *buffer;
+    IsPrevBoundaryFn *isPreviousBoundary;
+    uint32_t mask;
+    int32_t startIndex, bufferLength, destLength;
+    UChar minC;
+
+    switch(mode) {
+    case UNORM_NFD:
+    case UNORM_NFKD:
+    case UNORM_FCD:
+        isPreviousBoundary=_isPrevCCZero;
+        minC=_NORM_MIN_WITH_LEAD_CC;
+        mask=_NORM_CC_MASK;
+        break;
+    case UNORM_NFC:
+        isPreviousBoundary=_isPrevTrueStarter;
+        minC=(UChar)indexes[_NORM_INDEX_MIN_NFC_NO_MAYBE];
+        mask=_NORM_CC_MASK|_NORM_QC_NFC;
+        break;
+    case UNORM_NFKC:
+        isPreviousBoundary=_isPrevTrueStarter;
+        minC=(UChar)indexes[_NORM_INDEX_MIN_NFKC_NO_MAYBE];
+        mask=_NORM_CC_MASK|_NORM_QC_NFKC;
+        break;
+    case UNORM_NONE:
+        if(src.hasPrevious()) {
+            UChar32 c=src.previous32();
+
+            destLength=0;
+            UTF_APPEND_CHAR_UNSAFE(dest, destLength, c);
+            return destLength;
+        } else {
+            return 0;
+        }
+    default:
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    buffer=stackBuffer;
+    bufferLength=_findPreviousIterationBoundary(src,
+                                                isPreviousBoundary, minC, mask,
+                                                buffer, sizeof(stackBuffer)/U_SIZEOF_UCHAR,
+                                                startIndex,
+                                                pErrorCode);
+    if(bufferLength>0) {
+        destLength=unorm_internalNormalize(dest, destCapacity,
+                                           buffer+startIndex, bufferLength,
+                                           mode, ignoreHangul,
+                                           growBuffer, context, pErrorCode);
+    } else {
+        destLength=0;
+    }
+
+    /* cleanup */
+    if(buffer!=stackBuffer) {
+        uprv_free(buffer);
+    }
+
+    return destLength;
+}
+
+/* forward iteration -------------------------------------------------------- */
+
 /*
- * Iteration functions:
- * Collect a minimum amount of text from the character iterator,
- * normalize into the destination buffer,
- * and return the length of the output.
+ * read forward and get norm32
+ * return 0 if the character is <minC
+ * if c2!=0 then (c2, c) is a surrogate pair
+ * always reads complete characters
  */
+inline uint32_t
+_getNextNorm32(CharacterIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar &c2) {
+    uint32_t norm32;
+
+    /* need src.hasNext() */
+    c=src.nextPostInc();
+    c2=0;
+
+    if(c<minC) {
+        return 0;
+    }
+
+    norm32=_getNorm32(c);
+    if(UTF_IS_FIRST_SURROGATE(c) && src.hasNext() && UTF_IS_SECOND_SURROGATE(c2=src.current())) {
+        src.move(1, CharacterIterator::kCurrent); /* skip the c2 surrogate */
+        if((norm32&mask)==0) {
+            /* irrelevant data */
+            return 0;
+        } else {
+            /* norm32 must be a surrogate special */
+            return _getNorm32FromSurrogatePair(norm32, c2);
+        }
+    }
+    return norm32;
+}
+
+/*
+ * read forward and check if the character is a next-iteration boundary
+ * if c2!=0 then (c, c2) is a surrogate pair
+ */
+typedef UBool
+IsNextBoundaryFn(CharacterIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar &c2);
+
+/*
+ * read forward and check if the combining class is 0
+ * if c2!=0 then (c, c2) is a surrogate pair
+ */
+static UBool
+_isNextCCZero(CharacterIterator &src, uint32_t minC, uint32_t ccMask, UChar &c, UChar &c2) {
+    return (_getNextNorm32(src, minC, ccMask, c, c2)&ccMask)==0;
+}
+
+/*
+ * read forward and check if the character is (or its decomposition begins with)
+ * a "true starter" (cc==0 and NF*C_YES)
+ * if c2!=0 then (c, c2) is a surrogate pair
+ */
+static UBool
+_isNextTrueStarter(CharacterIterator &src, uint32_t minC, uint32_t ccOrQCMask, UChar &c, UChar &c2) {
+    uint32_t norm32, decompQCMask;
+    
+    decompQCMask=(ccOrQCMask<<2)&0xf; /* decomposition quick check mask */
+    norm32=_getNextNorm32(src, minC, ccOrQCMask|decompQCMask, c, c2);
+    return _isTrueStarter(norm32, ccOrQCMask, decompQCMask);
+}
+
+static int32_t
+_findNextIterationBoundary(CharacterIterator &src,
+                           IsNextBoundaryFn *isNextBoundary, uint32_t minC, uint32_t mask,
+                           UChar *&buffer, int32_t bufferCapacity,
+                           UErrorCode *pErrorCode) {
+    UChar *stackBuffer;
+    int32_t bufferIndex;
+    UChar c, c2;
+
+    if(!src.hasNext()) {
+        return 0;
+    }
+
+    /* initialize */
+    stackBuffer=buffer;
+
+    /* get one character and ignore its properties */
+    buffer[0]=c=src.current();
+    bufferIndex=1;
+    c2=src.next();
+    if(UTF_IS_FIRST_SURROGATE(c) && UTF_IS_SECOND_SURROGATE(c2)) {
+        buffer[bufferIndex++]=c2;
+        src.move(1, CharacterIterator::kCurrent); /* skip the c2 surrogate */
+    }
+
+    /* get all following characters until we see a boundary */
+    /* checking hasNext() instead of c!=DONE on the off-chance that U+ffff is part of the string */
+    while(src.hasNext()) {
+        if(isNextBoundary(src, minC, mask, c, c2)) {
+            /* back out the latest movement to stop at the boundary */
+            src.move(c2==0 ? -1 : -2, CharacterIterator::kCurrent);
+            break;
+        } else {
+            if(bufferIndex+(c2==0 ? 1 : 2)<=bufferCapacity ||
+                /* attempt to grow the buffer */
+                u_growBufferFromStatic(stackBuffer, &buffer, &bufferCapacity,
+                                       2*bufferCapacity,
+                                       bufferIndex)
+            ) {
+                buffer[bufferIndex++]=c;
+                if(c2!=0) {
+                    buffer[bufferIndex++]=c2;
+                }
+            } else {
+                *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                src.setToEnd();
+                return 0;
+            }
+        }
+    }
+
+    /* return the length of the buffer contents */
+    return bufferIndex;
+}
 
 U_CFUNC int32_t
-unorm_nextDecompose(UChar *dest, int32_t destCapacity,
+unorm_nextNormalize(UChar *dest, int32_t destCapacity,
                     CharacterIterator &src,
-                    UBool compat, UBool ignoreHangul,
+                    UNormalizationMode mode, UBool ignoreHangul,
                     UGrowBuffer *growBuffer, void *context,
                     UErrorCode *pErrorCode) {
     UChar stackBuffer[40];
     UChar *buffer;
+    IsNextBoundaryFn *isNextBoundary;
+    uint32_t mask;
     int32_t bufferLength, destLength;
+    UChar minC;
+
+    switch(mode) {
+    case UNORM_NFD:
+    case UNORM_NFKD:
+    case UNORM_FCD:
+        isNextBoundary=_isNextCCZero;
+        minC=_NORM_MIN_WITH_LEAD_CC;
+        mask=_NORM_CC_MASK;
+        break;
+    case UNORM_NFC:
+        isNextBoundary=_isNextTrueStarter;
+        minC=(UChar)indexes[_NORM_INDEX_MIN_NFC_NO_MAYBE];
+        mask=_NORM_CC_MASK|_NORM_QC_NFC;
+        break;
+    case UNORM_NFKC:
+        isNextBoundary=_isNextTrueStarter;
+        minC=(UChar)indexes[_NORM_INDEX_MIN_NFKC_NO_MAYBE];
+        mask=_NORM_CC_MASK|_NORM_QC_NFKC;
+        break;
+    case UNORM_NONE:
+        if(src.hasNext()) {
+            UChar32 c=src.next32PostInc();
+
+            destLength=0;
+            UTF_APPEND_CHAR_UNSAFE(dest, destLength, c);
+            return destLength;
+        } else {
+            return 0;
+        }
+    default:
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
 
     buffer=stackBuffer;
-    bufferLength=_findNextDecomposeBoundary(src,
+    bufferLength=_findNextIterationBoundary(src,
+                                            isNextBoundary, minC, mask,
                                             buffer, sizeof(stackBuffer)/U_SIZEOF_UCHAR,
                                             pErrorCode);
     if(bufferLength>0) {
-        destLength=unorm_decompose(dest, destCapacity,
-                                   buffer, bufferLength,
-                                   compat, ignoreHangul,
-                                   growBuffer, context, pErrorCode);
+        destLength=unorm_internalNormalize(dest, destCapacity,
+                                           buffer, bufferLength,
+                                           mode, ignoreHangul,
+                                           growBuffer, context, pErrorCode);
     } else {
         destLength=0;
     }
@@ -2715,113 +2909,8 @@ unorm_nextDecompose(UChar *dest, int32_t destCapacity,
     return destLength;
 }
 
-U_CFUNC int32_t
-unorm_prevDecompose(UChar *dest, int32_t destCapacity,
-                    CharacterIterator &src,
-                    UBool compat, UBool ignoreHangul,
-                    UGrowBuffer *growBuffer, void *context,
-                    UErrorCode *pErrorCode) {
-    UChar stackBuffer[40];
-    UChar *buffer;
-    int32_t startIndex, bufferLength, destLength;
-
-    buffer=stackBuffer;
-    bufferLength=_findPreviousDecomposeBoundary(src,
-                                                buffer, sizeof(stackBuffer)/U_SIZEOF_UCHAR,
-                                                startIndex,
-                                                pErrorCode);
-    if(bufferLength>0) {
-        destLength=unorm_decompose(dest, destCapacity,
-                                   buffer+startIndex, bufferLength,
-                                   compat, ignoreHangul,
-                                   growBuffer, context, pErrorCode);
-    } else {
-        destLength=0;
-    }
-
-    /* cleanup */
-    if(buffer!=stackBuffer) {
-        uprv_free(buffer);
-    }
-
-    return destLength;
-}
-
-U_CFUNC int32_t
-unorm_nextFCD(UChar *dest, int32_t destCapacity,
-              CharacterIterator &src,
-              UGrowBuffer *growBuffer, void *context,
-              UErrorCode *pErrorCode) {
-    UChar stackBuffer[40];
-    UChar *buffer;
-    int32_t bufferLength, destLength;
-
-    buffer=stackBuffer;
-    bufferLength=_findNextDecomposeBoundary(src,
-                                            buffer, sizeof(stackBuffer)/U_SIZEOF_UCHAR,
-                                            pErrorCode);
-    if(bufferLength>0) {
-        destLength=unorm_makeFCD(dest, destCapacity,
-                                 buffer, bufferLength,
-                                 growBuffer, context, pErrorCode);
-    } else {
-        destLength=0;
-    }
-
-    /* cleanup */
-    if(buffer!=stackBuffer) {
-        uprv_free(buffer);
-    }
-
-    return destLength;
-}
-
-U_CFUNC int32_t
-unorm_prevFCD(UChar *dest, int32_t destCapacity,
-              CharacterIterator &src,
-              UGrowBuffer *growBuffer, void *context,
-              UErrorCode *pErrorCode) {
-    UChar stackBuffer[40];
-    UChar *buffer;
-    int32_t startIndex, bufferLength, destLength;
-
-    buffer=stackBuffer;
-    bufferLength=_findPreviousDecomposeBoundary(src,
-                                                buffer, sizeof(stackBuffer)/U_SIZEOF_UCHAR,
-                                                startIndex,
-                                                pErrorCode);
-    if(bufferLength>0) {
-        destLength=unorm_makeFCD(dest, destCapacity,
-                                 buffer+startIndex, bufferLength,
-                                 growBuffer, context, pErrorCode);
-    } else {
-        destLength=0;
-    }
-
-    /* cleanup */
-    if(buffer!=stackBuffer) {
-        uprv_free(buffer);
-    }
-
-    return destLength;
-}
-
-U_CFUNC int32_t
-unorm_nextCompose(UChar *dest, int32_t destCapacity,
-                  CharacterIterator &src,
-                  UBool compat, UBool ignoreHangul,
-                  UGrowBuffer *growBuffer, void *context,
-                  UErrorCode *pErrorCode) {
-    *pErrorCode=U_UNSUPPORTED_ERROR;
-    return 0;
-}
-
-U_CFUNC int32_t
-unorm_prevCompose(UChar *dest, int32_t destCapacity,
-                  CharacterIterator &src,
-                  UBool compat, UBool ignoreHangul,
-                  UGrowBuffer *growBuffer, void *context,
-                  UErrorCode *pErrorCode) {
-    *pErrorCode=U_UNSUPPORTED_ERROR;
-    return 0;
-}
+/*
+ * ### TODO: check if NF*D and FCD iteration finds optimal boundaries
+ * and if not, how hard it would be to improve it.
+ * For example, see _findSafeFCD().
+ */
