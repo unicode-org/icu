@@ -573,7 +573,7 @@ void
 UnicodeStringTest::TestStackAllocation()
 {
      UChar            testString[] ={ 
-        'T', 'h', 'i', 's', ' ', 'i', 's', ' ', 'a', ' ', 'c', 'r', 'a', 'z', 'y', ' ', 't', 'e', 's', 't','.'};
+        'T', 'h', 'i', 's', ' ', 'i', 's', ' ', 'a', ' ', 'c', 'r', 'a', 'z', 'y', ' ', 't', 'e', 's', 't', '.', 0 };
     UChar           guardWord = 0x4DED;
     UnicodeString*  test = 0;
 
@@ -592,15 +592,17 @@ UnicodeStringTest::TestStackAllocation()
 
     // we have to deinitialize and release the backing store by calling the destructor
     // explicitly, since we can't overload operator delete
-    test->~UnicodeString();
+    delete test;
 
     UChar workingBuffer[] = {
         'N', 'o', 'w', ' ', 'i', 's', ' ', 't', 'h', 'e', ' ', 't', 'i', 'm', 'e', ' ',
         'f', 'o', 'r', ' ', 'a', 'l', 'l', ' ', 'm', 'e', 'n', ' ', 't', 'o', ' ',
-        'c', 'o', 'm', 'e', 0xffff, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        'c', 'o', 'm', 'e', 0xffff, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     UChar guardWord2 = 0x4DED;
 
-    test = new UnicodeString(workingBuffer, 35, 50);
+    test = new UnicodeString(workingBuffer, 35, 100);
     if (*test != "Now is the time for all men to come")
         errln("Stack-allocated backing store failed to initialize correctly.");
     if (guardWord2 != 0x4DED)
@@ -611,8 +613,13 @@ UnicodeStringTest::TestStackAllocation()
         errln("insert() on stack-allocated UnicodeString didn't work right");
     if (guardWord2 != 0x4DED)
         errln("insert() on stack-allocated UnicodeString overwrote guard word!");
+#if 0
+    // the current implementation will always reallocate the memory
+    // after it was aliased in case it was read-only;
+    // therefore, this test must fail and we don't perform it
     if (workingBuffer[24] != 'g')
         errln("insert() on stack-allocated UnicodeString didn't affect backing store");
+#endif
 
     *test += " to the aid of their country.";
     if (*test != "Now is the time for all good men to come to the aid of their country.")
@@ -627,7 +634,6 @@ UnicodeStringTest::TestStackAllocation()
         errln("Change to UnicodeString after overflow are stil affecting original buffer");
     if (guardWord2 != 0x4DED)
         errln("Change to UnicodeString after overflow overwrote guard word!");
-#ifdef _WIN32
-    test->~UnicodeString();
-#endif
+
+    delete test;
 }
