@@ -31,6 +31,7 @@ static const char *TESTCOLLATORRULE = "& o,O ; p,P";
 static const char *EXTRACOLLATIONRULE = " & ae ; \\u00e4 & AE ; \\u00c4 & oe ; \\u00f6 & OE ; \\u00d6 & ue ; \\u00fc & UE ; \\u00dc";
 
 static const SearchData BASIC[] = {
+    {"xxxxxxxxxxxxxxxxxxxx", "fisher", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
     {"silly spring string", "string", NULL, UCOL_TERTIARY, NULL, {13, -1}, 
     {6}},
     {"silly spring string string", "string", NULL, UCOL_TERTIARY, NULL,
@@ -233,6 +234,7 @@ static const SearchData IGNORABLE[] = {
 };
 
 static const SearchData BASICCANONICAL[] = {
+    {"xxxxxxxxxxxxxxxxxxxx", "fisher", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
     {"silly spring string", "string", NULL, UCOL_TERTIARY, NULL, {13, -1}, 
     {6}},
     {"silly spring string string", "string", NULL, UCOL_TERTIARY, NULL,
@@ -249,6 +251,10 @@ static const SearchData BASICCANONICAL[] = {
     {2}},
     {"a\\u0300b", "\\u0300", NULL, UCOL_TERTIARY, NULL, {1, -1}, {1}},
     {"a\\u0300\\u0325b", "\\u0300b", NULL, UCOL_TERTIARY, NULL, {1, -1}, {3}},
+    {"\\u0325\\u0300A\\u0325\\u0300", "\\u0300A\\u0300", NULL, UCOL_TERTIARY, 
+    NULL, {0, -1}, {5}},
+    {"\\u0325\\u0300A\\u0325\\u0300", "\\u0325A\\u0325", NULL, UCOL_TERTIARY, 
+    NULL, {0, -1}, {5}},
     {"a\\u0300\\u0325b\\u0300\\u0325c \\u0325b\\u0300 \\u0300b\\u0325", 
     "\\u0300b\\u0325", NULL, UCOL_TERTIARY, NULL, {1, 12, -1}, {5, 3}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
