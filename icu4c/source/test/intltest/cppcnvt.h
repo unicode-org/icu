@@ -12,7 +12,7 @@
 class ConvertTest: public IntlTest {
 public:
     ConvertTest() {};
-    ~ConvertTest() {};
+    virtual ~ConvertTest() {};
     
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 

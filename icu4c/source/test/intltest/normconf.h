@@ -20,7 +20,7 @@ class NormalizerConformanceTest : public IntlTest {
 
  public:
     NormalizerConformanceTest();
-    ~NormalizerConformanceTest();
+    virtual ~NormalizerConformanceTest();
 
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL);
 

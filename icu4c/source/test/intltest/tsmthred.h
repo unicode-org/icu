@@ -36,7 +36,7 @@ class MultithreadTest : public IntlTest
 {
 public:
     MultithreadTest();
-    ~MultithreadTest();
+    virtual ~MultithreadTest();
     
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 

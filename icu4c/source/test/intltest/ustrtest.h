@@ -12,7 +12,7 @@
 class UnicodeStringTest: public IntlTest {
 public:
     UnicodeStringTest();
-    ~UnicodeStringTest();
+    virtual ~UnicodeStringTest();
     
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
