@@ -155,9 +155,6 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name common
     End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name i18n
-    End Project Dependency
 }}}
 
 ###############################################################################
