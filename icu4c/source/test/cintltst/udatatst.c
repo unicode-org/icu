@@ -697,8 +697,9 @@ static void TestUDataGetMemory() {
     }
     table=(const uint16_t *)udata_getMemory(result);
 
-    if(ucnv_countAvailable() !=  table[1+2*(*table)])      /*???*/
-        log_err("FAIL: udata_getMemory() failed ucnv_countAvailable returned = %d, expected = %d ", ucnv_countAvailable(), table[1+2*(*table)]);
+    /* The alias table may list more converters than what's actually available now. [grhoten] */
+    if(ucnv_countAvailable() > table[1+2*(*table)])      /*???*/
+        log_err("FAIL: udata_getMemory() failed ucnv_countAvailable returned = %d, expected = %d\n", ucnv_countAvailable(), table[1+2*(*table)]);
 
     udata_close(result);
 
