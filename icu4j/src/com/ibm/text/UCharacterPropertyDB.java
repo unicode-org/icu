@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2001/06/21 23:20:53 $ 
-* $Revision: 1.4 $
+* $Date: 2001/10/19 22:15:53 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -16,6 +16,7 @@ package com.ibm.text;
 
 import java.io.InputStream;
 import java.io.DataInputStream;
+import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 
@@ -98,7 +99,7 @@ final class  UCharacterPropertyDB extends UCharacterDB
   /**
   * Default name of the datafile
   */
-  private static final String DATA_FILE_NAME_ = "uprops.dat";
+  private static final String DATA_FILE_NAME_ = "resources/uprops.dat";
   
   /**
   * Default buffer size of datafile
@@ -197,6 +198,7 @@ final class  UCharacterPropertyDB extends UCharacterDB
   {
     UGenPropReader reader = new UGenPropReader();
     
+    // jar access
     InputStream i = getClass().getResourceAsStream(DATA_FILE_NAME_);
     BufferedInputStream b = new BufferedInputStream(i, DATA_BUFFER_SIZE_);
     DataInputStream d = new DataInputStream(b);
