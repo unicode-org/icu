@@ -26,9 +26,11 @@
 // class DateFormatSymbols
 // *****************************************************************************
 
+#define PATTERN_CHARS_LEN 20
+
 // generic date-format pattern symbols.  For their meanings, see class docs
 // for SimpleDateFormat
-UnicodeString DateFormatSymbols::fgPatternChars = UNICODE_STRING("GyMdkHmsSEDFwWahKzYe", 20);
+UnicodeString DateFormatSymbols::fgPatternChars = UNICODE_STRING("GyMdkHmsSEDFwWahKzYe", PATTERN_CHARS_LEN);
 
 //------------------------------------------------------
 // Strings of last resort.  These are only used if we have no resource
@@ -486,14 +488,14 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, bool
     
     fAmPms          = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgAmPmMarkersTag, fAmPmsCount, status);
 
-    /**
-     * Retrieve the data we need from the time zone data file.
-     * We cast away const here, but that's okay; we won't delete any of
-     * these.
-     */
-    ResourceBundle zoneResource(Locale::getDataDirectory(), locale, status);
-    fZoneStrings    = (UnicodeString**)zoneResource.get2dArray(SimpleDateFormat::fgZoneStringsTag, fZoneStringsRowCount, fZoneStringsColCount, status);
-    zoneResource.getString(SimpleDateFormat::fgLocalPatternCharsTag, fLocalPatternChars, status);
+    fZoneStrings    = (UnicodeString**)resource.get2dArray(SimpleDateFormat::fgZoneStringsTag, fZoneStringsRowCount, fZoneStringsColCount, status);
+    resource.getString(SimpleDateFormat::fgLocalPatternCharsTag, fLocalPatternChars, status);
+    // If the locale data does not include new pattern chars, use the defaults
+    if (fLocalPatternChars.length() < PATTERN_CHARS_LEN) {
+        UnicodeString str;
+        fgPatternChars.extractBetween(fLocalPatternChars.length(), PATTERN_CHARS_LEN, str);
+        fLocalPatternChars.append(str);
+    }
 }
 
 /**
