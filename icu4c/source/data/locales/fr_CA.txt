@@ -28,6 +28,6 @@ fr_CA {
     // Currency display names
     Currencies {
         CAD { "$", "dollar canadien" } // Canadian Dollar
-        USD { "US$", "dollar des Etats-Unis" } // US Dollar
+        USD { "$ US", "dollar am\u00E9ricain" } // US Dollar
     }
 }
