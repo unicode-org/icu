@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $
- * $Date: 2001/11/15 23:38:01 $
- * $Revision: 1.53 $
+ * $Date: 2001/11/16 00:57:51 $
+ * $Revision: 1.54 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.53 $ $Date: 2001/11/15 23:38:01 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.54 $ $Date: 2001/11/16 00:57:51 $
  */
 public abstract class Transliterator {
     /**
@@ -1288,23 +1288,34 @@ public abstract class Transliterator {
                 if (var < 0) {
                     var = id.length();
                 }
+                boolean isSourcePresent = false;
                 
                 if (sep < 0) {
                     // Form: T/V or T (or /V)
                     target = id.substring(0, var);
                     variant = id.substring(var);
                 } else if (sep < var) {
-                    // Form: S-T/V or S-T
-                    source = id.substring(0, sep++);
-                    target = id.substring(sep, var);
+                    // Form: S-T/V or S-T (or -T/V or -T)
+                    if (sep > 0) {
+                        source = id.substring(0, sep);
+                        isSourcePresent = true;
+                    }
+                    target = id.substring(++sep, var);
                     variant = id.substring(var);
                 } else {
-                    // Form: S/V-T
-                    source = id.substring(0, var);
+                    // Form: (S/V-T or /V-T)
+                    if (var > 0) {
+                        source = id.substring(0, var);
+                        isSourcePresent = true;
+                    }
                     variant = id.substring(var, sep++);
                     target = id.substring(sep);
                 }
                 id.setLength(0);
+                // Source and variant may be empty, but target may not be.
+                if (target.length() == 0) {
+                    return null;
+                }
                 // For forward IDs *or IDs that were part of a Foo(Bar) ID*,
                 // normalize them to canonical form.
                 if (dir == FORWARD || revStart >= 0) {
@@ -1319,7 +1330,7 @@ public abstract class Transliterator {
                             // If the original ID contained "Any-" then make the
                             // special inverse "Any-Foo"; otherwise make it "Foo".
                             // So "Any-NFC" => "Any-NFD" but "NFC" => "NFD".
-                            if (sep < 0) {
+                            if (!isSourcePresent) {
                                 id.append(inverseTarget);
                             } else {
                                 source = inverseTarget;
