@@ -308,6 +308,27 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name genrb
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genccode
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gencmn
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gencnval
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gennames
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gentz
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name mkhelper
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name toolutil
+    End Project Dependency
 }}}
 
 ###############################################################################
