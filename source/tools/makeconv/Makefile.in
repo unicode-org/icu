@@ -66,6 +66,10 @@ ALL_UCM = $(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
 UCM_FILES = $(ALL_UCM:%=$(top_srcdir)/../data/%)
 CNV_FILES = $(ALL_UCM:%.ucm=@DATABUILDDIR@/%.cnv)
 
+TEST_UCM_SOURCE= test1.ucm test3.ucm test4.ucm
+TEST_UCM_FILES=$(TEST_UCM_SOURCE:%=$(top_srcdir)/test/testdata/%)
+TEST_CNV_FILES=$(TEST_UCM_SOURCE:%.ucm=@DATABUILDDIR@/../source/test/testdata/%.cnv)
+
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
 distclean distclean-local dist dist-local check	\
@@ -82,7 +86,7 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) $(CNV_FILES)
+all-local: $(TARGET) $(CNV_FILES) $(TEST_CNV_FILES)
 
 
 install-local: all-local
@@ -97,7 +101,7 @@ install-local: all-local
 dist-local:
 
 rebuild: $(TARGET)
-	-$(RMV) $(CNV_FILES)
+	-$(RMV) $(CNV_FILES) $(TEST_CNV_FILES)
 	$(MAKE) all-local
 
 clean-local:
@@ -105,7 +109,7 @@ clean-local:
 	$(RMV) $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
-	$(RMV) Makefile $(DEPS) $(CNV_FILES)
+	$(RMV) Makefile $(DEPS) $(CNV_FILES) $(TEST_CNV_FILES)
 
 check-local: all-local
 
