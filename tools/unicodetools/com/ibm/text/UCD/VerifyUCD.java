@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2002/07/30 09:56:40 $
-* $Revision: 1.18 $
+* $Date: 2002/08/09 23:56:24 $
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -30,6 +30,37 @@ import java.text.NumberFormat;
 
 public class VerifyUCD implements UCD_Types {
     static final boolean DEBUG = false;
+    
+    static void checkDecompFolding() {
+        Default.setUCD();
+        UnicodeSet sum = new UnicodeSet();
+        for (int cp = 0; cp <= 0x10FFFF; ++cp) {
+            Utility.dot(cp);
+            if (!Default.ucd.isAllocated(cp)) continue;
+            byte cat = Default.ucd.getCategory(cp);
+            if (cat == UNASSIGNED || cat == PRIVATE_USE) continue;
+            String decomp = Default.nfd.normalize(cp);
+            String foldDecomp = Default.ucd.getCase(decomp, FULL, FOLD);
+            int d0 = Default.ucd.getCombiningClass(decomp.charAt(0));
+            int dL = Default.ucd.getCombiningClass(decomp.charAt(decomp.length()-1));
+            int f0 = Default.ucd.getCombiningClass(foldDecomp.charAt(0));
+            int fL = Default.ucd.getCombiningClass(foldDecomp.charAt(decomp.length()-1));
+            if (d0 != f0 || dL != fL) {
+                Utility.fixDot();
+                System.out.println();
+                System.out.println("Exception: " + Default.ucd.getCodeAndName(cp));
+                System.out.println("Decomp: " + Default.ucd.getCodeAndName(decomp));
+                System.out.println("FoldedDecomp: " + Default.ucd.getCodeAndName(foldDecomp));
+                System.out.println("d0: " + d0 + ", "
+                    + "dL: " + dL + ", "
+                    + "f0: " + f0 + ", "
+                    + "fL: " + fL
+                );
+                sum.add(cp);
+            }
+        }
+        System.out.println("Set: " + sum.toPattern(true));
+    }
     
     static void oneTime() {
         Default.setUCD();

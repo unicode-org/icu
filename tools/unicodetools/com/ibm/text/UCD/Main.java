@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/08/08 15:35:01 $
-* $Revision: 1.21 $
+* $Date: 2002/08/09 23:56:24 $
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -77,6 +77,8 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("Buildnames")) BuildNames.main(null);
             else if (arg.equalsIgnoreCase("TestNormalization")) TestNormalization.main(null);
             
+            
+            else if (arg.equalsIgnoreCase("checkDecompFolding")) VerifyUCD.checkDecompFolding();
             
             else if (arg.equalsIgnoreCase("breaktest")) GenerateBreakTest.main(null);
             else if (arg.equalsIgnoreCase("checkcollator")) CheckCollator.main(null);
