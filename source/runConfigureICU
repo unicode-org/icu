@@ -113,8 +113,8 @@ case $platform in
 		THE_COMP=xlC
                 CC=/usr/lpp/xlC/bin/xlc; export CC
                 CXX=/usr/lpp/xlC/bin/xlC_r; export CXX
-		RELEASE_CFLAGS=-O2 -Q
-		RELEASE_CXXFLAGS=-O2 -Q
+		RELEASE_CFLAGS=-O2
+		RELEASE_CXXFLAGS=-O2
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
 		;;
@@ -123,8 +123,8 @@ case $platform in
 		THE_COMP=xlC
                 CC=/usr/ibmcxx/bin/xlc; export CC
                 CXX=/usr/ibmcxx/bin/xlC_r; export CXX
-		RELEASE_CFLAGS=-O2 -Q
-		RELEASE_CXXFLAGS=-O2 -Q
+		RELEASE_CFLAGS=-O2
+		RELEASE_CXXFLAGS=-O2
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
 		;;
@@ -133,32 +133,18 @@ case $platform in
 		THE_COMP=xlC
                 CC=/usr/vacpp/bin/xlc; export CC
                 CXX=/usr/vacpp/bin/xlC_r; export CXX
-		RELEASE_CFLAGS=-O2 -Q
-		RELEASE_CXXFLAGS=-O2 -Q
+		RELEASE_CFLAGS=-O2
+		RELEASE_CXXFLAGS=-O2
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-                ;;
-        SOLARISCC)
-		THE_OS=SOLARIS
-		THE_COMP="Sun's CC"
-                CC=/usr/local/SUNWspro/bin/cc; export CC
-                CXX=/usr/local/SUNWspro/bin/CC; export CXX
-		RELEASE_CFLAGS=-xO5
-		RELEASE_CXXFLAGS=-O5
-                ;;
-        SOLARISGCC)
-		THE_OS=SOLARIS
-		THE_COMP="the GNU C++"
-                CXXFLAGS=-I/usr/local/include/g++; export CXXFLAGS
-		LDFLAGS=-R/usr/local/lib; export LDFLAGS
                 ;;
         SOL2.7CC)
 		THE_OS="SOLARIS 2.7"
 		THE_COMP="Sun's CC"
                 CC=/usr/local/SUNWspro/bin/cc; export CC
                 CXX=/usr/local/SUNWspro/bin/CC; export CXX 
-		RELEASE_CFLAGS=-xO4
-		RELEASE_CXXFLAGS=-O4
+		RELEASE_CFLAGS=-xO3
+		RELEASE_CXXFLAGS=-O3
                 ;;
         SOLARISX86)
 		THE_OS="SOLARIS X86"
@@ -168,8 +154,22 @@ case $platform in
                 CXX_FLAGS="-w -O";export CXX_FLAGS
                 C_FLAGS="-w -O";export C_FLAGS
                 LDFLAGS="-L -lCrun";export LDFLAGS
-		RELEASE_CFLAGS=-xO4
-		RELEASE_CXXFLAGS=-O4
+		RELEASE_CFLAGS=-xO3
+		RELEASE_CXXFLAGS=-O3
+                ;;
+        SOLARISCC)
+		THE_OS=SOLARIS
+		THE_COMP="Sun's CC"
+                CC=/usr/local/SUNWspro/bin/cc; export CC
+                CXX=/usr/local/SUNWspro/bin/CC; export CXX
+		RELEASE_CFLAGS=-xO3
+		RELEASE_CXXFLAGS=-O3
+                ;;
+        SOLARISGCC)
+		THE_OS=SOLARIS
+		THE_COMP="the GNU C++"
+                CXXFLAGS=-I/usr/local/include/g++; export CXXFLAGS
+		LDFLAGS=-R/usr/local/lib; export LDFLAGS
                 ;;
         LinuxRedHat*)
 		THE_OS=Linux
