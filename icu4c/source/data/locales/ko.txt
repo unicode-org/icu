@@ -1898,5 +1898,5 @@ ko {
                 "GMT",
         }
     }
-
+    LocaleScript{ "Hang", "Hani" }
 }
