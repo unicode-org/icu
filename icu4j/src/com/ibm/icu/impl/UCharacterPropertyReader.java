@@ -4,30 +4,28 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/Attic/UCharacterPropertyReader.java,v $ 
-* $Date: 2002/02/16 03:05:58 $ 
-* $Revision: 1.3 $
+* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharacterPropertyReader.java,v $ 
+* $Date: 2002/02/28 23:42:04 $ 
+* $Revision: 1.1 $
 *
 *******************************************************************************
 */
-package com.ibm.icu.lang;
+package com.ibm.icu.impl;
 
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.util.Arrays;
 import java.io.IOException;
-import com.ibm.icu.impl.CharTrie;
-import com.ibm.icu.impl.ICUBinary;
 
 /**
 * <p>Internal reader class for ICU data file uprops.dat containing 
 * Unicode codepoint data.</p> 
 * <p>This class simply reads uprops.dat, authenticates that it is a valid
 * ICU data file and split its contents up into blocks of data for use in
-* <a href=UCharacterProperty.html>com.ibm.icu.text.UCharacterProperty</a>.
+* <a href=UCharacterProperty.html>com.ibm.icu.impl.UCharacterProperty</a>.
 * </p> 
 * <p>For more information about the format of uprops.dat refer to
-* <a href=oss.software.ibm.com/icu4j/icu4jhtml/com/ibm/icu/text/readme.html>
+* <a href=oss.software.ibm.com/icu4j/icu4jhtml/com/ibm/icu/lang/readme.html>
 * ReadMe</a>.<\p>
 * <p>uprops.dat which is in big-endian format is jared together with this 
 * package.</p>
@@ -131,7 +129,7 @@ final class UCharacterPropertyReader
     */
     private static final byte DATA_FORMAT_ID_[] = {(byte)0x55, (byte)0x50, 
                                                     (byte)0x72, (byte)0x6F};
-    private static final byte DATA_FORMAT_VERSION_[] = {(byte)0x2, (byte)0x0, 
+    private static final byte DATA_FORMAT_VERSION_[] = {(byte)0x2, (byte)0x1, 
                                                         (byte)0x5, (byte)0x2};
     private static final byte UNICODE_VERSION_[] = {(byte)0x3, (byte)0x1, 
                                                     (byte)0x1, (byte)0x0};  

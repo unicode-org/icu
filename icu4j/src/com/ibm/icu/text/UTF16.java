@@ -5,15 +5,15 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2002/02/16 03:06:20 $ 
-* $Revision: 1.12 $
+* $Date: 2002/02/28 23:42:03 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
 
 package com.ibm.icu.text;
 
-import com.ibm.icu.lang.*;
+import com.ibm.icu.impl.UnicodeProperty;
 
 /**
 * Standalone utility class providing UTF16 character conversions and indexing 
@@ -109,31 +109,6 @@ public final class UTF16
     public static final int SINGLE_CHAR_BOUNDARY = 1, 
                             LEAD_SURROGATE_BOUNDARY = 2, 
                             TRAIL_SURROGATE_BOUNDARY = 5;
-     
-    // private variables ============================================
-    	
-    /** 
-    * Lead surrogates values from LEAD_SURROGATE_MIN_VALUE_ to 
-    * LEAD_SURROGATE_MAX_VALUE_
-	*/
-	private static final int LEAD_SURROGATE_MIN_VALUE_ = 0xD800;
-	private static final int LEAD_SURROGATE_MAX_VALUE_ = 0xDBFF;
-    	
-	/**
-	* Surrogate lead offset, to be used when breaking up UTF32 into surrogate
-	* pair
-	*/
-	private static final int LEAD_SURROGATE_OFFSET_ = 
-	                                    LEAD_SURROGATE_MIN_VALUE_ - 
-	                                   (UCharacter.SUPPLEMENTARY_MIN_VALUE 
-	                                    >> UCharacter.LEAD_SURROGATE_SHIFT_);
-    	
-	/** 
-	* Trail surrogates values from TRAIL_SURROGATE_MIN_VALUE_ to 
-    * TRAIL_SURROGATE_MAX_VALUE_
-	*/
-	private static final int TRAIL_SURROGATE_MIN_VALUE_ = 0xDC00; 
-	private static final int TRAIL_SURROGATE_MAX_VALUE_ = 0xDFFF;
                               
     // constructor ==================================================
       
@@ -170,37 +145,7 @@ public final class UTF16
             throw new StringIndexOutOfBoundsException(offset16);
         }
           
-        char single = source.charAt(offset16);
-        if (!isSurrogate(single)) {
-            return single;
-        }
-
-        // Convert the UTF-16 surrogate pair if necessary.
-        // For simplicity in usage, and because the frequency of pairs is 
-        // low, look both directions.
-                
-	    if (isLeadSurrogate(single)) 
-	    {
-	        ++ offset16;
-	        if (source.length() != offset16)
-	        {
-	        char trail = source.charAt(offset16);
-	        if (isTrailSurrogate(trail))
-	            return UCharacter.getRawSupplementary(single, trail);
-	        }
-	    } 
-	    else 
-	    { 
-	        -- offset16;
-	        if (offset16 >= 0)
-	        {
-	        // single is a trail surrogate so
-	        char lead = source.charAt(offset16);
-	        if (isLeadSurrogate(lead))
-	            return UCharacter.getRawSupplementary(lead, single);
-	        }
-	    } 
-	    return single; // return unmatched surrogate
+        return UnicodeProperty.charAt(source, offset16);
     }
       
     /**
@@ -236,14 +181,14 @@ public final class UTF16
         // For simplicity in usage, and because the frequency of pairs is 
         // low, look both directions.
                 
-	    if (isLeadSurrogate(single)) 
+	    if (single <= UnicodeProperty.LEAD_SURROGATE_MAX_VALUE) 
 	    {
 	        ++ offset16;
 	        if (source.length() != offset16)
 	        {
 	        char trail = source.charAt(offset16);
 	        if (isTrailSurrogate(trail))
-	            return UCharacter.getRawSupplementary(single, trail);
+	            return UnicodeProperty.getRawSupplementary(single, trail);
 	        }
 	    } 
 	    else 
@@ -254,7 +199,7 @@ public final class UTF16
 	        // single is a trail surrogate so
 	        char lead = source.charAt(offset16);
 	        if (isLeadSurrogate(lead)) {
-	            return UCharacter.getRawSupplementary(lead, single);
+	            return UnicodeProperty.getRawSupplementary(lead, single);
 	        }
 	        }
 	    } 
@@ -297,14 +242,14 @@ public final class UTF16
         // Convert the UTF-16 surrogate pair if necessary.
         // For simplicity in usage, and because the frequency of pairs is 
         // low, look both directions.      
-	    if (isLeadSurrogate(single)) {
+	    if (single <= UnicodeProperty.LEAD_SURROGATE_MAX_VALUE) {
 	        offset16 ++;
 	        if (offset16 >= limit) {
 	            return single;
 	        }
 	        char trail = source[offset16];
 	        if (isTrailSurrogate(trail)) {
-	            return UCharacter.getRawSupplementary(single, trail);
+	            return UnicodeProperty.getRawSupplementary(single, trail);
 	        }
         } 
         else { // isTrailSurrogate(single), so
@@ -314,7 +259,7 @@ public final class UTF16
             offset16 --;
 	        char lead = source[offset16];
 	        if (isLeadSurrogate(lead))
-	            return UCharacter.getRawSupplementary(lead, single);
+	            return UnicodeProperty.getRawSupplementary(lead, single);
         }
         return single; // return unmatched surrogate
     }
@@ -352,14 +297,14 @@ public final class UTF16
         // For simplicity in usage, and because the frequency of pairs is 
         // low, look both directions.
                 
-	    if (isLeadSurrogate(single)) 
+	    if (single <= UnicodeProperty.LEAD_SURROGATE_MAX_VALUE) 
 	    {
 	        ++ offset16;
 	        if (source.length() != offset16)
 	        {
 	        char trail = source.charAt(offset16);
 	        if (isTrailSurrogate(trail))
-	            return UCharacter.getRawSupplementary(single, trail);
+	            return UnicodeProperty.getRawSupplementary(single, trail);
 	        }
 	    } 
 	    else 
@@ -370,7 +315,7 @@ public final class UTF16
 	        // single is a trail surrogate so
 	        char lead = source.charAt(offset16);
 	        if (isLeadSurrogate(lead)) {
-	            return UCharacter.getRawSupplementary(lead, single);
+	            return UnicodeProperty.getRawSupplementary(lead, single);
 	        }
 	        }
 	    } 
@@ -406,15 +351,12 @@ public final class UTF16
     * If a validity check is required, use <code>
     * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on 
     * char32 before calling.
-    * @param ch the input character.
-    * @return 2 if is in surrogate space, otherwise 1. 
+    * @param ch the input codepoint.
+    * @return 2 if is in supplementary space, otherwise 1. 
     */
     public static int getCharCount(int char32) 
     {
-        if (char32 < UCharacter.SUPPLEMENTARY_MIN_VALUE) {
-        return 1;
-        }
-        return 2;
+        return UnicodeProperty.getCharCount(char32);
     }
       
     /**
@@ -582,8 +524,8 @@ public final class UTF16
     */
     public static boolean isSurrogate(char char16) 
     {
-        return LEAD_SURROGATE_MIN_VALUE_ <= char16 && 
-            char16 <= TRAIL_SURROGATE_MAX_VALUE_;
+        return UnicodeProperty.LEAD_SURROGATE_MIN_VALUE <= char16 && 
+            char16 <= UnicodeProperty.TRAIL_SURROGATE_MAX_VALUE;
     }
         
     /**
@@ -593,8 +535,8 @@ public final class UTF16
     */
     public static boolean isTrailSurrogate(char char16) 
     {
-        return (TRAIL_SURROGATE_MIN_VALUE_ <= char16 && 
-                char16 <= TRAIL_SURROGATE_MAX_VALUE_);
+        return (UnicodeProperty.TRAIL_SURROGATE_MIN_VALUE <= char16 && 
+                char16 <= UnicodeProperty.TRAIL_SURROGATE_MAX_VALUE);
     }
         
     /**
@@ -604,8 +546,8 @@ public final class UTF16
     */
     public static boolean isLeadSurrogate(char char16) 
     {
-        return LEAD_SURROGATE_MIN_VALUE_ <= char16 && 
-            char16 <= LEAD_SURROGATE_MAX_VALUE_;
+        return UnicodeProperty.LEAD_SURROGATE_MIN_VALUE <= char16 && 
+            char16 <= UnicodeProperty.LEAD_SURROGATE_MAX_VALUE;
     }
             
     /**
@@ -619,9 +561,8 @@ public final class UTF16
     */
     public static char getLeadSurrogate(int char32) 
     {
-        if (char32 >= UCharacter.SUPPLEMENTARY_MIN_VALUE) {
-        return (char)(LEAD_SURROGATE_OFFSET_ + 
-                    (char32 >> UCharacter.LEAD_SURROGATE_SHIFT_));
+        if (char32 >= UnicodeProperty.SUPPLEMENTARY_MIN_VALUE) {
+        	return UnicodeProperty.getLeadSurrogate(char32);
         }
             
         return 0;
@@ -638,9 +579,8 @@ public final class UTF16
     */
     public static char getTrailSurrogate(int char32) 
     {
-        if (char32 >= UCharacter.SUPPLEMENTARY_MIN_VALUE) {
-        return (char)(TRAIL_SURROGATE_MIN_VALUE_ + (char32 & 
-                        UCharacter.TRAIL_SURROGATE_MASK_));       
+        if (char32 >= UnicodeProperty.SUPPLEMENTARY_MIN_VALUE) {
+        	return UnicodeProperty.getTrailSurrogate(char32);       
         }
           
         return (char)char32;
@@ -659,18 +599,10 @@ public final class UTF16
     */
     public static String valueOf(int char32)
     {
-        if (char32 < UCharacter.MIN_VALUE || char32 > UCharacter.MAX_VALUE) {
-        throw new IllegalArgumentException("Illegal codepoint");
+        if (char32 < UnicodeProperty.MIN_VALUE || char32 > UnicodeProperty.MAX_VALUE) {
+        	throw new IllegalArgumentException("Illegal codepoint");
         }
-        if (char32 < UCharacter.SUPPLEMENTARY_MIN_VALUE) {
-        return String.valueOf((char)char32);
-        }
-        char str[] = new char[2];   
-        str[0] = (char)(LEAD_SURROGATE_OFFSET_ + 
-                        (char32 >> UCharacter.LEAD_SURROGATE_SHIFT_));
-        str[1] = (char)(TRAIL_SURROGATE_MIN_VALUE_ + 
-                        (char32 & UCharacter.TRAIL_SURROGATE_MASK_));
-        return String.valueOf(str);
+        return UnicodeProperty.toString(char32);
     }
       
     /**
@@ -1044,27 +976,19 @@ public final class UTF16
     * If a validity check is required, use 
     * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on 
     * char32 before calling.
-    * @param char32 value to append. If out of bounds, substitutes 
-    *               UTF32.REPLACEMENT_CHAR.
+    * @param char32 value to append.
     * @return the updated StringBuffer
+    * @exception IllegalArgumentException thrown when char32 does not lie within
+    *            the range of the Unicode codepoints
     */
     public static StringBuffer append(StringBuffer target, int char32)
     {
         // Check for irregular values
-        if (char32 < UCharacter.MIN_VALUE || char32 > UCharacter.MAX_VALUE) {
+        if (char32 < UnicodeProperty.MIN_VALUE || char32 > UnicodeProperty.MAX_VALUE) {
             throw new IllegalArgumentException("Illegal codepoint");
         }
             
-        // Write the UTF-16 values
-        if (char32 >= UCharacter.SUPPLEMENTARY_MIN_VALUE) 
-        {
-            target.append(getLeadSurrogate(char32));
-	        target.append(getTrailSurrogate(char32));
-        } 
-	    else {
-	        target.append((char)char32);
-	    }
-	    return target;
+        return UnicodeProperty.append(target, char32);
     }
       
     /**
@@ -1073,17 +997,18 @@ public final class UTF16
     * @param limit UTF16 offset which the codepoint will be appended.
     * @param char32 code point to be appended
     * @return offset after char32 in the array.
-    * @exception IndexOutOfBoundsException thrown if there is not enough 
-    *            space for the append.
+    * @exception Exception thrown if there is not enough 
+    *            space for the append, or when char32 does not lie within
+    *            the range of the Unicode codepoints.
     */
     public static int append(char[] target, int limit, int char32)
     {
         // Check for irregular values
-        if (char32 < UCharacter.MIN_VALUE || char32 > UCharacter.MAX_VALUE) {
+        if (char32 < UnicodeProperty.MIN_VALUE || char32 > UnicodeProperty.MAX_VALUE) {
             throw new IllegalArgumentException("Illegal codepoint");
         }
         // Write the UTF-16 values
-        if (char32 >= UCharacter.SUPPLEMENTARY_MIN_VALUE) 
+        if (char32 >= UnicodeProperty.SUPPLEMENTARY_MIN_VALUE) 
         {
             target[limit ++] = getLeadSurrogate(char32);
             target[limit ++] = getTrailSurrogate(char32);
@@ -1523,18 +1448,19 @@ public final class UTF16
     */
     public static int indexOf(String source, int char32)  
     {
-        if (char32 < UCharacter.MIN_VALUE || char32 > UCharacter.MAX_VALUE) {
+        if (char32 < UnicodeProperty.MIN_VALUE || 
+            char32 > UnicodeProperty.MAX_VALUE) {
             throw new IllegalArgumentException(
                             "Argument char32 is not a valid codepoint");
         }
         // non-surrogate bmp
-        if (char32 < LEAD_SURROGATE_MIN_VALUE_ ||
-            (char32 > TRAIL_SURROGATE_MIN_VALUE_ && 
-             char32 < UCharacter.SUPPLEMENTARY_MIN_VALUE)) {
+        if (char32 < UnicodeProperty.LEAD_SURROGATE_MIN_VALUE ||
+            (char32 > UnicodeProperty.TRAIL_SURROGATE_MIN_VALUE && 
+             char32 < UnicodeProperty.SUPPLEMENTARY_MIN_VALUE)) {
             return source.indexOf((char)char32);
         }
         // surrogate
-        if (char32 < UCharacter.SUPPLEMENTARY_MIN_VALUE) {
+        if (char32 < UnicodeProperty.SUPPLEMENTARY_MIN_VALUE) {
             int result = source.indexOf((char)char32);
             if (result >= 0) {
                 if (isLeadSurrogate((char)char32) && 
@@ -1551,7 +1477,7 @@ public final class UTF16
             return result;
         }
         // supplementary
-        String char32str = UCharacter.toString(char32);
+        String char32str = UnicodeProperty.toString(char32);
         return source.indexOf(char32str);
     }
      
@@ -1631,18 +1557,18 @@ public final class UTF16
     */
     public static int indexOf(String source, int char32, int fromIndex) 
     {
-        if (char32 < UCharacter.MIN_VALUE || char32 > UCharacter.MAX_VALUE) {
+        if (char32 < UnicodeProperty.MIN_VALUE || char32 > UnicodeProperty.MAX_VALUE) {
             throw new IllegalArgumentException(
                             "Argument char32 is not a valid codepoint");
         }
         // non-surrogate bmp
-        if (char32 < LEAD_SURROGATE_MIN_VALUE_ ||
-            (char32 > TRAIL_SURROGATE_MIN_VALUE_ && 
-             char32 < UCharacter.SUPPLEMENTARY_MIN_VALUE)) {
+        if (char32 < UnicodeProperty.LEAD_SURROGATE_MIN_VALUE ||
+            (char32 > UnicodeProperty.TRAIL_SURROGATE_MIN_VALUE && 
+             char32 < UnicodeProperty.SUPPLEMENTARY_MIN_VALUE)) {
             return source.indexOf((char)char32, fromIndex);
         }
         // surrogate
-        if (char32 < UCharacter.SUPPLEMENTARY_MIN_VALUE) {
+        if (char32 < UnicodeProperty.SUPPLEMENTARY_MIN_VALUE) {
             int result = source.indexOf((char)char32, fromIndex);
             if (result >= 0) {
                 if (isLeadSurrogate((char)char32) && 
@@ -1659,7 +1585,7 @@ public final class UTF16
             return result;
         }
         // supplementary
-        String char32str = UCharacter.toString(char32);
+        String char32str = UnicodeProperty.toString(char32);
         return source.indexOf(char32str, fromIndex);
     }
 
@@ -1739,18 +1665,18 @@ public final class UTF16
     */
     public static int lastIndexOf(String source, int char32)  
     {
-        if (char32 < UCharacter.MIN_VALUE || char32 > UCharacter.MAX_VALUE) {
+        if (char32 < UnicodeProperty.MIN_VALUE || char32 > UnicodeProperty.MAX_VALUE) {
             throw new IllegalArgumentException(
                             "Argument char32 is not a valid codepoint");
         }
         // non-surrogate bmp
-        if (char32 < LEAD_SURROGATE_MIN_VALUE_ ||
-            (char32 > TRAIL_SURROGATE_MIN_VALUE_ && 
-             char32 < UCharacter.SUPPLEMENTARY_MIN_VALUE)) {
+        if (char32 < UnicodeProperty.LEAD_SURROGATE_MIN_VALUE ||
+            (char32 > UnicodeProperty.TRAIL_SURROGATE_MIN_VALUE && 
+             char32 < UnicodeProperty.SUPPLEMENTARY_MIN_VALUE)) {
             return source.lastIndexOf((char)char32);
         }
         // surrogate
-        if (char32 < UCharacter.SUPPLEMENTARY_MIN_VALUE) {
+        if (char32 < UnicodeProperty.SUPPLEMENTARY_MIN_VALUE) {
             int result = source.lastIndexOf((char)char32);
             if (result >= 0) {
                 if (isLeadSurrogate((char)char32) && 
@@ -1767,7 +1693,7 @@ public final class UTF16
             return result;
         }
         // supplementary
-        String char32str = UCharacter.toString(char32);
+        String char32str = UnicodeProperty.toString(char32);
         return source.lastIndexOf(char32str);
     }
     
@@ -1854,18 +1780,18 @@ public final class UTF16
     */
     public static int lastIndexOf(String source, int char32, int fromIndex)
     {
-        if (char32 < UCharacter.MIN_VALUE || char32 > UCharacter.MAX_VALUE) {
+        if (char32 < UnicodeProperty.MIN_VALUE || char32 > UnicodeProperty.MAX_VALUE) {
             throw new IllegalArgumentException(
                             "Argument char32 is not a valid codepoint");
         }
         // non-surrogate bmp
-        if (char32 < LEAD_SURROGATE_MIN_VALUE_ ||
-            (char32 > TRAIL_SURROGATE_MIN_VALUE_ && 
-             char32 < UCharacter.SUPPLEMENTARY_MIN_VALUE)) {
+        if (char32 < UnicodeProperty.LEAD_SURROGATE_MIN_VALUE ||
+            (char32 > UnicodeProperty.TRAIL_SURROGATE_MIN_VALUE && 
+             char32 < UnicodeProperty.SUPPLEMENTARY_MIN_VALUE)) {
             return source.lastIndexOf((char)char32, fromIndex);
         }
         // surrogate
-        if (char32 < UCharacter.SUPPLEMENTARY_MIN_VALUE) {
+        if (char32 < UnicodeProperty.SUPPLEMENTARY_MIN_VALUE) {
             int result = source.lastIndexOf((char)char32, fromIndex);
             if (result >= 0) {
                 if (isLeadSurrogate((char)char32) && 
@@ -1882,7 +1808,7 @@ public final class UTF16
             return result;
         }
         // supplementary
-        String char32str = UCharacter.toString(char32);
+        String char32str = UnicodeProperty.toString(char32);
         return source.lastIndexOf(char32str, fromIndex);
     }
     
@@ -1978,11 +1904,11 @@ public final class UTF16
     public static String replace(String source, int oldChar32, 
                                  int newChar32)  
     {
-        if (oldChar32 <= 0 || oldChar32 > UCharacter.MAX_VALUE) {
+        if (oldChar32 <= 0 || oldChar32 > UnicodeProperty.MAX_VALUE) {
             throw new IllegalArgumentException(
                             "Argument oldChar32 is not a valid codepoint");
         }
-        if (newChar32 <= 0 || newChar32 > UCharacter.MAX_VALUE) {
+        if (newChar32 <= 0 || newChar32 > UnicodeProperty.MAX_VALUE) {
             throw new IllegalArgumentException(
                             "Argument newChar32 is not a valid codepoint");
         }
@@ -1991,13 +1917,13 @@ public final class UTF16
         if (index == -1) {
             return source;
         }
-        String       newChar32Str    = UCharacter.toString(newChar32);
+        String       newChar32Str    = UnicodeProperty.toString(newChar32);
         int          oldChar32Size   = 1;
         int          newChar32Size   = newChar32Str.length();
         StringBuffer result = new StringBuffer(source);
         int          resultIndex     = index;
         
-        if (oldChar32 >= UCharacter.SUPPLEMENTARY_MIN_VALUE) {
+        if (oldChar32 >= UnicodeProperty.SUPPLEMENTARY_MIN_VALUE) {
             oldChar32Size = 2;
         }
         
@@ -2145,11 +2071,11 @@ public final class UTF16
             // what this part does is to rearrange the characters 0xE000 to 0xFFFF
             // to the region starting from 0xD800
             // and shift the surrogate characters to above this region
-            if (ca >= LEAD_SURROGATE_MIN_VALUE_) {
-            ca += (ca <= TRAIL_SURROGATE_MAX_VALUE_) ? 0x2000 : -0x800;
+            if (ca >= UnicodeProperty.LEAD_SURROGATE_MIN_VALUE) {
+            ca += (ca <= UnicodeProperty.TRAIL_SURROGATE_MAX_VALUE) ? 0x2000 : -0x800;
             }
-            if (cb >= LEAD_SURROGATE_MIN_VALUE_) {
-            cb += (cb <= TRAIL_SURROGATE_MAX_VALUE_) ? 0x2000 : -0x800;
+            if (cb >= UnicodeProperty.LEAD_SURROGATE_MIN_VALUE) {
+            cb += (cb <= UnicodeProperty.TRAIL_SURROGATE_MAX_VALUE) ? 0x2000 : -0x800;
             }
             // end of only different section
                     

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2002/02/25 22:43:59 $ 
-* $Revision: 1.10 $
+* $Date: 2002/02/28 23:42:04 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -19,8 +19,8 @@ import java.io.DataInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.UnicodeProperty;
 import com.ibm.icu.text.UTF16;
-
 
 /**
 * Internal class to manage character names.
@@ -1024,24 +1024,17 @@ final class UCharacterName
     */
     private int getType(int ch)
     {
-        if ((ch & 0xFFFE) == 0xFFFE || (ch >= 0xFDD0 && ch <= 0xFDEF)) {  
+        if (UCharacter.isNonCharacter(ch)) {  
             // not a character we return a invalid category count
             return UCharacterCategory.NON_CHARACTER_;    
         }    
-        // Undo ICU exceptions to the UCD when determining the category.  
-        int result;   
-        if (UCharacter.isISOControl(ch)) {        
-            result = UCharacterCategory.CONTROL;    
-        } 
-        else {        
-            result = UCharacter.getType(ch);
-            if (result == UCharacterCategory.SURROGATE) {            
-                if (UTF16.isLeadSurrogate((char)ch)) {
-                    result = UCharacterCategory.LEAD_SURROGATE_;
-                }
-                else {
-                    result = UCharacterCategory.TRAIL_SURROGATE_;
-                }
+        int result = UCharacter.getType(ch);
+        if (result == UCharacterCategory.SURROGATE) {            
+            if (ch <= UnicodeProperty.LEAD_SURROGATE_MAX_VALUE) {
+                result = UCharacterCategory.LEAD_SURROGATE_;
+            }
+            else {
+                result = UCharacterCategory.TRAIL_SURROGATE_;
             }    
         }    
         return result;

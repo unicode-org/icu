@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UTF16Test.java,v $ 
-* $Date: 2002/02/25 22:43:57 $ 
-* $Revision: 1.14 $
+* $Date: 2002/02/28 23:42:03 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -49,7 +49,7 @@ public final class UTF16Test extends TestFmwk
       Utility.getChars(strbuff, 0, strsize, array, 0);
       for (int i = 1; i < UCharacter.MAX_VALUE; i += 100)
       {
-          UTF16.append(strbuff, i);
+      	  UTF16.append(strbuff, i);
           arraysize = UTF16.append(array, arraysize, i);
           
           String arraystr = new String(array, 0, arraysize);

@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacterTypeIterator.java,v $
-* $Date: 2002/02/16 03:05:58 $
-* $Revision: 1.2 $
+* $Date: 2002/02/28 23:42:04 $
+* $Revision: 1.3 $
 *
 ******************************************************************************
 */
@@ -14,6 +14,8 @@
 package com.ibm.icu.lang;
 
 import com.ibm.icu.impl.TrieIterator;
+import com.ibm.icu.impl.UnicodeProperty;
+import com.ibm.icu.impl.UCharacterProperty;
 
 /**
  * Class enabling iteration of the codepoints according to their types.
@@ -46,7 +48,7 @@ class UCharacterTypeIterator extends TrieIterator
     */
     protected UCharacterTypeIterator()
     {
-        super(UCharacter.PROPERTY_.m_trie_);
+        super(UnicodeProperty.PROPERTY.m_trie_);
     }
     
     // protected methods ----------------------------------------------
@@ -63,6 +65,6 @@ class UCharacterTypeIterator extends TrieIterator
     protected int extract(int value)
     {
         return UCharacterProperty.getPropType(
-                                 UCharacter.PROPERTY_.m_property_[value]);
+                                 UnicodeProperty.PROPERTY.m_property_[value]);
     }
 }
