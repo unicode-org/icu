@@ -39,6 +39,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 //URL url = loader.getResource("LocaleElements_en.class");
                 //File file = new File(url.getPath());
                 URL url = (URL)en.nextElement();
+		if (url == null) {
+		    warnln("could not load resource data");
+		    return;
+		}
                 File file = new File(url.getPath());
                 File[] files = file.listFiles();
                 if(files!=null){
@@ -48,9 +52,13 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 }
             }
         }catch(SecurityException ex) {
-            warnln("could not load resource data");
+            warnln("could not load resource data: " + ex);
+	}catch(NullPointerException ex) {
+	    // thrown by ibm 1.4.2 windows jvm security manager
+	    warnln("could not load resource data: " + ex);
         }catch(Exception ex){
-            errln("Unexpected exception: "+ ex.getMessage());
+	    ex.printStackTrace();
+            errln("Unexpected exception: "+ ex);
         }
     }
     public void TestResourceBundleWrapper(){
