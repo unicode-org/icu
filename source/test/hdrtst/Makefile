@@ -77,7 +77,7 @@ cpptest:
 dtest:
 	@rm -f Makefile.sub
 	@echo "Deprecation #######################################################"
-	@echo 'Should be 1 in each case if file is properly deprecated.'
+	@echo 'Should be 1 in each case if file is properly obsoleted.'
 	@for stub in `cat dfiles.txt` ; do \
 	  file=unicode/$$stub \
 	  incfile=`basename $$file .h` ; \
@@ -85,10 +85,10 @@ dtest:
 	  echo '#include "'unicode/$$incfile'.h"' > ht_$$incfile.cpp ; \
 	  echo 'void junk(){}' >> ht_$$incfile.cpp ; \
 	  echo > ht_dep.junk ; \
-          $(COMPILE.cc) -c -I. ht_$$incfile.cpp 2>&1 | sed -e 's/^.*#error[^"]*"//' | fgrep -v ht_ | tee ht_dep.junk | fgrep -v "$$incfile.h header is deprecated" ; \
+          $(COMPILE.cc) -c -I. ht_$$incfile.cpp 2>&1 | sed -e 's/^.*#error[^"]*"//' | fgrep -v ht_ | tee ht_dep.junk | fgrep -v "$$incfile.h header is obsolete" ; \
 	  RES=$$? ; \
 	  echo $$RES ; \
-	  fgrep -q "$$incfile.h header is deprecated" ht_dep.junk || echo "** FAIL Header unicode/$$incfile.h is not deprecated properly" ; \
+	  fgrep -q "$$incfile.h header is obsolete" ht_dep.junk || echo "** FAIL Header unicode/$$incfile.h is not obsoleted properly" ; \
 	  rm -f unicode/$$stub ; \
 	done
 
