@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2001/06/07 01:13:19 $ 
-* $Revision: 1.33 $
+* $Date: 2001/07/17 20:22:28 $ 
+* $Revision: 1.34 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -149,21 +149,25 @@
   <target name="zipbin" depends="docs,jar">
     <!--Create a zip archive of the source, docs, and jar file for
     distribution.  The zip file will be created in the directory above
-    the root ICU4J directory.-->
+    the root ICU4J directory. The exclude pattern ${src.dir}/data/unicode/UnicodeData-*.txt
+    and ${src.dir}/data/unicode/SpecialCasing-*.txt
+    eliminates old archive copies like SpecialCasing-2.txt and
+    UnicodeData-2.1.8.txt -->
     <zip zipfile="${zipbin.file}"
          basedir="."
-         excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/*-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
+         excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/UnicodeData-*.txt,${src.dir}/data/unicode/SpecialCasing-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
   </target>
 
   <target name="zip" depends="init">
     <!--Create a zip archive of just the source for distribution.  The
     zip file will be created in the directory above the root ICU4J
-    directory. The exclude pattern ${src.dir}/data/unicode/*-*.txt
+    directory. The exclude pattern ${src.dir}/data/unicode/UnicodeData-*.txt
+    and ${src.dir}/data/unicode/SpecialCasing-*.txt
     eliminates old archive copies like SpecialCasing-2.txt and
     UnicodeData-2.1.8.txt -->
     <zip zipfile="${zip.file}"
          basedir="."
-         excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/*-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,${jar.file}"/>
+         excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/UnicodeData-*.txt,${src.dir}/data/unicode/SpecialCasing-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,${jar.file}"/>
   </target>
 
   <target name="clean" depends="init">
