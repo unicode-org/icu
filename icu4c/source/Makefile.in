@@ -38,7 +38,7 @@ include @platform_make_fragment@
 CLEANFILES = *~ 
 
 DOCDIRS = common i18n
-SUBDIRS =  stubdata common i18n $(LAYOUT) tools data $(TEST) $(SAMPLE) $(EXTRA)
+SUBDIRS =  stubdata common i18n $(LAYOUT) tools data $(EXTRA) $(TEST) $(SAMPLE)
 
 ## Extra files to install [nothing at present]
 EXTRA_DATA =
