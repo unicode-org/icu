@@ -172,7 +172,7 @@ static int32_t convertToPuny(const UChar* src, int32_t srcLength,
         goto CLEANUP;
     }
 
-    caseFlags = (unsigned char*) uprv_malloc(b1Len *sizeof(unsigned char));
+    //caseFlags = (unsigned char*) uprv_malloc(b1Len *sizeof(unsigned char));
 
     error = punycode_encode(b1Len,b1,caseFlags, (uint32_t*)&b2Len, b2);
     status = getError(error);
@@ -224,7 +224,7 @@ static int32_t convertFromPuny(  const UChar* src, int32_t srcLength,
     uint32_t b2Stack[MAX_LABEL_BUFFER_SIZE];
     uint32_t* b2 = b2Stack;
     int32_t b2Len =MAX_LABEL_BUFFER_SIZE;
-    unsigned char* caseFlags = (unsigned char*) uprv_malloc(srcLength * sizeof(unsigned char*));
+    unsigned char* caseFlags = NULL; //(unsigned char*) uprv_malloc(srcLength * sizeof(unsigned char*));
     punycode_status error = punycode_decode(srcLength,b1,(uint32_t*)&b2Len,b2,caseFlags);
     status = getError(error);
     if(status == U_BUFFER_OVERFLOW_ERROR){
@@ -345,7 +345,7 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
         if(!startsWithPrefix(b1,b1Len)){
 
             //step 6: encode the sequence with punycode
-            caseFlags = (UBool*) uprv_malloc(b1Len * sizeof(UBool));
+            //caseFlags = (UBool*) uprv_malloc(b1Len * sizeof(UBool));
 
             b2Len = convertToPuny(b1,b1Len, b2,b2Capacity,*status);
             //b2Len = u_strToPunycode(b2,b2Capacity,b1,b1Len, caseFlags, status);
