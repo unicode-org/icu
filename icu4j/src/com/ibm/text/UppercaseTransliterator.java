@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UppercaseTransliterator.java,v $ 
- * $Date: 2001/06/29 22:35:41 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/06/29 22:50:25 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -23,6 +23,17 @@ public class UppercaseTransliterator extends TransformTransliterator {
      * Package accessible ID.
      */
     static final String _ID = "Any-Upper";
+
+    /**
+     * System registration hook.
+     */
+    static void register() {
+        Transliterator.registerFactory(_ID, new Transliterator.Factory() {
+            public Transliterator getInstance() {
+                return new UppercaseTransliterator();
+            }
+        });
+    }
 
     private Locale loc;
 
