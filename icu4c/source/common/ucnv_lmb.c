@@ -491,8 +491,8 @@ void _LMBCSFromUnicode(UConverter*     _this,
                               extraInfo, group, pLMBCS, &uniChar, 
                               &lastConverterIndex, groups_tried, err);
 
-            // MyAssert(bytes_written); /* table should never return unusable group */
-            // JSGTODO: table may be more usable as 'guesses' - remove requirement for match
+            /* MyAssert(bytes_written); */ /* table should never return unusable group */
+            /* JSGTODO: table may be more usable as 'guesses' - remove requirement for match*/
 
          }
          if (!bytes_written)    /* the ambiguous group cases */
