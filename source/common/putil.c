@@ -38,6 +38,22 @@
 *******************************************************************************
 */
 
+
+/* include standard headers */
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include <locale.h>
+
+/* include ICU headers */
+#include "utypes.h"
+#include "umutex.h"
+#include "cmemory.h"
+#include "cstring.h"
+#include "filestrm.h"
+
 /* include system headers */
 #ifdef WIN32
 #   include <wtypes.h>
@@ -58,24 +74,11 @@
 #   include <sys/ldr.h>
 #elif defined(SOLARIS) || defined(LINUX)
 #   include <dlfcn.h>
+#   include <link.h>
 #elif defined(HPUX)
 #   include <dl.h>
 #endif
 
-/* include standard headers */
-#include <time.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <locale.h>
-
-/* include ICU headers */
-#include "utypes.h"
-#include "umutex.h"
-#include "cmemory.h"
-#include "cstring.h"
-#include "filestrm.h"
 
 /* floating point implementations ------------------------------------------- */
 
