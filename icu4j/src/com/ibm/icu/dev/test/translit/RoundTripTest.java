@@ -82,6 +82,11 @@ public class RoundTripTest extends TestFmwk {
         Test t = new Test("Latin-Hangul");
         t.test("[a-zA-Z]", "[\uAC00-\uD7A4]", "", this, new Legal());
     }
+    
+    public void TestSingle() {
+		Transliterator t = Transliterator.getInstance("Latin-Greek");
+    	t.transliterate("\u0061\u0101\u0069");
+    }
 
     public void TestGreek() throws IOException, ParseException {
         new Test("Latin-Greek")
@@ -600,6 +605,10 @@ public class RoundTripTest extends TestFmwk {
             this.full = full;
         }
         
+        static final char IOTA_SUBSCRIPT = '\u0345';
+        static final UnicodeSet breathing = new UnicodeSet("[\\u0313\\u0314']");
+        static final UnicodeSet validSecondVowel = new UnicodeSet("[\\u03C5\\u03B9\\u03A5\\u0399]");
+        
         public static boolean isVowel(char c) {
             return "\u03B1\u03B5\u03B7\u03B9\u03BF\u03C5\u03C9\u0391\u0395\u0397\u0399\u039F\u03A5\u03A9".indexOf(c) >= 0;
         }
@@ -628,6 +637,8 @@ public class RoundTripTest extends TestFmwk {
                 // Legal full Greek has breathing marks IFF there is a vowel or RHO at the start
                 // IF it has them, it has exactly one.
                 // IF it starts with a RHO, then the breathing mark must come before the second letter.
+                // IF it starts with a vowel, then it must before the third letter.
+                //	it will only come after the second if of the format [vowel] [no iota subscript!] [upsilon or iota]
                 // Since there are no surrogates in greek, don't worry about them
 
                 boolean firstIsVowel = false;
@@ -635,10 +646,13 @@ public class RoundTripTest extends TestFmwk {
                 boolean noLetterYet = true;
                 int breathingCount = 0;
                 int letterCount = 0;
+                int breathingPosition = -1;
+                
                 for (int i = 0; i < decomp.length(); ++i) {
                     char c = decomp.charAt(i);
                     if (UCharacter.isLetter(c)) {
                         ++letterCount;
+                        if (firstIsVowel && !validSecondVowel.contains(c) && breathingCount == 0) return false;
                         if (noLetterYet) {
                             noLetterYet = false;
                             firstIsVowel = isVowel(c);
@@ -646,7 +660,9 @@ public class RoundTripTest extends TestFmwk {
                         }
                         if (firstIsRho && letterCount == 2 && breathingCount == 0) return false;
                     }
-                    if (c == '\u0313' || c == '\u0314') {
+                    if (c == IOTA_SUBSCRIPT && firstIsVowel && breathingCount == 0) return false;
+                    if (breathing.contains(c)) {
+                    	breathingPosition = i;
                         ++breathingCount;
                     }
                 }
