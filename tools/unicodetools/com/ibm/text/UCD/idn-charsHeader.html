@@ -1,0 +1,71 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>IDN Characters</title>
+<style>
+<!--
+.script       { font-size: 150%; background-color: #CCCCCC }
+.Atomic       { background-color: #CCCCFF }
+.Atomic-no-uppercase       { background-color: #CCFFCC }
+.Non-XID       { background-color: #FFCCCC }
+.Decomposable       { background-color: #FFFFCC }
+.Pattern_Syntax       { background-color: #FFCCFF }
+th           { text-align: left }
+-->
+</style>
+</head>
+
+<body>
+
+<h1>IDN Character Categorization</h1>
+<p>$Date: 2005/03/29 18:31:15 $, MED</p>
+<p>This page lists all of the valid output IDN characters broken down by category. By &quot;output&quot; IDN 
+characters, we mean ones that can result from nameprep. Characters are grouped first by script, and 
+then by subcategory. Within each subcategory characters are sorted according to the default
+<a href="http://www.unicode.org/reports/tr10/">UCA</a> order. Tooltips provide the character code 
+and name (in enabled browsers).</p>
+<table border="1" cellpadding="2" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" id="AutoNumber1">
+  <tr>
+    <th>Subcategory</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="Atomic">Atomic</td>
+    <td>Characters that don&#39;t fall into any of the following subcategories</td>
+  </tr>
+  <tr>
+    <td class="Atomic-no-uppercase">Atomic-no-uppercase</td>
+    <td>For bicameral scripts, Atomic characters without an uppercase.</td>
+  </tr>
+  <tr>
+    <td class="Pattern_Syntax">Pattern_Syntax</td>
+    <td>Characters recommended as a basis for syntax, as in
+    <a href="http://www.unicode.org/reports/tr31/tr31-5.html">UAX #31: Identifier and Pattern Syntax</a>. 
+    Excludes the word characters in <i>Section 4 Word Boundaries</i> of
+    <a href="http://www.unicode.org/reports/tr29/tr29-9.html#Word_Boundaries">UAX# 29</a>, in the 
+    Word_Break property and notes at the end of the section.&nbsp;&nbsp; </td>
+  </tr>
+  <tr>
+    <td class="Non-XID">Non-XID</td>
+    <td>Characters recommended as a basis for identifiers, as in
+    <a href="http://www.unicode.org/reports/tr31/tr31-5.html">UAX #31: Identifier and Pattern Syntax</a> 
+    (XID_Continue). Excludes the word characters in <i>Section 4 Word Boundaries</i> of
+    <a href="http://www.unicode.org/reports/tr29/tr29-9.html#Word_Boundaries">UAX# 29</a>, in the 
+    Word_Break property and notes at the end of the section.</td>
+  </tr>
+  <tr>
+    <td class="Decomposable">Decomposable</td>
+    <td>Characters with NFC decompositions.</td>
+  </tr>
+</table>
+<table>
+</table>
+<h2>Categorization</h2>
+
+</body>
+
+</html>
