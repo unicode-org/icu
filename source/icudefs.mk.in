@@ -150,11 +150,12 @@ MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
 ##  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
 # Prefix for the ICU library names
 ICUPREFIX = icu
-LIBICU = lib$(ICUPREFIX)
+LIBPREFIX = lib
+LIBICU = $(LIBPREFIX)$(ICUPREFIX)
 
 # Static library prefix and file extension
 STATIC_PREFIX = s
-LIBSICU = lib$(STATIC_PREFIX)$(ICUPREFIX)
+LIBSICU = $(LIBPREFIX)$(STATIC_PREFIX)$(ICUPREFIX)
 A = a
 
 # Force removal [for make clean]
