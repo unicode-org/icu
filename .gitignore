@@ -163,6 +163,7 @@ icu4c/source/tools/makeconv/Debug
 icu4c/source/tools/makeconv/Makefile
 icu4c/source/tools/makeconv/Release
 icu4c/source/tools/makeconv/makeconv
+icu4c/source/tools/makeconv/makeconv.[0-9]
 icu4c/source/tools/makeconv/tmp
 icu4c/source/tools/pkgdata/*.d
 icu4c/source/tools/pkgdata/*.ncb
