@@ -371,57 +371,35 @@ void LocaleTest::TestSimpleResourceInfo() {
 
 }
 
+/*
+ * Jitterbug 2439 -- markus 20030425
+ *
+ * The lookup of display names must not fall back through the default
+ * locale because that yields useless results.
+ */
 void 
 LocaleTest::TestDisplayNames() 
 {
-    Locale  saveDefault = Locale::getDefault();
-    Locale  empty("", "");
     Locale  english("en", "US");
     Locale  french("fr", "FR");
     Locale  croatian("hr", "HR");
     Locale  greek("el", "GR");
-    UErrorCode err = U_ZERO_ERROR;
 
-    Locale::setDefault(english, err);
-    if (U_FAILURE(err)) {
-        errln("Locale::setDefault returned error code " + (int)err);
-        return;
-    }
-
-    logln("With default = en_US...");
-    logln("  In default locale...");
-    doTestDisplayNames(empty, DLANG_EN, FALSE);
     logln("  In locale = en_US...");
-    doTestDisplayNames(english, DLANG_EN, FALSE);
+    doTestDisplayNames(english, DLANG_EN);
     logln("  In locale = fr_FR...");
-    doTestDisplayNames(french, DLANG_FR, FALSE);
+    doTestDisplayNames(french, DLANG_FR);
     logln("  In locale = hr_HR...");
-    doTestDisplayNames(croatian, DLANG_HR, FALSE);
+    doTestDisplayNames(croatian, DLANG_HR);
     logln("  In locale = el_GR...");
-    doTestDisplayNames(greek, DLANG_EL, FALSE);
+    doTestDisplayNames(greek, DLANG_EL);
 
-    Locale::setDefault(french, err);
-    if (U_FAILURE(err)) {
-        errln("Locale::setDefault returned error code " + (int)err);
-        return;
-    }
-
-    logln("With default = fr_FR...");
-    logln("  In default locale...");
-    doTestDisplayNames(empty, DLANG_FR, TRUE);
-    logln("  In locale = en_US...");
-    doTestDisplayNames(english, DLANG_EN, TRUE);
-    logln("  In locale = fr_FR...");
-    doTestDisplayNames(french, DLANG_FR, TRUE);
-    logln("  In locale = hr_HR...");
-    doTestDisplayNames(croatian, DLANG_HR, TRUE);
-    logln("  In locale = el_GR...");
-    doTestDisplayNames(greek, DLANG_EL, TRUE);
-
-    Locale::setDefault(saveDefault, err);
-    if (U_FAILURE(err)) {
-        errln("Locale::setDefault returned error code " + (int)err);
-        return;
+    /* test that the default locale has a display name for its own language */
+    UnicodeString s;
+    Locale().getDisplayName(Locale(), s);
+    if(s.length()<=3) {
+        /* check <=3 to reject getting the language code as a display name */
+        errln("unable to get a display string for the language of the default locale\n");
     }
 }
 
@@ -655,16 +633,9 @@ void LocaleTest::TestDataDirectory()
 
 //===========================================================
 
-void LocaleTest::doTestDisplayNames(Locale& inLocale,
-                                    int32_t compareIndex,
-                                    UBool defaultIsFrench) {
+void LocaleTest::doTestDisplayNames(Locale& displayLocale, int32_t compareIndex) {
     UnicodeString   temp;
     
-    if (defaultIsFrench && (temp=Locale::getDefault().getLanguage()) != "fr")
-        errln("Default locale should be French, but it's really " + temp);
-    else if (!defaultIsFrench && (temp=Locale::getDefault().getLanguage()) != "en")
-        errln("Default locale should be English, but it's really " + temp);
-
     for (int32_t i = 0; i <= MAX_LOCALES; i++) {
         Locale testLocale(rawData[LANG][i], rawData[CTRY][i], rawData[VAR][i]);
         logln("  Testing " + (temp=testLocale.getName()) + "...");
@@ -674,18 +645,10 @@ void LocaleTest::doTestDisplayNames(Locale& inLocale,
         UnicodeString  testVar;
         UnicodeString  testName;
 
-        if (inLocale == Locale("", "", "")) {
-            testLocale.getDisplayLanguage(testLang);
-            testLocale.getDisplayCountry(testCtry);
-            testLocale.getDisplayVariant(testVar);
-            testLocale.getDisplayName(testName);
-        }
-        else {
-            testLocale.getDisplayLanguage(inLocale, testLang);
-            testLocale.getDisplayCountry(inLocale, testCtry);
-            testLocale.getDisplayVariant(inLocale, testVar);
-            testLocale.getDisplayName(inLocale, testName);
-        }
+        testLocale.getDisplayLanguage(displayLocale, testLang);
+        testLocale.getDisplayCountry(displayLocale, testCtry);
+        testLocale.getDisplayVariant(displayLocale, testVar);
+        testLocale.getDisplayName(displayLocale, testName);
 
         UnicodeString  expectedLang;
         UnicodeString  expectedCtry;
@@ -693,37 +656,29 @@ void LocaleTest::doTestDisplayNames(Locale& inLocale,
         UnicodeString  expectedName;
 
         expectedLang = dataTable[compareIndex][i];
-        if (expectedLang.length() == 0 && defaultIsFrench)
-            expectedLang = dataTable[DLANG_FR][i];
         if (expectedLang.length() == 0)
             expectedLang = dataTable[DLANG_EN][i];
 
         expectedCtry = dataTable[compareIndex + 1][i];
-        if ((expectedCtry.length() == 0) && defaultIsFrench)
-            expectedCtry = dataTable[DCTRY_FR][i];
         if (expectedCtry.length() == 0)
             expectedCtry = dataTable[DCTRY_EN][i];
 
         expectedVar = dataTable[compareIndex + 2][i];
-        if (expectedVar.length() == 0 && defaultIsFrench)
-            expectedVar = dataTable[DVAR_FR][i];
         if (expectedVar.length() == 0)
             expectedVar = dataTable[DVAR_EN][i];
 
         expectedName = dataTable[compareIndex + 3][i];
-        if (expectedName.length() == 0 && defaultIsFrench)
-            expectedName = dataTable[DNAME_FR][i];
         if (expectedName.length() == 0)
             expectedName = dataTable[DNAME_EN][i];
 
         if (testLang != expectedLang)
-            errln("Display language (" + UnicodeString(inLocale.getName()) + ") mismatch: " + testLang + " versus " + expectedLang);
+            errln("Display language (" + UnicodeString(displayLocale.getName()) + ") got " + testLang + " expected " + expectedLang);
         if (testCtry != expectedCtry)
-            errln("Display country (" + UnicodeString(inLocale.getName()) + ") mismatch: " + testCtry + " versus " + expectedCtry + (defaultIsFrench?UnicodeString("French"):UnicodeString("_")) );
+            errln("Display country (" + UnicodeString(displayLocale.getName()) + ") got " + testCtry + " expected " + expectedCtry);
         if (testVar != expectedVar)
-            errln("Display variant (" + UnicodeString(inLocale.getName()) + ") mismatch: " + testVar + " versus " + expectedVar);
+            errln("Display variant (" + UnicodeString(displayLocale.getName()) + ") got " + testVar + " expected " + expectedVar);
         if (testName != expectedName)
-            errln("Display name (" + UnicodeString(inLocale.getName()) + ") mismatch: " + testName + " versus " + expectedName);
+            errln("Display name (" + UnicodeString(displayLocale.getName()) + ") got " + testName + " expected " + expectedName);
     }
 }
 

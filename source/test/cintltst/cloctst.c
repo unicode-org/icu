@@ -26,6 +26,8 @@
 #include "cintltst.h"
 #include "cstring.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 #include "unicode/ures.h"
 #ifdef WIN32
 /* Get the private functions. This is a hack! [grhoten] */
@@ -58,7 +60,7 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* LCID (not currently public) */
     {   "409", "40c", "41a", "408", "814"  },
 
-    /* display langage (English) */
+    /* display language (English) */
     {   "English",  "French",   "Croatian", "Greek",    "Norwegian" },
     /* display country (English) */
     {   "United States",    "France",   "Croatia",  "Greece",   "Norway"    },
@@ -67,7 +69,7 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* display name (English) */
     {   "English (United States)", "French (France)", "Croatian (Croatia)", "Greek (Greece)", "Norwegian (Norway, Nynorsk)" },
 
-    /* display langage (French) */
+    /* display language (French) */
     {   "anglais",  "fran\\u00E7ais",   "croate", "grec",    "norv\\u00E9gien" },
     /* display country (French) */
     {   "\\u00C9tats-Unis",    "France",   "Croatie",  "Gr\\u00E8ce",   "Norv\\u00E8ge"    },
@@ -76,23 +78,41 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* display name (French) */
     {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "croate (Croatie)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, Nynorsk)" },
 
-    /* display langage (Croatian) */
+    /* display language (Croatian) */
     {   "", "", "hrvatski",            "",  "" },
     /* display country (Croatian) */
     {   "", "", "Hrvatska",            "", "" },
     /* display variant (Croatian) */
-    {   "", "", "",                    "", "" },
+    {   "", "", "",                    "", "Nynorsk" },
     /* display name (Croatian) */
     {   "", "", "hrvatski (Hrvatska)", "", "" },
 
-    /* display langage (Greek) */
-    {   "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac", "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac", "\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03b9\\u03ba\\u03ac", "\\u03b5\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac", "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac" },
+    /* display language (Greek) */
+    {
+        "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac",
+        "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac",
+        "\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03b9\\u03ba\\u03ac",
+        "\\u03b5\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac",
+        "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac"
+    },
     /* display country (Greek) */
-    {   "\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2 \\u0391\\u03bc\\u03b5\\u03c1\\u03b9\\u03ba\\u03ae\\u03c2", "\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1", "\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03af\\u03b1", "\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1", "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1" },
+    {
+        "\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2 \\u0391\\u03bc\\u03b5\\u03c1\\u03b9\\u03ba\\u03ae\\u03c2",
+        "\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1",
+        "\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03af\\u03b1",
+        "\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1",
+        "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1"
+    },
     /* display variant (Greek) */
-    {   "", "", "", "",                                                         "" },
+    {   "", "", "", "", "Nynorsk" },
     /* display name (Greek) */
-    {   "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac (\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2 \\u0391\\u03bc\\u03b5\\u03c1\\u03b9\\u03ba\\u03ae\\u03c2)", "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac (\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1)", "\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03b9\\u03ba\\u03ac (\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03af\\u03b1)", "\\u03b5\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac (\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1)", "" }
+    {
+        "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac (\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2 \\u0391\\u03bc\\u03b5\\u03c1\\u03b9\\u03ba\\u03ae\\u03c2)",
+        "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac (\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1)",
+        "\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03b9\\u03ba\\u03ac (\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03af\\u03b1)",
+        "\\u03b5\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac (\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1)",
+        "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac (\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1, Nynorsk)"
+    }
 };
 
 static UChar*** dataTable=0;
@@ -100,9 +120,8 @@ enum {
     ENGLISH = 0,
     FRENCH = 1,
     CROATIAN = 2,
-    GREEKS = 3,
-    NORWEGIAN = 4,
-    MAX_LOCALES = 4
+    GREEK = 3,
+    NORWEGIAN = 4
 };
 
 enum {
@@ -162,7 +181,7 @@ static void TestBasicGetters() {
     char *testLocale = 0;
     char *temp = 0, *name = 0;
     log_verbose("Testing Basic Getters\n");
-    for (i = 0; i <= MAX_LOCALES; i++) {
+    for (i = 0; i < LOCALE_SIZE; i++) {
         testLocale=(char*)malloc(sizeof(char) * (strlen(rawData2[NAME][i])+1));
         strcpy(testLocale,rawData2[NAME][i]);
 
@@ -364,7 +383,7 @@ static void TestSimpleResourceInfo() {
 
 setUpDataTable();
     log_verbose("Testing getISO3Language and getISO3Country\n");
-    for (i = 0; i <= MAX_LOCALES; i++) {
+    for (i = 0; i < LOCALE_SIZE; i++) {
 
         testLocale=(char*)realloc(testLocale, sizeof(char) * (u_strlen(dataTable[NAME][i])+1));
         u_austrcpy(testLocale, dataTable[NAME][i]);
@@ -398,75 +417,43 @@ setUpDataTable();
 cleanUpDataTable();
 }
 
+/*
+ * Jitterbug 2439 -- markus 20030425
+ *
+ * The lookup of display names must not fall back through the default
+ * locale because that yields useless results.
+ */
 static void TestDisplayNames()
 {
-  /* sfb 990721 
-     Can't just save a pointer to the default locale.
-     Although the pointer won't change, the contents will, so the
-     restore at the end doesn't actually restore the original.
-  */
-    const char *saveDefault;
-    char *defaultLocale;
-
-    UErrorCode err = U_ZERO_ERROR;
-
-
-    saveDefault = uloc_getDefault();
-    defaultLocale = (char*) malloc(strlen(saveDefault) + 1);
-    if(defaultLocale == 0) {
-      log_err("out of memory");
-      return;
-    }
-    strcpy(defaultLocale, saveDefault);
-
-    uloc_setDefault("en_US", &err);
-    if (U_FAILURE(err)) {
-        log_err("uloc_setDefault returned error code ");
-        return;
-    }
-
+    UChar buffer[100];
+    UErrorCode errorCode;
+    int32_t length;
 
     log_verbose("Testing getDisplayName for different locales\n");
-    log_verbose("With default = en_US...\n");
 
-    log_verbose("  In default locale...\n");
-    doTestDisplayNames(" ", DLANG_EN, FALSE);
     log_verbose("  In locale = en_US...\n");
-    doTestDisplayNames("en_US", DLANG_EN, FALSE);
+    doTestDisplayNames("en_US", DLANG_EN);
     log_verbose("  In locale = fr_FR....\n");
-    doTestDisplayNames("fr_FR", DLANG_FR, FALSE);
+    doTestDisplayNames("fr_FR", DLANG_FR);
     log_verbose("  In locale = hr_HR...\n");
-    doTestDisplayNames("hr_HR", DLANG_HR, FALSE);
+    doTestDisplayNames("hr_HR", DLANG_HR);
     log_verbose("  In locale = gr_EL..\n");
-    doTestDisplayNames("el_GR", DLANG_EL, FALSE);
+    doTestDisplayNames("el_GR", DLANG_EL);
 
-    uloc_setDefault("fr_FR", &err);
-    if (U_FAILURE(err)) {
-        log_err("Locale::setDefault returned error code  %s\n", myErrorName(err));
-        return;
+    /* test that the default locale has a display name for its own language */
+    errorCode=U_ZERO_ERROR;
+    length=uloc_getDisplayLanguage(NULL, NULL, buffer, LENGTHOF(buffer), &errorCode);
+    if(U_FAILURE(errorCode) || length<=3) {
+        /* check <=3 to reject getting the language code as a display name */
+        log_err("unable to get a display string for the language of the default locale - %s\n", u_errorName(errorCode));
     }
 
-    log_verbose("With default = fr_FR...\n");
-
-    log_verbose("  In default locale...\n");
-    doTestDisplayNames(" ", DLANG_FR, TRUE);
-    log_verbose("  In locale = en_US...\n");
-    doTestDisplayNames("en_US", DLANG_EN, TRUE);
-    log_verbose("  In locale = fr_FR....\n");
-    doTestDisplayNames("fr_FR", DLANG_FR, TRUE);
-    log_verbose("  In locale = hr_HR...\n");
-    doTestDisplayNames("hr_HR", DLANG_HR, TRUE);
-    log_verbose("  In locale = el_GR...\n");
-    doTestDisplayNames("el_GR", DLANG_EL, TRUE);
-
-    uloc_setDefault(defaultLocale, &err);
-    if (U_FAILURE(err)) {
-        log_err("Locale::setDefault returned error code  %s\n", myErrorName(err));
-        return;
+    /* test that we get the language code itself for an unknown language, and a default warning */
+    errorCode=U_ZERO_ERROR;
+    length=uloc_getDisplayLanguage("qq", "rr", buffer, LENGTHOF(buffer), &errorCode);
+    if(errorCode!=U_USING_DEFAULT_WARNING || length!=2 || buffer[0]!=0x71 || buffer[1]!=0x71) {
+        log_err("error getting the display string for an unknown language - %s\n", u_errorName(errorCode));
     }
-
-    free(defaultLocale);
-
 }
 
 
@@ -541,15 +528,13 @@ static void TestDataDirectory()
 
 static UChar _NUL=0;
 
-static void doTestDisplayNames(const char* inLocale,
-                                    int32_t compareIndex,
-                                    int32_t defaultIsFrench)
+static void doTestDisplayNames(const char* displayLocale, int32_t compareIndex)
 {
     UErrorCode status = U_ZERO_ERROR;
     int32_t i;
     int32_t maxresultsize;
 
-    char* testLocale;
+    const char *testLocale;
 
 
     UChar  *testLang  = 0;
@@ -562,207 +547,110 @@ static void doTestDisplayNames(const char* inLocale,
     UChar*  expectedCtry = 0;
     UChar*  expectedVar = 0;
     UChar*  expectedName = 0;
-    char temp[5];
     const char* defaultDefaultLocale=" ";
 
 setUpDataTable();
 
-
-    uloc_getLanguage(uloc_getDefault(), temp, 5, &status);
-    if(U_FAILURE(status)){
-        log_err("ERROR: in getDefault  %s \n", myErrorName(status));
-    }
-    if (defaultIsFrench && 0 != strcmp(temp, "fr"))    {
-        log_err("Default locale should be French, but it's really  %s\n", temp);
-    }
-    else if (!defaultIsFrench && 0 != strcmp(temp, "en")){
-        log_err("Default locale should be English, but it's really  %s\n", temp);
-    }
-
-    testLocale = (char*)malloc(sizeof(char)   * 1);
-
-
-    for(i=0;i<MAX_LOCALES; ++i)
+    for(i=0;i<LOCALE_SIZE; ++i)
     {
-       testLocale=(char*)realloc(testLocale, sizeof(char) * (u_strlen(dataTable[NAME][i])+1));
-       u_austrcpy(testLocale,dataTable[NAME][i]);
+        testLocale=rawData2[NAME][i];
 
         log_verbose("Testing.....  %s\n", testLocale);
 
-        if (strcmp(inLocale, defaultDefaultLocale)==0) {
-            maxresultsize=0;
-            maxresultsize=uloc_getDisplayLanguage(testLocale, NULL, NULL, maxresultsize, &status);
-            if(status==U_BUFFER_OVERFLOW_ERROR)
-            {
-                status=U_ZERO_ERROR;
-                testLang=(UChar*)malloc(sizeof(UChar) * (maxresultsize + 1));
-                uloc_getDisplayLanguage(testLocale, NULL, testLang, maxresultsize + 1, &status);
-            }
-            else
-            {
-                testLang=&_NUL;
-            }
-
-            if(U_FAILURE(status)){
-                    log_err("Error in getDisplayLanguage()  %s\n", myErrorName(status));
-            }
-            maxresultsize=0;
-            maxresultsize=uloc_getDisplayCountry(testLocale, NULL, NULL, maxresultsize, &status);
-            if(status==U_BUFFER_OVERFLOW_ERROR)
-            {
-                status=U_ZERO_ERROR;
-                testCtry=(UChar*)malloc(sizeof(UChar) * (maxresultsize + 1));
-                uloc_getDisplayCountry(testLocale, NULL, testCtry, maxresultsize + 1, &status);
-            }
-            else
-            {
-                testCtry=&_NUL;
-            }
-            if(U_FAILURE(status)){
-                    log_err("Error in getDisplayCountry()  %s\n", myErrorName(status));
-            }
-
-            maxresultsize=0;
-            maxresultsize=uloc_getDisplayVariant(testLocale, NULL, NULL, maxresultsize, &status);
-            if(status==U_BUFFER_OVERFLOW_ERROR)
-            {
-                status=U_ZERO_ERROR;
-                testVar=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
-                uloc_getDisplayVariant(testLocale, NULL, testVar, maxresultsize + 1, &status);
-            }
-            else
-            {
-                testVar=&_NUL;
-            }
-            if(U_FAILURE(status)){
-                    log_err("Error in getDisplayVariant()  %s\n", myErrorName(status));
-            }
-            maxresultsize=0;
-            maxresultsize=uloc_getDisplayName(testLocale, NULL, NULL, maxresultsize, &status);
-            if(status==U_BUFFER_OVERFLOW_ERROR)
-            {
-                status=U_ZERO_ERROR;
-                testName=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
-                uloc_getDisplayName(testLocale, NULL, testName, maxresultsize + 1, &status);
-            }
-            else
-            {
-                testName=&_NUL;
-            }
-            if(U_FAILURE(status)){
-                    log_err("Error in getDisplayName()  %s\n", myErrorName(status));
-
-            }
-
+        maxresultsize=0;
+        maxresultsize=uloc_getDisplayLanguage(testLocale, displayLocale, NULL, maxresultsize, &status);
+        if(status==U_BUFFER_OVERFLOW_ERROR)
+        {
+            status=U_ZERO_ERROR;
+            testLang=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
+            uloc_getDisplayLanguage(testLocale, displayLocale, testLang, maxresultsize + 1, &status);
         }
-        else {
-            maxresultsize=0;
-            maxresultsize=uloc_getDisplayLanguage(testLocale, inLocale, NULL, maxresultsize, &status);
-            if(status==U_BUFFER_OVERFLOW_ERROR)
-            {
-                status=U_ZERO_ERROR;
-                testLang=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
-                uloc_getDisplayLanguage(testLocale, inLocale, testLang, maxresultsize + 1, &status);
-            }
-            else
-            {
-                testLang=&_NUL;
-            }
-            if(U_FAILURE(status)){
-                log_err("Error in getDisplayLanguage()  %s\n", myErrorName(status));
-            }
+        else
+        {
+            testLang=&_NUL;
+        }
+        if(U_FAILURE(status)){
+            log_err("Error in getDisplayLanguage()  %s\n", myErrorName(status));
+        }
 
-            maxresultsize=0;
-            maxresultsize=uloc_getDisplayCountry(testLocale, inLocale, NULL, maxresultsize, &status);
-            if(status==U_BUFFER_OVERFLOW_ERROR)
-            {
-                status=U_ZERO_ERROR;
-                testCtry=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
-                uloc_getDisplayCountry(testLocale, inLocale, testCtry, maxresultsize + 1, &status);
-            }
-            else
-            {
-                testCtry=&_NUL;
-            }
-            if(U_FAILURE(status)){
-                log_err("Error in getDisplayCountry()  %s\n", myErrorName(status));
-            }
+        maxresultsize=0;
+        maxresultsize=uloc_getDisplayCountry(testLocale, displayLocale, NULL, maxresultsize, &status);
+        if(status==U_BUFFER_OVERFLOW_ERROR)
+        {
+            status=U_ZERO_ERROR;
+            testCtry=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
+            uloc_getDisplayCountry(testLocale, displayLocale, testCtry, maxresultsize + 1, &status);
+        }
+        else
+        {
+            testCtry=&_NUL;
+        }
+        if(U_FAILURE(status)){
+            log_err("Error in getDisplayCountry()  %s\n", myErrorName(status));
+        }
 
-            maxresultsize=0;
-            maxresultsize=uloc_getDisplayVariant(testLocale, inLocale, NULL, maxresultsize, &status);
-            if(status==U_BUFFER_OVERFLOW_ERROR)
-            {
-                status=U_ZERO_ERROR;
-                testVar=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
-                uloc_getDisplayVariant(testLocale, inLocale, testVar, maxresultsize + 1, &status);
-            }
-            else
-            {
-                testVar=&_NUL;
-            }
-            if(U_FAILURE(status)){
-                    log_err("Error in getDisplayVariant()  %s\n", myErrorName(status));
-            }
+        maxresultsize=0;
+        maxresultsize=uloc_getDisplayVariant(testLocale, displayLocale, NULL, maxresultsize, &status);
+        if(status==U_BUFFER_OVERFLOW_ERROR)
+        {
+            status=U_ZERO_ERROR;
+            testVar=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
+            uloc_getDisplayVariant(testLocale, displayLocale, testVar, maxresultsize + 1, &status);
+        }
+        else
+        {
+            testVar=&_NUL;
+        }
+        if(U_FAILURE(status)){
+                log_err("Error in getDisplayVariant()  %s\n", myErrorName(status));
+        }
 
-            maxresultsize=0;
-            maxresultsize=uloc_getDisplayName(testLocale, inLocale, NULL, maxresultsize, &status);
-            if(status==U_BUFFER_OVERFLOW_ERROR)
-            {
-                status=U_ZERO_ERROR;
-                testName=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
-                uloc_getDisplayName(testLocale, inLocale, testName, maxresultsize + 1, &status);
-            }
-            else
-            {
-                testName=&_NUL;
-            }
-            if(U_FAILURE(status)){
-                log_err("Error in getDisplayName()  %s\n", myErrorName(status));
-            }
-
+        maxresultsize=0;
+        maxresultsize=uloc_getDisplayName(testLocale, displayLocale, NULL, maxresultsize, &status);
+        if(status==U_BUFFER_OVERFLOW_ERROR)
+        {
+            status=U_ZERO_ERROR;
+            testName=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
+            uloc_getDisplayName(testLocale, displayLocale, testName, maxresultsize + 1, &status);
+        }
+        else
+        {
+            testName=&_NUL;
+        }
+        if(U_FAILURE(status)){
+            log_err("Error in getDisplayName()  %s\n", myErrorName(status));
         }
 
         expectedLang=dataTable[compareIndex][i];
-        if(u_strlen(expectedLang) == 0 && defaultIsFrench)
-            expectedLang=dataTable[DLANG_FR][i];
         if(u_strlen(expectedLang)== 0)
             expectedLang=dataTable[DLANG_EN][i];
 
-
         expectedCtry=dataTable[compareIndex + 1][i];
-        if(u_strlen(expectedCtry) == 0 && defaultIsFrench)
-            expectedCtry=dataTable[DCTRY_FR][i];
         if(u_strlen(expectedCtry)== 0)
             expectedCtry=dataTable[DCTRY_EN][i];
 
         expectedVar=dataTable[compareIndex + 2][i];
-        if(u_strlen(expectedVar) == 0 && defaultIsFrench)
-            expectedVar=dataTable[DVAR_FR][i];
         if(u_strlen(expectedCtry)== 0)
             expectedVar=dataTable[DVAR_EN][i];
 
-
         expectedName=dataTable[compareIndex + 3][i];
-        if(u_strlen(expectedName) ==0 && defaultIsFrench)
-            expectedName=dataTable[DNAME_FR][i];
         if(u_strlen(expectedName) == 0)
             expectedName=dataTable[DNAME_EN][i];
 
-
         if (0 !=u_strcmp(testLang,expectedLang))  {
-            log_data_err(" Display Language mismatch: %s  versus  %s inLocale=%s\n", austrdup(testLang), austrdup(expectedLang), inLocale);
+            log_data_err(" Display Language mismatch: got %s expected %s displayLocale=%s\n", austrdup(testLang), austrdup(expectedLang), displayLocale);
         }
 
         if (0 != u_strcmp(testCtry,expectedCtry))   {
-            log_data_err(" Display Country mismatch: %s  versus  %s inLocale=%s\n", austrdup(testCtry), austrdup(expectedCtry), inLocale);
+            log_data_err(" Display Country mismatch: got %s expected %s displayLocale=%s\n", austrdup(testCtry), austrdup(expectedCtry), displayLocale);
         }
 
         if (0 != u_strcmp(testVar,expectedVar))    {
-            log_data_err(" Display Variant mismatch: %s  versus  %s inLocale=%s\n", austrdup(testVar), austrdup(expectedVar), inLocale);
+            log_data_err(" Display Variant mismatch: got %s expected %s displayLocale=%s\n", austrdup(testVar), austrdup(expectedVar), displayLocale);
         }
 
         if(0 != u_strcmp(testName, expectedName))    {
-            log_data_err(" Display Name mismatch: %s  versus  %s inLocale=%s\n", austrdup(testName), austrdup(expectedName), inLocale);
+            log_data_err(" Display Name mismatch: got %s expected %s displayLocale=%s\n", austrdup(testName), austrdup(expectedName), displayLocale);
         }
 
         if(testName!=&_NUL) {
@@ -778,7 +666,6 @@ setUpDataTable();
             free(testVar);
         }
     }
-    free(testLocale);
 cleanUpDataTable();
 }
 
