@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UnicodePropertySet.java,v $
-* $Date: 2002/06/06 22:39:15 $
-* $Revision: 1.12 $
+* $Date: 2002/06/06 22:39:58 $
+* $Revision: 1.13 $
 **********************************************************************
 */
 package com.ibm.icu.text;
@@ -54,7 +54,7 @@ import com.ibm.icu.lang.*;
  * '+' indicates a supported property.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.12 $ $Date: 2002/06/06 22:39:15 $
+ * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.13 $ $Date: 2002/06/06 22:39:58 $
  */
 class UnicodePropertySet {
 
@@ -534,7 +534,7 @@ class UnicodePropertySet {
     private static void addType(String shortName, String longName,
                                 SetFactory factory) {
         // DEBUGGING CODE: DISABLE FOR PRODUCTION BUILD
-        if (true) {
+        if (false) {
             if (NAME_MAP.get(shortName) != null) {
                 throw new InternalError("Duplicate name " + shortName);
             }
@@ -554,7 +554,7 @@ class UnicodePropertySet {
                                  String shortName, String longName,
                                  int value) {
         // DEBUGGING CODE: DISABLE FOR PRODUCTION BUILD
-        if (true) {
+        if (false) {
             if (map.get(shortName) != null) {
                 throw new InternalError("Duplicate name " + shortName);
             }
