@@ -45,6 +45,7 @@
 #define COLL_H
 
 
+#include "unicode/ucol.h"
 #include "unicode/locid.h"
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
@@ -52,57 +53,6 @@
 #include "unicode/chariter.h"
 
 class CollationKey;
-
-enum UColAttribute {
-     UCOL_FRENCH_COLLATION, /* attribute for direction of secondary weights*/
-     UCOL_ALTERNATE_HANDLING, /* attribute for handling variable elements*/
-     UCOL_CASE_FIRST, /* who goes first, lower case or uppercase */
-     UCOL_CASE_LEVEL, /* do we have an extra case level */
-     UCOL_NORMALIZATION_MODE, /* attribute for normalization */
-     UCOL_STRENGTH,         /* attribute for strength */
-     UCOL_ATTRIBUTE_COUNT
-};
-
-enum UColAttributeValue {
-     /* accepted by most attributes */
-          UCOL_ATTR_DEFAULT,
-     /* for UCOL_FRENCH_COLLATION & UCOL_CASE_LEVEL*/
-          UCOL_ATTR_ON,
-          UCOL_ATTR_OFF,
-     /* for UCOL_ALTERNATE_HANDLING */
-          UCOL_ATTR_SHIFTED,
-          UCOL_ATTR_NON_IGNORABLE,
-     /* for UCOL_CASE_FIRST */
-          UCOL_ATTR_LOWER_FIRST,
-          UCOL_ATTR_UPPER_FIRST,
-     /* for UCOL_NORMALIZATION_MODE */
-          /** No decomposition/composition */
-          UCOL_ATTR_NO_NORMALIZATION,
-          /** Canonical decomposition */
-          UCOL_ATTR_DECOMP_CAN,
-          /** Compatibility decomposition */
-          UCOL_ATTR_DECOMP_COMPAT,
-          /** Default normalization */
-          UCOL_ATTR_DEFAULT_NORMALIZATION = UCOL_ATTR_DECOMP_COMPAT, 
-          /** Canonical decomposition followed by canonical composition */
-          UCOL_ATTR_DECOMP_CAN_COMP_COMPAT,
-          /** Compatibility decomposition followed by canonical composition */
-          UCOL_ATTR_DECOMP_COMPAT_COMP_CAN,
-     /* for UCOL_STRENGTH */
-            /** Primary collation strength */
-            UCOL_ATTR_PRIMARY,
-            /** Secondary collation strength */
-            UCOL_ATTR_SECONDARY,
-            /** Tertiary collation strength */
-            UCOL_ATTR_TERTIARY,
-            UCOL_ATTR_DEFAULT_STRENGTH = UCOL_ATTR_TERTIARY,
-            /** Quaternary collation strength */
-            UCOL_ATTR_QUATERNARY,
-            /** Identical collation strength */
-            UCOL_ATTR_IDENTICAL,
-            /** Default collation strength */
-	    UCOL_ATTRIBUTE_VALUE_COUNT
-};
 
 /**
  * The <code>Collator</code> class performs locale-sensitive

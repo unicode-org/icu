@@ -71,11 +71,6 @@ class TableCollationData;
 struct collIterate;
 typedef void *  UCollator;
 
-enum UColRuleOption {
-	UCOL_TAILORING_ONLY,
-	UCOL_FULL_RULES
-};
-
 
 
 /**
@@ -384,12 +379,6 @@ public:
    * @stable
    */
   virtual UBool                  operator!=(const Collator& other) const;
-
-  /**
-   * Gets the state of french collation. So what!
-   */
-  UCollationOptions getDirection();
-  void setDirection(UCollationOptions direction);
 
   /**
    * Makes a deep copy of the object.  The caller owns the returned object.
