@@ -10,6 +10,7 @@
 
 #include "unicode/utypes.h"
 
+#ifdef XP_CPLUSPLUS
 #if !UCONFIG_NO_TRANSLITERATION
 
 #include "unicode/uobject.h"
@@ -345,5 +346,19 @@ private:
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+#endif /* #ifdef XP_CPLUSPLUS */
+
+/**
+ * Strip/convert the following from the transliterator rules:
+ * comments
+ * newlines
+ * white space at the beginning and end of a line
+ * unescape \u notation
+ *
+ * The target must be equal in size as the source.
+ * @internal
+ */
+U_CAPI int32_t
+utrans_stripRules(const UChar *source, int32_t sourceLen, UChar *target, UErrorCode *status);
 
 #endif

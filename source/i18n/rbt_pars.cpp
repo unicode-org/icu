@@ -1545,4 +1545,95 @@ Transliterator* TransliteratorParser::createBasicInstance(const UnicodeString& i
 
 U_NAMESPACE_END
 
+U_CAPI int32_t
+utrans_stripRules(const UChar *source, int32_t sourceLen, UChar *target, UErrorCode *status) {
+    const UChar *sourceStart = source;
+    const UChar *targetStart = target;
+    const UChar *sourceLimit = source+sourceLen;
+    UChar *targetLimit = target+sourceLen;
+    uint32_t isError = 0;
+    UChar32 c = 0;
+    UBool quoted = FALSE;
+    int32_t index;
+
+    uprv_memset(target, 0, sourceLen*U_SIZEOF_UCHAR);
+
+    /* read the rules into the buffer */
+    while (source < sourceLimit)
+    {
+        index=0;
+        U16_NEXT_UNSAFE(source, index, c);
+        source+=index;
+        if(c == QUOTE) {
+            quoted = (UBool)!quoted;
+        }
+        else if (!quoted) {
+            if (c == RULE_COMMENT_CHAR) {
+                /* skip comments and all preceding spaces */
+                while (targetStart < target && *(target - 1) == 0x0020) {
+                    target--;
+                }
+                do {
+                    c = *(source++);
+                }
+                while (c != CR && c != LF);
+                continue;
+            }
+            else if (c == ESCAPE) {
+                UChar32   c2 = *source;
+                if (c2 == CR || c2 == LF) {
+                    /* A backslash at the end of a line. */
+                    /* Since we're stripping lines, ignore the backslash. */
+                    source++;
+                    continue;
+                }
+                if (c2 == 0x0075 && source+5 < sourceLimit) { /* \u seen. \U isn't unescaped. */
+                    int32_t escapeOffset = 0;
+                    UnicodeString escapedStr(source, 5);
+                    c2 = escapedStr.unescapeAt(escapeOffset);
+
+                    if (c2 == (UChar32)0xFFFFFFFF || escapeOffset == 0)
+                    {
+                        *status = U_PARSE_ERROR;
+                        return 0;
+                    }
+                    if (!uprv_isRuleWhiteSpace(c2) && !u_iscntrl(c2) && !u_ispunct(c2)) {
+                        /* It was escaped for a reason. Write what it was suppose to be. */
+                        source+=5;
+                        c = c2;
+                    }
+                }
+                else if (c2 == QUOTE) {
+                    /* \' seen. Make sure we don't do anything when we see it again. */
+                    quoted = (UBool)!quoted;
+                }
+            }
+        }
+        if (c == CR || c == LF)
+        {
+            /* ignore spaces carriage returns, and all leading spaces on the next line.
+            * and line feed unless in the form \uXXXX
+            */
+            quoted = FALSE;
+            while (source < sourceLimit) {
+                c = *(source);
+                if (c != CR && c != LF && c != 0x0020) {
+                    break;
+                }
+                source++;
+            }
+            continue;
+        }
+
+        /* Append UChar * after dissembling if c > 0xffff*/
+        index=0;
+        U16_APPEND_UNSAFE(target, index, c);
+        target+=index;
+    }
+    if (target < targetLimit) {
+        *target = 0;
+    }
+    return (int32_t)(target-targetStart);
+}
+
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */
