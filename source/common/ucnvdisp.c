@@ -65,7 +65,7 @@ ucnv_getDisplayName(const UConverter *cnv,
     } else {
         /* convert the internal name into a Unicode string */
         *pErrorCode=U_ZERO_ERROR;
-        length=uprv_strlen(cnv->sharedData->staticData->name);
+        length=(int32_t)uprv_strlen(cnv->sharedData->staticData->name);
         u_charsToUChars(cnv->sharedData->staticData->name, displayName, uprv_min(length, displayNameCapacity));
     }
     return u_terminateUChars(displayName, displayNameCapacity, length, pErrorCode);
