@@ -100,7 +100,7 @@ $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
 	done;
 
 install-resfiles: $(RESFILES)
-	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)/$(PACKAGE)/$(VERSION)
+	$(MKINSTALLDIRS) $(DESTDIR)$(ICUDATA_DIR)/$(VERSION)
 	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O $(top_builddir)/tools/pkgdata/icupkg.inc -m common -d uconvmsg -I $(DESTDIR)$(ICUDATA_DIR)/$(VERSION) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 
 $(RESDIR)/%.res: $(srcdir)/%.txt
