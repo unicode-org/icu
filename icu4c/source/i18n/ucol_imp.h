@@ -127,12 +127,6 @@ U_CAPI void init_collIterate(const UCollator *collator, const UChar *sourceStrin
 struct UCollationElements
 {
   /**
-  * Normalization mode, not exactly the same as the data in collator_.
-  * If collation strength requested is UCOL_IDENTICAL, this mode will be
-  * UNORM_NONE otherwise it follows collator_.
-  */
-        UNormalizationMode normalization_;
-  /**
   * Struct wrapper for source data
   */
         collIterate        iteratordata_;
