@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/10/25 22:33:19 $
- * $Revision: 1.42 $
+ * $Date: 2001/11/01 16:53:04 $
+ * $Revision: 1.43 $
  *
  *****************************************************************************************
  */
@@ -220,7 +220,7 @@ import com.ibm.util.Utility;
  * added in the future.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.42 $ $Date: 2001/10/25 22:33:19 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.43 $ $Date: 2001/11/01 16:53:04 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -978,7 +978,7 @@ public class UnicodeSet extends UnicodeFilter {
      * collection is modified while the operation is in progress.
      *
      * @param c set whose elements are to be added to this set.
-     * @see #add(char, char)
+     * @see #add(int[], int, int)
      */
     public void addAll(UnicodeSet c) {
         add(c.list, c.len, 0);
