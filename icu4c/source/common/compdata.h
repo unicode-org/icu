@@ -30,21 +30,21 @@ struct ComposeData {
     enum { FINAL_JAMO = 6 };
     enum { HANGUL = 7 };
 
-    static const UChar lookup_index[];
+    static const uint16_t lookup_index[];
 
-    static const UChar lookup_values[];
+    static const uint16_t lookup_values[];
 
     static const CompactShortArray* lookup;
 
-    static const UChar actions_index[];
+    static const uint16_t actions_index[];
 
-    static const UChar actions_values[];
+    static const uint16_t actions_values[];
 
     static const CompactShortArray* actions;
 
-    static const UChar actionIndex[];
+    static const uint16_t actionIndex[];
 
-    static const UChar replace[];
+    static const uint16_t replace[];
 
     static const int32_t typeMask[];
 };

@@ -13,15 +13,15 @@ struct DecompData {
     enum { MAX_COMPAT = 11153 };
     enum { BASE = 0 };
 
-    static const UChar offsets_index[];
+    static const uint16_t offsets_index[];
 
-    static const UChar offsets_values[];
+    static const uint16_t offsets_values[];
 
     static const CompactShortArray* offsets;
 
     static const UChar contents[];
 
-    static const UChar canonClass_index[];
+    static const uint16_t canonClass_index[];
 
     static const int8_t canonClass_values[];
 
