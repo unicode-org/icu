@@ -23,6 +23,8 @@
 *                            Removed subParseLong
 *                            Removed getZoneIndex (added in DateFormatSymbols)
 *   06/14/99    stephen     Removed fgTimeZoneDataSuffix
+*   10/14/99    aliu        Updated class doc to describe 2-digit year parsing
+*                           {j28 4182066}.
 *******************************************************************************
 */
 
@@ -135,6 +137,28 @@ class DateFormatSymbols;
  * marker 'a' is left out from the format pattern while the "hour in am/pm"
  * pattern symbol is used. This information loss can happen when formatting the
  * time in PM.
+ *
+ * <p>
+ * When parsing a date string using the abbreviated year pattern ("y" or "yy"),
+ * SimpleDateFormat must interpret the abbreviated year
+ * relative to some century.  It does this by adjusting dates to be
+ * within 80 years before and 20 years after the time the SimpleDateFormat
+ * instance is created. For example, using a pattern of "MM/dd/yy" and a
+ * SimpleDateFormat instance created on Jan 1, 1997,  the string
+ * "01/11/12" would be interpreted as Jan 11, 2012 while the string "05/04/64"
+ * would be interpreted as May 4, 1964.
+ * During parsing, only strings consisting of exactly two digits, as defined by
+ * <code>Unicode::isDigit()</code>, will be parsed into the default century.
+ * Any other numeric string, such as a one digit string, a three or more digit
+ * string, or a two digit string that isn't all digits (for example, "-1"), is
+ * interpreted literally.  So "01/02/3" or "01/02/003" are parsed, using the
+ * same pattern, as Jan 2, 3 AD.  Likewise, "01/02/-3" is parsed as Jan 2, 4 BC.
+ *
+ * <p>
+ * If the year pattern has more than two 'y' characters, the year is
+ * interpreted literally, regardless of the number of digits.  So using the
+ * pattern "MM/dd/yyyy", "01/11/12" parses to Jan 11, 12 A.D.
+ *
  * <P>
  * For time zones that have no names, SimpleDateFormat uses strings GMT+hours:minutes or
  * GMT-hours:minutes.
