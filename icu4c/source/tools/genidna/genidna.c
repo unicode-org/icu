@@ -88,7 +88,7 @@ static UOption options[]={
 
 extern int
 main(int argc, char* argv[]) {
-    char filename[300];
+    char* filename = NULL;
     const char *srcDir=NULL, *destDir=NULL, *suffix=NULL;
     char *basename=NULL;
     char *saveBasename = NULL;
@@ -147,7 +147,7 @@ main(int argc, char* argv[]) {
     }
 
     setUnicodeVersion(options[6].value);
-
+    filename = (char* ) uprv_malloc(uprv_strlen(srcDir) + 300); /* hopefully this should be enough */
     /* prepare the filename beginning with the source dir */
     if(uprv_strchr(srcDir,U_FILE_SEP_CHAR) == NULL){
         filename[0] = 0x2E;
@@ -240,6 +240,8 @@ main(int argc, char* argv[]) {
     if(printRules){
         printf("\t\t\"::[:AGE=3.2:]NFKC;\"\n\t}\n}");
     }
+
+    uprv_free(filename);
     return errorCode;
 }
 
