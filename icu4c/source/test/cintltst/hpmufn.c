@@ -13,12 +13,13 @@
 #include "unicode/uchar.h"
 #include "unicode/ures.h"
 #include "cintltst.h"
-
+#include "umutex.h"
 #include <stdlib.h>
 
 
 static void TestHeapFunctions(void);
 static void TestMutexFunctions(void);
+static void TestIncDecFunctions(void);
 
 void addHeapMutexTest(TestNode **root);
 
@@ -26,8 +27,9 @@ void addHeapMutexTest(TestNode **root);
 void
 addHeapMutexTest(TestNode** root)
 {
-    addTest(root, &TestHeapFunctions,       "tsutil/TestHeapFunctions"      );
-    addTest(root, &TestMutexFunctions,      "tsutil/TestMutexFunctions");
+    addTest(root, &TestHeapFunctions,       "tsutil/TestHeapFunctions"  );
+    addTest(root, &TestMutexFunctions,      "tsutil/TestMutexFunctions" );
+    addTest(root, &TestIncDecFunctions,     "tsutil/TestIncDecFunctions");
 }
 
 
@@ -282,5 +284,98 @@ static void TestMutexFunctions() {
     TEST_ASSERT(gTotalMutexesActive == 0);
 
     ures_close(rb);
+}
+
+
+
+
+/*
+ *  Test Atomic Increment & Decrement Functions
+ */
+
+int         gIncCount             = 0;
+int         gDecCount             = 0;
+const void *gIncDecContext;
+
+
+static int32_t myIncFunc(const void *context, int32_t *p) {
+    int32_t  retVal;
+    TEST_ASSERT(context == gIncDecContext);
+    gIncCount++;
+    retVal = ++(*p);
+    return retVal;
+}
+
+static int32_t myDecFunc(const void *context, int32_t *p) {
+    int32_t  retVal;
+    TEST_ASSERT(context == gIncDecContext);
+    gDecCount++;
+    retVal = --(*p);
+    return retVal;
+}
+
+
+
+
+static void TestIncDecFunctions() {
+    UErrorCode   status = U_ZERO_ERROR;
+    int32_t      t;
+
+
+    /* Can not set mutex functions if ICU is already initialized */
+    u_setAtomicIncDecFunctions(&gIncDecContext, myIncFunc, myDecFunc,  &status);
+    TEST_STATUS(status, U_INVALID_STATE_ERROR);
+
+    /* Un-initialize ICU */
+    u_cleanup();
+
+    /* Can not set functions with NULL values */
+    status = U_ZERO_ERROR;
+    u_setAtomicIncDecFunctions(&gIncDecContext, NULL, myDecFunc,  &status);
+    TEST_STATUS(status, U_ILLEGAL_ARGUMENT_ERROR);
+    status = U_ZERO_ERROR;
+    u_setAtomicIncDecFunctions(&gIncDecContext, myIncFunc, NULL,  &status);
+    TEST_STATUS(status, U_ILLEGAL_ARGUMENT_ERROR);
+
+    /* u_setIncDecFunctions() should work with null or non-null context pointer */
+    status = U_ZERO_ERROR;
+    u_setAtomicIncDecFunctions(NULL, myIncFunc, myDecFunc,  &status);
+    TEST_STATUS(status, U_ZERO_ERROR);
+    u_setAtomicIncDecFunctions(&gIncDecContext, myIncFunc, myDecFunc,  &status);
+    TEST_STATUS(status, U_ZERO_ERROR);
+
+
+    /* After reinitializing ICU, we should not be able to set the inc/dec funcs again. */
+    status = U_ZERO_ERROR;
+    u_init(&status);
+    TEST_STATUS(status, U_ZERO_ERROR);
+    u_setAtomicIncDecFunctions(&gIncDecContext, myIncFunc, myDecFunc,  &status);
+    TEST_STATUS(status, U_INVALID_STATE_ERROR);
+
+    /* Doing ICU operations should cause our functions to be called */
+    gIncCount = 0;
+    gDecCount = 0;
+    umtx_atomic_inc(&t);
+    umtx_atomic_dec(&t);
+    TEST_ASSERT(gIncCount > 0);
+    TEST_ASSERT(gDecCount > 0);
+
+
+    /* Cleanup should cancel use of our inc/dec functions. */
+    /* Additional ICU operations should not use them */
+    u_cleanup();
+    gIncCount = 0;
+    gDecCount = 0;
+    status = U_ZERO_ERROR;
+    u_init(&status);
+    TEST_ASSERT(gIncCount == 0);
+    TEST_ASSERT(gDecCount == 0);
+
+    status = U_ZERO_ERROR;
+    umtx_atomic_inc(&t);
+    umtx_atomic_dec(&t);
+    TEST_STATUS(status, U_ZERO_ERROR);
+    TEST_ASSERT(gIncCount == 0);
+    TEST_ASSERT(gDecCount == 0);
 }
 

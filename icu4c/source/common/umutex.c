@@ -66,34 +66,32 @@ static int32_t gRecursionCount = 0;
 
 
 /*
- *  User mutex implementatin functions.  If non-null, call back to these rather than
+ *  User mutex implementation functions.  If non-null, call back to these rather than
  *  directly using the system (Posix or Windows) APIs.
  *    (declarations are in uclean.h)
  */
-static UMtxInit      *pMutexInit    = NULL;
-static UMtxDestroy   *pMutexDestroy = NULL;
-static UMtxLock      *pMutexLock    = NULL;
-static UMtxUnlock    *pMutexUnlock  = NULL;
-static const void    *gMutexContext = NULL;
+static UMtxInit    *pMutexInit    = NULL;
+static UMtxFunc    *pMutexDestroy = NULL;
+static UMtxFunc    *pMutexLock    = NULL;
+static UMtxFunc    *pMutexUnlock  = NULL;
+static const void  *gMutexContext = NULL;
 
 
 
 /*
- * umtx_lock
+ *   umtx_lock
  */
 U_CAPI void  U_EXPORT2
 umtx_lock(UMTX *mutex)
 {
-    if (mutex == NULL)
-    {
+    if (mutex == NULL) {
         mutex = &gGlobalMutex;
     }
 
-    if (*mutex == NULL)
-    {
+    if (*mutex == NULL) {
         /* Attempt to lock an uninitialized mutex.  Not Supported.
          *  Note that earlier versions of ICU supported lazy mutex initialization.
-         *    That is not thread safe on CPUs that reorder memory operations.  */
+         *    That was not thread safe on CPUs that reorder memory operations.  */
         U_ASSERT(FALSE); 
         umtx_init(mutex);    /*  But, in case someone really screwed up, we will
                               *   still do the lazy init to try to avoid a crash  */
@@ -265,13 +263,13 @@ umtx_init(UMTX *mutex)
  */                  
 U_CAPI void  U_EXPORT2
 umtx_destroy(UMTX *mutex) {
-    if (mutex == NULL) /* destroy the global mutex */
-    {
+    if (mutex == NULL) {  /* destroy the global mutex */
         mutex = &gGlobalMutex;
     }
     
-    if (*mutex == NULL) /* someone already did it. */
+    if (*mutex == NULL) {  /* someone already did it. */
         return;
+    }
     
     if (pMutexDestroy != NULL) {
         (*pMutexDestroy)(gMutexContext, mutex);
@@ -300,7 +298,7 @@ umtx_destroy(UMTX *mutex) {
 
 
 U_CAPI void U_EXPORT2 
-u_setMutexFunctions(const void *context, UMtxInit *i, UMtxDestroy *d, UMtxLock *l, UMtxUnlock *u,
+u_setMutexFunctions(const void *context, UMtxInit *i, UMtxFunc *d, UMtxFunc *l, UMtxFunc *u,
                     UErrorCode *status) {
     if (U_FAILURE(*status)) {
         return;
@@ -337,10 +335,103 @@ u_setMutexFunctions(const void *context, UMtxInit *i, UMtxDestroy *d, UMtxLock *
 }
 
 
+
+/*-----------------------------------------------------------------
+ *
+ *  Atomic Increment and Decrement
+ *     umtx_atomic_inc
+ *     umtx_atomic_dec
+ *
+ *----------------------------------------------------------------*/
+
+/* Pointers to user-supplied inc/dec functions.  Null if not funcs have been set.  */
+static UMtxAtomicF  *pIncF = NULL;
+static UMtxAtomicF  *pDecF = NULL;
+static void *gIncDecContext;
+
+
+U_CAPI int32_t U_EXPORT2
+umtx_atomic_inc(int32_t *p)  {
+    int32_t retVal;
+    if (pIncF) {
+        retVal = (*pIncF)(gIncDecContext, p);
+    } else {
+        #if defined (WIN32) && ICU_USE_THREADS == 1
+            retVal = InterlockedIncrement(p);
+        #elif defined (POSIX) && ICU_USE_THREADS == 1
+            pthread_mutex_t *m = (pthread_mutex_t*) gIncDecMutex;
+            pthread_mutex_lock(m);
+            retVal = ++(*p);
+            pthread_mutex_unlock(m);
+        #else
+            /* Unknown Platform, or ICU thread support compiled out. */
+            retVal = ++(*p);
+        #endif
+    }
+    return retVal;
+}
+
+U_CAPI int32_t U_EXPORT2
+umtx_atomic_dec(int32_t *p) {
+    int32_t retVal;
+    if (pDecF) {
+        retVal = (*pDecF)(gIncDecContext, p);
+    } else {
+        #if defined (WIN32) && ICU_USE_THREADS == 1
+            retVal = InterlockedDecrement(p);
+        #elif defined (POSIX) && ICU_USE_THREADS == 1
+            pthread_mutex_t *m = (pthread_mutex_t*) gIncDecMutex;
+            pthread_mutex_lock(m);
+            retVal = --(*p);
+            pthread_mutex_unlock(m);
+        #else
+            /* Unknown Platform, or ICU thread support compiled out. */
+            retVal = --(*p);
+        #endif
+    }
+    return retVal;
+}
+
+/* TODO:  Some POSIXy platforms have atomic inc/dec functions available.  Use them. */
+
+
+
+
+
+U_CAPI void U_EXPORT2
+u_setAtomicIncDecFunctions(const void *context, UMtxAtomicF *ip, UMtxAtomicF *dp,
+                                UErrorCode *status) {
+    int32_t   testInt;
+    if (U_FAILURE(*status)) {
+        return;
+    }
+    /* Can not set a mutex function to a NULL value  */
+    if (ip==NULL || dp==NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    /* If ICU is not in an initial state, disallow this operation. */
+    if (cmemory_inUse()) {
+        *status = U_INVALID_STATE_ERROR;
+        return;
+    }
+
+    pIncF = ip;
+    pDecF = dp;
+
+    testInt = 0;
+    U_ASSERT(umtx_atomic_inc(&testInt) == 1);     /* Sanity Check.    Do the functions work at all? */
+    U_ASSERT(testInt == 1);
+    U_ASSERT(umtx_atomic_dec(&testInt) == 0);
+    U_ASSERT(testInt == 0);
+}
+
+
+
 /*
  *  Mutex Cleanup Function
  *
- *      Destroy the global mutex, and reset the mutex function callback pointers.
+ *      Destroy the global mutex(es), and reset the mutex function callback pointers.
  */
 U_CFUNC UBool umtx_cleanup(void) {
     umtx_destroy(NULL);
@@ -349,93 +440,11 @@ U_CFUNC UBool umtx_cleanup(void) {
     pMutexLock    = NULL;
     pMutexUnlock  = NULL;
     gMutexContext = NULL;
+
+    pIncF         = NULL;
+    pDecF         = NULL;
+
     return TRUE;
 }
-
-
-
-/*-----------------------------------------------------------------
- *
- *  umtx_atomic_inc
- *  umtx_atomic_dec
- *
- *----------------------------------------------------------------*/
-#if (ICU_USE_THREADS == 1) 
-
-#if defined (WIN32)
-/*
- * Win32 - use the Windows API functions for atomic increment and decrement.
- */
-U_CAPI int32_t U_EXPORT2
-umtx_atomic_inc(int32_t *p)
-{
-    return InterlockedIncrement(p);
-}
-
-U_CAPI int32_t U_EXPORT2
-umtx_atomic_dec(int32_t *p)
-{
-    return InterlockedDecrement(p); 
-}
-
-#elif defined (POSIX)
-/*
- * POSIX platforms without specific atomic operations.  Use a posix mutex
- *   to protect the increment and decrement.
- */
-
-U_CAPI int32_t U_EXPORT2
-umtx_atomic_inc(int32_t *p)
-{
-    int32_t    retVal;
-
-    pthread_mutex_t *m = (pthread_mutex_t*) gIncDecMutex;
-    pthread_mutex_lock(m);
-    retVal = ++(*p);
-    pthread_mutex_unlock(m);
-    return retVal;
-}
-
-
-U_CAPI int32_t U_EXPORT2
-umtx_atomic_dec(int32_t *p)
-{
-    int32_t    retVal;
-
-    pthread_mutex_t *m = (pthread_mutex_t*) gIncDecMutex;
-    pthread_mutex_lock(m);
-    retVal = --(*p);
-    pthread_mutex_unlock(m);
-    return retVal;
-}
-
-
-/* TODO:  Some POSIXy platforms have atomic inc/dec functions available.  Use them. */
-#else 
-   
-/* No recognized platform.  */
-#error  No atomic increment and decrement defined for this platform. \
-        Either use the --disable-threads configure option, or define those functions in this file.
-
-#endif   /* Platform selection for atomic_inc and dec. */
-
-
-#else  /* (ICU_USE_THREADS == 0) */
-
-/* Threads disabled here */
-
-U_CAPI int32_t U_EXPORT2
-umtx_atomic_inc(int32_t *p) {
-    return ++(*p);
-}
-
-U_CAPI int32_t U_EXPORT2
-umtx_atomic_dec(int32_t *p) {
-    return --(*p);
-}
-
-#endif /* (ICU_USE_THREADS == 1) */
-
-
 
 
