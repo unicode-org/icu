@@ -744,7 +744,7 @@ struct UCollator {
     int32_t rulesLength;
     int32_t latinOneTableLen;
 
-    UErrorCode errorCode;             /* internal error code */
+    /*UErrorCode errorCode;*/             /* internal error code */
 
     uint32_t variableTopValue;
     UColAttributeValue frenchCollation;
