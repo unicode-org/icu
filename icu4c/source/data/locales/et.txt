@@ -23,7 +23,7 @@ et {
         "H:mm:ss",
         "H:mm",
         "EEEE, d, MMMM yyyy",
-        "EEEE, d, MMMM yyyy",
+        "d MMMM yyyy",
         "dd.MM.yyyy",
         "dd.MM.yy",
         "{1} {0}",
@@ -60,18 +60,18 @@ et {
     LocaleID:int { 0x25 }
 //    LocaleString { "et" }
     MonthAbbreviations { 
-        "jaan",
-        "veebr",
+        "jaan.",
+        "veebr.",
         "m\u00E4rts",
-        "apr",
+        "apr.",
         "mai",
         "juuni",
         "juuli",
-        "aug",
-        "sept",
-        "okt",
-        "nov",
-        "dets",
+        "aug.",
+        "sept.",
+        "okt.",
+        "nov.",
+        "dets.",
     }
     MonthNames { 
         "jaanuar",

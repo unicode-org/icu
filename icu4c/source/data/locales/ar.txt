@@ -54,13 +54,13 @@ ar {
     }
     DateTimePatterns { 
         "z h:mm:ss a",
-        "z h:mm:ss a",
+        "h:mm:ss a",
         "h:mm:ss a",
         "h:mm a",
         "EEEE, d MMMM, yyyy",
         "d MMMM, yyyy",
         "dd/MM/yyyy",
-        "dd/MM/yy",
+        "d/M/yyyy",
         "{1} {0}",
     }
     DayAbbreviations { 

@@ -10,7 +10,7 @@
 am_ET {
     Version{ "1.0" }
     AmPmMarkers {
-        "\u1320\u12CB\u1275",
+        "\u1321\u12CB\u1275",
         "\u12A8\u1233\u12D3\u1275",
     }
     DateTimePatterns { 

@@ -19,10 +19,10 @@ mk {
         "HH:mm:ss z",
         "HH:mm:ss",
         "HH:mm",
-        "EEEE, d, MMMM yyyy",
-        "d, MMMM yyyy",
-        "d.M.yyyy",
-        "d.M.yy",
+        "EEEE, dd MMMM yyyy",
+        "dd MMMM yyyy",
+        "dd.M.yyyy",
+        "dd.M.yy",
         "{1} {0}",
     }
     DayAbbreviations { 
