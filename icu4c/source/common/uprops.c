@@ -20,6 +20,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 #include "unicode/uscript.h"
+#include "unormimp.h"
 #include "uprops.h"
 
 /* helper definitions ------------------------------------------------------- */
@@ -127,7 +128,7 @@ UBool u_hasBinaryProperty(UChar32 c, UProperty which) {
     case UCHAR_EXTENDER:
         return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_EXTENDER))!=0;
     case UCHAR_FULL_COMPOSITION_EXCLUSION:
-        return FALSE; /* ### TODO from unorm.dat */
+        return unorm_internalIsFullCompositionExclusion(c);
     case UCHAR_GRAPHEME_BASE:
         /*
          * [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-Grapheme_Extend ==
