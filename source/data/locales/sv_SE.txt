@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+sv_SE {
+    Version { "1.0" }
+    CurrencyElements { 
+        "kr",
+        "SEK",
+        ",",
+    }
+//    LocaleString { "sv_SE" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "SWE" }
+    LocaleID:int { 0x041d }
+}

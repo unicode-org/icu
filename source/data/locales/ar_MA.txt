@@ -1,0 +1,18 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ar_MA {
+    Version{ "1.0" }
+    CurrencyElements { 
+        "\u062F.\u0645.\u200F",
+        "MAD",
+        ".",
+    }
+//    LocaleString { "ar_MA" }
+//    ShortCountry { "MAR" }
+    LocaleID:int { 0x1801 }
+}

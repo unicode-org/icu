@@ -1,0 +1,58 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+it_CH {
+    Version{ "1.0" }
+    CurrencyElements { 
+        "SFr.",
+        "CHF",
+        ".",
+    }
+    DateTimePatterns { 
+        "HH.mm' h' z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE, d. MMMM yyyy",
+        "d. MMMM yyyy",
+        "d-MMM-yy",
+        "dd.MM.yy",
+        "{1} {0}",
+    }
+    LocaleID:int { 0x0810 }
+//    LocaleString { "it_CH" }
+    NumberElements { 
+        ".",
+        "'",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4 #,##0.00;\u00A4-#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "CHE" }
+    zoneStrings { 
+        {
+            "Europe/Zurich",
+            "CET",
+            "CET",
+            "CET",
+            "CET",
+            "Zurich",
+        }
+    }
+}

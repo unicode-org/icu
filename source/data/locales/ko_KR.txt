@@ -1,0 +1,50 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ko_KR {
+    Version { "1.2" }
+    CurrencyElements { 
+        "\u20A9",
+        "KRW",
+        ".",
+    }
+//    LocaleString { "ko_KR" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "KOR" }
+    LocaleID:int { 0x0412 }
+//    Countries {
+        //KR { "\uB300\uD55C\uBBFC\uAD6D" }
+        //KP { "\uC870\uC120 \uBBFC\uC8FC\uC8FC\uC758 \uC778\uBBFC \uACF5\uD654\uAD6D" }
+        //US { "\uBBF8\uAD6D" }
+        //JP { "\uC77C\uBCF8" }
+        //GB { "\uC601\uAD6D" }
+        //DE { "\uB3C5\uC77C" }
+        //FR { "\uD504\uB791\uC2A4" }
+        //CA { "\uCE90\uB098\uB2E4" }
+//    }
+    DateTimePatterns {
+        "a h'\uC2DC' mm'\uBD84' ss'\uCD08' z",
+        "a h'\uC2DC' mm'\uBD84' ss'\uCD08'",
+        "a h:mm:ss",
+        "a h'\uC2Dc' mm'\uBD84'",
+        "yyyy'\uB144' M'\uC6D4' d'\uC77C' EEEE",
+        "yyyy'\uB144' M'\uC6D4' d'\uC77C' EE",
+        "yyyy.MM.dd",
+        "yy.MM.dd",
+        "{1} {0}",
+    }
+
+//    Languages {
+//         ko { "\uD55C\uAD6D\uC5B4" }
+//    }
+
+}
