@@ -33,6 +33,12 @@
  * {@link ucnv_getAlias()} and {@link ucnv_getStandardName()} are some of the
  * more frequently used alias functions to get this information.</p>
  *
+ * <p>When a converter encounters an illegal, irregular, invalid or unmappable character
+ * its default behavior is to use a substitution character to replace the
+ * bad byte sequence. This behavior can be changed by using {@link ucnv_getFromUCallBack()}
+ * or {@link ucnv_getToUCallBack()} on the converter. The header ucnv_err.h defines
+ * many other callback actions that can be used instead of a character substitution.</p>
+ *
  * <p>More information about this API can be found in our 
  * <a href="http://oss.software.ibm.com/icu/userguide/conversion.html">User's
  * Guide</a>.</p>
@@ -775,12 +781,13 @@ ucnv_getFromUCallBack (const UConverter * converter,
  * Changes the callback function used by the converter when
  * an illegal or invalid sequence is found.
  * Context pointers are always owned by the caller.
+ * Predefined actions and contexts can be found in the ucnv_err.h header.
  *
  * @param converter the unicode converter
  * @param newAction the new callback function
- * @param newContext the new toUnicode callback context pointer
- * @param oldAction fillin: returns the old callback function pointer
- * @param oldContext fillin: returns the old callback's private void* context
+ * @param newContext the new toUnicode callback context pointer. This can be NULL.
+ * @param oldAction fillin: returns the old callback function pointer. This can be NULL.
+ * @param oldContext fillin: returns the old callback's private void* context. This can be NULL.
  * @param err The error code status
  * @see ucnv_getToUCallBack
  * @stable ICU 2.0
@@ -797,12 +804,13 @@ ucnv_setToUCallBack (UConverter * converter,
  * Changes the current callback function used by the converter when
  * an illegal or invalid sequence is found.
  * Context pointers are always owned by the caller.
+ * Predefined actions and contexts can be found in the ucnv_err.h header.
  *
  * @param converter the unicode converter
  * @param newAction the new callback function
- * @param newContext the new fromUnicode callback context pointer
- * @param oldAction fillin: returns the old callback function pointer
- * @param oldContext fillin: returns the old callback's private void* context
+ * @param newContext the new fromUnicode callback context pointer. This can be NULL.
+ * @param oldAction fillin: returns the old callback function pointer. This can be NULL.
+ * @param oldContext fillin: returns the old callback's private void* context. This can be NULL.
  * @param err The error code status
  * @see ucnv_getFromUCallBack
  * @stable ICU 2.0
