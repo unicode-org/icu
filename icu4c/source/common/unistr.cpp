@@ -1353,6 +1353,23 @@ UnicodeString::copy(int32_t start, int32_t limit, int32_t dest) {
     uprv_free(text);
 }
 
+/**
+ * Replaceable API
+ *
+ * NOTE: This is for the Replaceable class.  There is no rep.cpp,
+ * so we implement this function here.
+ */
+UBool Replaceable::hasMetaData() const {
+    return TRUE;
+}
+
+/**
+ * Replaceable API
+ */
+UBool UnicodeString::hasMetaData() const {
+    return FALSE;
+}
+
 UnicodeString&
 UnicodeString::doReverse(int32_t start,
              int32_t length)
