@@ -1213,16 +1213,14 @@ void NumberFormatRegressionTest::Test4106658(void)
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status); // Corrected; see 4147706
     failure(status, "new DecimalFormat");
-#if defined(WIN32) || defined(HPUX)
-    double d1 = 0.0 * -1;
-#else
-    double d1 = 0.0; d1 *= -1;
-#endif
+    volatile double d1 = 0.0;   // volatile to prevent code optimization
     double d2 = -0.0001;
     UnicodeString buffer;
     UnicodeString temp;
-    logln("pattern: \"" + df->toPattern(temp) + "\"");
     FieldPosition pos(FieldPosition::DONT_CARE);
+
+    d1 *= -1.0; // Some compilers have a problem with defining -0.0
+    logln("pattern: \"" + df->toPattern(temp) + "\"");
     df->format(d1, buffer, pos);
     if (buffer != UnicodeString("-0")) // Corrected; see 4147706
         errln(UnicodeString("") + d1 + "      is formatted as " + buffer);
@@ -1281,7 +1279,9 @@ void NumberFormatRegressionTest::Test4114639(void)
     delete format;
 }
 
-/* @bug 4106664 (FIX)
+/* @bug 4106664
+ * TODO: this test does not work because we need to use a 64 bit number and a
+ * a double only MAY only have 52 bits of precision.
  * DecimalFormat.format(long n) fails if n * multiplier > MAX_LONG.
  */
 void NumberFormatRegressionTest::Test4106664(void)
@@ -1320,16 +1320,14 @@ void NumberFormatRegressionTest::Test4106667(void)
     failure(status, "new DecimalFormat");
     UChar foo [] = { 0x002B };
     UnicodeString bar(foo, 1, 1);
-    df->setPositivePrefix(/*"+"*/bar);
-#if defined(WIN32) || defined(HPUX)
-    double d = 0.0 * -1;
-#else
-    double d = 0.0; d *= -1;
-#endif
+    volatile double d = 0.0;   // volatile to prevent code optimization
     UnicodeString temp;
-    logln("pattern: \"" + df->toPattern(temp) + "\"");
     UnicodeString buffer;
     FieldPosition pos(FieldPosition::DONT_CARE);
+
+    logln("pattern: \"" + df->toPattern(temp) + "\"");
+    d *= -1.0; // Some compilers have a problem with defining -0.0
+    df->setPositivePrefix(/*"+"*/bar);
     df->format(d, buffer, pos);
     if (buffer != UnicodeString("-0")) // Corrected; see 4147706
         errln(/*d + */UnicodeString("  is formatted as ") + buffer);
@@ -1721,17 +1719,15 @@ void NumberFormatRegressionTest::Test4147706(void)
     failure(status, "new DecimalFormat");
     DecimalFormatSymbols *syms = new DecimalFormatSymbols(Locale::ENGLISH, status);
     failure(status, "new DecimalFormatSymbols");
-    df->adoptDecimalFormatSymbols(syms);
-#if defined(WIN32) || defined(HPUX)
-    double d1 = 0.0 * -1;
-#else
-    double d1 = 0.0; d1 *= -1;
-#endif
-    double d2 = -0.0001;
     UnicodeString f1;
-    FieldPosition pos(FieldPosition::DONT_CARE);
-    f1 = df->format(d1, f1, pos);
     UnicodeString f2, temp;
+    FieldPosition pos(FieldPosition::DONT_CARE);
+    volatile double d1 = 0.0;   // volatile to prevent code optimization
+    double d2 = -0.0001;
+
+    d1 *= -1.0; // Some compilers have a problem with defining -0.0
+    df->adoptDecimalFormatSymbols(syms);
+    f1 = df->format(d1, f1, pos);
     f2 = df->format(d2, f2, pos);
     if (f1 != UnicodeString("-0.0")) {
         errln(UnicodeString("") + d1 + UnicodeString(" x \"") + df->toPattern(temp) + "\" is formatted as \"" + f1 + '"');
