@@ -1766,11 +1766,11 @@ CalendarRegressionTest::Test4166109()
 
     for(int32_t firstInWeek = UCAL_SUNDAY; firstInWeek <= UCAL_SATURDAY; firstInWeek++) {
         calendar->setFirstDayOfWeek((UCalendarDaysOfWeek)firstInWeek);
-        int32_t returned = calendar->getActualMaximum(field);
+        int32_t returned = calendar->getActualMaximum(field, status);
         int32_t expected = (31 + ((firstInMonth - firstInWeek + 7)% 7) + 6) / 7;
 
         logln(UnicodeString("First day of week = ") + firstInWeek +
-              "  getActualMaximum(WEEK_OF_MONTH) = " + returned +
+              "  getActualMaximum(WEEK_OF_MONTH, status) = " + returned +
               "  expected = " + expected +
               ((returned == expected) ? "  ok" : "  FAIL"));
 
@@ -1834,7 +1834,7 @@ CalendarRegressionTest::Test4167060()
             if(U_FAILURE(status))
                 errln("getTime() failed");
 
-            int32_t maxYear = calendar->getActualMaximum(field);
+            int32_t maxYear = calendar->getActualMaximum(field, status);
             UnicodeString temp;
             logln(UnicodeString("maxYear: ") + maxYear + " for " + format->format(calendar->getTime(status), temp));
             temp.remove();
