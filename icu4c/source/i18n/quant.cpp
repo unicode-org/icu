@@ -29,6 +29,7 @@ Quantifier::Quantifier(UnicodeFunctor *adoptedMatcher,
 
 Quantifier::Quantifier(const Quantifier& o) :
     UnicodeFunctor(o),
+    UnicodeMatcher(o),
     matcher(o.matcher->clone()),
     minCount(o.minCount),
     maxCount(o.maxCount)
