@@ -318,7 +318,6 @@ uloc_getLanguage(const char*    localeID,
     {
       language[uprv_min(i,languageCapacity-1)] = '\0';
     }
-    }
   
   return i+1;
 }
