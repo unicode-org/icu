@@ -114,24 +114,29 @@ ja_JP_JIS {
           "=\u30db\u3099|\u30fc=\u30f2\u3099|\u30fc"
           "=\u30db\u309a|\u30aa=\u30db\u309a|\u30fc"
 
-        // Iteration mark  
-        "&\u30a1<<<\u30a1|\u30fd=\u3041|\u309d"             // SMALL A
-        "&[before 3]\u30a2<<<\u30a2|\u30fd=\u3042|\u309d"   // A
+        // Iteration mark - these should probably go as a tertiary difference above
 
-        "&\u30a3<<<\u30a3|\u30fd=\u3043|\u309d"             // SMALL I
-        "&[before 3]\u30a4<<<\u30a4|\u30fd=\u3044|\u309d"   // I
+        "&[before 3]\u30a2<<<\u30a2|\u30fd=\u3042|\u309d" // A
+        "=\u30a1|\u30fd=\u3041|\u309d"                    // SMALL A
 
-        "&\u30a5<<<\u30a5|\u30fd=\u3045|\u309d"             // SMALL U
-        "&[before 3]\u30a6<<<\u30a6|\u30fd=\u3046|\u309d"   // U
+        "&[before 3]\u30a4<<<\u30a4|\u30fd=\u3044|\u309d" // I
+        "=\u30a3|\u30fd=\u3043|\u309d"                    // SMALL I
 
-        "&\u30a7<<<\u30a7|\u30fd=\u3047|\u309d"             // SMALL E
-        "&[before 3]\u30a8<<<\u30a8|\u30fd=\u3048|\u309d"   // E
+        "&[before 3]\u30a6<<<\u30a6|\u30fd=\u3046|\u309d  // U
+        "=\u30a5|\u30fd=\u3045|\u309d"                    // SMALL U
 
-        "&\u30a9<<<\u30a9|\u30fd=\u3049|\u309d"             // SMALL O
-        "&[before 3]\u30aa<<<\u30aa|\u30fd=\u304a|\u309d"   // O
+        "&[before 3]\u30a8<<<\u30a8|\u30fd=\u3048|\u309d" // E
+        "=\u30a7|\u30fd=\u3047|\u309d"                    // SMALL E
+
+        "&[before 3]\u30aa<<<\u30aa|\u30fd=\u304a|\u309d" // O
+        "=\u30a9|\u30fd=\u3049|\u309d"                    // SMALL O
+
+        // regular syllables
 
         "&[before 3]\u30ab<<<\u30ab|\u30fd=\u30ab\u3099|\u30fd=\u304b|\u309d=\u304b\u3099|\u309d" // KA
+        "=\u30f5|\u30fd" // SMALL KA
         "=\u30ab|\u30fe/\u3099=\u30ab\u3099|\u30fe/\u3099=\u304b|\u309e/\u3099=\u304b\u3099|\u309e/\u3099" // GA
+        "=\u30f5|\u30fe/\u3099" // SMALL KA FOLLOWED BY A VOICED ITERATION MARK
 
         "&[before 3]\u30ad<<<\u30ad|\u30fd=\u30ad\u3099|\u30fd=\u304d|\u309d=\u304d\u3099|\u309d" // KI
         "=\u30ad|\u30fe/\u3099=\u30ad\u3099|\u30fe/\u3099=\u304d|\u309e/\u3099=\u304d\u3099|\u309e/\u3099" // GI
@@ -140,7 +145,9 @@ ja_JP_JIS {
         "=\u30af|\u30fe/\u3099=\u30af\u3099|\u30fe/\u3099=\u304f|\u309e/\u3099=\u304f\u3099|\u309e/\u3099" // GU
 
         "&[before 3]\u30b1<<<\u30b1|\u30fd=\u30b1\u3099|\u30fd=\u3051|\u309d=\u3051\u3099|\u309d" // KE
+        "=\u30f6|\u30fd" // SMALL KE
         "=\u30b1|\u30fe/\u3099=\u30b1\u3099|\u30fe/\u3099=\u3051|\u309e/\u3099=\u3051\u3099|\u309e/\u3099" // GE
+        "=\u30f6|\u30fe/\u3099" // SMALL KE FOLLOWED BY A VOICED ITERATION MARK
 
         "&[before 3]\u30b3<<<\u30b3|\u30fd=\u30b3\u3099|\u30fd=\u3053|\u309d=\u3053\u3099|\u309d" // KO
         "\u30b3|\u30fe/\u3099=\u30b3\u3099|\u30fe/\u3099=\u3053|\u309e/\u3099=\u3053\u3099|\u309e/\u3099" // GO
@@ -154,159 +161,104 @@ ja_JP_JIS {
         "&[before 3]\u30b9<<<\u30b9|\u30fd=\u30b9\u3099|\u30fd=\u3059|\u309d=\u3059\u3099|\u309d" // SU
         "=\u30b9|\u30fe/\u3099=\u30b9\u3099|\u30fe/\u3099=\u3059|\u309e/\u3099=\u3059\u3099|\u309e/\u3099" // ZU
 
-        "&[before 3]\u305b<<<\u305b|\u309d"
-        "&[before 3]\u305b\u3099<<<\u305b\u3099|\u309d=\u305b|\u309e=\u305b\u3099|\u309e"
+        "&[before 3]\u30bb<<<\u30bb|\u30fd=\u30bb\u3099|\u30fd=\u305b|\u309d=\u305b\u3099|\u309d" // SE
+        "=\u30bb|\u30fe/\u3099=\u30bb\u3099|\u30fe/\u3099=\u305b|\u309e/\u3099=\u305b\u3099|\u309e/\u3099" // ZE
 
-        "&[before 3]\u305d<<<\u305d|\u309d"
-        "&[before 3]\u305d\u3099<<<\u305d\u3099|\u309d=\u305d|\u309e=\u305d\u3099|\u309e"
+        "&[before 3]\u30bd<<<\u30bd|\u30fd=\u30bd\u3099|\u30fd=\u305d|\u309d=\u305d\u3099|\u309d" // SO
+        "=\u30bd|\u30fe/\u3099=\u30bd\u3099|\u30fe/\u3099<=\u305d|\u309e/\u3099=\u305d\u3099|\u309e/\u3099" // SO
 
-        "&[before 3]\u305f<<<\u305f|\u309d"
-        "&[before 3]\u305f\u3099<<<\u305f\u3099|\u309d=\u305f|\u309e=\u305f\u3099|\u309e"
+        "&[before 3]\u30bf<<<\u30bf|\u30fd=\u30bf\u3099|\u30fd=\u305f|\u309d=\u305f\u3099|\u309d" // TA
+        "=\u30bf|\u30fe/\u3099=\u30bf\u3099|\u30fe/\u3099=\u305f|\u309e/\u3099=\u305f\u3099|\u309e/\u3099" // DA
 
-        "&[before 3]\u3061<<<\u3061|\u309d"
-        "&[before 3]\u3061\u3099<<<\u3061\u3099|\u309d=\u3061|\u309e=\u3061\u3099|\u309e"
+        "&[before 3]\u30c1<<<\u30c1|\u30fd=\u30c1\u3099|\u30fd=\u3061|\u309d=\u3061\u3099|\u309d" // TI
+        "=\u30c1|\u30fe/\u3099=\u30c1\u3099|\u30fe/\u3099=\u3061|\u309e/\u3099=\u3061\u3099|\u309e/\u3099" // DI
 
-        "&\u3063<<<\u3063|\u309d"
-        "&[before 3]\u3064<<<\u3064|\u309d"
-        "&[before 3]\u3064\u3099<<<\u3064\u3099|\u309d=\u3064|\u309e=\u3064\u3099|\u309e"
+        "&[before 3]\u30c4<<<\u30c4|\u30fd=\u30c4\u3099|\u30fd=\u3064|\u309d=\u3064\u3099|\u309d"
+        "=\u30c3|\u30fd=\u3063|\u309d" // SMALL TU
+        "=\u30c4|\u30fe/\u3099=\u30c4\u3099|\u30fe/\u3099=\u3064|\u309e/\u3099=\u3064\u3099|\u309e/\u3099 // DU
+        "=\u30c3|\u30fe/\u3099=\u3063|\u309e/\u3099" // SMALL TU FOLLOWED BY A VOICED ITERATION MARK
 
-        "&[before 3]\u3066<<<\u3066|\u309d"
-        "&[before 3]\u3066\u3099<<<\u3066\u3099|\u309d=\u3066|\u309e=\u3066\u3099|\u309e"
+        "&[before 3]\u30c6<<<\u30c6|\u30fd=\u30c6\u3099|\u30fd=\u3066|\u309d=\u3066\u3099|\u309d" // TE
+        "=\u30c6|\u30fe/\u3099=\u30c6\u3099|\u30fe/\u3099=\u3066|\u309e/\u3099=\u3066\u3099|\u309e/\u3099" // DE
 
-        "&[before 3]\u3068<<<\u3068|\u309d"
-        "&[before 3]\u3068\u3099<<<\u3068\u3099|\u309d=\u3068|\u309e=\u3068\u3099|\u309e"
+        "&[before 3]\u30c8<<<\u30c8|\u30fd=\u30c8\u3099|\u30fd=\u3068|\u309d=\u3068\u3099|\u309d" // TO
+        "=\u30c8|\u30fe/\u3099=\u30c8\u3099|\u30fe/\u3099=\u3068|\u309e/\u3099=\u3068\u3099|\u309e/\u3099" // DO
 
-        "&[before 3]\u306a<<<\u306a|\u309d"
+        "&[before 3]\u30ca<<<\u30ca|\u30fd=\u306a|\u309d" // NA
 
-        "&[before 3]\u306b<<<\u306b|\u309d"
+        "&[before 3]\u30cb<<<\u30cb|\u30fd=\u306b|\u309d" // NI
 
-        "&[before 3]\u306c<<<\u306c|\u309d"
+        "&[before 3]\u30cc<<<\u30cc|\u30fd=\u306c|\u309d" // NU
 
-        "&[before 3]\u306d<<<\u306d|\u309d"
+        "&[before 3]\u30cd<<<\u30cd|\u30fd=\u306d|\u309d" // NE
 
-        "&[before 3]\u306e<<<\u306e|\u309d"
+        "&[before 3]\u30ce<<<\u30ce|\u30fd=\u306e|\u309d" // NO
 
-        "&[before 3]\u306f<<<\u306f|\u309d"
-        "&[before 3]\u306f\u3099<<<\u306f\u3099|\u309d=\u306f|\u309e=\u306f\u309a|\u309e=\u306f\u3099|\u309e"
-        "&[before 3]\u306f\u309a<<<\u306f\u309a|\u309d"
+        "&[before 3]\u30cf<<<\u30cf|\u30fd=\u30cf\u3099|\u30fd=\u30cf\u309a|\u30fd=\u306f|\u309d=\u306f\u3099|\u309d=\u306f\u309a|\u309d" // HA
+        "=\u30cf|\u30fe/\u3099=\u30cf\u309a|\u30fe/\u3099=\u30cf\u3099|\u30fe/\u3099=\u306f|\u309e/\u3099=\u306f\u309a|\u309e/\u3099=\u306f\u3099|\u309e/\u3099" // BA
 
-        "&[before 3]\u3072<<<\u3072|\u309d"
-        "&[before 3]\u3072\u3099<<<\u3072\u3099|\u309d=\u3072|\u309e=\u3072\u309a|\u309e=\u3072\u3099|\u309e"
-        "&[before 3]\u3072\u309a<<<\u3072\u309a|\u309d"
+        "&[before 3]\u30d2<<<\u30d2|\u30fd=\u30d2\u3099|\u30fd=\u30d2\u309a|\u30fd=\u3072|\u309d=\u3072\u3099|\u309d=\u3072\u309a|\u309d" // HI
+        "=\u30d2|\u30fe/\u3099=\u30d2\u309a|\u30fe/\u3099=\u30d2\u3099|\u30fe/\u3099=\u3072|\u309e/\u3099=\u3072\u309a|\u309e/\u3099=\u3072\u3099|\u309e/\u3099" // BI
 
-        "&[before 3]\u3075<<<\u3075|\u309d"
-        "&[before 3]\u3075\u3099<<<\u3075\u3099|\u309d=\u3075|\u309e=\u3075\u309a|\u309e=\u3075\u3099|\u309e"
-        "&[before 3]\u3075\u309a<<<\u3075\u309a|\u309d"
+        "&[before 3]\u30d5<<<\u30d5|\u30fd=\u30d5\u3099|\u30fd=\u30d5\u309a|\u30fd=\u3075|\u309d=\u3075\u3099|\u309d=\u3075\u309a|\u309d" // HU
+        "=\u30d5|\u30fe/\u3099=\u30d5\u309a|\u30fe/\u3099=\u30d5\u3099|\u30fe/\u3099=\u3075|\u309e/\u3099=\u3075\u309a|\u309e/\u3099=\u3075\u3099|\u309e/\u3099" // BU
 
-        "&[before 3]\u3078<<<\u3078|\u309d"
-        "&[before 3]\u3078\u3099<<<\u3078\u3099|\u309d=\u3078|\u309e=\u3078\u309a|\u309e=\u3078\u3099|\u309e"
-        "&[before 3]\u3078\u309a<<<\u3078\u309a|\u309d"
+        "&[before 3]\u30d8<<<\u30d8|\u30fd=\u30d8\u3099|\u30fd=\u30d8\u309a|\u30fd=\u3078|\u309d=\u3078\u3099|\u309d=\u3078\u309a|\u309d" // HE
+        "=\u30d8|\u30fe/\u3099=\u30d8\u309a|\u30fe/\u3099=\u30d8\u3099|\u30fe/\u3099=\u3078|\u309e/\u3099=\u3078\u309a|\u309e/\u3099=\u3078\u3099|\u309e/\u3099" // BE
 
-        "&[before 3]\u307b<<<\u307b|\u309d"
-        "&[before 3]\u307b\u3099<<<\u307b\u3099|\u309d=\u307b|\u309e=\u307b\u309a|\u309e=\u307b\u3099|\u309e"
-        "&[before 3]\u307b\u309a<<<\u307b\u309a|\u309d"
+        "&[before 3]\u30db<<<\u30db|\u30fd=\u30db\u3099|\u30fd=\u30db\u309a|\u30fd=\u307b|\u309d=\u307b\u3099|\u309d=\u307b\u309a|\u309d" // HO
+        "=\u30db|\u30fe/\u3099=\u30db\u309a|\u30fe/\u3099=\u30db\u3099|\u30fe/\u3099=\u307b|\u309e/\u3099=\u307b\u309a|\u309e/\u3099=\u307b\u3099|\u309e/\u3099" // HO
 
-        "&[before 3]\u307e<<<\u307e|\u309d"
+        "&[before 3]\u30de<<<\u30de|\u30fd=\u307e|\u309d" // MA
 
-        "&[before 3]\u307f<<<\u307f|\u309d"
+        "&[before 3]\u30df<<<\u30df|\u30fd=\u307f|\u309d" // MI
 
-        "&[before 3]\u3080<<<\u3080|\u309d"
+        "&[before 3]\u30e0<<<\u30e0|\u30fd=\u3080|\u309d" // MU
 
-        "&[before 3]\u3081<<<\u3081|\u309d"
+        "&[before 3]\u30e1<<<\u30e1|\u30fd=\u3081|\u309d" // ME
+ 
+        "&[before 3]\u30e2<<<\u30e2|\u30fd=\u3082|\u309d" // MO
 
-        "&[before 3]\u3082<<<\u3082|\u309d"
+        //"&\u30e3<<<\u30e3|\u30fd=\u3083|\u309d" // SMALL YA
+        "&[before 3]\u30e4<<<\u30e4|\u30fd=\u3084|\u309d=\u30e3|\u30fd=\u3083|\u309d" // YA
 
-        "&\u3083<<<\u3083|\u309d"
-        "&[before 3]\u3084<<<\u3084|\u309d"
+        //"&\u30e5<<<\u30e5|\u30fd=\u3085|\u309d" // SMALL YU
+        "&[before 3]\u30e6<<<\u30e6|\u30fd=\u3086|\u309d=\u30e5|\u30fd=\u3085|\u309d" // YU
 
-        "&\u3085<<<\u3085|\u309d"
-        "&[before 3]\u3086<<<\u3086|\u309d"
+        //"&\u30e7<<<\u30e7|\u30fd=\u3087|\u309d" // SMALL YO
+        "&[before 3]\u30e8<<<\u30e8|\u30fd=\u3088|\u309d=\u30e7|\u30fd=\u3087|\u309d" // YO
 
-        "&\u3087<<<\u3087|\u309d"
-        "&[before 3]\u3088<<<\u3088|\u309d"
+        "&[before 3]\u30e9<<<\u30e9|\u30fd=\u3089|\u309d" // RA
 
-        "&[before 3]\u3089<<<\u3089|\u309d"
+        "&[before 3]\u30ea<<<\u30ea|\u30fd=\u308a|\u309d" // RI
 
-        "&[before 3]\u308a<<<\u308a|\u309d"
+        "&[before 3]\u30eb<<<\u30eb|\u30fd=\u308b|\u309d" // RU
 
-        "&[before 3]\u308b<<<\u308b|\u309d"
+        "&[before 3]\u30ec<<<\u30ec|\u30fd=\u308c|\u309d" // RE
 
-        "&[before 3]\u308c<<<\u308c|\u309d"
+        "&[before 3]\u30ed<<<\u30ed|\u30fd=\u308d|\u309d" // RO
 
-        "&[before 3]\u308d<<<\u308d|\u309d"
+        //"&\u30ee<<<\u30ee|\u30fd=\u308e|\u309d" // SMALL WA
 
-        "&\u308e<<<\u308e|\u309d"
-        "&[before 3]\u308f<<<\u308f|\u309d"
-        "&[before 3]\u3090<<<\u3090|\u309d"
-        "&[before 3]\u3091<<<\u3091|\u309d"
-        "&[before 3]\u3092<<<\u3092|\u309d"
-        "&[before 3]\u3093<<<\u3093|\u309d"
-        "&[before 3]\u3046\u3099<<<\u3046\u3099|\u309d=\u3046|\u309e=\u3046\u3099|\u309e"
+        "&[before 3]\u30ef<<<\u30ef|\u30fd=\u30ef\u3099|\u30fd=\u308f|\u309d" // WA
+        "=\u30ee|\u30fd=\u308e|\u309d" // SMALL WA
+        "=\u30ef|\u30fe/\u3099=\u30ef\u3099|\u30fe/\u3099" // VA
+        "=\u30ee|\u30fe/\u3099=\u308e|\u309e/\u3099" // SMALL WA FOLLOWED BY A VOICED ITERATION MARK
 
-        "&[before 3]\u30bb<<<\u30bb|\u30fd"
-        "&[before 3]\u30bb\u3099<<<\u30bb\u3099|\u30fd=\u30bb|\u30fe=\u30bb\u3099|\u30fe"
-        "&[before 3]\u30bd<<<\u30bd|\u30fd"
-        "&[before 3]\u30bd\u3099<<<\u30bd\u3099|\u30fd=\u30bd|\u30fe=\u30bd\u3099|\u30fe"
-        "&[before 3]\u30bf<<<\u30bf|\u30fd"
-        "&[before 3]\u30bf\u3099<<<\u30bf\u3099|\u30fd=\u30bf|\u30fe=\u30bf\u3099|\u30fe"
-        "&[before 3]\u30c1<<<\u30c1|\u30fd"
-        "&[before 3]\u30c1\u3099<<<\u30c1\u3099|\u30fd=\u30c1|\u30fe=\u30c1\u3099|\u30fe"
-        "&\u30c3<<<\u30c3|\u30fd"
-        "&[before 3]\u30c4<<<\u30c4|\u30fd"
-        "&[before 3]\u30c4\u3099<<<\u30c4\u3099|\u30fd=\u30c4|\u30fe=\u30c4\u3099|\u30fe"
-        "&[before 3]\u30c6<<<\u30c6|\u30fd"
-        "&[before 3]\u30c6\u3099<<<\u30c6\u3099|\u30fd=\u30c6|\u30fe=\u30c6\u3099|\u30fe"
-        "&[before 3]\u30c8<<<\u30c8|\u30fd"
-        "&[before 3]\u30c8\u3099<<<\u30c8\u3099|\u30fd=\u30c8|\u30fe=\u30c8\u3099|\u30fe"
-        "&[before 3]\u30ca<<<\u30ca|\u30fd"
-        "&[before 3]\u30cb<<<\u30cb|\u30fd"
-        "&[before 3]\u30cc<<<\u30cc|\u30fd"
-        "&[before 3]\u30cd<<<\u30cd|\u30fd"
-        "&[before 3]\u30ce<<<\u30ce|\u30fd"
-        "&[before 3]\u30cf<<<\u30cf|\u30fd"
-        "&[before 3]\u30cf\u3099<<<\u30cf\u3099|\u30fd=\u30cf|\u30fe=\u30cf\u309a|\u30fe=\u30cf\u3099|\u30fe"
-        "&[before 3]\u30cf\u309a<<<\u30cf\u309a|\u30fd"
-        "&[before 3]\u30d2<<<\u30d2|\u30fd"
-        "&[before 3]\u30d2\u3099<<<\u30d2\u3099|\u30fd=\u30d2|\u30fe=\u30d2\u309a|\u30fe=\u30d2\u3099|\u30fe"
-        "&[before 3]\u30d2\u309a<<<\u30d2\u309a|\u30fd"
-        "&[before 3]\u30d5<<<\u30d5|\u30fd"
-        "&[before 3]\u30d5\u3099<<<\u30d5\u3099|\u30fd=\u30d5|\u30fe=\u30d5\u309a|\u30fe=\u30d5\u3099|\u30fe"
-        "&[before 3]\u30d5\u309a<<<\u30d5\u309a|\u30fd"
-        "&[before 3]\u30d8<<<\u30d8|\u30fd"
-        "&[before 3]\u30d8\u3099<<<\u30d8\u3099|\u30fd=\u30d8|\u30fe=\u30d8\u309a|\u30fe=\u30d8\u3099|\u30fe"
-        "&[before 3]\u30d8\u309a<<<\u30d8\u309a|\u30fd"
-        "&[before 3]\u30db<<<\u30db|\u30fd"
-        "&[before 3]\u30db\u3099<<<\u30db\u3099|\u30fd=\u30db|\u30fe=\u30db\u309a|\u30fe=\u30db\u3099|\u30fe"
-        "&[before 3]\u30db\u309a<<<\u30db\u309a|\u30fd"
-        "&[before 3]\u30de<<<\u30de|\u30fd"
-        "&[before 3]\u30df<<<\u30df|\u30fd"
-        "&[before 3]\u30e0<<<\u30e0|\u30fd"
-        "&[before 3]\u30e1<<<\u30e1|\u30fd"
-        "&[before 3]\u30e2<<<\u30e2|\u30fd"
-        "&\u30e3<<<\u30e3|\u30fd"
-        "&[before 3]\u30e4<<<\u30e4|\u30fd"
-        "&\u30e5<<<\u30e5|\u30fd"
-        "&[before 3]\u30e6<<<\u30e6|\u30fd"
-        "&\u30e7<<<\u30e7|\u30fd"
-        "&[before 3]\u30e8<<<\u30e8|\u30fd"
-        "&[before 3]\u30e9<<<\u30e9|\u30fd"
-        "&[before 3]\u30ea<<<\u30ea|\u30fd"
-        "&[before 3]\u30eb<<<\u30eb|\u30fd"
-        "&[before 3]\u30ec<<<\u30ec|\u30fd"
-        "&[before 3]\u30ed<<<\u30ed|\u30fd"
-        "&\u30ee<<<\u30ee|\u30fd"
-        "&[before 3]\u30ef<<<\u30ef|\u30fd"
-        "&[before 3]\u30f0<<<\u30f0|\u30fd"
-        "&[before 3]\u30f1<<<\u30f1|\u30fd"
-        "&[before 3]\u30f2<<<\u30f2|\u30fd"
-        "&[before 3]\u30f3<<<\u30f3|\u30fd"
-        "&[before 3]\u30a6\u3099<<<\u30a6\u3099|\u30fd=\u30a6|\u30fe=\u30a6\u3099|\u30fe"
-        "&\u30f5<<<\u30f5|\u30fd"
-        "&\u30f6<<<\u30f6|\u30fd"
-        "&[before 3]\u30ef\u3099<<<\u30ef\u3099|\u30fd=\u30ef|\u30fe=\u30ef\u3099|\u30fe"
-        "&[before 3]\u30f0\u3099<<<\u30f0\u3099|\u30fd=\u30f0|\u30fe=\u30f0\u3099|\u30fe"
-        "&[before 3]\u30f1\u3099<<<\u30f1\u3099|\u30fd=\u30f1|\u30fe=\u30f1\u3099|\u30fe"
-        "&[before 3]\u30f2\u3099<<<\u30f2\u3099|\u30fd=\u30f2|\u30fe=\u30f2\u3099|\u30fe"
+        "&[before 3]\u30f0<<<\u30f0|\u30fd=\u30f0\u3099|\u30fd=\u3090|\u309d" // WI
+        "=\u30f0|\u30fe/\u3099=\u30f0\u3099|\u30fe/\u3099" // VI
+
+        "&[before 3]\u30f1<<<\u30f1|\u30fd=\u30f1\u3099|\u30fd=\u3091|\u309d" // WE
+        "=\u30f1|\u30fe/\u3099=\u30f1\u3099|\u30fe/\u3099" // VE
+
+        "&[before 3]\u30f2<<<\u30f2|\u30fd=\u30f2\u3099|\u30fd=\u3092|\u309d" // WO
+        "\u30f2|\u30fe/\u3099=\u30f2\u3099|\u30fe/\u3099" // VO
+
+        "&[before 3]\u30f3<<<\u30f3|\u30fd=\u3093|\u309d" // N
+
+        // This one should probably go with U
+        "&[before 3]\u30a6<<<\u30a6\u3099|\u30fd=\u3046\u3099|\u309d"  // VU
+        "=\u30a6|\u30fe/\u3099=\u30a6\u3099|\u30fe/\u3099=\u3046|\u309e/\u3099=\u3046\u3099|\u309e/\u3099"
 
         // Kanji, positioned over the top
         "& [top] "
