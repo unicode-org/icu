@@ -65,26 +65,32 @@ RuleBasedTransliterator::RuleBasedTransliterator(const UnicodeString& id,
 }
 
 /**
- * Copy constructor.  Since the data object is immutable, we can share
- * it with other objects -- no need to clone it.
+ * Copy constructor.
  */
 RuleBasedTransliterator::RuleBasedTransliterator(
         const RuleBasedTransliterator& other) :
     Transliterator(other), data(other.data),
     isDataOwned(other.isDataOwned) {
 
-    // Only do a deep copy if this is non-owned data, that is,
-    // data that will be later deleted.  System transliterators
-    // contain owned data.
+    // The data object may or may not be owned.  If it is not owned we
+    // share it; it is invariant.  If it is owned, it's still
+    // invariant, but we need to copy it to prevent double-deletion.
+    // If this becomes a performance issue (if people do a lot of RBT
+    // copying -- unlikely) we can reference count the data object.
+
+    // Only do a deep copy if this is owned data, that is, data that
+    // will be later deleted.  System transliterators contain
+    // non-owned data.
     if (isDataOwned) {
         data = new TransliterationRuleData(*other.data);
     }
 }
 
 /**
- * Destructor.  We do NOT own the data object, so we do not delete it.
+ * Destructor.
  */
 RuleBasedTransliterator::~RuleBasedTransliterator() {
+    // Delete the data object only if we own it.
     if (isDataOwned) {
         delete data;
     }
