@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2001/10/25 20:33:46 $
-* $Revision: 1.4 $
+* $Date: 2001/10/26 23:33:07 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -54,7 +54,7 @@ final class UCD_Names implements UCD_Types {
 
     static final String[] SHORT_UNIFIED_PROPERTIES = {
         "GeneralCategory",
-        "CombiningClass",
+        "CanonicalCombiningClass",
         "BidiClass",
         "DecompositionType",
         "NumericType",
@@ -70,7 +70,7 @@ final class UCD_Names implements UCD_Types {
 
     static final String[] ABB_UNIFIED_PROPERTIES = {
         "gc",
-        "cc",
+        "ccc",
         "bc",
         "dt",
         "nt",
@@ -467,23 +467,23 @@ final class UCD_Names implements UCD_Types {
 
     static String[] SHORT_DT = {
         "", // NONE
-        "ca", // CANONICAL
-        "co",	// Otherwise unspecified compatibility character.
-        "fo",		// A font variant (e.g. a blackletter form).
+        "can", // CANONICAL
+        "com",	// Otherwise unspecified compatibility character.
+        "font",		// A font variant (e.g. a blackletter form).
         "nb",	// A no-break version of a space or hyphen.
-        "in",	// // An initial presentation form (Arabic).
-        "me",	// // A medial presentation form (Arabic).
-        "fi",	// // 	A final presentation form (Arabic).
-        "is",	// An isolated presentation form (Arabic).
-        "ci",	// An encircled form.
-        "sp",	// 	A superscript form.
-        "sb",	// 	A subscript form.
-        "ve",	// A vertical layout presentation form.
-        "wi",	// 	A wide (or zenkaku) compatibility character.
-        "na",	// A narrow (or hankaku) compatibility character.
-        "sm",	// 	A small variant form (CNS compatibility).
-        "sq",	// A CJK squared font variant.
-        "fr",	// A vulgar fraction form.
+        "init",	// // An initial presentation form (Arabic).
+        "med",	// // A medial presentation form (Arabic).
+        "fin",	// // 	A final presentation form (Arabic).
+        "iso",	// An isolated presentation form (Arabic).
+        "enc",	// An encircled form.
+        "sup",	// 	A superscript form.
+        "sub",	// 	A subscript form.
+        "vert",	// A vertical layout presentation form.
+        "wide",	// 	A wide (or zenkaku) compatibility character.
+        "nar",	// A narrow (or hankaku) compatibility character.
+        "sml",	// 	A small variant form (CNS compatibility).
+        "sqr",	// A CJK squared font variant.
+        "fra",	// A vulgar fraction form.
     };
 
     static private String[] MIRRORED_TABLE = {

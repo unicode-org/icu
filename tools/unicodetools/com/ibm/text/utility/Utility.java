@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2001/10/25 20:32:38 $
-* $Revision: 1.5 $
+* $Date: 2001/10/26 23:33:48 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -82,6 +82,15 @@ public final class Utility {    // COMMON UTILITIES
             if (source.equalsIgnoreCase(target[i])) return i;
         }
         return -1;
+    }
+
+    public static String findSubstring(String source, Set target, boolean invert) {
+        Iterator it = target.iterator();
+        while (it.hasNext()) {
+            String other = it.next().toString();
+            if ((other.indexOf(source) >= 0) == invert) return other;
+        }
+        return null;
     }
 
     public static byte lookup(String source, String[] target) {

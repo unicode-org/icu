@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2001/10/25 20:33:46 $
-* $Revision: 1.5 $
+* $Date: 2001/10/26 23:33:08 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -116,6 +116,7 @@ public class DerivedProperty implements UCD_Types {
         int prop;
         
         NF_UnsafeStartProp(int i) {
+            testStatus = true;
             prop = i-NFD_UnsafeStart;
             nfx = nf[prop];
             name = NAME[prop] + "_UnsafeStart";
@@ -143,6 +144,7 @@ public class DerivedProperty implements UCD_Types {
         boolean keepNonZero = true;
         
         NFC_Prop(int i) {
+            testStatus = true;
             BitSet[] bitsets = new BitSet[3];
             switch(i) {
                 case NFC_Leading: bitsets[0] = bitset = new BitSet(); break;
@@ -238,11 +240,11 @@ public class DerivedProperty implements UCD_Types {
     class CaseDProp extends DProp {
         byte val;
         CaseDProp (int i) {
+            testStatus = true;
             val = (i == Missing_Uppercase ? Lu : i == Missing_Lowercase ? Ll : Lt);
             name = "Possible_Missing_" + CaseNames[i-Missing_Uppercase];
             header = "# Derived Property: " + name
             + "\r\n#  Generated from: NFKD has >0 " + CaseNames[i-Missing_Uppercase] + ", no other cases";
-            testStatus = true;
         }
         boolean hasProperty(int cp) {
             byte cat = ucdData.getCategory(cp);
@@ -451,10 +453,10 @@ of characters, the first of which has a non-zero combining class.
         
         dprops[FullCompInclusion] = new DProp() {
             {
+                testStatus = true;
                 name = "Full_Composition_Inclusion";
                 shortName = "Comp_In";
                 defaultStyle = SHORT;
-                testStatus = true;
                 header = "# Derived Property: " + name
                     + ": Full Composition Inclusion"
                     + "\r\n#  characters with Canonical Decompositions MINUS Full Composition Exclusion";

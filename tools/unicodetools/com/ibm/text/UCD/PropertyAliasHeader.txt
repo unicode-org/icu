@@ -1,3 +1,4 @@
+# DRAFT
 # PropertyAliases-3.2.0.txt
 #
 # This file contains aliases for properties and property values used in the UCD.
@@ -42,6 +43,3 @@
 #
 # The combination of property value and property name is, however, unique.
 # For more information, see UTR #24: Regular Expression Guidelines
-# ================================================
-
-

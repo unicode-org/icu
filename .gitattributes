@@ -110,3 +110,4 @@ icu4j/src/data/unicode/Draft-TestSuite.txt -text svneol=unset#application/octet-
 tools/unicodetools/com/ibm/text/UCA/charts.css svneol=native#text/css
 tools/unicodetools/com/ibm/text/UCA/help.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/UCA/index.html svneol=native#text/html
+tools/unicodetools/com/ibm/text/UCA/index_header.html svneol=native#text/html
