@@ -1139,7 +1139,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
        *internal buffers */
 
       /* This code needs updating when new error callbacks are installed */
-
+      UConverterToUnicodeArgs cbArgs = *args;
       UChar * pUniChar = (UChar *)&uniChar;
       UConverterCallbackReason reason;
 
@@ -1154,18 +1154,14 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
         *err = U_ILLEGAL_CHAR_FOUND;
       }
 
-      args->target = pUniChar;
-      args->targetLimit = pUniChar + 1;
-      args->flush = TRUE;
-      args->offsets = NULL;  
-      args->size = sizeof(args);
-      args->converter->fromCharErrorBehaviour(args->converter->toUContext,
-                                    args,
+      cbArgs.target = pUniChar;
+      cbArgs.targetLimit = pUniChar + 1;
+      cbArgs.converter->fromCharErrorBehaviour(cbArgs.converter->toUContext,
+                                    &cbArgs,
                                     saveSource,
                                     args->sourceLimit - saveSource,
                                     reason,
                                     err);
-      args->source = saveSource;
    }
    return uniChar;
 }
