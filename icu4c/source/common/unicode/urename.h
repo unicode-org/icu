@@ -111,9 +111,6 @@
 #define _UTF32LEData _UTF32LEData_2_1
 #define _UTF7Data _UTF7Data_2_1
 #define _UTF8Data _UTF8Data_2_1
-#define __divdi3 __divdi3_2_1
-#define __moddi3 __moddi3_2_1
-#define __pure_virtual __pure_virtual_2_1
 #define dateFormatSymbols_cleanup dateFormatSymbols_cleanup_2_1
 #define init_collIterate init_collIterate_2_1
 #define isTailored isTailored_2_1
