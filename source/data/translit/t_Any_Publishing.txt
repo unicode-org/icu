@@ -1,0 +1,50 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2002, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpicurules.bat
+// Source: ../../../impl/data/Transliterator_Any_Publishing.txt
+// Date: Sat Jul 27 10:31:01 2002
+//--------------------------------------------------------------------
+
+// Any_Publishing
+
+t_Any_Publishing {
+  Rule {
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+
+// Test case
+// "The" "(quick)" ('brown') `fox' ` jumped --     "over?"
+
+// Variables
+
+"$single = \\\' ;"
+"$space = ' ' ;"
+"$double = \\\" ;"
+"$back = \\\` ;"
+"$tab = '\u0008' ;"
+"$makeRight = [[:Z:][:Ps:][:Pi:]$] ;"
+
+// fix UNIX quotes
+
+"$back $back > “ ;"
+"$back > ‘ ;"
+
+// fix typewriter quotes, by context
+
+"$makeRight {$double} <> “ ;"
+"$double <> ” ;"
+
+"$makeRight {$single} <> ‘ ;"
+"$single <> ’;"
+
+// fix multiple spaces and hyphens
+
+"$space {$space} > ;"
+"'--' <> — ;"
+  }
+}
