@@ -624,6 +624,8 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
             }
             sep = id.length();
             id.append(ID_SEP).append(left);
+        } else if (sep < 0) {
+            sep = id.length();
         }
 
         // The 'alias' parameter is non-empty if _createInstance()
