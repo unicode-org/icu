@@ -340,6 +340,7 @@ line_th.brk : "$(ICUBRK)\line_th.txt" $(BRKDEPS)
 GODATA :
 	@if not exist "$(ICUOUT)\$(NULL)" mkdir "$(ICUOUT)"
 	@if not exist "$(ICUTMP)\$(NULL)" mkdir "$(ICUTMP)"
+	@if not exist "$(ICUOUT)\build\$(NULL)" mkdir "$(ICUOUT)\build"
 	@if not exist "$(ICUBLD)\$(NULL)" mkdir "$(ICUBLD)"
 	@if not exist "$(ICUBLD)\coll\$(NULL)" mkdir "$(ICUBLD)\coll"
 	@if not exist "$(TESTDATAOUT)\$(NULL)" mkdir "$(TESTDATAOUT)"
