@@ -132,34 +132,33 @@ void TestResourceBundles()
     log_verbose("Passed:=  %d   Failed=   %d \n", pass, fail);
 }
 
-
 void TestConstruction1()
 {
     UResourceBundle *test1 = 0, *test2 = 0;
     const UChar *result1, *result2;
     int32_t resultLen;
+
     UErrorCode   err = U_ZERO_ERROR;
-    const char*        directory=NULL;
+    char testdatapath[256] ;
     const char*      locale="te_IN";
-    char testdatapath[256];
-    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
-    directory= u_getDataDirectory();
-    uprv_strcpy(testdatapath, directory);
-    
-    /* u_getDataDirectory shoul return \source\data ... set the
-     * directory to ..\source\data\..\test\testdata\out\testdata
-     */
-    uprv_strcat(testdatapath, tdrelativepath);
-    uprv_strcat(testdatapath,"testdata");
+
     log_verbose("Testing ures_open()......\n");
     
-    test1=ures_open(testdatapath, NULL, &err);
-    
+
+    loadTestData(testdatapath,256,&err);
     if(U_FAILURE(err))
     {
-        log_err("construction of NULL did not succeed  :  %s \n", myErrorName(err));
+        log_err("Could not load testdata.dat %s \n",myErrorName(err));
         return;
     }
+    
+    test1=ures_open(testdatapath, NULL, &err);
+    if(U_FAILURE(err))
+    {
+        log_err("construction of %s did not succeed :  %s \n",NULL, myErrorName(err));
+        return;
+    }
+
     
     test2=ures_open(testdatapath, locale, &err);
     if(U_FAILURE(err))
