@@ -436,7 +436,6 @@ static void TestEmptyTypes() {
     UResourceBundle* theBundle = NULL;
     char action[256];
     const char* testdatapath;
-    const char *directory= u_getDataDirectory();
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle* res = NULL;
     UResourceBundle* resArray = NULL;
@@ -783,7 +782,6 @@ static void TestAPI() {
 
 static void TestErrorConditions(){
     UErrorCode status=U_ZERO_ERROR;
-    const char*        directory=NULL;
     const char *key=NULL;
     const UChar *value=NULL;
     const char* testdatapath;
@@ -1058,7 +1056,6 @@ static void TestConstruction1()
     const UChar *result1, *result2;
     UErrorCode status= U_ZERO_ERROR;
     UErrorCode   err = U_ZERO_ERROR;
-    const char*        directory=NULL;
     const char*      locale="te_IN";
     const char* testdatapath;
 
