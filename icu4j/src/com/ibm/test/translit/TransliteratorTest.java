@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/11/29 17:27:43 $
- * $Revision: 1.85 $
+ * $Date: 2001/11/29 18:58:33 $
+ * $Revision: 1.86 $
  *
  *****************************************************************************************
  */
@@ -2234,6 +2234,55 @@ public class TransliteratorTest extends TestFmwk {
             errln("Fails lowercase of surrogates");
         }
     }
+    
+    // Check to see that incremental gets at least part way through a reasonable string.
+    // NOT YET IN C
+    
+    public void TestIncrementalProgress() {
+        String test = "The Quick Brown Fox Jumped Over The Lazy Dog.";
+        
+        Enumeration sources = Transliterator.getAvailableSources();
+        while(sources.hasMoreElements()) {
+            String source = (String) sources.nextElement();
+            if (!source.equals("Latin")) continue;
+            Enumeration targets = Transliterator.getAvailableTargets(source);
+            while(targets.hasMoreElements()) {
+                String target = (String) targets.nextElement();
+                Enumeration variants = Transliterator.getAvailableVariants(source, target);
+                while(variants.hasMoreElements()) {
+                    String variant = (String) variants.nextElement();
+                    String id = source + "-" + target + "/" + variant;
+        
+                    Transliterator t = Transliterator.getInstance(id);
+                    String result = CheckIncrementalAux(t, test);
+                    Transliterator inv = t.getInverse();
+                    CheckIncrementalAux(inv, result);
+                }
+            }
+        }
+    }
+    
+    public String CheckIncrementalAux(Transliterator t, String input) {
+        
+        Replaceable test = new ReplaceableString(input);
+        Transliterator.Position pos = new Transliterator.Position(0, test.length(), 0, test.length());
+        t.transliterate(test, pos);
+        boolean gotError = false;
+        if (pos.start == 0) {
+            errln("No Progress, " + t.getID() + ": " + Utility.formatInput(test, pos));
+            gotError = true;
+        }
+        t.finishTransliteration(test, pos);
+        if (pos.start != pos.limit) {
+            errln("Incomplete, " + t.getID() + ":  " + Utility.formatInput(test, pos));
+            gotError = true;
+        }
+        if (!gotError) {
+            logln("PASSED " + t.getID());
+        }
+        return test.toString();
+    }
+        
 
     //======================================================================
     // Support methods
