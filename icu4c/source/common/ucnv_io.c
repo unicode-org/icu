@@ -86,6 +86,9 @@ static const uint16_t *aliasTable=NULL;
 static const uint16_t *converterTable = NULL;
 static const uint16_t *tagTable = NULL;
 
+static char defaultConverterNameBuffer[100];
+static const char *defaultConverterName = NULL;
+
 static UBool
 isAcceptable(void *context,
              const char *type, const char *name,
@@ -171,6 +174,8 @@ ucnv_io_cleanup()
 
     converterTable = NULL;
     tagTable = NULL;
+
+    defaultConverterName = NULL;
 
     return TRUE;                   /* Everything was cleaned up */
 }
@@ -470,9 +475,6 @@ ucnv_io_fillAvailableAliases(const char **aliases, UErrorCode *pErrorCode) {
  * setting the name.
  * It assumes that setting a pointer is atomic.
  */
-
-static char defaultConverterNameBuffer[100];
-static const char *defaultConverterName = NULL;
 
 U_CFUNC const char *
 ucnv_io_getDefaultConverterName() {
