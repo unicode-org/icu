@@ -271,12 +271,18 @@ const UnicodeString& RuleBasedCollator::getRules() const
 
 void RuleBasedCollator::getRules(UColRuleOption delta, UnicodeString &buffer)
 {
-    int rulesize = ucol_getRulesEx(ucollator, delta, NULL, -1);
-    UChar *rules = (UChar*) uprv_malloc( sizeof(UChar) * (rulesize) );
+    int32_t rulesize = ucol_getRulesEx(ucollator, delta, NULL, -1);
 
-    ucol_getRulesEx(ucollator, delta, rules, rulesize);
-    buffer.setTo(rules, rulesize);
-    uprv_free(rules);
+    if (rulesize > 0) {
+        UChar *rules = (UChar*) uprv_malloc( sizeof(UChar) * (rulesize) );
+
+        ucol_getRulesEx(ucollator, delta, rules, rulesize);
+        buffer.setTo(rules, rulesize);
+        uprv_free(rules);
+    }
+    else {
+        buffer.remove();
+    }
 }
 
 void RuleBasedCollator::getVersion(UVersionInfo versionInfo) const
