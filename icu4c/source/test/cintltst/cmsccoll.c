@@ -388,7 +388,7 @@ static void BillFairmanTest(void) {
 
     lr = ures_open(NULL,lp,&lec);
     if (lr) {
-        cr = ures_getByKey(lr,"CollationElements",0,&lec);
+        cr = ures_getByKey(lr,"collations",0,&lec);
         if (cr) {
             lp = ures_getLocale(cr,&lec);
             if (lp) {
@@ -1272,7 +1272,7 @@ static UBool hasCollationElements(const char *locName) {
 
   if(U_SUCCESS(status)) {
     status = U_ZERO_ERROR;
-    ColEl = ures_getByKey(loc, "CollationElements", ColEl, &status);
+    ColEl = ures_getByKey(loc, "collations", ColEl, &status);
     if(status == U_ZERO_ERROR) { /* do the test - there are real elements */
       ures_close(ColEl);
       ures_close(loc);
@@ -1316,8 +1316,13 @@ static void TestCollations(void) {
         cName[nameSize] = 0;
         log_verbose("\nTesting locale %s (%s)\n", locName, cName);
         coll = ucol_open(locName, &status);
-        testAgainstUCA(coll, UCA, "UCA", FALSE, &status);
-        ucol_close(coll);
+        if(U_SUCCESS(status)) {
+          testAgainstUCA(coll, UCA, "UCA", FALSE, &status);
+          ucol_close(coll);
+        } else {
+          log_err("Couldn't instantiate collator for locale %s, error: %s\n", locName, u_errorName(status));
+          status = U_ZERO_ERROR;
+        }
     }
   }
   ucol_setAttribute(UCA, UCOL_STRENGTH, oldStrength, &status);

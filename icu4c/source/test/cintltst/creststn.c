@@ -233,7 +233,7 @@ static void TestErrorCodes(void) {
   /* we look up the resource which is aliased, but it lives in fallback */
   if(U_SUCCESS(status) && r != NULL) {
     status = U_USING_DEFAULT_WARNING; 
-    r2 = ures_getByKey(r, "CollationElements", NULL, &status);
+    r2 = ures_getByKey(r, "collations", NULL, &status);
     checkStatus(U_USING_FALLBACK_WARNING, status);
   } 
   ures_close(r);
@@ -246,7 +246,7 @@ static void TestErrorCodes(void) {
   /* we look up the resource which is aliased and at our level */
   if(U_SUCCESS(status) && r != NULL) {
     status = U_USING_DEFAULT_WARNING; 
-    r2 = ures_getByKey(r, "CollationElements", r2, &status);
+    r2 = ures_getByKey(r, "collations", r2, &status);
     checkStatus(U_USING_DEFAULT_WARNING, status);
   }
   ures_close(r);
@@ -567,10 +567,11 @@ static void TestNewTypes() {
         int32_t strLength = 0;
         const UChar my[] = {0x0026,0x0027,0x0075,0x0027,0x0020,0x003d,0x0020,0x0027,0xff55,0x0027,0x0000}; /* &'\u0075' = '\uFF55' */
         status = U_ZERO_ERROR;
-        resB = ures_getByKey(theBundle,"CollationElements", resB,&status);
+        resB = ures_getByKey(theBundle, "collations", resB, &status);
+        resB = ures_getByKey(resB, "standard", resB, &status);
         str  = ures_getStringByKey(resB,"Sequence",&strLength,&status);
         if(!str || U_FAILURE(status)) {
-            log_data_err("Could not load CollationElements from theBundle: %s\n", u_errorName(status));
+            log_data_err("Could not load collations from theBundle: %s\n", u_errorName(status));
         } else if(u_strcmp(my,str) != 0){
             log_err("Did not get the expected string for escaped \\u0075\n");
         }
@@ -856,7 +857,8 @@ static void TestBinaryCollationData(){
         return;
     }
     status=U_ZERO_ERROR;
-    coll = ures_getByKey(teRes, "CollationElements", coll, &status);
+    coll = ures_getByKey(teRes, "collations", coll, &status);
+    coll = ures_getByKey(coll, "standard", coll, &status);
     if(U_SUCCESS(status)){
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
         CONFIRM_INT_EQ(ures_getType(coll), URES_TABLE);
@@ -875,7 +877,7 @@ static void TestBinaryCollationData(){
         }
     }
     else{
-        log_err("ERROR: ures_getByKey(locale(te), CollationElements) failed\n");
+        log_err("ERROR: ures_getByKey(locale(te), collations) failed\n");
         return;
     }
     ures_close(binColl);
@@ -943,7 +945,7 @@ static void TestAPI() {
     }
     key=ures_getKey(teFillin);
     /*if(strcmp(key, "%%CollationBin") != 0){*/
-    if(strcmp(key, "CollationElements") != 0){
+    if(strcmp(key, "array_2d_in_Root_te") != 0){
         log_err("ERROR: ures_getNextResource() failed\n");
     }
 #endif
@@ -1142,7 +1144,8 @@ static void TestErrorConditions(){
     } 
     /*Test ures_getBinary(0 status != U_ILLEGAL_ARGUMENT_ERROR*/
     status=U_ZERO_ERROR;
-    coll = ures_getByKey(teRes, "CollationElements", coll, &status);
+    coll = ures_getByKey(teRes, "collations", coll, &status);
+    coll = ures_getByKey(teRes, "standard", coll, &status);
     binColl=ures_getByKey(coll, "%%CollationBin", binColl, &status);
 
     status=U_ILLEGAL_ARGUMENT_ERROR;
@@ -1944,9 +1947,9 @@ static void TestResourceLevelAliasing(void) {
     
 
     /* testing referencing/composed alias */
-    uk = ures_findResource("uk/CollationElements/Sequence", uk, &status);
+    uk = ures_findResource("uk/collations/standard/Sequence", uk, &status);
     if((uk == NULL) || U_FAILURE(status)) {
-      log_err("Couldn't findResource('uk/collationelements/sequence') err %s\n", u_errorName(status));
+      log_err("Couldn't findResource('uk/collations/standard/sequence') err %s\n", u_errorName(status));
       return;
     } 
 
@@ -1964,7 +1967,8 @@ static void TestResourceLevelAliasing(void) {
       log_err("Referencing alias didn't get the right string\n");
     }
 
-    tb = ures_getByKey(aliasB, "CollationElements", tb, &status);
+    tb = ures_getByKey(aliasB, "collations", tb, &status);
+    tb = ures_getByKey(tb, "standard", tb, &status);
     tb = ures_getByKey(tb, "Sequence", tb, &status);
     string = ures_getString(tb, &strLen, &status);
     
@@ -1981,10 +1985,11 @@ static void TestResourceLevelAliasing(void) {
      */
 
     /* check whether the binary collation data is properly referenced by an alias */
-    uk = ures_findResource("uk/CollationElements/%%CollationBin", uk, &status);
+    uk = ures_findResource("uk/collations/standard/%%CollationBin", uk, &status);
     binSequence = ures_getBinary(uk, &binSeqLen, &status);
 
-    tb = ures_getByKey(aliasB, "CollationElements", tb, &status);
+    tb = ures_getByKey(aliasB, "collations", tb, &status);
+    tb = ures_getByKey(tb, "standard", tb, &status);
     tb = ures_getByKey(tb, "%%CollationBin", tb, &status);
     binary = ures_getBinary(tb, &binLen, &status);
 
@@ -2122,7 +2127,7 @@ static void TestDirectAccess(void) {
     }
   }
 
-  t = ures_findResource("sh/CollationElements/Sequence", t, &status);
+  t = ures_findResource("sh/collations/standard/Sequence", t, &status);
   if(U_FAILURE(status)) {
     log_err("Couldn't access keyed resource, error %s\n", u_errorName(status));
     status = U_ZERO_ERROR;
@@ -2140,7 +2145,7 @@ static void TestDirectAccess(void) {
   }
 
   if(U_SUCCESS(status)) {
-    strcpy(buffer, "CollationElements/Sequence");
+    strcpy(buffer, "collations/standard/Sequence");
     s = buffer;
     t = ures_findSubResource(t2, s, t, &status);
     if(U_FAILURE(status)) {
