@@ -37,7 +37,7 @@ pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
 ## Install program information
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
 
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -98,7 +98,7 @@ check: all check-local
 all-local: $(TARGET) $(ALL_MAN_FILES) build-data
 
 install-local: all-local build-data install-man
-	$(mkinstalldirs) $(DESTDIR)$(sbindir)
+	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
 build-data: $(ICUDATADIR)/cnvalias.dat
@@ -129,10 +129,10 @@ $(TARGET) : $(OBJECTS)
 # man page
 install-man: install-man5 install-manx
 install-man5: $(MAN5_FILES)
-	$(mkinstalldirs) $(DESTDIR)$(mandir)/man5
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man5
 	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man5
 install-manx: $(MANX_FILES)
-	$(mkinstalldirs) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
 	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
 
 %.$(SECTION): $(srcdir)/%.$(SECTION).in

@@ -63,7 +63,7 @@ INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir_from_tmp)/common:$(top_builddir_
 PKGDATA = ../pkgdata/pkgdata -T . -s $(DATABUILDDIR) -O ./icupkg.inc -d $(DATABUILDDIR) -m $(MODE) 
 
 ## Install program information
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
 
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -182,30 +182,30 @@ distclean-local: clean-local
 
 $(TMPDATADIR)/icudata.lst: Makefile $(srcdir)/Makefile.in $(srcdir)/genrb/genrbfiles.mk $(srcdir)/makeconv/ucmfiles.mk
 	@echo Generating $@ list of data files
-	@$(mkinstalldirs) $(TMPDATADIR)
+	@$(MKINSTALLDIRS) $(TMPDATADIR)
 	@-$(RMV) $(TMPDATADIR)/icudata.lst
 	@for file in $(DATAFILES); do \
 	  echo $$file >> $(TMPDATADIR)/icudata.lst; \
 	done;
 
 $(TMPDATADIR)/testdata.lst: Makefile
-	@$(mkinstalldirs) $(TMPDATADIR)
+	@$(MKINSTALLDIRS) $(TMPDATADIR)
 	@echo $(DATABUILDDIR)/test.dat > $@
 
 $(TMPDATADIR)/icupkg.inc: pkgdata/icupkg.inc
-	@$(mkinstalldirs) $(TMPDATADIR)
+	@$(MKINSTALLDIRS) $(TMPDATADIR)
 	cp pkgdata/icupkg.inc $(TMPDATADIR)/icupkg.inc
 
 # build the ICU and test data
 
 build-local build-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/testdata.lst  $(TMPDATADIR)/icupkg.inc $(DATAFILES) 
-	@$(mkinstalldirs) $(TMPDATADIR)
+	@$(MKINSTALLDIRS) $(TMPDATADIR)
 	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p icudata ./icudata.lst   )
 	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p testdat1  ./testdata.lst )
 	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p testdat2  ./testdata.lst )
 
 install-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/icupkg.inc
-	$(mkinstalldirs) $(TMPDATADIR) $(DESTDIR)$(pkgdatadir)/$(VERSION)
+	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(pkgdatadir)/$(VERSION)
 	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p icudata ./icudata.lst -I $(DESTDIR)$(pkgdatadir)/$(VERSION) )
 
 
