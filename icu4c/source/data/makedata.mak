@@ -258,7 +258,7 @@ RBNF_RES_FILES = $(RBNF_RES_FILES:rbnf\ =rbnf\)
 !INCLUDE "$(ICUSRCDATA)\$(ICUTRNS)\trnsfiles.mk"
 !IF EXISTS("$(ICUSRCDATA)\$(ICUTRNS)\trnslocal.mk")
 !INCLUDE "$(ICUSRCDATA)\$(ICUTRNS)\trnslocal.mk"
-TRANLIT_SOURCE=$(TRANSLIT_SOURCE) $(TRANSLIT_SOURCE_LOCAL)
+TRANSLIT_SOURCE=$(TRANSLIT_SOURCE) $(TRANSLIT_SOURCE_LOCAL)
 !ELSE
 !MESSAGE Information: cannot find "trnslocal.mk". Not building user-additional transliterator files.
 !ENDIF
