@@ -46,18 +46,15 @@ TextFile::TextFile(const char* _name, const char* _encoding, UErrorCode& ec) :
     encoding = (char*) _encoding;
 #endif
 
-    const char* testDir = IntlTest::loadTestData(ec);
+    const char* testDir = IntlTest::getSourceTestData(ec);
     if (U_FAILURE(ec)) {
         return;
     }
-    if (!ensureCapacity(uprv_strlen(testDir) + uprv_strlen(name) + 8)) {
+    if (!ensureCapacity(uprv_strlen(testDir) + uprv_strlen(name) + 1)) {
         ec = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
     uprv_strcpy(buffer, testDir);
-    char* index = uprv_strrchr(buffer, (char)U_FILE_SEP_CHAR);
-    if (index) index[1] = 0;
-    uprv_strcat(buffer, ".." U_FILE_SEP_STRING);
     uprv_strcat(buffer, name);
 
     file = T_FileStream_open(buffer, "rb");

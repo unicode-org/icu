@@ -1384,22 +1384,14 @@ void RBBITest::TestExtended() {
     //
     //  Open and read the test data file.
     //
-    const char *testDataDirectory = loadTestData(status);
+    const char *testDataDirectory = IntlTest::getSourceTestData(status);
     char testFileName[1000];
-    if (strlen(testDataDirectory) >= sizeof(testFileName)) {
+    if (testDataDirectory == NULL || strlen(testDataDirectory) >= sizeof(testFileName)) {
         errln("Can't open test data.  Path too long.");
         return;
     }
     strcpy(testFileName, testDataDirectory);
-    char *p = strstr(testFileName, "/out/testdata");
-    if (p == NULL) {
-        p = strstr(testFileName, "\\out\\testdata");
-        if (p == NULL) {
-            errln("Can't open test data.  Bad test data directory path..");
-            return;
-        }
-    }
-    strcpy(p+1, "rbbitst.txt");
+    strcat(testFileName, "rbbitst.txt");
 
     int    len;
     UChar *testFile = ReadAndConvertFile(testFileName, len, status);

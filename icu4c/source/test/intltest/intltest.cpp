@@ -1230,6 +1230,17 @@ const char* IntlTest::getTestDataPath(UErrorCode& err) {
     return loadTestData(err);
 }
 
+/* Returns the path to icu/source/test/testdata/ */
+const char *IntlTest::getSourceTestData(UErrorCode& err) {
+    const char *srcDataDir = NULL;
+#ifdef U_TOPSRCDIR
+    srcDataDir = U_TOPSRCDIR U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
+#else
+    srcDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
+#endif
+    return srcDataDir;
+}
+
 const char* IntlTest::fgDataDir = NULL;
 
 /* returns the path to icu/source/data */

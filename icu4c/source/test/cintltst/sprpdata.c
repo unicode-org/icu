@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003, International Business Machines
+ *   Copyright (C) 2003-2004, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -271,11 +271,21 @@ void
 doStringPrepTest(const char* binFileName, const char* txtFileName, int32_t options, UErrorCode* errorCode){
 
     const char *testdatapath = loadTestData(errorCode);
-    const char *srcdatapath =ctest_dataOutDir();
+    const char *srcdatapath = NULL;
+    const char *relativepath = NULL;
+    char *filename = NULL;
+    UStringPrepProfile* profile = NULL;
 
-    const char *relativepath = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
-    char *filename = (char*) malloc(strlen(srcdatapath)+strlen(relativepath)+strlen(txtFileName)+10 );
-    UStringPrepProfile* profile = usprep_open(testdatapath, binFileName, errorCode);
+#ifdef U_TOPSRCDIR
+    srcdatapath = U_TOPSRCDIR;
+    relativepath = U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
+#else
+    srcdatapath = ctest_dataOutDir();
+    relativepath = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
+#endif
+
+    filename = (char*) malloc(strlen(srcdatapath)+strlen(relativepath)+strlen(txtFileName)+10 );
+    profile = usprep_open(testdatapath, binFileName, errorCode);
 
     if(U_FAILURE(*errorCode)){
         log_err("Failed to load %s data file. Error: %s \n", binFileName, u_errorName(*errorCode));

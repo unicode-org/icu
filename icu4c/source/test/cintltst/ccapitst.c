@@ -537,6 +537,9 @@ static void TestConvert()
         char* index = NULL;
 
         err = U_ZERO_ERROR;
+#ifdef U_TOPSRCDIR
+        strcpy(ucs_file_name, U_TOPSRCDIR U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING);
+#else
         strcpy(ucs_file_name, loadTestData(&err));
         
         if(U_FAILURE(err)){
@@ -551,6 +554,7 @@ static void TestConvert()
         }
         
         strcat(ucs_file_name,".."U_FILE_SEP_STRING);
+#endif
         strcat(ucs_file_name, CodePagesTestFiles[codepage_index]);
 
         ucs_file_in = fopen(ucs_file_name,"rb");
