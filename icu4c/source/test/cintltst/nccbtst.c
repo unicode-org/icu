@@ -293,22 +293,19 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         /*ISO-2022-cn*/
         static const UChar iso_2022_cn_inputText[]={ 0x0041, 0x3712/*unassigned*/, 0x0042, };
         static const uint8_t to_iso_2022_cn[]={  
-            0x0F,   0x41,   
-            0x0F,   0x42, 
+            0x41, 0x42
         };
         static const int32_t from_iso_2022_cnOffs [] ={ 
-            0,0,
-            2,2,
+            0, 2
         };
         
         /*ISO-2022-CN*/
         static const UChar iso_2022_cn_inputText1[]={0x0041, 0x3712/*unassigned*/,0x43,0xd800/*illegal*/,0x0042, };
         static const uint8_t to_iso_2022_cn1[]={ 
-            0x0F,   0x41,   
-            0x0F,   0x43, 
+            0x41, 0x43
 
         };
-        static const int32_t from_iso_2022_cnOffs1 [] ={0,0,2,2};
+        static const int32_t from_iso_2022_cnOffs1 [] ={ 0, 2 };
 
         /*ISO-2022-kr*/
         static const UChar iso_2022_kr_inputText[]={ 0x0041, 0x03A0,0x3712/*unassigned*/,0x03A0, 0x0042, };
@@ -1125,7 +1122,7 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
         /*ISO-2022-cn*/
         static const UChar iso_2022_cn_inputText[]={ 0x0041, 0x3712, 0x0042, };
         static const uint8_t to_iso_2022_cn[]={  
-            0x0F,   0x41,   
+            0x41,   
 
         };
         static const int32_t from_iso_2022_cnOffs [] ={ 
@@ -1902,46 +1899,46 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         /*ISO-2022-cn*/
         static const UChar iso_2022_cn_inputText[]={ 0x0041, 0x3712, 0x0042, };
         static const uint8_t to_iso_2022_cn[]={  
-            0x0F,   0x41,   
-            0x0f,   0x25, 0x55,   0x33,   0x37,   0x31,   0x32,   
+            0x41,   
+            0x25, 0x55,   0x33,   0x37,   0x31,   0x32,   
             0x42, 
         };
         static const int32_t from_iso_2022_cnOffs [] ={ 
-            0,0,
-            1,1,1,1,1,1,1,
+            0,
+            1,1,1,1,1,1,
             2,
         };
         static const UChar iso_2022_cn_inputText1[]={ 0x4e00, 0x3712, 0x4e01, };
         static const uint8_t to_iso_2022_cn1[]={  
                         0x1b,   0x24,   0x29,   0x41,   0x0e,   0x52,   0x3b,   
                         0x0f,   0x25,   0x55,   0x33,   0x37,   0x31,   0x32, 
-                        0x1b,   0x24,   0x29,   0x41,   0x0e,   0x36,   0x21,
+                        0x0e,   0x36,   0x21,
         };
         static const int32_t from_iso_2022_cnOffs1 [] ={ 
                 0, 0, 0, 0, 0, 0, 0, 
                 1, 1, 1, 1, 1, 1, 1, 
-                2, 2, 2, 2, 2, 2, 2,
+                2, 2, 2,
         };
         static const UChar iso_2022_cn_inputText3[]={ 0x3000, 0x3712, 0x3001, };
         static const uint8_t to_iso_2022_cn3[]={  
                0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
               0x0f,   0x25,   0x55,   0x33,   0x37,   0x31,   0x32,   
-             0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22, 
+             0x0e,   0x21,   0x22, 
         };
         static const int32_t from_iso_2022_cnOffs3 [] ={ 
             0,0,0,0,0,0,0,
             1,1,1,1,1,1,1,
-            2,2,2,2,2,2,2
+            2,2,2
         };
         static const UChar iso_2022_cn_inputText2[]={ 0x0041, 0x3712, 0x4e00, };
         static const uint8_t to_iso_2022_cn2[]={  
-            0x0F,   0x41,   
-            0x0f,   0x25,   0x55,   0x33,   0x37,   0x31,   0x32,   
+            0x41,   
+            0x25,   0x55,   0x33,   0x37,   0x31,   0x32,   
             0x1b,   0x24,   0x29,   0x41,   0x0e,   0x52,   0x3b,
         };
         static const int32_t from_iso_2022_cnOffs2 [] ={ 
-            0,0,
-            1,1,1,1,1,1,1,
+            0,
+            1,1,1,1,1,1,
             2,2,2,2,2,2,2
         };
         
@@ -1951,7 +1948,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                              0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
                              0x0f,   0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   
                              0x25,   0x55,   0x44,   0x43,   0x35,   0x36,   
-                             0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22,   
+                             0x0e,   0x21,   0x22,   
                              0x0f,   0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   
                              0x25,   0x55,   0x44,   0x43,   0x35,   0x36,   
                              0x42, 
@@ -1960,7 +1957,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             0,0,0,0,0,0,0,
             1,1,1,1,1,1,1,
             1,1,1,1,1,1,
-            3,3,3,3,3,3,3,
+            3,3,3,
             4,4,4,4,4,4,4,
             4,4,4,4,4,4,
             6
@@ -2154,21 +2151,21 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                              0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
                              0x0f,   0x5c,   0x75,   0x44,   0x38,   0x34,   0x44,   
                              0x5c,   0x75,   0x44,   0x43,   0x35,   0x36,   
-                             0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22,   
+                             0x0e,   0x21,   0x22,   
                              0x0f,   0x5c,   0x75,   0x44,   0x38,   0x34,   0x44,   
                              0x5c,   0x75,   0x44,   0x43,   0x35,   0x36,   
                              0x42,
-                             0x0f,   0x5c,   0x75,   0x30,   0x39,   0x30,   0x32,
+                             0x5c,   0x75,   0x30,   0x39,   0x30,   0x32,
                              };
             static const int32_t from_iso_2022_cnOffs5_v2 [] ={ 
                 0,0,0,0,0,0,0,
                 1,1,1,1,1,1,1,
                 1,1,1,1,1,1,
-                3,3,3,3,3,3,3,
+                3,3,3,
                 4,4,4,4,4,4,4,
                 4,4,4,4,4,4,
                 6, 
-                7,7,7,7,7,7,7
+                7,7,7,7,7,7
             };
             if(!testConvertFromUnicodeWithContext(iso_2022_cn_inputText5, sizeof(iso_2022_cn_inputText5)/sizeof(iso_2022_cn_inputText5[0]),
                 to_iso_2022_cn5_v2, sizeof(to_iso_2022_cn5_v2), "iso-2022-cn",
@@ -2181,18 +2178,18 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             static const uint8_t to_iso_2022_cn6_v2[]={  
                                 0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
                                 0x0f,   0x7b,   0x55,   0x2b,   0x32,   0x33,   0x34,   0x35,   0x36,   0x7d,   
-                                0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22,   
+                                0x0e,   0x21,   0x22,   
                                 0x0f,   0x7b,   0x55,   0x2b,   0x32,   0x33,   0x34,   0x35,   0x36,   0x7d,   
                                 0x42,   
-                                0x0f,   0x7b,   0x55,   0x2b,   0x30,   0x39,   0x30,   0x32,   0x7d
+                                0x7b,   0x55,   0x2b,   0x30,   0x39,   0x30,   0x32,   0x7d
                              };
             static const int32_t from_iso_2022_cnOffs6_v2 [] ={ 
                     0,  0,  0,  0,  0,  0,  0,  
                     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  
-                    3,  3,  3,  3,  3,  3,  3,  
+                    3,  3,  3,  
                     4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  
                     6, 
-                    7,  7,  7,  7,  7,  7,  7,  7,  7,
+                    7,  7,  7,  7,  7,  7,  7,  7,
             };
             if(!testConvertFromUnicodeWithContext(iso_2022_cn_inputText6, sizeof(iso_2022_cn_inputText6)/sizeof(iso_2022_cn_inputText6[0]),
                 to_iso_2022_cn6_v2, sizeof(to_iso_2022_cn6_v2), "iso-2022-cn",
@@ -2205,17 +2202,17 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             static const uint8_t to_iso_2022_cn7_v2[]={  
                                 0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
                                 0x0f,   0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   0x25,   0x55,   0x44,   0x43,   0x35,   0x36,   
-                                0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22,   
+                                0x0e,   0x21,   0x22,   
                                 0x0f,   0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   0x25,   0x55,   0x44,   0x43,   0x35,   0x36,   
-                                0x42,   0x0f,   0x25,   0x55,   0x30,   0x39,   0x30,   0x32, 
+                                0x42,   0x25,   0x55,   0x30,   0x39,   0x30,   0x32, 
                             };
             static const int32_t from_iso_2022_cnOffs7_v2 [] ={ 
                                 0,  0,  0,  0,  0,  0,  0,  
                                 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  
-                                3,  3,  3,  3,  3,  3,  3,  
+                                3,  3,  3,  
                                 4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  
                                 6,  
-                                7,  7,  7,  7,  7,  7,  7,
+                                7,  7,  7,  7,  7,  7,
             };
             if(!testConvertFromUnicodeWithContext(iso_2022_cn_inputText7, sizeof(iso_2022_cn_inputText7)/sizeof(iso_2022_cn_inputText7[0]),
                 to_iso_2022_cn7_v2, sizeof(to_iso_2022_cn7_v2), "iso-2022-cn",
@@ -2227,7 +2224,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             static const uint8_t to_iso_2022_cn4_v3[]={  
                             0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
                             0x0f,   0x5c,   0x55,   0x30,   0x30,   0x30,   0x32,   0x33,   0x34,   0x35,   0x36,   
-                            0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22,
+                            0x0e,   0x21,   0x22,
                             0x0f,   0x5c,   0x55,   0x30,   0x30,   0x30,   0x32,   0x33,   0x34,   0x35,   0x36, 
                             0x42 
                              };
@@ -2237,7 +2234,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                 0,0,0,0,0,0,0,
                 1,1,1,1,1,1,1,1,1,1,1,
 
-                3,3,3,3,3,3,3,
+                3,3,3,
                 4,4,4,4,4,4,4,4,4,4,4,
 
                 6

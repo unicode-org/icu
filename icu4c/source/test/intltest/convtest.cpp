@@ -113,6 +113,10 @@ ConversionTest::TestToUnicode() {
                     cc.outErrorCode=U_ILLEGAL_CHAR_FOUND;
                 } else if(s==UNICODE_STRING("truncated", 9)) {
                     cc.outErrorCode=U_TRUNCATED_CHAR_FOUND;
+                } else if(s==UNICODE_STRING("illesc", 6)) {
+                    cc.outErrorCode=U_ILLEGAL_ESCAPE_SEQUENCE;
+                } else if(s==UNICODE_STRING("unsuppesc", 9)) {
+                    cc.outErrorCode=U_UNSUPPORTED_ESCAPE_SEQUENCE;
                 } else {
                     cc.outErrorCode=U_ZERO_ERROR;
                 }

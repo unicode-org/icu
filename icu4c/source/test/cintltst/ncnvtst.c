@@ -190,7 +190,7 @@ static void TestSurrogateBehaviour(){
                                     0x36, 0x21,
                                     0x0F, 0x31, 
                                     0x1A, 
-                                    0x0f, 0x32
+                                    0x32
                                     };
 
         
@@ -200,7 +200,7 @@ static void TestSurrogateBehaviour(){
                                     1,    1,
                                     2,    2,
                                     3,  
-                                    5,    5,  };
+                                    5,  };
 
         /*iso-2022-CN*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -480,21 +480,21 @@ static void TestErrorBehaviour(){
     log_verbose("Testing for iso-2022-cn\n");
     {
         static const UChar    sampleText[]    = { 0x0031, 0xd801};
-        static const uint8_t expected[] = { 0x0f, 0x31};
-        static const uint8_t expectedSUB[] = { 0x0f, 0x31, 0x1A};
-        static const int32_t offsets[]        = { 0x00, 0x00, 1};
+        static const uint8_t expected[] = { 0x31};
+        static const uint8_t expectedSUB[] = { 0x31, 0x1A};
+        static const int32_t offsets[]        = { 0x00, 1};
 
         static const UChar       sampleText2[] = { 0x0031, 0xd801, 0x0032};
-        static const uint8_t expected2[] = { 0x0f, 0x31, 0x1A,0x32};
-        static const int32_t offsets2[]        = { 0x00, 0x00, 0x01,0x02};
+        static const uint8_t expected2[] = { 0x31, 0x1A,0x32};
+        static const int32_t offsets2[]        = { 0x00, 0x01,0x02};
 
         static const UChar       sampleText3MBCS[] = { 0x0051, 0x0050, 0xdc01};
-        static const uint8_t expected3MBCS[] = {0x0f, 0x51, 0x50, 0x1A};
-        static const int32_t offsets3MBCS[]        = { 0x00, 0x00, 0x01, 0x02 };
+        static const uint8_t expected3MBCS[] = {0x51, 0x50, 0x1A};
+        static const int32_t offsets3MBCS[]        = { 0x00, 0x01, 0x02 };
 
         static const UChar       sampleText4MBCS[] = { 0x0061, 0x4e00, 0xdc01};
-        static const uint8_t expected4MBCS[] = { 0x0f, 0x61, 0x1b, 0x24, 0x29, 0x41, 0x0e, 0x52, 0x3b, 0x0f, 0x1a };
-        static const int32_t offsets4MBCS[]        = { 0x00, 0x00, 0x01, 0x01 ,0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02 };
+        static const uint8_t expected4MBCS[] = { 0x61, 0x1b, 0x24, 0x29, 0x41, 0x0e, 0x52, 0x3b, 0x0f, 0x1a };
+        static const int32_t offsets4MBCS[]        = { 0x00, 0x01, 0x01 ,0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02 };
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expectedSUB, sizeof(expectedSUB), "iso-2022-cn", offsets, TRUE, U_ZERO_ERROR))
             log_err("u-> iso-2022-cn [UCNV_MBCS] \n");
@@ -1462,7 +1462,7 @@ static void TestResetBehaviour(void){
                                     0x36, 0x21,
                                     0x0f, 0x31,
                                     0x1A, 
-                                    0x0f, 0x32
+                                    0x32
                                     };
         
 
@@ -1471,17 +1471,17 @@ static void TestResetBehaviour(void){
                                     1,    1,
                                     2,    2,
                                     3,    
-                                    5,    5,  };
+                                    5,  };
         
         UChar sampleText1[] = {0x4e00, 0x04e01, 0x0031,0x001A, 0x0032};
         static const uint8_t expected1[] = {
                                     0x1B, 0x24, 0x29, 0x41, 0x0E, 0x52, 0x3B, 
                                     0x36, 0x21,
-                                    0x1B, 0x24, 0x29, 0x47, 0x1B, 0x4E, 0x24, 0x22, 
+                                    0x1B, 0x24, 0x29, 0x47, 0x24, 0x22, 
                                     0x0f, 0x1A, 
                                     0x32
                                     };
-        static const int32_t offsets1[] =  { 5,7,15,18,19};
+        static const int32_t offsets1[] =  { 5,7,13,16,17};
 
         /*iso-2022-CN*/
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
