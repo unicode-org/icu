@@ -178,7 +178,7 @@ class BreakIterator;
  * </blockquote>
  *
  * <p>For a more complete explanation, see <a
- * href="http://www.ibm.com/java/education/boundaries/boundaries.html">http://www.ibm.com/java/education/boundaries/boundaries.html</a>.
+ * href="http://www.ibm.com/developerworks/unicode/library/boundaries/boundaries.html">http://www.ibm.com/developerworks/unicode/library/boundaries/boundaries.html</a>.
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
@@ -425,7 +425,7 @@ RuleBasedBreakIterator(UDataMemory* image);
      */
     inline static UClassID getStaticClassID(void);
 
-	virtual BreakIterator *  createBufferClone(void *stackBuffer,
+    virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,
                                                UErrorCode &status);
 
