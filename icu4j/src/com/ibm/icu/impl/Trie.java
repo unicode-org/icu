@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Trie.java,v $
-* $Date: 2003/06/11 19:55:18 $
-* $Revision: 1.12 $
+* $Date: 2003/09/19 00:14:35 $
+* $Revision: 1.13 $
 *
 ******************************************************************************
 */
@@ -109,6 +109,26 @@ public abstract class Trie
                && Arrays.equals(m_index_, othertrie.m_index_);
     }
     ///CLOVER:ON
+    
+    /**
+     * Gets the serialized data file size of the Trie. This is used during 
+     * trie data reading for size checking purposes. 
+     * @return size size of serialized trie data file in terms of the number
+     *              of bytes
+     */
+    public int getSerializedDataSize()
+    {
+        // includes signature, option, dataoffset and datalength output
+        int result = (4 << 2);
+        result += (m_dataOffset_ << 1);
+        if (isCharTrie()) {
+            result += (m_dataLength_ << 1);
+        }
+        else if (isIntTrie()) {
+            result += (m_dataLength_ << 2);
+        }
+        return result;
+    }
 
     // protected constructor -------------------------------------------
 
@@ -157,6 +177,7 @@ public abstract class Trie
         m_isLatin1Linear_ = (m_options_ &
                              HEADER_OPTIONS_LATIN1_IS_LINEAR_MASK_) != 0;
         m_index_ = index;
+        m_dataOffset_ = m_index_.length;
     }
 
 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorReader.java,v $ 
-* $Date: 2003/08/27 22:28:45 $ 
-* $Revision: 1.14 $
+* $Date: 2003/09/19 00:14:36 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -91,56 +91,84 @@ final class CollatorReader
     */
     protected void readHeader(RuleBasedCollator rbc) throws IOException
     {
-        int size = m_dataInputStream_.readInt();
+        m_size_ = m_dataInputStream_.readInt();
         // all the offsets are in bytes
       	// to get the address add to the header address and cast properly 
       	// Default options int options
-        m_dataInputStream_.skip(4); // options
+        m_headerSize_ = m_dataInputStream_.readInt(); // start of options
+        int readcount = 8; // for size and headersize
         // structure which holds values for indirect positioning and implicit 
         // ranges
       	int UCAConst = m_dataInputStream_.readInt(); 
+        readcount += 4;
         // this one is needed only for UCA, to copy the appropriate 
         // contractions
         m_dataInputStream_.skip(4);
+        readcount += 4;
       	// reserved for future use
       	m_dataInputStream_.skipBytes(4);
+        readcount += 4;
       	// const uint8_t *mappingPosition; 
-      	int mapping = m_dataInputStream_.readInt(); 
+      	int mapping = m_dataInputStream_.readInt();
+        readcount += 4;
       	// uint32_t *expansion; 
-      	rbc.m_expansionOffset_ = m_dataInputStream_.readInt(); 
+      	rbc.m_expansionOffset_ = m_dataInputStream_.readInt();
+        readcount += 4; 
       	// UChar *contractionIndex;     
-      	rbc.m_contractionOffset_ = m_dataInputStream_.readInt(); 
+      	rbc.m_contractionOffset_ = m_dataInputStream_.readInt();
+        readcount += 4; 
       	// uint32_t *contractionCEs;
-      	int contractionCE = m_dataInputStream_.readInt();   
+      	int contractionCE = m_dataInputStream_.readInt();
+        readcount += 4;   
       	// needed for various closures int contractionSize 
-      	int contractionSize = m_dataInputStream_.readInt();  
+      	int contractionSize = m_dataInputStream_.readInt();
+        readcount += 4;  
       	// array of last collation element in expansion
-      	int expansionEndCE = m_dataInputStream_.readInt();  
+      	int expansionEndCE = m_dataInputStream_.readInt();
+        readcount += 4;  
       	// array of maximum expansion size corresponding to the expansion
         // collation elements with last element in expansionEndCE
-      	int expansionEndCEMaxSize = m_dataInputStream_.readInt();     
+      	int expansionEndCEMaxSize = m_dataInputStream_.readInt();
+        readcount += 4;     
       	// size of endExpansionCE int expansionEndCESize
-      	m_dataInputStream_.skipBytes(4); 
+      	m_dataInputStream_.skipBytes(4);
+        readcount += 4; 
       	// hash table of unsafe code points 
-      	int unsafe = m_dataInputStream_.readInt();            
+      	int unsafe = m_dataInputStream_.readInt();
+        readcount += 4;            
       	// hash table of final code points in contractions.
       	int contractionEnd = m_dataInputStream_.readInt();
+        readcount += 4;
       	// int CEcount = m_dataInputStream_.readInt();
       	m_dataInputStream_.skipBytes(4);
+        readcount += 4;
       	// is jamoSpecial
-      	rbc.m_isJamoSpecial_ = m_dataInputStream_.readBoolean(); 
+      	rbc.m_isJamoSpecial_ = m_dataInputStream_.readBoolean();
+        readcount ++; 
         // padding
       	m_dataInputStream_.skipBytes(3);
+        readcount += 3;
         rbc.m_version_ = readVersion(m_dataInputStream_);
+        readcount += 4;
         rbc.m_UCA_version_ = readVersion(m_dataInputStream_);
+        readcount += 4;
         rbc.m_UCD_version_ = readVersion(m_dataInputStream_);
+        readcount += 4;
       	// byte charsetName[] = new byte[32]; // for charset CEs
       	m_dataInputStream_.skipBytes(32);
-      	m_dataInputStream_.skipBytes(56); // for future use 
+        readcount += 32;
+      	m_dataInputStream_.skipBytes(56); // for future use
+        readcount += 56; 
+        if (m_headerSize_ < readcount) {
+            throw new IOException("Internal Error: Header size error");
+        }
+        m_dataInputStream_.skipBytes(m_headerSize_ - readcount);
+        
       	if (rbc.m_contractionOffset_ == 0) { // contraction can be null
       		rbc.m_contractionOffset_ = mapping;
       		contractionCE = mapping;
       	}
+        m_optionSize_ = rbc.m_expansionOffset_ - m_headerSize_;
       	m_expansionSize_ = rbc.m_contractionOffset_ - rbc.m_expansionOffset_;
       	m_contractionIndexSize_ = contractionCE - rbc.m_contractionOffset_;
       	m_contractionCESize_ = mapping - contractionCE;
@@ -148,10 +176,10 @@ final class CollatorReader
       	m_expansionEndCESize_ = expansionEndCEMaxSize - expansionEndCE;
       	m_expansionEndCEMaxSizeSize_ = unsafe - expansionEndCEMaxSize;
       	m_unsafeSize_ = contractionEnd - unsafe;
-        m_UCAValuesSize_ = size - UCAConst; // UCA value, will be handled later
+        m_UCAValuesSize_ = m_size_ - UCAConst; // UCA value, will be handled later
         // treat it as normal collator first
         // for normal collator there is no UCA contraction
-        m_contractionEndSize_ = size - contractionEnd;    
+        m_contractionEndSize_ = m_size_ - contractionEnd;    
         
       	rbc.m_contractionOffset_ >>= 1; // casting to ints
       	rbc.m_expansionOffset_ >>= 2; // casting to chars
@@ -166,16 +194,23 @@ final class CollatorReader
      */
     protected void readOptions(RuleBasedCollator rbc) throws IOException
     {
+        int readcount = 0;
         rbc.m_defaultVariableTopValue_ = m_dataInputStream_.readInt();
+        readcount += 4;
     	rbc.m_defaultIsFrenchCollation_ = (m_dataInputStream_.readInt()
-    	                                == RuleBasedCollator.AttributeValue.ON_);
+    	                              == RuleBasedCollator.AttributeValue.ON_);
+        readcount += 4;
         rbc.m_defaultIsAlternateHandlingShifted_ 
                                    = (m_dataInputStream_.readInt() == 
                                     RuleBasedCollator.AttributeValue.SHIFTED_);
+        readcount += 4;
         rbc.m_defaultCaseFirst_ = m_dataInputStream_.readInt();
+        readcount += 4;
         rbc.m_defaultIsCaseLevel_ = (m_dataInputStream_.readInt() 
                                      == RuleBasedCollator.AttributeValue.ON_);
+        readcount += 4;
         int value = m_dataInputStream_.readInt();
+        readcount += 4;
     	if (value == RuleBasedCollator.AttributeValue.ON_) {
     		value = Collator.CANONICAL_DECOMPOSITION;
     	}
@@ -184,11 +219,19 @@ final class CollatorReader
     	}
     	rbc.m_defaultDecomposition_ = value;
     	rbc.m_defaultStrength_ = m_dataInputStream_.readInt();
+        readcount += 4;
     	rbc.m_defaultIsHiragana4_ = (m_dataInputStream_.readInt() 
     	                             == RuleBasedCollator.AttributeValue.ON_);
+        readcount += 4;
         rbc.m_defaultIsNumericCollation_ = (m_dataInputStream_.readInt() 
                                       == RuleBasedCollator.AttributeValue.ON_);
+        readcount += 4;
         m_dataInputStream_.skip(64); // reserved for future use
+        readcount += 64;
+        m_dataInputStream_.skipBytes(m_optionSize_ - readcount);
+        if (m_optionSize_ < readcount) {
+            throw new IOException("Internal Error: Option size error");
+        }
     }
     
     /**
@@ -207,23 +250,30 @@ final class CollatorReader
                                                             throws IOException
     {
     	readHeader(rbc);
+        // header size has been checked by readHeader
+        int readcount = m_headerSize_; 
+        // option size has been checked by readOptions
     	readOptions(rbc);
+        readcount += m_optionSize_;
         m_expansionSize_ >>= 2;
     	rbc.m_expansion_ = new int[m_expansionSize_];
     	for (int i = 0; i < m_expansionSize_; i ++) {
     		rbc.m_expansion_[i] = m_dataInputStream_.readInt();
     	}
+        readcount += (m_expansionSize_ << 2);
         if (m_contractionIndexSize_ > 0) { 
         	m_contractionIndexSize_ >>= 1;
         	rbc.m_contractionIndex_ = new char[m_contractionIndexSize_];
         	for (int i = 0; i < m_contractionIndexSize_; i ++) {
         		rbc.m_contractionIndex_[i] = m_dataInputStream_.readChar();
         	}
+            readcount += (m_contractionIndexSize_ << 1);
         	m_contractionCESize_ >>= 2;
         	rbc.m_contractionCE_ = new int[m_contractionCESize_];
         	for (int i = 0; i < m_contractionCESize_; i ++) {
         		rbc.m_contractionCE_[i] = m_dataInputStream_.readInt();
         	}
+            readcount += (m_contractionCESize_ << 2);
         }
     	rbc.m_trie_ = new IntTrie(m_dataInputStream_, 
                            	  RuleBasedCollator.DataManipulate.getInstance());
@@ -232,19 +282,23 @@ final class CollatorReader
     		                      + "Collator Tries expected to have linear "
     		                      + "latin one data arrays");
     	}
+        readcount += rbc.m_trie_.getSerializedDataSize();
     	m_expansionEndCESize_ >>= 2;
     	rbc.m_expansionEndCE_ = new int[m_expansionEndCESize_];
     	for (int i = 0; i < m_expansionEndCESize_; i ++) {
     		rbc.m_expansionEndCE_[i] = m_dataInputStream_.readInt();
     	}
+        readcount += (m_expansionEndCESize_ << 2);
     	rbc.m_expansionEndCEMaxSize_ = new byte[m_expansionEndCEMaxSizeSize_];
     	for (int i = 0; i < m_expansionEndCEMaxSizeSize_; i ++) {
     		rbc.m_expansionEndCEMaxSize_[i] = m_dataInputStream_.readByte();
     	}
+        readcount += m_expansionEndCEMaxSizeSize_;
     	rbc.m_unsafe_ = new byte[m_unsafeSize_];
     	for (int i = 0; i < m_unsafeSize_; i ++) {
     		rbc.m_unsafe_[i] = m_dataInputStream_.readByte();
     	}
+        readcount += m_unsafeSize_;
         if (UCAConst != null) {
             // we are reading the UCA
             // unfortunately the UCA offset in any collator data is not 0 and
@@ -255,99 +309,107 @@ final class CollatorReader
     	for (int i = 0; i < m_contractionEndSize_; i ++) {
     		rbc.m_contractionEnd_[i] = m_dataInputStream_.readByte();
     	}
+        readcount += m_contractionEndSize_;
         if (UCAConst != null) {
             UCAConst.FIRST_TERTIARY_IGNORABLE_[0] 
                                                = m_dataInputStream_.readInt();
-            m_UCAValuesSize_ -= 4;
+            int readUCAConstcount = 4;
             UCAConst.FIRST_TERTIARY_IGNORABLE_[1] 
                                                = m_dataInputStream_.readInt();
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.LAST_TERTIARY_IGNORABLE_[0] 
                                                = m_dataInputStream_.readInt();
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.LAST_TERTIARY_IGNORABLE_[1] 
                                                = m_dataInputStream_.readInt();
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.FIRST_PRIMARY_IGNORABLE_[0] 
                                                = m_dataInputStream_.readInt();
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.FIRST_PRIMARY_IGNORABLE_[1] 
                                                = m_dataInputStream_.readInt();
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.FIRST_SECONDARY_IGNORABLE_[0] 
                                                = m_dataInputStream_.readInt();
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.FIRST_SECONDARY_IGNORABLE_[1] 
                                                = m_dataInputStream_.readInt();
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.LAST_SECONDARY_IGNORABLE_[0] 
                                                = m_dataInputStream_.readInt();
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.LAST_SECONDARY_IGNORABLE_[1] 
                                                = m_dataInputStream_.readInt();
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.LAST_PRIMARY_IGNORABLE_[0] 
                                                = m_dataInputStream_.readInt();
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.LAST_PRIMARY_IGNORABLE_[1] 
                                                = m_dataInputStream_.readInt();
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.FIRST_VARIABLE_[0] = m_dataInputStream_.readInt();     
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.FIRST_VARIABLE_[1] = m_dataInputStream_.readInt();
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.LAST_VARIABLE_[0] = m_dataInputStream_.readInt(); 
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.LAST_VARIABLE_[1] = m_dataInputStream_.readInt();                     
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.FIRST_NON_VARIABLE_[0] = m_dataInputStream_.readInt();  
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.FIRST_NON_VARIABLE_[1] = m_dataInputStream_.readInt();  
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.LAST_NON_VARIABLE_[0] = m_dataInputStream_.readInt();  
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.LAST_NON_VARIABLE_[1] = m_dataInputStream_.readInt();  
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.RESET_TOP_VALUE_[0] = m_dataInputStream_.readInt();  
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.RESET_TOP_VALUE_[1] = m_dataInputStream_.readInt();  
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.FIRST_IMPLICIT_[0] = m_dataInputStream_.readInt();  
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.FIRST_IMPLICIT_[1] = m_dataInputStream_.readInt();  
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.LAST_IMPLICIT_[0] = m_dataInputStream_.readInt();  
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.LAST_IMPLICIT_[1] = m_dataInputStream_.readInt();  
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.FIRST_TRAILING_[0] = m_dataInputStream_.readInt();  
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.FIRST_TRAILING_[1] = m_dataInputStream_.readInt();  
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.LAST_TRAILING_[0] = m_dataInputStream_.readInt();  
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.LAST_TRAILING_[1] = m_dataInputStream_.readInt();   
-            m_UCAValuesSize_ -= 4; 
+            readUCAConstcount += 4; 
             UCAConst.PRIMARY_TOP_MIN_ = m_dataInputStream_.readInt();  
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.PRIMARY_IMPLICIT_MIN_ = m_dataInputStream_.readInt();   
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.PRIMARY_IMPLICIT_MAX_ = m_dataInputStream_.readInt();   
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.PRIMARY_TRAILING_MIN_ = m_dataInputStream_.readInt();   
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.PRIMARY_TRAILING_MAX_ = m_dataInputStream_.readInt();   
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.PRIMARY_SPECIAL_MIN_ = m_dataInputStream_.readInt();   
-            m_UCAValuesSize_ -= 4;
+            readUCAConstcount += 4;
             UCAConst.PRIMARY_SPECIAL_MAX_ = m_dataInputStream_.readInt();   
-            m_UCAValuesSize_ -= 4;
-            m_UCAValuesSize_ >>= 1;
-            char result[] = new char[m_UCAValuesSize_];
-            for (int i = 0; i < m_UCAValuesSize_; i ++) {
+            readUCAConstcount += 4;
+            int resultsize = (m_UCAValuesSize_ - readUCAConstcount) >> 1;
+            char result[] = new char[resultsize];
+            for (int i = 0; i < resultsize; i ++) {
                 result[i] = m_dataInputStream_.readChar();
             }
+            readcount += m_UCAValuesSize_;
+            if (readcount != m_size_) {
+                throw new IOException("Internal Error: Data file size error");
+            }
             return result;
+        }
+        if (readcount != m_size_) {
+            throw new IOException("Internal Error: Data file size error");
         }
         return null;
     }
@@ -521,6 +583,19 @@ final class CollatorReader
      * to the ones in expansionEndCE
      */
     private int m_expansionEndCEMaxSizeSize_;
+    /**
+     * Size of the option table that contains information about the collation
+     * options
+     */
+    private int m_optionSize_;
+    /**
+     * Size of the whole data file minusing the ICU header
+     */
+    private int m_size_;
+    /**
+     * Size of the collation data header
+     */
+    private int m_headerSize_;
     /**
      * Size of the table that contains information about the "Unsafe" 
      * codepoints
