@@ -38,11 +38,13 @@ void PrintDataTable();
   table of valid data
  --------------------------------------------------- */
 #define LOCALE_SIZE 5
-#define LOCALE_INFO_SIZE 23
+#define LOCALE_INFO_SIZE 28
 
 static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* language code */
     {   "en",   "fr",   "ca",   "el",   "no"    },
+    /* script code */
+    {   "",     "",     "",     "",     ""      },
     /* country code */
     {   "US",   "FR",   "ES",   "GR",   "NO"    },
     /* variant code */
@@ -58,6 +60,8 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
 
     /* display language (English) */
     {   "English",  "French",   "Catalan", "Greek",    "Norwegian" },
+    /* display script code (English) */
+    {   "",     "",     "",     "",     ""      },
     /* display country (English) */
     {   "United States",    "France",   "Spain",  "Greece",   "Norway"    },
     /* display variant (English) */
@@ -67,6 +71,8 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
 
     /* display language (French) */
     {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien" },
+    /* display script code (French) */
+    {   "",     "",     "",     "",     ""      },
     /* display country (French) */
     {   "\\u00C9tats-Unis",    "France",   "Espagne",  "Gr\\u00E8ce",   "Norv\\u00E8ge"    },
     /* display variant (French) */
@@ -76,6 +82,8 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
 
     /* display language (Catalan) */
     {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec" },
+    /* display script code (Catalan) */
+    {   "",     "",     "",     "",     ""      },
     /* display country (Catalan) */
     {   "Estats Units", "Fran\\u00E7a", "Espanya",  "Gr\\u00E8cia", "Noruega" },
     /* display variant (Catalan) */
@@ -91,6 +99,8 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
         "\\u0395\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac",
         "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac"
     },
+    /* display script code (Greek) */
+    {   "",     "",     "",     "",     ""      },
     /* display country (Greek) */
     {
         "\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2",
@@ -122,28 +132,33 @@ enum {
 
 enum {
     LANG = 0,
-    CTRY = 1,
-    VAR = 2,
-    NAME = 3,
-    LANG3 = 4,
-    CTRY3 = 5,
-    LCID = 6,
-    DLANG_EN = 7,
-    DCTRY_EN = 8,
-    DVAR_EN = 9,
-    DNAME_EN = 10,
-    DLANG_FR = 11,
-    DCTRY_FR = 12,
-    DVAR_FR = 13,
-    DNAME_FR = 14,
-    DLANG_CA = 15,
-    DCTRY_CA = 16,
-    DVAR_CA = 17,
-    DNAME_CA = 18,
-    DLANG_EL = 19,
-    DCTRY_EL = 20,
-    DVAR_EL = 21,
-    DNAME_EL = 22
+    SCRIPT = 1,
+    CTRY = 2,
+    VAR = 3,
+    NAME = 4,
+    LANG3 = 5,
+    CTRY3 = 6,
+    LCID = 7,
+    DLANG_EN = 8,
+    DSCRIPT_EN = 9,
+    DCTRY_EN = 10,
+    DVAR_EN = 11,
+    DNAME_EN = 12,
+    DLANG_FR = 13,
+    DSCRIPT_FR = 14,
+    DCTRY_FR = 15,
+    DVAR_FR = 16,
+    DNAME_FR = 17,
+    DLANG_CA = 18,
+    DSCRIPT_CA = 19,
+    DCTRY_CA = 20,
+    DVAR_CA = 21,
+    DNAME_CA = 22,
+    DLANG_EL = 23,
+    DSCRIPT_EL = 24,
+    DCTRY_EL = 25,
+    DVAR_EL = 26,
+    DNAME_EL = 27
 };
 
 void addLocaleTest(TestNode** root);
@@ -306,103 +321,113 @@ static void TestNullDefault() {
 #define PREFIXBUFSIZ 128
 
 static void TestPrefixes() {
-  int row = 0;
-  int n;
-  const char *loc;
-
-  const char *testData[][5] =
-  {
-    {"sv", "FI", "AL", "sv-fi-al", "sv_FI_AL" },
-    {"en", "GB", "", "en-gb", "en_GB" },
-    {"i-hakka", "MT", "XEMXIJA", "i-hakka_MT_XEMXIJA", "i-hakka_MT_XEMXIJA"},
-    {"i-hakka", "CN", "", "i-hakka_CN", "i-hakka_CN"},
-    {"i-hakka", "MX", "", "I-hakka_MX", "i-hakka_MX"},
-    {"x-klingon", "US", "SANJOSE", "X-KLINGON_us_SANJOSE", "x-klingon_US_SANJOSE"},
-
-    {"mr", "", "", "mr.utf8", "mr"},
-    {"de", "TV", "", "de-tv.koi8r", "de_TV"},
-    {"x-piglatin", "ML", "", "x-piglatin_ML.MBE", "x-piglatin_ML"},  /* Multibyte English */
-    {"i-cherokee","US", "", "i-Cherokee_US.utf7", "i-cherokee_US"},
-    {"x-filfli", "MT", "FILFLA", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA"},
-    {"no", "NO", "NY", "no-no-ny.utf32@B", "no_NO_NY"}, /* @ ignored unless variant is empty */
-    {"no", "NO", "B",  "no-no.utf32@B", "no_NO_B" },
-    {"no", "",   "NY", "no__ny", "no__NY" },
-    {"no", "",   "NY", "no@ny", "no__NY" },
-
-    { "","","","",""}
-  };
-
-  const char *testTitles[] = { "uloc_getLanguage()", "uloc_getCountry()", "uloc_getVariant()", "name", "uloc_getName()", "country3", "lcid" };
-
-  char buf[PREFIXBUFSIZ];
-  int32_t len;
-  UErrorCode err;
-
-
-  for(row=0;testData[row][0][0] != 0;row++) {
-    loc = testData[row][NAME];
-    log_verbose("Test #%d: %s\n", row, loc);
-
-    err = U_ZERO_ERROR;
-    len=0;
-    buf[0]=0;
-    for(n=0;n<=(NAME+1);n++) {
-      if(n==NAME) continue;
-
-      for(len=0;len<PREFIXBUFSIZ;len++) {
-        buf[len] = '%'; /* Set a tripwire.. */
-      }
-      len = 0;
-
-      switch(n) {
-      case LANG:
-        len = uloc_getLanguage(loc, buf, PREFIXBUFSIZ, &err);
-        break;
-
-      case CTRY:
-        len = uloc_getCountry(loc, buf, PREFIXBUFSIZ, &err);
-        break;
-
-      case VAR:
-        len = uloc_getVariant(loc, buf, PREFIXBUFSIZ, &err);
-        break;
-
-      case NAME+1:
-        len = uloc_getName(loc, buf, PREFIXBUFSIZ, &err);
-        break;
-
-      default:
-        strcpy(buf, "**??");
-        len=4;
-      }
-
-      if(U_FAILURE(err)) {
-        log_err("#%d: %s on %s: err %s\n",
-                row, testTitles[n], loc, u_errorName(err));
-      } else {
-        log_verbose("#%d: %s on %s: -> [%s] (length %d)\n",
-                row, testTitles[n], loc, buf, len);
-
-        if(len != (int32_t)strlen(buf)) {
-          log_err("#%d: %s on %s: -> [%s] (length returned %d, actual %d!)\n",
-                row, testTitles[n], loc, buf, len, strlen(buf)+1);
-
+    int row = 0;
+    int n;
+    const char *loc;
+    
+    const char *testData[][6] =
+    {
+        {"sv", "", "FI", "AL", "sv-fi-al", "sv_FI_AL" },
+        {"en", "", "GB", "", "en-gb", "en_GB" },
+        {"i-hakka", "", "MT", "XEMXIJA", "i-hakka_MT_XEMXIJA", "i-hakka_MT_XEMXIJA"},
+        {"i-hakka", "", "CN", "", "i-hakka_CN", "i-hakka_CN"},
+        {"i-hakka", "", "MX", "", "I-hakka_MX", "i-hakka_MX"},
+        {"x-klingon", "", "US", "SANJOSE", "X-KLINGON_us_SANJOSE", "x-klingon_US_SANJOSE"},
+        
+        {"mr", "", "", "", "mr.utf8", "mr"},
+        {"de", "", "TV", "", "de-tv.koi8r", "de_TV"},
+        {"x-piglatin", "", "ML", "", "x-piglatin_ML.MBE", "x-piglatin_ML"},  /* Multibyte English */
+        {"i-cherokee", "","US", "", "i-Cherokee_US.utf7", "i-cherokee_US"},
+        {"x-filfli", "", "MT", "FILFLA", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA"},
+        {"no", "", "NO", "NY", "no-no-ny.utf32@B", "no_NO_NY"}, /* @ ignored unless variant is empty */
+        {"no", "", "NO", "B",  "no-no.utf32@B", "no_NO_B" },
+        {"no", "", "",   "NY", "no__ny", "no__NY" },
+        {"no", "", "",   "NY", "no@ny", "no__NY" },
+        {"el", "Latn", "", "", "el-latn", "el_Latn" },
+        {"en", "Cyrl", "RU", "", "en-cyrl-ru", "en_Cyrl_RU" },
+        {"zh", "Hant", "TW", "STROKE", "zh-hant_TW_STROKE", "zh_Hant_TW_STROKE" },
+        {"qq", "Qqqq", "QQ", "QQ", "qq_Qqqq_QQ_QQ", "qq_Qqqq_QQ_QQ" },
+        {"qq", "Qqqq", "", "QQ", "qq_Qqqq__QQ", "qq_Qqqq__QQ" },
+        {"12", "3456", "78", "90", "12_3456_78_90", "12_3456_78_90" }, /* total garbage */
+        
+        { "","","","",""}
+    };
+    
+    const char *testTitles[] = { "uloc_getLanguage()", "uloc_getScript()", "uloc_getCountry()", "uloc_getVariant()", "name", "uloc_getName()", "country3" };
+    
+    char buf[PREFIXBUFSIZ];
+    int32_t len;
+    UErrorCode err;
+    
+    
+    for(row=0;testData[row][0][0] != 0;row++) {
+        loc = testData[row][NAME];
+        log_verbose("Test #%d: %s\n", row, loc);
+        
+        err = U_ZERO_ERROR;
+        len=0;
+        buf[0]=0;
+        for(n=0;n<=(NAME+1);n++) {
+            if(n==NAME) continue;
+            
+            for(len=0;len<PREFIXBUFSIZ;len++) {
+                buf[len] = '%'; /* Set a tripwire.. */
+            }
+            len = 0;
+            
+            switch(n) {
+            case LANG:
+                len = uloc_getLanguage(loc, buf, PREFIXBUFSIZ, &err);
+                break;
+                
+            case SCRIPT:
+                len = uloc_getScript(loc, buf, PREFIXBUFSIZ, &err);
+                break;
+                
+            case CTRY:
+                len = uloc_getCountry(loc, buf, PREFIXBUFSIZ, &err);
+                break;
+                
+            case VAR:
+                len = uloc_getVariant(loc, buf, PREFIXBUFSIZ, &err);
+                break;
+                
+            case NAME+1:
+                len = uloc_getName(loc, buf, PREFIXBUFSIZ, &err);
+                break;
+                
+            default:
+                strcpy(buf, "**??");
+                len=4;
+            }
+            
+            if(U_FAILURE(err)) {
+                log_err("#%d: %s on %s: err %s\n",
+                    row, testTitles[n], loc, u_errorName(err));
+            } else {
+                log_verbose("#%d: %s on %s: -> [%s] (length %d)\n",
+                    row, testTitles[n], loc, buf, len);
+                
+                if(len != (int32_t)strlen(buf)) {
+                    log_err("#%d: %s on %s: -> [%s] (length returned %d, actual %d!)\n",
+                        row, testTitles[n], loc, buf, len, strlen(buf)+1);
+                    
+                }
+                
+                /* see if they smashed something */
+                if(buf[len+1] != '%') {
+                    log_err("#%d: %s on %s: -> [%s] - wrote [%X] out ofbounds!\n",
+                        row, testTitles[n], loc, buf, buf[len+1]);
+                }
+                
+                if(strcmp(buf, testData[row][n])) {
+                    log_err("#%d: %s on %s: -> [%s] (expected '%s'!)\n",
+                        row, testTitles[n], loc, buf, testData[row][n]);
+                    
+                }
+            }
         }
-
-        /* see if they smashed something */
-        if(buf[len+1] != '%') {
-          log_err("#%d: %s on %s: -> [%s] - wrote [%X] out ofbounds!\n",
-                row, testTitles[n], loc, buf, buf[len+1]);
-        }
-
-        if(strcmp(buf, testData[row][n])) {
-          log_err("#%d: %s on %s: -> [%s] (expected '%s'!)\n",
-                row, testTitles[n], loc, buf, testData[row][n]);
-
-        }
-      }
     }
-  }
 }
 
 
@@ -411,45 +436,45 @@ static void TestSimpleResourceInfo() {
     int32_t i;
     char* testLocale = 0;
     UChar* expected = 0;
-
+    
     const char* temp;
     char            temp2[20];
     testLocale=(char*)malloc(sizeof(char) * 1);
     expected=(UChar*)malloc(sizeof(UChar) * 1);
-
-setUpDataTable();
+    
+    setUpDataTable();
     log_verbose("Testing getISO3Language and getISO3Country\n");
     for (i = 0; i < LOCALE_SIZE; i++) {
-
+        
         testLocale=(char*)realloc(testLocale, sizeof(char) * (u_strlen(dataTable[NAME][i])+1));
         u_austrcpy(testLocale, dataTable[NAME][i]);
-
+        
         log_verbose("Testing   %s ......\n", testLocale);
-
+        
         temp=uloc_getISO3Language(testLocale);
         expected=(UChar*)realloc(expected, sizeof(UChar) * (strlen(temp) + 1));
         u_uastrcpy(expected,temp);
         if (0 != u_strcmp(expected, dataTable[LANG3][i])) {
-             log_err("  ISO-3 language code mismatch:  %s versus  %s\n",  austrdup(expected),
-                                                            austrdup(dataTable[LANG3][i]));
+            log_err("  ISO-3 language code mismatch:  %s versus  %s\n",  austrdup(expected),
+                austrdup(dataTable[LANG3][i]));
         }
-
+        
         temp=uloc_getISO3Country(testLocale);
         expected=(UChar*)realloc(expected, sizeof(UChar) * (strlen(temp) + 1));
         u_uastrcpy(expected,temp);
         if (0 != u_strcmp(expected, dataTable[CTRY3][i])) {
             log_err("  ISO-3 Country code mismatch:  %s versus  %s\n",  austrdup(expected),
-                                                            austrdup(dataTable[CTRY3][i]));
+                austrdup(dataTable[CTRY3][i]));
         }
         sprintf(temp2, "%x", uloc_getLCID(testLocale));
         if (strcmp(temp2, rawData2[LCID][i]) != 0) {
             log_err("LCID mismatch: %s versus %s\n", temp2 , rawData2[LCID][i]);
         }
     }
-
- free(expected);
- free(testLocale);
-cleanUpDataTable();
+    
+    free(expected);
+    free(testLocale);
+    cleanUpDataTable();
 }
 
 /*
@@ -574,12 +599,14 @@ static void doTestDisplayNames(const char* displayLocale, int32_t compareIndex)
 
 
     UChar  *testLang  = 0;
+    UChar  *testScript  = 0;
     UChar  *testCtry = 0;
     UChar  *testVar = 0;
     UChar  *testName = 0;
 
 
     UChar*  expectedLang = 0;
+    UChar*  expectedScript = 0;
     UChar*  expectedCtry = 0;
     UChar*  expectedVar = 0;
     UChar*  expectedName = 0;
@@ -660,15 +687,15 @@ setUpDataTable();
         if(u_strlen(expectedLang)== 0)
             expectedLang=dataTable[DLANG_EN][i];
 
-        expectedCtry=dataTable[compareIndex + 1][i];
+        expectedCtry=dataTable[compareIndex + 2][i];
         if(u_strlen(expectedCtry)== 0)
             expectedCtry=dataTable[DCTRY_EN][i];
 
-        expectedVar=dataTable[compareIndex + 2][i];
+        expectedVar=dataTable[compareIndex + 3][i];
         if(u_strlen(expectedCtry)== 0)
             expectedVar=dataTable[DVAR_EN][i];
 
-        expectedName=dataTable[compareIndex + 3][i];
+        expectedName=dataTable[compareIndex + 4][i];
         if(u_strlen(expectedName) == 0)
             expectedName=dataTable[DNAME_EN][i];
 
@@ -777,9 +804,9 @@ static void setUpDataTable()
     int32_t i,j;
     dataTable = (UChar***)(calloc(sizeof(UChar**),LOCALE_INFO_SIZE));
 
-    for (i = 0; i < 23; i++) {
+    for (i = 0; i < LOCALE_INFO_SIZE; i++) {
         dataTable[i] = (UChar**)(calloc(sizeof(UChar*),LOCALE_SIZE));
-        for (j = 0; j < 5; j++){
+        for (j = 0; j < LOCALE_SIZE; j++){
             dataTable[i][j] = CharsToUChars(rawData2[i][j]);
         }
     }
