@@ -568,28 +568,11 @@ UnicodeString::doCompareCodePointOrder(UTextOffset start,
     lengthResult = 0;
   }
 
-  static const UChar utf16Fixup[32]={
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0x2000, 0xf800, 0xf800, 0xf800, 0xf800
-  };
-  UChar c1, c2;
-  int32_t diff;
-
-  /* rotate each code unit's value so that surrogates get the highest values */
-  while(minLength>0) {
-    c1 = (UChar)(*chars + utf16Fixup[*chars>>11]); /* additional "fix-up" line */
-    c2 = (UChar)(*srcChars + utf16Fixup[*srcChars>>11]); /* additional "fix-up" line */
-
-    /* now c1 and c2 are in UTF-32-compatible order */
-    diff=(int32_t)c1-(int32_t)c2;
-    if(diff!=0) {
-      return (int8_t)(diff >> 15 | 1);
-    }
-    ++chars;
-    ++srcChars;
-    --minLength;
+  int32_t diff = u_memcmpCodePointOrder(chars, srcChars, minLength);
+  if(diff!=0) {
+    return (int8_t)(diff >> 15 | 1);
   }
+
   return lengthResult;
 }
 
