@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2003/04/04 17:15:13 $ 
- * $Revision: 1.15 $
+ * $Date: 2003/05/09 18:44:53 $ 
+ * $Revision: 1.16 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
@@ -410,6 +410,42 @@ public class IBMCalendarTest extends CalendarTest {
             }
         }
     }
+
+    /**
+     * Make sure that when adding a day, we actually wind up in a
+     * different day.  The DST adjustments we use to keep the hour
+     * constant across DST changes can backfire and change the day.
+     */
+    public void TestTimeZoneTransitionAdd() {
+        Locale locale = Locale.US; // could also be CHINA
+        SimpleDateFormat dateFormat =
+            new SimpleDateFormat("MM/dd/yyyy HH:mm z", locale);
+
+        String tz[] = TimeZone.getAvailableIDs();
+
+        for (int z=0; z<tz.length; ++z) {
+            TimeZone t = TimeZone.getTimeZone(tz[z]);
+            dateFormat.setTimeZone(t);
+
+            Calendar cal = Calendar.getInstance(t, locale);
+            cal.clear();
+            // Scan the year 2003, overlapping the edges of the year
+            cal.set(Calendar.YEAR, 2002);
+            cal.set(Calendar.MONTH, Calendar.DECEMBER);
+            cal.set(Calendar.DAY_OF_MONTH, 25);
+
+            for (int i=0; i<365+10; ++i) {
+                Date yesterday = cal.getTime();
+                int yesterday_day = cal.get(Calendar.DAY_OF_MONTH);
+                cal.add(Calendar.DAY_OF_MONTH, 1);
+                if (yesterday_day == cal.get(Calendar.DAY_OF_MONTH)) {
+                    errln(tz[z] + " " +
+                          dateFormat.format(yesterday) + " +1d= " +
+                          dateFormat.format(cal.getTime()));
+            }
+        }
+    }
+}
 
     /**
      * Miscellaneous tests to increase coverage.

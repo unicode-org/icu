@@ -2767,8 +2767,10 @@ public abstract class Calendar implements Serializable, Cloneable {
         // operation.  If it has changed, then adjust the millis to
         // compensate.
         int dst = 0;
+        int hour = 0;
         if (keepHourInvariant) {
             dst = get(DST_OFFSET);
+            hour = internalGet(HOUR_OF_DAY);
         }
 
         setTimeInMillis(getTimeInMillis() + delta);
@@ -2776,7 +2778,18 @@ public abstract class Calendar implements Serializable, Cloneable {
         if (keepHourInvariant) {
             dst -= get(DST_OFFSET);
             if (dst != 0) {
+                // We have done an hour-invariant adjustment but the
+                // DST offset has altered.  We adjust millis to keep
+                // the hour constant.  In cases such as midnight after
+                // a DST change which occurs at midnight, there is the
+                // danger of adjusting into a different day.  To avoid
+                // this we make the adjustment only if it actually
+                // maintains the hour.
+                long t = time;
                 setTimeInMillis(time + dst);
+                if (get(HOUR_OF_DAY) != hour) {
+                    setTimeInMillis(t);
+                }
             }
         }
     }
