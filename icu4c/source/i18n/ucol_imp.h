@@ -78,6 +78,10 @@
  * to get the address add to the header address and cast properly.
  * Some offsets are zero if the corresponding structures are empty.
  *
+ * Tailoring binaries that only set options and contain no mappings etc.
+ * will have all offsets 0 except for the options and expansion offsets,
+ * which give the position and length of the options array.
+ *
  * uint32_t options; - offset to default collator options (UColOptionSet *),
  *                     a set of 32-bit values. See declaration of UColOptionSet for more details
  *
