@@ -151,8 +151,12 @@ strprepProfileLineFn(void *context,
    /*UBool* mapWithNorm = (UBool*) context;*/
     const char* typeName;
     uint32_t rangeStart=0,rangeEnd =0;
-    const char* filename = (const char*) context;
- 
+    
+    if(fieldCount != 3){
+        *pErrorCode = U_INVALID_FORMAT_ERROR;
+        return;
+    }
+
     typeName = fields[2][0];
     map = fields[1][0];
    
