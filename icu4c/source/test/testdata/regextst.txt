@@ -484,7 +484,20 @@
 "A*"                           4  ""
 "A*"                           5  ""
 				  
+#
+# Bug 4046
+#
+"(?m)^"                           "<0></0>AA\u000dBB\u000dCC\u000d"
+"(?m)^"                        2  "AA\u000d<0></0>BB\u000dCC\u000d"
+"(?m)^"                        3  "AA\u000dBB\u000d<0></0>CC\u000d"
+"(?m)^"                        4  "AA\u000dBB\u000dCC\u000d"
+"(?m)^"                        5  "AA\u000dBB\u000dCC\u000d"
+"(?m)^"                        6  "AA\u000dBB\u000dCC\u000d"
 
+"(?m)^"                           "<0></0>AA\u000d\u000aBB\u000d\u000aCC\u000d\u000a"
+"(?m)^"                        2  "AA\u000d\u000a<0></0>BB\u000d\u000aCC\u000d\u000a"
+"(?m)^"                        3  "AA\u000d\u000aBB\u000d\u000a<0></0>CC\u000d\u000a"
+"(?m)^"                        4  "AA\u000d\u000aBB\u000d\u000aCC\u000d\u000a"
 
 #
 #  Random debugging, Temporary

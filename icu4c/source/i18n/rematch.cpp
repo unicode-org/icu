@@ -453,19 +453,19 @@ UBool RegexMatcher::find() {
             }
 
             for (;;) {
-                UChar32 c = inputBuf[startPos-1];
+                c = inputBuf[startPos-1];
                 if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
-                    (c == 0x0a ||  c==0x0c || c==0x85 ||c==0x2028 || c==0x2029 )) {
-                    if (c == 0x0d && startPos < inputLen && inputBuf[startPos] == 0x0a) {
-                        startPos++;
-                    }
-                    MatchAt(startPos, fDeferredStatus);
-                    if (U_FAILURE(fDeferredStatus)) {
-                        return FALSE;
-                    }
-                    if (fMatch) {
-                        return TRUE;
-                    }
+                    (c == 0x0a || c == 0x0d ||  c==0x0c || c==0x85 ||c==0x2028 || c==0x2029 )) {
+                        if (c == 0x0d && startPos < inputLen && inputBuf[startPos] == 0x0a) {
+                            startPos++;
+                        }
+                        MatchAt(startPos, fDeferredStatus);
+                        if (U_FAILURE(fDeferredStatus)) {
+                            return FALSE;
+                        }
+                        if (fMatch) {
+                            return TRUE;
+                        }
                 }
                 if (startPos >= testLen) {
                     fMatch = FALSE;
