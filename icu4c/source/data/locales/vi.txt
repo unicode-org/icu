@@ -40,13 +40,13 @@ vi {
         "CN",
     }
     DayNames {
-        "Th\u01B0\u0301 hai",
-        "Th\u01B0\u0301 ba",
-        "Th\u01B0\u0301 t\u01B0",
-        "Th\u01B0\u0301 n\u0103m",
-        "Th\u01B0\u0301 s\u00E1u",
-        "Th\u01B0\u0301 ba\u0309y",
-        "Chu\u0309 nh\u00E2\u0323t",
+        "Th\u1EE9 hai",
+        "Th\u1EE9 ba",
+        "Th\u1EE9 t\u01B0",
+        "Th\u1EE9 n\u0103m",
+        "Th\u1EE9 s\u00E1u",
+        "Th\u1EE9 b\u1EA3y",
+        "Ch\u1EE7 nh\u1EADt",
     }
     LocaleID:int { 0x002A }
 //    LocaleString { "vi" }
@@ -65,18 +65,18 @@ vi {
         "Thg 12",
     }
     MonthNames {
-        "Th\u00E1ng m\u00F4\u0323t",
+        "Th\u00E1ng m\u1ED9t",
         "Th\u00E1ng hai",
         "Th\u00E1ng ba",
         "Th\u00E1ng t\u01B0",
         "Th\u00E1ng n\u0103m",
         "Th\u00E1ng s\u00E1u",
-        "Th\u00E1ng ba\u0309y",
+        "Th\u00E1ng b\u1EA3y",
         "Th\u00E1ng t\u00E1m",
         "Th\u00E1ng ch\u00EDn",
-        "Th\u00E1ng m\u01B0\u01A1\u0300i",
-        "Th\u00E1ng m\u01B0\u01A1\u0300i m\u00F4\u0323t",
-        "Th\u00E1ng m\u01B0\u01A1\u0300i hai",
+        "Th\u00E1ng m\u01B0\u1EDDi",
+        "Th\u00E1ng m\u01B0\u1EDDi m\u1ED9t",
+        "Th\u00E1ng m\u01B0\u1EDDi hai",
     }
     NumberElements {
         ",",
