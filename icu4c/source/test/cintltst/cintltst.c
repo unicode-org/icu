@@ -29,6 +29,10 @@ U_CDECL_END
 #include "unicode/ucnv.h"
 #include "unicode/ures.h"
 
+#ifdef XP_MAC_CONSOLE
+#   include <console.h>
+#endif
+
 U_CAPI void U_EXPORT2 ucnv_orphanAllConverters();
 
 static char* _testDirectory=NULL;
@@ -44,7 +48,13 @@ int main ( int argc, const char **argv )
     /* initial check for the default converter */
     UErrorCode errorCode = U_ZERO_ERROR;
     UResourceBundle *rb;
-    UConverter *cnv = ucnv_open(NULL, &errorCode);
+    UConverter *cnv;
+    
+#ifdef XP_MAC_CONSOLE
+	argc = ccommand(&argv);
+#endif
+
+    cnv  = ucnv_open(NULL, &errorCode);
     if(cnv != NULL) {
         /* ok */
         ucnv_close(cnv);
