@@ -56,6 +56,7 @@ static void _HZClose(UConverter *converter);
 static void _HZReset(UConverter *converter, UConverterResetChoice choice);
 
 U_CFUNC void _HZ_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *err);
+U_CFUNC UConverter * _HZ_SafeClone(const UConverter 	*cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
 
 U_CFUNC void UConverter_toUnicode_HZ_OFFSETS_LOGIC (UConverterToUnicodeArgs *args,
                                                             UErrorCode *err);
@@ -82,7 +83,8 @@ static UConverterImpl _HZImpl={
     
     NULL,
     NULL,
-    _HZ_WriteSub
+    _HZ_WriteSub,
+	_HZ_SafeClone
 };
 
 const UConverterStaticData _HZStaticData={
@@ -643,3 +645,42 @@ _HZ_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *e
                            buffer, (int32_t)(p - buffer),
                            offsetIndex, err);
 }
+
+/* structure for SafeClone calculations */
+struct cloneStruct
+{
+	UConverter cnv;
+	UConverterDataHZ mydata;
+};
+
+
+U_CFUNC UConverter * 
+_HZ_SafeClone(
+			const UConverter *cnv, 
+			void *stackBuffer, 
+			int32_t *pBufferSize, 
+			UErrorCode *status)
+{
+	struct cloneStruct * localClone;
+	int32_t bufferSizeNeeded = sizeof(struct cloneStruct);
+
+    if (U_FAILURE(*status)){
+        return 0;
+    }
+	
+	if (*pBufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+		*pBufferSize = 	bufferSizeNeeded;
+		return 0;
+    }
+
+    localClone = (struct cloneStruct *)stackBuffer;
+    memcpy(&localClone->cnv, cnv, sizeof(UConverter));
+	localClone->cnv.isCopyLocal = TRUE;
+	
+	memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataHZ));
+	localClone->cnv.extraInfo = &localClone->mydata;
+
+	return &localClone->cnv;
+}
+
+
