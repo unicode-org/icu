@@ -458,6 +458,12 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\currfmt.cpp">
+			</File>
+			<File
+				RelativePath=".\currfmt.h">
+			</File>
+			<File
 				RelativePath=".\datefmt.cpp">
 			</File>
 			<File
@@ -659,6 +665,26 @@
 			</File>
 			<File
 				RelativePath=".\japancal.h">
+			</File>
+			<File
+				RelativePath=".\measfmt.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\measfmt.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\msgfmt.cpp">

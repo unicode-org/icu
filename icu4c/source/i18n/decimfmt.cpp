@@ -1198,12 +1198,6 @@ Formattable& DecimalFormat::parseCurrency(const UnicodeString& text,
     return result;
 }
 
-Formattable& DecimalFormat::parseCurrency(const UnicodeString& text,
-                                          Formattable& result,
-                                          UErrorCode& status) const {
-    return NumberFormat::parseCurrency(text, result, status);
-}
-
 /**
  * Parses the given text as either a number or a currency amount.
  * @param text the string to parse
