@@ -174,8 +174,8 @@ strcpy_returnEnd(char *dest, const char *src) {
  *                           this one function, but the whole scheme.)
  *                            
  *------------------------------------------------------------------------------*/
-static char *
-computeDirPath(const char *path, char *pathBuffer) {
+char *
+uprv_computeDirPath(const char *path, char *pathBuffer) {
     char   *finalSlash;       /* Ptr to last dir separator in input path, or null if none. */
     int     pathLen;          /* Length of the returned directory path                     */
     
@@ -434,7 +434,7 @@ openCommonData(
      */
 
     /* try path/basename first, then basename only */
-    basename=computeDirPath(path, pathBuffer);       /*  pathBuffer = directory path */
+    basename=uprv_computeDirPath(path, pathBuffer);       /*  pathBuffer = directory path */
     suffix=strcpy_returnEnd(basename, inBasename);   /*     append the base name.    */
     uprv_strcpy(suffix, ".dat");                     /*     append ".dat"            */
 
@@ -464,6 +464,11 @@ openCommonData(
 }
 
 
+#ifdef OS390
+#   define MAX_STUB_ENTRIES 7
+#else
+#   define MAX_STUB_ENTRIES 0
+#endif
 
 
 /*----------------------------------------------------------------------*
@@ -489,7 +494,7 @@ static UBool extendICUData(UDataMemory *failedData, UErrorCode *pErr)
     UDataMemory   *pData;
     UDataMemory   copyPData;
 
-    if (failedData->vFuncs->NumEntries(failedData) > 0) {
+    if (failedData->vFuncs->NumEntries(failedData) > MAX_STUB_ENTRIES) {
         /*  Not the stub.  We can't extend.  */
         return FALSE;
     }
@@ -738,7 +743,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
     /* the data was not found in the common data,  look further, */
     /* try to get an individual data file */
-    basename=computeDirPath(path, pathBuffer);
+    basename=uprv_computeDirPath(path, pathBuffer);
     if(isICUData) {
         inBasename=COMMON_DATA_NAME;
     } else {
