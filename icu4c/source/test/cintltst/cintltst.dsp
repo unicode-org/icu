@@ -245,6 +245,10 @@ SOURCE=.\nucnvtst.c
 
 SOURCE=.\susctest.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\udatatst.c
+# End Source File
 # End Group
 # Begin Group "Header Files"
 

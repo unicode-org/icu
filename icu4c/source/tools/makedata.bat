@@ -83,6 +83,19 @@ echo %ICU_DATA%tz.dat>>mkmap.tmp
 %conv% -p "$ICU_DATA$" -old ".ucm" -new ".cnv">>mkmap.tmp
 gencmn\%toolversion%\gencmn 1000000 mkmap.tmp
 
+echo create memory mappable test.dat using gentest and creating test_dat.c 
+gentest\%toolversion%\gentest 
+genccode\%toolversion%\genccode "%ICU_DATA%test.dat"
+
+echo create the test data DLL
+type mkobj.cl>mkobj.tmp
+echo "%ICU_DATA%test_dat.c">>mkobj.tmp
+cl @mkobj.tmp
+
+echo "/out:%ICU_DATA%test_dat.dll">mkdll.tmp
+echo test_dat.obj>>mkdll.tmp
+type mkdll.lk>>mkdll.tmp
+link @mkdll.tmp
 
 goto :end
 
