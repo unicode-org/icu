@@ -48,11 +48,34 @@ public final class ICUData {
 			i = root.getResourceAsStream(resourceName);
 		}
 		if (i == null && required) {
-			throw new InternalError("could not locate data " + resourceName);
+			throw new InternalError("could not locate data " + resourceName+ " " + root.getPackage().getName());
 		}
 		return i;
 	}
-	
+    private static InputStream getStream(final ClassLoader loader, final String resourceName, boolean required) {
+        InputStream i = null;
+        if (System.getSecurityManager() != null) {
+            i = (InputStream)AccessController.doPrivileged(
+            new PrivilegedAction() {
+                public Object run() {
+                    return loader.getResourceAsStream(resourceName);
+                }
+            });
+        } else {
+            i = loader.getResourceAsStream(resourceName);
+        }
+        if (i == null && required) {
+            throw new InternalError("could not locate data " + resourceName+ " " + loader.toString());
+        }
+        return i;
+    }
+    
+    public static InputStream getStream(ClassLoader loader, String resourceName){
+        return getStream(loader,resourceName, false);   
+    }
+    public static InputStream getRequiredStream(ClassLoader loader, String resourceName){
+        return getStream(loader,resourceName, true);   
+    }
 	/*
 	 * Convenience override that calls getStream(ICUData.class, resourceName, false);
 	 */
