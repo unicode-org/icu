@@ -1,0 +1,83 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2003-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// This is for Baffin Bay Inuktitut and other dialects have other terms
+// Contributed by Michael Everson <everson @ evertype . com>
+
+iu {
+    Version { "x0.1" }
+    DayAbbreviations {
+        "\u14C8\u1466\u14F0\u1591\u152D", // naatsiinguja - abbreviations are not used
+        "\u14C7\u14A1\u1490\u153E\u152D\u1405", // naggajjau
+        "\u14C7\u14A1\u1490\u153E\u152D\u1405\u14D5\u1585\u146D", // naggajjauliqqi
+        "\u1431\u1593\u1466\u14EF\u1585", // pingatsiq
+        "\u14EF\u1455\u14BB\u14A5\u1585", // sitammiq
+        "\u1455\u14EA\u14D5\u1550\u14A5\u1585", // tallirmiq
+        "\u14C8\u1466\u14F0\u1591\u152D\u14D5\u1585\u157F", // naatsiingujalaarniaq
+    }
+    DayNames {
+        "\u14C8\u1466\u14F0\u1591\u152D", // naatsiinguja
+        "\u14C7\u14A1\u1490\u153E\u152D\u1405", // naggajjau
+        "\u14C7\u14A1\u1490\u153E\u152D\u1405\u14D5\u1585\u146D", // naggajjauliqqi
+        "\u1431\u1593\u1466\u14EF\u1585", // pingatsiq
+        "\u14EF\u1455\u14BB\u14A5\u1585", // sitammiq
+        "\u1455\u14EA\u14D5\u1550\u14A5\u1585", // tallirmiq
+        "\u14C8\u1466\u14F0\u1591\u152D\u14D5\u1585\u157F", // naatsiingujalaarniaq
+    }
+    MonthAbbreviations {
+        "\u152D\u14D0\u14C4\u140A\u14D5", // jannuali
+        "\u1555\u155D\u1557\u140A\u14D5", // vivvuali
+        "\u14AB\u1466\u14EF", // maatsi
+        "\u140A\u1403\u1449\u1433\u14D7", // aippulu
+        "\u14AA\u1403", // mai
+        "\u152B\u14C2", // juuni
+        "\u152A\u14DA\u1403", // julai
+        "\u140A\u1405\u14A1\u148D\u14EF", // auggusi
+        "\u14F0\u1466\u144F\u155D\u1559", // siittiivva
+        "\u1406\u1466\u1451\u155D\u1559", // uuttuuvva
+        "\u14C5\u1559\u1403\u155D\u1559", // nuuvaivva
+        "\u144F\u14F0\u155D\u1559", // tiisiivva
+    }
+    MonthNames {
+        "\u152D\u14D0\u14C4\u140A\u14D5", // jannuali
+        "\u1555\u155D\u1557\u140A\u14D5", // vivvuali
+        "\u14AB\u1466\u14EF", // maatsi
+        "\u140A\u1403\u1449\u1433\u14D7", // aippulu
+        "\u14AA\u1403", // mai
+        "\u152B\u14C2", // juuni
+        "\u152A\u14DA\u1403", // julai
+        "\u140A\u1405\u14A1\u148D\u14EF", // auggusi
+        "\u14F0\u1466\u144F\u155D\u1559", // siittiivva
+        "\u1406\u1466\u1451\u155D\u1559", // uuttuuvva
+        "\u14C5\u1559\u1403\u155D\u1559", // nuuvaivva
+        "\u144F\u14F0\u155D\u1559", // tiisiivva
+    }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221E",
+//        "\uFFFD",
+//    }
+    LocaleScript:array{
+        "Latn",  // ISO 15924 Name
+    }
+    ExemplarCharacters { "[\u1403\u1404\u1405\u1406\u140A\u140B \u1431\u1432\u1433\u1434\u1438\u1439\u1449 \u144E\u144F\u1450\u1451\u1455\u1456\u1466 \u146D\u146E\u146F\u1470\u1472\u1473\u1483 \u148B\u148C\u148D\u148E\u1490\u1491\u14A1 \u14A5\u14A6\u14A7\u14A8\u14AA\u14AB\u14BB \u14C2\u14C3\u14C4\u14C5\u14C7\u14C8\u14D0 \u14EF\u14F0\u14F1\u14F2\u14F4\u14F5\u1505 \u14D5\u14D6\u14D7\u14D8\u14DA\u14DB\u14EA \u1528\u1529\u152A\u152B\u152D\u152E\u153E \u1555\u1556\u1557\u1558\u1559\u155A\u155D \u1546\u1547\u1548\u1549\u154B\u154C\u1550 \u157F\u1580\u1581\u1582\u1583\u1582\u1585 \u158F\u1592\u1591\u1592\u1593\u1594\u1595 \u1671\u1672\u1673\u1674\u1675\u1676\u1596 \u15A0\u15A1\u15A2\u14D8\u15A3\u15A4\u15A5\u15A6]" }
+    // /**************** Info Below is needed ****************/
+    // collations{}
+    // Countries{}
+    // Eras{}
+    // Languages{}
+    // ShortLanguage { }
+    // localPatternChars{}
+    //
+}
