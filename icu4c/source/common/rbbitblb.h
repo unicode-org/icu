@@ -44,6 +44,7 @@ public:
                                         //     Sufficient memory must exist at
                                         //     the specified location.
 
+
 private:
     void     calcNullable(RBBINode *n);
     void     calcFirstPos(RBBINode *n);
@@ -75,6 +76,7 @@ private:
     UVector          *fDStates;            //  D states (Aho's terminology)
                                            //  Index is state number
                                            //  Contents are RBBIStateDescriptor pointers.
+
 
     RBBITableBuilder(const RBBITableBuilder &other); // forbid copying of this class
     RBBITableBuilder &operator=(const RBBITableBuilder &other); // forbid copying of this class

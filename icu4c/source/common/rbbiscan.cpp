@@ -32,6 +32,7 @@
 #include "rbbirb.h"
 #include "rbbinode.h"
 #include "rbbiscan.h"
+#include "rbbitblb.h"
 
 #include "uassert.h"
 
@@ -473,17 +474,15 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action)
             } else if (opt == "LBCMNoChain") {
                 fRB->fLBCMNoChain = TRUE;
             } else if (opt == "forward") {
-                fRB->fDefaultTree = &fRB->fForwardTree;
+                fRB->fDefaultTree   = &fRB->fForwardTree;
             } else if (opt == "reverse") {
-                fRB->fDefaultTree = &fRB->fReverseTree;
+                fRB->fDefaultTree   = &fRB->fReverseTree;
             } else if (opt == "safe_forward") {
-                fRB->fDefaultTree = &fRB->fSafeFwdTree;
+                fRB->fDefaultTree   = &fRB->fSafeFwdTree;
             } else if (opt == "safe_reverse") {
-                fRB->fDefaultTree = &fRB->fSafeRevTree;
+                fRB->fDefaultTree   = &fRB->fSafeRevTree;
             } else if (opt == "lookAheadHardBreak") {
-                // at the moment do nothing for this
-                // the code is handled in rbbi.cpp
-                // todo: think about how to handle this
+                fRB->fLookAheadHardBreak = TRUE;
             } else {
                 error(U_BRK_UNRECOGNIZED_OPTION);
             }
