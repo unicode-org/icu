@@ -169,44 +169,53 @@ IntlTest::reportCResult( UnicodeString &source, UnicodeString &target,
              Collator::EComparisonResult keyResult,
                          Collator::EComparisonResult expectedResult )
 {
-  if (expectedResult < -1 || expectedResult > 1)
+    if (expectedResult < -1 || expectedResult > 1)
     {
-      errln("***** invalid call to reportCResult ****");
-      return;
+        errln("***** invalid call to reportCResult ****");
+        return;
     }
   
-  if (compareResult != expectedResult)
-    {
-      UnicodeString msg1("compare("), msg2(", "), msg3(") returned "), msg4("; expected ");
-      UnicodeString prettySource, prettyTarget, sExpect, sResult;
+    UBool ok1 = (compareResult == expectedResult);
+    UBool ok2 = (keyResult == expectedResult);
+
+    if (ok1 && ok2 && !verbose) {
+        // Keep non-verbose, passing tests fast
+        return;
+    } else {
+        UnicodeString msg1(ok1 ? "Ok: compare(" : "FAIL: compare(");
+        UnicodeString msg2(", "), msg3(") returned "), msg4("; expected ");
+        UnicodeString prettySource, prettyTarget, sExpect, sResult;
       
-      prettify(source, prettySource);
-      prettify(target, prettyTarget);
-      appendCompareResult(compareResult, sResult);
-      appendCompareResult(expectedResult, sExpect);
+        prettify(source, prettySource);
+        prettify(target, prettyTarget);
+        appendCompareResult(compareResult, sResult);
+        appendCompareResult(expectedResult, sExpect);
       
-      errln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult + msg4 + sExpect);
-    }
-  
-  if (keyResult != expectedResult)
-    {
-      UnicodeString msg1("key("), msg2(").compareTo(key("), msg3(")) returned "), msg4("; expected ");
-      UnicodeString prettySource, prettyTarget, sExpect, sResult;
+        if (ok1) {
+            logln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult);
+        } else {
+            errln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult + msg4 + sExpect);
+        }
+
+        msg1 = UnicodeString(ok2 ? "Ok: key(" : "FAIL: key(");
+        msg2 = ").compareTo(key(";
+        msg3 = ")) returned ";
       
-      prettify(source, prettySource);
-      prettify(target, prettyTarget);
-      appendCompareResult(keyResult, sResult);
-      appendCompareResult(expectedResult, sExpect);
+        appendCompareResult(keyResult, sResult);
       
-      errln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult + msg4 + sExpect);
+        if (ok2) {
+            logln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult);
+        } else {
+            errln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult + msg4 + sExpect);
       
-      msg1 = "  ";
-      msg2 = " vs. ";
+            msg1 = "  ";
+            msg2 = " vs. ";
       
-      prettify(sourceKey, prettySource);
-      prettify(targetKey, prettyTarget);
+            prettify(sourceKey, prettySource);
+            prettify(targetKey, prettyTarget);
       
-      errln(msg1 + prettySource + msg2 + prettyTarget);
+            errln(msg1 + prettySource + msg2 + prettyTarget);
+        }
     }
 }
 
