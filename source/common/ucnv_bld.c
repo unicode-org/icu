@@ -54,52 +54,53 @@ converterData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
     &_UTF7Data, &_Bocu1Data, &_UTF16Data, &_UTF32Data, &_CESU8Data
 };
 
+/* Please keep this in sorted order for getAlgorithmicTypeFromName */
 static struct {
   const char *name;
   const UConverterType type;
 } const cnvNameType[] = {
-  { "ISO-8859-1", UCNV_LATIN_1 },
-  { "UTF-8", UCNV_UTF8 },
-  { "UTF-16", UCNV_UTF16 },
-  { "UTF-16BE", UCNV_UTF16_BigEndian },
-  { "UTF-16LE", UCNV_UTF16_LittleEndian },
-#if U_IS_BIG_ENDIAN
-  { "UTF16_PlatformEndian", UCNV_UTF16_BigEndian },
-  { "UTF16_OppositeEndian", UCNV_UTF16_LittleEndian },
-#else
-  { "UTF16_PlatformEndian", UCNV_UTF16_LittleEndian },
-  { "UTF16_OppositeEndian", UCNV_UTF16_BigEndian},
-#endif
-  { "UTF-32", UCNV_UTF32 },
-  { "UTF-32BE", UCNV_UTF32_BigEndian },
-  { "UTF-32LE", UCNV_UTF32_LittleEndian },
-#if U_IS_BIG_ENDIAN
-  { "UTF32_PlatformEndian", UCNV_UTF32_BigEndian },
-  { "UTF32_OppositeEndian", UCNV_UTF32_LittleEndian },
-#else
-  { "UTF32_PlatformEndian", UCNV_UTF32_LittleEndian },
-  { "UTF32_OppositeEndian", UCNV_UTF32_BigEndian},
-#endif
+  { "BOCU-1", UCNV_BOCU1 },
+  { "CESU-8", UCNV_CESU8 },
+  { "HZ",UCNV_HZ },
+  { "ISCII", UCNV_ISCII },
   { "ISO_2022", UCNV_ISO_2022 },
+  { "ISO-8859-1", UCNV_LATIN_1 },
   { "LMBCS-1", UCNV_LMBCS_1 },
+  { "LMBCS-11",UCNV_LMBCS_11 },
+  { "LMBCS-16",UCNV_LMBCS_16 },
+  { "LMBCS-17",UCNV_LMBCS_17 },
+  { "LMBCS-18",UCNV_LMBCS_18 },
+  { "LMBCS-19",UCNV_LMBCS_19 },
   { "LMBCS-2", UCNV_LMBCS_2 },
   { "LMBCS-3", UCNV_LMBCS_3 },
   { "LMBCS-4", UCNV_LMBCS_4 },
   { "LMBCS-5", UCNV_LMBCS_5 },
   { "LMBCS-6", UCNV_LMBCS_6 },
   { "LMBCS-8", UCNV_LMBCS_8 },
-  { "LMBCS-11",UCNV_LMBCS_11 },
-  { "LMBCS-16",UCNV_LMBCS_16 },
-  { "LMBCS-17",UCNV_LMBCS_17 },
-  { "LMBCS-18",UCNV_LMBCS_18 },
-  { "LMBCS-19",UCNV_LMBCS_19 },
-  { "HZ",UCNV_HZ },
   { "SCSU", UCNV_SCSU },
-  { "ISCII", UCNV_ISCII },
   { "US-ASCII", UCNV_US_ASCII },
+  { "UTF-16", UCNV_UTF16 },
+  { "UTF-16BE", UCNV_UTF16_BigEndian },
+  { "UTF-16LE", UCNV_UTF16_LittleEndian },
+#if U_IS_BIG_ENDIAN
+  { "UTF16_OppositeEndian", UCNV_UTF16_LittleEndian },
+  { "UTF16_PlatformEndian", UCNV_UTF16_BigEndian },
+#else
+  { "UTF16_OppositeEndian", UCNV_UTF16_BigEndian},
+  { "UTF16_PlatformEndian", UCNV_UTF16_LittleEndian },
+#endif
+  { "UTF-32", UCNV_UTF32 },
+  { "UTF-32BE", UCNV_UTF32_BigEndian },
+  { "UTF-32LE", UCNV_UTF32_LittleEndian },
+#if U_IS_BIG_ENDIAN
+  { "UTF32_OppositeEndian", UCNV_UTF32_LittleEndian },
+  { "UTF32_PlatformEndian", UCNV_UTF32_BigEndian },
+#else
+  { "UTF32_OppositeEndian", UCNV_UTF32_BigEndian },
+  { "UTF32_PlatformEndian", UCNV_UTF32_LittleEndian },
+#endif
   { "UTF-7", UCNV_UTF7 },
-  { "BOCU-1", UCNV_BOCU1 },
-  { "CESU-8", UCNV_CESU8 }
+  { "UTF-8", UCNV_UTF8 }
 };
 
 
@@ -107,9 +108,9 @@ static struct {
  *goes to disk and opens it.
  *allocates the memory and returns a new UConverter object
  */
-static UConverterSharedData *createConverterFromFile (const char *pkg, const char *converterName, UErrorCode * err);
+static UConverterSharedData *createConverterFromFile(const char *pkg, const char *converterName, UErrorCode * err);
 
-static const UConverterSharedData *getAlgorithmicTypeFromName (const char *realName);
+static const UConverterSharedData *getAlgorithmicTypeFromName(const char *realName);
 
 /**
  * Un flatten shared data from a UDATA..
@@ -207,12 +208,33 @@ ucnv_copyPlatformString(char *platformString, UConverterPlatform pltfrm)
 static const UConverterSharedData *
 getAlgorithmicTypeFromName(const char *realName)
 {
-    int i;
-    for(i=0; i<sizeof(cnvNameType)/sizeof(cnvNameType[0]); ++i) {
-        if(ucnv_compareNames(realName, cnvNameType[i].name)==0) {
-            return converterData[cnvNameType[i].type];
+    uint32_t mid, start, limit;
+	uint32_t lastMid;
+    int result;
+
+    /* do a binary search for the alias */
+    start = 0;
+    limit = sizeof(cnvNameType)/sizeof(cnvNameType[0]);
+    mid = limit;
+	lastMid = UINT32_MAX;
+
+    for (;;) {
+        mid = (uint32_t)((start + limit) / 2);
+		if (lastMid == mid) {	/* Have we moved? */
+			break;	/* We haven't moved, and it wasn't found. */
+		}
+		lastMid = mid;
+        result = ucnv_compareNames(realName, cnvNameType[mid].name);
+
+        if (result < 0) {
+            limit = mid;
+        } else if (result > 0) {
+            start = mid;
+        } else {
+            return converterData[cnvNameType[mid].type];
         }
     }
+
     return NULL;
 }
 
