@@ -2282,7 +2282,6 @@ unorm_normalize(const UChar *src, int32_t srcLength,
                                    pErrorCode);
 }
 
-U_NAMESPACE_BEGIN
 
 /* iteration functions ------------------------------------------------------ */
 
@@ -2670,9 +2669,9 @@ unorm_nextNormalize(UChar *&dest, int32_t &destCapacity,
     return destLength;
 }
 
-U_NAMESPACE_END
 /*
  * ### TODO: check if NF*D and FCD iteration finds optimal boundaries
  * and if not, how hard it would be to improve it.
  * For example, see _findSafeFCD().
  */
+

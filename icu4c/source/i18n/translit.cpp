@@ -86,6 +86,8 @@ static UMTX registryMutex = 0;
  */
 static TransliteratorRegistry* registry = 0;
 
+U_NAMESPACE_BEGIN
+
 /**
  * Class identifier for subclasses of Transliterator that do not
  * define their class (anonymous subclasses).
@@ -1506,6 +1508,8 @@ void Transliterator::initializeRegistry(void) {
     ucln_i18n_registerCleanup();
 }
 
+U_NAMESPACE_END
+
 // Defined in ucln_in.h:
 
 /**
@@ -1520,6 +1524,5 @@ U_CFUNC UBool transliterator_cleanup(void) {
     return TRUE;
 }
 
-U_NAMESPACE_END
-
 //eof
+
