@@ -127,14 +127,25 @@ struct DSTZone {
  * discriminating information.  This information comes from the file
  * tz.default.  Note that this is itself a zone number, like
  * those in the array starting at &zoneNumber.
+ *
+ * The gmtOffset field must be 4-aligned for some architectures.  To
+ * ensure this, we do two things: 1. The entire struct is 4-aligned.
+ * 2. The gmtOffset is placed at a 4-aligned position within the
+ * struct.  3. The size of the whole structure is padded out to 4n
+ * bytes.  We achieve this last condition by adding two bytes of
+ * padding after the last zoneNumber, if count is _even_.  That is,
+ * the struct size is 10+2count+padding, where padding is (count%2==0
+ * ? 2:0).  See gentz for implementation.
  */
 struct OffsetIndex {
-    int32_t   gmtOffset;  // in ms
+    int32_t   gmtOffset;  // in ms - 4-aligned
     uint16_t  nextEntryDelta;
     uint16_t  defaultZone; // a zone number from 0..TZHeader.count-1
     uint16_t  count;
-    uint16_t  padding;    // to make the next field 32-bit aligned
     uint16_t  zoneNumber; // There are actually 'count' uint16_t's here
+    // Following the 'count' uint16_t's starting with zoneNumber,
+    // there may be two bytes of padding to make the whole struct have
+    // a size of 4n.  nextEntryDelta skips over any padding.
 };
 
 // Information used to identify and validate the data
