@@ -31,16 +31,23 @@ $LVT = [:Hangul_Syllable_Type = LVT:];
 
 $HangulSyllable = $L+ | ($L* ($LV? $V+ | $LV | $LVT) $T*) | $T+;
 
-#
-#  Forward Break Rules
-#
+## -------------------------------------------------
+
+!!forward;
+
 $CR $LF;
 ([^$Control] | $HangulSyllable) $Extend*;
 
+## -------------------------------------------------
 
-#
-#  Reverse Rule, back up to the beginning of some preceding grapheme cluster.
-#
+!!reverse;
+
 $BackHangulSyllable = $L+ | ($T* ($V+$LV? | $LV | $LVT) $L*) | $T+;
 $BackOneCluster = ($LF $CR) | ($Extend* ([^$Control] | $BackHangulSyllable));
-! $BackOneCluster; 
+$BackOneCluster; 
+
+## -------------------------------------------------
+
+!!safe_reverse;
+
+$BackOneCluster; 

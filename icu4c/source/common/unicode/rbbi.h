@@ -472,6 +472,17 @@ protected:
       */
     void init();
 
+private:
+
+    /**
+     * This method backs the iterator back up to a "safe position" in the text.
+     * This is a position that we know, without any context, must be a break position.
+     * The various calling methods then iterate forward from this safe position to
+     * the appropriate position to return.  (For more information, see the description
+     * of buildBackwardsStateTable() in RuleBasedBreakIterator.Builder.)
+     * @internal
+     */
+    int32_t handleNewPrevious(void);
 };
 
 //------------------------------------------------------------------------------
