@@ -1138,13 +1138,13 @@ static void TestStringCopy()
     charOut[2] = (char)0x7B;
     charOut[3] = (char)0x7B;
 
-    temp[0] = 'a'; /* load codepage specific string into it */
-    temp[1] = 'b';
-    temp[2] = 'c';
-    temp[3] = 'a';
-    temp[4] = 'b';
-    temp[5] = 'c';
-    temp[6] = '\0';
+    temp[0] = 0x0061;
+    temp[1] = 0x0062;
+    temp[2] = 0x0063;
+    temp[3] = 0x0061;
+    temp[4] = 0x0062;
+    temp[5] = 0x0063;
+    temp[6] = 0x0000;
 
     u_austrncpy(charOut, temp, 3);
     if(strncmp(chars, charOut, 3) != 0){
