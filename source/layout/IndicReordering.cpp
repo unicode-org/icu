@@ -2,8 +2,8 @@
  * (C) Copyright IBM Corp. 1998 - 2003 - All Rights Reserved
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/IndicReordering.cpp,v $
- * $Date: 2003/04/12 00:37:11 $
- * $Revision: 1.10 $
+ * $Date: 2003/05/13 00:44:33 $
+ * $Revision: 1.11 $
  *
  */
 
@@ -250,7 +250,6 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
     while (prev < charCount) {
         le_int32 syllable = findSyllable(classTable, chars, prev, charCount);
         le_int32 matra, vmabove, vmpost = syllable;
-        le_int16 flags = 0;
 
         while (vmpost > prev && classTable->isVMpost(chars[vmpost - 1])) {
             vmpost -= 1;

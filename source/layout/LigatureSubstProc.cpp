@@ -42,7 +42,7 @@ void LigatureSubstitutionProcessor::beginStateTable()
     m = -1;
 }
 
-ByteOffset LigatureSubstitutionProcessor::processStateEntry(LEGlyphID *glyphs, le_int32 *charIndices, le_int32 &currGlyph, le_int32 glyphCount, EntryTableIndex index)
+ByteOffset LigatureSubstitutionProcessor::processStateEntry(LEGlyphID *glyphs, le_int32 * /*charIndices*/, le_int32 &currGlyph, le_int32 /*glyphCount*/, EntryTableIndex index)
 {
     const LigatureSubstitutionStateEntry *entry = &entryTable[index];
     ByteOffset newState = SWAPW(entry->newStateOffset);

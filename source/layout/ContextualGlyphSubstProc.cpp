@@ -36,7 +36,7 @@ void ContextualGlyphSubstitutionProcessor::beginStateTable()
     markGlyph = 0;
 }
 
-ByteOffset ContextualGlyphSubstitutionProcessor::processStateEntry(LEGlyphID *glyphs, le_int32 * charIndices, le_int32 &currGlyph, le_int32 glyphCount, EntryTableIndex index)
+ByteOffset ContextualGlyphSubstitutionProcessor::processStateEntry(LEGlyphID *glyphs, le_int32 * /*charIndices*/, le_int32 &currGlyph, le_int32 /*glyphCount*/, EntryTableIndex index)
 {
     const ContextualGlyphSubstitutionStateEntry *entry = &entryTable[index];
     ByteOffset newState = SWAPW(entry->newStateOffset);

@@ -683,6 +683,8 @@ static const LanguageMap languageMap[] =
     {"zho_TWN", zhtLanguageCode}  // Chinese - Taiwan
 };
 
+static const le_int32 languageMapCount = ARRAY_SIZE(languageMap);
+
 le_int32 ParagraphLayout::getLanguageCode(const Locale *locale)
 {
     char code[8] = {0, 0, 0, 0, 0, 0, 0, 0};
@@ -696,7 +698,7 @@ le_int32 ParagraphLayout::getLanguageCode(const Locale *locale)
         uprv_strcat(code, country);
     }
 
-    for (le_int32 i = 0; i < ARRAY_SIZE(languageMap); i += 1) {
+    for (le_int32 i = 0; i < languageMapCount; i += 1) {
         if (uprv_strcmp(code, languageMap[i].localeCode) == 0) {
             return languageMap[i].languageCode;
         }
@@ -734,7 +736,7 @@ le_int32 ParagraphLayout::previousBreak(le_int32 charIndex)
 
     // Create the BreakIterator if we don't already have one
     if (fBreakIterator == NULL) {
-        /*Locale thai("en_us"); //*/Locale thai("th");
+        Locale thai("th");
         UCharCharacterIterator *iter = new UCharCharacterIterator(fChars, fCharCount);
         UErrorCode status = U_ZERO_ERROR;
 

@@ -51,7 +51,7 @@ le_int32 IndicOpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_
         return 0;
     }
 
-    if (chars == NULL || offset < 0 || count < 0) {
+    if (chars == NULL || offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max) {
         success = LE_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -70,7 +70,7 @@ le_int32 IndicOpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_
 // Input: characters
 // Output: characters, char indices, tags
 // Returns: output character count
-le_int32 IndicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
+le_int32 IndicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool /*rightToLeft*/,
         LEUnicode *&outChars, le_int32 *&charIndices, const LETag **&featureTags, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {

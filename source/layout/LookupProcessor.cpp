@@ -106,8 +106,8 @@ le_int32 LookupProcessor::selectLookups(const FeatureTable *featureTable, LETag 
 LookupProcessor::LookupProcessor(const char *baseAddress,
         Offset scriptListOffset, Offset featureListOffset, Offset lookupListOffset,
         LETag scriptTag, LETag languageTag, const LETag *featureOrder)
-    : lookupListTable(NULL), featureListTable(NULL), lookupOrderArray(NULL), lookupSelectArray(NULL),
-      requiredFeatureTag(notSelected)
+    : lookupListTable(NULL), featureListTable(NULL), lookupSelectArray(NULL),
+      requiredFeatureTag(notSelected), lookupOrderArray(NULL), lookupOrderCount(0)
 {
     const ScriptListTable *scriptListTable = NULL;
     const LangSysTable *langSysTable = NULL;
