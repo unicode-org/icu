@@ -1177,7 +1177,7 @@ zh_TW {
             "#,##0%",
     }
     ShortCountry { "TWN" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

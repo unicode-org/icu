@@ -94,7 +94,7 @@ no {
             "\uFFFD",
     }
     ShortLanguage { "nor" }
-    localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
     Eras { 
             "f.Kr.",
             "e.Kr.",

@@ -111,7 +111,7 @@ bg {
             "\uFFFD",
     }
     ShortLanguage { "bul" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

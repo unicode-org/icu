@@ -872,7 +872,7 @@ ja {
             "\uFFFD",
     }
     ShortLanguage { "jpn" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Asia/Tokyo",

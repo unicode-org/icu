@@ -94,7 +94,7 @@ da {
             "\uFFFD",
     }
     ShortLanguage { "dan" }
-    localPatternChars { "GuMtkHmsSEDFwWahKz" }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
     Eras { 
             "f.Kr.",
             "e.Kr.",

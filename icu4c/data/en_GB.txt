@@ -40,7 +40,7 @@ en_GB {
     LocaleID { "0809" }
     LocaleString { "en_GB" }
     ShortCountry { "GBR" }
-    localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
     zoneStrings { 
         {
                 "Europe/London",

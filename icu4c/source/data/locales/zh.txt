@@ -908,7 +908,7 @@ zh {
             "",
     }
     ShortLanguage { "zho" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

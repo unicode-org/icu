@@ -94,7 +94,7 @@ tr {
             "\uFFFD",
     }
     ShortLanguage { "tur" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

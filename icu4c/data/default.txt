@@ -776,7 +776,7 @@ default {
     }
     ShortCountry { "" }
     ShortLanguage { "eng" }
-    localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
     zoneStrings { 
         {
                 "PST",

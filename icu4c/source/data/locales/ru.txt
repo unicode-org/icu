@@ -115,7 +115,7 @@ ru {
             "\uFFFD",
     }
     ShortLanguage { "rus" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

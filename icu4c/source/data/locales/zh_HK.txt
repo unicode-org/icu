@@ -54,7 +54,7 @@ zh_HK {
             "#,##0%",
     }
     ShortCountry { "HKG" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "CTT",

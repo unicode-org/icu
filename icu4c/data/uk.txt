@@ -111,7 +111,7 @@ uk {
             "\uFFFD",
     }
     ShortLanguage { "ukr" }
-    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

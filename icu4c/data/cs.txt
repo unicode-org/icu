@@ -98,7 +98,7 @@ cs {
             "\uFFFD",
     }
     ShortLanguage { "ces" }
-    localPatternChars { "GuMtkHmsSEDFwWahKz" }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",
