@@ -600,6 +600,26 @@ U_CAPI const char * U_EXPORT2 ucnv_getDefaultName (void);
  */
 U_CAPI void U_EXPORT2 ucnv_setDefaultName (const char *name);
 
+/**
+ * Fixes the backslash character mismapping.  For example, in SJIS, the backslash 
+ * character in the ASCII portion is also used to represent the yen currency sign.  
+ * When mapping from Unicode character 0x005C, it's unclear whether to map the 
+ * character back to yen or backslash in SJIS.  This function will take the input
+ * buffer and replace all the yen sign characters with backslash.  This is necessary
+ * when the user tries to open a file with the input buffer on Windows.
+ * @param source the input buffer to be fixed
+ * @param sourceLength the length of the input buffer
+ */
+U_CAPI void U_EXPORT2 ucnv_fixFileSeparator(const UConverter *cnv, UChar* source, int32_t sourceLen);
+
+/**
+ * Determines if the converter contains ambiguous mappings of the same
+ * character or not.
+ * @return TRUE if the converter contains ambiguous mapping of the same 
+ * character, FALSE otherwise.
+ */
+U_CAPI bool_t U_EXPORT2 ucnv_isAmbiguous(const UConverter *cnv);
+
 
 #endif
 /*_UCNV*/
