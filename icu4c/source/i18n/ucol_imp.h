@@ -287,8 +287,7 @@ struct incrementalContext {
   else if (*limit == order) {                                                \
          result = *(coll->expansionCESize + (limit - coll->endExpansionCE)); \
        }                                                                     \
-       else if (order ^ UCOL_IMPLICIT_SURROGATE_LAST_CE_MASK == 0 ||         \
-                order ^ UCOL_IMPLICIT_MISCELLANEOUS_LAST_CE_MASK == 0) {     \
+       else if ((order & 0xFFFF) == 0x00C0) {     \
               result = 2;                                                    \
             }                                                                \
             else {                                                           \
