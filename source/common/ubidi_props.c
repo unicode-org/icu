@@ -359,7 +359,10 @@ _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint
 U_CAPI void U_EXPORT2
 ubidi_addPropertyStarts(const UBiDiProps *bdp, const USetAdder *sa, UErrorCode *pErrorCode) {
     int32_t i, length;
-    UChar32 c;
+    UChar32 c, start, limit;
+
+    const uint8_t *jgArray;
+    uint8_t prev, jg;
 
     if(U_FAILURE(*pErrorCode)) {
         return;
@@ -373,6 +376,24 @@ ubidi_addPropertyStarts(const UBiDiProps *bdp, const USetAdder *sa, UErrorCode *
     for(i=0; i<length; ++i) {
         c=UBIDI_GET_MIRROR_CODE_POINT(bdp->mirrors[i]);
         sa->addRange(sa->set, c, c+1);
+    }
+
+    /* add the code points from the Joining_Group array where the value changes */
+    start=bdp->indexes[UBIDI_IX_JG_START];
+    limit=bdp->indexes[UBIDI_IX_JG_LIMIT];
+    jgArray=bdp->jgArray;
+    prev=0;
+    while(start<limit) {
+        jg=*jgArray++;
+        if(jg!=prev) {
+            sa->add(sa->set, start);
+            prev=jg;
+        }
+        ++start;
+    }
+    if(prev!=0) {
+        /* add the limit code point if the last value was not 0 (it is now start==limit) */
+        sa->add(sa->set, limit);
     }
 
     /* add code points with hardcoded properties, plus the ones following them */
