@@ -359,7 +359,10 @@ ucnv_io_getDefaultConverterName() {
     /* local variable to be thread-safe */
     const char *name=defaultConverterName;
     if(name==NULL) {
-        const char *codepage=uprv_getDefaultCodepage();
+        const char *codepage=0;
+        umtx_lock(NULL);        
+        codepage = uprv_getDefaultCodepage();
+        umtx_unlock(NULL);
         if(codepage!=NULL) {
             UErrorCode errorCode=U_ZERO_ERROR;
             name=ucnv_io_getConverterName(codepage, &errorCode);

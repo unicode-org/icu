@@ -201,7 +201,8 @@
 
 
 /**
- * Gets the system's default locale.
+ * Gets the system's default locale.  This pointer may become invalid if the uloc_setDefault()
+ * is called.
  *
  * @return the system default locale
  * @system
@@ -212,7 +213,8 @@ U_CAPI const char* U_EXPORT2
 uloc_getDefault(void);
 
 /**
- * Sets the system's default locale.
+ * Sets the system's default locale.  Call this once during setup or program initialization.  
+ * This is a system API.
  *
  * @param localeID the new system default locale
  * @param status the error information if the setting of default locale fails
