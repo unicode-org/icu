@@ -443,24 +443,22 @@ int32_t TransliteratorIDParser::instantiateList(UVector& list,
                                                 Transliterator* insert,
                                                 int32_t insertIndex,
                                                 UErrorCode& ec) {
-    // TODO: This is messy and error-prone.  Rewrite this to just use
-    // two vectors, one with Transliterators and one with SingleID
-    // objects.
-    UObjectDeleter save = list.setDeleter(_deleteSingleID);
+    UVector tlist(ec);
     if (U_FAILURE(ec)) {
-        goto FAIL;
+        goto RETURN;
     }
+    tlist.setDeleter(_deleteTransliterator);
+
     Transliterator* t;
     int32_t i;
-    for (i=0; i<=list.size(); ) { // [sic]: i<=list.size()
+    for (i=0; i<=list.size(); ++i) { // [sic]: i<=list.size()
         if (insertIndex == i) {
-            list.insertElementAt(insert, i, ec);
+            insertIndex = tlist.size();
+            tlist.addElement(insert, ec);
             if (U_FAILURE(ec)) {
-                goto PARTIAL_FAIL;
+                goto RETURN;
             }
             insert = NULL;
-            i++;
-            continue;
         }
 
         // We run the loop too long by one, so we can
@@ -470,50 +468,47 @@ int32_t TransliteratorIDParser::instantiateList(UVector& list,
         }
 
         SingleID* single = (SingleID*) list.elementAt(i);
-        if (single->basicID.length() == 0) {
-            list.removeElementAt(i);
-            if (insertIndex > i) {
-                --insertIndex;
-            }
-        } else {
+        if (single->basicID.length() != 0) {
             t = single->createInstance();
             if (t == NULL) {
                 ec = U_INVALID_ID;
-                goto PARTIAL_FAIL;
-            } else {
-                list.setElementAt(t, i);
-                ++i;
+                goto RETURN;
+            }
+            tlist.addElement(t, ec);
+            if (U_FAILURE(ec)) {
+                goto RETURN;
             }
         }
     }
 
     // An empty list is equivalent to a NULL transliterator.
-    if (list.size() == 0) {
+    if (tlist.size() == 0) {
         t = createBasicInstance(ANY_NULL, NULL);
         if (t == NULL) {
             // Should never happen
             ec = U_INTERNAL_TRANSLITERATOR_ERROR;
         }
-        list.addElement(t, ec);
+        tlist.addElement(t, ec);
     }
 
-    list.setDeleter(save);
-    return insertIndex;
+ RETURN:
 
- PARTIAL_FAIL:
-    // Delete entries 0..(i-1), which are now Transliterators.  Then
-    // fall through to FAIL, which will delete remaining entries as
-    // SingleID objects.
-    list.setDeleter(_deleteTransliterator);
-    while (--i >= 0) {
-        list.setElementAt((void*)NULL, i);
-    }
-    list.setDeleter(_deleteSingleID);
-    
- FAIL:
+    UObjectDeleter save = list.setDeleter(_deleteSingleID);
     list.removeAllElements();
+    list.setDeleter(_deleteTransliterator);
+
+    while (tlist.size() > 0) {
+        t = (Transliterator*) tlist.orphanElementAt(0);
+        list.addElement(t, ec);
+        if (U_FAILURE(ec)) {
+            delete t;
+            list.removeAllElements();
+            break;
+        }
+    }
+
+    delete insert; // Clean up in case of failure
     list.setDeleter(save);
-    delete insert;
     return insertIndex;
 }
 
