@@ -341,9 +341,9 @@ static void TestUDataGetInfo() {
     sizeof(UChar),
     0,
 
-    0x54, 0x65, 0x73, 0x74,     /* dataFormat="Test" */
-    9, 0, 0, 0,                 /* formatVersion */
-    4, 0, 0, 0                  /* dataVersion */
+    {0x54, 0x65, 0x73, 0x74},     /* dataFormat="Test" */
+    {9, 0, 0, 0},                 /* formatVersion */
+    {4, 0, 0, 0}                  /* dataVersion */
     };
     UErrorCode status=U_ZERO_ERROR;
     const char* name="cnvalias";
@@ -466,9 +466,9 @@ static void TestErrorConditions(){
         sizeof(UChar),
         0,
 
-        0x54, 0x65, 0x73, 0x74,     /* dataFormat="Test" */
-        9, 0, 0, 0,                 /* formatVersion */
-        4, 0, 0, 0                  /* dataVersion */
+        {0x54, 0x65, 0x73, 0x74},     /* dataFormat="Test" */
+        {9, 0, 0, 0},                 /* formatVersion */
+        {4, 0, 0, 0}                  /* dataVersion */
     };
 
     const char* name = "test";
