@@ -43,8 +43,18 @@ if test $ac_cv_lib_pthread_pthread_create = no; then
 AC_CHECK_LIB(cma, pthread_create)
 fi
 
-#only LINUX for now
+# check for dlopen()
+
+HAVE_DLOPEN=0
+
+#add more libs here..
 AC_CHECK_LIB(dl, dlopen)
+
+if test $ac_cv_lib_dl_dlopen = yes; then
+HAVE_DLOPEN=1
+fi
+
+AC_SUBST(HAVE_DLOPEN)
 
 dnl Checks for header files
 AC_CHECK_HEADERS(inttypes.h)
@@ -143,7 +153,9 @@ AC_ARG_ENABLE(mapped,
 		*) AC_MSG_ERROR(bad value ${enableval} for --enable-mapped) ;;
 		esac], 
 	mapped=false)
-ICU_CONDITIONAL(USE_MAPPED, test "$mapped" = true)
+
+ICU_CONDITIONAL(USE_MAPPED, test "$mapped" = true -o "$HAVE_DLOPEN" = 0)
+
 
 dnl Enable/disable tests
 AC_ARG_ENABLE(tests,
@@ -213,7 +225,7 @@ AC_OUTPUT([Makefile \
 		extra/Makefile extra/ustdio/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile tools/gencol/Makefile \
-		tools/rbdump/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile \
+		tools/rbdump/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile \
 	        tools/gennames/Makefile tools/toolutil/Makefile \
 		test/Makefile test/intltest/Makefile test/cintltst/Makefile \
 		test/ieeetest/Makefile \

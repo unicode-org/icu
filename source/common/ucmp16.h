@@ -76,11 +76,12 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.3 $ 8/25/98
+ * @version            $Revision: 1.4 $ 8/25/98
  * @author             Helena Shih
  */
 
 typedef struct CompactShortArray {
+  int32_t fStructSize;
   int16_t* fArray;
   uint16_t* fIndex;
   int32_t* fHashes;
@@ -88,6 +89,7 @@ typedef struct CompactShortArray {
   int16_t fDefaultValue;
   bool_t fCompact;    
   bool_t fBogus;
+  bool_t fAlias;
   int32_t kBlockShift;
   int32_t kBlockMask;
 } CompactShortArray;
@@ -125,6 +127,11 @@ U_CAPI  CompactShortArray* U_EXPORT2 ucmp16_openAdoptWithBlockShift(uint16_t *in
 								  int16_t defaultValue,
 								  int32_t blockShift);
 
+
+U_CAPI  CompactShortArray* U_EXPORT2 ucmp16_openAlias(uint16_t *indexArray,
+                                                      int16_t *newValues,
+                                                      int32_t count,
+                                                      int16_t defaultValue );
 
 U_CAPI  void U_EXPORT2 ucmp16_close(CompactShortArray* array);
  /**
@@ -205,6 +212,8 @@ U_CAPI  const int16_t* U_EXPORT2 ucmp16_getArray(const CompactShortArray* array)
 U_CAPI  const uint16_t* U_EXPORT2 ucmp16_getIndex(const CompactShortArray* array);
 
 
+/** INTERNAL USE ONLY **/
+U_CAPI  CompactShortArray * U_EXPORT2 ucmp16_cloneFromData(const uint8_t **source,  UErrorCode *status);
 
 #endif
 

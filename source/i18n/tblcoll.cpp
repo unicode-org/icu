@@ -717,7 +717,9 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
     }
 
   // Now try to load it up from a resource bundle text source file
-  ResourceBundle bundle(UnicodeString(Locale::getDataDirectory(),""), localeFileName, status);
+  UnicodeString dataDir = UnicodeString(Locale::getDataDirectory(),"");
+
+  ResourceBundle bundle(dataDir, localeFileName, status);
 
   // if there is no resource bundle file for the give locale, break out
   if(U_FAILURE(status))

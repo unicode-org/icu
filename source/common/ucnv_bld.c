@@ -1,14 +1,9 @@
 /*
- ********************************************************************************
- *                                                                              *
- * COPYRIGHT:                                                                   *
- *   (C) Copyright International Business Machines Corporation, 1998            *
- *   Licensed Material - Program-Property of IBM - All Rights Reserved.         *
- *   US Government Users Restricted Rights - Use, duplication, or disclosure    *
- *   restricted by GSA ADP Schedule Contract with IBM Corp.                     *
- *                                                                              *
- ********************************************************************************
- *
+ ********************************************************************
+ * COPYRIGHT: 
+ * Copyright (c) 1996-1999, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************
  *
  *  uconv_bld.c:
  *
@@ -26,11 +21,14 @@
 #include "ucnv_bld.h"
 #include "ucnv_err.h"
 #include "ucnv_imp.h"
+#include "udata.h"
 #include "ucnv.h"
 #include "umutex.h"
 #include "cstring.h"
 #include "cmemory.h"
 #include "filestrm.h"
+
+#include <stdio.h>
 
 /*Array used to generate ALGORITHMIC_CONVERTERS_HASHTABLE
  *should ALWAYS BE EMPTY STRING TERMINATED.
@@ -85,6 +83,11 @@ static void initializeAlgorithmicConverter (UConverter * myConverter);
  */
 
 static int32_t uhash_hashSharedData (void *sharedData);
+
+/**
+ * Un flatten shared data from a UDATA..
+ */
+U_CAPI  UConverterSharedData* U_EXPORT2 ucnv_data_unFlattenClone(const UConverterSharedData *data, UErrorCode *status);
 
 
 /*initializes some global variables */
@@ -263,6 +266,25 @@ CompactByteArray*  createCompactByteArrayFromFile (FileStream * infile,
   return ucmp8_openAdopt (myIndexArray, myByteArray, myValuesCount);
 }
 
+
+static bool_t
+isCnvAcceptable(void *context,
+             const char *type, const char *name,
+             UDataInfo *pInfo) {
+    return 
+        pInfo->size>=20 &&
+        pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
+        pInfo->charsetFamily==U_CHARSET_FAMILY &&
+        pInfo->sizeofUChar==U_SIZEOF_UCHAR &&
+        pInfo->dataFormat[0]==0x63 &&   /* dataFormat="cnvt" */
+        pInfo->dataFormat[1]==0x6e &&
+        pInfo->dataFormat[2]==0x76 &&
+        pInfo->dataFormat[3]==0x74 &&
+        pInfo->formatVersion[0]==1;
+}
+
+#define DATA_TYPE "cnv"
+
 UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
 {
   int32_t i = 0;
@@ -272,134 +294,60 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
   int32_t myIndexCount = 0;
   UConverter *myConverter = NULL;
   int32_t myCheck;
-  FileStream *infile = NULL;
   int8_t errorLevel = 0;
-  char throwAway[UCNV_COPYRIGHT_STRING_LENGTH];
-  char actualFullFilenameName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
+
+  UDataMemory *data;
 
   if (err == NULL || U_FAILURE (*err)) {
     return NULL;
   }
-
-  icu_strcpy (actualFullFilenameName, u_getDataDirectory ());
-  icu_strcat (actualFullFilenameName, fileName);
-  icu_strcat (actualFullFilenameName, CONVERTER_FILE_EXTENSION);
-
-  infile = T_FileStream_open (actualFullFilenameName, "rb");
-  if (infile == NULL)
-    {
-      *err = U_FILE_ACCESS_ERROR;
-      return NULL;
-    }
-
-  /*Reads the UCNV_FILE_CHECK_MARKER to assess the integrity of the file */
-  T_FileStream_read (infile, &myCheck, sizeof (int32_t));
-  if (myCheck != UCNV_FILE_CHECK_MARKER)
-    {
-      T_FileStream_close (infile);
-      *err = U_INVALID_TABLE_FILE;
-      return NULL;
-    }
-
-  /*Skips the copyright*/
-  T_FileStream_read(infile , throwAway, UCNV_COPYRIGHT_STRING_LENGTH);
   
+
+  data = udata_openChoice(NULL, DATA_TYPE, fileName, isCnvAcceptable, NULL, err);
+  if(U_FAILURE(*err))
+    {
+      return NULL;
+    }
+
   myConverter = (UConverter *) icu_malloc (sizeof (UConverter));
   if (myConverter == NULL)
     {
-      T_FileStream_close (infile);
+      udata_close(data);
       *err = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
 
   myConverter->sharedData =
-    (UConverterSharedData *) icu_malloc (sizeof (UConverterSharedData));
+    (UConverterSharedData *) udata_getMemory(data);
+
   if (myConverter->sharedData == NULL)
     {
-      T_FileStream_close (infile);
+      udata_close(data);
       icu_free (myConverter);
       *err = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
 
-  /*Reads in the UConverterSharedData object straight from file */
-  T_FileStream_read (infile, myConverter->sharedData, sizeof (UConverterSharedData));
+  /* clone it. OK to drop the original sharedData */
+  myConverter->sharedData = ucnv_data_unFlattenClone(myConverter->sharedData, err);
 
-  /*switches over the types of conversions
-   *allocates appropriate amounts of memory for the table
-   *and calls functions to read in the CompactArrays
-   */
-  switch (myConverter->sharedData->conversionType)
+  myConverter->sharedData->dataMemory = (void*)data; /* for future use */
+
+
+  if(U_FAILURE(*err))
     {
-    case UCNV_SBCS:
-      {
-        myConverter->sharedData->table = (UConverterTable *) icu_malloc (sizeof (UConverterSBCSTable));
-        if (myConverter->sharedData->table == NULL)
-          {
-            icu_free (myConverter->sharedData);
-            icu_free (myConverter);
-            *err = U_MEMORY_ALLOCATION_ERROR;
-            break;
-          }
-        T_FileStream_read (infile, myConverter->sharedData->table->sbcs.toUnicode, 256 * sizeof (UChar));
-        myConverter->sharedData->table->sbcs.fromUnicode = createCompactByteArrayFromFile (infile, err);
-      }
-      break;
+      udata_close(data);
+      icu_free (myConverter);
+      *err = U_MEMORY_ALLOCATION_ERROR;
+      return NULL;
+    }
 
-    case UCNV_DBCS:
-    case UCNV_EBCDIC_STATEFUL:
-      {
-        myConverter->sharedData->table = (UConverterTable *) icu_malloc (sizeof (UConverterDBCSTable));
-        if (myConverter->sharedData->table == NULL)
-          {
-            icu_free (myConverter->sharedData);
-            icu_free (myConverter);
-            *err = U_MEMORY_ALLOCATION_ERROR;
-            break;
-          }
-        myConverter->sharedData->table->dbcs.toUnicode = createCompactShortArrayFromFile (infile, err);
-        myConverter->sharedData->table->dbcs.fromUnicode = createCompactShortArrayFromFile (infile, err);
-      }
-      break;
-
-    case UCNV_MBCS:
-      {
-        myConverter->sharedData->table = (UConverterTable *) icu_malloc (sizeof (UConverterMBCSTable));
-        if (myConverter->sharedData->table == NULL)
-          {
-            icu_free (myConverter->sharedData);
-            icu_free (myConverter);
-            *err = U_MEMORY_ALLOCATION_ERROR;
-            break;
-          }
-        T_FileStream_read (infile, myConverter->sharedData->table->mbcs.starters, 256 * sizeof (bool_t));
-        myConverter->sharedData->table->mbcs.toUnicode = createCompactShortArrayFromFile (infile, err);
-        myConverter->sharedData->table->mbcs.fromUnicode = createCompactShortArrayFromFile (infile, err);
-      }
-      break;
-
-    default:
-      {
-        /*If it isn't any of the above, the file is invalid */
-        *err = U_INVALID_TABLE_FILE;
-        icu_free (myConverter->sharedData);
-        icu_free (myConverter);
-      }
-    };
-
-  /*there could be a U_FAILURE on the createCompact{Short,Byte}ArrayFromFile
-   *calls, if so we don't want to initialize
-   */
-
-  T_FileStream_close (infile);
   if (U_SUCCESS (*err))
     {
       initializeDataConverter (myConverter);
     }
 
   return myConverter;
-
-
 }
 
 
@@ -538,44 +486,56 @@ UConverterSharedData *getSharedConverterData (const char *name)
  */
 bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
 {
-  if (deadSharedData->referenceCounter > 0)
-    return FALSE;
-
-  switch (deadSharedData->conversionType)
+    if (deadSharedData->referenceCounter > 0)
+        return FALSE;
+    
+    /* Note: if we have a dataMemory, then that means that all ucmp's came
+       from udata, and their tables will go away at the end
+       of this function. So, we need to simply dealloc the UCMP8's themselves.
+       We're guaranteed that they do not allocate any further memory.
+       
+       When we have an API to simply 'init' a ucmp8, then no action at all will
+       need to happen.   --srl 
+    */
+    
+    switch (deadSharedData->conversionType)
     {
-
     case UCNV_SBCS:
-      {
+    {
         ucmp8_close (deadSharedData->table->sbcs.fromUnicode);
         icu_free (deadSharedData->table);
-        icu_free (deadSharedData);
-      };
-      break;
-
+    };
+    break;
+    
     case UCNV_MBCS:
-      {
+    {
         ucmp16_close (deadSharedData->table->mbcs.fromUnicode);
         ucmp16_close (deadSharedData->table->mbcs.toUnicode);
-        icu_free (deadSharedData->table);
-        icu_free (deadSharedData);
-      };
-      break;
+	icu_free (deadSharedData->table);
+    };
+    break;
 
     case UCNV_DBCS:
     case UCNV_EBCDIC_STATEFUL:
-      {
+    {
         ucmp16_close (deadSharedData->table->dbcs.fromUnicode);
         ucmp16_close (deadSharedData->table->dbcs.toUnicode);
-        icu_free (deadSharedData->table);
-        icu_free (deadSharedData);
-      };
-      break;
+	icu_free (deadSharedData->table);
+    };
+    break;
 
     default:
-      icu_free (deadSharedData);
     };
 
-  return TRUE;
+    if(deadSharedData->dataMemory != NULL)
+    {
+        UDataMemory *data = (UDataMemory*)deadSharedData->dataMemory;
+        udata_close(data);
+    }
+
+    icu_free (deadSharedData);
+    
+    return TRUE;
 }
 
 bool_t   isDataBasedConverter (const char *name)
@@ -983,7 +943,9 @@ UConverter *
       icu_free (myConverter);
       return NULL;
     }
+  mySharedData->structSize = sizeof(UConverterSharedData);
   mySharedData->table = NULL;
+  mySharedData->dataMemory = NULL;
   icu_strcpy (mySharedData->name, actualName);
   /*Initializes the referenceCounter to 1 */
   mySharedData->referenceCounter = 1;
@@ -995,3 +957,72 @@ UConverter *
   initializeAlgorithmicConverter (myConverter);
   return myConverter;
 }
+
+
+UConverterSharedData* ucnv_data_unFlattenClone(const UConverterSharedData *source, UErrorCode *status)
+{
+    const uint8_t *raw;
+    UConverterSharedData *data = NULL;
+    
+    if(U_FAILURE(*status))
+        return NULL;
+
+    if(source->structSize != sizeof(UConverterSharedData))
+    {
+        *status = U_INVALID_TABLE_FORMAT;
+        return NULL;
+    }
+
+  data = (UConverterSharedData*) malloc(sizeof(UConverterSharedData));
+  raw = (uint8_t*)source;
+  icu_memcpy(data,source,sizeof(UConverterSharedData));
+  
+  raw += data->structSize;
+
+  /*  data->table = (UConverterTable*)raw; */
+  
+  switch (data->conversionType)
+    {
+    case UCNV_SBCS:
+      data->table = malloc(sizeof(UConverterSBCSTable));
+      data->table->sbcs.toUnicode = (UChar*)raw;
+      raw += sizeof(UChar)*256;
+
+      data->table->sbcs.fromUnicode = ucmp8_cloneFromData(&raw, status);
+
+      break;
+
+    case UCNV_EBCDIC_STATEFUL:
+    case UCNV_DBCS:
+      data->table = icu_malloc(sizeof(UConverterDBCSTable));
+      data->table->dbcs.
+toUnicode=ucmp16_cloneFromData(&raw, status);
+      data->table->dbcs.fromUnicode =ucmp16_cloneFromData(&raw, status);
+
+      break;
+
+    case UCNV_MBCS:
+      data->table = icu_malloc(sizeof(UConverterMBCSTable));
+
+      data->table->mbcs.starters = (bool_t*)raw;
+      raw += sizeof(bool_t)*256;
+      
+      data->table->mbcs.toUnicode   = ucmp16_cloneFromData(&raw, status);
+      data->table->mbcs.fromUnicode = ucmp16_cloneFromData(&raw, status);
+
+      break;
+
+    default:
+      *status = U_INVALID_TABLE_FORMAT;
+      return NULL;
+    }
+  
+  return data;
+}
+
+
+
+
+
+
+

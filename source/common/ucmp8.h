@@ -26,11 +26,13 @@ U_CAPI int32_t U_EXPORT2 ucmp8_getkUnicodeCount(void);
 U_CAPI int32_t U_EXPORT2 ucmp8_getkBlockCount(void);
 
 typedef struct CompactByteArray {
+  uint32_t fStructSize;
   int8_t* fArray;
   uint16_t* fIndex;
   int32_t fCount;
-  bool_t fCompact; 
+  bool_t fCompact;
   bool_t fBogus;
+  bool_t fAlias;
 } CompactByteArray;
 
 #define UCMP8_kUnicodeCount 65536
@@ -79,7 +81,8 @@ U_CAPI  void U_EXPORT2 ucmp8_compact(CompactByteArray* array,
 /* Expanded takes the array back to a 65536 element array*/
 U_CAPI  void U_EXPORT2 ucmp8_expand(CompactByteArray* array);
 
-
+/** INTERNAL USE ONLY **/
+U_CAPI  CompactByteArray * U_EXPORT2 ucmp8_cloneFromData(const uint8_t **source, UErrorCode *status);
 
 #endif
 

@@ -327,7 +327,7 @@ void TestConvert()
     ucs_file_in = fopen(ucs_file_name,"rb");
         if (!ucs_file_in) 
         {
-            log_err("Couldn't open the Unicode file...\n");
+            log_err("Couldn't open the Unicode file [%s]... Exiting...\n", ucs_file_name);
             exit(0);
         }
 
@@ -578,9 +578,14 @@ void TestConvert()
            log_err("ucnv_toUChars() FAILED %s\n", myErrorName(err));
          else
            log_verbose(" ucnv_toUChars() o.k.\n");
+
+	if(u_strcmp(uchar1,uchar2)!=0) 
+	  log_err("equality test failed with convertion routine\n");         
       }
-              if(u_strcmp(uchar1,uchar2)!=0) 
-        log_err("equality test failed with convertion routine\n");         
+      else
+	{
+	  log_err("ERR: calling toUChars: Didn't get U_BUFFER_OVERFLOW .. expected it.\n");
+	}
     
      /*testing for ucnv_fromUnicode() and ucnv_toUnicode() */
          /*Clean up re-usable vars*/
@@ -632,10 +637,17 @@ void TestConvert()
         log_err("Equality test failed\n");
 
     /*sanity compare */
-    if(u_strcmp(uchar2, uchar3)==0)
-        log_verbose("Equality test o.k.\n");
+    if(uchar2 == NULL)
+      {
+	log_err("uchar2 was NULL (ccapitst.c line %d), couldn't do sanity check\n", __LINE__);
+      }
     else
-        log_err("Equality test failed\n");
+      {
+	if(u_strcmp(uchar2, uchar3)==0)
+	  log_verbose("Equality test o.k.\n");
+	else
+	  log_err("Equality test failed\n");
+      }
 
     fclose(ucs_file_in);    
     ucnv_close(myConverter);

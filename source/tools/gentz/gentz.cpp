@@ -103,7 +103,7 @@ class gentz {
 public:
     int     main(int argc, char *argv[]);
 private:
-    int32_t  writeTzDatFile(FileStream* out);
+    int32_t  writeTzDatFile();
     void     parseTzTextFile(FileStream* in);
 
     // High level parsing
@@ -202,23 +202,14 @@ int gentz::main(int argc, char *argv[]) {
     fprintf(stdout, "Read %ld standard zones, %ld dst zones, %ld zone names\n",
             header.standardCount, header.dstCount, zoneCount);
 
-    FileStream* out = T_FileStream_open(outfile, "w");
-    if (out == 0) {
-        die("Cannot open output file");
-    }
-    int32_t wlen = writeTzDatFile(out);
-    T_FileStream_close(out);
+    int32_t wlen = writeTzDatFile();
     fprintf(stdout, "Wrote to %s: %ld bytes\n",
             outfile, wlen);
-    // REMOVE THIS NOTICE when it no longer applies:
-    fprintf(stdout, "NOTE: Currently, gentz writes the output file to"
-            " the data directory and creates an EMPTY file of the"
-            " same name in the target directory. Ignore the empty file.");
 
     return 0; // success
 }
 
-int32_t gentz::writeTzDatFile(FileStream* out) {
+int32_t gentz::writeTzDatFile() {
     UNewDataMemory *pdata;
     UErrorCode status = U_ZERO_ERROR;
 
