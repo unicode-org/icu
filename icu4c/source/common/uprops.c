@@ -349,6 +349,11 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
                 return c%JAMO_T_COUNT==0 ? U_HST_LV_SYLLABLE : U_HST_LVT_SYLLABLE;
             }
             return U_HST_NOT_APPLICABLE;
+        case UCHAR_NFD_QUICK_CHECK:
+        case UCHAR_NFKD_QUICK_CHECK:
+        case UCHAR_NFC_QUICK_CHECK:
+        case UCHAR_NFKC_QUICK_CHECK:
+            return (int32_t)unorm_getQuickCheck(c, (UNormalizationMode)(which-UCHAR_NFD_QUICK_CHECK)+UNORM_NFD);
         default:
             return 0; /* undefined */
         }
@@ -407,6 +412,12 @@ u_getIntPropertyMaxValue(UProperty which) {
             return max!=0 ? max : (int32_t)USCRIPT_CODE_LIMIT-1;
         case UCHAR_HANGUL_SYLLABLE_TYPE:
             return (int32_t)U_HST_COUNT-1;
+        case UCHAR_NFD_QUICK_CHECK:
+        case UCHAR_NFKD_QUICK_CHECK:
+            return (int32_t)UNORM_YES; /* these are never "maybe", only "no" or "yes" */
+        case UCHAR_NFC_QUICK_CHECK:
+        case UCHAR_NFKC_QUICK_CHECK:
+            return (int32_t)UNORM_MAYBE;
         default:
             return -1; /* undefined */
         }
