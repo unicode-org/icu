@@ -43,15 +43,15 @@
 				OutputFile="..\..\..\bin\icutest.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\..\..\..\lib/icutest.pdb"
-				ImportLibrary=".\..\..\..\lib/icutest.lib"/>
+				ProgramDatabaseFile=".\..\..\..\lib\icutest.pdb"
+				ImportLibrary=".\..\..\..\lib\icutest.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\lib/icutest.tlb"/>
+				TypeLibraryName=".\..\..\..\lib\icutest.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -109,15 +109,15 @@
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\..\lib/icutestd.pdb"
-				ImportLibrary=".\..\..\..\lib/icutestd.lib"/>
+				ProgramDatabaseFile=".\..\..\..\lib\icutestd.pdb"
+				ImportLibrary=".\..\..\..\lib\icutestd.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\lib/icutest.tlb"/>
+				TypeLibraryName=".\..\..\..\lib\icutestd.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool

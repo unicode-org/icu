@@ -29,7 +29,7 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				DisableLanguageExtensions="TRUE"
-				PrecompiledHeaderFile=".\Release/io.pch"
+				PrecompiledHeaderFile=".\Release/icuio.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -41,19 +41,19 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icuio30.dll"
+				OutputFile="..\..\bin\icuio31.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\..\..\lib/icuio30.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icuio31.pdb"
 				BaseAddress="0x4ab00000"
-				ImportLibrary="..\..\lib/icuio.lib"/>
+				ImportLibrary="..\..\lib\icuio.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\lib/io.tlb"/>
+				TypeLibraryName=".\..\..\lib\icuio.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -95,7 +95,7 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"
 				DisableLanguageExtensions="TRUE"
-				PrecompiledHeaderFile=".\Debug/io.pch"
+				PrecompiledHeaderFile=".\Debug/icuio.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -108,11 +108,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icuio30d.dll"
+				OutputFile="..\..\bin\icuio31d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\lib/icuio30d.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icuio31d.pdb"
 				BaseAddress="0x4ab00000"
 				ImportLibrary="..\..\lib\icuiod.lib"/>
 			<Tool
@@ -121,7 +121,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\lib/io.tlb"/>
+				TypeLibraryName=".\..\..\lib\icuio.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool

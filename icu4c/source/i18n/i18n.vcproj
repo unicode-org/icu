@@ -42,10 +42,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icuin30.dll"
+				OutputFile="..\..\bin\icuin31.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\..\..\lib/icuin30.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icuin31.pdb"
 				BaseAddress="0x4a900000"
 				ImportLibrary="..\..\lib\icuin.lib"/>
 			<Tool
@@ -54,7 +54,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\lib/i18n.tlb"/>
+				TypeLibraryName=".\..\..\lib\icuin.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -108,11 +108,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icuin30d.dll"
+				OutputFile="..\..\bin\icuin31d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\lib/icuin30d.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icuin31d.pdb"
 				BaseAddress="0x4a900000"
 				ImportLibrary="..\..\lib\icuind.lib"/>
 			<Tool
@@ -121,7 +121,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\lib/i18n.tlb"/>
+				TypeLibraryName=".\..\..\lib\icuind.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
