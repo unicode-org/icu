@@ -11,6 +11,7 @@
 #include "numfmtst.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
+#include "unicode/currency.h"
 #include <float.h>
  
 // *****************************************************************************
@@ -41,6 +42,8 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(11,TestSecondaryGrouping);
         CASE(12,TestSurrogateSupport);
         CASE(13,TestAPI);
+
+        CASE(14,TestCurrencyObject);
 
         default: name = ""; break;
     }
@@ -429,6 +432,89 @@ NumberFormatTest::TestCurrency(void)
         errln((UnicodeString)"FAIL: Status " + (int32_t)status);
 }
  
+// -------------------------------------
+
+/**
+ * Test the Currency object handling, new as of ICU 2.2.
+ */
+void NumberFormatTest::TestCurrencyObject() {
+    UErrorCode ec = U_ZERO_ERROR;
+    NumberFormat* fmt = 
+        NumberFormat::createCurrencyInstance(Locale::getUS(), ec);
+
+    if (U_FAILURE(ec)) {
+        errln("FAIL: getCurrencyInstance(US)");
+        delete fmt;
+        return;
+    }
+
+    Locale null("", "", "");
+        
+    expectCurrency(*fmt, null, 1234.56, "$1,234.56");
+
+    expectCurrency(*fmt, Locale::getFrance(),
+                   1234.56, CharsToUnicodeString("\\u20AC1,234.56")); // Euro
+
+    expectCurrency(*fmt, Locale::getJapan(),
+                   1234.56, CharsToUnicodeString("\\uFFE51,235")); // Yen
+
+    expectCurrency(*fmt, Locale("fr", "CH", ""),
+                   1234.56, "CHF1,234.50"); // 0.25 rounding
+
+    expectCurrency(*fmt, Locale::getUS(),
+                   1234.56, "$1,234.56");
+
+    delete fmt;
+    fmt = NumberFormat::createCurrencyInstance(Locale::getFrance(), ec);
+
+    if (U_FAILURE(ec)) {
+        errln("FAIL: getCurrencyInstance(FRANCE)");
+        delete fmt;
+        return;
+    }
+        
+    expectCurrency(*fmt, null, 1234.56, CharsToUnicodeString("1 234,56 \\u20AC"));
+
+    expectCurrency(*fmt, Locale::getJapan(),
+                   1234.56, CharsToUnicodeString("1 235 \\uFFE5")); // Yen
+
+    expectCurrency(*fmt, Locale("fr", "CH", ""),
+                   1234.56, "1 234,50 CHF"); // 0.25 rounding
+
+    expectCurrency(*fmt, Locale::getUS(),
+                   1234.56, "1 234,56 USD");
+
+    expectCurrency(*fmt, Locale::getFrance(),
+                   1234.56, CharsToUnicodeString("1 234,56 \\u20AC")); // Euro
+
+    delete fmt;
+}
+    
+void NumberFormatTest::expectCurrency(NumberFormat& nf, const Locale& locale,
+                                      double value, const UnicodeString& string) {
+    DecimalFormat& fmt = * (DecimalFormat*) &nf;
+    UnicodeString curr("<none>");
+    if (*locale.getLanguage() != 0) {
+        UErrorCode ec = U_ZERO_ERROR;
+        curr = UCurrency::forLocale(locale, ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: UCurrency::forLocale");
+            return;
+        }
+        fmt.setCurrency(curr);
+    }
+    UnicodeString s;
+    fmt.format(value, s);
+    s.findAndReplace((UChar32)0x00A0, (UChar32)0x0020);
+
+    if (s == string) {
+        logln((UnicodeString)"Ok: " + value + " x " + curr + " => " + prettify(s));
+    } else {
+        errln((UnicodeString)"FAIL: " + value + " x " + curr + " => " + prettify(s) +
+              ", expected " + prettify(string));
+    }
+}
+
 // -------------------------------------
 
 /**
