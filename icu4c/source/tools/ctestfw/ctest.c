@@ -357,16 +357,20 @@ const TestNode* getTest(const TestNode* root, const char* name)
 void log_err(const char* pattern, ...)
 {
   va_list ap;
+  if(strchr(pattern, '\n') != NULL) {
+      /*
+       * Count errors only if there is a line feed in the pattern
+       * so that we do not exaggerate our error count.
+       */
+      ++ERROR_COUNT;
+  }
   if( ERR_MSG == FALSE){
-      ERROR_COUNT++;
       return;
   }
   va_start(ap, pattern);
   fprintf(stdout, "%-*s", INDENT_LEVEL," " );
   vfprintf(stderr, pattern, ap);
   va_end(ap);
-  
-  ERROR_COUNT++;
 }
 
 void log_info(const char* pattern, ...)
