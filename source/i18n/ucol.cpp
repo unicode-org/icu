@@ -275,8 +275,10 @@ ucol_open(    const    char         *loc,
   /* first take on tailoring version: */
   /* get CollationElements -> Version */
   UResourceBundle *binary = ures_getByKey(b, "%%CollationNew", NULL, status);
+  UResourceBundle* resB;
+  const UChar* trDataVersion;
 
-  if(*status = U_MISSING_RESOURCE_ERROR) { /* if we don't find tailoring, we'll fallback to UCA */
+  if(*status == U_MISSING_RESOURCE_ERROR) { /* if we don't find tailoring, we'll fallback to UCA */
     result = UCA;
     *status = U_USING_DEFAULT_ERROR;
   } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
@@ -286,6 +288,15 @@ ucol_open(    const    char         *loc,
     result->rb = b;
   }
 
+  resB = ures_getByKey(b,"CollationElements",NULL,status);
+  trDataVersion=ures_get(resB,"Version",status); 
+  if(trDataVersion){
+   char tVer[10]={'\0'};
+   UVersionInfo trVInfo;
+   u_UCharsToChars(trDataVersion, tVer, 10);
+   u_versionFromString(trVInfo,tVer );
+   result->trVersion=(uint8_t)trVInfo[0]; 
+  }
   ures_close(binary);
 
   return result;
@@ -858,6 +869,8 @@ void ucol_initUCA(UErrorCode *status) {
     if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
       newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, status);
       newUCA->rb = NULL;
+      newUCA->dataInfo.size = sizeof(UDataInfo);
+      udata_getInfo(result,&newUCA->dataInfo);
 
       umtx_lock(NULL);
       if(UCA == NULL) {
@@ -2377,13 +2390,45 @@ ucol_countAvailable()
   return uloc_countAvailable();
 }
 
+/* temp Defines */
+#define UCOL_RUNTIME_VERSION 1
+#define UCOL_BUILDER_VERSION 1
+
 U_CAPI void 
 ucol_getVersion(const UCollator* coll, 
                 UVersionInfo versionInfo) 
 {
-    /*((Collator*)coll)->getVersion(versionInfo);*/
-}
+    UErrorCode status =U_ZERO_ERROR;
+    /* RunTime version  */
+    uint8_t rtVersion = UCOL_RUNTIME_VERSION;
+    /* Builder version
+     * Vladimir said this would be a #define but
+     * I am of the opinion that the builder populates
+     * the built CEs with version
+     */
+    uint8_t bdVersion = UCOL_BUILDER_VERSION;
+    /* Charset Version. Need to get the version from cnv files
+     * makeconv should populate cnv files with version and 
+     * an api has to be provided in ucnv.h to obtain this version
+     */
+    uint8_t csVersion = 0;
 
+    /* combine the version info */
+    uint16_t cmbVersion = (rtVersion<<11) | (bdVersion<<6) | (csVersion);
+    
+    /* UCA table version info */
+    uint8_t* ucaDataVersion = (uint8_t*) coll->dataInfo.dataVersion;
+    uint8_t ucaVersion =ucaDataVersion[0];
+
+    /* Tailoring rules
+     * Is this the resource bundle version????
+     */
+    versionInfo[0] = cmbVersion>>8;
+    versionInfo[1] = (uint8_t)cmbVersion;
+    versionInfo[2] = (uint8_t)(coll->trVersion | ucaVersion | rtVersion);
+    versionInfo[3] = (uint8_t)ucaVersion;
+
+}
 /****************************************************************************/
 /* Following are the string compare functions                               */
 /*                                                                          */
