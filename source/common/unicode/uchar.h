@@ -2290,7 +2290,7 @@ u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *p
 
 #ifdef ICU_UCHAR_USE_DEPRECATES
 /**
- *@deprecated Use u_charBlock instead. Remove after Aug,2002
+ *@deprecated Use ublock_getCode instead. Remove after Aug,2002
  */
 #define u_charScript ublock_getCode
 /** @deprecated  Use the enum UCharBlock instead. Remove after Aug,2002*/
