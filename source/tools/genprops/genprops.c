@@ -397,7 +397,7 @@ parseSpecialCasing(const char *filename, UErrorCode *pErrorCode) {
 
 /* parser for CaseFolding.txt ----------------------------------------------- */
 
-#define MAX_CASE_FOLDING_COUNT 500
+#define MAX_CASE_FOLDING_COUNT 2000
 
 static CaseFolding caseFoldings[MAX_CASE_FOLDING_COUNT];
 static int32_t caseFoldingCount=0;
