@@ -1240,7 +1240,14 @@ public class RuleBasedNumberFormat extends NumberFormat {
             if (publicRuleSetNames.length > 0) {
                 defaultRuleSet = findRuleSet(publicRuleSetNames[0]);
             } else {
-                defaultRuleSet = ruleSets[ruleSets.length - 1];
+	        defaultRuleSet = null;
+  	        int n = ruleSets.length;
+		while (--n >= 0) {
+		  if (ruleSets[n].isPublic()) {
+		    defaultRuleSet = ruleSets[n];
+		    break;
+		  }
+		}
             }
         } else if (ruleSetName.startsWith("%%")) {
             throw new IllegalArgumentException("cannot use private rule set: " + ruleSetName);
