@@ -97,7 +97,7 @@ class U_COMMON_API UnicodeFunctor : public UObject {
      * class have the same class ID.  Objects of other classes have
      * different class IDs.
      */
-    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
+    virtual UClassID getDynamicClassID(void) const = 0;
 
     /**
      * Set the data object associated with this functor.  The data
