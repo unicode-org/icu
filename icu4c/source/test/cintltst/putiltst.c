@@ -21,8 +21,8 @@
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
 
-static void TestPUtilAPI();
-static void testIEEEremainder();
+static void TestPUtilAPI(void);
+static void testIEEEremainder(void);
 static void remainderTest(double x, double y, double exp);
 static void doAssert(double expect, double got, const char *message);
 static UBool compareWithNAN(double x, double y);
