@@ -18,9 +18,9 @@ subdir = tools/icuswap
 
 SECTION = 1
 
-MANX_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
+#MANX_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
 
-ALL_MAN_FILES = $(MANX_FILES)
+#ALL_MAN_FILES = $(MANX_FILES)
 
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~ mkmap.tmp $(DEPS) $(RES_FILES) $(TEST_FILES) $(ALL_MAN_FILES)
@@ -78,8 +78,8 @@ $(TARGET) : $(OBJECTS)
 # man page
 install-man: install-manx
 install-manx: $(MANX_FILES)
-	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
-	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+#	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+#	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
 
 %.$(SECTION): $(srcdir)/%.$(SECTION).in
 	cd $(top_builddir) \
