@@ -1,0 +1,755 @@
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2000, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*
+* File reslist.c
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/21/00    weiv        Creation.
+*******************************************************************************
+*/
+
+#include "reslist.h"
+#include "unewdata.h"
+#include "unicode/ures.h"
+
+uint32_t res_write(UNewDataMemory *mem, struct SResource *res, 
+                 uint32_t usedOffset, UErrorCode *status);
+
+static const UDataInfo dataInfo={
+    sizeof(UDataInfo),
+    0,
+
+    U_IS_BIG_ENDIAN,
+    U_CHARSET_FAMILY,
+    sizeof(UChar),
+    0,
+
+    0x52, 0x65, 0x73, 0x42,     /* dataFormat="resb" */
+    1, 0, 0, 0,                 /* formatVersion */
+    1, 4, 0, 0                  /* dataVersion take a look at version inside parsed resb*/
+};
+
+uint8_t calcPadding(uint32_t size) {
+    /* returns space we need to pad */
+    return((size%sizeof(uint32_t))?(sizeof(uint32_t)-(size%sizeof(uint32_t))):0);
+
+}
+
+/* Writing Functions */
+uint32_t string_write(UNewDataMemory *mem, struct SResource *res, 
+                 uint32_t usedOffset, UErrorCode *status) {
+    udata_write32(mem, res->u.fString.fLength);
+    udata_writeUString(mem, res->u.fString.fChars, (res->u.fString.fLength)+1);
+    udata_writePadding(mem, calcPadding(res->fSize));
+    return usedOffset;
+}
+
+uint32_t array_write(UNewDataMemory *mem, struct SResource *res, 
+                 uint32_t usedOffset, UErrorCode *status) {
+    uint32_t i = 0;
+    uint32_t *resources = NULL;
+    struct SResource *current = NULL;
+
+    if(U_FAILURE(*status)) {
+        return 0;
+    }
+
+    if(res->u.fArray.fCount > 0) {
+
+        resources = (uint32_t *) uprv_malloc(sizeof(uint32_t)*res->u.fArray.fCount);
+        if (resources == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
+
+        current = res->u.fArray.fFirst;
+        i=0;
+
+        while(current != NULL) {
+            if(current->fType == RES_INT) {
+                *(resources+i) = (current->fType)<<28 | (current->u.fIntValue.fValue & 0xFFFFFFF);
+            } else {
+                usedOffset = res_write(mem, current, usedOffset, status);
+                *(resources+i) = (current->fType)<<28 | (usedOffset>>2);
+                usedOffset += (current->fSize) + calcPadding(current->fSize);
+            }
+            i++;
+            current = current->fNext;
+        }
+
+        /* usedOffset += res->fSize + pad; */
+
+        udata_write32(mem, res->u.fArray.fCount);
+
+        udata_writeBlock(mem, resources, sizeof(uint32_t)*res->u.fArray.fCount);
+
+        uprv_free(resources);
+    } else { /*table is empty*/
+        udata_write32(mem, 0);
+    }
+    return usedOffset;
+}
+
+uint32_t intvector_write(UNewDataMemory *mem, struct SResource *res, 
+                 uint32_t usedOffset, UErrorCode *status) {
+    return usedOffset;
+}
+
+uint32_t bin_write(UNewDataMemory *mem, struct SResource *res, 
+                 uint32_t usedOffset, UErrorCode *status) {
+    return usedOffset;
+}
+
+uint32_t int_write(UNewDataMemory *mem, struct SResource *res, 
+                 uint32_t usedOffset, UErrorCode *status) {
+    return usedOffset;
+}
+
+
+uint32_t table_write(UNewDataMemory *mem, struct SResource *res, 
+                 uint32_t usedOffset, UErrorCode *status) {
+    uint8_t pad = 0;
+    uint32_t i = 0;
+    uint16_t *keys = NULL;
+    uint32_t *resources = NULL;
+    struct SResource *current = NULL;
+
+    if(U_FAILURE(*status)) {
+        return 0;
+    }
+
+    pad = calcPadding(res->fSize);
+
+    if(res->u.fTable.fCount > 0) {
+
+        keys = (uint16_t *) uprv_malloc(sizeof(uint16_t)*res->u.fTable.fCount);
+        if (keys == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
+
+        resources = (uint32_t *) uprv_malloc(sizeof(uint32_t)*res->u.fTable.fCount);
+        if (resources == NULL) {
+            uprv_free(keys);
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
+
+        current = res->u.fTable.fFirst;
+        i=0;
+
+        while(current != NULL) {
+            *(keys+i) = (current->fKey)+sizeof(uint32_t); /*where the key is plus root pointer*/
+            if(current->fType == RES_INT) {
+                *(resources+i) = (current->fType)<<28 | (current->u.fIntValue.fValue & 0xFFFFFFF);
+            } else {
+                usedOffset = res_write(mem, current, usedOffset, status);
+                *(resources+i) = (current->fType)<<28 | (usedOffset>>2) ;
+                usedOffset += (current->fSize) + calcPadding(current->fSize);
+            }
+            i++;
+            current = current->fNext;
+        }
+
+        udata_write16(mem, res->u.fTable.fCount);
+
+        udata_writeBlock(mem, keys, sizeof(uint16_t)*res->u.fTable.fCount);
+        udata_writePadding(mem, pad);
+        udata_writeBlock(mem, resources, sizeof(uint32_t)*res->u.fTable.fCount);
+
+        uprv_free(keys);
+        uprv_free(resources);
+    } else { /*table is empty*/
+        udata_write16(mem, 0);
+        udata_writePadding(mem, pad);
+    }
+    return usedOffset;
+
+}
+
+uint32_t res_write(UNewDataMemory *mem, struct SResource *res, 
+                 uint32_t usedOffset, UErrorCode *status) {
+
+    if(U_FAILURE(*status)) {
+        return 0;
+    }
+
+    if(res != NULL) {
+        switch(res->fType) {
+        case RES_STRING:
+            return string_write(mem, res, usedOffset, status);
+            break;
+        case RES_INT_VECTOR:
+            return intvector_write(mem, res, usedOffset, status);
+            break;
+        case RES_BINARY:
+            return bin_write(mem, res, usedOffset, status);
+            break;
+        case RES_INT:
+            return int_write(mem, res, usedOffset, status);
+            break;
+        case RES_ARRAY:
+            return array_write(mem, res, usedOffset, status);
+            break;
+        case RES_TABLE : 
+            return table_write(mem, res, usedOffset, status);
+            break;
+        }
+    }
+    *status = U_INTERNAL_PROGRAM_ERROR;
+    return 0;
+}
+
+
+/*void bundle_write(struct SRBRoot *bundle, const char *outputDir, const char *filename, UErrorCode *status) {*/
+void bundle_write(struct SRBRoot *bundle, const char *outputDir, UErrorCode *status) {
+    UNewDataMemory *mem = NULL;
+    uint8_t pad = 0;
+    uint32_t root = 0;
+    uint32_t i = 0;
+    uint32_t usedOffset = 0;
+
+    if(U_FAILURE(*status)) {
+        return;
+    }
+
+    mem = udata_create(outputDir, "res", bundle->fLocale, &dataInfo, U_COPYRIGHT_STRING, status);
+    /*mem = udata_create(outputDir, "res", filename, &dataInfo, U_COPYRIGHT_STRING, status);*/
+
+    pad = calcPadding(bundle->fKeyPoint);
+
+    usedOffset = sizeof(uint32_t) + bundle->fKeyPoint + pad ; /*this is how much root and keys are taking up*/
+
+    root = ((usedOffset + bundle->fRoot->u.fTable.fChildrenSize)>>2) | (RES_TABLE << 28); /* we're gonna put the main table at the end */
+
+    udata_write32(mem, root);
+
+    udata_writeBlock(mem, bundle->fKeys, bundle->fKeyPoint);
+
+    udata_writePadding(mem, pad);
+
+    usedOffset = res_write(mem, bundle->fRoot, usedOffset, status);
+
+    udata_finish(mem, status);
+
+}
+
+
+/* Opening Functions */
+
+struct SResource* table_open(struct SRBRoot *bundle, char *tag, UErrorCode *status) {
+
+    struct SResource *res;
+
+    if(U_FAILURE(*status)) {
+        return NULL;
+    }
+
+    res = (struct SResource *)uprv_malloc(sizeof(struct SResource));
+
+    if(res == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+
+    res->fType = RES_TABLE;
+    res->fKey = bundle_addtag(bundle, tag, status);
+
+    if(U_FAILURE(*status)) {
+        uprv_free(res);
+        return NULL;
+    }
+
+    res->fNext = NULL;
+    res->fSize = sizeof(uint16_t);
+    res->u.fTable.fCount = 0;
+    res->u.fTable.fChildrenSize = 0;
+    res->u.fTable.fFirst = NULL;
+    res->u.fTable.fRoot = bundle;
+
+    return res;
+}
+
+struct SResource* array_open(struct SRBRoot *bundle, char *tag, UErrorCode *status) {
+
+    struct SResource *res;
+
+    if(U_FAILURE(*status)) {
+        return NULL;
+    }
+
+    res = (struct SResource *)uprv_malloc(sizeof(struct SResource));
+
+    if(res == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+
+    res->fType = RES_ARRAY;
+    res->fKey = bundle_addtag(bundle, tag, status);
+
+    if(U_FAILURE(*status)) {
+        uprv_free(res);
+        return NULL;
+    }
+
+    res->fNext = NULL;
+    res->fSize = sizeof(int32_t);
+    res->u.fArray.fCount = 0;
+    res->u.fArray.fChildrenSize = 0;
+    res->u.fArray.fFirst = NULL;
+    res->u.fArray.fLast = NULL;
+
+    return res;
+}
+
+struct SResource *string_open(struct SRBRoot *bundle, char *tag, UChar *value, UErrorCode *status) {
+
+    struct SResource *res;
+
+    if(U_FAILURE(*status)) {
+        return NULL;
+    }
+
+    res = (struct SResource *)uprv_malloc(sizeof(struct SResource));
+
+    if(res == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+
+    res->fType = RES_STRING;
+    res->fKey = bundle_addtag(bundle, tag, status);
+
+    if(U_FAILURE(*status)) {
+        uprv_free(res);
+        return NULL;
+    }
+
+    res->fNext = NULL;
+
+    res->u.fString.fLength = u_strlen(value);
+    res->u.fString.fChars = (UChar *)uprv_malloc(sizeof(UChar) * (u_strlen(value)+1));
+    if(res->u.fString.fChars == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(res);
+        return NULL;
+    }
+    u_strcpy(res->u.fString.fChars, value);
+    res->fSize = sizeof(int32_t) + sizeof(UChar) * (u_strlen(value)+1);
+
+    return res;
+}
+
+struct SResource* intvector_open(struct SRBRoot *bundle, char *tag, UErrorCode *status) {
+    struct SResource *res;
+
+    if(U_FAILURE(*status)) {
+        return NULL;
+    }
+
+    res = (struct SResource *)uprv_malloc(sizeof(struct SResource));
+
+    if(res == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+
+    res->fType = RES_ARRAY;
+    res->fKey = bundle_addtag(bundle, tag, status);
+
+    if(U_FAILURE(*status)) {
+        uprv_free(res);
+        return NULL;
+    }
+
+    res->fNext = NULL;
+    res->fSize = sizeof(int32_t);
+    res->u.fIntVector.fCount = 0;
+    res->u.fIntVector.fArray = (uint32_t *)uprv_malloc(sizeof(uint32_t) * MAX_INT_VECTOR);
+    if(res->u.fIntVector.fArray == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(res);
+        return NULL;
+    }
+
+    return res;
+}
+
+struct SResource *int_open(struct SRBRoot *bundle, char *tag, int32_t value, UErrorCode *status) {
+
+    struct SResource *res;
+
+    if(U_FAILURE(*status)) {
+        return NULL;
+    }
+
+    res = (struct SResource *)uprv_malloc(sizeof(struct SResource));
+
+    if(res == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+
+    res->fType = RES_INT;
+    res->fKey = bundle_addtag(bundle, tag, status);
+
+    if(U_FAILURE(*status)) {
+        uprv_free(res);
+        return NULL;
+    }
+
+    res->fSize = 0;
+    res->fNext = NULL;
+    res->u.fIntValue.fValue = value;
+
+    return res;
+}
+
+struct SResource *bin_open(struct SRBRoot *bundle, char *tag, uint32_t length, uint8_t *data, UErrorCode *status) {
+
+    struct SResource *res;
+
+    if(U_FAILURE(*status)) {
+        return NULL;
+    }
+
+    res = (struct SResource *)uprv_malloc(sizeof(struct SResource));
+
+    if(res == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+
+    res->fType = RES_STRING;
+    res->fKey = bundle_addtag(bundle, tag, status);
+
+    if(U_FAILURE(*status)) {
+        uprv_free(res);
+        return NULL;
+    }
+
+    res->fNext = NULL;
+
+    res->u.fBinaryValue.fLength = length;
+    res->u.fBinaryValue.fData = (uint8_t *)uprv_malloc(sizeof(uint8_t) * length);
+    if(res->u.fString.fChars == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(res);
+        return NULL;
+    }
+    uprv_memcpy(res->u.fBinaryValue.fData, data, length);
+
+    res->fSize = sizeof(int32_t) + sizeof(uint8_t) * length;
+
+    return res;
+}
+
+struct SRBRoot *bundle_open(UErrorCode *status) {
+    struct SRBRoot *bundle = NULL;
+
+    if(U_FAILURE(*status)) {
+        return NULL;
+    }
+
+    bundle = (struct SRBRoot*) uprv_malloc(sizeof(struct SRBRoot));
+    if(bundle == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+    }
+
+    bundle->fLocale = NULL;
+    bundle->fKeyPoint = 0;
+    bundle->fKeys = (char *) uprv_malloc(sizeof(char) * KEY_SPACE_SIZE);
+    if(bundle->fKeys == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(bundle);
+        return NULL;
+    }
+    bundle->fCount = 0;
+    bundle->fRoot = table_open(bundle, NULL, status);
+    if((bundle->fRoot == NULL) || (U_FAILURE(*status))) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(bundle->fKeys);
+        uprv_free(bundle);
+        return NULL;
+    }
+/*
+    bundle->fRoot = (struct SResource*) uprv_malloc(sizeof(struct SResource));
+    if(bundle->fRoot == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(bundle->fKeys);
+        uprv_free(bundle);
+        return NULL;
+    }
+    bundle->fRoot->fType = RES_TABLE;
+    bundle->fRoot->fSize = sizeof(uint16_t);
+    bundle->fRoot->u.fTable.fCount = 0;
+    bundle->fRoot->u.fTable.fFirst = NULL;
+    bundle->fRoot->u.fTable.fRoot = bundle;
+*/
+    return bundle;
+}
+
+/* Closing Functions */
+
+void table_close(struct SResource *table, UErrorCode *status) {
+    struct SResource *current = NULL;
+    struct SResource *prev = NULL;
+
+    current = table->u.fTable.fFirst;
+
+    while(current!=NULL) {
+        prev = current;
+        current = current->fNext;
+        res_close(prev, status);
+    }
+}
+
+void array_close(struct SResource *array, UErrorCode *status) {
+    struct SResource *current = NULL;
+    struct SResource *prev = NULL;
+
+    current = array->u.fArray.fFirst;
+
+    while(current!=NULL) {
+        prev = current;
+        current = current->fNext;
+        res_close(prev, status);
+    }
+
+}
+
+void string_close(struct SResource *string, UErrorCode *status) {
+    if(string->u.fString.fChars != NULL) {
+        uprv_free(string->u.fString.fChars);
+    }
+}
+
+void intvector_close(struct SResource *intvector, UErrorCode *status) {
+    if(intvector->u.fIntVector.fArray != NULL) {
+        uprv_free(intvector->u.fIntVector.fArray);
+    }
+}
+
+void int_close(struct SResource *intres, UErrorCode *status) {
+    /* Intentionally left blank */
+}
+
+void bin_close(struct SResource *binres, UErrorCode *status) {
+    if(binres->u.fBinaryValue.fData != NULL) {
+        uprv_free(binres->u.fBinaryValue.fData);
+    }
+}
+
+void res_close(struct SResource *res, UErrorCode *status) {
+    if(res != NULL) {
+        switch(res->fType) {
+        case RES_STRING:
+            string_close(res, status);
+            break;
+        case RES_INT_VECTOR:
+            intvector_close(res, status);
+            break;
+        case RES_BINARY:
+            bin_close(res, status);
+            break;
+        case RES_INT:
+            int_close(res, status);
+            break;
+        case RES_ARRAY:
+            array_close(res, status);
+            break;
+        case RES_TABLE : 
+            table_close(res, status);
+            break;
+        }
+
+        uprv_free(res);
+    }
+
+}
+
+void bundle_close(struct SRBRoot *bundle, UErrorCode *status) {
+    struct SResource *current = NULL;
+    struct SResource *prev = NULL;
+
+    if(bundle->fRoot!=NULL) {
+        current = bundle->fRoot->u.fTable.fFirst;
+
+        while(current!=NULL) {
+            prev = current;
+            current = current->fNext;
+            res_close(prev, status);
+        }
+
+
+        uprv_free(bundle->fRoot);
+    }
+
+    if(bundle->fLocale != NULL) {
+        uprv_free(bundle->fLocale);
+    }
+
+    if(bundle->fKeys != NULL) {
+        uprv_free(bundle->fKeys);
+    }
+
+    uprv_free(bundle);
+}
+
+/* Adding Functions */
+
+void table_add(struct SResource *table, struct SResource *res, UErrorCode *status) {
+    struct SResource *current = NULL;
+    struct SResource *prev = NULL;
+    struct SResTable *list;
+
+    if(U_FAILURE(*status)) {
+        return;
+    }
+
+    /* here we need to traverse the list */  
+    list = &(table->u.fTable);
+
+    ++(list->fCount);
+    table->fSize += sizeof(uint32_t) + sizeof(uint16_t);
+
+    table->u.fTable.fChildrenSize += res->fSize + calcPadding(res->fSize);
+
+    if(res->fType == RES_TABLE) {
+        table->u.fTable.fChildrenSize += res->u.fTable.fChildrenSize;
+    } else if (res->fType == RES_ARRAY) {
+        table->u.fTable.fChildrenSize += res->u.fArray.fChildrenSize;
+    }
+
+    /* is list still empty? */
+    if(list->fFirst == NULL) {
+        list->fFirst = res;
+        res->fNext = NULL;
+        return;
+    } else {
+        current = list->fFirst;
+    }
+
+    while(current != NULL) {
+        if(uprv_strcmp(((list->fRoot->fKeys)+(current->fKey)), ((list->fRoot->fKeys)+(res->fKey)))<0) {
+            prev = current;
+            current = current->fNext;
+        } else if (uprv_strcmp(((list->fRoot->fKeys)+(current->fKey)), ((list->fRoot->fKeys)+(res->fKey)))>0) { /*we're either in front of list, or in middle*/
+            if(prev == NULL) { /*front of the list*/
+                list->fFirst = res;
+            } else { /*middle of the list*/
+                prev->fNext = res;
+            }
+            res->fNext = current;
+            return;
+        } else { /* Key already exists! ERROR! */
+            *status = U_UNSUPPORTED_ERROR;
+            return;
+        }
+    }
+
+    /* end of list */
+    prev->fNext = res;
+    res->fNext = NULL;
+}
+
+void array_add(struct SResource *array, struct SResource *res, UErrorCode *status) {
+
+    if(U_FAILURE(*status)) {
+        return;
+    }
+
+    if(array->u.fArray.fFirst == NULL) {
+        array->u.fArray.fFirst = res;
+        array->u.fArray.fLast = res;
+    } else {
+        array->u.fArray.fLast->fNext = res;
+        array->u.fArray.fLast = res;
+    }
+    (array->u.fArray.fCount)++;
+
+    array->fSize += sizeof(uint32_t);
+    array->u.fArray.fChildrenSize += res->fSize + calcPadding(res->fSize);
+
+    if(res->fType == RES_TABLE) {
+        array->u.fArray.fChildrenSize += res->u.fTable.fChildrenSize;
+    } else if (res->fType == RES_ARRAY) {
+        array->u.fArray.fChildrenSize += res->u.fArray.fChildrenSize;
+    }
+}
+
+void intvector_add(struct SResource *intvector, int32_t value, UErrorCode *status) {
+
+    if(U_FAILURE(*status)) {
+        return;
+    }
+
+    *(intvector->u.fIntVector.fArray+(intvector->u.fIntVector.fCount)) = value;
+
+    (intvector->u.fIntVector.fCount)++;
+
+    intvector->fSize += sizeof(uint32_t);
+
+}
+
+/* Misc Functions */
+
+void bundle_setlocale(struct SRBRoot *bundle, UChar *locale, UErrorCode *status) {
+
+    if(U_FAILURE(*status)) {
+        return;
+    }
+
+    if (bundle->fLocale!=NULL) {
+        uprv_free(bundle->fLocale);
+    }
+
+    bundle->fLocale= (char*) uprv_malloc(sizeof(char) * (u_strlen(locale)+1));
+
+    if(bundle->fLocale == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+
+    /*u_strcpy(bundle->fLocale, locale);*/
+    u_UCharsToChars(locale, bundle->fLocale, u_strlen(locale)+1);
+
+}
+
+uint16_t bundle_addtag(struct SRBRoot *bundle, char *tag, UErrorCode *status) {
+    uint16_t keypos;
+
+    if(U_FAILURE(*status)) {
+        return -1;
+    }
+
+    if(tag == NULL) {
+        return -1;
+    }
+
+    keypos = bundle->fKeyPoint;
+
+    bundle->fKeyPoint += uprv_strlen(tag)+1;
+
+    if(bundle->fKeyPoint > KEY_SPACE_SIZE) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return -1;
+    }
+
+    uprv_strcpy((bundle->fKeys)+keypos, tag);
+
+    return keypos;
+}
+
+struct SResource *table_get(struct SResource *table, char *key, UErrorCode *status) {
+    return NULL;
+}
