@@ -982,6 +982,7 @@ static void TestStringFunctions()
         if (currToken != sizeof(tokens)/sizeof(tokens[0])) {
             log_err("Didn't get correct number of tokens\n");
         }
+        state = delimBuf;       /* Give it an "invalid" saveState */
         u_uastrcpy(currTokenBuf, "");
         if (u_strtok_r(currTokenBuf, delimBuf, &state) != NULL) {
             log_err("Didn't get NULL for empty string\n");
@@ -989,6 +990,7 @@ static void TestStringFunctions()
         if (state != NULL) {
             log_err("State should be NULL for empty string\n");
         }
+        state = delimBuf;       /* Give it an "invalid" saveState */
         u_uastrcpy(currTokenBuf, ", ,");
         if (u_strtok_r(currTokenBuf, delimBuf, &state) != NULL) {
             log_err("Didn't get NULL for a string of delimiters\n");
@@ -996,6 +998,7 @@ static void TestStringFunctions()
         if (state != NULL) {
             log_err("State should be NULL for a string of delimiters\n");
         }
+        state = delimBuf;       /* Give it an "invalid" saveState */
         u_uastrcpy(currTokenBuf, "q, ,");
         if (u_strtok_r(currTokenBuf, delimBuf, &state) == NULL) {
             log_err("Got NULL for a string that does not begin with delimiters\n");
