@@ -2220,8 +2220,9 @@ unorm_normalize(const UChar *src, int32_t srcLength,
     }
 
     /* check for overlapping src and destination */
-    if( (src>=dest && src<(dest+destCapacity)) ||
-        (srcLength>0 && dest>=src && dest<(src+srcLength))
+    if( dest!=NULL &&
+        ((src>=dest && src<(dest+destCapacity)) ||
+         (srcLength>0 && dest>=src && dest<(src+srcLength)))
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
