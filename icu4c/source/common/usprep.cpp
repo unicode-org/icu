@@ -30,6 +30,7 @@
 #include "ustr_imp.h"
 #include "uhash.h"
 #include "cstring.h"
+#include "udataswp.h"
 
 U_CDECL_BEGIN
 
@@ -809,6 +810,106 @@ usprep_isLabelSeparator(UStringPrepProfile* profile,
     }
     
     return FALSE;
+}
+
+/* data swapping ------------------------------------------------------------ */
+
+U_CAPI int32_t U_EXPORT2
+usprep_swap(const UDataSwapper *ds,
+            const void *inData, int32_t length, void *outData,
+            UErrorCode *pErrorCode) {
+    const UDataInfo *pInfo;
+    int32_t headerSize;
+
+    const uint8_t *inBytes;
+    uint8_t *outBytes;
+
+    const int32_t *inIndexes;
+    int32_t indexes[16];
+
+    int32_t i, offset, count, size;
+
+    /* udata_swapDataHeader checks the arguments */
+    headerSize=udata_swapDataHeader(ds, inData, length, outData, pErrorCode);
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    /* check data format and format version */
+    pInfo=(const UDataInfo *)((const char *)inData+4);
+    if(!(
+        pInfo->dataFormat[0]==0x53 &&   /* dataFormat="SPRP" */
+        pInfo->dataFormat[1]==0x50 &&
+        pInfo->dataFormat[2]==0x52 &&
+        pInfo->dataFormat[3]==0x50 &&
+        pInfo->formatVersion[0]==3
+    )) {
+        udata_printError(ds, "usprep_swap(): data format %02x.%02x.%02x.%02x (format version %02x) is not recognized as StringPrep .spp data\n",
+                         pInfo->dataFormat[0], pInfo->dataFormat[1],
+                         pInfo->dataFormat[2], pInfo->dataFormat[3],
+                         pInfo->formatVersion[0]);
+        *pErrorCode=U_UNSUPPORTED_ERROR;
+        return 0;
+    }
+
+    inBytes=(const uint8_t *)inData+headerSize;
+    outBytes=(uint8_t *)outData+headerSize;
+
+    inIndexes=(const int32_t *)inBytes;
+
+    if(length>=0) {
+        length-=headerSize;
+        if(length<16*4) {
+            udata_printError(ds, "usprep_swap(): too few bytes (%d after header) for StringPrep .spp data\n",
+                             length);
+            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            return 0;
+        }
+    }
+
+    /* read the first 16 indexes (ICU 2.8/format version 3: _SPREP_INDEX_TOP==16, might grow) */
+    for(i=0; i<16; ++i) {
+        indexes[i]=udata_readInt32(ds, inIndexes[i]);
+    }
+
+    /* calculate the total length of the data */
+    size=
+        16*4+ /* size of indexes[] */
+        indexes[_SPREP_INDEX_TRIE_SIZE]+
+        indexes[_SPREP_INDEX_MAPPING_DATA_SIZE];
+
+    if(length>=0) {
+        if(length<size) {
+            udata_printError(ds, "usprep_swap(): too few bytes (%d after header) for all of StringPrep .spp data\n",
+                             length);
+            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            return 0;
+        }
+
+        /* copy the data for inaccessible bytes */
+        if(inBytes!=outBytes) {
+            uprv_memcpy(outBytes, inBytes, size);
+        }
+
+        offset=0;
+
+        /* swap the int32_t indexes[] */
+        count=16*4;
+        ds->swapArray32(ds, inBytes, count, outBytes, pErrorCode);
+        offset+=count;
+
+        /* swap the UTrie */
+        count=indexes[_SPREP_INDEX_TRIE_SIZE];
+        utrie_swap(ds, inBytes+offset, count, outBytes+offset, pErrorCode);
+        offset+=count;
+
+        /* swap the uint16_t mappingTable[] */
+        count=indexes[_SPREP_INDEX_MAPPING_DATA_SIZE];
+        ds->swapArray16(ds, inBytes+offset, count, outBytes+offset, pErrorCode);
+        offset+=count;
+    }
+
+    return headerSize+size;
 }
 
 #endif /* #if !UCONFIG_NO_IDNA */
