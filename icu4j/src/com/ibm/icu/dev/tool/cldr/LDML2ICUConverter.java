@@ -3064,28 +3064,8 @@ public class LDML2ICUConverter {
                             }
                         }
                         
-                        // Now- write the actual items
-                        
-                        /// Write resfiles.mk
-                        String resfiles_mk_name = destDir + File.separator + "resfiles.mk";
-                        try {
-                            System.out.println(" Writing ICU build file: " + resfiles_mk_name);
-                            PrintStream resfiles_mk = new PrintStream(new  FileOutputStream(resfiles_mk_name)); 
-                            resfiles_mk.println("# generated.");
-                            resfiles_mk.println("GENRB_ALIAS_SOURCE = " + aliasFilesList);
-                            resfiles_mk.println("");
-                            resfiles_mk.println("");
-                            resfiles_mk.print("GENRB_SOURCE = " + inFileText);
-                            resfiles_mk.println("");
-                            resfiles_mk.println("");
-                            
-                            resfiles_mk.close();
-                        }catch( IOException e) {
-                            System.err.println("While writing " + resfiles_mk_name);
-                            e.printStackTrace();
-                            System.exit(1);
-                        }
-                        
+                        // Now- write the actual items (resfiles.mk, etc)
+                        writeResourceMakefile(myTreeName,aliasFilesList,inFileText);                        
                         
                         System.exit(0);
                         return;
@@ -3112,7 +3092,7 @@ public class LDML2ICUConverter {
                 table.name = fromLocale.toString();
                 ICUResourceWriter.ResourceString ver = new ICUResourceWriter.ResourceString();
                 ver.name = "\"Version\"";
-                ver.val = "1.0";
+                ver.val = "1.1.1.1"; // newer than any existing alias locales
                 table.first=ver;
                 if(xpath == null) {
                     ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
@@ -3129,7 +3109,7 @@ public class LDML2ICUConverter {
                     if((aVal = toLocale.getKeywordValue("calendar")) != null) { 
                         service = "calendar";
                         serviceDefault = aVal;
-                    } else if((toLocale.getKeywordValue("collation")) != null) {
+                    } else if((aVal = toLocale.getKeywordValue("collation")) != null) {
                         service = "collations";
                         serviceDefault = aVal;
                     } else {
@@ -3182,5 +3162,42 @@ public class LDML2ICUConverter {
             e.printStackTrace();
             System.exit(1);
         }    
+    }
+    
+    private void writeResourceMakefile(String myTreeName, String aliasFilesList, String inFileText)
+    {
+        /// Write resfiles.mk
+        String stub = "UNKNOWN";
+        String shortstub = "unk";
+        
+        if(myTreeName.equals("main")) {
+            stub = "GENRB";
+            shortstub = "res";
+        } else if(myTreeName.equals("collation")) {
+            stub = "COLLATION";
+            shortstub = "col";
+        } else {
+            System.err.println("Unknown tree name in writeResourceMakefile: " + myTreeName);
+            System.exit(-1);
+        }
+        
+        String resfiles_mk_name = destDir + File.separator +  shortstub+"files.mk";
+        try {
+            System.out.println(" Writing ICU build file: " + resfiles_mk_name);
+            PrintStream resfiles_mk = new PrintStream(new  FileOutputStream(resfiles_mk_name)); 
+            resfiles_mk.println("# generated.");
+            resfiles_mk.println(stub + "_ALIAS_SOURCE = " + aliasFilesList);
+            resfiles_mk.println("");
+            resfiles_mk.println("");
+            resfiles_mk.print(stub + "_SOURCE = " + inFileText);
+            resfiles_mk.println("");
+            resfiles_mk.println("");
+            
+            resfiles_mk.close();
+        }catch( IOException e) {
+            System.err.println("While writing " + resfiles_mk_name);
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 }
