@@ -877,7 +877,6 @@ public:
   lines(NULL),
   noLines(0)
  {
-    UErrorCode status = U_ZERO_ERROR;
   };
   void setCollator(UCollator *c, Line *l, int32_t nl) 
   {
@@ -887,7 +886,6 @@ public:
   }
   virtual void run() {
     //sleep(10000);
-    UErrorCode status = U_ZERO_ERROR;
   int32_t line = 0;
 
   uint8_t sk1[1024], sk2[1024];
