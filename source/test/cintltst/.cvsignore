@@ -1,0 +1,5 @@
+*.d
+cintltst
+Debug
+Release
+Makefile

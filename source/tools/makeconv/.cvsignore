@@ -4,4 +4,4 @@ Release
 Makefile
 *.d
 *.pdb
-pkgdata
+makeconv
