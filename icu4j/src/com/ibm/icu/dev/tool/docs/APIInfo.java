@@ -91,7 +91,6 @@ class APIInfo {
     public void setSignature(String val) { setType(SIG, val); }
     public void setExceptions(String val) { setType(EXC, val); }
 
-
     public boolean isDraft() { return getVal(STA) == STA_DRAFT; }
     public boolean isStable() { return getVal(STA) == STA_STABLE; }
     public boolean isDeprecated() { return getVal(STA) == STA_DEPRECATED; }
@@ -363,7 +362,7 @@ class APIInfo {
     /**
      * Write the data in report format.
      */
-    public void print(PrintWriter pw, boolean detail) {
+    public void print(PrintWriter pw, boolean detail, boolean html) {
         StringBuffer buf = new StringBuffer();
 
         // remove all occurrences of icu packages from the param string
@@ -401,11 +400,17 @@ class APIInfo {
             } else {
                 buf.append("class ");
             }
+	    if (html) {
+		buf.append("<i>");
+	    }
             if (cls.length() > 0) {
                 buf.append(cls);
                 buf.append('.');
             }
             buf.append(name);
+	    if (html) {
+		buf.append("</i>");
+	    }
             if (detail) {
                 buf.append(' ');
                 buf.append(sig);
@@ -427,7 +432,11 @@ class APIInfo {
             } else {
                 n = 0;
             }
-            buf.append(name);
+	    if (html) {
+		buf.append("<i>" + name + "</i>");
+	    } else {
+		buf.append(name);
+	    }
             buf.append(xsig.substring(n));
             break;
         }
@@ -435,8 +444,8 @@ class APIInfo {
         pw.print(buf.toString());
     }
 
-    public void println(PrintWriter pw, boolean detail) {
-        print(pw, detail);
+    public void println(PrintWriter pw, boolean detail, boolean html) {
+        print(pw, detail, html);
         pw.println();
     }
 
