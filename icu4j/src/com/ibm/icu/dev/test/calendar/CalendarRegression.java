@@ -1513,7 +1513,55 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
 	TimeZone.setDefault(savedTZ);
     }
 
+    /**
+     * Test fieldDifference().
+     */
+    public void TestJ438() throws Exception {
+        int DATA[] = {
+            2000, Calendar.JANUARY, 20,   2010, Calendar.JUNE, 15,
+            2010, Calendar.JUNE, 15,      2000, Calendar.JANUARY, 20,
+            1964, Calendar.SEPTEMBER, 7,  1999, Calendar.JUNE, 4,
+            1999, Calendar.JUNE, 4,       1964, Calendar.SEPTEMBER, 7,
+        };
+        Calendar cal = Calendar.getInstance(Locale.US);
+        for (int i=0; i<DATA.length; i+=6) {
+            int y1 = DATA[i];
+            int m1 = DATA[i+1];
+            int d1 = DATA[i+2];
+            int y2 = DATA[i+3];
+            int m2 = DATA[i+4];
+            int d2 = DATA[i+5];
 
+            cal.clear();
+            cal.set(y1, m1, d1);
+            Date date1 = cal.getTime();
+            cal.set(y2, m2, d2);
+            Date date2 = cal.getTime();
+
+            cal.setTime(date1);
+            int dy = cal.fieldDifference(date2, Calendar.YEAR);
+            int dm = cal.fieldDifference(date2, Calendar.MONTH);
+            int dd = cal.fieldDifference(date2, Calendar.DATE);
+
+            logln("" + date2 + " - " + date1 + " = " +
+                  dy + "y " + dm + "m " + dd + "d");
+
+            cal.setTime(date1);
+            cal.add(Calendar.YEAR, dy);
+            cal.add(Calendar.MONTH, dm);
+            cal.add(Calendar.DATE, dd);
+            Date date22 = cal.getTime();
+            if (!date2.equals(date22)) {
+                errln("FAIL: " + date1 + " + " +
+                      dy + "y " + dm + "m " + dd + "d = " +
+                      date22 + ", exp " + date2);
+            } else {
+                logln("Ok: " + date1 + " + " +
+                      dy + "y " + dm + "m " + dd + "d = " +
+                      date22);
+            }
+        }
+    }
 }
 
 //eof
