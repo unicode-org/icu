@@ -61,16 +61,16 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, UBool dict, UE
 
     // Get the locale
     UResourceBundle *b = ures_open(NULL, loc.getName(), &status);
+    ures_initStackObject(&brkrules);
+    ures_initStackObject(&brkname);
 
     // Get the "boundaries" array.
     if (U_SUCCESS(status)) {
-        ures_initStackObject(&brkrules);
         (void) ures_getByKeyWithFallback(b, "boundaries", &brkrules, &status);
     }
 
     // Get the string object naming the rules file
     if (U_SUCCESS(status)) {
-        ures_initStackObject(&brkname);
         (void) ures_getByKeyWithFallback(&brkrules, type, &brkname, &status);
     }
 
