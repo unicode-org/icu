@@ -472,12 +472,12 @@ u_fgets(UFILE        *f,
         /* find the first occurrence of a delimiter character, if present */
         alias = f->fUCPos;
         count = 0;
-        while( ! IS_STRING_DELIMITER(*alias) && alias < f->fUCLimit && count < n) {
+        while (alias < f->fUCLimit && count < n && !IS_STRING_DELIMITER(*alias)) {
             ++count;
             alias++;
         }
         /* Preserve the newline */
-        if (IS_STRING_DELIMITER(*alias) && count < n) {
+        if (alias < f->fUCLimit && count < n && IS_STRING_DELIMITER(*alias)) {
             count++;
             alias++;
         }
