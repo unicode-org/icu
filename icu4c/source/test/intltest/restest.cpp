@@ -42,11 +42,11 @@ enum E_Where
 
 //***************************************************************************************
 
-#define CONFIRM_EQ(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << (actual) << " instead of " << (expected) << endl; }
-#define CONFIRM_GE(actual,expected) if ((actual)>=(expected)) { record_pass(); } else { record_fail(); OUT << action << " returned " << (actual) << " instead of x >= " << (expected) << endl; }
-#define CONFIRM_NE(actual,expected) if ((expected)!=(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << (actual) << " instead of x != " << (expected) << endl; }
+#define CONFIRM_EQ(actual, expected, myAction) if ((expected)==(actual)) { record_pass(myAction); } else { record_fail(myAction + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of " + (expected) + "\n");}
+#define CONFIRM_GE(actual, expected, myAction) if ((actual)>=(expected)) { record_pass(myAction); } else { record_fail(myAction + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of x >= " + (expected) + "\n");}
+#define CONFIRM_NE(actual, expected, myAction) if ((expected)!=(actual)) { record_pass(myAction); } else { record_fail(myAction + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of x != " + (expected) + "\n");}
 
-#define CONFIRM_UErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << u_errorName(actual) << " instead of " << u_errorName(expected) << endl; }
+#define CONFIRM_UErrorCode(actual, expected, myAction) if ((expected)==(actual)) { record_pass(myAction); } else { record_fail(myAction + (UnicodeString)" returned " + u_errorName(actual) + " instead of " + u_errorName(expected) + "\n"); }
 
 //***************************************************************************************
 
@@ -269,11 +269,8 @@ ResourceBundleTest::TestConstruction()
         //ResourceBundle  test1("c:\\icu\\icu\\source\\test\\testdata\\testdata", err);
         //ResourceBundle  test2("c:\\icu\\icu\\source\\test\\testdata\\testdata", locale, err);
 
-        UnicodeString   result1;
-        UnicodeString   result2;
-
-        result1 = *test1.getString("string_in_Root_te_te_IN", err);
-        result2 = *test2.getString("string_in_Root_te_te_IN", err);
+        UnicodeString   result1(test1.getStringEx("string_in_Root_te_te_IN", err));
+        UnicodeString   result2(test2.getStringEx("string_in_Root_te_te_IN", err));
 
         if (U_FAILURE(err)) {
             errln("Something threw an error in TestConstruction()");
@@ -325,9 +322,7 @@ ResourceBundleTest::TestConstruction()
 
         ResourceBundle  test2(wideDirectory, locale, err);
 
-        UnicodeString   result2;
-
-        result2 = *test2.getString("string_in_Root_te_te_IN", err);
+        UnicodeString   result2(test2.getStringEx("string_in_Root_te_te_IN", err));
 
         if (U_FAILURE(err)) {
             errln("Something threw an error in TestConstruction()");
@@ -364,7 +359,8 @@ ResourceBundleTest::testTag(const char* frag,
     char tag[100];
     UnicodeString action;
 
-    int32_t i,j,row,col, actual_bundle;
+    int32_t i,j,actual_bundle;
+//    int32_t row,col;
     int32_t index;
     const char *directory;
     char testdatapath[256];
@@ -373,7 +369,7 @@ ResourceBundleTest::testTag(const char* frag,
     uprv_strcpy(testdatapath, directory);
     uprv_strcat(testdatapath, "testdata");
 
-        for (i=0; i<bundles_count; ++i)
+    for (i=0; i<bundles_count; ++i)
     {
         action = "Constructor for ";
         action += param[i].name;
@@ -381,7 +377,7 @@ ResourceBundleTest::testTag(const char* frag,
         UErrorCode status = U_ZERO_ERROR;
         ResourceBundle theBundle( testdatapath, *param[i].locale, status);
         //ResourceBundle theBundle( "c:\\icu\\icu\\source\\test\\testdata\\testdata", *param[i].locale, status);
-        CONFIRM_UErrorCode(status,param[i].expected_constructor_status);
+        CONFIRM_UErrorCode(status, param[i].expected_constructor_status, action);
 
         if(i == 5)
           actual_bundle = 0; /* ne -> default */
@@ -397,7 +393,7 @@ ResourceBundleTest::testTag(const char* frag,
         for (j=e_te_IN; j>=e_Root; --j)
         {
             if (is_in[j] && param[i].inherits[j])
-              {
+            {
                 if(j == actual_bundle) /* it's in the same bundle OR it's a nonexistent=default bundle (5) */
                   expected_resource_status = U_ZERO_ERROR;
                 else if(j == 0)
@@ -435,25 +431,17 @@ ResourceBundleTest::testTag(const char* frag,
 
         status = U_ZERO_ERROR;
 
-        UnicodeString string(kERROR);
-
-        const UnicodeString *t = theBundle.getString(tag, status);
-        if(t != NULL) {
-            string = *t;
-        }
-
-        //UnicodeString string = theBundle.getStringEx(tag, status);
+        UnicodeString string(theBundle.getStringEx(tag, status));
 
         if(U_FAILURE(status)) {
             string.setTo(TRUE, kErrorUChars, kErrorLength);
         }
 
-        CONFIRM_UErrorCode(status, expected_resource_status);
+        CONFIRM_UErrorCode(status, expected_resource_status, action);
 
-        UnicodeString expected_string;
-        expected_string = U_SUCCESS(status) ? base : kERROR;
+        UnicodeString expected_string = U_SUCCESS(status) ? base : kERROR;
 
-        CONFIRM_EQ(string, expected_string);
+        CONFIRM_EQ(string, expected_string, action);
 
         //--------------------------------------------------------------------------
         // array
@@ -462,71 +450,67 @@ ResourceBundleTest::testTag(const char* frag,
         uprv_strcat(tag, frag);
 
         action = param[i].name;
-        action += ".getStringArray(";
+        action += ".get(";
         action += tag;
         action += ")";
 
-        int32_t count = kERROR_COUNT;
         status = U_ZERO_ERROR;
-        const UnicodeString* array = theBundle.getStringArray(tag, count, status);
-        CONFIRM_UErrorCode(status,expected_resource_status);
+        ResourceBundle arrayBundle(theBundle.get(tag, status));
+        CONFIRM_UErrorCode(status, expected_resource_status, action);
+        int32_t count = arrayBundle.getSize();
 
         if (U_SUCCESS(status))
         {
-            CONFIRM_GE(count,1);
-            CONFIRM_NE((int32_t)(unsigned long)array,(int32_t)0);
+            CONFIRM_GE(count, 1, action);
 
-            for (j=0; j<count; ++j)
+            for (j=0; j < count; ++j)
             {
                 char buf[32];
+                UnicodeString value(arrayBundle.getStringEx(j, status));
                 expected_string = base;
                 expected_string += itoa(j,buf);
-                CONFIRM_EQ(array[j],expected_string);
+                CONFIRM_EQ(value, expected_string, action);
             }
-        }
-        else
-        {
-            CONFIRM_EQ(count,kERROR_COUNT);
-            CONFIRM_EQ((int32_t)(unsigned long)array,(int32_t)0);
-            count = 0;
-        }
 
-        //--------------------------------------------------------------------------
-        // arrayItem
+            action = param[i].name;
+            action += ".getStringEx(";
+            action += tag;
+            action += ")";
 
-        action = param[i].name;
-        action += ".getArrayItem(";
-        action += tag;
-        action += ")";
-
-        for (j=0; j<100; ++j)
-        {
-            index = count ? (randi(count * 3) - count) : (randi(200) - 100);
-            status = U_ZERO_ERROR;
-            string = kERROR;
-            const UnicodeString *t = theBundle.getArrayItem(tag, index, status);
-            if(t!=NULL) {
-                string = *t;
-            }
-            expected_status = (index >= 0 && index < count) ? expected_resource_status : U_MISSING_RESOURCE_ERROR;
-            CONFIRM_UErrorCode(status,expected_status);
-
-            if (U_SUCCESS(status))
+            for (j=0; j<100; ++j)
             {
-                char buf[32];
-                expected_string = base;
-                expected_string += itoa(index,buf);
+                index = count ? (randi(count * 3) - count) : (randi(200) - 100);
+                status = U_ZERO_ERROR;
+                string = kERROR;
+                UnicodeString t(arrayBundle.getStringEx(index, status));
+                expected_status = (index >= 0 && index < count) ? expected_resource_status : U_MISSING_RESOURCE_ERROR;
+                CONFIRM_UErrorCode(status, expected_status, action);
+
+                if (U_SUCCESS(status))
+                {
+                    char buf[32];
+                    expected_string = base;
+                    expected_string += itoa(index,buf);
+                }
+                else
+                {
+                    expected_string = kERROR;
+                }
+                CONFIRM_EQ(string, expected_string, action);
             }
-            else
-            {
-                expected_string = kERROR;
-            }
-            CONFIRM_EQ(string,expected_string);
+        }
+        else if (status != expected_resource_status)
+        {
+            record_fail("Error getting " + (UnicodeString)tag);
+            return (UBool)(failOrig != fail);
         }
 
+
+        // This is deprecated
         //--------------------------------------------------------------------------
         // 2dArray
 
+/*
         uprv_strcpy(tag, "array_2d_");
         uprv_strcat(tag, frag);
 
@@ -536,16 +520,19 @@ ResourceBundleTest::testTag(const char* frag,
         action += ")";
 
 
+        const UnicodeString* array = theBundle.getStringArray(tag, count, status);
+        CONFIRM_UErrorCode(status, expected_resource_status, action);
         int32_t row_count = kERROR_COUNT, column_count = kERROR_COUNT;
+        int32_t row, col;
         status = U_ZERO_ERROR;
         const UnicodeString** array2d = theBundle.get2dArray(tag, row_count, column_count, status);
-        CONFIRM_UErrorCode(status,expected_resource_status);
+        CONFIRM_UErrorCode(status,expected_resource_status, action);
 
         if (U_SUCCESS(status))
         {
-            CONFIRM_GE(row_count,1);
-            CONFIRM_GE(column_count,(int32_t)0);
-            CONFIRM_NE((int32_t)(unsigned long)array,(int32_t)0);
+            CONFIRM_GE(row_count, 1, action);
+            CONFIRM_GE(column_count, (int32_t)0, action);
+            CONFIRM_NE((int32_t)(unsigned long)array, (int32_t)0, action);
 
             for (row=0; row<row_count; ++row)
             {
@@ -555,18 +542,19 @@ ResourceBundleTest::testTag(const char* frag,
                     expected_string = base;
                     expected_string += itoa(row,buf);
                     expected_string += itoa(col,buf);
-                    CONFIRM_EQ(array2d[row][col],expected_string);
+                    CONFIRM_EQ(array2d[row][col], expected_string, action);
                 }
             }
         }
         else
         {
-            CONFIRM_EQ(row_count,kERROR_COUNT);
-            CONFIRM_EQ(column_count,kERROR_COUNT);
-            CONFIRM_EQ((int32_t)(unsigned long)array,(int32_t)0);
+            CONFIRM_EQ(row_count, kERROR_COUNT, action);
+            CONFIRM_EQ(column_count, kERROR_COUNT, action);
+            CONFIRM_EQ((int32_t)(unsigned long)array, (int32_t)0, action);
             row_count = column_count = 0;
         }
 
+        // This is deprecated
         //--------------------------------------------------------------------------
         // 2dArrayItem
 
@@ -587,7 +575,7 @@ ResourceBundleTest::testTag(const char* frag,
             }
             expected_status = (row >= 0 && row < row_count && col >= 0 && col < column_count) ?
               expected_resource_status: U_MISSING_RESOURCE_ERROR;
-            CONFIRM_UErrorCode(status,expected_status);
+            CONFIRM_UErrorCode(status, expected_status, action);
 
             if (U_SUCCESS(status))
             {
@@ -600,7 +588,7 @@ ResourceBundleTest::testTag(const char* frag,
             {
                 expected_string = kERROR;
             }
-            CONFIRM_EQ(string,expected_string);
+            CONFIRM_EQ(string, expected_string, action);
         }
 
         //--------------------------------------------------------------------------
@@ -621,19 +609,19 @@ ResourceBundleTest::testTag(const char* frag,
         status = U_ZERO_ERROR;
 
         theBundle.getTaggedArray(tag, tags, items, expected_count, status);
-        CONFIRM_UErrorCode(status, expected_resource_status);
+        CONFIRM_UErrorCode(status, expected_resource_status, action);
 
         if (U_SUCCESS(status)) {
-            CONFIRM_GE((int32_t)expected_count, (int32_t)0);
-            CONFIRM_NE((int32_t)(unsigned long)tags, (int32_t)0);
-            CONFIRM_NE((int32_t)(unsigned long)items, (int32_t)0);
+            CONFIRM_GE((int32_t)expected_count, (int32_t)0, action);
+            CONFIRM_NE((int32_t)(unsigned long)tags, (int32_t)0, action);
+            CONFIRM_NE((int32_t)(unsigned long)items, (int32_t)0, action);
 
             for (index = 0; index < expected_count; index++) {
                 logln("tag = " + tags[index] + ", value = " + items[index]);
                 if (tags[index].startsWith("tag") && items[index].startsWith(base))
-                    record_pass();
+                    record_pass(tags[index]);
                 else
-                    record_fail();
+                    record_fail(tags[index]);
             }
         }
         else
@@ -664,7 +652,7 @@ ResourceBundleTest::testTag(const char* frag,
             }
             if (index < 0)
             {
-                CONFIRM_UErrorCode(status,U_MISSING_RESOURCE_ERROR);
+                CONFIRM_UErrorCode(status, U_MISSING_RESOURCE_ERROR, action);
             }
             else
             {
@@ -672,25 +660,28 @@ ResourceBundleTest::testTag(const char* frag,
                     count++;
                     expected_string = base;
                     expected_string += buf;
-                    CONFIRM_EQ(string,expected_string);
+                    CONFIRM_EQ(string, expected_string, action);
                 }
             }
         }
-        CONFIRM_EQ(count, expected_count);
+        CONFIRM_EQ(count, expected_count, action);
+*/
     }
+
     return (UBool)(failOrig != fail);
 }
 
 void
-ResourceBundleTest::record_pass()
+ResourceBundleTest::record_pass(UnicodeString passMessage)
 {
-  ++pass;
+    logln(passMessage);
+    ++pass;
 }
 void
-ResourceBundleTest::record_fail()
+ResourceBundleTest::record_fail(UnicodeString errMessage)
 {
-  err();
-  ++fail;
+    err(errMessage);
+    ++fail;
 }
 //eof
 
