@@ -348,7 +348,9 @@ ResourceBundle ResourceBundle::getNext(UErrorCode& status) {
     ures_setIsStackObject(&r, TRUE);
     ures_getNextResource(resource, &r, &status);
     ResourceBundle res(&r, status);
-    ures_close(&r);
+    if (U_SUCCESS(status)) {
+        ures_close(&r);
+    }
     return res;
 }
 
@@ -370,7 +372,9 @@ ResourceBundle ResourceBundle::get(int32_t indexR, UErrorCode& status) const {
     ures_setIsStackObject(&r, TRUE);
     ures_getByIndex(resource, indexR, &r, &status);
     ResourceBundle res(&r, status);
-    ures_close(&r);
+    if (U_SUCCESS(status)) {
+        ures_close(&r);
+    }
     return res;
 }
 
@@ -386,7 +390,9 @@ ResourceBundle ResourceBundle::get(const char* key, UErrorCode& status) const {
     ures_setIsStackObject(&r, TRUE);
     ures_getByKey(resource, key, &r, &status);
     ResourceBundle res(&r, status);
-    ures_close(&r);
+    if (U_SUCCESS(status)) {
+        ures_close(&r);
+    }
     return res;
 }
 
