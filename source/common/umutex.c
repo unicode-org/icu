@@ -544,8 +544,10 @@ U_CFUNC UBool umtx_cleanup(void) {
 #elif defined (POSIX)
     gIncDecMutex    = NULL;
     for (i=0; i<MAX_MUTEXES; i++) {
-        pthread_mutex_destroy(&gMutexes[i]);
-        gMutexesInUse[i] = 0;
+        if (gMutexesInUse[i]) {
+            pthread_mutex_destroy(&gMutexes[i]);
+            gMutexesInUse[i] = 0;
+        }
     }
     gMutexPoolInitialized = FALSE;
 #endif
