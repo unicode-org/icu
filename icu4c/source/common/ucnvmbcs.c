@@ -697,10 +697,37 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
             return 0xffff;
         } else {
             int32_t length=pArgs->target-buffer;
+#if 0
+            /*
+             *     markus 2000-oct-26
+             *
+             * This version of the exit condition is commented out because of
+             * a clarification of the semantics of ucnv_getNextUChar() (see updated javadoc):
+             *
+             * Codepages that provide direct encodings of supplementary Unicode code points (U+10000 and up)
+             * should return single surrogates without combining them into pairs if single surrogates
+             * are encoded. This group of codepages includes UTF-8, UTF-32, and GB 18030.
+             *
+             * Codepages that provide direct encodings only of single surrogates
+             * must attempt to match pairs of them into supplementary code points.
+             * Single surrogates are returned only if they are not part of matched pairs.
+             * This group of codepages includes SCSU, LMBCS, and UTF-16.
+             *
+             * Currently, there is no MBCS codepage in the second group. SCSU, LMBCS, and UTF-16
+             * are implemented with separate code.
+             *
+             * Therefore, this feature is removed here.
+             * It might need to be added back in later when some MBCS codepages are created that
+             * fall into the second group. In this case, a flag in the .cnv file will be necessary
+             * to indicate this. makeconv would need to set this flag based on whether the codepage
+             * contains only mappings for single surrogates but
+             * not directly for any supplementary code points.
+             */
             if(/* some output and (source consumed or not a surrogate or a surrogate pair [UTF-16 specific]) */
                length>0 &&
                (pArgs->flush || !UTF_IS_FIRST_SURROGATE(buffer[0]) || length==2)
-            ) {
+#endif
+            if(length>0) {
                 if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
                     *pErrorCode=U_ZERO_ERROR;
                 }
