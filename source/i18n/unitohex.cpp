@@ -23,7 +23,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeToHexTransliterator)
 /**
  * ID for this transliterator.
  */
-const char UnicodeToHexTransliterator::_ID[] = "Any-Hex";
+const char CURR_ID[] = "Any-Hex";
 
 static const UChar HEX_DIGITS[32] = {
     // Use Unicode hex values for EBCDIC compatibility
@@ -43,8 +43,9 @@ UnicodeToHexTransliterator::UnicodeToHexTransliterator(
                                 UBool isUppercase,
                                 UnicodeFilter* adoptedFilter,
                                 UErrorCode& status) :
-    Transliterator(_ID, adoptedFilter),
-    uppercase(isUppercase) {
+    Transliterator(UnicodeString(CURR_ID, ""), adoptedFilter),
+    uppercase(isUppercase)
+{
 
     if (U_FAILURE(status)) {
         return;
@@ -58,7 +59,7 @@ UnicodeToHexTransliterator::UnicodeToHexTransliterator(
 UnicodeToHexTransliterator::UnicodeToHexTransliterator(
                                 const UnicodeString& thePattern,
                                 UErrorCode& status) :
-    Transliterator(_ID, 0),
+    Transliterator(UnicodeString(CURR_ID, ""), 0),
     uppercase(TRUE) {
 
     if (U_FAILURE(status)) {
@@ -73,7 +74,7 @@ UnicodeToHexTransliterator::UnicodeToHexTransliterator(
  */
 UnicodeToHexTransliterator::UnicodeToHexTransliterator(
                                 UnicodeFilter* adoptedFilter) :
-    Transliterator(_ID, adoptedFilter),
+    Transliterator(UnicodeString(CURR_ID, ""), adoptedFilter),
     pattern("\\\\u0000", ""),
     prefix("\\u", 2, ""),
     suffix(),

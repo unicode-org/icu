@@ -24,7 +24,7 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(NameUnicodeTransliterator)
 
-const char NameUnicodeTransliterator::_ID[] = "Name-Any";
+const char CURR_ID[] = "Name-Any";
 
 static const UChar OPEN[] = {92,78,126,123,126,0}; // "\N~{~"
 static const UChar OPEN_DELIM  = 92;  // '\\' first char of OPEN
@@ -36,7 +36,7 @@ static const UChar SPACE       = 32;  // ' '
  * '}'.
  */
 NameUnicodeTransliterator::NameUnicodeTransliterator(UnicodeFilter* adoptedFilter) :
-    Transliterator(_ID, adoptedFilter) {
+    Transliterator(UnicodeString(CURR_ID, ""), adoptedFilter) {
 }
 
 /**

@@ -111,25 +111,25 @@ static const UChar gLastResortZoneStrings[5][4] =
 
 U_NAMESPACE_BEGIN
 
-const char DateFormatSymbols::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateFormatSymbols)
 
 /**
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale.
  */
-const char DateFormatSymbols::fgErasTag[]="Eras";
-const char DateFormatSymbols::fgMonthNamesTag[]="MonthNames";
-const char DateFormatSymbols::fgMonthAbbreviationsTag[]="MonthAbbreviations";
-const char DateFormatSymbols::fgDayNamesTag[]="DayNames";
-const char DateFormatSymbols::fgDayAbbreviationsTag[]="DayAbbreviations";
-const char DateFormatSymbols::fgAmPmMarkersTag[]="AmPmMarkers";
+const char gErasTag[]="Eras";
+const char gMonthNamesTag[]="MonthNames";
+const char gMonthAbbreviationsTag[]="MonthAbbreviations";
+const char gDayNamesTag[]="DayNames";
+const char gDayAbbreviationsTag[]="DayAbbreviations";
+const char gAmPmMarkersTag[]="AmPmMarkers";
 
 /**
  * These are the tags we expect to see in time zone data resource bundle files
  * associated with a locale.
  */
-const char DateFormatSymbols::fgZoneStringsTag[]="zoneStrings";
-const char DateFormatSymbols::fgLocalPatternCharsTag[]="localPatternChars";
+const char gZoneStringsTag[]="zoneStrings";
+const char gLocalPatternCharsTag[]="localPatternChars";
 
 /**
  * Jitterbug 2974: MSVC has a bug whereby new X[0] behaves badly.
@@ -644,14 +644,14 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     // if we make it to here, the resource data is cool, and we can get everything out
     // of it that we need except for the time-zone and localized-pattern data, which
     // are stoerd in a separate file
-    initField(&fEras, fErasCount, getData(resource, fgErasTag, type, status), status);
-    initField(&fMonths, fMonthsCount, getData(resource, fgMonthNamesTag, type, status), status);
-    initField(&fShortMonths, fShortMonthsCount, getData(resource, fgMonthAbbreviationsTag, type, status), status);
-    initField(&fAmPms, fAmPmsCount, getData(resource, fgAmPmMarkersTag, type, status), status);
+    initField(&fEras, fErasCount, getData(resource, gErasTag, type, status), status);
+    initField(&fMonths, fMonthsCount, getData(resource, gMonthNamesTag, type, status), status);
+    initField(&fShortMonths, fShortMonthsCount, getData(resource, gMonthAbbreviationsTag, type, status), status);
+    initField(&fAmPms, fAmPmsCount, getData(resource, gAmPmMarkersTag, type, status), status);
     // fastCopyFrom() - see assignArray comments
-    fLocalPatternChars.fastCopyFrom(resource.getStringEx(fgLocalPatternCharsTag, status));
+    fLocalPatternChars.fastCopyFrom(resource.getStringEx(gLocalPatternCharsTag, status));
 
-    ResourceBundle zoneArray(resource.get(fgZoneStringsTag, status));
+    ResourceBundle zoneArray(resource.get(gZoneStringsTag, status));
     fZoneStringsRowCount = zoneArray.getSize();
     ResourceBundle zoneRow(zoneArray.get((int32_t)0, status));
     /* TODO: Fix the case where the zoneStrings is not a perfect square array of information. */
@@ -677,7 +677,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     }
 
     // {sfb} fixed to handle 1-based weekdays
-    ResourceBundle weekdaysData(getData(resource, fgDayNamesTag, type, status));
+    ResourceBundle weekdaysData(getData(resource, gDayNamesTag, type, status));
     fWeekdaysCount = weekdaysData.getSize();
     fWeekdays = new UnicodeString[fWeekdaysCount+1];
     /* test for NULL */
@@ -691,7 +691,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         fWeekdays[i+1].fastCopyFrom(weekdaysData.getStringEx(i, status));
     }
 
-    ResourceBundle lsweekdaysData(getData(resource, fgDayAbbreviationsTag, type, status));
+    ResourceBundle lsweekdaysData(getData(resource, gDayAbbreviationsTag, type, status));
     fShortWeekdaysCount = lsweekdaysData.getSize();
     fShortWeekdays = new UnicodeString[fShortWeekdaysCount+1];
     /* test for NULL */
