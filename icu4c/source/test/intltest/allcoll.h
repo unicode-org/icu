@@ -62,5 +62,7 @@ private:
     static const Collator::EComparisonResult results[];
 
     RuleBasedCollator *myCollation;
+
+    void doTestVariant(const UnicodeString source, const UnicodeString target, Collator::EComparisonResult result);
 };
 #endif

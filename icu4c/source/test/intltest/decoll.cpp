@@ -127,6 +127,7 @@ void CollationGermanTest::TestTertiary(/* char* par */)
 
     int32_t i = 0;
     myCollation->setStrength(Collator::TERTIARY);
+    myCollation->setDecomposition(Normalizer::EMode::COMPOSE_COMPAT);
     for (i = 0; i < 12 ; i++)
     {
         doTest(testSourceCases[i], testTargetCases[i], results[i][1]);
@@ -140,6 +141,7 @@ void CollationGermanTest::TestPrimary(/* char* par */)
 	}
     int32_t i;
     myCollation->setStrength(Collator::PRIMARY);
+    myCollation->setDecomposition(Normalizer::EMode::DECOMP);
     for (i = 0; i < 12 ; i++)
     {
         doTest(testSourceCases[i], testTargetCases[i], results[i][0]);

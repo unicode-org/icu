@@ -44,6 +44,23 @@ public:
     void TestProperty(/* char* par */);
 
     /**
+    * This tests the RuleBasedCollator
+    * - constructor/destructor
+    * - getRules
+    */
+    void TestRuleBasedColl(/* char* par */);
+
+    /**
+    * Tests decomposition setting
+    */
+    void TestDecomposition();
+
+    /**
+    * SafeClone test
+    */
+    void TestSafeClone();
+
+    /**
      * This tests the properties of a rule based collator object.
      * - constructor/destructor
      * - == and != operators
