@@ -32,7 +32,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 2.6
     ReadMe</h1>
 
-    <p>Version: 2003-Apr-16<br>
+    <p>Version: 2003-May-02<br>
      Copyright &copy; 1997-2003 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -89,7 +89,20 @@
         </ul>
       </li>
 
-      <li><a href="#PlatformDependencies">Platform Dependencies</a></li>
+      <li>
+        <a href="#PlatformDependencies">Platform Dependencies</a> 
+
+        <ul class="TOC">
+          <li><a href="#PlatformDependenciesNew">Porting To A New
+          Platform</a></li>
+
+          <li><a href="#PlatformDependenciesImpl">Platform Dependent
+          Implementations</a></li>
+
+          <li><a href="#PlatformDependenciesBuildOrder">Build Order Without
+          Using ICU's Makefiles</a></li>
+        </ul>
+      </li>
     </ul>
     <hr>
 
@@ -1579,6 +1592,48 @@ del common/libicuuc.o
     <h2><a name="PlatformDependencies" href="#PlatformDependencies">Platform
     Dependencies</a></h2>
 
+    <h3><a name="PlatformDependenciesNew" href=
+    "#PlatformDependenciesNew">Porting To A New Platform</a></h3>
+
+    <p>If you are using ICU's Makefiles to build ICU on a new platform, there
+    are a few places where you will need to add or modify some files. If you
+    need more help, you can always ask the icu4c-support mailing list. Once you
+    have finished porting ICU to a new platform, it is recommended that you
+    contribute your changes back to ICU via the icu4c-support mailing list.
+    This will make it easier for everyone to benefit from your work.</p>
+
+    <p>Try to follow the build steps from the <a href=
+    "#HowToBuildUnix">Unix</a> build instructions. If the configure script
+    fails, then you will need to modify some files. Here are the usual steps
+    for porting to a new platform:<br>
+    </p>
+
+    <ol>
+      <li>Create an mh file in icu/source/config/. You can use mh-linux or a
+      similar mh file as your base configuration.</li>
+
+      <li>Modify icu/source/aclocal.m4 to recognize your platform's mh
+      file.</li>
+
+      <li>Modify icu/source/configure.in to properly set your <b>platform</b> C
+      Macro define.</li>
+
+      <li>Run <a href="http://www.gnu.org/software/autoconf/">autoconf</a> in
+      icu/source/ without any options. The autoconf tool is standard on most
+      Linux systems.</li>
+
+      <li>If you have any optimization options that you want to normally use,
+      you can modify icu/source/runConfigureICU to specify those options for
+      your platform.</li>
+
+      <li>Build and test ICU on your platform. It is very important that you
+      run the tests. If you don't run the tests, there is no guarentee that you
+      have properly ported ICU.</li>
+    </ol>
+
+    <h3><a name="PlatformDependenciesImpl" href=
+    "#PlatformDependenciesImpl">Platform Dependent Implementations</a></h3>
+
     <p>The platform dependencies have been mostly isolated into the following
     files in the common library. This information can be useful if you are
     porting ICU to a new platform.</p>
@@ -1653,17 +1708,17 @@ del common/libicuuc.o
       <br>
       </li>
 
-      <li>For the intltest test suite, intltest.cpp in
-      "icu/source/test/intltest/" contains the method pathnameInContext, which
-      must also be adapted to any new platform.</li>
-
       <li>Using platform specific #ifdef macros are highly discouraged outside
       of the scope of these files. When the source code gets updated in the
       future, these #ifdef's can cause testing problems for your platform.</li>
     </ul>
 
-    <p>It is possible to build each library individually. They must be built in
-    the following order:<br>
+    <h3><a name="PlatformDependenciesBuildOrder" href=
+    "#PlatformDependenciesBuildOrder">Build Order Without Using ICU's
+    Makefiles</a></h3>
+
+    <p>It is possible to build each library individually without our Makefiles.
+    They must be built in the following order:<br>
     </p>
 
     <ol>
@@ -1687,6 +1742,8 @@ del common/libicuuc.o
 
       <li>gennorm</li>
 
+      <li>genidna</li>
+
       <li>genbrk</li>
 
       <li>genuca</li>
@@ -1702,6 +1759,10 @@ del common/libicuuc.o
       <li>pkgdata</li>
 
       <li>makedata (a project on Windows, or source/data/Makefile on Unix)</li>
+
+      <li>layout (optional)</li>
+
+      <li>layoutex (optional)</li>
 
       <li>ctestfw, intltest and cintltst, if you want to run the test
       suite.</li>
