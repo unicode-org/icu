@@ -1,8 +1,8 @@
 /*
- **************************************************************************
- * Copyright (C) 2004, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                           *
- **************************************************************************
+ *********************************************************************************
+ * Copyright (C) 2004 - 2005, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                  *
+ *********************************************************************************
  *
  */
 
@@ -66,7 +66,7 @@ import java.lang.IllegalArgumentException;
  *    <td>Jan 1, 1601</td>
  *  </tr>
  *  <tr>
- *    <td>WINDOWS_DATE_TIME</td>
+ *    <td>DOTNET_DATE_TIME</td>
  *    <td>long</td>
  *    <td>ticks (100 nanoseconds)</td>
  *
@@ -161,7 +161,7 @@ import java.lang.IllegalArgumentException;
  *
  *<p>
  * So what to use for this pivot? Java time has plenty of range, but cannot represent
- * Windows datetimes without severe loss of precision. ICU4C time addresses this by using a
+ * .NET framework <code>System.DateTime</code> vaules without severe loss of precision. ICU4C time addresses this by using a
  * <code>double</code> that is otherwise equivalent to the Java time. However, there are disadvantages
  * with <code>doubles</code>. They provide for much more graceful degradation in arithmetic operations.
  * But they only have 53 bits of accuracy, which means that they will lose precision when
@@ -177,7 +177,7 @@ import java.lang.IllegalArgumentException;
  * have a fixed size.
  *
  *<p>
- * Because of these issues, we ended up concluding that the Windows datetime would be the
+ * Because of these issues, we ended up concluding that the .NET framework's <code>System.DateTime</code> would be the
  * best pivot. However, we use the full range allowed by the datatype, allowing for
  * datetimes back to 29,000 BC and up to 29,000 AD. This time scale is very fine grained,
  * does not lose precision, and covers a range that will meet almost all requirements.
@@ -229,13 +229,13 @@ public final class UniversalTimeScale
     public static final int WINDOWS_FILE_TIME = 3;
 
     /**
-     * Used in Windows for date time (?). Data is a <code>long</code>. Value
-     * is ticks (1 tick == 100 nanoseconds) since January 1, 0001.
+     * Used in the .NET framework's <code>System.DateTime</code> structure.
+     * Data is a <code>long</code>. Value is ticks (1 tick == 100 nanoseconds) since January 1, 0001.
      *
      * @draft ICU 3.2
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public static final int WINDOWS_DATE_TIME = 4;
+    public static final int DOTNET_DATE_TIME = 4;
 
     /**
      * Used in older Macintosh systems. Data is an <code>int</code>. Value
@@ -481,7 +481,7 @@ public final class UniversalTimeScale
             new TimeScaleData(seconds,      621357696000000000L, -9223372036854775808L, 9223372036854775807L, -984472973285L,               860201434085L), // UNIX_TIME
             new TimeScaleData(milliseconds, 621357696000000000L, -9223372036854774999L, 9223372036854774999L, -984472973285477L,         860201434085477L), // ICU4C_TIME
             new TimeScaleData(ticks,        504912960000000000L, -8718459076854775808L, 9223372036854775807L, -9223372036854775808L, 8718459076854775807L), // WINDOWS_FILE_TIME
-            new TimeScaleData(ticks,        000000000000000000L, -9223372036854775808L, 9223372036854775807L, -9223372036854775808L, 9223372036854775807L), // WINDOWS_DATE_TIME
+            new TimeScaleData(ticks,        000000000000000000L, -9223372036854775808L, 9223372036854775807L, -9223372036854775808L, 9223372036854775807L), // DOTNET_DATE_TIME
             new TimeScaleData(seconds,      600529248000000000L, -9223372036854775808L, 9223372036854775807L, -982390128485L,               862284278885L), // MAC_OLD_TIME
             new TimeScaleData(seconds,      631140768000000000L, -9223372036854775808L, 9223372036854775807L, -985451280485L,               859223126885L), // MAC_TIME
             new TimeScaleData(days,         599266944000000000L, -9223372036854775808L, 9223372036854775807L, -11368795L,                        9981603L), // EXCEL_TIME
