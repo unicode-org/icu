@@ -575,10 +575,10 @@ uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *elemen
     } else { /* we are adding to existing contraction */
       /* there were already some elements in the table, so we need to add a new contraction */
       /* Two things can happen here: either the codepoint is already in the table, or it is not */
-      uint32_t position = uprv_cnttab_findCP(contractions, existingCE, *(element->cPoints+1), status);
+      int32_t position = uprv_cnttab_findCP(contractions, existingCE, *(element->cPoints+1), status);
       element->cPoints++;
       element->cSize--;
-      if(position != 0) {       /* if it is we just continue down the chain */
+      if(position > 0) {       /* if it is we just continue down the chain */
         uint32_t eCE = uprv_cnttab_getCE(contractions, existingCE, position, status);
         uint32_t newCE = uprv_uca_processContraction(contractions, element, eCE, status);
         uprv_cnttab_setContraction(contractions, existingCE, position, *(element->cPoints), newCE, status);
