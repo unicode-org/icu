@@ -35,7 +35,7 @@ U_NAMESPACE_BEGIN
 //     All of them are strung together in a linked list, which is kept in order
 //     (by character)
 //
-class RangeDescriptor : public UObject {
+class RangeDescriptor : public UMemory {
 public:
     UChar32            fStartChar;      // Start of range, unicode 32 bit value.
     UChar32            fEndChar;        // End of range, unicode 32 bit value.
@@ -53,26 +53,9 @@ public:
     void setDictionaryFlag();           // Check whether this range appears as part of
                                         //   the Unicode set named "dictionary"
 
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
 private:
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
+    RangeDescriptor(const RangeDescriptor &other); // forbid copying of this class
+    RangeDescriptor &operator=(const RangeDescriptor &other); // forbid copying of this class
 };
 
 
@@ -91,7 +74,7 @@ private:
 //
 
 
-class RBBISetBuilder : public UObject {
+class RBBISetBuilder : public UMemory {
 public:
     RBBISetBuilder(RBBIRuleBuilder *rb);
     ~RBBISetBuilder();
@@ -106,20 +89,6 @@ public:
     void     printSets();
     void     printRanges();
     void     printRangeGroups();
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
 private:
     void           numberSets();
@@ -139,11 +108,8 @@ private:
     //       Index 0 is not used.  Funny counting.
     int32_t               fGroupCount;
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
+    RBBISetBuilder(const RBBISetBuilder &other); // forbid copying of this class
+    RBBISetBuilder &operator=(const RBBISetBuilder &other); // forbid copying of this class
 };
 
 

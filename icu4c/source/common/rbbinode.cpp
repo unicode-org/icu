@@ -33,8 +33,6 @@
 
 U_NAMESPACE_BEGIN
 
-const char RBBINode::fgClassID=0;
-
 int  RBBINode::gLastSerial = 0;
 
 
@@ -44,7 +42,7 @@ int  RBBINode::gLastSerial = 0;
 //    Constructor.   Just set the fields to reasonable default values.
 //
 //-------------------------------------------------------------------------
-RBBINode::RBBINode(NodeType t) : UObject() {
+RBBINode::RBBINode(NodeType t) : UMemory() {
     fSerialNum    = ++gLastSerial;
     fType         = t;
     fParent       = NULL;
@@ -70,7 +68,7 @@ RBBINode::RBBINode(NodeType t) : UObject() {
 };
 
 
-RBBINode::RBBINode(const RBBINode &other) : UObject(other) {
+RBBINode::RBBINode(const RBBINode &other) : UMemory(other) {
     fSerialNum   = ++gLastSerial;
     fType        = other.fType;
     fParent      = NULL;
