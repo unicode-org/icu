@@ -97,7 +97,7 @@ void TransliteratorTest::TestInstantiation() {
                   ", parse error " + parseError.code +
                   ", line " + parseError.line +
                   ", offset " + parseError.offset +
-                  ", context " + prettify(parseError.preContext));
+                  ", context " + prettify(parseError.preContext, TRUE));
             // When createInstance fails, it deletes the failing
             // entry from the available ID list.  We detect this
             // here by looking for a change in countAvailableIDs.
@@ -120,8 +120,8 @@ void TransliteratorTest::TestInstantiation() {
                       ", parse error " + parseError.code +
                       ", line " + parseError.line +
                       ", offset " + parseError.offset +
-                      ", context " + prettify(parseError.preContext) +
-                      ", rules: " + rules);
+                      ", context " + prettify(parseError.preContext, TRUE) +
+                      ", rules: " + prettify(rules, TRUE));
             } else {
                 delete u;
             }
@@ -268,7 +268,7 @@ void TransliteratorTest::TestRuleBasedInverse(void) {
  */
 void TransliteratorTest::TestKeyboard(void) {
     UErrorCode status = U_ZERO_ERROR;
-    RuleBasedTransliterator t("<ID>", 
+    RuleBasedTransliterator t("<ID>",
                               UnicodeString("psch>Y;")
                               +"ps>y;"
                               +"ch>x;"
@@ -297,7 +297,7 @@ void TransliteratorTest::TestKeyboard(void) {
  */
 void TransliteratorTest::TestKeyboard2(void) {
     UErrorCode status = U_ZERO_ERROR;
-    RuleBasedTransliterator t("<ID>", 
+    RuleBasedTransliterator t("<ID>",
                               UnicodeString("ych>Y;")
                               +"ps>|y;"
                               +"ch>x;"
@@ -505,7 +505,7 @@ void TransliteratorTest::TestFiltering(void) {
 /**
  * Test anchors
  */
-void TransliteratorTest::TestAnchors(void) { 
+void TransliteratorTest::TestAnchors(void) {
     expect(UnicodeString("^ab  > 01 ;"
            " ab  > |8 ;"
            "  b  > k ;"
@@ -513,7 +513,7 @@ void TransliteratorTest::TestAnchors(void) {
            " 8x  > 77 ;", ""),
 
            "ababbabxabx",
-           "018k7745");  
+           "018k7745");
     expect(UnicodeString("$s = [z$] ;"
            "$s{ab    > 01 ;"
            "   ab    > |8 ;"
@@ -640,7 +640,7 @@ void TransliteratorTest::TestJ243(void) {
     // Try a custom Hex-Unicode
     // \uXXXX and &#xXXXX;
     status = U_ZERO_ERROR;
-    HexToUnicodeTransliterator hex2(UnicodeString("\\\\u###0;&\\#x###0\\;", ""), status); 
+    HexToUnicodeTransliterator hex2(UnicodeString("\\\\u###0;&\\#x###0\\;", ""), status);
     expect(hex2, UnicodeString("\\u61\\u062\\u0063\\u00645\\u66x&#x30;&#x031;&#x0032;&#x00033;", ""),
            "abcd5fx012&#x00033;");
     // Try custom Unicode-Hex (default is tested elsewhere)
@@ -719,9 +719,9 @@ void TransliteratorTest::TestCursorOffset(void) {
     // Array of 3n items
     // Each item is <rules>, <input>, <expected output>
     UnicodeString DATA[] = {
-        "pre {alpha} post > | @ ALPHA ;" 
-        "eALPHA > beta ;" 
-        "pre {beta} post > BETA @@ | ;" 
+        "pre {alpha} post > | @ ALPHA ;"
+        "eALPHA > beta ;"
+        "pre {beta} post > BETA @@ | ;"
         "post > xyz",
 
         "prealphapost prebetapost",
@@ -750,18 +750,18 @@ void TransliteratorTest::TestArbitraryVariableValues(void) {
     // Array of 3n items
     // Each item is <rules>, <input>, <expected output>
     UnicodeString DATA[] = {
-        "$abe = ab;" 
-        "$pat = x[yY]z;" 
-        "$ll  = 'a-z';" 
-        "$llZ = [$ll];" 
-        "$llY = [$ll$pat];" 
-        "$emp = ;" 
+        "$abe = ab;"
+        "$pat = x[yY]z;"
+        "$ll  = 'a-z';"
+        "$llZ = [$ll];"
+        "$llY = [$ll$pat];"
+        "$emp = ;"
 
-        "$abe > ABE;" 
-        "$pat > END;" 
-        "$llZ > 1;" 
-        "$llY > 2;" 
-        "7$emp 8 > 9;" 
+        "$abe > ABE;"
+        "$pat > END;"
+        "$llZ > 1;"
+        "$llY > 2;"
+        "7$emp 8 > 9;"
         "",
 
         "ab xYzxyz stY78",
@@ -1106,53 +1106,53 @@ void TransliteratorTest::TestNormalizationTransliterator() {
         // Input               Decomposed            Composed
         "cat",                "cat",                "cat"               ,
         "\\u00e0ardvark",      "a\\u0300ardvark",     "\\u00e0ardvark"    ,
-                                                                        
+
         "\\u1e0a",             "D\\u0307",            "\\u1e0a"            , // D-dot_above
         "D\\u0307",            "D\\u0307",            "\\u1e0a"            , // D dot_above
-                                                                        
+
         "\\u1e0c\\u0307",       "D\\u0323\\u0307",      "\\u1e0c\\u0307"      , // D-dot_below dot_above
         "\\u1e0a\\u0323",       "D\\u0323\\u0307",      "\\u1e0c\\u0307"      , // D-dot_above dot_below
         "D\\u0307\\u0323",      "D\\u0323\\u0307",      "\\u1e0c\\u0307"      , // D dot_below dot_above
-                                                                        
+
         "\\u1e10\\u0307\\u0323", "D\\u0327\\u0323\\u0307","\\u1e10\\u0323\\u0307", // D dot_below cedilla dot_above
         "D\\u0307\\u0328\\u0323","D\\u0328\\u0323\\u0307","\\u1e0c\\u0328\\u0307", // D dot_above ogonek dot_below
-                                                                        
+
         "\\u1E14",             "E\\u0304\\u0300",      "\\u1E14"            , // E-macron-grave
         "\\u0112\\u0300",       "E\\u0304\\u0300",      "\\u1E14"            , // E-macron + grave
         "\\u00c8\\u0304",       "E\\u0300\\u0304",      "\\u00c8\\u0304"      , // E-grave + macron
-                                                                        
+
         "\\u212b",             "A\\u030a",            "\\u00c5"            , // angstrom_sign
         "\\u00c5",             "A\\u030a",            "\\u00c5"            , // A-ring
-                                                                        
+
         "\\u00fdffin",         "y\\u0301ffin",        "\\u00fdffin"        ,	//updated with 3.0
         "\\u00fd\\uFB03n",      "y\\u0301\\uFB03n",     "\\u00fd\\uFB03n"     ,	//updated with 3.0
-                                                                        
+
         "Henry IV",           "Henry IV",           "Henry IV"          ,
         "Henry \\u2163",       "Henry \\u2163",       "Henry \\u2163"      ,
-                                                                        
+
         "\\u30AC",             "\\u30AB\\u3099",       "\\u30AC"            , // ga (Katakana)
         "\\u30AB\\u3099",       "\\u30AB\\u3099",       "\\u30AC"            , // ka + ten
         "\\uFF76\\uFF9E",       "\\uFF76\\uFF9E",       "\\uFF76\\uFF9E"      , // hw_ka + hw_ten
         "\\u30AB\\uFF9E",       "\\u30AB\\uFF9E",       "\\u30AB\\uFF9E"      , // ka + hw_ten
         "\\uFF76\\u3099",       "\\uFF76\\u3099",       "\\uFF76\\u3099"      , // hw_ka + ten
-                                                                        
+
         "A\\u0300\\u0316",      "A\\u0316\\u0300",      "\\u00C0\\u0316"      ,
         0 // end
-    };                                                
+    };
 
-    const char* COMPAT[] = {                        
+    const char* COMPAT[] = {
         // Input               Decomposed            Composed
         "\\uFB4f",             "\\u05D0\\u05DC",       "\\u05D0\\u05DC"     , // Alef-Lamed vs. Alef, Lamed
-                                                                        
+
         "\\u00fdffin",         "y\\u0301ffin",        "\\u00fdffin"        ,	//updated for 3.0
         "\\u00fd\\uFB03n",      "y\\u0301ffin",        "\\u00fdffin"        , // ffi ligature -> f + f + i
-                                                                        
+
         "Henry IV",           "Henry IV",           "Henry IV"          ,
         "Henry \\u2163",       "Henry IV",           "Henry IV"          ,
-                                                                        
+
         "\\u30AC",             "\\u30AB\\u3099",       "\\u30AC"            , // ga (Katakana)
         "\\u30AB\\u3099",       "\\u30AB\\u3099",       "\\u30AC"            , // ka + ten
-                                                                        
+
         "\\uFF76\\u3099",       "\\u30AB\\u3099",       "\\u30AC"            , // hw_ka + ten
         0 // end
     };
@@ -1328,7 +1328,7 @@ void TransliteratorTest::TestCompoundFilter(void) {
     expect(*t,
            CharsToUnicodeString("CA\\u039A\\u0391"),
            CharsToUnicodeString("\\u043AA\\u043A\\u0430"));
-    delete t;                                       
+    delete t;
 }
 
 void TransliteratorTest::TestRemove(void) {
@@ -1339,34 +1339,92 @@ void TransliteratorTest::TestRemove(void) {
     }
     
     expect(*t, "Able bodied baker's cats", "Ale odied ker's ts");
-    delete t;                                       
+    delete t;
 }
 
 void TransliteratorTest::TestToRules(void) {
-    Transliterator *t = Transliterator::createFromRules("ID",
-         "$a=\\u4E61; [$a] > A;");
-    if (t == 0) {
-        errln("FAIL: createFromRules failed");
-        return;
+    const char* RBT = "rbt";
+    const char* SET = "set";
+    const char* DATA[] = {
+        RBT,
+        "$a=\\u4E61; [$a] > A;",
+        "[\\u4E61] > A;",
+
+        RBT,
+        "$white=[[:Zs:][:Zl:]]; $white{a} > A;",
+        "[[:Zs:][:Zl:]]{a} > A;",
+
+        SET,
+        "[[:Zs:][:Zl:]]",
+        "[[:Zs:][:Zl:]]",
+
+        SET,
+        "[:Ps:]",
+        "[:Ps:]",
+
+        SET,
+        "[:L:]",
+        "[:L:]",
+
+        SET,
+        "[[:L:]-[A]]",
+        "[[:L:]-[A]]",
+    };
+    const size_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+
+    for (int32_t d=0; d < DATA_length; d+=3) {
+        if (DATA[d] == RBT) {
+            // Transliterator test
+            Transliterator *t = Transliterator::createFromRules("ID",
+                                                                DATA[d+1]);
+            if (t == 0) {
+                errln("FAIL: createFromRules failed");
+                return;
+            }
+            UnicodeString rules, escapedRules;
+            t->toRules(rules, FALSE);
+            t->toRules(escapedRules, TRUE);
+            UnicodeString expRules = CharsToUnicodeString(DATA[d+2]);
+            UnicodeString expEscapedRules(DATA[d+2]);
+            if (rules == expRules) {
+                logln((UnicodeString)"Ok: " + DATA[d+1] +
+                      " => " + rules);
+            } else {
+                errln((UnicodeString)"FAIL: " + DATA[d+1] +
+                      " => " + rules + ", exp " + expRules);
+            }
+            if (escapedRules == expEscapedRules) {
+                logln((UnicodeString)"Ok: " + DATA[d+1] +
+                      " => " + escapedRules);
+            } else {
+                errln((UnicodeString)"FAIL: " + DATA[d+1] +
+                      " => " + escapedRules + ", exp " + expEscapedRules);
+            }
+            delete t;
+            
+        } else {
+            // UnicodeSet test
+            UErrorCode status = U_ZERO_ERROR;
+            UnicodeString pat(DATA[d+1]);
+            UnicodeString expToPat(DATA[d+2]);
+            UnicodeSet set(pat, status);
+            if (U_FAILURE(status)) {
+                errln("FAIL: UnicodeSet ct failed");
+                return;
+            }
+            // Adjust spacing etc. as necessary.
+            UnicodeString toPat;
+            set.toPattern(toPat);
+            if (expToPat == toPat) {
+                logln((UnicodeString)"Ok: " + pat +
+                      " => " + toPat);
+            } else {
+                errln((UnicodeString)"FAIL: " + pat +
+                      " => " + prettify(toPat, TRUE) +
+                      ", exp " + prettify(pat, TRUE));
+            }
+        }
     }
-    UnicodeString rules, escapedRules;
-    t->toRules(rules, FALSE);
-    t->toRules(escapedRules, TRUE);
-    // Adjust spacing etc. as necessary.  We expect an actual
-    // U+4E61 in the rules and "\\u4E61" in the escaped rules.
-    UnicodeString expRules = CharsToUnicodeString("[\\u4E61] > A;");
-    UnicodeString expEscapedRules("[\\u4E61] > A;");
-    if (rules == expRules) {
-        logln(rules);
-    } else {
-        errln((UnicodeString)"FAIL: got " + rules + ", exp " + expRules);
-    }
-    if (escapedRules == expEscapedRules) {
-        logln(escapedRules);
-    } else {
-        errln((UnicodeString)"FAIL: got " + escapedRules + ", exp " + expEscapedRules);
-    }
-    delete t;                                       
 }
 
 //======================================================================
