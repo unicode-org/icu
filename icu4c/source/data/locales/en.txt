@@ -1498,7 +1498,7 @@ en {
         }
         calendar{
             traditional   { "Traditional Calendar" }
-            japanese      { "Japaneese Calendar"  }
+            japanese      { "Japanese Calendar"  }
             buddhist      { "Buddhist Calendar"  }
             islamic       { "Islamic Calendar"   }
             islamic-civil { "Islamic-Civil Calendar" }
