@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2003, International Business Machines
+*   Copyright (C) 1998-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -82,6 +82,27 @@
 
 
 #define UFMT_EMPTY {ufmt_empty, NULL}
+
+/**
+ * A u_scanf handler function.  
+ * A u_scanf handler is responsible for handling a single u_scanf 
+ * format specification, for example 'd' or 's'.
+ * @param stream The UFILE to which to write output.
+ * @param info A pointer to a <TT>u_scanf_spec_info</TT> struct containing
+ * information on the format specification.
+ * @param args A pointer to the argument data
+ * @param fmt A pointer to the first character in the format string
+ * following the spec.
+ * @param consumed On output, set to the number of characters consumed
+ * in <TT>fmt</TT>.
+ * @return The number of arguments converted and assigned, or -1 if an
+ * error occurred.
+ */
+typedef int32_t (*u_scanf_handler) (UFILE            *stream,
+                   const u_scanf_spec_info     *info,
+                   ufmt_args  *args,
+                   const UChar            *fmt,
+                   int32_t            *consumed);
 
 typedef struct u_scanf_info {
     ufmt_type_info info;
@@ -711,7 +732,6 @@ u_scanf_octal_handler(UFILE             *input,
     void            *num         = (void*) (args[0].ptrValue);
     int64_t         result;
 
-
     /* skip all ws in the input */
     u_scanf_skip_leading_ws(input, info->fPadChar);
 
@@ -1055,11 +1075,10 @@ u_vfscanf_u(UFILE       *f,
         /* else do nothing */
 
         /* just ignore unknown tags */
+    }
 
-  }
-
-  /* return # of items converted */
-  return converted;
+    /* return # of items converted */
+    return converted;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
