@@ -2921,7 +2921,7 @@ private:
   friend class UnicodeConverter;
 
   friend class StringCharacterIterator;
-  friend class StringTest;
+  friend class StringThreadTest;
 
   /*
    * The following are all the class fields that are stored
