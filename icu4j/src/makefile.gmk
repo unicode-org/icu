@@ -1,8 +1,8 @@
 #
-# @(#)$RCSfile: makefile.gmk,v $ $Revision: 1.1 $ $Date: 2000/02/16 23:39:32 $
+# @(#)$RCSfile: makefile.gmk,v $ $Revision: 1.2 $ $Date: 2000/02/17 05:14:59 $
 # 
 
-TOPDIR=		..
+TOPDIR=..
 PACKAGE=	
 
 include $(TOPDIR)/src/build/defs.gmk
