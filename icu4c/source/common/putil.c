@@ -71,6 +71,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
+#include "locmap.h"
 
 /* include system headers */
 #ifdef WIN32
@@ -81,7 +82,6 @@
 #   define NOIME
 #   define NOMCX
 #   include <windows.h>
-#   include "locmap.h"
 #elif defined(OS2)
 #   define INCL_DOSMISC
 #   define INCL_DOSERRORS
@@ -1111,121 +1111,6 @@ static const mac_lc_rec mac_lc_recs[] = {
 #endif
 
 #if U_POSIX_LOCALE
-struct
-{
-  const char *loc;
-  const char *charmap;
-}
-const _localeToDefaultCharmapTable [] =
-{
-/*
-  See:         http://czyborra.com/charsets/iso8859.html
-*/
-
-/* xx_XX locales first, so they will match: */
- { "zh_CN", "gb2312" },  /* Chinese (Simplified) */
- { "zh_TW", "Big5" },    /* Chinese (Traditional) */
-
- { "af", "iso-8859-1" },  /* Afrikaans */
- { "ar", "iso-8859-6" },  /* Arabic */
- { "be", "iso-8859-5" },  /* Byelorussian */
- { "bg", "iso-8859-5" },  /* Bulgarian */
- { "ca", "iso-8859-1" },  /* Catalan */
- { "cs", "iso-8859-2" },  /* Czech */
- { "da", "iso-8859-1" },  /* Danish */
- { "de", "iso-8859-1" },  /* German */
- { "el", "iso-8859-7" },  /* Greek */
- { "en", "iso-8859-1" },  /* English */
- { "eo", "iso-8859-3" },  /* Esperanto */
- { "es", "iso-8859-1" },  /* Spanish */
- { "et", "iso-8859-4" },  /* Estonian  */
- { "eu", "iso-8859-1" },  /* basque */
- { "fi", "iso-8859-1" },  /* Finnish */
- { "fo", "iso-8859-1" },  /* faroese */
- { "fr", "iso-8859-1" },  /* French */
- { "ga", "iso-8859-1" },  /* Irish (Gaelic) */
- { "gd", "iso-8859-1" },  /* Scottish */
- { "he", "iso-8859-8" },  /* hebrew */
- { "hr", "iso-8859-2" },  /* Croatian */
- { "hu", "iso-8859-2" },  /* Hungarian */
- { "in", "iso-8859-1" },  /* Indonesian */
- { "is", "iso-8859-1" },  /* Icelandic */
- { "it", "iso-8859-1" },  /* Italian  */
- { "iw", "iso-8859-8" },  /* hebrew old ISO name */
- { "ja", "Shift_JIS"  },  /* Japanese [was: ja_JP ] */
- { "ji", "iso-8859-8" },  /* Yiddish */
- { "kl", "iso-8859-4" },  /* Greenlandic */
- { "ko", "euc-kr"     },  /* korean [was: ko_KR ] */
- { "lt", "iso-8859-4" },  /* Lithuanian */
- { "lv", "iso-8859-4" },  /* latvian (lettish) */
- { "mk", "iso-8859-5" },  /* Macedonian */
- { "mt", "iso-8859-3" },  /* Maltese  */
- { "nb", "iso-8859-1" },  /* Norwegian Bokmal */
- { "nl", "iso-8859-1" },  /* dutch */
- { "no", "iso-8859-1" },  /* Norwegian old ISO name*/
- { "nn", "iso-8859-1" },  /* Norwegian Nynorsk */
- { "pl", "iso-8859-2" },  /* Polish */
- { "pt", "iso-8859-1" },  /* Portugese */
- { "rm", "iso-8859-1" },  /* Rhaeto-romance */
- { "ro", "iso-8859-2" },  /* Romanian */
- { "ru", "iso-8859-5" },  /* Russian */
- { "sk", "iso-8859-2" },  /* Slovak  */
- { "sl", "iso-8859-2" },  /* Slovenian */
- { "sq", "iso-8859-1" },  /* albanian */
- { "sr", "iso-8859-5" },  /* Serbian */
- { "sv", "iso-8859-1" },  /* Swedish */
- { "sw", "iso-8859-1" },  /* Swahili */
- { "th", "tis-620"    },  /* Thai [windows-874] */
- { "tr", "iso-8859-9" },  /* Turkish */
- { "uk", "iso-8859-5" },  /* pre 1990 Ukranian... see: <http://czyborra.com/charsets/cyrillic.html#KOI8-U>  */
- { "zh", "Big-5"      },  /* Chinese (Traditional) */
- { NULL, NULL         }
-};
-
-/* Not-used list, overridden old data  */
-#if 0
- { "ar", "ibm-1256" }, /* arabic */
- { "ko", "ibm-949" }, /* korean  */
- { "ru", "ibm-878" }, /* Russian- koi8-r */
- { "sk", "ibm-912" },
-#endif
-
-U_CAPI const char *
-uprv_defaultCodePageForLocale(const char *locale);
-
-U_CAPI const char *
-uprv_defaultCodePageForLocale(const char *locale)
-{
-    int32_t i;
-    int32_t locale_len;
-
-    if (locale == NULL)
-    {
-        return NULL;
-    }
-    locale_len = uprv_strlen(locale);
-
-    if(locale_len < 2)
-    {
-        return NULL; /* non existent. Not a complete check, but it will
-                      * make sure that 'c' doesn't match catalan, etc.
-                      */
-    }
-
-    for(i=0; _localeToDefaultCharmapTable[i].loc; i++)
-    {
-        if(uprv_strncmp(locale, _localeToDefaultCharmapTable[i].loc,
-                        uprv_min(locale_len,
-                                 uprv_strlen(_localeToDefaultCharmapTable[i].loc)))
-            == 0)
-        {
-            return _localeToDefaultCharmapTable[i].charmap;
-        }
-    }
-
-    return NULL;
-}
-
 /* Return just the POSIX id, whatever happens to be in it */
 static const char *uprv_getPOSIXID()
 {
