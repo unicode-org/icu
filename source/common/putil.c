@@ -246,11 +246,11 @@ uprv_getUTCtime()
     uprv_memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
     t2 = mktime(&tmrec);    /* seconds of current GMT*/
     return (UDate)(t2 - t1) * U_MILLIS_PER_SECOND;         /* GMT (or UTC) in seconds since 1970*/
-/*#elif defined(U_WINDOWS)
+#elif defined(U_WINDOWS)
 
     FileTimeConversion winTime;
     GetSystemTimeAsFileTime(&winTime.fileTime);
-    return (UDate)((winTime.int64 - EPOCH_BIAS) / HECTONANOSECOND_PER_MILLISECOND);*/
+    return (UDate)((winTime.int64 - EPOCH_BIAS) / HECTONANOSECOND_PER_MILLISECOND);
 #else
 /*
     struct timeval posixTime;
