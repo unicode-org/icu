@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2002/07/16 00:18:33 $
- * $Revision: 1.6 $
+ * $Date: 2002/07/24 01:04:10 $
+ * $Revision: 1.7 $
  *******************************************************************************
  */
  
@@ -392,6 +392,7 @@ public final class NormalizerImpl {
 	private static long getNorm32(int c){
         return (UNSIGNED_INT_MASK&(normTrieImpl.normTrie.getCodePointValue(c)));
     }
+    
     private static long getNorm32(int c,int mask){
         long/*unsigned*/ norm32= getNorm32(UTF16.getLeadSurrogate(c));
         if(((norm32&mask)>0) && isNorm32LeadSurrogate(norm32)) {
@@ -400,7 +401,8 @@ public final class NormalizerImpl {
         }
         return norm32; 
     }
-	/*
+	
+    /*
 	 * get a norm32 from text with complete code points
 	 * (like from decompositions)
 	 */
@@ -761,12 +763,13 @@ public final class NormalizerImpl {
             boolean adjacent;
         
             adjacent= current==next;
-        
+            NextCCArgs ncArgs = new NextCCArgs();
+            ncArgs.source = data;
+            ncArgs.next   = next;
+            ncArgs.limit  = limit;
+            
             if(start!=current || !isOrdered) {
-                NextCCArgs ncArgs = new NextCCArgs();
-                ncArgs.source = data;
-                ncArgs.next	  = next;
-                ncArgs.limit  = limit;	
+                	
                 while(ncArgs.next<ncArgs.limit) {
                     cc=getNextCC(ncArgs);
                     if(cc==0) {
@@ -794,21 +797,21 @@ public final class NormalizerImpl {
                 }
             }
         
-            if(next==limit) {
+            if(ncArgs.next==ncArgs.limit) {
                 // we know the cc of the last code point 
                 return trailCC;
             } else {
                 if(!adjacent) {
                     // copy the second string part 
                     do {
-                        source[current++]=data[next++];
-                    } while(next!=limit);
-                    limit=current;
+                        source[current++]=data[ncArgs.next++];
+                    } while(ncArgs.next!=ncArgs.limit);
+                    ncArgs.limit=current;
                 }
                 PrevArgs prevArgs = new PrevArgs();
                 prevArgs.src   = data;
                 prevArgs.start = start;
-                prevArgs.current = limit;
+                prevArgs.current =  ncArgs.limit;
                 return getPrevCC(prevArgs);
             }
 
