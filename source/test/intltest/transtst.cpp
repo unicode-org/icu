@@ -43,6 +43,7 @@ TransliteratorTest::runIndexedTest(int32_t index, bool_t exec,
 
 void TransliteratorTest::TestInstantiation() {
     int32_t n = Transliterator::countAvailableIDs();
+    UnicodeString name;
     for (int32_t i=0; i<n; ++i) {
         UnicodeString id = Transliterator::getAvailableID(i);
         if (id.length() < 1) {
@@ -51,6 +52,8 @@ void TransliteratorTest::TestInstantiation() {
             continue;
         }
         Transliterator* t = Transliterator::createInstance(id);
+        name.truncate(0);
+        Transliterator::getDisplayName(id, name);
         if (t == 0) {
             errln(UnicodeString("FAIL: Couldn't create ") + id);
             // When createInstance fails, it deletes the failing
@@ -62,7 +65,7 @@ void TransliteratorTest::TestInstantiation() {
                 --i; // Compensate for deleted entry
             }
         } else {
-            logln(UnicodeString("OK: ") + id);
+            logln(UnicodeString("OK: ") + name + " (" + id + ")");
         }
         delete t;
     }
