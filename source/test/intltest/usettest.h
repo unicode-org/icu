@@ -120,6 +120,9 @@ private:
     
     UBool checkEqual(const UnicodeSet& s, const UnicodeSet& t, const char* message);
 
+    void expectContainment(const UnicodeString& pat,
+                           const UnicodeString& charsIn,
+                           const UnicodeString& charsOut);
     void expectContainment(const UnicodeSet& set,
                            const UnicodeString& charsIn,
                            const UnicodeString& charsOut);
