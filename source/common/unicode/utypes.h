@@ -376,6 +376,77 @@ typedef void* UClassID;
 #endif
 
 /*===========================================================================*/
+/* Global delete operator                                                    */
+/*===========================================================================*/
+
+/*
+ * The ICU4C library must not use the global new and delete operators.
+ * These operators here are defined to enable testing for this.
+ * See Jitterbug 2581 for details of why this is necessary.
+ *
+ * Verification that ICU4C's memory usage is correct, i.e.,
+ * that global new/delete are not used:
+ *
+ * a) Check for imports of global new/delete (see uobject.cpp for details)
+ * b) Verify that new is never imported.
+ * c) Verify that delete is only imported from object code for interface/mixin classes.
+ * d) Add global delete and delete[] only for the ICU4C library itself
+ *    and define them in a way that crashes or otherwise easily shows a problem.
+ *
+ * The following implements d).
+ * The operator implementations crash; this is intentional and used for library debugging.
+ */
+#if defined(XP_CPLUSPLUS) && (defined(U_COMMON_IMPLEMENTATION) || defined(U_I18N_IMPLEMENTATION) || defined(U_LAYOUT_IMPLEMENTATION) || defined(U_USTDIO_IMPLEMENTATION))
+
+/**
+ * Global operator new, defined only inside ICU4C, must not be used.
+ * Crashes intentionally.
+ * @internal
+ */
+inline void *
+operator new(size_t size) {
+    char *q=NULL;
+    *q=5; // break it
+    return q;
+}
+
+/**
+ * Global operator new[], defined only inside ICU4C, must not be used.
+ * Crashes intentionally.
+ * @internal
+ */
+inline void *
+operator new[](size_t size) {
+    char *q=NULL;
+    *q=5; // break it
+    return q;
+}
+
+/**
+ * Global operator delete, defined only inside ICU4C, must not be used.
+ * Crashes intentionally.
+ * @internal
+ */
+inline void
+operator delete(void *p) {
+    char *q=NULL;
+    *q=5; // break it
+}
+
+/**
+ * Global operator delete[], defined only inside ICU4C, must not be used.
+ * Crashes intentionally.
+ * @internal
+ */
+inline void
+operator delete[](void *p) {
+    char *q=NULL;
+    *q=5; // break it
+}
+
+#endif
+
+/*===========================================================================*/
 /* UErrorCode */
 /*===========================================================================*/
 
