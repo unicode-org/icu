@@ -85,37 +85,6 @@ Transliterator* TransliteratorIDParser::SingleID::createInstance() {
     return t;
 }
 
-/**
- * Parse a basic ID from the given string.  A basic ID contains
- * only a single source, target, and variant.  It does not contain
- * a filter or an explicit inverse.
- * @param id the id to be parsed
- * @param pos INPUT-OUTPUT parameter.  On input, the position of
- * the first character to parse.  On output, the position after
- * the last character parsed.  If the parse fails pos will be
- * unchanged.
- * @return the parsed ID in canonical format, or NULL on parse
- * failure.  If the parsed ID did not contain a source, the return
- * ID will not.
- */
-UnicodeString TransliteratorIDParser::parseBasicID(const UnicodeString& id, int32_t& pos) {
-    Specs* specs = parseFilterID(id, pos, FALSE);
-    if (specs != NULL) {
-        UnicodeString buf;
-        if (specs->sawSource) {
-            buf.append(specs->source);
-            buf.append(TARGET_SEP);
-        }
-        buf.append(specs->target);
-        if (specs->variant.length() != 0) {
-            buf.append(VARIANT_SEP);
-            buf.append(specs->variant);
-        }
-        delete specs;
-        return buf;
-    }
-    return EMPTY;
-}
 
 /**
  * Parse a single ID, that is, an ID of the general form
@@ -204,6 +173,33 @@ TransliteratorIDParser::parseSingleID(const UnicodeString& id, int32_t& pos,
     delete specsA;
     delete specsB;
 
+    return single;
+}
+
+/**
+ * Parse a filter ID, that is, an ID of the general form
+ * "[f1] s1-t1/v1", with the filters optional, and the variants optional.
+ * @param id the id to be parsed
+ * @param pos INPUT-OUTPUT parameter.  On input, the position of
+ * the first character to parse.  On output, the position after
+ * the last character parsed.
+ * @return a SingleID object or null if the parse fails
+ */
+TransliteratorIDParser::SingleID*
+TransliteratorIDParser::parseFilterID(const UnicodeString& id, int32_t& pos) {
+
+    int32_t start = pos;
+
+    Specs* specs = parseFilterID(id, pos, TRUE);
+    if (specs == NULL) {
+        pos = start;
+        return NULL;
+    }
+
+    // Assemble return results
+    SingleID* single = specsToID(specs, FORWARD);
+    single->filter = specs->filter;
+    delete specs;
     return single;
 }
 

@@ -98,19 +98,15 @@ class TransliteratorIDParser {
     };
 
     /**
-     * Parse a basic ID from the given string.  A basic ID contains
-     * only a single source, target, and variant.  It does not contain
-     * a filter or an explicit inverse.
+     * Parse a filter ID, that is, an ID of the general form
+     * "[f1] s1-t1/v1", with the filters optional, and the variants optional.
      * @param id the id to be parsed
      * @param pos INPUT-OUTPUT parameter.  On input, the position of
      * the first character to parse.  On output, the position after
-     * the last character parsed.  If the parse fails pos[0] will be
-     * unchanged.
-     * @return the parsed ID in canonical format, or null on parse
-     * failure.  If the parsed ID did not contain a source, the return
-     * ID will not.
+     * the last character parsed.
+     * @return a SingleID object or null if the parse fails
      */
-    static UnicodeString parseBasicID(const UnicodeString& id, int32_t& pos);
+    static SingleID* parseFilterID(const UnicodeString& id, int32_t& pos);
 
     /**
      * Parse a single ID, that is, an ID of the general form
