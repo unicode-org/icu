@@ -33,6 +33,7 @@ static const int32_t kGregorianEpoch = 1970;
 BuddhistCalendar::BuddhistCalendar(const Locale& aLocale, UErrorCode& success)
   :   GregorianCalendar(aLocale, success)
 {
+    setTimeInMillis(getNow(), success); // Call this again now that the vtable is set up properly.
 }
 
 BuddhistCalendar::~BuddhistCalendar()

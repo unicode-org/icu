@@ -281,6 +281,7 @@ const uint32_t JapaneseCalendar::kCurrentEra = (kEraCount-1);
 JapaneseCalendar::JapaneseCalendar(const Locale& aLocale, UErrorCode& success)
   :   GregorianCalendar(aLocale, success)
 {
+    setTimeInMillis(getNow(), success); // Call this again now that the vtable is set up properly.
 }
 
 JapaneseCalendar::~JapaneseCalendar()
