@@ -191,6 +191,7 @@ public:
      * locale.
      * @param status    Output param set to success/failure code. If the
      *                  pattern is invalid this will be set to a failure code.
+     * @stable
      */
     DecimalFormat(UErrorCode& status);
 
@@ -206,6 +207,7 @@ public:
      * @param pattern   A non-localized pattern string.
      * @param status    Output param set to success/failure code. If the
      *                  pattern is invalid this will be set to a failure code.
+     * @stable
      */
     DecimalFormat(const UnicodeString& pattern,
                   UErrorCode& status);
@@ -226,6 +228,7 @@ public:
      *                          delete this object after making this call.
      * @param status            Output param set to success/failure code. If the
      *                          pattern is invalid this will be set to a failure code.
+     * @stable
      */
     DecimalFormat(  const UnicodeString& pattern,
                     DecimalFormatSymbols* symbolsToAdopt,
@@ -246,6 +249,7 @@ public:
      * @param symbols   the set of symbols to be used
      * @param status            Output param set to success/failure code. If the
      *                          pattern is invalid this will be set to a failure code.
+     * @stable
      */
     DecimalFormat(  const UnicodeString& pattern,
                     const DecimalFormatSymbols& symbols,
@@ -253,28 +257,33 @@ public:
 
     /**
      * Copy constructor.
+     * @stable
      */
     DecimalFormat(const DecimalFormat& source);
 
     /**
      * Assignment operator.
+     * @stable
      */
     DecimalFormat& operator=(const DecimalFormat& rhs);
 
     /**
      * Destructor.
+     * @stable
      */
     virtual ~DecimalFormat();
 
     /**
      * Clone this Format object polymorphically. The caller owns the
      * result and should delete it when done.
+     * @stable
      */
     virtual Format* clone(void) const;
 
     /**
      * Return true if the given Format objects are semantically equal.
      * Objects of different subclasses are considered unequal.
+     * @stable
      */
     virtual bool_t operator==(const Format& other) const;
 
@@ -287,6 +296,7 @@ public:
     * @param pos        On input: an alignment field, if desired.
     *                   On output: the offsets of the alignment field.
     * @return           A reference to 'toAppendTo'.
+    * @stable
     */
     virtual UnicodeString& format(double number,
                                   UnicodeString& toAppendTo,
@@ -301,6 +311,7 @@ public:
 
     /**
      * Redeclared NumberFormat method.
+     * @stable
      */
     UnicodeString& format(const Formattable& obj,
                           UnicodeString& result,
@@ -308,12 +319,14 @@ public:
 
     /**
      * Redeclared NumberFormat method.
+     * @stable
      */
     UnicodeString& format(double number,
                           UnicodeString& output) const;
 
     /**
      * Redeclared NumberFormat method.
+     * @stable
      */
     UnicodeString& format(int32_t number,
                           UnicodeString& output) const;
@@ -330,6 +343,7 @@ public:
     * @param parsePosition  The position to start parsing at on input.
     *                       On output, moved to after the last successfully
     *                       parse character. On parse failure, does not change.
+    * @stable
     */
     virtual void parse(const UnicodeString& text,
                        Formattable& result,
@@ -345,6 +359,7 @@ public:
      * by the programmer or user.
      * @return desired DecimalFormatSymbols
      * @see DecimalFormatSymbols
+     * @stable
      */
     virtual const DecimalFormatSymbols* getDecimalFormatSymbols(void) const;
 
@@ -352,6 +367,7 @@ public:
      * Sets the decimal format symbols, which is generally not changed
      * by the programmer or user.
      * @param symbolsToAdopt DecimalFormatSymbols to be adopted.
+     * @stable
      */
     virtual void adoptDecimalFormatSymbols(DecimalFormatSymbols* symbolsToAdopt);
 
@@ -359,6 +375,7 @@ public:
      * Sets the decimal format symbols, which is generally not changed
      * by the programmer or user.
      * @param symbols DecimalFormatSymbols.
+     * @stable
      */
     virtual void setDecimalFormatSymbols(const DecimalFormatSymbols& symbols);
 
@@ -367,6 +384,7 @@ public:
      * Get the positive prefix.
      *
      * Examples: +123, $123, sFr123
+     * @stable
      */
     UnicodeString& getPositivePrefix(UnicodeString& result) const;
 
@@ -374,6 +392,7 @@ public:
      * Set the positive prefix.
      *
      * Examples: +123, $123, sFr123
+     * @stable
      */
     virtual void setPositivePrefix(const UnicodeString& newValue);
 
@@ -381,6 +400,7 @@ public:
      * Get the negative prefix.
      *
      * Examples: -123, ($123) (with negative suffix), sFr-123
+     * @stable
      */
     UnicodeString& getNegativePrefix(UnicodeString& result) const;
 
@@ -388,6 +408,7 @@ public:
      * Set the negative prefix.
      *
      * Examples: -123, ($123) (with negative suffix), sFr-123
+     * @stable
      */
     virtual void setNegativePrefix(const UnicodeString& newValue);
 
@@ -395,6 +416,7 @@ public:
      * Get the positive suffix.
      *
      * Example: 123%
+     * @stable
      */
     UnicodeString& getPositiveSuffix(UnicodeString& result) const;
 
@@ -402,6 +424,7 @@ public:
      * Set the positive suffix.
      *
      * Example: 123%
+     * @stable
      */
     virtual void setPositiveSuffix(const UnicodeString& newValue);
 
@@ -409,6 +432,7 @@ public:
      * Get the negative suffix.
      *
      * Examples: -123%, ($123) (with positive suffixes)
+     * @stable
      */
     UnicodeString& getNegativeSuffix(UnicodeString& result) const;
 
@@ -416,6 +440,7 @@ public:
      * Set the positive suffix.
      *
      * Examples: 123%
+     * @stable
      */
     virtual void setNegativeSuffix(const UnicodeString& newValue);
 
@@ -426,6 +451,7 @@ public:
      * For a permill, set the suffixes to have "\u2031" and the multiplier to be 1000.
      *
      * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
+     * @stable
      */
     int32_t getMultiplier(void) const;
 
@@ -436,6 +462,7 @@ public:
      * For a permill, set the suffixes to have "\u2031" and the multiplier to be 1000.
      *
      * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
+     * @stable
      */
     virtual void setMultiplier(int32_t newValue);
 
@@ -446,6 +473,7 @@ public:
      * @see #setRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
+     * @stable
      */
     virtual double getRoundingIncrement(void);
 
@@ -457,6 +485,7 @@ public:
      * @see #getRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
+     * @stable
      */
     virtual void setRoundingIncrement(double newValue);
 
@@ -466,6 +495,7 @@ public:
      * @see #setRoundingIncrement
      * @see #getRoundingIncrement
      * @see #setRoundingMode
+     * @stable
      */
     virtual ERoundingMode getRoundingMode(void);
 
@@ -476,6 +506,7 @@ public:
      * @see #setRoundingIncrement
      * @see #getRoundingIncrement
      * @see #getRoundingMode
+     * @stable
      */
     virtual void setRoundingMode(ERoundingMode roundingMode);
 
@@ -487,6 +518,7 @@ public:
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
+     * @stable
      */
     virtual int32_t getFormatWidth(void);
 
@@ -501,6 +533,7 @@ public:
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
+     * @stable
      */
     virtual void setFormatWidth(int32_t width);
 
@@ -512,6 +545,7 @@ public:
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
+     * @draft
      */
     virtual UChar getPadCharacter(void);
 
@@ -524,6 +558,7 @@ public:
      * @see #getPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
+     * @draft
      */
     virtual void setPadCharacter(UChar padChar);
 
@@ -543,6 +578,7 @@ public:
      * @see #kPadAfterPrefix
      * @see #kPadBeforeSuffix
      * @see #kPadAfterSuffix
+     * @stable
      */
     virtual EPadPosition getPadPosition(void);
 
@@ -564,6 +600,7 @@ public:
      * @see #kPadAfterPrefix
      * @see #kPadBeforeSuffix
      * @see #kPadAfterSuffix
+     * @stable
      */
     virtual void setPadPosition(EPadPosition padPos);
 
@@ -575,6 +612,7 @@ public:
      * @see #setMinimumExponentDigits
      * @see #isExponentSignAlwaysShown
      * @see #setExponentSignAlwaysShown
+     * @stable
      */
     virtual bool_t isScientificNotation(void);
 
@@ -587,6 +625,7 @@ public:
      * @see #setMinimumExponentDigits
      * @see #isExponentSignAlwaysShown
      * @see #setExponentSignAlwaysShown
+     * @stable
      */
     virtual void setScientificNotation(bool_t useScientific);
 
@@ -598,6 +637,7 @@ public:
      * @see #setMinimumExponentDigits
      * @see #isExponentSignAlwaysShown
      * @see #setExponentSignAlwaysShown
+     * @stable
      */
     virtual int8_t getMinimumExponentDigits(void);
 
@@ -611,6 +651,7 @@ public:
      * @see #getMinimumExponentDigits
      * @see #isExponentSignAlwaysShown
      * @see #setExponentSignAlwaysShown
+     * @stable
      */
     virtual void setMinimumExponentDigits(int8_t minExpDig);
 
@@ -624,6 +665,7 @@ public:
      * @see #setMinimumExponentDigits
      * @see #getMinimumExponentDigits
      * @see #setExponentSignAlwaysShown
+     * @stable
      */
     virtual bool_t isExponentSignAlwaysShown(void);
 
@@ -638,6 +680,7 @@ public:
      * @see #setMinimumExponentDigits
      * @see #getMinimumExponentDigits
      * @see #isExponentSignAlwaysShown
+     * @stable
      */
     virtual void setExponentSignAlwaysShown(bool_t expSignAlways);
 
@@ -648,6 +691,7 @@ public:
      * @see setGroupingSize
      * @see NumberFormat::isGroupingUsed
      * @see DecimalFormatSymbols::getGroupingSeparator
+     * @stable
      */
     int32_t getGroupingSize(void) const;
 
@@ -658,6 +702,7 @@ public:
      * @see getGroupingSize
      * @see NumberFormat::setGroupingUsed
      * @see DecimalFormatSymbols::setGroupingSeparator
+     * @stable
      */
     virtual void setGroupingSize(int32_t newValue);
 
@@ -666,6 +711,7 @@ public:
      * (The decimal separator will always appear with decimals.)
      *
      * Example: Decimal ON: 12345 -> 12345.; OFF: 12345 -> 12345
+     * @stable
      */
     bool_t isDecimalSeparatorAlwaysShown(void) const;
 
@@ -674,6 +720,7 @@ public:
      * (The decimal separator will always appear with decimals.)
      *
      * Example: Decimal ON: 12345 -> 12345.; OFF: 12345 -> 12345
+     * @stable
      */
     virtual void setDecimalSeparatorAlwaysShown(bool_t newValue);
 
@@ -681,6 +728,7 @@ public:
      * Synthesizes a pattern string that represents the current state
      * of this Format object.
      * @see applyPattern
+     * @stable
      */
     virtual UnicodeString& toPattern(UnicodeString& result) const;
 
@@ -689,6 +737,7 @@ public:
      * state of this Format object.
      *
      * @see applyPattern
+     * @stable
      */
     virtual UnicodeString& toLocalizedPattern(UnicodeString& result) const;
  
@@ -717,6 +766,7 @@ public:
      * @param status    Output param set to success/failure code on
      *                  exit. If the pattern is invalid, this will be
      *                  set to a failure result.
+     * @stable
      */
     virtual void applyPattern(const UnicodeString& pattern,
                               UErrorCode& status);
@@ -747,6 +797,7 @@ public:
      * @param status    Output param set to success/failure code on
      *                  exit. If the pattern is invalid, this will be
      *                  set to a failure result.
+     * @stable
      */
     virtual void applyLocalizedPattern(const UnicodeString& pattern,
                                        UErrorCode& status);
@@ -755,6 +806,7 @@ public:
      * Sets the maximum number of digits allowed in the integer portion of a
      * number. This override limits the integer digit count to 309.
      * @see NumberFormat#setMaximumIntegerDigits
+     * @stable
      */
     virtual void setMaximumIntegerDigits(int32_t newValue);
 
@@ -762,6 +814,7 @@ public:
      * Sets the minimum number of digits allowed in the integer portion of a
      * number. This override limits the integer digit count to 309.
      * @see NumberFormat#setMinimumIntegerDigits
+     * @stable
      */
     virtual void setMinimumIntegerDigits(int32_t newValue);
 
@@ -769,6 +822,7 @@ public:
      * Sets the maximum number of digits allowed in the fraction portion of a
      * number. This override limits the fraction digit count to 340.
      * @see NumberFormat#setMaximumFractionDigits
+     * @stable
      */
     virtual void setMaximumFractionDigits(int32_t newValue);
 
@@ -776,12 +830,14 @@ public:
      * Sets the minimum number of digits allowed in the fraction portion of a
      * number. This override limits the fraction digit count to 340.
      * @see NumberFormat#setMinimumFractionDigits
+     * @stable
      */
     virtual void setMinimumFractionDigits(int32_t newValue);
 
     /**
      * The resource tags we use to retrieve decimal format data from
      * locale resource bundles.
+     * @stable
      */
     static const char *fgNumberPatterns;
 
@@ -796,6 +852,7 @@ public:
      * .          Derived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
+     * @stable
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
@@ -808,6 +865,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
+     * @stable
      */
     virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
 

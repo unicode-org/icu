@@ -92,20 +92,24 @@ public:
     static  int32_t const   NULLORDER;
 
     /** Destructor
+     * @stable
      */
                                 ~CollationElementIterator();
     /**
      * Returns true if "other" is the same as "this"
+     * @stable
      */
     virtual     bool_t          operator==(const CollationElementIterator& other) const;
 
     /**
      * Returns true if "other" is not the same as "this".
+     * @stable
      */
     virtual     bool_t          operator!=(const CollationElementIterator& other) const;
 
     /**
      * Resets the cursor to the beginning of the string.
+     * @stable
      */
             void                reset(void);
     /**
@@ -113,6 +117,7 @@ public:
      * @param status the error code status.
      * @return the next character's ordering.  Returns NULLORDER if
      * the end of string is reached.
+     * @stable
      */
             int32_t             next(UErrorCode& status);
      /**
@@ -120,6 +125,7 @@ public:
       * @param status the error code status.
       * @return the previous element's ordering.  Returns NULLORDER if
       * the beginning of string is reached.
+     * @stable
       */
             int32_t                 previous(UErrorCode& status);
 
@@ -127,18 +133,21 @@ public:
      * Gets the primary order of a collation order.
      * @param order the collation order
      * @return the primary order of a collation order.
+     * @stable
      */
     static  int32_t             primaryOrder(int32_t order);
     /**
      * Gets the secondary order of a collation order.
      * @param order the collation order
      * @return the secondary order of a collation order.
+     * @stable
      */
     static  int32_t             secondaryOrder(int32_t order);
     /**
      * Gets the tertiary order of a collation order.
      * @param order the collation order
      * @return the tertiary order of a collation order.
+	 * @stable
      */
     static  int32_t             tertiaryOrder(int32_t order);
     /**
@@ -147,6 +156,7 @@ public:
      *  @param order a collation order returned by previous or next.
      *  @return the maximum length of any expansion sequences ending
      *          with the specified order.
+	 *  @stable
      */
         int32_t                    getMaxExpansion(int32_t order) const;
 
@@ -155,12 +165,14 @@ public:
      *  Gets the comparison order in the desired strength.  Ignore the other
      *  differences.
      *  @param order The order value
+	 *  @stable 
      */
            int32_t              strengthOrder(int32_t order) const;
     /**
      * Sets the source string.
      * @param str the source string.
      * @param status the error code status.
+	 * @stable
      */
             void                setText(const   UnicodeString&  str,
                                                 UErrorCode&      status);
@@ -168,6 +180,7 @@ public:
      * Sets the source string.
      * @param str the source character iterator.
      * @param status the error code status.
+	 * @stable
      */
             void                setText(CharacterIterator&  str,
                                         UErrorCode&            status);
@@ -175,11 +188,13 @@ public:
      *  Checks if a comparison order is ignorable.
      *  @param order the collation order.
      *  @return TRUE if a character is ignorable, FALSE otherwise.
+	 *  @stable
      */
     static    bool_t              isIgnorable(int32_t order);
     /**
      *  Gets the offset of the currently processed character in the source string.
      *  @return the offset of the character.
+	 *  @stable
      */
             UTextOffset          getOffset(void) const;
     /**
@@ -187,9 +202,11 @@ public:
      *  @param newOffset the new offset.
      *  @param status the error code status.
      *  @return the offset of the character.
+	 *  @stable
      */
             void                setOffset(UTextOffset newOffset,
                                           UErrorCode& status);
+	/* CollationElementIterator should not be subclassed. */
 protected:
     /**
      * CollationElementIterator constructor.  This takes the source string and
@@ -202,6 +219,7 @@ protected:
      * @param endOffset the ending offset of the string where the cursor
      * stops the iterating.
      * @param order the collation object.
+	 * @stable
      */
                                 CollationElementIterator(   const   UnicodeString&  sourceText,
                                                             const   RuleBasedCollator*  order,
@@ -218,18 +236,21 @@ protected:
      * @param endOffset the ending offset of the string where the cursor
      * stops the iterating.
      * @param order the collation object.
+	 * @stable
      */
                                 CollationElementIterator(   const    CharacterIterator&  sourceText,
                                                             const   RuleBasedCollator*  order,
                                                             UErrorCode& status);
     /**
      * Assignment operator
+	 * @stable
      */
     const   CollationElementIterator&
                                 operator=(const CollationElementIterator& other);
 public:
     /**
      * Copy constructor.
+	 * @stable
      */
                                 CollationElementIterator(const  CollationElementIterator& other);
     //============================================================

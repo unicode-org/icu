@@ -217,8 +217,7 @@ public:
     /**
      * Change the text over which this operates. The text boundary is
      * reset to the start.
-     * [This function should be modified to take a const UnicodeString& agrument.]
-     * @deprecate
+     * @deprecated This function should be modified to take a const UnicodeString& agrument.
      */
     virtual void  setText(const UnicodeString* it) = 0;
 
@@ -232,7 +231,7 @@ public:
     /**
      * DONE is returned by previous() and next() after all valid
      * boundaries have been returned.
-     @stable
+     * @stable
      */
     static const UTextOffset DONE;
 

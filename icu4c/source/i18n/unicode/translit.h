@@ -219,6 +219,7 @@ class CompoundTransliterator;
  * performance obtained by the default implementations in this class.
  *
  * @author Alan Liu
+ * @draft
  */
 class U_I18N_API Transliterator {
 
@@ -229,12 +230,15 @@ public:
      * the forward or reverse rules of a RuleBasedTransliterator.  An "A-B"
      * transliterator transliterates A to B when operating in the forward
      * direction, and B to A when operating in the reverse direction.
+     * @draft
      */
     enum Direction {
         FORWARD,
         REVERSE
     };
-
+    /**
+     * @draft
+     */
     class Position {
     public:
         /**
@@ -427,6 +431,7 @@ public:
 
     /**
      * Destructor.
+     * @draft
      */
     virtual ~Transliterator();
 
@@ -441,6 +446,7 @@ public:
      * will return null, and calls to createInstance() will fail.
      *
      * @see #registerInstance
+     * @draft
      */
     virtual Transliterator* clone() const { return 0; }
 
@@ -460,6 +466,7 @@ public:
      * limit)</code> has been transliterated, possibly to a string of a different
      * length, at <code>[start, </code><em>new-limit</em><code>)</code>, where
      * <em>new-limit</em> is the return value.
+     * @draft
      */
     virtual int32_t transliterate(Replaceable& text,
                                   int32_t start, int32_t limit) const;
@@ -467,6 +474,7 @@ public:
     /**
      * Transliterates an entire string in place. Convenience method.
      * @param text the string to be transliterated
+     * @draft
      */
     virtual void transliterate(Replaceable& text) const;
 
@@ -530,6 +538,7 @@ public:
      * @see #handleTransliterate
      * @exception IllegalArgumentException if <code>index</code>
      * is invalid
+     * @draft
      */
     virtual void transliterate(Replaceable& text, Position& index,
                                const UnicodeString& insertion,
@@ -549,6 +558,7 @@ public:
      * transliterated into the translation buffer at
      * <code>index.limit</code>.
      * @see #transliterate(Replaceable, int[], String)
+     * @draft
      */
     virtual void transliterate(Replaceable& text, Position& index,
                                UChar insertion,
@@ -564,6 +574,7 @@ public:
      * @param index an array of three integers.  See {@link
      * #transliterate(Replaceable, int[], String)}.
      * @see #transliterate(Replaceable, int[], String)
+     * @draft
      */
     virtual void transliterate(Replaceable& text, Position& index,
                                UErrorCode& status) const;
@@ -577,6 +588,7 @@ public:
      * untransliterated text.
      * @param index the array of indices previously passed to {@link
      * #transliterate}
+     * @draft
      */
     virtual void finishTransliteration(Replaceable& text,
                                        Position& index) const;
@@ -642,6 +654,7 @@ public:
      *
      * @return The maximum number of preceding context characters this
      * transliterator needs to examine
+     * @draft
      */
     int32_t getMaximumContextLength(void) const;
 
@@ -662,6 +675,7 @@ public:
      * @see #registerInstance
      * @see #registerClass
      * @see #getAvailableIDs
+     * @draft
      */
     virtual const UnicodeString& getID(void) const;
 
@@ -669,6 +683,7 @@ public:
      * Returns a name for this transliterator that is appropriate for
      * display to the user in the default locale.  See {@link
      * #getDisplayName(Locale)} for details.
+     * @draft
      */
     static UnicodeString& getDisplayName(const UnicodeString& ID,
                                          UnicodeString& result);
@@ -690,6 +705,7 @@ public:
      * @param inLocale the Locale in which the display name should be
      * localized.
      * @see java.text.MessageFormat
+     * @draft
      */
     static UnicodeString& getDisplayName(const UnicodeString& ID,
                                          const Locale& inLocale,
@@ -698,6 +714,7 @@ public:
     /**
      * Returns the filter used by this transliterator, or <tt>NULL</tt>
      * if this transliterator uses no filter.
+     * @draft
      */
     virtual const UnicodeFilter* getFilter(void) const;
 
@@ -716,6 +733,7 @@ public:
      * <p>Callers must take care if a transliterator is in use by
      * multiple threads.  The filter should not be changed by one
      * thread while another thread may be transliterating.
+     * @draft
      */
     virtual void adoptFilter(UnicodeFilter* adoptedFilter);
 
@@ -738,6 +756,7 @@ public:
      * exact, of this transliterator, or <code>null</code> if no such
      * transliterator is registered.
      * @see #registerInstance
+     * @draft
      */
     Transliterator* createInverse(void) const;
 
@@ -752,6 +771,7 @@ public:
      * @see #registerInstance
      * @see #getAvailableIDs
      * @see #getID
+     * @draft
      */
     static Transliterator* createInstance(const UnicodeString& ID,
                                           Direction dir = FORWARD,
@@ -806,6 +826,7 @@ public:
      * @see #getInstance
      * @see #registerClass
      * @see #unregister
+     * @draft
      */
     static void registerInstance(Transliterator* adoptedObj,
                                  UErrorCode& status);
@@ -830,6 +851,7 @@ public:
      * <code>ID</code>, or <code>null</code> if none was
      * @see #registerInstance
      * @see #registerClass
+     * @draft
      */
     static void unregister(const UnicodeString& ID);
 
@@ -866,6 +888,7 @@ public:
      * Return the number of IDs currently registered with the system.
      * To retrieve the actual IDs, call getAvailableID(i) with
      * i from 0 to countAvailableIDs() - 1.
+     * @draft
      */
     static int32_t countAvailableIDs(void);
 
@@ -873,6 +896,7 @@ public:
      * Return the index-th available ID.  index must be between 0
      * and countAvailableIDs() - 1, inclusive.  If index is out of
      * range, the result of getAvailableID(0) is returned.
+     * @draft
      */
     static const UnicodeString& getAvailableID(int32_t index);
 

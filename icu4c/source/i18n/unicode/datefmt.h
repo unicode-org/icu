@@ -202,11 +202,13 @@ public:
 
     /**
      * Destructor.
+     * @stable
      */
     virtual ~DateFormat();
 
     /**
      * Equality operator.  Returns true if the two formats have the same behavior.
+     * @stable
      */
     virtual bool_t operator==(const Format&) const;
 
@@ -223,6 +225,7 @@ public:
      * @param status        Output param filled with success/failure status.
      * @return              The value passed in as toAppendTo (this allows chaining,
      *                      as with UnicodeString::append())
+     * @draft
      */
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& toAppendTo,
@@ -255,6 +258,7 @@ public:
      * @param fieldPosition On input: an alignment field, if desired (see examples above)
      *                      On output: the offsets of the alignment field (see examples above)
      * @return              A reference to 'toAppendTo'.
+     * @draft
      */
     virtual UnicodeString& format(  UDate date,
                                     UnicodeString& toAppendTo,
@@ -268,11 +272,13 @@ public:
      * @param date      The UDate value to be formatted into a string.
      * @param result    Output param which will receive the formatted date.
      * @return          A reference to 'result'.
+     * @draft
      */
     UnicodeString& format(UDate date, UnicodeString& result) const;
 
     /**
      * Redeclared Format method.
+     * @draft
      */
     UnicodeString& format(const Formattable& obj,
                           UnicodeString& result,
@@ -286,6 +292,7 @@ public:
      *                  'text' cannot be parsed, it will be set to a failure
      *                  code.
      * @result          The parsed UDate value, if successful.
+     * @draft
      */
     virtual UDate parse( const UnicodeString& text,
                         UErrorCode& status) const;
@@ -307,6 +314,7 @@ public:
      *              output, the position at which parsing terminated, or the
      *              start position if the parse failed.
      * @return      A valid UDate if the input could be parsed.
+     * @draft
      */
     virtual UDate parse( const UnicodeString& text,
                         ParsePosition& pos) const = 0;
@@ -335,6 +343,7 @@ public:
      * @return          A newly created Formattable* object, or NULL
      *                  on failure.  The caller owns this and should
      *                  delete it when done.
+     * @draft
      */
     virtual void parseObject(const UnicodeString& source,
                              Formattable& result,
@@ -345,6 +354,7 @@ public:
      * the date and the time.
      *
      * @return A date/time formatter which the caller owns.
+     * @stable
      */
     static DateFormat* createInstance(void);
 
@@ -356,6 +366,7 @@ public:
      *                  SHORT for "h:mm a" in the US locale.
      * @param aLocale   The given locale.
      * @return          A time formatter which the caller owns.
+     * @stable
      */
     static DateFormat* createTimeInstance(EStyle style = kDefault,
                                           const Locale& aLocale = Locale::getDefault());
@@ -368,6 +379,7 @@ public:
      *                  SHORT for "M/d/yy" in the US locale.
      * @param aLocale   The given locale.
      * @return          A date formatter which the caller owns.
+     * @stable
      */
     static DateFormat* createDateInstance(EStyle style = kDefault,
                                           const Locale& aLocale = Locale::getDefault());
@@ -382,6 +394,7 @@ public:
      *                  For example, SHORT for "h:mm a" in the US locale.
      * @param aLocale   The given locale.
      * @return          A date/time formatter which the caller owns.
+     * @stable
      */
     static DateFormat* createDateTimeInstance(EStyle dateStyle = kDefault,
                                               EStyle timeStyle = kDefault,
@@ -392,11 +405,13 @@ public:
      * @param count Filled in with the number of locales in the list that is returned.
      * @return the set of locales for which DateFormats are installed.  The caller
      *  does NOT own this list and must not delete it.
+     * @stable
      */
     static const Locale* getAvailableLocales(int32_t& count);
   
     /**
      * Returns true if the formatter is set for lenient parsing.
+     * @stable
      */
     virtual bool_t isLenient(void) const;
 
@@ -406,12 +421,14 @@ public:
      * precisely match this object's format. With strict parsing, inputs must
      * match this object's format.
      * @see Calendar::setLenient
+     * @stable
      */
     virtual void setLenient(bool_t lenient);
     
     /**
      * Gets the calendar associated with this date/time formatter.
      * @return the calendar associated with this date/time formatter.
+     * @stable
      */
     virtual const Calendar* getCalendar(void) const;
     
@@ -419,12 +436,14 @@ public:
      * Set the calendar to be used by this date format. Initially, the default
      * calendar for the specified or default locale is used.  The caller should
      * not delete the Calendar object after it is adopted by this call.
+     * @stable
      */
     virtual void adoptCalendar(Calendar* calendarToAdopt);
 
     /**
      * Set the calendar to be used by this date format. Initially, the default
      * calendar for the specified or default locale is used.
+     * @stable
      */
     virtual void setCalendar(const Calendar& newCalendar);
 
@@ -433,6 +452,7 @@ public:
      * Gets the number formatter which this date/time formatter uses to format
      * and parse the numeric portions of the pattern.
      * @return the number formatter which this date/time formatter uses.
+     * @stable
      */
     virtual const NumberFormat* getNumberFormat(void) const;
     
@@ -440,18 +460,21 @@ public:
      * Allows you to set the number formatter.  The caller should
      * not delete the NumberFormat object after it is adopted by this call.
      * @param formatToAdopt     NumberFormat object to be adopted.
+     * @stable
      */
     virtual void adoptNumberFormat(NumberFormat* formatToAdopt);
 
     /**
      * Allows you to set the number formatter.
      * @param formatToAdopt     NumberFormat object to be adopted.
+     * @stable
      */
     virtual void setNumberFormat(const NumberFormat& newNumberFormat);
 
     /**
      * Returns a reference to the TimeZone used by this DateFormat's calendar.
      * @return the time zone associated with the calendar of DateFormat.
+     * @stable
      */
     virtual const TimeZone& getTimeZone(void) const;
     
@@ -459,12 +482,14 @@ public:
      * Sets the time zone for the calendar of this DateFormat object. The caller
      * no longer owns the TimeZone object and should not delete it after this call.
      * @param zone the new time zone.
+     * @stable
      */
     virtual void adoptTimeZone(TimeZone* zoneToAdopt);
 
     /**
      * Sets the time zone for the calendar of this DateFormat object.
      * @param zone the new time zone.
+     * @stable
      */
     virtual void setTimeZone(const TimeZone& zone);
 
@@ -474,16 +499,19 @@ protected:
      * Default constructor.  Creates a DateFormat with no Calendar or NumberFormat
      * associated with it.  This constructor depends on the subclasses to fill in
      * the calendar and numberFormat fields.
+     * @stable
      */
     DateFormat();
 
     /**
      * Copy constructor.
+     * @stable
      */
     DateFormat(const DateFormat&);
 
     /**
      * Default assignment operator.
+     * @stable
      */
     DateFormat& operator=(const DateFormat&);
 

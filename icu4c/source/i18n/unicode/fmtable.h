@@ -52,58 +52,70 @@ public:
      * Creates a Formattable object with a UDate instance.
      * @param d the UDate instance.
      * @param ISDATE the flag to indicate this is a date.
+     * @stable   
      */
                     Formattable(UDate d, ISDATE);
     /**
      * Creates a Formattable object with a double number.
      * @param d the double number.
+     * @stable
      */
                     Formattable(double d);
     /**
      * Creates a Formattable object with a long number.
      * @param d the long number.
+     * @stable
      */
                     Formattable(int32_t l);
     /**
      * Creates a Formattable object with a char string pointer.
      * Assumes that the char string is null terminated.
      * @param strToCopy the char string.
+     * @stable
      */
                     Formattable(const char* strToCopy);
     /**
      * Creates a Formattable object with a UnicodeString object to copy from.
      * @param strToCopy the UnicodeString string.
+     * @stable
      */
                     Formattable(const UnicodeString& stringToCopy);
     /**
      * Creates a Formattable object with a UnicodeString object to adopt from.
      * @param strToAdopt the UnicodeString string.
+     * @stable
      */
                     Formattable(UnicodeString* stringToAdopt);
     /**
      * Creates a Formattable object with an array of Formattable objects.
      * @param arrayToCopy the Formattable object array.
      * @param count the array count.
+     * @stable
      */
                     Formattable(const Formattable* arrayToCopy, int32_t count);
 
     /**
      * Copy constructor.
+     * @stable
      */
                     Formattable(const Formattable&);
     /**
      * Assignment operator.
+     * @stable
      */
     Formattable&    operator=(const Formattable&);
     /**
      * Equality comparison.
+     * @stable
      */
     bool_t          operator==(const Formattable&) const;
     bool_t          operator!=(const Formattable& other) const
       { return !operator==(other); }
 
-    /** Destructor.
-    */
+    /** 
+     * Destructor.
+     * @stable
+     */
     virtual         ~Formattable();
 
     /** 
@@ -119,30 +131,36 @@ public:
 
     /**
      * Gets the data type of this Formattable object.
+     * @stable
      */
     Type            getType(void) const;
     
     /**
      * Gets the double value of this object.
+     * @stable
      */ 
     double          getDouble(void) const { return fValue.fDouble; }
     /**
      * Gets the long value of this object.
+     * @stable
      */ 
     int32_t            getLong(void) const { return fValue.fLong; }
     /**
      * Gets the Date value of this object.
+     * @stable
      */ 
     UDate            getDate(void) const { return fValue.fDate; }
 
     /**
      * Gets the string value of this object.
+     * @stable
      */ 
     UnicodeString&  getString(UnicodeString& result) const
       { result=*fValue.fString; return result; }
 
     /**
      * Gets the array value and count of this object.
+     * @stable
      */ 
     const Formattable* getArray(int32_t& count) const
       { count=fValue.fArrayAndCount.fCount; return fValue.fArrayAndCount.fArray; }
@@ -151,35 +169,43 @@ public:
      * Accesses the specified element in the array value of this Formattable object.
      * @param index the specified index.
      * @return the accessed element in the array.
+     * @stable
      */
     Formattable&    operator[](int32_t index) { return fValue.fArrayAndCount.fArray[index]; }
 
     /**
      * Sets the double value of this object.
+     * @stable
      */ 
     void            setDouble(double d);
     /**
      * Sets the long value of this object.
+     * @stable
      */ 
     void            setLong(int32_t l);
     /**
      * Sets the Date value of this object.
+     * @stable
      */ 
     void            setDate(UDate d);
     /**
      * Sets the string value of this object.
+     * @stable
      */ 
     void            setString(const UnicodeString& stringToCopy);
     /**
      * Sets the array value and count of this object.
+     * @stable
      */ 
     void            setArray(const Formattable* array, int32_t count);
     /**
      * Sets and adopts the string value and count of this object.
+     * @stable
      */ 
     void            adoptString(UnicodeString* stringToAdopt);
     /**
      * Sets and adopts the array value and count of this object.
+     * @stable
      */ 
     void            adoptArray(Formattable* array, int32_t count);
         

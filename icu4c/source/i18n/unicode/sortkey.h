@@ -79,6 +79,7 @@ class RuleBasedCollator;
  * @see          RuleBasedCollator
  * @version      1.3 12/18/96
  * @author       Helena Shih
+ * @deprecated
  */
 class U_I18N_API CollationKey {
 public:
@@ -87,6 +88,7 @@ public:
      * collation key contains no sorting information.  When comparing two empty
      * collation keys, the result is Collator::EQUAL.  Comparing empty collation key
      * with non-empty collation key is always Collator::LESS.
+	 * @deprecated
      */
      CollationKey();
     /**
@@ -94,21 +96,25 @@ public:
      * @param values the collation key values
      * @param count number of collation key values, including trailing nulls.
      * @see #createBits
+	 * @deprecated
      */
      CollationKey(const  uint8_t*    values,
 					int32_t     count);
 
     /**
      * Copy constructor.
+	 * @deprecated
      */
      CollationKey(const CollationKey& other);
     /** 
      * Sort key destructor.
+	 * @deprecated
      */
      ~CollationKey();
 
     /**
      * Assignment operator
+	 * @deprecated
      */
     const   CollationKey&           operator=(const CollationKey& other);
 
@@ -116,6 +122,7 @@ public:
      * Compare if two collation keys are the same.
      * @param source the collation key to compare to.
      * @return Returns true if two collation keys are equal, false otherwise.
+	 * @deprecated
      */
      bool_t                  operator==(const CollationKey& source) const;
 
@@ -123,6 +130,7 @@ public:
      * Compare if two collation keys are not the same.
      * @param source the collation key to compare to.
      * @return Returns TRUE if two collation keys are different, FALSE otherwise.
+	 * @deprecated
      */
      bool_t                  operator!=(const CollationKey& source) const;
 
@@ -131,6 +139,7 @@ public:
      * Test to see if the key is in an invalid state. The key will be in an
      * invalid state if it couldn't allocate memory for some operation.
      * @return Returns TRUE if the key is in an invalid, FALSE otherwise.
+	 * @deprecated
      */
      bool_t                  isBogus(void) const;
 
@@ -140,6 +149,7 @@ public:
      * is deleted.
      * @param count the output parameter of number of collation key values,
      * including any trailing nulls.
+	 * @deprecated
      */
 	 const    uint8_t*                getByteArray(int32_t& count) const;
 
@@ -148,6 +158,7 @@ public:
      * this storage and should free it.
      * @param count the output parameter of number of collation key values,
      * including any trailing nulls.
+	 * @deprecated
      */
      uint8_t*                toByteArray(int32_t& count) const;
 
@@ -159,6 +170,7 @@ public:
      * @return Returns Collator::LESS if sourceKey &lt; targetKey, 
      * Collator::GREATER if sourceKey > targetKey and Collator::EQUAL
      * otherwise.
+	 * @deprecated
      */
      Collator::EComparisonResult    compareTo(const CollationKey& target) const;
 
@@ -180,6 +192,7 @@ public:
      * </pre>
      * @return the hash value based on the string's collation order.
      * @see UnicodeString#hashCode
+	 * @deprecated
      */
      int32_t                 hashCode(void) const;
 
