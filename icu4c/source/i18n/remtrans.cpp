@@ -34,8 +34,9 @@ void RemoveTransliterator::registerIDs() {
 /**
  * Factory method
  */
-Transliterator* RemoveTransliterator::_create(const UnicodeString& ID,
+Transliterator* RemoveTransliterator::_create(const UnicodeString& /*ID*/,
                                               Token /*context*/) {
+    /* We don't need the ID or context. We just remove data */
     return new RemoveTransliterator();
 }
 
