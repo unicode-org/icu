@@ -77,7 +77,7 @@ uchar.o ucmp8.o ucmp16.o ucmp32.o ucmpe32.o uvector.o uhash.o uhash_us.o \
 unames.o unicode.o unistr.o ustring.o cstring.o utf_impl.o \
 scsu.o ucnv.o ucnv_bld.o ucnv_cb.o ucnv_cnv.o ucnv_err.o ucnv_io.o convert.o \
 ucnvlat1.o ucnvmbcs.o ucnv_utf.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvscsu.o \
-ustream.o uscript.o ucnvisci.o ucln_cmn.o
+ustream.o uscript.o ucnvisci.o ucln_cmn.o ustrfmt.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
