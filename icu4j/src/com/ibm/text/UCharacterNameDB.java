@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UCharacterNameDB.java,v $ 
-* $Date: 2001/08/22 22:38:30 $ 
-* $Revision: 1.5 $
+* $Date: 2001/10/19 22:15:53 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -59,7 +59,7 @@ final class UCharacterNameDB extends UCharacterDB
   /**
   * Default name of the name datafile
   */
-  private static final String NAME_FILE_NAME_ = "unames.dat";
+  private static final String NAME_FILE_NAME_ = "resources/unames.dat";
   
   /**
   * Default buffer size of datafile
