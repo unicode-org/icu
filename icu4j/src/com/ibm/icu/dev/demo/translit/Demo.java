@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2002/07/14 22:03:24 $ 
- * $Revision: 1.20 $
+ * $Date: 2002/07/15 01:26:18 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -31,7 +31,7 @@ import java.io.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.20 $ $Date: 2002/07/14 22:03:24 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.21 $ $Date: 2002/07/15 01:26:18 $
  */
 public class Demo extends Frame {
 
@@ -428,6 +428,7 @@ public class Demo extends Frame {
         }
     }
     
+
     boolean transliterateTyping = true;
     Transliterator fromHex = Transliterator.getInstance("Hex-Any");
     InfoDialog helpDialog;
@@ -625,17 +626,92 @@ public class Demo extends Frame {
                     first = false;
                 }
             }
+            int dashPos = id.indexOf('-');
+            int slashPos = id.indexOf('/');
+            if (slashPos < 0) slashPos = id.length();
+            UnicodeSet sourceSuper = null;
+            try {
+                sourceSuper = new UnicodeSet("[:" + id.substring(0,dashPos) + ":]");
+            } catch (Exception e) {}
+            
+            UnicodeSet targetSuper = null;
+            try {
+                targetSuper = new UnicodeSet("[:" + id.substring(dashPos+1, slashPos) + ":]");
+            } catch (Exception e) {}
+            
             out.println("</table><ul>");
-            out.println("<li>Source Set:<ul><li>" + translit.getSourceSet().toPattern(true) + "</li></ul></li>");
-            out.println("<li>Reverse Target Set:<ul><li>" + lt.getTargetSet().toPattern(true) + "</li></ul></li>");
-            out.println("<li>Target Set:<ul><li>" + translit.getTargetSet().toPattern(true) + "</li></ul></li>");
-            out.println("<li>Reverse Source Set:<ul><li>" + lt.getSourceSet().toPattern(true) + "</li></ul></li>");
+            out.println("<p><b>NFD</b></p>");
+            out.println("<li>Source Set:<ul><li>" + toPattern(closeUnicodeSet(translit.getSourceSet(), Normalizer.NFD, true), sourceSuper) + "</li></ul></li>");
+            out.println("<li>Reverse Target Set:<ul><li>" + toPattern(closeUnicodeSet(lt.getTargetSet(), Normalizer.NFD, true), sourceSuper) + "</li></ul></li>");
+            out.println("<li>Target Set:<ul><li>" + toPattern(closeUnicodeSet(translit.getTargetSet(), Normalizer.NFD, true), targetSuper) + "</li></ul></li>");
+            out.println("<li>Reverse Source Set:<ul><li>" + toPattern(closeUnicodeSet(lt.getSourceSet(), Normalizer.NFD, true), targetSuper) + "</li></ul></li>");
+            out.println("<p><b>NFKD</b></p>");
+            out.println("<li>Source Set:<ul><li>" + toPattern(closeUnicodeSet(translit.getSourceSet(), Normalizer.NFKD, true), sourceSuper) + "</li></ul></li>");
+            out.println("<li>Reverse Target Set:<ul><li>" + toPattern(closeUnicodeSet(lt.getTargetSet(), Normalizer.NFKD, true), sourceSuper) + "</li></ul></li>");
+            out.println("<li>Target Set:<ul><li>" + toPattern(closeUnicodeSet(translit.getTargetSet(), Normalizer.NFKD, true), targetSuper) + "</li></ul></li>");
+            out.println("<li>Reverse Source Set:<ul><li>" + toPattern(closeUnicodeSet(lt.getSourceSet(), Normalizer.NFKD, true), targetSuper) + "</li></ul></li>");
             out.println("</ul></body>");
             out.close();
             System.out.println("Done Writing");
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    
+    static UnicodeSet closeUnicodeSet(UnicodeSet source, Normalizer.Mode mode, boolean caseToo) {
+        UnicodeSetIterator it = new UnicodeSetIterator(source);
+        UnicodeSet additions = new UnicodeSet(); // to avoid messing up iterator
+        int cp;
+        
+        // First add all case equivalents
+        if (caseToo) {
+            while (it.next()) {
+                cp = it.codepoint;
+                if (cp == it.IS_STRING) continue;
+                int type = UCharacter.getType(cp);
+                if (type == Character.UPPERCASE_LETTER || type == Character.LOWERCASE_LETTER || type == Character.TITLECASE_LETTER) {
+                    additions.add(UCharacter.toLowerCase(UTF16.valueOf(cp)));
+                    additions.add(UCharacter.toUpperCase(UTF16.valueOf(cp)));
+                }
+            }
+            source.addAll(additions);
+            additions.clear();
+        }
+       
+        // Now add all decompositions of characters in source
+        it.reset(source);
+        while (it.next()) {
+            cp = it.codepoint;
+            if (cp == it.IS_STRING) continue;
+            if (Normalizer.isNormalized(cp, mode)) continue;
+            String decomp = Normalizer.normalize(cp, mode);
+            additions.add(decomp);
+        }
+        source.addAll(additions);
+        
+        // Now add any other character that decomposes to a character in source
+        for (cp = 0; cp < 0x10FFFF; ++cp) {
+            if (!UCharacter.isDefined(cp)) continue;
+            if (Normalizer.isNormalized(cp, mode)) continue;
+            if (source.contains(cp)) continue;
+            
+            String decomp = Normalizer.normalize(cp, mode);
+            if (source.containsAll(decomp)) {
+                System.out.println("Adding: " + Integer.toString(cp,16) + " " + UCharacter.getName(cp));
+                source.add(cp);
+            }
+        }
+        // For completeness, later we should add the canonical closure of all strings in source
+        return source;
+    }
+    
+    static String toPattern(UnicodeSet source, UnicodeSet superset) {
+        if (superset != null) {
+            source.removeAll(superset);
+            return "[" + superset.toPattern(true) + " " + source.toPattern(true) + "]";
+        }
+        return source.toPattern(true);
     }
     
     static BreakIterator bi = BreakIterator.getWordInstance();

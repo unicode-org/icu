@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Arabic_Latin.txt,v $
-# $Date: 2002/07/14 22:02:01 $
-# $Revision: 1.1 $
+# $Date: 2002/07/15 01:26:18 $
+# $Revision: 1.2 $
 #--------------------------------------------------------------------
 
 # Generally follows UNGEGN <http://www.eki.ee/wgrs/rom1_ar.pdf>
@@ -18,8 +18,8 @@
 # While it could be done, we need to determine whether a prefix "al" could
 # occur other than as the definite article (since no space is used).
 
-:: NFD (NFC);
-:: lower () ;
+:: [[:Arabic:] [‎ⁿ\u060C\u061B\u061F\u0640\u064B-\u0655\u0660-\u066C\u06F0-\u06F9\uFDFC]] ;
+:: NFKD (NFC);
 $disambig =  ̱ ; 
 $disambig2 =  ̰ ;
 $under =  ̣ ;
@@ -73,6 +73,10 @@ $under =  ̣ ;
  ط <> t $under ; # ARABIC LETTER TAH
  ظ <> z $under ; # ARABIC LETTER ZAH
  غ <> g h $disambig ; # ARABIC LETTER GHAIN
+
+# WARNING: special case
+# These canonically rearrange, so we have to special-case the return
+ةٕ < ẗ̹ ; # LATIN SMALL LETTER T, COMBINING RIGHT HALF RING BELOW, COMBINING DIAERESIS
 
 # non-Arabic language
  ژ <> z h $disambig ; # ARABIC LETTER JEH
@@ -129,9 +133,13 @@ $under =  ̣ ;
  گ <> g ; # ARABIC LETTER GAF
 
 # fallbacks
-
+| s < c } [eiy];
+| k < c ;
 | i < e ;
 | u < o ;
 | ks < x ;
+| n < ‎ⁿ;
 
+:: (lower) ;
 ::NFC (NFD);
+:: ( [[:Latin:] [%,.0-9;?\u02BE-\u02BF\u0302-\u0304\u0308-\u030A\u0323\u0330-\u0331\u0339\u037E]] );
