@@ -374,6 +374,10 @@ SOURCE=.\udatatst.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\uenumtst.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\usettest.c
 # End Source File
 # Begin Source File

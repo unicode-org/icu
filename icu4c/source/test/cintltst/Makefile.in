@@ -45,7 +45,7 @@ cnmdptst.o cnormtst.o cnumtst.o cregrtst.o crestst.o creststn.o cturtst.o \
 cucdtst.o cstrcase.o cutiltst.o encoll.o nucnvtst.o susctest.o nccbtst.o bocu1tst.o \
 cbiditst.o cbididat.o dadrcoll.o eurocreg.o udatatst.o utf16tst.o utransts.o \
 ncnvfbts.o ncnvtst.o putiltst.o cstrtest.o mstrmtst.o utf8tst.o ucmptst.o \
-stdnmtst.o ctstdep.o usrchtst.o custrtrn.o trietest.o usettest.o
+stdnmtst.o ctstdep.o usrchtst.o custrtrn.o trietest.o usettest.o uenumtst.o
 
 DEPS = $(OBJECTS:.o=.d)
 
