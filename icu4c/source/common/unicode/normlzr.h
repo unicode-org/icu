@@ -324,8 +324,11 @@ public:
    * For FCD strings and short non-FCD strings there is no memory allocation.
    *
    * Semantically, this is equivalent to
-   *   strcmp[CodePointOrder](foldCase(NFD(s1)), foldCase(NFD(s2)))
+   *   strcmp[CodePointOrder](NFD(foldCase(s1)), NFD(foldCase(s2)))
    * where code point order and foldCase are all optional.
+   *
+   * UAX 21 2.5 Caseless Matching specifies that for a canonical caseless match
+   * the case folding must be performed first, then the normalization.
    *
    * @param s1 First source string.
    * @param s2 Second source string.
