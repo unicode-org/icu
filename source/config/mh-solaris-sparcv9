@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-solaris-sparcv9,v 1.13 2000/10/16 18:05:34 yves Exp $
+## $Id: mh-solaris-sparcv9,v 1.14 2000/10/17 16:39:33 yves Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -xtarget=ultra -xarch=v9 -xM $(DEFS) $(CPPFLAGS)
@@ -31,7 +31,7 @@ LD_SONAME = -h $(MIDDLE_SO_TARGET)
 
 ## Versioned target for a shared library.
 FINAL_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION)
-MIDDLE_SO_TARGET = $(SO_TARGET)
+MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_MAJOR_VERSION)
 
 ## Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
