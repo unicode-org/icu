@@ -67,7 +67,7 @@ package com.ibm.icu.text;
 * @see UnicodeCompressor
 *
 * @author Stephen F. Booth
-* @draft ICU 2.4
+* @stable ICU 2.4
 */
 public final class UnicodeDecompressor implements SCSU
 {
@@ -98,7 +98,7 @@ public final class UnicodeDecompressor implements SCSU
      * Create a UnicodeDecompressor.
      * Sets all windows to their default values.
      * @see #reset
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public UnicodeDecompressor()
     {
@@ -110,7 +110,7 @@ public final class UnicodeDecompressor implements SCSU
      * @param buffer The byte array to decompress.
      * @return A String containing the decompressed characters.
      * @see #decompress(byte [], int, int)
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static String decompress(byte [] buffer)
     {
@@ -125,7 +125,7 @@ public final class UnicodeDecompressor implements SCSU
      * @param limit The limit of the byte run to decompress.
      * @return A character array containing the decompressed bytes.
      * @see #decompress(byte [])
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static char [] decompress(byte [] buffer,
 				     int start,
@@ -165,7 +165,7 @@ public final class UnicodeDecompressor implements SCSU
      * @param charBufferLimit The limiting offset for writing 
      * decompressed data.
      * @return The number of Unicode characters written to charBuffer.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public int decompress(byte []    byteBuffer,
 			  int        byteBufferStart,
@@ -540,7 +540,7 @@ public final class UnicodeDecompressor implements SCSU
 
     /** 
      * Reset the decompressor to its initial state. 
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public void reset()
     {
