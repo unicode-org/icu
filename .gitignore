@@ -193,7 +193,12 @@ icu4c/source/tools/ctestfw/Release
 icu4c/source/tools/ctestfw/libicuctestfw.so.20.0
 icu4c/source/tools/ctestfw/pkgdata
 icu4c/source/tools/ctestfw/tmp
+icu4c/source/tools/dumpce/*.css
+icu4c/source/tools/dumpce/*.d
+icu4c/source/tools/dumpce/*.html
+icu4c/source/tools/dumpce/*.o
 icu4c/source/tools/dumpce/Makefile
+icu4c/source/tools/dumpce/dumpce
 icu4c/source/tools/genccode/*.d
 icu4c/source/tools/genccode/*.pdb
 icu4c/source/tools/genccode/*.plg
