@@ -607,10 +607,10 @@ unicodeDataLineFn(void *context,
                 *pErrorCode=U_PARSE_ERROR;
                 exit(U_PARSE_ERROR);
             }
-            if(!upvec_setValue(pv, p.code, p.code+1, 2, (uint32_t)i, UPROPS_DT_MASK, pErrorCode)) {
-                fprintf(stderr, "genprops error: unable to set decomposition type: %s\n", u_errorName(*pErrorCode));
-                exit(*pErrorCode);
-            }
+        }
+        if(!upvec_setValue(pv, p.code, p.code+1, 2, (uint32_t)i, UPROPS_DT_MASK, pErrorCode)) {
+            fprintf(stderr, "genprops error: unable to set decomposition type: %s\n", u_errorName(*pErrorCode));
+            exit(*pErrorCode);
         }
     }
 
@@ -840,6 +840,7 @@ repeatAreaProps() {
     uint32_t puaProps;
     int32_t i;
     UBool hasPlane15PUA, hasPlane16PUA;
+    UErrorCode errorCode;
 
     /*
      * UnicodeData.txt before 3.0.1 did not contain the PUAs on
@@ -870,6 +871,13 @@ repeatAreaProps() {
         if(!hasPlane16PUA) {
             repeatProps(0x100000, 0x10fffd, puaProps);
         }
+    }
+
+    /* Hangul have canonical decompositions */
+    errorCode=U_ZERO_ERROR;
+    if(!upvec_setValue(pv, 0xac00, 0xd7a4, 2, (uint32_t)U_DT_CANONICAL, UPROPS_DT_MASK, &errorCode)) {
+        fprintf(stderr, "genprops error: unable to set decomposition type: %s\n", u_errorName(errorCode));
+        exit(errorCode);
     }
 }
 
