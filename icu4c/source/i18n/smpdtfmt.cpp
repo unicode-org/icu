@@ -678,7 +678,7 @@ SimpleDateFormat::zeroPaddingNumber(UnicodeString& result, int32_t value, int32_
     result.remove();
     fNumberFormat->setMinimumIntegerDigits(minDigits);
     fNumberFormat->setMaximumIntegerDigits(maxDigits);
-    return fNumberFormat->format(value, result);
+    return fNumberFormat->format(value, result, FieldPosition(0));  // 3rd arg is there to speed up processing
 }
 
 //----------------------------------------------------------------------

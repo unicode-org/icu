@@ -158,9 +158,7 @@ NumberFormat::parseObject(const UnicodeString& source,
 UnicodeString&
 NumberFormat::format(double number, UnicodeString& toAppendTo) const
 {
-    FieldPosition pos(0);
-    UErrorCode status = U_ZERO_ERROR;
-    return format(Formattable(number), toAppendTo, pos, status);
+    return format(number, toAppendTo, FieldPosition(0));
 }
  
 // -------------------------------------
@@ -169,9 +167,7 @@ NumberFormat::format(double number, UnicodeString& toAppendTo) const
 UnicodeString&
 NumberFormat::format(int32_t number, UnicodeString& toAppendTo) const
 {
-    FieldPosition pos(0);
-    UErrorCode status = U_ZERO_ERROR;
-    return format(Formattable(number), toAppendTo, pos, status);
+    return format(number, toAppendTo, FieldPosition(0));
 }
  
 // -------------------------------------
