@@ -306,8 +306,8 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
     for( j=0;j<b1Len;j++){
         if(b1[j] > 0x7F){
             srcIsASCII = FALSE;
-        }else{
-            srcIsLDH = prep->isLDHChar(b1[j]);
+        }else if(prep->isLDHChar(b1[j])==FALSE){  // if the char is in ASCII range verify that it is an LDH character{
+            srcIsLDH = FALSE;
         }
     }
     
