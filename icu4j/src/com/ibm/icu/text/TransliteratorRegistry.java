@@ -109,11 +109,12 @@ class TransliteratorRegistry {
 
             Locale toploc = getLocale(top);
             res = ResourceBundle.getBundle(RB_LOCALE_ELEMENTS, toploc);
-            if (res.getLocale().equals(ROOT_LOCALE)) {
+            // Make sure we got the bundle we wanted; otherwise, don't use it
+            if (res.getLocale().equals(toploc)) {
+                isSpecLocale = true;
+            } else {
                 isSpecLocale = false;
                 res = null;
-            } else {
-                isSpecLocale = true;
             }
 
             // Canonicalize script name -or- do locale->script mapping
@@ -230,6 +231,16 @@ class TransliteratorRegistry {
         public ResourceEntry(String n, String enc, int d) {
             resourceName = n;
             encoding = enc;
+            direction = d;
+        }
+    }
+
+    // An entry representing a rule in a locale resource bundle
+    static class LocaleEntry {
+        public String rule;
+        public int direction;
+        public LocaleEntry(String r, int d) {
+            rule = r;
             direction = d;
         }
     }
@@ -644,11 +655,9 @@ class TransliteratorRegistry {
         }
         Object[] entry = null;
         if (src.isLocale()) {
-            entry = findInBundle(src, trg, variant,
-                                 "TransliterateTo");
+            entry = findInBundle(src, trg, variant, Transliterator.FORWARD);
         } else if (trg.isLocale()) {
-            entry = findInBundle(trg, src, variant,
-                                 "TransliterateFrom");
+            entry = findInBundle(trg, src, variant, Transliterator.REVERSE);
         }
 
         // If we found an entry, store it in the Hashtable for next
@@ -673,7 +682,7 @@ class TransliteratorRegistry {
     private Object[] findInBundle(Spec specToOpen,
                                   Spec specToFind,
                                   String variant,
-                                  String tagPrefix) {
+                                  int direction) {
         // assert(specToOpen.isLocale());
         ResourceBundle res = specToOpen.getBundle();
         if (res == null) {
@@ -682,35 +691,55 @@ class TransliteratorRegistry {
             return null;
         }
 
-        StringBuffer tag = new StringBuffer(tagPrefix);
-        tag.append(LOCALE_SEP).append(specToFind.get());
+        for (int pass=0; pass<2; ++pass) {
+            StringBuffer tag = new StringBuffer();
+            // First try either TransliteratorTo_xxx or
+            // TransliterateFrom_xxx, then try the bidirectional
+            // Transliterate_xxx.  This precedence order is arbitrary
+            // but must be consistent and documented.
+            if (pass == 0) {
+                tag.append(direction == Transliterator.FORWARD ?
+                           "TransliterateTo_" : "TransliterateFrom_");
+            } else {
+                tag.append("Transliterate_");
+            }
+            tag.append(specToFind.get());
+            
+            try {
+                // The Transliterate*_xxx resource is an array of
+                // strings of the format { <v0>, <r0>, ... }.  Each
+                // <vi> is a variant name, and each <ri> is a rule.
+                String[] subres = res.getStringArray(tag.toString());
 
-        try {
-            // The TranslateTo_xxx or TranslateFrom_xxx resource is
-            // an array of strings of the format { <v0>, <r0>, ... }.
-            // Each <vi> is a variant name, and each <ri> is a rule.
-            String[] subres = res.getStringArray(tag.toString());
-
-            // assert(subres != null);
-            // assert(subres.length % 2 == 0);
-            int i = 0;
-            if (variant.length() != 0) {
-                for (i=0; i<subres.length; i+= 2) {
-                    if (subres[i].equalsIgnoreCase(variant)) {
-                        break;
+                // assert(subres != null);
+                // assert(subres.length % 2 == 0);
+                int i = 0;
+                if (variant.length() != 0) {
+                    for (i=0; i<subres.length; i+= 2) {
+                        if (subres[i].equalsIgnoreCase(variant)) {
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (i < subres.length) {
-                // We have a match, or there is no variant and i == 0.
-                // We have succeeded in loading a string from the
-                // locale resources.  Return the rule string which
-                // will itself become the registry entry.
-                return new Object[] { subres[i+1] };
-            }
+                if (i < subres.length) {
+                    // We have a match, or there is no variant and i == 0.
+                    // We have succeeded in loading a string from the
+                    // locale resources.  Return the rule string which
+                    // will itself become the registry entry.
 
-        } catch (MissingResourceException e) {}
+                    // The direction is always forward for the
+                    // TransliterateTo_xxx and TransliterateFrom_xxx
+                    // items; those are unidirectional forward rules.
+                    // For the bidirectional Transliterate_xxx items,
+                    // the direction is the value passed in to this
+                    // function.
+                    int dir = (pass == 0) ? Transliterator.FORWARD : direction;
+                    return new Object[] { new LocaleEntry(subres[i+1], dir) };
+                }
+
+            } catch (MissingResourceException e) {}
+        }
 
         // If we get here we had a missing resource exception or we
         // failed to find a desired variant.
@@ -846,17 +875,26 @@ class TransliteratorRegistry {
             // TransliteratorRuleData object, and possibly also into an
             // .id header and/or footer.  Then we modify the registry with
             // the parsed data and retry.
-            ResourceEntry re = (ResourceEntry) entry;
-            ResourceReader r = null;
-            try {
-                r = new ResourceReader(re.resourceName, re.encoding);
-            } catch (UnsupportedEncodingException e) {
-                // This should never happen; UTF8 is always supported
-                throw new RuntimeException(e.getMessage());
-            }
 
             TransliteratorParser parser = new TransliteratorParser();
-            parser.parse(r, re.direction);
+
+            try {
+                ResourceEntry re = (ResourceEntry) entry;
+                ResourceReader r = null;
+                try {
+                    r = new ResourceReader(re.resourceName, re.encoding);
+                } catch (UnsupportedEncodingException e) {
+                    // This should never happen; UTF8 is always supported
+                    throw new RuntimeException(e.getMessage());
+                }
+                
+                parser.parse(r, re.direction);
+            } catch (ClassCastException e) {
+                // If we pull a rule from a locale resource bundle it will
+                // be a LocaleEntry.
+                LocaleEntry le = (LocaleEntry) entry;
+                parser.parse(le.rule, le.direction);
+            }
 
             // Reset entry to something that we process at the
             // top of the loop, then loop back to the top.  As long as we
