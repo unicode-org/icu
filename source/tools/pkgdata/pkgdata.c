@@ -447,7 +447,7 @@ static int executeMakefile(const UPKGOptions *o)
         o->install ? "install"    : "",
         o->makeArgs);
 #elif OS400
-    sprintf(cmd, "CALL GNU/GMAKE PARM(%s%s%s '-f' '%s' %s %s %s %s)",
+    sprintf(cmd, "CALL GNU/GMAKE PARM(%s%s%s '-f' '%s' %s %s %s %s%s%s)",
         o->install ? "'INSTALLTO=" : "",
         o->install ? o->install    : "",
         o->install ? "'"           : "",
@@ -455,7 +455,9 @@ static int executeMakefile(const UPKGOptions *o)
         o->clean   ? "'clean'"     : "",
         o->rebuild ? "'rebuild'"   : "",
         o->install ? "'install'"   : "",
-        o->makeArgs);
+        o->makeArgs ? "'"          : "",
+        o->makeArgs,
+        o->makeArgs ? "'"          : "");
 #else
     sprintf(cmd, "%s %s%s -f %s %s %s %s %s",
         make,
