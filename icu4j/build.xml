@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/12/13 00:30:58 $
-* $Revision: 1.85 $
+* $Date: 2004/01/12 23:54:16 $
+* $Revision: 1.86 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -21,54 +21,54 @@
     <taskdef resource="clovertasks"/>
 
     <target name="with.clover">
-    	<clover-setup initString="tmp/icu4j.db">
-    	     <files>
-       	     	<exclude name="**/dev/**/*.java"/>
+        <clover-setup initString="tmp/icu4j.db">
+             <files>
+                <exclude name="**/dev/**/*.java"/>
              </files>
         </clover-setup>
     </target>
     <target name="clover.html" depends="with.clover">
-    	<clover-report >
+        <clover-report >
             <current outfile="icu4j_html" >
-                 <format type="html" /> 
-      	    </current>	 
- 	</clover-report>
+                 <format type="html" />
+            </current>
+    </clover-report>
     </target>
     <target name="clover.log" depends="with.clover">
         <clover-log level="method">
              <package name="com.ibm.icu.text"/>
- 	</clover-log>
+    </clover-log>
         <clover-log level="method">
              <package name="com.ibm.icu.lang"/>
- 	</clover-log>
+    </clover-log>
         <clover-log level="method">
              <package name="com.ibm.icu.math"/>
- 	</clover-log>
+    </clover-log>
         <clover-log level="method">
              <package name="com.ibm.icu.util"/>
- 	</clover-log>
+    </clover-log>
         <clover-log level="method">
              <package name="com.ibm.icu.impl"/>
- 	</clover-log>
+    </clover-log>
     </target>
 
     <!-- ### End Clover 1.2 setup ### -->
-    
+
     <target name="anthack1">
         <!-- It's a real pain to set properties conditionally.
           Ant 1.5 isn't really any better than 1.4, in fact 1.5 enforces that
           properties are write-once so you can't even set a default and then
           override it, which we used to do for Ant 1.4. -->
         <condition property="version.1.4">
-	        <or>
-	        	<equals arg1="${ant.java.version}" arg2="1.4"/>
-	        </or>
+            <or>
+                <equals arg1="${ant.java.version}" arg2="1.4"/>
+            </or>
         </condition>
 
-	    <condition property="doc.params"
-	        value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'ICU Core' 'com.ibm.icu.lang*:com.ibm.icu.math*:com.ibm.icu.text*:com.ibm.icu.util*:com.ibm.icu.stringprep*' -group 'ICU Tools' 'com.ibm.icu.dev*' -group 'Rich Text Editing' 'com.ibm.richtext*'">
-	            <equals arg1="${version.1.4}" arg2="true"/>
-	    </condition>
+        <condition property="doc.params"
+            value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'ICU Core' 'com.ibm.icu.lang*:com.ibm.icu.math*:com.ibm.icu.text*:com.ibm.icu.util*:com.ibm.icu.stringprep*' -group 'ICU Tools' 'com.ibm.icu.dev*' -group 'Rich Text Editing' 'com.ibm.richtext*'">
+                <equals arg1="${version.1.4}" arg2="true"/>
+        </condition>
     </target>
 
     <target name="anthack2" unless="doc.params">
@@ -134,7 +134,7 @@
             destdir="${build.dir}"
             classpathref="build.classpath"
             debug="on" deprecation="off"
-	    encoding="ascii"/>
+        encoding="ascii"/>
     </target>
 
     <target name="tests" depends="core,testData">
@@ -172,7 +172,7 @@
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
-    
+
 <!-- use excludefiles below when we move to ant 1.5 -->
 
     <target name="docs" depends="anthack1,anthack2,tools">
@@ -228,12 +228,12 @@
         </copy>
     </target>
 
-	<!-- Creates the 3 release jar archives for distribution -->
-	<target name="jarRelease" depends="jar,jarSrc,jarDocs"/>
-	
+    <!-- Creates the 3 release jar archives for distribution -->
+    <target name="jarRelease" depends="jar,jarSrc,jarDocs"/>
+
     <target name="jar" depends="core">
         <jar jarfile="${jar.file}"
-            compress="false"
+            compress="true"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
             basedir="${build.dir}"
             manifest="${icu4j.manifest}"/>
@@ -241,7 +241,7 @@
 
     <target name="testJar" depends="tests">
         <jar jarfile="${testjar.file}"
-            compress="false"
+            compress="true"
             includes="com/ibm/icu/dev/test/**/*"
             basedir="${build.dir}"/>
     </target>
@@ -271,7 +271,7 @@
     <target name="richeditJar" depends="richedit">
         <mkdir dir="${richedit.dir}"/>
         <jar jarfile="${richedit.jar.file}"
-            compress="false"
+            compress="true"
             includes="com/ibm/richtext/**/*"
         excludes="com/ibm/richtext/test/**/*"
             basedir="${build.dir}"
@@ -322,11 +322,11 @@
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes">
         <!-- (use for debugging, LOTS of output) jvmarg value="-Djava.security.debug=access" -->
         <jvmarg value="-Djava.security.manager"/>
-	<jvmarg value="-Djava.security.policy=src/com/ibm/icu/dev/test/security.policy"/>
-	<arg value="-w"/>
+    <jvmarg value="-Djava.security.policy=src/com/ibm/icu/dev/test/security.policy"/>
+    <arg value="-w"/>
         <classpath>
             <pathelement path="${java.class.path}/"/>
-	        <pathelement location="clover.jar"/>
+            <pathelement location="clover.jar"/>
             <pathelement path="${build.dir}"/>
         </classpath>
     </java>
@@ -367,7 +367,7 @@
         <copy file="${src.dir}/com/ibm/icu/impl/data/uprops.icu"
             todir="${build.dir}/com/ibm/icu/impl/data/"/>
         <!-- with introduction of back level normalization
-             we need the below data files to support it -->    
+             we need the below data files to support it -->
         <copy file="${src.dir}/com/ibm/icu/impl/data/unames.icu"
             todir="${build.dir}/com/ibm/icu/impl/data/"/>
         <copy file="${src.dir}/com/ibm/icu/impl/data/pnames.icu"
@@ -603,16 +603,16 @@
         <copy file="${src.dir}/com/ibm/icu/dev/data/th18057.txt"
             todir="${build.dir}/com/ibm/icu/dev/data/"/>
     </target>
-    
+
     <!-- build the extra Transliterator data pertaining to Han-Latin transliteration -->
     <target name="extraTransliteratorData" depends="init">
         <copy todir="${build.dir}/com/ibm/icu/impl/data">
               <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="Transliterator_Han_Latin_*.txt"/>
         </copy>
     </target>
-	<!-- Taget for builing XLIFF2ICUConverter Jar -->
-	<target name="xliff" depends="init">
-	    <javac includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.java,com/ibm/icu/dev/tool/UOption.java,com/ibm/icu/dev/tool/xmlcomparator/XMLValidator.java"
+    <!-- Taget for builing XLIFF2ICUConverter Jar -->
+    <target name="xliff" depends="init">
+        <javac includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.java,com/ibm/icu/dev/tool/UOption.java,com/ibm/icu/dev/tool/xmlcomparator/XMLValidator.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
