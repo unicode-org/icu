@@ -4,8 +4,8 @@
  * Corporation and others.  All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberRegression.java,v $ 
- * $Date: 2003/12/20 03:06:51 $ 
- * $Revision: 1.17 $
+ * $Date: 2004/02/04 02:36:38 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  **/
@@ -1762,6 +1762,43 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
 	if (!result.equals("0.01")) {
 	    errln("FAIL: input: " + f + ", expected: 0.01, got: " + result);
 	}
+    }
+    
+    /**
+     * 4241880: Decimal format doesnt round a double properly when the number is less than 1
+     */
+    public void test4241880() {
+        Locale savedLocale = Locale.getDefault();
+        Locale.setDefault(Locale.US);
+        double[] input = {
+                .019, .009, .015, .016, .014,
+                .004, .005, .006, .007, .008,
+                .5, 1.5, .05, .15, .005,
+                .015, .0005, .0015,
+        };
+        String[] pattern = {
+                "##0%", "##0%", "##0%", "##0%", "##0%",
+                "##0%", "##0%", "##0%", "##0%", "##0%",
+                "#,##0", "#,##0", "#,##0.0", "#,##0.0", "#,##0.00",
+                "#,##0.00", "#,##0.000", "#,##0.000",
+        };
+        String[] expected = {
+                "2%", "1%", "2%", "2%", "1%",
+                "0%", "0%", "1%", "1%", "1%",
+                "0", "2", "0.0", "0.2", "0.00",
+                "0.02", "0.000", "0.002",
+        };
+        for (int i = 0; i < input.length; i++) {
+            DecimalFormat format = new DecimalFormat(pattern[i]);
+            String result = format.format(input[i]);
+            if (!result.equals(expected[i])) {
+                errln("FAIL: input: " + input[i] +
+                        ", pattern: " + pattern[i] +
+                        ", expected: " + expected[i] +
+                        ", got: " + result);
+            }
+        }
+        Locale.setDefault(savedLocale);
     }
 }
 

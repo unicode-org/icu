@@ -1076,5 +1076,15 @@ public class CollationAPITest extends TestFmwk {
                 }
             }
         }
+    }
+    
+    public final void TestGetAll() {
+        Locale[] list = Collator.getAvailableLocales();
+        for (int i = 0; i < list.length; ++i) {
+            log("Locale name: ");
+            log(list[i].toString());
+            log(" , the display name is : ");
+            logln(list[i].getDisplayName());
+        }
     }    
 }
