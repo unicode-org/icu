@@ -53,16 +53,15 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
                 + "Y-UMLAUT=\u0178;"
                 + "y-umlaut=\u00FF;"
                 
-                /*
-                // with real accents.
-                + "E-MACRON-ACUTE=\u0112\u0301;"
-                + "e-macron-acute=\u0113\u0301;"
-                + "O-MACRON-ACUTE=\u014C\u0301;"
-                + "o-macron-acute=\u014D\u0301;"
-                + "y-umlaut-acute=\u00FF\u0301;"
-                + "\u00ef-acute=\u00ef\u0301;"
-                + "\u00fc-acute=\u00fc\u0301;"
-                //*/
+                //! // with real accents.
+                //! + "E-MACRON-ACUTE=\u0112\u0301;"
+                //! + "e-macron-acute=\u0113\u0301;"
+                //! + "O-MACRON-ACUTE=\u014C\u0301;"
+                //! + "o-macron-acute=\u014D\u0301;"
+                //! + "y-umlaut-acute=\u00FF\u0301;"
+                //! + "\u00ef-acute=\u00ef\u0301;"
+                //! + "\u00fc-acute=\u00fc\u0301;"
+                //! //
  
                 // single letter equivalents
                 
@@ -108,8 +107,8 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
                 + "OMICRON+=\u038C;"
                 + "YPSILON+=\u038E;"
                 + "OMEGA+=\u038F;"
-                + "IOTA\u00a8=\u03AA;"
-                + "YPSILON\u00a8=\u03AB;"
+                + "IOTA_DIAERESIS=\u03AA;"
+                + "YPSILON_DIAERESIS=\u03AB;"
 
                 + "alpha=\u03B1;"
                 + "beta=\u03B2;"
@@ -145,26 +144,27 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
                 + "omicron+=\u03CC;"
                 + "ypsilon+=\u03CD;"
                 + "omega+=\u03CE;"
-                + "iota\u00a8=\u03CA;"
-                + "ypsilon\u00a8=\u03CB;"
-                + "iota\u00a8+=\u0390;"
-                + "ypsilon\u00a8+=\u03B0;"
+                + "iota_diaeresis=\u03CA;"
+                + "ypsilon_diaeresis=\u03CB;"
+                + "iota_diaeresis+=\u0390;"
+                + "ypsilon_diaeresis+=\u03B0;"
                 + "sigma+=\u03C2;"
 
                 // Variables for conditional mappings
                 
                 // Use lowercase for all variable names, to allow cut/paste below.
 
-                + "letter=[[:Lu:][:Ll:]];"
+                + "letter=[~[:Lu:][:Ll:]];"
                 + "lower=[[:Ll:]];"
+                + "softener=[eiyEIY];"
                 + "vowel=[aeiouAEIOU"
                 +   "{ALPHA}{EPSILON}{ETA}{IOTA}{OMICRON}{YPSILON}{OMEGA}"
                 +   "{ALPHA+}{EPSILON+}{ETA+}{IOTA+}{OMICRON+}{YPSILON+}{OMEGA+}"
-                +   "{IOTA\u00a8}{YPSILON\u00a8}"
+                +   "{IOTA_DIAERESIS}{YPSILON_DIAERESIS}"
                 +   "{alpha}{epsilon}{eta}{iota}{omicron}{ypsilon}{omega}"
                 +   "{alpha+}{epsilon+}{eta+}{iota+}{omicron+}{ypsilon+}{omega+}"
-                +   "{iota\u00a8}{ypsilon\u00a8}"
-                +   "{iota\u00a8+}{ypsilon\u00a8+}"
+                +   "{iota_diaeresis}{ypsilon_diaeresis}"
+                +   "{iota_diaeresis+}{ypsilon_diaeresis+}"
                 +   "];"
                 + "n-gamma=[GKXCgkxc];"
                 + "gamma-n=[{GAMMA}{KAPPA}{CHI}{XI}{gamma}{kappa}{chi}{xi}];"
@@ -177,34 +177,53 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
                 // not be copied when duplicating the lowercase
                 // ==============================================
                 
-                + "Th<{THETA}({lower};"
-                + "Ph<{PHI}({lower};"
-                + "Ch<{CHI}({lower};"
+                + "Th <> {THETA}({lower};"
+                + "Ph <> {PHI}({lower};"
+                + "Ch <> {CHI}({lower};"
               //masked: + "Ps<{PHI}({lower};"
                 
                 // Because there is no uppercase forms for final sigma,
                 // we had to move all the sigma rules up here.
                 
-                // insert ' to preserve round trip, for double letters
+                // Remember to insert ' to preserve round trip, for double letters
                 // don't need to do this for the digraphs with h,
                 // since it is not created when mapping back from greek
                 
-                + "''S<{pp}){SIGMA};" // for PS
-                + "''s<{pp}){sigma};" // for ps
-                + "''s<{pp}){sigma+};" // for ps
+                // use special form for s
                 
-                + "S({letter}>{SIGMA};"    + "S<{SIGMA};"
-                + "s({letter}>{sigma};"    + "s<{sigma};"
-                + "s<>{sigma+};"
+                + "''S <> ({pp}) {SIGMA} ;" // handle PS
+                + "S <> {SIGMA};"
+                
+                // The following are a bit tricky. 's' takes two forms in greek
+                // final or non final. 
+                // We use ~s to represent the abnormal form: final before letter
+                // or non-final before non-letter.
+                // We use 's to separate p and s (otherwise ps is one letter)
+                // so, we break out the following forms:
+                
+                + "''s < ({pp}) {sigma} ({letter});"
+                + "s <          {sigma} ({letter});"
+                + "~s <         {sigma} ;"
+
+                + "~s <         {sigma+} ({letter});"
+                + "''s < ({pp}) {sigma+} ;"
+                + "s <          {sigma+} ;"
+
+                + "~s ({letter})  > {sigma+};"
+                + "~s             > {sigma};"
+                + "''s ({letter}) > {sigma};"
+                + "''s            > {sigma+};"
+                + "s ({letter})   > {sigma};"
+                + "s              > {sigma+};"
                 
                 // because there are no uppercase forms, had to move these up too.
                 
-                + "i\"`>{iota\u00a8+};"
-                + "y\"`>{ypsilon\u00a8+};"
+                + "i\"`>{iota_diaeresis+};"
+                + "y\"`>{ypsilon_diaeresis+};"
                 
-                + "{\u00ef-acute}<>{iota\u00a8+};"
-                + "{vowel}){\u00fc-acute}>{ypsilon\u00a8+};"  + "{\u00fc-acute}<{vowel}){ypsilon\u00a8+};"
-                + "{y-umlaut-acute}<>{ypsilon\u00a8+};"
+                + "{\u00ef-acute} <> {iota_diaeresis+};"
+                + "{\u00fc-acute} <> {vowel}){ypsilon_diaeresis+};"
+                + "{y-umlaut-acute} <> {ypsilon_diaeresis+};"
                                 
                 // ==============================================
                 // Uppercase Forms.
@@ -221,17 +240,18 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
                 + "O`>{OMICRON+};"
                 + "OO`>{OMEGA+};"
                 + "OO>{OMEGA};"
-                + "I\">{IOTA\u00a8};"
-                + "Y\">{YPSILON\u00a8};"
+                + "I\">{IOTA_DIAERESIS};"
+                + "Y\">{YPSILON_DIAERESIS};"
                 
                 // Basic Letters
                 
                 + "A<>{ALPHA};"
                 + "\u00c1<>{ALPHA+};"
                 + "B<>{BETA};"
-                + "N){n-gamma}>{GAMMA};"  + "N<{GAMMA}({gamma-n};"
+                + "N ({n-gamma}) <> {GAMMA} ({gamma-n});"
                 + "G<>{GAMMA};"
                 + "D<>{DELTA};"
+                + "''E <> ([Ee]){EPSILON};" // handle EE
                 + "E<>{EPSILON};"
                 + "\u00c9<>{EPSILON+};"
                 + "Z<>{ZETA};"
@@ -240,41 +260,41 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
                 + "TH<>{THETA};"
                 + "I<>{IOTA};"
                 + "\u00cd<>{IOTA+};"
-                + "\u00cf<>{IOTA\u00a8};"
+                + "\u00cf<>{IOTA_DIAERESIS};"
                 + "K<>{KAPPA};"
                 + "L<>{LAMBDA};"
                 + "M<>{MU};"
+                + "N'' <> {NU} ({gamma-n});"
                 + "N<>{NU};"
                 + "X<>{XI};"
+                + "''O <> ([Oo]) {OMICRON};" // handle OO
                 + "O<>{OMICRON};"
-                + "\u00d3>{OMICRON+};"  + "\u00d3<{OMEGA+};"
+                + "\u00d3<>{OMICRON+};"
                 + "PH<>{PHI};" // needs ordering before P
                 + "PS<>{PSI};" // needs ordering before P
                 + "P<>{PI};"
                 + "R<>{RHO};"
                 + "T<>{TAU};"
-                + "{vowel})U>{YPSILON};"    + "U<{vowel}){YPSILON};"
-                + "{vowel})\u00da>{YPSILON+};"  + "\u00da<{vowel}){YPSILON+};"
-                + "{vowel})\u00dc>{YPSILON\u00a8};"    + "\u00dc<{vowel}){YPSILON\u00a8};"
+                + "U <> ({vowel}) {YPSILON};"
+                + "\u00da <> ({vowel}) {YPSILON+};"
+                + "\u00dc <> ({vowel}) {YPSILON_DIAERESIS};"
                 + "Y<>{YPSILON};"
                 + "\u00dd<>{YPSILON+};"
-                + "{Y-UMLAUT}<>{YPSILON\u00a8};"
+                + "{Y-UMLAUT}<>{YPSILON_DIAERESIS};"
                 + "CH<>{CHI};"
-                + "{O-MACRON-ACUTE}>{OMEGA+};" + "{O-MACRON-ACUTE}<{OMICRON+};"
+                + "{O-MACRON-ACUTE}<>{OMEGA+};"
                 + "{O-MACRON}<>{OMEGA};"
 
                 // Extra English Letters. Mapped for completeness
                 
-                + "C(I>{SIGMA};"
-                + "C(E>{SIGMA};"
-                + "C(Y>{SIGMA};"
-                + "C>{KAPPA};"
-                + "F>{PHI};"
-                + "H>{CHI};"
-                + "J>{IOTA};"
-                + "Q>{KAPPA};"
-                + "V>{YPSILON};"
-                + "W>{YPSILON};"
+                + "C({softener})>|S;"
+                + "C>|K;"
+                + "F>|PH;"
+                + "H>|CH;"
+                + "J>|I;"
+                + "Q>|K;"
+                + "V>|U;"
+                + "W>|U;"
                 
                 // ==============================================
                 // Lowercase Forms. Just copy above and lowercase
@@ -290,17 +310,18 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
                 + "o`>{omicron+};"
                 + "oo`>{omega+};"
                 + "oo>{omega};"
-                + "i\">{iota\u00a8};"
-                + "y\">{ypsilon\u00a8};"
+                + "i\">{iota_diaeresis};"
+                + "y\">{ypsilon_diaeresis};"
                 
                 // basic letters
                 
                 + "a<>{alpha};"
                 + "\u00e1<>{alpha+};"
                 + "b<>{beta};"
-                + "n){n-gamma}>{gamma};"  + "n<{gamma}({gamma-n};"
+                + "n ({n-gamma}) <> {gamma} ({gamma-n});"
                 + "g<>{gamma};"
                 + "d<>{delta};"
+                + "''e <> ([Ee]){epsilon};" // handle EE
                 + "e<>{epsilon};"
                 + "\u00e9<>{epsilon+};"
                 + "z<>{zeta};"
@@ -309,48 +330,47 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
                 + "th<>{theta};"
                 + "i<>{iota};"
                 + "\u00ed<>{iota+};"
-                + "\u00ef<>{iota\u00a8};"
+                + "\u00ef<>{iota_diaeresis};"
                 + "k<>{kappa};"
                 + "l<>{lambda};"
                 + "m<>{mu};"
+                + "n'' <> {nu} ({gamma-n});"
                 + "n<>{nu};"
                 + "x<>{xi};"
+                + "''o <> ([Oo]) {omicron};" // handle OO
                 + "o<>{omicron};"
-                + "\u00f3>{omicron+};"  + "\u00f3<{omega+};"
+                + "\u00f3<>{omicron+};"
                 + "ph<>{phi};" // needs ordering before p
                 + "ps<>{psi};" // needs ordering before p
                 + "p<>{pi};"
                 + "r<>{rho};"
                 + "t<>{tau};"
-                + "{vowel})u>{ypsilon};"    + "u<{vowel}){ypsilon};"
-                + "{vowel})\u00fa>{ypsilon+};"  + "\u00fa<{vowel}){ypsilon+};"
-                + "{vowel})\u00fc>{ypsilon\u00a8};"  + "\u00fc<{vowel}){ypsilon\u00a8};"
+                + "u <> ({vowel}){ypsilon};"
+                + "\u00fa <> ({vowel}){ypsilon+};"
+                + "\u00fc <> ({vowel}){ypsilon_diaeresis};"
                 + "y<>{ypsilon};"
                 + "\u00fd<>{ypsilon+};"
-                + "{y-umlaut}<>{ypsilon\u00a8};"
+                + "{y-umlaut}<>{ypsilon_diaeresis};"
                 + "ch<>{chi};"
-                + "{o-macron-acute}>{omega+};" + "{o-macron-acute}<{omicron+};"
+                + "{o-macron-acute}<>{omega+};"
                 + "{o-macron}<>{omega};"
 
                 // extra english letters. mapped for completeness
                 
-                + "c(i>{sigma};"
-                + "c(e>{sigma};"
-                + "c(y>{sigma};"
-                + "c>{kappa};"
-                + "f>{phi};"
-                + "h>{chi};"
-                + "j>{iota};"
-                + "q>{kappa};"
-                + "v>{ypsilon};"
-                + "w>{ypsilon};"
+                + "c({softener})>|s;"
+                + "c>|k;"
+                + "f>|ph;"
+                + "h>|ch;"
+                + "j>|i;"
+                + "q>|k;"
+                + "v>|u;"
+                + "w>|u;"
                 
                 // ====================================
                 // Normal final rule: remove '
                 // ====================================
                 
-                + "''>;"
-                
+                //+ "''>;"                
             }
         };
     }
