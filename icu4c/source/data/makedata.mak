@@ -35,6 +35,8 @@ ICUOUT=$(ICUMAKE)\out
 #
 ICUP=$(ICUMAKE)\..\..
 ICUP=$(ICUP:\source\data\..\..=)
+# In case the first one didn't do it, try this one.  .NET would do the second one.
+ICUP=$(ICUP:\source\data\\..\..=)
 !MESSAGE ICU root path is $(ICUP)
 
 
@@ -238,14 +240,14 @@ BRK_FILES = "$(ICUBLD)\sent.brk" "$(ICUBLD)\char.brk" "$(ICUBLD)\line.brk" "$(IC
 #  move the .dll and .lib files to their final destination afterwards.
 #  The $(U_ICUDATA_NAME).lib and $(U_ICUDATA_NAME).exp should already be in the right place due to stubdata.
 #
-"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata.exe" $(CNV_FILES) $(BRK_FILES) "$(ICUBLD)\uprops.dat" "$(ICUBLD)\unames.dat" "$(ICUBLD)\unorm.dat" "$(ICUBLD)\cnvalias.dat" "$(ICUBLD)\tz.dat" "$(ICUBLD)\ucadata.dat" "$(ICUBLD)\invuca.dat" $(ALL_RES) "$(ICUBLD)\icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
+"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata.exe" $(CNV_FILES) $(BRK_FILES) "$(ICUBLD)\uprops.dat" "$(ICUBLD)\unames.dat" "$(ICUBLD)\unorm.dat" "$(ICUBLD)\cnvalias.icu" "$(ICUBLD)\tz.dat" "$(ICUBLD)\ucadata.dat" "$(ICUBLD)\invuca.dat" $(ALL_RES) "$(ICUBLD)\icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
 	@echo Building icu data
 	@cd "$(ICUBLD)"
  	"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -e $(U_ICUDATA_NAME) -v -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(ICUBLD)" -s . <<pkgdatain.txt
 uprops.dat
 unames.dat
 unorm.dat
-cnvalias.dat
+cnvalias.icu
 tz.dat
 ucadata.dat
 invuca.dat
@@ -390,7 +392,7 @@ res_index {
 	@"$(ICUTOOLS)\gennorm\$(CFG)\gennorm" -u $(UNICODE_VERSION) -s "$(ICUUNIDATA)"
 
 # Targets for converters
-"$(ICUBLD)\cnvalias.dat" : {"$(ICUSRCDATA)\$(ICUUCM)"}\convrtrs.txt "$(ICUTOOLS)\gencnval\$(CFG)\gencnval.exe"
+"$(ICUBLD)\cnvalias.icu" : {"$(ICUSRCDATA)\$(ICUUCM)"}\convrtrs.txt "$(ICUTOOLS)\gencnval\$(CFG)\gencnval.exe"
 	@echo Creating data file for Converter Aliases
 	@set ICU_DATA=$(ICUBLD)
 	@"$(ICUTOOLS)\gencnval\$(CFG)\gencnval" "$(ICUSRCDATA)\$(ICUUCM)\convrtrs.txt"

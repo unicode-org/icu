@@ -283,8 +283,7 @@ ucnv_countAvailable ()
 U_CAPI uint16_t U_EXPORT2
 ucnv_countAliases(const char *alias, UErrorCode *pErrorCode)
 {
-    const char *p;
-    return ucnv_io_getAliases(alias, &p, pErrorCode);
+    return ucnv_io_countAliases(alias, pErrorCode);
 }
 
 
@@ -297,14 +296,7 @@ ucnv_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode)
 U_CAPI void U_EXPORT2
 ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
 {
-    const char *p;
-    uint16_t count=ucnv_io_getAliases(alias, &p, pErrorCode);
-    while(count>0) {
-        *aliases++=p;
-        /* skip a name, first the canonical converter name */
-        p+=uprv_strlen(p)+1;
-        --count;
-    }
+    ucnv_io_getAliases(alias, 0, aliases, pErrorCode);
 }
 
 U_CAPI uint16_t U_EXPORT2

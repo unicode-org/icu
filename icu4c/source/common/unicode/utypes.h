@@ -379,7 +379,10 @@ enum UErrorCode {
     U_STATE_OLD_WARNING       = -125,   /**< ICU has to use compatibility layer to construct the service. Expect performance/memory usage degradation. Consider upgrading */
 
     U_STRING_NOT_TERMINATED_WARNING = -124,/**< An output string could not be NUL-terminated because output length==destCapacity. */
+
     U_SORT_KEY_TOO_SHORT_WARNING = -123,
+
+    U_AMBIGUOUS_ALIAS_WARNING = -122,
 
     U_ERROR_WARNING_LIMIT,                 /**< This must always be the last warning value to indicate the limit for UErrorCode warnings (last warning code +1) */
     
@@ -476,18 +479,18 @@ enum UErrorCode {
     /* 
      * the error code range 0x10200 0x10300 are reserved for Break Iterator related error
      */
-     U_BRK_ERROR_START=0x10200,
-     U_BRK_INTERNAL_ERROR,
-     U_BRK_HEX_DIGITS_EXPECTED,
-     U_BRK_SEMICOLON_EXPECTED,
-     U_BRK_RULE_SYNTAX,
-     U_BRK_UNCLOSED_SET,
-     U_BRK_ASSIGN_ERROR,
-     U_BRK_VARIABLE_REDFINITION,
-     U_BRK_MISMATCHED_PAREN,
-     U_BRK_NEW_LINE_IN_QUOTED_STRING,
-     U_BRK_UNDEFINED_VARIABLE,
-     U_BRK_ERROR_LIMIT,
+    U_BRK_ERROR_START=0x10200,
+    U_BRK_INTERNAL_ERROR,
+    U_BRK_HEX_DIGITS_EXPECTED,
+    U_BRK_SEMICOLON_EXPECTED,
+    U_BRK_RULE_SYNTAX,
+    U_BRK_UNCLOSED_SET,
+    U_BRK_ASSIGN_ERROR,
+    U_BRK_VARIABLE_REDFINITION,
+    U_BRK_MISMATCHED_PAREN,
+    U_BRK_NEW_LINE_IN_QUOTED_STRING,
+    U_BRK_UNDEFINED_VARIABLE,
+    U_BRK_ERROR_LIMIT,
 
     U_ERROR_LIMIT=U_BRK_ERROR_LIMIT /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
 };

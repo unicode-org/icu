@@ -15,6 +15,9 @@
 
 #include "unicode/utypes.h"
 
+#define UCNV_AMBIGUOUS_ALIAS_MAP_BIT 0x8000
+#define UCNV_CONVERTER_INDEX_MASK 0x7FF
+
 /**
  * Map a converter alias name to a canonical converter name.
  * The alias is searched for case-insensitively, the converter name
@@ -23,6 +26,12 @@
  */
 U_CFUNC const char *
 ucnv_io_getConverterName(const char *alias, UErrorCode *pErrorCode);
+
+/**
+ * The count for ucnv_io_getAliases and ucnv_io_getAlias
+ */
+U_CFUNC uint16_t
+ucnv_io_countAliases(const char *alias, UErrorCode *pErrorCode);
 
 /**
  * Search case-insensitively for a converter alias and set aliases to
@@ -34,7 +43,7 @@ ucnv_io_getConverterName(const char *alias, UErrorCode *pErrorCode);
  * or 0 if the alias is not found.
  */
 U_CFUNC uint16_t
-ucnv_io_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode);
+ucnv_io_getAliases(const char *alias, uint16_t start, const char **aliases, UErrorCode *pErrorCode);
 
 /**
  * Search case-insensitively for a converter alias and return
@@ -84,21 +93,6 @@ ucnv_io_flushAvailableConverterCache(void);
  */
 U_CFUNC uint16_t
 ucnv_io_countAvailableAliases(UErrorCode *pErrorCode);
-
-/**
- * Return the (n)th alias or converter name in mixed case, or NULL
- * if there is none (typically, if the data cannot be loaded).
- * 0<=index<ucnv_io_countAvailableAliases().
- */
-U_CFUNC const char *
-ucnv_io_getAvailableAlias(uint16_t n, UErrorCode *pErrorCode);
-
-/**
- * Fill an array const char *aliases[ucnv_io_countAvailableAliases()]
- * with pointers to all aliases and converter names in mixed-case.
- */
-U_CFUNC void
-ucnv_io_fillAvailableAliases(const char **aliases, UErrorCode *pErrorCode);
 
 /**
  * Get the name of the default converter.

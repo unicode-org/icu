@@ -31,66 +31,139 @@
 #include "unicode/udata.h"
 #include "ucln_cmn.h"
 
-/* Format of cnvalias.dat ------------------------------------------------------
+/* Format of cnvalias.icu -----------------------------------------------------
  *
- * cnvalias.dat is a binary, memory-mappable form of convrtrs.txt .
- * It contains two sorted tables and a block of zero-terminated strings.
- * Each table is preceded by the number of table entries.
+ * cnvalias.dat is a binary, memory-mappable form of convrtrs.txt.
+ * This binary form contains several tables. All indexes are to uint16_t
+ * units, and not to the bytes (uint8_t units). Addressing everything on
+ * 16-bit boundaries allows us to store more information with small index
+ * numbers, which are also 16-bit in size. The majority of the table (except
+ * the string table) are 16-bit numbers.
  *
- * The first table maps from aliases to converter indexes.
- * The converter names themselves are listed as aliases in this table.
- * Each entry in this table has an offset to the alias and
- * an index of the converter in the converter table.
+ * First there is the size of the Table of Contents (TOC). The TOC
+ * entries contain the size of each section. In order to find the offset
+ * you just need to sum up the previous offsets.
  *
- * The second table lists only the converters themselves.
- * Each entry in this table has an offset to the converter name and
- * the number of aliases, including the converter itself.
- * A count of 1 means that there is no alias, only the converter name.
+ * 1) This section contains a list of converters. This list contains indexes
+ * into the string table for the converter name. The index of this list is
+ * also used by other sections, which are mentioned later on.
  *
- * In the block of strings after the tables, each converter name is directly
- * followed by its aliases. All offsets to strings are offsets from the
- * beginning of the data.
+ * 2) This section contains a list of tags. This list contains indexes
+ * into the string table for the tag name. The index of this list is
+ * also used by other sections, which are mentioned later on.
  *
- * More formal file data structure (data format 2.1):
+ * 3) This section contains a list of sorted list of unique aliases. This
+ * list contains indexes into the string table for the alias name. The
+ * index of this list is also used by other sections, which are mentioned
+ * later on.
  *
- * uint16_t aliasCount;
- * uint16_t aliasOffsets[aliasCount];
- * uint16_t converterIndexes[aliasCount];
+ * 4) This section contains a list of mapped converter names. Consider this
+ * as a table that maps the 3rd section to the 1st section. This list contains
+ * indexes into the 1st section. The index of this list is the same index in
+ * the 3rd section. There is also some extra information in the high bits of
+ * each converter index in this table. Currently it's only used to say that
+ * an alias mapped to this converter is ambiguous. See UCNV_CONVERTER_INDEX_MASK
+ * and UCNV_AMBIGUOUS_ALIAS_MAP_BIT for more information. This section is
+ * the predigested form of the 5th section so that an alias lookup can be fast.
+ * 
+ * 5) This section contains a 2D array with indexes to the 6th section. This
+ * section is the full form of all alias mappings. The column index is the
+ * index into the converter list (column header). The row index is the index
+ * to tag list (row header). This 2D array is the top part a 3D array. The
+ * third dimension is in the 6th section.
  *
- * uint16_t converterCount;
- * struct {
- *     uint16_t converterOffset;
- *     uint16_t aliasCount;
- * } converters[converterCount];
+ * 6) This is blob of variable length arrays. Each array starts with a size,
+ * and is followed by indexes to alias names in the string table. This is
+ * the third dimension to the section 5. No other section should be referencing
+ * this section.
  *
- * uint16_t tagCount;
- * uint16_t taggedAliasesOffsets[tagCount][converterCount];
- * char tags[] = { "Tag0\Tag1\0..." };
+ * 7) Reserved at this time (There is no information). This _usually_ has a
+ * size of 0. Future versions may add more information here.
  *
- * char strings[]={
- *     "Converter0\0Alias1\0Alias2\0...Converter1\0Converter2\0Alias0\Alias1\0..."
- * };
+ * 8) This is the string table. All strings are indexed on an even address.
+ * There are two reasons for this. First many chip architectures locate strings
+ * faster on even address boundaries. Second, since all indexes are 16-bit
+ * numbers, this string table can be 128KB in size instead of 64KB when we
+ * only have strings starting on an even address.
  *
- * The code included here can read versions 2 and 2.1 of the data format.
- * Version 2 does not have tag information, but since the code never refers
- * to strings[] by its base offset, it's okay.
  *
+ * Here is the concept of section 5 and 6. It's a 3D cube. Each tag
+ * has a unique alias among all converters. That same alias can
+ * be mentioned in other standards on different converters,
+ * but only one alias per tag can be unique.
+ *
+ *
+ *              Converter Names (Usually in TR22 form)
+ *           -------------------------------------------.
+ *     T    /                                          /|
+ *     a   /                                          / |
+ *     g  /                                          /  |
+ *     s /                                          /   |
+ *      /                                          /    |
+ *      ------------------------------------------/     |
+ *    A |                                         |     |
+ *    l |                                         |     |
+ *    i |                                         |    /
+ *    a |                                         |   /
+ *    s |                                         |  /
+ *    e |                                         | /
+ *    s |                                         |/
+ *      -------------------------------------------
+ *
+ *
+ *
+ * Here is what it really looks like. It's like swiss cheese.
+ * There are holes. Some converters aren't recognized by
+ * a standard, or they are really old converters that the
+ * standard doesn't recognize anymore.
+ *
+ *              Converter Names (Usually in TR22 form)
+ *           -------------------------------------------.
+ *     T    /##########################################/|
+ *     a   /     #            #                       /#
+ *     g  /  #      ##     ##     ### # ### ### ### #/  
+ *     s / #             #####  ####        ##  ## #/#  
+ *      / ### # # ##  #  #   #          ### # #   #/##  
+ *      ------------------------------------------/# #
+ *    A |### # # ##  #  #   #          ### # #   #|# #
+ *    l |# # #    #     #               ## #     #|# #
+ *    i |# # #    #     #                #       #|#
+ *    a |#                                       #|#
+ *    s |                                        #|#
+ *    e 
+ *    s 
+ *      
  */
 
 static const char DATA_NAME[] = "cnvalias";
-static const char DATA_TYPE[] = "dat";
+static const char DATA_TYPE[] = "icu";
 
 static UDataMemory *aliasData=NULL;
-static const uint16_t *aliasTable=NULL;
+
+static const uint16_t *converterList = NULL;
+static const uint16_t *tagList = NULL;
+static const uint16_t *aliasList = NULL;
+static const uint16_t *untaggedConvArray = NULL;
+static const uint16_t *taggedAliasArray = NULL;
+static const uint16_t *taggedAliasLists = NULL;
+static const uint16_t *stringTable = NULL;
+
+static uint32_t converterListNum;
+static uint32_t tagListNum;
+static uint32_t aliasListNum;
+static uint32_t untaggedConvArraySize;
+static uint32_t taggedAliasArraySize;
+static uint32_t taggedAliasListsSize;
+static uint32_t stringTableSize;
 
 static const char **availableConverters = NULL;
 static uint16_t availableConverterCount = 0;
 
-static const uint16_t *converterTable = NULL;
-static const uint16_t *tagTable = NULL;
-
-static char defaultConverterNameBuffer[100];
+static char defaultConverterNameBuffer[UCNV_MAX_CONVERTER_NAME_LENGTH + 1]; /* +1 for NULL */
 static const char *defaultConverterName = NULL;
+
+#define GET_STRING(idx) (const char *)(stringTable + (idx))
+#define NUM_RESERVED_TAGS 2
 
 static UBool
 isAcceptable(void *context,
@@ -104,7 +177,7 @@ isAcceptable(void *context,
         pInfo->dataFormat[1]==0x76 &&
         pInfo->dataFormat[2]==0x41 &&
         pInfo->dataFormat[3]==0x6c &&
-        pInfo->formatVersion[0]==2);
+        pInfo->formatVersion[0]==3);
 }
 
 static UBool
@@ -115,32 +188,64 @@ haveAliasData(UErrorCode *pErrorCode) {
 
     /* load converter alias data from file if necessary */
     if(aliasData==NULL) {
-        UDataMemory *data;
-        UDataInfo info;
-        const uint16_t *table=NULL;
+        UDataMemory *data = NULL;
+        const uint16_t *table = NULL;
+        uint32_t tableStart;
+        uint32_t currOffset;
+        uint32_t reservedSize1;
 
-        /* open the data outside the mutex block */
-        data=udata_openChoice(NULL, DATA_TYPE, DATA_NAME, isAcceptable, NULL, pErrorCode);
+        data = udata_openChoice(NULL, DATA_TYPE, DATA_NAME, isAcceptable, NULL, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             return FALSE;
         }
 
-        table=(const uint16_t *)udata_getMemory(data);
-        info.size=sizeof(UDataInfo);
-        udata_getInfo(data, &info);
+        table = (const uint16_t *)udata_getMemory(data);
 
-        /* in the mutex block, set the data for this process */
+        tableStart      = ((const uint32_t *)(table))[0];
+        if (tableStart < 8) {
+            *pErrorCode = U_INVALID_FORMAT_ERROR;
+            return FALSE;
+        }
+
         umtx_lock(NULL);
         if(aliasData==NULL) {
-            aliasData=data;
+            aliasData = data;
             data=NULL;
-            aliasTable=table;
-            table=NULL;
-            converterTable = aliasTable + 1 + 2 * *aliasTable;
 
-            if (info.formatVersion[0] == 2 && info.formatVersion[1] > 0) {
-                tagTable = converterTable + 1 + 2 * *converterTable;
-            }
+            converterListNum        = ((const uint32_t *)(table))[1];
+            tagListNum              = ((const uint32_t *)(table))[2];
+            aliasListNum            = ((const uint32_t *)(table))[3];
+            untaggedConvArraySize  = ((const uint32_t *)(table))[4];
+            taggedAliasArraySize    = ((const uint32_t *)(table))[5];
+            taggedAliasListsSize    = ((const uint32_t *)(table))[6];
+            reservedSize1           = ((const uint32_t *)(table))[7];   /* reserved */
+            stringTableSize         = ((const uint32_t *)(table))[8];
+
+            currOffset = tableStart * (sizeof(uint32_t)/sizeof(uint16_t)) + (sizeof(uint32_t)/sizeof(uint16_t));
+            converterList = table + currOffset;
+
+            currOffset += converterListNum;
+            tagList = table + currOffset;
+
+            currOffset += tagListNum;
+            aliasList = table + currOffset;
+
+            currOffset += aliasListNum;
+            untaggedConvArray = table + currOffset;
+
+            currOffset += untaggedConvArraySize;
+            taggedAliasArray = table + currOffset;
+
+            /* aliasLists is a 1's based array, but it has a padding character */
+            currOffset += taggedAliasArraySize;
+            taggedAliasLists = table + currOffset;
+
+            currOffset += taggedAliasListsSize;
+            /* reserved */
+
+            currOffset += reservedSize1;
+            stringTable = table + currOffset;
+
         }
         umtx_unlock(NULL);
 
@@ -175,49 +280,40 @@ ucnv_io_cleanup()
 
     ucnv_io_flushAvailableConverterCache();
 
-    aliasData = NULL;
-    aliasTable = NULL;
+    converterListNum        = 0;
+    tagListNum              = 0;
+    aliasListNum            = 0;
+    untaggedConvArraySize  = 0;
+    taggedAliasArraySize    = 0;
+    taggedAliasListsSize    = 0;
+    stringTableSize         = 0;
 
-    converterTable = NULL;
-    tagTable = NULL;
+    converterList = NULL;
+    tagList = NULL;
+    aliasList = NULL;
+    untaggedConvArray = NULL;
+    taggedAliasArray = NULL;
+    taggedAliasLists = NULL;
+    stringTable = NULL;
 
     defaultConverterName = NULL;
+    defaultConverterNameBuffer[0] = 0;
 
     return TRUE;                   /* Everything was cleaned up */
 }
 
 
-static int16_t getTagNumber(const char *tagname) {
-    if (tagTable) {
-        int16_t tag, count = (int16_t) *tagTable;
-        const char *tags = (const char *) (tagTable + 1 + count * *converterTable);
-
-#if 0
-
-        char name[100];
-        int i;
-
-        /* convert the tag name to lowercase to do case-insensitive comparisons */
-        for(i = 0; i < sizeof(name) - 1 && *tagname; ++i) {
-            name[i] = (char)uprv_tolower(*tagname++);
-        }
-        name[i] = 0;
-
-#else
-
-        const char *name = tagname;
-
-#endif
-
-        for (tag = 0; count--; ++tag) {
-            if (!uprv_stricmp(name, tags)) {
-                return tag;
+static uint32_t getTagNumber(const char *tagname) {
+    if (tagList) {
+        uint32_t tagNum;
+        for (tagNum = 0; tagNum < tagListNum; tagNum++) {
+            if (!uprv_stricmp(GET_STRING(tagList[tagNum]), tagname)) {
+                return tagNum;
             }
-            tags += strlen(tags) + 1;
         }
     }
 
-    return -1;
+    return UINT32_MAX;
 }
 
 /**
@@ -240,14 +336,16 @@ static int16_t getTagNumber(const char *tagname) {
 U_CAPI int U_EXPORT2
 ucnv_compareNames(const char *name1, const char *name2) {
     int rc;
-    unsigned char c1, c2;
+    char c1, c2;
 
     for (;;) {
         /* Ignore delimiters '-', '_', and ' ' */
-        while ((c1 = (unsigned char)*name1) == '-'
-               || c1 == '_' || c1 == ' ') ++name1;
-        while ((c2 = (unsigned char)*name2) == '-'
-               || c2 == '_' || c2 == ' ') ++name2;
+        while ((c1 = *name1) == '-' || c1 == '_' || c1 == ' ') {
+            ++name1;
+        }
+        while ((c2 = *name2) == '-' || c2 == '_' || c2 == ' ') {
+            ++name2;
+        }
 
         /* If we reach the ends of both strings then they match */
         if ((c1|c2)==0) {
@@ -257,7 +355,7 @@ ucnv_compareNames(const char *name1, const char *name2) {
         /* Case-insensitive comparison */
         rc = (int)(unsigned char)uprv_tolower(c1) -
              (int)(unsigned char)uprv_tolower(c2);
-        if (rc!=0) {
+        if (rc != 0) {
             return rc;
         }
         ++name1;
@@ -267,69 +365,87 @@ ucnv_compareNames(const char *name1, const char *name2) {
 
 /*
  * search for an alias
- * return NULL or a pointer to the converter table entry
+ * return the converter number index for converterList
  */
-static const uint16_t *
-findAlias(const char *alias) {
-    char name[100];
-    const uint16_t *p=aliasTable;
-    uint16_t i, start, limit;
-
-    limit=*p++;
-    if(limit==0) {
-        /* there are no aliases */
-        return NULL;
-    }
-
-    /* convert the alias name to lowercase to do case-insensitive comparisons */
-    for(i=0; i<sizeof(name)-1 && *alias!=0; ++i) {
-        name[i]=(char)uprv_tolower(*alias++);
-    }
-    name[i]=0;
+static uint32_t
+findConverter(const char *alias, UErrorCode *pErrorCode) {
+    uint32_t mid, start, limit;
+    int result;
 
     /* do a binary search for the alias */
-    start=0;
-    while(start<limit-1) {
-        i=(uint16_t)((start+limit)/2);
-        if(ucnv_compareNames(name, (const char *)aliasTable+p[i])<0) {
-            limit=i;
+    start = 0;
+    limit = untaggedConvArraySize - 1;
+    mid = limit;
+
+    /* Once mid == 0 we've already checked the 0'th element and we can stop */
+    while (start <= limit && mid != 0) {
+        mid = (uint32_t)((start + limit + 1) / 2);    /* +1 is to round properly */
+        result = ucnv_compareNames(alias, GET_STRING(aliasList[mid]));
+
+        if (result < 0) {
+            limit = mid-1;
+        } else if (result > 0) {
+            start = mid+1;
         } else {
-            start=i;
+            /* Since the gencnval tool folds duplicates into one entry,
+             * this alias in aliasList is unique, but different standards
+             * may map an alias to different converters.
+             */
+            if (untaggedConvArray[mid] & UCNV_AMBIGUOUS_ALIAS_MAP_BIT) {
+                *pErrorCode = U_AMBIGUOUS_ALIAS_WARNING;
+            }
+            return untaggedConvArray[mid] & UCNV_CONVERTER_INDEX_MASK;
         }
     }
 
-    /* did we really find it? */
-    if(ucnv_compareNames(name, (const char *)aliasTable+p[start])==0) {
-        limit=*(p-1);       /* aliasCount */
-        p+=limit;           /* advance to the second column of the alias table */
-        i=p[start];         /* converter index */
-        return
-            p+limit+        /* beginning of converter table */
-            1+              /* skip its count */
-            2*i;            /* go to this converter's entry and return a pointer to it */
-    } else {
-        return NULL;
-    }
+    return UINT32_MAX;
 }
 
 U_CFUNC const char *
 ucnv_io_getConverterName(const char *alias, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
-        const uint16_t *p=findAlias(alias);
-        if(p!=NULL) {
-            return (const char *)aliasTable+*p;
+        uint32_t convNum = findConverter(alias, pErrorCode);
+        if (convNum < converterListNum) {
+            return GET_STRING(converterList[convNum]);
         }
     }
     return NULL;
 }
 
 U_CFUNC uint16_t
-ucnv_io_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode) {
+ucnv_io_countAliases(const char *alias, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
-        const uint16_t *p=findAlias(alias);
-        if(p!=NULL) {
-            *aliases=(const char *)aliasTable+*p;
-            return *(p+1);
+        uint32_t convNum = findConverter(alias, pErrorCode);
+        if (convNum < converterListNum) {
+            /* tagListNum - 1 is the ALL tag */
+            int32_t listOffset = taggedAliasArray[(tagListNum - 1)*converterListNum + convNum];
+
+            if (listOffset) {
+                return taggedAliasLists[listOffset];
+            }
+        }
+    }
+    return 0;
+}
+
+U_CFUNC uint16_t
+ucnv_io_getAliases(const char *alias, uint16_t start, const char **aliases, UErrorCode *pErrorCode) {
+    if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
+        uint32_t currAlias;
+        uint32_t convNum = findConverter(alias, pErrorCode);
+        if (convNum < converterListNum) {
+            /* tagListNum - 1 is the ALL tag */
+            int32_t listOffset = taggedAliasArray[(tagListNum - 1)*converterListNum + convNum];
+
+            if (listOffset) {
+                uint32_t listCount = taggedAliasLists[listOffset];
+                /* +1 to skip listCount */
+                const uint16_t *currList = taggedAliasLists + listOffset + 1;
+
+                for (currAlias = start; currAlias < listCount; currAlias++) {
+                    aliases[currAlias] = GET_STRING(currList[currAlias]);
+                }
+            }
         }
     }
     return 0;
@@ -338,17 +454,20 @@ ucnv_io_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCo
 U_CFUNC const char *
 ucnv_io_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
-        const uint16_t *p=findAlias(alias);
-        if(p!=NULL) {
-            uint16_t count=*(p+1);
-            if(n<count) {
-                const char *aliases=(const char *)aliasTable+*p;
-                while(n>0) {
-                    /* skip a name, first the canonical converter name */
-                    aliases+=uprv_strlen(aliases)+1;
-                    --n;
+        uint32_t convNum = findConverter(alias, pErrorCode);
+        if (convNum < converterListNum) {
+            /* tagListNum - 1 is the ALL tag */
+            int32_t listOffset = taggedAliasArray[(tagListNum - 1)*converterListNum + convNum];
+
+            if (listOffset) {
+                uint32_t listCount = taggedAliasLists[listOffset];
+                /* +1 to skip listCount */
+                const uint16_t *currList = taggedAliasLists + listOffset + 1;
+
+                if (n < listCount)  {
+                    return GET_STRING(currList[n]);
                 }
-                return aliases;
+                *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
             }
         }
     }
@@ -358,12 +477,8 @@ ucnv_io_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode) {
 U_CFUNC uint16_t
 ucnv_io_countStandards(UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode)) {
-        if (!tagTable) {
-            *pErrorCode = U_INVALID_FORMAT_ERROR;
-            return 0;
-        }
-
-        return *tagTable;
+        /* Don't include the empty list */
+        return (uint16_t)(tagListNum - NUM_RESERVED_TAGS);
     }
 
     return 0;
@@ -371,15 +486,11 @@ ucnv_io_countStandards(UErrorCode *pErrorCode) {
 
 U_CAPI const char * U_EXPORT2
 ucnv_getStandard(uint16_t n, UErrorCode *pErrorCode) {
-    if (haveAliasData(pErrorCode) && tagTable) {
-        int16_t count = (int16_t) *tagTable;
-        const char *tags = (const char *) (tagTable + 1 + count * *converterTable);
-
-        while (n-- && count--) {
-            tags += strlen(tags) + 1;
+    if (haveAliasData(pErrorCode)) {
+        if (n < tagListNum - NUM_RESERVED_TAGS) {
+            return GET_STRING(tagList[n]);
         }
-
-        return count ? tags : NULL;
+        *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
     }
 
     return NULL;
@@ -388,18 +499,56 @@ ucnv_getStandard(uint16_t n, UErrorCode *pErrorCode) {
 U_CFUNC const char * U_EXPORT2
 ucnv_getStandardName(const char *alias, const char *standard, UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
-        const uint16_t *p = findAlias(alias);
-        if(p != NULL) {
-            int16_t tag = getTagNumber(standard);
+        uint32_t idx;
+        uint32_t listOffset;
+        uint32_t convNum;
+        uint32_t tagNum = getTagNumber(standard);
+        UErrorCode myErr = U_ZERO_ERROR;
 
-            if (tag > -1) {
-                uint16_t offset = tagTable[1 + tag * *converterTable + (p - converterTable) / 2];
-                return offset ? (const char *) aliasTable + offset : NULL;
+        /* Make a quick guess. Hopefully they used a TR22 canonical alias. */
+        convNum = findConverter(alias, &myErr);
+
+        if (tagNum < (tagListNum - NUM_RESERVED_TAGS) && convNum < converterListNum) {
+            if (myErr == U_AMBIGUOUS_ALIAS_WARNING) {
+                /* Uh Oh! They used an ambiguous alias.
+                   Hopefully the standard knows the alias.
+                   This may take a while.
+                */
+                for (idx = 0; idx < converterListNum; idx++) {
+                    listOffset = taggedAliasArray[tagNum*converterListNum + idx];
+                    if (listOffset) {
+                        uint32_t currAlias;
+                        uint32_t listCount = taggedAliasLists[listOffset];
+                        /* +1 to skip listCount */
+                        const uint16_t *currList = taggedAliasLists + listOffset + 1;
+                        for (currAlias = 0; currAlias < listCount; currAlias++) {
+                            if (currList[currAlias]
+                                && ucnv_compareNames(alias, GET_STRING(currList[currAlias]))==0)
+                            {
+                                if (currList[0]) {
+                                    return GET_STRING(currList[0]);
+                                }
+                                else {
+                                    /* Someone screwed up the alias table. */
+                                    return NULL;
+                                }
+                            }
+                        }
+                    }
+                }
+                /* The standard doesn't know about the alias */
+                *pErrorCode = U_AMBIGUOUS_ALIAS_WARNING;
             }
+            listOffset = taggedAliasArray[tagNum*converterListNum + convNum];
+            if (listOffset && taggedAliasLists[listOffset + 1]) {
+                return GET_STRING(taggedAliasLists[listOffset + 1]);
+            }
+            /* else no default name */
         }
+        /* else converter or tag not found */
     }
 
-   return NULL;
+    return NULL;
 }
 
 void
@@ -413,41 +562,52 @@ ucnv_io_flushAvailableConverterCache() {
     availableConverterCount = 0;
 }
 
-static void ucnv_io_loadAvailableConverterList(void) {
-    uint16_t idx = 0;
-    uint16_t localConverterCount = 0;
-    UErrorCode status;
-    char *converterName;
-
-    /* We can't have more than "*converterTable" converters to open */
-    char **localConverterList = (char **) uprv_malloc(*converterTable * sizeof(char*));
-
-    for (; idx < *converterTable; idx++) {
-        status = U_ZERO_ERROR;
-        converterName = (char *)aliasTable+converterTable[1+2*idx];
-        ucnv_close(ucnv_open(converterName, &status));
-        if (U_SUCCESS(status)) {
-            localConverterList[localConverterCount++] = converterName;
-        }
-    }
-
-    umtx_lock(NULL);
+static UBool haveAvailableConverterList(UErrorCode *pErrorCode) {
     if (availableConverters == NULL) {
-        availableConverters = (const char **)localConverterList;
-        availableConverterCount = localConverterCount;
+        uint16_t idx;
+        uint16_t localConverterCount;
+        UErrorCode status;
+        const char *converterName;
+        const char **localConverterList;
+
+        if (!haveAliasData(pErrorCode)) {
+            return FALSE;
+        }
+
+        /* We can't have more than "*converterTable" converters to open */
+        localConverterList = (const char **) uprv_malloc(converterListNum * sizeof(char*));
+        if (!localConverterList) {
+            *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+            return FALSE;
+        }
+
+        localConverterCount = 0;
+
+        for (idx = 0; idx < converterListNum; idx++) {
+            status = U_ZERO_ERROR;
+            converterName = GET_STRING(converterList[idx]);
+            ucnv_close(ucnv_open(converterName, &status));
+            if (U_SUCCESS(status)) {
+                localConverterList[localConverterCount++] = converterName;
+            }
+        }
+
+        umtx_lock(NULL);
+        if (availableConverters == NULL) {
+            availableConverters = localConverterList;
+            availableConverterCount = localConverterCount;
+        }
+        else {
+            uprv_free((char **)localConverterList);
+        }
+        umtx_unlock(NULL);
     }
-    else {
-        uprv_free(localConverterList);
-    }
-    umtx_unlock(NULL);
+    return TRUE;
 }
 
 U_CFUNC uint16_t
 ucnv_io_countAvailableConverters(UErrorCode *pErrorCode) {
-    if(haveAliasData(pErrorCode)) {
-        if (availableConverters == NULL) {
-            ucnv_io_loadAvailableConverterList();
-        }
+    if (haveAvailableConverterList(pErrorCode)) {
         return availableConverterCount;
     }
     return 0;
@@ -455,20 +615,18 @@ ucnv_io_countAvailableConverters(UErrorCode *pErrorCode) {
 
 U_CFUNC const char *
 ucnv_io_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode) {
-    if(haveAliasData(pErrorCode)) {
-        if (availableConverters == NULL) {
-            ucnv_io_loadAvailableConverterList();
-        }
-        if(n < availableConverterCount) {
+    if (haveAvailableConverterList(pErrorCode)) {
+        if (n < availableConverterCount) {
             return availableConverters[n];
         }
+        *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
     }
     return NULL;
 }
 
 U_CFUNC void
 ucnv_io_fillAvailableConverters(const char **aliases, UErrorCode *pErrorCode) {
-    if(haveAliasData(pErrorCode)) {
+    if (haveAvailableConverterList(pErrorCode)) {
         uint16_t count = 0;
         while (count < availableConverterCount) {
             *aliases++=availableConverters[count++];
@@ -478,41 +636,11 @@ ucnv_io_fillAvailableConverters(const char **aliases, UErrorCode *pErrorCode) {
 
 U_CFUNC uint16_t
 ucnv_io_countAvailableAliases(UErrorCode *pErrorCode) {
-    if(haveAliasData(pErrorCode)) {
-        return *aliasTable;
+    if (haveAliasData(pErrorCode)) {
+        return (uint16_t)aliasListNum;
     }
     return 0;
 }
-
-#if 0
-/*
- * We are not currently using these functions, so I am commenting them out
- * to reduce the binary file size and improve the code coverage;
- * I do not currently want to remove this entirely because it may be useful
- * in the future and also serves to some degree as another piece of
- * documentation of the data structure.
- */
-U_CFUNC const char *
-ucnv_io_getAvailableAlias(uint16_t n, UErrorCode *pErrorCode) {
-    if(haveAliasData(pErrorCode) && n<*aliasTable) {
-        return (const char *)aliasTable+*(aliasTable+1+n);
-    }
-    return NULL;
-}
-
-U_CFUNC void
-ucnv_io_fillAvailableAliases(const char **aliases, UErrorCode *pErrorCode) {
-    if(haveAliasData(pErrorCode)) {
-        const uint16_t *p=aliasTable;
-        uint16_t count=*p++;
-        while(count>0) {
-            *aliases++=(const char *)aliasTable+*p;
-            ++p;
-            --count;
-        }
-    }
-}
-#endif
 
 /* default converter name --------------------------------------------------- */
 
@@ -529,10 +657,7 @@ ucnv_io_getDefaultConverterName() {
     /* local variable to be thread-safe */
     const char *name=defaultConverterName;
     if(name==NULL) {
-        const char *codepage=0;
-        umtx_lock(NULL);        
-        codepage = uprv_getDefaultCodepage();
-        umtx_unlock(NULL);
+        const char *codepage = uprv_getDefaultCodepage();
         if(codepage!=NULL) {
             UErrorCode errorCode=U_ZERO_ERROR;
             name=ucnv_io_getConverterName(codepage, &errorCode);
@@ -543,26 +668,27 @@ ucnv_io_getDefaultConverterName() {
 
         /* if the name is there, test it out */
         if(name != NULL) {
-          UErrorCode errorCode = U_ZERO_ERROR;
-          UConverter *cnv;
-          cnv = ucnv_open(name, &errorCode);
-          if(U_FAILURE(errorCode) || (cnv == NULL)) {
-            /* Panic time, let's use a fallback. */
+            UErrorCode errorCode = U_ZERO_ERROR;
+            UConverter *cnv = ucnv_open(name, &errorCode);
+            if(U_FAILURE(errorCode) || (cnv == NULL)) {
+                /* Panic time, let's use a fallback. */
 #if (U_CHARSET_FAMILY == U_ASCII_FAMILY) 
-            name = "US-ASCII";
-            /* there is no 'algorithmic' converter for EBCDIC */
+                name = "US-ASCII";
+                /* there is no 'algorithmic' converter for EBCDIC */
 #elif defined(OS390)
-            name = "ibm-1047-s390";
+                name = "ibm-1047-s390";
 #else
-            name = "ibm-37";
+                name = "ibm-37";
 #endif
-          }
-          ucnv_close(cnv);
+            }
+            ucnv_close(cnv);
         }
 
         if(name != NULL) {
-           /* Did find a name. And it works.*/
-          defaultConverterName=name;
+            umtx_lock(NULL);
+            /* Did find a name. And it works.*/
+            defaultConverterName=name;
+            umtx_unlock(NULL);
         }
     }
 
