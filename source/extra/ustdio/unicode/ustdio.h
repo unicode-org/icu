@@ -32,9 +32,6 @@
  The following is a small list as to what is currently wrong/suggestions for
  ustdio.
 
- * The const char* format specification should use unescape
- * ufile_locale2codepage should not be used.  Using one of putil.c's functions
-    would be better or some new API would be better.
  * %D and %T printf uses the current timezone, but the scanf version uses GMT.
  * %p should be deprecated. Pointers are 2-16 bytes big and scanf should
     really read them.
