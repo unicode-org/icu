@@ -16,6 +16,7 @@ package com.ibm.icu.dev.test.perf;
 import com.ibm.icu.text.*;
 import java.util.*;
 import java.io.*;
+import com.ibm.icu.impl.LocaleUtility;
 
 public class CollationPerformanceTest {
     static final String usageString = 
@@ -397,7 +398,6 @@ public class CollationPerformanceTest {
                 startTime = System.currentTimeMillis();
                 for (loops = 0; loops < adj_loopCount; loops++) {
                     for (int j = 0; j < tests.length; j++) {
-                        com.ibm.icu.text.CollationKey sortKey1 = icuCol.getCollationKey(tests[j]);
                         int hi = tests.length - 1;
                         int lo = 0;
                         int guess = -1;
@@ -407,8 +407,9 @@ public class CollationPerformanceTest {
                                 break;
                             }
                             guess = newGuess;
-                            com.ibm.icu.text.CollationKey sortKey2 = icuCol.getCollationKey(tests[guess]);
                             if (opt_usekeys) {
+                                com.ibm.icu.text.CollationKey sortKey1 = icuCol.getCollationKey(tests[j]);
+                                com.ibm.icu.text.CollationKey sortKey2 = icuCol.getCollationKey(tests[guess]);
                                 r = sortKey1.compareTo(sortKey2);
                                 gCount ++;
                             } else {
@@ -435,7 +436,6 @@ public class CollationPerformanceTest {
                 startTime = System.currentTimeMillis();
                 for (loops = 0; loops < adj_loopCount; loops++) {
                     for (int j = 0; j < tests.length; j++) {
-                        java.text.CollationKey sortKey1 = javaCol.getCollationKey(tests[j]);
                         int hi = tests.length - 1;
                         int lo = 0;
                         int guess = -1;
@@ -445,8 +445,9 @@ public class CollationPerformanceTest {
                                 break;
                             }
                             guess = newGuess;
-                            java.text.CollationKey sortKey2 = javaCol.getCollationKey(tests[guess]);
                             if (opt_usekeys) {
+                                java.text.CollationKey sortKey1 = javaCol.getCollationKey(tests[j]);
+                                java.text.CollationKey sortKey2 = javaCol.getCollationKey(tests[guess]);
                                 r = sortKey1.compareTo(sortKey2);
                                 gCount ++;
                             } else {
@@ -528,11 +529,9 @@ public class CollationPerformanceTest {
             System.out.println("Key Length / character = " + nf.format(totalKeyLen / (totalChars + 0.0)));
         }
         else {
-            System.out.println(ns + ",  ");
+            System.out.print(ns + ",  ");
             System.out.println(nf.format(totalKeyLen / (totalChars + 0.0)) + ", ");
         }
-        
-        
     }
     
     /**---------------------------------------------------------------------------------------
@@ -835,10 +834,12 @@ public class CollationPerformanceTest {
                 System.exit(1);
             }
         } else {
-            icuCol = com.ibm.icu.text.Collator.getInstance(new Locale(opt_locale, ""));
+            icuCol = com.ibm.icu.text.Collator.getInstance(
+                                LocaleUtility.getLocaleFromName(opt_locale));
         }
         
-        javaCol = java.text.Collator.getInstance(new Locale(opt_locale, ""));
+        javaCol = java.text.Collator.getInstance(
+                                LocaleUtility.getLocaleFromName(opt_locale));
         
         if (opt_norm) {
             javaCol.setDecomposition(java.text.Collator.CANONICAL_DECOMPOSITION);
@@ -1007,7 +1008,7 @@ public class CollationPerformanceTest {
         
         return true;
     }
-
+    
     /**
      * Invoke the runtime's garbage collection procedure repeatedly
      * until the amount of free memory stabilizes to within 10%.
