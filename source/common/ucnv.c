@@ -304,12 +304,12 @@ ucnv_getAlias(const char *alias, uint16_t index, UErrorCode *pErrorCode) {
 
 U_CAPI void
 ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode) {
-    char *p;
+    const char *p;
     uint16_t count=ucnv_io_getAliases(alias, &p, pErrorCode);
     while(count>0) {
-        *aliases++=*p;
+        *aliases++=p;
         /* skip a name, first the canonical converter name */
-        *p+=uprv_strlen(p)+1;
+        p+=uprv_strlen(p)+1;
         --count;
     }
 }
