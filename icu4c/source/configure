@@ -1379,7 +1379,6 @@ fi
 
     if test "$ac_use_strict_options" = yes
     then
-echo "${host}"
         if test "$GCC" = yes
         then
             CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
@@ -1410,7 +1409,7 @@ else
 fi
 
         echo $ac_n "checking for 64-bit executable support""... $ac_c" 1>&6
-echo "configure:1414: checking for 64-bit executable support" >&5
+echo "configure:1413: checking for 64-bit executable support" >&5
     if test "$ENABLE_64BIT_LIBS" = no; then
         case "${host}" in
         *-*-hpux*)
@@ -1450,11 +1449,11 @@ echo "configure:1414: checking for 64-bit executable support" >&5
   ENABLE_64BIT_LIBS=no
 else
   cat > conftest.$ac_ext <<EOF
-#line 1454 "configure"
+#line 1453 "configure"
 #include "confdefs.h"
 int main(void) {return 0;}
 EOF
-if { (eval echo configure:1458: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:1457: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
 then
   ENABLE_64BIT_LIBS=yes
 else
@@ -1483,11 +1482,11 @@ fi
   ENABLE_64BIT_LIBS=no
 else
   cat > conftest.$ac_ext <<EOF
-#line 1487 "configure"
+#line 1486 "configure"
 #include "confdefs.h"
 int main(void) {return 0;}
 EOF
-if { (eval echo configure:1491: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:1490: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
 then
   ENABLE_64BIT_LIBS=yes
 else
@@ -1515,7 +1514,7 @@ fi
 
 
 	echo $ac_n "checking which Makefile fragment to use""... $ac_c" 1>&6
-echo "configure:1519: checking which Makefile fragment to use" >&5
+echo "configure:1518: checking which Makefile fragment to use" >&5
 if eval "test \"`echo '$''{'icu_cv_host_frag'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1527,14 +1526,12 @@ case "${host}" in
 	else
 		icu_cv_host_frag=mh-solaris
 	fi ;;
-*-*-irix*)	icu_cv_host_frag=mh-irix ;;
 alpha*-*-linux-gnu)
 	if test "$ac_cv_prog_gcc" = yes; then
 		icu_cv_host_frag=mh-alpha-linux-gcc
 	else  
 		icu_cv_host_frag=mh-alpha-linux-cc
 	fi ;;
-*-dec-osf*) icu_cv_host_frag=mh-alpha-osf ;;
 *-*-linux*) icu_cv_host_frag=mh-linux ;;
 *-*-cygwin)
 	if test "$ac_cv_prog_gcc" = yes; then
@@ -1549,7 +1546,6 @@ alpha*-*-linux-gnu)
 	else
 		icu_cv_host_frag=mh-aix-va
 	fi ;;
-*-sequent-*) 	icu_cv_host_frag=mh-ptx ;;
 *-*-hpux*)
 	if test "$ac_cv_prog_gcc" = yes; then
 		icu_cv_host_frag=mh-hpux-gcc
@@ -1563,6 +1559,10 @@ alpha*-*-linux-gnu)
 *-*-os400*)	icu_cv_host_frag=mh-os400 ;;
 *-apple-rhapsody*)	icu_cv_host_frag=mh-darwin ;;
 *-apple-darwin*)	icu_cv_host_frag=mh-darwin ;;
+*-*-irix*)	icu_cv_host_frag=mh-irix ;;
+*-dec-osf*) icu_cv_host_frag=mh-alpha-osf ;;
+*-*-nto*)	icu_cv_host_frag=mh-qnx ;;
+*-sequent-*) 	icu_cv_host_frag=mh-ptx ;;
 *) 		icu_cv_host_frag=mh-unknown ;;
 esac
 		
@@ -4052,16 +4052,17 @@ case "${host}" in
 	*-*-linux*) 	platform=U_LINUX ;;
 	*-*-*bsd*) 	platform=U_BSD ;;
 	*-*-aix*) 	platform=AIX ;;
-	*-sequent-*)	platform=PTX ;;
 	*-*-hpux*) 	platform=HPUX ;;
-	*-dec-osf*) 	platform=U_OSF ;;
-	*-*-irix*)      platform=IRIX ;;
+	*-apple-darwin*|*-apple-rhapsody*)	platform=U_DARWIN ;;
+	*-*-cygwin*|*-*-mingw*)	platform=U_CYGWIN ;;
 	*-*ibm-openedition*|*-*-os390*)	platform=OS390
 			ICUDATA_CHAR="e" ;;
 	*-*-os400*)	platform=OS400
 			ICUDATA_CHAR="e" ;;
-	*-apple-darwin*|*-apple-rhapsody*)	platform=U_DARWIN ;;
-	*-*-cygwin*|*-*-mingw*)	platform=U_CYGWIN ;;
+	*-*-nto*)	platform=U_QNX ;;
+	*-dec-osf*) 	platform=U_OSF ;;
+	*-*-irix*)      platform=IRIX ;;
+	*-sequent-*)	platform=PTX ;;
 	*) 		platform=U_UNKNOWN_PLATFORM ;;
 esac
 
@@ -4076,11 +4077,11 @@ case "${host}" in
 	*-*-linux*) 	ld_rpath_suf=" " ;;
 	*-*-*bsd*) 	ld_rpath_suf=" " ;;
 	*-*-aix*) 	ld_rpath_suf="" ;;
-	*-sequent-*)	ld_rpath_suf="" ;;
 	*-*-hpux*) 	ld_rpath_suf=":" ;;
-	*-*-irix*)      ld_rpath_suf=" " ;;
 	*-*ibm-openedition*|*-*-os390*)	ld_rpath_suf="" ;;
 	*-*-os400*)	ld_rpath_suf=" " ;;
+	*-sequent-*)	ld_rpath_suf="" ;;
+	*-*-irix*)      ld_rpath_suf=" " ;;
 	*) 		ld_rpath_suf="" ;;
 esac
 
@@ -4271,7 +4272,7 @@ trap 'rm -fr `echo "README icudefs.mk \
                 test/cintltst/Makefile test/iotest/Makefile \
 		test/ieeetest/Makefile \
 		test/collperf/Makefile \
-		test/normperf/Makefile \
+		test/perf/normperf/Makefile \
 		test/thaitest/Makefile \
 		test/letest/Makefile \
 		test/threadtest/Makefile \
@@ -4466,7 +4467,7 @@ CONFIG_FILES=\${CONFIG_FILES-"README icudefs.mk \
                 test/cintltst/Makefile test/iotest/Makefile \
 		test/ieeetest/Makefile \
 		test/collperf/Makefile \
-		test/normperf/Makefile \
+		test/perf/normperf/Makefile \
 		test/thaitest/Makefile \
 		test/letest/Makefile \
 		test/threadtest/Makefile \
