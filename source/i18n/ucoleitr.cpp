@@ -207,6 +207,9 @@ ucol_setOffset(UCollationElements    *elems,
   collIterate *ci = &(elems->iteratordata_);
   ci->pos         = ci->string + offset;
   ci->CEpos       = ci->toReturn = ci->CEs;
+  if ((ci->flags & UCOL_ITER_HASLEN) == 0) {
+      ci->endp = ci->string + u_strlen(ci->string);
+  }
   ci->flags       = UCOL_ITER_HASLEN;
   if (ci->coll->normalizationMode == UCOL_ON) {
     ci->flags |= UCOL_ITER_NORM;
