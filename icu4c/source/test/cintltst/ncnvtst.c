@@ -797,11 +797,11 @@ static void TestRegressionUTF32(){
             currCh++;
         }
         if(!convertFromU(standardForm, offset16, 
-            (const uint8_t *)utf32, offset32*sizeof(UChar32), "UTF32", 0, TRUE, U_ZERO_ERROR )) {
-            log_err("Unicode->UTF8 did not match.\n");
+            (const uint8_t *)utf32, offset32*sizeof(UChar32), "UTF32_PlatformEndian", 0, TRUE, U_ZERO_ERROR )) {
+            log_err("Unicode->UTF32 did not match.\n");
         }
         if(!convertToU((const uint8_t *)utf32, offset32*sizeof(UChar32), 
-            standardForm, offset16, "UTF32", 0, TRUE, U_ZERO_ERROR )) {
+            standardForm, offset16, "UTF32_PlatformEndian", 0, TRUE, U_ZERO_ERROR )) {
             log_err("UTF32->Unicode did not match.\n");
         }
     }
