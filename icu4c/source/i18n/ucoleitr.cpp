@@ -1,18 +1,36 @@
 /*
-*******************************************************************************
+******************************************************************************
 *   Copyright (C) 2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
-*******************************************************************************
-*/
+******************************************************************************
+*
+* File ucoleitr.cpp
+*
+* Modification History:
+*
+* Date        Name        Description
+* 02/15/2001  synwee      Modified all methods to process its own function 
+*                         instead of calling the equivalent c++ api (coleitr.h)
+******************************************************************************/
 
 #include "unicode/ucoleitr.h"
 #include "unicode/ustring.h"
-#include "unicode/coleitr.h"
+#include "unicode/sortkey.h"
+#include "ucolimp.h"
+#include "cmemory.h"
 
+#define BUFFER_LENGTH 100
 
+typedef struct collIterate collIterator;
+
+/* public methods ---------------------------------------------------- */
+
+/**
+* Since this is going to be deprecated, I'll leave it as it is
+*/
 U_CAPI int32_t
-ucol_keyHashCode(    const    uint8_t*    key, 
-            int32_t        length)
+ucol_keyHashCode(const uint8_t *key, 
+                       int32_t  length)
 {
   CollationKey newKey(key, length);
   return newKey.hashCode();
@@ -20,88 +38,160 @@ ucol_keyHashCode(    const    uint8_t*    key,
 
 
 UCollationElements*
-ucol_openElements(    const    UCollator            *coll,
-            const    UChar                *text,
-            int32_t              textLength,
-            UErrorCode *status)
+ucol_openElements(const UCollator  *coll,
+                  const UChar      *text,
+                        int32_t    textLength,
+                        UErrorCode *status)
 {
-  int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
-  const UnicodeString src((UChar*)text, len, len);
+  UCollationElements *result;
 
-  CollationElementIterator *iter = 0;
-  iter = ((RuleBasedCollator*)coll)->createCollationElementIterator(src);
-  if(iter == 0) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    return 0;
-  }
+  if (U_FAILURE(*status))
+    return NULL;
 
-  return (UCollationElements*) iter;
+  result = (UCollationElements *)uprv_malloc(sizeof(UCollationElements));
+
+  result->collator_ = coll;
+  
+  /* gets the correct length of the null-terminated string */
+  if (textLength == -1)
+    textLength = u_strlen(text);
+
+  result->length_ = textLength;
+  init_collIterate(text, textLength, &result->iteratordata_, FALSE);
+
+  return result;
 }
 
 U_CAPI void
 ucol_closeElements(UCollationElements *elems)
 {
-  delete (CollationElementIterator*)elems;
+  collIterate *ci = &elems->iteratordata_;
+  if (ci->writableBuffer != ci->stackWritableBuffer)
+    uprv_free(ci->writableBuffer);
+  if (elems->iteratordata_.isWritable && elems->iteratordata_.string != NULL)
+    uprv_free(elems->iteratordata_.string);
+  uprv_free(elems);
 }
 
 U_CAPI void
 ucol_reset(UCollationElements *elems)
 {
-  ((CollationElementIterator*)elems)->reset();
+  collIterate *ci = &(elems->iteratordata_);
+  ci->pos         = ci->string;
+  ci->len         = ci->string + elems->length_;
+  ci->CEpos       = ci->toReturn = ci->CEs;
+  /*
+  problem here, that means we'll have to keep calculating the new thai set
+  whenever we reset. maybe getSpecialCE should just do up the whole string
+  instead of only a substring of it.
+  */
+  ci->isThai      = TRUE;
+  if (ci->stackWritableBuffer != ci->writableBuffer)
+  {
+    uprv_free(ci->writableBuffer);
+    ci->writableBuffer = ci->stackWritableBuffer;
+  }
 }
 
 U_CAPI int32_t
-ucol_next(    UCollationElements    *elems,
-        UErrorCode            *status)
+ucol_next(UCollationElements *elems,
+          UErrorCode         *status)
 {
-  if(U_FAILURE(*status)) return UCOL_NULLORDER;
+  if (U_FAILURE(*status)) 
+    return UCOL_NULLORDER;
 
-  return ((CollationElementIterator*)elems)->next(*status);
+  int32_t result;
+  UCOL_GETNEXTCE(result, elems->collator_, elems->iteratordata_, status);
+  return result;
 }
 
 U_CAPI int32_t
-ucol_previous(    UCollationElements    *elems,
-        UErrorCode            *status)
+ucol_previous(UCollationElements *elems,
+              UErrorCode         *status)
 {
-  if(U_FAILURE(*status)) return UCOL_NULLORDER;
+  if(U_FAILURE(*status)) 
+    return UCOL_NULLORDER;
 
-  return ((CollationElementIterator*)elems)->previous(*status);
+  int32_t result;
+  UCOL_GETPREVCE(result, elems->collator_, elems->iteratordata_, 
+                 elems->length_, status);
+  return result;
 }
 
 U_CAPI int32_t
-ucol_getMaxExpansion(    const    UCollationElements    *elems,
-            int32_t                order)
+ucol_getMaxExpansion(const UCollationElements *elems,
+                           int32_t            order)
 {
-  return ((CollationElementIterator*)elems)->getMaxExpansion(order);
+  /* 
+  synwee : requested this implementation from vladimir, need discussion. so 
+  hang on.
+  */
+  /* return ((CollationElementIterator*)elems)->getMaxExpansion(order); */
+  return -1;
 }
 
 U_CAPI void
-ucol_setText(UCollationElements        *elems,
-         const    UChar                    *text,
-         int32_t                    textLength,
-         UErrorCode                *status)
+ucol_setText(      UCollationElements *elems,
+             const UChar              *text,
+                   int32_t            textLength,
+                   UErrorCode         *status)
 {
-  if(U_FAILURE(*status)) return;
+  if (U_FAILURE(*status)) 
+    return;
+  
+  /* gets the correct length of the null-terminated string */
+  if (textLength == -1)
+    textLength = u_strlen(text);
 
-  int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
-  const UnicodeString src((UChar*)text, len, len);
+  elems->length_ = textLength;
 
-  ((CollationElementIterator*)elems)->setText(src, *status);
+  if (elems->iteratordata_.isWritable && elems->iteratordata_.string != NULL)
+    uprv_free(elems->iteratordata_.string);
+  init_collIterate(text, textLength, &elems->iteratordata_, FALSE);
 }
 
 U_CAPI UTextOffset
 ucol_getOffset(const UCollationElements *elems)
 {
-  return ((CollationElementIterator*)elems)->getOffset();
+  /* return ((CollationElementIterator*)elems)->getOffset(); */
+  const collIterate *ci = &(elems->iteratordata_);
+  if (ci->isThai == TRUE)
+    return ci->pos - ci->string;
+
+  /* 
+  if it is a thai string with reversed elements, since getNextCE does not 
+  store only a substring in writeablebuffer, we'll have to do some calculation
+  to get the offset out.
+  need discussion to see if it is a better idea to store the whole string 
+  instead.
+  */
+  return elems->length_ - (ci->len - ci->pos);
 }
 
 U_CAPI void
-ucol_setOffset(    UCollationElements    *elems,
-        UTextOffset            offset,
-        UErrorCode            *status)
+ucol_setOffset(UCollationElements    *elems,
+               UTextOffset           offset,
+               UErrorCode            *status)
 {
-  if(U_FAILURE(*status)) return;
-  
-  ((CollationElementIterator*)elems)->setOffset(offset, *status);
+  if (U_FAILURE(*status)) 
+    return;
+
+  collIterate *ci = &(elems->iteratordata_);
+  ci->pos         = ci->string + offset;
+  ci->CEpos       = ci->toReturn = ci->CEs;
+  /*
+  problem here, that means we'll have to keep calculating the new thai set
+  whenever we reset. maybe getSpecialCE should just do up the whole string
+  instead of only a substring of it.
+  */
+  ci->isThai      = TRUE;
+  if (ci->stackWritableBuffer != ci->writableBuffer)
+  {
+    uprv_free(ci->writableBuffer);
+    ci->writableBuffer = ci->stackWritableBuffer;
+  }
 }
+
+
+
 

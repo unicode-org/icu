@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2000, International Business Machines
+*   Copyright (C) 1998-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -14,6 +14,11 @@
 *
 *   created on: 2000dec11
 *   created by: Vladimir Weinstein
+* 
+* Modification history
+* Date        Name      Comments
+* 02/16/2001  synwee    Added UCOL_GETPREVCE for the use in ucoleitr
+*                       
 */
 
 #ifndef UCOL_IMP_H
@@ -60,6 +65,28 @@ struct collIterate {
   UBool JamoSpecial;
   UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
   UChar *writableBuffer;
+};
+
+struct UCollationElements
+{
+  /**
+  * Locale specific collator for generating the collation elements
+  */
+  const UCollator          *collator_;
+  /**
+  * Normalization mode, not exactly the same as the data in collator_.
+  * If collation strength requested is UCOL_IDENTICAL, this modes will be 
+  * UNORM_NONE other it follows collator_.
+  */
+        UNormalizationMode normalization_;
+  /**
+  * Struct wrapper for source data
+  */
+        collIterate        iteratordata_;
+  /**
+  * Source text length
+  */
+        int32_t            length_;
 };
 
 struct incrementalContext {
@@ -196,9 +223,61 @@ struct incrementalContext {
     }                                                                                 \
 }
 
+/**
+* Macro that gets a simple CE.
+* So what it does is that it will first check the expansion buffer. If the 
+* expansion buffer is not empty, ie the end pointer to the expansion buffer 
+* is different from the start pointer, we return the collation element at the 
+* return pointer and decrement it.
+* For more complicated CEs it resorts to getComplicatedCE.
+*/
+#define UCOL_GETPREVCE(order, coll, data, length, status) {                  \
+  if (data.CEpos > data.CEs) {                                               \
+    (order) = *(data.toReturn --);                                           \
+    if (data.CEs == data.toReturn) {                                         \
+      data.CEpos = data.toReturn = data.CEs;                                 \
+    }                                                                        \
+  }                                                                          \
+  else {                                                                     \
+    if (data.len - data.pos == length) {                                     \
+      (order) = UCOL_NO_MORE_CES;                                            \
+    }                                                                        \
+    else {                                                                   \
+      UChar ch = *(data.pos);                                                \
+      if (data.pos != data.writableBuffer) {                                 \
+        data.pos --;                                                         \
+      }                                                                      \
+      else {                                                                 \
+        data.pos = data.string +                                             \
+                            (length - (data.len - data.writableBuffer));     \
+        data.len = data.string + length;                                     \
+        data.isThai = TRUE;                                                  \
+      }                                                                      \
+      if (ch <= 0xFF) {                                                      \
+        (order) = (coll)->latinOneMapping[ch];                               \
+      }                                                                      \
+      else {                                                                 \
+        (order) = ucmp32_get((coll)->mapping, ch);                           \
+      }                                                                      \
+      if ((order) >= UCOL_NOT_FOUND) {                                       \
+        (order) = getSpecialPrevCE((coll), (order), &(data), (length),       \
+                                                             (status));      \
+        if ((order) == UCOL_NOT_FOUND) {                                     \
+          (order) = ucol_getPrevUCA(ch, &(data), (length), (status));                  \
+        }                                                                    \
+      }                                                                      \
+    }                                                                        \
+  }                                                                          \
+}
+
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status);
+uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE, 
+                          collIterate *source, uint32_t length, 
+                          UErrorCode *status);
 U_CFUNC uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
 uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
+uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource, 
+                         uint32_t length, UErrorCode *status);
 void incctx_cleanUpContext(incrementalContext *ctx);
 UChar incctx_appendChar(incrementalContext *ctx, UChar c);
 

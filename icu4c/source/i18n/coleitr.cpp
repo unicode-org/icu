@@ -14,58 +14,53 @@
 *
 * Modification History:
 *
-*  Date         Name          Description
+*  Date      Name        Description
 *
-*  6/23/97     helena      Adding comments to make code more readable.
-* 08/03/98     erm         Synched with 1.2 version of CollationElementIterator.java
-* 12/10/99      aliu          Ported Thai collation support from Java.
-* 01/25/01     swquek      Modified to a C++ wrapper calling C APIs (ucoliter.h)
+*  6/23/97   helena      Adding comments to make code more readable.
+* 08/03/98   erm         Synched with 1.2 version of CollationElementIterator.java
+* 12/10/99   aliu        Ported Thai collation support from Java.
+* 01/25/01   swquek      Modified to a C++ wrapper calling C APIs (ucoliter.h)
+* 02/19/01   swquek      Removed CollationElementsIterator() since it is 
+*                        private constructor and no calls are made to it
 */
 
 // #include "unicode/sortkey.h"
 #include "unicode/coleitr.h"
+#include "ucolimp.h"
+#include "cmemory.h"
 
 // #include "unicode/chariter.h"
-#include "tables.h"
+// #include "tables.h"
 // #include "unicode/normlzr.h"
 // #include "unicode/unicode.h"
 // #include "tcoldata.h"
 // #include "ucmp32.h"
 
-// Constants ------------------------------------------------------------------
+/* Constants --------------------------------------------------------------- */
 
+/* synwee : public can't remove */
 int32_t const CollationElementIterator::NULLORDER = 0xffffffff;
-int32_t const CollationElementIterator::UNMAPPEDCHARVALUE = 0x7fff0000;
+// int32_t const CollationElementIterator::UNMAPPEDCHARVALUE = 0x7fff0000;
 
-// CollationElementIterator public constructor/destructor ---------------------
+/* CollationElementIterator public constructor/destructor ------------------ */
 
 CollationElementIterator::CollationElementIterator(
-                                          const CollationElementIterator& other)
-                                          : text(0), 
-                                          ownBuffer(new VectorOfInt(2)),
-                                          reorderBuffer(0), 
-                                          expIndex(other.expIndex)
+                                         const CollationElementIterator& other) 
+                                         : isDataOwned_(TRUE)
 {
   *this = other;
 }
 
 CollationElementIterator::~CollationElementIterator()
 {
-  delete text;
-  text = NULL;
-  bufferAlias = NULL;
-  orderAlias = NULL;
-  delete ownBuffer;
-  delete reorderBuffer;
+  ucol_closeElements(m_data_);
 }
 
-// CollationElementIterator public methods ------------------------------------
+/* CollationElementIterator public methods --------------------------------- */
 
 UTextOffset CollationElementIterator::getOffset() const
 {
-  // Since the DecompositionIterator is doing the work of iterating through
-  // the text string, we can just ask it what its offset is.
-  return (text != NULL) ? text->getIndex() : 0;
+  return ucol_getOffset(m_data_);
 }
 
 /**
@@ -75,6 +70,7 @@ UTextOffset CollationElementIterator::getOffset() const
 */
 int32_t CollationElementIterator::next(UErrorCode& status)
 {
+  /*
   if (text == NULL || U_FAILURE(status))
     return NULLORDER;
     
@@ -111,9 +107,8 @@ int32_t CollationElementIterator::next(UErrorCode& status)
   // Ask the collator for this character's ordering.
   // Used to be RuleBasedCollator.getUnicodeOrder(). 
   // It can't be inlined in tblcoll.h file unfortunately.
-  /*
-  synwee : have to modify this part
-  int32_t value = ucmp32_get(orderAlias->data->mapping, ch);
+  
+    int32_t value = ucmp32_get(orderAlias->data->mapping, ch);
 
   if (value == RuleBasedCollator::UNMAPPED)
   {
@@ -153,21 +148,22 @@ int32_t CollationElementIterator::next(UErrorCode& status)
 
   return strengthOrder(value);
   */
-  return 0;
+  return ucol_next(m_data_, &status);
 }
 
 UBool CollationElementIterator::operator!=(
-                                   const CollationElementIterator& other) const
+                                  const CollationElementIterator& other) const
 {
   return !(*this == other);
 }
 
-UBool CollationElementIterator::operator==(const CollationElementIterator& that) 
-                                                                           const
+UBool CollationElementIterator::operator==(
+                                    const CollationElementIterator& that) const
 {
   if (this == &that)
     return TRUE;
-    
+  
+  /*
   if (*text != *(that.text))
     return FALSE;
     
@@ -182,6 +178,9 @@ UBool CollationElementIterator::operator==(const CollationElementIterator& that)
     return FALSE;
     
   return TRUE;
+  */
+  
+  return m_data_ == that.m_data_;
 }
 
 /**
@@ -192,6 +191,7 @@ UBool CollationElementIterator::operator==(const CollationElementIterator& that)
 */
 int32_t CollationElementIterator::previous(UErrorCode& status)
 {
+  /*
   if (text == NULL || U_FAILURE(status))
     return NULLORDER;
     
@@ -212,8 +212,7 @@ int32_t CollationElementIterator::previous(UErrorCode& status)
     
   // Used to be RuleBasedCollator.getUnicodeOrder(). It can't be inlined in 
   // tblcoll.h file unfortunately.
-  /*
-
+  
   int32_t value = ucmp32_get(orderAlias->data->mapping, ch);
 
   if (value == RuleBasedCollator::UNMAPPED)
@@ -252,7 +251,7 @@ int32_t CollationElementIterator::previous(UErrorCode& status)
 
   return strengthOrder(value);
   */
-  return 0;
+  return ucol_previous(m_data_, &status);
 }
 
 /**
@@ -260,6 +259,7 @@ int32_t CollationElementIterator::previous(UErrorCode& status)
 */
 void CollationElementIterator::reset()
 {
+  /*
   if (text != NULL)
   {
     text->reset();
@@ -268,11 +268,14 @@ void CollationElementIterator::reset()
 
   bufferAlias = NULL;
   expIndex = 0;
+  */
+  ucol_reset(m_data_);
 }
 
 void CollationElementIterator::setOffset(UTextOffset newOffset, 
                                          UErrorCode& status)
 {
+  /*
   if (U_FAILURE(status))
     return;
     
@@ -280,6 +283,8 @@ void CollationElementIterator::setOffset(UTextOffset newOffset,
     text->setIndex(newOffset);
     
   bufferAlias = NULL;
+  */
+  ucol_setOffset(m_data_, newOffset, &status);
 }
 
 /**
@@ -290,7 +295,7 @@ void CollationElementIterator::setText(const UnicodeString& source,
 {
   if (U_FAILURE(status))
     return;
-    
+  /*
   bufferAlias = 0;
 
   if (text == NULL)
@@ -300,6 +305,17 @@ void CollationElementIterator::setText(const UnicodeString& source,
     text->setText(source, status);
     text->setMode(orderAlias->getDecomposition());
   }
+  */
+  int32_t length = source.length();
+  UChar *string = new UChar[length];
+  source.extract(0, length, string);
+	
+  m_data_->length_ = length;
+
+  if (m_data_->iteratordata_.isWritable && 
+      m_data_->iteratordata_.string != NULL)
+    uprv_free(m_data_->iteratordata_.string);
+  init_collIterate(string, length, &m_data_->iteratordata_, TRUE);
 }
 
 // Sets the source to the new character iterator.
@@ -309,6 +325,7 @@ void CollationElementIterator::setText(CharacterIterator& source,
   if (U_FAILURE(status)) 
     return;
     
+  /*
   bufferAlias = 0;
 
   if (text == NULL)
@@ -318,38 +335,52 @@ void CollationElementIterator::setText(CharacterIterator& source,
     text->setMode(orderAlias->getDecomposition());
     text->setText(source, status);
   }
+  */
+  int32_t length = source.getLength();
+  UChar *buffer = new UChar[length];
+  /* 
+  Using this constructor will prevent buffer from being removed when
+  string gets removed
+  */
+  UnicodeString string(buffer, length, length);
+  source.getText(string);
+  string.extract(0, length, buffer);
+  m_data_->length_ = length;
+
+  if (m_data_->iteratordata_.isWritable && 
+      m_data_->iteratordata_.string != NULL)
+    uprv_free(m_data_->iteratordata_.string);
+  init_collIterate(buffer, length, &m_data_->iteratordata_, TRUE);
 }
 
 int32_t CollationElementIterator::strengthOrder(int32_t order) const
 {
-  Collator::ECollationStrength s = orderAlias->getStrength();
+  UCollationStrength s = ucol_getStrength(m_data_->collator_);
   // Mask off the unwanted differences.
-  if (s == Collator::PRIMARY)
+  if (s == UCOL_PRIMARY)
     order &= RuleBasedCollator::PRIMARYDIFFERENCEONLY;
   else 
-    if (s == Collator::SECONDARY)
+    if (s == UCOL_SECONDARY)
       order &= RuleBasedCollator::SECONDARYDIFFERENCEONLY;
     
   return order;
 }
 
-// CollationElementIterator private constructors/destructors ------------------
+/* CollationElementIterator private constructors/destructors --------------- */
 
-// This private method will never be called, but it makes the linker happy
-CollationElementIterator::CollationElementIterator() : text(0), bufferAlias(0),
-                                                  ownBuffer(new VectorOfInt(2)), 
-                                                  reorderBuffer(0), expIndex(0),
-                                                  orderAlias(0)
+/* 
+This private method will never be called, but it makes the linker happy
+CollationElementIterator::CollationElementIterator() : m_data_(0)
 {
 }
+*/
 
 CollationElementIterator::CollationElementIterator(
-                                                 const RuleBasedCollator* order)
-                                               : text(0), bufferAlias(0),
-                                                 ownBuffer(new VectorOfInt(2)),
-                                                 reorderBuffer(0), expIndex(0),
-                                                 orderAlias(order)
+                                              const RuleBasedCollator* order)
+                                              : isDataOwned_(TRUE)
 {
+  UErrorCode status = U_ZERO_ERROR;
+  m_data_ = ucol_openElements(order->ucollator, NULL, 0, &status);
 }
 
 /** 
@@ -359,17 +390,12 @@ CollationElementIterator::CollationElementIterator(
 CollationElementIterator::CollationElementIterator(
                                                 const UnicodeString& sourceText,
                                                 const RuleBasedCollator* order,
-                                                UErrorCode& status) 
-                                                : text(NULL),
-                                                  bufferAlias(NULL),
-                                                  ownBuffer(new VectorOfInt(2)),
-                                                  reorderBuffer(0),
-                                                  expIndex(0), 
-                                                  orderAlias(order)
+                                                UErrorCode& status)
 {
   if (U_FAILURE(status))
     return;
-    
+ 
+  /*
   if ( sourceText.length() != 0 ) 
   {
     // A CollationElementIterator is really a two-layered beast.
@@ -386,6 +412,8 @@ CollationElementIterator::CollationElementIterator(
     if (text == NULL)
       status = U_MEMORY_ALLOCATION_ERROR;
   }
+  */
+  m_data_ = ucol_openElements(order->ucollator, NULL, 0, &status);
 }
 
 /** 
@@ -393,20 +421,16 @@ CollationElementIterator::CollationElementIterator(
 * the source text using the specified collator
 */
 CollationElementIterator::CollationElementIterator(
-                                            const CharacterIterator& sourceText,
-                                            const RuleBasedCollator* order,
-                                            UErrorCode& status) 
-                                            : text(NULL),
-                                              bufferAlias(NULL),
-                                              ownBuffer(new VectorOfInt(2)),
-                                              reorderBuffer(0),
-                                              expIndex(0), 
-                                              orderAlias(order)
+                                           const CharacterIterator& sourceText,
+                                           const RuleBasedCollator* order,
+                                           UErrorCode& status)
+                                           : isDataOwned_(TRUE)
 {
   if (U_FAILURE(status))
     return;
     
   // **** should I just drop this test? ****
+  /*
   if ( sourceText.endIndex() != 0 )
   {
     // A CollationElementIterator is really a two-layered beast.
@@ -423,15 +447,29 @@ CollationElementIterator::CollationElementIterator(
     if (text == NULL)
       status = U_MEMORY_ALLOCATION_ERROR;    
   }
+  */
+  int32_t length = sourceText.getLength();
+  UChar *buffer = new UChar[length];
+  /* 
+  Using this constructor will prevent buffer from being removed when
+  string gets removed
+  */
+  UnicodeString string(buffer, length, length);
+  // synwee sourceText.getText(string);
+  string.extract(0, length, buffer);
+  
+  m_data_ = ucol_openElements(order->ucollator, NULL, 0, &status);
+  // synwee ucol_setText(m_data_, buffer, length, TRUE, &status);
 }
 
-// CollationElementIterator private methods -----------------------------------
+/* CollationElementIterator private methods -------------------------------- */
 
 const CollationElementIterator& CollationElementIterator::operator=(
-                                          const CollationElementIterator& other)
+                                         const CollationElementIterator& other)
 {
   if (this != &other)
   {
+    /*
     expIndex = other.expIndex;
     delete text;
     text = (Normalizer*)other.text->clone();
@@ -455,6 +493,8 @@ const CollationElementIterator& CollationElementIterator::operator=(
         bufferAlias = other.bufferAlias;
         
       orderAlias = other.orderAlias;
+    */
+    this->m_data_ = other.m_data_;
   }
 
   return *this;
