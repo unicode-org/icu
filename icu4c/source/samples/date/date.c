@@ -28,11 +28,22 @@
 
 #include "uprint.h"
 
+int main(int argc, char **argv);
+
+#if UCONFIG_NO_FORMATTING
+
+int main(int argc, char **argv)
+{
+  printf("%s: Sorry, UCONFIG_NO_FORMATTING was turned on (see uconfig.h). No formatting can be done. \n", argv[0]);
+  return 0;
+}
+#else
+
+
 /* Protos */
 static void usage(void);
 static void version(void);
 static void date(const UChar *tz, UDateFormatStyle style, UErrorCode *status);
-int main(int argc, char **argv);
 
 
 /* The version of date */
@@ -177,3 +188,4 @@ date(const UChar *tz,
   udat_close(fmt);
   free(s);
 }
+#endif
