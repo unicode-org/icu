@@ -32,6 +32,7 @@ public:
     void TestCompositionExclusion(void);
     void TestZeroIndex(void);
     void TestVerisign(void);
+    void TestPreviousNext(void);
 
 private:
     UnicodeString canonTests[24][3];
