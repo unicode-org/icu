@@ -806,6 +806,22 @@ SOURCE=.\testutil.cpp
 
 SOURCE=.\testutil.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\textfile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\textfile.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\tokiter.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\tokiter.h
+# End Source File
 # End Group
 # Begin Group "normalization"
 
