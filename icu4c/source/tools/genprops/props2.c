@@ -35,6 +35,8 @@ static UNewTrie *trie;
 static uint32_t *pv;
 static int32_t pvCount;
 
+static uint32_t prevStart=0, prevLimit=0, prevValue=0;
+
 /* prototypes --------------------------------------------------------------- */
 
 static void
@@ -61,15 +63,37 @@ propListLineFn(void *context,
                char *fields[][2], int32_t fieldCount,
                UErrorCode *pErrorCode);
 
+static void
+eaWidthLineFn(void *context,
+              char *fields[][2], int32_t fieldCount,
+              UErrorCode *pErrorCode);
+
 /* -------------------------------------------------------------------------- */
+
+U_CFUNC void
+initAdditionalProperties() {
+    pv=upvec_open(UPROPS_VECTOR_WORDS, 20000);
+}
+
+U_CFUNC void
+setMainProperties(uint32_t start, uint32_t limit, uint32_t value) {
+#if 0
+    /* ### TODO: remove this function */
+    UErrorCode errorCode=U_ZERO_ERROR;
+
+    if(!upvec_setValue(pv, start, limit, 2, value, 0xffffffff, &errorCode)) {
+        fprintf(stderr, "genprops: unable to set main properties: %s\n", u_errorName(errorCode));
+        exit(errorCode);
+    }
+#endif
+}
 
 U_CFUNC void
 generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pErrorCode) {
     char *basename;
+    UErrorCode errorCode;
 
     basename=filename+uprv_strlen(filename);
-
-    pv=upvec_open(UPROPS_VECTOR_WORDS, 20000);
 
     /* process various UCD .txt files */
     parseTwoFieldFile(filename, basename, "DerivedAge", suffix, ageLineFn, pErrorCode);
@@ -80,6 +104,31 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     parseTwoFieldFile(filename, basename, "Blocks", suffix, blocksLineFn, pErrorCode);
 
     parseTwoFieldFile(filename, basename, "PropList", suffix, propListLineFn, pErrorCode);
+
+    /*
+     * Preset East Asian Width defaults:
+     * N for all
+     * A for Private Use
+     * W for plane 2
+     */
+    errorCode=U_ZERO_ERROR;
+    if( !upvec_setValue(pv, 0, 0x110000, 0, (uint32_t)(U_EA_NEUTRAL<<UPROPS_EA_WIDTH_SHIFT), UPROPS_EA_WIDTH_MASK, pErrorCode) ||
+        !upvec_setValue(pv, 0xe000, 0xf900, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_WIDTH_SHIFT), UPROPS_EA_WIDTH_MASK, pErrorCode) ||
+        !upvec_setValue(pv, 0xf0000, 0xffffe, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_WIDTH_SHIFT), UPROPS_EA_WIDTH_MASK, pErrorCode) ||
+        !upvec_setValue(pv, 0x100000, 0x10fffe, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_WIDTH_SHIFT), UPROPS_EA_WIDTH_MASK, pErrorCode) ||
+        !upvec_setValue(pv, 0x20000, 0x2fffe, 0, (uint32_t)(U_EA_WIDE<<UPROPS_EA_WIDTH_SHIFT), UPROPS_EA_WIDTH_MASK, pErrorCode)
+    ) {
+        fprintf(stderr, "genprops: unable to set default East Asian Widths: %s\n", u_errorName(*pErrorCode));
+        exit(*pErrorCode);
+    }
+    prevStart=prevLimit=prevValue=0;
+    /* parse EastAsianWidth.txt */
+    parseTwoFieldFile(filename, basename, "EastAsianWidth", suffix, eaWidthLineFn, pErrorCode);
+    /* set last range */
+    if(!upvec_setValue(pv, prevStart, prevLimit, 0, (uint32_t)(prevValue<<UPROPS_EA_WIDTH_SHIFT), UPROPS_EA_WIDTH_MASK, pErrorCode)) {
+        fprintf(stderr, "genprops error: unable to set East Asian Width: %s\n", u_errorName(*pErrorCode));
+        exit(*pErrorCode);
+    }
 
     trie=utrie_open(NULL, NULL, 50000, 0, FALSE);
     if(trie==NULL) {
@@ -150,7 +199,7 @@ ageLineFn(void *context,
     }
 
     if(!upvec_setValue(pv, start, limit, 0, version<<UPROPS_AGE_SHIFT, UPROPS_AGE_MASK, pErrorCode)) {
-        fprintf(stderr, "genprops: unable to set character age: %s\n", u_errorName(*pErrorCode));
+        fprintf(stderr, "genprops error: unable to set character age: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
 }
@@ -193,7 +242,7 @@ scriptsLineFn(void *context,
     }
 
     if(!upvec_setValue(pv, start, limit, 0, (uint32_t)script, UPROPS_SCRIPT_MASK, pErrorCode)) {
-        fprintf(stderr, "genprops: unable to set script code: %s\n", u_errorName(*pErrorCode));
+        fprintf(stderr, "genprops error: unable to set script code: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
 }
@@ -219,7 +268,7 @@ parseScripts(const char *filename, UErrorCode *pErrorCode) {
      *    explicitly mentioned in the data file."
      */
     if(!upvec_setValue(pv, 0, 0x110000, 0, (uint32_t)USCRIPT_COMMON, UPROPS_SCRIPT_MASK, pErrorCode)) {
-        fprintf(stderr, "genprops: unable to set script code: %s\n", u_errorName(*pErrorCode));
+        fprintf(stderr, "genprops error: unable to set script code: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
 
@@ -353,7 +402,7 @@ blocksLineFn(void *context,
     }
 
     if(!upvec_setValue(pv, start, limit, 0, (uint32_t)i<<UPROPS_BLOCK_SHIFT, UPROPS_BLOCK_MASK, pErrorCode)) {
-        fprintf(stderr, "genprops: unable to set block code: %s\n", u_errorName(*pErrorCode));
+        fprintf(stderr, "genprops error: unable to set block code: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
 }
@@ -415,8 +464,57 @@ propListLineFn(void *context,
     if(i<0) {
         fprintf(stderr, "genprops warning: unknown binary property name \"%s\" in PropList.txt\n", fields[1][0]);
     } else if(!upvec_setValue(pv, start, limit, 1, (uint32_t)(1<<i), (uint32_t)(1<<i), pErrorCode)) {
-        fprintf(stderr, "genprops: unable to set binary property: %s\n", u_errorName(*pErrorCode));
+        fprintf(stderr, "genprops error: unable to set binary property: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
+    }
+}
+
+/* East Asian Width --------------------------------------------------------- */
+
+/* keep this list in sync with UEAWidthCode in uprops.h or uchar.h */
+static const char *const
+eaNames[U_EA_TOP]={
+    "N",        /* Non-East Asian Neutral, default for unassigned code points */
+    "A",        /* Ambiguous, default for Private Use code points */
+    "H",        /* Half-width */
+    "F",        /* Full-width */
+    "Na",       /* Narrow */
+    "W"         /* Wide, default for plane 2 */
+};
+
+static void
+eaWidthLineFn(void *context,
+              char *fields[][2], int32_t fieldCount,
+              UErrorCode *pErrorCode) {
+    uint32_t start, limit;
+    int32_t i;
+
+    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "genprops: syntax error in EastAsianWidth.txt field 0 at %s\n", fields[0][0]);
+        exit(*pErrorCode);
+    }
+    ++limit;
+
+    /* parse binary property name */
+    i=getTokenIndex(eaNames, U_EA_TOP, fields[1][0]);
+    if(i<0) {
+        fprintf(stderr, "genprops error: unknown width name \"%s\" in EastAsianWidth.txt\n", fields[1][0]);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+
+    /* collect maximum ranges */
+    if(prevLimit==start && (uint32_t)i==prevValue) {
+        prevLimit=limit;
+    } else {
+        if(!upvec_setValue(pv, prevStart, prevLimit, 0, (uint32_t)(prevValue<<UPROPS_EA_WIDTH_SHIFT), UPROPS_EA_WIDTH_MASK, pErrorCode)) {
+            fprintf(stderr, "genprops error: unable to set East Asian Width: %s\n", u_errorName(*pErrorCode));
+            exit(*pErrorCode);
+        }
+        prevStart=start;
+        prevLimit=limit;
+        prevValue=(uint32_t)i;
     }
 }
 
