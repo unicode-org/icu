@@ -89,9 +89,6 @@ U_NAMESPACE_BEGIN
 //----------------------------------------------------------------------------------------
 RBBIRuleScanner::RBBIRuleScanner(RBBIRuleBuilder *rb)
 {
-    if (U_FAILURE(*rb->fStatus)) {
-        return;
-    }
     fRB                 = rb;
     fStackPtr           = 0;
     fStack[fStackPtr]   = 0;
@@ -116,6 +113,12 @@ RBBIRuleScanner::RBBIRuleScanner(RBBIRuleBuilder *rb)
     fLineNum    = 1;
     fCharNum    = 0;
     fQuoteMode  = FALSE;
+
+    // Do not check status until after all critical fields are sufficiently initialized
+    //   that the destructor can run cleanly.
+    if (U_FAILURE(*rb->fStatus)) {
+        return;
+    }
 
     //
     //  Set up the constant Unicode Sets.
