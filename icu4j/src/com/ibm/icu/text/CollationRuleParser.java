@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationRuleParser.java,v $ 
-* $Date: 2002/09/10 22:19:31 $ 
-* $Revision: 1.7 $
+* $Date: 2002/09/17 21:31:58 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -53,7 +53,9 @@ final class CollationRuleParser
         m_options_ = new OptionSet(RuleBasedCollator.UCA_);
         m_listHeader_ = new TokenListHeader[512];
         m_resultLength_ = 0;
-		assembleTokenList();
+        // call assembleTokenList() manually, so that we can 
+        // init a parser and manually parse tokens
+		//assembleTokenList();
     }
     
 	// package private inner classes -----------------------------------------
@@ -654,7 +656,7 @@ final class CollationRuleParser
      * @param
      * @exception ParseException thrown when rules syntax fails
      */
-    private int assembleTokenList() throws ParseException
+    int assembleTokenList() throws ParseException
     {
 		Token lastToken = null;
 	    m_parsedToken_.m_strength_ = TOKEN_UNSET_; 
@@ -1780,4 +1782,40 @@ final class CollationRuleParser
 	            break;
 	    }
   	}
+  	
+    UnicodeSet getTailoredSet() throws ParseException
+    {	
+        boolean startOfRules = true;
+        UnicodeSet tailored = new UnicodeSet();
+        String pattern;
+        CanonicalIterator it = new CanonicalIterator("");
+        
+        m_parsedToken_.m_strength_ = TOKEN_UNSET_; 
+        int sourcelimit = m_source_.length();
+        int expandNext = 0;
+        
+        while (m_current_ < sourcelimit) {
+        m_parsedToken_.m_prefixOffset_ = 0;
+        if (parseNextToken(startOfRules) < 0) {
+            // we have reached the end
+            continue;
+        }
+        startOfRules = false;
+        // The idea is to tokenize the rule set. For each non-reset token,
+        // we add all the canonicaly equivalent FCD sequences 
+            if(m_parsedToken_.m_strength_ != TOKEN_RESET_) {		    	
+                it.setSource(m_source_.substring(
+                  	m_parsedToken_.m_charsOffset_, 
+                  	m_parsedToken_.m_charsOffset_+m_parsedToken_.m_charsLen_));
+                pattern = it.next();
+                while(pattern != null) {
+                  	if(Normalizer.quickCheck(pattern, Normalizer.FCD) != Normalizer.NO) {
+                        tailored.add(pattern);
+                    }
+                    pattern = it.next();
+                }
+            }
+        }
+        return tailored;
+    }
 }

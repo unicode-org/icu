@@ -24,8 +24,8 @@ import java.text.CharacterIterator;
 
 public class CollationAPITest extends TestFmwk {
     public static void main(String[] args) throws Exception {
-        // new CollationAPITest().run(args);
-        new CollationAPITest().TestRuleBasedColl();
+        new CollationAPITest().run(args);
+        //new CollationAPITest().TestGetTailoredSet();
     }
     
     /**
@@ -606,4 +606,43 @@ public class CollationAPITest extends TestFmwk {
                      "Result should be \"abCda\" == \"abcda\" ");
         }
     }
+
+    public void TestGetTailoredSet() 
+    {
+        logln("testing getTailoredSet...");
+        String rules[] = {
+            "&a < \u212b",             
+            "& S < \u0161 <<< \u0160",
+        };
+        String data[][] = {
+            { "\u212b", "A\u030a", "\u00c5" },        
+            { "\u0161", "s\u030C", "\u0160", "S\u030C" }            
+        };
+    
+        int i = 0, j = 0;
+        
+        RuleBasedCollator coll;
+        UnicodeSet set;
+        
+        for(i = 0; i < rules.length; i++) {
+            try {
+                logln("Instantiating a collator from "+rules[i]);
+                coll = new RuleBasedCollator(rules[i]);
+                set = coll.getTailoredSet();
+                logln("Got set: "+set.toPattern(true));
+                if(set.size() != data[i].length) {
+                    errln("Tailored set size different ("+set.size()+") than expected ("+data[i].length+")");
+                }
+                for(j = 0; j < data[i].length; j++) {
+                    logln("Checking to see whether "+data[i][j]+" is in set");
+                    if(!set.contains(data[i][j])) {
+                        errln("Tailored set doesn't contain "+data[i][j]+"... It should");
+                    }
+                }
+            } catch (Exception e) {
+                errln("Couldn't open collator with rules "+ rules[i]);
+            }
+        }
+    }
+
 }
