@@ -30,6 +30,15 @@
 static UCollator* UCA = NULL;
 static const InverseTableHeader* invUCA = NULL;
 
+/* Fixup table a la Markus */
+/* see http://www.ibm.com/software/developer/library/utf16.html for further explanation */
+static uint8_t utf16fixup[32] = {
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0x20, 0xf8, 0xf8, 0xf8, 0xf8
+};
+
 static UBool
 isAcceptableUCA(void *context, 
              const char *type, const char *name,
@@ -1092,11 +1101,9 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
     case NOT_FOUND_TAG:
       /* This one is not found, and we'll let somebody else bother about it... no more games */
       return CE;
-      break;
     case SURROGATE_TAG:
       /* pending surrogate discussion with Markus and Mark */
       return UCOL_NOT_FOUND;
-      break;
     case THAI_TAG:
       /* Thai/Lao reordering */
       if(source->isThai == TRUE) { /* if we encountered Thai prevowel & the string is not yet touched */
@@ -1179,11 +1186,9 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         }
       }
       return CE;
-      break;
     case CHARSET_TAG:
       /* probably after 1.8 */
       return UCOL_NOT_FOUND;
-      break;
     default:
       *status = U_INTERNAL_PROGRAM_ERROR;
       CE=0;
