@@ -29,7 +29,7 @@ alpha*-*-linux-gnu)
 	else  
 		icu_cv_host_frag=mh-alpha-linux-cc
 	fi ;;
-*-dec-osf) icu_cv_host_frag=mh-alpha-osf ;;
+*-dec-osf*) icu_cv_host_frag=mh-alpha-osf ;;
 *-*-linux*) icu_cv_host_frag=mh-linux ;;
 *-*-cygwin)	icu_cv_host_frag=mh-cygwin ;;
 *-*-freebsd*|*-*-netbsd*) 	icu_cv_host_frag=mh-bsd-gcc ;;
