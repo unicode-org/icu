@@ -475,6 +475,9 @@ NumberFormat::createInstance(const Locale& desiredLocale,
         if (U_SUCCESS(status)) {
             f = new DecimalFormat(pattern, symbolsToAdopt, status);
         }
+        else {
+            return NULL;
+        }
     }
     else {
         // If the requested style doesn't exist, use a last-resort style.
