@@ -81,6 +81,9 @@ ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
 else
 ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
+ifneq ($(patsubst %install,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
 endif
+endif
+
