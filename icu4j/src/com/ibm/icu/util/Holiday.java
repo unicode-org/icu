@@ -169,7 +169,7 @@ public abstract class Holiday implements DateRule
      * @param locale   A locale specifying the language in which the name is desired.
      *
      * @see ResourceBundle
-     * @draft ICU 2.8
+     * @draft ICU 3.2
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayName(ULocale locale)
