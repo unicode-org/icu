@@ -71,8 +71,8 @@ Note 3 is the minimum value for Thai collation to work correctly.
 #define UCOL_UNSAFECP_TABLE_MASK 0x1fff
 
 
-#define UCOL_RUNTIME_VERSION 1
-#define UCOL_BUILDER_VERSION 1
+#define UCOL_RUNTIME_VERSION 2
+#define UCOL_BUILDER_VERSION 2
 
 /* flags bits for collIterate.flags       */
 /*                                        */
