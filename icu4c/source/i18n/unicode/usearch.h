@@ -167,8 +167,10 @@ typedef enum {
 *                  be rejected and another will be searched for. 
 *                  If this parameter is <tt>NULL</tt>, no break detection is 
 *                  attempted.
-* @param status for errors if it occurs
-* @return search iterator data structure
+* @param status for errors if it occurs. If pattern or text is NULL, or if
+*               patternlength or textlength is 0 then an 
+*               U_ILLEGAL_ARGUMENT_ERROR is returned.
+* @return search iterator data structure, or NULL if there is an error.
 */
 U_CAPI UStringSearch * U_EXPORT2 usearch_open(const UChar          *pattern, 
                                               int32_t         patternlength, 
@@ -194,8 +196,10 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_open(const UChar          *pattern,
 *                  be rejected and another will be searched for. 
 *                  If this parameter is <tt>NULL</tt>, no break detection is 
 *                  attempted.
-* @param status for errors if it occurs
-* @return search iterator data structure
+* @param status for errors if it occurs. If collator, pattern or text is NULL, 
+*               or if patternlength or textlength is 0 then an 
+*               U_ILLEGAL_ARGUMENT_ERROR is returned.
+* @return search iterator data structure, or NULL if there is an error.
 */
 U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
                                          const UChar *pattern, 
@@ -357,7 +361,9 @@ U_CAPI const UBreakIterator * U_EXPORT2 usearch_getBreakIterator(
 * @param strsrch search iterator data struct
 * @param text new string to look for match
 * @param textlength length of the new string, -1 for null-termination
-* @param status for errors if it occurs
+* @param status for errors if it occurs. If text is NULL, or textlength is 0 
+*               then an U_ILLEGAL_ARGUMENT_ERROR is returned with no change
+*               done to strsrch.
 * @see #usearch_getText
 */
 U_CAPI void U_EXPORT2 usearch_setText(      UStringSearch *strsrch, 
@@ -407,7 +413,9 @@ U_CAPI void U_EXPORT2 usearch_setCollator(      UStringSearch *strsrch,
 * @param strsrch search iterator data struct
 * @param pattern string
 * @param patternlength pattern length, -1 for null-terminated string
-* @param status for errors if it occurs
+* @param status for errors if it occurs. If text is NULL, or textlength is 0 
+*               then an U_ILLEGAL_ARGUMENT_ERROR is returned with no change
+*               done to strsrch.
 */
 U_CAPI void U_EXPORT2 usearch_setPattern(      UStringSearch *strsrch, 
                                          const UChar         *pattern,

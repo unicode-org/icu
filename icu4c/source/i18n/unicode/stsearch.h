@@ -134,7 +134,9 @@ public:
      *                determined by the <tt>BreakIterator</tt> are 
      *                ignored. If this behavior is not desired, 
      *                <tt>NULL</tt> can be passed in instead.
-     * @param status  for errors if any
+     * @param status  for errors if any. If pattern or text is NULL, or if
+     *               either the length of pattern or text is 0 then an 
+     *               U_ILLEGAL_ARGUMENT_ERROR is returned.
      */
     StringSearch(const UnicodeString &pattern, const UnicodeString &text,
                  const Locale        &locale,       
@@ -158,7 +160,8 @@ public:
      *                determined by the <tt>BreakIterator</tt> are 
      *                ignored. If this behavior is not desired, 
      *                <tt>NULL</tt> can be passed in instead.
-     * @param status  for errors if any
+     * @param status for errors if any. If either the length of pattern or 
+     *               text is 0 then an U_ILLEGAL_ARGUMENT_ERROR is returned.
      */
     StringSearch(const UnicodeString     &pattern, 
                  const UnicodeString     &text,
@@ -187,7 +190,8 @@ public:
      *                determined by the <tt>BreakIterator</tt> are 
      *                ignored. If this behavior is not desired, 
      *                <tt>NULL</tt> can be passed in instead.
-     * @param status  for errors if any
+     * @param status for errors if any. If either the length of pattern or 
+     *               text is 0 then an U_ILLEGAL_ARGUMENT_ERROR is returned.
      */
     StringSearch(const UnicodeString &pattern, CharacterIterator &text,
                  const Locale        &locale, 
@@ -215,7 +219,8 @@ public:
      *                determined by the <tt>BreakIterator</tt> are 
      *                ignored. If this behavior is not desired, 
      *                <tt>NULL</tt> can be passed in instead.
-     * @param status  for errors if any
+     * @param status for errors if any. If either the length of pattern or 
+     *               text is 0 then an U_ILLEGAL_ARGUMENT_ERROR is returned.
      */
     StringSearch(const UnicodeString     &pattern, CharacterIterator &text,
                        RuleBasedCollator *coll, 
@@ -283,7 +288,8 @@ public:
      * useful if you want to re-use an iterator to search for the same 
      * pattern within a different body of text.
      * @param text text string to be searched
-     * @param status  for errors if any
+     * @param status for errors if any. If the text length is 0 then an 
+     *        U_ILLEGAL_ARGUMENT_ERROR is returned.
      */
     virtual void setText(const UnicodeString &text, UErrorCode &status);
     
@@ -297,7 +303,8 @@ public:
      * will be done during searching for this version. The block of text 
      * in <tt>CharacterIterator</tt> will be used as it is.
      * @param text text string to be searched
-     * @param status  for errors if any
+     * @param status for errors if any. If the text length is 0 then an 
+     *        U_ILLEGAL_ARGUMENT_ERROR is returned.
      */
     virtual void setText(CharacterIterator &text, UErrorCode &status);
 
@@ -327,7 +334,8 @@ public:
      * Internal data like the Boyer Moore table will be recalculated, but 
      * the iterator's position is unchanged.
      * @param pattern search pattern to be found
-     * @param status for errors if any
+     * @param status for errors if any. If the pattern length is 0 then an 
+     *               U_ILLEGAL_ARGUMENT_ERROR is returned.
      */
     void setPattern(const UnicodeString &pattern, UErrorCode &status);
     
