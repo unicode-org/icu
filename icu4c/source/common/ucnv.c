@@ -173,7 +173,7 @@ UConverter *ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pB
         else
         {
             localConverter = (UConverter *)stackBuffer;
-            memcpy(localConverter, cnv, sizeof(UConverter));
+            uprv_memcpy(localConverter, cnv, sizeof(UConverter));
             localConverter->isCopyLocal = TRUE;
         }
     }
