@@ -700,108 +700,6 @@ void RegexTest::API_Match() {
         delete matcher;
         delete pat;
     }
-
-    //
-    //  Replace
-    //
-    {
-        int32_t             flags=0;
-        UParseError         pe;
-        UErrorCode          status=U_ZERO_ERROR;
-
-        UnicodeString       re("abc");
-        RegexPattern *pat = RegexPattern::compile(re, flags, pe, status);
-        REGEX_CHECK_STATUS;
-        UnicodeString data = ".abc..abc...abc..";
-        //                    012345678901234567
-        RegexMatcher *matcher = pat->matcher(data, status);
-
-        //
-        //  Plain vanilla matches.
-        //
-        UnicodeString  dest;
-        dest = matcher->replaceFirst("yz", status);
-        REGEX_CHECK_STATUS;
-        REGEX_ASSERT(dest == ".yz..abc...abc..");
-
-        dest = matcher->replaceAll("yz", status);
-        REGEX_CHECK_STATUS;
-        REGEX_ASSERT(dest == ".yz..yz...yz..");
-
-        //
-        //  Plain vanilla non-matches.
-        //
-        UnicodeString d2 = ".abx..abx...abx..";
-        matcher->reset(d2);
-        dest = matcher->replaceFirst("yz", status);
-        REGEX_CHECK_STATUS;
-        REGEX_ASSERT(dest == ".abx..abx...abx..");
-
-        dest = matcher->replaceAll("yz", status);
-        REGEX_CHECK_STATUS;
-        REGEX_ASSERT(dest == ".abx..abx...abx..");
-
-        //
-        // Empty source string
-        //
-        UnicodeString d3 = "";
-        matcher->reset(d3);
-        dest = matcher->replaceFirst("yz", status);
-        REGEX_CHECK_STATUS;
-        REGEX_ASSERT(dest == "");
-
-        dest = matcher->replaceAll("yz", status);
-        REGEX_CHECK_STATUS;
-        REGEX_ASSERT(dest == "");
-
-        //
-        // Empty substitution string
-        //
-        matcher->reset(data);              // ".abc..abc...abc.."
-        dest = matcher->replaceFirst("", status);
-        REGEX_CHECK_STATUS;
-        REGEX_ASSERT(dest == "...abc...abc..");
-
-        dest = matcher->replaceAll("", status);
-        REGEX_CHECK_STATUS;
-        REGEX_ASSERT(dest == "........");
-
-        //
-        // match whole string
-        //
-        UnicodeString d4 = "abc";
-        matcher->reset(d4);   
-        dest = matcher->replaceFirst("xyz", status);
-        REGEX_CHECK_STATUS;
-        REGEX_ASSERT(dest == "xyz");
-
-        dest = matcher->replaceAll("xyz", status);
-        REGEX_CHECK_STATUS;
-        REGEX_ASSERT(dest == "xyz");
-
-        //
-        // Capture Group, simple case
-        //
-        UnicodeString       re2("a(..)");
-        RegexPattern *pat2 = RegexPattern::compile(re2, flags, pe, status);
-        REGEX_CHECK_STATUS;
-        UnicodeString d5 = "abcdefg";
-        RegexMatcher *matcher2 = pat2->matcher(d5, status);
-        REGEX_CHECK_STATUS;
-        dest = matcher2->replaceFirst("$1$1", status);
-        REGEX_CHECK_STATUS;
-        REGEX_ASSERT(dest == "bcbcdefg");
-      
-        // TODO:  need more through testing of capture substitutions.
-
-
-        //
-        //  Non-Grouping parentheses
-        //
-
-    }
-
-
         
 }
 
@@ -910,10 +808,10 @@ void RegexTest::API_Replace() {
     // TODO:  need more through testing of capture substitutions.
     
     
-    //
-    //  Non-Grouping parentheses
-    //
-    
+    delete matcher2;
+    delete pat2;
+    delete matcher;
+    delete pat;
 }
 
 
@@ -980,6 +878,7 @@ void RegexTest::API_Pattern() {
     delete pat1a;
     delete pat1;
     delete pat2;
+
 
     //
     //   matches convenience API
@@ -1052,6 +951,7 @@ void RegexTest::API_Pattern() {
     REGEX_ASSERT(n==0);
     REGEX_ASSERT(fields[0]=="foo");
 
+    delete pat1;
 
 }
 

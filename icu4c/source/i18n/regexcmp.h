@@ -64,6 +64,8 @@ public:
 
     void        nextChar(RegexPatternChar &c);      // Get the next char from the input stream.
 
+    static void cleanup();                       // Memory cleanup
+
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
