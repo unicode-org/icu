@@ -16,7 +16,7 @@ U_NAMESPACE_BEGIN
 /**
  * ID for this transliterator.
  */
-const char* TitlecaseTransliterator::_ID = "Any-Title";
+const char TitlecaseTransliterator::_ID[] = "Any-Title";
 
 TitlecaseTransliterator::TitlecaseTransliterator(UnicodeFilter* adoptedFilter) :
     Transliterator(_ID, adoptedFilter) {

@@ -68,7 +68,7 @@ class U_I18N_API UnicodeNameTransliterator : public Transliterator {
 
  private:
 
-    static const char* _ID;
+    static const char _ID[];
 };
 
 U_NAMESPACE_END

@@ -103,7 +103,7 @@ typedef struct {
 typedef struct {
    const UChar *optionName;
    int32_t optionLen;
-   ucolTokSuboption *subopts;
+   const ucolTokSuboption *subopts;
    int32_t subSize;
    UColAttribute attr;
 } ucolTokOption;

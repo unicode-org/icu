@@ -66,7 +66,7 @@ class U_I18N_API UppercaseTransliterator : public TransformTransliterator {
 
     Locale loc;
 
-    static const char* _ID;
+    static const char _ID[];
 };
 
 U_NAMESPACE_END
