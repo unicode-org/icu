@@ -102,9 +102,16 @@ static const UChar gSpaceStr[] = {0x20, 0}; /* " " */
 static void
 u_printf_set_sign(UNumberFormat        *format,
                    const u_printf_spec_info     *info,
+                   UChar *prefixBuffer,
+                   int32_t *prefixBufLen,
                    UErrorCode *status)
 {
     if(info->fShowSign) {
+        *prefixBufLen = unum_getTextAttribute(format,
+                                              UNUM_POSITIVE_PREFIX,
+                                              prefixBuffer,
+                                              *prefixBufLen,
+                                              status);
         if (info->fSpace) {
             /* Setting UNUM_PLUS_SIGN_SYMBOL affects the exponent too. */
             /* unum_setSymbol(format, UNUM_PLUS_SIGN_SYMBOL, gSpaceStr, 1, &status); */
@@ -126,7 +133,27 @@ u_printf_set_sign(UNumberFormat        *format,
                 status);
         }
     }
+    else {
+        *prefixBufLen = 0;
+    }
 }
+
+static void
+u_printf_reset_sign(UNumberFormat        *format,
+                   const u_printf_spec_info     *info,
+                   UChar *prefixBuffer,
+                   int32_t *prefixBufLen,
+                   UErrorCode *status)
+{
+    if(info->fShowSign) {
+        unum_setTextAttribute(format,
+                              UNUM_POSITIVE_PREFIX,
+                              prefixBuffer,
+                              *prefixBufLen,
+                              status);
+    }
+}
+
 
 /* handle a '%' */
 static int32_t
@@ -242,10 +269,14 @@ u_printf_double_handler(const u_printf_stream_handler  *handler,
 {
     double        num         = (double) (args[0].doubleValue);
     UNumberFormat  *format;
-    UChar          result        [UPRINTF_BUFFER_SIZE];
+    UChar          result[UPRINTF_BUFFER_SIZE];
+    UChar          prefixBuffer[UPRINTF_BUFFER_SIZE];
+    int32_t        prefixBufferLen = sizeof(prefixBuffer);
     int32_t        minDecimalDigits;
     int32_t        maxDecimalDigits;
     UErrorCode     status        = U_ZERO_ERROR;
+
+    prefixBuffer[0] = 0;
 
     /* mask off any necessary bits */
     /*  if(! info->fIsLongDouble)
@@ -282,14 +313,23 @@ u_printf_double_handler(const u_printf_stream_handler  *handler,
     }
 
     /* set whether to show the sign */
-    u_printf_set_sign(format, info, &status);
+    if (info->fShowSign) {
+        u_printf_set_sign(format, info, prefixBuffer, &prefixBufferLen, &status);
+    }
 
     /* format the number */
     unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
 
     /* restore the number format */
+    /* TODO: Is this needed? */
     unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
     unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
+
+    if (info->fShowSign) {
+        /* Reset back to original value regardless of what the error was */
+        UErrorCode localStatus = U_ZERO_ERROR;
+        u_printf_reset_sign(format, info, prefixBuffer, &prefixBufferLen, &localStatus);
+    }
 
     return handler->pad_and_justify(context, info, result, u_strlen(result));
 }
@@ -303,10 +343,14 @@ u_printf_integer_handler(const u_printf_stream_handler  *handler,
                          const ufmt_args                *args)
 {
     long            num         = (long) (args[0].intValue);
-    UNumberFormat        *format;
-    UChar            result        [UPRINTF_BUFFER_SIZE];
-    int32_t        minDigits     = -1;
-    UErrorCode        status        = U_ZERO_ERROR;
+    UNumberFormat   *format;
+    UChar           result[UPRINTF_BUFFER_SIZE];
+    UChar           prefixBuffer[UPRINTF_BUFFER_SIZE];
+    int32_t         prefixBufferLen = sizeof(prefixBuffer);
+    int32_t         minDigits     = -1;
+    UErrorCode      status        = U_ZERO_ERROR;
+
+    prefixBuffer[0] = 0;
 
     /* mask off any necessary bits */
     if(info->fIsShort)
@@ -332,7 +376,7 @@ u_printf_integer_handler(const u_printf_stream_handler  *handler,
 
     /* set whether to show the sign */
     if(info->fShowSign) {
-        u_printf_set_sign(format, info, &status);
+        u_printf_set_sign(format, info, prefixBuffer, &prefixBufferLen, &status);
     }
 
     /* format the number */
@@ -341,6 +385,12 @@ u_printf_integer_handler(const u_printf_stream_handler  *handler,
     /* restore the number format */
     if (minDigits != -1) {
         unum_setAttribute(format, UNUM_MIN_INTEGER_DIGITS, minDigits);
+    }
+
+    if (info->fShowSign) {
+        /* Reset back to original value regardless of what the error was */
+        UErrorCode localStatus = U_ZERO_ERROR;
+        u_printf_reset_sign(format, info, prefixBuffer, &prefixBufferLen, &localStatus);
     }
 
     return handler->pad_and_justify(context, info, result, u_strlen(result));
@@ -462,16 +512,19 @@ u_printf_scientific_handler(const u_printf_stream_handler  *handler,
                             const u_printf_spec_info       *info,
                             const ufmt_args                *args)
 {
-    double        num         = (double) (args[0].doubleValue);
-    UNumberFormat        *format;
-    UChar            result        [UPRINTF_BUFFER_SIZE];
-    int32_t        minDecimalDigits;
-    int32_t        maxDecimalDigits;
-    UErrorCode        status        = U_ZERO_ERROR;
+    double          num         = (double) (args[0].doubleValue);
+    UNumberFormat   *format;
+    UChar           result[UPRINTF_BUFFER_SIZE];
+    UChar           prefixBuffer[UPRINTF_BUFFER_SIZE];
+    int32_t         prefixBufferLen = sizeof(prefixBuffer);
+    int32_t         minDecimalDigits;
+    int32_t         maxDecimalDigits;
+    UErrorCode      status        = U_ZERO_ERROR;
     UChar srcExpBuf[UPRINTF_SYMBOL_BUFFER_SIZE];
     int32_t srcLen, expLen;
     UChar expBuf[UPRINTF_SYMBOL_BUFFER_SIZE];
 
+    prefixBuffer[0] = 0;
 
     /* mask off any necessary bits */
     /*  if(! info->fIsLongDouble)
@@ -536,22 +589,31 @@ u_printf_scientific_handler(const u_printf_stream_handler  *handler,
     }
 
     /* set whether to show the sign */
-    u_printf_set_sign(format, info, &status);
+    if (info->fShowSign) {
+        u_printf_set_sign(format, info, prefixBuffer, &prefixBufferLen, &status);
+    }
 
     /* format the number */
     unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
 
     /* restore the number format */
+    /* TODO: Is this needed? */
     unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
     unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
 
-    /* Since we clone the fBundle and we're only using the scientific
+    /* Since we're the only one using the scientific
        format, we don't need to save the old exponent value. */
     /*unum_setSymbol(format,
         UNUM_EXPONENTIAL_SYMBOL,
         srcExpBuf,
         srcLen,
         &status);*/
+
+    if (info->fShowSign) {
+        /* Reset back to original value regardless of what the error was */
+        UErrorCode localStatus = U_ZERO_ERROR;
+        u_printf_reset_sign(format, info, prefixBuffer, &prefixBufferLen, &localStatus);
+    }
 
     return handler->pad_and_justify(context, info, result, u_strlen(result));
 }
@@ -563,13 +625,16 @@ u_printf_percent_handler(const u_printf_stream_handler  *handler,
                          const u_printf_spec_info       *info,
                          const ufmt_args                *args)
 {
-    double        num         = (double) (args[0].doubleValue);
-    UNumberFormat        *format;
-    UChar            result        [UPRINTF_BUFFER_SIZE];
-    int32_t        minDecimalDigits;
-    int32_t        maxDecimalDigits;
-    UErrorCode        status        = U_ZERO_ERROR;
+    double          num         = (double) (args[0].doubleValue);
+    UNumberFormat   *format;
+    UChar           result[UPRINTF_BUFFER_SIZE];
+    UChar           prefixBuffer[UPRINTF_BUFFER_SIZE];
+    int32_t         prefixBufferLen = sizeof(prefixBuffer);
+    int32_t         minDecimalDigits;
+    int32_t         maxDecimalDigits;
+    UErrorCode      status        = U_ZERO_ERROR;
 
+    prefixBuffer[0] = 0;
 
     /* mask off any necessary bits */
     /*  if(! info->fIsLongDouble)
@@ -606,14 +671,23 @@ u_printf_percent_handler(const u_printf_stream_handler  *handler,
     }
 
     /* set whether to show the sign */
-    u_printf_set_sign(format, info, &status);
+    if (info->fShowSign) {
+        u_printf_set_sign(format, info, prefixBuffer, &prefixBufferLen, &status);
+    }
 
     /* format the number */
     unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
 
     /* restore the number format */
+    /* TODO: Is this needed? */
     unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
     unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
+
+    if (info->fShowSign) {
+        /* Reset back to original value regardless of what the error was */
+        UErrorCode localStatus = U_ZERO_ERROR;
+        u_printf_reset_sign(format, info, prefixBuffer, &prefixBufferLen, &localStatus);
+    }
 
     return handler->pad_and_justify(context, info, result, u_strlen(result));
 }
@@ -738,13 +812,16 @@ u_printf_spellout_handler(const u_printf_stream_handler *handler,
                           const u_printf_spec_info      *info,
                           const ufmt_args               *args)
 {
-    double        num         = (double) (args[0].doubleValue);
-    UNumberFormat        *format;
-    UChar            result        [UPRINTF_BUFFER_SIZE];
-    int32_t        minDecimalDigits;
-    int32_t        maxDecimalDigits;
-    UErrorCode        status        = U_ZERO_ERROR;
+    double          num         = (double) (args[0].doubleValue);
+    UNumberFormat   *format;
+    UChar           result[UPRINTF_BUFFER_SIZE];
+    UChar           prefixBuffer[UPRINTF_BUFFER_SIZE];
+    int32_t         prefixBufferLen = sizeof(prefixBuffer);
+    int32_t         minDecimalDigits;
+    int32_t         maxDecimalDigits;
+    UErrorCode      status        = U_ZERO_ERROR;
 
+    prefixBuffer[0] = 0;
 
     /* mask off any necessary bits */
     /*  if(! info->fIsLongDouble)
@@ -781,14 +858,23 @@ u_printf_spellout_handler(const u_printf_stream_handler *handler,
     }
 
     /* set whether to show the sign */
-    u_printf_set_sign(format, info, &status);
+    if (info->fShowSign) {
+        u_printf_set_sign(format, info, prefixBuffer, &prefixBufferLen, &status);
+    }
 
     /* format the number */
     unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
 
     /* restore the number format */
+    /* TODO: Is this needed? */
     unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
     unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
+
+    if (info->fShowSign) {
+        /* Reset back to original value regardless of what the error was */
+        UErrorCode localStatus = U_ZERO_ERROR;
+        u_printf_reset_sign(format, info, prefixBuffer, &prefixBufferLen, &localStatus);
+    }
 
     return handler->pad_and_justify(context, info, result, u_strlen(result));
 }
