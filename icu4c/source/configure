@@ -2068,9 +2068,9 @@ fi
 done
 
 if test $ac_cv_header_inttypes_h = no; then
-HAVE_INTTYPES_H=0
+U_HAVE_INTTYPES_H=0
 else
-HAVE_INTTYPES_H=1
+U_HAVE_INTTYPES_H=1
 fi
 
 
@@ -2908,16 +2908,16 @@ else
 fi
 
 case "${host}" in
-	*-*-solaris*) 	platform=SOLARIS ;;
-	*-*-linux*) 	platform=LINUX ;;
-	*-*-freebsd*) 	platform=LINUX ;;
+	*-*-solaris*) 	platform=U_SOLARIS ;;
+	*-*-linux*) 	platform=U_LINUX ;;
+	*-*-freebsd*) 	platform=U_LINUX ;;
 	*-*-aix*) 	platform=AIX ;;
 	*-*-hpux*) 	platform=HPUX ;;
 	*-*-irix*)      platform=IRIX ;;
 	*-*-os390*)	platform=OS390 ;;
 	*-*-os400*)	platform=OS400 ;;
-	*-apple-rhapsody*)	platform=RHAPSODY ;;
-	*) 		platform=UNKNOWN ;;
+	*-apple-rhapsody*)	platform=U_RHAPSODY ;;
+	*) 		platform=U_UNKNOWN_PLATFORM ;;
 esac
 
 host_frag=$icu_cv_host_frag
@@ -3154,7 +3154,7 @@ s%@THREADS_FALSE@%$THREADS_FALSE%g
 s%@ICU_USE_THREADS@%$ICU_USE_THREADS%g
 s%@HAVE_DLOPEN@%$HAVE_DLOPEN%g
 s%@CPP@%$CPP%g
-s%@HAVE_INTTYPES_H@%$HAVE_INTTYPES_H%g
+s%@U_HAVE_INTTYPES_H@%$U_HAVE_INTTYPES_H%g
 s%@CXXCPP@%$CXXCPP%g
 s%@U_IOSTREAM_SOURCE@%$U_IOSTREAM_SOURCE%g
 s%@U_IS_BIG_ENDIAN@%$U_IS_BIG_ENDIAN%g

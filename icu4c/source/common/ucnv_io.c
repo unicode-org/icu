@@ -136,28 +136,27 @@ isAlias(const char *alias, UErrorCode *pErrorCode) {
     }
 }
 
-/* compare lowercase str1 with mixed-case str2, ignoring case */
+/* compare lowercase str1 with mixed-case str2, both being charset names */
 static int
-strHalfCaseCmp(const char *str1, const char *str2) {
-    /* compare non-NULL strings lexically with lowercase */
+charsetNameCmp(const char *str1, const char *str2) {
     int rc;
     unsigned char c1, c2;
 
-    for(;;) {
-        c1=(unsigned char)*str1;
-        c2=(unsigned char)*str2;
-        if(c1==0) {
-            if(c2==0) {
+    for (;;) {
+        c1 = (unsigned char) *str1;
+        c2 = (unsigned char) *str2;
+        if (c1 == 0) {
+            if(c2 == 0) {
                 return 0;
             } else {
                 return -1;
             }
-        } else if(c2==0) {
+        } else if (c2 == 0) {
             return 1;
         } else {
             /* compare non-zero characters with lowercase */
-            rc=(int)c1-(int)(unsigned char)uprv_tolower(c2);
-            if(rc!=0) {
+            rc = (int) c1 - (int) (unsigned char) uprv_tolower(c2);
+            if(rc != 0) {
                 return rc;
             }
         }
@@ -192,7 +191,7 @@ findAlias(const char *alias) {
     start=0;
     while(start<limit-1) {
         i=(start+limit)/2;
-        if(strHalfCaseCmp(name, (const char *)aliasTable+p[i])<0) {
+        if(charsetNameCmp(name, (const char *)aliasTable+p[i])<0) {
             limit=i;
         } else {
             start=i;
@@ -200,7 +199,7 @@ findAlias(const char *alias) {
     }
 
     /* did we really find it? */
-    if(strHalfCaseCmp(name, (const char *)aliasTable+p[start])==0) {
+    if(charsetNameCmp(name, (const char *)aliasTable+p[start])==0) {
         limit=*(p-1);       /* aliasCount */
         p+=limit;           /* advance to the second column of the alias table */
         i=p[start];         /* converter index */

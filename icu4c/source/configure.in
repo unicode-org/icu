@@ -197,11 +197,11 @@ AC_SUBST(HAVE_DLOPEN)
 dnl Checks for header files
 AC_CHECK_HEADERS(inttypes.h)
 if test $ac_cv_header_inttypes_h = no; then
-HAVE_INTTYPES_H=0
+U_HAVE_INTTYPES_H=0
 else
-HAVE_INTTYPES_H=1
+U_HAVE_INTTYPES_H=1
 fi
-AC_SUBST(HAVE_INTTYPES_H)
+AC_SUBST(U_HAVE_INTTYPES_H)
 
 if test x$U_IOSTREAM_SOURCE = x
 then
@@ -370,17 +370,17 @@ ICU_CONDITIONAL(SAMPLES, test "$samples" = true)
 
 dnl Platform-specific Makefile setup
 case "${host}" in
-	*-*-solaris*) 	platform=SOLARIS ;;
-	*-*-linux*) 	platform=LINUX ;;
-	*-*-freebsd*) 	platform=LINUX ;;
+	*-*-solaris*) 	platform=U_SOLARIS ;;
+	*-*-linux*) 	platform=U_LINUX ;;
+	*-*-freebsd*) 	platform=U_LINUX ;;
 	*-*-aix*) 	platform=AIX ;;
 	*-sequent-*)	platform=PTX ;;
 	*-*-hpux*) 	platform=HPUX ;;
 	*-*-irix*)      platform=IRIX ;;
 	*-*-os390*)	platform=OS390 ;;
 	*-*-os400*)	platform=OS400 ;;
-	*-apple-rhapsody*)	platform=RHAPSODY ;;
-	*) 		platform=UNKNOWN ;;
+	*-apple-rhapsody*)	platform=U_RHAPSODY ;;
+	*) 		platform=U_UNKNOWN_PLATFORM ;;
 esac
 AC_SUBST(platform)
 host_frag=$icu_cv_host_frag
