@@ -1184,7 +1184,7 @@ public:
     /**
      * SymbolTable API
      */
-    virtual const UnicodeFunctor* lookupMatcher(UChar32 ch) const {
+    virtual const UnicodeFunctor* lookupMatcher(UChar32 /*ch*/) const {
         return NULL;
     }
 

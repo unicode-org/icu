@@ -29,7 +29,7 @@ _int32Top28Comparator(const void *context, const void *left, const void *right) 
     return (*(const int32_t *)left>>4) - (*(const int32_t *)right>>4);
 }
 
-void
+static void
 SortTest(void) {
     uint16_t small[]={ 8, 1, 2, 5, 4, 3, 7, 6 };
     int32_t medium[]={ 10, 8, 1, 2, 5, 5, 6, 4, 3, 9, 7, 5 };
@@ -85,6 +85,9 @@ SortTest(void) {
         }
     }
 }
+
+void
+addSortTest(TestNode** root);
 
 void
 addSortTest(TestNode** root) {
