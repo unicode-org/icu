@@ -29,14 +29,6 @@
 #include "ucmp32.h"
 #include "cstring.h"
 
-#ifdef WIN32
-#define UNICODE
-#include <windows.h>
-#else
-#define LCID uint32_t
-#define LOCALE_SYSTEM_DEFAULT 0
-#endif
-
 #define MAX_TOKEN_LEN 16
 
 typedef int tst_strcoll(void *collator, const int object,
@@ -885,6 +877,7 @@ static void logFailure (const char *platform, const char *test,
 
 }
 
+/*
 static void printOutRules(const UChar *rules) {
   uint32_t len = u_strlen(rules);
   uint32_t i = 0;
@@ -922,7 +915,7 @@ static void printOutRules(const UChar *rules) {
   log_verbose("\n");
 
 }
-
+*/
 
 static uint32_t testSwitch(tst_strcoll* func, void *collator, int opts, uint32_t strength, const UChar *first, const UChar *second, const char* msg, UBool error) {
   uint32_t diffs = 0;
@@ -946,7 +939,7 @@ static uint32_t testSwitch(tst_strcoll* func, void *collator, int opts, uint32_t
 }
 
 
-static void testAgainstUCA(UCollator *coll, UCollator *UCA, LCID lcid, const char *refName, UBool error, UErrorCode *status) {
+static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName, UBool error, UErrorCode *status) {
   const UChar *rules = NULL, *current = NULL;
   int32_t ruleLen = 0;
   uint32_t strength = 0;
@@ -1198,7 +1191,6 @@ static UBool hasCollationElements(const char *locName) {
 static void TestCollations( ) {
   int32_t noOfLoc = uloc_countAvailable();
   int32_t i = 0, j = 0;
-  LCID lcid = LOCALE_SYSTEM_DEFAULT;
 
   UErrorCode status = U_ZERO_ERROR;
   char cName[256];
@@ -1216,15 +1208,14 @@ static void TestCollations( ) {
     status = U_ZERO_ERROR;
     locName = uloc_getAvailable(i);
     if(hasCollationElements(locName)) {
-        lcid = uloc_getLCID(locName);
         nameSize = uloc_getDisplayName(locName, NULL, name, 256, &status);
         for(j = 0; j<nameSize; j++) {
           cName[j] = (char)name[j];
         }
         cName[nameSize] = 0;
-        log_verbose("\nTesting locale %s (%s), LCID %04X\n", locName, cName, lcid);
+        log_verbose("\nTesting locale %s (%s)\n", locName, cName);
         coll = ucol_open(locName, &status);
-        testAgainstUCA(coll, UCA, lcid, "UCA", FALSE, &status);
+        testAgainstUCA(coll, UCA, "UCA", FALSE, &status);
         ucol_close(coll);
     }
   }
@@ -1737,7 +1728,7 @@ static void TestRedundantRules() {
     rlen = u_unescape(expectedRules[i], rlz, 2048);
     cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
 
-    testAgainstUCA(cresulting, credundant, 0, "expected", TRUE, &status);
+    testAgainstUCA(cresulting, credundant, "expected", TRUE, &status);
 
     ucol_close(credundant);
     ucol_close(cresulting);
@@ -1793,7 +1784,7 @@ static void TestExpansionSyntax() {
 
     /* testAgainstUCA still doesn't handle expansions correctly, so this is not run */
     /* as a hard error test, but only in information mode */
-    testAgainstUCA(cresulting, credundant, 0, "expected", FALSE, &status);
+    testAgainstUCA(cresulting, credundant, "expected", FALSE, &status);
 
     ucol_close(credundant);
     ucol_close(cresulting);
@@ -2012,10 +2003,10 @@ static void TestIncrementalNormalize() {
             log_err("ERROR 2 in test 4\n");
         }
 
-        ucol_getSortKey(coll, strA,  3, sortKeyA, sizeof(sortKeyA));
-        ucol_getSortKey(coll, strA, -1, sortKeyAz, sizeof(sortKeyAz));
-        ucol_getSortKey(coll, strB,  3, sortKeyB, sizeof(sortKeyB));
-        ucol_getSortKey(coll, strB, -1, sortKeyBz, sizeof(sortKeyBz));
+        ucol_getSortKey(coll, strA,  3, (uint8_t *)sortKeyA, sizeof(sortKeyA));
+        ucol_getSortKey(coll, strA, -1, (uint8_t *)sortKeyAz, sizeof(sortKeyAz));
+        ucol_getSortKey(coll, strB,  3, (uint8_t *)sortKeyB, sizeof(sortKeyB));
+        ucol_getSortKey(coll, strB, -1, (uint8_t *)sortKeyBz, sizeof(sortKeyBz));
 
         r = strcmp(sortKeyA, sortKeyAz);
         if (r <= 0) {
@@ -2031,10 +2022,10 @@ static void TestIncrementalNormalize() {
         }
 
         ucol_setStrength(coll, UCOL_IDENTICAL);
-        ucol_getSortKey(coll, strA,  3, sortKeyA, sizeof(sortKeyA));
-        ucol_getSortKey(coll, strA, -1, sortKeyAz, sizeof(sortKeyAz));
-        ucol_getSortKey(coll, strB,  3, sortKeyB, sizeof(sortKeyB));
-        ucol_getSortKey(coll, strB, -1, sortKeyBz, sizeof(sortKeyBz));
+        ucol_getSortKey(coll, strA,  3, (uint8_t *)sortKeyA, sizeof(sortKeyA));
+        ucol_getSortKey(coll, strA, -1, (uint8_t *)sortKeyAz, sizeof(sortKeyAz));
+        ucol_getSortKey(coll, strB,  3, (uint8_t *)sortKeyB, sizeof(sortKeyB));
+        ucol_getSortKey(coll, strB, -1, (uint8_t *)sortKeyBz, sizeof(sortKeyBz));
 
         r = strcmp(sortKeyA, sortKeyAz);
         if (r <= 0) {
@@ -2072,10 +2063,10 @@ static void TestIncrementalNormalize() {
             log_err("ERROR 2 in test 5\n");
         }
 
-        ucol_getSortKey(coll, strA,  6, sortKeyA, sizeof(sortKeyA));
-        ucol_getSortKey(coll, strA, -1, sortKeyAz, sizeof(sortKeyAz));
-        ucol_getSortKey(coll, strB,  6, sortKeyB, sizeof(sortKeyB));
-        ucol_getSortKey(coll, strB, -1, sortKeyBz, sizeof(sortKeyBz));
+        ucol_getSortKey(coll, strA,  6, (uint8_t *)sortKeyA, sizeof(sortKeyA));
+        ucol_getSortKey(coll, strA, -1, (uint8_t *)sortKeyAz, sizeof(sortKeyAz));
+        ucol_getSortKey(coll, strB,  6, (uint8_t *)sortKeyB, sizeof(sortKeyB));
+        ucol_getSortKey(coll, strB, -1, (uint8_t *)sortKeyBz, sizeof(sortKeyBz));
 
         r = strcmp(sortKeyA, sortKeyAz);
         if (r <= 0) {
@@ -2091,10 +2082,10 @@ static void TestIncrementalNormalize() {
         }
 
         ucol_setStrength(coll, UCOL_IDENTICAL);
-        ucol_getSortKey(coll, strA,  6, sortKeyA, sizeof(sortKeyA));
-        ucol_getSortKey(coll, strA, -1, sortKeyAz, sizeof(sortKeyAz));
-        ucol_getSortKey(coll, strB,  6, sortKeyB, sizeof(sortKeyB));
-        ucol_getSortKey(coll, strB, -1, sortKeyBz, sizeof(sortKeyBz));
+        ucol_getSortKey(coll, strA,  6, (uint8_t *)sortKeyA, sizeof(sortKeyA));
+        ucol_getSortKey(coll, strA, -1, (uint8_t *)sortKeyAz, sizeof(sortKeyAz));
+        ucol_getSortKey(coll, strB,  6, (uint8_t *)sortKeyB, sizeof(sortKeyB));
+        ucol_getSortKey(coll, strB, -1, (uint8_t *)sortKeyBz, sizeof(sortKeyBz));
 
         r = strcmp(sortKeyA, sortKeyAz);
         if (r <= 0) {
@@ -2192,10 +2183,10 @@ static void TestCompressOverlap() {
     UChar       tertstr[150];
     UErrorCode  status = U_ZERO_ERROR;
     UCollator  *coll;
-    uint8_t     result[200];
+    char        result[200];
     uint32_t    resultlen;
     int         count = 0;
-    uint8_t     *tempptr;
+    char       *tempptr;
 
     coll = ucol_open("", &status);
 
@@ -2217,7 +2208,7 @@ static void TestCompressOverlap() {
     have 150 tertiary bytes.
     with correct overlapping compression, secstr should have 4 secondary 
     bytes, tertstr should have > 2 tertiary bytes */
-    resultlen = ucol_getSortKey(coll, secstr, 150, result, 250);
+    resultlen = ucol_getSortKey(coll, secstr, 150, (uint8_t *)result, 250);
     tempptr = uprv_strchr(result, 1) + 1;
     while (*(tempptr + 1) != 1) {
         /* the last secondary collation element is not checked since it is not 
@@ -2230,7 +2221,7 @@ static void TestCompressOverlap() {
     
     /* tertiary top/bottom/common for en_US is similar to the secondary
     top/bottom/common */
-    resultlen = ucol_getSortKey(coll, tertstr, 150, result, 250);
+    resultlen = ucol_getSortKey(coll, tertstr, 150, (uint8_t *)result, 250);
     tempptr = uprv_strrchr(result, 1) + 1;
     while (*(tempptr + 1) != 0) {
         /* the last secondary collation element is not checked since it is not 
@@ -2244,7 +2235,7 @@ static void TestCompressOverlap() {
     /* bottom up compression ------------------------------------- */
     secstr[count] = 0;
     tertstr[count] = 0;
-    resultlen = ucol_getSortKey(coll, secstr, 150, result, 250);
+    resultlen = ucol_getSortKey(coll, secstr, 150, (uint8_t *)result, 250);
     tempptr = uprv_strchr(result, 1) + 1;
     while (*(tempptr + 1) != 1) {
         /* the last secondary collation element is not checked since it is not 
@@ -2257,7 +2248,7 @@ static void TestCompressOverlap() {
     
     /* tertiary top/bottom/common for en_US is similar to the secondary
     top/bottom/common */
-    resultlen = ucol_getSortKey(coll, tertstr, 150, result, 250);
+    resultlen = ucol_getSortKey(coll, tertstr, 150, (uint8_t *)result, 250);
     tempptr = uprv_strrchr(result, 1) + 1;
     while (*(tempptr + 1) != 0) {
         /* the last secondary collation element is not checked since it is not 
