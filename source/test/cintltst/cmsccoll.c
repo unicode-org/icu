@@ -4356,6 +4356,15 @@ static void TestSeparateTrees(void) {
     /* Don't need to check n because we check list */
     uenum_close(e);
 
+    /* Try setting a warning before calling ucol_getKeywordValues */
+    ec = U_USING_FALLBACK_WARNING;
+    e = ucol_getKeywordValues(KW[0], &ec);
+    assertSuccess("ucol_getKeywordValues [with warning code set]", &ec);
+    assertTrue("ucol_getKeywordValues!=0 [with warning code set]", e!=0);
+    n = checkUEnumeration("ucol_getKeywordValues [with warning code set]", e, KWVAL, LEN(KWVAL));
+    /* Don't need to check n because we check list */
+    uenum_close(e);
+
     /*
 U_DRAFT int32_t U_EXPORT2
 ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
