@@ -99,42 +99,51 @@ class MyNumberFormatTest : public NumberFormat
 public:
 
   
-  virtual UnicodeString& format(    double            number, 
+    virtual UnicodeString& format(    double            number, 
                     UnicodeString&        toAppendTo, 
                     FieldPosition&        pos,
                     UErrorCode& status) const
     {
-      return NumberFormat::format(number, toAppendTo, pos, status);
+        return NumberFormat::format(number, toAppendTo, pos, status);
     }
-  
-  virtual UnicodeString& format(    double            number, 
+
+    /* Just keep this here to make some of the compilers happy */
+    virtual UnicodeString& format(const Formattable& obj,
+                                  UnicodeString& toAppendTo,
+                                  FieldPosition& pos,
+                                  UErrorCode& status) const
+    {
+        return NumberFormat::format(obj, toAppendTo, pos, status);
+    }
+
+    virtual UnicodeString& format(    double            number, 
                     UnicodeString&        toAppendTo, 
                     FieldPosition&        pos) const
     {
-      toAppendTo = "";
-      return toAppendTo;
+        toAppendTo = "";
+        return toAppendTo;
     }
   
-  //public Number parse(String text, ParsePosition parsePosition) 
-  //{ return new Integer(0); }
+    //public Number parse(String text, ParsePosition parsePosition) 
+    //{ return new Integer(0); }
   
-  virtual void parse(    const UnicodeString&    text, 
+    virtual void parse(    const UnicodeString&    text, 
             Formattable&            result, 
             ParsePosition&            parsePosition) const
     {
-      result.setLong(0L);
+        result.setLong(0L);
     }
   
-  virtual void parse(    const UnicodeString&    text, 
+    virtual void parse(    const UnicodeString&    text, 
             Formattable&            result, 
             UErrorCode&            status) const 
-  {
-      NumberFormat::parse(text, result, status);
-  }
-  virtual Format* clone() const 
+    {
+        NumberFormat::parse(text, result, status);
+    }
+    virtual Format* clone() const 
     { return NULL; }
   
-  virtual UnicodeString& format(int32_t, 
+    virtual UnicodeString& format(int32_t, 
                 UnicodeString& foo, 
                 FieldPosition&) const
     { return foo.remove(); }
