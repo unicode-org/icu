@@ -578,12 +578,45 @@ processCombining() {
 /* processing incoming normalization data ----------------------------------- */
 
 /*
+ * Decompose Hangul syllables algorithmically and fill a pseudo-Norm struct.
+ * c must be a Hangul syllable code point.
+ */
+static void
+getHangulDecomposition(uint32_t c, Norm *pHangulNorm, uint32_t hangulBuffer[3]) {
+    /* Hangul syllable: decompose algorithmically */
+    uint32_t c2;
+    uint8_t length;
+
+    uprv_memset(pHangulNorm, 0, sizeof(Norm));
+
+    c-=HANGUL_BASE;
+
+    c2=c%JAMO_T_COUNT;
+    c/=JAMO_T_COUNT;
+    if(c2>0) {
+        hangulBuffer[2]=JAMO_T_BASE+c2;
+        length=3;
+    } else {
+        hangulBuffer[2]=0;
+        length=2;
+    }
+
+    hangulBuffer[1]=JAMO_V_BASE+c%JAMO_V_COUNT;
+    hangulBuffer[0]=JAMO_L_BASE+c/JAMO_V_COUNT;
+
+    pHangulNorm->nfd=pHangulNorm->nfkd=hangulBuffer;
+    pHangulNorm->lenNFD=pHangulNorm->lenNFKD=length;
+}
+
+/*
  * decompose the one decomposition further, may generate two decompositions
  * apply all previous characters' decompositions to this one
  */
 static void
 decompStoreNewNF(uint32_t code, Norm *norm) {
-    uint32_t nfd[40], nfkd[40];
+    uint32_t nfd[40], nfkd[40], hangulBuffer[3];
+    Norm hangulNorm;
+
     uint32_t *s32;
     Norm *p;
     uint32_t c;
@@ -609,10 +642,15 @@ decompStoreNewNF(uint32_t code, Norm *norm) {
         c=s32[i];
         p=getNorm(c);
         if(p==NULL) {
-            /* no data, no decomposition */
-            nfd[lenNFD++]=c;
-            nfkd[lenNFKD++]=c;
-            continue;
+            if(HANGUL_BASE<=c && c<(HANGUL_BASE+HANGUL_COUNT)) {
+                getHangulDecomposition(c, &hangulNorm, hangulBuffer);
+                p=&hangulNorm;
+            } else {
+                /* no data, no decomposition */
+                nfd[lenNFD++]=c;
+                nfkd[lenNFKD++]=c;
+                continue;
+            }
         }
 
         /* canonically decompose c */
