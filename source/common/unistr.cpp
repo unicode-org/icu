@@ -675,6 +675,13 @@ UnicodeString::getChar32At(UTextOffset offset) const {
   return char32At(offset);
 }
 
+int32_t
+UnicodeString::countChar32(UTextOffset start, int32_t length) const {
+  pinIndices(start, length);
+  // if(isBogus()) then fArray==0 and start==0 - u_countChar32() checks for NULL
+  return u_countChar32(fArray+start, length);
+}
+
 UTextOffset
 UnicodeString::moveIndex32(UTextOffset index, int32_t delta) const {
   // pin index
