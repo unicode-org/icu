@@ -327,7 +327,32 @@ static struct ErrorCases{
       "www.xn--989AoMsVi5E83Db1D2A355Cv1E0vAk1DwRv93D5xBh15A0Dt30A5JpSD879Ccm6FeA98C.com",
       U_IDNA_LABEL_TOO_LONG_ERROR,
       FALSE, TRUE, TRUE
-    },   
+    },  
+    
+    { 
+      {
+        0x0077, 0x0077, 0x0077, 0x002e, /* www. */
+        0x0030, 0x0644, 0x064A, 0x0647, 0x0031, /* Arabic code points squashed between EN codepoints */
+        0x002e, 0x0063, 0x006f, 0x006d, /* com. */
+        0x0000
+      },
+      "www.xn--01-tvdmo.com",
+      U_IDNA_CHECK_BIDI_ERROR,
+      FALSE, TRUE, TRUE
+    },  
+    /*
+    { 
+      {
+        0x0077, 0x0077, 0x0077, 0x002e, // www. 
+        0x206C, 0x0644, 0x064A, 0x0647, 0x206D, // Arabic code points squashed between BN codepoints 
+        0x002e, 0x0063, 0x006f, 0x006d, // com. 
+        0x0000
+      },
+      "www.xn--989AoMsVi.com",
+      U_ZERO_ERROR,
+      FALSE, TRUE, TRUE
+    },
+    */
 };
 
 
@@ -543,7 +568,10 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
             destLen = func(src,-1,dest,destLen+1,options, &parseError, &status);
             // TODO : compare output with expected
             if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
-                errln("Did not get the expected result for "+UnicodeString(testName) +" null terminated source : "+ prettify(UnicodeString(expected,expectedLen)));
+                errln("Did not get the expected result for "+UnicodeString(testName) +" null terminated source. Expected : " 
+                       + prettify(UnicodeString(expected,expectedLen))
+                       + " Got: " + prettify(UnicodeString(dest,destLen))
+                    );
             }
         }else{
             errln( "%s null terminated source failed. Requires destCapacity > 300\n",testName);
