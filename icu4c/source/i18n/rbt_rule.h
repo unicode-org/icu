@@ -63,46 +63,8 @@ private:
     UnicodeString output;
 
     /**
-     * >>> Duplicated in rbt_pars.cpp and rbt_rule.h <<<
-     *
-     * The segments array encodes information about parentheses-
-     * enclosed regions of the input string.  These are referenced in
-     * the output string using the notation $1, $2, etc.  Numbering is
-     * in order of appearance of the left parenthesis.  Number is
-     * one-based.  Segments are defined as start, limit pairs.
-     * Segments may nest.
-     * 
-     * In order two avoid allocating two subobjects, the segments
-     * array actually comprises two arrays.  The first is gives the
-     * index values of the open and close parentheses in the order
-     * they appear.  The second maps segment numbers to the indices of
-     * the first array.  The two arrays have the same length.
-     *
-     * Example:  (a b(c d)e f)
-     *            0 1 2 3 4 5 6
-     *
-     * First array: Indices are 0, 2, 4, and 6.
-
-     * Second array: $1 is at 0 and 6, and $2 is at 2 and 4, so the
-     * second array is 0, 3, 1 2 -- these give the indices in the
-     * first array at which $1:open, $1:close, $2:open, and $2:close
-     * occur.
-     *
-     * The final array is: 2, 7, 0, 2, 4, 6, -1, 2, 5, 3, 4, -1
-     *
-     * Each subarray is terminated with a -1, and two leading entries
-     * give the number of segments and the offset to the first entry
-     * of the second array.  In addition, the second array value are
-     * all offset by 2 so they index directly into the final array.
-     * The total array size is 4*segments[0] + 4.  The second index is
-     * 2*segments[0] + 3.
-     *
-     * In the output string, a segment reference is indicated by a
-     * character in a special range, as defined by
-     * RuleBasedTransliterator.Data.
-     *
-     * Most rules have no segments, in which case segments is null, and the
-     * output string need not be checked for segment reference characters.
+     * An array of integers encoding the position of the segments.
+     * See rbt_pars.cpp::Segments for more details.
      */
     int32_t* segments;
 
