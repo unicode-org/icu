@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/09/25 06:40:13 $
-* $Revision: 1.23 $
+* $Date: 2002/10/01 01:19:16 $
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
@@ -80,6 +80,8 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("Buildnames")) BuildNames.main(null);
             else if (arg.equalsIgnoreCase("TestNormalization")) TestNormalization.main(null);
             
+            
+            else if (arg.equalsIgnoreCase("binary")) FastBinarySearch.test();
             
             else if (arg.equalsIgnoreCase("GenerateCaseTest")) GenerateCaseTest.main(null);
             else if (arg.equalsIgnoreCase("checkDecompFolding")) VerifyUCD.checkDecompFolding();
