@@ -65,7 +65,7 @@
                 <equals arg1="${ant.java.version}" arg2="1.5"/>
             </or>
         </condition>
-
+	
         <condition property="doc.params"
             value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'ICU Core' 'com.ibm.icu.lang*:com.ibm.icu.math*:com.ibm.icu.text*:com.ibm.icu.util*:com.ibm.icu.stringprep*' -group 'ICU Tests' 'com.ibm.icu.dev.test*' -group 'Demos' 'com.ibm.icu.dev.demo*' -group 'ICU Tools' 'com.ibm.icu.dev*'">
                 <equals arg1="${version.1.4}" arg2="true"/>
@@ -231,10 +231,34 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+	    source="1.4"
             debug="on" deprecation="off"/>
     </target>
 
-    <target name="one4tools" depends="anthack1,anthack2" if="version.1.4">
+    <target name="buildmangle" depends="init,anthack1" if="version.1.4">
+        <javac includes="com/ibm/icu/dev/tool/docs/CodeMangler.java"
+	srcdir="${src.dir}"
+	destdir="${build.dir}"
+	classpathref="build.classpath"
+	source="1.4"/>
+    </target>
+
+    <target name="mangle" depends="buildmangle" if="version.1.4">
+    <!-- this is a hack for now, need a way to express dependency on the .jpp files
+    and to provide directories or trees of files to the code mangler tool. -->
+        <java classname="com.ibm.icu.dev.tool.docs.CodeMangler"
+	classpath="${build.dir}"
+	logError="true">
+	    <arg value="-d"/>
+	    <arg value="VERSION_${ant.java.version}"/>
+	    <arg value="-in"/>
+	    <arg value="${src.dir}/com/ibm/icu/dev/tool/docs/ICUTaglet.jpp"/>
+	    <arg value="-out"/>
+	    <arg value="${src.dir}/com/ibm/icu/dev/tool/docs/ICUTaglet.java"/>
+         </java>
+    </target>
+
+    <target name="one4tools" depends="anthack1,anthack2,mangle" if="version.1.4">
         <javac includes="com/ibm/icu/dev/localeconverter/docs/*.java,com/ibm/icu/dev/tool/docs/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -268,9 +292,9 @@
             doctitle="icu4j"
             encoding="iso-8859-1"
             docencoding="iso-8859-1"
-            bottom="&lt;font size=-1>Copyright (c) 2004 IBM Corporation and others.&lt;/font>"
+            bottom="&lt;font size=-1>Copyright (c) 2005 IBM Corporation and others.&lt;/font>"
             additionalparam="${doc.params}"
-            link="http://java.sun.com/j2se/1.4/docs/api"
+            link="http://java.sun.com/j2se/1.5/docs/api"
             source="1.4"/>
     </target>
 
@@ -312,6 +336,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+	    source="1.4"
             debug="on" deprecation="off"/>
         <copy todir="${build.dir}/com/ibm/icu/dev/data">
             <fileset dir="${src.dir}/com/ibm/icu/dev/data"
@@ -334,6 +359,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+	    source="1.4"
             debug="on" deprecation="off"/>
         <copy todir="${build.dir}/com/ibm/richtext/textapps/resources" overwrite="yes" includeEmptyDirs="no">
             <fileset dir="${src.dir}/com/ibm/richtext/textapps/resources" includes="*.red"/>
@@ -386,6 +412,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+	    source="1.4"
             debug="on" deprecation="off"/>
         <copy file="${src.dir}/com/ibm/icu/dev/tool/ime/translit/Transliterator.properties"
             todir="${build.dir}/com/ibm/icu/dev/tool/ime/translit"/>
@@ -404,6 +431,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+	    source="1.4"
             debug="on" deprecation="off"/>
         <copy file="${src.dir}/com/ibm/icu/dev/tool/ime/indic/DisplayNames.properties"
             todir="${build.dir}/com/ibm/icu/dev/tool/ime/indic"/>
@@ -423,6 +451,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+	    source="1.4"
             debug="on" deprecation="off"/>
         <copy toDir="${build.dir}/com/ibm/icu/dev/tool/ime/translit">
             <fileset dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="*.properties"/>
@@ -726,6 +755,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+	    source="1.4"
             debug="on" deprecation="off"/>
     </target>
 
@@ -756,6 +786,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+	    source="1.4"
             debug="on" deprecation="off"/>
     </target>
 
@@ -767,6 +798,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+	    source="1.4"
             debug="on" deprecation="off"/>
     </target>
     
@@ -812,6 +844,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+	    source="1.4"
             debug="on" deprecation="off"/>
     </target>
 
@@ -835,6 +868,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+	    source="1.4"
             debug="on" deprecation="off"/>
     </target>
 
@@ -858,6 +892,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+	    source="1.4"
             debug="on" deprecation="off"/>
         <copy file="${src.dir}/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt"
             todir="${build.dir}/com/ibm/icu/dev/test/format"/>
@@ -885,6 +920,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+	    source="1.4"
             debug="on" deprecation="off"/>
         <copy file="${src.dir}/com/ibm/icu/dev/test/rbbi/rbbitst.txt"
             todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
@@ -915,6 +951,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+	    source="1.4"
             debug="on" deprecation="off"/>
         <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}">
             <patternset>
@@ -938,6 +975,7 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+	    source="1.4"
             debug="on" deprecation="off"/>
         <jar jarfile="xliff.jar"
             compress="true"
