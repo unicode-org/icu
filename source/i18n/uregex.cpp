@@ -610,11 +610,13 @@ U_NAMESPACE_END
 //  Call-back function for u_unescapeAt(), used when we encounter
 //    \uxxxx or \Uxxxxxxxxx escapes in the replacement text.
 //
+U_CDECL_BEGIN
 static UChar U_CALLCONV
 unescape_charAt(int32_t offset, void *context) {
     UChar c16 = ((UChar *)context)[offset];
     return c16;
 }
+U_CDECL_END
 
 
 static const UChar BACKSLASH  = 0x5c;
