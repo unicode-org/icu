@@ -49,6 +49,7 @@ void TestMemoryStreamAPI(){
     if(memStream == NULL){
         log_err("uprv_mstrm_openNew() failed\n");
     }
+    uprv_mstrm_close(memStream);
     
     log_verbose("Testing the function uprv_mstrm_openNew() with size=0\n");
     memStream=uprv_mstrm_openNew(0);

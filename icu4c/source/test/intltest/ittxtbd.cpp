@@ -1134,6 +1134,10 @@ void IntlTestTextBoundary::generalIteratorTest(BreakIterator& bi, Vector* expect
     testIsBoundary(bi, text, boundaries);
 
     doMultipleSelectionTest(bi, text);
+
+    delete nextResults;
+    delete previousResults;
+
 }
 
 Vector* IntlTestTextBoundary::testFirstAndNext(BreakIterator& bi, UnicodeString& text) 

@@ -114,8 +114,12 @@ void currTest()
             reportCResult(source, target, sortKey1, sortKey2,
                           compareResult, keyResult, expectedResult);
 
+            free(sortKey1);
+            free(sortKey2);
+
         }
     }
+    ucol_close(c);
 }
 
 

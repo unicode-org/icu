@@ -167,6 +167,8 @@ void TestClone(){
 
     utrans_close(t1);
     utrans_close(t2);
+    utrans_close(t3);
+    utrans_close(t4);
 
 }
 
@@ -223,7 +225,8 @@ void TestRegisterUnregister(){
         return;
     }
     
-    /*utrans_close(rules);*/
+    utrans_close(t1);
+    utrans_close(inverse1);
 }
 
 void TestSimpleRules() {

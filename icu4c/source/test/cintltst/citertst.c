@@ -307,6 +307,8 @@ void backAndForth(UCollationElements *iter)
         log_verbose("\n");
     }
 
+    free(orders);
+
     
 }
 /** @bug 4108762
