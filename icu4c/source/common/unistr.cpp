@@ -86,6 +86,21 @@ us_arrayCopy(const UChar *src, int32_t srcStart,
 UConverter* UnicodeString::fgDefaultConverter  = 0;
 
 //========================================
+// Unescaping
+//========================================
+U_COMMON_API UnicodeString
+u_unescape(const UnicodeString &s) {
+  /* ### TBD */
+  return s;
+}
+
+U_COMMON_API UChar32
+u_unescape(const UnicodeString &s, int32_t &offset) {
+  /* ### TBD */
+  return 0xffff;
+}
+
+//========================================
 // Constructors
 //========================================
 UnicodeString::UnicodeString()

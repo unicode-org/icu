@@ -72,6 +72,25 @@ U_COMMON_API ostream &operator<<(ostream& stream, const UnicodeString& s);
 #endif
 
 /**
+ * Unescape an entire string.
+ * ### TBD
+ */
+U_COMMON_API UnicodeString
+u_unescape(const UnicodeString &s);
+
+/**
+ * Unescape one escape sequence in a string and return the code point.
+ * <code>s[offset]</code> must be the beginning of an escape sequence.
+ * <code>offset</code> is advanced to the first character after the
+ * escape sequence.
+ * If an error occurs, then U+ffff is returned and the offset is not
+ * advanced.
+ * ### TBD
+ */
+U_COMMON_API UChar32
+u_unescape(const UnicodeString &s, int32_t &offset);
+
+/**
  * UnicodeString is a concrete implementation of the abstract class Replaceable.
  * It is a string class that stores Unicode characters directly and provides
  * similar functionality as the Java string class.
