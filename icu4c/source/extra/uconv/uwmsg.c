@@ -81,17 +81,17 @@ uprint(const UChar *s,
 
 static UResourceBundle *gBundle = NULL;
 
-U_CAPI void u_wmsg_setPath(const char *path, UErrorCode *err)
+U_CAPI UResourceBundle *u_wmsg_setPath(const char *path, UErrorCode *err)
 {
   if(U_FAILURE(*err))
   {
-    return;
+    return 0;
   }
 
   if(gBundle != NULL)
   {
     *err = U_ILLEGAL_ARGUMENT_ERROR;
-    return;
+    return 0;
   }
   else
   {
@@ -101,7 +101,7 @@ U_CAPI void u_wmsg_setPath(const char *path, UErrorCode *err)
     gBundle = b;
   }
   
-  return;
+  return gBundle;
 }
 
 /* Format a message and print it's output to stderr */

@@ -1,6 +1,6 @@
 // -*- Coding: utf-8; -*-  [all uconv resource files]
 // Copyright (c) 2000 IBM, Inc. and Others.
-// $Revision: 1.1 $
+// $Revision: 1.2 $
 //
 // Root translation file for uconv messages.
 // So you want to translate this file??? Great!
@@ -28,22 +28,28 @@ root
 {
 // uconv errors
 
-  usage { "Usage: uconv [flag] [file]\n"
-           "-f [codeset]  Convert file from this codeset\n"
-           "-t [codeset]  Convert file to this code set\n"
-           "-h            Show this help text\n"
-           "-l            List all available codepages\n" }
+  lcUsageWord { "usage" }
+  ucUsageWord { "Usage" }
+  usage { "{0}: {1} [ -h, --help ] [ -l, --list ] [ -L, --list-transliterators ] [ -x transliterator ] -f, --from-code code -t, --to-code code [ file ]\n" }
+
+  help { "Options:  -h, --help\t\tprint this message\n"
+	  "          -l, --list\t\tlist all available encodings\n"
+	  "          -L, --list-transliterators\tlist all available transliterators\n"
+	  "          -f, --from-code code\tset the original encoding\n"
+	  "          -t, --to-code code\tset the destination encoding\n" 
+	  "          -x transliterator\trun everything through transliterator\n" 
+}
 
 
-  cantGetNames   { "Can''t get available converter names. {0}\n" } // 0: err
+  cantGetNames   { "Couldn''t get available converter names. {0}\n" } // 0: err
    
-  noFromCodeset  { "No conversion from codeset given (use -f)\n" }
-  noToCodeset    {  "No conversion to codeset given (use -t)\n"  }
+  noFromCodeset  { "No conversion from encoding given (use -f)\n" }
+  noToCodeset    {  "No conversion to encoding given (use -t)\n"  }
 
-  cantOpenFromCodeset { "Couldn''t open the from codeset {0}: {1}\n" }  // 0:set, 1: err
-  cantOpenToCodeset { "Couldn''t open the to codeset {0}: {1}\n" } // 0: set, 1: err
+  cantOpenFromCodeset { "Couldn''t open the from encoding {0}: {1}\n" }  // 0:set, 1: err
+  cantOpenToCodeset { "Couldn''t open the to encoding {0}: {1}\n" } // 0: set, 1: err
 
-  cantOpenInputF  { "Couldn''t open the input file \"{0}\", {1}.\n" } // 0: file, 1: strerror [OS error string]
+  cantOpenInputF  { "Couldn''t open the input file {0}, {1}.\n" } // 0: file, 1: strerror [OS error string]
 
   cantWrite       { "The converted text couldn't be written: {0} \n" } // 0: OS error string
   cantRead        { "Error reading from input file {0} \n" } // 0: OS error string
