@@ -285,10 +285,12 @@ public class CollationMiscTest extends TestFmwk{
     
     public void TestPrefix() {
         String[] rules = {
-            "&z <<< z|a", 
+            "&z <<< z|a",
+            "&z <<< z|   a", 
             "[strength I]&a=\ud900\udc25&z<<<\ud900\udc25|a", 
         };
         String[][] data = {
+            {"zz", "za"},
             {"zz", "za"},
             {"aa", "az", "\ud900\udc25z", "\ud900\udc25a", "zz"},
         };
@@ -1707,4 +1709,5 @@ public class CollationMiscTest extends TestFmwk{
         doTest(collator, " a", "a", 0);       // works properly
         doTest(collator, "a", "a ", 0);       // inconsistent results
     }
+    
 }

@@ -3215,6 +3215,8 @@ static void TestPrefix(void) {
     { "&z <<< z|a", 
       {"zz", "za"}, 2 },
 
+    { "&z <<< z|   a", 
+      {"zz", "za"}, 2 },
     { "[strength I]"
       "&a=\\ud900\\udc25"
       "&z<<<\\ud900\\udc25|a", 
@@ -4018,6 +4020,15 @@ static void TestEquals(void) {
 
 }
 
+static void TestPUA(void) {
+  const char* cases[] = {
+    "AA", "A\\ue000"
+  };
+
+
+  genericLocaleStarter("da", cases, 2);
+}
+
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
@@ -4070,6 +4081,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestPartialSortKeyTermination);
     TEST(TestSettings);
     TEST(TestEquals);
+    TEST(TestPUA);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
