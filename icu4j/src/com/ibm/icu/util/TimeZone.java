@@ -151,9 +151,6 @@ abstract public class TimeZone implements Serializable, Cloneable {
             throw new NullPointerException();
         }
         this.ID = ID;
-        if (zone != null) {
-            zone.setID(ID);
-        }
     }
 
     /**
@@ -260,32 +257,6 @@ abstract public class TimeZone implements Serializable, Cloneable {
         // Format a date in January.  We use the value 10*ONE_DAY == Jan 11 1970
         // 0:00 GMT.
         return format.format(new Date(864000000L));
-
-// Alternate implementation that uses the underlying JDK's display
-// name data.  Alan
-//
-//      // Use the wrapped zone, if there is one.  Otherwise create a
-//      // new SimpleTimeZone as a stand-in for this zone; the
-//      // stand-in will have no DST, or DST during January, but the
-//      // same ID and offset, and hence the same display name.  We
-//      // don't cache these because they're small and cheap to
-//      // create.
-//      java.util.TimeZone tz;
-//      if (zone != null) {
-//          tz = zone;
-//      } else if (daylight && useDaylightTime()) {
-//          int savings = 3600000; // one hour
-//          try {
-//              savings = ((SimpleTimeZone) this).getDSTSavings();
-//          } catch (ClassCastException e) {}
-//          tz = new java.util.SimpleTimeZone(getRawOffset(), getID(),
-//                                            Calendar.JANUARY, 1, 0, 0,
-//                                            Calendar.FEBRUARY, 1, 0, 0,
-//                                            savings);
-//      } else {
-//          tz = new java.util.SimpleTimeZone(getRawOffset(), getID());
-//      }
-//      return tz.getDisplayName(daylight, style, locale);
     }
 
     /**
@@ -319,7 +290,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public static synchronized TimeZone getTimeZone(String ID) {
-        return wrap(java.util.TimeZone.getTimeZone(ID));
+        return JDKTimeZone.wrap(java.util.TimeZone.getTimeZone(ID));
     }
 
     /**
@@ -413,7 +384,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      */
     public static synchronized TimeZone getDefault() {
         if (defaultZone == null) {
-            defaultZone = wrap(java.util.TimeZone.getDefault());
+            defaultZone = JDKTimeZone.wrap(java.util.TimeZone.getDefault());
         }
         return (TimeZone) defaultZone.clone();
     }
@@ -432,7 +403,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
         // can interoperate with com.ibm.icu.util classes.
         java.util.TimeZone jdkZone = null;
         if (tz != null) {
-            jdkZone = (tz.zone != null) ? tz.zone : new TimeZoneAdapter(tz);
+            jdkZone = TimeZoneAdapter.wrap(tz);
         }
         java.util.TimeZone.setDefault(jdkZone);
     }
@@ -447,13 +418,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public boolean hasSameRules(TimeZone other) {
-        if (other == null) {
-            return false;
-        }
-        if (zone != null && other.zone != null) {
-            return zone.hasSameRules(other.zone);
-        }
-        return getRawOffset() == other.getRawOffset() &&
+        return other != null &&
+            getRawOffset() == other.getRawOffset() &&
             useDaylightTime() == other.useDaylightTime();
     }
 
@@ -462,9 +428,6 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public Object clone() {
-        if (zone != null) {
-            return wrap((java.util.TimeZone) zone.clone());
-        }
         try {
             TimeZone other = (TimeZone) super.clone();
             other.ID = ID;
@@ -490,40 +453,6 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * The default time zone, or null if not set.
      */
     private static TimeZone  defaultZone = null;
-
-    /**
-     * The java.util.TimeZone that is being wrapped by this object,
-     * or null if none.
-     */
-    private java.util.TimeZone zone;
-
-    /**
-     * Returns the wrapped java.util.TimeZone.
-     */
-    protected final java.util.TimeZone getJDKZone() {
-        return zone;
-    }
-
-    /**
-     * Given a java.util.TimeZone, wrap it in the appropriate adapter
-     * subclass of com.ibm.icu.util.TimeZone and return the adapter.
-     */
-    static TimeZone wrap(java.util.TimeZone tz) {
-        // This is faster than instanceof
-        try {
-            return new SimpleTimeZone((java.util.SimpleTimeZone) tz);
-        } catch (ClassCastException e) {
-            return new JDKTimeZone(tz);
-        }
-    }
-
-    /**
-     * Construct a time zone that wraps the given java.util.TimeZone.
-     */
-    protected TimeZone(java.util.TimeZone tz) {
-        zone = tz;
-        ID = tz.getID();
-    }
 }
 
 //eof

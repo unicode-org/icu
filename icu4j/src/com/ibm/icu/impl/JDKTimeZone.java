@@ -10,6 +10,7 @@
 */
 package com.ibm.icu.impl;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.SimpleTimeZone;
 import java.util.Date;
 
 /**
@@ -28,15 +29,49 @@ import java.util.Date;
 public class JDKTimeZone extends TimeZone {
 
     /**
+     * The java.util.TimeZone wrapped by this object.  Must not be null.
+     */
+    java.util.TimeZone zone;
+
+    /**
+     * Given a java.util.TimeZone, wrap it in the appropriate adapter
+     * subclass of com.ibm.icu.util.TimeZone and return the adapter.
+     */
+    public static TimeZone wrap(java.util.TimeZone tz) {
+        if (tz instanceof TimeZoneAdapter) {
+            return ((TimeZoneAdapter) tz).unwrap();
+        }
+        if (tz instanceof java.util.SimpleTimeZone) {
+            return new SimpleTimeZone((java.util.SimpleTimeZone) tz);
+        }
+        return new JDKTimeZone(tz);
+    }
+
+    /**
+     * Return the java.util.TimeZone wrapped by this object.
+     */
+    public java.util.TimeZone unwrap() {
+        return zone;
+    }
+
+    /**
      * Constructs a JDKTimeZone given a java.util.TimeZone reference
      * which must not be null.
      * @param tz the time zone to wrap
      */
-    public JDKTimeZone(java.util.TimeZone tz) {
-        super(tz);
-        if (tz == null) {
-            throw new NullPointerException();
-        }
+    protected JDKTimeZone(java.util.TimeZone tz) {
+        zone = tz;
+        super.setID(zone.getID());
+    }
+
+    /**
+     * Sets the time zone ID. This does not change any other data in
+     * the time zone object.
+     * @param ID the new time zone ID.
+     */
+    public void setID(String ID) {
+        super.setID(ID);
+        zone.setID(ID);
     }
 
     /**
@@ -44,7 +79,7 @@ public class JDKTimeZone extends TimeZone {
      */
     public int getOffset(int era, int year, int month, int day,
                          int dayOfWeek, int milliseconds) {
-        return getJDKZone().getOffset(era, year, month, day,
+        return unwrap().getOffset(era, year, month, day,
                                       dayOfWeek, milliseconds);
     }
 
@@ -52,35 +87,55 @@ public class JDKTimeZone extends TimeZone {
      * TimeZone API; calls through to wrapped time zone.
      */
     public void setRawOffset(int offsetMillis) {
-        getJDKZone().setRawOffset(offsetMillis);
+        unwrap().setRawOffset(offsetMillis);
     }
 
     /**
      * TimeZone API; calls through to wrapped time zone.
      */
     public int getRawOffset() {
-        return getJDKZone().getRawOffset();
+        return unwrap().getRawOffset();
     }
 
     /**
      * TimeZone API; calls through to wrapped time zone.
      */
     public boolean useDaylightTime() {
-        return getJDKZone().useDaylightTime();
+        return unwrap().useDaylightTime();
     }
 
     /**
      * TimeZone API; calls through to wrapped time zone.
      */
     public boolean inDaylightTime(Date date) {
-        return getJDKZone().inDaylightTime(date);
+        return unwrap().inDaylightTime(date);
+    }
+
+    /**
+     * TimeZone API.
+     */
+    public boolean hasSameRules(TimeZone other) {
+        if (other == null) {
+            return false;
+        }
+        if (other instanceof JDKTimeZone) {
+            return zone.hasSameRules(((JDKTimeZone) other).zone);
+        }
+        return super.hasSameRules(other);
+    }
+
+    /**
+     * Boilerplate API; calls through to wrapped object.
+     */
+    public Object clone() {
+        return new JDKTimeZone((java.util.TimeZone)zone.clone());
     }
 
     /**
      * Boilerplate API; calls through to wrapped object.
      */
     public synchronized int hashCode() {
-        return getJDKZone().hashCode();
+        return unwrap().hashCode();
     }
 
     /**
@@ -89,7 +144,7 @@ public class JDKTimeZone extends TimeZone {
     public boolean equals(Object obj) {
         try {
             return obj != null &&
-                getJDKZone().equals(((JDKTimeZone) obj).getJDKZone());
+                unwrap().equals(((JDKTimeZone) obj).unwrap());
         } catch (ClassCastException e) {
             return false;
         }
@@ -100,7 +155,7 @@ public class JDKTimeZone extends TimeZone {
      * @return  a string representation of this object.
      */
     public String toString() {
-        return "JDKTimeZone: " + getJDKZone().toString();
+        return "JDKTimeZone: " + unwrap().toString();
     }
 }
 
