@@ -797,11 +797,19 @@ public:
    */
   virtual inline UBool isLenient(void) const;
 
+  /**
+   * Override the default rule set to use.  If ruleSetName is null, reset
+   * to the initial default rule set.  If the rule set is not a public rule set name,
+   * U_ILLEGAL_ARGUMENT_ERROR is returned in status.
+   * @param ruleSetName the name of the rule set, or null to reset the initial default.
+   */
+  virtual void setDefaultRuleSet(const UnicodeString& ruleSetName, UErrorCode& status);
+
 private:
   void init(const UnicodeString& rules, UParseError& perror, UErrorCode& status);
   void dispose();
   void stripWhitespace(UnicodeString& src);
-  void setDefaultRuleSet();
+  void initDefaultRuleSet();
   void format(double number, NFRuleSet& ruleSet);
   NFRuleSet* findRuleSet(const UnicodeString& name, UErrorCode& status) const;
 

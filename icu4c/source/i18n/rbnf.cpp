@@ -376,6 +376,42 @@ RuleBasedNumberFormat::setLenient(UBool enabled)
     }
 }
 
+void 
+RuleBasedNumberFormat::setDefaultRuleSet(const UnicodeString& ruleSetName, UErrorCode& status) {
+    if (U_SUCCESS(status)) {
+        if (ruleSetName.isEmpty()) {
+            initDefaultRuleSet();
+        } else if (ruleSetName.startsWith("%%")) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+        } else {
+			NFRuleSet* result = findRuleSet(ruleSetName, status);
+			if (result != NULL) {
+				defaultRuleSet = result;
+			}
+        }
+    }
+}
+
+void 
+RuleBasedNumberFormat::initDefaultRuleSet()
+{
+	NFRuleSet**p = &ruleSets[1];
+	while (*p) {
+		++p;
+	}
+
+	defaultRuleSet = *--p;
+	if (!defaultRuleSet->isPublic()) {
+		while (p != ruleSets) {
+			if ((*--p)->isPublic()) {
+				defaultRuleSet = *p;
+				break;
+			}
+		}
+	}
+}
+
+
 void
 RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErrorCode& status)
 {
@@ -498,18 +534,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
     // rather than the first so that a user can create a new formatter
     // from an existing formatter and change its default behavior just
     // by appending more rule sets to the end)
-    // setDefaultRuleSet
-    {
-        defaultRuleSet = ruleSets[numRuleSets - 1];
-        if (!defaultRuleSet->isPublic()) {
-            for (int i = numRuleSets - 2; i >= 0; --i) {
-                if (ruleSets[i]->isPublic()) {
-                    defaultRuleSet = ruleSets[i];
-                    break;
-                }
-            }
-        }
-    }
+	initDefaultRuleSet();
 
     // finally, we can go back through the temporary descriptions
     // list and finish seting up the substructure (and we throw
