@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RawCollationKey.java,v $ 
- * $Date: 2003/09/22 06:24:20 $ 
- * $Revision: 1.1 $
+ * $Date: 2003/09/23 04:16:47 $ 
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -24,7 +24,8 @@ import com.ibm.icu.util.ByteArrayWrapper;
  * </p>
  * <p>
  * Please refer to the documentation on CollationKey for a detail description
- * on the internal byte representation.
+ * on the internal byte representation. Note the internal byte representation 
+ * is always null-terminated.
  * </p> 
  * <code>
  * Example of use:<br>
@@ -45,7 +46,7 @@ public final class RawCollationKey extends ByteArrayWrapper
     // public constructors --------------------------------------------------
     
     /**
-     * Default constructor, internal byte array is null.
+     * Default constructor, internal byte array is null and its size set to 0.
      * @draft ICU 2.8
      */
     public RawCollationKey() 
@@ -54,7 +55,7 @@ public final class RawCollationKey extends ByteArrayWrapper
 
     /**
      * RawCollationKey created with an empty internal byte array of length 
-     * capacity 
+     * capacity. Size of the internal byte array will be set to 0.
      * @param capacity length of internal byte array
      * @draft ICU 2.8
      */
@@ -64,13 +65,34 @@ public final class RawCollationKey extends ByteArrayWrapper
     }
 
     /**
-     * RawCollationKey created taking bytes as the internal byte array 
-     * @param bytes
+     * RawCollationKey created, adopting bytes as the internal byte array.
+     * Size of the internal byte array will be set to 0.
+     * @param bytes byte array to be adopted by RawCollationKey
      * @draft ICU 2.8
      */
     public RawCollationKey(byte[] bytes) 
     {
         this.bytes = bytes;
+    }
+    
+    /**
+     * RawCollationKey created, adopting bytes as the internal byte array.
+     * Size of the internal byte array will be set to size.
+     * @param bytes byte array to be adopted by RawCollationKey
+     * @param size non-negative designated size of bytes
+     * @exception ArrayIndexOutOfBoundsException thrown if size is &gt; 
+     *            bytes.length
+     * @draft ICU 2.8
+     */
+    public RawCollationKey(byte[] bytes, int size) 
+    {
+        if (size < 0 || (size != 0 && bytes == null) 
+            || (bytes.length < size)) {
+            throw new ArrayIndexOutOfBoundsException(
+                                            "Expected bytes.length >= size");
+        }
+        this.bytes = bytes;
+        this.size = size;
     }
     
     // public method --------------------------------------------------------
