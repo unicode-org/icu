@@ -46,5 +46,5 @@ void ustr_ncat(struct UString *dst, const struct UString *src,
 	       int32_t n, UErrorCode *status);
 
 void ustr_ucat(struct UString *dst, UChar c, UErrorCode *status);
-
+void ustr_uscat(struct UString *dst, const UChar* src,UErrorCode *status);
 #endif
