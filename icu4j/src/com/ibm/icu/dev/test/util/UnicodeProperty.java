@@ -4,19 +4,14 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.ParsePosition;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.regex.Pattern;
-
-import sun.io.UnknownCharacterException;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.SymbolTable;
