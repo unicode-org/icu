@@ -3501,7 +3501,7 @@ static void TestRuleOptions(void) {
     }, 
 
     { "&[last variable]<a &[before 1][last variable]<<<c<<<b ", 
-        {  "c", "b", "\\uD800\\uDF23", "a", "\\u02d0" }, 5
+        {  "c", "b", "\\uD800\\uDD33", "a", "\\u02d0" }, 5
     }, 
 
     { "&[first regular]<a"
@@ -3511,7 +3511,7 @@ static void TestRuleOptions(void) {
 
     { "&[before 1][last regular]<b"
       "&[last regular]<a",
-        { "b", "\\uD801\\uDC25", "a", "\\u4e00" }, 4
+        { "b", "\\uD800\\uDF9D", "a", "\\u4e00" }, 4
     },     
 
     { "&[before 1][first implicit]<b"
