@@ -264,6 +264,32 @@ ucnv_openCCSID (int32_t codepage,
                 UErrorCode * err);
 
 /**
+ * Thread safe cloning operation
+ * @param cnv converter to be cloned
+ * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated. 
+	If buffer is not large enough, new memory will be allocated.
+	Clients can use the U_CNV_SAFECLONE_BUFFERSIZE. This will probably be enough to avoid memory allocations.
+ * @param pBufferSize pointer to size of allocated space. 
+	If *pBufferSize == 0, a sufficient size for use in cloning will 
+	be returned ('pre-flighting')
+	If *pBufferSize is not enough for a stack-based safe clone, 
+	new memory will be allocated.
+ * @param status to indicate whether the operation went on smoothly or there were errors
+    An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were necessary.
+ * @return pointer to the new clone
+ * @draft API 1.8 freeze
+ */
+
+U_CAPI UConverter *
+	ucnv_safeClone(
+		const UConverter 	*cnv, 
+		void 			*stackBuffer,
+		int32_t 		*pBufferSize, 
+		UErrorCode 		*status);
+
+#define U_CNV_SAFECLONE_BUFFERSIZE 512
+
+/**
  * Deletes the unicode converter and releases resources associated
  * with just this instance.
  * Does not free up shared converter tables.
@@ -274,6 +300,9 @@ ucnv_openCCSID (int32_t codepage,
  * @see ucnv_openCCSID
  * @stable
  */
+
+
+
 
 U_CAPI void  U_EXPORT2
 ucnv_close (UConverter * converter);
