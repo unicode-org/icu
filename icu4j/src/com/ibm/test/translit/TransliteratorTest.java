@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/10/31 20:56:40 $
- * $Revision: 1.60 $
+ * $Date: 2001/11/02 23:22:57 $
+ * $Revision: 1.61 $
  *
  *****************************************************************************************
  */
@@ -1914,6 +1914,25 @@ public class TransliteratorTest extends TestFmwk {
     public void TestTitleAccents() {
         Transliterator t = Transliterator.getInstance("Title");
         expect(t, "a\u0300b can't abe", "A\u0300b Can't Abe");
+    }
+
+    /**
+     * Basic test of a locale resource based rule.
+     */
+    public void TestLocaleResource() {
+        String DATA[] = {
+            // id                    from             to
+            "Latin-Greek/UNGEGN",    "b",             "\u03bc\u03c0",
+            "Latin-el",              "b",             "\u03bc\u03c0",
+            "Latin-Greek",           "b",             "\u03B2",
+            "Greek-Latin/UNGEGN",    "\u03bc\u03c0",  "b",
+            "el-Latin",              "\u03bc\u03c0",  "b",
+            "Greek-Latin",           "\u03B2",        "b",
+        };
+        for (int i=0; i<DATA.length; i+=3) {
+            Transliterator t = Transliterator.getInstance(DATA[i]);
+            expect(t, DATA[i+1], DATA[i+2]);
+        }
     }
 
     //======================================================================
