@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UGenReader.java,v $ 
-* $Date: 2001/08/22 22:38:30 $ 
-* $Revision: 1.4 $
+* $Date: 2001/10/23 17:08:13 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -52,8 +52,8 @@ abstract class UGenReader
   private static final byte BIG_ENDIAN_ = 1;
   private static final byte CHAR_SET_ = 0;
   private static final byte CHAR_SIZE_ = 2;
-  private static final byte UNICODE_VERSION_[] = {(byte)0x3, (byte)0x0, 
-                                                 (byte)0x0, (byte)0x0};
+  private static final byte UNICODE_VERSION_[] = {(byte)0x3, (byte)0x1, 
+                                                 (byte)0x1, (byte)0x0};
   
   // constructor =================================================
   

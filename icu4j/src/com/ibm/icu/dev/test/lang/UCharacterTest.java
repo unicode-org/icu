@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2001/10/19 22:16:23 $ 
-* $Revision: 1.15 $
+* $Date: 2001/10/23 17:08:13 $ 
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -36,7 +36,7 @@ public final class UCharacterTest extends TestFmwk
   /**
   * ICU4J data version number
   */
-  private final String VERSION_ = "3.0.0.0";
+  private final String VERSION_ = "3.1.1.0";
   
   // constructor ===================================================
   
@@ -540,15 +540,16 @@ public final class UCharacterTest extends TestFmwk
   */
   public void TestNames()
   {
-    int c[] = {0x0061, 0x0284, 0x3401, 0x7fed, 0xac00, 0xd7a3, 0xff08, 0xffe5};
+    int c[] = {0x0061, 0x0284, 0x3401, 0x7fed, 0xac00, 0xd7a3, 0xff08, 0xffe5,
+               0x23456};
     String name[] = {"LATIN SMALL LETTER A", 
                      "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK", 
                      "CJK UNIFIED IDEOGRAPH-3401", 
                      "CJK UNIFIED IDEOGRAPH-7FED", "HANGUL SYLLABLE GA", 
                      "HANGUL SYLLABLE HIH", "FULLWIDTH LEFT PARENTHESIS",
-                     "FULLWIDTH YEN SIGN"};
+                     "FULLWIDTH YEN SIGN", "CJK UNIFIED IDEOGRAPH-23456"};
     String oldname[] = {"", "LATIN SMALL LETTER DOTLESS J BAR HOOK", "", "",
-                        "", "", "FULLWIDTH OPENING PARENTHESIS", ""};
+                        "", "", "FULLWIDTH OPENING PARENTHESIS", "", ""};
     int size = c.length;
     String str;
     int uc;
@@ -660,7 +661,19 @@ public final class UCharacterTest extends TestFmwk
     if (!foldedDefault.equals(foldedstr)) {
         errln("FAIL: foldCase(\\uabcd, true) should be " + foldedDefault);
     }
+    
+    String str1 = "A\u00df\u00b5\ufb03\uD801\uDC0C\u0131",
+           str2 = "ass\u03bcffi\uD801\uDC34i",
+           str3 = "ass\u03bcffi\uD801\uDC34\u0131";
+    if (!str2.equals(UCharacter.foldCase(str1, true))) {
+       errln("FAIL: foldCase(" + hex(str1) + ") should be " + hex(str2));
+    }
 
+    // alternate handling for dotted I/dotless i (U+0130, U+0131)
+    if (!str3.equals(UCharacter.foldCase(str1, false))) {
+        errln("FAIL: foldCase(" + hex(str1) + " should be " + hex(str3));
+    }
+       
     // ### TODO: add the following tests similar to TestCaseMapping, follow icu's test cases 
 
     // test full string case folding with default option and in the same buffer
