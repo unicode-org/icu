@@ -4261,9 +4261,11 @@ ucol_getBound(const uint8_t       *source,
     if(source[sourceIndex] == UCOL_LEVELTERMINATOR) {
       noOfLevels--;
     }
-  } while (noOfLevels > 0 && source[sourceIndex] != 0);
+  } while (noOfLevels > 0 
+    && (source[sourceIndex] != 0 || sourceIndex == sourceLength));
 
-  if(source[sourceIndex] == 0 && noOfLevels > 0) {
+  if((source[sourceIndex] != 0 || sourceIndex == sourceLength)
+    && noOfLevels > 0) {
     *status = U_SORT_KEY_TOO_SHORT_WARNING;
   }
 
