@@ -250,7 +250,7 @@ NewResourceBundleTest::TestConstruction()
         char testdatapath[256];
         Locale       locale("te", "IN");
 
-        directory=IntlTest::getTestDirectory();
+        directory=u_getDataDirectory();
         uprv_strcpy(testdatapath, directory);
         uprv_strcat(testdatapath, "testdata");
 
@@ -300,7 +300,7 @@ NewResourceBundleTest::TestConstruction()
         char testdatapath[256];
         Locale       locale("te", "IN");
 
-        directory=IntlTest::getTestDirectory();
+        directory=u_getDataDirectory();
         uprv_strcpy(testdatapath, directory);
         uprv_strcat(testdatapath, "testdata");
 
@@ -340,7 +340,7 @@ NewResourceBundleTest::TestIteration()
 
     Locale       *locale=new Locale("te_IN");
 
-    directory=IntlTest::getTestDirectory();
+    directory=u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
     uprv_strcat(testdatapath, "testdata");
 
@@ -444,13 +444,14 @@ NewResourceBundleTest::TestOtherAPI(){
     char testdatapath[256];
     Locale       *locale=new Locale("te_IN");
    
-    directory=IntlTest::getTestDirectory();
+    directory=u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
     uprv_strcat(testdatapath, "testdata");
 
     ResourceBundle  test1(testdatapath, *locale, err);
     if(U_FAILURE(err)){
         errln("Construction failed");
+        return;
     }
 
     logln("Testing getLocale()\n");
@@ -512,7 +513,7 @@ NewResourceBundleTest::testTag(const char* frag,
     const char *directory;
     char testdatapath[256];
 
-    directory=IntlTest::getTestDirectory();
+    directory=u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
     uprv_strcat(testdatapath, "testdata");
 
