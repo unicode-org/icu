@@ -125,6 +125,7 @@ typedef enum UCollationResult UCollationResult;
     *
     **/
 /** Possible collation normalization modes */
+#if 0
 enum UNormalizationMode {
   /** No decomposition/composition */
   UCOL_NO_NORMALIZATION,
@@ -140,6 +141,9 @@ enum UNormalizationMode {
   UCOL_DEFAULT_NORMALIZATION = UCOL_DECOMP_CAN
 };
 typedef enum UNormalizationMode UNormalizationMode;
+#else
+typedef enum UColAttributeValue UNormalizationMode;
+#endif
 
 /** Possible normalization options */
 enum UNormalizationOption {
@@ -173,6 +177,7 @@ typedef enum UNormalizationOption UNormalizationOption;
      * generated from UCollator objects
      **/
 /** Possible collation strengths */
+#if 0
 enum UCollationStrength {
   /** Primary collation strength */
   UCOL_PRIMARY = 0,
@@ -181,11 +186,69 @@ enum UCollationStrength {
   /** Tertiary collation strength */
   UCOL_TERTIARY = 2,
   /** Identical collation strength */
-  UCOL_IDENTICAL = 3,
+  UCOL_IDENTICAL = 7,
   /** Default collation strength */
   UCOL_DEFAULT_STRENGTH = UCOL_TERTIARY
 } ;
 typedef enum UCollationStrength UCollationStrength;
+#else 
+typedef enum UColAttributValue UCollationStrength;
+#endif
+
+enum UColAttribute {
+     UCOL_FRENCH_COLLATION, /* attribute for direction of secondary weights*/
+     UCOL_ALTERNATE_HANDLING, /* attribute for handling variable elements*/
+     UCOL_CASE_FIRST, /* who goes first, lower case or uppercase */
+     UCOL_CASE_LEVEL, /* do we have an extra case level */
+     UCOL_NORMALIZATION_MODE, /* attribute for normalization */
+     UCOL_STRENGTH,         /* attribute for strength */
+     UCOL_ATTRIBUTE_COUNT
+};
+
+typedef enum UColAttribute UColAttribute;
+
+enum UColAttributeValue {
+     /* accepted by most attributes */
+          UCOL_DEFAULT = -1,
+     /* for UCOL_FRENCH_COLLATION & UCOL_CASE_LEVEL*/
+          UCOL_OFF = 0,
+          UCOL_ON = 1,
+     /* for UCOL_ALTERNATE_HANDLING */
+          UCOL_SHIFTED = 0,
+          UCOL_NON_IGNORABLE = 1,
+     /* for UCOL_CASE_FIRST */
+          UCOL_LOWER_FIRST = 0,
+          UCOL_UPPER_FIRST = 1,
+     /* for UCOL_NORMALIZATION_MODE */
+          /** No decomposition/composition */
+          UCOL_NO_NORMALIZATION = 1,
+          /** Canonical decomposition */
+          UCOL_DECOMP_CAN = 2,
+          /** Compatibility decomposition */
+          UCOL_DECOMP_COMPAT = 3,
+          /** Default normalization */
+          UCOL_DEFAULT_NORMALIZATION = UCOL_DECOMP_COMPAT, 
+          /** Canonical decomposition followed by canonical composition */
+          UCOL_DECOMP_CAN_COMP_COMPAT = 4,
+          /** Compatibility decomposition followed by canonical composition */
+          UCOL_DECOMP_COMPAT_COMP_CAN =5,
+     /* for UCOL_STRENGTH */
+            /** Primary collation strength */
+            UCOL_PRIMARY = 0,
+            /** Secondary collation strength */
+            UCOL_SECONDARY = 1,
+            /** Tertiary collation strength */
+            UCOL_TERTIARY = 2,
+            UCOL_DEFAULT_STRENGTH = UCOL_TERTIARY,
+            /** Quaternary collation strength */
+            UCOL_QUATERNARY=3,
+            /** Identical collation strength */
+            UCOL_IDENTICAL=7,
+            /** Default collation strength */
+	    UCOL_ATTRIBUTE_VALUE_COUNT
+};
+
+typedef enum UColAttributeValue UColAttributeValue;
 
 /**
  * @name Unicode normalization API
@@ -786,61 +849,6 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 
 
 /* Following are the new APIs for 1.7. They are all draft and most are not even implemented */
-
-enum UColAttribute {
-     UCOL_FRENCH_COLLATION, /* attribute for direction of secondary weights*/
-     UCOL_ALTERNATE_HANDLING, /* attribute for handling variable elements*/
-     UCOL_CASE_FIRST, /* who goes first, lower case or uppercase */
-     UCOL_CASE_LEVEL, /* do we have an extra case level */
-     UCOL_NORMALIZATION_MODE, /* attribute for normalization */
-     UCOL_STRENGTH,         /* attribute for strength */
-     UCOL_ATTRIBUTE_COUNT
-};
-
-typedef enum UColAttribute UColAttribute;
-
-enum UColAttributeValue {
-     /* accepted by most attributes */
-          UCOL_ATTR_DEFAULT,
-     /* for UCOL_FRENCH_COLLATION & UCOL_CASE_LEVEL*/
-          UCOL_ATTR_ON,
-          UCOL_ATTR_OFF,
-     /* for UCOL_ALTERNATE_HANDLING */
-          UCOL_ATTR_SHIFTED,
-          UCOL_ATTR_NON_IGNORABLE,
-     /* for UCOL_CASE_FIRST */
-          UCOL_ATTR_LOWER_FIRST,
-          UCOL_ATTR_UPPER_FIRST,
-     /* for UCOL_NORMALIZATION_MODE */
-          /** No decomposition/composition */
-          UCOL_ATTR_NO_NORMALIZATION,
-          /** Canonical decomposition */
-          UCOL_ATTR_DECOMP_CAN,
-          /** Compatibility decomposition */
-          UCOL_ATTR_DECOMP_COMPAT,
-          /** Default normalization */
-          UCOL_ATTR_DEFAULT_NORMALIZATION = UCOL_ATTR_DECOMP_COMPAT, 
-          /** Canonical decomposition followed by canonical composition */
-          UCOL_ATTR_DECOMP_CAN_COMP_COMPAT,
-          /** Compatibility decomposition followed by canonical composition */
-          UCOL_ATTR_DECOMP_COMPAT_COMP_CAN,
-     /* for UCOL_STRENGTH */
-            /** Primary collation strength */
-            UCOL_ATTR_PRIMARY,
-            /** Secondary collation strength */
-            UCOL_ATTR_SECONDARY,
-            /** Tertiary collation strength */
-            UCOL_ATTR_TERTIARY,
-            UCOL_ATTR_DEFAULT_STRENGTH = UCOL_ATTR_TERTIARY,
-            /** Quaternary collation strength */
-            UCOL_ATTR_QUATERNARY,
-            /** Identical collation strength */
-            UCOL_ATTR_IDENTICAL,
-            /** Default collation strength */
-	    UCOL_ATTRIBUTE_VALUE_COUNT
-};
-
-typedef enum UColAttributeValue UColAttributeValue;
 
 /**
  * Universal attribute setter

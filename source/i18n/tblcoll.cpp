@@ -2902,11 +2902,11 @@ RuleBasedCollator::cloneRuleData(int32_t &length, UErrorCode &status)
 void RuleBasedCollator::setAttribute(UColAttribute attr, UColAttributeValue value, UErrorCode &status) {
 	switch(attr) {
 	case UCOL_FRENCH_COLLATION: /* attribute for direction of secondary weights*/
-		if(value == UCOL_ATTR_ON) {
+		if(value == UCOL_ON) {
 			data->isFrenchSec = TRUE;
-		} else if (value == UCOL_ATTR_OFF) {
+		} else if (value == UCOL_OFF) {
 			data->isFrenchSec = FALSE;
-		} else if (value == UCOL_ATTR_DEFAULT) {
+		} else if (value == UCOL_DEFAULT) {
 		} else {
 			status = U_ILLEGAL_ARGUMENT_ERROR  ;
 		}
@@ -2937,9 +2937,9 @@ UColAttributeValue RuleBasedCollator::getAttribute(UColAttribute attr, UErrorCod
 	switch(attr) {
 	case UCOL_FRENCH_COLLATION: /* attribute for direction of secondary weights*/
 		if(data->isFrenchSec == TRUE) {
-			return UCOL_ATTR_ON;
+			return UCOL_ON;
 		} else {
-			return UCOL_ATTR_OFF;
+			return UCOL_OFF;
 		}
 		break;
     case UCOL_ALTERNATE_HANDLING: /* attribute for handling variable elements*/
@@ -2962,7 +2962,7 @@ UColAttributeValue RuleBasedCollator::getAttribute(UColAttribute attr, UErrorCod
 		status = U_ILLEGAL_ARGUMENT_ERROR;
 		break;
 	}
-	return UCOL_ATTR_DEFAULT;
+	return UCOL_DEFAULT;
 }
 
 Collator* RuleBasedCollator::safeClone(void) {
