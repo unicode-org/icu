@@ -2428,7 +2428,7 @@ ucol_getStrength(const UCollator *coll)
 /* there are new APIs and some compatibility APIs                           */
 /****************************************************************************/
 
-U_CAPI UCollator *ucol_safeClone(const UCollator *coll, void *stackBuffer, uint32_t bufferSize, UErrorCode *status) {
+U_CAPI UCollator *ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, UErrorCode *status) {
 	/*return (UCollatorOld *)(((RuleBasedCollator *)coll)->safeClone());*/
   return 0;
 }
