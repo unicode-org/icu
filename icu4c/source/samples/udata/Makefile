@@ -1,5 +1,5 @@
 # Copyright (c) 2000 IBM, Inc. and others
-# udata sample code $Revision: 1.2 $
+# udata sample code $Revision: 1.3 $
 
 
 # Usage:
@@ -9,7 +9,7 @@
 #  - do 'make install' of icu 
 #
 #  - change ICU_DEFAULT_PREFIX line to point to the $(prefix) that 
-#    was used (will look for $(prefix)/share/icu/Makefile.inc )
+#    was used (will look for $(prefix)/lib/icu/Makefile.inc )
 #      OR 
 #   set the variable ICU_PREFIX to point at $(prefix)
 #  
@@ -21,12 +21,12 @@
 #  - do 'make' in this directory
 
 ICU_DEFAULT_PREFIX=/home/srl/II
-ICU_DEFAULT_PATH=~/icu
+ICU_DEFAULT_PATH=$(HOME)/icu
 
 ifeq ($(strip $(ICU_PREFIX)),)
-  ICU_INC=$(ICU_DEFAULT_PREFIX)/share/icu/Makefile.inc
+  ICU_INC=$(ICU_DEFAULT_PREFIX)/lib/icu/Makefile.inc
 else
-  ICU_INC=$(ICU_PREFIX)/share/icu/Makefile.inc
+  ICU_INC=$(ICU_PREFIX)/lib/icu/Makefile.inc
 endif
 
 
@@ -49,16 +49,20 @@ CLEANFILES=*~ $(TARGET).out
 
 DEPS=$(OBJECTS:.o=.d)
 
-all: $(ICU_PATH)/source/tools/toolutil/uoptions.h $(TARGET1) $(TARGET2)
+all: $(TARGET1) $(TARGET2)
+
+writer.o: $(ICU_PATH)/source/tools/toolutil/uoptions.h
 
 $(ICU_PATH)/source/tools/toolutil/uoptions.h:
-	@echo "Please read the directions at the top of this file (Makefile)"
-	@echo "Can't open $@ - check ICU_PATH"
+	@echo
+	@echo "*** Please read the directions at the top of this file (Makefile)"
+	@echo "*** Can't open $@ - check ICU_PATH"
+	@echo
 	@false
 
 # Only the writer needs these, actually.
 CPPFLAGS += -I$(ICU_PATH)/source/tools/toolutil
-LDFLAGS += -L$(ICU_PATH)/source/tools/toolutil -licu-toolutil
+#LDFLAGS += -L$(ICU_PATH)/source/tools/toolutil -licu-toolutil
 
 
 .PHONY: all clean distclean check report
@@ -78,8 +82,8 @@ $(TARGET2): $(OBJECTS2)
 
 # Make check: simply runs the sample, logged to a file
 check: $(TARGET1) $(TARGET2)
-	$(TARGET1) | tee $(TARGET1).out
-	$(TARGET2) | tee $(TARGET2).out
+	$(INVOKE) ./$(TARGET2) | tee $(TARGET2).out
+	$(INVOKE) ./$(TARGET1) | tee $(TARGET1).out
 
 $(ICU_INC):
 	@echo "Please read the directions at the top of this file (Makefile)"

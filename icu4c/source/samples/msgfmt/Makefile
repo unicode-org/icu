@@ -7,7 +7,7 @@
 #  - do 'make install' of icu 
 #
 #  - change the following line to point to the $(prefix) that 
-#    was used (will look for $(prefix)/lib/icu/Makefile.inc )
+#    was used (will look for $(prefix)/share/icu/Makefile.inc )
 #      OR 
 #   set the variable ICU_PREFIX to point at $(prefix)
 #  
@@ -50,7 +50,7 @@ $(TARGET): $(OBJECTS)
 
 # Make check: simply runs the sample, logged to a file
 check: $(TARGET)
-	$(TARGET) | tee $(TARGET).out
+	$(INVOKE) ./$(TARGET) | tee $(TARGET).out
 
 # Make report: creates a 'report file' with both source and sample run
 report: $(TARGET).report
@@ -59,7 +59,7 @@ $(TARGET).report: check $(TARGET).cpp
 	more $(TARGET).cpp $(TARGET).out > $@
 
 $(ICU_INC):
-	@echo "Please read the directions at the top of this file (Makefile)"
+	@echo "Please read the directions at the top of this file (Makefile) and the README"
 	@echo "Can't open $(ICU_INC)"
 	@false
 

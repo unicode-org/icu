@@ -1,32 +1,31 @@
-numfmt: a sample program which displays number formatting in C and C++
+udata: Low level ICU data
 
 This sample demonstrates
-         Formatting a number
-         Outputting text in the default codepage to the console
+    Using the low level ICU data handling interfaces (udata) to create 
+ and later access user data.
          
 Files:
-    main.cpp                   Main source file in C++
-    capi.c                     C version 
-    util.cpp                   formatted output convenience implementation
-    util.h                     formatted output convenience header
-    numfmt.dsw                 Windows MSVC workspace.  Double-click this to get started.
-    numfmt.dsp                 Windows MSVC project file
+    writer.c       C source for Writer application, will generate data file to be read by Reader.
+    reader.c       C source for Reader application, will read file created by Writer
+    udata.dsw      Windows MSVC workspace.  Double-click this to get started.
+    udata.dsp      Windows MSVC project file
 
-To Build on Windows
+To Build udata on Windows
     1.  Install and build ICU
-    2.  In MSVC, open the workspace file icu\samples\numfmt\numfmt.dsw
+    2.  In MSVC, open the workspace file icu\samples\udata\udata.dsw
     3.  Choose a Debug or Release build.
     4.  Build.
-	
+
 To Run on Windows
     1.  Start a command shell window
     2.  Add ICU's bin directory to the path, e.g.
             set PATH=c:\icu\bin;%PATH%
         (Use the path to where ever ICU is on your system.)
-    3.  cd into the numfmt directory, e.g.
-            cd c:\icu\source\samples\numfmt\debug
+    3.  cd into the udata directory, e.g.
+            cd c:\icu\source\samples\udata\debug
     4.  Run it
-            numfmt
+            writer
+            reader
 
 To Build on Unixes
     1.  Build ICU.  
@@ -41,17 +40,18 @@ To Build on Unixes
            gmake install
  
     3.  Compile
-           cd <icu directory>/source/samples/numfmt
-           gmake ICU_PREFIX=<icu install directory)
+           You will need to set ICU_PATH to the location of your ICU source tree, for example ICU_PATH=/home/srl/icu   (containing source, etc.)
+           cd <icu directory>/source/samples/udata
+           gmake ICU_PATH=<icu source directory> ICU_PREFIX=<icu install directory)
            
  To Run on Unixes
-           cd <icu directory>/source/samples/numfmt
-           
+           cd <icu directory>/source/samples/udata
            gmake ICU_PREFIX=<icu install directory>  check
                -or- 
 
            export LD_LIBRARY_PATH=<icu install directory>/lib:.:$LD_LIBRARY_PATH
-           numfmt
+           writer
+           reader
            
  Note:  The name of the LD_LIBRARY_PATH variable is different on some systems.
         If in doubt, run the sample using "gmake check", and note the name of

@@ -1,4 +1,5 @@
 This is an exercise for the ICU Workshop (September 2000).
+  http://oss.software.ibm.com/icu/docs/workshop_2000/agenda.html
 
   Day 2: September 12th 2000
   Pre-requisite:
@@ -25,19 +26,14 @@ This exercise was developed and tested on ICU release 1.6.0, Win32,
 Microsoft Visual C++ 6.0.  It should work on other ICU releases and
 other platforms as well.
 
-To install:  Create a folder "translit" at:
+ MSVC:
+   Open the file "translit.dsw" in Microsoft Visual C++.
 
-  <icu>/source/samples/translit
-
-Within it, place the files:
-
-  translit.dsp
-  translit.dsw
-  main.cpp
-  util.cpp
-  util.h
-
-Open the file "translit.dsw" in Microsoft Visual C++.
+ Unix:
+   - Build and install ICU with a prefix, for example '--prefix=/home/srl/ICU'
+   - Set the variable  ICU_PREFIX=/home/srl/ICU and use GNU make in 
+        this directory.
+   - You may use 'make check' to invoke this sample.
 
 
 PROBLEMS

@@ -1,7 +1,9 @@
 This is an exercise for the ICU Workshop (September 2000).
 
+  http://oss.software.ibm.com/icu/docs/workshop_2000/agenda.html
+
   Day 2: September 12th 2000
-  Pre-requsit:
+  Pre-requisites:
   1. All the hardware and software requirements from Day 1.
   2. Attended or fully understand Day 1 material.
   3. Read through the ICU user's guide at
@@ -21,24 +23,19 @@ This is an exercise for the ICU Workshop (September 2000).
 INSTRUCTIONS
 ------------
 
-This exercise was developed and tested on ICU release 1.6.0, Win32,
+
+This exercise was first developed and tested on ICU release 1.6.0, Win32,
 Microsoft Visual C++ 6.0.  It should work on other ICU releases and
 other platforms as well.
 
-To install:  Create a folder "datefmt" at:
+ MSVC:
+   Open the file "msgfmt.dsw" in Microsoft Visual C++.
 
-  <icu>/source/samples/msgfmt
-
-Within it, place the files:
-
-  msgfmt.dsp
-  msgfmt.dsw
-  main.cpp
-  util.cpp
-  util.h
-
-Open the file "msgfmt.dsw" in Microsoft Visual C++.
-
+ Unix:
+   - Build and install ICU with a prefix, for example '--prefix=/home/srl/ICU'
+   - Set the variable  ICU_PREFIX=/home/srl/ICU and use GNU make in 
+        this directory.
+   - You may use 'make check' to invoke this sample.
 
 PROBLEMS
 --------

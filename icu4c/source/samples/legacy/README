@@ -14,7 +14,10 @@ In order to make the compilation unit use old version of ICU, you have to do a c
 Building and running of the example:
 
 Linux:
-To make it work, you should build and install both the current ICU and ICU 1.8.1. Put both data libraries to wherever ICU_DATA points (usually it is $(prefix)/share/icu/$(icu_version)/). Copy libicuuc.so.18* and libicui18n.so.18* to $(prefix)/lib directory, together with current libraries). 
+To make it work, you should build and install both the current ICU and ICU 1.8.1. Put both data libraries to wherever ICU_DATA points (usually it is $(prefix)/share/icu/$(icu_version)/). If data libraries are used, then check for $(prefix)/lib/icu/1.8.1 which should contain libicudata.so and libicudt18*.so
+2. Copy libicuuc.so.18* and libicui18n.so.18* to $(prefix)/lib directory, together with current libraries). 
+3. Should work on other Unixes.
+
 
 Change $ICU_PREFIX to point to the current installation, and $ICU_LEGACY to point to 1.8.1 installation. $ICU_LEGACY is needed solely to access the 1.8.1 include directory through $LEGACY_INCLUDE variable, so if you want to move the 1.8.1. include directory, you can set $LEGACY_INCLUDE directly to that directory.
 
@@ -34,3 +37,4 @@ Sample won't link: The path for 1.8.1. libraries is broken. Edit it so that it  
 Linker says: "Undefined symbol u_getVersion()" (or something similar): path to 1.8.1. libraries is bad.
 Linker says: "Undefined symbol u_getVersion()_X_Y" (or something similar): path to current libraries is bad.
 Legacy crashes horribly: Sorry, didn't put any error checking. If legacy crashes that's most probably because it cannot find the data libraries. You can see which data library is not found by the part of the program that is running. Make sure program can find tha data library either by putting it where ever ICU_DATA points to OR by putting the DLL version of the data library somewhere on your PATH.
+

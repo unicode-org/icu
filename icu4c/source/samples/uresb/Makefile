@@ -1,5 +1,5 @@
 # Copyright (c) 2000 IBM, Inc. and others
-# conversion sample code $Revision: 1.4 $
+# conversion sample code $Revision: 1.5 $
 
 
 # Usage:
@@ -20,8 +20,8 @@
 #
 #  - do 'make' in this directory
 
-ICU_DEFAULT_PREFIX=/home/weiv/build/workshop
-ICU_DEFAULT_PATH=/home/weiv/dev/icu
+ICU_DEFAULT_PREFIX=ICU_PREFIX
+ICU_DEFAULT_PATH=../../..
 
 ifeq ($(strip $(ICU_PREFIX)),)
   ICU_INC=$(ICU_DEFAULT_PREFIX)/lib/icu/Makefile.inc
@@ -50,7 +50,9 @@ CLEANFILES=*~ $(TARGET).out
 
 DEPS=$(OBJECTS:.o=.d)
 
-all: $(ICU_PATH)/source/tools/toolutil/uoptions.h $(GENRB) $(RESOURCES) $(TARGET) 
+all: $(GENRB) $(RESOURCES) $(TARGET) 
+
+uresb.o:  $(ICU_PATH)/source/tools/toolutil/uoptions.h
 
 $(ICU_PATH)/source/tools/toolutil/uoptions.h:
 	@echo "Please read the directions at the top of this file (Makefile)"
@@ -74,15 +76,15 @@ distclean clean:
 
 ## resources
 root.res : root.txt
-	#@echo "generating $@"
+	@echo "generating $@"
 	$(GENRB) $(GENRBOPT) $?
 
 en.res : en.txt
-	#@echo "generating $@"
+	@echo "generating $@"
 	$(GENRB) $(GENRBOPT) $?
 
 sr.res : sr.txt
-	#@echo "generating $@"
+	@echo "generating $@"
 	$(GENRB) $(GENRBOPT) -e cp1251 $?
 
 
@@ -93,8 +95,8 @@ $(TARGET): $(OBJECTS)
 	$(LINK.cc) -o $@ $^ $(ICULIBS)
 
 # Make check: simply runs the sample, logged to a file
-check: $(TARGET)
-	$(TARGET) | tee $(TARGET).out
+check: $(TARGET) $(RESOURCES)
+	$(INVOKE) ./$(TARGET) en | tee $(TARGET).out
 
 # Make report: creates a 'report file' with both source and sample run
 report: $(TARGET).report
