@@ -197,6 +197,11 @@ void TestConvert()
         }
     };
 
+    UConverterFromUCallback oldFromUAction;
+    UConverterToUCallback oldToUAction;
+    void* oldFromUContext = NULL;
+    void* oldToUContext = NULL;
+
     /* flush the converter cache to get a consistent state before the flushing is tested */
     ucnv_flushCache();
 
@@ -465,7 +470,7 @@ void TestConvert()
     MIA1 = ucnv_getFromUCallBack(myConverter);
             
     log_verbose("\n---Testing ucnv_setFromUCallBack...\n");
-    ucnv_setFromUCallBack(myConverter,otherUnicodeAction(MIA1), &err);
+    ucnv_setFromUCallBack(myConverter, otherUnicodeAction(MIA1), NULL, oldFromUAction, &oldFromUContext, err);
     if (U_FAILURE(err)) 
     { log_err("FAILURE! %s\n", myErrorName(err)); }
     
@@ -475,7 +480,7 @@ void TestConvert()
         log_verbose("get From UCallBack ok\n");
 
     log_verbose("\n---Testing getFromUCallBack Roundtrip...\n");
-    ucnv_setFromUCallBack(myConverter,MIA1, &err);
+    ucnv_setFromUCallBack(myConverter,MIA1, NULL, oldFromUAction, &oldFromUContext, &err);
     if (U_FAILURE(err)) 
     { log_err("FAILURE! %s\n", myErrorName(err));  }
     
@@ -490,7 +495,7 @@ void TestConvert()
     MIA2 = ucnv_getToUCallBack(myConverter);
     
     log_verbose("\n---Testing setTo UCallBack...\n");
-    ucnv_setToUCallBack(myConverter,otherCharAction(MIA2),&err);
+    ucnv_setToUCallBack(myConverter,otherCharAction(MIA2), NULL, oldToUAction, &oldToUContext, &err);
     if (U_FAILURE(err)) 
     { log_err("FAILURE! %s\n", myErrorName(err));}
 
@@ -500,7 +505,7 @@ void TestConvert()
         log_verbose("To UCallBack ok\n");
     
     log_verbose("\n---Testing setTo UCallBack Roundtrip...\n");
-    ucnv_setToUCallBack(myConverter,MIA2, &err);
+    ucnv_setToUCallBack(myConverter,MIA2, NULL, oldToUAction, &oldToUContext, &err);
     if (U_FAILURE(err)) 
     { log_err("FAILURE! %s\n", myErrorName(err));  }
     

@@ -21,6 +21,7 @@
 #define UCNV_IMP_H
 
 #include "unicode/utypes.h"
+#include "ucnv_bld.h"
 
 #ifndef UHASH_H
 typedef struct _UHashtable UHashtable;

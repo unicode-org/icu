@@ -10,12 +10,16 @@
 *
 *   created on: 2000feb07
 *   created by: Markus W. Scherer
+*   Change history:
+*
+*   06/29/2000  helena      Major rewrite of the callback APIs.
 */
 
 #include "unicode/utypes.h"
 #include "ucmp16.h"
 #include "ucmp8.h"
-#include "unicode/ucnv_bld.h"
+#include "unicode/ucnv_err.h"
+#include "ucnv_bld.h"
 #include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
 
@@ -68,13 +72,15 @@ static void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
                                          UBool flush,
                                          UErrorCode * err)
 {
-  const UChar *mySource = *source;
-  unsigned char *myTarget = (unsigned char *) *target;
+  const UChar *mySource = *source, *srcTemp;
+  unsigned char *myTarget = (unsigned char *) *target, *tgtTemp;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - (char *) myTarget;
   int32_t sourceLength = sourceLimit - mySource;
+  UConverterFromUnicodeArgs args;
 
+  args.sourceStart = *source;
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
     {
@@ -93,19 +99,29 @@ static void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
               _this->invalidUCharLength = 1;
 
 /* Needed explicit cast for myTarget on MVS to make compiler happy - JJD */
-              FromU_CALLBACK_MACRO(_this,
-                                   (char *)myTarget, 
-                                   myTargetIndex,
-                                   targetLimit, 
-                                   mySource,
-                                   mySourceIndex, 
-                                   sourceLimit,
-                                   offsets, 
-                                   flush, 
-                                   err);
+              srcTemp = mySource + mySourceIndex;
+              tgtTemp = myTarget + myTargetIndex;
+              args.converter = _this;
+              args.pTarget = (char**)&tgtTemp;
+              args.targetLimit = targetLimit;
+              args.pSource = &srcTemp;
+              args.sourceLimit = sourceLimit;
+              args.flush = flush;
+              args.offsets = offsets+myTargetIndex;
+              args.size = sizeof(args);
+
+              FromU_CALLBACK_MACRO(args.converter->fromUContext,
+                                 args,
+                                 srcTemp,
+                                 1,
+                                 (UChar32) (*srcTemp),
+                                 UCNV_UNASSIGNED,
+                                 err);
 
               if (U_FAILURE (*err)) break;
               _this->invalidUCharLength = 0;
+              myTargetIndex = (unsigned char *) (*(args.pTarget)) - myTarget;
+              mySourceIndex = *(args.pSource) - mySource;
             }
         }
       else

@@ -23,7 +23,6 @@
 #include "uhash.h"
 #include "ucmp16.h"
 #include "ucmp8.h"
-#include "unicode/ucnv_bld.h"
 #include "ucnv_io.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_cnv.h"
@@ -33,6 +32,7 @@
 #include "cstring.h"
 #include "unicode/ustring.h"
 #include "unicode/uloc.h"
+#include "ucnv_bld.h"
 
 #define CHUNK_SIZE 5*1024
 
@@ -394,32 +394,37 @@ UConverterFromUCallback  ucnv_getFromUCallBack (const UConverter * converter)
   return converter->fromUCharErrorBehaviour;
 }
 
-UConverterToUCallback   ucnv_setToUCallBack (UConverter * converter,
-					UConverterToUCallback action,
+void   ucnv_setToUCallBack (UConverter * converter,
+					UConverterToUCallback newAction,
+					void* newContext,
+					UConverterToUCallback oldAction,
+					void** oldContext,
 					UErrorCode * err)
 {
   UConverterToUCallback myReturn = NULL;
 
   if (U_FAILURE (*err))
-    return NULL;
-  myReturn = converter->fromCharErrorBehaviour;
-  converter->fromCharErrorBehaviour = action;
-
-  return myReturn;
+    return;
+  oldAction = converter->fromCharErrorBehaviour;
+  converter->fromCharErrorBehaviour = newAction;
+  oldContext = converter->toUContext;
+  converter->toUContext = newContext;
 }
 
-UConverterFromUCallback   ucnv_setFromUCallBack (UConverter * converter,
-					    UConverterFromUCallback action,
-					    UErrorCode * err)
+void   ucnv_setFromUCallBack (UConverter * converter,
+					UConverterFromUCallback newAction,
+					void* newContext,
+					UConverterFromUCallback oldAction,
+					void** oldContext,
+					UErrorCode * err)
 {
-  UConverterFromUCallback myReturn = NULL;
   
   if (U_FAILURE (*err))
-    return NULL;
-  myReturn = converter->fromUCharErrorBehaviour;
-  converter->fromUCharErrorBehaviour = action;
-
-  return myReturn;
+    return;
+  oldAction = converter->fromUCharErrorBehaviour;
+  converter->fromUCharErrorBehaviour = newAction;
+  oldContext = converter->fromUContext;
+  converter->fromUContext = newContext;
 }
 void   ucnv_fromUnicode (UConverter * _this,
 			 char **target,

@@ -10,10 +10,12 @@
 *   Implements all the low level conversion functions
 *   T_UnicodeConverter_{to,from}Unicode_$ConversionType
 *
+*   Change history:
+*
+*   06/29/2000  helena      Major rewrite of the callback APIs.
 */
 
 #include "unicode/utypes.h"
-#include "unicode/ucnv_bld.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_cnv.h"
 #include "unicode/ucnv.h"

@@ -10,12 +10,17 @@
 *
 *   created on: 2000feb03
 *   created by: Markus W. Scherer
+*
+*   Change history:
+*
+*   06/29/2000  helena      Major rewrite of the callback APIs.
 */
 
 #include "unicode/utypes.h"
 #include "ucmp16.h"
 #include "ucmp8.h"
-#include "unicode/ucnv_bld.h"
+#include "unicode/ucnv_err.h"
+#include "ucnv_bld.h"
 #include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
 
@@ -65,8 +70,8 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
                                   UBool flush,
                                   UErrorCode * err)
 {
-  const unsigned char *mySource = (unsigned char *) *source;
-  UChar *myTarget = *target;
+  const unsigned char *mySource = (unsigned char *) *source, *srcTemp;
+  UChar *myTarget = *target, *tgtTemp;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
@@ -75,7 +80,9 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
            ch2 =0 ,
            i =0;            /* Index into the current # of bytes consumed in the current sequence */
   uint32_t inBytes = 0;  /* Total number of bytes in the current UTF8 sequence */
+  UConverterToUnicodeArgs args;
   
+  args.sourceStart = *source;
   if (_this->toUnicodeStatus)
     {
       i = _this->invalidCharLength;   /* restore # of bytes consumed */
@@ -170,18 +177,26 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
                   printf("inbytes %d\n, _this->invalidCharLength = %d,\n mySource[mySourceIndex]=%X\n", inBytes, _this->invalidCharLength, mySource[mySourceIndex]);
 #endif
 /* Needed explicit cast for mySource on MVS to make compiler happy - JJD */
-                  ToU_CALLBACK_MACRO(_this,
-                                     myTarget,
-                                     myTargetIndex, 
-                                     targetLimit,
-                                     (const char *)mySource, 
-                                     mySourceIndex,
-                                     sourceLimit,
-                                     offsets,
-                                     flush,
+                  args.converter = _this;
+                  srcTemp = mySource + mySourceIndex;
+                  tgtTemp = myTarget + myTargetIndex;
+                  args.pTarget = &tgtTemp;
+                  args.targetLimit = targetLimit;
+                  args.pSource = &srcTemp;
+                  args.sourceLimit = sourceLimit;
+                  args.flush = flush;
+                  args.offsets = offsets+myTargetIndex;
+                  args.size = sizeof(args);
+                  ToU_CALLBACK_MACRO(_this->toUContext,
+                                     args,
+                                     srcTemp,
+                                     1, 
+                                     UCNV_UNASSIGNED,
                                      err);
                   if (U_FAILURE (*err))   break;
                   _this->invalidCharLength = 0;
+                  myTargetIndex = *(args.pTarget) - myTarget;
+                  mySourceIndex = *(args.pSource) - mySource;
                 }
             }
         }
@@ -208,15 +223,17 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
                                                 UBool flush,
                                                 UErrorCode * err)
 {
-  const unsigned char *mySource = (unsigned char *) *source;
-  UChar *myTarget = *target;
+  const unsigned char *mySource = (unsigned char *) *source, *srcTemp;
+  UChar *myTarget = *target, *tgtTemp;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
   int32_t sourceLength = sourceLimit - (char *) mySource;
   uint32_t ch = 0, ch2 = 0, i = 0;
   uint32_t inBytes = 0;
+  UConverterToUnicodeArgs args;
 
+  args.sourceStart = *source;
   if (_this->toUnicodeStatus)
     {
       i = _this->invalidCharLength;
@@ -306,21 +323,30 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
                   *err = U_ILLEGAL_CHAR_FOUND;
                   _this->invalidCharLength = (int8_t)i;
                   
+                  args.converter = _this;
+                  srcTemp = mySource + mySourceIndex;
+                  tgtTemp = myTarget + myTargetIndex;
+                  args.pTarget = &tgtTemp;
+                  args.targetLimit = targetLimit;
+                  args.pSource = &srcTemp;
+                  args.sourceLimit = sourceLimit;
+                  args.flush = flush;
+                  args.offsets = offsets+myTargetIndex;
+                  args.size = sizeof(args);
+                  /* To do HSYS: more smarts here, including offsets */
+                  ToU_CALLBACK_MACRO(_this->toUContext,
+                                     args,
+                                     srcTemp,
+                                     1, 
+                                     UCNV_UNASSIGNED,
+                                     err);
 /* Needed explicit cast for mySource on MVS to make compiler happy - JJD */
-                  ToU_CALLBACK_OFFSETS_LOGIC_MACRO(_this,
-                                                   myTarget,
-                                                   myTargetIndex, 
-                                                   targetLimit,
-                                                   (const char *)mySource, 
-                                                   mySourceIndex,
-                                                   sourceLimit,
-                                                   offsets,
-                                                   flush,
-                                                   err);
 
                   
                   if (U_FAILURE (*err))   break;
                   _this->invalidCharLength = 0;
+                  myTargetIndex = *(args.pTarget) - myTarget;
+                  mySourceIndex = *(args.pSource) - mySource;
                 }
             }
         }
@@ -574,8 +600,10 @@ UChar32 T_UConverter_getNextUChar_UTF8(UConverter* converter,
   uint8_t myByte;
   UChar32 ch;
   int8_t isLegalSequence = 1;
+  UConverterToUnicodeArgs args;
 
   /*Input boundary check*/
+  args.sourceStart = *source;
   if ((*source) >= sourceLimit) 
     {
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
@@ -655,14 +683,21 @@ UChar32 T_UConverter_getNextUChar_UTF8(UConverter* converter,
     
     /*It is very likely that the ErrorFunctor will write to the
      *internal buffers */
-    converter->fromCharErrorBehaviour(converter,
-                                      &myUCharPtr,
-                                      myUCharPtr + 1,
-                                      &sourceFinal,
-                                      sourceLimit,
-                                      NULL,
-                                      TRUE,
-                                      err);
+    args.converter = converter;
+    args.pTarget = &myUCharPtr;
+    args.targetLimit = myUCharPtr + 1;
+    args.pSource = &sourceFinal;
+    args.sourceLimit = sourceLimit;
+    args.flush = TRUE;
+    args.offsets = NULL;  
+    args.size = sizeof(args);
+    converter->fromCharErrorBehaviour(converter->toUContext,
+                                    &args,
+                                    sourceFinal,
+                                    1,
+                                    UCNV_UNASSIGNED,
+                                    err);
+
     
     /*makes the internal caching transparent to the user*/
     if (*err == U_INDEX_OUTOFBOUNDS_ERROR) *err = U_ZERO_ERROR;
