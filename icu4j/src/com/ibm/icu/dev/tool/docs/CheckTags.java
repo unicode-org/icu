@@ -254,7 +254,13 @@ public class CheckTags {
     }
 
     void doDoc(ProgramElementDoc doc) {
-        if (doc != null && (doc.isPublic() || doc.isProtected())) {
+        if (doc != null && (doc.isPublic() || doc.isProtected())
+            && !(doc instanceof ConstructorDoc && ((ConstructorDoc)doc).isSynthetic())) {
+
+            // unfortunately, in JDK 1.4.1 MemberDoc.isSynthetic is not properly implemented for 
+            // synthetic constructors.  So you'll have to live with spurious errors or 'implement'
+            // the synthetic constructors...
+
             boolean isClass = doc.isClass();
             String header = "--- " + (isClass ? doc.qualifiedName() : doc.name());
             if (doc instanceof ExecutableMemberDoc) {
