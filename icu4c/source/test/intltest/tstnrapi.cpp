@@ -161,3 +161,4 @@ BasicNormalizerTest::TestNormalizerAPI() {
         errln("error in Normalizer::decompose(self)");
     }
 }
+

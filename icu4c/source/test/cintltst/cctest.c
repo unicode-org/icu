@@ -9,6 +9,7 @@
 
 #include "cintltst.h"
 #include "ustr_imp.h"
+void TestFlushCache(void); /* keep gcc happy */
 
 
 void TestFlushCache(void) {
@@ -83,3 +84,6 @@ void TestFlushCache(void) {
         log_data_err("Flush Cache failed line %d, expected 1 got %d \n", __LINE__, flushCount);
 
 }
+
+
+
