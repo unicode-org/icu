@@ -116,7 +116,7 @@ CollationElements {
 	"laurdag",
     }
 
-    LocaleID { "14" }
+    LocaleID { "814" }
     LocaleScript{ 
                 "Latn",  // ISO 15924 Name 
     }

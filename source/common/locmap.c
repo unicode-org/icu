@@ -420,9 +420,9 @@ static const ILcidPosixElement nl[] = {
 /* The "no" locale split into nb and nn.  By default in ICU, "no" is nb.*/
 static const ILcidPosixElement no[] = {
     {0x14,   "nb"},     /* really nb */
-/*        {0x14,   "nn"},     // You could put this in, but we only map from LCID*/
     {0x0414, "nb_NO"},  /* really nb_NO */
-    {0x0814, "nn_NO"}   /* really nn_NO */
+    {0x0814, "nn_NO"},  /* really nn_NO */
+    {0x0814, "nn"}      /* It's 0x14 or 0x814, pick one to make the test program happy. */
 };
 
 /* Declared as or_IN to get around compiler errors*/
