@@ -1084,7 +1084,7 @@ u_scanf_scanset_handler(UFILE       *input,
                 if (!info->fSkipArg) {
                     int32_t idx = 0;
                     UBool isError = FALSE;
-                    int32_t capacity = (int32_t)(1 + (limit - alias));
+                    int32_t capacity = (int32_t)(limit - alias);
 
                     U16_APPEND(alias, idx, capacity, c, isError);
                     alias += idx;
