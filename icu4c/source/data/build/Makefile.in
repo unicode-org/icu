@@ -126,7 +126,7 @@ clean-local:
 
 #$(ALL_TEST_FILES)
 
-build-testdata:  $(ALL_TEST_FILES) $(TESTOBJDATADIR)/testdata.lst ja_data.txt
+build-testdata:  $(ALL_TEST_FILES) $(TESTOBJDATADIR)/testdata.lst ja_data.bin
 	@echo "ICU test data files are up to date."
 
 # Now, sections for building each kind of data.
