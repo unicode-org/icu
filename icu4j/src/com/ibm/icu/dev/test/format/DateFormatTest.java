@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2003/04/04 19:20:51 $ 
- * $Revision: 1.14 $
+ * $Date: 2003/04/24 22:59:13 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -853,7 +853,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             null,        "Apr 05 06",  "2006 04 05",
         };
 
-        expectParse(DATA, new Locale("en"));
+        expectParse(DATA, new Locale("en", "", ""));
     }
 
     /**
@@ -873,7 +873,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "ahhmm",  "PM730",  "1970 01 01 19:30:00",
         };
 
-        expectParse(DATA, new Locale("en"));
+        expectParse(DATA, new Locale("en", "", ""));
     }
 
     /**
@@ -890,7 +890,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             null,          " 04  01   03 ", "2003 04 01",
         };
 
-        expectParse(DATA, new Locale("en"));
+        expectParse(DATA, new Locale("en", "", ""));
     }
 
     public void TestCoverage() {
