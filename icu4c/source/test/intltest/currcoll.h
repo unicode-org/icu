@@ -42,7 +42,7 @@ public:
     virtual ~CollationCurrencyTest();
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL);
 
-    void currencyTest(char *par);
+    void currencyTest(/*char *par*/);
 };
 
 #endif

@@ -18,7 +18,7 @@ UnicodeStringTest::~UnicodeStringTest()
 {
 }
 
-void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite LocaleTest: ");
     switch (index) {

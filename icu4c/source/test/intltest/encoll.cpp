@@ -268,7 +268,7 @@ void CollationEnglishTest::doTest( UnicodeString source, UnicodeString target, C
     reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, result );
 }
 
-void CollationEnglishTest::TestTertiary( char* par )
+void CollationEnglishTest::TestTertiary(/* char* par */)
 {
     int32_t i = 0;
     myCollation->setStrength(Collator::TERTIARY);
@@ -305,7 +305,7 @@ void CollationEnglishTest::TestTertiary( char* par )
 
 }
 
-void CollationEnglishTest::TestPrimary( char* par )
+void CollationEnglishTest::TestPrimary(/* char* par */)
 {
     int32_t i;
     myCollation->setStrength(Collator::PRIMARY);
@@ -315,7 +315,7 @@ void CollationEnglishTest::TestPrimary( char* par )
     }
 }
 
-void CollationEnglishTest::TestSecondary( char* par )
+void CollationEnglishTest::TestSecondary(/* char* par */)
 {
     int32_t i;
     myCollation->setStrength(Collator::SECONDARY);
@@ -343,13 +343,13 @@ void CollationEnglishTest::TestSecondary( char* par )
     }
 }
 
-void CollationEnglishTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void CollationEnglishTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationEnglishTest: ");
     switch (index) {
-        case 0: name = "TestPrimary";   if (exec)   TestPrimary( par ); break;
-        case 1: name = "TestSecondary"; if (exec)   TestSecondary( par ); break;
-        case 2: name = "TestTertiary";  if (exec)   TestTertiary( par ); break;
+        case 0: name = "TestPrimary";   if (exec)   TestPrimary(/* par */); break;
+        case 1: name = "TestSecondary"; if (exec)   TestSecondary(/* par */); break;
+        case 2: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
         default: name = ""; break;
     }
 }

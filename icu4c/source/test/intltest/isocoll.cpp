@@ -7015,7 +7015,7 @@ CollationISOTest::~CollationISOTest()
     delete myCollation;
 }
 
-void CollationISOTest::TestAll( char* par )
+void CollationISOTest::TestAll(/* char* par */)
 {
     int32_t i = 0;
 
@@ -7109,11 +7109,11 @@ void CollationISOTest::TestAll( char* par )
     }
 }
 
-void CollationISOTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void CollationISOTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationISOTest: ");
     switch (index) {
-        case 0: name = "TestAll";   if (exec)   TestAll( par ); break;
+        case 0: name = "TestAll";   if (exec)   TestAll(/* par */); break;
         default: name = ""; break;
     }
 }

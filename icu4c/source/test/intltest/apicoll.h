@@ -30,7 +30,7 @@
 
 class CollationAPITest: public IntlTest {
 public:
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par = NULL */);
     void doAssert(UBool condition, const char *message);
 
     /**
@@ -41,7 +41,7 @@ public:
      * - get/set decomposition mode and comparison level
      * - displayable name in the desired locale
      */
-    void TestProperty( char* par );
+    void TestProperty(/* char* par */);
 
     /**
      * This tests the properties of a rule based collator object.
@@ -50,12 +50,12 @@ public:
      * - clone and copy
      * - collation rules access
      */
-    void TestOperators( char* par );
+    void TestOperators(/* char* par */);
 
     /**
      * This tests the duplication of a collator object.
      */
-    void TestDuplicate( char* par );
+    void TestDuplicate(/* char* par */);
 
     /**
      * This tests the comparison convenience methods of a collator object.
@@ -63,12 +63,12 @@ public:
      * - greater than or equal to
      * - equal to
      */
-    void TestCompare( char* par );
+    void TestCompare(/* char* par */);
 
     /**
      * This tests the hashCode method of a collator object.
      */
-    void TestHashCode( char* par );
+    void TestHashCode(/* char* par */);
 
     /**
      * This tests the collation key related APIs.
@@ -78,7 +78,7 @@ public:
      * - comparison between collation keys
      * - creating collation key with a byte array and vice versa
      */
-    void TestCollationKey( char* par );
+    void TestCollationKey(/* char* par */);
 
     /**
      * This tests the CollationElementIterator related APIs.
@@ -88,12 +88,12 @@ public:
      * - reseting the iterator index
      * - requesting the order properties(primary, secondary or tertiary)
      */
-    void TestElemIter( char* par );
+    void TestElemIter(/* char* par */);
 
     /**
      * This tests the list the all available locales.
      */
-    void TestGetAll( char* par );
+    void TestGetAll(/* char* par */);
 
 private:
     // static constants

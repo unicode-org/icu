@@ -198,7 +198,7 @@ void CollationDanishTest::doTest( UnicodeString source, UnicodeString target, Co
     reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, result );
 }
 
-void CollationDanishTest::TestTertiary( char* par )
+void CollationDanishTest::TestTertiary(/* char* par */)
 {
     int32_t i = 0;
     myCollation->setStrength(Collator::TERTIARY);
@@ -219,7 +219,7 @@ void CollationDanishTest::TestTertiary( char* par )
         }
     }
 }
-void CollationDanishTest::TestPrimary( char* par )
+void CollationDanishTest::TestPrimary(/* char* par */)
 {
     int32_t i;
     myCollation->setStrength(Collator::PRIMARY);
@@ -228,12 +228,12 @@ void CollationDanishTest::TestPrimary( char* par )
     }
 }
 
-void CollationDanishTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void CollationDanishTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationDanishTest: ");
     switch (index) {
-        case 0: name = "TestPrimary";   if (exec)   TestPrimary( par ); break;
-        case 1: name = "TestTertiary";  if (exec)   TestTertiary( par ); break;
+        case 0: name = "TestPrimary";   if (exec)   TestPrimary(/* par */); break;
+        case 1: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
         default: name = ""; break;
     }
 }

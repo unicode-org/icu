@@ -80,7 +80,7 @@ CollationMonkeyTest::checkValue(int32_t value)
     return value;
 }
 
-void CollationMonkeyTest::TestCollationKey( char* par )
+void CollationMonkeyTest::TestCollationKey(/* char* par */)
 {
     if(source.length() == 0) {
         errln(UNICODE_STRING("CollationMonkeyTest::TestCollationKey(): source is empty - ICU_DATA not set or data missing?", 92));
@@ -152,7 +152,7 @@ void CollationMonkeyTest::TestCollationKey( char* par )
 }
 
 void 
-CollationMonkeyTest::TestCompare(char* par)
+CollationMonkeyTest::TestCompare(/* char* par */)
 {
     if(source.length() == 0) {
         errln(UNICODE_STRING("CollationMonkeyTest::TestCompare(): source is empty - ICU_DATA not set or data missing?", 87));
@@ -214,7 +214,7 @@ CollationMonkeyTest::TestCompare(char* par)
         errln(msg);
     }
 }
-void CollationMonkeyTest::TestRules(char *par){
+void CollationMonkeyTest::TestRules(/* char* par */){
     UChar testSourceCases[][10] = {
     {0x0061, 0x0062, 0x007a, 0},
     {0x0061, 0x0062, 0x007a, 0},
@@ -277,13 +277,13 @@ void CollationMonkeyTest::doTest(RuleBasedCollator *myCollation, UnicodeString m
     reportCResult( mysource, target, sortKey1, sortKey2, compareResult, keyResult, result );
 }
 
-void CollationMonkeyTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void CollationMonkeyTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationMonkeyTest: ");
     switch (index) {
-        case 0: name = "TestCompare";   if (exec)   TestCompare( par ); break;
-        case 1: name = "TestCollationKey"; if (exec)    TestCollationKey( par ); break;
-        case 2: name = "TestRules"; if (exec) TestRules(par); break;
+        case 0: name = "TestCompare";   if (exec)   TestCompare(/* par */); break;
+        case 1: name = "TestCollationKey"; if (exec)    TestCollationKey(/* par */); break;
+        case 2: name = "TestRules"; if (exec) TestRules(/* par */); break;
         default: name = ""; break;
     }
 }

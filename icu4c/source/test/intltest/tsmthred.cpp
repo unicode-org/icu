@@ -266,7 +266,7 @@ void SimpleThread::sleep(int32_t millis)
 
 /* now begins the real test. */
 void MultithreadTest::runIndexedTest( int32_t index, UBool exec, 
-                const char* &name, char* par ) {
+                const char* &name, char* /*par*/ ) {
   if (exec) logln("TestSuite MultithreadTest: ");
   switch (index) {
   case 0: name = "TestThreads"; if (exec) TestThreads(); break;
@@ -392,6 +392,12 @@ public:
     TestMutexThread1 & fOtherThread;
     UBool fDone, fErr;
     int32_t fElapsed;
+private:
+    /**
+     * The assignment operator has no real implementation.
+     * It is provided to make the compiler happy. Do not call.
+     */
+    TestMutexThread2& operator=(const TestMutexThread2&) { return *this; }
 };
 
 void MultithreadTest::TestMutex()

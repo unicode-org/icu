@@ -146,7 +146,7 @@ void CollationFrenchTest::doTest( UnicodeString source, UnicodeString target, Co
     reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, result );
 }
 
-void CollationFrenchTest::TestTertiary( char* par )
+void CollationFrenchTest::TestTertiary(/* char* par */)
 {
     int32_t i = 0;
     myCollation->setStrength(Collator::TERTIARY);
@@ -156,7 +156,7 @@ void CollationFrenchTest::TestTertiary( char* par )
     }
 }
 
-void CollationFrenchTest::TestSecondary( char* par )
+void CollationFrenchTest::TestSecondary(/* char* par */)
 {
     //test acute and grave ordering
     int32_t i = 0;
@@ -178,7 +178,7 @@ void CollationFrenchTest::TestSecondary( char* par )
     }
 }
 
-void CollationFrenchTest::TestExtra( char* par )
+void CollationFrenchTest::TestExtra(/* char* par */)
 {
     int32_t i, j;
     myCollation->setStrength(Collator::TERTIARY);
@@ -191,13 +191,13 @@ void CollationFrenchTest::TestExtra( char* par )
     }
 }
 
-void CollationFrenchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void CollationFrenchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationFrenchTest: ");
     switch (index) {
-        case 0: name = "TestSecondary"; if (exec)   TestSecondary( par ); break;
-        case 1: name = "TestTertiary";  if (exec)   TestTertiary( par ); break;
-        case 2: name = "TestExtra";     if (exec)   TestExtra( par ); break;
+        case 0: name = "TestSecondary"; if (exec)   TestSecondary(/* par */); break;
+        case 1: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
+        case 2: name = "TestExtra";     if (exec)   TestExtra(/* par */); break;
         default: name = ""; break;
     }
 }

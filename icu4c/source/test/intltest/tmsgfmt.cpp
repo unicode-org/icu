@@ -339,7 +339,7 @@ void TestMessageFormat::sample()
 }
 
 
-void TestMessageFormat::testStaticFormat(char* parm)
+void TestMessageFormat::testStaticFormat(/* char* par */)
 {
     logln("running TestMessageFormat::testStaticFormat");
 
@@ -375,7 +375,7 @@ void TestMessageFormat::testStaticFormat(char* parm)
 }
 
 
-void TestMessageFormat::testSimpleFormat(char* parm)
+void TestMessageFormat::testSimpleFormat(/* char* par */)
 {
     logln("running TestMessageFormat::testSimpleFormat");
 
@@ -413,7 +413,7 @@ void TestMessageFormat::testSimpleFormat(char* parm)
     delete form;
  }
 
-void TestMessageFormat::testMsgFormatChoice(char* parm)
+void TestMessageFormat::testMsgFormatChoice(/* char* par */)
 {
     logln("running TestMessageFormat::testMsgFormatChoice");
 
@@ -1040,7 +1040,7 @@ static void testCopyConstructor2()
 }
 
 
-void TestMessageFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* parm )
+void TestMessageFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite MessageFormat");
 
@@ -1049,9 +1049,9 @@ void TestMessageFormat::runIndexedTest( int32_t index, UBool exec, const char* &
         case 1:  name = "testBug2";             if (exec) testBug2(); break;
         case 2:  name = "sample";               if (exec) sample(); break;
         case 3:  name = "PatternTest";          if (exec) PatternTest(); break;
-        case 4:  name = "testStaticFormat";     if (exec) testStaticFormat(parm); break;
-        case 5:  name = "testSimpleFormat";     if (exec) testSimpleFormat(parm); break;
-        case 6:  name = "testMsgFormatChoice";  if (exec) testMsgFormatChoice(parm); break;
+        case 4:  name = "testStaticFormat";     if (exec) testStaticFormat(/* par */); break;
+        case 5:  name = "testSimpleFormat";     if (exec) testSimpleFormat(/* par */); break;
+        case 6:  name = "testMsgFormatChoice";  if (exec) testMsgFormatChoice(/* par */); break;
 
         case 7:  name = "testCopyConstructor";  if (exec) testCopyConstructor(); break;
         case 8:  name = "testAssignment";       if (exec) testAssignment(); break;

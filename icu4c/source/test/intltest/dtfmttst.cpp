@@ -17,7 +17,7 @@
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
-void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     // if (exec) logln((UnicodeString)"TestSuite DateFormatTest");
     switch (index) {

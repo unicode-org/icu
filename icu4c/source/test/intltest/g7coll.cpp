@@ -104,7 +104,7 @@ void G7CollationTest::doTest( Collator* myCollation, UnicodeString source, Unico
     reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, result );
 }
 
-void G7CollationTest::TestG7Locales( char* par )
+void G7CollationTest::TestG7Locales(/* char* par */)
 {
     int32_t i;
 
@@ -164,7 +164,7 @@ void G7CollationTest::TestG7Locales( char* par )
     }
 }
 
-void G7CollationTest::TestDemo1( char* par )
+void G7CollationTest::TestDemo1(/* char* par */)
 {
     logln("Demo Test 1 : Create a new table collation with rules \"& Z < p, P\"");
     UErrorCode status = U_ZERO_ERROR;
@@ -193,7 +193,7 @@ void G7CollationTest::TestDemo1( char* par )
     delete col;
 }
 
-void G7CollationTest::TestDemo2( char* par )
+void G7CollationTest::TestDemo2(/* char* par */)
 {
     logln("Demo Test 2 : Create a new table collation with rules \"& C < ch , cH, Ch, CH\"");
     UErrorCode status = U_ZERO_ERROR;
@@ -222,7 +222,7 @@ void G7CollationTest::TestDemo2( char* par )
     delete col;
 }
 
-void G7CollationTest::TestDemo3( char* par )
+void G7CollationTest::TestDemo3(/* char* par */)
 {
     logln("Demo Test 3 : Create a new table collation with rules \"& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'\"");
     UErrorCode status = U_ZERO_ERROR;
@@ -251,7 +251,7 @@ void G7CollationTest::TestDemo3( char* par )
     delete col;
 }
 
-void G7CollationTest::TestDemo4( char* par )
+void G7CollationTest::TestDemo4(/* char* par */)
 {
     logln("Demo Test 4 : Create a new table collation with rules \" & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' \"");
     UErrorCode status = U_ZERO_ERROR;
@@ -280,15 +280,15 @@ void G7CollationTest::TestDemo4( char* par )
     delete col;
 }
 
-void G7CollationTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void G7CollationTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite G7CollationTest: ");
     switch (index) {
-        case 0: name = "TestG7Locales"; if (exec)   TestG7Locales( par ); break;
-        case 1: name = "TestDemo1"; if (exec)   TestDemo1( par ); break;
-        case 2: name = "TestDemo2"; if (exec)   TestDemo2( par ); break;
-        case 3: name = "TestDemo3"; if (exec)   TestDemo3( par ); break;
-        case 4: name = "TestDemo4"; if (exec)   TestDemo4( par ); break;
+        case 0: name = "TestG7Locales"; if (exec)   TestG7Locales(/* par */); break;
+        case 1: name = "TestDemo1"; if (exec)   TestDemo1(/* par */); break;
+        case 2: name = "TestDemo2"; if (exec)   TestDemo2(/* par */); break;
+        case 3: name = "TestDemo3"; if (exec)   TestDemo3(/* par */); break;
+        case 4: name = "TestDemo4"; if (exec)   TestDemo4(/* par */); break;
         default: name = ""; break;
     }
 }

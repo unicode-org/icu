@@ -37,13 +37,13 @@ public:
     void doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result);
 
     // perform tests with strength SECONDARY
-    void TestSecondary( char* par );
+    void TestSecondary(/* char* par */);
 
     // perform tests with strength TERTIARY
-    void TestTertiary( char* par );
+    void TestTertiary(/* char* par */);
 
     // perform extra tests
-    void TestExtra( char* par );
+    void TestExtra(/* char* par */);
 
 private:
     static const UChar testSourceCases[][MAX_TOKEN_LEN];

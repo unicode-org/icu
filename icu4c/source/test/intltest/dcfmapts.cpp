@@ -14,7 +14,7 @@
 // try to test the full functionality.  It just calls each function in the class and
 // verifies that it works on a basic level.
 
-void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln((UnicodeString)"TestSuite DecimalFormatAPI");
     switch (index) {
@@ -26,13 +26,13 @@ void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, UBool exec, const 
                     if(U_FAILURE(status)) {
                         errln((UnicodeString)"ERROR: Could not set default locale, test may not give correct results");
                     }
-                    testAPI(par);
+                    testAPI(/*par*/);
                 }
                 break;
         case 1: name = "Rounding test";
             if(exec) {
                logln((UnicodeString)"DecimalFormat Rounding test---");
-               testRounding(par);
+               testRounding(/*par*/);
             }
             break;
 
@@ -44,7 +44,7 @@ void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, UBool exec, const 
  * This test checks various generic API methods in DecimalFormat to achieve 100%
  * API coverage.
  */
-void IntlTestDecimalFormatAPI::testAPI(char *par)
+void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
 {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -322,7 +322,7 @@ void IntlTestDecimalFormatAPI::testAPI(char *par)
     delete test;
 }
 
-void IntlTestDecimalFormatAPI::testRounding(char *par)
+void IntlTestDecimalFormatAPI::testRounding(/*char *par*/)
 {
     UErrorCode status = U_ZERO_ERROR;
     double Roundingnumber = 2.55;

@@ -38,7 +38,7 @@ enum {
 
 void
 TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
-                                   const char* &name, char* par) {
+                                   const char* &name, char* /*par*/) {
     switch (index) {
         CASE(0,TestInstantiation);
         CASE(1,TestSimpleRules);

@@ -23,7 +23,7 @@
 // class TimeZoneTest
 // *****************************************************************************
 
-void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite TestTimeZone");
     switch (index) {

@@ -20,8 +20,8 @@ public:
     /**
      * Tests basic functionality of various API functions for DecimalFormat
      **/
-    void testAPI(char *par);
-    void testRounding(char *par);
+    void testAPI(/*char *par*/);
+    void testRounding(/*char *par*/);
 private:
     /*Helper functions */
     void verify(const UnicodeString& message, const UnicodeString& got, double expected);

@@ -21,7 +21,7 @@ private:
     /**
      * Test the API of DateFormatSymbols; primarily a simple get/set set.
      */
-    void testSymbols(char *par);
+    void testSymbols(/* char *par */);
     /**
      * Test getMonths.
      */

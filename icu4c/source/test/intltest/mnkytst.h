@@ -39,12 +39,12 @@ public:
     int32_t checkValue(int32_t value);
 
     // perform monkey tests using Collator::compare
-    void TestCompare( char* par );
+    void TestCompare(/* char* par */);
 
     // perform monkey tests using CollationKey::compareTo
-    void TestCollationKey( char* par );
+    void TestCollationKey(/* char* par */);
 
-    void TestRules(char* par);
+    void TestRules(/* char* par */);
 
 private:
     void report(UnicodeString& s, UnicodeString& t, int32_t result, int32_t revResult);

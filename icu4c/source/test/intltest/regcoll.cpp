@@ -48,7 +48,7 @@ CollationRegressionTest::~CollationRegressionTest()
 //
 // CollationElementIterator.reset() doesn't work
 //
-void CollationRegressionTest::Test4048446(char *par)
+void CollationRegressionTest::Test4048446(/* char* par */)
 {
     CollationElementIterator *i1 = en_us->createCollationElementIterator(test1);
     CollationElementIterator *i2 = en_us->createCollationElementIterator(test1);
@@ -86,7 +86,7 @@ void CollationRegressionTest::Test4048446(char *par)
 //
 // Collator -> rules -> Collator round-trip broken for expanding characters
 //
-void CollationRegressionTest::Test4051866(char *par)
+void CollationRegressionTest::Test4051866(/* char* par */)
 {
 /*
     RuleBasedCollator c1 = new RuleBasedCollator("< o "
@@ -132,7 +132,7 @@ void CollationRegressionTest::Test4051866(char *par)
 //
 // Collator thinks "black-bird" == "black"
 //
-void CollationRegressionTest::Test4053636(char *par)
+void CollationRegressionTest::Test4053636(/* char* par */)
 {
     if (en_us->equals("black_bird", "black"))
     {
@@ -145,7 +145,7 @@ void CollationRegressionTest::Test4053636(char *par)
 // CollationElementIterator will not work correctly if the associated
 // Collator object's mode is changed
 //
-void CollationRegressionTest::Test4054238(char *par)
+void CollationRegressionTest::Test4054238(/* char* par */)
 {
     RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
 
@@ -170,7 +170,7 @@ void CollationRegressionTest::Test4054238(char *par)
 //
 // Collator::IDENTICAL documented but not implemented
 //
-void CollationRegressionTest::Test4054734(char *par)
+void CollationRegressionTest::Test4054734(/* char* par */)
 {
     /*
         Here's the original Java:
@@ -217,7 +217,7 @@ void CollationRegressionTest::Test4054734(char *par)
 //
 // Full Decomposition mode not implemented
 //
-void CollationRegressionTest::Test4054736(char *par)
+void CollationRegressionTest::Test4054736(/* char* par */)
 {
     RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
 
@@ -237,7 +237,7 @@ void CollationRegressionTest::Test4054736(char *par)
 //
 // Collator::createInstance() causes an ArrayIndexOutofBoundsException for Korean  
 //
-void CollationRegressionTest::Test4058613(char *par)
+void CollationRegressionTest::Test4058613(/* char* par */)
 {
     // Creating a default collator doesn't work when Korean is the default
     // locale
@@ -282,7 +282,7 @@ void CollationRegressionTest::Test4058613(char *par)
 // RuleBasedCollator.getRules does not return the exact pattern as input
 // for expanding character sequences
 //
-void CollationRegressionTest::Test4059820(char *par)
+void CollationRegressionTest::Test4059820(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -310,7 +310,7 @@ void CollationRegressionTest::Test4059820(char *par)
 //
 // MergeCollation::fixEntry broken for "& H < \u0131, \u0130, i, I"
 //
-void CollationRegressionTest::Test4060154(char *par)
+void CollationRegressionTest::Test4060154(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString rules;
@@ -381,7 +381,7 @@ void CollationRegressionTest::Test4060154(char *par)
 //
 // Secondary/Tertiary comparison incorrect in French Secondary
 //
-void CollationRegressionTest::Test4062418(char *par)
+void CollationRegressionTest::Test4062418(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -417,7 +417,7 @@ void CollationRegressionTest::Test4062418(char *par)
 //
 // Collator::compare() method broken if either string contains spaces
 //
-void CollationRegressionTest::Test4065540(char *par)
+void CollationRegressionTest::Test4065540(/* char* par */)
 {
     if (en_us->compare("abcd e", "abcd f") == 0)
     {
@@ -431,7 +431,7 @@ void CollationRegressionTest::Test4065540(char *par)
 // correct result. For example,
 // u1EB1 -> \u0103 + \u0300 -> a + \u0306 + \u0300.
 //
-void CollationRegressionTest::Test4066189(char *par)
+void CollationRegressionTest::Test4066189(/* char* par */)
 {
     static const UChar chars1[] = {0x1EB1, 0};
     static const UChar chars2[] = {0x61, 0x0306, 0x0300, 0};
@@ -461,7 +461,7 @@ void CollationRegressionTest::Test4066189(char *par)
 //
 // French secondary collation checking at the end of compare iteration fails
 //
-void CollationRegressionTest::Test4066696(char *par)
+void CollationRegressionTest::Test4066696(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *c = NULL;
@@ -497,7 +497,7 @@ void CollationRegressionTest::Test4066696(char *par)
 //
 // Bad canonicalization of same-class combining characters
 //
-void CollationRegressionTest::Test4076676(char *par)
+void CollationRegressionTest::Test4076676(/* char* par */)
 {
     // These combining characters are all in the same class, so they should not
     // be reordered, and they should compare as unequal.
@@ -519,7 +519,7 @@ void CollationRegressionTest::Test4076676(char *par)
 //
 // RuleBasedCollator::operator==(NULL) throws NullPointerException
 //
-void CollationRegressionTest::Test4079231(char *par)
+void CollationRegressionTest::Test4079231(/* char* par */)
 {
     // I don't think there's any way to write this test
     // in C++. The following is equivalent to the Java,
@@ -547,7 +547,7 @@ void CollationRegressionTest::Test4079231(char *par)
 //
 // RuleBasedCollator breaks on "< a < bb" rule
 //
-void CollationRegressionTest::Test4078588(char *par)
+void CollationRegressionTest::Test4078588(/* char *par */)
 {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *rbc = new RuleBasedCollator((UnicodeString)"< a < bb", status);
@@ -578,7 +578,7 @@ void CollationRegressionTest::Test4078588(char *par)
 //
 // Combining characters in different classes not reordered properly.
 //
-void CollationRegressionTest::Test4081866(char *par)
+void CollationRegressionTest::Test4081866(/* char* par */)
 {
     // These combining characters are all in different classes,
     // so they should be reordered and the strings should compare as equal.
@@ -605,7 +605,7 @@ void CollationRegressionTest::Test4081866(char *par)
 //
 // string comparison errors in Scandinavian collators
 //
-void CollationRegressionTest::Test4087241(char *par)
+void CollationRegressionTest::Test4087241(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
     Locale da_DK("da", "DK");
@@ -638,7 +638,7 @@ void CollationRegressionTest::Test4087241(char *par)
 //
 // CollationKey takes ignorable strings into account when it shouldn't
 //
-void CollationRegressionTest::Test4087243(char *par)
+void CollationRegressionTest::Test4087243(/* char* par */)
 {
     RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
     c->setStrength(Collator::TERTIARY);
@@ -658,7 +658,7 @@ void CollationRegressionTest::Test4087243(char *par)
 // Mu/micro conflict
 // Micro symbol and greek lowercase letter Mu should sort identically
 //
-void CollationRegressionTest::Test4092260(char *par)
+void CollationRegressionTest::Test4092260(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
     Locale el("el", "");
@@ -685,7 +685,7 @@ void CollationRegressionTest::Test4092260(char *par)
 
 // @bug 4095316
 //
-void CollationRegressionTest::Test4095316(char *par)
+void CollationRegressionTest::Test4095316(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
     Locale el_GR("el", "GR");
@@ -712,7 +712,7 @@ void CollationRegressionTest::Test4095316(char *par)
 
 // @bug 4101940
 //
-void CollationRegressionTest::Test4101940(char *par)
+void CollationRegressionTest::Test4101940(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *c = NULL;
@@ -744,7 +744,7 @@ void CollationRegressionTest::Test4101940(char *par)
 //
 // Collator::compare not handling spaces properly
 //
-void CollationRegressionTest::Test4103436(char *par)
+void CollationRegressionTest::Test4103436(/* char* par */)
 {
     RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
     c->setStrength(Collator::TERTIARY);
@@ -764,7 +764,7 @@ void CollationRegressionTest::Test4103436(char *par)
 //
 // Collation not Unicode conformant with Hangul syllables
 //
-void CollationRegressionTest::Test4114076(char *par)
+void CollationRegressionTest::Test4114076(/* char* par */)
 {
     RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
     c->setStrength(Collator::TERTIARY);
@@ -807,7 +807,7 @@ void CollationRegressionTest::Test4114076(char *par)
 //
 // Collator::getCollationKey was hanging on certain character sequences
 //
-void CollationRegressionTest::Test4124632(char *par)
+void CollationRegressionTest::Test4124632(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
     Collator *coll = NULL;
@@ -837,7 +837,7 @@ void CollationRegressionTest::Test4124632(char *par)
 //
 // sort order of french words with multiple accents has errors
 //
-void CollationRegressionTest::Test4132736(char *par)
+void CollationRegressionTest::Test4132736(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -866,7 +866,7 @@ void CollationRegressionTest::Test4132736(char *par)
 //
 // The sorting using java.text.CollationKey is not in the exact order
 //
-void CollationRegressionTest::Test4133509(char *par)
+void CollationRegressionTest::Test4133509(/* char* par */)
 {
     static const UChar test1[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
@@ -882,7 +882,7 @@ void CollationRegressionTest::Test4133509(char *par)
 //
 // Collation with decomposition off doesn't work for Europe 
 //
-void CollationRegressionTest::Test4114077(char *par)
+void CollationRegressionTest::Test4114077(/* char* par */)
 {
     // Ensure that we get the same results with decomposition off
     // as we do with it on....
@@ -918,7 +918,7 @@ void CollationRegressionTest::Test4114077(char *par)
 //
 // Support for Swedish gone in 1.1.6 (Can't create Swedish collator) 
 //
-void CollationRegressionTest::Test4141640(char *par)
+void CollationRegressionTest::Test4141640(/* char* par */)
 {
     //
     // Rather than just creating a Swedish collator, we might as well
@@ -954,7 +954,7 @@ void CollationRegressionTest::Test4141640(char *par)
 // getCollationKey throws exception for spanish text 
 // Cannot reproduce this bug on 1.2, however it DOES fail on 1.1.6
 //
-void CollationRegressionTest::Test4139572(char *par)
+void CollationRegressionTest::Test4139572(/* char* par */)
 {
     //
     // Code pasted straight from the bug report
@@ -1029,7 +1029,7 @@ CollationElementIterator *My4146160Collator::createCollationElementIterator(cons
 //
 // RuleBasedCollator doesn't use createCollationElementIterator internally
 //
-void CollationRegressionTest::Test4146160(char *par)
+void CollationRegressionTest::Test4146160(/* char* par */)
 {
 #if 0
     //
@@ -1167,7 +1167,7 @@ void CollationRegressionTest::assertEqual(CollationElementIterator &i1, Collatio
     while (c1 != CollationElementIterator::NULLORDER);
 }
 
-void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* par)
+void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* /* par */)
 {
     if (exec)
     {
@@ -1176,37 +1176,37 @@ void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, const ch
 
     switch (index)
     {
-        case  0: name = "Test4048446"; if (exec) Test4048446(par); break;
-        case  1: name = "Test4051866"; if (exec) Test4051866(par); break;
-        case  2: name = "Test4053636"; if (exec) Test4053636(par); break;
-        case  3: name = "Test4054238"; if (exec) Test4054238(par); break;
-        case  4: name = "Test4054734"; if (exec) Test4054734(par); break;
-        case  5: name = "Test4054736"; if (exec) Test4054736(par); break;
-        case  6: name = "Test4058613"; if (exec) Test4058613(par); break;
-        case  7: name = "Test4059820"; if (exec) Test4059820(par); break;
-        case  8: name = "Test4060154"; if (exec) Test4060154(par); break;
-        case  9: name = "Test4062418"; if (exec) Test4062418(par); break;
-        case 10: name = "Test4065540"; if (exec) Test4065540(par); break;
-        case 11: name = "Test4066189"; if (exec) Test4066189(par); break;
-        case 12: name = "Test4066696"; if (exec) Test4066696(par); break;
-        case 13: name = "Test4076676"; if (exec) Test4076676(par); break;
-        case 14: name = "Test4078588"; if (exec) Test4078588(par); break;
-        case 15: name = "Test4079231"; if (exec) Test4079231(par); break;
-        case 16: name = "Test4081866"; if (exec) Test4081866(par); break;
-        case 17: name = "Test4087241"; if (exec) Test4087241(par); break;
-        case 18: name = "Test4087243"; if (exec) Test4087243(par); break;
-        case 19: name = "Test4092260"; if (exec) Test4092260(par); break;
-        case 20: name = "Test4095316"; if (exec) Test4095316(par); break;
-        case 21: name = "Test4101940"; if (exec) Test4101940(par); break;
-        case 22: name = "Test4103436"; if (exec) Test4103436(par); break;
-        case 23: name = "Test4114076"; if (exec) Test4114076(par); break;
-        case 24: name = "Test4114077"; if (exec) Test4114077(par); break;
-        case 25: name = "Test4124632"; if (exec) Test4124632(par); break;
-        case 26: name = "Test4132736"; if (exec) Test4132736(par); break;
-        case 27: name = "Test4133509"; if (exec) Test4133509(par); break;
-        case 28: name = "Test4139572"; if (exec) Test4139572(par); break;
-        case 29: name = "Test4141640"; if (exec) Test4141640(par); break;
-        case 30: name = "Test4146160"; if (exec) Test4146160(par); break;
+        case  0: name = "Test4048446"; if (exec) Test4048446(/* par */); break;
+        case  1: name = "Test4051866"; if (exec) Test4051866(/* par */); break;
+        case  2: name = "Test4053636"; if (exec) Test4053636(/* par */); break;
+        case  3: name = "Test4054238"; if (exec) Test4054238(/* par */); break;
+        case  4: name = "Test4054734"; if (exec) Test4054734(/* par */); break;
+        case  5: name = "Test4054736"; if (exec) Test4054736(/* par */); break;
+        case  6: name = "Test4058613"; if (exec) Test4058613(/* par */); break;
+        case  7: name = "Test4059820"; if (exec) Test4059820(/* par */); break;
+        case  8: name = "Test4060154"; if (exec) Test4060154(/* par */); break;
+        case  9: name = "Test4062418"; if (exec) Test4062418(/* par */); break;
+        case 10: name = "Test4065540"; if (exec) Test4065540(/* par */); break;
+        case 11: name = "Test4066189"; if (exec) Test4066189(/* par */); break;
+        case 12: name = "Test4066696"; if (exec) Test4066696(/* par */); break;
+        case 13: name = "Test4076676"; if (exec) Test4076676(/* par */); break;
+        case 14: name = "Test4078588"; if (exec) Test4078588(/* par */); break;
+        case 15: name = "Test4079231"; if (exec) Test4079231(/* par */); break;
+        case 16: name = "Test4081866"; if (exec) Test4081866(/* par */); break;
+        case 17: name = "Test4087241"; if (exec) Test4087241(/* par */); break;
+        case 18: name = "Test4087243"; if (exec) Test4087243(/* par */); break;
+        case 19: name = "Test4092260"; if (exec) Test4092260(/* par */); break;
+        case 20: name = "Test4095316"; if (exec) Test4095316(/* par */); break;
+        case 21: name = "Test4101940"; if (exec) Test4101940(/* par */); break;
+        case 22: name = "Test4103436"; if (exec) Test4103436(/* par */); break;
+        case 23: name = "Test4114076"; if (exec) Test4114076(/* par */); break;
+        case 24: name = "Test4114077"; if (exec) Test4114077(/* par */); break;
+        case 25: name = "Test4124632"; if (exec) Test4124632(/* par */); break;
+        case 26: name = "Test4132736"; if (exec) Test4132736(/* par */); break;
+        case 27: name = "Test4133509"; if (exec) Test4133509(/* par */); break;
+        case 28: name = "Test4139572"; if (exec) Test4139572(/* par */); break;
+        case 29: name = "Test4141640"; if (exec) Test4141640(/* par */); break;
+        case 30: name = "Test4146160"; if (exec) Test4146160(/* par */); break;
         default: name = ""; break;
     }
 }
