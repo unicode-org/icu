@@ -1356,7 +1356,7 @@ protected:
 
     /**
      * Return a limit for a field.
-     * @param field the field, from 0..UCAL_MAX_FIELD</code>
+     * @param field the field, from <code>0..UCAL_MAX_FIELD</code>
      * @param limitType the type specifier for the limit
      * @see #ELimitType
      * @internal
