@@ -27,7 +27,7 @@ abstract class NFSubstitution {
      * Puts a copyright in the .class file
      */
     private static final String copyrightNotice
-        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
+        = "Copyright \u00a91997-2004 IBM Corp.  All rights reserved.";
 
     //-----------------------------------------------------------------------
     // data members
@@ -1564,6 +1564,11 @@ class NumeratorSubstitution extends NFSubstitution {
      */
     double denominator;
 
+    /**
+     * True if we format leading zeros (this is a hack for Hebrew spellout)
+     */
+    boolean withZeros;
+
     //-----------------------------------------------------------------------
     // construction
     //-----------------------------------------------------------------------
@@ -1578,12 +1583,20 @@ class NumeratorSubstitution extends NFSubstitution {
                           NFRuleSet ruleSet,
                           RuleBasedNumberFormat formatter,
                           String description) {
-        super(pos, ruleSet, formatter, description);
+        super(pos, ruleSet, formatter, fixdesc(description));
 
         // this substitution's behavior depends on the rule's base value
         // Rather than keeping a backpointer to the rule, we copy its
         // base value here
         this.denominator = denominator;
+        
+        this.withZeros = description.endsWith("<<");
+    }
+
+    static String fixdesc(String description) {
+        return description.endsWith("<<") 
+            ? description.substring(0,description.length()-1) 
+            : description;
     }
 
     //-----------------------------------------------------------------------
@@ -1607,6 +1620,50 @@ class NumeratorSubstitution extends NFSubstitution {
     //-----------------------------------------------------------------------
     // formatting
     //-----------------------------------------------------------------------
+
+    /**
+     * Performs a mathematical operation on the number, formats it using
+     * either ruleSet or decimalFormat, and inserts the result into
+     * toInsertInto.
+     * @param number The number being formatted.
+     * @param toInsertInto The string we insert the result into
+     * @param pos The position in toInsertInto where the owning rule's
+     * rule text begins (this value is added to this substitution's
+     * position to determine exactly where to insert the new text)
+     */
+    public void doSubstitution(double number, StringBuffer toInsertInto, int pos) {
+        // perform a transformation on the number being formatted that
+        // is dependent on the type of substitution this is
+        String s = toInsertInto.toString();
+        double numberToFormat = transformNumber(number);
+
+        if (withZeros && ruleSet != null) {
+            // if there are leading zeros in the decimal expansion then emit them
+            long nf = (long)numberToFormat;
+            int len = toInsertInto.length();
+            while ((nf *= 10) < denominator) {
+                toInsertInto.insert(pos + this.pos, ' ');
+                ruleSet.format(0, toInsertInto, pos + this.pos);
+            }
+            pos += toInsertInto.length() - len;
+        }
+
+        // if the result is an integer, from here on out we work in integer
+        // space (saving time and memory and preserving accuracy)
+        if (numberToFormat == Math.floor(numberToFormat) && ruleSet != null) {
+            ruleSet.format((long)numberToFormat, toInsertInto, pos + this.pos);
+
+            // if the result isn't an integer, then call either our rule set's
+            // format() method or our DecimalFormat's format() method to
+            // format the result
+        } else {
+            if (ruleSet != null) {
+                ruleSet.format(numberToFormat, toInsertInto, pos + this.pos);
+            } else {
+                toInsertInto.insert(pos + this.pos, numberFormat.format(numberToFormat));
+            }
+        }
+    }
 
     /**
      * Returns the number being formatted times the denominator.
@@ -1639,7 +1696,62 @@ class NumeratorSubstitution extends NFSubstitution {
         // we don't have to do anything special to do the parsing here,
         // but we have to turn lenient parsing off-- if we leave it on,
         // it SERIOUSLY messes up the algorithm
-        return super.doParse(text, parsePosition, baseValue, upperBound, false);
+
+        // if withZeros is true, we need to count the zeros
+        // and use that to adjust the parse result
+        int zeroCount = 0;
+        if (withZeros) {
+            String workText = new String(text);
+            ParsePosition workPos = new ParsePosition(1);
+            int digit;
+
+            while (workText.length() > 0 && workPos.getIndex() != 0) {
+                workPos.setIndex(0);
+                digit = ruleSet.parse(workText, workPos, 1).intValue(); // parse zero or nothing at all
+                if (workPos.getIndex() == 0) {
+                    // we failed, either there were no more zeros, or the number was formatted with digits
+                    // either way, we're done
+                    break;
+                }
+
+                ++zeroCount;
+                parsePosition.setIndex(parsePosition.getIndex() + workPos.getIndex());
+                workText = workText.substring(workPos.getIndex());
+                while (workText.length() > 0 && workText.charAt(0) == ' ') {
+                    workText = workText.substring(1);
+                    parsePosition.setIndex(parsePosition.getIndex() + 1);
+                }
+            }
+
+            text = text.substring(parsePosition.getIndex()); // arrgh!
+            parsePosition.setIndex(0);
+        }
+
+        // we've parsed off the zeros, now let's parse the rest from our current position
+        Number result =  super.doParse(text, parsePosition, withZeros ? 1 : baseValue, upperBound, false);
+
+        if (withZeros) {
+            // any base value will do in this case.  is there a way to
+            // force this to not bother trying all the base values?
+            
+            // compute the 'effective' base and prescale the value down
+            long n = result.longValue();
+            long d = 1;
+            int pow = 0;
+            while (d <= n) {
+                d *= 10;
+                ++pow;
+            }
+            // now add the zeros
+            while (zeroCount > 0) {
+                d *= 10;
+                --zeroCount;
+            }
+            // d is now our true denominator
+            result = new Double(n/(double)d);
+        }
+
+        return result;
     }
 
     /**
