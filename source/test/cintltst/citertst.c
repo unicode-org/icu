@@ -1077,6 +1077,17 @@ static void TestSmallBuffer()
 
     free(testorders);
     free(orders);
+
+    ucol_reset(testiter);
+    /* ensures that the writable buffer was cleared */
+    if (testiter->iteratordata_.writableBuffer != 
+        testiter->iteratordata_.stackWritableBuffer) {
+        log_err("Error Writable buffer in collation element iterator not reset\n");
+    }
+
+    /* ensures closing of elements done properly to clear writable buffer */
+    ucol_next(testiter, &status);
+    ucol_next(testiter, &status);
     ucol_closeElements(testiter);
     ucol_closeElements(iter);
     ucol_close(coll);
