@@ -153,7 +153,7 @@ static struct STransition gTransitionTable [] = {
  ********************************************************************/
 
 static UBool get(UHashtable *hash, const struct UString* tag) {
-    return uhash_get(hash, tag) != NULL;
+    return (UBool)(uhash_get(hash, tag) != NULL);
 }
 
 static void put(UHashtable *hash, const struct UString *tag,
