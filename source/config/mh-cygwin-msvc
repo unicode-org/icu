@@ -175,7 +175,7 @@ endif
 
 ## Versioned target for a shared library.
 FINAL_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
-MIDDLE_SO_TARGET=$(SO_TARGET)
+MIDDLE_SO_TARGET=$(FINAL_SO_TARGET)
 
 ## Special pkgdata information that is needed
 PKGDATA_VERSIONING = -r $(SO_TARGET_VERSION_MAJOR)
@@ -191,8 +191,10 @@ FINAL_IMPORT_LIB = $(MIDDLE_IMPORT_LIB)
 ## Versioned libraries rules
 #%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
 #	$(RM) $@ && cp ${<F} $@
+# The following rule is a no op. We don't want symbolic links
 %.$(SO): %$(SO_TARGET_VERSION_MAJOR).$(SO)
-	$(RM) $@ && ln -s ${<F} $@
+	@echo -n
+#	$(RM) $@ && ln -s ${<F} $@
 
 # Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = PATH
