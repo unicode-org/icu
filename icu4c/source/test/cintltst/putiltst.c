@@ -202,7 +202,7 @@ void TestPUtilAPI(){
     u_getVersion(versionArray);
     u_versionToString(versionArray, versionString);
     if(strcmp(versionString, U_ICU_VERSION) != 0){
-        log_err("ERROR: u_getVersion() failed. Got=%s\n",  versionString);
+        log_err("ERROR: u_getVersion() failed. Got=%s, expected %s\n",  versionString, U_ICU_VERSION);
     }
     log_verbose("Testing the API u_errorName()...\n");
     str=(char*)u_errorName((UErrorCode)0);
