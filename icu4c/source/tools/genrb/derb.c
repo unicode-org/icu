@@ -203,6 +203,8 @@ main(int argc, char* argv[]) {
         p = uprv_strrchr(arg, U_FILE_SEP_CHAR);
         if (!p) {
             p = arg;
+        } else {
+          p++;
         }
         q = uprv_strrchr(p, '.');
         if (!q) {
@@ -215,14 +217,20 @@ main(int argc, char* argv[]) {
             UBool absfilename = *arg == U_FILE_SEP_CHAR;
 #ifdef WIN32
             if (!absfilename) {
-                absfilename = (uprv_strlen(arg) > 2 && isalpha(arg[0]) && arg[1] == ':' && arg[2] == U_FILE_SEP_CHAR);
+                absfilename = (uprv_strlen(arg) > 2 && isalpha(arg[0]) 
+                  && arg[1] == ':' && arg[2] == U_FILE_SEP_CHAR);
             }
 #endif
             if (absfilename) {
                 thename = arg;
             } else {
-                uprv_strcat(uprv_strcat(uprv_strcpy(infile, inputDir), U_FILE_SEP_STRING), arg);
-                thename = infile;
+              q = uprv_strrchr(arg, U_FILE_SEP_CHAR);
+              uprv_strcpy(infile, inputDir);
+              if(q != NULL) {
+                uprv_strcat(infile, U_FILE_SEP_STRING), 
+                strncat(infile, arg, q-arg);
+              }
+              thename = infile;
             }
         }
         status = U_ZERO_ERROR;
