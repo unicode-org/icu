@@ -111,7 +111,7 @@ static void freeToUCharStrings(void **hook) {
         uprv_free(s);
         s = next;
     }
-};
+}
 
 
 static void TestBreakIteratorCAPI()
@@ -463,14 +463,14 @@ static UBreakIterator * testOpenRules(char *rules) {
     freeToUCharStrings(&strCleanUp);
     return bi;
 
-};
+}
 
 
 /*
  *  TestBreakIteratorRules - Verify that a break iterator can be created from
  *                           a set of source rules.
  */
-void TestBreakIteratorRules() {
+static void TestBreakIteratorRules() {
     /*  Rules will keep together any run of letters not including 'a', OR
      *             keep together 'abc', but only when followed by 'def', OTHERWISE
      *             just return one char at a time.
@@ -520,7 +520,7 @@ void TestBreakIteratorRules() {
 
 
 
-void TestBreakIteratorRuleError() {
+static void TestBreakIteratorRuleError() {
 /*
  *  TestBreakIteratorRuleError -   Try to create a BI from rules with syntax errors,
  *                                 check that the error is reported correctly.
