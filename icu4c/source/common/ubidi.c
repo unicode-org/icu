@@ -305,6 +305,8 @@ getDirProps(UBiDi *pBiDi, const UChar *text) {
                 break;
             }
         }
+    } else {
+        flags|=DIRPROP_FLAG_LR(pBiDi->paraLevel);
     }
 
     /* get the rest of the directional properties and the flags bits */
