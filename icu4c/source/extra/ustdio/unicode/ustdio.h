@@ -51,17 +51,19 @@
  * There is a locale cache.  It needs to be cleaned up when the library unloads.
  * Make sure that surrogates are supported.
  * More testing is needed.
- * #include <iostream> from common/unicode/unistr.h should go into a new
-    separate header (uios.h or ustream.h?) in the ustdio library.  Plenty of
-    people do not use the iostream functionality for Unicode strings, and it
-    will vastly speed up compilation time of .cpp files for those people that
-    don't use it. In some cases, libraries that use ICU should not include
-    iostream.  This new header file should also include operator<< and
-    operator>> for UDate (not double) and UChar *.
+ * The ustream header should also include operator<< and
+    operator>> for UDate (not double).
  * Testing should be done for reading and writing multi-byte encodings,
     and make sure that a character that is contained across buffer boundries
     works even for incomplete characters.
  * Make sure that the last character is flushed when the file/string is closed.
+ * snprintf should follow the C99 standard for the return value, which is
+    return the number of characters (excluding the trailing '\0')
+    which would have been written to the destination string regardless
+    of available space. This is like pre-flighting.
+ * %C and %S are aliases of %lc and %ls, which are used for wchar_t.
+    We should consider using this for UChar and replace %K and %U,
+    or we should make them use wchar_t.
 */
 
 
@@ -443,6 +445,28 @@ u_file_read(UChar        *chars,
         int32_t        count, 
         UFILE         *f);
 
+/**
+ * Set a transliterator on the UFILE. The transliterator will be owned by the
+ * UFILE. 
+ * @param file The UFILE to set transliteration on
+ * @param adopt The UTransliterator to set. Can be NULL, which will
+ * mean that no transliteration is used.
+ * @param direction either U_READ, U_WRITE, or U_READWRITE - sets
+ *  which direction the transliterator is to be applied to. If
+ * U_READWRITE, the "Read" transliteration will be in the inverse
+ * direction.
+ * @param status ICU error code.
+ * @return The previously set transliterator, owned by the
+ * caller. If U_READWRITE is specified, only the WRITE transliterator
+ * is returned. In most cases, the caller should call utrans_close()
+ * on the result of this function.
+ * @draft
+ */
+
+U_CAPI UTransliterator* U_EXPORT2
+u_fsettransliterator(UFILE *file, UFileDirection direction,
+		     UTransliterator *adopt, UErrorCode *status); 
+
 
 
 
@@ -723,28 +747,6 @@ u_vsscanf_u(UChar       *buffer,
         const UChar     *patternSpecification,
         va_list         ap);
 
-
-/**
- * Set a transliterator on the UFILE. The transliterator will be owned by the
- * UFILE. 
- * @param file The UFILE to set transliteration on
- * @param adopt The UTransliterator to set. Can be NULL, which will
- * mean that no transliteration is used.
- * @param direction either U_READ, U_WRITE, or U_READWRITE - sets
- *  which direction the transliterator is to be applied to. If
- * U_READWRITE, the "Read" transliteration will be in the inverse
- * direction.
- * @param status ICU error code.
- * @return The previously set transliterator, owned by the
- * caller. If U_READWRITE is specified, only the WRITE transliterator
- * is returned. In most cases, the caller should call utrans_close()
- * on the result of this function.
- * @draft
- */
-
-U_CAPI UTransliterator* U_EXPORT2
-u_fsettransliterator(UFILE *file, UFileDirection direction,
-		     UTransliterator *adopt, UErrorCode *status); 
 
 #endif
 
