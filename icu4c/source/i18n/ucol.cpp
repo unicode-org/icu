@@ -351,7 +351,8 @@ ucol_close(UCollator *coll)
     }
   }
   if(coll->mapping != NULL) {
-      ucmpe32_close(coll->mapping);
+      /*ucmpe32_close(coll->mapping);*/
+    uprv_free(coll->mapping);
   }
   if(coll->rules != NULL && coll->freeRulesOnClose) {
     uprv_free((UChar *)coll->rules);
@@ -617,7 +618,18 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
 
     result->image = image;
     const uint8_t *mapping = (uint8_t*)result->image+result->image->mappingPosition;
-    CompactEIntArray *newUCAmapping = ucmpe32_openFromData(&mapping, status);
+    /*CompactEIntArray *newUCAmapping = ucmpe32_openFromData(&mapping, status);*/
+    UTrie *newUCAmapping = (UTrie *)uprv_malloc(sizeof(UTrie)); 
+    if(newUCAmapping != NULL) {
+      utrie_unserialize(newUCAmapping, mapping, result->image->latinOneMapping - result->image->mappingPosition, status);
+    } else {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      if(result->freeOnClose == TRUE) {
+          uprv_free(result);
+          result = NULL;
+      }
+      return result;
+    }
     if(U_SUCCESS(*status)) {
         result->mapping = newUCAmapping;
     } else {
@@ -625,10 +637,12 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
             uprv_free(result);
             result = NULL;
         }
+        uprv_free(newUCAmapping);
         return result;
     }
 
-    result->latinOneMapping = (uint32_t*)((uint8_t*)result->image+result->image->latinOneMapping);
+    /*result->latinOneMapping = (uint32_t*)((uint8_t*)result->image+result->image->latinOneMapping);*/
+    result->latinOneMapping = UTRIE_GET32_LATIN1(result->mapping);
     result->contractionCEs = (uint32_t*)((uint8_t*)result->image+result->image->contractionCEs);
     result->contractionIndex = (UChar*)((uint8_t*)result->image+result->image->contractionIndex);
     result->expansion = (uint32_t*)((uint8_t*)result->image+result->image->expansion);
@@ -705,7 +719,8 @@ ucol_cleanup(void)
     }
     if (UCA) {
         /* Since UCA was opened with ucol_initCollator, ucol_close won't work. */
-        ucmpe32_close(UCA->mapping);
+        /*ucmpe32_close(UCA->mapping);*/
+        uprv_free(UCA->mapping);
         uprv_free(UCA);
         UCA = NULL;
     }
@@ -1043,13 +1058,15 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
       }
       else
       {
-          order = ucmpe32_get(coll->mapping, ch);                             /* we'll go for slightly slower trie */
+          /*order = ucmpe32_get(coll->mapping, ch);*/                             /* we'll go for slightly slower trie */
+          order = UTRIE_GET32_FROM_LEAD(coll->mapping, ch);
           if(order > UCOL_NOT_FOUND) {                                       /* if a CE is special                */
               order = ucol_prv_getSpecialCE(coll, ch, order, collationSource, status);    /* and try to get the special CE     */
           }
           if(order == UCOL_NOT_FOUND) {   /* We couldn't find a good CE in the tailoring */
             /* if we got here, the codepoint MUST be over 0xFF - so we look directly in the trie */
-            order = ucmpe32_get(UCA->mapping, ch);
+            /*order = ucmpe32_get(UCA->mapping, ch);*/
+            order = UTRIE_GET32_FROM_LEAD(UCA->mapping, ch);
 
             if(order > UCOL_NOT_FOUND) { /* UCA also gives us a special CE */
               order = ucol_prv_getSpecialCE(UCA, ch, order, collationSource, status);
@@ -1357,7 +1374,8 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                     result = UCOL_THAI;
                 }
                 else {
-                    result = ucmpe32_get(coll->mapping, ch);
+                    /*result = ucmpe32_get(coll->mapping, ch);*/
+                    result = UTRIE_GET32_FROM_LEAD(coll->mapping, ch);
                 }
                 if (result > UCOL_NOT_FOUND) {
                     result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
@@ -1368,7 +1386,8 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                       result = UCOL_CONTRACTION;
                   }
                   else {
-                        result = ucmpe32_get(UCA->mapping, ch);
+                        /*result = ucmpe32_get(UCA->mapping, ch);*/
+                        result = UTRIE_GET32_FROM_LEAD(UCA->mapping, ch);
                   }
 
                   if (result > UCOL_NOT_FOUND) {
@@ -1860,7 +1879,9 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
           loadState(source, &state, TRUE);
           return 0;
         } else {
-          CE = ucmpe32_getSurrogate(coll->mapping, CE, trail);
+          /* CE = ucmpe32_getSurrogate(coll->mapping, CE, trail); */
+          /* TODO: CE contain the data from the previous CE + the mask. It should at least be unmasked */
+          CE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, CE&0xFFFFFF, trail);
           if(CE == UCOL_NOT_FOUND) { // there are tailored surrogates in this block, but not this one.
             // We need to backup
             loadState(source, &state, TRUE);
@@ -2156,12 +2177,15 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         // return the first CE, but first put the rest into the expansion buffer
         if (!source->coll->image->jamoSpecial) { // FAST PATH
 
-          *(source->CEpos++) = ucmpe32_get(UCA->mapping, V);
+          /**(source->CEpos++) = ucmpe32_get(UCA->mapping, V);*/
+          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, V);
           if (T != TBase) {
-              *(source->CEpos++) = ucmpe32_get(UCA->mapping, T);
+              /**(source->CEpos++) = ucmpe32_get(UCA->mapping, T);*/
+              *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, T);
           }
 
-          return ucmpe32_get(UCA->mapping, L); // return first one
+          /*return ucmpe32_get(UCA->mapping, L);*/ // return first one
+          return UTRIE_GET32_FROM_LEAD(UCA->mapping, L);
 
         } else { // Jamo is Special
 	  // Since Hanguls pass the FCD check, it is 
@@ -2712,10 +2736,13 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         */
         if (!source->coll->image->jamoSpecial)
         {
-          *(source->CEpos ++) = ucmpe32_get(UCA->mapping, L);
-          *(source->CEpos ++) = ucmpe32_get(UCA->mapping, V);
+          /**(source->CEpos ++) = ucmpe32_get(UCA->mapping, L);*/
+          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, L);
+          /**(source->CEpos ++) = ucmpe32_get(UCA->mapping, V);*/
+          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, V);
           if (T != TBase)
-            *(source->CEpos ++) = ucmpe32_get(UCA->mapping, T);
+            /**(source->CEpos ++) = ucmpe32_get(UCA->mapping, T);*/
+            *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, T);
 
           source->toReturn = source->CEpos - 1;
           return *(source->toReturn);
@@ -4711,7 +4738,9 @@ isTailored(const UCollator *coll, const UChar u, UErrorCode *status) {
         return FALSE;
       }
     } else { /* regular */
-      CE = ucmpe32_get(coll->mapping, u);
+      /*CE = ucmpe32_get(coll->mapping, u);*/
+      CE = UTRIE_GET32_FROM_LEAD(coll->mapping, u);
+
     }
 
     if(isContraction(CE)) {

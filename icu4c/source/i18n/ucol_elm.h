@@ -74,7 +74,8 @@ typedef struct {
 } MaxExpansionTable;
 
 typedef struct {
-  CompactEIntArray      *mapping; 
+  /*CompactEIntArray      *mapping; */
+  UNewTrie                 *mapping; 
   ExpansionTable        *expansions; 
   struct CntTable       *contractions;
   UCATableHeader        *image;

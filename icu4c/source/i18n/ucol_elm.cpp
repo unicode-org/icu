@@ -129,7 +129,8 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
   t->UCA = UCA;
   t->expansions = (ExpansionTable *)uprv_malloc(sizeof(ExpansionTable));
   uprv_memset(t->expansions, 0, sizeof(ExpansionTable));
-  t->mapping = ucmpe32_open(UCOL_SPECIAL_FLAG | (initTag<<24), UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG<<24), status);
+  /*t->mapping = ucmpe32_open(UCOL_SPECIAL_FLAG | (initTag<<24), UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG<<24), status);*/
+  t->mapping = utrie_open(NULL, NULL, 0x100000, UCOL_SPECIAL_FLAG | (initTag<<24), TRUE); // Do your own mallocs for the structure, array and have linear Latin 1
   t->prefixLookup = uhash_open(prefixLookupHash, prefixLookupComp, status);
   uhash_setValueDeleter(t->prefixLookup, uhash_freeBlock);
 
@@ -184,7 +185,8 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
 
   /* mapping */
   if(t->mapping != NULL) {
-    r->mapping = ucmpe32_clone(t->mapping, status);
+    /*r->mapping = ucmpe32_clone(t->mapping, status);*/
+    r->mapping = utrie_clone(NULL, t->mapping, NULL, 0);
   }
 
   // a hashing clone function would be very nice. We have none currently...
@@ -270,7 +272,8 @@ uprv_uca_closeTempTable(tempUCATable *t) {
   if(t->contractions != NULL) {
     uprv_cnttab_close(t->contractions);
   }
-  ucmpe32_close(t->mapping);
+  /*ucmpe32_close(t->mapping);*/
+  utrie_close(t->mapping);
 
   if(t->prefixLookup != NULL) {
     uhash_close(t->prefixLookup);
@@ -776,9 +779,11 @@ uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE,
       }
       element->cPoints-=cpsize;
       element->cSize+=cpsize;
-      ucmpe32_set(t->mapping, cp, CE);
+      /*ucmpe32_set(t->mapping, cp, CE);*/
+      utrie_set32(t->mapping, cp, CE);
     } else if(!isContraction(CE)) { /* this is just a surrogate, and there is no contraction */
-      ucmpe32_set(t->mapping, cp, element->mapCE);
+      /*ucmpe32_set(t->mapping, cp, element->mapCE);*/
+      utrie_set32(t->mapping, cp, element->mapCE);
     } else { /* fill out the first stage of the contraction with the surrogate CE */
       uprv_cnttab_changeContraction(contractions, CE, 0, element->mapCE, status);
       uprv_cnttab_changeContraction(contractions, CE, 0xFFFF, element->mapCE, status);
@@ -846,7 +851,8 @@ static uint32_t uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element,
     UChar32 cp;
 
     UTF_NEXT_CHAR(element->cPoints, i, element->cSize, cp);
-    CE = ucmpe32_get(t->mapping, cp);
+    /*CE = ucmpe32_get(t->mapping, cp);*/
+    CE = utrie_get32(t->mapping, cp, NULL);
 #if 0
     UCAElements *composed = (UCAElements *)uprv_malloc(sizeof(UCAElements));
     uprv_memcpy(composed, element, sizeof(UCAElements));
@@ -866,7 +872,8 @@ static uint32_t uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element,
 
     CE = uprv_uca_addContraction(t, CE, element, status);
   } else { /* easy case, */
-    CE = ucmpe32_get(t->mapping, element->cPoints[0]);
+    /*CE = ucmpe32_get(t->mapping, element->cPoints[0]);*/
+    CE = utrie_get32(t->mapping, element->cPoints[0], NULL);
 
     if( CE != UCOL_NOT_FOUND) {
       if(isCntTableElement(CE) /*isContraction(CE)*/) { /* adding a non contraction element (thai, expansion, single) to already existing contraction */
@@ -877,14 +884,16 @@ static uint32_t uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element,
             uprv_cnttab_changeLastCE(t->contractions, CE, element->mapCE, status);
         }
       } else {
-        ucmpe32_set(t->mapping, element->cPoints[0], element->mapCE);
+        /*ucmpe32_set(t->mapping, element->cPoints[0], element->mapCE);*/
+        utrie_set32(t->mapping, element->cPoints[0], element->mapCE);
 #ifdef UCOL_DEBUG
         fprintf(stderr, "Warning - trying to overwrite existing data %08X for cp %04X with %08X\n", CE, element->cPoints[0], element->CEs[0]);
         //*status = U_ILLEGAL_ARGUMENT_ERROR;
 #endif
       }
     } else {
-      ucmpe32_set(t->mapping, element->cPoints[0], element->mapCE);
+      /*ucmpe32_set(t->mapping, element->cPoints[0], element->mapCE);*/
+      utrie_set32(t->mapping, element->cPoints[0], element->mapCE);
     }
   }
   return CE;
@@ -998,7 +1007,8 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
 }
 
 
-void uprv_uca_getMaxExpansionJamo(CompactEIntArray       *mapping, 
+/*void uprv_uca_getMaxExpansionJamo(CompactEIntArray       *mapping, */
+void uprv_uca_getMaxExpansionJamo(UNewTrie       *mapping, 
                                   MaxExpansionTable     *maxexpansion,
                                   MaxJamoExpansionTable *maxjamoexpansion,
                                   UBool                  jamospecial,
@@ -1014,7 +1024,8 @@ void uprv_uca_getMaxExpansionJamo(CompactEIntArray       *mapping,
   uint32_t ce;
 
   while (v >= VBASE) {
-      ce = ucmpe32_get(mapping, v);
+      /*ce = ucmpe32_get(mapping, v);*/
+      ce = utrie_get32(mapping, v, NULL);
       if (ce < UCOL_SPECIAL_FLAG) {
           uprv_uca_setMaxExpansion(ce, 2, maxexpansion, status);
       }
@@ -1023,7 +1034,8 @@ void uprv_uca_getMaxExpansionJamo(CompactEIntArray       *mapping,
 
   while (t >= TBASE)
   {
-      ce = ucmpe32_get(mapping, t);
+      /*ce = ucmpe32_get(mapping, t);*/
+      ce = utrie_get32(mapping, t, NULL);
       if (ce < UCOL_SPECIAL_FLAG) {
           uprv_uca_setMaxExpansion(ce, 3, maxexpansion, status);
       }
@@ -1055,10 +1067,31 @@ void uprv_uca_getMaxExpansionJamo(CompactEIntArray       *mapping,
   }
 }
 
+static inline uint32_t getFoldedValue(UNewTrie *trie, UChar32 start, int32_t offset) {
+  uint32_t value;
+  uint32_t tag;
+  UChar32 limit;
+  UBool inBlockZero;
+
+  limit=start+0x400;
+  while(start<limit) {
+      value=utrie_get32(trie, start, &inBlockZero);
+      tag = getCETag(value);
+      if(inBlockZero == TRUE) {
+          start+=UTRIE_DATA_BLOCK_LENGTH;
+      } else if(value!=0 && tag != IMPLICIT_TAG) {
+          return (uint32_t)(UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24) | offset);
+      } else {
+          ++start;
+      }
+  }
+  return 0;
+}
 
 U_CAPI UCATableHeader* U_EXPORT2
 uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
-    CompactEIntArray *mapping = t->mapping;
+    /*CompactEIntArray *mapping = t->mapping;*/
+    UNewTrie *mapping = t->mapping;
     ExpansionTable *expansions = t->expansions;
     CntTable *contractions = t->contractions;
     MaxExpansionTable *maxexpansion = t->maxExpansions;
@@ -1072,17 +1105,24 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     int32_t contractionsSize = 0;
     contractionsSize = uprv_cnttab_constructTable(contractions, beforeContractions, status);
 
-    ucmpe32_compact(mapping);
-    UMemoryStream *ms = uprv_mstrm_openNew(8192);
-    int32_t mappingSize = ucmpe32_flattenMem(mapping, ms);
-    const uint8_t *flattened = uprv_mstrm_getBuffer(ms, &mappingSize);
-
+    /* the following operation depends on the trie data. Therefore, we have to do it before */
+    /* the trie is compacted */
     /* sets jamo expansions */
     uprv_uca_getMaxExpansionJamo(mapping, maxexpansion, t->maxJamoExpansions,
                                  t->image->jamoSpecial, status);
 
+    /*ucmpe32_compact(mapping);*/
+    /*UMemoryStream *ms = uprv_mstrm_openNew(8192);*/
+    /*int32_t mappingSize = ucmpe32_flattenMem(mapping, ms);*/
+    /*const uint8_t *flattened = uprv_mstrm_getBuffer(ms, &mappingSize);*/
+
+    // After setting the jamo expansions, compact the trie and get the needed size
+    int32_t mappingSize = utrie_serialize(mapping, NULL, 0, getFoldedValue /*getFoldedValue*/, FALSE, status);
+
     uint32_t tableOffset = 0;
     uint8_t *dataStart;
+
+    /* TODO: LATIN1 array is now in the utrie - it should be removed from the calculation */
 
     uint32_t toAllocate =(uint32_t)(headersize+                                    
                                     paddedsize(expansions->position*sizeof(uint32_t))+
@@ -1149,8 +1189,11 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
 
     /* copy mapping table */
     /*myData->mappingPosition = dataStart+tableOffset;*/
+    /*myData->mappingPosition = tableOffset;*/
+    /*memcpy(dataStart+tableOffset, flattened, mappingSize);*/
+
     myData->mappingPosition = tableOffset;
-    memcpy(dataStart+tableOffset, flattened, mappingSize);
+    utrie_serialize(mapping, dataStart+tableOffset, toAllocate-tableOffset, getFoldedValue, FALSE, status);
     tableOffset += paddedsize(mappingSize);
 
     /* construct the fast tracker for latin one*/
@@ -1158,7 +1201,8 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     uint32_t *store = (uint32_t*)(dataStart+tableOffset);
     int32_t i = 0;
     for(i = 0; i<=0xFF; i++) {
-        *(store++) = ucmpe32_get(mapping,i);
+        /**(store++) = ucmpe32_get(mapping,i);*/
+        *(store++) = utrie_get32(mapping, i, NULL);
         tableOffset+=(uint32_t)(sizeof(uint32_t));
     }
 
@@ -1208,7 +1252,7 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     myData->size = tableOffset;
     /* This should happen upon ressurection */
     /*const uint8_t *mapPosition = (uint8_t*)myData+myData->mappingPosition;*/
-    uprv_mstrm_close(ms);
+    /*uprv_mstrm_close(ms);*/
     return myData;
 }
 

@@ -27,7 +27,8 @@
 #define UCOL_IMP_H
 
 #include "unicode/ucol.h"
-#include "ucmpe32.h"
+/*#include "ucmpe32.h"*/
+#include "utrie.h"
 #include "unicode/ures.h"
 #include "unicode/udata.h"
 
@@ -629,7 +630,8 @@ struct UCollator {
     UBool freeOnClose;
     UResourceBundle *rb;
     const UCATableHeader *image;
-    CompactEIntArray *mapping;
+    /*CompactEIntArray *mapping;*/
+    UTrie *mapping;
     const uint32_t *latinOneMapping;
     const uint32_t *expansion;
     const UChar *contractionIndex;
