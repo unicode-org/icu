@@ -11,6 +11,7 @@
 #include "unicode/schriter.h"
 #include "srchiter.h"
 
+
 int32_t const SearchIterator::DONE = -1;
 int32_t const SearchIterator::BEFORE = -2;    
 

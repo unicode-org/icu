@@ -16,6 +16,7 @@
 #include "unicode/brkiter.h"
 #include "srchiter.h"
 
+
 class SearchIterator;
 /**
  * <code>StringSearch</code> is a <code>SearchIterator</code> that provides
@@ -179,7 +180,7 @@ public:
      * <p>
      * @see #setStrength
      */
-     Collator::ECollationStrength getStrength(void) const;
+     Collator::ECollationStrength getStrength(void) const{ return strength; }
     
     /**
      * Set the collator to be used for this string search.  Also changes
@@ -373,21 +374,20 @@ private:
     static char fgClassID;
 };
 
-inline UBool StringSearch::operator!=(const SearchIterator& that) const 
+inline UBool ::StringSearch::operator!=(const SearchIterator& that) const 
 {
     return !operator==(that);
 }
 
-inline UClassID StringSearch::getDynamicClassID(void) const 
+inline UClassID ::StringSearch::getDynamicClassID(void) const 
 {
-    return StringSearch::getStaticClassID();
+    return ::StringSearch::getStaticClassID();
 }
 
-inline UClassID StringSearch::getStaticClassID(void) 
+inline UClassID ::StringSearch::getStaticClassID(void) 
 {
     return (UClassID)(&fgClassID);
 }
-
 
 #endif
 
