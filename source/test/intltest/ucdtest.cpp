@@ -500,7 +500,7 @@ void UnicodeTest::TestUnicodeData()
     // test Unicode::getCharName()
     // a more thorough test of u_charName() is in cintltst/cucdtst.c
     char buffer[100];
-    UTextOffset length=Unicode::getCharName(0x284, buffer, sizeof(buffer));
+    UTextOffset length=Unicode::getCharName(0x284, buffer, (UTextOffset)sizeof(buffer));
 
     // use invariant-character conversion to Unicode
     UnicodeString name(buffer, length, "");
