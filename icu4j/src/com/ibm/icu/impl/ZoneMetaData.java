@@ -1,11 +1,11 @@
 //---------------------------------------------------------
-// Copyright (C) 2003-2004, International Business Machines
+// Copyright (C) 2003-2005, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //---------------------------------------------------------
 // Build tool: tz2icu
-// Build date: Mon Oct 25 13:21:25 2004
+// Build date: Wed Jan 19 21:36:30 2005
 // Olson source: ftp://elsie.nci.nih.gov/pub/
-// Olson version: 2004e
+// Olson version: 2005c
 //---------------------------------------------------------
 // >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<
 // >> !!! >>>            DO NOT EDIT             <<< !!! <<
