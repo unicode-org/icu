@@ -262,8 +262,8 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
             reqLength=0;
 
 	//get the options
-	UBool allowUnassigned	= options & IDNAREF_ALLOW_UNASSIGNED;
-	UBool useSTD3ASCIIRules = (options & IDNAREF_USE_STD3_RULES) >>1;
+    UBool allowUnassigned   = (UBool)((options & IDNAREF_ALLOW_UNASSIGNED) != 0);
+    UBool useSTD3ASCIIRules = (UBool)((options & IDNAREF_USE_STD3_RULES) != 0);
 
     UBool* caseFlags = NULL;
     
@@ -421,8 +421,8 @@ idnaref_toUnicode(const UChar* src, int32_t srcLength,
     UBool srcIsASCII = TRUE;
 
 	//get the options
-	UBool allowUnassigned	= options & IDNAREF_ALLOW_UNASSIGNED;
-	UBool useSTD3ASCIIRules = (options & IDNAREF_USE_STD3_RULES) >>1;
+    UBool allowUnassigned   = (UBool)((options & IDNAREF_ALLOW_UNASSIGNED) != 0);
+    UBool useSTD3ASCIIRules = (UBool)((options & IDNAREF_USE_STD3_RULES) != 0);
 
     if(U_FAILURE(*status)){
         goto CLEANUP;
@@ -632,8 +632,8 @@ idnaref_IDNToASCII(  const UChar* src, int32_t srcLength,
     int32_t b1Capacity = MAX_LABEL_BUFFER_SIZE;
     
 	//get the options
-	UBool allowUnassigned	= options & IDNAREF_ALLOW_UNASSIGNED;
-	UBool useSTD3ASCIIRules = (options & IDNAREF_USE_STD3_RULES) >>1;
+    UBool allowUnassigned   = (UBool)((options & IDNAREF_ALLOW_UNASSIGNED) != 0);
+    UBool useSTD3ASCIIRules = (UBool)((options & IDNAREF_USE_STD3_RULES) != 0);
     UBool done = FALSE;
 
     if(U_FAILURE(*status)){
@@ -787,8 +787,8 @@ idnaref_IDNToUnicode(  const UChar* src, int32_t srcLength,
     int32_t b1Capacity = MAX_LABEL_BUFFER_SIZE;
     
 	//get the options
-	UBool allowUnassigned	= options & IDNAREF_ALLOW_UNASSIGNED;
-	UBool useSTD3ASCIIRules = (options & IDNAREF_USE_STD3_RULES) >>1;
+    UBool allowUnassigned   = (UBool)((options & IDNAREF_ALLOW_UNASSIGNED) != 0);
+    UBool useSTD3ASCIIRules = (UBool)((options & IDNAREF_USE_STD3_RULES) != 0);
     
 	if(U_FAILURE(*status)){
         goto CLEANUP;

@@ -163,8 +163,8 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
     int32_t j=0;
 
     //get the options
-    UBool allowUnassigned   = options & UIDNA_ALLOW_UNASSIGNED;
-    UBool useSTD3ASCIIRules = (options & UIDNA_USE_STD3_RULES) >>1;
+    UBool allowUnassigned   = (UBool)((options & UIDNA_ALLOW_UNASSIGNED) != 0);
+    UBool useSTD3ASCIIRules = (UBool)((options & UIDNA_USE_STD3_RULES) != 0);
     
     int32_t failPos = -1;
     // step 2
@@ -315,8 +315,8 @@ uidna_toUnicode(const UChar* src, int32_t srcLength,
     }
 
     //get the options
-    UBool allowUnassigned   = options & UIDNA_ALLOW_UNASSIGNED;
-    UBool useSTD3ASCIIRules = (options & UIDNA_USE_STD3_RULES) >>1;
+    UBool allowUnassigned   = (UBool)((options & UIDNA_ALLOW_UNASSIGNED) != 0);
+    UBool useSTD3ASCIIRules = (UBool)((options & UIDNA_USE_STD3_RULES) != 0);
     
     UChar b1Stack[MAX_LABEL_BUFFER_SIZE], b2Stack[MAX_LABEL_BUFFER_SIZE], b3Stack[MAX_LABEL_BUFFER_SIZE];
 
@@ -514,8 +514,8 @@ uidna_IDNToASCII(  const UChar *src, int32_t srcLength,
     }
 
     //get the options
-    UBool allowUnassigned   = options & UIDNA_ALLOW_UNASSIGNED;
-    UBool useSTD3ASCIIRules = (options & UIDNA_USE_STD3_RULES) >>1;
+    UBool allowUnassigned   = (UBool)((options & UIDNA_ALLOW_UNASSIGNED) != 0);
+    UBool useSTD3ASCIIRules = (UBool)((options & UIDNA_USE_STD3_RULES) != 0);
 
     UChar *start=NULL, *limit=NULL;
 
