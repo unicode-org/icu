@@ -1397,7 +1397,7 @@ void NumberFormatRegressionTest::Test4122840()
     for (int i = 0; i < count; i++) {
         UErrorCode status = U_ZERO_ERROR;
         ResourceBundle *rb = new ResourceBundle(
-            icu_getDefaultDataDirectory()/*"java.text.resources.LocaleElements"*/, 
+            u_getDataDirectory()/*"java.text.resources.LocaleElements"*/, 
             locales[i], status);
         failure(status, "new ResourceBundle");
         //
